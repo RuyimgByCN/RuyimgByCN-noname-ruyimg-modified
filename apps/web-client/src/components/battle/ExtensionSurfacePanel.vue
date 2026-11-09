@@ -28,18 +28,10 @@ import {
   unlockLongxueSkills,
   validateSafeExportFilename,
   type ExtensionSurfacesSnapshot,
+  type ExtensionUiSuitesState,
 } from "../../engine/extensionSurfaceRuntime";
-import {
-  CleanRoomAnimationState,
-  HANDCRAFTED_SPINE40_ATLAS_TEXT,
-  HANDCRAFTED_SPINE40_SKELETON_JSON,
-  buildBatchGeometry,
-  createSkeletonInstance,
-  parseSpine40Json,
-  parseTextureAtlas,
-  renderSpineBatchesToCanvas2D,
-  resolveDynamicSkinImport,
-} from "../../engine/spine40/index";
+import Spine40SkinImportBox from "./surfaces/Spine40SkinImportBox.vue";
+import UiSkinSuitePanel from "./surfaces/UiSkinSuitePanel.vue";
 import type { ObserverSnapshot } from "../../types/engine";
 
 const props = defineProps<{
@@ -68,25 +60,7 @@ const omnisearchPage = ref(1);
 const exportNameInput = ref("match_seed42.npack.save");
 const exportValidationMsg = ref<string>("合法文件名");
 const surfaceNotice = ref<string>("");
-const spineCanvasRef = ref<HTMLCanvasElement | null>(null);
 const coinParticleCanvasRef = ref<HTMLCanvasElement | null>(null);
-const cleanroomSkeletonData = parseSpine40Json(HANDCRAFTED_SPINE40_SKELETON_JSON);
-const cleanroomAtlas = parseTextureAtlas(HANDCRAFTED_SPINE40_ATLAS_TEXT);
-const defaultSkinFallback = resolveDynamicSkinImport(null);
-
-function renderCleanroomSpine40Pose(clipName: string) {
-  const canvas = spineCanvasRef.value;
-  if (!canvas) return;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return;
-  const instance = createSkeletonInstance(cleanroomSkeletonData, "default");
-  const state = new CleanRoomAnimationState();
-  state.setAnimation(0, clipName, true, 1, "replace");
-  state.update(0.3);
-  state.apply(instance);
-  const batches = buildBatchGeometry(instance, cleanroomAtlas, true);
-  renderSpineBatchesToCanvas2D(ctx, instance, batches);
-}
 
 function renderCoinParticlesNow() {
   const canvas = coinParticleCanvasRef.value;
@@ -97,16 +71,8 @@ function renderCoinParticlesNow() {
 }
 
 onMounted(() => {
-  renderCleanroomSpine40Pose(props.surfaces.theme.spineActiveClip ?? "daiji");
   renderCoinParticlesNow();
 });
-
-watch(
-  () => props.surfaces.theme.spineActiveClip,
-  (clip) => {
-    renderCleanroomSpine40Pose(clip ?? "daiji");
-  },
-);
 
 watch(
   () => [props.surfaces.coin.snowFall, props.surfaces.coin.activeEffects.length],
@@ -372,6 +338,29 @@ function onTriggerShoushaBanner() {
   });
 }
 
+function onUpdateUiSuites(
+  payload: Required<
+    Pick<ExtensionUiSuitesState, "qhly" | "skinSwitch" | "shoushaUi" | "decadeUi" | "taixuUi">
+  > & {
+    notice: string;
+  },
+) {
+  update((prev) => {
+    surfaceNotice.value = payload.notice;
+    return {
+      ...prev,
+      uiSuites: {
+        ...prev.uiSuites,
+        qhly: payload.qhly,
+        skinSwitch: payload.skinSwitch,
+        shoushaUi: payload.shoushaUi,
+        decadeUi: payload.decadeUi,
+        taixuUi: payload.taixuUi,
+      },
+    };
+  });
+}
+
 function onApplyZuanDiyOffline() {
   update((prev) => {
     const workbench = applyZuanDiyDraft(prev.workbench, {
@@ -595,21 +584,14 @@ function onSurfacePointerMove(ev: MouseEvent) {
             </button>
           </div>
 
-          <div class="sub-surface-box" data-testid="l24-skin-transform-panel">
-            <canvas
-              ref="spineCanvasRef"
-              width="220"
-              height="52"
-              class="spine-canvas"
-              data-testid="spine-skeletal-canvas"
-            ></canvas>
-            <span class="tiny" data-testid="l24-skin-transform-meta">
-              Spine 4.0 净室 · 动作:{{ surfaces.theme.spineActiveClip ?? "daiji" }} · 偏移({{ surfaces.theme.skinStandX ?? 4 }},{{ surfaces.theme.skinStandY ?? 0 }}) · 缩放 {{ surfaces.theme.skinScalePct ?? 100 }}% · 未导入资产:{{ defaultSkinFallback.status }}
-            </span>
-            <button type="button" data-testid="btn-l24-trigger-clip" @click="onTriggerSpineClip">
-              触发 Spine 骨骼动作 (L08/L24)
-            </button>
-          </div>
+          <Spine40SkinImportBox
+            :active-clip="surfaces.theme.spineActiveClip ?? 'daiji'"
+            :stand-x="surfaces.theme.skinStandX ?? 4"
+            :stand-y="surfaces.theme.skinStandY ?? 0"
+            :scale-pct="surfaces.theme.skinScalePct ?? 100"
+            @trigger-clip="onTriggerSpineClip"
+            @import-status="(msg) => (surfaceNotice = msg)"
+          />
 
           <div class="sub-surface-box" data-testid="l14-shousha-hud">
             <div class="daoxin-bar">
@@ -624,6 +606,15 @@ function onSurfacePointerMove(ev: MouseEvent) {
           </div>
         </div>
       </div>
+
+      <UiSkinSuitePanel
+        :qhly="surfaces.uiSuites?.qhly"
+        :skin-switch="surfaces.uiSuites?.skinSwitch"
+        :shousha-ui="surfaces.uiSuites?.shoushaUi"
+        :decade-ui="surfaces.uiSuites?.decadeUi"
+        :taixu-ui="surfaces.uiSuites?.taixuUi"
+        @update-suites="onUpdateUiSuites"
+      />
     </div>
 
     <!-- Tab 2: 单机战役脚本 -->

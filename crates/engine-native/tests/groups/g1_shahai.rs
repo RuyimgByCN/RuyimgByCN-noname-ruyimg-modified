@@ -18,3 +18,6 @@ mod g1_shahai_yunchou;
 
 #[path = "../g1_shahai_zhenfa.rs"]
 mod g1_shahai_zhenfa;
+
+#[path = "../decision34_round4_u05_shahai.rs"]
+mod decision34_round4_u05_shahai;

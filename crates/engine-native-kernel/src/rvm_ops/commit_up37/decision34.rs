@@ -94,6 +94,9 @@ pub(super) fn try_commit_decision34(
         L29_LONGXUE_SKILL_ID => {
             super::decision34_ext::resolve_l29_longxue_skill(ctx, executing, owner)
         }
+        v if (1_926_000_000..1_927_000_000).contains(&v) => {
+            return super::decision34_pack9::try_commit_decision34_pack9(ctx, executing, owner, v)
+        }
         _ => match executing {
             "mbcmjiushi" => resolve_mbcmjiushi(ctx, owner),
             "mbcmfangzhu" => resolve_mbcmfangzhu(ctx, owner),

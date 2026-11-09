@@ -28,6 +28,7 @@ import type {
   TransformMode,
 } from "./types";
 
+import { parseStandardSpine40Skel } from "./binarySkelCodec";
 const BINARY_MAGIC = [0x53, 0x50, 0x34, 0x30] as const; // "SP40"
 
 export function isSpine40Version(version: string | undefined | null): boolean {
@@ -563,7 +564,7 @@ export function parseSpine40Binary(bytes: Uint8Array): SkeletonData {
     bytes[2] !== BINARY_MAGIC[2] ||
     bytes[3] !== BINARY_MAGIC[3]
   ) {
-    throw new Error("Invalid Spine 4.0 binary magic header");
+    return parseStandardSpine40Skel(bytes);
   }
   const state = { offset: 4 };
   const hash = readUtf8(bytes, state);

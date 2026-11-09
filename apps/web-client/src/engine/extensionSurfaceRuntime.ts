@@ -179,6 +179,15 @@ export interface WorkbenchToolsState {
   l27DualLocked?: boolean;
 }
 
+export interface ExtensionUiSuitesState {
+  qhly?: import("./surfaces/qhlySurface").QhlyRuntimeState;
+  skinSwitch?: import("./surfaces/skinSwitchSurface").SkinSwitchRuntimeState;
+  shoushaUi?: import("./surfaces/shoushaUiSurface").ShoushaUiRuntimeState;
+  decadeUi?: import("./surfaces/decadeUiSurface").DecadeUiRuntimeState;
+  taixuUi?: import("./surfaces/taixuSurface").TaixuUiRuntimeState;
+  zuanUi?: Record<string, unknown>;
+}
+
 export interface ExtensionSurfacesSnapshot {
   version: 1;
   activeSources: string[];
@@ -193,6 +202,7 @@ export interface ExtensionSurfacesSnapshot {
   thunder: ThunderSurfaceState;
   omnisearch: OmnisearchSurfaceState;
   workbench: WorkbenchToolsState;
+  uiSuites?: ExtensionUiSuitesState;
 }
 
 const DEFAULT_OMNI_CATALOG: OmnisearchEntry[] = [
@@ -1414,5 +1424,10 @@ export function triggerLongxueHolySwordEffect(
   };
 }
 
-
-
+export * from "./surfaces/decadeMarkSkillsData";
+export * from "./surfaces/decadeUiSurface";
+export * from "./surfaces/qhlySurface";
+export * from "./surfaces/shoushaUiSurface";
+export * from "./surfaces/skinSwitchSurface";
+export * from "./surfaces/taixuSurface";
+export * from "./surfaces/zuanSurface";

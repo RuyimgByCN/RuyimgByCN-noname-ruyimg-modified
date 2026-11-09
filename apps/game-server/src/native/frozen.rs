@@ -248,7 +248,8 @@ impl NativeContent {
         let verified = self.verify_room_locked_content(references, None, frozen)?;
         let mut packs = Vec::with_capacity(verified.copies().len());
         for copy in verified.copies() {
-            packs.push(self.load_frozen(copy)?.pack);
+            let loaded = self.load_frozen_with_prior(copy, &packs)?;
+            packs.push(loaded.pack);
         }
         Ok((packs, verified.copies().to_vec()))
     }

@@ -7,11 +7,12 @@
 
 import { execFileSync, spawn } from "node:child_process";
 import { createServer } from "node:http";
-import { existsSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { extname, join, resolve } from "node:path";
 
 const outDir = resolve(process.argv[2] ?? ".");
+mkdirSync(outDir, { recursive: true });
 const chromeBin =
   process.argv[3] ?? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const webClientDir = resolve(new URL("..", import.meta.url).pathname);
@@ -62,12 +63,13 @@ const chrome = spawn(
   chromeBin,
   [
     "--headless=new",
-    "--disable-gpu",
+    "--enable-webgl",
+    "--ignore-gpu-blocklist",
     "--no-sandbox",
     "--autoplay-policy=no-user-gesture-required",
     `--user-data-dir=${udd}`,
     `--remote-debugging-port=${cdpPort}`,
-    "--window-size=1440,960",
+    "--window-size=1440,1080",
     "about:blank",
   ],
   { stdio: "ignore" },
@@ -178,7 +180,7 @@ try {
     throw new Error(`ExtensionSurfacePanel 未渲染或尺寸为 0: ${JSON.stringify({ panelRect, diag, consoleErrors })}`);
   }
 
-  // 2. 驱动 Tab 1 (战局 HUD)
+  // 2. 驱动 Tab 1 (战局 HUD + 净室 Spine 4.0 导入器 + L08/L09/L11/L14/L24 全量皮肤套装面板)
   const hudResult = await evalJs(`(async () => {
     const click = (tid) => {
       const btn = document.querySelector('[data-testid="' + tid + '"]');
@@ -197,7 +199,28 @@ try {
     click('btn-u01-3d-rotate');
     click('btn-l24-trigger-clip');
     click('btn-l14-shousha-banner');
+
+    // 驱动裁决 35 Spine 4.0 玩家动皮导入抽屉与静态立绘回退
+    click('btn-spine40-toggle-import');
+    await new Promise(r => setTimeout(r, 25));
+    click('btn-spine40-load-handcrafted');
+    await new Promise(r => setTimeout(r, 25));
+    const spineReadyReason = document.querySelector('[data-testid="spine40-resolution-reason"]')?.textContent?.trim() ?? '';
+    click('btn-spine40-clear-asset');
+    await new Promise(r => setTimeout(r, 25));
+    const spineFallbackReason = document.querySelector('[data-testid="spine40-resolution-reason"]')?.textContent?.trim() ?? '';
+    click('btn-spine40-load-handcrafted');
+    await new Promise(r => setTimeout(r, 25));
+
+    // 驱动 L08/L09/L14/L24/L11 五套完整前端渲染面卡片
+    click('btn-l08-apply-mark');
+    click('btn-l09-cycle-sheet');
+    click('btn-l09-kill-bgm');
+    click('btn-l14-paixu');
+    click('btn-l24-chukuang');
+    click('btn-l11-taixu-console');
     await new Promise(r => setTimeout(r, 50));
+
     const text = (tid) => document.querySelector('[data-testid="' + tid + '"]')?.textContent?.trim() ?? '';
     const rectOf = (tid) => {
       const r = document.querySelector('[data-testid="' + tid + '"]')?.getBoundingClientRect();
@@ -215,14 +238,24 @@ try {
       u01Standee: text('u01-3d-standee'),
       u01Rect: rectOf('u01-3d-select-gallery'),
       spineRect: rectOf('spine-skeletal-canvas'),
+      spineWebglRect: rectOf('spine-webgl-canvas'),
+      spineReadyReason,
+      spineFallbackReason,
       l24Meta: text('l24-skin-transform-meta'),
       l14Banner: text('l14-shousha-banner-text'),
       l14Rect: rectOf('l14-shousha-hud'),
+      l08FullText: text('l08-decade-full-surface'),
+      l08MarkBar: text('l08-decade-mark-bar'),
+      l09FullText: text('l09-qhly-full-surface'),
+      l14FullText: text('l14-shousha-full-surface'),
+      l24FullText: text('l24-skinswitch-full-surface'),
+      l11FullText: text('l11-taixu-full-surface'),
+      uiSuiteRect: rectOf('ui-skin-suite-panel'),
       notice: text('surface-notice'),
     };
   })()`);
 
-  // 3. 驱动 Tab 2 (单机战役)
+  // 3. 驱动 Tab 2 (单机战役) 并截图
   const campaignResult = await evalJs(`(async () => {
     const click = (tid) => {
       const btn = document.querySelector('[data-testid="' + tid + '"]');
@@ -254,6 +287,9 @@ try {
       doomsdayWave: text('doomsday-wave'),
     };
   })()`);
+  const campaignShot = await send(ws, "Page.captureScreenshot", { format: "png" });
+  const campaignPngPath = join(outDir, "decision34-taixu-campaign-surface.png");
+  writeFileSync(campaignPngPath, Buffer.from(campaignShot.data, "base64"));
 
   // 4. 驱动 Tab 3 (金币假人 + 天气粒子层)
   const coinResult = await evalJs(`(async () => {
@@ -459,9 +495,19 @@ try {
       hudResult.u01Standee.includes("ddd_xinxianying") &&
       hudResult.u01Rect.w > 0 &&
       hudResult.spineRect.w > 0 &&
+      hudResult.spineWebglRect.w > 0 &&
+      hudResult.spineReadyReason.includes("ready-spine40") &&
+      hudResult.spineFallbackReason.includes("static-portrait-fallback") &&
       hudResult.l24Meta.includes("gongji") &&
       hudResult.l14Banner.includes("无双·千军破(zhefu)") &&
       hudResult.l14Rect.w > 0 &&
+      hudResult.uiSuiteRect.w > 0 &&
+      hudResult.l08FullText.includes("319钩子 / 43表面") &&
+      hudResult.l08MarkBar.includes("暴戾") &&
+      hudResult.l09FullText.includes("8钩子 / 12套样式") &&
+      hudResult.l14FullText.includes("[102,103,101]") &&
+      hudResult.l24FullText.includes("cang-zhen-ge") &&
+      hudResult.l11FullText.includes("extension_MobileStyle.css") &&
       campaignResult.bossHp === "∞" &&
       campaignResult.taixuGold === "90" &&
       coinResult.weatherOverlayRendered === true &&
@@ -478,7 +524,8 @@ try {
       restartAndReloadResult.afterRestartDaoxin === "20" &&
       restartAndReloadResult.afterRestartWeather === false &&
       restartAndReloadResult.afterReloadDaoxin === "50" &&
-      restartAndReloadResult.afterReloadWeather === true,
+      restartAndReloadResult.afterReloadWeather === true &&
+      frameStats.approx_fps >= 50,
     panelRect,
     hudResult,
     campaignResult,
@@ -490,6 +537,7 @@ try {
     frameStats,
     consoleErrors,
     screenshot: pngPath,
+    campaignScreenshot: campaignPngPath,
   };
 
   const reportPath = join(outDir, "decision34-browser-surfaces-report.json");

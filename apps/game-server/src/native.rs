@@ -214,6 +214,14 @@ impl NativeContent {
     }
 
     pub(crate) fn load_frozen(&self, frozen: &FrozenNativePackage) -> Result<LoadedPack, String> {
+        self.load_frozen_with_prior(frozen, &[])
+    }
+
+    pub(crate) fn load_frozen_with_prior(
+        &self,
+        frozen: &FrozenNativePackage,
+        prior_packs: &[engine_native::content::extension::ExtensionPack],
+    ) -> Result<LoadedPack, String> {
         use engine_native::content::extension::{ExtensionDef, ExtensionPack};
 
         self.check_not_revoked(&frozen.binding)?;
@@ -314,7 +322,7 @@ impl NativeContent {
             &parsed.manifest.namespace,
             &parsed.manifest.package_id,
             &mut pack,
-            &[],
+            prior_packs,
         );
         // 原生目录锁也绑定安装包的命名空间、完整版本与内容指纹。
         pack.def.name = engine_native::content::names::intern(format!(

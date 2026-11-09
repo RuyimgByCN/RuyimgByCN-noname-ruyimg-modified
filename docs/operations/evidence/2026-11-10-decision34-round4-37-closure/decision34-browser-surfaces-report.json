@@ -1,0 +1,106 @@
+{
+  "passed": true,
+  "panelRect": {
+    "width": 1160,
+    "height": 1306,
+    "display": "block",
+    "border": "solid"
+  },
+  "hudResult": {
+    "daoxin": "50",
+    "thresholds": "25, 50",
+    "unlockedSkills": "mbcmqingzheng/mbcmjiushi",
+    "l20MarkBadges": "L20 标记补充 (14项)：龙印 ×1",
+    "badgeDecade": "十周年:shousha",
+    "badgeShousha": "手杀:left",
+    "badgeRuzhen": "如真:reality(II)",
+    "badgeQhly": "千幻:shousha",
+    "u01Standee": "3D立绘:ddd_xinxianying (30°/115%)",
+    "u01Rect": {
+      "w": 343,
+      "h": 82
+    },
+    "spineRect": {
+      "w": 162,
+      "h": 54
+    },
+    "spineWebglRect": {
+      "w": 122,
+      "h": 54
+    },
+    "spineReadyReason": "解析结果：ready-spine40 — SPINE_40_LOADED:4.0.64",
+    "spineFallbackReason": "解析结果：static-portrait-fallback — NO_DYNAMIC_SKIN_ASSET_IMPORTED (产品不附带动皮资源，未导入玩家自有 4.0 资源时回退静态立绘)",
+    "l24Meta": "Spine 4.0 净室 · 动作:gongji · 偏移(24,-8) · 缩放 108% · 资产状态:ready-spine40 · WebGL批次:2/8△",
+    "l14Banner": "手杀播报:无双·千军破(zhefu) · 倒计时 70%",
+    "l14Rect": {
+      "w": 343,
+      "h": 80
+    },
+    "l08FullText": "十周年 UI (L08 · 319钩子 / 43表面)decadeLayout.css · standard成略[阴] 暴戾[2] 🍶酒态移除协力 (_removeXieli) 成略 (nzry_chenglve) nzry_chenglve1 (nzry_chenglve1) 成略 (nzry_chenglve2) 暴戾 (xionghuo) 滔乱 (taoluan) 滔乱 (taoluan3) 颓盗 (twtuidao) 骜肆 (mbaosi) 青刃可摸 (yizan_use) 💀 (dcxiangmian) smh_yeyan (smh_yeyan) 龙 (smh_huoji) 丰积 (olfengji) 毅烈 多出杀 (twyilie) 星坠 (twxingzhui) 卫 (dcxuewei) 筮 (lkbushi) 挽弓 (wangong) 挽弓 (wangong2) 连 (clanlianhe) 狂才 (rekuangcai) 私 (dcsilve) 衰劫 (dcshuaijie)  挂载十周年标记角标",
+    "l08MarkBar": "成略[阴] 暴戾[2] 🍶酒态",
+    "l09FullText": "千幻聆音 (L09 · 8钩子 / 12套样式)  圆弧:wei 套装：newui_lolbig.css · 共享映射：sb_caopi → re_caopi (台词 rexingshang) · BGM：qhly_bgm/re_caopi.mp3 切换千幻套装  触发击杀换肤+角色BGM",
+    "l14FullText": "手杀 UI (L14 · 53钩子 / 40表面)出牌阶段 (控件#2) 提示：出牌阶段，请选择一张牌 · 自动牌序：[102,103,101] · 露头(ZLLT)：关 执行手杀木牛自动牌序",
+    "l24FullText": "皮肤切换 (L24 · 22钩子 / 10表面)弹窗:cang-zhen-ge · 变身:jisha_form 出框：GongJi(flipX=true) · 语音队列：sha_fire 触发攻击出框+火杀语音入队",
+    "l11FullText": "太虚幻境 (L11 · 4样式 / 8赛季 / 21侍灵)extension_MobileStyle.css (rem) 赛季：ChongYingChuLin · 侍灵：jiuwei (frame3) · 金币：150 (巨贾冻结:是)  切换太虚 PC/触屏样式+九尾商铺",
+    "uiSuiteRect": {
+      "w": 1121,
+      "h": 502
+    },
+    "notice": "太虚幻境 (L11)：响应式 extension_MobileStyle.css · 侍灵「九尾」(frame3) · 商铺余币 150"
+  },
+  "campaignResult": {
+    "bossName": "剑阁·高达一号",
+    "bossHp": "∞",
+    "bossMode": "versus_jiange",
+    "taixuNode": "#2 (颍川前哨（战斗）)",
+    "taixuGold": "90",
+    "taixuPet": "苍雷幼麟",
+    "taixuBlessingsCount": "2",
+    "martialReplacement": "sp_zhaoyun",
+    "doomsdayWave": "#2"
+  },
+  "coinResult": {
+    "balance": "80",
+    "honorTitle": "初入茅庐",
+    "snow": "snow",
+    "weatherOverlayRendered": true,
+    "weatherAttr": "snow"
+  },
+  "omnisearchResult": {
+    "hitText": "card苍螭之璧 (cangchizhibi) — shahai-swd",
+    "blockedText": "安全门禁拦截：error:eval_refused"
+  },
+  "workbenchResult": {
+    "rejectedMsg": "拒绝：unsafe export filename",
+    "l25Status": "祖安 DIY (L25): 已应用离线 DIY: ssr_sunquan (5血) · 武将 ssr_sunquan (5血)",
+    "l25GuardNotice": "ONLINE_MULTIPLAYER_DIY_FORBIDDEN",
+    "l27Status": "双将选将框 (L27 chooseCharacterTwo): ddd_caomao + ddd_liuchong (已锁定 · 37技)"
+  },
+  "saveRestoreResult": {
+    "beforeSaveDaoxin": "50",
+    "beforeSaveDecade": "十周年:shousha",
+    "saveStatus": "已存档 · save-1794259367101",
+    "mutatedDaoxin": "80",
+    "mutatedDecade": "十周年:xinzhan",
+    "restoredDaoxin": "50",
+    "restoredDecade": "十周年:shousha",
+    "weatherStillActive": true
+  },
+  "restartAndReloadResult": {
+    "afterRestartDaoxin": "20",
+    "afterRestartWeather": false,
+    "afterReloadDaoxin": "50",
+    "afterReloadWeather": true
+  },
+  "frameStats": {
+    "n": 60,
+    "p50_ms": 16.66,
+    "p95_ms": 16.67,
+    "p99_ms": 16.67,
+    "max_ms": 16.67,
+    "approx_fps": 60
+  },
+  "consoleErrors": [],
+  "screenshot": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-10-decision34-round4-37-closure/decision34-browser-surfaces.png",
+  "campaignScreenshot": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-10-decision34-round4-37-closure/decision34-taixu-campaign-surface.png"
+}

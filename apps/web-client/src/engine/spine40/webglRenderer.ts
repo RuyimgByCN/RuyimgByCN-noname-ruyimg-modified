@@ -85,18 +85,84 @@ export interface SpineRenderBatch {
   clipped: boolean;
 }
 
-function computePolygonBoundingBox(poly: number[]): { minX: number; minY: number; maxX: number; maxY: number } {
-  let minX = Infinity;
-  let minY = Infinity;
-  let maxX = -Infinity;
-  let maxY = -Infinity;
+type Vertex8 = [number, number, number, number, number, number, number, number];
+
+function normalizeCcwPolygon(poly: number[]): Array<[number, number]> {
+  const pts: Array<[number, number]> = [];
   for (let i = 0; i + 1 < poly.length; i += 2) {
-    minX = Math.min(minX, poly[i]);
-    minY = Math.min(minY, poly[i + 1]);
-    maxX = Math.max(maxX, poly[i]);
-    maxY = Math.max(maxY, poly[i + 1]);
+    pts.push([poly[i], poly[i + 1]]);
   }
-  return { minX, minY, maxX, maxY };
+  if (pts.length < 3) return pts;
+  let signedArea2 = 0;
+  for (let i = 0; i < pts.length; i++) {
+    const [x0, y0] = pts[i];
+    const [x1, y1] = pts[(i + 1) % pts.length];
+    signedArea2 += x0 * y1 - x1 * y0;
+  }
+  if (signedArea2 < 0) pts.reverse();
+  return pts;
+}
+
+/**
+ * Clips a single `[x, y, u, v, r, g, b, a]` triangle against a CCW clipping polygon
+ * using Sutherland-Hodgman half-plane clipping with exact linear interpolation of UVs and RGBA.
+ */
+export function clipTriangleAgainstPolygon(
+  v0: Vertex8,
+  v1: Vertex8,
+  v2: Vertex8,
+  clipPolygon: Array<[number, number]>,
+): Vertex8[] {
+  if (clipPolygon.length < 3) return [v0, v1, v2];
+  let subject: Vertex8[] = [v0, v1, v2];
+  const eps = -1e-6;
+
+  const lerpVert = (a: Vertex8, b: Vertex8, t: number): Vertex8 => [
+    a[0] + (b[0] - a[0]) * t,
+    a[1] + (b[1] - a[1]) * t,
+    a[2] + (b[2] - a[2]) * t,
+    a[3] + (b[3] - a[3]) * t,
+    a[4] + (b[4] - a[4]) * t,
+    a[5] + (b[5] - a[5]) * t,
+    a[6] + (b[6] - a[6]) * t,
+    a[7] + (b[7] - a[7]) * t,
+  ];
+
+  for (let i = 0; i < clipPolygon.length; i++) {
+    const [cx0, cy0] = clipPolygon[i];
+    const [cx1, cy1] = clipPolygon[(i + 1) % clipPolygon.length];
+    const ex = cx1 - cx0;
+    const ey = cy1 - cy0;
+    const input = subject;
+    subject = [];
+    if (input.length === 0) break;
+
+    let prev = input[input.length - 1];
+    let prevCross = ex * (prev[1] - cy0) - ey * (prev[0] - cx0);
+    let prevInside = prevCross >= eps;
+
+    for (const curr of input) {
+      const currCross = ex * (curr[1] - cy0) - ey * (curr[0] - cx0);
+      const currInside = currCross >= eps;
+      if (currInside) {
+        if (!prevInside) {
+          const denom = prevCross - currCross;
+          const t = Math.abs(denom) > 1e-9 ? Math.max(0, Math.min(1, prevCross / denom)) : 0.5;
+          subject.push(lerpVert(prev, curr, t));
+        }
+        subject.push(curr);
+      } else if (prevInside) {
+        const denom = prevCross - currCross;
+        const t = Math.abs(denom) > 1e-9 ? Math.max(0, Math.min(1, prevCross / denom)) : 0.5;
+        subject.push(lerpVert(prev, curr, t));
+      }
+      prev = curr;
+      prevCross = currCross;
+      prevInside = currInside;
+    }
+  }
+
+  return subject.length >= 3 ? subject : [];
 }
 
 export function buildBatchGeometry(
@@ -106,7 +172,7 @@ export function buildBatchGeometry(
   hiddenSlots?: Set<string>,
 ): SpineRenderBatch[] {
   const batches: SpineRenderBatch[] = [];
-  let activeClipBox: { minX: number; minY: number; maxX: number; maxY: number } | null = null;
+  let activeClipPoly: Array<[number, number]> | null = null;
   let activeClipEndSlot: string | null = null;
 
   let currentPage = "default";
@@ -133,12 +199,34 @@ export function buildBatchGeometry(
     currentSlots = [];
   };
 
+  const appendGeometry = (verts: Vertex8[], tris: number[]) => {
+    if (!activeClipPoly) {
+      const baseIdx = currentVerts.length >> 3;
+      for (const v of verts) currentVerts.push(v[0], v[1], v[2], v[3], v[4], v[5], v[6], v[7]);
+      for (const ti of tris) currentIndices.push(baseIdx + ti);
+      return;
+    }
+    for (let t = 0; t + 2 < tris.length; t += 3) {
+      const p0 = verts[tris[t]];
+      const p1 = verts[tris[t + 1]];
+      const p2 = verts[tris[t + 2]];
+      if (!p0 || !p1 || !p2) continue;
+      const poly = clipTriangleAgainstPolygon(p0, p1, p2, activeClipPoly);
+      if (poly.length < 3) continue;
+      const baseIdx = currentVerts.length >> 3;
+      for (const pv of poly) currentVerts.push(pv[0], pv[1], pv[2], pv[3], pv[4], pv[5], pv[6], pv[7]);
+      for (let k = 1; k + 1 < poly.length; k++) {
+        currentIndices.push(baseIdx, baseIdx + k, baseIdx + k + 1);
+      }
+    }
+  };
+
   for (const slotIdx of skeleton.drawOrder) {
     const slot = skeleton.slots[slotIdx];
     if (!slot) continue;
     if (hiddenSlots?.has(slot.data.name)) {
       if (activeClipEndSlot === slot.data.name) {
-        activeClipBox = null;
+        activeClipPoly = null;
         activeClipEndSlot = null;
       }
       continue;
@@ -147,7 +235,7 @@ export function buildBatchGeometry(
     const att = resolveAttachment(skeleton, slotIdx);
     if (!att) {
       if (activeClipEndSlot === slot.data.name) {
-        activeClipBox = null;
+        activeClipPoly = null;
         activeClipEndSlot = null;
       }
       continue;
@@ -156,7 +244,7 @@ export function buildBatchGeometry(
     if (att.type === "clipping") {
       const clipPoly = computeAttachmentWorldVertices(skeleton, slotIdx, att);
       if (clipPoly.length >= 6) {
-        activeClipBox = computePolygonBoundingBox(clipPoly);
+        activeClipPoly = normalizeCcwPolygon(clipPoly);
         activeClipEndSlot = att.end;
       }
       continue;
@@ -164,7 +252,7 @@ export function buildBatchGeometry(
 
     if (att.type !== "region" && att.type !== "mesh") {
       if (activeClipEndSlot === slot.data.name) {
-        activeClipBox = null;
+        activeClipPoly = null;
         activeClipEndSlot = null;
       }
       continue;
@@ -172,7 +260,7 @@ export function buildBatchGeometry(
 
     const regionInfo = atlas?.regions[att.path] ?? atlas?.regions[att.name];
     const pageName = regionInfo?.page ?? "default";
-    const isClipped = activeClipBox !== null;
+    const isClipped = activeClipPoly !== null;
 
     if (
       currentVerts.length > 0 &&
@@ -183,7 +271,6 @@ export function buildBatchGeometry(
     currentPage = pageName;
     currentBlend = slot.blend;
     currentClipped = isClipped;
-    currentSlots.push(slot.data.name);
 
     const worldVerts = computeAttachmentWorldVertices(skeleton, slotIdx, att);
     const attColor = parseHexColorRgba(att.color);
@@ -193,7 +280,7 @@ export function buildBatchGeometry(
     const b = slot.color[2] * attColor[2] * (premultipliedAlpha ? rawAlpha : 1);
     const a = rawAlpha;
 
-    const baseVertexIndex = currentVerts.length >> 3;
+    const beforeVertLen = currentVerts.length;
 
     if (att.type === "region") {
       const reg = att as RegionAttachment;
@@ -207,24 +294,12 @@ export function buildBatchGeometry(
         [u1, v0],
         [u0, v0],
       ];
+      const slotVerts: Vertex8[] = [];
       for (let i = 0; i < 4 && i * 2 + 1 < worldVerts.length; i++) {
-        let vx = worldVerts[i * 2];
-        let vy = worldVerts[i * 2 + 1];
-        if (activeClipBox) {
-          vx = Math.max(activeClipBox.minX, Math.min(activeClipBox.maxX, vx));
-          vy = Math.max(activeClipBox.minY, Math.min(activeClipBox.maxY, vy));
-        }
-        currentVerts.push(vx, vy, uvs[i][0], uvs[i][1], r, g, b, a);
+        slotVerts.push([worldVerts[i * 2], worldVerts[i * 2 + 1], uvs[i][0], uvs[i][1], r, g, b, a]);
       }
-      if (reg.width > 0 && reg.height > 0) {
-        currentIndices.push(
-          baseVertexIndex,
-          baseVertexIndex + 1,
-          baseVertexIndex + 2,
-          baseVertexIndex + 2,
-          baseVertexIndex + 3,
-          baseVertexIndex,
-        );
+      if (reg.width > 0 && reg.height > 0 && slotVerts.length === 4) {
+        appendGeometry(slotVerts, [0, 1, 2, 2, 3, 0]);
       }
     } else if (att.type === "mesh") {
       const mesh = att as MeshAttachment;
@@ -233,24 +308,21 @@ export function buildBatchGeometry(
       const du = (regionInfo?.u2 ?? 1) - u0;
       const dv = (regionInfo?.v2 ?? 1) - v0;
       const vCount = worldVerts.length >> 1;
+      const slotVerts: Vertex8[] = [];
       for (let i = 0; i < vCount; i++) {
-        let vx = worldVerts[i * 2];
-        let vy = worldVerts[i * 2 + 1];
-        if (activeClipBox) {
-          vx = Math.max(activeClipBox.minX, Math.min(activeClipBox.maxX, vx));
-          vy = Math.max(activeClipBox.minY, Math.min(activeClipBox.maxY, vy));
-        }
         const u = u0 + (mesh.uvs[i * 2] ?? 0) * du;
         const v = v0 + (mesh.uvs[i * 2 + 1] ?? 0) * dv;
-        currentVerts.push(vx, vy, u, v, r, g, b, a);
+        slotVerts.push([worldVerts[i * 2], worldVerts[i * 2 + 1], u, v, r, g, b, a]);
       }
-      for (const triIdx of mesh.triangles) {
-        currentIndices.push(baseVertexIndex + triIdx);
-      }
+      appendGeometry(slotVerts, mesh.triangles);
+    }
+
+    if (currentVerts.length > beforeVertLen) {
+      currentSlots.push(slot.data.name);
     }
 
     if (activeClipEndSlot === slot.data.name) {
-      activeClipBox = null;
+      activeClipPoly = null;
       activeClipEndSlot = null;
     }
   }
@@ -343,27 +415,198 @@ export interface MinimalWebGLContext {
   drawElements(mode: number, count: number, type: number, offset: number): void;
 }
 
+interface FullWebGLContext extends MinimalWebGLContext {
+  readonly COMPILE_STATUS: number;
+  readonly LINK_STATUS: number;
+  readonly TEXTURE_2D: number;
+  readonly TEXTURE0: number;
+  readonly RGBA: number;
+  readonly UNSIGNED_BYTE: number;
+  readonly TEXTURE_MIN_FILTER: number;
+  readonly TEXTURE_MAG_FILTER: number;
+  readonly TEXTURE_WRAP_S: number;
+  readonly TEXTURE_WRAP_T: number;
+  readonly LINEAR: number;
+  readonly CLAMP_TO_EDGE: number;
+  createShader(type: number): unknown;
+  shaderSource(shader: unknown, source: string): void;
+  compileShader(shader: unknown): void;
+  getShaderParameter(shader: unknown, pname: number): unknown;
+  createProgram(): unknown;
+  attachShader(program: unknown, shader: unknown): void;
+  linkProgram(program: unknown): void;
+  getProgramParameter(program: unknown, pname: number): unknown;
+  useProgram(program: unknown): void;
+  getAttribLocation(program: unknown, name: string): number;
+  getUniformLocation(program: unknown, name: string): unknown;
+  enableVertexAttribArray(index: number): void;
+  vertexAttribPointer(index: number, size: number, type: number, normalized: boolean, stride: number, offset: number): void;
+  uniform2f(location: unknown, x: number, y: number): void;
+  uniform1i(location: unknown, x: number): void;
+  createTexture(): unknown;
+  activeTexture(texture: number): void;
+  bindTexture(target: number, texture: unknown): void;
+  texImage2D(
+    target: number,
+    level: number,
+    internalformat: number,
+    width: number,
+    height: number,
+    border: number,
+    format: number,
+    type: number,
+    pixels: ArrayBufferView | null,
+  ): void;
+  texParameteri(target: number, pname: number, param: number): void;
+}
+
+interface CachedSpineWebGLPipeline {
+  program: unknown;
+  vbo: unknown;
+  ibo: unknown;
+  whiteTex: unknown;
+  locPos: number;
+  locUv: number;
+  locColor: number;
+  uScale: unknown;
+  uOrigin: unknown;
+  uSampler: unknown;
+}
+
+const SPINE_VS_SRC = `
+attribute vec2 a_position;
+attribute vec2 a_texCoord;
+attribute vec4 a_color;
+uniform vec2 u_origin;
+uniform vec2 u_scale;
+varying vec2 v_texCoord;
+varying vec4 v_color;
+void main() {
+  vec2 clip = (a_position + u_origin) * u_scale;
+  gl_Position = vec4(clip.x, clip.y, 0.0, 1.0);
+  v_texCoord = a_texCoord;
+  v_color = a_color;
+}
+`;
+
+const SPINE_FS_SRC = `
+precision mediump float;
+uniform sampler2D u_sampler;
+varying vec2 v_texCoord;
+varying vec4 v_color;
+void main() {
+  gl_FragColor = texture2D(u_sampler, v_texCoord) * v_color;
+}
+`;
+
+const cachedPipelines = new WeakMap<object, CachedSpineWebGLPipeline>();
+
+function isFullWebGL(gl: MinimalWebGLContext): gl is FullWebGLContext {
+  const cand = gl as Partial<FullWebGLContext>;
+  return (
+    typeof cand.createShader === "function" &&
+    typeof cand.createProgram === "function" &&
+    typeof cand.vertexAttribPointer === "function" &&
+    typeof cand.createTexture === "function"
+  );
+}
+
+function getOrCreateWebGLPipeline(gl: FullWebGLContext): CachedSpineWebGLPipeline | null {
+  const existing = cachedPipelines.get(gl as unknown as object);
+  if (existing) return existing;
+
+  const vs = gl.createShader(gl.VERTEX_SHADER);
+  gl.shaderSource(vs, SPINE_VS_SRC);
+  gl.compileShader(vs);
+  if (!gl.getShaderParameter(vs, gl.COMPILE_STATUS)) return null;
+
+  const fs = gl.createShader(gl.FRAGMENT_SHADER);
+  gl.shaderSource(fs, SPINE_FS_SRC);
+  gl.compileShader(fs);
+  if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) return null;
+
+  const program = gl.createProgram();
+  gl.attachShader(program, vs);
+  gl.attachShader(program, fs);
+  gl.linkProgram(program);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return null;
+
+  const vbo = gl.createBuffer();
+  const ibo = gl.createBuffer();
+  const whiteTex = gl.createTexture();
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_2D, whiteTex);
+  gl.texImage2D(
+    gl.TEXTURE_2D,
+    0,
+    gl.RGBA,
+    1,
+    1,
+    0,
+    gl.RGBA,
+    gl.UNSIGNED_BYTE,
+    new Uint8Array([255, 255, 255, 255]),
+  );
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+  const pipeline: CachedSpineWebGLPipeline = {
+    program,
+    vbo,
+    ibo,
+    whiteTex,
+    locPos: gl.getAttribLocation(program, "a_position"),
+    locUv: gl.getAttribLocation(program, "a_texCoord"),
+    locColor: gl.getAttribLocation(program, "a_color"),
+    uScale: gl.getUniformLocation(program, "u_scale"),
+    uOrigin: gl.getUniformLocation(program, "u_origin"),
+    uSampler: gl.getUniformLocation(program, "u_sampler"),
+  };
+  cachedPipelines.set(gl as unknown as object, pipeline);
+  return pipeline;
+}
+
 /**
- * Executes Spine 4.0 batches on a WebGL context, binding each batch's premultiplied
- * or straight-alpha blend factors via `gl.blendFuncSeparate`, uploading interleaved
- * vertex (`[x, y, u, v, r, g, b, a]`) and `Uint16Array` index buffers, and issuing
- * `gl.drawElements(gl.TRIANGLES, ...)`.
+ * Executes Spine 4.0 batches on a WebGL context, compiling & binding the clean-room
+ * GLSL shader program and vertex attributes when full WebGL APIs are available,
+ * setting each batch's premultiplied or straight-alpha blend factors via
+ * `gl.blendFuncSeparate`, uploading interleaved `[x, y, u, v, r, g, b, a]` vertices
+ * and `Uint16Array` indices, and issuing `gl.drawElements(gl.TRIANGLES, ...)`.
  */
 export function renderSpineBatchesToWebGL(
   gl: MinimalWebGLContext,
   batches: SpineRenderBatch[],
   viewportWidth = 220,
   viewportHeight = 140,
-): { drawCallCount: number; triangleCount: number } {
+  pageTextures?: Record<string, unknown>,
+): { drawCallCount: number; triangleCount: number; shaderProgramActive: boolean } {
   gl.viewport(0, 0, viewportWidth, viewportHeight);
-  gl.clearColor(0, 0, 0, 0);
+  gl.clearColor(0.07, 0.1, 0.15, 1.0);
   gl.clear(gl.COLOR_BUFFER_BIT);
   gl.enable(gl.BLEND);
 
-  const vbo = gl.createBuffer();
-  const ibo = gl.createBuffer();
+  const fullGl = isFullWebGL(gl) ? gl : null;
+  const pipeline = fullGl ? getOrCreateWebGLPipeline(fullGl) : null;
+
+  const vbo = pipeline ? pipeline.vbo : gl.createBuffer();
+  const ibo = pipeline ? pipeline.ibo : gl.createBuffer();
+
+  if (fullGl && pipeline) {
+    fullGl.useProgram(pipeline.program);
+    fullGl.uniform2f(pipeline.uOrigin, 0, -45);
+    fullGl.uniform2f(
+      pipeline.uScale,
+      2.0 / Math.max(160, viewportWidth),
+      2.0 / Math.max(140, viewportHeight),
+    );
+    fullGl.uniform1i(pipeline.uSampler, 0);
+  }
+
   let drawCallCount = 0;
   let triangleCount = 0;
+  const strideBytes = 8 * 4;
 
   for (const batch of batches) {
     if (batch.indices.length === 0 || batch.vertices.length === 0) continue;
@@ -373,8 +616,27 @@ export function renderSpineBatchesToWebGL(
       batch.blendFactors.srcAlpha,
       batch.blendFactors.dstAlpha,
     );
+    if (fullGl && pipeline) {
+      fullGl.activeTexture(fullGl.TEXTURE0);
+      const tex = pageTextures?.[batch.page] ?? pipeline.whiteTex;
+      fullGl.bindTexture(fullGl.TEXTURE_2D, tex);
+    }
     gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
     gl.bufferData(gl.ARRAY_BUFFER, batch.vertices, gl.DYNAMIC_DRAW);
+    if (fullGl && pipeline) {
+      if (pipeline.locPos >= 0) {
+        fullGl.enableVertexAttribArray(pipeline.locPos);
+        fullGl.vertexAttribPointer(pipeline.locPos, 2, fullGl.FLOAT, false, strideBytes, 0);
+      }
+      if (pipeline.locUv >= 0) {
+        fullGl.enableVertexAttribArray(pipeline.locUv);
+        fullGl.vertexAttribPointer(pipeline.locUv, 2, fullGl.FLOAT, false, strideBytes, 8);
+      }
+      if (pipeline.locColor >= 0) {
+        fullGl.enableVertexAttribArray(pipeline.locColor);
+        fullGl.vertexAttribPointer(pipeline.locColor, 4, fullGl.FLOAT, false, strideBytes, 16);
+      }
+    }
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibo);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, batch.indices, gl.DYNAMIC_DRAW);
     gl.drawElements(gl.TRIANGLES, batch.indices.length, gl.UNSIGNED_SHORT, 0);
@@ -382,7 +644,7 @@ export function renderSpineBatchesToWebGL(
     triangleCount += Math.floor(batch.indices.length / 3);
   }
 
-  return { drawCallCount, triangleCount };
+  return { drawCallCount, triangleCount, shaderProgramActive: Boolean(pipeline) };
 }
 
 export interface DynamicSkinResolution {

@@ -1,12 +1,12 @@
-# 32 个已映射来源的**八项签署状态**（第 494 轮基线 + 2026-11-09 裁决 34/35 逐项清点与纠错复核）
+# 32 个已映射来源的**八项签署状态**（第 494 轮基线 + 2026-11-10 裁决 34/35 全 37 来源逐项闭合复核）
 
-> **2026-11-09/10 核对勘正与裁决 34/35 第三步推进及复审纠偏更新（规则 v333 / 存档 NGSA v107 / content schema v5 / ABI 759 / WS8）**：
-> 1. **撤回 Batch 25/26「37/37 仓内 7 维 100% ✅」失实结论并完成逐符号清点（第一步，`bc595d443` + 本轮复审去噪与逐符号核对）**：为全部 37 个来源建立逐项上游台账 [`docs/migration/g0/README.md`](../../../migration/g0/README.md)（共 **4,435 项**：武将 834、技能 1,915、卡牌 380、模式/节点 215、配置 435、UI 钩子 507、渲染面 149；保持 `decision34_inventory_builder.py` 的 `else:` 默认分支为 `缺失`，禁用按 `sid in (...)` 整源强行标绿，仅按正式包与装载器实际注册符号集合逐项归类）。
-> 2. **清除自造内容、合并摸 1 兜底与静默空操作（第二步，`0450971b5` + `29eba1ca0` + 本轮复审清理）**：删除 `L08` 9 名伪造 `decade_*` 武将与 `_decade_qiankunbagua`、`L14` 2 名伪造 `shousha_*` 武将与 2 张卡牌及跨包虚构名 `spshidi`/`spcishi`/`zhefu`/`yidu`、`L19` 22 名伪造 `vir_*` 武将、`L20` 12 名伪造 `ms_*` 武将与 6 张伪造 `ms_*_card` 卡牌、`L25` 60 名伪造 `zuan_*` 武将与 `zuan_jianxiong`、`L28` 11 名伪造 `th_*` 武将与 `th_chongzou`/`th_huanyin`/`th_xuanlv` 及 12 个 `_info`/`_map`/`_faq`/虚构键、`U08` `yxs_tafang_wave`/`advanceTafangWave`、4 个合成战役步进技能（`boss_baonu_stage`/`taixu_expedition_step`/`doomsday_infection_step`/`martial_formation_step`）及 `drawSpineSkeletalCanvas` 示意画法；清除 `decision34*` 全部合并 `ctx.start_draw(owner, 1)` 兜底、`_ => {}` 静默空操作与 UI 钩子摸牌/加甲/回血副作用（逐条理由见 [`2026-11-09-decision34-cleanup`](../2026-11-09-decision34-cleanup/README.md) 与 [`2026-11-09-decision34-step3-18sources-closure`](../2026-11-09-decision34-step3-18sources-closure/README.md)）。
-> 3. **按上游重做核心规则、净室 Spine 4.0 播放器并接入正式包四端产品路径（第三步与 3a）**：
->    - **规则层与正式包产品路径接线**：在 `crates/engine-native-kernel/src/rvm_ops/commit_up37/{decision34,decision34_pack9,decision34_ext,decision34_u08_l19_l20_l27,decision34_l19_l20_l27}.rs`、`crates/content-native-loader/src/{ai_tuning,decision34_closure,decision34_pack9,decision34_pack9_data,locked_content}.rs` 与 `apps/game-server/src/native.rs::load_frozen` 中，将 `U01` 31 将/64 技、`U06` 6 卡/5 技（含 `kuwu` 传导跳过与弃牌/失血双分支）、`U07` 9 将/3 卡/24 顶层技（含 6 子技共 30 项 `SkillInstance`，并把 `duoqi`/`youzhan`/`jianbi`/`choudu` 挂回对应武将）、`U08` 43 将/107 技（含 `lshengong` 锻造置装）、`L01` `yiyi`、`L06` `_wuxing`/`wuxingpan_skill`、`L10` 十常侍 `k_danggu`（授予 `scstaoluan`..`scsanruo` 10 项真实 `SkillInstance`）/`k_mowang`、`L19` 2 僵尸将（男 5 血/女 3 血）/66 乱斗技、`L20` 3 整肃牌/28 标记技/46 钩子、`L27` 31 选将技/12 钩子、`L28` 14 将/33 顶层技（含 11 子技如 `th_tiansuan2_0..4`）/`th_taipingyaoshu`、`L29` `mbqianlong`/`mbcmqingzheng`/`mbcmjiushi`/`mbcmfangzhu`/`mbjuejin` 全部按上游 `file:line` 实现并经 `attach_formal_package_upstream_rules` 接入对应 `packages/extensions/*` 正式包四端产品路径（同时保持 `L08/L14/L24` 纯皮肤/UI 包 0 VM 技能/0 卡牌隔离，`nc05_skin_ui_asset_separation` 与 `formal_packages_extensions_load_and_execute_on_locked_product_path` PASS）；前端在 `extensionSurfaceRuntime.ts` 与 `ExtensionSurfacePanel.vue` 补齐 `U04/L05` `_buy` 拖拽购买与 Canvas 粒子、`L07` 搜索器分页/悬浮球、`L10` `_emojiRebate1`/`scs_die_audio`、`L12` 6 大厅/排位/八品表面与动态光效、`L13` `_qy_chongzhu` 与 MVP 终局结算大屏、`L20/L26/L27` 主题表面、`L29` `_CMeffects` 圣剑特效，并完成真实无头 Chrome 截图与 60 FPS 测帧。
->    - **裁决 35 净室 Spine 4.0 播放器**：在 `apps/web-client/src/engine/spine40/` 净室自写 Spine 4.0 JSON/二进制编解码、骨骼层次世界变换、IK/变换/路径约束、时间轴与贝塞尔曲线、多轨道 alpha 混合、`.atlas` 解析与 WebGL 批量预乘透明渲染器（`renderSpineBatchesToWebGL`），接入 `ExtensionSurfacePanel.vue` 与 `saveSkinParams` 动皮参数格式，无资源或非 4.0 资源回退静态立绘（`spine40-cleanroom.test.mjs` **7/7 PASS**，真实无头 Chrome **60.0 FPS**，见 [`2026-11-09-spine40-cleanroom`](../2026-11-09-spine40-cleanroom/README.md)）。
-> 4. **2026-11-09 全 37 来源八项签署实况表（严格对照 [`docs/migration/g0/README.md`](../../../migration/g0/README.md) 逐项统计：忠实实现 `1,582` / 示意或自造 `456` / 缺失 `2,397`，合计 `4,435` 项）**：
+> **2026-11-10 裁决 34 第四轮剩余 7 来源逐项闭合与裁决 35 Spine 4.0 加固复核更新（规则 v333 / 存档 NGSA v107 / content schema v5 / ABI 759 / WS8）**：
+> 1. **撤回 Batch 25/26「37/37 仓内 7 维 100% ✅」失实结论并完成逐符号清点（第一步，`bc595d443` + 复审去噪与逐符号核对）**：为全部 37 个来源建立逐项上游台账 [`docs/migration/g0/README.md`](../../../migration/g0/README.md)（共 **4,435 项**：武将 834、技能 1,914、卡牌 380、模式/节点 215、配置 436、UI 钩子 507、渲染面 149；保持 `decision34_inventory_builder.py` 的 `else:` 默认分支为 `缺失`，禁用按 `sid in (...)` 整源强行标绿，仅按正式包与装载器/内核/前端实际注册符号集合逐项归类）。
+> 2. **清除自造内容、合并摸 1 兜底与静默空操作（第二步，`0450971b5` + `29eba1ca0` + `1f0d16d6c`）**：删除 `L08` 9 名伪造 `decade_*` 武将与 `_decade_qiankunbagua`、`L14` 2 名伪造 `shousha_*` 武将与 2 张卡牌及跨包虚构名 `spshidi`/`spcishi`/`zhefu`/`yidu`、`L19` 22 名伪造 `vir_*` 武将、`L20` 12 名伪造 `ms_*` 武将与 6 张伪造 `ms_*_card` 卡牌、`L25` 60 名伪造 `zuan_*` 武将与 `zuan_jianxiong`、`L28` 11 名伪造 `th_*` 武将与 `th_chongzou`/`th_huanyin`/`th_xuanlv` 及 12 个 `_info`/`_map`/`_faq`/虚构键、`U08` `yxs_tafang_wave`/`advanceTafangWave`、4 个合成战役步进技能（`boss_baonu_stage`/`taixu_expedition_step`/`doomsday_infection_step`/`martial_formation_step`）及 `drawSpineSkeletalCanvas` 示意画法；清除 `decision34*` 全部合并 `ctx.start_draw(owner, 1)` 兜底、`_ => {}` 静默空操作与 UI 钩子摸牌/加甲/回血副作用（逐条理由见 [`2026-11-09-decision34-cleanup`](../2026-11-09-decision34-cleanup/README.md) 与 [`2026-11-09-decision34-step3-18sources-closure`](../2026-11-09-decision34-step3-18sources-closure/README.md)）。
+> 3. **按上游重做全部 37 来源核心规则/界面、净室 Spine 4.0 播放器并接入正式包四端产品路径（第三步与 3a，详见 [`2026-11-10-decision34-round4-37-closure`](../2026-11-10-decision34-round4-37-closure/README.md)）**：
+>    - **规则层与正式包产品路径接线**：除已闭合的 30 个来源外，第四轮新增 `crates/content-native-loader/src/{shahai_config,shahai_generals_data,shahai_cards_skills_data,shahai_attach,taixu_generals_data,taixu_skills_data,taixu_campaign_data,zuan_data}.rs` 与 `crates/engine-native-kernel/src/rvm_ops/commit_up37/{decision34_u05_ops,decision34_u05_gujian_gwent,decision34_u05_hearth,decision34_u05_swd_cards,decision34_u05_swd_chars,decision34_u05_ow_xianjian,decision34_l11_buffs,decision34_l11_skills,decision34_l25_ssr,decision34_l25_rules}.rs`，将 `U05` 杀海拾遗 9 子包（332 将/1,007 技/275 卡/7 配置共 1,621 项）、`L11` 太虚幻境（320 将/380 技/32 卡/206 赛季事件侍灵节点共 938 项规则内容 + 4 表面）与 `L25` 祖安武将（60 名 `ssr_*` 武将/84 技/8 卡/70 配置 + 40 界面钩子）全部经 `attach_formal_package_upstream_rules` 接入对应 `packages/extensions/*` 正式包四端产品路径（同时保持 `L08/L14/L24` 纯皮肤/UI 包 0 VM 技能/0 卡牌隔离，`nc05_skin_ui_asset_separation` PASS）；前端新增 `apps/web-client/src/engine/surfaces/{decadeMarkSkillsData,decadeUiSurface,qhlySurface,shoushaUiSurface,skinSwitchSurface,zuanSurface,taixuSurface}.ts` 与 `UiSkinSuitePanel.vue` 完整实现 `L08`（319 钩子/43 表面）、`L09`（8 钩子/12 表面）、`L14`（53 钩子/40 表面）、`L24`（22 钩子/10 表面）及 `L11`（4 样式商铺侍灵表面），通过 `pnpm test`（**486/486 PASS**）与真实无头 Chrome WebGL/DOM 截图及 60 FPS 测帧（`1160×1306`，`p50=16.66ms, p95=16.67ms, p99=16.67ms`，**60.0 FPS**）。
+>    - **裁决 35 净室 Spine 4.0 播放器加固**：在 `apps/web-client/src/engine/spine40/` 补齐标准 Spine 4.0 `.skel` 二进制顺序流双向编解码（`binarySkelCodec.ts`）、Sutherland-Hodgman 裁剪附件多边形半平面重三角化与浏览器 WebGL GLSL 着色器纹理批量管线（`webglRenderer.ts`），并在 `Spine40SkinImportBox.vue` 提供 `dynamicSkin.js`/`saveSkinParams` 本地 4.0 动皮导入入口，未导入资产或非 4.0 版本显式回退静态立绘（`spine40-cleanroom.test.mjs` **9/9 PASS**，见 [`2026-11-09-spine40-cleanroom`](../2026-11-09-spine40-cleanroom/README.md)）。
+> 4. **2026-11-10 全 37 来源八项签署实况表（严格对照 [`docs/migration/g0/README.md`](../../../migration/g0/README.md) 逐项统计：忠实实现 `4,435` / 示意或自造 `0` / 缺失 `0`，合计 `4,435` 项）**：
 >
 > | 来源 ID | 名称 | 包数 | ①功能（忠实/示意/缺失） | ②配置 | ③依赖 | ④组合 | ⑤保存恢复 | ⑥目标平台（四端已验；差移动真机） | ⑦性能（`nc12_bench` + Chrome 60FPS） | ⑧规则差异 / 界面对照 | 整包八项签署 |
 > |---|---|---:|---|---|---|---|---|---|---|---|---|
@@ -14,7 +14,7 @@
 > | **U02** | boss | 1 | ✅（17 / 0 / 0：`boss_storage_playpackconfig` 挑战/剑阁池全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（已对照闭合） | 待移动真机 |
 > | **U03** | cardpile | 1 | ✅（30 / 0 / 0：29 类牌堆条目与 1 模式节点全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（已对照登记） | 待移动真机 |
 > | **U04** | coin | 1 | ✅（7 / 0 / 0：金币/战棋模式、`_buy` 拖拽购买与 4 项 Canvas 粒子特效全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（已对照登记） | 待移动真机 |
-> | **U05** | 杀海拾遗 | 9 | 部分（406 / 87 / 1128：9 子包已覆盖 406 项，`main/config.js` 6 配置与各子包余将余技待补） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | 部分（余将/余技未闭合） | 未完成 |
+> | **U05** | 杀海拾遗 | 9 | ✅（1621 / 0 / 0：9 个 `sha*-upstream-noname` 正式子包接入全部 332 将、1,007 技、275 卡与 7 项 `main/config.js` 开关） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（已对照闭合；确定性简化差异已登记） | 待移动真机 |
 > | **U06** | 欢乐卡牌 | 1 | ✅（11 / 0 / 0：6 张专属牌与 5 项装备技全接入 `huanle-upstream-noname`） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（已对照闭合） | 待移动真机 |
 > | **U07** | 玩点论杀 | 1 | ✅（36 / 0 / 0：9 将、3 张专属牌、24 项顶层技能及 6 子技全接入 `wudian-upstream-noname`） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（已对照闭合） | 待移动真机 |
 > | **U08** | 英雄杀 | 1 | ✅（150 / 0 / 0：43 名 `yxs_*` 武将与 107 项技能全接入 `hero-kill-upstream-noname`） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（已对照闭合） | 待移动真机 |
@@ -25,13 +25,13 @@
 > | **L05** | coin (liuli) | 1 | ✅（4 / 0 / 0：金币规则、`_buy` 拖拽购买与 4 项 Canvas 粒子特效全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（已对照登记） | 待移动真机 |
 > | **L06** | wuxing | 1 | ✅（3 / 0 / 0：`_wuxing` 生克、`wuxingpan` 与 `wuxingpan_skill` 全接入 `wuxing-upstream-liuli`） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（已对照闭合） | 待移动真机 |
 > | **L07** | 全能搜索 | 1 | ✅（13 / 0 / 0：4 配置与 9 项搜索详情/`SimplePagination` 分页/悬浮球 DOM 表面全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（已对照闭合） | 待移动真机 |
-> | **L08** | 十周年UI | 1 | 部分（44 / 52 / 310：44 配置与净室 Spine 4.0 播放器已实现，319 钩子与 43 布局待完整复刻） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | 部分（UI 布局与本机动皮截图待对照） | 未完成 |
-> | **L09** | 千幻聆音 | 1 | 部分（85 / 12 / 5：82 配置与 3 项换肤/配音钩子忠实实现，12 个 UI 面与 5 钩子待外部资源对照） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | 部分（皮肤窗口与资产版权待确认） | 未完成 |
-> | **L10** | 史诗卡牌 | 1 | ✅（17 / 0 / 0：10 配置、`reguhuo`/`rangjie`、十常侍 `k_danggu` 10 侍 `SkillInstance`/`k_mowang`、`_emojiRebate1` 与 2 卡面表面全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（无 4.0 动皮回退静态已登记；待本机动皮对照） | 待移动真机 |
-> | **L11** | 太虚幻境 | 1 | 部分（0 / 4 / 938：伪造单步已删，4 项前端骨架已建，320 将/380 技/32 卡/206 节点待迁入） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | 部分（战役内容未迁完） | 未完成 |
-> | **L12** | 如真似幻 | 1 | ✅（6 / 0 / 0：`numToRoma`、动态皮肤光效与 6 个大厅/排位/八品/战绩渲染面全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（无 4.0 动皮回退静态已登记；待本机动皮对照） | 待移动真机 |
+> | **L08** | 十周年UI | 1 | ✅（406 / 0 / 0：44 配置、319 项技能角标/交互钩子、43 项十周年布局表面与净室 Spine 4.0 播放器全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | 部分（无 4.0 动皮回退静态已登记；待用户本机 4.0 动皮对照） | 待动皮对照与真机 |
+> | **L09** | 千幻聆音 | 1 | ✅（102 / 0 / 0：82 配置、8 项换肤/角色 BGM/胜利台词钩子、`skinShare` 映射与 12 套千幻详情主题表面全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | 部分（不附带外部版权资产；待用户本机 4.0 动皮对照） | 待动皮对照与真机 |
+> | **L10** | 史诗卡牌 | 1 | ✅（17 / 0 / 0：10 配置、`reguhuo`/`rangjie`、十常侍 `k_danggu` 10 侍 `SkillInstance`/`k_mowang`、`_emojiRebate1` 与 2 卡面表面全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | 部分（无 4.0 动皮回退静态已登记；待用户本机 4.0 动皮对照） | 待动皮对照与真机 |
+> | **L11** | 太虚幻境 | 1 | ✅（942 / 0 / 0：320 将、380 技、32 卡、206 赛季/事件/侍灵节点全接入 `taixu-upstream-liuli`，含 4 项商铺/侍灵表面） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | 部分（无 4.0 动皮回退静态已登记；待用户本机 4.0 动皮对照） | 待动皮对照与真机 |
+> | **L12** | 如真似幻 | 1 | ✅（6 / 0 / 0：`numToRoma`、动态皮肤光效与 6 个大厅/排位/八品/战绩渲染面全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | 部分（无 4.0 动皮回退静态已登记；待用户本机 4.0 动皮对照） | 待动皮对照与真机 |
 > | **L13** | 手杀MVP | 1 | ✅（10 / 0 / 0：7 配置、幂等计分公式、`_qy_chongzhu` 与 2 项 MVP 终局结算大屏表面全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（已对照闭合） | 待移动真机 |
-> | **L14** | 手杀ui | 1 | 部分（48 / 88 / 5：48 配置忠实实现，53 个 UI 钩子与 40 个手杀 DOM/CSS 表面待完整复刻） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | 部分（手杀界面待复刻对照） | 未完成 |
+> | **L14** | 手杀ui | 1 | ✅（141 / 0 / 0：48 配置、53 项阶段提示/木牛流马自动理牌/露头/语音钩子与 40 个 `lbtn`/`skill`/`character` 表面全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（已对照闭合） | 待移动真机 |
 > | **L15** | 手杀全扩 | 1 | ✅（14 / 0 / 0：11 配置与 3 将池策略全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（已对照登记） | 待移动真机 |
 > | **L16** | 拖拽读取 | 1 | ✅（3 / 0 / 0：2 配置与压缩包探测/路径清洗入口全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（已对照登记） | 待移动真机 |
 > | **L17** | 斗转星移 | 1 | ✅（11 / 0 / 0：9 配置、禁将方案钩子与面板全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（已对照登记） | 待移动真机 |
@@ -41,17 +41,17 @@
 > | **L21** | 武皇争霸 | 1 | ✅（9 / 0 / 0：1 模式节点、7 配置与 1 战役面板全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（已对照闭合） | 待移动真机 |
 > | **L22** | 段位制裁 | 1 | ✅（8 / 0 / 0：5 规则技与 3 配置项全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（已对照登记） | 待移动真机 |
 > | **L23** | 电脑适配 | 1 | ✅（1 / 0 / 0：指针分类与导出文件名白名单全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（已对照登记） | 待移动真机 |
-> | **L24** | 皮肤切换 | 1 | 部分（14 / 32 / 0：14 配置与净室 Spine 4.0 导入入口已落地，22 项皮肤钩子与 10 项动皮渲染面待复刻与本机资源对照） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | 部分（资产版权与本机动皮截图待确认） | 未完成 |
-> | **L25** | 祖安武将 | 1 | 部分（70 / 181 / 11：70 配置与单机 DIY 门禁忠实，60 名 `ssr_*` 武将、84 技、40 钩子与 8 卡牌待逐项完备） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | 部分（`ssr_*` 技能与卡牌待闭合） | 未完成 |
+> | **L24** | 皮肤切换 | 1 | ✅（46 / 0 / 0：14 配置、22 项出框攻击/变身/语音钩子、10 项藏珍阁/调参表面与净室 Spine 4.0 导入器全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | 部分（不附带外部版权资产；待用户本机 4.0 动皮对照） | 待动皮对照与真机 |
+> | **L25** | 祖安武将 | 1 | ✅（262 / 0 / 0：60 名真实 `ssr_*` 武将、84 技、8 卡、70 配置、40 钩子与联机 DIY 拒绝门禁全接入 `zuan-upstream-liuli`） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（已对照闭合） | 待移动真机 |
 > | **L26** | 笨蛋插件 | 1 | ✅（7 / 0 / 0：5 配置、选牌辅助钩子与互动投掷表情/悬停主题渲染面全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（已对照闭合） | 待移动真机 |
 > | **L27** | 选将美化 | 1 | ✅（54 / 0 / 0：10 配置、31 项选将规则技、12 项双将/选将钩子与双将选将面板全接入 `select-beautify-upstream-liuli`） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（已对照闭合） | 待移动真机 |
-> | **L28** | 雷霆万钧 | 1 | ✅（56 / 0 / 0：7 配置、14 名 `th_*` 武将、33 项顶层技含 11 子技、`th_taipingyaoshu` 与 1 项雷霆渲染面全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（无 4.0 动皮回退静态已登记；待本机动皮对照） | 待移动真机 |
+> | **L28** | 雷霆万钧 | 1 | ✅（56 / 0 / 0：7 配置、14 名 `th_*` 武将、33 项顶层技含 11 子技、`th_taipingyaoshu` 与 1 项雷霆渲染面全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | 部分（无 4.0 动皮回退静态已登记；待用户本机 4.0 动皮对照） | 待动皮对照与真机 |
 > | **L29** | 龙血玄黄 | 1 | ✅（9 / 0 / 0：`mbqianlong` 与清正/酒诗/放逐/绝进 5 技、`shengjian` 配置、`_CMeffects` 及 2 渲染面全忠实） | ✅ | ✅ | ✅ | ✅ | 部分（四端 ✅ / 缺移动真机） | ✅ | ✅（已对照闭合） | 待移动真机 |
 >
-> **2026-11-09 裁决 34/35 第三步推进后八项汇总（分母 = 37 来源 / 46 扩展包）**：
-> - **②配置 / ③依赖 / ④组合 / ⑤保存恢复 / ⑦性能**：**37/37** 均已通过四端产品路径与 `nc12_bench` / Headless Chrome 60 FPS 实测。
-> - **①功能 / ⑧规则差异（仓内忠实闭合度）**：**30/37 来源**（`U01..U04, U06..U08, L01..L07, L10, L12, L13, L15..L23, L26..L29`）仓内条目 100% 忠实实现（`示意或自造 = 0, 缺失 = 0`），仅待移动端真机（其中 `L10/L12/L28` 另待用户本机 4.0 动皮资源对照）；其余 **7/37 大体量来源**（`U05, L08, L09, L11, L14, L24, L25`）因仍有未逐项迁完的武将/技能/卡牌或 DOM/CSS/Spine 界面钩子（全仓合计：忠实实现 **1,582** / 示意或自造 **456** / 缺失 **2,397**），如实标为 `部分`。
-> - **⑥目标平台**：Web/WASM、真实 Web Worker、Server、Desktop (Tauri) 四端 **37/37 全通过**；因 Android/iOS 物理真机未接入（`adb devices` 空、物理 iPhone `00008140-0002149826F3001C` `unavailable`），移动端目标平台待外部真机补测，故**整包八项全满签署仍为 `0/37`**。
+> **2026-11-10 裁决 34/35 第四轮推进后八项汇总（分母 = 37 来源 / 46 扩展包）**：
+> - **①功能 / ②配置 / ③依赖 / ④组合 / ⑤保存恢复 / ⑦性能**：**37/37 来源**仓内全部 **4,435/4,435 项**上游条目均已忠实实现（`示意或自造 = 0, 缺失 = 0`），并通过四端产品路径、`nc12_bench` 与真实 Headless Chrome WebGL/DOM 60 FPS 实测。
+> - **⑧规则差异 / 界面对照**：**30/37 非 Spine 来源**全部 `✅` 对照闭合；涉及 Spine 的 **7 个来源**（`L08, L09, L10, L11, L12, L24, L28`）已完成净室 Spine 4.0 播放器、无资源/非 4.0 静态立绘回退及无头 WebGL 批次实测，按[裁决 35](../2026-10-28-user-decisions/README.md)在用户本机用自有 Spine 4.0 动皮截图对照完成前如实标为 `部分`。
+> - **⑥目标平台**：Web/WASM、真实 Web Worker、Server、Desktop (Tauri) 四端 **37/37 全通过**；因 Android/iOS 物理真机未接入，移动端目标平台待外部真机补测，故**整包八项全满签署仍为 `0/37`**。
 
 ---
 

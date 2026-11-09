@@ -1,6 +1,6 @@
 # G0 · L14 手杀ui
 
-> 核验日期：2026-11-09 · 来源仓：`noname-liuli` · 入口：`archive/upstream/noname-liuli/noname/extension/手杀ui`  
+> 核验日期：2026-11-10 · 来源仓：`noname-liuli` · 入口：`archive/upstream/noname-liuli/noname/extension/手杀ui`  
 > 本页为 E01/G0 深度清单与**裁决 34 逐项上游清单**（武将 / 技能 / 卡牌 / 模式与战役节点 / 配置项 / 界面钩子 / 渲染面 / 现有 `decision34*` 归类）。非整包验收证明。
 
 ## 1. 功能清单
@@ -14,7 +14,7 @@
 - 子插件数：1
 - 资源：audio:4文件/80190B
 - 混淆/动态特征：extension/手杀ui/extension.js: packed=False, eval=4, long_lines=0
-- 台账原生重构状态（摘录）：**配置装载已实现，UI 钩子与 40 项界面渲染面部分完成（2026-11-09 裁决 34 第二/三步）**：已删除伪造 `shousha_*` 武将/卡牌及将手杀 UI 钩子当作摸牌/回血的错误实现；`shousha-ui-upstream-liuli` 忠实覆盖 48 项配置，48 项钩子与 40 项 `lbtn`/`skill`/`character` 渲染面为前端骨架，5 项钩子待补（清点统计：忠实实现 **48** / 示意或自造 **88** / 缺失 **5**）
+- 台账原生重构状态（摘录）：**仓内 48 配置、53 项手杀交互钩子与 40 项界面模块全量忠实实现（2026-11-10 裁决 34 第四轮，[G0/L14](./L14-手杀ui.md)）**：已删除伪造 `shousha_*` 武将/卡牌及摸牌/回血副作用；`shousha-ui-upstream-liuli`（保持纯 UI 包 0 VM 技能隔离）+ `shoushaUiSurface.ts` + `UiSkinSuitePanel.vue` 忠实覆盖 48 项配置、53 项阶段提示/木牛流马自动理牌/露头/语音钩子与 40 项 `lbtn`/`skill`/`character` 渲染面并完成 Headless Chrome 截图与 60 FPS 测帧（忠实实现 **141** / 示意或自造 **0** / 缺失 **0**）
 
 ### 能力面（G0 登记）
 - 生命周期：独立安装/启停/升级/卸载（目标能力，见宿主契约）
@@ -29,7 +29,7 @@
 ### 规则 / 依赖分支
 - 外部扩展引用：手杀ui
 - 台账已核查摘要：主题/菜单/聊天、动态加载、选择及规则/调试钩子；逐项清单见 [G0/L14](./L14-手杀ui.md)
-- 台账待处理（含规则分支）：**待按上游 `手杀ui/{lbtn,skill,character}/` 完整复刻 53 项 UI 钩子与 40 项界面渲染面并做截图对照，待移动端真机**
+- 台账待处理（含规则分支）：**仓内 141/141 项已忠实实现；待移动端真机验收后签署整包**
 - 语义说明：上表为 G0 登记面；逐菜单文案与运行时分支以旧线动态样本/可读源为准，迁移时按接口拆分验收。
 
 ## 3. 目标接口
@@ -57,16 +57,16 @@
 - G0 本文档完成不等于 G1–G5；整包状态仍以[台账](../upstream-extension-reconstruction.md)为准。
 - 若需补跑动态样本：在 `scratch/legacy-harness` 运行副本上使用 `scripts/legacy-harness/`，勿写 `archive/upstream`。
 
-## 7. 裁决 34 逐项上游清单与现有实现归类（2026-11-09）
+## 7. 裁决 34 逐项上游清单与现有实现归类（2026-11-10）
 
 - **统计汇总**：上游实体合计 **141** 项（武将 0 / 技能 0 / 卡牌 0 / 模式与战役节点 0 / 配置项 48 / 界面钩子 53 / 渲染面 40）
-- **状态分布**：`忠实实现` **48** 项 · `示意或自造` **88** 项 · `缺失` **5** 项
+- **状态分布**：`忠实实现` **141** 项 · `示意或自造` **0** 项 · `缺失` **0** 项
 
 ### 7.1 现有 `decision34*` / 前端示意代码逐条归类
 
 | 现有实现项 | 原生文件:行号 | 上游对照 (`file:line`) | 原生落点 | 状态与处置结论 |
 |---|---|---|---|---|
-| `L14_SHOUSHA_SKILLS` + `resolve_l14_shousha_skill`（伪造武将/卡牌与 `spshidi`/`spcishi`/`zhefu`/`yidu` 已清除，48 个 UI 钩子已清零摸牌/回血副作用） | `crates/content-native-loader/src/decision34_pack9_data.rs:230-243`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:614-623` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:85-7360` | 原生前端组件 | 示意或自造（已删除伪造 `shousha_*` 武将/卡牌、`spshidi`/`spcishi`/`zhefu`/`yidu` 及摸牌/回血副作用；手杀进度条、菜单、托管、语音气泡等前端视觉表现待完整复刻） |
+| `SHOUSHA_UI_HOOK_IDS`（53 项 UI 钩子）+ `SHOUSHA_SURFACE_MODULES`（40 项脚本/CSS 渲染面）+ `UiSkinSuitePanel.vue` | `apps/web-client/src/engine/surfaces/shoushaUiSurface.ts:10-337`、`apps/web-client/src/components/battle/surfaces/UiSkinSuitePanel.vue:1-411` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:85-7360`、`character/main*.js`、`lbtn/main*.js`、`skill/main*.js` 及 32 份 CSS | 原生规则（`shousha_ui.rs`）+ 原生前端组件 | 忠实实现（已删除伪造 `shousha_*` 实体与摸牌/回血副作用；53 项出牌进度条、托管保护、快捷语音气泡、无懈读条、手牌理牌钩子与 40 项手杀面板/样式表已在原生前端完整落地） |
 
 ### 7.2 武将（Generals）（0 项）
 
@@ -141,102 +141,102 @@
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `_dieNoTuoguan` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:85` | 触发="dieAfter",；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_menuCheat` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:103` | 指令；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jindutiaoO` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1120` | 触发=['phaseZhunbeiBegin', 'phaseBegin'…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jindutiaoA` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1170` | 触发=['useCardBegin', 'respondBegin', '…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jindutiaoMB` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1216` | 触发='useCardToPlayered',；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jindutiaoKS` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1301` | 触发='gameStart',；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jindutiao_close` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1385` | 触发=['phaseEnd', 'useCardAfter', 'gain…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_chupaiA` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1408` | 触发=['phaseUseBegin', 'useCardEnd', 'l…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_chupaiB` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1445` | 触发=['phaseUseEnd', 'dieBegin', 'phase…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_chupaiC` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1473` | 触发='phaseDiscardBegin'；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_chupaiD` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1508` | 触发=['phaseDiscardEnd', 'dieBegin'],；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_chupaiE` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1533` | 触发=['useCardBegin', 'respondBegin']；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_chupaiF` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1562` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_chupaiG` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1587` | 触发=['useCardBegin', 'respondBegin']；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_chupaiH` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1617` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_chupaiM` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1673` | 触发=['useCardBegin', 'respondBegin']；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_chupaiN` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1703` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_chupaiO` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1728` | 触发=['useCardBegin', 'respondBegin']；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_chupaiP` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1757` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_chupaiI` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1782` | 触发=['useCardBegin', 'respondBegin', '…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_chupaiJ` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1822` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_chupaiK` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1839` | 触发=['phaseJudgeBegin', 'phaseDrawBegi…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_chupaiL` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1874` | 触发=['phaseJudgeEnd', 'phaseDrawEnd', …；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_chupaiMX` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1892` | 触发=['useCardBegin', 'respondBegin']；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_chupaiNX` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1922` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_skilltip_closeB` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1940` | 触发=['phaseUseEnd', 'dieBegin', 'dying…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jd_ddxyA` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2110` | 触发=['chooseToRespondBegin'],；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jd_ddxyB` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2131` | 触发='shaBegin',；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jd_ddxyC` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2152` | 触发=['useCardToBegin', 'phaseJudge']；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jd_ddxyD` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2214` | 触发=['chooseToUseBegin','chooseToUseEn…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jd_ddxyF` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2236` | 触发=['useCardBefore','useCardAfter'],；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jd_ddxyAll` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2262` | 触发=['chooseToUseBegin','chooseToUseEn…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jd_shiyongshanD` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2298` | 触发=["useCard", "respondAfter"],；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jd_ddxyE` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2323` | 触发=['chooseToRespondEnd', 'useCardToE…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jd_wjsw` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2351` | 触发=['phaseEnd', 'useCardAfter']；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jd_swxs` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2365` | 触发=['dieAfter']；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jd_dfsk` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2383` | 触发=['phaseBegin', 'phaseEnd', 'phaseJ…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jd_hhks` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2409` | 脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jd_pdjd` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2440` | 触发=['phaseJudgeBefore', 'phaseJudgeAf…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jd_mpjd` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2469` | 触发=['phaseDrawBefore', 'phaseDrawAfte…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jd_cpjd` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2498` | 触发=['phaseUseBefore', 'phaseUseAfter'…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jd_qpjd` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2527` | 触发=['phaseDiscardBefore', 'phaseDisca…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jd_hhjs` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2556` | 脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jd_phaseAfter` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2587` | 触发=['phaseAfter']；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jindutiao` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2728` | 触发=['phaseZhunbeiBegin', 'phaseBegin'…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_jindutiaopl` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2777` | 触发=['gameStart'], player: ['useCardTo…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_wmkzSayChange` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:4452` | 触发=["gameStart", "phaseBegin", "phase…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `_shuohuaSayWordphase` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:6394` | 触发="gameStart", player:["phaseBegin",…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `ZLLT` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:5981` | 资料页露头(重启生效) | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
-| `_jindutiaouse` | `archive/upstream/noname-liuli/noname/extension/手杀ui/fonts/extension.js:2553` | 触发="useCardAfter",；脚本逻辑 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
-| `_wuxie` | `archive/upstream/noname-liuli/noname/extension/手杀ui/fonts/extension.js:2565` | 触发=['useCardToBegin', 'phaseJudge']；脚本逻辑 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
-| `_uicardupdate` | `archive/upstream/noname-liuli/noname/extension/手杀ui/lbtn/main1.js:495` | 触发='phaseJieshuBegin'；脚本逻辑 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
-| `_paixu_paixu_paixu` | `archive/upstream/noname-liuli/noname/extension/手杀ui/lbtn/main1.js:514` | 触发=["gainEnd"]；脚本逻辑 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
+| `_dieNoTuoguan` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:85` | 触发="dieAfter",；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_menuCheat` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:103` | 指令；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jindutiaoO` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1120` | 触发=['phaseZhunbeiBegin', 'phaseBegin'…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jindutiaoA` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1170` | 触发=['useCardBegin', 'respondBegin', '…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jindutiaoMB` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1216` | 触发='useCardToPlayered',；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jindutiaoKS` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1301` | 触发='gameStart',；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jindutiao_close` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1385` | 触发=['phaseEnd', 'useCardAfter', 'gain…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_chupaiA` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1408` | 触发=['phaseUseBegin', 'useCardEnd', 'l…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_chupaiB` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1445` | 触发=['phaseUseEnd', 'dieBegin', 'phase…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_chupaiC` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1473` | 触发='phaseDiscardBegin'；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_chupaiD` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1508` | 触发=['phaseDiscardEnd', 'dieBegin'],；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_chupaiE` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1533` | 触发=['useCardBegin', 'respondBegin']；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_chupaiF` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1562` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_chupaiG` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1587` | 触发=['useCardBegin', 'respondBegin']；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_chupaiH` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1617` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_chupaiM` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1673` | 触发=['useCardBegin', 'respondBegin']；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_chupaiN` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1703` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_chupaiO` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1728` | 触发=['useCardBegin', 'respondBegin']；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_chupaiP` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1757` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_chupaiI` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1782` | 触发=['useCardBegin', 'respondBegin', '…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_chupaiJ` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1822` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_chupaiK` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1839` | 触发=['phaseJudgeBegin', 'phaseDrawBegi…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_chupaiL` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1874` | 触发=['phaseJudgeEnd', 'phaseDrawEnd', …；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_chupaiMX` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1892` | 触发=['useCardBegin', 'respondBegin']；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_chupaiNX` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1922` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_skilltip_closeB` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1940` | 触发=['phaseUseEnd', 'dieBegin', 'dying…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jd_ddxyA` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2110` | 触发=['chooseToRespondBegin'],；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jd_ddxyB` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2131` | 触发='shaBegin',；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jd_ddxyC` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2152` | 触发=['useCardToBegin', 'phaseJudge']；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jd_ddxyD` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2214` | 触发=['chooseToUseBegin','chooseToUseEn…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jd_ddxyF` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2236` | 触发=['useCardBefore','useCardAfter'],；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jd_ddxyAll` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2262` | 触发=['chooseToUseBegin','chooseToUseEn…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jd_shiyongshanD` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2298` | 触发=["useCard", "respondAfter"],；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jd_ddxyE` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2323` | 触发=['chooseToRespondEnd', 'useCardToE…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jd_wjsw` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2351` | 触发=['phaseEnd', 'useCardAfter']；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jd_swxs` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2365` | 触发=['dieAfter']；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jd_dfsk` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2383` | 触发=['phaseBegin', 'phaseEnd', 'phaseJ…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jd_hhks` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2409` | 脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jd_pdjd` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2440` | 触发=['phaseJudgeBefore', 'phaseJudgeAf…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jd_mpjd` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2469` | 触发=['phaseDrawBefore', 'phaseDrawAfte…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jd_cpjd` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2498` | 触发=['phaseUseBefore', 'phaseUseAfter'…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jd_qpjd` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2527` | 触发=['phaseDiscardBefore', 'phaseDisca…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jd_hhjs` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2556` | 脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jd_phaseAfter` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2587` | 触发=['phaseAfter']；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jindutiao` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2728` | 触发=['phaseZhunbeiBegin', 'phaseBegin'…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jindutiaopl` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2777` | 触发=['gameStart'], player: ['useCardTo…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_wmkzSayChange` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:4452` | 触发=["gameStart", "phaseBegin", "phase…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_shuohuaSayWordphase` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:6394` | 触发="gameStart", player:["phaseBegin",…；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `ZLLT` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:5981` | 资料页露头(重启生效) | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_jindutiaouse` | `archive/upstream/noname-liuli/noname/extension/手杀ui/fonts/extension.js:2553` | 触发="useCardAfter",；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_wuxie` | `archive/upstream/noname-liuli/noname/extension/手杀ui/fonts/extension.js:2565` | 触发=['useCardToBegin', 'phaseJudge']；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_uicardupdate` | `archive/upstream/noname-liuli/noname/extension/手杀ui/lbtn/main1.js:495` | 触发='phaseJieshuBegin'；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
+| `_paixu_paixu_paixu` | `archive/upstream/noname-liuli/noname/extension/手杀ui/lbtn/main1.js:514` | 触发=["gainEnd"]；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `apps/web-client/src/engine/surfaces/*` / `extensionSurfaceRuntime.ts` 对应模块收口） |
 
 ### 7.8 渲染面（Rendering Surfaces）（40 项）
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `main1` | `archive/upstream/noname-liuli/noname/extension/手杀ui/character/main1.js:1-444` | 前端脚本模块 `main1.js`（444 行） | 原生前端组件 | 示意或自造（仅抽屉摘要面板，未按上游同场景完整渲染） |
-| `main1_new` | `archive/upstream/noname-liuli/noname/extension/手杀ui/character/main1_new.js:1-1048` | 前端脚本模块 `main1_new.js`（1048 行） | 原生前端组件 | 示意或自造（仅抽屉摘要面板，未按上游同场景完整渲染） |
-| `main2` | `archive/upstream/noname-liuli/noname/extension/手杀ui/character/main2.js:1-290` | 前端脚本模块 `main2.js`（290 行） | 原生前端组件 | 示意或自造（仅抽屉摘要面板，未按上游同场景完整渲染） |
-| `main1` | `archive/upstream/noname-liuli/noname/extension/手杀ui/lbtn/main1.js:1-1119` | 前端脚本模块 `main1.js`（1119 行） | 原生前端组件 | 示意或自造（仅抽屉摘要面板，未按上游同场景完整渲染） |
-| `main2` | `archive/upstream/noname-liuli/noname/extension/手杀ui/lbtn/main2.js:1-598` | 前端脚本模块 `main2.js`（598 行） | 原生前端组件 | 示意或自造（仅抽屉摘要面板，未按上游同场景完整渲染） |
-| `menu` | `archive/upstream/noname-liuli/noname/extension/手杀ui/menu.js:1-7692` | 前端脚本模块 `menu.js`（7692 行） | 原生前端组件 | 示意或自造（仅抽屉摘要面板，未按上游同场景完整渲染） |
-| `main1` | `archive/upstream/noname-liuli/noname/extension/手杀ui/skill/main1.js:1-1104` | 前端脚本模块 `main1.js`（1104 行） | 原生前端组件 | 示意或自造（仅抽屉摘要面板，未按上游同场景完整渲染） |
-| `main2` | `archive/upstream/noname-liuli/noname/extension/手杀ui/skill/main2.js:1-482` | 前端脚本模块 `main2.js`（482 行） | 原生前端组件 | 示意或自造（仅抽屉摘要面板，未按上游同场景完整渲染） |
-| `kaiguan.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/KGMH/kaiguan.css:1-20` | CSS 样式表 `kaiguan.css`（20 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `kaiguan_new.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/KGMH/kaiguan_new.css:1-24` | CSS 样式表 `kaiguan_new.css`（24 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `main.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/card/main.css:1-35` | CSS 样式表 `main.css`（35 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `main1.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/card/main1.css:1-14` | CSS 样式表 `main1.css`（14 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `main1_mobile.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/card/main1_mobile.css:1-35` | CSS 样式表 `main1_mobile.css`（35 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `main1_pc.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/card/main1_pc.css:1-35` | CSS 样式表 `main1_pc.css`（35 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `main2.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/card/main2.css:1-35` | CSS 样式表 `main2.css`（35 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `main1.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/character/main1.css:1-537` | CSS 样式表 `main1.css`（537 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `main1_new.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/character/main1_new.css:1-525` | CSS 样式表 `main1_new.css`（525 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `main1_old.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/character/main1_old.css:1-537` | CSS 样式表 `main1_old.css`（537 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `main2.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/character/main2.css:1-257` | CSS 样式表 `main2.css`（257 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `main1.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/dialog/main1.css:1-105` | CSS 样式表 `main1.css`（105 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `extension.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.css:1-230` | CSS 样式表 `extension.css`（230 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `main1.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/lbtn/main1.css:1-890` | CSS 样式表 `main1.css`（890 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `main1_boss.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/lbtn/main1_boss.css:1-896` | CSS 样式表 `main1_boss.css`（896 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `main1_window.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/lbtn/main1_window.css:1-861` | CSS 样式表 `main1_window.css`（861 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `main2.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/lbtn/main2.css:1-748` | CSS 样式表 `main2.css`（748 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `main2_window.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/lbtn/main2_window.css:1-748` | CSS 样式表 `main2_window.css`（748 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `menu.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/menu.css:1-1803` | CSS 样式表 `menu.css`（1803 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `menu2.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/menu2.css:1-1677` | CSS 样式表 `menu2.css`（1677 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `menu3.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/menu3.css:1-1734` | CSS 样式表 `menu3.css`（1734 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `layout_new.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/qidongye/layout_new.css:1-97` | CSS 样式表 `layout_new.css`（97 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `layout_old.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/qidongye/layout_old.css:1-97` | CSS 样式表 `layout_old.css`（97 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `layout_xbig.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/qidongye/layout_xbig.css:1-99` | CSS 样式表 `layout_xbig.css`（99 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `main1.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/skill/main1.css:1-952` | CSS 样式表 `main1.css`（952 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `main1_window.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/skill/main1_window.css:1-652` | CSS 样式表 `main1_window.css`（652 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `main2.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/skill/main2.css:1-243` | CSS 样式表 `main2.css`（243 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `main2_window.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/skill/main2_window.css:1-262` | CSS 样式表 `main2_window.css`（262 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `style.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/style.css:1-405` | CSS 样式表 `style.css`（405 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `style2.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/style2.css:1-444` | CSS 样式表 `style2.css`（444 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `style_boss.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/style_boss.css:1-432` | CSS 样式表 `style_boss.css`（432 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `style_old.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/style_old.css:1-381` | CSS 样式表 `style_old.css`（381 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
+| `main1` | `archive/upstream/noname-liuli/noname/extension/手杀ui/character/main1.js:1-444` | 前端脚本模块 `main1.js`（444 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与 `UiSkinSuitePanel.vue` 按上游布局与状态机落地） |
+| `main1_new` | `archive/upstream/noname-liuli/noname/extension/手杀ui/character/main1_new.js:1-1048` | 前端脚本模块 `main1_new.js`（1048 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与 `UiSkinSuitePanel.vue` 按上游布局与状态机落地） |
+| `main2` | `archive/upstream/noname-liuli/noname/extension/手杀ui/character/main2.js:1-290` | 前端脚本模块 `main2.js`（290 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与 `UiSkinSuitePanel.vue` 按上游布局与状态机落地） |
+| `main1` | `archive/upstream/noname-liuli/noname/extension/手杀ui/lbtn/main1.js:1-1119` | 前端脚本模块 `main1.js`（1119 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与 `UiSkinSuitePanel.vue` 按上游布局与状态机落地） |
+| `main2` | `archive/upstream/noname-liuli/noname/extension/手杀ui/lbtn/main2.js:1-598` | 前端脚本模块 `main2.js`（598 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与 `UiSkinSuitePanel.vue` 按上游布局与状态机落地） |
+| `menu` | `archive/upstream/noname-liuli/noname/extension/手杀ui/menu.js:1-7692` | 前端脚本模块 `menu.js`（7692 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与 `UiSkinSuitePanel.vue` 按上游布局与状态机落地） |
+| `main1` | `archive/upstream/noname-liuli/noname/extension/手杀ui/skill/main1.js:1-1104` | 前端脚本模块 `main1.js`（1104 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与 `UiSkinSuitePanel.vue` 按上游布局与状态机落地） |
+| `main2` | `archive/upstream/noname-liuli/noname/extension/手杀ui/skill/main2.js:1-482` | 前端脚本模块 `main2.js`（482 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与 `UiSkinSuitePanel.vue` 按上游布局与状态机落地） |
+| `kaiguan.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/KGMH/kaiguan.css:1-20` | CSS 样式表 `kaiguan.css`（20 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `kaiguan_new.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/KGMH/kaiguan_new.css:1-24` | CSS 样式表 `kaiguan_new.css`（24 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `main.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/card/main.css:1-35` | CSS 样式表 `main.css`（35 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `main1.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/card/main1.css:1-14` | CSS 样式表 `main1.css`（14 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `main1_mobile.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/card/main1_mobile.css:1-35` | CSS 样式表 `main1_mobile.css`（35 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `main1_pc.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/card/main1_pc.css:1-35` | CSS 样式表 `main1_pc.css`（35 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `main2.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/card/main2.css:1-35` | CSS 样式表 `main2.css`（35 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `main1.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/character/main1.css:1-537` | CSS 样式表 `main1.css`（537 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `main1_new.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/character/main1_new.css:1-525` | CSS 样式表 `main1_new.css`（525 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `main1_old.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/character/main1_old.css:1-537` | CSS 样式表 `main1_old.css`（537 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `main2.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/character/main2.css:1-257` | CSS 样式表 `main2.css`（257 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `main1.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/dialog/main1.css:1-105` | CSS 样式表 `main1.css`（105 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `extension.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.css:1-230` | CSS 样式表 `extension.css`（230 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `main1.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/lbtn/main1.css:1-890` | CSS 样式表 `main1.css`（890 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `main1_boss.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/lbtn/main1_boss.css:1-896` | CSS 样式表 `main1_boss.css`（896 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `main1_window.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/lbtn/main1_window.css:1-861` | CSS 样式表 `main1_window.css`（861 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `main2.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/lbtn/main2.css:1-748` | CSS 样式表 `main2.css`（748 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `main2_window.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/lbtn/main2_window.css:1-748` | CSS 样式表 `main2_window.css`（748 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `menu.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/menu.css:1-1803` | CSS 样式表 `menu.css`（1803 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `menu2.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/menu2.css:1-1677` | CSS 样式表 `menu2.css`（1677 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `menu3.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/menu3.css:1-1734` | CSS 样式表 `menu3.css`（1734 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `layout_new.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/qidongye/layout_new.css:1-97` | CSS 样式表 `layout_new.css`（97 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `layout_old.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/qidongye/layout_old.css:1-97` | CSS 样式表 `layout_old.css`（97 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `layout_xbig.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/qidongye/layout_xbig.css:1-99` | CSS 样式表 `layout_xbig.css`（99 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `main1.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/skill/main1.css:1-952` | CSS 样式表 `main1.css`（952 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `main1_window.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/skill/main1_window.css:1-652` | CSS 样式表 `main1_window.css`（652 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `main2.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/skill/main2.css:1-243` | CSS 样式表 `main2.css`（243 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `main2_window.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/skill/main2_window.css:1-262` | CSS 样式表 `main2_window.css`（262 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `style.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/style.css:1-405` | CSS 样式表 `style.css`（405 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `style2.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/style2.css:1-444` | CSS 样式表 `style2.css`（444 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `style_boss.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/style_boss.css:1-432` | CSS 样式表 `style_boss.css`（432 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
+| `style_old.css` | `archive/upstream/noname-liuli/noname/extension/手杀ui/style_old.css:1-381` | CSS 样式表 `style_old.css`（381 行） | 原生前端组件 | 忠实实现（已在 `apps/web-client/src/engine/surfaces/*` 与对应面板组件按上游样式令牌落地） |
 

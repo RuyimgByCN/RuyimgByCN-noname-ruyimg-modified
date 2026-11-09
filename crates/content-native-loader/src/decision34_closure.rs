@@ -479,7 +479,39 @@ pub fn verify_u08_standard_skill_bindings(catalog: &Catalog) -> Result<usize, St
     Ok(U08_STANDARD_SKILL_REFS.len())
 }
 
+#[path = "zuan_data.rs"]
+pub mod zuan_data;
+pub use zuan_data::*;
+
+#[path = "taixu_generals_data.rs"]
+pub mod taixu_generals_data;
+pub use taixu_generals_data::*;
+
+#[path = "taixu_skills_data.rs"]
+pub mod taixu_skills_data;
+pub use taixu_skills_data::*;
+
+#[path = "taixu_campaign_data.rs"]
+pub mod taixu_campaign_data;
+pub use taixu_campaign_data::*;
+
+#[path = "shahai_config.rs"]
+pub mod shahai_config;
+pub use shahai_config::*;
+
+#[path = "shahai_generals_data.rs"]
+pub mod shahai_generals_data;
+pub use shahai_generals_data::*;
+
+#[path = "shahai_cards_skills_data.rs"]
+pub mod shahai_cards_skills_data;
+pub use shahai_cards_skills_data::*;
+
 #[path = "decision34_pack9.rs"]
 pub mod decision34_pack9;
 pub use decision34_pack9::*;
+
+#[path = "shahai_attach.rs"]
+pub mod shahai_attach;
+pub use shahai_attach::*;
 

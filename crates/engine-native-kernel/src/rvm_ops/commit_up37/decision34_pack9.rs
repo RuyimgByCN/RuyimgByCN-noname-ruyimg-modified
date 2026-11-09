@@ -13,6 +13,7 @@ pub const MTG_LAND_CARD_ID: u32 = 1_926_002_004;
 pub const ZHENFA_POZHENJUE_ID: u32 = 1_926_002_005;
 pub const OW_SKILL_DISPATCH_ID: u32 = 1_926_002_006;
 pub const XIANJIAN_SKILL_DISPATCH_ID: u32 = 1_926_002_007;
+pub const U05_SHAHAI_SKILL_ID: u32 = 1_926_002_010;
 pub const WUDIAN_JIANBI_ID: u32 = 1_926_003_001;
 pub const WUDIAN_CHOUDU_ID: u32 = 1_926_003_002;
 pub const L08_DECADE_SKILL_ID: u32 = 1_926_004_001;
@@ -22,16 +23,7 @@ pub const L20_SKILL_DISPATCH_ID: u32 = 1_926_007_001;
 pub const L24_SKIN_SKILL_ID: u32 = 1_926_008_001;
 pub const L25_ZUAN_SKILL_ID: u32 = 1_926_009_001;
 pub const L27_SELECT_SKILL_ID: u32 = 1_926_010_001;
-
-fn discard_first_hand(ctx: &mut Ctx<'_>, owner: PlayerId) -> Option<CardId> {
-    if let Some(c) = ctx.core.player(owner).hand.first().copied() {
-        ctx.take_hand_card(owner, c);
-        discard_some(ctx, owner, vec![c]);
-        Some(c)
-    } else {
-        None
-    }
-}
+pub const L11_TAIXU_SKILL_ID: u32 = 1_926_011_001;
 
 fn discard_first_he(ctx: &mut Ctx<'_>, owner: PlayerId) -> Option<CardId> {
     if let Some(c) = ctx.core.player(owner).hand.first().copied() {
@@ -55,13 +47,14 @@ pub(super) fn try_commit_decision34_pack9(
 ) -> bool {
     match value {
         DDD_SKILL_DISPATCH_ID => resolve_u01_ddd_skill(ctx, executing, owner),
-        SWD_DUIJUE_ID => resolve_swd_duijue(ctx, owner),
-        SWD_TANLIN_ID => resolve_swd_tanlin(ctx, owner),
-        YUNCHOU_SKILL_ID => resolve_yunchou_skill(ctx, executing, owner),
-        MTG_LAND_CARD_ID => resolve_mtg_land_card(ctx, executing, owner),
-        ZHENFA_POZHENJUE_ID => resolve_zhenfa_pozhenjue(ctx, owner),
-        OW_SKILL_DISPATCH_ID => resolve_ow_skill(ctx, executing, owner),
-        XIANJIAN_SKILL_DISPATCH_ID => resolve_xianjian_skill(ctx, executing, owner),
+        SWD_DUIJUE_ID => resolve_u05_shahai_skill(ctx, executing, "duijue", owner),
+        SWD_TANLIN_ID => resolve_u05_shahai_skill(ctx, executing, "tanlin", owner),
+        YUNCHOU_SKILL_ID => resolve_u05_shahai_skill(ctx, executing, "ycnxinfu_qiaosi", owner),
+        MTG_LAND_CARD_ID => resolve_u05_shahai_skill(ctx, executing, "mtg_cangbaohaiwan", owner),
+        ZHENFA_POZHENJUE_ID => resolve_u05_shahai_skill(ctx, executing, "pozhenjue", owner),
+        OW_SKILL_DISPATCH_ID => resolve_u05_shahai_skill(ctx, executing, "shanhui", owner),
+        XIANJIAN_SKILL_DISPATCH_ID => resolve_u05_shahai_skill(ctx, executing, "tianjian", owner),
+        U05_SHAHAI_SKILL_ID => resolve_u05_shahai_skill(ctx, executing, "stone_chenshui", owner),
         WUDIAN_JIANBI_ID => resolve_wudian_jianbi(ctx, owner),
         WUDIAN_CHOUDU_ID => resolve_wudian_choudu(ctx, owner),
         L08_DECADE_SKILL_ID => resolve_l08_decade_skill(ctx, executing, owner),
@@ -71,16 +64,21 @@ pub(super) fn try_commit_decision34_pack9(
         L24_SKIN_SKILL_ID => resolve_l24_skin_skill(ctx, executing, owner),
         L25_ZUAN_SKILL_ID => resolve_l25_zuan_skill(ctx, executing, owner),
         L27_SELECT_SKILL_ID => resolve_l27_select_skill(ctx, executing, owner),
+        L11_TAIXU_SKILL_ID => {
+            super::decision34_l11_skills::resolve_l11_taixu_skill(ctx, executing, owner)
+        }
         _ => match executing {
-            "duijue" => resolve_swd_duijue(ctx, owner),
-            "tanlin" => resolve_swd_tanlin(ctx, owner),
-            "ycndiyjianxiong" | "xinfu_jingxie" | "ycnxinfu_qiaosi" => {
-                resolve_yunchou_skill(ctx, executing, owner)
-            }
-            "mtg_duzhao" | "mtg_cangbaohaiwan" | "g_mtg_duzhao" | "g_mtg_cangbaohaiwan" => {
-                resolve_mtg_land_card(ctx, executing, owner)
-            }
-            "pozhenjue" | "g_pozhenjue" => resolve_zhenfa_pozhenjue(ctx, owner),
+            "duijue"
+            | "tanlin"
+            | "ycndiyjianxiong"
+            | "xinfu_jingxie"
+            | "ycnxinfu_qiaosi"
+            | "mtg_duzhao"
+            | "mtg_cangbaohaiwan"
+            | "g_mtg_duzhao"
+            | "g_mtg_cangbaohaiwan"
+            | "pozhenjue"
+            | "g_pozhenjue" => resolve_u05_shahai_skill(ctx, executing, executing, owner),
             "jianbi" => resolve_wudian_jianbi(ctx, owner),
             "choudu" => resolve_wudian_choudu(ctx, owner),
             "_changeEquipExt"
@@ -332,229 +330,40 @@ fn resolve_u01_ddd_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
     }
 }
 
-/// `U05` `swd` (`duijue` 对决, limited skill on `swd_wangsiyuan` / `swd_weida`):
-/// Upstream `filterTarget`: `target.hp > 1 && player !== target`; `limited: true`.
-fn resolve_swd_duijue(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    if flag(ctx.core, owner, "duijue_used") == 1 {
-        set_flag(ctx.core, owner, "duijue_blocked_limited", 1);
-        return;
-    }
-    let Some(t) = first_other_alive(ctx.core, owner) else {
-        return;
-    };
-    if flag(ctx.core, owner, "duijue_target_hp_too_low") == 1 || ctx.core.player(t).hp <= 1 {
-        set_flag(ctx.core, owner, "duijue_blocked_hp", 1);
-        return;
-    }
-    set_flag(ctx.core, owner, "duijue_used", 1);
-    set_flag(ctx.core, owner, "duijue_active", 1);
-    ctx.emit(EventData::Damage(crate::machine::damage_data(
-        Some(owner),
-        t,
-        2,
-    )));
-    ctx.start_draw(owner, 1);
-}
-
-/// `U05` `swd` (`tanlin` 探林):
-/// Upstream `filter`: `player.countCards("h") > 0` and `target.countCards("h") > 0`;
-/// compares cards (win -> gain cards & `tanlin_discovered = 1`; lose -> take 1 damage from target).
-fn resolve_swd_tanlin(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    let Some(t) = first_other_alive(ctx.core, owner) else {
-        return;
-    };
-    if ctx.core.player(owner).hand.is_empty() || ctx.core.player(t).hand.is_empty() {
-        set_flag(ctx.core, owner, "tanlin_blocked_empty", 1);
-        return;
-    }
-    let step = flag(ctx.core, owner, "tanlin_step") + 1;
-    set_flag(ctx.core, owner, "tanlin_step", step);
-    if flag(ctx.core, owner, "tanlin_force_lose") == 1 {
-        set_flag(ctx.core, owner, "tanlin_lost_damage", 1);
-        ctx.emit(EventData::Damage(crate::machine::damage_data(
-            Some(t),
-            owner,
-            1,
-        )));
-        return;
-    }
-    ctx.start_draw(owner, 1);
-    if step >= 2 {
-        set_flag(ctx.core, owner, "tanlin_discovered", 1);
-        if ctx.core.player(owner).hp < ctx.core.player(owner).max_hp as i32 {
-            ctx.recover(owner, 1, None);
-        }
-    }
-}
-
-/// `U05` `yunchou` (`ycndiyjianxiong`, `xinfu_jingxie`, `ycnxinfu_qiaosi`):
-fn resolve_yunchou_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
-    let skill_name = if executing.is_empty() {
-        "ycnxinfu_qiaosi"
+/// `U05` `杀海拾遗` unified skill & card-skill dispatcher across all subpackages
+/// (`swd`, `mtg`, `yunchou`, `zhenfa`, `play/wuxing`, `ow`, `xianjian`, `gujian`, `gwent`, `hearth`, `stone`).
+fn resolve_u05_shahai_skill(ctx: &mut Ctx<'_>, executing: &str, fallback: &str, owner: PlayerId) {
+    let raw_name = if executing.is_empty() {
+        fallback
     } else {
         executing
     };
-    set_flag(ctx.core, owner, &format!("yunchou_skill:{skill_name}"), 1);
-    match skill_name {
-        "ycndiyjianxiong" => {
-            set_flag(ctx.core, owner, "ycndiyjianxiong_obtained", 1);
-            ctx.start_draw(owner, 1);
-        }
-        "xinfu_jingxie" => {
-            set_flag(ctx.core, owner, "xinfu_jingxie_recast", 1);
-            if ctx.core.player(owner).hp < ctx.core.player(owner).max_hp as i32 {
-                ctx.recover(owner, 1, None);
-            }
-            ctx.start_draw(owner, 1);
-        }
-        _ => {
-            set_flag(ctx.core, owner, "ycnxinfu_qiaosi_figure", 1);
-            set_flag(ctx.core, owner, "ycnxinfu_qiaosi_resolved", 1);
-            ctx.start_draw(owner, 2);
-            let _ = discard_first_hand(ctx, owner);
-        }
+    let skill_name = raw_name
+        .rsplit_once("__ref_")
+        .map(|(_, s)| s)
+        .unwrap_or(raw_name);
+    if super::decision34_u05_swd_chars::try_resolve_u05_swd_chars(ctx, skill_name, owner) {
+        return;
     }
-}
-
-/// `U05` `mtg` (`mtg_duzhao` 毒沼 & `mtg_cangbaohaiwan` 藏宝海湾 land cards):
-fn resolve_mtg_land_card(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
-    if flag(ctx.core, owner, "mtg_land_played_this_turn") == 1
-        || flag(ctx.core, owner, "mtg_land_tapped") == 1
+    if super::decision34_u05_swd_cards::try_resolve_u05_swd_cards_and_tactics(ctx, skill_name, owner)
     {
-        set_flag(ctx.core, owner, "mtg_land_blocked", 1);
         return;
     }
-    set_flag(ctx.core, owner, "mtg_land_played_this_turn", 1);
-    set_flag(ctx.core, owner, "mtg_land_active", 1);
-    if executing.contains("duzhao") {
-        let mana = flag(ctx.core, owner, "mtg_black_mana") + 1;
-        set_flag(ctx.core, owner, "mtg_black_mana", mana);
-        set_flag(ctx.core, owner, "mtg_duzhao_corrode", 1);
-        if let Some(t) = first_other_alive(ctx.core, owner) {
-            set_flag(ctx.core, t, "mtg_swamp_miasma", 1);
-        }
-    } else {
-        let mana = flag(ctx.core, owner, "mtg_treasure_mana") + 1;
-        set_flag(ctx.core, owner, "mtg_treasure_mana", mana);
-        set_flag(ctx.core, owner, "mtg_cangbaohaiwan_drawn", 1);
-        ctx.start_draw(owner, 1);
-    }
-}
-
-/// `U05` `zhenfa` (`pozhenjue` 破阵决, `recastable: true` & seat/formation disruption):
-fn resolve_zhenfa_pozhenjue(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    if flag(ctx.core, owner, "pozhenjue_recast") == 1 {
-        let _ = discard_first_hand(ctx, owner);
-        set_flag(ctx.core, owner, "pozhenjue_recasted", 1);
-        ctx.start_draw(owner, 1);
+    if super::decision34_u05_ow_xianjian::try_resolve_u05_ow_xianjian(ctx, skill_name, owner) {
         return;
     }
-    set_flag(ctx.core, owner, "pozhenjue_formation_broken", 1);
-    let mut alive_count = 0u32;
-    for pid in ctx.core.seat_order_from(owner) {
-        if ctx.core.player(pid).alive {
-            alive_count += 1;
-            ctx.core.player_mut(pid).linked = false;
-            set_flag(ctx.core, pid, "formation_active", 0);
-        }
-    }
-    set_flag(ctx.core, owner, "pozhenjue_seats_swapped", alive_count);
-    ctx.start_draw(owner, 1);
-}
-
-/// `U05` `ow` (26 Overwatch tactical/ultimate skills):
-fn resolve_ow_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
-    let skill_name = if executing.is_empty() {
-        "shanhui"
-    } else {
-        executing
-    };
-    if matches!(skill_name, "zhanlong" | "zihui" | "maichong")
-        && flag(ctx.core, owner, "ow_ult_require_charge") == 1
-        && flag(ctx.core, owner, "ow_ult_charge") < 100
-    {
-        set_flag(ctx.core, owner, "ow_ult_blocked", 1);
+    if super::decision34_u05_gujian_gwent::try_resolve_u05_gujian_gwent(ctx, skill_name, owner) {
         return;
     }
-    set_flag(ctx.core, owner, &format!("ow_skill:{skill_name}"), 1);
-    let count = flag(ctx.core, owner, "ow_skill_trigger_count") + 1;
-    set_flag(ctx.core, owner, "ow_skill_trigger_count", count);
-
-    match skill_name {
-        "shanhui" => {
-            let target_hp = flag(ctx.core, owner, "ow_shanhui_saved_hp") as i32;
-            let max_hp = ctx.core.player(owner).max_hp as i32;
-            ctx.core.player_mut(owner).hp = if target_hp > 0 {
-                target_hp.min(max_hp)
-            } else {
-                max_hp
-            };
-            set_flag(ctx.core, owner, "ow_shanhui_recalled", 1);
-            ctx.start_draw(owner, 1);
-        }
-        "zhanlong" | "zihui" | "maichong" => {
-            set_flag(ctx.core, owner, "ow_ult_charge", 0);
-            set_flag(ctx.core, owner, "ow_ult_unleashed", 1);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
-                ctx.emit(EventData::Damage(crate::machine::damage_data(
-                    Some(owner),
-                    t,
-                    1,
-                )));
-            }
-        }
-        "zhongdun" | "lichang" | "bingqiang" | "mianzhen" => {
-            let shield = flag(ctx.core, owner, "ow_shield_tokens") + 1;
-            set_flag(ctx.core, owner, "ow_shield_tokens", shield);
-            ctx.start_draw(owner, 1);
-        }
-        other => {
-            super::decision34_ext::resolve_u05_ow_remaining(ctx, other, owner);
-        }
+    if super::decision34_u05_hearth::try_resolve_u05_hearth(ctx, skill_name, owner) {
+        return;
     }
-}
-
-/// `U05` `xianjian` (26 Sword-and-Fairy skills):
-fn resolve_xianjian_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
-    let skill_name = if executing.is_empty() {
-        "tianjian"
-    } else {
-        executing
-    };
-    set_flag(ctx.core, owner, &format!("xianjian_skill:{skill_name}"), 1);
-    let count = flag(ctx.core, owner, "xianjian_skill_trigger_count") + 1;
-    set_flag(ctx.core, owner, "xianjian_skill_trigger_count", count);
-
-    match skill_name {
-        "tianjian" | "jianzhen" | "leiyu" | "qijian" => {
-            set_flag(ctx.core, owner, "xianjian_sword_thunder_hit", 1);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
-                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                    Some(owner),
-                    t,
-                    1,
-                    DamageNature::Thunder,
-                    None,
-                )));
-            }
-            if skill_name == "leiyu"
-                && ctx.core.player(owner).hp < ctx.core.player(owner).max_hp as i32
-            {
-                ctx.recover(owner, 1, None);
-            }
-        }
-        "xuanning" | "yujia" | "huxi" => {
-            set_flag(ctx.core, owner, "xianjian_ward_active", 1);
-            if ctx.core.player(owner).hp < ctx.core.player(owner).max_hp as i32 {
-                ctx.recover(owner, 1, None);
-            } else {
-                ctx.start_draw(owner, 1);
-            }
-        }
-        other => {
-            super::decision34_ext::resolve_u05_xianjian_remaining(ctx, other, owner);
-        }
-    }
+    set_flag(
+        ctx.core,
+        owner,
+        &format!("u05_unhandled_skill:{skill_name}"),
+        1,
+    );
 }
 
 /// `U07` `wudian` (`jianbi` 坚壁):
@@ -741,32 +550,20 @@ fn resolve_l24_skin_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
     set_flag(ctx.core, owner, "l24_skin_anim_state", 1);
 }
 
-/// `L25` (`祖安扩展` — `archive/upstream/noname-liuli/noname/extension/祖安扩展/extension.js`):
+/// `L25` (`祖安武将` — `archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js`):
 fn resolve_l25_zuan_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
     let skill_name = if executing.is_empty() {
         "g_du"
     } else {
         executing
     };
-    if matches!(skill_name, "_diycharacterskill" | "_diyskill") {
-        if flag(ctx.core, owner, "l25_online_room_active") == 1 {
-            set_flag(ctx.core, owner, "l25_diy_blocked_online", 1);
-            return;
-        }
-        set_flag(ctx.core, owner, "l25_diy_applied", 1);
-        set_flag(ctx.core, owner, &format!("l25_skill:{skill_name}"), 1);
+    if super::decision34_l25_rules::try_resolve_l25_rule_skill(ctx, skill_name, owner) {
         return;
     }
-    set_flag(ctx.core, owner, &format!("l25_skill:{skill_name}"), 1);
-    let count = flag(ctx.core, owner, "l25_zuan_trigger_count") + 1;
-    set_flag(ctx.core, owner, "l25_zuan_trigger_count", count);
-    if skill_name == "g_du" {
-        set_flag(ctx.core, owner, "l25_g_du_triggered", 1);
-        ctx.emit(EventData::LoseHp {
-            player: owner,
-            amount: 1,
-        });
+    if super::decision34_l25_ssr::try_resolve_l25_ssr_skill(ctx, skill_name, owner) {
+        return;
     }
+    set_flag(ctx.core, owner, &format!("l25_unhandled_skill:{skill_name}"), 1);
 }
 
 /// `L27` (`选将美化` — `archive/upstream/noname-liuli/noname/extension/选将美化/extension.js`):

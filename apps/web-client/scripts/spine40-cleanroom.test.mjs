@@ -284,3 +284,140 @@ test("Decision 35 (7/7): Atlas parser, WebGL batch geometry, premultiplied alpha
   assert.equal(valid40Res.status, "ready-spine40");
   assert.equal(valid40Res.skeletonData?.bones.length, 9);
 });
+
+test("Decision 35 (8/9): Standard Spine 4.0 binary .skel stream codec round-trips and rejects non-4.0 binary headers", async () => {
+  const { encodeStandardSpine40Skel, clipTriangleAgainstPolygon } = await import("../src/engine/spine40/index.ts");
+  const data = parseSpine40Json(HANDCRAFTED_SPINE40_SKELETON_JSON);
+  const stdSkelBytes = encodeStandardSpine40Skel(data);
+  // Standard .skel does NOT start with SP40 magic
+  assert.notEqual(String.fromCharCode(...stdSkelBytes.slice(0, 4)), "SP40");
+
+  const decoded = parseSpine40Binary(stdSkelBytes);
+  assert.equal(decoded.header.spine, "4.0.64");
+  assert.equal(decoded.bones.length, data.bones.length);
+  assert.equal(decoded.slots.length, data.slots.length);
+  assert.equal(decoded.skins.length, data.skins.length);
+  assert.ok(decoded.animations.daiji);
+  assert.ok(decoded.animations.jineng);
+
+  // Forge a non-4.0 ("3.8.99") standard binary header (8-byte hash + len+1=7 + "3.8.99")
+  const non40Bytes = new Uint8Array([
+    0x12, 0x34, 0x56, 0x78, 0x9a, 0xbc, 0xde, 0xf0,
+    7, 0x33, 0x2e, 0x38, 0x2e, 0x39, 0x39,
+    0, 0, 0, 0,
+  ]);
+  const fallbackRes = resolveDynamicSkinImport({ generalId: "lvbu", skinName: "3.8旧动皮" }, non40Bytes);
+  assert.equal(fallbackRes.status, "static-portrait-fallback");
+  assert.match(fallbackRes.reason, /UNSUPPORTED_SPINE_VERSION:3\.8\.99/);
+
+  // Verify Sutherland-Hodgman polygon clipping interpolates UVs along diagonal clip edge `x + y = 10`
+  const clipTri = [
+    [0, 0],
+    [10, 0],
+    [0, 10],
+  ];
+  const clippedPoly = clipTriangleAgainstPolygon(
+    [0, 0, 0, 0, 1, 1, 1, 1],
+    [20, 0, 1, 0, 1, 1, 1, 1],
+    [0, 20, 0, 1, 1, 1, 1, 1],
+    clipTri,
+  );
+  assert.equal(clippedPoly.length, 3);
+  // Vertex [20, 0, u=1] clipped at [10, 0] must interpolate u=0.5!
+  const rightIntercept = clippedPoly.find((v) => Math.abs(v[0] - 10) < 1e-4 && Math.abs(v[1]) < 1e-4);
+  assert.ok(rightIntercept, "expected clipped vertex at (10, 0)");
+  assert.ok(Math.abs(rightIntercept[2] - 0.5) < 1e-4, `expected interpolated u=0.5, got ${rightIntercept[2]}`);
+
+  // Triangle completely outside clip polygon produces 0 vertices (discarded, not clamped to edge)
+  const outsideClipped = clipTriangleAgainstPolygon(
+    [30, 30, 0, 0, 1, 1, 1, 1],
+    [40, 30, 1, 0, 1, 1, 1, 1],
+    [30, 40, 0, 1, 1, 1, 1, 1],
+    clipTri,
+  );
+  assert.equal(outsideClipped.length, 0);
+});
+
+test("Decision 35 (9/9): Full WebGL shader program, attribute pointers, and RGBA texture pipeline execute cleanly", () => {
+  const data = parseSpine40Json(HANDCRAFTED_SPINE40_SKELETON_JSON);
+  const atlas = parseTextureAtlas(HANDCRAFTED_SPINE40_ATLAS_TEXT);
+  const skel = createSkeletonInstance(data, "default");
+  const batches = buildBatchGeometry(skel, atlas, true);
+
+  const attribPointers = [];
+  let compiledShaders = 0;
+  let linkedPrograms = 0;
+  const fullMockGl = {
+    ARRAY_BUFFER: 0x8892,
+    ELEMENT_ARRAY_BUFFER: 0x8893,
+    DYNAMIC_DRAW: 0x88e8,
+    FLOAT: 0x1406,
+    TRIANGLES: 0x0004,
+    UNSIGNED_SHORT: 0x1403,
+    BLEND: 0x0be2,
+    COLOR_BUFFER_BIT: 0x4000,
+    VERTEX_SHADER: 0x8b31,
+    FRAGMENT_SHADER: 0x8b30,
+    COMPILE_STATUS: 0x8b81,
+    LINK_STATUS: 0x8b82,
+    TEXTURE_2D: 0x0de1,
+    TEXTURE0: 0x84c0,
+    RGBA: 0x1908,
+    UNSIGNED_BYTE: 0x1401,
+    TEXTURE_MIN_FILTER: 0x2801,
+    TEXTURE_MAG_FILTER: 0x2800,
+    TEXTURE_WRAP_S: 0x2802,
+    TEXTURE_WRAP_T: 0x2803,
+    LINEAR: 0x2601,
+    CLAMP_TO_EDGE: 0x812f,
+    viewport() {},
+    clearColor() {},
+    clear() {},
+    enable() {},
+    blendFuncSeparate() {},
+    createBuffer: () => ({}),
+    bindBuffer() {},
+    bufferData() {},
+    drawElements() {},
+    createShader: (type) => ({ type }),
+    shaderSource() {},
+    compileShader() {
+      compiledShaders += 1;
+    },
+    getShaderParameter: () => true,
+    createProgram: () => ({}),
+    attachShader() {},
+    linkProgram() {
+      linkedPrograms += 1;
+    },
+    getProgramParameter: () => true,
+    useProgram() {},
+    getAttribLocation: (_p, name) => (name === "a_position" ? 0 : name === "a_texCoord" ? 1 : 2),
+    getUniformLocation: (_p, name) => ({ name }),
+    enableVertexAttribArray() {},
+    vertexAttribPointer(index, size, _type, _norm, stride, offset) {
+      attribPointers.push({ index, size, stride, offset });
+    },
+    uniform2f() {},
+    uniform1i() {},
+    createTexture: () => ({}),
+    activeTexture() {},
+    bindTexture() {},
+    texImage2D() {},
+    texParameteri() {},
+  };
+
+  const res1 = renderSpineBatchesToWebGL(fullMockGl, batches, 220, 140);
+  assert.equal(res1.shaderProgramActive, true);
+  assert.equal(res1.drawCallCount, 2);
+  assert.equal(compiledShaders, 2);
+  assert.equal(linkedPrograms, 1);
+  assert.equal(attribPointers.length, 6); // 3 attributes * 2 batches
+
+  // Second frame reuses cached GLSL program without recompiling
+  const res2 = renderSpineBatchesToWebGL(fullMockGl, batches, 220, 140);
+  assert.equal(res2.shaderProgramActive, true);
+  assert.equal(compiledShaders, 2);
+  assert.equal(linkedPrograms, 1);
+});
+

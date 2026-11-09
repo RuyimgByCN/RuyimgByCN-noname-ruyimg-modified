@@ -28,6 +28,9 @@ mod l10_epic_cards_eight;
 #[path = "../l11_taixu_eight.rs"]
 mod l11_taixu_eight;
 
+#[path = "../decision34_round4_l11_taixu.rs"]
+mod decision34_round4_l11_taixu;
+
 #[path = "../l12_rzsh_eight.rs"]
 mod l12_rzsh_eight;
 
@@ -84,6 +87,9 @@ mod l24_skin_switch_eight;
 
 #[path = "../l25_zuan_eight.rs"]
 mod l25_zuan_eight;
+
+#[path = "../decision34_round4_l25_zuan.rs"]
+mod decision34_round4_l25_zuan;
 
 #[path = "../l26_fool_eight.rs"]
 mod l26_fool_eight;

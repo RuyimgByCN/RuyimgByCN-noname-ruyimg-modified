@@ -36,6 +36,7 @@ pub const L20_SKILL_DISPATCH_ID: u32 = 1_926_007_001;
 pub const L24_SKIN_SKILL_ID: u32 = 1_926_008_001;
 pub const L25_ZUAN_SKILL_ID: u32 = 1_926_009_001;
 pub const L27_SELECT_SKILL_ID: u32 = 1_926_010_001;
+pub const L11_TAIXU_SKILL_ID: u32 = 1_926_011_001;
 
 fn classify_skill_trigger(name: &str) -> (EventKind, VmFilterPolicy) {
     match name {
@@ -102,7 +103,7 @@ fn classify_skill_trigger(name: &str) -> (EventKind, VmFilterPolicy) {
     }
 }
 
-fn make_vm_skill_decl(name_str: &str, dispatch_id: u32, idx: usize) -> VmSkillDecl {
+pub(super) fn make_vm_skill_decl(name_str: &str, dispatch_id: u32, idx: usize) -> VmSkillDecl {
     let mod_name = format!("{name_str}#d34p9");
     let mut code = Vec::with_capacity(14);
     code.push(0x57); // HOST_SKILL
@@ -241,8 +242,8 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
         &["baozou", "wansha", "xueji", "shishi", "ganran"],
     );
     // L25: 60 authentic Zuan `ssr_*` characters (`祖安武将/extension.js:338-397`)
-    for &sym in &L25_ZUAN_CHARACTERS {
-        push_general(sym, Faction::Qun, Gender::Male, 4, &["g_du", "_diycharacterskill"]);
+    for &(sym, faction, gender, max_hp, sk_list) in &super::L25_SSR_GENERALS {
+        push_general(sym, faction, gender, max_hp, sk_list);
     }
     // L29: `mb_caomao` and `mb_caomao2` (`龙血玄黄/extension.js:24-25`)
     push_general(
@@ -274,7 +275,8 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
     );
 
     // Cards: U05 MTG (2), U05 Zhenfa (1), L20 (3 `zhengsu_*` cards from `标记补充/extension.js:6319-6321`),
-    // L01 (`yiyi` from `AI优化/extension.js:9205`), L06 (`wuxingpan` from `五行生克/extension.js:116`)
+    // L01 (`yiyi` from `AI优化/extension.js:9205`), L06 (`wuxingpan` from `五行生克/extension.js:116`),
+    // L25 (`ssr_newsance_*` & `ssr_yongsi_yuxi_card` from `祖安武将/extension.js:6535-28385`)
     let mut cards: Vec<CardDef> = Vec::new();
     let card_specs: [(&str, CardKind, Suit, u8); 8] = [
         ("mtg_duzhao", CardKind::Wuzhong, Suit::Spade, 1),
@@ -286,7 +288,7 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
         ("yiyi", CardKind::Wuzhong, Suit::Heart, 4),
         ("wuxingpan", CardKind::Wuzhong, Suit::Diamond, 5),
     ];
-    for &(cname, kind, suit, rank) in &card_specs {
+    for &(cname, kind, suit, rank) in card_specs.iter().chain(super::L25_ZUAN_FORMAL_CARDS.iter()) {
         if seen_cards.insert(cname.to_string()) {
             let interned = names::intern(cname.to_string());
             cards.push(CardDef::basic(interned, kind).with_suit_rank(suit, rank));
@@ -368,7 +370,13 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
     for &s in &L24_SKIN_SWITCH_SKILLS {
         push_skill(s, L24_SKIN_SKILL_ID);
     }
-    for &s in &L25_ZUAN_SKILLS {
+    for &s in super::L25_SSR_GENERAL_SKILLS
+        .iter()
+        .chain(super::L25_ALL_RULE_SKILLS.iter())
+        .chain(super::L25_ZUAN_CARD_ENTRIES.iter())
+        .chain(["ssr_yongsi_yuxi_card"].iter())
+        .chain(L25_ZUAN_SKILLS.iter())
+    {
         push_skill(s, L25_ZUAN_SKILL_ID);
     }
     for &s in &L27_SELECT_BEAUTIFY_SKILLS {
@@ -437,6 +445,18 @@ pub fn attach_formal_package_upstream_rules(
         }
     }
 
+    if super::try_attach_shahai_formal_package(
+        namespace,
+        package_id,
+        pack,
+        prior_packs,
+        &mut seen_generals,
+        &mut seen_cards,
+        &mut seen_skills,
+    ) {
+        return;
+    }
+
     let had_generals = !pack.generals.is_empty();
     let had_cards = !pack.cards.is_empty();
 
@@ -481,53 +501,6 @@ pub fn attach_formal_package_upstream_rules(
             }
             for &s in &U01_DDD_SKILLS {
                 push_skill(s, DDD_SKILL_DISPATCH_ID);
-            }
-        }
-        ("upstream-noname", "shahai-swd") => {
-            push_skill("duijue", SWD_DUIJUE_ID);
-            push_skill("tanlin", SWD_TANLIN_ID);
-        }
-        ("upstream-noname", "shahai-yunchou") => {
-            for &s in &U05_YUNCHOU_REMAINING_SKILLS {
-                push_skill(s, YUNCHOU_SKILL_ID);
-            }
-        }
-        ("upstream-noname", "shahai-mtg") => {
-            for &(cname, suit, rank, g_sk) in &U05_MTG_LAND_CARDS {
-                if !had_cards {
-                    push_card(cname, CardKind::Wuzhong, suit, rank);
-                }
-                push_skill(cname, MTG_LAND_CARD_ID);
-                push_skill(g_sk, MTG_LAND_CARD_ID);
-            }
-        }
-        ("upstream-noname", "shahai-zhenfa") => {
-            for &(cname, suit, rank, g_sk) in &U05_ZHENFA_CARDS {
-                if !had_cards {
-                    push_card(cname, CardKind::Wuzhong, suit, rank);
-                }
-                push_skill(cname, ZHENFA_POZHENJUE_ID);
-                push_skill(g_sk, ZHENFA_POZHENJUE_ID);
-            }
-        }
-        ("upstream-noname", "shaai-ow") => {
-            for &s in &U05_OW_SKILLS {
-                push_skill(s, OW_SKILL_DISPATCH_ID);
-            }
-        }
-        ("upstream-noname", "shaai-xianjian") => {
-            if !had_generals {
-                for &(sym, faction, gender, max_hp, sk_list) in &U05_XIANJIAN_GENERALS {
-                    push_general(sym, faction, gender, max_hp, sk_list);
-                }
-            }
-            for &s in &U05_XIANJIAN_SKILLS {
-                push_skill(s, XIANJIAN_SKILL_DISPATCH_ID);
-            }
-            for &(_, _, _, _, sk_list) in &U05_XIANJIAN_GENERALS {
-                for &s in sk_list {
-                    push_skill(s, XIANJIAN_SKILL_DISPATCH_ID);
-                }
             }
         }
         ("upstream-noname", "huanle-cards") => {
@@ -634,11 +607,43 @@ pub fn attach_formal_package_upstream_rules(
             }
             push_skill("l20_mark_dispatch", super::L20_MARK_DISPATCH_ID);
         }
-        ("upstream-liuli", "zuan") => {
-            for &sym in &L25_ZUAN_CHARACTERS {
-                push_general(sym, Faction::Qun, Gender::Male, 4, &["g_du", "_diycharacterskill"]);
+        ("upstream-liuli", "taixu") => {
+            for &(sym, faction, gender, max_hp, sk_list) in &super::L11_TAIXU_GENERALS {
+                push_general(sym, faction, gender, max_hp, sk_list);
             }
-            for &s in &L25_ZUAN_SKILLS {
+            for &(cname, kind, range, suit, rank) in &super::L11_TAIXU_CARDS {
+                if seen_cards.insert(cname.to_string()) {
+                    let interned = names::intern(cname.to_string());
+                    let card_def = if kind == CardKind::Weapon {
+                        CardDef::weapon(interned, range).with_suit_rank(suit, rank)
+                    } else {
+                        CardDef::basic(interned, kind).with_suit_rank(suit, rank)
+                    };
+                    pack.cards.push(card_def);
+                }
+            }
+            for &s in super::L11_TAIXU_SKILLS
+                .iter()
+                .chain(super::L11_TAIXU_CROSS_SKILLS.iter())
+                .chain(super::L11_TAIXU_CARD_IDS.iter())
+            {
+                push_skill(s, L11_TAIXU_SKILL_ID);
+            }
+        }
+        ("upstream-liuli", "zuan") => {
+            for &(sym, faction, gender, max_hp, sk_list) in &super::L25_SSR_GENERALS {
+                push_general(sym, faction, gender, max_hp, sk_list);
+            }
+            for &(cname, kind, suit, rank) in &super::L25_ZUAN_FORMAL_CARDS {
+                push_card(cname, kind, suit, rank);
+            }
+            for &s in super::L25_SSR_GENERAL_SKILLS
+                .iter()
+                .chain(super::L25_ALL_RULE_SKILLS.iter())
+                .chain(super::L25_ZUAN_CARD_ENTRIES.iter())
+                .chain(["ssr_yongsi_yuxi_card"].iter())
+                .chain(L25_ZUAN_SKILLS.iter())
+            {
                 push_skill(s, L25_ZUAN_SKILL_ID);
             }
         }
