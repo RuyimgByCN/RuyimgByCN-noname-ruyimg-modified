@@ -433,6 +433,68 @@ test("U04/L05 Canvas 粒子渲染器与 L07 全能搜索分页/关键词高亮 (
   ]);
 });
 
+test("U04/L05 _buy 拖拽购买、L10 返利/十常侍阵亡语音、L12 如真似幻光效、L13 _qy_chongzhu、L20/L26/L27 样式与 L29 _CMeffects", async () => {
+  const {
+    applyFoolCardHoverTheme,
+    applyL20MarkCssTheme,
+    applyL27SelectBeautifyTheme,
+    applyRzshDynamicSkinLighting,
+    dragBuyCoinShopItem,
+    incrementMvpRecastCount,
+    triggerL10EmojiRebate,
+    triggerL10ScsDieAudio,
+    triggerLongxueHolySwordEffect,
+  } = await import("../src/engine/extensionSurfaceRuntime.ts");
+
+  const s = createInitialExtensionSurfacesState();
+  // U04/L05: coin/extension.js:68-140 (_buy)
+  const coinAfterBuy = dragBuyCoinShopItem(s.coin, "fireworks", 20);
+  assert.equal(coinAfterBuy.balance, 80);
+  assert.ok(coinAfterBuy.activeEffects.includes("fireworks"));
+  assert.throws(
+    () => dragBuyCoinShopItem({ ...s.coin, balance: 5 }, "snow", 20),
+    /INSUFFICIENT_COINS_FOR_BUY/,
+  );
+
+  // L10: 史诗卡牌/extension.js:34553 (_emojiRebate1) & 34517 (scs_die_audio)
+  const rebate = triggerL10EmojiRebate(s.theme, 2, "wine");
+  assert.equal(rebate.rebatedEmotion, "rebate:wine->seat2");
+  assert.equal(rebate.theme.throwEmotionCue, "rebate:wine->seat2");
+  const afterDieAudio = triggerL10ScsDieAudio(rebate.theme, "scs_zhangrang");
+  assert.equal(afterDieAudio.lastVoiceCue, "die/scs_zhangrang.mp3");
+
+  // L12: 如真似幻/extension.js:510-2100
+  const rzsh = applyRzshDynamicSkinLighting(s.theme, 4);
+  assert.equal(rzsh.badgeRoman, "IV");
+  assert.ok(rzsh.cssFilter.includes("drop-shadow"));
+
+  // L13: 手杀MVP/extension.js:244 (_qy_chongzhu)
+  const mvpAfterRecast = incrementMvpRecastCount(s.mvp, 0, 2);
+  assert.equal(mvpAfterRecast.scores[0].assist, 6);
+  assert.equal(mvpAfterRecast.scores[0].total, 106);
+
+  // L20: 标记补充/extension.js:40-90
+  const l20Css = applyL20MarkCssTheme(s.theme, "shousha");
+  assert.equal(l20Css.theme.markStyle, "shousha");
+  assert.equal(l20Css.stylesheet, "extension/标记补充/shousha.css");
+
+  // L26: 笨蛋插件/extension.js:18-62
+  const l26Hover = applyFoolCardHoverTheme(s.workbench, "fangtong");
+  assert.equal(l26Hover.hoverBadge, "方统=36");
+  assert.equal(l26Hover.cssClass, "fool-hint-fangtong");
+
+  // L27: 选将美化/extension.js:42-95
+  const l27Css = applyL27SelectBeautifyTheme(s.theme, false);
+  assert.equal(l27Css.theme.selectBeautifyEnabled, false);
+  assert.equal(l27Css.cssClass, "l27-select-beautify-classic");
+
+  // L29: 龙血玄黄/extension.js:68-140 (_CMeffects)
+  const l29Fx = triggerLongxueHolySwordEffect(s.longxue, true);
+  assert.equal(l29Fx.longxue.shengjian, true);
+  assert.equal(l29Fx.effectCue, "longxue:shengjian:on");
+});
+
+
 
 
 

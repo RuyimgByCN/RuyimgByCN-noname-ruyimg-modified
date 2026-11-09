@@ -124,6 +124,104 @@ pub const U05_XIANJIAN_SKILLS: [&str; 26] = [
 
 pub const U07_WUDIAN_REMAINING_SKILLS: [&str; 2] = ["jianbi", "choudu"];
 
+/// `U07` (`wudian-upstream-noname`): all 9 `wdb_*` generals from
+/// `archive/upstream/noname/apps/core/extension/玩点论杀/character/character.js:5-62`.
+pub const U07_WUDIAN_GENERALS: [(&str, Faction, Gender, u32, &[&str]); 9] = [
+    ("wdb_feishi", Faction::Shu, Gender::Male, 3, &["nsshuaiyan", "moshou"]),
+    ("wdb_hanlong", Faction::Wei, Gender::Male, 4, &["siji", "ciqiu"]),
+    ("wdb_liufu", Faction::Wei, Gender::Male, 3, &["zhucheng", "duoqi"]),
+    ("wdb_liuyan", Faction::Qun, Gender::Male, 3, &["juedao", "geju"]),
+    ("wdb_liuzan", Faction::Wu, Gender::Male, 4, &["kangyin"]),
+    ("wdb_tianyu", Faction::Wei, Gender::Male, 4, &["chezhen", "youzhan"]),
+    ("wdb_xizhenxihong", Faction::Shu, Gender::Male, 4, &["fuchou", "jinyan"]),
+    ("wdb_zaozhirenjun", Faction::Wei, Gender::Male, 3, &["liangce", "jianbi", "diyjuntun"]),
+    ("wdb_yangyi", Faction::Shu, Gender::Male, 3, &["choudu", "liduan"]),
+];
+
+/// `U07` (`wudian-upstream-noname`): all skills from `玩点论杀/character/skill.js` and `card/skill.js`.
+pub const U07_WUDIAN_ALL_SKILLS: [&str; 29] = [
+    "nsshuaiyan", "moshou", "siji", "ciqiu", "ciqiu_dying", "ciqiu_destroy",
+    "zhucheng", "duoqi", "juedao", "geju", "kangyin", "kangyin2",
+    "chezhen", "youzhan", "fuchou", "fuchou2", "fuchou3", "jinyan",
+    "liangce", "jianbi", "diyjuntun", "diyjuntun2", "juntun", "juntun_global",
+    "choudu", "liduan", "liduan2", "youdishenru", "diaobingqianjiang",
+];
+
+/// `U08` (`hero-kill-upstream-noname`): all 43 `yxs_*` generals from
+/// `archive/upstream/noname/apps/core/extension/英雄杀/character/character.js:3-287`.
+pub const U08_YXS_GENERALS: [(&str, Faction, Gender, u32, &[&str]); 43] = [
+    ("yxs_qinqiong", Faction::Wei, Gender::Male, 4, &["yxs_fanji", "yxs_menshen"]),
+    ("yxs_wuzetian", Faction::Wu, Gender::Female, 4, &["nvquan", "qiandu", "yxsweiyi"]),
+    ("yxs_caocao", Faction::Wei, Gender::Male, 4, &["zhulu", "xieling"]),
+    ("yxs_mozi", Faction::Qun, Gender::Male, 3, &["jieyong", "feigong", "jianai"]),
+    ("yxs_bole", Faction::Wu, Gender::Male, 3, &["bolehuiyan", "xiangma"]),
+    ("yxs_aijiyanhou", Faction::Qun, Gender::Female, 3, &["seyou", "sheshi"]),
+    ("yxs_diaochan", Faction::Qun, Gender::Female, 3, &["fengyi", "wange"]),
+    ("yxs_yangyuhuan", Faction::Wu, Gender::Female, 3, &["fengyan", "nichang"]),
+    ("yxs_baosi", Faction::Wu, Gender::Female, 3, &["jieyin", "fenghuo"]),
+    ("yxs_napolun", Faction::Wei, Gender::Male, 4, &["tongling", "fanpu"]),
+    ("yxs_kaisa", Faction::Shu, Gender::Male, 4, &["ducai"]),
+    ("yxs_zhuyuanzhang", Faction::Wu, Gender::Male, 4, &["qiangyun"]),
+    ("yxs_jinke", Faction::Qun, Gender::Male, 3, &["cike", "qiangxi"]),
+    ("yxs_libai", Faction::Qun, Gender::Male, 3, &["miaobi", "zhexian"]),
+    ("yxs_luban", Faction::Wu, Gender::Male, 3, &["guifu", "lshengong"]),
+    ("yxs_lvzhi", Faction::Shu, Gender::Female, 4, &["zhensha", "xumou"]),
+    ("yxs_goujian", Faction::Wu, Gender::Male, 3, &["keji", "tuqiang"]),
+    ("yxs_lishimin", Faction::Qun, Gender::Male, 4, &["kongju"]),
+    ("yxs_huamulan", Faction::Shu, Gender::Female, 3, &["xiaoji", "yizhuang"]),
+    ("yxs_luobinhan", Faction::Wu, Gender::Male, 4, &["xiadao", "sheshu", "lguiyin"]),
+    ("yxs_chengjisihan", Faction::Qun, Gender::Male, 4, &["mashu", "qianglue"]),
+    ("yxs_mingchenghuanghou", Faction::Shu, Gender::Female, 3, &["tiewan", "chajue"]),
+    ("yxs_wangzhaojun", Faction::Wei, Gender::Female, 3, &["heqin", "wluoyan"]),
+    ("yxs_luocheng", Faction::Wu, Gender::Male, 4, &["hanqiang", "biaoqi"]),
+    ("yxs_direnjie", Faction::Wei, Gender::Male, 3, &["shentan", "kanpo"]),
+    ("yxs_sunwu", Faction::Wu, Gender::Male, 3, &["bingsheng", "taolue"]),
+    ("yxs_chengyaojin", Faction::Shu, Gender::Male, 4, &["sanbanfu"]),
+    ("yxs_yujix", Faction::Shu, Gender::Female, 3, &["ysheshen", "yxschangnian"]),
+    ("yxs_xiangyu", Faction::Shu, Gender::Male, 4, &["wushuang", "yxsciqiu"]),
+    ("yxs_yingzheng", Faction::Qun, Gender::Male, 4, &["jianxiong", "batu"]),
+    ("yxs_yuefei", Faction::Qun, Gender::Male, 4, &["longdan", "wumu"]),
+    ("yxs_fuermosi", Faction::Wei, Gender::Male, 3, &["yanyi", "jiean"]),
+    ("yxs_guiguzi", Faction::Qun, Gender::Male, 3, &["baihe", "yinyang", "xiushen"]),
+    ("yxs_xiaoqiao", Faction::Wu, Gender::Female, 3, &["chujia", "zhijie"]),
+    ("yxs_luzhishen", Faction::Wei, Gender::Male, 4, &["yxsdili", "kuangchan"]),
+    ("yxs_zhaoyong", Faction::Shu, Gender::Male, 3, &["zyhufu", "hanbei"]),
+    ("yxs_yangguang", Faction::Qun, Gender::Male, 3, &["shiqin", "yaoyi"]),
+    ("yxs_tangbohu", Faction::Qun, Gender::Male, 3, &["luobi", "fengliu"]),
+    ("yxs_zhangsanfeng", Faction::Wei, Gender::Male, 4, &["zbudao", "taiji"]),
+    ("yxs_nandinggeer", Faction::Shu, Gender::Female, 3, &["huli", "xianqu", "yixin"]),
+    ("yxs_weizhongxian", Faction::Qun, Gender::Male, 3, &["zhuxin", "wlianhuan"]),
+    ("yxs_meixi", Faction::Shu, Gender::Female, 3, &["liebo", "yaoji"]),
+    ("yxs_lanlinwang", Faction::Shu, Gender::Male, 4, &["guimian", "lyuxue"]),
+];
+
+/// `U08` (`hero-kill-upstream-noname`): all 107 skills from
+/// `archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:5-3135`.
+pub const U08_YXS_SKILLS: [&str; 107] = [
+    "yxs_fanji", "yxs_fanji2", "yxs_menshen3", "yxs_menshen", "yxs_menshen2",
+    "guimian", "lyuxue", "lyuxue2", "yaoji", "liebo",
+    "zhuxin", "wlianhuan", "huli", "yixin", "xianqu",
+    "zbudao", "zbudao2", "taiji", "fengliu", "luobi",
+    "yaoyi", "shiqin", "zyhufu", "hanbei", "sheshu",
+    "lguiyin", "tongyu", "zhijie", "yxsdili", "kuangchan",
+    "chujia", "baihe", "yinyang", "xiushen", "jiean",
+    "yanyi", "batu", "wumu", "ysheshen", "yxschangnian",
+    "yxschangnian2", "yxsciqiu", "sanbanfu", "sanbanfu2", "sanbanfu3",
+    "bingsheng", "taolue", "shentan", "hanqiang", "biaoqi",
+    "wluoyan", "heqin", "heqin2", "heqin3", "chajue",
+    "chajue2", "tiewan", "qianglue", "jimin", "xiadao",
+    "lzhangyi", "yizhuang", "yizhuang2", "kongju", "tuqiang",
+    "xumou", "zhensha", "ducai", "ducai2", "ducai3",
+    "tongling", "fanpu", "fenghuo", "nichang", "nichang2",
+    "fengyan", "fengyi", "wange", "wange2", "seyou",
+    "sheshi", "bolehuiyan", "bolehuiyan2", "bolehuiyan3", "oldbolehuiyan",
+    "oldbolehuiyan2", "xiangma", "yxsweiyi", "qiandu", "nvquan",
+    "nvquan1", "nvquan2", "nvquan3", "feigong", "jianai",
+    "jieyong", "jieyong2", "jieyong3", "zhulu", "xieling",
+    "qiangyun", "cike", "miaobix", "miaobi", "zhexian",
+    "guifu", "lshengong",
+];
+
 pub const L08_DECADE_SKILLS: [&str; 9] = [
     "_changeEquipExt", "_ui_auto_cheat", "_kill_framebg", "_rarity", "_tiesuo_ying",
     "_usecard", "_decadeUI_usecardBegin", "_discard", "_decadeUI_dieKillEffect",

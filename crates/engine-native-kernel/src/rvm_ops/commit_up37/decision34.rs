@@ -30,6 +30,13 @@ pub const TH_YEYAN_ID: u32 = 1_920_007_014;
 pub const TH_TAIPINGYAOSHU_ID: u32 = 1_920_007_015;
 pub const TH_SKILL_DISPATCH_ID: u32 = 1_920_007_016;
 
+pub const L01_YIYI_ID: u32 = 1_920_008_001;
+pub const L06_WUXING_ID: u32 = 1_920_008_002;
+pub const U06_HUANLE_SKILL_ID: u32 = 1_920_008_003;
+pub const U07_WUDIAN_SKILL_ID: u32 = 1_920_008_004;
+pub const U08_YXS_SKILL_ID: u32 = 1_920_008_005;
+pub const L29_LONGXUE_SKILL_ID: u32 = 1_920_008_006;
+
 pub const L20_MARK_IDS: [(&str, u32); 14] = [
     ("longmark", 1_920_060_001),
     ("biaoji", 1_920_060_002),
@@ -71,17 +78,43 @@ pub(super) fn try_commit_decision34(
         TH_YEYAN_ID => resolve_th_yeyan(ctx, owner),
         TH_TAIPINGYAOSHU_ID => resolve_th_taipingyaoshu(ctx, owner),
         TH_SKILL_DISPATCH_ID => resolve_th_extra_skill(ctx, executing, owner),
+        L01_YIYI_ID => super::decision34_ext::resolve_l01_yiyi_card(ctx, owner),
+        L06_WUXING_ID => super::decision34_ext::resolve_l06_wuxing_skill(ctx, executing, owner),
+        U06_HUANLE_SKILL_ID => {
+            super::decision34_ext::resolve_u06_huanle_skill(ctx, executing, owner)
+        }
+        U07_WUDIAN_SKILL_ID => {
+            super::decision34_ext::resolve_u07_wudian_skill(ctx, executing, owner)
+        }
+        U08_YXS_SKILL_ID => {
+            super::decision34_u08_l19_l20_l27::resolve_u08_yxs_skill(ctx, executing, owner)
+        }
+        L29_LONGXUE_SKILL_ID => {
+            super::decision34_ext::resolve_l29_longxue_skill(ctx, executing, owner)
+        }
         _ => match executing {
             "mbcmjiushi" => resolve_mbcmjiushi(ctx, owner),
             "mbcmfangzhu" => resolve_mbcmfangzhu(ctx, owner),
             "mbjuejin" => resolve_mbjuejin(ctx, owner),
-            "mbcmxscw" => super::decision34_ext::resolve_mbcmxscw(ctx, owner),
+            "mbcmxscw" | "mbcmqingzheng" => {
+                super::decision34_ext::resolve_l29_longxue_skill(ctx, executing, owner)
+            }
             "k_danggu" => resolve_k_danggu(ctx, owner),
             "k_mowang" => resolve_k_mowang(ctx, owner),
-            "huanle_kuwu_interactive" => resolve_kuwu_interactive(ctx, owner),
+            "yiyi" => super::decision34_ext::resolve_l01_yiyi_card(ctx, owner),
+            "_shengke" | "wuxing_shengke" | "wuxingpan_skill" => {
+                super::decision34_ext::resolve_l06_wuxing_skill(ctx, executing, owner)
+            }
+            "huanle_kuwu_interactive" | "kuwu" => resolve_kuwu_interactive(ctx, owner),
+            "monkey" | "mianju" | "xuelunyang" | "jiuwei" => {
+                super::decision34_ext::resolve_u06_huanle_skill(ctx, executing, owner)
+            }
             "diaobingqianjiang" => resolve_diaobingqianjiang(ctx, owner),
             "duoqi" => resolve_duoqi(ctx, owner),
             "youzhan" => resolve_youzhan(ctx, owner),
+            "youdishenru" | "g_youdishenru" | "ciqiu_dying" | "kangyin2" => {
+                super::decision34_ext::resolve_u07_wudian_skill(ctx, executing, owner)
+            }
             "yxs_menshen2_guard" => resolve_yxs_menshen2_guard(ctx, owner),
             "l20_mark_dispatch" => resolve_l20_mark_dispatch(ctx, owner),
             "th_dunshi" => resolve_th_dunshi(ctx, owner),
@@ -89,7 +122,13 @@ pub(super) fn try_commit_decision34(
             "th_qiaosi" => resolve_th_qiaosi(ctx, owner),
             "th_yeyan" => resolve_th_yeyan(ctx, owner),
             "th_taipingyaoshu" => resolve_th_taipingyaoshu(ctx, owner),
+            "miaojian" | "shhlianhua" | "olqisi" | "xinfu_pdgyingshi" | "rejici" | "qinyin" => {
+                resolve_th_extra_skill(ctx, executing, owner)
+            }
             s if s.starts_with("th_") => resolve_th_extra_skill(ctx, s, owner),
+            s if super::decision34_u08_l19_l20_l27::is_u08_yxs_skill(s) => {
+                super::decision34_u08_l19_l20_l27::resolve_u08_yxs_skill(ctx, s, owner)
+            }
             _ => {
                 return super::decision34_pack9::try_commit_decision34_pack9(
                     ctx, executing, owner, value,

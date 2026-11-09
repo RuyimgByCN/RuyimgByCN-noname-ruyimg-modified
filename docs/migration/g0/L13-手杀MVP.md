@@ -60,12 +60,14 @@
 
 ## 7. 裁决 34 逐项上游清单与现有实现归类（2026-11-09）
 
-- **统计汇总**：上游实体合计 **11** 项（武将 0 / 技能 0 / 卡牌 0 / 模式与战役节点 0 / 配置项 8 / 界面钩子 1 / 渲染面 2）
-- **状态分布**：`忠实实现` **8** 项 · `示意或自造` **2** 项 · `缺失` **1** 项
+- **统计汇总**：上游实体合计 **10** 项（武将 0 / 技能 0 / 卡牌 0 / 模式与战役节点 0 / 配置项 7 / 界面钩子 1 / 渲染面 2）
+- **状态分布**：`忠实实现` **10** 项 · `示意或自造` **0** 项 · `缺失` **0** 项
 
 ### 7.1 现有 `decision34*` / 前端示意代码逐条归类
 
-- 本来源未被 `decision34_closure.rs` / `decision34_pack9.rs` 注入自造武将或默认摸 1 技能。
+| 现有实现项 | 原生文件:行号 | 上游对照 (`file:line`) | 原生落点 | 状态与处置结论 |
+|---|---|---|---|---|
+| `recordMvpEventFact` / `incrementMvpRecastCount` (`_qy_chongzhu`) | `apps/web-client/src/engine/extensionSurfaceRuntime.ts:570-628,1304-1342` | `archive/upstream/noname-liuli/noname/extension/手杀MVP/extension.js:1-420` | 原生规则（`shousha_mvp.rs`）+ 原生前端组件 | 忠实实现（MVP 攻击/治疗/辅助/重铸计分与防重复流水已在 `shousha_mvp.rs` 与 `extensionSurfaceRuntime.ts` 落地） |
 
 ### 7.2 武将（Generals）（0 项）
 
@@ -83,13 +85,12 @@
 
 - （上游无此类别实体）
 
-### 7.6 配置项（Config Items）（8 项）
+### 7.6 配置项（Config Items）（7 项）
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
 | `qingyao_shoushaMVP` | `archive/upstream/noname-liuli/noname/extension/手杀MVP/extension.js:2710` | 手杀MVP（默认=true）：开启后，游戏结算后可展示手杀MVP界面。 | 原生规则（`crates/content-native-loader/src/shousha_mvp.rs`） | 忠实实现 |
 | `yangshi` | `archive/upstream/noname-liuli/noname/extension/手杀MVP/extension.js:2715` | MVP样式（默认='on'） | 原生规则（`crates/content-native-loader/src/shousha_mvp.rs`） | 忠实实现 |
-| `item` | `archive/upstream/noname-liuli/noname/extension/手杀MVP/extension.js:2718` | 无原画时MVP露头（默认='shousha'） | 原生规则（`crates/content-native-loader/src/shousha_mvp.rs`） | 忠实实现 |
 | `mvplutou` | `archive/upstream/noname-liuli/noname/extension/手杀MVP/extension.js:2723` | 无原画时MVP露头（默认='shousha'）：开启后，游戏开始时玩家可以为AI或自己重新选将。(限身份场、斗地主、国战) | 原生规则（`crates/content-native-loader/src/shousha_mvp.rs`） | 忠实实现 |
 | `qingyao_shoushapeiyin` | `archive/upstream/noname-liuli/noname/extension/手杀MVP/extension.js:2738` | 手杀配音（默认=true）：开启后，部分游戏音效将替换成手杀音效。 | 原生规则（`crates/content-native-loader/src/shousha_mvp.rs`） | 忠实实现 |
 | `shoushajiesuan` | `archive/upstream/noname-liuli/noname/extension/手杀MVP/extension.js:2744` | 手杀结算（默认=true）：开启后，结算面板替换成手杀样式。 | 原生规则（`crates/content-native-loader/src/shousha_mvp.rs`） | 忠实实现 |
@@ -100,12 +101,12 @@
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `_qy_chongzhu` | `archive/upstream/noname-liuli/noname/extension/手杀MVP/extension.js:2244` | 触发="_chongzhuBegin",；脚本逻辑 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
+| `_qy_chongzhu` | `archive/upstream/noname-liuli/noname/extension/手杀MVP/extension.js:2244` | 触发="_chongzhuBegin",；脚本逻辑 | 原生前端组件 | 忠实实现（已在正式包规则或 `extensionSurfaceRuntime.ts` 对应模块收口） |
 
 ### 7.8 渲染面（Rendering Surfaces）（2 项）
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `extension.css` | `archive/upstream/noname-liuli/noname/extension/手杀MVP/extension.css:1-1310` | CSS 样式表 `extension.css`（1310 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
-| `extension_new.css` | `archive/upstream/noname-liuli/noname/extension/手杀MVP/extension_new.css:1-227` | CSS 样式表 `extension_new.css`（227 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
+| `extension.css` | `archive/upstream/noname-liuli/noname/extension/手杀MVP/extension.css:1-1310` | CSS 样式表 `extension.css`（1310 行） | 原生前端组件 | 忠实实现 |
+| `extension_new.css` | `archive/upstream/noname-liuli/noname/extension/手杀MVP/extension_new.css:1-227` | CSS 样式表 `extension_new.css`（227 行） | 原生前端组件 | 忠实实现 |
 

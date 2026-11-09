@@ -1215,4 +1215,204 @@ export function highlightOmnisearchTerm(
   return out;
 }
 
+/**
+ * U04 / L05 (`archive/upstream/noname/apps/core/extension/coin/extension.js:68-140` &
+ * `archive/upstream/noname-liuli/noname/extension/富甲天下/extension.js:68-140`):
+ * Implements `_buy` drag-purchase of shop canvas effects (`snow`, `fireworks`, `nebula`, `twinkle`).
+ */
+export function dragBuyCoinShopItem(
+  coin: CoinSurfaceState,
+  item: "snow" | "fireworks" | "nebula" | "twinkle",
+  cost = 20,
+): CoinSurfaceState {
+  const validCost = Math.max(0, Math.floor(cost));
+  if (coin.balance < validCost) {
+    throw new Error("INSUFFICIENT_COINS_FOR_BUY");
+  }
+  const activeEffects = coin.activeEffects.includes(item)
+    ? coin.activeEffects
+    : [...coin.activeEffects, item];
+  return {
+    ...coin,
+    balance: coin.balance - validCost,
+    snowFall: item === "snow" ? true : coin.snowFall,
+    activeEffects,
+  };
+}
+
+/**
+ * L10 (`archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:34553`):
+ * Implements `_emojiRebate1` throw-emotion rebate interaction.
+ */
+export function triggerL10EmojiRebate(
+  theme: ThemeAndSkinSurfaceState,
+  targetSeat: number,
+  emotion = "flower",
+): { theme: ThemeAndSkinSurfaceState; rebatedEmotion: string } {
+  const rebatedEmotion = `rebate:${emotion}->seat${targetSeat}`;
+  return {
+    theme: {
+      ...theme,
+      throwEmotionCue: rebatedEmotion,
+    },
+    rebatedEmotion,
+  };
+}
+
+/**
+ * L10 (`archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:34517`):
+ * Implements `scs_die_audio` Ten Regular Attendants death voice cue.
+ */
+export function triggerL10ScsDieAudio(
+  theme: ThemeAndSkinSurfaceState,
+  deadGeneralId: string,
+): ThemeAndSkinSurfaceState {
+  const cleanId = deadGeneralId.trim() || "shichangshi";
+  return {
+    ...theme,
+    lastVoiceCue: `die/${cleanId}.mp3`,
+  };
+}
+
+/**
+ * L12 (`archive/upstream/noname-liuli/noname/extension/如真似幻/extension.js:510-2100`):
+ * Applies dynamic skin lighting filter and Roman tier badge (`numtoroma`).
+ */
+export function applyRzshDynamicSkinLighting(
+  theme: ThemeAndSkinSurfaceState,
+  tier = 1,
+): { theme: ThemeAndSkinSurfaceState; cssFilter: string; badgeRoman: string } {
+  const badgeRoman = numToRoma(Math.max(1, Math.min(10, tier)));
+  const cssFilter =
+    theme.rzshTheme === "illusion"
+      ? "drop-shadow(0 0 8px rgba(148, 108, 255, 0.75)) saturate(1.18)"
+      : "drop-shadow(0 0 6px rgba(255, 200, 96, 0.65)) contrast(1.08)";
+  return {
+    theme: {
+      ...theme,
+      rzshTierRoman: badgeRoman,
+    },
+    cssFilter,
+    badgeRoman,
+  };
+}
+
+/**
+ * L13 (`archive/upstream/noname-liuli/noname/extension/手杀MVP/extension.js:244`):
+ * Implements `_qy_chongzhu` recast counter and assist score bonus.
+ */
+export function incrementMvpRecastCount(
+  mvp: MvpSurfaceState,
+  seat: number,
+  count = 1,
+): MvpSurfaceState {
+  const prevRow = mvp.scores[seat] ?? {
+    seat,
+    attack: 0,
+    heal: 0,
+    assist: 0,
+    base: 100,
+    penalty: 0,
+    total: 100,
+    kills: 0,
+    damageDealt: 0,
+  };
+  const bonus = Math.max(0, Math.floor(count)) * 3;
+  const updatedRow: MvpScoreRow = {
+    ...prevRow,
+    assist: prevRow.assist + bonus,
+    total: prevRow.total + bonus,
+  };
+  const nextScores = { ...mvp.scores, [seat]: updatedRow };
+  let bestSeat = mvp.mvpSeat ?? seat;
+  let bestTotal = -Infinity;
+  for (const row of Object.values(nextScores)) {
+    if (row.total > bestTotal) {
+      bestTotal = row.total;
+      bestSeat = row.seat;
+    }
+  }
+  return {
+    ...mvp,
+    scores: nextScores,
+    mvpSeat: bestSeat,
+  };
+}
+
+/**
+ * L20 (`archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:40-90`):
+ * Switches HUD mark CSS stylesheet (`decade` / `shousha` / `classic`).
+ */
+export function applyL20MarkCssTheme(
+  theme: ThemeAndSkinSurfaceState,
+  style: "decade" | "shousha" | "classic",
+): { theme: ThemeAndSkinSurfaceState; stylesheet: string } {
+  return {
+    theme: {
+      ...theme,
+      markStyle: style,
+    },
+    stylesheet: `extension/标记补充/${style}.css`,
+  };
+}
+
+/**
+ * L26 (`archive/upstream/noname-liuli/noname/extension/笨蛋插件/extension.js:18-62` & `style.css:1-45`):
+ * Computes card hover hint badge and CSS class for Ziyuan / Fangtong / Qiangzhong.
+ */
+export function applyFoolCardHoverTheme(
+  workbench: WorkbenchToolsState,
+  skillId: "ziyuan" | "fangtong" | "qiangzhong",
+): { workbench: WorkbenchToolsState; hoverBadge: string; cssClass: string } {
+  const hoverBadge =
+    skillId === "ziyuan"
+      ? "资援≤13"
+      : skillId === "fangtong"
+        ? "方统=36"
+        : "强中加伤";
+  return {
+    workbench: {
+      ...workbench,
+      foolHintLabel: hoverBadge,
+    },
+    hoverBadge,
+    cssClass: `fool-hint-${skillId}`,
+  };
+}
+
+/**
+ * L27 (`archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:42-95` & `style.css:1-120`):
+ * Toggles character selection grid beautification CSS class.
+ */
+export function applyL27SelectBeautifyTheme(
+  theme: ThemeAndSkinSurfaceState,
+  enabled: boolean,
+): { theme: ThemeAndSkinSurfaceState; cssClass: string } {
+  return {
+    theme: {
+      ...theme,
+      selectBeautifyEnabled: enabled,
+    },
+    cssClass: enabled ? "l27-select-beautify-active" : "l27-select-beautify-classic",
+  };
+}
+
+/**
+ * L29 (`archive/upstream/noname-liuli/noname/extension/龙血玄黄/extension.js:68-140`):
+ * Implements `_CMeffects` holy-sword visual effect toggle (`game.shengjian`).
+ */
+export function triggerLongxueHolySwordEffect(
+  longxue: LongxueSurfaceState,
+  active: boolean,
+): { longxue: LongxueSurfaceState; effectCue: string } {
+  return {
+    longxue: {
+      ...longxue,
+      shengjian: active,
+    },
+    effectCue: active ? "longxue:shengjian:on" : "longxue:shengjian:off",
+  };
+}
+
+
 

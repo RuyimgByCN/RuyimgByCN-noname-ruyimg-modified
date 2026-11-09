@@ -59,8 +59,8 @@
 
 ## 7. 裁决 34 逐项上游清单与现有实现归类（2026-11-09）
 
-- **统计汇总**：上游实体合计 **143** 项（武将 0 / 技能 0 / 卡牌 0 / 模式与战役节点 0 / 配置项 49 / 界面钩子 54 / 渲染面 40）
-- **状态分布**：`忠实实现` **49** 项 · `示意或自造` **88** 项 · `缺失` **6** 项
+- **统计汇总**：上游实体合计 **141** 项（武将 0 / 技能 0 / 卡牌 0 / 模式与战役节点 0 / 配置项 48 / 界面钩子 53 / 渲染面 40）
+- **状态分布**：`忠实实现` **48** 项 · `示意或自造` **88** 项 · `缺失` **5** 项
 
 ### 7.1 现有 `decision34*` / 前端示意代码逐条归类
 
@@ -84,7 +84,7 @@
 
 - （上游无此类别实体）
 
-### 7.6 配置项（Config Items）（49 项）
+### 7.6 配置项（Config Items）（48 项）
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
@@ -97,7 +97,6 @@
 | `JDTSM` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:5652` | <div class=（默认=—） | 原生规则（`crates/content-native-loader/src/shousha_ui.rs`） | 忠实实现 |
 | `jindutiao` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:5669` | 进度条（默认=true）：自己回合内显示进度条带素材 | 原生规则（`crates/content-native-loader/src/shousha_ui.rs`） | 忠实实现 |
 | `jindutiaoYangshi` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:5674` | 进度条样式（默认="1"）：切换进度条样式，可根据个人喜好切换手杀进度条或十周年进度条，切换后重启生效 | 原生规则（`crates/content-native-loader/src/shousha_ui.rs`） | 忠实实现 |
-| `item` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:5678` | 托管效果（默认=true）：开启进度条的情况下，开启此选项后，当玩家的进度条时间走完时，将自动托管。 | 原生规则（`crates/content-native-loader/src/shousha_ui.rs`） | 忠实实现 |
 | `jindutiaotuoguan` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:5684` | 托管效果（默认=true）：开启进度条的情况下，开启此选项后，当玩家的进度条时间走完时，将自动托管。 | 原生规则（`crates/content-native-loader/src/shousha_ui.rs`） | 忠实实现 |
 | `jindutiaoST` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:5689` | 进度条时间间隔（默认="100"）：设置玩家进度条的时间间隔。 | 原生规则（`crates/content-native-loader/src/shousha_ui.rs`） | 忠实实现 |
 | `jindutiaoUpdata` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:5704` | 玩家进度条刷新（默认=true）：开启进度条的情况下，开启此选项后，玩家进度条将会进行刷新 | 原生规则（`crates/content-native-loader/src/shousha_ui.rs`） | 忠实实现 |
@@ -138,7 +137,7 @@
 | `分割线02` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:7448` | <img style=width:240px src=（默认=true） | 原生规则（`crates/content-native-loader/src/shousha_ui.rs`） | 忠实实现 |
 | `ZLLT` | `archive/upstream/noname-liuli/noname/extension/手杀ui/fonts/extension.js:6939` | 资料页露头(重启生效)（默认=false）：手杀样式下，点击武将资料页会适配露头皮肤。 | 原生规则（`crates/content-native-loader/src/shousha_ui.rs`） | 忠实实现 |
 
-### 7.7 界面钩子（UI Hooks）（54 项）
+### 7.7 界面钩子（UI Hooks）（53 项）
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
@@ -190,7 +189,6 @@
 | `_jindutiaopl` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2777` | 触发=['gameStart'], player: ['useCardTo…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
 | `_wmkzSayChange` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:4452` | 触发=["gameStart", "phaseBegin", "phase…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
 | `_shuohuaSayWordphase` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:6394` | 触发="gameStart", player:["phaseBegin",…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
-| `use` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:132` | 触发=['useCardBefore','respondBefore'/*…；脚本逻辑 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
 | `ZLLT` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:5981` | 资料页露头(重启生效) | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
 | `_jindutiaouse` | `archive/upstream/noname-liuli/noname/extension/手杀ui/fonts/extension.js:2553` | 触发="useCardAfter",；脚本逻辑 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
 | `_wuxie` | `archive/upstream/noname-liuli/noname/extension/手杀ui/fonts/extension.js:2565` | 触发=['useCardToBegin', 'phaseJudge']；脚本逻辑 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |

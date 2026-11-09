@@ -40,6 +40,15 @@ pub const TH_YEYAN_ID: u32 = 1_920_007_014;
 pub const TH_TAIPINGYAOSHU_ID: u32 = 1_920_007_015;
 pub const TH_SKILL_DISPATCH_ID: u32 = 1_920_007_016;
 
+/// Authentic upstream `L01` (`AI优化/extension.js:9205-9260`), `L06` (`五行生克/extension.js:18-167`),
+/// `U06`, `U07`, `U08`, and `L29` dispatch IDs.
+pub const L01_YIYI_ID: u32 = 1_920_008_001;
+pub const L06_WUXING_ID: u32 = 1_920_008_002;
+pub const U06_HUANLE_SKILL_ID: u32 = 1_920_008_003;
+pub const U07_WUDIAN_SKILL_ID: u32 = 1_920_008_004;
+pub const U08_YXS_SKILL_ID: u32 = 1_920_008_005;
+pub const L29_LONGXUE_SKILL_ID: u32 = 1_920_008_006;
+
 /// L20 (`mark-supplement-upstream-liuli`) 14 HUD marks (`(key, zh_label, mark_id)`).
 pub const L20_MARK_SPECS: [(&str, &str, u32); 14] = [
     ("longmark", "龙印", 1_920_060_001),
@@ -220,38 +229,56 @@ pub const L28_THUNDER_GENERALS: [(&str, Faction, Gender, u32, &[&str]); 14] = [
     ("th_guanning", Faction::Qun, Gender::Male, 7, &["th_dunshi"]),
     ("th_lukai", Faction::Wu, Gender::Male, 4, &["th_bushi", "th_zhongzhuang"]),
     ("th_caohua", Faction::Wei, Gender::Female, 3, &["th_caiyi", "th_guili"]),
-    ("th_sunhanhua", Faction::Wu, Gender::Female, 3, &["th_chongxu"]),
-    ("th_puyuan", Faction::Shu, Gender::Male, 4, &["th_shengong"]),
-    ("th_pangdegong", Faction::Qun, Gender::Male, 3, &["th_pingcai"]),
+    ("th_sunhanhua", Faction::Wu, Gender::Female, 3, &["th_chongxu", "miaojian", "shhlianhua"]),
+    ("th_puyuan", Faction::Shu, Gender::Male, 4, &["th_shengong", "olqisi"]),
+    ("th_pangdegong", Faction::Qun, Gender::Male, 3, &["th_pingcai", "xinfu_pdgyingshi"]),
     ("th_zhengxuan", Faction::Qun, Gender::Male, 3, &["th_zhengjing"]),
     ("th_mamidi", Faction::Qun, Gender::Male, 3, &["th_chengye", "th_buxu"]),
     ("th_nanhualaoxian", Faction::Qun, Gender::Male, 3, &["th_yufeng", "th_tianshu"]),
     ("th_majun", Faction::Wei, Gender::Male, 3, &["th_jingxie", "th_qiaosi"]),
     ("th_zhouqun", Faction::Shu, Gender::Male, 3, &["th_tiansuan"]),
-    ("th_wanglang", Faction::Wei, Gender::Male, 3, &["th_gushe"]),
+    ("th_wanglang", Faction::Wei, Gender::Male, 3, &["th_gushe", "rejici"]),
     ("th_liuhui", Faction::Qun, Gender::Male, 4, &["th_geyuan", "th_jieshu", "th_gusuan"]),
-    ("th_shen_zhouyu", Faction::Wu, Gender::Male, 4, &["th_yeyan"]),
+    ("th_shen_zhouyu", Faction::Wu, Gender::Male, 4, &["th_yeyan", "qinyin"]),
 ];
 
-/// Authentic `L28` (`雷霆万钧/extension.js:3783-8960`) additional general skills.
-pub const L28_THUNDER_EXTRA_SKILLS: [&str; 17] = [
+/// Authentic `L28` (`雷霆万钧/extension.js:3783-8960`) additional general and sub-skills.
+pub const L28_THUNDER_EXTRA_SKILLS: [&str; 35] = [
     "th_bushi",
     "th_zhongzhuang",
     "th_caiyi",
+    "th_caiyi_info",
+    "th_caiyi_yang",
+    "th_caiyi_yin",
     "th_guili",
     "th_chongxu",
+    "miaojian",
+    "shhlianhua",
     "th_shengong",
+    "olqisi",
     "th_pingcai",
+    "th_pingcai_Wolong",
+    "th_pingcai_Fengchu",
+    "th_pingcai_Shuijing",
+    "th_pingcai_Xuanjian",
+    "xinfu_pdgyingshi",
     "th_zhengjing",
     "th_chengye",
     "th_buxu",
     "th_yufeng",
     "th_tianshu",
+    "th_jingxie1",
+    "th_qiaosi_map",
     "th_tiansuan",
+    "th_tiansuan_faq",
     "th_gushe",
+    "rejici",
     "th_geyuan",
+    "th_geyuan_info",
     "th_jieshu",
     "th_gusuan",
+    "qinyin",
+    "th_taipingyaoshu_info",
 ];
 
 fn build_d34_vm_decl(

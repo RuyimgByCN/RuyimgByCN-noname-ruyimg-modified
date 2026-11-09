@@ -73,3 +73,34 @@ fn benefit_applies_weight_only_when_enabled() {
     cfg.qz_cf = false;
     assert!((benefit(&cfg, 2.0, 3.0) - 3.0).abs() < 1e-9, "关闭：原结果");
 }
+
+#[test]
+fn yiyi_card_target_selection_and_ai_benefit_matches_upstream() {
+    // Upstream `archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9216-9253`:
+    // - `selectTarget: [-1, -1]` in `guozhan` / `versus`, `[1, 3]` in other modes (`extension.js:9216-9219`)
+    // - `ai.wuxie` returns `0` (`extension.js:9225-9227`)
+    // - `ai.result.target` (`extension.js:9234-9253`):
+    //   `add + Math.sqrt(i / 3.6 + tars) / 2` where `tars = 0.01 * selected_targets_len`, `add = 1.0` if `hasSkillTag('noh')` else `0.0`
+    assert_eq!(
+        content_native_loader::yiyi_select_target_range("identity"),
+        (1, 3)
+    );
+    assert_eq!(
+        content_native_loader::yiyi_select_target_range("guozhan"),
+        (-1, -1)
+    );
+    assert_eq!(
+        content_native_loader::yiyi_select_target_range("versus"),
+        (-1, -1)
+    );
+    assert_eq!(content_native_loader::yiyi_wuxie_weight(), 0);
+    let self_benefit =
+        content_native_loader::evaluate_yiyi_target_benefit(true, 4, 4, 0, true, 1, false);
+    let expected_self = ((3.0_f64 / 3.6) + 0.01).sqrt() / 2.0;
+    assert!((self_benefit - expected_self).abs() < 1e-9);
+    let other_noh_benefit =
+        content_native_loader::evaluate_yiyi_target_benefit(false, 2, 2, 0, false, 2, true);
+    let expected_other_noh = 1.0 + ((2.0_f64 / 3.6) + 0.02).sqrt() / 2.0;
+    assert!((other_noh_benefit - expected_other_noh).abs() < 1e-9);
+}
+

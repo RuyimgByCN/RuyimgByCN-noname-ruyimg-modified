@@ -60,8 +60,8 @@
 
 ## 7. 裁决 34 逐项上游清单与现有实现归类（2026-11-09）
 
-- **统计汇总**：上游实体合计 **407** 项（武将 0 / 技能 0 / 卡牌 0 / 模式与战役节点 0 / 配置项 45 / 界面钩子 319 / 渲染面 43）
-- **状态分布**：`忠实实现` **45** 项 · `示意或自造` **52** 项 · `缺失` **310** 项
+- **统计汇总**：上游实体合计 **406** 项（武将 0 / 技能 0 / 卡牌 0 / 模式与战役节点 0 / 配置项 44 / 界面钩子 319 / 渲染面 43）
+- **状态分布**：`忠实实现` **44** 项 · `示意或自造` **52** 项 · `缺失` **310** 项
 
 ### 7.1 现有 `decision34*` / 前端示意代码逐条归类
 
@@ -87,7 +87,7 @@
 
 - （上游无此类别实体）
 
-### 7.6 配置项（Config Items）（45 项）
+### 7.6 配置项（Config Items）（44 项）
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
@@ -103,7 +103,6 @@
 | `cardPrettify` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:12171` | 卡牌美化（默认='png'） | 原生规则（`crates/content-native-loader/src/decade_ui.rs`） | 忠实实现 |
 | `cardBorder` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:12213` | 卡牌边框（默认='off'） | 原生规则（`crates/content-native-loader/src/decade_ui.rs`） | 忠实实现 |
 | `gold_suitnum` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:12272` | 视为点数花色高亮（默认='gold'）：高亮“视为”牌点数和花色变化牌的内容，重启后生效 | 原生规则（`crates/content-native-loader/src/decade_ui.rs`） | 忠实实现 |
-| `item` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:12276` | 动态背景(导入骨骼包才可使用)（默认='off'） | 原生规则（`crates/content-native-loader/src/decade_ui.rs`） | 忠实实现 |
 | `dynamicBackground` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:12282` | 动态背景(导入骨骼包才可使用)（默认='off'） | 原生规则（`crates/content-native-loader/src/decade_ui.rs`） | 忠实实现 |
 | `dynamicSkin` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:12308` | 动态皮肤（默认=false） | 原生规则（`crates/content-native-loader/src/decade_ui.rs`） | 忠实实现 |
 | `dynamicSkinOutcrop` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:12312` | 动皮露头（默认=true） | 原生规则（`crates/content-native-loader/src/decade_ui.rs`） | 忠实实现 |

@@ -179,3 +179,51 @@ pub fn benefit(cfg: &AiTuningConfig, w: f64, value: f64) -> f64 {
         value
     }
 }
+
+/// L01 `AI优化` (`archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9216-9219`):
+/// `lib.card.yiyi.selectTarget`: `guozhan` 或 `versus` 模式返回 `(-1, -1)`（全体友方），其余模式返回 `(1, 3)`。
+pub fn yiyi_select_target_range(mode: &str) -> (i32, i32) {
+    if mode == "guozhan" || mode == "versus" {
+        (-1, -1)
+    } else {
+        (1, 3)
+    }
+}
+
+/// L01 `AI优化` (`archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9225-9227`):
+/// `lib.card.yiyi.ai.wuxie`: 固定返回 `0`（不对以逸待劳使用无懈可击）。
+pub fn yiyi_wuxie_weight() -> i32 {
+    0
+}
+
+/// L01 `AI优化` (`archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9234-9253`):
+/// `lib.card.yiyi.ai.result.target` 收益评估公式：
+/// `add + Math.sqrt(i / 3.6 + tars) / 2`，其中：
+/// - `tars = 0.01 * selected_targets_len`
+/// - 若 `target == player`，`i` 为扣除待打出牌（或首张 `yiyi`）后的手牌数；否则 `i` 为目标的 `he` 牌数；
+/// - 若目标拥有 `noh` 标签，`add = 1.0`，否则 `0.0`。
+pub fn evaluate_yiyi_target_benefit(
+    is_self: bool,
+    hand_count: usize,
+    he_count: usize,
+    selected_cards_in_hand: usize,
+    has_yiyi_in_hand: bool,
+    selected_targets_len: usize,
+    has_noh_tag: bool,
+) -> f64 {
+    let tars = 0.01 * (selected_targets_len as f64);
+    let i = if is_self {
+        if selected_cards_in_hand > 0 {
+            hand_count.saturating_sub(selected_cards_in_hand)
+        } else if has_yiyi_in_hand {
+            hand_count.saturating_sub(1)
+        } else {
+            hand_count
+        }
+    } else {
+        he_count
+    };
+    let add = if has_noh_tag { 1.0 } else { 0.0 };
+    add + ((i as f64) / 3.6 + tars).sqrt() / 2.0
+}
+

@@ -670,7 +670,9 @@ fn resolve_l19_doomsday_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerI
                 set_flag(ctx.core, owner, "l19_level", lvl);
             }
         }
-        _ => {}
+        other => {
+            super::decision34_u08_l19_l20_l27::resolve_l19_doomsday_remaining(ctx, other, owner);
+        }
     }
 }
 
@@ -715,7 +717,9 @@ fn resolve_l20_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
         "diaohulishan" => {
             set_flag(ctx.core, owner, "l20_diaohulishan_exiled", 1);
         }
-        _ => {}
+        other => {
+            super::decision34_u08_l19_l20_l27::resolve_l20_mark_remaining(ctx, other, owner);
+        }
     }
 }
 
@@ -800,5 +804,7 @@ fn resolve_l27_select_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId)
         set_flag(ctx.core, owner, "l27_baonvezhi_resolved", 1);
         let marks = (flag(ctx.core, owner, "l27_baonue_marks") + 1).min(5);
         set_flag(ctx.core, owner, "l27_baonue_marks", marks);
+    } else {
+        super::decision34_u08_l19_l20_l27::resolve_l27_select_remaining(ctx, skill_name, owner);
     }
 }

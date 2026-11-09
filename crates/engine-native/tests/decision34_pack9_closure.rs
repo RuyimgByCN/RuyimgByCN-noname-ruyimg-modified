@@ -743,6 +743,10 @@ fn formal_packages_extensions_load_and_execute_on_locked_product_path() {
         "zuan-upstream-liuli",
         "select-beautify-upstream-liuli",
         "wudian-upstream-noname",
+        "hero-kill-upstream-noname",
+        "huanle-upstream-noname",
+        "ai-tuning-upstream-liuli",
+        "wuxing-upstream-liuli",
     ];
 
     let mut frozen_list = Vec::new();
@@ -781,6 +785,14 @@ fn formal_packages_extensions_load_and_execute_on_locked_product_path() {
         "jiangshinj",
         "ssr_luxun",
         "ssr_sunquan",
+        "费诗",
+        "韩龙",
+        "留赞",
+        "yxs_qinqiong",
+        "yxs_wuzetian",
+        "yxs_nandinggeer",
+        "mb_caomao",
+        "mb_caomao2",
     ] {
         assert!(
             (0..e.catalog().general_count() as u16)
@@ -799,8 +811,8 @@ fn formal_packages_extensions_load_and_execute_on_locked_product_path() {
     let restored = restore_locked_engine(&snap, &verified).expect("restore locked engine");
     assert_eq!(restored.state_hash(), e.state_hash());
 
-    // Verify extended upstream resolvers in `decision34_ext.rs`:
-    // 1. U01 remaining skills (`dddxianxi` `skill.js:4`, `dddjuxian` `skill.js:275`, `dddfenji` `skill.js:1765`, `dddduanbing` `skill.js:2650`)
+    // Verify extended upstream resolvers in `decision34_ext.rs` and `decision34_u08_l19_l20_l27.rs`:
+    // 1. U01 remaining skills (`dddxianxi` `skill.js:1798`, `dddjuxian` `skill.js:275`, `dddfenji` `skill.js:3866`, `dddduanbing` `skill.js:5131`)
     invoke_p9_op(&mut e, 0, "dddxianxi", DDD_SKILL_DISPATCH_ID);
     assert_eq!(flag(&e, 0, "ddd_xianxi_target_added"), 1);
     invoke_p9_op(&mut e, 0, "dddjuxian", DDD_SKILL_DISPATCH_ID);
@@ -814,7 +826,10 @@ fn formal_packages_extensions_load_and_execute_on_locked_product_path() {
     assert_eq!(flag(&e, 0, "ddd_dddduanbing_range_mod"), 1);
     assert_eq!(e.state_core().player(0).hand.len(), hand_before_duanbing);
 
-    // 2. L28 remaining `th_*` skills (`th_caiyi` `extension.js:4120`, `th_chongxu` `extension.js:4480`, `th_tiansuan` `extension.js:6710`, `th_geyuan` `extension.js:8320`)
+    // 2. L28 remaining `th_*` skills (`th_caiyi` `extension.js:4054`, `th_chongxu` `extension.js:4354`, `th_tiansuan` `extension.js:7633`, `th_geyuan` `extension.js:8141`,
+    //    `th_bushi` `extension.js:3783`, `th_guili` `extension.js:4289`, `th_shengong` `extension.js:4812`, `th_pingcai` `extension.js:5181`,
+    //    `th_zhengjing` `extension.js:5953`, `th_chengye` `extension.js:6155`, `th_buxu` `extension.js:6358`, `th_yufeng` `extension.js:6591`,
+    //    `th_tianshu` `extension.js:6785`, `th_jieshu` `extension.js:8394`, `th_gusuan` `extension.js:8443`)
     invoke_p9_op(&mut e, 0, "th_caiyi", content_native_loader::TH_SKILL_DISPATCH_ID);
     assert_eq!(flag(&e, 0, "th_caiyi_yang"), 1);
     invoke_p9_op(&mut e, 0, "th_chongxu", content_native_loader::TH_SKILL_DISPATCH_ID);
@@ -823,6 +838,28 @@ fn formal_packages_extensions_load_and_execute_on_locked_product_path() {
     assert_eq!(flag(&e, 0, "th_tiansuan_lot"), 1);
     invoke_p9_op(&mut e, 0, "th_geyuan", content_native_loader::TH_SKILL_DISPATCH_ID);
     assert_eq!(flag(&e, 0, "th_geyuan_pi"), 1);
+    invoke_p9_op(&mut e, 0, "th_bushi", content_native_loader::TH_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "th_bushi_suits_assigned"), 1);
+    invoke_p9_op(&mut e, 0, "th_guili", content_native_loader::TH_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "th_guili_extra_turn"), 1);
+    invoke_p9_op(&mut e, 0, "th_shengong", content_native_loader::TH_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "th_shengong_forged"), 1);
+    invoke_p9_op(&mut e, 0, "th_pingcai", content_native_loader::TH_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "th_pingcai_relic_wiped"), 1);
+    invoke_p9_op(&mut e, 0, "th_zhengjing", content_native_loader::TH_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "th_zhengjing_sorted"), 1);
+    invoke_p9_op(&mut e, 0, "th_chengye", content_native_loader::TH_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "th_chengye_liujing_count"), 1);
+    invoke_p9_op(&mut e, 0, "th_buxu", content_native_loader::TH_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "th_buxu_added_classic"), 1);
+    invoke_p9_op(&mut e, 0, "th_yufeng", content_native_loader::TH_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "th_yufeng_flight_score"), 2);
+    invoke_p9_op(&mut e, 0, "th_tianshu", content_native_loader::TH_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "th_tianshu_granted_yaoshu"), 1);
+    invoke_p9_op(&mut e, 0, "th_jieshu", content_native_loader::TH_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "th_jieshu_drawn"), 1);
+    invoke_p9_op(&mut e, 0, "th_gusuan", content_native_loader::TH_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "th_gusuan_awakened"), 1);
 
     // 3. L10 `k_danggu` non-conflicting pair (`史诗卡牌/extension.js:250-295`): eunuch 0 (`scstaoluan`) conflicts with eunuch 1 (`scschiyan`), so partner is eunuch 2 (`scszimou`)
     invoke_p9_op(&mut e, 0, "k_danggu", content_native_loader::K_DANGGU_ID);
@@ -830,7 +867,7 @@ fn formal_packages_extensions_load_and_execute_on_locked_product_path() {
     assert_eq!(flag(&e, 0, "k_danggu_partner_eunuch"), 3);
     assert_eq!(flag(&e, 0, "l10_scs_skill:scszimou"), 1);
 
-    // 4. L29 `mbcmfangzhu` baiban/jin options (`龙血玄黄/character/mobile.js:17343-17392`) & `mbcmxscw` (`mobile.js:17410`)
+    // 4. L29 `mbcmfangzhu` baiban/jin options (`龙血玄黄/character/mobile.js:17343-17392`), `mbcmqingzheng` (`龙血玄黄/extension.js:180`), & `mbcmxscw` (`mobile.js:17410`)
     e.state_core_mut().player_mut(0).mbqianlong_marks = 80;
     set_flag(&mut e, 0, "mbcmfangzhu_option", 1);
     invoke_p9_op(&mut e, 0, "mbcmfangzhu", content_native_loader::MBCMFANGZHU_ID);
@@ -838,8 +875,45 @@ fn formal_packages_extensions_load_and_execute_on_locked_product_path() {
     set_flag(&mut e, 0, "mbcmfangzhu_option", 2);
     invoke_p9_op(&mut e, 0, "mbcmfangzhu", content_native_loader::MBCMFANGZHU_ID);
     assert_eq!(flag(&e, 1, "mbcmfangzhu_jin"), 1);
+    invoke_p9_op(&mut e, 0, "mbcmqingzheng", content_native_loader::L29_LONGXUE_SKILL_ID);
+    assert_eq!(flag(&e, 0, "mbcmqingzheng_resolved"), 1);
     invoke_p9_op(&mut e, 0, "mbcmxscw", 0);
     assert_eq!(flag(&e, 0, "mbcmxscw_triggered"), 1);
+
+    // 5. L01 `yiyi` (`AI优化/extension.js:9205-9260`), L06 `_shengke`/`wuxingpan_skill` (`五行生克/extension.js:18-167`),
+    //    U06 `monkey`/`mianju`/`xuelunyang`/`jiuwei` (`欢乐卡牌/card/skill.js:4-255`),
+    //    U07 `youdishenru`/`ciqiu_dying`/`kangyin2` (`玩点论杀/character/skill.js:5-720`),
+    //    and U08 `U08_YXS_SKILLS` (`英雄杀/character/skill.js:5-3135`)
+    invoke_p9_op(&mut e, 0, "yiyi", content_native_loader::L01_YIYI_ID);
+    assert_eq!(flag(&e, 0, "l01_yiyi_resolved"), 1);
+    set_flag(&mut e, 0, "wuxing_card_nature", 1);
+    set_flag(&mut e, 0, "wuxing_player_nature", 3);
+    invoke_p9_op(&mut e, 0, "_shengke", content_native_loader::L06_WUXING_ID);
+    assert_eq!(flag(&e, 0, "wuxing_sheng_triggered"), 1);
+    invoke_p9_op(&mut e, 0, "wuxingpan_skill", content_native_loader::L06_WUXING_ID);
+    assert_eq!(flag(&e, 0, "wuxingpan_reassigned_nature"), 1);
+    invoke_p9_op(&mut e, 0, "monkey", content_native_loader::U06_HUANLE_SKILL_ID);
+    assert_eq!(flag(&e, 0, "monkey_stole_tao"), 1);
+    invoke_p9_op(&mut e, 0, "mianju", content_native_loader::U06_HUANLE_SKILL_ID);
+    assert_eq!(flag(&e, 0, "mianju_prevented_turnover"), 1);
+    invoke_p9_op(&mut e, 0, "xuelunyang", content_native_loader::U06_HUANLE_SKILL_ID);
+    assert_eq!(flag(&e, 0, "xuelunyang_copied_skill"), 1);
+    invoke_p9_op(&mut e, 0, "jiuwei", content_native_loader::U06_HUANLE_SKILL_ID);
+    assert_eq!(flag(&e, 0, "jiuwei_triggered"), 1);
+    invoke_p9_op(&mut e, 0, "youdishenru", content_native_loader::U07_WUDIAN_SKILL_ID);
+    assert_eq!(flag(&e, 0, "youdishenru_counter_damage"), 1);
+    invoke_p9_op(&mut e, 0, "ciqiu_dying", content_native_loader::U07_WUDIAN_SKILL_ID);
+    assert_eq!(flag(&e, 0, "ciqiu_dying_instant_kill"), 1);
+    invoke_p9_op(&mut e, 0, "kangyin2", content_native_loader::U07_WUDIAN_SKILL_ID);
+    assert_eq!(flag(&e, 0, "kangyin2_bonus_applied"), 1);
+    for &yxs_sk in &content_native_loader::U08_YXS_SKILLS {
+        invoke_p9_op(&mut e, 0, yxs_sk, content_native_loader::U08_YXS_SKILL_ID);
+        assert_eq!(flag(&e, 0, &format!("u08_skill:{yxs_sk}")), 1);
+    }
+    assert_eq!(flag(&e, 0, "yxs_fanji_counter"), 1);
+    assert_eq!(flag(&e, 0, "yxs_yixin_resolved"), 1);
+    assert_eq!(flag(&e, 0, "yxs_lshengong_copied_equip"), 1);
 }
+
 
 

@@ -1,9 +1,25 @@
-# G0 · U05 杀海拾遗（裁决 34 逐项清单 · 分册 2：第 1101–1622 项）
+# G0 · U05 杀海拾遗（裁决 34 逐项清单 · 分册 2：第 1101–1621 项）
 
 > 主文档：[U05-杀海拾遗.md](./U05-杀海拾遗.md) · 台账：[upstream-extension-reconstruction.md](../upstream-extension-reconstruction.md)
 
 | 类别 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|---|
+| 技能 | `kunlunjing2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4634` | 幻镜；触发="phaseAfter"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `oldliaoyuan` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4676` | 脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `oldliaoyuan2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4723` | 脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `shehun` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4768` | 摄魂：出牌阶段限一次，你可以弃置任意张花色不同的牌，另一名其他角色弃置等量的牌，若其弃置的牌中有牌的花色与你弃置的牌相同，你对其造成1点伤害。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:shehun`） |
+| 技能 | `liaoyuan` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4856` | 燎原：每当你使用一张【杀】指定目标后，你可以弃置任意张与此【杀】花色相同的牌，若如此做，目标需额外打出等量的闪，每少打出一张闪，此【杀】的伤害+1。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:liaoyuan`） |
+| 技能 | `liaoyuan2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4917` | 触发="damageBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `liaoyuan3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4929` | 触发="shaEnd"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `dunxing` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4936` | 遁形：当你成为其他角色卡牌的目标时，你可以弃置一张牌并进行一次判定，若不为红桃，则取消之。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:dunxing`） |
+| 技能 | `duanxing` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4982` | 锻星：每当你装备一张未强化的装备牌，可以视为一名角色使用一张【杀】。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:duanxing`） |
+| 技能 | `meihuo` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5005` | 魅惑：每当你失去最后一张装备牌，你可以获得一名其他角色的一张牌，若此牌来自装备区，你立即装备之。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:meihuo`） |
+| 技能 | `yishan` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5059` | 异闪：每当你受到一次伤害，你可以重新获得最近失去的两张牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:yishan`） |
+| 技能 | `yishan2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5149` | 异闪；触发="loseEnd"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `guanhu` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5159` | 贯鹄：每当你使用【杀】造成伤害，你可以弃置对方一张手牌和一张装备牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:guanhu`） |
+| 技能 | `poxing` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5186` | 破星：锁定技，每当你即将造成伤害，若目标的体力值大于你，你令伤害+1。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:poxing`） |
+| 技能 | `huanhun` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5196` | 唤魂：当一名角色进入濒死状态时，你可以弃置一张牌并令其进行一次判定，若结果为红色，其回复1点体力，否则其获得你弃置的牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:huanhun`） |
+| 技能 | `yinyue` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5240` | 引月：每当有一名角色回复一次体力，你可以令其摸一张牌，若该角色不是你且你的手牌数不大于该角色，你也摸一张牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:yinyue`） |
 | 技能 | `daofa` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5261` | 道法：每当有一名其他角色造成伤害，你可以令其弃置一张牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:daofa`） |
 | 技能 | `daixing` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5278` | 代形：结束阶段，你可以弃置任意张牌并获得等量的护甲；这些护甲将在你的下个准备阶段消失。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:daixing`） |
 | 技能 | `daixing2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5329` | 触发="phaseBegin"；护甲 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:daixing2`） |
@@ -28,6 +44,7 @@
 | 技能 | `lexue` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5950` | 乐学：回合内，你随机获得制衡、集智、缔盟、驱虎中的一个技能；回合外，你随机获得遗计、急救、鬼道、反馈中的一个技能。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:lexue`） |
 | 技能 | `lexue1` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5953` | 触发="phaseBegin"；获得技能 | 原生规则 / `rule-vm` 包 | 缺失 |
 | 技能 | `lexue2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5991` | 触发="phaseEnd"；获得技能 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `swdtianshu2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:6029` | 天书；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
 | 技能 | `swdtianshu3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:6103` | 触发=["useCardAfter", "useSkillAfter", …；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
 | 技能 | `swdtianshu` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:6113` | 天书：出牌阶段，你可以弃置一张锦囊牌，然后获得一名其他角色的一项技能直到该角色死亡（替换以此法获得的前一个技能）。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:swdtianshu`） |
 | 技能 | `swdtianshu_remove` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:6242` | 触发="dieAfter"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
@@ -226,6 +243,7 @@
 | 技能 | `tip` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/config.js:4` | 五行生克 | 原生规则 / `rule-vm` 包 | 缺失 |
 | 技能 | `stone_chenshui` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/content.js:397` | 沉睡：在你的结束阶段，令己方主将获得一张梦境牌。 | 原生规则 / `rule-vm` 包 | 缺失 |
 | 技能 | `_shengke` | `archive/upstream/noname/apps/core/extension/杀海拾遗/play/wuxing/skill.js:5` | 触发="useCardToBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `wuxingpan_skill` | `archive/upstream/noname/apps/core/extension/杀海拾遗/play/wuxing/skill.js:79` | 五行：出牌阶段限一次，你可以永久改变一张手牌的五行属性 | 原生规则 / `rule-vm` 包 | 缺失 |
 | 卡牌 | `luyugeng` | `archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js:4` | 鲈鱼羹：出牌阶段限一次，你可以弃置一张基本牌并发现一张牌，持续三回合。 | 原生规则 / `rule-vm` 包 | 忠实实现 |
 | 卡牌 | `jinlianzhu` | `archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js:26` | 金莲珠：对一名即将受到伤害的角色使用，防止此伤害，并令伤害来源摸一张牌。 | 原生规则 / `rule-vm` 包 | 忠实实现 |
 | 卡牌 | `chunbing` | `archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js:57` | 春饼：你的手牌上限+1，持续五回合。 | 原生规则 / `rule-vm` 包 | 忠实实现 |
@@ -503,26 +521,7 @@
 | 卡牌 | `wuxingpan` | `archive/upstream/noname/apps/core/extension/杀海拾遗/play/wuxing/card.js:2` | 五行盘：出牌阶段限一次，你可以永久改变一张手牌的五行属性 | 原生规则 / `rule-vm` 包 | 缺失 |
 | 配置项 | `wuxing` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/config.js:14` | 五行生克（默认=false）：每名角色和部分卡牌在游戏开始时随机获得一个属性 | 原生规则 / 配置 schema | 忠实实现 |
 | 配置项 | `rand` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/config.js:19` | 带属性卡牌概率（默认="0.3"）：包含12种地图牌和3张武将牌，首次引入“随从”概念 | 原生规则 / 配置 schema | 忠实实现 |
-| 配置项 | `item` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/config.js:22` | 万智牌（默认=true）：包含12种地图牌和3张武将牌，首次引入“随从”概念 | 原生规则 / 配置 schema | 忠实实现 |
 | 配置项 | `mtg` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/config.js:29` | 万智牌（默认=true）：包含12种地图牌和3张武将牌，首次引入“随从”概念 | 原生规则 / 配置 schema | 忠实实现 |
 | 配置项 | `zhenfa` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/config.js:34` | 阵法牌（默认=true）：国战模式专属卡牌扩展包 | 原生规则 / 配置 schema | 忠实实现 |
 | 配置项 | `gwent` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/config.js:39` | 昆特牌（<span style=（默认=true）：包含32种法术牌和52张武将牌，并引入“天气牌” | 原生规则 / 配置 schema | 忠实实现 |
 | 配置项 | `yunchou` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/config.js:44` | 运筹帷幄（<span style=（默认=true）：以三国背景设计的若干武将牌和卡牌 | 原生规则 / 配置 schema | 忠实实现 |
-| 界面钩子 | `kunlunjingc` | `archive/upstream/noname/apps/core/extension/杀海拾遗/card/swd/skill.js:820` | 昆仑镜：出牌阶段限一次，你可以观看牌堆顶的三张牌，然后用一张手牌替换其中的一张。 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
-| 界面钩子 | `old_longfan` | `archive/upstream/noname/apps/core/extension/杀海拾遗/card/swd/skill.js:2403` | 脚本逻辑 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
-| 界面钩子 | `huanshu3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/gwent/skill.js:1521` | 幻术；触发="phaseBegin"；脚本逻辑 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
-| 界面钩子 | `gwjieyin` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/gwent/skill.js:1530` | 结印：出牌阶段，你可以视为使用瘟疫、燕子药水或昆恩法印（不能重复使用同一法术），技能两轮重置一次。 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
-| 界面钩子 | `gwfengchi` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/gwent/skill.js:1835` | 风驰：锁定技，出牌阶段开始时，你随机观看3个可以在出牌阶段使用的技能，并获得其中一个技能直到此阶段结束。 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
-| 界面钩子 | `yinzhang` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/gwent/skill.js:2418` | 银杖：出牌阶段限一次，你可以弃置一张牌，然后发现一张银卡法术。 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
-| 界面钩子 | `lanquan` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/gwent/skill.js:3145` | 远略：出牌阶段限一次，你可以观看牌堆顶的六张牌，并选择一张使用。 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
-| 界面钩子 | `kekao` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/hearth/skill.js:1927` | 科考：结束阶段，你可以发现一张延时锦囊牌。 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
-| 界面钩子 | `jinhua` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/hearth/skill.js:1964` | 进化：锁定技，每当你以自己为目标使用一张非转化的锦囊牌，你发现一个技能并获得之。 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
-| 界面钩子 | `kqizhou` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/hearth/skill.js:2028` | 祈咒：准备阶段，若你于上回合使用过锦囊牌，则可以获得一张元素祈咒。 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
-| 界面钩子 | `nuyan2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/hearth/skill.js:3429` | 怒焰：出牌阶段限三次，你可以失去1点体力，视为使用任意一张具有「伤害」标签的牌。 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
-| 界面钩子 | `nuyan` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/hearth/skill.js:3513` | 怒焰：出牌阶段限一次，你可以将一张红色牌当作任意一张具有「伤害」标签的牌使用（不得是你本局以此法使用过的牌）。 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
-| 界面钩子 | `maoxian` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/hearth/skill.js:3915` | 奇旅：出牌阶段限两次，你可以发现一个技能并获得之（替换此前发现的技能）。 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
-| 界面钩子 | `hsbaowu_huangjinyuanhou2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/hearth/skill.js:4177` | 触发="phaseBegin"；脚本逻辑 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
-| 界面钩子 | `xieneng` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/hearth/skill.js:4185` | 邪能：结束阶段，你可以选择一张神器牌并获得之。 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
-| 界面钩子 | `kbolan2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:683` | 触发="drawEnd"；脚本逻辑 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
-| 界面钩子 | `swdtianshu2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:6029` | 天书；脚本逻辑 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
-| 界面钩子 | `wuxingpan_skill` | `archive/upstream/noname/apps/core/extension/杀海拾遗/play/wuxing/skill.js:79` | 五行：出牌阶段限一次，你可以永久改变一张手牌的五行属性 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |

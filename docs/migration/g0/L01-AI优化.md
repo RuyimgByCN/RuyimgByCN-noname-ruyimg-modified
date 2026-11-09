@@ -60,12 +60,14 @@
 
 ## 7. 裁决 34 逐项上游清单与现有实现归类（2026-11-09）
 
-- **统计汇总**：上游实体合计 **134** 项（武将 0 / 技能 69 / 卡牌 1 / 模式与战役节点 0 / 配置项 64 / 界面钩子 0 / 渲染面 0）
-- **状态分布**：`忠实实现` **133** 项 · `示意或自造` **0** 项 · `缺失` **1** 项
+- **统计汇总**：上游实体合计 **133** 项（武将 0 / 技能 69 / 卡牌 1 / 模式与战役节点 0 / 配置项 63 / 界面钩子 0 / 渲染面 0）
+- **状态分布**：`忠实实现` **133** 项 · `示意或自造` **0** 项 · `缺失` **0** 项
 
 ### 7.1 现有 `decision34*` / 前端示意代码逐条归类
 
-- 本来源未被 `decision34_closure.rs` / `decision34_pack9.rs` 注入自造武将或默认摸 1 技能。
+| 现有实现项 | 原生文件:行号 | 上游对照 (`file:line`) | 原生落点 | 状态与处置结论 |
+|---|---|---|---|---|
+| `lib.card.yiyi`（以逸待劳锦囊，`resolve_l01_yiyi_card` + `evaluate_yiyi_target_benefit`） | `crates/content-native-loader/src/ai_tuning.rs:183-228`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:11-28` | `archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9205-9260` | 原生规则 / `ai-tuning-upstream-liuli` | 忠实实现（已按上游实现 `yiyi` 锦囊摸 2 弃 2 结算与目标收益评估并接入正式包 `ai-tuning-upstream-liuli` 产品路径） |
 
 ### 7.2 武将（Generals）（0 项）
 
@@ -149,13 +151,13 @@
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `yiyi` | `archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9205` | 摸牌、弃牌 | 原生规则 / `rule-vm` 包 | 缺失 |
+| `yiyi` | `archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9205` | 摸牌、弃牌 | 原生规则 / `rule-vm` 包 | 忠实实现 |
 
 ### 7.5 模式 / 战役节点（Modes & Campaign Nodes）（0 项）
 
 - （上游无此类别实体）
 
-### 7.6 配置项（Config Items）（64 项）
+### 7.6 配置项（Config Items）（63 项）
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
@@ -166,7 +168,6 @@
 | `copyYp` | `archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9926` | 一键复制123云盘下载链接（默认=—） | 原生规则（`crates/content-native-loader/src/ai_tuning.rs`） | 忠实实现 |
 | `bd2` | `archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9943` | AI相关（默认='shyg'）：主要包括非装备牌、卖血、存牌、弃牌等难以区分的AI策略。开启后，重启游戏可载入对应AI优化策略。其… | 原生规则（`crates/content-native-loader/src/ai_tuning.rs`） | 忠实实现 |
 | `btAi` | `archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9948` | 本体AI优化（默认='shyg'）：主要包括非装备牌、卖血、存牌、弃牌等难以区分的AI策略。开启后，重启游戏可载入对应AI优化策略。其… | 原生规则（`crates/content-native-loader/src/ai_tuning.rs`） | 忠实实现 |
-| `item` | `archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9952` | 装备AI优化（默认=true）：全部来自〔山河永固〕AI，针对常见的一些装备牌包括部分装备技能进行了优化 | 原生规则（`crates/content-native-loader/src/ai_tuning.rs`） | 忠实实现 |
 | `zbAi` | `archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9958` | 装备AI优化（默认=true）：全部来自〔山河永固〕AI，针对常见的一些装备牌包括部分装备技能进行了优化 | 原生规则（`crates/content-native-loader/src/ai_tuning.rs`） | 忠实实现 |
 | `wjAi` | `archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9963` | 武将技能优化（默认=true）：开启后，重启游戏可载入优化后的武将技能，具体优化技能见扩展介绍 | 原生规则（`crates/content-native-loader/src/ai_tuning.rs`） | 忠实实现 |
 | `sfjAi` | `archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9968` | 身份局AI优化（默认='shyg'）：开启后，重启游戏可载入对应身份局AI策略。其中〔山河永固〕优化内容较全面、较耗时；〔官将重修〕优化… | 原生规则（`crates/content-native-loader/src/ai_tuning.rs`） | 忠实实现 |
