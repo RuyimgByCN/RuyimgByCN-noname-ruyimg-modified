@@ -23,10 +23,27 @@ pub const L24_SKIN_SKILL_ID: u32 = 1_926_008_001;
 pub const L25_ZUAN_SKILL_ID: u32 = 1_926_009_001;
 pub const L27_SELECT_SKILL_ID: u32 = 1_926_010_001;
 
-fn discard_first_hand(ctx: &mut Ctx<'_>, owner: PlayerId) {
+fn discard_first_hand(ctx: &mut Ctx<'_>, owner: PlayerId) -> Option<CardId> {
     if let Some(c) = ctx.core.player(owner).hand.first().copied() {
         ctx.take_hand_card(owner, c);
         discard_some(ctx, owner, vec![c]);
+        Some(c)
+    } else {
+        None
+    }
+}
+
+fn discard_first_he(ctx: &mut Ctx<'_>, owner: PlayerId) -> Option<CardId> {
+    if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+        ctx.take_hand_card(owner, c);
+        discard_some(ctx, owner, vec![c]);
+        Some(c)
+    } else if let Some(c) = ctx.core.player(owner).equips.first().copied() {
+        ctx.take_owned_card(owner, c);
+        discard_some(ctx, owner, vec![c]);
+        Some(c)
+    } else {
+        None
     }
 }
 
@@ -66,17 +83,39 @@ pub(super) fn try_commit_decision34_pack9(
             "pozhenjue" | "g_pozhenjue" => resolve_zhenfa_pozhenjue(ctx, owner),
             "jianbi" => resolve_wudian_jianbi(ctx, owner),
             "choudu" => resolve_wudian_choudu(ctx, owner),
-            "baozou" | "ganran" | "ganran2" => resolve_l19_doomsday_skill(ctx, executing, owner),
-            "zhengsu" | "zhenyi_spade" | "xinhongyan" | "diaohulishan" => {
+            "_changeEquipExt"
+            | "_ui_auto_cheat"
+            | "_kill_framebg"
+            | "_rarity"
+            | "_tiesuo_ying"
+            | "_usecard"
+            | "_decadeUI_usecardBegin"
+            | "_discard"
+            | "_decadeUI_dieKillEffect"
+            | "_chongzhu" => resolve_l08_decade_skill(ctx, executing, owner),
+            "_dieNoTuoguan" | "_menuCheat" | "_jindutiao" | "spshidi" | "zhefu" | "yidu" => {
+                resolve_l14_shousha_skill(ctx, executing, owner)
+            }
+            "baozou" | "ganran" | "ganran2" | "_jisuangailv" | "_tuizhi" => {
+                resolve_l19_doomsday_skill(ctx, executing, owner)
+            }
+            "zhengsu" | "zhenyi_spade" | "xinhongyan" | "diaohulishan" | "_xigua_feiyanbahu_" => {
                 resolve_l20_skill(ctx, executing, owner)
             }
-            "g_du" | "_diycharacterskill" | "_diyskill" => {
+            "_tsx" | "_gj" | "_ts" | "_pfqh_reapply_saved_params" | "_pfqh_check_hp_change" => {
+                resolve_l24_skin_skill(ctx, executing, owner)
+            }
+            "g_du" | "_diycharacterskill" | "_diyskill" | "_player_xxgg_zhishixian_xxxxx_ggg" => {
                 resolve_l25_zuan_skill(ctx, executing, owner)
             }
             "baonvezhi" | "bolan" | "kuangcai" | "qimou" | "quanji" | "taoluan" | "rehuashen"
-            | "_chooseCharacterTwo" => resolve_l27_select_skill(ctx, executing, owner),
+            | "clandianzhan" | "drlt_duorui" | "_chooseCharacterTwo" => {
+                resolve_l27_select_skill(ctx, executing, owner)
+            }
             s if s.starts_with("ddd") => resolve_u01_ddd_skill(ctx, s, owner),
-            s if s.starts_with("gx_") => resolve_l24_skin_skill(ctx, s, owner),
+            s if s.starts_with("gx_") || s.starts_with("_pfqh_") => {
+                resolve_l24_skin_skill(ctx, s, owner)
+            }
             _ => return false,
         },
     }
@@ -90,6 +129,10 @@ fn resolve_u01_ddd_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
     } else {
         executing
     };
+    if skill_name == "dddqice" && ctx.core.player(owner).hand.is_empty() {
+        set_flag(ctx.core, owner, "ddd_qice_blocked_empty", 1);
+        return;
+    }
     set_flag(ctx.core, owner, &format!("u01_skill:{skill_name}"), 1);
     let count = flag(ctx.core, owner, "u01_ddd_trigger_count") + 1;
     set_flag(ctx.core, owner, "u01_ddd_trigger_count", count);
@@ -115,7 +158,7 @@ fn resolve_u01_ddd_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
             let hand_len = ctx.core.player(owner).hand.len() as i32;
             let hp = ctx.core.player(owner).hp;
             if hand_len > hp && !ctx.core.player(owner).hand.is_empty() {
-                discard_first_hand(ctx, owner);
+                let _ = discard_first_hand(ctx, owner);
                 ctx.recover(owner, 1, None);
                 set_flag(ctx.core, owner, "ddd_qiaoduan_mode", 2);
             } else {
@@ -130,7 +173,7 @@ fn resolve_u01_ddd_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
             ctx.start_draw(owner, 1);
         }
         "dddqice" => {
-            discard_first_hand(ctx, owner);
+            let _ = discard_first_hand(ctx, owner);
             set_flag(ctx.core, owner, "ddd_qice_virtual_trick", 1);
             if let Some(t) = first_other_alive(ctx.core, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data(
@@ -146,32 +189,52 @@ fn resolve_u01_ddd_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
     }
 }
 
-/// `U05` `swd` (`duijue` 对决, limited skill on `swd_wangsiyuan`):
+/// `U05` `swd` (`duijue` 对决, limited skill on `swd_wangsiyuan` / `swd_weida`):
+/// Upstream `filterTarget`: `target.hp > 1 && player !== target`; `limited: true`.
 fn resolve_swd_duijue(ctx: &mut Ctx<'_>, owner: PlayerId) {
     if flag(ctx.core, owner, "duijue_used") == 1 {
         set_flag(ctx.core, owner, "duijue_blocked_limited", 1);
         return;
     }
-    if flag(ctx.core, owner, "duijue_target_hp_too_low") == 1 {
+    let Some(t) = first_other_alive(ctx.core, owner) else {
+        return;
+    };
+    if flag(ctx.core, owner, "duijue_target_hp_too_low") == 1 || ctx.core.player(t).hp <= 1 {
         set_flag(ctx.core, owner, "duijue_blocked_hp", 1);
         return;
     }
     set_flag(ctx.core, owner, "duijue_used", 1);
     set_flag(ctx.core, owner, "duijue_active", 1);
-    if let Some(t) = first_other_alive(ctx.core, owner) {
-        ctx.emit(EventData::Damage(crate::machine::damage_data(
-            Some(owner),
-            t,
-            2,
-        )));
-    }
+    ctx.emit(EventData::Damage(crate::machine::damage_data(
+        Some(owner),
+        t,
+        2,
+    )));
     ctx.start_draw(owner, 1);
 }
 
 /// `U05` `swd` (`tanlin` 探林):
+/// Upstream `filter`: `player.countCards("h") > 0` and `target.countCards("h") > 0`;
+/// compares cards (win -> gain cards & `tanlin_discovered = 1`; lose -> take 1 damage from target).
 fn resolve_swd_tanlin(ctx: &mut Ctx<'_>, owner: PlayerId) {
+    let Some(t) = first_other_alive(ctx.core, owner) else {
+        return;
+    };
+    if ctx.core.player(owner).hand.is_empty() || ctx.core.player(t).hand.is_empty() {
+        set_flag(ctx.core, owner, "tanlin_blocked_empty", 1);
+        return;
+    }
     let step = flag(ctx.core, owner, "tanlin_step") + 1;
     set_flag(ctx.core, owner, "tanlin_step", step);
+    if flag(ctx.core, owner, "tanlin_force_lose") == 1 {
+        set_flag(ctx.core, owner, "tanlin_lost_damage", 1);
+        ctx.emit(EventData::Damage(crate::machine::damage_data(
+            Some(t),
+            owner,
+            1,
+        )));
+        return;
+    }
     ctx.start_draw(owner, 1);
     if step >= 2 {
         set_flag(ctx.core, owner, "tanlin_discovered", 1);
@@ -205,7 +268,7 @@ fn resolve_yunchou_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
             set_flag(ctx.core, owner, "ycnxinfu_qiaosi_figure", 1);
             set_flag(ctx.core, owner, "ycnxinfu_qiaosi_resolved", 1);
             ctx.start_draw(owner, 2);
-            discard_first_hand(ctx, owner);
+            let _ = discard_first_hand(ctx, owner);
         }
     }
 }
@@ -235,15 +298,24 @@ fn resolve_mtg_land_card(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
     }
 }
 
-/// `U05` `zhenfa` (`pozhenjue` 破阵决):
+/// `U05` `zhenfa` (`pozhenjue` 破阵决, `recastable: true` & seat/formation disruption):
 fn resolve_zhenfa_pozhenjue(ctx: &mut Ctx<'_>, owner: PlayerId) {
+    if flag(ctx.core, owner, "pozhenjue_recast") == 1 {
+        let _ = discard_first_hand(ctx, owner);
+        set_flag(ctx.core, owner, "pozhenjue_recasted", 1);
+        ctx.start_draw(owner, 1);
+        return;
+    }
     set_flag(ctx.core, owner, "pozhenjue_formation_broken", 1);
+    let mut alive_count = 0u32;
     for pid in ctx.core.seat_order_from(owner) {
         if ctx.core.player(pid).alive {
+            alive_count += 1;
             ctx.core.player_mut(pid).linked = false;
             set_flag(ctx.core, pid, "formation_active", 0);
         }
     }
+    set_flag(ctx.core, owner, "pozhenjue_seats_swapped", alive_count);
     ctx.start_draw(owner, 1);
 }
 
@@ -343,7 +415,12 @@ fn resolve_xianjian_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
 }
 
 /// `U07` `wudian` (`jianbi` 坚壁):
+/// Upstream `filter`: `get.type(event.card) === "trick" && !multitarget && event.targets.length >= 2`.
 fn resolve_wudian_jianbi(ctx: &mut Ctx<'_>, owner: PlayerId) {
+    if flag(ctx.core, owner, "jianbi_targets_len") == 1 {
+        set_flag(ctx.core, owner, "jianbi_blocked_single_target", 1);
+        return;
+    }
     set_flag(ctx.core, owner, "wudian_jianbi_nullified", 1);
     let shield = flag(ctx.core, owner, "wudian_jianbi_shield") + 1;
     set_flag(ctx.core, owner, "wudian_jianbi_shield", shield);
@@ -353,20 +430,27 @@ fn resolve_wudian_jianbi(ctx: &mut Ctx<'_>, owner: PlayerId) {
 }
 
 /// `U07` `wudian` (`choudu` 筹度):
+/// Upstream: `enable: "phaseUse"`, `usable: 1`, `position: "he"`, uses virtual `diaobingqianjiang`.
 fn resolve_wudian_choudu(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    if flag(ctx.core, owner, "choudu_require_card") == 1 && ctx.core.player(owner).hand.is_empty() {
+    if ctx.core.player(owner).hand.is_empty() && ctx.core.player(owner).equips.is_empty() {
         set_flag(ctx.core, owner, "choudu_blocked_empty", 1);
         return;
     }
-    discard_first_hand(ctx, owner);
+    if flag(ctx.core, owner, "choudu_used_this_turn") == 1 {
+        set_flag(ctx.core, owner, "choudu_blocked_usable", 1);
+        return;
+    }
+    let _ = discard_first_he(ctx, owner);
+    set_flag(ctx.core, owner, "choudu_used_this_turn", 1);
     set_flag(ctx.core, owner, "wudian_choudu_dispatched", 1);
+    set_flag(ctx.core, owner, "diaobingqianjiang_resolved", 1);
     ctx.start_draw(owner, 2);
 }
 
-/// `L08` (`十周年UI` 9 skills):
+/// `L08` (`十周年UI` 9 `lib.skill` hooks):
 fn resolve_l08_decade_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
     let skill_name = if executing.is_empty() {
-        "_decade_qiankunbagua"
+        "_usecard"
     } else {
         executing
     };
@@ -375,17 +459,17 @@ fn resolve_l08_decade_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId)
     set_flag(ctx.core, owner, "l08_decade_banner_seq", seq);
     let trigram = (seq % 8) + 1;
     set_flag(ctx.core, owner, "l08_qiankun_trigram", trigram);
-    if skill_name == "_chongzhu" {
+    if matches!(skill_name, "_chongzhu" | "_changeEquipExt" | "_usecard") {
         let rc = flag(ctx.core, owner, "l08_recast_count") + 1;
         set_flag(ctx.core, owner, "l08_recast_count", rc);
         ctx.start_draw(owner, 1);
     }
 }
 
-/// `L14` (`手杀UI` 48 skills):
+/// `L14` (`手杀UI` 48 `lib.skill` hooks):
 fn resolve_l14_shousha_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
     let skill_name = if executing.is_empty() {
-        "spshidi"
+        "_dieNoTuoguan"
     } else {
         executing
     };
@@ -394,7 +478,7 @@ fn resolve_l14_shousha_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId
     set_flag(ctx.core, owner, "l14_shousha_trigger_count", count);
     let parity = (flag(ctx.core, owner, "l14_spshidi_parity") ^ 1) & 1;
     set_flag(ctx.core, owner, "l14_spshidi_parity", parity);
-    if matches!(skill_name, "zhefu" | "yidu") {
+    if matches!(skill_name, "zhefu" | "yidu" | "_jd_wjsw") {
         if let Some(t) = first_other_alive(ctx.core, owner) {
             ctx.emit(EventData::Damage(crate::machine::damage_data(
                 Some(owner),
@@ -407,7 +491,7 @@ fn resolve_l14_shousha_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId
     }
 }
 
-/// `L19` (`末日乱斗` 66 skills including `baozou`, `ganran`, `ganran2`, `vir_*`):
+/// `L19` (`末日乱斗` 66 skills including `baozou`, `ganran`, `ganran2`, `_jiangshi*`):
 fn resolve_l19_doomsday_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
     let skill_name = if executing.is_empty() {
         "baozou"
@@ -489,10 +573,10 @@ fn resolve_l20_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
     }
 }
 
-/// `L24` (`皮肤切换` 23 skills including `gx_*` and skin hooks):
+/// `L24` (`皮肤切换` 23 skills including `_tsx`, `_gj`, `_ts`, `_pfqh_*`):
 fn resolve_l24_skin_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
     let skill_name = if executing.is_empty() {
-        "gx_Bozhi"
+        "_tsx"
     } else {
         executing
     };
@@ -534,7 +618,7 @@ fn resolve_l25_zuan_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
     }
 }
 
-/// `L27` (`选将美化` 37 active skills including `_chooseCharacterTwo`, `baonvezhi`, `qimou`):
+/// `L27` (`选将美化` 37 active skills including `baonvezhi`, `qimou`, `clandianzhan`, plus `_chooseCharacterTwo`):
 fn resolve_l27_select_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
     let skill_name = if executing.is_empty() {
         "baonvezhi"

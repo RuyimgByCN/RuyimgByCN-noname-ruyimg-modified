@@ -11,6 +11,7 @@ use engine_native::content::extension::{
 use engine_native::content::names;
 use engine_native::content::standard::{Gender, STANDARD_GENERALS};
 use engine_native::event::EventKind;
+use engine_native::rvm_bridge::VmFilterPolicy;
 
 #[path = "decision34_pack9_data.rs"]
 pub mod decision34_pack9_data;
@@ -36,7 +37,72 @@ pub const L24_SKIN_SKILL_ID: u32 = 1_926_008_001;
 pub const L25_ZUAN_SKILL_ID: u32 = 1_926_009_001;
 pub const L27_SELECT_SKILL_ID: u32 = 1_926_010_001;
 
-fn make_vm_skill_decl(name_str: &str, dispatch_id: u32, event: EventKind, idx: usize) -> VmSkillDecl {
+fn classify_skill_trigger(name: &str) -> (EventKind, VmFilterPolicy) {
+    match name {
+        "ycndiyjianxiong"
+        | "_pfqh_check_damage"
+        | "_pfqh_check_damage_times"
+        | "_pfqh_check_hp_change"
+        | "_zuan_damageSendEgg"
+        | "_zuan_damageSendFlower"
+        | "_extradamageskill"
+        | "_wujinmoshiDamage"
+        | "_wujinmoshiDamageE"
+        | "_losehp_"
+        | "_mianshang_"
+        | "baonvezhi" => (EventKind::Damage, VmFilterPolicy::OwnerIsTarget),
+        "tanlin"
+        | "feizhua"
+        | "tianjian"
+        | "shanguang"
+        | "_usecard"
+        | "_decadeUI_usecardBegin"
+        | "_changeEquipExt"
+        | "_tsx"
+        | "_gj"
+        | "_ts"
+        | "_chupaiA"
+        | "_chupaiB"
+        | "_chupaiC"
+        | "_chupaiD"
+        | "_chupaiE"
+        | "_chupaiF"
+        | "_chupaiG"
+        | "_chupaiH"
+        | "_useskill"
+        | "_extrauseskill"
+        | "_shiyongkapaitexiao_" => (EventKind::CardUsed, VmFilterPolicy::OwnerIsSource),
+        "jianbi" | "_jd_shiyongshanD" | "_checkDcdShan" | "_shanskill" => {
+            (EventKind::CardUsed, VmFilterPolicy::OwnerIsTarget)
+        }
+        "leiyu"
+        | "zhengsu"
+        | "_pfqh_check_phaseEnd"
+        | "_jd_hhjs"
+        | "_jd_phaseAfter"
+        | "_phaseendskill" => (EventKind::PhaseEnd, VmFilterPolicy::OwnerIsTarget),
+        "_decadeUI_dieKillEffect"
+        | "_kill_framebg"
+        | "_dieNoTuoguan"
+        | "_jd_wjsw"
+        | "_check_die_yh"
+        | "_pfqh_check_jisha"
+        | "_killskill"
+        | "_extradieskill"
+        | "_dieskill"
+        | "_guozhan_diebiaoji_"
+        | "_shoushajisha_" => (EventKind::Death, VmFilterPolicy::OwnerIsTarget),
+        "_zuanidentitydyingskill" | "_bingleDying" => {
+            (EventKind::Dying, VmFilterPolicy::OwnerIsTarget)
+        }
+        "_pfqh_check_roundCount" | "_zuanRoundTX" | "_chooseCharacterTwo" => {
+            (EventKind::TurnBegin, VmFilterPolicy::OwnerIsTarget)
+        }
+        _ => (EventKind::PhaseBegin, VmFilterPolicy::OwnerIsTarget),
+    }
+}
+
+fn make_vm_skill_decl(name_str: &str, dispatch_id: u32, idx: usize) -> VmSkillDecl {
     let mod_name = format!("{name_str}#d34p9");
     let mut code = Vec::with_capacity(14);
     code.push(0x57); // HOST_SKILL
@@ -59,6 +125,12 @@ fn make_vm_skill_decl(name_str: &str, dispatch_id: u32, event: EventKind, idx: u
         caps_mask: 1,
     };
     let skill_def_id = dispatch_id.wrapping_add(idx as u32);
+    let (event, inner_filter) = classify_skill_trigger(name_str);
+    let extra_events = if event == EventKind::PhaseBegin {
+        Vec::new()
+    } else {
+        vec![EventKind::PhaseBegin]
+    };
     VmSkillDecl {
         declaration_hash: None,
         presentation_binding: None,
@@ -70,14 +142,14 @@ fn make_vm_skill_decl(name_str: &str, dispatch_id: u32, event: EventKind, idx: u
             priority: 15,
             order_selectable: false,
             optional: false,
-            extra_events: Vec::new(),
+            extra_events,
         },
-        filter: engine_native::rvm_bridge::VmFilterPolicy::Declared {
+        filter: VmFilterPolicy::Declared {
             skill_def_id,
             hand_limit_base_max_hp: false,
             choice_actor: engine_native::rvm_bridge::VmChoiceActor::Owner,
             modifiers: Vec::new(),
-            inner: Box::new(engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget),
+            inner: Box::new(inner_filter),
         },
         r05_identity: None,
     }
@@ -138,15 +210,19 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
     for &(sym, faction, gender, max_hp, sk_list) in &U01_DDD_GENERALS {
         push_general(sym, faction, gender, max_hp, sk_list);
     }
+    // U05 Xianjian: all 36 `pal_*` generals (covering the 13 full + 23 partial generals)
+    for &(sym, faction, gender, max_hp, sk_list) in &U05_XIANJIAN_GENERALS {
+        push_general(sym, faction, gender, max_hp, sk_list);
+    }
     // L08: 9 Decade UI characters
     for &sym in &L08_DECADE_CHARACTERS {
-        push_general(sym, Faction::Qun, Gender::Male, 4, &["_decade_qiankunbagua"]);
+        push_general(sym, Faction::Qun, Gender::Male, 4, &["_usecard"]);
     }
     // L14: 3 Shousha UI characters
     for &sym in &L14_SHOUSHA_CHARACTERS {
-        push_general(sym, Faction::Wei, Gender::Male, 4, &["spshidi", "spcishi"]);
+        push_general(sym, Faction::Wei, Gender::Male, 4, &["_dieNoTuoguan", "_jindutiao"]);
     }
-    // L19: 24 Doomsday Brawl characters
+    // L19: 24 Doomsday Brawl characters (starting with `jiangshifz`, `jiangshinj`)
     for &sym in &L19_DOOMSDAY_CHARACTERS {
         push_general(sym, Faction::Qun, Gender::Male, 4, &["baozou", "ganran"]);
     }
@@ -154,18 +230,21 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
     for &sym in &L20_MARK_SUPPLEMENT_CHARACTERS {
         push_general(sym, Faction::Shu, Gender::Male, 4, &["zhengsu", "zhenyi_spade"]);
     }
-    // L25: 120 Zuan characters
+    // L25: 120 Zuan characters (60 `ssr_*` + 60 `zuan_*`)
     for &sym in &L25_ZUAN_CHARACTERS {
-        push_general(sym, Faction::Qun, Gender::Male, 4, &["g_du", "zuan_jianxiong"]);
+        push_general(sym, Faction::Qun, Gender::Male, 4, &["g_du", "_diycharacterskill"]);
     }
 
-    // Cards: U05 MTG (2), U05 Zhenfa (1), L14 (1), L20 (3)
+    // Cards: U05 MTG (2), U05 Zhenfa (1), L14 (1), L20 (3 `zhengsu_*` + 3 tactical cards)
     let mut cards: Vec<CardDef> = Vec::new();
-    let card_specs: [(&str, CardKind, Suit, u8); 7] = [
+    let card_specs: [(&str, CardKind, Suit, u8); 10] = [
         ("mtg_duzhao", CardKind::Wuzhong, Suit::Spade, 1),
         ("mtg_cangbaohaiwan", CardKind::Wuzhong, Suit::Heart, 1),
         ("pozhenjue", CardKind::Wuzhong, Suit::Club, 7),
         ("shousha_qiankunbagua", CardKind::Wuzhong, Suit::Spade, 2),
+        ("zhengsu_leijin", CardKind::Wuzhong, Suit::Spade, 3),
+        ("zhengsu_mingzhi", CardKind::Wuzhong, Suit::Heart, 4),
+        ("zhengsu_bianzhen", CardKind::Wuzhong, Suit::Club, 5),
         ("diaohulishan", CardKind::Wuzhong, Suit::Diamond, 10),
         ("huoshaolianying", CardKind::Wuzhong, Suit::Heart, 12),
         ("lulitongxin", CardKind::Wuzhong, Suit::Club, 11),
@@ -180,58 +259,72 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
     // Skills across all 9 sources + U07
     let mut vm_skills: Vec<VmSkillDecl> = Vec::new();
     let mut idx = 0usize;
-    let mut push_skill = |name: &str, dispatch_id: u32, event: EventKind| {
+    let mut push_skill = |name: &str, dispatch_id: u32| {
         if seen_skills.insert(name.to_string()) {
-            vm_skills.push(make_vm_skill_decl(name, dispatch_id, event, idx));
+            vm_skills.push(make_vm_skill_decl(name, dispatch_id, idx));
             idx += 1;
         }
     };
 
     for &s in &U01_DDD_SKILLS {
-        push_skill(s, DDD_SKILL_DISPATCH_ID, EventKind::PhaseBegin);
+        push_skill(s, DDD_SKILL_DISPATCH_ID);
     }
-    push_skill("duijue", SWD_DUIJUE_ID, EventKind::PhaseBegin);
-    push_skill("tanlin", SWD_TANLIN_ID, EventKind::PhaseBegin);
+    push_skill("duijue", SWD_DUIJUE_ID);
+    push_skill("tanlin", SWD_TANLIN_ID);
     for &s in &U05_YUNCHOU_REMAINING_SKILLS {
-        push_skill(s, YUNCHOU_SKILL_ID, EventKind::PhaseBegin);
+        push_skill(s, YUNCHOU_SKILL_ID);
     }
     for &(cname, _, _, g_sk) in &U05_MTG_LAND_CARDS {
-        push_skill(cname, MTG_LAND_CARD_ID, EventKind::PhaseBegin);
-        push_skill(g_sk, MTG_LAND_CARD_ID, EventKind::PhaseBegin);
+        push_skill(cname, MTG_LAND_CARD_ID);
+        push_skill(g_sk, MTG_LAND_CARD_ID);
     }
     for &(cname, _, _, g_sk) in &U05_ZHENFA_CARDS {
-        push_skill(cname, ZHENFA_POZHENJUE_ID, EventKind::PhaseBegin);
-        push_skill(g_sk, ZHENFA_POZHENJUE_ID, EventKind::PhaseBegin);
+        push_skill(cname, ZHENFA_POZHENJUE_ID);
+        push_skill(g_sk, ZHENFA_POZHENJUE_ID);
     }
     for &s in &U05_OW_SKILLS {
-        push_skill(s, OW_SKILL_DISPATCH_ID, EventKind::PhaseBegin);
+        push_skill(s, OW_SKILL_DISPATCH_ID);
     }
     for &s in &U05_XIANJIAN_SKILLS {
-        push_skill(s, XIANJIAN_SKILL_DISPATCH_ID, EventKind::PhaseBegin);
+        push_skill(s, XIANJIAN_SKILL_DISPATCH_ID);
     }
-    push_skill("jianbi", WUDIAN_JIANBI_ID, EventKind::PhaseBegin);
-    push_skill("choudu", WUDIAN_CHOUDU_ID, EventKind::PhaseBegin);
+    for &(_, _, _, _, sk_list) in &U05_XIANJIAN_GENERALS {
+        for &s in sk_list {
+            push_skill(s, XIANJIAN_SKILL_DISPATCH_ID);
+        }
+    }
+    push_skill("jianbi", WUDIAN_JIANBI_ID);
+    push_skill("choudu", WUDIAN_CHOUDU_ID);
     for &s in &L08_DECADE_SKILLS {
-        push_skill(s, L08_DECADE_SKILL_ID, EventKind::PhaseBegin);
+        push_skill(s, L08_DECADE_SKILL_ID);
+    }
+    for &s in &["_chongzhu", "_decade_qiankunbagua"] {
+        push_skill(s, L08_DECADE_SKILL_ID);
     }
     for &s in &L14_SHOUSHA_SKILLS {
-        push_skill(s, L14_SHOUSHA_SKILL_ID, EventKind::PhaseBegin);
+        push_skill(s, L14_SHOUSHA_SKILL_ID);
+    }
+    for &s in &["spshidi", "spcishi", "zhefu", "yidu"] {
+        push_skill(s, L14_SHOUSHA_SKILL_ID);
     }
     for &s in &L19_DOOMSDAY_SKILLS {
-        push_skill(s, L19_DOOMSDAY_SKILL_ID, EventKind::PhaseBegin);
+        push_skill(s, L19_DOOMSDAY_SKILL_ID);
     }
     for &s in &L20_MARK_SUPPLEMENT_SKILLS {
-        push_skill(s, L20_SKILL_DISPATCH_ID, EventKind::PhaseBegin);
+        push_skill(s, L20_SKILL_DISPATCH_ID);
     }
     for &s in &L24_SKIN_SWITCH_SKILLS {
-        push_skill(s, L24_SKIN_SKILL_ID, EventKind::PhaseBegin);
+        push_skill(s, L24_SKIN_SKILL_ID);
     }
+    push_skill("gx_Bozhi", L24_SKIN_SKILL_ID);
     for &s in &L25_ZUAN_SKILLS {
-        push_skill(s, L25_ZUAN_SKILL_ID, EventKind::PhaseBegin);
+        push_skill(s, L25_ZUAN_SKILL_ID);
     }
+    push_skill("zuan_jianxiong", L25_ZUAN_SKILL_ID);
     for &s in &L27_SELECT_BEAUTIFY_SKILLS {
-        push_skill(s, L27_SELECT_SKILL_ID, EventKind::PhaseBegin);
+        push_skill(s, L27_SELECT_SKILL_ID);
     }
+    push_skill("_chooseCharacterTwo", L27_SELECT_SKILL_ID);
 
     ExtensionPack {
         def: ExtensionDef {

@@ -15,11 +15,12 @@ use content_native_loader::{
     L25_ZUAN_SKILLS, L25_ZUAN_SKILL_ID, L27DualGeneralPick, L27_SELECT_BEAUTIFY_SKILLS,
     L27_SELECT_SKILL_ID, MTG_LAND_CARD_ID, OW_SKILL_DISPATCH_ID, SWD_DUIJUE_ID, SWD_TANLIN_ID,
     U01_DDD_GENERALS, U01_DDD_SKILLS, U05_MTG_LAND_CARDS, U05_OW_SKILLS,
-    U05_SWD_REMAINING_SKILLS, U05_XIANJIAN_SKILLS, U05_YUNCHOU_REMAINING_SKILLS,
-    U05_ZHENFA_CARDS, U07_WUDIAN_REMAINING_SKILLS, WUDIAN_CHOUDU_ID, WUDIAN_JIANBI_ID,
-    XIANJIAN_SKILL_DISPATCH_ID, YUNCHOU_SKILL_ID, ZHENFA_POZHENJUE_ID,
-    DECISION34_STORAGE_DISPATCH_KEY, DDD_SKILL_DISPATCH_ID,
+    U05_SWD_REMAINING_SKILLS, U05_XIANJIAN_GENERALS, U05_XIANJIAN_SKILLS,
+    U05_YUNCHOU_REMAINING_SKILLS, U05_ZHENFA_CARDS, U07_WUDIAN_REMAINING_SKILLS,
+    WUDIAN_CHOUDU_ID, WUDIAN_JIANBI_ID, XIANJIAN_SKILL_DISPATCH_ID, YUNCHOU_SKILL_ID,
+    ZHENFA_POZHENJUE_ID, DECISION34_STORAGE_DISPATCH_KEY, DDD_SKILL_DISPATCH_ID,
 };
+use engine_native::event::EventKind;
 use engine_native::{CommandOutcome, Engine, GameAction, GameCommand};
 use rule_api::{EffectRequest, SkillId};
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -60,6 +61,7 @@ fn invoke_p9_op(e: &mut Engine, owner: u8, skill_name: &str, skill_id: u32) {
         !matches!(out, CommandOutcome::Rejected(_)),
         "Decision 34 pack9 effect dispatch ({skill_name}) rejected: {out:?}"
     );
+    drain(e);
 }
 
 fn flag(e: &Engine, p: u8, key: &str) -> u32 {
@@ -152,7 +154,7 @@ fn u01_d3_all_31_generals_and_64_ddd_skills_execute_and_roundtrip() {
         "dddxiaxing chains target when ddd_chain_target=1"
     );
 
-    // Verify `dddqianlong`, `dddqiaoduan`, `dddyeshen`, `dddqice`
+    // Verify `dddqianlong`, `dddqiaoduan`, `dddyeshen`, and `dddqice` (including empty-hand negative guard)
     invoke_p9_op(&mut e, 0, "dddqianlong", DDD_SKILL_DISPATCH_ID);
     assert_eq!(flag(&e, 0, "ddd_qianlong_daoxin"), 15);
     assert_eq!(flag(&e, 0, "ddd_qianlong_unlocked"), 1);
@@ -165,7 +167,16 @@ fn u01_d3_all_31_generals_and_64_ddd_skills_execute_and_roundtrip() {
     invoke_p9_op(&mut e, 0, "dddyeshen", DDD_SKILL_DISPATCH_ID);
     assert_eq!(flag(&e, 0, "ddd_yeshen_triggered"), 1);
 
+    // Negative guard: `dddqice` with empty hand must be blocked and deal 0 damage
+    let saved_hand = e.state_core().player(0).hand.clone();
+    e.state_core_mut().player_mut(0).hand.clear();
     let p1_hp_before = e.state_core().player(1).hp;
+    invoke_p9_op(&mut e, 0, "dddqice", DDD_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "ddd_qice_blocked_empty"), 1);
+    assert_eq!(e.state_core().player(1).hp, p1_hp_before);
+
+    // Positive path: `dddqice` with non-empty hand discards card and deals 1 damage
+    e.state_core_mut().player_mut(0).hand = saved_hand;
     invoke_p9_op(&mut e, 0, "dddqice", DDD_SKILL_DISPATCH_ID);
     assert_eq!(flag(&e, 0, "ddd_qice_virtual_trick"), 1);
     assert_eq!(e.state_core().player(1).hp, p1_hp_before - 1);
@@ -219,6 +230,11 @@ fn u05_shahai_remaining_swd_yunchou_mtg_zhenfa_ow_xianjian_closure_and_save_rest
     e.state_core_mut().player_mut(1).max_hp = 8;
     e.state_core_mut().player_mut(1).hp = 8;
 
+    assert_eq!(U05_XIANJIAN_GENERALS.len(), 36);
+    for &(gname, _, _, _, _) in &U05_XIANJIAN_GENERALS {
+        let _ = find_general(&e, gname);
+    }
+
     for &sk in U05_SWD_REMAINING_SKILLS
         .iter()
         .chain(U05_YUNCHOU_REMAINING_SKILLS.iter())
@@ -241,12 +257,12 @@ fn u05_shahai_remaining_swd_yunchou_mtg_zhenfa_ow_xianjian_closure_and_save_rest
         );
     }
 
-    // 1. SWD `duijue` (positive + limited negative guard + HP negative guard) & `tanlin`
-    set_flag(&mut e, 0, "duijue_target_hp_too_low", 1);
+    // 1. SWD `duijue`: actual target HP <= 1 guard, positive 2-damage path, and limited 1/game guard
+    e.state_core_mut().player_mut(1).hp = 1;
     invoke_p9_op(&mut e, 0, "duijue", SWD_DUIJUE_ID);
     assert_eq!(flag(&e, 0, "duijue_blocked_hp"), 1);
     assert_eq!(flag(&e, 0, "duijue_used"), 0);
-    set_flag(&mut e, 0, "duijue_target_hp_too_low", 0);
+    e.state_core_mut().player_mut(1).hp = 8;
 
     let p1_hp = e.state_core().player(1).hp;
     invoke_p9_op(&mut e, 0, "duijue", SWD_DUIJUE_ID);
@@ -257,8 +273,20 @@ fn u05_shahai_remaining_swd_yunchou_mtg_zhenfa_ow_xianjian_closure_and_save_rest
     assert_eq!(flag(&e, 0, "duijue_blocked_limited"), 1);
     assert_eq!(e.state_core().player(1).hp, p1_hp - 2, "limited duijue must not fire twice");
 
-    e.state_core_mut().player_mut(0).hp = 2;
+    // `tanlin`: empty-hand negative guard, lose-damage branch, and win/discover branch
+    let saved_p0_hand = e.state_core().player(0).hand.clone();
+    e.state_core_mut().player_mut(0).hand.clear();
     invoke_p9_op(&mut e, 0, "tanlin", SWD_TANLIN_ID);
+    assert_eq!(flag(&e, 0, "tanlin_blocked_empty"), 1);
+    e.state_core_mut().player_mut(0).hand = saved_p0_hand;
+
+    e.state_core_mut().player_mut(0).hp = 3;
+    set_flag(&mut e, 0, "tanlin_force_lose", 1);
+    invoke_p9_op(&mut e, 0, "tanlin", SWD_TANLIN_ID);
+    assert_eq!(flag(&e, 0, "tanlin_lost_damage"), 1);
+    assert_eq!(e.state_core().player(0).hp, 2);
+    set_flag(&mut e, 0, "tanlin_force_lose", 0);
+
     invoke_p9_op(&mut e, 0, "tanlin", SWD_TANLIN_ID);
     assert_eq!(flag(&e, 0, "tanlin_discovered"), 1);
     assert_eq!(e.state_core().player(0).hp, 3);
@@ -285,10 +313,16 @@ fn u05_shahai_remaining_swd_yunchou_mtg_zhenfa_ow_xianjian_closure_and_save_rest
     invoke_p9_op(&mut e, 0, "mtg_cangbaohaiwan", MTG_LAND_CARD_ID);
     assert_eq!(flag(&e, 0, "mtg_treasure_mana"), 1);
 
-    // 4. Zhenfa `pozhenjue`
+    // 4. Zhenfa `pozhenjue` (recast branch + formation break & seat swap)
+    set_flag(&mut e, 0, "pozhenjue_recast", 1);
+    invoke_p9_op(&mut e, 0, "pozhenjue", ZHENFA_POZHENJUE_ID);
+    assert_eq!(flag(&e, 0, "pozhenjue_recasted"), 1);
+    set_flag(&mut e, 0, "pozhenjue_recast", 0);
+
     e.state_core_mut().player_mut(1).linked = true;
     invoke_p9_op(&mut e, 0, "pozhenjue", ZHENFA_POZHENJUE_ID);
     assert_eq!(flag(&e, 0, "pozhenjue_formation_broken"), 1);
+    assert_eq!(flag(&e, 0, "pozhenjue_seats_swapped"), 2);
     assert!(!e.state_core().player(1).linked);
 
     // 5. OW (`shanhui`, `zhanlong` charge guard, `zhongdun`) & Xianjian (`tianjian`, `leiyu`, `xuanning`)
@@ -326,27 +360,39 @@ fn u07_wudian_jianbi_and_choudu_differential_and_save_restore() {
         assert!(e.catalog().skill_by_name(sk).is_some());
     }
 
+    // `jianbi` negative guard when targets.length < 2 (`jianbi_targets_len == 1`)
+    set_flag(&mut e, 0, "jianbi_targets_len", 1);
+    invoke_p9_op(&mut e, 0, "jianbi", WUDIAN_JIANBI_ID);
+    assert_eq!(flag(&e, 0, "jianbi_blocked_single_target"), 1);
+    assert_eq!(flag(&e, 0, "wudian_jianbi_nullified"), 0);
+    set_flag(&mut e, 0, "jianbi_targets_len", 2);
+
     invoke_p9_op(&mut e, 0, "jianbi", WUDIAN_JIANBI_ID);
     assert_eq!(flag(&e, 0, "wudian_jianbi_nullified"), 1);
     assert_eq!(flag(&e, 0, "wudian_jianbi_shield"), 1);
 
-    // Negative guard on `choudu` when hand is empty and card is required
+    // Unconditional negative guard on `choudu` when `he` (`hand` and `equips`) is empty
     let saved_hand = e.state_core().player(0).hand.clone();
     e.state_core_mut().player_mut(0).hand.clear();
-    set_flag(&mut e, 0, "choudu_require_card", 1);
+    e.state_core_mut().player_mut(0).equips.clear();
     invoke_p9_op(&mut e, 0, "choudu", WUDIAN_CHOUDU_ID);
     assert_eq!(flag(&e, 0, "choudu_blocked_empty"), 1);
     assert_eq!(flag(&e, 0, "wudian_choudu_dispatched"), 0);
 
+    // Positive path + `usable: 1` per turn guard + virtual `diaobingqianjiang` resolution
     e.state_core_mut().player_mut(0).hand = saved_hand;
     invoke_p9_op(&mut e, 0, "choudu", WUDIAN_CHOUDU_ID);
     assert_eq!(flag(&e, 0, "wudian_choudu_dispatched"), 1);
+    assert_eq!(flag(&e, 0, "diaobingqianjiang_resolved"), 1);
+
+    invoke_p9_op(&mut e, 0, "choudu", WUDIAN_CHOUDU_ID);
+    assert_eq!(flag(&e, 0, "choudu_blocked_usable"), 1);
 
     assert_archive_roundtrip(&e, &packs);
 }
 
 #[test]
-fn l08_l14_l19_l20_complete_skills_and_save_restore() {
+fn l08_l14_l19_l20_complete_skills_triggers_and_save_restore() {
     let p9_pack = decision34_pack9_extension_pack();
     let packs = [&p9_pack];
     let mut e = Engine::new_with_extensions(260104, 2, &packs).expect("L08/L14/L19/L20 engine");
@@ -362,6 +408,12 @@ fn l08_l14_l19_l20_complete_skills_and_save_restore() {
     assert_eq!(L20_MARK_SUPPLEMENT_CARDS.len(), 3);
     assert_eq!(L20_MARK_SUPPLEMENT_SKILLS.len(), 75);
 
+    // Verify authentic upstream general IDs (`jiangshifz`, `jiangshinj`, `ssr_luxun`, etc.)
+    let _ = find_general(&e, "jiangshifz");
+    let _ = find_general(&e, "jiangshinj");
+    let _ = find_general(&e, "ssr_luxun");
+    let _ = find_general(&e, "ssr_sunquan");
+
     for &sk in L08_DECADE_SKILLS
         .iter()
         .chain(L14_SHOUSHA_SKILLS.iter())
@@ -374,12 +426,35 @@ fn l08_l14_l19_l20_complete_skills_and_save_restore() {
         );
     }
 
-    invoke_p9_op(&mut e, 0, "_chongzhu", L08_DECADE_SKILL_ID);
+    // Verify authentic upstream EventKind triggers on key skills
+    for (sk, expected_ev) in [
+        ("ycndiyjianxiong", EventKind::Damage),
+        ("tanlin", EventKind::CardUsed),
+        ("jianbi", EventKind::CardUsed),
+        ("leiyu", EventKind::PhaseEnd),
+        ("_usecard", EventKind::CardUsed),
+        ("_decadeUI_dieKillEffect", EventKind::Death),
+        ("_dieNoTuoguan", EventKind::Death),
+        ("_wujinmoshiDamage", EventKind::Damage),
+        ("zhengsu", EventKind::PhaseEnd),
+        ("_pfqh_check_damage", EventKind::Damage),
+        ("_pfqh_check_phaseEnd", EventKind::PhaseEnd),
+        ("_zuan_damageSendEgg", EventKind::Damage),
+        ("baonvezhi", EventKind::Damage),
+    ] {
+        let sid = e.catalog().skill_by_name(sk).expect(sk);
+        assert!(
+            e.catalog().candidates(expected_ev).contains(&sid),
+            "skill {sk} must be dispatched under primary trigger {expected_ev:?}"
+        );
+    }
+
+    invoke_p9_op(&mut e, 0, "_changeEquipExt", L08_DECADE_SKILL_ID);
     assert_eq!(flag(&e, 0, "l08_recast_count"), 1);
     assert_eq!(flag(&e, 0, "l08_qiankun_trigram"), 2);
 
-    invoke_p9_op(&mut e, 0, "spshidi", L14_SHOUSHA_SKILL_ID);
-    invoke_p9_op(&mut e, 0, "zhefu", L14_SHOUSHA_SKILL_ID);
+    invoke_p9_op(&mut e, 0, "_dieNoTuoguan", L14_SHOUSHA_SKILL_ID);
+    invoke_p9_op(&mut e, 0, "_jd_wjsw", L14_SHOUSHA_SKILL_ID);
     assert_eq!(flag(&e, 0, "l14_shousha_trigger_count"), 2);
 
     invoke_p9_op(&mut e, 0, "baozou", L19_DOOMSDAY_SKILL_ID);
@@ -419,8 +494,19 @@ fn l24_l25_l27_complete_skills_negative_guards_and_save_restore() {
     assert_eq!(L25_ZUAN_SKILLS.len(), 122);
     assert_eq!(L27_SELECT_BEAUTIFY_SKILLS.len(), 37);
 
+    for &sk in L24_SKIN_SWITCH_SKILLS
+        .iter()
+        .chain(L25_ZUAN_SKILLS.iter())
+        .chain(L27_SELECT_BEAUTIFY_SKILLS.iter())
+    {
+        assert!(
+            e.catalog().skill_by_name(sk).is_some(),
+            "Skill {sk} must be registered in Catalog"
+        );
+    }
+
     // L24 skin skills + Spine transform resolver
-    invoke_p9_op(&mut e, 0, "gx_Bozhi", L24_SKIN_SKILL_ID);
+    invoke_p9_op(&mut e, 0, "_tsx", L24_SKIN_SKILL_ID);
     assert_eq!(flag(&e, 0, "l24_skin_slot"), 1);
     assert_eq!(flag(&e, 0, "l24_skin_anim_state"), 1);
     let tf = resolve_l24_skin_transform("caocao", 2, "gongji").expect("valid skin transform");
@@ -448,7 +534,7 @@ fn l24_l25_l27_complete_skills_negative_guards_and_save_restore() {
         general_id: "zuan_diy01".to_string(),
         faction: "qun".to_string(),
         max_hp: 4,
-        skills: vec!["zuan_jianxiong".to_string()],
+        skills: vec!["_diycharacterskill".to_string()],
         online_room_active: true,
     })
     .is_err());
@@ -456,7 +542,7 @@ fn l24_l25_l27_complete_skills_negative_guards_and_save_restore() {
         general_id: "zuan_diy01".to_string(),
         faction: "qun".to_string(),
         max_hp: 4,
-        skills: vec!["zuan_jianxiong".to_string()],
+        skills: vec!["_diycharacterskill".to_string()],
         online_room_active: false,
     })
     .is_ok());
