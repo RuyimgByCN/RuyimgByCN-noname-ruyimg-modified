@@ -68,3 +68,14 @@ node apps/web-client/scripts/decision34-browser-surfaces.mjs docs/operations/evi
   - 面板尺寸：`1160 × 729`（`u01Rect: 343 × 82`、`spineRect: 222 × 54`、`l14Rect: 343 × 80`）
   - 交互与恢复验证：`u01Camera: "ddd_liuchong:closeup"`、`spineAction: "action:damage_shake"`、`l14Streak: "x2"`、`zuanSaved: "saved:zuan_hero_1"`、`zuanRefused: "error:eval_refused"`、`l27Confirmed: "confirmed:2"`、`restoredCamera: "ddd_liuchong:closeup"`、`restoredStreak: "x2"`、`afterRestartCamera: "ddd_liuchong:front"`、`afterReloadCamera: "ddd_liuchong:closeup"`、`consoleErrors: []`
   - 60 帧 `requestAnimationFrame` 帧率：**`p50 = 16.66 ms, p95 = 16.67 ms, p99 = 16.67 ms, max = 16.67 ms, approx_fps = 60.0 FPS`**
+
+### 3.4 全工作区测试、跨目标确定性、`preflight.py` 与裁决 25 发布 / exact-head CI 实跑
+
+| 门禁项 | 命令 / 证据 | 结果 |
+| --- | --- | --- |
+| 全工作区 Rust 测试 | `cargo test --offline --workspace --no-fail-fast` | **7,611 passed; 0 failed; 8 ignored** |
+| 原生↔旧线 Conformance | `cargo run --offline -p conformance` | **19/19 ALL PASS** |
+| 桌面客户端单测 | `cargo test --offline -p desktop-client` | **20 passed; 0 failed; 1 ignored** |
+| 跨目标确定性（Native vs WASM） | `python3 -B scripts/check-native-wasm-cross-target.py` & `bash scripts/cross-target-hash.sh` | **ALL CROSS-TARGET CHECKS PASSED** (`native_wasm_match: true`, `6a59d996...` / `5e41ae8e...`) |
+| 收口 21 项门禁 | `python3 -B scripts/preflight.py` | **21/21 全部通过 ✅** |
+| 裁决 25 发布与 exact-head CI | 单命令作用域 `pre-push` 守卫（原钩子 `sha256: e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7` 零改动）推送代码提交 `5a866c19f4682d0af6aee5e55cde4a6dede8bb52 -> refs/heads/native-convergence`（CI Run [`42536292387`](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/42536292387)，[`ci-run-42536292387-5a866c19f.json`](ci-run-42536292387-5a866c19f.json)） | **首次运行（Attempt 1）10/10 全部通过 `conclusion: success`**（`build-ubuntu-latest` `128901219497`、`perf-macos-latest` `128901219556`、`desktop-windows-latest` `128901219558`、`native-web` `128901219562`、`desktop-macos-latest` `128901219570`、`desktop-ubuntu-latest` `128901219608`、`build-macos-latest` `128901219639`、`perf-ubuntu-latest` `128901219666`、`gates-ubuntu` `128901219669`、`build-windows-latest` `128901219676` 全绿） |
