@@ -16,6 +16,9 @@ import {
   normalizeBossHp,
   numToRoma,
   placeCoinBet,
+  paginateOmnisearchResults,
+  highlightOmnisearchTerm,
+  renderCoinCanvasParticles,
   resolveCoinHonorTitle,
   rotateU01GalleryStandee,
   runOmnisearchQuery,
@@ -61,10 +64,12 @@ watch(
 type SurfaceTab = "hud" | "campaign" | "coin" | "omnisearch" | "workbench";
 const activeTab = ref<SurfaceTab>("hud");
 const searchInput = ref("cangchizhibi");
+const omnisearchPage = ref(1);
 const exportNameInput = ref("match_seed42.npack.save");
 const exportValidationMsg = ref<string>("合法文件名");
 const surfaceNotice = ref<string>("");
 const spineCanvasRef = ref<HTMLCanvasElement | null>(null);
+const coinParticleCanvasRef = ref<HTMLCanvasElement | null>(null);
 const cleanroomSkeletonData = parseSpine40Json(HANDCRAFTED_SPINE40_SKELETON_JSON);
 const cleanroomAtlas = parseTextureAtlas(HANDCRAFTED_SPINE40_ATLAS_TEXT);
 const defaultSkinFallback = resolveDynamicSkinImport(null);
@@ -83,8 +88,17 @@ function renderCleanroomSpine40Pose(clipName: string) {
   renderSpineBatchesToCanvas2D(ctx, instance, batches);
 }
 
+function renderCoinParticlesNow() {
+  const canvas = coinParticleCanvasRef.value;
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+  renderCoinCanvasParticles(ctx, props.surfaces.coin, 1);
+}
+
 onMounted(() => {
   renderCleanroomSpine40Pose(props.surfaces.theme.spineActiveClip ?? "daiji");
+  renderCoinParticlesNow();
 });
 
 watch(
@@ -92,6 +106,17 @@ watch(
   (clip) => {
     renderCleanroomSpine40Pose(clip ?? "daiji");
   },
+);
+
+watch(
+  () => [props.surfaces.coin.snowFall, props.surfaces.coin.activeEffects.length],
+  () => {
+    renderCoinParticlesNow();
+  },
+);
+
+const paginatedOmnisearch = computed(() =>
+  paginateOmnisearchResults(props.surfaces.omnisearch.results, omnisearchPage.value, 5),
 );
 
 const mvpSortedEntries = computed(() => {
@@ -398,11 +423,18 @@ function onSurfacePointerMove(ev: MouseEvent) {
 <template>
   <section
     class="panel extension-surface-panel"
+    :class="[
+      `decade-style-${surfaces.theme.decadeSkinStyle}`,
+      `shousha-layout-${surfaces.theme.shoushaLayout}`,
+      `rzsh-theme-${surfaces.theme.rzshTheme}`,
+      `qhly-theme-${surfaces.theme.qhlyTheme}`,
+      { 'longxue-shengjian-active': surfaces.longxue.shengjian },
+    ]"
     data-testid="extension-surface-panel"
     aria-label="扩展渲染面与单机战役台"
     @mousemove="onSurfacePointerMove"
   >
-    <!-- 天气粒子层（U04/L05 金币下雪/烟花/星云/闪烁 CSS 粒子层） -->
+    <!-- 天气粒子层（U04/L05 金币下雪/烟花/星云/闪烁 Canvas + 辅助标记） -->
     <div
       v-if="surfaces.coin.snowFall || surfaces.coin.activeEffects.length > 0"
       class="weather-particle-layer"
@@ -410,6 +442,13 @@ function onSurfacePointerMove(ev: MouseEvent) {
       data-testid="coin-weather-overlay"
       aria-hidden="true"
     >
+      <canvas
+        ref="coinParticleCanvasRef"
+        width="240"
+        height="48"
+        class="coin-particle-canvas"
+        data-testid="coin-particle-canvas"
+      ></canvas>
       <span v-for="n in 8" :key="n" class="weather-particle" :style="{ '--idx': n }">
         {{ surfaces.coin.snowFall ? "❄" : "✦" }}
       </span>
@@ -701,11 +740,23 @@ function onSurfacePointerMove(ev: MouseEvent) {
           安全门禁拦截：{{ surfaces.omnisearch.lastError }}
         </p>
         <ul v-else class="omnisearch-results" data-testid="omnisearch-results">
-          <li v-for="item in surfaces.omnisearch.results" :key="item.id">
+          <li v-for="item in paginatedOmnisearch.items" :key="item.id">
             <span class="badge">{{ item.kind }}</span>
-            <strong>{{ item.displayName }}</strong> ({{ item.id }}) — {{ item.packageId }}
+            <strong>
+              <template
+                v-for="(seg, sIdx) in highlightOmnisearchTerm(item.displayName, searchInput)"
+                :key="sIdx"
+              >
+                <mark v-if="seg.matched">{{ seg.text }}</mark>
+                <span v-else>{{ seg.text }}</span>
+              </template>
+            </strong>
+            ({{ item.id }}) — {{ item.packageId }}
           </li>
         </ul>
+        <p class="tiny" data-testid="omnisearch-pagination">
+          第 {{ paginatedOmnisearch.page }}/{{ paginatedOmnisearch.totalPages }} 页（共 {{ surfaces.omnisearch.results.length }} 条）
+        </p>
       </div>
     </div>
 

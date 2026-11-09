@@ -388,5 +388,51 @@ test("Batch 26 全 37 来源收口：U01 31将3D陈列馆、L08/L24 Spine骨骼�
   assert.throws(() => selectL27DualGenerals(wb, "caocao", "caocao"), /DUAL_PICK_REQUIRES_TWO_DISTINCT_GENERALS/);
 });
 
+test("U04/L05 Canvas 粒子渲染器与 L07 全能搜索分页/关键词高亮 (coin/extension.js:24-398, SimplePagination.js:1-147)", async () => {
+  const {
+    highlightOmnisearchTerm,
+    paginateOmnisearchResults,
+    renderCoinCanvasParticles,
+  } = await import("../src/engine/extensionSurfaceRuntime.ts");
+
+  const calls = [];
+  const fakeCtx = {
+    canvas: { width: 240, height: 48 },
+    fillStyle: "",
+    strokeStyle: "",
+    clearRect: (...a) => calls.push(["clearRect", ...a]),
+    beginPath: () => calls.push(["beginPath"]),
+    arc: (...a) => calls.push(["arc", ...a]),
+    fill: () => calls.push(["fill"]),
+    moveTo: (...a) => calls.push(["moveTo", ...a]),
+    lineTo: (...a) => calls.push(["lineTo", ...a]),
+    stroke: () => calls.push(["stroke"]),
+    fillRect: (...a) => calls.push(["fillRect", ...a]),
+  };
+  const coinState = {
+    ...createInitialExtensionSurfacesState().coin,
+    snowFall: true,
+    activeEffects: ["fireworks", "nebula", "twinkle"],
+  };
+  const rendered = renderCoinCanvasParticles(fakeCtx, coinState, 2);
+  assert.equal(rendered.renderedParticles, 12 + 8 + 1 + 6);
+  assert.deepEqual(rendered.activeModes.sort(), ["fireworks", "nebula", "snow", "twinkle"]);
+  assert.ok(calls.length > 20);
+
+  const entries = createInitialExtensionSurfacesState().omnisearch.results;
+  const page1 = paginateOmnisearchResults(entries, 1, 2);
+  assert.equal(page1.items.length, 2);
+  assert.equal(page1.page, 1);
+  assert.equal(page1.totalPages, 3);
+
+  const hl = highlightOmnisearchTerm("苍螭之璧", "螭之");
+  assert.deepEqual(hl, [
+    { text: "苍", matched: false },
+    { text: "螭之", matched: true },
+    { text: "璧", matched: false },
+  ]);
+});
+
+
 
 

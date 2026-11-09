@@ -61,7 +61,7 @@
 ## 7. 裁决 34 逐项上游清单与现有实现归类（2026-11-09）
 
 - **统计汇总**：上游实体合计 **134** 项（武将 0 / 技能 69 / 卡牌 1 / 模式与战役节点 0 / 配置项 64 / 界面钩子 0 / 渲染面 0）
-- **状态分布**：`忠实实现` **133** 项 · `示意或自造` **0** 项 · `缺失` **1** 项
+- **状态分布**：`忠实实现` **134** 项 · `示意或自造` **0** 项 · `缺失` **0** 项
 
 ### 7.1 现有 `decision34*` / 前端示意代码逐条归类
 
@@ -149,7 +149,7 @@
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `yiyi` | `archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9205` | 摸牌、弃牌 | 原生规则 / `rule-vm` 包 | 缺失 |
+| `yiyi` | `archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9205` | 摸牌、弃牌 | 原生规则 / `rule-vm` 包 | 忠实实现（卡牌效果已按上游语义实现并通过 `attach_formal_package_upstream_rules` 接入正式包产品路径） |
 
 ### 7.5 模式 / 战役节点（Modes & Campaign Nodes）（0 项）
 

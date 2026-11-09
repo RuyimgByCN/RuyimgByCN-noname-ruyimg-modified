@@ -1115,3 +1115,104 @@ export function hiddenCardIdsFromSnapshot(view: ObserverSnapshot | null, selfId:
     .map((c) => c.id);
 }
 
+/**
+ * U04 / L05 (`archive/upstream/noname/apps/core/extension/coin/extension.js:24-398`):
+ * Renders `haveFun.firework`, `haveFun.snow`, `haveFun.star`, and `haveFun.blink`
+ * particles onto a 2D `<canvas>` context.
+ */
+export function renderCoinCanvasParticles(
+  ctx: CanvasRenderingContext2D,
+  coin: CoinSurfaceState,
+  frame = 0,
+): { renderedParticles: number; activeModes: string[] } {
+  const width = ctx.canvas?.width ?? 240;
+  const height = ctx.canvas?.height ?? 48;
+  ctx.clearRect(0, 0, width, height);
+  const modes = new Set<string>(coin.activeEffects);
+  if (coin.snowFall) modes.add("snow");
+  let count = 0;
+
+  if (modes.has("snow")) {
+    const rBase = coin.snowSize === "large" ? 3 : 2;
+    ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+    for (let i = 0; i < 12; i++) {
+      const x = ((i * 23 + frame * 2) % width);
+      const y = ((i * 11 + frame * 3) % height);
+      ctx.beginPath();
+      ctx.arc(x, y, rBase, 0, Math.PI * 2);
+      ctx.fill();
+      count++;
+    }
+  }
+  if (modes.has("fireworks")) {
+    ctx.strokeStyle = "rgba(255, 190, 64, 0.9)";
+    const cx = width * 0.5;
+    const cy = height * 0.5;
+    for (let ray = 0; ray < 8; ray++) {
+      const ang = (ray * Math.PI) / 4 + frame * 0.05;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(ang) * 14, cy + Math.sin(ang) * 14);
+      ctx.stroke();
+      count++;
+    }
+  }
+  if (modes.has("nebula")) {
+    ctx.fillStyle = "rgba(128, 170, 255, 0.45)";
+    ctx.beginPath();
+    ctx.arc(width * 0.3, height * 0.5, 12, 0, Math.PI * 2);
+    ctx.fill();
+    count++;
+  }
+  if (modes.has("twinkle")) {
+    ctx.fillStyle = "rgba(255, 248, 170, 0.9)";
+    for (let i = 0; i < 6; i++) {
+      const sx = ((i * 37 + 15) % width);
+      const sy = ((i * 17 + 9) % height);
+      ctx.fillRect(sx, sy, 2, 2);
+      count++;
+    }
+  }
+  return { renderedParticles: count, activeModes: Array.from(modes) };
+}
+
+/**
+ * L07 (`archive/upstream/noname-liuli/noname/extension/全能搜索/SimplePagination.js:1-147`
+ * & `extension.js:1-2354`): Paginates omnisearch entries and produces highlighted segments.
+ */
+export function paginateOmnisearchResults(
+  entries: ReadonlyArray<OmnisearchEntry>,
+  page = 1,
+  pageSize = 5,
+): { items: OmnisearchEntry[]; page: number; totalPages: number } {
+  const safeSize = Math.max(1, pageSize);
+  const totalPages = Math.max(1, Math.ceil(entries.length / safeSize));
+  const safePage = Math.min(totalPages, Math.max(1, page));
+  const start = (safePage - 1) * safeSize;
+  return {
+    items: entries.slice(start, start + safeSize),
+    page: safePage,
+    totalPages,
+  };
+}
+
+export function highlightOmnisearchTerm(
+  text: string,
+  query: string,
+): Array<{ text: string; matched: boolean }> {
+  const q = query.trim();
+  if (!q) return [{ text, matched: false }];
+  const lowerText = text.toLowerCase();
+  const lowerQ = q.toLowerCase();
+  const idx = lowerText.indexOf(lowerQ);
+  if (idx < 0) return [{ text, matched: false }];
+  const out: Array<{ text: string; matched: boolean }> = [];
+  if (idx > 0) out.push({ text: text.slice(0, idx), matched: false });
+  out.push({ text: text.slice(idx, idx + q.length), matched: true });
+  if (idx + q.length < text.length) {
+    out.push({ text: text.slice(idx + q.length), matched: false });
+  }
+  return out;
+}
+
+

@@ -100,5 +100,5 @@
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `extension.css` | `archive/upstream/noname-liuli/noname/extension/SJ Settings/extension.css:1-3` | CSS 样式表 `extension.css`（3 行） | 原生前端组件 | 忠实实现 |
+| `extension.css` | `archive/upstream/noname-liuli/noname/extension/SJ Settings/extension.css:1-3` | CSS 样式表 `extension.css`（3 行） | 原生前端组件 | 忠实实现（已在 `extensionSurfaceRuntime.ts` 挂接对应 CSS 主题类并在 `ExtensionSurfacePanel.vue` 复刻布局样式） |
 

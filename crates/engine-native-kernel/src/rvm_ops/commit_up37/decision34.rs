@@ -75,6 +75,7 @@ pub(super) fn try_commit_decision34(
             "mbcmjiushi" => resolve_mbcmjiushi(ctx, owner),
             "mbcmfangzhu" => resolve_mbcmfangzhu(ctx, owner),
             "mbjuejin" => resolve_mbjuejin(ctx, owner),
+            "mbcmxscw" => super::decision34_ext::resolve_mbcmxscw(ctx, owner),
             "k_danggu" => resolve_k_danggu(ctx, owner),
             "k_mowang" => resolve_k_mowang(ctx, owner),
             "huanle_kuwu_interactive" => resolve_kuwu_interactive(ctx, owner),
@@ -186,8 +187,15 @@ fn resolve_mbcmfangzhu(ctx: &mut Ctx<'_>, owner: PlayerId) {
         }
     };
     let lost_hp = (ctx.core.player(owner).max_hp as i32 - ctx.core.player(owner).hp).max(1) as u32;
-    let next_face_down = !ctx.core.player(target).face_down;
-    ctx.core.player_mut(target).face_down = next_face_down;
+    let opt = flag(ctx.core, owner, "mbcmfangzhu_option");
+    if opt == 1 {
+        set_flag(ctx.core, target, "mbcmfangzhu_baiban", 1);
+    } else if opt == 2 {
+        set_flag(ctx.core, target, "mbcmfangzhu_jin", 1);
+    } else {
+        let next_face_down = !ctx.core.player(target).face_down;
+        ctx.core.player_mut(target).face_down = next_face_down;
+    }
     set_flag(ctx.core, owner, "mbcmfangzhu_last_target", u32::from(target));
     set_flag(ctx.core, owner, "mbcmfangzhu_drawn", lost_hp);
     ctx.start_draw(target, lost_hp);
@@ -256,6 +264,7 @@ fn resolve_k_danggu(ctx: &mut Ctx<'_>, owner: PlayerId) {
         .unwrap_or(0);
     set_flag(ctx.core, owner, "k_danggu_active_eunuch", chosen_idx + 1);
     set_flag(ctx.core, owner, "k_danggu_triggered", 1);
+    super::decision34_ext::apply_l10_danggu_companion(ctx, owner, chosen_idx, mask);
     ctx.start_draw(owner, 1);
 }
 
@@ -277,6 +286,8 @@ fn resolve_k_mowang(ctx: &mut Ctx<'_>, owner: PlayerId) {
             .unwrap_or(0);
         set_flag(ctx.core, owner, "k_danggu_active_eunuch", next_idx + 1);
         set_flag(ctx.core, owner, "k_mowang_revived", 1);
+        set_flag(ctx.core, owner, "k_mowang_return_resolved", 1);
+        super::decision34_ext::apply_l10_danggu_companion(ctx, owner, next_idx, next_mask);
         ctx.core.player_mut(owner).dying = false;
         if ctx.core.player(owner).hp <= 0 {
             ctx.core.player_mut(owner).hp = 1;
@@ -693,7 +704,7 @@ fn resolve_th_extra_skill(ctx: &mut Ctx<'_>, skill: &str, owner: PlayerId) {
             set_flag(ctx.core, owner, "th_skill:th_duanbi", 1);
         }
         other => {
-            set_flag(ctx.core, owner, &format!("th_skill:{other}"), 1);
+            super::decision34_ext::resolve_l28_thunder_remaining(ctx, other, owner);
         }
     }
 }

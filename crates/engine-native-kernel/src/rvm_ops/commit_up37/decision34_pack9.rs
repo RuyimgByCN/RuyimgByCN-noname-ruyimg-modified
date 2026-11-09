@@ -326,7 +326,9 @@ fn resolve_u01_ddd_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
             }
             set_flag(ctx.core, owner, "ddddiedang_state", state ^ 1);
         }
-        _ => {}
+        other => {
+            super::decision34_ext::resolve_u01_ddd_remaining(ctx, other, owner);
+        }
     }
 }
 
@@ -506,7 +508,9 @@ fn resolve_ow_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
             set_flag(ctx.core, owner, "ow_shield_tokens", shield);
             ctx.start_draw(owner, 1);
         }
-        _ => {}
+        other => {
+            super::decision34_ext::resolve_u05_ow_remaining(ctx, other, owner);
+        }
     }
 }
 
@@ -547,7 +551,9 @@ fn resolve_xianjian_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
                 ctx.start_draw(owner, 1);
             }
         }
-        _ => {}
+        other => {
+            super::decision34_ext::resolve_u05_xianjian_remaining(ctx, other, owner);
+        }
     }
 }
 

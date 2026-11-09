@@ -1,0 +1,89 @@
+{
+  "passed": true,
+  "panelRect": {
+    "width": 1160,
+    "height": 773,
+    "display": "block",
+    "border": "solid"
+  },
+  "hudResult": {
+    "daoxin": "50",
+    "thresholds": "25, 50",
+    "unlockedSkills": "mbcmqingzheng/mbcmjiushi",
+    "l20MarkBadges": "L20 标记补充 (14项)：龙印 ×1",
+    "badgeDecade": "十周年:shousha",
+    "badgeShousha": "手杀:left",
+    "badgeRuzhen": "如真:reality(II)",
+    "badgeQhly": "千幻:shousha",
+    "u01Standee": "3D立绘:ddd_xinxianying (30°/115%)",
+    "u01Rect": {
+      "w": 343,
+      "h": 82
+    },
+    "spineRect": {
+      "w": 222,
+      "h": 54
+    },
+    "l24Meta": "Spine 4.0 净室 · 动作:gongji · 偏移(24,-8) · 缩放 108% · 未导入资产:static-portrait-fallback",
+    "l14Banner": "手杀播报:无双·千军破(zhefu) · 倒计时 70%",
+    "l14Rect": {
+      "w": 343,
+      "h": 80
+    },
+    "notice": "手杀 UI (L14)：无双·千军破(zhefu) · 倒计时 70%"
+  },
+  "campaignResult": {
+    "bossName": "剑阁·高达一号",
+    "bossHp": "∞",
+    "bossMode": "versus_jiange",
+    "taixuNode": "#2 (颍川前哨（战斗）)",
+    "taixuGold": "90",
+    "taixuPet": "苍雷幼麟",
+    "taixuBlessingsCount": "2",
+    "martialReplacement": "sp_zhaoyun",
+    "doomsdayWave": "#2"
+  },
+  "coinResult": {
+    "balance": "80",
+    "honorTitle": "初入茅庐",
+    "snow": "snow",
+    "weatherOverlayRendered": true,
+    "weatherAttr": "snow"
+  },
+  "omnisearchResult": {
+    "hitText": "card苍螭之璧 (cangchizhibi) — shahai-swd",
+    "blockedText": "安全门禁拦截：error:eval_refused"
+  },
+  "workbenchResult": {
+    "rejectedMsg": "拒绝：unsafe export filename",
+    "l25Status": "祖安 DIY (L25): 已应用离线 DIY: ssr_sunquan (5血) · 武将 ssr_sunquan (5血)",
+    "l25GuardNotice": "ONLINE_MULTIPLAYER_DIY_FORBIDDEN",
+    "l27Status": "双将选将框 (L27 chooseCharacterTwo): ddd_caomao + ddd_liuchong (已锁定 · 37技)"
+  },
+  "saveRestoreResult": {
+    "beforeSaveDaoxin": "50",
+    "beforeSaveDecade": "十周年:shousha",
+    "saveStatus": "已存档 · save-1794219039348",
+    "mutatedDaoxin": "80",
+    "mutatedDecade": "十周年:xinzhan",
+    "restoredDaoxin": "50",
+    "restoredDecade": "十周年:shousha",
+    "weatherStillActive": true
+  },
+  "restartAndReloadResult": {
+    "afterRestartDaoxin": "20",
+    "afterRestartWeather": false,
+    "afterReloadDaoxin": "50",
+    "afterReloadWeather": true
+  },
+  "frameStats": {
+    "n": 60,
+    "p50_ms": 16.66,
+    "p95_ms": 16.67,
+    "p99_ms": 16.67,
+    "max_ms": 16.67,
+    "approx_fps": 60
+  },
+  "consoleErrors": [],
+  "screenshot": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-09-spine40-cleanroom/decision34-browser-surfaces.png"
+}

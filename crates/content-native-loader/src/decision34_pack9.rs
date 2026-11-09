@@ -451,12 +451,6 @@ pub fn attach_formal_package_upstream_rules(
         ("upstream-noname", "hero-kill") => {
             push_skill("yxs_menshen2_guard", super::YXS_MENSHEN2_GUARD_ID);
         }
-        ("upstream-liuli", "decade-ui") => {
-            for &s in &L08_DECADE_SKILLS {
-                push_skill(s, L08_DECADE_SKILL_ID);
-            }
-            push_skill("_chongzhu", L08_DECADE_SKILL_ID);
-        }
         ("upstream-liuli", "epic-cards") => {
             push_general(
                 "shichangshi",
@@ -467,11 +461,6 @@ pub fn attach_formal_package_upstream_rules(
             );
             push_skill("k_danggu", super::K_DANGGU_ID);
             push_skill("k_mowang", super::K_MOWANG_ID);
-        }
-        ("upstream-liuli", "shousha-ui") => {
-            for &s in &L14_SHOUSHA_SKILLS {
-                push_skill(s, L14_SHOUSHA_SKILL_ID);
-            }
         }
         ("upstream-liuli", "doomsday-brawl") => {
             for &sym in &L19_DOOMSDAY_CHARACTERS {
@@ -489,11 +478,6 @@ pub fn attach_formal_package_upstream_rules(
                 push_skill(s, L20_SKILL_DISPATCH_ID);
             }
             push_skill("l20_mark_dispatch", super::L20_MARK_DISPATCH_ID);
-        }
-        ("upstream-liuli", "skin-switch") => {
-            for &s in &L24_SKIN_SWITCH_SKILLS {
-                push_skill(s, L24_SKIN_SKILL_ID);
-            }
         }
         ("upstream-liuli", "zuan") => {
             for &sym in &L25_ZUAN_CHARACTERS {

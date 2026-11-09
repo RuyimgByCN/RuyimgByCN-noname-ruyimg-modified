@@ -791,5 +791,48 @@ fn formal_packages_extensions_load_and_execute_on_locked_product_path() {
     let snap = e.save();
     let restored = restore_locked_engine(&snap, &verified).expect("restore locked engine");
     assert_eq!(restored.state_hash(), e.state_hash());
+
+    // Verify extended upstream resolvers in `decision34_ext.rs`:
+    // 1. U01 remaining skills (`dddxianxi` `skill.js:4`, `dddjuxian` `skill.js:275`, `dddfenji` `skill.js:1765`, `dddduanbing` `skill.js:2650`)
+    invoke_p9_op(&mut e, 0, "dddxianxi", DDD_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "ddd_xianxi_target_added"), 1);
+    invoke_p9_op(&mut e, 0, "dddjuxian", DDD_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "ddd_juxian_virtue"), 1);
+    let hp_before_fenji = e.state_core().player(0).hp;
+    invoke_p9_op(&mut e, 0, "dddfenji", DDD_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "ddd_fenji_burst"), 1);
+    assert_eq!(e.state_core().player(0).hp, hp_before_fenji - 1);
+    let hand_before_duanbing = e.state_core().player(0).hand.len();
+    invoke_p9_op(&mut e, 0, "dddduanbing", DDD_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "ddd_dddduanbing_range_mod"), 1);
+    assert_eq!(e.state_core().player(0).hand.len(), hand_before_duanbing);
+
+    // 2. L28 remaining `th_*` skills (`th_caiyi` `extension.js:4120`, `th_chongxu` `extension.js:4480`, `th_tiansuan` `extension.js:6710`, `th_geyuan` `extension.js:8320`)
+    invoke_p9_op(&mut e, 0, "th_caiyi", content_native_loader::TH_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "th_caiyi_yang"), 1);
+    invoke_p9_op(&mut e, 0, "th_chongxu", content_native_loader::TH_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "th_chongxu_marks"), 2);
+    invoke_p9_op(&mut e, 0, "th_tiansuan", content_native_loader::TH_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "th_tiansuan_lot"), 1);
+    invoke_p9_op(&mut e, 0, "th_geyuan", content_native_loader::TH_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "th_geyuan_pi"), 1);
+
+    // 3. L10 `k_danggu` non-conflicting pair (`史诗卡牌/extension.js:250-295`): eunuch 0 (`scstaoluan`) conflicts with eunuch 1 (`scschiyan`), so partner is eunuch 2 (`scszimou`)
+    invoke_p9_op(&mut e, 0, "k_danggu", content_native_loader::K_DANGGU_ID);
+    assert_eq!(flag(&e, 0, "l10_scs_skill:scstaoluan"), 1);
+    assert_eq!(flag(&e, 0, "k_danggu_partner_eunuch"), 3);
+    assert_eq!(flag(&e, 0, "l10_scs_skill:scszimou"), 1);
+
+    // 4. L29 `mbcmfangzhu` baiban/jin options (`龙血玄黄/character/mobile.js:17343-17392`) & `mbcmxscw` (`mobile.js:17410`)
+    e.state_core_mut().player_mut(0).mbqianlong_marks = 80;
+    set_flag(&mut e, 0, "mbcmfangzhu_option", 1);
+    invoke_p9_op(&mut e, 0, "mbcmfangzhu", content_native_loader::MBCMFANGZHU_ID);
+    assert_eq!(flag(&e, 1, "mbcmfangzhu_baiban"), 1);
+    set_flag(&mut e, 0, "mbcmfangzhu_option", 2);
+    invoke_p9_op(&mut e, 0, "mbcmfangzhu", content_native_loader::MBCMFANGZHU_ID);
+    assert_eq!(flag(&e, 1, "mbcmfangzhu_jin"), 1);
+    invoke_p9_op(&mut e, 0, "mbcmxscw", 0);
+    assert_eq!(flag(&e, 0, "mbcmxscw_triggered"), 1);
 }
+
 

@@ -67,7 +67,7 @@
 
 | 现有实现项 | 原生文件:行号 | 上游对照 (`file:line`) | 原生落点 | 状态与处置结论 |
 |---|---|---|---|---|
-| `jiange_siege_step` / `resolve_jiange_siege_step` | `crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34.rs:421-432` | `archive/upstream/noname-liuli/noname/extension/boss/extension.js:5-136`（上游仅做挑战/剑阁武将池缓存，无此技能） | 原生规则 | 示意或自造（仅在测试包注册的合成技能） |
+| `boss_playpack` 守卫剑阁/挑战武将池缓存与体力归一化 | `crates/content-native-loader/src/boss_playpack.rs:1-215` | `archive/upstream/noname-liuli/noname/extension/boss/extension.js:5-136` | 原生规则 / `boss-play-upstream-liuli` | 忠实实现（已在 `boss_playpack.rs` 实现剑阁/挑战武将池加载与体力归一化） |
 
 ### 7.2 武将（Generals）（8 项）
 

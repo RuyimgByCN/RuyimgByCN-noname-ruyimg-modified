@@ -65,8 +65,7 @@
 
 | 现有实现项 | 原生文件:行号 | 上游对照 (`file:line`) | 原生落点 | 状态与处置结论 |
 |---|---|---|---|---|
-| `boss_stage_transition` / `resolve_boss_stage_transition`（`boss_baonu_stage` 已按第二步清除） | `crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34.rs:403-416` | `archive/upstream/noname/apps/core/extension/boss/extension.js:6-146`（上游仅做挑战/剑阁武将池缓存，无此技能） | 原生规则 | 示意或自造（已清除伪造的 `boss_baonu_stage`；`boss_stage_transition` 仅在测试包注册） |
-| `stepBossStage` 前端闯关按钮 | `apps/web-client/src/engine/extensionSurfaceRuntime.ts:436-463` | 上游 `U02` 为 `play` 角色池加载器，无独立闯关面板 | 原生前端组件 | 示意或自造（前端自造战役按钮） |
+| `boss_playpack` 挑战/剑阁武将池缓存与体力归一化（`boss_baonu_stage` 已按第二步清除） | `crates/content-native-loader/src/boss_playpack.rs:1-215`、`apps/web-client/src/engine/extensionSurfaceRuntime.ts:221-238` | `archive/upstream/noname/apps/core/extension/boss/extension.js:6-146` | 原生规则 / `boss-play-upstream-noname` | 忠实实现（已清除伪造的 `boss_baonu_stage`，按上游 `boss_storage_playpackconfig` 归一化挑战/剑阁武将池与体力） |
 
 ### 7.2 武将（Generals）（15 项）
 

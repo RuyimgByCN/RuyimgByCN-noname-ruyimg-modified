@@ -61,7 +61,7 @@
 ## 7. 裁决 34 逐项上游清单与现有实现归类（2026-11-09）
 
 - **统计汇总**：上游实体合计 **3** 项（武将 0 / 技能 2 / 卡牌 1 / 模式与战役节点 0 / 配置项 0 / 界面钩子 0 / 渲染面 0）
-- **状态分布**：`忠实实现` **2** 项 · `示意或自造` **0** 项 · `缺失` **1** 项
+- **状态分布**：`忠实实现` **3** 项 · `示意或自造` **0** 项 · `缺失` **0** 项
 
 ### 7.1 现有 `decision34*` / 前端示意代码逐条归类
 
@@ -75,7 +75,7 @@
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `_shengke` | `archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:62` | 触发='useCardToBegin'；弃牌 | 原生规则 / `rule-vm` 包 | 缺失 |
+| `_shengke` | `archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:62` | 触发='useCardToBegin'；弃牌 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义在 `decision34*.rs` / `content-native-loader` 实现并通过 `attach_formal_package_upstream_rules` 接入正式包产品路径） |
 | `wuxingpan_skill` | `archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:173` | 五行：出牌阶段限一次，你可以永久改变一张手牌的五行属性 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:change_card_nature`） |
 
 ### 7.4 卡牌（Cards）（1 项）
