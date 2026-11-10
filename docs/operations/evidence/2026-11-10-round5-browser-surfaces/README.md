@@ -67,3 +67,5 @@
 | 桌面端双路径测试（PA09） | `cargo test --offline -p desktop-client` | **PASS**（`20 passed; 0 failed; 1 ignored`） |
 | 前端类型检查与单测 | `pnpm --dir apps/web-client typecheck && pnpm --dir apps/web-client test` | **PASS**（`vue-tsc` `0` 错；`489 passed; 0 failed`） |
 | 真实 Headless Chrome 60 帧与弹窗截图 | `node apps/web-client/scripts/decision34-browser-surfaces.mjs docs/operations/evidence/2026-11-10-round5-browser-surfaces` | **PASS**（`60.0 FPS`，`consoleErrors: []`） |
+| 21 项仓库预检门禁 | `python3 -B scripts/preflight.py` | **PASS**（`21/21 全部通过`） |
+| 裁决 25 Exact-Head CI（`886fafafa`） | GitHub Actions Run `42771773936`（`refs/heads/native-convergence` = `886fafafa8a684fbbde807d2d1a8750ef78df073`） | **首次 9/10 PASS**（`perf-macos-latest` 共享 runner 微秒级抖动 `start-hash-p50 165/100 us`，见 [`exact-head-ci-run-42771773936-attempt1.json`](./exact-head-ci-run-42771773936-attempt1.json)）；**补跑 10/10 PASS**（`gates-ubuntu`、`native-web`、`build-{ubuntu,macos,windows}-latest`、`perf-{ubuntu,macos}-latest`、`desktop-{ubuntu,macos,windows}-latest` 全绿，见 [`exact-head-ci-run-42771773936.json`](./exact-head-ci-run-42771773936.json)） |
