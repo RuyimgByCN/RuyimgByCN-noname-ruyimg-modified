@@ -229,6 +229,7 @@ pub(super) fn apply_sha_extra_targets(
         {
             extra += 1;
         }
+        extra += flag_val(state, player, "l11_mod:guju_extra") as i32;
         extra += flag_val(state, player, "l11_mod:twhengjiang_extra") as i32;
     }
     extra

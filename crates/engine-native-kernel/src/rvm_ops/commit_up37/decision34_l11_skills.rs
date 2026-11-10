@@ -929,9 +929,10 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
             }
         }
         _ => {
-            if !super::decision34_l11_npc_a::try_resolve_l11_npc_skill_a(ctx, skill_name, owner) {
-                let _ =
-                    super::decision34_l11_npc_b::try_resolve_l11_npc_skill_b(ctx, skill_name, owner);
+            if !super::decision34_l11_npc_a::try_resolve_l11_npc_skill_a(ctx, skill_name, owner)
+                && !super::decision34_l11_npc_b::try_resolve_l11_npc_skill_b(ctx, skill_name, owner)
+            {
+                set_flag(ctx.core, owner, &format!("l11_unhandled_skill:{skill_name}"), 1);
             }
         }
     }

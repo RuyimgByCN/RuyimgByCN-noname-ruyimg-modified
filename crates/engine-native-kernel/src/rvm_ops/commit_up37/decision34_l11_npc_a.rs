@@ -95,9 +95,7 @@ pub(super) fn try_resolve_l11_npc_skill_a(
             // `sp2.js:9417`: cancel single-target card from `傀`-marked actor or add `傀`-marked extra targets (`d34_l11_mods.rs`)
             set_flag(ctx.core, owner, "l11_mod:bmcanshi", 1);
             if let Some(t) = first_other_alive(ctx.core, owner) {
-                if flag(ctx.core, t, "l11_kui_mark") > 0 {
-                    set_flag(ctx.core, t, "l11_kui_mark", 0);
-                }
+                set_flag(ctx.core, t, "l11_kui_mark", 1);
             }
         }
         "buqu" => {
@@ -258,17 +256,15 @@ pub(super) fn try_resolve_l11_npc_skill_a(
             }
         }
         "guju" => {
-            // `sp2.js:9487`: when a `傀`-marked character takes damage -> draw 1 card and increment `guju` count
-            let n = flag(ctx.core, owner, "l11_guju_count") + 1;
-            set_flag(ctx.core, owner, "l11_guju_count", n);
+            // `sp2.js:9487`: when a `傀`-marked character takes damage -> draw 1 card and increment `l11_mod:guju_extra`
+            let n = flag(ctx.core, owner, "l11_mod:guju_extra") + 1;
+            set_flag(ctx.core, owner, "l11_mod:guju_extra", n);
             ctx.start_draw(owner, 1);
         }
         "gushe" => {
             // `sp.js:17027`: pindian up to 3 targets -> loser discards 1 or owner draws 1, add `饶舌` mark
             if let Some(t) = first_other_alive(ctx.core, owner) {
                 if discard_up_to_he(ctx, t, 1).is_empty() {
-                    ctx.start_draw(owner, 1);
-                } else {
                     ctx.start_draw(owner, 1);
                 }
             }
@@ -283,9 +279,19 @@ pub(super) fn try_resolve_l11_npc_skill_a(
         }
         "jieyuan" => {
             // `sp.js:18564`: discard black hand card for damage +1 (`l11_mod:jieyuan_more`) or red for damage -1 (`l11_mod:jieyuan_less`)
-            let _ = discard_up_to_he(ctx, owner, 1);
-            set_flag(ctx.core, owner, "l11_mod:jieyuan_more", 1);
-            set_flag(ctx.core, owner, "l11_mod:jieyuan_less", 1);
+            if let Some(&cid) = discard_up_to_he(ctx, owner, 1).first() {
+                let is_black = matches!(
+                    ctx.catalog.cards[cid as usize].suit,
+                    Suit::Spade | Suit::Club
+                );
+                if is_black {
+                    set_flag(ctx.core, owner, "l11_mod:jieyuan_more", 1);
+                    set_flag(ctx.core, owner, "l11_mod:jieyuan_less", 0);
+                } else {
+                    set_flag(ctx.core, owner, "l11_mod:jieyuan_less", 1);
+                    set_flag(ctx.core, owner, "l11_mod:jieyuan_more", 0);
+                }
+            }
         }
         "jigong" => {
             // `yijiang.js:7487`: PlayPhase begin draw 2 cards; hand limit adjusted by damage dealt (`l11_mod:jigong_hand`)
@@ -381,12 +387,10 @@ pub(super) fn try_resolve_l11_npc_skill_a(
             }
         }
         "lianzhu" => {
-            // `sp.js:16157`: show & give 1 card to target; if black, owner draws 2 or target discards 2
+            // `sp.js:16157`: show & give 1 card to target; if black, target discards 2 cards or owner draws 2 cards
             if let Some(t) = first_other_alive(ctx.core, owner) {
                 let _ = move_one_hand_to(ctx, owner, t);
-                if discard_up_to_he(ctx, t, 2).is_empty() {
-                    ctx.start_draw(owner, 2);
-                } else {
+                if discard_up_to_he(ctx, t, 2).len() < 2 {
                     ctx.start_draw(owner, 2);
                 }
             }
@@ -557,8 +561,10 @@ pub(super) fn try_resolve_l11_npc_skill_a(
         }
         "nzry_shicai" => {
             // `shenhua.js:2208`: after using a card of a new type this turn -> put card on deck top and draw 1 card
+            if let Some(c) = ctx.core.discard.pop() {
+                ctx.core.deck.push(c);
+            }
             ctx.start_draw(owner, 1);
-            set_flag(ctx.core, owner, "l11_shicai_drawn", 1);
         }
         "olniepan" => {
             // `refresh.js:9277`: limited 1/game on dying -> discard all cards, reset state, draw 3, recover to 3 HP, gain bazhen/huoji/kanpo
@@ -663,12 +669,12 @@ pub(super) fn try_resolve_l11_npc_skill_a(
             }
         }
         "reguanxing" => {
-            // `refresh.js:11932`: PreparePhase inspect & reorder top 5 (or 3) deck cards
-            if ctx.core.deck.len() >= 2 {
-                let top = ctx.core.deck.pop().unwrap();
-                ctx.core.deck.insert(0, top);
+            // `refresh.js:11932`: PreparePhase inspect & reorder top 5 (or 3) deck cards (prioritizing basic cards on top)
+            let dlen = ctx.core.deck.len();
+            if dlen >= 2 {
+                let start = dlen.saturating_sub(5);
+                ctx.core.deck[start..].sort_by_key(|&c| ctx.catalog.cards[c as usize].kind.is_basic_kind());
             }
-            set_flag(ctx.core, owner, "l11_reguanxing_sorted", 1);
         }
         "reguose" => {
             // `refresh.js:13736`: view Diamond card as Le (`d34_view_as.rs`) or discard 1 judge card on field, then draw 1 card
@@ -814,14 +820,16 @@ pub(super) fn try_resolve_l11_npc_skill_a(
             }
         }
         "rewurong" => {
-            // `refresh.js:11555`: simultaneous reveal -> if owner shows Sha and target not Shan, deal 1 damage; else gain 1 card from target
+            // `refresh.js:11555`: simultaneous reveal -> if target reveals Shan, owner gains 1 card from target; else deal 1 damage
             if let Some(t) = first_other_alive(ctx.core, owner) {
-                if move_one_hand_to(ctx, t, owner).is_none() {
-                    ctx.emit(EventData::Damage(crate::machine::damage_data(
-                        Some(owner),
-                        t,
-                        1,
-                    )));
+                let target_has_shan = ctx
+                    .core
+                    .player(t)
+                    .hand
+                    .iter()
+                    .any(|&c| ctx.catalog.cards[c as usize].kind == CardKind::Shan);
+                if target_has_shan {
+                    let _ = move_one_hand_to(ctx, t, owner);
                 } else {
                     ctx.emit(EventData::Damage(crate::machine::damage_data(
                         Some(owner),
@@ -832,8 +840,18 @@ pub(super) fn try_resolve_l11_npc_skill_a(
             }
         }
         "rexingluan" => {
-            // `sp2/skill.js:9812`: 1/phase after single-target card resolves -> gain 1 matching-rank card from deck
-            draw_cards_sync(ctx, owner, 1);
+            // `sp2/skill.js:9812`: 1/phase after single-target card resolves -> gain 1 rank-6 card from deck
+            if let Some(pos) = ctx
+                .core
+                .deck
+                .iter()
+                .position(|&c| ctx.catalog.cards[c as usize].rank == 6)
+            {
+                let cid = ctx.core.deck.remove(pos);
+                ctx.core.player_mut(owner).hand.push(cid);
+            } else {
+                draw_cards_sync(ctx, owner, 1);
+            }
         }
         "rexingshang" => {
             // `refresh.js:17643`: when a character dies -> recover 1 HP or gain all of deceased's hand cards

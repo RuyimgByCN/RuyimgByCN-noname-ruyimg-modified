@@ -128,9 +128,15 @@ fn l11_taixu_formal_package_320_generals_32_cards_374_skills_and_206_campaign_no
         assert_eq!(fac, expected_faction, "faction mismatch for {gname}");
         assert_eq!(gender, expected_gender, "gender mismatch for {gname}");
         assert_eq!(max_hp, expected_hp, "max_hp mismatch for {gname}");
-        assert!(
-            sks.len() <= sk_list.len(),
-            "general {gname} cannot have more attached skills than upstream declaration"
+        let expected_attached: Vec<&str> = sk_list
+            .iter()
+            .copied()
+            .filter(|sk| !L11_TAIXU_UPSTREAM_UNDEFINED_SKILL_REFS.contains(sk))
+            .collect();
+        assert_eq!(
+            sks.len(),
+            expected_attached.len(),
+            "general {gname} attached skill count must match all upstream-defined skills"
         );
         for &sk in &sks {
             assert!(
@@ -140,20 +146,11 @@ fn l11_taixu_formal_package_320_generals_32_cards_374_skills_and_206_campaign_no
         }
     }
 
-    // Unported NPC cross-skills must NOT have fake `l11_npc_*` stubs in Catalog (`缺失`):
-    for unported in [
-        "txhj_xiehui",
-        "txhj_jinxing",
-        "txhj_zhanhuo",
-        "txhj_jiaoxie",
-        "txhj_jinwei",
-        "txhj_quanqin",
-        "txhj_yishi",
-        "txhj_zhuosheng",
-    ] {
+    // The 9 upstream-undefined skill refs must NOT have fake stubs in Catalog:
+    for &undef_sk in &L11_TAIXU_UPSTREAM_UNDEFINED_SKILL_REFS {
         assert!(
-            e.catalog().skill_by_name(unported).is_none(),
-            "unported NPC cross-skill {unported} must NOT have a fake stub in Catalog"
+            e.catalog().skill_by_name(undef_sk).is_none(),
+            "upstream-undefined NPC skill ref {undef_sk} must NOT have a fake stub in Catalog"
         );
     }
 
@@ -753,8 +750,8 @@ fn l11_taixu_164_cross_package_npc_skills_and_9_inert_undefined_refs() {
     use engine_native::catalog::Suit;
     use engine_native::event::DamageNature;
     use engine_native::rvm_bridge::modifiers::{
-        d34_flags::find_d34_flag_view_as, eval_card_unrespondable, eval_card_use_canceled,
-        eval_damage_amount,
+        d34_flags::find_d34_flag_view_as, eval_card_target_canceled, eval_card_unrespondable,
+        eval_card_use_canceled, eval_damage_amount,
     };
 
     let (_verified, mut e) = start_formal_taixu_engine(2026_1120);
@@ -1030,6 +1027,125 @@ fn l11_taixu_164_cross_package_npc_skills_and_9_inert_undefined_refs() {
         unhandled.is_empty(),
         "All 164 L11 cross-package NPC skills must resolve with zero unhandled flags, found: {unhandled:?}"
     );
+
+    // 4. Regression checks for awakening transitions, suit-conditional modifiers, and unhandled guard:
+    // (a) `twhongju` awakens once (-1 max_hp), then transitions to `twqingce` without losing max_hp again
+    e.state_core_mut().vm_aux.flags.clear();
+    e.state_core_mut().player_mut(0).max_hp = 5;
+    e.state_core_mut().player_mut(0).hp = 5;
+    invoke_l11(&mut e, 0, "twzhengrong");
+    invoke_l11(&mut e, 0, "twhongju");
+    assert_eq!(e.state_core().player(0).max_hp, 4);
+    invoke_l11(&mut e, 0, "twhongju");
+    assert_eq!(
+        e.state_core().player(0).max_hp,
+        4,
+        "twhongju must not reduce max_hp a second time after awakening"
+    );
+
+    // (b) `zili` awakens once (-1 max_hp), then transitions to `paiyi` (2 draws + 1 damage)
+    e.state_core_mut().vm_aux.flags.clear();
+    e.state_core_mut().player_mut(0).max_hp = 5;
+    e.state_core_mut().player_mut(0).hp = 4;
+    e.state_core_mut().player_mut(1).hp = 5;
+    invoke_l11(&mut e, 0, "requanji");
+    invoke_l11(&mut e, 0, "zili");
+    assert_eq!(e.state_core().player(0).max_hp, 4);
+    invoke_l11(&mut e, 0, "zili");
+    assert_eq!(
+        e.state_core().player(0).max_hp,
+        4,
+        "zili must not reduce max_hp a second time after awakening"
+    );
+    assert_eq!(e.state_core().player(1).hp, 4);
+
+    // (c) `jieyuan` distinguishes black card (+1 damage) vs red card (-1 damage)
+    let black_card = (0..e.catalog().cards.len() as u32)
+        .find(|&cid| matches!(e.catalog().cards[cid as usize].suit, Suit::Spade | Suit::Club))
+        .unwrap();
+    e.state_core_mut().vm_aux.flags.clear();
+    e.state_core_mut().player_mut(0).hand = vec![black_card];
+    e.state_core_mut().player_mut(0).equips.clear();
+    invoke_l11(&mut e, 0, "jieyuan");
+    assert_eq!(
+        e.state_core()
+            .vm_aux
+            .flags
+            .get(&(0, "l11_mod:jieyuan_more".to_string()))
+            .copied()
+            .unwrap_or(0),
+        1
+    );
+    assert_eq!(
+        e.state_core()
+            .vm_aux
+            .flags
+            .get(&(0, "l11_mod:jieyuan_less".to_string()))
+            .copied()
+            .unwrap_or(0),
+        0
+    );
+    e.state_core_mut().player_mut(0).hand = vec![heart_sha];
+    invoke_l11(&mut e, 0, "jieyuan");
+    assert_eq!(
+        e.state_core()
+            .vm_aux
+            .flags
+            .get(&(0, "l11_mod:jieyuan_less".to_string()))
+            .copied()
+            .unwrap_or(0),
+        1
+    );
+    assert_eq!(
+        e.state_core()
+            .vm_aux
+            .flags
+            .get(&(0, "l11_mod:jieyuan_more".to_string()))
+            .copied()
+            .unwrap_or(0),
+        0
+    );
+
+    // (d) `twlingfa`: discarding a card avoids taking damage; empty hand/equips takes 1 damage
+    e.state_core_mut().vm_aux.flags.clear();
+    e.state_core_mut().player_mut(1).hp = 5;
+    e.state_core_mut().player_mut(1).hand = vec![black_card];
+    e.state_core_mut().player_mut(1).equips.clear();
+    invoke_l11(&mut e, 0, "twlingfa");
+    assert_eq!(
+        e.state_core().player(1).hp,
+        5,
+        "twlingfa must not deal damage when target discards 1 card"
+    );
+    invoke_l11(&mut e, 0, "twlingfa");
+    assert_eq!(
+        e.state_core().player(1).hp,
+        4,
+        "twlingfa must deal 1 damage when target has no cards to discard"
+    );
+
+    // (e) `bmcanshi` marks target with `l11_kui_mark` and cancels single-target cards from that actor
+    e.state_core_mut().vm_aux.flags.clear();
+    invoke_l11(&mut e, 0, "bmcanshi");
+    assert!(eval_card_target_canceled(
+        e.state_core(),
+        e.catalog(),
+        1,
+        0,
+        heart_sha,
+        CardKind::Sha,
+        DamageNature::Normal,
+    ));
+
+    // (f) Unhandled skill guard sets `l11_unhandled_skill:*` when an unknown skill is dispatched
+    e.state_core_mut().vm_aux.flags.clear();
+    invoke_l11(&mut e, 0, "l11_nonexistent_test_skill");
+    assert_eq!(
+        e.state_core()
+            .vm_aux
+            .flags
+            .get(&(0, "l11_unhandled_skill:l11_nonexistent_test_skill".to_string()))
+            .copied(),
+        Some(1)
+    );
 }
-
-

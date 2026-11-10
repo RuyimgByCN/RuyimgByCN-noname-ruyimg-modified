@@ -109,7 +109,6 @@ pub(super) fn try_resolve_l11_npc_skill_b(
             if let Some(t) = first_other_alive(ctx.core, owner) {
                 set_flag(ctx.core, t, "l11_shefu_ambush", 1);
             }
-            set_flag(ctx.core, owner, "l11_shefu_recorded", 1);
         }
         "shensu" => {
             // `shenhua/skill.js:7595`: skip phase / discard equip -> deal 1 distance-unlimited Sha damage (`d34_l11_mods.rs`)
@@ -256,16 +255,28 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "twhongju" => {
             // `tw/skill.js:18939`: awakening at PreparePhase -> draw cards equal to `荣`, -1 max_hp, unlock twqingce/twsaotao
-            let rong = flag(ctx.core, owner, "l11_zhengrong_rong").max(2);
-            ctx.start_draw(owner, rong);
-            if ctx.core.player(owner).max_hp > 1 {
-                let next_mhp = ctx.core.player(owner).max_hp - 1;
-                ctx.core.player_mut(owner).max_hp = next_mhp;
-                if ctx.core.player(owner).hp > next_mhp as i32 {
-                    ctx.core.player_mut(owner).hp = next_mhp as i32;
+            if flag(ctx.core, owner, "l11_twhongju_awakened") == 0 {
+                let rong = flag(ctx.core, owner, "l11_zhengrong_rong").max(2);
+                ctx.start_draw(owner, rong);
+                if ctx.core.player(owner).max_hp > 1 {
+                    let next_mhp = ctx.core.player(owner).max_hp - 1;
+                    ctx.core.player_mut(owner).max_hp = next_mhp;
+                    if ctx.core.player(owner).hp > next_mhp as i32 {
+                        ctx.core.player_mut(owner).hp = next_mhp as i32;
+                    }
+                }
+                set_flag(ctx.core, owner, "l11_twhongju_awakened", 1);
+            } else {
+                // `tw/skill.js:18952` (`twqingce`): consume 1 `荣` card and discard 1 card from field/target
+                if let Some(pile) = ctx.core.vm_aux.piles.get_mut(&(owner, "twzhengrong".to_string())) {
+                    if let Some(c) = pile.pop() {
+                        discard_some(ctx, owner, vec![c]);
+                    }
+                }
+                if let Some(t) = first_other_alive(ctx.core, owner) {
+                    let _ = discard_up_to_he(ctx, t, 1);
                 }
             }
-            set_flag(ctx.core, owner, "l11_twhongju_awakened", 1);
         }
         "twhuangjin" => {
             // `tw/skill.js:25864`: when targeted by Sha -> judge; if rank diff <= 1, nullify Sha (`d34_l11_mods.rs`)
@@ -275,8 +286,10 @@ pub(super) fn try_resolve_l11_npc_skill_b(
             set_flag(ctx.core, owner, "l11_mod:twhuangjin_null", 1);
         }
         "twjianming" => {
-            // `tw/skill.js:22032`: when using or responding with Sha (1/suit per turn) -> draw 1 card
-            ctx.start_draw(owner, 1);
+            // `tw/skill.js:22032`: when using or responding with Sha (1/suit per turn) -> draw 1 card (+1 bonus when 4 suits reached)
+            let mask = (flag(ctx.core, owner, "l11_twjianming_suits") + 1) & 0x3;
+            set_flag(ctx.core, owner, "l11_twjianming_suits", mask);
+            ctx.start_draw(owner, if mask == 0 { 2 } else { 1 });
         }
         "twjiefan" => {
             // `tw/skill.js:18251`: limited 1/game -> others discard weapon or target draws 1 card
@@ -315,12 +328,6 @@ pub(super) fn try_resolve_l11_npc_skill_b(
                         t,
                         1,
                     )));
-                } else {
-                    ctx.emit(EventData::Damage(crate::machine::damage_data(
-                        Some(owner),
-                        t,
-                        1,
-                    )));
                 }
             }
         }
@@ -328,12 +335,16 @@ pub(super) fn try_resolve_l11_npc_skill_b(
             // `tw/skill.js:15134`: PlayPhase begin issue `强令` -> success: target draws 2; failure: target loses 1 HP
             if let Some(t) = first_other_alive(ctx.core, owner) {
                 if flag(ctx.core, t, "l11_twlinglu_done") > 0 {
+                    set_flag(ctx.core, t, "l11_twlinglu_done", 0);
                     ctx.start_draw(t, 2);
                 } else {
-                    ctx.emit(EventData::LoseHp {
-                        player: t,
-                        amount: 1,
-                    });
+                    set_flag(ctx.core, t, "l11_twlinglu_done", 1);
+                    if ctx.core.player(t).hp > 1 {
+                        ctx.emit(EventData::LoseHp {
+                            player: t,
+                            amount: 1,
+                        });
+                    }
                 }
             }
         }
@@ -341,8 +352,8 @@ pub(super) fn try_resolve_l11_npc_skill_b(
             // `tw/skill.js:15808`: mission skill -> track card types used; on completion gain `twmouli` (+1 draw & +1 hand limit)
             let cnt = flag(ctx.core, owner, "l11_twmibei_progress") + 1;
             set_flag(ctx.core, owner, "l11_twmibei_progress", cnt);
-            ctx.start_draw(owner, 1);
-            set_flag(ctx.core, owner, "l11_mod:shunshi_hand", 1);
+            ctx.start_draw(owner, if cnt >= 2 { 2 } else { 1 });
+            set_flag(ctx.core, owner, "l11_mod:shunshi_hand", cnt);
         }
         "twqianxi" => {
             // `tw/skill.js:18681`: PreparePhase draw 1 card, discard 1 card, and lock adjacent target's hand cards (`d34_l11_mods.rs`)
@@ -473,7 +484,8 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         "twyingjia" => {
             // `tw/skill.js:28283`: at PhaseEnd after using 2+ same-name tricks -> discard 1 hand card & grant extra turn / draw 2
             let _ = discard_up_to_he(ctx, owner, 1);
-            set_flag(ctx.core, owner, "l11_twyingjia_extra_turn", 1);
+            ctx.core.player_mut(owner).face_down = false;
+            set_flag(ctx.core, owner, "l11_mod:txhj_oldhuxiao", 1);
             ctx.start_draw(owner, 2);
         }
         "twyuanhu" => {
@@ -525,7 +537,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
             set_flag(ctx.core, owner, "l11_zhengrong_rong", r);
         }
         "waishi" => {
-            // `tw/skill.js:29290`: swap up to X cards with target and draw 1 card
+            // `tw/skill.js:29290`: swap up to X cards with target and draw 1 card (+1 extra when boosted by `renshe`)
             if let Some(t) = first_other_alive(ctx.core, owner) {
                 let c_me = ctx.core.player(owner).hand.first().copied();
                 let c_th = ctx.core.player(t).hand.first().copied();
@@ -536,7 +548,11 @@ pub(super) fn try_resolve_l11_npc_skill_b(
                     ctx.core.player_mut(t).hand.push(a);
                 }
             }
-            ctx.start_draw(owner, 1);
+            let bonus = flag(ctx.core, owner, "l11_renshe_waishi_plus1");
+            if bonus > 0 {
+                set_flag(ctx.core, owner, "l11_renshe_waishi_plus1", 0);
+            }
+            ctx.start_draw(owner, 1 + bonus.min(1));
         }
         "wangzun" => {
             // `sp/skill.js:43311`: at other player's PreparePhase -> owner draws 1 card and target hand limit -1 (`d34_l11_mods.rs`)
@@ -708,9 +724,9 @@ pub(super) fn try_resolve_l11_npc_skill_b(
             ctx.start_draw(owner, 2);
         }
         "xinsheng" => {
-            // `shenhua/skill.js:4560`: after taking 1 damage -> gain 1 `化身` (`l11_huashen_count`) and draw 1 card
-            let h = flag(ctx.core, owner, "l11_huashen_count") + 1;
-            set_flag(ctx.core, owner, "l11_huashen_count", h);
+            // `shenhua/skill.js:4560`: after taking 1 damage -> gain 1 `化身` (`l11_mod:txhj_renwang`) and draw 1 card
+            let h = flag(ctx.core, owner, "l11_mod:txhj_renwang") + 1;
+            set_flag(ctx.core, owner, "l11_mod:txhj_renwang", h);
             ctx.start_draw(owner, 1);
         }
         "yechou" => {
@@ -723,7 +739,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
             }
         }
         "yinbing" => {
-            // `sp.js:18139`: at PhaseEnd place non-basic card as `引兵` (`l11_yinbing_count`)
+            // `sp.js:18139`: at PhaseEnd place non-basic card as `引兵` (or draw 1 via `juedi` if `yinbing` pile non-empty)
             if let Some(cid) = ctx
                 .core
                 .player(owner)
@@ -739,9 +755,9 @@ pub(super) fn try_resolve_l11_npc_skill_b(
                     .entry((owner, "yinbing".to_string()))
                     .or_default()
                     .push(cid);
+            } else {
+                ctx.start_draw(owner, 1);
             }
-            let y = flag(ctx.core, owner, "l11_yinbing_count") + 1;
-            set_flag(ctx.core, owner, "l11_yinbing_count", y);
         }
         "yise" => {
             // `sp2/skill.js:4647`: when another character gains owner's card -> red heals 1 HP, black adds +1 Sha damage vulnerability (`d34_l11_mods.rs`)
@@ -788,7 +804,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
                 if discard_up_to_he(ctx, t, 1).is_empty() {
                     let _ = ctx.recover(owner, 1, None);
                 } else {
-                    let _ = ctx.recover(owner, 1, None);
+                    ctx.start_draw(owner, 1);
                 }
             }
         }
@@ -898,16 +914,33 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "zili" => {
             // `yijiang.js:10747`: awakening at PreparePhase -> -1 max_hp, recover 1 HP or draw 2 cards, unlock `paiyi`
-            if ctx.core.player(owner).max_hp > 1 {
-                let next_mhp = ctx.core.player(owner).max_hp - 1;
-                ctx.core.player_mut(owner).max_hp = next_mhp;
-                if ctx.core.player(owner).hp > next_mhp as i32 {
-                    ctx.core.player_mut(owner).hp = next_mhp as i32;
+            if flag(ctx.core, owner, "l11_zili_awakened") == 0 {
+                if ctx.core.player(owner).max_hp > 1 {
+                    let next_mhp = ctx.core.player(owner).max_hp - 1;
+                    ctx.core.player_mut(owner).max_hp = next_mhp;
+                    if ctx.core.player(owner).hp > next_mhp as i32 {
+                        ctx.core.player_mut(owner).hp = next_mhp as i32;
+                    }
+                }
+                let _ = ctx.recover(owner, 1, None);
+                ctx.start_draw(owner, 2);
+                set_flag(ctx.core, owner, "l11_zili_awakened", 1);
+            } else {
+                // `yijiang.js:10786` (`paiyi`): consume 1 `权` card, draw 2 cards, and deal 1 damage to target
+                if let Some(pile) = ctx.core.vm_aux.piles.get_mut(&(owner, "requanji".to_string())) {
+                    if let Some(c) = pile.pop() {
+                        discard_some(ctx, owner, vec![c]);
+                    }
+                }
+                ctx.start_draw(owner, 2);
+                if let Some(t) = first_other_alive(ctx.core, owner) {
+                    ctx.emit(EventData::Damage(crate::machine::damage_data(
+                        Some(owner),
+                        t,
+                        1,
+                    )));
                 }
             }
-            let _ = ctx.recover(owner, 1, None);
-            ctx.start_draw(owner, 2);
-            set_flag(ctx.core, owner, "l11_zili_awakened", 1);
         }
         "zongkui" => {
             // `sp2/skill.js:9525`: at TurnBegin / RoundStart -> place `傀` mark (`l11_kui_mark`) on lowest-HP other character
