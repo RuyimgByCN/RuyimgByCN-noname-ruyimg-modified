@@ -618,6 +618,20 @@ pub(super) fn resolve_u01_ddd_remaining(ctx: &mut Ctx<'_>, skill_name: &str, own
         }
         // dddqiahua 恰化 (`3D精选/character/skill.js:3068-3111`):
         "dddqiahua" => {
+            if other != owner {
+                let cards = ctx
+                    .core
+                    .vm_aux
+                    .piles
+                    .remove(&(owner, "ddd_jian".to_string()))
+                    .unwrap_or_default();
+                if !cards.is_empty() {
+                    ctx.core.player_mut(other).hand.extend(cards);
+                } else if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+                    ctx.take_hand_card(owner, c);
+                    ctx.core.player_mut(other).hand.push(c);
+                }
+            }
             set_flag(ctx.core, owner, "dddqiahua_granted_xunxun", 1);
             set_flag(ctx.core, other, "dddqiahua_has_xunxun", 1);
         }

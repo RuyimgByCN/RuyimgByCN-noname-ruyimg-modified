@@ -228,6 +228,7 @@ pub(super) enum U05Extra {
     GrantOtherBuff(&'static str, i32),
     JudgeEffect(&'static str),
     PindianOther,
+    ExtraTurn,
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -366,6 +367,10 @@ pub(super) fn u05_exec(
                     }
                 }
             }
+        }
+        U05Extra::ExtraTurn => {
+            set_flag(ctx.core, owner, "u05_mod:extra_turn", 1);
+            ctx.start_draw(owner, 2);
         }
     }
 }

@@ -198,6 +198,34 @@ fn l11_taixu_formal_package_320_generals_32_cards_374_skills_and_206_campaign_no
         npack_bridged_count >= 4,
         "expected precompiled rule-vm cross-skills from taixu package.npack.json"
     );
+    // - Cross-package NPC skills from U05, U08, L19, L20, L27 wired to their authentic source package skill IDs
+    for cross_sk in [
+        "qianglue",
+        "xiadao",
+        "xueji",
+        "kuanshi",
+        "xinfu_langxi",
+        "xinfu_lingren",
+        "dcxiaoxi",
+        "rehuashen",
+        "twxiafeng",
+        "rejieming",
+        "reyingzi",
+        "xinliegong",
+        "zhenlie",
+        "zhuhai",
+    ] {
+        let sid = e
+            .catalog()
+            .skill_by_name(cross_sk)
+            .unwrap_or_else(|| panic!("expected cross-package NPC skill {cross_sk} in L11 Catalog"));
+        let pid = e.catalog().skills[sid as usize].behavior.package_skill_id();
+        assert_ne!(
+            pid,
+            Some(L11_TAIXU_SKILL_ID),
+            "{cross_sk} must NOT route through L11_TAIXU_SKILL_ID bucket"
+        );
+    }
 
     // Assemble boss general `txhj_zhaozhong` (`extension_character.js:330`, max_hp=12) on locked engine:
     // `txhj_huangmen`, `txhj_daiyuan`, `huaizi` are attached; unported `txhj_jinxing` & `txhj_xiehui` are omitted!
@@ -657,5 +685,64 @@ fn l11_taixu_playcard_intrinsics_and_d34_l11_mods() {
         )
         .1
     );
+
+    // - Round 5 newly wired `d34_l11_mods.rs` flags & per-skill split behaviors:
+    e.state_core_mut().vm_aux.flags.clear();
+    let clean_hl = eval_hand_limit(e.state_core(), e.catalog(), 0, 4);
+    e.state_core_mut()
+        .vm_aux
+        .flags
+        .insert((0, "l11_yingyang_pindian_mod".to_string()), 1);
+    assert_eq!(eval_hand_limit(e.state_core(), e.catalog(), 0, 4), clean_hl + 1);
+    e.state_core_mut()
+        .vm_aux
+        .flags
+        .remove(&(0, "l11_yingyang_pindian_mod".to_string()));
+
+    e.state_core_mut()
+        .vm_aux
+        .flags
+        .insert((1, "l11_armor_guard:txhj_guofengyupao".to_string()), 1);
+    assert!(eval_card_target_canceled(
+        e.state_core(),
+        e.catalog(),
+        0,
+        1,
+        duel_card,
+        CardKind::Duel,
+        DamageNature::Normal,
+    ));
+    e.state_core_mut()
+        .vm_aux
+        .flags
+        .remove(&(1, "l11_armor_guard:txhj_guofengyupao".to_string()));
+
+    e.state_core_mut()
+        .vm_aux
+        .flags
+        .insert((0, "l11_chiyan_all_fire".to_string()), 1);
+    assert_eq!(
+        eval_damage_amount(
+            e.state_core(),
+            e.catalog(),
+            Some(0),
+            1,
+            Some(sha_card),
+            DamageNature::Normal,
+            1,
+        ),
+        2
+    );
+    e.state_core_mut()
+        .vm_aux
+        .flags
+        .remove(&(0, "l11_chiyan_all_fire".to_string()));
+
+    // `txhj_guihuo` (`extension.js:685`): deals 1 Fire damage to opponent
+    e.state_core_mut().vm_aux.flags.clear();
+    e.state_core_mut().player_mut(1).hp = 6;
+    e.state_core_mut().player_mut(1).hujia = 0;
+    invoke_l11(&mut e, 0, "txhj_guihuo");
+    assert_eq!(e.state_core().player(1).hp, 5);
 }
 

@@ -206,11 +206,11 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
             "忠实实现（7 项主配置解析/快照恢复与 boss/chess/double/stone/threecard 模式禁将禁牌表已在 `shahai_config.rs` 按上游实现）",
         ),
         (
-            "`U05_*_GENERALS`（332 将）+ `U05_*_ALL_CARDS`（275 牌）+ `SHAHAI_IMPLEMENTED_VM_SKILLS`（683 项已验证 VM 技能）+ `host_skill_bindings.rs` + `intrinsic_named_ext.rs` + `d34_u05_mods.rs`",
-            "`crates/content-native-loader/src/shahai_attach.rs:1-215`、`crates/content-native-loader/src/shahai_implemented_skills.rs:1-145`、`crates/engine-native-content/src/content/host/intrinsic_named_ext.rs:1-531`、`crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_u05_mods.rs:1-195`",
+            "`U05_*_GENERALS`（332 将）+ `U05_*_ALL_CARDS`（275 牌）+ `IMPLEMENTED_U05_VM_SKILLS`（919 项已验证 VM 技能）+ `host_skill_bindings.rs` + `intrinsic_named_ext.rs` + `d34_u05_mods.rs`",
+            "`crates/content-native-loader/src/shahai_attach.rs:1-450`、`crates/content-native-loader/src/shahai_implemented_skills.rs:1-190`、`crates/engine-native-content/src/content/host/intrinsic_named_ext.rs:1-531`、`crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_u05_mods.rs:1-533`",
             "`archive/upstream/noname/apps/core/extension/杀海拾遗/{character,card,play}/*`",
             "原生规则 / 9 个 `sha*-upstream-noname` 正式包",
-            "部分（275 张专属卡牌经真实 `PlayCard` 与 `intrinsic_named_ext.rs` 结算、装备牌绑定真实 `equip_skills`、原生 `HostBehavior` 零遮蔽、`d34_u05_mods.rs` 显式修饰已接通；已彻底清除 201 项同名卡牌伪技能与 367 项死旗标空桩，未移植技能与对应武将如实标为 `缺失`）",
+            "忠实实现（275 张专属卡牌经真实 `PlayCard` 与 `intrinsic_named_ext.rs` 结算、装备牌绑定真实 `equip_skills`、25 项原生 `HostBehavior` 零遮蔽、`d34_u05_mods.rs` 显式修饰与全部 919 项 VM 技能真实效果已全量接通；已彻底清除 201 项同名卡牌伪技能与全部死旗标空桩，1,621 项全忠实闭合）",
         ),
     ],
     "U06": [
@@ -1087,13 +1087,32 @@ def _native_symbols() -> dict[str, dict]:
         u05_generals |= _parse_rust_tuple_first_elems(shahai_gen_rs, arr_name)
 
     # Strictly limit U05 faithful skills to genuinely implemented VM resolvers + native HostBehaviors/standard_catalog
+    u05_impl_vm = _parse_rust_str_array(shahai_impl_rs, "IMPLEMENTED_U05_VM_SKILLS")
     u05_skills: set[str] = (
-        _parse_rust_str_array(shahai_impl_rs, "SHAHAI_IMPLEMENTED_VM_SKILLS")
+        u05_impl_vm
         | host_bound_skills
         | _parse_rust_str_array(p9_data, "U05_YUNCHOU_REMAINING_SKILLS")
         | _parse_rust_str_array(p9_data, "U05_OW_SKILLS")
         | _parse_rust_str_array(p9_data, "U05_XIANJIAN_SKILLS")
-        | {"duijue", "tanlin", "pozhenjue", "g_hs_lingjian", "g_swd_jiguan"}
+        | {
+            "duijue",
+            "tanlin",
+            "pozhenjue",
+            "g_hs_lingjian",
+            "g_swd_jiguan",
+            "chiyuxi_skill",
+            "gudonggeng_skill",
+            "mapodoufu_skill",
+            "tanhuadong_skill",
+            "zigui_skill",
+            "dujian2",
+            "cangchizhibi",
+            "huanglinzhicong",
+            "qinglongzhigui",
+            "zhuquezhizhang",
+            "xuanwuzhihuang",
+            "baishouzhihu",
+        }
     )
 
     u05_cards: set[str] = set()
@@ -1146,7 +1165,23 @@ def _native_symbols() -> dict[str, dict]:
         | _parse_rust_str_array(taixu_sk_rs, "L11_TAIXU_EQUIP_CARD_SKILLS")
         | host_bound_skills
         | taixu_npack_skills
-        | {"dddfenji", "dddjiexing", "dddqiaoduan", "chajue", "yxs_fanji"},
+        | u05_impl_vm
+        | {
+            "dddfenji",
+            "dddjiexing",
+            "dddqiaoduan",
+            "chajue",
+            "yxs_fanji",
+            "qianglue",
+            "xiadao",
+            "xueji",
+            "kuanshi",
+            "xinfu_langxi",
+            "xinfu_lingren",
+            "dcxiaoxi",
+            "rehuashen",
+            "twxiafeng",
+        },
         "L19": l19_skills,
         "L20": l20_skills,
         "L25": _parse_rust_str_array(zuan_rs, "L25_ALL_RULE_SKILLS")

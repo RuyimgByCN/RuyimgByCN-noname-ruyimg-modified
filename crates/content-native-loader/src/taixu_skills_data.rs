@@ -106,8 +106,8 @@ pub const L11_TAIXU_OWN_NPC_SKILLS: [&str; 29] = [
     "txhj_didun", "txhj_dizhou", "txhj_guihuo", "txhj_guimei", "txhj_guimen",
     "txhj_guiyan", "txhj_huangjin", "txhj_juhun", "txhj_kuangbao", "txhj_luolei",
     "txhj_renfang", "txhj_renwang", "txhj_shiyuan", "txhj_tunshi", "txhj_wangyuan",
-    "txhj_wangzu", "txhj_xiefeng", "txhj_yaoshu", "txhj_zhoufa", "txhj_zhouzu",
-    "txhj_zhoulei", "txhj_zhuhun", "txhj_zuijiu", "txqyyouji",
+    "txhj_wangzu", "txhj_xiefeng", "txhj_yaoshu", "txhj_zhoufa", "txhj_zhoulei",
+    "txhj_zhouzu", "txhj_zhuhun", "txhj_zuijiu", "txqyyouji",
 ];
 
 /// The 20 equip/summon card-backed skills in `太虚幻境/extension_card.js` (trick cards execute via `PlayCard`).

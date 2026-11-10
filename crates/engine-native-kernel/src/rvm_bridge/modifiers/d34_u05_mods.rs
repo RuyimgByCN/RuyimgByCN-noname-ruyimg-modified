@@ -85,6 +85,24 @@ pub(super) fn apply_hand_limit(state: &GameStateCore, player: PlayerId, mut limi
     if jijia > 0 {
         delta += jijia.max(4) as i32;
     }
+    // character/gwent/skill.js:368-416 (`gwjinli`: target hand limit -1)
+    if flag_val(state, player, "u05_debuff:gwjinli") > 0 {
+        delta -= 1;
+    }
+    // character/hearth/skill.js:679-709 (`nsaiqi`), card/mtg/skill.js:93-110 (`mtg_shuimomuxue_skill`),
+    // character/swd/skill.js:720-741 (`hujing`), 2914-2976 (`hutian`), character/ow/skill.js:2428 (`xie2`)
+    if flag_val(state, player, "u05_mod:nsaiqi") > 0
+        || flag_val(state, player, "u05_mod:mtg_shuimomuxue_skill") > 0
+        || flag_val(state, player, "u05_mod:hujing") > 0
+        || flag_val(state, player, "u05_debuff:hutian") > 0
+        || flag_val(state, player, "u05_buff:xie2") > 0
+        || flag_val(state, player, "u05_buff:xuejibingbao") > 0
+    {
+        delta += 1;
+    }
+    if flag_val(state, player, "u05_mod:yuling2") > 0 {
+        return 5;
+    }
     limit += delta;
     limit
 }
@@ -93,6 +111,14 @@ pub(super) fn apply_attack_range(state: &GameStateCore, player: PlayerId, mut ra
     // character/ow/skill.js:941-963 (`bfengshi`: attackFrom - countUsed())
     if flag_val(state, player, "u05_mod:bfengshi") > 0 {
         range += state.turn.cards_used_play_phase.max(1) as i32;
+    }
+    // character/hearth/skill.js:1677-1704 (`shouwang`), character/swd/skill.js:720-741 (`hujing`),
+    // card/swd/skill.js:1380-1391 (`hslingjian_xuanfengzhiren_equip1`)
+    if flag_val(state, player, "u05_debuff:shouwang") > 0
+        || flag_val(state, player, "u05_mod:hujing") > 0
+        || flag_val(state, player, "u05_mod:hslingjian_xuanfengzhiren_equip1") > 0
+    {
+        range += 1;
     }
     range
 }
@@ -209,6 +235,12 @@ pub(super) fn apply_distance_total(
     if flag_val(state, to, "u05_mod:fengyangzhen") > 0 {
         dist += 1;
     }
+    // character/gwent/skill.js:1414-1454 (`gwqinwu`) & character/ow/skill.js:3132-3160 (`shouhu`)
+    if flag_val(state, to, "u05_debuff:gwqinwu") > 0
+        || flag_val(state, from, "u05_mod:shouhu") > 0
+    {
+        dist -= 1;
+    }
     dist
 }
 
@@ -224,11 +256,14 @@ pub(super) fn apply_sha_use_limit(
     {
         unlimited = true;
     }
-    // character/xianjian/skill.js:1850-1858 (`yanzhan4`) & card/mtg/skill.js:211-222 (`mtg_longlushanfeng_skill`)
+    // character/xianjian/skill.js:1850-1858 (`yanzhan4`), card/mtg/skill.js:211-222 (`mtg_longlushanfeng_skill`),
+    // character/hearth/skill.js:730-902 (`hsnitai`)
     if flag_val(state, player, "u05_mod:yanzhan4") > 0 {
         cur += 1;
     }
-    if flag_val(state, player, "u05_mod:mtg_longlushanfeng_skill") > 0 {
+    if flag_val(state, player, "u05_mod:mtg_longlushanfeng_skill") > 0
+        || flag_val(state, player, "u05_debuff:hsnitai") > 0
+    {
         cur += 1;
     }
     (cur, unlimited)
@@ -253,6 +288,9 @@ pub(super) fn apply_sha_extra_targets(
     {
         extra += 1;
     }
+    if kind.is_sha_like() && flag_val(state, player, "u05_mod:woliu") > 0 {
+        extra += 1;
+    }
     extra
 }
 
@@ -270,6 +308,7 @@ pub(super) fn apply_card_distance_unlimited(
     }
     if flag_val(state, player, "u05_mod:zhufangshenshi") > 0
         || flag_val(state, player, "u05_mod:tanlin4") > 0
+        || flag_val(state, player, "u05_mod:mujing") > 0
     {
         unlimited = true;
     }
@@ -293,10 +332,12 @@ pub(super) fn apply_card_target_canceled(
     {
         canceled = true;
     }
-    // character/ow/skill.js:1880-1905 (`jidong2`) & 2643-2657 (`sheng2`): untargetable by others
+    // character/ow/skill.js:1880-1905 (`jidong2`), 2643-2657 (`sheng2`),
+    // character/hearth/skill.js:1747-1814 (`qianfu2`): untargetable by others
     if actor != target
         && (flag_val(state, target, "u05_mod:jidong2") > 0
-            || flag_val(state, target, "u05_mod:sheng2") > 0)
+            || flag_val(state, target, "u05_mod:sheng2") > 0
+            || flag_val(state, target, "u05_mod:qianfu2") > 0)
     {
         canceled = true;
     }
@@ -406,15 +447,23 @@ pub(super) fn apply_damage_amount(
     source: Option<PlayerId>,
     target: PlayerId,
     card: Option<CardId>,
-    _nature: DamageNature,
+    nature: DamageNature,
     mut amount: i32,
 ) -> i32 {
     if amount <= 0 {
         return amount;
     }
+    // card/swd/skill.js:1368-1379 (`qinglianxindeng`: prevents elemental damage)
+    if matches!(nature, DamageNature::Fire | DamageNature::Thunder)
+        && flag_val(state, target, "u05_mod:qinglianxindeng") > 0
+    {
+        return 0;
+    }
     if let Some(src) = source {
-        // character/hearth/skill.js:2523-2549 (`zhongji`: +1 damage)
-        if flag_val(state, src, "u05_mod:zhongji_dmg") > 0 {
+        // character/hearth/skill.js:2523-2549 (`zhongji`: +1 damage) & character/ow/skill.js:1075 (`aqianghua2`)
+        if flag_val(state, src, "u05_mod:zhongji_dmg") > 0
+            || flag_val(state, src, "u05_buff:aqianghua2") > 0
+        {
             amount += 1;
         }
         // character/ow/skill.js:2331-2355 (`feiren`: Spade Sha +1 damage)
@@ -426,16 +475,27 @@ pub(super) fn apply_damage_amount(
             amount += 1;
         }
     }
-    // character/ow/skill.js:562-578 (`liangou2`: +1 incoming damage)
-    if flag_val(state, target, "u05_mod:liangou2") > 0 {
+    // character/ow/skill.js:562-578 (`liangou2`) & 2492-2549 (`luan`: +1 incoming damage)
+    if flag_val(state, target, "u05_mod:liangou2") > 0
+        || flag_val(state, target, "u05_debuff:luan") > 0
+    {
         amount += 1;
     }
-    // card/gujian/skill.js:313-342 (`molicha`) & 456-467 (`heilonglinpian`): reduce damage > 1
+    // card/gujian/skill.js:313-342 (`molicha`), 456-467 (`heilonglinpian`),
+    // character/hearth/skill.js:4829 (`xiaorong`), character/xianjian/skill.js:719 (`chengxin`),
+    // character/swd/skill.js:1480 (`jinlin`), character/ow/skill.js:1075 (`aqianghua2`): reduce damage > 1
     if amount > 1
         && (flag_val(state, target, "u05_mod:molicha") > 0
-            || flag_val(state, target, "u05_mod:heilonglinpian") > 0)
+            || flag_val(state, target, "u05_mod:heilonglinpian") > 0
+            || flag_val(state, target, "u05_mod:xiaorong") > 0
+            || flag_val(state, target, "u05_debuff:chengxin") > 0
+            || flag_val(state, target, "u05_debuff:jinlin") > 0
+            || flag_val(state, target, "u05_buff:aqianghua2") > 0)
     {
         amount -= 1;
+    }
+    if flag_val(state, target, "u05_mod:mingkong2") > 0 {
+        amount = (amount - 1).max(0);
     }
     amount
 }
@@ -461,6 +521,7 @@ pub(super) fn apply_card_unrespondable(
     if kind.is_sha_like()
         && (flag_val(state, source, "u05_mod:bshaowei") > 0
             || flag_val(state, source, "u05_mod:juji3") > 0
+            || flag_val(state, source, "u05_mod:jianwu") > 0
             || flag_val(state, source, "u05_mod:yunchuizhen") > 0
             || flag_val(state, target, "u05_mod:xiaoyue2") > 0
             || flag_val(state, target, "u05_mod:yanzhan3") > 0

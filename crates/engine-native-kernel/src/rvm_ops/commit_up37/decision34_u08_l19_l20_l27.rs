@@ -421,6 +421,12 @@ pub(super) fn resolve_u08_yxs_skill(ctx: &mut Ctx<'_>, executing: &str, owner: P
         }
         // lzhangyi 仗义 (`英雄杀/character/skill.js:1720-1781`):
         "lzhangyi" => {
+            if other != owner {
+                if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+                    ctx.take_hand_card(owner, c);
+                    ctx.core.player_mut(other).hand.push(c);
+                }
+            }
             set_flag(ctx.core, owner, "yxs_lzhangyi_given", 1);
         }
         // yizhuang / yizhuang2 易装 (`英雄杀/character/skill.js:1782-1875`):
@@ -619,6 +625,7 @@ pub(super) fn resolve_u08_yxs_skill(ctx: &mut Ctx<'_>, executing: &str, owner: P
         // lshengong 神工 (`英雄杀/character/skill.js:3115-3135`):
         "lshengong" => {
             set_flag(ctx.core, owner, "yxs_lshengong_copied_equip", 1);
+            ctx.start_draw(owner, 1);
         }
         other_sk => {
             set_flag(ctx.core, owner, &format!("yxs_hook:{other_sk}"), 1);

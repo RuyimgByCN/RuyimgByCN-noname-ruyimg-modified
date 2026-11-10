@@ -39,6 +39,13 @@ pub(super) fn apply_hand_limit(
     limit += flag_val(state, player, "l11_mod:txhj_renwang") as i32;
     // extension_buff.js:365 (`buff_txhj_wuweizhile`: target hand limit -1)
     limit -= flag_val(state, player, "l11_wuweizhile_minus1") as i32;
+    // extension.js:5044 (`txyingyang`: pindian/hand bonus)
+    if flag_val(state, player, "l11_yingyang_pindian_mod") > 0
+        || flag_val(state, player, "l11_buff_aozhan_no_post_heal") > 0
+        || flag_val(state, player, "l11_quiz_hint_exclude_wrong") > 0
+    {
+        limit += 1;
+    }
     limit
 }
 
@@ -57,6 +64,17 @@ pub(super) fn apply_distance_total(
     }
     if flag_val(state, to, "l11_mod:txmazhan") > 0
         || has_ext_skill(state, catalog, to, "txmazhan")
+    {
+        dist += 1;
+    }
+    // extension_card.js:501, 642, 1263 (`txhj_liulongcanjia`, `txhj_juechenjinge`, `txhj_baihu`)
+    if flag_val(state, from, "l11_mount_active:txhj_liulongcanjia") > 0
+        || flag_val(state, from, "l11_mount_active:txhj_baihu") > 0
+    {
+        dist -= 1;
+    }
+    if flag_val(state, to, "l11_mount_active:txhj_liulongcanjia") > 0
+        || flag_val(state, to, "l11_mount_active:txhj_juechenjinge") > 0
     {
         dist += 1;
     }
@@ -122,9 +140,15 @@ pub(super) fn apply_card_target_canceled(
 ) -> bool {
     let is_trick = !kind.is_basic_kind() && kind.equip_slot().is_none();
     // extension.js:3593 (`txshixin`: immune to others' tricks/delayed tricks)
+    // extension_card.js:821 (`txhj_guofengyupao`, `guofengyupao`) & extension_buff.js:1212 (`txhj_ruiSkill3`, `txhj_yanSkill1`, `txhj_xuanwuSkill3`)
     if actor != target
         && is_trick
         && (flag_val(state, target, "l11_mod:txshixin") > 0
+            || flag_val(state, target, "l11_armor_guard:txhj_guofengyupao") > 0
+            || flag_val(state, target, "l11_armor_guard:guofengyupao") > 0
+            || flag_val(state, target, "l11_trick_guard:txhj_ruiSkill3") > 0
+            || flag_val(state, target, "l11_trick_guard:txhj_yanSkill1") > 0
+            || flag_val(state, target, "l11_trick_guard:txhj_xuanwuSkill3") > 0
             || has_ext_skill(state, catalog, target, "txshixin"))
     {
         canceled = true;
@@ -192,8 +216,10 @@ pub(super) fn apply_damage_amount(
     {
         return 0;
     }
-    // extension.js:5851 (`txyongguan`: prevents damage when ward active)
-    if flag_val(state, target, "l11_mod:txyongguan_ward") > 0 {
+    // extension.js:5851 (`txyongguan`: prevents damage when ward active) & `txhj_jiuweiSkill2` (`l11_jiuwei_misi_active`)
+    if flag_val(state, target, "l11_mod:txyongguan_ward") > 0
+        || (flag_val(state, target, "l11_jiuwei_misi_active") > 0 && state.player(target).hp <= 1)
+    {
         return 0;
     }
     // extension.js:5657-5681 (`txmanjia` / `txmanjia1` / `txmanjia2`: unarmored Vine Armor)
@@ -216,6 +242,7 @@ pub(super) fn apply_damage_amount(
         // extension.js:554, 572, 699, 1344, 3355, 5809 & extension_skill.js:1071
         if flag_val(state, src, "l11_mod:damage_plus1") > 0
             || has_ext_skill(state, catalog, src, "txhj_shiyuan")
+            || (flag_val(state, src, "l11_buff_juguzhidao") > 0 && state.player(target).hujia > 0)
         {
             cur += 1;
         }
@@ -223,14 +250,17 @@ pub(super) fn apply_damage_amount(
             && (flag_val(state, src, "l11_mod:txfusha") > 0
                 || has_ext_skill(state, catalog, src, "txfusha")
                 || has_ext_skill(state, catalog, src, "txhj_zuijiu")
-                || flag_val(state, src, "l11_mowang_jiu_persist") > 0)
+                || flag_val(state, src, "l11_mowang_jiu_persist") > 0
+                || flag_val(state, src, "l11_leijimu_thunder_sha") > 0)
         {
             cur += 1;
         }
-        // extension_buff.js:321 (`buff_txhj_taipingzhoufa`: elemental Sha +1 damage)
+        // extension_buff.js:321 (`buff_txhj_taipingzhoufa`) & extension_card.js:1013 (`txhj_chiyanzhenhunqin`)
         if is_sha
-            && matches!(nature, DamageNature::Fire | DamageNature::Thunder)
+            && (matches!(nature, DamageNature::Fire | DamageNature::Thunder)
+                || flag_val(state, src, "l11_chiyan_all_fire") > 0)
             && (flag_val(state, src, "l11_taipingzhoufa") > 0
+                || flag_val(state, src, "l11_chiyan_all_fire") > 0
                 || has_ext_skill(state, catalog, src, "buff_txhj_taipingzhoufa"))
         {
             cur += 1;

@@ -4,18 +4,18 @@
 
 | 类别 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|---|
-| 技能 | `kunlunjing2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4634` | 幻镜；触发="phaseAfter"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `oldliaoyuan` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4676` | 脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `oldliaoyuan2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4723` | 脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `kunlunjing2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4634` | 幻镜；触发="phaseAfter"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `oldliaoyuan` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4676` | 脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `oldliaoyuan2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4723` | 脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `shehun` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4768` | 摄魂：出牌阶段限一次，你可以弃置任意张花色不同的牌，另一名其他角色弃置等量的牌，若其弃置的牌中有牌的花色与你弃置的牌相同，你对其造成1点伤害。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:shehun`） |
 | 技能 | `liaoyuan` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4856` | 燎原：每当你使用一张【杀】指定目标后，你可以弃置任意张与此【杀】花色相同的牌，若如此做，目标需额外打出等量的闪，每少打出一张闪，此【杀】的伤害+1。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:liaoyuan`） |
-| 技能 | `liaoyuan2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4917` | 触发="damageBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `liaoyuan3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4929` | 触发="shaEnd"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `liaoyuan2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4917` | 触发="damageBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `liaoyuan3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4929` | 触发="shaEnd"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `dunxing` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4936` | 遁形：当你成为其他角色卡牌的目标时，你可以弃置一张牌并进行一次判定，若不为红桃，则取消之。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:dunxing`） |
 | 技能 | `duanxing` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:4982` | 锻星：每当你装备一张未强化的装备牌，可以视为一名角色使用一张【杀】。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:duanxing`） |
 | 技能 | `meihuo` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5005` | 魅惑：每当你失去最后一张装备牌，你可以获得一名其他角色的一张牌，若此牌来自装备区，你立即装备之。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:meihuo`） |
 | 技能 | `yishan` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5059` | 异闪：每当你受到一次伤害，你可以重新获得最近失去的两张牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:yishan`） |
-| 技能 | `yishan2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5149` | 异闪；触发="loseEnd"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `yishan2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5149` | 异闪；触发="loseEnd"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `guanhu` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5159` | 贯鹄：每当你使用【杀】造成伤害，你可以弃置对方一张手牌和一张装备牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:guanhu`） |
 | 技能 | `poxing` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5186` | 破星：锁定技，每当你即将造成伤害，若目标的体力值大于你，你令伤害+1。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:poxing`） |
 | 技能 | `huanhun` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5196` | 唤魂：当一名角色进入濒死状态时，你可以弃置一张牌并令其进行一次判定，若结果为红色，其回复1点体力，否则其获得你弃置的牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:huanhun`） |
@@ -34,20 +34,20 @@
 | 技能 | `jikong` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5618` | 亟空：准备阶段，你可以指定一名角色视为对其使用一张雷【杀】；每当你失去最后一张手牌，你可以指定一名角色视为对其使用一张雷【杀】（每回合限发动一次）。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:jikong`） |
 | 技能 | `xielei` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5660` | 挟雷：每当你使用或打出一张【杀】，可以弃置一张牌并对目标以外的一名角色造成1点雷电伤害。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xielei`） |
 | 技能 | `pozhen` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5705` | 破阵：每当你受到一次伤害，若你的手牌数大于伤害来源，你可以弃置X张手牌对其造成1点伤害；若你的手牌数小于伤害来源，你可以弃置其X张手牌。X为你与伤害来源的手牌数之差。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:pozhen`） |
-| 技能 | `tanlin_defence` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5766` | 触发="damageEnd"；弃牌 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `tanlin_defence` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5766` | 触发="damageEnd"；弃牌 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `tanlin` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5803` | 探麟：出牌阶段限一次，你可以与一名其他角色进行拼点，若你赢，你获得双方拼点牌、对该角色使用卡牌无视距离且可以额外使用一张【杀】直到回合结束，若你没赢，你受到该角色的1点伤害。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
-| 技能 | `tanlin2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5853` | 探麟；触发="phaseAfter"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `tanlin3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5860` | 触发="phaseAfter"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `tanlin4` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5875` | 脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `tanlin2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5853` | 探麟；触发="phaseAfter"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `tanlin3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5860` | 触发="phaseAfter"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `tanlin4` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5875` | 脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `yunchou` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5884` | 运筹：出牌阶段限一次，你可以弃置一张手牌，并弃置一名其他角色的一张手牌，若两张牌颜色相同，你摸一张牌，否则对方摸一张牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:yunchou`） |
 | 技能 | `jqimou` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5925` | 奇谋：每当你于回合外受到一次伤害，你可以摸一张牌，并可以使用一张牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:jqimou`） |
 | 技能 | `lexue` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5950` | 乐学：回合内，你随机获得制衡、集智、缔盟、驱虎中的一个技能；回合外，你随机获得遗计、急救、鬼道、反馈中的一个技能。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:lexue`） |
-| 技能 | `lexue1` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5953` | 触发="phaseBegin"；获得技能 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `lexue2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5991` | 触发="phaseEnd"；获得技能 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `swdtianshu2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:6029` | 天书；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `swdtianshu3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:6103` | 触发=["useCardAfter", "useSkillAfter", …；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `lexue1` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5953` | 触发="phaseBegin"；获得技能 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `lexue2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:5991` | 触发="phaseEnd"；获得技能 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `swdtianshu2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:6029` | 天书；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `swdtianshu3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:6103` | 触发=["useCardAfter", "useSkillAfter", …；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `swdtianshu` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:6113` | 天书：出牌阶段，你可以弃置一张锦囊牌，然后获得一名其他角色的一项技能直到该角色死亡（替换以此法获得的前一个技能）。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:swdtianshu`） |
-| 技能 | `swdtianshu_remove` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:6242` | 触发="dieAfter"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `swdtianshu_remove` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:6242` | 触发="dieAfter"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `luomei` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:6254` | 落梅：每当你使用或打出一张梅花花色的牌，你可以摸一张牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:luomei`） |
 | 技能 | `xingdian` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:6281` | 星点：出牌阶段限一次，你可以弃置一张手牌，然后随机弃置两名敌人各一张牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xingdian`） |
 | 技能 | `yulin` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:6327` | 玉鳞：每当你即将受到伤害，你可以弃置一张装备牌抵消此伤害。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:yulin`） |
@@ -64,40 +64,40 @@
 | 技能 | `lanzhi` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:6876` | 兰芷：每当你使用一张梅花牌，你可以令所有体力值不大于你的角色回复1点体力。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:lanzhi`） |
 | 技能 | `duanyi` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:6926` | 断意：出牌阶段限一次，你可以弃置两张【杀】，对一名角色造成1点伤害，然后其随机弃置X张牌，X为其已损失的体力值。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:duanyi`） |
 | 技能 | `guxing` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:6957` | 孤星：出牌阶段，你可以将最后至多X张手牌当【杀】使用，此【杀】无视距离且可以指定至多3个目标，每造成一次伤害，你摸一张牌，Ｘ为你已损失的体力值且至少为１。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:guxing`） |
-| 技能 | `guxing1` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:6960` | 孤星（sha） | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `guxing1` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:6960` | 孤星（sha） | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `guxing3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7008` | 触发="damageAfter"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:guxing3`） |
 | 技能 | `miles_xueyi` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7023` | 血裔：锁定技，你防止即将受到的伤害，然后失去1点体力。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:miles_xueyi`） |
 | 技能 | `jifeng` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7032` | 触发="useCardToBefore"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:jifeng`） |
 | 技能 | `swd_xiuluo` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7072` | 修罗：准备阶段，你可以弃一张手牌来弃置你判定区里的一张延时类锦囊（必须花色相同）。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:swd_xiuluo`） |
 | 技能 | `mohua2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7119` | 魔化：锁定技，当你进入濒死状态时，你立即变身为撒旦，将体力回复至２，然后摸两张牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:mohua2`） |
 | 技能 | `duijue` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7160` | 对决：限定技，出牌阶段，你可以指定一名体力值大于1的其他角色，你结束出牌阶段，并在回合结束后将所有其他角色移出游戏，然后该角色与你轮流进行回合，直到有一方死亡或一共进行六个回合为… | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
-| 技能 | `duijue3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7244` | 触发="phaseAfter"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `duijue2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7287` | 脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `duijue3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7244` | 触发="phaseAfter"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `duijue2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7287` | 脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `yueren` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7316` | 月刃：每当你使用一张【杀】，可以进行一次判定，若结果为黑色，你弃置目标一张牌，若结果为红色，你将此【杀】收回，每回合限发动一次。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:yueren`） |
 | 技能 | `busi` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7344` | 不死：锁定技，当你进入濒死状态时，你进行一次判定，若结果不为黑桃，你将体力回复至1并将武将牌翻至背面。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:busi`） |
 | 技能 | `xuying` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7367` | 虚影：锁定技，每当你即将受到伤害，你防止此伤害，若你此时有手牌，你失去1点体力。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xuying`） |
 | 技能 | `yinguo` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7387` | 因果：除你之外的任意一名角色即将受到受到伤害时，若有伤害来源，你可以弃置一张牌将伤害来源和目标对调。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:yinguo`） |
-| 技能 | `yinguo3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7434` | 脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `yinguo3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7434` | 脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `guiyan` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7456` | 鬼眼：出牌阶段，你可以观看一名角色的手牌，并获得其中一张梅花牌，每阶段限一次。当你首次进入濒死状态时，你须回复1点体力并失去技能鬼眼。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:guiyan`） |
-| 技能 | `guiyan2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7490` | 鬼眼；触发="dying"；回复 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `guiyan2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7490` | 鬼眼；触发="dying"；回复 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `xianyin` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7500` | 散结：出牌阶段，你可以令所有判定区内有牌的角色弃置判定区内的牌，然后交给你一张手牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xianyin`） |
 | 技能 | `mailun` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7556` | 脉轮：准备阶段，你可以选择一个脉轮效果直到下一回合开始。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:mailun`） |
-| 技能 | `mailun31` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7682` | 脉轮；触发="damageBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `mailun32` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7690` | 脉轮；触发="damageBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `mailun41` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7698` | 脉轮；触发="damageBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `mailun42` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7706` | 脉轮；触发="damageBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `mailun5` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7714` | 触发="phaseDrawBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `mailun6` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7727` | 触发="phaseDrawBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `mailun7` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7740` | 脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `mailun8` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7750` | 脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `mailun31` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7682` | 脉轮；触发="damageBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `mailun32` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7690` | 脉轮；触发="damageBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `mailun41` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7698` | 脉轮；触发="damageBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `mailun42` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7706` | 脉轮；触发="damageBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `mailun5` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7714` | 触发="phaseDrawBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `mailun6` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7727` | 触发="phaseDrawBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `mailun7` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7740` | 脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `mailun8` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7750` | 脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `fengming` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7760` | 凤鸣：出牌阶段限一次，你可以弃置一张装备牌，令一名角色恢复1点体力并摸一张牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:fengming`） |
 | 技能 | `wanjun` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7786` | 万钧：你可以将一张装备牌当作南蛮入侵使用。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:wanjun`） |
 | 技能 | `huanling` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7812` | 幻灵：结束阶段，你可以选择一名角色与你同时翻面；翻面状态下，你防止一切伤害。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:huanling`） |
-| 技能 | `huanling2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7859` | 幻灵；触发="damageBefore"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `huanling2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7859` | 幻灵；触发="damageBefore"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `ljifeng` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7869` | 疾风：锁定技，你的攻击范围+X，【杀】可以额外指定X个目标，X为你已损失的体力值。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:ljifeng`） |
 | 技能 | `lxianglong` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7881` | 翔龙：每当你闪避一张【杀】，你可以视为使用一张【杀】。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:lxianglong`） |
 | 技能 | `zhenjiu` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7909` | 针灸：出牌阶段限一次，你可以将一张红色手牌置于一名角色的武将牌上，该角色于下一个准备阶段回复1点体力，然后获得此牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:zhenjiu`） |
-| 技能 | `zhenjiu2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7942` | 针灸；触发="phaseBegin"；回复、获得牌 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `zhenjiu2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7942` | 针灸；触发="phaseBegin"；回复、获得牌 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `shoulie` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7956` | 狩猎：当你使用一张【杀】指定目标后，可以弃置一张手牌令此【杀】不可闪避。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:shoulie`） |
 | 技能 | `hudun` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7988` | 盾甲：锁定技，当你对其他角色造成伤害后，若你没有护甲，你获得1点护甲值。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:hudun`） |
 | 技能 | `toudan` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js:7999` | 投弹：出牌阶段限一次，你可以弃置一张黑桃牌对一名其他角色造成1点火焰伤害，然后你与距离该角色1以内的所有角色各弃置一张牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:toudan`） |
@@ -110,20 +110,20 @@
 | 技能 | `xunying` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:153` | 迅影：每当你使用【杀】对一名目标结算完毕后，你可以继续对目标使用【杀】。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_xunying`） |
 | 技能 | `liefeng` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:172` | 冽风：锁定技，当你在回合内使用第二张牌时，你本回合获得〖炎斩〗；当你在回合内使用第三张牌时，你本回合获得〖天剑〗；当你在回合内使用第四张牌时，你本回合获得〖御风〗。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_liefeng`） |
 | 技能 | `yuexing` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:238` | 越行：出牌阶段限一次，你可以指定一名角色，本阶段内将你与该角色到其他角色的距离基数互换。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_yuexing`） |
-| 技能 | `yuexing2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:281` | 越行；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `yuexing2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:281` | 越行；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `minsha` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:297` | 冥煞：出牌阶段限一次，你可以弃置两张牌，对一名体力值大于1的其他角色造成1点雷属性伤害，然后距离目标1以内的所有其他角色随机弃置一张牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_minsha`） |
 | 技能 | `lingdi` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:358` | 灵笛：出牌阶段，你可以弃置一张本回合与此法弃置的牌花色均不同的手牌，然后选择一名与你距离为X的角色与其各摸一张牌，X为本回合发动〖灵笛〗的次数（含此次）。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `xiaoyue` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:411` | 啸月：锁定技，每轮开始时，若你手牌中有【杀】，你将手牌中的一张随机【杀】对一名随机敌方角色使用，然后获得1点护甲。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
-| 技能 | `xiaoyue2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:439` | 触发="damageEnd"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `huanlei` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:448` | 触发="damageEnd"；摸牌、伤害 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `xiaoyue2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:439` | 触发="damageEnd"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `huanlei` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:448` | 触发="damageEnd"；摸牌、伤害 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `anwugu` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:464` | 巫蛊：每当你对其他角色造成一次伤害，你可以令目标获得三枚蛊标记；拥有蛊标记的角色手牌上限-1，每回合最多使用X张牌（X为蛊标记数），每个结束阶段失去一枚蛊标记。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_anwugu`） |
 | 技能 | `anwugu2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:480` | 蛊；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_anwugu2`） |
 | 技能 | `xtanxi` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:513` | 探息：出牌阶段限一次，你可以弃置一张手牌，然后随机选择一名手牌中有与之同名的牌的敌方角色，观看其手牌并获得任意一张。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_xtanxi`） |
 | 技能 | `linghuo` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:574` | 灵火：每两轮限一次，在一名其他角色的结束阶段，若其本回合内造成过伤害，你可以对其造成1点火属性伤害。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_linghuo`） |
 | 技能 | `guijin` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:593` | 归烬：每三轮限一次，出牌阶段，你可以观看牌堆顶的四张牌，然后可以将其中任意张牌分配给任意角色，被分到牌的角色跳过下一摸牌阶段，然后将剩余牌以原顺序放回牌堆顶。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_guijin`） |
-| 技能 | `guijin2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:704` | 归烬；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `guijin2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:704` | 归烬；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `chengxin` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:719` | 澄心：每四轮限一次，当一名角色进入濒死状态时，你可以令其将体力值回复至1，然后该角色防止一切伤害直到下一回合结束。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_chengxin`） |
-| 技能 | `chengxin2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:750` | 澄心；触发="damageBefore"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `chengxin2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:750` | 澄心；触发="damageBefore"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `tianwu` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:773` | 天舞：每当你使用卡牌指定一名敌方角色为唯一目标，你可以对其施加一个随机的负面效果。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `shiying` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:785` | 逝影：限定技，在一名其他角色死亡前，你可以防止其死亡，然后你与该角色失去全部技能、将体力和体力上限变为3、移去所有牌并摸三张牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_shiying`） |
 | 技能 | `liguang` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:833` | 离光：结束阶段，你可以弃置一张手牌并将场上的一张牌移动到另一个合理的位置。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_liguang`） |
@@ -146,9 +146,9 @@
 | 技能 | `fenshi` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:1755` | 焚世：觉醒技，当你解除濒死状态时，你获得2点护甲，摸两张牌，然后获得技能〖龙火〗。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_fenshi`） |
 | 技能 | `longhuo` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:1769` | 龙火：结束阶段，你可以对所有角色各造成1点火焰伤害。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_longhuo`） |
 | 技能 | `yanzhan` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:1799` | 炎斩：出牌阶段限一次，你可以将一张红色牌当作火【杀】使用，此【杀】只能用与之花色相同的闪响应；若此【杀】造成了伤害，你本回合可以额外使用一张【杀】。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
-| 技能 | `yanzhan2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:1830` | 触发="damageEnd"；临时技 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `yanzhan3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:1841` | 脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `yanzhan4` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:1850` | 触发="loseEnd"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `yanzhan2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:1830` | 触发="damageEnd"；临时技 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `yanzhan3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:1841` | 脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `yanzhan4` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:1850` | 触发="loseEnd"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `xjyufeng` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:1859` | 御风：锁定技，当你失去手牌后，若手牌数少于2，你将手牌数补至2（每回合最多发动两次）。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_xjyufeng`） |
 | 技能 | `feixia` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:1884` | 飞霞：出牌阶段限一次，你可以弃置一张红色牌视为对一名随机敌人使用一张不计入出杀次数的【杀】。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `lueying` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:1910` | 掠影：每当你使用一张【杀】，你可以随机获得目标的一张牌，然后目标可以指定一名其他角色，你弃置该角色一张牌（每回合限发动一次，没有弃牌目标时无法发动）。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_lueying`） |
@@ -160,21 +160,21 @@
 | 技能 | `huxi` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2075` | 虎袭：你可以失去1点体力并获得1点护甲，视为使用一张【杀】。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `xuanmo` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2105` | 玄墨：出牌阶段限一次，你可以将一张手牌置于牌堆顶并随机获得两张与之类别相同的牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_xuanmo`） |
 | 技能 | `danqing` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2137` | 丹青：结束阶段，若你累计使用了四张花色不同的牌，你可以选择至多4名角色随机获得一个正面效果。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
-| 技能 | `danqing_count` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2185` | 触发="useCard"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `danqing_count` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2185` | 触发="useCard"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `sheling` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2196` | 摄灵：其他角色于你的回合内因使用、打出或弃置而失去牌时，你可以获得之（每回合最多发动三次）。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_sheling`） |
 | 技能 | `zhaoyao` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2231` | 招摇：其他角色的摸牌阶段开始时，你可以与其拼点，若你赢，你摸两张牌，然后将两张牌置于牌堆顶。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_zhaoyao`） |
 | 技能 | `zhangmu` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2298` | 障目：每回合限一次，当你需要使用或打出一张闪时，你可以展示一张闪，视为使用或打出了此闪。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_zhangmu`） |
-| 技能 | `zhangmu_ai` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2345` | 触发="loseAfter"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `zhangmu_ai` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2345` | 触发="loseAfter"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `leiyu` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2355` | 雷狱：结束阶段，你可以弃置一张黑色手牌，视为对本回合内所有成为过你的卡牌目标的角色使用一张【惊雷闪】。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
-| 技能 | `leiyu2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2413` | 触发="phaseUseBegin"；回复 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `leiyu3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2420` | 触发="dieAfter"；回复 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `leiyu4` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2432` | 触发="useCardToBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `leiyu2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2413` | 触发="phaseUseBegin"；回复 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `leiyu3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2420` | 触发="dieAfter"；回复 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `leiyu4` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2432` | 触发="useCardToBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `feizhua` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2442` | 飞爪：当你使用一张【杀】时，你可以将与目标相邻的角色追加为额外目标。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `lingxue` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2502` | 灵血：锁定技，每当你回复1点体力，你获得1点护甲。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_lingxue`） |
-| 技能 | `diesha` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2509` | 叠杀：锁定技，每当你使用【杀】造成伤害，受伤害角色失去1点体力，你回复1点体力。 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `guijiang` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2526` | 鬼降：出牌阶段限一次，你可以弃置一张黑色牌，令一名其他角色无法成为回复牌的目标直到你下一回合开始。 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `guijiang2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2560` | 鬼降；触发=["dieBegin", "phaseBegin"]；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `guijiang3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2583` | 触发="phaseBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `diesha` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2509` | 叠杀：锁定技，每当你使用【杀】造成伤害，受伤害角色失去1点体力，你回复1点体力。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `guijiang` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2526` | 鬼降：出牌阶段限一次，你可以弃置一张黑色牌，令一名其他角色无法成为回复牌的目标直到你下一回合开始。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `guijiang2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2560` | 鬼降；触发=["dieBegin", "phaseBegin"]；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `guijiang3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2583` | 触发="phaseBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `fenxing` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2592` | 分形：锁定技，准备阶段，你有50%概率变身为另一形态。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `diewu` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2619` | 蝶舞：出牌阶段，你可以将一张【杀】交给一名角色，若你于此阶段内首次如此做，你摸一张牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_diewu`） |
 | 技能 | `lingyu` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2651` | 灵愈：结束阶段，你可以令一名其他角色回复1点体力。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_lingyu`） |
@@ -185,7 +185,7 @@
 | 技能 | `xuanyan3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2754` | 触发="damageEnd"；失去体力 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_xuanyan3`） |
 | 技能 | `ningbin` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2765` | 凝冰：锁定技，每当你受到1次雷属性伤害，你回复1点体力。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_ningbin`） |
 | 技能 | `xfenxin` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2787` | 焚心：锁定技，每当你的体力值发生改变，你摸等量的牌；每当你杀死一名角色，你增加1点体力上限并回复1点体力。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
-| 技能 | `xfenxin2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2810` | 焚心（sha） | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `xfenxin2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2810` | 焚心（sha） | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `luanjian` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2818` | 乱剑：出牌阶段，你可以将两张【杀】当【杀】使用，此【杀】无视距离，可以指定任意名目标且有50%的机率伤害+1。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_luanjian`） |
 | 技能 | `luanjian2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2868` | 触发="damageBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_luanjian2`） |
 | 技能 | `ctianfu` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:2881` | 天符：出牌阶段，你可以将一张闪置于一名其他角色的武将牌上，该角色在下一次造成伤害时受到来自你的1点雷属性伤害并随机弃置一张牌，然后移去此牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_ctianfu`） |
@@ -206,29 +206,29 @@
 | 技能 | `qijian` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:3416` | 气剑：弃牌阶段结束时，你可以指定至多X名目标视为使用一张【杀】，X为你于此阶段弃置的卡牌数。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `shenmu` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:3436` | 神木：任意一名角色濒死时，你可以展示你的手牌并弃置其中的所有红色牌（至少一张），若如此做，该角色回复1点体力，然后摸X张牌，X为你弃置的手牌数。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_shenmu`） |
 | 技能 | `qianfang` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:3472` | 千方：准备阶段，若你有玄凝标记，你可以弃置3-X张牌和所有玄凝标记，视为使用了一张【万箭齐发】，每当一名敌方角色因此牌受到伤害，你摸一张牌。X为你的玄凝标记数。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_qianfang`） |
-| 技能 | `qianfang2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:3549` | 触发="phaseDrawBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `qianfang2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:3549` | 触发="phaseDrawBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `poyun` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:3557` | 破云：每当你造成一次伤害，你可以弃置一枚玄凝标记，然后弃置对方两张牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_poyun`） |
-| 技能 | `poyun2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:3582` | 触发="damageEnd"；摸牌 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `poyun2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:3582` | 触发="damageEnd"；摸牌 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `zhuyue` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:3596` | 逐月：出牌阶段限一次，你可以弃置一张非基本牌并指定至多两个目标各随机弃置一张牌，若如此做，你本回合使用的【杀】须指定选中角色为目标。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_zhuyue`） |
-| 技能 | `zhuyue2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:3674` | 触发="phaseUseEnd"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `zhuyue2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:3674` | 触发="phaseUseEnd"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `longxi` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:3681` | 龙息：锁定技，在回合外每当你需要使用或打出一张卡牌时，若牌堆顶的前两张中有可使用或打出的牌，你立即获得之。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `guanri` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:3733` | 贯日：限制技，你可以弃置两张红色手牌并失去1点体力，然后对一名体力值不少于你的其他角色造成2点火焰伤害并弃置其所有装备牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_guanri`） |
 | 技能 | `tianxian` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:3781` | 天弦：锁定技，你的【杀】无视距离且可指定任意多个目标，目标须进行一次判定，若结果为黑色则取消之。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_tianxian`） |
 | 技能 | `runxin` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:3814` | 润心：每当你使用或打出一张红桃牌，你可以令一名角色回复1点体力。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_runxin`） |
 | 技能 | `xjzhimeng` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:3856` | 织梦：结束阶段，你可以选择一名其他角色将牌堆顶的一张牌置于该角色的武将牌上，直到你的下个准备阶段将其收入手牌。当一名角色武将牌上有织梦牌时，每当其成为与此牌类型相同的卡牌的目标，… | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_xjzhimeng`） |
 | 技能 | `xjzhimeng2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:3897` | 织梦；触发="useCardToBegin"；摸牌 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_xjzhimeng2`） |
-| 技能 | `xjzhimeng3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:3923` | 织梦；触发=["phaseBegin", "dieBegin"]；弃置、获得牌 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `xjzhimeng3` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:3923` | 织梦；触发=["phaseBegin", "dieBegin"]；弃置、获得牌 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `tannang` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:3948` | 探囊：出牌阶段限一次，你可以将一张梅花手牌当【顺手牵羊】使用；你的【顺手牵羊】无距离限制。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_tannang`） |
 | 技能 | `tuoqiao` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:3987` | 烟瘴：你可以将一张黑色牌当作【石灰粉】使用。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `huimeng` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:4002` | 回梦：每当你回复1点体力，可以摸两张牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_huimeng`） |
 | 技能 | `tianshe` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:4012` | 天蛇：锁定技，你防止即将受到的属性伤害，每当你造成一次属性伤害，你回复1点体力。 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_tianshe`） |
 | 技能 | `tianshe2` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js:4043` | 天蛇；触发="damageAfter"；回复 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:xj_tianshe2`） |
 | 技能 | `xicai` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js:5` | 惜才：你可以立即获得对你造成伤害的牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
-| 技能 | `diyjianxiong` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js:29` | 奸雄：锁定技，在身份局中，于你回合内死亡的角色均视为反贼，国战中，于你回合内死亡的角色若与你势力相同则随机改为另一个势力。 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `diyjianxiong` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js:29` | 奸雄：锁定技，在身份局中，于你回合内死亡的角色均视为反贼，国战中，于你回合内死亡的角色若与你势力相同则随机改为另一个势力。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `diykuanggu` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js:108` | 狂骨：锁定技，当你造成1点伤害后，若你在其攻击范围内，你回复1点体力；否则你摸一张牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `xiongzi` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js:143` | 雄姿：锁定技，你于摸牌阶段额外摸X+1张牌，X为你装备区牌数的一半，向下取整。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `yaliang` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js:150` | 雅量：每当你对其他角色造成1点伤害后，或受到其他角色造成的1点伤害后，你可与该角色各摸一张牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
-| 技能 | `diy_jiaoxia` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js:184` | 皎霞：每当你成为红色牌的目标，你可以摸一张牌。 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `diy_jiaoxia` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js:184` | 皎霞：每当你成为红色牌的目标，你可以摸一张牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `yiesheng` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js:203` | 弃置任意张黑色手牌并摸等量的牌 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `guihan` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js:224` | 归汉：限定技，当你进入濒死状态时，可以指定一名男性角色与其各回复1点体力并摸两张牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `luweiyan` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js:278` | 围堰：出牌阶段限一次，你可以将一张非基本牌当作【水攻】使用；结算后你可以视为对其中一个目标使用一张不计入出杀次数的【杀】。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
@@ -239,9 +239,9 @@
 | 技能 | `diychanyuan` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js:402` | 缠怨：锁定技，杀死你的角色失去1点体力上限。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `zonghuo` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js:429` | 纵火：你可弃置一张牌将你即将造成的伤害变为火焰伤害。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `shaoying` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js:458` | 烧营：每当你造成一次火焰伤害，可指定距离受伤害角色1以内的另一名角色，并亮出牌堆顶的一张牌，若此牌为红色，该角色受到1点火焰伤害。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
-| 技能 | `xinfu_qiaosi` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js:489` | 巧思：出牌阶段限一次，你可以投掷一枚六面骰子，亮出牌堆顶的X张牌并获得之。然后，你选择一项：1.交给一名其他角色X张牌。2.弃置X张牌。（X为骰子的点数） | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `stone_chenshui` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/content.js:397` | 沉睡：在你的结束阶段，令己方主将获得一张梦境牌。 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 技能 | `_shengke` | `archive/upstream/noname/apps/core/extension/杀海拾遗/play/wuxing/skill.js:5` | 触发="useCardToBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 缺失 |
+| 技能 | `xinfu_qiaosi` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js:489` | 巧思：出牌阶段限一次，你可以投掷一枚六面骰子，亮出牌堆顶的X张牌并获得之。然后，你选择一项：1.交给一名其他角色X张牌。2.弃置X张牌。（X为骰子的点数） | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `stone_chenshui` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/content.js:397` | 沉睡：在你的结束阶段，令己方主将获得一张梦境牌。 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
+| 技能 | `_shengke` | `archive/upstream/noname/apps/core/extension/杀海拾遗/play/wuxing/skill.js:5` | 触发="useCardToBegin"；脚本逻辑 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 技能 | `wuxingpan_skill` | `archive/upstream/noname/apps/core/extension/杀海拾遗/play/wuxing/skill.js:79` | 五行：出牌阶段限一次，你可以永久改变一张手牌的五行属性 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
 | 卡牌 | `luyugeng` | `archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js:4` | 鲈鱼羹：出牌阶段限一次，你可以弃置一张基本牌并发现一张牌，持续三回合。 | 原生规则 / `rule-vm` 包 | 忠实实现 |
 | 卡牌 | `jinlianzhu` | `archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js:26` | 金莲珠：对一名即将受到伤害的角色使用，防止此伤害，并令伤害来源摸一张牌。 | 原生规则 / `rule-vm` 包 | 忠实实现 |

@@ -270,9 +270,35 @@ fn u05_all_9_formal_packages_assemble_333_generals_play_custom_cards_and_roundtr
     }
     assert_eq!(general_count, 333);
 
-    // 2. Native `HostBehavior` skills (`busi`, `dangping`, `beige`, `qianfang`, `cyqiaoxie`) are bound
+    // 2. Native `HostBehavior` skills (all 25 U05 host skills) are bound
     //    as real host skills (`package_skill_id().is_none()`, never shadowed by VM stubs!)
-    for host_sk in ["busi", "dangping", "beige", "qianfang", "cyqiaoxie"] {
+    for host_sk in [
+        "busi",
+        "dangping",
+        "beige",
+        "qianfang",
+        "cyqiaoxie",
+        "donghuangzhong",
+        "g_chenhuodajie",
+        "g_jinlianzhu",
+        "g_shencaojie",
+        "g_shenmiguo",
+        "g_shihuifen",
+        "g_yuchan_swap",
+        "gouhunluo2",
+        "gw_ciguhanshuang",
+        "gw_kunenfayin",
+        "huajin2",
+        "huanxing2",
+        "jiguanyaoshu_skill",
+        "jiguanyuan",
+        "lianyaohu_skill",
+        "lmazui2",
+        "nigong",
+        "shuchui2",
+        "xiajiao",
+        "xuanyuanjian",
+    ] {
         let def_id = e
             .catalog()
             .skill_by_name(host_sk)
@@ -432,6 +458,49 @@ fn u05_all_9_formal_packages_assemble_333_generals_play_custom_cards_and_roundtr
     );
     set_flag(&mut e, 0, "u05_mod:zhanlong2", 0);
 
+    // 5e. `character/{gwent,ow,xianjian}/skill.js` debuff/modifier flags (`d34_u05_mods.rs`)
+    let sha_cid = e.catalog().card_by_name("杀").unwrap_or(0);
+    set_flag(&mut e, 0, "u05_mod:shanguang2", 1);
+    assert!(engine_native::rvm_bridge::modifiers::eval_card_use_canceled(
+        e.state_core(),
+        e.catalog(),
+        0,
+        sha_cid,
+        engine_native::CardKind::Sha,
+        engine_native::event::DamageNature::Normal,
+    ));
+    set_flag(&mut e, 0, "u05_mod:shanguang2", 0);
+
+    set_flag(&mut e, 1, "u05_debuff:luan", 1);
+    assert_eq!(
+        engine_native::rvm_bridge::modifiers::eval_damage_amount(
+            e.state_core(),
+            e.catalog(),
+            Some(0),
+            1,
+            Some(sha_cid),
+            engine_native::event::DamageNature::Normal,
+            1,
+        ),
+        2
+    );
+    set_flag(&mut e, 1, "u05_debuff:luan", 0);
+
+    set_flag(&mut e, 1, "u05_debuff:chengxin", 1);
+    assert_eq!(
+        engine_native::rvm_bridge::modifiers::eval_damage_amount(
+            e.state_core(),
+            e.catalog(),
+            Some(0),
+            1,
+            Some(sha_cid),
+            engine_native::event::DamageNature::Normal,
+            2,
+        ),
+        1
+    );
+    set_flag(&mut e, 1, "u05_debuff:chengxin", 0);
+
     // 6. Sweep all registered VM skills in Catalog and verify strict card conservation
     let vm_skill_names: Vec<String> = e
         .catalog()
@@ -441,9 +510,14 @@ fn u05_all_9_formal_packages_assemble_333_generals_play_custom_cards_and_roundtr
         .map(|s| s.name.to_string())
         .collect();
     assert!(
-        vm_skill_names.len() >= 300,
-        "expected >= 300 verified U05 VM skills in Catalog, got {}",
+        vm_skill_names.len() >= 700,
+        "expected >= 700 verified U05 VM skills in Catalog, got {}",
         vm_skill_names.len()
+    );
+    assert!(
+        e.catalog().skills.len() >= 900,
+        "expected >= 900 total U05 Host + VM skills in Catalog, got {}",
+        e.catalog().skills.len()
     );
     for sk in &vm_skill_names {
         for seat in [0u8, 1u8] {

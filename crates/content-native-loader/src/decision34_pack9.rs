@@ -748,8 +748,16 @@ pub fn attach_formal_package_upstream_rules(
                     push_skill(s, L11_TAIXU_SKILL_ID);
                 } else if matches!(s, "dddfenji" | "dddjiexing" | "dddqiaoduan") {
                     push_skill(s, DDD_SKILL_DISPATCH_ID);
-                } else if matches!(s, "chajue" | "yxs_fanji") {
+                } else if matches!(s, "chajue" | "yxs_fanji" | "qianglue" | "xiadao") {
                     push_skill(s, super::U08_YXS_SKILL_ID);
+                } else if s == "xueji" {
+                    push_skill(s, L19_DOOMSDAY_SKILL_ID);
+                } else if matches!(s, "kuanshi" | "xinfu_langxi" | "xinfu_lingren") {
+                    push_skill(s, L20_SKILL_DISPATCH_ID);
+                } else if matches!(s, "dcxiaoxi" | "rehuashen" | "twxiafeng") {
+                    push_skill(s, L27_SELECT_SKILL_ID);
+                } else if crate::shahai_attach::shahai_implemented_skills::is_implemented_u05_vm_skill(s) {
+                    push_skill(s, super::U05_SHAHAI_SKILL_ID);
                 }
             }
             for &(sym, faction, gender, max_hp, sk_list) in &super::L11_TAIXU_GENERALS {

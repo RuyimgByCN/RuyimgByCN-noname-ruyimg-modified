@@ -81,31 +81,31 @@ pub(super) fn try_resolve_u05_swd_chars(ctx: &mut Ctx<'_>, skill: &str, owner: P
             set_flag(ctx.core, owner, "u05_buff:cyxianjiang", 1);
         }
         // character/swd/skill.js:105-244: usable 1, discard 1 card -> thunder damage / recover + draw 1
-        "gxianyin" => u05_exec(ctx, owner, "gxianyin", 1, false, 1, 1, 0, 1, DamageNature::Thunder, 1, 0, U05Extra::GrantBuff("u05_state:gxianyin", 1)),
+        "gxianyin" => u05_exec(ctx, owner, "gxianyin", 1, false, 1, 1, 0, 1, DamageNature::Thunder, 1, 0, U05Extra::None),
         // character/swd/skill.js:245-260
         "yeying" => u05_exec(ctx, owner, "yeying", 1, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ViewAs("qiankunbiao")),
         // character/swd/skill.js:261-340
-        "juxi" => u05_exec(ctx, owner, "juxi", 1, false, 0, 0, 0, 1, DamageNature::Normal, 1, 0, U05Extra::GrantBuff("u05_buff:juxi", 1)),
+        "juxi" => u05_exec(ctx, owner, "juxi", 1, false, 0, 0, 0, 1, DamageNature::Normal, 1, 0, U05Extra::None),
         // character/swd/skill.js:341-397
-        "jiefen" => u05_exec(ctx, owner, "jiefen", 1, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:jiefen", 1)),
+        "jiefen" => u05_exec(ctx, owner, "jiefen", 1, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::StealOther),
         // character/swd/skill.js:398-418
-        "datong" => u05_exec(ctx, owner, "datong", 0, false, 0, 2, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:datong", 1)),
+        "datong" => u05_exec(ctx, owner, "datong", 0, false, 0, 2, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:419-472
         "huodan" => u05_exec(ctx, owner, "huodan", 1, false, 1, 0, 0, 1, DamageNature::Fire, 0, 0, U05Extra::LoseHpSelf(1)),
         // character/swd/skill.js:597-671
-        "zhanxing" => u05_exec(ctx, owner, "zhanxing", 1, false, 1, 2, 0, -1, DamageNature::Thunder, 1, 1, U05Extra::GrantBuff("u05_state:zhanxing", 1)),
+        "zhanxing" => u05_exec(ctx, owner, "zhanxing", 1, false, 1, 2, 0, -1, DamageNature::Thunder, 1, 1, U05Extra::None),
         // character/swd/skill.js:683-719
-        "kbolan2" => u05_exec(ctx, owner, "kbolan2", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:kbolan2", 1)),
+        "kbolan2" => u05_exec(ctx, owner, "kbolan2", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:720-741
         "hujing" => u05_exec(ctx, owner, "hujing", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_mod:hujing", 1)),
         // character/swd/skill.js:812-846
         "lingshi" => u05_exec(ctx, owner, "lingshi", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_mod:lingshi", 1)),
         // character/swd/skill.js:847-877
-        "tiebi" => u05_exec(ctx, owner, "tiebi", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 1, U05Extra::GrantBuff("u05_state:tiebi", 1)),
+        "tiebi" => u05_exec(ctx, owner, "tiebi", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 1, U05Extra::None),
         // character/swd/skill.js:878-929
         "shenyan" => u05_exec(ctx, owner, "shenyan", 0, true, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::StorePile("u05_pile:shenyan")),
         // character/swd/skill.js:930-946
-        "shenyan2" => u05_exec(ctx, owner, "shenyan2", 0, false, 0, 0, 0, 1, DamageNature::Fire, 0, 0, U05Extra::GrantBuff("u05_buff:shenyan2", 1)),
+        "shenyan2" => u05_exec(ctx, owner, "shenyan2", 0, false, 0, 0, 0, 1, DamageNature::Fire, 0, 0, U05Extra::None),
         // character/swd/skill.js:947-969
         "senluo" => u05_exec(ctx, owner, "senluo", 1, false, 0, 0, 1, 0, DamageNature::Normal, 0, 0, U05Extra::DiscardOther(1)),
         // character/swd/skill.js:970-1112
@@ -113,15 +113,15 @@ pub(super) fn try_resolve_u05_swd_chars(ctx: &mut Ctx<'_>, skill: &str, owner: P
         // character/swd/skill.js:1113-1148
         "hwendao" => u05_exec(ctx, owner, "hwendao", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::StealOther),
         // character/swd/skill.js:1149-1185
-        "lingfeng" => u05_exec(ctx, owner, "lingfeng", 0, false, 0, 0, 0, 1, DamageNature::Normal, 0, 1, U05Extra::GrantBuff("u05_state:lingfeng", 1)),
+        "lingfeng" => u05_exec(ctx, owner, "lingfeng", 0, false, 0, 0, 0, 1, DamageNature::Normal, 0, 1, U05Extra::None),
         // character/swd/skill.js:1393-1432
-        "hlingbo" => u05_exec(ctx, owner, "hlingbo", 0, false, 0, 2, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:hlingbo", 1)),
+        "hlingbo" => u05_exec(ctx, owner, "hlingbo", 0, false, 0, 2, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:1433-1479
         "gtiandao" => u05_exec(ctx, owner, "gtiandao", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::JudgeEffect("u05_judge:gtiandao")),
         // character/swd/skill.js:1480-1542
         "jinlin" => u05_exec(ctx, owner, "jinlin", 0, true, 0, 0, 0, 0, DamageNature::Normal, 0, 3, U05Extra::GrantOtherBuff("u05_debuff:jinlin", 1)),
         // character/swd/skill.js:1543-1559
-        "jinlin2" => u05_exec(ctx, owner, "jinlin2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, -1, U05Extra::GrantBuff("u05_buff:jinlin2", 1)),
+        "jinlin2" => u05_exec(ctx, owner, "jinlin2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, -1, U05Extra::None),
         // character/swd/skill.js:1560-1572
         "lingyue" => u05_exec(ctx, owner, "lingyue", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::DiscardOther(1)),
         // character/swd/skill.js:1573-1590
@@ -129,15 +129,15 @@ pub(super) fn try_resolve_u05_swd_chars(ctx: &mut Ctx<'_>, skill: &str, owner: P
         // character/swd/skill.js:1591-1664
         "huanxia" => u05_exec(ctx, owner, "huanxia", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::StorePile("u05_pile:huanxia")),
         // character/swd/skill.js:1665-1675
-        "huajing" => u05_exec(ctx, owner, "huajing", 0, false, 0, 1, 0, 0, DamageNature::Normal, 1, 0, U05Extra::GrantBuff("u05_state:huajing", 1)),
+        "huajing" => u05_exec(ctx, owner, "huajing", 0, false, 0, 1, 0, 0, DamageNature::Normal, 1, 0, U05Extra::None),
         // character/swd/skill.js:1703-1806
         "bingfeng" => u05_exec(ctx, owner, "bingfeng", 0, true, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::LoseMaxHp(1)),
         // character/swd/skill.js:1829-1891
         "yudun" => u05_exec(ctx, owner, "yudun", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ViewAs("sha")),
         // character/swd/skill.js:1892-1986
-        "guozao" => u05_exec(ctx, owner, "guozao", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:guozao", 1)),
+        "guozao" => u05_exec(ctx, owner, "guozao", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:1987-2030
-        "heihuo" => u05_exec(ctx, owner, "heihuo", 0, false, 0, 0, 0, 3, DamageNature::Fire, 0, 0, U05Extra::GrantBuff("u05_buff:heihuo", 1)),
+        "heihuo" => u05_exec(ctx, owner, "heihuo", 0, false, 0, 0, 0, 3, DamageNature::Fire, 0, 0, U05Extra::None),
         // character/swd/skill.js:2045-2060
         "yaotong1" => u05_exec(ctx, owner, "yaotong1", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ViewAs("sha")),
         // character/swd/skill.js:2061-2076
@@ -147,19 +147,19 @@ pub(super) fn try_resolve_u05_swd_chars(ctx: &mut Ctx<'_>, skill: &str, owner: P
         // character/swd/skill.js:2100-2122
         "yaotong4" => u05_exec(ctx, owner, "yaotong4", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ViewAs("tao")),
         // character/swd/skill.js:2123-2156
-        "pojian" => u05_exec(ctx, owner, "pojian", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:pojian", 1)),
+        "pojian" => u05_exec(ctx, owner, "pojian", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:2157-2191
-        "huajin" => u05_exec(ctx, owner, "huajin", 1, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:huajin", 1)),
+        "huajin" => u05_exec(ctx, owner, "huajin", 1, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_mod:zhongji_dmg", 1)),
         // character/swd/skill.js:2208-2242
         "yuchen" => u05_exec(ctx, owner, "yuchen", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::DiscardOther(1)),
         // character/swd/skill.js:2243-2276
         "bingjian" => u05_exec(ctx, owner, "bingjian", 1, false, 0, 0, 0, 1, DamageNature::Thunder, 0, 0, U05Extra::DiscardOther(1)),
         // character/swd/skill.js:2385-2450
-        "xianghui" => u05_exec(ctx, owner, "xianghui", 1, false, 1, 0, 0, 0, DamageNature::Normal, 1, 0, U05Extra::GrantBuff("u05_state:xianghui", 1)),
+        "xianghui" => u05_exec(ctx, owner, "xianghui", 1, false, 1, 0, 0, 0, DamageNature::Normal, 1, 0, U05Extra::None),
         // character/swd/skill.js:2504-2541
-        "shangxi" => u05_exec(ctx, owner, "shangxi", 0, false, 0, 0, 0, 1, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:shangxi", 1)),
+        "shangxi" => u05_exec(ctx, owner, "shangxi", 0, false, 0, 0, 0, 1, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:2542-2582
-        "fuyan" => u05_exec(ctx, owner, "fuyan", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 1, U05Extra::GrantBuff("u05_state:fuyan", 1)),
+        "fuyan" => u05_exec(ctx, owner, "fuyan", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 1, U05Extra::None),
         // character/swd/skill.js:2611-2619
         "guaili2" => { u05_mark_invoked(ctx, owner, "guaili2"); let _ = u05_discard_up_to(ctx, owner, 2); }
         // character/swd/skill.js:2620-2670
@@ -171,37 +171,37 @@ pub(super) fn try_resolve_u05_swd_chars(ctx: &mut Ctx<'_>, skill: &str, owner: P
         // character/swd/skill.js:2854-2873
         "linyun" => u05_exec(ctx, owner, "linyun", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ViewAs("sha")),
         // character/swd/skill.js:2901-2912
-        "linyun3" => u05_exec(ctx, owner, "linyun3", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:linyun3", 1)),
+        "linyun3" => u05_exec(ctx, owner, "linyun3", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:2914-2976
         "hutian" => u05_exec(ctx, owner, "hutian", 0, false, 0, 0, 0, 0, DamageNature::Normal, 1, 0, U05Extra::GrantOtherBuff("u05_debuff:hutian", 1)),
         // character/swd/skill.js:3133-3145
         "guiying" => u05_exec(ctx, owner, "guiying", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ViewAs("toulianghuanzhu")),
         // character/swd/skill.js:3175-3253
-        "ningxian" => u05_exec(ctx, owner, "ningxian", 0, false, 0, 0, 0, 1, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:ningxian", 1)),
+        "ningxian" => u05_exec(ctx, owner, "ningxian", 0, false, 0, 0, 0, 1, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:3254-3288
-        "xuanyuan" => u05_exec(ctx, owner, "xuanyuan", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:xuanyuan", 1)),
+        "xuanyuan" => u05_exec(ctx, owner, "xuanyuan", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:3308-3363
-        "jilve" => u05_exec(ctx, owner, "jilve", 3, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:jilve", 1)),
+        "jilve" => u05_exec(ctx, owner, "jilve", 3, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:3483-3513
-        "duanyue" => u05_exec(ctx, owner, "duanyue", 1, false, 1, 0, 0, 1, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:duanyue", 1)),
+        "duanyue" => u05_exec(ctx, owner, "duanyue", 1, false, 1, 0, 0, 1, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:3536-3551
-        "mojian" => u05_exec(ctx, owner, "mojian", 0, false, 0, 0, 1, 0, DamageNature::Normal, 1, 0, U05Extra::GrantBuff("u05_state:mojian", 1)),
+        "mojian" => u05_exec(ctx, owner, "mojian", 0, false, 0, 0, 1, 0, DamageNature::Normal, 1, 0, U05Extra::None),
         // character/swd/skill.js:3552-3561
-        "swdliuhong" => u05_exec(ctx, owner, "swdliuhong", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:swdliuhong", 1)),
+        "swdliuhong" => u05_exec(ctx, owner, "swdliuhong", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:3598-3652
-        "jianji" => u05_exec(ctx, owner, "jianji", 1, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:jianji", 1)),
+        "jianji" => u05_exec(ctx, owner, "jianji", 1, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:3653-3674
         "huangyu" => u05_exec(ctx, owner, "huangyu", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ViewAs("chiyuxi")),
         // character/swd/skill.js:3786-3824
         "duishi" => u05_exec(ctx, owner, "duishi", 0, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::StealOther),
         // character/swd/skill.js:3875-3898
-        "mufeng" => u05_exec(ctx, owner, "mufeng", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:mufeng", 1)),
+        "mufeng" => u05_exec(ctx, owner, "mufeng", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:3924-3962
         "touxi" => u05_exec(ctx, owner, "touxi", 0, false, 0, 0, 0, 1, DamageNature::Thunder, 0, 0, U05Extra::DiscardOther(1)),
         // character/swd/skill.js:3971-4022
         "nlianji" => u05_exec(ctx, owner, "nlianji", 1, false, 0, 0, 0, 1, DamageNature::Normal, 0, 0, U05Extra::PindianOther),
         // character/swd/skill.js:4034-4046
-        "lianji4" => u05_exec(ctx, owner, "lianji4", 0, false, 0, 0, 0, 1, DamageNature::Thunder, 0, 0, U05Extra::GrantBuff("u05_buff:lianji4", 1)),
+        "lianji4" => u05_exec(ctx, owner, "lianji4", 0, false, 0, 0, 0, 1, DamageNature::Thunder, 0, 0, U05Extra::None),
         // character/swd/skill.js:4064-4073
         "miedao2" => {
             let lost = (ctx.core.player(owner).max_hp as i32 - ctx.core.player(owner).hp).max(0) as usize;
@@ -211,29 +211,29 @@ pub(super) fn try_resolve_u05_swd_chars(ctx: &mut Ctx<'_>, skill: &str, owner: P
             }
         }
         // character/swd/skill.js:4074-4131
-        "aojian" => u05_exec(ctx, owner, "aojian", 1, false, 1, 0, 0, 1, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:aojian", 1)),
+        "aojian" => u05_exec(ctx, owner, "aojian", 1, false, 1, 0, 0, 1, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:4132-4192
-        "moyan" => u05_exec(ctx, owner, "moyan", 1, false, 0, 0, 0, 1, DamageNature::Fire, 0, 0, U05Extra::GrantBuff("u05_state:moyan", 1)),
+        "moyan" => u05_exec(ctx, owner, "moyan", 1, false, 0, 0, 0, 1, DamageNature::Fire, 0, 0, U05Extra::None),
         // character/swd/skill.js:4193-4227
         "wangchen" => u05_exec(ctx, owner, "wangchen", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::TurnOverOther),
         // character/swd/skill.js:4294-4319
-        "youyin" => u05_exec(ctx, owner, "youyin", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:youyin", 1)),
+        "youyin" => u05_exec(ctx, owner, "youyin", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:4320-4352
-        "anlianying" => u05_exec(ctx, owner, "anlianying", 0, false, 0, 2, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:anlianying", 1)),
+        "anlianying" => u05_exec(ctx, owner, "anlianying", 0, false, 0, 2, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:4353-4389
-        "zhanlu" => u05_exec(ctx, owner, "zhanlu", 1, false, 0, 0, 0, 0, DamageNature::Normal, 1, 0, U05Extra::GrantBuff("u05_state:zhanlu", 1)),
+        "zhanlu" => u05_exec(ctx, owner, "zhanlu", 1, false, 0, 0, 0, 0, DamageNature::Normal, 1, 0, U05Extra::None),
         // character/swd/skill.js:4390-4411
         "huopu" => u05_exec(ctx, owner, "huopu", 1, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ViewAs("liuxinghuoyu")),
         // character/swd/skill.js:4412-4426
-        "rexue" => u05_exec(ctx, owner, "rexue", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:rexue", 1)),
+        "rexue" => u05_exec(ctx, owner, "rexue", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:4427-4440
         "shengshou" => u05_exec(ctx, owner, "shengshou", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ViewAs("caoyao")),
         // character/swd/skill.js:4441-4463
         "huanjian" => u05_exec(ctx, owner, "huanjian", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ViewAs("bingpotong")),
         // character/swd/skill.js:4464-4474
-        "moyu" => u05_exec(ctx, owner, "moyu", 0, false, 0, 0, 0, 0, DamageNature::Normal, 1, 0, U05Extra::GrantBuff("u05_state:moyu", 1)),
+        "moyu" => u05_exec(ctx, owner, "moyu", 0, false, 0, 0, 0, 0, DamageNature::Normal, 1, 0, U05Extra::None),
         // character/swd/skill.js:4535-4633
-        "kunlunjing1" => u05_exec(ctx, owner, "kunlunjing1", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:kunlunjing1", 1)),
+        "kunlunjing1" => u05_exec(ctx, owner, "kunlunjing1", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:4634-4675
         "kunlunjing2" => u05_exec(ctx, owner, "kunlunjing2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::StorePile("u05_pile:kunlunjing2")),
         // character/swd/skill.js:4676-4722
@@ -247,7 +247,7 @@ pub(super) fn try_resolve_u05_swd_chars(ctx: &mut Ctx<'_>, skill: &str, owner: P
         // character/swd/skill.js:5196-5239
         "huanhun" => u05_exec(ctx, owner, "huanhun", 0, false, 0, 0, 0, 0, DamageNature::Normal, 1, 0, U05Extra::JudgeEffect("u05_judge:huanhun")),
         // character/swd/skill.js:5240-5260
-        "yinyue" => u05_exec(ctx, owner, "yinyue", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:yinyue", 1)),
+        "yinyue" => u05_exec(ctx, owner, "yinyue", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:5361-5409
         "lqingcheng" => u05_exec(ctx, owner, "lqingcheng", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::JudgeEffect("u05_judge:lqingcheng")),
         // character/swd/skill.js:5456-5568
@@ -255,11 +255,11 @@ pub(super) fn try_resolve_u05_swd_chars(ctx: &mut Ctx<'_>, skill: &str, owner: P
         // character/swd/skill.js:5601-5617
         "polang" => u05_exec(ctx, owner, "polang", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::DiscardOther(1)),
         // character/swd/skill.js:5660-5704
-        "xielei" => u05_exec(ctx, owner, "xielei", 0, false, 0, 0, 0, 1, DamageNature::Thunder, 0, 0, U05Extra::GrantBuff("u05_state:xielei", 1)),
+        "xielei" => u05_exec(ctx, owner, "xielei", 0, false, 0, 0, 0, 1, DamageNature::Thunder, 0, 0, U05Extra::None),
         // character/swd/skill.js:5705-5765
-        "pozhen" => u05_exec(ctx, owner, "pozhen", 0, false, 0, 0, 0, 1, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:pozhen", 1)),
+        "pozhen" => u05_exec(ctx, owner, "pozhen", 0, false, 0, 0, 0, 1, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:5766-5802
-        "tanlin_defence" => u05_exec(ctx, owner, "tanlin_defence", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:tanlin_defence", 1)),
+        "tanlin_defence" => u05_exec(ctx, owner, "tanlin_defence", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:5860-5874
         "tanlin3" => u05_exec(ctx, owner, "tanlin3", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_mod:tanlin3", 1)),
         // character/swd/skill.js:5875-5883
@@ -267,17 +267,17 @@ pub(super) fn try_resolve_u05_swd_chars(ctx: &mut Ctx<'_>, skill: &str, owner: P
         // character/swd/skill.js:5884-5924
         "yunchou" => u05_exec(ctx, owner, "yunchou", 1, false, 1, 1, 1, 0, DamageNature::Normal, 0, 0, U05Extra::DiscardOther(1)),
         // character/swd/skill.js:5925-5949
-        "jqimou" => u05_exec(ctx, owner, "jqimou", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:jqimou", 1)),
+        "jqimou" => u05_exec(ctx, owner, "jqimou", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:6281-6326
-        "xingdian" => u05_exec(ctx, owner, "xingdian", 1, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:xingdian", 1)),
+        "xingdian" => u05_exec(ctx, owner, "xingdian", 1, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::DiscardOther(1)),
         // character/swd/skill.js:6356-6397
-        "funiao" => u05_exec(ctx, owner, "funiao", 1, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:funiao", 1)),
+        "funiao" => u05_exec(ctx, owner, "funiao", 1, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
         // character/swd/skill.js:6504-6562
         "ningshuang" => u05_exec(ctx, owner, "ningshuang", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::LoseHpSelf(1)),
         // character/swd/skill.js:6563-6618
-        "xielv" => u05_exec(ctx, owner, "xielv", 0, false, 0, 0, 0, 0, DamageNature::Normal, 1, 0, U05Extra::GrantBuff("u05_state:xielv", 1)),
+        "xielv" => u05_exec(ctx, owner, "xielv", 0, false, 0, 0, 0, 0, DamageNature::Normal, 1, 0, U05Extra::None),
         // character/swd/skill.js:6619-6655
-        "xiaomoyu" => u05_exec(ctx, owner, "xiaomoyu", 0, false, 0, 1, 0, 0, DamageNature::Normal, 1, 0, U05Extra::GrantBuff("u05_buff:xiaomoyu", 1)),
+        "xiaomoyu" => u05_exec(ctx, owner, "xiaomoyu", 0, false, 0, 1, 0, 0, DamageNature::Normal, 1, 0, U05Extra::None),
         // character/swd/skill.js:6657-6700
         "tianhuo" => u05_exec(ctx, owner, "tianhuo", 1, false, 0, 0, 0, 1, DamageNature::Fire, 0, 0, U05Extra::DiscardOther(1)),
         // character/swd/skill.js:6701-6741
@@ -285,7 +285,7 @@ pub(super) fn try_resolve_u05_swd_chars(ctx: &mut Ctx<'_>, skill: &str, owner: P
         // character/swd/skill.js:6815-6875
         "tianlun" => u05_exec(ctx, owner, "tianlun", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::JudgeEffect("u05_judge:tianlun")),
         // character/swd/skill.js:6876-6925
-        "lanzhi" => u05_exec(ctx, owner, "lanzhi", 0, false, 0, 0, 0, 0, DamageNature::Normal, 1, 0, U05Extra::GrantBuff("u05_state:lanzhi", 1)),
+        "lanzhi" => u05_exec(ctx, owner, "lanzhi", 0, false, 0, 0, 0, 0, DamageNature::Normal, 1, 0, U05Extra::None),
         // character/swd/skill.js:6926-6956
         "duanyi" => u05_exec(ctx, owner, "duanyi", 1, false, 2, 0, 0, 1, DamageNature::Normal, 0, 0, U05Extra::DiscardOther(1)),
         // character/swd/skill.js:7023-7031
@@ -295,7 +295,7 @@ pub(super) fn try_resolve_u05_swd_chars(ctx: &mut Ctx<'_>, skill: &str, owner: P
         // character/swd/skill.js:7072-7118
         "swd_xiuluo" => u05_exec(ctx, owner, "swd_xiuluo", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::DiscardOther(1)),
         // character/swd/skill.js:7119-7159
-        "mohua2" => u05_exec(ctx, owner, "mohua2", 0, false, 0, 2, 0, 0, DamageNature::Normal, 2, 0, U05Extra::GrantBuff("u05_buff:mohua2", 1)),
+        "mohua2" => u05_exec(ctx, owner, "mohua2", 0, false, 0, 2, 0, 0, DamageNature::Normal, 2, 0, U05Extra::None),
         // character/swd/skill.js:7287-7315
         "duijue2" => u05_exec(ctx, owner, "duijue2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_mod:duijue2", 1)),
         // character/swd/skill.js:7316-7342
@@ -305,7 +305,7 @@ pub(super) fn try_resolve_u05_swd_chars(ctx: &mut Ctx<'_>, skill: &str, owner: P
         // character/swd/skill.js:7367-7386
         "xuying" => u05_exec(ctx, owner, "xuying", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::LoseHpSelf(1)),
         // character/swd/skill.js:7490-7499
-        "guiyan2" => u05_exec(ctx, owner, "guiyan2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 1, 0, U05Extra::GrantBuff("u05_state:guiyan2", 1)),
+        "guiyan2" => u05_exec(ctx, owner, "guiyan2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 1, 0, U05Extra::None),
         // character/swd/skill.js:7500-7555
         "xianyin" => u05_exec(ctx, owner, "xianyin", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::DiscardOther(1)),
         // character/swd/skill.js:7556-7681
@@ -319,7 +319,7 @@ pub(super) fn try_resolve_u05_swd_chars(ctx: &mut Ctx<'_>, skill: &str, owner: P
         // character/swd/skill.js:7750-7759
         "mailun8" => u05_exec(ctx, owner, "mailun8", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_mod:mailun8", 1)),
         // character/swd/skill.js:7760-7785
-        "fengming" => u05_exec(ctx, owner, "fengming", 1, false, 1, 0, 1, 0, DamageNature::Normal, 1, 0, U05Extra::GrantBuff("u05_state:fengming", 1)),
+        "fengming" => u05_exec(ctx, owner, "fengming", 1, false, 1, 0, 1, 0, DamageNature::Normal, 1, 0, U05Extra::None),
         // character/swd/skill.js:7786-7811
         "wanjun" => u05_exec(ctx, owner, "wanjun", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ViewAs("nanman")),
         // character/swd/skill.js:7812-7858
@@ -327,15 +327,61 @@ pub(super) fn try_resolve_u05_swd_chars(ctx: &mut Ctx<'_>, skill: &str, owner: P
         // character/swd/skill.js:7869-7880
         "ljifeng" => u05_exec(ctx, owner, "ljifeng", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_mod:ljifeng", 1)),
         // character/swd/skill.js:7942-7955
-        "zhenjiu2" => u05_exec(ctx, owner, "zhenjiu2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 1, 0, U05Extra::GrantBuff("u05_buff:zhenjiu2", 1)),
+        "zhenjiu2" => u05_exec(ctx, owner, "zhenjiu2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 1, 0, U05Extra::None),
         // character/swd/skill.js:7988-7998
-        "hudun" => u05_exec(ctx, owner, "hudun", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 1, U05Extra::GrantBuff("u05_state:hudun", 1)),
+        "hudun" => u05_exec(ctx, owner, "hudun", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 1, U05Extra::None),
         // character/swd/skill.js:7999-8040
-        "toudan" => u05_exec(ctx, owner, "toudan", 1, false, 1, 0, 0, 1, DamageNature::Fire, 0, 0, U05Extra::GrantBuff("u05_state:toudan", 1)),
+        "toudan" => u05_exec(ctx, owner, "toudan", 1, false, 1, 0, 0, 1, DamageNature::Fire, 0, 0, U05Extra::None),
         // character/swd/skill.js:8041-8106
         "shending" => u05_exec(ctx, owner, "shending", 1, false, 0, 1, 0, 0, DamageNature::Normal, 1, 0, U05Extra::JudgeEffect("u05_judge:shending")),
         // character/swd/skill.js:8107-8155
         "poxiao" => u05_exec(ctx, owner, "poxiao", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ViewAs("sha")),
+        // character/swd/skill.js:1319-1335
+        "lmazui3" => u05_exec(ctx, owner, "lmazui3", 0, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
+        // character/swd/skill.js:2200-2215
+        "huajin3" => u05_exec(ctx, owner, "huajin3", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_mod:zhongji_dmg", 1)),
+        // character/swd/skill.js:2583-2605
+        "fuyan2" => u05_exec(ctx, owner, "fuyan2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::DiscardOther(1)),
+        // character/swd/skill.js:2874-2890
+        "linyun2" => u05_exec(ctx, owner, "linyun2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ViewAs("shan")),
+        // character/swd/skill.js:2977-3020
+        "hutian2" | "hutian3" => u05_exec(ctx, owner, skill, 0, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_debuff:hutian", 1)),
+        // character/swd/skill.js:3289-3310
+        "xuanyuan_ai" => u05_exec(ctx, owner, "xuanyuan_ai", 0, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
+        // character/swd/skill.js:3364-3405
+        "jilve2" | "jilve4" | "jilve5" | "jilve6" => u05_exec(ctx, owner, skill, 0, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
+        // character/swd/skill.js:3587-3605
+        "poyue2" => u05_exec(ctx, owner, "poyue2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ViewAs("sha")),
+        // character/swd/skill.js:3963-3980
+        "touxi2" => u05_exec(ctx, owner, "touxi2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::StealOther),
+        // character/swd/skill.js:4023-4045
+        "lianji2" | "lianji3" => u05_exec(ctx, owner, skill, 0, false, 0, 0, 0, 1, DamageNature::Normal, 0, 0, U05Extra::None),
+        // character/swd/skill.js:4054-4080
+        "miedao1" => u05_exec(ctx, owner, "miedao1", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::DiscardOther(1)),
+        // character/swd/skill.js:4228-4255
+        "wangchen2" | "wangchen3" => u05_exec(ctx, owner, skill, 0, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
+        // character/swd/skill.js:4723-4945
+        "oldliaoyuan2" | "liaoyuan2" | "liaoyuan3" => u05_exec(ctx, owner, skill, 0, false, 0, 0, 0, 1, DamageNature::Fire, 0, 0, U05Extra::None),
+        // character/swd/skill.js:5149-5170
+        "yishan2" => u05_exec(ctx, owner, "yishan2", 0, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
+        // character/swd/skill.js:5853-5875
+        "tanlin2" => u05_exec(ctx, owner, "tanlin2", 0, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
+        // character/swd/skill.js:5953-6015
+        "lexue1" | "lexue2" => u05_exec(ctx, owner, skill, 0, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
+        // character/swd/skill.js:6029-6255
+        "swdtianshu2" | "swdtianshu3" | "swdtianshu_remove" => u05_exec(ctx, owner, skill, 0, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
+        // character/swd/skill.js:6960-6980
+        "guxing1" => u05_exec(ctx, owner, "guxing1", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ViewAs("sha")),
+        // character/swd/skill.js:7244-7265
+        "duijue3" => u05_exec(ctx, owner, "duijue3", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_mod:duijue2", 1)),
+        // character/swd/skill.js:7434-7455
+        "yinguo3" => u05_exec(ctx, owner, "yinguo3", 0, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
+        // character/swd/skill.js:7682-7713
+        "mailun31" | "mailun32" | "mailun41" | "mailun42" => u05_exec(ctx, owner, skill, 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_mod:mailun5", 1)),
+        // character/swd/skill.js:7859-7868
+        "huanling2" => u05_exec(ctx, owner, "huanling2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_mod:mingkong2", 1)),
+        // character/yunchou/skill.js:29-107
+        "diyjianxiong" => u05_exec(ctx, owner, "diyjianxiong", 0, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::None),
         _ => return false,
     }
     true

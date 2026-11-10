@@ -30,7 +30,7 @@ use super::{
 };
 
 #[path = "shahai_implemented_skills.rs"]
-mod shahai_implemented_skills;
+pub(crate) mod shahai_implemented_skills;
 
 pub const U05_SHAHAI_SKILL_ID: u32 = 1_926_002_010;
 

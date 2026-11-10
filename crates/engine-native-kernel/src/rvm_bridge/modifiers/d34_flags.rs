@@ -156,6 +156,11 @@ pub fn apply_hand_limit(
         let lost = (state.player(player).max_hp as i32 - state.player(player).hp).max(0);
         limit += lost;
     }
+    if flag_val(state, player, "yxs_kuangchan_no_lord_hp") > 0
+        && state.player(player).hp > state.player(player).max_hp as i32
+    {
+        limit -= 1;
+    }
     if flag_val(state, player, "u05_mod:gw_qinpendayu") > 0 {
         limit -= 1;
     }
@@ -170,6 +175,17 @@ pub fn apply_hand_limit(
     }
     if flag_val(state, player, "u05_mod:lingshi") > 0 {
         limit += 2;
+    }
+    if flag_val(state, player, "l20_xinhongyan_heart_lock") > 0
+        || flag_val(state, player, "dddqiahua_has_xunxun") > 0
+    {
+        limit += 1;
+    }
+    if flag_val(state, player, "th_yingshi_hermit") > 0 {
+        limit += 2;
+    }
+    if flag_val(state, player, "l10_scsyaozhuo_skip_draw") > 0 {
+        limit -= 1;
     }
     limit += flag_val(state, player, "u05_mod:tanlin3") as i32;
     let limit = d34_u05_mods::apply_hand_limit(state, player, limit);
@@ -251,6 +267,7 @@ pub fn apply_distance_total(
     }
     if flag_val(state, a, "l11_mount_active:txhj_liulongcanjia") > 0
         || flag_val(state, a, "l11_mount_active:txhj_baihu") > 0
+        || flag_val(state, a, "th_zhongzhuang_mounted") > 0
         || flag_val(state, a, "u05_cross_mod:mashu") > 0
         || flag_val(state, a, "u05_cross_mod:yicong") > 0
         || flag_val(state, a, "u05_mod:jifeng") > 0
@@ -260,6 +277,7 @@ pub fn apply_distance_total(
     }
     if flag_val(state, b, "l11_mount_active:txhj_liulongcanjia") > 0
         || flag_val(state, b, "l11_mount_active:txhj_juechenjinge") > 0
+        || flag_val(state, b, "th_zhongzhuang_mounted") > 0
         || flag_val(state, b, "u05_cross_mod:feiying") > 0
         || flag_val(state, b, "u05_mod:heilonglinpian") > 0
         || flag_val(state, b, "u05_mod:sliufeng") > 0
@@ -290,6 +308,12 @@ pub fn apply_sha_use_limit(
     cur += flag_val(state, player, "dddfuyi_qun_sha_bonus") as i32;
     cur += flag_val(state, player, "l27_qimou_range_bonus") as i32;
     cur += flag_val(state, player, "l27_potzhuangshi_unblockable") as i32;
+    if flag_val(state, player, "l27_jinghe_shared") > 0
+        || flag_val(state, player, "l27_bolan_temp_skill") > 0
+        || flag_val(state, player, "l27_duorui_stolen_skill") > 0
+    {
+        cur += 1;
+    }
     if has_weapon(state, catalog, player) {
         if flag_val(state, player, "l11_weapon_yanrenzhinu") > 0
             || has_ext_skill(state, catalog, player, "buff_txhj_yanrenzhinu")
@@ -446,7 +470,8 @@ pub fn apply_card_target_canceled(
     if actor != target
         && (has_ext_skill(state, catalog, target, "ssr_newjiahe")
             || flag_val(state, target, "l25_jiahe_qianxing") > 0
-            || flag_val(state, target, "th_tiansuan2_immune") > 0)
+            || flag_val(state, target, "th_tiansuan2_immune") > 0
+            || flag_val(state, target, "l20_diaohulishan_exiled") > 0)
     {
         canceled = true;
     }
@@ -517,7 +542,8 @@ pub fn apply_card_target_canceled(
     if actor != target
         && kind.is_sha_like()
         && (flag_val(state, target, "l20_shouxi_nullified") > 0
-            || flag_val(state, target, "l27_shouxi_nullified") > 0)
+            || flag_val(state, target, "l27_shouxi_nullified") > 0
+            || flag_val(state, target, "yxs_menshen_active") > 0)
     {
         canceled = true;
     }
@@ -542,7 +568,24 @@ pub fn apply_card_use_canceled(
     }
     if kind.is_sha_like()
         && (flag_val(state, actor, "l25_zhenhun_forbid_sha") > 0
-            || flag_val(state, actor, "u05_mod:gw_birinongwu") > 0)
+            || flag_val(state, actor, "u05_mod:gw_birinongwu") > 0
+            || (in_hand && flag_val(state, actor, "yxs_yaoji_lebu_placed") > 0))
+    {
+        canceled = true;
+    }
+    if in_hand
+        && flag_val(state, actor, "l27_duorui_sealed") > 0
+        && !kind.is_basic_kind()
+    {
+        canceled = true;
+    }
+    let zhixi_cap = flag_val(state, actor, "l27_new_zhixi_cap");
+    if in_hand && zhixi_cap > 0 && state.player(actor).hand.len() as u32 > zhixi_cap {
+        canceled = true;
+    }
+    if in_hand
+        && matches!(kind, CardKind::Tao | CardKind::Jiu)
+        && flag_val(state, actor, "th_tiansuan2_4_forbid_tao_jiu") > 0
     {
         canceled = true;
     }
@@ -637,6 +680,9 @@ pub fn apply_damage_amount(
             cur += 1;
         }
         if is_sha_card {
+            if flag_val(state, src, "th_zhongzhuang_damage_bonus") > 0 {
+                cur += 1;
+            }
             if flag_val(state, src, "l11_lulu_huwei_boost") > 0 {
                 cur += 1;
             }
@@ -691,8 +737,21 @@ pub fn apply_damage_amount(
     if flag_val(state, target, "l20_qingyu_prevented") > 0
         || flag_val(state, target, "l20_kuanshi_ward") > 0
         || flag_val(state, target, "l11_yaya2_protected") > 0
+        || flag_val(state, target, "th_tiansuan2_0_prevent_damage") > 0
     {
         return 0;
+    }
+    if cur > 1
+        && (flag_val(state, target, "th_tiansuan2_1_cap_damage") > 0
+            || flag_val(state, target, "th_tiansuan2_2_cap_damage") > 0)
+    {
+        cur = 1;
+    }
+    if flag_val(state, target, "th_tiansuan2_3_extra_damage") > 0
+        || flag_val(state, target, "th_tiansuan2_4_extra_damage") > 0
+        || (nature == DamageNature::Fire && flag_val(state, target, "th_tiansuan2_fire_nature") > 0)
+    {
+        cur += 1;
     }
     if nature == DamageNature::Fire
         && (flag_val(state, target, "l11_buff_fire_shield") > 0
@@ -801,6 +860,7 @@ pub fn apply_card_unrespondable(
             || has_ext_skill(state, catalog, source, "ssr_wushuang")
             || flag_val(state, source, "l25_wushuang_unrespondable") > 0
             || flag_val(state, source, "u05_cross_mod:wushuang") > 0
+            || flag_val(state, source, "yxs_nvquan_double_response") > 0
             || flag_val(state, source, "l20_liegong_direct_hit") > 0
             || flag_val(state, source, "l27_potzhuangshi_unblockable") > 0
             || flag_val(state, source, "l27_twxiafeng_spent") > 0
@@ -837,7 +897,8 @@ pub fn apply_card_unrespondable(
     }
     if kind == CardKind::Duel
         && (has_ext_skill(state, catalog, source, "ssr_wushuang")
-            || flag_val(state, source, "u05_cross_mod:wushuang") > 0)
+            || flag_val(state, source, "u05_cross_mod:wushuang") > 0
+            || flag_val(state, source, "yxs_nvquan_double_response") > 0)
     {
         unrespondable = true;
     }

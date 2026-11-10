@@ -730,30 +730,76 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
             // `extension_buff.js:508`: exclude 1 wrong quiz option in `execute_taixu_campaign_node`
             set_flag(ctx.core, owner, "l11_quiz_hint_exclude_wrong", 1);
         }
-        "buff_txhj_dongchazhiyan"
-        | "_buff_txhj_dongchazhiyan"
-        | "buff_txhj_mingjingzhiyan"
-        | "_buff_txhj_mingjingzhiyan"
-        | "buff_txhj_wolongmice"
-        | "buff_txhj_majundegaizao"
-        | "buff_txhj_shangjiangdelvli"
-        | "buff_txhj_shierqicejin"
-        | "_buff_txhj_shierqicejin"
-        | "txhj_shierqicejin"
-        | "buff_txhj_shierqicetui"
-        | "_buff_txhj_shierqicetui"
-        | "txhj_shierqicetui"
-        | "buff_txhj_huangtianyili"
-        | "_buff_txhj_huangtianyili"
-        | "buff_txhj_huangtianzhizu"
-        | "_buff_txhj_huangtianzhizu"
-        | "buff_txhj_tiangongdeyouhu"
-        | "buff_txhj_digongdeyouhu"
-        | "txhj_kapaikeshi" => {
-            // Tactical hand-visibility / AOE-ally-immunity / judge-spade5 / cast-speed blessings:
-            // grant +1 hujia or draw 1 tactical advantage when triggered on native engine
-            let cur_h = ctx.core.player(owner).hujia;
-            ctx.core.player_mut(owner).hujia = cur_h.saturating_add(1);
+        "buff_txhj_dongchazhiyan" | "_buff_txhj_dongchazhiyan" => {
+            // `extension_buff.js:185`: Shunshou unlimited distance (`l11_mod:txshouyi`) and draw 1
+            set_flag(ctx.core, owner, "l11_mod:txshouyi", 1);
+            ctx.start_draw(owner, 1);
+        }
+        "buff_txhj_mingjingzhiyan" | "_buff_txhj_mingjingzhiyan" => {
+            // `extension_buff.js:196`: Guohe discards 1 extra card from target
+            if let Some(t) = first_other_alive(ctx.core, owner) {
+                let _ = discard_one_from_target(ctx, t);
+            }
+        }
+        "buff_txhj_wolongmice" => {
+            // `extension_buff.js:340`: Huogong +1 damage (`l11_mod:damage_plus1`) and draw 1
+            set_flag(ctx.core, owner, "l11_mod:damage_plus1", 1);
+            ctx.start_draw(owner, 1);
+        }
+        "buff_txhj_majundegaizao" => {
+            // `extension_buff.js:518`: equip upgrade -> draw 1 card and gain 1 hujia
+            ctx.core.player_mut(owner).hujia = ctx.core.player(owner).hujia.saturating_add(1);
+            ctx.start_draw(owner, 1);
+        }
+        "buff_txhj_shangjiangdelvli" => {
+            // `extension_buff.js:535`: +1 Sha use limit (`l11_mod:txhj_oldhuxiao`)
+            set_flag(ctx.core, owner, "l11_mod:txhj_oldhuxiao", 1);
+        }
+        "buff_txhj_shierqicejin" | "_buff_txhj_shierqicejin" | "txhj_shierqicejin" => {
+            // `extension_buff.js:415`: ally AOE immunity (`l11_mod:txmanzhen`) and 1 damage to enemy
+            set_flag(ctx.core, owner, "l11_mod:txmanzhen", 1);
+            if let Some(t) = first_other_alive(ctx.core, owner) {
+                ctx.emit(EventData::Damage(crate::machine::damage_data(Some(owner), t, 1)));
+            }
+        }
+        "buff_txhj_shierqicetui" | "_buff_txhj_shierqicetui" | "txhj_shierqicetui" => {
+            // `extension_buff.js:445`: Taoyuan/Wugu enemy exclusion -> recover 1 HP and draw 1
+            let _ = ctx.recover(owner, 1, None);
+            ctx.start_draw(owner, 1);
+        }
+        "buff_txhj_huangtianyili" | "_buff_txhj_huangtianyili" => {
+            // `extension_buff.js:385`: judge treated as Spade 5 -> 3 thunder damage to enemy
+            if let Some(t) = first_other_alive(ctx.core, owner) {
+                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                    Some(owner),
+                    t,
+                    3,
+                    DamageNature::Thunder,
+                    None,
+                )));
+            }
+        }
+        "buff_txhj_huangtianzhizu" | "_buff_txhj_huangtianzhizu" => {
+            // `extension_buff.js:405`: before judge, enemy loses 1 HP
+            if let Some(t) = first_other_alive(ctx.core, owner) {
+                ctx.emit(EventData::LoseHp { player: t, amount: 1 });
+            }
+        }
+        "buff_txhj_tiangongdeyouhu" => {
+            // `extension_buff.js:550`: thunder immunity (`l11_mod:txhuangfu`) and draw 1
+            set_flag(ctx.core, owner, "l11_mod:txhuangfu", 1);
+            ctx.start_draw(owner, 1);
+        }
+        "buff_txhj_digongdeyouhu" => {
+            // `extension_buff.js:565`: heavy damage -1 (`l11_mod:txxiebi`) and +1 hujia
+            set_flag(ctx.core, owner, "l11_mod:txxiebi", 1);
+            ctx.core.player_mut(owner).hujia = ctx.core.player(owner).hujia.saturating_add(1);
+        }
+        "txhj_kapaikeshi" => {
+            // `extension_buff.js:810`: view enemy hand and steal 1 card
+            if let Some(t) = first_other_alive(ctx.core, owner) {
+                let _ = steal_one_from_target(ctx, owner, t);
+            }
         }
         _ => return false,
     }

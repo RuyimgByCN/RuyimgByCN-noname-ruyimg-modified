@@ -507,24 +507,135 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
             ctx.start_draw(owner, 3);
             let _ = discard_up_to_hand_or_equip(ctx, owner, 2);
         }
-        "txhj_chuhai" | "txhj_chuhai2" | "txlieji" | "txnangce" | "txfeiyan" | "txkaikang"
-        | "txyicheng" | "cxyMoJun" | "cxyRuiQi" | "cxyMoQu" | "cxyYaoWu" | "cxyYingHun"
-        | "cxyPoLu" | "oldfuman" | "oldfuman2" | "ljxuechi" | "txmengtai" | "txrenxing"
-        | "txyinli" | "txhj_huangmen" | "txhj_mouqiang" | "txhj_suzhi" | "polu"
-        | "polu_damage" | "txhj_zhuwei" | "twzhouhu" | "twharvestinori" | "twzuhuo" => {
-            // `extension.js:3468-5588`, `extension_skill.js:420-1180`: authentic card-draw / cycling general & weapon skills
+        "txhj_chuhai" | "txhj_chuhai2" => {
+            // `extension_skill.js:970`: discard 1 card, draw 2 cards, +1 Sha use (`l11_mod:txhj_oldhuxiao`)
+            let _ = discard_up_to_hand_or_equip(ctx, owner, 1);
+            ctx.start_draw(owner, 2);
+            set_flag(ctx.core, owner, "l11_mod:txhj_oldhuxiao", 1);
+        }
+        "txlieji" => {
+            // `extension.js:3533`: deal 1 thunder damage and draw 1 card
+            if let Some(t) = first_other_alive(ctx.core, owner) {
+                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                    Some(owner),
+                    t,
+                    1,
+                    DamageNature::Thunder,
+                    None,
+                )));
+            }
             ctx.start_draw(owner, 1);
-            if matches!(skill_name, "txyicheng" | "cxyYingHun") {
-                let _ = discard_up_to_hand_or_equip(ctx, owner, 1);
+        }
+        "txnangce" | "cxyMoQu" => {
+            // `extension.js:3580, 3995`: draw 2 / 1 cards and increase hand limit (`l11_mod:txhj_renwang`)
+            let n = if skill_name == "txnangce" { 2 } else { 1 };
+            ctx.start_draw(owner, n);
+            let cur = flag(ctx.core, owner, "l11_mod:txhj_renwang") + n;
+            set_flag(ctx.core, owner, "l11_mod:txhj_renwang", cur);
+        }
+        "txfeiyan" | "txmengtai" => {
+            // `extension.js:3650, 5200`: draw 1 card and distance/range bonus (`l11_mod:txmazhan`)
+            ctx.start_draw(owner, 1);
+            set_flag(ctx.core, owner, "l11_mod:txmazhan", 1);
+        }
+        "txkaikang" | "twzuhuo" => {
+            // `extension.js:3710, 5588`: gain 1 hujia and draw 1 card
+            ctx.core.player_mut(owner).hujia = ctx.core.player(owner).hujia.saturating_add(1);
+            ctx.start_draw(owner, 1);
+        }
+        "txyicheng" | "cxyYingHun" => {
+            // `extension.js:3760, 4090`: draw 2 cards and discard 1 card
+            ctx.start_draw(owner, 2);
+            let _ = discard_up_to_hand_or_equip(ctx, owner, 1);
+        }
+        "cxyMoJun" | "cxyPoLu" | "polu" | "polu_damage" | "oldfuman" | "oldfuman2" => {
+            // `extension.js:3912, 4110, 4350`, `extension_skill.js:1160`: self and ally draw 1 card
+            ctx.start_draw(owner, 1);
+            if let Some(t) = first_other_alive(ctx.core, owner) {
+                ctx.start_draw(t, 1);
             }
         }
-        "txayboji" | "txdaoxi" | "txdaoji" | "txtanbei" | "txtanbei_effect1"
-        | "txtanbei_effect2" | "txtanbei_effect3" | "txclanxieshu" | "txmouduan"
-        | "txhj_mouduan" | "txhj_xuanlve" | "hanbing_skill" | "cixiong_skill"
-        | "guanshi_skill" | "boss_jueji" => {
-            // `extension.js:3331-5472`, `extension_skill.js:860-4148`: authentic card-control / discard skills
+        "cxyRuiQi" => {
+            // `extension.js:3960`: draw phase +1 card
+            ctx.start_draw(owner, 1);
+        }
+        "cxyYaoWu" | "txhj_huangmen" | "twzhouhu" | "twharvestinori" => {
+            // `extension.js:4050, 5520, 5550`, `extension_skill.js:420`: recover 1 HP and draw 1-2 cards
+            let _ = ctx.recover(owner, 1, None);
+            let n = if skill_name == "twharvestinori" { 2 } else { 1 };
+            ctx.start_draw(owner, n);
+        }
+        "ljxuechi" => {
+            // `extension.js:4780`: deal 1 fire damage and draw 1 card
+            if let Some(t) = first_other_alive(ctx.core, owner) {
+                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                    Some(owner),
+                    t,
+                    1,
+                    DamageNature::Fire,
+                    None,
+                )));
+            }
+            ctx.start_draw(owner, 1);
+        }
+        "txrenxing" | "txyinli" => {
+            // `extension.js:5260, 5310`: draw 2 cards (renxing discards 1 first)
+            if skill_name == "txrenxing" {
+                let _ = discard_up_to_hand_or_equip(ctx, owner, 1);
+            }
+            ctx.start_draw(owner, 2);
+        }
+        "txhj_mouqiang" => {
+            // `extension_skill.js:480`: Sha unrespondable (`l11_taiji_unrespondable`) and draw 1
+            set_flag(ctx.core, owner, "l11_taiji_unrespondable", 1);
+            ctx.start_draw(owner, 1);
+        }
+        "txhj_suzhi" => {
+            // `extension_skill.js:520`: trick distance unlimited (`l11_mod:txshouyi`) and draw 1
+            set_flag(ctx.core, owner, "l11_mod:txshouyi", 1);
+            ctx.start_draw(owner, 1);
+        }
+        "txhj_zhuwei" => {
+            // `extension_skill.js:1180`: +1 Sha use (`l11_mod:txhj_oldhuxiao`) and draw 1
+            set_flag(ctx.core, owner, "l11_mod:txhj_oldhuxiao", 1);
+            ctx.start_draw(owner, 1);
+        }
+        "txayboji" | "txdaoji" | "guanshi_skill" => {
+            // `extension.js:3331, 3440`, `extension_skill.js:1280`: discard 1 from target/self and deal 1 damage
             if let Some(t) = first_other_alive(ctx.core, owner) {
                 let _ = discard_up_to_hand_or_equip(ctx, t, 1);
+                ctx.emit(EventData::Damage(crate::machine::damage_data(Some(owner), t, 1)));
+            }
+        }
+        "txdaoxi" | "txtanbei" | "txtanbei_effect1" | "txtanbei_effect2" | "txtanbei_effect3"
+        | "boss_jueji" => {
+            // `extension.js:3410, 3820`, `extension_skill.js:4148`: prey 1 card from target and +1 Sha limit
+            if let Some(t) = first_other_alive(ctx.core, owner) {
+                if let Some(c) = ctx.core.player(t).hand.first().copied() {
+                    ctx.take_hand_card(t, c);
+                    ctx.core.player_mut(owner).hand.push(c);
+                }
+            }
+            set_flag(ctx.core, owner, "l11_mod:txhj_oldhuxiao", 1);
+        }
+        "txclanxieshu" => {
+            // `extension.js:4550`: discard 1 card and draw lost-HP cards (at least 1)
+            let _ = discard_up_to_hand_or_equip(ctx, owner, 1);
+            let lost = (ctx.core.player(owner).max_hp as i32 - ctx.core.player(owner).hp).max(1) as u32;
+            ctx.start_draw(owner, lost);
+        }
+        "txmouduan" | "txhj_mouduan" | "txhj_xuanlve" | "cixiong_skill" => {
+            // `extension.js:5472`, `extension_skill.js:860, 900, 1250`: target discards 1 or owner draws 1
+            if let Some(t) = first_other_alive(ctx.core, owner) {
+                if discard_up_to_hand_or_equip(ctx, t, 1) == 0 {
+                    ctx.start_draw(owner, 1);
+                }
+            }
+        }
+        "hanbing_skill" => {
+            // `extension_skill.js:1220`: discard up to 2 cards from target instead of dealing damage
+            if let Some(t) = first_other_alive(ctx.core, owner) {
+                let _ = discard_up_to_hand_or_equip(ctx, t, 2);
             }
         }
 
