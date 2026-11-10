@@ -67,7 +67,7 @@
 
 | 现有实现项 | 原生文件:行号 | 上游对照 (`file:line`) | 原生落点 | 状态与处置结论 |
 |---|---|---|---|---|
-| `lib.card.yiyi`（以逸待劳锦囊，`resolve_l01_yiyi_card` + `evaluate_yiyi_target_benefit`） | `crates/content-native-loader/src/ai_tuning.rs:183-228`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:158-181` | `archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9205-9260` | 原生规则 / `ai-tuning-upstream-liuli` | 忠实实现（已按上游实现 `yiyi` 锦囊摸 2 弃 2 结算与目标收益评估并接入正式包 `ai-tuning-upstream-liuli` 产品路径） |
+| `lib.card.yiyi`（以逸待劳锦囊，`resolve_l01_yiyi_card` + `evaluate_yiyi_target_benefit`） | `crates/content-native-loader/src/ai_tuning.rs:183-228`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:158-181` | `archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9205-9260` | 原生规则 / `ai-tuning-upstream-liuli` | 忠实实现（已按上游实现 `yiyi` 锦囊同步摸 2 弃 2 结算与目标收益评估并接入正式包 `ai-tuning-upstream-liuli` 产品路径） |
 
 ### 7.2 武将（Generals）（0 项）
 

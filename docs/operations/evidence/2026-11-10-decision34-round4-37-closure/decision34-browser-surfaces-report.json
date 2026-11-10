@@ -28,10 +28,11 @@
       "w": 122,
       "h": 54
     },
+    "spinePngInputPresent": true,
     "spineReadyReason": "解析结果：ready-spine40 — SPINE_40_LOADED:4.0.64",
     "spineFallbackReason": "解析结果：static-portrait-fallback — NO_DYNAMIC_SKIN_ASSET_IMPORTED (产品不附带动皮资源，未导入玩家自有 4.0 资源时回退静态立绘)",
     "l24Meta": "Spine 4.0 净室 · 动作:gongji · 偏移(24,-8) · 缩放 108% · 资产状态:ready-spine40 · WebGL批次:2/8△",
-    "l14Banner": "手杀播报:无双·千军破(zhefu) · 倒计时 70%",
+    "l14Banner": "手杀播报:手杀播报·天下无双 · 倒计时 70%",
     "l14Rect": {
       "w": 343,
       "h": 80
@@ -52,9 +53,9 @@
     "bossName": "剑阁·高达一号",
     "bossHp": "∞",
     "bossMode": "versus_jiange",
-    "taixuNode": "#2 (颍川前哨（战斗）)",
+    "taixuNode": "#2 (幻境守护童子（战斗）)",
     "taixuGold": "90",
-    "taixuPet": "苍雷幼麟",
+    "taixuPet": "九尾",
     "taixuBlessingsCount": "2",
     "martialReplacement": "sp_zhaoyun",
     "doomsdayWave": "#2"
@@ -79,7 +80,7 @@
   "saveRestoreResult": {
     "beforeSaveDaoxin": "50",
     "beforeSaveDecade": "十周年:shousha",
-    "saveStatus": "已存档 · save-1794259367101",
+    "saveStatus": "已存档 · save-1794275576109",
     "mutatedDaoxin": "80",
     "mutatedDecade": "十周年:xinzhan",
     "restoredDaoxin": "50",
@@ -102,5 +103,6 @@
   },
   "consoleErrors": [],
   "screenshot": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-10-decision34-round4-37-closure/decision34-browser-surfaces.png",
+  "uiSuitesScreenshot": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-10-decision34-round4-37-closure/decision34-ui-skin-suites.png",
   "campaignScreenshot": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-10-decision34-round4-37-closure/decision34-taixu-campaign-surface.png"
 }

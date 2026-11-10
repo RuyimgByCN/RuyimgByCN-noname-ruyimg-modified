@@ -39,8 +39,21 @@ pub const L27_SELECT_SKILL_ID: u32 = 1_926_010_001;
 pub const L11_TAIXU_SKILL_ID: u32 = 1_926_011_001;
 
 fn classify_skill_trigger(name: &str) -> (EventKind, VmFilterPolicy) {
+    if name.ends_with("__ref_busi") {
+        return (EventKind::Dying, VmFilterPolicy::OwnerIsTarget);
+    }
     match name {
         "ycndiyjianxiong"
+        | "cyxianjiang"
+        | "ssr_newganglie"
+        | "ssr_newtianxiang"
+        | "ssr_newjiyuan"
+        | "ssr_guimou"
+        | "ssr_newduanxian"
+        | "ssr_wangxi"
+        | "txhj_dundunSkill2"
+        | "txhj_yayaSkill2"
+        | "txhj_piliche"
         | "_pfqh_check_damage"
         | "_pfqh_check_damage_times"
         | "_pfqh_check_hp_change"
@@ -56,6 +69,14 @@ fn classify_skill_trigger(name: &str) -> (EventKind, VmFilterPolicy) {
         | "feizhua"
         | "tianjian"
         | "shanguang"
+        | "ssr_wushuang"
+        | "ssr_baonue"
+        | "ssr_newfabing"
+        | "ssr_newjilue"
+        | "ssr_tieji"
+        | "ssr_liegong"
+        | "txhj_taijifuchen"
+        | "gx_taijifuchen"
         | "_usecard"
         | "_decadeUI_usecardBegin"
         | "_changeEquipExt"
@@ -78,11 +99,16 @@ fn classify_skill_trigger(name: &str) -> (EventKind, VmFilterPolicy) {
         }
         "leiyu"
         | "zhengsu"
+        | "ssr_biyue"
+        | "ssr_jushou"
+        | "ssr_zhuhai"
+        | "ssr_shendao"
         | "_pfqh_check_phaseEnd"
         | "_jd_hhjs"
         | "_jd_phaseAfter"
         | "_phaseendskill" => (EventKind::PhaseEnd, VmFilterPolicy::OwnerIsTarget),
-        "_decadeUI_dieKillEffect"
+        "dddqianlong"
+        | "_decadeUI_dieKillEffect"
         | "_kill_framebg"
         | "_dieNoTuoguan"
         | "_jd_wjsw"
@@ -93,7 +119,7 @@ fn classify_skill_trigger(name: &str) -> (EventKind, VmFilterPolicy) {
         | "_dieskill"
         | "_guozhan_diebiaoji_"
         | "_shoushajisha_" => (EventKind::Death, VmFilterPolicy::OwnerIsTarget),
-        "_zuanidentitydyingskill" | "_bingleDying" => {
+        "busi" | "ssr_newbuqu" | "_zuanidentitydyingskill" | "_bingleDying" => {
             (EventKind::Dying, VmFilterPolicy::OwnerIsTarget)
         }
         "_pfqh_check_roundCount" | "_zuanRoundTX" | "_chooseCharacterTwo" => {
@@ -127,10 +153,10 @@ pub(super) fn make_vm_skill_decl(name_str: &str, dispatch_id: u32, idx: usize) -
     };
     let skill_def_id = dispatch_id.wrapping_add(idx as u32);
     let (event, inner_filter) = classify_skill_trigger(name_str);
-    let extra_events = if event == EventKind::PhaseBegin {
-        Vec::new()
+    let extra_events = if name_str == "dddxiaxing" {
+        vec![EventKind::Dying]
     } else {
-        vec![EventKind::PhaseBegin]
+        Vec::new()
     };
     VmSkillDecl {
         declaration_hash: None,
@@ -415,20 +441,16 @@ pub fn attach_formal_package_upstream_rules(
     let mut seen_generals: BTreeSet<String> = STANDARD_GENERALS
         .iter()
         .map(|g| g.name.to_string())
-        .chain(pack.generals.iter().map(|g| g.name.to_string()))
         .collect();
     let mut seen_cards: BTreeSet<String> = std_cat
         .cards
         .iter()
         .map(|c| c.name.to_string())
-        .chain(pack.cards.iter().map(|c| c.name.to_string()))
         .collect();
     let mut seen_skills: BTreeSet<String> = std_cat
         .skills
         .iter()
         .map(|s| s.name.to_string())
-        .chain(pack.host_skills.iter().map(|hs| hs.name.to_string()))
-        .chain(pack.vm_skills.iter().map(|vs| vs.name.clone()))
         .collect();
     for p in prior_packs {
         for g in &p.generals {
@@ -444,6 +466,13 @@ pub fn attach_formal_package_upstream_rules(
             seen_skills.insert(vs.name.clone());
         }
     }
+
+    // Deduplicate pre-parsed formal package entries against standard catalog and prior_packs
+    // so multi-package loading is symmetric regardless of package order (e.g. `[shahai-zhenfa, wuxing]`).
+    pack.generals.retain(|g| seen_generals.insert(g.name.to_string()));
+    pack.cards.retain(|c| seen_cards.insert(c.name.to_string()));
+    pack.host_skills.retain(|hs| seen_skills.insert(hs.name.to_string()));
+    pack.vm_skills.retain(|vs| seen_skills.insert(vs.name.clone()));
 
     if super::try_attach_shahai_formal_package(
         namespace,

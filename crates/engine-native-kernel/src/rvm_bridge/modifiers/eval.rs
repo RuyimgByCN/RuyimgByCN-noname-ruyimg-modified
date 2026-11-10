@@ -50,6 +50,7 @@ pub fn eval_hand_limit(
             }
         });
     }
+    limit = super::d34_flags::apply_hand_limit(state, catalog, player, limit);
     limit.max(0) as usize
 }
 
@@ -137,6 +138,7 @@ pub fn eval_attack_range(
             }
         });
     }
+    cur = super::d34_flags::apply_attack_range(state, catalog, player, cur);
     cur.max(0) as u32
 }
 
@@ -183,6 +185,7 @@ pub fn eval_distance_total(
             }
         });
     }
+    cur = super::d34_flags::apply_distance_total(state, catalog, a, b, cur);
     cur.max(1) as u32
 }
 
@@ -301,6 +304,7 @@ pub fn eval_sha_use_limit(
             }
         }
     }
+    (cur, unlimited) = super::d34_flags::apply_sha_use_limit(state, catalog, player, cur, unlimited);
     (cur.max(0) as u32, unlimited)
 }
 
@@ -326,6 +330,7 @@ pub fn eval_sha_extra_targets(
             extra = rule.apply_to(extra, val);
         }
     });
+    extra = super::d34_flags::apply_sha_extra_targets(state, catalog, player, kind, extra);
     extra.max(0) as usize
 }
 
@@ -349,7 +354,7 @@ pub fn eval_card_distance_unlimited(
             unlimited = true;
         }
     });
-    unlimited
+    super::d34_flags::apply_card_distance_unlimited(state, catalog, player, kind, unlimited)
 }
 
 /// 评估目标是否免疫某张牌的指向（`CardTargetCancel` / `CardTargetEnabled`）。
@@ -381,7 +386,7 @@ pub fn eval_card_target_canceled(
             canceled = true;
         }
     });
-    canceled
+    super::d34_flags::apply_card_target_canceled(state, catalog, actor, target, kind, canceled)
 }
 
 /// 评估角色是否被禁止使用某张牌（`ShaUseCancel` / `CardUseCancel` / `HandCardUseResponseCancel` / `CardUsable`）。
@@ -445,7 +450,7 @@ pub fn eval_card_use_canceled(
             }
         });
     }
-    canceled
+    super::d34_flags::apply_card_use_canceled(state, actor, kind, canceled)
 }
 
 /// 评估角色是否被禁止对濒死角色使用【桃】（`DyingPeachTargetCancel` / `DyingSavePeachUsable` / `CardSavable`）。
@@ -558,6 +563,7 @@ pub fn eval_damage_amount(
             _ => {}
         }
     });
+    cur = super::d34_flags::apply_damage_amount(state, catalog, target, card, nature, cur);
     cur.max(0) as u32
 }
 
@@ -599,7 +605,7 @@ pub fn eval_ignore_armor(
             }
         }
     });
-    ignore
+    super::d34_flags::apply_ignore_armor(state, catalog, source, target, ignore)
 }
 
 /// 评估使用卡牌是否不可被响应（`CardUseUnrespondable` / `ShaUnrespondable` / `CardUnrespondable`）。
@@ -631,5 +637,5 @@ pub fn eval_card_unrespondable(
             _ => {}
         }
     });
-    unrespondable
+    super::d34_flags::apply_card_unrespondable(state, catalog, source, kind, unrespondable)
 }

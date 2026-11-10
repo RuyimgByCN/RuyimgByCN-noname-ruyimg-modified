@@ -47,7 +47,7 @@ pub(super) fn try_resolve_u05_swd_cards_and_tactics(ctx: &mut Ctx<'_>, skill: &s
             set_flag(ctx.core, owner, "yunchou_skill:ycnxinfu_qiaosi", 1);
             set_flag(ctx.core, owner, "ycnxinfu_qiaosi_figure", 1);
             set_flag(ctx.core, owner, "ycnxinfu_qiaosi_resolved", 1);
-            ctx.start_draw(owner, 2);
+            draw_cards_sync(ctx, owner, 2);
             let _ = u05_discard_up_to(ctx, owner, 1);
         }
         // card/zhenfa/card.js:186-225: pozhenjue (recastable: true + formation break & seat swap)

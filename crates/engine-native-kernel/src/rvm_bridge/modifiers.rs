@@ -628,6 +628,7 @@ impl VmModifierRule {
     }
 }
 
+pub mod d34_flags;
 mod eval;
 pub use eval::*;
 

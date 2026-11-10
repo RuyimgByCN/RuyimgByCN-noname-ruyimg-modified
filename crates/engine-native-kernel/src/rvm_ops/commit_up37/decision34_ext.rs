@@ -156,7 +156,7 @@ pub(super) fn resolve_l10_scs_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: 
 /// `L01` (`yiyi` 以逸待劳 — `archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9205-9260`):
 /// Target draws 2 cards (`target.draw(2)` at line 9221) then discards 2 `he` cards (`target.chooseToDiscard(2, "he", true)` at line 9223).
 pub(super) fn resolve_l01_yiyi_card(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    ctx.start_draw(owner, 2);
+    let drawn = draw_cards_sync(ctx, owner, 2);
     let mut disc = Vec::new();
     for _ in 0..2 {
         if let Some(c) = ctx.core.player(owner).hand.first().copied() {
@@ -171,7 +171,7 @@ pub(super) fn resolve_l01_yiyi_card(ctx: &mut Ctx<'_>, owner: PlayerId) {
     if !disc.is_empty() {
         discard_some(ctx, owner, disc);
     }
-    set_flag(ctx.core, owner, "l01_yiyi_drawn", 2);
+    set_flag(ctx.core, owner, "l01_yiyi_drawn", drawn);
     set_flag(ctx.core, owner, "l01_yiyi_discarded", disc_n);
     set_flag(ctx.core, owner, "l01_yiyi_resolved", 1);
 }

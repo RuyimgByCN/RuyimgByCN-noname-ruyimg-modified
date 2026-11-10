@@ -66,7 +66,7 @@
 
 | 现有实现项 | 原生文件:行号 | 上游对照 (`file:line`) | 原生落点 | 状态与处置结论 |
 |---|---|---|---|---|
-| `SHOUSHA_UI_HOOK_IDS`（53 项 UI 钩子）+ `SHOUSHA_SURFACE_MODULES`（40 项脚本/CSS 渲染面）+ `UiSkinSuitePanel.vue` | `apps/web-client/src/engine/surfaces/shoushaUiSurface.ts:10-337`、`apps/web-client/src/components/battle/surfaces/UiSkinSuitePanel.vue:1-411` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:85-7360`、`character/main*.js`、`lbtn/main*.js`、`skill/main*.js` 及 32 份 CSS | 原生规则（`shousha_ui.rs`）+ 原生前端组件 | 忠实实现（已删除伪造 `shousha_*` 实体与摸牌/回血副作用；53 项出牌进度条、托管保护、快捷语音气泡、无懈读条、手牌理牌钩子与 40 项手杀面板/样式表已在原生前端完整落地） |
+| `SHOUSHA_UI_HOOK_IDS`（53 项 UI 钩子）+ `SHOUSHA_SURFACE_MODULES`（40 项脚本/CSS 渲染面）+ `UiSkinSuitePanel.vue` | `apps/web-client/src/engine/surfaces/shoushaUiSurface.ts:10-337`、`apps/web-client/src/components/battle/surfaces/UiSkinSuitePanel.vue:1-411` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:85-7360`、`character/main*.js`、`lbtn/main*.js`、`skill/main*.js` 及 32 份 CSS | 原生规则（`shousha_ui.rs`）+ 原生前端组件 | 忠实实现（已删除伪造 `shousha_*` 实体与跨包虚构名 `spshidi`/`zhefu` 及摸牌/回血副作用；53 项出牌进度条、托管保护、快捷语音气泡、无懈读条、手牌理牌钩子与 40 项手杀面板/样式表已在原生前端完整落地） |
 
 ### 7.2 武将（Generals）（0 项）
 

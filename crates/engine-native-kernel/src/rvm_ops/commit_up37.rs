@@ -10,6 +10,7 @@ pub mod decision34_l11_skills;
 pub mod decision34_l19_l20_l27;
 pub mod decision34_l25_rules;
 pub mod decision34_l25_ssr;
+pub mod decision34_l25_ssr_mods;
 pub mod decision34_pack9;
 pub mod decision34_u05_gujian_gwent;
 pub mod decision34_u05_hearth;
@@ -72,6 +73,91 @@ fn set_flag(core: &mut GameStateCore, p: PlayerId, key: &str, val: u32) {
     } else {
         core.vm_aux.flags.insert((p, key.to_string()), val);
     }
+}
+
+/// Synchronously draws up to `count` cards from the top of `deck` into `seat`'s hand
+/// (reshuffling `discard` via `pop_deck` if needed) and emits `CardsDrawn` immediately.
+/// Required for draw-then-discard resolvers (`txhj_yiyi`, `yiyi`, `ycnxinfu_qiaosi`) and
+/// deterministic multi-seat draw sequences (`txhj_yuanjiao`, `txhj_diaohu`).
+pub(super) fn draw_cards_sync(ctx: &mut Ctx<'_>, seat: PlayerId, count: u32) -> u32 {
+    let mut drawn = Vec::with_capacity(count as usize);
+    for _ in 0..count {
+        let Some(c) = pop_deck(ctx) else { break };
+        ctx.core.player_mut(seat).hand.push(c);
+        drawn.push(c);
+    }
+    let n = drawn.len() as u32;
+    if !drawn.is_empty() {
+        ctx.emit(EventData::CardsDrawn {
+            player: seat,
+            cards: drawn.clone(),
+        });
+        ctx.out.push(LogEvent::CardsDrawn {
+            player: seat,
+            cards: drawn,
+        });
+    }
+    n
+}
+
+/// Guards automatic `PhaseBegin` triggers so they:
+/// 1) only fire for `owner` (`player == owner`),
+/// 2) reset per-turn counters at `Phase::Prepare`,
+/// 3) fire at most once per turn across `Prepare -> Judge -> Draw -> Play -> Discard -> End`, and
+/// 4) never auto-self-immolate (`hp <= 1`) when `self_hp_cost` is true.
+/// Direct `debug_commit_effect` calls (`ctx.res.stack.is_empty()`) always pass through.
+pub(super) fn guard_phase_auto_trigger(
+    ctx: &mut Ctx<'_>,
+    owner: PlayerId,
+    ns: &str,
+    skill: &str,
+    self_hp_cost: bool,
+) -> bool {
+    let Some(frame) = ctx.res.stack.last() else {
+        return true;
+    };
+    if let EventData::Phase {
+        player,
+        phase,
+        begin: true,
+    } = &frame.data
+    {
+        if *player != owner {
+            return false;
+        }
+        let fired_prefix = format!("{ns}_phase_fired:");
+        if *phase == Phase::Prepare {
+            let stale: Vec<(PlayerId, String)> = ctx
+                .core
+                .vm_aux
+                .flags
+                .keys()
+                .filter(|(p, k)| {
+                    (*p == owner
+                        && (k.starts_with(&fired_prefix)
+                            || k.starts_with("u05_usable:")
+                            || k == "l25_miedi_forbid"))
+                        || k == "l11_xingtian_card_locked"
+                        || k == "l11_xingtian_armor_null"
+                        || k == "l25_yijue_locked"
+                        || k == "l25_zhenhun_forbid_sha"
+                })
+                .cloned()
+                .collect();
+            for key in stale {
+                ctx.core.vm_aux.flags.remove(&key);
+            }
+        }
+        let fired_key = format!("{fired_prefix}{skill}");
+        if flag(ctx.core, owner, &fired_key) != 0 {
+            return false;
+        }
+        if self_hp_cost && ctx.core.player(owner).hp <= 1 {
+            return false;
+        }
+        set_flag(ctx.core, owner, &fired_key, 1);
+    }
+    true
 }
 
 fn turn_var(core: &GameStateCore, p: PlayerId, key: &str) -> u32 {

@@ -38,6 +38,9 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
     } else {
         executing
     };
+    if !guard_phase_auto_trigger(ctx, owner, "l11", skill_name, false) {
+        return;
+    }
     set_flag(ctx.core, owner, &format!("l11_skill:{skill_name}"), 1);
     let total = flag(ctx.core, owner, "l11_trigger_count") + 1;
     set_flag(ctx.core, owner, "l11_trigger_count", total);
@@ -98,15 +101,15 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
             ctx.start_draw(owner, 1);
         }
         "txhj_yuanjiao" => {
-            // `extension_card.js:305`: target draws 1, then owner draws 3
+            // `extension_card.js:305`: target draws 1 first, then owner draws 3
             if let Some(t) = first_other_alive(ctx.core, owner) {
-                ctx.start_draw(t, 1);
+                draw_cards_sync(ctx, t, 1);
             }
-            ctx.start_draw(owner, 3);
+            draw_cards_sync(ctx, owner, 3);
         }
         "txhj_yiyi" => {
-            // `extension_card.js:334`: draw 2, then discard 2
-            ctx.start_draw(owner, 2);
+            // `extension_card.js:334`: draw 2 synchronously, then discard 2
+            draw_cards_sync(ctx, owner, 2);
             let _ = discard_up_to_hand_or_equip(ctx, owner, 2);
         }
         "txhj_xuwangzhimian" => {
@@ -177,12 +180,12 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
             }
         }
         "txhj_diaohu" => {
-            // `extension_card.js:951`: target turns over (`face_down`), then both draw 1
+            // `extension_card.js:951`: target turns over (`face_down`), then target draws 1 and owner draws 1
             if let Some(t) = first_other_alive(ctx.core, owner) {
                 ctx.core.player_mut(t).face_down = !ctx.core.player(t).face_down;
-                ctx.start_draw(t, 1);
+                draw_cards_sync(ctx, t, 1);
             }
-            ctx.start_draw(owner, 1);
+            draw_cards_sync(ctx, owner, 1);
         }
         "txhj_chiyanzhenhunqin" => {
             // `extension_card.js:1013`: all damage dealt by owner becomes Fire
@@ -210,11 +213,11 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "txhj_wangmeizhike" => {
             // `extension_card.js:1287`: judge Club -> recover 1 HP, else draw 1
-            let is_club = ctx
-                .core
-                .deck
-                .last()
-                .is_some_and(|&c| ctx.catalog.cards[c as usize].suit == Suit::Club);
+            let mut is_club = false;
+            if let Some(jcard) = pop_deck(ctx) {
+                is_club = ctx.catalog.cards[jcard as usize].suit == Suit::Club;
+                discard_some(ctx, owner, vec![jcard]);
+            }
             if is_club {
                 let _ = ctx.recover(owner, 1, None);
             } else {
@@ -241,8 +244,11 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
                     .map(|&c| u32::from(ctx.catalog.cards[c as usize].rank))
                     .sum();
                 if eq_sum >= 6 {
-                    let eq_len = ctx.core.player(t).equips.len();
-                    let _ = discard_up_to_hand_or_equip(ctx, t, eq_len);
+                    let eq_cards = ctx.core.player(t).equips.clone();
+                    for cid in &eq_cards {
+                        ctx.take_owned_card(t, *cid);
+                    }
+                    discard_some(ctx, t, eq_cards);
                 } else {
                     ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                         Some(owner),

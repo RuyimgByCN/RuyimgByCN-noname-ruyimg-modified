@@ -28,8 +28,7 @@ import type {
   TransformMode,
 } from "./types";
 
-import { parseStandardSpine40Skel } from "./binarySkelCodec";
-const BINARY_MAGIC = [0x53, 0x50, 0x34, 0x30] as const; // "SP40"
+import { encodeStandardSpine40Skel, parseStandardSpine40Skel } from "./binarySkelCodec";
 
 export function isSpine40Version(version: string | undefined | null): boolean {
   if (typeof version !== "string") return false;
@@ -212,14 +211,35 @@ export function parseSpine40Json(input: unknown): SkeletonData {
   }));
 
   const skins: SkinData[] = [];
+  const pendingJsonLinked: Array<{
+    skinIdx: number;
+    slotName: string;
+    attKey: string;
+    parentSkinName: string;
+    parentName: string;
+    hasWidth: boolean;
+    hasHeight: boolean;
+  }> = [];
   if (Array.isArray(obj.skins)) {
     for (const sk of obj.skins as Array<Record<string, unknown>>) {
+      const skinIdx = skins.length;
       const attachmentsMap: Record<string, Record<string, Attachment>> = {};
       const rawAtts = (sk.attachments ?? {}) as Record<string, Record<string, Record<string, unknown>>>;
       for (const [slotName, slotEntries] of Object.entries(rawAtts)) {
         attachmentsMap[slotName] = {};
         for (const [attKey, attVal] of Object.entries(slotEntries ?? {})) {
           attachmentsMap[slotName][attKey] = parseAttachment(attKey, attVal);
+          if (asString(attVal?.type, "region") === "linkedmesh" && !Array.isArray(attVal?.uvs)) {
+            pendingJsonLinked.push({
+              skinIdx,
+              slotName,
+              attKey,
+              parentSkinName: asString(attVal.skin, "default"),
+              parentName: asString(attVal.parent, attKey),
+              hasWidth: typeof attVal.width === "number",
+              hasHeight: typeof attVal.height === "number",
+            });
+          }
         }
       }
       skins.push({
@@ -230,6 +250,21 @@ export function parseSpine40Json(input: unknown): SkeletonData {
         path: asStringArray(sk.path),
         attachments: attachmentsMap,
       });
+    }
+  }
+  for (const lm of pendingJsonLinked) {
+    const parentSkin = skins.find((s) => s.name === lm.parentSkinName) ?? skins[0];
+    const parentAtt = parentSkin?.attachments?.[lm.slotName]?.[lm.parentName];
+    const curAtt = skins[lm.skinIdx]?.attachments?.[lm.slotName]?.[lm.attKey];
+    if (parentAtt && parentAtt.type === "mesh" && curAtt && curAtt.type === "mesh") {
+      curAtt.uvs = [...parentAtt.uvs];
+      curAtt.triangles = [...parentAtt.triangles];
+      curAtt.vertices = [...parentAtt.vertices];
+      curAtt.hull = parentAtt.hull;
+      curAtt.edges = [...parentAtt.edges];
+      curAtt.weighted = parentAtt.weighted;
+      if (!lm.hasWidth) curAtt.width = parentAtt.width;
+      if (!lm.hasHeight) curAtt.height = parentAtt.height;
     }
   }
 
@@ -464,156 +499,20 @@ export function parseSpine40Json(input: unknown): SkeletonData {
   };
 }
 
-function writeVarint(out: number[], value: number): void {
-  let v = value >>> 0;
-  while (v >= 0x80) {
-    out.push((v & 0x7f) | 0x80);
-    v >>>= 7;
-  }
-  out.push(v & 0x7f);
-}
-
-function readVarint(bytes: Uint8Array, state: { offset: number }): number {
-  let result = 0;
-  let shift = 0;
-  while (state.offset < bytes.length) {
-    const b = bytes[state.offset++];
-    result |= (b & 0x7f) << shift;
-    if ((b & 0x80) === 0) return result >>> 0;
-    shift += 7;
-  }
-  throw new Error("Truncated Spine 4.0 binary varint");
-}
-
-function writeFloat32(out: number[], value: number): void {
-  const buf = new ArrayBuffer(4);
-  new DataView(buf).setFloat32(0, value, false);
-  const arr = new Uint8Array(buf);
-  out.push(arr[0], arr[1], arr[2], arr[3]);
-}
-
-function readFloat32(bytes: Uint8Array, state: { offset: number }): number {
-  if (state.offset + 4 > bytes.length) {
-    throw new Error("Truncated Spine 4.0 binary float32");
-  }
-  const view = new DataView(bytes.buffer, bytes.byteOffset + state.offset, 4);
-  state.offset += 4;
-  return Number(view.getFloat32(0, false).toFixed(5));
-}
-
-function writeUtf8(out: number[], text: string): void {
-  const encoded = new TextEncoder().encode(text);
-  writeVarint(out, encoded.length);
-  for (let i = 0; i < encoded.length; i++) out.push(encoded[i]);
-}
-
-function readUtf8(bytes: Uint8Array, state: { offset: number }): string {
-  const len = readVarint(bytes, state);
-  if (state.offset + len > bytes.length) {
-    throw new Error("Truncated Spine 4.0 binary string");
-  }
-  const slice = bytes.subarray(state.offset, state.offset + len);
-  state.offset += len;
-  return new TextDecoder().decode(slice);
-}
-
 /**
- * Self-contained clean-room Spine 4.0 binary `.skel` encoder.
- * Encodes header (varint + float32 + string table), bone count, slot count, and canonical payload.
+ * Clean-room Spine 4.0 binary `.skel` encoder delegating directly to the
+ * standard Spine 4.0 binary byte layout (`encodeStandardSpine40Skel`).
  */
 export function encodeSpine40Binary(data: SkeletonData): Uint8Array {
-  if (!isSpine40Version(data.header.spine)) {
-    throw new Error(`Cannot encode non-4.0 skeleton version: ${data.header.spine}`);
-  }
-  const out: number[] = [...BINARY_MAGIC];
-  writeUtf8(out, data.header.hash);
-  writeUtf8(out, data.header.spine);
-  writeFloat32(out, data.header.x);
-  writeFloat32(out, data.header.y);
-  writeFloat32(out, data.header.width);
-  writeFloat32(out, data.header.height);
-  writeFloat32(out, data.header.fps);
-
-  writeVarint(out, data.bones.length);
-  for (const b of data.bones) {
-    writeUtf8(out, b.name);
-    writeUtf8(out, b.parent ?? "");
-    writeFloat32(out, b.length);
-    writeFloat32(out, b.x);
-    writeFloat32(out, b.y);
-    writeFloat32(out, b.rotation);
-    writeFloat32(out, b.scaleX);
-    writeFloat32(out, b.scaleY);
-    writeFloat32(out, b.shearX);
-    writeFloat32(out, b.shearY);
-  }
-
-  writeVarint(out, data.slots.length);
-  writeUtf8(out, JSON.stringify(data));
-  return new Uint8Array(out);
+  return encodeStandardSpine40Skel(data);
 }
 
 /**
- * Clean-room Spine 4.0 binary `.skel` decoder matching `encodeSpine40Binary`.
+ * Clean-room Spine 4.0 binary `.skel` decoder delegating directly to the
+ * standard Spine 4.0 binary byte layout (`parseStandardSpine40Skel`).
  */
 export function parseSpine40Binary(bytes: Uint8Array): SkeletonData {
-  if (
-    bytes.length < 4 ||
-    bytes[0] !== BINARY_MAGIC[0] ||
-    bytes[1] !== BINARY_MAGIC[1] ||
-    bytes[2] !== BINARY_MAGIC[2] ||
-    bytes[3] !== BINARY_MAGIC[3]
-  ) {
-    return parseStandardSpine40Skel(bytes);
-  }
-  const state = { offset: 4 };
-  const hash = readUtf8(bytes, state);
-  const spine = readUtf8(bytes, state);
-  if (!isSpine40Version(spine)) {
-    throw new Error(`UNSUPPORTED_SPINE_VERSION:${spine}`);
-  }
-  const x = readFloat32(bytes, state);
-  const y = readFloat32(bytes, state);
-  const width = readFloat32(bytes, state);
-  const height = readFloat32(bytes, state);
-  const fps = readFloat32(bytes, state);
-
-  const boneCount = readVarint(bytes, state);
-  const decodedBones: Array<Pick<BoneData, "name" | "parent" | "length" | "x" | "y" | "rotation" | "scaleX" | "scaleY" | "shearX" | "shearY">> = [];
-  for (let i = 0; i < boneCount; i++) {
-    const name = readUtf8(bytes, state);
-    const parentRaw = readUtf8(bytes, state);
-    decodedBones.push({
-      name,
-      parent: parentRaw || null,
-      length: readFloat32(bytes, state),
-      x: readFloat32(bytes, state),
-      y: readFloat32(bytes, state),
-      rotation: readFloat32(bytes, state),
-      scaleX: readFloat32(bytes, state),
-      scaleY: readFloat32(bytes, state),
-      shearX: readFloat32(bytes, state),
-      shearY: readFloat32(bytes, state),
-    });
-  }
-
-  const slotCount = readVarint(bytes, state);
-  const payloadStr = readUtf8(bytes, state);
-  const restored = JSON.parse(payloadStr) as SkeletonData;
-  if (restored.slots.length !== slotCount) {
-    throw new Error("Spine 4.0 binary slot count mismatch");
-  }
-  restored.header.hash = hash;
-  restored.header.spine = spine;
-  restored.header.x = x;
-  restored.header.y = y;
-  restored.header.width = width;
-  restored.header.height = height;
-  restored.header.fps = fps;
-  for (let i = 0; i < decodedBones.length; i++) {
-    Object.assign(restored.bones[i], decodedBones[i]);
-  }
-  return restored;
+  return parseStandardSpine40Skel(bytes);
 }
 
 /**

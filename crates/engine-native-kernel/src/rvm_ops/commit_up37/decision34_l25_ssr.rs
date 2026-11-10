@@ -38,7 +38,30 @@ pub(super) fn steal_one_card(ctx: &mut Ctx<'_>, thief: PlayerId, victim: PlayerI
 
 /// Resolve `L25` `ssr_*` general skills & card skills (`祖安武将/extension.js:4911-33889`).
 pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: PlayerId) -> bool {
+    let self_hp_cost = matches!(
+        skill_name,
+        "ssr_bailun"
+            | "ssr_newkurou"
+            | "ssr_newlihun"
+            | "ssr_shiyong"
+            | "ssr_newluoyi"
+            | "ssr_yushui"
+            | "ssr_newweimu"
+            | "ssr_guimou"
+            | "ssr_newduanxian"
+            | "ssr_newyizhong"
+    );
+    if !guard_phase_auto_trigger(ctx, owner, "l25", skill_name, self_hp_cost) {
+        return true;
+    }
     let other = first_other_alive(ctx.core, owner).unwrap_or(owner);
+    if super::decision34_l25_ssr_mods::try_resolve_l25_ssr_mod_or_tactical(
+        ctx, skill_name, owner, other,
+    ) {
+        let cnt = flag(ctx.core, owner, "l25_zuan_trigger_count") + 1;
+        set_flag(ctx.core, owner, "l25_zuan_trigger_count", cnt);
+        return true;
+    }
     match skill_name {
         "ssr_qianxun" => {
             // ssr_qianxun (`祖安武将/extension.js:4911-4930`): if hand > 1 discards down to 1, else draws 1.
@@ -72,31 +95,15 @@ pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pla
             }
             set_flag(ctx.core, owner, "l25_skill:ssr_zhiheng", 1);
         }
-        "ssr_jianye" => {
-            // ssr_jianye (`祖安武将/extension.js:5235`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_jianye", 1);
-        }
         "ssr_jiuyuan" => {
             // ssr_jiuyuan (`祖安武将/extension.js:5439`)
             ctx.start_draw(owner, 1);
             set_flag(ctx.core, owner, "l25_skill:ssr_jiuyuan", 1);
         }
-        "ssr_newlongdan" => {
-            // ssr_newlongdan (`祖安武将/extension.js:5586`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_newlongdan", 1);
-        }
         "ssr_newpozhen" => {
             // ssr_newpozhen (`祖安武将/extension.js:5945`)
             let _ = discard_first_he(ctx, if other != owner { other } else { owner });
             set_flag(ctx.core, owner, "l25_skill:ssr_newpozhen", 1);
-        }
-        "ssr_jinnang" => {
-            // ssr_jinnang (`祖安武将/extension.js:20784`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_jinnang", 1);
-        }
-        "ssr_newbazhen" => {
-            // ssr_newbazhen (`祖安武将/extension.js:21623`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_newbazhen", 1);
         }
         "ssr_tuxi" => {
             // ssr_tuxi (`祖安武将/extension.js:6372`)
@@ -155,18 +162,10 @@ pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pla
             if other != owner { ctx.emit(EventData::Damage(crate::machine::damage_data(Some(owner), other, 1))); }
             set_flag(ctx.core, owner, "l25_skill:ssr_newfanjian", 1);
         }
-        "ssr_shichou" => {
-            // ssr_shichou (`祖安武将/extension.js:20615`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_shichou", 1);
-        }
         "ssr_newrende" => {
             // ssr_newrende (`祖安武将/extension.js:20335`)
             if ctx.core.player(owner).hp < ctx.core.player(owner).max_hp as i32 { ctx.recover(owner, 1, None); }
             set_flag(ctx.core, owner, "l25_skill:ssr_newrende", 1);
-        }
-        "ssr_jijiang" => {
-            // ssr_jijiang (`祖安武将/extension.js:7619`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_jijiang", 1);
         }
         "ssr_qiangxi" => {
             // ssr_qiangxi (`祖安武将/extension.js:7718`)
@@ -197,10 +196,6 @@ pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pla
             let _ = steal_one_card(ctx, owner, other);
             set_flag(ctx.core, owner, "l25_skill:ssr_tumeng", 1);
         }
-        "ssr_zhujiu" => {
-            // ssr_zhujiu (`祖安武将/extension.js:8779`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_zhujiu", 1);
-        }
         "ssr_hujia" => {
             // ssr_hujia (`祖安武将/extension.js:8677`)
             ctx.start_draw(owner, 1);
@@ -227,22 +222,10 @@ pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pla
             set_flag(ctx.core, owner, "l25_kuangbao_marks", kb);
             set_flag(ctx.core, owner, "l25_skill:ssr_kuangbao", 1);
         }
-        "ssr_wushuang" => {
-            // ssr_wushuang (`祖安武将/extension.js:8998`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_wushuang", 1);
-        }
-        "ssr_jiwu" => {
-            // ssr_jiwu (`祖安武将/extension.js:31644`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_jiwu", 1);
-        }
         "ssr_liegong" => {
             // ssr_liegong (`祖安武将/extension.js:9359`)
             let _ = discard_first_he(ctx, if other != owner { other } else { owner });
             set_flag(ctx.core, owner, "l25_skill:ssr_liegong", 1);
-        }
-        "ssr_pojia" => {
-            // ssr_pojia (`祖安武将/extension.js:9474`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_pojia", 1);
         }
         "ssr_newganglie" => {
             // ssr_newganglie (`祖安武将/extension.js:9567`)
@@ -277,18 +260,6 @@ pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pla
             if ctx.core.player(owner).hp < ctx.core.player(owner).max_hp as i32 { ctx.recover(owner, 1, None); }
             set_flag(ctx.core, owner, "l25_skill:ssr_newyizhong", 1);
         }
-        "ssr_shendao" => {
-            // ssr_shendao (`祖安武将/extension.js:10377`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_shendao", 1);
-        }
-        "ssr_newjiahe" => {
-            // ssr_newjiahe (`祖安武将/extension.js:10307`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_newjiahe", 1);
-        }
-        "ssr_miedi" => {
-            // ssr_miedi (`祖安武将/extension.js:10842`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_miedi", 1);
-        }
         "ssr_shiyong" => {
             // ssr_shiyong (`祖安武将/extension.js:10942`)
             ctx.emit(EventData::LoseHp { player: owner, amount: 1 });
@@ -312,10 +283,6 @@ pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pla
             let _ = discard_first_he(ctx, if other != owner { other } else { owner });
             set_flag(ctx.core, owner, "l25_skill:ssr_newlihun", 1);
         }
-        "ssr_biyue" => {
-            // ssr_biyue (`祖安武将/extension.js:11950`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_biyue", 1);
-        }
         "ssr_yjixi" => {
             // ssr_yjixi (`祖安武将/extension.js:12185`)
             let _ = steal_one_card(ctx, owner, other);
@@ -331,14 +298,6 @@ pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pla
             let _ = discard_first_he(ctx, if other != owner { other } else { owner });
             ctx.start_draw(owner, 2);
             set_flag(ctx.core, owner, "l25_skill:ssr_cuandi", 1);
-        }
-        "ssr_wusheng" => {
-            // ssr_wusheng (`祖安武将/extension.js:12929`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_wusheng", 1);
-        }
-        "ssr_yijue" => {
-            // ssr_yijue (`祖安武将/extension.js:13133`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_yijue", 1);
         }
         "ssr_newbaiyi" => {
             // ssr_newbaiyi (`祖安武将/extension.js:13341`)
@@ -356,39 +315,11 @@ pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pla
             let _ = steal_one_card(ctx, owner, other);
             set_flag(ctx.core, owner, "l25_skill:ssr_newyucong", 1);
         }
-        "ssr_newyicong" => {
-            // ssr_newyicong (`祖安武将/extension.js:13604`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_newyicong", 1);
-        }
-        "ssr_newguose" => {
-            // ssr_newguose (`祖安武将/extension.js:13979`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_newguose", 1);
-        }
-        "ssr_newtongque" => {
-            // ssr_newtongque (`祖安武将/extension.js:14304`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_newtongque", 1);
-        }
-        "ssr_newtianxiang" => {
-            // ssr_newtianxiang (`祖安武将/extension.js:14157`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_newtianxiang", 1);
-        }
-        "ssr_huchi" => {
-            // ssr_huchi (`祖安武将/extension.js:14922`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_huchi", 1);
-        }
         "ssr_newluoyi" => {
             // ssr_newluoyi (`祖安武将/extension.js:14948`)
             ctx.emit(EventData::LoseHp { player: owner, amount: 1 });
             let _ = steal_one_card(ctx, owner, other);
             set_flag(ctx.core, owner, "l25_skill:ssr_newluoyi", 1);
-        }
-        "ssr_zhenhun" => {
-            // ssr_zhenhun (`祖安武将/extension.js:15202`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_zhenhun", 1);
-        }
-        "ssr_paoxiao" => {
-            // ssr_paoxiao (`祖安武将/extension.js:15111`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_paoxiao", 1);
         }
         "ssr_newluoshen" => {
             // ssr_newluoshen (`祖安武将/extension.js:15602`)
@@ -414,18 +345,6 @@ pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pla
             let _ = steal_one_card(ctx, owner, other);
             set_flag(ctx.core, owner, "l25_skill:ssr_weigong", 1);
         }
-        "ssr_tianlang" => {
-            // ssr_tianlang (`祖安武将/extension.js:16375`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_tianlang", 1);
-        }
-        "ssr_newjilue" => {
-            // ssr_newjilue (`祖安武将/extension.js:17640`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_newjilue", 1);
-        }
-        "ssr_newjijie" => {
-            // ssr_newjijie (`祖安武将/extension.js:17980`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_newjijie", 1);
-        }
         "ssr_newjiyuan" => {
             // ssr_newjiyuan (`祖安武将/extension.js:17824`)
             let _ = steal_one_card(ctx, owner, other);
@@ -435,10 +354,6 @@ pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pla
             // ssr_jiqiao (`祖安武将/extension.js:18354`)
             let _ = steal_one_card(ctx, owner, other);
             set_flag(ctx.core, owner, "l25_skill:ssr_jiqiao", 1);
-        }
-        "ssr_qicai" => {
-            // ssr_qicai (`祖安武将/extension.js:18242`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_qicai", 1);
         }
         "ssr_newweimu" => {
             // ssr_newweimu (`祖安武将/extension.js:18894`)
@@ -471,10 +386,6 @@ pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pla
             if ctx.core.player(owner).hp < ctx.core.player(owner).max_hp as i32 { ctx.recover(owner, 1, None); }
             set_flag(ctx.core, owner, "l25_skill:ssr_newduanxian", 1);
         }
-        "ssr_manjia" => {
-            // ssr_manjia (`祖安武将/extension.js:22026`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_manjia", 1);
-        }
         "ssr_zaiqi" => {
             // ssr_zaiqi (`祖安武将/extension.js:22170`)
             if ctx.core.player(owner).hp < ctx.core.player(owner).max_hp as i32 { ctx.recover(owner, 1, None); }
@@ -491,18 +402,10 @@ pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pla
             ctx.core.player_mut(owner).hujia = ctx.core.player(owner).hujia.saturating_add(1);
             set_flag(ctx.core, owner, "l25_skill:ssr_zhiji", 1);
         }
-        "ssr_weilong" => {
-            // ssr_weilong (`祖安武将/extension.js:22562`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_weilong", 1);
-        }
         "ssr_hunzi" => {
             // ssr_hunzi (`祖安武将/extension.js:23004`)
             ctx.start_draw(owner, 1);
             set_flag(ctx.core, owner, "l25_skill:ssr_hunzi", 1);
-        }
-        "ssr_newjiang" => {
-            // ssr_newjiang (`祖安武将/extension.js:23364`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_newjiang", 1);
         }
         "ssr_newzhiba" => {
             // ssr_newzhiba (`祖安武将/extension.js:23516`)
@@ -515,34 +418,10 @@ pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pla
             if other != owner { ctx.emit(EventData::Damage(crate::machine::damage_data(Some(owner), other, 1))); }
             set_flag(ctx.core, owner, "l25_skill:ssr_kuiwei", 1);
         }
-        "ssr_newhanzhan" => {
-            // ssr_newhanzhan (`祖安武将/extension.js:23719`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_newhanzhan", 1);
-        }
         "ssr_newbuqu" => {
             // ssr_newbuqu (`祖安武将/extension.js:23967`)
             if ctx.core.player(owner).hp < ctx.core.player(owner).max_hp as i32 { ctx.recover(owner, 1, None); }
             set_flag(ctx.core, owner, "l25_skill:ssr_newbuqu", 1);
-        }
-        "ssr_huwei" => {
-            // ssr_huwei (`祖安武将/extension.js:23900`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_huwei", 1);
-        }
-        "ssr_shensu" => {
-            // ssr_shensu (`祖安武将/extension.js:24198`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_shensu", 1);
-        }
-        "ssr_hubu" => {
-            // ssr_hubu (`祖安武将/extension.js:24310`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_hubu", 1);
-        }
-        "ssr_jushou" => {
-            // ssr_jushou (`祖安武将/extension.js:24390`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_jushou", 1);
-        }
-        "ssr_zhuzhen" => {
-            // ssr_zhuzhen (`祖安武将/extension.js:24891`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_zhuzhen", 1);
         }
         "ssr_tuntian" => {
             // ssr_tuntian (`祖安武将/extension.js:25012`)
@@ -560,22 +439,10 @@ pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pla
             let _ = steal_one_card(ctx, owner, other);
             set_flag(ctx.core, owner, "l25_skill:ssr_newhengzheng", 1);
         }
-        "ssr_baonue" => {
-            // ssr_baonue (`祖安武将/extension.js:25560`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_baonue", 1);
-        }
         "ssr_newjiuchi" => {
             // ssr_newjiuchi (`祖安武将/extension.js:25592`)
             ctx.start_draw(owner, 1);
             set_flag(ctx.core, owner, "l25_skill:ssr_newjiuchi", 1);
-        }
-        "ssr_newmizhou" => {
-            // ssr_newmizhou (`祖安武将/extension.js:25910`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_newmizhou", 1);
-        }
-        "ssr_chanyuan" => {
-            // ssr_chanyuan (`祖安武将/extension.js:26431`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_chanyuan", 1);
         }
         "ssr_newluanji" => {
             // ssr_newluanji (`祖安武将/extension.js:26502`)
@@ -593,18 +460,10 @@ pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pla
             ctx.start_draw(owner, 1);
             set_flag(ctx.core, owner, "l25_skill:ssr_newshiyi", 1);
         }
-        "ssr_zhuhai" => {
-            // ssr_zhuhai (`祖安武将/extension.js:33853`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_zhuhai", 1);
-        }
         "ssr_yijian" => {
             // ssr_yijian (`祖安武将/extension.js:33889`)
             ctx.start_draw(owner, 1);
             set_flag(ctx.core, owner, "l25_skill:ssr_yijian", 1);
-        }
-        "ssr_newfabing" => {
-            // ssr_newfabing (`祖安武将/extension.js:27618`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_newfabing", 1);
         }
         "ssr_xuanhuo" => {
             // ssr_xuanhuo (`祖安武将/extension.js:27487`)
@@ -699,14 +558,6 @@ pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pla
             let _ = steal_one_card(ctx, owner, other);
             set_flag(ctx.core, owner, "l25_skill:ssr_gaiming", 1);
         }
-        "ssr_newguidao" => {
-            // ssr_newguidao (`祖安武将/extension.js:32897`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_newguidao", 1);
-        }
-        "ssr_zhuji" => {
-            // ssr_zhuji (`祖安武将/extension.js:32191`)
-            set_flag(ctx.core, owner, "l25_skill:ssr_zhuji", 1);
-        }
         "ssr_dihuo" => {
             // ssr_dihuo (`祖安武将/extension.js:33216`)
             if other != owner { ctx.emit(EventData::Damage(crate::machine::damage_data(Some(owner), other, 1))); }
@@ -769,9 +620,9 @@ pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pla
             set_flag(ctx.core, owner, "l25_skill:ssr_newsance_xicheng", 1);
         }
         "ssr_newsance_weicheng" => {
-            // ssr_newsance_weicheng (`祖安武将/extension.js:28269-28354`): target draws 1, gives 1 card to owner, optional discard for 1 damage.
+            // ssr_newsance_weicheng (`祖安武将/extension.js:28269-28354`): target draws 1 synchronously, gives 1 card to owner, optional discard for 1 damage.
             if other != owner {
-                ctx.start_draw(other, 1);
+                draw_cards_sync(ctx, other, 1);
                 steal_one_card(ctx, owner, other);
                 if flag(ctx.core, owner, "l25_weicheng_burn") == 1 && discard_first_he(ctx, owner).is_some() {
                     ctx.emit(EventData::Damage(crate::machine::damage_data(Some(owner), other, 1)));

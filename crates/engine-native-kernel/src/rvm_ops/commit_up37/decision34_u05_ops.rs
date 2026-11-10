@@ -246,6 +246,15 @@ pub(super) fn u05_exec(
     hujia_delta: i8,
     extra: U05Extra,
 ) {
+    if !guard_phase_auto_trigger(
+        ctx,
+        owner,
+        "u05",
+        skill,
+        matches!(extra, U05Extra::LoseHpSelf(_)),
+    ) {
+        return;
+    }
     u05_mark_invoked(ctx, owner, skill);
     if limited && !u05_check_limited(ctx, owner, skill) {
         return;
@@ -327,39 +336,35 @@ pub(super) fn u05_exec(
             }
         }
         U05Extra::JudgeEffect(judge_key) => {
-            let rank = ctx
-                .core
-                .deck
-                .last()
-                .and_then(|&cid| ctx.catalog.cards.get(cid as usize))
-                .map(|c| u32::from(c.rank))
-                .unwrap_or(7);
+            let mut rank = 7u32;
+            if let Some(jcard) = pop_deck(ctx) {
+                if let Some(def) = ctx.catalog.cards.get(jcard as usize) {
+                    rank = u32::from(def.rank);
+                }
+                discard_some(ctx, owner, vec![jcard]);
+            }
             set_flag(ctx.core, owner, judge_key, rank);
+            if rank > 6 {
+                ctx.start_draw(owner, 1);
+            }
         }
         U05Extra::PindianOther => {
             if let Some(t) = first_other_alive(ctx.core, owner) {
-                let my_r = ctx
-                    .core
-                    .player(owner)
-                    .hand
-                    .first()
-                    .and_then(|&cid| ctx.catalog.cards.get(cid as usize))
-                    .map(|c| c.rank)
-                    .unwrap_or(0);
-                let th_r = ctx
-                    .core
-                    .player(t)
-                    .hand
-                    .first()
-                    .and_then(|&cid| ctx.catalog.cards.get(cid as usize))
-                    .map(|c| c.rank)
-                    .unwrap_or(0);
-                set_flag(
-                    ctx.core,
-                    owner,
-                    &format!("u05_pindian_won:{skill}"),
-                    u32::from(my_r > th_r),
-                );
+                let my_c = ctx.core.player(owner).hand.first().copied();
+                let th_c = ctx.core.player(t).hand.first().copied();
+                if let (Some(mc), Some(tc)) = (my_c, th_c) {
+                    let my_r = ctx.catalog.cards.get(mc as usize).map(|c| c.rank).unwrap_or(0);
+                    let th_r = ctx.catalog.cards.get(tc as usize).map(|c| c.rank).unwrap_or(0);
+                    ctx.take_hand_card(owner, mc);
+                    discard_some(ctx, owner, vec![mc]);
+                    ctx.take_hand_card(t, tc);
+                    discard_some(ctx, t, vec![tc]);
+                    let won = my_r > th_r;
+                    set_flag(ctx.core, owner, &format!("u05_pindian_won:{skill}"), u32::from(won));
+                    if won {
+                        ctx.start_draw(owner, 1);
+                    }
+                }
             }
         }
     }

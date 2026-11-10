@@ -296,3 +296,118 @@ fn l11_taixu_formal_package_320_generals_32_cards_380_skills_and_206_campaign_no
     let restored = restore_locked_engine(&snap, &verified).expect("restore locked taixu engine");
     assert_eq!(restored.state_hash(), e.state_hash());
 }
+
+#[test]
+fn l11_taixu_yiyi_conservation_and_authoritative_kernel_modifiers() {
+    use engine_native::event::DamageNature;
+    use engine_native::rvm_bridge::modifiers::{
+        eval_card_use_canceled, eval_damage_amount, eval_hand_limit, eval_ignore_armor,
+        eval_sha_extra_targets, eval_sha_use_limit,
+    };
+
+    let (_verified, mut e) = start_formal_taixu_engine(2026_1119);
+
+    // 1. Empty-hand `txhj_yiyi` (`太虚幻境/extension_card.js:334`): draw 2 FIRST, then discard 2 -> hand.len() == 0
+    let old_h0: Vec<_> = e.state_core_mut().player_mut(0).hand.drain(..).collect();
+    e.state_core_mut().discard.extend(old_h0);
+    let old_e0: Vec<_> = e.state_core_mut().player_mut(0).equips.drain(..).collect();
+    e.state_core_mut().discard.extend(old_e0);
+    let discard_before = e.state_core().discard.len();
+    invoke_l11(&mut e, 0, "txhj_yiyi");
+    assert_eq!(
+        e.state_core().player(0).hand.len(),
+        0,
+        "empty-hand txhj_yiyi must draw 2 synchronously and then discard 2"
+    );
+    assert_eq!(e.state_core().discard.len(), discard_before + 2);
+
+    // 2. `txhj_yuanjiao` (`太虚幻境/extension_card.js:305-320`): target draws 1 FIRST (`deck.last()`), then owner draws 3
+    let old_h1: Vec<_> = e.state_core_mut().player_mut(1).hand.drain(..).collect();
+    e.state_core_mut().discard.extend(old_h1);
+    let expected_target_card = *e.state_core().deck.last().expect("non-empty deck");
+    invoke_l11(&mut e, 0, "txhj_yuanjiao");
+    assert_eq!(e.state_core().player(1).hand, vec![expected_target_card]);
+    assert_eq!(e.state_core().player(0).hand.len(), 3);
+
+    // 3. Authoritative kernel modifiers (`extension_card.js:8, 22, 171, 379`, `extension_servant.js:419`)
+    let sha_card = e.catalog().card_by_name("杀").unwrap_or(0);
+    invoke_l11(&mut e, 0, "txhj_zhuge");
+    assert_eq!(
+        eval_sha_use_limit(
+            e.state_core(),
+            e.catalog(),
+            0,
+            Some(sha_card),
+            CardKind::Sha,
+            DamageNature::Normal,
+            1,
+        ),
+        (4, false),
+        "txhj_zhuge must add +3 to authoritative Sha use limit"
+    );
+
+    invoke_l11(&mut e, 0, "txhj_fangtianhuaji");
+    assert_eq!(
+        eval_sha_extra_targets(
+            e.state_core(),
+            e.catalog(),
+            0,
+            sha_card,
+            CardKind::Sha,
+            DamageNature::Normal,
+        ),
+        2,
+        "txhj_fangtianhuaji must grant +2 extra Sha targets"
+    );
+
+    // Ensure seat 0 has >= 2 cards to pay `txhj_xingtianpojunfu` discard cost
+    invoke_l11(&mut e, 0, "txhj_xingtianpojunfu");
+    let opp_card = e.state_core().player(1).hand[0];
+    let opp_kind = e.catalog().card_kind(opp_card);
+    assert!(
+        eval_card_use_canceled(
+            e.state_core(),
+            e.catalog(),
+            1,
+            opp_card,
+            opp_kind,
+            DamageNature::Normal,
+        ),
+        "txhj_xingtianpojunfu must lock target card use for the turn"
+    );
+    assert!(
+        eval_ignore_armor(
+            e.state_core(),
+            e.catalog(),
+            0,
+            1,
+            Some(sha_card),
+            DamageNature::Normal,
+        ),
+        "txhj_xingtianpojunfu must nullify target armor"
+    );
+
+    invoke_l11(&mut e, 0, "txhj_xuwangzhimian");
+    let hp0 = e.state_core().player(0).hp;
+    assert_eq!(
+        eval_hand_limit(e.state_core(), e.catalog(), 0, hp0),
+        (hp0 - 1).max(0) as usize,
+        "txhj_xuwangzhimian must reduce owner hand limit by 1"
+    );
+
+    invoke_l11(&mut e, 0, "txhj_dundunSkill2");
+    assert_eq!(
+        eval_damage_amount(
+            e.state_core(),
+            e.catalog(),
+            Some(1),
+            0,
+            Some(sha_card),
+            DamageNature::Normal,
+            2,
+        ),
+        1,
+        "txhj_dundunSkill2 must reduce heavy damage (>1) by 1"
+    );
+}
+

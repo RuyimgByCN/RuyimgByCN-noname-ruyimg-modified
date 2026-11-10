@@ -1305,6 +1305,16 @@ impl Catalog {
                     spec.matches_card(core, self, player, card, in_play, target_kind)
                 })
             })
+            .or_else(|| {
+                crate::rvm_bridge::modifiers::d34_flags::find_d34_flag_view_as(
+                    core,
+                    self,
+                    player,
+                    card,
+                    in_play,
+                    target_kind,
+                )
+            })
     }
 
     /// PA12 批⑰：返回 `player` 转化技在 `from none` 模式下使用的确定性虚拟令牌卡牌 ID（不在手牌与装备区中）。

@@ -62,8 +62,8 @@ class BinaryWriter {
     this.bytes.push((v >>> 8) & 0xff, v & 0xff);
   }
 
-  writeVarint(value: number): void {
-    let v = value >>> 0;
+  writeVarint(value: number, optimizePositive = true): void {
+    let v = optimizePositive ? value >>> 0 : ((value << 1) ^ (value >> 31)) >>> 0;
     while (v >= 0x80) {
       this.bytes.push((v & 0x7f) | 0x80);
       v >>>= 7;
@@ -140,13 +140,16 @@ class BinaryReader {
     return (hi << 8) | lo;
   }
 
-  readVarint(): number {
+  readVarint(optimizePositive = true): number {
     let result = 0;
     let shift = 0;
     while (this.offset < this.bytes.length && shift < 35) {
       const b = this.bytes[this.offset++];
       result |= (b & 0x7f) << shift;
-      if ((b & 0x80) === 0) return result >>> 0;
+      if ((b & 0x80) === 0) {
+        const u = result >>> 0;
+        return optimizePositive ? u | 0 : (u >>> 1) ^ -(u & 1);
+      }
       shift += 7;
     }
     throw new Error("Truncated Spine 4.0 binary varint");
@@ -241,23 +244,38 @@ function readCurve(r: BinaryReader): CurveDef | undefined {
   return undefined;
 }
 
+export interface Spine40BinaryEncodeOptions {
+  nonessential?: boolean;
+  emitLinkedMeshForIdenticalTopology?: boolean;
+}
+
 /**
  * Encodes a `SkeletonData` into standard Spine 4.0 binary `.skel` byte layout
  * (8-byte big-endian hash + version string + header floats + string table +
  * bones + slots + constraints + skins + events + animations).
  */
-export function encodeStandardSpine40Skel(data: SkeletonData): Uint8Array {
+export function encodeStandardSpine40Skel(
+  data: SkeletonData,
+  options?: Spine40BinaryEncodeOptions,
+): Uint8Array {
   if (!isSpine40Ver(data.header.spine)) {
     throw new Error(`Cannot encode non-4.0 skeleton version: ${data.header.spine}`);
   }
+  const nonessential = options?.nonessential ?? true;
+  const emitLinkedMesh = options?.emitLinkedMeshForIdenticalTopology ?? false;
+
   const w = new BinaryWriter();
-  // 8-byte hash derived from FNV-1a over `data.header.hash`
   let hHi = 0x811c9dc5;
   let hLo = 0x01000193;
-  for (let i = 0; i < data.header.hash.length; i++) {
-    const ch = data.header.hash.charCodeAt(i);
-    hHi = Math.imul(hHi ^ ch, 0x01000193) >>> 0;
-    hLo = Math.imul(hLo ^ (ch + i), 0x01000193) >>> 0;
+  if (/^[0-9a-fA-F]{16}$/.test(data.header.hash)) {
+    hHi = Number.parseInt(data.header.hash.slice(0, 8), 16) >>> 0;
+    hLo = Number.parseInt(data.header.hash.slice(8, 16), 16) >>> 0;
+  } else {
+    for (let i = 0; i < data.header.hash.length; i++) {
+      const ch = data.header.hash.charCodeAt(i);
+      hHi = Math.imul(hHi ^ ch, 0x01000193) >>> 0;
+      hLo = Math.imul(hLo ^ (ch + i), 0x01000193) >>> 0;
+    }
   }
   w.writeInt32(hHi);
   w.writeInt32(hLo);
@@ -266,12 +284,14 @@ export function encodeStandardSpine40Skel(data: SkeletonData): Uint8Array {
   w.writeFloat(data.header.y);
   w.writeFloat(data.header.width);
   w.writeFloat(data.header.height);
-  w.writeBool(true); // nonessential = true (includes fps, images, audio, edges, colors)
-  w.writeFloat(data.header.fps);
-  w.writeString(data.header.images ?? null);
-  w.writeString(data.header.audio ?? null);
+  w.writeBool(nonessential);
+  if (nonessential) {
+    w.writeFloat(data.header.fps);
+    w.writeString(data.header.images ?? null);
+    w.writeString(data.header.audio ?? null);
+  }
 
-  // Build deduplicated string table
+  // Build deduplicated string table without polluting strings[0] with header.hash
   const strPool: string[] = [];
   const strIdx = new Map<string, number>();
   const intern = (s: string | null | undefined): number => {
@@ -283,11 +303,12 @@ export function encodeStandardSpine40Skel(data: SkeletonData): Uint8Array {
     strIdx.set(s, id);
     return id;
   };
-  intern(data.header.hash);
   for (const s of data.slots) intern(s.attachment);
+  const defaultSkin = data.skins.find((s) => s.name === "default");
+  if (emitLinkedMesh && defaultSkin) intern("default");
   for (const sk of data.skins) {
-    for (const slotMap of Object.values(sk.attachments)) {
-      for (const [attKey, att] of Object.entries(slotMap)) {
+    for (const slotMapObj of Object.values(sk.attachments)) {
+      for (const [attKey, att] of Object.entries(slotMapObj)) {
         intern(attKey);
         intern(att.name);
         if (att.type === "region" || att.type === "mesh") intern(att.path);
@@ -318,7 +339,7 @@ export function encodeStandardSpine40Skel(data: SkeletonData): Uint8Array {
     w.writeFloat(b.length);
     w.writeByte(Math.max(0, TRANSFORM_MODES.indexOf(b.transform)));
     w.writeBool(b.skin);
-    w.writeInt32(0x9b9b9bff); // nonessential bone color
+    if (nonessential) w.writeInt32(0x9b9b9bff);
   });
 
   // Slots
@@ -423,22 +444,44 @@ export function encodeStandardSpine40Skel(data: SkeletonData): Uint8Array {
           w.writeByte(1);
           w.writeVarint(att.vertexCount);
           writeVertices(w, att.vertices, att.weighted, att.vertexCount);
-          w.writeColorHex(att.color);
+          if (nonessential) w.writeColorHex(att.color);
         } else if (att.type === "mesh") {
-          w.writeByte(2);
-          w.writeVarint(intern(att.path));
-          w.writeColorHex(att.color);
-          const vCount = att.uvs.length >> 1;
-          w.writeVarint(vCount);
-          for (const uv of att.uvs) w.writeFloat(uv);
-          w.writeVarint(att.triangles.length);
-          for (const tri of att.triangles) w.writeUint16(tri);
-          writeVertices(w, att.vertices, att.weighted, vCount);
-          w.writeVarint(att.hull);
-          w.writeVarint(att.edges.length);
-          for (const e of att.edges) w.writeUint16(e);
-          w.writeFloat(att.width);
-          w.writeFloat(att.height);
+          const parentCand =
+            emitLinkedMesh && sk.name !== "default" ? defaultSkin?.attachments?.[slotName]?.[attKey] : undefined;
+          if (
+            parentCand &&
+            parentCand.type === "mesh" &&
+            parentCand.uvs.length === att.uvs.length &&
+            parentCand.triangles.length === att.triangles.length
+          ) {
+            w.writeByte(3); // LinkedMesh
+            w.writeVarint(intern(att.path));
+            w.writeColorHex(att.color);
+            w.writeVarint(intern("default"));
+            w.writeVarint(intern(attKey));
+            w.writeBool(true); // inheritDeform
+            if (nonessential) {
+              w.writeFloat(att.width);
+              w.writeFloat(att.height);
+            }
+          } else {
+            w.writeByte(2);
+            w.writeVarint(intern(att.path));
+            w.writeColorHex(att.color);
+            const vCount = att.uvs.length >> 1;
+            w.writeVarint(vCount);
+            for (const uv of att.uvs) w.writeFloat(uv);
+            w.writeVarint(att.triangles.length);
+            for (const tri of att.triangles) w.writeUint16(tri);
+            writeVertices(w, att.vertices, att.weighted, vCount);
+            w.writeVarint(att.hull);
+            if (nonessential) {
+              w.writeVarint(att.edges.length);
+              for (const e of att.edges) w.writeUint16(e);
+              w.writeFloat(att.width);
+              w.writeFloat(att.height);
+            }
+          }
         } else if (att.type === "path") {
           w.writeByte(4);
           w.writeBool(att.closed);
@@ -447,25 +490,24 @@ export function encodeStandardSpine40Skel(data: SkeletonData): Uint8Array {
           writeVertices(w, att.vertices, att.weighted, att.vertexCount);
           const lenCount = Math.floor(att.vertexCount / 3);
           for (let li = 0; li < lenCount; li++) w.writeFloat(att.lengths[li] ?? 0);
-          w.writeColorHex(att.color);
+          if (nonessential) w.writeColorHex(att.color);
         } else if (att.type === "point") {
           w.writeByte(5);
           w.writeFloat(att.rotation);
           w.writeFloat(att.x);
           w.writeFloat(att.y);
-          w.writeColorHex(att.color);
+          if (nonessential) w.writeColorHex(att.color);
         } else if (att.type === "clipping") {
           w.writeByte(6);
           w.writeVarint(att.end ? (slotMap.get(att.end) ?? 0) : 0xffff);
           w.writeVarint(att.vertexCount);
           writeVertices(w, att.vertices, att.weighted, att.vertexCount);
-          w.writeColorHex(att.color);
+          if (nonessential) w.writeColorHex(att.color);
         }
       }
     }
   };
 
-  const defaultSkin = data.skins.find((s) => s.name === "default");
   if (defaultSkin) {
     writeSkinAttachments(defaultSkin);
   } else {
@@ -476,10 +518,14 @@ export function encodeStandardSpine40Skel(data: SkeletonData): Uint8Array {
   w.writeVarint(namedSkins.length);
   for (const sk of namedSkins) {
     w.writeString(sk.name);
-    w.writeVarint(0); // skin bones
-    w.writeVarint(0); // skin ik
-    w.writeVarint(0); // skin transform
-    w.writeVarint(0); // skin path
+    w.writeVarint(sk.bones.length);
+    for (const bn of sk.bones) w.writeVarint(boneMap.get(bn) ?? 0);
+    w.writeVarint(sk.ik.length);
+    for (const iname of sk.ik) w.writeVarint(Math.max(0, data.ik.findIndex((x) => x.name === iname)));
+    w.writeVarint(sk.transform.length);
+    for (const tname of sk.transform) w.writeVarint(Math.max(0, data.transform.findIndex((x) => x.name === tname)));
+    w.writeVarint(sk.path.length);
+    for (const pname of sk.path) w.writeVarint(Math.max(0, data.path.findIndex((x) => x.name === pname)));
     writeSkinAttachments(sk);
   }
 
@@ -673,7 +719,7 @@ export function encodeStandardSpine40Skel(data: SkeletonData): Uint8Array {
       w.writeVarint(kf.offsets.length);
       for (const off of kf.offsets) {
         w.writeVarint(slotMap.get(off.slot) ?? 0);
-        w.writeVarint(off.offset);
+        w.writeVarint(off.offset, false);
       }
     }
 
@@ -682,6 +728,20 @@ export function encodeStandardSpine40Skel(data: SkeletonData): Uint8Array {
   }
 
   return new Uint8Array(w.bytes);
+}
+
+interface PendingBinaryLinkedMesh {
+  targetSkinIdx: number;
+  slotName: string;
+  key: string;
+  name: string;
+  path: string;
+  color: string;
+  parentSkinName: string;
+  parentName: string;
+  width: number;
+  height: number;
+  hasExplicitSize: boolean;
 }
 
 /**
@@ -860,7 +920,13 @@ export function parseStandardSpine40Skel(bytes: Uint8Array): SkeletonData {
     });
   }
 
-  const readAttachmentEntry = (placeholderName: string): Attachment => {
+  const pendingLinkedMeshes: PendingBinaryLinkedMesh[] = [];
+
+  const readAttachmentEntry = (
+    targetSkinIdx: number,
+    slotName: string,
+    placeholderName: string,
+  ): Attachment => {
     const name = r.readStringRef() ?? placeholderName;
     const type = r.readByte();
     if (type === 0) {
@@ -903,6 +969,43 @@ export function parseStandardSpine40Skel(bytes: Uint8Array): SkeletonData {
       }
       return { type: "mesh", name, path: attPath, uvs, triangles, vertices, hull, edges, color, width: mw, height: mh, weighted };
     }
+    if (type === 3) {
+      // LinkedMesh: inherits uvs, triangles, vertices, hull, edges from parent mesh
+      const attPath = r.readStringRef() ?? name;
+      const color = r.readColorHex();
+      const parentSkinName = r.readStringRef() ?? "default";
+      const parentName = r.readStringRef() ?? name;
+      r.readBool(); // inheritDeform
+      const mw = nonessential ? r.readFloat() : 32;
+      const mh = nonessential ? r.readFloat() : 32;
+      pendingLinkedMeshes.push({
+        targetSkinIdx,
+        slotName,
+        key: placeholderName,
+        name,
+        path: attPath,
+        color,
+        parentSkinName,
+        parentName,
+        width: mw,
+        height: mh,
+        hasExplicitSize: nonessential,
+      });
+      return {
+        type: "mesh",
+        name,
+        path: attPath,
+        uvs: [],
+        triangles: [],
+        vertices: [],
+        hull: 0,
+        edges: [],
+        color,
+        width: mw,
+        height: mh,
+        weighted: false,
+      };
+    }
     if (type === 4) {
       const closed = r.readBool();
       const constantSpeed = r.readBool();
@@ -939,7 +1042,10 @@ export function parseStandardSpine40Skel(bytes: Uint8Array): SkeletonData {
     throw new Error(`Unsupported Spine 4.0 binary attachment type: ${type}`);
   };
 
-  const readSkinSlotAttachments = (slotEntryCount: number): Record<string, Record<string, Attachment>> => {
+  const readSkinSlotAttachments = (
+    targetSkinIdx: number,
+    slotEntryCount: number,
+  ): Record<string, Record<string, Attachment>> => {
     const out: Record<string, Record<string, Attachment>> = {};
     for (let i = 0; i < slotEntryCount; i++) {
       const slIdx = r.readVarint();
@@ -948,7 +1054,7 @@ export function parseStandardSpine40Skel(bytes: Uint8Array): SkeletonData {
       const attCount = r.readVarint();
       for (let j = 0; j < attCount; j++) {
         const key = r.readStringRef() ?? `att_${j}`;
-        out[slName][key] = readAttachmentEntry(key);
+        out[slName][key] = readAttachmentEntry(targetSkinIdx, slName, key);
       }
     }
     return out;
@@ -963,7 +1069,7 @@ export function parseStandardSpine40Skel(bytes: Uint8Array): SkeletonData {
       ik: [],
       transform: [],
       path: [],
-      attachments: readSkinSlotAttachments(defaultSlotEntries),
+      attachments: readSkinSlotAttachments(0, defaultSlotEntries),
     });
   }
 
@@ -983,18 +1089,51 @@ export function parseStandardSpine40Skel(bytes: Uint8Array): SkeletonData {
     const sp: string[] = [];
     for (let j = 0; j < spCount; j++) sp.push(path[r.readVarint()]?.name ?? "");
     const sec = r.readVarint();
-    skins.push({ name, bones: sb, ik: sik, transform: str, path: sp, attachments: readSkinSlotAttachments(sec) });
+    const targetIdx = skins.length;
+    skins.push({
+      name,
+      bones: sb,
+      ik: sik,
+      transform: str,
+      path: sp,
+      attachments: readSkinSlotAttachments(targetIdx, sec),
+    });
+  }
+
+  for (const lm of pendingLinkedMeshes) {
+    const parentSkin = skins.find((s) => s.name === lm.parentSkinName) ?? skins[0];
+    const parentAtt = parentSkin?.attachments?.[lm.slotName]?.[lm.parentName];
+    const dstSkin = skins[lm.targetSkinIdx];
+    if (parentAtt && parentAtt.type === "mesh" && dstSkin?.attachments?.[lm.slotName]) {
+      dstSkin.attachments[lm.slotName][lm.key] = {
+        type: "mesh",
+        name: lm.name,
+        path: lm.path,
+        uvs: [...parentAtt.uvs],
+        triangles: [...parentAtt.triangles],
+        vertices: [...parentAtt.vertices],
+        hull: parentAtt.hull,
+        edges: [...parentAtt.edges],
+        color: lm.color,
+        width: lm.hasExplicitSize ? lm.width : parentAtt.width,
+        height: lm.hasExplicitSize ? lm.height : parentAtt.height,
+        weighted: parentAtt.weighted,
+      };
+    }
   }
 
   // Events
   const eventCount = r.readVarint();
+  const eventHasAudio: boolean[] = [];
   for (let i = 0; i < eventCount; i++) {
     r.readStringRef();
-    r.readVarint();
+    r.readVarint(false);
     r.readFloat();
     r.readString();
     const audioPath = r.readString();
-    if (audioPath) {
+    const hasAudio = Boolean(audioPath);
+    eventHasAudio.push(hasAudio);
+    if (hasAudio) {
       r.readFloat();
       r.readFloat();
     }
@@ -1164,7 +1303,7 @@ export function parseStandardSpine40Skel(bytes: Uint8Array): SkeletonData {
       const offCount = r.readVarint();
       const offsets: Array<{ slot: string; offset: number }> = [];
       for (let k = 0; k < offCount; k++) {
-        offsets.push({ slot: slots[r.readVarint()]?.name ?? "", offset: r.readVarint() });
+        offsets.push({ slot: slots[r.readVarint()]?.name ?? "", offset: r.readVarint(false) });
       }
       drawOrder.push({ time, offsets });
     }
@@ -1172,10 +1311,14 @@ export function parseStandardSpine40Skel(bytes: Uint8Array): SkeletonData {
     const evTlCount = r.readVarint();
     for (let j = 0; j < evTlCount; j++) {
       r.readFloat();
-      r.readVarint();
-      r.readVarint();
+      const evIdx = r.readVarint();
+      r.readVarint(false);
       r.readFloat();
       if (r.readBool()) r.readString();
+      if (eventHasAudio[evIdx]) {
+        r.readFloat();
+        r.readFloat();
+      }
     }
 
     animations[animName] = {
@@ -1192,7 +1335,7 @@ export function parseStandardSpine40Skel(bytes: Uint8Array): SkeletonData {
 
   return {
     header: {
-      hash: r.strings[0] || rawHash,
+      hash: rawHash,
       spine,
       x,
       y,
@@ -1211,3 +1354,7 @@ export function parseStandardSpine40Skel(bytes: Uint8Array): SkeletonData {
     animations,
   };
 }
+
+export const encodeSpine40StandardBinary = encodeStandardSpine40Skel;
+export const decodeSpine40StandardBinary = parseStandardSpine40Skel;
+

@@ -6,13 +6,12 @@ import {
   HANDCRAFTED_SPINE40_SKELETON_JSON,
   buildBatchGeometry,
   createSkeletonInstance,
-  parseSpine40Json,
   parseTextureAtlas,
   renderSpineBatchesToCanvas2D,
   renderSpineBatchesToWebGL,
   resolveDynamicSkinImport,
+  uploadRgbaTextureToWebGL,
   type MinimalWebGLContext,
-  type SkeletonData,
   type TextureAtlas,
 } from "../../../engine/spine40/index";
 
@@ -31,7 +30,6 @@ const emit = defineEmits<{
 const canvas2dRef = ref<HTMLCanvasElement | null>(null);
 const webglCanvasRef = ref<HTMLCanvasElement | null>(null);
 
-const cleanroomSkeleton = parseSpine40Json(HANDCRAFTED_SPINE40_SKELETON_JSON);
 const cleanroomAtlas = parseTextureAtlas(HANDCRAFTED_SPINE40_ATLAS_TEXT);
 
 const showImportForm = ref(false);
@@ -42,6 +40,7 @@ const paramAction = ref("DaiJi");
 const paramScale = ref(1.0);
 const importedRawAsset = ref<unknown>(null);
 const importedAtlasText = ref<string>("");
+const importedTexturePixels = ref<{ name: string; width: number; height: number; pixels: Uint8Array } | null>(null);
 const lastGlStats = ref<{ drawCallCount: number; triangleCount: number; shaderProgramActive: boolean }>({
   drawCallCount: 0,
   triangleCount: 0,
@@ -63,13 +62,45 @@ const skinResolution = computed(() =>
   ),
 );
 
-const activeSkeleton = computed<SkeletonData>(() => skinResolution.value.skeletonData ?? cleanroomSkeleton);
 const activeAtlas = computed<TextureAtlas>(() =>
   importedAtlasText.value.trim() ? parseTextureAtlas(importedAtlasText.value) : cleanroomAtlas,
 );
 
+function renderStaticPortraitFallback() {
+  const c2d = canvas2dRef.value?.getContext("2d");
+  if (c2d && canvas2dRef.value) {
+    const w = canvas2dRef.value.width;
+    const h = canvas2dRef.value.height;
+    c2d.clearRect(0, 0, w, h);
+    c2d.fillStyle = "#172033";
+    c2d.fillRect(0, 0, w, h);
+    c2d.strokeStyle = "#475569";
+    c2d.strokeRect(2, 2, w - 4, h - 4);
+    c2d.fillStyle = "#cbd5e1";
+    c2d.font = "10px sans-serif";
+    c2d.fillText(`静态立绘: ${paramGeneralId.value}`, 8, 22);
+    c2d.fillStyle = "#94a3b8";
+    c2d.fillText(paramSkinName.value.slice(0, 12), 8, 38);
+  }
+  const glCanvas = webglCanvasRef.value;
+  if (glCanvas) {
+    const gl = (glCanvas.getContext("webgl", { premultipliedAlpha: true }) ??
+      glCanvas.getContext("experimental-webgl")) as unknown as MinimalWebGLContext | null;
+    if (gl) {
+      gl.viewport(0, 0, glCanvas.width, glCanvas.height);
+      gl.clearColor(0.07, 0.1, 0.15, 1.0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+    }
+  }
+  lastGlStats.value = { drawCallCount: 0, triangleCount: 0, shaderProgramActive: false };
+}
+
 function renderCurrentPose() {
-  const skelData = activeSkeleton.value;
+  const skelData = skinResolution.value.skeletonData;
+  if (!skelData || skinResolution.value.status !== "ready-spine40") {
+    renderStaticPortraitFallback();
+    return;
+  }
   const atlas = activeAtlas.value;
   const clipLower = props.activeClip || "daiji";
   const animNames = Object.keys(skelData.animations);
@@ -97,7 +128,21 @@ function renderCurrentPose() {
     const gl = (glCanvas.getContext("webgl", { premultipliedAlpha: true }) ??
       glCanvas.getContext("experimental-webgl")) as unknown as MinimalWebGLContext | null;
     if (gl) {
-      lastGlStats.value = renderSpineBatchesToWebGL(gl, batches, glCanvas.width, glCanvas.height);
+      let pageTextures: Record<string, unknown> | undefined;
+      if (importedTexturePixels.value) {
+        const tex = uploadRgbaTextureToWebGL(
+          gl,
+          importedTexturePixels.value.width,
+          importedTexturePixels.value.height,
+          importedTexturePixels.value.pixels,
+        );
+        if (tex) {
+          pageTextures = { [importedTexturePixels.value.name]: tex };
+          const firstPage = atlas.pages[0]?.name;
+          if (firstPage) pageTextures[firstPage] = tex;
+        }
+      }
+      lastGlStats.value = renderSpineBatchesToWebGL(gl, batches, glCanvas.width, glCanvas.height, pageTextures);
     }
   }
 }
@@ -124,6 +169,28 @@ async function onAtlasFileChange(ev: Event) {
   renderCurrentPose();
 }
 
+async function onTextureFileChange(ev: Event) {
+  const input = ev.target as HTMLInputElement | null;
+  const file = input?.files?.[0];
+  if (!file || typeof createImageBitmap !== "function") return;
+  const bmp = await createImageBitmap(file);
+  const offscreen = document.createElement("canvas");
+  offscreen.width = bmp.width;
+  offscreen.height = bmp.height;
+  const ctx = offscreen.getContext("2d");
+  if (!ctx) return;
+  ctx.drawImage(bmp, 0, 0);
+  const imgData = ctx.getImageData(0, 0, bmp.width, bmp.height);
+  importedTexturePixels.value = {
+    name: file.name,
+    width: bmp.width,
+    height: bmp.height,
+    pixels: new Uint8Array(imgData.data.buffer, imgData.data.byteOffset, imgData.data.byteLength),
+  };
+  emit("import-status", `动皮贴图导入 (${file.name}, ${bmp.width}x${bmp.height})`);
+  renderCurrentPose();
+}
+
 function onLoadCleanroomDemoAsset() {
   paramVersion.value = "4.0";
   importedRawAsset.value = HANDCRAFTED_SPINE40_SKELETON_JSON;
@@ -135,6 +202,7 @@ function onLoadCleanroomDemoAsset() {
 function onClearImportedAsset() {
   importedRawAsset.value = null;
   importedAtlasText.value = "";
+  importedTexturePixels.value = null;
   emit("import-status", `已清空导入动皮：回退静态立绘 (${skinResolution.value.status})`);
   renderCurrentPose();
 }
@@ -213,6 +281,15 @@ watch(
         <label class="tiny">
           图集 (.atlas)
           <input type="file" accept=".atlas,.txt" data-testid="input-spine-atlas-file" @change="onAtlasFileChange" />
+        </label>
+        <label class="tiny">
+          贴图 (.png)
+          <input
+            type="file"
+            accept=".png,image/png,.jpg,.jpeg,.webp"
+            data-testid="input-spine-png-file"
+            @change="onTextureFileChange"
+          />
         </label>
         <button type="button" data-testid="btn-spine40-load-handcrafted" @click="onLoadCleanroomDemoAsset">
           载入净室4.0校核骨骼

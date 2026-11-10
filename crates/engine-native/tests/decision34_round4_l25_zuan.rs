@@ -261,3 +261,145 @@ fn l25_zuan_formal_package_generals_cards_skills_and_archive_roundtrip() {
         restore_locked_engine(&archive_bytes, &verified).expect("restore locked L25 engine");
     assert_eq!(restored.state_hash(), sweep_e.state_hash());
 }
+
+#[test]
+fn l25_zuan_ssr_skills_authoritative_modifiers_viewas_and_turn_safety() {
+    use engine_native::catalog::CardKind;
+    use engine_native::event::DamageNature;
+    use engine_native::rvm_bridge::modifiers::{
+        eval_card_unrespondable, eval_damage_amount, eval_distance_total, eval_sha_use_limit,
+    };
+
+    let (_verified, mut e) = start_formal_zuan_engine(2026_1125);
+    let sha_card = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.kind == CardKind::Sha)
+        .unwrap() as u32;
+    let shan_card = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.kind == CardKind::Shan)
+        .unwrap() as u32;
+
+    // 1. `ssr_diaochan` (`ssr_biyue` — `祖安武将/extension.js:11950`):
+    // Passive `mod.globalTo` adds +1 distance per empty zone (h, e, j), and active trigger draws cards!
+    e.assign_general_named(1, "ssr_diaochan")
+        .expect("assign ssr_diaochan");
+    let drained_h1: Vec<_> = e.state_core_mut().player_mut(1).hand.drain(..).collect();
+    e.state_core_mut().discard.extend(drained_h1);
+    let drained_e1: Vec<_> = e.state_core_mut().player_mut(1).equips.drain(..).collect();
+    e.state_core_mut().discard.extend(drained_e1);
+    assert_eq!(
+        eval_distance_total(e.state_core(), e.catalog(), 0, 1, 1),
+        4,
+        "ssr_biyue with 3 empty zones (h/e/j) must add +3 distance to seat 1"
+    );
+    invoke_l25(&mut e, 1, "ssr_biyue");
+    assert!(
+        !e.state_core().player(1).hand.is_empty(),
+        "ssr_biyue must draw cards instead of being a dead flag"
+    );
+
+    // 2. `ssr_zhangfei` (`ssr_paoxiao` — `extension.js:15111`): unlimited Sha uses
+    e.assign_general_named(0, "ssr_zhangfei")
+        .expect("assign ssr_zhangfei");
+    let (_, unlimited) = eval_sha_use_limit(
+        e.state_core(),
+        e.catalog(),
+        0,
+        Some(sha_card),
+        CardKind::Sha,
+        DamageNature::Normal,
+        1,
+    );
+    assert!(unlimited, "ssr_paoxiao must grant unlimited Sha uses");
+
+    // 3. `ssr_lvbu` (`ssr_wushuang` — `extension.js:8998`): Sha unrespondable
+    e.assign_general_named(0, "ssr_lvbu")
+        .expect("assign ssr_lvbu");
+    assert!(
+        eval_card_unrespondable(
+            e.state_core(),
+            e.catalog(),
+            0,
+            1,
+            sha_card,
+            CardKind::Sha,
+            DamageNature::Normal,
+        ),
+        "ssr_wushuang must enforce unrespondable Sha in authoritative kernel"
+    );
+
+    // 4. `ssr_zhaoyun` (`ssr_newlongdan` — `extension.js:5586`): Shan <-> Sha view-as
+    e.assign_general_named(0, "ssr_zhaoyun")
+        .expect("assign ssr_zhaoyun");
+    if !e.state_core().player(0).hand.contains(&shan_card) {
+        e.state_core_mut().deck.retain(|&c| c != shan_card);
+        e.state_core_mut().discard.retain(|&c| c != shan_card);
+        e.state_core_mut().player_mut(1).hand.retain(|&c| c != shan_card);
+        e.state_core_mut().player_mut(0).hand.push(shan_card);
+    }
+    assert!(
+        e.catalog()
+            .find_player_vm_view_as(e.state_core(), 0, shan_card, true, Some(CardKind::Sha))
+            .is_some(),
+        "ssr_newlongdan must allow viewing Shan as Sha"
+    );
+
+    // 5. `ssr_menghuo` (`ssr_manjia` — `extension.js:22026`): Vine Armor passive (0 normal Sha, +1 Fire damage)
+    e.assign_general_named(1, "ssr_menghuo")
+        .expect("assign ssr_menghuo");
+    assert_eq!(
+        eval_damage_amount(
+            e.state_core(),
+            e.catalog(),
+            Some(0),
+            1,
+            Some(sha_card),
+            DamageNature::Normal,
+            1,
+        ),
+        0,
+        "ssr_manjia must prevent normal Sha damage"
+    );
+    assert_eq!(
+        eval_damage_amount(
+            e.state_core(),
+            e.catalog(),
+            Some(0),
+            1,
+            Some(sha_card),
+            DamageNature::Fire,
+            1,
+        ),
+        2,
+        "ssr_manjia must add +1 to incoming Fire damage"
+    );
+
+    // 6. Full-turn progression safety: `ssr_guojia` (`ssr_bailun`, `max_hp = 3`) does NOT self-immolate across 6 phases!
+    e.assign_general_named(0, "ssr_guojia")
+        .expect("assign ssr_guojia");
+    for _ in 0..6 {
+        let actor = e.turn().current;
+        let _ = e.submit(GameCommand {
+            actor,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::NextPhase,
+        });
+        drain(&mut e);
+    }
+    assert!(
+        e.state_core().player(0).alive,
+        "ssr_guojia must survive full turn progression without 6x ssr_bailun self-immolation"
+    );
+    assert_eq!(
+        flag(&e, 0, "l25_skill:_dieskill"),
+        0,
+        "Death skill _dieskill must NOT fire on PhaseBegin"
+    );
+}
+

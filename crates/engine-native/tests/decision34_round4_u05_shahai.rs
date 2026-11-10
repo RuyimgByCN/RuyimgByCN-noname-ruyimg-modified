@@ -435,3 +435,106 @@ fn u05_single_subpackage_isolation_and_cross_subpack_general_assembly() {
     invoke_u05(&mut e_gj, 0, "shahai-gujian__ref_xuanning");
     assert_eq!(flag(&e_gj, 0, "u05_skill:xuanning"), 1);
 }
+
+#[test]
+fn u05_bidirectional_wuxing_coexistence_turn_progression_and_authoritative_modifiers() {
+    let ext_root =
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../packages/extensions");
+    let freeze_pkg = |dir_name: &str| -> content_native_loader::FrozenPackage {
+        let pkg_dir = ext_root.join(dir_name);
+        let raw_json = std::fs::read_to_string(pkg_dir.join("package.npack.json"))
+            .unwrap()
+            .replace("\r\n", "\n");
+        let parsed: serde_json::Value = serde_json::from_str(&raw_json).unwrap();
+        let mut assets = BTreeMap::new();
+        if let Some(paths) = parsed.get("asset_paths").and_then(|v| v.as_object()) {
+            for rel_path in paths.values().filter_map(|v| v.as_str()) {
+                let bytes = std::fs::read(pkg_dir.join(rel_path))
+                    .unwrap()
+                    .into_iter()
+                    .filter(|&b| b != b'\r')
+                    .collect::<Vec<u8>>();
+                assets.insert(rel_path.to_string(), bytes);
+            }
+        }
+        validate_and_freeze_raw_package(raw_json, assets).expect("freeze formal package")
+    };
+
+    // 1. Bidirectional formal coexistence: `[shahai-zhenfa, wuxing]` AND `[wuxing, shahai-zhenfa]`
+    let v_zw = prepare_locked_content_with_bridge(vec![
+        freeze_pkg("shahai-zhenfa-upstream-noname"),
+        freeze_pkg("wuxing-upstream-liuli"),
+    ])
+    .expect("[shahai-zhenfa, wuxing] must coexist without DuplicateCard/DuplicateSkill");
+    let _e_zw = start_locked_engine(2026_0510, 2, LockedStartMode::Prototype, &v_zw).unwrap();
+
+    let v_wz = prepare_locked_content_with_bridge(vec![
+        freeze_pkg("wuxing-upstream-liuli"),
+        freeze_pkg("shahai-zhenfa-upstream-noname"),
+    ])
+    .expect("[wuxing, shahai-zhenfa] must coexist without DuplicateCard/DuplicateSkill");
+    let _e_wz = start_locked_engine(2026_0511, 2, LockedStartMode::Prototype, &v_wz).unwrap();
+
+    // 2. Multi-source formal coexistence (`shahai-swd` + `shahai-yunchou` + `taixu` + `zuan`)
+    let v_multi = prepare_locked_content_with_bridge(vec![
+        freeze_pkg("shahai-swd-upstream-noname"),
+        freeze_pkg("shahai-yunchou-upstream-noname"),
+        freeze_pkg("taixu-upstream-liuli"),
+        freeze_pkg("zuan-upstream-liuli"),
+    ])
+    .expect("multi-source U05+L11+L25 formal packages must coexist cleanly");
+    let mut e = start_locked_engine(2026_0512, 2, LockedStartMode::Prototype, &v_multi).unwrap();
+
+    // 3. Empty-hand `ycnxinfu_qiaosi` (`杀海拾遗/card/yunchou/card.js`): draws 2 FIRST, then discards 1 -> hand.len() == 1
+    let removed_hand: Vec<_> = e.state_core_mut().player_mut(0).hand.drain(..).collect();
+    e.state_core_mut().discard.extend(removed_hand);
+    let removed_eq: Vec<_> = e.state_core_mut().player_mut(0).equips.drain(..).collect();
+    e.state_core_mut().discard.extend(removed_eq);
+    assert_eq!(e.state_core().player(0).hand.len(), 0);
+    invoke_u05(&mut e, 0, "ycnxinfu_qiaosi");
+    assert_eq!(
+        e.state_core().player(0).hand.len(),
+        1,
+        "empty-hand ycnxinfu_qiaosi must draw 2 synchronously before discarding 1"
+    );
+
+    // 4. `cyqiaoxie` (`杀海拾遗/character/swd/skill.js:5-60`) steals/stores into `cyqiaoxie` pile,
+    // and `U05Extra::ViewAs("sha")` wires into `Catalog::find_player_vm_view_as`!
+    invoke_u05(&mut e, 0, "cyqiaoxie");
+    assert!(
+        e.state_core()
+            .vm_aux
+            .piles
+            .get(&(0, "cyqiaoxie".to_string()))
+            .is_some_and(|p| !p.is_empty()),
+        "cyqiaoxie must store stolen/gained card into cyqiaoxie pile"
+    );
+    invoke_u05(&mut e, 0, "yeying");
+    let sample_card = e.state_core().player(0).hand[0];
+    assert!(
+        e.catalog()
+            .find_player_vm_view_as(e.state_core(), 0, sample_card, true, None)
+            .is_some(),
+        "U05 ViewAs flag must activate real kernel VmViewAsSpec in find_player_vm_view_as"
+    );
+
+    // 5. Full-turn progression: Damage skill `ycndiyjianxiong` does NOT fire on PhaseBegin,
+    // and self-HP-loss general (`swd_situqiang` with `huodan`) does NOT self-immolate across 6 phases!
+    e.assign_general_named(0, "swd_situqiang")
+        .expect("assign swd_situqiang");
+    for _ in 0..6 {
+        let actor = e.turn().current;
+        let _ = e.submit(GameCommand {
+            actor,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::NextPhase,
+        });
+        drain(&mut e);
+    }
+    assert!(
+        e.state_core().player(0).alive,
+        "swd_situqiang must survive full turn progression without 6x auto self-immolation"
+    );
+}
+

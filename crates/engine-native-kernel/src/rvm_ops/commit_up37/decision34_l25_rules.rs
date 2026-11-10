@@ -17,6 +17,9 @@ fn gain_l25_exp(ctx: &mut Ctx<'_>, owner: PlayerId, delta: u32) {
 
 /// Resolve `L25` global/mode/rule skills (`祖安武将/extension.js:18984-49741`).
 pub fn try_resolve_l25_rule_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: PlayerId) -> bool {
+    if !guard_phase_auto_trigger(ctx, owner, "l25", skill_name, skill_name == "g_du") {
+        return true;
+    }
     let other = first_other_alive(ctx.core, owner).unwrap_or(owner);
     if skill_name == "_diyskill" {
         if flag(ctx.core, owner, "l25_online_room_active") == 1 {

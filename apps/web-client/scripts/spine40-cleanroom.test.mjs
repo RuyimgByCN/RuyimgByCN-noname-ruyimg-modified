@@ -421,3 +421,105 @@ test("Decision 35 (9/9): Full WebGL shader program, attribute pointers, and RGBA
   assert.equal(linkedPrograms, 1);
 });
 
+test("Decision 35 (10/11): Binary .skel zig-zag signed varints (negative drawOrder), header.hash fidelity, nonessential=false, and LinkedMesh (type 3)", async () => {
+  const {
+    encodeSpine40StandardBinary,
+    decodeSpine40StandardBinary,
+  } = await import("../src/engine/spine40/index.ts");
+  assert.equal(typeof encodeSpine40StandardBinary, "function");
+  assert.equal(typeof decodeSpine40StandardBinary, "function");
+
+  // 1) encodeSpine40Binary must emit real Spine 4.0 binary bytes (never a "SP40" JSON wrapper)
+  const baseData = parseSpine40Json(HANDCRAFTED_SPINE40_SKELETON_JSON);
+  const binFromPrimary = encodeSpine40Binary(baseData);
+  assert.notEqual(String.fromCharCode(...binFromPrimary.slice(0, 4)), "SP40");
+
+  // 2) Negative drawOrder offsets (-1, -2) must round-trip via zig-zag optimizePositive=false varints
+  const negDrawJson = structuredClone(HANDCRAFTED_SPINE40_SKELETON_JSON);
+  negDrawJson.animations.daiji.drawOrder = [
+    {
+      time: 0.2,
+      offsets: [
+        { slot: "weapon_slot", offset: -2 },
+        { slot: "cape_slot", offset: 1 },
+      ],
+    },
+  ];
+  const negDrawData = parseSpine40Json(negDrawJson);
+  const negDrawSkel = encodeSpine40StandardBinary(negDrawData, { nonessential: false });
+  const decodedNegDraw = decodeSpine40StandardBinary(negDrawSkel);
+  assert.deepEqual(decodedNegDraw.animations.daiji.drawOrder, [
+    {
+      time: 0.2,
+      offsets: [
+        { slot: "weapon_slot", offset: -2 },
+        { slot: "cape_slot", offset: 1 },
+      ],
+    },
+  ]);
+
+  // 3) Third-party .skel header.hash must decode from the 8-byte header, NOT strings[0]
+  assert.notEqual(decodedNegDraw.header.hash, decodedNegDraw.skins[0]?.attachments?.clip_window?.viewport_clip?.name);
+  assert.match(decodedNegDraw.header.hash, /^[0-9a-f]{16}$/);
+
+  // 4) JSON & Binary LinkedMesh (attachment type === 3) inherits parent mesh topology
+  const linkedJson = structuredClone(HANDCRAFTED_SPINE40_SKELETON_JSON);
+  linkedJson.skins[1].attachments.cape_slot = {
+    cape_cloth: {
+      type: "linkedmesh",
+      skin: "default",
+      parent: "cape_cloth",
+      deform: true,
+      color: "93c5fdff",
+      width: 64,
+      height: 96,
+    },
+  };
+  const parsedLinked = parseSpine40Json(linkedJson);
+  const goldCape = parsedLinked.skins[1].attachments.cape_slot.cape_cloth;
+  assert.equal(goldCape.type, "mesh");
+  assert.equal(goldCape.triangles.length, 6);
+  assert.equal(goldCape.weighted, true);
+
+  // Hand-craft minimal Spine 4.0 binary stream with default mesh + named skin LinkedMesh (type = 3)
+  const linkedBytes = encodeSpine40StandardBinary(parsedLinked, { nonessential: false, emitLinkedMeshForIdenticalTopology: true });
+  const decodedLinked = decodeSpine40StandardBinary(linkedBytes);
+  const decodedGoldCape = decodedLinked.skins[1].attachments.cape_slot.cape_cloth;
+  assert.equal(decodedGoldCape.type, "mesh");
+  assert.equal(decodedGoldCape.triangles.length, 6);
+  assert.equal(decodedGoldCape.uvs.length, 8);
+  assert.equal(decodedGoldCape.color, "93c5fdff");
+});
+
+test("Decision 35 (11/11): Concave ClippingAttachment polygon triangulates via ear-clipping without cutting off valid wings", async () => {
+  const { clipBatchTrianglesToPolygon } = await import("../src/engine/spine40/index.ts");
+  assert.equal(typeof clipBatchTrianglesToPolygon, "function");
+
+  // Concave V-notched polygon: [0,0] -> [10,0] -> [10,10] -> [5,4] (reflex notch) -> [0,10]
+  // Area = 10*10 - (1/2 * 10 * 6) = 100 - 30 = 70.
+  // Full 10x10 quad split into 2 triangles covering [0,10]x[0,10]: clipped area MUST equal 70!
+  const concavePoly = [
+    [0, 0],
+    [10, 0],
+    [10, 10],
+    [5, 4],
+    [0, 10],
+  ];
+  const quadVerts = [
+    [0, 0, 0, 0, 1, 1, 1, 1],
+    [10, 0, 1, 0, 1, 1, 1, 1],
+    [10, 10, 1, 1, 1, 1, 1, 1],
+    [0, 10, 0, 1, 1, 1, 1, 1],
+  ];
+  const clippedTris = clipBatchTrianglesToPolygon(quadVerts, [0, 1, 2, 0, 2, 3], concavePoly);
+  let totalArea = 0;
+  for (const [a, b, c] of clippedTris) {
+    totalArea += Math.abs((b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1])) * 0.5;
+  }
+  assert.ok(
+    Math.abs(totalArea - 70) < 1e-3,
+    `expected concave-clipped quad area 70.0 (preserving both upper wings), got ${totalArea}`,
+  );
+});
+
+

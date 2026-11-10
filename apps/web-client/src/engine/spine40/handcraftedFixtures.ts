@@ -37,7 +37,7 @@ aura_glow
 
 export const HANDCRAFTED_SPINE40_SKELETON_JSON = {
   skeleton: {
-    hash: "cleanroom-spine40-spec-v1",
+    hash: "c1ea4005e4000001",
     spine: "4.0.64",
     x: -80,
     y: -20,

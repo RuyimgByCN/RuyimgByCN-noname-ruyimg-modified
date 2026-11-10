@@ -163,16 +163,16 @@ test("U02/L03 剑阁与 BOSS 体力归一化、L11 太虚幻境节点赐福、L2
   assert.deepEqual(normalizeBossHp("6/8", true), { kind: "finite", hp: 6, maxHp: 8, label: "6/8" });
   assert.deepEqual(normalizeBossHp("6/8", false), { kind: "infinity", label: "∞" });
 
-  // L11 太虚幻境
+  // L11 太虚幻境（太虚幻境/game_buff.js 焱火、content_Pets.js 九尾）
   let taixu = createInitialExtensionSurfacesState().taixu;
   taixu = advanceTaixuNode(taixu);
   assert.equal(taixu.currentNodeIndex, 1);
   assert.equal(taixu.gold, 130);
-  taixu = buyTaixuBlessing(taixu, "破军神威", 40);
+  taixu = buyTaixuBlessing(taixu, "焱火", 40);
   assert.equal(taixu.gold, 90);
-  assert.equal(taixu.blessings.includes("破军神威"), true);
-  taixu = bindTaixuPet(taixu, "苍雷幼麟");
-  assert.equal(taixu.boundPet, "苍雷幼麟");
+  assert.equal(taixu.blessings.includes("焱火"), true);
+  taixu = bindTaixuPet(taixu, "九尾");
+  assert.equal(taixu.boundPet, "九尾");
 
   // L21 武皇 5v5 先后手排阵与替补补摸 4 张
   const lineup0 = assignMartialLineup(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"], 0);
@@ -267,7 +267,7 @@ test("裁决 34 完整状态快照序列化与读档恢复往返一致", () => {
   original = {
     ...original,
     coin: buyCoinShopItem(original.coin, "snow"),
-    taixu: buyTaixuBlessing(advanceTaixuNode(original.taixu), "破军神威", 40),
+    taixu: buyTaixuBlessing(advanceTaixuNode(original.taixu), "焱火", 40),
     longxue: advanceLongxueDaoxin(original.longxue, "damage_dealt", 4),
   };
 
@@ -276,7 +276,7 @@ test("裁决 34 完整状态快照序列化与读档恢复往返一致", () => {
   assert.deepEqual(restored, original);
   assert.equal(restored.coin.snowFall, true);
   assert.equal(restored.coin.balance, 80);
-  assert.equal(restored.taixu.blessings.includes("破军神威"), true);
+  assert.equal(restored.taixu.blessings.includes("焱火"), true);
   assert.deepEqual(restored.longxue.unlockedThresholds, [25, 50, 75]);
 
   assert.throws(() => deserializeExtensionSurfacesSnapshot("{}"), /invalid extension surfaces snapshot/);
@@ -368,8 +368,8 @@ test("Batch 26 全 37 来源收口：U01 31将3D陈列馆、L08/L24 Spine骨骼�
   assert.equal(theme.skinStandY, -8);
   assert.equal(theme.skinScalePct, 108);
 
-  theme = triggerShoushaHudBanner(theme, "无双·千军破(zhefu)");
-  assert.equal(theme.shoushaKillBanner, "无双·千军破(zhefu)");
+  theme = triggerShoushaHudBanner(theme, "手杀播报·天下无双");
+  assert.equal(theme.shoushaKillBanner, "手杀播报·天下无双");
   assert.equal(theme.shoushaCountdownPct, 70);
 
   let wb = createInitialExtensionSurfacesState().workbench;

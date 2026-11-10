@@ -206,11 +206,11 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
             "忠实实现（7 项主配置解析/快照恢复与 boss/chess/double/stone/threecard 模式禁将禁牌表已在 `shahai_config.rs` 按上游实现）",
         ),
         (
-            "`U05_*_GENERALS`（333 将）+ `U05_*_ALL_CARDS`（275 牌）+ `U05_*_SKILLS`（1,007 技）+ `resolve_u05_shahai_skill`",
-            "`crates/content-native-loader/src/shahai_generals_data.rs:8-374`、`crates/content-native-loader/src/shahai_cards_skills_data.rs:7-535`、`crates/content-native-loader/src/shahai_attach.rs:27-214`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_u05_{ops,gujian_gwent,hearth,swd_cards,swd_chars,ow_xianjian}.rs`",
+            "`U05_*_GENERALS`（332 将）+ `U05_*_ALL_CARDS`（275 牌）+ `U05_*_SKILLS`（1,007 技）+ `resolve_u05_shahai_skill` + `d34_flags.rs` 被动修饰/转化",
+            "`crates/content-native-loader/src/shahai_generals_data.rs:8-374`、`crates/content-native-loader/src/shahai_cards_skills_data.rs:7-535`、`crates/content-native-loader/src/shahai_attach.rs:27-214`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_u05_{ops,gujian_gwent,hearth,swd_cards,swd_chars,ow_xianjian}.rs`、`crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_flags.rs:1-674`",
             "`archive/upstream/noname/apps/core/extension/杀海拾遗/{character,card,play}/*`",
             "原生规则 / 9 个 `sha*-upstream-noname` 正式包",
-            "忠实实现（已清除全部分组摸 1 兜底，古剑/昆特/炉石/万智/守望/轩辕剑/仙剑/运筹/阵法/五行全部武将、卡牌与技能均按上游 `file:line` 实现并接入 9 个 `sha*-upstream-noname` 正式包产品路径）",
+            "忠实实现（已清除全部分组摸 1 兜底与只写死旗标，补齐攻击距离/手牌上限/出杀次数/`VmViewAsSpec` 修饰、真实判定/拼点守恒及阶段触发守卫并接入 9 个 `sha*-upstream-noname` 正式包；冻结 `ABI 759` 下多步子询问确定性简化边界已登记于 `native-rules-baseline.md`）",
         ),
     ],
     "U06": [
@@ -246,7 +246,7 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
             "`crates/content-native-loader/src/ai_tuning.rs:183-228`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:158-181`",
             "`archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9205-9260`",
             "原生规则 / `ai-tuning-upstream-liuli`",
-            "忠实实现（已按上游实现 `yiyi` 锦囊摸 2 弃 2 结算与目标收益评估并接入正式包 `ai-tuning-upstream-liuli` 产品路径）",
+            "忠实实现（已按上游实现 `yiyi` 锦囊同步摸 2 弃 2 结算与目标收益评估并接入正式包 `ai-tuning-upstream-liuli` 产品路径）",
         ),
     ],
     "L02": [],
@@ -267,7 +267,7 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
             "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:184-217`",
             "`archive/upstream/noname-liuli/noname/extension/五行生克/extension.js:9-95`",
             "原生规则 / `wuxing-upstream-liuli`",
-            "忠实实现（已按上游实现 `_wuxing` 初始五行属性与生克结算并接入正式包 `wuxing-upstream-liuli` 产品路径）",
+            "忠实实现（已按上游实现 `_wuxing` 初始五行属性与生克结算并接入正式包 `wuxing-upstream-liuli` 产品路径，支持与 `shahai-zhenfa` 任意顺序共存去重）",
         ),
     ],
     "L07": [
@@ -292,14 +292,14 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
             "`apps/web-client/src/engine/surfaces/decadeUiSurface.ts:14-323`、`apps/web-client/src/engine/surfaces/decadeMarkSkillsData.ts:15-302`、`apps/web-client/src/components/battle/surfaces/UiSkinSuitePanel.vue:1-411`",
             "`archive/upstream/noname-liuli/noname/extension/十周年UI/{extension,animation,animation_new,markskill,meihua,splash}.js` 及 33 份 CSS",
             "原生前端组件",
-            "忠实实现（已清除摸牌/加甲规则副作用，319 项标记/角标/阴阳转换/动画/重铸/隐匿开场钩子与 43 项布局渲染面已在原生前端完整落地）",
+            "忠实实现（已清除摸牌/加甲规则副作用，319 项标记/角标/阴阳转换/动画/重铸/隐匿开场钩子与 43 项布局渲染面已在原生前端完整落地并接入实时战局事件流）",
         ),
         (
             "净室 Spine 4.0 播放器 (`apps/web-client/src/engine/spine40/*` + `Spine40SkinImportBox.vue`，已替换示意 `drawSpineSkeletalCanvas`)",
-            "`apps/web-client/src/engine/spine40/{binarySkelCodec,formatCodec,webglRenderer,index}.ts`、`apps/web-client/src/components/battle/surfaces/Spine40SkinImportBox.vue:1-260`",
+            "`apps/web-client/src/engine/spine40/{binarySkelCodec,formatCodec,webglRenderer,index}.ts`、`apps/web-client/src/components/battle/surfaces/Spine40SkinImportBox.vue:1-337`",
             "`archive/upstream/noname-liuli/noname/extension/十周年UI/animation.js:1-1816`、`dynamicSkin.js:1-162`",
             "原生前端组件（净室 Spine 4.0 播放器）",
-            "忠实实现（按裁决 35 净室自写 Spine 4.0 JSON/`.skel` 二进制流式编解码、Sutherland-Hodgman 多边形裁剪附件、骨骼世界变换、IK/变换/路径约束、多轨道混合、图集解析、WebGL 着色器批量绘制与 `saveSkinParams` 玩家动皮导入入口，无资源或非 4.0 资源回退静态立绘）",
+            "忠实实现（按裁决 35 净室自写 Spine 4.0 JSON/标准 `.skel` 二进制编解码含 zig-zag 有符号 varint 与 `LinkedMesh`、Sutherland-Hodgman + 耳切法凹凸多边形裁剪附件、骨骼世界变换、IK/变换/路径约束、多轨道混合、图集与 `.png` 贴图上传、WebGL 着色器批量绘制及无资源/非 4.0 静态立绘回退）",
         ),
     ],
     "L09": [
@@ -322,18 +322,18 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
     ],
     "L11": [
         (
-            "`L11_TAIXU_GENERALS`（320 将）+ `L11_TAIXU_CARDS`（32 牌）+ `L11_TAIXU_SKILLS`（380 技）+ `resolve_l11_taixu_skill`（伪造 `taixu_expedition_step` 已按第二步清除）",
-            "`crates/content-native-loader/src/taixu_generals_data.rs:8-395`、`crates/content-native-loader/src/taixu_skills_data.rs:5-195`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_l11_{buffs,skills}.rs`",
+            "`L11_TAIXU_GENERALS`（320 将）+ `L11_TAIXU_CARDS`（32 牌）+ `L11_TAIXU_SKILLS`（380 技）+ `resolve_l11_taixu_skill` + `d34_flags.rs` 装备/赐福修饰",
+            "`crates/content-native-loader/src/taixu_generals_data.rs:8-395`、`crates/content-native-loader/src/taixu_skills_data.rs:5-195`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_l11_{buffs,skills}.rs`、`crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_flags.rs:1-674`",
             "`archive/upstream/noname-liuli/noname/extension/太虚幻境/extension_{character,card,skill,buff}.js`",
             "原生规则 / `taixu-upstream-liuli`",
-            "忠实实现（已清除伪造步进技能 `taixu_expedition_step`；320 名敌方/随从武将、32 张专属装备/宝物牌、380 项祝福与专属技能均按上游实现并接入正式包 `taixu-upstream-liuli` 产品路径）",
+            "忠实实现（已清除伪造步进技能 `taixu_expedition_step` 与虚构地名/灵宠名；320 名敌方/随从武将、32 张专属装备/宝物牌含方天/诸葛/虚妄/刑天真实内核修饰、380 项祝福与专属技能均按上游实现并接入正式包 `taixu-upstream-liuli`）",
         ),
         (
             "`L11_TAIXU_CAMPAIGN_NODES`（206 项赛季/奇遇/侍灵/模式节点）+ `L11_TAIXU_SERVANTS`（21 名侍灵）+ `taixuSurface.ts`（4 份 CSS 渲染面）",
             "`crates/content-native-loader/src/taixu_campaign_data.rs:46-378`、`apps/web-client/src/engine/surfaces/taixuSurface.ts:10-214`",
             "`archive/upstream/noname-liuli/noname/extension/太虚幻境/dlc/*/extension_season.js`、`event/event_universal.js`、`extension_servant.js`、`extension_*.css`",
             "原生规则（`taixu_campaign_data.rs`）+ 原生前端组件",
-            "忠实实现（8 赛季 DLC 章节与答题、奇遇通用事件、21 名侍灵及 PC/移动端/侍灵/图鉴 4 份样式表布局均已按上游实现）",
+            "忠实实现（8 赛季 DLC 章节与答题、奇遇通用事件、21 名侍灵及 PC/移动端/侍灵/图鉴 4 份样式表布局均已按上游真实名称实现）",
         ),
     ],
     "L12": [
@@ -360,7 +360,7 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
             "`apps/web-client/src/engine/surfaces/shoushaUiSurface.ts:10-337`、`apps/web-client/src/components/battle/surfaces/UiSkinSuitePanel.vue:1-411`",
             "`archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:85-7360`、`character/main*.js`、`lbtn/main*.js`、`skill/main*.js` 及 32 份 CSS",
             "原生规则（`shousha_ui.rs`）+ 原生前端组件",
-            "忠实实现（已删除伪造 `shousha_*` 实体与摸牌/回血副作用；53 项出牌进度条、托管保护、快捷语音气泡、无懈读条、手牌理牌钩子与 40 项手杀面板/样式表已在原生前端完整落地）",
+            "忠实实现（已删除伪造 `shousha_*` 实体与跨包虚构名 `spshidi`/`zhefu` 及摸牌/回血副作用；53 项出牌进度条、托管保护、快捷语音气泡、无懈读条、手牌理牌钩子与 40 项手杀面板/样式表已在原生前端完整落地）",
         ),
     ],
     "L15": [],
@@ -413,19 +413,19 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
     "L24": [
         (
             "`SKIN_SWITCH_UI_HOOK_IDS`（22 项 UI 钩子）+ `SKIN_SWITCH_SURFACE_IDS`（10 项渲染面）+ `Spine40SkinImportBox.vue`",
-            "`apps/web-client/src/engine/surfaces/skinSwitchSurface.ts:10-340`、`apps/web-client/src/components/battle/surfaces/UiSkinSuitePanel.vue:1-411`、`apps/web-client/src/components/battle/surfaces/Spine40SkinImportBox.vue:1-260`",
+            "`apps/web-client/src/engine/surfaces/skinSwitchSurface.ts:10-342`、`apps/web-client/src/components/battle/surfaces/UiSkinSuitePanel.vue:1-411`、`apps/web-client/src/components/battle/surfaces/Spine40SkinImportBox.vue:1-337`",
             "`archive/upstream/noname-liuli/noname/extension/皮肤切换/extension.js:176-5900`、`animation.js`、`component/*.css`、`style/*.css`",
             "原生规则（`skin_switch.rs`）+ 原生前端组件",
-            "忠实实现（已清除规则层摸牌副作用，22 项动态出框/语音队列/原画回退/`saveSkinParams` 重应用钩子、藏珍阁与骨骼参数编辑弹窗及净室 Spine 4.0 播放器均已完整落地）",
+            "忠实实现（已清除规则层摸牌副作用，22 项动态出框/语音队列/原画回退/`saveSkinParams` 重应用钩子、藏珍阁与骨骼参数编辑弹窗、`.png` 贴图上传及净室 Spine 4.0 播放器均已完整落地）",
         ),
     ],
     "L25": [
         (
             "`L25_SSR_GENERALS`（60 名 `ssr_*` 武将）+ `L25_ALL_RULE_SKILLS`（84 项规则技能）+ `L25_ZUAN_FORMAL_CARDS`（8 牌）+ `resolve_l25_zuan_skill`",
-            "`crates/content-native-loader/src/zuan_data.rs:8-376`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_l25_{ssr,rules}.rs`",
+            "`crates/content-native-loader/src/zuan_data.rs:8-376`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_l25_{ssr,ssr_mods,rules}.rs`、`crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_flags.rs:1-674`",
             "`archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:338-397,536-51470`",
             "原生规则 / `zuan-upstream-liuli`",
-            "忠实实现（已清除 60 名伪造 `zuan_*` 武将与摸 1 兜底；60 名 `ssr_*` 武将、130 项自带技能、84 项规则技能与 8 张专属卡牌已按上游逐项实现并接入正式包 `zuan-upstream-liuli` 产品路径）",
+            "忠实实现（已清除 60 名伪造 `zuan_*` 武将、摸 1 兜底与 43 项单旗标空桩；60 名 `ssr_*` 武将、130 项自带技能、84 项规则技能与 8 张专属卡牌已按上游逐项实现并接入正式包 `zuan-upstream-liuli` 产品路径）",
         ),
         (
             "`ZUAN_UI_HOOK_IDS`（40 项攻击指示线、语音与判定全屏特效钩子）",

@@ -87,24 +87,123 @@ export interface SpineRenderBatch {
 
 type Vertex8 = [number, number, number, number, number, number, number, number];
 
+function ensureCcwPolygonPoints(pts: Array<[number, number]>): Array<[number, number]> {
+  const out = pts.map(([x, y]): [number, number] => [x, y]);
+  if (out.length < 3) return out;
+  let signedArea2 = 0;
+  for (let i = 0; i < out.length; i++) {
+    const [x0, y0] = out[i];
+    const [x1, y1] = out[(i + 1) % out.length];
+    signedArea2 += x0 * y1 - x1 * y0;
+  }
+  if (signedArea2 < 0) out.reverse();
+  return out;
+}
+
 function normalizeCcwPolygon(poly: number[]): Array<[number, number]> {
   const pts: Array<[number, number]> = [];
   for (let i = 0; i + 1 < poly.length; i += 2) {
     pts.push([poly[i], poly[i + 1]]);
   }
-  if (pts.length < 3) return pts;
-  let signedArea2 = 0;
+  return ensureCcwPolygonPoints(pts);
+}
+
+function cross2d(a: [number, number], b: [number, number], c: [number, number]): number {
+  return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
+}
+
+function isConvexCcwPolygon(pts: Array<[number, number]>): boolean {
+  if (pts.length <= 3) return true;
   for (let i = 0; i < pts.length; i++) {
-    const [x0, y0] = pts[i];
-    const [x1, y1] = pts[(i + 1) % pts.length];
-    signedArea2 += x0 * y1 - x1 * y0;
+    const a = pts[i];
+    const b = pts[(i + 1) % pts.length];
+    const c = pts[(i + 2) % pts.length];
+    if (cross2d(a, b, c) < -1e-6) return false;
   }
-  if (signedArea2 < 0) pts.reverse();
-  return pts;
+  return true;
+}
+
+function pointInTriangleCcw(
+  p: [number, number],
+  a: [number, number],
+  b: [number, number],
+  c: [number, number],
+): boolean {
+  const c1 = cross2d(a, b, p);
+  const c2 = cross2d(b, c, p);
+  const c3 = cross2d(c, a, p);
+  return c1 >= -1e-7 && c2 >= -1e-7 && c3 >= -1e-7;
 }
 
 /**
- * Clips a single `[x, y, u, v, r, g, b, a]` triangle against a CCW clipping polygon
+ * Clean-room ear-clipping triangulation for arbitrary simple CCW polygons
+ * (both convex and concave).
+ */
+export function triangulateSimplePolygon(
+  rawPolygon: Array<[number, number]>,
+): Array<[[number, number], [number, number], [number, number]]> {
+  const pts = ensureCcwPolygonPoints(rawPolygon);
+  if (pts.length < 3) return [];
+  if (pts.length === 3) return [[pts[0], pts[1], pts[2]]];
+
+  const indices: number[] = pts.map((_, idx) => idx);
+  const ears: Array<[[number, number], [number, number], [number, number]]> = [];
+  let guard = indices.length * indices.length + 8;
+
+  while (indices.length > 3 && guard-- > 0) {
+    let earFound = false;
+    const len = indices.length;
+    for (let i = 0; i < len; i++) {
+      const iPrev = indices[(i + len - 1) % len];
+      const iCurr = indices[i];
+      const iNext = indices[(i + 1) % len];
+      const a = pts[iPrev];
+      const b = pts[iCurr];
+      const c = pts[iNext];
+      if (cross2d(a, b, c) <= 1e-7) continue;
+
+      let containsReflex = false;
+      for (let j = 0; j < len; j++) {
+        const idx = indices[j];
+        if (idx === iPrev || idx === iCurr || idx === iNext) continue;
+        const p = pts[idx];
+        if (
+          (Math.abs(p[0] - a[0]) < 1e-7 && Math.abs(p[1] - a[1]) < 1e-7) ||
+          (Math.abs(p[0] - b[0]) < 1e-7 && Math.abs(p[1] - b[1]) < 1e-7) ||
+          (Math.abs(p[0] - c[0]) < 1e-7 && Math.abs(p[1] - c[1]) < 1e-7)
+        ) {
+          continue;
+        }
+        if (pointInTriangleCcw(p, a, b, c)) {
+          containsReflex = true;
+          break;
+        }
+      }
+      if (!containsReflex) {
+        ears.push([a, b, c]);
+        indices.splice(i, 1);
+        earFound = true;
+        break;
+      }
+    }
+    if (!earFound) {
+      // Degenerate collinear/self-touching fallback: clip sharpest positive corner
+      const i0 = indices[0];
+      const i1 = indices[1];
+      const i2 = indices[2];
+      ears.push([pts[i0], pts[i1], pts[i2]]);
+      indices.splice(1, 1);
+    }
+  }
+
+  if (indices.length === 3) {
+    ears.push([pts[indices[0]], pts[indices[1]], pts[indices[2]]]);
+  }
+  return ears;
+}
+
+/**
+ * Clips a single `[x, y, u, v, r, g, b, a]` triangle against a CONVEX CCW clipping polygon
  * using Sutherland-Hodgman half-plane clipping with exact linear interpolation of UVs and RGBA.
  */
 export function clipTriangleAgainstPolygon(
@@ -165,6 +264,38 @@ export function clipTriangleAgainstPolygon(
   return subject.length >= 3 ? subject : [];
 }
 
+/**
+ * Clips indexed `[x, y, u, v, r, g, b, a]` batch triangles against a convex OR concave
+ * `ClippingAttachment` polygon by decomposing concave polygons via ear-clipping first.
+ */
+export function clipBatchTrianglesToPolygon(
+  verts: Vertex8[],
+  tris: number[],
+  rawClipPolygon: Array<[number, number]>,
+): Array<[Vertex8, Vertex8, Vertex8]> {
+  const ccwClip = ensureCcwPolygonPoints(rawClipPolygon);
+  if (ccwClip.length < 3) return [];
+  const convexRegions: Array<Array<[number, number]>> = isConvexCcwPolygon(ccwClip)
+    ? [ccwClip]
+    : triangulateSimplePolygon(ccwClip);
+
+  const out: Array<[Vertex8, Vertex8, Vertex8]> = [];
+  for (let t = 0; t + 2 < tris.length; t += 3) {
+    const p0 = verts[tris[t]];
+    const p1 = verts[tris[t + 1]];
+    const p2 = verts[tris[t + 2]];
+    if (!p0 || !p1 || !p2) continue;
+    for (const region of convexRegions) {
+      const poly = clipTriangleAgainstPolygon(p0, p1, p2, region);
+      if (poly.length < 3) continue;
+      for (let k = 1; k + 1 < poly.length; k++) {
+        out.push([poly[0], poly[k], poly[k + 1]]);
+      }
+    }
+  }
+  return out;
+}
+
 export function buildBatchGeometry(
   skeleton: SkeletonInstance,
   atlas?: TextureAtlas,
@@ -206,18 +337,15 @@ export function buildBatchGeometry(
       for (const ti of tris) currentIndices.push(baseIdx + ti);
       return;
     }
-    for (let t = 0; t + 2 < tris.length; t += 3) {
-      const p0 = verts[tris[t]];
-      const p1 = verts[tris[t + 1]];
-      const p2 = verts[tris[t + 2]];
-      if (!p0 || !p1 || !p2) continue;
-      const poly = clipTriangleAgainstPolygon(p0, p1, p2, activeClipPoly);
-      if (poly.length < 3) continue;
+    const clippedTris = clipBatchTrianglesToPolygon(verts, tris, activeClipPoly);
+    for (const [a, b, c] of clippedTris) {
       const baseIdx = currentVerts.length >> 3;
-      for (const pv of poly) currentVerts.push(pv[0], pv[1], pv[2], pv[3], pv[4], pv[5], pv[6], pv[7]);
-      for (let k = 1; k + 1 < poly.length; k++) {
-        currentIndices.push(baseIdx, baseIdx + k, baseIdx + k + 1);
-      }
+      currentVerts.push(
+        a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7],
+        b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7],
+        c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7],
+      );
+      currentIndices.push(baseIdx, baseIdx + 1, baseIdx + 2);
     }
   };
 
@@ -566,6 +694,31 @@ function getOrCreateWebGLPipeline(gl: FullWebGLContext): CachedSpineWebGLPipelin
   };
   cachedPipelines.set(gl as unknown as object, pipeline);
   return pipeline;
+}
+
+/**
+ * Uploads RGBA8888 image pixels into a WebGL 2D texture for a Spine `.atlas` page.
+ */
+export function uploadRgbaTextureToWebGL(
+  gl: MinimalWebGLContext,
+  width: number,
+  height: number,
+  pixels: Uint8Array | Uint8ClampedArray,
+): unknown | null {
+  if (!isFullWebGL(gl) || width <= 0 || height <= 0) return null;
+  const tex = gl.createTexture();
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  const view =
+    pixels instanceof Uint8Array
+      ? pixels
+      : new Uint8Array(pixels.buffer, pixels.byteOffset, pixels.byteLength);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, view);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  return tex;
 }
 
 /**

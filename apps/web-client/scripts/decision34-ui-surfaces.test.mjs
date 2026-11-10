@@ -331,3 +331,41 @@ test("L11 太虚幻境: implements all 4 upstream stylesheets, 8 DLC seasons, 21
   assert.equal(state.currentShopPrice, 50);
 });
 
+test("Battle EngineEnvelope stream wires live CardPlayed / DamageDealt / PlayerDied events into uiSuites and eliminates fabricated labels", async () => {
+  const { ingestBattleEnvelopeIntoSurfaces } = await import("../src/engine/extensionSurfaceRuntime.ts");
+  const init = createInitialExtensionSurfacesState();
+  const serializedInit = JSON.stringify(init);
+  for (const forbidden of ["苍雷幼麟", "颍川前哨", "spshidi", "zhefu"]) {
+    assert.ok(!serializedInit.includes(forbidden), `initial surface snapshot must not contain fabricated ${forbidden}`);
+  }
+  assert.ok(init.uiSuites?.decadeUi, "initial snapshot must initialize decadeUi suite");
+  assert.ok(init.uiSuites?.qhly, "initial snapshot must initialize qhly suite");
+  assert.ok(init.uiSuites?.skinSwitch, "initial snapshot must initialize skinSwitch suite");
+  assert.ok(init.uiSuites?.shoushaUi, "initial snapshot must initialize shoushaUi suite");
+  assert.ok(init.uiSuites?.taixuUi, "initial snapshot must initialize taixuUi suite");
+  assert.ok(init.uiSuites?.zuanUi, "initial snapshot must initialize zuanUi suite");
+
+  const afterCombat = ingestBattleEnvelopeIntoSurfaces(init, {
+    revision: 7,
+    finished: false,
+    view: {
+      round: 2,
+      current_player: 0,
+      seats: [
+        { player: 0, alive: true, hp: 3, max_hp: 4, hand_count: 4, general: "caocao" },
+        { player: 1, alive: true, hp: 2, max_hp: 4, hand_count: 2, general: "liubei" },
+      ],
+    },
+    events: [
+      { type: "CardPlayed" },
+      { type: "DamageDealt" },
+    ],
+  });
+
+  // L08 hand count badge synced from view.seats, L24 audio/action triggered on CardPlayed, L09 skin reacts to DamageDealt
+  assert.equal(afterCombat.uiSuites?.decadeUi?.handCountBadgeBySeat[0], 4);
+  assert.ok((afterCombat.uiSuites?.skinSwitch?.audioPlayQueue.length ?? 0) >= 1);
+  assert.equal(afterCombat.uiSuites?.qhly?.replaceSkinByGeneral.liubei, "hp_wounded");
+});
+
+

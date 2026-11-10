@@ -239,6 +239,7 @@ try {
       u01Rect: rectOf('u01-3d-select-gallery'),
       spineRect: rectOf('spine-skeletal-canvas'),
       spineWebglRect: rectOf('spine-webgl-canvas'),
+      spinePngInputPresent: Boolean(document.querySelector('[data-testid="input-spine-png-file"]')),
       spineReadyReason,
       spineFallbackReason,
       l24Meta: text('l24-skin-transform-meta'),
@@ -254,6 +255,15 @@ try {
       notice: text('surface-notice'),
     };
   })()`);
+
+  await evalJs(`(() => { window.scrollTo(0, 0); return true; })()`);
+  await new Promise((r) => setTimeout(r, 50));
+  const uiSuiteShot = await send(ws, "Page.captureScreenshot", {
+    format: "png",
+    captureBeyondViewport: true,
+  });
+  const uiSuitePngPath = join(outDir, "decision34-ui-skin-suites.png");
+  writeFileSync(uiSuitePngPath, Buffer.from(uiSuiteShot.data, "base64"));
 
   // 3. 驱动 Tab 2 (单机战役) 并截图
   const campaignResult = await evalJs(`(async () => {
@@ -287,7 +297,10 @@ try {
       doomsdayWave: text('doomsday-wave'),
     };
   })()`);
-  const campaignShot = await send(ws, "Page.captureScreenshot", { format: "png" });
+  const campaignShot = await send(ws, "Page.captureScreenshot", {
+    format: "png",
+    captureBeyondViewport: true,
+  });
   const campaignPngPath = join(outDir, "decision34-taixu-campaign-surface.png");
   writeFileSync(campaignPngPath, Buffer.from(campaignShot.data, "base64"));
 
@@ -481,7 +494,10 @@ try {
     };
   })()`);
 
-  const shot = await send(ws, "Page.captureScreenshot", { format: "png" });
+  const shot = await send(ws, "Page.captureScreenshot", {
+    format: "png",
+    captureBeyondViewport: true,
+  });
   const pngPath = join(outDir, "decision34-browser-surfaces.png");
   writeFileSync(pngPath, Buffer.from(shot.data, "base64"));
 
@@ -496,10 +512,11 @@ try {
       hudResult.u01Rect.w > 0 &&
       hudResult.spineRect.w > 0 &&
       hudResult.spineWebglRect.w > 0 &&
+      hudResult.spinePngInputPresent === true &&
       hudResult.spineReadyReason.includes("ready-spine40") &&
       hudResult.spineFallbackReason.includes("static-portrait-fallback") &&
       hudResult.l24Meta.includes("gongji") &&
-      hudResult.l14Banner.includes("无双·千军破(zhefu)") &&
+      hudResult.l14Banner.includes("手杀播报·天下无双") &&
       hudResult.l14Rect.w > 0 &&
       hudResult.uiSuiteRect.w > 0 &&
       hudResult.l08FullText.includes("319钩子 / 43表面") &&
@@ -510,6 +527,7 @@ try {
       hudResult.l11FullText.includes("extension_MobileStyle.css") &&
       campaignResult.bossHp === "∞" &&
       campaignResult.taixuGold === "90" &&
+      campaignResult.taixuPet === "九尾" &&
       coinResult.weatherOverlayRendered === true &&
       coinResult.honorTitle === "初入茅庐" &&
       omnisearchResult.hitText.includes("苍螭之璧") &&
@@ -537,6 +555,7 @@ try {
     frameStats,
     consoleErrors,
     screenshot: pngPath,
+    uiSuitesScreenshot: uiSuitePngPath,
     campaignScreenshot: campaignPngPath,
   };
 

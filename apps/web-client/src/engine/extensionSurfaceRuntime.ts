@@ -1,4 +1,14 @@
 import type { EngineEnvelope, ObserverSnapshot } from "../types/engine";
+import { createInitialDecadeUiRuntimeState, dispatchDecadeUiHook } from "./surfaces/decadeUiSurface";
+import { createInitialQhlyRuntimeState, dispatchQhlyUiHook } from "./surfaces/qhlySurface";
+import { createInitialShoushaUiRuntimeState, dispatchShoushaUiHook } from "./surfaces/shoushaUiSurface";
+import { createInitialSkinSwitchRuntimeState, dispatchSkinSwitchHook } from "./surfaces/skinSwitchSurface";
+import { createInitialTaixuUiRuntimeState } from "./surfaces/taixuSurface";
+import {
+  createInitialZuanUiRuntimeState,
+  dispatchZuanUiHook,
+  type ZuanUiRuntimeState,
+} from "./surfaces/zuanSurface";
 
 export type BossHpNormalized =
   | { kind: "finite"; hp: number; maxHp: number; label: string }
@@ -185,7 +195,7 @@ export interface ExtensionUiSuitesState {
   shoushaUi?: import("./surfaces/shoushaUiSurface").ShoushaUiRuntimeState;
   decadeUi?: import("./surfaces/decadeUiSurface").DecadeUiRuntimeState;
   taixuUi?: import("./surfaces/taixuSurface").TaixuUiRuntimeState;
-  zuanUi?: Record<string, unknown>;
+  zuanUi?: ZuanUiRuntimeState;
 }
 
 export interface ExtensionSurfacesSnapshot {
@@ -468,14 +478,14 @@ export function triggerSpineSkinClip(
 /** L14: 手杀 UI 倒计时进度条、操作按钮栏与击杀播报横幅更新。 */
 export function triggerShoushaHudBanner(
   theme: ThemeAndSkinSurfaceState,
-  banner = "无双·千军破(zhefu)",
+  banner = "手杀播报·天下无双",
 ): ThemeAndSkinSurfaceState {
   const nextPct = Math.max(15, ((theme.shoushaCountdownPct ?? 85) - 15 + 100) % 100);
   return {
     ...theme,
     shoushaCountdownPct: nextPct,
     shoushaKillBanner: banner,
-    lastVoiceCue: "skill/zhefu1.mp3",
+    lastVoiceCue: "手杀ui/audio/huan.mp3",
   };
 }
 
@@ -821,18 +831,18 @@ export function createInitialExtensionSurfacesState(
       lastSettlement: null,
     },
     taixu: {
-      seasonId: "S1-黄天当立",
+      seasonId: "ChongYingChuLin（冲应初临）",
       gold: 100,
       maxBlessings: 3,
       currentNodeIndex: 0,
       nodes: [
-        { id: "node_0", title: "广宗营地（起点）", kind: "start", cleared: true },
-        { id: "node_1", title: "颍川前哨（战斗）", kind: "battle", cleared: false },
-        { id: "node_2", title: "太平祭坛（赐福）", kind: "blessing", cleared: false },
-        { id: "node_3", title: "天公将军（首领）", kind: "boss", cleared: false },
+        { id: "node_0", title: "序章·冲应初临（起点）", kind: "start", cleared: true },
+        { id: "node_1", title: "幻境守护童子（战斗）", kind: "battle", cleared: false },
+        { id: "node_2", title: "天命加身（事件）", kind: "blessing", cleared: false },
+        { id: "node_3", title: "天匠神兵（首领）", kind: "boss", cleared: false },
       ],
-      blessings: ["黄天之庇（摸牌+1）"],
-      boundPet: "玄木灵鹿",
+      blessings: ["丰裕生财"],
+      boundPet: "盾盾",
     },
     martial: {
       width: 5,
@@ -886,7 +896,7 @@ export function createInitialExtensionSurfacesState(
       skinStandY: 0,
       skinScalePct: 100,
       shoushaCountdownPct: 85,
-      shoushaKillBanner: "连破·一血(spshidi)",
+      shoushaKillBanner: "手杀播报·乱世豪杰",
     },
     longxue: {
       shengjian: true,
@@ -928,14 +938,29 @@ export function createInitialExtensionSurfacesState(
       l27DualSecondary: "simayi",
       l27DualLocked: true,
     },
+    uiSuites: {
+      qhly: createInitialQhlyRuntimeState(),
+      skinSwitch: createInitialSkinSwitchRuntimeState(),
+      shoushaUi: createInitialShoushaUiRuntimeState(),
+      decadeUi: createInitialDecadeUiRuntimeState(),
+      taixuUi: createInitialTaixuUiRuntimeState(),
+      zuanUi: createInitialZuanUiRuntimeState(),
+    },
   };
 }
 
-/** 根据对局 `EngineEnvelope` 推进扩展表现面与单机战役脚本状态。 */
+/** 根据对局 `EngineEnvelope` 推进扩展表现面、五套 UI 皮肤钩子与单机战役脚本状态。 */
 export function ingestBattleEnvelopeIntoSurfaces(
   state: ExtensionSurfacesSnapshot,
   env: EngineEnvelope,
 ): ExtensionSurfacesSnapshot {
+  let qhly = state.uiSuites?.qhly ?? createInitialQhlyRuntimeState();
+  let skinSwitch = state.uiSuites?.skinSwitch ?? createInitialSkinSwitchRuntimeState();
+  let shoushaUi = state.uiSuites?.shoushaUi ?? createInitialShoushaUiRuntimeState();
+  let decadeUi = state.uiSuites?.decadeUi ?? createInitialDecadeUiRuntimeState();
+  const taixuUi = state.uiSuites?.taixuUi ?? createInitialTaixuUiRuntimeState();
+  let zuanUi = state.uiSuites?.zuanUi ?? createInitialZuanUiRuntimeState();
+
   let next: ExtensionSurfacesSnapshot = {
     ...state,
     coin: {
@@ -944,13 +969,31 @@ export function ingestBattleEnvelopeIntoSurfaces(
     },
     theme: {
       ...state.theme,
-      rzshTierRoman: numToRoma(Math.max(1, Math.min(10, (env.view?.round ?? 1)))),
+      rzshTierRoman: numToRoma(Math.max(1, Math.min(10, env.view?.round ?? 1))),
     },
   };
 
   const seats = env.view?.seats ?? [];
+  const seatGeneralName = (seatIdx: number): string => {
+    const found = seats.find((s) => s.player === seatIdx);
+    const fallbackGen = (found as unknown as { general?: string } | undefined)?.general;
+    return found?.generals?.[0]?.name ?? fallbackGen ?? `seat_${seatIdx}`;
+  };
+
   for (const seat of seats) {
-    if ( !(seat.player in next.mvp.scores)) {
+    decadeUi = dispatchDecadeUiHook(decadeUi, "_gshoupai", {
+      seat: seat.player,
+      handCount: seat.hand_count,
+    });
+    if (!seat.alive) {
+      qhly = dispatchQhlyUiHook(qhly, {
+        hook: "_qhcreateYH",
+        seat: seat.player,
+        faction: seat.generals?.[0]?.faction ?? "qun",
+        isDead: true,
+      });
+    }
+    if (!(seat.player in next.mvp.scores)) {
       next = {
         ...next,
         mvp: {
@@ -974,30 +1017,84 @@ export function ingestBattleEnvelopeIntoSurfaces(
     }
   }
 
+  const curPlayer = env.view?.current_player ?? 0;
+  const curGen = seatGeneralName(curPlayer);
+  const woundedSeat =
+    seats.find((s) => s.player !== curPlayer && s.hp < s.max_hp)?.player ??
+    seats.find((s) => s.player !== curPlayer)?.player ??
+    curPlayer;
+  const woundedGen = seatGeneralName(woundedSeat);
+
   const events = env.events ?? [];
   events.forEach((rawEv, idx) => {
     const seq = env.revision * 100 + idx + 1;
     const pubCode = (rawEv as { PublicEvent?: { code?: number } })?.PublicEvent?.code;
-    if (pubCode === 4 || (rawEv as { type?: string })?.type === "DamageDealt") {
+    const evType = (rawEv as { type?: string })?.type;
+    if (pubCode === 4 || evType === "DamageDealt") {
+      decadeUi = dispatchDecadeUiHook(decadeUi, "_Hplose", { seat: woundedSeat });
+      qhly = dispatchQhlyUiHook(qhly, { hook: "_qhlyChangeSkin", generalId: woundedGen, hpDelta: -1 });
+      skinSwitch = dispatchSkinSwitchHook(skinSwitch, {
+        hook: "_pfqh_check_damage",
+        seat: woundedSeat,
+        generalId: woundedGen,
+        damageAmount: 1,
+      });
+      zuanUi = dispatchZuanUiHook(zuanUi, "_extradamageskill", { seat: woundedSeat });
       next = {
         ...next,
-        mvp: recordMvpEventFact(next.mvp, { seq, seat: env.view?.current_player ?? 0, kind: "damage", amount: 1 }),
+        mvp: recordMvpEventFact(next.mvp, { seq, seat: curPlayer, kind: "damage", amount: 1 }),
         longxue: advanceLongxueDaoxin(next.longxue, "damage_dealt", 1),
         theme: { ...next.theme, lastSkinTrigger: `damage@rev${env.revision}` },
       };
-    } else if (pubCode === 5 || (rawEv as { type?: string })?.type === "HpRecovered") {
+    } else if (pubCode === 5 || evType === "HpRecovered") {
+      decadeUi = dispatchDecadeUiHook(decadeUi, "_HpRecover", { seat: curPlayer });
+      qhly = dispatchQhlyUiHook(qhly, { hook: "_qhlyChangeSkin", generalId: curGen, hpDelta: 1 });
+      zuanUi = dispatchZuanUiHook(zuanUi, "_saveskill", { seat: curPlayer });
       next = {
         ...next,
-        mvp: recordMvpEventFact(next.mvp, { seq, seat: env.view?.current_player ?? 0, kind: "recover", amount: 1 }),
+        mvp: recordMvpEventFact(next.mvp, { seq, seat: curPlayer, kind: "recover", amount: 1 }),
       };
-    } else if (pubCode === 2 || (rawEv as { type?: string })?.type === "CardPlayed") {
+    } else if (pubCode === 2 || evType === "CardPlayed") {
+      decadeUi = dispatchDecadeUiHook(decadeUi, "_usecard", { seat: curPlayer });
+      skinSwitch = dispatchSkinSwitchHook(skinSwitch, {
+        hook: "_playAudioToQueue",
+        seat: curPlayer,
+        generalId: curGen,
+        skinId: "primary_1",
+        cardName: "sha",
+        timestampMs: env.revision * 10 + idx,
+      });
+      shoushaUi = dispatchShoushaUiHook(shoushaUi, "_chupaiA", { seat: curPlayer });
+      zuanUi = dispatchZuanUiHook(zuanUi, "_extrauseskill", { seat: curPlayer });
       next = {
         ...next,
-        mvp: recordMvpEventFact(next.mvp, { seq, seat: env.view?.current_player ?? 0, kind: "damage_card", amount: 1 }),
+        mvp: recordMvpEventFact(next.mvp, { seq, seat: curPlayer, kind: "damage_card", amount: 1 }),
         longxue: advanceLongxueDaoxin(next.longxue, "gain_card", 1),
       };
+    } else if (pubCode === 7 || evType === "PlayerDied") {
+      decadeUi = dispatchDecadeUiHook(decadeUi, "_decadeUI_dieKillEffect", { seat: woundedSeat });
+      qhly = dispatchQhlyUiHook(qhly, { hook: "_qhlyChageKillingSkin", killerGeneralId: curGen });
+      skinSwitch = dispatchSkinSwitchHook(skinSwitch, {
+        hook: "_pfqh_check_jisha",
+        seat: curPlayer,
+        generalId: curGen,
+      });
+      shoushaUi = dispatchShoushaUiHook(shoushaUi, "_jd_wjsw", { seat: woundedSeat });
+      zuanUi = dispatchZuanUiHook(zuanUi, "_dieskill", { seat: woundedSeat });
     }
   });
+
+  next = {
+    ...next,
+    uiSuites: {
+      qhly,
+      skinSwitch,
+      shoushaUi,
+      decadeUi,
+      taixuUi,
+      zuanUi,
+    },
+  };
 
   if (env.finished && !next.coin.lastSettlement) {
     const selfSeat = seats[0];

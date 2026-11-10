@@ -47,12 +47,41 @@ pub(super) fn try_resolve_u05_swd_chars(ctx: &mut Ctx<'_>, skill: &str, owner: P
                 u05_recover(ctx, owner, 1);
             }
         }
-        // character/swd/skill.js:5-60
-        "cyqiaoxie" => u05_exec(ctx, owner, "cyqiaoxie", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:cyqiaoxie", 1)),
-        // character/swd/skill.js:61-104
-        "cyxianjiang" => u05_exec(ctx, owner, "cyxianjiang", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:cyxianjiang", 1)),
-        // character/swd/skill.js:105-244
-        "gxianyin" => u05_exec(ctx, owner, "gxianyin", 1, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:gxianyin", 1)),
+        // character/swd/skill.js:5-60: usable 2, steals 1 card from target / top deck into `cyqiaoxie` pile
+        "cyqiaoxie" => {
+            if !guard_phase_auto_trigger(ctx, owner, "u05", "cyqiaoxie", false) {
+                return true;
+            }
+            u05_mark_invoked(ctx, owner, "cyqiaoxie");
+            if u05_check_usable(ctx, owner, "cyqiaoxie", 2) {
+                let _ = u05_prey_other(ctx, owner, true);
+                let _ = u05_store_pile(ctx, owner, "cyqiaoxie");
+                set_flag(ctx.core, owner, "u05_state:cyqiaoxie", 1);
+            }
+        }
+        // character/swd/skill.js:61-104: consumes 1 card from `cyqiaoxie` pile so owner & target draw 1
+        "cyxianjiang" => {
+            if !guard_phase_auto_trigger(ctx, owner, "u05", "cyxianjiang", false) {
+                return true;
+            }
+            u05_mark_invoked(ctx, owner, "cyxianjiang");
+            if let Some(c) = ctx
+                .core
+                .vm_aux
+                .piles
+                .get_mut(&(owner, "cyqiaoxie".to_string()))
+                .and_then(Vec::pop)
+            {
+                super::commit::discard_some(ctx, owner, vec![c]);
+                ctx.start_draw(owner, 1);
+                if let Some(t) = first_other_alive(ctx.core, owner) {
+                    ctx.start_draw(t, 1);
+                }
+            }
+            set_flag(ctx.core, owner, "u05_buff:cyxianjiang", 1);
+        }
+        // character/swd/skill.js:105-244: usable 1, discard 1 card -> thunder damage / recover + draw 1
+        "gxianyin" => u05_exec(ctx, owner, "gxianyin", 1, false, 1, 1, 0, 1, DamageNature::Thunder, 1, 0, U05Extra::GrantBuff("u05_state:gxianyin", 1)),
         // character/swd/skill.js:245-260
         "yeying" => u05_exec(ctx, owner, "yeying", 1, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ViewAs("qiankunbiao")),
         // character/swd/skill.js:261-340

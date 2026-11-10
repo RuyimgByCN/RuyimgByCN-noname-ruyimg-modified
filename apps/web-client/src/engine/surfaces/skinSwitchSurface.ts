@@ -336,5 +336,7 @@ export function dispatchSkinSwitchHook(
         ...state,
         specialFormBySeat: { ...state.specialFormBySeat, [seat]: "phase_idle" },
       };
+    default:
+      return state;
   }
 }

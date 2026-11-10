@@ -332,7 +332,7 @@ function onTriggerSpineClip() {
 
 function onTriggerShoushaBanner() {
   update((prev) => {
-    const theme = triggerShoushaHudBanner(prev.theme, "无双·千军破(zhefu)");
+    const theme = triggerShoushaHudBanner(prev.theme, "手杀播报·天下无双");
     surfaceNotice.value = `手杀 UI (L14)：${theme.shoushaKillBanner} · 倒计时 ${theme.shoushaCountdownPct}%`;
     return { ...prev, theme };
   });
@@ -598,10 +598,10 @@ function onSurfacePointerMove(ev: MouseEvent) {
               <div class="daoxin-fill" :style="{ width: `${surfaces.theme.shoushaCountdownPct ?? 85}%` }"></div>
             </div>
             <span class="tiny" data-testid="l14-shousha-banner-text">
-              手杀播报:{{ surfaces.theme.shoushaKillBanner ?? "连破·一血(spshidi)" }} · 倒计时 {{ surfaces.theme.shoushaCountdownPct ?? 85 }}%
+              手杀播报:{{ surfaces.theme.shoushaKillBanner ?? "手杀播报·乱世豪杰" }} · 倒计时 {{ surfaces.theme.shoushaCountdownPct ?? 85 }}%
             </span>
             <button type="button" data-testid="btn-l14-shousha-banner" @click="onTriggerShoushaBanner">
-              触发手杀连破横幅 (L14·48技)
+              触发手杀连破横幅 (L14·53钩子)
             </button>
           </div>
         </div>
@@ -648,11 +648,11 @@ function onSurfacePointerMove(ev: MouseEvent) {
           </p>
           <div class="row wrap">
             <button type="button" data-testid="btn-taixu-advance" @click="onAdvanceTaixu">推进太虚节点 (+30金)</button>
-            <button type="button" data-testid="btn-taixu-buy-blessing" @click="onBuyTaixuBlessing('破军神威', 40)">
-              购买赐福「破军神威」(40金)
+            <button type="button" data-testid="btn-taixu-buy-blessing" @click="onBuyTaixuBlessing('焱火', 40)">
+              购买赐福「焱火」(40金)
             </button>
-            <button type="button" data-testid="btn-taixu-bind-pet" @click="onBindTaixuPet('苍雷幼麟')">
-              绑定灵宠「苍雷幼麟」
+            <button type="button" data-testid="btn-taixu-bind-pet" @click="onBindTaixuPet('九尾')">
+              绑定灵宠「九尾」
             </button>
           </div>
         </div>
