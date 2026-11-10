@@ -61,8 +61,8 @@
 |---|---|---|
 | 行数单测与源码行数门禁 | `python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py' && python3 -B scripts/check-source-lines.py` | **PASS**（2 tests OK；`<= 2000` 总行、`<= 1000` Rust 有效行） |
 | 原生三层依赖棘轮 | `python3 -B scripts/check-native-layering.py` | **PASS**（`0 upward references <= 0`） |
-| 原生三 crate 全量测试 | `cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native --no-fail-fast` | **PASS**（`2,229 passed; 0 failed; 6 ignored`） |
-| 独立 `CARGO_TARGET_DIR` `-D warnings`（含 `wasm32`） | `CARGO_TARGET_DIR=/tmp/d34-r5-fix-werror RUSTFLAGS="-D warnings" cargo check --offline ... --all-targets` + `--target wasm32-unknown-unknown -p engine-native-wasm` | **PASS**（`0` 警告，已清理 `/tmp/d34-r5-fix-werror`） |
+| 原生三 crate 全量测试 | `cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native --no-fail-fast` | **PASS**（`2,230 passed; 0 failed; 6 ignored`） |
+| 独立 `CARGO_TARGET_DIR` `-D warnings`（含 `wasm32`） | `CARGO_TARGET_DIR=/tmp/d34-l11-npc-werror RUSTFLAGS="-D warnings" cargo check --offline ... --all-targets` + `--target wasm32-unknown-unknown -p engine-native-wasm` | **PASS**（`0` 警告，已清理 `/tmp/d34-l11-npc-werror`） |
 | Conformance 19 黄金场景 | `cargo run --offline -p conformance` | **PASS**（`passed=19, ALL PASS`） |
 | 桌面端双路径测试（PA09） | `cargo test --offline -p desktop-client` | **PASS**（`20 passed; 0 failed; 1 ignored`） |
 | 前端类型检查与单测 | `pnpm --dir apps/web-client typecheck && pnpm --dir apps/web-client test` | **PASS**（`vue-tsc` `0` 错；`489 passed; 0 failed`） |
@@ -71,4 +71,5 @@
 | 裁决 25 Exact-Head CI（初版 `886fafafa`） | GitHub Actions Run `42771773936`（`refs/heads/native-convergence` = `886fafafa8a684fbbde807d2d1a8750ef78df073`） | **首次 9/10 PASS**（`perf-macos-latest` 共享 runner 微秒级抖动 `start-hash-p50 165/100 us`，见 [`exact-head-ci-run-42771773936-attempt1.json`](./exact-head-ci-run-42771773936-attempt1.json)）；**补跑 10/10 PASS**（见 [`exact-head-ci-run-42771773936.json`](./exact-head-ci-run-42771773936.json)） |
 | 裁决 25 Exact-Head CI（复审纠偏首推 `aa2c5b74f`） | GitHub Actions Run `42798875406`（`refs/heads/native-convergence` = `aa2c5b74f79393c096a30261d2e1eaa38a72c7d1`） | **9/10 PASS**（`gates-ubuntu` 的 `game-server` `native_extensions_ws_slow_spectator_does_not_block_commands` 因 `g_shencaojie` 等别名未按 `HostBehavior` 去重导致每座重复授予全局技、301 次广播体积超出 `1 MiB`，见 [`exact-head-ci-run-42798875406-attempt1.json`](./exact-head-ci-run-42798875406-attempt1.json)） |
 | 裁决 25 Exact-Head CI（复审纠偏终版 `d5f70a75b`） | GitHub Actions Run `42803736083`（`refs/heads/native-convergence` = `d5f70a75b604eed5e75ed851bb314c27cf9c2000`） | **首次即 10/10 PASS**（`standard_catalog_with_extensions` 按 `HostBehavior` 去重 `extension_global_skills` 后 `healthy_bytes = 972,093 < 1 MiB`；`gates-ubuntu`、`native-web`、`build-{ubuntu,macos,windows}-latest`、`perf-{ubuntu,macos}-latest`、`desktop-{ubuntu,macos,windows}-latest` 全绿，见 [`exact-head-ci-run-42803736083.json`](./exact-head-ci-run-42803736083.json)） |
+| 裁决 25 Exact-Head CI（`L11` 164 跨包 NPC 技全量闭合 `66fc8094b`） | GitHub Actions Run `42824222036`（`refs/heads/native-convergence` = `66fc8094b4be164428e44e5b4e4f207630a94719`） | **首次即 10/10 PASS**（Attempt 1 零补跑；`gates-ubuntu`、`native-web`、`build-{ubuntu,macos,windows}-latest`、`perf-{ubuntu,macos}-latest`、`desktop-{ubuntu,macos,windows}-latest` 全部一次通过，见 [`exact-head-ci-run-42824222036.json`](./exact-head-ci-run-42824222036.json)） |
 
