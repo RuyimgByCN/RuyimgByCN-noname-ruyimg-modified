@@ -430,6 +430,83 @@ fn d34_view_as_table() -> &'static Vec<D34ViewAsRule> {
                     false,
                 ),
             },
+            // `twwushen` (`shenhua.js:1164`): Heart hand card -> distance-unlimited Sha
+            D34ViewAsRule {
+                activation: D34ViewAsActivation::SkillOrFlag("twwushen", "l11_mod:twwushen"),
+                spec: make_spec(
+                    1_926_900_060,
+                    "twwushen",
+                    CardKind::Sha,
+                    VmViewAsWindow::Any,
+                    VmViewAsZone::Hand,
+                    VmViewAsFilter::Heart,
+                    true,
+                ),
+            },
+            // `rejinjiu` (`yijiang.js:5855`): Jiu hand card -> Sha
+            D34ViewAsRule {
+                activation: D34ViewAsActivation::SkillOrFlag("rejinjiu", "l11_mod:rejinjiu"),
+                spec: make_spec(
+                    1_926_900_061,
+                    "rejinjiu",
+                    CardKind::Sha,
+                    VmViewAsWindow::Any,
+                    VmViewAsZone::Hand,
+                    VmViewAsFilter::Jiu,
+                    false,
+                ),
+            },
+            // `shizhi` (`sp.js:12650`): Shan hand card -> Sha when HP==1
+            D34ViewAsRule {
+                activation: D34ViewAsActivation::SkillOrFlag("shizhi", "l11_mod:shizhi"),
+                spec: make_spec(
+                    1_926_900_062,
+                    "shizhi",
+                    CardKind::Sha,
+                    VmViewAsWindow::Any,
+                    VmViewAsZone::Hand,
+                    VmViewAsFilter::Shan,
+                    false,
+                ),
+            },
+            // `reguose` (`refresh.js:2443`) / `xinfu_limu` (`sp2.js:1760`): Diamond card -> Le
+            D34ViewAsRule {
+                activation: D34ViewAsActivation::SkillOrFlag("reguose", "l11_viewas:reguose"),
+                spec: make_spec(
+                    1_926_900_063,
+                    "reguose",
+                    CardKind::Le,
+                    VmViewAsWindow::PlayPhase,
+                    VmViewAsZone::HandEquip,
+                    VmViewAsFilter::Diamond,
+                    true,
+                ),
+            },
+            D34ViewAsRule {
+                activation: D34ViewAsActivation::Skill("xinfu_limu"),
+                spec: make_spec(
+                    1_926_900_064,
+                    "xinfu_limu",
+                    CardKind::Le,
+                    VmViewAsWindow::PlayPhase,
+                    VmViewAsZone::HandEquip,
+                    VmViewAsFilter::Diamond,
+                    true,
+                ),
+            },
+            // `xinjiewei` (`refresh.js:3547`): Equip/hand card -> Nullify
+            D34ViewAsRule {
+                activation: D34ViewAsActivation::SkillOrFlag("xinjiewei", "l11_viewas:xinjiewei"),
+                spec: make_spec(
+                    1_926_900_065,
+                    "xinjiewei",
+                    CardKind::Nullify,
+                    VmViewAsWindow::Any,
+                    VmViewAsZone::HandEquip,
+                    VmViewAsFilter::Any,
+                    false,
+                ),
+            },
         ];
 
         let u05_flag_map: &[(&str, CardKind)] = &[
@@ -457,6 +534,14 @@ fn d34_view_as_table() -> &'static Vec<D34ViewAsRule> {
             ("u05_viewas:liuxinghuoyu", CardKind::FireSha),
             ("u05_viewas:jingleishan", CardKind::LeiSha),
             ("u05_viewas:chiyuxi", CardKind::FireSha),
+            ("l11_viewas:kyou_zhidian", CardKind::Sha),
+            ("l11_viewas:dclbjiuxian", CardKind::Jiu),
+            ("l11_viewas:reluanji", CardKind::ArcheryAttack),
+            ("l11_mod:reshuangxiong_duel", CardKind::Duel),
+            ("l11_viewas:xinfu_sidao", CardKind::Snatch),
+            ("l11_viewas:weijing", CardKind::Sha),
+            ("l11_viewas:zhanyi_basic", CardKind::Sha),
+            ("l11_viewas:mozhi", CardKind::Sha),
         ];
         for (idx, &(flag_name, kind)) in u05_flag_map.iter().enumerate() {
             v.push(D34ViewAsRule {

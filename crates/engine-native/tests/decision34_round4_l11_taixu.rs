@@ -14,8 +14,10 @@ use content_native_loader::{
     restore_locked_engine, start_locked_engine, validate_and_freeze_raw_package, LockedStartMode,
     TaixuCampaignRun, TaixuConfig, TaixuError, TaixuNodeKind, TaixuRunState,
     DECISION34_STORAGE_DISPATCH_KEY, L11_TAIXU_CAMPAIGN_NODES, L11_TAIXU_CARDS,
-    L11_TAIXU_CARD_IDS, L11_TAIXU_EQUIP_CARD_SKILLS, L11_TAIXU_GENERALS, L11_TAIXU_OWN_NPC_SKILLS,
-    L11_TAIXU_SERVANTS, L11_TAIXU_SHOP_BUFF_POOL, L11_TAIXU_SKILLS, L11_TAIXU_SKILL_ID,
+    L11_TAIXU_CARD_IDS, L11_TAIXU_EQUIP_CARD_SKILLS, L11_TAIXU_GENERALS,
+    L11_TAIXU_IMPLEMENTED_CROSS_SKILLS, L11_TAIXU_OWN_NPC_SKILLS, L11_TAIXU_SERVANTS,
+    L11_TAIXU_SHOP_BUFF_POOL, L11_TAIXU_SKILLS, L11_TAIXU_SKILL_ID,
+    L11_TAIXU_UPSTREAM_UNDEFINED_SKILL_REFS,
 };
 use engine_native::catalog::CardKind;
 use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand};
@@ -745,4 +747,289 @@ fn l11_taixu_playcard_intrinsics_and_d34_l11_mods() {
     invoke_l11(&mut e, 0, "txhj_guihuo");
     assert_eq!(e.state_core().player(1).hp, 5);
 }
+
+#[test]
+fn l11_taixu_164_cross_package_npc_skills_and_9_inert_undefined_refs() {
+    use engine_native::catalog::Suit;
+    use engine_native::event::DamageNature;
+    use engine_native::rvm_bridge::modifiers::{
+        d34_flags::find_d34_flag_view_as, eval_card_unrespondable, eval_card_use_canceled,
+        eval_damage_amount,
+    };
+
+    let (_verified, mut e) = start_formal_taixu_engine(2026_1120);
+
+    // 1. All 9 upstream-undefined dangling skill IDs (`extension_character.js:321-337`,
+    //    `extension_csrank.js:3540-3587`) must remain inert without fabricated skills in Catalog:
+    assert_eq!(L11_TAIXU_UPSTREAM_UNDEFINED_SKILL_REFS.len(), 9);
+    for &undef_sk in &L11_TAIXU_UPSTREAM_UNDEFINED_SKILL_REFS {
+        assert!(
+            e.catalog().skill_by_name(undef_sk).is_none(),
+            "upstream-undefined skill ref {undef_sk} must NOT have a fabricated skill in Catalog"
+        );
+    }
+
+    // All `HeJinZhuHuan` (`何进诛宦`) NPCs that reference those 9 undefined IDs assemble cleanly:
+    // `txhj_huanguan` (`&["txhj_xiehui"]`) has 0 attached skills; the other 13 bind their defined skills:
+    let hg_idx = (0..e.catalog().general_count() as u16)
+        .find(|&idx| e.catalog().general_meta(idx).map(|m| m.0) == Some("txhj_huanguan"))
+        .expect("txhj_huanguan in Catalog");
+    assert!(
+        e.catalog().general_meta(hg_idx).unwrap().2.is_empty(),
+        "txhj_huanguan only lists undefined txhj_xiehui so attached skills must be empty"
+    );
+    for &(npc_id, expected_defined_skill) in &[
+        ("txhj_huanguandaofushou", "txhj_huangmen"),
+        ("txhj_dongtaihou", "fenji"),
+        ("txhj_baohong", "twlinglu"),
+        ("txhj_xiaoweijun", "kaikang"),
+        ("txhj_chunyuqiong", "jiuchi"),
+        ("txhj_jinweijun", "longdan"),
+        ("txhj_zhaorong", "txzhulian"),
+        ("txhj_zhaozhong", "txhj_huangmen"),
+        ("txhj_yuanshao", "zhanyi"),
+        ("txhj_caocao", "nzry_kuizhu"),
+        ("txhj_jianshuo", "txzhulian"),
+        ("txhj_huanyanzhangrang", "shefu"),
+        ("txhj_huanyanhejin", "mouzhu"),
+    ] {
+        let g_idx = (0..e.catalog().general_count() as u16)
+            .find(|&idx| e.catalog().general_meta(idx).map(|m| m.0) == Some(npc_id))
+            .unwrap_or_else(|| panic!("HeJinZhuHuan NPC {npc_id} missing from Catalog"));
+        e.debug_assemble_general_def(0, g_idx);
+        let sk_id = e
+            .catalog()
+            .skill_by_name(expected_defined_skill)
+            .unwrap_or_else(|| panic!("defined skill {expected_defined_skill} on {npc_id} missing"));
+        assert!(
+            e.state_core().has_skill(0, sk_id),
+            "{npc_id} must bind defined skill {expected_defined_skill}"
+        );
+    }
+
+    // 2. Representative authentic upstream `file:line` behavior assertions for the 164 cross-package NPC skills:
+    // (a) `twwushen` (`tw/skill.js:1764`): Heart hand card views as distance-unlimited Sha, unrespondable, and Heart Sha unlimited count
+    e.state_core_mut().vm_aux.flags.clear();
+    let heart_card = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.suit == Suit::Heart)
+        .unwrap() as u32;
+    let heart_sha = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.suit == Suit::Heart && c.kind == CardKind::Sha)
+        .unwrap_or(heart_card as usize) as u32;
+    if !e.state_core().player(0).hand.contains(&heart_card) {
+        e.state_core_mut().player_mut(0).hand.push(heart_card);
+    }
+    invoke_l11(&mut e, 0, "twwushen");
+    let vas = find_d34_flag_view_as(
+        e.state_core(),
+        e.catalog(),
+        0,
+        heart_card,
+        true,
+        Some(CardKind::Sha),
+    )
+    .expect("twwushen must view Heart hand card as Sha");
+    assert_eq!(vas.as_kind, CardKind::Sha);
+    assert!(vas.ignore_distance);
+    assert!(eval_card_unrespondable(
+        e.state_core(),
+        e.catalog(),
+        0,
+        1,
+        heart_sha,
+        CardKind::Sha,
+        DamageNature::Normal,
+    ));
+
+    // (b) `twwuhun` (`tw/skill.js:1842`): marks opponent with `l11_mengyan_mark` and drains opponent's HP on death rattle
+    e.state_core_mut().vm_aux.flags.clear();
+    e.state_core_mut().player_mut(1).hp = 6;
+    e.state_core_mut().player_mut(1).hujia = 0;
+    invoke_l11(&mut e, 0, "twwuhun");
+    assert!(flag(&e, 1, "l11_mengyan_mark") >= 1);
+    assert_eq!(e.state_core().player(1).hp, 3);
+    e.state_core_mut().player_mut(1).hp = 6;
+
+    // (c) `dualside` (`game.js:34262`): flips `face_down`, restores HP to `max_hp`, clears `dying`, and draws 2 cards
+    e.state_core_mut().vm_aux.flags.clear();
+    e.state_core_mut().player_mut(0).max_hp = 6;
+    e.state_core_mut().player_mut(0).hp = 0;
+    e.state_core_mut().player_mut(0).dying = true;
+    e.state_core_mut().player_mut(0).face_down = false;
+    let hand_before_dual = e.state_core().player(0).hand.len();
+    invoke_l11(&mut e, 0, "dualside");
+    assert!(e.state_core().player(0).face_down);
+    assert!(!e.state_core().player(0).dying);
+    assert_eq!(e.state_core().player(0).hp, 6);
+    assert!(e.state_core().player(0).hand.len() >= hand_before_dual + 2);
+
+    // (d) `qingzhongx` (`sp/skill.js:35220` / `markskill.js:18544`): draws 2 cards and swaps hand with the character who has fewer handcards
+    e.state_core_mut().vm_aux.flags.clear();
+    while e.state_core().player(0).hand.len() > 3 {
+        let cid = e.state_core_mut().player_mut(0).hand.pop().unwrap();
+        e.state_core_mut().discard.push(cid);
+    }
+    while e.state_core().player(1).hand.len() > 1 {
+        let cid = e.state_core_mut().player_mut(1).hand.pop().unwrap();
+        e.state_core_mut().discard.push(cid);
+    }
+    invoke_l11(&mut e, 0, "qingzhongx");
+    assert!(e.state_core().player(1).hand.len() >= 3);
+
+    // (e) `leiji` (`shenhua.js:7205`): flips 1 judge card and deals 2 Thunder damage to opponent
+    e.state_core_mut().vm_aux.flags.clear();
+    e.state_core_mut().player_mut(1).hp = 6;
+    e.state_core_mut().player_mut(1).hujia = 0;
+    invoke_l11(&mut e, 0, "leiji");
+    assert_eq!(e.state_core().player(1).hp, 4);
+
+    // (f) `retianxiang` (`shenhua.js:7913`): prevents damage (`l11_mod:retianxiang_ward`), redirects 1 damage to opponent, and target draws lost_hp
+    e.state_core_mut().vm_aux.flags.clear();
+    e.state_core_mut().player_mut(1).max_hp = 6;
+    e.state_core_mut().player_mut(1).hp = 5;
+    e.state_core_mut().player_mut(1).hujia = 0;
+    let p1_hand_before = e.state_core().player(1).hand.len();
+    invoke_l11(&mut e, 0, "retianxiang");
+    assert_eq!(e.state_core().player(1).hp, 4);
+    assert!(e.state_core().player(1).hand.len() >= p1_hand_before + 1);
+    assert_eq!(
+        eval_damage_amount(
+            e.state_core(),
+            e.catalog(),
+            Some(1),
+            0,
+            Some(heart_sha),
+            DamageNature::Normal,
+            2,
+        ),
+        0
+    );
+
+    // (g) `sbliegong` (`sb.js:3439`), `nzry_kuizhu` (`shenhua.js:1931`), `twlinglu` (`tw/skill.js:15134`), `mouzhu` (`sp.js:12799`), `shefu` (`sp/skill.js:39282`), `xinfu_daigong` (`mobile/skill.js:30818`)
+    e.state_core_mut().vm_aux.flags.clear();
+    invoke_l11(&mut e, 0, "sbliegong");
+    assert!(eval_card_unrespondable(
+        e.state_core(),
+        e.catalog(),
+        0,
+        1,
+        heart_sha,
+        CardKind::Sha,
+        DamageNature::Normal,
+    ));
+    assert_eq!(
+        eval_damage_amount(
+            e.state_core(),
+            e.catalog(),
+            Some(0),
+            1,
+            Some(heart_sha),
+            DamageNature::Normal,
+            1,
+        ),
+        2
+    );
+
+    e.state_core_mut().vm_aux.flags.clear();
+    e.state_core_mut().player_mut(0).hp = 2;
+    e.state_core_mut().player_mut(1).hp = 6;
+    invoke_l11(&mut e, 0, "nzry_kuizhu");
+    assert_eq!(e.state_core().player(1).hp, 5);
+
+    e.state_core_mut().vm_aux.flags.clear();
+    e.state_core_mut().player_mut(1).hp = 6;
+    invoke_l11(&mut e, 0, "twlinglu");
+    assert_eq!(e.state_core().player(1).hp, 5);
+
+    e.state_core_mut().vm_aux.flags.clear();
+    for _ in 0..4 {
+        if let Some(cid) = e.state_core_mut().deck.pop() {
+            e.state_core_mut().player_mut(0).hand.push(cid);
+        }
+    }
+    while e.state_core().player(1).hand.len() > 1 {
+        let cid = e.state_core_mut().player_mut(1).hand.pop().unwrap();
+        e.state_core_mut().discard.push(cid);
+    }
+    e.state_core_mut().player_mut(1).hp = 6;
+    invoke_l11(&mut e, 0, "mouzhu");
+    assert_eq!(e.state_core().player(1).hp, 5);
+
+    e.state_core_mut().vm_aux.flags.clear();
+    if !e.state_core().player(1).hand.contains(&heart_sha) {
+        e.state_core_mut().player_mut(1).hand.push(heart_sha);
+    }
+    invoke_l11(&mut e, 0, "shefu");
+    assert!(eval_card_use_canceled(
+        e.state_core(),
+        e.catalog(),
+        1,
+        heart_sha,
+        CardKind::Sha,
+        DamageNature::Normal,
+    ));
+
+    e.state_core_mut().vm_aux.flags.clear();
+    invoke_l11(&mut e, 1, "xinfu_daigong");
+    assert_eq!(
+        eval_damage_amount(
+            e.state_core(),
+            e.catalog(),
+            Some(0),
+            1,
+            Some(heart_sha),
+            DamageNature::Normal,
+            2,
+        ),
+        0
+    );
+
+    // 3. Exhaustively execute all 164 `L11_TAIXU_IMPLEMENTED_CROSS_SKILLS`:
+    assert_eq!(L11_TAIXU_IMPLEMENTED_CROSS_SKILLS.len(), 164);
+    for &sk in &L11_TAIXU_IMPLEMENTED_CROSS_SKILLS {
+        for seat in [0u8, 1u8] {
+            e.state_core_mut().player_mut(seat).max_hp = 10;
+            e.state_core_mut().player_mut(seat).hp = 6;
+            e.state_core_mut().player_mut(seat).alive = true;
+            e.state_core_mut().player_mut(seat).dying = false;
+            while e.state_core().player(seat).hand.len() < 3 {
+                if let Some(cid) = e
+                    .state_core_mut()
+                    .deck
+                    .pop()
+                    .or_else(|| e.state_core_mut().discard.pop())
+                {
+                    e.state_core_mut().player_mut(seat).hand.push(cid);
+                } else {
+                    break;
+                }
+            }
+        }
+        assert!(
+            e.catalog().skill_by_name(sk).is_some(),
+            "L11 cross-package NPC skill {sk} must be registered in formal locked Catalog"
+        );
+        invoke_l11(&mut e, 0, sk);
+    }
+
+    let unhandled: Vec<String> = e
+        .state_core()
+        .vm_aux
+        .flags
+        .keys()
+        .filter(|(_, k)| k.starts_with("l11_unhandled_skill:"))
+        .map(|(_, k)| k.clone())
+        .collect();
+    assert!(
+        unhandled.is_empty(),
+        "All 164 L11 cross-package NPC skills must resolve with zero unhandled flags, found: {unhandled:?}"
+    );
+}
+
 

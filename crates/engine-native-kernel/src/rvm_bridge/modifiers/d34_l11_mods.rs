@@ -1,7 +1,9 @@
 //! Explicit per-skill `L11 太虚幻境` modifier evaluations (`d34_l11_mods.rs`), extracted from
-//! `archive/upstream/noname-liuli/noname/extension/太虚幻境/{extension.js,extension_skill.js,extension_buff.js}`.
+//! `archive/upstream/noname-liuli/noname/extension/太虚幻境/{extension.js,extension_skill.js,extension_buff.js}`
+//! and the 164 cross-package NPC skills in `archive/upstream/noname-liuli/noname/character/*.js`
+//! & `archive/upstream/noname/apps/core/character/**/*.js`.
 
-use crate::catalog::{CardKind, Catalog, EquipSlot};
+use crate::catalog::{CardKind, Catalog, EquipSlot, Suit};
 use crate::event::DamageNature;
 use crate::ids::{CardId, PlayerId};
 use crate::state::GameStateCore;
@@ -15,6 +17,34 @@ fn has_armor(state: &GameStateCore, catalog: &Catalog, seat: PlayerId) -> bool {
         .equips
         .iter()
         .any(|&cid| catalog.card_slot_of(state, cid) == Some(EquipSlot::Armor))
+}
+
+pub(super) fn is_card_ignored_hand_limit(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    player: PlayerId,
+    card: CardId,
+    kind: CardKind,
+) -> bool {
+    // `tw/skill.js:16171` (`twyuhua`: non-basic cards ignored for hand limit)
+    if !kind.is_basic_kind()
+        && (flag_val(state, player, "l11_mod:twyuhua") > 0
+            || has_ext_skill(state, catalog, player, "twyuhua"))
+    {
+        return true;
+    }
+    // `sp.js:16213` (`xiehui`: black cards ignored for hand limit)
+    let is_black = catalog
+        .cards
+        .get(card as usize)
+        .is_some_and(|cd| matches!(cd.suit, Suit::Spade | Suit::Club));
+    if is_black
+        && (flag_val(state, player, "l11_mod:xiehui") > 0
+            || has_ext_skill(state, catalog, player, "xiehui"))
+    {
+        return true;
+    }
+    false
 }
 
 pub(super) fn apply_hand_limit(
@@ -35,9 +65,21 @@ pub(super) fn apply_hand_limit(
     {
         limit += 4;
     }
+    // `shenhua.js:7047` (`buqu`: hand limit equals `创` count when `创` present)
+    let buqu = flag_val(state, player, "l11_mod:buqu_chuang");
+    if buqu > 0 {
+        limit = limit.max(buqu as i32);
+    }
+    // `yijiang.js:7487` (`jigong`), `yijiang.js:8886` (`mingjian`), `mobile/skill.js:23519` (`requanji`),
+    // `sb/skill.js:9647` (`sbyingzi`), `sp2/skill.js:9985` (`shunshi`)
+    limit += flag_val(state, player, "l11_mod:jigong_hand") as i32;
+    limit += flag_val(state, player, "l11_mod:mingjian_buff") as i32;
+    limit += flag_val(state, player, "l11_mod:requanji_quan") as i32;
+    limit += flag_val(state, player, "l11_mod:sbyingzi_hand") as i32;
+    limit += flag_val(state, player, "l11_mod:shunshi_hand") as i32;
     // extension.js:1393 (`txhj_renwang`: +expansion count)
     limit += flag_val(state, player, "l11_mod:txhj_renwang") as i32;
-    // extension_buff.js:365 (`buff_txhj_wuweizhile`: target hand limit -1)
+    // extension_buff.js:365 (`buff_txhj_wuweizhile` & `wangzun`: target hand limit -1)
     limit -= flag_val(state, player, "l11_wuweizhile_minus1") as i32;
     // extension.js:5044 (`txyingyang`: pindian/hand bonus)
     if flag_val(state, player, "l11_yingyang_pindian_mod") > 0
@@ -49,6 +91,35 @@ pub(super) fn apply_hand_limit(
     limit
 }
 
+pub(super) fn apply_attack_range(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    player: PlayerId,
+    mut cur: i32,
+) -> i32 {
+    // `jsrg.js:3836` (`jsrgzhenqiao`: attack range +1)
+    if flag_val(state, player, "l11_mod:jsrgzhenqiao_range") > 0
+        || has_ext_skill(state, catalog, player, "jsrgzhenqiao")
+    {
+        cur += 1;
+    }
+    // `tw/skill.js:27771` (`twqueshi`: Meiying spear +2 range)
+    let queshi = flag_val(state, player, "l11_mod:twqueshi_meiying");
+    if queshi > 0 {
+        cur += queshi as i32;
+    } else if has_ext_skill(state, catalog, player, "twqueshi") {
+        cur += 2;
+    }
+    // `tw/skill.js:17764` (`twxiangyu`: attack range +X)
+    let xiangyu = flag_val(state, player, "l11_mod:twxiangyu_range");
+    if xiangyu > 0 {
+        cur += xiangyu as i32;
+    } else if has_ext_skill(state, catalog, player, "twxiangyu") {
+        cur += 1;
+    }
+    cur
+}
+
 pub(super) fn apply_distance_total(
     state: &GameStateCore,
     catalog: &Catalog,
@@ -56,6 +127,17 @@ pub(super) fn apply_distance_total(
     to: PlayerId,
     mut dist: i32,
 ) -> i32 {
+    // `sp.js:15556` (`fenxun`) & `sp.js:11358` (`refenxun`): distance to target treated as 1
+    if flag_val(state, from, "l11_mod:fenxun_dist1") > 0 {
+        return 1;
+    }
+    // `sp.js:7210` (`olzhuiji`: distance to characters with hp <= owner.hp is 1)
+    if (flag_val(state, from, "l11_mod:olzhuiji_dist") > 0
+        || has_ext_skill(state, catalog, from, "olzhuiji"))
+        && state.player(from).hp >= state.player(to).hp
+    {
+        return 1;
+    }
     // extension.js:3460 (`txmazhan`: globalFrom - 2, globalTo + 1)
     if flag_val(state, from, "l11_mod:txmazhan") > 0
         || has_ext_skill(state, catalog, from, "txmazhan")
@@ -67,6 +149,14 @@ pub(super) fn apply_distance_total(
     {
         dist += 1;
     }
+    // `sp.js:19457` (`lixia`: others calculate distance to owner -1)
+    if flag_val(state, to, "l11_mod:lixia_dist_to_minus1") > 0
+        || has_ext_skill(state, catalog, to, "lixia")
+    {
+        dist -= 1;
+    }
+    // `refresh.js:17516` (`retuntian`: distance from owner -X `田`)
+    dist -= flag_val(state, from, "l11_mod:retuntian_tian") as i32;
     // extension_card.js:501, 642, 1263 (`txhj_liulongcanjia`, `txhj_juechenjinge`, `txhj_baihu`)
     if flag_val(state, from, "l11_mount_active:txhj_liulongcanjia") > 0
         || flag_val(state, from, "l11_mount_active:txhj_baihu") > 0
@@ -88,9 +178,17 @@ pub(super) fn apply_sha_use_limit(
     mut cur: i32,
     mut unlimited: bool,
 ) -> (i32, bool) {
-    // extension.js:3441 (`xinmingjian2`: unlimited Sha)
+    // extension.js:3441 (`xinmingjian2`), `diy.js:3461` (`kyou_zhidian`), `shenhua.js:2142` (`nzry_chenglve`),
+    // `tw/skill.js:1764` (`twwushen`), `sp/skill.js:49243` (`xinfu_limu`)
     if flag_val(state, player, "l11_mod:xinmingjian2") > 0
+        || flag_val(state, player, "l11_mod:kyou_zhidian_unlimited") > 0
+        || flag_val(state, player, "l11_mod:nzry_chenglve") > 0
+        || flag_val(state, player, "l11_mod:twwushen") > 0
+        || flag_val(state, player, "l11_mod:xinfu_limu") > 0
         || has_ext_skill(state, catalog, player, "xinmingjian2")
+        || has_ext_skill(state, catalog, player, "twwushen")
+        || (has_ext_skill(state, catalog, player, "xinfu_limu")
+            && !state.player(player).judge.is_empty())
     {
         unlimited = true;
     }
@@ -103,7 +201,37 @@ pub(super) fn apply_sha_use_limit(
     {
         cur += 1;
     }
+    // `collab.js:3112` (`dcnutao`), `yijiang.js:8886` (`mingjian`), `sp2/skill.js:9985` (`shunshi`),
+    // `sp/skill.js:38664` (`tuifeng`), `sp.js:11432` (`zhuixi`)
+    cur += flag_val(state, player, "l11_mod:dcnutao_sha_plus") as i32;
+    cur += flag_val(state, player, "l11_mod:mingjian_buff") as i32;
+    cur += flag_val(state, player, "l11_mod:shunshi_sha") as i32;
+    cur += flag_val(state, player, "l11_mod:tuifeng_sha") as i32;
+    if flag_val(state, player, "l11_mod:zhuixi_sha_plus1") > 0
+        || has_ext_skill(state, catalog, player, "zhuixi")
+    {
+        cur += 1;
+    }
     (cur, unlimited)
+}
+
+pub(super) fn apply_sha_extra_targets(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    player: PlayerId,
+    kind: CardKind,
+    mut extra: i32,
+) -> i32 {
+    if kind.is_sha_like() {
+        // `sp2.js:9417` (`bmcanshi`) & `tw/skill.js:26877` (`twhengjiang`)
+        if flag_val(state, player, "l11_mod:bmcanshi") > 0
+            || has_ext_skill(state, catalog, player, "bmcanshi")
+        {
+            extra += 1;
+        }
+        extra += flag_val(state, player, "l11_mod:twhengjiang_extra") as i32;
+    }
+    extra
 }
 
 pub(super) fn apply_card_distance_unlimited(
@@ -113,9 +241,21 @@ pub(super) fn apply_card_distance_unlimited(
     kind: CardKind,
     mut unlimited: bool,
 ) -> bool {
-    // extension.js:4854 (`txshouyi`: targetInRange => true)
+    // extension.js:4854 (`txshouyi`) + `diy.js:3461` (`kyou_zhidian`) + `shenhua.js:2142` (`nzry_chenglve`)
+    // + `shenhua/skill.js:7595` (`shensu`) + `tw/skill.js:16072` (`twqirang`) + `tw/skill.js:1764` (`twwushen`)
+    // + `sp/skill.js:49243` (`xinfu_limu`)
     if flag_val(state, player, "l11_mod:txshouyi") > 0
+        || flag_val(state, player, "l11_mod:kyou_zhidian_unlimited") > 0
+        || flag_val(state, player, "l11_mod:nzry_chenglve") > 0
+        || flag_val(state, player, "l11_mod:shensu_no_dist") > 0
+        || flag_val(state, player, "l11_mod:twqirang") > 0
+        || flag_val(state, player, "l11_mod:twwushen") > 0
+        || flag_val(state, player, "l11_mod:xinfu_limu") > 0
         || has_ext_skill(state, catalog, player, "txshouyi")
+        || has_ext_skill(state, catalog, player, "kyou_zhidian")
+        || has_ext_skill(state, catalog, player, "twwushen")
+        || (has_ext_skill(state, catalog, player, "xinfu_limu")
+            && !state.player(player).judge.is_empty())
     {
         unlimited = true;
     }
@@ -153,6 +293,34 @@ pub(super) fn apply_card_target_canceled(
     {
         canceled = true;
     }
+    // `sp2.js:9417` (`bmcanshi`: cancel card from `傀`-marked actor)
+    if actor != target
+        && flag_val(state, actor, "l11_kui_mark") > 0
+        && (flag_val(state, target, "l11_mod:bmcanshi") > 0
+            || has_ext_skill(state, catalog, target, "bmcanshi"))
+    {
+        canceled = true;
+    }
+    // `mobile.js:11997` (`gaoyuan`) & `tw/skill.js:25864` (`twhuangjin`): Sha deflected/nullified
+    if kind.is_sha_like()
+        && (flag_val(state, target, "l11_mod:gaoyuan_deflect") > 0
+            || flag_val(state, target, "l11_mod:twhuangjin_null") > 0)
+    {
+        canceled = true;
+    }
+    // `shenhua/skill.js:1136` (`xinfu_fuyin`: Sha/Duel nullified when target hand <= actor hand)
+    if actor != target
+        && (kind.is_sha_like() || kind == CardKind::Duel)
+        && state.player(target).hand.len() <= state.player(actor).hand.len()
+        && (flag_val(state, target, "l11_mod:xinfu_fuyin") > 0
+            || has_ext_skill(state, catalog, target, "xinfu_fuyin"))
+    {
+        canceled = true;
+    }
+    // `yijiang.js:11491` (`zhichi`: Sha & tricks nullified after out-of-turn damage)
+    if (kind.is_sha_like() || is_trick) && flag_val(state, target, "l11_mod:zhichi_ward") > 0 {
+        canceled = true;
+    }
     // extension.js:658 (`txhj_guimei`: immune to delayed tricks)
     if matches!(
         kind,
@@ -170,10 +338,11 @@ pub(super) fn apply_card_target_canceled(
     {
         canceled = true;
     }
-    // extension.js:5704 (`txmanzhen`: immune to SavageAttack)
+    // extension.js:5704 (`txmanzhen`) & `shiji/skill.js:4520` (`spxiangzhen`: immune to SavageAttack)
     if kind == CardKind::SavageAttack
         && (flag_val(state, target, "l11_mod:txmanzhen") > 0
-            || has_ext_skill(state, catalog, target, "txmanzhen"))
+            || has_ext_skill(state, catalog, target, "txmanzhen")
+            || has_ext_skill(state, catalog, target, "spxiangzhen"))
     {
         canceled = true;
     }
@@ -182,12 +351,27 @@ pub(super) fn apply_card_target_canceled(
 
 pub(super) fn apply_card_use_canceled(
     state: &GameStateCore,
+    catalog: &Catalog,
     actor: PlayerId,
+    kind: CardKind,
     in_hand: bool,
     mut canceled: bool,
 ) -> bool {
-    // extension.js:5131 (`mdqianxi72`: hand cards locked this turn)
-    if in_hand && flag_val(state, actor, "l11_mod:mdqianxi72") > 0 {
+    // extension.js:5131 (`mdqianxi72`), `mobile.js:11007` (`jinglve`), `sp/skill.js:39282` (`shefu`)
+    if in_hand
+        && (flag_val(state, actor, "l11_mod:mdqianxi72") > 0
+            || flag_val(state, actor, "l11_jinglve_sishi") > 0
+            || flag_val(state, actor, "l11_shefu_ambush") > 0)
+    {
+        canceled = true;
+    }
+    // `refresh.js:9638` (`rejinjiu`: others cannot use Jiu during owner's turn)
+    let cur_turn = state.turn.current;
+    if kind == CardKind::Jiu
+        && cur_turn != actor
+        && (flag_val(state, cur_turn, "l11_mod:rejinjiu") > 0
+            || has_ext_skill(state, catalog, cur_turn, "rejinjiu"))
+    {
         canceled = true;
     }
     canceled
@@ -216,11 +400,22 @@ pub(super) fn apply_damage_amount(
     {
         return 0;
     }
-    // extension.js:5851 (`txyongguan`: prevents damage when ward active) & `txhj_jiuweiSkill2` (`l11_jiuwei_misi_active`)
+    // extension.js:5851 (`txyongguan`), `shenhua.js:7913` (`retianxiang`), `refresh/skill.js:10339` (`wulie`),
+    // `mobile/skill.js:30818` (`xinfu_daigong`), `shiji.js:4013` (`mjmouzhi`)
     if flag_val(state, target, "l11_mod:txyongguan_ward") > 0
+        || flag_val(state, target, "l11_mod:retianxiang_ward") > 0
+        || flag_val(state, target, "l11_mod:wulie_lie") > 0
+        || flag_val(state, target, "l11_mod:xinfu_daigong_ward") > 0
+        || (flag_val(state, target, "l11_mod:mjmouzhi_suit") > 0 && card.is_some())
         || (flag_val(state, target, "l11_jiuwei_misi_active") > 0 && state.player(target).hp <= 1)
     {
         return 0;
+    }
+    if let Some(src) = source {
+        // `yijiang.js:9766` (`zhiman`: prevent damage to steal field card)
+        if flag_val(state, src, "l11_mod:zhiman_prevent") > 0 {
+            return 0;
+        }
     }
     // extension.js:5657-5681 (`txmanjia` / `txmanjia1` / `txmanjia2`: unarmored Vine Armor)
     let has_txmanjia = flag_val(state, target, "l11_mod:txmanjia") > 0
@@ -239,12 +434,22 @@ pub(super) fn apply_damage_amount(
     }
 
     if let Some(src) = source {
-        // extension.js:554, 572, 699, 1344, 3355, 5809 & extension_skill.js:1071
+        // extension.js:554, 572, 699, 1344, 3355, 5809 & cross-package damage boosts
         if flag_val(state, src, "l11_mod:damage_plus1") > 0
+            || flag_val(state, src, "l11_mod:jieyuan_more") > 0
+            || flag_val(state, src, "l11_mod:kyou_zhidian_dmg") > 0
+            || flag_val(state, src, "l11_mod:new_yijue_heart_plus1") > 0
+            || flag_val(state, src, "l11_mod:reluoyi_dmg_plus1") > 0
+            || flag_val(state, src, "l11_mod:repojun_dmg_plus1") > 0
+            || flag_val(state, src, "l11_mod:sbliegong_dmg") > 0
+            || flag_val(state, src, "l11_mod:xinfu_zengdao_dao") > 0
             || has_ext_skill(state, catalog, src, "txhj_shiyuan")
             || (flag_val(state, src, "l11_buff_juguzhidao") > 0 && state.player(target).hujia > 0)
         {
             cur += 1;
+        }
+        if flag_val(state, src, "l11_mod:twxuhe_plus2") > 0 {
+            cur += 2;
         }
         if is_sha
             && (flag_val(state, src, "l11_mod:txfusha") > 0
@@ -273,8 +478,22 @@ pub(super) fn apply_damage_amount(
         {
             cur += 1;
         }
+        // `newjiang/skill.js:7123` (`spyishi`: damage -1 to steal equip)
+        if flag_val(state, src, "l11_mod:spyishi_reduce") > 0 {
+            cur = (cur - 1).max(0);
+        }
     }
 
+    // `newjiang/skill.js:6760` (`weifeng`: `惧` mark +1 damage) & `sp2/skill.js:4647` (`yise`: black card +1 Sha damage)
+    if flag_val(state, target, "l11_mod:weifeng_ju") > 0
+        || (is_sha && flag_val(state, target, "l11_mod:yise_black_vuln") > 0)
+    {
+        cur += 1;
+    }
+    // `sp.js:18564` (`jieyuan_less`: damage -1)
+    if flag_val(state, target, "l11_mod:jieyuan_less") > 0 {
+        cur = (cur - 1).max(0);
+    }
     // extension.js:3760 (`txxiebi`: damage > 1 -> -1)
     if cur > 1
         && (flag_val(state, target, "l11_mod:txxiebi") > 0
@@ -304,4 +523,43 @@ pub(super) fn apply_damage_amount(
         }
     }
     cur
+}
+
+pub(super) fn apply_ignore_armor(
+    state: &GameStateCore,
+    source: PlayerId,
+    mut ignore: bool,
+) -> bool {
+    // `mobile.js:16944` (`gnsheque`) & `diy.js:3461` (`kyou_zhidian`)
+    if flag_val(state, source, "l11_mod:gnsheque_pierce") > 0
+        || flag_val(state, source, "l11_mod:kyou_zhidian_pierce") > 0
+    {
+        ignore = true;
+    }
+    ignore
+}
+
+pub(super) fn apply_card_unrespondable(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    source: PlayerId,
+    kind: CardKind,
+    mut unrespondable: bool,
+) -> bool {
+    if kind.is_sha_like()
+        && (flag_val(state, source, "l11_mod:kyou_zhidian_unresp") > 0
+            || flag_val(state, source, "l11_mod:sbliegong_unresp") > 0
+            || flag_val(state, source, "l11_mod:twwushen") > 0
+            || flag_val(state, source, "l11_mod:twxiangyu_unresp") > 0
+            || has_ext_skill(state, catalog, source, "twwushen")
+            || has_ext_skill(state, catalog, source, "twxiangyu"))
+    {
+        unrespondable = true;
+    }
+    if flag_val(state, source, "l11_mod:spwenji_unresp") > 0
+        || flag_val(state, source, "l11_mod:twqirang") > 0
+    {
+        unrespondable = true;
+    }
+    unrespondable
 }

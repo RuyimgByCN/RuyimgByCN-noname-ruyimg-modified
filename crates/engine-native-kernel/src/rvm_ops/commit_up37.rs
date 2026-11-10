@@ -6,6 +6,8 @@ use super::*;
 pub mod decision34;
 pub mod decision34_ext;
 pub mod decision34_l11_buffs;
+pub mod decision34_l11_npc_a;
+pub mod decision34_l11_npc_b;
 pub mod decision34_l11_skills;
 pub mod decision34_l19_l20_l27;
 pub mod decision34_l25_rules;

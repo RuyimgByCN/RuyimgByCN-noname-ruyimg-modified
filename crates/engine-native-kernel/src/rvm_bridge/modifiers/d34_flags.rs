@@ -99,6 +99,7 @@ pub fn is_card_ignored_hand_limit(
         return true;
     }
     d34_u05_mods::is_card_ignored_hand_limit(state, catalog, player, card)
+        || d34_l11_mods::is_card_ignored_hand_limit(state, catalog, player, card, kind)
 }
 
 pub fn apply_hand_limit(
@@ -220,7 +221,8 @@ pub fn apply_attack_range(
     if flag_val(state, player, "u05_mod:mailun5") > 0 {
         cur += 1;
     }
-    d34_u05_mods::apply_attack_range(state, player, cur)
+    let cur = d34_u05_mods::apply_attack_range(state, player, cur);
+    d34_l11_mods::apply_attack_range(state, catalog, player, cur)
 }
 
 pub fn apply_distance_total(
@@ -403,7 +405,8 @@ pub fn apply_sha_extra_targets(
             extra += 1;
         }
     }
-    d34_u05_mods::apply_sha_extra_targets(state, catalog, player, kind, extra)
+    let extra = d34_u05_mods::apply_sha_extra_targets(state, catalog, player, kind, extra);
+    d34_l11_mods::apply_sha_extra_targets(state, catalog, player, kind, extra)
 }
 
 pub fn apply_card_distance_unlimited(
@@ -620,7 +623,7 @@ pub fn apply_card_use_canceled(
     }
     let canceled =
         d34_u05_mods::apply_card_use_canceled(state, catalog, actor, card, kind, in_hand, canceled);
-    d34_l11_mods::apply_card_use_canceled(state, actor, in_hand, canceled)
+    d34_l11_mods::apply_card_use_canceled(state, catalog, actor, kind, in_hand, canceled)
 }
 
 pub fn apply_dying_peach_target_canceled(
@@ -842,7 +845,8 @@ pub fn apply_ignore_armor(
     {
         ignore = true;
     }
-    d34_u05_mods::apply_ignore_armor(state, source, ignore)
+    let ignore = d34_u05_mods::apply_ignore_armor(state, source, ignore);
+    d34_l11_mods::apply_ignore_armor(state, source, ignore)
 }
 
 pub fn apply_card_unrespondable(
@@ -909,5 +913,7 @@ pub fn apply_card_unrespondable(
     {
         unrespondable = true;
     }
-    d34_u05_mods::apply_card_unrespondable(state, source, target, kind, unrespondable)
+    let unrespondable =
+        d34_u05_mods::apply_card_unrespondable(state, source, target, kind, unrespondable);
+    d34_l11_mods::apply_card_unrespondable(state, catalog, source, kind, unrespondable)
 }

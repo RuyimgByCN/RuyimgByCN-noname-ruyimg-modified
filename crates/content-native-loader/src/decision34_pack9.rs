@@ -42,6 +42,9 @@ fn classify_skill_trigger(name: &str) -> (EventKind, VmFilterPolicy) {
     if name.ends_with("__ref_busi") {
         return (EventKind::Dying, VmFilterPolicy::OwnerIsTarget);
     }
+    if let Some(res) = super::classify_l11_npc_skill_trigger(name) {
+        return res;
+    }
     match name {
         "ycndiyjianxiong"
         | "cyxianjiang"
@@ -737,12 +740,15 @@ pub fn attach_formal_package_upstream_rules(
                 .iter()
                 .chain(super::L11_TAIXU_OWN_NPC_SKILLS.iter())
                 .chain(super::L11_TAIXU_EQUIP_CARD_SKILLS.iter())
+                .chain(super::L11_TAIXU_IMPLEMENTED_CROSS_SKILLS.iter())
             {
                 push_skill(s, L11_TAIXU_SKILL_ID);
             }
-            // Bind genuine native HostSkillDecls and real U01/U08 resolvers; precompiled ported
-            // rule-vm cross-skills are already bridged from `taixu-upstream-liuli/package.npack.json`
-            // into `pack.vm_skills` (`seen_skills`), and unported cross-skills remain omitted (`缺失`).
+            // Bind genuine native HostSkillDecls and real U01/U05/U08/L19/L20/L27 resolvers;
+            // precompiled ported rule-vm cross-skills are already bridged from
+            // `taixu-upstream-liuli/package.npack.json` into `pack.vm_skills` (`seen_skills`),
+            // and the 9 upstream-undefined IDs (`L11_TAIXU_UPSTREAM_UNDEFINED_SKILL_REFS`)
+            // remain inert without fabricating fake skills.
             for &s in &super::L11_TAIXU_CROSS_SKILLS {
                 if super::lookup_upstream_host_behavior(s).is_some() {
                     push_skill(s, L11_TAIXU_SKILL_ID);

@@ -322,11 +322,11 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
     ],
     "L11": [
         (
-            "`L11_TAIXU_GENERALS`（320 将）+ `L11_TAIXU_CARDS`（32 牌）+ `L11_TAIXU_SKILLS`（374 项本包技能/赐福）+ `L11_TAIXU_OWN_NPC_SKILLS`（29 项本包 Boss 技）+ 237 项 `package.npack.json` 预编译 `rule-vm` 跨包技 + `d34_l11_mods.rs`",
-            "`crates/content-native-loader/src/taixu_skills_data.rs:5-210`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_l11_{buffs,skills}.rs`、`crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_l11_mods.rs:1-277`、`packages/extensions/taixu-upstream-liuli/package.npack.json`",
-            "`archive/upstream/noname-liuli/noname/extension/太虚幻境/extension_{character,card,skill,buff}.js`",
+            "`L11_TAIXU_GENERALS`（320 将）+ `L11_TAIXU_CARDS`（32 牌）+ `L11_TAIXU_SKILLS`（374 项本包技能/赐福）+ `L11_TAIXU_OWN_NPC_SKILLS`（29 项本包 Boss 技）+ `L11_TAIXU_IMPLEMENTED_CROSS_SKILLS`（164 项跨包 NPC 技）+ 237 项 `package.npack.json` 预编译 `rule-vm` 跨包技 + `d34_l11_mods.rs` + `L11_TAIXU_UPSTREAM_UNDEFINED_SKILL_REFS`（9 项上游未定义悬空引用保持惰性）",
+            "`crates/content-native-loader/src/taixu_skills_data.rs:5-311`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_l11_{buffs,skills,npc_a,npc_b}.rs`、`crates/engine-native-kernel/src/rvm_bridge/modifiers/{d34_l11_mods,d34_view_as}.rs`、`packages/extensions/taixu-upstream-liuli/package.npack.json`",
+            "`archive/upstream/noname-liuli/noname/extension/太虚幻境/extension_{character,card,skill,buff}.js`、`archive/upstream/noname-liuli/noname/character/*.js`、`archive/upstream/noname/apps/core/character/**/*.js`",
             "原生规则 / `taixu-upstream-liuli`",
-            "部分（已清除 6 个 `subSkill` 正则伪影及全部 `l11_passive_active:*`/`l11_npc_*`/`l11_buff_draw:*`/`l11_buff_aura:*`/`l11_unhandled_skill:*` 分组桶；374 项本包技、29 项本包 Boss 技、32 张卡牌及 `HostSkillDecl`/`standard_catalog`/237 项预编译 `rule-vm` 跨包技已真实落地，未移植跨包 NPC 技与对应武将如实标为 `缺失`）",
+            "忠实实现（已清除 6 个 `subSkill` 正则伪影及全部分组桶；374 项本包技、29 项本包 Boss 技、164 项跨包 NPC 技、237 项预编译 `rule-vm` 跨包技、32 张卡牌及 320 名武将全部按上游 `file:line` 落地；`extension_character.js:321-337` 何进诛宦 11 名 NPC 上引用的 9 个上游未定义悬空技能 ID `L11_TAIXU_UPSTREAM_UNDEFINED_SKILL_REFS` 按上游运行时惰性处理，严禁凭空自造）",
         ),
         (
             "`L11_TAIXU_CAMPAIGN_NODES`（206 项节点）+ `TaixuCampaignRun` 赛季分支状态机 + `TaixuCampaignModal.vue`",
@@ -1163,6 +1163,7 @@ def _native_symbols() -> dict[str, dict]:
         "L11": _parse_rust_str_array(taixu_sk_rs, "L11_TAIXU_SKILLS")
         | _parse_rust_str_array(taixu_sk_rs, "L11_TAIXU_OWN_NPC_SKILLS")
         | _parse_rust_str_array(taixu_sk_rs, "L11_TAIXU_EQUIP_CARD_SKILLS")
+        | _parse_rust_str_array(taixu_sk_rs, "L11_TAIXU_IMPLEMENTED_CROSS_SKILLS")
         | host_bound_skills
         | taixu_npack_skills
         | u05_impl_vm
@@ -1234,6 +1235,9 @@ def _native_symbols() -> dict[str, dict]:
     l11_campaign_nodes: set[str] = set(
         re.findall(r'TaixuCampaignNodeSpec\s*\{[^}]*\bid:\s*"([^"]+)"', taixu_camp_rs)
     ) | _parse_rust_tuple_first_elems(taixu_camp_rs, "L11_TAIXU_SERVANTS")
+    l11_undefined_skill_refs: set[str] = _parse_rust_str_array(
+        taixu_sk_rs, "L11_TAIXU_UPSTREAM_UNDEFINED_SKILL_REFS"
+    )
     partial_skills: dict[str, set[str]] = {}
     faithful_cards: set[str] = (
         {"yiyi", "diaobingqianjiang", "shichangshi", "th_taipingyaoshu"}
@@ -1254,6 +1258,7 @@ def _native_symbols() -> dict[str, dict]:
         "faithful_surfaces": faithful_surfaces,
         "faithful_configs": faithful_configs,
         "l11_campaign_nodes": l11_campaign_nodes,
+        "l11_undefined_skill_refs": l11_undefined_skill_refs,
         "partial_skills": partial_skills,
         "faithful_cards": faithful_cards,
     }
@@ -1275,21 +1280,29 @@ def _classify_general(
     f_skills = syms["faithful_skills"].get(sid, set())
     f_generals = syms["faithful_generals"].get(sid, set())
     p_generals = syms["partial_generals"].get(sid, set())
+    undef_refs = syms.get("l11_undefined_skill_refs", set()) if sid == "L11" else set()
 
     zh = trans.get(cid, cid)
     sk_str = ", ".join(sk_list[:6]) + ("…" if len(sk_list) > 6 else "")
     summary = clean_md(f"{zh}（势力={grp}, 性别={sex}, 体力={hp}, 技能=[{sk_str}]）")
     if cid in pkg_generals:
         g_skills = pkg_generals[cid]
-        unmapped = [k for k, v in g_skills.items() if not v and k not in f_skills]
+        unmapped = [k for k, v in g_skills.items() if not v and k not in f_skills and k not in undef_refs]
         if not unmapped:
             status = "忠实实现"
         else:
             status = f"缺失（正式包已登记武将，但技能 {','.join(unmapped)} 尚未移植）"
     elif cid in f_generals:
-        missing_sks = [s for s in sk_list if s not in f_skills] if sid in ("U05", "L11") else []
+        missing_sks = (
+            [s for s in sk_list if s not in f_skills and s not in undef_refs]
+            if sid in ("U05", "L11")
+            else []
+        )
         if not missing_sks:
-            status = "忠实实现（武将与自带技能已按上游语义实现并接入正式包产品路径）"
+            if sid == "L11" and any(s in undef_refs for s in sk_list):
+                status = "忠实实现（武将与上游已定义自带技能已按上游语义实现并接入正式包产品路径；上游 `extension_character.js:321-337` 未定义悬空技能引用保持惰性不自造）"
+            else:
+                status = "忠实实现（武将与自带技能已按上游语义实现并接入正式包产品路径）"
         else:
             status = f"缺失（武将已登记于正式包，但自带技能 {','.join(missing_sks[:4])} 尚未移植）"
     elif cid in p_generals:

@@ -212,3 +212,100 @@ pub const L11_TAIXU_CROSS_SKILLS: [&str; 448] = [
     "zhuiji", "zhuikong", "zhuixi", "zhuiyi", "zili",
     "zishou", "zongkui", "zymoucheng",
 ];
+
+/// The 9 dangling skill IDs referenced by 11 `HeJinZhuHuan` (`何进诛宦`) NPCs in
+/// `archive/upstream/noname-liuli/noname/extension/太虚幻境/extension_character.js:321-337`
+/// (`/*何进诛宦*/ ... /*新技能*/`), with commented-out draft stubs in
+/// `extension_csrank.js:3540-3587` and `extension_framework.js:10545-10562`, that have
+/// **zero `lib.skill` definitions anywhere in `archive/upstream/noname` or `archive/upstream/noname-liuli`**.
+///
+/// Per Decision 34 (`禁止凭空生成上游不存在的技能；禁止用默认摸 1 兜底冒充实现`), these 9 IDs are
+/// recorded as inert upstream-undefined metadata tags without fabricating fake skill behaviors.
+pub const L11_TAIXU_UPSTREAM_UNDEFINED_SKILL_REFS: [&str; 9] = [
+    "txhj_jiaoxie",
+    "txhj_jinwei",
+    "txhj_jinxing",
+    "txhj_quanqin",
+    "txhj_xiehui",
+    "txhj_yishi",
+    "txhj_zhanhuo",
+    "txhj_zhuosheng",
+    "xinchenhui",
+];
+
+/// All 164 upstream-defined cross-package NPC skills referenced by `L11_TAIXU_GENERALS`
+/// (`archive/upstream/noname-liuli/noname/character/*.js`, `archive/upstream/noname/apps/core/character/**/*.js`,
+/// `dualside` in `game.js:34262`, and `qingzhongx` in `sp/skill.js:35220` / `markskill.js:18544`)
+/// that are faithfully implemented in `decision34_l11_npc_a.rs`, `decision34_l11_npc_b.rs`,
+/// `d34_l11_mods.rs`, and `d34_view_as.rs`.
+pub const L11_TAIXU_IMPLEMENTED_CROSS_SKILLS: [&str; 164] = [
+    "aocai", "baiyi", "benyu", "bmcanshi", "buqu", "chenqing", "chouce", "dclbjiuxian",
+    "dcmoukui", "dcnutao", "diancai", "dualside", "duwu", "fenji", "fenxun", "gaoyuan",
+    "gnsheque", "guanzong", "guju", "gushe", "jici", "jieyuan", "jigong", "jili",
+    "jinglve", "jsrgshichong", "jsrgzhenqiao", "jujian", "kyou_zhidian", "leiji", "liangzhu", "lianzhu",
+    "lihun", "lirang", "lixia", "liyu", "mingjian", "mizhao", "mjmouzhi", "mouzhu",
+    "mozhi", "new_reqingnang", "new_yijue", "nsxianhai", "nzry_chenglve", "nzry_feijun", "nzry_kuizhu", "nzry_shicai",
+    "olniepan", "olzhuiji", "piaoling", "qingxian", "qingzhongx", "quji", "reduodao", "refenxun",
+    "reganlu", "reguanxing", "reguose", "rejinjiu", "rejuece", "rejunxing", "relianying", "reluanji",
+    "reluoyi", "renshe", "repojun", "reqizhou", "requanji", "reshuangxiong", "retianxiang", "retuntian",
+    "retuxi", "rewurong", "rexingluan", "rexingshang", "reyajiao", "rezaiqi", "rezhijian", "rongbei",
+    "satomi_luodao", "sbliegong", "sbyingzi", "shangyi", "shefu", "shensu", "shizhi", "shunshi",
+    "spshiji", "sptunjiang", "spwenji", "spxiangzhen", "spyishi", "tianming", "tianshu", "tuifeng",
+    "twfenming", "twhanyu", "twhengjiang", "twhongju", "twhuangjin", "twjianming", "twjiefan", "twjuntun",
+    "twliancai", "twlingfa", "twlinglu", "twmibei", "twqianxi", "twqirang", "twqueshi", "twwuhun",
+    "twwushen", "twxiangyu", "twxingqi", "twxiongxi", "twxiongzheng", "twxuanhuo", "twxuechang", "twxuhe",
+    "twyilie", "twyingjia", "twyuanhu", "twyuhua", "twzhengrong", "waishi", "wangzun", "weifeng",
+    "weijing", "wulie", "xianfu", "xiehui", "xinfenyue", "xinfu_daigong", "xinfu_fuyin", "xinfu_kannan",
+    "xinfu_limu", "xinfu_shajue", "xinfu_sidao", "xinfu_xingluan", "xinfu_zengdao", "xinfu_zhaoxin", "xinjiewei", "xinjushou",
+    "xinkuangfu", "xinsheng", "yechou", "yinbing", "yise", "yjjianshu", "yongjin", "yongsi",
+    "yuce", "zhanyi", "zhendu", "zhichi", "zhidao", "zhiman", "zhiyan", "zhongyong",
+    "zhuide", "zhuixi", "zili", "zongkui",
+];
+
+/// Map each of the 164 `L11` cross-package NPC skills to its authentic upstream trigger window.
+pub fn classify_l11_npc_skill_trigger(
+    name: &str,
+) -> Option<(
+    engine_native::event::EventKind,
+    engine_native::rvm_bridge::VmFilterPolicy,
+)> {
+    use engine_native::event::EventKind;
+    use engine_native::rvm_bridge::VmFilterPolicy;
+    match name {
+        "buqu" | "chenqing" | "dualside" | "olniepan" | "xinfu_shajue" => {
+            Some((EventKind::Dying, VmFilterPolicy::OwnerIsTarget))
+        }
+        "rexingshang" | "twwuhun" | "yechou" | "zhuide" => {
+            Some((EventKind::Death, VmFilterPolicy::OwnerIsTarget))
+        }
+        "benyu" | "chouce" | "guju" | "jieyuan" | "mjmouzhi" | "qingxian" | "renshe"
+        | "requanji" | "retianxiang" | "shunshi" | "tuifeng" | "xianfu" | "xinfu_daigong"
+        | "xinsheng" | "yuce" | "zhichi" => {
+            Some((EventKind::Damage, VmFilterPolicy::OwnerIsTarget))
+        }
+        "liyu" | "nsxianhai" | "spshiji" | "spyishi" | "twzhengrong" | "zhidao" | "zhiman" => {
+            Some((EventKind::Damage, VmFilterPolicy::OwnerIsSource))
+        }
+        "dcmoukui" | "dcnutao" | "jsrgshichong" | "jsrgzhenqiao" | "kyou_zhidian" | "leiji"
+        | "nzry_shicai" | "olzhuiji" | "repojun" | "reqizhou" | "rexingluan" | "reyajiao"
+        | "satomi_luodao" | "sbliegong" | "twhengjiang" | "twjianming" | "twmibei"
+        | "twxiangyu" | "twxuhe" | "weifeng" | "xinfu_sidao" | "xinfu_xingluan" | "zhongyong" => {
+            Some((EventKind::CardUsed, VmFilterPolicy::OwnerIsSource))
+        }
+        "bmcanshi" | "gaoyuan" | "jili" | "reduodao" | "spxiangzhen" | "tianming"
+        | "twhuangjin" | "xinfu_fuyin" => {
+            Some((EventKind::CardUsed, VmFilterPolicy::OwnerIsTarget))
+        }
+        "diancai" | "lixia" | "mozhi" | "nzry_kuizhu" | "piaoling" | "rejuece" | "rezaiqi"
+        | "shefu" | "sptunjiang" | "twliancai" | "twyingjia" | "wulie" | "xinjushou"
+        | "yinbing" | "zhiyan" => Some((EventKind::PhaseEnd, VmFilterPolicy::OwnerIsTarget)),
+        "twhanyu" | "twjuntun" | "twlingfa" | "twqueshi" | "twxiongzheng" | "zongkui" => {
+            Some((EventKind::TurnBegin, VmFilterPolicy::OwnerIsTarget))
+        }
+        _ if L11_TAIXU_IMPLEMENTED_CROSS_SKILLS.binary_search(&name).is_ok() => {
+            Some((EventKind::PhaseBegin, VmFilterPolicy::OwnerIsTarget))
+        }
+        _ => None,
+    }
+}
+
