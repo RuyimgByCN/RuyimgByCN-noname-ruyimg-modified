@@ -101,7 +101,7 @@ node apps/web-client/scripts/decision34-browser-surfaces.mjs docs/operations/evi
    - `python3 -B scripts/preflight.py` -> **`21/21 全部通过 ✅`**
 4. **按裁决 25 发布与 exact-head CI 实跑登记**：
    - 初版第四轮代码提交 `3d6b4eb31` 上 exact-head CI Run [`42718816733`](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/42718816733)（[`ci-run-42718816733-3d6b4eb31.json`](ci-run-42718816733-3d6b4eb31.json)）首跑 `10/10 PASS`；
-   - 本轮对抗复审修复代码提交推送 `refs/heads/native-convergence` 后的最新 exact-head CI Run ID 见 [`native-progress.md`](../../../architecture/native-progress.md) 顶部最新登记。
+   - 本轮对抗复审修复代码提交 `0ed74fdcd741a728eee586e33612198c66c79317`（`0ed74fdcd`）经单命令作用域 `pre-push` 守卫（原钩子 `.git/hooks/pre-push` `sha256: e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7` 零改动、远端 `main` `47347c660` 零改动、未新增 `remote`）推送至 `refs/heads/native-convergence`，exact-head CI Run [`42742221486`](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/42742221486)（原始记录见 [`ci-run-42742221486-0ed74fdcd.json`](ci-run-42742221486-0ed74fdcd.json)）**首次运行（Attempt 1，零补跑）10/10 全部通过 `conclusion: success`**（`gates-ubuntu` `129585798297`、`build-windows-latest` `129585798568`、`build-macos-latest` `129585798574`、`desktop-ubuntu-latest` `129585798685`、`native-web` `129585798696`、`desktop-windows-latest` `129585798763`、`perf-ubuntu-latest` `129585798816`、`build-ubuntu-latest` `129585798843`、`desktop-macos-latest` `129585798856`、`perf-macos-latest` `129585798917` 全绿）。
 
 ---
 
