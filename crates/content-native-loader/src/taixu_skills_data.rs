@@ -1,8 +1,8 @@
 //! Authentic upstream `L11` (`archive/upstream/noname-liuli/noname/extension/太虚幻境/{extension.js,extension_buff.js,extension_servant.js,extension_skill.js}`)
 //! 380 skills/buffs and cross-package NPC general skill bindings.
 
-/// All 380 authentic `L11` skills & buffs (`extension.js` 130 + `extension_buff.js` 106 + `extension_servant.js` 4 + `extension_skill.js` 140).
-pub const L11_TAIXU_SKILLS: [&str; 380] = [
+/// All 374 authentic `L11` skills & buffs (`extension.js` 124 + `extension_buff.js` 106 + `extension_servant.js` 4 + `extension_skill.js` 140).
+pub const L11_TAIXU_SKILLS: [&str; 374] = [
     "txhj_daiyuan", "txhj_daiyuan2", "txhj_daiyuanA", "txhj_daiyuanB",
     "txhj_ruiSkill1", "txhj_dundunSkill2", "txhj_jiuweiSkill1", "txhj_jiuweiSkill1_disable",
     "txhj_jiuweiSkill2", "txhj_jiuweiSkill3", "txhj_tengsheSkill1", "txhj_tengsheSkill2",
@@ -17,10 +17,10 @@ pub const L11_TAIXU_SKILLS: [&str; 380] = [
     "diyfeihua", "txclanxieshu", "txshixin", "txmouduan",
     "txkaikang", "txhuangfu", "txleizhen", "txxiebi",
     "txlianbi", "txfeiyan", "txleili", "cxyMoJun",
-    "cxyKuangXi", "temp", "txbaobian", "cxy_BaoYing",
-    "cxyYangWu", "cxyJingQi", "buff", "cxyRuiQi",
+    "cxyKuangXi", "txbaobian", "cxy_BaoYing",
+    "cxyYangWu", "cxyJingQi", "cxyRuiQi",
     "cxyJiaoXia", "cxyTunJun", "cxyFengYing", "cxyFanGong",
-    "cxyJieLve", "cxyMoQu", "sub1", "sub2",
+    "cxyJieLve", "cxyMoQu",
     "cxyYaoWu", "cxyYingHun", "cxyPoLu", "oldfuman",
     "oldfuman2", "txhuao", "hgkurou", "hgkurou_effect",
     "gdsanchen", "txlveming", "txdaoxi", "txlangxi",
@@ -31,8 +31,8 @@ pub const L11_TAIXU_SKILLS: [&str; 380] = [
     "txnangce", "txduanzui", "txyingyang", "mdqianxi7",
     "mdqianxi72", "mdqianxi", "zylongdan", "zglkongcheng",
     "txjuxiang", "txdaoji", "txhj_suoming", "txhj_huangmen",
-    "txhj_mouqiang", "txhj_suzhi", "count", "txmanjia",
-    "txmanjia1", "txmanjia2", "txmanzhen", "Use",
+    "txhj_mouqiang", "txhj_suzhi", "txmanjia",
+    "txmanjia1", "txmanjia2", "txmanzhen",
     "txfusha", "txleizhou", "txzhennu", "txyongguan",
     "txyongguan_fate", "txchengyuan", "txbenji", "txyonglve",
     "txjiang", "txhj_oldhuxiao", "buff_txhj_aozhan", "buff_txhj_yanhuo",
@@ -100,7 +100,26 @@ pub const L11_TAIXU_SKILLS: [&str; 380] = [
     "txhj_zhuwei", "boss_zhennu", "txhj_chuhai", "txhj_chuhai2",
 ];
 
-/// Cross-package skills referenced on `L11_TAIXU_GENERALS` (`extension_character.js:6-1489`) ensured in `Catalog`.
+/// The 29 `L11` NPC boss skills defined in `太虚幻境/extension.js:554-3632`.
+pub const L11_TAIXU_OWN_NPC_SKILLS: [&str; 29] = [
+    "tx_modao", "txhj_baoji", "txhj_baolian", "txhj_beiming", "txhj_chuanyun",
+    "txhj_didun", "txhj_dizhou", "txhj_guihuo", "txhj_guimei", "txhj_guimen",
+    "txhj_guiyan", "txhj_huangjin", "txhj_juhun", "txhj_kuangbao", "txhj_luolei",
+    "txhj_renfang", "txhj_renwang", "txhj_shiyuan", "txhj_tunshi", "txhj_wangyuan",
+    "txhj_wangzu", "txhj_xiefeng", "txhj_yaoshu", "txhj_zhoufa", "txhj_zhouzu",
+    "txhj_zhoulei", "txhj_zhuhun", "txhj_zuijiu", "txqyyouji",
+];
+
+/// The 20 equip/summon card-backed skills in `太虚幻境/extension_card.js` (trick cards execute via `PlayCard`).
+pub const L11_TAIXU_EQUIP_CARD_SKILLS: [&str; 20] = [
+    "txhj_xingtianpojunfu", "txhj_zhuge", "txhj_qilingong", "txhj_fangtianhuaji",
+    "txhj_xuwangzhimian", "txhj_piliche", "txhj_liulongcanjia", "txhj_leijimu",
+    "txhj_juechenjinge", "txhj_guofengyupao", "txhj_feilong", "txhj_dinglanyemingzhu",
+    "txhj_chiyanzhenhunqin", "txhj_lingbaoxianhu", "txhj_chongyingshenfu", "txminguangkai",
+    "txhj_taijifuchen", "txhj_baihu", "txzhaoshu_skill", "txzhaoshu_global",
+];
+
+/// Cross-package skills referenced on `L11_TAIXU_GENERALS` (`extension_character.js:6-1489`).
 pub const L11_TAIXU_CROSS_SKILLS: [&str; 448] = [
     "anguo", "anjian", "aocai", "baiyi", "baonu",
     "bazhen", "benghuai", "benyu", "bihuo", "bingyi",

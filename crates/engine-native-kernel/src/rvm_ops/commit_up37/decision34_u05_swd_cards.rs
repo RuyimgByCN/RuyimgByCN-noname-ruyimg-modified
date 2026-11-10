@@ -121,30 +121,14 @@ pub(super) fn try_resolve_u05_swd_cards_and_tactics(ctx: &mut Ctx<'_>, skill: &s
         "g_zhufangshenshi" => u05_exec(ctx, owner, "g_zhufangshenshi", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:g_zhufangshenshi", 1)),
         // card/swd/skill.js:95-112
         "huanpodan_skill" => u05_exec(ctx, owner, "huanpodan_skill", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:huanpodan_skill", 1)),
-        // card/swd/skill.js:114-127
-        "g_yuchan_swap" => u05_exec(ctx, owner, "g_yuchan_swap", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:g_yuchan_swap", 1)),
         // card/swd/skill.js:128-155
         "g_yuchan_equip" => u05_exec(ctx, owner, "g_yuchan_equip", 1, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:g_yuchan_equip", 1)),
-        // card/swd/skill.js:196-223
-        "lianyaohu_skill" => u05_exec(ctx, owner, "lianyaohu_skill", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:lianyaohu_skill", 1)),
-        // card/swd/skill.js:224-249
-        "g_shencaojie" => u05_exec(ctx, owner, "g_shencaojie", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:g_shencaojie", 1)),
-        // card/swd/skill.js:250-326
-        "g_shenmiguo" => u05_exec(ctx, owner, "g_shenmiguo", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:g_shenmiguo", 1)),
         // card/swd/skill.js:328-365
         "yuruyi" => u05_exec(ctx, owner, "yuruyi", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:yuruyi", 1)),
         // card/swd/skill.js:366-412
         "shuchui" => u05_exec(ctx, owner, "shuchui", 1, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:shuchui", 1)),
-        // card/swd/skill.js:413-425
-        "shuchui2" => u05_exec(ctx, owner, "shuchui2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:shuchui2", 1)),
-        // card/swd/skill.js:426-445
-        "xuejibingbao" => u05_exec(ctx, owner, "xuejibingbao", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:xuejibingbao", 1)),
         // card/swd/skill.js:446-484
         "gouhunluo" => u05_exec(ctx, owner, "gouhunluo", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::LoseHpSelf(1)),
-        // card/swd/skill.js:485-497
-        "gouhunluo2" => u05_exec(ctx, owner, "gouhunluo2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:gouhunluo2", 1)),
-        // card/swd/skill.js:498-512
-        "jiguanyuan" => u05_exec(ctx, owner, "jiguanyuan", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:jiguanyuan", 1)),
         // card/swd/skill.js:513-526
         "g_qinglongzhigui" => u05_exec(ctx, owner, "g_qinglongzhigui", 0, false, 0, 2, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:g_qinglongzhigui", 1)),
         // card/swd/skill.js:527-553
@@ -223,16 +207,10 @@ pub(super) fn try_resolve_u05_swd_cards_and_tactics(ctx: &mut Ctx<'_>, skill: &s
         "lianhua" => u05_exec(ctx, owner, "lianhua", 1, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:lianhua", 1)),
         // card/swd/skill.js:908-949
         "shouna" => u05_exec(ctx, owner, "shouna", 1, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::StorePile("u05_pile:shouna")),
-        // card/swd/skill.js:950-999
-        "donghuangzhong" => u05_exec(ctx, owner, "donghuangzhong", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:donghuangzhong", 1)),
-        // card/swd/skill.js:1000-1017
-        "xuanyuanjian" => u05_exec(ctx, owner, "xuanyuanjian", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:xuanyuanjian", 1)),
-        // card/swd/skill.js:1018-1032
-        "xuanyuanjian2" => u05_exec(ctx, owner, "xuanyuanjian2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:xuanyuanjian2", 1)),
         // card/swd/skill.js:1033-1044
         "xuanyuanjian3" => u05_exec(ctx, owner, "xuanyuanjian3", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::LoseHpSelf(1)),
         // card/swd/skill.js:1045-1059
-        "pangufu" => u05_exec(ctx, owner, "pangufu", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:pangufu", 1)),
+        "pangufu" => { u05_mark_invoked(ctx, owner, "pangufu"); let _ = u05_prey_other(ctx, owner, false); }
         // card/swd/skill.js:1060-1144
         "haotianta" => u05_exec(ctx, owner, "haotianta", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::JudgeEffect("u05_judge:haotianta")),
         // card/swd/skill.js:1145-1171
@@ -243,30 +221,14 @@ pub(super) fn try_resolve_u05_swd_cards_and_tactics(ctx: &mut Ctx<'_>, skill: &s
         "nvwashi" => u05_exec(ctx, owner, "nvwashi", 0, false, 0, 0, 0, 0, DamageNature::Normal, 1, 0, U05Extra::LoseHpSelf(1)),
         // card/swd/skill.js:1209-1264
         "kongxin" => u05_exec(ctx, owner, "kongxin", 1, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::DiscardOther(1)),
-        // card/swd/skill.js:1265-1286
-        "kongxin2" => u05_exec(ctx, owner, "kongxin2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:kongxin2", 1)),
-        // card/swd/skill.js:1287-1327
-        "qinglianxindeng" => u05_exec(ctx, owner, "qinglianxindeng", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:qinglianxindeng", 1)),
         // card/swd/skill.js:1328-1367
         "yiluan" => u05_exec(ctx, owner, "yiluan", 1, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::JudgeEffect("u05_judge:yiluan")),
-        // card/swd/skill.js:1368-1380
-        "hslingjian_xuanfengzhiren_equip1" => u05_exec(ctx, owner, "hslingjian_xuanfengzhiren_equip1", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:hslingjian_xuanfengzhiren_equip1", 1)),
-        // card/swd/skill.js:1381-1390
-        "hslingjian_xuanfengzhiren_equip2" => u05_exec(ctx, owner, "hslingjian_xuanfengzhiren_equip2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:hslingjian_xuanfengzhiren_equip2", 1)),
-        // card/swd/skill.js:1391-1400
-        "hslingjian_xuanfengzhiren_equip3" => u05_exec(ctx, owner, "hslingjian_xuanfengzhiren_equip3", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:hslingjian_xuanfengzhiren_equip3", 1)),
         // card/swd/skill.js:1401-1407
         "hslingjian_xuanfengzhiren_equip3_dist" => u05_exec(ctx, owner, "hslingjian_xuanfengzhiren_equip3_dist", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_mod:hslingjian_xuanfengzhiren_equip3_dist", 1)),
-        // card/swd/skill.js:1408-1417
-        "hslingjian_xuanfengzhiren_equip4" => u05_exec(ctx, owner, "hslingjian_xuanfengzhiren_equip4", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:hslingjian_xuanfengzhiren_equip4", 1)),
         // card/swd/skill.js:1418-1424
         "hslingjian_xuanfengzhiren_equip4_dist" => u05_exec(ctx, owner, "hslingjian_xuanfengzhiren_equip4_dist", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_mod:hslingjian_xuanfengzhiren_equip4_dist", 1)),
         // card/swd/skill.js:1425-1454
         "hslingjian_xuanfengzhiren_equip5" => u05_exec(ctx, owner, "hslingjian_xuanfengzhiren_equip5", 1, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::DiscardOther(1)),
-        // card/swd/skill.js:1455-1469
-        "hslingjian_zhongxinghujia_equip1" => u05_exec(ctx, owner, "hslingjian_zhongxinghujia_equip1", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:hslingjian_zhongxinghujia_equip1", 1)),
-        // card/swd/skill.js:1470-1482
-        "hslingjian_zhongxinghujia_equip2" => u05_exec(ctx, owner, "hslingjian_zhongxinghujia_equip2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:hslingjian_zhongxinghujia_equip2", 1)),
         // card/swd/skill.js:1483-1491
         "hslingjian_zhongxinghujia_equip3" => u05_exec(ctx, owner, "hslingjian_zhongxinghujia_equip3", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_mod:hslingjian_zhongxinghujia_equip3", 1)),
         // card/swd/skill.js:1492-1500
@@ -283,10 +245,6 @@ pub(super) fn try_resolve_u05_swd_cards_and_tactics(ctx: &mut Ctx<'_>, skill: &s
         "hslingjian_jinjilengdong_equip4" => u05_exec(ctx, owner, "hslingjian_jinjilengdong_equip4", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_mod:hslingjian_jinjilengdong_equip4", 1)),
         // card/swd/skill.js:1594-1618
         "hslingjian_jinjilengdong_equip5" => u05_exec(ctx, owner, "hslingjian_jinjilengdong_equip5", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::TurnOverSelf),
-        // card/swd/skill.js:1619-1648
-        "hslingjian_yinmilichang_equip1" => u05_exec(ctx, owner, "hslingjian_yinmilichang_equip1", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:hslingjian_yinmilichang_equip1", 1)),
-        // card/swd/skill.js:1649-1658
-        "hslingjian_yinmilichang_equip2" => u05_exec(ctx, owner, "hslingjian_yinmilichang_equip2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:hslingjian_yinmilichang_equip2", 1)),
         // card/swd/skill.js:1659-1667
         "hslingjian_yinmilichang_equip3" => u05_exec(ctx, owner, "hslingjian_yinmilichang_equip3", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_mod:hslingjian_yinmilichang_equip3", 1)),
         // card/swd/skill.js:1668-1676
@@ -303,8 +261,6 @@ pub(super) fn try_resolve_u05_swd_cards_and_tactics(ctx: &mut Ctx<'_>, skill: &s
         "hslingjian_xingtigaizao_equip4" => u05_exec(ctx, owner, "hslingjian_xingtigaizao_equip4", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_mod:hslingjian_xingtigaizao_equip4", 1)),
         // card/swd/skill.js:1738-1749
         "hslingjian_xingtigaizao_equip5" => u05_exec(ctx, owner, "hslingjian_xingtigaizao_equip5", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_mod:hslingjian_xingtigaizao_equip5", 1)),
-        // card/swd/skill.js:1750-1759
-        "hslingjian_shengxiuhaojiao_equip1" => u05_exec(ctx, owner, "hslingjian_shengxiuhaojiao_equip1", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:hslingjian_shengxiuhaojiao_equip1", 1)),
         // card/swd/skill.js:1760-1768
         "hslingjian_shengxiuhaojiao_equip2" => u05_exec(ctx, owner, "hslingjian_shengxiuhaojiao_equip2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_mod:hslingjian_shengxiuhaojiao_equip2", 1)),
         // card/swd/skill.js:1769-1777
@@ -323,12 +279,6 @@ pub(super) fn try_resolve_u05_swd_cards_and_tactics(ctx: &mut Ctx<'_>, skill: &s
         "hslingjian_shijianhuisu_equip4" => u05_exec(ctx, owner, "hslingjian_shijianhuisu_equip4", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_mod:hslingjian_shijianhuisu_equip4", 1)),
         // card/swd/skill.js:1854-1882
         "hslingjian_shijianhuisu_equip5" => u05_exec(ctx, owner, "hslingjian_shijianhuisu_equip5", 1, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:hslingjian_shijianhuisu_equip5", 1)),
-        // card/swd/skill.js:1883-1916
-        "jiguanyaoshu_skill" => u05_exec(ctx, owner, "jiguanyaoshu_skill", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:jiguanyaoshu_skill", 1)),
-        // card/swd/skill.js:1917-2020
-        "lingjianduanzao" => u05_exec(ctx, owner, "lingjianduanzao", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:lingjianduanzao", 1)),
-        // card/swd/skill.js:2021-2156
-        "_lingjianduanzao" => u05_exec(ctx, owner, "_lingjianduanzao", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:_lingjianduanzao", 1)),
         // card/swd/skill.js:2157-2190
         "hslingjian_chaofeng" => u05_exec(ctx, owner, "hslingjian_chaofeng", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_mod:hslingjian_chaofeng", 1)),
         // card/swd/skill.js:2191-2212
@@ -337,14 +287,10 @@ pub(super) fn try_resolve_u05_swd_cards_and_tactics(ctx: &mut Ctx<'_>, skill: &s
         "hslingjian_jinjilengdong" => u05_exec(ctx, owner, "hslingjian_jinjilengdong", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ModFlag("u05_mod:hslingjian_jinjilengdong", 1)),
         // card/swd/skill.js:2229-2252
         "qinglonglingzhu" => u05_exec(ctx, owner, "qinglonglingzhu", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::StealOther),
-        // card/swd/skill.js:2253-2272
-        "xingjunyan" => u05_exec(ctx, owner, "xingjunyan", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:xingjunyan", 1)),
         // card/swd/skill.js:2273-2283
         "baihupifeng" => u05_exec(ctx, owner, "baihupifeng", 0, false, 0, 0, 0, 0, DamageNature::Normal, 1, 0, U05Extra::GrantBuff("u05_state:baihupifeng", 1)),
         // card/swd/skill.js:2284-2312
         "fengxueren" => u05_exec(ctx, owner, "fengxueren", 0, false, 0, 0, 1, 0, DamageNature::Normal, 0, 0, U05Extra::TurnOverOther),
-        // card/swd/skill.js:2313-2323
-        "chilongya" => u05_exec(ctx, owner, "chilongya", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:chilongya", 1)),
         // card/swd/skill.js:2324-2337
         "chilongya2" => u05_exec(ctx, owner, "chilongya2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:chilongya2", 1)),
         // card/swd/skill.js:2338-2346
@@ -359,10 +305,6 @@ pub(super) fn try_resolve_u05_swd_cards_and_tactics(ctx: &mut Ctx<'_>, skill: &s
         "touzhi" => u05_exec(ctx, owner, "touzhi", 1, false, 0, 0, 0, 1, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:touzhi", 1)),
         // card/swd/skill.js:2616-2626
         "xixue" => u05_exec(ctx, owner, "xixue", 0, false, 0, 0, 0, 0, DamageNature::Normal, 1, 0, U05Extra::GrantBuff("u05_state:xixue", 1)),
-        // card/swd/skill.js:2627-2650
-        "guangshatianyi" => u05_exec(ctx, owner, "guangshatianyi", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:guangshatianyi", 1)),
-        // card/swd/skill.js:2651-2675
-        "nigong" => u05_exec(ctx, owner, "nigong", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:nigong", 1)),
         // card/swd/skill.js:2676-2713
         "nigong2" => u05_exec(ctx, owner, "nigong2", 0, false, 0, 1, 0, 1, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:nigong2", 1)),
         // card/swd/skill.js:2714-2731
@@ -371,114 +313,10 @@ pub(super) fn try_resolve_u05_swd_cards_and_tactics(ctx: &mut Ctx<'_>, skill: &s
         "sadengjinhuan" => u05_exec(ctx, owner, "sadengjinhuan", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::JudgeEffect("u05_judge:sadengjinhuan")),
         // card/swd/skill.js:2757-2783
         "guiyanfadao" => u05_exec(ctx, owner, "guiyanfadao", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::LoseHpOther(1)),
-        // card/swd/skill.js:2784-2791
-        "guiyanfadao2" => u05_exec(ctx, owner, "guiyanfadao2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:guiyanfadao2", 1)),
         // card/swd/skill.js:2792-2815
         "tianxianjiu" => u05_exec(ctx, owner, "tianxianjiu", 0, false, 0, 2, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:tianxianjiu", 1)),
-        // card/swd/card.js:4-15
-        "hufu" => u05_exec(ctx, owner, "hufu", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:hufu", 1)),
-        // card/swd/card.js:16-98
-        "liuxinghuoyu" => u05_exec(ctx, owner, "liuxinghuoyu", 0, false, 0, 0, 0, 1, DamageNature::Fire, 0, 0, U05Extra::DiscardOther(1)),
-        // card/swd/card.js:99-188
-        "dujian" => u05_exec(ctx, owner, "dujian", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::LoseHpOther(1)),
-        // card/swd/card.js:189-241
-        "yangpijuan" => u05_exec(ctx, owner, "yangpijuan", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:yangpijuan", 1)),
-        // card/swd/card.js:242-281
-        "shencaojie" => u05_exec(ctx, owner, "shencaojie", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:shencaojie", 1)),
-        // card/swd/card.js:293-363
-        "fengyinzhidan" => u05_exec(ctx, owner, "fengyinzhidan", 1, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:fengyinzhidan", 1)),
-        // card/swd/card.js:364-374
-        "yuchanqian" => u05_exec(ctx, owner, "yuchanqian", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:yuchanqian", 1)),
-        // card/swd/card.js:375-385
-        "yuchankun" => u05_exec(ctx, owner, "yuchankun", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:yuchankun", 1)),
-        // card/swd/card.js:386-399
-        "yuchanzhen" => u05_exec(ctx, owner, "yuchanzhen", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:yuchanzhen", 1)),
-        // card/swd/card.js:400-411
-        "yuchanxun" => u05_exec(ctx, owner, "yuchanxun", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:yuchanxun", 1)),
-        // card/swd/card.js:412-453
-        "yuchankan" => u05_exec(ctx, owner, "yuchankan", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:yuchankan", 1)),
-        // card/swd/card.js:454-467
-        "yuchanli" => u05_exec(ctx, owner, "yuchanli", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:yuchanli", 1)),
-        // card/swd/card.js:468-478
-        "yuchangen" => u05_exec(ctx, owner, "yuchangen", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:yuchangen", 1)),
-        // card/swd/card.js:479-489
-        "yuchandui" => u05_exec(ctx, owner, "yuchandui", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:yuchandui", 1)),
-        // card/swd/card.js:490-532
-        "mujiaren" => u05_exec(ctx, owner, "mujiaren", 1, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:mujiaren", 1)),
-        // card/swd/card.js:615-623
-        "zhuquezhizhang" => u05_exec(ctx, owner, "zhuquezhizhang", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:zhuquezhizhang", 1)),
-        // card/swd/card.js:624-632
-        "xuanwuzhihuang" => u05_exec(ctx, owner, "xuanwuzhihuang", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:xuanwuzhihuang", 1)),
-        // card/swd/card.js:633-641
-        "huanglinzhicong" => u05_exec(ctx, owner, "huanglinzhicong", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:huanglinzhicong", 1)),
-        // card/swd/card.js:642-650
-        "cangchizhibi" => u05_exec(ctx, owner, "cangchizhibi", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:cangchizhibi", 1)),
-        // card/swd/card.js:651-659
-        "qinglongzhigui" => u05_exec(ctx, owner, "qinglongzhigui", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:qinglongzhigui", 1)),
-        // card/swd/card.js:660-668
-        "baishouzhihu" => u05_exec(ctx, owner, "baishouzhihu", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:baishouzhihu", 1)),
-        // card/swd/card.js:669-749
-        "jiguantong" => u05_exec(ctx, owner, "jiguantong", 0, false, 0, 1, 0, 1, DamageNature::Fire, 0, 0, U05Extra::DiscardOther(1)),
-        // card/swd/card.js:798-822
-        "lianyaohu" => u05_exec(ctx, owner, "lianyaohu", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:lianyaohu", 1)),
-        // card/swd/card.js:835-849
-        "fuxiqin" => u05_exec(ctx, owner, "fuxiqin", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:fuxiqin", 1)),
-        // card/swd/card.js:915-935
-        "guisheqi" => u05_exec(ctx, owner, "guisheqi", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 1, U05Extra::GrantBuff("u05_state:guisheqi", 1)),
-        // card/swd/card.js:936-974
-        "jiguanfeng" => u05_exec(ctx, owner, "jiguanfeng", 0, false, 0, 0, 0, 1, DamageNature::Normal, 0, 0, U05Extra::GrantOtherBuff("u05_debuff:jiguanfeng", 1)),
-        // card/swd/card.js:1027-1050
-        "shenmiguo" => u05_exec(ctx, owner, "shenmiguo", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:shenmiguo", 1)),
-        // card/swd/card.js:1062-1098
-        "lingjiandai" => u05_exec(ctx, owner, "lingjiandai", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:lingjiandai", 1)),
-        // card/swd/card.js:1099-1211
-        "jiguanshu" => u05_exec(ctx, owner, "jiguanshu", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:jiguanshu", 1)),
-        // card/swd/card.js:1212-1257
-        "jiguanyaoshu" => u05_exec(ctx, owner, "jiguanyaoshu", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantOtherBuff("u05_debuff:jiguanyaoshu", 1)),
-        // card/swd/card.js:1258-1279
-        "hslingjian_xuanfengzhiren" => u05_exec(ctx, owner, "hslingjian_xuanfengzhiren", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::DiscardOther(1)),
-        // card/swd/card.js:1280-1357
-        "hslingjian_zhongxinghujia" => u05_exec(ctx, owner, "hslingjian_zhongxinghujia", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::DiscardOther(1)),
-        // card/swd/card.js:1392-1444
-        "hslingjian_shijianhuisu" => u05_exec(ctx, owner, "hslingjian_shijianhuisu", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:hslingjian_shijianhuisu", 1)),
-        // card/swd/card.js:1495-1524
-        "hslingjian_shengxiuhaojiao" => u05_exec(ctx, owner, "hslingjian_shengxiuhaojiao", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantOtherBuff("u05_debuff:hslingjian_shengxiuhaojiao", 1)),
-        // card/swd/card.js:1525-1557
-        "hslingjian_yinmilichang" => u05_exec(ctx, owner, "hslingjian_yinmilichang", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:hslingjian_yinmilichang", 1)),
-        // card/swd/card.js:1621-1632
-        "daihuofenglun" => u05_exec(ctx, owner, "daihuofenglun", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:daihuofenglun", 1)),
-        // card/swd/card.js:1633-1638
-        "xiayuncailing" => u05_exec(ctx, owner, "xiayuncailing", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:xiayuncailing", 1)),
-        // card/swd/card.js:1639-1650
-        "shentoumianju" => u05_exec(ctx, owner, "shentoumianju", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:shentoumianju", 1)),
-        // card/swd/card.js:1651-1684
-        "xianluhui" => u05_exec(ctx, owner, "xianluhui", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 1, U05Extra::GrantBuff("u05_state:xianluhui", 1)),
-        // card/swd/card.js:1685-1721
-        "xiangyuye" => u05_exec(ctx, owner, "xiangyuye", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::LoseHpOther(1)),
-        // card/swd/card.js:1722-1746
-        "caoyao" => u05_exec(ctx, owner, "caoyao", 0, false, 0, 0, 0, 0, DamageNature::Normal, 1, 0, U05Extra::GrantBuff("u05_state:caoyao", 1)),
-        // card/swd/card.js:1855-1889
-        "huanpodan" => u05_exec(ctx, owner, "huanpodan", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantOtherBuff("u05_debuff:huanpodan", 1)),
-        // card/swd/card.js:1890-1901
-        "langeguaiyi" => u05_exec(ctx, owner, "langeguaiyi", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:langeguaiyi", 1)),
-        // card/swd/card.js:1902-1935
-        "guiyoujie" => u05_exec(ctx, owner, "guiyoujie", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::LoseHpSelf(1)),
-        // card/swd/card.js:1936-1946
-        "yufulu" => u05_exec(ctx, owner, "yufulu", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:yufulu", 1)),
-        // card/swd/card.js:1947-1957
-        "xixueguizhihuan" => u05_exec(ctx, owner, "xixueguizhihuan", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:xixueguizhihuan", 1)),
-        // card/swd/card.js:1995-2074
-        "jingleishan" => u05_exec(ctx, owner, "jingleishan", 0, false, 0, 0, 0, 1, DamageNature::Thunder, 0, 0, U05Extra::GrantBuff("u05_state:jingleishan", 1)),
-        // card/swd/card.js:2076-2158
-        "chiyuxi" => u05_exec(ctx, owner, "chiyuxi", 0, false, 0, 0, 0, 1, DamageNature::Fire, 0, 0, U05Extra::GrantBuff("u05_state:chiyuxi", 1)),
-        // card/swd/card.js:2170-2197
-        "guilingzhitao" => u05_exec(ctx, owner, "guilingzhitao", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:guilingzhitao", 1)),
-        // card/swd/card.js:2198-2211
-        "qipoguyu" => u05_exec(ctx, owner, "qipoguyu", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:qipoguyu", 1)),
-        // card/swd/card.js:2223-2234
-        "sifeizhenmian" => u05_exec(ctx, owner, "sifeizhenmian", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:sifeizhenmian", 1)),
         // card/mtg/skill.js:5-21
-        "mtg_bingheyaosai_skill" => u05_exec(ctx, owner, "mtg_bingheyaosai_skill", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:mtg_bingheyaosai_skill", 1)),
+        "mtg_bingheyaosai_skill" => { u05_mark_invoked(ctx, owner, "mtg_bingheyaosai_skill"); let _ = u05_discard_up_to(ctx, owner, 1); }
         // card/mtg/skill.js:22-31
         "mtg_duzhao_skill" => u05_exec(ctx, owner, "mtg_duzhao_skill", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:mtg_duzhao_skill", 1)),
         // card/mtg/skill.js:32-43
@@ -502,53 +340,15 @@ pub(super) fn try_resolve_u05_swd_cards_and_tactics(ctx: &mut Ctx<'_>, skill: &s
         // card/mtg/skill.js:223-245
         "mtg_lindixiliu_skill" => u05_exec(ctx, owner, "mtg_lindixiliu_skill", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::DiscardOther(1)),
         // character/mtg/skill.js:5-33
-        "mduohun" => u05_exec(ctx, owner, "mduohun", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:mduohun", 1)),
-        // character/mtg/skill.js:34-77
-        "lingyong" => u05_exec(ctx, owner, "lingyong", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:lingyong", 1)),
-        // character/mtg/skill.js:78-172
-        "mhuanyi" => u05_exec(ctx, owner, "mhuanyi", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_buff:mhuanyi", 1)),
-        // character/mtg/skill.js:173-211
-        "msuoling" => u05_exec(ctx, owner, "msuoling", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:msuoling", 1)),
+        "mduohun" => { u05_mark_invoked(ctx, owner, "mduohun"); if let Some(t) = first_other_alive(ctx.core, owner) { u05_lose_hp(ctx, t, 1); } }
         // character/mtg/skill.js:212-315
         "mtongnian" => u05_exec(ctx, owner, "mtongnian", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:mtongnian", 1)),
         // character/mtg/skill.js:316-328
-        "mbaizhan" => u05_exec(ctx, owner, "mbaizhan", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:mbaizhan", 1)),
+        "mbaizhan" => { u05_mark_invoked(ctx, owner, "mbaizhan"); u05_change_hujia(ctx, owner, 1); }
         // character/mtg/skill.js:329-365
         "msilian" => u05_exec(ctx, owner, "msilian", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::LoseHpSelf(1)),
-        // card/mtg/card.js:4-62
-        "mtg_lindixiliu" => u05_exec(ctx, owner, "mtg_lindixiliu", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:mtg_lindixiliu", 1)),
-        // card/mtg/card.js:63-98
-        "mtg_longlushanfeng" => u05_exec(ctx, owner, "mtg_longlushanfeng", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:mtg_longlushanfeng", 1)),
-        // card/mtg/card.js:165-200
-        "mtg_linzhongjianta" => u05_exec(ctx, owner, "mtg_linzhongjianta", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:mtg_linzhongjianta", 1)),
-        // card/mtg/card.js:201-234
-        "mtg_youlin" => u05_exec(ctx, owner, "mtg_youlin", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:mtg_youlin", 1)),
-        // card/mtg/card.js:235-274
-        "mtg_haidao" => u05_exec(ctx, owner, "mtg_haidao", 0, false, 0, 0, 0, 0, DamageNature::Normal, 1, 1, U05Extra::GrantBuff("u05_state:mtg_haidao", 1)),
-        // card/mtg/card.js:275-310
-        "mtg_yixialan" => u05_exec(ctx, owner, "mtg_yixialan", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:mtg_yixialan", 1)),
-        // card/mtg/card.js:311-350
-        "mtg_shuimomuxue" => u05_exec(ctx, owner, "mtg_shuimomuxue", 0, false, 0, 2, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:mtg_shuimomuxue", 1)),
-        // card/mtg/card.js:351-370
-        "mtg_feixu" => u05_exec(ctx, owner, "mtg_feixu", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:mtg_feixu", 1)),
-        // card/mtg/card.js:371-390
-        "mtg_shamolvzhou" => u05_exec(ctx, owner, "mtg_shamolvzhou", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:mtg_shamolvzhou", 1)),
-        // card/mtg/card.js:441-463
-        "mtg_bingheyaosai" => u05_exec(ctx, owner, "mtg_bingheyaosai", 0, false, 0, 2, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:mtg_bingheyaosai", 1)),
-        // card/yunchou/skill.js:7-57
-        "suolianjia" => u05_exec(ctx, owner, "suolianjia", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:suolianjia", 1)),
-        // card/yunchou/skill.js:59-98
-        "g_chenhuodajie" => u05_exec(ctx, owner, "g_chenhuodajie", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:g_chenhuodajie", 1)),
-        // character/yunchou/skill.js:5-28
-        "xicai" => u05_exec(ctx, owner, "xicai", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:xicai", 1)),
-        // character/yunchou/skill.js:29-107
-        "diyjianxiong" => u05_exec(ctx, owner, "diyjianxiong", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:diyjianxiong", 1)),
         // character/yunchou/skill.js:108-142
         "diykuanggu" => u05_exec(ctx, owner, "diykuanggu", 0, false, 0, 1, 0, 0, DamageNature::Normal, 1, 0, U05Extra::GrantBuff("u05_state:diykuanggu", 1)),
-        // character/yunchou/skill.js:143-149
-        "xiongzi" => u05_exec(ctx, owner, "xiongzi", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:xiongzi", 1)),
-        // character/yunchou/skill.js:150-183
-        "yaliang" => u05_exec(ctx, owner, "yaliang", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:yaliang", 1)),
         // character/yunchou/skill.js:184-202
         "diy_jiaoxia" => u05_exec(ctx, owner, "diy_jiaoxia", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:diy_jiaoxia", 1)),
         // character/yunchou/skill.js:203-223
@@ -557,60 +357,16 @@ pub(super) fn try_resolve_u05_swd_cards_and_tactics(ctx: &mut Ctx<'_>, skill: &s
         "guihan" => u05_exec(ctx, owner, "guihan", 0, true, 0, 2, 2, 0, DamageNature::Normal, 1, 0, U05Extra::GrantBuff("u05_buff:guihan", 1)),
         // character/yunchou/skill.js:278-296
         "luweiyan" => u05_exec(ctx, owner, "luweiyan", 1, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::ViewAs("shuigong")),
-        // character/yunchou/skill.js:297-328
-        "luweiyan2" => u05_exec(ctx, owner, "luweiyan2", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:luweiyan2", 1)),
         // character/yunchou/skill.js:329-347
         "jieyan" => u05_exec(ctx, owner, "jieyan", 0, false, 0, 0, 0, -1, DamageNature::Fire, 0, 0, U05Extra::GrantBuff("u05_state:jieyan", 1)),
-        // character/yunchou/skill.js:348-370
-        "honglian" => u05_exec(ctx, owner, "honglian", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:honglian", 1)),
         // character/yunchou/skill.js:371-401
         "diyguhuo" => u05_exec(ctx, owner, "diyguhuo", 0, false, 0, 2, 0, 0, DamageNature::Normal, 0, 0, U05Extra::DiscardOther(1)),
         // character/yunchou/skill.js:402-428
         "diychanyuan" => u05_exec(ctx, owner, "diychanyuan", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::LoseMaxHp(1)),
-        // character/yunchou/skill.js:429-457
-        "zonghuo" => u05_exec(ctx, owner, "zonghuo", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:zonghuo", 1)),
         // character/yunchou/skill.js:458-488
         "shaoying" => u05_exec(ctx, owner, "shaoying", 0, false, 0, 0, 0, 1, DamageNature::Fire, 0, 0, U05Extra::GrantBuff("u05_state:shaoying", 1)),
         // character/yunchou/skill.js:489-554
         "xinfu_qiaosi" => u05_exec(ctx, owner, "xinfu_qiaosi", 1, false, 1, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:xinfu_qiaosi", 1)),
-        // card/yunchou/card.js:4-61
-        "caochuanjiejian" => u05_exec(ctx, owner, "caochuanjiejian", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::DiscardOther(1)),
-        // card/yunchou/card.js:62-131
-        "geanguanhuo" => u05_exec(ctx, owner, "geanguanhuo", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::StealOther),
-        // card/yunchou/card.js:132-244
-        "shezhanqunru" => u05_exec(ctx, owner, "shezhanqunru", 0, false, 0, 3, 0, 0, DamageNature::Normal, 0, 0, U05Extra::PindianOther),
-        // card/yunchou/card.js:266-287
-        "chenhuodajie" => u05_exec(ctx, owner, "chenhuodajie", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::StealOther),
-        // card/yunchou/card.js:288-332
-        "fudichouxin" => u05_exec(ctx, owner, "fudichouxin", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::PindianOther),
-        // card/yunchou/card.js:333-362
-        "shuigong" => u05_exec(ctx, owner, "shuigong", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::DiscardOther(1)),
-        // card/yunchou/card.js:363-441
-        "toulianghuanzhu" => u05_exec(ctx, owner, "toulianghuanzhu", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantOtherBuff("u05_debuff:toulianghuanzhu", 1)),
-        // card/yunchou/card.js:442-504
-        "huoshan" => u05_exec(ctx, owner, "huoshan", 0, false, 0, 0, 0, -2, DamageNature::Fire, 0, 0, U05Extra::JudgeEffect("u05_judge:huoshan")),
-        // card/yunchou/card.js:505-569
-        "hongshui" => u05_exec(ctx, owner, "hongshui", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::LoseHpSelf(1)),
-        // card/zhenfa/card.js:24-69
-        "changshezhen" => u05_exec(ctx, owner, "changshezhen", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:changshezhen", 1)),
-        // card/zhenfa/card.js:70-95
-        "tianfuzhen" => u05_exec(ctx, owner, "tianfuzhen", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::DiscardOther(1)),
-        // card/zhenfa/card.js:96-122
-        "dizaizhen" => u05_exec(ctx, owner, "dizaizhen", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:dizaizhen", 1)),
-        // card/zhenfa/card.js:123-143
-        "fengyangzhen" => u05_exec(ctx, owner, "fengyangzhen", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantOtherBuff("u05_debuff:fengyangzhen", 1)),
-        // card/zhenfa/card.js:144-164
-        "yunchuizhen" => u05_exec(ctx, owner, "yunchuizhen", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantOtherBuff("u05_debuff:yunchuizhen", 1)),
-        // card/zhenfa/card.js:165-203
-        "qixingzhen" => u05_exec(ctx, owner, "qixingzhen", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::DiscardOther(1)),
-        // card/zhenfa/card.js:204-236
-        "shepanzhen" => u05_exec(ctx, owner, "shepanzhen", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:shepanzhen", 1)),
-        // card/zhenfa/card.js:237-268
-        "longfeizhen" => u05_exec(ctx, owner, "longfeizhen", 0, false, 0, 1, 0, 0, DamageNature::Normal, 0, 0, U05Extra::DiscardOther(1)),
-        // card/zhenfa/card.js:269-319
-        "huyizhen" => u05_exec(ctx, owner, "huyizhen", 0, false, 0, 0, 0, 0, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:huyizhen", 1)),
-        // card/zhenfa/card.js:320-365
-        "niaoxiangzhen" => u05_exec(ctx, owner, "niaoxiangzhen", 0, false, 0, 0, 0, 1, DamageNature::Normal, 0, 0, U05Extra::GrantBuff("u05_state:niaoxiangzhen", 1)),
         _ => return false,
     }
     true

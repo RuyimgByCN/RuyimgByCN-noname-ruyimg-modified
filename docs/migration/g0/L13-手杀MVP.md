@@ -14,7 +14,7 @@
 - 子插件数：0
 - 资源：无统计
 - 混淆/动态特征：extension/手杀MVP/extension.js: packed=False, eval=3, long_lines=0
-- 台账原生重构状态（摘录）：**MVP 计分规则、重铸钩子与终局结算大屏忠实实现（2026-11-09 裁决 34 第三步，[G0/L13](./L13-手杀MVP.md)）**：真实包 `packages/extensions/shousha-mvp-upstream-liuli` 忠实覆盖 7 项配置、按 `seq` 幂等计分公式（攻+疗+辅+基−罚）、`_qy_chongzhu` 重铸统计钩子（`incrementMvpRecastCount`）与 2 项 MVP 终局结算大屏/战绩动画渲染面并完成 Headless Chrome 截图与测帧（忠实实现 **10** / 示意或自造 **0** / 缺失 **0**）
+- 台账原生重构状态（摘录）：**MVP 计分规则、重铸钩子与终局结算大屏弹窗忠实实现（2026-11-10 裁决 34 第五轮挂载，[G0/L13](./L13-手杀MVP.md)）**：真实包 `packages/extensions/shousha-mvp-upstream-liuli` 忠实覆盖 7 项配置、按 `seq` 幂等计分公式（攻+疗+辅+基−罚）、`_qy_chongzhu` 重铸统计钩子与 `MvpSettlementModal.vue` 全场最佳结算献花大屏并完成 Headless Chrome 截图与测帧（忠实实现 **10** / 示意或自造 **0** / 缺失 **0**）
 
 ### 能力面（G0 登记）
 - 生命周期：独立安装/启停/升级/卸载（目标能力，见宿主契约）
@@ -67,7 +67,7 @@
 
 | 现有实现项 | 原生文件:行号 | 上游对照 (`file:line`) | 原生落点 | 状态与处置结论 |
 |---|---|---|---|---|
-| `recordMvpEventFact` / `incrementMvpRecastCount` (`_qy_chongzhu`) | `apps/web-client/src/engine/extensionSurfaceRuntime.ts:570-628,1304-1342` | `archive/upstream/noname-liuli/noname/extension/手杀MVP/extension.js:1-420` | 原生规则（`shousha_mvp.rs`）+ 原生前端组件 | 忠实实现（MVP 攻击/治疗/辅助/重铸计分与防重复流水已在 `shousha_mvp.rs` 与 `extensionSurfaceRuntime.ts` 落地） |
+| `recordMvpEventFact` / `incrementMvpRecastCount` (`_qy_chongzhu`) + `MvpSettlementModal.vue` | `apps/web-client/src/engine/extensionSurfaceRuntime.ts:570-628,1304-1342`、`apps/web-client/src/components/battle/modals/MvpSettlementModal.vue:1-155` | `archive/upstream/noname-liuli/noname/extension/手杀MVP/extension.js:1-420` | 原生规则（`shousha_mvp.rs`）+ 原生前端组件 | 忠实实现（MVP 攻击/治疗/辅助/重铸计分与全场结算献花弹窗 `MvpSettlementModal.vue` 已挂载至 `BattleView.vue`） |
 
 ### 7.2 武将（Generals）（0 项）
 

@@ -1,16 +1,25 @@
-//! Authoritative kernel evaluation for Decision 34 (`U01`, `U05`, `L11`, `L19`, `L20`, `L25`, `L27`)
-//! passive skills, equipment/servant modifiers, buff/debuff flags, and `VmViewAsSpec` conversions.
+//! Authoritative kernel evaluation for Decision 34 (`U01`, `U05`, `U07`, `U08`, `L10`, `L11`,
+//! `L19`, `L20`, `L25`, `L27`, `L28`, `L29`) passive skills, equipment/servant modifiers,
+//! explicit per-skill buff/debuff flags, and `VmViewAsSpec` conversions.
+//!
+//! Zero blanket `has_flag_prefix` catch-alls: every modifier rule checks an explicit
+//! upstream skill or per-skill flag backed by upstream `mod.*` / `trigger.*` semantics.
 
-use std::sync::OnceLock;
-
-use crate::catalog::{CardKind, Catalog, EquipSlot};
+use crate::catalog::{CardKind, Catalog, EquipSlot, Suit};
 use crate::event::DamageNature;
 use crate::ids::{CardId, PlayerId};
-use crate::rvm_bridge::{VmViewAsFilter, VmViewAsSpec, VmViewAsWindow, VmViewAsZone};
 use crate::state::GameStateCore;
 
+#[path = "d34_view_as.rs"]
+mod d34_view_as;
+#[path = "d34_u05_mods.rs"]
+mod d34_u05_mods;
+#[path = "d34_l11_mods.rs"]
+mod d34_l11_mods;
+pub use d34_view_as::find_d34_flag_view_as;
+
 #[inline]
-fn flag_val(state: &GameStateCore, player: PlayerId, key: &str) -> u32 {
+pub(super) fn flag_val(state: &GameStateCore, player: PlayerId, key: &str) -> u32 {
     if state.vm_aux.flags.is_empty() {
         return 0;
     }
@@ -23,7 +32,12 @@ fn flag_val(state: &GameStateCore, player: PlayerId, key: &str) -> u32 {
 }
 
 #[inline]
-fn has_ext_skill(state: &GameStateCore, catalog: &Catalog, player: PlayerId, name: &str) -> bool {
+pub(super) fn has_ext_skill(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    player: PlayerId,
+    name: &str,
+) -> bool {
     if catalog.skills.len() <= 24 {
         return false;
     }
@@ -32,16 +46,59 @@ fn has_ext_skill(state: &GameStateCore, catalog: &Catalog, player: PlayerId, nam
         .is_some_and(|def| state.has_skill(player, def))
 }
 
-fn has_flag_prefix(state: &GameStateCore, player: PlayerId, prefix: &str) -> bool {
-    if state.vm_aux.flags.is_empty() {
-        return false;
+#[inline]
+fn has_slot_equipped(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    player: PlayerId,
+    pred: impl Fn(EquipSlot) -> bool,
+) -> bool {
+    state.player(player).equips.iter().any(|&c| {
+        catalog
+            .cards
+            .get(c as usize)
+            .and_then(|d| d.kind.equip_slot())
+            .is_some_and(&pred)
+    })
+}
+
+#[inline]
+fn has_weapon(state: &GameStateCore, catalog: &Catalog, player: PlayerId) -> bool {
+    has_slot_equipped(state, catalog, player, |s| s == EquipSlot::Weapon)
+}
+
+#[inline]
+fn card_suit(catalog: &Catalog, card: Option<CardId>) -> Option<Suit> {
+    card.and_then(|c| catalog.cards.get(c as usize).map(|d| d.suit))
+}
+
+#[inline]
+fn suit_code(suit: Suit) -> u32 {
+    match suit {
+        Suit::Spade => 1,
+        Suit::Heart => 2,
+        Suit::Club => 3,
+        Suit::Diamond => 4,
     }
-    state
-        .vm_aux
-        .flags
-        .range((player, prefix.to_string())..)
-        .take_while(|((p, k), _)| *p == player && k.starts_with(prefix))
-        .any(|(_, &v)| v > 0)
+}
+
+pub fn is_card_ignored_hand_limit(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    player: PlayerId,
+    card: CardId,
+    kind: CardKind,
+) -> bool {
+    if flag_val(state, player, "dddfusi_active") > 0 {
+        return true;
+    }
+    if flag_val(state, player, "u05_mod:qingzun") > 0 && kind == CardKind::Jiu {
+        return true;
+    }
+    if flag_val(state, player, "u05_mod:hsbaowu_huangjinyuanhou") > 0 && kind.is_basic_kind() {
+        return true;
+    }
+    d34_u05_mods::is_card_ignored_hand_limit(state, catalog, player, card)
 }
 
 pub fn apply_hand_limit(
@@ -55,12 +112,49 @@ pub fn apply_hand_limit(
     {
         limit -= 1;
     }
+    if flag_val(state, player, "l11_buff_handlimit_maxhp") > 0
+        || has_ext_skill(state, catalog, player, "buff_txhj_xiongziyingfa")
+    {
+        limit = limit.max(state.player(player).max_hp as i32);
+    }
+    let l11_plus3 = flag_val(state, player, "l11_buff_handlimit_plus3");
+    if l11_plus3 > 0 {
+        limit += l11_plus3 as i32;
+    } else if has_ext_skill(state, catalog, player, "buff_txhj_wuxiangdexinxue") {
+        limit += 3;
+    }
+    limit += flag_val(state, player, "l11_ahao_equip_bonus") as i32;
     if flag_val(state, player, "l25_yuxi_treasure_active") > 0 {
         limit += 1;
     }
-    let crazy = flag_val(state, player, "l25_chanyuan_crazy");
-    if crazy > 0 {
-        limit -= crazy as i32;
+    limit -= flag_val(state, player, "l25_chanyuan_crazy") as i32;
+    limit += flag_val(state, player, "l25_level_maxhand_bonus") as i32;
+    limit += flag_val(state, player, "l19_wujin_hand_limit_bonus") as i32;
+    limit -= flag_val(state, player, "l27_jishe_limit_minus") as i32;
+    if flag_val(state, player, "th_taipingyaoshu_prevent_elemental") > 0
+        || flag_val(state, player, "l28_taipingyaoshu_equipped") > 0
+        || has_ext_skill(state, catalog, player, "th_taipingyaoshu")
+    {
+        limit += 2;
+    }
+    let zyhufu_flag = flag_val(state, player, "yxs_zyhufu_hand_limit_bonus");
+    if zyhufu_flag > 0 {
+        limit += zyhufu_flag as i32;
+    } else if has_ext_skill(state, catalog, player, "zyhufu")
+        && has_slot_equipped(state, catalog, player, |s| s == EquipSlot::Armor)
+    {
+        limit += 5;
+    }
+    if has_ext_skill(state, catalog, player, "taolue")
+        || flag_val(state, player, "yxs_taolue_hand_limit") > 0
+    {
+        limit += 1;
+    }
+    if has_ext_skill(state, catalog, player, "kongju")
+        || flag_val(state, player, "yxs_kongju_ward") > 0
+    {
+        let lost = (state.player(player).max_hp as i32 - state.player(player).hp).max(0);
+        limit += lost;
     }
     if flag_val(state, player, "u05_mod:gw_qinpendayu") > 0 {
         limit -= 1;
@@ -68,13 +162,18 @@ pub fn apply_hand_limit(
     if flag_val(state, player, "u05_mod:chunbing") > 0 {
         limit += 1;
     }
-    if has_flag_prefix(state, player, "u05_buff:") {
+    if flag_val(state, player, "u05_mod:hlongyi") > 0 {
         limit += 1;
     }
-    if has_flag_prefix(state, player, "u05_debuff:") {
-        limit -= 1;
+    if flag_val(state, player, "u05_mod:moyao") > 0 {
+        limit += 2;
     }
-    limit
+    if flag_val(state, player, "u05_mod:lingshi") > 0 {
+        limit += 2;
+    }
+    limit += flag_val(state, player, "u05_mod:tanlin3") as i32;
+    let limit = d34_u05_mods::apply_hand_limit(state, player, limit);
+    d34_l11_mods::apply_hand_limit(state, catalog, player, limit)
 }
 
 pub fn apply_attack_range(
@@ -83,17 +182,29 @@ pub fn apply_attack_range(
     player: PlayerId,
     mut cur: i32,
 ) -> i32 {
-    let qimou = flag_val(state, player, "l27_qimou_range_bonus");
-    if qimou > 0 {
-        cur += qimou as i32;
-    }
+    cur += flag_val(state, player, "l27_qimou_range_bonus") as i32;
     if has_ext_skill(state, catalog, player, "ssr_huchi") {
         cur += 1;
     }
-    if has_flag_prefix(state, player, "u05_mod:") {
+    let l11_range = flag_val(state, player, "l11_buff_attack_range_plus3");
+    if l11_range > 0 {
+        cur += l11_range as i32;
+    } else if has_ext_skill(state, catalog, player, "buff_txhj_changbingguangren") {
+        cur += 3;
+    }
+    if (has_ext_skill(state, catalog, player, "hanqiang")
+        || flag_val(state, player, "yxs_hanqiang_range") > 0)
+        && !has_weapon(state, catalog, player)
+    {
         cur += 1;
     }
-    cur
+    if flag_val(state, player, "u05_mod:shihuawuqi") > 0 {
+        cur += 2;
+    }
+    if flag_val(state, player, "u05_mod:mailun5") > 0 {
+        cur += 1;
+    }
+    d34_u05_mods::apply_attack_range(state, player, cur)
 }
 
 pub fn apply_distance_total(
@@ -106,7 +217,6 @@ pub fn apply_distance_total(
     if a == b {
         return cur;
     }
-    // `ssr_biyue` (`祖安武将/extension.js:11950`): +1 distance to `b` for each empty zone (`h`, `e`, `j`)
     if has_ext_skill(state, catalog, b, "ssr_biyue") {
         let pb = state.player(b);
         if pb.hand.is_empty() {
@@ -119,26 +229,32 @@ pub fn apply_distance_total(
             cur += 1;
         }
     }
-    // `ssr_newyicong` (`祖安武将/extension.js:13604`): -99 against targets with mounts, else -1
     if has_ext_skill(state, catalog, a, "ssr_newyicong") {
-        let target_has_mount = state.player(b).equips.iter().any(|&c| {
-            catalog.cards.get(c as usize).is_some_and(|d| {
-                matches!(
-                    d.kind.equip_slot(),
-                    Some(EquipSlot::HorsePlus | EquipSlot::HorseMinus)
-                )
-            })
+        let target_has_mount = has_slot_equipped(state, catalog, b, |s| {
+            matches!(s, EquipSlot::HorsePlus | EquipSlot::HorseMinus)
         });
-        if target_has_mount {
-            cur -= 99;
-        } else {
-            cur -= 1;
-        }
+        cur -= if target_has_mount { 99 } else { 1 };
+    }
+    cur -= flag_val(state, a, "kangyin2_bonus_applied") as i32;
+    cur -= flag_val(state, a, "l27_xiefang_distance_mod") as i32;
+    if (has_ext_skill(state, catalog, a, "xiangma")
+        || flag_val(state, a, "yxs_xiangma_mounted") > 0)
+        && state.player(a).hp > 2
+    {
+        cur -= 1;
+    }
+    if (has_ext_skill(state, catalog, b, "xiangma")
+        || flag_val(state, b, "yxs_xiangma_mounted") > 0)
+        && state.player(b).hp <= 2
+    {
+        cur += 1;
     }
     if flag_val(state, a, "l11_mount_active:txhj_liulongcanjia") > 0
         || flag_val(state, a, "l11_mount_active:txhj_baihu") > 0
         || flag_val(state, a, "u05_cross_mod:mashu") > 0
         || flag_val(state, a, "u05_cross_mod:yicong") > 0
+        || flag_val(state, a, "u05_mod:jifeng") > 0
+        || flag_val(state, a, "u05_mod:ljifeng") > 0
     {
         cur -= 1;
     }
@@ -146,16 +262,19 @@ pub fn apply_distance_total(
         || flag_val(state, b, "l11_mount_active:txhj_juechenjinge") > 0
         || flag_val(state, b, "u05_cross_mod:feiying") > 0
         || flag_val(state, b, "u05_mod:heilonglinpian") > 0
+        || flag_val(state, b, "u05_mod:sliufeng") > 0
     {
         cur += 1;
     }
-    cur
+    let cur = d34_u05_mods::apply_distance_total(state, catalog, a, b, cur);
+    d34_l11_mods::apply_distance_total(state, catalog, a, b, cur)
 }
 
 pub fn apply_sha_use_limit(
     state: &GameStateCore,
     catalog: &Catalog,
     player: PlayerId,
+    card: Option<CardId>,
     mut cur: i32,
     mut unlimited: bool,
 ) -> (i32, bool) {
@@ -165,13 +284,48 @@ pub fn apply_sha_use_limit(
     } else if has_ext_skill(state, catalog, player, "txhj_zhuge") {
         cur += 3;
     }
+    cur += flag_val(state, player, "l11_hgkurou_sha_plus1") as i32;
+    cur += flag_val(state, player, "l11_ahao_equip_bonus") as i32;
+    cur += flag_val(state, player, "yxs_guimian_sha_limit_bonus") as i32;
+    cur += flag_val(state, player, "dddfuyi_qun_sha_bonus") as i32;
+    cur += flag_val(state, player, "l27_qimou_range_bonus") as i32;
+    cur += flag_val(state, player, "l27_potzhuangshi_unblockable") as i32;
+    if has_weapon(state, catalog, player) {
+        if flag_val(state, player, "l11_weapon_yanrenzhinu") > 0
+            || has_ext_skill(state, catalog, player, "buff_txhj_yanrenzhinu")
+        {
+            unlimited = true;
+        }
+        if flag_val(state, player, "l11_weapon_ziyideyongzhan") > 0
+            || has_ext_skill(state, catalog, player, "buff_txhj_ziyideyongzhan")
+        {
+            cur += 1;
+        }
+    }
     if has_ext_skill(state, catalog, player, "ssr_paoxiao")
         || flag_val(state, player, "l25_paoxiao_unlimited") > 0
         || flag_val(state, player, "l19_baozou_sha_unlimited") > 0
+        || flag_val(state, player, "l19_paoxiao_unlimited_sha") > 0
+        || flag_val(state, player, "l20_paoxiao_unlimited") > 0
+        || flag_val(state, player, "l27_kuangcai_unlimited") > 0
     {
         unlimited = true;
     }
-    if has_ext_skill(state, catalog, player, "ssr_jijiang") {
+    let suit = card_suit(catalog, card);
+    let is_red = matches!(suit, Some(Suit::Heart | Suit::Diamond));
+    if is_red
+        && (has_ext_skill(state, catalog, player, "wumu")
+            || flag_val(state, player, "yxs_wumu_active") > 0
+            || flag_val(state, player, "l27_sbzhaxiang_red_sha") > 0)
+    {
+        unlimited = true;
+    }
+    if suit == Some(Suit::Diamond) && flag_val(state, player, "l20_wusheng_diamond_unlimited") > 0 {
+        unlimited = true;
+    }
+    if has_ext_skill(state, catalog, player, "ssr_jijiang")
+        || flag_val(state, player, "l25_jijiang_sha_plus1") > 0
+    {
         cur += 1;
     }
     if has_ext_skill(state, catalog, player, "ssr_weilong") {
@@ -181,8 +335,8 @@ pub fn apply_sha_use_limit(
         cur += 1;
     }
     for k in [
+        "u05_mod:yuanbaorou",
         "u05_mod:fengnu",
-        "u05_mod:feiren",
         "u05_mod:feidan",
         "u05_mod:duijue2",
         "u05_buff:chilongya2",
@@ -193,7 +347,8 @@ pub fn apply_sha_use_limit(
             cur += 1;
         }
     }
-    (cur, unlimited)
+    let (cur, unlimited) = d34_u05_mods::apply_sha_use_limit(state, player, cur, unlimited);
+    d34_l11_mods::apply_sha_use_limit(state, catalog, player, cur, unlimited)
 }
 
 pub fn apply_sha_extra_targets(
@@ -210,27 +365,72 @@ pub fn apply_sha_extra_targets(
         } else if has_ext_skill(state, catalog, player, "txhj_fangtianhuaji") {
             extra += 2;
         }
+        extra += flag_val(state, player, "kangyin2_bonus_applied") as i32;
+        extra += flag_val(state, player, "ddd_xianxi_target_added") as i32;
+        if has_weapon(state, catalog, player)
+            && (flag_val(state, player, "l11_weapon_ziyideyongzhan") > 0
+                || has_ext_skill(state, catalog, player, "buff_txhj_ziyideyongzhan"))
+        {
+            extra += 1;
+        }
+        if flag_val(state, player, "u05_mod:gwchuanxin") > 0
+            || flag_val(state, player, "u05_mod:shewu") > 0
+        {
+            extra += 1;
+        }
     }
-    extra
+    d34_u05_mods::apply_sha_extra_targets(state, catalog, player, kind, extra)
 }
 
 pub fn apply_card_distance_unlimited(
     state: &GameStateCore,
     catalog: &Catalog,
     player: PlayerId,
+    card: CardId,
     kind: CardKind,
     mut unlimited: bool,
 ) -> bool {
-    if !kind.is_basic_kind()
-        && !kind.is_equip()
-        && has_ext_skill(state, catalog, player, "ssr_qicai")
+    let is_trick = !kind.is_basic_kind() && !kind.is_equip();
+    if is_trick
+        && (has_ext_skill(state, catalog, player, "ssr_qicai")
+            || flag_val(state, player, "l11_buff_trick_no_distance") > 0
+            || has_ext_skill(state, catalog, player, "buff_txhj_yueyingdezhihui"))
     {
         unlimited = true;
     }
-    if flag_val(state, player, "l25_jiwu_boost") > 0 {
+    if flag_val(state, player, "l25_jiwu_boost") > 0
+        || flag_val(state, player, "l27_kuangcai_unlimited") > 0
+    {
         unlimited = true;
     }
-    unlimited
+    if kind.is_sha_like() {
+        if flag_val(state, player, "ddd_dddduanbing_range_mod") > 0
+            || has_ext_skill(state, catalog, player, "sheshu")
+            || flag_val(state, player, "yxs_sheshu_pierce") > 0
+        {
+            unlimited = true;
+        }
+        if has_weapon(state, catalog, player)
+            && (flag_val(state, player, "l11_weapon_pozhenzhifeng") > 0
+                || has_ext_skill(state, catalog, player, "buff_txhj_pozhenzhifeng"))
+        {
+            unlimited = true;
+        }
+        let suit = card_suit(catalog, Some(card));
+        if matches!(suit, Some(Suit::Spade | Suit::Club))
+            && (has_ext_skill(state, catalog, player, "wumu")
+                || flag_val(state, player, "yxs_wumu_active") > 0)
+        {
+            unlimited = true;
+        }
+        if suit == Some(Suit::Diamond)
+            && flag_val(state, player, "l20_wusheng_diamond_unlimited") > 0
+        {
+            unlimited = true;
+        }
+    }
+    let unlimited = d34_u05_mods::apply_card_distance_unlimited(state, player, kind, unlimited);
+    d34_l11_mods::apply_card_distance_unlimited(state, catalog, player, kind, unlimited)
 }
 
 pub fn apply_card_target_canceled(
@@ -238,9 +438,11 @@ pub fn apply_card_target_canceled(
     catalog: &Catalog,
     actor: PlayerId,
     target: PlayerId,
+    card: CardId,
     kind: CardKind,
     mut canceled: bool,
 ) -> bool {
+    let is_trick = !kind.is_basic_kind() && !kind.is_equip();
     if actor != target
         && (has_ext_skill(state, catalog, target, "ssr_newjiahe")
             || flag_val(state, target, "l25_jiahe_qianxing") > 0
@@ -253,17 +455,88 @@ pub fn apply_card_target_canceled(
     {
         canceled = true;
     }
-    canceled
+    if kind.is_sha_like()
+        && (has_ext_skill(state, catalog, target, "xianqu")
+            || flag_val(state, target, "yxs_xianqu_ward") > 0)
+    {
+        let rank = catalog.cards.get(card as usize).map_or(0, |d| d.rank);
+        if rank > 0 && rank < 8 {
+            canceled = true;
+        }
+    }
+    if (kind.is_sha_like() || is_trick)
+        && (has_ext_skill(state, catalog, target, "chajue2")
+            || flag_val(state, target, "yxs_chajue_immune") > 0)
+    {
+        canceled = true;
+    }
+    if has_ext_skill(state, catalog, target, "kongju")
+        || flag_val(state, target, "yxs_kongju_ward") > 0
+    {
+        let hlen = state.player(target).hand.len();
+        let mhp = state.player(target).max_hp as usize;
+        if hlen < mhp && matches!(kind, CardKind::Snatch | CardKind::Dismantle) {
+            canceled = true;
+        } else if hlen > mhp && kind == CardKind::Le {
+            canceled = true;
+        }
+    }
+    let is_black = matches!(card_suit(catalog, Some(card)), Some(Suit::Spade | Suit::Club));
+    if is_black && flag_val(state, target, "dddanzhi_black_ward") > 0 {
+        canceled = true;
+    }
+    if actor != target && is_black && flag_val(state, target, "u05_mod:molicha") > 0 {
+        canceled = true;
+    }
+    if actor != target
+        && (kind.is_sha_like() || is_trick)
+        && flag_val(state, target, "xianjian_ward_active") > 0
+    {
+        canceled = true;
+    }
+    if matches!(
+        kind,
+        CardKind::Le | CardKind::Bing | CardKind::ShanDian | CardKind::HongShui
+    ) && (flag_val(state, target, "l11_buff_no_delayed_trick") > 0
+        || has_ext_skill(state, catalog, target, "buff_txhj_wenhejibei"))
+    {
+        canceled = true;
+    }
+    if actor != target
+        && is_trick
+        && (flag_val(state, target, "l11_jiuwei_trick_nullify") > 0
+            || flag_val(state, target, "l11_armor_guard:txhj_guofengyupao") > 0
+            || flag_val(state, target, "l11_armor_guard:guofengyupao") > 0
+            || flag_val(state, target, "l11_trick_guard:txhj_ruiSkill3") > 0
+            || flag_val(state, target, "l11_trick_guard:txhj_yanSkill1") > 0
+            || flag_val(state, target, "l11_trick_guard:txhj_xuanwuSkill3") > 0
+            || flag_val(state, target, "l27_dinghan_negated") > 0)
+    {
+        canceled = true;
+    }
+    if actor != target
+        && kind.is_sha_like()
+        && (flag_val(state, target, "l20_shouxi_nullified") > 0
+            || flag_val(state, target, "l27_shouxi_nullified") > 0)
+    {
+        canceled = true;
+    }
+    let canceled = d34_u05_mods::apply_card_target_canceled(state, actor, target, kind, canceled);
+    d34_l11_mods::apply_card_target_canceled(state, catalog, actor, target, kind, canceled)
 }
 
 pub fn apply_card_use_canceled(
     state: &GameStateCore,
+    catalog: &Catalog,
     actor: PlayerId,
+    card: CardId,
     kind: CardKind,
+    in_hand: bool,
     mut canceled: bool,
 ) -> bool {
     if flag_val(state, actor, "l11_xingtian_card_locked") > 0
         || flag_val(state, actor, "l25_yijue_locked") > 0
+        || flag_val(state, actor, "u05_mod:shihuifen") > 0
     {
         canceled = true;
     }
@@ -273,12 +546,76 @@ pub fn apply_card_use_canceled(
     {
         canceled = true;
     }
-    canceled
+    let suit = card_suit(catalog, Some(card));
+    if in_hand && suit == Some(Suit::Heart) && flag_val(state, actor, "l25_gongxin_heart_sealed") > 0
+    {
+        canceled = true;
+    }
+    let liduan_suit = flag_val(state, actor, "wdb_liduan_suit_locked");
+    if in_hand && liduan_suit > 0 {
+        if suit.is_some_and(|s| suit_code(s) == liduan_suit || liduan_suit == 5) {
+            canceled = true;
+        }
+    }
+    if let Some(s) = suit {
+        let sc = suit_code(s);
+        for p in state.alive_players() {
+            if p != actor && flag_val(state, p, "yxs_ducai_forbidden_suit") == sc {
+                canceled = true;
+                break;
+            }
+        }
+    }
+    let cur_turn = state.turn.current;
+    if in_hand
+        && cur_turn != actor
+        && state.player(cur_turn).alive
+        && !state.player(cur_turn).hand.is_empty()
+        && flag_val(state, cur_turn, "dddfusi_all_shown") > 0
+    {
+        canceled = true;
+    }
+    let canceled =
+        d34_u05_mods::apply_card_use_canceled(state, catalog, actor, card, kind, in_hand, canceled);
+    d34_l11_mods::apply_card_use_canceled(state, actor, in_hand, canceled)
+}
+
+pub fn apply_dying_peach_target_canceled(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    actor: PlayerId,
+    dying_target: PlayerId,
+    card: CardId,
+    kind: CardKind,
+    mut canceled: bool,
+) -> bool {
+    if actor != dying_target && kind == CardKind::Tao {
+        for p in state.alive_players() {
+            if p != actor
+                && (flag_val(state, p, "l19_wansha_forbid_ally_tao") > 0
+                    || flag_val(state, p, "l19_guixin_wansha") > 0)
+            {
+                canceled = true;
+                break;
+            }
+        }
+    }
+    if let Some(s) = card_suit(catalog, Some(card)) {
+        let sc = suit_code(s);
+        for p in state.alive_players() {
+            if p != actor && flag_val(state, p, "yxs_ducai_forbidden_suit") == sc {
+                canceled = true;
+                break;
+            }
+        }
+    }
+    d34_u05_mods::apply_dying_peach_target_canceled(state, actor, dying_target, canceled)
 }
 
 pub fn apply_damage_amount(
     state: &GameStateCore,
     catalog: &Catalog,
+    source: Option<PlayerId>,
     target: PlayerId,
     card: Option<CardId>,
     nature: DamageNature,
@@ -287,9 +624,61 @@ pub fn apply_damage_amount(
     if cur <= 0 {
         return 0;
     }
-    // `ssr_manjia` (`祖安武将/extension.js:22026`): Vine Armor — immune to Nanman/Wanjian/normal Sha, +1 Fire damage
+    let ckind = card.map(|c| catalog.card_kind(c));
+    let is_sha_card = ckind.is_some_and(CardKind::is_sha_like);
+    if let Some(src) = source {
+        if flag_val(state, src, "l19_wujin_damage_amp") > 0 {
+            cur += 1;
+        }
+        if flag_val(state, src, "l20_lingren_dmg_plus") > 0 {
+            cur += 1;
+        }
+        if (is_sha_card || card.is_none()) && flag_val(state, src, "l19_xunmeng_damage_bonus") > 0 {
+            cur += 1;
+        }
+        if is_sha_card {
+            if flag_val(state, src, "l11_lulu_huwei_boost") > 0 {
+                cur += 1;
+            }
+            if flag_val(state, src, "l20_liegong_damage_boost") > 0 {
+                cur += 1;
+            }
+            if flag_val(state, src, "l10_scschihe_sha_boost") > 0 {
+                cur += 1;
+            }
+            if flag_val(state, src, "mbjuejin_active") > 0 {
+                cur += 2;
+            }
+        }
+        if nature == DamageNature::Fire {
+            if flag_val(state, src, "l11_buff_fire_dmg_plus") > 0
+                || has_ext_skill(state, catalog, src, "buff_txhj_yanhuo")
+            {
+                cur += 1;
+            }
+            if has_weapon(state, catalog, src)
+                && (flag_val(state, src, "l11_weapon_yanhuozhiren") > 0
+                    || has_ext_skill(state, catalog, src, "buff_txhj_yanhuozhiren"))
+            {
+                cur += 1;
+            }
+        }
+        if nature == DamageNature::Thunder {
+            if flag_val(state, src, "l11_buff_thunder_dmg_plus") > 0
+                || has_ext_skill(state, catalog, src, "buff_txhj_jinglei")
+            {
+                cur += 1;
+            }
+            if has_weapon(state, catalog, src)
+                && (flag_val(state, src, "l11_weapon_jingleizhiren") > 0
+                    || has_ext_skill(state, catalog, src, "buff_txhj_jingleizhiren"))
+            {
+                cur += 1;
+            }
+        }
+    }
+
     if has_ext_skill(state, catalog, target, "ssr_manjia") {
-        let ckind = card.map(|c| catalog.card_kind(c));
         if matches!(ckind, Some(CardKind::SavageAttack | CardKind::ArcheryAttack))
             || (matches!(ckind, Some(CardKind::Sha)) && nature == DamageNature::Normal)
         {
@@ -300,19 +689,58 @@ pub fn apply_damage_amount(
         }
     }
     if flag_val(state, target, "l20_qingyu_prevented") > 0
+        || flag_val(state, target, "l20_kuanshi_ward") > 0
         || flag_val(state, target, "l11_yaya2_protected") > 0
     {
         return 0;
     }
+    if nature == DamageNature::Fire
+        && (flag_val(state, target, "l11_buff_fire_shield") > 0
+            || flag_val(state, target, "l11_armor_guard:txminguangkai") > 0
+            || has_ext_skill(state, catalog, target, "buff_txhj_xihuo"))
+    {
+        return 0;
+    }
+    if nature == DamageNature::Thunder
+        && (flag_val(state, target, "l11_buff_thunder_shield") > 0
+            || has_ext_skill(state, catalog, target, "buff_txhj_dinglei"))
+    {
+        return 0;
+    }
+    if matches!(nature, DamageNature::Fire | DamageNature::Thunder)
+        && (flag_val(state, target, "th_taipingyaoshu_prevent_elemental") > 0
+            || flag_val(state, target, "l28_taipingyaoshu_equipped") > 0
+            || has_ext_skill(state, catalog, target, "th_taipingyaoshu"))
+    {
+        return 0;
+    }
     if flag_val(state, target, "u05_cross_mod:xinwuyan") > 0 {
-        if let Some(c) = card {
-            let k = catalog.card_kind(c);
+        if let Some(k) = ckind {
             if !k.is_basic_kind() && !k.is_equip() {
                 return 0;
             }
         }
     }
+    if flag_val(state, target, "u05_cross_mod:jueqing") > 0 {
+        return cur;
+    }
+    let moyan_rec = flag_val(state, target, "dddmoyan_recorded_count");
+    if moyan_rec > 0 {
+        let moyan_t = flag_val(state, target, "dddmoyan_target") as u8;
+        if (moyan_t as usize) < state.players.len()
+            && state.player(moyan_t).hand.len() <= moyan_rec as usize
+        {
+            cur += 1;
+        }
+    }
     if flag_val(state, target, "l25_tianxiang_deflected") > 0 {
+        cur = (cur - 1).max(0);
+    }
+    let zuhuo = flag_val(state, target, "l27_twzuhuo_shield");
+    if zuhuo > 0 {
+        cur = (cur - zuhuo as i32).max(0);
+    }
+    if flag_val(state, target, "l11_armor_guard:txhj_chongyingshenfu") > 0 {
         cur = (cur - 1).max(0);
     }
     if cur > 1
@@ -321,11 +749,13 @@ pub fn apply_damage_amount(
             || flag_val(state, target, "u05_buff:bingjia") > 0
             || flag_val(state, target, "u05_buff:bingjia2") > 0
             || flag_val(state, target, "u05_buff:cyxianjiang") > 0
-            || flag_val(state, target, "u05_buff:dangping") > 0)
+            || flag_val(state, target, "u05_buff:dangping") > 0
+            || (is_sha_card && flag_val(state, target, "u05_buff:gudonggeng") > 0))
     {
         cur -= 1;
     }
-    cur
+    let cur = d34_u05_mods::apply_damage_amount(state, catalog, source, target, card, nature, cur);
+    d34_l11_mods::apply_damage_amount(state, catalog, source, target, card, nature, cur)
 }
 
 pub fn apply_ignore_armor(
@@ -341,26 +771,69 @@ pub fn apply_ignore_armor(
         || flag_val(state, target, "l25_hubu_unequip2") > 0
         || has_ext_skill(state, catalog, source, "ssr_pojia")
         || has_ext_skill(state, catalog, source, "ssr_hubu")
+        || flag_val(state, source, "l25_pojia_ignore_armor") > 0
+        || flag_val(state, source, "l20_paoxiao_unlimited") > 0
+        || flag_val(state, source, "l27_twxiafeng_spent") > 0
     {
         ignore = true;
     }
-    ignore
+    if has_weapon(state, catalog, source)
+        && (flag_val(state, source, "l11_weapon_pozhenzhifeng") > 0
+            || has_ext_skill(state, catalog, source, "buff_txhj_pozhenzhifeng"))
+    {
+        ignore = true;
+    }
+    d34_u05_mods::apply_ignore_armor(state, source, ignore)
 }
 
 pub fn apply_card_unrespondable(
     state: &GameStateCore,
     catalog: &Catalog,
     source: PlayerId,
+    target: PlayerId,
+    card: CardId,
     kind: CardKind,
     mut unrespondable: bool,
 ) -> bool {
-    if kind.is_sha_like()
-        && (flag_val(state, source, "l11_taiji_unrespondable") > 0
+    if kind.is_sha_like() {
+        if flag_val(state, source, "l11_taiji_unrespondable") > 0
+            || flag_val(state, source, "l11_lulu_huwei_boost") > 0
             || has_ext_skill(state, catalog, source, "ssr_wushuang")
             || flag_val(state, source, "l25_wushuang_unrespondable") > 0
-            || flag_val(state, source, "u05_cross_mod:wushuang") > 0)
-    {
-        unrespondable = true;
+            || flag_val(state, source, "u05_cross_mod:wushuang") > 0
+            || flag_val(state, source, "l20_liegong_direct_hit") > 0
+            || flag_val(state, source, "l27_potzhuangshi_unblockable") > 0
+            || flag_val(state, source, "l27_twxiafeng_spent") > 0
+        {
+            unrespondable = true;
+        }
+        if has_weapon(state, catalog, source)
+            && (flag_val(state, source, "l11_weapon_dunjiazhoufa") > 0
+                || has_ext_skill(state, catalog, source, "buff_txhj_dunjiazhoufa"))
+        {
+            unrespondable = true;
+        }
+        if flag_val(state, source, "yxs_hanbei_unblockable") > 0
+            || (has_ext_skill(state, catalog, source, "hanbei")
+                && has_slot_equipped(state, catalog, source, |s| {
+                    matches!(s, EquipSlot::HorsePlus | EquipSlot::HorseMinus)
+                }))
+        {
+            unrespondable = true;
+        }
+        if (has_ext_skill(state, catalog, source, "sheshu")
+            || flag_val(state, source, "yxs_sheshu_pierce") > 0)
+            && state.player(target).hp >= 3
+        {
+            unrespondable = true;
+        }
+        if matches!(
+            card_suit(catalog, Some(card)),
+            Some(Suit::Heart | Suit::Diamond)
+        ) && flag_val(state, source, "l27_sbzhaxiang_red_sha") > 0
+        {
+            unrespondable = true;
+        }
     }
     if kind == CardKind::Duel
         && (has_ext_skill(state, catalog, source, "ssr_wushuang")
@@ -368,307 +841,12 @@ pub fn apply_card_unrespondable(
     {
         unrespondable = true;
     }
-    unrespondable
-}
-
-enum D34ViewAsActivation {
-    Skill(&'static str),
-    Flag(&'static str),
-}
-
-struct D34ViewAsRule {
-    activation: D34ViewAsActivation,
-    spec: VmViewAsSpec,
-}
-
-fn make_spec(
-    id: u32,
-    name: &str,
-    as_kind: CardKind,
-    window: VmViewAsWindow,
-    zone: VmViewAsZone,
-    filter: VmViewAsFilter,
-    ignore_distance: bool,
-) -> VmViewAsSpec {
-    VmViewAsSpec {
-        skill_def_id: id,
-        skill_name: name.to_string(),
-        as_kind,
-        window,
-        zone,
-        filter,
-        uses_per_turn: None,
-        ignore_distance,
-        red_unrespondable: false,
-        black_no_use_count: false,
-        no_use_count: false,
-        target_lacks_source_suit_unrespondable: false,
-        refund_use_count_if_no_damage: false,
-        min_cards: 1,
-        max_cards: 1,
-        owner_hp_min_one_cards: false,
-        owner_basic_uses_plus_one_cards: false,
-        once_per_turn_per_branch: false,
-        same_suit: false,
-        multi_card_bonus: None,
-        branch: None,
-        once_per_round: false,
-        next_branch: None,
-        cost: None,
-        mark_cost: None,
-        post_draw: 0,
+    if !kind.is_basic_kind()
+        && !kind.is_equip()
+        && (flag_val(state, source, "l11_buff_trick_unwuxie") > 0
+            || has_ext_skill(state, catalog, source, "buff_txhj_wenhezhenlue"))
+    {
+        unrespondable = true;
     }
-}
-
-fn d34_view_as_table() -> &'static Vec<D34ViewAsRule> {
-    static TABLE: OnceLock<Vec<D34ViewAsRule>> = OnceLock::new();
-    TABLE.get_or_init(|| {
-        let mut v = vec![
-            D34ViewAsRule {
-                activation: D34ViewAsActivation::Skill("ssr_newlongdan"),
-                spec: make_spec(
-                    1_926_900_001,
-                    "ssr_newlongdan",
-                    CardKind::Sha,
-                    VmViewAsWindow::Any,
-                    VmViewAsZone::Hand,
-                    VmViewAsFilter::Shan,
-                    false,
-                ),
-            },
-            D34ViewAsRule {
-                activation: D34ViewAsActivation::Skill("ssr_newlongdan"),
-                spec: make_spec(
-                    1_926_900_002,
-                    "ssr_newlongdan",
-                    CardKind::Shan,
-                    VmViewAsWindow::Any,
-                    VmViewAsZone::Hand,
-                    VmViewAsFilter::Sha,
-                    false,
-                ),
-            },
-            D34ViewAsRule {
-                activation: D34ViewAsActivation::Skill("ssr_wusheng"),
-                spec: make_spec(
-                    1_926_900_003,
-                    "ssr_wusheng",
-                    CardKind::Sha,
-                    VmViewAsWindow::Any,
-                    VmViewAsZone::HandEquip,
-                    VmViewAsFilter::Red,
-                    true,
-                ),
-            },
-            D34ViewAsRule {
-                activation: D34ViewAsActivation::Skill("ssr_newguose"),
-                spec: make_spec(
-                    1_926_900_004,
-                    "ssr_newguose",
-                    CardKind::Le,
-                    VmViewAsWindow::PlayPhase,
-                    VmViewAsZone::HandEquip,
-                    VmViewAsFilter::Diamond,
-                    false,
-                ),
-            },
-            D34ViewAsRule {
-                activation: D34ViewAsActivation::Skill("ssr_newjijie"),
-                spec: make_spec(
-                    1_926_900_005,
-                    "ssr_newjijie",
-                    CardKind::Shan,
-                    VmViewAsWindow::Response,
-                    VmViewAsZone::HandExpansion,
-                    VmViewAsFilter::Any,
-                    false,
-                ),
-            },
-            D34ViewAsRule {
-                activation: D34ViewAsActivation::Skill("ssr_newjiang"),
-                spec: make_spec(
-                    1_926_900_006,
-                    "ssr_newjiang",
-                    CardKind::Sha,
-                    VmViewAsWindow::Response,
-                    VmViewAsZone::Hand,
-                    VmViewAsFilter::Basic,
-                    false,
-                ),
-            },
-            D34ViewAsRule {
-                activation: D34ViewAsActivation::Flag("dddxiaxing_viewas_taojiu"),
-                spec: make_spec(
-                    1_926_900_007,
-                    "dddxiaxing",
-                    CardKind::Tao,
-                    VmViewAsWindow::Any,
-                    VmViewAsZone::Hand,
-                    VmViewAsFilter::Any,
-                    false,
-                ),
-            },
-            D34ViewAsRule {
-                activation: D34ViewAsActivation::Flag("dddxiaxing_viewas_taojiu"),
-                spec: make_spec(
-                    1_926_900_008,
-                    "dddxiaxing",
-                    CardKind::Jiu,
-                    VmViewAsWindow::Any,
-                    VmViewAsZone::Hand,
-                    VmViewAsFilter::Any,
-                    false,
-                ),
-            },
-            D34ViewAsRule {
-                activation: D34ViewAsActivation::Flag("dddxiaxing_viewas_basic"),
-                spec: make_spec(
-                    1_926_900_009,
-                    "dddxiaxing",
-                    CardKind::Sha,
-                    VmViewAsWindow::Any,
-                    VmViewAsZone::Hand,
-                    VmViewAsFilter::Any,
-                    false,
-                ),
-            },
-            D34ViewAsRule {
-                activation: D34ViewAsActivation::Flag("dddxiaxing_viewas_basic"),
-                spec: make_spec(
-                    1_926_900_010,
-                    "dddxiaxing",
-                    CardKind::Shan,
-                    VmViewAsWindow::Any,
-                    VmViewAsZone::Hand,
-                    VmViewAsFilter::Any,
-                    false,
-                ),
-            },
-            D34ViewAsRule {
-                activation: D34ViewAsActivation::Flag("l25_viewas_wuxie"),
-                spec: make_spec(
-                    1_926_900_011,
-                    "wuxie",
-                    CardKind::Nullify,
-                    VmViewAsWindow::Any,
-                    VmViewAsZone::Hand,
-                    VmViewAsFilter::Any,
-                    false,
-                ),
-            },
-            D34ViewAsRule {
-                activation: D34ViewAsActivation::Flag("l25_viewas_jiu"),
-                spec: make_spec(
-                    1_926_900_012,
-                    "ssr_zhujiu",
-                    CardKind::Jiu,
-                    VmViewAsWindow::Any,
-                    VmViewAsZone::Hand,
-                    VmViewAsFilter::Any,
-                    false,
-                ),
-            },
-            D34ViewAsRule {
-                activation: D34ViewAsActivation::Flag("l25_basic_as_sha"),
-                spec: make_spec(
-                    1_926_900_013,
-                    "res",
-                    CardKind::Sha,
-                    VmViewAsWindow::Any,
-                    VmViewAsZone::Hand,
-                    VmViewAsFilter::Basic,
-                    false,
-                ),
-            },
-            D34ViewAsRule {
-                activation: D34ViewAsActivation::Flag("u05_viewas:longdan"),
-                spec: make_spec(
-                    1_926_900_014,
-                    "u05_longdan",
-                    CardKind::Sha,
-                    VmViewAsWindow::Any,
-                    VmViewAsZone::Hand,
-                    VmViewAsFilter::Shan,
-                    false,
-                ),
-            },
-            D34ViewAsRule {
-                activation: D34ViewAsActivation::Flag("u05_viewas:longdan"),
-                spec: make_spec(
-                    1_926_900_015,
-                    "u05_longdan",
-                    CardKind::Shan,
-                    VmViewAsWindow::Any,
-                    VmViewAsZone::Hand,
-                    VmViewAsFilter::Sha,
-                    false,
-                ),
-            },
-        ];
-
-        let u05_flag_map: &[(&str, CardKind)] = &[
-            ("u05_viewas:sha", CardKind::Sha),
-            ("u05_viewas:stonesha", CardKind::Sha),
-            ("u05_viewas:shan", CardKind::Shan),
-            ("u05_viewas:stoneshan", CardKind::Shan),
-            ("u05_viewas:tao", CardKind::Tao),
-            ("u05_viewas:caoyao", CardKind::Tao),
-            ("u05_viewas:jiu", CardKind::Jiu),
-            ("u05_viewas:jiuchi", CardKind::Jiu),
-            ("u05_viewas:wuxie", CardKind::Nullify),
-            ("u05_viewas:wuzhong", CardKind::Wuzhong),
-            ("u05_viewas:juedou", CardKind::Duel),
-            ("u05_viewas:nanman", CardKind::SavageAttack),
-            ("u05_viewas:luanji", CardKind::ArcheryAttack),
-            ("u05_viewas:shunshou", CardKind::Snatch),
-            ("u05_viewas:taoyuan", CardKind::Taoyuan),
-            ("u05_viewas:shuigong", CardKind::Shuigong),
-            ("u05_viewas:toulianghuanzhu", CardKind::Toulianghuanzhu),
-            ("u05_viewas:bingpotong", CardKind::Bingpotong),
-            ("u05_viewas:qiankunbiao", CardKind::Qiankunbiao),
-            ("u05_viewas:feibiao", CardKind::Feibiao),
-            ("u05_viewas:shihuifen", CardKind::Shihuifen),
-            ("u05_viewas:liuxinghuoyu", CardKind::FireSha),
-            ("u05_viewas:jingleishan", CardKind::LeiSha),
-            ("u05_viewas:chiyuxi", CardKind::FireSha),
-        ];
-        for (idx, &(flag_name, kind)) in u05_flag_map.iter().enumerate() {
-            v.push(D34ViewAsRule {
-                activation: D34ViewAsActivation::Flag(flag_name),
-                spec: make_spec(
-                    1_926_900_100 + idx as u32,
-                    flag_name,
-                    kind,
-                    VmViewAsWindow::Any,
-                    VmViewAsZone::HandEquip,
-                    VmViewAsFilter::Any,
-                    false,
-                ),
-            });
-        }
-        v
-    })
-}
-
-pub fn find_d34_flag_view_as(
-    core: &GameStateCore,
-    catalog: &Catalog,
-    player: PlayerId,
-    card: CardId,
-    in_play: bool,
-    target_kind: Option<CardKind>,
-) -> Option<&'static VmViewAsSpec> {
-    if core.vm_aux.flags.is_empty() && catalog.skills.len() <= 24 {
-        return None;
-    }
-    for entry in d34_view_as_table() {
-        let active = match entry.activation {
-            D34ViewAsActivation::Skill(sk) => has_ext_skill(core, catalog, player, sk),
-            D34ViewAsActivation::Flag(fl) => flag_val(core, player, fl) > 0,
-        };
-        if active && entry.spec.matches_card(core, catalog, player, card, in_play, target_kind) {
-            return Some(&entry.spec);
-        }
-    }
-    None
+    d34_u05_mods::apply_card_unrespondable(state, source, target, kind, unrespondable)
 }

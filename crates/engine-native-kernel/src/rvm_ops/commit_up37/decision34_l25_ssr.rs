@@ -658,32 +658,6 @@ pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pla
             set_flag(ctx.core, owner, "l25_yuxi_treasure_active", 1);
             set_flag(ctx.core, owner, "l25_skill:ssr_yongsi_yuxi_card", 1);
         }
-        "wuxie" => {
-            // ssr_yunchou.subSkill.wuxie (`祖安武将/extension.js:7839-7895`): converts unspent card type into Wuxiekeji.
-            if discard_first_he(ctx, owner).is_some() {
-                set_flag(ctx.core, owner, "l25_viewas_wuxie", 1);
-            }
-            set_flag(ctx.core, owner, "l25_skill:wuxie", 1);
-        }
-        "equip" => {
-            // ssr_liegong_sub.equip (`祖安武将/extension.js:9156-9188`): converts an equip card into Jiu once per turn.
-            if let Some(eq) = ctx.core.player(owner).equips.first().copied() {
-                ctx.take_owned_card(owner, eq);
-                discard_some(ctx, owner, vec![eq]);
-                ctx.core.turn.jiu_active = true;
-                set_flag(ctx.core, owner, "l25_equip_as_jiu", 1);
-            } else {
-                set_flag(ctx.core, owner, "l25_equip_as_jiu_blocked", 1);
-            }
-            set_flag(ctx.core, owner, "l25_skill:equip", 1);
-        }
-        "res" => {
-            // ssr_newjiang_sub.res (`祖安武将/extension.js:23367-23405`): converts basic card into Sha response.
-            if discard_first_he(ctx, owner).is_some() {
-                set_flag(ctx.core, owner, "l25_basic_as_sha", 1);
-            }
-            set_flag(ctx.core, owner, "l25_skill:res", 1);
-        }
         _ => return false,
     }
     let cnt = flag(ctx.core, owner, "l25_zuan_trigger_count") + 1;

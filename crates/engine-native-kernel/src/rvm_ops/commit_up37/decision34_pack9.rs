@@ -366,8 +366,9 @@ fn resolve_u05_shahai_skill(ctx: &mut Ctx<'_>, executing: &str, fallback: &str, 
     );
 }
 
-/// `U07` `wudian` (`jianbi` 坚壁):
+/// `U07` `wudian` (`jianbi` 坚壁 — `archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:735-775`):
 /// Upstream `filter`: `get.type(event.card) === "trick" && !multitarget && event.targets.length >= 2`.
+/// Excludes 1 target (`excluded.add(event.targets[0])`); does NOT draw cards.
 fn resolve_wudian_jianbi(ctx: &mut Ctx<'_>, owner: PlayerId) {
     if flag(ctx.core, owner, "jianbi_targets_len") == 1 {
         set_flag(ctx.core, owner, "jianbi_blocked_single_target", 1);
@@ -376,13 +377,10 @@ fn resolve_wudian_jianbi(ctx: &mut Ctx<'_>, owner: PlayerId) {
     set_flag(ctx.core, owner, "wudian_jianbi_nullified", 1);
     let shield = flag(ctx.core, owner, "wudian_jianbi_shield") + 1;
     set_flag(ctx.core, owner, "wudian_jianbi_shield", shield);
-    if (ctx.core.player(owner).hand.len() as i32) < ctx.core.player(owner).hp {
-        ctx.start_draw(owner, 1);
-    }
 }
 
-/// `U07` `wudian` (`choudu` 筹度):
-/// Upstream: `enable: "phaseUse"`, `usable: 1`, `position: "he"`, uses virtual `diaobingqianjiang`.
+/// `U07` `wudian` (`choudu` 筹度 — `archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:586-615`):
+/// `enable: "phaseUse"`, `usable: 1`, `position: "he"`, discards 1 card so `target` uses virtual `diaobingqianjiang`.
 fn resolve_wudian_choudu(ctx: &mut Ctx<'_>, owner: PlayerId) {
     if ctx.core.player(owner).hand.is_empty() && ctx.core.player(owner).equips.is_empty() {
         set_flag(ctx.core, owner, "choudu_blocked_empty", 1);
@@ -395,8 +393,13 @@ fn resolve_wudian_choudu(ctx: &mut Ctx<'_>, owner: PlayerId) {
     let _ = discard_first_he(ctx, owner);
     set_flag(ctx.core, owner, "choudu_used_this_turn", 1);
     set_flag(ctx.core, owner, "wudian_choudu_dispatched", 1);
-    set_flag(ctx.core, owner, "diaobingqianjiang_resolved", 1);
-    ctx.start_draw(owner, 2);
+    let raw_t = flag(ctx.core, owner, "choudu_target") as usize;
+    let target = if raw_t > 0 && raw_t <= ctx.core.players.len() {
+        (raw_t - 1) as PlayerId
+    } else {
+        owner
+    };
+    super::decision34::resolve_diaobingqianjiang(ctx, target);
 }
 
 /// `L08` (`十周年UI` — `archive/upstream/noname-liuli/noname/extension/十周年UI/skill.js`):
@@ -560,10 +563,7 @@ fn resolve_l25_zuan_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
     if super::decision34_l25_rules::try_resolve_l25_rule_skill(ctx, skill_name, owner) {
         return;
     }
-    if super::decision34_l25_ssr::try_resolve_l25_ssr_skill(ctx, skill_name, owner) {
-        return;
-    }
-    set_flag(ctx.core, owner, &format!("l25_unhandled_skill:{skill_name}"), 1);
+    let _ = super::decision34_l25_ssr::try_resolve_l25_ssr_skill(ctx, skill_name, owner);
 }
 
 /// `L27` (`选将美化` — `archive/upstream/noname-liuli/noname/extension/选将美化/extension.js`):

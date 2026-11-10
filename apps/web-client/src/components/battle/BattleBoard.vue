@@ -9,16 +9,21 @@ import type {
 } from "../../types/engine";
 import SeatCard from "./SeatCard.vue";
 import HandStrip from "./HandStrip.vue";
+import BattleShoushaHud, { type BattleModalId } from "./BattleShoushaHud.vue";
+import type { ExtensionSurfacesSnapshot } from "../../engine/extensionSurfaceRuntime";
 
 const props = defineProps<{
   view: ObserverSnapshot | null;
   selfId: number;
   legalActions: LegalAction[];
+  surfaces?: ExtensionSurfacesSnapshot;
 }>();
 
 const emit = defineEmits<{
   playCard: [cardId: number, targets: number[]];
   activateSkill: [skillId: number, targets: number[], cardTargets: number[]];
+  openModal: [modal: BattleModalId];
+  sortHand: [sortedIds: number[]];
 }>();
 
 // Card selection state.
@@ -282,6 +287,11 @@ function cancelSelection() {
 
 <template>
   <div class="board" role="region" aria-label="战场">
+    <BattleShoushaHud
+      :view="view"
+      :surfaces="surfaces"
+      @open-modal="(m) => emit('openModal', m)"
+    />
     <!-- Action bar when a card is selected -->
     <div v-if="selectedCard != null || selectedSkill" class="action-bar panel" role="toolbar" aria-label="行动操作">
       <span class="muted">
@@ -342,6 +352,10 @@ function cancelSelection() {
           :is-selectable-target="selectableSet.has(s.player)"
           :is-drop-target="dropTargetId === s.player"
           :equip-cards="equipCardsFor(s.player)"
+          :current-turn="view?.current_player === s.player"
+          :decade-ui="surfaces?.uiSuites?.decadeUi"
+          :skin-switch="surfaces?.uiSuites?.skinSwitch"
+          :decade-style="surfaces?.theme?.decadeSkinStyle"
           @select="onTargetSelect"
         />
       </div>
@@ -351,6 +365,7 @@ function cancelSelection() {
       :actionable-ids="actionableCardIds"
       @select="onCardSelect"
       @drag-start="onCardDragStart"
+      @sort-hand="(ids) => emit('sortHand', ids)"
     />
 
     <!-- Judgment zone (delayed tricks: Le/Bingliang/Shandian) -->

@@ -285,6 +285,37 @@ pub fn resolve_taixu_servant_skills(servant_id: &str) -> Option<&'static [&'stat
         .map(|&(_, _, _, sks)| sks)
 }
 
+/// Authentic upstream `buff_txhj_*` shop & event blessing pool (`太虚幻境/extension_buff.js:7-790`).
+pub const L11_TAIXU_SHOP_BUFF_POOL: [&str; 16] = [
+    "buff_txhj_aozhan",
+    "buff_txhj_yanhuo",
+    "buff_txhj_jinglei",
+    "buff_txhj_xihuo",
+    "buff_txhj_dinglei",
+    "buff_txhj_yueyingdezhihui",
+    "buff_txhj_changbingguangren",
+    "buff_txhj_xiongziyingfa",
+    "buff_txhj_pozhenzhifeng",
+    "buff_txhj_yanrenzhinu",
+    "buff_txhj_ziyideyongzhan",
+    "buff_txhj_taipingzhoufa",
+    "buff_txhj_xumingshenyao",
+    "buff_txhj_tianxiawushuang",
+    "buff_txhj_mowangdejianiang",
+    "buff_txhj_luoshenjuezhang",
+];
+
+fn pick_unowned_upstream_buff(owned: &[String], seed_offset: usize) -> Option<String> {
+    let n = L11_TAIXU_SHOP_BUFF_POOL.len();
+    for step in 0..n {
+        let candidate = L11_TAIXU_SHOP_BUFF_POOL[(seed_offset + step) % n];
+        if !owned.iter().any(|b| b == candidate) {
+            return Some(candidate.to_string());
+        }
+    }
+    None
+}
+
 /// Deterministically execute any of the 206 `太虚幻境` campaign/season/quiz/event/shop/servant/mode nodes
 /// against [`TaixuRunState`] (`extension_framework.js:9919`, `event_universal.js:3-10730`, `dlc/*/extension_season.js`).
 pub fn execute_taixu_campaign_node(
@@ -317,13 +348,14 @@ pub fn execute_taixu_campaign_node(
             state.node_index += 1;
         }
         TaixuNodeKind::UniversalShop => {
-            // Upstream `buff_txhj_juguzhidao` (`extension_buff.js:189`): first shop markup waived.
+            // Upstream `buff_txhj_juguzhidao` (`extension_buff.js:189`): shop cost halved.
             let has_jugu = state.buffs.iter().any(|b| b == "buff_txhj_juguzhidao");
             let base_cost = spec.gold_delta.unsigned_abs();
             let cost = if has_jugu { base_cost / 2 } else { base_cost };
             if state.gold >= cost && state.buffs.len() < cfg.buff_limit {
-                let buff_id = format!("shop_buff_{}", state.node_index);
-                if !state.buffs.contains(&buff_id) {
+                if let Some(buff_id) =
+                    pick_unowned_upstream_buff(&state.buffs, state.node_index + choice_idx)
+                {
                     state.gold -= cost;
                     state.buffs.push(buff_id.clone());
                     granted_buff = Some(buff_id);
@@ -344,18 +376,23 @@ pub fn execute_taixu_campaign_node(
             state.season = "taixuhuanjing".to_string();
             state.gold = state.gold.saturating_add(spec.gold_delta.max(0) as u32);
         }
-        TaixuNodeKind::SeasonChapter | TaixuNodeKind::BattleNode | TaixuNodeKind::UniversalTrade | TaixuNodeKind::UniversalGain => {
+        TaixuNodeKind::SeasonChapter
+        | TaixuNodeKind::BattleNode
+        | TaixuNodeKind::UniversalTrade
+        | TaixuNodeKind::UniversalGain => {
             if spec.gold_delta >= 0 {
                 state.gold = state.gold.saturating_add(spec.gold_delta as u32);
             } else {
                 let need = spec.gold_delta.unsigned_abs();
                 state.gold = state.gold.saturating_sub(need);
             }
-            if matches!(spec.kind, TaixuNodeKind::UniversalGain) && state.buffs.len() < cfg.buff_limit {
-                let b = format!("gain_{}", spec.id);
-                if !state.buffs.contains(&b) {
-                    state.buffs.push(b.clone());
-                    granted_buff = Some(b);
+            if matches!(spec.kind, TaixuNodeKind::UniversalGain)
+                && state.buffs.len() < cfg.buff_limit
+            {
+                let hash_seed = spec.id.bytes().fold(choice_idx, |acc, b| acc.wrapping_add(b as usize));
+                if let Some(buff_id) = pick_unowned_upstream_buff(&state.buffs, hash_seed) {
+                    state.buffs.push(buff_id.clone());
+                    granted_buff = Some(buff_id);
                 }
             }
             state.node_index += 1;
@@ -375,4 +412,114 @@ pub fn execute_taixu_campaign_node(
         quiz_passed,
         granted_buff,
     })
+}
+
+/// Season-scoped multi-node `太虚幻境` campaign graph progression (`dlc/*/extension_season.js`).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct TaixuCampaignRun {
+    pub scope: String,
+    pub cursor: usize,
+    pub visited_nodes: Vec<String>,
+    pub state: TaixuRunState,
+}
+
+impl TaixuCampaignRun {
+    /// Start a new season campaign run on `scope` (e.g. `"ChongYingChuLin"`, `"GFHuangJinZhiLuan"`, `"GFQiQinMengHuo"`, `"HaiWaiFengHe"`).
+    pub fn start_season_run(cfg: &TaixuConfig, scope: &str) -> Result<Self, TaixuError> {
+        if !cfg.enable_campaign {
+            return Err(TaixuError::CampaignDisabled);
+        }
+        if !L11_TAIXU_CAMPAIGN_NODES.iter().any(|n| n.scope == scope) {
+            return Err(TaixuError::UnknownCommand(format!("unknown_season:{scope}")));
+        }
+        let mut state = TaixuRunState::from_config(cfg);
+        state.season = scope.to_string();
+        Ok(Self {
+            scope: scope.to_string(),
+            cursor: 0,
+            visited_nodes: Vec::new(),
+            state,
+        })
+    }
+
+    /// Return the next reachable nodes (up to 3 branching choices) in the active season graph.
+    pub fn available_next_nodes(&self) -> Vec<&'static TaixuCampaignNodeSpec> {
+        if self.state.completed {
+            return Vec::new();
+        }
+        L11_TAIXU_CAMPAIGN_NODES
+            .iter()
+            .filter(|n| n.scope == self.scope || n.scope == "event_universal")
+            .skip(self.cursor)
+            .take(3)
+            .collect()
+    }
+
+    /// Advance along branch `branch_idx` (`0..available_next_nodes().len()`) with option `choice_idx`.
+    pub fn advance_node(
+        &mut self,
+        cfg: &TaixuConfig,
+        branch_idx: usize,
+        choice_idx: usize,
+    ) -> Result<TaixuNodeOutcome, TaixuError> {
+        let nexts = self.available_next_nodes();
+        let chosen = nexts
+            .get(branch_idx)
+            .copied()
+            .ok_or_else(|| TaixuError::UnknownCommand(format!("branch:{branch_idx}")))?;
+        let out = execute_taixu_campaign_node(cfg, &mut self.state, chosen.scope, chosen.id, choice_idx)?;
+        self.visited_nodes.push(format!("{}:{}", chosen.scope, chosen.id));
+        self.cursor += branch_idx + 1;
+        if self.available_next_nodes().is_empty() {
+            self.state.completed = true;
+        }
+        Ok(out)
+    }
+
+    /// Deterministic snapshot serialization for campaign save/restore.
+    pub fn encode_snapshot(&self) -> String {
+        format!(
+            "scope={}|cursor={}|visited={}|{}",
+            self.scope,
+            self.cursor,
+            self.visited_nodes.join(","),
+            crate::taixu::snapshot_taixu(&self.state),
+        )
+    }
+
+    /// Restore a `TaixuCampaignRun` from [`Self::encode_snapshot`].
+    pub fn decode_snapshot(raw: &str) -> Result<Self, TaixuError> {
+        let mut parts = raw.splitn(4, '|');
+        let scope = parts
+            .next()
+            .and_then(|s| s.strip_prefix("scope="))
+            .filter(|s| !s.is_empty())
+            .ok_or_else(|| TaixuError::SnapshotMalformed("missing scope".into()))?
+            .to_string();
+        let cursor = parts
+            .next()
+            .and_then(|s| s.strip_prefix("cursor="))
+            .ok_or_else(|| TaixuError::SnapshotMalformed("missing cursor".into()))?
+            .parse::<usize>()
+            .map_err(|e| TaixuError::SnapshotMalformed(e.to_string()))?;
+        let visited_raw = parts
+            .next()
+            .and_then(|s| s.strip_prefix("visited="))
+            .ok_or_else(|| TaixuError::SnapshotMalformed("missing visited".into()))?;
+        let visited_nodes = if visited_raw.is_empty() {
+            Vec::new()
+        } else {
+            visited_raw.split(',').map(str::to_string).collect()
+        };
+        let state_raw = parts
+            .next()
+            .ok_or_else(|| TaixuError::SnapshotMalformed("missing state".into()))?;
+        let state = crate::taixu::restore_taixu(state_raw)?;
+        Ok(Self {
+            scope,
+            cursor,
+            visited_nodes,
+            state,
+        })
+    }
 }

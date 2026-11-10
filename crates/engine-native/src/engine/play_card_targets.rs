@@ -97,6 +97,14 @@ pub(super) fn validate_jiguan_targets(
         {
             return Err(RejectReason::CardLimit);
         }
+    } else if catalog.cards[card as usize].name.contains("yanjiadan")
+        || catalog.cards[card as usize].name.contains("lingjiandai")
+    {
+        if !(targets.is_empty()
+            || (targets.len() == 1 && core.player(targets[0]).alive))
+        {
+            return Err(RejectReason::IllegalTargets);
+        }
     } else {
         if targets != [core.turn.current] {
             return Err(RejectReason::IllegalTargets);
@@ -106,6 +114,28 @@ pub(super) fn validate_jiguan_targets(
         {
             return Err(RejectReason::CardLimit);
         }
+    }
+    Ok(())
+}
+
+pub(super) fn validate_wuzhong_targets(
+    core: &GameStateCore,
+    catalog: &SharedCatalog,
+    card: CardId,
+    kind: CardKind,
+    targets: &[PlayerId],
+) -> Result<(), RejectReason> {
+    if kind == CardKind::Wuzhong {
+        let cname = catalog.cards.get(card as usize).map(|c| c.name).unwrap_or("");
+        if cname != "无中生有" && cname != "wuzhong" && !cname.starts_with("wuzhong_") {
+            if targets.is_empty() || (targets.len() == 1 && core.player(targets[0]).alive) {
+                return Ok(());
+            }
+            return Err(RejectReason::IllegalTargets);
+        }
+    }
+    if !targets.is_empty() {
+        return Err(RejectReason::IllegalTargets);
     }
     Ok(())
 }

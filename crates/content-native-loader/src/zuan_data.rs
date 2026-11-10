@@ -350,27 +350,21 @@ pub const L25_ALL_RULE_SKILLS: [&str; 84] = [
     "g_chenhuodajie",
 ];
 
-/// Authentic `ssr_newsance_*`, `ssr_yongsi_yuxi_card`, and view-as card definitions from `祖安武将/extension.js:6535-28385`.
-pub const L25_ZUAN_FORMAL_CARDS: [(&str, CardKind, Suit, u8); 9] = [
+/// Authentic `ssr_newsance_*`, `ssr_yongsi_yuxi_card`, `ssr_jinfan`, and `ssr_yongsi` cards from `祖安武将/extension.js:6535-28385`.
+pub const L25_ZUAN_FORMAL_CARDS: [(&str, CardKind, Suit, u8); 6] = [
     ("ssr_newsance_xicheng", CardKind::Wuzhong, Suit::Spade, 7),
     ("ssr_newsance_weicheng", CardKind::Wuzhong, Suit::Club, 8),
     ("ssr_newsance_shoucheng", CardKind::Wuzhong, Suit::Heart, 9),
     ("ssr_yongsi_yuxi_card", CardKind::WuxingPan, Suit::Heart, 1),
     ("ssr_jinfan", CardKind::Wuzhong, Suit::Spade, 9),
-    ("wuxie", CardKind::Nullify, Suit::Club, 12),
-    ("equip", CardKind::Jiu, Suit::Diamond, 9),
     ("ssr_yongsi", CardKind::WuxingPan, Suit::Heart, 1),
-    ("res", CardKind::Sha, Suit::Spade, 8),
 ];
 
-/// All 8 card & card-view-as entries inventoried for `L25` (`extension.js:6535-28355`).
-pub const L25_ZUAN_CARD_ENTRIES: [&str; 8] = [
+/// All 5 top-level card entries inventoried for `L25` (`extension.js:6535-28355`).
+pub const L25_ZUAN_CARD_ENTRIES: [&str; 5] = [
     "ssr_newsance_xicheng",
     "ssr_newsance_weicheng",
     "ssr_newsance_shoucheng",
     "ssr_jinfan",
-    "wuxie",
-    "equip",
     "ssr_yongsi",
-    "res",
 ];

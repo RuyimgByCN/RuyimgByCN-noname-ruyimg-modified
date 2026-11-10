@@ -44,6 +44,8 @@ import {
   withSeatProjection,
 } from "../engine/generalSelectModel";
 import BattleBoard from "../components/battle/BattleBoard.vue";
+import type { BattleModalId } from "../components/battle/BattleShoushaHud.vue";
+import BattleModalsHost from "../components/battle/modals/BattleModalsHost.vue";
 import TriggerOrderChoice from "../components/battle/TriggerOrderChoice.vue";
 import GeneralSelectPanel from "../components/battle/GeneralSelectPanel.vue";
 import ExtensionSurfacePanel from "../components/battle/ExtensionSurfacePanel.vue";
@@ -54,6 +56,7 @@ import {
   serializeExtensionSurfacesSnapshot,
   type ExtensionSurfacesSnapshot,
 } from "../engine/extensionSurfaceRuntime";
+import { createInitialShoushaUiRuntimeState } from "../engine/surfaces/shoushaUiSurface";
 import type { EngineEnvelope, LegalAction } from "../types/engine";
 import { matchOutcomePresentation, nativeCommandError } from "../engine/outcome";
 import { nextTick } from "vue";
@@ -101,8 +104,23 @@ const showGeneralSelect = computed(
   () => !isOnline.value && store.connected && localClient.isNative(),
 );
 const extensionSurfaces = ref<ExtensionSurfacesSnapshot>(createInitialExtensionSurfacesState());
+const activeBattleModal = ref<BattleModalId | null>(null);
 function onUpdateExtensionSurfaces(next: ExtensionSurfacesSnapshot) {
   extensionSurfaces.value = next;
+}
+function onSortHandFromBoard(sortedIds: number[]) {
+  const prevShousha =
+    extensionSurfaces.value.uiSuites?.shoushaUi ?? createInitialShoushaUiRuntimeState();
+  extensionSurfaces.value = {
+    ...extensionSurfaces.value,
+    uiSuites: {
+      ...extensionSurfaces.value.uiSuites,
+      shoushaUi: {
+        ...prevShousha,
+        sortedHandCardIds: sortedIds,
+      },
+    },
+  };
 }
 const audioOwner = new BattleAudioOwner({
   allowRemotePackageFallback: () => isOnline.value,
@@ -1000,8 +1018,18 @@ const turnInfo = computed(() => {
         :view="store.view"
         :self-id="selfId"
         :legal-actions="store.connected && !store.busy ? store.legalActions : []"
+        :surfaces="extensionSurfaces"
         @play-card="playCard"
         @activate-skill="activateSkill"
+        @open-modal="(m) => (activeBattleModal = m)"
+        @sort-hand="onSortHandFromBoard"
+      />
+      <BattleModalsHost
+        :active-modal="activeBattleModal"
+        :surfaces="extensionSurfaces"
+        :view="store.view"
+        @close="activeBattleModal = null"
+        @update:surfaces="onUpdateExtensionSurfaces"
       />
       <!-- Effect overlay -->
       <div v-if="store.effects.length" class="effect-overlay" aria-hidden="true">

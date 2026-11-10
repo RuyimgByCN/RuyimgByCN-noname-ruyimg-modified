@@ -450,8 +450,15 @@ pub(super) fn resolve_u08_yxs_skill(ctx: &mut Ctx<'_>, executing: &str, owner: P
         }
         // ducai / ducai2 / ducai3 独裁 (`英雄杀/character/skill.js:1981-2075`):
         "ducai" | "ducai2" | "ducai3" => {
-            let _ = discard_first_he(ctx, owner);
-            set_flag(ctx.core, owner, "yxs_ducai_forbidden_suit", 1);
+            let suit_code = discard_first_he(ctx, owner)
+                .and_then(|c| ctx.catalog.cards.get(c as usize))
+                .map_or(1u32, |d| match d.suit {
+                    crate::catalog::Suit::Spade => 1,
+                    crate::catalog::Suit::Heart => 2,
+                    crate::catalog::Suit::Club => 3,
+                    crate::catalog::Suit::Diamond => 4,
+                });
+            set_flag(ctx.core, owner, "yxs_ducai_forbidden_suit", suit_code);
         }
         // tongling 统领 (`英雄杀/character/skill.js:2076-2096`):
         "tongling" => {

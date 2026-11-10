@@ -6,6 +6,9 @@ use crate::catalog::SkillMachine;
 use crate::event::CardUseData;
 use crate::kernel::*;
 
+#[path = "intrinsic_named_ext.rs"]
+mod intrinsic_named_ext;
+
 /// 内容牌种的固有结算机器；`None` = 不是内容牌种，由内核继续分派。
 pub(crate) fn card_intrinsic(
     ctx: &mut Ctx<'_>,
@@ -606,6 +609,9 @@ pub(crate) fn card_intrinsic(
             // 异行为按目录名分流（指路小虎=随机敌虚拟杀；木甲人=
             // 弃非基本换随机机关牌）——无懈窗口包装共享。
             let name = &ctx.catalog.cards[card as usize].name;
+            if let Some(res) = intrinsic_named_ext::try_named_jiguan_card(ctx, u, card, name) {
+                return Some(res);
+            }
             let (behavior, def_key, target) = if name.contains("mujiaren") {
                 (
                     crate::content::host::HostBehavior::SwdMujiarenCard,
@@ -1043,6 +1049,6 @@ pub(crate) fn card_intrinsic(
             });
             Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
-        _ => return None,
+        _ => return intrinsic_named_ext::try_named_ext_card(ctx, u, card, effective_kind),
     })
 }

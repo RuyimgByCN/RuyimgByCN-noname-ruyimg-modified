@@ -2,6 +2,8 @@
 import { computed } from "vue";
 import GeneralPortrait from "./GeneralPortrait.vue";
 import type { CardView, SeatView } from "../../types/engine";
+import type { DecadeUiRuntimeState } from "../../engine/surfaces/decadeUiSurface";
+import type { SkinSwitchRuntimeState } from "../../engine/surfaces/skinSwitchSurface";
 
 const props = defineProps<{
   seat: SeatView;
@@ -11,6 +13,10 @@ const props = defineProps<{
   isSelectableTarget: boolean;
   isDropTarget: boolean;
   equipCards: CardView[];
+  currentTurn?: boolean;
+  decadeUi?: DecadeUiRuntimeState;
+  skinSwitch?: SkinSwitchRuntimeState;
+  decadeStyle?: string;
 }>();
 
 const emit = defineEmits<{
@@ -22,13 +28,21 @@ const legacyDef = computed(() => !props.seat.generals || (slots.value.every((slo
   ? props.seat.character_def : undefined);
 const displayName = computed(() => slots.value.map((slot, index) => slot?.name || (index === 0 && legacyDef.value !== undefined ? `#${legacyDef.value}` : "暗将／未配置")).join(" / "));
 
-function hpIcon(hp: number, maxHp: number, alive: boolean): string {
+const decadeBadges = computed(() => props.decadeUi?.activeMarkBadgesBySeat[props.seat.player] ?? []);
+const hasJiuBuff = computed(() => props.decadeUi?.jiuBuffSeats.includes(props.seat.player) ?? false);
+const isChained = computed(() => Boolean(props.seat.linked));
+const chukuangOverlay = computed(() => {
+  const act = props.skinSwitch?.lastChukuangAction;
+  return act && act.seat === props.seat.player ? act : null;
+});
+
+function hpIcon(hp: number, _maxHp: number, alive: boolean): string {
   if (!alive) return "✗";
   if (hp <= 0) return "⚠";
   return "✓";
 }
 
-function hpColor(hp: number, maxHp: number, alive: boolean): string {
+function hpColor(hp: number, _maxHp: number, alive: boolean): string {
   if (!alive) return "var(--color-negative)";
   if (hp <= 0) return "var(--color-warning)";
   return "var(--color-positive)";
@@ -45,8 +59,9 @@ function hpColor(hp: number, maxHp: number, alive: boolean): string {
       'target-mode': isTargetMode,
       'target-selectable': isTargetMode && isSelectableTarget,
       'drop-target': isDropTarget,
-      'current-turn': false,
+      'current-turn': Boolean(currentTurn),
     }"
+    :data-decade-style="decadeStyle ?? decadeUi?.layoutVariant ?? 'shizhounian'"
     role="listitem"
     :aria-label="`座位 ${seat.seat} 玩家 ${seat.player} 武将 ${displayName}`"
     :tabindex="isTargetMode && isSelectableTarget ? 0 : -1"
@@ -54,8 +69,18 @@ function hpColor(hp: number, maxHp: number, alive: boolean): string {
     @keydown.enter="isTargetMode && isSelectableTarget && emit('select', seat.player)"
   >
     <header>
-      <span v-if="self" class="tag">你</span>
-      <span v-if="seat.turned_over" class="tag" aria-label="武将牌背面">翻面</span>
+      <div class="seat-tags">
+        <span v-if="self" class="tag">你</span>
+        <span v-if="seat.turned_over" class="tag" aria-label="武将牌背面">翻面</span>
+        <span v-if="isChained" class="tag chain-tag" data-testid="seat-chain-badge">🔗横置</span>
+        <span v-if="hasJiuBuff" class="tag jiu-tag" data-testid="seat-jiu-badge">🍶酒态</span>
+      </div>
+      <span
+        v-if="chukuangOverlay"
+        class="chukuang-badge"
+        data-testid="seat-chukuang-overlay"
+        :style="{ transform: chukuangOverlay.flipX ? 'scaleX(-1)' : 'none' }"
+      >⚡{{ chukuangOverlay.action }}</span>
     </header>
     <div class="generals" aria-label="双将">
       <GeneralPortrait v-for="(general, index) in slots" :key="index" :general="general" :slot="index" :legacy-def="index === 0 ? legacyDef : undefined" :alive="seat.alive" />
@@ -83,6 +108,14 @@ function hpColor(hp: number, maxHp: number, alive: boolean): string {
     <div class="meta muted">
       <span>手牌 {{ seat.hand_count }}</span>
       <span>{{ identityLabel }}</span>
+    </div>
+    <div v-if="decadeBadges.length > 0" class="decade-seat-marks" data-testid="seat-decade-marks">
+      <span
+        v-for="mk in decadeBadges"
+        :key="mk.skillId"
+        class="seat-mark-chip"
+        :title="mk.upstreamRef"
+      >{{ mk.label }}[{{ mk.badgeText }}]</span>
     </div>
     <div v-if="equipCards.length > 0" class="equip-zone" aria-label="装备区">
       <div
@@ -259,5 +292,46 @@ header {
   .seat.target-selectable:hover {
     transform: none;
   }
+}
+.seat.current-turn {
+  border-color: #f3d27a;
+  box-shadow: 0 0 0 2px rgba(243, 210, 122, 0.35);
+}
+.seat-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+.chain-tag {
+  background: #4d78a8;
+  color: #fff;
+}
+.jiu-tag {
+  background: #b93829;
+  color: #fff;
+}
+.chukuang-badge {
+  display: inline-block;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: rgba(232, 165, 75, 0.22);
+  border: 1px solid var(--accent);
+  color: #f3d27a;
+}
+.decade-seat-marks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+  margin-top: 0.3rem;
+}
+.seat-mark-chip {
+  padding: 0.08rem 0.35rem;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  background: rgba(232, 165, 75, 0.15);
+  border: 1px solid rgba(232, 165, 75, 0.4);
+  color: #f3d27a;
 }
 </style>

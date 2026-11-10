@@ -1,15 +1,48 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import type { CardView } from "../../types/engine";
 
 const props = defineProps<{ cards: CardView[]; actionableIds: number[] }>();
 const emit = defineEmits<{
   select: [id: number];
   dragStart: [id: number];
+  sortHand: [sortedIds: number[]];
 }>();
 
 const selectedId = ref<number | null>(null);
 const draggingId = ref<number | null>(null);
+const handSorted = ref(false);
+
+const SUIT_WEIGHT: Record<string, number> = {
+  Spade: 1,
+  Heart: 2,
+  Club: 3,
+  Diamond: 4,
+};
+
+const displayCards = computed(() => {
+  if (!handSorted.value) return props.cards;
+  return [...props.cards].sort((a, b) => {
+    const ka = a.kind ?? "Other";
+    const kb = b.kind ?? "Other";
+    if (ka !== kb) return ka.localeCompare(kb);
+    const sa = SUIT_WEIGHT[a.suit ?? ""] ?? 9;
+    const sb = SUIT_WEIGHT[b.suit ?? ""] ?? 9;
+    if (sa !== sb) return sa - sb;
+    const ra = a.rank ?? 99;
+    const rb = b.rank ?? 99;
+    if (ra !== rb) return ra - rb;
+    return a.id - b.id;
+  });
+});
+
+function toggleHandSort() {
+  handSorted.value = !handSorted.value;
+  emit(
+    "sortHand",
+    displayCards.value.map((c) => c.id),
+  );
+}
 
 function suitGlyph(s: CardView["suit"]) {
   switch (s) {
@@ -56,12 +89,22 @@ function onDragEnd() {
 
 <template>
   <section class="hand" aria-label="手牌">
-    <h2 class="muted title">
-      手牌（{{ cards.length }} 张{{ selectedId != null ? " · 已选中 #" + selectedId : " · 点击或拖拽" }}）
-    </h2>
+    <div class="hand-header">
+      <h2 class="muted title">
+        手牌（{{ cards.length }} 张{{ selectedId != null ? " · 已选中 #" + selectedId : " · 点击或拖拽" }}{{ handSorted ? " · 已理牌" : "" }}）
+      </h2>
+      <button
+        type="button"
+        class="lipai-btn"
+        data-testid="btn-handstrip-lipai"
+        @click="toggleHandSort"
+      >
+        {{ handSorted ? "✓ 手杀已理牌" : "⇄ 理牌" }}
+      </button>
+    </div>
     <div class="strip" role="listbox" aria-label="手牌列表">
       <button
-        v-for="c in cards"
+        v-for="c in displayCards"
         :key="c.id"
         type="button"
         class="card"
@@ -92,7 +135,23 @@ function onDragEnd() {
 </template>
 
 <style scoped>
-.title { font-size: 0.9rem; margin: 0 0 0.4rem; font-weight: 500; }
+.hand-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+.title { font-size: 0.9rem; margin: 0; font-weight: 500; }
+.lipai-btn {
+  padding: 0.18rem 0.55rem;
+  font-size: 0.76rem;
+  border-radius: 6px;
+  border: 1px solid rgba(232, 165, 75, 0.45);
+  background: rgba(232, 165, 75, 0.12);
+  color: var(--text);
+  cursor: pointer;
+}
 .strip { display: flex; flex-wrap: wrap; gap: 0.45rem; }
 .card {
   width: 64px; height: 88px;

@@ -258,22 +258,86 @@ fn u06_kuwu_interactive_and_u07_wudian_diaobingqianjiang_duoqi_youzhan() {
     assert_eq!(e.debug_hp(1), hp1_before - 1);
     set_flag(&mut e, 1, "kuwu_choose_lose_hp", 0);
 
-    // 2. U07 diaobingqianjiang: market card swap across seats
+    // 2. U07 `diaobingqianjiang` (`玩点论杀/card/card.js:4-142`):
+    //    `contentBefore` draws 1 card (`card.js:15`), reveals `ceil(alive / 2)` market cards (`card.js:41`),
+    //    swaps across seats (`card.js:87-94`), and returns chosen market card(s) to deck top (`card.js:130`).
     invoke_d34_op(&mut e, 0, "diaobingqianjiang", DIAOBINGQIANJIANG_ID);
     assert_eq!(flag(&e, 0, "diaobingqianjiang_resolved"), 1);
     assert!(flag(&e, 0, "diaobingqianjiang_swapped") >= 1);
+    assert!(flag(&e, 0, "diaobingqianjiang_returned_top") >= 1);
 
-    // 3. U07 duoqi & youzhan
+    // 3. U07 `duoqi` (`玩点论杀/character/skill.js:109-159`):
+    //    - Blocked on owner's own turn (`skill.js:112`: `_status.currentPhase === player`)
+    //    - Blocked when `zhucheng` is empty (`skill.js:115`)
+    //    - Off-turn with `zhucheng` card: discards 1 `zhucheng` card and sets `skip_play_phase = true` (`skill.js:151`), 0 draw!
+    assert_eq!(e.turn().current, 0);
     invoke_d34_op(&mut e, 0, "duoqi", DUOQI_ID);
-    drain(&mut e);
-    assert_eq!(flag(&e, 0, "duoqi_triggered"), 1);
-    assert_eq!(flag(&e, 1, "duoqi_draw_penalty"), 1);
+    assert_eq!(flag(&e, 0, "duoqi_blocked_self_turn"), 1);
+    assert_eq!(flag(&e, 0, "duoqi_triggered"), 0);
 
+    invoke_d34_op(&mut e, 1, "duoqi", DUOQI_ID);
+    assert_eq!(flag(&e, 1, "duoqi_blocked_no_zhucheng"), 1);
+
+    let zc_card = e.state_core_mut().deck.pop().expect("deck card for zhucheng");
+    e.state_core_mut().player_mut(1).zhucheng.push(zc_card);
+    let hand1_pre_duoqi = e.debug_hand(1).len();
+    invoke_d34_op(&mut e, 1, "duoqi", DUOQI_ID);
+    drain(&mut e);
+    assert_eq!(flag(&e, 1, "duoqi_triggered"), 1);
+    assert!(e.state_core().player(1).zhucheng.is_empty());
+    assert!(e.state_core().discard.contains(&zc_card));
+    assert!(e.state_core().turn.skip_play_phase);
+    assert_eq!(
+        e.debug_hand(1).len(),
+        hand1_pre_duoqi,
+        "duoqi (`玩点论杀/character/skill.js:109-159`) must not draw cards"
+    );
+    e.state_core_mut().turn.skip_play_phase = false;
+
+    // 4. U07 `youzhan` (`玩点论杀/character/skill.js:422-447` & `card/card.js:169-202`):
+    //    - Blocked when owner has no equip card in `he`
+    //    - With equip card in `he`: discards equip card, cancels incoming Sha (`youdishenru_nullified_sha = 1`),
+    //      and when attacker refuses/lacks Sha (`youdishenru_refuse_sha = 1`), deals 1 counter-damage with 0 self-draw!
+    let mut moved_to_disc = Vec::new();
+    let mut kept_hand = Vec::new();
+    for c in e.debug_hand(0) {
+        if e.catalog().card_kind(c).is_equip() {
+            moved_to_disc.push(c);
+        } else {
+            kept_hand.push(c);
+        }
+    }
+    moved_to_disc.extend(e.state_core().player(0).equips.iter().copied());
+    e.state_core_mut().player_mut(0).hand = kept_hand;
+    e.state_core_mut().player_mut(0).equips.clear();
+    e.state_core_mut().discard.extend(moved_to_disc);
+    invoke_d34_op(&mut e, 0, "youzhan", YOUZHAN_ID);
+    assert_eq!(flag(&e, 0, "youzhan_blocked_no_equip"), 1);
+
+    let equip_cid = e
+        .state_core()
+        .deck
+        .iter()
+        .chain(e.state_core().discard.iter())
+        .copied()
+        .find(|&c| e.catalog().card_kind(c).is_equip())
+        .expect("equip card in deck/discard");
+    e.state_core_mut().deck.retain(|&c| c != equip_cid);
+    e.state_core_mut().discard.retain(|&c| c != equip_cid);
+    e.state_core_mut().player_mut(0).hand.push(equip_cid);
+    set_flag(&mut e, 1, "youdishenru_refuse_sha", 1);
+    let hand0_pre_youzhan = e.debug_hand(0).len();
     let hp1_pre_youzhan = e.debug_hp(1);
     invoke_d34_op(&mut e, 0, "youzhan", YOUZHAN_ID);
     drain(&mut e);
     assert_eq!(flag(&e, 0, "youzhan_triggered"), 1);
+    assert_eq!(flag(&e, 0, "youdishenru_nullified_sha"), 1);
     assert_eq!(e.debug_hp(1), hp1_pre_youzhan - 1);
+    assert_eq!(
+        e.debug_hand(0).len(),
+        hand0_pre_youzhan - 1,
+        "youzhan discards 1 equip card without drawing cards"
+    );
 
     // Save/restore + binary archive card conservation verification
     let snap = e.save();
@@ -282,7 +346,7 @@ fn u06_kuwu_interactive_and_u07_wudian_diaobingqianjiang_duoqi_youzhan() {
     let restored = Engine::restore_with_extensions(&decoded, &[&wudian_pack, &d34_pack])
         .expect("restore_with_extensions");
     assert_eq!(flag(&restored, 0, "diaobingqianjiang_resolved"), 1);
-    assert_eq!(flag(&restored, 0, "duoqi_triggered"), 1);
+    assert_eq!(flag(&restored, 1, "duoqi_triggered"), 1);
     assert_eq!(flag(&restored, 0, "youzhan_triggered"), 1);
 }
 

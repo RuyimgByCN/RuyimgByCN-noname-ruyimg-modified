@@ -93,7 +93,7 @@ pub fn eval_ignored_hand_card_count(
                 }
                 _ => {}
             });
-            ignored
+            ignored || super::d34_flags::is_card_ignored_hand_limit(state, catalog, player, card, kind)
         })
         .count()
 }
@@ -304,7 +304,8 @@ pub fn eval_sha_use_limit(
             }
         }
     }
-    (cur, unlimited) = super::d34_flags::apply_sha_use_limit(state, catalog, player, cur, unlimited);
+    (cur, unlimited) =
+        super::d34_flags::apply_sha_use_limit(state, catalog, player, card, cur, unlimited);
     (cur.max(0) as u32, unlimited)
 }
 
@@ -354,7 +355,7 @@ pub fn eval_card_distance_unlimited(
             unlimited = true;
         }
     });
-    super::d34_flags::apply_card_distance_unlimited(state, catalog, player, kind, unlimited)
+    super::d34_flags::apply_card_distance_unlimited(state, catalog, player, card, kind, unlimited)
 }
 
 /// 评估目标是否免疫某张牌的指向（`CardTargetCancel` / `CardTargetEnabled`）。
@@ -386,7 +387,9 @@ pub fn eval_card_target_canceled(
             canceled = true;
         }
     });
-    super::d34_flags::apply_card_target_canceled(state, catalog, actor, target, kind, canceled)
+    super::d34_flags::apply_card_target_canceled(
+        state, catalog, actor, target, card, kind, canceled,
+    )
 }
 
 /// 评估角色是否被禁止使用某张牌（`ShaUseCancel` / `CardUseCancel` / `HandCardUseResponseCancel` / `CardUsable`）。
@@ -450,7 +453,7 @@ pub fn eval_card_use_canceled(
             }
         });
     }
-    super::d34_flags::apply_card_use_canceled(state, actor, kind, canceled)
+    super::d34_flags::apply_card_use_canceled(state, catalog, actor, card, kind, in_hand, canceled)
 }
 
 /// 评估角色是否被禁止对濒死角色使用【桃】（`DyingPeachTargetCancel` / `DyingSavePeachUsable` / `CardSavable`）。
@@ -516,7 +519,15 @@ pub fn eval_dying_peach_target_canceled(
             });
         }
     }
-    canceled
+    super::d34_flags::apply_dying_peach_target_canceled(
+        state,
+        catalog,
+        actor,
+        dying_target,
+        card,
+        kind,
+        canceled,
+    )
 }
 
 /// 评估伤害修正（`DamageAmount` / `DamageTakenAmount` / `DamageTakenCancel`）。
@@ -563,7 +574,7 @@ pub fn eval_damage_amount(
             _ => {}
         }
     });
-    cur = super::d34_flags::apply_damage_amount(state, catalog, target, card, nature, cur);
+    cur = super::d34_flags::apply_damage_amount(state, catalog, source, target, card, nature, cur);
     cur.max(0) as u32
 }
 
@@ -637,5 +648,13 @@ pub fn eval_card_unrespondable(
             _ => {}
         }
     });
-    super::d34_flags::apply_card_unrespondable(state, catalog, source, kind, unrespondable)
+    super::d34_flags::apply_card_unrespondable(
+        state,
+        catalog,
+        source,
+        target,
+        card,
+        kind,
+        unrespondable,
+    )
 }

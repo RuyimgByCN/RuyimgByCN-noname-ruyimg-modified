@@ -10,7 +10,7 @@ use content_native_loader::{
     prepare_locked_content_with_bridge, restore_locked_engine, start_locked_engine,
     validate_and_freeze_raw_package, LockedStartMode, DECISION34_STORAGE_DISPATCH_KEY,
     L25_ALL_RULE_SKILLS, L25_SSR_GENERALS, L25_SSR_GENERAL_SKILLS, L25_ZUAN_CARD_ENTRIES,
-    L25_ZUAN_SKILL_ID,
+    L25_ZUAN_FORMAL_CARDS, L25_ZUAN_SKILLS, L25_ZUAN_SKILL_ID,
 };
 use engine_native::catalog::{Faction, Suit};
 use engine_native::content::standard::Gender;
@@ -141,17 +141,72 @@ fn l25_zuan_formal_package_generals_cards_skills_and_archive_roundtrip() {
     let dongzhuo = L25_SSR_GENERALS.iter().find(|g| g.0 == "ssr_dongzhuo").unwrap();
     assert_eq!((dongzhuo.1, dongzhuo.2, dongzhuo.3), (Faction::Qun, Gender::Male, 8));
 
-    // 2. Upstream cards (`extension.js:6535-28385`): all 8 G0 card entries + `ssr_yongsi_yuxi_card` exist
-    for &cname in L25_ZUAN_CARD_ENTRIES.iter().chain(["ssr_yongsi_yuxi_card"].iter()) {
+    // 2. Upstream cards (`extension.js:6535-28385`): all 6 authentic formal cards exist;
+    //    subSkill regex artifacts (`wuxie`, `equip`, `res`, `defend`, `zhou`) do NOT exist!
+    assert_eq!(L25_ZUAN_FORMAL_CARDS.len(), 6);
+    assert_eq!(L25_ZUAN_CARD_ENTRIES.len(), 5);
+    for &(cname, _, _, _) in &L25_ZUAN_FORMAL_CARDS {
         assert!(
             e.catalog().cards.iter().any(|c| c.name == cname),
             "formal L25 Catalog must contain card {cname}"
         );
     }
+    for artifact in ["wuxie", "equip", "res", "defend", "zhou"] {
+        assert!(
+            !e.catalog().cards.iter().any(|c| c.name == artifact),
+            "subSkill artifact {artifact} must NOT be registered as a card"
+        );
+        assert!(
+            e.catalog().skill_by_name(artifact).is_none(),
+            "subSkill artifact {artifact} must NOT be registered as a skill"
+        );
+    }
+
+    // Play `ssr_newsance_shoucheng` (`extension.js:28355-28410`) via real `GameAction::PlayCard`
+    let shoucheng_cid = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.name == "ssr_newsance_shoucheng")
+        .unwrap() as u32;
+    while e.turn().phase != engine_native::Phase::Play {
+        let actor = e.turn().current;
+        let _ = e.submit(GameCommand {
+            actor,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::NextPhase,
+        });
+        drain(&mut e);
+    }
+    let actor = e.turn().current;
+    e.state_core_mut().deck.retain(|&c| c != shoucheng_cid);
+    e.state_core_mut().discard.retain(|&c| c != shoucheng_cid);
+    e.state_core_mut().player_mut(1 - actor).hand.retain(|&c| c != shoucheng_cid);
+    if !e.state_core().player(actor).hand.contains(&shoucheng_cid) {
+        e.state_core_mut().player_mut(actor).hand.push(shoucheng_cid);
+    }
+    let play_out = e.submit(GameCommand {
+        actor,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::PlayCard {
+            card: shoucheng_cid,
+            targets: vec![],
+        },
+    });
+    assert!(
+        !matches!(play_out, CommandOutcome::Rejected(_)),
+        "PlayCard(ssr_newsance_shoucheng) rejected: {play_out:?}"
+    );
+    drain(&mut e);
 
     // 3. Upstream skill semantics:
     // 3a. `ssr_qianxun` (`extension.js:4911-4930`): discards down to 1 hand card when >1
-    assert!(e.state_core().player(0).hand.len() > 1);
+    while e.state_core().player(0).hand.len() < 2 {
+        let cid = e.state_core_mut().deck.pop().unwrap();
+        e.state_core_mut().player_mut(0).hand.push(cid);
+    }
     invoke_l25(&mut e, 0, "ssr_qianxun");
     assert_eq!(e.state_core().player(0).hand.len(), 1);
     assert!(flag(&e, 0, "l25_ssr_qianxun_discarded") >= 1);
@@ -225,19 +280,18 @@ fn l25_zuan_formal_package_generals_cards_skills_and_archive_roundtrip() {
     invoke_l25(&mut e, 0, "_useskill"); // +2 exp (10) -> level 2!
     assert_eq!(flag(&e, 0, "l25_level"), 2);
 
-    // 4. Exhaustive sweep across all 130 SSR skills, 84 rule skills, and 9 card skills: zero unhandled
+    // 4. Exhaustive sweep across all 130 SSR skills, all 122 L25_ZUAN_SKILLS, 84 rule skills, and treasure skills: zero unhandled
     let (_, mut sweep_e) = start_formal_zuan_engine(2026_1111);
     for &sk in L25_SSR_GENERAL_SKILLS
         .iter()
         .chain(L25_ALL_RULE_SKILLS.iter())
-        .chain(L25_ZUAN_CARD_ENTRIES.iter())
-        .chain(["ssr_yongsi_yuxi_card"].iter())
+        .chain(L25_ZUAN_SKILLS.iter())
+        .chain(["ssr_yongsi", "ssr_yongsi_yuxi_card"].iter())
     {
         assert!(
             sweep_e.catalog().skill_by_name(sk).is_some(),
             "L25 skill {sk} must exist in formal locked Catalog"
         );
-        // Keep player 0 & 1 alive and healthy during sweep
         sweep_e.state_core_mut().player_mut(0).hp = 4;
         sweep_e.state_core_mut().player_mut(1).hp = 4;
         invoke_l25(&mut sweep_e, 0, sk);

@@ -206,11 +206,11 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
             "忠实实现（7 项主配置解析/快照恢复与 boss/chess/double/stone/threecard 模式禁将禁牌表已在 `shahai_config.rs` 按上游实现）",
         ),
         (
-            "`U05_*_GENERALS`（332 将）+ `U05_*_ALL_CARDS`（275 牌）+ `U05_*_SKILLS`（1,007 技）+ `resolve_u05_shahai_skill` + `d34_flags.rs` 被动修饰/转化",
-            "`crates/content-native-loader/src/shahai_generals_data.rs:8-374`、`crates/content-native-loader/src/shahai_cards_skills_data.rs:7-535`、`crates/content-native-loader/src/shahai_attach.rs:27-214`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_u05_{ops,gujian_gwent,hearth,swd_cards,swd_chars,ow_xianjian}.rs`、`crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_flags.rs:1-674`",
+            "`U05_*_GENERALS`（332 将）+ `U05_*_ALL_CARDS`（275 牌）+ `SHAHAI_IMPLEMENTED_VM_SKILLS`（683 项已验证 VM 技能）+ `host_skill_bindings.rs` + `intrinsic_named_ext.rs` + `d34_u05_mods.rs`",
+            "`crates/content-native-loader/src/shahai_attach.rs:1-215`、`crates/content-native-loader/src/shahai_implemented_skills.rs:1-145`、`crates/engine-native-content/src/content/host/intrinsic_named_ext.rs:1-531`、`crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_u05_mods.rs:1-195`",
             "`archive/upstream/noname/apps/core/extension/杀海拾遗/{character,card,play}/*`",
             "原生规则 / 9 个 `sha*-upstream-noname` 正式包",
-            "忠实实现（已清除全部分组摸 1 兜底与只写死旗标，补齐攻击距离/手牌上限/出杀次数/`VmViewAsSpec` 修饰、真实判定/拼点守恒及阶段触发守卫并接入 9 个 `sha*-upstream-noname` 正式包；冻结 `ABI 759` 下多步子询问确定性简化边界已登记于 `native-rules-baseline.md`）",
+            "部分（275 张专属卡牌经真实 `PlayCard` 与 `intrinsic_named_ext.rs` 结算、装备牌绑定真实 `equip_skills`、原生 `HostBehavior` 零遮蔽、`d34_u05_mods.rs` 显式修饰已接通；已彻底清除 201 项同名卡牌伪技能与 367 项死旗标空桩，未移植技能与对应武将如实标为 `缺失`）",
         ),
     ],
     "U06": [
@@ -322,18 +322,18 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
     ],
     "L11": [
         (
-            "`L11_TAIXU_GENERALS`（320 将）+ `L11_TAIXU_CARDS`（32 牌）+ `L11_TAIXU_SKILLS`（380 技）+ `resolve_l11_taixu_skill` + `d34_flags.rs` 装备/赐福修饰",
-            "`crates/content-native-loader/src/taixu_generals_data.rs:8-395`、`crates/content-native-loader/src/taixu_skills_data.rs:5-195`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_l11_{buffs,skills}.rs`、`crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_flags.rs:1-674`",
+            "`L11_TAIXU_GENERALS`（320 将）+ `L11_TAIXU_CARDS`（32 牌）+ `L11_TAIXU_SKILLS`（374 项本包技能/赐福）+ `L11_TAIXU_OWN_NPC_SKILLS`（29 项本包 Boss 技）+ 237 项 `package.npack.json` 预编译 `rule-vm` 跨包技 + `d34_l11_mods.rs`",
+            "`crates/content-native-loader/src/taixu_skills_data.rs:5-210`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_l11_{buffs,skills}.rs`、`crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_l11_mods.rs:1-277`、`packages/extensions/taixu-upstream-liuli/package.npack.json`",
             "`archive/upstream/noname-liuli/noname/extension/太虚幻境/extension_{character,card,skill,buff}.js`",
             "原生规则 / `taixu-upstream-liuli`",
-            "忠实实现（已清除伪造步进技能 `taixu_expedition_step` 与虚构地名/灵宠名；320 名敌方/随从武将、32 张专属装备/宝物牌含方天/诸葛/虚妄/刑天真实内核修饰、380 项祝福与专属技能均按上游实现并接入正式包 `taixu-upstream-liuli`）",
+            "部分（已清除 6 个 `subSkill` 正则伪影及全部 `l11_passive_active:*`/`l11_npc_*`/`l11_buff_draw:*`/`l11_buff_aura:*`/`l11_unhandled_skill:*` 分组桶；374 项本包技、29 项本包 Boss 技、32 张卡牌及 `HostSkillDecl`/`standard_catalog`/237 项预编译 `rule-vm` 跨包技已真实落地，未移植跨包 NPC 技与对应武将如实标为 `缺失`）",
         ),
         (
-            "`L11_TAIXU_CAMPAIGN_NODES`（206 项赛季/奇遇/侍灵/模式节点）+ `L11_TAIXU_SERVANTS`（21 名侍灵）+ `taixuSurface.ts`（4 份 CSS 渲染面）",
-            "`crates/content-native-loader/src/taixu_campaign_data.rs:46-378`、`apps/web-client/src/engine/surfaces/taixuSurface.ts:10-214`",
+            "`L11_TAIXU_CAMPAIGN_NODES`（206 项节点）+ `TaixuCampaignRun` 赛季分支状态机 + `TaixuCampaignModal.vue`",
+            "`crates/content-native-loader/src/taixu_campaign_data.rs:46-485`、`apps/web-client/src/components/battle/modals/TaixuCampaignModal.vue:1-250`",
             "`archive/upstream/noname-liuli/noname/extension/太虚幻境/dlc/*/extension_season.js`、`event/event_universal.js`、`extension_servant.js`、`extension_*.css`",
             "原生规则（`taixu_campaign_data.rs`）+ 原生前端组件",
-            "忠实实现（8 赛季 DLC 章节与答题、奇遇通用事件、21 名侍灵及 PC/移动端/侍灵/图鉴 4 份样式表布局均已按上游真实名称实现）",
+            "忠实实现（商铺与奇遇统一发放真实上游 `buff_txhj_*` ID，`TaixuCampaignRun` 支持赛季分支图推进与快照往返，`BattleView.vue` 已挂载 `TaixuCampaignModal.vue`）",
         ),
     ],
     "L12": [
@@ -342,25 +342,25 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
             "`apps/web-client/src/engine/extensionSurfaceRuntime.ts:687-708,1280-1298`",
             "`archive/upstream/noname-liuli/noname/extension/如真似幻/extension.js:1-9502`、`js/rzsh.js:1-815`",
             "原生规则（`rzsh.rs`）+ 原生前端组件",
-            "忠实实现（`numToRoma` 罗马数字、动皮光效滤镜与主题切换已在 `rzsh.rs` 与 `extensionSurfaceRuntime.ts` 落地）",
+            "忠实实现（`numToRoma` 罗马数字、动皮光效滤镜与主题切换已在 `rzsh.rs`、`BattleShoushaHud.vue` 与 `extensionSurfaceRuntime.ts` 落地）",
         ),
     ],
     "L13": [
         (
-            "`recordMvpEventFact` / `incrementMvpRecastCount` (`_qy_chongzhu`)",
-            "`apps/web-client/src/engine/extensionSurfaceRuntime.ts:570-628,1304-1342`",
+            "`recordMvpEventFact` / `incrementMvpRecastCount` (`_qy_chongzhu`) + `MvpSettlementModal.vue`",
+            "`apps/web-client/src/engine/extensionSurfaceRuntime.ts:570-628,1304-1342`、`apps/web-client/src/components/battle/modals/MvpSettlementModal.vue:1-155`",
             "`archive/upstream/noname-liuli/noname/extension/手杀MVP/extension.js:1-420`",
             "原生规则（`shousha_mvp.rs`）+ 原生前端组件",
-            "忠实实现（MVP 攻击/治疗/辅助/重铸计分与防重复流水已在 `shousha_mvp.rs` 与 `extensionSurfaceRuntime.ts` 落地）",
+            "忠实实现（MVP 攻击/治疗/辅助/重铸计分与全场结算献花弹窗 `MvpSettlementModal.vue` 已挂载至 `BattleView.vue`）",
         ),
     ],
     "L14": [
         (
-            "`SHOUSHA_UI_HOOK_IDS`（53 项 UI 钩子）+ `SHOUSHA_SURFACE_MODULES`（40 项脚本/CSS 渲染面）+ `UiSkinSuitePanel.vue`",
-            "`apps/web-client/src/engine/surfaces/shoushaUiSurface.ts:10-337`、`apps/web-client/src/components/battle/surfaces/UiSkinSuitePanel.vue:1-411`",
+            "`SHOUSHA_UI_HOOK_IDS`（53 项 UI 钩子）+ `SHOUSHA_SURFACE_MODULES`（40 项渲染面）+ `BattleShoushaHud.vue` + `HandStrip.vue`「理牌」",
+            "`apps/web-client/src/engine/surfaces/shoushaUiSurface.ts:10-337`、`apps/web-client/src/components/battle/BattleShoushaHud.vue:1-190`、`apps/web-client/src/components/battle/HandStrip.vue:1-194`",
             "`archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:85-7360`、`character/main*.js`、`lbtn/main*.js`、`skill/main*.js` 及 32 份 CSS",
             "原生规则（`shousha_ui.rs`）+ 原生前端组件",
-            "忠实实现（已删除伪造 `shousha_*` 实体与跨包虚构名 `spshidi`/`zhefu` 及摸牌/回血副作用；53 项出牌进度条、托管保护、快捷语音气泡、无懈读条、手牌理牌钩子与 40 项手杀面板/样式表已在原生前端完整落地）",
+            "忠实实现（牌桌顶栏阶段旗幡、读秒进度条、将灯徽章与手牌区一键「理牌」已直接挂载于 `BattleBoard.vue` / `HandStrip.vue`）",
         ),
     ],
     "L15": [],
@@ -377,7 +377,7 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
         ),
         (
             "`L19_DOOMSDAY_SKILLS` + `resolve_l19_doomsday_skill` / `resolve_l19_doomsday_remaining`（全部 66 项乱斗技能与伴生基础技）",
-            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:431-486`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_l19_l20_l27.rs:58-326`",
+            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:431-486`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_u08_l19_l20_l27.rs:58-326`",
             "`archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:333-3370`",
             "原生规则 / `doomsday-brawl-upstream-liuli`",
             "忠实实现（已清除全部分组摸 1 与空操作桩，按上游逐项实现灾变、8 回合退治、尸变弃全牌 5/5 血摸 4 牌、互助弃桃回血、无尽波次、经验升级、元气护甲、归心等全部规则并接入正式包）",
@@ -393,7 +393,7 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
         ),
         (
             "`L20_MARK_SUPPLEMENT_SKILLS` + `resolve_l20_skill` / `resolve_l20_mark_remaining` + `applyL20MarkCssTheme`（74 项标记技能与钩子）",
-            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:489-533`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_l19_l20_l27.rs:329-552`、`apps/web-client/src/engine/extensionSurfaceRuntime.ts:361-380,1348-1359`",
+            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:489-533`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_u08_l19_l20_l27.rs:329-552`、`apps/web-client/src/engine/extensionSurfaceRuntime.ts:361-380,1348-1359`",
             "`archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6319-6480`",
             "原生规则 / `mark-supplement-upstream-liuli` + 原生前端组件",
             "忠实实现（已清除全部分组摸 1 与空操作桩，按上游逐项实现 `kurou`/`qingyu`/`mibei`/`wengua5`/`zuoxing`/`_chongzhu`/`_xigua_xueliangfanbei_` 等全部 74 项技能/钩子与 CSS 主题切换并接入正式包）",
@@ -412,20 +412,20 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
     "L23": [],
     "L24": [
         (
-            "`SKIN_SWITCH_UI_HOOK_IDS`（22 项 UI 钩子）+ `SKIN_SWITCH_SURFACE_IDS`（10 项渲染面）+ `Spine40SkinImportBox.vue`",
-            "`apps/web-client/src/engine/surfaces/skinSwitchSurface.ts:10-342`、`apps/web-client/src/components/battle/surfaces/UiSkinSuitePanel.vue:1-411`、`apps/web-client/src/components/battle/surfaces/Spine40SkinImportBox.vue:1-337`",
+            "`SKIN_SWITCH_UI_HOOK_IDS`（22 项 UI 钩子）+ `SKIN_SWITCH_SURFACE_IDS`（10 项渲染面）+ `SkinSwitchModal.vue` + `SeatCard.vue` 出框叠加",
+            "`apps/web-client/src/engine/surfaces/skinSwitchSurface.ts:10-342`、`apps/web-client/src/components/battle/modals/SkinSwitchModal.vue:1-170`、`apps/web-client/src/components/battle/SeatCard.vue:1-335`",
             "`archive/upstream/noname-liuli/noname/extension/皮肤切换/extension.js:176-5900`、`animation.js`、`component/*.css`、`style/*.css`",
             "原生规则（`skin_switch.rs`）+ 原生前端组件",
-            "忠实实现（已清除规则层摸牌副作用，22 项动态出框/语音队列/原画回退/`saveSkinParams` 重应用钩子、藏珍阁与骨骼参数编辑弹窗、`.png` 贴图上传及净室 Spine 4.0 播放器均已完整落地）",
+            "忠实实现（22 项出框/语音队列/原画回退钩子、座位 `flipX` 出框徽章、藏珍阁与坐标编辑全屏弹窗 `SkinSwitchModal.vue` 及净室 Spine 4.0 播放器均已挂载）",
         ),
     ],
     "L25": [
         (
-            "`L25_SSR_GENERALS`（60 名 `ssr_*` 武将）+ `L25_ALL_RULE_SKILLS`（84 项规则技能）+ `L25_ZUAN_FORMAL_CARDS`（8 牌）+ `resolve_l25_zuan_skill`",
-            "`crates/content-native-loader/src/zuan_data.rs:8-376`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_l25_{ssr,ssr_mods,rules}.rs`、`crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_flags.rs:1-674`",
+            "`L25_SSR_GENERALS`（60 名 `ssr_*` 武将）+ `L25_ALL_RULE_SKILLS` + `L25_ZUAN_SKILLS`（124 项规则/特效技）+ `L25_ZUAN_FORMAL_CARDS`（6 牌）",
+            "`crates/content-native-loader/src/zuan_data.rs:8-370`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_l25_{ssr,ssr_mods,rules}.rs`、`crates/engine-native-content/src/content/host/intrinsic_named_ext.rs:1-531`",
             "`archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:338-397,536-51470`",
             "原生规则 / `zuan-upstream-liuli`",
-            "忠实实现（已清除 60 名伪造 `zuan_*` 武将、摸 1 兜底与 43 项单旗标空桩；60 名 `ssr_*` 武将、130 项自带技能、84 项规则技能与 8 张专属卡牌已按上游逐项实现并接入正式包 `zuan-upstream-liuli` 产品路径）",
+            "忠实实现（已清除 5 个 `subSkill` 正则伪影 `wuxie`/`equip`/`res`/`defend`/`zhou` 及 `l25_unhandled_skill:*` 兜底；60 名 `ssr_*` 武将、130 项自带技能、全部规则/音效技能与 6 张专属卡牌均按上游逐项实现并接入正式包 `zuan-upstream-liuli`）",
         ),
         (
             "`ZUAN_UI_HOOK_IDS`（40 项攻击指示线、语音与判定全屏特效钩子）",
@@ -1050,7 +1050,16 @@ def _native_symbols() -> dict[str, dict]:
     taixu_camp_rs = (REPO / "crates/content-native-loader/src/taixu_campaign_data.rs").read_text(encoding="utf-8")
     shahai_gen_rs = (REPO / "crates/content-native-loader/src/shahai_generals_data.rs").read_text(encoding="utf-8")
     shahai_cs_rs = (REPO / "crates/content-native-loader/src/shahai_cards_skills_data.rs").read_text(encoding="utf-8")
+    shahai_impl_rs = (REPO / "crates/content-native-loader/src/shahai_implemented_skills.rs").read_text(encoding="utf-8")
     shahai_cfg_rs = (REPO / "crates/content-native-loader/src/shahai_config.rs").read_text(encoding="utf-8")
+    host_bind_rs = (REPO / "crates/content-native-loader/src/host_skill_bindings.rs").read_text(encoding="utf-8")
+    taixu_npack = json.loads(
+        (REPO / "packages/extensions/taixu-upstream-liuli/package.npack.json").read_text(encoding="utf-8")
+    )
+    taixu_npack_skills = {entry["name"] for entry in taixu_npack.get("skill_index", [])}
+    host_bound_skills = set(re.findall(r'"([^"]+)"\s*=>', host_bind_rs)) | set(
+        re.findall(r'\|\s*"([^"]+)"', host_bind_rs)
+    )
 
     surf_dir = REPO / "apps/web-client/src/engine/surfaces"
     qhly_ts = (surf_dir / "qhlySurface.ts").read_text(encoding="utf-8")
@@ -1077,21 +1086,15 @@ def _native_symbols() -> dict[str, dict]:
     ):
         u05_generals |= _parse_rust_tuple_first_elems(shahai_gen_rs, arr_name)
 
-    u05_skills: set[str] = set()
-    for arr_name in (
-        "U05_GUJIAN_ALL_SKILLS",
-        "U05_GWENT_ALL_SKILLS",
-        "U05_HEARTH_ALL_SKILLS",
-        "U05_MTG_ALL_SKILLS",
-        "U05_SWD_CARD_SKILLS",
-        "U05_SWD_CHAR_SKILLS",
-        "U05_YUNCHOU_ALL_SKILLS",
-        "U05_WUXING_PLAY_SKILLS",
-        "U05_OW_ALL_SKILLS",
-        "U05_XIANJIAN_ALL_SKILLS",
-        "U05_CROSS_SKILLS",
-    ):
-        u05_skills |= _parse_rust_str_array(shahai_cs_rs, arr_name)
+    # Strictly limit U05 faithful skills to genuinely implemented VM resolvers + native HostBehaviors/standard_catalog
+    u05_skills: set[str] = (
+        _parse_rust_str_array(shahai_impl_rs, "SHAHAI_IMPLEMENTED_VM_SKILLS")
+        | host_bound_skills
+        | _parse_rust_str_array(p9_data, "U05_YUNCHOU_REMAINING_SKILLS")
+        | _parse_rust_str_array(p9_data, "U05_OW_SKILLS")
+        | _parse_rust_str_array(p9_data, "U05_XIANJIAN_SKILLS")
+        | {"duijue", "tanlin", "pozhenjue", "g_hs_lingjian", "g_swd_jiguan"}
+    )
 
     u05_cards: set[str] = set()
     for arr_name in (
@@ -1139,11 +1142,17 @@ def _native_symbols() -> dict[str, dict]:
         "L10": _parse_attach_arm_strings(p9_mod, "epic-cards")
         | _parse_rust_str_array(closure_src, "L10_SCS_COMPANION_SKILLS"),
         "L11": _parse_rust_str_array(taixu_sk_rs, "L11_TAIXU_SKILLS")
-        | _parse_rust_str_array(taixu_sk_rs, "L11_TAIXU_CROSS_SKILLS"),
+        | _parse_rust_str_array(taixu_sk_rs, "L11_TAIXU_OWN_NPC_SKILLS")
+        | _parse_rust_str_array(taixu_sk_rs, "L11_TAIXU_EQUIP_CARD_SKILLS")
+        | host_bound_skills
+        | taixu_npack_skills
+        | {"dddfenji", "dddjiexing", "dddqiaoduan", "chajue", "yxs_fanji"},
         "L19": l19_skills,
         "L20": l20_skills,
         "L25": _parse_rust_str_array(zuan_rs, "L25_ALL_RULE_SKILLS")
-        | _parse_rust_str_array(zuan_rs, "L25_SSR_GENERAL_SKILLS"),
+        | _parse_rust_str_array(zuan_rs, "L25_SSR_GENERAL_SKILLS")
+        | _parse_rust_str_array(p9_data, "L25_ZUAN_SKILLS")
+        | {"ssr_yongsi", "ssr_yongsi_yuxi_card"},
         "L27": l27_skills,
         "L28": l28_skills,
         "L29": _parse_attach_arm_strings(p9_mod, "longxue"),
@@ -1241,9 +1250,13 @@ def _classify_general(
         if not unmapped:
             status = "忠实实现"
         else:
-            status = f"缺失（正式包已登记武将，但技能 {','.join(unmapped)} 为 mapping: null）"
+            status = f"缺失（正式包已登记武将，但技能 {','.join(unmapped)} 尚未移植）"
     elif cid in f_generals:
-        status = "忠实实现（武将与自带技能已按上游语义实现并接入正式包产品路径）"
+        missing_sks = [s for s in sk_list if s not in f_skills] if sid in ("U05", "L11") else []
+        if not missing_sks:
+            status = "忠实实现（武将与自带技能已按上游语义实现并接入正式包产品路径）"
+        else:
+            status = f"缺失（武将已登记于正式包，但自带技能 {','.join(missing_sks[:4])} 尚未移植）"
     elif cid in p_generals:
         status = "示意或自造（武将已接入正式包产品路径，但部分自带技能尚未逐个完整实现）"
     elif sid == "L11":
@@ -1400,6 +1413,75 @@ def _extract_file_top_keys_as_generals(
             )
 
 
+def _strip_js_line_for_braces(line: str, in_block_comment: bool) -> tuple[str, bool]:
+    out: list[str] = []
+    i = 0
+    n = len(line)
+    in_str: str | None = None
+    while i < n:
+        ch = line[i]
+        nxt = line[i + 1] if i + 1 < n else ""
+        if in_block_comment:
+            if ch == "*" and nxt == "/":
+                in_block_comment = False
+                i += 2
+            else:
+                i += 1
+            continue
+        if in_str is not None:
+            if ch == "\\":
+                i += 2
+                continue
+            if ch == in_str:
+                in_str = None
+            i += 1
+            continue
+        if ch == "/" and nxt == "/":
+            break
+        if ch == "/" and nxt == "*":
+            in_block_comment = True
+            i += 2
+            continue
+        if ch in ("'", '"', "`"):
+            in_str = ch
+            i += 1
+            continue
+        out.append(ch)
+        i += 1
+    return "".join(out), in_block_comment
+
+
+def _compute_subskill_line_mask(lines: list[str]) -> list[bool]:
+    mask = [False] * len(lines)
+    in_block_comment = False
+    subskill_depth = 0
+    re_subskill = re.compile(r"(?<![A-Za-z0-9_$])subSkill\s*:\s*\{")
+    for idx, raw in enumerate(lines):
+        cleaned, in_block_comment = _strip_js_line_for_braces(raw, in_block_comment)
+        if subskill_depth > 0:
+            mask[idx] = True
+            for ch in cleaned:
+                if ch == "{":
+                    subskill_depth += 1
+                elif ch == "}":
+                    subskill_depth -= 1
+                    if subskill_depth == 0:
+                        break
+        else:
+            m = re_subskill.search(cleaned)
+            if m:
+                mask[idx] = True
+                subskill_depth = 1
+                for ch in cleaned[m.end() :]:
+                    if ch == "{":
+                        subskill_depth += 1
+                    elif ch == "}":
+                        subskill_depth -= 1
+                        if subskill_depth == 0:
+                            break
+    return mask
+
+
 def _extract_file_top_keys_as_cards(
     sid: str,
     rel: str,
@@ -1410,8 +1492,11 @@ def _extract_file_top_keys_as_cards(
     pkg_cards: dict[str, str],
     pkg_deferred: dict[str, str],
 ) -> None:
+    subskill_mask = _compute_subskill_line_mask(lines)
     re_top = re.compile(r"""^(\t+| {2,16})["']?([A-Za-z0-9_]+)["']?\s*:\s*\{\s*$""")
     for idx, line in enumerate(lines):
+        if subskill_mask[idx]:
+            continue
         m = re_top.match(line)
         if not m:
             continue
@@ -1434,8 +1519,11 @@ def _extract_file_top_keys_as_skills(
     trans: dict[str, str],
     pkg_skills: dict[str, str | None],
 ) -> None:
+    subskill_mask = _compute_subskill_line_mask(lines)
     re_top = re.compile(r"""^(\t| {2,4})["']?([A-Za-z0-9_$]+)["']?\s*:\s*\{\s*$""")
     for idx, line in enumerate(lines):
+        if subskill_mask[idx]:
+            continue
         m = re_top.match(line)
         if not m:
             continue
@@ -1472,8 +1560,11 @@ def _extract_structured_blocks(
     pkg_deferred: dict[str, str],
 ) -> None:
     syms = _native_symbols()
+    subskill_mask = _compute_subskill_line_mask(lines)
     re_key_obj = re.compile(r"""^(\s*)["']?([A-Za-z0-9_$\u4e00-\u9fa5]+)["']?\s*:\s*\{\s*$""")
     for idx, line in enumerate(lines):
+        if subskill_mask[idx]:
+            continue
         lineno = idx + 1
         # Season / event / servant nodes in L11
         if fname in ("extension_season.js", "event_universal.js", "extension_servant.js"):

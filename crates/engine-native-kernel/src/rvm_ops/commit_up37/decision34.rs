@@ -400,9 +400,13 @@ pub(super) fn resolve_kuwu_interactive(ctx: &mut Ctx<'_>, owner: PlayerId) {
     }
 }
 
-/// `U07` (`diaobingqianjiang` 调兵遣将, `duoqi` 夺气, `youzhan` 诱战):
-fn resolve_diaobingqianjiang(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    let reveal_count = (ctx.core.alive_players().count() / 2).max(2);
+/// `U07` (`diaobingqianjiang` 调兵遣将 — `archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js:4-142`):
+/// 1. `contentBefore`: user draws 1 card (`player.draw()` at `card.js:15`) and reveals `ceil(alive / 2)` cards (`card.js:41`).
+/// 2. `content`: in seat order from user, each player with hand cards swaps 1 hand card with 1 market card (`card.js:87-94`).
+/// 3. `contentAfter`: user places `1..=market.len()` chosen market cards back on top of `deck` (`card.js:130`) and discards the rest (`card.js:135`).
+pub(super) fn resolve_diaobingqianjiang(ctx: &mut Ctx<'_>, owner: PlayerId) {
+    draw_cards_sync(ctx, owner, 1);
+    let reveal_count = ctx.core.alive_players().count().div_ceil(2).max(1);
     let mut market = Vec::with_capacity(reveal_count);
     for _ in 0..reveal_count {
         if let Some(c) = pop_deck(ctx) {
@@ -422,50 +426,105 @@ fn resolve_diaobingqianjiang(ctx: &mut Ctx<'_>, owner: PlayerId) {
             swapped += 1;
         }
     }
-    if let Some(rem) = market.pop() {
-        ctx.core.player_mut(owner).hand.push(rem);
+    let top_req = flag(ctx.core, owner, "diaobingqianjiang_top_count");
+    let top_n = if top_req == 0 {
+        usize::from(!market.is_empty())
+    } else {
+        (top_req as usize).min(market.len())
+    };
+    let mut returned_top = 0u32;
+    for _ in 0..top_n {
+        if let Some(c) = market.pop() {
+            ctx.core.deck.push(c);
+            returned_top += 1;
+        }
     }
-    for c in market {
-        ctx.core.discard.push(c);
+    if !market.is_empty() {
+        discard_some(ctx, owner, market);
     }
     set_flag(ctx.core, owner, "diaobingqianjiang_swapped", swapped);
+    set_flag(ctx.core, owner, "diaobingqianjiang_returned_top", returned_top);
     set_flag(ctx.core, owner, "diaobingqianjiang_resolved", 1);
 }
 
+/// `U07` (`duoqi` 夺气 — `archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:109-159`):
+/// Requires `currentPhase != owner` (`skill.js:112`) and at least 1 `zhucheng` card (`skill.js:115`).
+/// Discards 1 `zhucheng` card (`skill.js:141-142`) and terminates the current player's play phase (`evt.skipped = true`, `skill.js:151`).
 fn resolve_duoqi(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    let Some(c) = ctx
+    if ctx.core.turn.current == owner {
+        set_flag(ctx.core, owner, "duoqi_blocked_self_turn", 1);
+        return;
+    }
+    let zc = ctx
+        .core
+        .player_mut(owner)
+        .zhucheng
+        .pop()
+        .or_else(|| {
+            ctx.core
+                .vm_aux
+                .piles
+                .get_mut(&(owner, "zhucheng".to_string()))
+                .and_then(Vec::pop)
+        });
+    let Some(c) = zc else {
+        set_flag(ctx.core, owner, "duoqi_blocked_no_zhucheng", 1);
+        return;
+    };
+    discard_some(ctx, owner, vec![c]);
+    ctx.core.turn.skip_play_phase = true;
+    set_flag(ctx.core, ctx.core.turn.current, "duoqi_phase_use_skipped", 1);
+    set_flag(ctx.core, owner, "duoqi_triggered", 1);
+}
+
+/// `U07` (`youzhan` 诱战 — `archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:422-447` & `card/card.js:169-202`):
+/// Requires an equip card in `he` (`skill.js:425`). Discards that equip card to invoke virtual `youdishenru`:
+/// cancels the incoming Sha (`card.js:182`), and unless the attacker responds with another Sha, deals 1 counter-damage (`card.js:199`).
+fn resolve_youzhan(ctx: &mut Ctx<'_>, owner: PlayerId) {
+    let equip_card = ctx
         .core
         .player(owner)
         .hand
-        .first()
+        .iter()
         .copied()
-        .or_else(|| ctx.core.player(owner).equips.first().copied())
-    else {
+        .find(|&c| ctx.catalog.card_kind(c).is_equip())
+        .or_else(|| ctx.core.player(owner).equips.first().copied());
+    let Some(eq) = equip_card else {
+        set_flag(ctx.core, owner, "youzhan_blocked_no_equip", 1);
         return;
     };
-    if ctx.core.player(owner).hand.contains(&c) {
-        ctx.take_hand_card(owner, c);
+    if ctx.core.player(owner).hand.contains(&eq) {
+        ctx.take_hand_card(owner, eq);
     } else {
-        ctx.take_owned_card(owner, c);
+        ctx.take_owned_card(owner, eq);
     }
-    discard_some(ctx, owner, vec![c]);
-    let target = first_other_alive(ctx.core, owner).unwrap_or(owner);
-    set_flag(ctx.core, target, "duoqi_draw_penalty", 1);
-    set_flag(ctx.core, owner, "duoqi_triggered", 1);
-    ctx.start_draw(owner, 1);
-}
-
-fn resolve_youzhan(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    let target = first_other_alive(ctx.core, owner).unwrap_or(owner);
+    discard_some(ctx, owner, vec![eq]);
     set_flag(ctx.core, owner, "youzhan_triggered", 1);
-    if target != owner {
+    set_flag(ctx.core, owner, "youdishenru_nullified_sha", 1);
+    let attacker = first_other_alive(ctx.core, owner).unwrap_or(owner);
+    if attacker != owner {
+        let sha_in_hand = ctx
+            .core
+            .player(attacker)
+            .hand
+            .iter()
+            .copied()
+            .find(|&c| ctx.catalog.card_kind(c).is_sha_like());
+        if flag(ctx.core, attacker, "youdishenru_refuse_sha") == 0 {
+            if let Some(sc) = sha_in_hand {
+                ctx.take_hand_card(attacker, sc);
+                discard_some(ctx, attacker, vec![sc]);
+                set_flag(ctx.core, attacker, "youdishenru_responded_sha", 1);
+                return;
+            }
+        }
+        set_flag(ctx.core, owner, "youdishenru_counter_damage", 1);
         ctx.emit(EventData::Damage(crate::machine::damage_data(
             Some(owner),
-            target,
+            attacker,
             1,
         )));
     }
-    ctx.start_draw(owner, 1);
 }
 
 /// `U08` (`yxs_menshen2_guard` 门神承受伤害转移):

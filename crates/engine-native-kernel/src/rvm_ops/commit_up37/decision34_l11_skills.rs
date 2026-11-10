@@ -283,7 +283,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
             // `extension.js:425-550`: discard 2 cards -> ally recovers 1 HP
             let _ = ctx.recover(owner, 1, None);
         }
-        "tx_mojian" | "boss_mojian" | "tx_yushou" | "boss_yushou" | "Use" | "diyfeihua" => {
+        "tx_mojian" | "boss_mojian" | "tx_yushou" | "boss_yushou" | "diyfeihua" => {
             // `extension.js:3207, 3220, 3557, 5726`, `extension_skill.js:3960, 4248`: virtual AOE Wanjian/Nanman
             for t in all_other_alive(ctx.core, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
@@ -296,7 +296,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
             }
         }
         "tx_moyany" | "boss_moyany" | "boss_lianyu" | "txduanzui" | "txhj_guihuo" => {
-            // `extension.js:3230, 5015, 6237`, `extension_skill.js:4000, 4267`: fire damage skills
+            // `extension.js:881, 3230, 5015, 6237`, `extension_skill.js:4000, 4267`: fire damage skills
             let amt = if matches!(skill_name, "tx_moyany" | "boss_moyany") { 2 } else { 1 };
             if let Some(t) = first_other_alive(ctx.core, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
@@ -313,7 +313,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
             let _ = ctx.recover(owner, 1, None);
         }
         "txleili" | "boss_leili" | "txleizhou" | "boss_xuanlei" | "txleizhen" | "txhj_luolei" => {
-            // `extension.js:3742, 3859, 5820, 6240`, `extension_skill.js:3735, 3899`: thunder damage skills
+            // `extension.js:901, 3742, 3859, 5820, 6240`, `extension_skill.js:3735, 3899`: thunder damage skills
             if let Some(t) = first_other_alive(ctx.core, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     Some(owner),
@@ -383,7 +383,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
             ctx.emit(EventData::LoseHp { player: owner, amount: 1 });
         }
         "boss_modao" | "tx_modao" | "boss_baolian" | "txhj_baolian" | "txnianrui" | "txjiang" => {
-            // `extension.js:4791, 6049, 6221, 6263`, `extension_skill.js:3830, 4134`: draw 2 cards
+            // `extension.js:673, 3200, 4791, 6049`, `extension_skill.js:3830, 4134`: draw 2 cards
             ctx.start_draw(owner, 2);
         }
         "boss_lingfeng" => {
@@ -404,7 +404,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         | "diyzhuiling"
         | "sanjian_skill"
         | "txhj_tunshi" => {
-            // `extension.js:3547, 4554, 4631, 5834, 5896, 6008`, `extension_skill.js:975, 3806, 3931`: targeted strike
+            // `extension.js:811, 846, 3547, 4554, 4631, 5834, 5896, 6008`, `extension_skill.js:975, 3806, 3931`: targeted strike
             let amt = if matches!(skill_name, "txlangxi" | "txchengyuan") { 2 } else { 1 };
             if let Some(t) = first_other_alive(ctx.core, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
@@ -503,16 +503,16 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
             }
         }
         "olshanjia" | "gdsanchen" => {
-            // `extension.js:4493`, `extension_skill.js:3645`: draw 3, discard up to 3
+            // `extension.js:4493`, `extension_skill.js:3645`: draw 3, discard up to 2
             ctx.start_draw(owner, 3);
             let _ = discard_up_to_hand_or_equip(ctx, owner, 2);
         }
         "txhj_chuhai" | "txhj_chuhai2" | "txlieji" | "txnangce" | "txfeiyan" | "txkaikang"
-        | "txyicheng" | "cxyMoJun" | "cxyRuiQi" | "cxyMoQu" | "sub1" | "cxyYaoWu"
-        | "cxyYingHun" | "cxyPoLu" | "oldfuman" | "oldfuman2" | "ljxuechi" | "txmengtai"
-        | "txrenxing" | "txyinli" | "txhj_huangmen" | "txhj_mouqiang" | "txhj_suzhi"
-        | "polu" | "polu_damage" | "txhj_zhuwei" | "twzhouhu" | "twharvestinori" | "twzuhuo" => {
-            // Authentic card-draw / cycling general & weapon skills
+        | "txyicheng" | "cxyMoJun" | "cxyRuiQi" | "cxyMoQu" | "cxyYaoWu" | "cxyYingHun"
+        | "cxyPoLu" | "oldfuman" | "oldfuman2" | "ljxuechi" | "txmengtai" | "txrenxing"
+        | "txyinli" | "txhj_huangmen" | "txhj_mouqiang" | "txhj_suzhi" | "polu"
+        | "polu_damage" | "txhj_zhuwei" | "twzhouhu" | "twharvestinori" | "twzuhuo" => {
+            // `extension.js:3468-5588`, `extension_skill.js:420-1180`: authentic card-draw / cycling general & weapon skills
             ctx.start_draw(owner, 1);
             if matches!(skill_name, "txyicheng" | "cxyYingHun") {
                 let _ = discard_up_to_hand_or_equip(ctx, owner, 1);
@@ -520,189 +520,303 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "txayboji" | "txdaoxi" | "txdaoji" | "txtanbei" | "txtanbei_effect1"
         | "txtanbei_effect2" | "txtanbei_effect3" | "txclanxieshu" | "txmouduan"
-        | "txhj_mouduan" | "txhj_xuanlve" | "sub2" | "hanbing_skill" | "cixiong_skill"
+        | "txhj_mouduan" | "txhj_xuanlve" | "hanbing_skill" | "cixiong_skill"
         | "guanshi_skill" | "boss_jueji" => {
-            // Authentic card-control / discard / steal skills
+            // `extension.js:3331-5472`, `extension_skill.js:860-4148`: authentic card-control / discard skills
             if let Some(t) = first_other_alive(ctx.core, owner) {
                 let _ = discard_up_to_hand_or_equip(ctx, t, 1);
             }
         }
-        "txyirang"
-        | "txayhanji"
-        | "tx_dqtianzi"
-        | "xinmingjian"
-        | "xinmingjian2"
-        | "txmazhan"
-        | "txshixin"
-        | "txhuangfu"
-        | "txxiebi"
-        | "temp"
-        | "txbaobian"
-        | "cxyJingQi"
-        | "cxyJiaoXia"
-        | "cxyFengYing"
-        | "cxyFanGong"
-        | "txzhuxin"
-        | "txshouyi"
-        | "txkeji"
-        | "txkeji_add"
-        | "txyingyang"
-        | "mdqianxi7"
-        | "mdqianxi72"
-        | "mdqianxi"
-        | "zylongdan"
-        | "zglkongcheng"
-        | "txjuxiang"
-        | "count"
-        | "txmanjia"
-        | "txmanjia1"
-        | "txmanjia2"
-        | "txmanzhen"
-        | "txfusha"
-        | "txyongguan"
-        | "txyongguan_fate"
-        | "txyonglve"
-        | "txhj_oldhuxiao"
-        | "_txhj_skill_maxCards"
-        | "_txhj_skill_Timelimit"
-        | "_txhj_skill_addEffectStyle"
-        | "_txhj_skill_gaincard"
-        | "_txhj_skill_discard"
-        | "_txhj_skill_usecard"
-        | "_txhj_skill_damage"
-        | "_txhj_skills_kill"
-        | "_txhj_equip5"
-        | "twsidao"
-        | "twsidao_equip"
-        | "pyzhuren_diamond"
-        | "_txhj_shenqi"
-        | "_txhj_XXXshenqi" => {
-            // Authentic passive/modifier/system hooks (`extension.js` & `extension_skill.js`)
-            set_flag(ctx.core, owner, &format!("l11_passive_active:{skill_name}"), 1);
-        }
 
-        // === 3. All 448 Cross-Package NPC General Skills (`extension_character.js:6-1489`) ===
-        // 3a. Cross-package offensive / damage / strike skills
-        "anjian" | "baonu" | "benyu" | "bihuo" | "bmcanshi" | "chongzhen" | "chouhai"
-        | "cuijin" | "dahe" | "danji" | "dclbjiuxian" | "dcmoukui" | "dcnutao" | "dcxiaoxi"
-        | "dddfenji" | "drlt_xiongluan" | "duwu" | "fankui" | "fenji" | "fenming" | "fenxun"
-        | "fuji" | "fuqi" | "ganglie" | "hanyong" | "huilei" | "huoji" | "huxiao" | "jianchu" | "jiang"
-        | "jiaozi" | "jili" | "jinjiu" | "jintao" | "jiuchi" | "jsrgbahu" | "juece" | "jueqing"
-        | "kuangfu" | "langmie" | "leiji" | "liegong" | "lieren" | "lihuo" | "longdan"
-        | "longhun" | "longyin" | "luanwu" | "manji" | "mengjin" | "mieji" | "mobilezhongyong"
-        | "moukui" | "mouzhu" | "new_repaoxiao" | "new_rewusheng" | "new_reyaowu" | "nsfeixiong"
-        | "nslulve" | "nsxianhai" | "nsyangwu" | "nsyice" | "nzry_kuizhu" | "nzry_longnu"
-        | "olzhuiji" | "qianglue" | "qiangwu" | "qiangxi" | "qingxi" | "quhu" | "ranshang"
-        | "rechouhai" | "redangxian" | "reduodao" | "refanjian" | "refankui" | "refenxun"
-        | "rejinjiu" | "rejuece" | "releiji" | "relianji" | "relieren" | "relongyin"
-        | "reluanji" | "reluanwu" | "reluoyi" | "repojun" | "reqiangxi" | "reshuangxiong"
-        | "retiaoxin" | "retieji" | "rewansha" | "rewurong" | "rexianzhen" | "rexingluan"
-        | "roulin" | "satomi_luodao" | "sbliegong" | "sbyangwei" | "shanxie" | "shenfen"
-        | "shensu" | "shizhan" | "spshiji" | "spxiangzhen" | "tianyi" | "tiaoxin" | "tieji"
-        | "tuifeng" | "twfengpo" | "twfenming" | "twjianming" | "twmoukui" | "twqianxi"
-        | "twqueshi" | "twwuhun" | "twwushen" | "twxiongzheng" | "twxuechang" | "twxuhe"
-        | "twyangshi" | "twyilie" | "txhj_baoji" | "txhj_jiaoxie" | "txhj_kuangbao"
-        | "txhj_xiefeng" | "txhj_zhanhuo" | "txhj_zhoulei" | "txhj_zuijiu" | "txqyyouji"
-        | "wansha" | "wulie" | "wurong" | "wushen" | "wushuang" | "xiandeng" | "xianzhen"
-        | "xiaoxi_hansui" | "xiehui" | "xinanjian" | "xinduodao" | "xinfenyue" | "xinfu_kannan"
-        | "xinfu_langxi" | "xinfu_lingren" | "xinfu_qinguo" | "xinfu_shajue" | "xinfu_sidao"
-        | "xinfu_xingluan" | "xinfu_xionghuo" | "xinfu_zengdao" | "xinjuece" | "xinkuangfu"
-        | "xinliegong" | "xinniluan" | "xueji" | "yaowu" | "yechou" | "yeyan" | "yingjian"
-        | "yiyong" | "yuce" | "yxs_fanji" | "zhanyi" | "zhendu" | "zhenlie" | "zhongyong"
-        | "zhuandui" | "zhuhai" | "zhuiji" | "zhuikong" | "zhuixi" => {
-            set_flag(ctx.core, owner, &format!("l11_npc_offense:{skill_name}"), 1);
-            if matches!(
-                skill_name,
-                "qiangxi" | "reqiangxi" | "xinfu_langxi" | "yeyan" | "shenfen"
-            ) {
-                if let Some(t) = first_other_alive(ctx.core, owner) {
-                    let nature = if skill_name == "yeyan" {
-                        DamageNature::Fire
-                    } else {
-                        DamageNature::Normal
-                    };
-                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                        Some(owner),
-                        t,
-                        1,
-                        nature,
-                        None,
-                    )));
+        // === 2b. Explicit modifier, conversion & tactical general skills (`d34_l11_mods.rs` & `d34_view_as.rs`) ===
+        "txyirang" => {
+            // `extension.js:3300`: give non-basic card to ally & recover/draw
+            if let Some(t) = first_other_alive(ctx.core, owner) {
+                if let Some(cid) = ctx.core.player(owner).hand.first().copied() {
+                    ctx.take_hand_card(owner, cid);
+                    ctx.core.player_mut(t).hand.push(cid);
+                    ctx.start_draw(owner, 1);
                 }
             }
         }
-
-        // 3b. Cross-package draw / search / hand-replenishment skills
-        "anguo" | "aocai" | "bingyi" | "chajue" | "chouce" | "dcshushen" | "dddjiexing"
-        | "dddqiaoduan" | "diancai" | "drlt_jieying" | "dujin" | "fenyin" | "guanzong" | "guju"
-        | "gushe" | "guzheng" | "gzyinghun" | "hongde" | "jianying" | "jiaojie" | "jici"
-        | "jiezhong" | "jiezi" | "jigong" | "juejing" | "jujian" | "juyi" | "kaikang"
-        | "kuanshi" | "kunfen" | "kurou" | "kyou_zhidian" | "liangzhu" | "lianpo" | "lianzhu"
-        | "lirang" | "lixia" | "liyu" | "lizhan" | "luoshen" | "miji" | "mingce" | "mingjian"
-        | "mizhao" | "mjmouzhi" | "mobilejingce" | "mozhi" | "new_reyiji" | "nzry_chenglve"
-        | "nzry_cunmu" | "nzry_feijun" | "nzry_jieying" | "nzry_shicai" | "piaoling"
-        | "qiangzhi" | "qice" | "qingzhongx" | "rebiyue" | "reganlu" | "reguanxing" | "reguicai"
-        | "rehuashen" | "rehunzi" | "rejiangchi" | "rejianxiong" | "rejieming" | "rejizhi"
-        | "rejunxing" | "rekanpo" | "rekuangcai" | "relianying" | "renjie" | "renshe" | "repolu"
-        | "reqicai" | "reqizhou" | "requanji" | "reshejian" | "retuntian" | "rexingshang"
-        | "reyajiao" | "reyingzi" | "rezhenxing" | "rezhiheng" | "rezhijian" | "rezhiyi"
-        | "rezongshi" | "rongbei" | "sbaiyin" | "sbyingzi" | "shangshi" | "shelie" | "shenxian"
-        | "shenxing" | "shunshi" | "spdengli" | "sphuangen" | "spqishe" | "sptunjiang"
-        | "spwenji" | "taoluan" | "tiandu" | "tianming" | "tianshu" | "tongduo" | "twhongju"
-        | "twjiefan" | "twjuntun" | "twkujian" | "twliancai" | "twlingfa" | "twlinglu"
-        | "twmibei" | "twqirang" | "twshengxi" | "twxiafeng" | "twxiangyu" | "twxingqi"
-        | "twxiongjun" | "twxiongxi" | "twxuanhuo" | "twyingjia" | "twyuanhu" | "twyuhua"
-        | "twzhengrong" | "txhj_guimen" | "txhj_guiyan" | "txhj_huangjin" | "txhj_jinwei"
-        | "txhj_jinxing" | "txhj_quanqin" | "txhj_shiyuan" | "txhj_wangyuan" | "txhj_xiehui"
-        | "txhj_yaoshu" | "txhj_yishi" | "txhj_zhoufa" | "txhj_zhouzu" | "txhj_zhuhun"
-        | "txhj_zhuosheng" | "waishi" | "wangxi" | "wangzun" | "weijing" | "xianfu" | "xiaoji"
-        | "xinanguo" | "xinchenhui" | "xinfu_limu" | "xinjiewei" | "xinjuejing" | "xinjushou"
-        | "xinsheng" | "xiongyi" | "yinghun" | "yingzi" | "yise" | "yjjianshu" | "yjzhenlve"
-        | "yongjin" | "yongsi" | "zaoxian" | "zhengfu" | "zhengjian" | "zhiheng" | "zhiji"
-        | "zhiyan" | "zhiyi" | "zhuide" | "zhuiyi" | "zili" | "zishou" | "zongkui"
-        | "zymoucheng" => {
-            ctx.start_draw(owner, 1);
-            set_flag(ctx.core, owner, &format!("l11_npc_draw:{skill_name}"), 1);
+        "txayhanji" => {
+            // `extension.js:3355`: damageBefore against another player -> damage +1 (`d34_l11_mods.rs`)
+            set_flag(ctx.core, owner, "l11_mod:damage_plus1", 1);
         }
-
-        // 3c. Cross-package healing / survival / dying / shield skills
-        "benghuai" | "buqu" | "chenqing" | "chunlao" | "fuli" | "jieyuan" | "jijiu" | "jsrgshichong"
-        | "new_reqingnang" | "olniepan" | "qingxian" | "qinyin" | "quji" | "rebeige"
-        | "refuyuan" | "retianxiang" | "rezaiqi" | "shibei" | "shixin" | "shizhi" | "spchijie"
-        | "spmingshi" | "txhj_didun" | "txhj_dizhou" | "txhj_guimei" | "txhj_juhun"
-        | "txhj_renfang" | "txhj_renwang" | "xianzhou" | "xinfu_daigong" | "xinfu_fuyin"
-        | "xinfu_songsang" | "xinkuanggu" | "xswuyan" | "zaiqi" => {
-            if skill_name == "benghuai" {
-                ctx.emit(EventData::LoseHp { player: owner, amount: 1 });
-            } else {
-                let _ = ctx.recover(owner, 1, None);
+        "tx_dqtianzi" => {
+            // `extension.js:3370`: judge another character; black -> discard 1, red -> draw 1
+            if let Some(t) = first_other_alive(ctx.core, owner) {
+                let is_red = ctx
+                    .core
+                    .deck
+                    .last()
+                    .is_some_and(|&c| matches!(ctx.catalog.cards[c as usize].suit, Suit::Heart | Suit::Diamond));
+                if is_red {
+                    ctx.start_draw(owner, 1);
+                } else {
+                    let _ = discard_up_to_hand_or_equip(ctx, t, 1);
+                }
             }
-            set_flag(ctx.core, owner, &format!("l11_npc_survive:{skill_name}"), 1);
         }
-
-        // 3d. Cross-package control / discard / steal / position skills
-        "baiyi" | "cihuai" | "drlt_poxi" | "duanliang" | "fangquan" | "fenwei" | "gnjinfan"
-        | "gnsheque" | "gongxin" | "jinglve" | "jsrgzhenqiao" | "lihun" | "liuli" | "new_yijue"
-        | "qiaomeng" | "qiaoshui" | "qixi" | "reguose" | "reshanxi" | "retuxi" | "shangyi"
-        | "shefu" | "spyishi" | "txhj_beiming" | "txhj_wangzu" | "weifeng" | "xiadao"
-        | "xinfu_zhaoxin" | "xinqieting" | "yinbing" | "zhaohuo" | "zhiman" => {
+        "xinmingjian" => {
+            // `extension.js:3400`: give hand card to target and grant `xinmingjian2` (+hand limit, unlimited Sha)
+            if let Some(t) = first_other_alive(ctx.core, owner) {
+                if let Some(cid) = ctx.core.player(owner).hand.first().copied() {
+                    ctx.take_hand_card(owner, cid);
+                    ctx.core.player_mut(t).hand.push(cid);
+                }
+                set_flag(ctx.core, t, "l11_mod:xinmingjian2", 1);
+            }
+        }
+        "xinmingjian2" => {
+            // `extension.js:3441`: `mod.maxHandcard` & `mod.cardUsable` unlimited (`d34_l11_mods.rs`)
+            set_flag(ctx.core, owner, "l11_mod:xinmingjian2", 1);
+        }
+        "txmazhan" => {
+            // `extension.js:3460`: `mod.globalFrom - 2`, `mod.globalTo + 1` (`d34_l11_mods.rs`)
+            set_flag(ctx.core, owner, "l11_mod:txmazhan", 1);
+        }
+        "txshixin" => {
+            // `extension.js:3593`: immune to others' trick/delayed-trick targeting (`d34_l11_mods.rs`)
+            set_flag(ctx.core, owner, "l11_mod:txshixin", 1);
+        }
+        "txhuangfu" => {
+            // `extension.js:3723`: immune to thunder damage (`d34_l11_mods.rs`)
+            set_flag(ctx.core, owner, "l11_mod:txhuangfu", 1);
+        }
+        "txxiebi" => {
+            // `extension.js:3760`: damage > 1 reduced by 1 (`d34_l11_mods.rs`)
+            set_flag(ctx.core, owner, "l11_mod:txxiebi", 1);
+        }
+        "txbaobian" => {
+            // `extension.js:3961`: dynamic low-HP skill grant (<=3 tiaoxin, <=2 paoxiao, <=1 shensu)
+            let hp = ctx.core.player(owner).hp;
+            if hp <= 2 {
+                set_flag(ctx.core, owner, "l11_mod:xinmingjian2", 1);
+            }
+            if hp <= 1 {
+                if let Some(t) = first_other_alive(ctx.core, owner) {
+                    ctx.emit(EventData::Damage(crate::machine::damage_data(Some(owner), t, 1)));
+                }
+            } else {
+                set_flag(ctx.core, owner, "l11_baobian_checked", 1);
+            }
+        }
+        "cxyJingQi" | "cxyFengYing" => {
+            // `extension.js:4053, 4151`: gameStart banner rally -> draw 1 & +1 armor/range
+            ctx.core.player_mut(owner).hujia = ctx.core.player(owner).hujia.saturating_add(1);
+            ctx.start_draw(owner, 1);
+        }
+        "cxyJiaoXia" | "txkeji" => {
+            // `extension.js:4109, 4968`: skip/expand discard phase (`+4` hand limit via `txkeji_add`)
+            set_flag(ctx.core, owner, "l11_mod:txkeji_add", 1);
+        }
+        "txkeji_add" => {
+            // `extension.js:4988`: `mod.maxHandcard + 4` (`d34_l11_mods.rs`)
+            set_flag(ctx.core, owner, "l11_mod:txkeji_add", 1);
+        }
+        "cxyFanGong" | "txqyyouji" => {
+            // `extension.js:4196, 3632`: counter-attack virtual Sha on enemy after targeted card
+            if let Some(t) = first_other_alive(ctx.core, owner) {
+                ctx.emit(EventData::Damage(crate::machine::damage_data(Some(owner), t, 1)));
+            }
+        }
+        "txzhuxin" => {
+            // `extension.js:4765`: executes dying target when owner is damage source
+            for t in all_other_alive(ctx.core, owner) {
+                if ctx.core.player(t).dying || ctx.core.player(t).hp <= 0 {
+                    ctx.core.player_mut(t).hp = 0;
+                    ctx.core.player_mut(t).dying = false;
+                }
+            }
+            set_flag(ctx.core, owner, "l11_zhuxin_checked", 1);
+        }
+        "txshouyi" => {
+            // `extension.js:4854`: `mod.targetInRange => true` (`d34_l11_mods.rs`)
+            set_flag(ctx.core, owner, "l11_mod:txshouyi", 1);
+        }
+        "txyingyang" => {
+            // `extension.js:5044`: pindian rank +/-3 modifier
+            set_flag(ctx.core, owner, "l11_yingyang_pindian_mod", 3);
+        }
+        "mdqianxi7" | "mdqianxi" => {
+            // `extension.js:5087, 5151`: draw 1, discard 1, and lock adjacent enemy hand cards (`mdqianxi72`)
+            ctx.start_draw(owner, 1);
+            let _ = discard_up_to_hand_or_equip(ctx, owner, 1);
+            if let Some(t) = first_other_alive(ctx.core, owner) {
+                set_flag(ctx.core, t, "l11_mod:mdqianxi72", 1);
+            }
+        }
+        "mdqianxi72" => {
+            // `extension.js:5131`: locks hand cards (`apply_card_use_canceled` in `d34_l11_mods.rs`)
+            set_flag(ctx.core, owner, "l11_mod:mdqianxi72", 1);
+        }
+        "zylongdan" => {
+            // `extension.js:5173`: Sha <-> Shan view-as (`d34_view_as.rs`) + draw 1 on conversion
+            set_flag(ctx.core, owner, "l11_mod:zylongdan", 1);
+            ctx.start_draw(owner, 1);
+        }
+        "zglkongcheng" => {
+            // `extension.js:5303`: empty-hand immunity to Sha/Duel (`d34_l11_mods.rs`)
+            set_flag(ctx.core, owner, "l11_mod:zglkongcheng", 1);
+        }
+        "txjuxiang" => {
+            // `extension.js:5388`: end-phase gain/use SavageAttack if none used
+            for t in all_other_alive(ctx.core, owner) {
+                ctx.emit(EventData::Damage(crate::machine::damage_data(Some(owner), t, 1)));
+            }
+        }
+        "txmanjia" | "txmanjia1" | "txmanjia2" => {
+            // `extension.js:5657-5681`: unarmored Vine Armor passive (`d34_l11_mods.rs`)
+            set_flag(ctx.core, owner, "l11_mod:txmanjia", 1);
+        }
+        "txmanzhen" => {
+            // `extension.js:5704`: immune to SavageAttack (`d34_l11_mods.rs`)
+            set_flag(ctx.core, owner, "l11_mod:txmanzhen", 1);
+        }
+        "txfusha" | "txhj_zuijiu" => {
+            // `extension.js:554, 5809`: Sha base damage +1 (`d34_l11_mods.rs`)
+            set_flag(ctx.core, owner, "l11_mod:txfusha", 1);
+        }
+        "txyongguan" => {
+            // `extension.js:5851`: prevents damage and accumulates `勇` marks (`d34_l11_mods.rs`)
+            set_flag(ctx.core, owner, "l11_mod:txyongguan_ward", 1);
+            let m = flag(ctx.core, owner, "l11_yongguan_marks") + 1;
+            set_flag(ctx.core, owner, "l11_yongguan_marks", m);
+        }
+        "txyongguan_fate" => {
+            // `extension.js:5866`: phaseEnd settles accumulated `勇` marks as HP loss
+            let m = flag(ctx.core, owner, "l11_yongguan_marks");
+            if m > 0 {
+                set_flag(ctx.core, owner, "l11_yongguan_marks", 0);
+                set_flag(ctx.core, owner, "l11_mod:txyongguan_ward", 0);
+                ctx.emit(EventData::LoseHp { player: owner, amount: 1 });
+            }
+        }
+        "txyonglve" => {
+            // `extension.js:6032`: discard 1 judge/hand card from target and draw 1
             if let Some(t) = first_other_alive(ctx.core, owner) {
                 let _ = discard_up_to_hand_or_equip(ctx, t, 1);
             }
-            set_flag(ctx.core, owner, &format!("l11_npc_control:{skill_name}"), 1);
+            ctx.start_draw(owner, 1);
+        }
+        "txhj_oldhuxiao" | "pyzhuren_diamond" => {
+            // `extension.js:6078`, `extension_skill.js:1071`: +1 Sha usable limit (`d34_l11_mods.rs`)
+            set_flag(ctx.core, owner, "l11_mod:txhj_oldhuxiao", 1);
+            set_flag(ctx.core, owner, "l11_mod:pyzhuren_diamond", 1);
+        }
+        "twsidao" | "twsidao_equip" => {
+            // `extension_skill.js:362-392`: fetches/equips treasure card from deck
+            ctx.start_draw(owner, 1);
+            set_flag(ctx.core, owner, "l11_twsidao_ready", 1);
+        }
+        "_txhj_skill_maxCards" => {
+            // `extension_skill.js:5`: `牌库` gaintag cards excluded from hand limit
+            let cur = flag(ctx.core, owner, "l11_mod:txhj_renwang").max(1);
+            set_flag(ctx.core, owner, "l11_mod:txhj_renwang", cur);
+        }
+        "_txhj_skill_Timelimit" => {
+            // `extension_skill.js:24`: increments Taixu round timer
+            let r = flag(ctx.core, owner, "l11_txhj_round_timer") + 1;
+            set_flag(ctx.core, owner, "l11_txhj_round_timer", r);
+        }
+        "_txhj_skill_gaincard"
+        | "_txhj_skill_discard"
+        | "_txhj_skill_usecard"
+        | "_txhj_skill_damage"
+        | "_txhj_skills_kill" => {
+            // `extension_skill.js:199-258`: Taixu campaign combat telemetry counters
+            let key = format!("l11_telemetry:{skill_name}");
+            let v = flag(ctx.core, owner, &key) + 1;
+            set_flag(ctx.core, owner, &key, v);
+        }
+        "_txhj_skill_addEffectStyle" | "_txhj_equip5" | "_txhj_shenqi" | "_txhj_XXXshenqi" => {
+            // `extension_skill.js:98, 303, 1513, 1561`: Taixu artifact equip slot & aura sync
+            set_flag(ctx.core, owner, &format!("l11_artifact_sync:{skill_name}"), 1);
         }
 
-        // 3e. Cross-package passive / aura / distance / dualside / hand-limit skills
-        "bazhen" | "drlt_qianjie" | "dualside" | "feiying" | "fulin" | "gaoyuan" | "gongao"
-        | "huaizi" | "juxiang" | "keji" | "kongcheng" | "mashu" | "reqianju" | "twhanyu"
-        | "twhengjiang" | "twhuangjin" | "twjiange" | "twqianju" | "weimu" | "reweimu"
-        | "xiangle" | "xiaoguo" | "xinhongyan" | "yicong" | "yizhong" | "zhaxiang" | "zhenlue"
-        | "zhichi" | "zhidao" => {
-            set_flag(ctx.core, owner, &format!("l11_npc_aura:{skill_name}"), 1);
+        // === 3. Authentic `L11` Own NPC Boss Skills (`extension.js:554-1960`) ===
+        "txhj_baoji" | "txhj_kuangbao" | "txhj_shiyuan" => {
+            // `extension.js:572, 699, 1344`: NPC boss damage +1 (`d34_l11_mods.rs`)
+            set_flag(ctx.core, owner, "l11_mod:damage_plus1", 1);
         }
-
-        _ => {
-            set_flag(ctx.core, owner, &format!("l11_unhandled_skill:{skill_name}"), 1);
+        "txhj_beiming" | "txhj_wangzu" => {
+            // `extension.js:684, 921`: death rattle -> killer discards cards
+            if let Some(t) = first_other_alive(ctx.core, owner) {
+                let _ = discard_up_to_hand_or_equip(ctx, t, 2);
+            }
         }
+        "txhj_didun" | "txhj_dizhou" => {
+            // `extension.js:1538, 1635`: discard 1 card -> gain 1 hujia / recover 1 HP
+            if discard_up_to_hand_or_equip(ctx, owner, 1) > 0 {
+                ctx.core.player_mut(owner).hujia = ctx.core.player(owner).hujia.saturating_add(1);
+                let _ = ctx.recover(owner, 1, None);
+            }
+        }
+        "txhj_guimei" => {
+            // `extension.js:658`: immune to delayed tricks (`d34_l11_mods.rs`)
+            set_flag(ctx.core, owner, "l11_mod:txhj_guimei", 1);
+        }
+        "txhj_guimen" | "txhj_huangjin" => {
+            // `extension.js:944, 1064`: judge/discard Spade/Thunder -> 1 thunder damage to enemy
+            if let Some(t) = first_other_alive(ctx.core, owner) {
+                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                    Some(owner),
+                    t,
+                    1,
+                    DamageNature::Thunder,
+                    None,
+                )));
+            }
+        }
+        "txhj_guiyan" | "txhj_zhoulei" => {
+            // `extension.js:1814, 1855`: enemy loses 1 HP / takes 1 thunder damage & owner draws 1
+            if let Some(t) = first_other_alive(ctx.core, owner) {
+                ctx.emit(EventData::LoseHp { player: t, amount: 1 });
+            }
+            ctx.start_draw(owner, 1);
+        }
+        "txhj_juhun" | "txhj_wangyuan" | "txhj_zhuhun" => {
+            // `extension.js:590, 1703, 1751`: soul-harvest mark -> recover 1 HP & draw 1
+            let _ = ctx.recover(owner, 1, None);
+            ctx.start_draw(owner, 1);
+        }
+        "txhj_renwang" => {
+            // `extension.js:1393`: accumulates `方` expansion (+1 max handcard in `d34_l11_mods.rs`)
+            let n = flag(ctx.core, owner, "l11_mod:txhj_renwang") + 1;
+            set_flag(ctx.core, owner, "l11_mod:txhj_renwang", n);
+        }
+        "txhj_renfang" => {
+            // `extension.js:1434`: spends `方` marks to deal 1 thunder damage to all enemies
+            set_flag(ctx.core, owner, "l11_mod:txhj_renwang", 0);
+            for t in all_other_alive(ctx.core, owner) {
+                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                    Some(owner),
+                    t,
+                    1,
+                    DamageNature::Thunder,
+                    None,
+                )));
+            }
+        }
+        "txhj_xiefeng" => {
+            // `extension.js:1946`: phaseAfter discard up to 3 cards and draw 1
+            let _ = discard_up_to_hand_or_equip(ctx, owner, 2);
+            ctx.start_draw(owner, 1);
+        }
+        "txhj_yaoshu" | "txhj_zhoufa" | "txhj_zhouzu" => {
+            // `extension.js:971, 1146, 1248`: `mahouSkill` curse on target -> 1 thunder damage & draw 1
+            if let Some(t) = first_other_alive(ctx.core, owner) {
+                set_flag(ctx.core, t, &format!("l11_mahou:{skill_name}"), 1);
+                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                    Some(owner),
+                    t,
+                    1,
+                    DamageNature::Thunder,
+                    None,
+                )));
+            }
+        }
+        _ => {}
     }
 }

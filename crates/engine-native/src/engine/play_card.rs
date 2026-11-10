@@ -382,10 +382,7 @@ pub(super) fn play_card(
                     {
                         return Err(RejectReason::IllegalTargets);
                     }
-                    // 闪电/洪水：只能置入自己判定区；判定区不能有同名牌
-                    if !targets.is_empty() {
-                        return Err(RejectReason::IllegalTargets);
-                    }
+                    validate_wuzhong_targets(core, catalog, card, kind, &targets)?;
                     let player = core.turn.current;
                     if core
                         .player(player)

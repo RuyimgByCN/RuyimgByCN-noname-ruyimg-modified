@@ -494,12 +494,170 @@ try {
     };
   })()`);
 
+  // 10. 验证真实牌桌顶栏 BattleShoushaHud、SeatCard 十周年标记/酒态/出框徽章、HandStrip 手杀「理牌」以及全部 5 个全屏弹窗
+  // 先在当前局挂上十周年标记与出框动作，验证 SeatCard 同步渲染
+  await evalJs(`(async () => {
+    document.querySelector('[data-testid="tab-hud"]')?.click();
+    await new Promise(r => setTimeout(r, 30));
+    document.querySelector('[data-testid="btn-l08-apply-mark"]')?.click();
+    document.querySelector('[data-testid="btn-l24-chukuang"]')?.click();
+    document.querySelector('[data-testid="btn-handstrip-lipai"]')?.click();
+    await new Promise(r => setTimeout(r, 40));
+  })()`);
+
+  const battleTableShot = await send(ws, "Page.captureScreenshot", {
+    format: "png",
+    captureBeyondViewport: false,
+  });
+  const battleTablePngPath = join(outDir, "decision34-battle-table-hud.png");
+  writeFileSync(battleTablePngPath, Buffer.from(battleTableShot.data, "base64"));
+
+  const battleModalsResult = await evalJs(`(async () => {
+    const click = (tid) => {
+      const el = document.querySelector('[data-testid="' + tid + '"]');
+      if (!el) throw new Error('missing ' + tid);
+      el.click();
+    };
+    const wait = (ms) => new Promise(r => setTimeout(r, ms));
+    const text = (tid) => document.querySelector('[data-testid="' + tid + '"]')?.textContent?.trim() ?? '';
+
+    const hudRect = document.querySelector('[data-testid="battle-shousha-table-hud"]')?.getBoundingClientRect();
+    const seatMarks = text('seat-decade-marks');
+    const seatJiu = text('seat-jiu-badge');
+    const seatChukuang = text('seat-chukuang-overlay');
+    const lipaiLabel = text('btn-handstrip-lipai');
+
+    // (1) L09 千幻详情弹窗
+    click('btn-open-qhly-modal');
+    await wait(30);
+    click('btn-qhly-modal-apply-kill');
+    await wait(25);
+    const qhlyShare = text('qhly-modal-share-result');
+    click('btn-close-qhly-modal');
+    await wait(20);
+
+    // (2) L24 藏珍阁·动皮弹窗
+    click('btn-open-skinswitch-modal');
+    await wait(30);
+    click('btn-skinswitch-modal-gongji');
+    await wait(25);
+    const skinPreview = text('skinswitch-modal-preview');
+    click('btn-close-skinswitch-modal');
+    await wait(20);
+
+    // (3) L13 MVP结算弹窗
+    click('btn-open-mvp-modal');
+    await wait(30);
+    const mvpCrown = text('mvp-modal-crown-seat');
+    click('btn-mvp-praise-0');
+    await wait(20);
+    const mvpPraise0 = text('btn-mvp-praise-0');
+    click('btn-close-mvp-modal');
+    await wait(20);
+
+    // (4) L07 全能搜索弹窗
+    click('btn-open-omnisearch-modal');
+    await wait(30);
+    click('btn-omnisearch-modal-run');
+    await wait(25);
+    const omniResults = text('omnisearch-modal-results');
+    click('btn-close-omnisearch-modal');
+    await wait(20);
+
+    // (5) L11 太虚战役图弹窗
+    click('btn-open-taixu-modal');
+    await wait(30);
+    click('btn-taixu-modal-advance');
+    await wait(20);
+    click('btn-taixu-buy-buff_txhj_aozhan');
+    await wait(20);
+    click('btn-taixu-servant-jiuwei');
+    await wait(25);
+    const taixuOwned = text('taixu-modal-owned-blessings');
+    const taixuPet = text('taixu-modal-pet');
+
+    return {
+      hudWidth: Math.round(hudRect?.width ?? 0),
+      phaseRibbon: text('battle-hud-phase-ribbon'),
+      jiangdeng: text('battle-hud-jiangdeng'),
+      seatMarks,
+      seatJiu,
+      seatChukuang,
+      lipaiLabel,
+      qhlyShare,
+      skinPreview,
+      mvpCrown,
+      mvpPraise0,
+      omniResults,
+      taixuOwned,
+      taixuPet,
+    };
+  })()`);
+
+  const taixuModalShot = await send(ws, "Page.captureScreenshot", {
+    format: "png",
+    captureBeyondViewport: false,
+  });
+  const taixuModalPngPath = join(outDir, "decision34-modal-taixu-campaign.png");
+  writeFileSync(taixuModalPngPath, Buffer.from(taixuModalShot.data, "base64"));
+
+  await evalJs(`document.querySelector('[data-testid="btn-close-taixu-modal"]')?.click()`);
+  await sleep(30);
+
   const shot = await send(ws, "Page.captureScreenshot", {
     format: "png",
     captureBeyondViewport: true,
   });
   const pngPath = join(outDir, "decision34-browser-surfaces.png");
   writeFileSync(pngPath, Buffer.from(shot.data, "base64"));
+
+  // 11. 旧线同场景参照截图（若本机存在 scratch/legacy-harness/liuli/index.html，仅作只读 HTTP 静态挂载截图对照，绝不读取任何 Spine 运行库文件）
+  let legacyComparisonPngPath = null;
+  const legacyRoot = resolve(webClientDir, "../../../scratch/legacy-harness/liuli");
+  if (existsSync(join(legacyRoot, "index.html"))) {
+    const legacyServer = createServer((req, res) => {
+      const urlPath = decodeURIComponent((req.url ?? "/").split("?")[0] || "/");
+      // Decision 35 Guard: strictly refuse serving any Spine runtime script
+      if (/spine/i.test(urlPath)) {
+        res.writeHead(404);
+        res.end("blocked by Decision 35 clean-room guard");
+        return;
+      }
+      const candidate = resolve(legacyRoot, "." + (urlPath === "/" ? "/index.html" : urlPath));
+      if (!candidate.startsWith(legacyRoot) || !existsSync(candidate) || statSync(candidate).isDirectory()) {
+        res.writeHead(404);
+        res.end("not found");
+        return;
+      }
+      try {
+        const ext = extname(candidate).toLowerCase();
+        res.writeHead(200, { "Content-Type": MIME[ext] ?? "application/octet-stream" });
+        res.end(readFileSync(candidate));
+      } catch {
+        res.writeHead(500);
+        res.end("err");
+      }
+    });
+    await new Promise((r) => legacyServer.listen(0, "127.0.0.1", r));
+    const legacyPort = legacyServer.address().port;
+    const prevErrCount = consoleErrors.length;
+    try {
+      await send(ws, "Page.navigate", { url: `http://127.0.0.1:${legacyPort}/` });
+      await sleep(1200);
+      const legacyShot = await send(ws, "Page.captureScreenshot", {
+        format: "png",
+        captureBeyondViewport: false,
+      });
+      legacyComparisonPngPath = join(outDir, "decision34-legacy-liuli-reference.png");
+      writeFileSync(legacyComparisonPngPath, Buffer.from(legacyShot.data, "base64"));
+    } finally {
+      // Do not pollute native consoleErrors with legacy noname startup logs
+      consoleErrors.length = prevErrCount;
+      try {
+        legacyServer.close();
+      } catch {}
+    }
+  }
 
   const report = {
     passed:
@@ -543,6 +701,18 @@ try {
       restartAndReloadResult.afterRestartWeather === false &&
       restartAndReloadResult.afterReloadDaoxin === "50" &&
       restartAndReloadResult.afterReloadWeather === true &&
+      battleModalsResult.hudWidth > 0 &&
+      battleModalsResult.seatMarks.includes("暴戾") &&
+      battleModalsResult.seatJiu.includes("酒态") &&
+      battleModalsResult.seatChukuang.includes("GongJi") &&
+      battleModalsResult.lipaiLabel.includes("手杀已理牌") &&
+      battleModalsResult.qhlyShare.includes("re_caopi") &&
+      battleModalsResult.skinPreview.includes("GongJi") &&
+      battleModalsResult.mvpCrown.includes("本局全场最佳") &&
+      battleModalsResult.mvpPraise0.includes("(1)") &&
+      battleModalsResult.omniResults.includes("曹操") &&
+      battleModalsResult.taixuOwned.includes("buff_txhj_aozhan") &&
+      battleModalsResult.taixuPet.includes("九尾") &&
       frameStats.approx_fps >= 50,
     panelRect,
     hudResult,
@@ -552,9 +722,13 @@ try {
     workbenchResult,
     saveRestoreResult,
     restartAndReloadResult,
+    battleModalsResult,
     frameStats,
     consoleErrors,
     screenshot: pngPath,
+    battleTableScreenshot: battleTablePngPath,
+    taixuModalScreenshot: taixuModalPngPath,
+    legacyComparisonScreenshot: legacyComparisonPngPath,
     uiSuitesScreenshot: uiSuitePngPath,
     campaignScreenshot: campaignPngPath,
   };

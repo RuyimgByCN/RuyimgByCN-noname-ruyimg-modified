@@ -281,24 +281,38 @@ pub(super) fn resolve_u07_wudian_skill(ctx: &mut Ctx<'_>, skill_name: &str, owne
                 )));
             }
         }
-        "ciqiu" | "ciqiu_dying" => {
+        "ciqiu_dying" => {
+            // `玩点论杀/character/skill.js:99-108`: `trigger: { player: "dyingBegin" }` -> `player.die()`
             set_flag(ctx.core, owner, "ciqiu_dying_instant_kill", 1);
             set_flag(ctx.core, owner, "ciqiu_removed", 1);
-            if other != owner {
-                ctx.core.player_mut(other).hp = 0;
-                ctx.core.player_mut(other).dying = true;
+            if ctx.core.player(owner).dying || ctx.core.player(owner).hp <= 0 {
+                ctx.core.player_mut(owner).hp = 0;
+                ctx.core.player_mut(owner).dying = false;
+                ctx.core.player_mut(owner).alive = false;
             }
         }
         "ciqiu_destroy" => {
-            let _ = discard_one_he(ctx, owner);
+            // `玩点论杀/character/skill.js:84-98`: destroys/discards equipped weapon when leaving equip zone
+            if let Some(wp) = ctx
+                .core
+                .player(owner)
+                .equips
+                .iter()
+                .copied()
+                .find(|&c| ctx.catalog.card_kind(c).equip_slot() == Some(crate::catalog::EquipSlot::Weapon))
+            {
+                ctx.take_owned_card(owner, wp);
+                discard_some(ctx, owner, vec![wp]);
+            }
             set_flag(ctx.core, owner, "ciqiu_weapon_destroyed", 1);
         }
-        "kangyin" | "kangyin2" => {
+        "kangyin2" => {
+            // `玩点论杀/character/skill.js:391-407`: `-X` distance & `+X` Sha extra targets (`d34_flags`)
             let bonus = flag(ctx.core, owner, "kangyin_marks").max(1);
             set_flag(ctx.core, owner, "kangyin2_bonus_applied", bonus);
-            ctx.start_draw(owner, bonus);
         }
-        "fuchou" | "fuchou2" | "fuchou3" => {
+        "fuchou3" => {
+            // `玩点论杀/character/skill.js:510`: end-of-turn counter-damage sub-skill
             set_flag(ctx.core, owner, "wdb_fuchou_counter", 1);
             if other != owner {
                 ctx.emit(EventData::Damage(crate::machine::damage_data(
@@ -308,25 +322,42 @@ pub(super) fn resolve_u07_wudian_skill(ctx: &mut Ctx<'_>, skill_name: &str, owne
                 )));
             }
         }
-        "diyjuntun" | "diyjuntun2" | "juntun" | "juntun_global" => {
-            if discard_one_he(ctx, owner).is_some() {
+        "diyjuntun2" | "juntun" | "juntun_global" => {
+            // `玩点论杀/character/skill.js:776`: recast an equip card (discard 1 equip -> draw 1)
+            let eq = ctx
+                .core
+                .player(owner)
+                .hand
+                .iter()
+                .copied()
+                .find(|&c| ctx.catalog.card_kind(c).is_equip())
+                .or_else(|| ctx.core.player(owner).equips.first().copied());
+            if let Some(c) = eq {
+                if ctx.core.player(owner).hand.contains(&c) {
+                    ctx.take_hand_card(owner, c);
+                } else {
+                    ctx.take_owned_card(owner, c);
+                }
+                discard_some(ctx, owner, vec![c]);
                 ctx.start_draw(owner, 1);
+                set_flag(ctx.core, owner, "wdb_juntun_recast", 1);
             }
-            set_flag(ctx.core, owner, "wdb_juntun_recast", 1);
         }
-        "liduan" | "liduan2" => {
-            set_flag(ctx.core, other, "wdb_liduan_suit_locked", 1);
-            ctx.start_draw(owner, 1);
+        "liduan2" => {
+            // `玩点论杀/character/skill.js:677-686`: target gives 1 hand card to owner or suit is locked (`d34_flags`)
+            if other != owner {
+                if flag(ctx.core, other, "liduan_refuse_give") == 0 {
+                    if let Some(c) = ctx.core.player(other).hand.first().copied() {
+                        ctx.take_hand_card(other, c);
+                        ctx.core.player_mut(owner).hand.push(c);
+                        set_flag(ctx.core, owner, "wdb_liduan_gained_card", 1);
+                        return;
+                    }
+                }
+                set_flag(ctx.core, other, "wdb_liduan_suit_locked", 5);
+            }
         }
-        "nsshuaiyan" | "siji" | "liangce" => {
-            ctx.start_draw(owner, 1);
-        }
-        "moshou" | "zhucheng" | "juedao" | "geju" | "chezhen" | "jinyan" => {
-            set_flag(ctx.core, owner, &format!("wdb_active:{skill_name}"), 1);
-        }
-        other_sk => {
-            set_flag(ctx.core, owner, &format!("u07_hook:{other_sk}"), 1);
-        }
+        _ => {}
     }
 }
 

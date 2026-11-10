@@ -539,6 +539,87 @@ pub fn try_resolve_l25_rule_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pl
             }
             set_flag(ctx.core, owner, "l25_skill:g_chenhuodajie", 1);
         }
+        "_anshaskill" => {
+            // _anshaskill (`祖安武将/extension.js:42659-42712`): Nightfall mode countdown; decrements `_dietime` or deals 1 HP loss when expired.
+            let rem = flag(ctx.core, owner, "l25_dietime_marks");
+            if rem > 1 {
+                set_flag(ctx.core, owner, "l25_dietime_marks", rem - 1);
+            } else {
+                set_flag(ctx.core, owner, "l25_dietime_marks", 0);
+                if other != owner {
+                    ctx.emit(EventData::LoseHp {
+                        player: other,
+                        amount: 1,
+                    });
+                }
+            }
+            set_flag(ctx.core, owner, "l25_skill:_anshaskill", 1);
+        }
+        "_seadreammodeskill" => {
+            // _seadreammodeskill (`祖安武将/extension.js:42815-42868`): Sea Dream (`幻海之诗`) phase mode mark & wallpaper rotation.
+            let m = flag(ctx.core, owner, "l25_mode_buff_marks").saturating_add(1);
+            set_flag(ctx.core, owner, "l25_mode_buff_marks", m);
+            set_flag(ctx.core, owner, "l25_skill:_seadreammodeskill", 1);
+        }
+        "_relifeskill" => {
+            // _relifeskill (`祖安武将/extension.js:43402-43437`): roundStart resurrection timer for fallen characters.
+            for pid in 0..ctx.core.players.len() as PlayerId {
+                if !ctx.core.player(pid).alive {
+                    let rem = flag(ctx.core, pid, "l25_relife_timer");
+                    if rem <= 1 {
+                        let mhp = ctx.core.player(pid).max_hp as i32;
+                        ctx.core.player_mut(pid).alive = true;
+                        ctx.core.player_mut(pid).dying = false;
+                        ctx.core.player_mut(pid).hp = mhp.max(1);
+                        set_flag(ctx.core, pid, "l25_relife_timer", 2);
+                    } else {
+                        set_flag(ctx.core, pid, "l25_relife_timer", rem - 1);
+                    }
+                }
+            }
+            set_flag(ctx.core, owner, "l25_skill:_relifeskill", 1);
+        }
+        "_zuanattacklinecheck"
+        | "_extraphaseskill"
+        | "_extradieskill"
+        | "_extraturnoverskill"
+        | "_extradamageskill"
+        | "_extradlosehpskill"
+        | "_extraloseskill"
+        | "_extragainskill"
+        | "_extraloseCardskill"
+        | "_extracompareskill"
+        | "_extrauseskill"
+        | "_extrajudgeskill"
+        | "_extralinkskill"
+        | "_comparesayskill"
+        | "_equipuseskill"
+        | "_damsayskill"
+        | "_saveskill"
+        | "_dieskill"
+        | "_shanskill"
+        | "_useCardsayskill"
+        | "_phasebeginskill"
+        | "_phaseendskill"
+        | "_judgeskill"
+        | "_linkskill"
+        | "_newBackgroundUse"
+        | "_zuanboss"
+        | "_helasisyskill"
+        | "_haoyunlai"
+        | "_bingleBigScreen"
+        | "_bingletexiaoshandian"
+        | "_bingletexiaohuoshan"
+        | "_bingletexiaohongshui"
+        | "_bingletexiaofulei"
+        | "_bingletexiaole"
+        | "_bingletexiaobingliang"
+        | "_thundertexiao"
+        | "_thundertexiao2" => {
+            // `祖安武将/extension.js:37514-48503`: pure audio, attack-line, boss-wallpaper & delayed-trick VFX hooks (zero card draw).
+            set_flag(ctx.core, owner, &format!("l25_fx_hook:{skill_name}"), 1);
+            set_flag(ctx.core, owner, &format!("l25_skill:{skill_name}"), 1);
+        }
         _ => return false,
     }
     let cnt = flag(ctx.core, owner, "l25_zuan_trigger_count") + 1;

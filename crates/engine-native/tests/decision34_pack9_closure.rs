@@ -520,11 +520,17 @@ fn l08_l14_l19_l20_complete_skills_triggers_and_save_restore() {
         );
     }
 
-    // Verify authentic upstream EventKind triggers on key skills
+    // Verify authentic upstream EventKind triggers on key VM skills, plus real `HostBehavior::WudianJianbi` on `jianbi`
+    assert!(
+        p9_pack
+            .host_skills
+            .iter()
+            .any(|hs| hs.name == "jianbi" && hs.behavior.aoe_exclude()),
+        "jianbi must bind real HostBehavior::WudianJianbi (`host:wudian_jianbi`) rather than a shadowed VM stub"
+    );
     for (sk, expected_ev) in [
         ("ycndiyjianxiong", EventKind::Damage),
         ("tanlin", EventKind::CardUsed),
-        ("jianbi", EventKind::CardUsed),
         ("leiyu", EventKind::PhaseEnd),
         ("_usecard", EventKind::CardUsed),
         ("_decadeUI_dieKillEffect", EventKind::Death),
@@ -924,6 +930,11 @@ fn formal_packages_extensions_load_and_execute_on_locked_product_path() {
     invoke_p9_op(&mut e, 0, "kangyin2", content_native_loader::U07_WUDIAN_SKILL_ID);
     assert_eq!(flag(&e, 0, "kangyin2_bonus_applied"), 1);
     for &yxs_sk in &content_native_loader::U08_YXS_SKILLS {
+        if e.state_core().player(1).hp < 3 {
+            e.state_core_mut().player_mut(1).max_hp = 10;
+            e.state_core_mut().player_mut(1).hp = 10;
+            e.state_core_mut().player_mut(1).dying = false;
+        }
         invoke_p9_op(&mut e, 0, yxs_sk, content_native_loader::U08_YXS_SKILL_ID);
         assert_eq!(flag(&e, 0, &format!("u08_skill:{yxs_sk}")), 1);
     }

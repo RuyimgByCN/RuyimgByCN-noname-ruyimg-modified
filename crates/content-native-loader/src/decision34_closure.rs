@@ -507,6 +507,10 @@ pub use shahai_generals_data::*;
 pub mod shahai_cards_skills_data;
 pub use shahai_cards_skills_data::*;
 
+#[path = "host_skill_bindings.rs"]
+pub mod host_skill_bindings;
+pub use host_skill_bindings::*;
+
 #[path = "decision34_pack9.rs"]
 pub mod decision34_pack9;
 pub use decision34_pack9::*;

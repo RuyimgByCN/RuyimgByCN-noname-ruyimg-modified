@@ -14,7 +14,7 @@
 - 子插件数：1
 - 资源：audio:4文件/80190B
 - 混淆/动态特征：extension/手杀ui/extension.js: packed=False, eval=4, long_lines=0
-- 台账原生重构状态（摘录）：**仓内 48 配置、53 项手杀交互钩子与 40 项界面模块全量忠实实现（2026-11-10 裁决 34 第四轮，[G0/L14](./L14-手杀ui.md)）**：已删除伪造 `shousha_*` 武将/卡牌及摸牌/回血副作用；`shousha-ui-upstream-liuli`（保持纯 UI 包 0 VM 技能隔离）+ `shoushaUiSurface.ts` + `UiSkinSuitePanel.vue` 忠实覆盖 48 项配置、53 项阶段提示/木牛流马自动理牌/露头/语音钩子与 40 项 `lbtn`/`skill`/`character` 渲染面并完成 Headless Chrome 截图与 60 FPS 测帧（忠实实现 **141** / 示意或自造 **0** / 缺失 **0**）
+- 台账原生重构状态（摘录）：**仓内 48 配置、53 项手杀交互钩子、40 项界面模块与牌桌顶栏 HUD/手牌理牌全量忠实实现（2026-11-10 裁决 34 第五轮，[G0/L14](./L14-手杀ui.md)）**：已删除伪造 `shousha_*` 武将/卡牌、跨包虚构名 `spshidi`/`zhefu` 及摸牌/回血副作用；`shousha-ui-upstream-liuli`（保持纯 UI 包 0 VM 技能隔离）+ `shoushaUiSurface.ts` + `BattleShoushaHud.vue`（阶段旗幡/读秒条/将灯）+ `HandStrip.vue`（「理牌」按钮）+ `UiSkinSuitePanel.vue` 覆盖全部 141/141 项并完成 Headless Chrome 截图与 60 FPS 测帧（忠实实现 **141** / 示意或自造 **0** / 缺失 **0**）
 
 ### 能力面（G0 登记）
 - 生命周期：独立安装/启停/升级/卸载（目标能力，见宿主契约）
@@ -66,7 +66,7 @@
 
 | 现有实现项 | 原生文件:行号 | 上游对照 (`file:line`) | 原生落点 | 状态与处置结论 |
 |---|---|---|---|---|
-| `SHOUSHA_UI_HOOK_IDS`（53 项 UI 钩子）+ `SHOUSHA_SURFACE_MODULES`（40 项脚本/CSS 渲染面）+ `UiSkinSuitePanel.vue` | `apps/web-client/src/engine/surfaces/shoushaUiSurface.ts:10-337`、`apps/web-client/src/components/battle/surfaces/UiSkinSuitePanel.vue:1-411` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:85-7360`、`character/main*.js`、`lbtn/main*.js`、`skill/main*.js` 及 32 份 CSS | 原生规则（`shousha_ui.rs`）+ 原生前端组件 | 忠实实现（已删除伪造 `shousha_*` 实体与跨包虚构名 `spshidi`/`zhefu` 及摸牌/回血副作用；53 项出牌进度条、托管保护、快捷语音气泡、无懈读条、手牌理牌钩子与 40 项手杀面板/样式表已在原生前端完整落地） |
+| `SHOUSHA_UI_HOOK_IDS`（53 项 UI 钩子）+ `SHOUSHA_SURFACE_MODULES`（40 项渲染面）+ `BattleShoushaHud.vue` + `HandStrip.vue`「理牌」 | `apps/web-client/src/engine/surfaces/shoushaUiSurface.ts:10-337`、`apps/web-client/src/components/battle/BattleShoushaHud.vue:1-190`、`apps/web-client/src/components/battle/HandStrip.vue:1-194` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:85-7360`、`character/main*.js`、`lbtn/main*.js`、`skill/main*.js` 及 32 份 CSS | 原生规则（`shousha_ui.rs`）+ 原生前端组件 | 忠实实现（牌桌顶栏阶段旗幡、读秒进度条、将灯徽章与手牌区一键「理牌」已直接挂载于 `BattleBoard.vue` / `HandStrip.vue`） |
 
 ### 7.2 武将（Generals）（0 项）
 
