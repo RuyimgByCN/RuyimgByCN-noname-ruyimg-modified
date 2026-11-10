@@ -573,20 +573,26 @@ pub fn standard_catalog_with_extensions(
         .filter(|p| p.enabled)
         .flat_map(|p| p.generals.iter().cloned())
         .collect();
+    let mut seen_global_behaviors = Vec::new();
     catalog.extension_global_skills = catalog
         .skills
         .iter()
         .enumerate()
         .filter_map(|(id, def)| {
             let behavior = def.behavior.as_host_behavior()?;
-            (behavior == crate::content::host::HostBehavior::ChenhuodajieCard
+            let is_global = behavior == crate::content::host::HostBehavior::ChenhuodajieCard
                 || packs.iter().any(|p| {
                     p.enabled
                         && (p.init_hook.grants_global_skill(behavior)
                             || (behavior == crate::content::host::HostBehavior::JinlianzhuCancel
                                 && p.host_skills.iter().any(|d| d.behavior == behavior)))
-                }))
-            .then_some(id as crate::ids::SkillDefId)
+                });
+            if is_global && !seen_global_behaviors.contains(&behavior) {
+                seen_global_behaviors.push(behavior);
+                Some(id as crate::ids::SkillDefId)
+            } else {
+                None
+            }
         })
         .collect();
     // R05-H（§8）：装载器随派生 helper 下传的公开逻辑身份并入目录
