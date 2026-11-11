@@ -1,0 +1,138 @@
+ D apps/web-client/dist/assets/engine.worker-6iNxSyL2.js
+ D apps/web-client/dist/assets/engine_wasm_bg-BumAzGma.wasm
+ D apps/web-client/dist/assets/index-CsFu7D1w.js
+ D apps/web-client/dist/assets/index-DHWyqN42.css
+ M apps/web-client/dist/index.html
+ M apps/web-client/package.json
+ M apps/web-client/scripts/pa09-desktop-transport.test.mjs
+ M apps/web-client/src/components/battle/BattleBoard.vue
+ M apps/web-client/src/components/battle/BattleShoushaHud.vue
+ M apps/web-client/src/components/battle/HandStrip.vue
+ M apps/web-client/src/components/battle/SeatCard.vue
+ M apps/web-client/src/components/battle/surfaces/Spine40SkinImportBox.vue
+ M apps/web-client/src/engine/desktopEngineTransport.ts
+ M apps/web-client/src/engine/spine40/binarySkelCodec.ts
+ M apps/web-client/src/engine/spine40/webglRenderer.ts
+ M apps/web-client/src/views/BattleView.vue
+ M crates/content-native-loader/src/decision34_pack9.rs
+ M crates/content-native-loader/src/shahai_attach.rs
+ M crates/content-native-loader/src/taixu_skills_data.rs
+ M crates/engine-native-kernel/src/rvm_ops/commit_up37.rs
+ M crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34.rs
+ M crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs
+ M crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_l11_buffs.rs
+ M crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_l11_npc_a.rs
+ M crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_l11_npc_b.rs
+ M crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_l11_skills.rs
+ M crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_l19_l20_l27.rs
+ M crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_l25_rules.rs
+ M crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_l25_ssr.rs
+ M crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs
+ M crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_u05_gujian_gwent.rs
+ M crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_u05_hearth.rs
+ M crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_u05_ops.rs
+ M crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_u05_ow_xianjian.rs
+ M crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_u05_swd_cards.rs
+ M crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_u05_swd_chars.rs
+ M crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_u08_l19_l20_l27.rs
+ M crates/engine-native-kernel/src/rvm_ops/commit_up37/generals.rs
+ M crates/engine-native/Cargo.toml
+ M crates/engine-native/src/engine/debug.rs
+ M crates/engine-native/tests/decision34_pack9_closure.rs
+ M crates/engine-native/tests/decision34_round4_l11_taixu.rs
+ M crates/engine-native/tests/decision34_round4_l25_zuan.rs
+ M crates/engine-native/tests/decision34_round4_u05_shahai.rs
+ M crates/engine-native/tests/decision34_rules_and_campaigns.rs
+ M crates/engine-native/tests/groups/l_rounds.rs
+ M crates/engine-native/tests/groups/test_registry.rs
+ M crates/engine-native/tests/up37_r02_to_n07_complete_closure.rs
+ M docs/architecture/native-progress.md
+ M docs/architecture/native-remaining-ledger.md
+ M docs/architecture/native-rules-baseline.md
+ M docs/migration/g0/L01-AI优化.md
+ M docs/migration/g0/L02-SJ-Settings.md
+ M docs/migration/g0/L03-boss.md
+ M docs/migration/g0/L04-cardpile.md
+ M docs/migration/g0/L05-coin.md
+ M docs/migration/g0/L06-wuxing.md
+ M docs/migration/g0/L07-全能搜索.md
+ M docs/migration/g0/L08-十周年UI.md
+ M docs/migration/g0/L09-千幻聆音.md
+ M docs/migration/g0/L10-史诗卡牌.md
+ M docs/migration/g0/L11-太虚幻境.md
+ M docs/migration/g0/L12-如真似幻.md
+ M docs/migration/g0/L13-手杀MVP.md
+ M docs/migration/g0/L14-手杀ui.md
+ M docs/migration/g0/L15-手杀全扩.md
+ M docs/migration/g0/L16-拖拽读取.md
+ M docs/migration/g0/L17-斗转星移.md
+ M docs/migration/g0/L18-更新保护.md
+ M docs/migration/g0/L19-末日乱斗.md
+ M docs/migration/g0/L20-标记补充.md
+ M docs/migration/g0/L21-武皇争霸.md
+ M docs/migration/g0/L22-段位制裁.md
+ M docs/migration/g0/L23-电脑适配.md
+ M docs/migration/g0/L24-皮肤切换.md
+ M docs/migration/g0/L25-祖安武将.md
+ M docs/migration/g0/L26-笨蛋插件.md
+ M docs/migration/g0/L27-选将美化.md
+ M docs/migration/g0/L28-雷霆万钧.md
+ M docs/migration/g0/L29-龙血玄黄.md
+ M docs/migration/g0/README.md
+ M docs/migration/g0/U01-3D精选.md
+ M docs/migration/g0/U02-boss.md
+ M docs/migration/g0/U03-cardpile.md
+ M docs/migration/g0/U04-coin.md
+ M docs/migration/g0/U05-杀海拾遗-part2.md
+ M docs/migration/g0/U05-杀海拾遗.md
+ M docs/migration/g0/U06-欢乐卡牌.md
+ M docs/migration/g0/U07-玩点论杀.md
+ M docs/migration/g0/U08-英雄杀.md
+ M docs/migration/upstream-extension-reconstruction.md
+ M docs/operations/evidence/2026-10-19-source-signoff-32/README.md
+ M scripts/legacy-harness/decision34_inventory_builder.py
+ M scripts/legacy-harness/generate-g0-docs.py
+?? .pi-lens.json
+?? apps/web-client/evidence/
+?? apps/web-client/scripts/tabletop-comparison-cdp.mjs
+?? crates/content-native-loader/src/decision34_pack9_triggers.rs
+?? crates/engine-native-kernel/src/rvm_ops/commit_up37/choice_routing.rs
+?? crates/engine-native/tests/e2e/
+?? crates/engine-native/tests/groups/e2e.rs
+?? crates/engine-native/tests/l11_taixu_boss_events.rs
+?? docs/migration/g0/inventory_status.json
+?? docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/artifacts/
+?? docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/machine-before-B-choice-adaptation/archives/
+?? docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/machine-phase-B/archives/
+?? docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/machine/archives/
+?? docs/operations/evidence/2026-10-30-native-ci-corrections/publication/command-scoped-pre-push.raw.txt
+?? docs/operations/evidence/2026-10-30-native-ci-corrections/publication/parent-publication-scope.json
+?? docs/operations/evidence/2026-10-30-nc10-continuations/isolated/liaoyuan-restore-repro.archive
+?? docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/artifacts/
+?? docs/operations/evidence/2026-10-30-pa09-desktop-native/github-related-repositories-readonly.json
+?? docs/operations/evidence/2026-10-30-pa09-desktop-native/physical-devices-recheck.json
+?? docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-artifacts/
+?? docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-machine/archives/
+?? docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-production-frontend.tar.gz
+?? docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/validated-dist/
+?? docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/happy/collection-audio.png
+?? docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/collection-audio.png
+?? docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/
+?? docs/operations/evidence/2026-10-30-up37-i02-resources/parent-discovery/liuli-official-release-assets-readonly.json
+?? docs/operations/evidence/2026-10-30-up37-i02-resources/parent-discovery/parent-official-resources/hm_yudu.jpg
+?? docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/
+?? docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/frontend-dist-before-legacy/
+?? docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/tauri-preexisting-schemas/
+?? docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-ingress-repair/original/pre-unicode-repair-report.md
+?? docs/operations/evidence/2026-10-31-nc10-public-own-plan/implementation/orchestration/36992565-9a6d-49bd-9192-6377f3f0251d_worker_output.md
+?? docs/operations/evidence/2026-10-31-nc10-public-own-plan/implementation/report-before-v2.md
+?? docs/operations/evidence/2026-11-11-external-prerequisites/
+?? docs/operations/evidence/2026-11-11-progress-scan-night/
+?? docs/operations/evidence/2026-11-11-r3-test-rewrites/
+?? docs/operations/evidence/spine40-user-guide.md
+?? docs/operations/evidence/tabletop-comparison.png
+?? docs/operations/evidence/tabletop-fps-report.json
+?? docs/operations/evidence/tabletop-native.png
+?? docs/operations/evidence/tabletop-upstream.png
+?? scripts/e2e/
+?? scripts/legacy-harness/init_inventory_status.py
