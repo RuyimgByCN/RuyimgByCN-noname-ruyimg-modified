@@ -1,6 +1,6 @@
 # G0 · U02 boss
 
-> 核验日期：2026-11-10 · 来源仓：`noname` · 入口：`archive/upstream/noname/apps/core/extension/boss`  
+> 核验日期：2026-11-11 · 来源仓：`noname` · 入口：`archive/upstream/noname/apps/core/extension/boss`  
 > 本页为 E01/G0 深度清单与**裁决 34 逐项上游清单**（武将 / 技能 / 卡牌 / 模式与战役节点 / 配置项 / 界面钩子 / 渲染面 / 现有 `decision34*` 归类）。非整包验收证明。
 
 ## 1. 功能清单
@@ -56,36 +56,36 @@
 - G0 本文档完成不等于 G1–G5；整包状态仍以[台账](../upstream-extension-reconstruction.md)为准。
 - 若需补跑动态样本：在 `scratch/legacy-harness` 运行副本上使用 `scripts/legacy-harness/`，勿写 `archive/upstream`。
 
-## 7. 裁决 34 逐项上游清单与现有实现归类（2026-11-10）
+## 7. 裁决 34 逐项上游清单与现有实现归类（2026-11-11）
 
 - **统计汇总**：上游实体合计 **17** 项（武将 15 / 技能 0 / 卡牌 0 / 模式与战役节点 2 / 配置项 0 / 界面钩子 0 / 渲染面 0）
-- **状态分布**：`忠实实现` **17** 项 · `示意或自造` **0** 项 · `缺失` **0** 项
+- **状态分布**：`已复核等价` **0** 项 · `简化近似` **17** 项 · `缺失` **0** 项 · `上游未定义` **0** 项
 
 ### 7.1 现有 `decision34*` / 前端示意代码逐条归类
 
 | 现有实现项 | 原生文件:行号 | 上游对照 (`file:line`) | 原生落点 | 状态与处置结论 |
 |---|---|---|---|---|
-| `boss_stage_transition` / `resolve_boss_stage_transition`（`boss_baonu_stage` 已按第二步清除） | `crates/content-native-loader/src/boss_playpack.rs:1-120` | `archive/upstream/noname/apps/core/extension/boss/extension.js:6-146` | 原生规则（`boss_playpack.rs`） | 忠实实现（已清除伪造的 `boss_baonu_stage`；挑战/剑阁武将池缓存与体力归一化已在 `boss_playpack.rs` 忠实实现） |
+| `boss_stage_transition` / `resolve_boss_stage_transition`（`boss_baonu_stage` 已按第二步清除） | `crates/content-native-loader/src/boss_playpack.rs:1-120` | `archive/upstream/noname/apps/core/extension/boss/extension.js:6-146` | 原生规则（`boss_playpack.rs`） | 简化近似（待复核：已清除伪造的 `boss_baonu_stage`；挑战/剑阁武将池缓存与体力归一化已在 `boss_playpack.rs` 落地） |
 
 ### 7.2 武将（Generals）（15 项）
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `boss_liedixuande` | `archive/upstream/noname/apps/core/extension/boss/extension.js:42` | 剑阁/挑战武将简介映射 `boss_liedixuande` → `liubei`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 忠实实现 |
-| `boss_gongshenyueying` | `archive/upstream/noname/apps/core/extension/boss/extension.js:43` | 剑阁/挑战武将简介映射 `boss_gongshenyueying` → `huangyueying`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 忠实实现 |
-| `boss_tianhoukongming` | `archive/upstream/noname/apps/core/extension/boss/extension.js:44` | 剑阁/挑战武将简介映射 `boss_tianhoukongming` → `shen_zhugeliang`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 忠实实现 |
-| `boss_yuhuoshiyuan` | `archive/upstream/noname/apps/core/extension/boss/extension.js:45` | 剑阁/挑战武将简介映射 `boss_yuhuoshiyuan` → `pangtong`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 忠实实现 |
-| `boss_qiaokuijunyi` | `archive/upstream/noname/apps/core/extension/boss/extension.js:46` | 剑阁/挑战武将简介映射 `boss_qiaokuijunyi` → `zhanghe`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 忠实实现 |
-| `boss_jiarenzidan` | `archive/upstream/noname/apps/core/extension/boss/extension.js:47` | 剑阁/挑战武将简介映射 `boss_jiarenzidan` → `caozhen`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 忠实实现 |
-| `boss_duanyuzhongda` | `archive/upstream/noname/apps/core/extension/boss/extension.js:48` | 剑阁/挑战武将简介映射 `boss_duanyuzhongda` → `simayi`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 忠实实现 |
-| `boss_juechenmiaocai` | `archive/upstream/noname/apps/core/extension/boss/extension.js:49` | 剑阁/挑战武将简介映射 `boss_juechenmiaocai` → `xiahouyuan`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 忠实实现 |
-| `boss_kumuyuanrang` | `archive/upstream/noname/apps/core/extension/boss/extension.js:50` | 剑阁/挑战武将简介映射 `boss_kumuyuanrang` → `xiahoudun`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 忠实实现 |
-| `boss_baijiwenyuan` | `archive/upstream/noname/apps/core/extension/boss/extension.js:51` | 剑阁/挑战武将简介映射 `boss_baijiwenyuan` → `zhangliao`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 忠实实现 |
-| `boss_yihanyunchang` | `archive/upstream/noname/apps/core/extension/boss/extension.js:52` | 剑阁/挑战武将简介映射 `boss_yihanyunchang` → `guanyu`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 忠实实现 |
-| `boss_fuweizilong` | `archive/upstream/noname/apps/core/extension/boss/extension.js:53` | 剑阁/挑战武将简介映射 `boss_fuweizilong` → `zhaoyun`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 忠实实现 |
-| `boss_lvbu1` | `archive/upstream/noname/apps/core/extension/boss/extension.js:54` | 剑阁/挑战武将简介映射 `boss_lvbu1` → `lvbu`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 忠实实现 |
-| `boss_lvbu2` | `archive/upstream/noname/apps/core/extension/boss/extension.js:55` | 剑阁/挑战武将简介映射 `boss_lvbu2` → `lvbu`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 忠实实现 |
-| `boss_lvbu3` | `archive/upstream/noname/apps/core/extension/boss/extension.js:56` | 剑阁/挑战武将简介映射 `boss_lvbu3` → `lvbu`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 忠实实现 |
+| `boss_liedixuande` | `archive/upstream/noname/apps/core/extension/boss/extension.js:42` | 剑阁/挑战武将简介映射 `boss_liedixuande` → `liubei`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `boss_gongshenyueying` | `archive/upstream/noname/apps/core/extension/boss/extension.js:43` | 剑阁/挑战武将简介映射 `boss_gongshenyueying` → `huangyueying`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `boss_tianhoukongming` | `archive/upstream/noname/apps/core/extension/boss/extension.js:44` | 剑阁/挑战武将简介映射 `boss_tianhoukongming` → `shen_zhugeliang`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 简化近似（待复核） |
+| `boss_yuhuoshiyuan` | `archive/upstream/noname/apps/core/extension/boss/extension.js:45` | 剑阁/挑战武将简介映射 `boss_yuhuoshiyuan` → `pangtong`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `boss_qiaokuijunyi` | `archive/upstream/noname/apps/core/extension/boss/extension.js:46` | 剑阁/挑战武将简介映射 `boss_qiaokuijunyi` → `zhanghe`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 简化近似（待复核） |
+| `boss_jiarenzidan` | `archive/upstream/noname/apps/core/extension/boss/extension.js:47` | 剑阁/挑战武将简介映射 `boss_jiarenzidan` → `caozhen`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `boss_duanyuzhongda` | `archive/upstream/noname/apps/core/extension/boss/extension.js:48` | 剑阁/挑战武将简介映射 `boss_duanyuzhongda` → `simayi`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 简化近似（待复核） |
+| `boss_juechenmiaocai` | `archive/upstream/noname/apps/core/extension/boss/extension.js:49` | 剑阁/挑战武将简介映射 `boss_juechenmiaocai` → `xiahouyuan`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `boss_kumuyuanrang` | `archive/upstream/noname/apps/core/extension/boss/extension.js:50` | 剑阁/挑战武将简介映射 `boss_kumuyuanrang` → `xiahoudun`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 简化近似（待复核） |
+| `boss_baijiwenyuan` | `archive/upstream/noname/apps/core/extension/boss/extension.js:51` | 剑阁/挑战武将简介映射 `boss_baijiwenyuan` → `zhangliao`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `boss_yihanyunchang` | `archive/upstream/noname/apps/core/extension/boss/extension.js:52` | 剑阁/挑战武将简介映射 `boss_yihanyunchang` → `guanyu`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 简化近似（待复核） |
+| `boss_fuweizilong` | `archive/upstream/noname/apps/core/extension/boss/extension.js:53` | 剑阁/挑战武将简介映射 `boss_fuweizilong` → `zhaoyun`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `boss_lvbu1` | `archive/upstream/noname/apps/core/extension/boss/extension.js:54` | 剑阁/挑战武将简介映射 `boss_lvbu1` → `lvbu`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 简化近似（待复核） |
+| `boss_lvbu2` | `archive/upstream/noname/apps/core/extension/boss/extension.js:55` | 剑阁/挑战武将简介映射 `boss_lvbu2` → `lvbu`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `boss_lvbu3` | `archive/upstream/noname/apps/core/extension/boss/extension.js:56` | 剑阁/挑战武将简介映射 `boss_lvbu3` → `lvbu`（`boss_storage_playpackconfig`） | 原生规则（`boss_playpack.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
 
 ### 7.3 技能（Skills）（0 项）
 
@@ -99,8 +99,8 @@
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `boss_play_init` | `archive/upstream/noname/apps/core/extension/boss/extension.js:6` | 加载 `boss_storage_playpackconfig` 挑战/剑阁武将池、归一化体力与 AI 禁选 | 原生规则（`boss_playpack.rs`） | 忠实实现 |
-| `boss_play_arenaReady` | `archive/upstream/noname/apps/core/extension/boss/extension.js:73` | 异步加载 `boss`/`versus` 模式武将池与技能并排除 `versus_ladder` | 原生规则（`boss_playpack.rs`） | 忠实实现 |
+| `boss_play_init` | `archive/upstream/noname/apps/core/extension/boss/extension.js:6` | 加载 `boss_storage_playpackconfig` 挑战/剑阁武将池、归一化体力与 AI 禁选 | 原生规则（`boss_playpack.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `boss_play_arenaReady` | `archive/upstream/noname/apps/core/extension/boss/extension.js:73` | 异步加载 `boss`/`versus` 模式武将池与技能并排除 `versus_ladder` | 原生规则（`boss_playpack.rs`） | 简化近似（待复核） |
 
 ### 7.6 配置项（Config Items）（0 项）
 

@@ -3,6 +3,8 @@
 
 use super::commit::pop_deck;
 use super::*;
+pub mod choice_routing;
+pub use choice_routing::*;
 pub mod decision34;
 pub mod decision34_ext;
 pub mod decision34_l11_buffs;
@@ -55,11 +57,7 @@ pub const OLREHUANSHI_ID: u32 = 3_274_133_709;
 pub const OLSHILUN_ID: u32 = 4_097_066_031;
 pub const OLZHUOMING_ID: u32 = 3_643_715_420;
 
-fn first_other_alive(core: &GameStateCore, p: PlayerId) -> Option<PlayerId> {
-    core.seat_order_from(p)
-        .into_iter()
-        .find(|&q| q != p && core.player(q).alive)
-}
+
 
 fn flag(core: &GameStateCore, p: PlayerId, key: &str) -> u32 {
     core.vm_aux
@@ -107,7 +105,7 @@ pub(super) fn draw_cards_sync(ctx: &mut Ctx<'_>, seat: PlayerId, count: u32) -> 
 /// 2) reset per-turn counters at `Phase::Prepare`,
 /// 3) fire at most once per turn across `Prepare -> Judge -> Draw -> Play -> Discard -> End`, and
 /// 4) never auto-self-immolate (`hp <= 1`) when `self_hp_cost` is true.
-/// Direct `debug_commit_effect` calls (`ctx.res.stack.is_empty()`) always pass through.
+/// Direct effect executions (`ctx.res.stack.is_empty()`) always pass through.
 pub(super) fn guard_phase_auto_trigger(
     ctx: &mut Ctx<'_>,
     owner: PlayerId,
@@ -438,14 +436,14 @@ fn resolve_jige(ctx: &mut Ctx<'_>, owner: PlayerId) {
     }
     set_flag(ctx.core, owner, "jige_resolved_safe", 1);
     set_flag(ctx.core, owner, "jige_subcard_count", subcards.len() as u32);
-    if let Some(&cid) = subcards.first() {
+    if let Some(&cid) = subcards.iter().next() {
         if let Some(pos) = ctx.core.discard.iter().position(|&c| c == cid) {
             ctx.core.discard.remove(pos);
             ctx.core.player_mut(owner).hand.push(cid);
         }
     }
     if flag(ctx.core, owner, "jige_mutual_sha_discard") != 0 || card_target.is_some() {
-        if let Some(target) = card_target.or_else(|| first_other_alive(ctx.core, owner)) {
+        if let Some(target) = card_target.or_else(|| hostile_target(ctx, owner)) {
             let owner_shas: Vec<CardId> = ctx
                 .core
                 .player(owner)
@@ -644,7 +642,7 @@ fn resolve_dcsbqingshi(ctx: &mut Ctx<'_>, owner: PlayerId) {
                 && ctx.core.player(q).alive
                 && ctx.core.player(q).hp == ctx.core.player(q).max_hp as i32
         })
-        .or_else(|| first_other_alive(ctx.core, owner));
+        .or_else(|| hostile_target(ctx, owner));
     if let Some(t) = target {
         set_flag(ctx.core, owner, "dcsbqingshi_attacked_target", u32::from(t));
         set_flag(ctx.core, owner, "dcsbqingshi_virtual_sha_used", 1);
@@ -702,7 +700,7 @@ fn resolve_shenfu(ctx: &mut Ctx<'_>, owner: PlayerId) {
     let hand_len = ctx.core.player(owner).hand.len();
     if hand_len % 2 == 1 {
         set_flag(ctx.core, owner, "shenfu_odd_branch", 1);
-        if let Some(t) = first_other_alive(ctx.core, owner) {
+        if let Some(t) = hostile_target(ctx, owner) {
             ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                 Some(owner),
                 t,
@@ -727,7 +725,7 @@ fn resolve_shenfu(ctx: &mut Ctx<'_>, owner: PlayerId) {
         }
     } else {
         set_flag(ctx.core, owner, "shenfu_even_branch", 1);
-        let t = first_other_alive(ctx.core, owner).unwrap_or(owner);
+        let t = friendly_target(ctx, owner).unwrap_or(owner);
         ctx.start_draw(t, 1);
     }
 }
@@ -746,7 +744,7 @@ fn resolve_olsbguqu(ctx: &mut Ctx<'_>, owner: PlayerId) {
 /// Target chooses `sha`/`shan`, reveals/gains from deck, and when `diff >= 2` grants
 /// `zijin` unconditionally (without `canUse(sha)` gate).
 fn resolve_dcsbtaozhou(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    let target = first_other_alive(ctx.core, owner).unwrap_or(owner);
+    let target = friendly_target(ctx, owner).unwrap_or(owner);
     let want_sha = flag(ctx.core, owner, "dcsbtaozhou_choice") != 3;
     let draw_n = flag(ctx.core, owner, "dcsbtaozhou_draw_count").clamp(1, 5) as usize;
     let mut matched = 0i32;
@@ -773,7 +771,7 @@ fn resolve_dcsbtaozhou(ctx: &mut Ctx<'_>, owner: PlayerId) {
 /// Virtual basic/normal-trick card use (`subcards = []`), deducting mark count by
 /// `cards_lost.len()` when target takes damage.
 fn resolve_dcxiangchen(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    let target = first_other_alive(ctx.core, owner).unwrap_or(owner);
+    let target = hostile_target(ctx, owner).unwrap_or(owner);
     let initial = ctx
         .core
         .vm_aux
@@ -821,7 +819,7 @@ fn resolve_potcuifeng(ctx: &mut Ctx<'_>, owner: PlayerId) {
     ctx.core.vm_aux.inc_once(owner, 2, "potcuifeng");
     let sha_played = turn_var(ctx.core, owner, "sha_played_this_turn");
     set_flag(ctx.core, owner, "potcuifeng_damage_bonus", sha_played);
-    if let Some(target) = first_other_alive(ctx.core, owner) {
+    if let Some(target) = hostile_target(ctx, owner) {
         let total_dmg = 1 + sha_played as i32;
         ctx.emit(EventData::Damage(crate::machine::damage_data(
             Some(owner),

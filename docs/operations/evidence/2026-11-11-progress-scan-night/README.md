@@ -20,9 +20,9 @@
 
 1. **清单状态改为数据驱动**：新增 `docs/migration/g0/inventory_status.json`（4,424 项，逐项带状态、复核人、测试名、差别字段），`decision34_inventory_builder.py` 不再写死「忠实实现」。当前计数为已复核等价 4／简化近似 4,420／缺失 0。
 2. **签署表与扩展台账如实降级**：第①项按 4/4,424（0.09%）填写，整包八项签署保持 0/37。
-3. **同场景截图对照第一次是真的**：`apps/web-client/scripts/tabletop-comparison-cdp.mjs` 在 headless Chrome 里实际运行上游琉璃版进入 5 人身份局，与原生牌桌并排截图（[对照图](../tabletop-comparison.png)）。
+3. **同场景截图对照第一次是真的**：`apps/web-client/scripts/tabletop-comparison-cdp.mjs` 在 headless Chrome 里实际运行上游琉璃版进入 5 人身份局，与原生牌桌并排截图（[对照图](../2026-11-11-tabletop-and-spine40/tabletop-comparison.png)）。
 4. **牌桌组件有实际改动**：`BattleBoard.vue`、`SeatCard.vue`、`HandStrip.vue`、`BattleShoushaHud.vue` 合计约 660 行改动。
-5. **Spine**：写了[用户导入与对照指引](../spine40-user-guide.md)，并把二进制解码标为「未经真实资源验证」。
+5. **Spine**：写了[用户导入与对照指引](../2026-11-11-tabletop-and-spine40/spine40-user-guide.md)，并把二进制解码标为「未经真实资源验证」。
 6. **`?desktopEngine=native` 参数现在真实存在**：此前代码只认 `engineTransport`，文档里写的 `?desktopEngine=native` 并不生效；本轮补了别名。
 7. 上一轮抽查点名的 4 个技能（`dddxiaxing`、`boss_chuanyun`、`boss_lingfeng`、`boss_tianyun`）补了条件与随机，并在 `l11_taixu_boss_events.rs` 里有经真实阶段推进触发的测试。
 
@@ -55,7 +55,7 @@
 
 ### 5. 界面：对照做了，结果是不一致
 
-[对照图](../tabletop-comparison.png)显示：上游是环绕式牌桌（座位分布四周、身份标记、中央提示与按钮）；原生是一排横向座位卡片加状态条。两边布局不同。60 FPS 测的是原生这一版。按清单口径，界面项仍应是「示意（待对照）」。
+[对照图](../2026-11-11-tabletop-and-spine40/tabletop-comparison.png)显示：上游是环绕式牌桌（座位分布四周、身份标记、中央提示与按钮）；原生是一排横向座位卡片加状态条。两边布局不同。60 FPS 测的是原生这一版。按清单口径，界面项仍应是「示意（待对照）」。
 
 ### 6. 工作区遗留
 

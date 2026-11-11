@@ -1,6 +1,6 @@
 # G0 · L06 wuxing
 
-> 核验日期：2026-11-10 · 来源仓：`noname-liuli` · 入口：`archive/upstream/noname-liuli/noname/extension/wuxing`  
+> 核验日期：2026-11-11 · 来源仓：`noname-liuli` · 入口：`archive/upstream/noname-liuli/noname/extension/wuxing`  
 > 本页为 E01/G0 深度清单与**裁决 34 逐项上游清单**（武将 / 技能 / 卡牌 / 模式与战役节点 / 配置项 / 界面钩子 / 渲染面 / 现有 `decision34*` 归类）。非整包验收证明。
 
 ## 1. 功能清单
@@ -58,16 +58,16 @@
 - G0 本文档完成不等于 G1–G5；整包状态仍以[台账](../upstream-extension-reconstruction.md)为准。
 - 若需补跑动态样本：在 `scratch/legacy-harness` 运行副本上使用 `scripts/legacy-harness/`，勿写 `archive/upstream`。
 
-## 7. 裁决 34 逐项上游清单与现有实现归类（2026-11-10）
+## 7. 裁决 34 逐项上游清单与现有实现归类（2026-11-11）
 
 - **统计汇总**：上游实体合计 **3** 项（武将 0 / 技能 2 / 卡牌 1 / 模式与战役节点 0 / 配置项 0 / 界面钩子 0 / 渲染面 0）
-- **状态分布**：`忠实实现` **3** 项 · `示意或自造` **0** 项 · `缺失` **0** 项
+- **状态分布**：`已复核等价` **0** 项 · `简化近似` **3** 项 · `缺失` **0** 项 · `上游未定义` **0** 项
 
 ### 7.1 现有 `decision34*` / 前端示意代码逐条归类
 
 | 现有实现项 | 原生文件:行号 | 上游对照 (`file:line`) | 原生落点 | 状态与处置结论 |
 |---|---|---|---|---|
-| `_wuxing` 全局五行生克技能（`resolve_l06_wuxing_skill`） | `crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:184-217` | `archive/upstream/noname-liuli/noname/extension/五行生克/extension.js:9-95` | 原生规则 / `wuxing-upstream-liuli` | 忠实实现（已按上游实现 `_wuxing` 初始五行属性与生克结算并接入正式包 `wuxing-upstream-liuli` 产品路径，支持与 `shahai-zhenfa` 任意顺序共存去重） |
+| `_wuxing` 全局五行生克技能（`resolve_l06_wuxing_skill`） | `crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:184-217` | `archive/upstream/noname-liuli/noname/extension/五行生克/extension.js:9-95` | 原生规则 / `wuxing-upstream-liuli` | 简化近似（待复核：已按上游实现 `_wuxing` 初始五行属性与生克结算并接入正式包 `wuxing-upstream-liuli` 产品路径，支持与 `shahai-zhenfa` 任意顺序共存去重） |
 
 ### 7.2 武将（Generals）（0 项）
 
@@ -77,14 +77,14 @@
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `_shengke` | `archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:62` | 触发='useCardToBegin'；弃牌 | 原生规则 / `rule-vm` 包 | 忠实实现（已按上游语义实现并接入正式包产品路径） |
-| `wuxingpan_skill` | `archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:173` | 五行：出牌阶段限一次，你可以永久改变一张手牌的五行属性 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:change_card_nature`） |
+| `_shengke` | `archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:62` | 触发='useCardToBegin'；弃牌 | 原生规则 / `rule-vm` 包 | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `wuxingpan_skill` | `archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:173` | 五行：出牌阶段限一次，你可以永久改变一张手牌的五行属性 | 原生规则 / `rule-vm` 包 | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
 
 ### 7.4 卡牌（Cards）（1 项）
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `wuxingpan` | `archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:196` | 五行盘：出牌阶段限一次，你可以永久改变一张手牌的五行属性 | 原生规则 / `rule-vm` 包 | 忠实实现 |
+| `wuxingpan` | `archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:196` | 五行盘：出牌阶段限一次，你可以永久改变一张手牌的五行属性 | 原生规则 / `rule-vm` 包 | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
 
 ### 7.5 模式 / 战役节点（Modes & Campaign Nodes）（0 项）
 

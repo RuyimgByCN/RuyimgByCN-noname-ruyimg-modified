@@ -3,7 +3,6 @@
 //! companion skills (`extension_skill.js:1633-3614`), and servant lifecycle/combat skills (`extension_servant.js:11-265`,
 //! `extension.js:2053-3195`).
 
-use super::commit::discard_some;
 use super::*;
 use crate::catalog::{CardKind, EquipSlot};
 
@@ -35,33 +34,9 @@ fn gain_card_by_kind_from_deck_or_discard(
     false
 }
 
-fn discard_one_from_target(ctx: &mut Ctx<'_>, target: PlayerId) -> bool {
-    if let Some(cid) = ctx.core.player(target).hand.first().copied() {
-        ctx.take_hand_card(target, cid);
-        discard_some(ctx, target, vec![cid]);
-        true
-    } else if let Some(cid) = ctx.core.player(target).equips.first().copied() {
-        ctx.take_owned_card(target, cid);
-        discard_some(ctx, target, vec![cid]);
-        true
-    } else {
-        false
-    }
-}
+fn discard_one_from_target(ctx: &mut Ctx<'_>, owner: PlayerId, target: PlayerId) -> bool { discard_target_he(ctx, owner, target).is_some() }
 
-fn steal_one_from_target(ctx: &mut Ctx<'_>, owner: PlayerId, target: PlayerId) -> bool {
-    if let Some(cid) = ctx.core.player(target).hand.first().copied() {
-        ctx.take_hand_card(target, cid);
-        ctx.core.player_mut(owner).hand.push(cid);
-        true
-    } else if let Some(cid) = ctx.core.player(target).equips.first().copied() {
-        ctx.take_owned_card(target, cid);
-        ctx.core.player_mut(owner).hand.push(cid);
-        true
-    } else {
-        false
-    }
-}
+fn steal_one_from_target(ctx: &mut Ctx<'_>, owner: PlayerId, target: PlayerId) -> bool { steal_target_he(ctx, owner, target) }
 
 fn has_weapon_equipped(ctx: &Ctx<'_>, owner: PlayerId) -> bool {
     ctx.core.player(owner).equips.iter().any(|&cid| {
@@ -128,7 +103,7 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
         "txhj_tengsheSkill1" => {
             // 雷奔云谲 (`extension.js:2806`): counterattack damage source with thunder Sha (1/turn)
             set_flag(ctx.core, owner, "l11_tengshe_counter_leisha", 1);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     Some(owner),
                     t,
@@ -169,7 +144,7 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
             let c = flag(ctx.core, owner, "l11_yaya_cards") + 1;
             set_flag(ctx.core, owner, "l11_yaya_cards", c);
             if c.is_multiple_of(4) {
-                if let Some(t) = first_other_alive(ctx.core, owner) {
+                if let Some(t) = hostile_target(ctx, owner) {
                     ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                         Some(owner),
                         t,
@@ -206,13 +181,13 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
         "txhj_qilinSkill2" => {
             // 掌火 (`extension.js:3014`): fire damage -> recover 1 HP & gain 1 card from target
             let _ = ctx.recover(owner, 1, None);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let _ = steal_one_from_target(ctx, owner, t);
             }
         }
         "txhj_qilinSkill3" => {
             // 腾焰飞芒 (`extension.js:3032`): virtual Huogong -> 1 fire damage if target has hand card
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     Some(owner),
                     t,
@@ -237,7 +212,7 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
         "txhj_ditingSkill3" => {
             // 巧捷万端 (`extension.js:3118`): phaseEnd -> draw X & deal 1 damage to X enemies (min 1)
             ctx.start_draw(owner, 1);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     Some(owner),
                     t,
@@ -249,7 +224,7 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
         }
         "txhj_qiaoqiaoSkill1" => {
             // 慧心巧思 (`extension.js:3149`): delayed trick added -> enemy loses 1 HP
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::LoseHp { player: t, amount: 1 });
             }
         }
@@ -307,8 +282,8 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
             // 神妙 (`extension_buff.js:1201`): odd hand -> draw 1; even hand -> enemy discards 1
             if ctx.core.player(owner).hand.len() % 2 == 1 {
                 ctx.start_draw(owner, 1);
-            } else if let Some(t) = first_other_alive(ctx.core, owner) {
-                let _ = discard_one_from_target(ctx, t);
+            } else if let Some(t) = hostile_target(ctx, owner) {
+                let _ = discard_one_from_target(ctx, owner, t);
             }
         }
         "txhj_ruiSkill3" | "txhj_yanSkill1" | "txhj_xuanwuSkill3" => {
@@ -322,7 +297,7 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
         }
         "txhj_yanSkill2" => {
             // 反计 (`extension_buff.js:1256`): counter Sha -> 1 damage & recover 1 HP
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     Some(owner),
                     t,
@@ -341,14 +316,14 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
                     crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
                 ) {
                     ctx.start_draw(owner, 2);
-                } else if let Some(t) = first_other_alive(ctx.core, owner) {
+                } else if let Some(t) = hostile_target(ctx, owner) {
                     let _ = steal_one_from_target(ctx, owner, t);
                 }
             }
         }
         "txhj_liuliSkill1" => {
             // 墨玉点雪 (`extension_buff.js:1278`): lose card off-turn -> 1 damage to current player
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     Some(owner),
                     t,
@@ -366,7 +341,7 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
         }
         "txhj_manmanSkill1" => {
             // 弄鬼掉猴 (`extension_buff.js:1300`): virtual Nanman -> 1 damage & draw 1
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     Some(owner),
                     t,
@@ -379,7 +354,7 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
         }
         "txhj_manmanSkill2" => {
             // 捣蛋 (`extension_buff.js:1311`): damage -> gain 1 card from target
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let _ = steal_one_from_target(ctx, owner, t);
             }
         }
@@ -398,7 +373,7 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
                 .filter(|&p| p != owner && ctx.core.player(p).alive && ctx.core.player(p).equips.len() <= my_eq)
                 .collect();
             for t in targets {
-                if let Some(cid) = ctx.core.player(t).hand.first().copied() {
+                if let Some(cid) = choose_enemy_card(ctx, owner, t) {
                     ctx.take_hand_card(t, cid);
                     ctx.core.player_mut(owner).hand.push(cid);
                 }
@@ -406,7 +381,7 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
         }
         "txhj_xuanwuSkill2" => {
             // 蛇影 (`extension_buff.js:1366`): discard hand -> 1 damage & draw 1
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     Some(owner),
                     t,
@@ -494,8 +469,8 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
             }
         }
         "buff_txhj_jipodizhen" | "_buff_txhj_jipodizhen" => {
-            if let Some(t) = first_other_alive(ctx.core, owner) {
-                let _ = discard_one_from_target(ctx, t);
+            if let Some(t) = hostile_target(ctx, owner) {
+                let _ = discard_one_from_target(ctx, owner, t);
             }
         }
         "buff_txhj_wenhezhenlue" | "_buff_txhj_wenhezhenlue" => {
@@ -569,8 +544,8 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
         }
         "buff_txhj_baijujianchu" | "_buff_txhj_baijujianchu" => {
             // `extension_buff.js:332`: normal Sha damage -> discard 1 from target
-            if let Some(t) = first_other_alive(ctx.core, owner) {
-                let _ = discard_one_from_target(ctx, t);
+            if let Some(t) = hostile_target(ctx, owner) {
+                let _ = discard_one_from_target(ctx, owner, t);
             }
         }
         "buff_txhj_juejingzhice" | "_buff_txhj_juejingzhice" => {
@@ -598,7 +573,7 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
         }
         "buff_txhj_wuweizhile" | "_buff_txhj_wuweizhile" | "txhj_wuweizhile" => {
             // `extension_buff.js:365`: target's Le resolves -> target hand limit -1
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let prev = flag(ctx.core, t, "l11_wuweizhile_minus1");
                 set_flag(ctx.core, t, "l11_wuweizhile_minus1", prev + 1);
             }
@@ -669,7 +644,7 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
         | "buff_txhj_fenchengluetu"
         | "buff_txhj_shenhanxueyin" => {
             // `extension_buff.js:475, 497, 563, 629`: steal/gain 1 card from target or discard
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 if !steal_one_from_target(ctx, owner, t) {
                     if let Some(cid) = ctx.core.discard.pop() {
                         ctx.core.player_mut(owner).hand.push(cid);
@@ -687,8 +662,8 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
         | "buff_txhj_huangtianzhinu"
         | "_buff_txhj_huangtianzhinu" => {
             // `extension_buff.js:431, 442, 552, 596, 695`: target discards 1 card
-            if let Some(t) = first_other_alive(ctx.core, owner) {
-                let _ = discard_one_from_target(ctx, t);
+            if let Some(t) = hostile_target(ctx, owner) {
+                let _ = discard_one_from_target(ctx, owner, t);
             }
         }
         "buff_txhj_cebeibuyu" | "_buff_txhj_cebeibuyu" => {
@@ -716,7 +691,7 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
         }
         "buff_txhj_huangtiannizhuan" | "_buff_txhj_huangtiannizhuan" | "txhj_huangtiannizhuan" => {
             // `extension_buff.js:398`: enemy Lightning reverses -> 3 thunder damage on enemy
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     None,
                     t,
@@ -737,8 +712,8 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
         }
         "buff_txhj_mingjingzhiyan" | "_buff_txhj_mingjingzhiyan" => {
             // `extension_buff.js:196`: Guohe discards 1 extra card from target
-            if let Some(t) = first_other_alive(ctx.core, owner) {
-                let _ = discard_one_from_target(ctx, t);
+            if let Some(t) = hostile_target(ctx, owner) {
+                let _ = discard_one_from_target(ctx, owner, t);
             }
         }
         "buff_txhj_wolongmice" => {
@@ -758,7 +733,7 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
         "buff_txhj_shierqicejin" | "_buff_txhj_shierqicejin" | "txhj_shierqicejin" => {
             // `extension_buff.js:415`: ally AOE immunity (`l11_mod:txmanzhen`) and 1 damage to enemy
             set_flag(ctx.core, owner, "l11_mod:txmanzhen", 1);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data(Some(owner), t, 1)));
             }
         }
@@ -769,7 +744,7 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
         }
         "buff_txhj_huangtianyili" | "_buff_txhj_huangtianyili" => {
             // `extension_buff.js:385`: judge treated as Spade 5 -> 3 thunder damage to enemy
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     Some(owner),
                     t,
@@ -781,7 +756,7 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
         }
         "buff_txhj_huangtianzhizu" | "_buff_txhj_huangtianzhizu" => {
             // `extension_buff.js:405`: before judge, enemy loses 1 HP
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::LoseHp { player: t, amount: 1 });
             }
         }
@@ -797,7 +772,7 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
         }
         "txhj_kapaikeshi" => {
             // `extension_buff.js:810`: view enemy hand and steal 1 card
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let _ = steal_one_from_target(ctx, owner, t);
             }
         }

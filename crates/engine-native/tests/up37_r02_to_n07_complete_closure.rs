@@ -1,3 +1,5 @@
+#![allow(deprecated)]
+
 //! Batch 18 (`UP37` Complete Closure: `R02`, `R03`, `R04`, `R06`, `R07`, `R08`, `R09`,
 //! `N02–N07`, `I02`, `I03`, `I05`) end-to-end verification suite.
 
@@ -59,7 +61,7 @@ fn find_general(e: &Engine, name: &str) -> u16 {
 }
 
 fn invoke_up37_op(e: &mut Engine, owner: u8, skill_name: &str, skill_id: u32) {
-    let out = e.debug_commit_effect(
+    let out = e.debug_execute_effect(
         skill_name,
         owner,
         EffectRequest::StorageSet {
@@ -166,7 +168,7 @@ fn up37_r03_starbishi_counts_and_triggers_on_judge_zone_card_loss() {
     let judge_card = e.debug_place_judge(0, "le");
 
     // Discard all cards in P0's judge zone via host primitive.
-    let out = e.debug_commit_effect(
+    let out = e.debug_execute_effect(
         "starbishi",
         0,
         EffectRequest::DiscardAllOwnJudge {
@@ -269,7 +271,7 @@ fn up37_r06_jige_virtual_empty_subcards_and_dcsbjuzhan_abolished_weapon_slot() {
     );
 
     // Also verify EquipWeaponFromDrawPile respects abolished weapon slot.
-    let out = e.debug_commit_effect(
+    let out = e.debug_execute_effect(
         "dcsbjuzhan",
         1,
         EffectRequest::EquipWeaponFromDrawPile {
@@ -746,7 +748,7 @@ fn up37_i02_death_flow_emits_die_audio_with_c29_skin_override_and_baseline_count
     e.debug_assemble_general_def(2, g_xushao);
     set_flag(&mut e, 2, "c29_skin_id", 1);
 
-    let out1 = e.debug_commit_effect(
+    let out1 = e.debug_execute_effect(
         "test",
         0,
         EffectRequest::KillPlayer {
@@ -760,7 +762,7 @@ fn up37_i02_death_flow_emits_die_audio_with_c29_skin_override_and_baseline_count
         .take_public_presentation()
         .expect("public presentation batch after first kill");
 
-    let out2 = e.debug_commit_effect(
+    let out2 = e.debug_execute_effect(
         "test",
         0,
         EffectRequest::KillPlayer {
@@ -843,7 +845,7 @@ fn up37_r03_and_r04_cross_player_isolation_and_jsrgzonghai_dying_save_forbid() {
     e.debug_set_turn(0, Phase::Play, 1);
     let _p1_judge = e.debug_place_judge(1, "le");
     let p0_hand_before = e.state_core().player(0).hand.len();
-    let out = e.debug_commit_effect(
+    let out = e.debug_execute_effect(
         "test",
         1,
         EffectRequest::DiscardAllOwnJudge {
@@ -914,7 +916,7 @@ fn up37_r06_jige_mutual_sha_discard_and_dcsbjuzhan_multi_slot_disable_and_replac
     );
     set_flag(&mut e, 1, "disabled_equip_slots", 0);
 
-    let out = e.debug_commit_effect(
+    let out = e.debug_execute_effect(
         "dcsbjuzhan",
         0,
         EffectRequest::DisableEquipSlots {
@@ -1013,7 +1015,7 @@ fn up37_n03_n05_and_ngsa_107_save_restore_roundtrip() {
     // 1. twrenfang deduplication: discarding 2 cards in Discard phase must add exactly +2 marks (not double-counted).
     let d1 = e.debug_place(1, "shan");
     let d2 = e.debug_place(1, "tao");
-    let out_disc = e.debug_commit_effect(
+    let out_disc = e.debug_execute_effect(
         "test",
         1,
         EffectRequest::DiscardAllHandAndEquip {

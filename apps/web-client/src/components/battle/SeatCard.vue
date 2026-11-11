@@ -17,6 +17,7 @@ const props = defineProps<{
   decadeUi?: DecadeUiRuntimeState;
   skinSwitch?: SkinSwitchRuntimeState;
   decadeStyle?: string;
+  l20Marks?: Record<string, number>;
 }>();
 
 const emit = defineEmits<{
@@ -34,6 +35,34 @@ const isChained = computed(() => Boolean(props.seat.linked));
 const chukuangOverlay = computed(() => {
   const act = props.skinSwitch?.lastChukuangAction;
   return act && act.seat === props.seat.player ? act : null;
+});
+
+const L20_METAS: Record<string, { label: string; icon: string }> = {
+  longmark: { label: "龙印", icon: "🐉" },
+  bahu: { label: "跋扈", icon: "⚡" },
+  feiyan: { label: "飞扬", icon: "🦅" },
+  danlie: { label: "胆裂", icon: "💥" },
+  fengyin: { label: "封印", icon: "⛓" },
+  fuhun: { label: "父魂", icon: "⚔" },
+  guimen: { label: "鬼门", icon: "⛩" },
+  hejie: { label: "和解", icon: "🤝" },
+  huxiao: { label: "虎啸", icon: "🐯" },
+  jianying: { label: "渐营", icon: "🏹" },
+  jinfan: { label: "锦帆", icon: "⛵" },
+  mohua: { label: "魔化", icon: "👿" },
+  niepan: { label: "涅槃", icon: "🪽" },
+  biaoji: { label: "标记", icon: "✦" },
+};
+
+const activeL20Marks = computed(() => {
+  if (!props.l20Marks) return [];
+  const list: Array<{ key: string; label: string; icon: string; count: number }> = [];
+  for (const [key, count] of Object.entries(props.l20Marks)) {
+    if (typeof count === "number" && count > 0 && L20_METAS[key]) {
+      list.push({ key, label: L20_METAS[key].label, icon: L20_METAS[key].icon, count });
+    }
+  }
+  return list;
 });
 
 function hpIcon(hp: number, _maxHp: number, alive: boolean): string {
@@ -60,6 +89,8 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
       'target-selectable': isTargetMode && isSelectableTarget,
       'drop-target': isDropTarget,
       'current-turn': Boolean(currentTurn),
+      'has-jiu-buff': hasJiuBuff,
+      'is-chained': isChained,
     }"
     :data-decade-style="decadeStyle ?? decadeUi?.layoutVariant ?? 'shizhounian'"
     role="listitem"
@@ -68,6 +99,11 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
     @click="isTargetMode && isSelectableTarget && emit('select', seat.player)"
     @keydown.enter="isTargetMode && isSelectableTarget && emit('select', seat.player)"
   >
+    <div v-if="isChained" class="seat-chain-bar" aria-hidden="true">
+      <span class="chain-link">⛓</span>
+      <span class="chain-link">⛓</span>
+      <span class="chain-link">⛓</span>
+    </div>
     <header>
       <div class="seat-tags">
         <span v-if="self" class="tag">你</span>
@@ -79,7 +115,8 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
         v-if="chukuangOverlay"
         class="chukuang-badge"
         data-testid="seat-chukuang-overlay"
-        :style="{ transform: chukuangOverlay.flipX ? 'scaleX(-1)' : 'none' }"
+        :class="{ 'flip-x': chukuangOverlay.flipX }"
+        :style="{ transform: chukuangOverlay.flipX ? 'scaleX(-1) translateY(-6px)' : 'translateY(-6px)' }"
       >⚡{{ chukuangOverlay.action }}</span>
     </header>
     <div class="generals" aria-label="双将">
@@ -109,13 +146,33 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
       <span>手牌 {{ seat.hand_count }}</span>
       <span>{{ identityLabel }}</span>
     </div>
+    <!-- L08 Decade mark badges -->
     <div v-if="decadeBadges.length > 0" class="decade-seat-marks" data-testid="seat-decade-marks">
       <span
         v-for="mk in decadeBadges"
         :key="mk.skillId"
         class="seat-mark-chip"
+        :class="{
+          'mark-yinyang-yang': mk.badgeText.includes('阳'),
+          'mark-yinyang-yin': mk.badgeText.includes('阴'),
+          'mark-limited': mk.badgeText.includes('限') || mk.badgeText.includes('✕'),
+        }"
         :title="mk.upstreamRef"
       >{{ mk.label }}[{{ mk.badgeText }}]</span>
+    </div>
+    <!-- L20 14 Mark badges -->
+    <div v-if="activeL20Marks.length > 0" class="seat-l20-marks" data-testid="l20-mark-badges">
+      <span
+        v-for="mk in activeL20Marks"
+        :key="mk.key"
+        class="l20-mark-badge"
+        :class="`mark-${mk.key}`"
+        :title="`${mk.label} ×${mk.count}`"
+      >
+        <span class="mark-icon">{{ mk.icon }}</span>
+        <span class="mark-name">{{ mk.label }}</span>
+        <span v-if="mk.count > 1" class="mark-count">×{{ mk.count }}</span>
+      </span>
     </div>
     <div v-if="equipCards.length > 0" class="equip-zone" aria-label="装备区">
       <div
@@ -310,15 +367,54 @@ header {
   background: #b93829;
   color: #fff;
 }
+.seat.has-jiu-buff {
+  border-color: #d93829 !important;
+  animation: jiu-glow 1.4s ease-in-out infinite alternate;
+}
+@keyframes jiu-glow {
+  0% { box-shadow: inset 0 0 10px rgba(220, 20, 60, 0.4), 0 0 6px rgba(185, 40, 25, 0.3); }
+  100% { box-shadow: inset 0 0 20px rgba(220, 20, 60, 0.75), 0 0 16px rgba(220, 40, 40, 0.6); }
+}
+.seat-chain-bar {
+  position: absolute;
+  top: 45%;
+  left: -4%;
+  right: -4%;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  transform: rotate(-14deg);
+  background: linear-gradient(90deg, rgba(77, 120, 168, 0.1), rgba(77, 120, 168, 0.85) 50%, rgba(77, 120, 168, 0.1));
+  border-top: 1px solid #7eb6ff;
+  border-bottom: 1px solid #3a5c88;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  z-index: 5;
+}
+.chain-link {
+  font-size: 0.95rem;
+  color: #d8e8ff;
+  text-shadow: 0 0 4px #4d78a8;
+}
 .chukuang-badge {
   display: inline-block;
-  padding: 0.1rem 0.4rem;
+  padding: 0.15rem 0.5rem;
   border-radius: 4px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  background: rgba(232, 165, 75, 0.22);
-  border: 1px solid var(--accent);
-  color: #f3d27a;
+  font-size: 0.72rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, rgba(232, 165, 75, 0.45), rgba(200, 100, 30, 0.45));
+  border: 1px solid #f3d27a;
+  color: #fff9e6;
+  box-shadow: 0 2px 8px rgba(232, 165, 75, 0.6);
+  animation: chukuang-leap 0.4s ease-out;
+  transition: transform 0.2s ease;
+}
+@keyframes chukuang-leap {
+  0% { transform: scale(0.8) translateY(0); opacity: 0; }
+  50% { transform: scale(1.15) translateY(-8px); opacity: 1; }
+  100% { transform: translateY(-6px); opacity: 1; }
 }
 .decade-seat-marks {
   display: flex;
@@ -332,6 +428,46 @@ header {
   font-size: 0.68rem;
   background: rgba(232, 165, 75, 0.15);
   border: 1px solid rgba(232, 165, 75, 0.4);
+  color: #f3d27a;
+}
+.seat-mark-chip.mark-yinyang-yang {
+  background: rgba(232, 165, 75, 0.25);
+  border-color: #f3d27a;
+  color: #ffe6a0;
+}
+.seat-mark-chip.mark-yinyang-yin {
+  background: rgba(140, 60, 180, 0.25);
+  border-color: #c078f0;
+  color: #e8c8ff;
+}
+.seat-mark-chip.mark-limited {
+  background: rgba(185, 40, 25, 0.25);
+  border-color: #e05a5a;
+  color: #ffb0b0;
+  font-weight: 700;
+}
+.seat-l20-marks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+  margin-top: 0.35rem;
+}
+.l20-mark-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.08rem 0.32rem;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  background: rgba(40, 100, 160, 0.25);
+  border: 1px solid rgba(91, 159, 212, 0.45);
+  color: #b0d8ff;
+}
+.mark-icon { font-size: 0.75rem; }
+.mark-count {
+  font-size: 0.65rem;
+  font-family: var(--mono);
   color: #f3d27a;
 }
 </style>

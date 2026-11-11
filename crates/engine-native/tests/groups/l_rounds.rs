@@ -31,6 +31,9 @@ mod l11_taixu_eight;
 #[path = "../decision34_round4_l11_taixu.rs"]
 mod decision34_round4_l11_taixu;
 
+#[path = "../l11_taixu_boss_events.rs"]
+mod l11_taixu_boss_events;
+
 #[path = "../l12_rzsh_eight.rs"]
 mod l12_rzsh_eight;
 

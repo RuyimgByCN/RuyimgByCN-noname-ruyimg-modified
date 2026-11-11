@@ -1,6 +1,6 @@
 # G0 · L05 coin
 
-> 核验日期：2026-11-10 · 来源仓：`noname-liuli` · 入口：`archive/upstream/noname-liuli/noname/extension/coin`  
+> 核验日期：2026-11-11 · 来源仓：`noname-liuli` · 入口：`archive/upstream/noname-liuli/noname/extension/coin`  
 > 本页为 E01/G0 深度清单与**裁决 34 逐项上游清单**（武将 / 技能 / 卡牌 / 模式与战役节点 / 配置项 / 界面钩子 / 渲染面 / 现有 `decision34*` 归类）。非整包验收证明。
 
 ## 1. 功能清单
@@ -59,10 +59,10 @@
 - G0 本文档完成不等于 G1–G5；整包状态仍以[台账](../upstream-extension-reconstruction.md)为准。
 - 若需补跑动态样本：在 `scratch/legacy-harness` 运行副本上使用 `scripts/legacy-harness/`，勿写 `archive/upstream`。
 
-## 7. 裁决 34 逐项上游清单与现有实现归类（2026-11-10）
+## 7. 裁决 34 逐项上游清单与现有实现归类（2026-11-11）
 
 - **统计汇总**：上游实体合计 **4** 项（武将 0 / 技能 0 / 卡牌 0 / 模式与战役节点 0 / 配置项 0 / 界面钩子 0 / 渲染面 4）
-- **状态分布**：`忠实实现` **4** 项 · `示意或自造` **0** 项 · `缺失` **0** 项
+- **状态分布**：`已复核等价` **0** 项 · `简化近似` **4** 项 · `缺失` **0** 项 · `上游未定义` **0** 项
 
 ### 7.1 现有 `decision34*` / 前端示意代码逐条归类
 
@@ -96,8 +96,8 @@
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `haveFun.firework` | `archive/upstream/noname-liuli/noname/extension/coin/extension.js:126` | 富甲天下商店特效 `firework`（烟花 Canvas 粒子与启停控制） | 原生规则（`coin.rs`）+ 原生前端组件 | 忠实实现（已在 `coin.rs` 与 `extensionSurfaceRuntime.ts::renderCoinCanvasParticles` 落地） |
-| `haveFun.snow` | `archive/upstream/noname-liuli/noname/extension/coin/extension.js:130` | 富甲天下商店特效 `snow`（下雪 Canvas 粒子与启停控制） | 原生规则（`coin.rs`）+ 原生前端组件 | 忠实实现（已在 `coin.rs` 与 `extensionSurfaceRuntime.ts::renderCoinCanvasParticles` 落地） |
-| `haveFun.star` | `archive/upstream/noname-liuli/noname/extension/coin/extension.js:146` | 富甲天下商店特效 `star`（星云 Canvas 粒子与启停控制） | 原生规则（`coin.rs`）+ 原生前端组件 | 忠实实现（已在 `coin.rs` 与 `extensionSurfaceRuntime.ts::renderCoinCanvasParticles` 落地） |
-| `haveFun.blink` | `archive/upstream/noname-liuli/noname/extension/coin/extension.js:150` | 富甲天下商店特效 `blink`（闪烁 Canvas 粒子与启停控制） | 原生规则（`coin.rs`）+ 原生前端组件 | 忠实实现（已在 `coin.rs` 与 `extensionSurfaceRuntime.ts::renderCoinCanvasParticles` 落地） |
+| `haveFun.firework` | `archive/upstream/noname-liuli/noname/extension/coin/extension.js:126` | 富甲天下商店特效 `firework`（烟花 Canvas 粒子与启停控制） | 原生规则（`coin.rs`）+ 原生前端组件 | 示意（待对照） |
+| `haveFun.snow` | `archive/upstream/noname-liuli/noname/extension/coin/extension.js:130` | 富甲天下商店特效 `snow`（下雪 Canvas 粒子与启停控制） | 原生规则（`coin.rs`）+ 原生前端组件 | 示意（待对照） |
+| `haveFun.star` | `archive/upstream/noname-liuli/noname/extension/coin/extension.js:146` | 富甲天下商店特效 `star`（星云 Canvas 粒子与启停控制） | 原生规则（`coin.rs`）+ 原生前端组件 | 示意（待对照） |
+| `haveFun.blink` | `archive/upstream/noname-liuli/noname/extension/coin/extension.js:150` | 富甲天下商店特效 `blink`（闪烁 Canvas 粒子与启停控制） | 原生规则（`coin.rs`）+ 原生前端组件 | 示意（待对照） |
 

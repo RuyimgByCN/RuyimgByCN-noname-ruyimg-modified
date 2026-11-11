@@ -1,22 +1,9 @@
 //! Decision 34 Authentic Upstream Skill Resolvers for `U08` (`英雄杀` — 104 skills),
 //! `L19` (`末日乱斗` — 66 skills), `L20` (`标记补充` — 74 skills), and `L27` (`选将美化` — 37 skills).
 
-use super::commit::discard_some;
 use super::*;
 
-fn discard_first_he(ctx: &mut Ctx<'_>, p: PlayerId) -> Option<CardId> {
-    if let Some(c) = ctx.core.player(p).hand.first().copied() {
-        ctx.take_hand_card(p, c);
-        discard_some(ctx, p, vec![c]);
-        Some(c)
-    } else if let Some(c) = ctx.core.player(p).equips.first().copied() {
-        ctx.take_owned_card(p, c);
-        discard_some(ctx, p, vec![c]);
-        Some(c)
-    } else {
-        None
-    }
-}
+fn discard_first_he(ctx: &mut Ctx<'_>, p: PlayerId) -> Option<CardId> { discard_one_he(ctx, p) }
 
 pub const U08_YXS_SKILLS: [&str; 107] = [
     "yxs_fanji", "yxs_fanji2", "yxs_menshen3", "yxs_menshen", "yxs_menshen2",
@@ -56,7 +43,7 @@ pub(super) fn resolve_u08_yxs_skill(ctx: &mut Ctx<'_>, executing: &str, owner: P
         executing
     };
     set_flag(ctx.core, owner, &format!("u08_skill:{skill_name}"), 1);
-    let other = first_other_alive(ctx.core, owner).unwrap_or(owner);
+    let other = hostile_target(ctx, owner).unwrap_or(owner);
     match skill_name {
         // yxs_fanji / yxs_fanji2 反击 (`英雄杀/character/skill.js:5-34`):
         "yxs_fanji" | "yxs_fanji2" => {
@@ -163,7 +150,7 @@ pub(super) fn resolve_u08_yxs_skill(ctx: &mut Ctx<'_>, executing: &str, owner: P
         "zbudao" | "zbudao2" => {
             ctx.start_draw(owner, 1);
             if other != owner {
-                if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+                if let Some(c) = choose_own_card(ctx, owner, false) {
                     ctx.take_hand_card(owner, c);
                     ctx.core.player_mut(other).hand.push(c);
                 }
@@ -195,7 +182,7 @@ pub(super) fn resolve_u08_yxs_skill(ctx: &mut Ctx<'_>, executing: &str, owner: P
         // yaoyi 徭役 (`英雄杀/character/skill.js:532-606`):
         "yaoyi" => {
             if other != owner {
-                if let Some(c) = ctx.core.player(other).hand.first().copied() {
+                if let Some(c) = choose_enemy_card(ctx, owner, other) {
                     ctx.take_hand_card(other, c);
                     ctx.core.player_mut(owner).hand.push(c);
                 }
@@ -362,7 +349,7 @@ pub(super) fn resolve_u08_yxs_skill(ctx: &mut Ctx<'_>, executing: &str, owner: P
         "shentan" => {
             let _ = discard_first_he(ctx, owner);
             if other != owner {
-                if let Some(c) = ctx.core.player(other).hand.first().copied() {
+                if let Some(c) = choose_enemy_card(ctx, owner, other) {
                     ctx.take_hand_card(other, c);
                     ctx.core.player_mut(owner).hand.push(c);
                 }
@@ -412,7 +399,7 @@ pub(super) fn resolve_u08_yxs_skill(ctx: &mut Ctx<'_>, executing: &str, owner: P
         // xiadao 侠盗 (`英雄杀/character/skill.js:1665-1719`):
         "xiadao" => {
             if other != owner {
-                if let Some(c) = ctx.core.player(other).hand.first().copied() {
+                if let Some(c) = choose_enemy_card(ctx, owner, other) {
                     ctx.take_hand_card(other, c);
                     ctx.core.player_mut(owner).hand.push(c);
                 }
@@ -422,7 +409,7 @@ pub(super) fn resolve_u08_yxs_skill(ctx: &mut Ctx<'_>, executing: &str, owner: P
         // lzhangyi 仗义 (`英雄杀/character/skill.js:1720-1781`):
         "lzhangyi" => {
             if other != owner {
-                if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+                if let Some(c) = choose_own_card(ctx, owner, false) {
                     ctx.take_hand_card(owner, c);
                     ctx.core.player_mut(other).hand.push(c);
                 }
@@ -514,7 +501,7 @@ pub(super) fn resolve_u08_yxs_skill(ctx: &mut Ctx<'_>, executing: &str, owner: P
         // wange / wange2 婉歌 (`英雄杀/character/skill.js:2219-2262`):
         "wange" | "wange2" => {
             if other != owner {
-                if let Some(c) = ctx.core.player(other).hand.first().copied() {
+                if let Some(c) = choose_enemy_card(ctx, owner, other) {
                     ctx.take_hand_card(other, c);
                     ctx.core.player_mut(owner).hand.push(c);
                 }

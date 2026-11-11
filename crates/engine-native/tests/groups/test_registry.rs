@@ -49,6 +49,25 @@ fn every_test_file_is_registered_in_exactly_one_group() {
             Some(_) => {}
         }
     }
+    let e2e_dir = tests_dir.join("e2e");
+    if e2e_dir.is_dir() {
+        for entry in fs::read_dir(&e2e_dir).expect("读取 tests/e2e") {
+            let path = entry.expect("目录项").path();
+            let file = path.file_name().and_then(|s| s.to_str()).expect("文件名").to_string();
+            if !path.is_file() || !file.ends_with(".rs") {
+                continue;
+            }
+            let rel = format!("e2e/{file}");
+            match registered.get(&rel) {
+                None => problems.push(format!(
+                    "tests/{rel} 未登记：在 tests/groups/e2e.rs 加入 `#[path = \"../{rel}\"]` 与 `mod {};`",
+                    file.trim_end_matches(".rs")
+                )),
+                Some(groups) if groups.len() > 1 => problems.push(format!("tests/{rel} 重复登记于 {groups:?}")),
+                Some(_) => {}
+            }
+        }
+    }
     for (file, groups) in &registered {
         if !tests_dir.join(file).is_file() {
             problems.push(format!("{groups:?} 登记的 tests/{file} 不存在"));

@@ -13,6 +13,24 @@ FEAT = REPO / "docs" / "operations" / "evidence" / "2026-10-07-e01-feature-inven
 SUMMARY = REPO / "docs" / "operations" / "evidence" / "2026-10-07-e01-feature-inventory" / "feature-summary.json"
 LEDGER = REPO / "docs" / "migration" / "upstream-extension-reconstruction.md"
 
+DEFAULT_ERRATA_BLOCK = (
+    "> **2026-11-11 核对勘正（Claude Code）**：本目录各表的「忠实实现」状态由生成脚本写死，"
+    "未经逐项比对；抽查发现多数技能为简化近似。在逐项复核完成前，「忠实实现」一栏只能读作「已有原生落点」。"
+    "本段为手工添加，重新生成时须保留。见[扫描证据](../../operations/evidence/2026-11-11-progress-scan/README.md)。"
+)
+STATUS_COLUMNS = ("已复核等价", "简化近似", "缺失", "上游未定义")
+
+
+def extract_existing_errata(readme_path: Path) -> str:
+    """从现存 README.md 提取 2026-11-11 核对勘正段，若不存在则回退至默认常量。"""
+    if not readme_path.exists():
+        return DEFAULT_ERRATA_BLOCK
+    text = readme_path.read_text(encoding="utf-8")
+    match = re.search(r"(> \*\*2026-11-11 核对勘正[^\n]*(?:\n>[^\n]*)*)", text)
+    if match:
+        return match.group(1).strip()
+    return DEFAULT_ERRATA_BLOCK
+
 # 目标接口（对照 native-extensions.md）
 INTERFACE_MAP = {
     "content": "内容包（武将/技能/卡牌目录合并 + rule-vm/宿主行为）",
@@ -214,7 +232,7 @@ def render(
     status = (ledger or {}).get("status") or "见台账"
     return f"""# G0 · {sid} {name}
 
-> 核验日期：2026-11-10 · 来源仓：`{repo}` · 入口：`{path}`  
+> 核验日期：2026-11-11 · 来源仓：`{repo}` · 入口：`{path}`  
 > 本页为 E01/G0 深度清单与**裁决 34 逐项上游清单**（武将 / 技能 / 卡牌 / 模式与战役节点 / 配置项 / 界面钩子 / 渲染面 / 现有 `decision34*` 归类）。非整包验收证明。
 
 ## 1. 功能清单
@@ -281,13 +299,13 @@ def main() -> None:
         old_part.unlink()
 
     index_rows = [
-        "| ID | 名称 | 主文档 / 分册 | 武将 | 技能 | 卡牌 | 模式/节点 | 配置 | UI钩子 | 渲染面 | 忠实实现 | 示意或自造 | 缺失 |",
-        "|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
+        "| ID | 名称 | 主文档 / 分册 | 武将 | 技能 | 卡牌 | 模式/节点 | 配置 | UI钩子 | 渲染面 | 已复核等价 | 简化近似 | 缺失 | 上游未定义 |",
+        "|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
     ]
     totals = {
         "generals": 0, "skills": 0, "cards": 0, "modes": 0,
         "configs": 0, "ui_hooks": 0, "surfaces": 0,
-        "忠实实现": 0, "示意或自造": 0, "缺失": 0,
+        "已复核等价": 0, "简化近似": 0, "缺失": 0, "上游未定义": 0,
     }
     part_count = 0
     for sid, e in items:
@@ -302,8 +320,8 @@ def main() -> None:
 
         for k in ("generals", "skills", "cards", "modes", "configs", "ui_hooks", "surfaces"):
             totals[k] += len(inv[k])
-        for k in ("忠实实现", "示意或自造", "缺失"):
-            totals[k] += counts[k]
+        for k in STATUS_COLUMNS:
+            totals[k] += counts.get(k, 0)
 
         body = render(sid, name, repo, path, feat, summ, led, d34_block)
         fname = f"{sid}-{slug_name(name)}.md"
@@ -314,25 +332,40 @@ def main() -> None:
             doc_links.append(f"[{p_fname}](./{p_fname})")
             part_count += 1
         index_rows.append(
-            f"| {sid} | {name} | {' · '.join(doc_links)} | {len(inv['generals'])} | {len(inv['skills'])} | {len(inv['cards'])} | {len(inv['modes'])} | {len(inv['configs'])} | {len(inv['ui_hooks'])} | {len(inv['surfaces'])} | {counts['忠实实现']} | {counts['示意或自造']} | {counts['缺失']} |"
+            f"| {sid} | {name} | {' · '.join(doc_links)} | {len(inv['generals'])} | {len(inv['skills'])} | {len(inv['cards'])} | {len(inv['modes'])} | {len(inv['configs'])} | {len(inv['ui_hooks'])} | {len(inv['surfaces'])} | {counts.get('已复核等价', 0)} | {counts.get('简化近似', 0)} | {counts.get('缺失', 0)} | {counts.get('上游未定义', 0)} |"
         )
 
     index_rows.append(
-        f"| **合计** | **37 来源** | **37 主文档 + {part_count} 分册** | **{totals['generals']}** | **{totals['skills']}** | **{totals['cards']}** | **{totals['modes']}** | **{totals['configs']}** | **{totals['ui_hooks']}** | **{totals['surfaces']}** | **{totals['忠实实现']}** | **{totals['示意或自造']}** | **{totals['缺失']}** |"
+        f"| **合计** | **37 来源** | **37 主文档 + {part_count} 分册** | **{totals['generals']}** | **{totals['skills']}** | **{totals['cards']}** | **{totals['modes']}** | **{totals['configs']}** | **{totals['ui_hooks']}** | **{totals['surfaces']}** | **{totals['已复核等价']}** | **{totals['简化近似']}** | **{totals['缺失']}** | **{totals['上游未定义']}** |"
     )
+
+    readme_file = OUT / "README.md"
+    errata_block = extract_existing_errata(readme_file)
 
     readme = f"""# G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
-核验日期：2026-11-10。每份文档含：
+{errata_block}
+
+核验日期：2026-11-11。每份文档含：
 1. 功能清单、菜单/规则分支语义、目标接口、验证入口与旧行为样本引用；
-2. **裁决 34 逐项上游清单（第 7 节）**：逐项列出上游每个武将、技能、卡牌、模式/战役节点、配置项、界面钩子与渲染面，标明上游 `file:line`、行为摘要、原生落点（`原生规则` / `rule-vm 包` / `原生前端组件`）和当前状态（`忠实实现` / `示意或自造` / `缺失`），以及现有 `decision34*` 代码逐条归类。
+2. **裁决 34 逐项上游清单（第 7 节）**：逐项列出上游每个武将、技能、卡牌、模式/战役节点、配置项、界面钩子与渲染面，标明上游 `file:line`、行为摘要、原生落点（`原生规则` / `rule-vm 包` / `原生前端组件`）和当前状态（`已复核等价` / `简化近似` / `缺失` / `上游未定义`），以及现有 `decision34*` 代码逐条归类。
 
 生成：`python3 scripts/legacy-harness/generate-g0-docs.py`  
-基线：`docs/operations/evidence/2026-10-07-e01-feature-inventory/` + `archive/upstream/` 源码静态扫描 + `packages/extensions/` 正式包对照。
+基线：`docs/operations/evidence/2026-10-07-e01-feature-inventory/` + `archive/upstream/` 源码静态扫描 + `packages/extensions/` 正式包对照 + `docs/migration/g0/inventory_status.json` 数据驱动状态。
 
 {chr(10).join(index_rows)}
 """
-    (OUT / "README.md").write_text(readme, encoding="utf-8")
+    readme_file.write_text(readme, encoding="utf-8")
+
+    # 门禁自检：严防任何生成的 Markdown 文件突破 2,000 行限制
+    oversized = []
+    for md_path in OUT.glob("*.md"):
+        line_count = sum(1 for _ in md_path.open("rb"))
+        if line_count > 2000:
+            oversized.append((md_path.name, line_count))
+    if oversized:
+        raise RuntimeError(f"Gate violation: generated markdown files exceed 2,000 lines: {oversized}")
+
     print(f"wrote {len(items)} main docs + {part_count} part docs + README -> {OUT}")
     print("Totals:", totals)
 

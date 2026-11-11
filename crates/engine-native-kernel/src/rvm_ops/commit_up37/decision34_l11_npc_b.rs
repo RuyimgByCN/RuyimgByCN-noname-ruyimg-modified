@@ -11,24 +11,17 @@ use crate::catalog::{CardKind, EquipSlot, Suit};
 fn discard_up_to_he(ctx: &mut Ctx<'_>, seat: PlayerId, max_n: usize) -> Vec<CardId> {
     let mut removed = Vec::new();
     while removed.len() < max_n {
-        if let Some(cid) = ctx.core.player(seat).hand.first().copied() {
-            ctx.take_hand_card(seat, cid);
-            removed.push(cid);
-        } else if let Some(cid) = ctx.core.player(seat).equips.first().copied() {
-            ctx.take_owned_card(seat, cid);
+        if let Some(cid) = discard_one_he(ctx, seat) {
             removed.push(cid);
         } else {
             break;
         }
     }
-    if !removed.is_empty() {
-        discard_some(ctx, seat, removed.clone());
-    }
     removed
 }
 
 fn move_one_hand_to(ctx: &mut Ctx<'_>, from: PlayerId, to: PlayerId) -> Option<CardId> {
-    let cid = ctx.core.player(from).hand.first().copied()?;
+    let cid = choose_own_card(ctx, from, false)?;
     ctx.take_hand_card(from, cid);
     ctx.core.player_mut(to).hand.push(cid);
     Some(cid)
@@ -42,7 +35,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
     match skill_name {
         "satomi_luodao" => {
             // `key/skill.js:3896`: on Sha target -> inspect target hand; if Shan present discard it, else owner discards 1
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 if let Some(shan) = ctx
                     .core
                     .player(t)
@@ -75,7 +68,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "shangyi" => {
             // `sp/skill.js:43934`: view target hand & discard 1 black card from target
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 if let Some(bc) = ctx
                     .core
                     .player(t)
@@ -88,7 +81,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
                             Suit::Spade | Suit::Club
                         )
                     })
-                    .or_else(|| ctx.core.player(t).hand.first().copied())
+                    .or_else(|| choose_enemy_card(ctx, owner, t))
                 {
                     ctx.take_hand_card(t, bc);
                     discard_some(ctx, t, vec![bc]);
@@ -97,7 +90,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "shefu" => {
             // `sp/skill.js:39282`: at PhaseEnd place 1 card into `伏兵` expansion to cancel opponent's hand card (`d34_l11_mods.rs`)
-            if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+            if let Some(c) = choose_own_card(ctx, owner, false) {
                 ctx.take_hand_card(owner, c);
                 ctx.core
                     .vm_aux
@@ -106,14 +99,14 @@ pub(super) fn try_resolve_l11_npc_skill_b(
                     .or_default()
                     .push(c);
             }
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 set_flag(ctx.core, t, "l11_shefu_ambush", 1);
             }
         }
         "shensu" => {
             // `shenhua/skill.js:7595`: skip phase / discard equip -> deal 1 distance-unlimited Sha damage (`d34_l11_mods.rs`)
             set_flag(ctx.core, owner, "l11_mod:shensu_no_dist", 1);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data(
                     Some(owner),
                     t,
@@ -127,7 +120,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "shunshi" => {
             // `sp2/skill.js:9985`: give 1 card to another character -> +1 draw, +1 Sha limit, +1 hand limit (`d34_l11_mods.rs`)
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let _ = move_one_hand_to(ctx, owner, t);
             }
             ctx.start_draw(owner, 1);
@@ -136,7 +129,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "spshiji" => {
             // `shiji/skill.js:3588`: on elemental damage -> discard all red hand cards from target and target draws equal
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let reds: Vec<CardId> = ctx
                     .core
                     .player(t)
@@ -174,7 +167,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "spwenji" => {
             // `sp2/skill.js:15275`: at PlayPhase begin target gives 1 card to owner -> cards of that name unrespondable (`d34_l11_mods.rs`)
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let _ = move_one_hand_to(ctx, t, owner);
             }
             set_flag(ctx.core, owner, "l11_mod:spwenji_unresp", 1);
@@ -187,8 +180,8 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         "spyishi" => {
             // `newjiang/skill.js:7123`: when dealing damage to target with equips -> damage -1 (`d34_l11_mods.rs`) and steal 1 equip
             set_flag(ctx.core, owner, "l11_mod:spyishi_reduce", 1);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
-                if let Some(eq) = ctx.core.player(t).equips.first().copied() {
+            if let Some(t) = hostile_target(ctx, owner) {
+                if let Some(eq) = choose_enemy_card(ctx, owner, t) {
                     ctx.take_owned_card(t, eq);
                     ctx.core.player_mut(owner).hand.push(eq);
                 }
@@ -220,7 +213,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         "twfenming" => {
             // `tw/skill.js:18052`: PreparePhase link self & target and discard 1 card from each linked character
             ctx.core.player_mut(owner).linked = true;
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.core.player_mut(t).linked = true;
                 let _ = discard_up_to_he(ctx, t, 1);
             }
@@ -273,7 +266,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
                         discard_some(ctx, owner, vec![c]);
                     }
                 }
-                if let Some(t) = first_other_alive(ctx.core, owner) {
+                if let Some(t) = hostile_target(ctx, owner) {
                     let _ = discard_up_to_he(ctx, t, 1);
                 }
             }
@@ -307,8 +300,8 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         "twliancai" => {
             // `tw/skill.js:28937`: at PhaseEnd turn over, steal 1 equip from target, and draw hand up to hp
             ctx.core.player_mut(owner).face_down = !ctx.core.player(owner).face_down;
-            if let Some(t) = first_other_alive(ctx.core, owner) {
-                if let Some(eq) = ctx.core.player(t).equips.first().copied() {
+            if let Some(t) = hostile_target(ctx, owner) {
+                if let Some(eq) = choose_enemy_card(ctx, owner, t) {
                     ctx.take_owned_card(t, eq);
                     ctx.core.player_mut(owner).hand.push(eq);
                 }
@@ -321,7 +314,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "twlingfa" => {
             // `tw/skill.js:26028`: round start decree -> target discards 1 card or takes 1 damage from owner
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 if discard_up_to_he(ctx, t, 1).is_empty() {
                     ctx.emit(EventData::Damage(crate::machine::damage_data(
                         Some(owner),
@@ -333,7 +326,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "twlinglu" => {
             // `tw/skill.js:15134`: PlayPhase begin issue `强令` -> success: target draws 2; failure: target loses 1 HP
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 if flag(ctx.core, t, "l11_twlinglu_done") > 0 {
                     set_flag(ctx.core, t, "l11_twlinglu_done", 0);
                     ctx.start_draw(t, 2);
@@ -359,7 +352,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
             // `tw/skill.js:18681`: PreparePhase draw 1 card, discard 1 card, and lock adjacent target's hand cards (`d34_l11_mods.rs`)
             draw_cards_sync(ctx, owner, 1);
             let _ = discard_up_to_he(ctx, owner, 1);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 set_flag(ctx.core, t, "l11_mod:mdqianxi72", 1);
             }
         }
@@ -391,7 +384,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "twwuhun" => {
             // `tw/skill.js:1842`: add `梦魇` mark on damage source; on death target with most `梦魇` marks loses HP
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let m = flag(ctx.core, t, "l11_mengyan_mark") + 1;
                 set_flag(ctx.core, t, "l11_mengyan_mark", m);
                 if ctx.core.player(t).hp > 1 {
@@ -423,7 +416,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
             let b = flag(ctx.core, owner, "l11_baonvezhi").min(5);
             let cost = (5 - b).max(1) as usize;
             let _ = discard_up_to_he(ctx, owner, cost);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data(
                     Some(owner),
                     t,
@@ -433,7 +426,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "twxiongzheng" => {
             // `tw/skill.js:15235`: RoundStart mark `雄争` character -> virtual Sha on non-attackers or draw 2 for attackers
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data(
                     Some(owner),
                     t,
@@ -444,7 +437,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "twxuanhuo" => {
             // `tw/skill.js:18464`: DrawPhase end give 2 cards to ally -> deal 1 Sha/Duel damage or gain 2 cards from target
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let _ = move_one_hand_to(ctx, t, owner);
                 ctx.emit(EventData::Damage(crate::machine::damage_data(
                     Some(owner),
@@ -455,7 +448,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "twxuechang" => {
             // `tw/skill.js:13587`: pindian with target -> win steals 1 card & virtual Sha if equip; lose takes 1 damage & +1 next damage
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let _ = move_one_hand_to(ctx, t, owner);
                 ctx.emit(EventData::Damage(crate::machine::damage_data(
                     Some(owner),
@@ -468,7 +461,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         "twxuhe" => {
             // `tw/skill.js:16685`: when Sha is dodged -> deal 1 damage to target or next damage +2 (`d34_l11_mods.rs`)
             set_flag(ctx.core, owner, "l11_mod:twxuhe_plus2", 2);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data(
                     Some(owner),
                     t,
@@ -511,15 +504,8 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "twzhengrong" => {
             // `tw/skill.js:18884`: after dealing damage / even-numbered card -> put 1 card from target onto general as `荣`
-            if let Some(t) = first_other_alive(ctx.core, owner) {
-                if let Some(c) = ctx
-                    .core
-                    .player(t)
-                    .hand
-                    .first()
-                    .copied()
-                    .or_else(|| ctx.core.player(t).equips.first().copied())
-                {
+            if let Some(t) = hostile_target(ctx, owner) {
+                if let Some(c) = choose_enemy_card(ctx, owner, t) {
                     if ctx.core.player(t).hand.contains(&c) {
                         ctx.take_hand_card(t, c);
                     } else {
@@ -538,9 +524,9 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "waishi" => {
             // `tw/skill.js:29290`: swap up to X cards with target and draw 1 card (+1 extra when boosted by `renshe`)
-            if let Some(t) = first_other_alive(ctx.core, owner) {
-                let c_me = ctx.core.player(owner).hand.first().copied();
-                let c_th = ctx.core.player(t).hand.first().copied();
+            if let Some(t) = hostile_target(ctx, owner) {
+                let c_me = choose_own_card(ctx, owner, false);
+                let c_th = choose_enemy_card(ctx, owner, t);
                 if let (Some(a), Some(b)) = (c_me, c_th) {
                     ctx.take_hand_card(owner, a);
                     ctx.take_hand_card(t, b);
@@ -557,21 +543,21 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         "wangzun" => {
             // `sp/skill.js:43311`: at other player's PreparePhase -> owner draws 1 card and target hand limit -1 (`d34_l11_mods.rs`)
             ctx.start_draw(owner, 1);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let m = flag(ctx.core, t, "l11_wuweizhile_minus1") + 1;
                 set_flag(ctx.core, t, "l11_wuweizhile_minus1", m);
             }
         }
         "weifeng" => {
             // `newjiang/skill.js:6760`: after using damage card -> inflict `惧` mark on target (+1 damage in `d34_l11_mods.rs`)
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 set_flag(ctx.core, t, "l11_mod:weifeng_ju", 1);
             }
         }
         "weijing" => {
             // `sp/skill.js:35282`: 1/round view-as virtual Sha or Shan (`d34_view_as.rs`)
             set_flag(ctx.core, owner, "l11_viewas:weijing", 1);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data(
                     Some(owner),
                     t,
@@ -590,7 +576,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
                     });
                 }
                 set_flag(ctx.core, owner, "l11_mod:wulie_lie", 1);
-                if let Some(t) = first_other_alive(ctx.core, owner) {
+                if let Some(t) = friendly_target(ctx, owner) {
                     set_flag(ctx.core, t, "l11_mod:wulie_lie", 1);
                 }
             }
@@ -606,7 +592,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "xinfenyue" => {
             // `sp/skill.js:36417`: pindian with target -> steal 1 card, gain 1 Sha from deck, and deal 1 thunder Sha damage
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let _ = move_one_hand_to(ctx, t, owner);
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     Some(owner),
@@ -620,7 +606,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         "xinfu_daigong" => {
             // `mobile/skill.js:30818`: 1/turn on taking damage -> reveal hand; source gives missing-suit card or damage prevented (`d34_l11_mods.rs`)
             set_flag(ctx.core, owner, "l11_mod:xinfu_daigong_ward", 1);
-            if let Some(src) = first_other_alive(ctx.core, owner) {
+            if let Some(src) = hostile_target(ctx, owner) {
                 let _ = move_one_hand_to(ctx, src, owner);
             }
         }
@@ -647,7 +633,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         "xinfu_sidao" => {
             // `sp2/skill.js:15876`: after 2 consecutive cards on same target -> view hand card as Snatch (`d34_view_as.rs`) & steal 1 card
             set_flag(ctx.core, owner, "l11_viewas:xinfu_sidao", 1);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let _ = move_one_hand_to(ctx, t, owner);
             }
         }
@@ -676,7 +662,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         "xinfu_zhaoxin" => {
             // `mobile/skill.js:30856`: put hand card into `望` & draw equal; after DrawPhase give `望` to target and deal 1 damage
             draw_cards_sync(ctx, owner, 1);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let _ = move_one_hand_to(ctx, owner, t);
                 ctx.emit(EventData::Damage(crate::machine::damage_data(
                     Some(owner),
@@ -688,8 +674,8 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         "xinjiewei" => {
             // `shenhua/skill.js:2660`: view equip as Nullify (`d34_view_as.rs`); on turning face up discard 1 & move 1 field card
             set_flag(ctx.core, owner, "l11_viewas:xinjiewei", 1);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
-                if let Some(eq) = ctx.core.player(t).equips.first().copied() {
+            if let Some(t) = hostile_target(ctx, owner) {
+                if let Some(eq) = choose_enemy_card(ctx, owner, t) {
                     ctx.take_owned_card(t, eq);
                     ctx.core.player_mut(owner).equips.push(eq);
                 }
@@ -699,7 +685,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
             // `shenhua/skill.js:2627`: at PhaseEnd turn over, draw 4 cards, and discard 1 hand card (or equip it if equip)
             ctx.core.player_mut(owner).face_down = !ctx.core.player(owner).face_down;
             draw_cards_sync(ctx, owner, 4);
-            if let Some(cid) = ctx.core.player(owner).hand.first().copied() {
+            if let Some(cid) = choose_own_card(ctx, owner, false) {
                 ctx.take_hand_card(owner, cid);
                 if ctx.catalog.cards[cid as usize].kind.is_equip() {
                     ctx.core.player_mut(owner).equips.push(cid);
@@ -710,8 +696,8 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "xinkuangfu" => {
             // `huicui.js:10136`: discard 1 equip from field -> deal 1 virtual Sha damage and draw 2 cards
-            if let Some(t) = first_other_alive(ctx.core, owner) {
-                if let Some(eq) = ctx.core.player(t).equips.first().copied() {
+            if let Some(t) = hostile_target(ctx, owner) {
+                if let Some(eq) = choose_enemy_card(ctx, owner, t) {
                     ctx.take_owned_card(t, eq);
                     discard_some(ctx, t, vec![eq]);
                 }
@@ -731,7 +717,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "yechou" => {
             // `sp2/skill.js:8414`: on death -> target with lost HP > 1 loses 1 HP at turn end
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::LoseHp {
                     player: t,
                     amount: 1,
@@ -762,13 +748,13 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         "yise" => {
             // `sp2/skill.js:4647`: when another character gains owner's card -> red heals 1 HP, black adds +1 Sha damage vulnerability (`d34_l11_mods.rs`)
             let _ = ctx.recover(owner, 1, None);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 set_flag(ctx.core, t, "l11_mod:yise_black_vuln", 1);
             }
         }
         "yjjianshu" => {
             // `offline.js:5917`: give 1 hand card to target -> target clashes and loser loses 1 HP
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let _ = move_one_hand_to(ctx, owner, t);
                 ctx.emit(EventData::LoseHp {
                     player: t,
@@ -780,8 +766,8 @@ pub(super) fn try_resolve_l11_npc_skill_b(
             // `refresh.js:7126`: limited 1/game -> move up to 3 equip cards on field
             if flag(ctx.core, owner, "l11_yongjin_used") == 0 {
                 set_flag(ctx.core, owner, "l11_yongjin_used", 1);
-                if let Some(t) = first_other_alive(ctx.core, owner) {
-                    if let Some(eq) = ctx.core.player(t).equips.first().copied() {
+                if let Some(t) = hostile_target(ctx, owner) {
+                    if let Some(eq) = choose_enemy_card(ctx, owner, t) {
                         ctx.take_owned_card(t, eq);
                         ctx.core.player_mut(owner).equips.push(eq);
                     }
@@ -800,7 +786,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "yuce" => {
             // `yijiang.js:13035`: after taking damage reveal 1 hand card -> source discards 1 different-type card or owner recovers 1 HP
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 if discard_up_to_he(ctx, t, 1).is_empty() {
                     let _ = ctx.recover(owner, 1, None);
                 } else {
@@ -825,7 +811,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
             // `sp.js:20867`: at PlayPhase begin discard 1 hand card -> target uses Jiu (`l11_mod:txfusha`) and takes 1 damage if not owner
             let _ = discard_up_to_he(ctx, owner, 1);
             set_flag(ctx.core, owner, "l11_mod:txfusha", 1);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data(
                     Some(owner),
                     t,
@@ -839,13 +825,13 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "zhidao" => {
             // `sp.js:17448`: after first damage dealt in turn -> gain 1 card each from target's hand, equip, and judge zones
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let _ = move_one_hand_to(ctx, t, owner);
-                if let Some(eq) = ctx.core.player(t).equips.first().copied() {
+                if let Some(eq) = choose_enemy_card(ctx, owner, t) {
                     ctx.take_owned_card(t, eq);
                     ctx.core.player_mut(owner).hand.push(eq);
                 }
-                if let Some(jc) = ctx.core.player(t).judge.first().copied() {
+                if let Some(&jc) = ctx.core.player(t).judge.last() {
                     ctx.take_owned_card(t, jc);
                     ctx.core.player_mut(owner).hand.push(jc);
                 }
@@ -854,15 +840,8 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         "zhiman" => {
             // `yijiang.js:9766`: when dealing damage -> prevent damage (`d34_l11_mods.rs`) and gain 1 equip/judge card from target
             set_flag(ctx.core, owner, "l11_mod:zhiman_prevent", 1);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
-                if let Some(eq) = ctx
-                    .core
-                    .player(t)
-                    .equips
-                    .first()
-                    .copied()
-                    .or_else(|| ctx.core.player(t).judge.first().copied())
-                {
+            if let Some(t) = hostile_target(ctx, owner) {
+                if let Some(eq) = choose_enemy_card(ctx, owner, t) {
                     ctx.take_owned_card(t, eq);
                     ctx.core.player_mut(owner).hand.push(eq);
                 }
@@ -881,7 +860,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "zhongyong" => {
             // `yijiang.js:7302`: when Sha is dodged -> give Shan to ally and deal 1 extra Sha damage to target
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data(
                     Some(owner),
                     t,
@@ -891,7 +870,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "zhuide" => {
             // `sp2/skill.js:6136`: on death -> another alive character gains up to 4 basic cards from deck
-            let ally = first_other_alive(ctx.core, owner).unwrap_or(owner);
+            let ally = friendly_target(ctx, owner).unwrap_or(owner);
             let mut gained = 0usize;
             let mut i = 0;
             while i < ctx.core.deck.len() && gained < 4 {
@@ -933,7 +912,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
                     }
                 }
                 ctx.start_draw(owner, 2);
-                if let Some(t) = first_other_alive(ctx.core, owner) {
+                if let Some(t) = hostile_target(ctx, owner) {
                     ctx.emit(EventData::Damage(crate::machine::damage_data(
                         Some(owner),
                         t,

@@ -46,8 +46,9 @@ fn find_general(e: &Engine, name: &str) -> u16 {
         .unwrap_or_else(|| panic!("general {name} not found in catalog"))
 }
 
+#[allow(deprecated)]
 fn invoke_p9_op(e: &mut Engine, owner: u8, skill_name: &str, skill_id: u32) {
-    let out = e.debug_commit_effect(
+    let out = e.debug_execute_effect(
         skill_name,
         owner,
         EffectRequest::StorageSet {

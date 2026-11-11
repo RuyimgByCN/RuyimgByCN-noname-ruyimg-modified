@@ -157,7 +157,8 @@ async function onSkeletonFileChange(ev: Event) {
   } else {
     importedRawAsset.value = new TextDecoder("utf-8").decode(buf);
   }
-  emit("import-status", `动皮导入 (${file.name}) → ${skinResolution.value.status}: ${skinResolution.value.reason}`);
+  const isBinaryNote = file.name.toLowerCase().endsWith(".skel") ? " [二进制解码：未经真实资源验证，建议优先使用 .json]" : "";
+  emit("import-status", `动皮导入 (${file.name}) → ${skinResolution.value.status}: ${skinResolution.value.reason}${isBinaryNote}`);
   renderCurrentPose();
 }
 
@@ -207,6 +208,8 @@ function onClearImportedAsset() {
   renderCurrentPose();
 }
 
+const isBinaryAsset = computed(() => importedRawAsset.value instanceof Uint8Array);
+
 onMounted(() => {
   renderCurrentPose();
 });
@@ -236,7 +239,7 @@ watch(
       data-testid="spine-webgl-canvas"
     ></canvas>
     <span class="tiny" data-testid="l24-skin-transform-meta">
-      Spine 4.0 净室 · 动作:{{ activeClip }} · 偏移({{ standX }},{{ standY }}) · 缩放 {{ scalePct }}% · 资产状态:{{ skinResolution.status }} · WebGL批次:{{ lastGlStats.drawCallCount }}/{{ lastGlStats.triangleCount }}△
+      Spine 4.0 净室 · 动作:{{ activeClip }} · 偏移({{ standX }},{{ standY }}) · 缩放 {{ scalePct }}% · 资产状态:{{ skinResolution.status }}{{ isBinaryAsset ? " (二进制:未经真实资源验证)" : "" }} · WebGL批次:{{ lastGlStats.drawCallCount }}/{{ lastGlStats.triangleCount }}△
     </span>
     <button type="button" data-testid="btn-l24-trigger-clip" @click="emit('trigger-clip')">
       触发 Spine 骨骼动作 (L08/L24)
@@ -270,7 +273,7 @@ watch(
       </div>
       <div class="import-row">
         <label class="tiny">
-          骨骼 (.json/.skel)
+          骨骼 (.json/.skel [未经真实资源验证])
           <input
             type="file"
             accept=".json,.skel"

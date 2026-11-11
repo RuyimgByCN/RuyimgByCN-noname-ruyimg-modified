@@ -22,7 +22,9 @@ export const MAX_ENGINE_OUTSTANDING = 8;
 
 /** Wasm stays the default until all six PA09 conditions have evidence. */
 export function desktopEngineChoice(): DesktopEngineChoice {
-  const override = typeof location === "undefined" ? null : urlParam("engineTransport");
+  const override = typeof location === "undefined"
+    ? null
+    : (urlParam("desktopEngine") ?? urlParam("engineTransport"));
   if (override === "native" || override === "wasm") return override;
   try { return localStorage.getItem(DESKTOP_ENGINE_KEY) === "native" ? "native" : "wasm"; }
   catch { return "wasm"; }

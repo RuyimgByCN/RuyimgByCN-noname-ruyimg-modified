@@ -867,13 +867,13 @@ export function resolveDynamicSkinImport(
   }
 
   try {
-    const skeletonData =
-      rawSkeletonAsset instanceof Uint8Array
-        ? parseSpine40Binary(rawSkeletonAsset)
-        : parseSpine40Json(rawSkeletonAsset);
+    const isBinary = rawSkeletonAsset instanceof Uint8Array;
+    const skeletonData = isBinary
+      ? parseSpine40Binary(rawSkeletonAsset)
+      : parseSpine40Json(rawSkeletonAsset);
     return {
       status: "ready-spine40",
-      reason: `SPINE_40_LOADED:${skeletonData.header.spine}`,
+      reason: `SPINE_40_LOADED:${skeletonData.header.spine}${isBinary ? " (二进制解码：未经真实资源验证)" : ""}`,
       normalizedParams,
       skeletonData,
     };

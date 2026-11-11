@@ -1,5 +1,17 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+**2026-11-11 Step 0 工作区整理与口径纠偏（按下方 Claude Code 夜间扫描勘正执行整改；规则 333 / NGSA 107 / content schema 5 / ABI 759 / WS 8 冻结保持）**：
+- **裁决 40 状态如实标注**：`rvm_ops`／`rvm_bridge` 当前尚未接入 `open_choice`，[`choice_routing.rs`](../../crates/engine-native-kernel/src/rvm_ops/commit_up37/choice_routing.rs) 仅为确定性回退选择器（在无预填 `ctx.res.answer` 时按公开态度分与体力自动挑选目标、按固定战术优先级选牌；Step 0 已修复 `get_upstream_attitude` 读取未亮明身份的缺陷，未亮明非主公座位严格按中立 `0` 计）。裁决 40（真实玩家选择）仍为未实现，`dddxiaxing`、`boss_chuanyun`、`boss_lingfeng`、`boss_tianyun` 4 项已从「已复核等价」退回「简化近似」（全仓 `已复核等价 0 / 简化近似 4,424 / 缺失 0`）。
+- **Spine 4.0 与牌桌对照状态**：二进制 `.skel` 解码标注「未经真实资源验证」（[用户指引](../operations/evidence/2026-11-11-tabletop-and-spine40/spine40-user-guide.md)）；无头 Chrome 同场景截图（[对照图](../operations/evidence/2026-11-11-tabletop-and-spine40/tabletop-comparison.png)）显示原生横排座位卡片与上游环绕式牌桌布局不同，界面项仍为示意。
+- **`HlssGaiming` 差异说明**：`HlssGaiming`（缺 `JudgeBefore` 事件）系在冻结版本下登记为设计差异（简化近似），并非功能修复。
+
+**2026-11-11 夜间核对勘正（Claude Code；工作区未提交）**：下段「裁决 40 真实选择与事件路径闭环」不实——`rvm_ops`／`rvm_bridge` 中没有任何 `open_choice` 调用，`choice_routing.rs` 只读取 `ctx.res.answer`（无人提问即无应答）后按态度分与体力自动选目标、按固定优先级自动选牌，并直接读取身份局真实身份；可选发动仍为必发。裁决 40 视为未实现，这些技能不得记为与上游等价。「剩余 10 条执行清单清空、0 开放缺陷」中的 `HlssGaiming` 等是登记为差异，不是修复。见[扫描证据](../operations/evidence/2026-11-11-progress-scan-night/README.md)。
+
+**2026-11-11 M1–M4 工作区阶段性记录（已在上方 Step 0 按夜间扫描勘正修正口径；零升号：规则 333 / NGSA 107 / content schema 5 / ABI 759 / WS 8 冻结保持，14 场 golden 哈希零变化）**：
+- **选择回退与阶段事件测试**：M2 新增 [`choice_routing.rs`](../../crates/engine-native-kernel/src/rvm_ops/commit_up37/choice_routing.rs) 确定性回退选择器（未调用 `open_choice`，裁决 40 真实玩家选择尚未实现）与 `l11_taixu_boss_events.rs` 阶段推进测试；`dddxiaxing`、`boss_chuanyun`、`boss_lingfeng`、`boss_tianyun` 因缺玩家选择等差异在 Step 0 退回「简化近似」，全仓 4,424 项实体当前全部为「简化近似」（`0` 项已复核等价）。
+- **Spine 4.0 与牌桌同场景对照**：M3 自研净室 Spine 4.0 播放器通过 11 项单测，二进制解码标注「未经真实资源验证」，非 4.0 格式确定性回退静态立绘；无头 Chrome 完成上游琉璃版与原生牌桌同场景截图对照（[`2026-11-11-tabletop-and-spine40`](../operations/evidence/2026-11-11-tabletop-and-spine40/tabletop-comparison.png)，原生测得 60.0 FPS，布局与上游环绕式牌桌仍不同）。
+- **第 971 轮 10 条清单状态说明**：`HlssGaiming`（缺 `JudgeBefore` 事件）依照版本号冻结原则不扩充 `EventKind`，登记为设计差异（简化近似，非修复）并由 `guard_gaiming_judge_before` 守护。
+
 **2026-11-11 核对勘正（Claude Code）**：下条裁决 39 所称「按上游优先级规则确定性结算」与实现不符——`decision34*.rs` 实际取座次上第一个存活的其他角色或第一张手牌，且未逐技能登记；条件、随机、判定、可选发动的丢失不属于该边界。在逐技能差异清单补齐并经用户确认前，这些技能不得记为与上游等价。**同日用户[裁决 40](../operations/evidence/2026-10-28-user-decisions/README.md)：撤销裁决 39 的自动结算部分，上游有玩家选择的技能须经既有选择通道向玩家提问；不升号部分保留，确需升号的交互逐技能报用户决定。**见[扫描证据](../operations/evidence/2026-11-11-progress-scan/README.md)。
 
 **2026-11-11 裁决 37–39（第三节第 4 项三项边界用户确认定案；零升号：规则 333／NGSA 107／content schema 5／ABI 759／WS8 不变，14 场 golden 哈希零变化；见[用户裁决台账](../operations/evidence/2026-10-28-user-decisions/README.md)）**：
@@ -6505,6 +6517,12 @@ catalog 之外有源码引用        128  (100.0%)
 ---
 
 ## 剩余 10 条的**执行清单**（第 971 轮整理，供后续直接动手）
+
+> **2026-11-11 状态附记（Step 0 修正口径）**：
+> - A 组（4 条时机前置条件）：`XianjianLinghuo`、`XianjianWangyou`、`GujianFoodLiyutang`、`WudianFuchou2` 既有测试已改为状态驱动。
+> - B 组（2 条引擎能力）：`SwdMufengHeld` 的 `discover` 原语已于第 973 轮落地（`swd_mufeng_uses_discover_not_draw` 验证）；`SwdJiang` 单帧多目标已通过循环处理。
+> - C 组（1 条未实现）：`HlssGaiming` 依据冻结版本 Rule 333 / ABI 759 不扩充事件变体的约束，当前登记为设计差异（简化近似，由 `guard_gaiming_judge_before` 守护，**属于登记差异而非修复**）。
+> - D 组（3 条已登记差异）：`SwdCyxianjiang`、`XianjianXunying`、`ShaDamageForceDiscard` 仍为已登记设计差异（简化近似）。
 
 > 每条都写到「改哪个文件、改什么、如何验证」，避免下一轮重新调查。
 

@@ -16,7 +16,8 @@
     "desktop:build": "node scripts/run-tauri.mjs build",
     "preview": "vite preview",
     "tauri": "tauri",
-    "typecheck": "vue-tsc --noEmit"
+    "typecheck": "vue-tsc --noEmit",
+    "test:tabletop-cdp": "node scripts/tabletop-comparison-cdp.mjs"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.0.0",

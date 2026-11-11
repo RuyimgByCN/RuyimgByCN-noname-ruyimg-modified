@@ -1,6 +1,6 @@
 # G0 · L02 SJ Settings
 
-> 核验日期：2026-11-10 · 来源仓：`noname-liuli` · 入口：`archive/upstream/noname-liuli/noname/extension/SJ Settings`  
+> 核验日期：2026-11-11 · 来源仓：`noname-liuli` · 入口：`archive/upstream/noname-liuli/noname/extension/SJ Settings`  
 > 本页为 E01/G0 深度清单与**裁决 34 逐项上游清单**（武将 / 技能 / 卡牌 / 模式与战役节点 / 配置项 / 界面钩子 / 渲染面 / 现有 `decision34*` 归类）。非整包验收证明。
 
 ## 1. 功能清单
@@ -58,10 +58,10 @@
 - G0 本文档完成不等于 G1–G5；整包状态仍以[台账](../upstream-extension-reconstruction.md)为准。
 - 若需补跑动态样本：在 `scratch/legacy-harness` 运行副本上使用 `scripts/legacy-harness/`，勿写 `archive/upstream`。
 
-## 7. 裁决 34 逐项上游清单与现有实现归类（2026-11-10）
+## 7. 裁决 34 逐项上游清单与现有实现归类（2026-11-11）
 
 - **统计汇总**：上游实体合计 **5** 项（武将 0 / 技能 0 / 卡牌 0 / 模式与战役节点 0 / 配置项 4 / 界面钩子 0 / 渲染面 1）
-- **状态分布**：`忠实实现` **5** 项 · `示意或自造` **0** 项 · `缺失` **0** 项
+- **状态分布**：`已复核等价` **0** 项 · `简化近似` **5** 项 · `缺失` **0** 项 · `上游未定义` **0** 项
 
 ### 7.1 现有 `decision34*` / 前端示意代码逐条归类
 
@@ -87,10 +87,10 @@
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `tutorialapk` | `archive/upstream/noname-liuli/noname/extension/SJ Settings/extension.js:338` | 查看apk使用教程（默认=false）：查看apk使用教程 | 原生规则（`crates/content-native-loader/src/sj_settings.rs`） | 忠实实现 |
-| `openTools` | `archive/upstream/noname-liuli/noname/extension/SJ Settings/extension.js:346` | 启用控制台（默认=false）：启用eruda控制台 | 原生规则（`crates/content-native-loader/src/sj_settings.rs`） | 忠实实现 |
-| `getExtensions` | `archive/upstream/noname-liuli/noname/extension/SJ Settings/extension.js:359` | 点击获取扩展（默认=—）：点击获取扩展 | 原生规则（`crates/content-native-loader/src/sj_settings.rs`） | 忠实实现 |
-| `tutorial` | `archive/upstream/noname-liuli/noname/extension/SJ Settings/extension.js:710` | 查看无名杀教程（默认=—）：查看无名杀教程 | 原生规则（`crates/content-native-loader/src/sj_settings.rs`） | 忠实实现 |
+| `tutorialapk` | `archive/upstream/noname-liuli/noname/extension/SJ Settings/extension.js:338` | 查看apk使用教程（默认=false）：查看apk使用教程 | 原生规则（`crates/content-native-loader/src/sj_settings.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `openTools` | `archive/upstream/noname-liuli/noname/extension/SJ Settings/extension.js:346` | 启用控制台（默认=false）：启用eruda控制台 | 原生规则（`crates/content-native-loader/src/sj_settings.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `getExtensions` | `archive/upstream/noname-liuli/noname/extension/SJ Settings/extension.js:359` | 点击获取扩展（默认=—）：点击获取扩展 | 原生规则（`crates/content-native-loader/src/sj_settings.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `tutorial` | `archive/upstream/noname-liuli/noname/extension/SJ Settings/extension.js:710` | 查看无名杀教程（默认=—）：查看无名杀教程 | 原生规则（`crates/content-native-loader/src/sj_settings.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
 
 ### 7.7 界面钩子（UI Hooks）（0 项）
 
@@ -100,5 +100,5 @@
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `extension.css` | `archive/upstream/noname-liuli/noname/extension/SJ Settings/extension.css:1-3` | CSS 样式表 `extension.css`（3 行） | 原生前端组件 | 忠实实现 |
+| `extension.css` | `archive/upstream/noname-liuli/noname/extension/SJ Settings/extension.css:1-3` | CSS 样式表 `extension.css`（3 行） | 原生前端组件 | 示意（待对照） |
 

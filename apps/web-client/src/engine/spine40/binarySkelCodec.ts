@@ -4,6 +4,8 @@
  * Authored strictly from the public Spine 4.0 binary format specification
  * using only Web-standard `Uint8Array`, `DataView`, `TextEncoder`, and `TextDecoder`.
  * Zero external Spine runtime code, zero Node `Buffer`.
+ *
+ * @note 本二进制解码器目前仅经由净室手写合成流往返验证，未经用户本机真实 Spine 4.0 商业资源验证。
  */
 
 import type {

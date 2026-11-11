@@ -215,7 +215,7 @@ fn resolve_mbcmjiushi(ctx: &mut Ctx<'_>, owner: PlayerId) {
 }
 
 /// `L29` (`mbcmfangzhu` 放逐, unlocked at `mbqianlong >= 75`):
-/// On damage, chooses another alive player (`mbcmfangzhu_target` or `first_other_alive`),
+/// On damage, chooses another alive player (`mbcmfangzhu_target` or `hostile_target`),
 /// turns that player over (`face_down = !face_down`), and that player draws `lost_hp = (max_hp - hp).max(1)` cards.
 fn resolve_mbcmfangzhu(ctx: &mut Ctx<'_>, owner: PlayerId) {
     if !is_daoxin_unlocked(ctx, owner, "mbcmfangzhu", 75) {
@@ -227,7 +227,7 @@ fn resolve_mbcmfangzhu(ctx: &mut Ctx<'_>, owner: PlayerId) {
         if raw > 0 && (raw as u8) < (ctx.core.players.len() as u8) && (raw as u8) != owner {
             raw as u8
         } else {
-            let Some(t) = first_other_alive(ctx.core, owner) else {
+            let Some(t) = hostile_target(ctx, owner) else {
                 return;
             };
             t
@@ -358,30 +358,18 @@ pub(super) fn resolve_kuwu_interactive(ctx: &mut Ctx<'_>, owner: PlayerId) {
         if raw > 0 && (raw as u8) < (ctx.core.players.len() as u8) {
             raw as u8
         } else {
-            let Some(t) = first_other_alive(ctx.core, owner) else {
+            let Some(t) = hostile_target(ctx, owner) else {
                 return;
             };
             t
         }
     };
     let choose_lose_hp = flag(ctx.core, target, "kuwu_choose_lose_hp") != 0;
-    let prefer_equip = flag(ctx.core, target, "kuwu_prefer_equip") != 0;
+    let _prefer_equip = flag(ctx.core, target, "kuwu_prefer_equip") != 0;
     let chosen_card = if choose_lose_hp {
         None
-    } else if prefer_equip {
-        ctx.core
-            .player(target)
-            .equips
-            .first()
-            .copied()
-            .or_else(|| ctx.core.player(target).hand.first().copied())
     } else {
-        ctx.core
-            .player(target)
-            .hand
-            .first()
-            .copied()
-            .or_else(|| ctx.core.player(target).equips.first().copied())
+        choose_enemy_card(ctx, owner, target)
     };
     if let Some(c) = chosen_card {
         if ctx.core.player(target).hand.contains(&c) {
@@ -418,7 +406,7 @@ pub(super) fn resolve_diaobingqianjiang(ctx: &mut Ctx<'_>, owner: PlayerId) {
         if !ctx.core.player(p).alive || market.is_empty() {
             continue;
         }
-        if let Some(hand_c) = ctx.core.player(p).hand.first().copied() {
+        if let Some(hand_c) = choose_own_card(ctx, p, false) {
             ctx.take_hand_card(p, hand_c);
             let m_card = market.remove(0);
             ctx.core.player_mut(p).hand.push(m_card);
@@ -486,9 +474,9 @@ fn resolve_youzhan(ctx: &mut Ctx<'_>, owner: PlayerId) {
         .player(owner)
         .hand
         .iter()
+        .chain(ctx.core.player(owner).equips.iter())
         .copied()
-        .find(|&c| ctx.catalog.card_kind(c).is_equip())
-        .or_else(|| ctx.core.player(owner).equips.first().copied());
+        .find(|&c| ctx.catalog.card_kind(c).is_equip());
     let Some(eq) = equip_card else {
         set_flag(ctx.core, owner, "youzhan_blocked_no_equip", 1);
         return;
@@ -501,7 +489,7 @@ fn resolve_youzhan(ctx: &mut Ctx<'_>, owner: PlayerId) {
     discard_some(ctx, owner, vec![eq]);
     set_flag(ctx.core, owner, "youzhan_triggered", 1);
     set_flag(ctx.core, owner, "youdishenru_nullified_sha", 1);
-    let attacker = first_other_alive(ctx.core, owner).unwrap_or(owner);
+    let attacker = hostile_target(ctx, owner).unwrap_or(owner);
     if attacker != owner {
         let sha_in_hand = ctx
             .core
@@ -620,14 +608,7 @@ fn resolve_th_dunshi(ctx: &mut Ctx<'_>, owner: PlayerId) {
 /// and restores that character's HP to 1.
 fn resolve_th_jingxie(ctx: &mut Ctx<'_>, owner: PlayerId) {
     let dying_save = ctx.core.player(owner).dying || flag(ctx.core, owner, "th_jingxie_dying_save") != 0;
-    if let Some(c) = ctx
-        .core
-        .player(owner)
-        .hand
-        .first()
-        .copied()
-        .or_else(|| ctx.core.player(owner).equips.first().copied())
-    {
+    if let Some(c) = choose_own_card(ctx, owner, true) {
         if ctx.core.player(owner).hand.contains(&c) {
             ctx.take_hand_card(owner, c);
         } else {
@@ -658,10 +639,10 @@ fn resolve_th_qiaosi(ctx: &mut Ctx<'_>, owner: PlayerId) {
     set_flag(ctx.core, owner, "th_qiaosi_drawn", won);
     set_flag(ctx.core, owner, "th_qiaosi_triggered", 1);
     if flag(ctx.core, owner, "th_qiaosi_give_other") != 0 {
-        if let Some(target) = first_other_alive(ctx.core, owner) {
+        if let Some(target) = friendly_target(ctx, owner) {
             let mut given = 0u32;
             for _ in 0..won {
-                if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+                if let Some(c) = choose_own_card(ctx, owner, false) {
                     ctx.take_hand_card(owner, c);
                     ctx.core.player_mut(target).hand.push(c);
                     given += 1;
@@ -672,7 +653,7 @@ fn resolve_th_qiaosi(ctx: &mut Ctx<'_>, owner: PlayerId) {
     } else {
         let mut to_discard = Vec::new();
         for _ in 0..won {
-            if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+            if let Some(c) = choose_own_card(ctx, owner, false) {
                 ctx.take_hand_card(owner, c);
                 to_discard.push(c);
             }
@@ -693,14 +674,14 @@ fn resolve_th_yeyan(ctx: &mut Ctx<'_>, owner: PlayerId) {
     }
     set_flag(ctx.core, owner, "th_yeyan_used", 1);
     set_flag(ctx.core, owner, "th_yeyan_triggered", 1);
-    let Some(target) = first_other_alive(ctx.core, owner) else {
+    let Some(target) = hostile_target(ctx, owner) else {
         return;
     };
     let great = flag(ctx.core, owner, "th_yeyan_great") != 0;
     let dmg = if great {
         let mut discarded = Vec::new();
         for _ in 0..4 {
-            if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+            if let Some(c) = choose_own_card(ctx, owner, false) {
                 ctx.take_hand_card(owner, c);
                 discarded.push(c);
             }
@@ -751,7 +732,7 @@ fn resolve_th_extra_skill(ctx: &mut Ctx<'_>, skill: &str, owner: PlayerId) {
         "th_tianming" => {
             let mut disc = Vec::new();
             for _ in 0..2 {
-                if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+                if let Some(c) = choose_own_card(ctx, owner, false) {
                     ctx.take_hand_card(owner, c);
                     disc.push(c);
                 }

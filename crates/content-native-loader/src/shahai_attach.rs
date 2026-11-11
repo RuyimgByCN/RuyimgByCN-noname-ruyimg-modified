@@ -139,9 +139,10 @@ fn resolve_and_register_u05_skill(
         _ => default_dispatch,
     };
     if seen_skills.insert(sk_owned.clone()) {
-        pack.vm_skills
-            .push(make_vm_skill_decl(&sk_owned, dispatch_id, *vm_idx));
-        *vm_idx += 1;
+        if let Some(decl) = make_vm_skill_decl(&sk_owned, dispatch_id, *vm_idx) {
+            pack.vm_skills.push(decl);
+            *vm_idx += 1;
+        }
     }
     Some(names::intern(sk_owned))
 }

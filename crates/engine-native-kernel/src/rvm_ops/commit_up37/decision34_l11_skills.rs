@@ -6,21 +6,13 @@ use super::*;
 use crate::catalog::{CardKind, EquipSlot, Suit};
 
 fn discard_up_to_hand_or_equip(ctx: &mut Ctx<'_>, seat: PlayerId, max_n: usize) -> usize {
-    let mut removed = Vec::new();
-    while removed.len() < max_n {
-        if let Some(cid) = ctx.core.player(seat).hand.first().copied() {
-            ctx.take_hand_card(seat, cid);
-            removed.push(cid);
-        } else if let Some(cid) = ctx.core.player(seat).equips.first().copied() {
-            ctx.take_owned_card(seat, cid);
-            removed.push(cid);
+    let mut cnt = 0;
+    while cnt < max_n {
+        if discard_one_he(ctx, seat).is_some() {
+            cnt += 1;
         } else {
             break;
         }
-    }
-    let cnt = removed.len();
-    if cnt > 0 {
-        discard_some(ctx, seat, removed);
     }
     cnt
 }
@@ -54,7 +46,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         "txhj_xingtianpojunfu" => {
             // `extension_card.js:8`: discard 2 cards -> target cannot use/respond cards & armor nullified this turn
             if discard_up_to_hand_or_equip(ctx, owner, 2) == 2 {
-                if let Some(t) = first_other_alive(ctx.core, owner) {
+                if let Some(t) = hostile_target(ctx, owner) {
                     set_flag(ctx.core, t, "l11_xingtian_card_locked", 1);
                     set_flag(ctx.core, t, "l11_xingtian_armor_null", 1);
                 }
@@ -66,7 +58,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "txhj_qilingong" | "qilin_skill" => {
             // `extension_card.js:108`, `extension_skill.js:856`: discard target mount/treasure equip
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 if let Some(cid) = ctx
                     .core
                     .player(t)
@@ -79,7 +71,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
                             Some(EquipSlot::Treasure | EquipSlot::HorsePlus | EquipSlot::HorseMinus)
                         )
                     })
-                    .or_else(|| ctx.core.player(t).equips.first().copied())
+                    .or_else(|| choose_enemy_card(ctx, owner, t))
                 {
                     ctx.take_owned_card(t, cid);
                     discard_some(ctx, t, vec![cid]);
@@ -95,14 +87,14 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "txhj_zhijizhibi" => {
             // `extension_card.js:233`: inspect target hand & draw 1
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 set_flag(ctx.core, owner, "l11_zhibi_peeked", (t as u32) + 1);
             }
             ctx.start_draw(owner, 1);
         }
         "txhj_yuanjiao" => {
             // `extension_card.js:305`: target draws 1 first, then owner draws 3
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 draw_cards_sync(ctx, t, 1);
             }
             draw_cards_sync(ctx, owner, 3);
@@ -119,7 +111,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "txhj_piliche" => {
             // `extension_card.js:438`: after dealing damage -> reduce target max_hp by 1
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let next_mhp = ctx.core.player(t).max_hp.saturating_sub(1).max(1);
                 ctx.core.player_mut(t).max_hp = next_mhp;
                 if ctx.core.player(t).hp > next_mhp as i32 {
@@ -137,13 +129,13 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "txhj_jiedao" => {
             // `extension_card.js:704`: target uses Sha or loses 1 HP
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::LoseHp { player: t, amount: 1 });
             }
         }
         "txhj_huoshaolianying" | "huogong" => {
             // `extension_card.js:775`, `extension_skill.js:458`: 1 fire damage to next alive seat
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     Some(owner),
                     t,
@@ -181,7 +173,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "txhj_diaohu" => {
             // `extension_card.js:951`: target turns over (`face_down`), then target draws 1 and owner draws 1
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.core.player_mut(t).face_down = !ctx.core.player(t).face_down;
                 draw_cards_sync(ctx, t, 1);
             }
@@ -193,7 +185,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "txhj_caomu" => {
             // `extension_card.js:1076`: target discards 1 card, neighbors draw 1
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let _ = discard_up_to_hand_or_equip(ctx, t, 1);
             }
             ctx.start_draw(owner, 1);
@@ -205,7 +197,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "txhj_taijifuchen" | "gx_taijifuchen" => {
             // `extension_card.js:1201`, `extension_skill.js:605`: target discards 1 or Sha unrespondable
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 if discard_up_to_hand_or_equip(ctx, t, 1) == 0 {
                     set_flag(ctx.core, owner, "l11_taiji_unrespondable", 1);
                 }
@@ -226,8 +218,8 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "txhj_shengdong" => {
             // `extension_card.js:1356`: give 1 hand card to target, who transfers up to 2 to third seat
-            if let Some(t) = first_other_alive(ctx.core, owner) {
-                if let Some(cid) = ctx.core.player(owner).hand.first().copied() {
+            if let Some(t) = hostile_target(ctx, owner) {
+                if let Some(cid) = choose_own_card(ctx, owner, false) {
                     ctx.take_hand_card(owner, cid);
                     ctx.core.player_mut(t).hand.push(cid);
                 }
@@ -235,7 +227,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "txhj_shuiyan" => {
             // `extension_card.js:1437`: target discards equips summing >= 6 or takes 1 thunder damage
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let eq_sum: u32 = ctx
                     .core
                     .player(t)
@@ -298,7 +290,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         "tx_moyany" | "boss_moyany" | "boss_lianyu" | "txduanzui" | "txhj_guihuo" => {
             // `extension.js:881, 3230, 5015, 6237`, `extension_skill.js:4000, 4267`: fire damage skills
             let amt = if matches!(skill_name, "tx_moyany" | "boss_moyany") { 2 } else { 1 };
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     Some(owner),
                     t,
@@ -314,7 +306,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "txleili" | "boss_leili" | "txleizhou" | "boss_xuanlei" | "txleizhen" | "txhj_luolei" => {
             // `extension.js:901, 3742, 3859, 5820, 6240`, `extension_skill.js:3735, 3899`: thunder damage skills
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     Some(owner),
                     t,
@@ -326,7 +318,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "boss_xixing" | "boss_skonghun" => {
             // `extension_skill.js:3976, 4293`: thunder damage + recover 1 HP
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     Some(owner),
                     t,
@@ -338,9 +330,23 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
             }
         }
         "boss_tianyun" => {
-            // `extension_skill.js:4085`: lose 1 HP, deal 2 fire damage to enemy & discard all enemy equips
-            ctx.emit(EventData::LoseHp { player: owner, amount: 1 });
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            // `archive/upstream/noname-liuli/noname/extension/太虚幻境/extension_skill.js:4085`:
+            // At phaseEnd, optional choice on enemy: if owner hp <= 1, abort to avoid death.
+            // When invoked, owner loses 1 HP; target takes random 2 or 3 fire damage (`Math.random() > 0.4 ? 2 : 3`),
+            // then target discards all equipment cards.
+            if ctx.core.player(owner).hp <= 1 {
+                return;
+            }
+            if let Some(t) = hostile_target(ctx, owner) {
+                ctx.emit(EventData::LoseHp { player: owner, amount: 1 });
+                let dmg = if ctx.core.rng.gen_range(10) >= 4 { 2 } else { 3 };
+                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                    Some(owner),
+                    t,
+                    dmg,
+                    DamageNature::Fire,
+                    None,
+                )));
                 let eqs = ctx.core.player(t).equips.clone();
                 for c in &eqs {
                     ctx.take_owned_card(t, *c);
@@ -348,13 +354,6 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
                 if !eqs.is_empty() {
                     discard_some(ctx, t, eqs);
                 }
-                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                    Some(owner),
-                    t,
-                    2,
-                    DamageNature::Fire,
-                    None,
-                )));
             }
         }
         "boss_zhennu" => {
@@ -388,14 +387,44 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "boss_lingfeng" => {
             // `extension_skill.js:3843`: draw 2 cards; if different color, enemy loses 1 HP
+            let c1 = ctx.core.deck.last().copied();
+            let c2 = if ctx.core.deck.len() >= 2 {
+                ctx.core.deck.get(ctx.core.deck.len() - 2).copied()
+            } else {
+                None
+            };
             ctx.start_draw(owner, 2);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
-                ctx.emit(EventData::LoseHp { player: t, amount: 1 });
+            let diff_color = match (c1, c2) {
+                (Some(a), Some(b)) => {
+                    let suit_a = ctx.catalog.cards.get(a as usize).map(|c| c.suit);
+                    let suit_b = ctx.catalog.cards.get(b as usize).map(|c| c.suit);
+                    let red_a = matches!(suit_a, Some(Suit::Heart | Suit::Diamond));
+                    let red_b = matches!(suit_b, Some(Suit::Heart | Suit::Diamond));
+                    red_a != red_b
+                }
+                _ => false,
+            };
+            if diff_color {
+                if let Some(t) = hostile_target(ctx, owner) {
+                    ctx.emit(EventData::LoseHp { player: t, amount: 1 });
+                }
             }
         }
-        "boss_chuanyun"
-        | "txhj_chuanyun"
-        | "boss_fengxing"
+        "boss_chuanyun" | "txhj_chuanyun" => {
+            // `extension_skill.js:3806`: choose target with hp > player.hp
+            if let Some(t) = filtered_target(ctx, owner, true, |core, p| {
+                core.player(p).hp > core.player(owner).hp
+            }) {
+                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                    Some(owner),
+                    t,
+                    1,
+                    DamageNature::Normal,
+                    None,
+                )));
+            }
+        }
+        "boss_fengxing"
         | "txzhennu"
         | "txlangxi"
         | "txbenji"
@@ -404,9 +433,9 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         | "diyzhuiling"
         | "sanjian_skill"
         | "txhj_tunshi" => {
-            // `extension.js:811, 846, 3547, 4554, 4631, 5834, 5896, 6008`, `extension_skill.js:975, 3806, 3931`: targeted strike
+            // `extension.js:811, 846, 3547, 4554, 4631, 5834, 5896, 6008`, `extension_skill.js:975, 3931`: targeted strike
             let amt = if matches!(skill_name, "txlangxi" | "txchengyuan") { 2 } else { 1 };
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     Some(owner),
                     t,
@@ -419,7 +448,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         "cxyKuangXi" => {
             // `extension.js:3909`: lose 1 HP, deal 1 damage to another character
             ctx.emit(EventData::LoseHp { player: owner, amount: 1 });
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     Some(owner),
                     t,
@@ -455,7 +484,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "diycuidu" => {
             // `extension.js:3489`: inflict poison mark on target & draw 2
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 set_flag(ctx.core, t, "l11_diyzhongdu_mark", 1);
             }
             ctx.start_draw(owner, 2);
@@ -515,7 +544,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "txlieji" => {
             // `extension.js:3533`: deal 1 thunder damage and draw 1 card
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     Some(owner),
                     t,
@@ -551,7 +580,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         "cxyMoJun" | "cxyPoLu" | "polu" | "polu_damage" | "oldfuman" | "oldfuman2" => {
             // `extension.js:3912, 4110, 4350`, `extension_skill.js:1160`: self and ally draw 1 card
             ctx.start_draw(owner, 1);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.start_draw(t, 1);
             }
         }
@@ -567,7 +596,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "ljxuechi" => {
             // `extension.js:4780`: deal 1 fire damage and draw 1 card
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     Some(owner),
                     t,
@@ -602,7 +631,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "txayboji" | "txdaoji" | "guanshi_skill" => {
             // `extension.js:3331, 3440`, `extension_skill.js:1280`: discard 1 from target/self and deal 1 damage
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let _ = discard_up_to_hand_or_equip(ctx, t, 1);
                 ctx.emit(EventData::Damage(crate::machine::damage_data(Some(owner), t, 1)));
             }
@@ -610,8 +639,8 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         "txdaoxi" | "txtanbei" | "txtanbei_effect1" | "txtanbei_effect2" | "txtanbei_effect3"
         | "boss_jueji" => {
             // `extension.js:3410, 3820`, `extension_skill.js:4148`: prey 1 card from target and +1 Sha limit
-            if let Some(t) = first_other_alive(ctx.core, owner) {
-                if let Some(c) = ctx.core.player(t).hand.first().copied() {
+            if let Some(t) = hostile_target(ctx, owner) {
+                if let Some(c) = choose_enemy_card(ctx, owner, t) {
                     ctx.take_hand_card(t, c);
                     ctx.core.player_mut(owner).hand.push(c);
                 }
@@ -626,7 +655,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "txmouduan" | "txhj_mouduan" | "txhj_xuanlve" | "cixiong_skill" => {
             // `extension.js:5472`, `extension_skill.js:860, 900, 1250`: target discards 1 or owner draws 1
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 if discard_up_to_hand_or_equip(ctx, t, 1) == 0 {
                     ctx.start_draw(owner, 1);
                 }
@@ -634,7 +663,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "hanbing_skill" => {
             // `extension_skill.js:1220`: discard up to 2 cards from target instead of dealing damage
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let _ = discard_up_to_hand_or_equip(ctx, t, 2);
             }
         }
@@ -642,8 +671,8 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         // === 2b. Explicit modifier, conversion & tactical general skills (`d34_l11_mods.rs` & `d34_view_as.rs`) ===
         "txyirang" => {
             // `extension.js:3300`: give non-basic card to ally & recover/draw
-            if let Some(t) = first_other_alive(ctx.core, owner) {
-                if let Some(cid) = ctx.core.player(owner).hand.first().copied() {
+            if let Some(t) = friendly_target(ctx, owner) {
+                if let Some(cid) = choose_own_card(ctx, owner, false) {
                     ctx.take_hand_card(owner, cid);
                     ctx.core.player_mut(t).hand.push(cid);
                     ctx.start_draw(owner, 1);
@@ -656,7 +685,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "tx_dqtianzi" => {
             // `extension.js:3370`: judge another character; black -> discard 1, red -> draw 1
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let is_red = ctx
                     .core
                     .deck
@@ -671,8 +700,8 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "xinmingjian" => {
             // `extension.js:3400`: give hand card to target and grant `xinmingjian2` (+hand limit, unlimited Sha)
-            if let Some(t) = first_other_alive(ctx.core, owner) {
-                if let Some(cid) = ctx.core.player(owner).hand.first().copied() {
+            if let Some(t) = friendly_target(ctx, owner) {
+                if let Some(cid) = choose_own_card(ctx, owner, false) {
                     ctx.take_hand_card(owner, cid);
                     ctx.core.player_mut(t).hand.push(cid);
                 }
@@ -706,7 +735,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
                 set_flag(ctx.core, owner, "l11_mod:xinmingjian2", 1);
             }
             if hp <= 1 {
-                if let Some(t) = first_other_alive(ctx.core, owner) {
+                if let Some(t) = hostile_target(ctx, owner) {
                     ctx.emit(EventData::Damage(crate::machine::damage_data(Some(owner), t, 1)));
                 }
             } else {
@@ -728,7 +757,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "cxyFanGong" | "txqyyouji" => {
             // `extension.js:4196, 3632`: counter-attack virtual Sha on enemy after targeted card
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data(Some(owner), t, 1)));
             }
         }
@@ -754,7 +783,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
             // `extension.js:5087, 5151`: draw 1, discard 1, and lock adjacent enemy hand cards (`mdqianxi72`)
             ctx.start_draw(owner, 1);
             let _ = discard_up_to_hand_or_equip(ctx, owner, 1);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 set_flag(ctx.core, t, "l11_mod:mdqianxi72", 1);
             }
         }
@@ -806,7 +835,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "txyonglve" => {
             // `extension.js:6032`: discard 1 judge/hand card from target and draw 1
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let _ = discard_up_to_hand_or_equip(ctx, t, 1);
             }
             ctx.start_draw(owner, 1);
@@ -853,7 +882,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "txhj_beiming" | "txhj_wangzu" => {
             // `extension.js:684, 921`: death rattle -> killer discards cards
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 let _ = discard_up_to_hand_or_equip(ctx, t, 2);
             }
         }
@@ -870,7 +899,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "txhj_guimen" | "txhj_huangjin" => {
             // `extension.js:944, 1064`: judge/discard Spade/Thunder -> 1 thunder damage to enemy
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     Some(owner),
                     t,
@@ -882,7 +911,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "txhj_guiyan" | "txhj_zhoulei" => {
             // `extension.js:1814, 1855`: enemy loses 1 HP / takes 1 thunder damage & owner draws 1
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::LoseHp { player: t, amount: 1 });
             }
             ctx.start_draw(owner, 1);
@@ -917,7 +946,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         }
         "txhj_yaoshu" | "txhj_zhoufa" | "txhj_zhouzu" => {
             // `extension.js:971, 1146, 1248`: `mahouSkill` curse on target -> 1 thunder damage & draw 1
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 set_flag(ctx.core, t, &format!("l11_mahou:{skill_name}"), 1);
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     Some(owner),

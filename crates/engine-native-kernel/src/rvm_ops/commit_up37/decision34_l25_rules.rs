@@ -20,7 +20,7 @@ pub fn try_resolve_l25_rule_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pl
     if !guard_phase_auto_trigger(ctx, owner, "l25", skill_name, skill_name == "g_du") {
         return true;
     }
-    let other = first_other_alive(ctx.core, owner).unwrap_or(owner);
+    let other = hostile_target(ctx, owner).unwrap_or(owner);
     if skill_name == "_diyskill" {
         if flag(ctx.core, owner, "l25_online_room_active") == 1 {
             set_flag(ctx.core, owner, "l25_diy_blocked_online", 1);

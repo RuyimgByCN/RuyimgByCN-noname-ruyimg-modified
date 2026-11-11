@@ -8,7 +8,7 @@ use super::*;
 /// Show 1 card & choose unvisited other player: branch 1 view hand & gain up to 2
 /// diff-suit cards + target gains shown card; branch 2 target loses 1 HP & may repeat.
 pub(super) fn resolve_zexing(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    let Some(shown) = ctx.core.player(owner).hand.first().copied() else {
+    let Some(shown) = choose_own_card(ctx, owner, false) else {
         return;
     };
     let branch = flag(ctx.core, owner, "zexing_branch").max(1);
@@ -22,7 +22,7 @@ pub(super) fn resolve_zexing(ctx: &mut Ctx<'_>, owner: PlayerId) {
                 && turn_var(ctx.core, owner, &format!("zexing_visited:{q}")) == 0
         })
         .collect();
-    let Some(&first_t) = unvisited.first() else {
+    let Some(&first_t) = unvisited.iter().min_by_key(|&&q| get_upstream_attitude(ctx.core, owner, q)) else {
         return;
     };
     set_turn_var(ctx.core, owner, &format!("zexing_visited:{first_t}"), 1);
@@ -164,7 +164,7 @@ pub(super) fn resolve_twjuemie(ctx: &mut Ctx<'_>, owner: PlayerId) {
     } else {
         ctx.core.vm_aux.marks.insert((owner, TWRENFANG_ID), next);
     }
-    if let Some(target) = first_other_alive(ctx.core, owner) {
+    if let Some(target) = hostile_target(ctx, owner) {
         ctx.emit(EventData::Damage(crate::machine::damage_data(
             Some(owner),
             target,
@@ -185,7 +185,7 @@ pub(super) fn resolve_relonghun(ctx: &mut Ctx<'_>, owner: PlayerId) {
     set_flag(ctx.core, owner, "relonghun_invoked", 1);
     if ctx.core.player(owner).hp < ctx.core.player(owner).max_hp as i32 {
         ctx.recover(owner, 1, None);
-    } else if let Some(target) = first_other_alive(ctx.core, owner) {
+    } else if let Some(target) = hostile_target(ctx, owner) {
         ctx.emit(EventData::Damage(crate::machine::damage_data_with(
             Some(owner),
             target,
@@ -295,7 +295,7 @@ pub(super) fn resolve_oljunzhu(ctx: &mut Ctx<'_>, owner: PlayerId) {
             ctx.recover(owner, 1, None);
         }
         _ => {
-            if let Some(target) = first_other_alive(ctx.core, owner) {
+            if let Some(target) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data(
                     Some(owner),
                     target,
@@ -309,7 +309,7 @@ pub(super) fn resolve_oljunzhu(ctx: &mut Ctx<'_>, owner: PlayerId) {
 /// `UP37-N06` (`collab:olrehuanshi` `3274133709`):
 /// Once per suit per turn view-as hand card as same-suit basic/normal-trick in hand.
 pub(super) fn resolve_olrehuanshi(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    let Some(&card) = ctx.core.player(owner).hand.first() else {
+    let Some(card) = choose_own_card(ctx, owner, false) else {
         return;
     };
     let suit = ctx.catalog.cards[card as usize].suit;
@@ -383,7 +383,7 @@ pub(super) fn resolve_olzhuoming(ctx: &mut Ctx<'_>, owner: PlayerId) {
     if sk == 0 {
         return;
     }
-    let Some(target) = first_other_alive(ctx.core, owner) else {
+    let Some(target) = friendly_target(ctx, owner) else {
         return;
     };
     set_turn_var(ctx.core, owner, "olzhuoming_transferred", 1);

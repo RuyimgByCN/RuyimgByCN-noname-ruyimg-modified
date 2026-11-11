@@ -943,13 +943,6 @@ const turnInfo = computed(() => {
       @reload="loadGeneralCandidates"
     />
 
-    <ExtensionSurfacePanel
-      :surfaces="extensionSurfaces"
-      :view="store.view"
-      :self-id="selfId"
-      @update:surfaces="onUpdateExtensionSurfaces"
-    />
-
     <section v-if="isOnline && roomRoster" class="panel online-roster" aria-label="联机房间座位">
       <div class="row online-roster-head">
         <h2>房间 #{{ roomRoster.room_id }}</h2>
@@ -1051,6 +1044,17 @@ const turnInfo = computed(() => {
         </div>
       </div>
     </section>
+
+    <!-- Collapsible Debug & Extension Data Drawer (Preserves BattleBoard Full Viewport at 1440x1080) -->
+    <details class="debug-surface-drawer" data-testid="extension-surface-panel-drawer">
+      <summary class="debug-drawer-summary">🛠 扩展底层数据与开发调试工作台 (点击展开)</summary>
+      <ExtensionSurfacePanel
+        :surfaces="extensionSurfaces"
+        :view="store.view"
+        :self-id="selfId"
+        @update:surfaces="onUpdateExtensionSurfaces"
+      />
+    </details>
 
     <!-- Match stats panel -->
     <section v-if="store.view" class="panel match-stats" aria-label="对局统计">
@@ -1437,5 +1441,26 @@ kbd {
   .effect-popup {
     animation: none;
   }
+}
+.debug-surface-drawer {
+  margin: 1.25rem 0;
+  border: 1px dashed rgba(232, 165, 75, 0.45);
+  border-radius: var(--radius);
+  background: rgba(23, 28, 38, 0.7);
+  padding: 0.5rem;
+}
+.debug-drawer-summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--accent);
+  padding: 0.4rem 0.6rem;
+  user-select: none;
+  list-style: none;
+}
+.debug-drawer-summary::-webkit-details-marker {
+  display: none;
+}
+.debug-drawer-summary:hover {
+  color: var(--accent-2);
 }
 </style>

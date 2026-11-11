@@ -1,0 +1,19 @@
+{
+  "sample_count": 120,
+  "avg_fps": 60,
+  "max_jitter_ms": 0.01,
+  "p50_ms": 16.66,
+  "p95_ms": 16.67,
+  "p99_ms": 16.67,
+  "max_ms": 16.67,
+  "avg_frame_time_ms": 16.66,
+  "active_elements": {
+    "has_weather_particles": true,
+    "seat_count": 4,
+    "hand_card_count": 4,
+    "has_shousha_hud": true,
+    "has_kill_banner": true,
+    "has_card_animation": true,
+    "battleboard_fully_visible": true
+  }
+}

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 import type {
   CardView,
   LegalAction,
@@ -11,6 +11,7 @@ import SeatCard from "./SeatCard.vue";
 import HandStrip from "./HandStrip.vue";
 import BattleShoushaHud, { type BattleModalId } from "./BattleShoushaHud.vue";
 import type { ExtensionSurfacesSnapshot } from "../../engine/extensionSurfaceRuntime";
+import { renderCoinCanvasParticles } from "../../engine/extensionSurfaceRuntime";
 
 const props = defineProps<{
   view: ObserverSnapshot | null;
@@ -25,6 +26,53 @@ const emit = defineEmits<{
   openModal: [modal: BattleModalId];
   sortHand: [sortedIds: number[]];
 }>();
+
+// Weather particle canvas & animation loop on the real tabletop
+const tableWeatherCanvasRef = ref<HTMLCanvasElement | null>(null);
+let weatherRafId: number | null = null;
+let weatherFrame = 0;
+
+function startWeatherAnimation() {
+  if (weatherRafId != null) return;
+  const loop = () => {
+    if (tableWeatherCanvasRef.value && props.surfaces?.coin) {
+      const ctx = tableWeatherCanvasRef.value.getContext("2d");
+      if (ctx) {
+        renderCoinCanvasParticles(ctx, props.surfaces.coin, weatherFrame++);
+      }
+    }
+    weatherRafId = requestAnimationFrame(loop);
+  };
+  weatherRafId = requestAnimationFrame(loop);
+}
+
+function stopWeatherAnimation() {
+  if (weatherRafId != null) {
+    cancelAnimationFrame(weatherRafId);
+    weatherRafId = null;
+  }
+}
+
+onMounted(() => {
+  if (props.surfaces?.coin?.snowFall || (props.surfaces?.coin?.activeEffects?.length ?? 0) > 0) {
+    startWeatherAnimation();
+  }
+});
+
+onUnmounted(() => {
+  stopWeatherAnimation();
+});
+
+watch(
+  () => Boolean(props.surfaces?.coin?.snowFall || (props.surfaces?.coin?.activeEffects?.length ?? 0) > 0),
+  (active) => {
+    if (active) {
+      startWeatherAnimation();
+    } else {
+      stopWeatherAnimation();
+    }
+  }
+);
 
 // Card selection state.
 const selectedCard = ref<number | null>(null);
@@ -286,7 +334,47 @@ function cancelSelection() {
 </script>
 
 <template>
-  <div class="board" role="region" aria-label="战场">
+  <div
+    class="board battle-table battle-felt-surface"
+    :class="[
+      `theme-decade-${surfaces?.theme?.decadeSkinStyle ?? 'shizhounian'}`,
+      `layout-shousha-${surfaces?.theme?.shoushaLayout ?? 'left'}`,
+      `theme-rzsh-${surfaces?.theme?.rzshTheme ?? 'reality'}`,
+      `theme-qhly-${surfaces?.theme?.qhlyTheme ?? 'decade'}`,
+      { 'longxue-shengjian-active': surfaces?.longxue?.shengjian },
+    ]"
+    role="region"
+    aria-label="三国杀真实牌桌战场"
+  >
+    <!-- Tabletop weather / particles canvas layer -->
+    <div
+      v-if="surfaces?.coin?.snowFall || (surfaces?.coin?.activeEffects?.length ?? 0) > 0"
+      class="tabletop-weather-layer"
+      data-testid="tabletop-weather-overlay"
+      aria-hidden="true"
+    >
+      <canvas
+        ref="tableWeatherCanvasRef"
+        class="tabletop-weather-canvas"
+        width="1200"
+        height="680"
+        data-testid="tabletop-weather-canvas"
+      ></canvas>
+    </div>
+
+    <!-- Kill / broadcast ribbon on the tabletop -->
+    <transition name="banner-fade">
+      <div
+        v-if="surfaces?.theme?.shoushaKillBanner"
+        class="tabletop-kill-banner"
+        data-testid="l14-shousha-banner-text"
+      >
+        <span class="banner-wing left">⚔</span>
+        <span class="banner-text">{{ surfaces.theme.shoushaKillBanner }}</span>
+        <span class="banner-wing right">⚔</span>
+      </div>
+    </transition>
+
     <BattleShoushaHud
       :view="view"
       :surfaces="surfaces"
@@ -356,6 +444,7 @@ function cancelSelection() {
           :decade-ui="surfaces?.uiSuites?.decadeUi"
           :skin-switch="surfaces?.uiSuites?.skinSwitch"
           :decade-style="surfaces?.theme?.decadeSkinStyle"
+          :l20-marks="surfaces?.theme?.l20Marks"
           @select="onTargetSelect"
         />
       </div>
@@ -411,9 +500,77 @@ function cancelSelection() {
 
 <style scoped>
 .board {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+/* Real mahogany wood border & dark green felt surface */
+.battle-table {
+  min-height: 720px;
+  border-radius: 16px;
+  padding: 1.1rem 1.3rem;
+  background: radial-gradient(ellipse at 50% 45%, #183e2b 0%, #0d261a 65%, #08160f 100%);
+  border: 8px solid #3c2415;
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.85), 0 8px 32px rgba(0, 0, 0, 0.65);
+}
+.battle-table::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border: 1px solid rgba(232, 165, 75, 0.25);
+  border-radius: 10px;
+  pointer-events: none;
+}
+/* Handkill / Shousha theme variant */
+.battle-table.layout-shousha-right,
+.battle-table.theme-decade-shousha {
+  background: radial-gradient(ellipse at 50% 50%, #2a2017 0%, #17110b 70%, #0c0805 100%);
+  border-color: #2b1a11;
+}
+/* Full-tabletop dynamic weather & particles canvas */
+.tabletop-weather-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: 12px;
+}
+.tabletop-weather-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+/* Center kill / broadcast banner */
+.tabletop-kill-banner {
+  position: absolute;
+  top: 64px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 1.6rem;
+  background: linear-gradient(135deg, rgba(184, 59, 59, 0.95), rgba(92, 20, 20, 0.95));
+  border: 2px solid #e8a54b;
+  border-radius: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(232, 165, 75, 0.5);
+  color: #fff9e6;
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+  animation: banner-glide 0.35s ease-out;
+}
+.banner-wing {
+  color: #f3d27a;
+  font-size: 1.15rem;
+}
+@keyframes banner-glide {
+  0% { opacity: 0; transform: translate(-50%, -18px) scale(0.92); }
+  100% { opacity: 1; transform: translate(-50%, 0) scale(1); }
 }
 .action-bar {
   display: flex;
@@ -431,21 +588,29 @@ function cancelSelection() {
   padding: 0.6rem 0.75rem;
 }
 .seats {
+  position: relative;
+  z-index: 2;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 0.65rem;
 }
 .discard-pile {
+  position: relative;
+  z-index: 2;
   padding: 0.5rem 0.75rem;
-  background: var(--bg-panel);
-  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px dashed rgba(232, 165, 75, 0.35);
   border-radius: 8px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 .judgment-zone {
+  position: relative;
+  z-index: 2;
   padding: 0.5rem 0.75rem;
-  background: rgba(91, 159, 212, 0.08);
-  border: 1px solid rgba(91, 159, 212, 0.25);
+  background: rgba(14, 40, 60, 0.45);
+  border: 1px dashed rgba(91, 159, 212, 0.4);
   border-radius: 8px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 .jz-title { font-size: 0.82rem; margin: 0 0 0.3rem; }
 .jz-entries { display: flex; gap: 0.4rem; flex-wrap: wrap; }
@@ -460,12 +625,6 @@ function cancelSelection() {
 }
 .jz-suit { font-weight: bold; color: var(--accent-2); }
 .jz-player { color: var(--muted); font-family: var(--mono); }
-.discard-pile {
-  padding: 0.5rem 0.75rem;
-  background: var(--bg-panel);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-}
 .discard-title { font-size: 0.82rem; margin: 0 0 0.3rem; }
 .discard-strip { display: flex; gap: 0.2rem; align-items: center; }
 .discard-card {

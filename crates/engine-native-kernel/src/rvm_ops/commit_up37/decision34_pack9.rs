@@ -25,19 +25,7 @@ pub const L25_ZUAN_SKILL_ID: u32 = 1_926_009_001;
 pub const L27_SELECT_SKILL_ID: u32 = 1_926_010_001;
 pub const L11_TAIXU_SKILL_ID: u32 = 1_926_011_001;
 
-fn discard_first_he(ctx: &mut Ctx<'_>, owner: PlayerId) -> Option<CardId> {
-    if let Some(c) = ctx.core.player(owner).hand.first().copied() {
-        ctx.take_hand_card(owner, c);
-        discard_some(ctx, owner, vec![c]);
-        Some(c)
-    } else if let Some(c) = ctx.core.player(owner).equips.first().copied() {
-        ctx.take_owned_card(owner, c);
-        discard_some(ctx, owner, vec![c]);
-        Some(c)
-    } else {
-        None
-    }
-}
+
 
 pub(super) fn try_commit_decision34_pack9(
     ctx: &mut Ctx<'_>,
@@ -138,14 +126,7 @@ fn resolve_u01_ddd_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
         // (`dddxiaxing_xia = 0`) to view-as `sha`/`shan` (`selectCard: -1`, `cards: []`) WITHOUT drawing cards.
         "dddxiaxing" => {
             if flag(ctx.core, owner, "dddxiaxing_xia") == 0 {
-                let Some(c) = ctx
-                    .core
-                    .player(owner)
-                    .hand
-                    .first()
-                    .copied()
-                    .or_else(|| ctx.core.player(owner).equips.first().copied())
-                else {
+                let Some(c) = choose_own_card(ctx, owner, true) else {
                     set_flag(ctx.core, owner, "dddxiaxing_blocked_empty", 1);
                     return;
                 };
@@ -171,7 +152,12 @@ fn resolve_u01_ddd_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
             let current = if prev == 0 { 3 } else { prev };
             let next = current.saturating_sub(1);
             set_flag(ctx.core, owner, "ddd_yeshen_triggered", 1);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            let yeshen_target = if flag(ctx.core, owner, "dddyeshen_recast") != 0 {
+                friendly_target(ctx, owner)
+            } else {
+                hostile_target(ctx, owner)
+            };
+            if let Some(t) = yeshen_target {
                 if flag(ctx.core, owner, "dddyeshen_recast") != 0 {
                     ctx.start_draw(t, 1);
                 } else {
@@ -204,7 +190,7 @@ fn resolve_u01_ddd_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
                 || ctx.core.player(owner).linked
             {
                 for _ in 0..chained_count {
-                    if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+                    if let Some(c) = choose_own_card(ctx, owner, false) {
                         ctx.take_hand_card(owner, c);
                         ctx.core.deck.insert(0, c);
                     }
@@ -245,7 +231,7 @@ fn resolve_u01_ddd_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
         // At PhaseJieshu, target draws 2 cards (`target.draw(2)`), shows all handcards, and
         // discards X cards of different suits (`X = suits - decreased`).
         "dddjungui" => {
-            let t = first_other_alive(ctx.core, owner).unwrap_or(owner);
+            let t = friendly_target(ctx, owner).unwrap_or(owner);
             set_flag(ctx.core, owner, "ddd_jungui_triggered", 1);
             set_flag(ctx.core, t, "ddd_jungui_shown_hand", 1);
             ctx.start_draw(t, 2);
@@ -253,7 +239,7 @@ fn resolve_u01_ddd_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
             let discard_n = (2usize).saturating_sub(decreased);
             let mut to_discard = Vec::new();
             for _ in 0..discard_n {
-                if let Some(c) = ctx.core.player(t).hand.first().copied() {
+                if let Some(c) = choose_own_card(ctx, t, false) {
                     ctx.take_hand_card(t, c);
                     to_discard.push(c);
                 }
@@ -295,10 +281,7 @@ fn resolve_u01_ddd_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
             if state == 0 {
                 set_flag(ctx.core, owner, "ddd_diedang_triggered", 1);
                 ctx.start_draw(owner, 3);
-                if let Some(c) = ctx.core.player(owner).hand.first().copied() {
-                    ctx.take_hand_card(owner, c);
-                    discard_some(ctx, owner, vec![c]);
-                }
+                let _ = discard_one_he(ctx, owner);
             } else {
                 let he_len =
                     ctx.core.player(owner).hand.len() + ctx.core.player(owner).equips.len();
@@ -307,18 +290,8 @@ fn resolve_u01_ddd_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
                     return;
                 }
                 set_flag(ctx.core, owner, "ddd_diedang_triggered", 1);
-                let mut disc = Vec::new();
                 for _ in 0..3 {
-                    if let Some(c) = ctx.core.player(owner).hand.first().copied() {
-                        ctx.take_hand_card(owner, c);
-                        disc.push(c);
-                    } else if let Some(c) = ctx.core.player(owner).equips.first().copied() {
-                        ctx.take_owned_card(owner, c);
-                        disc.push(c);
-                    }
-                }
-                if !disc.is_empty() {
-                    discard_some(ctx, owner, disc);
+                    let _ = discard_one_he(ctx, owner);
                 }
                 ctx.start_draw(owner, 1);
             }
@@ -390,7 +363,7 @@ fn resolve_wudian_choudu(ctx: &mut Ctx<'_>, owner: PlayerId) {
         set_flag(ctx.core, owner, "choudu_blocked_usable", 1);
         return;
     }
-    let _ = discard_first_he(ctx, owner);
+    let _ = discard_one_he(ctx, owner);
     set_flag(ctx.core, owner, "choudu_used_this_turn", 1);
     set_flag(ctx.core, owner, "wudian_choudu_dispatched", 1);
     let raw_t = flag(ctx.core, owner, "choudu_target") as usize;
@@ -516,7 +489,7 @@ fn resolve_l20_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
         }
         "zhenyi_spade" => {
             set_flag(ctx.core, owner, "l20_zhenyi_spade_hit", 1);
-            if let Some(t) = first_other_alive(ctx.core, owner) {
+            if let Some(t) = hostile_target(ctx, owner) {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     Some(owner),
                     t,

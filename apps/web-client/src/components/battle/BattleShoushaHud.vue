@@ -68,7 +68,7 @@ const rzshCrest = computed(() => {
         第 {{ view.round }} 轮 · P{{ view.current_player }}
       </span>
       <span class="lantern-badge" data-testid="battle-hud-jiangdeng">
-        🏮 {{ jiangdengTier }}
+        <span class="candle-flame">🏮</span> {{ jiangdengTier }}
       </span>
       <span class="rzsh-crest" data-testid="battle-hud-rzsh-crest">
         ✦ {{ rzshCrest }}
@@ -77,12 +77,19 @@ const rzshCrest = computed(() => {
 
     <div class="hud-timebar" role="progressbar" :aria-valuenow="countdownPct" aria-valuemin="0" aria-valuemax="100">
       <span class="timebar-label">读秒 {{ Math.ceil(countdownPct * 0.15) }}s</span>
-      <div class="timebar-track">
+      <div class="timebar-track" :class="{ 'is-urgent': countdownPct < 25 }">
         <div
           class="timebar-fill"
           data-testid="battle-hud-countdown-fill"
+          :class="{
+            'fill-safe': countdownPct >= 50,
+            'fill-warn': countdownPct < 50 && countdownPct >= 25,
+            'fill-danger': countdownPct < 25,
+          }"
           :style="{ width: `${countdownPct}%` }"
-        ></div>
+        >
+          <span class="spark-cursor" aria-hidden="true">✦</span>
+        </div>
       </div>
     </div>
 
@@ -149,20 +156,56 @@ const rzshCrest = computed(() => {
   align-items: center;
   gap: 0.45rem;
 }
+/* Embroidered silk banner for phase ribbon */
 .phase-ribbon {
-  padding: 0.18rem 0.65rem;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #d89638, #9c5b16);
-  color: #fff8eb;
+  position: relative;
+  padding: 0.22rem 0.95rem;
+  border-radius: 4px;
+  background: linear-gradient(135deg, #b83b3b 0%, #852222 50%, #5c1414 100%);
+  color: #fff9e6;
   font-weight: 700;
-  font-size: 0.82rem;
+  font-size: 0.84rem;
+  letter-spacing: 0.05em;
+  border: 1px solid #e8a54b;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  animation: ribbon-slide-in 0.3s ease-out;
+}
+@keyframes ribbon-slide-in {
+  0% { transform: translateY(-4px); opacity: 0.7; }
+  100% { transform: translateY(0); opacity: 1; }
 }
 .round-pill {
   font-family: var(--mono);
   font-size: 0.78rem;
   color: var(--muted);
 }
-.lantern-badge,
+/* Lantern & Candle flicker styling */
+.lantern-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.14rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  border: 1px solid rgba(232, 197, 75, 0.4);
+  background: rgba(232, 197, 75, 0.12);
+  color: #f3d27a;
+  animation: lantern-glow 2.2s infinite ease-in-out alternate;
+}
+@keyframes lantern-glow {
+  0% { box-shadow: 0 0 4px rgba(232, 197, 75, 0.2); }
+  100% { box-shadow: 0 0 10px rgba(232, 197, 75, 0.55); }
+}
+.candle-flame {
+  display: inline-block;
+  animation: flame-flicker 1.8s infinite ease-in-out alternate;
+}
+@keyframes flame-flicker {
+  0% { transform: scale(0.95) rotate(-2deg); }
+  100% { transform: scale(1.08) rotate(3deg); }
+}
 .rzsh-crest {
   padding: 0.14rem 0.5rem;
   border-radius: 6px;
@@ -187,17 +230,57 @@ const rzshCrest = computed(() => {
   white-space: nowrap;
 }
 .timebar-track {
+  position: relative;
   flex: 1;
-  height: 7px;
+  height: 9px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
-  overflow: hidden;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  overflow: visible;
+}
+.timebar-track.is-urgent {
+  animation: bar-urgent-pulse 0.5s ease-in-out infinite alternate;
+}
+@keyframes bar-urgent-pulse {
+  0% { box-shadow: 0 0 4px rgba(224, 90, 90, 0.4); }
+  100% { box-shadow: 0 0 12px rgba(224, 90, 90, 0.9); }
 }
 .timebar-fill {
+  position: relative;
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, #5fbf7a, #e8a54b, #e05a5a);
-  transition: width 0.2s ease;
+  transition: width 0.2s ease, background 0.3s ease;
+}
+.timebar-fill.fill-safe {
+  background: linear-gradient(90deg, #3db868, #5fbf7a);
+  box-shadow: 0 0 8px rgba(95, 191, 122, 0.5);
+}
+.timebar-fill.fill-warn {
+  background: linear-gradient(90deg, #d89638, #f59e0b);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+}
+.timebar-fill.fill-danger {
+  background: linear-gradient(90deg, #b83b3b, #e05a5a);
+  box-shadow: 0 0 12px rgba(224, 90, 90, 0.8);
+  animation: danger-flash 0.4s ease-in-out infinite alternate;
+}
+@keyframes danger-flash {
+  0% { filter: brightness(1); }
+  100% { filter: brightness(1.4); }
+}
+.spark-cursor {
+  position: absolute;
+  right: -5px;
+  top: -6px;
+  font-size: 0.8rem;
+  color: #fff4bd;
+  text-shadow: 0 0 8px #ffd700, 0 0 12px #ff8c00;
+  animation: spark-twinkle 0.3s infinite alternate;
+  pointer-events: none;
+}
+@keyframes spark-twinkle {
+  0% { transform: scale(0.9) rotate(0deg); opacity: 0.8; }
+  100% { transform: scale(1.2) rotate(15deg); opacity: 1; }
 }
 .hud-modal-actions {
   display: flex;

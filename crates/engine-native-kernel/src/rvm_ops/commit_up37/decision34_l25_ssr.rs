@@ -2,38 +2,12 @@
 //! 130 `ssr_*` General Skills, and `ssr_newsance_*` / `ssr_yongsi` Cards.
 //! Upstream source: `archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js`.
 
-use super::commit::discard_some;
 use super::*;
 
-pub(super) fn discard_first_he(ctx: &mut Ctx<'_>, p: PlayerId) -> Option<CardId> {
-    if let Some(c) = ctx.core.player(p).hand.first().copied() {
-        ctx.take_hand_card(p, c);
-        discard_some(ctx, p, vec![c]);
-        Some(c)
-    } else if let Some(c) = ctx.core.player(p).equips.first().copied() {
-        ctx.take_owned_card(p, c);
-        discard_some(ctx, p, vec![c]);
-        Some(c)
-    } else {
-        None
-    }
-}
+pub(super) fn discard_first_he(ctx: &mut Ctx<'_>, p: PlayerId) -> Option<CardId> { discard_one_he(ctx, p) }
 
 pub(super) fn steal_one_card(ctx: &mut Ctx<'_>, thief: PlayerId, victim: PlayerId) -> bool {
-    if thief == victim {
-        return false;
-    }
-    if let Some(c) = ctx.core.player(victim).hand.first().copied() {
-        ctx.take_hand_card(victim, c);
-        ctx.core.player_mut(thief).hand.push(c);
-        true
-    } else if let Some(c) = ctx.core.player(victim).equips.first().copied() {
-        ctx.take_owned_card(victim, c);
-        ctx.core.player_mut(thief).hand.push(c);
-        true
-    } else {
-        false
-    }
+    steal_target_he(ctx, thief, victim)
 }
 
 /// Resolve `L25` `ssr_*` general skills & card skills (`祖安武将/extension.js:4911-33889`).
@@ -54,7 +28,7 @@ pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pla
     if !guard_phase_auto_trigger(ctx, owner, "l25", skill_name, self_hp_cost) {
         return true;
     }
-    let other = first_other_alive(ctx.core, owner).unwrap_or(owner);
+    let other = hostile_target(ctx, owner).unwrap_or(owner);
     if super::decision34_l25_ssr_mods::try_resolve_l25_ssr_mod_or_tactical(
         ctx, skill_name, owner, other,
     ) {
@@ -576,12 +550,8 @@ pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pla
         }
         "ssr_fangtong" => {
             // ssr_fangtong (`祖安武将/extension.js:33401-33455`): compares shown hand card rank; deals 1 damage if target cannot match <= rank.
-            let my_rank = ctx
-                .core
-                .player(owner)
-                .hand
-                .first()
-                .map(|&c| ctx.catalog.cards[c as usize].rank)
+            let my_rank = choose_own_card(ctx, owner, false)
+                .map(|c| ctx.catalog.cards[c as usize].rank)
                 .unwrap_or(0);
             if my_rank > 0 && other != owner {
                 let opp_min = ctx

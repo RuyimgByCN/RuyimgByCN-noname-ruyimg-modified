@@ -30,6 +30,10 @@ tempfile = { workspace = true }
 # tests/*.rs 经 tests/groups/<组>.rs 的 #[path] 模块编入分组二进制：每组链接一次，
 # 不再每个文件各链接一个测试二进制。新增测试文件须登记到一个分组（test_registry 守卫）。
 [[test]]
+name = "e2e"
+path = "tests/groups/e2e.rs"
+
+[[test]]
 name = "g1"
 path = "tests/groups/g1.rs"
 

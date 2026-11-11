@@ -18,19 +18,7 @@ const L10_SCS_COMPANION_SKILLS: [&str; 10] = [
     "scsanruo",
 ];
 
-fn discard_one_he(ctx: &mut Ctx<'_>, p: PlayerId) -> Option<CardId> {
-    if let Some(c) = ctx.core.player(p).hand.first().copied() {
-        ctx.take_hand_card(p, c);
-        discard_some(ctx, p, vec![c]);
-        Some(c)
-    } else if let Some(c) = ctx.core.player(p).equips.first().copied() {
-        ctx.take_owned_card(p, c);
-        discard_some(ctx, p, vec![c]);
-        Some(c)
-    } else {
-        None
-    }
-}
+
 
 fn grant_named_skill_if_present(ctx: &mut Ctx<'_>, owner: PlayerId, skill_name: &str) {
     if let Some(def) = ctx.catalog.skill_by_name(skill_name) {
@@ -87,7 +75,7 @@ pub(super) fn apply_l10_danggu_companion(
 
 /// `L10` (`scstaoluan`..`scsanruo` — `archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2335-2369`):
 pub(super) fn resolve_l10_scs_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: PlayerId) {
-    let other = first_other_alive(ctx.core, owner).unwrap_or(owner);
+    let other = hostile_target(ctx, owner).unwrap_or(owner);
     set_flag(ctx.core, owner, &format!("l10_scs_resolved:{skill_name}"), 1);
     match skill_name {
         "scstaoluan" => {
@@ -141,7 +129,7 @@ pub(super) fn resolve_l10_scs_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: 
         }
         "scsanruo" => {
             if other != owner {
-                if let Some(c) = ctx.core.player(other).hand.first().copied() {
+                if let Some(c) = choose_enemy_card(ctx, owner, other) {
                     ctx.take_hand_card(other, c);
                     ctx.core.player_mut(owner).hand.push(c);
                 }
@@ -159,10 +147,10 @@ pub(super) fn resolve_l01_yiyi_card(ctx: &mut Ctx<'_>, owner: PlayerId) {
     let drawn = draw_cards_sync(ctx, owner, 2);
     let mut disc = Vec::new();
     for _ in 0..2 {
-        if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+        if let Some(c) = choose_own_card(ctx, owner, false) {
             ctx.take_hand_card(owner, c);
             disc.push(c);
-        } else if let Some(c) = ctx.core.player(owner).equips.first().copied() {
+        } else if let Some(c) = choose_own_card(ctx, owner, true) {
             ctx.take_owned_card(owner, c);
             disc.push(c);
         }
@@ -250,7 +238,7 @@ pub(super) fn resolve_u06_huanle_skill(ctx: &mut Ctx<'_>, skill_name: &str, owne
             if ctx.core.player(owner).hp < ctx.core.player(owner).max_hp as i32 {
                 ctx.recover(owner, 1, None);
             } else if flag(ctx.core, owner, "jiuwei_discard_other") != 0 {
-                if let Some(other) = first_other_alive(ctx.core, owner) {
+                if let Some(other) = hostile_target(ctx, owner) {
                     let _ = discard_one_he(ctx, other);
                     let _ = discard_one_he(ctx, other);
                 }
@@ -267,7 +255,7 @@ pub(super) fn resolve_u06_huanle_skill(ctx: &mut Ctx<'_>, skill_name: &str, owne
 /// `U07` (`youdishenru`, `g_youdishenru`, `ciqiu_dying`, `ciqiu_destroy`, `kangyin2`, etc. —
 /// `archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js:169-219`, `card/skill.js:5-36`, `character/skill.js:5-795`).
 pub(super) fn resolve_u07_wudian_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: PlayerId) {
-    let other = first_other_alive(ctx.core, owner).unwrap_or(owner);
+    let other = hostile_target(ctx, owner).unwrap_or(owner);
     set_flag(ctx.core, owner, &format!("u07_skill:{skill_name}"), 1);
     match skill_name {
         "youdishenru" | "g_youdishenru" => {
@@ -331,7 +319,7 @@ pub(super) fn resolve_u07_wudian_skill(ctx: &mut Ctx<'_>, skill_name: &str, owne
                 .iter()
                 .copied()
                 .find(|&c| ctx.catalog.card_kind(c).is_equip())
-                .or_else(|| ctx.core.player(owner).equips.first().copied());
+                .or_else(|| choose_own_card(ctx, owner, true));
             if let Some(c) = eq {
                 if ctx.core.player(owner).hand.contains(&c) {
                     ctx.take_hand_card(owner, c);
@@ -347,7 +335,7 @@ pub(super) fn resolve_u07_wudian_skill(ctx: &mut Ctx<'_>, skill_name: &str, owne
             // `玩点论杀/character/skill.js:677-686`: target gives 1 hand card to owner or suit is locked (`d34_flags`)
             if other != owner {
                 if flag(ctx.core, other, "liduan_refuse_give") == 0 {
-                    if let Some(c) = ctx.core.player(other).hand.first().copied() {
+                    if let Some(c) = choose_enemy_card(ctx, owner, other) {
                         ctx.take_hand_card(other, c);
                         ctx.core.player_mut(owner).hand.push(c);
                         set_flag(ctx.core, owner, "wdb_liduan_gained_card", 1);
@@ -368,7 +356,7 @@ pub(super) fn resolve_mbcmxscw(ctx: &mut Ctx<'_>, owner: PlayerId) {
     set_flag(ctx.core, owner, "mbcmxscw_triggered", 1);
     set_flag(ctx.core, owner, "mbcmxscw_drawn", lost_hp);
     ctx.start_draw(owner, lost_hp);
-    if let Some(t) = first_other_alive(ctx.core, owner) {
+    if let Some(t) = hostile_target(ctx, owner) {
         ctx.emit(EventData::Damage(crate::machine::damage_data(
             Some(owner),
             t,
@@ -386,7 +374,7 @@ pub(super) fn resolve_l29_longxue_skill(ctx: &mut Ctx<'_>, skill_name: &str, own
             return;
         }
         let owner_disc = discard_one_he(ctx, owner).is_some();
-        let other = first_other_alive(ctx.core, owner).unwrap_or(owner);
+        let other = hostile_target(ctx, owner).unwrap_or(owner);
         let target_disc = if other != owner {
             discard_one_he(ctx, other).is_some()
         } else {
@@ -412,7 +400,7 @@ pub(super) fn resolve_l29_longxue_skill(ctx: &mut Ctx<'_>, skill_name: &str, own
 /// Authentic per-skill state transitions for all remaining `ddd*` skills without any
 /// grouped or default `ctx.start_draw(owner, 1)` fallback branches.
 pub(super) fn resolve_u01_ddd_remaining(ctx: &mut Ctx<'_>, skill_name: &str, owner: PlayerId) {
-    let other = first_other_alive(ctx.core, owner).unwrap_or(owner);
+    let other = hostile_target(ctx, owner).unwrap_or(owner);
     match skill_name {
         // dddyuanzhen 远振 (`3D精选/character/skill.js:6-36`):
         "dddyuanzhen" => {
@@ -433,7 +421,7 @@ pub(super) fn resolve_u01_ddd_remaining(ctx: &mut Ctx<'_>, skill_name: &str, own
         }
         // dddjuxian 聚贤 (`3D精选/character/skill.js:244-383`):
         "dddjuxian" => {
-            if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+            if let Some(c) = choose_own_card(ctx, owner, false) {
                 ctx.take_hand_card(owner, c);
                 push_pile(ctx, owner, "dddjuxian", c);
             }
@@ -469,8 +457,8 @@ pub(super) fn resolve_u01_ddd_remaining(ctx: &mut Ctx<'_>, skill_name: &str, own
         // dddanliu 暗流 (`3D精选/character/skill.js:861-967`):
         "dddanliu" => {
             if let (Some(c1), Some(c2)) = (
-                ctx.core.player(owner).hand.first().copied(),
-                ctx.core.player(other).hand.first().copied(),
+                choose_own_card(ctx, owner, false),
+                choose_enemy_card(ctx, owner, other),
             ) {
                 if other != owner {
                     ctx.take_hand_card(owner, c1);
@@ -487,7 +475,7 @@ pub(super) fn resolve_u01_ddd_remaining(ctx: &mut Ctx<'_>, skill_name: &str, own
         // dddguiying 归萤 (`3D精选/character/skill.js:968-1203`):
         "dddguiying" => {
             if other != owner {
-                if let Some(c) = ctx.core.player(other).hand.first().copied() {
+                if let Some(c) = choose_enemy_card(ctx, owner, other) {
                     ctx.take_hand_card(other, c);
                     ctx.core.player_mut(owner).hand.push(c);
                 }
@@ -533,7 +521,7 @@ pub(super) fn resolve_u01_ddd_remaining(ctx: &mut Ctx<'_>, skill_name: &str, own
         // dddjijian / dddjijian_old 赍剑 (`3D精选/character/skill.js:1676-2004`):
         "dddjijian" | "dddjijian_old" => {
             if other != owner {
-                if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+                if let Some(c) = choose_own_card(ctx, owner, false) {
                     ctx.take_hand_card(owner, c);
                     ctx.core.player_mut(other).hand.push(c);
                 }
@@ -604,7 +592,7 @@ pub(super) fn resolve_u01_ddd_remaining(ctx: &mut Ctx<'_>, skill_name: &str, own
         }
         // ddddongcha 洞察 (`3D精选/character/skill.js:2851-2940`):
         "ddddongcha" => {
-            if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+            if let Some(c) = choose_own_card(ctx, owner, false) {
                 ctx.take_hand_card(owner, c);
                 push_pile(ctx, owner, "ddd_jian", c);
             }
@@ -627,7 +615,7 @@ pub(super) fn resolve_u01_ddd_remaining(ctx: &mut Ctx<'_>, skill_name: &str, own
                     .unwrap_or_default();
                 if !cards.is_empty() {
                     ctx.core.player_mut(other).hand.extend(cards);
-                } else if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+                } else if let Some(c) = choose_own_card(ctx, owner, false) {
                     ctx.take_hand_card(owner, c);
                     ctx.core.player_mut(other).hand.push(c);
                 }
@@ -700,7 +688,7 @@ pub(super) fn resolve_u01_ddd_remaining(ctx: &mut Ctx<'_>, skill_name: &str, own
         // dddyulv / dddyulv_old 玉律 (`3D精选/character/skill.js:4213-4402`):
         "dddyulv" | "dddyulv_old" => {
             ctx.start_draw(owner, 1);
-            if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+            if let Some(c) = choose_own_card(ctx, owner, false) {
                 ctx.take_hand_card(owner, c);
                 push_pile(ctx, owner, "dddyulv", c);
             }
@@ -759,7 +747,7 @@ pub(super) fn resolve_u01_ddd_remaining(ctx: &mut Ctx<'_>, skill_name: &str, own
         // dddzhuanshe 专摄 (`3D精选/character/skill.js:5593-5713`):
         "dddzhuanshe" => {
             if other != owner {
-                if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+                if let Some(c) = choose_own_card(ctx, owner, false) {
                     ctx.take_hand_card(owner, c);
                     ctx.core.player_mut(other).hand.push(c);
                 }
@@ -838,7 +826,7 @@ pub(super) fn resolve_u01_ddd_remaining(ctx: &mut Ctx<'_>, skill_name: &str, own
 /// Authentic per-skill state transitions for all `th_*` skills without any grouped fallback.
 pub(super) fn resolve_l28_thunder_remaining(ctx: &mut Ctx<'_>, skill: &str, owner: PlayerId) {
     set_flag(ctx.core, owner, &format!("th_skill:{skill}"), 1);
-    let other = first_other_alive(ctx.core, owner).unwrap_or(owner);
+    let other = hostile_target(ctx, owner).unwrap_or(owner);
     match skill {
         // th_bushi 卜筮 (`雷霆万钧/extension.js:4203-4387`):
         "th_bushi" => {
@@ -976,18 +964,7 @@ pub(super) fn resolve_l28_thunder_remaining(ctx: &mut Ctx<'_>, skill: &str, owne
             let lot = (flag(ctx.core, owner, "th_tiansuan_lot") % 5) + 1;
             set_flag(ctx.core, owner, "th_tiansuan_lot", lot);
             if lot <= 2 && other != owner {
-                let gained = if let Some(c) = ctx.core.player(other).hand.first().copied() {
-                    ctx.take_hand_card(other, c);
-                    Some(c)
-                } else if let Some(c) = ctx.core.player(other).equips.first().copied() {
-                    ctx.take_owned_card(other, c);
-                    Some(c)
-                } else {
-                    None
-                };
-                if let Some(c) = gained {
-                    ctx.core.player_mut(owner).hand.push(c);
-                }
+                let _ = steal_target_he(ctx, owner, other);
             }
         }
         // th_tiansuan2 (`雷霆万钧/extension.js:8027-8034`): `onremove` cleanup clearing fortune lot

@@ -16,6 +16,9 @@ use engine_native::rvm_bridge::VmFilterPolicy;
 #[path = "decision34_pack9_data.rs"]
 pub mod decision34_pack9_data;
 pub use decision34_pack9_data::*;
+#[path = "decision34_pack9_triggers.rs"]
+pub mod decision34_pack9_triggers;
+pub use decision34_pack9_triggers::classify_skill_trigger;
 
 use super::DECISION34_STORAGE_DISPATCH_KEY;
 
@@ -38,101 +41,8 @@ pub const L25_ZUAN_SKILL_ID: u32 = 1_926_009_001;
 pub const L27_SELECT_SKILL_ID: u32 = 1_926_010_001;
 pub const L11_TAIXU_SKILL_ID: u32 = 1_926_011_001;
 
-fn classify_skill_trigger(name: &str) -> (EventKind, VmFilterPolicy) {
-    if name.ends_with("__ref_busi") {
-        return (EventKind::Dying, VmFilterPolicy::OwnerIsTarget);
-    }
-    if let Some(res) = super::classify_l11_npc_skill_trigger(name) {
-        return res;
-    }
-    match name {
-        "ycndiyjianxiong"
-        | "cyxianjiang"
-        | "ssr_newganglie"
-        | "ssr_newtianxiang"
-        | "ssr_newjiyuan"
-        | "ssr_guimou"
-        | "ssr_newduanxian"
-        | "ssr_wangxi"
-        | "txhj_dundunSkill2"
-        | "txhj_yayaSkill2"
-        | "txhj_piliche"
-        | "_pfqh_check_damage"
-        | "_pfqh_check_damage_times"
-        | "_pfqh_check_hp_change"
-        | "_zuan_damageSendEgg"
-        | "_zuan_damageSendFlower"
-        | "_extradamageskill"
-        | "_wujinmoshiDamage"
-        | "_wujinmoshiDamageE"
-        | "_losehp_"
-        | "_mianshang_"
-        | "baonvezhi" => (EventKind::Damage, VmFilterPolicy::OwnerIsTarget),
-        "tanlin"
-        | "feizhua"
-        | "tianjian"
-        | "shanguang"
-        | "ssr_wushuang"
-        | "ssr_baonue"
-        | "ssr_newfabing"
-        | "ssr_newjilue"
-        | "ssr_tieji"
-        | "ssr_liegong"
-        | "txhj_taijifuchen"
-        | "gx_taijifuchen"
-        | "_usecard"
-        | "_decadeUI_usecardBegin"
-        | "_changeEquipExt"
-        | "_tsx"
-        | "_gj"
-        | "_ts"
-        | "_chupaiA"
-        | "_chupaiB"
-        | "_chupaiC"
-        | "_chupaiD"
-        | "_chupaiE"
-        | "_chupaiF"
-        | "_chupaiG"
-        | "_chupaiH"
-        | "_useskill"
-        | "_extrauseskill"
-        | "_shiyongkapaitexiao_" => (EventKind::CardUsed, VmFilterPolicy::OwnerIsSource),
-        "jianbi" | "_jd_shiyongshanD" | "_checkDcdShan" | "_shanskill" => {
-            (EventKind::CardUsed, VmFilterPolicy::OwnerIsTarget)
-        }
-        "leiyu"
-        | "zhengsu"
-        | "ssr_biyue"
-        | "ssr_jushou"
-        | "ssr_zhuhai"
-        | "ssr_shendao"
-        | "_pfqh_check_phaseEnd"
-        | "_jd_hhjs"
-        | "_jd_phaseAfter"
-        | "_phaseendskill" => (EventKind::PhaseEnd, VmFilterPolicy::OwnerIsTarget),
-        "dddqianlong"
-        | "_decadeUI_dieKillEffect"
-        | "_kill_framebg"
-        | "_dieNoTuoguan"
-        | "_jd_wjsw"
-        | "_check_die_yh"
-        | "_pfqh_check_jisha"
-        | "_killskill"
-        | "_extradieskill"
-        | "_dieskill"
-        | "_guozhan_diebiaoji_"
-        | "_shoushajisha_" => (EventKind::Death, VmFilterPolicy::OwnerIsTarget),
-        "busi" | "ssr_newbuqu" | "_zuanidentitydyingskill" | "_bingleDying" => {
-            (EventKind::Dying, VmFilterPolicy::OwnerIsTarget)
-        }
-        "_pfqh_check_roundCount" | "_zuanRoundTX" | "_chooseCharacterTwo" => {
-            (EventKind::TurnBegin, VmFilterPolicy::OwnerIsTarget)
-        }
-        _ => (EventKind::PhaseBegin, VmFilterPolicy::OwnerIsTarget),
-    }
-}
-
-pub(super) fn make_vm_skill_decl(name_str: &str, dispatch_id: u32, idx: usize) -> VmSkillDecl {
+pub(super) fn make_vm_skill_decl(name_str: &str, dispatch_id: u32, idx: usize) -> Option<VmSkillDecl> {
+    let (event, inner_filter) = classify_skill_trigger(name_str)?;
     let mod_name = format!("{name_str}#d34p9");
     let mut code = Vec::with_capacity(14);
     code.push(0x57); // HOST_SKILL
@@ -155,13 +65,12 @@ pub(super) fn make_vm_skill_decl(name_str: &str, dispatch_id: u32, idx: usize) -
         caps_mask: 1,
     };
     let skill_def_id = dispatch_id.wrapping_add(idx as u32);
-    let (event, inner_filter) = classify_skill_trigger(name_str);
     let extra_events = if name_str == "dddxiaxing" {
         vec![EventKind::Dying]
     } else {
         Vec::new()
     };
-    VmSkillDecl {
+    Some(VmSkillDecl {
         declaration_hash: None,
         presentation_binding: None,
         name: name_str.to_string(),
@@ -182,7 +91,7 @@ pub(super) fn make_vm_skill_decl(name_str: &str, dispatch_id: u32, idx: usize) -
             inner: Box::new(inner_filter),
         },
         r05_identity: None,
-    }
+    })
 }
 
 /// Build the complete `ExtensionPack` covering the remaining 9 sources (`U01`, `U05`,
@@ -366,8 +275,10 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
             return;
         }
         if seen_skills.insert(name.to_string()) {
-            vm_skills.push(make_vm_skill_decl(name, dispatch_id, idx));
-            idx += 1;
+            if let Some(decl) = make_vm_skill_decl(name, dispatch_id, idx) {
+                vm_skills.push(decl);
+                idx += 1;
+            }
         }
     };
 
@@ -594,8 +505,10 @@ pub fn attach_formal_package_upstream_rules(
             return;
         }
         if seen_skills.insert(name.to_string()) {
-            extra_vm_skills.push(make_vm_skill_decl(name, dispatch_id, idx));
-            idx += 1;
+            if let Some(decl) = make_vm_skill_decl(name, dispatch_id, idx) {
+                extra_vm_skills.push(decl);
+                idx += 1;
+            }
         }
     };
 

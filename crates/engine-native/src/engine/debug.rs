@@ -846,8 +846,14 @@ impl Engine {
             .unwrap_or_else(|| panic!("unknown card name {name}"))
     }
 
-    /// 调试/测试：通过完整命令段管线执行一条权威 `EffectRequest`（含后续事件帧与表现层投影）。
-    pub fn debug_commit_effect(
+    /// [LEGACY INTERNAL HARNESS ONLY]
+    /// 历史遗留内部测试辅助函数：仅供历史回归测试套件检验低阶字节码操作码及快照稳定性使用。
+    ///
+    /// ⚠️ 严禁在 R3 上游语义等价性测试中使用此函数！
+    /// 所有 R3 技能等价性测试必须严格经由引擎真实对局事件路径（GameAction::NextPhase、
+    /// GameAction::PlayCard、GameAction::Answer 等）推入状态机驱动。
+    #[deprecated(note = "Legacy internal opcode harness; do not use in new R3 tests")]
+    pub fn debug_execute_effect(
         &mut self,
         executing: &str,
         owner: PlayerId,

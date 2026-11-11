@@ -54,8 +54,9 @@ fn drain(e: &mut Engine) {
     }
 }
 
+#[allow(deprecated)]
 fn invoke_l11(e: &mut Engine, owner: u8, skill_name: &str) {
-    let out = e.debug_commit_effect(
+    let out = e.debug_execute_effect(
         skill_name,
         owner,
         EffectRequest::StorageSet {
@@ -298,13 +299,16 @@ fn l11_taixu_formal_package_320_generals_32_cards_374_skills_and_206_campaign_no
     invoke_l11(&mut e, 0, "txhj_ditingSkill2");
     assert_eq!(e.state_core().player(0).max_hp, mhp_before + 1);
 
-    // (d) `boss_tianyun` (`extension_skill.js:4085`): owner loses 1 HP, strips target equips, and deals 2 fire damage
+    // (d) `boss_tianyun` (`extension_skill.js:4085`): owner loses 1 HP, strips target equips, and deals 2~3 fire damage
     e.state_core_mut().player_mut(0).hp = 8;
     e.state_core_mut().player_mut(1).hp = 8;
     e.state_core_mut().player_mut(1).max_hp = 8;
     invoke_l11(&mut e, 0, "boss_tianyun");
     assert_eq!(e.state_core().player(0).hp, 7);
-    assert_eq!(e.state_core().player(1).hp, 6);
+    assert!(
+        e.state_core().player(1).hp == 5 || e.state_core().player(1).hp == 6,
+        "boss_tianyun deals random 2~3 fire damage matching upstream Math.random() > 0.4 ? 2 : 3"
+    );
 
     // 4. Exhaustively execute all 374 L11 skills + 29 own NPC skills + 20 equip card skills:
     //    ZERO grouped bucket flags (`l11_passive_active:*`, `l11_npc_*`, `l11_buff_draw:*`, `l11_buff_aura:*`, `l11_unhandled_skill:*`)!

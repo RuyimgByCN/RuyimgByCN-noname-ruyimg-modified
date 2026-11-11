@@ -1,6 +1,6 @@
 # G0 · L04 cardpile
 
-> 核验日期：2026-11-10 · 来源仓：`noname-liuli` · 入口：`archive/upstream/noname-liuli/noname/extension/cardpile`  
+> 核验日期：2026-11-11 · 来源仓：`noname-liuli` · 入口：`archive/upstream/noname-liuli/noname/extension/cardpile`  
 > 本页为 E01/G0 深度清单与**裁决 34 逐项上游清单**（武将 / 技能 / 卡牌 / 模式与战役节点 / 配置项 / 界面钩子 / 渲染面 / 现有 `decision34*` 归类）。非整包验收证明。
 
 ## 1. 功能清单
@@ -59,10 +59,10 @@
 - G0 本文档完成不等于 G1–G5；整包状态仍以[台账](../upstream-extension-reconstruction.md)为准。
 - 若需补跑动态样本：在 `scratch/legacy-harness` 运行副本上使用 `scripts/legacy-harness/`，勿写 `archive/upstream`。
 
-## 7. 裁决 34 逐项上游清单与现有实现归类（2026-11-10）
+## 7. 裁决 34 逐项上游清单与现有实现归类（2026-11-11）
 
 - **统计汇总**：上游实体合计 **21** 项（武将 0 / 技能 0 / 卡牌 21 / 模式与战役节点 0 / 配置项 0 / 界面钩子 0 / 渲染面 0）
-- **状态分布**：`忠实实现` **21** 项 · `示意或自造` **0** 项 · `缺失` **0** 项
+- **状态分布**：`已复核等价` **0** 项 · `简化近似` **21** 项 · `缺失` **0** 项 · `上游未定义` **0** 项
 
 ### 7.1 现有 `decision34*` / 前端示意代码逐条归类
 
@@ -80,27 +80,27 @@
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `pile_diamond_9` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:9` | 牌堆花色基数权重 `diamond: 6`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 忠实实现 |
-| `pile_club_10` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:10` | 牌堆花色基数权重 `club: 14`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 忠实实现 |
-| `pile_heart_11` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:11` | 牌堆花色基数权重 `heart: 3`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 忠实实现 |
-| `pile_spade_12` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:12` | 牌堆花色基数权重 `spade: 7`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 忠实实现 |
-| `pile_diamond_15` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:15` | 牌堆花色基数权重 `diamond: 2`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 忠实实现 |
-| `pile_spade_19` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:19` | 牌堆花色基数权重 `spade: 5`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 忠实实现 |
-| `pile_heart_23` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:23` | 牌堆花色基数权重 `heart: 6`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 忠实实现 |
-| `pile_diamond_27` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:27` | 牌堆花色基数权重 `diamond: 1`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 忠实实现 |
-| `pile_spade_28` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:28` | 牌堆花色基数权重 `spade: 2`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 忠实实现 |
-| `pile_heart_32` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:32` | 牌堆花色基数权重 `heart: 9`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 忠实实现 |
-| `pile_diamond_33` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:33` | 牌堆花色基数权重 `diamond: 3`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 忠实实现 |
-| `pile_heart_36` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:36` | 牌堆花色基数权重 `heart: 1`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 忠实实现 |
-| `pile_spade_39` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:39` | 牌堆花色基数权重 `spade: 2`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 忠实实现 |
-| `pile_club_40` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:40` | 牌堆花色基数权重 `club: 1`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 忠实实现 |
-| `pile_spade_43` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:43` | 牌堆花色基数权重 `spade: 3`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 忠实实现 |
-| `pile_club_44` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:44` | 牌堆花色基数权重 `club: 2`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 忠实实现 |
-| `pile_spade_48` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:48` | 牌堆花色基数权重 `spade: 3`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 忠实实现 |
-| `pile_heart_52` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:52` | 牌堆花色基数权重 `heart: 2`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 忠实实现 |
-| `pile_diamond_53` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:53` | 牌堆花色基数权重 `diamond: 1`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 忠实实现 |
-| `pile_spade_54` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:54` | 牌堆花色基数权重 `spade: 2`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 忠实实现 |
-| `pile_spade_58` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:58` | 牌堆花色基数权重 `spade: 2`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 忠实实现 |
+| `pile_diamond_9` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:9` | 牌堆花色基数权重 `diamond: 6`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `pile_club_10` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:10` | 牌堆花色基数权重 `club: 14`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `pile_heart_11` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:11` | 牌堆花色基数权重 `heart: 3`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 简化近似（待复核） |
+| `pile_spade_12` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:12` | 牌堆花色基数权重 `spade: 7`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 简化近似（待复核） |
+| `pile_diamond_15` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:15` | 牌堆花色基数权重 `diamond: 2`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 简化近似（待复核） |
+| `pile_spade_19` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:19` | 牌堆花色基数权重 `spade: 5`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `pile_heart_23` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:23` | 牌堆花色基数权重 `heart: 6`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `pile_diamond_27` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:27` | 牌堆花色基数权重 `diamond: 1`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `pile_spade_28` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:28` | 牌堆花色基数权重 `spade: 2`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 简化近似（待复核） |
+| `pile_heart_32` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:32` | 牌堆花色基数权重 `heart: 9`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `pile_diamond_33` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:33` | 牌堆花色基数权重 `diamond: 3`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 简化近似（待复核） |
+| `pile_heart_36` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:36` | 牌堆花色基数权重 `heart: 1`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `pile_spade_39` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:39` | 牌堆花色基数权重 `spade: 2`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `pile_club_40` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:40` | 牌堆花色基数权重 `club: 1`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 简化近似（待复核） |
+| `pile_spade_43` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:43` | 牌堆花色基数权重 `spade: 3`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 简化近似（待复核） |
+| `pile_club_44` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:44` | 牌堆花色基数权重 `club: 2`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 简化近似（待复核） |
+| `pile_spade_48` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:48` | 牌堆花色基数权重 `spade: 3`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 简化近似（待复核） |
+| `pile_heart_52` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:52` | 牌堆花色基数权重 `heart: 2`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 简化近似（待复核） |
+| `pile_diamond_53` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:53` | 牌堆花色基数权重 `diamond: 1`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `pile_spade_54` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:54` | 牌堆花色基数权重 `spade: 2`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `pile_spade_58` | `archive/upstream/noname-liuli/noname/extension/cardpile/extension.js:58` | 牌堆花色基数权重 `spade: 2`（按 `cardpile_*_playpackconfig` 缩放） | 原生规则（`pile_bridge.rs`） | 简化近似（待复核） |
 
 ### 7.5 模式 / 战役节点（Modes & Campaign Nodes）（0 项）
 

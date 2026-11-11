@@ -6,19 +6,7 @@
 use super::commit::{discard_some, pop_deck, push_pile};
 use super::*;
 
-fn discard_first_he(ctx: &mut Ctx<'_>, p: PlayerId) -> Option<CardId> {
-    if let Some(c) = ctx.core.player(p).hand.first().copied() {
-        ctx.take_hand_card(p, c);
-        discard_some(ctx, p, vec![c]);
-        Some(c)
-    } else if let Some(c) = ctx.core.player(p).equips.first().copied() {
-        ctx.take_owned_card(p, c);
-        discard_some(ctx, p, vec![c]);
-        Some(c)
-    } else {
-        None
-    }
-}
+fn discard_first_he(ctx: &mut Ctx<'_>, p: PlayerId) -> Option<CardId> { discard_one_he(ctx, p) }
 
 fn discard_all_he(ctx: &mut Ctx<'_>, p: PlayerId) -> u32 {
     let hand: Vec<CardId> = ctx.core.player(p).hand.clone();
@@ -56,7 +44,7 @@ fn gain_l19_exp(ctx: &mut Ctx<'_>, owner: PlayerId, delta: u32) {
 
 /// `L19` (`末日乱斗` — `archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:367-3290`):
 pub fn resolve_l19_doomsday_remaining(ctx: &mut Ctx<'_>, skill_name: &str, owner: PlayerId) {
-    let other = first_other_alive(ctx.core, owner).unwrap_or(owner);
+    let other = hostile_target(ctx, owner).unwrap_or(owner);
     match skill_name {
         // zaibian 灾变 (`末日乱斗/extension.js:367-377`):
         // At PhaseUseBegin, if (humans - zombies + 1) > 0, draws that many cards.
@@ -142,7 +130,7 @@ pub fn resolve_l19_doomsday_remaining(ctx: &mut Ctx<'_>, skill_name: &str, owner
                 set_flag(ctx.core, owner, "l19_huzhu_blocked_usable", 1);
                 return;
             }
-            let Some(c) = ctx.core.player(owner).hand.first().copied() else {
+            let Some(c) = choose_own_card(ctx, owner, false) else {
                 set_flag(ctx.core, owner, "l19_huzhu_blocked_empty", 1);
                 return;
             };
@@ -327,7 +315,7 @@ pub fn resolve_l19_doomsday_remaining(ctx: &mut Ctx<'_>, skill_name: &str, owner
 
 /// `L20` (`标记补充` — `archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:577-6260`):
 pub fn resolve_l20_mark_remaining(ctx: &mut Ctx<'_>, skill_name: &str, owner: PlayerId) {
-    let other = first_other_alive(ctx.core, owner).unwrap_or(owner);
+    let other = hostile_target(ctx, owner).unwrap_or(owner);
     set_flag(ctx.core, owner, &format!("l20_resolved:{skill_name}"), 1);
     match skill_name {
         // kurou 苦肉 (`标记补充/extension.js:6208-6216`): `player.loseHp(1); player.draw(2);` (0 discard!).
@@ -486,7 +474,7 @@ pub fn resolve_l20_mark_remaining(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pl
         }
         // wengua / wengua5 问卦 (`标记补充/extension.js:6141-6154`): places 1 card on deck top/bottom & draws from opposite end (net hand unchanged).
         "wengua" | "wengua5" => {
-            if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+            if let Some(c) = choose_own_card(ctx, owner, false) {
                 if let Some(drawn) = pop_deck(ctx) {
                     ctx.take_hand_card(owner, c);
                     ctx.core.deck.insert(0, c);
@@ -518,7 +506,7 @@ pub fn resolve_l20_mark_remaining(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pl
         }
         // _chongzhu 重铸 (`标记补充/extension.js:6231-6250`): discards 1 hand card and draws 1 card.
         "_chongzhu" => {
-            let Some(c) = ctx.core.player(owner).hand.first().copied() else {
+            let Some(c) = choose_own_card(ctx, owner, false) else {
                 set_flag(ctx.core, owner, "l20_chongzhu_blocked_empty", 1);
                 return;
             };
@@ -553,7 +541,7 @@ pub fn resolve_l20_mark_remaining(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pl
 
 /// `L27` (`选将美化` — `archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:1162-8995`):
 pub fn resolve_l27_select_remaining(ctx: &mut Ctx<'_>, skill_name: &str, owner: PlayerId) {
-    let other = first_other_alive(ctx.core, owner).unwrap_or(owner);
+    let other = hostile_target(ctx, owner).unwrap_or(owner);
     set_flag(ctx.core, owner, &format!("l27_resolved:{skill_name}"), 1);
     match skill_name {
         // xiefang 撷芳 (`选将美化/extension.js:1162-1214`): distance minus female count.
@@ -667,7 +655,7 @@ pub fn resolve_l27_select_remaining(ctx: &mut Ctx<'_>, skill_name: &str, owner: 
         // quanji 权计 (`选将美化/extension.js:2645-2747`): draws 1 card then puts 1 card onto `quan` pile.
         "quanji" => {
             ctx.start_draw(owner, 1);
-            if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+            if let Some(c) = choose_own_card(ctx, owner, false) {
                 ctx.take_hand_card(owner, c);
                 push_pile(ctx, owner, "quan", c);
             } else if let Some(c) = pop_deck(ctx) {

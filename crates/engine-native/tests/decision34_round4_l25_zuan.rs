@@ -48,8 +48,9 @@ fn drain(e: &mut Engine) {
     }
 }
 
+#[allow(deprecated)]
 fn invoke_l25(e: &mut Engine, owner: u8, skill_name: &str) {
-    let out = e.debug_commit_effect(
+    let out = e.debug_execute_effect(
         skill_name,
         owner,
         EffectRequest::StorageSet {

@@ -87,9 +87,18 @@ test("Wasm is the default and an explicit persistent/URL fallback remains availa
     globalThis.location.search = "?engineTransport=native";
     values.clear();
     assert.equal(desktopEngineChoice(), "native");
+    globalThis.location.search = "?desktopEngine=wasm";
+    assert.equal(desktopEngineChoice(), "wasm");
+    globalThis.location.search = "?desktopEngine=native";
+    assert.equal(desktopEngineChoice(), "native");
     globalThis.location.search = "";
     globalThis.location.hash = "#/battle?engineTransport=wasm";
     assert.equal(desktopEngineChoice(), "wasm");
+    globalThis.location.hash = "#/battle?desktopEngine=wasm";
+    assert.equal(desktopEngineChoice(), "wasm");
+    globalThis.location.hash = "#/battle?desktopEngine=native";
+    assert.equal(desktopEngineChoice(), "native");
+    globalThis.location.hash = "";
   } finally {
     if (originalStorage === undefined) delete globalThis.localStorage; else globalThis.localStorage = originalStorage;
     if (originalLocation === undefined) delete globalThis.location; else globalThis.location = originalLocation;
