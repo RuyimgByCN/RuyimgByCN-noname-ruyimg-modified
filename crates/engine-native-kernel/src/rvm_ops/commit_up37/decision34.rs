@@ -68,7 +68,7 @@ pub(super) fn try_commit_decision34(
         K_DANGGU_ID => resolve_k_danggu(ctx, owner),
         K_MOWANG_ID => resolve_k_mowang(ctx, owner),
         L10_SCS_SKILL_ID => super::decision34_ext::resolve_l10_scs_skill(ctx, executing, owner),
-        HUANLE_KUWU_INTERACTIVE_ID => resolve_kuwu_interactive(ctx, owner),
+        HUANLE_KUWU_INTERACTIVE_ID | U06_HUANLE_SKILL_ID => {}
         DIAOBINGQIANJIANG_ID => resolve_diaobingqianjiang(ctx, owner),
         DUOQI_ID => resolve_duoqi(ctx, owner),
         YOUZHAN_ID => resolve_youzhan(ctx, owner),
@@ -82,9 +82,6 @@ pub(super) fn try_commit_decision34(
         TH_SKILL_DISPATCH_ID => resolve_th_extra_skill(ctx, executing, owner),
         L01_YIYI_ID => super::decision34_ext::resolve_l01_yiyi_card(ctx, owner),
         L06_WUXING_ID => super::decision34_ext::resolve_l06_wuxing_skill(ctx, executing, owner),
-        U06_HUANLE_SKILL_ID => {
-            super::decision34_ext::resolve_u06_huanle_skill(ctx, executing, owner)
-        }
         U07_WUDIAN_SKILL_ID => {
             super::decision34_ext::resolve_u07_wudian_skill(ctx, executing, owner)
         }
@@ -112,10 +109,6 @@ pub(super) fn try_commit_decision34(
             "yiyi" => super::decision34_ext::resolve_l01_yiyi_card(ctx, owner),
             "_shengke" | "wuxing_shengke" | "wuxingpan_skill" => {
                 super::decision34_ext::resolve_l06_wuxing_skill(ctx, executing, owner)
-            }
-            "huanle_kuwu_interactive" | "kuwu" => resolve_kuwu_interactive(ctx, owner),
-            "monkey" | "mianju" | "xuelunyang" | "jiuwei" => {
-                super::decision34_ext::resolve_u06_huanle_skill(ctx, executing, owner)
             }
             "diaobingqianjiang" => resolve_diaobingqianjiang(ctx, owner),
             "duoqi" => resolve_duoqi(ctx, owner),
@@ -342,49 +335,6 @@ fn resolve_k_mowang(ctx: &mut Ctx<'_>, owner: PlayerId) {
         ctx.start_draw(owner, 1);
     } else {
         set_flag(ctx.core, owner, "k_mowang_exhausted", 1);
-    }
-}
-
-/// `U06` (`huanle_kuwu_interactive` 苦无交互式分支):
-/// Guards against chained damage (`kuwu_from_chain == 0`), then lets target either discard 1
-/// `he` card (hand or equip) OR lose 1 HP when target chooses lose-HP or has no `he` cards.
-pub(super) fn resolve_kuwu_interactive(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    if flag(ctx.core, owner, "kuwu_from_chain") != 0 {
-        set_flag(ctx.core, owner, "kuwu_skipped_from_chain", 1);
-        return;
-    }
-    let target = {
-        let raw = flag(ctx.core, owner, "kuwu_target");
-        if raw > 0 && (raw as u8) < (ctx.core.players.len() as u8) {
-            raw as u8
-        } else {
-            let Some(t) = hostile_target(ctx, owner) else {
-                return;
-            };
-            t
-        }
-    };
-    let choose_lose_hp = flag(ctx.core, target, "kuwu_choose_lose_hp") != 0;
-    let _prefer_equip = flag(ctx.core, target, "kuwu_prefer_equip") != 0;
-    let chosen_card = if choose_lose_hp {
-        None
-    } else {
-        choose_enemy_card(ctx, owner, target)
-    };
-    if let Some(c) = chosen_card {
-        if ctx.core.player(target).hand.contains(&c) {
-            ctx.take_hand_card(target, c);
-        } else {
-            ctx.take_owned_card(target, c);
-        }
-        discard_some(ctx, target, vec![c]);
-        set_flag(ctx.core, target, "kuwu_discarded_he", c.max(1));
-    } else {
-        set_flag(ctx.core, target, "kuwu_lost_hp", 1);
-        ctx.emit(EventData::LoseHp {
-            player: target,
-            amount: 1,
-        });
     }
 }
 

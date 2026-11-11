@@ -938,14 +938,14 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
-            // 雪轮羊（A2 H24）：上游 player phaseBegin＝自己回合开始
-            //（原锚自己判定阶段开始）（可选）
+            // 写轮眼（欢乐卡牌 E03）：回合开始（Phase::Judge begin）直接询问
+            // 目标（allow_cancel: true，对应上游 cost chooseTarget）→ 选其技能临时获得至回合结束。
             HostBehavior::HuanleXuelunyangCard => Some(TriggerMeta {
                 event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
-                optional: true,
+                optional: false,
                 extra_events: Vec::new(),
             }),
             HostBehavior::HuanleMianjuCard => Some(TriggerMeta {

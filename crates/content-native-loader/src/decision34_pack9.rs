@@ -522,9 +522,7 @@ pub fn attach_formal_package_upstream_rules(
             }
         }
         ("upstream-noname", "huanle-cards") => {
-            push_skill("kuwu", super::HUANLE_KUWU_INTERACTIVE_ID);
-            push_skill("huanle_kuwu_interactive", super::HUANLE_KUWU_INTERACTIVE_ID);
-            for &s in &["monkey", "mianju", "xuelunyang", "jiuwei"] {
+            for &s in &["monkey", "mianju", "kuwu", "xuelunyang", "jiuwei"] {
                 push_skill(s, super::U06_HUANLE_SKILL_ID);
             }
         }

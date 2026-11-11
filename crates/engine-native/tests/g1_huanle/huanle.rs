@@ -276,13 +276,11 @@ fn huanle_xuelunyang_steals_target_skill_until_turn_end() {
     let stolen_name = e.catalog().skills[def_mashu as usize].name;
 
     // 写轮眼在装备者的**下一个**回合开始触发：先推进到 1 号回合，
-    // 再推进到 0 号回合开始（Judge begin）→ 确认门挂起。
+    // 再推进到 0 号回合开始（direct: true 直接弹出 huanle_xuelunyang_target）。
     advance_to_play(&mut e, 1);
-    // 推进到 0 号回合开始（Judge begin）→ OptionalGate 确认门挂起
-    // （NextPhase 的 Pending 返回即新开的门，由 open_choice 分支应答）。
     for _ in 0..64 {
         if let Some(g) = e.open_choice() {
-            if g.spec.prompt == "trigger_confirm" && g.observer == 0 {
+            if g.spec.prompt == "huanle_xuelunyang_target" && g.observer == 0 {
                 break;
             }
         }
@@ -313,26 +311,9 @@ fn huanle_xuelunyang_steals_target_skill_until_turn_end() {
             }
         }
     }
-    let gate = e.open_choice().expect("写轮眼确认门应挂起");
-    assert_eq!(gate.spec.prompt, "trigger_confirm");
-    assert_eq!(gate.observer, 0);
-
-    // 确认（OptionalGate 通过）→ 选目标（1 号）→ 选技能（PickTag 下标
-    // 0 = 目标技能目录序首项 = 马术）。
-    let (cid, obs) = {
-        let g = e.open_choice().unwrap();
-        (g.id, g.observer)
-    };
-    submit(
-        &mut e,
-        obs,
-        GameAction::Answer {
-            choice_id: cid,
-            selection: vec![ChoiceOption::Confirm],
-        },
-    );
     let target_pick = e.open_choice().expect("选目标挂起");
     assert_eq!(target_pick.spec.prompt, "huanle_xuelunyang_target");
+    assert!(target_pick.spec.allow_cancel);
     assert!(
         target_pick.spec.options.contains(&ChoiceOption::Player(1)),
         "目标选项应含 1 号"
@@ -395,15 +376,15 @@ fn huanle_xuelunyang_steals_target_skill_until_turn_end() {
         }
         if e.open_choice().is_some() {
             let g = e.open_choice().unwrap();
-            // 写轮眼确认门：Pass 放弃（不再窃取，保证到期断言时序干净）。
-            if g.spec.prompt == "trigger_confirm" {
+            // 写轮眼目标门或确认门：取消放弃（不再窃取，保证到期断言时序干净）。
+            if g.spec.prompt == "trigger_confirm" || g.spec.prompt == "huanle_xuelunyang_target" {
                 let (id2, obs2) = (g.id, g.observer);
                 submit(
                     &mut e,
                     obs2,
                     GameAction::Answer {
                         choice_id: id2,
-                        selection: vec![ChoiceOption::Pass],
+                        selection: vec![],
                     },
                 );
                 continue;
@@ -487,10 +468,8 @@ fn huanle_xuelunyang_pass_declines_theft() {
             reached = true;
         }
         match e.open_choice() {
-            Some(g) if g.spec.prompt == "trigger_confirm" => {
+            Some(g) if g.spec.prompt == "trigger_confirm" || g.spec.prompt == "huanle_xuelunyang_target" => {
                 passed_gates += 1;
-                // OptionalGate 门 options=[Confirm]、allow_cancel=true：
-                // 放弃 = 空选择取消（Pass 不在选项集，会被拒绝）。
                 let (id2, obs2) = (g.id, g.observer);
                 submit(
                     &mut e,
@@ -551,8 +530,7 @@ fn huanle_xuelunyang_pass_declines_theft() {
             break;
         }
         match e.open_choice() {
-            Some(g) if g.spec.prompt == "trigger_confirm" => {
-                // OptionalGate 门放弃 = 空选择取消。
+            Some(g) if g.spec.prompt == "trigger_confirm" || g.spec.prompt == "huanle_xuelunyang_target" => {
                 let (id2, obs2) = (g.id, g.observer);
                 submit(
                     &mut e,
@@ -1011,10 +989,10 @@ fn huanle_combo_stolen_jushou_fires_for_thief() {
     assert!(e.debug_has_skill(1, "据守"), "1 号有据守");
 
     // 推进到 1 号回合（途中 1 号的据守确认门放弃），再到 0 号回合开始
-    // 的写轮眼确认门。
+    // 的写轮眼选目标门。
     for _ in 0..128 {
         if let Some(g) = e.open_choice() {
-            if g.spec.prompt == "trigger_confirm" && g.observer == 0 {
+            if g.spec.prompt == "huanle_xuelunyang_target" && g.observer == 0 {
                 break;
             }
             let sel: Vec<ChoiceOption> = if g.spec.prompt == "trigger_confirm" {
@@ -1041,18 +1019,6 @@ fn huanle_combo_stolen_jushou_fires_for_thief() {
             other => panic!("advance: {other:?}"),
         }
     }
-    let (cid, obs) = {
-        let g = e.open_choice().unwrap();
-        (g.id, g.observer)
-    };
-    submit(
-        &mut e,
-        obs,
-        GameAction::Answer {
-            choice_id: cid,
-            selection: vec![ChoiceOption::Confirm],
-        },
-    );
     let target_pick = e.open_choice().expect("选目标挂起");
     assert!(target_pick.spec.options.contains(&ChoiceOption::Player(1)));
     let (tid, tobs) = {
@@ -1174,7 +1140,7 @@ fn huanle_combo_stolen_jushou_flip_cancelled_by_mask() {
 
     for _ in 0..128 {
         if let Some(g) = e.open_choice() {
-            if g.spec.prompt == "trigger_confirm" && g.observer == 0 {
+            if g.spec.prompt == "huanle_xuelunyang_target" && g.observer == 0 {
                 break;
             }
             let sel: Vec<ChoiceOption> = if g.spec.prompt == "trigger_confirm" {
@@ -1201,18 +1167,6 @@ fn huanle_combo_stolen_jushou_flip_cancelled_by_mask() {
             other => panic!("advance: {other:?}"),
         }
     }
-    let (cid, obs) = {
-        let g = e.open_choice().unwrap();
-        (g.id, g.observer)
-    };
-    submit(
-        &mut e,
-        obs,
-        GameAction::Answer {
-            choice_id: cid,
-            selection: vec![ChoiceOption::Confirm],
-        },
-    );
     let target_pick = e.open_choice().expect("选目标挂起");
     let (tid, tobs) = (target_pick.id, target_pick.observer);
     submit(
@@ -1376,8 +1330,15 @@ fn huanle_combo_kuwu_sha_like_and_non_sha_damage() {
         "装备苦无授予实例"
     );
 
-    // ③ 苦无持有者用手里剑：目标弃权受伤 → 苦无不触发（伤害牌非杀）。
+    // ③ 苦无持有者用手里剑：目标装备 +1 马（满足 outrange: { global: 2 }），
+    // 选择弃权受伤 → 苦无不触发（伤害牌非杀）。
     let sj = e.debug_place(0, "hnl_shoulijian_1");
+    let horse_plus = e.debug_move_named_card_to_hand(1, "horse_plus");
+    {
+        let core = e.state_core_mut();
+        core.players[1].hand.retain(|c| *c != horse_plus);
+        core.players[1].equips.push(horse_plus);
+    }
     // 目标手牌两张均非闪：手里剑弃权受伤后不触发苦无；雷杀必命中。
     let t1_card = e.debug_place(1, "tao");
     let t1_card2 = e.debug_place(1, "jiu");

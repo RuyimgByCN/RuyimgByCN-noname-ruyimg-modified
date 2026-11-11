@@ -572,17 +572,40 @@ impl HostMachine {
                     let Some(t) = self.target else {
                         return Flow::Done;
                     };
-                    self.stage = HostStage::Act;
                     let spec = Self::target_choice_spec(ctx, t);
+                    // card.js:41-44：目标 he 区无装备牌时，直接受到使用者造成的 1 点普通伤害（不弹窗口）
+                    if spec.options.len() <= 1 {
+                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                            Some(self.owner),
+                            t,
+                            1,
+                            crate::event::DamageNature::Normal,
+                            self.card,
+                        )));
+                        if let Some(c) = self.card {
+                            ctx.to_discard(c);
+                            ctx.core.table.retain(|x| *x != c);
+                        }
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::Act;
                     Flow::WaitChoice { observer: t, spec }
                 }
                 HostStage::Act => {
                     let Some(t) = self.target else {
                         return Flow::Done;
                     };
-                    match ctx.answer_first() {
-                        ChoiceOption::Card(equip) => {
-                            if ctx.core.player(t).equips.contains(&equip) {
+                    match ctx.answer().first().copied() {
+                        Some(ChoiceOption::Card(equip)) => {
+                            if ctx.core.player(t).hand.contains(&equip)
+                                && ctx.catalog.card_slot_of(ctx.core, equip).is_some()
+                            {
+                                ctx.discard_from_hand(t, equip);
+                                ctx.log(LogEvent::CardDiscarded {
+                                    player: t,
+                                    cards: vec![equip],
+                                });
+                            } else if ctx.core.player(t).equips.contains(&equip) {
                                 ctx.core.player_mut(t).equips.retain(|x| *x != equip);
                                 crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, equip);
                                 ctx.to_discard(equip);
@@ -593,7 +616,7 @@ impl HostMachine {
                             }
                         }
                         _ => {
-                            // 弃权：受 1 点伤害（来源 = 使用者，牌归因 = 手里剑）
+                            // 弃权/取消：受 1 点伤害（来源 = 使用者，牌归因 = 手里剑）
                             let source = Some(self.owner);
                             ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                                 source,

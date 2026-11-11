@@ -165,7 +165,7 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
         ),
         (
             "`U01_DDD_SKILLS` + `resolve_u01_ddd_skill` / `resolve_u01_ddd_remaining`（64 项 `ddd*` 技能，含 `dddjinggou` 装备射程狙击与 `dddmoyan` 亮 3 牌择人获牌）",
-            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:124-335`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:383-791`",
+            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:124-335`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:354-774`",
             "`archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4-6368`",
             "原生规则 / `d3-upstream-noname`",
             "简化近似（待复核：已清除全部分组摸 1 兜底，全部 64 项 `ddd*` 技能均按上游 `file:line` 独立实现并接入 `d3-upstream-noname` 正式包）",
@@ -215,17 +215,17 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
     ],
     "U06": [
         (
-            "`huanle_kuwu_interactive` / `kuwu` / `resolve_u06_huanle_skill`（覆盖 `monkey`、`mianju`、`shoulijian`、`kuwu`、`xuelunyang`、`jiuwei`）",
-            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34.rs:348-399`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:220-266`",
-            "`archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:1-139`",
+            "`monkey` / `mianju` / `shoulijian` / `kuwu` / `xuelunyang` / `jiuwei`（6 张卡牌 + 5 项同名装备技能，零 VM 旁路）",
+            "`crates/engine-native-kernel/src/kernel/monkey.rs:8-128`、`crates/engine-native/src/engine/play_card.rs:696-773`、`crates/engine-native-content/src/content/host/step/skills_status.rs:665-723`、`crates/engine-native-content/src/content/host/step/skills_damage.rs:570-637`、`crates/engine-native-content/src/content/host/step/skills_targets.rs:212-301`、`crates/engine-native-content/src/content/host/step/skills_recovery.rs:287-295`、`crates/content-native-loader/src/host_skill_bindings.rs:118-122`、`packages/extensions/huanle-upstream-noname/assets/cards.json:1-72`",
+            "`archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:1-127`、`card/skill.js:1-146`、`card/list.js:1-11`",
             "原生规则 / `huanle-upstream-noname`",
-            "简化近似（待复核：已接入正式包 `huanle-upstream-noname` 产品路径，完整覆盖苦无 `kuwu`、猴子偷桃、暗黑面具、手里剑、写轮眼、九尾全部分支）",
+            "已复核等价（11/11 项经 `u06-verifier` 独立逐行对照上游 JS 与 6 维真实对局测试复核等价，见 `docs/operations/evidence/2026-11-12-u06-huanle-review/README.md`）",
         ),
     ],
     "U07": [
         (
             "`diaobingqianjiang` + `U07_WUDIAN_GENERALS`（9 将）+ `U07_WUDIAN_ALL_SKILLS`（30 技，含 `g_youdishenru` 及锁内容路径 `duoqi`/`youzhan`/`jianbi`/`choudu` 绑定）",
-            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34.rs:401-467`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:269-331`、`crates/content-native-loader/src/decision34_pack9.rs:433-478`",
+            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34.rs:345-465`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:208-301`、`crates/content-native-loader/src/decision34_pack9.rs:433-478`",
             "`archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js:4-168`、`card/skill.js:1-60`、`character/skill.js:1-795`",
             "原生规则 / `wudian-upstream-noname`",
             "简化近似（待复核：9 名武将、30 项技能/子技与 `diaobingqianjiang` 均按上游语义实现并绑定至正式包 `wudian-upstream-noname` 锁内容目录）",
@@ -243,7 +243,7 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
     "L01": [
         (
             "`lib.card.yiyi`（以逸待劳锦囊，`resolve_l01_yiyi_card` + `evaluate_yiyi_target_benefit`）",
-            "`crates/content-native-loader/src/ai_tuning.rs:183-228`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:158-181`",
+            "`crates/content-native-loader/src/ai_tuning.rs:183-228`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:142-165`",
             "`archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9205-9260`",
             "原生规则 / `ai-tuning-upstream-liuli`",
             "简化近似（待复核：已按上游实现 `yiyi` 锦囊同步摸 2 弃 2 结算与目标收益评估并接入正式包 `ai-tuning-upstream-liuli` 产品路径）",
@@ -264,7 +264,7 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
     "L06": [
         (
             "`_wuxing` 全局五行生克技能（`resolve_l06_wuxing_skill`）",
-            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:184-217`",
+            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:172-204`",
             "`archive/upstream/noname-liuli/noname/extension/五行生克/extension.js:9-95`",
             "原生规则 / `wuxing-upstream-liuli`",
             "简化近似（待复核：已按上游实现 `_wuxing` 初始五行属性与生克结算并接入正式包 `wuxing-upstream-liuli` 产品路径，支持与 `shahai-zhenfa` 任意顺序共存去重）",
@@ -448,7 +448,7 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
     "L28": [
         (
             "`L28_THUNDER_GENERALS`（14 将）+ `L28_THUNDER_EXTRA_SKILLS`（39 技）+ `th_taipingyaoshu`（`resolve_l28_thunder_remaining`）",
-            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34.rs:530-754`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:794-1033`、`crates/content-native-loader/src/decision34_closure.rs:243-301`",
+            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34.rs:530-747`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:778-1007`、`crates/content-native-loader/src/decision34_closure.rs:243-301`",
             "`archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3656-3671,3781-8968`",
             "原生规则 / `thunder-upstream-liuli`",
             "简化近似（待复核：已清除非技能 `_info`/`_map`/`_faq` 键与虚构 `th_caiyi_yang`/`th_pingcai_Wolong`/`th_jingxie1` 等键，补齐 `th_tiansuan2_0..4` 五签、`th_pcaudio_*_card` 四奇卡、`th_zhengjing2`、`th_gushe2` 等全部真实子技，14 名武将、全部 33 项 `th_*` 技能、6 项基础技与 `th_taipingyaoshu` 完整接入正式包 `thunder-upstream-liuli` 产品路径）",
@@ -457,7 +457,7 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
     "L29": [
         (
             "`mbqianlong` / `mbcmqingzheng` / `mbcmjiushi` / `mbcmfangzhu` / `mbjuejin` + `_CMeffects` (`resolve_l29_longxue_skill`)",
-            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34.rs:178-293`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:335-378`、`apps/web-client/src/engine/extensionSurfaceRuntime.ts:330-359,1402-1413`",
+            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34.rs:178-286`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:305-348`、`apps/web-client/src/engine/extensionSurfaceRuntime.ts:330-359,1402-1413`",
             "`docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1`、`archive/upstream/noname-liuli/noname/extension/龙血玄黄/专属技能区/手杀ui/skill/main1.js:1-1048`",
             "原生规则 / `longxue-upstream-liuli` + 原生前端组件",
             "简化近似（待复核：`mbqianlong`、`mbcmqingzheng`、`mbcmjiushi`、`mbcmfangzhu`、`mbjuejin` 与 `_CMeffects` 已按上游实现并接入正式包 `longxue-upstream-liuli` 产品路径）",

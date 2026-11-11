@@ -542,8 +542,14 @@ impl HostSkillBehavior {
                         || ctx.state.seat_distance(d.target, owner) > 1)),
             HostBehavior::ShaDamageForceDiscard => matches!(event,
                 EventData::Damage(d)
-                if d.source == Some(owner) && !d.prevented && d.amount > 0
-                    && d.card.map(|c| ctx.catalog.card_kind(c).is_sha_like()).unwrap_or(false)),
+                if d.source == Some(owner)
+                    && !d.prevented
+                    && d.amount > 0
+                    && !d.from_chain
+                    && d.card.is_some_and(|c| ctx.catalog.card_kind(c).is_sha_like())
+                    && ctx.state.player(d.target).alive
+                    && (!ctx.state.player(d.target).hand.is_empty()
+                        || !ctx.state.player(d.target).equips.is_empty())),
             HostBehavior::PhaseEndRecoverOrDraw => matches!(event,
                 // A2 H50：整回合结束窗 phaseEnd 段（上游 player phaseEnd）。
                 EventData::TurnEndWindow { player, after: false } if *player == owner),
@@ -665,6 +671,7 @@ impl HostSkillBehavior {
             EventData::CardUsed(u)
             if u.player != owner
                 && !u.cancelled
+                && u.card.is_some()
                 && u.effective_kind(ctx.catalog) == crate::catalog::CardKind::Tao
                 && ctx.state.player(owner).equips.iter().any(|c| {
                     ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Monkey
@@ -697,9 +704,10 @@ impl HostSkillBehavior {
                 EventData::TurnEndWindow { player, after: true } if *player == owner),
             HostBehavior::HuanleMianjuCard => matches!(event,
             EventData::TurnOverBefore { player, .. }
-            if ctx.state.player(*player).equips.iter().any(|c| {
-                ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Mianju
-            })),
+            if *player == owner
+                && ctx.state.player(owner).equips.iter().any(|c| {
+                    ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Mianju
+                })),
             HostBehavior::ZhangbaSha => false,
             HostBehavior::WudianShuaiyan => matches!(event,
                 EventData::Recover { player, .. }

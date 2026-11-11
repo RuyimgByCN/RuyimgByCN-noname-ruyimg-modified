@@ -995,14 +995,16 @@ fn formal_packages_extensions_load_and_execute_on_locked_product_path() {
     assert_eq!(flag(&e, 0, "wuxing_sheng_triggered"), 1);
     invoke_p9_op(&mut e, 0, "wuxingpan_skill", content_native_loader::L06_WUXING_ID);
     assert_eq!(flag(&e, 0, "wuxingpan_reassigned_nature"), 1);
-    invoke_p9_op(&mut e, 0, "monkey", content_native_loader::U06_HUANLE_SKILL_ID);
-    assert_eq!(flag(&e, 0, "monkey_stole_tao"), 1);
-    invoke_p9_op(&mut e, 0, "mianju", content_native_loader::U06_HUANLE_SKILL_ID);
-    assert_eq!(flag(&e, 0, "mianju_prevented_turnover"), 1);
-    invoke_p9_op(&mut e, 0, "xuelunyang", content_native_loader::U06_HUANLE_SKILL_ID);
-    assert_eq!(flag(&e, 0, "xuelunyang_copied_skill"), 1);
-    invoke_p9_op(&mut e, 0, "jiuwei", content_native_loader::U06_HUANLE_SKILL_ID);
-    assert_eq!(flag(&e, 0, "jiuwei_triggered"), 1);
+    for u06_sk in ["monkey", "mianju", "kuwu", "xuelunyang", "jiuwei"] {
+        let sk_id = e
+            .catalog()
+            .skill_by_name(u06_sk)
+            .unwrap_or_else(|| panic!("U06 skill {u06_sk} must be in locked Catalog"));
+        assert!(
+            e.catalog().skills[sk_id as usize].trigger.is_some(),
+            "U06 skill {u06_sk} must carry native TriggerMeta"
+        );
+    }
     invoke_p9_op(&mut e, 0, "youdishenru", content_native_loader::U07_WUDIAN_SKILL_ID);
     assert_eq!(flag(&e, 0, "youdishenru_counter_damage"), 1);
     invoke_p9_op(&mut e, 0, "ciqiu_dying", content_native_loader::U07_WUDIAN_SKILL_ID);
@@ -1030,10 +1032,9 @@ fn formal_packages_extensions_load_and_execute_on_locked_product_path() {
     assert_eq!(flag(&e, 0, "dddmoyan_recorded_count"), 1);
     assert_eq!(e.state_core().player(0).hand.len(), hand_before_moyan);
 
-    // 7. U06 `kuwu` (`欢乐卡牌/card/skill.js:41`) & U07 `g_youdishenru` (`玩点论杀/card/skill.js:16`) + deferred general skills on locked Catalog
-    assert!(e.catalog().skill_by_name("kuwu").is_some());
-    invoke_p9_op(&mut e, 0, "kuwu", content_native_loader::HUANLE_KUWU_INTERACTIVE_ID);
-    assert!(flag(&e, 1, "kuwu_discarded_he") > 0 || flag(&e, 1, "kuwu_lost_hp") == 1);
+    // 7. U06 `kuwu` (`欢乐卡牌/card/skill.js:53-69`) & U07 `g_youdishenru` (`玩点论杀/card/skill.js:16`) + deferred general skills on locked Catalog
+    let kuwu_id = e.catalog().skill_by_name("kuwu").expect("kuwu in Catalog");
+    assert!(e.catalog().skills[kuwu_id as usize].trigger.is_some());
 
     assert!(e.catalog().skill_by_name("g_youdishenru").is_some());
     invoke_p9_op(&mut e, 0, "g_youdishenru", content_native_loader::U07_WUDIAN_SKILL_ID);

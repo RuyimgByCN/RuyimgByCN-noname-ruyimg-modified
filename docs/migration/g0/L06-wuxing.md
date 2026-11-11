@@ -67,7 +67,7 @@
 
 | 现有实现项 | 原生文件:行号 | 上游对照 (`file:line`) | 原生落点 | 状态与处置结论 |
 |---|---|---|---|---|
-| `_wuxing` 全局五行生克技能（`resolve_l06_wuxing_skill`） | `crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:184-217` | `archive/upstream/noname-liuli/noname/extension/五行生克/extension.js:9-95` | 原生规则 / `wuxing-upstream-liuli` | 简化近似（待复核：已按上游实现 `_wuxing` 初始五行属性与生克结算并接入正式包 `wuxing-upstream-liuli` 产品路径，支持与 `shahai-zhenfa` 任意顺序共存去重） |
+| `_wuxing` 全局五行生克技能（`resolve_l06_wuxing_skill`） | `crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:172-204` | `archive/upstream/noname-liuli/noname/extension/五行生克/extension.js:9-95` | 原生规则 / `wuxing-upstream-liuli` | 简化近似（待复核：已按上游实现 `_wuxing` 初始五行属性与生克结算并接入正式包 `wuxing-upstream-liuli` 产品路径，支持与 `shahai-zhenfa` 任意顺序共存去重） |
 
 ### 7.2 武将（Generals）（0 项）
 

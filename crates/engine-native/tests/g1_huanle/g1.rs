@@ -55,6 +55,17 @@ fn g1_huanle_vertical_host_behaviors_and_restore() {
         out,
         CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
     ));
+    if let Some(c) = e.open_choice() {
+        let (cid, obs) = (c.id, c.observer);
+        submit(
+            &mut e,
+            obs,
+            GameAction::Answer {
+                choice_id: cid,
+                selection: vec![ChoiceOption::Card(victim_card)],
+            },
+        );
+    }
     assert!(
         !e.debug_hand(1).contains(&victim_card),
         "苦无：目标应弃一张手牌"

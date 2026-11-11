@@ -67,13 +67,24 @@ fn equip_skill_lifecycle_grant_and_revoke() {
         out,
         CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
     ));
+    if let Some(c) = e.open_choice() {
+        let (cid, obs) = (c.id, c.observer);
+        submit(
+            &mut e,
+            obs,
+            GameAction::Answer {
+                choice_id: cid,
+                selection: vec![ChoiceOption::Card(victim_card)],
+            },
+        );
+    }
     assert!(
         !e.debug_hand(1).contains(&victim_card),
         "装备授予的苦无应生效"
     );
 
     // 苦无离场 → 技能撤销。规则路径：1 号出手里剑令 0 号弃装备
-    //（推进到 1 号出牌阶段，途中挂起选择取首选项）
+    //（推进到 1 号出牌阶段，途中挂起选择取首选项；0 号装备 +1 马满足 outrange: { global: 2 }）
     for _ in 0..128 {
         if e.turn().current == 1 && e.turn().phase == Phase::Play && e.open_choice().is_none() {
             break;
@@ -105,17 +116,28 @@ fn equip_skill_lifecycle_grant_and_revoke() {
             other => panic!("advance: {other:?}"),
         }
     }
-    let (sj,) = {
+    let (sj, horse_plus) = {
         let catalog = e.catalog();
         let sj = catalog
             .cards
             .iter()
             .position(|c| c.name.starts_with("hnl_shoulijian"))
             .expect("手里剑在目录") as u32;
-        (sj,)
+        let hp = catalog.card_by_name("horse_plus").expect("目录有+1马");
+        (sj, hp)
     };
     let mut snap = e.save();
-    snap.core.deck.retain(|c| *c != sj);
+    for id in [sj, horse_plus] {
+        snap.core.deck.retain(|c| *c != id);
+        snap.core.discard.retain(|c| *c != id);
+        snap.core.table.retain(|c| *c != id);
+        for p in snap.core.players.iter_mut() {
+            p.hand.retain(|c| *c != id);
+            p.equips.retain(|c| *c != id);
+            p.judge.retain(|c| *c != id);
+        }
+    }
+    snap.core.players[0].equips.push(horse_plus);
     snap.core.players[1].hand.push(sj);
     e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入恢复");
     let out = submit(

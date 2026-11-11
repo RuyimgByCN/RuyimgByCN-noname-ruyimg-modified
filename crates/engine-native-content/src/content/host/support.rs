@@ -615,9 +615,11 @@ impl HostMachine {
         options.extend(
             ctx.core
                 .player(target)
-                .equips
+                .hand
                 .iter()
                 .copied()
+                .filter(|&c| ctx.catalog.card_slot_of(ctx.core, c).is_some())
+                .chain(ctx.core.player(target).equips.iter().copied())
                 .map(ChoiceOption::Card),
         );
         ChoiceSpec {
@@ -626,7 +628,7 @@ impl HostMachine {
             options,
             min: 1,
             max: 1,
-            allow_cancel: false,
+            allow_cancel: true,
         }
     }
 

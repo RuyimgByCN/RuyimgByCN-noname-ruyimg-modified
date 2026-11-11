@@ -661,20 +661,66 @@ impl HostMachine {
                 *cancelled = true;
                 Flow::Done
             }
-            HostBehavior::ShaDamageForceDiscard => {
-                if let Some(t) = self.target {
-                    if ctx.core.player(t).alive {
-                        if let Some(c) = ctx.core.player(t).hand.first().copied() {
-                            ctx.discard_from_hand(t, c);
-                            ctx.log(LogEvent::CardDiscarded {
-                                player: t,
-                                cards: vec![c],
-                            });
-                        }
+            // 苦无（U06 欢乐卡牌 skill.js:53-69）：使用【杀】造成非连环伤害后，目标弃置一张 he 牌（强制）
+            HostBehavior::ShaDamageForceDiscard => match self.stage {
+                HostStage::Act => {
+                    let Some(t) = self.target else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(t).alive {
+                        return Flow::Done;
+                    }
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(t)
+                        .hand
+                        .iter()
+                        .chain(ctx.core.player(t).equips.iter())
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: t,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "kuwu_discard",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
                     }
                 }
-                Flow::Done
-            }
+                HostStage::SelectCard => {
+                    let Some(t) = self.target else {
+                        return Flow::Done;
+                    };
+                    let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    if ctx.core.player(t).hand.contains(&c) {
+                        ctx.discard_from_hand(t, c);
+                        ctx.log(LogEvent::CardDiscarded {
+                            player: t,
+                            cards: vec![c],
+                        });
+                    } else if ctx.core.player(t).equips.contains(&c) {
+                        ctx.core.player_mut(t).equips.retain(|x| *x != c);
+                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+                        ctx.to_discard(c);
+                        ctx.log(LogEvent::CardDiscarded {
+                            player: t,
+                            cards: vec![c],
+                        });
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             HostBehavior::ShengkeCheck => {
                 // 被克 → 弃一张手牌（确定性首张，登记差异：上游为目标
                 // 自选「he」）；被生 → 摸一张；无关系 → 无事
@@ -949,46 +995,54 @@ impl HostMachine {
                 _ => Flow::Done,
             },
             HostBehavior::HuanleMonkeyCard => {
-                // 确认后（OptionalGate 通过）：取消桃的结算——
-                // ① 使用者手牌中的桃移入自己手牌；② 弃掉自己的猴子
-                // （离场撤销装备技）；③ 写回取消位，提交阶段跳过结算。
-                let (used_card, user) = {
+                // 确认后（OptionalGate 通过，skill.js:5-31）：取消桃的结算——
+                // ① 弃掉自己的猴子（装备区 → 弃牌堆 + 离场撤销装备技）；
+                // ② 获得使用者使用的【桃】（兼容使用者手牌或处理区 table，不 panic）；
+                // ③ 写回取消位，提交阶段跳过结算。
+                let Some((used_card, user)) = ({
                     let u = ctx.current_card_use_mut();
-                    (u.card.expect("physical Peach source"), u.player)
+                    u.card.map(|c| (c, u.player))
+                }) else {
+                    return Flow::Done;
                 };
-                // ① 夺桃：使用者手牌 → 自己手牌。
-                let user_hand = &mut ctx.core.players[user as usize].hand;
-                let pos = user_hand
-                    .iter()
-                    .position(|c| *c == used_card)
-                    .expect("被取消使用的桃应在使用者手牌");
-                let peach = user_hand.remove(pos);
-                ctx.core.players[self.owner as usize].hand.push(peach);
-                ctx.log(LogEvent::CardsGiven {
-                    from: user,
-                    to: self.owner,
-                    cards: vec![peach],
-                });
-                // ② 弃猴子（装备区 → 弃牌堆 + 离场撤销装备技）。
-                if let Some(pos) = ctx.core.players[self.owner as usize]
+                let Some(pos) = ctx.core.players[self.owner as usize]
                     .equips
                     .iter()
                     .position(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Monkey)
+                else {
+                    return Flow::Done;
+                };
+                let monkey = ctx.core.players[self.owner as usize].equips.remove(pos);
+                crate::kernel::revoke_equip_skills(
+                    &mut ctx.core,
+                    ctx.catalog,
+                    self.owner,
+                    monkey,
+                );
+                ctx.core.discard.push(monkey);
+                ctx.log(LogEvent::CardDiscarded {
+                    player: self.owner,
+                    cards: vec![monkey],
+                });
+                let taken = if let Some(hpos) = ctx.core.players[user as usize]
+                    .hand
+                    .iter()
+                    .position(|c| *c == used_card)
                 {
-                    let monkey = ctx.core.players[self.owner as usize].equips.remove(pos);
-                    crate::kernel::revoke_equip_skills(
-                        &mut ctx.core,
-                        ctx.catalog,
-                        self.owner,
-                        monkey,
-                    );
-                    ctx.core.discard.push(monkey);
-                    ctx.log(LogEvent::CardDiscarded {
-                        player: self.owner,
-                        cards: vec![monkey],
+                    Some(ctx.core.players[user as usize].hand.remove(hpos))
+                } else if let Some(tpos) = ctx.core.table.iter().position(|c| *c == used_card) {
+                    Some(ctx.core.table.remove(tpos))
+                } else {
+                    None
+                };
+                if let Some(peach) = taken {
+                    ctx.core.players[self.owner as usize].hand.push(peach);
+                    ctx.log(LogEvent::CardsGiven {
+                        from: user,
+                        to: self.owner,
+                        cards: vec![peach],
                     });
                 }
-                // ③ 写回取消位：提交阶段跳过桃的结算。
                 ctx.current_card_use_mut().cancelled = true;
                 Flow::Done
             }

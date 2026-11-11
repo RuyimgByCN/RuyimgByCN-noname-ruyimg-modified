@@ -203,55 +203,6 @@ pub(super) fn resolve_l06_wuxing_skill(ctx: &mut Ctx<'_>, skill_name: &str, owne
     }
 }
 
-/// `U06` (`monkey`, `mianju`, `kuwu`, `xuelunyang`, `jiuwei` —
-/// `archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:5-144`).
-pub(super) fn resolve_u06_huanle_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: PlayerId) {
-    match skill_name {
-        // monkey 猴子 (`欢乐卡牌/card/skill.js:5-31`):
-        "monkey" => {
-            let _ = discard_one_he(ctx, owner);
-            set_flag(ctx.core, owner, "monkey_prevented_tao", 1);
-            set_flag(ctx.core, owner, "monkey_stole_tao", 1);
-            ctx.start_draw(owner, 1);
-        }
-        // mianju 漩涡面具 (`欢乐卡牌/card/skill.js:32-40`):
-        "mianju" => {
-            ctx.core.player_mut(owner).face_down = false;
-            set_flag(ctx.core, owner, "mianju_prevented_turnover", 1);
-        }
-        // kuwu 苦无 (`欢乐卡牌/card/skill.js:41-61`):
-        "kuwu" => {
-            set_flag(ctx.core, owner, "kuwu_invoked", 1);
-            super::decision34::resolve_kuwu_interactive(ctx, owner);
-        }
-        // xuelunyang 写轮眼 (`欢乐卡牌/card/skill.js:62-97`):
-        "xuelunyang" => {
-            if discard_one_he(ctx, owner).is_none() {
-                set_flag(ctx.core, owner, "xuelunyang_blocked_empty", 1);
-                return;
-            }
-            set_flag(ctx.core, owner, "xuelunyang_copied_skill", 1);
-        }
-        // jiuwei 九尾 (`欢乐卡牌/card/skill.js:98-144`):
-        "jiuwei" => {
-            set_flag(ctx.core, owner, "jiuwei_triggered", 1);
-            if ctx.core.player(owner).hp < ctx.core.player(owner).max_hp as i32 {
-                ctx.recover(owner, 1, None);
-            } else if flag(ctx.core, owner, "jiuwei_discard_other") != 0 {
-                if let Some(other) = hostile_target(ctx, owner) {
-                    let _ = discard_one_he(ctx, other);
-                    let _ = discard_one_he(ctx, other);
-                }
-            } else {
-                ctx.start_draw(owner, 2);
-            }
-        }
-        other_sk => {
-            set_flag(ctx.core, owner, &format!("u06_hook:{other_sk}"), 1);
-        }
-    }
-}
-
 /// `U07` (`youdishenru`, `g_youdishenru`, `ciqiu_dying`, `ciqiu_destroy`, `kangyin2`, etc. —
 /// `archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js:169-219`, `card/skill.js:5-36`, `character/skill.js:5-795`).
 pub(super) fn resolve_u07_wudian_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: PlayerId) {

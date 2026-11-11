@@ -697,19 +697,27 @@ pub(super) fn play_card(
                     // （命令层挂起机器，ActivateSkill 槽模式）——确认者弃
                     // 猴子把桃收为手牌（使用不发生，无 CardUsed 帧）；
                     // 全部放弃则按普通桃结算。
-                    let monkey_def = catalog
-                        .skill_by_name(crate::content::host::HUANLE_MONKEY_KEY);
-                    let holders: Vec<u8> = monkey_def
-                        .map(|d| {
-                            core.skills
-                                .range(..)
-                                .filter(|((o, idef), inst)| {
-                                    *idef == d && inst.enabled && core.player(*o).alive && *o != user
-                                })
-                                .map(|((o, _), _)| *o)
-                                .collect::<Vec<_>>()
-                        })
-                        .unwrap_or_default();
+                    let mut holders: Vec<u8> = Vec::new();
+                    for key in [crate::content::host::HUANLE_MONKEY_KEY, "monkey"] {
+                        if let Some(d) = catalog.skill_by_name(key) {
+                            for ((o, idef), inst) in core.skills.range(..) {
+                                if *idef == d
+                                    && inst.enabled
+                                    && core.player(*o).alive
+                                    && *o != user
+                                    && core
+                                        .player(*o)
+                                        .equips
+                                        .iter()
+                                        .any(|c| catalog.card_kind(*c) == CardKind::Monkey)
+                                    && !holders.contains(o)
+                                {
+                                    holders.push(*o);
+                                }
+                            }
+                        }
+                    }
+                    holders.sort_unstable();
                     if !holders.is_empty() {
                         state.resolution.parks.push(crate::resolution::Park {
                             resume_depth: state.resolution.stack.len(),
@@ -751,13 +759,15 @@ pub(super) fn play_card(
                     }
                 }
                 CardKind::ShouLiJian => {
-                    // 手里剑（G1 欢乐卡牌）：恰 1 名其他存活目标（无距离限制，
-                    // 上游 outrange global）
+                    // 手里剑（U06 欢乐卡牌 card.js:39-40）：恰 1 名距离 > 1 的其他存活目标（outrange: { global: 2 }）
                     if targets.len() != 1 {
                         return Err(RejectReason::IllegalTargets);
                     }
                     let target = targets[0];
-                    if target == core.turn.current || !core.player(target).alive {
+                    if target == core.turn.current
+                        || !core.player(target).alive
+                        || core.computed_distance(catalog, core.turn.current, target) <= 1
+                    {
                         return Err(RejectReason::IllegalTargets);
                     }
                 }

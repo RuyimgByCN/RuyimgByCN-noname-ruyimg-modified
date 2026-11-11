@@ -251,7 +251,7 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
     "yxs_menshen_target", "zhangba_pick_two", "zhangba_sha_target", "zhanlu_discard",
     "zhanlu_targets", "zhanxing_discard", "zhanxing_target", "zhenjiu_pick",
     "zhenjiu_target", "zhuhai_sha", "zhuyu_discard",
-    "boss_chuanyun_target", "boss_tianyun_target", "dddxiaxing_card",
+    "boss_chuanyun_target", "boss_tianyun_target", "dddxiaxing_card", "kuwu_discard",
 ];
 
 pub(super) fn intern_prompt(bytes: &[u8]) -> Result<&'static str, ArchiveError> {

@@ -6,10 +6,10 @@
 use content_native_loader::{
     bridge_pack, decision34_closure_extension_pack, longxue_full_unlock_report,
     verify_u08_standard_skill_bindings, DECISION34_STORAGE_DISPATCH_KEY, DIAOBINGQIANJIANG_ID,
-    DUOQI_ID, HUANLE_KUWU_INTERACTIVE_ID, K_DANGGU_ID, K_MOWANG_ID, L20_MARK_DISPATCH_ID,
-    L20_MARK_SPECS, L28_THUNDER_EXTRA_SKILLS, L28_THUNDER_GENERALS, MBCMFANGZHU_ID,
-    MBCMJIUSHI_ID, MBJUEJIN_ID, TH_DUNSHI_ID, TH_JINGXIE_ID, TH_QIAOSI_ID, TH_SKILL_DISPATCH_ID,
-    TH_TAIPINGYAOSHU_ID, TH_YEYAN_ID, YOUZHAN_ID, YXS_MENSHEN2_GUARD_ID,
+    DUOQI_ID, K_DANGGU_ID, K_MOWANG_ID, L20_MARK_DISPATCH_ID, L20_MARK_SPECS,
+    L28_THUNDER_EXTRA_SKILLS, L28_THUNDER_GENERALS, MBCMFANGZHU_ID, MBCMJIUSHI_ID, MBJUEJIN_ID,
+    TH_DUNSHI_ID, TH_JINGXIE_ID, TH_QIAOSI_ID, TH_SKILL_DISPATCH_ID, TH_TAIPINGYAOSHU_ID,
+    TH_YEYAN_ID, YOUZHAN_ID, YXS_MENSHEN2_GUARD_ID,
 };
 use engine_native::event::DamageNature;
 use engine_native::{CommandOutcome, Engine, GameAction, GameCommand};
@@ -231,33 +231,59 @@ fn l10_shichangshi_k_danggu_and_k_mowang_roster_lifecycle_and_save_restore() {
 
 #[test]
 fn u06_kuwu_interactive_and_u07_wudian_diaobingqianjiang_duoqi_youzhan() {
+    let huanle_json = read_pack_lf("huanle-upstream-noname/assets/cards.json");
+    let huanle_pack = bridge_pack(&huanle_json).expect("huanle pack").pack;
+    {
+        let mut e_huanle =
+            Engine::new_with_extensions(2026110903, 3, &[&huanle_pack]).expect("huanle engine");
+        while e_huanle.turn().current != 0
+            || e_huanle.turn().phase != engine_native::Phase::Play
+            || e_huanle.open_choice().is_some()
+        {
+            next_phase(&mut e_huanle);
+        }
+        e_huanle.debug_clear_hand(1);
+        let tao = e_huanle.debug_place(1, "tao");
+        let kuwu = e_huanle.debug_move_named_card_to_hand(0, "hnl_kuwu_0");
+        let _ = e_huanle.submit(GameCommand {
+            actor: 0,
+            expected_revision: e_huanle.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::PlayCard {
+                card: kuwu,
+                targets: vec![],
+            },
+        });
+        let sha = e_huanle.debug_place(0, "sha");
+        let out = e_huanle.submit(GameCommand {
+            actor: 0,
+            expected_revision: e_huanle.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::PlayCard {
+                card: sha,
+                targets: vec![1],
+            },
+        });
+        assert!(matches!(out, CommandOutcome::Pending { .. }));
+        let c = e_huanle.open_choice().expect("kuwu_discard").clone();
+        assert_eq!(c.spec.prompt, "kuwu_discard");
+        let _ = e_huanle.submit(GameCommand {
+            actor: 1,
+            expected_revision: e_huanle.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::Answer {
+                choice_id: c.id,
+                selection: vec![engine_native::ChoiceOption::Card(tao)],
+            },
+        });
+        assert!(e_huanle.debug_hand(1).is_empty());
+    }
+
     let wudian_json = read_pack_lf("wudian-upstream-noname/assets/cards.json");
     let wudian_pack = bridge_pack(&wudian_json).expect("wudian pack").pack;
     let d34_pack = decision34_closure_extension_pack();
     let mut e = Engine::new_with_extensions(2026110903, 4, &[&wudian_pack, &d34_pack])
         .expect("new_with_extensions");
-
-    // 1. U06 kuwu interactive: chain guard -> skipped
-    set_flag(&mut e, 0, "kuwu_from_chain", 1);
-    invoke_d34_op(&mut e, 0, "huanle_kuwu_interactive", HUANLE_KUWU_INTERACTIVE_ID);
-    assert_eq!(flag(&e, 0, "kuwu_skipped_from_chain"), 1);
-    set_flag(&mut e, 0, "kuwu_from_chain", 0);
-
-    // U06 kuwu interactive: discard 1 hand card branch
-    let hand1_before = e.debug_hand(1).len();
-    invoke_d34_op(&mut e, 0, "huanle_kuwu_interactive", HUANLE_KUWU_INTERACTIVE_ID);
-    drain(&mut e);
-    assert_eq!(e.debug_hand(1).len(), hand1_before - 1);
-    assert!(flag(&e, 1, "kuwu_discarded_he") > 0);
-
-    // U06 kuwu interactive: choose lose 1 HP branch
-    let hp1_before = e.debug_hp(1);
-    set_flag(&mut e, 1, "kuwu_choose_lose_hp", 1);
-    invoke_d34_op(&mut e, 0, "huanle_kuwu_interactive", HUANLE_KUWU_INTERACTIVE_ID);
-    drain(&mut e);
-    assert_eq!(flag(&e, 1, "kuwu_lost_hp"), 1);
-    assert_eq!(e.debug_hp(1), hp1_before - 1);
-    set_flag(&mut e, 1, "kuwu_choose_lose_hp", 0);
 
     // 2. U07 `diaobingqianjiang` (`玩点论杀/card/card.js:4-142`):
     //    `contentBefore` draws 1 card (`card.js:15`), reveals `ceil(alive / 2)` market cards (`card.js:41`),

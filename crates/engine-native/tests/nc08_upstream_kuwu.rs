@@ -233,8 +233,9 @@ fn upstream_kuwu_requires_sha_damage_and_is_forced() {
     );
 }
 
-/// 上游规则点 6（+ 差异 K4）：【杀】造成伤害后受伤角色**强制**弃一张牌；
-/// 原生按「确定性弃首张手牌」落地——本断言固定该现状（改回 `he` 自选即失败）。
+/// 上游规则点 6（`欢乐卡牌/card/skill.js:53-69`）：【杀】造成伤害后受伤角色
+/// **强制**自选弃置一张 `he` 牌（`chooseToDiscard(1, "he", true)` → 弹出
+/// `kuwu_discard` 选择窗口，`allow_cancel: false`）。
 #[test]
 fn upstream_kuwu_forces_target_discard() {
     let mut e = huanle_engine(20262703);
@@ -265,6 +266,10 @@ fn upstream_kuwu_forces_target_discard() {
         !prompts.iter().any(|p| p == "trigger_confirm"),
         "锁定技不得挂「是否发动」确认门：{prompts:?}"
     );
+    assert!(
+        prompts.iter().any(|p| p == "kuwu_discard"),
+        "苦无应打开 kuwu_discard 选择窗口：{prompts:?}"
+    );
     assert_eq!(
         e.debug_hp(1),
         3,
@@ -272,11 +277,11 @@ fn upstream_kuwu_forces_target_discard() {
     );
     assert!(
         !e.debug_hand(1).contains(&first),
-        "受伤角色被强制弃牌（上游 chooseToDiscard(true,'he')）"
+        "受伤角色通过 kuwu_discard 弃置所选牌（上游 chooseToDiscard(1,'he',true)）"
     );
     assert!(
         e.debug_hand(1).contains(&second),
-        "差异 K4：原生固定弃**首张**手牌（上游由受伤角色自选）"
+        "未选中的另一张手牌保留"
     );
     assert_eq!(
         discard_len(&e),
@@ -285,8 +290,8 @@ fn upstream_kuwu_forces_target_discard() {
     );
 }
 
-/// 差异 K1：上游 `event.notLink()` 排除铁索连环传导伤害；原生只按
-/// 「来源 + 杀族牌」过滤，传导伤害（`from_chain: true`）**仍触发**苦无。
+/// 上游规则点 4（`欢乐卡牌/card/skill.js:61-63`）：`event.notLink()` 排除铁索连环
+/// 传导伤害（`from_chain: true`）——传导伤害**不触发**苦无。
 #[test]
 fn upstream_kuwu_chain_damage_difference() {
     let mut e = huanle_engine(20262704);
@@ -295,7 +300,7 @@ fn upstream_kuwu_chain_damage_difference() {
     for p in 0..4 {
         e.debug_clear_hand(p);
     }
-    // 1、2 号横置；2 号持一张手牌（只应由「传导」决定是否被弃）
+    // 1、2 号横置；2 号持一张手牌（传导伤害不得触发苦无弃牌）
     let victim_card = e.debug_place(2, "tao");
     {
         let core = e.state_core_mut();
@@ -318,18 +323,16 @@ fn upstream_kuwu_chain_damage_difference() {
     assert_eq!(e.debug_hp(1), 3, "火杀命中 1 号");
     assert_eq!(e.debug_hp(2), 3, "铁索传导火伤至 2 号");
     assert!(
-        !e.debug_hand(2).contains(&victim_card),
-        "差异 K1：原生对铁索传导伤害仍触发苦无（上游 notLink() 为假 → 不触发）"
+        e.debug_hand(2).contains(&victim_card),
+        "上游对齐：铁索传导伤害（!event.notLink()）不触发苦无"
     );
     assert!(!e.debug_linked(1) && !e.debug_linked(2), "传导后连环解除");
 }
 
-/// 差异 K2+K3：上游 filter 还要求「目标有 `he` 牌」与「目标不在 `_notrigger`」；
-/// 原生无这两项条件（源码事实固定），且仅持装备的目标**不会**被强制弃牌
-/// （上游会强制其弃掉装备）。
+/// 上游规则点 3（`欢乐卡牌/card/skill.js:61-63`）：filter 要求目标有 `he` 牌且
+/// `!d.from_chain`；仅持装备的目标同样会触发苦无并被强制弃置装备。
 #[test]
 fn upstream_kuwu_filter_gaps() {
-    // 源码事实：伤害过滤臂只有「来源 + 未防止 + 有杀族牌」三项
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
         "/../engine-native-content/src/content/host/filtering/common.rs"
@@ -338,16 +341,12 @@ fn upstream_kuwu_filter_gaps() {
     let idx = src
         .find("HostBehavior::ShaDamageForceDiscard => matches!")
         .expect("苦无过滤臂");
-    let arm: String = src[idx..].chars().take(320).collect();
+    let arm: String = src[idx..].chars().take(480).collect();
     assert!(
-        arm.contains("is_sha_like"),
-        "杀族判定在过滤臂内：{arm}"
+        arm.contains("is_sha_like") && arm.contains("!d.from_chain"),
+        "杀族与非连环判定在过滤臂内：{arm}"
     );
-    assert!(
-        !arm.contains("from_chain") && !arm.contains("_notrigger"),
-        "差异 K1/K3：过滤臂缺 notLink/_notrigger 对应条件（若新增需更新证据）：{arm}"
-    );
-    // 行为事实：目标无手牌、只有装备 → 原生不弃任何牌（上游强制弃装备）
+    // 行为事实：目标无手牌、只有装备 → 苦无触发并强制目标弃掉该装备
     let mut e = huanle_engine(20262705);
     advance_to_play(&mut e, 0);
     equip_kuwu(&mut e);
@@ -384,8 +383,8 @@ fn upstream_kuwu_filter_gaps() {
     drain(&mut e);
     assert_eq!(e.debug_hp(1), 3, "杀命中");
     assert!(
-        e.debug_equips(1).contains(&equip),
-        "差异 K2：原生只弃手牌——仅持装备的目标不被强制弃牌（上游会弃装备）"
+        !e.debug_equips(1).contains(&equip),
+        "上游对齐：仅持装备的目标也被强制弃置装备"
     );
-    assert_eq!(discard_len(&e), before + 1, "弃牌堆只有杀本身");
+    assert_eq!(discard_len(&e), before + 2, "弃牌堆 = 杀 + 被弃装备");
 }

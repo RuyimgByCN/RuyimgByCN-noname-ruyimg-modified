@@ -706,6 +706,156 @@ fn plan_extension_choice_action(input: &crate::view::PolicyInput) -> Option<Game
                 selection,
             })
         }
+        // U06 欢乐卡牌·猴子（skill.js:20-22）：仅当使用【桃】的角色为敌方（public_attitude <= 0）时发动夺桃
+        "huanle_monkey_confirm" => {
+            let peach_user = input
+                .view
+                .players
+                .iter()
+                .find(|p| p.alive && p.hp <= 0)
+                .map(|p| p.seat)
+                .unwrap_or(input.view.turn);
+            let confirm = public_attitude(&input.view, seat, peach_user) <= 0;
+            let selection = if confirm {
+                vec![ChoiceOption::Confirm]
+            } else if options.contains(&ChoiceOption::Pass) {
+                vec![ChoiceOption::Pass]
+            } else {
+                Vec::new()
+            };
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
+        "trigger_confirm" => match input.choice.as_ref().and_then(|c| match c {
+            ChoiceView::Own { source_skill, .. } => *source_skill,
+            _ => None,
+        }) {
+            Some("huanle:monkey" | "monkey") => {
+                let peach_user = input
+                    .view
+                    .players
+                    .iter()
+                    .find(|p| p.alive && p.hp <= 0)
+                    .map(|p| p.seat)
+                    .unwrap_or(input.view.turn);
+                let confirm = public_attitude(&input.view, seat, peach_user) <= 0;
+                let selection = if confirm {
+                    vec![ChoiceOption::Confirm]
+                } else {
+                    vec![ChoiceOption::Pass]
+                };
+                Some(GameAction::Answer {
+                    choice_id: id,
+                    selection,
+                })
+            }
+            Some("huanle_jiuwei" | "jiuwei") => Some(GameAction::Answer {
+                choice_id: id,
+                selection: vec![ChoiceOption::Confirm],
+            }),
+            _ => None,
+        },
+        // U06 欢乐卡牌·手里剑（card.js:47-59）：背面朝上且装备旋涡面具时宁可受 1 伤保留面具，否则弃置最低价值装备
+        "host_target_discard_equip" => {
+            let me = input.view.players.get(seat as usize);
+            let keep_mianju_when_turned = me.is_some_and(|p| {
+                p.turned_over
+                    && p.skills
+                        .iter()
+                        .any(|&s| s == "huanle:mianju" || s == "mianju")
+            });
+            if keep_mianju_when_turned {
+                let selection = if options.contains(&ChoiceOption::Pass) {
+                    vec![ChoiceOption::Pass]
+                } else {
+                    Vec::new()
+                };
+                return Some(GameAction::Answer {
+                    choice_id: id,
+                    selection,
+                });
+            }
+            let best = options
+                .iter()
+                .filter_map(|o| match o {
+                    ChoiceOption::Card(c) => Some(*c),
+                    _ => None,
+                })
+                .min_by_key(|&c| extension_card_value(input, c));
+            let selection = match best {
+                Some(c) => vec![ChoiceOption::Card(c)],
+                None if options.contains(&ChoiceOption::Pass) => vec![ChoiceOption::Pass],
+                None => Vec::new(),
+            };
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
+        // U06 欢乐卡牌·苦无（skill.js:66-69）：强制弃置 1 张价值最低的 he 牌
+        "kuwu_discard" => {
+            let best = options
+                .iter()
+                .filter_map(|o| match o {
+                    ChoiceOption::Card(c) => Some(*c),
+                    _ => None,
+                })
+                .min_by_key(|&c| extension_card_value(input, c));
+            let selection = match best {
+                Some(c) => vec![ChoiceOption::Card(c)],
+                None => options.iter().take(1).copied().collect(),
+            };
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
+        // U06 欢乐卡牌·写轮眼（skill.js:80-112）：优先选择技能数最多的存活其他角色与首个可窃技能
+        "huanle_xuelunyang_target" => {
+            let best = options
+                .iter()
+                .filter_map(|o| match o {
+                    ChoiceOption::Player(t) => Some(*t),
+                    _ => None,
+                })
+                .max_by_key(|&t| {
+                    let skill_n = input
+                        .view
+                        .players
+                        .get(t as usize)
+                        .map(|p| p.skills.len() as i64)
+                        .unwrap_or(0);
+                    let enemy_bonus = if public_attitude(&input.view, seat, t) < 0 {
+                        1i64
+                    } else {
+                        0
+                    };
+                    skill_n * 10 + enemy_bonus
+                });
+            let selection = match best {
+                Some(t) => vec![ChoiceOption::Player(t)],
+                None if allow_cancel => Vec::new(),
+                None => options.iter().take(1).copied().collect(),
+            };
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
+        "huanle_xuelunyang_skill" => {
+            let selection = options
+                .iter()
+                .find(|o| matches!(o, ChoiceOption::Tag(_)))
+                .copied()
+                .into_iter()
+                .collect();
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
         _ => None,
     }
 }

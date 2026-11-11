@@ -380,14 +380,6 @@ pub fn decision34_closure_extension_pack() -> ExtensionPack {
             engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
         ));
     }
-    vm_skills.push(build_d34_vm_decl(
-        vm_skills.len(),
-        "kuwu",
-        HUANLE_KUWU_INTERACTIVE_ID,
-        EventKind::CardUsed,
-        &[],
-        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsSource,
-    ));
     for &sk_name in &L10_SCS_COMPANION_SKILLS {
         vm_skills.push(build_d34_vm_decl(
             vm_skills.len(),

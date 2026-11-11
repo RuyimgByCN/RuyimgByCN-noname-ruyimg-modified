@@ -39,10 +39,20 @@ impl crate::catalog::SkillMachine for MonkeyStealMachine {
         loop {
             // 跳过死亡或已失去猴子的持有者。
             while let Some(h) = self.holders.first().copied() {
-                let def = ctx
-                    .catalog
-                    .skill_by_name(crate::vocabulary::host::HUANLE_MONKEY_KEY);
-                let armed = def.is_some_and(|d| ctx.core.has_skill(h, d));
+                let has_monkey_card = ctx
+                    .core
+                    .player(h)
+                    .equips
+                    .iter()
+                    .any(|c| ctx.catalog.card_kind(*c) == CardKind::Monkey);
+                let armed = has_monkey_card
+                    && [crate::vocabulary::host::HUANLE_MONKEY_KEY, "monkey"]
+                        .into_iter()
+                        .any(|k| {
+                            ctx.catalog
+                                .skill_by_name(k)
+                                .is_some_and(|d| ctx.core.has_skill(h, d))
+                        });
                 if !ctx.core.player(h).alive || !armed {
                     self.holders.remove(0);
                 } else {
@@ -64,19 +74,25 @@ impl crate::catalog::SkillMachine for MonkeyStealMachine {
                     .map(|o| *o == ChoiceOption::Confirm)
                     .unwrap_or(false);
                 if confirmed {
-                    // 取消使用：桃从使用者手牌收为持有者手牌，弃猴子
+                    // 取消使用：桃从使用者手牌或桌面收为持有者手牌，弃猴子
                     //（离场撤销装备技）。
-                    let user_hand = &mut ctx.core.players[self.user as usize].hand;
-                    let pos = user_hand
+                    if let Some(pos) = ctx.core.players[self.user as usize]
+                        .hand
                         .iter()
                         .position(|c| *c == self.card)
-                        .expect("被拦截的桃应在使用者手牌");
-                    let peach = user_hand.remove(pos);
-                    ctx.core.players[holder as usize].hand.push(peach);
+                    {
+                        let peach = ctx.core.players[self.user as usize].hand.remove(pos);
+                        ctx.core.players[holder as usize].hand.push(peach);
+                    } else if let Some(pos) = ctx.core.table.iter().position(|c| *c == self.card) {
+                        let peach = ctx.core.table.remove(pos);
+                        ctx.core.players[holder as usize].hand.push(peach);
+                    } else {
+                        return Flow::Done;
+                    }
                     ctx.log(LogEvent::CardsGivenPublic {
                         from: self.user,
                         to: holder,
-                        cards: vec![peach],
+                        cards: vec![self.card],
                     });
                     if let Some(pos) = ctx.core.players[holder as usize]
                         .equips

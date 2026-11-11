@@ -235,7 +235,7 @@ impl HostMachine {
                                 options: candidates,
                                 min: 1,
                                 max: 1,
-                                allow_cancel: false,
+                                allow_cancel: true,
                             },
                         }
                     }
@@ -278,11 +278,12 @@ impl HostMachine {
                         }
                     }
                     HostStage::ComparePlayerPick => {
-                        let picked = ctx.answer().first().copied().expect("PickTag 应答存在");
-                        let ChoiceOption::Tag(idx) = picked else {
+                        let Some(ChoiceOption::Tag(idx)) = ctx.answer().first().copied() else {
                             return Flow::Done;
                         };
-                        let target = self.target.expect("已选目标");
+                        let Some(target) = self.target else {
+                            return Flow::Done;
+                        };
                         let owned: Vec<crate::ids::SkillDefId> = ctx
                             .core
                             .skills

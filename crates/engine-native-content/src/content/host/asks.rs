@@ -244,9 +244,11 @@ pub(crate) fn active_ask_host(
             let mut options = vec![ChoiceOption::Pass];
             options.extend(
                 core.player(t)
-                    .equips
+                    .hand
                     .iter()
                     .copied()
+                    .filter(|&c| catalog.card_slot_of(core, c).is_some())
+                    .chain(core.player(t).equips.iter().copied())
                     .map(ChoiceOption::Card),
             );
             Some(ask(
@@ -256,9 +258,79 @@ pub(crate) fn active_ask_host(
                 options,
                 1,
                 1,
+                true,
+            ))
+        }
+        // 苦无（U06 欢乐卡牌 skill.js:53-69）：受伤目标弃置一张 he 牌（强制）
+        HostBehavior::ShaDamageForceDiscard => {
+            if stage != HostStage::SelectCard {
+                return None;
+            }
+            let t = target?;
+            let options: Vec<ChoiceOption> = core
+                .player(t)
+                .hand
+                .iter()
+                .chain(core.player(t).equips.iter())
+                .copied()
+                .map(ChoiceOption::Card)
+                .collect();
+            if options.is_empty() {
+                return None;
+            }
+            Some(ask(
+                t,
+                "kuwu_discard",
+                ChoiceKind::SelectCards,
+                options,
+                1,
+                1,
                 false,
             ))
         }
+        // 写轮眼（U06 欢乐卡牌 skill.js:70-128）：阶段一选目标（可取消），阶段二选技能（不可取消）
+        HostBehavior::HuanleXuelunyangCard => match stage {
+            HostStage::CompareTargetPick => {
+                let candidates: Vec<ChoiceOption> = (0..core.players.len())
+                    .filter(|&i| {
+                        i as PlayerId != owner
+                            && core.player(i as PlayerId).alive
+                            && core.skills.keys().any(|(o, _)| *o == i as PlayerId)
+                    })
+                    .map(|i| ChoiceOption::Player(i as PlayerId))
+                    .collect();
+                if candidates.is_empty() {
+                    return None;
+                }
+                Some(ask(
+                    owner,
+                    "huanle_xuelunyang_target",
+                    ChoiceKind::SelectPlayers,
+                    candidates,
+                    1,
+                    1,
+                    true,
+                ))
+            }
+            HostStage::ComparePlayerPick => {
+                let t = target?;
+                let count = core.skills.range((t, 0)..(t, u16::MAX)).count();
+                if count == 0 {
+                    return None;
+                }
+                let tags: Vec<ChoiceOption> = (0..count).map(|i| ChoiceOption::Tag(i as u8)).collect();
+                Some(ask(
+                    owner,
+                    "huanle_xuelunyang_skill",
+                    ChoiceKind::PickTag,
+                    tags,
+                    1,
+                    1,
+                    false,
+                ))
+            }
+            _ => None,
+        },
         // 潜偷（swd 第三批 v92）：代价牌选择询问（owner）
         HostBehavior::SwdShentouEquipSkill => {
             if stage != HostStage::Act {
