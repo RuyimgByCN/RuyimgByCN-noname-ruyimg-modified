@@ -109,6 +109,14 @@
 
 **36. PA09 维持 WASM 默认并关闭（2026-11-09，用户在 Claude Code 会话中选定）**：依据 [Batch 24 证据 §4](../2026-11-08-batch24-cangchizhibi-and-pa09/README.md) 的 macOS `WKWebView` 同负载对照，2026-10-26 裁决的六项切换条件中①（单步 IPC 往返 p50 2ms 高于同进程 Worker 0ms）与②（单座顺序规划直调 53.4µs 快于线程池 78.9µs，线程池仅 8 座并发规划提速 1.40×）未满足，用户接受 Claude 建议：桌面默认引擎维持 WASM，PA09 记为「已评估，维持 WASM，关闭」，不再为满足条件①②继续优化 IPC 或规划派发。理由：玩家可感知的 `step_to_paint` 两侧均为 16–17ms（受帧刷新限制），IPC 差距在一帧之内；跨进程 IPC 的 p50 结构上难以低于同进程 Worker；单机回合制一次只规划一个座位，线程池收益用不上；网页、移动端、桌面共用同一 WASM 产物，测试面只有一份。原生原型与 `?desktopEngine=native` 可选开关及其测试保留（不删代码、不降为未测路径），WASM 下 AI 仅按节点预算停止（`crates/engine-native/src/ai.rs` 中 wasm 分支 `started = None`）的既有契约不变。条件原文不改；若日后桌面需要多座并发规划或更大的 AI 时间预算，再重开 PA09 并按原六项条件重新验收。本项只登记裁决。
 
+## 补充裁决（2026-11-11，第三节第 4 项三项边界确认）
+
+**37. Spine 其余版本（3.5／3.7／3.8／4.1／4.2）边界（2026-11-11，用户确认「第三节第 4 项 按你推荐的进行」）**：延续裁决 35 的净室自写 Spine 4.0 路线，原生前端播放器仅支持 Spine `4.0.*`（覆盖上游 `L08 十周年UI` 与 `L24 皮肤切换` `dynamicSkin.js` 约 170 处 `version: "4.0"` 配置），不再扩展 `3.5／3.7／3.8／4.1／4.2` 格式解析；当未导入动皮资产或导入非 `4.0.x` 版本资源时，由 [`resolveDynamicSkinImport`](../../../../apps/web-client/src/engine/spine40/webglRenderer.ts#L829-L889) 确定性回退为静态立绘展示（`status: "static-portrait-fallback"`），并在[规则基准](../../../architecture/native-rules-baseline.md)登记为已确认基准差异。涉及 Spine 的 7 个来源（`L08, L09, L10, L11, L12, L24, L28`）第⑧维仍待用户本机使用自有 Spine 4.0 动皮与旧版无名杀同场景截图对照完成后再上调签署。
+
+**38. 大体量数据型来源（皮肤切换、千幻聆音、十周年UI 等）资源获取与版权范围（2026-11-11，用户确认「第三节第 4 项 按你推荐的进行」）**：仓库与发行产物不内置、不打包任何受第三方商业版权保护的外部骨骼（`.skel`/`.atlas`/`.png`）、商业动皮或外部配音二进制资产；仅保留上游完整配置项、`dynamicSkin.js`／`saveSkinParams` 参数结构与玩家本地导入入口（[`Spine40SkinImportBox.vue`](../../../../apps/web-client/src/components/battle/surfaces/Spine40SkinImportBox.vue) 及本地皮肤/音画导入），未导入外部商业资产时确定性回退静态立绘或静音，不阻塞牌局执行与仓内功能验收。
+
+**39. 冻结版本号、ABI 与 schema 边界（规则 333／NGSA 107／content schema 5／ABI 759／WS 8）（2026-11-11，用户确认「第三节第 4 项 按你推荐的进行」）**：维持当前已授权冻结版本边界 `规则 333 / NGSA 107 / content schema 5 / RULE_VM_ABI_VERSION 759 / WS 8` 不升号（保持 14 场 golden 哈希与既有存档／内容锁 100% 兼容）；37 个扩展来源中凡上游 JS 在技能 `content` 内嵌多步交互子询问（`chooseControl`/`chooseCard`/`chooseTarget`）且超出既有 `HostStage` 状态机者，在 `ABI 759` 单次触发窗口内按上游优先级规则执行确定性选牌/选目标结算（不新增跨版本 `HostStage` 或 `ABI` 操作码），并在[规则基准](../../../architecture/native-rules-baseline.md)作为已确认基准边界正式定案。
+
 ## 文档验证
 
 本批只登记裁决，不改变代码或上述事项的验收状态。执行仓库文档链接、ADR 索引和源码行数检查及行数脚本自检，结果见[链接](local-links.log)、[ADR](adr-index.log)、[行数](source-lines.log)、[自检](source-line-tests.log)、[暂存差异](staged-check.log)。第 9 项补登后的同类检查见 [v325 补登检查](addendum-v325-checks.log)，第 10–15 项见[补登检查](addendum-10-15-checks.log)。
