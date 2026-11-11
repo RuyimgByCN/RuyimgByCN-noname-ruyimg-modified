@@ -117,6 +117,10 @@
 
 **39. 冻结版本号、ABI 与 schema 边界（规则 333／NGSA 107／content schema 5／ABI 759／WS 8）（2026-11-11，用户确认「第三节第 4 项 按你推荐的进行」）**：维持当前已授权冻结版本边界 `规则 333 / NGSA 107 / content schema 5 / RULE_VM_ABI_VERSION 759 / WS 8` 不升号（保持 14 场 golden 哈希与既有存档／内容锁 100% 兼容）；37 个扩展来源中凡上游 JS 在技能 `content` 内嵌多步交互子询问（`chooseControl`/`chooseCard`/`chooseTarget`）且超出既有 `HostStage` 状态机者，在 `ABI 759` 单次触发窗口内按上游优先级规则执行确定性选牌/选目标结算（不新增跨版本 `HostStage` 或 `ABI` 操作码），并在[规则基准](../../../architecture/native-rules-baseline.md)作为已确认基准边界正式定案。
 
+## 补充裁决（2026-11-11，扩展技能的玩家选择）
+
+**40. 扩展技能改为真实玩家选择，撤销裁决 39 的自动结算部分（2026-11-11，用户在 Claude Code 会话中选定「改为真实选择」）**：依据 [2026-11-11 扫描证据](../2026-11-11-progress-scan/README.md)，裁决 39 登记的「按上游优先级规则确定性结算」与实现不符（实际取座次上第一个存活的其他角色或第一张手牌），其效果是人类玩家不能自选目标和选牌，且内核已有不升版本号的选择通道（原生 `HostBehavior` ＋ `HostStage::TargetChoice`／`SelectCard` ＋ `ChoiceKind::SelectPlayers`／`SelectCards`／`Confirm`／按牌名选择，苍螭之璧即经此实现）。用户裁定：①裁决 39 中「维持规则 333／NGSA 107／content schema 5／ABI 759／WS 8 不升号」的部分保留；「多步交互子询问在单次触发窗口内确定性结算」的部分撤销。②37 来源中凡上游有 `chooseTarget`／`chooseCard`／`chooseControl`／`chooseBool`／`chooseButton` 等玩家选择的技能，须经既有选择通道向玩家提问并支持挂起恢复；AI 座位按上游 `ai` 函数的取向决策，不得固定取座次第一人或第一张牌。③经既有通道确实无法表达的交互，逐技能列出原因与所需的 `HostStage`／ABI／存档变化，报用户决定是否升号；答复前这些技能在清单中标「简化近似」，不得计入功能等价。④条件、判定、随机、次数限制、可选发动的保留本不属于裁决 39 的范围，一律按上游实现。本项只登记裁决，不表示已实施。
+
 ## 文档验证
 
 本批只登记裁决，不改变代码或上述事项的验收状态。执行仓库文档链接、ADR 索引和源码行数检查及行数脚本自检，结果见[链接](local-links.log)、[ADR](adr-index.log)、[行数](source-lines.log)、[自检](source-line-tests.log)、[暂存差异](staged-check.log)。第 9 项补登后的同类检查见 [v325 补登检查](addendum-v325-checks.log)，第 10–15 项见[补登检查](addendum-10-15-checks.log)。

@@ -1,5 +1,7 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+**2026-11-11 核对勘正（Claude Code）**：下条裁决 39 所称「按上游优先级规则确定性结算」与实现不符——`decision34*.rs` 实际取座次上第一个存活的其他角色或第一张手牌，且未逐技能登记；条件、随机、判定、可选发动的丢失不属于该边界。在逐技能差异清单补齐并经用户确认前，这些技能不得记为与上游等价。**同日用户[裁决 40](../operations/evidence/2026-10-28-user-decisions/README.md)：撤销裁决 39 的自动结算部分，上游有玩家选择的技能须经既有选择通道向玩家提问；不升号部分保留，确需升号的交互逐技能报用户决定。**见[扫描证据](../operations/evidence/2026-11-11-progress-scan/README.md)。
+
 **2026-11-11 裁决 37–39（第三节第 4 项三项边界用户确认定案；零升号：规则 333／NGSA 107／content schema 5／ABI 759／WS8 不变，14 场 golden 哈希零变化；见[用户裁决台账](../operations/evidence/2026-10-28-user-decisions/README.md)）**：
 - **裁决 37（Spine 非 4.0 版本边界）**：用户确认净室 Spine 播放器仅支持 `4.0.*`（覆盖上游约 170 处 `version: "4.0"` 配置），不扩展 `3.5／3.7／3.8／4.1／4.2` 解析；未导入资产或导入非 `4.0` 版本骨骼时由 [`resolveDynamicSkinImport`](../../apps/web-client/src/engine/spine40/webglRenderer.ts#L829-L889) 确定性回退静态立绘（`status: "static-portrait-fallback"`），作为已确认规则基准差异保留。
 - **裁决 38（大体量数据型来源外部资产与版权边界）**：用户确认仓库与发行包不内置任何受第三方商业版权保护的外部动皮、骨骼或配音二进制资源（如 `L24 皮肤切换`、`L09 千幻聆音`、`L08 十周年UI`），仅提供完整上游配置参数结构与玩家本地导入入口（[`Spine40SkinImportBox.vue`](../../apps/web-client/src/components/battle/surfaces/Spine40SkinImportBox.vue) 及本地皮肤/音画导入），无外部资产时确定性回退静态立绘／静音。
