@@ -1585,4 +1585,13 @@ pub enum HostBehavior {
     XianluhuiCard,
     /// 苍螭之璧（tag 538，swd 裁决 33）：手持法器，回合开始可选 1–3 名角色横置/重置。
     SwdCangchizhibiHeld,
+    /// 穿云（tag 539，太虚幻境·extension_skill.js:3806）：结束阶段开始，若场上有体力值
+    /// 大于等于你的其他角色，须选择其中一名造成 1 点伤害。
+    BossChuanyun,
+    /// 天陨（tag 540，太虚幻境·extension_skill.js:4085）：结束阶段开始，可失去 1 点体力并
+    /// 选择一名其他角色，对其造成 2 点火焰伤害并弃置其所有装备牌。
+    BossTianyun,
+    /// 侠行（tag 541，3D精选·character/skill.js:59）：一轮一次，任意角色准备阶段或濒死时，
+    /// 可弃置一张牌令其随机获得牌堆中一张闪/桃（本轮「侠」标记下可视为无距离限制使用【杀】）。
+    DddXiaxing,
 }

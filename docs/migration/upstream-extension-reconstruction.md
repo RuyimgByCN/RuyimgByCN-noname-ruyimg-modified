@@ -2,6 +2,8 @@
 
 <a id="-当前值第-568-轮实测2026-10-19"></a>
 
+> **2026-11-12 Step 1 交互通道打样**：按[裁决 40](../operations/evidence/2026-10-28-user-decisions/README.md)在既有 `HostBehavior + HostStage + ChoiceKind` 通道上完成 `boss_chuanyun`（`L11`）、`boss_tianyun`（`L11`）、`dddxiaxing`（`U01`）3 个代表技能的真实玩家选择、取消不发动、AI 公开决策与挂起中途存读档恢复（零升号：`333 / 107 / 5 / 759 / 8` 不变，14 场 golden 哈希不变），经独立复核员 `step1-verifier` 逐行核对上游源码通过后更新 [`docs/migration/g0/inventory_status.json`](./g0/inventory_status.json) 并重跑 `generate-g0-docs.py`，全仓 37 来源 4,424 项实体当前计数为 **`已复核等价 3 / 简化近似 4,421 / 缺失 0 / 上游未定义 0`**（`U01` `1 / 94 / 0`、`L11` `2 / 934 / 0`；见[Step 1 迁移指南](../operations/evidence/2026-11-12-step1-choice-channel-prototype/README.md)）。其余技能待后续按来源批量迁移，**整包八项签署仍为 0/37**。
+
 > **2026-11-11 Step 0 工作区整理与口径纠偏**：按下方夜间扫描勘正执行整改——在 [`docs/migration/g0/inventory_status.json`](./g0/inventory_status.json) 中将 `dddxiaxing`、`boss_chuanyun`、`boss_lingfeng`、`boss_tianyun` 4 项从「已复核等价」降回「简化近似」（`reviewer: null, review_date: null`，写明缺玩家选择等差异），重跑 `generate-g0-docs.py`，全仓 37 来源 4,424 项实体当前计数为 **`已复核等价 0 / 简化近似 4,424 / 缺失 0 / 上游未定义 0`**；修复 `choice_routing.rs` 暗身份泄漏并标明其为自动回退选择器（未调用 `open_choice`，裁决 40 未实现）；同场景截图对照见 [`2026-11-11-tabletop-and-spine40`](../operations/evidence/2026-11-11-tabletop-and-spine40/tabletop-comparison.png)（原生横排座位卡片与上游环绕式布局不同，界面项仍为示意）；恢复[签署表](../operations/evidence/2026-10-19-source-signoff-32/README.md) `2026-11-10` 历史快照。全部 37 来源第①、⑧项维持「部分/简化近似」，**整包八项签署 0/37**。
 
 > **2026-11-11 夜间核对勘正（Claude Code；HEAD `057ba1789`，工作区未提交）**：下段「Milestone 4 闭环」的清单计数（已复核等价 4／简化近似 4,420）与整包 0/37 属实，但其「闭环」「交付完成」措辞不成立：逐技能改写基本未做（自动选目标函数改名、`u05_exec` 模板内联，行为未变），裁决 40 的真实玩家选择未实现，标为「已复核等价」的 4 项同样缺玩家选择；同场景对照图显示原生牌桌布局与上游不同，界面项仍为示意。各来源第①、⑧项维持「部分」。见[扫描证据](../operations/evidence/2026-11-11-progress-scan-night/README.md)。

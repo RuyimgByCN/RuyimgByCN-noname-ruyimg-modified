@@ -298,6 +298,142 @@ impl HostMachine {
                     _ => Flow::Done,
                 }
             }
+            // 侠行（3D精选·character/skill.js:59-240）：
+            // - 触发路径（self.card != Some(2)）：选择一张 he 牌置于牌堆顶（可取消），获得「侠」标记并视为事件角色
+            //   使用一张【酒】（准备阶段开始）或【桃】（濒死时）；
+            // - 主动转化路径（self.card == Some(2)，skill.js:163-208）：移去「侠」标记，0 卡视为使用【杀】。
+            HostBehavior::DddXiaxing => {
+                if self.card == Some(2) {
+                    match self.stage {
+                        HostStage::Act => {
+                            let options: Vec<ChoiceOption> = ctx
+                                .core
+                                .alive_players()
+                                .filter(|&p| p != self.owner)
+                                .map(ChoiceOption::Player)
+                                .collect();
+                            if options.is_empty() {
+                                return Flow::Done;
+                            }
+                            self.stage = HostStage::TargetChoice;
+                            Flow::WaitChoice {
+                                observer: self.owner,
+                                spec: ChoiceSpec {
+                                    kind: ChoiceKind::SelectPlayers,
+                                    prompt: "zhangba_sha_target",
+                                    options,
+                                    min: 1,
+                                    max: 1,
+                                    allow_cancel: true,
+                                },
+                            }
+                        }
+                        HostStage::TargetChoice => {
+                            let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied()
+                            else {
+                                return Flow::Done;
+                            };
+                            if target == self.owner || !ctx.core.player(target).alive {
+                                return Flow::Done;
+                            };
+                            ctx.core
+                                .vm_aux
+                                .flags
+                                .remove(&(self.owner, "dddxiaxing_xia".to_string()));
+                            ctx.core.turn.sha_used_play_phase = true;
+                            ctx.log(LogEvent::SkillTriggered {
+                                skill: "侠行",
+                                owner: self.owner,
+                                presentation: None,
+                            });
+                            ctx.emit(EventData::CardUsed(crate::event::CardUseData {
+                                card: None,
+                                player: self.owner,
+                                targets: vec![target],
+                                nature: crate::event::DamageNature::Normal,
+                                use_as: Some(CardKind::Sha),
+                                cancelled: false,
+                            }));
+                            Flow::Done
+                        }
+                        _ => Flow::Done,
+                    }
+                } else {
+                    match self.stage {
+                        HostStage::Act => {
+                            let options: Vec<ChoiceOption> = ctx
+                                .core
+                                .player(self.owner)
+                                .hand
+                                .iter()
+                                .chain(ctx.core.player(self.owner).equips.iter())
+                                .copied()
+                                .map(ChoiceOption::Card)
+                                .collect();
+                            if options.is_empty() {
+                                return Flow::Done;
+                            }
+                            self.stage = HostStage::SelectCard;
+                            Flow::WaitChoice {
+                                observer: self.owner,
+                                spec: ChoiceSpec {
+                                    kind: ChoiceKind::SelectCards,
+                                    prompt: "dddxiaxing_card",
+                                    options,
+                                    min: 1,
+                                    max: 1,
+                                    allow_cancel: true,
+                                },
+                            }
+                        }
+                        HostStage::SelectCard => {
+                            let Some(ChoiceOption::Card(picked)) = ctx.answer().first().copied()
+                            else {
+                                return Flow::Done;
+                            };
+                            if !ctx.core.player(self.owner).hand.contains(&picked)
+                                && !ctx.core.player(self.owner).equips.contains(&picked)
+                            {
+                                return Flow::Done;
+                            }
+                            ctx.take_owned_card(self.owner, picked);
+                            ctx.core.deck.push(picked);
+                            let round_tag = ctx.core.turn.round + 1000;
+                            ctx.core
+                                .vm_aux
+                                .flags
+                                .insert((self.owner, "dddxiaxing_round".to_string()), round_tag);
+                            ctx.core
+                                .vm_aux
+                                .flags
+                                .insert((self.owner, "dddxiaxing_xia".to_string()), 1);
+                            ctx.log(LogEvent::SkillTriggered {
+                                skill: "侠行",
+                                owner: self.owner,
+                                presentation: None,
+                            });
+                            let beneficiary = self.target.unwrap_or(self.owner);
+                            if ctx.core.player(beneficiary).alive {
+                                let as_kind = if self.card == Some(1) {
+                                    CardKind::Tao
+                                } else {
+                                    CardKind::Jiu
+                                };
+                                ctx.emit(EventData::CardUsed(crate::event::CardUseData {
+                                    card: None,
+                                    player: beneficiary,
+                                    targets: vec![beneficiary],
+                                    nature: crate::event::DamageNature::Normal,
+                                    use_as: Some(as_kind),
+                                    cancelled: false,
+                                }));
+                            }
+                            Flow::Done
+                        }
+                        _ => Flow::Done,
+                    }
+                }
+            }
             _ => unreachable!("behavior routed to the wrong step module"),
         }
     }

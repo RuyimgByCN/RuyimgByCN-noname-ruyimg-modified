@@ -559,14 +559,169 @@ pub fn projected_choice_action(choice: ChoiceView) -> Option<GameAction> {
     Some(GameAction::Answer { choice_id: id, selection })
 }
 
+fn public_attitude(view: &crate::view::PlayerView, seat: u8, target: u8) -> i32 {
+    if target == seat {
+        return 10;
+    }
+    let my_role = view.players.get(seat as usize).and_then(|p| p.role);
+    let target_role = view.players.get(target as usize).and_then(|p| p.role);
+    match my_role {
+        Some(crate::state::Role::Lord) | Some(crate::state::Role::Loyalist) => match target_role {
+            Some(crate::state::Role::Lord) | Some(crate::state::Role::Loyalist) => 6,
+            _ => -5,
+        },
+        Some(crate::state::Role::Rebel) => match target_role {
+            Some(crate::state::Role::Lord) => -6,
+            Some(crate::state::Role::Rebel) => 6,
+            _ => -4,
+        },
+        _ => -5,
+    }
+}
+
+fn extension_card_value(input: &crate::view::PolicyInput, card: crate::ids::CardId) -> i64 {
+    let kind = input
+        .own_hand_kinds
+        .iter()
+        .find(|(c, _)| *c == card)
+        .map(|(_, k)| *k);
+    match kind {
+        Some(crate::catalog::CardKind::Tao) => 80,
+        Some(crate::catalog::CardKind::Jiu) | Some(crate::catalog::CardKind::Wuzhong) => 70,
+        Some(crate::catalog::CardKind::Shan) => 40,
+        Some(crate::catalog::CardKind::Sha) => 35,
+        Some(_) => 45,
+        None => 30,
+    }
+}
+
+fn plan_extension_choice_action(input: &crate::view::PolicyInput) -> Option<GameAction> {
+    let seat = input.view.seat;
+    let Some(ChoiceView::Own {
+        id,
+        prompt,
+        ref options,
+        allow_cancel,
+        ..
+    }) = input.choice
+    else {
+        return None;
+    };
+    match prompt {
+        "boss_chuanyun_target" => {
+            let best = options
+                .iter()
+                .filter_map(|o| match o {
+                    ChoiceOption::Player(t) => Some(*t),
+                    _ => None,
+                })
+                .filter(|&t| public_attitude(&input.view, seat, t) < 0)
+                .max_by_key(|&t| {
+                    let att = public_attitude(&input.view, seat, t) as i64;
+                    let hp = input
+                        .view
+                        .players
+                        .get(t as usize)
+                        .map(|p| p.hp as i64)
+                        .unwrap_or(0);
+                    (-att) * 10 - hp
+                });
+            let selection = match best {
+                Some(t) => vec![ChoiceOption::Player(t)],
+                None if allow_cancel => Vec::new(),
+                None => options.iter().take(1).copied().collect(),
+            };
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
+        "boss_tianyun_target" => {
+            let my_hp = input
+                .view
+                .players
+                .get(seat as usize)
+                .map(|p| p.hp)
+                .unwrap_or(0);
+            if my_hp <= 1 && allow_cancel {
+                return Some(GameAction::Answer {
+                    choice_id: id,
+                    selection: Vec::new(),
+                });
+            }
+            let best = options
+                .iter()
+                .filter_map(|o| match o {
+                    ChoiceOption::Player(t) => Some(*t),
+                    _ => None,
+                })
+                .filter(|&t| public_attitude(&input.view, seat, t) <= -3)
+                .max_by_key(|&t| {
+                    let att = (-public_attitude(&input.view, seat, t)) as i64;
+                    let equips = input
+                        .view
+                        .players
+                        .get(t as usize)
+                        .map(|p| p.equips.len() as i64)
+                        .unwrap_or(0);
+                    att * 10 + equips * 5
+                });
+            let selection = match best {
+                Some(t) => vec![ChoiceOption::Player(t)],
+                None if allow_cancel => Vec::new(),
+                None => options.iter().take(1).copied().collect(),
+            };
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
+        "dddxiaxing_card" => {
+            let beneficiary = input
+                .view
+                .players
+                .iter()
+                .find(|p| p.alive && p.hp <= 0)
+                .map(|p| p.seat)
+                .unwrap_or(input.view.turn);
+            if public_attitude(&input.view, seat, beneficiary) <= 0 && allow_cancel {
+                return Some(GameAction::Answer {
+                    choice_id: id,
+                    selection: Vec::new(),
+                });
+            }
+            let best = options
+                .iter()
+                .filter_map(|o| match o {
+                    ChoiceOption::Card(c) => Some(*c),
+                    _ => None,
+                })
+                .min_by_key(|&c| extension_card_value(input, c));
+            let selection = match best {
+                Some(c) => vec![ChoiceOption::Card(c)],
+                None => Vec::new(),
+            };
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
+        _ => None,
+    }
+}
+
 impl Engine {
     /// 有界规划：在克隆引擎上模拟候选动作（计算与规则推进隔离），
     /// 以启发式评分（敌方体力下降 − 己方体力下降）选最优动作。
     /// 不修改权威状态；克隆隔离保证规划中途的模拟不外泄。
     pub fn plan_action(&self, seat: u8, planner: &BoundedPlanner) -> Plan {
         let submitted_revision = self.revision();
-        let public_action = match self.ai_session(seat).choice() {
-            Some(choice @ ChoiceView::Own { .. }) => projected_choice_action(choice),
+        let session = self.ai_session(seat);
+        let public_action = match session.choice() {
+            Some(choice @ ChoiceView::Own { .. }) => {
+                let input = session.input();
+                plan_extension_choice_action(&input).or_else(|| projected_choice_action(choice))
+            }
             // Non-owner advice is idle; do not inspect another seat's private continuation.
             Some(ChoiceView::Other { .. }) => Some(GameAction::NextPhase),
             _ => None,

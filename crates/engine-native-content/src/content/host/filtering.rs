@@ -673,6 +673,9 @@ impl HostSkillBehavior {
             HostBehavior::BossBaiyi => self.filter_common(ctx, owner, event),
             HostBehavior::BossBaiyiThunder => self.filter_common(ctx, owner, event),
             HostBehavior::D3Moyan => self.filter_common(ctx, owner, event),
+            HostBehavior::BossChuanyun
+            | HostBehavior::BossTianyun
+            | HostBehavior::DddXiaxing => self.filter_common(ctx, owner, event),
             _ => false,
         }
     }

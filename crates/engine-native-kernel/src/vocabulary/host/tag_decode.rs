@@ -539,6 +539,9 @@ impl HostBehavior {
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
             538 => HostBehavior::SwdCangchizhibiHeld,
+            539 => HostBehavior::BossChuanyun,
+            540 => HostBehavior::BossTianyun,
+            541 => HostBehavior::DddXiaxing,
             _ => return None,
         })
     }

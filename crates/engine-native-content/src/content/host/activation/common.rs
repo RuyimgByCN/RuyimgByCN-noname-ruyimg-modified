@@ -480,6 +480,34 @@ impl HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
+            HostBehavior::DddXiaxing => {
+                // 侠行·视为使用【杀】（3D精选/character/skill.js:163-208）：
+                // 持有「侠」标记（跨轮保留直至被消费）且本阶段尚未使用杀，移去「侠」并视为使用【杀】（0 卡转化）。
+                let has_xia = ctx
+                    .state
+                    .vm_aux
+                    .flags
+                    .get(&(owner, "dddxiaxing_xia".to_string()))
+                    .copied()
+                    .unwrap_or(0)
+                    > 0;
+                if !has_xia
+                    || ctx.state.turn.sha_used_play_phase
+                    || !ctx.state.alive_players().any(|p| p != owner)
+                {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: Some(2),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
             _ => unreachable!("behavior routed to the wrong activate module"),
         }
     }

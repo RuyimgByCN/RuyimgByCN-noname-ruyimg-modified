@@ -61,6 +61,87 @@ pub(crate) fn active_ask_host(
             let max = options.len().min(3);
             Some(ask(owner, "cangchizhibi_target", ChoiceKind::SelectPlayers, options, 1, max, true))
         }
+        HostBehavior::BossChuanyun => {
+            if stage != HostStage::TargetChoice {
+                return None;
+            }
+            let owner_hp = core.player(owner).hp;
+            let options: Vec<ChoiceOption> = core
+                .alive_players()
+                .filter(|&p| p != owner && core.player(p).hp > owner_hp)
+                .map(ChoiceOption::Player)
+                .collect();
+            if options.is_empty() {
+                return None;
+            }
+            Some(ask(
+                owner,
+                "boss_chuanyun_target",
+                ChoiceKind::SelectPlayers,
+                options,
+                1,
+                1,
+                true,
+            ))
+        }
+        HostBehavior::BossTianyun => {
+            if stage != HostStage::TargetChoice {
+                return None;
+            }
+            let options = other_player_options(core, owner);
+            if options.is_empty() {
+                return None;
+            }
+            Some(ask(
+                owner,
+                "boss_tianyun_target",
+                ChoiceKind::SelectPlayers,
+                options,
+                1,
+                1,
+                true,
+            ))
+        }
+        HostBehavior::DddXiaxing => match stage {
+            HostStage::SelectCard => {
+                let mut options = hand_card_options(&core.player(owner).hand);
+                options.extend(
+                    core.player(owner)
+                        .equips
+                        .iter()
+                        .copied()
+                        .map(ChoiceOption::Card),
+                );
+                if options.is_empty() {
+                    return None;
+                }
+                Some(ask(
+                    owner,
+                    "dddxiaxing_card",
+                    ChoiceKind::SelectCards,
+                    options,
+                    1,
+                    1,
+                    true,
+                ))
+            }
+            HostStage::TargetChoice => {
+                let options = other_player_options(core, owner);
+                if options.is_empty() {
+                    return None;
+                }
+                Some(ask(
+                    owner,
+                    "zhangba_sha_target",
+                    ChoiceKind::SelectPlayers,
+                    options,
+                    1,
+                    1,
+                    true,
+                ))
+            }
+            _ => None,
+        },
         HostBehavior::SwdBaishouzhihuHeld => {
             if stage != HostStage::TargetChoice { return None; }
             let options: Vec<ChoiceOption> = core

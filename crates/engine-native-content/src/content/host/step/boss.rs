@@ -210,6 +210,138 @@ impl HostMachine {
                 ctx.current_damage_mut().prevented = true;
                 Flow::Done
             }
+            // 穿云（太虚幻境·extension_skill.js:3806）：结束阶段开始，可选一名体力值 > 自己的其他角色造成 1 点伤害
+            HostBehavior::BossChuanyun => match self.stage {
+                HostStage::Act => {
+                    let owner_hp = ctx.core.player(self.owner).hp;
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|&p| p != self.owner && ctx.core.player(p).hp > owner_hp)
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "boss_chuanyun_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    let owner_hp = ctx.core.player(self.owner).hp;
+                    if target == self.owner
+                        || !ctx.core.player(target).alive
+                        || ctx.core.player(target).hp <= owner_hp
+                    {
+                        return Flow::Done;
+                    }
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "穿云",
+                        owner: self.owner,
+                        presentation: None,
+                    });
+                    ctx.emit(EventData::Damage(crate::machine::damage_data(
+                        Some(self.owner),
+                        target,
+                        1,
+                    )));
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 天陨（太虚幻境·extension_skill.js:4085）：结束阶段开始，可选一名其他角色：
+            // step 1 失去 1 点体力 → step 2 随机造成 2~3 点火焰伤害（Math.random()>0.4?2:3）→ step 3 弃置其所有装备牌。
+            HostBehavior::BossTianyun => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|&p| p != self.owner)
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "boss_tianyun_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    if target == self.owner || !ctx.core.player(target).alive {
+                        return Flow::Done;
+                    }
+                    self.target = Some(target);
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "天陨",
+                        owner: self.owner,
+                        presentation: None,
+                    });
+                    let dmg = if ctx.core.rng.gen_range(10) >= 4 {
+                        2
+                    } else {
+                        3
+                    };
+                    // LIFO 压栈：先压 step 2 火焰伤害，再压 step 1 失去体力，使 step 1 先结算、step 2 次之；
+                    // 让出至 ShuchuiTargetLoop 续行位待伤害帧弹栈后执行 step 3 弃置目标全部装备牌。
+                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                        Some(self.owner),
+                        target,
+                        dmg,
+                        crate::event::DamageNature::Fire,
+                        None,
+                    )));
+                    ctx.emit(EventData::LoseHp {
+                        player: self.owner,
+                        amount: 1,
+                    });
+                    self.stage = HostStage::ShuchuiTargetLoop;
+                    Flow::Yield
+                }
+                HostStage::ShuchuiTargetLoop => {
+                    let Some(target) = self.target else {
+                        return Flow::Done;
+                    };
+                    if ctx.core.player(target).alive {
+                        let equips: Vec<CardId> = ctx.core.player(target).equips.clone();
+                        if !equips.is_empty() {
+                            for eq in &equips {
+                                ctx.take_owned_card(target, *eq);
+                                ctx.to_discard(*eq);
+                            }
+                            ctx.log(LogEvent::CardDiscarded {
+                                player: target,
+                                cards: equips,
+                            });
+                        }
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             _ => unreachable!("behavior routed to the wrong step module"),
         }
     }

@@ -19,7 +19,7 @@ use content_native_loader::{
     U07_WUDIAN_REMAINING_SKILLS, WUDIAN_CHOUDU_ID, WUDIAN_JIANBI_ID, XIANJIAN_SKILL_DISPATCH_ID,
     YUNCHOU_SKILL_ID, ZHENFA_POZHENJUE_ID,
 };
-use engine_native::event::EventKind;
+use engine_native::event::{EventKind, Phase};
 use engine_native::{CommandOutcome, Engine, GameAction, GameCommand};
 use rule_api::{EffectRequest, SkillId};
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -107,21 +107,6 @@ fn drain(e: &mut Engine) {
     }
 }
 
-fn next_phase(e: &mut Engine) {
-    let actor = e.turn().current;
-    let out = e.submit(GameCommand {
-        actor,
-        expected_revision: e.revision(),
-        dedup_id: next_dedup(),
-        action: GameAction::NextPhase,
-    });
-    assert!(
-        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
-        "{out:?}"
-    );
-    drain(e);
-}
-
 #[test]
 fn u01_d3_all_31_generals_and_64_ddd_skills_execute_and_roundtrip() {
     let d3_json = read_pack_lf("d3-upstream-noname/assets/character.json");
@@ -142,36 +127,104 @@ fn u01_d3_all_31_generals_and_64_ddd_skills_execute_and_roundtrip() {
         );
     }
 
-    // 1. `dddxiaxing` 侠行 (`3D精选/character/skill.js:59-242`):
-    // Negative guard: when `he` (`hand` and `equips`) is empty and `dddxiaxing_xia == 0`,
-    // `dddxiaxing` is blocked (`dddxiaxing_blocked_empty = 1`) and does NOT gain "侠" mark.
+    // 1. `dddxiaxing` 侠行 (`archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:59-147`):
+    // Negative guard: when `he` (`hand` and `equips`) is empty, `dddxiaxing` does NOT trigger on `Phase::Prepare`.
+    let zhangmiao = find_general(&e, "ddd_zhangmiao");
+    e.assign_general(0, zhangmiao).expect("assign ddd_zhangmiao");
     let saved_hand = e.state_core().player(0).hand.clone();
     e.state_core_mut().player_mut(0).hand.clear();
     e.state_core_mut().player_mut(0).equips.clear();
-    invoke_p9_op(&mut e, 0, "dddxiaxing", DDD_SKILL_DISPATCH_ID);
-    assert_eq!(flag(&e, 0, "dddxiaxing_blocked_empty"), 1);
+    e.debug_set_turn(1, Phase::End, 1);
+    let out_empty = e.submit(GameCommand {
+        actor: 1,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::NextPhase,
+    });
+    assert!(
+        matches!(out_empty, CommandOutcome::Accepted { .. }),
+        "dddxiaxing must not open choice when hand and equips are empty: {out_empty:?}"
+    );
     assert_eq!(flag(&e, 0, "dddxiaxing_xia"), 0);
     e.state_core_mut().player_mut(0).hand = saved_hand;
 
-    // First use with cards puts 1 card on deck top, views as tao/jiu, and gains "侠" mark (`dddxiaxing_xia = 1`);
-    // second use (`dddxiaxing_viewas` at `skill.js:163-208`) removes "侠" mark (`dddxiaxing_xia = 0`)
-    // and views as sha/shan WITHOUT drawing any card (`hand.len() == hand_before_second`).
-    let zhangmiao = find_general(&e, "ddd_zhangmiao");
-    e.assign_general(0, zhangmiao).expect("assign ddd_zhangmiao");
-    next_phase(&mut e);
-    assert_eq!(flag(&e, 0, "dddxiaxing_xia"), 1);
-    assert_eq!(flag(&e, 0, "dddxiaxing_viewas_taojiu"), 1);
-    assert_eq!(flag(&e, 0, "u01_ddd_resolved"), 1);
+    // Positive interactive trigger on `Phase::Prepare` (`skill.js:59-109`):
+    // Advance seat 1 from `Phase::End` into seat 0's `Phase::Prepare` -> opens `"dddxiaxing_card"`.
+    let c_discard = e.state_core().player(0).hand[0];
+    let shan_in_deck = e.debug_place(1, "shan");
+    e.state_core_mut().player_mut(1).hand.retain(|&c| c != shan_in_deck);
+    e.state_core_mut().deck.push(shan_in_deck);
+    e.debug_set_turn(1, Phase::End, 1);
+    let out_prep = e.submit(GameCommand {
+        actor: 1,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::NextPhase,
+    });
+    let choice = match out_prep {
+        CommandOutcome::Pending { choice, .. } => choice,
+        other => panic!("expected Pending dddxiaxing_card choice, got {other:?}"),
+    };
+    assert_eq!(choice.spec.prompt, "dddxiaxing_card");
+    assert!(choice.spec.allow_cancel);
 
-    let hand_before_second = e.state_core().player(0).hand.len();
-    invoke_p9_op(&mut e, 0, "dddxiaxing", DDD_SKILL_DISPATCH_ID);
-    assert_eq!(flag(&e, 0, "dddxiaxing_xia"), 0);
-    assert_eq!(flag(&e, 0, "dddxiaxing_viewas_basic"), 1);
+    // Mid-choice save/restore roundtrip while `dddxiaxing_card` is open:
+    let pending_snap = e.save();
+    let mut restored_pending =
+        Engine::restore_with_extensions(&pending_snap, &packs).expect("restore mid-choice dddxiaxing");
+    assert_eq!(restored_pending.state_hash(), e.state_hash());
+
+    let answer_cmd = GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: choice.id,
+            selection: vec![engine_native::ChoiceOption::Card(c_discard)],
+        },
+    };
+    let _ = restored_pending.submit(answer_cmd.clone());
+    let _ = e.submit(answer_cmd);
+    assert_eq!(restored_pending.state_hash(), e.state_hash());
+    assert_eq!(flag(&e, 0, "dddxiaxing_xia"), 1);
+    assert!(!e.state_core().player(0).hand.contains(&c_discard));
     assert_eq!(
-        e.state_core().player(0).hand.len(),
-        hand_before_second,
-        "dddxiaxing_viewas removes 侠 mark without drawing cards"
+        e.state_core().deck.last().copied(),
+        Some(c_discard),
+        "dddxiaxing must place the chosen card on top of the draw pile"
     );
+    assert!(
+        e.state_core().turn.jiu_active,
+        "dddxiaxing_begin on Prepare must treat target as using virtual Jiu"
+    );
+
+    // Active view-as (`dddxiaxing_viewas` at `skill.js:110-147`):
+    // In `Phase::Play`, consuming `dddxiaxing_xia` views as a virtual `Sha` without distance limit.
+    let dddxiaxing_def = e.catalog().skill_by_name("dddxiaxing").expect("dddxiaxing def");
+    let cur_round = e.turn().round;
+    e.debug_set_turn(0, Phase::Play, cur_round);
+    let out_viewas = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::ActivateSkill { skill: dddxiaxing_def },
+    });
+    let sha_choice = match out_viewas {
+        CommandOutcome::Pending { choice, .. } => choice,
+        other => panic!("expected Pending zhangba_sha_target choice, got {other:?}"),
+    };
+    assert_eq!(sha_choice.spec.prompt, "zhangba_sha_target");
+    let _ = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: sha_choice.id,
+            selection: vec![engine_native::ChoiceOption::Player(1)],
+        },
+    });
+    drain(&mut e);
+    assert_eq!(flag(&e, 0, "dddxiaxing_xia"), 0);
 
     // 2. `dddqianlong` 潜龙 (`3D精选/character/skill.js:2819`):
     // Lord skill on `ddd_caomao` — draws 3 cards upon killing a character (`player.draw(3)` at `skill.js:2842`), NO daoxin marks.
@@ -825,14 +878,40 @@ fn formal_packages_extensions_load_and_execute_on_locked_product_path() {
         );
     }
 
-    // Verify authentic upstream skills execute on the locked engine and survive restore_locked_engine
-    invoke_p9_op(&mut e, 0, "dddxiaxing", DDD_SKILL_DISPATCH_ID);
-    assert_eq!(flag(&e, 0, "dddxiaxing_xia"), 1);
-    assert_eq!(flag(&e, 0, "dddxiaxing_viewas_taojiu"), 1);
-    assert_eq!(flag(&e, 0, "u01_ddd_resolved"), 1);
+    // Verify authentic upstream `dddxiaxing` executes via interactive choice on the locked engine
+    // and survives `restore_locked_engine` mid-choice (`3D精选/character/skill.js:59-147`):
+    let zhangmiao_locked = find_general(&e, "ddd_zhangmiao");
+    e.assign_general(0, zhangmiao_locked).expect("assign ddd_zhangmiao on locked engine");
+    let pick_card = e.state_core().player(0).hand[0];
+    e.debug_set_turn(1, Phase::End, 1);
+    let out_locked = e.submit(GameCommand {
+        actor: 1,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::NextPhase,
+    });
+    let locked_choice = match out_locked {
+        CommandOutcome::Pending { choice, .. } => choice,
+        other => panic!("expected Pending dddxiaxing_card on locked engine, got {other:?}"),
+    };
+    assert_eq!(locked_choice.spec.prompt, "dddxiaxing_card");
 
-    let snap = e.save();
-    let restored = restore_locked_engine(&snap, &verified).expect("restore locked engine");
+    let snap_pending = e.save();
+    let mut restored = restore_locked_engine(&snap_pending, &verified).expect("restore locked engine mid-choice");
+    assert_eq!(restored.state_hash(), e.state_hash());
+
+    let ans = GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: locked_choice.id,
+            selection: vec![engine_native::ChoiceOption::Card(pick_card)],
+        },
+    };
+    let _ = e.submit(ans.clone());
+    let _ = restored.submit(ans);
+    assert_eq!(flag(&e, 0, "dddxiaxing_xia"), 1);
     assert_eq!(restored.state_hash(), e.state_hash());
 
     // Verify extended upstream resolvers in `decision34_ext.rs` and `decision34_u08_l19_l20_l27.rs`:

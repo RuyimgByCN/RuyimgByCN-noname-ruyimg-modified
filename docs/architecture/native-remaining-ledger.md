@@ -1,5 +1,7 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+2026-11-12 Step 1 交互通道打样：复用既有 `HostBehavior + HostStage + ChoiceKind` 挂起选择通道（零升号：`333 / 107 / 5 / 759 / 8` 与 14 场 golden 哈希不变），完成 `boss_chuanyun`、`boss_tianyun`、`dddxiaxing` 3 个代表技能的真实玩家选择、取消不发动、AI 公开信息决策与中途存读档恢复，并由独立复核员 `step1-verifier` 逐行复核通过后更新 `inventory_status.json`（全仓 `已复核等价 3 / 简化近似 4,421 / 缺失 0`；见[Step 1 交互通道打样与迁移指南](../operations/evidence/2026-11-12-step1-choice-channel-prototype/README.md)）。整包八项签署仍为 **0/37**。
+
 2026-11-11 Step 0 工作区整理与口径纠偏：按下方夜间扫描勘正执行整改——`inventory_status.json` 中 4 项缺玩家选择的技能（`dddxiaxing`、`boss_chuanyun`、`boss_lingfeng`、`boss_tianyun`）已退回「简化近似」（全仓 `已复核等价 0 / 简化近似 4,424 / 缺失 0`）；修复 `choice_routing.rs` 暗身份泄漏并如实标注其为自动回退选择器（不调用 `open_choice`，裁决 40 未实现）；删除绑定清单计数/文档字符串的 E2E 测试；将根目录截图与 Spine 指引移入 [`2026-11-11-tabletop-and-spine40`](../operations/evidence/2026-11-11-tabletop-and-spine40/)；恢复 `apps/web-client/dist/` 与 HEAD 一致；恢复签署表 `2026-11-10` 历史快照。NC12 维持「部分」，第六阶段未开始，整包八项签署 **0/37**。
 
 2026-11-11夜间导航（Claude Code 核对）：HEAD `057ba1789` 其后 0 个提交，工作区改动全部未提交、未发布；三 crate 2524/0/6。下段「M4 闭环」所称「全部交付完成」「NC01–NC12 仓内项 100% 验收关闭」不成立：逐技能改写基本未做（自动选目标函数改名、模板内联，4,420/4,424 仍为简化近似），裁决 40 的真实玩家选择未实现（无任何 `open_choice` 调用），290 条 E2E 测试不证明规则等价；NC12 的真机温控与旧线退出未做，本行已改回「部分」；第六阶段未开始。清单数据驱动、签署如实（0/37）与同场景截图对照属实。详见[2026-11-11 夜间扫描证据](../operations/evidence/2026-11-11-progress-scan-night/README.md)。

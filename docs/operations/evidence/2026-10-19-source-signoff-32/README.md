@@ -6,6 +6,8 @@
 >
 > 历史快照（2026-11-09，被 `ff82883a7` 删除，2026-11-11 按原文恢复）：**2026-11-09 核对勘正（Claude Code）**：下文 Batch 25／26 的「仓内 7 维 37/37 ✅」不成立——功能与规则差异两维的测试断言的是原生自造行为（示意 Spine canvas、默认摸 1 的技能分派、上游不存在的武将），相关 pack 未接入正式包。裁决 34 视为未实现，整包八项签署仍为 0/37，各来源第①、⑧维按「部分」计。见[2026-11-09 扫描证据](../2026-11-09-progress-scan/README.md)。
 
+> **2026-11-12 Step 1 交互通道打样增量更新（`reviewer: "step1-verifier"` 独立复核通过；见[Step 1 交互通道打样与迁移指南](../2026-11-12-step1-choice-channel-prototype/README.md)）**：`U01` 的 `dddxiaxing` 与 `L11` 的 `boss_chuanyun`、`boss_tianyun` 共 3 项已迁入 `HostBehavior + HostStage + ChoiceKind` 真实玩家选择通道并通过六维真实对局测试与独立复核，全仓 [`inventory_status.json`](../../../migration/g0/inventory_status.json) 现为 **已复核等价 `3` 项（0.07%，其中 `U01` `1 / 94 / 0`、`L11` `2 / 934 / 0`）/ 简化近似 `4,421` 项（99.93%）/ 缺失 `0` 项**；整包八项签署仍保持 **`0/37`**。
+>
 > **2026-11-11 Step 0 工作区整理与全 37 来源八项签署如实复核表（严格对照 [`docs/migration/g0/inventory_status.json`](../../../migration/g0/inventory_status.json) 与 [`g0/README.md`](../../../migration/g0/README.md) 数据驱动基准：已复核等价 `0` 项 / 简化近似 `4,424` 项 / 缺失 `0` 项 / 上游未定义 `0` 项，合计 `4,424` 项）**：
 > - `dddxiaxing`、`boss_chuanyun`、`boss_lingfeng`、`boss_tianyun` 4 项因缺真实玩家选择（及 `boss_lingfeng` 未替换摸牌阶段、`boss_tianyun` 可选发动未提问）已从「已复核等价」降回「简化近似」；裁决 40（真实玩家选择）尚未实现；同场景截图对照见 [`2026-11-11-tabletop-and-spine40/tabletop-comparison.png`](../2026-11-11-tabletop-and-spine40/tabletop-comparison.png)（原生横排座位卡片与上游环绕式牌桌布局不同，界面项仍为简化近似/示意）。
 > - 下方完整保留 `历史快照（2026-11-10）` 原表，不再就地覆盖历史快照。

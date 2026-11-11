@@ -708,6 +708,11 @@ impl VmViewAsSpec {
     }
 
     pub fn record_use(&self, core: &mut GameStateCore, owner: PlayerId) {
+        if self.zone == VmViewAsZone::None && self.skill_name == "dddxiaxing" {
+            core.vm_aux
+                .flags
+                .remove(&(owner, "dddxiaxing_xia".to_string()));
+        }
         core.vm_aux
             .flags
             .insert((owner, "event_view_as_skill".to_string()), self.skill_def_id);

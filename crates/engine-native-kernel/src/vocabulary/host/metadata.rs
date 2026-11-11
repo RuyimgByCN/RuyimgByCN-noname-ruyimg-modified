@@ -583,6 +583,10 @@ impl HostBehavior {
             HostBehavior::MaxRangeWeaponDamage => self.trigger_meta_common(),
             // 末焱：判定阶段开始（一轮一次）+ 伤害前置增幅
             HostBehavior::D3Moyan => self.trigger_meta_common(),
+            // 穿云 / 天陨（结束阶段开始）+ 侠行（准备阶段开始 / 濒死时）
+            HostBehavior::BossChuanyun
+            | HostBehavior::BossTianyun
+            | HostBehavior::DddXiaxing => self.trigger_meta_common(),
             HostBehavior::WangmeiZhikeCard => self.trigger_meta_common(),
             HostBehavior::SijiDiscardDraw => self.trigger_meta_common(),
             HostBehavior::SanjianWeaponDamage => self.trigger_meta_common(),

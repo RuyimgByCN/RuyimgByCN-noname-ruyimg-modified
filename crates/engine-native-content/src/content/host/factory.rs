@@ -428,6 +428,12 @@ impl HostSkillBehavior {
                 EventData::Damage(d) => (d.source, None),
                 _ => (None, None),
             },
+            // 侠行（3D精选·character/skill.js:59）：记录受益角色与触发分支（None=准备阶段得闪，Some(1)=濒死得桃）
+            HostBehavior::DddXiaxing => match event {
+                EventData::Phase { player, .. } => (Some(*player), None),
+                EventData::Dying { player, .. } => (Some(*player), Some(1)),
+                _ => (None, None),
+            },
             _ => (None, None),
         };
         let stage = match self.behavior {

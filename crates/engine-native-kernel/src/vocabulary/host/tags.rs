@@ -543,6 +543,9 @@ impl HostBehavior {
             HostBehavior::SwdChangshezhenCard => 239,
             HostBehavior::SwdPozhenjueCard => 240,
             HostBehavior::SwdCangchizhibiHeld => 538,
+            HostBehavior::BossChuanyun => 539,
+            HostBehavior::BossTianyun => 540,
+            HostBehavior::DddXiaxing => 541,
         }
     }
 

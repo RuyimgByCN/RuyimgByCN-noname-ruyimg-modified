@@ -1,5 +1,8 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+**2026-11-12 Step 1 交互通道打样（按[裁决 40](../operations/evidence/2026-10-28-user-decisions/README.md)复用既有 `HostBehavior + HostStage + ChoiceKind` 选择通道，零升号：规则 333 / NGSA 107 / content schema 5 / ABI 759 / WS 8 冻结保持，14 场 golden 哈希零变化；见[Step 1 交互通道打样与迁移指南](../operations/evidence/2026-11-12-step1-choice-channel-prototype/README.md)）**：
+- **代表技能真实玩家选择落地与独立复核**：将选目标代表技 `boss_chuanyun`（`HostBehavior::BossChuanyun = 539`）、可选发动+选目标代表技 `boss_tianyun`（`HostBehavior::BossTianyun = 540`）与选牌置牌堆顶+视为用酒/桃+0 卡转化技代表技 `dddxiaxing`（`HostBehavior::DddXiaxing = 541`）迁入真实 `Flow::WaitChoice` + `active_ask_host` 挂起选择通道，支持玩家任选合法目标/卡牌、取消不发动、AI 座位基于公开 `PolicyInput` 启发式应答以及选择挂起中途 `save() -> restore()` 无损恢复；经 `step1-verifier` 独立复核后，全仓 4,424 项实体更新为 `已复核等价 3 / 简化近似 4,421 / 缺失 0`（其余尚未迁入挂起选择通道的扩展技能仍保持 `简化近似` 状态）。
+
 **2026-11-11 Step 0 工作区整理与口径纠偏（按下方 Claude Code 夜间扫描勘正执行整改；规则 333 / NGSA 107 / content schema 5 / ABI 759 / WS 8 冻结保持）**：
 - **裁决 40 状态如实标注**：`rvm_ops`／`rvm_bridge` 当前尚未接入 `open_choice`，[`choice_routing.rs`](../../crates/engine-native-kernel/src/rvm_ops/commit_up37/choice_routing.rs) 仅为确定性回退选择器（在无预填 `ctx.res.answer` 时按公开态度分与体力自动挑选目标、按固定战术优先级选牌；Step 0 已修复 `get_upstream_attitude` 读取未亮明身份的缺陷，未亮明非主公座位严格按中立 `0` 计）。裁决 40（真实玩家选择）仍为未实现，`dddxiaxing`、`boss_chuanyun`、`boss_lingfeng`、`boss_tianyun` 4 项已从「已复核等价」退回「简化近似」（全仓 `已复核等价 0 / 简化近似 4,424 / 缺失 0`）。
 - **Spine 4.0 与牌桌对照状态**：二进制 `.skel` 解码标注「未经真实资源验证」（[用户指引](../operations/evidence/2026-11-11-tabletop-and-spine40/spine40-user-guide.md)）；无头 Chrome 同场景截图（[对照图](../operations/evidence/2026-11-11-tabletop-and-spine40/tabletop-comparison.png)）显示原生横排座位卡片与上游环绕式牌桌布局不同，界面项仍为示意。

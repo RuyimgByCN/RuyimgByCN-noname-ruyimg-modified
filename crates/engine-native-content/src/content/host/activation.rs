@@ -195,6 +195,7 @@ impl HostSkillBehavior {
             HostBehavior::MtgYixialanRecast => self.activate_common(ctx, owner),
             HostBehavior::MtgYoulinDiscard => self.activate_common(ctx, owner),
             HostBehavior::MtgLinzhongjiantaStrike => self.activate_common(ctx, owner),
+            HostBehavior::DddXiaxing => self.activate_common(ctx, owner),
             _ => None,
         }
     }

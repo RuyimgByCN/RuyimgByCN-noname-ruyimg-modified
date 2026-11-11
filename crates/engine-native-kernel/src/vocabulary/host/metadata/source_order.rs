@@ -25,10 +25,13 @@ impl HostBehavior {
             // Phase 5 default-matching source-order bindings
             Self::BossBaiyi
             | Self::BossBaiyiThunder
+            | Self::BossChuanyun
             | Self::BossChiyi
             | Self::BossChiyiMark
             | Self::BossHuanren
             | Self::BossQingyi
+            | Self::BossTianyun
+            | Self::DddXiaxing
             | Self::GujianFoodGudonggeng
             | Self::GujianFoodLiyutang
             | Self::GujianFoodMapodoufu

@@ -707,6 +707,33 @@ impl HostBehavior {
                 optional: false,
                 extra_events: vec![EventKind::DamageBefore],
             }),
+            // 穿云（太虚幻境·extension_skill.js:3806）：结束阶段开始，锁定技直接进选目标
+            HostBehavior::BossChuanyun => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                order_selectable: true,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 天陨（太虚幻境·extension_skill.js:4085）：结束阶段开始，direct 选目标（可取消）
+            HostBehavior::BossTianyun => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                order_selectable: true,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 侠行（3D精选·character/skill.js:59）：任意角色准备阶段或濒死时，选弃牌发动（可取消）
+            HostBehavior::DddXiaxing => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                order_selectable: true,
+                optional: false,
+                extra_events: vec![EventKind::Dying],
+            }),
             HostBehavior::WangmeiZhikeCard => None,
             HostBehavior::SijiDiscardDraw => Some(TriggerMeta {
                 event: EventKind::CardsDiscarded,

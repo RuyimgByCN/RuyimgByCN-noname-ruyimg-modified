@@ -892,6 +892,64 @@ impl HostSkillBehavior {
                     && ctx.state.turn.round < 7
                     && ctx.state.boss_mode().map(|(b, _)| b == owner).unwrap_or(false)),
             HostBehavior::D3Moyan => moyan_filter(ctx, owner, event),
+            // 穿云（太虚幻境·extension_skill.js:3806）：本人结束阶段开始，且有体力 > 自己的其他角色
+            HostBehavior::BossChuanyun => {
+                if !matches!(
+                    event,
+                    EventData::Phase {
+                        player,
+                        phase: crate::event::Phase::End,
+                        begin: true,
+                    } if *player == owner
+                ) {
+                    return false;
+                }
+                let owner_hp = ctx.state.player(owner).hp;
+                ctx.state
+                    .alive_players()
+                    .any(|p| p != owner && ctx.state.player(p).hp > owner_hp)
+            }
+            // 天陨（太虚幻境·extension_skill.js:4085）：本人结束阶段开始，且有其他存活角色
+            HostBehavior::BossTianyun => {
+                matches!(
+                    event,
+                    EventData::Phase {
+                        player,
+                        phase: crate::event::Phase::End,
+                        begin: true,
+                    } if *player == owner
+                ) && ctx.state.alive_players().any(|p| p != owner)
+            }
+            // 侠行（3D精选·character/skill.js:59）：每轮限一次（!hasSkill("dddxiaxing_used")）且 he 区有牌，
+            // 任意角色准备阶段开始或濒死时触发（持有「侠」标记不阻碍触发，标记跨轮保留直至被转化消费）
+            HostBehavior::DddXiaxing => {
+                let round_tag = ctx.state.turn.round + 1000;
+                let rec_round = ctx
+                    .state
+                    .vm_aux
+                    .flags
+                    .get(&(owner, "dddxiaxing_round".to_string()))
+                    .copied()
+                    .unwrap_or(0);
+                let used_this_round = rec_round == round_tag;
+                if used_this_round
+                    || (ctx.state.player(owner).hand.is_empty()
+                        && ctx.state.player(owner).equips.is_empty())
+                {
+                    return false;
+                }
+                match event {
+                    EventData::Phase {
+                        player,
+                        phase: crate::event::Phase::Prepare,
+                        begin: true,
+                    } => ctx.state.player(*player).alive,
+                    EventData::Dying { player, .. } => {
+                        ctx.state.player(*player).alive && ctx.state.player(*player).hp <= 0
+                    }
+                    _ => false,
+                }
+            }
             _ => unreachable!("behavior routed to the wrong filter module"),
         }
     }
