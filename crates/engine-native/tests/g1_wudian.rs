@@ -435,6 +435,8 @@ mod tianshi;
 mod tianyu;
 #[path = "g1_wudian/tuobiang.rs"]
 mod tuobiang;
+#[path = "g1_wudian/u07.rs"]
+mod u07;
 #[path = "g1_wudian/wangmeizhike.rs"]
 mod wangmeizhike;
 #[path = "g1_wudian/wangpengxu.rs"]

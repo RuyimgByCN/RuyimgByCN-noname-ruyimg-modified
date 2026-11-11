@@ -569,6 +569,10 @@ impl HostBehavior {
             HostBehavior::SwdNiaoxiangzhenCard => "host:swd_niaoxiangzhen_card",
             HostBehavior::SwdChangshezhenCard => "host:swd_changshezhen_card",
             HostBehavior::SwdPozhenjueCard => "host:swd_pozhenjue_card",
+            HostBehavior::WudianDuoqi => "host:wudian_duoqi",
+            HostBehavior::WudianYouzhan => "host:wudian_youzhan",
+            HostBehavior::WudianChoudu => "host:wudian_choudu",
+            HostBehavior::WudianDiaobingCard => "host:wudian_diaobing_card",
         }
     }
 }

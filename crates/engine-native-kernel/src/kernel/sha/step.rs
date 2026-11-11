@@ -880,7 +880,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         }
         // 已恢复：读取应答
         let answer = ctx.answer_first();
-        // 诱敌深入应答：杀无效（弃置），来源受 1 点反噬伤害
+        // 诱敌深入应答：杀无效（弃置），来源对目标使用一张杀否则受 1 点反噬伤害
         if let ChoiceOption::Card(yd) = answer {
             if ctx.catalog.card_kind(yd) == CardKind::Youdishenru {
                 let in_hand = ctx.core.player(self.target).hand.contains(&yd);
@@ -891,7 +891,34 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     card: yd,
                     player: self.target,
                 });
+                let card = self.card.take();
+                ctx.to_discard(card);
+                ctx.core.table.retain(|c| Some(*c) != card);
                 if ctx.core.player(self.source).alive {
+                    let hand_shas: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(self.source)
+                        .hand
+                        .iter()
+                        .filter(|c| ctx.catalog.card_kind(**c).is_sha_like())
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if !hand_shas.is_empty() {
+                        self.asking_qinglong = true;
+                        self.fuchou_card = Some(yd);
+                        return Flow::WaitChoice {
+                            observer: self.source,
+                            spec: ChoiceSpec {
+                                kind: ChoiceKind::SelectCards,
+                                prompt: crate::vocabulary::host::WUDIAN_YOUDISHENRU_SHA,
+                                options: hand_shas,
+                                min: 1,
+                                max: 1,
+                                allow_cancel: true,
+                            },
+                        };
+                    }
                     ctx.emit(EventData::Damage(damage_data_with(
                         Some(self.target),
                         self.source,
@@ -900,9 +927,6 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                         Some(yd),
                     )));
                 }
-                let card = self.card;
-                ctx.to_discard(card);
-                ctx.core.table.retain(|c| Some(*c) != card);
                 return Flow::Done;
             }
         }

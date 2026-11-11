@@ -217,13 +217,28 @@ impl WuguMachine {
         }
     }
     fn finish_wugu(&mut self, ctx: &mut Ctx<'_>) -> Flow {
-        // 良策·余获（玩点论杀批 15）：剩余牌归持有者（登记差异：上游
-        // 玩家选目标）。结构性说明：4 人局五谷亮牌数=存活数=择牌数，
-        // **永无剩余**——本近似与「可选目标」在可达面等价（无剩余时均
-        // 无效果）；多亮/减员等剩余场景上游亦罕见，登记边界。
-        let _beneficiary = ctx.catalog.wugu_remain_beneficiary(ctx.core);
-        for c in self.cards.drain(..) {
-            ctx.to_discard(c);
+        // 良策·余获（玩点论杀批 15）：剩余亮出牌交予良策持有者（无持有者则进弃牌堆）。
+        if let Some(beneficiary) = ctx
+            .catalog
+            .wugu_remain_beneficiary(ctx.core)
+            .filter(|b| ctx.core.player(*b).alive)
+        {
+            if !self.cards.is_empty() {
+                let rem: Vec<crate::ids::CardId> = self.cards.drain(..).collect();
+                ctx.core
+                    .player_mut(beneficiary)
+                    .hand
+                    .extend(rem.iter().copied());
+                ctx.log(LogEvent::CardsGiven {
+                    from: self.owner,
+                    to: beneficiary,
+                    cards: rem,
+                });
+            }
+        } else {
+            for c in self.cards.drain(..) {
+                ctx.to_discard(c);
+            }
         }
         if let Some(c) = ctx
             .core

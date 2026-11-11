@@ -192,6 +192,7 @@ impl HostSkillBehavior {
             HostBehavior::WudianYinbo => self.activate_wudian(ctx, owner),
             HostBehavior::WudianQianggu => self.activate_wudian(ctx, owner),
             HostBehavior::WudianFeitiao => self.activate_wudian(ctx, owner),
+            HostBehavior::WudianChoudu => self.activate_wudian(ctx, owner),
             HostBehavior::MtgYixialanRecast => self.activate_common(ctx, owner),
             HostBehavior::MtgYoulinDiscard => self.activate_common(ctx, owner),
             HostBehavior::MtgLinzhongjiantaStrike => self.activate_common(ctx, owner),

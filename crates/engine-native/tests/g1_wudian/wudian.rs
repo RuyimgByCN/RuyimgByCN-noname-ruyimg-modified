@@ -278,7 +278,25 @@ fn wudian_generals_batch12_liduan_gain_equip() {
         core.players[0].hand.push(z);
     }
     e.debug_give_hand_card(0, 2, z);
-    settle_optional_confirm(&mut e);
+    // 理断确认后，p2 在 wudian_liduan_give 选择取消交手牌 → 直接装备该武器
+    let c1 = e.open_choice().expect("trigger_confirm").clone();
+    let _ = submit(
+        &mut e,
+        c1.observer,
+        GameAction::Answer {
+            choice_id: c1.id,
+            selection: vec![ChoiceOption::Confirm],
+        },
+    );
+    let c2 = e.open_choice().expect("wudian_liduan_give").clone();
+    let _ = submit(
+        &mut e,
+        c2.observer,
+        GameAction::Answer {
+            choice_id: c2.id,
+            selection: Vec::new(),
+        },
+    );
     assert!(
         e.state_core().players[2].equips.contains(&z),
         "理断：直装分支——装备被装上"

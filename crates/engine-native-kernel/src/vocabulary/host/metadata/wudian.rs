@@ -238,6 +238,24 @@ impl HostBehavior {
             HostBehavior::WudianJijia => None,
             HostBehavior::WudianLongxiang => None,
             HostBehavior::WudianLueying => None,
+            HostBehavior::WudianDuoqi => Some(TriggerMeta {
+                event: EventKind::CardsDiscarded,
+                timing: Timing::Normal,
+                priority: 0,
+                order_selectable: true,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            HostBehavior::WudianYouzhan => Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 0,
+                order_selectable: true,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            HostBehavior::WudianChoudu => None,
+            HostBehavior::WudianDiaobingCard => None,
             _ => unreachable!("behavior routed to the wrong trigger_meta module"),
         }
     }

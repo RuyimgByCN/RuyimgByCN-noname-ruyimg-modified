@@ -588,6 +588,8 @@ impl HostSkillBehavior {
             HostBehavior::SijiDiscardDraw => matches!(event,
                 EventData::CardsDiscarded { player, cards }
                 if *player == owner
+                    && ctx.state.turn.current == owner
+                    && ctx.state.turn.phase == crate::event::Phase::Discard
                     && cards.iter().any(|c| ctx.catalog.card_kind(*c).is_sha_like())),
             HostBehavior::MaxRangeWeaponDamage => matches!(event,
             EventData::Equipped { player, card, .. }
@@ -958,6 +960,41 @@ impl HostSkillBehavior {
                     _ => false,
                 }
             }
+            HostBehavior::WudianDuoqi => matches!(
+                event,
+                EventData::CardsDiscarded { cards, .. }
+                if !cards.is_empty()
+                    && ctx.state.turn.current != owner
+                    && ctx.state.turn.phase == crate::event::Phase::Play
+                    && !ctx.state.player(owner).zhucheng.is_empty()
+            ),
+            HostBehavior::WudianYouzhan => match event {
+                EventData::CardUsed(u) => {
+                    if u.cancelled
+                        || !u.effective_kind(ctx.catalog).is_sha_like()
+                        || u.targets.is_empty()
+                        || !ctx.state.player(owner).alive
+                    {
+                        return false;
+                    }
+                    let t0 = u.targets[0];
+                    if !ctx.state.player(t0).alive {
+                        return false;
+                    }
+                    let in_range =
+                        t0 == owner || ctx.state.computed_distance(ctx.catalog, owner, t0) <= 1;
+                    let has_equip = !ctx.state.player(owner).equips.is_empty()
+                        || ctx
+                            .state
+                            .player(owner)
+                            .hand
+                            .iter()
+                            .any(|c| ctx.catalog.card_kind(*c).is_equip());
+                    in_range && has_equip
+                }
+                _ => false,
+            },
+            HostBehavior::WudianChoudu | HostBehavior::WudianDiaobingCard => false,
             _ => unreachable!("behavior routed to the wrong filter module"),
         }
     }

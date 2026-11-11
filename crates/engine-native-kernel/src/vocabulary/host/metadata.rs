@@ -834,6 +834,10 @@ impl HostBehavior {
             // 勾魂锣·倒计时：来源回合开始（global phaseBegin 由 filter 定向）
             HostBehavior::SwdGouhunluoSub => self.trigger_meta_swd(),
             HostBehavior::SwdJiguantongCard => self.trigger_meta_swd(),
+            HostBehavior::WudianDuoqi
+            | HostBehavior::WudianYouzhan
+            | HostBehavior::WudianChoudu
+            | HostBehavior::WudianDiaobingCard => self.trigger_meta_wudian(),
         };
         if let (Some(meta), Some((timing, priority, selectable))) = (&mut meta, self.source_order()) {
             meta.timing = timing;

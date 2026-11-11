@@ -1,5 +1,6 @@
 use super::*;
 mod judge;
+mod sha;
 mod shapes;
 pub use shapes::*;
 
@@ -67,37 +68,12 @@ pub fn active_ask(
             tieji_red,
             liuli_stage,
             hujia_holder,
+            asking_qinglong,
+            asking_fuchou,
+            fuchou_card,
             ..
         } => {
-            if *liuli_stage == 1 {
-                // 流离弃牌自选（逐技对照批二 v76）：手牌+装备选一张，可取消
-                let mut options: Vec<ChoiceOption> = core
-                    .player(*target)
-                    .hand
-                    .iter()
-                    .copied()
-                    .map(ChoiceOption::Card)
-                    .collect();
-                options.extend(
-                    core.player(*target)
-                        .equips
-                        .iter()
-                        .copied()
-                        .map(ChoiceOption::Card),
-                );
-                return Some(ask(
-                    *target,
-                    "liuli_discard_choose",
-                    ChoiceKind::SelectCards,
-                    options,
-                    0,
-                    1,
-                    true,
-                ));
-            }
             if *liuli_stage == 2 {
-                // 流离转移目标询问：在（被转移者）攻击范围内、非来源非己、
-                // 非空城（kernel liuli_candidate_ok 同口径）
                 let candidates: Vec<ChoiceOption> = core
                     .alive_players()
                     .filter(|p| {
@@ -125,93 +101,19 @@ pub fn active_ask(
                     false,
                 ));
             }
-            if let Some(h) = hujia_holder {
-                // v204：持牌者自选一张闪（含倾国转化黑手牌）；空选=拒绝
-                let qingguo_h = catalog
-                    .skill_by_name(QING_GUO)
-                    .map(|d| core.has_skill(*h, d))
-                    .unwrap_or(false);
-                let options: Vec<ChoiceOption> = core
-                    .player(*h)
-                    .hand
-                    .iter()
-                    .copied()
-                    .filter(|c| {
-                        let kind = catalog.card_kind(*c);
-                        kind == CardKind::Shan
-                            || (qingguo_h
-                                && matches!(
-                                    catalog.cards[*c as usize].suit,
-                                    crate::catalog::Suit::Spade | crate::catalog::Suit::Club
-                                ))
-                    })
-                    .map(ChoiceOption::Card)
-                    .collect();
-                return Some(ask(
-                    *h,
-                    "hujia_respond",
-                    ChoiceKind::SelectCards,
-                    options,
-                    0,
-                    1,
-                    false, // 空选=拒绝本位（非取消）
-                ));
-            }
-            if *asked {
-                // 出闪响应：Pass + 目标的闪（龙胆并入杀、倾国并入装备黑牌、
-                // 铁骑红色判定封锁常规闪；诱敌深入独立并入一张）
-                let tieji_blocks = *tieji_red == Some(true);
-                let longdan = catalog
-                    .skill_by_name(LONG_DAN)
-                    .map(|d| core.has_skill(*target, d))
-                    .unwrap_or(false);
-                let qingguo = catalog
-                    .skill_by_name(QING_GUO)
-                    .map(|d| core.has_skill(*target, d))
-                    .unwrap_or(false);
-                let mut options: Vec<ChoiceOption> = vec![ChoiceOption::Pass];
-                for c in core.player(*target).hand.iter().copied() {
-                    let kind = catalog.card_kind(c);
-                    if !tieji_blocks
-                        && (kind == CardKind::Shan || (longdan && kind == CardKind::Sha))
-                    {
-                        options.push(ChoiceOption::Card(c));
-                    }
-                }
-                for c in core.player(*target).hand.iter().copied() {
-                    if catalog.card_kind(c) == CardKind::Youdishenru {
-                        options.push(ChoiceOption::Card(c));
-                        break;
-                    }
-                }
-                if qingguo && !tieji_blocks {
-                    // 倾国（v202 对齐上游 position "hs"）：黑色手牌并入
-                    for c in core.player(*target).hand.iter().copied() {
-                        let kind = catalog.card_kind(c);
-                        let already = kind == CardKind::Shan || (longdan && kind == CardKind::Sha);
-                        let black = matches!(
-                            catalog.cards[c as usize].suit,
-                            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
-                        );
-                        if black && !already {
-                            options.push(ChoiceOption::Card(c));
-                        }
-                    }
-                }
-                if !tieji_blocks {
-                    append_vm_shan_options(core, catalog, *target, &mut options);
-                }
-                return Some(ask(
-                    *target,
-                    "respond_shan",
-                    ChoiceKind::RespondCard,
-                    options,
-                    1,
-                    1,
-                    false,
-                ));
-            }
-            None
+            sha::active_sha_ask(
+                *target,
+                *source,
+                *asked,
+                *tieji_red,
+                *liuli_stage,
+                *hujia_holder,
+                *asking_qinglong,
+                *asking_fuchou,
+                *fuchou_card,
+                core,
+                catalog,
+            )
         }
         MachineSnapshot::DyingSave {
             responders,

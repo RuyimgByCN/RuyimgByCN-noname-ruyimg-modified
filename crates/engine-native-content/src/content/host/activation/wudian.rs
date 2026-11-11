@@ -317,6 +317,22 @@ impl HostSkillBehavior {
                     stage: HostStage::SelectCard,
                 }))
             }
+            HostBehavior::WudianChoudu => {
+                let p = ctx.state.player(owner);
+                if p.hand.is_empty() && p.equips.is_empty() {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
             _ => unreachable!("behavior routed to the wrong activate module"),
         }
     }

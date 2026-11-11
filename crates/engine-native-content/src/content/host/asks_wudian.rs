@@ -160,6 +160,56 @@ pub(super) fn active_ask_wudian(
             }
             _ => None,
         },
+        HostBehavior::WudianZhuchengGuard => match stage {
+            HostStage::SelectCard => {
+                let attacker = target?;
+                let mut options = vec![ChoiceOption::Pass];
+                options.extend(
+                    core.player(attacker)
+                        .hand
+                        .iter()
+                        .copied()
+                        .map(ChoiceOption::Card),
+                );
+                Some(ask(
+                    attacker,
+                    WUDIAN_ZHUCHENG_GUARD_ASK,
+                    ChoiceKind::SelectCards,
+                    options,
+                    0,
+                    1,
+                    false,
+                ))
+            }
+            _ => None,
+        },
+        HostBehavior::WudianDiyjuntun => match stage {
+            HostStage::Act => {
+                let p = core.player(owner);
+                let mut options: Vec<ChoiceOption> = p
+                    .equips
+                    .iter()
+                    .chain(p.hand.iter())
+                    .copied()
+                    .filter(|c| catalog.card_slot_of(core, *c).is_some())
+                    .map(ChoiceOption::Card)
+                    .collect();
+                options.dedup();
+                if options.is_empty() {
+                    return None;
+                }
+                Some(ask(
+                    owner,
+                    "wudian_diyjuntun_recast",
+                    ChoiceKind::SelectCards,
+                    options,
+                    1,
+                    1,
+                    true,
+                ))
+            }
+            _ => None,
+        },
         // 音波（U05 ow 半藏，规则 v135）：黑桃弃牌询问（挂起时 stage
         // 已前移到 Act）
         HostBehavior::WudianYinbo => match stage {
@@ -393,15 +443,29 @@ pub(super) fn active_ask_wudian(
                     1,
                     false,
                 )),
-                HostStage::TargetChoice => Some(ask(
-                    r,
-                    crate::content::host::WUDIAN_SHUAIYAN_DISCARD,
-                    ChoiceKind::SelectCards,
-                    hand_card_options(&core.player(r).hand),
-                    1,
-                    1,
-                    false,
-                )),
+                HostStage::TargetChoice => {
+                    let mut options: Vec<ChoiceOption> = core
+                        .player(r)
+                        .hand
+                        .iter()
+                        .chain(core.player(r).equips.iter())
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    options.dedup();
+                    if options.is_empty() {
+                        return None;
+                    }
+                    Some(ask(
+                        r,
+                        crate::content::host::WUDIAN_SHUAIYAN_DISCARD,
+                        ChoiceKind::SelectCards,
+                        options,
+                        1,
+                        1,
+                        false,
+                    ))
+                }
                 _ => None,
             }
         }
@@ -409,15 +473,29 @@ pub(super) fn active_ask_wudian(
         // 被弃者选牌（stage=TargetChoice，observer=target）→ 基本分支多
         // 角色摸牌（stage=CardsAsk，owner）
         HostBehavior::WudianKangyin => match stage {
-            HostStage::SelectCard => Some(ask(
-                owner,
-                crate::content::host::WUDIAN_KANGYIN_TARGET,
-                ChoiceKind::SelectPlayers,
-                other_player_options(core, owner),
-                1,
-                1,
-                false,
-            )),
+            HostStage::SelectCard => {
+                let options: Vec<ChoiceOption> = core
+                    .alive_players()
+                    .filter(|p| {
+                        *p != owner
+                            && (!core.player(*p).hand.is_empty()
+                                || !core.player(*p).equips.is_empty())
+                    })
+                    .map(ChoiceOption::Player)
+                    .collect();
+                if options.is_empty() {
+                    return None;
+                }
+                Some(ask(
+                    owner,
+                    crate::content::host::WUDIAN_KANGYIN_TARGET,
+                    ChoiceKind::SelectPlayers,
+                    options,
+                    1,
+                    1,
+                    false,
+                ))
+            }
             HostStage::TargetChoice => {
                 let Some(t) = target else {
                     return None;
@@ -456,7 +534,148 @@ pub(super) fn active_ask_wudian(
                     core.alive_players().map(ChoiceOption::Player).collect(),
                     1,
                     x,
-                    false,
+                    true,
+                ))
+            }
+            _ => None,
+        },
+        HostBehavior::WudianLiduan => match stage {
+            HostStage::CardsAsk => {
+                let to = target?;
+                let options = hand_card_options(&core.player(to).hand);
+                if options.is_empty() {
+                    return None;
+                }
+                Some(ask(
+                    to,
+                    crate::content::host::WUDIAN_LIDUAN_GIVE,
+                    ChoiceKind::SelectCards,
+                    options,
+                    1,
+                    1,
+                    true,
+                ))
+            }
+            _ => None,
+        },
+        HostBehavior::WudianDuoqi => match stage {
+            HostStage::SelectCard => {
+                let options = hand_card_options(&core.player(owner).zhucheng);
+                if options.is_empty() {
+                    return None;
+                }
+                Some(ask(
+                    owner,
+                    crate::content::host::WUDIAN_DUOQI_CARD,
+                    ChoiceKind::SelectCards,
+                    options,
+                    1,
+                    1,
+                    true,
+                ))
+            }
+            _ => None,
+        },
+        HostBehavior::WudianYouzhan => match stage {
+            HostStage::SelectCard => {
+                let p = core.player(owner);
+                let mut options: Vec<ChoiceOption> = p
+                    .hand
+                    .iter()
+                    .copied()
+                    .filter(|c| catalog.card_kind(*c).is_equip())
+                    .chain(p.equips.iter().copied())
+                    .map(ChoiceOption::Card)
+                    .collect();
+                options.dedup();
+                if options.is_empty() {
+                    return None;
+                }
+                Some(ask(
+                    owner,
+                    crate::content::host::WUDIAN_YOUZHAN_DISCARD,
+                    ChoiceKind::SelectCards,
+                    options,
+                    1,
+                    1,
+                    true,
+                ))
+            }
+            HostStage::CardsAsk => {
+                let attacker = target?;
+                let options: Vec<ChoiceOption> = core
+                    .player(attacker)
+                    .hand
+                    .iter()
+                    .copied()
+                    .filter(|c| catalog.card_kind(*c).is_sha_like())
+                    .map(ChoiceOption::Card)
+                    .collect();
+                if options.is_empty() {
+                    return None;
+                }
+                Some(ask(
+                    attacker,
+                    crate::content::host::WUDIAN_YOUDISHENRU_SHA,
+                    ChoiceKind::SelectCards,
+                    options,
+                    1,
+                    1,
+                    true,
+                ))
+            }
+            _ => None,
+        },
+        HostBehavior::WudianChoudu => match stage {
+            HostStage::SelectCard => {
+                let p = core.player(owner);
+                let mut options: Vec<ChoiceOption> = p
+                    .hand
+                    .iter()
+                    .chain(p.equips.iter())
+                    .copied()
+                    .map(ChoiceOption::Card)
+                    .collect();
+                options.dedup();
+                if options.is_empty() {
+                    return None;
+                }
+                Some(ask(
+                    owner,
+                    crate::content::host::WUDIAN_CHOUDU_CARD,
+                    ChoiceKind::SelectCards,
+                    options,
+                    1,
+                    1,
+                    true,
+                ))
+            }
+            HostStage::TargetChoice => Some(ask(
+                owner,
+                crate::content::host::WUDIAN_CHOUDU_TARGET,
+                ChoiceKind::SelectPlayers,
+                core.alive_players().map(ChoiceOption::Player).collect(),
+                1,
+                1,
+                true,
+            )),
+            _ => None,
+        },
+        HostBehavior::WudianDiaobingCard => match stage {
+            HostStage::CardsAsk => {
+                let t = target?;
+                let options = hand_card_options(&core.player(t).hand);
+                if options.is_empty() {
+                    return None;
+                }
+                Some(ask(
+                    t,
+                    crate::content::host::WUDIAN_DIAOBING_SWAP,
+                    ChoiceKind::SelectCards,
+                    options,
+                    1,
+                    1,
+                    true,
                 ))
             }
             _ => None,

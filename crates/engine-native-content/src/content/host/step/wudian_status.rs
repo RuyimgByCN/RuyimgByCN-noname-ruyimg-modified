@@ -7,28 +7,86 @@ impl HostMachine {
             HostBehavior::WudianFuchou => Flow::Done,
             // 坚壁：锁定查询面（AOE 目标段查询），无独立效果步
             HostBehavior::WudianJianbi => Flow::Done,
-            // 理断：同栏已有装备 → 其交首张手牌（登记差异：上游自选）；
-            // 否则直接装备该牌（不走 Equipped 帧防双 grant）
-            HostBehavior::WudianLiduan => {
-                let to = match self.target {
-                    Some(t) => t,
-                    None => return Flow::Done,
-                };
-                let Some(card) = self.card else {
-                    return Flow::Done;
-                };
-                let Some(slot) = ctx.catalog.card_slot_of(ctx.core, card) else {
-                    return Flow::Done;
-                };
-                let same_slot = ctx
-                    .core
-                    .player(to)
-                    .equips
-                    .iter()
-                    .any(|e| ctx.catalog.card_slot_of(ctx.core, *e) == Some(slot));
-                if same_slot {
-                    // 交首张手牌给持有者
-                    if let Some(c) = ctx.core.player(to).hand.first().copied() {
+            // 理断：目标选择交出一张手牌予持有者，或（同栏为空时取消交牌）直接装备该牌
+            HostBehavior::WudianLiduan => match self.stage {
+                HostStage::Act => {
+                    let Some(to) = self.target else {
+                        return Flow::Done;
+                    };
+                    let Some(card) = self.card else {
+                        return Flow::Done;
+                    };
+                    let Some(slot) = ctx.catalog.card_slot_of(ctx.core, card) else {
+                        return Flow::Done;
+                    };
+                    let same_slot = ctx
+                        .core
+                        .player(to)
+                        .equips
+                        .iter()
+                        .any(|e| ctx.catalog.card_slot_of(ctx.core, *e) == Some(slot));
+                    if !ctx.core.player(to).hand.is_empty() {
+                        let options: Vec<ChoiceOption> = ctx
+                            .core
+                            .player(to)
+                            .hand
+                            .iter()
+                            .copied()
+                            .map(ChoiceOption::Card)
+                            .collect();
+                        self.stage = HostStage::CardsAsk;
+                        return Flow::WaitChoice {
+                            observer: to,
+                            spec: ChoiceSpec {
+                                kind: ChoiceKind::SelectCards,
+                                prompt: WUDIAN_LIDUAN_GIVE,
+                                options,
+                                min: 1,
+                                max: 1,
+                                allow_cancel: true,
+                            },
+                        };
+                    }
+                    if !same_slot && ctx.core.player(to).hand.contains(&card) {
+                        ctx.core.player_mut(to).hand.retain(|x| *x != card);
+                        ctx.core.player_mut(to).equips.push(card);
+                        crate::kernel::grant_equip_skills(ctx, to, card);
+                        ctx.log(LogEvent::Equipped {
+                            player: to,
+                            card,
+                            replaced: None,
+                        });
+                    }
+                    Flow::Done
+                }
+                HostStage::CardsAsk => {
+                    let Some(to) = self.target else {
+                        return Flow::Done;
+                    };
+                    let Some(card) = self.card else {
+                        return Flow::Done;
+                    };
+                    let Some(slot) = ctx.catalog.card_slot_of(ctx.core, card) else {
+                        return Flow::Done;
+                    };
+                    let same_slot = ctx
+                        .core
+                        .player(to)
+                        .equips
+                        .iter()
+                        .any(|e| ctx.catalog.card_slot_of(ctx.core, *e) == Some(slot));
+                    let picked = ctx.answer().first().and_then(|o| match o {
+                        ChoiceOption::Card(c) => Some(*c),
+                        _ => None,
+                    });
+                    let chosen = picked.or_else(|| {
+                        if same_slot {
+                            ctx.core.player(to).hand.first().copied()
+                        } else {
+                            None
+                        }
+                    });
+                    if let Some(c) = chosen.filter(|c| ctx.core.player(to).hand.contains(c)) {
                         ctx.core.player_mut(to).hand.retain(|x| *x != c);
                         ctx.core.player_mut(self.owner).hand.push(c);
                         ctx.emit(EventData::CardsMoved {
@@ -41,31 +99,20 @@ impl HostMachine {
                             to: self.owner,
                             cards: vec![c],
                         });
+                    } else if !same_slot && ctx.core.player(to).hand.contains(&card) {
+                        ctx.core.player_mut(to).hand.retain(|x| *x != card);
+                        ctx.core.player_mut(to).equips.push(card);
+                        crate::kernel::grant_equip_skills(ctx, to, card);
+                        ctx.log(LogEvent::Equipped {
+                            player: to,
+                            card,
+                            replaced: None,
+                        });
                     }
-                } else {
-                    ctx.core.player_mut(to).hand.retain(|x| *x != card);
-                    let old_equip = ctx
-                        .core
-                        .player(to)
-                        .equips
-                        .iter()
-                        .copied()
-                        .find(|e| ctx.catalog.card_slot_of(ctx.core, *e) == Some(slot));
-                    if let Some(old) = old_equip {
-                        ctx.core.player_mut(to).equips.retain(|x| *x != old);
-                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, to, old);
-                        ctx.to_discard(old);
-                    }
-                    ctx.core.player_mut(to).equips.push(card);
-                    crate::kernel::grant_equip_skills(ctx, to, card);
-                    ctx.log(LogEvent::Equipped {
-                        player: to,
-                        card,
-                        replaced: old_equip,
-                    });
+                    Flow::Done
                 }
-                Flow::Done
-            }
+                _ => Flow::Done,
+            },
             // 复仇·清算：标记来源逐个摸 1+虚拟杀强制指定（死亡移除）。
             // R05-C2 续行位改写：①全部摸 1 先按标记序（逆序压 R 帧＝标记
             // 序执行/取牌）异步交付；②R 弹栈后统一发虚拟杀（同步序＝杀帧
@@ -173,11 +220,11 @@ impl HostMachine {
                         }
                     }
                 }
-                let range = ctx.core.attack_range(ctx.catalog, self.owner);
                 for q in ctx.core.alive_players() {
                     if q == self.owner {
                         continue;
                     }
+                    let range = ctx.core.attack_range(ctx.catalog, q);
                     let in_range = ctx.core.computed_distance(ctx.catalog, q, self.owner) <= range;
                     if in_range {
                         if let Some(f) = ctx.core.effective_faction(ctx.catalog, q) {

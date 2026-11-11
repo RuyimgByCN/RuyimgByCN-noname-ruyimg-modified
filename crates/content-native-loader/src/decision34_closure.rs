@@ -355,12 +355,18 @@ fn build_d34_vm_decl(
 
 /// Build the native `ExtensionPack` for Decision 34 authentic upstream rules.
 pub fn decision34_closure_extension_pack() -> ExtensionPack {
+    let mut host_skills = Vec::new();
+    let mut seen_skills = std::collections::BTreeSet::new();
     let mut vm_skills: Vec<VmSkillDecl> = Vec::with_capacity(
         DECISION34_SKILL_SPECS.len() + L28_THUNDER_EXTRA_SKILLS.len() + L10_SCS_COMPANION_SKILLS.len() + 1,
     );
     for (idx, (name_str, def_id, event, extra_events, filter_inner)) in
         DECISION34_SKILL_SPECS.iter().enumerate()
     {
+        if let Some(behavior) = crate::lookup_upstream_host_behavior(name_str) {
+            crate::push_host_skill_if_unseen(name_str, behavior, &mut host_skills, &mut seen_skills);
+            continue;
+        }
         vm_skills.push(build_d34_vm_decl(
             idx,
             name_str,
@@ -432,7 +438,7 @@ pub fn decision34_closure_extension_pack() -> ExtensionPack {
         },
         generals,
         cards,
-        host_skills: Vec::new(),
+        host_skills,
         vm_skills,
         init_hook: InitHook::None,
         enabled: true,

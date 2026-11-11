@@ -1594,4 +1594,16 @@ pub enum HostBehavior {
     /// 侠行（tag 541，3D精选·character/skill.js:59）：一轮一次，任意角色准备阶段或濒死时，
     /// 可弃置一张牌令其随机获得牌堆中一张闪/桃（本轮「侠」标记下可视为无距离限制使用【杀】）。
     DddXiaxing,
+    /// 夺气（tag 542，玩点论杀·character/skill.js:109）：其他角色出牌阶段弃置牌后，
+    /// 可移去一张「筑」牌并令当前角色结束出牌阶段。
+    WudianDuoqi,
+    /// 诱战（tag 543，玩点论杀·character/skill.js:422）：成为【杀】目标（或你攻击范围内至多 1
+    /// 距离角色成为【杀】目标）时，可弃置一张装备牌令此【杀】无效并视为对其执行【诱敌深入】。
+    WudianYouzhan,
+    /// 筹度（tag 544，玩点论杀·character/skill.js:586）：出牌阶段限一次，可弃置一张牌并指定
+    /// 一名角色视为使用一张【调兵遣将】。
+    WudianChoudu,
+    /// 调兵遣将（tag 545，玩点论杀·card/card.js:4）：使用者摸一张牌，亮出牌堆顶 ceil(存活数/2)
+    /// 张牌，各目标可依次用一张手牌交换其中一张亮出牌。
+    WudianDiaobingCard,
 }

@@ -128,6 +128,12 @@ pub(super) fn validate_wuzhong_targets(
     if kind == CardKind::Wuzhong {
         let cname = catalog.cards.get(card as usize).map(|c| c.name).unwrap_or("");
         if cname != "无中生有" && cname != "wuzhong" && !cname.starts_with("wuzhong_") {
+            if cname.contains("diaobingqianjiang") {
+                if targets.iter().all(|t| core.player(*t).alive) {
+                    return Ok(());
+                }
+                return Err(RejectReason::IllegalTargets);
+            }
             if targets.is_empty() || (targets.len() == 1 && core.player(targets[0]).alive) {
                 return Ok(());
             }

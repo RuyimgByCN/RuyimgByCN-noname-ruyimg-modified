@@ -225,37 +225,23 @@ pub(super) fn try_named_ext_card(
             ctx.start_draw(owner, 2);
             let _ = discard_up_to(ctx, owner, 2);
         }
-        // U07 玩点论杀/card/card.js:4-142: 调兵遣将 — reveal max(1, alive/2) cards, distribute highest
+        // U07 玩点论杀/card/card.js:4-142: 调兵遣将 — 使用者摸 1，亮出牌堆顶 ceil(alive/2) 张，各目标可选换牌
         "diaobingqianjiang" => {
-            let seats: Vec<PlayerId> = ctx
-                .core
-                .seat_order_from(owner)
-                .into_iter()
-                .filter(|&p| ctx.core.player(p).alive)
-                .collect();
-            let reveal_n = (seats.len() / 2).max(1);
-            let mut pool = Vec::new();
-            for _ in 0..reveal_n {
-                if let Some(cid) = ctx.core.deck.pop() {
-                    pool.push(cid);
-                }
-            }
-            pool.sort_by_key(|&cid| {
-                ctx.catalog
-                    .cards
-                    .get(cid as usize)
-                    .map(|c| c.rank)
-                    .unwrap_or(0)
-            });
-            for &pid in &seats {
-                if let Some(best) = pool.pop() {
-                    ctx.core.player_mut(pid).hand.push(best);
-                }
-            }
-            for rem in pool {
-                ctx.to_discard(rem);
-            }
-            set_flag(ctx, owner, "u07_diaobing_resolved", reveal_n as u32);
+            let targets = if u.targets.is_empty() {
+                vec![owner]
+            } else {
+                u.targets.clone()
+            };
+            return Some(Some(Box::new(crate::content::host::HostMachine {
+                def_key: crate::vocabulary::host::WUDIAN_DIAOBING_KEY.to_string(),
+                behavior: crate::vocabulary::host::HostBehavior::WudianDiaobingCard,
+                owner,
+                target: None,
+                card: Some(card),
+                cards: Vec::new(),
+                targets,
+                stage: crate::content::host::HostStage::Act,
+            })));
         }
         // L20 标记补充/extension.js:6319-6321: 整肃奖励牌 (recover 1 if damaged, else draw 2)
         "zhengsu_leijin" | "zhengsu_mingzhi" | "zhengsu_bianzhen" => {

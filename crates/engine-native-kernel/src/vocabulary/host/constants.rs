@@ -839,3 +839,26 @@ pub const YC_GEAN_KEY: &str = "yc:geanguanhuo";
 pub const YC_GEAN_T1_PICK: &str = "yc_gean_t1_pick";
 
 pub const YC_GEAN_T2_PICK: &str = "yc_gean_t2_pick";
+
+pub const WUDIAN_DUOQI_KEY: &str = "duoqi";
+
+pub const WUDIAN_DUOQI_CARD: &str = "wudian_duoqi_card";
+
+pub const WUDIAN_YOUZHAN_KEY: &str = "youzhan";
+
+pub const WUDIAN_YOUZHAN_DISCARD: &str = "wudian_youzhan_discard";
+
+pub const WUDIAN_CHOUDU_KEY: &str = "choudu";
+
+pub const WUDIAN_CHOUDU_CARD: &str = "wudian_choudu_card";
+
+pub const WUDIAN_CHOUDU_TARGET: &str = "wudian_choudu_target";
+
+pub const WUDIAN_DIAOBING_KEY: &str = "diaobingqianjiang";
+
+pub const WUDIAN_DIAOBING_SWAP: &str = "wudian_diaobing_swap";
+
+pub const WUDIAN_LIDUAN_GIVE: &str = "wudian_liduan_give";
+
+pub const WUDIAN_YOUDISHENRU_SHA: &str = "wudian_youdishenru_sha";
+

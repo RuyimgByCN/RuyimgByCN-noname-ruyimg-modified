@@ -546,6 +546,10 @@ impl HostBehavior {
             HostBehavior::BossChuanyun => 539,
             HostBehavior::BossTianyun => 540,
             HostBehavior::DddXiaxing => 541,
+            HostBehavior::WudianDuoqi => 542,
+            HostBehavior::WudianYouzhan => 543,
+            HostBehavior::WudianChoudu => 544,
+            HostBehavior::WudianDiaobingCard => 545,
         }
     }
 

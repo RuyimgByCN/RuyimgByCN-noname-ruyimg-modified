@@ -1060,6 +1060,10 @@ impl HostMachine {
             HostBehavior::D3Moyan => self.step_skills_damage(ctx),
             // 机关妖术防重标记：纯状态无触发面（补偿触发暂缓）
             HostBehavior::SwdJiguanyaoState => self.step_swd_status(ctx),
+            HostBehavior::WudianDuoqi
+            | HostBehavior::WudianYouzhan
+            | HostBehavior::WudianChoudu
+            | HostBehavior::WudianDiaobingCard => self.step_wudian_cards(ctx),
         }
     }
 }

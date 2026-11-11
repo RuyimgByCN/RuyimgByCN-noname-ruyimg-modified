@@ -434,6 +434,11 @@ impl HostSkillBehavior {
                 EventData::Dying { player, .. } => (Some(*player), Some(1)),
                 _ => (None, None),
             },
+            // 诱战（玩点论杀·character/skill.js:422）：记录杀使用者与杀实体牌
+            HostBehavior::WudianYouzhan => match event {
+                EventData::CardUsed(u) => (Some(u.player), u.card),
+                _ => (None, None),
+            },
             _ => (None, None),
         };
         let stage = match self.behavior {
@@ -526,6 +531,10 @@ impl HostSkillBehavior {
             // 悲歌：targets=[来源, 受伤者]
             HostBehavior::YunchouBeige => match event {
                 EventData::Damage(d) => vec![d.source.unwrap_or(d.target), d.target],
+                _ => Vec::new(),
+            },
+            HostBehavior::WudianYouzhan => match event {
+                EventData::CardUsed(u) => u.targets.clone(),
                 _ => Vec::new(),
             },
             _ => Vec::new(),

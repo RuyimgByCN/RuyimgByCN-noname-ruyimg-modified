@@ -343,6 +343,10 @@ impl HostBehavior {
             Self::Tianlun => (Timing::Normal, 0, true),
             // extension/玩点论杀/character/skill.js:74 (ciqiu)
             Self::WudianCiqiu => (Timing::Normal, 0, true),
+            // extension/玩点论杀/character/skill.js:109 (duoqi)
+            Self::WudianDuoqi => (Timing::Normal, 0, true),
+            // extension/玩点论杀/character/skill.js:422 (youzhan)
+            Self::WudianYouzhan => (Timing::Normal, 0, true),
             // extension/杀海拾遗/character/ow/skill.js:2779 (feidan)
             Self::WudianFeidan => (Timing::Normal, 0, true),
             // extension/玩点论杀/character/skill.js:507 (fuchou)

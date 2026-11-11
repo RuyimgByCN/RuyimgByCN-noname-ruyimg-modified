@@ -5,20 +5,21 @@ use super::*;
 impl ShaResolveMachine {
     /// 杀结算的挂起应答恢复（复仇、霰弹、掠影与各武器/防具询问）：有待恢复的询问时返回本步结果。
     pub(super) fn resume_pending_answer(&mut self, ctx: &mut Ctx<'_>) -> Option<Flow> {
-        // 复仇（玩点论杀批 14，规则 v279）：成为杀目标时弃 1 张手牌取消
-        // 该杀（上游 target shaBefore direct chooseCard 同面；所选牌归来
+        // 复仇（玩点论杀批 14，规则 v279）：成为杀目标时交出 1 张牌（"he"）取消
+        // 该杀（上游 target shaBefore direct chooseCard("he") 同面；所选牌归来
         // 源+标记来源供 fuchou2 回合末结算；杀回来源手=上游 cancel 回手
         // 同口径）。取消（空应答）则照常响应流程。
-        if !self.asking_fuchou && self.fuchou_card.is_none() {
+        if !self.asked && !self.asking_fuchou && self.fuchou_card.is_none() {
             let t = self.target;
             let has = ctx
                 .catalog
                 .skill_by_name(crate::vocabulary::host::WUDIAN_FUCHOU_KEY)
                 .map(|d| ctx.core.has_skill(t, d))
                 .unwrap_or(false);
-            if has && !ctx.core.player(t).hand.is_empty() {
+            if has && (!ctx.core.player(t).hand.is_empty() || !ctx.core.player(t).equips.is_empty())
+            {
                 self.asking_fuchou = true;
-                let options: Vec<ChoiceOption> = ctx
+                let mut options: Vec<ChoiceOption> = ctx
                     .core
                     .player(t)
                     .hand
@@ -26,6 +27,14 @@ impl ShaResolveMachine {
                     .copied()
                     .map(ChoiceOption::Card)
                     .collect();
+                options.extend(
+                    ctx.core
+                        .player(t)
+                        .equips
+                        .iter()
+                        .copied()
+                        .map(ChoiceOption::Card),
+                );
                 return Some(Flow::WaitChoice {
                     observer: t,
                     spec: ChoiceSpec {
@@ -49,7 +58,12 @@ impl ShaResolveMachine {
                 self.fuchou_card = Some(c);
                 ctx.core.table.retain(|x| Some(*x) != self.card);
                 ctx.core.player_mut(self.source).hand.extend(self.card);
-                ctx.core.player_mut(t).hand.retain(|x| *x != c);
+                if ctx.core.player(t).equips.contains(&c) {
+                    ctx.core.player_mut(t).equips.retain(|x| *x != c);
+                    crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+                } else {
+                    ctx.core.player_mut(t).hand.retain(|x| *x != c);
+                }
                 ctx.core.player_mut(self.source).hand.push(c);
                 ctx.core.player_mut(t).fuchou_marked.push(self.source);
                 ctx.log(LogEvent::CardsGiven {
@@ -58,6 +72,8 @@ impl ShaResolveMachine {
                     cards: vec![c],
                 });
                 return Some(Flow::Done); // 杀整体取消
+            } else {
+                self.fuchou_card = Some(u32::MAX);
             }
         }
         // 寒冰剑（逐技对照批一，规则 v75）：目标自选弃牌恢复——上游
@@ -285,6 +301,39 @@ impl ShaResolveMachine {
         // 以其重启对同一目标的杀结算（防/闪/贯石斧/麒麟弓流程全部重走）。
         if self.asking_qinglong {
             self.asking_qinglong = false;
+            if let Some(yd) = self.fuchou_card.take().filter(|c| *c != u32::MAX) {
+                if let Some(ChoiceOption::Card(new_sha)) = ctx.answer().first().copied() {
+                    if ctx.core.player(self.source).hand.contains(&new_sha) {
+                        ctx.core
+                            .player_mut(self.source)
+                            .hand
+                            .retain(|c| *c != new_sha);
+                        ctx.core.table.push(new_sha);
+                        ctx.log(LogEvent::CardPlayed {
+                            player: self.source,
+                            card: new_sha,
+                            targets: vec![self.target],
+                            presentation: None,
+                        });
+                        ctx.emit(EventData::CardUsed(crate::machine::card_use(
+                            new_sha,
+                            self.source,
+                            vec![self.target],
+                        )));
+                        return Some(Flow::Done);
+                    }
+                }
+                if ctx.core.player(self.source).alive {
+                    ctx.emit(EventData::Damage(damage_data_with(
+                        Some(self.target),
+                        self.source,
+                        1,
+                        crate::event::DamageNature::Normal,
+                        Some(yd),
+                    )));
+                }
+                return Some(Flow::Done);
+            }
             if let Some(ChoiceOption::Card(new_sha)) = ctx.answer().first().copied() {
                 if ctx.core.player(self.source).hand.contains(&new_sha) {
                     ctx.discard_from_hand(self.source, new_sha);

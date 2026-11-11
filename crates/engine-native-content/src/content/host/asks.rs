@@ -1000,7 +1000,14 @@ pub(crate) fn active_ask_host(
         | HostBehavior::WudianHuhuan
         | HostBehavior::WudianShuaiyan
         | HostBehavior::WudianKangyin
-        | HostBehavior::WudianMujing => {
+        | HostBehavior::WudianMujing
+        | HostBehavior::WudianLiduan
+        | HostBehavior::WudianDuoqi
+        | HostBehavior::WudianYouzhan
+        | HostBehavior::WudianChoudu
+        | HostBehavior::WudianDiaobingCard
+        | HostBehavior::WudianZhuchengGuard
+        | HostBehavior::WudianDiyjuntun => {
             active_ask_wudian(behavior, stage, owner, target, targets, cards, core, catalog)
         }
         HostBehavior::MtgLongshanfengLand
