@@ -321,7 +321,7 @@ pub fn lookup_upstream_host_behavior(skill_name: &str) -> Option<HostBehavior> {
         "wanjun" => Some(HostBehavior::SwdWanjun),
         "wd_sanjian" => Some(HostBehavior::SanjianWeaponDamage),
         "wd_wangmeizhike" => Some(HostBehavior::WangmeiZhikeCard),
-        "wuxing_shengke" => Some(HostBehavior::ShengkeCheck),
+        "_shengke" | "wuxing_shengke" => Some(HostBehavior::ShengkeCheck),
         "wuxingpan_skill" => Some(HostBehavior::ChangeCardNature),
         "xiandan" => Some(HostBehavior::WudianXiandan),
         "xianghui" => Some(HostBehavior::SwdXianghui),

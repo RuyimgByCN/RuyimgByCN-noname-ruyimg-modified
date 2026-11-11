@@ -87,7 +87,11 @@ fn attach_card_rows(
                 CardDef::basic(interned, kind)
             }
             .with_suit_rank(suit, rank);
-            def.equip_skills = card_kind_equip_skills(kind).to_vec();
+            def.equip_skills = if kind == CardKind::WuxingPan {
+                vec!["wuxingpan_skill"]
+            } else {
+                card_kind_equip_skills(kind).to_vec()
+            };
             pack.cards.push(def);
         }
     }

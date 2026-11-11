@@ -14,7 +14,7 @@
 - 子插件数：0
 - 资源：无统计
 - 混淆/动态特征：无
-- 台账原生重构状态（摘录）：**仓内五行规则、五行盘与改属性主动技忠实实现（2026-11-09 裁决 34 第三步，[G0/L06](./L06-wuxing.md)）**：真实包 `packages/extensions/wuxing-upstream-liuli` 通过 `attach_formal_package_upstream_rules` 接入 `_wuxing`、`wuxingpan` 与 `wuxingpan_skill`（`resolve_l06_wuxing_skill`），共 3/3 项忠实实现（忠实实现 **3** / 示意或自造 **0** / 缺失 **0**）
+- 台账原生重构状态（摘录）：**全源 3/3 项已复核等价（2026-11-12，`l06-verifier` 独立逐行复核，[复核报告](../../operations/evidence/2026-11-12-l06-wuxing-review/README.md)、[G0/L06](./L06-wuxing.md)）**：真实包 `packages/extensions/wuxing-upstream-liuli` 通过 `host_skill_bindings.rs` 与原生 `HostBehavior::{ShengkeCheck,ChangeCardNature}` 完整覆盖 `wuxingpan`（♠5 宝物栏装备授 `wuxingpan_skill`）、`wuxingpan_skill`（出牌阶段限 1 次两段选择永久改手牌属性）与 `_shengke`（`useCardToBegin` 五组相生摸 1、五组相克发起 `shengke_discard` 强制自选弃 1 张 `he` 牌及弃装备撤技、AI 按 `get.disvalue` 弃最低价值牌），6 维真实对局测试全绿（已复核等价 **3** / 简化近似 **0** / 缺失 **0**）
 
 ### 能力面（G0 登记）
 - 生命周期：独立安装/启停/升级/卸载（目标能力，见宿主契约）
@@ -29,7 +29,7 @@
 ### 规则 / 依赖分支
 - 外部扩展引用：无（清点未检出）
 - 台账已核查摘要：五行属性、五行盘卡牌/技能、开局随机插牌；逐项清单见 [G0/L06](./L06-wuxing.md)
-- 台账待处理（含规则分支）：**仓内 3/3 项已忠实实现；待移动端真机验收后签署整包**
+- 台账待处理（含规则分支）：**仓内 3/3 项已复核等价（①②③④⑤⑦⑧ 7 维全 `✅`）；仅待第⑥维移动端真机验收后签署整包**
 - 语义说明：上表为 G0 登记面；逐菜单文案与运行时分支以旧线动态样本/可读源为准，迁移时按接口拆分验收。
 
 ## 3. 目标接口
@@ -61,7 +61,7 @@
 ## 7. 裁决 34 逐项上游清单与现有实现归类（2026-11-11）
 
 - **统计汇总**：上游实体合计 **3** 项（武将 0 / 技能 2 / 卡牌 1 / 模式与战役节点 0 / 配置项 0 / 界面钩子 0 / 渲染面 0）
-- **状态分布**：`已复核等价` **0** 项 · `简化近似` **3** 项 · `缺失` **0** 项 · `上游未定义` **0** 项
+- **状态分布**：`已复核等价` **3** 项 · `简化近似` **0** 项 · `缺失` **0** 项 · `上游未定义` **0** 项
 
 ### 7.1 现有 `decision34*` / 前端示意代码逐条归类
 
@@ -77,14 +77,14 @@
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `_shengke` | `archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:62` | 触发='useCardToBegin'；弃牌 | 原生规则 / `rule-vm` 包 | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
-| `wuxingpan_skill` | `archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:173` | 五行：出牌阶段限一次，你可以永久改变一张手牌的五行属性 | 原生规则 / `rule-vm` 包 | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `_shengke` | `archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:62` | 触发='useCardToBegin'；弃牌 | 原生规则 / `rule-vm` 包 | 已复核等价（复核人: l06-verifier, 日期: 2026-11-12, 对照: archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:62-172, 测试: l06_shengke_six_dimension_real_match_equivalence） |
+| `wuxingpan_skill` | `archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:173` | 五行：出牌阶段限一次，你可以永久改变一张手牌的五行属性 | 原生规则 / `rule-vm` 包 | 已复核等价（复核人: l06-verifier, 日期: 2026-11-12, 对照: archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:173-193, 测试: l06_wuxingpan_and_skill_six_dimension_real_match_equivalence） |
 
 ### 7.4 卡牌（Cards）（1 项）
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `wuxingpan` | `archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:196` | 五行盘：出牌阶段限一次，你可以永久改变一张手牌的五行属性 | 原生规则 / `rule-vm` 包 | 简化近似（差异: 待补齐真实事件对局测试与独立复核） |
+| `wuxingpan` | `archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:196` | 五行盘：出牌阶段限一次，你可以永久改变一张手牌的五行属性 | 原生规则 / `rule-vm` 包 | 已复核等价（复核人: l06-verifier, 日期: 2026-11-12, 对照: archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:7,196-201, 测试: l06_wuxingpan_and_skill_six_dimension_real_match_equivalence） |
 
 ### 7.5 模式 / 战役节点（Modes & Campaign Nodes）（0 项）
 

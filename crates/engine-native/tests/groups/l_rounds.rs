@@ -13,6 +13,9 @@ mod l04_cardpile_eight;
 #[path = "../l05_coin_eight.rs"]
 mod l05_coin_eight;
 
+#[path = "../l06_wuxing_eight.rs"]
+mod l06_wuxing_eight;
+
 #[path = "../l07_omnisearch.rs"]
 mod l07_omnisearch;
 

@@ -239,8 +239,8 @@ pub(super) fn plan_extension_choice_action(input: &crate::view::PolicyInput) -> 
                 selection,
             })
         }
-        // U06 欢乐卡牌·苦无（skill.js:66-69）：强制弃置 1 张价值最低的 he 牌
-        "kuwu_discard" => {
+        // U06 欢乐卡牌·苦无（skill.js:66-69）/ L06 五行生克（wuxing/extension.js:77）：强制弃置 1 张价值最低的 he 牌
+        "kuwu_discard" | "shengke_discard" => {
             let best = options
                 .iter()
                 .filter_map(|o| match o {

@@ -251,7 +251,7 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
     "yxs_menshen_target", "zhangba_pick_two", "zhangba_sha_target", "zhanlu_discard",
     "zhanlu_targets", "zhanxing_discard", "zhanxing_target", "zhenjiu_pick",
     "zhenjiu_target", "zhuhai_sha", "zhuyu_discard",
-    "boss_chuanyun_target", "boss_tianyun_target", "dddxiaxing_card", "kuwu_discard",
+    "boss_chuanyun_target", "boss_tianyun_target", "dddxiaxing_card", "kuwu_discard", "shengke_discard",
     "wudian_duoqi_card", "wudian_youzhan_discard", "wudian_choudu_card", "wudian_choudu_target",
     "wudian_diaobing_swap", "wudian_liduan_give", "wudian_youdishenru_sha",
 ];

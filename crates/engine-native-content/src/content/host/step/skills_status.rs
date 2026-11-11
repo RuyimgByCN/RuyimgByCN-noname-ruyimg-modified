@@ -663,92 +663,34 @@ impl HostMachine {
             }
             // 苦无（U06 欢乐卡牌 skill.js:53-69）：使用【杀】造成非连环伤害后，目标弃置一张 he 牌（强制）
             HostBehavior::ShaDamageForceDiscard => match self.stage {
-                HostStage::Act => {
-                    let Some(t) = self.target else {
-                        return Flow::Done;
-                    };
-                    if !ctx.core.player(t).alive {
-                        return Flow::Done;
-                    }
-                    let options: Vec<ChoiceOption> = ctx
-                        .core
-                        .player(t)
-                        .hand
-                        .iter()
-                        .chain(ctx.core.player(t).equips.iter())
-                        .copied()
-                        .map(ChoiceOption::Card)
-                        .collect();
-                    if options.is_empty() {
-                        return Flow::Done;
-                    }
-                    self.stage = HostStage::SelectCard;
-                    Flow::WaitChoice {
-                        observer: t,
-                        spec: ChoiceSpec {
-                            kind: ChoiceKind::SelectCards,
-                            prompt: "kuwu_discard",
-                            options,
-                            min: 1,
-                            max: 1,
-                            allow_cancel: false,
-                        },
-                    }
-                }
-                HostStage::SelectCard => {
-                    let Some(t) = self.target else {
-                        return Flow::Done;
-                    };
-                    let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() else {
-                        return Flow::Done;
-                    };
-                    if ctx.core.player(t).hand.contains(&c) {
-                        ctx.discard_from_hand(t, c);
-                        ctx.log(LogEvent::CardDiscarded {
-                            player: t,
-                            cards: vec![c],
-                        });
-                    } else if ctx.core.player(t).equips.contains(&c) {
-                        ctx.core.player_mut(t).equips.retain(|x| *x != c);
-                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
-                        ctx.to_discard(c);
-                        ctx.log(LogEvent::CardDiscarded {
-                            player: t,
-                            cards: vec![c],
-                        });
-                    }
-                    Flow::Done
-                }
+                HostStage::Act => match self.target {
+                    Some(t) => step_force_he_discard(self, ctx, t, "kuwu_discard"),
+                    None => Flow::Done,
+                },
+                HostStage::SelectCard => match self.target {
+                    Some(t) => finish_force_he_discard(ctx, t),
+                    None => Flow::Done,
+                },
                 _ => Flow::Done,
             },
-            HostBehavior::ShengkeCheck => {
-                // 被克 → 弃一张手牌（确定性首张，登记差异：上游为目标
-                // 自选「he」）；被生 → 摸一张；无关系 → 无事
-                let card = match self.card {
-                    Some(c) => c,
-                    None => return Flow::Done,
-                };
-                let cnat = match ctx.core.card_natures.get(&card).copied() {
-                    Some(n) => n,
-                    None => return Flow::Done,
-                };
-                let onat = match ctx.core.player(self.owner).wunature {
-                    Some(n) => n as usize,
-                    None => return Flow::Done,
-                };
-                if KE[cnat as usize] == onat as u8 {
-                    if let Some(c) = ctx.core.player(self.owner).hand.first().copied() {
-                        ctx.discard_from_hand(self.owner, c);
-                        ctx.log(LogEvent::CardDiscarded {
-                            player: self.owner,
-                            cards: vec![c],
-                        });
+            // 五行生克（L06 wuxing/extension.js:62-133）：被克自选弃置一张 he 牌（强制）；被生摸一张；无关系无事
+            HostBehavior::ShengkeCheck => match self.stage {
+                HostStage::Act => {
+                    let Some(card) = self.card else { return Flow::Done; };
+                    let Some(cnat) = ctx.core.card_natures.get(&card).copied() else { return Flow::Done; };
+                    let Some(onat) = ctx.core.player(self.owner).wunature.map(|n| n as usize) else { return Flow::Done; };
+                    if KE[cnat as usize] == onat as u8 {
+                        step_force_he_discard(self, ctx, self.owner, "shengke_discard")
+                    } else {
+                        if SHENG[cnat as usize] == onat as u8 {
+                            ctx.start_draw(self.owner, 1);
+                        }
+                        Flow::Done
                     }
-                } else if SHENG[cnat as usize] == onat as u8 {
-                    ctx.start_draw(self.owner, 1);
                 }
-                Flow::Done
-            }
+                HostStage::SelectCard => finish_force_he_discard(ctx, self.owner),
+                _ => Flow::Done,
+            },
             HostBehavior::SijiDiscardDraw => {
                 let n = self
                     .cards
@@ -1055,4 +997,39 @@ impl HostMachine {
             _ => unreachable!("behavior routed to the wrong step module"),
         }
     }
+}
+
+fn step_force_he_discard(
+    machine: &mut HostMachine,
+    ctx: &mut Ctx<'_>,
+    actor: PlayerId,
+    prompt: &'static str,
+) -> Flow {
+    if !ctx.core.player(actor).alive {
+        return Flow::Done;
+    }
+    let p = ctx.core.player(actor);
+    let options: Vec<ChoiceOption> = p.hand.iter().chain(p.equips.iter()).copied().map(ChoiceOption::Card).collect();
+    if options.is_empty() {
+        return Flow::Done;
+    }
+    machine.stage = HostStage::SelectCard;
+    Flow::WaitChoice {
+        observer: actor,
+        spec: ChoiceSpec { kind: ChoiceKind::SelectCards, prompt, options, min: 1, max: 1, allow_cancel: false },
+    }
+}
+
+fn finish_force_he_discard(ctx: &mut Ctx<'_>, actor: PlayerId) -> Flow {
+    let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() else { return Flow::Done; };
+    if ctx.core.player(actor).hand.contains(&c) {
+        ctx.discard_from_hand(actor, c);
+        ctx.log(LogEvent::CardDiscarded { player: actor, cards: vec![c] });
+    } else if ctx.core.player(actor).equips.contains(&c) {
+        ctx.core.player_mut(actor).equips.retain(|x| *x != c);
+        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, actor, c);
+        ctx.to_discard(c);
+        ctx.log(LogEvent::CardDiscarded { player: actor, cards: vec![c] });
+    }
+    Flow::Done
 }

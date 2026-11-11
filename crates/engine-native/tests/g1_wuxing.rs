@@ -169,6 +169,19 @@ fn g1_wuxing_vertical_natures_shengke_saverestore() {
     }
     let out = submit(&mut e, 1, GameAction::PlayCard { card: sha2, targets: vec![0] });
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
+    if let Some(c) = e.open_choice().cloned() {
+        if c.spec.prompt == "shengke_discard" {
+            let sel: Vec<ChoiceOption> = c.spec.options.iter().take(1).copied().collect();
+            let _ = submit(
+                &mut e,
+                c.observer,
+                GameAction::Answer {
+                    choice_id: c.id,
+                    selection: sel,
+                },
+            );
+        }
+    }
     assert_eq!(
         e.save().core.discard.len(),
         discard_before + 2, // 杀 + 被克弃的手牌

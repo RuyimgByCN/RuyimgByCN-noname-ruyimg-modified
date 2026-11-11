@@ -251,12 +251,6 @@ pub(super) fn try_named_ext_card(
                 ctx.start_draw(owner, 2);
             }
         }
-        // L06 五行生克/extension.js:116: 五行盘 (rotate five-element wunature & draw 1)
-        "wuxingpan" => {
-            let next_nat = (ctx.core.player(owner).wunature.unwrap_or(0) + 1) % 5;
-            ctx.core.player_mut(owner).wunature = Some(next_nat);
-            ctx.start_draw(owner, 1);
-        }
         // L28 雷霆万钧/extension.js:8968: 太平要术 (+2 hand limit & elemental immunity + draw 2)
         "th_taipingyaoshu" => {
             set_flag(ctx, owner, "l28_taipingyaoshu_equipped", 1);

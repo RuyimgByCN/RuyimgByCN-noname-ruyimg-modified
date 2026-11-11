@@ -263,30 +263,20 @@ pub(crate) fn active_ask_host(
         }
         // 苦无（U06 欢乐卡牌 skill.js:53-69）：受伤目标弃置一张 he 牌（强制）
         HostBehavior::ShaDamageForceDiscard => {
-            if stage != HostStage::SelectCard {
-                return None;
-            }
+            if stage != HostStage::SelectCard { return None; }
             let t = target?;
-            let options: Vec<ChoiceOption> = core
-                .player(t)
-                .hand
-                .iter()
-                .chain(core.player(t).equips.iter())
-                .copied()
-                .map(ChoiceOption::Card)
-                .collect();
-            if options.is_empty() {
-                return None;
-            }
-            Some(ask(
-                t,
-                "kuwu_discard",
-                ChoiceKind::SelectCards,
-                options,
-                1,
-                1,
-                false,
-            ))
+            let p = core.player(t);
+            let options: Vec<ChoiceOption> = p.hand.iter().chain(p.equips.iter()).copied().map(ChoiceOption::Card).collect();
+            if options.is_empty() { return None; }
+            Some(ask(t, "kuwu_discard", ChoiceKind::SelectCards, options, 1, 1, false))
+        }
+        // 五行生克（L06 wuxing/extension.js:62-133）：被克目标弃置一张 he 牌（强制）
+        HostBehavior::ShengkeCheck => {
+            if stage != HostStage::SelectCard { return None; }
+            let p = core.player(owner);
+            let options: Vec<ChoiceOption> = p.hand.iter().chain(p.equips.iter()).copied().map(ChoiceOption::Card).collect();
+            if options.is_empty() { return None; }
+            Some(ask(owner, "shengke_discard", ChoiceKind::SelectCards, options, 1, 1, false))
         }
         // 写轮眼（U06 欢乐卡牌 skill.js:70-128）：阶段一选目标（可取消），阶段二选技能（不可取消）
         HostBehavior::HuanleXuelunyangCard => match stage {

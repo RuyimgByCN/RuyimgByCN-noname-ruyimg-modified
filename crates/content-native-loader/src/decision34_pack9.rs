@@ -249,13 +249,15 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
         ("zhengsu_mingzhi", CardKind::Wuzhong, Suit::Heart, 4),
         ("zhengsu_bianzhen", CardKind::Wuzhong, Suit::Club, 5),
         ("yiyi", CardKind::Wuzhong, Suit::Heart, 4),
-        ("wuxingpan", CardKind::Wuzhong, Suit::Diamond, 5),
+        ("wuxingpan", CardKind::WuxingPan, Suit::Spade, 5),
     ];
     for &(cname, kind, suit, rank) in card_specs.iter().chain(super::L25_ZUAN_FORMAL_CARDS.iter()) {
         if seen_cards.insert(cname.to_string()) {
             let interned = names::intern(cname.to_string());
             let mut cdef = CardDef::basic(interned, kind).with_suit_rank(suit, rank);
-            if kind.equip_slot().is_some() {
+            if kind == CardKind::WuxingPan {
+                cdef.equip_skills = vec!["wuxingpan_skill"];
+            } else if kind.equip_slot().is_some() {
                 cdef.equip_skills = vec![interned];
             }
             cards.push(cdef);
@@ -488,7 +490,9 @@ pub fn attach_formal_package_upstream_rules(
         if seen_cards.insert(cname.to_string()) {
             let interned = names::intern(cname.to_string());
             let mut cdef = CardDef::basic(interned, kind).with_suit_rank(suit, rank);
-            if kind.equip_slot().is_some() {
+            if kind == CardKind::WuxingPan {
+                cdef.equip_skills = vec!["wuxingpan_skill"];
+            } else if kind.equip_slot().is_some() {
                 cdef.equip_skills = vec![interned];
             }
             extra_cards.push(cdef);
@@ -578,7 +582,7 @@ pub fn attach_formal_package_upstream_rules(
         }
         ("upstream-liuli", "wuxing") => {
             if !had_cards {
-                push_card("wuxingpan", CardKind::Wuzhong, Suit::Diamond, 5);
+                push_card("wuxingpan", CardKind::WuxingPan, Suit::Spade, 5);
             }
             for &s in &["_shengke", "wuxingpan_skill", "wuxing"] {
                 push_skill(s, super::L06_WUXING_ID);

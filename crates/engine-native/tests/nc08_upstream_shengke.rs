@@ -363,8 +363,8 @@ fn upstream_shengke_requires_both_natures_and_relation() {
     );
 }
 
-/// 差异 S1：上游弃牌范围为 `he`（手牌+装备）且由角色自选；原生只弃首张手牌，
-/// 因而**仅持装备**的被克角色不会被强制弃牌（上游会弃装备）。
+/// 上游对齐（`wuxing/extension.js:75-125`）：弃牌范围为 `he`（手牌+装备）且由角色自选
+/// （`chooseToDiscard(true, 'he')`），仅持装备的被克角色同样会被强制弃置装备。
 #[test]
 fn upstream_shengke_he_range_difference() {
     let (e, pack) = wuxing_engine(20262807);
@@ -388,10 +388,14 @@ fn upstream_shengke_he_range_difference() {
         core.players[0].equips.push(equip);
     }
     let before = e.debug_discard_len();
-    play_sha_at_zero(&mut e, sha);
+    let prompts = play_sha_at_zero(&mut e, sha);
     assert!(
-        e.debug_equips(0).contains(&equip),
-        "差异 S1：仅持装备时原生不弃（上游 'he' 会强制弃装备）"
+        prompts.iter().any(|p| p == "shengke_discard"),
+        "仅持装备时也应打开 shengke_discard 选择窗: {prompts:?}"
     );
-    assert_eq!(e.debug_discard_len(), before + 1, "弃牌堆只有杀本身");
+    assert!(
+        !e.debug_equips(0).contains(&equip),
+        "上游对齐：仅持装备的被克角色同样被强制弃置装备（'he'）"
+    );
+    assert_eq!(e.debug_discard_len(), before + 2, "弃牌堆 = 杀 + 被克弃装备");
 }
