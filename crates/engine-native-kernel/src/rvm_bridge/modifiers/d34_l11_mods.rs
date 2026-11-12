@@ -109,6 +109,19 @@ pub(super) fn apply_hand_limit(
     if flag_val(state, player, "l27_jishe_limit_minus") == 0 {
         limit -= flag_val(state, player, "jishe2") as i32;
     }
+    // L19 末日乱斗 (`_wujinmoshiMaxHandCard`, `_wujinmoshiMaxHandCardE`)
+    if has_ext_skill(state, catalog, player, "_wujinmoshiMaxHandCard")
+        || has_ext_skill(state, catalog, player, "_wujinmoshiMaxHandCardE")
+    {
+        limit += flag_val(state, player, "wujin_hand_bonus")
+            .max(flag_val(state, player, "l19_wujin_hand_limit_bonus"))
+            .max(1) as i32;
+    } else if flag_val(state, player, "wujin_hand_bonus") > 0
+        || flag_val(state, player, "l19_wujin_hand_limit_bonus") > 0
+    {
+        limit += flag_val(state, player, "wujin_hand_bonus")
+            .max(flag_val(state, player, "l19_wujin_hand_limit_bonus")) as i32;
+    }
     limit
 }
 
@@ -265,6 +278,14 @@ pub(super) fn apply_sha_use_limit(
     let xiafeng_x = flag_val(state, player, "twxiafeng_x")
         .max(flag_val(state, player, "l27_twxiafeng_spent"));
     if xiafeng_x > 0 && state.turn.cards_used_play_phase < xiafeng_x {
+        unlimited = true;
+    }
+    // L19 末日乱斗 (`baozou`, `paoxiao` on `jiangshifz`/`jiangshinj`)
+    if has_ext_skill(state, catalog, player, "baozou")
+        || has_ext_skill(state, catalog, player, "paoxiao")
+        || flag_val(state, player, "baozou_unlimited") > 0
+        || flag_val(state, player, "l19_baozou_sha_unlimited") > 0
+    {
         unlimited = true;
     }
     (cur, unlimited)
@@ -442,6 +463,23 @@ pub(super) fn apply_card_target_canceled(
     {
         canceled = true;
     }
+    // L19 末日乱斗 (`_tamodeskill`: tower `nei` cannot be targeted by normal cards)
+    if actor != target
+        && (has_ext_skill(state, catalog, target, "_tamodeskill")
+            || flag_val(state, target, "_tamodeskill_untouchable") > 0
+            || flag_val(state, target, "is_tower_nei") > 0)
+    {
+        canceled = true;
+    }
+    // L19 末日乱斗 (`_guanmodeskill`: boss `zhu` immune to delayed tricks)
+    if matches!(
+        kind,
+        CardKind::Le | CardKind::Bing | CardKind::ShanDian | CardKind::HongShui
+    ) && (has_ext_skill(state, catalog, target, "_guanmodeskill")
+        || flag_val(state, target, "_guanmodeskill_immune") > 0)
+    {
+        canceled = true;
+    }
     canceled
 }
 
@@ -607,6 +645,19 @@ pub(super) fn apply_damage_amount(
         // `newjiang/skill.js:7123` (`spyishi`: damage -1 to steal equip)
         if flag_val(state, src, "l11_mod:spyishi_reduce") > 0 {
             cur = (cur - 1).max(0);
+        }
+        // L19 末日乱斗 (`_wujinmoshiDamage`, `_wujinmoshiDamageE`)
+        if has_ext_skill(state, catalog, src, "_wujinmoshiDamage")
+            || has_ext_skill(state, catalog, src, "_wujinmoshiDamageE")
+        {
+            cur += flag_val(state, src, "wujin_damage_bonus")
+                .max(flag_val(state, src, "l19_wujin_damage_bonus"))
+                .max(1) as i32;
+        } else if flag_val(state, src, "wujin_damage_bonus") > 0
+            || flag_val(state, src, "l19_wujin_damage_bonus") > 0
+        {
+            cur += flag_val(state, src, "wujin_damage_bonus")
+                .max(flag_val(state, src, "l19_wujin_damage_bonus")) as i32;
         }
     }
 

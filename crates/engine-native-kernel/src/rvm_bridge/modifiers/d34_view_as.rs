@@ -507,6 +507,19 @@ fn d34_view_as_table() -> &'static Vec<D34ViewAsRule> {
                     false,
                 ),
             },
+            // L19 `ganran` (`末日乱斗/extension.js:378`): Equip hand card -> Chain (`Tiesuo`)
+            D34ViewAsRule {
+                activation: D34ViewAsActivation::SkillOrFlag("ganran", "ganran_active"),
+                spec: make_spec(
+                    1_926_900_066,
+                    "ganran",
+                    CardKind::Chain,
+                    VmViewAsWindow::PlayPhase,
+                    VmViewAsZone::Hand,
+                    VmViewAsFilter::Equip,
+                    false,
+                ),
+            },
         ];
 
         let u05_flag_map: &[(&str, CardKind)] = &[

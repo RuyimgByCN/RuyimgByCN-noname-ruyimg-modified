@@ -144,7 +144,11 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
             if seen_generals.insert(sym.to_string()) {
                 let mut interned: Vec<&'static str> = Vec::with_capacity(sk_list.len() + 2);
                 for &s in sk_list {
-                    let mapped = resolve_general_skill(s, seen);
+                    let mapped = if matches!(sym, "jiangshifz" | "jiangshinj") {
+                        names::intern(s.to_string())
+                    } else {
+                        resolve_general_skill(s, seen)
+                    };
                     if !interned.contains(&mapped) {
                         interned.push(mapped);
                     }

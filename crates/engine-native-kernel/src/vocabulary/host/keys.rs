@@ -586,6 +586,8 @@ impl HostBehavior {
             HostBehavior::L28ThunderBatchB => "host:l28_thunder_batch_b",
             HostBehavior::L27BeautifyBatchA => "host:l27_beautify_batch_a",
             HostBehavior::L27BeautifyBatchB => "host:l27_beautify_batch_b",
+            HostBehavior::L19DoomsdayBatchA => "host:l19_doomsday_batch_a",
+            HostBehavior::L19DoomsdayBatchB => "host:l19_doomsday_batch_b",
         }
     }
 }

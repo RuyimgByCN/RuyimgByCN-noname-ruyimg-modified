@@ -321,6 +321,12 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
     "mbwuling:choose_equip_target", "mbwuling:confirm", "jishe2:choose_targets",
     "sbqingzheng:choose_suits", "xingchong:show_cards", "twharvestinori:discard_black",
     "twzhouhu:discard_red", "twzuhuo:discard_nonbasic",
+    "ganran2:choose_equip",
+    "_huzhu:discard_tao",
+    "_huzhu:choose_target",
+    "_yuanqiskill:choose_mode",
+    "_yuanqiskill:choose_skill",
+    "_yuanqiskill:remove_skill",
 ];
 
 pub(super) fn intern_prompt(bytes: &[u8]) -> Result<&'static str, ArchiveError> {

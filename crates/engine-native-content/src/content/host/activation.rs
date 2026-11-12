@@ -224,6 +224,12 @@ impl HostSkillBehavior {
             HostBehavior::L27BeautifyBatchB => {
                 super::step::l27_batch_b::activate_l27_batch_b(self, ctx, owner)
             }
+            HostBehavior::L19DoomsdayBatchA => {
+                super::step::l19_batch_a::activate_l19_batch_a(self, ctx, owner)
+            }
+            HostBehavior::L19DoomsdayBatchB => {
+                super::step::l19_batch_b::activate_l19_batch_b(self, ctx, owner)
+            }
             _ => None,
         }
     }

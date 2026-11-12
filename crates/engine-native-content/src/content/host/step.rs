@@ -56,6 +56,8 @@ pub(super) mod l28_batch_a;
 pub(super) mod l28_batch_b;
 pub(super) mod l27_batch_a;
 pub(super) mod l27_batch_b;
+pub(super) mod l19_batch_a;
+pub(super) mod l19_batch_b;
 
 impl HostMachine {
     pub(super) fn step_behavior(&mut self, ctx: &mut Ctx<'_>) -> Flow {
@@ -1084,6 +1086,8 @@ impl HostMachine {
             HostBehavior::L28ThunderBatchB => l28_batch_b::handle_l28_batch_b(self, ctx),
             HostBehavior::L27BeautifyBatchA => l27_batch_a::handle_l27_batch_a(self, ctx),
             HostBehavior::L27BeautifyBatchB => l27_batch_b::handle_l27_batch_b(self, ctx),
+            HostBehavior::L19DoomsdayBatchA => l19_batch_a::handle_l19_batch_a(self, ctx),
+            HostBehavior::L19DoomsdayBatchB => l19_batch_b::handle_l19_batch_b(self, ctx),
         }
     }
 }

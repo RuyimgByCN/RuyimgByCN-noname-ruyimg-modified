@@ -152,3 +152,83 @@ pub fn parse_wujinmoshi(values: &BTreeMap<String, i64>) -> WujinMoshiConfig {
             .unwrap_or_default(),
     }
 }
+
+/// 末日乱斗 2 位僵尸武将完整元数据（`末日乱斗/extension.js:3383-3395`）。
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct DoomsdayZombieGeneralSpec {
+    pub id: &'static str,
+    pub name_zh: &'static str,
+    pub gender: &'static str,
+    pub group: &'static str,
+    pub max_hp: u32,
+    pub skills: &'static [&'static str],
+}
+
+pub const JIANGSHIFZ_SKILLS: [&str; 5] = ["xunmeng", "zaibian", "ganran", "wansha", "paoxiao"];
+pub const JIANGSHINJ_SKILLS: [&str; 5] = ["baozou", "wansha", "xueji", "shishi", "ganran"];
+
+pub const DOOMSDAY_ZOMBIE_GENERALS: [DoomsdayZombieGeneralSpec; 2] = [
+    DoomsdayZombieGeneralSpec {
+        id: "jiangshifz",
+        name_zh: "邪灵僵尸",
+        gender: "male",
+        group: "ye",
+        max_hp: 5,
+        skills: &JIANGSHIFZ_SKILLS,
+    },
+    DoomsdayZombieGeneralSpec {
+        id: "jiangshinj",
+        name_zh: "鬼影僵尸",
+        gender: "female",
+        group: "ye",
+        max_hp: 3,
+        skills: &JIANGSHINJ_SKILLS,
+    },
+];
+
+/// `zuan_brawl` 配置项（`末日乱斗/extension.js:3360-3381`）：乱斗模式武将禁用策略。
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ZuanBrawlMode {
+    /// 关闭（`"off"`）
+    Off,
+    /// 标准（`"standard"`）
+    Standard,
+    /// 随机（`"random"`）
+    Random,
+    /// 全部（`"all"`，默认值）
+    All,
+    /// 日常（`"daily"`）
+    Daily,
+}
+
+pub const DEFAULT_ZUAN_BRAWL: &str = "all";
+pub const ZUAN_BRAWL_MODES: [&str; 5] = ["off", "standard", "random", "all", "daily"];
+
+impl ZuanBrawlMode {
+    pub const fn as_str(&self) -> &'static str {
+        match self {
+            Self::Off => "off",
+            Self::Standard => "standard",
+            Self::Random => "random",
+            Self::All => "all",
+            Self::Daily => "daily",
+        }
+    }
+}
+
+/// 校验 `zuan_brawl` 配置字符串是否合法（`"off" | "standard" | "random" | "all" | "daily"`）。
+pub fn validate_zuan_brawl(raw: &str) -> bool {
+    matches!(raw, "off" | "standard" | "random" | "all" | "daily")
+}
+
+/// 解析 `zuan_brawl` 配置（缺省取 `"all"`）。
+pub fn parse_zuan_brawl(raw: Option<&str>) -> Result<ZuanBrawlMode, &'static str> {
+    match raw.unwrap_or(DEFAULT_ZUAN_BRAWL) {
+        "off" => Ok(ZuanBrawlMode::Off),
+        "standard" => Ok(ZuanBrawlMode::Standard),
+        "random" => Ok(ZuanBrawlMode::Random),
+        "all" => Ok(ZuanBrawlMode::All),
+        "daily" => Ok(ZuanBrawlMode::Daily),
+        _ => Err("invalid zuan_brawl config: expected off|standard|random|all|daily"),
+    }
+}

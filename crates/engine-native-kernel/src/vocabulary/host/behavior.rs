@@ -1640,4 +1640,8 @@ pub enum HostBehavior {
     L27BeautifyBatchA,
     /// L27 选将美化 Batch B（tag 558，选将美化/extension.js 后 15 个完整技能 + 4 个辅助/界面桩）。
     L27BeautifyBatchB,
+    /// L19 末日乱斗 Batch A（tag 559，末日乱斗/extension.js 模式 1–3 核心技能 + 20 注释/VFX 桩）。
+    L19DoomsdayBatchA,
+    /// L19 末日乱斗 Batch B（tag 560，末日乱斗/extension.js 模式 4–10 RPG/祖安桥接技能）。
+    L19DoomsdayBatchB,
 }
