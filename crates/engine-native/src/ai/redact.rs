@@ -43,7 +43,9 @@ fn scrub_opponent_vm_aux_scalars(core: &mut crate::state::GameStateCore, seat: u
                 .and_then(|(s, _)| s.parse::<u8>().ok())
                 .is_none_or(|owner| owner == seat)
     });
-    core.vm_aux.flags.retain(|(owner, _), _| *owner == seat);
+    core.vm_aux
+        .flags
+        .retain(|(owner, k), _| *owner == seat && !k.starts_with("elo_known:"));
     core.vm_aux.drawn.retain(|owner, _| *owner == seat);
 }
 
@@ -263,6 +265,7 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
         pile.copy_from_slice(&pool[cursor..cursor + len]);
         cursor += len;
     }
+    scrub_opponent_vm_aux_scalars(core, seat);
     if !remap.is_empty() {
         let replace = |card: &mut CardId| {
             if let Some(replacement) = remap.get(*card as usize) {
@@ -272,7 +275,6 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
         for card in core.vm_aux.lost.values_mut().flatten() {
             replace(card);
         }
-        scrub_opponent_vm_aux_scalars(core, seat);
         for card in core.vm_aux.storage.values_mut() {
             if trap_cards.contains(card) {
                 replace(card);

@@ -1,6 +1,7 @@
 use super::super::*;
 
 pub(super) fn begin_play(ctx: &mut Ctx<'_>, player: PlayerId) {
+    crate::kernel::elo_on_choice_before(ctx.core, ctx.catalog, player, "phase_use_choose_to_use");
     // 往生（十殿阎罗转轮王，规则 v269）：出牌阶段开始——视为
     // 随机使用一张【南蛮入侵】/【万箭齐发】（上游 boss_wangsheng
     // useCard noai；randomGet→恒定取南蛮确定性近似登记；

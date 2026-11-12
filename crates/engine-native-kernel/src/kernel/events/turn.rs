@@ -134,6 +134,7 @@ pub(in crate::kernel) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: Playe
 }
 
 pub(in crate::kernel) fn commit_turn_begin(ctx: &mut Ctx<'_>, player: PlayerId) {
+    crate::kernel::elo_on_phase_before(ctx.core, ctx.catalog, player);
     // K46/K47/K48（A2）：封冻／巡游／炎狱＝上游 player/global phaseBegin
     // 内联效果——置于 TurnBegin 窗 Commit 步（BeforeTriggers 已跑、准备
     // 阶段帧未压），严格落在 phaseBegin 窗内（原锚判定开始→prepare 入场）。
@@ -266,6 +267,7 @@ pub(in crate::kernel) fn commit_turn_begin(ctx: &mut Ctx<'_>, player: PlayerId) 
         let i = ctx.core.rng.gen_range(n) as usize;
         let c = ctx.core.discard.remove(i);
         ctx.core.deck.push(c);
+        crate::kernel::elo_mark_deck_insert(ctx.core, c, false);
     }
     ctx.core.turn.phase = Phase::Prepare;
     ctx.emit(EventData::Phase {

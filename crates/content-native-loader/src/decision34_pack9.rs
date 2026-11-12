@@ -758,6 +758,13 @@ pub fn attach_formal_package_upstream_rules(
                 &seen_skills,
             );
         }
+        ("upstream-liuli", "elo-sanction") => {
+            for (idx, &(s, ev)) in engine_native::kernel::L22_ELO_SKILLS.iter().enumerate() {
+                if !seen_skills.contains(s) {
+                    extra_vm_skills.push(crate::elo::make_l22_vm_skill_decl(s, ev, idx));
+                }
+            }
+        }
         _ => {}
     }
     pack.generals.extend(extra_generals);

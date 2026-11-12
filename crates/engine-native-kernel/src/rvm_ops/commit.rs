@@ -624,7 +624,10 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
                     continue;
                 }
                 match kind {
-                    1 => ctx.core.deck.push(id),
+                    1 => {
+                        ctx.core.deck.push(id);
+                        crate::kernel::elo_mark_deck_insert(ctx.core, id, false);
+                    }
                     2 => {
                         ctx.core.discard.push(id);
                         ctx.out.push(LogEvent::CardDiscarded {

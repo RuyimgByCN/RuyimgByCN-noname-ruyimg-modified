@@ -492,6 +492,7 @@ impl<'a> Ctx<'a> {
         if self.core.deck.is_empty() {
             let mut cards = std::mem::take(&mut self.core.discard);
             self.core.rng.shuffle(&mut cards);
+            crate::kernel::elo_on_wash_deck(self.core, &cards);
             self.core.deck = cards;
             self.out.push(LogEvent::DeckReshuffled);
         }

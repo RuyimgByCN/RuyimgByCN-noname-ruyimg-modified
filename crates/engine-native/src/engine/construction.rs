@@ -125,6 +125,21 @@ impl Engine {
         if let GameMode::Boss { fellows, .. } = &mut self.state.core.mode {
             fellows.push(pid);
         }
+        for &def in &self.catalog.extension_global_skills {
+            if crate::kernel::is_l22_elo_global_skill(self.catalog.skills[def as usize].name) {
+                self.state.core.skills.insert(
+                    (pid, def),
+                    crate::state::SkillInstance {
+                        owner: pid,
+                        enabled: true,
+                        once_used: false,
+                        expires_end_of_turn: false,
+                        rounds: 0,
+                    },
+                );
+            }
+        }
+        crate::kernel::elo_try_init_cards(&mut self.state.core, &self.catalog, pid, false);
         crate::resolution::sync_trigger_owners(&self.state.core, &mut self.state.resolution);
         Some(pid)
     }
@@ -496,6 +511,7 @@ detached_cards: Vec::new(),
                 );
             }
         }
+        crate::kernel::elo_on_game_start(&mut e.state.core, &e.catalog);
         Ok(e)
     }
 }

@@ -412,12 +412,26 @@ impl crate::catalog::SkillMachine for DismantleMachine {
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         if !self.asked {
             self.asked = true;
+            crate::kernel::elo_on_choice_before(
+                ctx.core,
+                ctx.catalog,
+                self.source,
+                "choose_player_card",
+            );
+            let hand_visible = crate::kernel::elo_on_extract_player_card_begin(
+                ctx.core,
+                ctx.catalog,
+                self.source,
+                self.target,
+            );
             // 选牌：手牌优先，其次装备区，再次判定区
             let t = ctx.core.player(self.target);
-            let pick = t
-                .hand
-                .first()
-                .copied()
+            let hand_pick = if hand_visible {
+                crate::kernel::elo_best_hand_card(ctx.core, ctx.catalog, self.target, &t.hand)
+            } else {
+                t.hand.first().copied()
+            };
+            let pick = hand_pick
                 .or_else(|| t.equips.first().copied())
                 .or_else(|| t.judge.first().copied());
             if let Some(c) = pick {
@@ -489,12 +503,25 @@ impl crate::catalog::SkillMachine for SnatchMachine {
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         if !self.asked {
             self.asked = true;
+            crate::kernel::elo_on_choice_before(
+                ctx.core,
+                ctx.catalog,
+                self.source,
+                "choose_player_card",
+            );
+            let hand_visible = crate::kernel::elo_on_extract_player_card_begin(
+                ctx.core,
+                ctx.catalog,
+                self.source,
+                self.target,
+            );
             let t = ctx.core.player(self.target);
-            let pick = t
-                .hand
-                .first()
-                .copied()
-                .or_else(|| t.equips.first().copied());
+            let hand_pick = if hand_visible {
+                crate::kernel::elo_best_hand_card(ctx.core, ctx.catalog, self.target, &t.hand)
+            } else {
+                t.hand.first().copied()
+            };
+            let pick = hand_pick.or_else(|| t.equips.first().copied());
             if let Some(c) = pick {
                 let public_material = ctx.core.player(self.target).equips.contains(&c);
                 {

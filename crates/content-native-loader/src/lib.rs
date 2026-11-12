@@ -88,9 +88,10 @@ pub use drag_read::{
     ERR_NOT_EXTENSION, ERR_NO_EXTENSION_JS, SEVENZ_UNSUPPORTED,
 };
 pub use elo::{
-    apply_elo_commands, hand_visible, mark_inserted, mark_opening, parse_elo_config, reorder_draw,
-    resolve_difficulty, restore_pile, restrict_pool, snapshot_pile, think_delay, wash, EloCard,
-    EloConfig, EloError, EloLevel, EloQuery, EloViewer, Think,
+    apply_elo_commands, elo_apply_engine_config, elo_sanction_extension_pack, hand_visible,
+    mark_inserted, mark_opening, parse_elo_config, reorder_draw, resolve_difficulty, restore_pile,
+    restrict_pool, snapshot_pile, think_delay, wash, EloCard, EloConfig, EloError, EloLevel,
+    EloQuery, EloViewer, Think, L22_ELO_SKILL_ID,
 };
 pub use epic_cards::*;
 pub use fool::{

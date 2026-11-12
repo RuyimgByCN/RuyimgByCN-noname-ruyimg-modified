@@ -363,6 +363,7 @@ impl crate::catalog::SkillMachine for DrawMachine {
                     }
                     let mut cards = std::mem::take(&mut ctx.core.discard);
                     ctx.core.rng.shuffle(&mut cards);
+                    crate::kernel::elo_on_wash_deck(ctx.core, &cards);
                     ctx.core.deck = cards;
                     ctx.log(LogEvent::DeckReshuffled);
                 }
@@ -375,6 +376,9 @@ impl crate::catalog::SkillMachine for DrawMachine {
                         .copied()
                         .unwrap_or(0)
                         > 0;
+                if held_cards.is_empty() && !from_bottom {
+                    crate::kernel::elo_on_draw_begin(ctx.core, ctx.catalog, player, requested);
+                }
                 let card = if from_bottom {
                     ctx.core.deck.remove(0)
                 } else {

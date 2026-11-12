@@ -87,6 +87,9 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
         phase,
         begin,
     });
+    if begin {
+        crate::kernel::elo_on_phase_before(ctx.core, ctx.catalog, player);
+    }
     // 全局阶段计数（U07 ow 自愈，规则 v120）：每阶段开始 +1（上游
     // game.phaseNumber 同口径）
     // 准备阶段（R05）不计入：保持既有「每回合五阶段」计数口径不漂移。

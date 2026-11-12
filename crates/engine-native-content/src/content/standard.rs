@@ -579,6 +579,9 @@ pub fn standard_catalog_with_extensions(
         .iter()
         .enumerate()
         .filter_map(|(id, def)| {
+            if engine_native_kernel::kernel::is_l22_elo_global_skill(def.name) {
+                return Some(id as crate::ids::SkillDefId);
+            }
             let behavior = def.behavior.as_host_behavior()?;
             let is_global = behavior == crate::content::host::HostBehavior::ChenhuodajieCard
                 || packs.iter().any(|p| {

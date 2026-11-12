@@ -596,6 +596,7 @@ pub fn run(
                         }
                     }
                     Flow::WaitChoice { observer, spec } => {
+                        crate::kernel::elo_on_choice_before(core, catalog, observer, spec.prompt);
                         let id = res.next_choice_id;
                         res.next_choice_id += 1;
                         out.push(LogEvent::ChoiceOpened {

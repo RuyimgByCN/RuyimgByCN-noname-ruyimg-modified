@@ -465,3 +465,110 @@ pub fn apply_elo_commands(
     }
     Ok(parts_out.join(" "))
 }
+
+pub const L22_ELO_SKILL_ID: u32 = 1_926_012_001;
+
+pub fn make_l22_vm_skill_decl(
+    name_str: &str,
+    event: engine_native::event::EventKind,
+    idx: usize,
+) -> engine_native::content::extension::VmSkillDecl {
+    let mod_name = format!("{name_str}#l22elo");
+    let mut code = Vec::with_capacity(14);
+    code.push(0x57); // HOST_SKILL
+    code.push(0x10); // CONST_I32
+    code.extend_from_slice(&(super::DECISION34_STORAGE_DISPATCH_KEY as i32).to_le_bytes());
+    code.push(0x10); // CONST_I32
+    code.extend_from_slice(&(L22_ELO_SKILL_ID as i32).to_le_bytes());
+    code.push(0x5A); // HOST_EFFECT_EXT
+    code.extend_from_slice(&649u16.to_le_bytes()); // STORAGE_SET = 649
+    code.push(0x01); // HALT
+    let module = engine_native::rvm_bridge::BytecodeModule {
+        logic_hash: engine_native::rvm_bridge::BytecodeModule::compute_logic_hash(
+            &mod_name, &code, 0, 1, 0,
+        ),
+        name: mod_name,
+        code,
+        local_count: 0,
+        max_stack: 4,
+        entry_pc: 0,
+        caps_mask: 1,
+    };
+    let skill_def_id = L22_ELO_SKILL_ID.wrapping_add(idx as u32);
+    engine_native::content::extension::VmSkillDecl {
+        declaration_hash: None,
+        presentation_binding: None,
+        name: name_str.to_string(),
+        module,
+        trigger: engine_native::catalog::TriggerMeta {
+            event,
+            timing: engine_native::event::Timing::Normal,
+            priority: 0,
+            order_selectable: false,
+            optional: false,
+            extra_events: Vec::new(),
+        },
+        filter: engine_native::rvm_bridge::VmFilterPolicy::Handlers(std::sync::Arc::new(
+            engine_native::rvm_bridge::VmHandlerSet {
+                skill_def_id,
+                active: None,
+                triggers: Vec::new(),
+                view_as: Vec::new(),
+                modifiers: Vec::new(),
+                limits: engine_native::rvm_bridge::VmActiveLimits::default(),
+            },
+        )),
+        r05_identity: None,
+    }
+}
+
+/// Build the formal `ExtensionPack` for `L22` (`段位制裁`, `upstream-liuli/elo-sanction`),
+/// registering all 5 global skills (`_eloMechanism`, `_eloInitCards`, `_eloDraw`,
+/// `_eloHandcard`, `_timeKiller`).
+pub fn elo_sanction_extension_pack() -> engine_native::content::extension::ExtensionPack {
+    let vm_skills = engine_native::kernel::L22_ELO_SKILLS
+        .iter()
+        .enumerate()
+        .map(|(idx, &(name, event))| make_l22_vm_skill_decl(name, event, idx))
+        .collect();
+    engine_native::content::extension::ExtensionPack {
+        def: engine_native::content::extension::ExtensionDef {
+            name: "elo-sanction",
+            version: 1,
+            description: "段位制裁",
+        },
+        enabled: true,
+        cards: Vec::new(),
+        generals: Vec::new(),
+        host_skills: Vec::new(),
+        vm_skills,
+        init_hook: engine_native::content::extension::InitHook::None,
+    }
+}
+
+/// Apply parsed `L22` (`段位制裁`) `EloConfig` (`eloPlayers`, `eloDifficulty`, `timeKiller`)
+/// and `EloQuery` onto a live `Engine` match.
+pub fn elo_apply_engine_config(
+    engine: &mut engine_native::Engine,
+    cfg: &EloConfig,
+    query: &EloQuery,
+) {
+    let level = resolve_difficulty(&cfg.difficulty, query);
+    let tk_val = match cfg.time_killer.as_str() {
+        "light" => 1,
+        "middle" | "medium" => 2,
+        "heavy" => 3,
+        _ => 0,
+    };
+    let core = engine.state_core_mut();
+    engine_native::kernel::elo_set_global_scalar(
+        core,
+        "elo_players_enable",
+        i32::from(cfg.elo_players),
+    );
+    engine_native::kernel::elo_set_global_scalar(core, "elo_eh", i32::from(level.eh));
+    engine_native::kernel::elo_set_global_scalar(core, "elo_players_mode", i32::from(level.eh));
+    engine_native::kernel::elo_set_global_scalar(core, "elo_difficulty_val", level.diff as i32);
+    engine_native::kernel::elo_set_global_scalar(core, "elo_online", i32::from(query.online));
+    engine_native::kernel::elo_set_global_scalar(core, "elo_time_killer_val", tk_val);
+}

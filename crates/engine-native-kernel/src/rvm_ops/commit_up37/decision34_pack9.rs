@@ -24,6 +24,7 @@ pub const L24_SKIN_SKILL_ID: u32 = 1_926_008_001;
 pub const L25_ZUAN_SKILL_ID: u32 = 1_926_009_001;
 pub const L27_SELECT_SKILL_ID: u32 = 1_926_010_001;
 pub const L11_TAIXU_SKILL_ID: u32 = 1_926_011_001;
+pub const L22_ELO_SKILL_ID: u32 = 1_926_012_001;
 
 
 
@@ -55,7 +56,11 @@ pub(super) fn try_commit_decision34_pack9(
         L11_TAIXU_SKILL_ID => {
             super::decision34_l11_skills::resolve_l11_taixu_skill(ctx, executing, owner)
         }
+        L22_ELO_SKILL_ID => resolve_l22_elo_skill(ctx, executing, owner),
         _ => match executing {
+            "_eloMechanism" | "_eloInitCards" | "_eloDraw" | "_eloHandcard" | "_timeKiller" => {
+                resolve_l22_elo_skill(ctx, executing, owner)
+            }
             "duijue"
             | "tanlin"
             | "ycndiyjianxiong"
@@ -136,6 +141,7 @@ fn resolve_u01_ddd_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
                     ctx.take_owned_card(owner, c);
                 }
                 ctx.core.deck.push(c);
+                crate::kernel::elo_mark_deck_insert(ctx.core, c, false);
                 set_flag(ctx.core, owner, "dddxiaxing_xia", 1);
                 set_flag(ctx.core, owner, "dddxiaxing_viewas_taojiu", 1);
             } else {
@@ -193,6 +199,7 @@ fn resolve_u01_ddd_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
                     if let Some(c) = choose_own_card(ctx, owner, false) {
                         ctx.take_hand_card(owner, c);
                         ctx.core.deck.insert(0, c);
+                        crate::kernel::elo_mark_deck_insert(ctx.core, c, false);
                     }
                 }
                 if ctx.core.player(owner).hp < ctx.core.player(owner).max_hp as i32 {
@@ -582,5 +589,65 @@ fn resolve_l27_select_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId)
         set_flag(ctx.core, owner, "l27_baonue_marks", marks);
     } else {
         super::decision34_u08_l19_l20_l27::resolve_l27_select_remaining(ctx, skill_name, owner);
+    }
+}
+
+/// `L22` (`段位制裁` — `archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js`):
+fn resolve_l22_elo_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
+    match executing {
+        "_eloMechanism" => {
+            let _ = crate::kernel::elo_try_init_mechanism(ctx.core, ctx.catalog, owner);
+        }
+        "_eloInitCards" => {
+            let is_phase = crate::kernel::elo_get_player_scalar(ctx.core, owner, "elo_init_is_phase")
+                .unwrap_or(0)
+                != 0;
+            let _ = crate::kernel::elo_try_init_cards(ctx.core, ctx.catalog, owner, is_phase);
+        }
+        "_eloDraw" => {
+            let is_judge =
+                crate::kernel::elo_get_player_scalar(ctx.core, owner, "elo_draw_is_judge")
+                    .unwrap_or(0)
+                    != 0;
+            if is_judge {
+                let trick = match crate::kernel::elo_get_player_scalar(
+                    ctx.core,
+                    owner,
+                    "elo_judge_trick_kind",
+                )
+                .unwrap_or(0)
+                {
+                    1 => crate::catalog::CardKind::Bing,
+                    2 => crate::catalog::CardKind::ShanDian,
+                    _ => crate::catalog::CardKind::Le,
+                };
+                let _ = crate::kernel::elo_on_judge_begin(ctx.core, ctx.catalog, owner, trick);
+            } else {
+                let num = crate::kernel::elo_get_player_scalar(ctx.core, owner, "elo_draw_num")
+                    .unwrap_or(2)
+                    .max(0) as u32;
+                let _ = crate::kernel::elo_on_draw_begin(ctx.core, ctx.catalog, owner, num);
+            }
+        }
+        "_eloHandcard" => {
+            let target = crate::kernel::elo_get_player_scalar(ctx.core, owner, "elo_extract_target")
+                .unwrap_or(0)
+                .max(0) as PlayerId;
+            let _ = crate::kernel::elo_on_extract_player_card_begin(
+                ctx.core,
+                ctx.catalog,
+                owner,
+                target,
+            );
+        }
+        "_timeKiller" => {
+            let _ = crate::kernel::elo_on_choice_before(
+                ctx.core,
+                ctx.catalog,
+                owner,
+                "choose_to_use",
+            );
+        }
+        _ => {}
     }
 }

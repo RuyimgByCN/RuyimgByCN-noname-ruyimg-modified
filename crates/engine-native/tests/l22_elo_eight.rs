@@ -335,3 +335,650 @@ fn l22_eight_dimension_from_fresh_install() {
     assert!(kept_config.elo_players);
     assert!(kept_text.contains("\"source\": \"noname-liuli\""));
 }
+
+fn new_l22_engine(seed: u64, seats: usize, diff_key: &str, tk_key: &str, online: bool) -> engine_native::Engine {
+    let pack = content_native_loader::elo_sanction_extension_pack();
+    let packs = [&pack];
+    let mut engine = engine_native::Engine::new_with_extensions(seed, seats, &packs).expect("l22 engine");
+    let cfg = content_native_loader::EloConfig {
+        source: "noname-liuli".to_string(),
+        elo_players: true,
+        difficulty: diff_key.to_string(),
+        time_killer: tk_key.to_string(),
+    };
+    let query = EloQuery {
+        online,
+        mode: "identity".to_string(),
+        paiwei_level: None,
+    };
+    content_native_loader::elo_apply_engine_config(&mut engine, &cfg, &query);
+    engine
+}
+
+fn find_card_of_kind(
+    engine: &engine_native::Engine,
+    kind: engine_native::catalog::CardKind,
+) -> engine_native::ids::CardId {
+    engine
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.kind == kind)
+        .expect("card kind exists") as engine_native::ids::CardId
+}
+
+fn submit_action(
+    engine: &mut engine_native::Engine,
+    dedup: &mut u64,
+    actor: u8,
+    action: engine_native::GameAction,
+) {
+    *dedup += 1;
+    let outcome = engine.submit(engine_native::GameCommand {
+        actor,
+        expected_revision: engine.revision(),
+        dedup_id: *dedup,
+        action,
+    });
+    assert!(
+        !matches!(outcome, engine_native::CommandOutcome::Rejected(_)),
+        "unexpected rejection: {outcome:?}"
+    );
+}
+
+fn advance_to_play_phase(engine: &mut engine_native::Engine, dedup: &mut u64, seat: u8) {
+    for _ in 0..24 {
+        if engine.turn().current == seat
+            && engine.turn().phase == engine_native::event::Phase::Play
+            && engine.open_choice().is_none()
+        {
+            return;
+        }
+        if let Some(ch) = engine.open_choice().cloned() {
+            let sel: Vec<engine_native::ChoiceOption> = ch
+                .spec
+                .options
+                .iter()
+                .take(ch.spec.min as usize)
+                .copied()
+                .collect();
+            submit_action(
+                engine,
+                dedup,
+                ch.observer,
+                engine_native::GameAction::Answer {
+                    choice_id: ch.id,
+                    selection: sel,
+                },
+            );
+        } else {
+            let cur = engine.turn().current;
+            submit_action(engine, dedup, cur, engine_native::GameAction::NextPhase);
+        }
+    }
+}
+
+/// Dimension ①: Trigger timing & negative conditions across all 8 L22 items in real Engine matches.
+#[test]
+fn l22_dim1_trigger_timing_and_negative_conditions_real_match() {
+    use engine_native::catalog::CardKind;
+    use engine_native::kernel::{
+        elo_get_global_scalar, elo_get_player_scalar, elo_is_card_known, elo_on_phase_before,
+        elo_set_card_known, elo_set_global_scalar, elo_set_player_scalar, elo_try_init_cards,
+        elo_try_init_mechanism, L22_ELO_SKILLS,
+    };
+
+    let mut engine = new_l22_engine(101, 2, "normal", "none", true);
+    let mut dedup = 0u64;
+
+    // Verify all 5 L22 skills are registered in catalog and granted to all seats via extension_global_skills.
+    for &(skill_name, expected_ev) in &L22_ELO_SKILLS {
+        let def = engine
+            .catalog()
+            .skill_by_name(skill_name)
+            .unwrap_or_else(|| panic!("missing L22 skill {skill_name}"));
+        assert_eq!(
+            engine.catalog().skills[def as usize]
+                .trigger
+                .as_ref()
+                .unwrap()
+                .event,
+            expected_ev
+        );
+        assert!(engine.state_core().has_skill(0, def));
+        assert!(engine.state_core().has_skill(1, def));
+    }
+
+    // 1. `_eloMechanism` triggered once on `gameStart` for `game.me` (seat 0), usable: 1.
+    assert_eq!(elo_get_global_scalar(engine.state_core(), "elo_has_init_function"), Some(1));
+    assert_eq!(elo_get_player_scalar(engine.state_core(), 0, "elo_mechanism_init_count"), Some(1));
+    assert_eq!(elo_get_player_scalar(engine.state_core(), 1, "elo_mechanism_init_count"), None);
+    // Negative: calling `elo_try_init_mechanism` again on seat 0 or seat 1 returns false.
+    let cat = engine.catalog().clone();
+    assert!(!elo_try_init_mechanism(engine.state_core_mut(), &cat, 0));
+    assert!(!elo_try_init_mechanism(engine.state_core_mut(), &cat, 1));
+    assert_eq!(elo_get_player_scalar(engine.state_core(), 0, "elo_mechanism_init_count"), Some(1));
+
+    // 2. `_eloInitCards` marked initial hand cards of seat 0 and seat 1 at gameStart (`enterGame`).
+    for seat in [0u8, 1u8] {
+        assert_eq!(elo_get_player_scalar(engine.state_core(), seat, "elo_init_cards_count"), Some(4));
+        for &c in &engine.state_core().player(seat).hand {
+            assert!(elo_is_card_known(engine.state_core(), c));
+        }
+    }
+    // Negative: when `phase_number > 0`, `phaseBefore` does NOT mark newly added unknown hand cards.
+    let extra_card = engine.state_core_mut().deck.pop().unwrap();
+    elo_set_card_known(engine.state_core_mut(), extra_card, false);
+    engine.state_core_mut().player_mut(0).hand.push(extra_card);
+    engine.state_core_mut().turn.phase_number = 1;
+    elo_on_phase_before(engine.state_core_mut(), &cat, 0);
+    assert!(!elo_is_card_known(engine.state_core(), extra_card));
+    engine.state_core_mut().player_mut(0).hand.pop();
+    engine.state_core_mut().deck.push(extra_card);
+
+    // Negative: when `hand` and `equips` are empty (even if `judge` area has a card), `_eloInitCards` returns 0.
+    let saved_hand = std::mem::take(&mut engine.state_core_mut().player_mut(1).hand);
+    let judge_dummy = engine.state_core_mut().deck.pop().unwrap();
+    elo_set_card_known(engine.state_core_mut(), judge_dummy, false);
+    engine.state_core_mut().player_mut(1).judge.push(judge_dummy);
+    engine.state_core_mut().turn.phase_number = 0;
+    assert_eq!(elo_try_init_cards(engine.state_core_mut(), &cat, 1, true), 0);
+    assert!(!elo_is_card_known(engine.state_core(), judge_dummy));
+    engine.state_core_mut().player_mut(1).judge.pop();
+    engine.state_core_mut().deck.push(judge_dummy);
+    engine.state_core_mut().player_mut(1).hand = saved_hand;
+
+    // 3. Negative for `_eloDraw` and `_timeKiller`: under `eloDifficulty: "normal"` (`eh == 0`) and `timeKiller: "none"`,
+    // stepping through Judge/Draw/Play phases triggers neither `_eloDraw` nor `_timeKiller`.
+    let deck_top_two_before: Vec<u32> = engine
+        .state_core()
+        .deck
+        .iter()
+        .rev()
+        .take(2)
+        .copied()
+        .collect();
+    advance_to_play_phase(&mut engine, &mut dedup, 0);
+    assert_eq!(elo_get_player_scalar(engine.state_core(), 0, "elo_draw_triggers"), None);
+    assert_eq!(elo_get_player_scalar(engine.state_core(), 0, "elo_judge_triggers"), None);
+    assert_eq!(elo_get_player_scalar(engine.state_core(), 0, "elo_time_killer_triggers"), None);
+    let drawn_two: Vec<u32> = engine.state_core().player(0).hand.iter().rev().take(2).copied().collect();
+    // Since two cards were popped in order, the last drawn is deck_top_two_before[1] and second-to-last is [0].
+    assert_eq!(drawn_two, vec![deck_top_two_before[1], deck_top_two_before[0]]);
+
+    // 4. Negative for `_eloHandcard`:
+    // - When `source == game.me` (seat 0), or `diff < 3` ("hard", diff = 2), or `diff == 3` ("vhard") with roll = 0,
+    //   `Dismantle` does NOT set `elo_handcard_visible = 1` and picks target's first hand card (`Sha`) instead of `Tao`.
+    let cfg_vhard = content_native_loader::EloConfig {
+        source: "noname-liuli".to_string(),
+        elo_players: true,
+        difficulty: "vhard".to_string(),
+        time_killer: "heavy".to_string(),
+    };
+    // Offline query disables both `paiwei` and `timeKiller`.
+    content_native_loader::elo_apply_engine_config(
+        &mut engine,
+        &cfg_vhard,
+        &EloQuery {
+            online: false,
+            mode: "identity".to_string(),
+            paiwei_level: None,
+        },
+    );
+    // Advance to seat 1's Play phase; with `online: false`, `_timeKiller` must NOT trigger on seat 1.
+    submit_action(&mut engine, &mut dedup, 0, engine_native::GameAction::NextPhase);
+    advance_to_play_phase(&mut engine, &mut dedup, 1);
+    assert_eq!(elo_get_player_scalar(engine.state_core(), 1, "elo_time_killer_triggers"), None);
+
+    // Set `elo_handcard_roll = 0` on seat 1 under `vhard` (`diff = 3`, `eh = -1`): 2/3 roll miss -> blind first card (`Sha`).
+    elo_set_global_scalar(engine.state_core_mut(), "elo_online", 1);
+    elo_set_player_scalar(engine.state_core_mut(), 1, "elo_handcard_roll", 0);
+    let sha_id = find_card_of_kind(&engine, CardKind::Sha);
+    let tao_id = find_card_of_kind(&engine, CardKind::Tao);
+    let dismantle_id = find_card_of_kind(&engine, CardKind::Dismantle);
+    engine.state_core_mut().player_mut(0).hand = vec![sha_id, tao_id];
+    engine.state_core_mut().player_mut(1).hand = vec![dismantle_id];
+    submit_action(
+        &mut engine,
+        &mut dedup,
+        1,
+        engine_native::GameAction::PlayCard {
+            card: dismantle_id,
+            targets: vec![0],
+        },
+    );
+    assert_eq!(elo_get_player_scalar(engine.state_core(), 1, "elo_handcard_visible"), Some(0));
+    assert_eq!(engine.state_core().player(0).hand, vec![tao_id], "blind pick must discard index 0 (Sha), leaving Tao");
+}
+
+/// Dimension ②: Target / tier filter & window limits across all `eloDifficulty` tiers,
+/// `eloPlayers` scopes, and `_eloDraw` (`drawBegin` & `judgeBegin`) in real matches.
+#[test]
+fn l22_dim2_tier_filters_and_window_limits_real_match() {
+    use engine_native::catalog::{CardKind, Suit};
+    use engine_native::kernel::{
+        elo_get_player_scalar, elo_is_card_known, elo_mark_deck_insert, elo_on_draw_begin,
+        elo_on_judge_begin, elo_set_card_known,
+    };
+
+    // 1. Enemy draw in `ehard` (`diff = 4`, `eh = -1`):
+    // Top `2 * 4 = 8` cards are reordered so unknown high-value cards move to top while `isEloKnown` slot stays locked!
+    let mut engine = new_l22_engine(202, 2, "ehard", "none", true);
+    let cat = engine.catalog().clone();
+
+    let tao_id = find_card_of_kind(&engine, CardKind::Tao);
+    let snatch_id = find_card_of_kind(&engine, CardKind::Snatch);
+    let shandian_id = find_card_of_kind(&engine, CardKind::ShanDian);
+    let chain_id = find_card_of_kind(&engine, CardKind::Chain);
+    let sha_cards: Vec<u32> = engine
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .filter(|(_, c)| c.kind == CardKind::Sha)
+        .take(4)
+        .map(|(i, _)| i as u32)
+        .collect();
+
+    // Build top 8 cards on `core.deck` (remember: `deck.last()` is top[0], `deck[len - 8]` is top[7]):
+    // Put `shandian_id` at top[0] (marked as `isEloKnown` via `elo_mark_deck_insert`),
+    // `chain_id` at top[1] (unknown), `sha_cards` at top[2..6] (unknown), and `tao_id`, `snatch_id` at top[6], top[7] (unknown).
+    for &c in &[tao_id, snatch_id, shandian_id, chain_id] {
+        elo_set_card_known(engine.state_core_mut(), c, false);
+    }
+    for &c in &sha_cards {
+        elo_set_card_known(engine.state_core_mut(), c, false);
+    }
+    let top_eight_in_draw_order = [
+        shandian_id, // top[0]: known (locked!)
+        chain_id,    // top[1]: unknown (low value 55)
+        sha_cards[0],
+        sha_cards[1],
+        sha_cards[2],
+        sha_cards[3],
+        snatch_id, // top[6]: unknown (value 80)
+        tao_id,    // top[7]: unknown (value 90)
+    ];
+    engine
+        .state_core_mut()
+        .deck
+        .retain(|c| !top_eight_in_draw_order.contains(c));
+    for &c in top_eight_in_draw_order.iter().rev() {
+        engine.state_core_mut().deck.push(c);
+    }
+    // Mark `shandian_id` via `_eloMechanism`'s deck-insert hook (`no_mark = false`).
+    elo_mark_deck_insert(engine.state_core_mut(), shandian_id, false);
+    assert!(elo_is_card_known(engine.state_core(), shandian_id));
+
+    // Trigger `_eloDraw` for enemy `seat 1` drawing 2 cards (`window = 2 * 4 = 8`):
+    let sorted_n = elo_on_draw_begin(engine.state_core_mut(), &cat, 1, 2);
+    assert_eq!(sorted_n, 8);
+    assert_eq!(elo_get_player_scalar(engine.state_core(), 1, "elo_draw_last_window"), Some(8));
+    let deck_len = engine.state_core().deck.len();
+    // Slot 0 (`deck[deck_len - 1]`) was `isEloKnown`, so `shandian_id` stays locked at slot 0!
+    // Slot 1 (`deck[deck_len - 2]`) and Slot 2 (`deck[deck_len - 3]`) receive `tao_id` (90) and `snatch_id` (80)!
+    assert_eq!(engine.state_core().deck[deck_len - 1], shandian_id);
+    assert_eq!(engine.state_core().deck[deck_len - 2], tao_id);
+    assert_eq!(engine.state_core().deck[deck_len - 3], snatch_id);
+    // Reordered cards must NOT be marked `isEloKnown` (`noMark = true`).
+    assert!(!elo_is_card_known(engine.state_core(), tao_id));
+    assert!(!elo_is_card_known(engine.state_core(), snatch_id));
+
+    // Now test `game.me` (`seat 0`, friend) drawing 2 cards under `ehard` (`eh = -1`, `diff = 4`):
+    // Unlock `shandian_id` so all 8 are unknown; `seat 0` must get the WORST cards (`shandian_id` 30, `chain_id` 55) at top[0], top[1]!
+    elo_set_card_known(engine.state_core_mut(), shandian_id, false);
+    let _ = elo_on_draw_begin(engine.state_core_mut(), &cat, 0, 2);
+    assert_eq!(engine.state_core().deck[deck_len - 1], shandian_id);
+    assert_eq!(engine.state_core().deck[deck_len - 2], chain_id);
+
+    // 2. Judge window (`judgeBegin`) for `ShanDian` on `seat 0` (`game.me`) vs `Le` on `seat 1` (enemy) under `ehard` (`diff = 4, eh = -1`):
+    let spade_bomb = engine
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.suit == Suit::Spade && (2..=9).contains(&c.rank))
+        .unwrap() as u32;
+    let safe_hearts: Vec<u32> = engine
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .filter(|(_, c)| c.suit == Suit::Heart)
+        .take(3)
+        .map(|(i, _)| i as u32)
+        .collect();
+    for &c in std::iter::once(&spade_bomb).chain(safe_hearts.iter()) {
+        elo_set_card_known(engine.state_core_mut(), c, false);
+    }
+    // Put 3 safe hearts at top[0..3] and `spade_bomb` at top[3] (4th card from top).
+    let judge_four = [safe_hearts[0], safe_hearts[1], safe_hearts[2], spade_bomb];
+    engine.state_core_mut().deck.retain(|c| !judge_four.contains(c));
+    for &c in judge_four.iter().rev() {
+        engine.state_core_mut().deck.push(c);
+    }
+    // Under `ehard` (`eh = -1`), when `seat 0` (`game.me`) judges `ShanDian`, `_eloDraw` moves `spade_bomb` (-50) to top[0]!
+    let j_window = elo_on_judge_begin(engine.state_core_mut(), &cat, 0, CardKind::ShanDian);
+    assert_eq!(j_window, 4);
+    let dlen = engine.state_core().deck.len();
+    assert_eq!(
+        engine.state_core().deck[dlen - 1],
+        spade_bomb,
+        "ehard sanctions game.me by moving Spade 2..9 lightning hit to top of deck"
+    );
+
+    // Conversely, when enemy `seat 1` judges `Le` with `spade_bomb` at top[0] and `safe_hearts[0]` at top[3],
+    // `_eloDraw` moves `safe_hearts[0]` (+20) to top[0] so enemy passes `Le`!
+    let le_four = [spade_bomb, safe_hearts[0], safe_hearts[1], safe_hearts[2]];
+    engine.state_core_mut().deck.retain(|c| !le_four.contains(c));
+    for &c in le_four.iter().rev() {
+        engine.state_core_mut().deck.push(c);
+    }
+    let _ = elo_on_judge_begin(engine.state_core_mut(), &cat, 1, CardKind::Le);
+    assert_eq!(
+        engine.catalog().cards[engine.state_core().deck[dlen - 1] as usize].suit,
+        Suit::Heart,
+        "ehard helps enemy pass Lebusishu by placing Heart at top of deck"
+    );
+}
+
+/// Dimension ③: Player choice / action window interaction (`_eloHandcard` visible extraction
+/// and `_timeKiller` turn choice timer delay & `zuan` chat lines in real match windows).
+#[test]
+fn l22_dim3_choice_and_action_windows_handcard_and_time_killer() {
+    use engine_native::catalog::CardKind;
+    use engine_native::kernel::{
+        elo_get_player_scalar, elo_set_global_scalar, elo_set_player_scalar,
+    };
+
+    let mut engine = new_l22_engine(303, 2, "ehard", "heavy", true);
+    let mut dedup = 0u64;
+    elo_set_global_scalar(engine.state_core_mut(), "elo_zuan_enable", 1);
+    elo_set_player_scalar(engine.state_core_mut(), 1, "elo_time_killer_ran_permille", 800);
+    elo_set_player_scalar(engine.state_core_mut(), 1, "elo_time_killer_chat_idx", 2);
+    elo_set_player_scalar(engine.state_core_mut(), 1, "elo_sex_female", 1);
+
+    // Advance through seat 0's turn to seat 1's Play phase.
+    advance_to_play_phase(&mut engine, &mut dedup, 0);
+    submit_action(&mut engine, &mut dedup, 0, engine_native::GameAction::NextPhase);
+    advance_to_play_phase(&mut engine, &mut dedup, 1);
+
+    // Entering seat 1's Play phase (`chooseToUseBefore`) triggered `_timeKiller` for AI seat 1:
+    // `delay_ms = (3 * 1500 * 800) / 1000 = 3600`, and female chat line 2 (`ran >= 750`).
+    assert_eq!(
+        elo_get_player_scalar(engine.state_core(), 1, "elo_time_killer_delay_ms"),
+        Some(3600)
+    );
+    assert_eq!(
+        elo_get_player_scalar(engine.state_core(), 1, "elo_time_killer_chat_female"),
+        Some(2)
+    );
+    let tk_before = elo_get_player_scalar(engine.state_core(), 1, "elo_time_killer_triggers").unwrap_or(0);
+    assert!(tk_before >= 1);
+
+    // Seat 0 (`game.me`) has `[Sha (index 0, value 60), Tao (index 1, value 90)]`.
+    // Seat 1 (enemy AI) plays `Snatch` (`ShunShou`) on seat 0.
+    // Under `ehard` (`diff = 4, eh = -1`), `_eloHandcard` sets `elo_handcard_visible = 1`
+    // and extracts `Tao` (index 1) instead of blind `Sha` (index 0)!
+    let sha_id = find_card_of_kind(&engine, CardKind::Sha);
+    let tao_id = find_card_of_kind(&engine, CardKind::Tao);
+    let snatch_id = find_card_of_kind(&engine, CardKind::Snatch);
+    engine.state_core_mut().player_mut(0).hand = vec![sha_id, tao_id];
+    engine.state_core_mut().player_mut(1).hand = vec![snatch_id];
+
+    submit_action(
+        &mut engine,
+        &mut dedup,
+        1,
+        engine_native::GameAction::PlayCard {
+            card: snatch_id,
+            targets: vec![0],
+        },
+    );
+
+    assert_eq!(
+        elo_get_player_scalar(engine.state_core(), 1, "elo_handcard_visible"),
+        Some(1)
+    );
+    assert_eq!(
+        elo_get_player_scalar(engine.state_core(), 1, "elo_handcard_triggers"),
+        Some(1)
+    );
+    assert_eq!(
+        engine.state_core().player(0).hand,
+        vec![sha_id],
+        "Tao (index 1) must be extracted by _eloHandcard visibility, leaving Sha (index 0)"
+    );
+    assert!(
+        engine.state_core().player(1).hand.contains(&tao_id),
+        "seat 1 must gain Tao from Snatch"
+    );
+
+    // Now give seat 1 extra hand cards above its HP (e.g. 6 cards vs 4 HP) and advance to Discard phase:
+    // Opening the `discard_cards` choice window on seat 1 triggers `_timeKiller` (`chooseToDiscardBefore`).
+    let extra_cards: Vec<u32> = engine.state_core_mut().deck.drain(..5).collect();
+    engine.state_core_mut().player_mut(1).hand.extend(extra_cards);
+    elo_set_player_scalar(engine.state_core_mut(), 1, "elo_sex_female", 0);
+    elo_set_player_scalar(engine.state_core_mut(), 1, "elo_time_killer_ran_permille", 900);
+    let tk_pre_discard =
+        elo_get_player_scalar(engine.state_core(), 1, "elo_time_killer_triggers").unwrap_or(0);
+    submit_action(&mut engine, &mut dedup, 1, engine_native::GameAction::NextPhase);
+    assert!(engine.open_choice().is_some(), "seat 1 must open discard choice window");
+    let tk_post_discard =
+        elo_get_player_scalar(engine.state_core(), 1, "elo_time_killer_triggers").unwrap_or(0);
+    assert!(tk_post_discard > tk_pre_discard);
+    assert_eq!(
+        elo_get_player_scalar(engine.state_core(), 1, "elo_time_killer_delay_ms"),
+        Some((3 * 1500 * 900) / 1000)
+    );
+    assert_eq!(
+        elo_get_player_scalar(engine.state_core(), 1, "elo_time_killer_chat_male"),
+        Some(2)
+    );
+}
+
+/// Dimension ④: Multi-step state changes across a real match turn (`GameStart` `_eloMechanism` +
+/// `_eloInitCards` -> `Phase::Judge` `_eloDraw` -> `Phase::Draw` `_eloDraw` -> `Phase::Play`
+/// `_eloHandcard` + `_timeKiller` -> deck exhaustion `washCard` clearing `isEloKnown`).
+#[test]
+fn l22_dim4_multi_step_turn_chain_and_wash_deck_real_match() {
+    use engine_native::catalog::{CardKind, Suit};
+    use engine_native::kernel::{
+        elo_get_global_scalar, elo_get_player_scalar, elo_is_card_known, elo_set_card_known,
+    };
+
+    let mut engine = new_l22_engine(404, 2, "eeasy", "light", true);
+    let mut dedup = 0u64;
+    // Advance to seat 1's Play phase so the next turn transition enters seat 0's `Phase::Judge (begin: true)` from scratch.
+    advance_to_play_phase(&mut engine, &mut dedup, 0);
+    submit_action(&mut engine, &mut dedup, 0, engine_native::GameAction::NextPhase);
+    advance_to_play_phase(&mut engine, &mut dedup, 1);
+
+    // In `eeasy` (`diff = 4, eh = 1`), `seat 0` (`game.me`) is helped:
+    // - `Phase::Judge` on `Le` places a Heart card at top of deck so `seat 0` passes `Le` and enters `Phase::Play`.
+    // - `Phase::Draw` places the highest-value unknown cards (`Tao`, `Snatch`) at top of deck for `seat 0`.
+    let le_id = find_card_of_kind(&engine, CardKind::Le);
+    let heart_judge = engine
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.suit == Suit::Heart && c.kind == CardKind::Sha)
+        .unwrap() as u32;
+    let spade_judge = engine
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.suit == Suit::Spade && c.kind == CardKind::Sha)
+        .unwrap() as u32;
+    let tao_id = find_card_of_kind(&engine, CardKind::Tao);
+    let snatch_id = find_card_of_kind(&engine, CardKind::Snatch);
+    let chain_id = find_card_of_kind(&engine, CardKind::Chain);
+
+    for &c in &[heart_judge, spade_judge, tao_id, snatch_id, chain_id, le_id] {
+        elo_set_card_known(engine.state_core_mut(), c, false);
+        engine.state_core_mut().deck.retain(|&x| x != c);
+        engine.state_core_mut().discard.retain(|&x| x != c);
+        for p in 0..2 {
+            engine.state_core_mut().player_mut(p).hand.retain(|&x| x != c);
+        }
+    }
+    // Put `Le` in seat 0's judge area.
+    engine.state_core_mut().player_mut(0).judge.push(le_id);
+
+    // Arrange top of deck:
+    // For Judge (`window = 4`): `spade_judge` at top[0], `heart_judge` at top[1], `chain_id` at top[2], `tao_id` at top[3], `snatch_id` at top[4].
+    // `_eloDraw` `judgeBegin` will move `heart_judge` (+20) to top[0] so `Le` passes!
+    // Then `Phase::Draw` (`window = 2 * 4 = 8`) will move `tao_id` (90) and `snatch_id` (80) to top[0..2] so `seat 0` draws both!
+    let top_five = [spade_judge, heart_judge, chain_id, tao_id, snatch_id];
+    for &c in top_five.iter().rev() {
+        engine.state_core_mut().deck.push(c);
+    }
+
+    submit_action(&mut engine, &mut dedup, 1, engine_native::GameAction::NextPhase);
+    advance_to_play_phase(&mut engine, &mut dedup, 0);
+    assert_eq!(engine.turn().current, 0);
+    assert_eq!(engine.turn().phase, engine_native::event::Phase::Play);
+    assert_eq!(elo_get_player_scalar(engine.state_core(), 0, "elo_judge_triggers"), Some(1));
+    assert_eq!(elo_get_player_scalar(engine.state_core(), 0, "elo_draw_triggers"), Some(2));
+    assert!(engine.state_core().player(0).hand.contains(&tao_id));
+    assert!(engine.state_core().player(0).hand.contains(&snatch_id));
+
+    // Now test `_eloMechanism`'s `washCard` hook during a real draw when `core.deck` is empty and `core.discard` has `isEloKnown` cards!
+    let discard_cards: Vec<u32> = engine.state_core_mut().deck.drain(..).collect();
+    for &c in &discard_cards {
+        elo_set_card_known(engine.state_core_mut(), c, true);
+    }
+    engine.state_core_mut().discard.extend(discard_cards.iter().copied());
+    assert!(elo_is_card_known(engine.state_core(), discard_cards[0]));
+
+    // Advance to seat 1's turn so seat 1's `Phase::Draw` triggers a deck reshuffle (`washCard`)!
+    submit_action(&mut engine, &mut dedup, 0, engine_native::GameAction::NextPhase);
+    advance_to_play_phase(&mut engine, &mut dedup, 1);
+
+    assert_eq!(
+        elo_get_global_scalar(engine.state_core(), "elo_wash_count"),
+        Some(1),
+        "reshuffling discard into deck must trigger _eloMechanism washCard hook"
+    );
+    for &c in &discard_cards {
+        assert!(
+            !elo_is_card_known(engine.state_core(), c),
+            "washCard must clear isEloKnown on all reshuffled cards"
+        );
+    }
+}
+
+/// Dimension ⑤: Archive save/restore (`encode_archive` -> `decode_archive` -> `restore_with_extensions`)
+/// preserves all L22 state, `isEloKnown` marks, config tiers, and deterministic `state_hash`.
+#[test]
+fn l22_dim5_archive_save_restore_preserves_l22_state_and_hash() {
+    use engine_native::archive::{decode_archive, encode_archive};
+    use engine_native::catalog::CardKind;
+    use engine_native::kernel::{
+        elo_get_global_scalar, elo_get_player_scalar, elo_is_card_known, elo_mark_deck_insert,
+    };
+
+    let pack = content_native_loader::elo_sanction_extension_pack();
+    let packs = [&pack];
+    let mut engine = new_l22_engine(505, 2, "ehard", "middle", true);
+    let mut dedup = 0u64;
+    advance_to_play_phase(&mut engine, &mut dedup, 0);
+
+    let marked_card = engine.state_core().deck[0];
+    elo_mark_deck_insert(engine.state_core_mut(), marked_card, false);
+    assert!(elo_is_card_known(engine.state_core(), marked_card));
+
+    let hash_before = engine.state_hash();
+    let snap = engine.save();
+    let bytes = encode_archive(&snap);
+    let decoded = decode_archive(&bytes).expect("decode l22 archive");
+    let mut restored =
+        engine_native::Engine::restore_with_extensions(&decoded, &packs).expect("restore l22 engine");
+
+    assert_eq!(restored.state_hash(), hash_before);
+    assert_eq!(elo_get_global_scalar(restored.state_core(), "elo_has_init_function"), Some(1));
+    assert_eq!(elo_get_global_scalar(restored.state_core(), "elo_eh"), Some(-1));
+    assert_eq!(elo_get_global_scalar(restored.state_core(), "elo_difficulty_val"), Some(4));
+    assert_eq!(elo_get_global_scalar(restored.state_core(), "elo_time_killer_val"), Some(2));
+    assert!(elo_is_card_known(restored.state_core(), marked_card));
+
+    // Step both `engine` and `restored` through seat 1's turn with a `Dismantle` (`_eloHandcard`) and verify identical `state_hash`.
+    let sha_id = find_card_of_kind(&engine, CardKind::Sha);
+    let tao_id = find_card_of_kind(&engine, CardKind::Tao);
+    let dismantle_id = find_card_of_kind(&engine, CardKind::Dismantle);
+
+    let base_dedup = dedup;
+    for e in [&mut engine, &mut restored] {
+        let mut d = base_dedup;
+        submit_action(e, &mut d, 0, engine_native::GameAction::NextPhase);
+        advance_to_play_phase(e, &mut d, 1);
+        e.state_core_mut().player_mut(0).hand = vec![sha_id, tao_id];
+        e.state_core_mut().player_mut(1).hand = vec![dismantle_id];
+        submit_action(
+            e,
+            &mut d,
+            1,
+            engine_native::GameAction::PlayCard {
+                card: dismantle_id,
+                targets: vec![0],
+            },
+        );
+    }
+
+    assert_eq!(
+        elo_get_player_scalar(restored.state_core(), 1, "elo_handcard_visible"),
+        Some(1)
+    );
+    assert_eq!(restored.state_core().player(0).hand, vec![sha_id]);
+    assert_eq!(restored.state_hash(), engine.state_hash());
+}
+
+/// Dimension ⑥: AI `BoundedPlanner` in an L22-enabled Identity match completes legally
+/// without reading unrevealed identities/cards or leaking `elo_known:*` deck knowledge.
+#[test]
+fn l22_dim6_ai_bounded_planner_advise_redacts_elo_known_and_completes_legally() {
+    use engine_native::ai::{redact_opponent_hands, BoundedPlanner};
+    use engine_native::kernel::elo_is_card_known;
+
+    let mut engine = new_l22_engine(606, 4, "ehard", "middle", true);
+    let mut dedup = 0u64;
+
+    // Precondition: initial hand cards are marked `elo_known:*` in authoritative engine state.
+    let seat0_card = engine.state_core().player(0).hand[0];
+    assert!(elo_is_card_known(engine.state_core(), seat0_card));
+
+    // Verify `redact_opponent_hands` scrubs `elo_known:*` for ALL seats (including seat 0!).
+    for observer in 0..4u8 {
+        let mut redacted = engine.clone();
+        redact_opponent_hands(&mut redacted, observer);
+        assert!(
+            !redacted
+                .state_core()
+                .vm_aux
+                .flags
+                .keys()
+                .any(|(_, k)| k.starts_with("elo_known:")),
+            "observer {observer} redacted view must not retain elo_known:* marks"
+        );
+    }
+
+    // Step through real match decisions using `BoundedPlanner` and verify every advised action is legal.
+    let planner = BoundedPlanner::new(32);
+    for _ in 0..12 {
+        if engine.outcome().is_some() {
+            break;
+        }
+        let actor = engine
+            .open_choice()
+            .map(|c| c.observer)
+            .unwrap_or_else(|| engine.turn().current);
+        let hash_before = engine.state_hash();
+        let plan = engine.plan_action(actor, &planner);
+        assert_eq!(
+            engine.state_hash(),
+            hash_before,
+            "BoundedPlanner must not mutate authoritative engine state"
+        );
+        submit_action(&mut engine, &mut dedup, actor, plan.action);
+    }
+}
+
