@@ -998,6 +998,7 @@ pub(crate) fn active_ask_host(
         | HostBehavior::WudianDiaobingCard
         | HostBehavior::MbcmJiushi
         | HostBehavior::MbcmFangzhu
+        | HostBehavior::KDanggu | HostBehavior::KMowang | HostBehavior::Reguhuo | HostBehavior::Rangjie
         | HostBehavior::WudianZhuchengGuard
         | HostBehavior::WudianDiyjuntun => {
             active_ask_wudian(behavior, stage, owner, target, targets, cards, core, catalog)

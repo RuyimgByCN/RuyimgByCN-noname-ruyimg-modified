@@ -276,31 +276,67 @@ fn l10_shichangshi_k_danggu_and_k_mowang_roster_lifecycle_and_save_restore() {
     e.debug_assemble_general_def(0, scs);
     assert_eq!(e.state_core().player(0).max_hp, 1);
 
-    // Real RuleVm TurnBegin trigger: advancing from GameStart into seat 0's TurnBegin
-    // automatically triggers k_danggu#d34 in RuleVm!
-    next_phase(&mut e);
-    assert_eq!(flag(&e, 0, "k_danggu_roster_mask"), 0x3FF);
-    assert_eq!(flag(&e, 0, "k_danggu_active_eunuch"), 1);
+    // 1. First Phase { begin: true } triggers HostBehavior::KDanggu -> opens "k_danggu_partner" PickTag choice
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::NextPhase,
+    });
+    assert!(matches!(out, CommandOutcome::Pending { .. }), "{out:?}");
+    let c = e.open_choice().expect("k_danggu_partner choice").clone();
+    assert_eq!(c.spec.prompt, "k_danggu_partner");
+    assert_eq!(flag(&e, 0, "k_danggu_inited"), 1);
+    assert_eq!(flag(&e, 0, "k_danggu_roster_mask").count_ones(), 9);
+
+    // Save/restore while "k_danggu_partner" choice is open
+    let pending_snap = e.save();
+    let pending_bytes = engine_native::archive::encode_archive(&pending_snap);
+    let pending_decoded =
+        engine_native::archive::decode_archive(&pending_bytes).expect("decode pending archive");
+    let mut e = Engine::restore_with_extensions(&pending_decoded, &[&epic_pack, &d34_pack])
+        .expect("restore pending");
+    let chosen_opt = c.spec.options[0];
+    let out = e.submit(GameCommand {
+        actor: c.observer,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: c.id,
+            selection: vec![chosen_opt],
+        },
+    });
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "{out:?}"
+    );
+    drain(&mut e);
+    assert_eq!(flag(&e, 0, "k_danggu_roster_mask").count_ones(), 8);
+    assert_eq!(flag(&e, 0, "k_danggu_active_mask").count_ones(), 2);
     assert_eq!(flag(&e, 0, "k_danggu_triggered"), 1);
 
-    // Real RuleVm Dying trigger: dealing 1 fatal damage to shichangshi (seat 0, 1 HP -> 0 HP)
-    // emits EventData::Dying, which automatically triggers k_mowang#d34 in RuleVm,
-    // retiring eunuch #1, reviving player 0 to 1 HP, clearing dying, and rotating to eunuch #2!
+    // 2. Fatal damage triggers HostBehavior::KMowang (Dying): enters rest, recovers hp=1,
+    //    clears linked/face_down, revokes companion skills, and discards all cards.
+    e.state_core_mut().player_mut(0).linked = true;
+    e.state_core_mut().player_mut(0).face_down = true;
     let _ = e.debug_deal_damage(Some(1), 0, 1, DamageNature::Normal);
     drain(&mut e);
-    assert_eq!(flag(&e, 0, "k_danggu_roster_mask"), 0x3FE);
-    assert_eq!(flag(&e, 0, "k_danggu_active_eunuch"), 2);
+    assert_eq!(flag(&e, 0, "k_mowang_resting"), 1);
     assert_eq!(flag(&e, 0, "k_mowang_revived"), 1);
+    assert_eq!(flag(&e, 0, "k_danggu_active_mask"), 0);
     assert_eq!(e.state_core().player(0).hp, 1);
     assert!(!e.state_core().player(0).dying);
+    assert!(!e.state_core().player(0).linked);
+    assert!(!e.state_core().player(0).face_down);
+    assert!(e.debug_hand(0).is_empty());
 
     let snap = e.save();
     let bytes = engine_native::archive::encode_archive(&snap);
     let decoded = engine_native::archive::decode_archive(&bytes).expect("decode_archive");
     let restored = Engine::restore_with_extensions(&decoded, &[&epic_pack, &d34_pack])
         .expect("restore_with_extensions");
-    assert_eq!(flag(&restored, 0, "k_danggu_roster_mask"), 0x3FE);
-    assert_eq!(flag(&restored, 0, "k_danggu_active_eunuch"), 2);
+    assert_eq!(flag(&restored, 0, "k_danggu_roster_mask").count_ones(), 8);
+    assert_eq!(flag(&restored, 0, "k_mowang_resting"), 1);
 }
 
 #[test]

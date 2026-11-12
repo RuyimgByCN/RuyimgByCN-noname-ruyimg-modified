@@ -157,6 +157,24 @@ impl HostBehavior {
             }),
             // 放逐 / 决进：出牌阶段主动（activate 分支；无触发时机）
             HostBehavior::MbcmFangzhu | HostBehavior::MbJuejin => None,
+            // 党锢（L10 史诗卡牌）：开局首阶段与修整归来准备阶段结党
+            HostBehavior::KDanggu => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                order_selectable: true,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 殁亡（L10 史诗卡牌）：濒死修整、准备阶段归来、结束阶段后崩解
+            HostBehavior::KMowang => Some(TriggerMeta {
+                event: EventKind::Dying,
+                timing: Timing::Normal,
+                priority: 15,
+                order_selectable: false,
+                optional: false,
+                extra_events: vec![EventKind::PhaseBegin, EventKind::PhaseEnd],
+            }),
             // 烈弓：被动（杀机器内联，无触发时机）
             HostBehavior::FzLiegong => None,
             // 狂骨：自己造成伤害后（可选）

@@ -816,7 +816,10 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
         // cards.json 面暂无内置引用需求：Deferred/Builtin 均跳过
         let mapped = match mapping_of(sk, "skills[].mapping")? {
             MappedSkill::Deferred
-                if matches!(key, "mbcmjiushi" | "mbcmfangzhu" | "mbjuejin") =>
+                if matches!(
+                    key,
+                    "mbcmjiushi" | "mbcmfangzhu" | "mbjuejin" | "k_danggu" | "k_mowang"
+                ) =>
             {
                 match host_skill_bindings::lookup_upstream_host_behavior(key) {
                     Some(b) => MappedSkill::Host(b),
@@ -864,6 +867,21 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
     let mut deferred = Vec::new();
     for d in opt_array(&parsed, "deferred", "deferred")? {
         deferred.push(req_str(d, "name", "deferred[].name")?.to_string());
+    }
+    if deferred.iter().any(|name| name == "shichangshi") {
+        for &(sk_name, behavior) in &[
+            ("k_danggu", HostBehavior::KDanggu),
+            ("k_mowang", HostBehavior::KMowang),
+        ] {
+            let interned = names::intern(sk_name.to_string());
+            if !host_skills.iter().any(|d| d.name == interned) {
+                host_skills.push(HostSkillDecl {
+                    name: interned,
+                    behavior,
+                    presentation_binding: None,
+                });
+            }
+        }
     }
 
     // generals 缺省为空：卡牌包合法；同文件声明的武将经同一 pack 段装载。

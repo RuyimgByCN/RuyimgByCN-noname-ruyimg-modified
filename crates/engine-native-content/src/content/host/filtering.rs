@@ -682,7 +682,9 @@ impl HostSkillBehavior {
             | HostBehavior::WudianDuoqi
             | HostBehavior::WudianYouzhan
             | HostBehavior::WudianChoudu
-            | HostBehavior::WudianDiaobingCard => self.filter_common(ctx, owner, event),
+            | HostBehavior::WudianDiaobingCard
+            | HostBehavior::KDanggu
+            | HostBehavior::KMowang => self.filter_common(ctx, owner, event),
             _ => false,
         }
     }

@@ -553,6 +553,8 @@ impl HostBehavior {
             HostBehavior::MbcmJiushi => 546,
             HostBehavior::MbcmFangzhu => 547,
             HostBehavior::MbJuejin => 548,
+            HostBehavior::KDanggu => 549,
+            HostBehavior::KMowang => 550,
         }
     }
 

@@ -1067,6 +1067,7 @@ impl HostMachine {
             | HostBehavior::WudianYouzhan
             | HostBehavior::WudianChoudu
             | HostBehavior::WudianDiaobingCard => self.step_wudian_cards(ctx),
+            HostBehavior::KDanggu | HostBehavior::KMowang => self.step_skills_recovery(ctx),
         }
     }
 }

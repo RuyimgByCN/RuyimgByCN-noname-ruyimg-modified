@@ -445,6 +445,21 @@ impl HostSkillBehavior {
                 EventData::CardUsed(u) => (Some(u.player), u.card),
                 _ => (None, None),
             },
+            // 殁亡（L10 史诗卡牌·extension.js:2677）：记录触发分支（0=濒死，1=准备阶段归来，2=结束阶段崩解）
+            HostBehavior::KMowang => match event {
+                EventData::Dying { .. } => (None, Some(0)),
+                EventData::Phase {
+                    phase: crate::event::Phase::Prepare,
+                    begin: true,
+                    ..
+                } => (None, Some(1)),
+                EventData::Phase {
+                    phase: crate::event::Phase::End,
+                    begin: false,
+                    ..
+                } => (None, Some(2)),
+                _ => (None, None),
+            },
             _ => (None, None),
         };
         let stage = match self.behavior {

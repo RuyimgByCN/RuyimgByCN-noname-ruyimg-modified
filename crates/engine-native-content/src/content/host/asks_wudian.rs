@@ -12,7 +12,7 @@ pub(super) fn active_ask_wudian(
     owner: PlayerId,
     target: Option<PlayerId>,
     _targets: &[PlayerId],
-    _cards: &[CardId],
+    cards: &[CardId],
     core: &GameStateCore,
     catalog: &Catalog,
 ) -> Option<ExpectedAsk> {
@@ -776,6 +776,119 @@ pub(super) fn active_ask_wudian(
                 1,
                 false,
             )),
+            _ => None,
+        },
+        HostBehavior::KDanggu | HostBehavior::KMowang => match stage {
+            HostStage::SelectNature => {
+                if cards.is_empty() {
+                    return None;
+                }
+                Some(ask(
+                    owner,
+                    crate::content::host::K_DANGGU_PARTNER,
+                    ChoiceKind::PickTag,
+                    cards
+                        .iter()
+                        .copied()
+                        .map(|t| ChoiceOption::Tag(t as u8))
+                        .collect(),
+                    1,
+                    1,
+                    false,
+                ))
+            }
+            _ => None,
+        },
+        HostBehavior::Reguhuo => match stage {
+            HostStage::SelectCard => {
+                let options: Vec<ChoiceOption> = core
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .copied()
+                    .map(ChoiceOption::Card)
+                    .collect();
+                if options.is_empty() {
+                    return None;
+                }
+                Some(ask(
+                    owner,
+                    "reguhuo_card",
+                    ChoiceKind::SelectCards,
+                    options,
+                    1,
+                    1,
+                    true,
+                ))
+            }
+            HostStage::SelectNature => Some(ask(
+                owner,
+                "reguhuo_name",
+                ChoiceKind::PickTag,
+                crate::content::host::support::reguhuo_kind_options(),
+                1,
+                1,
+                true,
+            )),
+            HostStage::TargetChoice => {
+                let kind = cards
+                    .first()
+                    .and_then(|k| crate::content::host::support::reguhuo_kind_at(*k as u8))?;
+                let (min, max, tgts) = core.legal_targets(catalog, kind, owner);
+                if tgts.is_empty() {
+                    return None;
+                }
+                Some(ask(
+                    owner,
+                    "reguhuo_targets",
+                    ChoiceKind::SelectPlayers,
+                    tgts.into_iter().map(ChoiceOption::Player).collect(),
+                    min as usize,
+                    max as usize,
+                    false,
+                ))
+            }
+            _ => None,
+        },
+        HostBehavior::Rangjie => match stage {
+            HostStage::SelectNature => {
+                let movable = core
+                    .players
+                    .iter()
+                    .any(|p| !p.equips.is_empty() || !p.judge.is_empty());
+                let options = if movable {
+                    vec![ChoiceOption::Tag(0), ChoiceOption::Tag(1), ChoiceOption::Tag(2)]
+                } else {
+                    vec![ChoiceOption::Tag(0), ChoiceOption::Tag(2)]
+                };
+                Some(ask(owner, "rangjie_choice", ChoiceKind::PickTag, options, 1, 1, false))
+            }
+            HostStage::SelectCard => Some(ask(
+                owner,
+                "rangjie_type",
+                ChoiceKind::PickTag,
+                vec![ChoiceOption::Tag(0), ChoiceOption::Tag(1), ChoiceOption::Tag(2)],
+                1,
+                1,
+                false,
+            )),
+            HostStage::TargetChoice => {
+                let mut options = Vec::new();
+                for p in 0..core.players.len() as PlayerId {
+                    for c in core.player(p).equips.iter().chain(core.player(p).judge.iter()).copied() {
+                        options.push(ChoiceOption::Card(c));
+                    }
+                }
+                if options.is_empty() {
+                    return None;
+                }
+                Some(ask(owner, "rangjie_move_card", ChoiceKind::SelectCards, options, 1, 1, false))
+            }
+            HostStage::ShuchuiTargetLoop => {
+                let options: Vec<ChoiceOption> =
+                    core.alive_players().map(ChoiceOption::Player).collect();
+                Some(ask(owner, "rangjie_move_target", ChoiceKind::SelectPlayers, options, 1, 1, false))
+            }
             _ => None,
         },
         _ => unreachable!("behavior routed to the wrong ask group"),

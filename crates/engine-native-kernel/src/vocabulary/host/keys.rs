@@ -576,6 +576,8 @@ impl HostBehavior {
             HostBehavior::MbcmJiushi => "host:mbcmjiushi",
             HostBehavior::MbcmFangzhu => "host:mbcmfangzhu",
             HostBehavior::MbJuejin => "host:mbjuejin",
+            HostBehavior::KDanggu => "host:k_danggu",
+            HostBehavior::KMowang => "host:k_mowang",
         }
     }
 }

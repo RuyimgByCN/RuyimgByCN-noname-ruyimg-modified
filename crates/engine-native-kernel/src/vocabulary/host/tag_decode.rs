@@ -549,6 +549,8 @@ impl HostBehavior {
             546 => HostBehavior::MbcmJiushi,
             547 => HostBehavior::MbcmFangzhu,
             548 => HostBehavior::MbJuejin,
+            549 => HostBehavior::KDanggu,
+            550 => HostBehavior::KMowang,
             _ => return None,
         })
     }

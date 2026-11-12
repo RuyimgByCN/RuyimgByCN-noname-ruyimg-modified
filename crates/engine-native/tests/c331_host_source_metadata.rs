@@ -11,6 +11,8 @@ fn direct_source_profiles_keep_priority_silent_and_translated_choice_qualificati
         (H::HlssYueyin2, Timing::Normal, 2000, true),
         (H::MbcmJiushi, Timing::Normal, 0, true),
         (H::MbcmQingzheng, Timing::Normal, 0, true),
+        (H::KDanggu, Timing::Normal, 0, true),
+        (H::KMowang, Timing::Normal, 15, false),
         (H::NewMeibu, Timing::Normal, 0, true),
         (H::NewZhixi, Timing::First, 0, true),
         (H::Rangjie, Timing::Normal, 0, true),

@@ -1036,6 +1036,68 @@ impl HostSkillBehavior {
                 _ => false,
             },
             HostBehavior::WudianChoudu | HostBehavior::WudianDiaobingCard => false,
+            HostBehavior::KDanggu => match event {
+                EventData::Phase {
+                    player,
+                    phase,
+                    begin: true,
+                } if *player == owner => {
+                    let inited = ctx
+                        .state
+                        .vm_aux
+                        .flags
+                        .get(&(owner, "k_danggu_inited".to_string()))
+                        .copied()
+                        .unwrap_or(0);
+                    let returning = *phase == crate::event::Phase::Prepare
+                        && ctx
+                            .state
+                            .vm_aux
+                            .flags
+                            .get(&(owner, "k_mowang_rest_returning".to_string()))
+                            .copied()
+                            .unwrap_or(0)
+                            > 0;
+                    inited == 0 || returning
+                }
+                _ => false,
+            },
+            HostBehavior::KMowang => match event {
+                EventData::Dying { player, .. } => {
+                    *player == owner
+                        && ctx.state.player(owner).hp <= 0
+                        && ctx.state.player(owner).max_hp > 0
+                        && ctx
+                            .state
+                            .vm_aux
+                            .flags
+                            .get(&(owner, "k_danggu_roster_mask".to_string()))
+                            .copied()
+                            .unwrap_or(0)
+                            != 0
+                }
+                EventData::Phase {
+                    player,
+                    phase: crate::event::Phase::Prepare,
+                    begin: true,
+                } => {
+                    *player == owner
+                        && ctx
+                            .state
+                            .vm_aux
+                            .flags
+                            .get(&(owner, "k_mowang_resting".to_string()))
+                            .copied()
+                            .unwrap_or(0)
+                            > 0
+                }
+                EventData::Phase {
+                    player,
+                    phase: crate::event::Phase::End,
+                    begin: false,
+                } => *player == owner,
+                _ => false,
+            },
             _ => unreachable!("behavior routed to the wrong filter module"),
         }
     }

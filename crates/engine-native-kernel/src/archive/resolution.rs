@@ -255,6 +255,7 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
     "wudian_duoqi_card", "wudian_youzhan_discard", "wudian_choudu_card", "wudian_choudu_target",
     "wudian_diaobing_swap", "wudian_liduan_give", "wudian_youdishenru_sha",
     "mbcmjiushi_gain_confirm", "mbcmjiushi_turnback_confirm", "mbcmfangzhu_target", "mbcmfangzhu_option",
+    "k_danggu_partner",
 ];
 
 pub(super) fn intern_prompt(bytes: &[u8]) -> Result<&'static str, ArchiveError> {

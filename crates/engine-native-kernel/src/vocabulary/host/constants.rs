@@ -866,6 +866,10 @@ pub const MBCMJIUSHI_TURNBACK_CONFIRM: &str = "mbcmjiushi_turnback_confirm";
 pub const MBCMFANGZHU_TARGET: &str = "mbcmfangzhu_target";
 pub const MBCMFANGZHU_OPTION: &str = "mbcmfangzhu_option";
 
+pub const EPIC_K_DANGGU_KEY: &str = "k_danggu";
+pub const EPIC_K_MOWANG_KEY: &str = "k_mowang";
+pub const K_DANGGU_PARTNER: &str = "k_danggu_partner";
+
 pub const WUDIAN_LIDUAN_GIVE: &str = "wudian_liduan_give";
 
 pub const WUDIAN_YOUDISHENRU_SHA: &str = "wudian_youdishenru_sha";

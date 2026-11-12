@@ -54,6 +54,7 @@ impl HostMachine {
                             // 摸 1 走 R 帧，类型询问在续行段开（同步序＝
                             // 先摸走牌堆顶、再扫描；WaitChoice 期间 R 帧不
                             // 泵，若同步内开询问则恢复步扫到未摸走的顶牌）。
+                            self.target = None;
                             ctx.start_draw(self.owner, 1);
                             self.stage = HostStage::DrawSettle;
                             Flow::Yield
@@ -188,10 +189,10 @@ impl HostMachine {
                     }
                 }
                 HostStage::ShuchuiTargetLoop => {
-                    let Some(card) = self.card else {
+                    let Some(card) = self.card.take() else {
                         return Flow::Done;
                     };
-                    let Some(from) = self.target else {
+                    let Some(from) = self.target.take() else {
                         return Flow::Done;
                     };
                     let Some(ChoiceOption::Player(to)) = ctx.answer().first().copied() else {

@@ -439,6 +439,19 @@ pub(super) fn plan_extension_choice_action(input: &crate::view::PolicyInput) -> 
                 selection,
             })
         }
+        "k_danggu_partner" => {
+            let selection = options
+                .iter()
+                .find(|o| matches!(o, ChoiceOption::Tag(9)))
+                .or_else(|| options.first())
+                .copied()
+                .into_iter()
+                .collect();
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
         _ => None,
     }
 }

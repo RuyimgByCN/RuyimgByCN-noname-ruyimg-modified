@@ -167,6 +167,8 @@ pub fn lookup_upstream_host_behavior(skill_name: &str) -> Option<HostBehavior> {
         "juxi" => Some(HostBehavior::SwdJuxi),
         "juxi_count" => Some(HostBehavior::SwdJuxiCount),
         "kangyin" | "kangyin2" => Some(HostBehavior::WudianKangyin),
+        "k_danggu" => Some(HostBehavior::KDanggu),
+        "k_mowang" => Some(HostBehavior::KMowang),
         "kbolan" => Some(HostBehavior::SwdKbolan),
         "kunlunjing" => Some(HostBehavior::Kunlunjing),
         "kuoyin" => Some(HostBehavior::WudianKuoyin),
