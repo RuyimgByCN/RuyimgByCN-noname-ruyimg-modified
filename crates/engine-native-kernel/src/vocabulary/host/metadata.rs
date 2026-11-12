@@ -844,6 +844,10 @@ impl HostBehavior {
             | HostBehavior::WudianYouzhan
             | HostBehavior::WudianChoudu
             | HostBehavior::WudianDiaobingCard => self.trigger_meta_wudian(),
+            HostBehavior::U01DddBatchA
+            | HostBehavior::U01DddBatchB
+            | HostBehavior::U01DddBatchC
+            | HostBehavior::U01DddBatchD => None,
         };
         if let (Some(meta), Some((timing, priority, selectable))) = (&mut meta, self.source_order()) {
             meta.timing = timing;

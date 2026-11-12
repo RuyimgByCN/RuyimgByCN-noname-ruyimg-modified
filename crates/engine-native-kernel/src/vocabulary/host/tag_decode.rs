@@ -551,6 +551,10 @@ impl HostBehavior {
             548 => HostBehavior::MbJuejin,
             549 => HostBehavior::KDanggu,
             550 => HostBehavior::KMowang,
+            551 => HostBehavior::U01DddBatchA,
+            552 => HostBehavior::U01DddBatchB,
+            553 => HostBehavior::U01DddBatchC,
+            554 => HostBehavior::U01DddBatchD,
             _ => return None,
         })
     }

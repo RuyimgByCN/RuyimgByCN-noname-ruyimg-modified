@@ -240,7 +240,7 @@ pub fn content_lock_id(packs: &[&ExtensionPack]) -> u64 {
         h.update(&(pack.host_skills.len() as u64).to_le_bytes());
         for skill in &pack.host_skills {
             h.update(&(skill.name.len() as u64).to_le_bytes()); h.update(skill.name.as_bytes()); h.update(&skill.behavior.tag().to_le_bytes());
-            if let Some(meta) = skill.behavior.trigger_meta() { crate::rvm_bridge::hash_trigger_meta(&mut h, &meta); }
+            if let Some(meta) = crate::content::host::host_skill_trigger_meta(skill.name, skill.behavior) { crate::rvm_bridge::hash_trigger_meta(&mut h, &meta); }
         }
         h.update(&(pack.vm_skills.len() as u64).to_le_bytes());
         for skill in &pack.vm_skills {

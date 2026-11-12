@@ -789,7 +789,8 @@ pub(super) fn moyan_filter(ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventDat
                 return false;
             };
             let target = target as PlayerId;
-            (target as usize) < ctx.state.players.len()
+            moyan_flag(ctx, owner, MOYAN_ROUND).map_or(true, |r| r == ctx.state.turn.round)
+                && (target as usize) < ctx.state.players.len()
                 && ctx.state.player(target).alive
                 && ctx.state.player(target).hand.len() <= limit as usize
         }

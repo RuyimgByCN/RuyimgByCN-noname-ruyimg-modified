@@ -15,10 +15,15 @@ pub fn apply_general_assembly(
     let meta = catalog.general_meta(g);
     let p = state.players.get_mut(player as usize).expect("player");
     if slot == 0 {
-        if let Some((_, _, _, hp, _)) = meta {
-            p.max_hp = hp;
-            if p.hp > hp as i32 {
-                p.hp = hp as i32;
+        if let Some((name, _, _, hp, _)) = meta {
+            if name == "ddd_zhangkai" {
+                p.max_hp = 4;
+                p.hp = p.hp.min(3);
+            } else {
+                p.max_hp = hp;
+                if p.hp > hp as i32 {
+                    p.hp = hp as i32;
+                }
             }
         }
     }

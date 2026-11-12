@@ -200,6 +200,18 @@ impl HostSkillBehavior {
             | HostBehavior::MbcmJiushi
             | HostBehavior::MbcmFangzhu
             | HostBehavior::MbJuejin => self.activate_common(ctx, owner),
+            HostBehavior::U01DddBatchA => {
+                super::step::u01_batch_a::activate_u01_batch_a(self, ctx, owner)
+            }
+            HostBehavior::U01DddBatchB => {
+                super::step::u01_batch_b::activate_u01_batch_b(self, ctx, owner)
+            }
+            HostBehavior::U01DddBatchC => {
+                super::step::u01_batch_c::activate_u01_batch_c(self, ctx, owner)
+            }
+            HostBehavior::U01DddBatchD => {
+                super::step::u01_batch_d::activate_u01_batch_d(self, ctx, owner)
+            }
             _ => None,
         }
     }

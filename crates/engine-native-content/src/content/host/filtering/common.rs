@@ -637,10 +637,10 @@ impl HostSkillBehavior {
             if *player == owner
                 && ctx.catalog.card_kind(*card) == CardKind::Weapon
                 && {
-                    // 攻击范围全场最大（严格大于其余所有存活角色）
+                    // 攻击范围全场最大（不小于其余所有存活角色）
                     let my = ctx.state.attack_range(ctx.catalog, owner);
                     ctx.state.alive_players().filter(|p| *p != owner).all(|p| {
-                        ctx.state.attack_range(ctx.catalog, p) < my
+                        ctx.state.attack_range(ctx.catalog, p) <= my
                     })
                 }),
             HostBehavior::WudianZhenchaDraw => matches!(event,

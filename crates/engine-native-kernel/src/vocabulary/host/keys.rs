@@ -578,6 +578,10 @@ impl HostBehavior {
             HostBehavior::MbJuejin => "host:mbjuejin",
             HostBehavior::KDanggu => "host:k_danggu",
             HostBehavior::KMowang => "host:k_mowang",
+            HostBehavior::U01DddBatchA => "host:u01_ddd_batch_a",
+            HostBehavior::U01DddBatchB => "host:u01_ddd_batch_b",
+            HostBehavior::U01DddBatchC => "host:u01_ddd_batch_c",
+            HostBehavior::U01DddBatchD => "host:u01_ddd_batch_d",
         }
     }
 }

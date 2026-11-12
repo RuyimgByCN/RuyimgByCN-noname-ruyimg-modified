@@ -18,3 +18,6 @@ mod g1_wudian;
 
 #[path = "../g1_wuxing.rs"]
 mod g1_wuxing;
+
+#[path = "../u01_ddd_eight.rs"]
+mod u01_ddd_eight;

@@ -7,6 +7,21 @@ impl HostSkillBehavior {
     }
 
     pub(super) fn machine(&self, owner: PlayerId, event: &EventData) -> HostMachine {
+        match self.behavior {
+            HostBehavior::U01DddBatchA => {
+                return super::step::u01_batch_a::machine_u01_batch_a(self, owner, event);
+            }
+            HostBehavior::U01DddBatchB => {
+                return super::step::u01_batch_b::machine_u01_batch_b(self, owner, event);
+            }
+            HostBehavior::U01DddBatchC => {
+                return super::step::u01_batch_c::machine_u01_batch_c(self, owner, event);
+            }
+            HostBehavior::U01DddBatchD => {
+                return super::step::u01_batch_d::machine_u01_batch_d(self, owner, event);
+            }
+            _ => {}
+        }
         let (target, card) = match self.behavior {
             HostBehavior::ShaDamageForceDiscard => match event {
                 EventData::Damage(d) => (Some(d.target), None),

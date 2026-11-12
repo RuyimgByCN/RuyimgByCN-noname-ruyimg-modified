@@ -685,6 +685,18 @@ impl HostSkillBehavior {
             | HostBehavior::WudianDiaobingCard
             | HostBehavior::KDanggu
             | HostBehavior::KMowang => self.filter_common(ctx, owner, event),
+            HostBehavior::U01DddBatchA => {
+                super::step::u01_batch_a::filter_u01_batch_a(self, ctx, owner, event)
+            }
+            HostBehavior::U01DddBatchB => {
+                super::step::u01_batch_b::filter_u01_batch_b(self, ctx, owner, event)
+            }
+            HostBehavior::U01DddBatchC => {
+                super::step::u01_batch_c::filter_u01_batch_c(self, ctx, owner, event)
+            }
+            HostBehavior::U01DddBatchD => {
+                super::step::u01_batch_d::filter_u01_batch_d(self, ctx, owner, event)
+            }
             _ => false,
         }
     }

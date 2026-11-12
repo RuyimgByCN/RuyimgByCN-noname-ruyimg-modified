@@ -1623,4 +1623,13 @@ pub enum HostBehavior {
     /// 殁亡（tag 550，L10 史诗卡牌·extension.js:2677，`k_mowang`）：
     /// 锁定技，濒死或回合结束时若仍有未亮出常侍且体力上限大于 0 则进入修整（复原武将、弃置全区域牌、撤销当前结党伴生技），下回合准备阶段满血归来并触发党锢。
     KMowang,
+    /// U01 3D精选 Batch A（tag 551，character/skill.js 1–15）：
+    /// 远振、治束、聚贤、均归、势烈、业身、巧断、跌宕、暗流、归萤、并肩、统御。
+    U01DddBatchA,
+    /// U01 3D精选 Batch B（tag 552，character/skill.js 16–31）。
+    U01DddBatchB,
+    /// U01 3D精选 Batch C（tag 553，character/skill.js 32–47）。
+    U01DddBatchC,
+    /// U01 3D精选 Batch D（tag 554，character/skill.js 48–64）。
+    U01DddBatchD,
 }

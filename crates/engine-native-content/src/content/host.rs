@@ -250,12 +250,29 @@ impl crate::catalog::SkillMachine for HostMachine {
     }
 }
 
-/// 目录侧注册：行为 → 触发元数据 + 宿主行为实现（打包为 SkillDef）。
-pub fn host_skill_def(name: String, behavior: HostBehavior) -> crate::catalog::SkillDef {
-    // 目录技能名为 'static：经符号表 intern，同名名称全局只分配一次
-    // （重复开局/启停循环内存恒定，见 content::names）。
-    let name: &'static str = crate::content::names::intern(name);
-    let limits = match behavior {
+/// 按技能名与宿主行为解析触发元数据（含 U01 3D精选分批技能）。
+pub fn host_skill_trigger_meta(
+    name: &str,
+    behavior: HostBehavior,
+) -> Option<crate::catalog::TriggerMeta> {
+    match behavior {
+        HostBehavior::U01DddBatchA => step::u01_batch_a::trigger_meta_u01_batch_a(name),
+        HostBehavior::U01DddBatchB => step::u01_batch_b::trigger_meta_u01_batch_b(name),
+        HostBehavior::U01DddBatchC => step::u01_batch_c::trigger_meta_u01_batch_c(name),
+        HostBehavior::U01DddBatchD => step::u01_batch_d::trigger_meta_u01_batch_d(name),
+        _ => crate::event::NativeDamageEffect::from_host(behavior)
+            .map(|e| e.meta())
+            .or_else(|| behavior.trigger_meta()),
+    }
+}
+
+/// 按技能名与宿主行为解析发动限制（含 U01 3D精选分批技能）。
+pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::SkillLimits {
+    match behavior {
+        HostBehavior::U01DddBatchA => step::u01_batch_a::limits_u01_batch_a(name),
+        HostBehavior::U01DddBatchB => step::u01_batch_b::limits_u01_batch_b(name),
+        HostBehavior::U01DddBatchC => step::u01_batch_c::limits_u01_batch_c(name),
+        HostBehavior::U01DddBatchD => step::u01_batch_d::limits_u01_batch_d(name),
         HostBehavior::GujianFoodQingtuan | HostBehavior::GujianFoodLuyugeng => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,
@@ -338,12 +355,18 @@ pub fn host_skill_def(name: String, behavior: HostBehavior) -> crate::catalog::S
             ..Default::default()
         },
         _ => crate::catalog::SkillLimits::default(),
-    };
+    }
+}
+
+/// 目录侧注册：行为 → 触发元数据 + 宿主行为实现（打包为 SkillDef）。
+pub fn host_skill_def(name: String, behavior: HostBehavior) -> crate::catalog::SkillDef {
+    // 目录技能名为 'static：经符号表 intern，同名名称全局只分配一次
+    // （重复开局/启停循环内存恒定，见 content::names）。
+    let name: &'static str = crate::content::names::intern(name);
+    let limits = host_skill_limits(name, behavior);
     crate::catalog::SkillDef {
         name,
-        trigger: crate::event::NativeDamageEffect::from_host(behavior)
-            .map(|e| e.meta())
-            .or_else(|| behavior.trigger_meta()),
+        trigger: host_skill_trigger_meta(name, behavior),
         limits,
         behavior: Box::new(HostSkillBehavior {
             name: name.to_string(),
