@@ -584,6 +584,8 @@ impl HostBehavior {
             HostBehavior::U01DddBatchD => "host:u01_ddd_batch_d",
             HostBehavior::L28ThunderBatchA => "host:l28_thunder_batch_a",
             HostBehavior::L28ThunderBatchB => "host:l28_thunder_batch_b",
+            HostBehavior::L27BeautifyBatchA => "host:l27_beautify_batch_a",
+            HostBehavior::L27BeautifyBatchB => "host:l27_beautify_batch_b",
         }
     }
 }

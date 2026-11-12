@@ -47,6 +47,7 @@ pub mod rzsh;
 mod shousha;
 mod shousha_mvp;
 pub mod shousha_ui;
+pub mod select_beautify;
 mod sj_settings;
 mod skin_switch;
 pub mod taixu;
@@ -129,6 +130,7 @@ pub use shousha_mvp::{
     MvpScore, MvpSession, MvpSettlement, MvpStats,
 };
 pub use shousha_ui::*;
+pub use select_beautify::*;
 pub use sj_settings::{
     apply_external, apply_sj_commands, boot, catalog_mark, choose_download, classify_fault,
     compare_version, decode_text, decode_uri, encode_text, eval_update_script, filter_downloads,

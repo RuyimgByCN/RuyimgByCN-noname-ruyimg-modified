@@ -219,7 +219,7 @@ pub fn eval_draw_count(
             }
         });
     }
-    cur
+    super::d34_flags::apply_draw_count(state, catalog, player, cur)
 }
 
 /// 评估出牌阶段【杀】使用次数上限修正与是否无次数限制。

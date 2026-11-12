@@ -1636,4 +1636,8 @@ pub enum HostBehavior {
     L28ThunderBatchA,
     /// L28 雷霆万钧 Batch B（tag 556，雷霆万钧/extension.js 武将 10–14）。
     L28ThunderBatchB,
+    /// L27 选将美化 Batch A（tag 557，选将美化/extension.js 前 16 个完整技能 + 3 个标记/屏蔽桩）。
+    L27BeautifyBatchA,
+    /// L27 选将美化 Batch B（tag 558，选将美化/extension.js 后 15 个完整技能 + 4 个辅助/界面桩）。
+    L27BeautifyBatchB,
 }

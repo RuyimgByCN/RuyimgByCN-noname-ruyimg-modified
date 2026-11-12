@@ -320,3 +320,142 @@ pub(super) fn active_ask_mtg(
         _ => unreachable!("behavior routed to the wrong ask group"),
     }
 }
+
+#[allow(clippy::too_many_arguments)]
+pub(super) fn active_ask_batches(
+    behavior: HostBehavior,
+    stage: HostStage,
+    owner: PlayerId,
+    target: Option<PlayerId>,
+    targets: &[PlayerId],
+    card: Option<u32>,
+    cards: &[CardId],
+    core: &GameStateCore,
+    catalog: &Catalog,
+) -> Option<ExpectedAsk> {
+    match behavior {
+        HostBehavior::U01DddBatchA => super::step::u01_batch_a::active_ask_u01_batch_a(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::U01DddBatchB => super::step::u01_batch_b::active_ask_u01_batch_b(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::U01DddBatchC => super::step::u01_batch_c::active_ask_u01_batch_c(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::U01DddBatchD => super::step::u01_batch_d::active_ask_u01_batch_d(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::L28ThunderBatchA => super::step::l28_batch_a::ask_l28_batch_a(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::L28ThunderBatchB => super::step::l28_batch_b::ask_l28_batch_b(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::L27BeautifyBatchA => super::step::l27_batch_a::ask_l27_batch_a(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::L27BeautifyBatchB => super::step::l27_batch_b::ask_l27_batch_b(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::NewMeibu => {
+            if stage != HostStage::SelectCard {
+                return None;
+            }
+            let t = target?;
+            if !core.player(t).alive {
+                return None;
+            }
+            let mut options: Vec<ChoiceOption> = core
+                .player(owner)
+                .hand
+                .iter()
+                .chain(core.player(owner).equips.iter())
+                .copied()
+                .map(ChoiceOption::Card)
+                .collect();
+            if options.is_empty() {
+                return None;
+            }
+            options.truncate(64);
+            Some(ask(
+                owner,
+                "new_meibu_discard",
+                ChoiceKind::SelectCards,
+                options,
+                1,
+                1,
+                true,
+            ))
+        }
+        HostBehavior::MbcmQingzheng => {
+            let suit_opts = |p: PlayerId| -> Vec<ChoiceOption> {
+                let mut suits: Vec<u8> = Vec::new();
+                for c in core.player(p).hand.iter().copied() {
+                    let s = match catalog.cards[c as usize].suit {
+                        crate::catalog::Suit::Spade => 0,
+                        crate::catalog::Suit::Heart => 1,
+                        crate::catalog::Suit::Club => 2,
+                        crate::catalog::Suit::Diamond => 3,
+                    };
+                    if !suits.contains(&s) {
+                        suits.push(s);
+                    }
+                }
+                suits.sort_unstable();
+                suits.into_iter().map(ChoiceOption::Tag).collect()
+            };
+            match stage {
+                HostStage::SelectNature => {
+                    let options = suit_opts(owner);
+                    (!options.is_empty()).then(|| {
+                        ask(
+                            owner,
+                            "mbcmqingzheng_suit",
+                            ChoiceKind::PickTag,
+                            options,
+                            1,
+                            1,
+                            false,
+                        )
+                    })
+                }
+                HostStage::TargetChoice => {
+                    let options: Vec<ChoiceOption> = core
+                        .alive_players()
+                        .filter(|p| *p != owner && !core.player(*p).hand.is_empty())
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    (!options.is_empty()).then(|| {
+                        ask(
+                            owner,
+                            "mbcmqingzheng_target",
+                            ChoiceKind::SelectPlayers,
+                            options,
+                            1,
+                            1,
+                            true,
+                        )
+                    })
+                }
+                HostStage::CompareTargetPick => {
+                    let t = target?;
+                    let options = suit_opts(t);
+                    (!options.is_empty()).then(|| {
+                        ask(
+                            owner,
+                            "mbcmqingzheng_target_suit",
+                            ChoiceKind::PickTag,
+                            options,
+                            1,
+                            1,
+                            false,
+                        )
+                    })
+                }
+                _ => None,
+            }
+        }
+        _ => None,
+    }
+}

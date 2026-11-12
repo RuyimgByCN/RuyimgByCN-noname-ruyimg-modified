@@ -557,6 +557,8 @@ impl HostBehavior {
             554 => HostBehavior::U01DddBatchD,
             555 => HostBehavior::L28ThunderBatchA,
             556 => HostBehavior::L28ThunderBatchB,
+            557 => HostBehavior::L27BeautifyBatchA,
+            558 => HostBehavior::L27BeautifyBatchB,
             _ => return None,
         })
     }

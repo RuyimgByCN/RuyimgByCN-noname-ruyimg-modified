@@ -88,7 +88,42 @@ pub(super) fn apply_hand_limit(
     {
         limit += 1;
     }
+    // L27 选将美化 Batch A (`kuangcai`, `sbtongye`, `quanji`, `sbjianxiong`)
+    limit += flag_val(state, player, "kuangcai_delta") as i32;
+    limit += flag_val(state, player, "sbtongye_ye")
+        .max(flag_val(state, player, "sbtongye")) as i32;
+    let quanji_pile = state
+        .vm_aux
+        .piles
+        .get(&(player, "quanji".to_string()))
+        .map_or(0, |p| p.len() as u32);
+    limit += flag_val(state, player, "quanji_count")
+        .max(flag_val(state, player, "quanji"))
+        .max(quanji_pile) as i32;
+    limit += flag_val(state, player, "sbjianxiong")
+        .max(flag_val(state, player, "sbjianxiong_marks")) as i32;
+    // L27 选将美化 Batch B (`xinfu_xionghuo`, `twxiafeng`, `jishe2`)
+    limit -= flag_val(state, player, "xinfu_xionghuo_hand_minus") as i32;
+    limit += flag_val(state, player, "twxiafeng_x")
+        .max(flag_val(state, player, "l27_twxiafeng_spent")) as i32;
+    if flag_val(state, player, "l27_jishe_limit_minus") == 0 {
+        limit -= flag_val(state, player, "jishe2") as i32;
+    }
     limit
+}
+
+pub fn apply_draw_count(
+    state: &GameStateCore,
+    _catalog: &Catalog,
+    player: PlayerId,
+    mut cur: i32,
+) -> i32 {
+    cur += flag_val(state, player, "kuangcai_delta") as i32;
+    cur += flag_val(state, player, "sbtongye_ye")
+        .max(flag_val(state, player, "sbtongye")) as i32;
+    cur += flag_val(state, player, "sbjianxiong")
+        .max(flag_val(state, player, "sbjianxiong_marks")) as i32;
+    cur.max(0)
 }
 
 pub(super) fn apply_attack_range(
@@ -157,6 +192,9 @@ pub(super) fn apply_distance_total(
     }
     // `refresh.js:17516` (`retuntian`: distance from owner -X `田`)
     dist -= flag_val(state, from, "l11_mod:retuntian_tian") as i32;
+    // L27 选将美化 (`qimou` / `reqimou`: distance from owner -X)
+    dist -= flag_val(state, from, "qimou_x")
+        .max(flag_val(state, from, "reqimou_x")) as i32;
     // extension_card.js:501, 642, 1263 (`txhj_liulongcanjia`, `txhj_juechenjinge`, `txhj_baihu`)
     if flag_val(state, from, "l11_mount_active:txhj_liulongcanjia") > 0
         || flag_val(state, from, "l11_mount_active:txhj_baihu") > 0
@@ -212,6 +250,23 @@ pub(super) fn apply_sha_use_limit(
     {
         cur += 1;
     }
+    // L27 选将美化 (`qimou`, `reqimou`, `kuangcai`, `potzhuangshi`)
+    if flag_val(state, player, "l27_qimou_range_bonus") == 0 {
+        cur += flag_val(state, player, "qimou_x")
+            .max(flag_val(state, player, "reqimou_x")) as i32;
+    }
+    if has_ext_skill(state, catalog, player, "kuangcai") {
+        unlimited = true;
+    }
+    let pot_y = flag_val(state, player, "potzhuangshi_damage_y");
+    if pot_y > 0 && state.turn.cards_used_play_phase < pot_y {
+        unlimited = true;
+    }
+    let xiafeng_x = flag_val(state, player, "twxiafeng_x")
+        .max(flag_val(state, player, "l27_twxiafeng_spent"));
+    if xiafeng_x > 0 && state.turn.cards_used_play_phase < xiafeng_x {
+        unlimited = true;
+    }
     (cur, unlimited)
 }
 
@@ -266,6 +321,18 @@ pub(super) fn apply_card_distance_unlimited(
             || has_ext_skill(state, catalog, player, "buff_txhj_yuanduandilue")
             || has_ext_skill(state, catalog, player, "txhj_yuanduandilue"))
     {
+        unlimited = true;
+    }
+    if has_ext_skill(state, catalog, player, "kuangcai") {
+        unlimited = true;
+    }
+    let pot_x = flag_val(state, player, "potzhuangshi_unblockable_x");
+    if pot_x > 0 && state.turn.cards_used_play_phase < pot_x {
+        unlimited = true;
+    }
+    let xiafeng_x = flag_val(state, player, "twxiafeng_x")
+        .max(flag_val(state, player, "l27_twxiafeng_spent"));
+    if xiafeng_x > 0 && state.turn.cards_used_play_phase < xiafeng_x {
         unlimited = true;
     }
     unlimited
@@ -347,6 +414,34 @@ pub(super) fn apply_card_target_canceled(
     {
         canceled = true;
     }
+    if actor != target
+        && is_trick
+        && flag_val(state, target, "l27_dinghan_negated") > 0
+    {
+        canceled = true;
+    }
+    if actor != target
+        && kind.is_sha_like()
+        && flag_val(state, target, "l27_shouxi_nullified") > 0
+    {
+        canceled = true;
+    }
+    if actor != target
+        && kind.is_sha_like()
+        && flag_val(state, actor, "xinfu_xionghuo_no_sha_turn") > 0
+        && (has_ext_skill(state, catalog, target, "xinfu_xionghuo")
+            || flag_val(state, target, "xinfu_xionghuo_marks") > 0
+            || flag_val(state, target, "xinfu_xionghuo_init") > 0)
+    {
+        canceled = true;
+    }
+    if matches!(
+        kind,
+        CardKind::Le | CardKind::Bing | CardKind::ShanDian | CardKind::HongShui
+    ) && flag_val(state, target, "mbwuling_spirit") == 2
+    {
+        canceled = true;
+    }
     canceled
 }
 
@@ -417,6 +512,36 @@ pub(super) fn apply_damage_amount(
         if flag_val(state, src, "l11_mod:zhiman_prevent") > 0 {
             return 0;
         }
+        let pot_y = flag_val(state, src, "potzhuangshi_damage_y");
+        if pot_y > 0 && card.is_some() && state.turn.cards_used_play_phase <= pot_y {
+            cur += 1;
+        }
+        if src != target
+            && (flag_val(state, target, "xinfu_xionghuo_marked") > 0
+                || flag_val(state, target, "xionghuo") > 0)
+            && (has_ext_skill(state, catalog, src, "xinfu_xionghuo")
+                || flag_val(state, src, "xinfu_xionghuo_init") > 0
+                || flag_val(state, src, "xinfu_xionghuo_marks") > 0)
+        {
+            cur += 1;
+        }
+        if card.is_some() && flag_val(state, src, "mbwuling_spirit") == 1 {
+            cur += 1;
+        }
+    }
+    if flag_val(state, target, "twzuhuo_shields") > 0
+        || flag_val(state, target, "l27_twzuhuo_shield") > 0
+    {
+        return 0;
+    }
+    if flag_val(state, target, "mbwuling_spirit") == 3 {
+        cur = (cur - 1).max(0);
+    }
+    if is_sha && flag_val(state, target, "l27_shouxi_nullified") > 0 {
+        return 0;
+    }
+    if is_trick && flag_val(state, target, "l27_dinghan_negated") > 0 {
+        return 0;
     }
     // extension.js:5657-5681 (`txmanjia` / `txmanjia1` / `txmanjia2`: unarmored Vine Armor)
     let has_txmanjia = flag_val(state, target, "l11_mod:txmanjia") > 0
@@ -560,6 +685,15 @@ pub(super) fn apply_card_unrespondable(
     if flag_val(state, source, "l11_mod:spwenji_unresp") > 0
         || flag_val(state, source, "l11_mod:twqirang") > 0
     {
+        unrespondable = true;
+    }
+    let pot_x = flag_val(state, source, "potzhuangshi_unblockable_x");
+    if pot_x > 0 && state.turn.cards_used_play_phase <= pot_x {
+        unrespondable = true;
+    }
+    let xiafeng_x = flag_val(state, source, "twxiafeng_x")
+        .max(flag_val(state, source, "l27_twxiafeng_spent"));
+    if xiafeng_x > 0 && state.turn.cards_used_play_phase <= xiafeng_x {
         unrespondable = true;
     }
     unrespondable

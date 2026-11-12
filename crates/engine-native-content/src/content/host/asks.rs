@@ -6,7 +6,7 @@ use crate::catalog::Catalog;
 use crate::snap::*;
 use crate::state::GameStateCore;
 
-use super::asks_mtg::active_ask_mtg;
+use super::asks_mtg::{active_ask_batches, active_ask_mtg};
 use super::asks_wudian::active_ask_wudian;
 
 pub(super) fn xuanying_target_spec(core: &GameStateCore, owner: PlayerId) -> ChoiceSpec {
@@ -1017,24 +1017,8 @@ pub(crate) fn active_ask_host(
         | HostBehavior::MtgShuimomuxueLand => {
             active_ask_mtg(behavior, stage, owner, target, targets, cards, core, catalog)
         }
-        HostBehavior::U01DddBatchA => super::step::u01_batch_a::active_ask_u01_batch_a(
-            stage, owner, target, targets, card, cards, core, catalog,
+        _ => active_ask_batches(
+            behavior, stage, owner, target, targets, card, cards, core, catalog,
         ),
-        HostBehavior::U01DddBatchB => super::step::u01_batch_b::active_ask_u01_batch_b(
-            stage, owner, target, targets, card, cards, core, catalog,
-        ),
-        HostBehavior::U01DddBatchC => super::step::u01_batch_c::active_ask_u01_batch_c(
-            stage, owner, target, targets, card, cards, core, catalog,
-        ),
-        HostBehavior::U01DddBatchD => super::step::u01_batch_d::active_ask_u01_batch_d(
-            stage, owner, target, targets, card, cards, core, catalog,
-        ),
-        HostBehavior::L28ThunderBatchA => super::step::l28_batch_a::ask_l28_batch_a(
-            stage, owner, target, targets, card, cards, core, catalog,
-        ),
-        HostBehavior::L28ThunderBatchB => super::step::l28_batch_b::ask_l28_batch_b(
-            stage, owner, target, targets, card, cards, core, catalog,
-        ),
-        _ => None,
     }
 }

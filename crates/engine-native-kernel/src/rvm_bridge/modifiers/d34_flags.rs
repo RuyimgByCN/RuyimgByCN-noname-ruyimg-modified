@@ -16,6 +16,7 @@ mod d34_view_as;
 mod d34_u05_mods;
 #[path = "d34_l11_mods.rs"]
 mod d34_l11_mods;
+pub use d34_l11_mods::apply_draw_count;
 pub use d34_view_as::find_d34_flag_view_as;
 
 #[inline]

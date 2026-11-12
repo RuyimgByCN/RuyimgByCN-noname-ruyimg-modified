@@ -30,3 +30,9 @@ mod l28_thunder_eight_triggers;
 
 #[path = "../l28_thunder_eight_batch_b.rs"]
 mod l28_thunder_eight_batch_b;
+
+#[path = "../l27_beautify_match.rs"]
+mod l27_beautify_match;
+
+#[path = "../l27_beautify_batch_b.rs"]
+mod l27_beautify_batch_b;

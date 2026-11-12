@@ -262,6 +262,8 @@ pub fn host_skill_trigger_meta(
         HostBehavior::U01DddBatchD => step::u01_batch_d::trigger_meta_u01_batch_d(name),
         HostBehavior::L28ThunderBatchA => step::l28_batch_a::trigger_meta_l28_batch_a(name),
         HostBehavior::L28ThunderBatchB => step::l28_batch_b::trigger_meta_l28_batch_b(name),
+        HostBehavior::L27BeautifyBatchA => step::l27_batch_a::trigger_meta_l27_batch_a(name),
+        HostBehavior::L27BeautifyBatchB => step::l27_batch_b::trigger_meta_l27_batch_b(name),
         _ => crate::event::NativeDamageEffect::from_host(behavior)
             .map(|e| e.meta())
             .or_else(|| behavior.trigger_meta()),
@@ -277,6 +279,8 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         HostBehavior::U01DddBatchD => step::u01_batch_d::limits_u01_batch_d(name),
         HostBehavior::L28ThunderBatchA => step::l28_batch_a::limits_l28_batch_a(name),
         HostBehavior::L28ThunderBatchB => step::l28_batch_b::limits_l28_batch_b(name),
+        HostBehavior::L27BeautifyBatchA => step::l27_batch_a::limits_l27_batch_a(name),
+        HostBehavior::L27BeautifyBatchB => step::l27_batch_b::limits_l27_batch_b(name),
         HostBehavior::GujianFoodQingtuan | HostBehavior::GujianFoodLuyugeng => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,

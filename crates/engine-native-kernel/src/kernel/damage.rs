@@ -11,6 +11,41 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
         finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Zero);
         return;
     }
+    let zuhuo_shields = ctx
+        .core
+        .vm_aux
+        .flags
+        .get(&(d.target, "twzuhuo_shields".to_string()))
+        .copied()
+        .unwrap_or(0)
+        .max(
+            ctx.core
+                .vm_aux
+                .flags
+                .get(&(d.target, "l27_twzuhuo_shield".to_string()))
+                .copied()
+                .unwrap_or(0),
+        );
+    if zuhuo_shields > 0 {
+        let rem = zuhuo_shields - 1;
+        for key in ["twzuhuo_shields", "l27_twzuhuo_shield"] {
+            if rem == 0 {
+                ctx.core.vm_aux.flags.remove(&(d.target, key.to_string()));
+            } else {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((d.target, key.to_string()), rem);
+            }
+        }
+        d.prevented = true;
+        ctx.log(LogEvent::DamagePrevented {
+            target: d.target,
+            presentation: None,
+        });
+        finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Cancelled);
+        return;
+    }
     if ctx.core.is_damage_taken_canceled(
         ctx.catalog,
         d.source,

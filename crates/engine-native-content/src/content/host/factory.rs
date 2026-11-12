@@ -27,6 +27,12 @@ impl HostSkillBehavior {
             HostBehavior::L28ThunderBatchB => {
                 return super::step::l28_batch_b::machine_l28_batch_b(self, owner, event);
             }
+            HostBehavior::L27BeautifyBatchA => {
+                return super::step::l27_batch_a::machine_l27_batch_a(self, owner, event);
+            }
+            HostBehavior::L27BeautifyBatchB => {
+                return super::step::l27_batch_b::machine_l27_batch_b(self, owner, event);
+            }
             _ => {}
         }
         let (target, card) = match self.behavior {
