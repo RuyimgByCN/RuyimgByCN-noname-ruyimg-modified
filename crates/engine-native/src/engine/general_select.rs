@@ -76,18 +76,18 @@ impl Engine {
             .identity_roles()
             .and_then(|roles| roles.get(seat as usize))
             == Some(&crate::state::Role::Lord);
-        let is_ddd_zhangkai = catalog
+        let gname = catalog
             .general_meta(general)
-            .map(|(n, _, _, _, _)| n == "ddd_zhangkai")
-            .unwrap_or(false);
+            .map(|(n, _, _, _, _)| n)
+            .unwrap_or("");
         let p = self.state_core_mut().player_mut(seat);
         if lord && p.max_hp != crate::state::INFINITE_HP {
             p.max_hp += 1;
         }
-        p.hp = if is_ddd_zhangkai {
-            (p.max_hp as i32).saturating_sub(1)
-        } else {
-            p.max_hp as i32
+        p.hp = match gname {
+            "ddd_zhangkai" => (p.max_hp as i32).saturating_sub(1),
+            "th_guanning" => 3 + i32::from(lord),
+            _ => p.max_hp as i32,
         };
         p.alive = true;
         p.dying = false;

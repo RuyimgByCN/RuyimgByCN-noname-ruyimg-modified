@@ -608,6 +608,10 @@ impl CardDef {
         }
     }
 
+    pub fn armor(name: &'static str) -> Self {
+        Self::basic(name, CardKind::Armor)
+    }
+
     pub fn weapon(name: &'static str, range: u32) -> Self {
         Self {
             name,

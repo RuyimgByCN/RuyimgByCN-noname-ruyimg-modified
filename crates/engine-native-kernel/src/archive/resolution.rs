@@ -279,6 +279,20 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
     "dddzhuanshe_damage", "dddlianer_confirm", "dddanzhi_target", "ddddanggu_targets", "dddlanghuai_confirm",
     "dddxuanlun_confirm", "dddxuanlun_end_mode", "dddxuanlun_cards", "dddjiexing_confirm", "dddbailei_target",
     "dddbailei_mode",
+    "th_dunshi:choose_basic", "th_dunshi:choose_sha_target", "th_dunshi:respond_shan", "th_dunshi:damage_choice",
+    "th_bushi:choose_posture", "th_caiyi:choose_target", "th_caiyi:choose_count", "th_chongxu:choose_action",
+    "miaojian:choose_target", "th_shengong:discard_card", "th_shengong:choose_target", "olqisi:choose_slot",
+    "th_pingcai:choose_relic", "th_pingcai:choose_target", "th_zhengjing:choose_count", "th_zhengjing:choose_target",
+    "th_chengye:choose_target", "th_buxu:discard_cards", "th_buxu:choose_chamber", "th_yufeng:choose_score",
+    "th_yufeng:choose_target", "th_tianshu:discard_card", "th_tianshu:choose_target",
+    "th_jingxie:choose_card", "th_qiaosi:choose_count", "th_qiaosi:choose_mode", "th_qiaosi:choose_target",
+    "th_tiansuan:choose_lot", "th_tiansuan:choose_target", "th_gushe:choose_targets", "rejici:choose_option",
+    "th_geyuan:choose_action", "th_jieshu:choose_card", "th_yeyan:choose_mode", "th_yeyan:choose_targets",
+    "th_yeyan:discard_cards", "qinyin:choose_mode",
+    "th_dunshi:choose_skill", "th_caiyi:choose_option", "th_caiyi:discard_cards", "th_guili:choose_target",
+    "th_shengong:choose_forge", "th_shengong:assist",
+    "th_tiansuan:gain_card", "th_gushe:pindian_card", "th_gushe:target_pindian_card", "th_gushe:target_discard",
+    "th_gushe:owner_discard", "rejici:killer_discard", "th_geyuan:magica_targets", "th_geyuan:magica_discard",
 ];
 
 pub(super) fn intern_prompt(bytes: &[u8]) -> Result<&'static str, ArchiveError> {

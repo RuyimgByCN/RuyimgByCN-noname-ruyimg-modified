@@ -921,6 +921,8 @@ impl VmAux {
                 && key != "olzhuoming_transferred"
                 && key != "free_use"
                 && key != "starbishi_triggered"
+                && key != "qinyin_used_turn"
+                && key != "th_geyuan_used_turn"
                 && !key.starts_with("zexing_visited:")
                 && !key.starts_with("mbcmjiushi_")
         });

@@ -1632,4 +1632,8 @@ pub enum HostBehavior {
     U01DddBatchC,
     /// U01 3D精选 Batch D（tag 554，character/skill.js 48–64）。
     U01DddBatchD,
+    /// L28 雷霆万钧 Batch A（tag 555，雷霆万钧/extension.js 武将 1–9）。
+    L28ThunderBatchA,
+    /// L28 雷霆万钧 Batch B（tag 556，雷霆万钧/extension.js 武将 10–14）。
+    L28ThunderBatchB,
 }

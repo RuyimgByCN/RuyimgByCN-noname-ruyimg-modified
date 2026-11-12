@@ -5,7 +5,7 @@
 //! `L20` (14 HUD marks), and `L28` (`雷霆万钧/extension.js:3657-3670,3783-8968` 14 `th_*`
 //! generals, skills, and `th_taipingyaoshu` card).
 
-use engine_native::catalog::{CardDef, CardKind, Catalog, Faction, Suit};
+use engine_native::catalog::{CardDef, Catalog, Faction, Suit};
 use engine_native::content::extension::{
     ExtensionDef, ExtensionGeneral, ExtensionPack, InitHook, VmSkillDecl,
 };
@@ -342,6 +342,10 @@ pub fn decision34_closure_extension_pack() -> ExtensionPack {
         ));
     }
     for &sk_name in &L28_THUNDER_EXTRA_SKILLS {
+        if let Some(behavior) = crate::lookup_upstream_host_behavior(sk_name) {
+            crate::push_host_skill_if_unseen(sk_name, behavior, &mut host_skills, &mut seen_skills);
+            continue;
+        }
         vm_skills.push(build_d34_vm_decl(
             vm_skills.len(),
             sk_name,
@@ -391,8 +395,9 @@ pub fn decision34_closure_extension_pack() -> ExtensionPack {
 
     // Authentic `L28` card: `th_taipingyaoshu` (`雷霆万钧/extension.js:8968`)
     let cards = vec![
-        CardDef::basic(names::intern("th_taipingyaoshu".to_string()), CardKind::Wuzhong)
-            .with_suit_rank(Suit::Heart, 3),
+        CardDef::armor("th_taipingyaoshu")
+            .with_suit_rank(Suit::Heart, 3)
+            .with_equip_skills(&["th_taipingyaoshu"]),
     ];
 
     ExtensionPack {

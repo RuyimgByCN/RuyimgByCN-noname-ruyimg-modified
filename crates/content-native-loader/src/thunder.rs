@@ -7,7 +7,8 @@
 //! - **禁同名**（`forbidSame`）：重名武将标记 `unseen` 并在选将时避免同名。
 //! - **标记文本补丁**：曹金玉标记「转人话」、孙寒华妙剑/莲华分级标记、神姜维
 //!   九伐标记改文字——纯标签重写，可移植为数据。
-//! - 其余（`UIpatch`/`gameSpeed`/立绘/主题）为渲染面，原生不迁移。
+//! - 其余（`UIpatch`/`gameSpeed`/`UIItroduc`/`yuqiTheme`/`timeTheme`/`standPath`）为渲染面：
+//!   本模块只校验取值并解析出档位文案、主题跟随与立绘路径，不做渲染。
 //!
 //! 本模块不读写文件、不请求网络、不 eval。
 
@@ -73,7 +74,31 @@ pub struct ThunderConfig {
     pub jiufa_text: bool,
     /// 管宁技能全扩。
     pub guanning: bool,
+    /// UI 补丁使用指南入口（`UIItroduc`，上游唯一项 `intro`）。
+    pub ui_introduc: String,
+    /// 对话框主题（`yuqiTheme`：`default`/`decade`/`shousha`/`follow`）。
+    pub yuqi_theme: String,
+    /// 进度条风格（`timeTheme`：`decade`/`shousha`/`follow`）。
+    pub time_theme: String,
+    /// 立绘存放目录（`standPath`，两项上游目录之一）。
+    pub stand_path: String,
 }
+
+/// `gameSpeed` 档位文案（`extension.js:9068-9079`）。
+pub const GAME_SPEED_LABELS: [&str; 9] = [
+    "极速", "很快", "快速", "稍快", "常速", "稍慢", "慢速", "很慢", "龟速",
+];
+/// `UIItroduc` 合法项（`extension.js:9091-9094`）。
+pub const UI_INTRODUC_ITEMS: [&str; 1] = ["intro"];
+/// `yuqiTheme` 合法项（`extension.js:9109-9118`）。
+pub const YUQI_THEME_ITEMS: [&str; 4] = ["default", "decade", "shousha", "follow"];
+/// `timeTheme` 合法项（`extension.js:9120-9128`）。
+pub const TIME_THEME_ITEMS: [&str; 3] = ["decade", "shousha", "follow"];
+/// `standPath` 合法项（`extension.js:9134-9140`）。
+pub const STAND_PATH_ITEMS: [&str; 2] = [
+    "extension/雷霆万钧/image/stand/",
+    "extension/千幻聆音/lihui/",
+];
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ThunderError {
@@ -101,13 +126,22 @@ fn opt_bool(v: &Value, key: &str, default: bool) -> bool {
     v.get(key).and_then(|x| x.as_bool()).unwrap_or(default)
 }
 
+/// 选项型配置：缺省取上游 `init`，存在时必须是上游 `item` 中的一项。
+fn opt_item(v: &Value, key: &str, items: &[&str], default: &str) -> Result<String, ThunderError> {
+    match v.get(key) {
+        None => Ok(default.to_string()),
+        Some(x) => x
+            .as_str()
+            .filter(|s| items.contains(s))
+            .map(str::to_string)
+            .ok_or_else(|| ThunderError::BadField(key.to_string())),
+    }
+}
+
 /// 解析转换包内的 `assets/config.json`。
 pub fn parse_thunder_config(json: &str) -> Result<ThunderConfig, ThunderError> {
     let v: Value = serde_json::from_str(json).map_err(|e| ThunderError::BadField(e.to_string()))?;
-    let speed = v
-        .get("gameSpeed")
-        .and_then(|x| x.as_u64())
-        .unwrap_or(4);
+    let speed = v.get("gameSpeed").and_then(|x| x.as_u64()).unwrap_or(4);
     if speed > 8 {
         return Err(ThunderError::BadField("gameSpeed".into()));
     }
@@ -125,6 +159,10 @@ pub fn parse_thunder_config(json: &str) -> Result<ThunderConfig, ThunderError> {
         shh_new: opt_bool(&v, "shh_new", false),
         jiufa_text: opt_bool(&v, "jiufatext", true),
         guanning: opt_bool(&v, "guanning", false),
+        ui_introduc: opt_item(&v, "UIItroduc", &UI_INTRODUC_ITEMS, "intro")?,
+        yuqi_theme: opt_item(&v, "yuqiTheme", &YUQI_THEME_ITEMS, "follow")?,
+        time_theme: opt_item(&v, "timeTheme", &TIME_THEME_ITEMS, "follow")?,
+        stand_path: opt_item(&v, "standPath", &STAND_PATH_ITEMS, STAND_PATH_ITEMS[0])?,
     })
 }
 
@@ -152,6 +190,34 @@ impl ThunderConfig {
     /// 是否隐藏专属包（`hidePack`）。
     pub fn hides_exclusive_pack(&self) -> bool {
         self.hide_pack
+    }
+
+    /// 小游戏速度档位文案（`gameSpeed`）。
+    pub fn game_speed_label(&self) -> &'static str {
+        GAME_SPEED_LABELS[usize::from(self.game_speed.min(8))]
+    }
+
+    /// 实际对话框主题：`follow` 跟随十周年 UI 设定（传入其当前风格）。
+    pub fn effective_dialog_theme<'a>(&'a self, decade_style: &'a str) -> &'a str {
+        if self.yuqi_theme == "follow" {
+            decade_style
+        } else {
+            &self.yuqi_theme
+        }
+    }
+
+    /// 实际进度条风格：`follow` 跟随十周年 UI 设定。
+    pub fn effective_time_theme<'a>(&'a self, decade_style: &'a str) -> &'a str {
+        if self.time_theme == "follow" {
+            decade_style
+        } else {
+            &self.time_theme
+        }
+    }
+
+    /// 立绘文件路径（`standPath` + 皮肤同名文件）。
+    pub fn stand_image_path(&self, skin: &str) -> String {
+        format!("{}{}.png", self.stand_path, skin)
     }
 }
 

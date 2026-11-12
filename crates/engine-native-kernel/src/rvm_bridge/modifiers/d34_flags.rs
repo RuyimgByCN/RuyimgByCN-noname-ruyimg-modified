@@ -132,11 +132,33 @@ pub fn apply_hand_limit(
     limit += flag_val(state, player, "l25_level_maxhand_bonus") as i32;
     limit += flag_val(state, player, "l19_wujin_hand_limit_bonus") as i32;
     limit -= flag_val(state, player, "l27_jishe_limit_minus") as i32;
+    let has_tpys_card = state.player(player).equips.iter().any(|&c| {
+        catalog
+            .cards
+            .get(c as usize)
+            .is_some_and(|cd| cd.name == "th_taipingyaoshu")
+    });
     if flag_val(state, player, "th_taipingyaoshu_prevent_elemental") > 0
         || flag_val(state, player, "l28_taipingyaoshu_equipped") > 0
-        || has_ext_skill(state, catalog, player, "th_taipingyaoshu")
+        || has_tpys_card
+        || (has_ext_skill(state, catalog, player, "th_taipingyaoshu")
+            && flag_val(state, player, "l28_taipingyaoshu_revoke_after_lost") == 0)
     {
-        limit += 2;
+        let mut faction_mask = 0u16;
+        for (pid, p) in state.players.iter().enumerate() {
+            if !p.alive {
+                continue;
+            }
+            if let Some(g) = p.general_slots[0] {
+                if let Some((_, faction, _, _, _)) = catalog.general_meta(g) {
+                    faction_mask |= 1u16 << (faction as u8);
+                    continue;
+                }
+            }
+            faction_mask |= 1u16 << ((pid % 3) as u8);
+        }
+        let distinct = faction_mask.count_ones() as i32;
+        limit += (distinct - 1).max(0);
     }
     let zyhufu_flag = flag_val(state, player, "yxs_zyhufu_hand_limit_bonus");
     if zyhufu_flag > 0 {
@@ -349,6 +371,13 @@ pub fn apply_sha_use_limit(
     if suit == Some(Suit::Diamond) && flag_val(state, player, "l20_wusheng_diamond_unlimited") > 0 {
         unlimited = true;
     }
+    if has_ext_skill(state, catalog, player, "th_bushi")
+        && suit.is_some_and(|s| {
+            suit_code(s) == flag_val(state, player, "th_bushi_unlimited_suit").max(1)
+        })
+    {
+        unlimited = true;
+    }
     if has_ext_skill(state, catalog, player, "ssr_jijiang")
         || flag_val(state, player, "l25_jijiang_sha_plus1") > 0
     {
@@ -526,7 +555,8 @@ pub fn apply_card_target_canceled(
         kind,
         CardKind::Le | CardKind::Bing | CardKind::ShanDian | CardKind::HongShui
     ) && (flag_val(state, target, "l11_buff_no_delayed_trick") > 0
-        || has_ext_skill(state, catalog, target, "buff_txhj_wenhejibei"))
+        || has_ext_skill(state, catalog, target, "buff_txhj_wenhejibei")
+        || has_ext_skill(state, catalog, target, "xinfu_pdgyingshi"))
     {
         canceled = true;
     }
@@ -566,6 +596,7 @@ pub fn apply_card_use_canceled(
     if flag_val(state, actor, "l11_xingtian_card_locked") > 0
         || flag_val(state, actor, "l25_yijue_locked") > 0
         || flag_val(state, actor, "u05_mod:shihuifen") > 0
+        || flag_val(state, actor, "th_caiyi_forbid_cards") > 0
     {
         canceled = true;
     }
@@ -688,10 +719,17 @@ pub fn apply_damage_amount(
         if (is_sha_card || card.is_none()) && flag_val(state, src, "l19_xunmeng_damage_bonus") > 0 {
             cur += 1;
         }
-        if is_sha_card {
-            if flag_val(state, src, "th_zhongzhuang_damage_bonus") > 0 {
+        if has_ext_skill(state, catalog, src, "th_zhongzhuang") {
+            let atk_range = state.attack_range(catalog, src);
+            if atk_range < 3 {
                 cur += 1;
+            } else if atk_range > 3 && cur > 1 {
+                cur = 1;
             }
+        } else if is_sha_card && flag_val(state, src, "th_zhongzhuang_damage_bonus") > 0 {
+            cur += 1;
+        }
+        if is_sha_card {
             if flag_val(state, src, "l11_lulu_huwei_boost") > 0 {
                 cur += 1;
             }
@@ -772,10 +810,18 @@ pub fn apply_damage_amount(
     {
         return 0;
     }
+    let target_has_tpys_card = state.player(target).equips.iter().any(|&c| {
+        catalog
+            .cards
+            .get(c as usize)
+            .is_some_and(|cd| cd.name == "th_taipingyaoshu")
+    });
     if matches!(nature, DamageNature::Fire | DamageNature::Thunder)
         && (flag_val(state, target, "th_taipingyaoshu_prevent_elemental") > 0
             || flag_val(state, target, "l28_taipingyaoshu_equipped") > 0
-            || has_ext_skill(state, catalog, target, "th_taipingyaoshu"))
+            || target_has_tpys_card
+            || (has_ext_skill(state, catalog, target, "th_taipingyaoshu")
+                && flag_val(state, target, "l28_taipingyaoshu_revoke_after_lost") == 0))
     {
         return 0;
     }

@@ -5,6 +5,14 @@ use crate::ids::PlayerId;
 /// 装配授予（P2/N08）：按武将表配置体力上限（主将槽）并授予技能集。
 /// 国战明置（`RevealGeneral`，ADR 0769）与原型装配原语
 /// （`debug_assemble_general`）共用此逻辑，授予语义不得分叉。
+pub fn general_starting_hp(name: &str, max_hp: u32) -> i32 {
+    match name {
+        "ddd_zhangkai" => 3,
+        "th_guanning" => 3,
+        _ => max_hp as i32,
+    }
+}
+
 pub fn apply_general_assembly(
     state: &mut crate::state::GameStateCore,
     catalog: &crate::catalog::Catalog,
@@ -19,10 +27,14 @@ pub fn apply_general_assembly(
             if name == "ddd_zhangkai" {
                 p.max_hp = 4;
                 p.hp = p.hp.min(3);
+            } else if name == "th_guanning" {
+                p.max_hp = 7;
+                p.hp = p.hp.min(3);
             } else {
                 p.max_hp = hp;
-                if p.hp > hp as i32 {
-                    p.hp = hp as i32;
+                let start_hp = general_starting_hp(name, hp);
+                if p.hp > start_hp {
+                    p.hp = start_hp;
                 }
             }
         }

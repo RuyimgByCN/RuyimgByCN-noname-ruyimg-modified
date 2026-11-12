@@ -1029,6 +1029,12 @@ pub(crate) fn active_ask_host(
         HostBehavior::U01DddBatchD => super::step::u01_batch_d::active_ask_u01_batch_d(
             stage, owner, target, targets, card, cards, core, catalog,
         ),
+        HostBehavior::L28ThunderBatchA => super::step::l28_batch_a::ask_l28_batch_a(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::L28ThunderBatchB => super::step::l28_batch_b::ask_l28_batch_b(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
         _ => None,
     }
 }

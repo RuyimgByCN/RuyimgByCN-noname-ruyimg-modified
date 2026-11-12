@@ -4,6 +4,7 @@ impl HostSkillBehavior {
     /// 墨守：延时锦囊（乐/兵）不能指定持有者为目标。
     pub(super) fn blocks_delayed_trick(&self) -> bool {
         self.behavior == HostBehavior::MoshouImmunity
+            || (self.behavior == HostBehavior::L28ThunderBatchA && self.name == "xinfu_pdgyingshi")
     }
 
     pub(super) fn machine(&self, owner: PlayerId, event: &EventData) -> HostMachine {
@@ -19,6 +20,12 @@ impl HostSkillBehavior {
             }
             HostBehavior::U01DddBatchD => {
                 return super::step::u01_batch_d::machine_u01_batch_d(self, owner, event);
+            }
+            HostBehavior::L28ThunderBatchA => {
+                return super::step::l28_batch_a::machine_l28_batch_a(self, owner, event);
+            }
+            HostBehavior::L28ThunderBatchB => {
+                return super::step::l28_batch_b::machine_l28_batch_b(self, owner, event);
             }
             _ => {}
         }

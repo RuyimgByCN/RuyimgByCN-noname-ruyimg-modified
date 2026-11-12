@@ -21,3 +21,12 @@ mod g1_wuxing;
 
 #[path = "../u01_ddd_eight.rs"]
 mod u01_ddd_eight;
+
+#[path = "../l28_thunder_eight_match.rs"]
+mod l28_thunder_eight_match;
+
+#[path = "../l28_thunder_eight_triggers.rs"]
+mod l28_thunder_eight_triggers;
+
+#[path = "../l28_thunder_eight_batch_b.rs"]
+mod l28_thunder_eight_batch_b;

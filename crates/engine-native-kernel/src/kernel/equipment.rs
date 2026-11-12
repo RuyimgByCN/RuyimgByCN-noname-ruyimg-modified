@@ -40,7 +40,13 @@ pub fn revoke_equip_skills(
             .iter()
             .any(|c| catalog.cards[*c as usize].equip_skills.contains(&name));
         if !still_provided {
-            core.skills.remove(&(player, def));
+            if name == "th_taipingyaoshu" {
+                core.vm_aux
+                    .flags
+                    .insert((player, "l28_taipingyaoshu_revoke_after_lost".to_string()), 1);
+            } else {
+                core.skills.remove(&(player, def));
+            }
         }
     }
     // G1 索链甲：离场装备声明横置且玩家无其他同类装备 → 重置横置
@@ -80,6 +86,18 @@ pub(super) fn commit_equip(
         revoke_equip_skills(ctx.core, ctx.catalog, player, old);
         ctx.note_cards_lost(player, &[old]);
         ctx.to_discard(old);
+        if ctx
+            .catalog
+            .cards
+            .get(old as usize)
+            .is_some_and(|cd| cd.name == "th_taipingyaoshu")
+        {
+            ctx.emit(EventData::CardsLost {
+                player,
+                cards: vec![old],
+                origins: vec![crate::event::LostOrigin::Equip],
+            });
+        }
     }
     ctx.core.player_mut(player).equips.push(card);
     grant_equip_skills(ctx, player, card);
