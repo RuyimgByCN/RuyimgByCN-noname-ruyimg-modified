@@ -31,9 +31,9 @@ pub enum LongxueError {
 /// 99 绝进）。返回 (技能名, 阈值, 是否已转换)。
 pub const LONGXUE_THRESHOLDS: [(&str, u8, bool); 4] = [
     ("mbcmqingzheng", 25, true),
-    ("mbcmjiushi", 50, false),
-    ("mbcmfangzhu", 75, false),
-    ("mbjuejin", 99, false),
+    ("mbcmjiushi", 50, true),
+    ("mbcmfangzhu", 75, true),
+    ("mbjuejin", 99, true),
 ];
 
 /// 解析包配置：字段缺失/类型错误一律拒绝（与其余来源同口径）。

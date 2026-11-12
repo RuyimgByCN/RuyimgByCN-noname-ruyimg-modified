@@ -124,28 +124,7 @@ const DECISION34_SKILL_SPECS: [(
     EventKind,
     &[EventKind],
     engine_native::rvm_bridge::VmFilterPolicy,
-); 16] = [
-    (
-        "mbcmjiushi",
-        MBCMJIUSHI_ID,
-        EventKind::PhaseBegin,
-        &[],
-        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
-    ),
-    (
-        "mbcmfangzhu",
-        MBCMFANGZHU_ID,
-        EventKind::Damage,
-        &[],
-        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
-    ),
-    (
-        "mbjuejin",
-        MBJUEJIN_ID,
-        EventKind::PhaseBegin,
-        &[],
-        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
-    ),
+); 13] = [
     (
         "k_danggu",
         K_DANGGU_ID,

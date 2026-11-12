@@ -573,6 +573,9 @@ impl HostBehavior {
             HostBehavior::WudianYouzhan => "host:wudian_youzhan",
             HostBehavior::WudianChoudu => "host:wudian_choudu",
             HostBehavior::WudianDiaobingCard => "host:wudian_diaobing_card",
+            HostBehavior::MbcmJiushi => "host:mbcmjiushi",
+            HostBehavior::MbcmFangzhu => "host:mbcmfangzhu",
+            HostBehavior::MbJuejin => "host:mbjuejin",
         }
     }
 }

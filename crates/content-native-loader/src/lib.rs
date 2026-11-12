@@ -814,7 +814,18 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
             opt_int(sk, "definition_id", "skills[].definition_id", 0..=u64::from(u32::MAX))?
                 .map(|n| n as u32);
         // cards.json 面暂无内置引用需求：Deferred/Builtin 均跳过
-        match mapping_of(sk, "skills[].mapping")? {
+        let mapped = match mapping_of(sk, "skills[].mapping")? {
+            MappedSkill::Deferred
+                if matches!(key, "mbcmjiushi" | "mbcmfangzhu" | "mbjuejin") =>
+            {
+                match host_skill_bindings::lookup_upstream_host_behavior(key) {
+                    Some(b) => MappedSkill::Host(b),
+                    None => MappedSkill::Deferred,
+                }
+            }
+            other => other,
+        };
+        match mapped {
             MappedSkill::Host(behavior) => {
                 let interned = names::intern(key.to_string());
                 host_skills.push(HostSkillDecl {

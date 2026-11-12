@@ -115,8 +115,8 @@ fn longxue_package_maps_host_and_defers_external() {
     );
     for name in ["mbcmjiushi", "mbcmfangzhu", "mbjuejin"] {
         assert!(
-            e.catalog().skill_by_name(name).is_none(),
-            "{name} 外部依赖未入目录（不虚构空操作）"
+            e.catalog().skill_by_name(name).is_some(),
+            "{name} 已转换入目录"
         );
     }
 }

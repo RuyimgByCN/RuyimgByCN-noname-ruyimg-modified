@@ -148,37 +148,111 @@ fn l29_longxue_mbqianlong_unlocks_and_executes_all_four_skills_with_save_restore
         "marks:99|unlocked:mbcmqingzheng,mbcmjiushi,mbcmfangzhu,mbjuejin"
     );
 
-    // 1. Execute mbcmjiushi: face-up -> turns over & sets jiu_active; face-down -> flips back & gains trick
+    // 1. Execute mbcmjiushi via native HostBehavior::MbcmJiushi:
+    //    Part A (Phase::Play active): face-up -> turns over, sets jiu_active, asks mbcmjiushi_gain_confirm -> gains trick
+    e.debug_set_turn(0, engine_native::event::Phase::Play, 1);
     assert!(!e.state_core().player(0).face_down);
-    invoke_d34_op(&mut e, 0, "mbcmjiushi", MBCMJIUSHI_ID);
+    let hand0_before = e.debug_hand(0).len();
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::ActivateSkill { skill: js },
+    });
+    let c = match out {
+        CommandOutcome::Pending { choice, .. } => choice,
+        other => panic!("expected mbcmjiushi_gain_confirm, got {other:?}"),
+    };
+    assert_eq!(c.spec.prompt, "mbcmjiushi_gain_confirm");
     assert!(e.state_core().player(0).face_down);
     assert!(e.state_core().turn.jiu_active);
-    assert_eq!(flag(&e, 0, "mbcmjiushi_jiu_used"), 1);
+    let _ = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: c.id,
+            selection: vec![engine_native::ChoiceOption::Confirm],
+        },
+    });
+    assert_eq!(e.debug_hand(0).len(), hand0_before + 1);
 
-    invoke_d34_op(&mut e, 0, "mbcmjiushi", MBCMJIUSHI_ID);
-    assert!(!e.state_core().player(0).face_down);
-    assert_eq!(flag(&e, 0, "mbcmjiushi_trick_gained"), 1);
-
-    // 2. Execute mbcmfangzhu via REAL RuleVm Damage trigger: dealing 1 damage to seat 0 (marks == 99 >= 75)
-    // automatically triggers mbcmfangzhu#d34 in RuleVm, flipping target 2 and drawing lost_hp cards!
-    e.debug_set_hp(0, 2); // taking 1 damage brings hp to 1 (max_hp = 3 => lost_hp = 2)
-    set_flag(&mut e, 0, "mbcmfangzhu_target", 2);
-    let hand2_before = e.debug_hand(2).len();
+    //    Part B (Damage while face_down): triggers mbcmjiushi -> turnback confirm -> flips face-up -> gain confirm -> gains trick
+    e.debug_set_hp(0, 3);
     let _ = e.debug_deal_damage(Some(1), 0, 1, DamageNature::Normal);
-    drain(&mut e);
-    assert!(
-        e.state_core().player(2).face_down,
-        "mbcmfangzhu must trigger via RuleVm on Damage to mb_caomao"
-    );
-    assert_eq!(flag(&e, 0, "mbcmfangzhu_drawn"), 2);
-    assert_eq!(e.debug_hand(2).len(), hand2_before + 2);
+    for _ in 0..8 {
+        let Some(ch) = e.open_choice().cloned() else { break };
+        let sel = if ch.spec.options.contains(&engine_native::ChoiceOption::Confirm) {
+            vec![engine_native::ChoiceOption::Confirm]
+        } else {
+            vec![ch.spec.options[0]]
+        };
+        let _ = e.submit(GameCommand {
+            actor: ch.observer,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::Answer {
+                choice_id: ch.id,
+                selection: sel,
+            },
+        });
+    }
+    assert!(!e.state_core().player(0).face_down);
+    assert_eq!(e.debug_hand(0).len(), hand0_before + 2);
 
-    // 3. Execute mbjuejin: limited 1/game -> +2 hujia & moves shan/tao/jiu into "xiang" pile
+    // 2. Execute mbcmfangzhu via native HostBehavior::MbcmFangzhu (Phase::Play active: target -> option)
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::ActivateSkill { skill: fz },
+    });
+    let c_tgt = match out {
+        CommandOutcome::Pending { choice, .. } => choice,
+        other => panic!("expected mbcmfangzhu_target, got {other:?}"),
+    };
+    assert_eq!(c_tgt.spec.prompt, "mbcmfangzhu_target");
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: c_tgt.id,
+            selection: vec![engine_native::ChoiceOption::Player(2)],
+        },
+    });
+    let c_opt = match out {
+        CommandOutcome::Pending { choice, .. } => choice,
+        other => panic!("expected mbcmfangzhu_option, got {other:?}"),
+    };
+    assert_eq!(c_opt.spec.prompt, "mbcmfangzhu_option");
+    let _ = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: c_opt.id,
+            selection: vec![engine_native::ChoiceOption::Tag(0)],
+        },
+    });
+    assert_eq!(flag(&e, 2, "mbcmfangzhu_ban"), 1);
+    assert_eq!(flag(&e, 0, "mbcmfangzhu_last_target"), 2);
+
+    // 3. Execute mbjuejin via native HostBehavior::MbJuejin: limited 1/game -> adjusts HP to 1 (+hujia), +2 hujia to owner, exiles shan/tao/jiu
+    e.debug_set_hp(0, 3);
     e.debug_place(1, "shan");
-    invoke_d34_op(&mut e, 0, "mbjuejin", MBJUEJIN_ID);
-    assert_eq!(flag(&e, 0, "mbjuejin_active"), 1);
-    assert_eq!(e.state_core().player(0).hujia, 2);
-    assert!(flag(&e, 0, "mbjuejin_xiang_count") >= 1);
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::ActivateSkill { skill: jj },
+    });
+    assert!(matches!(out, CommandOutcome::Accepted { .. }), "{out:?}");
+    assert_eq!(flag(&e, 0, "mbjuejin_used"), 1);
+    assert_eq!(flag(&e, 0, "mbjuejin_xiangsicunwei"), 1);
+    assert_eq!(e.state_core().player(0).hp, 1);
+    assert_eq!(e.state_core().player(0).hujia, 4);
+    assert!(!e.state_core().detached_cards.is_empty());
 
     // Save & restore + binary archive roundtrip verification
     let snap = e.save();
@@ -187,8 +261,8 @@ fn l29_longxue_mbqianlong_unlocks_and_executes_all_four_skills_with_save_restore
     let restored = Engine::restore_with_extensions(&decoded, &[&longxue_pack, &d34_pack])
         .expect("restore_with_extensions");
     assert_eq!(restored.state_core().player(0).mbqianlong_marks, 99);
-    assert_eq!(restored.state_core().player(0).hujia, 2);
-    assert_eq!(flag(&restored, 0, "mbjuejin_active"), 1);
+    assert_eq!(restored.state_core().player(0).hujia, 4);
+    assert_eq!(flag(&restored, 0, "mbjuejin_xiangsicunwei"), 1);
 }
 
 #[test]

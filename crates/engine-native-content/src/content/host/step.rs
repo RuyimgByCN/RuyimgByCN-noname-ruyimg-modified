@@ -1056,7 +1056,10 @@ impl HostMachine {
             HostBehavior::BossBaiyi => self.step_boss(ctx),
             HostBehavior::BossBaiyiThunder => self.step_boss(ctx),
             HostBehavior::BossChuanyun | HostBehavior::BossTianyun => self.step_boss(ctx),
-            HostBehavior::DddXiaxing => self.step_skills_targets(ctx),
+            HostBehavior::DddXiaxing
+            | HostBehavior::MbcmJiushi
+            | HostBehavior::MbcmFangzhu
+            | HostBehavior::MbJuejin => self.step_skills_targets(ctx),
             HostBehavior::D3Moyan => self.step_skills_damage(ctx),
             // 机关妖术防重标记：纯状态无触发面（补偿触发暂缓）
             HostBehavior::SwdJiguanyaoState => self.step_swd_status(ctx),

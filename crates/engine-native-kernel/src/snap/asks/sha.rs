@@ -167,7 +167,8 @@ pub(super) fn active_sha_ask(
         ));
     }
     if asked {
-        let tieji_blocks = tieji_red == Some(true);
+        let tieji_blocks = tieji_red == Some(true)
+            || core.vm_aux.flags.get(&(target, "mbcmfangzhu_ban".to_string())).copied().unwrap_or(0) > 0;
         let longdan = catalog
             .skill_by_name(LONG_DAN)
             .map(|d| core.has_skill(target, d))

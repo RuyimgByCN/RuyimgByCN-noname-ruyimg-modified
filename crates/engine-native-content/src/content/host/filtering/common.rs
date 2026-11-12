@@ -417,6 +417,47 @@ impl HostSkillBehavior {
             HostBehavior::MbcmQingzheng => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::Play, begin: true }
                 if *player == owner && !ctx.state.player(owner).hand.is_empty()),
+            // 酒诗：背面朝上受非本技能强化【杀】伤害后翻回 + 翻面时获得锦囊
+            HostBehavior::MbcmJiushi => match event {
+                EventData::Damage(d) => {
+                    !d.prevented
+                        && d.amount > 0
+                        && d.target == owner
+                        && ctx.state.player(owner).face_down
+                        && ctx
+                            .state
+                            .vm_aux
+                            .flags
+                            .get(&(owner, "mbcmjiushi_check_jiushi".to_string()))
+                            .copied()
+                            .unwrap_or(0)
+                            == 0
+                        && !d.card.is_some_and(|cid| {
+                            d.source.is_some_and(|src| {
+                                ctx.state
+                                    .vm_aux
+                                    .flags
+                                    .get(&(src, format!("mbcmjiushi_boosted_card:{cid}")))
+                                    .copied()
+                                    .unwrap_or(0)
+                                    > 0
+                            })
+                        })
+                        && !(d.from_chain
+                            && d.source == Some(owner)
+                            && ctx
+                                .state
+                                .vm_aux
+                                .flags
+                                .get(&(owner, "mbcmjiushi_used_turn".to_string()))
+                                .copied()
+                                .unwrap_or(0)
+                                > 0)
+                }
+                EventData::TurnOvered { player, .. } => *player == owner,
+                _ => false,
+            },
+            HostBehavior::MbcmFangzhu | HostBehavior::MbJuejin => false,
             // 卫统：开局首阶段 + 自己持潜龙 + 另有魏势力持本技者
             HostBehavior::MbWeitong => match event {
                 EventData::Phase { begin: true, .. } => {

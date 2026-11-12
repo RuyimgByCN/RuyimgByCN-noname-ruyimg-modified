@@ -103,7 +103,7 @@ fn phase7_all_trigger_bearing_host_behaviors_have_bound_source_order() {
         .copied()
         .filter(|h| h.trigger_meta().is_some())
         .collect();
-    assert_eq!(trigger_bearing.len(), 296);
+    assert_eq!(trigger_bearing.len(), 297);
     assert!(
         trigger_bearing.iter().all(|h| h.source_order().is_some()),
         "every trigger-bearing HostBehavior must have an explicit source_order tuple"

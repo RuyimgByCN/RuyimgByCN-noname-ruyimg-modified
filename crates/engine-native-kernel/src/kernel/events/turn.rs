@@ -300,6 +300,35 @@ pub(in crate::kernel) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) 
                 inst.enabled = true;
             }
         }
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(player, "mbcmfangzhu_ban".to_string()));
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(player, "mbcmfangzhu_baiban".to_string()));
+        let fangzhu_disabled: Vec<u16> = ctx
+            .core
+            .vm_aux
+            .flags
+            .keys()
+            .filter_map(|(p, k)| {
+                (*p == player)
+                    .then(|| k.strip_prefix("mbcmfangzhu_disabled:"))
+                    .flatten()
+                    .and_then(|d| d.parse::<u16>().ok())
+            })
+            .collect();
+        for def in fangzhu_disabled {
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(player, format!("mbcmfangzhu_disabled:{def}")));
+            if let Some(inst) = ctx.core.skills.get_mut(&(player, def)) {
+                inst.enabled = true;
+            }
+        }
         ctx.core.vm_aux.clear_turn();
     }
     ctx.log(LogEvent::TurnEnded { player });

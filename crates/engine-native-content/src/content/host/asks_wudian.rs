@@ -721,6 +721,63 @@ pub(super) fn active_ask_wudian(
             )),
             _ => None,
         },
+        HostBehavior::MbcmJiushi => match stage {
+            HostStage::TargetChoice => Some(ask(
+                owner,
+                crate::content::host::MBCMJIUSHI_TURNBACK_CONFIRM,
+                ChoiceKind::Confirm,
+                vec![ChoiceOption::Confirm, ChoiceOption::Pass],
+                1,
+                1,
+                false,
+            )),
+            HostStage::SelectCard => Some(ask(
+                owner,
+                crate::content::host::MBCMJIUSHI_GAIN_CONFIRM,
+                ChoiceKind::Confirm,
+                vec![ChoiceOption::Confirm, ChoiceOption::Pass],
+                1,
+                1,
+                false,
+            )),
+            _ => None,
+        },
+        HostBehavior::MbcmFangzhu => match stage {
+            HostStage::TargetChoice => {
+                let last_t = core
+                    .vm_aux
+                    .flags
+                    .get(&(owner, "mbcmfangzhu_last_target".to_string()))
+                    .copied();
+                let options: Vec<ChoiceOption> = core
+                    .alive_players()
+                    .filter(|&p| p != owner && Some(u32::from(p)) != last_t)
+                    .map(ChoiceOption::Player)
+                    .collect();
+                if options.is_empty() {
+                    return None;
+                }
+                Some(ask(
+                    owner,
+                    crate::content::host::MBCMFANGZHU_TARGET,
+                    ChoiceKind::SelectPlayers,
+                    options,
+                    1,
+                    1,
+                    true,
+                ))
+            }
+            HostStage::SelectNature => Some(ask(
+                owner,
+                crate::content::host::MBCMFANGZHU_OPTION,
+                ChoiceKind::PickTag,
+                vec![ChoiceOption::Tag(0), ChoiceOption::Tag(1)],
+                1,
+                1,
+                false,
+            )),
+            _ => None,
+        },
         _ => unreachable!("behavior routed to the wrong ask group"),
     }
 }

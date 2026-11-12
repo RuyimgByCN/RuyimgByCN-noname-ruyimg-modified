@@ -394,6 +394,51 @@ pub(super) fn plan_extension_choice_action(input: &crate::view::PolicyInput) -> 
                 selection,
             })
         }
+        "mbcmjiushi_gain_confirm" | "mbcmjiushi_turnback_confirm" => Some(GameAction::Answer {
+            choice_id: id,
+            selection: vec![ChoiceOption::Confirm],
+        }),
+        "mbcmfangzhu_target" => {
+            let best = options
+                .iter()
+                .filter_map(|o| match o {
+                    ChoiceOption::Player(t) => Some(*t),
+                    _ => None,
+                })
+                .filter(|&t| public_attitude(&input.view, seat, t) < 0)
+                .max_by_key(|&t| {
+                    let att = (-public_attitude(&input.view, seat, t)) as i64;
+                    let hand_n = input
+                        .view
+                        .players
+                        .get(t as usize)
+                        .map(|p| p.hand_count as i64)
+                        .unwrap_or(0);
+                    att * 10 + hand_n
+                });
+            let selection = match best {
+                Some(t) => vec![ChoiceOption::Player(t)],
+                None if allow_cancel => Vec::new(),
+                None => options.iter().take(1).copied().collect(),
+            };
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
+        "mbcmfangzhu_option" => {
+            let selection = options
+                .iter()
+                .find(|o| matches!(o, ChoiceOption::Tag(0)))
+                .or_else(|| options.first())
+                .copied()
+                .into_iter()
+                .collect();
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
         _ => None,
     }
 }

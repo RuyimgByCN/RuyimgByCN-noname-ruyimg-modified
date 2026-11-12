@@ -685,7 +685,8 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 .skill_by_name(crate::vocabulary::names::LONG_DAN)
                 .map(|d| ctx.core.has_skill(self.target, d))
                 .unwrap_or(false);
-            let tieji_blocks = self.tieji_red == Some(true);
+            let tieji_blocks = self.tieji_red == Some(true)
+                || ctx.core.vm_aux.flags.get(&(self.target, "mbcmfangzhu_ban".to_string())).copied().unwrap_or(0) > 0;
             // 倾国（甄姬，v202 对齐上游 position "hs"）：黑色手牌可当闪打出——并入响应选项
             let qingguo = ctx
                 .catalog

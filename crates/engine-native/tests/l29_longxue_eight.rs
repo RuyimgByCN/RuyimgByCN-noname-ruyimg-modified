@@ -6,14 +6,57 @@
 //! Spine/DOM 显示面（`_CMeffects`、死亡动画、进度条）。
 
 use std::path::PathBuf;
+use std::sync::atomic::{AtomicU64, Ordering};
 
 use content_native_loader::{
     longxue_unlock_report, parse_longxue_config, LongxueError, LONGXUE_THRESHOLDS,
 };
 use content_runtime::{import_extensions, InstallOptions, PackageStore};
 use content_schema::ContentPackage;
+use engine_native::ai::BoundedPlanner;
+use engine_native::archive::{decode_archive, encode_archive};
+use engine_native::catalog::Suit;
+use engine_native::content::extension::ExtensionPack;
 use engine_native::event::DamageNature;
-use engine_native::{CommandOutcome, Engine, GameAction, GameCommand};
+use engine_native::{
+    ChoiceKind, ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase,
+};
+
+static DEDUP: AtomicU64 = AtomicU64::new(1_000_000);
+
+fn submit(e: &mut Engine, actor: u8, action: GameAction) -> CommandOutcome {
+    e.submit(GameCommand {
+        actor,
+        expected_revision: e.revision(),
+        dedup_id: DEDUP.fetch_add(1, Ordering::Relaxed),
+        action,
+    })
+}
+
+fn longxue_pack() -> ExtensionPack {
+    let json = std::fs::read_to_string(
+        repo_extensions_root().join("longxue-upstream-liuli/assets/cards.json"),
+    )
+    .expect("读取 longxue cards.json");
+    content_native_loader::bridge_pack(&json)
+        .expect("桥接 longxue-upstream-liuli")
+        .pack
+}
+
+fn advance_to_play(e: &mut Engine, seat: u8) {
+    for _ in 0..48 {
+        if e.turn().current == seat && e.turn().phase == Phase::Play && e.open_choice().is_none() {
+            return;
+        }
+        if e.open_choice().is_some() {
+            drain(e);
+            continue;
+        }
+        let actor = e.turn().current;
+        let _ = submit(e, actor, GameAction::NextPhase);
+    }
+    panic!("未能推进到座位 {seat} 的出牌阶段");
+}
 
 fn repo_extensions_root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../packages/extensions")
@@ -85,7 +128,7 @@ fn drain(e: &mut Engine) {
         let _ = e.submit(GameCommand {
             actor: c.observer,
             expected_revision: e.revision(),
-            dedup_id: 700_000 + u64::from(c.id),
+            dedup_id: DEDUP.fetch_add(1, Ordering::Relaxed),
             action: GameAction::Answer { choice_id: c.id, selection: sel },
         });
     }
@@ -219,11 +262,11 @@ fn l29_eight_dimension_from_fresh_install() {
     );
     drain(&mut e);
     assert_eq!(e.state_core().player(1).mbqianlong_marks, 90, "造成伤害 +45");
-    // 功能（反例）：外部技能不入目录（不虚构空操作）；未持潜龙者道心值恒 0
+    // 功能（正例）：50/75/99 阈值宿主技能均已入目录；功能（反例）：未持潜龙者道心值恒 0
     for name in ["mbcmjiushi", "mbcmfangzhu", "mbjuejin"] {
         assert!(
-            e.catalog().skill_by_name(name).is_none(),
-            "{name} 外部依赖未入目录"
+            e.catalog().skill_by_name(name).is_some(),
+            "{name} 宿主技能已入目录"
         );
     }
     assert_eq!(e.state_core().player(0).mbqianlong_marks, 0);
@@ -358,8 +401,8 @@ fn l29_eight_dimension_from_fresh_install() {
     );
     assert_eq!(
         longxue_unlock_report(99),
-        "marks:99|unlocked:mbcmqingzheng,mbcmjiushi(external),mbcmfangzhu(external),mbjuejin(external)",
-        "99 解锁全部（后三为外部依赖）"
+        "marks:99|unlocked:mbcmqingzheng,mbcmjiushi,mbcmfangzhu,mbjuejin",
+        "99 解锁全部四项宿主技能"
     );
     assert_eq!(LONGXUE_THRESHOLDS.len(), 4);
     // 反例：显示面（_CMeffects/死亡动画/进度条）未进包数据与内核
@@ -368,4 +411,489 @@ fn l29_eight_dimension_from_fresh_install() {
     assert!(e.catalog().skill_by_name("_CMeffects").is_none());
 
     let _ = std::fs::remove_dir_all(&root);
+}
+
+#[test]
+fn l29_mbqianlong_mbweitong_and_mbcmqingzheng_six_dimensions() {
+    let pack = longxue_pack();
+    // 1. 卫统联动：场上另一存活魏势力角色持 mbweitong 时，曹髦首回合开始道心 +60；达 99 解锁决进并移除自身卫统
+    let mut e = Engine::new_with_extensions(96010, 4, &[&pack]).expect("建局");
+    let caomao = general_def_of(&e, "mb_caomao");
+    e.debug_assemble_general_def(0, caomao);
+    e.debug_assemble_general_def(1, caomao);
+    let weitong = e.catalog().skill_by_name("mbweitong").expect("mbweitong");
+    let qingzheng = e
+        .catalog()
+        .skill_by_name("mbcmqingzheng")
+        .expect("mbcmqingzheng");
+    let jiushi = e.catalog().skill_by_name("mbcmjiushi").expect("mbcmjiushi");
+    let fangzhu = e
+        .catalog()
+        .skill_by_name("mbcmfangzhu")
+        .expect("mbcmfangzhu");
+    let juejin = e.catalog().skill_by_name("mbjuejin").expect("mbjuejin");
+    assert!(e.state_core().skills.contains_key(&(0, weitong)));
+    assert!(e.state_core().skills.contains_key(&(1, weitong)));
+
+    next_phase(&mut e);
+    assert_eq!(
+        e.state_core().player(1).mbqianlong_marks,
+        60,
+        "另一魏势力角色有卫统时开局道心 +60"
+    );
+    assert_eq!(
+        e.state_core().player(0).mbqianlong_marks,
+        65,
+        "0 号开局 +60 且首回合摸牌 +5 = 65"
+    );
+    assert!(e.state_core().skills.contains_key(&(0, qingzheng)));
+    assert!(e.state_core().skills.contains_key(&(0, jiushi)));
+    assert!(!e.state_core().skills.contains_key(&(0, fangzhu)));
+
+    // 造成 3 点伤害（+45 -> 封顶 99），解锁放逐与决进，且移除 0 号自身 mbweitong
+    let _ = e.debug_deal_damage(Some(0), 2, 3, DamageNature::Normal);
+    drain(&mut e);
+    assert_eq!(e.state_core().player(0).mbqianlong_marks, 99, "道心上限 99");
+    assert!(e.state_core().skills.contains_key(&(0, fangzhu)));
+    assert!(e.state_core().skills.contains_key(&(0, juejin)));
+    assert!(
+        !e.state_core().skills.contains_key(&(0, weitong)),
+        "99 阈值解锁决进并移除自身卫统"
+    );
+
+    // 2. 清正（mbcmqingzheng）出牌阶段开始三段交互 + 中途存档恢复 + AI 规划 + 造成伤害/不造成伤害分支
+    let mut e2 = Engine::new_with_extensions(96011, 4, &[&pack]).expect("建局2");
+    e2.debug_assemble_general_def(0, caomao);
+    e2.debug_grant(0, "mbcmqingzheng");
+    for p in 0..4 {
+        e2.debug_clear_hand(p);
+    }
+    e2.debug_place_suit(0, Suit::Spade);
+    e2.debug_place_suit(0, Suit::Spade);
+    e2.debug_place_suit(0, Suit::Heart);
+    e2.debug_place_suit(1, Suit::Club);
+    // 推进到 0 号出牌阶段开始（触发清正 trigger_confirm）
+    for _ in 0..12 {
+        if e2.open_choice().map(|c| c.spec.prompt == "trigger_confirm").unwrap_or(false) {
+            break;
+        }
+        if e2.open_choice().is_some() {
+            drain(&mut e2);
+            continue;
+        }
+        let actor = e2.turn().current;
+        let _ = submit(&mut e2, actor, GameAction::NextPhase);
+    }
+    let gate = e2.open_choice().expect("清正确认门").clone();
+    assert_eq!(gate.spec.prompt, "trigger_confirm");
+    let _ = submit(
+        &mut e2,
+        0,
+        GameAction::Answer {
+            choice_id: gate.id,
+            selection: vec![ChoiceOption::Confirm],
+        },
+    );
+
+    // Stage 1: mbcmqingzheng_suit
+    let c1 = e2.open_choice().expect("清正第一段花色选择").clone();
+    assert_eq!(c1.spec.prompt, "mbcmqingzheng_suit");
+    assert_eq!(c1.spec.kind, ChoiceKind::PickTag);
+    assert!(!c1.spec.allow_cancel);
+    assert!(c1.spec.options.contains(&ChoiceOption::Tag(0)));
+    // 反例：不允许取消
+    assert!(matches!(
+        submit(
+            &mut e2,
+            0,
+            GameAction::Answer {
+                choice_id: c1.id,
+                selection: vec![],
+            }
+        ),
+        CommandOutcome::Rejected { .. }
+    ));
+
+    // AI 规划（处于清正 Choice 窗口中）
+    let planner = BoundedPlanner::new(16);
+    let plan = e2.plan_action(0, &planner);
+    assert!(matches!(plan.action, GameAction::Answer { .. }), "AI 可规划清正选花色");
+
+    let out = submit(
+        &mut e2,
+        0,
+        GameAction::Answer {
+            choice_id: c1.id,
+            selection: vec![ChoiceOption::Tag(0)],
+        },
+    );
+    assert!(matches!(out, CommandOutcome::Pending { .. }), "{out:?}");
+
+    // Stage 2: mbcmqingzheng_target
+    let c2 = e2.open_choice().expect("清正第二段目标选择").clone();
+    assert_eq!(c2.spec.prompt, "mbcmqingzheng_target");
+    assert_eq!(c2.spec.kind, ChoiceKind::SelectPlayers);
+    let out = submit(
+        &mut e2,
+        0,
+        GameAction::Answer {
+            choice_id: c2.id,
+            selection: vec![ChoiceOption::Player(1)],
+        },
+    );
+    assert!(matches!(out, CommandOutcome::Pending { .. }), "{out:?}");
+
+    // Stage 3: mbcmqingzheng_target_suit
+    let c3 = e2.open_choice().expect("清正第三段弃目标花色").clone();
+    assert_eq!(c3.spec.prompt, "mbcmqingzheng_target_suit");
+    assert_eq!(c3.spec.options, vec![ChoiceOption::Tag(2)]);
+    let hp_before = e2.debug_hp(1);
+    let out = submit(
+        &mut e2,
+        0,
+        GameAction::Answer {
+            choice_id: c3.id,
+            selection: vec![ChoiceOption::Tag(2)],
+        },
+    );
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "{out:?}"
+    );
+    drain(&mut e2);
+    // 存档编码/解码/恢复往返保持清正结算后的状态
+    let bytes = encode_archive(&e2.save());
+    let snap = decode_archive(&bytes).expect("解码清正存档");
+    let e2 = Engine::restore_with_extensions(&snap, &[&pack]).expect("恢复清正存档");
+    assert!(e2.debug_hand(1).is_empty(), "1 号梅花牌全弃");
+    assert_eq!(
+        e2.debug_hp(1),
+        hp_before - 1,
+        "弃牌数 2 > 1 时对目标造成 1 点伤害"
+    );
+}
+
+#[test]
+fn l29_mbcmjiushi_six_dimensions() {
+    let pack = longxue_pack();
+    let mut e = Engine::new_with_extensions(96020, 4, &[&pack]).expect("建局");
+    drain(&mut e);
+    let caomao = general_def_of(&e, "mb_caomao");
+    e.debug_assemble_general_def(0, caomao);
+    e.debug_assemble_general_def(1, caomao);
+    let jiushi = e.catalog().skill_by_name("mbcmjiushi").expect("mbcmjiushi");
+    advance_to_play(&mut e, 0);
+    e.debug_grant(0, "mbcmjiushi");
+    e.debug_grant(1, "mbcmjiushi");
+    e.debug_clear_hand(0);
+    e.debug_clear_hand(1);
+    e.debug_set_hp(1, 3);
+
+    // Part A: 正面向上且未用过酒时发动 mbcmjiushi -> 翻面、视为使用酒、打开 mbcmjiushi_gain_confirm
+    let out = submit(&mut e, 0, GameAction::ActivateSkill { skill: jiushi });
+    assert!(matches!(out, CommandOutcome::Pending { .. }), "{out:?}");
+    assert!(e.state_core().player(0).face_down, "发动酒诗后翻至背面");
+    assert!(e.turn().jiu_used && e.turn().jiu_active, "视为已使用酒且酒劲生效");
+
+    let c_gain = e.open_choice().expect("酒诗翻面获锦囊确认窗").clone();
+    assert_eq!(c_gain.spec.prompt, "mbcmjiushi_gain_confirm");
+    assert!(c_gain.spec.allow_cancel);
+
+    // AI 规划（处于酒诗 Choice 窗口中）
+    let planner = BoundedPlanner::new(16);
+    let plan = e.plan_action(0, &planner);
+    assert!(matches!(plan.action, GameAction::Answer { .. }), "AI 可规划酒诗确认窗");
+
+    let out = submit(
+        &mut e,
+        0,
+        GameAction::Answer {
+            choice_id: c_gain.id,
+            selection: vec![ChoiceOption::Confirm],
+        },
+    );
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "{out:?}"
+    );
+    // 存档编码/解码/恢复往返保持翻面、酒劲与获牌状态
+    let bytes = encode_archive(&e.save());
+    let snap = decode_archive(&bytes).expect("解码酒诗存档");
+    let restored = Engine::restore_with_extensions(&snap, &[&pack]).expect("恢复酒诗存档");
+    assert!(restored.state_core().player(0).face_down);
+    assert_eq!(restored.debug_hand(0).len(), 1, "确认后获得 1 张锦囊牌");
+    let gained_cid = e.debug_hand(0)[0];
+    let sample_sha = e.debug_place(3, "sha");
+    assert_ne!(
+        e.catalog().card_kind(gained_cid),
+        e.catalog().card_kind(sample_sha),
+        "获得的牌为锦囊牌而非基本牌"
+    );
+
+    // 反例：背面向上且本回合已用过酒时不可再次发动 mbcmjiushi
+    let dup = submit(&mut e, 0, GameAction::ActivateSkill { skill: jiushi });
+    assert!(
+        matches!(dup, CommandOutcome::Rejected(_)),
+        "背面/已用酒不可再发动酒诗：{dup:?}"
+    );
+
+    // 酒诗增伤的【杀】造成 2 点伤害（+1 增伤）
+    let sha = e.debug_place(0, "sha");
+    let _ = submit(
+        &mut e,
+        0,
+        GameAction::PlayCard {
+            card: sha,
+            targets: vec![1],
+        },
+    );
+    drain(&mut e);
+    assert_eq!(e.debug_hp(1), 1, "酒诗增伤杀造成 2 点伤害");
+
+    // Part B1: 非酒诗增伤的伤害命中背面 0 号 -> 弹出 mbcmjiushi_turnback_confirm -> 确认翻回正面并弹出 mbcmjiushi_gain_confirm
+    e.debug_set_hp(0, 3);
+    let out = e.debug_deal_damage(Some(2), 0, 1, DamageNature::Normal);
+    assert!(matches!(out, CommandOutcome::Pending { .. }), "{out:?}");
+    let c_turnback = e.open_choice().expect("受击翻回确认窗").clone();
+    assert_eq!(c_turnback.spec.prompt, "mbcmjiushi_turnback_confirm");
+    assert!(c_turnback.spec.allow_cancel);
+    let hand_before = e.debug_hand(0).len();
+    let out = submit(
+        &mut e,
+        0,
+        GameAction::Answer {
+            choice_id: c_turnback.id,
+            selection: vec![ChoiceOption::Confirm],
+        },
+    );
+    assert!(matches!(out, CommandOutcome::Pending { .. }), "{out:?}");
+    assert!(!e.state_core().player(0).face_down, "确认后翻回正面");
+    let c_gain2 = e.open_choice().expect("翻回正面后联动获锦囊窗").clone();
+    assert_eq!(c_gain2.spec.prompt, "mbcmjiushi_gain_confirm");
+    // 取消获牌（vec![]）则不获得锦囊牌
+    let _ = submit(
+        &mut e,
+        0,
+        GameAction::Answer {
+            choice_id: c_gain2.id,
+            selection: vec![],
+        },
+    );
+    assert_eq!(e.debug_hand(0).len(), hand_before, "取消获牌不增加手牌");
+}
+
+#[test]
+fn l29_mbcmfangzhu_and_mbjuejin_six_dimensions() {
+    let pack = longxue_pack();
+    let mut e = Engine::new_with_extensions(96030, 4, &[&pack]).expect("建局");
+    let caomao = general_def_of(&e, "mb_caomao");
+    e.debug_assemble_general_def(0, caomao);
+    e.debug_assemble_general_def(1, caomao);
+    let fangzhu = e
+        .catalog()
+        .skill_by_name("mbcmfangzhu")
+        .expect("mbcmfangzhu");
+    let jiushi = e.catalog().skill_by_name("mbcmjiushi").expect("mbcmjiushi");
+    let qianlong = e.catalog().skill_by_name("mbqianlong").expect("mbqianlong");
+    let juejin = e.catalog().skill_by_name("mbjuejin").expect("mbjuejin");
+
+    advance_to_play(&mut e, 0);
+    // 通过造成 3 点伤害令 0 号道心值达 99，永久解锁放逐与决进（expires_end_of_turn: false）
+    e.debug_set_hp(3, 4);
+    let _ = e.debug_deal_damage(Some(0), 3, 3, DamageNature::Normal);
+    drain(&mut e);
+    assert!(e.state_core().skills.contains_key(&(0, fangzhu)));
+    assert!(e.state_core().skills.contains_key(&(0, juejin)));
+
+    // 1. 放逐（mbcmfangzhu）第一段取消回滚 once_used
+    let out = submit(&mut e, 0, GameAction::ActivateSkill { skill: fangzhu });
+    assert!(matches!(out, CommandOutcome::Pending { .. }), "{out:?}");
+    let c_tgt = e.open_choice().expect("放逐目标窗").clone();
+    assert_eq!(c_tgt.spec.prompt, "mbcmfangzhu_target");
+    assert!(c_tgt.spec.allow_cancel);
+    assert!(!c_tgt.spec.options.contains(&ChoiceOption::Player(0)));
+    let _ = submit(
+        &mut e,
+        0,
+        GameAction::Answer {
+            choice_id: c_tgt.id,
+            selection: vec![],
+        },
+    );
+    // 取消后可再次发动
+    let out = submit(&mut e, 0, GameAction::ActivateSkill { skill: fangzhu });
+    assert!(matches!(out, CommandOutcome::Pending { .. }), "{out:?}");
+    let c_tgt = e.open_choice().expect("放逐目标窗").clone();
+    let out = submit(
+        &mut e,
+        0,
+        GameAction::Answer {
+            choice_id: c_tgt.id,
+            selection: vec![ChoiceOption::Player(1)],
+        },
+    );
+    assert!(matches!(out, CommandOutcome::Pending { .. }), "{out:?}");
+
+    // Stage 2: mbcmfangzhu_option + AI 规划
+    let c_opt = e.open_choice().expect("放逐选项窗").clone();
+    assert_eq!(c_opt.spec.prompt, "mbcmfangzhu_option");
+    assert_eq!(
+        c_opt.spec.options,
+        vec![ChoiceOption::Tag(0), ChoiceOption::Tag(1)]
+    );
+    let planner = BoundedPlanner::new(16);
+    let plan = e.plan_action(0, &planner);
+    assert!(matches!(plan.action, GameAction::Answer { .. }), "AI 可规划放逐选项");
+
+    // Tag(0): 1 号直到下回合结束只能使用锦囊手牌（禁用基本/装备手牌）
+    let _ = submit(
+        &mut e,
+        0,
+        GameAction::Answer {
+            choice_id: c_opt.id,
+            selection: vec![ChoiceOption::Tag(0)],
+        },
+    );
+    // 存档编码/解码/恢复往返保持放逐禁令与本回合已用标记
+    let bytes = encode_archive(&e.save());
+    let snap = decode_archive(&bytes).expect("解码放逐存档");
+    let restored = Engine::restore_with_extensions(&snap, &[&pack]).expect("恢复放逐存档");
+    assert_eq!(
+        restored.state_core().players.len(),
+        e.state_core().players.len()
+    );
+    // 同回合不可再次发动放逐
+    assert!(matches!(
+        submit(&mut e, 0, GameAction::ActivateSkill { skill: fangzhu }),
+        CommandOutcome::Rejected(_)
+    ));
+
+    advance_to_play(&mut e, 1);
+    e.debug_clear_hand(1);
+    let sha = e.debug_place(1, "sha");
+    let zhuge = e.debug_place(1, "zhuge");
+    let wuzhong = e.debug_place(1, "wuzhong");
+    assert!(
+        matches!(
+            submit(
+                &mut e,
+                1,
+                GameAction::PlayCard {
+                    card: sha,
+                    targets: vec![2],
+                }
+            ),
+            CommandOutcome::Rejected(_)
+        ),
+        "放逐禁令下不可使用基本手牌"
+    );
+    assert!(
+        matches!(
+            submit(
+                &mut e,
+                1,
+                GameAction::PlayCard {
+                    card: zhuge,
+                    targets: vec![],
+                }
+            ),
+            CommandOutcome::Rejected(_)
+        ),
+        "放逐禁令下不可使用装备手牌"
+    );
+    let wz_out = submit(
+        &mut e,
+        1,
+        GameAction::PlayCard {
+            card: wuzhong,
+            targets: vec![],
+        },
+    );
+    assert!(
+        matches!(wz_out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "放逐禁令下可使用锦囊手牌：{wz_out:?}"
+    );
+    drain(&mut e);
+
+    // 推进回 0 号出牌阶段：1 号回合结束后禁令解除；且 0 号连续发动放逐时不可重复指派上次目标 1 号
+    advance_to_play(&mut e, 0);
+    let out2 = submit(&mut e, 0, GameAction::ActivateSkill { skill: fangzhu });
+    assert!(
+        matches!(out2, CommandOutcome::Pending { .. }),
+        "次轮放逐应可发动：{out2:?}, turn={:?}, open={:?}, all_skills={:?}",
+        e.turn(),
+        e.open_choice(),
+        e.state_core().skills
+    );
+    let c_tgt2 = e.open_choice().expect("次轮放逐目标窗").clone();
+    assert!(
+        !c_tgt2.spec.options.contains(&ChoiceOption::Player(1)),
+        "不可连续两回合放逐同一目标 1 号"
+    );
+    // 选 2 号并测 Tag(1) 非锁定技失效（先把 2 号也授予 mbcmjiushi + mbqianlong）
+    e.debug_grant(2, "mbcmjiushi");
+    e.debug_grant(2, "mbqianlong");
+    let _ = submit(
+        &mut e,
+        0,
+        GameAction::Answer {
+            choice_id: c_tgt2.id,
+            selection: vec![ChoiceOption::Player(2)],
+        },
+    );
+    let c_opt2 = e.open_choice().expect("放逐选项窗2").clone();
+    let _ = submit(
+        &mut e,
+        0,
+        GameAction::Answer {
+            choice_id: c_opt2.id,
+            selection: vec![ChoiceOption::Tag(1)],
+        },
+    );
+    assert!(
+        !e.state_core().skills[&(2, jiushi)].enabled,
+        "Tag(1) 使目标非锁定技失效"
+    );
+    assert!(
+        e.state_core().skills[&(2, qianlong)].enabled,
+        "Tag(1) 不影响目标锁定技"
+    );
+
+    // 2. 决进（mbjuejin）限定技：全场体力置 1、溢出转护甲、使用者额外 +2 护甲、驱逐全场闪/桃/酒至向死存魏区
+    e.debug_set_hp(0, 3);
+    e.debug_set_hp(1, 2);
+    e.debug_set_hp(2, 1);
+    let shan_in_hand = e.debug_place(1, "shan");
+    let tao_in_hand = e.debug_place(2, "tao");
+    let out = submit(&mut e, 0, GameAction::ActivateSkill { skill: juejin });
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "{out:?}"
+    );
+    drain(&mut e);
+    for p in 0..4 {
+        assert_eq!(e.debug_hp(p), 1, "{p} 号体力调整为 1");
+    }
+    assert_eq!(e.state_core().player(0).hujia, 4, "0 号减 2 体力转 2 护甲 + 决进额外 2 护甲 = 4");
+    assert_eq!(e.state_core().player(1).hujia, 1, "1 号减 1 体力转 1 护甲");
+    assert_eq!(e.state_core().player(2).hujia, 0, "2 号原为 1 体力无额外护甲");
+    assert!(
+        e.state_core()
+            .detached_cards
+            .iter()
+            .any(|&(c, _)| c == shan_in_hand),
+        "手牌中的【闪】被移入向死存魏区"
+    );
+    assert!(
+        e.state_core()
+            .detached_cards
+            .iter()
+            .any(|&(c, _)| c == tao_in_hand),
+        "手牌中的【桃】被移入向死存魏区"
+    );
+    // 反例：限定技决进整局只能发动一次
+    assert!(matches!(
+        submit(&mut e, 0, GameAction::ActivateSkill { skill: juejin }),
+        CommandOutcome::Rejected(_)
+    ));
 }

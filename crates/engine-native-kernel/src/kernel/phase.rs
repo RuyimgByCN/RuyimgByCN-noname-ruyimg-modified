@@ -61,6 +61,19 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
     //（上游 zhuyue2 phaseUseEnd silent 同口径）
     if !begin && phase == Phase::Play {
         ctx.core.turn.zhuyue_targets.clear();
+        if ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(player, "mbcmfangzhu_used_in_play".to_string()))
+            .unwrap_or(0)
+            == 0
+        {
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(player, "mbcmfangzhu_last_target".to_string()));
+        }
     }
     // 诚信免伤清除（U05 xianjian 明绣，规则 v164）：本人 End 阶段结束
     //（登记差异：上游 chengxin2 存活至最近阶段结束）

@@ -175,7 +175,10 @@ impl HostSkillBehavior {
             HostBehavior::SwdShenyan => self.filter_swd(ctx, owner, event),
             HostBehavior::SwdLingwu => self.filter_swd(ctx, owner, event),
             // 清正：自己出牌阶段开始且手牌非空
-            HostBehavior::MbcmQingzheng => self.filter_common(ctx, owner, event),
+            HostBehavior::MbcmQingzheng
+            | HostBehavior::MbcmJiushi
+            | HostBehavior::MbcmFangzhu
+            | HostBehavior::MbJuejin => self.filter_common(ctx, owner, event),
             // 卫统：开局首阶段 + 自己持潜龙 + 另有魏势力持本技者
             HostBehavior::MbWeitong => self.filter_common(ctx, owner, event),
             // 隐月·判：自己未被翻面时取消翻面（上游 filter !isTurnedOver）

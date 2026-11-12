@@ -582,6 +582,7 @@ impl<'a> Ctx<'a> {
     pub fn to_discard(&mut self, card: impl Into<Option<CardId>>) {
         let Some(card) = card.into() else { return };
         if self.core.discard.contains(&card)
+            || self.core.detached_cards.iter().any(|(c, _)| *c == card)
             || self.core.players.iter().any(|p| {
                 p.hand.contains(&card)
                     || p.equips.contains(&card)
@@ -590,6 +591,23 @@ impl<'a> Ctx<'a> {
             })
             || self.core.vm_aux.piles.values().any(|v| v.contains(&card))
         {
+            return;
+        }
+        if matches!(
+            self.catalog.card_kind(card),
+            crate::catalog::CardKind::Shan
+                | crate::catalog::CardKind::Tao
+                | crate::catalog::CardKind::Jiu
+        ) && self
+            .core
+            .vm_aux
+            .flags
+            .iter()
+            .any(|((_, k), &v)| k == "mbjuejin_xiangsicunwei" && v > 0)
+        {
+            self.core
+                .detached_cards
+                .push((card, crate::event::DetachedKind::Destroyed));
             return;
         }
         self.core.discard.push(card);

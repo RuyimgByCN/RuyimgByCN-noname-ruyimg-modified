@@ -452,6 +452,11 @@ pub(super) fn mbqianlong_refresh(ctx: &mut Ctx<'_>, owner: PlayerId) {
             });
         }
     }
+    if marks >= 99 {
+        if let Some(wt_def) = ctx.catalog.skill_by_name(HLSS_MBWEITONG_KEY) {
+            ctx.core.remove_skill_and_r05_mark(ctx.catalog, owner, wt_def);
+        }
+    }
 }
 
 /// 起风候选：可用**非延时锦囊**牌种（未用过、有合法目标）。

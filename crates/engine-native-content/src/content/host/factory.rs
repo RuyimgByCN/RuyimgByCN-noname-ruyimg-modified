@@ -280,6 +280,12 @@ impl HostSkillBehavior {
             HostBehavior::Yuhuo => (None, None),
             HostBehavior::Shenwei => (None, None),
             HostBehavior::MbcmQingzheng => (None, None),
+            HostBehavior::MbcmJiushi => match event {
+                EventData::Damage(_) => (None, Some(1)),
+                EventData::TurnOvered { .. } => (None, Some(2)),
+                _ => (None, None),
+            },
+            HostBehavior::MbcmFangzhu | HostBehavior::MbJuejin => (None, None),
             HostBehavior::SwdLingwu => (None, None),
             HostBehavior::SwdShenyan => (None, None),
             HostBehavior::SwdRumeng => (None, None),

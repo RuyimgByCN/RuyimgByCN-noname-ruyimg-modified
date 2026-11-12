@@ -858,6 +858,14 @@ pub const WUDIAN_DIAOBING_KEY: &str = "diaobingqianjiang";
 
 pub const WUDIAN_DIAOBING_SWAP: &str = "wudian_diaobing_swap";
 
+pub const HLSS_MBCMJIUSHI_KEY: &str = "mbcmjiushi";
+pub const HLSS_MBCMFANGZHU_KEY: &str = "mbcmfangzhu";
+pub const HLSS_MBJUEJIN_KEY: &str = "mbjuejin";
+pub const MBCMJIUSHI_GAIN_CONFIRM: &str = "mbcmjiushi_gain_confirm";
+pub const MBCMJIUSHI_TURNBACK_CONFIRM: &str = "mbcmjiushi_turnback_confirm";
+pub const MBCMFANGZHU_TARGET: &str = "mbcmfangzhu_target";
+pub const MBCMFANGZHU_OPTION: &str = "mbcmfangzhu_option";
+
 pub const WUDIAN_LIDUAN_GIVE: &str = "wudian_liduan_give";
 
 pub const WUDIAN_YOUDISHENRU_SHA: &str = "wudian_youdishenru_sha";

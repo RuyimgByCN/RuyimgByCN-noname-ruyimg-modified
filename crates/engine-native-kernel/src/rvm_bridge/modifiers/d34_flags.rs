@@ -582,6 +582,12 @@ pub fn apply_card_use_canceled(
     {
         canceled = true;
     }
+    if in_hand
+        && flag_val(state, actor, "mbcmfangzhu_ban") > 0
+        && (kind.is_basic_kind() || kind.is_equip())
+    {
+        canceled = true;
+    }
     let zhixi_cap = flag_val(state, actor, "l27_new_zhixi_cap");
     if in_hand && zhixi_cap > 0 && state.player(actor).hand.len() as u32 > zhixi_cap {
         canceled = true;
@@ -694,9 +700,6 @@ pub fn apply_damage_amount(
             }
             if flag_val(state, src, "l10_scschihe_sha_boost") > 0 {
                 cur += 1;
-            }
-            if flag_val(state, src, "mbjuejin_active") > 0 {
-                cur += 2;
             }
         }
         if nature == DamageNature::Fire {

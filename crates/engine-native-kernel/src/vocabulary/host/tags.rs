@@ -550,6 +550,9 @@ impl HostBehavior {
             HostBehavior::WudianYouzhan => 543,
             HostBehavior::WudianChoudu => 544,
             HostBehavior::WudianDiaobingCard => 545,
+            HostBehavior::MbcmJiushi => 546,
+            HostBehavior::MbcmFangzhu => 547,
+            HostBehavior::MbJuejin => 548,
         }
     }
 

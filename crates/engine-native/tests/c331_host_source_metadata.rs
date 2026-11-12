@@ -9,6 +9,7 @@ fn direct_source_profiles_keep_priority_silent_and_translated_choice_qualificati
         (H::HlssXiangxing, Timing::Normal, 0, true),
         (H::HlssYueyin, Timing::First, 1, false),
         (H::HlssYueyin2, Timing::Normal, 2000, true),
+        (H::MbcmJiushi, Timing::Normal, 0, true),
         (H::MbcmQingzheng, Timing::Normal, 0, true),
         (H::NewMeibu, Timing::Normal, 0, true),
         (H::NewZhixi, Timing::First, 0, true),

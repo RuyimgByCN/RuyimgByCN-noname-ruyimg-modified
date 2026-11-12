@@ -82,6 +82,10 @@ impl HostBehavior {
             HostBehavior::Niepan => self.trigger_meta_common(),
             // 清正：出牌阶段开始（可选）
             HostBehavior::MbcmQingzheng => self.trigger_meta_common(),
+            // 酒诗 / 放逐 / 决进（L29 龙血玄黄）：酒诗含受伤翻回+翻面得锦囊触发；放逐/决进为出牌阶段主动
+            HostBehavior::MbcmJiushi
+            | HostBehavior::MbcmFangzhu
+            | HostBehavior::MbJuejin => self.trigger_meta_common(),
             // 烈弓：被动（杀机器内联，无触发时机）
             HostBehavior::FzLiegong => self.trigger_meta_common(),
             // 狂骨：自己造成伤害后（可选）

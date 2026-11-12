@@ -546,6 +546,9 @@ impl HostBehavior {
             543 => HostBehavior::WudianYouzhan,
             544 => HostBehavior::WudianChoudu,
             545 => HostBehavior::WudianDiaobingCard,
+            546 => HostBehavior::MbcmJiushi,
+            547 => HostBehavior::MbcmFangzhu,
+            548 => HostBehavior::MbJuejin,
             _ => return None,
         })
     }

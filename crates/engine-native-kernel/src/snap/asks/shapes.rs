@@ -143,14 +143,23 @@ pub(in crate::snap) fn append_vm_shan_options(
     target: PlayerId,
     options: &mut Vec<ChoiceOption>,
 ) {
+    let hand_banned = core
+        .vm_aux
+        .flags
+        .get(&(target, "mbcmfangzhu_ban".to_string()))
+        .copied()
+        .unwrap_or(0)
+        > 0;
     let p = core.player(target);
-    for &c in &p.hand {
-        if catalog
-            .find_player_vm_view_as(core, target, c, false, Some(CardKind::Shan))
-            .is_some()
-            && !options.contains(&ChoiceOption::Card(c))
-        {
-            options.push(ChoiceOption::Card(c));
+    if !hand_banned {
+        for &c in &p.hand {
+            if catalog
+                .find_player_vm_view_as(core, target, c, false, Some(CardKind::Shan))
+                .is_some()
+                && !options.contains(&ChoiceOption::Card(c))
+            {
+                options.push(ChoiceOption::Card(c));
+            }
         }
     }
     for c in catalog.player_vm_view_as_extra_cards(core, target, false, Some(CardKind::Shan)) {
@@ -189,15 +198,25 @@ pub(in crate::snap) fn response_kind_options(
     responder: PlayerId,
     need: CardKind,
 ) -> Vec<ChoiceOption> {
+    let hand_banned = (need.is_basic_kind() || need.is_equip())
+        && core
+            .vm_aux
+            .flags
+            .get(&(responder, "mbcmfangzhu_ban".to_string()))
+            .copied()
+            .unwrap_or(0)
+            > 0;
     let mut options = vec![ChoiceOption::Pass];
     let p = core.player(responder);
-    for &c in &p.hand {
-        if catalog.card_kind(c) == need
-            || catalog
-                .find_player_vm_view_as(core, responder, c, false, Some(need))
-                .is_some()
-        {
-            options.push(ChoiceOption::Card(c));
+    if !hand_banned {
+        for &c in &p.hand {
+            if catalog.card_kind(c) == need
+                || catalog
+                    .find_player_vm_view_as(core, responder, c, false, Some(need))
+                    .is_some()
+            {
+                options.push(ChoiceOption::Card(c));
+            }
         }
     }
     for c in catalog.player_vm_view_as_extra_cards(core, responder, false, Some(need)) {

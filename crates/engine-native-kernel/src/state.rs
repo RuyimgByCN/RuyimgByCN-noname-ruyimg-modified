@@ -922,6 +922,7 @@ impl VmAux {
                 && key != "free_use"
                 && key != "starbishi_triggered"
                 && !key.starts_with("zexing_visited:")
+                && !key.starts_with("mbcmjiushi_")
         });
     }
 

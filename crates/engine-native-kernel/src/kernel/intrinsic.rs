@@ -688,6 +688,25 @@ fn sha_intrinsic(
         hujia_queue: None,
         hujia_holder: None,
         // 酒效果在杀派发（=使用）时捕获并消耗——「下一张杀」
-        jiu_bonus: std::mem::take(&mut ctx.core.turn.jiu_active),
+        jiu_bonus: {
+            let jb = std::mem::take(&mut ctx.core.turn.jiu_active);
+            if jb
+                && ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .remove(&(u.player, "mbcmjiushi_jiu_active".to_string()))
+                    .unwrap_or(0)
+                    > 0
+            {
+                if let Some(cid) = u.card {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .insert((u.player, format!("mbcmjiushi_boosted_card:{cid}")), 1);
+                }
+            }
+            jb
+        },
     }))
 }

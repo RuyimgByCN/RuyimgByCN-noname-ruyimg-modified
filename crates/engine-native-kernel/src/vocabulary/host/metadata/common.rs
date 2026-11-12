@@ -146,6 +146,17 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 酒诗：受伤翻回 + 翻面获得锦囊（两面均在机器步内弹窗确认）
+            HostBehavior::MbcmJiushi => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                order_selectable: true,
+                optional: false,
+                extra_events: vec![EventKind::TurnOvered],
+            }),
+            // 放逐 / 决进：出牌阶段主动（activate 分支；无触发时机）
+            HostBehavior::MbcmFangzhu | HostBehavior::MbJuejin => None,
             // 烈弓：被动（杀机器内联，无触发时机）
             HostBehavior::FzLiegong => None,
             // 狂骨：自己造成伤害后（可选）

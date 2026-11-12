@@ -197,19 +197,31 @@ pub(super) fn response_kind_cards(
     responder: PlayerId,
     need: CardKind,
 ) -> Vec<crate::ids::CardId> {
+    let hand_banned = (need.is_basic_kind() || need.is_equip())
+        && ctx
+            .core
+            .vm_aux
+            .flags
+            .get(&(responder, "mbcmfangzhu_ban".to_string()))
+            .copied()
+            .unwrap_or(0)
+            > 0;
     let p = ctx.core.player(responder);
-    let mut out: Vec<crate::ids::CardId> = p
-        .hand
-        .iter()
-        .copied()
-        .filter(|&c| {
-            ctx.catalog.card_kind(c) == need
-                || ctx
-                    .catalog
-                    .find_player_vm_view_as(ctx.core, responder, c, false, Some(need))
-                    .is_some()
-        })
-        .collect();
+    let mut out: Vec<crate::ids::CardId> = if hand_banned {
+        Vec::new()
+    } else {
+        p.hand
+            .iter()
+            .copied()
+            .filter(|&c| {
+                ctx.catalog.card_kind(c) == need
+                    || ctx
+                        .catalog
+                        .find_player_vm_view_as(ctx.core, responder, c, false, Some(need))
+                        .is_some()
+            })
+            .collect()
+    };
     for c in ctx
         .catalog
         .player_vm_view_as_extra_cards(ctx.core, responder, false, Some(need))

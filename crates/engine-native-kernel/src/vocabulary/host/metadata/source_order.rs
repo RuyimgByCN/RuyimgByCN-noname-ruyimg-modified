@@ -101,6 +101,8 @@ impl HostBehavior {
             Self::HlssYueyin2 => (Timing::Normal, 2000, true),
             // noname-liuli/noname/character/mobile.js:17117
             Self::MbcmQingzheng => (Timing::Normal, 0, true),
+            // noname/apps/core/character/mobile/skill.js:14399
+            Self::MbcmJiushi => (Timing::Normal, 0, true),
             // noname/apps/core/character/sp/skill.js:35046
             Self::NewMeibu => (Timing::Normal, 0, true),
             // noname/apps/core/character/sp/skill.js:35205

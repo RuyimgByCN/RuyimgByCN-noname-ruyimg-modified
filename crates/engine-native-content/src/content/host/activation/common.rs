@@ -508,6 +508,69 @@ impl HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
+            HostBehavior::MbcmJiushi => {
+                if ctx.state.player(owner).face_down || ctx.state.turn.jiu_used {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: Some(0),
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            HostBehavior::MbcmFangzhu => {
+                let last_t = ctx
+                    .state
+                    .vm_aux
+                    .flags
+                    .get(&(owner, "mbcmfangzhu_last_target".to_string()))
+                    .copied();
+                if !ctx
+                    .state
+                    .alive_players()
+                    .any(|p| p != owner && Some(u32::from(p)) != last_t)
+                {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
+            HostBehavior::MbJuejin => {
+                if ctx
+                    .state
+                    .vm_aux
+                    .flags
+                    .get(&(owner, "mbjuejin_used".to_string()))
+                    .copied()
+                    .unwrap_or(0)
+                    > 0
+                {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
             _ => unreachable!("behavior routed to the wrong activate module"),
         }
     }

@@ -332,7 +332,8 @@ pub fn host_skill_def(name: String, behavior: HostBehavior) -> crate::catalog::S
         | HostBehavior::SwdLianyaohuLianhua
         | HostBehavior::SwdShennongdingCard
         | HostBehavior::SwdKunlunjingcCard
-        | HostBehavior::SwdSifeizhenmianCard => crate::catalog::SkillLimits {
+        | HostBehavior::SwdSifeizhenmianCard
+        | HostBehavior::MbcmFangzhu => crate::catalog::SkillLimits {
             once_per_turn: true,
             ..Default::default()
         },
