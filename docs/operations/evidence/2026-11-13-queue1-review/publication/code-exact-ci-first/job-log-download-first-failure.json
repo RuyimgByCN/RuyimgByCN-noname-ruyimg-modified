@@ -1,0 +1,12 @@
+{
+  "at": "2026-11-14T01:10:07.359487+08:00",
+  "recorded_from": "Previous exec inline subprocess output",
+  "argv": [
+    "gh",
+    "api",
+    "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/132034131115/logs"
+  ],
+  "exit_code": 1,
+  "stderr": "the response contains terminal escape sequences; pass --allow-escape-sequences to output it anyway",
+  "scope": "CLI refused to emit raw log bytes. This was a read-only download, not a CI job failure or workflow rerun."
+}

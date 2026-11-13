@@ -1,5 +1,9 @@
 # 32 个已映射来源的**八项签署状态**（第 494 轮基线 + 2026-11-10 裁决 34/35 第五轮死旗标清退与如实复核）
 
+## 2026-11-14T01:33:42+08:00 队列1部分增量发布及CI核验
+
+代码 `1fa8ac6cc3a70446436d97ff49aa19ea4626e22d` 已按裁决25正常发布；[精确SHA CI](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43468568765) attempt1全部10作业success／0失败／0取消，未由agent补跑。记录时HEAD为该代码加文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8。 [完整门禁/作业/原始日志](../2026-11-13-queue1-review/publication/code-exact-ci-first/README.md)。第①项按[634／3790／0](../2026-11-13-queue1-review/source-counts-reviewed.md)、新增等价0；第⑧项保留聚贤及全部已知差异，八项整包仍0/37。队列1部分，平台/组合/性能及规则签署不因测试绿色关闭。
+
 ## 2026-11-14T00:58:36+08:00 队列1部分增量本地核验（未提交／发布）
 
 HEAD `bd58ef06d59940baed8d7f93e61ce571b152fb81` + tracked dirty；333／107／5／759／WS8。三crate2446／0／6、workspace7842／0／8及其余必跑命令exit0、完整preflight复跑21项通过，见[实际门禁与限制](../2026-11-13-queue1-review/final-local-gates.md)。全清单[634／3790／0](../2026-11-13-queue1-review/source-counts-reviewed.md)，新增等价0；第⑧项保留全部已知差异，八项整包仍0/37。尚未提交/发布，队列1未完成；本地门禁不替代各来源功能/配置/组合/平台/性能与差异验收。

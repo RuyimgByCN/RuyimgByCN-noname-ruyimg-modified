@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-14T01:33:42+08:00 队列1部分增量发布与CI
+
+代码 `1fa8ac6cc3a70446436d97ff49aa19ea4626e22d` 已按裁决25正常发布；[精确SHA CI](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43468568765) attempt1全部10作业success／0失败／0取消，未由agent补跑。记录时HEAD为该代码加文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8。 [本地及精确代码CI记录](../../operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/README.md)。[37来源清单](../../operations/evidence/2026-11-13-queue1-review/source-counts-reviewed.md)634／3790／0、本批撤回215、新增等价0；八项0/37、队列1部分。旧状态沿用不作本轮重新认证，保留下方全部历史表。
+
 ## 2026-11-14T00:58:36+08:00 队列1部分增量本地门禁通过（未提交／发布）
 
 源码HEAD `bd58ef06d59940baed8d7f93e61ce571b152fb81` + tracked dirty；规则333／NGSA107／schema5／ABI759／WS8。当前[37来源清单](../../operations/evidence/2026-11-13-queue1-review/source-counts-reviewed.md)634／3790／0；撤回215旧等价、新增等价0，沿用旧状态不作为本轮认证。三crate2446／0／6、workspace7842／0／8及其他必跑命令均exit0；完整preflight复跑21项通过，见[命令、首次失败和未验范围](../../operations/evidence/2026-11-13-queue1-review/final-local-gates.md)。八项0/37、队列1部分；实际[对照样本](../../operations/evidence/2026-11-13-queue1-review/runtime-comparison.md)仅5技能指定分支。尚未提交/发布本批。

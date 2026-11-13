@@ -1,0 +1,28 @@
+{
+  "argv": [
+    "git",
+    "diff",
+    "--check",
+    "--",
+    "docs/architecture/native-progress.md",
+    "docs/architecture/native-remaining-ledger.md",
+    "docs/architecture/native-rules-baseline.md",
+    "docs/migration/g0/README.md",
+    "docs/migration/upstream-extension-reconstruction.md",
+    "docs/operations/evidence/2026-10-19-source-signoff-32/README.md",
+    "docs/operations/evidence/2026-11-13-queue1-review/README.md",
+    "docs/operations/evidence/2026-11-13-queue1-review/final-local-gates.md",
+    "docs/operations/evidence/2026-11-13-queue1-review/remaining-scope.md"
+  ],
+  "command": "git diff --check -- docs/architecture/native-progress.md docs/architecture/native-remaining-ledger.md docs/architecture/native-rules-baseline.md docs/migration/g0/README.md docs/migration/upstream-extension-reconstruction.md docs/operations/evidence/2026-10-19-source-signoff-32/README.md docs/operations/evidence/2026-11-13-queue1-review/README.md docs/operations/evidence/2026-11-13-queue1-review/final-local-gates.md docs/operations/evidence/2026-11-13-queue1-review/remaining-scope.md",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0"
+  },
+  "source_head": "1fa8ac6cc3a70446436d97ff49aa19ea4626e22d",
+  "tracked_status": " M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/README.md\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n M docs/operations/evidence/2026-11-13-queue1-review/README.md\n M docs/operations/evidence/2026-11-13-queue1-review/final-local-gates.md\n M docs/operations/evidence/2026-11-13-queue1-review/remaining-scope.md\n",
+  "start_utc": "2026-11-13T17:35:26.842714+00:00",
+  "exit_code": 0,
+  "duration_seconds": 0.034,
+  "end_utc": "2026-11-13T17:35:26.878132+00:00"
+}

@@ -1,0 +1,62 @@
+{
+  "at": "2026-11-14T01:37:30+08:00",
+  "head": "1fa8ac6cc3a70446436d97ff49aa19ea4626e22d",
+  "tracked_dirty": true,
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "checks": [
+    {
+      "metadata": "../29-documentation-links.json",
+      "log": "../29-documentation-links.log",
+      "command": "python3 -B scripts/check_local_links.py",
+      "exit_code": 0
+    },
+    {
+      "metadata": "../30-documentation-line-refs.json",
+      "log": "../30-documentation-line-refs.log",
+      "command": "python3 -B scripts/check_doc_line_refs.py",
+      "exit_code": 0
+    },
+    {
+      "metadata": "../31-documentation-source-unit.json",
+      "log": "../31-documentation-source-unit.log",
+      "command": "python3 -B -m unittest discover -s scripts -p test_check_source_lines.py",
+      "exit_code": 0
+    },
+    {
+      "metadata": "../32-documentation-source-lines.json",
+      "log": "../32-documentation-source-lines.log",
+      "command": "python3 -B scripts/check-source-lines.py",
+      "exit_code": 0
+    },
+    {
+      "metadata": "../33-documentation-links-all.json",
+      "log": "../33-documentation-links-all.log",
+      "command": "python3 -B scripts/check_local_links.py --all",
+      "exit_code": 0
+    },
+    {
+      "metadata": "../34-documentation-owned-diff-check.json",
+      "log": "../34-documentation-owned-diff-check.log",
+      "command": "git diff --check -- docs/architecture/native-progress.md docs/architecture/native-remaining-ledger.md docs/architecture/native-rules-baseline.md docs/migration/g0/README.md docs/migration/upstream-extension-reconstruction.md docs/operations/evidence/2026-10-19-source-signoff-32/README.md docs/operations/evidence/2026-11-13-queue1-review/README.md docs/operations/evidence/2026-11-13-queue1-review/final-local-gates.md docs/operations/evidence/2026-11-13-queue1-review/remaining-scope.md",
+      "exit_code": 0
+    }
+  ],
+  "full_link_files": 2103,
+  "broken_links": 0,
+  "file_line_references": 10584,
+  "out_of_bounds_references": 0,
+  "unresolved_path_classes": 48,
+  "source_guard_files": 9364,
+  "source_unit_passed": 2,
+  "product_inputs_frozen": 32259,
+  "code_exact_ci_run": 43468568765,
+  "code_ci_attempt": 1,
+  "code_ci_successful_jobs": 10,
+  "scope": "Documentation/evidence companion only. No new Rust/UI logic; required code gates are the earlier exact-code results. The 48 unresolved path classes remain, and raw logs preserve original whitespace."
+}

@@ -1,0 +1,33 @@
+{
+  "at": "2026-11-14T01:13:25.561301+08:00",
+  "argv": [
+    "gh",
+    "api",
+    "--allow-escape-sequences",
+    "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/132034131076/logs"
+  ],
+  "exit_code": 0,
+  "job_id": 132034131076,
+  "job_name": "native-web",
+  "sha256": "2790687a946704465809ac0c60879dc720677f01ae15620947908b899a488cc7",
+  "bytes": 670248,
+  "rustc_versions": [
+    "rustc 1.100.0 (0ef1bc386 2026-11-09)",
+    "rustc 1.100.0 (0ef1bc386 2026-11-09) (from rustc 1.99.1 (58cf8f9c3 2026-10-13))"
+  ],
+  "rust_test_result_sections": 56,
+  "rust_test_counts": {
+    "passed": 2583,
+    "failed": 0,
+    "ignored": 6,
+    "measured": 0,
+    "filtered": 0
+  },
+  "new_juxian_tests_passed": [
+    "test u01_juxian_gain::juxian_gain_planner_does_not_inspect_foreign_hand_faces ... ok",
+    "test u01_juxian_gain::juxian_top_mode_requires_other_he_and_mode_cancel_keeps_payment ... ok",
+    "test u01_juxian_gain::juxian_gain_selects_each_hidden_card_or_public_equipment_and_resumes_archive ... ok",
+    "test u01_juxian_gain::juxian_hidden_order_uses_rng_is_archived_and_rejects_invalid_mapping ... ok"
+  ],
+  "scope": "Completed Linux native-web job only; separate workspace/strict and installer jobs remain."
+}

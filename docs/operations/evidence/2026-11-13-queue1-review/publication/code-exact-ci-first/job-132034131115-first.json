@@ -1,0 +1,28 @@
+{
+  "at": "2026-11-14T01:10:11.841442+08:00",
+  "argv": [
+    "gh",
+    "api",
+    "--allow-escape-sequences",
+    "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/132034131115/logs"
+  ],
+  "exit_code": 0,
+  "job_id": 132034131115,
+  "job_name": "build-ubuntu-latest",
+  "download_attempt": 2,
+  "sha256": "da52fa5bd2d2484a0f69998ca5a9a3190ebd97198d7285ff4d3a8752763a184e",
+  "bytes": 353344,
+  "rustc_versions": [
+    "rustc 1.100.0 (0ef1bc386 2026-11-09)",
+    "rustc 1.100.0 (0ef1bc386 2026-11-09) (from rustc 1.99.1 (58cf8f9c3 2026-10-13))"
+  ],
+  "test_result_sections": 26,
+  "test_counts": {
+    "passed": 872,
+    "failed": 0,
+    "ignored": 0,
+    "measured": 0,
+    "filtered": 0
+  },
+  "scope": "Completed Linux workspace build and --lib unit-test job only; full integration/product gates and remaining jobs are still running."
+}

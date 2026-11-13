@@ -1,0 +1,74 @@
+﻿2026-11-13T17:03:49.7791963Z ##[group]Run pnpm build:native
+2026-11-13T17:03:49.7792223Z [36;1mpnpm build:native[0m
+2026-11-13T17:03:49.7837187Z shell: /usr/bin/bash -e {0}
+2026-11-13T17:03:49.7837413Z env:
+2026-11-13T17:03:49.7837582Z   CARGO_TERM_COLOR: always
+2026-11-13T17:03:49.7837791Z   WASM_PACK_TARGET: web
+2026-11-13T17:03:49.7837989Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T17:03:49.7838205Z   CARGO_INCREMENTAL: 0
+2026-11-13T17:03:49.7838390Z   CACHE_ON_FAILURE: false
+2026-11-13T17:03:49.7838629Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-11-13T17:03:49.7838893Z ##[endgroup]
+2026-11-13T17:03:50.0972916Z 
+2026-11-13T17:03:50.0974117Z > noname-next-web-client@0.1.0 build:native /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/apps/web-client
+2026-11-13T17:03:50.0975104Z > node scripts/build-native.mjs
+2026-11-13T17:03:50.0975322Z 
+2026-11-13T17:03:51.1638850Z [INFO]: 🎯  Checking for the Wasm target...
+2026-11-13T17:03:51.1867435Z [INFO]: 🌀  Compiling to Wasm...
+2026-11-13T17:03:51.2042399Z [1m[33mwarning[0m[1m: unused workspace dependency `accessibility-schema`[0m
+2026-11-13T17:03:51.2043122Z   [1m[94m--> [0mCargo.toml:72:1
+2026-11-13T17:03:51.2043467Z    [1m[94m|[0m
+2026-11-13T17:03:51.2044145Z [1m[94m72[0m [1m[94m|[0m accessibility-schema = { path = "crates/accessibility-schema" }
+2026-11-13T17:03:51.2044872Z    [1m[94m|[0m [1m[33m^^^^^^^^^^^^^^^^^^^^[0m
+2026-11-13T17:03:51.2045242Z    [1m[94m|[0m
+2026-11-13T17:03:51.2046336Z    [1m[94m= [0m[1mnote[0m: `cargo::unused_workspace_dependencies` is set to `warn` by default
+2026-11-13T17:03:51.2046974Z [1m[96mhelp[0m: consider removing the workspace dependency `accessibility-schema`
+2026-11-13T17:03:51.2047485Z [1m[33mwarning[0m[1m: unused workspace dependency `bytemuck`[0m
+2026-11-13T17:03:51.2047910Z   [1m[94m--> [0mCargo.toml:80:1
+2026-11-13T17:03:51.2048263Z    [1m[94m|[0m
+2026-11-13T17:03:51.2048634Z [1m[94m80[0m [1m[94m|[0m bytemuck = { version = "1", features = ["derive"] }
+2026-11-13T17:03:51.2049024Z    [1m[94m|[0m [1m[33m^^^^^^^^[0m
+2026-11-13T17:03:51.2049268Z    [1m[94m|[0m
+2026-11-13T17:03:51.2049626Z [1m[96mhelp[0m: consider removing the workspace dependency `bytemuck`
+2026-11-13T17:03:51.2050080Z [1m[33mwarning[0m[1m: unused workspace dependency `devtools`[0m
+2026-11-13T17:03:51.2050407Z   [1m[94m--> [0mCargo.toml:73:1
+2026-11-13T17:03:51.2050813Z    [1m[94m|[0m
+2026-11-13T17:03:51.2051203Z [1m[94m73[0m [1m[94m|[0m devtools = { path = "crates/devtools" }
+2026-11-13T17:03:51.2051831Z    [1m[94m|[0m [1m[33m^^^^^^^^[0m
+2026-11-13T17:03:51.2052058Z    [1m[94m|[0m
+2026-11-13T17:03:51.2052402Z [1m[96mhelp[0m: consider removing the workspace dependency `devtools`
+2026-11-13T17:03:51.2052847Z [1m[33mwarning[0m[1m: unused workspace dependency `diagnostics`[0m
+2026-11-13T17:03:51.2053176Z   [1m[94m--> [0mCargo.toml:69:1
+2026-11-13T17:03:51.2053408Z    [1m[94m|[0m
+2026-11-13T17:03:51.2053740Z [1m[94m69[0m [1m[94m|[0m diagnostics = { path = "crates/diagnostics" }
+2026-11-13T17:03:51.2054087Z    [1m[94m|[0m [1m[33m^^^^^^^^^^^[0m
+2026-11-13T17:03:51.2054324Z    [1m[94m|[0m
+2026-11-13T17:03:51.2054681Z [1m[96mhelp[0m: consider removing the workspace dependency `diagnostics`
+2026-11-13T17:03:51.2055183Z [1m[33mwarning[0m[1m: unused field `repository` in `workspace.package`[0m
+2026-11-13T17:03:51.2055543Z   [1m[94m--> [0mCargo.toml:59:1
+2026-11-13T17:03:51.2055766Z    [1m[94m|[0m
+2026-11-13T17:03:51.2056140Z [1m[94m59[0m [1m[94m|[0m repository = "https://github.com/local/noname-next"
+2026-11-13T17:03:51.2056497Z    [1m[94m|[0m [1m[33m^^^^^^^^^^[0m
+2026-11-13T17:03:51.2056728Z    [1m[94m|[0m
+2026-11-13T17:03:51.2057257Z    [1m[94m= [0m[1mnote[0m: `cargo::unused_workspace_package_fields` is set to `warn` by default
+2026-11-13T17:03:51.2057799Z [1m[96mhelp[0m: consider removing the field `workspace.package.repository`
+2026-11-13T17:03:51.2058263Z [1m[33mwarning[0m: workspace (manifest) generated 5 warnings
+2026-11-13T17:03:51.2815827Z [1m[92m   Compiling[0m engine-api v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-api)
+2026-11-13T17:03:51.2817654Z [1m[92m   Compiling[0m licensing-schema v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/licensing-schema)
+2026-11-13T17:03:51.2837720Z [1m[92m   Compiling[0m resource-schema v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/resource-schema)
+2026-11-13T17:03:53.3106621Z [1m[92m   Compiling[0m rule-api v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/rule-api)
+2026-11-13T17:04:07.2629108Z [1m[92m   Compiling[0m rule-vm v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/rule-vm)
+2026-11-13T17:04:08.0049930Z [1m[92m   Compiling[0m engine-native-kernel v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-native-kernel)
+2026-11-13T17:04:08.0051946Z [1m[92m   Compiling[0m content-schema v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/content-schema)
+2026-11-13T17:04:13.9355637Z [1m[92m   Compiling[0m engine-native-content v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-native-content)
+2026-11-13T17:04:21.7524078Z [1m[92m   Compiling[0m engine-native v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-native)
+2026-11-13T17:04:33.2893134Z [1m[92m   Compiling[0m content-runtime v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/content-runtime)
+2026-11-13T17:04:35.2732692Z [1m[92m   Compiling[0m content-native-loader v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/content-native-loader)
+2026-11-13T17:04:55.7966737Z [1m[92m   Compiling[0m engine-native-wasm v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-native-wasm)
+2026-11-13T17:05:05.8285017Z [1m[92m    Finished[0m `release` profile [optimized] target(s) in 1m 14s
+2026-11-13T17:05:05.8433814Z [INFO]: ⬇️  Installing wasm-bindgen...
+2026-11-13T17:05:07.7933246Z [INFO]: Optional fields missing from Cargo.toml: 'repository', 'license'. These are not necessary, but recommended
+2026-11-13T17:05:07.7934355Z [INFO]: ✨   Done in 1m 16s
+2026-11-13T17:05:07.7935908Z [INFO]: 📦   Your wasm pkg is ready to publish at /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/apps/web-client/src/worker/.native-pkg-tmp.
+2026-11-13T17:05:07.7948346Z [WARN]: ⚠️   There's a newer version of wasm-pack available, the new version is: 0.15.1, you are using: 0.15.0. To update, navigate to: https://wasm-bindgen.github.io/wasm-pack/installer/
+2026-11-13T17:05:08.0562113Z native engine pkg (web) deployed to /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/apps/web-client/src/worker/native-pkg

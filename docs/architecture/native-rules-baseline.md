@@ -1,5 +1,9 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+## 2026-11-14T01:33:42+08:00 聚贤部分修复发布与代码CI
+
+代码 `1fa8ac6cc3a70446436d97ff49aa19ea4626e22d` 已按裁决25正常发布；[精确SHA CI](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43468568765) attempt1全部10作业success／0失败／0取消，未由agent补跑。记录时HEAD为该代码加文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8。 [完整原始门禁与CI](../operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/README.md)。14标准golden及一份旧NGSA107核验不变；聚贤J01–J05仍保留，整技能为简化近似。634／3790／0、新增等价0；没有因CI或5技能指定投影相同签整源规则等价。
+
 ## 2026-11-14T00:58:36+08:00 聚贤部分修复最终本地核验（未提交／发布）
 
 HEAD `bd58ef06d59940baed8d7f93e61ce571b152fb81` + tracked dirty；333／107／5／759／WS8不变。第五节本地命令均exit0、完整preflight复跑21项通过；[完整门禁及首次失败](../operations/evidence/2026-11-13-queue1-review/final-local-gates.md)。14标准golden未重录，一份2149字节旧NGSA107恢复/续行通过；聚贤J01–J05继续保留，[独立限定补审](../operations/evidence/2026-11-13-queue1-review/independent/u01/j06-followup-review.md)不签整技能等价。5技能24次[指定投影](../operations/evidence/2026-11-13-queue1-review/runtime-comparison.md)相同不代表完整事件/随机流等价；全清单634／3790／0，新增签署0。发布及CI待记录。

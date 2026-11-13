@@ -1,0 +1,10 @@
+{
+  "at": "2026-11-14T01:39:47.936112+08:00",
+  "head": "1fa8ac6cc3a70446436d97ff49aa19ea4626e22d",
+  "check": "assert all numstat deleted columns equal 0",
+  "exit_code": 1,
+  "error": "AssertionError",
+  "cause": "New binary logs-first.zip has numstat -/-; the preliminary checker incorrectly treated that as a deletion. Inspection found no unstaged tracked changes and no text deletion.",
+  "raw_exception": "Traceback (most recent call last):\n  File <stdin>, line 13, in <module>\nAssertionError",
+  "correction": "Check deletion counts only for existing text paths; require the sole binary numstat path to be a newly added original ZIP."
+}

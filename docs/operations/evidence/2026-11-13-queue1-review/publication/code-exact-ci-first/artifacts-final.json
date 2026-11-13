@@ -1,0 +1,65 @@
+{
+  "total_count": 3,
+  "artifacts": [
+    {
+      "id": 14062021578,
+      "node_id": "MDg6QXJ0aWZhY3QxNDA2MjAyMTU3OA==",
+      "name": "installer-macos-latest",
+      "size_in_bytes": 48181945,
+      "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/artifacts/14062021578",
+      "archive_download_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/artifacts/14062021578/zip",
+      "expired": false,
+      "digest": "sha256:6c48ecb96f5387fe51248be2d7014794ba85e95830acbdeeb92919b7a77b0fae",
+      "created_at": "2026-11-13T17:26:19Z",
+      "updated_at": "2026-11-13T17:26:19Z",
+      "expires_at": "2027-02-11T17:01:21Z",
+      "workflow_run": {
+        "id": 43468568765,
+        "repository_id": 1269455162,
+        "head_repository_id": 1269455162,
+        "head_branch": "native-convergence",
+        "head_sha": "1fa8ac6cc3a70446436d97ff49aa19ea4626e22d"
+      }
+    },
+    {
+      "id": 14061501305,
+      "node_id": "MDg6QXJ0aWZhY3QxNDA2MTUwMTMwNQ==",
+      "name": "installer-windows-latest",
+      "size_in_bytes": 39540026,
+      "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/artifacts/14061501305",
+      "archive_download_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/artifacts/14061501305/zip",
+      "expired": false,
+      "digest": "sha256:944afd2677232537dbb2303ee1ce3c91d09a4978e50fd7c583d7d05aa9c0b744",
+      "created_at": "2026-11-13T17:15:50Z",
+      "updated_at": "2026-11-13T17:15:50Z",
+      "expires_at": "2027-02-11T17:01:21Z",
+      "workflow_run": {
+        "id": 43468568765,
+        "repository_id": 1269455162,
+        "head_repository_id": 1269455162,
+        "head_branch": "native-convergence",
+        "head_sha": "1fa8ac6cc3a70446436d97ff49aa19ea4626e22d"
+      }
+    },
+    {
+      "id": 14061366024,
+      "node_id": "MDg6QXJ0aWZhY3QxNDA2MTM2NjAyNA==",
+      "name": "installer-ubuntu-latest",
+      "size_in_bytes": 311678709,
+      "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/artifacts/14061366024",
+      "archive_download_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/artifacts/14061366024/zip",
+      "expired": false,
+      "digest": "sha256:c1ebac7ae17ac35352ebebd00412ea0d66bd3987c16271bf557eb94ccc52feb8",
+      "created_at": "2026-11-13T17:16:26Z",
+      "updated_at": "2026-11-13T17:16:26Z",
+      "expires_at": "2027-02-11T17:01:21Z",
+      "workflow_run": {
+        "id": 43468568765,
+        "repository_id": 1269455162,
+        "head_repository_id": 1269455162,
+        "head_branch": "native-convergence",
+        "head_sha": "1fa8ac6cc3a70446436d97ff49aa19ea4626e22d"
+      }
+    }
+  ]
+}

@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-14T01:33:42+08:00 队列1部分增量发布及精确代码CI
+
+代码 `1fa8ac6cc3a70446436d97ff49aa19ea4626e22d` 已按裁决25正常发布；[精确SHA CI](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43468568765) attempt1全部10作业success／0失败／0取消，未由agent补跑。记录时HEAD为该代码加文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8。 [逐作业与本地验证](../operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/README.md)。第①项按[634／3790／0](../operations/evidence/2026-11-13-queue1-review/source-counts-reviewed.md)，新增等价0；第⑧项继续保留所有已知差异。八项整包0/37，界面/Spine/平台等不据CI上调；队列1部分、队列2及以后未开始。
+
 ## 2026-11-14T00:58:36+08:00 队列1部分增量最终本地门禁（未提交／发布）
 
 HEAD `bd58ef06d59940baed8d7f93e61ce571b152fb81` + tracked dirty，版本333／107／5／759／WS8。三crate2446／0／6、workspace7842／0／8、完整preflight复跑21项通过，其余必跑命令均exit0；首次失败/补跑及实际命令见[门禁表](../operations/evidence/2026-11-13-queue1-review/final-local-gates.md)。第①项按[634／3790／0](../operations/evidence/2026-11-13-queue1-review/source-counts-reviewed.md)，新增等价签署0；第⑧项仍含聚贤J01–J05及其他差异。局部上游投影和绿色门禁不提升八项整包0/37；队列1仍部分、队列2未开始。提交/发布及exact-code CI另增记录。

@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "gh",
+    "run",
+    "watch",
+    "43468568765",
+    "--repo",
+    "RuyimgByCN/RuyimgByCN-noname-ruyimg-modified",
+    "--exit-status",
+    "--interval",
+    "30"
+  ],
+  "command": "gh run watch 43468568765 --repo RuyimgByCN/RuyimgByCN-noname-ruyimg-modified --exit-status --interval 30",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0"
+  },
+  "source_head": "1fa8ac6cc3a70446436d97ff49aa19ea4626e22d",
+  "tracked_status": "",
+  "start_utc": "2026-11-13T17:01:54.675003+00:00",
+  "exit_code": 0,
+  "duration_seconds": 1838.447,
+  "end_utc": "2026-11-13T17:32:33.123954+00:00"
+}

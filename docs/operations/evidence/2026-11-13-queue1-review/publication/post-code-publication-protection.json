@@ -1,0 +1,16 @@
+{
+  "at": "2026-11-14T01:05:20.475735+08:00",
+  "head": "1fa8ac6cc3a70446436d97ff49aa19ea4626e22d",
+  "frozen_product_count": 32259,
+  "frozen_product_drift": [],
+  "initial_untracked_missing": [],
+  "all_eight_old_worktree_blocks_unchanged": true,
+  "current_main_worktree_head_advanced_only_by_owned_commit": true,
+  "tracked_changes": [
+    "docs/architecture/native-progress.md",
+    "docs/architecture/native-remaining-ledger.md",
+    "docs/operations/evidence/2026-11-13-queue1-review/README.md"
+  ],
+  "all_tracked_changes_docs_only": true,
+  "inventory_sha256": "2658808bbe361ab248e53166157e25606c47155eb31fa19947cb601eb3f35c89"
+}

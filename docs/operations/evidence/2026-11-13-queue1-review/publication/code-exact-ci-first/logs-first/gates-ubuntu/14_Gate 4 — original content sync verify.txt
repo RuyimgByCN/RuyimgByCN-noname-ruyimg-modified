@@ -1,0 +1,112 @@
+﻿2026-11-13T17:31:06.6756247Z ##[group]Run node --test scripts/test_original_content_order.mjs scripts/test_original_audio_resources.mjs scripts/test_original_resources.mjs
+2026-11-13T17:31:06.6757313Z [36;1mnode --test scripts/test_original_content_order.mjs scripts/test_original_audio_resources.mjs scripts/test_original_resources.mjs[0m
+2026-11-13T17:31:06.6758181Z [36;1mnode scripts/sync-original-content.mjs --verify-only[0m
+2026-11-13T17:31:06.6815046Z shell: /usr/bin/bash -e {0}
+2026-11-13T17:31:06.6815316Z env:
+2026-11-13T17:31:06.6815535Z   CARGO_TERM_COLOR: always
+2026-11-13T17:31:06.6815794Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T17:31:06.6816069Z   CARGO_INCREMENTAL: 0
+2026-11-13T17:31:06.6816298Z   CACHE_ON_FAILURE: false
+2026-11-13T17:31:06.6816601Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-11-13T17:31:06.6817049Z ##[endgroup]
+2026-11-13T17:31:06.7370317Z TAP version 13
+2026-11-13T17:31:07.4870400Z # Subtest: AST maps true upstream reference/count/list/variant/death forms without executing source
+2026-11-13T17:31:07.4892742Z ok 1 - AST maps true upstream reference/count/list/variant/death forms without executing source
+2026-11-13T17:31:07.4902115Z   ---
+2026-11-13T17:31:07.4902570Z   duration_ms: 31.114706
+2026-11-13T17:31:07.4903019Z   ...
+2026-11-13T17:31:07.4966719Z # Subtest: unknown and absent source voices never borrow another skill's bytes
+2026-11-13T17:31:07.4970211Z ok 2 - unknown and absent source voices never borrow another skill's bytes
+2026-11-13T17:31:07.4971632Z   ---
+2026-11-13T17:31:07.4972044Z   duration_ms: 10.158128
+2026-11-13T17:31:07.5422378Z   ...
+2026-11-13T17:31:07.5423312Z # Subtest: cycles, ambiguous references, duplicate declarations and unsafe paths fail closed
+2026-11-13T17:31:07.5425519Z ok 3 - cycles, ambiguous references, duplicate declarations and unsafe paths fail closed
+2026-11-13T17:31:07.5426654Z   ---
+2026-11-13T17:31:07.5427344Z   duration_ms: 45.144478
+2026-11-13T17:31:07.5427933Z   ...
+2026-11-13T17:31:07.5536467Z # Subtest: real diy:liangji immediate self reference uses upstream default; a multi-skill cycle rejects
+2026-11-13T17:31:07.5538852Z ok 4 - real diy:liangji immediate self reference uses upstream default; a multi-skill cycle rejects
+2026-11-13T17:31:07.5540074Z   ---
+2026-11-13T17:31:07.5540824Z   duration_ms: 11.122958
+2026-11-13T17:31:07.5541915Z   ...
+2026-11-13T17:31:07.5614769Z # Subtest: static card/mode dependencies and unknown character death references follow source declarations
+2026-11-13T17:31:07.5616495Z ok 5 - static card/mode dependencies and unknown character death references follow source declarations
+2026-11-13T17:31:07.5617443Z   ---
+2026-11-13T17:31:07.5618059Z   duration_ms: 8.406788
+2026-11-13T17:31:07.5618535Z   ...
+2026-11-13T17:31:07.5662374Z # Subtest: an equivalent top-level helper and finishSkill subskill share one audio identity; conflicts reject
+2026-11-13T17:31:07.5664821Z ok 6 - an equivalent top-level helper and finishSkill subskill share one audio identity; conflicts reject
+2026-11-13T17:31:07.5666305Z   ---
+2026-11-13T17:31:07.5667015Z   duration_ms: 5.137436
+2026-11-13T17:31:07.5667439Z   ...
+2026-11-13T17:31:07.5751611Z # Subtest: character bindings use actual tempname priority and only declared substitute forms
+2026-11-13T17:31:07.5753545Z ok 7 - character bindings use actual tempname priority and only declared substitute forms
+2026-11-13T17:31:07.5776954Z   ---
+2026-11-13T17:31:07.5777635Z   duration_ms: 8.722194
+2026-11-13T17:31:07.5778167Z   ...
+2026-11-13T17:31:07.5841425Z # Subtest: dynamic actor inputs produce no guessed binding and substitute death reference cycles reject
+2026-11-13T17:31:07.5843072Z ok 8 - dynamic actor inputs produce no guessed binding and substitute death reference cycles reject
+2026-11-13T17:31:07.5844007Z   ---
+2026-11-13T17:31:07.5844420Z   duration_ms: 8.323566
+2026-11-13T17:31:07.5844900Z   ...
+2026-11-13T17:31:07.6082113Z # Subtest: equivalent dependency leaves are provable; identical indirect metadata cannot hide different source contexts
+2026-11-13T17:31:07.6084165Z ok 9 - equivalent dependency leaves are provable; identical indirect metadata cannot hide different source contexts
+2026-11-13T17:31:07.6085767Z   ---
+2026-11-13T17:31:07.6086264Z   duration_ms: 22.79371
+2026-11-13T17:31:07.6086672Z   ...
+2026-11-13T17:31:07.6854060Z # Subtest: substitutes resolve one global exact owner across declaration packs and reject ambiguity
+2026-11-13T17:31:07.6855865Z ok 10 - substitutes resolve one global exact owner across declaration packs and reject ambiguity
+2026-11-13T17:31:07.6856795Z   ---
+2026-11-13T17:31:07.6857296Z   duration_ms: 5.835108
+2026-11-13T17:31:07.6857787Z   ...
+2026-11-13T17:31:07.6895515Z # Subtest: five static bindings select ten AST aliases without changing global owners
+2026-11-13T17:31:07.6897291Z ok 11 - five static bindings select ten AST aliases without changing global owners
+2026-11-13T17:31:07.6898722Z   ---
+2026-11-13T17:31:07.6899401Z   duration_ms: 77.473683
+2026-11-13T17:31:07.6900152Z   ...
+2026-11-13T17:31:07.7137929Z # Subtest: content traversal and index ordering ignore the process locale
+2026-11-13T17:31:07.7138752Z ok 12 - content traversal and index ordering ignore the process locale
+2026-11-13T17:31:07.7139156Z   ---
+2026-11-13T17:31:07.7139430Z   duration_ms: 268.186222
+2026-11-13T17:31:07.7139668Z   ...
+2026-11-13T17:31:36.5267719Z # Subtest: resources-only refresh preserves catalog, legacy source, immutable packages and old locks and verifies bytes
+2026-11-13T17:31:36.5270504Z ok 13 - resources-only refresh preserves catalog, legacy source, immutable packages and old locks and verifies bytes
+2026-11-13T17:31:36.5272006Z   ---
+2026-11-13T17:31:36.5274696Z   duration_ms: 5138.544533
+2026-11-13T17:31:36.5275128Z   ...
+2026-11-13T17:31:36.5276306Z # Subtest: static compat drift, paths, duplicate bindings, size, SHA, recipe and tool fail before any resource write
+2026-11-13T17:31:36.5285134Z ok 14 - static compat drift, paths, duplicate bindings, size, SHA, recipe and tool fail before any resource write
+2026-11-13T17:31:36.5294765Z   ---
+2026-11-13T17:31:36.5316100Z   duration_ms: 19772.31602
+2026-11-13T17:31:36.5316749Z   ...
+2026-11-13T17:31:36.5317661Z # Subtest: unbound compat symlinks fail before writes after a valid sync and verify
+2026-11-13T17:31:36.5318582Z     # Subtest: file
+2026-11-13T17:31:36.5319094Z     ok 1 - file
+2026-11-13T17:31:36.5319561Z       ---
+2026-11-13T17:31:36.5320084Z       duration_ms: 2398.310985
+2026-11-13T17:31:36.5320624Z       ...
+2026-11-13T17:31:36.5321365Z     # Subtest: dir
+2026-11-13T17:31:36.5321863Z     ok 2 - dir
+2026-11-13T17:31:36.5322340Z       ---
+2026-11-13T17:31:36.5322840Z       duration_ms: 2426.518203
+2026-11-13T17:31:36.5323374Z       ...
+2026-11-13T17:31:36.5323822Z     1..2
+2026-11-13T17:31:36.5324668Z ok 15 - unbound compat symlinks fail before writes after a valid sync and verify
+2026-11-13T17:31:36.5325482Z   ---
+2026-11-13T17:31:36.5325959Z   duration_ms: 4826.05021
+2026-11-13T17:31:36.5326467Z   ...
+2026-11-13T17:31:36.5446401Z 1..15
+2026-11-13T17:31:36.5446986Z # tests 17
+2026-11-13T17:31:36.5447644Z # suites 0
+2026-11-13T17:31:36.5448124Z # pass 17
+2026-11-13T17:31:36.5448502Z # fail 0
+2026-11-13T17:31:36.5448888Z # cancelled 0
+2026-11-13T17:31:36.5449505Z # skipped 0
+2026-11-13T17:31:36.5450172Z # todo 0
+2026-11-13T17:31:36.5471858Z # duration_ms 29825.283807
+2026-11-13T17:31:59.8299144Z original content verified:
+2026-11-13T17:31:59.8301728Z   legacy-source: 366 files, 14.9 MiB, 0 linked, 366 copied
+2026-11-13T17:31:59.8302577Z   portraits: 2707 files, 387.6 MiB, 2707 linked, 0 copied
+2026-11-13T17:31:59.8303301Z   audio: 9652 files, 620.9 MiB, 9652 linked, 0 copied
+2026-11-13T17:31:59.8304010Z   audio-compat: 5 files, 257.4 KiB, 0 linked, 5 copied

@@ -1,0 +1,34 @@
+﻿2026-11-13T17:15:48.0915238Z ##[group]Run actions/upload-artifact@v4
+2026-11-13T17:15:48.0915545Z with:
+2026-11-13T17:15:48.0915730Z   name: installer-windows-latest
+2026-11-13T17:15:48.0915975Z   path: noname-next/target/release/bundle/**
+
+2026-11-13T17:15:48.0916197Z   if-no-files-found: error
+2026-11-13T17:15:48.0916585Z   compression-level: 6
+2026-11-13T17:15:48.0916776Z   overwrite: false
+2026-11-13T17:15:48.0916969Z   include-hidden-files: false
+2026-11-13T17:15:48.0917148Z env:
+2026-11-13T17:15:48.0917330Z   CARGO_TERM_COLOR: always
+2026-11-13T17:15:48.0917517Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-11-13T17:15:48.0917738Z   CARGO_INCREMENTAL: 0
+2026-11-13T17:15:48.0917911Z   CACHE_ON_FAILURE: false
+2026-11-13T17:15:48.0918127Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-11-13T17:15:48.0918360Z ##[endgroup]
+2026-11-13T17:15:48.2302544Z (node:6756) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-13T17:15:48.2303657Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-13T17:15:48.2339697Z With the provided path, there will be 2 files uploaded
+2026-11-13T17:15:48.2343637Z Artifact name is valid!
+2026-11-13T17:15:48.2344298Z Root directory input is valid!
+2026-11-13T17:15:48.4945889Z Beginning upload of artifact content to blob storage
+2026-11-13T17:15:48.6803388Z (node:6756) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-13T17:15:49.3920716Z Uploaded bytes 8388608
+2026-11-13T17:15:49.5476600Z Uploaded bytes 16777216
+2026-11-13T17:15:49.8521238Z Uploaded bytes 25165824
+2026-11-13T17:15:49.8542837Z Uploaded bytes 33554432
+2026-11-13T17:15:50.0959255Z Uploaded bytes 39540026
+2026-11-13T17:15:50.1366418Z Finished uploading artifact content to blob storage!
+2026-11-13T17:15:50.1367847Z SHA256 digest of uploaded artifact zip is 944afd2677232537dbb2303ee1ce3c91d09a4978e50fd7c583d7d05aa9c0b744
+2026-11-13T17:15:50.1369286Z Finalizing artifact upload
+2026-11-13T17:15:50.4854278Z Artifact installer-windows-latest.zip successfully finalized. Artifact ID 14061501305
+2026-11-13T17:15:50.4854876Z Artifact installer-windows-latest has been successfully uploaded! Final size is 39540026 bytes. Artifact ID is 14061501305
+2026-11-13T17:15:50.4863361Z Artifact download URL: https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43468568765/artifacts/14061501305

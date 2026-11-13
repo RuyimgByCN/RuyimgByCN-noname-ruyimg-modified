@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "scripts",
+    "-p",
+    "test_check_source_lines.py"
+  ],
+  "command": "python3 -B -m unittest discover -s scripts -p test_check_source_lines.py",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0"
+  },
+  "source_head": "1fa8ac6cc3a70446436d97ff49aa19ea4626e22d",
+  "tracked_status": " M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/README.md\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n M docs/operations/evidence/2026-11-13-queue1-review/README.md\n M docs/operations/evidence/2026-11-13-queue1-review/final-local-gates.md\n M docs/operations/evidence/2026-11-13-queue1-review/remaining-scope.md\n",
+  "start_utc": "2026-11-13T17:33:57.283016+00:00",
+  "exit_code": 0,
+  "duration_seconds": 0.069,
+  "end_utc": "2026-11-13T17:33:57.352384+00:00"
+}

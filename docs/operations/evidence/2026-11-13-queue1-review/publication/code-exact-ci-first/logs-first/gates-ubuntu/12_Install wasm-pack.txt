@@ -1,0 +1,14 @@
+﻿2026-11-13T17:27:28.5640386Z ##[group]Run cargo install wasm-pack --version 0.15.0 --locked
+2026-11-13T17:27:28.5640897Z [36;1mcargo install wasm-pack --version 0.15.0 --locked[0m
+2026-11-13T17:27:28.5699846Z shell: /usr/bin/bash -e {0}
+2026-11-13T17:27:28.5700147Z env:
+2026-11-13T17:27:28.5700366Z   CARGO_TERM_COLOR: always
+2026-11-13T17:27:28.5700625Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T17:27:28.5700894Z   CARGO_INCREMENTAL: 0
+2026-11-13T17:27:28.5701322Z   CACHE_ON_FAILURE: false
+2026-11-13T17:27:28.5701628Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-11-13T17:27:28.5701960Z ##[endgroup]
+2026-11-13T17:27:28.6002664Z [1m[92m    Updating[0m crates.io index
+2026-11-13T17:27:28.6235261Z [1m[92m Downloading[0m crates ...
+2026-11-13T17:27:28.6594173Z [1m[92m  Downloaded[0m wasm-pack v0.15.0
+2026-11-13T17:27:28.6825901Z [1m[92m     Ignored[0m package `wasm-pack v0.15.0` is already installed, use --force to override

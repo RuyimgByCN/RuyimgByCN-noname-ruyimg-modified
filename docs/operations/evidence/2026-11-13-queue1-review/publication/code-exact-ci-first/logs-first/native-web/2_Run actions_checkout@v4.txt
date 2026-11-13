@@ -1,0 +1,186 @@
+﻿2026-11-13T17:01:26.4850247Z ##[group]Run actions/checkout@v4
+2026-11-13T17:01:26.4851395Z with:
+2026-11-13T17:01:26.4851986Z   path: noname-next
+2026-11-13T17:01:26.4852707Z   repository: RuyimgByCN/RuyimgByCN-noname-ruyimg-modified
+2026-11-13T17:01:26.4856975Z   token: ***
+2026-11-13T17:01:26.4857832Z   ssh-strict: true
+2026-11-13T17:01:26.4858503Z   ssh-user: git
+2026-11-13T17:01:26.4859116Z   persist-credentials: true
+2026-11-13T17:01:26.4859753Z   clean: true
+2026-11-13T17:01:26.4860360Z   sparse-checkout-cone-mode: true
+2026-11-13T17:01:26.4861201Z   fetch-depth: 1
+2026-11-13T17:01:26.4861797Z   fetch-tags: false
+2026-11-13T17:01:26.4862408Z   show-progress: true
+2026-11-13T17:01:26.4863013Z   lfs: false
+2026-11-13T17:01:26.4863607Z   submodules: false
+2026-11-13T17:01:26.4864210Z   set-safe-directory: true
+2026-11-13T17:01:26.4864905Z   allow-unsafe-pr-checkout: false
+2026-11-13T17:01:26.4866053Z env:
+2026-11-13T17:01:26.4866636Z   CARGO_TERM_COLOR: always
+2026-11-13T17:01:26.4867266Z   WASM_PACK_TARGET: web
+2026-11-13T17:01:26.4867921Z ##[endgroup]
+2026-11-13T17:01:26.7558209Z Syncing repository: RuyimgByCN/RuyimgByCN-noname-ruyimg-modified
+2026-11-13T17:01:26.7561583Z ##[group]Getting Git version info
+2026-11-13T17:01:26.7562790Z Working directory is '/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next'
+2026-11-13T17:01:26.7564346Z [command]/usr/bin/git version
+2026-11-13T17:01:26.7595908Z git version 2.56.1
+2026-11-13T17:01:26.7617998Z ##[endgroup]
+2026-11-13T17:01:26.7625949Z Temporarily overriding HOME='/home/runner/work/_temp/26ccb314-96f3-4c13-b672-641925ada746' before making global git config changes
+2026-11-13T17:01:26.7628237Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-13T17:01:26.7631268Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next
+2026-11-13T17:01:26.7804478Z ##[group]Initializing the repository
+2026-11-13T17:01:26.7806466Z [command]/usr/bin/git init /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next
+2026-11-13T17:01:26.8164245Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-13T17:01:26.8166036Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-13T17:01:26.8167631Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-13T17:01:26.8168865Z hint: call:
+2026-11-13T17:01:26.8169655Z hint:
+2026-11-13T17:01:26.8170795Z hint: 	git config --global init.defaultBranch <name>
+2026-11-13T17:01:26.8171884Z hint:
+2026-11-13T17:01:26.8172911Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-13T17:01:26.8174401Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-13T17:01:26.8175709Z hint:
+2026-11-13T17:01:26.8176538Z hint: 	git branch -m <name>
+2026-11-13T17:01:26.8177501Z hint:
+2026-11-13T17:01:26.8178598Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-13T17:01:26.8180893Z Initialized empty Git repository in /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/.git/
+2026-11-13T17:01:26.8184872Z [command]/usr/bin/git remote add origin https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified
+2026-11-13T17:01:26.8242788Z ##[endgroup]
+2026-11-13T17:01:26.8244486Z ##[group]Disabling automatic garbage collection
+2026-11-13T17:01:26.8255471Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-13T17:01:26.8293041Z ##[endgroup]
+2026-11-13T17:01:26.8294611Z ##[group]Setting up auth
+2026-11-13T17:01:26.8298747Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-13T17:01:26.8332840Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-13T17:01:26.8854780Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-13T17:01:26.8886555Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-13T17:01:26.9139492Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-13T17:01:26.9172935Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-13T17:01:26.9428344Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-13T17:01:26.9464909Z ##[endgroup]
+2026-11-13T17:01:26.9466055Z ##[group]Fetching the repository
+2026-11-13T17:01:26.9472637Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +1fa8ac6cc3a70446436d97ff49aa19ea4626e22d:refs/remotes/origin/native-convergence
+2026-11-13T17:02:02.2793239Z From https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified
+2026-11-13T17:02:02.2794283Z  * [new ref]           1fa8ac6cc3a70446436d97ff49aa19ea4626e22d -> origin/native-convergence
+2026-11-13T17:02:02.2796144Z ##[endgroup]
+2026-11-13T17:02:02.2796697Z ##[group]Determining the checkout info
+2026-11-13T17:02:02.2799312Z ##[endgroup]
+2026-11-13T17:02:02.2804396Z [command]/usr/bin/git sparse-checkout disable
+2026-11-13T17:02:02.2855494Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-13T17:02:02.2887111Z ##[group]Checking out the ref
+2026-11-13T17:02:02.2889765Z [command]/usr/bin/git checkout --progress --force -B native-convergence refs/remotes/origin/native-convergence
+2026-11-13T17:02:03.3658472Z Updating files:   6% (4831/71312)
+2026-11-13T17:02:03.4463173Z Updating files:   7% (4992/71312)
+2026-11-13T17:02:03.5432271Z Updating files:   8% (5705/71312)
+2026-11-13T17:02:03.6181496Z Updating files:   9% (6419/71312)
+2026-11-13T17:02:03.7852623Z Updating files:  10% (7132/71312)
+2026-11-13T17:02:03.9012363Z Updating files:  11% (7845/71312)
+2026-11-13T17:02:04.0397366Z Updating files:  12% (8558/71312)
+2026-11-13T17:02:04.2048080Z Updating files:  13% (9271/71312)
+2026-11-13T17:02:04.3195047Z Updating files:  14% (9984/71312)
+2026-11-13T17:02:04.3356203Z Updating files:  15% (10697/71312)
+2026-11-13T17:02:04.4448367Z Updating files:  15% (10927/71312)
+2026-11-13T17:02:04.6434458Z Updating files:  16% (11410/71312)
+2026-11-13T17:02:04.6802254Z Updating files:  17% (12124/71312)
+2026-11-13T17:02:04.8298446Z Updating files:  18% (12837/71312)
+2026-11-13T17:02:04.9644144Z Updating files:  19% (13550/71312)
+2026-11-13T17:02:05.0491455Z Updating files:  20% (14263/71312)
+2026-11-13T17:02:05.2369698Z Updating files:  21% (14976/71312)
+2026-11-13T17:02:05.3086186Z Updating files:  22% (15689/71312)
+2026-11-13T17:02:05.3362159Z Updating files:  23% (16402/71312)
+2026-11-13T17:02:05.4337980Z Updating files:  23% (16563/71312)
+2026-11-13T17:02:05.5177502Z Updating files:  24% (17115/71312)
+2026-11-13T17:02:05.5692765Z Updating files:  25% (17828/71312)
+2026-11-13T17:02:05.6087084Z Updating files:  26% (18542/71312)
+2026-11-13T17:02:05.6522385Z Updating files:  27% (19255/71312)
+2026-11-13T17:02:05.6976151Z Updating files:  28% (19968/71312)
+2026-11-13T17:02:05.7344689Z Updating files:  29% (20681/71312)
+2026-11-13T17:02:05.7976144Z Updating files:  30% (21394/71312)
+2026-11-13T17:02:05.8519000Z Updating files:  31% (22107/71312)
+2026-11-13T17:02:05.8972981Z Updating files:  32% (22820/71312)
+2026-11-13T17:02:05.9639249Z Updating files:  33% (23533/71312)
+2026-11-13T17:02:06.3896130Z Updating files:  34% (24247/71312)
+2026-11-13T17:02:07.0179406Z Updating files:  34% (24766/71312)
+2026-11-13T17:02:07.0693351Z Updating files:  35% (24960/71312)
+2026-11-13T17:02:07.1571434Z Updating files:  36% (25673/71312)
+2026-11-13T17:02:07.2523713Z Updating files:  37% (26386/71312)
+2026-11-13T17:02:07.2888784Z Updating files:  38% (27099/71312)
+2026-11-13T17:02:07.3445635Z Updating files:  39% (27812/71312)
+2026-11-13T17:02:07.3699267Z Updating files:  39% (28204/71312)
+2026-11-13T17:02:07.5347412Z Updating files:  40% (28525/71312)
+2026-11-13T17:02:07.6928637Z Updating files:  41% (29238/71312)
+2026-11-13T17:02:07.9248169Z Updating files:  42% (29952/71312)
+2026-11-13T17:02:08.0388800Z Updating files:  43% (30665/71312)
+2026-11-13T17:02:08.1171938Z Updating files:  44% (31378/71312)
+2026-11-13T17:02:08.3252081Z Updating files:  45% (32091/71312)
+2026-11-13T17:02:08.3357151Z Updating files:  46% (32804/71312)
+2026-11-13T17:02:08.5737072Z Updating files:  46% (32848/71312)
+2026-11-13T17:02:08.6292432Z Updating files:  47% (33517/71312)
+2026-11-13T17:02:08.6701924Z Updating files:  48% (34230/71312)
+2026-11-13T17:02:08.6976848Z Updating files:  49% (34943/71312)
+2026-11-13T17:02:08.7241100Z Updating files:  50% (35656/71312)
+2026-11-13T17:02:08.8523083Z Updating files:  51% (36370/71312)
+2026-11-13T17:02:08.8854164Z Updating files:  52% (37083/71312)
+2026-11-13T17:02:08.9124695Z Updating files:  53% (37796/71312)
+2026-11-13T17:02:08.9561111Z Updating files:  54% (38509/71312)
+2026-11-13T17:02:08.9825312Z Updating files:  55% (39222/71312)
+2026-11-13T17:02:09.0128607Z Updating files:  56% (39935/71312)
+2026-11-13T17:02:09.0389199Z Updating files:  57% (40648/71312)
+2026-11-13T17:02:09.0654992Z Updating files:  58% (41361/71312)
+2026-11-13T17:02:09.0929190Z Updating files:  59% (42075/71312)
+2026-11-13T17:02:09.1192285Z Updating files:  60% (42788/71312)
+2026-11-13T17:02:09.1469418Z Updating files:  61% (43501/71312)
+2026-11-13T17:02:09.1747137Z Updating files:  62% (44214/71312)
+2026-11-13T17:02:09.2023409Z Updating files:  63% (44927/71312)
+2026-11-13T17:02:09.2639401Z Updating files:  64% (45640/71312)
+2026-11-13T17:02:09.3152048Z Updating files:  65% (46353/71312)
+2026-11-13T17:02:09.3354668Z Updating files:  66% (47066/71312)
+2026-11-13T17:02:09.3965397Z Updating files:  66% (47271/71312)
+2026-11-13T17:02:09.4766148Z Updating files:  67% (47780/71312)
+2026-11-13T17:02:09.5432862Z Updating files:  68% (48493/71312)
+2026-11-13T17:02:09.6238614Z Updating files:  69% (49206/71312)
+2026-11-13T17:02:09.7262938Z Updating files:  70% (49919/71312)
+2026-11-13T17:02:09.7913902Z Updating files:  71% (50632/71312)
+2026-11-13T17:02:09.8798867Z Updating files:  72% (51345/71312)
+2026-11-13T17:02:09.9831974Z Updating files:  73% (52058/71312)
+2026-11-13T17:02:10.0839295Z Updating files:  74% (52771/71312)
+2026-11-13T17:02:10.1760489Z Updating files:  75% (53484/71312)
+2026-11-13T17:02:10.3400994Z Updating files:  76% (54198/71312)
+2026-11-13T17:02:10.6089066Z Updating files:  76% (54340/71312)
+2026-11-13T17:02:10.7436900Z Updating files:  77% (54911/71312)
+2026-11-13T17:02:11.0446465Z Updating files:  78% (55624/71312)
+2026-11-13T17:02:11.2259972Z Updating files:  79% (56337/71312)
+2026-11-13T17:02:11.3495723Z Updating files:  80% (57050/71312)
+2026-11-13T17:02:11.4788793Z Updating files:  80% (57101/71312)
+2026-11-13T17:02:12.0548792Z Updating files:  81% (57763/71312)
+2026-11-13T17:02:12.3445678Z Updating files:  82% (58476/71312)
+2026-11-13T17:02:12.5736377Z Updating files:  82% (58782/71312)
+2026-11-13T17:02:12.7576028Z Updating files:  83% (59189/71312)
+2026-11-13T17:02:13.0794757Z Updating files:  84% (59903/71312)
+2026-11-13T17:02:13.3391474Z Updating files:  85% (60616/71312)
+2026-11-13T17:02:13.4206208Z Updating files:  85% (61070/71312)
+2026-11-13T17:02:13.8603423Z Updating files:  86% (61329/71312)
+2026-11-13T17:02:14.2114415Z Updating files:  87% (62042/71312)
+2026-11-13T17:02:14.3463664Z Updating files:  88% (62755/71312)
+2026-11-13T17:02:14.6414038Z Updating files:  88% (63000/71312)
+2026-11-13T17:02:15.1006309Z Updating files:  89% (63468/71312)
+2026-11-13T17:02:15.3414084Z Updating files:  90% (64181/71312)
+2026-11-13T17:02:15.4510511Z Updating files:  90% (64764/71312)
+2026-11-13T17:02:15.7279981Z Updating files:  91% (64894/71312)
+2026-11-13T17:02:16.0422662Z Updating files:  92% (65608/71312)
+2026-11-13T17:02:16.3302225Z Updating files:  93% (66321/71312)
+2026-11-13T17:02:16.3354348Z Updating files:  94% (67034/71312)
+2026-11-13T17:02:16.6610380Z Updating files:  94% (67059/71312)
+2026-11-13T17:02:17.0105677Z Updating files:  95% (67747/71312)
+2026-11-13T17:02:17.3374135Z Updating files:  96% (68460/71312)
+2026-11-13T17:02:17.3529531Z Updating files:  96% (69142/71312)
+2026-11-13T17:02:17.6042745Z Updating files:  97% (69173/71312)
+2026-11-13T17:02:17.9163215Z Updating files:  98% (69886/71312)
+2026-11-13T17:02:18.1329791Z Updating files:  99% (70599/71312)
+2026-11-13T17:02:18.1330214Z Updating files: 100% (71312/71312)
+2026-11-13T17:02:18.1330511Z Updating files: 100% (71312/71312), done.
+2026-11-13T17:02:18.1940920Z Switched to a new branch 'native-convergence'
+2026-11-13T17:02:18.1941838Z branch 'native-convergence' set up to track 'origin/native-convergence'.
+2026-11-13T17:02:18.2180272Z ##[endgroup]
+2026-11-13T17:02:18.2222024Z [command]/usr/bin/git log -1 --format=%H
+2026-11-13T17:02:18.2252507Z 1fa8ac6cc3a70446436d97ff49aa19ea4626e22d

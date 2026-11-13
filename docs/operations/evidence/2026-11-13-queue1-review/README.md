@@ -30,3 +30,18 @@
 ## 2026-11-14T00:58:36+08:00 完整本地门禁收口（未提交／发布）
 
 源码HEAD `bd58ef06d59940baed8d7f93e61ce571b152fb81` + tracked dirty；版本333／107／5／759／WS8。第二次完整preflight21项通过、exit0；本批所有第五节命令均exit0，精确命令/环境/计数/首次失败见[最终门禁表](final-local-gates.md)与[机器记录](final-local-gates.json)。636处href修正及不改审查语义的证据见[链接更正](link-correction-20261114-01/correction.md)。仅按[明确提交范围](commit-scope-plan.json)提交本批，未发布时不写成已完成；队列1仍部分，发布及exact-code CI另增日期记录。
+
+
+## 2026-11-14T01:02:23+08:00 代码增量提交与发布（CI进行中）
+
+代码 `1fa8ac6cc3a70446436d97ff49aa19ea4626e22d` 已提交并正常推送批准的native-convergence；[原始推送结果](publication/code-batch-first.json)及[提交树](publication/code-commit.json)保留。规则333／107／5／759／WS8、634／3790／0、八项0/37不变。[精确代码CI](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43468568765) attempt1正在运行，记录后仅文档/证据dirty；[初始状态及同run观察方式](publication/code-exact-ci-first/README.md)。不把代码已发布写成队列1完成；终态另增日期记录。
+
+
+## 2026-11-14T01:33:42+08:00 精确代码CI通过
+
+代码 `1fa8ac6cc3a70446436d97ff49aa19ea4626e22d` 已按裁决25正常发布；[精确SHA CI](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43468568765) attempt1全部10作业success／0失败／0取消，未由agent补跑。记录时HEAD为该代码加文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8。 [全部终态及日志](publication/code-exact-ci-first/README.md)。本批发布与验证事实已确定；队列1仍部分，不上调0/37或634／3790／0，不开始队列2。后续纯文档提交只补发布记录，不更改产品输入。
+
+
+## 2026-11-14T01:37:30+08:00 纯文档伴随提交前核验
+
+代码精确CI已通过；本次仅补日期记录与原始发布/CI证据，产品输入无变化。链接、行号、行数单测/门禁及原文保留范围见[文档核验表](publication/documentation-validation.md)。48类未解析路径与原始日志空白保留；本条记录时文档提交尚未生成，后续实际提交/推送/CI不据此预称成功。

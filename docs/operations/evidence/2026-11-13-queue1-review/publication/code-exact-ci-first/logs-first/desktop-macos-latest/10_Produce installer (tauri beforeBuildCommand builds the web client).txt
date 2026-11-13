@@ -1,0 +1,1256 @@
+﻿2026-11-13T17:06:36.4092780Z ##[group]Run cargo tauri build
+2026-11-13T17:06:36.4093090Z [36;1mcargo tauri build[0m
+2026-11-13T17:06:36.4135330Z shell: /bin/bash -e {0}
+2026-11-13T17:06:36.4135630Z env:
+2026-11-13T17:06:36.4135800Z   CARGO_TERM_COLOR: always
+2026-11-13T17:06:36.4136000Z   CARGO_HOME: /Users/runner/.cargo
+2026-11-13T17:06:36.4136250Z   CARGO_INCREMENTAL: 0
+2026-11-13T17:06:36.4136560Z   CACHE_ON_FAILURE: false
+2026-11-13T17:06:36.4136810Z   PNPM_HOME: /Users/runner/setup-pnpm/node_modules/.bin
+2026-11-13T17:06:36.4137080Z   TAURI_SIGNING_PRIVATE_KEY: 
+2026-11-13T17:06:36.4137280Z ##[endgroup]
+2026-11-13T17:06:36.8609670Z         Info Looking up installed tauri packages to check mismatched versions...
+2026-11-13T17:06:38.4320850Z      Running beforeBuildCommand `pnpm build:desktop`
+2026-11-13T17:06:39.0863880Z 
+2026-11-13T17:06:39.0866010Z > noname-next-web-client@0.1.0 build:desktop /Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/apps/web-client
+2026-11-13T17:06:39.0867560Z > node scripts/build-desktop.mjs
+2026-11-13T17:06:39.0868850Z 
+2026-11-13T17:06:39.5250180Z 
+2026-11-13T17:06:39.5352900Z > noname-next-web-client@0.1.0 build:native /Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/apps/web-client
+2026-11-13T17:06:39.5452220Z > node scripts/build-native.mjs
+2026-11-13T17:06:39.5552950Z 
+2026-11-13T17:06:45.0715120Z [INFO]: 🎯  Checking for the Wasm target...
+2026-11-13T17:06:45.1595680Z [INFO]: 🌀  Compiling to Wasm...
+2026-11-13T17:06:45.2195470Z [1m[33mwarning[0m[1m: unused workspace dependency `accessibility-schema`[0m
+2026-11-13T17:06:45.2197870Z   [1m[94m--> [0mCargo.toml:72:1
+2026-11-13T17:06:45.2208780Z    [1m[94m|[0m
+2026-11-13T17:06:45.2211650Z [1m[94m72[0m [1m[94m|[0m accessibility-schema = { path = "crates/accessibility-schema" }
+2026-11-13T17:06:45.2214910Z    [1m[94m|[0m [1m[33m^^^^^^^^^^^^^^^^^^^^[0m
+2026-11-13T17:06:45.2216060Z    [1m[94m|[0m
+2026-11-13T17:06:45.2225500Z    [1m[94m= [0m[1mnote[0m: `cargo::unused_workspace_dependencies` is set to `warn` by default
+2026-11-13T17:06:45.2226790Z [1m[96mhelp[0m: consider removing the workspace dependency `accessibility-schema`
+2026-11-13T17:06:45.2229120Z [1m[33mwarning[0m[1m: unused workspace dependency `bytemuck`[0m
+2026-11-13T17:06:45.2230760Z   [1m[94m--> [0mCargo.toml:80:1
+2026-11-13T17:06:45.2231400Z    [1m[94m|[0m
+2026-11-13T17:06:45.2232420Z [1m[94m80[0m [1m[94m|[0m bytemuck = { version = "1", features = ["derive"] }
+2026-11-13T17:06:45.2233310Z    [1m[94m|[0m [1m[33m^^^^^^^^[0m
+2026-11-13T17:06:45.2233750Z    [1m[94m|[0m
+2026-11-13T17:06:45.2234400Z [1m[96mhelp[0m: consider removing the workspace dependency `bytemuck`
+2026-11-13T17:06:45.2235190Z [1m[33mwarning[0m[1m: unused workspace dependency `devtools`[0m
+2026-11-13T17:06:45.2235830Z   [1m[94m--> [0mCargo.toml:73:1
+2026-11-13T17:06:45.2236350Z    [1m[94m|[0m
+2026-11-13T17:06:45.2238770Z [1m[94m73[0m [1m[94m|[0m devtools = { path = "crates/devtools" }
+2026-11-13T17:06:45.2240710Z    [1m[94m|[0m [1m[33m^^^^^^^^[0m
+2026-11-13T17:06:45.2241360Z    [1m[94m|[0m
+2026-11-13T17:06:45.2242760Z [1m[96mhelp[0m: consider removing the workspace dependency `devtools`
+2026-11-13T17:06:45.2243610Z [1m[33mwarning[0m[1m: unused workspace dependency `diagnostics`[0m
+2026-11-13T17:06:45.2244350Z   [1m[94m--> [0mCargo.toml:69:1
+2026-11-13T17:06:45.2244760Z    [1m[94m|[0m
+2026-11-13T17:06:45.2245300Z [1m[94m69[0m [1m[94m|[0m diagnostics = { path = "crates/diagnostics" }
+2026-11-13T17:06:45.2245870Z    [1m[94m|[0m [1m[33m^^^^^^^^^^^[0m
+2026-11-13T17:06:45.2246320Z    [1m[94m|[0m
+2026-11-13T17:06:45.2246970Z [1m[96mhelp[0m: consider removing the workspace dependency `diagnostics`
+2026-11-13T17:06:45.2247790Z [1m[33mwarning[0m[1m: unused field `repository` in `workspace.package`[0m
+2026-11-13T17:06:45.2248420Z   [1m[94m--> [0mCargo.toml:59:1
+2026-11-13T17:06:45.2248950Z    [1m[94m|[0m
+2026-11-13T17:06:45.2251100Z [1m[94m59[0m [1m[94m|[0m repository = "https://github.com/local/noname-next"
+2026-11-13T17:06:45.2252470Z    [1m[94m|[0m [1m[33m^^^^^^^^^^[0m
+2026-11-13T17:06:45.2255120Z    [1m[94m|[0m
+2026-11-13T17:06:45.2256480Z    [1m[94m= [0m[1mnote[0m: `cargo::unused_workspace_package_fields` is set to `warn` by default
+2026-11-13T17:06:45.2257860Z [1m[96mhelp[0m: consider removing the field `workspace.package.repository`
+2026-11-13T17:06:45.2259090Z [1m[33mwarning[0m: workspace (manifest) generated 5 warnings
+2026-11-13T17:06:45.5068350Z [1m[92m   Compiling[0m engine-api v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-api)
+2026-11-13T17:06:45.5113560Z [1m[92m   Compiling[0m resource-schema v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/resource-schema)
+2026-11-13T17:06:45.5148840Z [1m[92m   Compiling[0m licensing-schema v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/licensing-schema)
+2026-11-13T17:06:48.1369140Z [1m[92m   Compiling[0m rule-api v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/rule-api)
+2026-11-13T17:07:09.7831990Z [1m[92m   Compiling[0m rule-vm v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/rule-vm)
+2026-11-13T17:07:11.6124950Z [1m[92m   Compiling[0m engine-native-kernel v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-native-kernel)
+2026-11-13T17:07:11.6138880Z [1m[92m   Compiling[0m content-schema v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/content-schema)
+2026-11-13T17:07:21.5364980Z [1m[92m   Compiling[0m engine-native-content v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-native-content)
+2026-11-13T17:07:53.7862140Z [1m[92m   Compiling[0m engine-native v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-native)
+2026-11-13T17:08:09.5526650Z [1m[92m   Compiling[0m content-runtime v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/content-runtime)
+2026-11-13T17:08:12.5750570Z [1m[92m   Compiling[0m content-native-loader v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/content-native-loader)
+2026-11-13T17:08:46.9338740Z [1m[92m   Compiling[0m engine-native-wasm v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-native-wasm)
+2026-11-13T17:09:08.9543860Z [1m[92m    Finished[0m `release` profile [optimized] target(s) in 2m 23s
+2026-11-13T17:09:09.0235860Z [INFO]: ⬇️  Installing wasm-bindgen...
+2026-11-13T17:09:09.2448570Z [1m[92m    Updating[0m crates.io index
+2026-11-13T17:09:09.3817160Z [1m[92m Downloading[0m crates ...
+2026-11-13T17:09:09.4603120Z [1m[92m  Downloaded[0m wasm-bindgen-cli v0.2.126
+2026-11-13T17:09:09.4989280Z [1m[92m  Installing[0m wasm-bindgen-cli v0.2.126
+2026-11-13T17:09:09.4993320Z [1m[33mwarning[0m: default toolchain implicitly overridden with `stable-aarch64-apple-darwin` by environment variable
+2026-11-13T17:09:09.4995210Z   [1m[94m|[0m
+2026-11-13T17:09:09.4996860Z   [1m[94m= [0m[1mhelp[0m: use `cargo +stable install` if you meant to use the stable toolchain
+2026-11-13T17:09:09.4999600Z   [1m[94m= [0m[1mnote[0m: rustup selects the toolchain based on the parent environment and not the environment of the package being installed
+2026-11-13T17:09:09.5049500Z [1m[92m    Updating[0m crates.io index
+2026-11-13T17:09:09.9260970Z [1m[33mwarning[0m: package `der v0.8.0` in Cargo.lock is yanked in registry `crates-io`
+2026-11-13T17:09:09.9637520Z [1m[92m    Updating[0m crates.io index
+2026-11-13T17:09:10.3035330Z [1m[92m Downloading[0m crates ...
+2026-11-13T17:09:10.5936860Z [1m[92m  Downloaded[0m anyhow v1.0.102
+2026-11-13T17:09:10.6192220Z [1m[92m  Downloaded[0m base64 v0.13.1
+2026-11-13T17:09:10.6287630Z [1m[92m  Downloaded[0m ascii v1.1.0
+2026-11-13T17:09:10.6376980Z [1m[92m  Downloaded[0m buf_redux v0.8.4
+2026-11-13T17:09:10.6455150Z [1m[92m  Downloaded[0m chunked_transfer v1.5.0
+2026-11-13T17:09:10.6486760Z [1m[92m  Downloaded[0m bytes v1.12.0
+2026-11-13T17:09:10.6634330Z [1m[92m  Downloaded[0m crossbeam-utils v0.8.21
+2026-11-13T17:09:10.6701600Z [1m[92m  Downloaded[0m cc v1.2.65
+2026-11-13T17:09:10.7106330Z [1m[92m  Downloaded[0m crossbeam-epoch v0.9.18
+2026-11-13T17:09:10.7177830Z [1m[92m  Downloaded[0m defmt-parser v1.0.0
+2026-11-13T17:09:10.7192510Z [1m[92m  Downloaded[0m env_filter v1.0.1
+2026-11-13T17:09:10.7221640Z [1m[92m  Downloaded[0m defmt v1.1.0
+2026-11-13T17:09:10.7466450Z [1m[92m  Downloaded[0m crossbeam-deque v0.8.6
+2026-11-13T17:09:10.7492270Z [1m[92m  Downloaded[0m defmt-macros v1.1.0
+2026-11-13T17:09:10.7702180Z [1m[92m  Downloaded[0m either v1.16.0
+2026-11-13T17:09:10.7743600Z [1m[92m  Downloaded[0m fallible-iterator v0.3.0
+2026-11-13T17:09:10.7789760Z [1m[92m  Downloaded[0m filetime v0.2.29
+2026-11-13T17:09:10.8019620Z [1m[92m  Downloaded[0m env_logger v0.11.10
+2026-11-13T17:09:10.8449300Z [1m[92m  Downloaded[0m hashbrown v0.16.1
+2026-11-13T17:09:10.8643760Z [1m[92m  Downloaded[0m gimli v0.32.3
+2026-11-13T17:09:10.8907910Z [1m[92m  Downloaded[0m id-arena v2.3.0
+2026-11-13T17:09:10.8964880Z [1m[92m  Downloaded[0m leb128fmt v0.1.0
+2026-11-13T17:09:10.8990010Z [1m[92m  Downloaded[0m leb128 v0.2.7
+2026-11-13T17:09:10.9020790Z [1m[92m  Downloaded[0m memchr v2.8.2
+2026-11-13T17:09:10.9236630Z [1m[92m  Downloaded[0m jiff v0.2.29
+2026-11-13T17:09:10.9598130Z [1m[92m  Downloaded[0m num_cpus v1.17.0
+2026-11-13T17:09:10.9686680Z [1m[92m  Downloaded[0m multipart v0.18.0
+2026-11-13T17:09:10.9755660Z [1m[92m  Downloaded[0m num_threads v0.1.7
+2026-11-13T17:09:10.9778570Z [1m[92m  Downloaded[0m proc-macro-error-attr2 v2.0.0
+2026-11-13T17:09:10.9798090Z [1m[92m  Downloaded[0m proc-macro-error2 v2.0.1
+2026-11-13T17:09:10.9918170Z [1m[92m  Downloaded[0m rand v0.8.6
+2026-11-13T17:09:10.9996840Z [1m[92m  Downloaded[0m rand_chacha v0.3.1
+2026-11-13T17:09:11.0022570Z [1m[92m  Downloaded[0m rand_core v0.6.4
+2026-11-13T17:09:11.0050780Z [1m[92m  Downloaded[0m rayon v1.12.0
+2026-11-13T17:09:11.0269340Z [1m[92m  Downloaded[0m rayon-core v1.13.0
+2026-11-13T17:09:11.0362730Z [1m[92m  Downloaded[0m regex v1.12.4
+2026-11-13T17:09:11.0939380Z [1m[92m  Downloaded[0m rouille v3.6.2
+2026-11-13T17:09:11.1037670Z [1m[92m  Downloaded[0m rustc-demangle v0.1.27
+2026-11-13T17:09:11.1068650Z [1m[92m  Downloaded[0m regex-automata v0.4.14
+2026-11-13T17:09:11.1357510Z [1m[92m  Downloaded[0m safemem v0.3.3
+2026-11-13T17:09:11.1379960Z [1m[92m  Downloaded[0m rustls-pki-types v1.14.1
+2026-11-13T17:09:11.1764800Z [1m[92m  Downloaded[0m rustls-webpki v0.103.13
+2026-11-13T17:09:11.1854780Z [1m[92m  Downloaded[0m rustls v0.23.41
+2026-11-13T17:09:11.2155320Z [1m[92m  Downloaded[0m shlex v1.3.0
+2026-11-13T17:09:11.2194170Z [1m[92m  Downloaded[0m ring v0.17.14
+2026-11-13T17:09:11.3887930Z [1m[92m  Downloaded[0m sha1_smol v1.0.1
+2026-11-13T17:09:11.3963730Z [1m[92m  Downloaded[0m subtle v2.6.1
+2026-11-13T17:09:11.3984330Z [1m[92m  Downloaded[0m threadpool v1.8.1
+2026-11-13T17:09:11.4019730Z [1m[92m  Downloaded[0m tiny_http v0.12.0
+2026-11-13T17:09:11.4106570Z [1m[92m  Downloaded[0m twoway v0.1.8
+2026-11-13T17:09:11.4141730Z [1m[92m  Downloaded[0m time v0.3.51
+2026-11-13T17:09:11.4772490Z [1m[92m  Downloaded[0m ureq-proto v0.6.0
+2026-11-13T17:09:11.4903560Z [1m[92m  Downloaded[0m untrusted v0.9.0
+2026-11-13T17:09:11.4953010Z [1m[92m  Downloaded[0m ureq v3.3.0
+2026-11-13T17:09:11.5120740Z [1m[92m  Downloaded[0m wasm-encoder v0.245.1
+2026-11-13T17:09:11.5205320Z [1m[92m  Downloaded[0m wasm-bindgen-test-shared v0.2.126
+2026-11-13T17:09:11.5232060Z [1m[92m  Downloaded[0m utf8-zero v0.8.1
+2026-11-13T17:09:11.5677750Z [1m[92m  Downloaded[0m walrus-macro v0.26.0
+2026-11-13T17:09:11.5690360Z [1m[92m  Downloaded[0m wasm-bindgen-cli-support v0.2.126
+2026-11-13T17:09:11.5915540Z [1m[92m  Downloaded[0m zeroize v1.9.0
+2026-11-13T17:09:11.5981350Z [1m[92m  Downloaded[0m walrus v0.26.4
+2026-11-13T17:09:11.6205700Z [1m[92m  Downloaded[0m zerocopy v0.8.52
+2026-11-13T17:09:11.6892180Z [1m[92m  Downloaded[0m webpki-roots v1.0.8
+2026-11-13T17:09:11.6940290Z [1m[92m  Downloaded[0m wasmparser v0.245.1
+2026-11-13T17:09:12.0104720Z [1m[92m   Compiling[0m ring v0.17.14
+2026-11-13T17:09:12.0107300Z [1m[92m   Compiling[0m crossbeam-epoch v0.9.18
+2026-11-13T17:09:12.0108220Z [1m[92m   Compiling[0m rayon-core v1.13.0
+2026-11-13T17:09:12.8752030Z [1m[92m   Compiling[0m crossbeam-deque v0.8.6
+2026-11-13T17:09:13.1680020Z [1m[92m   Compiling[0m zeroize v1.9.0
+2026-11-13T17:09:13.4009430Z [1m[92m   Compiling[0m rustls-pki-types v1.14.1
+2026-11-13T17:09:14.3875560Z [1m[92m   Compiling[0m untrusted v0.9.0
+2026-11-13T17:09:14.5106060Z [1m[92m   Compiling[0m either v1.16.0
+2026-11-13T17:09:14.8285380Z [1m[92m   Compiling[0m safemem v0.3.3
+2026-11-13T17:09:14.9981420Z [1m[92m   Compiling[0m rustls v0.23.41
+2026-11-13T17:09:20.2077990Z [1m[92m   Compiling[0m fallible-iterator v0.3.0
+2026-11-13T17:09:20.7582300Z [1m[92m   Compiling[0m leb128fmt v0.1.0
+2026-11-13T17:09:20.9774640Z [1m[92m   Compiling[0m rayon v1.12.0
+2026-11-13T17:09:22.4113710Z [1m[92m   Compiling[0m wasm-encoder v0.245.1
+2026-11-13T17:09:24.3070230Z [1m[92m   Compiling[0m id-arena v2.3.0
+2026-11-13T17:09:24.5397400Z [1m[92m   Compiling[0m wasmparser v0.245.1
+2026-11-13T17:09:26.3604010Z [1m[92m   Compiling[0m gimli v0.32.3
+2026-11-13T17:09:36.7067900Z [1m[92m   Compiling[0m rustls-webpki v0.103.13
+2026-11-13T17:09:38.2423510Z [1m[92m   Compiling[0m buf_redux v0.8.4
+2026-11-13T17:09:38.7172970Z [1m[92m   Compiling[0m walrus-macro v0.26.0
+2026-11-13T17:09:39.5092210Z [1m[92m   Compiling[0m twoway v0.1.8
+2026-11-13T17:09:39.6220840Z [1m[92m   Compiling[0m num_cpus v1.17.0
+2026-11-13T17:09:39.7004660Z [1m[92m   Compiling[0m num_threads v0.1.7
+2026-11-13T17:09:39.8289730Z [1m[92m   Compiling[0m chunked_transfer v1.5.0
+2026-11-13T17:09:39.8414210Z [1m[92m   Compiling[0m leb128 v0.2.7
+2026-11-13T17:09:39.9674250Z [1m[92m   Compiling[0m ascii v1.1.0
+2026-11-13T17:09:39.9852880Z [1m[92m   Compiling[0m subtle v2.6.1
+2026-11-13T17:09:40.1207630Z [1m[92m   Compiling[0m time v0.3.51
+2026-11-13T17:09:40.5730410Z [1m[92m   Compiling[0m tiny_http v0.12.0
+2026-11-13T17:09:46.1695630Z [1m[92m   Compiling[0m multipart v0.18.0
+2026-11-13T17:09:47.9895390Z [1m[92m   Compiling[0m walrus v0.26.4
+2026-11-13T17:10:00.7365920Z [1m[92m   Compiling[0m threadpool v1.8.1
+2026-11-13T17:10:01.9002820Z [1m[92m   Compiling[0m env_filter v1.0.1
+2026-11-13T17:10:03.2195610Z [1m[92m   Compiling[0m ureq-proto v0.6.0
+2026-11-13T17:10:04.2118410Z [1m[92m   Compiling[0m webpki-roots v1.0.8
+2026-11-13T17:10:04.3442620Z [1m[92m   Compiling[0m filetime v0.2.29
+2026-11-13T17:10:04.5986500Z [1m[92m   Compiling[0m jiff v0.2.29
+2026-11-13T17:10:05.9452970Z [1m[92m   Compiling[0m rustc-demangle v0.1.27
+2026-11-13T17:10:07.1780520Z [1m[92m   Compiling[0m sha1_smol v1.0.1
+2026-11-13T17:10:07.5234330Z [1m[92m   Compiling[0m rouille v3.6.2
+2026-11-13T17:10:14.3984150Z [1m[92m   Compiling[0m env_logger v0.11.10
+2026-11-13T17:10:16.5125750Z [1m[92m   Compiling[0m ureq v3.3.0
+2026-11-13T17:10:20.2819470Z [1m[92m   Compiling[0m wasm-bindgen-cli-support v0.2.126
+2026-11-13T17:10:21.8309140Z [1m[92m   Compiling[0m wasm-bindgen-test-shared v0.2.126
+2026-11-13T17:10:25.5268220Z [1m[92m   Compiling[0m wasm-bindgen-cli v0.2.126
+2026-11-13T17:10:41.3934990Z [1m[92m    Finished[0m `release` profile [optimized] target(s) in 1m 32s
+2026-11-13T17:10:41.4099730Z [1m[33mwarning[0m: the following packages contain code that will be rejected by a future version of Rust: buf_redux v0.8.4, multipart v0.18.0
+2026-11-13T17:10:41.4117510Z [1m[92mnote[0m: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+2026-11-13T17:10:41.4323690Z [1m[92m  Installing[0m /Users/runner/Library/Caches/.wasm-pack/.wasm-bindgen-cargo-install-0.2.126/bin/wasm-bindgen
+2026-11-13T17:10:41.4326560Z [1m[92m  Installing[0m /Users/runner/Library/Caches/.wasm-pack/.wasm-bindgen-cargo-install-0.2.126/bin/wasm-bindgen-test-runner
+2026-11-13T17:10:41.4330580Z [1m[92m  Installing[0m /Users/runner/Library/Caches/.wasm-pack/.wasm-bindgen-cargo-install-0.2.126/bin/wasm2es6js
+2026-11-13T17:10:41.4334730Z [1m[92m   Installed[0m package `wasm-bindgen-cli v0.2.126` (executables `wasm-bindgen`, `wasm-bindgen-test-runner`, `wasm2es6js`)
+2026-11-13T17:10:41.4339420Z [1m[33mwarning[0m: be sure to add `/Users/runner/Library/Caches/.wasm-pack/.wasm-bindgen-cargo-install-0.2.126/bin` to your PATH to be able to run the installed binaries
+2026-11-13T17:10:42.9062140Z [INFO]: Optional fields missing from Cargo.toml: 'repository', 'license'. These are not necessary, but recommended
+2026-11-13T17:10:42.9172160Z [INFO]: ✨   Done in 3m 57s
+2026-11-13T17:10:42.9277560Z [INFO]: 📦   Your wasm pkg is ready to publish at /Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/apps/web-client/src/worker/.native-pkg-tmp.
+2026-11-13T17:10:42.9381160Z [WARN]: ⚠️   There's a newer version of wasm-pack available, the new version is: 0.15.1, you are using: 0.15.0. To update, navigate to: https://wasm-bindgen.github.io/wasm-pack/installer/
+2026-11-13T17:10:43.0099570Z native engine pkg (web) deployed to /Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/apps/web-client/src/worker/native-pkg
+2026-11-13T17:10:43.9507710Z 
+2026-11-13T17:10:43.9510940Z > noname-next-web-client@0.1.0 build:wasm /Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/apps/web-client
+2026-11-13T17:10:43.9539090Z > node scripts/build-wasm.mjs
+2026-11-13T17:10:43.9541050Z 
+2026-11-13T17:10:44.0759580Z Using wasm-pack…
+2026-11-13T17:10:45.3173040Z [INFO]: 🎯  Checking for the Wasm target...
+2026-11-13T17:10:45.4584120Z [INFO]: 🌀  Compiling to Wasm...
+2026-11-13T17:10:45.5244320Z [1m[33mwarning[0m[1m: unused workspace dependency `accessibility-schema`[0m
+2026-11-13T17:10:45.5254870Z   [1m[94m--> [0mCargo.toml:72:1
+2026-11-13T17:10:45.5255550Z    [1m[94m|[0m
+2026-11-13T17:10:45.5256650Z [1m[94m72[0m [1m[94m|[0m accessibility-schema = { path = "crates/accessibility-schema" }
+2026-11-13T17:10:45.5257990Z    [1m[94m|[0m [1m[33m^^^^^^^^^^^^^^^^^^^^[0m
+2026-11-13T17:10:45.5258400Z    [1m[94m|[0m
+2026-11-13T17:10:45.5261500Z    [1m[94m= [0m[1mnote[0m: `cargo::unused_workspace_dependencies` is set to `warn` by default
+2026-11-13T17:10:45.5262520Z [1m[96mhelp[0m: consider removing the workspace dependency `accessibility-schema`
+2026-11-13T17:10:45.5263590Z [1m[33mwarning[0m[1m: unused workspace dependency `bytemuck`[0m
+2026-11-13T17:10:45.5264000Z   [1m[94m--> [0mCargo.toml:80:1
+2026-11-13T17:10:45.5264330Z    [1m[94m|[0m
+2026-11-13T17:10:45.5264830Z [1m[94m80[0m [1m[94m|[0m bytemuck = { version = "1", features = ["derive"] }
+2026-11-13T17:10:45.5265340Z    [1m[94m|[0m [1m[33m^^^^^^^^[0m
+2026-11-13T17:10:45.5265690Z    [1m[94m|[0m
+2026-11-13T17:10:45.5266110Z [1m[96mhelp[0m: consider removing the workspace dependency `bytemuck`
+2026-11-13T17:10:45.5266740Z [1m[33mwarning[0m[1m: unused workspace dependency `devtools`[0m
+2026-11-13T17:10:45.5267270Z   [1m[94m--> [0mCargo.toml:73:1
+2026-11-13T17:10:45.5267550Z    [1m[94m|[0m
+2026-11-13T17:10:45.5269500Z [1m[94m73[0m [1m[94m|[0m devtools = { path = "crates/devtools" }
+2026-11-13T17:10:45.5273130Z    [1m[94m|[0m [1m[33m^^^^^^^^[0m
+2026-11-13T17:10:45.5273950Z    [1m[94m|[0m
+2026-11-13T17:10:45.5275160Z [1m[96mhelp[0m: consider removing the workspace dependency `devtools`
+2026-11-13T17:10:45.5276880Z [1m[33mwarning[0m[1m: unused workspace dependency `diagnostics`[0m
+2026-11-13T17:10:45.5278140Z   [1m[94m--> [0mCargo.toml:69:1
+2026-11-13T17:10:45.5282970Z    [1m[94m|[0m
+2026-11-13T17:10:45.5283710Z [1m[94m69[0m [1m[94m|[0m diagnostics = { path = "crates/diagnostics" }
+2026-11-13T17:10:45.5284140Z    [1m[94m|[0m [1m[33m^^^^^^^^^^^[0m
+2026-11-13T17:10:45.5284500Z    [1m[94m|[0m
+2026-11-13T17:10:45.5284990Z [1m[96mhelp[0m: consider removing the workspace dependency `diagnostics`
+2026-11-13T17:10:45.5285670Z [1m[33mwarning[0m[1m: unused field `repository` in `workspace.package`[0m
+2026-11-13T17:10:45.5286200Z   [1m[94m--> [0mCargo.toml:59:1
+2026-11-13T17:10:45.5286660Z    [1m[94m|[0m
+2026-11-13T17:10:45.5287150Z [1m[94m59[0m [1m[94m|[0m repository = "https://github.com/local/noname-next"
+2026-11-13T17:10:45.5287660Z    [1m[94m|[0m [1m[33m^^^^^^^^^^[0m
+2026-11-13T17:10:45.5289070Z    [1m[94m|[0m
+2026-11-13T17:10:45.5289890Z    [1m[94m= [0m[1mnote[0m: `cargo::unused_workspace_package_fields` is set to `warn` by default
+2026-11-13T17:10:45.5290700Z [1m[96mhelp[0m: consider removing the field `workspace.package.repository`
+2026-11-13T17:10:45.5292390Z [1m[33mwarning[0m: workspace (manifest) generated 5 warnings
+2026-11-13T17:10:45.8003730Z [1m[92m   Compiling[0m resource-schema v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/resource-schema)
+2026-11-13T17:10:45.8005640Z [1m[92m   Compiling[0m licensing-schema v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/licensing-schema)
+2026-11-13T17:10:46.4694800Z [1m[92m   Compiling[0m content-schema v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/content-schema)
+2026-11-13T17:11:11.9263410Z [1m[92m   Compiling[0m content-compiler v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/content-compiler)
+2026-11-13T17:11:11.9266970Z [1m[92m   Compiling[0m content-runtime v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/content-runtime)
+2026-11-13T17:11:29.6446710Z [1m[92m   Compiling[0m engine-core v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-core)
+2026-11-13T17:11:33.6231350Z warning: unused imports: `choose_gain_other_skill`, `lose_gained_skill`, and `resolve_potheyun`
+2026-11-13T17:11:33.6329680Z   --> crates/engine-core/src/effect/mod.rs:12:5
+2026-11-13T17:11:33.6430490Z    |
+2026-11-13T17:11:33.6531740Z 12 |     choose_gain_other_skill, lose_gained_skill, resolve_choose_gain_other_skill,
+2026-11-13T17:11:33.6634930Z    |     ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+2026-11-13T17:11:33.6736020Z 13 |     resolve_lose_gained_skill, resolve_potheyun, resolve_potheyun_pick,
+2026-11-13T17:11:33.6837820Z    |                                ^^^^^^^^^^^^^^^^
+2026-11-13T17:11:33.6939500Z    |
+2026-11-13T17:11:33.7041570Z    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+2026-11-13T17:11:33.7141360Z 
+2026-11-13T17:11:33.7241590Z 
+2026-11-13T17:11:33.7344920Z warning: unused import: `primitives::enable_equip_slot`
+2026-11-13T17:11:33.7444670Z   --> crates/engine-core/src/effect/mod.rs:21:16
+2026-11-13T17:11:33.7546330Z    |
+2026-11-13T17:11:33.7649290Z 21 | pub(crate) use primitives::enable_equip_slot;
+2026-11-13T17:11:33.7748670Z    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T17:11:33.7849860Z 
+2026-11-13T17:11:33.7951030Z 
+2026-11-13T17:11:33.8053280Z warning: unused import: `primitives::resolve_xinfu_qiai`
+2026-11-13T17:11:33.8152820Z   --> crates/engine-core/src/effect/mod.rs:24:16
+2026-11-13T17:11:33.8253490Z    |
+2026-11-13T17:11:33.8355980Z 24 | pub(crate) use primitives::resolve_xinfu_qiai;
+2026-11-13T17:11:33.8458210Z    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T17:11:33.8560950Z 
+2026-11-13T17:11:33.8661730Z 
+2026-11-13T17:11:33.8764710Z warning: unused import: `primitives::resolve_twxiongjun`
+2026-11-13T17:11:33.8866550Z   --> crates/engine-core/src/effect/mod.rs:62:16
+2026-11-13T17:11:33.8968160Z    |
+2026-11-13T17:11:33.9212540Z 62 | pub(crate) use primitives::resolve_twxiongjun;
+2026-11-13T17:11:33.9296440Z    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T17:11:33.9398310Z 
+2026-11-13T17:11:33.9503320Z 
+2026-11-13T17:11:33.9608160Z warning: unused import: `primitives::resolve_yixiang`
+2026-11-13T17:11:33.9710760Z   --> crates/engine-core/src/effect/mod.rs:63:16
+2026-11-13T17:11:33.9814020Z    |
+2026-11-13T17:11:33.9915450Z 63 | pub(crate) use primitives::resolve_yixiang;
+2026-11-13T17:11:34.0018570Z    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T17:11:34.0117690Z 
+2026-11-13T17:11:34.0218090Z 
+2026-11-13T17:11:34.0320780Z warning: unused import: `primitives::resolve_qiangyong`
+2026-11-13T17:11:34.0422270Z   --> crates/engine-core/src/effect/mod.rs:64:16
+2026-11-13T17:11:34.0523830Z    |
+2026-11-13T17:11:34.0625490Z 64 | pub(crate) use primitives::resolve_qiangyong;
+2026-11-13T17:11:34.0725620Z    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T17:11:34.0828000Z 
+2026-11-13T17:11:34.0929070Z 
+2026-11-13T17:11:34.1055850Z warning: unused import: `primitives::resolve_duoduan`
+2026-11-13T17:11:34.1131930Z   --> crates/engine-core/src/effect/mod.rs:66:16
+2026-11-13T17:11:34.1233600Z    |
+2026-11-13T17:11:34.1334150Z 66 | pub(crate) use primitives::resolve_duoduan;
+2026-11-13T17:11:34.1440060Z    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T17:11:34.1471650Z 
+2026-11-13T17:11:34.1572520Z 
+2026-11-13T17:11:34.1674010Z warning: unused import: `primitives::resolve_reliangyin`
+2026-11-13T17:11:34.1777950Z   --> crates/engine-core/src/effect/mod.rs:70:16
+2026-11-13T17:11:34.1896160Z    |
+2026-11-13T17:11:34.1999630Z 70 | pub(crate) use primitives::resolve_reliangyin;
+2026-11-13T17:11:34.2102790Z    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T17:11:34.2204250Z 
+2026-11-13T17:11:34.2305080Z 
+2026-11-13T17:11:34.2407080Z warning: unused import: `commit_hand_compare`
+2026-11-13T17:11:34.2510210Z   --> crates/engine-core/src/effect/mod.rs:75:26
+2026-11-13T17:11:34.2612290Z    |
+2026-11-13T17:11:34.2714150Z 75 |     commit_guanxing_top, commit_hand_compare, commit_hand_compare_between,
+2026-11-13T17:11:34.2860260Z    |                          ^^^^^^^^^^^^^^^^^^^
+2026-11-13T17:11:34.2961590Z 
+2026-11-13T17:11:34.3063170Z 
+2026-11-13T17:11:34.3165870Z warning: unused imports: `RESOLVE_ZHENGSU_CHOICE` and `resolve_rechuhai_choice`
+2026-11-13T17:11:34.3281010Z    --> crates/engine-core/src/effect/mod.rs:145:31
+2026-11-13T17:11:34.3404870Z     |
+2026-11-13T17:11:34.3543030Z 145 |     resolve_potzhouyu_choice, resolve_rechuhai_choice, skill_pile_def, twchengpu_field_cards,
+2026-11-13T17:11:34.3666750Z     |                               ^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T17:11:34.3793790Z ...
+2026-11-13T17:11:34.3919000Z 206 |     RESOLVE_ZHENGRONG_CUSTOM_CHOICE, RESOLVE_ZHENGSU_CHOICE, RESOLVE_ZHENLIANG_DAMAGE,
+2026-11-13T17:11:34.4022690Z     |                                      ^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T17:11:34.4124350Z 
+2026-11-13T17:11:34.4230030Z 
+2026-11-13T17:11:34.4345780Z warning: unused import: `Serialize`
+2026-11-13T17:11:34.4448120Z     --> crates/engine-core/src/state/turn.rs:1390:44
+2026-11-13T17:11:34.4550060Z      |
+2026-11-13T17:11:34.4653500Z 1390 |     use serde::{Deserialize, Deserializer, Serialize, Serializer};
+2026-11-13T17:11:34.4759070Z      |                                            ^^^^^^^^^
+2026-11-13T17:11:34.4860750Z 
+2026-11-13T17:11:34.4961530Z 
+2026-11-13T17:11:46.4701770Z warning: unused variable: `skill`
+2026-11-13T17:11:46.4791990Z    --> crates/engine-core/src/command/resolve_choice/group_post_3/resolve_resolve_tianxiang.rs:679:9
+2026-11-13T17:11:46.4894410Z     |
+2026-11-13T17:11:46.4996910Z 679 |     let skill = engine_api::SkillId::new(payload[2]);
+2026-11-13T17:11:46.5099040Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:46.5201690Z     |
+2026-11-13T17:11:46.5303340Z     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+2026-11-13T17:11:46.5403670Z 
+2026-11-13T17:11:46.5504700Z 
+2026-11-13T17:11:46.5611960Z warning: unused variable: `skill`
+2026-11-13T17:11:46.5713690Z   --> crates/engine-core/src/command/resolve_choice/group_post_3/resolve_resolve_lulve.rs:90:9
+2026-11-13T17:11:46.5815210Z    |
+2026-11-13T17:11:46.5915910Z 90 |     let skill = engine_api::SkillId::new(*skill);
+2026-11-13T17:11:46.6018100Z    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:46.6125220Z 
+2026-11-13T17:11:46.6243830Z 
+2026-11-13T17:11:46.6350450Z warning: unused variable: `skill`
+2026-11-13T17:11:46.6453120Z    --> crates/engine-core/src/command/resolve_choice/group_post_3/resolve_resolve_lulve.rs:235:17
+2026-11-13T17:11:46.6574000Z     |
+2026-11-13T17:11:46.6675450Z 235 |             let skill = engine_api::SkillId::new(*skill);
+2026-11-13T17:11:46.6778950Z     |                 ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:46.6913950Z 
+2026-11-13T17:11:46.7020630Z 
+2026-11-13T17:11:46.7156190Z warning: unused variable: `target`
+2026-11-13T17:11:46.7283330Z    --> crates/engine-core/src/command/resolve_choice/group_post_4/resolve_resolve_dctingxian.rs:199:13
+2026-11-13T17:11:46.7394180Z     |
+2026-11-13T17:11:46.7505140Z 199 |         let target = PlayerId::new(payload[3]);
+2026-11-13T17:11:46.7607820Z     |             ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+2026-11-13T17:11:46.7707640Z 
+2026-11-13T17:11:46.7808430Z 
+2026-11-13T17:11:46.7910800Z warning: variable does not need to be mutable
+2026-11-13T17:11:46.8020610Z   --> crates/engine-core/src/command/resolve_choice/group_post_4/resolve_resolve_zhiba.rs:93:9
+2026-11-13T17:11:46.8025060Z    |
+2026-11-13T17:11:46.8025870Z 93 |     let mut target = PlayerId::new(*payload.get(3).unwrap_or(&0));
+2026-11-13T17:11:46.8130550Z    |         ----^^^^^^
+2026-11-13T17:11:46.8232460Z    |         |
+2026-11-13T17:11:46.8333610Z    |         help: remove this `mut`
+2026-11-13T17:11:46.8439550Z    |
+2026-11-13T17:11:46.8547090Z    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+2026-11-13T17:11:46.8650650Z 
+2026-11-13T17:11:46.8762050Z 
+2026-11-13T17:11:46.8863950Z warning: unused variable: `skill`
+2026-11-13T17:11:46.8969140Z    --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:103:9
+2026-11-13T17:11:46.9091590Z     |
+2026-11-13T17:11:46.9193300Z 103 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+2026-11-13T17:11:46.9295090Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:46.9409990Z 
+2026-11-13T17:11:46.9523040Z 
+2026-11-13T17:11:46.9642360Z warning: unused variable: `skill`
+2026-11-13T17:11:46.9763230Z    --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:160:9
+2026-11-13T17:11:46.9874270Z     |
+2026-11-13T17:11:46.9978760Z 160 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+2026-11-13T17:11:47.0106100Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:47.0221600Z 
+2026-11-13T17:11:47.0323310Z 
+2026-11-13T17:11:47.0425480Z warning: unused variable: `player`
+2026-11-13T17:11:47.0531850Z    --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:344:5
+2026-11-13T17:11:47.0646910Z     |
+2026-11-13T17:11:47.0750390Z 344 |     player: PlayerId,
+2026-11-13T17:11:47.0865450Z     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+2026-11-13T17:11:47.0975920Z 
+2026-11-13T17:11:47.1085520Z 
+2026-11-13T17:11:47.1187200Z warning: unused variable: `skill`
+2026-11-13T17:11:47.1295870Z    --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:348:5
+2026-11-13T17:11:47.1398390Z     |
+2026-11-13T17:11:47.1500040Z 348 |     skill: engine_api::SkillId,
+2026-11-13T17:11:47.1602700Z     |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:47.1704990Z 
+2026-11-13T17:11:47.1805910Z 
+2026-11-13T17:11:47.1908480Z warning: unused variable: `skill`
+2026-11-13T17:11:47.2016470Z    --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:405:9
+2026-11-13T17:11:47.2119030Z     |
+2026-11-13T17:11:47.2222700Z 405 |     let skill = engine_api::SkillId::new(*payload.get(5).unwrap_or(&0));
+2026-11-13T17:11:47.2357040Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:47.2458490Z 
+2026-11-13T17:11:47.2568780Z 
+2026-11-13T17:11:47.2669890Z warning: unused variable: `skill`
+2026-11-13T17:11:47.2774720Z    --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:575:9
+2026-11-13T17:11:47.2878800Z     |
+2026-11-13T17:11:47.2981400Z 575 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+2026-11-13T17:11:47.3084650Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:47.3195700Z 
+2026-11-13T17:11:47.3310050Z 
+2026-11-13T17:11:47.3411100Z warning: unused variable: `skill`
+2026-11-13T17:11:47.3527450Z    --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:655:9
+2026-11-13T17:11:47.3629080Z     |
+2026-11-13T17:11:47.3736980Z 655 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+2026-11-13T17:11:47.3840430Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:47.3942280Z 
+2026-11-13T17:11:47.4043370Z 
+2026-11-13T17:11:47.4145490Z warning: unused variable: `skill`
+2026-11-13T17:11:47.4247210Z    --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:702:9
+2026-11-13T17:11:47.4349270Z     |
+2026-11-13T17:11:47.4376840Z 702 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+2026-11-13T17:11:47.4482320Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:47.4583210Z 
+2026-11-13T17:11:47.4679510Z 
+2026-11-13T17:11:47.4701100Z warning: unused variable: `skill`
+2026-11-13T17:11:47.4720520Z    --> crates/engine-core/src/command/resolve_choice/group_post_4/resolve_qizhi_target.rs:144:9
+2026-11-13T17:11:47.4787280Z     |
+2026-11-13T17:11:47.4812280Z 144 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+2026-11-13T17:11:47.4934910Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:47.5036100Z 
+2026-11-13T17:11:47.5136960Z 
+2026-11-13T17:11:47.5239000Z warning: unused variable: `skill`
+2026-11-13T17:11:47.5341980Z    --> crates/engine-core/src/command/resolve_choice/group_post_4/resolve_qizhi_target.rs:198:9
+2026-11-13T17:11:47.5443410Z     |
+2026-11-13T17:11:47.5467140Z 198 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+2026-11-13T17:11:47.5519210Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:47.5591140Z 
+2026-11-13T17:11:47.5593880Z 
+2026-11-13T17:11:47.5599750Z warning: unused variable: `skill`
+2026-11-13T17:11:47.5614170Z    --> crates/engine-core/src/command/resolve_choice/group_post_4/resolve_qizhi_target.rs:408:9
+2026-11-13T17:11:47.5622020Z     |
+2026-11-13T17:11:47.5623700Z 408 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+2026-11-13T17:11:47.5629670Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:47.5632910Z 
+2026-11-13T17:11:47.5633010Z 
+2026-11-13T17:11:47.5636300Z warning: unused variable: `skill`
+2026-11-13T17:11:47.5637050Z    --> crates/engine-core/src/command/resolve_choice/group_post_4/resolve_qizhi_target.rs:596:9
+2026-11-13T17:11:47.5637640Z     |
+2026-11-13T17:11:47.5638250Z 596 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+2026-11-13T17:11:47.5638950Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:47.5639360Z 
+2026-11-13T17:11:47.5639470Z 
+2026-11-13T17:11:47.5639790Z warning: unused variable: `skill`
+2026-11-13T17:11:47.5640420Z    --> crates/engine-core/src/command/resolve_choice/group_post_4/resolve_qizhi_target.rs:633:9
+2026-11-13T17:11:47.5640920Z     |
+2026-11-13T17:11:47.5641470Z 633 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+2026-11-13T17:11:47.5642190Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:47.5642660Z 
+2026-11-13T17:11:47.5642790Z 
+2026-11-13T17:11:47.5643090Z warning: unused variable: `skill`
+2026-11-13T17:11:47.5643720Z    --> crates/engine-core/src/command/resolve_choice/group_post_4/resolve_qizhi_target.rs:710:9
+2026-11-13T17:11:47.5644300Z     |
+2026-11-13T17:11:47.5652650Z 710 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+2026-11-13T17:11:47.5653930Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:47.5654580Z 
+2026-11-13T17:11:47.5654750Z 
+2026-11-13T17:11:47.5655130Z warning: unused variable: `skill`
+2026-11-13T17:11:47.5656590Z   --> crates/engine-core/src/command/resolve_choice/group_post_4/resolve_kuizhu_damage.rs:14:9
+2026-11-13T17:11:47.5657430Z    |
+2026-11-13T17:11:47.5658830Z 14 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+2026-11-13T17:11:47.5660940Z    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:47.5662610Z 
+2026-11-13T17:11:47.5662960Z 
+2026-11-13T17:11:47.5663620Z warning: unused variable: `pile_zone`
+2026-11-13T17:11:47.5670830Z    --> crates/engine-core/src/command/resolve_choice/group_post_5/resolve_twjuxiang_card.rs:726:9
+2026-11-13T17:11:47.5672770Z     |
+2026-11-13T17:11:47.5673780Z 726 |     let pile_zone = tx
+2026-11-13T17:11:47.5674990Z     |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_pile_zone`
+2026-11-13T17:11:47.5675520Z 
+2026-11-13T17:11:47.5682980Z 
+2026-11-13T17:11:47.5683520Z warning: unused variable: `phase`
+2026-11-13T17:11:47.5684850Z    --> crates/engine-core/src/command/resolve_choice/group_post_5/resolve_qiaobian_discard.rs:352:9
+2026-11-13T17:11:47.5686100Z     |
+2026-11-13T17:11:47.5686850Z 352 |     let phase = *payload.get(2).unwrap_or(&0);
+2026-11-13T17:11:47.5687640Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_phase`
+2026-11-13T17:11:47.5688230Z 
+2026-11-13T17:11:47.5688420Z 
+2026-11-13T17:11:47.5689020Z warning: unused variable: `skill`
+2026-11-13T17:11:47.5690620Z    --> crates/engine-core/src/command/resolve_choice/group_post_5/resolve_qiaobian_discard.rs:354:9
+2026-11-13T17:11:47.5691450Z     |
+2026-11-13T17:11:47.5692320Z 354 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+2026-11-13T17:11:47.5693560Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:47.5694210Z 
+2026-11-13T17:11:47.5695200Z 
+2026-11-13T17:11:47.5695590Z warning: variable does not need to be mutable
+2026-11-13T17:11:47.5696560Z    --> crates/engine-core/src/command/resolve_choice/group_post_5/resolve_resolve_xinkuangfu.rs:185:21
+2026-11-13T17:11:47.5723850Z     |
+2026-11-13T17:11:47.5736760Z 185 |                 let mut next_payload = vec![
+2026-11-13T17:11:47.5747860Z     |                     ----^^^^^^^^^^^^
+2026-11-13T17:11:47.5767630Z     |                     |
+2026-11-13T17:11:47.5770580Z     |                     help: remove this `mut`
+2026-11-13T17:11:47.5771940Z 
+2026-11-13T17:11:47.5772040Z 
+2026-11-13T17:11:47.5772290Z warning: unused variable: `count`
+2026-11-13T17:11:47.5772940Z   --> crates/engine-core/src/command/resolve_choice/group_post_6/resolve_resolve_xinxingluan.rs:23:9
+2026-11-13T17:11:47.5773540Z    |
+2026-11-13T17:11:47.5774120Z 23 |     let count = payload.get(6).copied().unwrap_or(0) as usize;
+2026-11-13T17:11:47.5774780Z    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_count`
+2026-11-13T17:11:47.5775190Z 
+2026-11-13T17:11:47.5775270Z 
+2026-11-13T17:11:47.5775530Z warning: unused variable: `draw`
+2026-11-13T17:11:47.5776180Z    --> crates/engine-core/src/command/resolve_choice/group_post_6/resolve_resolve_xinxingluan.rs:213:17
+2026-11-13T17:11:47.5782780Z     |
+2026-11-13T17:11:47.5784970Z 213 |             let draw = tx
+2026-11-13T17:11:47.5785710Z     |                 ^^^^ help: if this is intentional, prefix it with an underscore: `_draw`
+2026-11-13T17:11:47.5786160Z 
+2026-11-13T17:11:47.5786250Z 
+2026-11-13T17:11:47.5786520Z warning: unused variable: `skill`
+2026-11-13T17:11:47.5787500Z    --> crates/engine-core/src/command/resolve_choice/group_post_8/open_equipment_pair_choice.rs:625:9
+2026-11-13T17:11:47.5788150Z     |
+2026-11-13T17:11:47.5788680Z 625 |     let skill = engine_api::SkillId::new(payload[2]);
+2026-11-13T17:11:47.5789400Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:47.5789850Z 
+2026-11-13T17:11:47.5789980Z 
+2026-11-13T17:11:47.5790350Z warning: unused variable: `target`
+2026-11-13T17:11:47.5792280Z    --> crates/engine-core/src/command/resolve_choice/group_post_8/resolve_resolve_biaozhao3.rs:186:9
+2026-11-13T17:11:47.5792940Z     |
+2026-11-13T17:11:47.5793260Z 186 |     let target = payload[5];
+2026-11-13T17:11:47.5793730Z     |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+2026-11-13T17:11:47.5794060Z 
+2026-11-13T17:11:47.5794070Z 
+2026-11-13T17:11:47.5794270Z warning: unused variable: `target`
+2026-11-13T17:11:47.5794830Z    --> crates/engine-core/src/command/resolve_choice/group_post_8/resolve_resolve_biaozhao3.rs:232:9
+2026-11-13T17:11:47.5795890Z     |
+2026-11-13T17:11:47.5796280Z 232 |     let target = payload[6];
+2026-11-13T17:11:47.5796840Z     |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+2026-11-13T17:11:47.5797160Z 
+2026-11-13T17:11:47.5797170Z 
+2026-11-13T17:11:47.5797290Z warning: unused variable: `kind`
+2026-11-13T17:11:47.5797880Z    --> crates/engine-core/src/command/resolve_choice/group_post_8/resolve_resolve_biaozhao3.rs:292:9
+2026-11-13T17:11:47.5798410Z     |
+2026-11-13T17:11:47.5798740Z 292 |     let kind = payload[4];
+2026-11-13T17:11:47.5799330Z     |         ^^^^ help: if this is intentional, prefix it with an underscore: `_kind`
+2026-11-13T17:11:47.5799590Z 
+2026-11-13T17:11:47.5799600Z 
+2026-11-13T17:11:47.5799760Z warning: unused variable: `mode`
+2026-11-13T17:11:47.5800280Z   --> crates/engine-core/src/command/resolve_choice/group_post_9/resolve_houfeng_choice.rs:19:9
+2026-11-13T17:11:47.5800790Z    |
+2026-11-13T17:11:47.5801040Z 19 |     let mode = payload[3] as u8;
+2026-11-13T17:11:47.5801530Z    |         ^^^^ help: if this is intentional, prefix it with an underscore: `_mode`
+2026-11-13T17:11:47.5801820Z 
+2026-11-13T17:11:47.5801820Z 
+2026-11-13T17:11:47.5802000Z warning: unused variable: `skill`
+2026-11-13T17:11:47.5802520Z    --> crates/engine-core/src/command/resolve_choice/group_post_9/resolve_tongduo_choice.rs:320:9
+2026-11-13T17:11:47.5802990Z     |
+2026-11-13T17:11:47.5803520Z 320 |     let skill = engine_api::SkillId::new(payload[4]);
+2026-11-13T17:11:47.5804090Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:47.5804410Z 
+2026-11-13T17:11:47.5804410Z 
+2026-11-13T17:11:47.7430870Z warning: unused variable: `actor`
+2026-11-13T17:11:47.7531460Z    --> crates/engine-core/src/command/resolve_choice/group_pre_2/resolve_twniujin_custom.rs:513:9
+2026-11-13T17:11:47.7632980Z     |
+2026-11-13T17:11:47.7734520Z 513 |     let actor = PlayerId::new(payload[1]);
+2026-11-13T17:11:47.7834780Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_actor`
+2026-11-13T17:11:47.7935770Z 
+2026-11-13T17:11:47.8036540Z 
+2026-11-13T17:11:48.6905920Z warning: unreachable pattern
+2026-11-13T17:11:48.6907750Z    --> crates/engine-core/src/content/registry/default_view_as_card_count.rs:499:9
+2026-11-13T17:11:48.6909400Z     |
+2026-11-13T17:11:48.6910580Z 474 |         ModifierValueSource::OwnerSkillPileCount => {
+2026-11-13T17:11:48.6912030Z     |         ---------------------------------------- matches all the relevant values
+2026-11-13T17:11:48.6913250Z ...
+2026-11-13T17:11:48.6914530Z 499 |         ModifierValueSource::OwnerSkillPileCount => "owner_skill_pile_count",
+2026-11-13T17:11:48.6916110Z     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+2026-11-13T17:11:48.6917400Z     |
+2026-11-13T17:11:48.6918690Z     = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+2026-11-13T17:11:48.6919690Z 
+2026-11-13T17:11:48.6919880Z 
+2026-11-13T17:11:48.8660280Z warning: unused variable: `player`
+2026-11-13T17:11:48.8760190Z    --> crates/engine-core/src/effect/primitives/pack_bingshi_1/begin_choose_compare_selected_hand_card.rs:496:5
+2026-11-13T17:11:48.8863330Z     |
+2026-11-13T17:11:48.8965180Z 496 |     player: PlayerId,
+2026-11-13T17:11:48.9068140Z     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+2026-11-13T17:11:48.9168220Z 
+2026-11-13T17:11:48.9238140Z 
+2026-11-13T17:11:49.0421570Z warning: variable does not need to be mutable
+2026-11-13T17:11:49.0445870Z    --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_potzhouyu_choice.rs:442:9
+2026-11-13T17:11:49.0447780Z     |
+2026-11-13T17:11:49.0448950Z 442 |     let mut options: Vec<_> = tx
+2026-11-13T17:11:49.0449860Z     |         ----^^^^^^^
+2026-11-13T17:11:49.0450740Z     |         |
+2026-11-13T17:11:49.0452330Z     |         help: remove this `mut`
+2026-11-13T17:11:49.0453270Z 
+2026-11-13T17:11:49.0455560Z 
+2026-11-13T17:11:49.0884120Z warning: unused variable: `skill`
+2026-11-13T17:11:49.0984180Z    --> crates/engine-core/src/effect/primitives/pack_bingshi_1/zuozhan_distinct_basics_from_discard.rs:477:5
+2026-11-13T17:11:49.1086630Z     |
+2026-11-13T17:11:49.1188530Z 477 |     skill: engine_api::SkillId,
+2026-11-13T17:11:49.1290160Z     |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:49.1391270Z 
+2026-11-13T17:11:49.1492020Z 
+2026-11-13T17:11:49.1548140Z warning: unused variable: `skill`
+2026-11-13T17:11:49.1557980Z    --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_dcbingji.rs:414:9
+2026-11-13T17:11:49.1559550Z     |
+2026-11-13T17:11:49.1572440Z 414 |     let skill = engine_api::SkillId::new(skill_raw);
+2026-11-13T17:11:49.1574020Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:49.1575440Z 
+2026-11-13T17:11:49.1576450Z 
+2026-11-13T17:11:49.1577170Z warning: unused variable: `skill`
+2026-11-13T17:11:49.1578750Z    --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_dcbingji.rs:633:9
+2026-11-13T17:11:49.1579930Z     |
+2026-11-13T17:11:49.1581060Z 633 |     let skill = engine_api::SkillId::new(skill_raw);
+2026-11-13T17:11:49.1582580Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:49.1583540Z 
+2026-11-13T17:11:49.1583730Z 
+2026-11-13T17:11:49.1584310Z warning: unused variable: `count`
+2026-11-13T17:11:49.1586010Z    --> crates/engine-core/src/effect/primitives/pack_bingshi_1/twmouzhi_card_color.rs:110:5
+2026-11-13T17:11:49.1587300Z     |
+2026-11-13T17:11:49.1588070Z 110 |     count: u32,
+2026-11-13T17:11:49.1589270Z     |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_count`
+2026-11-13T17:11:49.1590170Z 
+2026-11-13T17:11:49.1590290Z 
+2026-11-13T17:11:49.1979180Z warning: variable does not need to be mutable
+2026-11-13T17:11:49.2081940Z    --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_yangming_round.rs:255:9
+2026-11-13T17:11:49.2183890Z     |
+2026-11-13T17:11:49.2285000Z 255 |     let mut payload = vec![
+2026-11-13T17:11:49.2386830Z     |         ----^^^^^^^
+2026-11-13T17:11:49.2488280Z     |         |
+2026-11-13T17:11:49.2589410Z     |         help: remove this `mut`
+2026-11-13T17:11:49.2690480Z 
+2026-11-13T17:11:49.2792180Z 
+2026-11-13T17:11:49.2812310Z warning: variable does not need to be mutable
+2026-11-13T17:11:49.2815260Z    --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_yangming_round.rs:733:17
+2026-11-13T17:11:49.2816610Z     |
+2026-11-13T17:11:49.2829130Z 733 |             let mut events = crate::effect::draw_cards(tx, player, 1)?;
+2026-11-13T17:11:49.2829720Z     |                 ----^^^^^^
+2026-11-13T17:11:49.2830060Z     |                 |
+2026-11-13T17:11:49.2830470Z     |                 help: remove this `mut`
+2026-11-13T17:11:49.2831050Z 
+2026-11-13T17:11:49.2831060Z 
+2026-11-13T17:11:49.2831320Z warning: unused variable: `player`
+2026-11-13T17:11:49.2831990Z   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_dcmoukui_stage.rs:61:5
+2026-11-13T17:11:49.2832850Z    |
+2026-11-13T17:11:49.2833210Z 61 |     player: PlayerId,
+2026-11-13T17:11:49.2834090Z    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+2026-11-13T17:11:49.2834510Z 
+2026-11-13T17:11:49.2834520Z 
+2026-11-13T17:11:49.2834730Z warning: unused variable: `dodger`
+2026-11-13T17:11:49.2835760Z    --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_dcmoukui_stage.rs:553:5
+2026-11-13T17:11:49.2836540Z     |
+2026-11-13T17:11:49.2836800Z 553 |     dodger: PlayerId,
+2026-11-13T17:11:49.2837760Z     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_dodger`
+2026-11-13T17:11:49.2838110Z 
+2026-11-13T17:11:49.2838120Z 
+2026-11-13T17:11:49.2838740Z warning: variable does not need to be mutable
+2026-11-13T17:11:49.2839390Z    --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_dcmoukui_stage.rs:615:17
+2026-11-13T17:11:49.2841140Z     |
+2026-11-13T17:11:49.2841870Z 615 |             let mut drawn = crate::effect::draw_cards(tx, player, draw_n)?;
+2026-11-13T17:11:49.2842330Z     |                 ----^^^^^
+2026-11-13T17:11:49.2842900Z     |                 |
+2026-11-13T17:11:49.2843300Z     |                 help: remove this `mut`
+2026-11-13T17:11:49.2843540Z 
+2026-11-13T17:11:49.2843550Z 
+2026-11-13T17:11:49.2962150Z warning: unused variable: `player`
+2026-11-13T17:11:49.2963030Z    --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_olqiaozhi.rs:325:5
+2026-11-13T17:11:49.2964010Z     |
+2026-11-13T17:11:49.2964590Z 325 |     player: PlayerId,
+2026-11-13T17:11:49.2975580Z     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+2026-11-13T17:11:49.2976360Z 
+2026-11-13T17:11:49.2977270Z 
+2026-11-13T17:11:49.3078310Z warning: variable does not need to be mutable
+2026-11-13T17:11:49.3180630Z    --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_mbzhenann.rs:124:9
+2026-11-13T17:11:49.3282780Z     |
+2026-11-13T17:11:49.3301690Z 124 |     let mut events = crate::effect::draw_cards(tx, source, 2)?;
+2026-11-13T17:11:49.3377700Z     |         ----^^^^^^
+2026-11-13T17:11:49.3424650Z     |         |
+2026-11-13T17:11:49.3439160Z     |         help: remove this `mut`
+2026-11-13T17:11:49.3496380Z 
+2026-11-13T17:11:49.3516960Z 
+2026-11-13T17:11:49.3535670Z warning: unused variable: `player`
+2026-11-13T17:11:49.3549220Z    --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_mbzhenann.rs:445:5
+2026-11-13T17:11:49.3549680Z     |
+2026-11-13T17:11:49.3551560Z 445 |     player: PlayerId,
+2026-11-13T17:11:49.3552190Z     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+2026-11-13T17:11:49.3552690Z 
+2026-11-13T17:11:49.3552700Z 
+2026-11-13T17:11:50.0065410Z warning: unused variable: `card`
+2026-11-13T17:11:50.0066990Z   --> crates/engine-core/src/effect/primitives/pack_ddd_2/resolve_ddd_zhaoang.rs:11:5
+2026-11-13T17:11:50.0067740Z    |
+2026-11-13T17:11:50.0068250Z 11 |     card: CardId,
+2026-11-13T17:11:50.0068780Z    |     ^^^^ help: if this is intentional, prefix it with an underscore: `_card`
+2026-11-13T17:11:50.0069200Z 
+2026-11-13T17:11:50.0069340Z 
+2026-11-13T17:11:50.6931540Z warning: variable does not need to be mutable
+2026-11-13T17:11:50.7033600Z    --> crates/engine-core/src/effect/primitives/pack_huicui/resolve_dcchiying.rs:590:9
+2026-11-13T17:11:50.7133580Z     |
+2026-11-13T17:11:50.7236480Z 590 |     let mut effects = vec![EffectRequest::RevealCards {
+2026-11-13T17:11:50.7338520Z     |         ----^^^^^^^
+2026-11-13T17:11:50.7439480Z     |         |
+2026-11-13T17:11:50.7541680Z     |         help: remove this `mut`
+2026-11-13T17:11:50.7642730Z 
+2026-11-13T17:11:50.7743510Z 
+2026-11-13T17:11:50.7844210Z warning: unused variable: `view`
+2026-11-13T17:11:50.7946220Z    --> crates/engine-core/src/effect/primitives/pack_huicui/resolve_dcchiying.rs:515:5
+2026-11-13T17:11:50.8046410Z     |
+2026-11-13T17:11:50.8144030Z 515 |     view: Vec<CardId>,
+2026-11-13T17:11:50.8246130Z     |     ^^^^ help: if this is intentional, prefix it with an underscore: `_view`
+2026-11-13T17:11:50.8347740Z 
+2026-11-13T17:11:50.8448760Z 
+2026-11-13T17:11:50.8558810Z warning: unused variable: `skill`
+2026-11-13T17:11:50.8660490Z    --> crates/engine-core/src/effect/primitives/pack_jsrg.rs:559:9
+2026-11-13T17:11:50.8704090Z     |
+2026-11-13T17:11:50.8783960Z 559 |     let skill = engine_api::SkillId::new(*skill);
+2026-11-13T17:11:50.8885880Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:50.8925500Z 
+2026-11-13T17:11:50.8967480Z 
+2026-11-13T17:11:51.3270760Z warning: unused variable: `skill`
+2026-11-13T17:11:51.3272980Z    --> crates/engine-core/src/effect/primitives/pack_refresh/choose_gain_target_card_alternate_zone_then_target_draw.rs:534:9
+2026-11-13T17:11:51.3273580Z     |
+2026-11-13T17:11:51.3274040Z 534 |     let skill = engine_api::SkillId::new(*payload.get(2).unwrap_or(&0));
+2026-11-13T17:11:51.3276520Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:51.3276820Z 
+2026-11-13T17:11:51.3276830Z 
+2026-11-13T17:11:51.4168900Z warning: variable does not need to be mutable
+2026-11-13T17:11:51.4169730Z    --> crates/engine-core/src/effect/primitives/pack_shenhua_1/resolve_zhiba.rs:170:5
+2026-11-13T17:11:51.4170170Z     |
+2026-11-13T17:11:51.4170480Z 170 |     mut targets: Vec<PlayerId>,
+2026-11-13T17:11:51.4170800Z     |     ----^^^^^^^
+2026-11-13T17:11:51.4171020Z     |     |
+2026-11-13T17:11:51.4171310Z     |     help: remove this `mut`
+2026-11-13T17:11:51.4171500Z 
+2026-11-13T17:11:51.4171510Z 
+2026-11-13T17:11:51.4366640Z warning: unused variable: `target`
+2026-11-13T17:11:51.4367250Z    --> crates/engine-core/src/effect/primitives/pack_shenhua_1/resolve_zhiba.rs:587:5
+2026-11-13T17:11:51.4367700Z     |
+2026-11-13T17:11:51.4367960Z 587 |     target: PlayerId,
+2026-11-13T17:11:51.4368410Z     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+2026-11-13T17:11:51.4368800Z 
+2026-11-13T17:11:51.4368810Z 
+2026-11-13T17:11:51.4443550Z warning: unused variable: `player`
+2026-11-13T17:11:51.4445210Z    --> crates/engine-core/src/effect/primitives/pack_shenhua_1/resolve_zhiba.rs:738:5
+2026-11-13T17:11:51.4446540Z     |
+2026-11-13T17:11:51.4447380Z 738 |     player: PlayerId,
+2026-11-13T17:11:51.4449040Z     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+2026-11-13T17:11:51.4449780Z 
+2026-11-13T17:11:51.4449790Z 
+2026-11-13T17:11:51.4674380Z warning: unused variable: `target`
+2026-11-13T17:11:51.4675030Z    --> crates/engine-core/src/effect/primitives/pack_shenhua_1/guanxing_top_by_falu_marks.rs:500:5
+2026-11-13T17:11:51.4675480Z     |
+2026-11-13T17:11:51.4675740Z 500 |     target: PlayerId,
+2026-11-13T17:11:51.4676180Z     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+2026-11-13T17:11:51.4676770Z 
+2026-11-13T17:11:51.4676840Z 
+2026-11-13T17:11:51.4771510Z warning: unused variable: `target`
+2026-11-13T17:11:51.4776820Z    --> crates/engine-core/src/effect/primitives/pack_shenhua_1/guanxing_top_by_falu_marks.rs:619:5
+2026-11-13T17:11:51.4777530Z     |
+2026-11-13T17:11:51.4777890Z 619 |     target: PlayerId,
+2026-11-13T17:11:51.4778460Z     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+2026-11-13T17:11:51.4784050Z 
+2026-11-13T17:11:51.4784160Z 
+2026-11-13T17:11:51.4857090Z warning: unused variable: `targets`
+2026-11-13T17:11:51.4861760Z   --> crates/engine-core/src/effect/primitives/pack_shenhua_1/resolve_haoshi.rs:85:5
+2026-11-13T17:11:51.4921470Z    |
+2026-11-13T17:11:51.4921990Z 85 |     targets: &[PlayerId],
+2026-11-13T17:11:51.4922590Z    |     ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_targets`
+2026-11-13T17:11:51.4923050Z 
+2026-11-13T17:11:51.4923150Z 
+2026-11-13T17:11:51.5325920Z warning: unused variable: `player`
+2026-11-13T17:11:51.5426740Z    --> crates/engine-core/src/effect/primitives/pack_shenhua_2/qizhi_count.rs:550:52
+2026-11-13T17:11:51.5527420Z     |
+2026-11-13T17:11:51.5601480Z 550 | pub(crate) fn turn_discard_count(tx: &Transaction, player: PlayerId) -> u32 {
+2026-11-13T17:11:51.5703770Z     |                                                    ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+2026-11-13T17:11:51.5804250Z 
+2026-11-13T17:11:51.5878890Z 
+2026-11-13T17:11:51.5927280Z warning: unused variable: `value`
+2026-11-13T17:11:51.5929210Z    --> crates/engine-core/src/effect/primitives/pack_shenhua_2/liangyin_mark.rs:194:23
+2026-11-13T17:11:51.5930360Z     |
+2026-11-13T17:11:51.5931160Z 194 |                 .map(|value| vec![card])
+2026-11-13T17:11:51.5932370Z     |                       ^^^^^ help: if this is intentional, prefix it with an underscore: `_value`
+2026-11-13T17:11:51.5933180Z 
+2026-11-13T17:11:51.5933190Z 
+2026-11-13T17:11:51.5933680Z warning: variable does not need to be mutable
+2026-11-13T17:11:51.5935790Z    --> crates/engine-core/src/effect/primitives/pack_shenhua_2/liangyin_mark.rs:532:9
+2026-11-13T17:11:51.5936760Z     |
+2026-11-13T17:11:51.5937440Z 532 |     let mut events = run_effects(
+2026-11-13T17:11:51.5938220Z     |         ----^^^^^^
+2026-11-13T17:11:51.5938840Z     |         |
+2026-11-13T17:11:51.5939560Z     |         help: remove this `mut`
+2026-11-13T17:11:51.5940090Z 
+2026-11-13T17:11:51.5940110Z 
+2026-11-13T17:11:51.5940630Z warning: unused variable: `kongsheng_def`
+2026-11-13T17:11:51.5941820Z  --> crates/engine-core/src/effect/primitives/pack_shenhua_2/resolve_liangyin.rs:8:5
+2026-11-13T17:11:51.5942900Z   |
+2026-11-13T17:11:51.5943720Z 8 |     kongsheng_def: engine_api::SkillDefId,
+2026-11-13T17:11:51.5944920Z   |     ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_kongsheng_def`
+2026-11-13T17:11:51.5945700Z 
+2026-11-13T17:11:51.5945740Z 
+2026-11-13T17:11:51.6983260Z warning: unused variable: `source`
+2026-11-13T17:11:51.6984620Z    --> crates/engine-core/src/effect/primitives/pack_shiji/resolve_spchijie.rs:155:5
+2026-11-13T17:11:51.6985130Z     |
+2026-11-13T17:11:51.6985450Z 155 |     source: PlayerId,
+2026-11-13T17:11:51.6986300Z     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_source`
+2026-11-13T17:11:51.7420450Z 
+2026-11-13T17:11:51.7420490Z 
+2026-11-13T17:11:51.7420940Z warning: variable does not need to be mutable
+2026-11-13T17:11:51.7422170Z    --> crates/engine-core/src/effect/primitives/pack_shiji/resolve_xinyangjie.rs:612:17
+2026-11-13T17:11:51.7422690Z     |
+2026-11-13T17:11:51.7423200Z 612 |             let mut events = add_skill(tx, target, engine_api::SkillDefId::new(def))?;
+2026-11-13T17:11:51.7423700Z     |                 ----^^^^^^
+2026-11-13T17:11:51.7424020Z     |                 |
+2026-11-13T17:11:51.7424290Z     |                 help: remove this `mut`
+2026-11-13T17:11:51.7424870Z 
+2026-11-13T17:11:51.7424880Z 
+2026-11-13T17:11:51.7584440Z warning: unused variable: `action`
+2026-11-13T17:11:51.7585880Z   --> crates/engine-core/src/effect/primitives/pack_shiji/resolve_xiongshu.rs:15:5
+2026-11-13T17:11:51.7586930Z    |
+2026-11-13T17:11:51.7587690Z 15 |     action: u8,
+2026-11-13T17:11:51.7588760Z    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_action`
+2026-11-13T17:11:51.7589410Z 
+2026-11-13T17:11:51.7589420Z 
+2026-11-13T17:11:51.7810670Z warning: unused variable: `card`
+2026-11-13T17:11:51.7811580Z     --> crates/engine-core/src/effect/primitives/pack_shiji/resolve_xiongshu.rs:1051:5
+2026-11-13T17:11:51.7812170Z      |
+2026-11-13T17:11:51.7813420Z 1051 |     card: CardId,
+2026-11-13T17:11:51.7814650Z      |     ^^^^ help: if this is intentional, prefix it with an underscore: `_card`
+2026-11-13T17:11:51.7815420Z 
+2026-11-13T17:11:51.7815500Z 
+2026-11-13T17:11:52.2734140Z warning: unused variable: `skill`
+2026-11-13T17:11:52.2735510Z    --> crates/engine-core/src/effect/primitives/pack_tw_1/resolve_twtanfeng.rs:516:24
+2026-11-13T17:11:52.2736650Z     |
+2026-11-13T17:11:52.2737520Z 516 |     let [player, _sub, skill] = payload else {
+2026-11-13T17:11:52.2738850Z     |                        ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:52.2739590Z 
+2026-11-13T17:11:52.2739610Z 
+2026-11-13T17:11:52.9887320Z warning: unused variable: `player`
+2026-11-13T17:11:52.9887960Z    --> crates/engine-core/src/effect/primitives/pack_xianding_2/continue_dcsbyingmou_spree.rs:685:5
+2026-11-13T17:11:52.9888460Z     |
+2026-11-13T17:11:52.9888730Z 685 |     player: PlayerId,
+2026-11-13T17:11:52.9889170Z     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+2026-11-13T17:11:52.9889460Z 
+2026-11-13T17:11:52.9889470Z 
+2026-11-13T17:11:53.0388850Z warning: unused variable: `skill`
+2026-11-13T17:11:53.0391870Z    --> crates/engine-core/src/effect/primitives/choose_others_add_mark.rs:587:18
+2026-11-13T17:11:53.0394620Z     |
+2026-11-13T17:11:53.0395710Z 587 |     let [player, skill] = payload else {
+2026-11-13T17:11:53.0399580Z     |                  ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T17:11:53.0400530Z 
+2026-11-13T17:11:53.0400540Z 
+2026-11-13T17:11:53.0657200Z warning: unused variable: `player`
+2026-11-13T17:11:53.0658120Z   --> crates/engine-core/src/effect/primitives/dispatch_draw_cards.rs:21:49
+2026-11-13T17:11:53.0658960Z    |
+2026-11-13T17:11:53.0659470Z 21 |         EffectRequest::SetDrawPhaseFromBottom { player } => {
+2026-11-13T17:11:53.0660270Z    |                                                 ^^^^^^ help: try ignoring the field: `player: _`
+2026-11-13T17:11:53.0660550Z 
+2026-11-13T17:11:53.0660560Z 
+2026-11-13T17:11:53.1174100Z warning: unused variable: `skill`
+2026-11-13T17:11:53.1175950Z    --> crates/engine-core/src/effect/primitives/dispatch_resolve_twxiawei_resolvers.rs:883:13
+2026-11-13T17:11:53.1177100Z     |
+2026-11-13T17:11:53.1177920Z 883 |             skill,
+2026-11-13T17:11:53.1178710Z     |             ^^^^^ help: try ignoring the field: `skill: _`
+2026-11-13T17:11:53.1179500Z 
+2026-11-13T17:11:53.1179520Z 
+2026-11-13T17:11:53.1273530Z warning: unreachable pattern
+2026-11-13T17:11:53.1274170Z    --> crates/engine-core/src/effect/primitives/dispatch_resolve_zhangjian_resolvers.rs:698:9
+2026-11-13T17:11:53.1275240Z     |
+2026-11-13T17:11:53.1275900Z 691 | /         EffectRequest::ResolveQiaobian {
+2026-11-13T17:11:53.1276260Z 692 | |             player,
+2026-11-13T17:11:53.1276550Z 693 | |             phase,
+2026-11-13T17:11:53.1311870Z 694 | |             stage,
+2026-11-13T17:11:53.1313120Z 695 | |             skill,
+2026-11-13T17:11:53.1314120Z 696 | |         } => resolve_qiaobian(tx, player, phase, stage, skill),
+2026-11-13T17:11:53.1315120Z     | |_________- matches all the relevant values
+2026-11-13T17:11:53.1320380Z 697 |           // ponytail: 巧变（ABI 559）由 C 段（omp）实现中，stub 保持编译通过。
+2026-11-13T17:11:53.1321670Z 698 |           EffectRequest::ResolveQiaobian { .. } => Ok(Vec::new()),
+2026-11-13T17:11:53.1324340Z     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+2026-11-13T17:11:53.1324880Z 
+2026-11-13T17:11:53.1324900Z 
+2026-11-13T17:11:53.1325290Z warning: unreachable pattern
+2026-11-13T17:11:53.1326490Z    --> crates/engine-core/src/effect/primitives/dispatch_resolve_zhangjian_resolvers.rs:728:9
+2026-11-13T17:11:53.1327580Z     |
+2026-11-13T17:11:53.1328840Z 728 |         EffectRequest::BanUseAgainst { .. } | EffectRequest::ResolveJuzhan { .. } => Ok(Vec::new()),
+2026-11-13T17:11:53.1330310Z     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+2026-11-13T17:11:53.1331190Z     |
+2026-11-13T17:11:53.1332030Z note: multiple earlier patterns match some of the same values
+2026-11-13T17:11:53.1333470Z    --> crates/engine-core/src/effect/primitives/dispatch_resolve_zhangjian_resolvers.rs:728:9
+2026-11-13T17:11:53.1334560Z     |
+2026-11-13T17:11:53.1336200Z 717 |           EffectRequest::BanUseAgainst { user, target } => ban_use_against(tx, user, target),
+2026-11-13T17:11:53.1337700Z     |           --------------------------------------------- matches some of the same values
+2026-11-13T17:11:53.1338610Z 718 |
+2026-11-13T17:11:53.1339320Z 719 | /         EffectRequest::ResolveJuzhan {
+2026-11-13T17:11:53.1340120Z 720 | |             player,
+2026-11-13T17:11:53.1340810Z 721 | |             source,
+2026-11-13T17:11:53.1341430Z 722 | |             card,
+2026-11-13T17:11:53.1342020Z ...   |
+2026-11-13T17:11:53.1342620Z 725 | |             skill,
+2026-11-13T17:11:53.1343710Z 726 | |         } => resolve_juzhan(tx, player, source, card, &targets, stage, skill),
+2026-11-13T17:11:53.1344210Z     | |_________- matches some of the same values
+2026-11-13T17:11:53.1345140Z 727 |           // ponytail: 并行会话中间态（ban-use-pairs / 拒战）stub 保持编译通过。
+2026-11-13T17:11:53.1345910Z 728 |           EffectRequest::BanUseAgainst { .. } | EffectRequest::ResolveJuzhan { .. } => Ok(Vec::new()),
+2026-11-13T17:11:53.1346570Z     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ collectively making this unreachable
+2026-11-13T17:11:53.1347610Z 
+2026-11-13T17:11:53.1347620Z 
+2026-11-13T17:11:53.1427980Z warning: unreachable pattern
+2026-11-13T17:11:53.1428520Z    --> crates/engine-core/src/effect/source_skill.rs:462:11
+2026-11-13T17:11:53.1428890Z     |
+2026-11-13T17:11:53.1429290Z 343 |         | EffectRequest::ResolveOllinjie { skill, .. }
+2026-11-13T17:11:53.1429960Z     |           -------------------------------------------- matches all the relevant values
+2026-11-13T17:11:53.1430310Z ...
+2026-11-13T17:11:53.1430670Z 462 |         | EffectRequest::ResolveOllinjie { skill, .. }
+2026-11-13T17:11:53.1431050Z     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+2026-11-13T17:11:53.1431260Z 
+2026-11-13T17:11:53.1431270Z 
+2026-11-13T17:11:53.1431360Z warning: unreachable pattern
+2026-11-13T17:11:53.1431660Z    --> crates/engine-core/src/effect/source_skill.rs:463:11
+2026-11-13T17:11:53.1431930Z     |
+2026-11-13T17:11:53.1432240Z 346 |         | EffectRequest::ChooseTargetGainMaxHp { skill, .. }
+2026-11-13T17:11:53.1432700Z     |           -------------------------------------------------- matches all the relevant values
+2026-11-13T17:11:53.1433020Z ...
+2026-11-13T17:11:53.1433300Z 463 |         | EffectRequest::ChooseTargetGainMaxHp { skill, .. }
+2026-11-13T17:11:53.1433730Z     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+2026-11-13T17:11:53.1433940Z 
+2026-11-13T17:11:53.1433940Z 
+2026-11-13T17:11:53.1434040Z warning: unreachable pattern
+2026-11-13T17:11:53.1434320Z    --> crates/engine-core/src/effect/source_skill.rs:464:11
+2026-11-13T17:11:53.1434570Z     |
+2026-11-13T17:11:53.1434860Z 347 |         | EffectRequest::GainTargetHandCard { skill, .. }
+2026-11-13T17:11:53.1435280Z     |           ----------------------------------------------- matches all the relevant values
+2026-11-13T17:11:53.1436140Z ...
+2026-11-13T17:11:53.1436480Z 464 |         | EffectRequest::GainTargetHandCard { skill, .. } => skill.raw(),
+2026-11-13T17:11:53.1436910Z     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+2026-11-13T17:11:53.1437120Z 
+2026-11-13T17:11:53.1437120Z 
+2026-11-13T17:11:53.1437220Z warning: unreachable pattern
+2026-11-13T17:11:53.1437500Z    --> crates/engine-core/src/effect/source_skill.rs:496:11
+2026-11-13T17:11:53.1437750Z     |
+2026-11-13T17:11:53.1438070Z 495 |         | EffectRequest::GiveSelectedThenRecoverSelf { skill, .. }
+2026-11-13T17:11:53.1438540Z     |           -------------------------------------------------------- matches all the relevant values
+2026-11-13T17:11:53.1439060Z 496 |         | EffectRequest::GiveSelectedThenRecoverSelf { skill, .. }
+2026-11-13T17:11:53.1439470Z     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+2026-11-13T17:11:53.1439690Z 
+2026-11-13T17:11:53.1439690Z 
+2026-11-13T17:11:53.3339980Z warning: unreachable pattern
+2026-11-13T17:11:53.3442290Z    --> crates/engine-core/src/hash/effects_choose_gain_discard_card_by_kind_resolvers.rs:336:9
+2026-11-13T17:11:53.3544810Z     |
+2026-11-13T17:11:53.3645070Z 322 | /         EffectRequest::ResolveSpshanxi {
+2026-11-13T17:11:53.3746930Z 323 | |             player,
+2026-11-13T17:11:53.3848590Z 324 | |             target,
+2026-11-13T17:11:53.3943680Z 325 | |             stage,
+2026-11-13T17:11:53.3999100Z 326 | |             skill,
+2026-11-13T17:11:53.4066160Z 327 | |         } => {
+2026-11-13T17:11:53.4073310Z     | |_________- matches all the relevant values
+2026-11-13T17:11:53.4073810Z ...
+2026-11-13T17:11:53.4074270Z 336 |           EffectRequest::ResolveSpshanxi { .. } => {
+2026-11-13T17:11:53.4074840Z     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+2026-11-13T17:11:53.4075180Z 
+2026-11-13T17:11:53.4075190Z 
+2026-11-13T17:11:53.4075320Z warning: unreachable pattern
+2026-11-13T17:11:53.4075800Z    --> crates/engine-core/src/hash/effects_choose_gain_discard_card_by_kind_resolvers.rs:355:9
+2026-11-13T17:11:53.4076290Z     |
+2026-11-13T17:11:53.4077060Z 341 | /         EffectRequest::ResolveSpshanxiSuoming {
+2026-11-13T17:11:53.4077340Z 342 | |             player,
+2026-11-13T17:11:53.4077570Z 343 | |             actor,
+2026-11-13T17:11:53.4077800Z 344 | |             stage,
+2026-11-13T17:11:53.4078000Z 345 | |             skill,
+2026-11-13T17:11:53.4078180Z 346 | |         } => {
+2026-11-13T17:11:53.4078450Z     | |_________- matches all the relevant values
+2026-11-13T17:11:53.4078680Z ...
+2026-11-13T17:11:53.4078980Z 355 |           EffectRequest::ResolveSpshanxiSuoming { .. } => {
+2026-11-13T17:11:53.4079360Z     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+2026-11-13T17:11:53.4079570Z 
+2026-11-13T17:11:53.4079570Z 
+2026-11-13T17:11:53.4079670Z warning: unreachable pattern
+2026-11-13T17:11:53.4080100Z    --> crates/engine-core/src/hash/effects_choose_gain_discard_card_by_kind_resolvers_r_z.rs:141:9
+2026-11-13T17:11:53.4080510Z     |
+2026-11-13T17:11:53.4080770Z 123 | /         EffectRequest::ResolveRechuhai {
+2026-11-13T17:11:53.4081030Z 124 | |             player,
+2026-11-13T17:11:53.4081220Z 125 | |             target,
+2026-11-13T17:11:53.4081420Z 126 | |             card,
+2026-11-13T17:11:53.4081580Z ...   |
+2026-11-13T17:11:53.4081740Z 129 | |             skill,
+2026-11-13T17:11:53.4081920Z 130 | |         } => {
+2026-11-13T17:11:53.4082150Z     | |_________- matches all the relevant values
+2026-11-13T17:11:53.4082370Z ...
+2026-11-13T17:11:53.4082630Z 141 |           EffectRequest::ResolveRechuhai { .. } => {
+2026-11-13T17:11:53.4082990Z     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+2026-11-13T17:11:53.4083190Z 
+2026-11-13T17:11:53.4083200Z 
+2026-11-13T17:11:53.4083290Z warning: unreachable pattern
+2026-11-13T17:11:53.4083720Z    --> crates/engine-core/src/hash/effects_choose_gain_discard_card_by_kind_resolvers_r_z.rs:165:9
+2026-11-13T17:11:53.4084310Z     |
+2026-11-13T17:11:53.4084580Z 147 | /         EffectRequest::ResolveXiongshu {
+2026-11-13T17:11:53.4084820Z 148 | |             player,
+2026-11-13T17:11:53.4085020Z 149 | |             target,
+2026-11-13T17:11:53.4085210Z 150 | |             card,
+2026-11-13T17:11:53.4085370Z ...   |
+2026-11-13T17:11:53.4085530Z 153 | |             skill,
+2026-11-13T17:11:53.4085710Z 154 | |         } => {
+2026-11-13T17:11:53.4085940Z     | |_________- matches all the relevant values
+2026-11-13T17:11:53.4086160Z ...
+2026-11-13T17:11:53.4086410Z 165 |           EffectRequest::ResolveXiongshu { .. } => {
+2026-11-13T17:11:53.4086800Z     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+2026-11-13T17:11:53.4087050Z 
+2026-11-13T17:11:53.4087050Z 
+2026-11-13T17:11:53.4087150Z warning: unreachable pattern
+2026-11-13T17:11:53.4087450Z   --> crates/engine-core/src/hash/effects_draw_cards.rs:19:9
+2026-11-13T17:11:53.4087700Z    |
+2026-11-13T17:11:53.4087920Z  7 | /         EffectRequest::ModifyCurrentDamage {
+2026-11-13T17:11:53.4088170Z  8 | |             player,
+2026-11-13T17:11:53.4088330Z  9 | |             delta,
+2026-11-13T17:11:53.4088530Z 10 | |             skill,
+2026-11-13T17:11:53.4088700Z 11 | |         } => {
+2026-11-13T17:11:53.4088930Z    | |_________- matches all the relevant values
+2026-11-13T17:11:53.4089150Z ...
+2026-11-13T17:11:53.4089400Z 19 | /         EffectRequest::ModifyCurrentDamage {
+2026-11-13T17:11:53.4089660Z 20 | |             player,
+2026-11-13T17:11:53.4089850Z 21 | |             delta,
+2026-11-13T17:11:53.4090060Z 22 | |             skill,
+2026-11-13T17:11:53.4090280Z 23 | |         } => {
+2026-11-13T17:11:53.4090530Z    | |_________^ no value can reach this
+2026-11-13T17:11:53.4090690Z 
+2026-11-13T17:11:53.4090700Z 
+2026-11-13T17:11:53.4090830Z warning: unused variable: `flipped`
+2026-11-13T17:11:53.4091150Z    --> crates/engine-core/src/hash/effects_draw_cards.rs:630:13
+2026-11-13T17:11:53.4091410Z     |
+2026-11-13T17:11:53.4091570Z 630 |             flipped,
+2026-11-13T17:11:53.4091850Z     |             ^^^^^^^ help: try ignoring the field: `flipped: _`
+2026-11-13T17:11:53.4092050Z 
+2026-11-13T17:11:53.4092180Z 
+2026-11-13T17:11:58.0952460Z warning: function `validate_sha_target` is never used
+2026-11-13T17:11:58.1049230Z    --> crates/engine-core/src/command/play/play_as_kind_with_extra_damage_flags.rs:366:15
+2026-11-13T17:11:58.1139790Z     |
+2026-11-13T17:11:58.1239820Z 366 | pub(crate) fn validate_sha_target(
+2026-11-13T17:11:58.1281740Z     |               ^^^^^^^^^^^^^^^^^^^
+2026-11-13T17:11:58.1345920Z     |
+2026-11-13T17:11:58.1448900Z     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+2026-11-13T17:11:58.1465680Z 
+2026-11-13T17:11:58.1474300Z 
+2026-11-13T17:11:58.1489330Z warning: function `wuxie_tokens` is never used
+2026-11-13T17:11:58.1516300Z    --> crates/engine-core/src/command/play/use_youdishenru_for_saved_sha.rs:291:15
+2026-11-13T17:11:58.1570990Z     |
+2026-11-13T17:11:58.1573140Z 291 | pub(crate) fn wuxie_tokens(state: &crate::state::GameState, player: PlayerId) -> Vec<u32> {
+2026-11-13T17:11:58.1573970Z     |               ^^^^^^^^^^^^
+2026-11-13T17:11:58.1574510Z 
+2026-11-13T17:11:58.1574660Z 
+2026-11-13T17:11:58.1575130Z warning: constant `RESOLVE_TWMOUZHI_MAGIC` is never used
+2026-11-13T17:11:58.1575860Z   --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:39:7
+2026-11-13T17:11:58.1576780Z    |
+2026-11-13T17:11:58.1577290Z 39 | const RESOLVE_TWMOUZHI_MAGIC: u32 = 0x4D4F_0001;
+2026-11-13T17:11:58.1577870Z    |       ^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T17:11:58.1578220Z 
+2026-11-13T17:11:58.1578370Z 
+2026-11-13T17:11:58.1578720Z warning: constant `RESOLVE_BIAOZHAO2_MAGIC` is never used
+2026-11-13T17:11:58.1579390Z   --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:61:7
+2026-11-13T17:11:58.1579970Z    |
+2026-11-13T17:11:58.1580450Z 61 | const RESOLVE_BIAOZHAO2_MAGIC: u32 = 0x425A_0002;
+2026-11-13T17:11:58.1581070Z    |       ^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T17:11:58.1581610Z 
+2026-11-13T17:11:58.1581770Z 
+2026-11-13T17:11:58.1583560Z warning: constant `RESOLVE_DCNIJI_MAGIC` is never used
+2026-11-13T17:11:58.1586790Z   --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:63:7
+2026-11-13T17:11:58.1587940Z    |
+2026-11-13T17:11:58.1591780Z 63 | const RESOLVE_DCNIJI_MAGIC: u32 = 0x4E4A_0001;
+2026-11-13T17:11:58.1592890Z    |       ^^^^^^^^^^^^^^^^^^^^
+2026-11-13T17:11:58.1593780Z 
+2026-11-13T17:11:58.1594150Z 
+2026-11-13T17:11:58.1595250Z warning: constant `RESOLVE_QINMIAN_MAGIC` is never used
+2026-11-13T17:11:58.1600090Z   --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:77:7
+2026-11-13T17:11:58.1601640Z    |
+2026-11-13T17:11:58.1602880Z 77 | const RESOLVE_QINMIAN_MAGIC: u32 = 0x514D_0001;
+2026-11-13T17:11:58.1604120Z    |       ^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T17:11:58.1604910Z 
+2026-11-13T17:11:58.1605240Z 
+2026-11-13T17:11:58.1606110Z warning: function `suit_from_tag` is never used
+2026-11-13T17:11:58.1607720Z    --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_dcbingji.rs:140:15
+2026-11-13T17:11:58.1626100Z     |
+2026-11-13T17:11:58.1629670Z 140 | pub(crate) fn suit_from_tag(tag: u32) -> engine_api::Suit {
+2026-11-13T17:11:58.1632110Z     |               ^^^^^^^^^^^^^
+2026-11-13T17:11:58.1633700Z 
+2026-11-13T17:11:58.1634120Z 
+2026-11-13T17:11:58.1634800Z warning: function `mingren_color_mask` is never used
+2026-11-13T17:11:58.1637120Z    --> crates/engine-core/src/effect/primitives/pack_shenhua_2/qizhi_count.rs:353:15
+2026-11-13T17:11:58.1640810Z     |
+2026-11-13T17:11:58.1642110Z 353 | pub(crate) fn mingren_color_mask(
+2026-11-13T17:11:58.1643650Z     |               ^^^^^^^^^^^^^^^^^^
+2026-11-13T17:11:58.1644110Z 
+2026-11-13T17:11:58.1644580Z 
+2026-11-13T17:11:58.1645940Z warning: function `kongsheng_pile_cards_by_def` is never used
+2026-11-13T17:11:58.1649130Z    --> crates/engine-core/src/effect/primitives/pack_shenhua_2/qizhi_count.rs:779:15
+2026-11-13T17:11:58.1653610Z     |
+2026-11-13T17:11:58.1654900Z 779 | pub(crate) fn kongsheng_pile_cards_by_def(
+2026-11-13T17:11:58.1656380Z     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T17:11:58.1657650Z 
+2026-11-13T17:11:58.1658960Z 
+2026-11-13T17:11:58.1659530Z warning: constant `RESOLVE_ZHENGSU_CHOICE` is never used
+2026-11-13T17:11:58.1660290Z   --> crates/engine-core/src/effect/primitives/pack_shiji.rs:27:18
+2026-11-13T17:11:58.1660940Z    |
+2026-11-13T17:11:58.1661580Z 27 | pub(crate) const RESOLVE_ZHENGSU_CHOICE: u32 = 0xDCDA_4320;
+2026-11-13T17:11:58.1662220Z    |                  ^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T17:11:58.1662570Z 
+2026-11-13T17:11:58.1662770Z 
+2026-11-13T17:11:58.1663220Z warning: function `resolve_rechuhai_choice` is never used
+2026-11-13T17:11:58.1664070Z    --> crates/engine-core/src/effect/primitives/pack_shiji/resolve_xinyangjie.rs:672:15
+2026-11-13T17:11:58.1664800Z     |
+2026-11-13T17:11:58.1665390Z 672 | pub(crate) fn resolve_rechuhai_choice(
+2026-11-13T17:11:58.1666010Z     |               ^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T17:11:58.1666580Z 
+2026-11-13T17:11:58.1666780Z 
+2026-11-13T17:11:58.1667370Z warning: unused `Result` that must be used
+2026-11-13T17:11:58.1668120Z    --> crates/engine-core/src/command/resolve_choice/group_post_8/resolve_resolve_mbbeiming.rs:284:13
+2026-11-13T17:11:58.1669690Z     |
+2026-11-13T17:11:58.1670630Z 284 |             crate::command::play::make_saved_sha_target_unrespondable(tx, source, card, player);
+2026-11-13T17:11:58.1689620Z     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T17:11:58.1703190Z     |
+2026-11-13T17:11:58.1741040Z     = note: this `Result` may be an `Err` variant, which should be handled
+2026-11-13T17:11:58.1743770Z     = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+2026-11-13T17:11:58.1746490Z help: use `let _ = ...` to ignore the resulting value
+2026-11-13T17:11:58.1747840Z     |
+2026-11-13T17:11:58.1748460Z 284 |             let _ = crate::command::play::make_saved_sha_target_unrespondable(tx, source, card, player);
+2026-11-13T17:11:58.1752490Z     |             +++++++
+2026-11-13T17:11:58.1753350Z 
+2026-11-13T17:11:58.1753710Z 
+2026-11-13T17:12:24.0406390Z [1m[92m   Compiling[0m engine-ai v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-ai)
+2026-11-13T17:12:24.7113460Z warning: unused variable: `c`
+2026-11-13T17:12:24.7115850Z    --> crates/engine-ai/src/fork_strategy.rs:166:78
+2026-11-13T17:12:24.7117250Z     |
+2026-11-13T17:12:24.7120040Z 166 |         self.snapshot_bytes.len() as u64 + self.applied_commands.iter().map(|c| 100).sum::<u64>()
+2026-11-13T17:12:24.7124640Z     |                                                                              ^ help: if this is intentional, prefix it with an underscore: `_c`
+2026-11-13T17:12:24.7235750Z     |
+2026-11-13T17:12:24.7401550Z     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+2026-11-13T17:12:24.7404760Z 
+2026-11-13T17:12:24.7505710Z 
+2026-11-13T17:12:24.8982220Z warning: struct `ForkMeta` is never constructed
+2026-11-13T17:12:24.8983610Z   --> crates/engine-ai/src/fork.rs:69:12
+2026-11-13T17:12:24.8984130Z    |
+2026-11-13T17:12:24.8984520Z 69 | pub struct ForkMeta {
+2026-11-13T17:12:24.8984860Z    |            ^^^^^^^^
+2026-11-13T17:12:24.8985480Z    |
+2026-11-13T17:12:24.9087760Z    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+2026-11-13T17:12:24.9105830Z 
+2026-11-13T17:12:24.9106010Z 
+2026-11-13T17:12:24.9107900Z warning: function `assert_no_foreign_hand_faces` is never used
+2026-11-13T17:12:24.9108660Z   --> crates/engine-ai/src/info_set.rs:56:8
+2026-11-13T17:12:24.9109030Z    |
+2026-11-13T17:12:24.9109530Z 56 | pub fn assert_no_foreign_hand_faces(view: &InformationSetView) -> bool {
+2026-11-13T17:12:24.9110000Z    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T17:12:24.9110230Z 
+2026-11-13T17:12:24.9110240Z 
+2026-11-13T17:16:52.3768050Z [1m[92m   Compiling[0m engine-wasm v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-wasm)
+2026-11-13T17:17:01.3668250Z [1m[92m    Finished[0m `release` profile [optimized] target(s) in 6m 15s
+2026-11-13T17:17:01.5001190Z [INFO]: ⬇️  Installing wasm-bindgen...
+2026-11-13T17:17:03.1843570Z [INFO]: Optional field missing from Cargo.toml: 'repository'. This is not necessary, but recommended
+2026-11-13T17:17:03.1945160Z [INFO]: License key is set in Cargo.toml but no LICENSE file(s) were found; Please add the LICENSE file(s) to your project directory
+2026-11-13T17:17:03.2048190Z [INFO]: ✨   Done in 6m 17s
+2026-11-13T17:17:03.2152650Z [INFO]: 📦   Your wasm pkg is ready to publish at /Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/apps/web-client/src/wasm-pkg.
+2026-11-13T17:17:03.2173150Z [WARN]: ⚠️   There's a newer version of wasm-pack available, the new version is: 0.15.1, you are using: 0.15.0. To update, navigate to: https://wasm-bindgen.github.io/wasm-pack/installer/
+2026-11-13T17:17:03.3020390Z WASM package written to /Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/apps/web-client/src/wasm-pkg
+2026-11-13T17:17:03.9096650Z 
+2026-11-13T17:17:03.9100520Z > noname-next-web-client@0.1.0 build /Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/apps/web-client
+2026-11-13T17:17:03.9107560Z > vue-tsc --noEmit && vite build
+2026-11-13T17:17:03.9108020Z 
+2026-11-13T17:17:11.6668910Z [36mvite v6.4.3 [32mbuilding for production...[36m[39m
+2026-11-13T17:17:11.8159680Z transforming...
+2026-11-13T17:17:14.5770890Z [32m✓[39m 196 modules transformed.
+2026-11-13T17:17:15.0376820Z rendering chunks...
+2026-11-13T17:17:15.5622830Z computing gzip size...
+2026-11-13T17:17:16.1390920Z [33m
+2026-11-13T17:17:16.1394030Z [2mdist/[22m[32mindex.html                                  [39m[1m[2m     0.46 kB[22m[1m[22m[2m │ gzip:     0.31 kB[22m
+2026-11-13T17:17:16.1474720Z [2mdist/[22m[2massets/[22m[32mengine.worker-DJg-KEhl.js            [39m[1m[2m     9.01 kB[22m[1m[22m
+2026-11-13T17:17:16.1484510Z (!) Some chunks are larger than 500 kB after minification. Consider:
+2026-11-13T17:17:16.1564540Z [2mdist/[22m[2massets/[22m[32mengine.native.worker-Bvpv4XaY.js     [39m[1m[2m    35.63 kB[22m[1m[22m
+2026-11-13T17:17:16.1569920Z - Using dynamic import() to code-split the application
+2026-11-13T17:17:16.1574480Z [2mdist/[22m[2massets/[22m[32mengine_wasm_bg-BpuacHz1.wasm         [39m[1m[2m16,105.45 kB[22m[1m[22m[2m │ gzip: 3,452.19 kB[22m
+2026-11-13T17:17:16.1581240Z - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+2026-11-13T17:17:16.1582640Z [2mdist/[22m[2massets/[22m[32mengine_native_wasm_bg-D6ADHS1o.wasm  [39m[1m[2m27,604.95 kB[22m[1m[22m[2m │ gzip: 5,119.85 kB[22m
+2026-11-13T17:17:16.1587870Z - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+2026-11-13T17:17:16.1589260Z [2mdist/[22m[2massets/[22m[35mindex-AhlAfnl3.css                   [39m[1m[2m    49.87 kB[22m[1m[22m[2m │ gzip:    10.15 kB[22m
+2026-11-13T17:17:16.1591220Z [2mdist/[22m[2massets/[22m[36mindex-CiSLAZ6M.js                    [39m[1m[33m   832.59 kB[39m[22m[2m │ gzip:   208.14 kB[22m
+2026-11-13T17:17:16.1591970Z [32m✓ built in 4.44s[39m
+2026-11-13T17:17:16.5755970Z [1m[33mwarning[0m[1m: unused workspace dependency `accessibility-schema`[0m
+2026-11-13T17:17:16.5759260Z   [1m[94m--> [0mCargo.toml:72:1
+2026-11-13T17:17:16.5761300Z    [1m[94m|[0m
+2026-11-13T17:17:16.5766400Z [1m[94m72[0m [1m[94m|[0m accessibility-schema = { path = "crates/accessibility-schema" }
+2026-11-13T17:17:16.5770830Z    [1m[94m|[0m [1m[33m^^^^^^^^^^^^^^^^^^^^[0m
+2026-11-13T17:17:16.5772620Z    [1m[94m|[0m
+2026-11-13T17:17:16.5784360Z    [1m[94m= [0m[1mnote[0m: `cargo::unused_workspace_dependencies` is set to `warn` by default
+2026-11-13T17:17:16.5785700Z [1m[96mhelp[0m: consider removing the workspace dependency `accessibility-schema`
+2026-11-13T17:17:16.5787210Z [1m[33mwarning[0m[1m: unused workspace dependency `bytemuck`[0m
+2026-11-13T17:17:16.5789310Z   [1m[94m--> [0mCargo.toml:80:1
+2026-11-13T17:17:16.5790590Z    [1m[94m|[0m
+2026-11-13T17:17:16.5791420Z [1m[94m80[0m [1m[94m|[0m bytemuck = { version = "1", features = ["derive"] }
+2026-11-13T17:17:16.5792200Z    [1m[94m|[0m [1m[33m^^^^^^^^[0m
+2026-11-13T17:17:16.5792830Z    [1m[94m|[0m
+2026-11-13T17:17:16.5793680Z [1m[96mhelp[0m: consider removing the workspace dependency `bytemuck`
+2026-11-13T17:17:16.5794720Z [1m[33mwarning[0m[1m: unused workspace dependency `devtools`[0m
+2026-11-13T17:17:16.5795390Z   [1m[94m--> [0mCargo.toml:73:1
+2026-11-13T17:17:16.5795920Z    [1m[94m|[0m
+2026-11-13T17:17:16.5796940Z [1m[94m73[0m [1m[94m|[0m devtools = { path = "crates/devtools" }
+2026-11-13T17:17:16.5797760Z    [1m[94m|[0m [1m[33m^^^^^^^^[0m
+2026-11-13T17:17:16.5798400Z    [1m[94m|[0m
+2026-11-13T17:17:16.5799190Z [1m[96mhelp[0m: consider removing the workspace dependency `devtools`
+2026-11-13T17:17:16.5800270Z [1m[33mwarning[0m[1m: unused workspace dependency `diagnostics`[0m
+2026-11-13T17:17:16.5801300Z   [1m[94m--> [0mCargo.toml:69:1
+2026-11-13T17:17:16.5801660Z    [1m[94m|[0m
+2026-11-13T17:17:16.5802330Z [1m[94m69[0m [1m[94m|[0m diagnostics = { path = "crates/diagnostics" }
+2026-11-13T17:17:16.5802950Z    [1m[94m|[0m [1m[33m^^^^^^^^^^^[0m
+2026-11-13T17:17:16.5803320Z    [1m[94m|[0m
+2026-11-13T17:17:16.5804830Z [1m[96mhelp[0m: consider removing the workspace dependency `diagnostics`
+2026-11-13T17:17:16.5805810Z [1m[33mwarning[0m[1m: unused field `repository` in `workspace.package`[0m
+2026-11-13T17:17:16.5811300Z   [1m[94m--> [0mCargo.toml:59:1
+2026-11-13T17:17:16.5811960Z    [1m[94m|[0m
+2026-11-13T17:17:16.5812790Z [1m[94m59[0m [1m[94m|[0m repository = "https://github.com/local/noname-next"
+2026-11-13T17:17:16.5813430Z    [1m[94m|[0m [1m[33m^^^^^^^^^^[0m
+2026-11-13T17:17:16.5814700Z    [1m[94m|[0m
+2026-11-13T17:17:16.5815900Z    [1m[94m= [0m[1mnote[0m: `cargo::unused_workspace_package_fields` is set to `warn` by default
+2026-11-13T17:17:16.5816710Z [1m[96mhelp[0m: consider removing the field `workspace.package.repository`
+2026-11-13T17:17:16.5817550Z [1m[33mwarning[0m: workspace (manifest) generated 5 warnings
+2026-11-13T17:17:19.6529260Z [1m[92m   Compiling[0m engine-api v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-api)
+2026-11-13T17:17:19.7288850Z [1m[92m   Compiling[0m resource-schema v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/resource-schema)
+2026-11-13T17:17:19.7304160Z [1m[92m   Compiling[0m licensing-schema v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/licensing-schema)
+2026-11-13T17:17:26.2223400Z [1m[92m   Compiling[0m desktop-client v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/apps/desktop-client)
+2026-11-13T17:17:27.3025260Z [1m[92m   Compiling[0m rule-api v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/rule-api)
+2026-11-13T17:17:27.9426970Z [1m[92m   Compiling[0m diagnostics v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/diagnostics)
+2026-11-13T17:17:58.1143970Z [1m[92m   Compiling[0m rule-vm v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/rule-vm)
+2026-11-13T17:18:00.2376940Z [1m[92m   Compiling[0m engine-native-kernel v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-native-kernel)
+2026-11-13T17:18:00.2392410Z [1m[92m   Compiling[0m content-schema v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/content-schema)
+2026-11-13T17:18:11.6481400Z [1m[92m   Compiling[0m engine-native-content v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-native-content)
+2026-11-13T17:18:52.8081030Z [1m[92m   Compiling[0m engine-native v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-native)
+2026-11-13T17:19:13.0751280Z [1m[92m   Compiling[0m content-runtime v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/content-runtime)
+2026-11-13T17:19:20.3927900Z [1m[92m   Compiling[0m content-native-loader v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/content-native-loader)
+2026-11-13T17:20:02.2353130Z [1m[92m   Compiling[0m engine-native-wasm v0.1.0 (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-native-wasm)
+2026-11-13T17:25:47.5754900Z [1m[92m    Finished[0m `release` profile [optimized] target(s) in 8m 31s
+2026-11-13T17:25:47.6232180Z        Built application at: /Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/target/release/noname-next-desktop
+2026-11-13T17:25:47.6969740Z     Bundling 无名杀 Next.app (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/target/release/bundle/macos/无名杀 Next.app)
+2026-11-13T17:25:47.7505080Z     Bundling 无名杀 Next_0.1.0_aarch64.dmg (/Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/target/release/bundle/dmg/无名杀 Next_0.1.0_aarch64.dmg)
+2026-11-13T17:25:47.7645490Z      Running bundle_dmg.sh
+2026-11-13T17:26:14.2534580Z     Finished 2 bundles at:
+2026-11-13T17:26:14.2542310Z         /Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/target/release/bundle/macos/无名杀 Next.app (46.04 MiB)
+2026-11-13T17:26:14.2557800Z         /Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/target/release/bundle/dmg/无名杀 Next_0.1.0_aarch64.dmg (22.92 MiB)
+2026-11-13T17:26:14.2558660Z 

@@ -39,3 +39,8 @@
 ## 2026-11-14T01:00:26.252972+08:00 补充暂存差异检查
 
 完整 `git diff --cached --check` 为exit2，48个文件全部在本轮原始输出、源码/差异快照或带日期审查表中（空行/行末空格）；[首次输出](25-staged-diff-check-first.log)和[逐文件范围](staged-whitespace-scope.json)保留，不把全暂存检查写成通过。保留原证据字节，不改历史审查表来消掉提示。6产品文件、19公共主稿及inventory的明确范围检查exit0，见[实际命令](26-staged-owned-check.json)。第五节必跑命令仍全部exit0；本补充结果不作为整仓空白清洁声明。
+
+
+## 2026-11-14T01:33:42+08:00 发布与精确代码CI补充
+
+代码 `1fa8ac6cc3a70446436d97ff49aa19ea4626e22d` 已按裁决25正常发布；[精确SHA CI](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43468568765) attempt1全部10作业success／0失败／0取消，未由agent补跑。记录时HEAD为该代码加文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8。 见[逐作业计数/工具链/内部尝试/原始日志](publication/code-exact-ci-first/README.md)。本地门禁表仍为提交前的原日期记录；额外全暂存空白检查exit2及保留原证据的范围不改写为通过。

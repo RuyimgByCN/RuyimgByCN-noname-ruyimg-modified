@@ -1,0 +1,28 @@
+{
+  "at": "2026-11-14T01:34:46.245942+08:00",
+  "head": "1fa8ac6cc3a70446436d97ff49aa19ea4626e22d",
+  "tracked_dirty": true,
+  "frozen_product_count": 32259,
+  "frozen_product_drift": [],
+  "initial_untracked_count": 672,
+  "initial_untracked_missing": [],
+  "all_eight_old_worktree_blocks_unchanged": true,
+  "tracked_document_changes": [
+    "docs/architecture/native-progress.md",
+    "docs/architecture/native-remaining-ledger.md",
+    "docs/architecture/native-rules-baseline.md",
+    "docs/migration/g0/README.md",
+    "docs/migration/upstream-extension-reconstruction.md",
+    "docs/operations/evidence/2026-10-19-source-signoff-32/README.md",
+    "docs/operations/evidence/2026-11-13-queue1-review/README.md",
+    "docs/operations/evidence/2026-11-13-queue1-review/final-local-gates.md",
+    "docs/operations/evidence/2026-11-13-queue1-review/remaining-scope.md"
+  ],
+  "all_existing_document_lines_preserved": true,
+  "inventory_sha256": "2658808bbe361ab248e53166157e25606c47155eb31fa19947cb601eb3f35c89",
+  "original_hook_unchanged": true,
+  "persistent_git_configuration_unchanged": true,
+  "ci_logs_zip_hash_verified": true,
+  "required_code_gates_repeated": false,
+  "reason": "Only dated documentation and raw publication/CI evidence changed after exact-code CI succeeded; product hashes remain frozen."
+}

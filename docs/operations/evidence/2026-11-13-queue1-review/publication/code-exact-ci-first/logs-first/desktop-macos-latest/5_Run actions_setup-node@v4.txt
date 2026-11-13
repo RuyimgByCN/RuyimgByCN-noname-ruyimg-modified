@@ -1,0 +1,24 @@
+﻿2026-11-13T17:03:40.2215230Z ##[group]Run actions/setup-node@v4
+2026-11-13T17:03:40.2215470Z with:
+2026-11-13T17:03:40.2215610Z   node-version: 20
+2026-11-13T17:03:40.2215760Z   always-auth: false
+2026-11-13T17:03:40.2215920Z   check-latest: false
+2026-11-13T17:03:40.2218150Z   token: ***
+2026-11-13T17:03:40.2218390Z env:
+2026-11-13T17:03:40.2218530Z   CARGO_TERM_COLOR: always
+2026-11-13T17:03:40.2218850Z   CARGO_HOME: /Users/runner/.cargo
+2026-11-13T17:03:40.2219260Z   CARGO_INCREMENTAL: 0
+2026-11-13T17:03:40.2219590Z   CACHE_ON_FAILURE: false
+2026-11-13T17:03:40.2219910Z ##[endgroup]
+2026-11-13T17:03:40.5086490Z Attempting to download 20...
+2026-11-13T17:03:40.5243570Z (node:2911) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-13T17:03:40.5255940Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-13T17:03:41.2692900Z Acquiring 20.20.2 - arm64 from https://github.com/actions/node-versions/releases/download/20.20.2-23521894959/node-20.20.2-darwin-arm64.tar.gz
+2026-11-13T17:03:41.9523540Z Extracting ...
+2026-11-13T17:03:41.9821410Z [command]/usr/bin/tar xz --strip 1 -C /Users/runner/work/_temp/9767bd2a-a312-4e5f-9ae6-13f1205126e7 -f /Users/runner/work/_temp/ee9ab762-0c81-4290-9bec-5eb3a80a935a
+2026-11-13T17:03:44.0863290Z Adding to the cache ...
+2026-11-13T17:03:47.0200300Z ##[group]Environment details
+2026-11-13T17:03:47.3996070Z node: v20.20.2
+2026-11-13T17:03:47.4004970Z npm: 10.8.2
+2026-11-13T17:03:47.4005250Z yarn: 1.22.22
+2026-11-13T17:03:47.4006210Z ##[endgroup]

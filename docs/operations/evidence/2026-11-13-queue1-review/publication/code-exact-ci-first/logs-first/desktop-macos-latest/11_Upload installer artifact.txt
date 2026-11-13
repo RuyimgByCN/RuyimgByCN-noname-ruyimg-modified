@@ -1,0 +1,35 @@
+﻿2026-11-13T17:26:14.3424350Z ##[group]Run actions/upload-artifact@v4
+2026-11-13T17:26:14.3425260Z with:
+2026-11-13T17:26:14.3425640Z   name: installer-macos-latest
+2026-11-13T17:26:14.3426590Z   path: noname-next/target/release/bundle/**
+
+2026-11-13T17:26:14.3427100Z   if-no-files-found: error
+2026-11-13T17:26:14.3427740Z   compression-level: 6
+2026-11-13T17:26:14.3428370Z   overwrite: false
+2026-11-13T17:26:14.3428730Z   include-hidden-files: false
+2026-11-13T17:26:14.3429550Z env:
+2026-11-13T17:26:14.3429880Z   CARGO_TERM_COLOR: always
+2026-11-13T17:26:14.3430460Z   CARGO_HOME: /Users/runner/.cargo
+2026-11-13T17:26:14.3431050Z   CARGO_INCREMENTAL: 0
+2026-11-13T17:26:14.3431400Z   CACHE_ON_FAILURE: false
+2026-11-13T17:26:14.3432060Z   PNPM_HOME: /Users/runner/setup-pnpm/node_modules/.bin
+2026-11-13T17:26:14.3432700Z ##[endgroup]
+2026-11-13T17:26:15.3236600Z (node:44976) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-13T17:26:15.3241580Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-13T17:26:15.3452120Z With the provided path, there will be 8 files uploaded
+2026-11-13T17:26:15.3459750Z Artifact name is valid!
+2026-11-13T17:26:15.3461590Z Root directory input is valid!
+2026-11-13T17:26:15.6881460Z Beginning upload of artifact content to blob storage
+2026-11-13T17:26:16.0592200Z (node:44976) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-13T17:26:16.6027690Z Uploaded bytes 8388608
+2026-11-13T17:26:17.0538400Z Uploaded bytes 16777216
+2026-11-13T17:26:17.2394690Z Uploaded bytes 25165824
+2026-11-13T17:26:17.7910540Z Uploaded bytes 33554432
+2026-11-13T17:26:18.1054500Z Uploaded bytes 41943040
+2026-11-13T17:26:18.6056570Z Uploaded bytes 48181945
+2026-11-13T17:26:18.6531550Z Finished uploading artifact content to blob storage!
+2026-11-13T17:26:18.6535890Z SHA256 digest of uploaded artifact zip is 6c48ecb96f5387fe51248be2d7014794ba85e95830acbdeeb92919b7a77b0fae
+2026-11-13T17:26:18.6537690Z Finalizing artifact upload
+2026-11-13T17:26:19.0326270Z Artifact installer-macos-latest.zip successfully finalized. Artifact ID 14062021578
+2026-11-13T17:26:19.0327560Z Artifact installer-macos-latest has been successfully uploaded! Final size is 48181945 bytes. Artifact ID is 14062021578
+2026-11-13T17:26:19.0364340Z Artifact download URL: https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43468568765/artifacts/14062021578

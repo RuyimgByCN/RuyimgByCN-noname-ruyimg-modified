@@ -1,0 +1,14 @@
+﻿2026-11-13T17:04:45.1506378Z ##[group]Run cargo install tauri-cli --version "^2" --locked
+2026-11-13T17:04:45.1506873Z [36;1mcargo install tauri-cli --version "^2" --locked[0m
+2026-11-13T17:04:45.1556865Z shell: /usr/bin/bash -e {0}
+2026-11-13T17:04:45.1557171Z env:
+2026-11-13T17:04:45.1557410Z   CARGO_TERM_COLOR: always
+2026-11-13T17:04:45.1557712Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T17:04:45.1558035Z   CARGO_INCREMENTAL: 0
+2026-11-13T17:04:45.1558308Z   CACHE_ON_FAILURE: false
+2026-11-13T17:04:45.1558661Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-11-13T17:04:45.1559042Z ##[endgroup]
+2026-11-13T17:04:45.1858400Z [1m[92m    Updating[0m crates.io index
+2026-11-13T17:04:45.2741954Z [1m[92m Downloading[0m crates ...
+2026-11-13T17:04:45.3524948Z [1m[92m  Downloaded[0m tauri-cli v2.12.4
+2026-11-13T17:04:45.3961173Z [1m[92m     Ignored[0m package `tauri-cli v2.12.4` is already installed, use --force to override

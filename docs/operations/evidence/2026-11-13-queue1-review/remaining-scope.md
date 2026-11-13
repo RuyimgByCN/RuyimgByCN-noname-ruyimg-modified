@@ -35,3 +35,8 @@
 - 队列11：前述门槛成立后先报精确切换范围取得用户确认；本批未开始第六阶段。PA09依裁决36维持WASM默认关闭。
 
 保护8个既有临时工作树（含locked）、原有未跟踪文件及共享target；本批自有浏览器/profile、临时上游副本与strict私有target已回收，见 [清理记录](owned-cache-and-browser-cleanup.json)。
+
+
+## 2026-11-14T01:33:42+08:00 本批发布与剩余范围补充
+
+代码 `1fa8ac6cc3a70446436d97ff49aa19ea4626e22d` 已按裁决25正常发布；[精确SHA CI](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43468568765) attempt1全部10作业success／0失败／0取消，未由agent补跑。记录时HEAD为该代码加文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8。 [完整CI证据](publication/code-exact-ci-first/README.md)。本批部分增量已经提交并发布，原文“尚未提交/发布”保留当时日期；队列1仍未完成、队列2未开始，634／3790／0、新增等价0、八项0/37及上述全部未验门槛不变。

@@ -1,0 +1,19 @@
+﻿2026-11-13T17:16:26.2967666Z Post job cleanup.
+2026-11-13T17:16:26.2972340Z ##[start-action display=Run pnpm/action-setup@v4;id=__71f0fc06-e047-41c7-a6a0-c4847c18481d.__pnpm_action-setup]
+2026-11-13T17:16:26.3004373Z Post job cleanup.
+2026-11-13T17:16:26.4515328Z Pruning is unnecessary.
+2026-11-13T17:16:26.4642330Z ##[end-action id=__71f0fc06-e047-41c7-a6a0-c4847c18481d.__pnpm_action-setup;outcome=success;conclusion=success;duration_ms=166]
+2026-11-13T17:16:26.4645944Z ##[start-action display=Run actions/checkout@v4;id=__71f0fc06-e047-41c7-a6a0-c4847c18481d.__actions_checkout]
+2026-11-13T17:16:26.4702145Z Post job cleanup.
+2026-11-13T17:16:26.5753414Z [command]/usr/bin/git version
+2026-11-13T17:16:26.5810985Z git version 2.56.1
+2026-11-13T17:16:26.5856810Z Temporarily overriding HOME='/home/runner/work/_temp/28355a93-3bd0-41af-b9b6-ecd5cbb694dc' before making global git config changes
+2026-11-13T17:16:26.5858442Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-13T17:16:26.5865368Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/archive/upstream/noname
+2026-11-13T17:16:26.5906296Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-13T17:16:26.5948431Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-13T17:16:26.6296484Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-13T17:16:26.6365989Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-13T17:16:26.6702442Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-13T17:16:26.6741207Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-13T17:16:26.7146132Z ##[end-action id=__71f0fc06-e047-41c7-a6a0-c4847c18481d.__actions_checkout;outcome=success;conclusion=success;duration_ms=249]

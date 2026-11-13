@@ -1,0 +1,33 @@
+﻿2026-11-13T17:12:35.0924972Z Post job cleanup.
+2026-11-13T17:12:35.0928813Z ##[start-action display=Run pnpm/action-setup@v4;id=__7235d2a0-bd37-4f18-89db-ee2ebf6e1d7f.__pnpm_action-setup]
+2026-11-13T17:12:35.0954667Z Post job cleanup.
+2026-11-13T17:12:35.2349898Z Pruning is unnecessary.
+2026-11-13T17:12:35.2448711Z ##[end-action id=__7235d2a0-bd37-4f18-89db-ee2ebf6e1d7f.__pnpm_action-setup;outcome=success;conclusion=success;duration_ms=151]
+2026-11-13T17:12:35.2453121Z ##[start-action display=Run actions/checkout@v4;id=__7235d2a0-bd37-4f18-89db-ee2ebf6e1d7f.__actions_checkout_2]
+2026-11-13T17:12:35.2520380Z Post job cleanup.
+2026-11-13T17:12:35.3332355Z [command]/usr/bin/git version
+2026-11-13T17:12:35.3364226Z git version 2.56.1
+2026-11-13T17:12:35.3399256Z Temporarily overriding HOME='/home/runner/work/_temp/9f2bcf7b-2183-49ec-9da5-260c5a636feb' before making global git config changes
+2026-11-13T17:12:35.3400506Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-13T17:12:35.3402727Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/archive/upstream/noname-liuli
+2026-11-13T17:12:35.3443572Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-13T17:12:35.3482647Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-13T17:12:35.3799619Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-13T17:12:35.3842080Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-13T17:12:35.4127535Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-13T17:12:35.4159723Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-13T17:12:35.4507691Z ##[end-action id=__7235d2a0-bd37-4f18-89db-ee2ebf6e1d7f.__actions_checkout_2;outcome=success;conclusion=success;duration_ms=205]
+2026-11-13T17:12:35.4510215Z ##[start-action display=Run actions/checkout@v4;id=__7235d2a0-bd37-4f18-89db-ee2ebf6e1d7f.__actions_checkout]
+2026-11-13T17:12:35.4581116Z Post job cleanup.
+2026-11-13T17:12:35.5295533Z [command]/usr/bin/git version
+2026-11-13T17:12:35.5339040Z git version 2.56.1
+2026-11-13T17:12:35.5376804Z Temporarily overriding HOME='/home/runner/work/_temp/e9219ce5-e7c3-4738-b482-337808bf8850' before making global git config changes
+2026-11-13T17:12:35.5378152Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-13T17:12:35.5382468Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/archive/upstream/noname
+2026-11-13T17:12:35.5432698Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-13T17:12:35.5482254Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-13T17:12:35.5803943Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-13T17:12:35.5837457Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-13T17:12:35.6114443Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-13T17:12:35.6144396Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-13T17:12:35.6487096Z ##[end-action id=__7235d2a0-bd37-4f18-89db-ee2ebf6e1d7f.__actions_checkout;outcome=success;conclusion=success;duration_ms=197]

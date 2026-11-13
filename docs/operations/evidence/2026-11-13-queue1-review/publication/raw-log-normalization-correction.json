@@ -1,0 +1,222 @@
+{
+  "at": "2026-11-14T01:38:57+08:00",
+  "head": "1fa8ac6cc3a70446436d97ff49aa19ea4626e22d",
+  "tracked_dirty": true,
+  "correction": "The earlier documentation-stage-audit.json field raw_ci_logs_preserved_byte_for_byte=true does not describe every Git text blob and is withdrawn for that interpretation. All original downloaded bytes are preserved in the exact ZIP; 26 staged Windows text views are CRLF-to-LF normalized by existing Git configuration. No other byte differences were found.",
+  "original_zip_sha256": "83295d5edb78f2e7c3c1b4040a4fbf59af6d48b50ad5d1815b206a55efe8ef48",
+  "original_zip_bytes": 1873392,
+  "staged_zip_blob_matches_original": true,
+  "all_zip_entries_match_working_raw_files": 148,
+  "normalized_text_files": [
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/0_desktop-windows-latest.txt",
+      "working_sha256": "67cc63050aac5914db2a3a5eb496ee657380912642224b5b90a74993c64c51ff",
+      "staged_sha256": "8119cc2b812782d1ddb21fd457fcc46d611b828d2739781bbb74ea5a48ff7330",
+      "working_bytes": 164378,
+      "staged_bytes": 162263,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/4_build-windows-latest.txt",
+      "working_sha256": "70d78acc52cc13c0c464b9edeb0ab4be67a10c473ee4dbe838a63baeae364ab9",
+      "staged_sha256": "2c4f013e8d07f590c5cb22101ef91df9ac4d53ba69658c7b43f6a9e077cb3f77",
+      "working_bytes": 361891,
+      "staged_bytes": 358151,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/build-windows-latest/11_Post Run Swatinem_rust-cache@v2.txt",
+      "working_sha256": "d61a62a930af8c43440e56453575005b05f80d136f77c21931ef2a7e49bfa702",
+      "staged_sha256": "08e201198f7c3ff212c15d69a2596ab42f49044f2d9450f1e2727ff0e3b26d9d",
+      "working_bytes": 99,
+      "staged_bytes": 97,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/build-windows-latest/12_Post Run actions_checkout@v4.txt",
+      "working_sha256": "db9a1434f0b169c774de9a459aafb63c1d273e9a7d1415224611e2386e6b56c1",
+      "staged_sha256": "5adfafc8db848119c0dfe43215853a709571e3bf64d7c4f5091656a947175b61",
+      "working_bytes": 1979,
+      "staged_bytes": 1965,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/build-windows-latest/13_Complete job.txt",
+      "working_sha256": "591c5ec29fa78261d2d5a8a85be8e9240f7b55b2f8d7d8f9c40e4a98398e23ea",
+      "staged_sha256": "30e8365584dae5020e5217ab9b63913e34061bf55535e9adea6417f0e6fb8ac4",
+      "working_bytes": 425,
+      "staged_bytes": 422,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/build-windows-latest/1_Set up job.txt",
+      "working_sha256": "cb6198895c8878cb7acb7774349303ccdd8b98bb190b31e808a71f76f2a55f66",
+      "staged_sha256": "39fc7f65786eb6e926a8b328d66b0f720860f454f94bf9f98eff8555667bbdbd",
+      "working_bytes": 2260,
+      "staged_bytes": 2226,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/build-windows-latest/2_Run actions_checkout@v4.txt",
+      "working_sha256": "aa54a41fe9028c122d7e70ef78640034ff5cb385880a07f5f12e7e1ca0b0a2c8",
+      "staged_sha256": "838dfc3dfa4c7ecd9f718ef85df274581646f63c37047de2c0169d621cc42399",
+      "working_bytes": 14682,
+      "staged_bytes": 14481,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/build-windows-latest/3_Run dtolnay_rust-toolchain@stable.txt",
+      "working_sha256": "994ca007ddc289249d103ed9992b185798c7f42231ec24e2550b0acacd7e36e2",
+      "staged_sha256": "7601935c3a9afaf0f5209f495d391cce5ca2a249d7eb12c6d78c7fe818f03a93",
+      "working_bytes": 17114,
+      "staged_bytes": 16910,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/build-windows-latest/4_Run Swatinem_rust-cache@v2.txt",
+      "working_sha256": "57d612522e7068c5cc2dadbf26c0006a9ae8aa6d626413ab13b42b4793d2ab58",
+      "staged_sha256": "d7f393446baf25b4def7edd69b8bf5b830e359ef3f2c31eab3684565cbaea06d",
+      "working_bytes": 8333,
+      "staged_bytes": 8247,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/build-windows-latest/5_Build workspace.txt",
+      "working_sha256": "f09f93dd2f4e531ad22dcbcdc3423611792cb0f89aeab710162d0755f32dd7ef",
+      "staged_sha256": "916d1e593ebba3f4a3fb917841e2939c180704f477f47270d1533d33a2238411",
+      "working_bytes": 116066,
+      "staged_bytes": 114815,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/build-windows-latest/6_Unit tests.txt",
+      "working_sha256": "c070f0b88050a0a09daac1556fe7998605c55f536607d170fb5f0b8a96369f04",
+      "staged_sha256": "1ea6aa54d7125327902010f746a4732c86b28fd828f5a3bb589bd47adee9ec94",
+      "working_bytes": 200957,
+      "staged_bytes": 199012,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/desktop-windows-latest/10_Produce installer (tauri beforeBuildCommand builds the web client).txt",
+      "working_sha256": "684b324cf2a243792c02c6a52009ee4801d031c68b340b2ce13255ded98171b3",
+      "staged_sha256": "2b3ef88a9be44cd5588f2b2d8e87fff3364053f893ca073e13f2f2836cbb2246",
+      "working_bytes": 85952,
+      "staged_bytes": 84813,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/desktop-windows-latest/11_Upload installer artifact.txt",
+      "working_sha256": "6de7c6363c78b4b28a0cccee361cbd003f3d03e450a9f50070b62f311f322e54",
+      "staged_sha256": "f202959fa1db24d4f2924353c64c7b4e87496588c981b610868f6fd21f501d78",
+      "working_bytes": 2650,
+      "staged_bytes": 2617,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/desktop-windows-latest/19_Post Run ._noname-next_.github_actions_prepare-original-content.txt",
+      "working_sha256": "9bbbe6a0d125a506a9609cf2fd10a5942c15e3425cb07a3e806b0bca9e3ae485",
+      "staged_sha256": "51086ac83a63f8e5c61fb6e57b63928b560820b08fb7ca8b4027d92ed49766a0",
+      "working_bytes": 2534,
+      "staged_bytes": 2515,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/desktop-windows-latest/1_Set up job.txt",
+      "working_sha256": "a36f5ac9969575e20837b39b92b41d51607e51c8da7e18b5cea72f0cf2bc5423",
+      "staged_sha256": "bcc2028ba2547ea63353fb09f1d189ddd044c67910f853e15525859d7d7660d7",
+      "working_bytes": 2526,
+      "staged_bytes": 2490,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/desktop-windows-latest/20_Post Run actions_setup-node@v4.txt",
+      "working_sha256": "d38054be26bd35136d24912574cf6788aee600736cc0006eea7ec0b17a21ca1a",
+      "staged_sha256": "ae623aa87fb930ed0cbf29c036569156dbd45f2a7470b1c2d6de5bb9e9ae096b",
+      "working_bytes": 308,
+      "staged_bytes": 305,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/desktop-windows-latest/21_Post Run Swatinem_rust-cache@v2.txt",
+      "working_sha256": "dff6ca7ef077e4ba020bbe6b8fb5435c61ec09c11496f5a4cc0809096c7f921f",
+      "staged_sha256": "7309db994fa575f10b96b2af598a9f60f30f49d084cdbe33a7e57e3e113a723d",
+      "working_bytes": 99,
+      "staged_bytes": 97,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/desktop-windows-latest/22_Post Run actions_checkout@v4.txt",
+      "working_sha256": "711f32b198b1df7bdd669d923eacb1757c60cb24ee8129d247eeae6e38edca22",
+      "staged_sha256": "dd0763c600302fffd074a70562f98e9c9c5b9913e55790a0037c82400e7c4686",
+      "working_bytes": 1979,
+      "staged_bytes": 1965,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/desktop-windows-latest/23_Complete job.txt",
+      "working_sha256": "34d3df65dc955488161a0ab5eba7f28d1a825d74a32ec4ba5303b4553b91f80b",
+      "staged_sha256": "07c2847f3b176861481ea2ef50246ff177156ff3b25371cefc30894061d77d7b",
+      "working_bytes": 498,
+      "staged_bytes": 495,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/desktop-windows-latest/2_Run actions_checkout@v4.txt",
+      "working_sha256": "889ed70b51452e9a66522260b4b15166c96029e90ecfd5c5b4c2ecc30ca40954",
+      "staged_sha256": "960c8fbd78a1f563b22c571651492dc5191a2bb0a4f7455b9f186882e151798a",
+      "working_bytes": 14229,
+      "staged_bytes": 14035,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/desktop-windows-latest/3_Run dtolnay_rust-toolchain@stable.txt",
+      "working_sha256": "27bc8937ec46f8b76f070505e29568255535868e8764e51dab8ae0c9e57586ad",
+      "staged_sha256": "558feb2f3c98e6c1a8da195f12be3b90ac76fc356d07c4f55bc517f71975b09f",
+      "working_bytes": 17111,
+      "staged_bytes": 16907,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/desktop-windows-latest/4_Run Swatinem_rust-cache@v2.txt",
+      "working_sha256": "0d1f80f5e83a55f7c08fa251babeb9c79220712e5787a9b6881c4219480c50b0",
+      "staged_sha256": "97744b4f94add312b6238349de226dc1132cc83d85b2364eb515b9955fb49a01",
+      "working_bytes": 8762,
+      "staged_bytes": 8671,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/desktop-windows-latest/5_Run actions_setup-node@v4.txt",
+      "working_sha256": "39e1cc11c2f02613d9b866ea3d0e7bff9ef6b8b143155edc745195bd0678f00e",
+      "staged_sha256": "6c5fb2298e285b90c86d4f74c80985b9b75a4472b0bdfad1200de6f48e75c951",
+      "working_bytes": 1427,
+      "staged_bytes": 1404,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/desktop-windows-latest/7_Run ._noname-next_.github_actions_prepare-original-content.txt",
+      "working_sha256": "6fdc682dceab2c68a271c5a7a302738a82977d5cf0b793a95974ef48b0c359ac",
+      "staged_sha256": "2960d61dc1e335dc4d3102aab28490718137cfdc1075f998166bb079fc398e7f",
+      "working_bytes": 24281,
+      "staged_bytes": 23955,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/desktop-windows-latest/8_Install wasm-pack.txt",
+      "working_sha256": "b03da0f31537729dac5941196830ea00bba3c2e1f1c204685ff58d4d39e4bc90",
+      "staged_sha256": "87781906d105ab63ad7d4c85e7ac515cbd455a5d9ef1b48254ed91fb12cbedfd",
+      "working_bytes": 1034,
+      "staged_bytes": 1020,
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/logs-first/desktop-windows-latest/9_Install Tauri CLI.txt",
+      "working_sha256": "5af368c949960320ba6a69a80064288a17f1c50cf5b9465a60bd91635a894bfa",
+      "staged_sha256": "8004237409704fef023b4398b7ddd9024825f490ee58b73ed21bb6f3aca063ae",
+      "working_bytes": 1030,
+      "staged_bytes": 1016,
+      "normalization": "CRLF to LF only"
+    }
+  ],
+  "persistent_git_configuration_changed": false,
+  "product_inputs_changed": false
+}

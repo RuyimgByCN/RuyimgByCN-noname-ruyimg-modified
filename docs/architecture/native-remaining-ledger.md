@@ -1,5 +1,13 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+## 2026-11-14T01:33:42+08:00 队列1部分增量已发布、代码CI通过
+
+代码 `1fa8ac6cc3a70446436d97ff49aa19ea4626e22d` 已按裁决25正常发布；[精确SHA CI](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43468568765) attempt1全部10作业success／0失败／0取消，未由agent补跑。记录时HEAD为该代码加文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8。 完整本地必跑命令通过，首失败/忽略项保留[门禁表](../operations/evidence/2026-11-13-queue1-review/final-local-gates.md)；[CI原始及逐作业范围](../operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/README.md)。634／3790／0、新增等价0、八项0/37；队列1尚余10来源30交互候选、L22自动规则及已登记差异后续修复，不开始队列2。全自动/固定选择清单未完成37来源穷举、尚无证明必须升号项；UI、Spine、设备/签名、第六阶段仍按[剩余范围](../operations/evidence/2026-11-13-queue1-review/remaining-scope.md)。
+
+## 2026-11-14T01:02:23+08:00 队列1部分增量发布（CI未结束）
+
+代码 `1fa8ac6cc3a70446436d97ff49aa19ea4626e22d` 已正常推送native-convergence，版本333／107／5／759／WS8、634／3790／0及八项0/37不变。HEAD为该代码，随后仅文档/证据dirty；[精确SHA CI](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43468568765) attempt1的10作业进行中，不重启、不补跑、不开始下批代码。队列1剩余范围保留，[发布及初始CI记录](../operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/README.md)；终态后另增日期。
+
 ## 2026-11-14T00:58:36+08:00 队列1部分增量本地验收（未提交／发布）
 
 HEAD `bd58ef06d59940baed8d7f93e61ce571b152fb81` + tracked dirty；版本333／107／5／759／WS8。完整三crate2446／0／6、workspace7842／0／8及第五节其余命令均exit0，完整preflight第二次21项通过；首次失败、忽略与未解析引用另列[门禁表](../operations/evidence/2026-11-13-queue1-review/final-local-gates.md)。当前634／3790／0、新增等价0，整包八项0/37；[对照范围及队列剩余](../operations/evidence/2026-11-13-queue1-review/remaining-scope.md)。尚未提交/发布，本批不标队列1完成，不进入队列2；实际发布/精确代码CI另增记录。

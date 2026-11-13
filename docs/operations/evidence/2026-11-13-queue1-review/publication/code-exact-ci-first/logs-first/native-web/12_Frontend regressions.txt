@@ -1,0 +1,2470 @@
+﻿2026-11-13T17:12:04.2217052Z ##[group]Run pnpm test
+2026-11-13T17:12:04.2217306Z [36;1mpnpm test[0m
+2026-11-13T17:12:04.2263449Z shell: /usr/bin/bash -e {0}
+2026-11-13T17:12:04.2263698Z env:
+2026-11-13T17:12:04.2263880Z   CARGO_TERM_COLOR: always
+2026-11-13T17:12:04.2264083Z   WASM_PACK_TARGET: web
+2026-11-13T17:12:04.2264283Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T17:12:04.2264497Z   CARGO_INCREMENTAL: 0
+2026-11-13T17:12:04.2264683Z   CACHE_ON_FAILURE: false
+2026-11-13T17:12:04.2264924Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-11-13T17:12:04.2265186Z ##[endgroup]
+2026-11-13T17:12:04.5341316Z 
+2026-11-13T17:12:04.5342537Z > noname-next-web-client@0.1.0 test /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/apps/web-client
+2026-11-13T17:12:04.5343236Z > node --import ./scripts/ts-register.mjs --test
+2026-11-13T17:12:04.5343438Z 
+2026-11-13T17:12:04.5792084Z TAP version 13
+2026-11-13T17:12:06.0487862Z # Subtest: u32 choice counts reject malformed fields before host acceptance
+2026-11-13T17:12:06.0489017Z ok 1 - u32 choice counts reject malformed fields before host acceptance
+2026-11-13T17:12:06.0489637Z   ---
+2026-11-13T17:12:06.0490011Z   duration_ms: 7.33455
+2026-11-13T17:12:06.0490364Z   ...
+2026-11-13T17:12:06.0500922Z # Subtest: two slots preserve def zero and defaults accept old payloads
+2026-11-13T17:12:06.0506124Z ok 2 - two slots preserve def zero and defaults accept old payloads
+2026-11-13T17:12:06.0506671Z   ---
+2026-11-13T17:12:06.0506943Z   duration_ms: 0.906695
+2026-11-13T17:12:06.0507258Z   ...
+2026-11-13T17:12:06.0507722Z # Subtest: canonical kinds and prompts reach real envelope conversion
+2026-11-13T17:12:06.0508404Z ok 3 - canonical kinds and prompts reach real envelope conversion
+2026-11-13T17:12:06.0508945Z   ---
+2026-11-13T17:12:06.0509420Z   duration_ms: 0.949037
+2026-11-13T17:12:06.0510089Z   ...
+2026-11-13T17:12:06.0510884Z # Subtest: metadata wrong types refuse explicitly at local JSON boundary
+2026-11-13T17:12:06.0511737Z ok 4 - metadata wrong types refuse explicitly at local JSON boundary
+2026-11-13T17:12:06.0512347Z   ---
+2026-11-13T17:12:06.0513113Z   duration_ms: 0.646262
+2026-11-13T17:12:06.0513512Z   ...
+2026-11-13T17:12:06.0712362Z # Subtest: old functional TypeScript reader ignores extra metadata
+2026-11-13T17:12:06.0721253Z ok 5 - old functional TypeScript reader ignores extra metadata
+2026-11-13T17:12:06.0723398Z   ---
+2026-11-13T17:12:06.0723841Z   duration_ms: 24.364441
+2026-11-13T17:12:06.0724303Z   ...
+2026-11-13T17:12:06.1432323Z # Subtest: production prompt literals and extension keys have readable presentation without internal keys
+2026-11-13T17:12:06.1442022Z ok 6 - production prompt literals and extension keys have readable presentation without internal keys
+2026-11-13T17:12:06.1442829Z   ---
+2026-11-13T17:12:06.1443298Z   duration_ms: 72.120628
+2026-11-13T17:12:06.1443714Z   ...
+2026-11-13T17:12:06.1475390Z # Subtest: r05h linked, r05_effects, and tiqi_adjustment context preserve signed/zero values and reject malformed payloads
+2026-11-13T17:12:06.1501997Z ok 7 - r05h linked, r05_effects, and tiqi_adjustment context preserve signed/zero values and reject malformed payloads
+2026-11-13T17:12:06.1551288Z   ---
+2026-11-13T17:12:06.1561823Z   duration_ms: 4.935868
+2026-11-13T17:12:06.1611289Z   ...
+2026-11-13T17:12:06.2075483Z # Subtest: desktop builds both WASM engines before the frontend, forcing native web output
+2026-11-13T17:12:06.2157294Z ok 8 - desktop builds both WASM engines before the frontend, forcing native web output
+2026-11-13T17:12:06.2211331Z   ---
+2026-11-13T17:12:06.2231447Z   duration_ms: 53.411929
+2026-11-13T17:12:06.2232113Z   ...
+2026-11-13T17:12:06.2232783Z # Subtest: Windows desktop runs pnpm.cmd through a shell
+2026-11-13T17:12:06.2233605Z ok 9 - Windows desktop runs pnpm.cmd through a shell
+2026-11-13T17:12:06.2234105Z   ---
+2026-11-13T17:12:06.2234460Z   duration_ms: 52.467799
+2026-11-13T17:12:06.2234862Z   ...
+2026-11-13T17:12:06.2235566Z # Subtest: a failed native build prevents publishing a frontend with a stale native package
+2026-11-13T17:12:06.2237391Z ok 10 - a failed native build prevents publishing a frontend with a stale native package
+2026-11-13T17:12:06.2238127Z   ---
+2026-11-13T17:12:06.2238501Z   duration_ms: 50.671058
+2026-11-13T17:12:06.2238906Z   ...
+2026-11-13T17:12:06.2239917Z # Subtest: native build creates a missing package from source with portable PATH and argument boundaries
+2026-11-13T17:12:06.2241190Z ok 11 - native build creates a missing package from source with portable PATH and argument boundaries
+2026-11-13T17:12:06.2241969Z   ---
+2026-11-13T17:12:06.2242358Z   duration_ms: 114.337327
+2026-11-13T17:12:06.2242780Z   ...
+2026-11-13T17:12:06.2243648Z # Subtest: native build failure preserves the previous usable package and clears temporary output
+2026-11-13T17:12:06.2245049Z ok 12 - native build failure preserves the previous usable package and clears temporary output
+2026-11-13T17:12:06.2245970Z   ---
+2026-11-13T17:12:06.2246482Z   duration_ms: 74.163666
+2026-11-13T17:12:06.2247002Z   ...
+2026-11-13T17:12:06.2247891Z # Subtest: native Node smoke target remains available without shell interpolation
+2026-11-13T17:12:06.2249036Z ok 13 - native Node smoke target remains available without shell interpolation
+2026-11-13T17:12:06.2249621Z   ---
+2026-11-13T17:12:06.2249968Z   duration_ms: 63.556523
+2026-11-13T17:12:06.2250416Z   ...
+2026-11-13T17:12:06.2251330Z # Subtest: legacy build prepends rustup PATH even when the cargo executable has a Windows suffix
+2026-11-13T17:12:06.2252368Z ok 14 - legacy build prepends rustup PATH even when the cargo executable has a Windows suffix
+2026-11-13T17:12:06.2253050Z   ---
+2026-11-13T17:12:06.2253390Z   duration_ms: 81.934854
+2026-11-13T17:12:06.2253756Z   ...
+2026-11-13T17:12:06.2254263Z # Subtest: MSI keeps the Chinese product name with the matching WiX locale
+2026-11-13T17:12:06.2255083Z ok 15 - MSI keeps the Chinese product name with the matching WiX locale
+2026-11-13T17:12:06.2255667Z   ---
+2026-11-13T17:12:06.2256049Z   duration_ms: 0.477734
+2026-11-13T17:12:06.2256464Z   ...
+2026-11-13T17:12:06.2257157Z # Subtest: Linux separates the package id from the Chinese window and launcher names
+2026-11-13T17:12:06.2258465Z ok 16 - Linux separates the package id from the Chinese window and launcher names
+2026-11-13T17:12:06.2259081Z   ---
+2026-11-13T17:12:06.2259442Z   duration_ms: 0.965231
+2026-11-13T17:12:06.2259806Z   ...
+2026-11-13T17:12:06.2260495Z # Subtest: Tauri hooks resolve the actual sibling web client from the desktop crate
+2026-11-13T17:12:06.2261566Z ok 17 - Tauri hooks resolve the actual sibling web client from the desktop crate
+2026-11-13T17:12:06.2262226Z   ---
+2026-11-13T17:12:06.2262605Z   duration_ms: 0.309897
+2026-11-13T17:12:06.2263019Z   ...
+2026-11-13T17:12:06.3136263Z # Subtest: U04/L05 金币商店价格、alwaysSnow 免费重载下雪、下注阶段门禁与录像回放隔离
+2026-11-13T17:12:06.3172395Z ok 18 - U04/L05 金币商店价格、alwaysSnow 免费重载下雪、下注阶段门禁与录像回放隔离
+2026-11-13T17:12:06.3212942Z   ---
+2026-11-13T17:12:06.3241141Z   duration_ms: 2.696751
+2026-11-13T17:12:06.3257280Z   ...
+2026-11-13T17:12:06.3272285Z # Subtest: L13 手杀 MVP 事件流计分、seq 幂等去重与信封注入
+2026-11-13T17:12:06.3273143Z ok 19 - L13 手杀 MVP 事件流计分、seq 幂等去重与信封注入
+2026-11-13T17:12:06.3273798Z   ---
+2026-11-13T17:12:06.3274332Z   duration_ms: 2.026724
+2026-11-13T17:12:06.3274872Z   ...
+2026-11-13T17:12:06.3275648Z # Subtest: U02/L03 剑阁与 BOSS 体力归一化、L11 太虚幻境节点赐福、L21 武皇排阵替补
+2026-11-13T17:12:06.3276565Z ok 20 - U02/L03 剑阁与 BOSS 体力归一化、L11 太虚幻境节点赐福、L21 武皇排阵替补
+2026-11-13T17:12:06.3277175Z   ---
+2026-11-13T17:12:06.3277631Z   duration_ms: 0.679491
+2026-11-13T17:12:06.3278153Z   ...
+2026-11-13T17:12:06.3278856Z # Subtest: L07 全能搜索：苍螭之璧公开百科检索、暗牌隐私拦截与零 eval 安全门禁
+2026-11-13T17:12:06.3279659Z ok 21 - L07 全能搜索：苍螭之璧公开百科检索、暗牌隐私拦截与零 eval 安全门禁
+2026-11-13T17:12:06.3280253Z   ---
+2026-11-13T17:12:06.3280819Z   duration_ms: 0.598782
+2026-11-13T17:12:06.3281313Z   ...
+2026-11-13T17:12:06.3296812Z # Subtest: L02/L12/L17/L22/L23/L26/L29 辅助算法与安全门禁
+2026-11-13T17:12:06.3299383Z ok 22 - L02/L12/L17/L22/L23/L26/L29 辅助算法与安全门禁
+2026-11-13T17:12:06.3310102Z   ---
+2026-11-13T17:12:06.3311533Z   duration_ms: 0.655736
+2026-11-13T17:12:06.3312146Z   ...
+2026-11-13T17:12:06.3312991Z # Subtest: 裁决 34 完整状态快照序列化与读档恢复往返一致
+2026-11-13T17:12:06.3313982Z ok 23 - 裁决 34 完整状态快照序列化与读档恢复往返一致
+2026-11-13T17:12:06.3314655Z   ---
+2026-11-13T17:12:06.3315204Z   duration_ms: 3.417873
+2026-11-13T17:12:06.3315790Z   ...
+2026-11-13T17:12:06.3316697Z # Subtest: Batch 25 补齐：L20 14 项战局标记、L29 潜龙四技解锁、U08 塔防波次、金币称号与百科检索
+2026-11-13T17:12:06.3317597Z ok 24 - Batch 25 补齐：L20 14 项战局标记、L29 潜龙四技解锁、U08 塔防波次、金币称号与百科检索
+2026-11-13T17:12:06.3318164Z   ---
+2026-11-13T17:12:06.3318576Z   duration_ms: 0.73988
+2026-11-13T17:12:06.3318996Z   ...
+2026-11-13T17:12:06.3320007Z # Subtest: Batch 26 全 37 来源收口：U01 31将3D陈列馆、L08/L24 Spine骨骼动作与皮肤偏移、L14手杀HUD、L25离线DIY门禁、L27双将同选
+2026-11-13T17:12:06.3321375Z ok 25 - Batch 26 全 37 来源收口：U01 31将3D陈列馆、L08/L24 Spine骨骼动作与皮肤偏移、L14手杀HUD、L25离线DIY门禁、L27双将同选
+2026-11-13T17:12:06.3331747Z   ---
+2026-11-13T17:12:06.3332271Z   duration_ms: 0.608957
+2026-11-13T17:12:06.3332776Z   ...
+2026-11-13T17:12:06.3333900Z # Subtest: U04/L05 Canvas 粒子渲染器与 L07 全能搜索分页/关键词高亮 (coin/extension.js:24-398, SimplePagination.js:1-147)
+2026-11-13T17:12:06.3335595Z ok 26 - U04/L05 Canvas 粒子渲染器与 L07 全能搜索分页/关键词高亮 (coin/extension.js:24-398, SimplePagination.js:1-147)
+2026-11-13T17:12:06.3336377Z   ---
+2026-11-13T17:12:06.3336851Z   duration_ms: 10.095646
+2026-11-13T17:12:06.3337332Z   ...
+2026-11-13T17:12:06.3338332Z # Subtest: U04/L05 _buy 拖拽购买、L10 返利/十常侍阵亡语音、L12 如真似幻光效、L13 _qy_chongzhu、L20/L26/L27 样式与 L29 _CMeffects
+2026-11-13T17:12:06.3339612Z ok 27 - U04/L05 _buy 拖拽购买、L10 返利/十常侍阵亡语音、L12 如真似幻光效、L13 _qy_chongzhu、L20/L26/L27 样式与 L29 _CMeffects
+2026-11-13T17:12:06.3340342Z   ---
+2026-11-13T17:12:06.3340922Z   duration_ms: 1.69771
+2026-11-13T17:12:06.3341481Z   ...
+2026-11-13T17:12:07.7685337Z # Subtest: L09 千幻聆音: implements all 8 UI hooks, 12 surface presets, and skinShare.js voice resolution
+2026-11-13T17:12:07.7693888Z ok 28 - L09 千幻聆音: implements all 8 UI hooks, 12 surface presets, and skinShare.js voice resolution
+2026-11-13T17:12:07.7694763Z   ---
+2026-11-13T17:12:07.7695164Z   duration_ms: 1.425889
+2026-11-13T17:12:07.7695595Z   ...
+2026-11-13T17:12:07.7696617Z # Subtest: L24 皮肤切换: implements all 22 UI hooks, 10 CSS/animation surfaces, elemental sha audio, and attack flipX
+2026-11-13T17:12:07.7698029Z ok 29 - L24 皮肤切换: implements all 22 UI hooks, 10 CSS/animation surfaces, elemental sha audio, and attack flipX
+2026-11-13T17:12:07.7698831Z   ---
+2026-11-13T17:12:07.7699219Z   duration_ms: 0.455441
+2026-11-13T17:12:07.7699630Z   ...
+2026-11-13T17:12:07.7711120Z # Subtest: L14 手杀ui: implements all 53 UI hooks, 40 JS/CSS surfaces, and muniu-first hand card sorting
+2026-11-13T17:12:07.7731719Z ok 30 - L14 手杀ui: implements all 53 UI hooks, 40 JS/CSS surfaces, and muniu-first hand card sorting
+2026-11-13T17:12:07.7732493Z   ---
+2026-11-13T17:12:07.7732899Z   duration_ms: 6.245276
+2026-11-13T17:12:07.7733309Z   ...
+2026-11-13T17:12:07.7734394Z # Subtest: L08 十周年UI: implements all 319 UI hooks (33 core + 286 markskill.js), 43 surfaces, and snapshot round-trip
+2026-11-13T17:12:07.7735713Z ok 31 - L08 十周年UI: implements all 319 UI hooks (33 core + 286 markskill.js), 43 surfaces, and snapshot round-trip
+2026-11-13T17:12:07.7736457Z   ---
+2026-11-13T17:12:07.7736819Z   duration_ms: 7.401644
+2026-11-13T17:12:07.7737215Z   ...
+2026-11-13T17:12:07.7737931Z # Subtest: L25 祖安武将: implements all 40 frontend UI/SFX/judgment-overlay hooks
+2026-11-13T17:12:07.7738870Z ok 32 - L25 祖安武将: implements all 40 frontend UI/SFX/judgment-overlay hooks
+2026-11-13T17:12:07.7739557Z   ---
+2026-11-13T17:12:07.7739862Z   duration_ms: 0.562057
+2026-11-13T17:12:07.7740162Z   ...
+2026-11-13T17:12:07.7771564Z # Subtest: L11 太虚幻境: implements all 4 upstream stylesheets, 8 DLC seasons, 21 servants, and juguzhidao shop price freeze
+2026-11-13T17:12:07.7773032Z ok 33 - L11 太虚幻境: implements all 4 upstream stylesheets, 8 DLC seasons, 21 servants, and juguzhidao shop price freeze
+2026-11-13T17:12:07.7773717Z   ---
+2026-11-13T17:12:07.7773975Z   duration_ms: 0.348734
+2026-11-13T17:12:07.7774704Z   ...
+2026-11-13T17:12:07.7775678Z # Subtest: Battle EngineEnvelope stream wires live CardPlayed / DamageDealt / PlayerDied events into uiSuites and eliminates fabricated labels
+2026-11-13T17:12:07.7777204Z ok 34 - Battle EngineEnvelope stream wires live CardPlayed / DamageDealt / PlayerDied events into uiSuites and eliminates fabricated labels
+2026-11-13T17:12:07.7778021Z   ---
+2026-11-13T17:12:07.7778278Z   duration_ms: 13.787762
+2026-11-13T17:12:07.7778574Z   ...
+2026-11-13T17:12:07.8092337Z # Subtest: 实测仓库：包清单由实际数据推导，目录项全部可回查
+2026-11-13T17:12:07.8131547Z ok 35 - 实测仓库：包清单由实际数据推导，目录项全部可回查
+2026-11-13T17:12:07.8161368Z   ---
+2026-11-13T17:12:07.8171073Z   duration_ms: 13.733672
+2026-11-13T17:12:07.8171419Z   ...
+2026-11-13T17:12:07.8171847Z # Subtest: 目录项与包元数据不一致会被判失败
+2026-11-13T17:12:07.8172238Z ok 36 - 目录项与包元数据不一致会被判失败
+2026-11-13T17:12:07.8172527Z   ---
+2026-11-13T17:12:07.8172781Z   duration_ms: 5.027483
+2026-11-13T17:12:07.8173056Z   ...
+2026-11-13T17:12:07.8173439Z # Subtest: 坏 npack、缺字段与重复包键会被判失败
+2026-11-13T17:12:07.8173939Z ok 37 - 坏 npack、缺字段与重复包键会被判失败
+2026-11-13T17:12:07.8174233Z   ---
+2026-11-13T17:12:07.8174963Z   duration_ms: 1.426671
+2026-11-13T17:12:07.8175234Z   ...
+2026-11-13T17:12:07.8175744Z # Subtest: 候选回包 → 渲染行：名称、技能、稳定顺序（且不改写输入）
+2026-11-13T17:12:07.8221260Z ok 38 - 候选回包 → 渲染行：名称、技能、稳定顺序（且不改写输入）
+2026-11-13T17:12:07.8251072Z   ---
+2026-11-13T17:12:07.8271243Z   duration_ms: 2.218917
+2026-11-13T17:12:07.8291446Z   ...
+2026-11-13T17:12:07.8311883Z # Subtest: 空候选是显式空状态，不是错误也不是静默白屏
+2026-11-13T17:12:07.8312475Z ok 39 - 空候选是显式空状态，不是错误也不是静默白屏
+2026-11-13T17:12:07.8312953Z   ---
+2026-11-13T17:12:07.8313413Z   duration_ms: 0.174387
+2026-11-13T17:12:07.8313828Z   ...
+2026-11-13T17:12:07.8314381Z # Subtest: 畸形候选：逐项报错并清空列表，不把坏数据过滤成更小候选集
+2026-11-13T17:12:07.8315041Z ok 40 - 畸形候选：逐项报错并清空列表，不把坏数据过滤成更小候选集
+2026-11-13T17:12:07.8315546Z   ---
+2026-11-13T17:12:07.8315950Z   duration_ms: 1.097105
+2026-11-13T17:12:07.8316392Z   ...
+2026-11-13T17:12:07.8316980Z # Subtest: 候选拉取失败保留原始错误文本（含旧产物 rebuild 提示）
+2026-11-13T17:12:07.8317708Z ok 41 - 候选拉取失败保留原始错误文本（含旧产物 rebuild 提示）
+2026-11-13T17:12:07.8318215Z   ---
+2026-11-13T17:12:07.8318662Z   duration_ms: 0.178142
+2026-11-13T17:12:07.8319087Z   ...
+2026-11-13T17:12:07.8319580Z # Subtest: 重新加载中保留旧候选但清掉旧错误
+2026-11-13T17:12:07.8320129Z ok 42 - 重新加载中保留旧候选但清掉旧错误
+2026-11-13T17:12:07.8320560Z   ---
+2026-11-13T17:12:07.8321091Z   duration_ms: 0.17675
+2026-11-13T17:12:07.8321508Z   ...
+2026-11-13T17:12:07.8321984Z # Subtest: 座位投影：只取目标座位，提取原生技能名与 id
+2026-11-13T17:12:07.8322539Z ok 43 - 座位投影：只取目标座位，提取原生技能名与 id
+2026-11-13T17:12:07.8322969Z   ---
+2026-11-13T17:12:07.8325884Z   duration_ms: 0.295245
+2026-11-13T17:12:07.8351634Z   ...
+2026-11-13T17:12:07.8352468Z # Subtest: 绑定新对局座位：清掉最近装配与投影，但复用候选目录（同座位也清）
+2026-11-13T17:12:07.8353225Z ok 44 - 绑定新对局座位：清掉最近装配与投影，但复用候选目录（同座位也清）
+2026-11-13T17:12:07.8353796Z   ---
+2026-11-13T17:12:07.8354204Z   duration_ms: 0.267884
+2026-11-13T17:12:07.8354655Z   ...
+2026-11-13T17:12:07.8355330Z # Subtest: 点击候选：调用 chooseGeneral(seat,name)，成功后应用刷新信封并更新技能
+2026-11-13T17:12:07.8356575Z ok 45 - 点击候选：调用 chooseGeneral(seat,name)，成功后应用刷新信封并更新技能
+2026-11-13T17:12:07.8357176Z   ---
+2026-11-13T17:12:07.8357598Z   duration_ms: 0.56325
+2026-11-13T17:12:07.8358018Z   ...
+2026-11-13T17:12:07.8358548Z # Subtest: 选将失败：显示错误、不应用刷新信封、不留下成功态
+2026-11-13T17:12:07.8359151Z ok 46 - 选将失败：显示错误、不应用刷新信封、不留下成功态
+2026-11-13T17:12:07.8359625Z   ---
+2026-11-13T17:12:07.8360022Z   duration_ms: 0.621385
+2026-11-13T17:12:07.8360440Z   ...
+2026-11-13T17:12:07.8361052Z # Subtest: 失败后重试成功：清除错误并进入成功态
+2026-11-13T17:12:07.8361589Z ok 47 - 失败后重试成功：清除错误并进入成功态
+2026-11-13T17:12:07.8362016Z   ---
+2026-11-13T17:12:07.8362414Z   duration_ms: 0.329014
+2026-11-13T17:12:07.8362847Z   ...
+2026-11-13T17:12:07.8363358Z # Subtest: 返回与请求不一致（错座位）不得显示成功
+2026-11-13T17:12:07.8363919Z ok 48 - 返回与请求不一致（错座位）不得显示成功
+2026-11-13T17:12:07.8364375Z   ---
+2026-11-13T17:12:07.8364765Z   duration_ms: 0.192333
+2026-11-13T17:12:07.8365190Z   ...
+2026-11-13T17:12:07.8365671Z # Subtest: 畸形返回（缺刷新信封）不得显示成功
+2026-11-13T17:12:07.8366201Z ok 49 - 畸形返回（缺刷新信封）不得显示成功
+2026-11-13T17:12:07.8366651Z   ---
+2026-11-13T17:12:07.8367040Z   duration_ms: 0.19645
+2026-11-13T17:12:07.8367690Z   ...
+2026-11-13T17:12:07.8368277Z # Subtest: 装配已生效但主视图刷新抛错：保持 accepted，同时显示刷新错误
+2026-11-13T17:12:07.8368982Z ok 50 - 装配已生效但主视图刷新抛错：保持 accepted，同时显示刷新错误
+2026-11-13T17:12:07.8369482Z   ---
+2026-11-13T17:12:07.8369870Z   duration_ms: 0.261344
+2026-11-13T17:12:07.8370292Z   ...
+2026-11-13T17:12:07.8370873Z # Subtest: 空候选名在发起请求前就被拒绝
+2026-11-13T17:12:07.8371379Z ok 51 - 空候选名在发起请求前就被拒绝
+2026-11-13T17:12:07.8371826Z   ---
+2026-11-13T17:12:07.8372226Z   duration_ms: 0.182329
+2026-11-13T17:12:07.8372650Z   ...
+2026-11-13T17:12:09.5472292Z # Subtest: blake3Hex matches Rust ContentLock empty seed and multi-chunk inputs
+2026-11-13T17:12:09.5506877Z ok 52 - blake3Hex matches Rust ContentLock empty seed and multi-chunk inputs
+2026-11-13T17:12:09.5512480Z   ---
+2026-11-13T17:12:09.5512911Z   duration_ms: 6.570014
+2026-11-13T17:12:09.5513415Z   ...
+2026-11-13T17:12:09.5514352Z # Subtest: synchronous cue admission deduplicates same-revision batch, rejects conflicts, and ignores stale revisions
+2026-11-13T17:12:09.5515805Z ok 53 - synchronous cue admission deduplicates same-revision batch, rejects conflicts, and ignores stale revisions
+2026-11-13T17:12:09.5541094Z   ---
+2026-11-13T17:12:09.5566569Z   duration_ms: 3.448718
+2026-11-13T17:12:09.5599756Z   ...
+2026-11-13T17:12:09.5620727Z # Subtest: queue caps at 8 pending items, drops oldest overflow without replay, and plays compat m4a
+2026-11-13T17:12:09.5651524Z ok 54 - queue caps at 8 pending items, drops oldest overflow without replay, and plays compat m4a
+2026-11-13T17:12:09.5681304Z   ---
+2026-11-13T17:12:09.5711501Z   duration_ms: 1.409636
+2026-11-13T17:12:09.5712120Z   ...
+2026-11-13T17:12:09.5761760Z # Subtest: mute and volume 0 immediately stop active playback and discard queue without replaying on unmute
+2026-11-13T17:12:09.5763317Z ok 55 - mute and volume 0 immediately stop active playback and discard queue without replaying on unmute
+2026-11-13T17:12:09.5797268Z   ---
+2026-11-13T17:12:09.5821585Z   duration_ms: 0.72711
+2026-11-13T17:12:09.5823002Z   ...
+2026-11-13T17:12:09.5826235Z # Subtest: NotAllowedError clears queue without autoplay retry and gesture unlock enables future cues only
+2026-11-13T17:12:09.5829189Z ok 56 - NotAllowedError clears queue without autoplay retry and gesture unlock enables future cues only
+2026-11-13T17:12:09.5831842Z   ---
+2026-11-13T17:12:09.5835649Z   duration_ms: 12.283888
+2026-11-13T17:12:09.5838842Z   ...
+2026-11-13T17:12:09.5839696Z # Subtest: media errors are bounded per path, advance queue, and late callbacks from prior generation/reconnect are ignored
+2026-11-13T17:12:09.5841551Z ok 57 - media errors are bounded per path, advance queue, and late callbacks from prior generation/reconnect are ignored
+2026-11-13T17:12:09.5842260Z   ---
+2026-11-13T17:12:09.5842529Z   duration_ms: 0.727351
+2026-11-13T17:12:09.5842815Z   ...
+2026-11-13T17:12:09.5843561Z # Subtest: frozen SDK package audio verifies 5-field owner + BLAKE3 digest and resists store upgrade/tampering
+2026-11-13T17:12:09.5844700Z ok 58 - frozen SDK package audio verifies 5-field owner + BLAKE3 digest and resists store upgrade/tampering
+2026-11-13T17:12:09.5845915Z   ---
+2026-11-13T17:12:09.5846176Z   duration_ms: 2.028567
+2026-11-13T17:12:09.5846464Z   ...
+2026-11-13T17:12:09.5847046Z # Subtest: source change via appearanceStore resets generation automatically
+2026-11-13T17:12:09.5847858Z ok 59 - source change via appearanceStore resets generation automatically
+2026-11-13T17:12:09.5848357Z   ---
+2026-11-13T17:12:09.5848603Z   duration_ms: 1.550503
+2026-11-13T17:12:09.5848875Z   ...
+2026-11-13T17:12:09.6242301Z # Subtest: 反例 1：候选值 42/99 → token 是下标且能回查候选
+2026-11-13T17:12:09.6271947Z ok 60 - 反例 1：候选值 42/99 → token 是下标且能回查候选
+2026-11-13T17:12:09.6321249Z   ---
+2026-11-13T17:12:09.6367108Z   duration_ms: 3.023472
+2026-11-13T17:12:09.6407041Z   ...
+2026-11-13T17:12:09.6431672Z # Subtest: 反例 1 补充：裸数字/字符串候选的 token 同样是下标
+2026-11-13T17:12:09.6457135Z ok 61 - 反例 1 补充：裸数字/字符串候选的 token 同样是下标
+2026-11-13T17:12:09.6457784Z   ---
+2026-11-13T17:12:09.6458156Z   duration_ms: 0.311449
+2026-11-13T17:12:09.6458537Z   ...
+2026-11-13T17:12:09.6459192Z # Subtest: 反例 2：引擎 rejected 显式进入 envelope.result
+2026-11-13T17:12:09.6459844Z ok 62 - 反例 2：引擎 rejected 显式进入 envelope.result
+2026-11-13T17:12:09.6460340Z   ---
+2026-11-13T17:12:09.6460861Z   duration_ms: 0.260744
+2026-11-13T17:12:09.6467257Z   ...
+2026-11-13T17:12:09.6468082Z # Subtest: 反例 2 补充：playCard 被拒同样暴露，observer 无命令时保持 null
+2026-11-13T17:12:09.6468908Z ok 63 - 反例 2 补充：playCard 被拒同样暴露，observer 无命令时保持 null
+2026-11-13T17:12:09.6469583Z   ---
+2026-11-13T17:12:09.6469957Z   duration_ms: 0.51582
+2026-11-13T17:12:09.6470312Z   ...
+2026-11-13T17:12:09.6470984Z # Subtest: 反例 3：ChoiceOption Kind(105) 不被归零
+2026-11-13T17:12:09.6471596Z ok 64 - 反例 3：ChoiceOption Kind(105) 不被归零
+2026-11-13T17:12:09.6472034Z   ---
+2026-11-13T17:12:09.6472404Z   duration_ms: 0.486647
+2026-11-13T17:12:09.6472793Z   ...
+2026-11-13T17:12:09.6473325Z # Subtest: 命令结果解析：非 JSON 或无 outcome 字段不臆造判决
+2026-11-13T17:12:09.6473938Z ok 65 - 命令结果解析：非 JSON 或无 outcome 字段不臆造判决
+2026-11-13T17:12:09.6474407Z   ---
+2026-11-13T17:12:09.6474754Z   duration_ms: 0.165183
+2026-11-13T17:12:09.6475136Z   ...
+2026-11-13T17:12:09.6475593Z # Subtest: choice_id 不匹配时拒绝应答，不触发引擎调用
+2026-11-13T17:12:09.6476123Z ok 66 - choice_id 不匹配时拒绝应答，不触发引擎调用
+2026-11-13T17:12:09.6476542Z   ---
+2026-11-13T17:12:09.6476880Z   duration_ms: 0.200065
+2026-11-13T17:12:09.6477285Z   ...
+2026-11-13T17:12:09.6477894Z # Subtest: 原生公开事件按粗粒度展示，不把防止伤害或完成选择写成已造成伤害或等待选择
+2026-11-13T17:12:09.6478602Z ok 67 - 原生公开事件按粗粒度展示，不把防止伤害或完成选择写成已造成伤害或等待选择
+2026-11-13T17:12:09.6479104Z   ---
+2026-11-13T17:12:09.6479504Z   duration_ms: 2.209994
+2026-11-13T17:12:09.6479889Z   ...
+2026-11-13T17:12:09.6480368Z # Subtest: identity 随座位透传（裁决⑥）：本人/主公非空，隐藏座位为 null，不再恒置 null
+2026-11-13T17:12:09.6481174Z ok 68 - identity 随座位透传（裁决⑥）：本人/主公非空，隐藏座位为 null，不再恒置 null
+2026-11-13T17:12:09.6481666Z   ---
+2026-11-13T17:12:09.6481916Z   duration_ms: 0.310628
+2026-11-13T17:12:09.6482566Z   ...
+2026-11-13T17:12:09.6482971Z # Subtest: 可见牌面进入 known_cards（裁决⑦）：本人手牌/全场装备判定/弃牌/处理区带真实 face，不占位
+2026-11-13T17:12:09.6483421Z ok 69 - 可见牌面进入 known_cards（裁决⑦）：本人手牌/全场装备判定/弃牌/处理区带真实 face，不占位
+2026-11-13T17:12:09.6483674Z   ---
+2026-11-13T17:12:09.6483854Z   duration_ms: 0.473087
+2026-11-13T17:12:09.6484041Z   ...
+2026-11-13T17:12:09.6484336Z # Subtest: visible general definition reaches the existing seat view
+2026-11-13T17:12:09.6484761Z ok 70 - visible general definition reaches the existing seat view
+2026-11-13T17:12:09.6485044Z   ---
+2026-11-13T17:12:09.6485209Z   duration_ms: 0.189689
+2026-11-13T17:12:09.6485390Z   ...
+2026-11-13T17:12:09.6485726Z # Subtest: Skill options keep stable names and use index tokens without truncation
+2026-11-13T17:12:09.6486203Z ok 71 - Skill options keep stable names and use index tokens without truncation
+2026-11-13T17:12:09.6486511Z   ---
+2026-11-13T17:12:09.6486682Z   duration_ms: 0.131874
+2026-11-13T17:12:09.6486859Z   ...
+2026-11-13T17:12:11.5931174Z # Subtest: 候选解析：内核形态通过，逐项结构化且不改写字段
+2026-11-13T17:12:11.5932362Z ok 72 - 候选解析：内核形态通过，逐项结构化且不改写字段
+2026-11-13T17:12:11.5933468Z   ---
+2026-11-13T17:12:11.5933984Z   duration_ms: 1.571775
+2026-11-13T17:12:11.5934510Z   ...
+2026-11-13T17:12:11.5935155Z # Subtest: 候选解析：畸形返回逐项显式报错，不静默过滤成更小候选集
+2026-11-13T17:12:11.5935842Z ok 73 - 候选解析：畸形返回逐项显式报错，不静默过滤成更小候选集
+2026-11-13T17:12:11.5936355Z   ---
+2026-11-13T17:12:11.5936804Z   duration_ms: 0.652621
+2026-11-13T17:12:11.5937252Z   ...
+2026-11-13T17:12:11.5937874Z # Subtest: 选将返回解析：与请求不一致即报错（错座位/错名字不算成功）
+2026-11-13T17:12:11.5938565Z ok 74 - 选将返回解析：与请求不一致即报错（错座位/错名字不算成功）
+2026-11-13T17:12:11.5939095Z   ---
+2026-11-13T17:12:11.5939534Z   duration_ms: 0.516861
+2026-11-13T17:12:11.5940004Z   ...
+2026-11-13T17:12:11.5940791Z # Subtest: 旧 wasm 产物缺导出：显式报错 + build:native，不静默降级
+2026-11-13T17:12:11.5941610Z ok 75 - 旧 wasm 产物缺导出：显式报错 + build:native，不静默降级
+2026-11-13T17:12:11.5942162Z   ---
+2026-11-13T17:12:11.5942593Z   duration_ms: 0.730776
+2026-11-13T17:12:11.5943050Z   ...
+2026-11-13T17:12:11.5943666Z # Subtest: 选将失败：原始错误文本保留，且不改缓存（状态未变）
+2026-11-13T17:12:11.5944322Z ok 76 - 选将失败：原始错误文本保留，且不改缓存（状态未变）
+2026-11-13T17:12:11.5944857Z   ---
+2026-11-13T17:12:11.5945277Z   duration_ms: 1.265593
+2026-11-13T17:12:11.5945761Z   ...
+2026-11-13T17:12:11.5946372Z # Subtest: 选将成功：技能集可见变化，且 revision 不变时缓存必须失效
+2026-11-13T17:12:11.5947093Z ok 77 - 选将成功：技能集可见变化，且 revision 不变时缓存必须失效
+2026-11-13T17:12:11.5947648Z   ---
+2026-11-13T17:12:11.5948080Z   duration_ms: 0.761622
+2026-11-13T17:12:11.5948541Z   ...
+2026-11-13T17:12:11.5949160Z # Subtest: 选将已生效但返回畸形：报错同时保持缓存失效（不放旧候选回界面）
+2026-11-13T17:12:11.5949881Z ok 78 - 选将已生效但返回畸形：报错同时保持缓存失效（不放旧候选回界面）
+2026-11-13T17:12:11.5950393Z   ---
+2026-11-13T17:12:11.5950964Z   duration_ms: 0.588828
+2026-11-13T17:12:11.5951432Z   ...
+2026-11-13T17:12:11.5952034Z # Subtest: 候选面逐项来自内核：适配层不裁剪、不排序、不补默认将
+2026-11-13T17:12:11.5952703Z ok 79 - 候选面逐项来自内核：适配层不裁剪、不排序、不补默认将
+2026-11-13T17:12:11.5953214Z   ---
+2026-11-13T17:12:11.5953646Z   duration_ms: 0.356235
+2026-11-13T17:12:11.5954121Z   ...
+2026-11-13T17:12:11.5955083Z # Subtest: 真实 WASM：候选来自内核目录，且逐项通过适配层结构校验
+2026-11-13T17:12:11.5955823Z ok 80 - 真实 WASM：候选来自内核目录，且逐项通过适配层结构校验
+2026-11-13T17:12:11.5956384Z   ---
+2026-11-13T17:12:11.5956817Z   duration_ms: 1999.696522
+2026-11-13T17:12:11.5957257Z   ...
+2026-11-13T17:12:11.5957866Z # Subtest: 真实 WASM：装配不改 revision，状态变化只体现在 state_hash
+2026-11-13T17:12:11.5958590Z ok 81 - 真实 WASM：装配不改 revision，状态变化只体现在 state_hash
+2026-11-13T17:12:11.5959102Z   ---
+2026-11-13T17:12:11.5959522Z   duration_ms: 25.700013
+2026-11-13T17:12:11.5959987Z   ...
+2026-11-13T17:12:11.5960518Z # Subtest: 真实 WASM：未知武将与越界座位显式报错，且不改状态
+2026-11-13T17:12:11.5961335Z ok 82 - 真实 WASM：未知武将与越界座位显式报错，且不改状态
+2026-11-13T17:12:11.5961802Z   ---
+2026-11-13T17:12:11.5962190Z   duration_ms: 36.782672
+2026-11-13T17:12:11.5962625Z   ...
+2026-11-13T17:12:11.5963145Z # Subtest: 真实 WASM：选将后权威候选重查（缓存不再命中）
+2026-11-13T17:12:11.5963742Z ok 83 - 真实 WASM：选将后权威候选重查（缓存不再命中）
+2026-11-13T17:12:11.5964211Z   ---
+2026-11-13T17:12:11.5964600Z   duration_ms: 46.643983
+2026-11-13T17:12:11.5965051Z   ...
+2026-11-13T17:12:11.6513351Z # Subtest: 候选逐项等于内核返回：不按 hand.slice(0,8) 拼接
+2026-11-13T17:12:11.6515180Z ok 84 - 候选逐项等于内核返回：不按 hand.slice(0,8) 拼接
+2026-11-13T17:12:11.6515785Z   ---
+2026-11-13T17:12:11.6516211Z   duration_ms: 13.156143
+2026-11-13T17:12:11.6516655Z   ...
+2026-11-13T17:12:11.6517217Z # Subtest: 无合成：内核不给 EndPhase/应答候选就不出现
+2026-11-13T17:12:11.6517861Z ok 85 - 无合成：内核不给 EndPhase/应答候选就不出现
+2026-11-13T17:12:11.6518350Z   ---
+2026-11-13T17:12:11.6518754Z   duration_ms: 3.093375
+2026-11-13T17:12:11.6519185Z   ...
+2026-11-13T17:12:11.6519728Z # Subtest: 查询按 (handle, revision) 记忆化
+2026-11-13T17:12:11.6520376Z ok 86 - 查询按 (handle, revision) 记忆化
+2026-11-13T17:12:11.6521333Z   ---
+2026-11-13T17:12:11.6521747Z   duration_ms: 0.906405
+2026-11-13T17:12:11.6522179Z   ...
+2026-11-13T17:12:11.6522790Z # Subtest: 旧 wasm 产物缺导出／畸形返回 → 显式报错，不回落拼接
+2026-11-13T17:12:11.6523470Z ok 87 - 旧 wasm 产物缺导出／畸形返回 → 显式报错，不回落拼接
+2026-11-13T17:12:11.6523979Z   ---
+2026-11-13T17:12:11.6524387Z   duration_ms: 2.515123
+2026-11-13T17:12:11.6524849Z   ...
+2026-11-13T17:12:11.6525487Z # Subtest: 内核候选逐项可提交：命令面覆盖每种候选，伪造动作的拒绝原因可见
+2026-11-13T17:12:11.6526177Z ok 88 - 内核候选逐项可提交：命令面覆盖每种候选，伪造动作的拒绝原因可见
+2026-11-13T17:12:11.6526666Z   ---
+2026-11-13T17:12:11.6527057Z   duration_ms: 8.701503
+2026-11-13T17:12:11.6527498Z   ...
+2026-11-13T17:12:11.6528299Z # Subtest: all discoverable packages install actual versioned data; active set reaches the match
+2026-11-13T17:12:11.6529441Z ok 89 - all discoverable packages install actual versioned data; active set reaches the match
+2026-11-13T17:12:11.6530179Z   ---
+2026-11-13T17:12:11.6530736Z   duration_ms: 105.326973
+2026-11-13T17:12:11.6531277Z   ...
+2026-11-13T17:12:11.6532155Z # Subtest: same-version installation/upgrade preserves installed bytes and refuses invented versions
+2026-11-13T17:12:11.6533400Z ok 90 - same-version installation/upgrade preserves installed bytes and refuses invented versions
+2026-11-13T17:12:11.6534214Z   ---
+2026-11-13T17:12:11.6534620Z   duration_ms: 3.193692
+2026-11-13T17:12:11.6535373Z   ...
+2026-11-13T17:12:11.6535992Z # Subtest: all lifecycle content mutations are blocked during a match
+2026-11-13T17:12:11.6536859Z ok 91 - all lifecycle content mutations are blocked during a match
+2026-11-13T17:12:11.6537458Z   ---
+2026-11-13T17:12:11.6537865Z   duration_ms: 1.138677
+2026-11-13T17:12:11.6538286Z   ...
+2026-11-13T17:12:11.6539009Z # Subtest: save retains original package copy across disable, uninstall and later saves
+2026-11-13T17:12:11.6540044Z ok 92 - save retains original package copy across disable, uninstall and later saves
+2026-11-13T17:12:11.6540983Z   ---
+2026-11-13T17:12:11.6541380Z   duration_ms: 1.031889
+2026-11-13T17:12:11.6541820Z   ...
+2026-11-13T17:12:11.6542513Z # Subtest: revocation rejects a saved package even when its original bytes remain
+2026-11-13T17:12:11.6543460Z ok 93 - revocation rejects a saved package even when its original bytes remain
+2026-11-13T17:12:11.6544109Z   ---
+2026-11-13T17:12:11.6544491Z   duration_ms: 0.854848
+2026-11-13T17:12:11.6544909Z   ...
+2026-11-13T17:12:11.6545662Z # Subtest: missing installed payload, dangling lock and duplicate lock fail without fallback
+2026-11-13T17:12:11.6546947Z ok 94 - missing installed payload, dangling lock and duplicate lock fail without fallback
+2026-11-13T17:12:11.6547654Z   ---
+2026-11-13T17:12:11.6548822Z   duration_ms: 0.562538
+2026-11-13T17:12:11.6549399Z   ...
+2026-11-13T17:12:11.6550058Z # Subtest: legacy metadata-only installs are repaired explicitly by upgrade
+2026-11-13T17:12:11.6551264Z ok 95 - legacy metadata-only installs are repaired explicitly by upgrade
+2026-11-13T17:12:11.6551886Z   ---
+2026-11-13T17:12:11.6552267Z   duration_ms: 0.740661
+2026-11-13T17:12:11.6552692Z   ...
+2026-11-13T17:12:11.6553439Z # Subtest: changed version, fingerprint, missing package and malformed payload reject restore
+2026-11-13T17:12:11.6554553Z ok 96 - changed version, fingerprint, missing package and malformed payload reject restore
+2026-11-13T17:12:11.6555255Z   ---
+2026-11-13T17:12:11.6555645Z   duration_ms: 0.963999
+2026-11-13T17:12:11.6556072Z   ...
+2026-11-13T17:12:11.6556654Z # Subtest: old standard saves without packages remain compatible
+2026-11-13T17:12:11.6557561Z ok 97 - old standard saves without packages remain compatible
+2026-11-13T17:12:11.6558167Z   ---
+2026-11-13T17:12:11.6558554Z   duration_ms: 0.296807
+2026-11-13T17:12:11.6558968Z   ...
+2026-11-13T17:12:11.6559664Z # Subtest: same-version logic fingerprint conflict rejects installation atomically
+2026-11-13T17:12:11.6560751Z ok 98 - same-version logic fingerprint conflict rejects installation atomically
+2026-11-13T17:12:11.6561424Z   ---
+2026-11-13T17:12:11.6561832Z   duration_ms: 0.996127
+2026-11-13T17:12:11.6562256Z   ...
+2026-11-13T17:12:11.6562925Z # Subtest: same-version logic fingerprint conflict rejects upgrade atomically
+2026-11-13T17:12:11.6563845Z ok 99 - same-version logic fingerprint conflict rejects upgrade atomically
+2026-11-13T17:12:11.6564481Z   ---
+2026-11-13T17:12:11.6564851Z   duration_ms: 0.940264
+2026-11-13T17:12:11.6565266Z   ...
+2026-11-13T17:12:11.6565869Z # Subtest: same-version asset content conflict rejects installation atomically
+2026-11-13T17:12:11.6567522Z ok 100 - same-version asset content conflict rejects installation atomically
+2026-11-13T17:12:11.6568242Z   ---
+2026-11-13T17:12:11.6568592Z   duration_ms: 1.133769
+2026-11-13T17:12:11.6568957Z   ...
+2026-11-13T17:12:11.6569511Z # Subtest: same-version asset content conflict rejects upgrade atomically
+2026-11-13T17:12:11.6570489Z ok 101 - same-version asset content conflict rejects upgrade atomically
+2026-11-13T17:12:11.6571239Z   ---
+2026-11-13T17:12:11.6571610Z   duration_ms: 1.040542
+2026-11-13T17:12:11.6572008Z   ...
+2026-11-13T17:12:11.6572661Z # Subtest: same-version copies tolerate JSON formatting and object key order
+2026-11-13T17:12:11.6573551Z ok 102 - same-version copies tolerate JSON formatting and object key order
+2026-11-13T17:12:11.6574173Z   ---
+2026-11-13T17:12:11.6574563Z   duration_ms: 2.2955
+2026-11-13T17:12:11.6574969Z   ...
+2026-11-13T17:12:11.6575813Z # Subtest: unsafe identity fields cannot enter the browser content lock
+2026-11-13T17:12:11.6576681Z ok 103 - unsafe identity fields cannot enter the browser content lock
+2026-11-13T17:12:11.6577247Z   ---
+2026-11-13T17:12:11.6577651Z   duration_ms: 1.08017
+2026-11-13T17:12:11.6578055Z   ...
+2026-11-13T17:12:11.6578815Z # Subtest: package dependencies are checked for match start and frozen save restore
+2026-11-13T17:12:11.6579819Z ok 104 - package dependencies are checked for match start and frozen save restore
+2026-11-13T17:12:11.6580469Z   ---
+2026-11-13T17:12:11.6580977Z   duration_ms: 3.445304
+2026-11-13T17:12:11.6581348Z   ...
+2026-11-13T17:12:11.6582139Z # Subtest: R05 v4: bundledFrozenPackage provides raw package_json and declared assets for all 15 catalog packages
+2026-11-13T17:12:11.6583382Z ok 105 - R05 v4: bundledFrozenPackage provides raw package_json and declared assets for all 15 catalog packages
+2026-11-13T17:12:11.6584184Z   ---
+2026-11-13T17:12:11.6584591Z   duration_ms: 4.78791
+2026-11-13T17:12:11.6585103Z   ...
+2026-11-13T17:12:11.6586184Z # Subtest: R05 v4: selectFrozenPackagesForMatch rejects legacy records without nativeFrozenVersions and import preserves raw text
+2026-11-13T17:12:11.6588121Z ok 106 - R05 v4: selectFrozenPackagesForMatch rejects legacy records without nativeFrozenVersions and import preserves raw text
+2026-11-13T17:12:11.6589103Z   ---
+2026-11-13T17:12:11.6589517Z   duration_ms: 1.822053
+2026-11-13T17:12:11.6589940Z   ...
+2026-11-13T17:12:11.6591034Z # Subtest: R05 v4 §4: restoreLockedNativeMatchContent enforces the exact envelope policy table
+2026-11-13T17:12:11.6592264Z ok 107 - R05 v4 §4: restoreLockedNativeMatchContent enforces the exact envelope policy table
+2026-11-13T17:12:11.6592981Z   ---
+2026-11-13T17:12:11.6593359Z   duration_ms: 0.557762
+2026-11-13T17:12:11.6593788Z   ...
+2026-11-13T17:12:13.0462170Z # Subtest: fixtures: v2 shares identity with v1 but has a new version, bytecode and fingerprint
+2026-11-13T17:12:13.0541541Z ok 108 - fixtures: v2 shares identity with v1 but has a new version, bytecode and fingerprint
+2026-11-13T17:12:13.0626010Z   ---
+2026-11-13T17:12:13.0672844Z   duration_ms: 1.653685
+2026-11-13T17:12:13.0701835Z   ...
+2026-11-13T17:12:13.0901872Z # Subtest: formal import installs a VM package with its modules and reaches the match
+2026-11-13T17:12:13.0903210Z ok 109 - formal import installs a VM package with its modules and reaches the match
+2026-11-13T17:12:13.0931387Z   ---
+2026-11-13T17:12:13.0961167Z   duration_ms: 4.921366
+2026-11-13T17:12:13.0991071Z   ...
+2026-11-13T17:12:13.0991901Z # Subtest: import rejects malformed packages without touching installed content
+2026-11-13T17:12:13.1021474Z ok 110 - import rejects malformed packages without touching installed content
+2026-11-13T17:12:13.1047953Z   ---
+2026-11-13T17:12:13.1048481Z   duration_ms: 2.807784
+2026-11-13T17:12:13.1048936Z   ...
+2026-11-13T17:12:13.1049653Z # Subtest: import upgrades to a new version, keeps the old copy, and rolls back
+2026-11-13T17:12:13.1050818Z ok 111 - import upgrades to a new version, keeps the old copy, and rolls back
+2026-11-13T17:12:13.1051510Z   ---
+2026-11-13T17:12:13.1051910Z   duration_ms: 1.420892
+2026-11-13T17:12:13.1052337Z   ...
+2026-11-13T17:12:13.1053160Z # Subtest: disable, uninstall and revoke affect new matches and saved matches as the contract requires
+2026-11-13T17:12:13.1054306Z ok 112 - disable, uninstall and revoke affect new matches and saved matches as the contract requires
+2026-11-13T17:12:13.1055035Z   ---
+2026-11-13T17:12:13.1055444Z   duration_ms: 1.023647
+2026-11-13T17:12:13.1055890Z   ...
+2026-11-13T17:12:13.1056414Z # Subtest: import is blocked while a match is frozen
+2026-11-13T17:12:13.1057107Z ok 113 - import is blocked while a match is frozen
+2026-11-13T17:12:13.1057643Z   ---
+2026-11-13T17:12:13.1058049Z   duration_ms: 0.438996
+2026-11-13T17:12:13.1058494Z   ...
+2026-11-13T17:12:13.1059180Z # Subtest: catalog packages without VM modules keep their manifest+asset payload
+2026-11-13T17:12:13.1060154Z ok 114 - catalog packages without VM modules keep their manifest+asset payload
+2026-11-13T17:12:13.1061643Z   ---
+2026-11-13T17:12:13.1062063Z   duration_ms: 84.258115
+2026-11-13T17:12:13.1062498Z   ...
+2026-11-13T17:12:13.1063377Z # Subtest: validated import commits only after the deep validator passes and marks the copy unsigned
+2026-11-13T17:12:13.1064530Z ok 115 - validated import commits only after the deep validator passes and marks the copy unsigned
+2026-11-13T17:12:13.1065292Z   ---
+2026-11-13T17:12:13.1065696Z   duration_ms: 0.939914
+2026-11-13T17:12:13.1066126Z   ...
+2026-11-13T17:12:13.1066890Z # Subtest: validated import aborts without touching the store when the deep validator rejects
+2026-11-13T17:12:13.1067983Z ok 116 - validated import aborts without touching the store when the deep validator rejects
+2026-11-13T17:12:13.1068705Z   ---
+2026-11-13T17:12:13.1069117Z   duration_ms: 1.054352
+2026-11-13T17:12:13.1070135Z   ...
+2026-11-13T17:12:13.1071185Z # Subtest: validated import never calls the deep validator when the structural layer or preconditions reject
+2026-11-13T17:12:13.1072517Z ok 117 - validated import never calls the deep validator when the structural layer or preconditions reject
+2026-11-13T17:12:13.1073645Z   ---
+2026-11-13T17:12:13.1074043Z   duration_ms: 2.504037
+2026-11-13T17:12:13.1074476Z   ...
+2026-11-13T17:12:13.1075350Z # Subtest: validated import re-checks preconditions at commit time (store may change during async validation)
+2026-11-13T17:12:13.1076621Z ok 118 - validated import re-checks preconditions at commit time (store may change during async validation)
+2026-11-13T17:12:13.1077417Z   ---
+2026-11-13T17:12:13.1077810Z   duration_ms: 0.423434
+2026-11-13T17:12:13.1078232Z   ...
+2026-11-13T17:12:13.1079139Z # Subtest: schema5 SDK preserves defaults and rejects downgrade presence before local-store mutation
+2026-11-13T17:12:13.1080329Z ok 119 - schema5 SDK preserves defaults and rejects downgrade presence before local-store mutation
+2026-11-13T17:12:13.1081256Z   ---
+2026-11-13T17:12:13.1081675Z   duration_ms: 1.182692
+2026-11-13T17:12:13.1082098Z   ...
+2026-11-13T17:12:13.1082902Z # Subtest: schema5 SDK native binding has one authority and defers real factory capabilities to Rust
+2026-11-13T17:12:13.1084128Z ok 120 - schema5 SDK native binding has one authority and defers real factory capabilities to Rust
+2026-11-13T17:12:13.1084885Z   ---
+2026-11-13T17:12:13.1085308Z   duration_ms: 0.348092
+2026-11-13T17:12:13.1085746Z   ...
+2026-11-13T17:12:13.1086447Z # Subtest: repair: omitted modules cannot discard declarations in validated import
+2026-11-13T17:12:13.1087447Z ok 121 - repair: omitted modules cannot discard declarations in validated import
+2026-11-13T17:12:13.1088123Z   ---
+2026-11-13T17:12:13.1088513Z   duration_ms: 0.735874
+2026-11-13T17:12:13.1088948Z   ...
+2026-11-13T17:12:13.1089637Z # Subtest: repair: validated import delivers original text to native typed reader
+2026-11-13T17:12:13.1090894Z ok 122 - repair: validated import delivers original text to native typed reader
+2026-11-13T17:12:13.1091622Z   ---
+2026-11-13T17:12:13.1092029Z   duration_ms: 0.385658
+2026-11-13T17:12:13.1092461Z   ...
+2026-11-13T17:12:13.1093106Z # Subtest: repair: active native and VM executor conflicts reject in SDK
+2026-11-13T17:12:13.1093980Z ok 123 - repair: active native and VM executor conflicts reject in SDK
+2026-11-13T17:12:13.1094621Z   ---
+2026-11-13T17:12:13.1095009Z   duration_ms: 0.343225
+2026-11-13T17:12:13.1095431Z   ...
+2026-11-13T17:12:13.1772173Z # Subtest: complete VM-only package survives match preparation and frozen save restoration
+2026-11-13T17:12:13.1788341Z ok 124 - complete VM-only package survives match preparation and frozen save restoration
+2026-11-13T17:12:13.1789023Z   ---
+2026-11-13T17:12:13.1789331Z   duration_ms: 4.824054
+2026-11-13T17:12:13.1789614Z   ...
+2026-11-13T17:12:13.1790186Z # Subtest: VM payload must have an array of modules and does not excuse malformed assets
+2026-11-13T17:12:13.1791198Z ok 125 - VM payload must have an array of modules and does not excuse malformed assets
+2026-11-13T17:12:13.1792133Z   ---
+2026-11-13T17:12:13.1792380Z   duration_ms: 0.94407
+2026-11-13T17:12:13.1792676Z   ...
+2026-11-13T17:12:13.3392758Z # Subtest: 座位和人数在进入 WASM 及选将前拒绝整数截断
+2026-11-13T17:12:13.3393843Z ok 126 - 座位和人数在进入 WASM 及选将前拒绝整数截断
+2026-11-13T17:12:13.3421263Z   ---
+2026-11-13T17:12:13.3431473Z   duration_ms: 2.312615
+2026-11-13T17:12:13.3432001Z   ...
+2026-11-13T17:12:13.3432640Z # Subtest: 牌和技能 ID 在进入 WASM 前拒绝整数截断
+2026-11-13T17:12:13.3433303Z ok 127 - 牌和技能 ID 在进入 WASM 前拒绝整数截断
+2026-11-13T17:12:13.3433774Z   ---
+2026-11-13T17:12:13.3434167Z   duration_ms: 0.31259
+2026-11-13T17:12:13.3434606Z   ...
+2026-11-13T17:12:15.0334217Z # Subtest: native SingleWin protocol players 1/4 become local seats 0/3 without mutating protocol data
+2026-11-13T17:12:15.0351106Z ok 128 - native SingleWin protocol players 1/4 become local seats 0/3 without mutating protocol data
+2026-11-13T17:12:15.0351788Z   ---
+2026-11-13T17:12:15.0352174Z   duration_ms: 1.282488
+2026-11-13T17:12:15.0352593Z   ...
+2026-11-13T17:12:15.0353170Z # Subtest: native other outcome shapes and unknown detail pass through unchanged
+2026-11-13T17:12:15.0354424Z ok 129 - native other outcome shapes and unknown detail pass through unchanged
+2026-11-13T17:12:15.0354905Z   ---
+2026-11-13T17:12:15.0355144Z   duration_ms: 0.307032
+2026-11-13T17:12:15.0355421Z   ...
+2026-11-13T17:12:15.0356011Z # Subtest: actual BattleView computed and banner recognize a rebel observer's win and loss
+2026-11-13T17:12:15.0356887Z ok 130 - actual BattleView computed and banner recognize a rebel observer's win and loss
+2026-11-13T17:12:15.0357410Z   ---
+2026-11-13T17:12:15.0357643Z   duration_ms: 5.706022
+2026-11-13T17:12:15.0357911Z   ...
+2026-11-13T17:12:15.0358521Z # Subtest: identity victory follows each observer's own role, including loyalists losing to rebels
+2026-11-13T17:12:15.0359320Z ok 131 - identity victory follows each observer's own role, including loyalists losing to rebels
+2026-11-13T17:12:15.0359669Z   ---
+2026-11-13T17:12:15.0359852Z   duration_ms: 1.109063
+2026-11-13T17:12:15.0360037Z   ...
+2026-11-13T17:12:15.0360425Z # Subtest: SingleWin zero and normalized last seat render a banner with the matching observer result
+2026-11-13T17:12:15.0361390Z ok 132 - SingleWin zero and normalized last seat render a banner with the matching observer result
+2026-11-13T17:12:15.0361945Z   ---
+2026-11-13T17:12:15.0362164Z   duration_ms: 1.219906
+2026-11-13T17:12:15.0362412Z   ...
+2026-11-13T17:12:15.0362952Z # Subtest: group, unknown, unmodeled, draw, abort and hidden identity render neutral banners
+2026-11-13T17:12:15.0363787Z ok 133 - group, unknown, unmodeled, draw, abort and hidden identity render neutral banners
+2026-11-13T17:12:15.0364175Z   ---
+2026-11-13T17:12:15.0364340Z   duration_ms: 1.978253
+2026-11-13T17:12:15.0364517Z   ...
+2026-11-13T17:12:15.0364937Z # Subtest: view outcome is authoritative; both MatchEnded event shapes use the same fallback presentation
+2026-11-13T17:12:15.0365586Z ok 134 - view outcome is authoritative; both MatchEnded event shapes use the same fallback presentation
+2026-11-13T17:12:15.0365963Z   ---
+2026-11-13T17:12:15.0366135Z   duration_ms: 0.484904
+2026-11-13T17:12:15.0366321Z   ...
+2026-11-13T17:12:15.0366583Z # Subtest: MatchEnded timeline uses shared outcome wording
+2026-11-13T17:12:15.0366936Z ok 135 - MatchEnded timeline uses shared outcome wording
+2026-11-13T17:12:15.0367183Z   ---
+2026-11-13T17:12:15.0367352Z   duration_ms: 0.608746
+2026-11-13T17:12:15.0367535Z   ...
+2026-11-13T17:12:15.0627394Z # Subtest: 原生零号座位的回合与结束阶段可见
+2026-11-13T17:12:15.0628233Z ok 136 - 原生零号座位的回合与结束阶段可见
+2026-11-13T17:12:15.0628911Z   ---
+2026-11-13T17:12:15.0629336Z   duration_ms: 152.549113
+2026-11-13T17:12:15.0629754Z   ...
+2026-11-13T17:12:15.0630199Z # Subtest: 非零座位与准备阶段保持可见
+2026-11-13T17:12:15.0630826Z ok 137 - 非零座位与准备阶段保持可见
+2026-11-13T17:12:15.0631228Z   ---
+2026-11-13T17:12:15.0631594Z   duration_ms: 73.708082
+2026-11-13T17:12:15.0632012Z   ...
+2026-11-13T17:12:15.0632562Z # Subtest: 旧线无当前玩家的零哨兵仍使用事件回退或不显示
+2026-11-13T17:12:15.0633512Z ok 138 - 旧线无当前玩家的零哨兵仍使用事件回退或不显示
+2026-11-13T17:12:15.0633950Z   ---
+2026-11-13T17:12:15.0634340Z   duration_ms: 40.355407
+2026-11-13T17:12:15.0634757Z   ...
+2026-11-13T17:12:15.4918620Z # Subtest: 本地命令将响应式数值数组原样交给可克隆的 Worker 消息
+2026-11-13T17:12:15.4941288Z ok 139 - 本地命令将响应式数值数组原样交给可克隆的 Worker 消息
+2026-11-13T17:12:15.4944056Z   ---
+2026-11-13T17:12:15.4944478Z   duration_ms: 277.207281
+2026-11-13T17:12:15.4945133Z   ...
+2026-11-13T17:12:15.4945748Z # Subtest: postMessage 同步失败释放请求、性能记录和 SAB 唤醒，随后可重试
+2026-11-13T17:12:15.4946504Z ok 140 - postMessage 同步失败释放请求、性能记录和 SAB 唤醒，随后可重试
+2026-11-13T17:12:15.4991423Z   ---
+2026-11-13T17:12:15.4991855Z   duration_ms: 91.708387
+2026-11-13T17:12:15.4992121Z   ...
+2026-11-13T17:12:15.4992559Z # Subtest: 其他请求在途时发送失败不提前结束 SAB 唤醒
+2026-11-13T17:12:15.4992958Z ok 141 - 其他请求在途时发送失败不提前结束 SAB 唤醒
+2026-11-13T17:12:15.4993235Z   ---
+2026-11-13T17:12:15.4993445Z   duration_ms: 61.979092
+2026-11-13T17:12:15.4993697Z   ...
+2026-11-13T17:12:15.4994013Z # Subtest: 性能探针丢弃未发送请求，保留成功请求
+2026-11-13T17:12:15.5020456Z ok 142 - 性能探针丢弃未发送请求，保留成功请求
+2026-11-13T17:12:15.5041160Z   ---
+2026-11-13T17:12:15.5071108Z   duration_ms: 7.433195
+2026-11-13T17:12:15.5071683Z   ...
+2026-11-13T17:12:19.6782064Z # Subtest: 读入较少座位时，投影视图失败不替换当前对局
+2026-11-13T17:12:19.6797850Z ok 143 - 读入较少座位时，投影视图失败不替换当前对局
+2026-11-13T17:12:19.6821078Z   ---
+2026-11-13T17:12:19.6851053Z   duration_ms: 2351.513682
+2026-11-13T17:12:19.6880959Z   ...
+2026-11-13T17:12:19.6911303Z # Subtest: 投影故障保留原局、缓存和事件游标，并释放候选引擎
+2026-11-13T17:12:19.6971304Z ok 144 - 投影故障保留原局、缓存和事件游标，并释放候选引擎
+2026-11-13T17:12:19.7000928Z   ---
+2026-11-13T17:12:19.7031070Z   duration_ms: 175.767396
+2026-11-13T17:12:19.7041104Z   ...
+2026-11-13T17:12:19.7081501Z # Subtest: 正式恢复失败时仍保留原局和游标
+2026-11-13T17:12:19.7101142Z ok 145 - 正式恢复失败时仍保留原局和游标
+2026-11-13T17:12:19.7101514Z   ---
+2026-11-13T17:12:19.7121245Z   duration_ms: 170.589156
+2026-11-13T17:12:19.7121635Z   ...
+2026-11-13T17:12:19.7201274Z # Subtest: 成功恢复保留原引擎引用并使权威动作缓存失效
+2026-11-13T17:12:19.7231154Z ok 146 - 成功恢复保留原引擎引用并使权威动作缓存失效
+2026-11-13T17:12:19.7260932Z   ---
+2026-11-13T17:12:19.7291099Z   duration_ms: 260.622721
+2026-11-13T17:12:19.7320952Z   ...
+2026-11-13T17:12:19.7431152Z # Subtest: 新局视图失败时保留原局，合法新局仍可替换
+2026-11-13T17:12:19.7461846Z ok 147 - 新局视图失败时保留原局，合法新局仍可替换
+2026-11-13T17:12:19.7462418Z   ---
+2026-11-13T17:12:19.7462788Z   duration_ms: 2445.596721
+2026-11-13T17:12:19.7463209Z   ...
+2026-11-13T17:12:19.7463689Z # Subtest: 其他新局信封错误也保留原局并释放新引擎
+2026-11-13T17:12:19.7464143Z ok 148 - 其他新局信封错误也保留原局并释放新引擎
+2026-11-13T17:12:19.7464500Z   ---
+2026-11-13T17:12:19.7464828Z   duration_ms: 67.034956
+2026-11-13T17:12:19.7465192Z   ...
+2026-11-13T17:12:25.3016863Z # Subtest: Worker 错误拒绝所有等待请求、保留句柄并允许核对和新请求
+2026-11-13T17:12:25.3054951Z ok 149 - Worker 错误拒绝所有等待请求、保留句柄并允许核对和新请求
+2026-11-13T17:12:25.3122036Z   ---
+2026-11-13T17:12:25.3161060Z   duration_ms: 192.046795
+2026-11-13T17:12:25.3213982Z   ...
+2026-11-13T17:12:25.3266297Z # Subtest: 回包无法解码时等待请求失败，原 Worker 保留
+2026-11-13T17:12:25.3271361Z ok 150 - 回包无法解码时等待请求失败，原 Worker 保留
+2026-11-13T17:12:25.3351306Z   ---
+2026-11-13T17:12:25.3351973Z   duration_ms: 90.670198
+2026-11-13T17:12:25.3423116Z   ...
+2026-11-13T17:12:25.3451496Z # Subtest: 初始化错误有结果，后续可创建新 Worker
+2026-11-13T17:12:25.3473901Z ok 151 - 初始化错误有结果，后续可创建新 Worker
+2026-11-13T17:12:25.3474537Z   ---
+2026-11-13T17:12:25.3474941Z   duration_ms: 42.611704
+2026-11-13T17:12:25.3475342Z   ...
+2026-11-13T17:12:25.3475876Z # Subtest: 释放时等待请求不悬挂，旧 Worker 错误不影响新连接
+2026-11-13T17:12:25.3476488Z ok 152 - 释放时等待请求不悬挂，旧 Worker 错误不影响新连接
+2026-11-13T17:12:25.3476943Z   ---
+2026-11-13T17:12:25.3477320Z   duration_ms: 50.935771
+2026-11-13T17:12:25.3477740Z   ...
+2026-11-13T17:12:25.3478259Z # Subtest: 初始化被释放后立即重连，旧连接的失败不能终止新 Worker
+2026-11-13T17:12:25.3478864Z ok 153 - 初始化被释放后立即重连，旧连接的失败不能终止新 Worker
+2026-11-13T17:12:25.3479322Z   ---
+2026-11-13T17:12:25.3479698Z   duration_ms: 48.956722
+2026-11-13T17:12:25.3480103Z   ...
+2026-11-13T17:12:25.3480792Z # Subtest: 空闲 Worker 的错误或释放不会结束其他请求的共享等待
+2026-11-13T17:12:25.3481414Z ok 154 - 空闲 Worker 的错误或释放不会结束其他请求的共享等待
+2026-11-13T17:12:25.3481908Z   ---
+2026-11-13T17:12:25.3482287Z   duration_ms: 76.641447
+2026-11-13T17:12:25.3483115Z   ...
+2026-11-13T17:12:25.3484012Z # Subtest: desktop IPC uses the production client's sequence, pending, errors and disposal without Worker fallback
+2026-11-13T17:12:25.3485335Z ok 155 - desktop IPC uses the production client's sequence, pending, errors and disposal without Worker fallback
+2026-11-13T17:12:25.3486118Z   ---
+2026-11-13T17:12:25.3486500Z   duration_ms: 122.975817
+2026-11-13T17:12:25.3486916Z   ...
+2026-11-13T17:12:25.3487972Z # Subtest: desktop burst keeps production EngineClient pending and unresolved promises at eight, rejects before IPC, and resumes without retry
+2026-11-13T17:12:25.3489568Z ok 156 - desktop burst keeps production EngineClient pending and unresolved promises at eight, rejects before IPC, and resumes without retry
+2026-11-13T17:12:25.3490491Z   ---
+2026-11-13T17:12:25.3551146Z   duration_ms: 105.018326
+2026-11-13T17:12:25.3562634Z   ...
+2026-11-13T17:12:25.3621844Z # Subtest: disposing eight accepted desktop requests retires the old resource and reconnects independently
+2026-11-13T17:12:25.3665398Z ok 157 - disposing eight accepted desktop requests retires the old resource and reconnects independently
+2026-11-13T17:12:25.3691122Z   ---
+2026-11-13T17:12:25.3691494Z   duration_ms: 40.874506
+2026-11-13T17:12:25.3714004Z   ...
+2026-11-13T17:12:25.3714734Z # Subtest: Worker bad present batch_unknown preserves pending until dispose
+2026-11-13T17:12:25.3715949Z ok 158 - Worker bad present batch_unknown preserves pending until dispose
+2026-11-13T17:12:25.3716548Z   ---
+2026-11-13T17:12:25.3716940Z   duration_ms: 65.797374
+2026-11-13T17:12:25.3717376Z   ...
+2026-11-13T17:12:25.3718045Z # Subtest: Worker bad present null_revision preserves pending until dispose
+2026-11-13T17:12:25.3718965Z ok 159 - Worker bad present null_revision preserves pending until dispose
+2026-11-13T17:12:25.3719569Z   ---
+2026-11-13T17:12:25.3719927Z   duration_ms: 46.240297
+2026-11-13T17:12:25.3720972Z   ...
+2026-11-13T17:12:25.3721531Z # Subtest: Worker bad present unsafe_revision preserves pending until dispose
+2026-11-13T17:12:25.3722394Z ok 160 - Worker bad present unsafe_revision preserves pending until dispose
+2026-11-13T17:12:25.3722909Z   ---
+2026-11-13T17:12:25.3723184Z   duration_ms: 34.217273
+2026-11-13T17:12:25.3723452Z   ...
+2026-11-13T17:12:25.3723971Z # Subtest: Worker bad present mixed_revision preserves pending until dispose
+2026-11-13T17:12:25.3724763Z ok 161 - Worker bad present mixed_revision preserves pending until dispose
+2026-11-13T17:12:25.3725280Z   ---
+2026-11-13T17:12:25.3725518Z   duration_ms: 21.975028
+2026-11-13T17:12:25.3725836Z   ...
+2026-11-13T17:12:25.3726381Z # Subtest: Worker bad present string_revision preserves pending until dispose
+2026-11-13T17:12:25.3726936Z ok 162 - Worker bad present string_revision preserves pending until dispose
+2026-11-13T17:12:25.3727248Z   ---
+2026-11-13T17:12:25.3727461Z   duration_ms: 21.139136
+2026-11-13T17:12:25.3727642Z   ...
+2026-11-13T17:12:25.3728079Z # Subtest: Worker bad present bad_status preserves pending until dispose
+2026-11-13T17:12:25.3728520Z ok 163 - Worker bad present bad_status preserves pending until dispose
+2026-11-13T17:12:25.3728797Z   ---
+2026-11-13T17:12:25.3728960Z   duration_ms: 76.796239
+2026-11-13T17:12:25.3729183Z   ...
+2026-11-13T17:12:25.3729523Z # Subtest: Worker bad present overflow_nonempty preserves pending until dispose
+2026-11-13T17:12:25.3730027Z ok 164 - Worker bad present overflow_nonempty preserves pending until dispose
+2026-11-13T17:12:25.3730345Z   ---
+2026-11-13T17:12:25.3730534Z   duration_ms: 30.25566
+2026-11-13T17:12:25.3730963Z   ...
+2026-11-13T17:12:25.3731441Z # Subtest: Worker bad present invalid_domain preserves pending until dispose
+2026-11-13T17:12:25.3732219Z ok 165 - Worker bad present invalid_domain preserves pending until dispose
+2026-11-13T17:12:25.3732700Z   ---
+2026-11-13T17:12:25.3732938Z   duration_ms: 42.402907
+2026-11-13T17:12:25.3733215Z   ...
+2026-11-13T17:12:25.3733699Z # Subtest: Worker bad present invalid_reason preserves pending until dispose
+2026-11-13T17:12:25.3734423Z ok 166 - Worker bad present invalid_reason preserves pending until dispose
+2026-11-13T17:12:25.3735186Z   ---
+2026-11-13T17:12:25.3735529Z   duration_ms: 27.817771
+2026-11-13T17:12:25.3735803Z   ...
+2026-11-13T17:12:25.3736276Z # Subtest: Worker bad present scope_unknown preserves pending until dispose
+2026-11-13T17:12:25.3736949Z ok 167 - Worker bad present scope_unknown preserves pending until dispose
+2026-11-13T17:12:25.3737362Z   ---
+2026-11-13T17:12:25.3737581Z   duration_ms: 32.09568
+2026-11-13T17:12:25.3737833Z   ...
+2026-11-13T17:12:25.3738289Z # Subtest: Worker bad present duplicate_scope preserves pending until dispose
+2026-11-13T17:12:25.3738944Z ok 168 - Worker bad present duplicate_scope preserves pending until dispose
+2026-11-13T17:12:25.3739368Z   ---
+2026-11-13T17:12:25.3739576Z   duration_ms: 23.098241
+2026-11-13T17:12:25.3739814Z   ...
+2026-11-13T17:12:25.3740272Z # Subtest: Worker bad present duplicate_ordinal preserves pending until dispose
+2026-11-13T17:12:25.3741153Z ok 169 - Worker bad present duplicate_ordinal preserves pending until dispose
+2026-11-13T17:12:25.3741575Z   ---
+2026-11-13T17:12:25.3741782Z   duration_ms: 55.530311
+2026-11-13T17:12:25.3742025Z   ...
+2026-11-13T17:12:25.3742447Z # Subtest: Worker bad present unknown_event preserves pending until dispose
+2026-11-13T17:12:25.3743076Z ok 170 - Worker bad present unknown_event preserves pending until dispose
+2026-11-13T17:12:25.3743478Z   ---
+2026-11-13T17:12:25.3743684Z   duration_ms: 56.843469
+2026-11-13T17:12:25.3743915Z   ...
+2026-11-13T17:12:25.3744334Z # Subtest: Worker bad present event_unknown preserves pending until dispose
+2026-11-13T17:12:25.3744949Z ok 171 - Worker bad present event_unknown preserves pending until dispose
+2026-11-13T17:12:25.3745348Z   ---
+2026-11-13T17:12:25.3745553Z   duration_ms: 59.629763
+2026-11-13T17:12:25.3745785Z   ...
+2026-11-13T17:12:25.3746196Z # Subtest: Worker bad present actor_zero preserves pending until dispose
+2026-11-13T17:12:25.3746991Z ok 172 - Worker bad present actor_zero preserves pending until dispose
+2026-11-13T17:12:25.3747388Z   ---
+2026-11-13T17:12:25.3747595Z   duration_ms: 33.625247
+2026-11-13T17:12:25.3747847Z   ...
+2026-11-13T17:12:25.3748346Z # Subtest: Worker bad present actor_negative preserves pending until dispose
+2026-11-13T17:12:25.3749064Z ok 173 - Worker bad present actor_negative preserves pending until dispose
+2026-11-13T17:12:25.3749589Z   ---
+2026-11-13T17:12:25.3749825Z   duration_ms: 30.800733
+2026-11-13T17:12:25.3750121Z   ...
+2026-11-13T17:12:25.3750814Z # Subtest: Worker bad present actor_fraction preserves pending until dispose
+2026-11-13T17:12:25.3751587Z ok 174 - Worker bad present actor_fraction preserves pending until dispose
+2026-11-13T17:12:25.3752069Z   ---
+2026-11-13T17:12:25.3752329Z   duration_ms: 30.45235
+2026-11-13T17:12:25.3752651Z   ...
+2026-11-13T17:12:25.3753194Z # Subtest: Worker bad present actor_string preserves pending until dispose
+2026-11-13T17:12:25.3754027Z ok 175 - Worker bad present actor_string preserves pending until dispose
+2026-11-13T17:12:25.3754524Z   ---
+2026-11-13T17:12:25.3754819Z   duration_ms: 19.840794
+2026-11-13T17:12:25.3755144Z   ...
+2026-11-13T17:12:25.3755704Z # Subtest: Worker bad present actor_out_of_view preserves pending until dispose
+2026-11-13T17:12:25.3756462Z ok 176 - Worker bad present actor_out_of_view preserves pending until dispose
+2026-11-13T17:12:25.3756974Z   ---
+2026-11-13T17:12:25.3757206Z   duration_ms: 23.481516
+2026-11-13T17:12:25.3757483Z   ...
+2026-11-13T17:12:25.3757949Z # Subtest: Worker bad present actor_u32_over preserves pending until dispose
+2026-11-13T17:12:25.3758657Z ok 177 - Worker bad present actor_u32_over preserves pending until dispose
+2026-11-13T17:12:25.3759167Z   ---
+2026-11-13T17:12:25.3759374Z   duration_ms: 18.732303
+2026-11-13T17:12:25.3759662Z   ...
+2026-11-13T17:12:25.3760126Z # Subtest: Worker bad present actor_null preserves pending until dispose
+2026-11-13T17:12:25.3760949Z ok 178 - Worker bad present actor_null preserves pending until dispose
+2026-11-13T17:12:25.3761434Z   ---
+2026-11-13T17:12:25.3761889Z   duration_ms: 41.938422
+2026-11-13T17:12:25.3762213Z   ...
+2026-11-13T17:12:25.3762754Z # Subtest: Worker bad present duplicate_target preserves pending until dispose
+2026-11-13T17:12:25.3763590Z ok 179 - Worker bad present duplicate_target preserves pending until dispose
+2026-11-13T17:12:25.3764109Z   ---
+2026-11-13T17:12:25.3764393Z   duration_ms: 27.539411
+2026-11-13T17:12:25.3764708Z   ...
+2026-11-13T17:12:25.3765307Z # Subtest: Worker bad present missing_nullable_voice preserves pending until dispose
+2026-11-13T17:12:25.3766197Z ok 180 - Worker bad present missing_nullable_voice preserves pending until dispose
+2026-11-13T17:12:25.3766765Z   ---
+2026-11-13T17:12:25.3767028Z   duration_ms: 30.590093
+2026-11-13T17:12:25.3767355Z   ...
+2026-11-13T17:12:25.3767865Z # Subtest: Worker bad present amount_zero preserves pending until dispose
+2026-11-13T17:12:25.3768616Z ok 181 - Worker bad present amount_zero preserves pending until dispose
+2026-11-13T17:12:25.3769116Z   ---
+2026-11-13T17:12:25.3769334Z   duration_ms: 19.345255
+2026-11-13T17:12:25.3769620Z   ...
+2026-11-13T17:12:25.3770100Z # Subtest: Worker bad present bad_nature preserves pending until dispose
+2026-11-13T17:12:25.3770889Z ok 182 - Worker bad present bad_nature preserves pending until dispose
+2026-11-13T17:12:25.3771284Z   ---
+2026-11-13T17:12:25.3771510Z   duration_ms: 45.467038
+2026-11-13T17:12:25.3771825Z   ...
+2026-11-13T17:12:25.3772339Z # Subtest: Worker bad present bad_effective_kind preserves pending until dispose
+2026-11-13T17:12:25.3773161Z ok 183 - Worker bad present bad_effective_kind preserves pending until dispose
+2026-11-13T17:12:25.3773626Z   ---
+2026-11-13T17:12:25.3773859Z   duration_ms: 25.296778
+2026-11-13T17:12:25.3774138Z   ...
+2026-11-13T17:12:25.3774629Z # Subtest: Worker bad present token_traversal preserves pending until dispose
+2026-11-13T17:12:25.3775339Z ok 184 - Worker bad present token_traversal preserves pending until dispose
+2026-11-13T17:12:25.3775989Z   ---
+2026-11-13T17:12:25.3776246Z   duration_ms: 17.479407
+2026-11-13T17:12:25.3776512Z   ...
+2026-11-13T17:12:25.3776998Z # Subtest: Worker bad present token_controls preserves pending until dispose
+2026-11-13T17:12:25.3777739Z ok 185 - Worker bad present token_controls preserves pending until dispose
+2026-11-13T17:12:25.3778211Z   ---
+2026-11-13T17:12:25.3778469Z   duration_ms: 37.334354
+2026-11-13T17:12:25.3778769Z   ...
+2026-11-13T17:12:25.3779335Z # Subtest: Worker bad present role_local_id_wrong preserves pending until dispose
+2026-11-13T17:12:25.3780151Z ok 186 - Worker bad present role_local_id_wrong preserves pending until dispose
+2026-11-13T17:12:25.3780847Z   ---
+2026-11-13T17:12:25.3781078Z   duration_ms: 21.723437
+2026-11-13T17:12:25.3781379Z   ...
+2026-11-13T17:12:25.3781920Z # Subtest: Worker bad present role_kind_wrong preserves pending until dispose
+2026-11-13T17:12:25.3782753Z ok 187 - Worker bad present role_kind_wrong preserves pending until dispose
+2026-11-13T17:12:25.3783250Z   ---
+2026-11-13T17:12:25.3783504Z   duration_ms: 43.797491
+2026-11-13T17:12:25.3783826Z   ...
+2026-11-13T17:12:25.3784335Z # Subtest: Worker bad present owner_unknown preserves pending until dispose
+2026-11-13T17:12:25.3785113Z ok 188 - Worker bad present owner_unknown preserves pending until dispose
+2026-11-13T17:12:25.3785589Z   ---
+2026-11-13T17:12:25.3785814Z   duration_ms: 36.921405
+2026-11-13T17:12:25.3786083Z   ...
+2026-11-13T17:12:25.3786608Z # Subtest: Worker bad present digest_upper preserves pending until dispose
+2026-11-13T17:12:25.3787379Z ok 189 - Worker bad present digest_upper preserves pending until dispose
+2026-11-13T17:12:25.3787862Z   ---
+2026-11-13T17:12:25.3788142Z   duration_ms: 26.708172
+2026-11-13T17:12:25.3788454Z   ...
+2026-11-13T17:12:25.3788956Z # Subtest: Worker bad present digest_algorithm preserves pending until dispose
+2026-11-13T17:12:25.3789795Z ok 190 - Worker bad present digest_algorithm preserves pending until dispose
+2026-11-13T17:12:25.3790327Z   ---
+2026-11-13T17:12:25.3790563Z   duration_ms: 26.65315
+2026-11-13T17:12:25.3791346Z   ...
+2026-11-13T17:12:25.3791822Z # Subtest: Worker bad present size_zero preserves pending until dispose
+2026-11-13T17:12:25.3792559Z ok 191 - Worker bad present size_zero preserves pending until dispose
+2026-11-13T17:12:25.3793020Z   ---
+2026-11-13T17:12:25.3793282Z   duration_ms: 26.256937
+2026-11-13T17:12:25.3793539Z   ...
+2026-11-13T17:12:25.3794095Z # Subtest: Worker bad present source_kind preserves pending until dispose
+2026-11-13T17:12:25.3794848Z ok 192 - Worker bad present source_kind preserves pending until dispose
+2026-11-13T17:12:25.3795357Z   ---
+2026-11-13T17:12:25.3795613Z   duration_ms: 20.033709
+2026-11-13T17:12:25.3795894Z   ...
+2026-11-13T17:12:25.3796442Z # Subtest: Worker bad present reference_private preserves pending until dispose
+2026-11-13T17:12:25.3797290Z ok 193 - Worker bad present reference_private preserves pending until dispose
+2026-11-13T17:12:25.3797788Z   ---
+2026-11-13T17:12:25.3798061Z   duration_ms: 31.00241
+2026-11-13T17:12:25.3798377Z   ...
+2026-11-13T17:12:25.3798883Z # Subtest: Worker bad present path_escape preserves pending until dispose
+2026-11-13T17:12:25.3799589Z ok 194 - Worker bad present path_escape preserves pending until dispose
+2026-11-13T17:12:25.3800084Z   ---
+2026-11-13T17:12:25.3800327Z   duration_ms: 21.728795
+2026-11-13T17:12:25.3800720Z   ...
+2026-11-13T17:12:25.3801259Z # Subtest: Worker bad present invalid_category preserves pending until dispose
+2026-11-13T17:12:25.3802054Z ok 195 - Worker bad present invalid_category preserves pending until dispose
+2026-11-13T17:12:25.3802556Z   ---
+2026-11-13T17:12:25.3802836Z   duration_ms: 17.328285
+2026-11-13T17:12:25.3803125Z   ...
+2026-11-13T17:12:25.3803633Z # Subtest: Worker bad present empty_assets preserves pending until dispose
+2026-11-13T17:12:25.3804410Z ok 196 - Worker bad present empty_assets preserves pending until dispose
+2026-11-13T17:12:25.3804930Z   ---
+2026-11-13T17:12:25.3805377Z   duration_ms: 22.437588
+2026-11-13T17:12:25.3805676Z   ...
+2026-11-13T17:12:25.3806174Z # Subtest: Worker bad present form_token preserves pending until dispose
+2026-11-13T17:12:25.3806962Z ok 197 - Worker bad present form_token preserves pending until dispose
+2026-11-13T17:12:25.3807438Z   ---
+2026-11-13T17:12:25.3807713Z   duration_ms: 20.274563
+2026-11-13T17:12:25.3807982Z   ...
+2026-11-13T17:12:25.3808483Z # Subtest: Worker bad present owner_tag preserves pending until dispose
+2026-11-13T17:12:25.3809268Z ok 198 - Worker bad present owner_tag preserves pending until dispose
+2026-11-13T17:12:25.3809760Z   ---
+2026-11-13T17:12:25.3810016Z   duration_ms: 22.190976
+2026-11-13T17:12:25.3810316Z   ...
+2026-11-13T17:12:25.3811096Z # Subtest: Worker bad present asset_unknown preserves pending until dispose
+2026-11-13T17:12:25.3811923Z ok 199 - Worker bad present asset_unknown preserves pending until dispose
+2026-11-13T17:12:25.3812550Z   ---
+2026-11-13T17:12:25.3812831Z   duration_ms: 19.611597
+2026-11-13T17:12:25.3813226Z   ...
+2026-11-13T17:12:25.3813852Z # Subtest: Worker bad present role_unknown preserves pending until dispose
+2026-11-13T17:12:25.3814843Z ok 200 - Worker bad present role_unknown preserves pending until dispose
+2026-11-13T17:12:25.3815478Z   ---
+2026-11-13T17:12:25.3815799Z   duration_ms: 30.877877
+2026-11-13T17:12:25.3816151Z   ...
+2026-11-13T17:12:25.3816821Z # Subtest: Worker bad present id_token_escape preserves pending until dispose
+2026-11-13T17:12:25.3817735Z ok 201 - Worker bad present id_token_escape preserves pending until dispose
+2026-11-13T17:12:25.3818303Z   ---
+2026-11-13T17:12:25.3818599Z   duration_ms: 14.842585
+2026-11-13T17:12:25.3818959Z   ...
+2026-11-13T17:12:25.3819537Z # Subtest: Worker bad present oversized_utf8 preserves pending until dispose
+2026-11-13T17:12:25.3820339Z ok 202 - Worker bad present oversized_utf8 preserves pending until dispose
+2026-11-13T17:12:25.3821097Z   ---
+2026-11-13T17:12:25.3821396Z   duration_ms: 20.376103
+2026-11-13T17:12:25.3821765Z   ...
+2026-11-13T17:12:25.3822426Z # Subtest: Worker bad present null_targets_bad preserves pending until dispose
+2026-11-13T17:12:25.3823503Z ok 203 - Worker bad present null_targets_bad preserves pending until dispose
+2026-11-13T17:12:25.3823968Z   ---
+2026-11-13T17:12:25.3824212Z   duration_ms: 17.568809
+2026-11-13T17:12:25.3824487Z   ...
+2026-11-13T17:12:25.3824979Z # Subtest: Worker bad present missing_source preserves pending until dispose
+2026-11-13T17:12:25.3825759Z ok 204 - Worker bad present missing_source preserves pending until dispose
+2026-11-13T17:12:25.3826224Z   ---
+2026-11-13T17:12:25.3826461Z   duration_ms: 30.566969
+2026-11-13T17:12:25.3826734Z   ...
+2026-11-13T17:12:25.3827231Z # Subtest: Worker bad present repository_bom preserves pending until dispose
+2026-11-13T17:12:25.3827987Z ok 205 - Worker bad present repository_bom preserves pending until dispose
+2026-11-13T17:12:25.3828529Z   ---
+2026-11-13T17:12:25.3828784Z   duration_ms: 18.457393
+2026-11-13T17:12:25.3829059Z   ...
+2026-11-13T17:12:25.3829732Z # Subtest: Worker bad present repository_whitespace_control_0000 preserves pending until dispose
+2026-11-13T17:12:25.3831570Z ok 206 - Worker bad present repository_whitespace_control_0000 preserves pending until dispose
+2026-11-13T17:12:25.3832183Z   ---
+2026-11-13T17:12:25.3832420Z   duration_ms: 15.698906
+2026-11-13T17:12:25.3832697Z   ...
+2026-11-13T17:12:25.3833286Z # Subtest: Worker bad present repository_whitespace_control_0009 preserves pending until dispose
+2026-11-13T17:12:25.3834216Z ok 207 - Worker bad present repository_whitespace_control_0009 preserves pending until dispose
+2026-11-13T17:12:25.3834773Z   ---
+2026-11-13T17:12:25.3835009Z   duration_ms: 21.693502
+2026-11-13T17:12:25.3835288Z   ...
+2026-11-13T17:12:25.3835881Z # Subtest: Worker bad present repository_whitespace_control_000a preserves pending until dispose
+2026-11-13T17:12:25.3836866Z ok 208 - Worker bad present repository_whitespace_control_000a preserves pending until dispose
+2026-11-13T17:12:25.3837410Z   ---
+2026-11-13T17:12:25.3838525Z   duration_ms: 17.362035
+2026-11-13T17:12:25.3838825Z   ...
+2026-11-13T17:12:25.3839484Z # Subtest: Worker bad present repository_whitespace_control_001c preserves pending until dispose
+2026-11-13T17:12:25.3840414Z ok 209 - Worker bad present repository_whitespace_control_001c preserves pending until dispose
+2026-11-13T17:12:25.3841139Z   ---
+2026-11-13T17:12:25.3841384Z   duration_ms: 19.212499
+2026-11-13T17:12:25.3841658Z   ...
+2026-11-13T17:12:25.3842280Z # Subtest: Worker bad present repository_whitespace_control_0020 preserves pending until dispose
+2026-11-13T17:12:25.3843220Z ok 210 - Worker bad present repository_whitespace_control_0020 preserves pending until dispose
+2026-11-13T17:12:25.3843778Z   ---
+2026-11-13T17:12:25.3844011Z   duration_ms: 18.834473
+2026-11-13T17:12:25.3844290Z   ...
+2026-11-13T17:12:25.3844887Z # Subtest: Worker bad present repository_whitespace_control_007f preserves pending until dispose
+2026-11-13T17:12:25.3845804Z ok 211 - Worker bad present repository_whitespace_control_007f preserves pending until dispose
+2026-11-13T17:12:25.3846372Z   ---
+2026-11-13T17:12:25.3846614Z   duration_ms: 27.747707
+2026-11-13T17:12:25.3846872Z   ...
+2026-11-13T17:12:25.3847474Z # Subtest: Worker bad present repository_whitespace_control_0085 preserves pending until dispose
+2026-11-13T17:12:25.3848390Z ok 212 - Worker bad present repository_whitespace_control_0085 preserves pending until dispose
+2026-11-13T17:12:25.3848935Z   ---
+2026-11-13T17:12:25.3849171Z   duration_ms: 24.191962
+2026-11-13T17:12:25.3849433Z   ...
+2026-11-13T17:12:25.3850019Z # Subtest: Worker bad present repository_whitespace_control_009f preserves pending until dispose
+2026-11-13T17:12:25.3851164Z ok 213 - Worker bad present repository_whitespace_control_009f preserves pending until dispose
+2026-11-13T17:12:25.3851716Z   ---
+2026-11-13T17:12:25.3851945Z   duration_ms: 16.491112
+2026-11-13T17:12:25.3852207Z   ...
+2026-11-13T17:12:25.3852809Z # Subtest: Worker bad present repository_whitespace_control_00a0 preserves pending until dispose
+2026-11-13T17:12:25.3853744Z ok 214 - Worker bad present repository_whitespace_control_00a0 preserves pending until dispose
+2026-11-13T17:12:25.3854469Z   ---
+2026-11-13T17:12:25.3854708Z   duration_ms: 29.190091
+2026-11-13T17:12:25.3854971Z   ...
+2026-11-13T17:12:25.3855595Z # Subtest: Worker bad present repository_whitespace_control_1680 preserves pending until dispose
+2026-11-13T17:12:25.3856521Z ok 215 - Worker bad present repository_whitespace_control_1680 preserves pending until dispose
+2026-11-13T17:12:25.3857068Z   ---
+2026-11-13T17:12:25.3857298Z   duration_ms: 25.218494
+2026-11-13T17:12:25.3857565Z   ...
+2026-11-13T17:12:25.3858152Z # Subtest: Worker bad present repository_whitespace_control_2000 preserves pending until dispose
+2026-11-13T17:12:25.3859064Z ok 216 - Worker bad present repository_whitespace_control_2000 preserves pending until dispose
+2026-11-13T17:12:25.3859620Z   ---
+2026-11-13T17:12:25.3859850Z   duration_ms: 16.531803
+2026-11-13T17:12:25.3860122Z   ...
+2026-11-13T17:12:25.3860884Z # Subtest: Worker bad present repository_whitespace_control_2001 preserves pending until dispose
+2026-11-13T17:12:25.3861813Z ok 217 - Worker bad present repository_whitespace_control_2001 preserves pending until dispose
+2026-11-13T17:12:25.3862351Z   ---
+2026-11-13T17:12:25.3862575Z   duration_ms: 11.618507
+2026-11-13T17:12:25.3862844Z   ...
+2026-11-13T17:12:25.3863428Z # Subtest: Worker bad present repository_whitespace_control_2002 preserves pending until dispose
+2026-11-13T17:12:25.3864340Z ok 218 - Worker bad present repository_whitespace_control_2002 preserves pending until dispose
+2026-11-13T17:12:25.3864901Z   ---
+2026-11-13T17:12:25.3865129Z   duration_ms: 18.323812
+2026-11-13T17:12:25.3865395Z   ...
+2026-11-13T17:12:25.3865988Z # Subtest: Worker bad present repository_whitespace_control_2003 preserves pending until dispose
+2026-11-13T17:12:25.3866909Z ok 219 - Worker bad present repository_whitespace_control_2003 preserves pending until dispose
+2026-11-13T17:12:25.3867606Z   ---
+2026-11-13T17:12:25.3867842Z   duration_ms: 12.721212
+2026-11-13T17:12:25.3868100Z   ...
+2026-11-13T17:12:25.3868686Z # Subtest: Worker bad present repository_whitespace_control_2004 preserves pending until dispose
+2026-11-13T17:12:25.3869603Z ok 220 - Worker bad present repository_whitespace_control_2004 preserves pending until dispose
+2026-11-13T17:12:25.3870141Z   ---
+2026-11-13T17:12:25.3870364Z   duration_ms: 25.529461
+2026-11-13T17:12:25.3870731Z   ...
+2026-11-13T17:12:25.3871340Z # Subtest: Worker bad present repository_whitespace_control_2005 preserves pending until dispose
+2026-11-13T17:12:25.3872273Z ok 221 - Worker bad present repository_whitespace_control_2005 preserves pending until dispose
+2026-11-13T17:12:25.3872814Z   ---
+2026-11-13T17:12:25.3873052Z   duration_ms: 19.195374
+2026-11-13T17:12:25.3873319Z   ...
+2026-11-13T17:12:25.3873898Z # Subtest: Worker bad present repository_whitespace_control_2006 preserves pending until dispose
+2026-11-13T17:12:25.3874816Z ok 222 - Worker bad present repository_whitespace_control_2006 preserves pending until dispose
+2026-11-13T17:12:25.3875378Z   ---
+2026-11-13T17:12:25.3875606Z   duration_ms: 22.848063
+2026-11-13T17:12:25.3875874Z   ...
+2026-11-13T17:12:25.3876465Z # Subtest: Worker bad present repository_whitespace_control_2007 preserves pending until dispose
+2026-11-13T17:12:25.3877380Z ok 223 - Worker bad present repository_whitespace_control_2007 preserves pending until dispose
+2026-11-13T17:12:25.3877922Z   ---
+2026-11-13T17:12:25.3878146Z   duration_ms: 17.387082
+2026-11-13T17:12:25.3878408Z   ...
+2026-11-13T17:12:25.3878988Z # Subtest: Worker bad present repository_whitespace_control_2008 preserves pending until dispose
+2026-11-13T17:12:25.3879902Z ok 224 - Worker bad present repository_whitespace_control_2008 preserves pending until dispose
+2026-11-13T17:12:25.3880440Z   ---
+2026-11-13T17:12:25.3880763Z   duration_ms: 19.809629
+2026-11-13T17:12:25.3881035Z   ...
+2026-11-13T17:12:25.3881623Z # Subtest: Worker bad present repository_whitespace_control_2009 preserves pending until dispose
+2026-11-13T17:12:25.3882539Z ok 225 - Worker bad present repository_whitespace_control_2009 preserves pending until dispose
+2026-11-13T17:12:25.3883247Z   ---
+2026-11-13T17:12:25.3883472Z   duration_ms: 16.995685
+2026-11-13T17:12:25.3883746Z   ...
+2026-11-13T17:12:25.3884346Z # Subtest: Worker bad present repository_whitespace_control_200a preserves pending until dispose
+2026-11-13T17:12:25.3885334Z ok 226 - Worker bad present repository_whitespace_control_200a preserves pending until dispose
+2026-11-13T17:12:25.3885926Z   ---
+2026-11-13T17:12:25.3886169Z   duration_ms: 18.203584
+2026-11-13T17:12:25.3886434Z   ...
+2026-11-13T17:12:25.3887049Z # Subtest: Worker bad present repository_whitespace_control_2028 preserves pending until dispose
+2026-11-13T17:12:25.3888043Z ok 227 - Worker bad present repository_whitespace_control_2028 preserves pending until dispose
+2026-11-13T17:12:25.3888628Z   ---
+2026-11-13T17:12:25.3888875Z   duration_ms: 13.656258
+2026-11-13T17:12:25.3889167Z   ...
+2026-11-13T17:12:25.3889773Z # Subtest: Worker bad present repository_whitespace_control_2029 preserves pending until dispose
+2026-11-13T17:12:25.3890857Z ok 228 - Worker bad present repository_whitespace_control_2029 preserves pending until dispose
+2026-11-13T17:12:25.3891398Z   ---
+2026-11-13T17:12:25.3891615Z   duration_ms: 13.068142
+2026-11-13T17:12:25.3891876Z   ...
+2026-11-13T17:12:25.3892449Z # Subtest: Worker bad present repository_whitespace_control_202f preserves pending until dispose
+2026-11-13T17:12:25.3893366Z ok 229 - Worker bad present repository_whitespace_control_202f preserves pending until dispose
+2026-11-13T17:12:25.3893930Z   ---
+2026-11-13T17:12:25.3894172Z   duration_ms: 26.62229
+2026-11-13T17:12:25.3894449Z   ...
+2026-11-13T17:12:25.3895059Z # Subtest: Worker bad present repository_whitespace_control_205f preserves pending until dispose
+2026-11-13T17:12:25.3895991Z ok 230 - Worker bad present repository_whitespace_control_205f preserves pending until dispose
+2026-11-13T17:12:25.3896764Z   ---
+2026-11-13T17:12:25.3897011Z   duration_ms: 18.050809
+2026-11-13T17:12:25.3897282Z   ...
+2026-11-13T17:12:25.3897876Z # Subtest: Worker bad present repository_whitespace_control_3000 preserves pending until dispose
+2026-11-13T17:12:25.3898821Z ok 231 - Worker bad present repository_whitespace_control_3000 preserves pending until dispose
+2026-11-13T17:12:25.3899399Z   ---
+2026-11-13T17:12:25.3899626Z   duration_ms: 20.709203
+2026-11-13T17:12:25.3899910Z   ...
+2026-11-13T17:12:25.3900462Z # Subtest: Worker bad present repository_lone_high preserves pending until dispose
+2026-11-13T17:12:25.3901485Z ok 232 - Worker bad present repository_lone_high preserves pending until dispose
+2026-11-13T17:12:25.3901990Z   ---
+2026-11-13T17:12:25.3902232Z   duration_ms: 18.955176
+2026-11-13T17:12:25.3902502Z   ...
+2026-11-13T17:12:25.3903042Z # Subtest: Worker bad present repository_lone_low preserves pending until dispose
+2026-11-13T17:12:25.3903870Z ok 233 - Worker bad present repository_lone_low preserves pending until dispose
+2026-11-13T17:12:25.3904375Z   ---
+2026-11-13T17:12:25.3904623Z   duration_ms: 26.090617
+2026-11-13T17:12:25.3904906Z   ...
+2026-11-13T17:12:25.3905361Z # Subtest: Worker bad present token_lone_high preserves pending until dispose
+2026-11-13T17:12:25.3906112Z ok 234 - Worker bad present token_lone_high preserves pending until dispose
+2026-11-13T17:12:25.3906616Z   ---
+2026-11-13T17:12:25.3906849Z   duration_ms: 30.157185
+2026-11-13T17:12:25.3907108Z   ...
+2026-11-13T17:12:25.3907591Z # Subtest: Worker bad present token_lone_low preserves pending until dispose
+2026-11-13T17:12:25.3908291Z ok 235 - Worker bad present token_lone_low preserves pending until dispose
+2026-11-13T17:12:25.3908758Z   ---
+2026-11-13T17:12:25.3908992Z   duration_ms: 20.091874
+2026-11-13T17:12:25.3909257Z   ...
+2026-11-13T17:12:25.3909744Z # Subtest: Worker bad present path_lone_high preserves pending until dispose
+2026-11-13T17:12:25.3910470Z ok 236 - Worker bad present path_lone_high preserves pending until dispose
+2026-11-13T17:12:25.3911095Z   ---
+2026-11-13T17:12:25.3911338Z   duration_ms: 34.932567
+2026-11-13T17:12:25.3911800Z   ...
+2026-11-13T17:12:25.3912288Z # Subtest: Worker bad present path_lone_low preserves pending until dispose
+2026-11-13T17:12:25.3913002Z ok 237 - Worker bad present path_lone_low preserves pending until dispose
+2026-11-13T17:12:25.3913471Z   ---
+2026-11-13T17:12:25.3913714Z   duration_ms: 22.55435
+2026-11-13T17:12:25.3913983Z   ...
+2026-11-13T17:12:25.3914496Z # Subtest: actual IPC to EngineClient bad present batch_unknown preserves pending
+2026-11-13T17:12:25.3915227Z ok 238 - actual IPC to EngineClient bad present batch_unknown preserves pending
+2026-11-13T17:12:25.3915685Z   ---
+2026-11-13T17:12:25.3915924Z   duration_ms: 41.965753
+2026-11-13T17:12:25.3916197Z   ...
+2026-11-13T17:12:25.3916684Z # Subtest: actual IPC to EngineClient bad present null_revision preserves pending
+2026-11-13T17:12:25.3917431Z ok 239 - actual IPC to EngineClient bad present null_revision preserves pending
+2026-11-13T17:12:25.3917933Z   ---
+2026-11-13T17:12:25.3918185Z   duration_ms: 24.527476
+2026-11-13T17:12:25.3918457Z   ...
+2026-11-13T17:12:25.3918975Z # Subtest: actual IPC to EngineClient bad present unsafe_revision preserves pending
+2026-11-13T17:12:25.3919803Z ok 240 - actual IPC to EngineClient bad present unsafe_revision preserves pending
+2026-11-13T17:12:25.3920301Z   ---
+2026-11-13T17:12:25.3920529Z   duration_ms: 16.205963
+2026-11-13T17:12:25.3921242Z   ...
+2026-11-13T17:12:25.3921783Z # Subtest: actual IPC to EngineClient bad present mixed_revision preserves pending
+2026-11-13T17:12:25.3922610Z ok 241 - actual IPC to EngineClient bad present mixed_revision preserves pending
+2026-11-13T17:12:25.3923125Z   ---
+2026-11-13T17:12:25.3923395Z   duration_ms: 31.887398
+2026-11-13T17:12:25.3923689Z   ...
+2026-11-13T17:12:25.3924233Z # Subtest: actual IPC to EngineClient bad present string_revision preserves pending
+2026-11-13T17:12:25.3925053Z ok 242 - actual IPC to EngineClient bad present string_revision preserves pending
+2026-11-13T17:12:25.3925935Z   ---
+2026-11-13T17:12:25.3926179Z   duration_ms: 19.147228
+2026-11-13T17:12:25.3926477Z   ...
+2026-11-13T17:12:25.3926997Z # Subtest: actual IPC to EngineClient bad present bad_status preserves pending
+2026-11-13T17:12:25.3927785Z ok 243 - actual IPC to EngineClient bad present bad_status preserves pending
+2026-11-13T17:12:25.3928277Z   ---
+2026-11-13T17:12:25.3928527Z   duration_ms: 23.079684
+2026-11-13T17:12:25.3928809Z   ...
+2026-11-13T17:12:25.3929376Z # Subtest: actual IPC to EngineClient bad present overflow_nonempty preserves pending
+2026-11-13T17:12:25.3930251Z ok 244 - actual IPC to EngineClient bad present overflow_nonempty preserves pending
+2026-11-13T17:12:25.3930960Z   ---
+2026-11-13T17:12:25.3931212Z   duration_ms: 20.30266
+2026-11-13T17:12:25.3931494Z   ...
+2026-11-13T17:12:25.3932043Z # Subtest: actual IPC to EngineClient bad present invalid_domain preserves pending
+2026-11-13T17:12:25.3932865Z ok 245 - actual IPC to EngineClient bad present invalid_domain preserves pending
+2026-11-13T17:12:25.3933386Z   ---
+2026-11-13T17:12:25.3933636Z   duration_ms: 17.747392
+2026-11-13T17:12:25.3933917Z   ...
+2026-11-13T17:12:25.3934473Z # Subtest: actual IPC to EngineClient bad present invalid_reason preserves pending
+2026-11-13T17:12:25.3935282Z ok 246 - actual IPC to EngineClient bad present invalid_reason preserves pending
+2026-11-13T17:12:25.3935786Z   ---
+2026-11-13T17:12:25.3936033Z   duration_ms: 24.987799
+2026-11-13T17:12:25.3936386Z   ...
+2026-11-13T17:12:25.3936923Z # Subtest: actual IPC to EngineClient bad present scope_unknown preserves pending
+2026-11-13T17:12:25.3937746Z ok 247 - actual IPC to EngineClient bad present scope_unknown preserves pending
+2026-11-13T17:12:25.3938259Z   ---
+2026-11-13T17:12:25.3938509Z   duration_ms: 19.800776
+2026-11-13T17:12:25.3938792Z   ...
+2026-11-13T17:12:25.3939343Z # Subtest: actual IPC to EngineClient bad present duplicate_scope preserves pending
+2026-11-13T17:12:25.3940152Z ok 248 - actual IPC to EngineClient bad present duplicate_scope preserves pending
+2026-11-13T17:12:25.3940823Z   ---
+2026-11-13T17:12:25.3941304Z   duration_ms: 21.923391
+2026-11-13T17:12:25.3941585Z   ...
+2026-11-13T17:12:25.3942131Z # Subtest: actual IPC to EngineClient bad present duplicate_ordinal preserves pending
+2026-11-13T17:12:25.3942969Z ok 249 - actual IPC to EngineClient bad present duplicate_ordinal preserves pending
+2026-11-13T17:12:25.3943486Z   ---
+2026-11-13T17:12:25.3943714Z   duration_ms: 30.006333
+2026-11-13T17:12:25.3944002Z   ...
+2026-11-13T17:12:25.3944592Z # Subtest: actual IPC to EngineClient bad present unknown_event preserves pending
+2026-11-13T17:12:25.3945394Z ok 250 - actual IPC to EngineClient bad present unknown_event preserves pending
+2026-11-13T17:12:25.3945893Z   ---
+2026-11-13T17:12:25.3946143Z   duration_ms: 26.688723
+2026-11-13T17:12:25.3946411Z   ...
+2026-11-13T17:12:25.3946901Z # Subtest: actual IPC to EngineClient bad present event_unknown preserves pending
+2026-11-13T17:12:25.3947689Z ok 251 - actual IPC to EngineClient bad present event_unknown preserves pending
+2026-11-13T17:12:25.3948178Z   ---
+2026-11-13T17:12:25.3948476Z   duration_ms: 18.776017
+2026-11-13T17:12:25.3948757Z   ...
+2026-11-13T17:12:25.3949262Z # Subtest: actual IPC to EngineClient bad present actor_zero preserves pending
+2026-11-13T17:12:25.3950014Z ok 252 - actual IPC to EngineClient bad present actor_zero preserves pending
+2026-11-13T17:12:25.3950485Z   ---
+2026-11-13T17:12:25.3964153Z   duration_ms: 23.364312
+2026-11-13T17:12:25.3964483Z   ...
+2026-11-13T17:12:25.3965073Z # Subtest: actual IPC to EngineClient bad present actor_negative preserves pending
+2026-11-13T17:12:25.3965938Z ok 253 - actual IPC to EngineClient bad present actor_negative preserves pending
+2026-11-13T17:12:25.3966465Z   ---
+2026-11-13T17:12:25.3966724Z   duration_ms: 15.498221
+2026-11-13T17:12:25.3967022Z   ...
+2026-11-13T17:12:25.3967564Z # Subtest: actual IPC to EngineClient bad present actor_fraction preserves pending
+2026-11-13T17:12:25.3968579Z ok 254 - actual IPC to EngineClient bad present actor_fraction preserves pending
+2026-11-13T17:12:25.3969111Z   ---
+2026-11-13T17:12:25.3969366Z   duration_ms: 15.098201
+2026-11-13T17:12:25.3969688Z   ...
+2026-11-13T17:12:25.3970240Z # Subtest: actual IPC to EngineClient bad present actor_string preserves pending
+2026-11-13T17:12:25.3971291Z ok 255 - actual IPC to EngineClient bad present actor_string preserves pending
+2026-11-13T17:12:25.3971780Z   ---
+2026-11-13T17:12:25.3972027Z   duration_ms: 12.386559
+2026-11-13T17:12:25.3972311Z   ...
+2026-11-13T17:12:25.3972847Z # Subtest: actual IPC to EngineClient bad present actor_out_of_view preserves pending
+2026-11-13T17:12:25.3973673Z ok 256 - actual IPC to EngineClient bad present actor_out_of_view preserves pending
+2026-11-13T17:12:25.3974205Z   ---
+2026-11-13T17:12:25.3974717Z   duration_ms: 10.776929
+2026-11-13T17:12:25.3975222Z   ...
+2026-11-13T17:12:25.3975912Z # Subtest: actual IPC to EngineClient bad present actor_u32_over preserves pending
+2026-11-13T17:12:25.3976815Z ok 257 - actual IPC to EngineClient bad present actor_u32_over preserves pending
+2026-11-13T17:12:25.3977514Z   ---
+2026-11-13T17:12:25.3977898Z   duration_ms: 20.690837
+2026-11-13T17:12:25.3978330Z   ...
+2026-11-13T17:12:25.3979071Z # Subtest: actual IPC to EngineClient bad present actor_null preserves pending
+2026-11-13T17:12:25.3979931Z ok 258 - actual IPC to EngineClient bad present actor_null preserves pending
+2026-11-13T17:12:25.3980559Z   ---
+2026-11-13T17:12:25.3981145Z   duration_ms: 13.615528
+2026-11-13T17:12:25.3981509Z   ...
+2026-11-13T17:12:25.3982247Z # Subtest: actual IPC to EngineClient bad present duplicate_target preserves pending
+2026-11-13T17:12:25.3983221Z ok 259 - actual IPC to EngineClient bad present duplicate_target preserves pending
+2026-11-13T17:12:25.3983873Z   ---
+2026-11-13T17:12:25.3984270Z   duration_ms: 15.582705
+2026-11-13T17:12:25.3984734Z   ...
+2026-11-13T17:12:25.3985442Z # Subtest: actual IPC to EngineClient bad present missing_nullable_voice preserves pending
+2026-11-13T17:12:25.3986481Z ok 260 - actual IPC to EngineClient bad present missing_nullable_voice preserves pending
+2026-11-13T17:12:25.3987471Z   ---
+2026-11-13T17:12:25.4003867Z   duration_ms: 15.193903
+2026-11-13T17:12:25.4004262Z   ...
+2026-11-13T17:12:25.4004798Z # Subtest: actual IPC to EngineClient bad present amount_zero preserves pending
+2026-11-13T17:12:25.4005601Z ok 261 - actual IPC to EngineClient bad present amount_zero preserves pending
+2026-11-13T17:12:25.4006088Z   ---
+2026-11-13T17:12:25.4006329Z   duration_ms: 17.383546
+2026-11-13T17:12:25.4006595Z   ...
+2026-11-13T17:12:25.4007098Z # Subtest: actual IPC to EngineClient bad present bad_nature preserves pending
+2026-11-13T17:12:25.4007853Z ok 262 - actual IPC to EngineClient bad present bad_nature preserves pending
+2026-11-13T17:12:25.4008326Z   ---
+2026-11-13T17:12:25.4008578Z   duration_ms: 14.177786
+2026-11-13T17:12:25.4008854Z   ...
+2026-11-13T17:12:25.4009378Z # Subtest: actual IPC to EngineClient bad present bad_effective_kind preserves pending
+2026-11-13T17:12:25.4010223Z ok 263 - actual IPC to EngineClient bad present bad_effective_kind preserves pending
+2026-11-13T17:12:25.4010917Z   ---
+2026-11-13T17:12:25.4011152Z   duration_ms: 18.459149
+2026-11-13T17:12:25.4011415Z   ...
+2026-11-13T17:12:25.4011946Z # Subtest: actual IPC to EngineClient bad present token_traversal preserves pending
+2026-11-13T17:12:25.4012752Z ok 264 - actual IPC to EngineClient bad present token_traversal preserves pending
+2026-11-13T17:12:25.4013283Z   ---
+2026-11-13T17:12:25.4013537Z   duration_ms: 16.301343
+2026-11-13T17:12:25.4013833Z   ...
+2026-11-13T17:12:25.4014388Z # Subtest: actual IPC to EngineClient bad present token_controls preserves pending
+2026-11-13T17:12:25.4015216Z ok 265 - actual IPC to EngineClient bad present token_controls preserves pending
+2026-11-13T17:12:25.4015727Z   ---
+2026-11-13T17:12:25.4015995Z   duration_ms: 23.243205
+2026-11-13T17:12:25.4016284Z   ...
+2026-11-13T17:12:25.4016853Z # Subtest: actual IPC to EngineClient bad present role_local_id_wrong preserves pending
+2026-11-13T17:12:25.4017969Z ok 266 - actual IPC to EngineClient bad present role_local_id_wrong preserves pending
+2026-11-13T17:12:25.4018520Z   ---
+2026-11-13T17:12:25.4018770Z   duration_ms: 21.921649
+2026-11-13T17:12:25.4019058Z   ...
+2026-11-13T17:12:25.4019607Z # Subtest: actual IPC to EngineClient bad present role_kind_wrong preserves pending
+2026-11-13T17:12:25.4020432Z ok 267 - actual IPC to EngineClient bad present role_kind_wrong preserves pending
+2026-11-13T17:12:25.4021859Z   ---
+2026-11-13T17:12:25.4022133Z   duration_ms: 20.722503
+2026-11-13T17:12:25.4022420Z   ...
+2026-11-13T17:12:25.4022960Z # Subtest: actual IPC to EngineClient bad present owner_unknown preserves pending
+2026-11-13T17:12:25.4023755Z ok 268 - actual IPC to EngineClient bad present owner_unknown preserves pending
+2026-11-13T17:12:25.4024223Z   ---
+2026-11-13T17:12:25.4024446Z   duration_ms: 21.717508
+2026-11-13T17:12:25.4024701Z   ...
+2026-11-13T17:12:25.4025174Z # Subtest: actual IPC to EngineClient bad present digest_upper preserves pending
+2026-11-13T17:12:25.4025881Z ok 269 - actual IPC to EngineClient bad present digest_upper preserves pending
+2026-11-13T17:12:25.4026337Z   ---
+2026-11-13T17:12:25.4026566Z   duration_ms: 17.712261
+2026-11-13T17:12:25.4026818Z   ...
+2026-11-13T17:12:25.4027320Z # Subtest: actual IPC to EngineClient bad present digest_algorithm preserves pending
+2026-11-13T17:12:25.4028151Z ok 270 - actual IPC to EngineClient bad present digest_algorithm preserves pending
+2026-11-13T17:12:25.4028672Z   ---
+2026-11-13T17:12:25.4028919Z   duration_ms: 14.468433
+2026-11-13T17:12:25.4029201Z   ...
+2026-11-13T17:12:25.4029708Z # Subtest: actual IPC to EngineClient bad present size_zero preserves pending
+2026-11-13T17:12:25.4030462Z ok 271 - actual IPC to EngineClient bad present size_zero preserves pending
+2026-11-13T17:12:25.4031135Z   ---
+2026-11-13T17:12:25.4031369Z   duration_ms: 13.033712
+2026-11-13T17:12:25.4031637Z   ...
+2026-11-13T17:12:25.4032148Z # Subtest: actual IPC to EngineClient bad present source_kind preserves pending
+2026-11-13T17:12:25.4032916Z ok 272 - actual IPC to EngineClient bad present source_kind preserves pending
+2026-11-13T17:12:25.4033612Z   ---
+2026-11-13T17:12:25.4033851Z   duration_ms: 19.330553
+2026-11-13T17:12:25.4034121Z   ...
+2026-11-13T17:12:25.4034673Z # Subtest: actual IPC to EngineClient bad present reference_private preserves pending
+2026-11-13T17:12:25.4035521Z ok 273 - actual IPC to EngineClient bad present reference_private preserves pending
+2026-11-13T17:12:25.4036031Z   ---
+2026-11-13T17:12:25.4036337Z   duration_ms: 16.262076
+2026-11-13T17:12:25.4036606Z   ...
+2026-11-13T17:12:25.4037106Z # Subtest: actual IPC to EngineClient bad present path_escape preserves pending
+2026-11-13T17:12:25.4037879Z ok 274 - actual IPC to EngineClient bad present path_escape preserves pending
+2026-11-13T17:12:25.4038354Z   ---
+2026-11-13T17:12:25.4038585Z   duration_ms: 15.220882
+2026-11-13T17:12:25.4038850Z   ...
+2026-11-13T17:12:25.4039384Z # Subtest: actual IPC to EngineClient bad present invalid_category preserves pending
+2026-11-13T17:12:25.4040225Z ok 275 - actual IPC to EngineClient bad present invalid_category preserves pending
+2026-11-13T17:12:25.4040879Z   ---
+2026-11-13T17:12:25.4041122Z   duration_ms: 11.578049
+2026-11-13T17:12:25.4041372Z   ...
+2026-11-13T17:12:25.4041870Z # Subtest: actual IPC to EngineClient bad present empty_assets preserves pending
+2026-11-13T17:12:25.4042540Z ok 276 - actual IPC to EngineClient bad present empty_assets preserves pending
+2026-11-13T17:12:25.4042986Z   ---
+2026-11-13T17:12:25.4043229Z   duration_ms: 25.808607
+2026-11-13T17:12:25.4043492Z   ...
+2026-11-13T17:12:25.4043988Z # Subtest: actual IPC to EngineClient bad present form_token preserves pending
+2026-11-13T17:12:25.4044746Z ok 277 - actual IPC to EngineClient bad present form_token preserves pending
+2026-11-13T17:12:25.4045213Z   ---
+2026-11-13T17:12:25.4045460Z   duration_ms: 22.335478
+2026-11-13T17:12:25.4045730Z   ...
+2026-11-13T17:12:25.4046229Z # Subtest: actual IPC to EngineClient bad present owner_tag preserves pending
+2026-11-13T17:12:25.4047191Z ok 278 - actual IPC to EngineClient bad present owner_tag preserves pending
+2026-11-13T17:12:25.4047663Z   ---
+2026-11-13T17:12:25.4047898Z   duration_ms: 31.907943
+2026-11-13T17:12:25.4048177Z   ...
+2026-11-13T17:12:25.4048697Z # Subtest: actual IPC to EngineClient bad present asset_unknown preserves pending
+2026-11-13T17:12:25.4049484Z ok 279 - actual IPC to EngineClient bad present asset_unknown preserves pending
+2026-11-13T17:12:25.4049998Z   ---
+2026-11-13T17:12:25.4050250Z   duration_ms: 42.19806
+2026-11-13T17:12:25.4050537Z   ...
+2026-11-13T17:12:25.4051822Z # Subtest: actual IPC to EngineClient bad present role_unknown preserves pending
+2026-11-13T17:12:25.4052659Z ok 280 - actual IPC to EngineClient bad present role_unknown preserves pending
+2026-11-13T17:12:25.4053172Z   ---
+2026-11-13T17:12:25.4053430Z   duration_ms: 23.334189
+2026-11-13T17:12:25.4053725Z   ...
+2026-11-13T17:12:25.4054279Z # Subtest: actual IPC to EngineClient bad present id_token_escape preserves pending
+2026-11-13T17:12:25.4055033Z ok 281 - actual IPC to EngineClient bad present id_token_escape preserves pending
+2026-11-13T17:12:25.4055499Z   ---
+2026-11-13T17:12:25.4055738Z   duration_ms: 20.40154
+2026-11-13T17:12:25.4056000Z   ...
+2026-11-13T17:12:25.4056558Z # Subtest: actual IPC to EngineClient bad present oversized_utf8 preserves pending
+2026-11-13T17:12:25.4057381Z ok 282 - actual IPC to EngineClient bad present oversized_utf8 preserves pending
+2026-11-13T17:12:25.4057899Z   ---
+2026-11-13T17:12:25.4058151Z   duration_ms: 13.301766
+2026-11-13T17:12:25.4058442Z   ...
+2026-11-13T17:12:25.4058991Z # Subtest: actual IPC to EngineClient bad present null_targets_bad preserves pending
+2026-11-13T17:12:25.4059812Z ok 283 - actual IPC to EngineClient bad present null_targets_bad preserves pending
+2026-11-13T17:12:25.4060326Z   ---
+2026-11-13T17:12:25.4060825Z   duration_ms: 19.714539
+2026-11-13T17:12:25.4061146Z   ...
+2026-11-13T17:12:25.4061709Z # Subtest: actual IPC to EngineClient bad present missing_source preserves pending
+2026-11-13T17:12:25.4062738Z ok 284 - actual IPC to EngineClient bad present missing_source preserves pending
+2026-11-13T17:12:25.4063255Z   ---
+2026-11-13T17:12:25.4063513Z   duration_ms: 14.873031
+2026-11-13T17:12:25.4063799Z   ...
+2026-11-13T17:12:25.4064326Z # Subtest: actual IPC to EngineClient bad present repository_bom preserves pending
+2026-11-13T17:12:25.4065128Z ok 285 - actual IPC to EngineClient bad present repository_bom preserves pending
+2026-11-13T17:12:25.4065643Z   ---
+2026-11-13T17:12:25.4065875Z   duration_ms: 17.890192
+2026-11-13T17:12:25.4066140Z   ...
+2026-11-13T17:12:25.4066805Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_0000 preserves pending
+2026-11-13T17:12:25.4067823Z ok 286 - actual IPC to EngineClient bad present repository_whitespace_control_0000 preserves pending
+2026-11-13T17:12:25.4068422Z   ---
+2026-11-13T17:12:25.4068660Z   duration_ms: 12.400769
+2026-11-13T17:12:25.4068937Z   ...
+2026-11-13T17:12:25.4069580Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_0009 preserves pending
+2026-11-13T17:12:25.4070721Z ok 287 - actual IPC to EngineClient bad present repository_whitespace_control_0009 preserves pending
+2026-11-13T17:12:25.4071327Z   ---
+2026-11-13T17:12:25.4071564Z   duration_ms: 16.005247
+2026-11-13T17:12:25.4071834Z   ...
+2026-11-13T17:12:25.4072483Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_000a preserves pending
+2026-11-13T17:12:25.4073514Z ok 288 - actual IPC to EngineClient bad present repository_whitespace_control_000a preserves pending
+2026-11-13T17:12:25.4074107Z   ---
+2026-11-13T17:12:25.4074357Z   duration_ms: 14.269001
+2026-11-13T17:12:25.4074639Z   ...
+2026-11-13T17:12:25.4075289Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_001c preserves pending
+2026-11-13T17:12:25.4076330Z ok 289 - actual IPC to EngineClient bad present repository_whitespace_control_001c preserves pending
+2026-11-13T17:12:25.4077270Z   ---
+2026-11-13T17:12:25.4077514Z   duration_ms: 13.843985
+2026-11-13T17:12:25.4077793Z   ...
+2026-11-13T17:12:25.4078430Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_0020 preserves pending
+2026-11-13T17:12:25.4079434Z ok 290 - actual IPC to EngineClient bad present repository_whitespace_control_0020 preserves pending
+2026-11-13T17:12:25.4080041Z   ---
+2026-11-13T17:12:25.4080289Z   duration_ms: 19.12448
+2026-11-13T17:12:25.4080570Z   ...
+2026-11-13T17:12:25.4081402Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_007f preserves pending
+2026-11-13T17:12:25.4082419Z ok 291 - actual IPC to EngineClient bad present repository_whitespace_control_007f preserves pending
+2026-11-13T17:12:25.4083011Z   ---
+2026-11-13T17:12:25.4083265Z   duration_ms: 17.397417
+2026-11-13T17:12:25.4083543Z   ...
+2026-11-13T17:12:25.4084188Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_0085 preserves pending
+2026-11-13T17:12:25.4085212Z ok 292 - actual IPC to EngineClient bad present repository_whitespace_control_0085 preserves pending
+2026-11-13T17:12:25.4085793Z   ---
+2026-11-13T17:12:25.4086026Z   duration_ms: 21.940687
+2026-11-13T17:12:25.4086289Z   ...
+2026-11-13T17:12:25.4086925Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_009f preserves pending
+2026-11-13T17:12:25.4087921Z ok 293 - actual IPC to EngineClient bad present repository_whitespace_control_009f preserves pending
+2026-11-13T17:12:25.4088526Z   ---
+2026-11-13T17:12:25.4088770Z   duration_ms: 19.064662
+2026-11-13T17:12:25.4089043Z   ...
+2026-11-13T17:12:25.4089710Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_00a0 preserves pending
+2026-11-13T17:12:25.4090901Z ok 294 - actual IPC to EngineClient bad present repository_whitespace_control_00a0 preserves pending
+2026-11-13T17:12:25.4091512Z   ---
+2026-11-13T17:12:25.4091763Z   duration_ms: 24.031355
+2026-11-13T17:12:25.4092068Z   ...
+2026-11-13T17:12:25.4092731Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_1680 preserves pending
+2026-11-13T17:12:25.4093970Z ok 295 - actual IPC to EngineClient bad present repository_whitespace_control_1680 preserves pending
+2026-11-13T17:12:25.4094588Z   ---
+2026-11-13T17:12:25.4094840Z   duration_ms: 17.452147
+2026-11-13T17:12:25.4095091Z   ...
+2026-11-13T17:12:25.4095730Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_2000 preserves pending
+2026-11-13T17:12:25.4096748Z ok 296 - actual IPC to EngineClient bad present repository_whitespace_control_2000 preserves pending
+2026-11-13T17:12:25.4097343Z   ---
+2026-11-13T17:12:25.4097587Z   duration_ms: 26.496655
+2026-11-13T17:12:25.4097870Z   ...
+2026-11-13T17:12:25.4098520Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_2001 preserves pending
+2026-11-13T17:12:25.4099519Z ok 297 - actual IPC to EngineClient bad present repository_whitespace_control_2001 preserves pending
+2026-11-13T17:12:25.4100120Z   ---
+2026-11-13T17:12:25.4100372Z   duration_ms: 23.228853
+2026-11-13T17:12:25.4100867Z   ...
+2026-11-13T17:12:25.4101541Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_2002 preserves pending
+2026-11-13T17:12:25.4102570Z ok 298 - actual IPC to EngineClient bad present repository_whitespace_control_2002 preserves pending
+2026-11-13T17:12:25.4103187Z   ---
+2026-11-13T17:12:25.4103446Z   duration_ms: 24.343786
+2026-11-13T17:12:25.4103702Z   ...
+2026-11-13T17:12:25.4104330Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_2003 preserves pending
+2026-11-13T17:12:25.4105339Z ok 299 - actual IPC to EngineClient bad present repository_whitespace_control_2003 preserves pending
+2026-11-13T17:12:25.4105917Z   ---
+2026-11-13T17:12:25.4106143Z   duration_ms: 16.688142
+2026-11-13T17:12:25.4106434Z   ...
+2026-11-13T17:12:25.4107071Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_2004 preserves pending
+2026-11-13T17:12:25.4108256Z ok 300 - actual IPC to EngineClient bad present repository_whitespace_control_2004 preserves pending
+2026-11-13T17:12:25.4108867Z   ---
+2026-11-13T17:12:25.4109118Z   duration_ms: 18.042226
+2026-11-13T17:12:25.4109400Z   ...
+2026-11-13T17:12:25.4110056Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_2005 preserves pending
+2026-11-13T17:12:25.4111346Z ok 301 - actual IPC to EngineClient bad present repository_whitespace_control_2005 preserves pending
+2026-11-13T17:12:25.4111943Z   ---
+2026-11-13T17:12:25.4112206Z   duration_ms: 24.339949
+2026-11-13T17:12:25.4112487Z   ...
+2026-11-13T17:12:25.4113115Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_2006 preserves pending
+2026-11-13T17:12:25.4114102Z ok 302 - actual IPC to EngineClient bad present repository_whitespace_control_2006 preserves pending
+2026-11-13T17:12:25.4114725Z   ---
+2026-11-13T17:12:25.4114989Z   duration_ms: 16.92417
+2026-11-13T17:12:25.4115268Z   ...
+2026-11-13T17:12:25.4115936Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_2007 preserves pending
+2026-11-13T17:12:25.4116950Z ok 303 - actual IPC to EngineClient bad present repository_whitespace_control_2007 preserves pending
+2026-11-13T17:12:25.4117538Z   ---
+2026-11-13T17:12:25.4117797Z   duration_ms: 29.151634
+2026-11-13T17:12:25.4118061Z   ...
+2026-11-13T17:12:25.4118711Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_2008 preserves pending
+2026-11-13T17:12:25.4119679Z ok 304 - actual IPC to EngineClient bad present repository_whitespace_control_2008 preserves pending
+2026-11-13T17:12:25.4120237Z   ---
+2026-11-13T17:12:25.4120472Z   duration_ms: 31.948262
+2026-11-13T17:12:25.4120893Z   ...
+2026-11-13T17:12:25.4121534Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_2009 preserves pending
+2026-11-13T17:12:25.4122517Z ok 305 - actual IPC to EngineClient bad present repository_whitespace_control_2009 preserves pending
+2026-11-13T17:12:25.4123111Z   ---
+2026-11-13T17:12:25.4123622Z   duration_ms: 35.590185
+2026-11-13T17:12:25.4123894Z   ...
+2026-11-13T17:12:25.4124509Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_200a preserves pending
+2026-11-13T17:12:25.4125538Z ok 306 - actual IPC to EngineClient bad present repository_whitespace_control_200a preserves pending
+2026-11-13T17:12:25.4126089Z   ---
+2026-11-13T17:12:25.4126325Z   duration_ms: 27.069219
+2026-11-13T17:12:25.4126601Z   ...
+2026-11-13T17:12:25.4127235Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_2028 preserves pending
+2026-11-13T17:12:25.4128231Z ok 307 - actual IPC to EngineClient bad present repository_whitespace_control_2028 preserves pending
+2026-11-13T17:12:25.4128813Z   ---
+2026-11-13T17:12:25.4129052Z   duration_ms: 27.402559
+2026-11-13T17:12:25.4129319Z   ...
+2026-11-13T17:12:25.4129937Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_2029 preserves pending
+2026-11-13T17:12:25.4131079Z ok 308 - actual IPC to EngineClient bad present repository_whitespace_control_2029 preserves pending
+2026-11-13T17:12:25.4131683Z   ---
+2026-11-13T17:12:25.4131927Z   duration_ms: 15.866433
+2026-11-13T17:12:25.4132201Z   ...
+2026-11-13T17:12:25.4132833Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_202f preserves pending
+2026-11-13T17:12:25.4133903Z ok 309 - actual IPC to EngineClient bad present repository_whitespace_control_202f preserves pending
+2026-11-13T17:12:25.4134512Z   ---
+2026-11-13T17:12:25.4134762Z   duration_ms: 31.629773
+2026-11-13T17:12:25.4135044Z   ...
+2026-11-13T17:12:25.4135715Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_205f preserves pending
+2026-11-13T17:12:25.4136835Z ok 310 - actual IPC to EngineClient bad present repository_whitespace_control_205f preserves pending
+2026-11-13T17:12:25.4137448Z   ---
+2026-11-13T17:12:25.4137909Z   duration_ms: 21.441807
+2026-11-13T17:12:25.4138202Z   ...
+2026-11-13T17:12:25.4138888Z # Subtest: actual IPC to EngineClient bad present repository_whitespace_control_3000 preserves pending
+2026-11-13T17:12:25.4139922Z ok 311 - actual IPC to EngineClient bad present repository_whitespace_control_3000 preserves pending
+2026-11-13T17:12:25.4140531Z   ---
+2026-11-13T17:12:25.4140911Z   duration_ms: 22.163405
+2026-11-13T17:12:25.4141208Z   ...
+2026-11-13T17:12:25.4141779Z # Subtest: actual IPC to EngineClient bad present repository_lone_high preserves pending
+2026-11-13T17:12:25.4142653Z ok 312 - actual IPC to EngineClient bad present repository_lone_high preserves pending
+2026-11-13T17:12:25.4143182Z   ---
+2026-11-13T17:12:25.4143441Z   duration_ms: 25.7294
+2026-11-13T17:12:25.4143714Z   ...
+2026-11-13T17:12:25.4144273Z # Subtest: actual IPC to EngineClient bad present repository_lone_low preserves pending
+2026-11-13T17:12:25.4145129Z ok 313 - actual IPC to EngineClient bad present repository_lone_low preserves pending
+2026-11-13T17:12:25.4145664Z   ---
+2026-11-13T17:12:25.4145905Z   duration_ms: 19.74928
+2026-11-13T17:12:25.4146189Z   ...
+2026-11-13T17:12:25.4146721Z # Subtest: actual IPC to EngineClient bad present token_lone_high preserves pending
+2026-11-13T17:12:25.4147548Z ok 314 - actual IPC to EngineClient bad present token_lone_high preserves pending
+2026-11-13T17:12:25.4148067Z   ---
+2026-11-13T17:12:25.4148316Z   duration_ms: 29.265903
+2026-11-13T17:12:25.4148596Z   ...
+2026-11-13T17:12:25.4149159Z # Subtest: actual IPC to EngineClient bad present token_lone_low preserves pending
+2026-11-13T17:12:25.4149995Z ok 315 - actual IPC to EngineClient bad present token_lone_low preserves pending
+2026-11-13T17:12:25.4150495Z   ---
+2026-11-13T17:12:25.4150891Z   duration_ms: 19.145441
+2026-11-13T17:12:25.4151175Z   ...
+2026-11-13T17:12:25.4151708Z # Subtest: actual IPC to EngineClient bad present path_lone_high preserves pending
+2026-11-13T17:12:25.4152505Z ok 316 - actual IPC to EngineClient bad present path_lone_high preserves pending
+2026-11-13T17:12:25.4152998Z   ---
+2026-11-13T17:12:25.4153500Z   duration_ms: 23.222223
+2026-11-13T17:12:25.4153782Z   ...
+2026-11-13T17:12:25.4154335Z # Subtest: actual IPC to EngineClient bad present path_lone_low preserves pending
+2026-11-13T17:12:25.4155147Z ok 317 - actual IPC to EngineClient bad present path_lone_low preserves pending
+2026-11-13T17:12:25.4155645Z   ---
+2026-11-13T17:12:25.4155891Z   duration_ms: 19.951528
+2026-11-13T17:12:25.4156169Z   ...
+2026-11-13T17:12:25.4156763Z # Subtest: actual SAB poll rejects malformed presentation before settling or deleting pending
+2026-11-13T17:12:25.4157648Z ok 318 - actual SAB poll rejects malformed presentation before settling or deleting pending
+2026-11-13T17:12:25.4158178Z   ---
+2026-11-13T17:12:25.4158413Z   duration_ms: 33.602458
+2026-11-13T17:12:25.4158691Z   ...
+2026-11-13T17:12:25.4159244Z # Subtest: actual Worker and IPC nested chooseGeneral preserve mapping on bad presentation
+2026-11-13T17:12:25.4160086Z ok 319 - actual Worker and IPC nested chooseGeneral preserve mapping on bad presentation
+2026-11-13T17:12:25.4160562Z   ---
+2026-11-13T17:12:25.4160942Z   duration_ms: 38.056076
+2026-11-13T17:12:25.4161212Z   ...
+2026-11-13T17:12:25.4161788Z # Subtest: shared Worker request guard sends eight and rejects ninth before map/postMessage
+2026-11-13T17:12:25.4162677Z ok 320 - shared Worker request guard sends eight and rejects ninth before map/postMessage
+2026-11-13T17:12:25.4163178Z   ---
+2026-11-13T17:12:25.4163402Z   duration_ms: 18.627158
+2026-11-13T17:12:25.4163656Z   ...
+2026-11-13T17:12:25.4164187Z # Subtest: eight retained malformed responses keep capacity until explicit dispose
+2026-11-13T17:12:25.4165011Z ok 321 - eight retained malformed responses keep capacity until explicit dispose
+2026-11-13T17:12:25.4165543Z   ---
+2026-11-13T17:12:25.4165790Z   duration_ms: 43.765022
+2026-11-13T17:12:25.4166085Z   ...
+2026-11-13T17:12:25.4166712Z # Subtest: compound-invalid IPC autoStep preserves uncertain pending before observer normalization
+2026-11-13T17:12:25.4167884Z ok 322 - compound-invalid IPC autoStep preserves uncertain pending before observer normalization
+2026-11-13T17:12:25.4168466Z   ---
+2026-11-13T17:12:25.4168697Z   duration_ms: 15.109699
+2026-11-13T17:12:25.4168965Z   ...
+2026-11-13T17:12:25.4169644Z # Subtest: compound-invalid IPC chooseGeneral preserves uncertain pending before observer normalization
+2026-11-13T17:12:25.4170875Z ok 323 - compound-invalid IPC chooseGeneral preserves uncertain pending before observer normalization
+2026-11-13T17:12:25.4171495Z   ---
+2026-11-13T17:12:25.4171744Z   duration_ms: 22.88304
+2026-11-13T17:12:25.4172008Z   ...
+2026-11-13T17:12:25.4172558Z # Subtest: compound IPC valid presentation keeps Source27 diagnostic and ordinary cleanup
+2026-11-13T17:12:25.4173425Z ok 324 - compound IPC valid presentation keeps Source27 diagnostic and ordinary cleanup
+2026-11-13T17:12:25.4173936Z   ---
+2026-11-13T17:12:25.4174151Z   duration_ms: 80.153883
+2026-11-13T17:12:25.4174410Z   ...
+2026-11-13T17:12:25.4175111Z # Subtest: IPC precheck preserves all malformed presentation before bad Source27, including missing view/context
+2026-11-13T17:12:25.4176197Z ok 325 - IPC precheck preserves all malformed presentation before bad Source27, including missing view/context
+2026-11-13T17:12:25.4176786Z   ---
+2026-11-13T17:12:25.4176960Z   duration_ms: 3320.558571
+2026-11-13T17:12:25.4177151Z   ...
+2026-11-13T17:12:25.4177601Z # Subtest: source metadata is optional but strict when present
+2026-11-13T17:12:25.4178130Z ok 326 - source metadata is optional but strict when present
+2026-11-13T17:12:25.4178393Z   ---
+2026-11-13T17:12:25.4178559Z   duration_ms: 1.356006
+2026-11-13T17:12:25.4178747Z   ...
+2026-11-13T17:12:25.4179076Z # Subtest: desktop normal and chooseGeneral envelopes preserve source and deadline
+2026-11-13T17:12:25.4179563Z ok 327 - desktop normal and chooseGeneral envelopes preserve source and deadline
+2026-11-13T17:12:25.4179879Z   ---
+2026-11-13T17:12:25.4180045Z   duration_ms: 0.818244
+2026-11-13T17:12:25.4180232Z   ...
+2026-11-13T17:12:25.4180742Z # Subtest: frozen WS6 TypeScript reader ignores source while current reader preserves it
+2026-11-13T17:12:25.4181494Z ok 328 - frozen WS6 TypeScript reader ignores source while current reader preserves it
+2026-11-13T17:12:25.4181819Z   ---
+2026-11-13T17:12:25.4181989Z   duration_ms: 19.278176
+2026-11-13T17:12:25.4182171Z   ...
+2026-11-13T17:12:25.4182438Z # Subtest: C order mapping and strict source forwarding coexist
+2026-11-13T17:12:25.4182822Z ok 329 - C order mapping and strict source forwarding coexist
+2026-11-13T17:12:25.4183081Z   ---
+2026-11-13T17:12:25.4183240Z   duration_ms: 0.350507
+2026-11-13T17:12:25.4183418Z   ...
+2026-11-13T17:12:25.4183975Z # Subtest: JoinOk、推送与快照保留权威 choice 和合法答案，观战空选择不合成
+2026-11-13T17:12:25.4184333Z ok 330 - JoinOk、推送与快照保留权威 choice 和合法答案，观战空选择不合成
+2026-11-13T17:12:25.4184566Z   ---
+2026-11-13T17:12:25.4184739Z   duration_ms: 2.813743
+2026-11-13T17:12:25.4184915Z   ...
+2026-11-13T17:12:25.4185184Z # Subtest: 拒绝提交仍同步最新投影与 choice，再向调用方显示拒绝
+2026-11-13T17:12:25.4185498Z ok 331 - 拒绝提交仍同步最新投影与 choice，再向调用方显示拒绝
+2026-11-13T17:12:25.4185724Z   ---
+2026-11-13T17:12:25.4185884Z   duration_ms: 0.949268
+2026-11-13T17:12:25.4186058Z   ...
+2026-11-13T17:12:25.4186314Z # Subtest: 断线后复用房间密码与最新令牌，重新入房前禁止提交
+2026-11-13T17:12:25.4186590Z ok 332 - 断线后复用房间密码与最新令牌，重新入房前禁止提交
+2026-11-13T17:12:25.4186783Z   ---
+2026-11-13T17:12:25.4186946Z   duration_ms: 6.205477
+2026-11-13T17:12:25.4187132Z   ...
+2026-11-13T17:12:25.4187379Z # Subtest: 旁观重连仍发送 Spectate，不取得玩家身份
+2026-11-13T17:12:25.4187661Z ok 333 - 旁观重连仍发送 Spectate，不取得玩家身份
+2026-11-13T17:12:25.4187868Z   ---
+2026-11-13T17:12:25.4188032Z   duration_ms: 1.300705
+2026-11-13T17:12:25.4188210Z   ...
+2026-11-13T17:12:25.4188470Z # Subtest: 入房/快照 send 失败释放 waiter，重复入房不多发请求
+2026-11-13T17:12:25.4188779Z ok 334 - 入房/快照 send 失败释放 waiter，重复入房不多发请求
+2026-11-13T17:12:25.4188994Z   ---
+2026-11-13T17:12:25.4189160Z   duration_ms: 0.969618
+2026-11-13T17:12:25.4189336Z   ...
+2026-11-13T17:12:25.4189618Z # Subtest: dispose 后的旧 socket 关闭不影响新的连接，销毁不保留监听器
+2026-11-13T17:12:25.4190108Z ok 335 - dispose 后的旧 socket 关闭不影响新的连接，销毁不保留监听器
+2026-11-13T17:12:25.4190368Z   ---
+2026-11-13T17:12:25.4190538Z   duration_ms: 0.825946
+2026-11-13T17:12:25.4190918Z   ...
+2026-11-13T17:12:25.4191223Z # Subtest: 重连令牌按实际 WS origin 与房号隔离，HTTP 输入规范化为同一服务
+2026-11-13T17:12:25.4191579Z ok 336 - 重连令牌按实际 WS origin 与房号隔离，HTTP 输入规范化为同一服务
+2026-11-13T17:12:25.4191805Z   ---
+2026-11-13T17:12:25.4191969Z   duration_ms: 0.3329
+2026-11-13T17:12:25.4192153Z   ...
+2026-11-13T17:12:25.4192388Z # Subtest: 表现延迟期间断线：旧信封不能覆盖重连提示
+2026-11-13T17:12:25.4192647Z ok 337 - 表现延迟期间断线：旧信封不能覆盖重连提示
+2026-11-13T17:12:25.4192845Z   ---
+2026-11-13T17:12:25.4193006Z   duration_ms: 85.35349
+2026-11-13T17:12:25.4193185Z   ...
+2026-11-13T17:12:25.4193442Z # Subtest: 表现延迟期间新投影到达：旧信封不能覆盖新状态提示或清掉新效果
+2026-11-13T17:12:25.4193745Z ok 338 - 表现延迟期间新投影到达：旧信封不能覆盖新状态提示或清掉新效果
+2026-11-13T17:12:25.4193956Z   ---
+2026-11-13T17:12:25.4194119Z   duration_ms: 53.256117
+2026-11-13T17:12:25.4194326Z   ...
+2026-11-13T17:12:25.4194589Z # Subtest: 断线保留待确认命令，重连后用原 key 重放并由服务端回执结算
+2026-11-13T17:12:25.4195027Z ok 339 - 断线保留待确认命令，重连后用原 key 重放并由服务端回执结算
+2026-11-13T17:12:25.4195248Z   ---
+2026-11-13T17:12:25.4195413Z   duration_ms: 4.995986
+2026-11-13T17:12:25.4195588Z   ...
+2026-11-13T17:12:25.4195843Z # Subtest: 自动重连耗尽后，待确认命令明确标为结果不确定而不是已撤销
+2026-11-13T17:12:25.4196124Z ok 340 - 自动重连耗尽后，待确认命令明确标为结果不确定而不是已撤销
+2026-11-13T17:12:25.4196329Z   ---
+2026-11-13T17:12:25.4196493Z   duration_ms: 1.598474
+2026-11-13T17:12:25.4196685Z   ...
+2026-11-13T17:12:25.4196921Z # Subtest: 刷新后的新客户端用原 key 重放未确认命令
+2026-11-13T17:12:25.4197191Z ok 341 - 刷新后的新客户端用原 key 重放未确认命令
+2026-11-13T17:12:25.4197393Z   ---
+2026-11-13T17:12:25.4197554Z   duration_ms: 1.470726
+2026-11-13T17:12:25.4197731Z   ...
+2026-11-13T17:12:25.4197935Z # Subtest: 取消待确认命令会清除刷新持久化
+2026-11-13T17:12:25.4198178Z ok 342 - 取消待确认命令会清除刷新持久化
+2026-11-13T17:12:25.4198362Z   ---
+2026-11-13T17:12:25.4198525Z   duration_ms: 0.694923
+2026-11-13T17:12:25.4198711Z   ...
+2026-11-13T17:12:25.4198929Z # Subtest: 过期刷新持久化不会重放陈旧命令
+2026-11-13T17:12:25.4199158Z ok 343 - 过期刷新持久化不会重放陈旧命令
+2026-11-13T17:12:25.4199354Z   ---
+2026-11-13T17:12:25.4199510Z   duration_ms: 0.670807
+2026-11-13T17:12:25.4199686Z   ...
+2026-11-13T17:12:25.4199902Z # Subtest: 旧房间无回执的重放拒绝显示为结果不确定
+2026-11-13T17:12:25.4200157Z ok 344 - 旧房间无回执的重放拒绝显示为结果不确定
+2026-11-13T17:12:25.4200353Z   ---
+2026-11-13T17:12:25.4200509Z   duration_ms: 0.610138
+2026-11-13T17:12:25.4200909Z   ...
+2026-11-13T17:12:25.4201179Z # Subtest: 联机公开事件与本地一致地展示粗粒度语义
+2026-11-13T17:12:25.4201423Z ok 345 - 联机公开事件与本地一致地展示粗粒度语义
+2026-11-13T17:12:25.4201605Z   ---
+2026-11-13T17:12:25.4201772Z   duration_ms: 1.62975
+2026-11-13T17:12:25.4201952Z   ...
+2026-11-13T17:12:25.4202334Z # Subtest: network SingleWin stays one-based with all authoritative projection fields unchanged
+2026-11-13T17:12:25.4202917Z ok 346 - network SingleWin stays one-based with all authoritative projection fields unchanged
+2026-11-13T17:12:25.4203262Z   ---
+2026-11-13T17:12:25.4203419Z   duration_ms: 0.880576
+2026-11-13T17:12:25.4203736Z   ...
+2026-11-13T17:12:25.4204067Z # Subtest: finished status shares the banner's view and MatchEnded fallback wording
+2026-11-13T17:12:25.4204567Z ok 347 - finished status shares the banner's view and MatchEnded fallback wording
+2026-11-13T17:12:25.4204885Z   ---
+2026-11-13T17:12:25.4205044Z   duration_ms: 21.602609
+2026-11-13T17:12:25.4205225Z   ...
+2026-11-13T17:12:25.4205630Z # Subtest: B metadata is preserved on real network consumer messages and malformed metadata refuses join
+2026-11-13T17:12:25.4206242Z ok 348 - B metadata is preserved on real network consumer messages and malformed metadata refuses join
+2026-11-13T17:12:25.4206599Z   ---
+2026-11-13T17:12:25.4206759Z   duration_ms: 1.017889
+2026-11-13T17:12:25.4206947Z   ...
+2026-11-13T17:12:25.4207203Z # Subtest: WS8 rejects an old Welcome before creating rooms
+2026-11-13T17:12:25.4207562Z ok 349 - WS8 rejects an old Welcome before creating rooms
+2026-11-13T17:12:25.4207816Z   ---
+2026-11-13T17:12:25.4207979Z   duration_ms: 0.423163
+2026-11-13T17:12:25.4208154Z   ...
+2026-11-13T17:12:25.4208484Z # Subtest: WS8 room configuration and deadline reach the actual network consumer
+2026-11-13T17:12:25.4209072Z ok 350 - WS8 room configuration and deadline reach the actual network consumer
+2026-11-13T17:12:25.4209374Z   ---
+2026-11-13T17:12:25.4209531Z   duration_ms: 0.544362
+2026-11-13T17:12:25.4209713Z   ...
+2026-11-13T17:12:25.4210029Z # Subtest: server countdown ignores client wall clock skew 60000 and later jumps
+2026-11-13T17:12:25.4210488Z ok 351 - server countdown ignores client wall clock skew 60000 and later jumps
+2026-11-13T17:12:25.4210980Z   ---
+2026-11-13T17:12:25.4211143Z   duration_ms: 20.954044
+2026-11-13T17:12:25.4211326Z   ...
+2026-11-13T17:12:25.4211655Z # Subtest: server countdown ignores client wall clock skew -60000 and later jumps
+2026-11-13T17:12:25.4212134Z ok 352 - server countdown ignores client wall clock skew -60000 and later jumps
+2026-11-13T17:12:25.4212432Z   ---
+2026-11-13T17:12:25.4212623Z   duration_ms: 13.893518
+2026-11-13T17:12:25.4212802Z   ...
+2026-11-13T17:12:25.4213176Z # Subtest: clock calibration requires matching Pong, measures RTT, and resets across reconnect
+2026-11-13T17:12:25.4213741Z ok 353 - clock calibration requires matching Pong, measures RTT, and resets across reconnect
+2026-11-13T17:12:25.4214092Z   ---
+2026-11-13T17:12:25.4214255Z   duration_ms: 32.412136
+2026-11-13T17:12:25.4214439Z   ...
+2026-11-13T17:12:25.4214678Z # Subtest: source skill and deadline survive JoinOk, outcome and snapshot
+2026-11-13T17:12:25.4214897Z ok 354 - source skill and deadline survive JoinOk, outcome and snapshot
+2026-11-13T17:12:25.4214967Z   ---
+2026-11-13T17:12:25.4215043Z   duration_ms: 10.090298
+2026-11-13T17:12:25.4215121Z   ...
+2026-11-13T17:12:25.4215417Z # Subtest: UP37 available voices resolve from the existing manifest and actual catalog identities
+2026-11-13T17:12:25.4215694Z ok 355 - UP37 available voices resolve from the existing manifest and actual catalog identities
+2026-11-13T17:12:25.4215770Z   ---
+2026-11-13T17:12:25.4215854Z   duration_ms: 286.183515
+2026-11-13T17:12:25.4215923Z   ...
+2026-11-13T17:12:25.4216229Z # Subtest: resource URL rejects traversal, absolute paths, encoded separators and invalid segments
+2026-11-13T17:12:25.4216522Z ok 356 - resource URL rejects traversal, absolute paths, encoded separators and invalid segments
+2026-11-13T17:12:25.4216596Z   ---
+2026-11-13T17:12:25.4216673Z   duration_ms: 0.263858
+2026-11-13T17:12:25.4216743Z   ...
+2026-11-13T17:12:25.4217030Z # Subtest: N01 declaration reference and Zhouyu declared variants resolve actual source voices
+2026-11-13T17:12:25.4217301Z ok 357 - N01 declaration reference and Zhouyu declared variants resolve actual source voices
+2026-11-13T17:12:25.4217378Z   ---
+2026-11-13T17:12:25.4217464Z   duration_ms: 54.589953
+2026-11-13T17:12:25.4217535Z   ...
+2026-11-13T17:12:25.4217857Z # Subtest: declared aliases isolate exact numeric skill IDs, validate backing bytes and reject duplicates
+2026-11-13T17:12:25.4218301Z ok 358 - declared aliases isolate exact numeric skill IDs, validate backing bytes and reject duplicates
+2026-11-13T17:12:25.4218381Z   ---
+2026-11-13T17:12:25.4218455Z   duration_ms: 1.284742
+2026-11-13T17:12:25.4218529Z   ...
+2026-11-13T17:12:25.4218874Z # Subtest: B current character isolates unrelated shared-skill actors and retains declared substitute forms
+2026-11-13T17:12:25.4219195Z ok 359 - B current character isolates unrelated shared-skill actors and retains declared substitute forms
+2026-11-13T17:12:25.4219263Z   ---
+2026-11-13T17:12:25.4219345Z   duration_ms: 69.849482
+2026-11-13T17:12:25.4219421Z   ...
+2026-11-13T17:12:25.4219747Z # Subtest: B real tempname chooses its declared voice and missing actor bindings never borrow the skill pool
+2026-11-13T17:12:25.4220064Z ok 360 - B real tempname chooses its declared voice and missing actor bindings never borrow the skill pool
+2026-11-13T17:12:25.4220138Z   ---
+2026-11-13T17:12:25.4220218Z   duration_ms: 83.935874
+2026-11-13T17:12:25.4220281Z   ...
+2026-11-13T17:12:25.4220554Z # Subtest: cross-pack substitute declaration binds to its global exact character owner
+2026-11-13T17:12:25.4221089Z ok 361 - cross-pack substitute declaration binds to its global exact character owner
+2026-11-13T17:12:25.4221161Z   ---
+2026-11-13T17:12:25.4221249Z   duration_ms: 34.232156
+2026-11-13T17:12:25.4221324Z   ...
+2026-11-13T17:12:25.4221598Z # Subtest: compat backing uses category and source identity while preserving role isolation
+2026-11-13T17:12:25.4221865Z ok 362 - compat backing uses category and source identity while preserving role isolation
+2026-11-13T17:12:25.4221939Z   ---
+2026-11-13T17:12:25.4222022Z   duration_ms: 0.72683
+2026-11-13T17:12:25.4222091Z   ...
+2026-11-13T17:12:25.4222385Z # Subtest: checked-in compat reaches actual role aliases and preserves original raw audio count
+2026-11-13T17:12:25.4222662Z ok 363 - checked-in compat reaches actual role aliases and preserves original raw audio count
+2026-11-13T17:12:25.4222729Z   ---
+2026-11-13T17:12:25.4222819Z   duration_ms: 36.943068
+2026-11-13T17:12:25.4222892Z   ...
+2026-11-13T17:12:25.4223039Z # Subtest: 身份局胜负类型映射
+2026-11-13T17:12:25.4223145Z ok 364 - 身份局胜负类型映射
+2026-11-13T17:12:25.4223221Z   ---
+2026-11-13T17:12:25.4223306Z   duration_ms: 2.754526
+2026-11-13T17:12:25.4223371Z   ...
+2026-11-13T17:12:25.4223498Z # Subtest: 单挑/势力与未建模形态
+2026-11-13T17:12:25.4223608Z ok 365 - 单挑/势力与未建模形态
+2026-11-13T17:12:25.4223674Z   ---
+2026-11-13T17:12:25.4223756Z   duration_ms: 0.215508
+2026-11-13T17:12:25.4223827Z   ...
+2026-11-13T17:12:25.4223982Z # Subtest: 未知形态如实显示原始 JSON（不猜测语义）
+2026-11-13T17:12:25.4224127Z ok 366 - 未知形态如实显示原始 JSON（不猜测语义）
+2026-11-13T17:12:25.4224199Z   ---
+2026-11-13T17:12:25.4224280Z   duration_ms: 0.111865
+2026-11-13T17:12:25.4224346Z   ...
+2026-11-13T17:12:25.4224496Z # Subtest: 原生命令的拒绝原因可显示，未知原因保留
+2026-11-13T17:12:25.4224621Z ok 367 - 原生命令的拒绝原因可显示，未知原因保留
+2026-11-13T17:12:25.4224686Z   ---
+2026-11-13T17:12:25.4224765Z   duration_ms: 0.207746
+2026-11-13T17:12:25.4224833Z   ...
+2026-11-13T17:12:25.4224993Z # Subtest: 自动步进的嵌套拒绝和计划错误不可当作成功
+2026-11-13T17:12:25.4225115Z ok 368 - 自动步进的嵌套拒绝和计划错误不可当作成功
+2026-11-13T17:12:25.4225197Z   ---
+2026-11-13T17:12:25.4225271Z   duration_ms: 0.179764
+2026-11-13T17:12:25.4225341Z   ...
+2026-11-13T17:12:25.4225621Z # Subtest: malformed and unmodeled outcome detail stays visible without inventing a winner
+2026-11-13T17:12:25.4225884Z ok 369 - malformed and unmodeled outcome detail stays visible without inventing a winner
+2026-11-13T17:12:25.4225950Z   ---
+2026-11-13T17:12:25.4226030Z   duration_ms: 0.159635
+2026-11-13T17:12:25.4226103Z   ...
+2026-11-13T17:12:25.4226374Z # Subtest: desktop IPC preserves request order, ids, errors and continues on the same engine
+2026-11-13T17:12:25.4226638Z ok 370 - desktop IPC preserves request order, ids, errors and continues on the same engine
+2026-11-13T17:12:25.4226712Z   ---
+2026-11-13T17:12:25.4226793Z   duration_ms: 7.303203
+2026-11-13T17:12:25.4226859Z   ...
+2026-11-13T17:12:25.4227116Z # Subtest: dispose suppresses late IPC replies and never submits queued operations
+2026-11-13T17:12:25.4227480Z ok 371 - dispose suppresses late IPC replies and never submits queued operations
+2026-11-13T17:12:25.4227552Z   ---
+2026-11-13T17:12:25.4227641Z   duration_ms: 3.207093
+2026-11-13T17:12:25.4227720Z   ...
+2026-11-13T17:12:25.4228052Z # Subtest: mismatched IPC response is an explicit unknown-result error, without retry
+2026-11-13T17:12:25.4228306Z ok 372 - mismatched IPC response is an explicit unknown-result error, without retry
+2026-11-13T17:12:25.4228382Z   ---
+2026-11-13T17:12:25.4228467Z   duration_ms: 0.484744
+2026-11-13T17:12:25.4228534Z   ...
+2026-11-13T17:12:25.4228793Z # Subtest: Wasm is the default and an explicit persistent/URL fallback remains available
+2026-11-13T17:12:25.4229034Z ok 373 - Wasm is the default and an explicit persistent/URL fallback remains available
+2026-11-13T17:12:25.4229099Z   ---
+2026-11-13T17:12:25.4229180Z   duration_ms: 0.702204
+2026-11-13T17:12:25.4229249Z   ...
+2026-11-13T17:12:25.4229497Z # Subtest: dispose during resource allocation closes it once and submits no request
+2026-11-13T17:12:25.4229737Z ok 374 - dispose during resource allocation closes it once and submits no request
+2026-11-13T17:12:25.4229896Z   ---
+2026-11-13T17:12:25.4229978Z   duration_ms: 1.68475
+2026-11-13T17:12:25.4230045Z   ...
+2026-11-13T17:12:25.4230363Z # Subtest: IPC and Worker convert native SingleWin seats exactly once without modifying raw projections
+2026-11-13T17:12:25.4230756Z ok 375 - IPC and Worker convert native SingleWin seats exactly once without modifying raw projections
+2026-11-13T17:12:25.4230829Z   ---
+2026-11-13T17:12:25.4230906Z   duration_ms: 126.271432
+2026-11-13T17:12:25.4230982Z   ...
+2026-11-13T17:12:25.4231216Z # Subtest: IPC refuses malformed B metadata before delivering a view envelope
+2026-11-13T17:12:25.4231432Z ok 376 - IPC refuses malformed B metadata before delivering a view envelope
+2026-11-13T17:12:25.4231508Z   ---
+2026-11-13T17:12:25.4231596Z   duration_ms: 0.575597
+2026-11-13T17:12:25.4231663Z   ...
+2026-11-13T17:12:25.4232009Z # Subtest: desktop admission bounds 128 submissions while open is blocked, before extending the promise tail
+2026-11-13T17:12:25.4232338Z ok 377 - desktop admission bounds 128 submissions while open is blocked, before extending the promise tail
+2026-11-13T17:12:25.4232415Z   ---
+2026-11-13T17:12:25.4232494Z   duration_ms: 5.531621
+2026-11-13T17:12:25.4232569Z   ...
+2026-11-13T17:12:25.4232906Z # Subtest: desktop admission bounds 128 submissions while request is blocked, before extending the promise tail
+2026-11-13T17:12:25.4233226Z ok 378 - desktop admission bounds 128 submissions while request is blocked, before extending the promise tail
+2026-11-13T17:12:25.4233296Z   ---
+2026-11-13T17:12:25.4233382Z   duration_ms: 5.85446
+2026-11-13T17:12:25.4233451Z   ...
+2026-11-13T17:12:25.4233781Z # Subtest: IPC errors, normalization errors and a throwing listener release admission and leave the tail usable
+2026-11-13T17:12:25.4234106Z ok 379 - IPC errors, normalization errors and a throwing listener release admission and leave the tail usable
+2026-11-13T17:12:25.4234179Z   ---
+2026-11-13T17:12:25.4234255Z   duration_ms: 5.008916
+2026-11-13T17:12:25.4234329Z   ...
+2026-11-13T17:12:25.4234589Z # Subtest: a rejected resource open drains accepted slots without submitting requests
+2026-11-13T17:12:25.4234838Z ok 380 - a rejected resource open drains accepted slots without submitting requests
+2026-11-13T17:12:25.4234903Z   ---
+2026-11-13T17:12:25.4234987Z   duration_ms: 3.128066
+2026-11-13T17:12:25.4235058Z   ...
+2026-11-13T17:12:25.4235261Z # Subtest: nearest-rank 分位与 NC12 口径一致；空输入为 null
+2026-11-13T17:12:25.4235437Z ok 381 - nearest-rank 分位与 NC12 口径一致；空输入为 null
+2026-11-13T17:12:25.4235515Z   ---
+2026-11-13T17:12:25.4235588Z   duration_ms: 0.794069
+2026-11-13T17:12:25.4235658Z   ...
+2026-11-13T17:12:25.4235801Z # Subtest: 帧间隔统计：刷新周期估计与超预算比例
+2026-11-13T17:12:25.4235919Z ok 382 - 帧间隔统计：刷新周期估计与超预算比例
+2026-11-13T17:12:25.4235993Z   ---
+2026-11-13T17:12:25.4236078Z   duration_ms: 0.369754
+2026-11-13T17:12:25.4236268Z   ...
+2026-11-13T17:12:25.4236464Z # Subtest: 交互记录：有输入时端到端从输入起算，缺失段为 null
+2026-11-13T17:12:25.4236622Z ok 383 - 交互记录：有输入时端到端从输入起算，缺失段为 null
+2026-11-13T17:12:25.4236696Z   ---
+2026-11-13T17:12:25.4236772Z   duration_ms: 0.447749
+2026-11-13T17:12:25.4236846Z   ...
+2026-11-13T17:12:25.4237017Z # Subtest: Worker 分段：关闭时只发原回包，开启时回包后追加分段
+2026-11-13T17:12:25.4237162Z ok 384 - Worker 分段：关闭时只发原回包，开启时回包后追加分段
+2026-11-13T17:12:25.4237238Z   ---
+2026-11-13T17:12:25.4237317Z   duration_ms: 1.091458
+2026-11-13T17:12:25.4237389Z   ...
+2026-11-13T17:12:26.7248542Z # Subtest: actual frozen Main5fc TS network and desktop readers accept the optional response
+2026-11-13T17:12:26.7249740Z ok 385 - actual frozen Main5fc TS network and desktop readers accept the optional response
+2026-11-13T17:12:26.7250332Z   ---
+2026-11-13T17:12:26.7250777Z   duration_ms: 160.808873
+2026-11-13T17:12:26.7251081Z   ...
+2026-11-13T17:12:26.7251696Z # Subtest: new parser accepts all seven events and legacy absence without altering autoStep strings
+2026-11-13T17:12:26.7252680Z ok 386 - new parser accepts all seven events and legacy absence without altering autoStep strings
+2026-11-13T17:12:26.7253671Z   ---
+2026-11-13T17:12:26.7253915Z   duration_ms: 5.071047
+2026-11-13T17:12:26.7254185Z   ...
+2026-11-13T17:12:26.7254851Z # Subtest: bad present batch_unknown is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7255821Z ok 387 - bad present batch_unknown is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7256403Z   ---
+2026-11-13T17:12:26.7256666Z   duration_ms: 1.423927
+2026-11-13T17:12:26.7256952Z   ...
+2026-11-13T17:12:26.7257614Z # Subtest: bad present null_revision is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7258573Z ok 388 - bad present null_revision is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7259146Z   ---
+2026-11-13T17:12:26.7259406Z   duration_ms: 0.505014
+2026-11-13T17:12:26.7259690Z   ...
+2026-11-13T17:12:26.7260350Z # Subtest: bad present unsafe_revision is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7261512Z ok 389 - bad present unsafe_revision is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7262101Z   ---
+2026-11-13T17:12:26.7262347Z   duration_ms: 0.569689
+2026-11-13T17:12:26.7262631Z   ...
+2026-11-13T17:12:26.7263266Z # Subtest: bad present mixed_revision is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7264255Z ok 390 - bad present mixed_revision is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7264844Z   ---
+2026-11-13T17:12:26.7265088Z   duration_ms: 0.403765
+2026-11-13T17:12:26.7265359Z   ...
+2026-11-13T17:12:26.7266002Z # Subtest: bad present string_revision is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7266981Z ok 391 - bad present string_revision is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7267794Z   ---
+2026-11-13T17:12:26.7268050Z   duration_ms: 0.521538
+2026-11-13T17:12:26.7268327Z   ...
+2026-11-13T17:12:26.7268934Z # Subtest: bad present bad_status is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7269881Z ok 392 - bad present bad_status is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7270436Z   ---
+2026-11-13T17:12:26.7270844Z   duration_ms: 0.599462
+2026-11-13T17:12:26.7271120Z   ...
+2026-11-13T17:12:26.7271780Z # Subtest: bad present overflow_nonempty is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7272790Z ok 393 - bad present overflow_nonempty is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7273378Z   ---
+2026-11-13T17:12:26.7273634Z   duration_ms: 0.67904
+2026-11-13T17:12:26.7273911Z   ...
+2026-11-13T17:12:26.7274524Z # Subtest: bad present invalid_domain is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7275491Z ok 394 - bad present invalid_domain is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7276079Z   ---
+2026-11-13T17:12:26.7276316Z   duration_ms: 0.708433
+2026-11-13T17:12:26.7287679Z   ...
+2026-11-13T17:12:26.7288400Z # Subtest: bad present invalid_reason is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7289502Z ok 395 - bad present invalid_reason is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7311147Z   ---
+2026-11-13T17:12:26.7321010Z   duration_ms: 0.580315
+2026-11-13T17:12:26.7331249Z   ...
+2026-11-13T17:12:26.7332134Z # Subtest: bad present scope_unknown is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7333527Z ok 396 - bad present scope_unknown is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7334383Z   ---
+2026-11-13T17:12:26.7334838Z   duration_ms: 0.567386
+2026-11-13T17:12:26.7335305Z   ...
+2026-11-13T17:12:26.7336152Z # Subtest: bad present duplicate_scope is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7337711Z ok 397 - bad present duplicate_scope is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7338507Z   ---
+2026-11-13T17:12:26.7338955Z   duration_ms: 0.856722
+2026-11-13T17:12:26.7339412Z   ...
+2026-11-13T17:12:26.7340244Z # Subtest: bad present duplicate_ordinal is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7341709Z ok 398 - bad present duplicate_ordinal is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7342496Z   ---
+2026-11-13T17:12:26.7342939Z   duration_ms: 0.732699
+2026-11-13T17:12:26.7343398Z   ...
+2026-11-13T17:12:26.7344278Z # Subtest: bad present unknown_event is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7345447Z ok 399 - bad present unknown_event is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7346203Z   ---
+2026-11-13T17:12:26.7346655Z   duration_ms: 0.552744
+2026-11-13T17:12:26.7347137Z   ...
+2026-11-13T17:12:26.7347930Z # Subtest: bad present event_unknown is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7349067Z ok 400 - bad present event_unknown is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7349809Z   ---
+2026-11-13T17:12:26.7350227Z   duration_ms: 0.523731
+2026-11-13T17:12:26.7350832Z   ...
+2026-11-13T17:12:26.7351609Z # Subtest: bad present actor_zero is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7381515Z ok 401 - bad present actor_zero is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7396157Z   ---
+2026-11-13T17:12:26.7411657Z   duration_ms: 0.491654
+2026-11-13T17:12:26.7422874Z   ...
+2026-11-13T17:12:26.7431131Z # Subtest: bad present actor_negative is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7432223Z ok 402 - bad present actor_negative is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7433200Z   ---
+2026-11-13T17:12:26.7433458Z   duration_ms: 0.441881
+2026-11-13T17:12:26.7433741Z   ...
+2026-11-13T17:12:26.7434314Z # Subtest: bad present actor_fraction is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7435203Z ok 403 - bad present actor_fraction is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7435729Z   ---
+2026-11-13T17:12:26.7435953Z   duration_ms: 0.476281
+2026-11-13T17:12:26.7436201Z   ...
+2026-11-13T17:12:26.7436793Z # Subtest: bad present actor_string is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7437720Z ok 404 - bad present actor_string is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7438245Z   ---
+2026-11-13T17:12:26.7438484Z   duration_ms: 0.595968
+2026-11-13T17:12:26.7438753Z   ...
+2026-11-13T17:12:26.7439336Z # Subtest: bad present actor_out_of_view is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7440236Z ok 405 - bad present actor_out_of_view is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7440917Z   ---
+2026-11-13T17:12:26.7441149Z   duration_ms: 0.70675
+2026-11-13T17:12:26.7441398Z   ...
+2026-11-13T17:12:26.7441972Z # Subtest: bad present actor_u32_over is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7442859Z ok 406 - bad present actor_u32_over is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7443366Z   ---
+2026-11-13T17:12:26.7443575Z   duration_ms: 0.734302
+2026-11-13T17:12:26.7443824Z   ...
+2026-11-13T17:12:26.7444378Z # Subtest: bad present actor_null is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7445283Z ok 407 - bad present actor_null is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7445717Z   ---
+2026-11-13T17:12:26.7445882Z   duration_ms: 0.693341
+2026-11-13T17:12:26.7446070Z   ...
+2026-11-13T17:12:26.7446633Z # Subtest: bad present duplicate_target is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7447715Z ok 408 - bad present duplicate_target is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7448201Z   ---
+2026-11-13T17:12:26.7448404Z   duration_ms: 0.709154
+2026-11-13T17:12:26.7448638Z   ...
+2026-11-13T17:12:26.7449212Z # Subtest: bad present missing_nullable_voice is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7450062Z ok 409 - bad present missing_nullable_voice is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7450561Z   ---
+2026-11-13T17:12:26.7450941Z   duration_ms: 0.484132
+2026-11-13T17:12:26.7451175Z   ...
+2026-11-13T17:12:26.7451686Z # Subtest: bad present amount_zero is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7452502Z ok 410 - bad present amount_zero is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7453077Z   ---
+2026-11-13T17:12:26.7453319Z   duration_ms: 0.70618
+2026-11-13T17:12:26.7453574Z   ...
+2026-11-13T17:12:26.7454134Z # Subtest: bad present bad_nature is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7455006Z ok 411 - bad present bad_nature is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7455533Z   ---
+2026-11-13T17:12:26.7455767Z   duration_ms: 0.69946
+2026-11-13T17:12:26.7456028Z   ...
+2026-11-13T17:12:26.7456648Z # Subtest: bad present bad_effective_kind is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7457548Z ok 412 - bad present bad_effective_kind is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7458085Z   ---
+2026-11-13T17:12:26.7458312Z   duration_ms: 0.770275
+2026-11-13T17:12:26.7458562Z   ...
+2026-11-13T17:12:26.7459147Z # Subtest: bad present token_traversal is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7460278Z ok 413 - bad present token_traversal is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7461056Z   ---
+2026-11-13T17:12:26.7461287Z   duration_ms: 0.593634
+2026-11-13T17:12:26.7461552Z   ...
+2026-11-13T17:12:26.7462157Z # Subtest: bad present token_controls is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7463097Z ok 414 - bad present token_controls is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7463677Z   ---
+2026-11-13T17:12:26.7463918Z   duration_ms: 0.592402
+2026-11-13T17:12:26.7464186Z   ...
+2026-11-13T17:12:26.7464856Z # Subtest: bad present role_local_id_wrong is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7465884Z ok 415 - bad present role_local_id_wrong is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7466475Z   ---
+2026-11-13T17:12:26.7466701Z   duration_ms: 0.470542
+2026-11-13T17:12:26.7466994Z   ...
+2026-11-13T17:12:26.7467590Z # Subtest: bad present role_kind_wrong is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7468497Z ok 416 - bad present role_kind_wrong is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7469043Z   ---
+2026-11-13T17:12:26.7469280Z   duration_ms: 0.492545
+2026-11-13T17:12:26.7469534Z   ...
+2026-11-13T17:12:26.7470284Z # Subtest: bad present owner_unknown is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7471282Z ok 417 - bad present owner_unknown is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7471822Z   ---
+2026-11-13T17:12:26.7472057Z   duration_ms: 0.640844
+2026-11-13T17:12:26.7472318Z   ...
+2026-11-13T17:12:26.7472920Z # Subtest: bad present digest_upper is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7473810Z ok 418 - bad present digest_upper is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7474354Z   ---
+2026-11-13T17:12:26.7474590Z   duration_ms: 0.474999
+2026-11-13T17:12:26.7475039Z   ...
+2026-11-13T17:12:26.7475643Z # Subtest: bad present digest_algorithm is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7476575Z ok 419 - bad present digest_algorithm is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7477116Z   ---
+2026-11-13T17:12:26.7477355Z   duration_ms: 0.555258
+2026-11-13T17:12:26.7477612Z   ...
+2026-11-13T17:12:26.7478179Z # Subtest: bad present size_zero is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7479077Z ok 420 - bad present size_zero is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7479580Z   ---
+2026-11-13T17:12:26.7479808Z   duration_ms: 0.443002
+2026-11-13T17:12:26.7480070Z   ...
+2026-11-13T17:12:26.7480744Z # Subtest: bad present source_kind is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7481633Z ok 421 - bad present source_kind is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7482137Z   ---
+2026-11-13T17:12:26.7482367Z   duration_ms: 0.470192
+2026-11-13T17:12:26.7482619Z   ...
+2026-11-13T17:12:26.7483259Z # Subtest: bad present reference_private is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7484280Z ok 422 - bad present reference_private is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7484873Z   ---
+2026-11-13T17:12:26.7485113Z   duration_ms: 0.698028
+2026-11-13T17:12:26.7485380Z   ...
+2026-11-13T17:12:26.7485912Z # Subtest: bad present path_escape is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7486729Z ok 423 - bad present path_escape is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7487225Z   ---
+2026-11-13T17:12:26.7487444Z   duration_ms: 3.804492
+2026-11-13T17:12:26.7487678Z   ...
+2026-11-13T17:12:26.7488482Z # Subtest: bad present invalid_category is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7489375Z ok 424 - bad present invalid_category is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7489884Z   ---
+2026-11-13T17:12:26.7490115Z   duration_ms: 0.737346
+2026-11-13T17:12:26.7490347Z   ...
+2026-11-13T17:12:26.7491009Z # Subtest: bad present empty_assets is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7491861Z ok 425 - bad present empty_assets is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7492388Z   ---
+2026-11-13T17:12:26.7492612Z   duration_ms: 0.49601
+2026-11-13T17:12:26.7492850Z   ...
+2026-11-13T17:12:26.7493414Z # Subtest: bad present form_token is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7494276Z ok 426 - bad present form_token is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7494783Z   ---
+2026-11-13T17:12:26.7495016Z   duration_ms: 0.444544
+2026-11-13T17:12:26.7495278Z   ...
+2026-11-13T17:12:26.7495840Z # Subtest: bad present owner_tag is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7496667Z ok 427 - bad present owner_tag is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7497141Z   ---
+2026-11-13T17:12:26.7497355Z   duration_ms: 0.446487
+2026-11-13T17:12:26.7497604Z   ...
+2026-11-13T17:12:26.7498159Z # Subtest: bad present asset_unknown is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7499057Z ok 428 - bad present asset_unknown is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7499600Z   ---
+2026-11-13T17:12:26.7499816Z   duration_ms: 0.481949
+2026-11-13T17:12:26.7500062Z   ...
+2026-11-13T17:12:26.7500776Z # Subtest: bad present role_unknown is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7501661Z ok 429 - bad present role_unknown is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7502411Z   ---
+2026-11-13T17:12:26.7502626Z   duration_ms: 0.433198
+2026-11-13T17:12:26.7502876Z   ...
+2026-11-13T17:12:26.7503473Z # Subtest: bad present id_token_escape is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7504367Z ok 430 - bad present id_token_escape is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7504889Z   ---
+2026-11-13T17:12:26.7505110Z   duration_ms: 0.429463
+2026-11-13T17:12:26.7505358Z   ...
+2026-11-13T17:12:26.7505934Z # Subtest: bad present oversized_utf8 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7506813Z ok 431 - bad present oversized_utf8 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7507343Z   ---
+2026-11-13T17:12:26.7507581Z   duration_ms: 0.631811
+2026-11-13T17:12:26.7507826Z   ...
+2026-11-13T17:12:26.7508403Z # Subtest: bad present null_targets_bad is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7509300Z ok 432 - bad present null_targets_bad is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7509853Z   ---
+2026-11-13T17:12:26.7510061Z   duration_ms: 0.710817
+2026-11-13T17:12:26.7510297Z   ...
+2026-11-13T17:12:26.7511002Z # Subtest: bad present missing_source is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7511926Z ok 433 - bad present missing_source is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7512476Z   ---
+2026-11-13T17:12:26.7512702Z   duration_ms: 1.123064
+2026-11-13T17:12:26.7512953Z   ...
+2026-11-13T17:12:26.7513528Z # Subtest: bad present repository_bom is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7514433Z ok 434 - bad present repository_bom is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7514964Z   ---
+2026-11-13T17:12:26.7515338Z   duration_ms: 0.815431
+2026-11-13T17:12:26.7515598Z   ...
+2026-11-13T17:12:26.7516325Z # Subtest: bad present repository_whitespace_control_0000 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7517441Z ok 435 - bad present repository_whitespace_control_0000 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7518074Z   ---
+2026-11-13T17:12:26.7518306Z   duration_ms: 0.494228
+2026-11-13T17:12:26.7518553Z   ...
+2026-11-13T17:12:26.7519258Z # Subtest: bad present repository_whitespace_control_0009 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7520316Z ok 436 - bad present repository_whitespace_control_0009 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7521030Z   ---
+2026-11-13T17:12:26.7521246Z   duration_ms: 0.419127
+2026-11-13T17:12:26.7521481Z   ...
+2026-11-13T17:12:26.7522123Z # Subtest: bad present repository_whitespace_control_000a is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7523200Z ok 437 - bad present repository_whitespace_control_000a is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7523842Z   ---
+2026-11-13T17:12:26.7524066Z   duration_ms: 0.444224
+2026-11-13T17:12:26.7524318Z   ...
+2026-11-13T17:12:26.7524973Z # Subtest: bad present repository_whitespace_control_001c is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7526027Z ok 438 - bad present repository_whitespace_control_001c is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7526614Z   ---
+2026-11-13T17:12:26.7526819Z   duration_ms: 0.470963
+2026-11-13T17:12:26.7527057Z   ...
+2026-11-13T17:12:26.7527726Z # Subtest: bad present repository_whitespace_control_0020 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7528808Z ok 439 - bad present repository_whitespace_control_0020 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7529387Z   ---
+2026-11-13T17:12:26.7529608Z   duration_ms: 0.424395
+2026-11-13T17:12:26.7530036Z   ...
+2026-11-13T17:12:26.7530858Z # Subtest: bad present repository_whitespace_control_007f is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7531976Z ok 440 - bad present repository_whitespace_control_007f is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7532603Z   ---
+2026-11-13T17:12:26.7532836Z   duration_ms: 0.395892
+2026-11-13T17:12:26.7533081Z   ...
+2026-11-13T17:12:26.7533776Z # Subtest: bad present repository_whitespace_control_0085 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7534881Z ok 441 - bad present repository_whitespace_control_0085 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7535553Z   ---
+2026-11-13T17:12:26.7535794Z   duration_ms: 0.420208
+2026-11-13T17:12:26.7536041Z   ...
+2026-11-13T17:12:26.7536740Z # Subtest: bad present repository_whitespace_control_009f is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7537887Z ok 442 - bad present repository_whitespace_control_009f is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7538506Z   ---
+2026-11-13T17:12:26.7538729Z   duration_ms: 0.410855
+2026-11-13T17:12:26.7539002Z   ...
+2026-11-13T17:12:26.7539732Z # Subtest: bad present repository_whitespace_control_00a0 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7540948Z ok 443 - bad present repository_whitespace_control_00a0 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7541595Z   ---
+2026-11-13T17:12:26.7541828Z   duration_ms: 0.399499
+2026-11-13T17:12:26.7542019Z   ...
+2026-11-13T17:12:26.7542546Z # Subtest: bad present repository_whitespace_control_1680 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7543290Z ok 444 - bad present repository_whitespace_control_1680 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7543855Z   ---
+2026-11-13T17:12:26.7544034Z   duration_ms: 0.462952
+2026-11-13T17:12:26.7544227Z   ...
+2026-11-13T17:12:26.7544677Z # Subtest: bad present repository_whitespace_control_2000 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7545830Z ok 445 - bad present repository_whitespace_control_2000 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7546486Z   ---
+2026-11-13T17:12:26.7546728Z   duration_ms: 0.436212
+2026-11-13T17:12:26.7546994Z   ...
+2026-11-13T17:12:26.7547733Z # Subtest: bad present repository_whitespace_control_2001 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7548815Z ok 446 - bad present repository_whitespace_control_2001 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7549412Z   ---
+2026-11-13T17:12:26.7549640Z   duration_ms: 0.451825
+2026-11-13T17:12:26.7549910Z   ...
+2026-11-13T17:12:26.7550736Z # Subtest: bad present repository_whitespace_control_2002 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7551944Z ok 447 - bad present repository_whitespace_control_2002 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7552537Z   ---
+2026-11-13T17:12:26.7552761Z   duration_ms: 0.428782
+2026-11-13T17:12:26.7553033Z   ...
+2026-11-13T17:12:26.7553477Z # Subtest: bad present repository_whitespace_control_2003 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7554158Z ok 448 - bad present repository_whitespace_control_2003 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7554558Z   ---
+2026-11-13T17:12:26.7554725Z   duration_ms: 0.450894
+2026-11-13T17:12:26.7555003Z   ...
+2026-11-13T17:12:26.7555687Z # Subtest: bad present repository_whitespace_control_2004 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7556899Z ok 449 - bad present repository_whitespace_control_2004 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7557754Z   ---
+2026-11-13T17:12:26.7557995Z   duration_ms: 0.445206
+2026-11-13T17:12:26.7558285Z   ...
+2026-11-13T17:12:26.7559052Z # Subtest: bad present repository_whitespace_control_2005 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7560230Z ok 450 - bad present repository_whitespace_control_2005 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7561004Z   ---
+2026-11-13T17:12:26.7561248Z   duration_ms: 0.449912
+2026-11-13T17:12:26.7561497Z   ...
+2026-11-13T17:12:26.7562184Z # Subtest: bad present repository_whitespace_control_2006 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7563253Z ok 451 - bad present repository_whitespace_control_2006 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7563862Z   ---
+2026-11-13T17:12:26.7564108Z   duration_ms: 0.431395
+2026-11-13T17:12:26.7564358Z   ...
+2026-11-13T17:12:26.7565042Z # Subtest: bad present repository_whitespace_control_2007 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7566144Z ok 452 - bad present repository_whitespace_control_2007 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7566762Z   ---
+2026-11-13T17:12:26.7566984Z   duration_ms: 0.450573
+2026-11-13T17:12:26.7567246Z   ...
+2026-11-13T17:12:26.7567989Z # Subtest: bad present repository_whitespace_control_2008 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7569063Z ok 453 - bad present repository_whitespace_control_2008 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7569681Z   ---
+2026-11-13T17:12:26.7569907Z   duration_ms: 0.436373
+2026-11-13T17:12:26.7570152Z   ...
+2026-11-13T17:12:26.7570975Z # Subtest: bad present repository_whitespace_control_2009 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7572012Z ok 454 - bad present repository_whitespace_control_2009 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7572436Z   ---
+2026-11-13T17:12:26.7572608Z   duration_ms: 0.420039
+2026-11-13T17:12:26.7572803Z   ...
+2026-11-13T17:12:26.7573260Z # Subtest: bad present repository_whitespace_control_200a is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7573973Z ok 455 - bad present repository_whitespace_control_200a is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7574378Z   ---
+2026-11-13T17:12:26.7574544Z   duration_ms: 0.460878
+2026-11-13T17:12:26.7574727Z   ...
+2026-11-13T17:12:26.7575171Z # Subtest: bad present repository_whitespace_control_2028 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7575864Z ok 456 - bad present repository_whitespace_control_2028 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7576279Z   ---
+2026-11-13T17:12:26.7576444Z   duration_ms: 0.479566
+2026-11-13T17:12:26.7576645Z   ...
+2026-11-13T17:12:26.7577110Z # Subtest: bad present repository_whitespace_control_2029 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7577796Z ok 457 - bad present repository_whitespace_control_2029 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7578197Z   ---
+2026-11-13T17:12:26.7578406Z   duration_ms: 0.558252
+2026-11-13T17:12:26.7578593Z   ...
+2026-11-13T17:12:26.7579039Z # Subtest: bad present repository_whitespace_control_202f is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7579710Z ok 458 - bad present repository_whitespace_control_202f is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7580097Z   ---
+2026-11-13T17:12:26.7580265Z   duration_ms: 0.557982
+2026-11-13T17:12:26.7580448Z   ...
+2026-11-13T17:12:26.7581262Z # Subtest: bad present repository_whitespace_control_205f is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7582676Z ok 459 - bad present repository_whitespace_control_205f is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7583359Z   ---
+2026-11-13T17:12:26.7583599Z   duration_ms: 0.552634
+2026-11-13T17:12:26.7583880Z   ...
+2026-11-13T17:12:26.7584635Z # Subtest: bad present repository_whitespace_control_3000 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7585845Z ok 460 - bad present repository_whitespace_control_3000 is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7586529Z   ---
+2026-11-13T17:12:26.7586769Z   duration_ms: 0.566945
+2026-11-13T17:12:26.7587042Z   ...
+2026-11-13T17:12:26.7587726Z # Subtest: bad present repository_lone_high is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7588786Z ok 461 - bad present repository_lone_high is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7589408Z   ---
+2026-11-13T17:12:26.7589653Z   duration_ms: 0.569208
+2026-11-13T17:12:26.7589933Z   ...
+2026-11-13T17:12:26.7590557Z # Subtest: bad present repository_lone_low is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7591656Z ok 462 - bad present repository_lone_low is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7592214Z   ---
+2026-11-13T17:12:26.7592433Z   duration_ms: 0.576228
+2026-11-13T17:12:26.7592682Z   ...
+2026-11-13T17:12:26.7593261Z # Subtest: bad present token_lone_high is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7594183Z ok 463 - bad present token_lone_high is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7594774Z   ---
+2026-11-13T17:12:26.7595031Z   duration_ms: 0.754461
+2026-11-13T17:12:26.7595298Z   ...
+2026-11-13T17:12:26.7595934Z # Subtest: bad present token_lone_low is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7597091Z ok 464 - bad present token_lone_low is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7597668Z   ---
+2026-11-13T17:12:26.7597909Z   duration_ms: 0.668504
+2026-11-13T17:12:26.7598178Z   ...
+2026-11-13T17:12:26.7598839Z # Subtest: bad present path_lone_high is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7599696Z ok 465 - bad present path_lone_high is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7600221Z   ---
+2026-11-13T17:12:26.7600445Z   duration_ms: 0.640733
+2026-11-13T17:12:26.7600821Z   ...
+2026-11-13T17:12:26.7601469Z # Subtest: bad present path_lone_low is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7602486Z ok 466 - bad present path_lone_low is atomic in actual network/store ingress and IPC pass-through
+2026-11-13T17:12:26.7603077Z   ---
+2026-11-13T17:12:26.7603333Z   duration_ms: 0.627044
+2026-11-13T17:12:26.7603633Z   ...
+2026-11-13T17:12:26.7604276Z # Subtest: unmatched malformed broadcast does not reject another call or mutate receipt storage
+2026-11-13T17:12:26.7605288Z ok 467 - unmatched malformed broadcast does not reject another call or mutate receipt storage
+2026-11-13T17:12:26.7605879Z   ---
+2026-11-13T17:12:26.7606127Z   duration_ms: 0.385237
+2026-11-13T17:12:26.7606406Z   ...
+2026-11-13T17:12:26.7606992Z # Subtest: bounds reject null, >1024 occurrences, >64KiB and typed binding mismatches
+2026-11-13T17:12:26.7607855Z ok 468 - bounds reject null, >1024 occurrences, >64KiB and typed binding mismatches
+2026-11-13T17:12:26.7608368Z   ---
+2026-11-13T17:12:26.7608618Z   duration_ms: 1.495072
+2026-11-13T17:12:26.7608905Z   ...
+2026-11-13T17:12:26.7609440Z # Subtest: new metadata keeps the existing WS256KiB limit before receipt mutation
+2026-11-13T17:12:26.7610163Z ok 469 - new metadata keeps the existing WS256KiB limit before receipt mutation
+2026-11-13T17:12:26.7610791Z   ---
+2026-11-13T17:12:26.7611039Z   duration_ms: 1.395955
+2026-11-13T17:12:26.7611298Z   ...
+2026-11-13T17:12:26.7611846Z # Subtest: compat m4a and zero SDK general/skill ids retain concrete leaf semantics
+2026-11-13T17:12:26.7612893Z ok 470 - compat m4a and zero SDK general/skill ids retain concrete leaf semantics
+2026-11-13T17:12:26.7613417Z   ---
+2026-11-13T17:12:26.7613674Z   duration_ms: 0.535268
+2026-11-13T17:12:26.7613954Z   ...
+2026-11-13T17:12:26.7614567Z # Subtest: malformed conn_seq0 broadcast with a colliding key cannot reject a pending call
+2026-11-13T17:12:26.7615492Z ok 471 - malformed conn_seq0 broadcast with a colliding key cannot reject a pending call
+2026-11-13T17:12:26.7616054Z   ---
+2026-11-13T17:12:26.7616297Z   duration_ms: 0.359529
+2026-11-13T17:12:26.7616577Z   ...
+2026-11-13T17:12:26.7617315Z # Subtest: network sequential malformed outcomes retain at most eight original intents and replay no fresh keys
+2026-11-13T17:12:26.7618279Z ok 472 - network sequential malformed outcomes retain at most eight original intents and replay no fresh keys
+2026-11-13T17:12:26.7618828Z   ---
+2026-11-13T17:12:26.7619057Z   duration_ms: 1.188
+2026-11-13T17:12:26.7619303Z   ...
+2026-11-13T17:12:26.7619788Z # Subtest: network full retained map cannot admit a missing persisted recovery entry
+2026-11-13T17:12:26.7620741Z ok 473 - network full retained map cannot admit a missing persisted recovery entry
+2026-11-13T17:12:26.7621241Z   ---
+2026-11-13T17:12:26.7621472Z   duration_ms: 0.276958
+2026-11-13T17:12:26.7621734Z   ...
+2026-11-13T17:12:26.7622358Z # Subtest: network legacy successful absence releases capacity and creation does not allocate an intent
+2026-11-13T17:12:26.7623388Z ok 474 - network legacy successful absence releases capacity and creation does not allocate an intent
+2026-11-13T17:12:26.7623997Z   ---
+2026-11-13T17:12:26.7624235Z   duration_ms: 0.919954
+2026-11-13T17:12:26.7624506Z   ...
+2026-11-13T17:12:26.7625191Z # Subtest: every network product command refuses ninth admission without allocating, sending or replacing storage
+2026-11-13T17:12:26.7626521Z ok 475 - every network product command refuses ninth admission without allocating, sending or replacing storage
+2026-11-13T17:12:26.7627143Z   ---
+2026-11-13T17:12:26.7627384Z   duration_ms: 0.633773
+2026-11-13T17:12:26.7627678Z   ...
+2026-11-13T17:12:26.7628282Z # Subtest: network rejoin replays exactly eight retained keys and legacy replies clear them
+2026-11-13T17:12:26.7629192Z ok 476 - network rejoin replays exactly eight retained keys and legacy replies clear them
+2026-11-13T17:12:26.7629755Z   ---
+2026-11-13T17:12:26.7630015Z   duration_ms: 1.001435
+2026-11-13T17:12:26.7630301Z   ...
+2026-11-13T17:12:26.7631084Z # Subtest: network malformed broadcast and wrong-room reply leave retained call unchanged
+2026-11-13T17:12:26.7632014Z ok 477 - network malformed broadcast and wrong-room reply leave retained call unchanged
+2026-11-13T17:12:26.7632550Z   ---
+2026-11-13T17:12:26.7632793Z   duration_ms: 0.48186
+2026-11-13T17:12:26.7633080Z   ...
+2026-11-13T17:12:26.7633775Z # Subtest: raw escaped surrogate cases reject at the actual TS leaf boundary while valid astral pairs pass
+2026-11-13T17:12:26.7634866Z ok 478 - raw escaped surrogate cases reject at the actual TS leaf boundary while valid astral pairs pass
+2026-11-13T17:12:26.7635487Z   ---
+2026-11-13T17:12:26.7635732Z   duration_ms: 0.96421
+2026-11-13T17:12:26.7635992Z   ...
+2026-11-13T17:12:26.7896482Z # Subtest: Decision 35 (1/7): Spine 4.0 version gate accepts 4.0.x and rejects 3.5/3.7/3.8/4.1/4.2
+2026-11-13T17:12:26.7897448Z ok 479 - Decision 35 (1/7): Spine 4.0 version gate accepts 4.0.x and rejects 3.5/3.7/3.8/4.1/4.2
+2026-11-13T17:12:26.7897968Z   ---
+2026-11-13T17:12:26.7898240Z   duration_ms: 1.777027
+2026-11-13T17:12:26.7898507Z   ...
+2026-11-13T17:12:26.7899172Z # Subtest: Decision 35 (2/7): JSON parser and self-written binary .skel encoder/decoder round-trip identically
+2026-11-13T17:12:26.7900209Z ok 480 - Decision 35 (2/7): JSON parser and self-written binary .skel encoder/decoder round-trip identically
+2026-11-13T17:12:26.7900975Z   ---
+2026-11-13T17:12:26.7901220Z   duration_ms: 6.295029
+2026-11-13T17:12:26.7901484Z   ...
+2026-11-13T17:12:26.7902406Z # Subtest: Decision 35 (3/7): Bone hierarchy and all 5 TransformMode world transforms solve accurately
+2026-11-13T17:12:26.7903342Z ok 481 - Decision 35 (3/7): Bone hierarchy and all 5 TransformMode world transforms solve accurately
+2026-11-13T17:12:26.7903882Z   ---
+2026-11-13T17:12:26.7904131Z   duration_ms: 1.642218
+2026-11-13T17:12:26.7904392Z   ...
+2026-11-13T17:12:26.7904971Z # Subtest: Decision 35 (4/7): 2-bone IK, Transform, and Path constraints solve target positions and orientations
+2026-11-13T17:12:26.7905594Z ok 482 - Decision 35 (4/7): 2-bone IK, Transform, and Path constraints solve target positions and orientations
+2026-11-13T17:12:26.7906205Z   ---
+2026-11-13T17:12:26.7906439Z   duration_ms: 2.459482
+2026-11-13T17:12:26.7906694Z   ...
+2026-11-13T17:12:26.7907203Z # Subtest: Decision 35 (5/7): Skins, all 6 attachment types (region, mesh, weighted mesh, clipping, path, boundingbox), and hit testing
+2026-11-13T17:12:26.7907999Z ok 483 - Decision 35 (5/7): Skins, all 6 attachment types (region, mesh, weighted mesh, clipping, path, boundingbox), and hit testing
+2026-11-13T17:12:26.7908433Z   ---
+2026-11-13T17:12:26.7908604Z   duration_ms: 1.152597
+2026-11-13T17:12:26.7908783Z   ...
+2026-11-13T17:12:26.7909298Z # Subtest: Decision 35 (6/7): Stepped, linear, cubic Bezier, transform/path/deform timelines, and multi-track mixing (replace + add)
+2026-11-13T17:12:26.7910103Z ok 484 - Decision 35 (6/7): Stepped, linear, cubic Bezier, transform/path/deform timelines, and multi-track mixing (replace + add)
+2026-11-13T17:12:26.7910545Z   ---
+2026-11-13T17:12:26.7910872Z   duration_ms: 2.358332
+2026-11-13T17:12:26.7911052Z   ...
+2026-11-13T17:12:26.7911532Z # Subtest: Decision 35 (7/7): Atlas parser, WebGL batch geometry, premultiplied alpha blend modes, and dynamicSkin.js fallback
+2026-11-13T17:12:26.7912236Z ok 485 - Decision 35 (7/7): Atlas parser, WebGL batch geometry, premultiplied alpha blend modes, and dynamicSkin.js fallback
+2026-11-13T17:12:26.7912817Z   ---
+2026-11-13T17:12:26.7912985Z   duration_ms: 2.905718
+2026-11-13T17:12:26.7913165Z   ...
+2026-11-13T17:12:26.7913595Z # Subtest: Decision 35 (8/9): Standard Spine 4.0 binary .skel stream codec round-trips and rejects non-4.0 binary headers
+2026-11-13T17:12:26.7914285Z ok 486 - Decision 35 (8/9): Standard Spine 4.0 binary .skel stream codec round-trips and rejects non-4.0 binary headers
+2026-11-13T17:12:26.7914673Z   ---
+2026-11-13T17:12:26.7914838Z   duration_ms: 7.515567
+2026-11-13T17:12:26.7915030Z   ...
+2026-11-13T17:12:26.7915465Z # Subtest: Decision 35 (9/9): Full WebGL shader program, attribute pointers, and RGBA texture pipeline execute cleanly
+2026-11-13T17:12:26.7916116Z ok 487 - Decision 35 (9/9): Full WebGL shader program, attribute pointers, and RGBA texture pipeline execute cleanly
+2026-11-13T17:12:26.7916496Z   ---
+2026-11-13T17:12:26.7916658Z   duration_ms: 1.007554
+2026-11-13T17:12:26.7916837Z   ...
+2026-11-13T17:12:26.7917399Z # Subtest: Decision 35 (10/11): Binary .skel zig-zag signed varints (negative drawOrder), header.hash fidelity, nonessential=false, and LinkedMesh (type 3)
+2026-11-13T17:12:26.7918303Z ok 488 - Decision 35 (10/11): Binary .skel zig-zag signed varints (negative drawOrder), header.hash fidelity, nonessential=false, and LinkedMesh (type 3)
+2026-11-13T17:12:26.7918771Z   ---
+2026-11-13T17:12:26.7918946Z   duration_ms: 4.793989
+2026-11-13T17:12:26.7919127Z   ...
+2026-11-13T17:12:26.7919615Z # Subtest: Decision 35 (11/11): Concave ClippingAttachment polygon triangulates via ear-clipping without cutting off valid wings
+2026-11-13T17:12:26.7920349Z ok 489 - Decision 35 (11/11): Concave ClippingAttachment polygon triangulates via ear-clipping without cutting off valid wings
+2026-11-13T17:12:26.7921117Z   ---
+2026-11-13T17:12:26.7921280Z   duration_ms: 2.623674
+2026-11-13T17:12:26.7921461Z   ...
+2026-11-13T17:12:26.7921630Z 1..489
+2026-11-13T17:12:26.7921791Z # tests 489
+2026-11-13T17:12:26.7921960Z # suites 0
+2026-11-13T17:12:26.7922127Z # pass 489
+2026-11-13T17:12:26.7922283Z # fail 0
+2026-11-13T17:12:26.7922589Z # cancelled 0
+2026-11-13T17:12:26.7922755Z # skipped 0
+2026-11-13T17:12:26.7922912Z # todo 0
+2026-11-13T17:12:26.7923091Z # duration_ms 22228.921358
