@@ -1,0 +1,67 @@
+﻿2026-11-13T17:54:46.9808259Z ##[group]Run actions/upload-artifact@v4
+2026-11-13T17:54:46.9808573Z with:
+2026-11-13T17:54:46.9808806Z   name: installer-ubuntu-latest
+2026-11-13T17:54:46.9809099Z   path: noname-next/target/release/bundle/**
+
+2026-11-13T17:54:46.9809417Z   if-no-files-found: error
+2026-11-13T17:54:46.9809676Z   compression-level: 6
+2026-11-13T17:54:46.9809912Z   overwrite: false
+2026-11-13T17:54:46.9810145Z   include-hidden-files: false
+2026-11-13T17:54:46.9810388Z env:
+2026-11-13T17:54:46.9810601Z   CARGO_TERM_COLOR: always
+2026-11-13T17:54:46.9810854Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T17:54:46.9811116Z   CARGO_INCREMENTAL: 0
+2026-11-13T17:54:46.9811345Z   CACHE_ON_FAILURE: false
+2026-11-13T17:54:46.9811633Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-11-13T17:54:46.9812071Z ##[endgroup]
+2026-11-13T17:54:47.1846773Z (node:8315) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-13T17:54:47.1847919Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-13T17:54:47.2738220Z With the provided path, there will be 384 files uploaded
+2026-11-13T17:54:47.2739035Z Artifact name is valid!
+2026-11-13T17:54:47.2739459Z Root directory input is valid!
+2026-11-13T17:54:47.5882189Z Beginning upload of artifact content to blob storage
+2026-11-13T17:54:47.8914164Z (node:8315) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-13T17:54:48.2648733Z Uploaded bytes 8388608
+2026-11-13T17:54:48.6378581Z Uploaded bytes 16777216
+2026-11-13T17:54:49.4988966Z Uploaded bytes 25165824
+2026-11-13T17:54:50.2206529Z Uploaded bytes 33554432
+2026-11-13T17:54:50.8527787Z Uploaded bytes 41943040
+2026-11-13T17:54:51.4104556Z Uploaded bytes 50331648
+2026-11-13T17:54:52.1829176Z Uploaded bytes 58720256
+2026-11-13T17:54:52.7893324Z Uploaded bytes 67108864
+2026-11-13T17:54:53.5039006Z Uploaded bytes 75497472
+2026-11-13T17:54:54.2364138Z Uploaded bytes 83886080
+2026-11-13T17:54:54.9452670Z Uploaded bytes 92274688
+2026-11-13T17:54:55.5255404Z Uploaded bytes 100663296
+2026-11-13T17:54:56.1553376Z Uploaded bytes 109051904
+2026-11-13T17:54:56.5769277Z Uploaded bytes 117440512
+2026-11-13T17:54:57.3397372Z Uploaded bytes 125829120
+2026-11-13T17:54:57.5820213Z Uploaded bytes 134217728
+2026-11-13T17:54:57.8027587Z Uploaded bytes 142606336
+2026-11-13T17:54:58.0169055Z Uploaded bytes 150994944
+2026-11-13T17:54:58.2751193Z Uploaded bytes 159383552
+2026-11-13T17:54:58.5585018Z Uploaded bytes 167772160
+2026-11-13T17:54:58.7662683Z Uploaded bytes 176160768
+2026-11-13T17:54:59.0578129Z Uploaded bytes 184549376
+2026-11-13T17:54:59.2932677Z Uploaded bytes 192937984
+2026-11-13T17:54:59.5221493Z Uploaded bytes 201326592
+2026-11-13T17:54:59.7721368Z Uploaded bytes 209715200
+2026-11-13T17:55:00.0107504Z Uploaded bytes 218103808
+2026-11-13T17:55:00.2481186Z Uploaded bytes 226492416
+2026-11-13T17:55:00.5239606Z Uploaded bytes 234881024
+2026-11-13T17:55:01.0905491Z Uploaded bytes 243269632
+2026-11-13T17:55:01.5829596Z Uploaded bytes 251658240
+2026-11-13T17:55:01.8071164Z Uploaded bytes 260046848
+2026-11-13T17:55:02.0930275Z Uploaded bytes 268435456
+2026-11-13T17:55:02.3763452Z Uploaded bytes 276824064
+2026-11-13T17:55:02.6463300Z Uploaded bytes 285212672
+2026-11-13T17:55:02.8547481Z Uploaded bytes 293601280
+2026-11-13T17:55:03.1293944Z Uploaded bytes 301989888
+2026-11-13T17:55:03.4430419Z Uploaded bytes 310378496
+2026-11-13T17:55:03.5175958Z Uploaded bytes 311678762
+2026-11-13T17:55:03.5571469Z Finished uploading artifact content to blob storage!
+2026-11-13T17:55:03.5574600Z SHA256 digest of uploaded artifact zip is cc999b12dcbfe090e21dc61b912c28d2231712a7e489d92c5b99e3d73456b44b
+2026-11-13T17:55:03.5577145Z Finalizing artifact upload
+2026-11-13T17:55:03.9979945Z Artifact installer-ubuntu-latest.zip successfully finalized. Artifact ID 14063756525
+2026-11-13T17:55:03.9980757Z Artifact installer-ubuntu-latest has been successfully uploaded! Final size is 311678762 bytes. Artifact ID is 14063756525
+2026-11-13T17:55:03.9988494Z Artifact download URL: https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340/artifacts/14063756525

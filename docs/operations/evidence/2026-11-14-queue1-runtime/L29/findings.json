@@ -1,0 +1,137 @@
+{
+  "date": "2026-11-14",
+  "baseline_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "scenario_author": "/root/fix_dddanzhi",
+  "independent_review_signed": false,
+  "inventory_modified_by_this_agent": false,
+  "findings": [
+    {
+      "id": "L29-runtime-01",
+      "skill": "mbcmqingzheng",
+      "status": "observed_difference",
+      "priority": "P2",
+      "cases": [
+        "q_A",
+        "q_B",
+        "q_target_B"
+      ],
+      "finding": "目标花色询问时，上游主人已经弃所选花色，原生仍持原牌；最后回答才支付双方。",
+      "upstream_source": "archive/upstream/noname-liuli/noname/character/mobile.js:17212",
+      "native_source": "crates/engine-native-content/src/content/host/step/skills_damage.rs:525",
+      "observed_evidence": [
+        "browser-round8/upstream-q_A.json",
+        "native-round4/native-q_A.json"
+      ],
+      "after_product_fix": "unchanged; wine restore repair does not change this path"
+    },
+    {
+      "id": "L29-runtime-02",
+      "skill": "mbcmqingzheng",
+      "status": "observed_difference",
+      "priority": "P2",
+      "cases": [
+        "q_A",
+        "q_target_B"
+      ],
+      "finding": "真实上游damage返回事件来源为主人0，原生DamageDealt来源None。后续damageSource技能结果未实跑。",
+      "upstream_source": "archive/upstream/noname-liuli/noname/character/mobile.js:17248",
+      "native_source": "crates/engine-native-content/src/content/host/step/skills_damage.rs:560",
+      "observed_evidence": [
+        "browser-round8/upstream-q_A.json",
+        "browser-round8/upstream-q_target_B.json",
+        "native-round4/native-q_A.json"
+      ],
+      "after_product_fix": "unchanged"
+    },
+    {
+      "id": "L29-runtime-03",
+      "skill": "mbcmqingzheng",
+      "status": "observed_difference",
+      "priority": "P2",
+      "cases": [
+        "q_cancel_suit_attempt"
+      ],
+      "finding": "上游首个花色询问可取消；原生先有可取消发动确认，再到不可取消花色窗，空回答被拒绝并继续挂起。",
+      "upstream_source": "archive/upstream/noname-liuli/noname/character/mobile.js:17130",
+      "native_source": "crates/engine-native-content/src/content/host/step/skills_damage.rs:461",
+      "observed_evidence": [
+        "browser-round8/upstream-q_cancel_suit_attempt.json",
+        "native-round4/native-q_cancel_suit_attempt.json"
+      ],
+      "after_product_fix": "unchanged"
+    },
+    {
+      "id": "L29-runtime-04",
+      "skill": "mbcmfangzhu",
+      "status": "observed_difference",
+      "priority": "P1",
+      "cases": [
+        "f_skill_A"
+      ],
+      "finding": "上游技能封锁保留forever酒诗、封普通锁定马术；原生enabled反向，酒诗false/马术true。",
+      "upstream_source": "archive/upstream/noname-liuli/noname/character/mobile.js:17471",
+      "native_source": "crates/engine-native-content/src/content/host/step/skills_targets.rs:634",
+      "observed_evidence": [
+        "browser-round8/upstream-f_skill_A.json",
+        "native-round4/native-f_skill_A.json"
+      ],
+      "after_product_fix": "unchanged"
+    },
+    {
+      "id": "L29-runtime-05",
+      "skill": "mbcmjiushi",
+      "status": "observed_intermediate_state_difference",
+      "priority": "P2",
+      "cases": [
+        "j_active_gain",
+        "j_active_cancel_gain"
+      ],
+      "finding": "得锦囊确认窗里上游酒标记0、实际酒尚待结算；原生jiu_active/jiu_used已true。最终酒状态同向；未实测该时点差异与其他技能组合的效果。",
+      "upstream_source": "archive/upstream/noname-liuli/noname/character/mobile.js:17277",
+      "native_source": "crates/engine-native-content/src/content/host/step/skills_targets.rs:447",
+      "observed_evidence": [
+        "browser-round8/upstream-j_active_gain.json",
+        "native-round4/native-j_active_gain.json"
+      ],
+      "after_product_fix": "unchanged"
+    },
+    {
+      "id": "L29-runtime-06",
+      "skill": "mbcmjiushi",
+      "status": "parent_local_fix_runtime_rechecked_not_full_acceptance",
+      "priority": "P1",
+      "cases": [
+        "j_active_gain",
+        "j_active_cancel_gain",
+        "j_damage_back_accept_gain",
+        "j_damage_back_cancel"
+      ],
+      "finding": "初始实际确认窗与恢复派生不一致导致OpenChoiceMismatch；主agent将两个恢复派生改为已有ChoiceSpec::confirm同规格。after 68/68新挂起恢复与68/68旧档续行通过，前后direct命令/日志/NGSA均相同。",
+      "upstream_source": "archive/upstream/noname-liuli/noname/character/mobile.js:17374",
+      "native_source": "crates/engine-native-content/src/content/host/asks_wudian.rs:724",
+      "observed_evidence": [
+        "comparison-before-product-fix.json",
+        "comparison-after-product-fix.json",
+        "old-ngsa-continuation-summary.json",
+        "native-before-after-direct.json"
+      ],
+      "after_product_fix": "two existing confirm shapes corrected by parent; no schema/ABI/WS/rules version change"
+    }
+  ],
+  "verification_gaps": [
+    "complete 17 unmapped deck cards and6 unmapped initial discard cards",
+    "full RNG/event stream and full hand order",
+    "full L29 wrapper/unlock/display/config",
+    "temporary effect expiry through targets actual next phaseEnd",
+    "all native normal/virtual use/respond legality under fangzhu ban",
+    "downstream source-dependent skill consequences of source=None",
+    "upstream save/restore and cross-engine archive formats"
+  ]
+}

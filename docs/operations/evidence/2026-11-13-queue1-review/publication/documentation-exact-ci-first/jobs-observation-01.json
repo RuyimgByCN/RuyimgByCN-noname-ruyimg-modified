@@ -1,0 +1,1021 @@
+{
+  "at": "2026-11-14T01:41:48.581647+08:00",
+  "argv": [
+    "gh",
+    "api",
+    "--allow-escape-sequences",
+    "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340/jobs?per_page=100"
+  ],
+  "exit_code": 0,
+  "raw_response": {
+    "total_count": 10,
+    "jobs": [
+      {
+        "id": 132056736691,
+        "run_id": 43475076340,
+        "workflow_name": "ci",
+        "head_branch": "native-convergence",
+        "run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOS6pZOs8AAAAevzHjsw",
+        "head_sha": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/132056736691",
+        "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340/job/132056736691",
+        "status": "queued",
+        "conclusion": null,
+        "created_at": "2026-11-13T17:40:19Z",
+        "started_at": "2026-11-13T17:40:19Z",
+        "completed_at": null,
+        "name": "desktop-macos-latest",
+        "steps": [],
+        "check_run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/check-runs/132056736691",
+        "labels": [
+          "macos-latest"
+        ],
+        "runner_id": null,
+        "runner_name": null,
+        "runner_group_id": null,
+        "runner_group_name": null
+      },
+      {
+        "id": 132056736723,
+        "run_id": 43475076340,
+        "workflow_name": "ci",
+        "head_branch": "native-convergence",
+        "run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOS6pZOs8AAAAevzHj0w",
+        "head_sha": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/132056736723",
+        "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340/job/132056736723",
+        "status": "in_progress",
+        "conclusion": null,
+        "created_at": "2026-11-13T17:40:19Z",
+        "started_at": "2026-11-13T17:40:23Z",
+        "completed_at": null,
+        "name": "gates-ubuntu",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-11-13T17:40:24Z",
+            "completed_at": "2026-11-13T17:40:25Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-11-13T17:40:25Z",
+            "completed_at": "2026-11-13T17:41:07Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@stable",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-11-13T17:41:07Z",
+            "completed_at": "2026-11-13T17:41:18Z"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-11-13T17:41:18Z",
+            "completed_at": "2026-11-13T17:41:27Z"
+          },
+          {
+            "name": "Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-11-13T17:41:27Z",
+            "completed_at": "2026-11-13T17:41:34Z"
+          },
+          {
+            "name": "Run ./noname-next/.github/actions/prepare-original-content",
+            "status": "in_progress",
+            "conclusion": null,
+            "number": 6,
+            "started_at": "2026-11-13T17:41:34Z",
+            "completed_at": null
+          },
+          {
+            "name": "Source files stay within 2,000 lines (Rust non-test code within 1,000 effective lines)",
+            "status": "pending",
+            "conclusion": null,
+            "number": 7,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "engine-native kernel layer does not grow content/engine references",
+            "status": "pending",
+            "conclusion": null,
+            "number": 8,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Gate 1 — cargo test --workspace",
+            "status": "pending",
+            "conclusion": null,
+            "number": 9,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Gate 1b — engine-native all targets warnings denied",
+            "status": "pending",
+            "conclusion": null,
+            "number": 10,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Gate 2 — conformance",
+            "status": "pending",
+            "conclusion": null,
+            "number": 11,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Install wasm-pack",
+            "status": "pending",
+            "conclusion": null,
+            "number": 12,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Gate 3 — cross-target hash (Native vs WASM)",
+            "status": "pending",
+            "conclusion": null,
+            "number": 13,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Gate 4 — original content sync verify",
+            "status": "pending",
+            "conclusion": null,
+            "number": 14,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Post Run ./noname-next/.github/actions/prepare-original-content",
+            "status": "pending",
+            "conclusion": null,
+            "number": 25,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Post Run actions/setup-node@v4",
+            "status": "pending",
+            "conclusion": null,
+            "number": 26,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@v2",
+            "status": "pending",
+            "conclusion": null,
+            "number": 27,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "pending",
+            "conclusion": null,
+            "number": 28,
+            "started_at": null,
+            "completed_at": null
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/check-runs/132056736723",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000001368,
+        "runner_name": "GitHub Actions 1000001368",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 132056736763,
+        "run_id": 43475076340,
+        "workflow_name": "ci",
+        "head_branch": "native-convergence",
+        "run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOS6pZOs8AAAAevzHj-w",
+        "head_sha": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/132056736763",
+        "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340/job/132056736763",
+        "status": "in_progress",
+        "conclusion": null,
+        "created_at": "2026-11-13T17:40:19Z",
+        "started_at": "2026-11-13T17:40:24Z",
+        "completed_at": null,
+        "name": "perf-ubuntu-latest",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-11-13T17:40:24Z",
+            "completed_at": "2026-11-13T17:40:25Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-11-13T17:40:25Z",
+            "completed_at": "2026-11-13T17:41:04Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@stable",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-11-13T17:41:04Z",
+            "completed_at": "2026-11-13T17:41:14Z"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-11-13T17:41:14Z",
+            "completed_at": "2026-11-13T17:41:21Z"
+          },
+          {
+            "name": "Tier list",
+            "status": "in_progress",
+            "conclusion": null,
+            "number": 5,
+            "started_at": "2026-11-13T17:41:21Z",
+            "completed_at": null
+          },
+          {
+            "name": "Tier report (server-baseline budget)",
+            "status": "pending",
+            "conclusion": null,
+            "number": 6,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@v2",
+            "status": "pending",
+            "conclusion": null,
+            "number": 11,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "pending",
+            "conclusion": null,
+            "number": 12,
+            "started_at": null,
+            "completed_at": null
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/check-runs/132056736763",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000001371,
+        "runner_name": "GitHub Actions 1000001371",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 132056736828,
+        "run_id": 43475076340,
+        "workflow_name": "ci",
+        "head_branch": "native-convergence",
+        "run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOS6pZOs8AAAAevzHkPA",
+        "head_sha": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/132056736828",
+        "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340/job/132056736828",
+        "status": "in_progress",
+        "conclusion": null,
+        "created_at": "2026-11-13T17:40:19Z",
+        "started_at": "2026-11-13T17:40:24Z",
+        "completed_at": null,
+        "name": "build-windows-latest",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-11-13T17:40:24Z",
+            "completed_at": "2026-11-13T17:40:25Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-11-13T17:40:25Z",
+            "completed_at": "2026-11-13T17:41:26Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@stable",
+            "status": "in_progress",
+            "conclusion": null,
+            "number": 3,
+            "started_at": "2026-11-13T17:41:26Z",
+            "completed_at": null
+          },
+          {
+            "name": "Run Swatinem/rust-cache@v2",
+            "status": "pending",
+            "conclusion": null,
+            "number": 4,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Build workspace",
+            "status": "pending",
+            "conclusion": null,
+            "number": 5,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Unit tests",
+            "status": "pending",
+            "conclusion": null,
+            "number": 6,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "pending",
+            "conclusion": null,
+            "number": 12,
+            "started_at": null,
+            "completed_at": null
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/check-runs/132056736828",
+        "labels": [
+          "windows-latest"
+        ],
+        "runner_id": 1000001374,
+        "runner_name": "GitHub Actions 1000001374",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 132056736874,
+        "run_id": 43475076340,
+        "workflow_name": "ci",
+        "head_branch": "native-convergence",
+        "run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOS6pZOs8AAAAevzHkag",
+        "head_sha": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/132056736874",
+        "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340/job/132056736874",
+        "status": "queued",
+        "conclusion": null,
+        "created_at": "2026-11-13T17:40:19Z",
+        "started_at": "2026-11-13T17:40:19Z",
+        "completed_at": null,
+        "name": "perf-macos-latest",
+        "steps": [],
+        "check_run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/check-runs/132056736874",
+        "labels": [
+          "macos-latest"
+        ],
+        "runner_id": null,
+        "runner_name": null,
+        "runner_group_id": null,
+        "runner_group_name": null
+      },
+      {
+        "id": 132056736908,
+        "run_id": 43475076340,
+        "workflow_name": "ci",
+        "head_branch": "native-convergence",
+        "run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOS6pZOs8AAAAevzHkjA",
+        "head_sha": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/132056736908",
+        "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340/job/132056736908",
+        "status": "in_progress",
+        "conclusion": null,
+        "created_at": "2026-11-13T17:40:19Z",
+        "started_at": "2026-11-13T17:40:24Z",
+        "completed_at": null,
+        "name": "build-ubuntu-latest",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-11-13T17:40:25Z",
+            "completed_at": "2026-11-13T17:40:26Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-11-13T17:40:26Z",
+            "completed_at": "2026-11-13T17:41:07Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@stable",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-11-13T17:41:07Z",
+            "completed_at": "2026-11-13T17:41:18Z"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-11-13T17:41:18Z",
+            "completed_at": "2026-11-13T17:41:27Z"
+          },
+          {
+            "name": "Build workspace",
+            "status": "in_progress",
+            "conclusion": null,
+            "number": 5,
+            "started_at": "2026-11-13T17:41:27Z",
+            "completed_at": null
+          },
+          {
+            "name": "Unit tests",
+            "status": "pending",
+            "conclusion": null,
+            "number": 6,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@v2",
+            "status": "pending",
+            "conclusion": null,
+            "number": 11,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "pending",
+            "conclusion": null,
+            "number": 12,
+            "started_at": null,
+            "completed_at": null
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/check-runs/132056736908",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000001370,
+        "runner_name": "GitHub Actions 1000001370",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 132056736978,
+        "run_id": 43475076340,
+        "workflow_name": "ci",
+        "head_branch": "native-convergence",
+        "run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOS6pZOs8AAAAevzHk0g",
+        "head_sha": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/132056736978",
+        "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340/job/132056736978",
+        "status": "in_progress",
+        "conclusion": null,
+        "created_at": "2026-11-13T17:40:19Z",
+        "started_at": "2026-11-13T17:40:24Z",
+        "completed_at": null,
+        "name": "desktop-ubuntu-latest",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-11-13T17:40:24Z",
+            "completed_at": "2026-11-13T17:40:26Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-11-13T17:40:26Z",
+            "completed_at": "2026-11-13T17:41:11Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@stable",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-11-13T17:41:11Z",
+            "completed_at": "2026-11-13T17:41:25Z"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-11-13T17:41:25Z",
+            "completed_at": "2026-11-13T17:41:36Z"
+          },
+          {
+            "name": "Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-11-13T17:41:36Z",
+            "completed_at": "2026-11-13T17:41:43Z"
+          },
+          {
+            "name": "Install Linux Tauri dependencies",
+            "status": "in_progress",
+            "conclusion": null,
+            "number": 6,
+            "started_at": "2026-11-13T17:41:43Z",
+            "completed_at": null
+          },
+          {
+            "name": "Run ./noname-next/.github/actions/prepare-original-content",
+            "status": "pending",
+            "conclusion": null,
+            "number": 7,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Install wasm-pack",
+            "status": "pending",
+            "conclusion": null,
+            "number": 8,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Install Tauri CLI",
+            "status": "pending",
+            "conclusion": null,
+            "number": 9,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Produce installer (tauri beforeBuildCommand builds the web client)",
+            "status": "pending",
+            "conclusion": null,
+            "number": 10,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Upload installer artifact",
+            "status": "pending",
+            "conclusion": null,
+            "number": 11,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Post Run actions/setup-node@v4",
+            "status": "pending",
+            "conclusion": null,
+            "number": 20,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@v2",
+            "status": "pending",
+            "conclusion": null,
+            "number": 21,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "pending",
+            "conclusion": null,
+            "number": 22,
+            "started_at": null,
+            "completed_at": null
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/check-runs/132056736978",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000001369,
+        "runner_name": "GitHub Actions 1000001369",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 132056737020,
+        "run_id": 43475076340,
+        "workflow_name": "ci",
+        "head_branch": "native-convergence",
+        "run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOS6pZOs8AAAAevzHk_A",
+        "head_sha": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/132056737020",
+        "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340/job/132056737020",
+        "status": "in_progress",
+        "conclusion": null,
+        "created_at": "2026-11-13T17:40:19Z",
+        "started_at": "2026-11-13T17:40:24Z",
+        "completed_at": null,
+        "name": "desktop-windows-latest",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-11-13T17:40:25Z",
+            "completed_at": "2026-11-13T17:40:26Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-11-13T17:40:26Z",
+            "completed_at": "2026-11-13T17:41:37Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@stable",
+            "status": "in_progress",
+            "conclusion": null,
+            "number": 3,
+            "started_at": "2026-11-13T17:41:37Z",
+            "completed_at": null
+          },
+          {
+            "name": "Run Swatinem/rust-cache@v2",
+            "status": "pending",
+            "conclusion": null,
+            "number": 4,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Run actions/setup-node@v4",
+            "status": "pending",
+            "conclusion": null,
+            "number": 5,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Install Linux Tauri dependencies",
+            "status": "pending",
+            "conclusion": null,
+            "number": 6,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Run ./noname-next/.github/actions/prepare-original-content",
+            "status": "pending",
+            "conclusion": null,
+            "number": 7,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Install wasm-pack",
+            "status": "pending",
+            "conclusion": null,
+            "number": 8,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Install Tauri CLI",
+            "status": "pending",
+            "conclusion": null,
+            "number": 9,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Produce installer (tauri beforeBuildCommand builds the web client)",
+            "status": "pending",
+            "conclusion": null,
+            "number": 10,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Upload installer artifact",
+            "status": "pending",
+            "conclusion": null,
+            "number": 11,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "pending",
+            "conclusion": null,
+            "number": 22,
+            "started_at": null,
+            "completed_at": null
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/check-runs/132056737020",
+        "labels": [
+          "windows-latest"
+        ],
+        "runner_id": 1000001373,
+        "runner_name": "GitHub Actions 1000001373",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 132056737033,
+        "run_id": 43475076340,
+        "workflow_name": "ci",
+        "head_branch": "native-convergence",
+        "run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOS6pZOs8AAAAevzHlCQ",
+        "head_sha": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/132056737033",
+        "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340/job/132056737033",
+        "status": "in_progress",
+        "conclusion": null,
+        "created_at": "2026-11-13T17:40:19Z",
+        "started_at": "2026-11-13T17:40:26Z",
+        "completed_at": null,
+        "name": "build-macos-latest",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-11-13T17:40:26Z",
+            "completed_at": "2026-11-13T17:40:28Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "in_progress",
+            "conclusion": null,
+            "number": 2,
+            "started_at": "2026-11-13T17:40:28Z",
+            "completed_at": null
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@stable",
+            "status": "pending",
+            "conclusion": null,
+            "number": 3,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Run Swatinem/rust-cache@v2",
+            "status": "pending",
+            "conclusion": null,
+            "number": 4,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Build workspace",
+            "status": "pending",
+            "conclusion": null,
+            "number": 5,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Unit tests",
+            "status": "pending",
+            "conclusion": null,
+            "number": 6,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "pending",
+            "conclusion": null,
+            "number": 12,
+            "started_at": null,
+            "completed_at": null
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/check-runs/132056737033",
+        "labels": [
+          "macos-latest"
+        ],
+        "runner_id": 1000001376,
+        "runner_name": "GitHub Actions 1000001376",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 132056737308,
+        "run_id": 43475076340,
+        "workflow_name": "ci",
+        "head_branch": "native-convergence",
+        "run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOS6pZOs8AAAAevzHmHA",
+        "head_sha": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/132056737308",
+        "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340/job/132056737308",
+        "status": "in_progress",
+        "conclusion": null,
+        "created_at": "2026-11-13T17:40:19Z",
+        "started_at": "2026-11-13T17:40:24Z",
+        "completed_at": null,
+        "name": "native-web",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-11-13T17:40:24Z",
+            "completed_at": "2026-11-13T17:40:25Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-11-13T17:40:26Z",
+            "completed_at": "2026-11-13T17:41:02Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@stable",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-11-13T17:41:02Z",
+            "completed_at": "2026-11-13T17:41:13Z"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-11-13T17:41:13Z",
+            "completed_at": "2026-11-13T17:41:18Z"
+          },
+          {
+            "name": "Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-11-13T17:41:18Z",
+            "completed_at": "2026-11-13T17:41:24Z"
+          },
+          {
+            "name": "Run ./noname-next/.github/actions/prepare-original-content",
+            "status": "in_progress",
+            "conclusion": null,
+            "number": 6,
+            "started_at": "2026-11-13T17:41:24Z",
+            "completed_at": null
+          },
+          {
+            "name": "Install wasm-pack",
+            "status": "pending",
+            "conclusion": null,
+            "number": 7,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Rebuild native WASM from current source",
+            "status": "pending",
+            "conclusion": null,
+            "number": 8,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Rebuild legacy WASM (still imported by the client)",
+            "status": "pending",
+            "conclusion": null,
+            "number": 9,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Native kernel and package loader regressions",
+            "status": "pending",
+            "conclusion": null,
+            "number": 10,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Real native Worker smoke",
+            "status": "pending",
+            "conclusion": null,
+            "number": 11,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Frontend regressions",
+            "status": "pending",
+            "conclusion": null,
+            "number": 12,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Frontend typecheck and production build",
+            "status": "pending",
+            "conclusion": null,
+            "number": 13,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Post Run ./noname-next/.github/actions/prepare-original-content",
+            "status": "pending",
+            "conclusion": null,
+            "number": 23,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Post Run actions/setup-node@v4",
+            "status": "pending",
+            "conclusion": null,
+            "number": 24,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@v2",
+            "status": "pending",
+            "conclusion": null,
+            "number": 25,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "pending",
+            "conclusion": null,
+            "number": 26,
+            "started_at": null,
+            "completed_at": null
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/check-runs/132056737308",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000001372,
+        "runner_name": "GitHub Actions 1000001372",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      }
+    ]
+  }
+}

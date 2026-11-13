@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-13T18:08:46.461157+00:00",
+  "command": "CARGO_TARGET_DIR=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target NONAME_REPO_ROOT=/Users/ruyimg/Documents/Claude/sanguosha/noname-next U07_ARCHIVE_DIR=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/verified-archives cargo run --offline --manifest-path /private/tmp/noname-queue1-u07-native/Cargo.toml",
+  "stdout": "07-verified.log",
+  "stderr": "07-verified.stderr",
+  "source": "probe-07.rs",
+  "reason": "resolve initial-state audit concern: explicitly capture linked, face_down and hujia in addition to regions/hp/skills/marks; no behavior changes"
+}

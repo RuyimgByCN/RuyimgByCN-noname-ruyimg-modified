@@ -1,0 +1,7 @@
+{
+  "at": "2026-11-14T01:54:44.048978+08:00",
+  "prior_cohort": "13 records tagged first in case-results.jsonl",
+  "finding": "p.uninit plus DOM card removal leaves stale virtual equipment across cases. Raw skills show kuwu/monkey persisting in later xuelun fixtures. Prior records are retained but excluded from same-initial-projection comparisons.",
+  "correction": "Reload the actual upstream page and wait for eight initialized players before each case, then apply its independent native fixture. No upstream skill code changed.",
+  "first_runner": "run-cases-first-cohort.py"
+}

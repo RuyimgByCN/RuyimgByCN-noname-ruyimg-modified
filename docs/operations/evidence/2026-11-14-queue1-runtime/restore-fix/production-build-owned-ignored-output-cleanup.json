@@ -1,0 +1,19 @@
+{
+  "at": "2026-11-14T02:19:38.097095+08:00",
+  "removed_exact_build_outputs_after_private_backup": [
+    "apps/web-client/dist/assets/index-AhlAfnl3.css",
+    "apps/web-client/dist/assets/engine_wasm_bg-MnGrgCz8.wasm",
+    "apps/web-client/dist/assets/engine.worker-BA44VKl-.js",
+    "apps/web-client/dist/assets/engine.native.worker-ejoI0OoG.js",
+    "apps/web-client/dist/assets/index-CjRBDHpz.js",
+    "apps/web-client/dist/assets/engine_native_wasm_bg-COTB33g-.wasm",
+    "apps/web-client/dist/pkg/engine_wasm_bg.wasm",
+    "apps/web-client/dist/pkg/engine_wasm.d.ts",
+    "apps/web-client/dist/pkg/.gitignore",
+    "apps/web-client/dist/pkg/package.json",
+    "apps/web-client/dist/pkg/engine_wasm_bg.wasm.d.ts",
+    "apps/web-client/dist/pkg/engine_wasm.js"
+  ],
+  "private_copy_still_present": true,
+  "scope": "Only filenames emitted by this build, with exact captured hashes, excluded from tracked dist files; no other cache touched."
+}

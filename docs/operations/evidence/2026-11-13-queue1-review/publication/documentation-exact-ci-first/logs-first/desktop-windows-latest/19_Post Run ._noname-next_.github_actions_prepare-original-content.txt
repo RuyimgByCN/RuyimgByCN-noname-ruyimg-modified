@@ -1,0 +1,19 @@
+﻿2026-11-13T17:57:48.0631941Z Post job cleanup.
+2026-11-13T17:57:48.0637355Z ##[start-action display=Run pnpm/action-setup@v4;id=__780a4ec6-6411-484d-b9f4-6c7802a6c3d1.__pnpm_action-setup]
+2026-11-13T17:57:48.0761730Z Post job cleanup.
+2026-11-13T17:57:48.2241825Z Pruning is unnecessary.
+2026-11-13T17:57:48.2355814Z ##[end-action id=__780a4ec6-6411-484d-b9f4-6c7802a6c3d1.__pnpm_action-setup;outcome=success;conclusion=success;duration_ms=171]
+2026-11-13T17:57:48.2358120Z ##[start-action display=Run actions/checkout@v4;id=__780a4ec6-6411-484d-b9f4-6c7802a6c3d1.__actions_checkout]
+2026-11-13T17:57:48.2498375Z Post job cleanup.
+2026-11-13T17:57:48.3993509Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-11-13T17:57:48.4293760Z git version 2.56.0.windows.4
+2026-11-13T17:57:48.4351987Z Temporarily overriding HOME='D:\a\_temp\58249b6b-3cc2-46a0-ae2a-0140af2f87a6' before making global git config changes
+2026-11-13T17:57:48.4353130Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-13T17:57:48.4361763Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\archive\upstream\noname
+2026-11-13T17:57:48.4698466Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-11-13T17:57:48.5031906Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-11-13T17:57:48.9857729Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-13T17:57:49.0175543Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-11-13T17:57:49.4930949Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-13T17:57:49.5250919Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-13T17:57:49.9952013Z ##[end-action id=__780a4ec6-6411-484d-b9f4-6c7802a6c3d1.__actions_checkout;outcome=success;conclusion=success;duration_ms=1759]

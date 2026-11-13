@@ -1,0 +1,6 @@
+{
+  "reason": "reload readiness incorrectly required initialized character names while fresh game paused at update/start; raw requests and any timeout rows retained",
+  "processes": [
+    "79939 /Library/Frameworks/Python.framework/Versions/3.10/Resources/Python.app/Contents/MacOS/Python -B docs/operations/evidence/2026-11-14-queue1-runtime/L29/run-browser.py browser-round5"
+  ]
+}

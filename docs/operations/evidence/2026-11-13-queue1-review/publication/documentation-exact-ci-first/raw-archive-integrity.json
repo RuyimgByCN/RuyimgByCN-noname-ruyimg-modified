@@ -1,0 +1,898 @@
+{
+  "at": "2026-11-14T02:12:05.120152+08:00",
+  "archive_sha256": "2227264c078e8373c638403cc789f10688c91e113d62f05fdfc092783061e0eb",
+  "archive_bytes": 1870038,
+  "entries_verified_byte_for_byte": 148,
+  "text_entries_with_crlf": 26,
+  "files": [
+    {
+      "path": "logs-first/0_native-web.txt",
+      "sha256": "626a956d19831628d99088facd11a1211b4a7ccadadf8858122f32f01eac74b4",
+      "bytes": 669921,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/native-web/system.txt",
+      "sha256": "66390b11517149928ffe6f4ca8b8141e0b0e480a2132a351c51c9bb608b39f21",
+      "bytes": 612,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/native-web/1_Set up job.txt",
+      "sha256": "d3ed88f9532e9e6b9892bf50807f6d116e77c9fb28035541806a16eb86fa5423",
+      "bytes": 2289,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/native-web/2_Run actions_checkout@v4.txt",
+      "sha256": "045ecae71dc6b5c0aba0ccd11bc20fedc4c8409d9420e818cf1796680f4d0a6a",
+      "bytes": 13152,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/native-web/3_Run dtolnay_rust-toolchain@stable.txt",
+      "sha256": "65439c591d22924787a23c5614612dedb5890b6dd5c2f573483794eccdca1bdd",
+      "bytes": 16929,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/native-web/4_Run Swatinem_rust-cache@v2.txt",
+      "sha256": "f4366f89a71ccee5779cd6ac1922d08c590e9dea23138463aeeefb5307867170",
+      "bytes": 8678,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/native-web/5_Run actions_setup-node@v4.txt",
+      "sha256": "b3dfc32ded49681f50dfa0e5c93f55bbf5e26b867ff4925a89e3438fcdfd155f",
+      "bytes": 1686,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/native-web/6_Run ._noname-next_.github_actions_prepare-original-content.txt",
+      "sha256": "01c5cba1e59f98bce0eb6ffb4408671ce27c26d212d341e1041882d9b6c2ee53",
+      "bytes": 35412,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/native-web/7_Install wasm-pack.txt",
+      "sha256": "c81299abcc204cdc2c0cc9cd159db21c5ddfedf7656bd56673d3c772e49b7ba9",
+      "bytes": 1020,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/native-web/8_Rebuild native WASM from current source.txt",
+      "sha256": "24d6f7d8abf911d96d33eb0439d3c6cf0f34afba745f9798f8760c86edc8289c",
+      "bytes": 7598,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/native-web/9_Rebuild legacy WASM (still imported by the client).txt",
+      "sha256": "95bb137a801f26a898596cb27b4839b81cf07c41280c8f811ff264841366fd42",
+      "bytes": 67363,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/native-web/10_Native kernel and package loader regressions.txt",
+      "sha256": "3006c83cb5c79fadf568a99c6ba9dc8b68aa2b3d994fdf5efe3f161fbb168b07",
+      "bytes": 314788,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/native-web/11_Real native Worker smoke.txt",
+      "sha256": "fe5de0aaee28636aebec7aeb3e1ed10c97e7bafa9f10791ce31e930ca74894f5",
+      "bytes": 12776,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/native-web/12_Frontend regressions.txt",
+      "sha256": "3bc91fe0b505f5ef81ad70d05ee35285b0169a3dcbc120fd8a29854bef971ca7",
+      "bytes": 178581,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/native-web/13_Frontend typecheck and production build.txt",
+      "sha256": "ece024f9ec0afb6931bda28dc20f9e4599454a15c20d542a88f2dba4fd88184c",
+      "bytes": 2882,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/native-web/23_Post Run ._noname-next_.github_actions_prepare-original-content.txt",
+      "sha256": "c91d6f50a989835e36717fe35e192d0efc528b8c090edba7d3d2cdded1824822",
+      "bytes": 4250,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/native-web/24_Post Run actions_setup-node@v4.txt",
+      "sha256": "e3ea59be60ab53b09f84d5dda12db7b1fa409052f0a47ad1841e02be1a0d12d5",
+      "bytes": 305,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/native-web/25_Post Run Swatinem_rust-cache@v2.txt",
+      "sha256": "8ee8a41cba72e8a19aff5cd56bca34ae9b8c0bbdb8c575a63b7daf7404a87786",
+      "bytes": 97,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/native-web/26_Post Run actions_checkout@v4.txt",
+      "sha256": "752148fbd6c4a8a40571f739a1bf5727b82b1ba555ff7abadd827aff4cfc7172",
+      "bytes": 1773,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/native-web/27_Complete job.txt",
+      "sha256": "b4c000ff65e438de8dde3174cbe3ea582d6f12487dafa0c5651b776cbe177197",
+      "bytes": 393,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/1_perf-ubuntu-latest.txt",
+      "sha256": "1792f669c69af634903a42ee68542fb5dab5a5b776d801a2115ab0ec249ab0e5",
+      "bytes": 197733,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/perf-ubuntu-latest/system.txt",
+      "sha256": "e1a6f9b72c80921c3218ecff3f9bab0681a45f1b359211ce829fc33a54e9a816",
+      "bytes": 606,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/perf-ubuntu-latest/1_Set up job.txt",
+      "sha256": "1cf8272485e4733d94edc5c38c05d34f8fbcd17ec68f299129dbeb05ce5c44f2",
+      "bytes": 2167,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/perf-ubuntu-latest/2_Run actions_checkout@v4.txt",
+      "sha256": "98334c5215223a1f5375cf47fbb18b835c98afa03359bd07c3a1de4fee348e01",
+      "bytes": 13223,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/perf-ubuntu-latest/3_Run dtolnay_rust-toolchain@stable.txt",
+      "sha256": "e5dc167d40f227fedf338de22e9e069ec65cfd75ef7e385f9e77cc8fe802c58c",
+      "bytes": 16207,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/perf-ubuntu-latest/4_Run Swatinem_rust-cache@v2.txt",
+      "sha256": "42529ee2c902aa643ea5d6d2dc9145a78bfa12dea1b8899b2c49d31fcce52e11",
+      "bytes": 8512,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/perf-ubuntu-latest/5_Tier list.txt",
+      "sha256": "e990e034423831a63830bd7be8df9130025876aedd27de3a378271826f85476d",
+      "bytes": 77813,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/perf-ubuntu-latest/6_Tier report (server-baseline budget).txt",
+      "sha256": "7628b6762ec04a4588bf7e5e0cdd54eaac2698268f178eed94326627ae168926",
+      "bytes": 77617,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/perf-ubuntu-latest/11_Post Run Swatinem_rust-cache@v2.txt",
+      "sha256": "dc5e978a14e82491e06beb4e950a55b09fed1bdfe979666f68b6c69cb429750c",
+      "bytes": 97,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/perf-ubuntu-latest/12_Post Run actions_checkout@v4.txt",
+      "sha256": "392dca541f5b5e88a6be9ccbbed80020fd0748541abe56ed734a6d3a09852ffa",
+      "bytes": 1773,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/perf-ubuntu-latest/13_Complete job.txt",
+      "sha256": "9ec67e76c60ab37927af12de54f67bdba3afc8000473cbd01da26f4a5f43386b",
+      "bytes": 348,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/2_build-macos-latest.txt",
+      "sha256": "821290614fbdb288a3bfb711cdc883f4716c248a50469dc4558c904a18c6d694",
+      "bytes": 356530,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/build-macos-latest/system.txt",
+      "sha256": "e100fda8f694a2dc092695aea8809651932253e0babe72d0790adee7c36c5107",
+      "bytes": 606,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/build-macos-latest/1_Set up job.txt",
+      "sha256": "d500844a4f09e93aa7435f18222e79472ff9ea8383d33cea92d40ac940d360bf",
+      "bytes": 2191,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/build-macos-latest/2_Run actions_checkout@v4.txt",
+      "sha256": "911a2b25104bba2af7d1f50466f0ed9ea9f4090e9ddbdaf03b6ab60e3143d78a",
+      "bytes": 15544,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/build-macos-latest/3_Run dtolnay_rust-toolchain@stable.txt",
+      "sha256": "d4f18a311c946108db106bb29ee98d18fa23eb1cf7d903bdb34883a32774aa55",
+      "bytes": 16437,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/build-macos-latest/4_Run Swatinem_rust-cache@v2.txt",
+      "sha256": "8e4ec3ff160fe38439f60f72252dd64f4d7c73dd893d50f4fda248c3c6fc2abc",
+      "bytes": 9009,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/build-macos-latest/5_Build workspace.txt",
+      "sha256": "45b081d37783fb96f15d60b4f894aaefae864258302e688c3a76861020671ebb",
+      "bytes": 112376,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/build-macos-latest/6_Unit tests.txt",
+      "sha256": "a9e912e29b430b714b5da7f497a65ced036bac26df4c5a5ed4ba76c0a2250564",
+      "bytes": 198554,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/build-macos-latest/11_Post Run Swatinem_rust-cache@v2.txt",
+      "sha256": "07bcdf07290e57b6500f8830fefd038ebb2b58eda9fd6085e951c98b7ce4e953",
+      "bytes": 97,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/build-macos-latest/12_Post Run actions_checkout@v4.txt",
+      "sha256": "1cbe936f8e9a224f4e5b58185c0c169c77b3da46b71c2c1530fb81c9898ac8da",
+      "bytes": 1998,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/build-macos-latest/13_Complete job.txt",
+      "sha256": "05d195330ef3d889977ecb942d565609683066674fd3c147a7c4eb0a6610fc17",
+      "bytes": 348,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/3_desktop-macos-latest.txt",
+      "sha256": "80d5b46f853b73c29e7cee518bb3bcd163be9c711cdb4e48e4d917a64c2d77b4",
+      "bytes": 174306,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-macos-latest/system.txt",
+      "sha256": "a4103617b3158b5a7fee4783338a889d85189ad9f102626ed6535efa09a749a5",
+      "bytes": 886,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-macos-latest/1_Set up job.txt",
+      "sha256": "6a3a88acd52c8d44989701c6ecdfdf9c02a26ad6823aa3459e49ef3822d69e13",
+      "bytes": 2452,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-macos-latest/2_Run actions_checkout@v4.txt",
+      "sha256": "4e4bdb7647ab8b88720aa41530647612df3949333fbace865225242f0fbb5ce7",
+      "bytes": 15478,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-macos-latest/3_Run dtolnay_rust-toolchain@stable.txt",
+      "sha256": "44d981b481cef65ae24b1ffa309bbc6ad8d67a4034dff164c648e8f56827a07e",
+      "bytes": 16442,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-macos-latest/4_Run Swatinem_rust-cache@v2.txt",
+      "sha256": "05b8a6407029b68ef8ddc38e937c29fd3fed80fc67f6ba78e4a92cdad3a64e1c",
+      "bytes": 9268,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-macos-latest/5_Run actions_setup-node@v4.txt",
+      "sha256": "2d30a7966dbfb5fc97926f26220c83ee3a6b5fffb1b9d177d8bd285a5b786f38",
+      "bytes": 1600,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-macos-latest/7_Run ._noname-next_.github_actions_prepare-original-content.txt",
+      "sha256": "4b2fadb21d2e23e9829322f2890487877b0f58955a0a6aa7d76f1ba3dcc61937",
+      "bytes": 24392,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-macos-latest/8_Install wasm-pack.txt",
+      "sha256": "77661de493e064c54f332e8c717943070c80a7b4472b2effbbf88a8a1fc5fa24",
+      "bytes": 965,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-macos-latest/9_Install Tauri CLI.txt",
+      "sha256": "37131fba88f49ff5ee2c8826cf864feee5a90d6ef2bd96f240df9826d9239890",
+      "bytes": 961,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-macos-latest/10_Produce installer (tauri beforeBuildCommand builds the web client).txt",
+      "sha256": "d5cafe5fba5ea6268e975454c372a680f4cbdf3a3d617aa5fcbae0c4a430eb8f",
+      "bytes": 94756,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-macos-latest/11_Upload installer artifact.txt",
+      "sha256": "c90e87ee9d46c531c2501359903c9d7007174b75b342f42926d453edd54e98cd",
+      "bytes": 2652,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-macos-latest/19_Post Run ._noname-next_.github_actions_prepare-original-content.txt",
+      "sha256": "6550311f305ed636d3e58a1dccca986a84765c4d4ad2b8c586841e9fe1a79bf4",
+      "bytes": 2560,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-macos-latest/20_Post Run actions_setup-node@v4.txt",
+      "sha256": "772af3072798d6bf544d450260bb1f9ee8b0ed9bf188fc36ecf5a19600ae5c6a",
+      "bytes": 306,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-macos-latest/21_Post Run Swatinem_rust-cache@v2.txt",
+      "sha256": "96243a80270f110b1c31a1116cb62b6242ec36e4755cb1ed50c6a5a8b71b60e8",
+      "bytes": 97,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-macos-latest/22_Post Run actions_checkout@v4.txt",
+      "sha256": "b5571e910b5465ef85fd3d87e098037db989da386762b41c07dc90420fb7a1aa",
+      "bytes": 1998,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-macos-latest/23_Complete job.txt",
+      "sha256": "7ffe9d2dbd97a6d8d20da6a811fef2a15ebb9d484e7e82a193362cd512dc5ae7",
+      "bytes": 421,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/4_perf-macos-latest.txt",
+      "sha256": "b5058e5be01e2874ee69cd29414b0313ba1197815bd468d365fd0c72e109c974",
+      "bytes": 199873,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/perf-macos-latest/system.txt",
+      "sha256": "e0a1841cd3932a4f257c5a3cc5667408517a60bb9b59179d4045f7ec68304ba5",
+      "bytes": 883,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/perf-macos-latest/1_Set up job.txt",
+      "sha256": "f25aee0754dd619efaa8c1cdc08674386f12d57307686065bd2f226b7db7015e",
+      "bytes": 2190,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/perf-macos-latest/2_Run actions_checkout@v4.txt",
+      "sha256": "a1cc037ac2ef49ba84870a0609f3e519492d3296dd52ae373b3739b64a7114fb",
+      "bytes": 14734,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/perf-macos-latest/3_Run dtolnay_rust-toolchain@stable.txt",
+      "sha256": "4156c314623d615d2e5f8029e5f0ebce23f41f5abc32e1ca7ae5a75751d6a2a1",
+      "bytes": 16352,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/perf-macos-latest/4_Run Swatinem_rust-cache@v2.txt",
+      "sha256": "7648425d4197e012d04c7f1e3640f3240022cc3b1f218d2921d9e24ebc5b6de6",
+      "bytes": 8754,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/perf-macos-latest/5_Tier list.txt",
+      "sha256": "d6ca9624e4f2abcce39a24ed0d9c1fb9b8e43cfa6c574de36c6b9f29da002df2",
+      "bytes": 77810,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/perf-macos-latest/6_Tier report (server-baseline budget).txt",
+      "sha256": "408c5c5bac7db3e32959819cb9307302dbb49d3a7467f25f0b93576978c85d3b",
+      "bytes": 77614,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/perf-macos-latest/11_Post Run Swatinem_rust-cache@v2.txt",
+      "sha256": "89a394d822dfc33160e35ec22b8ad4abe54c100cac7aadc6a3bf2b5bffa1502a",
+      "bytes": 97,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/perf-macos-latest/12_Post Run actions_checkout@v4.txt",
+      "sha256": "e2f17e19fb4a1fff22f36b890d0032f94c90bc1a61bfe735ae292971bd41b6b8",
+      "bytes": 1998,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/perf-macos-latest/13_Complete job.txt",
+      "sha256": "a46eca34072b217a7aaf63550ad4dbdc5ece212f608527928372a224ad6f1bc1",
+      "bytes": 348,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/5_build-ubuntu-latest.txt",
+      "sha256": "af90ce14e311f6203cdc233d523e3abf2ab9839a4d1633e6001140d949d0a23a",
+      "bytes": 353679,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/build-ubuntu-latest/system.txt",
+      "sha256": "19475d6aeeb2b835777a7cca8d43f6ca726d8d469ecaf1583aa20a62466cab0a",
+      "bytes": 607,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/build-ubuntu-latest/1_Set up job.txt",
+      "sha256": "300da848da6fc330cedf0a71a16bca365bbc25376289076da21ddef7747558ec",
+      "bytes": 2169,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/build-ubuntu-latest/2_Run actions_checkout@v4.txt",
+      "sha256": "144e70c7763ca84586c7fb87e44c631de3550cb5cbfc7244b093733e9f2881b5",
+      "bytes": 13460,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/build-ubuntu-latest/3_Run dtolnay_rust-toolchain@stable.txt",
+      "sha256": "1512afa7fc7c7f8a93fb74cb41e4db015530802742accacc4d1e34c0eced8788",
+      "bytes": 16294,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/build-ubuntu-latest/4_Run Swatinem_rust-cache@v2.txt",
+      "sha256": "0ace14b11038c4e3d72720862b13bbdcbd683df6272c1419c1bcd1062771a2c1",
+      "bytes": 8683,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/build-ubuntu-latest/5_Build workspace.txt",
+      "sha256": "f280ea061fdb28227bd0184b183272346a618b037dca8084700ab9df9f7c7230",
+      "bytes": 112348,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/build-ubuntu-latest/6_Unit tests.txt",
+      "sha256": "b60fcfc4605632a623d4783dbd1921b1d345e703de6c86e29003af2a8e7dd650",
+      "bytes": 198531,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/build-ubuntu-latest/11_Post Run Swatinem_rust-cache@v2.txt",
+      "sha256": "d52627db1b46b8d86da436ab001ca47e5ca93c993453b0ffa7235445034f43cf",
+      "bytes": 97,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/build-ubuntu-latest/12_Post Run actions_checkout@v4.txt",
+      "sha256": "29414a9995bc753f84a967ed8da8d9b1094c37d658c20b12949b1de8b92c6083",
+      "bytes": 1773,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/build-ubuntu-latest/13_Complete job.txt",
+      "sha256": "ac55f0f1a20cda8626f6ceced9feb6cc63393cbd01cc050388b88443d706108a",
+      "bytes": 348,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/6_build-windows-latest.txt",
+      "sha256": "3b0c32d6e10fe62f1dd94e5bb6456acb174c6d96e205754b8b4eb7db9e6941d2",
+      "bytes": 361764,
+      "crlf_pairs": 3738
+    },
+    {
+      "path": "logs-first/build-windows-latest/system.txt",
+      "sha256": "85436e410299bc1d9efb8cbacbdf5539d0bf70528665cf457497204235f3c1df",
+      "bytes": 608,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/build-windows-latest/1_Set up job.txt",
+      "sha256": "95aed71815b558d1afda3a29f8d7a5ff2f393bb1da7fcf4ebab39b3316f62018",
+      "bytes": 2260,
+      "crlf_pairs": 34
+    },
+    {
+      "path": "logs-first/build-windows-latest/2_Run actions_checkout@v4.txt",
+      "sha256": "c8886ccb79d808c1e0c733d7e90dc5f56c3d0e9b7522a8d6e3361417691bbe2b",
+      "bytes": 14555,
+      "crlf_pairs": 199
+    },
+    {
+      "path": "logs-first/build-windows-latest/3_Run dtolnay_rust-toolchain@stable.txt",
+      "sha256": "1efec40d685e660e36970d9fcb02c68f2d27f841d037a9cd9b329a7132b773de",
+      "bytes": 17114,
+      "crlf_pairs": 204
+    },
+    {
+      "path": "logs-first/build-windows-latest/4_Run Swatinem_rust-cache@v2.txt",
+      "sha256": "f4d91483b8189873650dbd03dd733b5a7884f8bf8242879d9b1ba4f758ff966b",
+      "bytes": 8333,
+      "crlf_pairs": 86
+    },
+    {
+      "path": "logs-first/build-windows-latest/5_Build workspace.txt",
+      "sha256": "52acc3baec4032ce5858b9c7d226b386c3b4b387e64a8fbd42c4aab2de093c53",
+      "bytes": 116066,
+      "crlf_pairs": 1251
+    },
+    {
+      "path": "logs-first/build-windows-latest/6_Unit tests.txt",
+      "sha256": "87fc46a4df61be0cabb1947140668e01beec4d09c8b562cabce48a8a1e50c8f9",
+      "bytes": 200957,
+      "crlf_pairs": 1945
+    },
+    {
+      "path": "logs-first/build-windows-latest/11_Post Run Swatinem_rust-cache@v2.txt",
+      "sha256": "5a08ad95e823fd279c314f6b4fcb9d390e3ff99acc6bf55a9f6c7b43530693db",
+      "bytes": 99,
+      "crlf_pairs": 2
+    },
+    {
+      "path": "logs-first/build-windows-latest/12_Post Run actions_checkout@v4.txt",
+      "sha256": "448389c24b9445348e063b34f86cda58ae8a1354ed258fc85063c798a2f8b3fd",
+      "bytes": 1979,
+      "crlf_pairs": 14
+    },
+    {
+      "path": "logs-first/build-windows-latest/13_Complete job.txt",
+      "sha256": "aa9e2b05784eb2779d9d9d092f5f8c9332c13f3c50268816cbd51eba5ab782e4",
+      "bytes": 425,
+      "crlf_pairs": 3
+    },
+    {
+      "path": "logs-first/7_desktop-windows-latest.txt",
+      "sha256": "7adeee96a6b29676a1dee7c12f1b4c70b9d6c081f9fcb22aa09dc5c42535cf60",
+      "bytes": 164920,
+      "crlf_pairs": 2124
+    },
+    {
+      "path": "logs-first/desktop-windows-latest/system.txt",
+      "sha256": "af9afcab160d86d6397daa24cd5ef1bbe4328c721882605c9cb7371ad2fd5c8e",
+      "bytes": 610,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-windows-latest/1_Set up job.txt",
+      "sha256": "132a8b627a0cf76e480e38706deab68b1e0548ff524f699558326a5f1ca18daa",
+      "bytes": 2524,
+      "crlf_pairs": 36
+    },
+    {
+      "path": "logs-first/desktop-windows-latest/2_Run actions_checkout@v4.txt",
+      "sha256": "85bddd97e9bfb42ef88e6c850563e739361b23fe5a0d58943f7cb72d6e8632d0",
+      "bytes": 14621,
+      "crlf_pairs": 200
+    },
+    {
+      "path": "logs-first/desktop-windows-latest/3_Run dtolnay_rust-toolchain@stable.txt",
+      "sha256": "ecd4e64dc6f854dbc93744aa645bc56552fc7d1cc4e0d9276c95b0a6eaef5d67",
+      "bytes": 17114,
+      "crlf_pairs": 204
+    },
+    {
+      "path": "logs-first/desktop-windows-latest/4_Run Swatinem_rust-cache@v2.txt",
+      "sha256": "8b101a92e3b358625edacdf6cf5f3eda4bd32940a9cdb9617cf346f9989f1188",
+      "bytes": 8591,
+      "crlf_pairs": 89
+    },
+    {
+      "path": "logs-first/desktop-windows-latest/5_Run actions_setup-node@v4.txt",
+      "sha256": "49496714a77d7135267761a8efd3e05b9cc07c0b4dc7edca1532252830522478",
+      "bytes": 1427,
+      "crlf_pairs": 23
+    },
+    {
+      "path": "logs-first/desktop-windows-latest/7_Run ._noname-next_.github_actions_prepare-original-content.txt",
+      "sha256": "0ad903973be6c5a0696563ad500f227791455d5b76a30914bc54f69728b749ac",
+      "bytes": 24601,
+      "crlf_pairs": 331
+    },
+    {
+      "path": "logs-first/desktop-windows-latest/8_Install wasm-pack.txt",
+      "sha256": "7ec73129bf7df85426890a8244e63b81c7cb5d426bc47c0233a999fc56b0ed1c",
+      "bytes": 1034,
+      "crlf_pairs": 14
+    },
+    {
+      "path": "logs-first/desktop-windows-latest/9_Install Tauri CLI.txt",
+      "sha256": "eb0582d1e64a3078ea1d2d30c6fb3dfed1f790b72e5a1812848d8edfadbbf14d",
+      "bytes": 1030,
+      "crlf_pairs": 14
+    },
+    {
+      "path": "logs-first/desktop-windows-latest/10_Produce installer (tauri beforeBuildCommand builds the web client).txt",
+      "sha256": "fd89277055aa518a284f5bc1e4bbfe3dd42fca5ef523c7a42e15c17b623b864e",
+      "bytes": 85952,
+      "crlf_pairs": 1139
+    },
+    {
+      "path": "logs-first/desktop-windows-latest/11_Upload installer artifact.txt",
+      "sha256": "e4e61b0c522376a1094df96b154d85cf255265d867be26bdc5622f64ff026bae",
+      "bytes": 2650,
+      "crlf_pairs": 33
+    },
+    {
+      "path": "logs-first/desktop-windows-latest/19_Post Run ._noname-next_.github_actions_prepare-original-content.txt",
+      "sha256": "e4e1280613156138757a7db8fe332ce0723bcd24d87f121eb44b62fd8a0be6cb",
+      "bytes": 2534,
+      "crlf_pairs": 19
+    },
+    {
+      "path": "logs-first/desktop-windows-latest/20_Post Run actions_setup-node@v4.txt",
+      "sha256": "965e464dd168bfec77e36181f14e9d7e81cd33540a668d586708624ae67f798c",
+      "bytes": 308,
+      "crlf_pairs": 3
+    },
+    {
+      "path": "logs-first/desktop-windows-latest/21_Post Run Swatinem_rust-cache@v2.txt",
+      "sha256": "74c49592e8d27383a4604580836edf46874167a527298b5a2db84b7fe778a6db",
+      "bytes": 99,
+      "crlf_pairs": 2
+    },
+    {
+      "path": "logs-first/desktop-windows-latest/22_Post Run actions_checkout@v4.txt",
+      "sha256": "d227da892c48cba57e0c87eee1743c1d181c3f9291878f19b14ddbdf37dcb0e2",
+      "bytes": 1979,
+      "crlf_pairs": 14
+    },
+    {
+      "path": "logs-first/desktop-windows-latest/23_Complete job.txt",
+      "sha256": "c5b9a8b2bac58332374c12c3ce59f096b2fa7e0d3f3684af0d67918f7948e380",
+      "bytes": 498,
+      "crlf_pairs": 3
+    },
+    {
+      "path": "logs-first/8_desktop-ubuntu-latest.txt",
+      "sha256": "b4811b66e044b662763f41e60b6b494468e586baf36a9a180faa983294e65dff",
+      "bytes": 273661,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-ubuntu-latest/system.txt",
+      "sha256": "fd11768b92a7398b719ccbb4215b410f920ef9e899f9d2e07957b618781e3a62",
+      "bytes": 609,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-ubuntu-latest/1_Set up job.txt",
+      "sha256": "f302e6be0cb1d20735b317096a743397a58f85f41ebfc146bd74ec1f18336ac1",
+      "bytes": 2437,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-ubuntu-latest/2_Run actions_checkout@v4.txt",
+      "sha256": "c0ab9154450d40d5c35fba28266afe2ca216486ca426d8551528354572c3c90e",
+      "bytes": 13586,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-ubuntu-latest/3_Run dtolnay_rust-toolchain@stable.txt",
+      "sha256": "5078d1897fc4b48a20218c3a16a8bd65b99cd2fee0a2a715829bf3f1374ded5d",
+      "bytes": 16293,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-ubuntu-latest/4_Run Swatinem_rust-cache@v2.txt",
+      "sha256": "88437524e702962ce2acee0ef03b53b8c40290a8f7dcaf2b942ecce709fffa8c",
+      "bytes": 8695,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-ubuntu-latest/5_Run actions_setup-node@v4.txt",
+      "sha256": "294e23910fda32c5e2e5db0782c11800cfc073779a6575cf29f961be68943a30",
+      "bytes": 1633,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-ubuntu-latest/6_Install Linux Tauri dependencies.txt",
+      "sha256": "35311c784dcfff97230976c4a50803ce703dafe68186321da7c67b56e75ac641",
+      "bytes": 110167,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-ubuntu-latest/7_Run ._noname-next_.github_actions_prepare-original-content.txt",
+      "sha256": "12385e3b931405372b7ee4840de762dd09a7d116c20f0118b21618a9f88baa98",
+      "bytes": 23804,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-ubuntu-latest/8_Install wasm-pack.txt",
+      "sha256": "62bb18bb97bd2fa5e78595b3b18485474dfd54c7a446289d01e532347798efc7",
+      "bytes": 967,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-ubuntu-latest/9_Install Tauri CLI.txt",
+      "sha256": "4fe612d87515cda2de1c5f3c0297fd9e078cde239b29740f0a13941eaf8ee1f9",
+      "bytes": 963,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-ubuntu-latest/10_Produce installer (tauri beforeBuildCommand builds the web client).txt",
+      "sha256": "ee5b9a6da1b65a1fc03df504c8f100092b744ac92ddb45280a65d24b763ad9d6",
+      "bytes": 85844,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-ubuntu-latest/11_Upload installer artifact.txt",
+      "sha256": "5a5ec86d0db0e26d3b41d87ce707f5ef406d563a26d7d6aad228e74a76a4497b",
+      "bytes": 4377,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-ubuntu-latest/19_Post Run ._noname-next_.github_actions_prepare-original-content.txt",
+      "sha256": "c0284f708bc07aa53126460db4907c91ae3d1303b26769a1df6cf581d1ec2302",
+      "bytes": 2344,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-ubuntu-latest/20_Post Run actions_setup-node@v4.txt",
+      "sha256": "e9cc7b700cb5c9569d09146e2e0e1985d691a73902ba223dbfc93645ea59c3e3",
+      "bytes": 305,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-ubuntu-latest/21_Post Run Swatinem_rust-cache@v2.txt",
+      "sha256": "8fdd2179a859087250d7aabd5a9bbd71bc5c14be3d407a2e8ced13b24f715eb1",
+      "bytes": 97,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-ubuntu-latest/22_Post Run actions_checkout@v4.txt",
+      "sha256": "f1652527cc063ebabb6d72af8d266b260ea29621d63357a21ee86ce5d9e27054",
+      "bytes": 1773,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/desktop-ubuntu-latest/23_Complete job.txt",
+      "sha256": "03965a2f1ee66cf666fd0f0c96b4a3c365f49da83511d488d26be7dcee6f4023",
+      "bytes": 421,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/9_gates-ubuntu.txt",
+      "sha256": "7295f8c5600a6c700a88d824f6451095f823058e5bf3345fd07b5e13fa877396",
+      "bytes": 2311928,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/gates-ubuntu/system.txt",
+      "sha256": "069e9de8983ce8963e7c1bb9c5b935b67f7a777d945d203e0eaa6bb90cf792a7",
+      "bytes": 607,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/gates-ubuntu/1_Set up job.txt",
+      "sha256": "a4ba35d53b88ac614f46dc7baaee3d1da3ef0128251b77c13f7b4288fc0da443",
+      "bytes": 2289,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/gates-ubuntu/2_Run actions_checkout@v4.txt",
+      "sha256": "0b69f09c6a70a56f83434fa7ce78afd92cd5a9964e5838838472e677b207c92d",
+      "bytes": 13353,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/gates-ubuntu/3_Run dtolnay_rust-toolchain@stable.txt",
+      "sha256": "e9395a94c175c58c1ba82fd6123955749523b1984b9a85c52b72f8a933577bfa",
+      "bytes": 16294,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/gates-ubuntu/4_Run Swatinem_rust-cache@v2.txt",
+      "sha256": "9b65fdb916737eaafd86ce5c38cfad81da6efea940d532cf0744b11224e78ec4",
+      "bytes": 8601,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/gates-ubuntu/5_Run actions_setup-node@v4.txt",
+      "sha256": "52983cf907b303baa2e85a928ff027f04fe7f601c4999ba092e75ac49af88f9c",
+      "bytes": 1633,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/gates-ubuntu/6_Run ._noname-next_.github_actions_prepare-original-content.txt",
+      "sha256": "d54d63c18fa39350c2737b62d5cc1e9f9f12a5c8826e4eed707edc2c78f050ff",
+      "bytes": 35114,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/gates-ubuntu/7_Source files stay within 2,000 lines (Rust non-test code within 1,000 effective lines).txt",
+      "sha256": "b3a3420134396081942830062238f29b950d82ab6435703cb663b5de24bf7234",
+      "bytes": 1126,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/gates-ubuntu/8_engine-native kernel layer does not grow content_engine references.txt",
+      "sha256": "45206b775c91295926067512b9fe012074d9954b0381e4dab755d46b8924c547",
+      "bytes": 1102,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/gates-ubuntu/9_Gate 1 — cargo test --workspace.txt",
+      "sha256": "7d672878eed09c351343650d43f8666a319a93b6cb058d9e1d787093bcc87f31",
+      "bytes": 1598308,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/gates-ubuntu/10_Gate 1b — engine-native all targets warnings denied.txt",
+      "sha256": "592a69b5ee7b00ac23e5f708e5f2648bb6cdea1ad03088a8423bd0e950fac67d",
+      "bytes": 6387,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/gates-ubuntu/11_Gate 2 — conformance.txt",
+      "sha256": "406011426e0ec0a0279b8304d0dd991cb1e9b9916d8546ef339b5ee1e064e8cf",
+      "bytes": 87838,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/gates-ubuntu/12_Install wasm-pack.txt",
+      "sha256": "becd7d53f042af407fadbcd4440f5409421ae3c38be7662202bf0d784002dd92",
+      "bytes": 967,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/gates-ubuntu/13_Gate 3 — cross-target hash (Native vs WASM).txt",
+      "sha256": "60ddb02f6a1f1c9feca238c7d4999ce9ca5e111557db455fb06e47a494843453",
+      "bytes": 524299,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/gates-ubuntu/14_Gate 4 — original content sync verify.txt",
+      "sha256": "d57e1e7753e3138f772324de2604b0bb1e2019abcf3f711fadb0766a48cad8ef",
+      "bytes": 7849,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/gates-ubuntu/25_Post Run ._noname-next_.github_actions_prepare-original-content.txt",
+      "sha256": "2733a8ca8de984057de7d5ecb5b2b76fa8db1926a912dfcca7ebb4dbd16de142",
+      "bytes": 4250,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/gates-ubuntu/26_Post Run actions_setup-node@v4.txt",
+      "sha256": "17772b4c2acb6f6f79d11c21a5ef095e43d546ee26dbeb97586061cc6b2722ae",
+      "bytes": 306,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/gates-ubuntu/27_Post Run Swatinem_rust-cache@v2.txt",
+      "sha256": "3627588de3187ad45cc80fc29f0daf2e3fb2b5c920fb55c8df463cbf56e470c2",
+      "bytes": 97,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/gates-ubuntu/28_Post Run actions_checkout@v4.txt",
+      "sha256": "72be987d41f8757dba38c9a3bd75bab619e5a2ac0720282309eb0254d51f278c",
+      "bytes": 1773,
+      "crlf_pairs": 0
+    },
+    {
+      "path": "logs-first/gates-ubuntu/29_Complete job.txt",
+      "sha256": "00894ae40f7f7037db901bac80f1d17be8392ae90b5855d1235c688ccc1024c3",
+      "bytes": 393,
+      "crlf_pairs": 0
+    }
+  ],
+  "git_text_policy": "Archive is the canonical exact-byte output. Extracted Windows text views can be normalized by existing gitattributes when staged; report any staged normalization separately."
+}

@@ -1,0 +1,159 @@
+{
+  "at": "2026-11-14T02:15:07.298081+08:00",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "product_source_modified_by_reviewer": false,
+  "equivalence_signoffs": 0,
+  "findings": [
+    {
+      "id": "U06-R01",
+      "classification": "verified_runtime_difference",
+      "inventory_key": "U06:skills:monkey@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:5",
+      "affected_card_key": "U06:cards:monkey@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:4",
+      "case": "monkey-cancel",
+      "difference": "HP均2→3，上游消耗红桃三桃入弃牌堆；原生仍持桃、弃牌堆空。",
+      "upstream": [
+        "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:5",
+        "U06/browser/case-results.jsonl:run_tag=fresh-nodes,case=monkey-cancel",
+        "U06/browser/session-modern-1794592005610-replies.jsonl:index=198"
+      ],
+      "native": [
+        "crates/engine-native/src/engine/play_card.rs:704",
+        "crates/engine-native-kernel/src/kernel/monkey.rs:64",
+        "crates/engine-native-kernel/src/machine.rs:582",
+        "U06/native-results-first.json:case=monkey-cancel"
+      ],
+      "cause": "挂起发生于移出手牌之前；全部Pass后to_discard发现卡仍在hand直接返回。",
+      "counterexample": "他人装备猴子，HP2使用者用红桃三桃；猴子持有者取消，再检查桃的区域。"
+    },
+    {
+      "id": "U06-R02",
+      "classification": "verified_runtime_difference",
+      "inventory_key": "U06:skills:xuelunyang@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:70",
+      "affected_card_key": "U06:cards:xuelunyang@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:97",
+      "case": "xuelun-skill-cancel",
+      "difference": "第二个选择技能窗口上游可取消且settled=true；原生[]为Rejected(InvalidChoice)、settled=false、保留pending。",
+      "upstream": [
+        "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:107",
+        "U06/browser/case-results.jsonl:run_tag=fresh-nodes,case=xuelun-skill-cancel",
+        "U06/browser/session-modern-1794592005610-replies.jsonl:index=279,281"
+      ],
+      "native": [
+        "crates/engine-native-content/src/content/host/step/skills_targets.rs:267",
+        "crates/engine-native-content/src/content/host/asks.rs:308",
+        "U06/native-results-first.json:case=xuelun-skill-cancel"
+      ],
+      "cause": "原生实时及恢复窗口均allow_cancel=false；上游chooseButton未forced且无links时直接返回。",
+      "counterexample": "回合开始先选具有马术/咆哮的1号，然后取消技能选择。"
+    },
+    {
+      "id": "U06-N01",
+      "classification": "verified_native_observation",
+      "inventory_key": "U06:skills:kuwu@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:53",
+      "case": "kuwu-hand",
+      "difference": "同一card45单次弃手牌后，原生日志连续两条CardDiscarded；实际牌区仅移动一次。",
+      "upstream": [
+        "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:66"
+      ],
+      "native": [
+        "crates/engine-native-content/src/content/host/step/skills_status.rs:1023",
+        "crates/engine-native-kernel/src/machine.rs:616",
+        "U06/native-results-first.json:case=kuwu-hand,log"
+      ],
+      "cause": "discard_from_hand已写日志，finish_force_he_discard又显式log同一事件。",
+      "counterexample": "苦无对Sha受伤目标强制弃一张手牌，数原生同card的CardDiscarded日志。",
+      "limit": "上游未记录完整弃牌事件流，不能声称已对比上下游事件数量；不能把双日志当两次弃牌。"
+    },
+    {
+      "id": "L29-R01",
+      "classification": "verified_runtime_difference",
+      "inventory_key": "L29:skills:mbcmqingzheng@noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1",
+      "case": "q_A",
+      "difference": "上游damage_created source=seat0,target=seat1,amount=1；原生DamageDealt source=None,target=1,amount=1。",
+      "upstream": [
+        "archive/upstream/noname-liuli/noname/character/mobile.js:17248",
+        "archive/upstream/noname-liuli/noname/game/game.js:26343",
+        "L29/browser-round8/upstream-q_A.json:final.trace",
+        "L29/session-l29b-1794592604612-replies.jsonl:index=288,289"
+      ],
+      "native": [
+        "crates/engine-native-content/src/content/host/step/skills_damage.rs:558",
+        "L29/native-round4/native-q_A.json:direct.commands[4].log_delta"
+      ],
+      "cause": "上游target.damage默认来源为当前技能事件player；原生显式传None。",
+      "counterexample": "owner黑桃两张对目标梅花一张发动清正，核对伤害来源而非只看HP。"
+    },
+    {
+      "id": "L29-R02",
+      "classification": "verified_runtime_difference",
+      "inventory_key": "L29:skills:mbcmqingzheng@noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1",
+      "case": "q_A/q_B",
+      "difference": "目标花色询问时，上游owner已弃所选花色牌，原生仍持有全部原手牌；原生在最后回答后才双方弃牌。",
+      "upstream": [
+        "archive/upstream/noname-liuli/noname/character/mobile.js:17212",
+        "L29/browser-round8/upstream-q_A.json:stages[label=target_suit_question_after_owner_payment]",
+        "L29/session-l29b-1794592604612-replies.jsonl:index=286,303"
+      ],
+      "native": [
+        "crates/engine-native-content/src/content/host/step/skills_damage.rs:506",
+        "crates/engine-native-content/src/content/host/step/skills_damage.rs:548",
+        "L29/native-round4/native-q_A.json:direct.commands[3].after.players[0].hand"
+      ],
+      "cause": "TargetChoice只建下一问，弃自身牌推迟至CompareTargetPick。",
+      "counterexample": "清正选择owner黑桃及目标1后，在目标花色提问窗口比较owner.hand；上游[51]，原生[85,114,51]。"
+    },
+    {
+      "id": "L29-R03",
+      "classification": "verified_runtime_difference",
+      "inventory_key": "L29:skills:mbcmjiushi@noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1",
+      "case": "j_active_gain/j_active_cancel_gain",
+      "difference": "翻面后得牌问答挂起时，上游jiu_mark=0，原生jiu_active=true且jiu_used=true；上游回答后酒才生效。",
+      "upstream": [
+        "archive/upstream/noname-liuli/noname/character/mobile.js:17277",
+        "L29/browser-round8/upstream-j_active_gain.json:stages[label=gain_question]",
+        "L29/browser-round8/upstream-j_active_cancel_gain.json:stages[label=gain_question]",
+        "L29/session-l29b-1794592604612-replies.jsonl:index=376,390"
+      ],
+      "native": [
+        "crates/engine-native-content/src/content/host/step/skills_targets.rs:440",
+        "L29/native-round4/native-j_active_gain.json:direct.commands[0].after",
+        "L29/native-round4/native-j_active_cancel_gain.json:direct.commands[0].after"
+      ],
+      "cause": "原生先设酒状态再emit TurnOvered；上游turnOver子事件先结算，useCard(jiu)在其后。",
+      "counterexample": "正面owner出牌阶段真实用酒诗，停在是否获锦囊的确认窗；取标记与酒使用状态，然后分别确认/取消。"
+    }
+  ],
+  "restore_fix": {
+    "verdict": "accepted_for_derived_confirmation_restore_shape_only",
+    "before_pending_success": 58,
+    "before_pending_failure": 10,
+    "after_old_archives_success": 68,
+    "old_archives_byte_equal_to_independent_before_run": 68,
+    "continuation_request_reply_log_equal": 136,
+    "final_snapshot_equal_except_auth_generation_and_hash": 68,
+    "direct_before_after_equal_including_archive_hex": 22,
+    "corrupt_extra_pass": "exact unchanged validator rejects; added real-event regression observed in producer5/0 log, not independently rerun test",
+    "own_execution": [
+      "l29-own-run.raw.txt",
+      "l29-own-before-run.raw.txt"
+    ],
+    "version_change": false
+  },
+  "u06": {
+    "valid_fresh_cases": 13,
+    "exploratory_preserved": 13,
+    "initial_equal": 13,
+    "full_selected_final_projection_equal": 11,
+    "differences": 2,
+    "native_resume_checks": 15,
+    "full_cross_engine_event_rng_equivalence": false,
+    "old_ngsa_files_preserved_by_U06_probe": false
+  },
+  "remaining_unverified": [
+    "U06 actual target candidate DOM sets: selectableTargets captured empty",
+    "Xuelun equipment/charlotte/disabled/previously-owned candidate cases and temporary-skill cleanup boundaries",
+    "Full cross-engine event/RNG/deck/discard/hand order equivalence",
+    "L29 damageBegin3 backface mark, mid-damage turnover and native extra boosted/chain guards",
+    "Full L29 extension wrapper/unlock/UI/config and upstream archive recovery"
+  ],
+  "status_recommendation": "Confirmed differences must remain simplified approximations; no upgrades; source repair is not whole-skill equivalence."
+}

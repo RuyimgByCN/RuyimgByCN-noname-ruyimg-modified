@@ -1,0 +1,6 @@
+{
+  "at": "2026-11-13T18:05:16.972408+00:00",
+  "failure": "case-results-fifth.jsonl six youzhan cases",
+  "cause": "actual U07 character/skill.js has no imports; raw filter references unqualified get. Direct module registration missed its standard noname bindings",
+  "change": "expose actual imported game/lib/ui/_status/get/ai as browser globals before registration; no skill function/body/source changes; reload every rerun"
+}

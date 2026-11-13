@@ -1,0 +1,73 @@
+{
+  "at": "2026-11-13T18:00:44.014531+00:00",
+  "mobile": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/character/mobile.js",
+    "sha256": "24a3c1fa495d58abeff716335804ecc19fafafdec46af10ef6a717b469d161f0"
+  },
+  "wrapper": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js",
+    "sha256": "8be88d4425367646cf8364a2ded0493bce384604bd2460279ed4394cbfad69fe"
+  },
+  "definition_starts": {
+    "mbcmqingzheng": 17117,
+    "mbcmjiushi": 17251,
+    "mbcmfangzhu": 17410
+  },
+  "wrapper_literal_occurrences": {
+    "mbcmqingzheng": [
+      {
+        "offset": 536784,
+        "context": "ao2')){if(!player.hasSkill('mbqianlong')&&!player.hasSkill('mbcmqingzheng')&&!player.hasSkill('mbcmjiushi')&&!player.hasSkill('mbjuejin')&&!player.hasSkill('mbcmfangzhu')){var cmarea=ui.arena.getElements"
+      },
+      {
+        "offset": 581176,
+        "context": "ateProgress;}}};}lib.skill.mbqianlong={audio:6,derivation:['mbcmqingzheng','mbcmjiushi','mbcmfangzhu','mbjuejin'],trigger:{global:'phaseBefore',player:'enterGame'},priority:6,forced:true,locked:false,for"
+      },
+      {
+        "offset": 581389,
+        "context": "init:function(player,skill){if(player.dieAfter_CM) return;['mbcmqingzheng','mbcmjiushi','mbcmfangzhu','mbjuejin'].forEach(s=>{if(!lib.skill[s]) return;if(!lib.skill[s]._noAutoMarkFilter) lib.skill[s]._no"
+      },
+      {
+        "offset": 585259,
+        "context": " = [];if (player.countMark('mbqianlong') >= 25) skills.add('mbcmqingzheng');if (player.countMark('mbqianlong') >= 50) skills.add('mbcmjiushi');if (player.countMark('mbqianlong') >= 75) skills.add('mbcmfa"
+      }
+    ],
+    "mbcmjiushi": [
+      {
+        "offset": 536819,
+        "context": "ong')&&!player.hasSkill('mbcmqingzheng')&&!player.hasSkill('mbcmjiushi')&&!player.hasSkill('mbjuejin')&&!player.hasSkill('mbcmfangzhu')){var cmarea=ui.arena.getElementsByClassName('cmarea')[0];if(cmar"
+      },
+      {
+        "offset": 581192,
+        "context": "}lib.skill.mbqianlong={audio:6,derivation:['mbcmqingzheng','mbcmjiushi','mbcmfangzhu','mbjuejin'],trigger:{global:'phaseBefore',player:'enterGame'},priority:6,forced:true,locked:false,forever:true,ini"
+      },
+      {
+        "offset": 581405,
+        "context": "ayer,skill){if(player.dieAfter_CM) return;['mbcmqingzheng','mbcmjiushi','mbcmfangzhu','mbjuejin'].forEach(s=>{if(!lib.skill[s]) return;if(!lib.skill[s]._noAutoMarkFilter) lib.skill[s]._noAutoMarkFilte"
+      },
+      {
+        "offset": 585329,
+        "context": "eng');if (player.countMark('mbqianlong') >= 50) skills.add('mbcmjiushi');if (player.countMark('mbqianlong') >= 75) skills.add('mbcmfangzhu');if (player.countMark('mbqianlong') >= 99) skills.add('mbjue"
+      }
+    ],
+    "mbcmfangzhu": [
+      {
+        "offset": 536881,
+        "context": "cmjiushi')&&!player.hasSkill('mbjuejin')&&!player.hasSkill('mbcmfangzhu')){var cmarea=ui.arena.getElementsByClassName('cmarea')[0];if(cmarea){cmarea.parentNode.removeChild(cmarea);}elementsRemoved=true"
+      },
+      {
+        "offset": 581205,
+        "context": "qianlong={audio:6,derivation:['mbcmqingzheng','mbcmjiushi','mbcmfangzhu','mbjuejin'],trigger:{global:'phaseBefore',player:'enterGame'},priority:6,forced:true,locked:false,forever:true,init:function(pla"
+      },
+      {
+        "offset": 581418,
+        "context": "f(player.dieAfter_CM) return;['mbcmqingzheng','mbcmjiushi','mbcmfangzhu','mbjuejin'].forEach(s=>{if(!lib.skill[s]) return;if(!lib.skill[s]._noAutoMarkFilter) lib.skill[s]._noAutoMarkFilter = {};lib.ski"
+      },
+      {
+        "offset": 585396,
+        "context": "shi');if (player.countMark('mbqianlong') >= 75) skills.add('mbcmfangzhu');if (player.countMark('mbqianlong') >= 99) skills.add('mbjuejin');if(skills.length>0) player.addAdditionalSkill('mbqianlong', sk"
+      }
+    ]
+  },
+  "boundary": "Browser loads real mobile definitions from liuli checkout; full 龙血玄黄 extension wrapper is not executed because it contains untested media/UI dependencies. Direct skill grants form scenario initial state; 道心 unlocking and wrapper-added marks/visuals are outside comparison. No official Spine runtime file was read or loaded."
+}

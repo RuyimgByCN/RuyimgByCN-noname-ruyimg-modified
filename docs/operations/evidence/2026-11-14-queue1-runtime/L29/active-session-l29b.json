@@ -1,0 +1,13 @@
+{
+  "at": "2026-11-13T17:56:45.059Z",
+  "label": "l29b",
+  "url": "http://127.0.0.1:56407/",
+  "upstream": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname",
+  "profile": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-l29-runtime-chrome-2fYoCi",
+  "upstreamPort": 56407,
+  "controlPort": 56440,
+  "cdpPort": 56410,
+  "chromePid": 80234,
+  "transcript": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/session-l29b-1794592604612",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d"
+}

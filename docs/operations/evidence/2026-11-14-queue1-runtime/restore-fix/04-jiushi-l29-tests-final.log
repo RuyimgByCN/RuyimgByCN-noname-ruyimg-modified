@@ -1,0 +1,14 @@
+    Blocking waiting for file lock on build directory
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.02s
+     Running tests/groups/l_rounds.rs (target/debug/deps/l_rounds-6b5ace321b7c4bdf)
+
+running 5 tests
+test l29_longxue_eight::l29_mbqianlong_mbweitong_and_mbcmqingzheng_six_dimensions ... ok
+test l29_longxue_eight::l29_mbcmjiushi_six_dimensions ... ok
+test l29_longxue_eight::l29_mbcmfangzhu_and_mbjuejin_six_dimensions ... ok
+test l29_longxue_eight::l29_jiushi_pending_confirmations_restore_and_match_direct_answers ... ok
+test l29_longxue_eight::l29_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 77 filtered out; finished in 0.29s
+

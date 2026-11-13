@@ -1,0 +1,3 @@
+{"cases": 13, "initial_equal": 13, "final_projection_equal": 12, "discard_projection_equal": 12, "projection_and_settlement_equal": 11, "restore_attempts": 15}
+difference monkey-cancel native settled True upstream settled True
+difference xuelun-skill-cancel native settled False upstream settled True

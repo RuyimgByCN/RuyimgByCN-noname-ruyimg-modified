@@ -1,0 +1,40 @@
+{
+  "at": "2026-11-14T01:46:26.751097+08:00",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "fs_port": 51215,
+  "temporary_vite_original_sha256": "02ed5f37522bc9c1320c0d844c2fc42b82a268739638fe75d25f238e5e97eb61",
+  "temporary_vite_patched_sha256": "0bda8766b1c749b6bc1eb920d535d6c12e20e043f6054c0ce580d3521f3462d2",
+  "host_only_changes": "Ephemeral FS backend port and pre-route spine URL denial; upstream skill/game code remains original",
+  "services": [
+    {
+      "label": "modern-vite",
+      "argv": [
+        "node",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-runtime-modern-b789ktt1/apps/core/node_modules/vite/bin/vite.js",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "0",
+        "--strictPort"
+      ],
+      "cwd": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-runtime-modern-b789ktt1/apps/core",
+      "pid": 77872,
+      "log": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U06/modern-vite-first.log",
+      "start": "2026-11-14T01:46:26.750011+08:00"
+    },
+    {
+      "label": "modern-fs",
+      "argv": [
+        "node",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-runtime-modern-b789ktt1/node_modules/tsx/dist/cli.mjs",
+        "src/entry.ts",
+        "--dirname=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-runtime-modern-b789ktt1/apps/core",
+        "--port=51215"
+      ],
+      "cwd": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-runtime-modern-b789ktt1/packages/fs",
+      "pid": 77873,
+      "log": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U06/modern-fs-first.log",
+      "start": "2026-11-14T01:46:26.751084+08:00"
+    }
+  ]
+}

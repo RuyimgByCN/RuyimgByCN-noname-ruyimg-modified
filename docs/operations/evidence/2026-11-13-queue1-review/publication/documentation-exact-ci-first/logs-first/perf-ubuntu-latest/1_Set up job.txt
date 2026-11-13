@@ -1,0 +1,34 @@
+﻿2026-11-13T17:40:24.8134440Z Current runner version: '2.338.2'
+2026-11-13T17:40:24.8172280Z ##[group]Runner Image Provisioner
+2026-11-13T17:40:24.8173597Z Hosted Compute Agent
+2026-11-13T17:40:24.8174785Z Version: 20261103.629
+2026-11-13T17:40:24.8175913Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+2026-11-13T17:40:24.8177282Z Build Date: 2026-11-03T17:26:59Z
+2026-11-13T17:40:24.8178694Z Worker ID: {eec39818-21dd-4a29-88c3-35b5ea9a3fd5}
+2026-11-13T17:40:24.8179998Z Region: eastus
+2026-11-13T17:40:24.8180969Z Cloud: Azure
+2026-11-13T17:40:24.8181941Z ##[endgroup]
+2026-11-13T17:40:24.8184484Z ##[group]Operating System
+2026-11-13T17:40:24.8185535Z Ubuntu
+2026-11-13T17:40:24.8186560Z 26.04.1
+2026-11-13T17:40:24.8187483Z LTS
+2026-11-13T17:40:24.8189126Z ##[endgroup]
+2026-11-13T17:40:24.8190146Z ##[group]Runner Image
+2026-11-13T17:40:24.8191148Z Image: ubuntu-26.04
+2026-11-13T17:40:24.8192236Z Version: 20261111.196.1
+2026-11-13T17:40:24.8194253Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261111.196/images/ubuntu/Ubuntu2604-Readme.md
+2026-11-13T17:40:24.8197414Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261111.196
+2026-11-13T17:40:24.8199542Z ##[endgroup]
+2026-11-13T17:40:24.8201479Z ##[group]GITHUB_TOKEN Permissions
+2026-11-13T17:40:24.8204488Z Contents: read
+2026-11-13T17:40:24.8205475Z Metadata: read
+2026-11-13T17:40:24.8206460Z ##[endgroup]
+2026-11-13T17:40:24.8209836Z Secret source: Actions
+2026-11-13T17:40:24.8211477Z Cache mode: write
+2026-11-13T17:40:24.8212942Z Prepare workflow directory
+2026-11-13T17:40:24.8832986Z Prepare all required actions
+2026-11-13T17:40:24.8908402Z Getting action download info
+2026-11-13T17:40:25.0649081Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-13T17:40:25.2867077Z Download action repository 'dtolnay/rust-toolchain@stable' (SHA:b725eda525362e7cf34af9a7243cac1e3f01a7ec)
+2026-11-13T17:40:25.3937188Z Download action repository 'Swatinem/rust-cache@v2' (SHA:d1527c8f67ef9af357290475d4af4b0fab8f12e0)
+2026-11-13T17:40:25.7178413Z Complete job name: perf-ubuntu-latest

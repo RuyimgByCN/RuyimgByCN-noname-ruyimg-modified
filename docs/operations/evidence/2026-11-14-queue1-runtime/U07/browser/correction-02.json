@@ -1,0 +1,6 @@
+{
+  "at": "2026-11-13T18:04:24.047750+00:00",
+  "failure": "case-results-second.jsonl",
+  "cause": "case settled, but result serialization referenced undefined runtimeActivation in non-choudu case",
+  "change": "serialize window.runtimeActivation || null; run a fresh case, never reuse settled state"
+}

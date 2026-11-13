@@ -9,6 +9,30 @@
 
 ## 当前交付与带日期核验记录
 
+## 2026-11-14T02:45:30+08:00 本批最终本地核验通过（未提交／发布）
+
+源码HEAD `605201f3f49e10cea61c31d52a61bbb66c85599d` + tracked dirty；规则333／NGSA107／schema5／ABI759／WS8。完整三crate2447通过／0失败／6忽略、workspace7843／0／8，前端489／0／0与其余第五节命令exit0；U07整合后的第二次完整preflight21项也全部通过。[完整命令/首次失败/边界](../operations/evidence/2026-11-14-queue1-runtime/restore-fix/final-local-gates.md)。产品输入仍与门禁冻结相同，14标准golden未重录。清单628／3796／0，本批撤回6旧等价、新签0；[37来源和样本](../operations/evidence/2026-11-14-queue1-runtime/source-counts-runtime-03.md)。本批准备提交酒诗恢复修复及U06/L29/U07冻结证据，L10/U08/L28仍另批。队列0完成、队列1部分，八项0/37；后续队列、UI/Spine/真机签名和第六阶段保持待。
+
+
+## 2026-11-14T02:33:04+08:00 队列1酒诗恢复门禁通过与U07补充撤回（尚未提交／发布）
+
+源码HEAD `605201f3f49e10cea61c31d52a61bbb66c85599d` + tracked dirty；规则333／NGSA107／schema5／ABI759／WS8不变。 队列0完成、队列1部分，队列2未开始。本批共撤回6项旧等价、新签等价0，现628／3796／0、合4424；[37来源日期表](../operations/evidence/2026-11-14-queue1-runtime/source-counts-runtime-03.md)。U06为5／6／0、L29为1／8／0、U07为27／9／0。
+
+完整三crate2447通过／0失败／6忽略，完整workspace7843／0／8，前端489／0／0与第五节其它代码命令均exit0；首次完整preflight21项通过，最终文档复核另记。[实际命令与边界](../operations/evidence/2026-11-14-queue1-runtime/restore-fix/final-local-gates.md)。酒诗只修两处恢复询问定义，68份旧档及136次续行通过；仍存的规则差异未修。
+
+U06三技能13场最终指定投影11同／2异；L29三技能22场终态指定投影相同但中间语义有异；U07筹度/复仇/诱战24场12同／12异、43个原生挂起检查点。[U06/L29独立表](../operations/evidence/2026-11-14-queue1-runtime/independent/u06-l29/review.md)、[U07独立表](../operations/evidence/2026-11-14-queue1-runtime/independent/u07/review.md)均未签整技能等价。U07复仇清算由真实反例撤回；实体诱敌深入由源码差异撤回，未冒称实体入口已实跑。新增[带日期提交范围修订](../operations/evidence/2026-11-14-queue1-runtime/commit-scope-amendment-01.json)纳入冻结U07，L10独立复核和U08采样另批。UI、Spine、八项0/37、真机签名、第六阶段仍待。
+
+
+## 2026-11-14T02:17:53+08:00 队列1卡牌条目补充撤回（未提交／发布）
+
+HEAD `605201f3f49e10cea61c31d52a61bbb66c85599d` + tracked dirty；规则333／NGSA107／schema5／ABI759／WS8。现630／3794／0、合4424，本批撤回4旧等价、新增等价0。U06猴子/写轮眼两卡绑定的规则真实不一致，原条目未只签静态字段，不能事后缩口径保留无差异；[独立补充裁定](../operations/evidence/2026-11-14-queue1-runtime/independent/u06-l29/card-entry-adjudication.md)。[37来源日期表](../operations/evidence/2026-11-14-queue1-runtime/source-counts-runtime-02.md)，U06现5／6／0、L29为1／8／0。酒诗只修恢复定义、其余规则差异保留；本地门禁仍在收口。队列1部分、八项0/37；本次先提交已冻结U06/L29证据，U07/L10继续采样，不进入队列2。
+
+**队列1实际对照撤回两项旧等价（2026-11-14T02:08:35+08:00；尚未提交／发布）**：HEAD `605201f3f49e10cea61c31d52a61bbb66c85599d` + tracked dirty；规则333／NGSA107／schema5／ABI759／WS8。清单现632／3792／0，本批新增等价0；清正伤害来源及付款时点、酒诗得牌窗中酒状态的真实差异已由独立agent确认，旧整技能等价2项撤回。酒诗仅恢复定义修复后，68份修复前挂起档恢复通过，136次续行命令/回包/log及最终完整快照（会话auth代次单列）相同；不覆盖仍存规则差异。U06三技能13初态投影相同、11最终投影连同结算状态相同，猴子桃消耗／写轮眼取消不同。[本批对照与首次失败](../operations/evidence/2026-11-14-queue1-runtime/README.md)、[清单变更前后原文](../operations/evidence/2026-11-14-queue1-runtime/inventory-runtime-update-01.json)。队列1仍部分、八项0/37，workspace/其余门禁及本批发布待；不进入队列2。
+
+## 2026-11-14T02:05:03+08:00 队列1运行补课与恢复修复执行中（未提交／发布）
+
+HEAD `605201f3f49e10cea61c31d52a61bbb66c85599d` + tracked dirty；333／107／5／759／WS8。酒诗确认挂起恢复失败已实际复现并定向修正，新增回归覆盖确认、取消、连续确认和篡改候选拒绝；L29定向5通过／0失败，完整三crate及严格all-targets已通过，其余第五节门禁仍在执行。U06三技能13场景重载上游实跑，13初态投影相同、11最终投影连同结算状态相同；猴子桃消耗及写轮眼第二步取消差异保留。634／3790／0、新增等价0、八项0/37；队列1仍部分，不进入队列2。[本批原始证据与未验范围](../operations/evidence/2026-11-14-queue1-runtime/README.md)。
+
 **队列1部分增量发布及精确代码CI通过（2026-11-14T01:33:42+08:00）**：代码 `1fa8ac6cc3a70446436d97ff49aa19ea4626e22d` 已按裁决25正常发布；[精确SHA CI](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43468568765) attempt1全部10作业success／0失败／0取消，未由agent补跑。记录时HEAD为该代码加文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8。 本地完整三crate2446通过／0失败／6忽略、workspace7842／0／8、前端489／0／0及第五节其余命令exit0，完整preflight复跑21项通过；[命令/首次失败/忽略边界](../operations/evidence/2026-11-13-queue1-review/final-local-gates.md)。CI实际stable1.100.0、与本机1.99.1严格检查及1.95.0 WASM分开；[逐作业计数、原有性能内部尝试与原始日志](../operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/README.md)。清单[634／3790／0](../operations/evidence/2026-11-13-queue1-review/source-counts-reviewed.md)、本批撤回215旧等价、新增等价0、八项0/37。上游[5技能13分支24次指定投影](../operations/evidence/2026-11-13-queue1-review/runtime-comparison.md)相同，非全轨迹；27次本轮挂起恢复。队列0完成、队列1仍部分，其他10来源30候选与L22自动规则、已知差异后续修复待做，不进入队列2。UI截图／Spine逐特性与净室及用户验证／真机签名／第六阶段保持待；[剩余范围](../operations/evidence/2026-11-13-queue1-review/remaining-scope.md)。
 
 **队列1部分增量已发布、CI进行中（2026-11-14T01:02:23+08:00）**：代码HEAD `1fa8ac6cc3a70446436d97ff49aa19ea4626e22d`，记录后仅文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8。代码与本地核验冻结输入一致，清单634／3790／0、新增等价0、八项0/37。已按裁决25正常推送批准ref，原钩子/持久设置未变；精确SHA的[同一条CI run43468568765](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43468568765) attempt1共10作业正在运行，未重启/补跑。实际[推送证据](../operations/evidence/2026-11-13-queue1-review/publication/code-batch-first.json)、[运行初始状态](../operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/README.md)。队列1仍部分，不进入队列2；终态另增记录。

@@ -1,0 +1,216 @@
+{
+  "at": "2026-11-14T02:11:46.950966+08:00",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "inputs": [
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/kernel/monkey.rs",
+      "snapshot": "review-inputs/crates/engine-native-kernel/src/kernel/monkey.rs",
+      "sha256": "2ad7d4e4c9d6f590b296c007b61230669a8c05d0f7d9fefd102cb409e346a617",
+      "bytes": 5207
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+      "snapshot": "review-inputs/crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+      "sha256": "66528fb45e1c35af41e57c69b3c4eec1dc8305729bb1d2eb988748beb3ba4f7f",
+      "bytes": 44612
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+      "snapshot": "review-inputs/crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+      "sha256": "1a6f7746cf75330648480b0e46b52f50427a73532f9e6c5a985f502d4382ed13",
+      "bytes": 36158
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/src/engine/play_card.rs",
+      "snapshot": "review-inputs/crates/engine-native/src/engine/play_card.rs",
+      "sha256": "da02ada44729bcde3fbbc7fd41b7d753459ef97c40afbf0419ff87af8ea3cab5",
+      "bytes": 56280
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/skills_damage.rs",
+      "snapshot": "review-inputs/crates/engine-native-content/src/content/host/step/skills_damage.rs",
+      "sha256": "8d907001c0eeac813b1e6accc00bc38e8efc20e62a1148d85af45a15c211a075",
+      "bytes": 41526
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/longxue-upstream-liuli/assets/cards.json",
+      "snapshot": "review-inputs/packages/extensions/longxue-upstream-liuli/assets/cards.json",
+      "sha256": "ca66fc4d3543f87515ac00053d1750529c714e1ce9d7db5b792aac2a268828c3",
+      "bytes": 1355
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-probe/src/main.rs",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-probe/src/main.rs",
+      "sha256": "e8cf53c45cdda5e3ced2ac945781a50d83e92b65e369d016ab64c2a40165777f",
+      "bytes": 18324
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-probe/Cargo.toml",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-probe/Cargo.toml",
+      "sha256": "b089756b30d2830d62968d7d675f6ad5d13c148cce4b38e4be2e3efb9d4d009d",
+      "bytes": 347
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-before-product-fix-inputs.json",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-before-product-fix-inputs.json",
+      "sha256": "854016c9fdb335da3f43d6db83d6c4cfdbde90cd5e36380490697f77eba79a05",
+      "bytes": 1265
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-after-product-fix-inputs.json",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-after-product-fix-inputs.json",
+      "sha256": "c97812e4b5166a59904cb25b986d8bf2d8ebc97010951a6e20821a4db710df04",
+      "bytes": 1370
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-before-after-direct.json",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-before-after-direct.json",
+      "sha256": "650cbbe76a182fce037c19eca8f8fa6f7870b9f70c9965ca01d39c8fae833fec",
+      "bytes": 5595
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-after-first.raw.txt",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-after-first.raw.txt",
+      "sha256": "50ad243d573719af3fad27d3f3551e1f733434235f7f750b125cae4b8a6bd82a",
+      "bytes": 3265
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/old-ngsa-continuation-summary.json",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/old-ngsa-continuation-summary.json",
+      "sha256": "f9fb3c91f02d6722fcab7ef63096e9d282e9e548709ba680b6a5a8d95442f70a",
+      "bytes": 293
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-after-jiushi-fix/old-ngsa-restore-results.json",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-after-jiushi-fix/old-ngsa-restore-results.json",
+      "sha256": "27a719a8cb08bbf91dc5fbb2efd91059e9c21477d76f102e58f122c5266fe542",
+      "bytes": 125290
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/upstream-setup.js",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/upstream-setup.js",
+      "sha256": "949291524c36eb1bd2774c673c82c4191b4744a104d4f6fd58ed3e74ae1f3fa4",
+      "bytes": 7979
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/run-browser.py",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/run-browser.py",
+      "sha256": "2b6cf038f918b6c7ba49f1f4b80a67e7ade32e0af5702337a139c126ef23007c",
+      "bytes": 11424
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/launch.mjs",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/launch.mjs",
+      "sha256": "06791729ac3b18a32ebd238157ec6e9724030a93a00a2bcd28b7906e552cd311",
+      "bytes": 6836
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/control.py",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/control.py",
+      "sha256": "a50790ceeedd86f54a76a16333f93a7c0f5eb15edcfd3bec8584a6f8573e1054",
+      "bytes": 2024
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/session-l29-1794591931110-requests.jsonl",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/session-l29-1794591931110-requests.jsonl",
+      "sha256": "3a4b2969b32a21d9a622de24ee837d81f6261e163f8728ee6c479976edeb36cd",
+      "bytes": 2610211
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/session-l29-1794591931110-replies.jsonl",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/session-l29-1794591931110-replies.jsonl",
+      "sha256": "aef1b83fa7786c9f88b16a92460b0a5050ed3063b47b21b8ba3a8432a7ea6a27",
+      "bytes": 4580989
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/session-l29b-1794592604612-requests.jsonl",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/session-l29b-1794592604612-requests.jsonl",
+      "sha256": "b7906a876bfcd2be1b43db8ee658cf37378d03f0461b1ea5e2ac8c13464c3c3d",
+      "bytes": 1332609
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/session-l29b-1794592604612-replies.jsonl",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/session-l29b-1794592604612-replies.jsonl",
+      "sha256": "9d8b70b418a86b6cf96c720fcb47217ff507c8ebd3a93384f58713587800ce60",
+      "bytes": 2836410
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/browser-round8/upstream-q_A.json",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/browser-round8/upstream-q_A.json",
+      "sha256": "c39e65424146d68d35b7e5685822633d1b55db1a01d3352e5eeb667c39937274",
+      "bytes": 226668
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/native-q_A.json",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/native-q_A.json",
+      "sha256": "4eebc5f9dd335fa59d2acaea8d6e89bc0035a39b84007f4d77fb33f8e82e9653",
+      "bytes": 461508
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/browser-round8/upstream-q_B.json",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/browser-round8/upstream-q_B.json",
+      "sha256": "51990b77a7accb35410b38f0ac5236419df0fbf2d8d0363790e310c6450d1478",
+      "bytes": 247492
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/native-q_B.json",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/native-q_B.json",
+      "sha256": "900e52a52fde2c9c8f0fc313d4146ee3a8f87a9758bbcf2b95c6975720bd05a6",
+      "bytes": 461128
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/browser-round8/upstream-j_active_gain.json",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/browser-round8/upstream-j_active_gain.json",
+      "sha256": "684f1e0215a4446335df880d0035d1f038b58b3235a8eb996086147ff245a93a",
+      "bytes": 198337
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/native-j_active_gain.json",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/native-j_active_gain.json",
+      "sha256": "ef86c4bb7c70e8d2f30b90bc088c97eac777bed16a4d48f61e6cda491210a6d1",
+      "bytes": 255673
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/browser-round8/upstream-j_active_cancel_gain.json",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/browser-round8/upstream-j_active_cancel_gain.json",
+      "sha256": "6135b278e1dc852ae4f32a6d029b4bcd804be8250858300f92ab1920b53c2183",
+      "bytes": 158113
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/native-j_active_cancel_gain.json",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/native-j_active_cancel_gain.json",
+      "sha256": "c8ec145df0901cdf4d2decc2bdc61a0fc6759a9bc02341d717b8c2cff32a60d5",
+      "bytes": 255366
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/browser-round8/upstream-j_damage_back_accept_gain.json",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/browser-round8/upstream-j_damage_back_accept_gain.json",
+      "sha256": "3e1cb53c252ed95967de5b4098b726fa74202a5f6fb06c8f73f1633431e6f8b1",
+      "bytes": 138853
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/native-j_damage_back_accept_gain.json",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/native-j_damage_back_accept_gain.json",
+      "sha256": "0bc467cfd202419f712e91790085c48fe2557dc524dbfc21ab1348a20b7ed6e2",
+      "bytes": 322659
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/browser-round8/upstream-j_damage_back_cancel.json",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/browser-round8/upstream-j_damage_back_cancel.json",
+      "sha256": "b2605dd8d3c824907106fca26b30be7bf3617c327e55b3db8015f60671f07edb",
+      "bytes": 113007
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/native-j_damage_back_cancel.json",
+      "snapshot": "review-inputs/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/native-j_damage_back_cancel.json",
+      "sha256": "a779856b1e35b6c9f8817ca12c6ee8cc1f5d87f774c1f9e7ba005dd640319d21",
+      "bytes": 254552
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/game/game.js",
+      "snapshot": "review-inputs/upstream/archive/upstream/noname-liuli/noname/game/game.js",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5",
+      "bytes": 2148860
+    }
+  ]
+}

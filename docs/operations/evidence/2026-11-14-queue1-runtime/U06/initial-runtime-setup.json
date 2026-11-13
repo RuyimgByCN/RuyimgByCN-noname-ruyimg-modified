@@ -1,0 +1,3439 @@
+{
+  "at": "2026-11-14T01:44:06.869534+08:00",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "tracked_status": "",
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "upstream": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname",
+  "temporary_workspace": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-runtime-modern-b789ktt1",
+  "copy_recipe": "Exact prior modern-setup.json whitelist plus its five recorded missing tsconfig/Vue inputs",
+  "files": [
+    {
+      "path": "apps/core/pnpm-lock.yaml",
+      "sha256": "75d8ed973c0169fde1d014bce600d61a8254e35a00e31179e794e012d0bd1014"
+    },
+    {
+      "path": "apps/core/tsconfig.types.json",
+      "sha256": "b73c8c903818dc05fc0e69b7e9f9881cd62b3df975edffeef24456d9debe382b"
+    },
+    {
+      "path": "apps/core/index.html",
+      "sha256": "81e0a3afd17bab9549ad14c260f1e38a8d7f97c9e00860f865e96174208935af"
+    },
+    {
+      "path": "apps/core/noname.js",
+      "sha256": "f1a7dc506e66ffcff8f6fc55f193c624a161dbfff63831b56cf8cd80cb2bd5ed"
+    },
+    {
+      "path": "apps/core/package.json",
+      "sha256": "ed8f9839ef854e64c0ce67be3ee93938720919947e5f9cc8c5c1cfe59a505671"
+    },
+    {
+      "path": "apps/core/tsconfig.json",
+      "sha256": "9bb1bd94654ec149ea5d3ab4a50e2b86f6110913ba07e992136bc737e19b0f00"
+    },
+    {
+      "path": "apps/core/vite.config.ts",
+      "sha256": "02ed5f37522bc9c1320c0d844c2fc42b82a268739638fe75d25f238e5e97eb61"
+    },
+    {
+      "path": "apps/core/card/sp.js",
+      "sha256": "f20a2d4d6174a9efa8b901842717c2248c0651c1b367d5b8f0d9b202a42f799b"
+    },
+    {
+      "path": "apps/core/card/standard.js",
+      "sha256": "33ebe708722f3d8b038d5c2855259699f9009cf73ef3c0fe8b1e9b6bd482f6fa"
+    },
+    {
+      "path": "apps/core/card/huodong.js",
+      "sha256": "b0eec6b6b1136b463f9f648d70a75615220551c66192dc7479a11a3f8b20ec40"
+    },
+    {
+      "path": "apps/core/card/extra.js",
+      "sha256": "8a73678a49b4fc413d6dc0d506733e594fae619d91dc8013cd441a6cd107c35d"
+    },
+    {
+      "path": "apps/core/card/xianxia.js",
+      "sha256": "0a32b2458071ae2962fc31c9039c03cf137659fa271dfe1aa4bdac47b38c0f62"
+    },
+    {
+      "path": "apps/core/card/zhulu.js",
+      "sha256": "77a77b63e4b26d5a69e2217f13b9b9087317e42fc4c857321fa4a6f9dff34633"
+    },
+    {
+      "path": "apps/core/card/yingbian.js",
+      "sha256": "897e979fe344f01e97813831b8fc0c65058a5c637fb163533eb91204e069b6c7"
+    },
+    {
+      "path": "apps/core/card/guozhan.js",
+      "sha256": "4d7312faf64b8213f0061139088e1389ea0a2dc2789a769155faf584de06431d"
+    },
+    {
+      "path": "apps/core/card/yongjian.js",
+      "sha256": "0aed37153bde382d90dc9c6fd2fa37ae4da310e43e99dc158a8951801014532f"
+    },
+    {
+      "path": "apps/core/card/jiubian.js",
+      "sha256": "44a67cff89047c9e89aed850268a13bdf1c5a280fb15aa785eb49236652b7097"
+    },
+    {
+      "path": "apps/core/extension/玩点论杀/info.json",
+      "sha256": "77a2b282a27fc4d1a09a1558290ff54815fedc1d8c4d21ad1687f22137aaf012"
+    },
+    {
+      "path": "apps/core/extension/玩点论杀/extension.js",
+      "sha256": "8843e0f1f1ad53f7dc473e9cfea4a3a2901edfa8b469941225660dc3fddf6c49"
+    },
+    {
+      "path": "apps/core/extension/玩点论杀/card/translate.js",
+      "sha256": "68d8dc4b4c9c22afea2fb3a60b7f92185f661b003e90082f02fc7a40ee9d4f74"
+    },
+    {
+      "path": "apps/core/extension/玩点论杀/card/skill.js",
+      "sha256": "be87d05bacd4295050191471bba11fa32b2755183e5c842e8c284894baf1e5f9"
+    },
+    {
+      "path": "apps/core/extension/玩点论杀/card/index.js",
+      "sha256": "e8c9b3c8014274232f2863d9586024cb7e8ece8085478ebc8fbf0f6a5dbf9b94"
+    },
+    {
+      "path": "apps/core/extension/玩点论杀/card/list.js",
+      "sha256": "b76bb05416a8bd1065e35e2d00fd005512481dc9a7655e0fab70f8a0d8aa84af"
+    },
+    {
+      "path": "apps/core/extension/玩点论杀/card/card.js",
+      "sha256": "a9f8dd509ee32aabdc52a664e2f2ce753b0ec5ee2a07da625842a7a0cc5f8ccf"
+    },
+    {
+      "path": "apps/core/extension/玩点论杀/character/sort.js",
+      "sha256": "c34b9ead6caed4ecd4e59cebae25b1c31b6e57c203234d706088fa716130ac94"
+    },
+    {
+      "path": "apps/core/extension/玩点论杀/character/characterFilter.js",
+      "sha256": "c4b44620d01e3ac2010d1c3042269c692f20a6f08b772c60cf28330dbf838a14"
+    },
+    {
+      "path": "apps/core/extension/玩点论杀/character/translate.js",
+      "sha256": "4808398b1ab3e4ca9483f75bc07821fa2aaeb55291bc516bea2fafae2bd3e971"
+    },
+    {
+      "path": "apps/core/extension/玩点论杀/character/skill.js",
+      "sha256": "e3d3256f6428eba85beed87a4d293d6063da7d8893e8da0def08d0bc89081076"
+    },
+    {
+      "path": "apps/core/extension/玩点论杀/character/index.js",
+      "sha256": "02e3677c0cbf56196b22f8b2c07a6f40e43c59de81ecc80c8b0128a323abf2ee"
+    },
+    {
+      "path": "apps/core/extension/玩点论杀/character/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/extension/玩点论杀/character/perfectPairs.js",
+      "sha256": "450f0af4f4c1ecc4c7180f2e364c8a59bfed69dd350fb6b47bce8641c2a37786"
+    },
+    {
+      "path": "apps/core/extension/玩点论杀/character/intro.js",
+      "sha256": "8b77a2d9e050e52c8ad61b8152536e65d0452e663f9e0fb42b09ae3d16eadf41"
+    },
+    {
+      "path": "apps/core/extension/玩点论杀/character/voices.js",
+      "sha256": "450f0af4f4c1ecc4c7180f2e364c8a59bfed69dd350fb6b47bce8641c2a37786"
+    },
+    {
+      "path": "apps/core/extension/玩点论杀/character/character.js",
+      "sha256": "bb9d0290418bebc86d2c4a98838416343beb472ed78514ab2f6bad935d528bd9"
+    },
+    {
+      "path": "apps/core/extension/玩点论杀/main/precontent.js",
+      "sha256": "d1332a340a900cede626fb58841e6d3f7aa8941c4c9fb06f0f68f87a16009bd3"
+    },
+    {
+      "path": "apps/core/extension/玩点论杀/main/content.js",
+      "sha256": "7ec78f60e156fc8406b7a3b52db1e0d72587fc39cbbe84719cf35987e59690c3"
+    },
+    {
+      "path": "apps/core/extension/cardpile/extension.js",
+      "sha256": "3c685de7f719f53d4c8482747fcaf3e233874311474bc1653a486bb719fe09a3"
+    },
+    {
+      "path": "apps/core/extension/英雄杀/info.json",
+      "sha256": "89f7b8b5eb6cd63a3e07cf8bf3712eaf14bc99919a2c2001e04cf47572b30ed9"
+    },
+    {
+      "path": "apps/core/extension/英雄杀/extension.js",
+      "sha256": "492a9b31d69b9884928251dc75259ac427acff9f451b0599ebdb72f308784cf3"
+    },
+    {
+      "path": "apps/core/extension/英雄杀/character/translate.js",
+      "sha256": "cb0fc0d9a742967ad6767e2799912f5d5878e2e276fdb96c8eb891db897a941d"
+    },
+    {
+      "path": "apps/core/extension/英雄杀/character/skill.js",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    {
+      "path": "apps/core/extension/英雄杀/character/index.js",
+      "sha256": "a90ccc6641ff0669e460b4653b79093853da3e12564849eba6228df490249e20"
+    },
+    {
+      "path": "apps/core/extension/英雄杀/character/title.js",
+      "sha256": "93b13555e1216fdcc409d7a8328fd9c1e6ed104b72c769bdce064dd8ae70efb8"
+    },
+    {
+      "path": "apps/core/extension/英雄杀/character/intro.js",
+      "sha256": "d2f19bffea81d3afd87a7a922a27e3bedf571ad1d1e91fba82235368d2ed4cfa"
+    },
+    {
+      "path": "apps/core/extension/英雄杀/character/character.js",
+      "sha256": "ab61252431228fb0d1a96e84ab4d8162e63c78b7ad0fcf6867b44deb2e0bd103"
+    },
+    {
+      "path": "apps/core/extension/英雄杀/main/precontent.js",
+      "sha256": "2c3cadcd1c5e2cd8eb2765b2e5b2e450d6092487d7f31e76b2a20d9fb3606a68"
+    },
+    {
+      "path": "apps/core/extension/英雄杀/main/content.js",
+      "sha256": "6f4d7a0b5bab25759cb10783bb92973f85e48ab8dd7e7788c7fc865e59831345"
+    },
+    {
+      "path": "apps/core/extension/boss/extension.js",
+      "sha256": "86b72a454c2293b193b62c1e0e0e1bb99470c7a5b705849fb64c2d2dc33be741"
+    },
+    {
+      "path": "apps/core/extension/coin/extension.js",
+      "sha256": "4ea56e740f5c806ec194d55b038432788ff354e0eae12ca2bc02086ca22f2217"
+    },
+    {
+      "path": "apps/core/extension/欢乐卡牌/info.json",
+      "sha256": "45bf2075ffa4c11d1da3cfc1177709a77a1d7a2850b174faa751a7e469776fcf"
+    },
+    {
+      "path": "apps/core/extension/欢乐卡牌/extension.js",
+      "sha256": "2968ed377f26b5f849d2efc5576629e44f134500c75dcff90a1d304b27307baa"
+    },
+    {
+      "path": "apps/core/extension/欢乐卡牌/card/translate.js",
+      "sha256": "c2b748a6d3bbb72a8a997117b3fd6c49007b3d8af981ac45b20fea4ba1dd83cd"
+    },
+    {
+      "path": "apps/core/extension/欢乐卡牌/card/skill.js",
+      "sha256": "e99244d552f0dccc30477b61aef8cca5bc758dc3d9b32221c2dba8a8e0bc9bfd"
+    },
+    {
+      "path": "apps/core/extension/欢乐卡牌/card/index.js",
+      "sha256": "0f87151dcda688d3e2b92581c09c98827be7726d17078749571a9b76c630f3c3"
+    },
+    {
+      "path": "apps/core/extension/欢乐卡牌/card/list.js",
+      "sha256": "9e875ac12b0689564b6507746c86396344c15e1016761ba97fffa4d8b9aafabb"
+    },
+    {
+      "path": "apps/core/extension/欢乐卡牌/card/card.js",
+      "sha256": "96d74f2aa088718a1990c7960aab47c39a618405922a3f325b51c39aac4fc71b"
+    },
+    {
+      "path": "apps/core/extension/欢乐卡牌/main/precontent.js",
+      "sha256": "db1b020251b99a2f8de2bd5fec7a0fe8f83b0553e69ad6d63e6e4d01e6a73bdd"
+    },
+    {
+      "path": "apps/core/extension/3D精选/info.json",
+      "sha256": "16826d7abcf19b47c8861f6a6bdf9855a23606fa8cabcc478f5c6f2a19bd2574"
+    },
+    {
+      "path": "apps/core/extension/3D精选/extension.js",
+      "sha256": "83da333d08dde30992e57c2912ab99409457bfe83532857a2b43db3f131d861a"
+    },
+    {
+      "path": "apps/core/extension/3D精选/character/sort.js",
+      "sha256": "c4170751ad769e22dcb63ed73ce4a939bc2d76e0a2510419a49e5941447a49d5"
+    },
+    {
+      "path": "apps/core/extension/3D精选/character/characterFilter.js",
+      "sha256": "ad4091d14b41c32498bf0a5a4437bd305c0f2378b989d7b8a4a2b40fa12c3f93"
+    },
+    {
+      "path": "apps/core/extension/3D精选/character/translate.js",
+      "sha256": "4ce99f14aea02c75e758eb528eb44b308078fec66640a2108cf6dba0f0a83164"
+    },
+    {
+      "path": "apps/core/extension/3D精选/character/skill.js",
+      "sha256": "cc09454d5187985af77d1be16f84e381b48637e0b89a088e53231cf0b11c0662"
+    },
+    {
+      "path": "apps/core/extension/3D精选/character/index.js",
+      "sha256": "883a2dae32d0a5d2fed3ed54f32813b0ae9278c0818eebf7bb11868d4ce2fe73"
+    },
+    {
+      "path": "apps/core/extension/3D精选/character/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/extension/3D精选/character/intro.js",
+      "sha256": "106817548ed643939e5ec291b61b6b6411b724504a92c64112365cdaee628138"
+    },
+    {
+      "path": "apps/core/extension/3D精选/character/dynamicTranslate.js",
+      "sha256": "2bcd288488f777e34f3b0ea96380b5e4491f4397f58c2e2e9a6e2cff7f470bbb"
+    },
+    {
+      "path": "apps/core/extension/3D精选/character/card.js",
+      "sha256": "14567c63bc51ae2082899ebfcda63b6649cac8543fa73a73989a26c49a946c37"
+    },
+    {
+      "path": "apps/core/extension/3D精选/character/voices.js",
+      "sha256": "450f0af4f4c1ecc4c7180f2e364c8a59bfed69dd350fb6b47bce8641c2a37786"
+    },
+    {
+      "path": "apps/core/extension/3D精选/character/character.js",
+      "sha256": "49b87ae81935e0e90feeadd2be1f8950e92d2b681ef3622f3d65e9843ca87338"
+    },
+    {
+      "path": "apps/core/extension/3D精选/main/precontent.js",
+      "sha256": "be380357e8e64a84da549fd41b5ea7b3a540831c5077dfec941278b6c3eb2049"
+    },
+    {
+      "path": "apps/core/extension/3D精选/main/content.js",
+      "sha256": "512b50eb95b10ab49c5d50add83be9cb028b6d6b4906f66c513fac232eb119ae"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/info.json",
+      "sha256": "ac86682c802c6fe3da543a01aff3f952a9f6cf9594e657e24ee65de85676c136"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/extension.js",
+      "sha256": "8b2c1fcc8fa7ce6a82fe5c47cc02f146d3b277465defaa678d6e4a39577aac32"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/yunchou/translate.js",
+      "sha256": "6d8032eb3f6805cb93ceb1994e50e37f7e87b8ce5cb5dc037f74f384a9a7163e"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/yunchou/skill.js",
+      "sha256": "666bfb9d729bed3e1ea0e7f47c5854063e7edd1ff220e6741c410bd38eb35267"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/yunchou/index.js",
+      "sha256": "9169896708566cc02bae879143addf659ac97f511ee056e72df669dafaa092ab"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/yunchou/list.js",
+      "sha256": "36627c5ac7c61563f65b857f85d662b7ce4419de1f4556c31edf042348dd790b"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/yunchou/card.js",
+      "sha256": "842a31c740b0a651efe892c13ecb52f2be77d41fcaef70d48c302584fcb255dc"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/mtg/type.js",
+      "sha256": "d362c3e3d0767489881bd3979bcb81224bcef690d7ccdbb9ed6b5ad5b23eefe4"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/mtg/translate.js",
+      "sha256": "d8304cb0818463d49c2a9deee79e291607887378d29fd15686ca67f4b468d104"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/mtg/skill.js",
+      "sha256": "703a4d178b7f1324a4afb9f1bb4d3fabfb79cedf34f12d11138c2f1b8e49ba3d"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/mtg/index.js",
+      "sha256": "918afa865571b0bc739568a25df530796395b88fea36ae910fba9af5a515d5f2"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/mtg/list.js",
+      "sha256": "4e1f5338e0b04e78c344302e4dcfe76842002e21140d74a1a15682e22027dbd0"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/mtg/help.js",
+      "sha256": "68ac237432c7c0ec2771d16ae262993678b1dbf68f0c34f973b760cb4b96c6f7"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/mtg/card.js",
+      "sha256": "f0ab7acd954b5068beb40f4171ebc30240e82d1c3a57ebc3535b68596b4d5392"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/zhenfa/translate.js",
+      "sha256": "6a6e40fd58b626204dab33c67894fc8aa21d6ddc359de0ef05887019aa2dd321"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/zhenfa/index.js",
+      "sha256": "f97ddb9b2f73e0baf83b9dc4a87f3a93520a8ad98dd45d004a7b6abfa4da4637"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/zhenfa/list.js",
+      "sha256": "fb3c29d3ffbcfa16564683724277c1b9ac24d913ea09e8ae6c23e1e0a0fc7d58"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/zhenfa/card.js",
+      "sha256": "b04dc42b905956096deeabc14668c477cb1ea1562408e7b40423149cac493168"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/gujian/type.js",
+      "sha256": "3e2a10a7598e1d3f8e04286e6b2d4eb3e7a59f9880ff815b5772855b5fb45f7a"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/gujian/translate.js",
+      "sha256": "3ff0f5958ec88823a08ea4522dbfcdd9ebe7f6fe249eba886af2f5cb5f242364"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/gujian/skill.js",
+      "sha256": "02258835c137c058118b00896784bf11665849dd2d1907324e93021dff22a913"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/gujian/index.js",
+      "sha256": "af96d75e33ab9d77e1657c292e4f4251f5355743fd0abf3d6ec0660b1dfca749"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/gujian/list.js",
+      "sha256": "a06c08594cc55322d620fddaed63715bcb3d0699eecdbce12bd8ec9906369981"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/gujian/card.js",
+      "sha256": "2df54604f26ee6a6625e93b64609103d8a6ab97a58803e17749f4a684e1ec60a"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/swd/type.js",
+      "sha256": "b8402a8453d48da5dbdbfc42ca93296a0456f91e630f3df1f5564e1f56a7da86"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/swd/translate.js",
+      "sha256": "5d9ff26a6eb6e647442d4dd01a94bfbc0f72b933b6bbe3a5b56d89e048f48d43"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/swd/skill.js",
+      "sha256": "eda7ee16a42c4f36d1ccbfd4b16e9e698025cf720d5ed28771ef58da0aff0646"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/swd/index.js",
+      "sha256": "678ddd8788e35b3830c09a5c61fdd280121bde0ec925f2ee929de1ea9201124c"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/swd/list.js",
+      "sha256": "b81457ba9a8987c8b0489fc0234c0d3309a74d0d7318e8019210d41ee7a88865"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/swd/help.js",
+      "sha256": "78eb8eb14469cc658b2bc0fd5aebf2edca32b7ce8ee8e14af0fe5b9aab8e6f1d"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/swd/card.js",
+      "sha256": "d85f1115a9d796e1bd188967984e69056ecbf1ef124238f87516b3e81741beb9"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/gwent/type.js",
+      "sha256": "ea59c3e87a54f30889cf95f3ff6ded396aac783509bd4825083e1500badaffdf"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/gwent/translate.js",
+      "sha256": "49c5385f2176ea11ee4905e535e0811398807c78dd8eef4db16f7c689cf1b661"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/gwent/skill.js",
+      "sha256": "3eb8c16e613f865c7aa11e85eaecfee14743f373dff86fd2873ba96603af664d"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/gwent/index.js",
+      "sha256": "7f54b33a30a7f934e7ebdc88004c8361c13a57309e263f66ec50f27bdefc7835"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/gwent/list.js",
+      "sha256": "203da828831030365e280a8ca65c846a53e53d3280508c5ce5e231be198e2b46"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/gwent/help.js",
+      "sha256": "ba0ff2eafd1e61d1977c02b56bbfbd83d74728cc362490a9cc022930e72200fa"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/gwent/card.js",
+      "sha256": "4a118650e9dd7ef20893b7359573959ed6a513155d8072541d989e5454d220df"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/hearth/translate.js",
+      "sha256": "f1aa6ff79290a0ee1d4d73cc99069047a111da5850cf8782f42d4430dc9b1ef1"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/hearth/skill.js",
+      "sha256": "d4ac741ba7969fb0c109275c26db85ab12e5a1da66df6df69e8bfcdefd5c6610"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/hearth/index.js",
+      "sha256": "fdb001d585b51a44a2098220729e63c892bb73f486e38fa5e702d97d6a563b5c"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/hearth/list.js",
+      "sha256": "0cefa11e0363f2cd6b706e75788122ede418faaff8ce97a4cb747fcfdbf75f61"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/card/hearth/card.js",
+      "sha256": "809c32fcc0f2570b3195a8e9645df24cc15e515e0e5a345dcc98541bc8275242"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/yunchou/sort.js",
+      "sha256": "2a4763c78f3fd93733e5941e424030f975bfd4cc0adcae6a4458ed4dfc7fade8"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/yunchou/characterFilter.js",
+      "sha256": "7c51d6faf6db03fec7e3da07395e59bc1cff4535cb9ce2a903a10dfff22e4025"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/yunchou/translate.js",
+      "sha256": "b5116e38f5047dec68168cb5dba07c24c74d6dbef51aa4b6321c07b4071db70b"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/yunchou/skill.js",
+      "sha256": "ab4323e4455a6b5b9afd69a7b37c4310c3f13ce4dd0d836b318dc1c95789ce08"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/yunchou/index.js",
+      "sha256": "9db4a25235ce22ccaefec4d7373256d430852724ede38d112f6ffa1b45fdd071"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/yunchou/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/yunchou/perfectPairs.js",
+      "sha256": "78ea1570a2162620585efb006c61579ca5695b13b503b227bacb590d5f19fe85"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/yunchou/intro.js",
+      "sha256": "f238971ec0d7face16343456285f9dafb73a6a955d067dd52e3bd756b61e9804"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/yunchou/voices.js",
+      "sha256": "450f0af4f4c1ecc4c7180f2e364c8a59bfed69dd350fb6b47bce8641c2a37786"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/yunchou/character.js",
+      "sha256": "aede5075d8c499acc569eb6796ce92ad6bc84a8807e07a363ffae84baff6f558"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/ow/translate.js",
+      "sha256": "e3489ca9bab04f861163485a011da6774295156b2728238256786bcec7634e25"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/ow/skill.js",
+      "sha256": "69fbd9fd26c3817bbb62426d389e666b74a18224b60f0fab9625254901503193"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/ow/index.js",
+      "sha256": "1c420c0410f94d8186ca0bbc062c7e59d25ddfcc18127aada3243a4cc4f741db"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/ow/intro.js",
+      "sha256": "27482ab234881e6554734b50d2ff89019a92592f24145f1eaea3ddb6002a3665"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/ow/character.js",
+      "sha256": "4c1330a5a2fd83620d7d569ecc13b5171e45ad9f314a1a2fa9bb418cbd99d6ef"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/mtg/translate.js",
+      "sha256": "428d380d634e895010af992b0829fd1f5ea39ced620cbbc5f502e9ed242c4b7a"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/mtg/skill.js",
+      "sha256": "90597a057f8427cc572958c3faa9ac645960c4d533daab4e763da2b6b7f9f765"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/mtg/index.js",
+      "sha256": "53844791ab06961713cd4dcef70d39fd5f2e66cfaad5a9909aae279b8c7b4374"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/mtg/intro.js",
+      "sha256": "95355f29392e81c1d5ae1630ac082c4969ff30e2dea84cd246e1608f1cfb4e94"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/mtg/character.js",
+      "sha256": "1208e5f572b6e5d9ff386b4339d2900182905988aaa2edef2023ef374c9fc454"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/gujian/translate.js",
+      "sha256": "c59b3c5864641351d48c9cc70d47fa735133281522a31609b6ab4050b46d7186"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/gujian/skill.js",
+      "sha256": "79fd1390b84874d6a31d0ebfaf015aacc3249f81a50b7aacb4d76102e5a6cd0c"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/gujian/index.js",
+      "sha256": "aff7b9da0cb7f4127a558fb97e3ed3087f130ace51a0f257d29580431f5936db"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/gujian/intro.js",
+      "sha256": "6c6df08659c89b350fab5ce887f57fda11d0e11f1311266b0f90c465cf2a4769"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/gujian/card.js",
+      "sha256": "c92bc871f77c8bbe188313ff64e14e895033e66edd86f480bedf1e14409975b8"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/gujian/character.js",
+      "sha256": "1d136b68fa73df911c8fbad01b9e205fd747f2ccf18ccb0634b9ba09cba0251b"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/swd/translate.js",
+      "sha256": "48ee34e36fcd805362b1f668e7900498fc04477982b67b3ee34b589d88c01166"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/swd/perfectPair.js",
+      "sha256": "261d314399ca87e5a5b1b18a9404ee0880f924e07152943a634b91296c9f60d1"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/swd/skill.js",
+      "sha256": "dee41eaa74d8f027eddb61df726e50f17819d25aed40bc65adf9352f5894d471"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/swd/index.js",
+      "sha256": "075ca362578cc6a36f78b9a2bceda776d822f4f982282c3e471d856f22aa5856"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/swd/intro.js",
+      "sha256": "d40b05f17adbfb479ff1fb7c36ff118dd225deb66b860e3c2340589b98b63fb1"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/swd/character.js",
+      "sha256": "05c4ad6b70dba44b1db16a10ade893441ca99c78b8679e33d1aed4bbbfcb6ddf"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/gwent/translate.js",
+      "sha256": "632afd1310b94c600d22f03141bd9ff28394ffb255f37d8fccde174a7a36bef1"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/gwent/skill.js",
+      "sha256": "dbd54d616cb29893120935473317af44d569990b5bf0dfb19475d8ba75bbe7da"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/gwent/index.js",
+      "sha256": "308dd843933dd772228dcd62c7578c4897a5c975df91c99ed95b4d43543d4420"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/gwent/cardType.js",
+      "sha256": "1a4d4233fc81447b32ef039fdcbc23aafaedb2397ad5197a1460553886e5de6c"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/gwent/intro.js",
+      "sha256": "3dcc69a76d725c8f25d2f594221e2ae166dbfca0a3d7277ad8bcebfdb0d4735f"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/gwent/card.js",
+      "sha256": "3f1023da03da313adec6e87d7ed0190dcb420ac126d3fb7beea8588c6cc0837e"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/gwent/character.js",
+      "sha256": "47366b52cdbd90f984be922157e0d96c9e103fae2a4f396d1326b406acb92c5f"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/hearth/translate.js",
+      "sha256": "a4855f441cbd08562fbb8185eaa1363d14067f38d2d74e4f688b7439e3daec28"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/hearth/perfectPair.js",
+      "sha256": "4a68a40ebbc35125fe75099906449c555f798757d2b32b4dc43798c9a1afd02e"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/hearth/skill.js",
+      "sha256": "f98499ffcf0014c69b3ca28edd51529410a6b0735338c4c420d842cf60c2ae0f"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/hearth/index.js",
+      "sha256": "19202194d56ec40ab4e86e70de4efbcd2d9a7e66faf6d0bd887f002b89257999"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/hearth/title.js",
+      "sha256": "0d8614446c90610005f6166e9529167a481ce02f4b6a0ef34c6775c1abbae59c"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/hearth/cardType.js",
+      "sha256": "e556dea7e9e89b4e25d3917599d2a4017344570f8b2750c58159180f787ab255"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/hearth/intro.js",
+      "sha256": "d38a4ef46fbd7d784f9d84cab084db9011018014db6e52830b9e45f8452672cd"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/hearth/card.js",
+      "sha256": "c232d7d4473fe147a8829b8d5e1d38500901fcb3bb111acc0c71e72dc9cbe9a9"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/hearth/character.js",
+      "sha256": "edf6e537f14dc6b37a8834678bd191ba0b2f597eccd1470e7314bf3eceb00042"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/xianjian/translate.js",
+      "sha256": "b84dcde49a37d698dbf4869a77ae116d8f7b2792f6521e14fb19d1933c11855b"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/xianjian/skill.js",
+      "sha256": "e0724c58d7cb80db1fe4dd251d896f5444711a5c2454ab44b9916b1d3d5db7e7"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/xianjian/index.js",
+      "sha256": "99cf45215ae2a7f0265d6df9aa17995bb880b6b5b02c5a4e2dd0734278641c77"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/xianjian/intro.js",
+      "sha256": "f7e1b4c6a4e3133b81165ece6e290fa0ce0cbfca8cbdee67bfbb6038ecc87989"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/character/xianjian/character.js",
+      "sha256": "3866cf89b9f96879cba8e09f34c0d3dbcdf7e8ba5483ec9cd65050b64cc837a6"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/play/wuxing/arenaReady.js",
+      "sha256": "6a831235d4f40f1cd129cd3c6d1c407331e460e29935681282df39691a193d16"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/play/wuxing/element.js",
+      "sha256": "ed946cff134b1db2a90d20f0b3c9132178e5c283e7053126e6335bcea9112a37"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/play/wuxing/translate.js",
+      "sha256": "45a62e85d59e412be948d7d86d5d43a47ccc529897b684df70b11e6f57fea662"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/play/wuxing/skill.js",
+      "sha256": "2dde6ec7beaae13c1b12c8fbdce8c3da8fe56bb02956bcb22fc695c50bd5a2c6"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/play/wuxing/index.js",
+      "sha256": "f7fc44d43699f95e51e5ea1b06d99cce301ffe9bd7bc715d78750dcd886e0214"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/play/wuxing/help.js",
+      "sha256": "16a8831dd6804b96c38accab5ab58e69d9729f5e3618c3566fdd63e6d30f9b15"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/play/wuxing/video.js",
+      "sha256": "3f7a338cc0acaf170838e3a96500a8002547fa1dab4a42538d80d0a785ed56c0"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/play/wuxing/card.js",
+      "sha256": "61e116ba32e36f44c0241e343e6ac72a27e5f058d6751f879f72d2e9db72946a"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/main/arenaReady.js",
+      "sha256": "07bda1855505ac498bd6e09cf304e48d49ce1a200b52de13d9b28b095d3c219f"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/main/precontent.js",
+      "sha256": "95a854ef57cfc88d81f2d4afdb8055a7e8069f0bfbb3745139c9fa29f8a5cb76"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/main/config.js",
+      "sha256": "c6b5032b58f099512912beb5d1c129b9ba1c8730d1482e7da20e852d31bebcfe"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/main/utils.js",
+      "sha256": "ee9e391b41eacd072ee79583a1f4774f59a7dd1ccbeeed50a51a6457d58e766c"
+    },
+    {
+      "path": "apps/core/extension/杀海拾遗/main/content.js",
+      "sha256": "6c5666537c67bc5d495722d50e2b76ef5db6c1fe39d1559c0aa301537d960f2d"
+    },
+    {
+      "path": "apps/core/mode/versus.js",
+      "sha256": "6b8e810664822160baf7c8e0b0f3ee5c46dfe464f80086059192e0fbac608bcd"
+    },
+    {
+      "path": "apps/core/mode/single.js",
+      "sha256": "d4d712417de5e20fd4636e94ae0a8478e1f79093597b9a97998d721ac7bbfd9f"
+    },
+    {
+      "path": "apps/core/mode/boss.js",
+      "sha256": "d92b9b66f158b2877a2d403a70048b803af649696f5be2ba41bef6dc1e3f7865"
+    },
+    {
+      "path": "apps/core/mode/doudizhu.js",
+      "sha256": "a316b1c6994335cb6d2277d7bf53bb02bf51cef02d1f53de3f37840430e73336"
+    },
+    {
+      "path": "apps/core/mode/chess.js",
+      "sha256": "ee047723bdf1cdcaf94e9f38e7cfd3e209d6394821cc5660505451007ee87815"
+    },
+    {
+      "path": "apps/core/mode/realtime.js",
+      "sha256": "202768bcdf63e6e2742cdd53ac6b1581a3365e7d515d0d31df4f0a40e1afe792"
+    },
+    {
+      "path": "apps/core/mode/connect.js",
+      "sha256": "5504b5eaa363500528c634ecb86cca8541cf588547d472ad495e0c028c1e21a3"
+    },
+    {
+      "path": "apps/core/mode/stone.js",
+      "sha256": "84d3cbcdf6ceb21b91630d90d03e0ea3384e203c449183f79a16c3884b02addf"
+    },
+    {
+      "path": "apps/core/mode/tafang.js",
+      "sha256": "2d59bf0c6cdc33c22795c285a5ac84e8fcb5facd99cbaba7b5c20602bcee015e"
+    },
+    {
+      "path": "apps/core/mode/identity.js",
+      "sha256": "08c63dab211db754f42e00d10f6c11a1f5ced86891572f67f0cab8185731014c"
+    },
+    {
+      "path": "apps/core/mode/brawl.js",
+      "sha256": "179e00adca47ae250f985449ac283dbc15404953fb4ec4194d8c18eb91ccbbbd"
+    },
+    {
+      "path": "apps/core/mode/guozhan/index.js",
+      "sha256": "cae5071bc8a0e2bf56563f4ba1b824ad7ca2ccb7a8b0a82007ce140fb72e5088"
+    },
+    {
+      "path": "apps/core/mode/guozhan/meta.js",
+      "sha256": "cf1362f0efbfb7b0ca5d8049c75285dc8cb7902ea04c952824f4f7ead9f8b09f"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/main.js",
+      "sha256": "694847885dcc345c5521749d5f368cafdb2a474da542328e08de99079308ea6f"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/card/index.js",
+      "sha256": "00dcc2e54a5c6a66713eac40995ea04fbb390b245d2d1d3ae822153aba09709d"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/skill/index.js",
+      "sha256": "9e9ff5685e2dbdd6d5e9770519fc5993b55571208a06d16e727ba23d967d3886"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/skill/character/quan.js",
+      "sha256": "4c8b575beea651ba5acf52abcd7c65fb8a237cbd9a92462e25da50aad87a2b14"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/skill/character/rest.js",
+      "sha256": "eaa6d4ae843a21fbc8e10c10f6a176fe9e8997f787659982c5a7ceac632f37b7"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/skill/character/normal.js",
+      "sha256": "9748d8280512ddaa8c4f3fc142f75465dc3b6042cae1c8b11589fb4a5e9fb7ea"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/skill/character/zhen.js",
+      "sha256": "52305827de800ca561843bb26c5c8b092969e7a32aeb3a2eb8fc5bcd3156b031"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/skill/character/shi.js",
+      "sha256": "386646ec05fe86bb61196f810f52541764109ebfa720f0d0f05e5939f7e3117c"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/skill/character/index.js",
+      "sha256": "2bdddedc27e8e5b5bbb1dda91a3c6d34f80455a31799917c7a4bbdcdfe8fe932"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/skill/character/bian.js",
+      "sha256": "e56ee3399b5a9a2ef2ae2d1d42c9c762871fb513f6a38a8e409642458cf7f475"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/skill/character/yingbian.js",
+      "sha256": "67f9aa9c5512cac10fda3bcc2496181dfeed850a3225fc48fbc6457f9a70d07c"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/skill/character/wushuang.js",
+      "sha256": "77ac4159ce41e549cba35991dc749df9bc7bce9eca2ca41a29cc8f534362b64f"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/skill/character/zifeng.js",
+      "sha256": "313cbf16a597a3b134dd1647a66509284eb286f31bc18441076140141c56ed91"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/rest.js",
+      "sha256": "7da005f8e75df025b57b7f3e1f7b0325bf24181e2b68897ba814a035adc058be"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/index.js",
+      "sha256": "9805140f6fbfb9d501eea2a97a475ef9a6292d13de698b500b5a1d7806d50610"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/dynamic.js",
+      "sha256": "df1dcdcaf635716ae625b7302b0eee10041a4114d2538eaa92b7ae2f421a0542"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/card/index.js",
+      "sha256": "729764df43a307fd98640c6deaffd1434ac77aab02b4ec3d545774b75a064927"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/skill/index.js",
+      "sha256": "9e9ff5685e2dbdd6d5e9770519fc5993b55571208a06d16e727ba23d967d3886"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/skill/character/quan.js",
+      "sha256": "a062bcbad43ce071b51a928b4174faa0627d7e325aa49cea48d989d15d2469fc"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/skill/character/normal.js",
+      "sha256": "9d31791fbf0151c977153ce60abbdc5546d8da2edebf82a6ecb597679487f3db"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/skill/character/zhen.js",
+      "sha256": "d8619ad1afb773d692ebeb56174ce91d9856b0cbaed29bbf4cc35fdefe0a0639"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/skill/character/shi.js",
+      "sha256": "ef09e25d437fe9d1a38d1a5b4cd386826f5b03edf1ce06ad5dd619211e9f1bd9"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/skill/character/index.js",
+      "sha256": "9eb99e62b6f7725b920154107018767246a67c3e5d1b6654b6014f281257ccb3"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/skill/character/bian.js",
+      "sha256": "668d24a4df585bd222f384420dec574c8418c1961c2ba4cd7839172296e1a296"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/skill/character/yingbian.js",
+      "sha256": "ee936889b74ea956ef6e69eda86f22bc49fe6af51baf27ee9cdc96c3ff9dbb33"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/skill/character/wushuang.js",
+      "sha256": "6b21ace9b3c55f11e1b383f77d2ca0496fb8fe9ef3459a477ce96b22f17ea81e"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/skill/character/zifeng.js",
+      "sha256": "2277b62e1dc3f5d1b8ee9f17c932893aba2887f9b2c5e4818fc1c103126009f6"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/character/quan.js",
+      "sha256": "58f482377686ee23e7adcddad7f531762a2a048a1dffba9cefef722ad1f188dd"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/character/sort.js",
+      "sha256": "0f42db58257dda63ce1176027ca59a9417c351e0ad9f27463c94521b77d3c516"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/character/normal.js",
+      "sha256": "13b565c557e2284fc31dd562d64a91f9d3c33b7bbb4dd80f904df57ced197b7f"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/character/zhen.js",
+      "sha256": "d8c7f153015345a8d70712e2292347969c1e58db5b0fe45a29586fc5a526c9fb"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/character/shi.js",
+      "sha256": "51dabaf117c7f62d30c62f7c9eed49329804a9514569d5ad0acfa624a27617ac"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/character/index.js",
+      "sha256": "e186278678f43f1aef3fccacbeadb20da749fdaf896d82aae1b70aacbc9ae951"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/character/bian.js",
+      "sha256": "7fafe6d09e6a3a33c5cc3702931b913327f1a528235f2c3d5447001cbb95c8f7"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/character/yingbian.js",
+      "sha256": "03bf3ded9ed3c29f2225b41c6546294581a95ab7c8e1b42e1a2f91d6436ba659"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/character/wushuang.js",
+      "sha256": "d0a3a68834709ce904da0ab7b75c6dab48267e071590d004b8fad8690db65100"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/character/zifeng.js",
+      "sha256": "824ebbae8a4eb2af0278fa1b3d051459b98bec3d61d2096b2e0dd8e3ffc613f5"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/translate/character/jiubian.js",
+      "sha256": "789f8b24073578b261dc7dd7f555d26dec0a79fc58a66faa7940d8a521b348b5"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/character/quan.js",
+      "sha256": "a6862c62767c5e2007adeaf159f96c6174e39e7c30df94dbb28101f58fd42091"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/character/rest.js",
+      "sha256": "552fe17007eaa0f7d2c7b185c3bd8390461026600340e0b1a59900412dfb9418"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/character/sort.js",
+      "sha256": "6c0606a2019d6f51e6621927b1935e4ad73e135f0a1a6bb0adebc317a83d61e2"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/character/normal.js",
+      "sha256": "52d3e686711385e5f4eb81d4a3f60f6065ed856f75e98cf9d374eb7f92b42f45"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/character/zhen.js",
+      "sha256": "cc4ede19e5d53aaaa5548f43cea9d43c92befd0ce5fb9973139ab2628fb66496"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/character/shi.js",
+      "sha256": "321e88741635404a4a20fe1798957c2cf7805d145a4129561077dbb756a1f6be"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/character/index.js",
+      "sha256": "87f9cd3a00ba84f729244b2c59ff70def0852078d7f33273284f1a364cf80c5f"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/character/bian.js",
+      "sha256": "b00ce66fa85537490772edd3909644deae2eabdabb602424990fd92b33df0e2e"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/character/yingbian.js",
+      "sha256": "cf79466dd590381f5d23d52b715921bfb60dbb052b73c1537710d6c1089fdf58"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/character/wushuang.js",
+      "sha256": "2650c4b95b92aa66a94b11c75754c5d13f9e226954db0e695698854f0095f039"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/character/intro.js",
+      "sha256": "636bb37eadf89ad60ed4327152590c4ebb6cb6467f001e49d4c96de6519c79fd"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/character/zifeng.js",
+      "sha256": "8e80e69bdc7216b1d5f2443adecdc9f399b9b3af3ad34eb987cea317ea034616"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/character/jiubian.js",
+      "sha256": "3b1e239ee5f7b13ac123768103177e27c178f24b5fc54a90a42c160e3c367258"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/info/pile.js",
+      "sha256": "273153230f92b41a69519210cb29a068d6324e60c3ad38acb5692a7bfaed214b"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/info/index.js",
+      "sha256": "cec560644654baca6f1de949c13964f13e4d48a77ddd8e302f51bcd67bc5c5ba"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/info/rank.js",
+      "sha256": "4b30c3441e692fdc9fc45e800bb0e5ca7855993ed9ac9d383b97871b79329e3e"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/patch/game.js",
+      "sha256": "4842d99af69f6116d388cc4d995d66838f6f821424eac3685c8bdf4344c77ced"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/patch/index.js",
+      "sha256": "9c0c1816d63b85e0244e06a2a1dc91b02558b9956061264ad55d1a86f09936ca"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/patch/get.js",
+      "sha256": "39753e4bef053a6f3c27e3c2e5cd9d31697116863fd4970dba82597bc845e320"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/patch/player.js",
+      "sha256": "d0667b9ddb275153b94e982265aa6cc8a56c665697f3ae35fc156a345e6539a5"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/patch/content.js",
+      "sha256": "5524fa3c829263aed5ffa356cda3841c4142d8f55470e1ab426a8b848d369f9d"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/voices/rest.js",
+      "sha256": "e31dd3f6f1d0b1ab5067cf2ef910a9d107b0f9a99d697a422be7c88198ce9ff9"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/voices/index.js",
+      "sha256": "ebfe8c42e8e77cf607bc5d5e942485c2d48bea8e4e5c4eca19d7c6f9f05f34a6"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/voices/character/quan.js",
+      "sha256": "8d7756cb16718a1aaeb7d1b440779c880a9dbcdf9e3f69af7bac374be3c2ce46"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/voices/character/normal.js",
+      "sha256": "c721348b292d1f2b98e80fd601972d082af1229c8abb3e41978158152c32d871"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/voices/character/zhen.js",
+      "sha256": "2c0e6b3211b0cfa4f13ca8371bea34c41e1647d2dc2da35d23215b1ab8e3e1c5"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/voices/character/shi.js",
+      "sha256": "4a75c6997e2db2ece9d8eae2b545fa724912e80eb08b2ec8663ed19b50617265"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/voices/character/index.js",
+      "sha256": "1c8c56904bcb36b77678e1452f1878df7e88fb71ea1ed28ace4d896ae2c37a39"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/voices/character/bian.js",
+      "sha256": "450f0af4f4c1ecc4c7180f2e364c8a59bfed69dd350fb6b47bce8641c2a37786"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/help/index.js",
+      "sha256": "cea6a410345e414ce60a72187e4d51dbe60858489c4e4e47ddfc5182ede92700"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/help/poptip.js",
+      "sha256": "921d734fa8e87e721ca40a92d8d5676211cf53e2dcf6fcdc9c6811c2738edff7"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/help/App.js",
+      "sha256": "4715daa464e5b44ce3f5501a332d1009c48bbfbd765181a51060295af5ec529e"
+    },
+    {
+      "path": "apps/core/character/replace.js",
+      "sha256": "74a7bdc73789342fea4c6c546fda4bff372d263f1c70aa924076e2c29507ee03"
+    },
+    {
+      "path": "apps/core/character/perfectPairs.js",
+      "sha256": "81e8ebcbbb813a7dfde049edbdf608274756ae49fb114389c2c8eaf2be12b25e"
+    },
+    {
+      "path": "apps/core/character/rank.js",
+      "sha256": "c878015a31506e7142b1e2b4cface2b6adef9ef9418d8a32a24d7243c7989787"
+    },
+    {
+      "path": "apps/core/character/sp2/sort.js",
+      "sha256": "9567ceb626f342ff305b5e217a52a58ba185188bdd25b7754f5d410a4014173f"
+    },
+    {
+      "path": "apps/core/character/sp2/characterFilter.js",
+      "sha256": "d8ddd290e1c96047eb2b3060101a2c99e8d1be028f4898935ef0abe60977910d"
+    },
+    {
+      "path": "apps/core/character/sp2/translate.js",
+      "sha256": "4e2031c4ca1708a1290c1eaecdadba78829b38b4b3b1f25ff40f98644761373f"
+    },
+    {
+      "path": "apps/core/character/sp2/skill.js",
+      "sha256": "9c54de34225419b556aa9376e12bdcd576ad5c29e7ede207f3bdd3d55d88e2d3"
+    },
+    {
+      "path": "apps/core/character/sp2/characterTitle.js",
+      "sha256": "642598e7409799f9a65ec47518b1bd7a0fa19521f34ab2c7b6768355d0ff31ab"
+    },
+    {
+      "path": "apps/core/character/sp2/index.js",
+      "sha256": "8b1a13d463fe59ad48f55301c5bbb36724db500327cb092cc6fe6918bb5f1ac5"
+    },
+    {
+      "path": "apps/core/character/sp2/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/sp2/perfectPairs.js",
+      "sha256": "450f0af4f4c1ecc4c7180f2e364c8a59bfed69dd350fb6b47bce8641c2a37786"
+    },
+    {
+      "path": "apps/core/character/sp2/intro.js",
+      "sha256": "f8216c69e447aae7aed7b57ff6d99dd8c2bbf2e5493a654daaf16f4f6acf5f56"
+    },
+    {
+      "path": "apps/core/character/sp2/dynamicTranslate.js",
+      "sha256": "055273692768274cd193fe3d7ab667fe1841c4d2801cbb97fd89825806561de6"
+    },
+    {
+      "path": "apps/core/character/sp2/card.js",
+      "sha256": "14567c63bc51ae2082899ebfcda63b6649cac8543fa73a73989a26c49a946c37"
+    },
+    {
+      "path": "apps/core/character/sp2/voices.js",
+      "sha256": "1d8e6f4a24ef4a55eacaab8549cedfeabbc67cb4aab69900db65f3d76d2899e1"
+    },
+    {
+      "path": "apps/core/character/sp2/character.js",
+      "sha256": "80b615d5df2506bea386feb25752aa36c333caddbe79778916bea336eed25292"
+    },
+    {
+      "path": "apps/core/character/sb/sort.js",
+      "sha256": "ac92e01a9a43abb5036b889f9f55f616078c1ea0c12f786634ac1756c57e31d4"
+    },
+    {
+      "path": "apps/core/character/sb/characterFilter.js",
+      "sha256": "ad4091d14b41c32498bf0a5a4437bd305c0f2378b989d7b8a4a2b40fa12c3f93"
+    },
+    {
+      "path": "apps/core/character/sb/translate.js",
+      "sha256": "e9e24c5e2fb0d772a395fbe830d08754c9432b61191db7dfc62f8083f57e538e"
+    },
+    {
+      "path": "apps/core/character/sb/skill.js",
+      "sha256": "5cf6b67707307ca8925d3cb1ae65e5ae249afef44161c51f645e42e8a9841e74"
+    },
+    {
+      "path": "apps/core/character/sb/characterTitle.js",
+      "sha256": "d94a96417bcbccd7601454735ac3790a47c21a6b9ec4fe6335f6763099bfd5e4"
+    },
+    {
+      "path": "apps/core/character/sb/index.js",
+      "sha256": "8e5b23520fdf99eb6bce7331f4e1537b7e659c271ee2048479bbef81c95e0cbb"
+    },
+    {
+      "path": "apps/core/character/sb/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/sb/intro.js",
+      "sha256": "d4080b667159e3b5f352ac9f58303741be64557fc48c915de2100806d236aa5a"
+    },
+    {
+      "path": "apps/core/character/sb/dynamicTranslate.js",
+      "sha256": "088d33a0de2ccbfc0edb89d5f152ce16cac63348ce5e704a463079e3d0bb27a6"
+    },
+    {
+      "path": "apps/core/character/sb/card.js",
+      "sha256": "14567c63bc51ae2082899ebfcda63b6649cac8543fa73a73989a26c49a946c37"
+    },
+    {
+      "path": "apps/core/character/sb/voices.js",
+      "sha256": "f7ed9f87cf40602d1289e6e707fb7cf849e9cb10b5da2898ca4d8fc6f58c342c"
+    },
+    {
+      "path": "apps/core/character/sb/character.js",
+      "sha256": "10c8591bfd055505f8879d78bfbee1e2be8ac531704eb5df64312f5b658e47a3"
+    },
+    {
+      "path": "apps/core/character/sp/sort.js",
+      "sha256": "ba277eb03127f5cd3ad94fceb15e94d91e35af0bd9ae0f46be8596fcf6ee6280"
+    },
+    {
+      "path": "apps/core/character/sp/characterFilter.js",
+      "sha256": "1eff9b0bda73aaa5129239e890c9dbc50385d283ae19fb1ebeb2317b9728a3ba"
+    },
+    {
+      "path": "apps/core/character/sp/translate.js",
+      "sha256": "178ff5ac6cf1a7645e0d0acfd3b21b5102f06562669c2fd4719f0a8c4d4142a8"
+    },
+    {
+      "path": "apps/core/character/sp/skill.js",
+      "sha256": "930c6e0f49000c5265d3a50b935375cd4989a4c01a12a4273bb1b25f2758c6e7"
+    },
+    {
+      "path": "apps/core/character/sp/characterTitle.js",
+      "sha256": "5e7ea6cb36f1974e41373fbf05b28597c3bda5e84be31ce69bb2b5b21b56f16d"
+    },
+    {
+      "path": "apps/core/character/sp/index.js",
+      "sha256": "a3053a189ea76eb8d546d75a56aea4dd0ed369365266be38c32d929fbac42b84"
+    },
+    {
+      "path": "apps/core/character/sp/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/sp/perfectPairs.js",
+      "sha256": "450f0af4f4c1ecc4c7180f2e364c8a59bfed69dd350fb6b47bce8641c2a37786"
+    },
+    {
+      "path": "apps/core/character/sp/intro.js",
+      "sha256": "5b3376b894c273027ac2a1cd8a0d38fac6e3411a587ebdae1a2f34f431572f8d"
+    },
+    {
+      "path": "apps/core/character/sp/dynamicTranslate.js",
+      "sha256": "fb4c19ca036176a72d6d16ab8053e5e6857801b73620e14160e958d8c509b2a4"
+    },
+    {
+      "path": "apps/core/character/sp/card.js",
+      "sha256": "c0105462751c38a83b525de15705c62a23a5e5195948eb779a8f6974fd90c3df"
+    },
+    {
+      "path": "apps/core/character/sp/voices.js",
+      "sha256": "d7abaa62d3da747c0c3671f02eaba8421bc8885629aebadeaefcf89b6d2472d1"
+    },
+    {
+      "path": "apps/core/character/sp/character.js",
+      "sha256": "ecb3c97930fa9b08a1a61f6b94108e67e8865d72a9467800de8eee8a14d8f594"
+    },
+    {
+      "path": "apps/core/character/newjiang/sort.js",
+      "sha256": "57e38b454009c69416b43b5a6039a0f7c44314021543eda529f09436f71f6077"
+    },
+    {
+      "path": "apps/core/character/newjiang/characterFilter.js",
+      "sha256": "ad4091d14b41c32498bf0a5a4437bd305c0f2378b989d7b8a4a2b40fa12c3f93"
+    },
+    {
+      "path": "apps/core/character/newjiang/translate.js",
+      "sha256": "f694c47891211f2c4d612ef042264bbe697271173f89c96628917d27e16769ba"
+    },
+    {
+      "path": "apps/core/character/newjiang/skill.js",
+      "sha256": "5bda2b4b626ded23081ac40006686054227b75093f81e10fb0362b0aaef8c238"
+    },
+    {
+      "path": "apps/core/character/newjiang/characterTitle.js",
+      "sha256": "a2d89b5458101d67e823a6ff8709c9764b974e596cb7e4070c987ff07f4c2dbb"
+    },
+    {
+      "path": "apps/core/character/newjiang/index.js",
+      "sha256": "b475cb438308dfa92673f35d2f7c37b77f6afdd8f86c960bf2111d7fc4e232da"
+    },
+    {
+      "path": "apps/core/character/newjiang/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/newjiang/perfectPairs.js",
+      "sha256": "450f0af4f4c1ecc4c7180f2e364c8a59bfed69dd350fb6b47bce8641c2a37786"
+    },
+    {
+      "path": "apps/core/character/newjiang/intro.js",
+      "sha256": "fd69a4fb84dfe39ad7e14c1aa3eff3afe4fd5e06ed17ca52cae748eac1dc2523"
+    },
+    {
+      "path": "apps/core/character/newjiang/dynamicTranslate.js",
+      "sha256": "cf3a16707d6c9318930ab11e9b9c3c0eae3c22c00f0bc34bdc9973ae36a859dc"
+    },
+    {
+      "path": "apps/core/character/newjiang/card.js",
+      "sha256": "54f3f179194de77019137fc88e1c1fd44e4bd696d40734e5956e0e8bf24e55e4"
+    },
+    {
+      "path": "apps/core/character/newjiang/voices.js",
+      "sha256": "5da584fbb5cee3950412f6b0fd070145d2e068f9ba43508ce6c56d82219d248f"
+    },
+    {
+      "path": "apps/core/character/newjiang/character.js",
+      "sha256": "3f6105c450f85431224fe7e37af546a94d05308134ad2565f2b8d2dba0222d10"
+    },
+    {
+      "path": "apps/core/character/jsrg/sort.js",
+      "sha256": "5b79d1b8f763d16071472ccb3cca53775934e260cdfd1ccb624245a39d209a41"
+    },
+    {
+      "path": "apps/core/character/jsrg/characterFilter.js",
+      "sha256": "2617e1281c12fd5aa31f99740d4461ce741f3c2e8ebd7c7e23a0c5051ba223d4"
+    },
+    {
+      "path": "apps/core/character/jsrg/translate.js",
+      "sha256": "1d241ef194aea3932bbf27b8ab8070d4d797c1edf6214554826f9751f61b57a8"
+    },
+    {
+      "path": "apps/core/character/jsrg/skill.js",
+      "sha256": "0a2070df76eae1c445bb3abcd8aa90ef4ff4d669bb24491a05439c992b7ecca3"
+    },
+    {
+      "path": "apps/core/character/jsrg/characterTitle.js",
+      "sha256": "4de1c45ff87d0280166f7d763b9df987905c953c3543faaba391849ae5a7207e"
+    },
+    {
+      "path": "apps/core/character/jsrg/index.js",
+      "sha256": "06a59735d12186e4115b3c3843974619bbd60c18f0e314a351b6929e2de5fb76"
+    },
+    {
+      "path": "apps/core/character/jsrg/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/jsrg/intro.js",
+      "sha256": "4db43c21e82fa6b41ba5d94c1ee7458494d5c5232b1e44c38b7276d03df4d0f8"
+    },
+    {
+      "path": "apps/core/character/jsrg/dynamicTranslate.js",
+      "sha256": "2d3bf8f65171330f1427e8048a4ca78744ed28e09f5db6bc3d13e4f8ce7528f5"
+    },
+    {
+      "path": "apps/core/character/jsrg/card.js",
+      "sha256": "1813d8359a45b6a8f7aa54516bc40d41d74bfdb8eeadb61179a3bbf0ae90b046"
+    },
+    {
+      "path": "apps/core/character/jsrg/voices.js",
+      "sha256": "910607f31899c628e99bf6056ab2ddaeaf0a4a7803d15369b189030b9e090125"
+    },
+    {
+      "path": "apps/core/character/jsrg/character.js",
+      "sha256": "731ecbcc2d853dda1ed91d16bc4a689fa57d52c37fd453ce93d05e0b6ea48ffc"
+    },
+    {
+      "path": "apps/core/character/xianding/sort.js",
+      "sha256": "c179529ead635fb8b87c48d747902bcfb61ce3609f348870b0a46578ea3ac66e"
+    },
+    {
+      "path": "apps/core/character/xianding/characterFilter.js",
+      "sha256": "edd5714e5bc6bf7fac0e52203ccf4760af932c833fa3c2039a61dab5e0094832"
+    },
+    {
+      "path": "apps/core/character/xianding/translate.js",
+      "sha256": "21d7a33adea44f6ecaecb18133fd118ff8457a63ec087c61f443827cfbcb94f0"
+    },
+    {
+      "path": "apps/core/character/xianding/skill.js",
+      "sha256": "3cad1845f43d4ddf4853eb91d2a69245244c212bdd8985e3535dbe171c04157c"
+    },
+    {
+      "path": "apps/core/character/xianding/characterTitle.js",
+      "sha256": "4341265b0b36b939bf4c01ad4b6f1b10c4b148efba0439f967bf197e19585942"
+    },
+    {
+      "path": "apps/core/character/xianding/index.js",
+      "sha256": "d66a50c538007fc7b4e1da29fec6ff3ef9a8f387b0302393dcc408975f573d16"
+    },
+    {
+      "path": "apps/core/character/xianding/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/xianding/perfectPairs.js",
+      "sha256": "9f085b1079ab38f776bbb3930dfd067a838ca3e0483aff8625f88837e8ed964c"
+    },
+    {
+      "path": "apps/core/character/xianding/intro.js",
+      "sha256": "ac31787a4966879acc7b7029cbc9bb305d09a5191b9ad6b6f166f162ec8bda0d"
+    },
+    {
+      "path": "apps/core/character/xianding/dynamicTranslate.js",
+      "sha256": "c61f8650307b90570bcaff1a611ff01d0b60fadf9c30ab151d2e4218d1bc29cb"
+    },
+    {
+      "path": "apps/core/character/xianding/card.js",
+      "sha256": "b68d1a83c98e26ab657eab30484b0daffe0edd27f2db2889ebe62ebeec5e98b7"
+    },
+    {
+      "path": "apps/core/character/xianding/voices.js",
+      "sha256": "1450bd5b10515484e5ba728d3b27b4456bd619d40fbdacc6a8bb0aa18650df97"
+    },
+    {
+      "path": "apps/core/character/xianding/character.js",
+      "sha256": "a5a527ead8d3f6210b27b0aa42a8bda72708e896de42a30656ae816db01397f9"
+    },
+    {
+      "path": "apps/core/character/clan/sort.js",
+      "sha256": "b252bc71d03a2f8e22f50c0a1dbb3a60c76b9b03aae8baddb88f11336bbe5614"
+    },
+    {
+      "path": "apps/core/character/clan/characterFilter.js",
+      "sha256": "ad4091d14b41c32498bf0a5a4437bd305c0f2378b989d7b8a4a2b40fa12c3f93"
+    },
+    {
+      "path": "apps/core/character/clan/translate.js",
+      "sha256": "eb5dbbf64a47babdd89b8b30c7cc5ee958578b2424fff346785b378e2d8f463e"
+    },
+    {
+      "path": "apps/core/character/clan/skill.js",
+      "sha256": "a3185d7b948af3a19ebe3681d9d1be28db077e5fb38bd3b1af32a3e2f1ffbc9e"
+    },
+    {
+      "path": "apps/core/character/clan/characterTitle.js",
+      "sha256": "3fbfd1532a16819ce2cd8a7b27aae8581dc0003ac425bdd1d148b788f8449aae"
+    },
+    {
+      "path": "apps/core/character/clan/index.js",
+      "sha256": "290ff6cb2d8c5b0d54b3776261073b9cd8f35d62822cf329f723b4f4601ada52"
+    },
+    {
+      "path": "apps/core/character/clan/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/clan/intro.js",
+      "sha256": "3507c83163bbb99864de32951feef65960d434ca13d163eefa72c0281fbdd862"
+    },
+    {
+      "path": "apps/core/character/clan/dynamicTranslate.js",
+      "sha256": "41872f45220401d4ab7b475217c79b0c7b6f3027050a557253d9cf876ef7ac95"
+    },
+    {
+      "path": "apps/core/character/clan/card.js",
+      "sha256": "fa24cdbb6676680f941ed6a5ad2937a48af25b7dd9f30e64c35f6ea556b222a1"
+    },
+    {
+      "path": "apps/core/character/clan/voices.js",
+      "sha256": "baf6b8ec706dc0614fb83c291fd39e7ab54d780a7b1132d6f7a63de148dca954"
+    },
+    {
+      "path": "apps/core/character/clan/character.js",
+      "sha256": "f6f71e208dea6a10e889955f1fbed3992d3d39845f8fc5e409985c575c5beda7"
+    },
+    {
+      "path": "apps/core/character/diy/sort.js",
+      "sha256": "472bcf0af3bd9aea171e8c3caa0f4963f3e6659bfdb724e4945013d65289a60e"
+    },
+    {
+      "path": "apps/core/character/diy/characterFilter.js",
+      "sha256": "c13093a0f48d709a25817e8d691a67f3c191ba28a79f34bd32ef6cb753755eec"
+    },
+    {
+      "path": "apps/core/character/diy/translate.js",
+      "sha256": "476fd5c1b48c1b6b6e345e9a3273e9b2ca256d614f66e054d00db284480380b9"
+    },
+    {
+      "path": "apps/core/character/diy/skill.js",
+      "sha256": "f0868ab5dc6a524249ce75a1411784bdc76345c686b1b865beec09e45909bd79"
+    },
+    {
+      "path": "apps/core/character/diy/index.js",
+      "sha256": "f806024b66b5d88afa3306401907b013ecdac7ca022849af983c14d66f03b794"
+    },
+    {
+      "path": "apps/core/character/diy/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/diy/perfectPairs.js",
+      "sha256": "450f0af4f4c1ecc4c7180f2e364c8a59bfed69dd350fb6b47bce8641c2a37786"
+    },
+    {
+      "path": "apps/core/character/diy/intro.js",
+      "sha256": "3314a50c1e726eb7ec89998f9260771e6f4a8cc256256ac873675e3f2113cd8f"
+    },
+    {
+      "path": "apps/core/character/diy/dynamicTranslate.js",
+      "sha256": "d6d69fec6130e478ccc47383f03ed75b48c1eb5f34ef32d966dee6c941b71723"
+    },
+    {
+      "path": "apps/core/character/diy/card.js",
+      "sha256": "08301700fc1730cf24f1cbc51e6df48c419ebd6c00df8b038f2038001ff50b96"
+    },
+    {
+      "path": "apps/core/character/diy/characterTitles.js",
+      "sha256": "c41a33c025f34d720b2bbddc0d01bb6af6ff8f08a1809069db65a660ad9117bd"
+    },
+    {
+      "path": "apps/core/character/diy/voices.js",
+      "sha256": "450f0af4f4c1ecc4c7180f2e364c8a59bfed69dd350fb6b47bce8641c2a37786"
+    },
+    {
+      "path": "apps/core/character/diy/character.js",
+      "sha256": "756c2df43a3c4734d6947966bd64ca292086ff2c1d31eb8cc14f3ea7faa2e49d"
+    },
+    {
+      "path": "apps/core/character/refresh/sort.js",
+      "sha256": "5f009f9b2d9abfdf0408783312dab0ea697ae66af7d5be062f17495610a67df1"
+    },
+    {
+      "path": "apps/core/character/refresh/characterFilter.js",
+      "sha256": "e818176ca28a4d3384598f0d6bb5c8f58b3a66396d89da05ddd552a8c0e7d5b7"
+    },
+    {
+      "path": "apps/core/character/refresh/translate.js",
+      "sha256": "289681f65786e9c9e71f4fcf920911a1cca622c2bd6c664dd247a5d545bb619b"
+    },
+    {
+      "path": "apps/core/character/refresh/skill.js",
+      "sha256": "655952b182a855e6c2886c9a217eb928357c16bc8b0c83fd1d7127651da0ba39"
+    },
+    {
+      "path": "apps/core/character/refresh/characterTitle.js",
+      "sha256": "f0ada98a5e3e660ed4297f645e0a7ed8b7b510d12bb7d7ab4453eadc70806eed"
+    },
+    {
+      "path": "apps/core/character/refresh/index.js",
+      "sha256": "2189ddad117154eda491003b7fc3815f933f4fc1152fc2e81c32a5e430d22e24"
+    },
+    {
+      "path": "apps/core/character/refresh/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/refresh/perfectPairs.js",
+      "sha256": "450f0af4f4c1ecc4c7180f2e364c8a59bfed69dd350fb6b47bce8641c2a37786"
+    },
+    {
+      "path": "apps/core/character/refresh/intro.js",
+      "sha256": "3891c23b7adf12468200eb70a218e978c1075e49ae9dcb0a04a2134f7f84e3be"
+    },
+    {
+      "path": "apps/core/character/refresh/dynamicTranslate.js",
+      "sha256": "40c35b62db31499b8f2dfcefad1257a261c46bf998f4acedf5323a51cc72f80f"
+    },
+    {
+      "path": "apps/core/character/refresh/card.js",
+      "sha256": "14567c63bc51ae2082899ebfcda63b6649cac8543fa73a73989a26c49a946c37"
+    },
+    {
+      "path": "apps/core/character/refresh/voices.js",
+      "sha256": "8dd9d2415068e6b008c7a457769453333d103f308e7fc8baa80b783f3634cabf"
+    },
+    {
+      "path": "apps/core/character/refresh/character.js",
+      "sha256": "ac5045f6c9eda9a074c6e21954872fad9a017f82e6c9d34d19a94df9a33b716d"
+    },
+    {
+      "path": "apps/core/character/sxrm/sort.js",
+      "sha256": "6879d9bd77cf439fe6a991c02129a8641e693a1e22a8e006fdde7ac9788651c0"
+    },
+    {
+      "path": "apps/core/character/sxrm/characterFilter.js",
+      "sha256": "ad4091d14b41c32498bf0a5a4437bd305c0f2378b989d7b8a4a2b40fa12c3f93"
+    },
+    {
+      "path": "apps/core/character/sxrm/translate.js",
+      "sha256": "19e19b21dd2562a9063aea48d6465785cc8e032a727720ef22d72911f3cdac87"
+    },
+    {
+      "path": "apps/core/character/sxrm/skill.js",
+      "sha256": "f3c088410767bcedf6a12b15a41dcd033bee2f9938e56675b5c65d217c9d6dc0"
+    },
+    {
+      "path": "apps/core/character/sxrm/characterTitle.js",
+      "sha256": "97f20bc9b145d29ea4e0a5b1a8eea1eaf578843af0e35b9853e10cb98611cbcd"
+    },
+    {
+      "path": "apps/core/character/sxrm/index.js",
+      "sha256": "be35ed518f67037b0301b209e1739e6fa669828d3a545392c1ae9ee53a7d69c5"
+    },
+    {
+      "path": "apps/core/character/sxrm/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/sxrm/intro.js",
+      "sha256": "f5f373eff8d683b82bbd47321bd4a1e5d2d024e71b8a6b980be26a643bb62390"
+    },
+    {
+      "path": "apps/core/character/sxrm/dynamicTranslate.js",
+      "sha256": "069cad4874b7ab8c1262cb84f15615b475bea4bbf0a391a9895a1811279429d6"
+    },
+    {
+      "path": "apps/core/character/sxrm/card.js",
+      "sha256": "14567c63bc51ae2082899ebfcda63b6649cac8543fa73a73989a26c49a946c37"
+    },
+    {
+      "path": "apps/core/character/sxrm/voices.js",
+      "sha256": "641f073cf5d02109d2b0da568567597100b4df9c85caa3e3c1cbed5960c7e1bc"
+    },
+    {
+      "path": "apps/core/character/sxrm/character.js",
+      "sha256": "fca7843b02b10d7072a25977296aae1095812581b87ebc43a8e82f45a37c0d18"
+    },
+    {
+      "path": "apps/core/character/tw/sort.js",
+      "sha256": "0ede7a2b22efe8acd90fe924fb0cebd3c8fbd1ff24cca2a4f72bd4e11f5e378d"
+    },
+    {
+      "path": "apps/core/character/tw/characterFilter.js",
+      "sha256": "2ed7217f2b923abb4e5a8773afdbfc2ddd5a0470fc1fb390cb2ca0adb50aeaa5"
+    },
+    {
+      "path": "apps/core/character/tw/translate.js",
+      "sha256": "a6a4b6981ae5bf76e5e954ba5dad03bbe2fd9a947b4c048e8e5a59a7c7a2c48b"
+    },
+    {
+      "path": "apps/core/character/tw/skill.js",
+      "sha256": "0a3c6e0d103575cb61229fc484a930a0e61e635d928637b84bbe8b3bbc70d8b3"
+    },
+    {
+      "path": "apps/core/character/tw/characterTitle.js",
+      "sha256": "64d402073a5f2ef98ca7e2e6c511842c32ad0fd1dc596a34f8195b084bb765c7"
+    },
+    {
+      "path": "apps/core/character/tw/index.js",
+      "sha256": "b4ec926289d4f6e1119440a540c772efa439361e11a099c0bc97130276b5d9f2"
+    },
+    {
+      "path": "apps/core/character/tw/pinyin.js",
+      "sha256": "dd5cde3bf9f0c92f7b9a2fcb79e79ff993adb7369c072c563f5134bcc534a887"
+    },
+    {
+      "path": "apps/core/character/tw/perfectPairs.js",
+      "sha256": "450f0af4f4c1ecc4c7180f2e364c8a59bfed69dd350fb6b47bce8641c2a37786"
+    },
+    {
+      "path": "apps/core/character/tw/intro.js",
+      "sha256": "1788037414387fb0dd0b651200fe4d6f9857f6edd1e8714cc09e5d4535e028c4"
+    },
+    {
+      "path": "apps/core/character/tw/dynamicTranslate.js",
+      "sha256": "b6206bd76fe410e174e79f20e4c9b757d7b162f6ea5fb7cac5364be2fe33a12a"
+    },
+    {
+      "path": "apps/core/character/tw/card.js",
+      "sha256": "e279dbc79c63e5d37c036ad8e52213a9052afc7d871e1fdc014d5bc40491dd88"
+    },
+    {
+      "path": "apps/core/character/tw/voices.js",
+      "sha256": "0eade27a563c786135588c7d13827ce0e0323078b62d85b647d7f4708f81b407"
+    },
+    {
+      "path": "apps/core/character/tw/character.js",
+      "sha256": "a99fdcedf83d7dd5be97fc6e4b3f79422c807b233dcec1d5309092671c737263"
+    },
+    {
+      "path": "apps/core/character/old/sort.js",
+      "sha256": "10b35612808863b18fc7eea2e2596a5c5a4da1c854818085b49a0d33bedd2c95"
+    },
+    {
+      "path": "apps/core/character/old/characterFilter.js",
+      "sha256": "ad4091d14b41c32498bf0a5a4437bd305c0f2378b989d7b8a4a2b40fa12c3f93"
+    },
+    {
+      "path": "apps/core/character/old/translate.js",
+      "sha256": "0fe4e2e4501ffde11611a04d1113b9408fb8f03ff4681fae4cfb6e74cdf473a9"
+    },
+    {
+      "path": "apps/core/character/old/skill.js",
+      "sha256": "ee44aecb2b860516d86339ce28a84b011f116fc8a618f4c20949293b91356d85"
+    },
+    {
+      "path": "apps/core/character/old/characterTitle.js",
+      "sha256": "beacacf690a82e2cf81ff3c1e44afce53c74adcad8196fc8c9acf135ca15d851"
+    },
+    {
+      "path": "apps/core/character/old/index.js",
+      "sha256": "7d0724944a333471ea011881eb15cd9c15e6a17fd8b2bd341583d78a6270fd28"
+    },
+    {
+      "path": "apps/core/character/old/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/old/intro.js",
+      "sha256": "106817548ed643939e5ec291b61b6b6411b724504a92c64112365cdaee628138"
+    },
+    {
+      "path": "apps/core/character/old/dynamicTranslate.js",
+      "sha256": "aae292e86224163121b00f0d52625a3749c7ba1a384cc9c976659ea28284b68b"
+    },
+    {
+      "path": "apps/core/character/old/card.js",
+      "sha256": "14567c63bc51ae2082899ebfcda63b6649cac8543fa73a73989a26c49a946c37"
+    },
+    {
+      "path": "apps/core/character/old/voices.js",
+      "sha256": "dbeabfd3749fb26e2d5a3cf6958dca29973292527ca27975d0dda3f662f1eccc"
+    },
+    {
+      "path": "apps/core/character/old/character.js",
+      "sha256": "ef03230410123f3916bef7887f20544e3252191225a8ebb7f74cba7555a83dfd"
+    },
+    {
+      "path": "apps/core/character/key/sort.js",
+      "sha256": "3ba8fe201abb7e75ccf5a4a2df1912e65bc5087516a95bcd292d7726fe95453c"
+    },
+    {
+      "path": "apps/core/character/key/translate.js",
+      "sha256": "ce54116a87c87010ac8c2a8728be5d99d550fbde7e412d7dfb8f73806c15eac5"
+    },
+    {
+      "path": "apps/core/character/key/skill.js",
+      "sha256": "23f48ab3b838d89bd62fa76468fc338d21da98e6a33bb67740ca6138ad658548"
+    },
+    {
+      "path": "apps/core/character/key/index.js",
+      "sha256": "78affb7d3d9f2e47db753940315547dfbb41d1ae472758f2e804e489a199c08c"
+    },
+    {
+      "path": "apps/core/character/key/pinyin.js",
+      "sha256": "99652474c6709663336b5f5169eb2b911b6db193470991eb2899918d3df95b14"
+    },
+    {
+      "path": "apps/core/character/key/card.js",
+      "sha256": "72d0feeaf42e5d2230033cd56c0276f81e36b735425e05dfb57b6b428bf2dff3"
+    },
+    {
+      "path": "apps/core/character/key/voices.js",
+      "sha256": "3acf5aec38c9e0878412cb43ef303332b6cabeaabcfc5be8cddd826a838c78ed"
+    },
+    {
+      "path": "apps/core/character/key/character.js",
+      "sha256": "c493f3def7fdcf49760c426908e71132f3be6a8f246be0dce25d750565fa2600"
+    },
+    {
+      "path": "apps/core/character/yijiang/sort.js",
+      "sha256": "0731f427359c53044ae3918468e0ecd5028c424f72449f4f1026b55c1961c9a0"
+    },
+    {
+      "path": "apps/core/character/yijiang/characterFilter.js",
+      "sha256": "ad4091d14b41c32498bf0a5a4437bd305c0f2378b989d7b8a4a2b40fa12c3f93"
+    },
+    {
+      "path": "apps/core/character/yijiang/translate.js",
+      "sha256": "ccad4ad8dec1d3e4c426b203e81dbe57c696650b6eac15cd916e03e6b0940603"
+    },
+    {
+      "path": "apps/core/character/yijiang/skill.js",
+      "sha256": "5b0eb965a8428535bf3cd7d369c261b8ad95cccbeac8d8c817cad3490643a54f"
+    },
+    {
+      "path": "apps/core/character/yijiang/characterTitle.js",
+      "sha256": "5d5951fee44e3463fecfa23f375e0d93ddaefbc8a83c4bf4d6e174d50d74fcba"
+    },
+    {
+      "path": "apps/core/character/yijiang/index.js",
+      "sha256": "af011e3bb433bfbb1268e3c904e04c6eea96bbd2a3a142c65c422196094519a1"
+    },
+    {
+      "path": "apps/core/character/yijiang/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/yijiang/perfectPairs.js",
+      "sha256": "450f0af4f4c1ecc4c7180f2e364c8a59bfed69dd350fb6b47bce8641c2a37786"
+    },
+    {
+      "path": "apps/core/character/yijiang/intro.js",
+      "sha256": "799bc744bb3b93b730570580be5dbfebaf50212b2cbb22acf0dcdb6070cada24"
+    },
+    {
+      "path": "apps/core/character/yijiang/dynamicTranslate.js",
+      "sha256": "905f429fc17777aee448b0ccf0c913b3100b14a4e0960b3a588aaf04a797072d"
+    },
+    {
+      "path": "apps/core/character/yijiang/card.js",
+      "sha256": "c17652d37c3b66d28ab94b8cd5a402ac7f5fd2d155464b8082026f39c46756a9"
+    },
+    {
+      "path": "apps/core/character/yijiang/voices.js",
+      "sha256": "71272f094979dd43576f65fbd788876c3cbbb6cab399890295fbce2a0c76a69b"
+    },
+    {
+      "path": "apps/core/character/yijiang/character.js",
+      "sha256": "f6bb73cd615fd5b603566341c27396f9cf1bdbe9439124dabc59ff76fce9479c"
+    },
+    {
+      "path": "apps/core/character/standard/sort.js",
+      "sha256": "3242b4dc04a75287569d5f474c1cc0b65265ce9a6828943360c4d6f3dbe698ec"
+    },
+    {
+      "path": "apps/core/character/standard/characterFilter.js",
+      "sha256": "ad4091d14b41c32498bf0a5a4437bd305c0f2378b989d7b8a4a2b40fa12c3f93"
+    },
+    {
+      "path": "apps/core/character/standard/translate.js",
+      "sha256": "e707194277de0fe2ac9ce7142d3cb5a7765bda395a33e6c55a1465a384d34dd8"
+    },
+    {
+      "path": "apps/core/character/standard/skill.js",
+      "sha256": "ee769399395b93f3d8293cd5b880b8e708864329bd0d79a0b4f0d8bd6f855a9e"
+    },
+    {
+      "path": "apps/core/character/standard/characterTitle.js",
+      "sha256": "a28b8d6c3a804db75718faf7c9c6091ce75d5ed5620f20fdfe816073f9fbfca7"
+    },
+    {
+      "path": "apps/core/character/standard/index.js",
+      "sha256": "a96e3c4fcd8a72785c8f07b53c84233ddc67aee0af348c7813c3686c6fcb8c09"
+    },
+    {
+      "path": "apps/core/character/standard/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/standard/perfectPairs.js",
+      "sha256": "450f0af4f4c1ecc4c7180f2e364c8a59bfed69dd350fb6b47bce8641c2a37786"
+    },
+    {
+      "path": "apps/core/character/standard/intro.js",
+      "sha256": "688565603843e8b9c7fad8801316c02b837b397888f75c3964e303a80c80867e"
+    },
+    {
+      "path": "apps/core/character/standard/dynamicTranslate.js",
+      "sha256": "469b4130dab0dc7f6a7ff2837b9b0d9c825f9c4ccbf11a658737cc4a4a7adeca"
+    },
+    {
+      "path": "apps/core/character/standard/card.js",
+      "sha256": "14567c63bc51ae2082899ebfcda63b6649cac8543fa73a73989a26c49a946c37"
+    },
+    {
+      "path": "apps/core/character/standard/voices.js",
+      "sha256": "a2d05e5aaaa7c92e8525e376b9be1c3e40a5c021e80589415d5871f2a818ce99"
+    },
+    {
+      "path": "apps/core/character/standard/character.js",
+      "sha256": "943620d557dadb30e254d088ba1dc6cd317103007d8e362fa7788d4b440fb419"
+    },
+    {
+      "path": "apps/core/character/onlyOL/sort.js",
+      "sha256": "599d974a9c2aec4bd3a266c82abc12ac0a42cfa442d463eee9531f656aaaf260"
+    },
+    {
+      "path": "apps/core/character/onlyOL/characterFilter.js",
+      "sha256": "ad4091d14b41c32498bf0a5a4437bd305c0f2378b989d7b8a4a2b40fa12c3f93"
+    },
+    {
+      "path": "apps/core/character/onlyOL/translate.js",
+      "sha256": "8231ea1a79a105b1b8b8107ab27ab84b614854fc7e43d131b317a2f76c91889c"
+    },
+    {
+      "path": "apps/core/character/onlyOL/skill.js",
+      "sha256": "e9203333fdbb5d62893cc8c4faa8f16f88a23ba82003e8f4f0a820c1addf8f4a"
+    },
+    {
+      "path": "apps/core/character/onlyOL/characterTitle.js",
+      "sha256": "502879470bab6d5b211e07c35bf14b83b084691c7d95ed0d032e579d6695e71a"
+    },
+    {
+      "path": "apps/core/character/onlyOL/index.js",
+      "sha256": "b8fe58c0216bec83d24bb809e56aa10468b87fe7eaa4365738760bb4fdb85425"
+    },
+    {
+      "path": "apps/core/character/onlyOL/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/onlyOL/intro.js",
+      "sha256": "106817548ed643939e5ec291b61b6b6411b724504a92c64112365cdaee628138"
+    },
+    {
+      "path": "apps/core/character/onlyOL/dynamicTranslate.js",
+      "sha256": "0b477e1152e80f7d03333b9613eaa883da9b8650b125c6d00e60ed982965a936"
+    },
+    {
+      "path": "apps/core/character/onlyOL/card.js",
+      "sha256": "45744bbaef3f1742bd639152dfd0689ef0b462192cac1e978d1e813f1e7699c5"
+    },
+    {
+      "path": "apps/core/character/onlyOL/voices.js",
+      "sha256": "a3fd1f3758ce8fb233accd85886ebac2ce91b0601366bac9f7b159eb991542c1"
+    },
+    {
+      "path": "apps/core/character/onlyOL/character.js",
+      "sha256": "b8137af23e77e763d74a67f1842fdd9da15ea10ea30b738b9864c448d90ddbdc"
+    },
+    {
+      "path": "apps/core/character/sixiang/sort.js",
+      "sha256": "7b0680117dba6ac6d7bd37882f74a82e31eba25eb45220ab33ff74e0e5305089"
+    },
+    {
+      "path": "apps/core/character/sixiang/characterFilter.js",
+      "sha256": "ad4091d14b41c32498bf0a5a4437bd305c0f2378b989d7b8a4a2b40fa12c3f93"
+    },
+    {
+      "path": "apps/core/character/sixiang/translate.js",
+      "sha256": "256e0d3d42cc8c470d4c46db38735d27ef957bfdbc39c3240488b2a89fe5b4c8"
+    },
+    {
+      "path": "apps/core/character/sixiang/skill.js",
+      "sha256": "e7e51930622599982e873cc3cdc36d8a26d36376ee7720f6dffc7173169a26ab"
+    },
+    {
+      "path": "apps/core/character/sixiang/characterTitle.js",
+      "sha256": "2e8c990568aa0654d617b20585271592cc91c5b1832bdcefdbba1b8f1ef6028b"
+    },
+    {
+      "path": "apps/core/character/sixiang/index.js",
+      "sha256": "fcbb29c1827b95fbdd6ac4f124de2a04a0728959e3b5e75214a0dbf8090d9111"
+    },
+    {
+      "path": "apps/core/character/sixiang/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/sixiang/perfectPairs.js",
+      "sha256": "450f0af4f4c1ecc4c7180f2e364c8a59bfed69dd350fb6b47bce8641c2a37786"
+    },
+    {
+      "path": "apps/core/character/sixiang/intro.js",
+      "sha256": "7c1928bbac71d73e0e8e5ace401499287a0d7839430025083ff6f46458d7b3a8"
+    },
+    {
+      "path": "apps/core/character/sixiang/dynamicTranslate.js",
+      "sha256": "469b4130dab0dc7f6a7ff2837b9b0d9c825f9c4ccbf11a658737cc4a4a7adeca"
+    },
+    {
+      "path": "apps/core/character/sixiang/card.js",
+      "sha256": "c3bde1e9ec2ad1963299980628426a9ea77b6a67f3b939f16a0fabcdbca8e120"
+    },
+    {
+      "path": "apps/core/character/sixiang/voices.js",
+      "sha256": "450f0af4f4c1ecc4c7180f2e364c8a59bfed69dd350fb6b47bce8641c2a37786"
+    },
+    {
+      "path": "apps/core/character/sixiang/character.js",
+      "sha256": "b96bdbb9ba2af894a4e2ec9510f26db3fc41de0bf12ea58ab593965e102d8d4b"
+    },
+    {
+      "path": "apps/core/character/collab/sort.js",
+      "sha256": "055fa99bcf659d24b838556b90bb19533e326356f26ecf4d8f2e0a13dac0444b"
+    },
+    {
+      "path": "apps/core/character/collab/characterFilter.js",
+      "sha256": "649f60be9937003ad81a459beed228b9911a20390ae4bc86aaf6632dbfe5ba4d"
+    },
+    {
+      "path": "apps/core/character/collab/translate.js",
+      "sha256": "c1cb5ee5d9e8bf5f62d6415fbc0d841d5bab00c42e1331d12b28aa14ebc68578"
+    },
+    {
+      "path": "apps/core/character/collab/skill.js",
+      "sha256": "df3a29a6c8678e1ba906267c414344195956a10399ea1b0aaeb07b62641c8697"
+    },
+    {
+      "path": "apps/core/character/collab/characterTitle.js",
+      "sha256": "7648cbb0fca68515bdd0a519ab2e72b88486887d15aceca68ca48364a05a8fbd"
+    },
+    {
+      "path": "apps/core/character/collab/index.js",
+      "sha256": "ad306570be3fb7aa3df9e9e6835534a54fe352f405c35656f6bc2bf8ffd9331f"
+    },
+    {
+      "path": "apps/core/character/collab/pinyin.js",
+      "sha256": "5db4501a6b8020c4b7b0c23f2d8182dbc423567626a0b6f677f439d0dc0b20e8"
+    },
+    {
+      "path": "apps/core/character/collab/intro.js",
+      "sha256": "dc09ffa82bf6eef4872d74a9d0a30abb53cd0679d89533b64883ea60c1621f02"
+    },
+    {
+      "path": "apps/core/character/collab/dynamicTranslate.js",
+      "sha256": "470ca1c0799dab70f36512eb5cbdf83702940efae1e905f43aca512f705326dc"
+    },
+    {
+      "path": "apps/core/character/collab/card.js",
+      "sha256": "afe3b3254146d71ae27ead4c4ba6b0c050b427ed1e2a0c01ec213f8fc7499697"
+    },
+    {
+      "path": "apps/core/character/collab/voices.js",
+      "sha256": "996fdc82a396bb153d0d605b7e01fefab3553a2f0a105debae45eac0a88db818"
+    },
+    {
+      "path": "apps/core/character/collab/character.js",
+      "sha256": "952f8f9a9f491e4ce2767436a745034783dc3e59c6b9762c82e31c980d72b350"
+    },
+    {
+      "path": "apps/core/character/extra/sort.js",
+      "sha256": "11a8d965e9cec850e9fc2a2da69d7956759f4a61b400cb47b2c38c0da427d2ca"
+    },
+    {
+      "path": "apps/core/character/extra/characterFilter.js",
+      "sha256": "7dbb36f54837dfe1122ca252f7caab4363ac58d3a0f6b554434b573e5d1ab02f"
+    },
+    {
+      "path": "apps/core/character/extra/translate.js",
+      "sha256": "6f3b48a4bb38529c439e8e6a70e8866c32d75be1f3b30c407649be98459c7646"
+    },
+    {
+      "path": "apps/core/character/extra/skill.js",
+      "sha256": "0e5091bb755e02195007e14e130c99c0e41520597d755f8c2e1544c23d191700"
+    },
+    {
+      "path": "apps/core/character/extra/characterTitle.js",
+      "sha256": "7c1895e1585d785c6fde5165440454e0b176f8327446e074f5687a2a12850268"
+    },
+    {
+      "path": "apps/core/character/extra/index.js",
+      "sha256": "e15505ed27d300579d6a1c9d7f351ee98db8b08981a8e9b9b74d9d50a438e37f"
+    },
+    {
+      "path": "apps/core/character/extra/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/extra/intro.js",
+      "sha256": "f22cf0e4cd819359f7783d99c687b91a4d6aad8385f09220f29f05669052764c"
+    },
+    {
+      "path": "apps/core/character/extra/dynamicTranslate.js",
+      "sha256": "27c885724c23d6218e0d8d567b003f83d4e1833c522e0715e6d23c0c34bed1fb"
+    },
+    {
+      "path": "apps/core/character/extra/card.js",
+      "sha256": "684246f3f3258cf515e07ba1f22be47e66df1954a9a90ab8df9c66cf98e37cfc"
+    },
+    {
+      "path": "apps/core/character/extra/voices.js",
+      "sha256": "de0e5fcfb7021df3a521ffdb0af51e1d09183530b4bb9f5a38b4894178117d37"
+    },
+    {
+      "path": "apps/core/character/extra/character.js",
+      "sha256": "0d65543e9f8764683454bbfeb3de262d9b62b09192322520f7d5cc98ea5f14b6"
+    },
+    {
+      "path": "apps/core/character/mobile/sort.js",
+      "sha256": "02b46749a746543d3efcc9b8eae260d63f72f7abccf42a3a293ba5641043b7c3"
+    },
+    {
+      "path": "apps/core/character/mobile/characterFilter.js",
+      "sha256": "8bd09b43a50255b344673c2f57482c835a463a2bda4d54a85f61f6b055d0a96d"
+    },
+    {
+      "path": "apps/core/character/mobile/translate.js",
+      "sha256": "0635af8def835afd4bf1e8bdc1e5e4696b0dd209816da3db471134e50d7ceba8"
+    },
+    {
+      "path": "apps/core/character/mobile/skill.js",
+      "sha256": "d335c8896c70ea503c9f2920bc0279fa6263f88343caea3e5071ca6914a9c7ba"
+    },
+    {
+      "path": "apps/core/character/mobile/characterTitle.js",
+      "sha256": "aeacde17bd3b69ea451d28c804304197a7ca5838a017691c26250d3aae4bf54f"
+    },
+    {
+      "path": "apps/core/character/mobile/index.js",
+      "sha256": "b26eec25d4a4bfceabd72be8677320d7fd8ebeb2e40158ff15dcbbde4cc404ea"
+    },
+    {
+      "path": "apps/core/character/mobile/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/mobile/perfectPairs.js",
+      "sha256": "450f0af4f4c1ecc4c7180f2e364c8a59bfed69dd350fb6b47bce8641c2a37786"
+    },
+    {
+      "path": "apps/core/character/mobile/intro.js",
+      "sha256": "c606c2f083efb53a704cc2cbe5c2b7d91b972ef31a67f0b7b774015a46d4d535"
+    },
+    {
+      "path": "apps/core/character/mobile/dynamicTranslate.js",
+      "sha256": "c8bae464b7423febb48a2559b8f79811305fbab89a7b3ec4f40f64a392ae5374"
+    },
+    {
+      "path": "apps/core/character/mobile/card.js",
+      "sha256": "63a146318f9fa5a493b40f31fbb14a39c36fb94a58c64d19971c2ebaaf6d3914"
+    },
+    {
+      "path": "apps/core/character/mobile/voices.js",
+      "sha256": "b29fd7fd1f0932377c167a0899a4358aba08e180330300f6f25a118fc8b14241"
+    },
+    {
+      "path": "apps/core/character/mobile/character.js",
+      "sha256": "172ccd63a7216c34a6b40016c42ce86ac11613d4ed3a786bb5ceeb78e1006110"
+    },
+    {
+      "path": "apps/core/character/bingshi/sort.js",
+      "sha256": "d37d6bdd56bef5e409f8ca36059eb439d0b2788a52a9d80fcb285620795633ec"
+    },
+    {
+      "path": "apps/core/character/bingshi/characterFilter.js",
+      "sha256": "ad4091d14b41c32498bf0a5a4437bd305c0f2378b989d7b8a4a2b40fa12c3f93"
+    },
+    {
+      "path": "apps/core/character/bingshi/translate.js",
+      "sha256": "520777f27a8d029125e14cc557ead5f7ebf20bc35d0e9bd78d7bf41195097c6d"
+    },
+    {
+      "path": "apps/core/character/bingshi/skill.js",
+      "sha256": "59c80041e05da05c89c7fb77364af558a4269dcf7dc89575928cc6937b602675"
+    },
+    {
+      "path": "apps/core/character/bingshi/characterTitle.js",
+      "sha256": "f990407423e62540ca208ca6afab2072cb8f70027915d19c7680ec45cc557b83"
+    },
+    {
+      "path": "apps/core/character/bingshi/index.js",
+      "sha256": "5ee146a3f054b0a8273b0908df1ddb21c30423a4dddde1a1550e0ff722424cb5"
+    },
+    {
+      "path": "apps/core/character/bingshi/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/bingshi/perfectPairs.js",
+      "sha256": "450f0af4f4c1ecc4c7180f2e364c8a59bfed69dd350fb6b47bce8641c2a37786"
+    },
+    {
+      "path": "apps/core/character/bingshi/intro.js",
+      "sha256": "82d54033e2906392840a0c1bf6f34cbd17f7305cace37b9ca2b7f931cdfa0b5c"
+    },
+    {
+      "path": "apps/core/character/bingshi/dynamicTranslate.js",
+      "sha256": "d65aa930311d15572a523f0148c2a15dea32ba51f233dcaa68668d2f8a350425"
+    },
+    {
+      "path": "apps/core/character/bingshi/card.js",
+      "sha256": "14567c63bc51ae2082899ebfcda63b6649cac8543fa73a73989a26c49a946c37"
+    },
+    {
+      "path": "apps/core/character/bingshi/voices.js",
+      "sha256": "69890d7791c129479df92692083b75a4b8c4662fa0a5b50e1274243b0621cc17"
+    },
+    {
+      "path": "apps/core/character/bingshi/character.js",
+      "sha256": "d8339e10ff9f79ccaf3466d7bb40f90109cf8be03d35d71baa2037c75bb44202"
+    },
+    {
+      "path": "apps/core/character/huicui/sort.js",
+      "sha256": "eb09cb7981bf632f587a8959fed7b3d625971bdbe63a451a19062fb3e124af11"
+    },
+    {
+      "path": "apps/core/character/huicui/characterFilter.js",
+      "sha256": "ad4091d14b41c32498bf0a5a4437bd305c0f2378b989d7b8a4a2b40fa12c3f93"
+    },
+    {
+      "path": "apps/core/character/huicui/translate.js",
+      "sha256": "555157171334b9c511ba4ea3b3960cd20972c6ece14224b4e065f02e3ebc406f"
+    },
+    {
+      "path": "apps/core/character/huicui/skill.js",
+      "sha256": "343d2a1032861bf79cfd90fa8ca745916b911eb893de334e933c9fa1bd841085"
+    },
+    {
+      "path": "apps/core/character/huicui/characterTitle.js",
+      "sha256": "d9bcc14a72a91295ad383df200418058cd27e538f743e54d4adf526ac951ef50"
+    },
+    {
+      "path": "apps/core/character/huicui/index.js",
+      "sha256": "fa1343d8b22f188a146c06d8bc0c519356676c23f12313606dccaddd4c5de3df"
+    },
+    {
+      "path": "apps/core/character/huicui/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/huicui/intro.js",
+      "sha256": "35d38614d617ed7f0906b0f9178c1d7783562dab2ed8d5814ce9fa7289f76311"
+    },
+    {
+      "path": "apps/core/character/huicui/dynamicTranslate.js",
+      "sha256": "05e7c14a1080125185ba9041c13d128ec2c471faa3145da2d310c17fb6a570e7"
+    },
+    {
+      "path": "apps/core/character/huicui/card.js",
+      "sha256": "14567c63bc51ae2082899ebfcda63b6649cac8543fa73a73989a26c49a946c37"
+    },
+    {
+      "path": "apps/core/character/huicui/voices.js",
+      "sha256": "ce826c9c006436edfaddf814d4c356b29374dcd72e77fa181cf483b81fa8a0f6"
+    },
+    {
+      "path": "apps/core/character/huicui/character.js",
+      "sha256": "acd79169a444681af33b3130b70a4fee1528b3e4995d1b0b5c9712d441c61f32"
+    },
+    {
+      "path": "apps/core/character/yingbian/sort.js",
+      "sha256": "af2bc138674b19ec84362c7ae81fae620ad4c9f62b9a56f8babb5d5c09fb63b7"
+    },
+    {
+      "path": "apps/core/character/yingbian/characterFilter.js",
+      "sha256": "ad4091d14b41c32498bf0a5a4437bd305c0f2378b989d7b8a4a2b40fa12c3f93"
+    },
+    {
+      "path": "apps/core/character/yingbian/translate.js",
+      "sha256": "0fca99e00aae03d0405701a0022b582e3ac4b1903a107450326d2f5042283ad9"
+    },
+    {
+      "path": "apps/core/character/yingbian/skill.js",
+      "sha256": "51f87a2169f559cc44882de819b6afffdbeb3c8592d14b7d3b427fdd567ab40b"
+    },
+    {
+      "path": "apps/core/character/yingbian/characterTitle.js",
+      "sha256": "e20fad82d021693e49c713f1597f13cd84910abb8d363a7b6657164e440076a6"
+    },
+    {
+      "path": "apps/core/character/yingbian/index.js",
+      "sha256": "492bcb694cc6a4351b3175fb72b4b68ed6fc576147e45b18b9a75443c2e973e3"
+    },
+    {
+      "path": "apps/core/character/yingbian/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/yingbian/perfectPairs.js",
+      "sha256": "450f0af4f4c1ecc4c7180f2e364c8a59bfed69dd350fb6b47bce8641c2a37786"
+    },
+    {
+      "path": "apps/core/character/yingbian/intro.js",
+      "sha256": "8ffca0c34257b49a1eada114fe51df539a3a561ab88a967bbf8fa3088391c784"
+    },
+    {
+      "path": "apps/core/character/yingbian/dynamicTranslate.js",
+      "sha256": "469b4130dab0dc7f6a7ff2837b9b0d9c825f9c4ccbf11a658737cc4a4a7adeca"
+    },
+    {
+      "path": "apps/core/character/yingbian/card.js",
+      "sha256": "4580e558ae912d58c2b3d844bdfecb98d342042b22367cfc2d1cbe69c50246f1"
+    },
+    {
+      "path": "apps/core/character/yingbian/voices.js",
+      "sha256": "0994da5c9f60f4ae8cf0da42b6bc44347da9be6a6d54c20819743dc61b666706"
+    },
+    {
+      "path": "apps/core/character/yingbian/character.js",
+      "sha256": "e032c8ae974a3cc04dfe6c1aa357c2e6852087fb8ab6e70e8cc354de276c315f"
+    },
+    {
+      "path": "apps/core/character/shiji/sort.js",
+      "sha256": "e5031fa6044b472f93158f21dccf8b69cbcccb0e8f0f73838b9a5b39a15c2b43"
+    },
+    {
+      "path": "apps/core/character/shiji/characterFilter.js",
+      "sha256": "ad4091d14b41c32498bf0a5a4437bd305c0f2378b989d7b8a4a2b40fa12c3f93"
+    },
+    {
+      "path": "apps/core/character/shiji/translate.js",
+      "sha256": "649abac7f43fe00e022dab80b142c577994e37b105763fa94c8d19bbc77b4b0e"
+    },
+    {
+      "path": "apps/core/character/shiji/skill.js",
+      "sha256": "ee9cdf9691342c139a1a91b0d4fcf334f4075262d7ca2b0c3415970901012065"
+    },
+    {
+      "path": "apps/core/character/shiji/characterTitle.js",
+      "sha256": "ac06f5cc5eaa43b9899e7d370f80694e681f7924cb56f50b0b3301b777a781f0"
+    },
+    {
+      "path": "apps/core/character/shiji/index.js",
+      "sha256": "2c2c16c8d2639b302c196290b2fc09cd6ce48a83d4193208dbd4a1693ef4c371"
+    },
+    {
+      "path": "apps/core/character/shiji/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/shiji/perfectPairs.js",
+      "sha256": "450f0af4f4c1ecc4c7180f2e364c8a59bfed69dd350fb6b47bce8641c2a37786"
+    },
+    {
+      "path": "apps/core/character/shiji/intro.js",
+      "sha256": "cc24b0738e70bc8e678b95ef06707425dc87753cccac2683dbfb00c331cb0933"
+    },
+    {
+      "path": "apps/core/character/shiji/dynamicTranslate.js",
+      "sha256": "5bba034e9a1ae4c3eae7b6ae905c253805ee697ea1393e7a7e448bafdbdd23fc"
+    },
+    {
+      "path": "apps/core/character/shiji/card.js",
+      "sha256": "bb89862ceaa5645933cee6c7d1fc9f2ebb55e22e67ad99f15c2b9ddc3635f264"
+    },
+    {
+      "path": "apps/core/character/shiji/voices.js",
+      "sha256": "bc4335ed1e30247099d8c82a92727b87211737aa58e7229fc86a195245823506"
+    },
+    {
+      "path": "apps/core/character/shiji/character.js",
+      "sha256": "fc72a309e484e58427b719e0515b4652d4b372496c42988f122497167a986bc9"
+    },
+    {
+      "path": "apps/core/character/shenhua/sort.js",
+      "sha256": "a26e178c440871dfcd083d09a298b529425c1e78b7b059e6d3120f0dc47d431c"
+    },
+    {
+      "path": "apps/core/character/shenhua/characterFilter.js",
+      "sha256": "12f6fc1b9f3807a9e3d09adc45e46feeafbf86f9cd344c671a4e0fd39a19a613"
+    },
+    {
+      "path": "apps/core/character/shenhua/translate.js",
+      "sha256": "0b6b0ecff56397e830bbd6353ce8ce69621882d5afcb179102021337d93a1db0"
+    },
+    {
+      "path": "apps/core/character/shenhua/skill.js",
+      "sha256": "7e87ec26c3f183b83878f886e3872bd78a0f69a5e51e7f46a64bfcc79362cd62"
+    },
+    {
+      "path": "apps/core/character/shenhua/characterTitle.js",
+      "sha256": "284345c9651479b9587b4c26155d6fad35e64b7a7ad82a3bf3b022064f6fd122"
+    },
+    {
+      "path": "apps/core/character/shenhua/index.js",
+      "sha256": "d0de0b6bd0690e013b92a3c5b0c856dd1c9905bfb5aaa18a7c034095d531c08d"
+    },
+    {
+      "path": "apps/core/character/shenhua/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/shenhua/perfectPairs.js",
+      "sha256": "450f0af4f4c1ecc4c7180f2e364c8a59bfed69dd350fb6b47bce8641c2a37786"
+    },
+    {
+      "path": "apps/core/character/shenhua/intro.js",
+      "sha256": "53180494efadb9b18669651f38f986b090da4b0f86b4cc119aa7c669335fa587"
+    },
+    {
+      "path": "apps/core/character/shenhua/dynamicTranslate.js",
+      "sha256": "6ef396a3d6b2638efbeb9bf2f17c34ec386015a9df0545911df07ebbb81e2d46"
+    },
+    {
+      "path": "apps/core/character/shenhua/card.js",
+      "sha256": "14567c63bc51ae2082899ebfcda63b6649cac8543fa73a73989a26c49a946c37"
+    },
+    {
+      "path": "apps/core/character/shenhua/voices.js",
+      "sha256": "2e00766a34d40c1eecc97cf894c2a4523630029d880158287ad5c119e3de80fa"
+    },
+    {
+      "path": "apps/core/character/shenhua/character.js",
+      "sha256": "2b615c4533ef3068a36cf234145f4908a349fe8bff430dd04acf877f58cad515"
+    },
+    {
+      "path": "apps/core/character/offline/sort.js",
+      "sha256": "019720de79d73741fe2fca45123ad6e46ae640426631a22feb0e087c5fff7c51"
+    },
+    {
+      "path": "apps/core/character/offline/characterFilter.js",
+      "sha256": "c7a0b7601329fe2c0f56a45f2c895b72730fdd8acd07118287e712c2cbcd685f"
+    },
+    {
+      "path": "apps/core/character/offline/translate.js",
+      "sha256": "5806f6b2293b9829fee37b5a44b657d45711158a727f269250f06bdf7b45cc47"
+    },
+    {
+      "path": "apps/core/character/offline/characterTitle.js",
+      "sha256": "3e3646bc229fa68f60ca66a1554860e55934ed1e22654230e6d386ee1dc79786"
+    },
+    {
+      "path": "apps/core/character/offline/index.js",
+      "sha256": "3d7a75ac1021f4ec76ab515b1d37e38e67ae8598ffabaddd9f31327efba88a00"
+    },
+    {
+      "path": "apps/core/character/offline/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829"
+    },
+    {
+      "path": "apps/core/character/offline/intro.js",
+      "sha256": "aff26fdf6bcd756259df838ab21b6fc04ae10960e64f13bfe4b7fc2df4d78a82"
+    },
+    {
+      "path": "apps/core/character/offline/dynamicTranslate.js",
+      "sha256": "367c037d7a4ddbb56b139c0a83733f5baadc978d3feb45b4bcce5a5bdee79250"
+    },
+    {
+      "path": "apps/core/character/offline/card.js",
+      "sha256": "a6d9efc9494171f67a8cc04b97a162f8a6fcf92d90b29911ec7189eb8472a9f5"
+    },
+    {
+      "path": "apps/core/character/offline/voices.js",
+      "sha256": "e4a506543d497fe5d51313a364e17a6ca4878672ba3af6df893ed5a43f1f0df5"
+    },
+    {
+      "path": "apps/core/character/offline/character.js",
+      "sha256": "6cb119b7df13508586dcd35eb38b0926d6f1c5d4de59f12d8fa5419788372c6e"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_prettyDerby.js",
+      "sha256": "aa3df208119c3bab5add19b3e24092d8dcf5083a16c6efabf04edb210ec3c097"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_qingshi.js",
+      "sha256": "80a3b410e2c5f3dd4b617692cc21ba97662d2fc947025c2e3c87d02bd619547a"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_weinan.js",
+      "sha256": "0325a4702d5ad6ff44d22464f52aed0a39a0c02ccd751897bfa6e2eccc569239"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_juedai.js",
+      "sha256": "e624b3282ac3b75fe11c97d1ada6dcdbfd5047791c66dcb5cdd9c5b040284a94"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_longyutao.js",
+      "sha256": "16da793a2cc52a9d03c3336ed49f3369fdbc9ec803c115671c68d3a3cdd955fe"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_piracyE_jb.js",
+      "sha256": "399d87134ddf335399304f9a8866e2584c13aee011a59b9b890be138c6201465"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_fengyun.js",
+      "sha256": "3e167bb3342a4e06ff891a17f07d437ac5d768daeece6064deb04e731c182c62"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_piracyS.js",
+      "sha256": "50cb976ca8a98bd1bb74b19dde31edefbfdae45f66d986d312876ee27a29579d"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_zongheng.js",
+      "sha256": "9eefeac1828d14d117f462f3ae75c3e10a28d3e5cfc286884234c22038695173"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_piracyK.js",
+      "sha256": "dfe4829d229bbfe01558e12cb779f419be337ff1881ecddcf554310fd9b48f42"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_taoyuan.js",
+      "sha256": "b9802626ba5d6e822542a03b5245676959cc8c7941f8f0d8cf5b30e0a08c4b6c"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_jingxiang.js",
+      "sha256": "27a5a1e147a347f4a53d2ea3a420fef7f87a6fc93b75b451fb64444d9f63bae0"
+    },
+    {
+      "path": "apps/core/character/offline/skill/extra_offline.js",
+      "sha256": "032459e73fcf3f34c5d1b154f86aee813743fb1bfa2d74dcf538c5382253c58e"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_shiningGrils.js",
+      "sha256": "9860207ade06a01e5b4032fc6d7829f84e3bf61ee0da9820dc2b3910e0d78ff7"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_piracyE_hl.js",
+      "sha256": "dc4ee83e90558c880303b74f3275b5661b7b2419e0bff9f7eb4ada810de70507"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_changan.js",
+      "sha256": "02927a69527883c25689690794e6ee74179873c6b7e714c67b65a83b7dd8659f"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_longxuexuanhuang.js",
+      "sha256": "70d9e0ec7f55fd2643a59ee641efc342d7065704b83646d09d2f7fa03a27f3e7"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_piracyS_shenmo.js",
+      "sha256": "268ffdc0accba6d3279c370e8c21526b33dda76e98f8a4f5032fe0105546a26e"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_piracyE.js",
+      "sha256": "4ea4b941ff56f2252ba5445bf2b406b065c923900898ca387cc07449c6c60e8d"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_yanyou.js",
+      "sha256": "90845c2af63a4ae5ef6cd06625d8e9cf828731b398855916b456c1d615ad1a82"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_sticker.js",
+      "sha256": "dabf1644ed67617cfaeb4e4bb719b18947fcb6ed5501301930ac88b03dd75aac"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_zc26.js",
+      "sha256": "58bfe126a83f90ba4295f933dcbafd52cb4b449baf227f7d675f177aafbc9143"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_hanmo.js",
+      "sha256": "4e8606eb0bc48d72a015fc9bd26456ed19cad32213040b7a4d7efc56b425a84f"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_guansuo.js",
+      "sha256": "fc9ca650b84e5bd93f7da680e02f573a26492e817077f3673aea227aef2ad60f"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_star.js",
+      "sha256": "72d77b0d3a709c43d74069e8cebd560f21d3f57e01651d625651f304a0c8d4b2"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_wenxindiaolong.js",
+      "sha256": "fd010b0e330c919b22e5eb74c7d96a6bf5ca2b5ea432c902123115f5d9c967f3"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_piracyE_shenmo.js",
+      "sha256": "a5bbf0f7db316798d99d509f4f8a11ff73a9fba3c35437d2e3a1180662051440"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_vtuber.js",
+      "sha256": "dbf1e4190663d2e37e07fdc6b212daa087e4d08d89613453f18c8b2f92c6ea50"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_shichangshi.js",
+      "sha256": "2655a38120927c3ee473aacabb76e6727840e755659d2f9efb7d1e63b20b8a9d"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_chunqiu.js",
+      "sha256": "545dcf6c92c61968eea2647ca3cb90f6b1d92c9c5dc4e0c68334a73607aa5832"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_scl.js",
+      "sha256": "afaa2979f0faa894d7a0dfc3f6b12961d951cd26494a75c1b8c85687da73c439"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_Europe.js",
+      "sha256": "2929564710fb00569180e47d68ca2151c2bf08cbe340f0af7193c8197d5daac9"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_yanling.js",
+      "sha256": "2f4406fff867f208559d3cbdad89ed395f7bf0c165bfc5ab692bd50f6d2d2908"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_piracyE_xk.js",
+      "sha256": "3163d37209ca86ed4059914cf516f33dc3935a9c01d0381e46773d72aac891d2"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_yongjian.js",
+      "sha256": "8b8ee89039e135b85ffb5c203f38235d8d69c09c515a19a3e62c83b7cdec3c5b"
+    },
+    {
+      "path": "apps/core/character/offline/skill/index.ts",
+      "sha256": "3e066f39a3513a66ce5580313f6fe453e458b4317a7a4f0d177b7e0b69f9e95f"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_xy.js",
+      "sha256": "a55955f5b650723ec3bf3b9d70c8600a9b4085b4817a0c9fdd4e38a99b216d11"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_piracyE_zy.js",
+      "sha256": "7e4c3f7a773e0245bae3cb01d412ac8434328aa0eaf5b4bbdf6f5555a99034e6"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_luanwu.js",
+      "sha256": "78cffce4946ef610e3b3c04dcee02e0aa999082f3535fa6b9322af2921f58054"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_jingyang.js",
+      "sha256": "ca2b5161aa6ac00b358958af61147594e7e077efad070f7c21bcaa38b4b3d110"
+    },
+    {
+      "path": "apps/core/character/offline/skill/offline_jiudin.js",
+      "sha256": "fc0c5915638c01333e32721a8d5a94166f80f6a6270ce89db17d5d64cf83305e"
+    },
+    {
+      "path": "apps/core/layout/mode/chess.css",
+      "sha256": "d919e5891a597df29af5aea39d0c91885ae0841332eb02ced4b20c3f2be5ee6f"
+    },
+    {
+      "path": "apps/core/layout/mode/boss.css",
+      "sha256": "b9da03aa373bdb6e42763aa55f972b15fc36ea9b89fbf09a4f5c8c054c29c612"
+    },
+    {
+      "path": "apps/core/layout/mode/tafang.css",
+      "sha256": "622114fc44ed843ac9be1e432a92ac7e94a382b11df06982709f80dc8b8116cb"
+    },
+    {
+      "path": "apps/core/layout/mode/story.css",
+      "sha256": "0a73c7882cf4cd26e4318695da812a17c0e9cf01b9f10cf67d1fde491029249d"
+    },
+    {
+      "path": "apps/core/layout/mode/stone.css",
+      "sha256": "8372074471301c65b2adac1478a6c500f5be67c0d273c6ad40e8b3078cb4b7dc"
+    },
+    {
+      "path": "apps/core/layout/long2/layout.css",
+      "sha256": "7d89c36773e080d9933dcdb081d860250dd2d3552ece511edd8bd8222df2966b"
+    },
+    {
+      "path": "apps/core/layout/nova/layout.css",
+      "sha256": "d681b3867dd41c572a4f2a7bfc4132d1f85beff3b27fe6bf01b098b27be11562"
+    },
+    {
+      "path": "apps/core/layout/others/skill.css",
+      "sha256": "002821b7eda3beaf98084d87bcf759758f7f8411e3b80e8516fb05bf4931af69"
+    },
+    {
+      "path": "apps/core/layout/others/dialog.css",
+      "sha256": "e7437f20b229e1527bc03bcd84672e92519bbe9428a6beeebe7bd03ac79c8f09"
+    },
+    {
+      "path": "apps/core/layout/default/newmenu.css",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/core/layout/default/pagination.css",
+      "sha256": "54b1407089245d780868fb0093f6e83f2cc31874eae8cb53764163a98b66b790"
+    },
+    {
+      "path": "apps/core/layout/default/toast.css",
+      "sha256": "012ac6569f42a7d69e790768a0f1c2b023ac41acf7c6dfa258df8a2fdf5187e0"
+    },
+    {
+      "path": "apps/core/layout/default/layout.css",
+      "sha256": "4566c2e3121ef5954655de965c6d2a36fda5c38f3a6937325b9e307000eb0e64"
+    },
+    {
+      "path": "apps/core/layout/default/menu.css",
+      "sha256": "18b90a7a7b987da4641c74b8b559cadaf538694d74ae85bb8c5b0127be0b832a"
+    },
+    {
+      "path": "apps/core/layout/default/phone.css",
+      "sha256": "d22c5be0deee52f58530dce63394f476ff40822591658a122df9d59167112800"
+    },
+    {
+      "path": "apps/core/layout/long/layout.css",
+      "sha256": "7ab56e32c98c1290ae8ca1679fbd347a0cced2b372915825e866afee33e3d545"
+    },
+    {
+      "path": "apps/core/layout/mobile/equip.css",
+      "sha256": "d51785f11578057739d050a2acb6c2c5586fbfc669425d31478be11f214dd4f5"
+    },
+    {
+      "path": "apps/core/layout/mobile/layout.css",
+      "sha256": "be5daeae06a073ecb3c08c91c5076e47e97e2653bd01b5cb0800e7e67d54c4c6"
+    },
+    {
+      "path": "apps/core/layout/newlayout/equip.css",
+      "sha256": "cd4f9144a26242945da34f6ec98e0b3b4b1c76b61764bfdaf52867d93e59f023"
+    },
+    {
+      "path": "apps/core/layout/newlayout/global.css",
+      "sha256": "ce3437b85c36d7e4a3c14c80e3b050080e7009796551d6e1946ca83960b26ae3"
+    },
+    {
+      "path": "apps/core/layout/newlayout/layout.css",
+      "sha256": "cf1a953176dfa1bc74aed796a1b20f3f5f3ca6ffdbf771290c6622e37869e268"
+    },
+    {
+      "path": "apps/core/typings/windowEx.d.ts",
+      "sha256": "502d74848f712dafe7350c58bd19ca8246a685603343ede364e91922115e34f1"
+    },
+    {
+      "path": "apps/core/typings/Result.d.ts",
+      "sha256": "86cfa8c4cc61102ffda3fae35e514c0b218aef49284e418d750e88a3d5f18e99"
+    },
+    {
+      "path": "apps/core/typings/DateEx.d.ts",
+      "sha256": "f23a033bbd97dbe79f78b5b7dd785d9821568895652fdb58c314d9dfcc48e3d5"
+    },
+    {
+      "path": "apps/core/typings/HTMLDivElementEx.d.ts",
+      "sha256": "a21f1e7a4ac25eace1f3d7b9283eec32cc46fe2445b2924455b4a054ee4da681"
+    },
+    {
+      "path": "apps/core/typings/NonameAndroidBridge.d.ts",
+      "sha256": "4878e61ca7ce41085047b380d6773ad8c751c05ed71986bd69530439955a100f"
+    },
+    {
+      "path": "apps/core/typings/NonameHookType.d.ts",
+      "sha256": "494033c07ca4ee2149fddc159717dd071c60371bd0c1b129bc7b0e43306779ce"
+    },
+    {
+      "path": "apps/core/typings/Card.d.ts",
+      "sha256": "519d3e6154b6efb2e0bf02258b211250984fff92e26be45db614145bdda562f0"
+    },
+    {
+      "path": "apps/core/typings/HTMLTableElementEx.d.ts",
+      "sha256": "f14a0a49b32b48a2935729bf9f9c39790770ffb2405005f78a2ff9829624bfa6"
+    },
+    {
+      "path": "apps/core/typings/cordova-plugin-device.d.ts",
+      "sha256": "d43b0d9dc263d8636861583caf5b3a9f0fe294822f71ca69c4138ee2cb530c0e"
+    },
+    {
+      "path": "apps/core/typings/NonameAnnounceType.d.ts",
+      "sha256": "d20e24a77ca9e85b5277d3b509da6c945424c1d325b90a0ed630ab16e287fe7f"
+    },
+    {
+      "path": "apps/core/typings/global.d.ts",
+      "sha256": "050836a7d59cbdc126d1535371dc2a99c4905ad2e462e1becad44dabc0cfba91"
+    },
+    {
+      "path": "apps/core/typings/ArrayEx.d.ts",
+      "sha256": "abf6559456598713fdbe3aa87608a4260e35e1557160eda1f38cb1ba36272d83"
+    },
+    {
+      "path": "apps/core/typings/type.d.ts",
+      "sha256": "2a47177003d338ee15a84a7c2a93bed4a9addd8fa404f45459c4c71482472b3c"
+    },
+    {
+      "path": "apps/core/typings/Pagination.d.ts",
+      "sha256": "48d84b71f00077bfb20778763e258be7604d6f8857f91fc69e3573623bdb5d69"
+    },
+    {
+      "path": "apps/core/typings/client.d.ts",
+      "sha256": "8031d295af8ac2c4382d6ba435d7eb86db1e7a89c876b5583f97187ad89eff80"
+    },
+    {
+      "path": "apps/core/typings/Skill.d.ts",
+      "sha256": "f01031c4ade407327c3aacdad78bd5e227f000d3c22fefabeb386e66532339e4"
+    },
+    {
+      "path": "apps/core/game/keyWords.js",
+      "sha256": "e3973154e748a5643e7ab6c1f12f3b278e1e79cc5a7a4e7684e66f727c7ec7dd"
+    },
+    {
+      "path": "apps/core/game/config.json",
+      "sha256": "2488a94de85553fed31d8cbbe3e251c5f7b186def6544f963e02eeeafa12c77a"
+    },
+    {
+      "path": "apps/core/game/update.js",
+      "sha256": "d9eac3278257461f31d22fd927404fd0f3b05ff664f7a5aca54fe20343e8be8c"
+    },
+    {
+      "path": "apps/core/game/package.js",
+      "sha256": "1f90d3d0ef018828122f5e65fa212c3d63f46328d6621ccb4ac961f28c3c4f2d"
+    },
+    {
+      "path": "apps/core/game/asset.js",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/core/game/vue.esm-browser.js",
+      "sha256": "57a99bfc161acd9f5c313ddfa4d29a2e8b2637c919fae00073fadc9f3d8612be"
+    },
+    {
+      "path": "apps/core/game/config.js",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/core/game/importmap.js",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/core/game/updateLog.md",
+      "sha256": "968c90d8c69c7e5eceaee125de966f4ee4e5aa9dcf622b03f264002f020c471d"
+    },
+    {
+      "path": "apps/core/game/dedent.js",
+      "sha256": "e3ccee307c5c4da849aaaafd0358d884467f6c00e1e5d6891934c56469e0a2e2"
+    },
+    {
+      "path": "apps/core/game/asset.json",
+      "sha256": "b29f5b741c68d8945de08363c8374f2671f1060fde24bd05965154e90e27b7ab"
+    },
+    {
+      "path": "apps/core/theme/music/wood.png",
+      "sha256": "19d8622c4fa4bbadee826d282027a1cfd3c14566922e7d8812ebedf6cfcc730d"
+    },
+    {
+      "path": "apps/core/theme/music/grid.png",
+      "sha256": "5a1ceffa6f6eae1fbb9f8a30dacc721e65ddc86aac062c6233e6527b7fa2d4b3"
+    },
+    {
+      "path": "apps/core/theme/music/wood3.png",
+      "sha256": "9cffdde2fb4691e943ca0b8b3ab28a28281b086f18d4daae8905c93562682425"
+    },
+    {
+      "path": "apps/core/theme/music/style.css",
+      "sha256": "d8eca5f7888bf1c28b614a7deacccb67bd66a1ff9d891cd663627b2ad1352aaa"
+    },
+    {
+      "path": "apps/core/theme/style/card/music.css",
+      "sha256": "51e2e5c86f513c1615548e57f94cb6990a4596895d6aab944508f6dd0cc1d760"
+    },
+    {
+      "path": "apps/core/theme/style/card/wood.css",
+      "sha256": "f92170534ee1624cacb5a9c7c922a669e9bfd41aa146ea3ed11799b11ba9015a"
+    },
+    {
+      "path": "apps/core/theme/style/card/ol.css",
+      "sha256": "9536298237833f81ac3291fb7fc2d8913b61daa834817546c8641b1cd4a76231"
+    },
+    {
+      "path": "apps/core/theme/style/card/custom.css",
+      "sha256": "fb1e5a342313b49a1d789120afb254c2b9f30fde3f34ea5459a057218d6a71f2"
+    },
+    {
+      "path": "apps/core/theme/style/card/default.css",
+      "sha256": "e390f18222a7af5ba6ed52f477659608d5b897083c5caf890e0e1cb1f7d4a453"
+    },
+    {
+      "path": "apps/core/theme/style/card/simple.css",
+      "sha256": "dddd7fd2c1faef731b32546958b9ca37f2e23b5bbea2b7a6d01ad24e518a883b"
+    },
+    {
+      "path": "apps/core/theme/style/card/new.css",
+      "sha256": "29b2a5709e97e8c34da6b7ae433951d60b24c12998eb84e5abb5b3a9196d2475"
+    },
+    {
+      "path": "apps/core/theme/style/hp/round.css",
+      "sha256": "7018a298a0061057b7ce444d2615c6b6fd14ec22cf59bf4c4eb745bc48e0b15a"
+    },
+    {
+      "path": "apps/core/theme/style/hp/official.css",
+      "sha256": "7aa8fd81546310ec84aad5fc46989f4a39fee6b9bf11e5372459162898ce5faf"
+    },
+    {
+      "path": "apps/core/theme/style/hp/ol.css",
+      "sha256": "8399b63db378940908acb8ab31b9e59a4fd3ab34e942d23588535bb76efd8029"
+    },
+    {
+      "path": "apps/core/theme/style/hp/xinround.css",
+      "sha256": "b1856a481618606d46d448866d9b594af844b85749c4e3eded735caf83403942"
+    },
+    {
+      "path": "apps/core/theme/style/hp/custom.css",
+      "sha256": "3a6b23d629f884b0a67ccbe0c0ab6e2acec3a074a4b86f49fd0fc09e3a2ce107"
+    },
+    {
+      "path": "apps/core/theme/style/hp/glass.css",
+      "sha256": "eafa57f1711c6a9805118c1eee5d9e09ce3134ed356e7c40efd304bcf0b0c1b7"
+    },
+    {
+      "path": "apps/core/theme/style/hp/default.css",
+      "sha256": "e390f18222a7af5ba6ed52f477659608d5b897083c5caf890e0e1cb1f7d4a453"
+    },
+    {
+      "path": "apps/core/theme/style/hp/emotion.css",
+      "sha256": "f004f1b546bba24d1853f1f43ccfaf858c6703542c7633c76f1cbf13743598b9"
+    },
+    {
+      "path": "apps/core/theme/style/hp/xinglass.css",
+      "sha256": "8f52506b311f2e6cbb30db848daca033ada1072c9d25b8c54385eb3791783593"
+    },
+    {
+      "path": "apps/core/theme/style/cardback/liusha.css",
+      "sha256": "75e2ccd1eec12b8c4e42fad747a8a66ddfed97b09cc819fa64f3ee56e5c83cdf"
+    },
+    {
+      "path": "apps/core/theme/style/cardback/music.css",
+      "sha256": "b1daae04a2fd06bd0a93c74f262c25dfc3ec557d201dbf3780ad5f4908c90261"
+    },
+    {
+      "path": "apps/core/theme/style/cardback/wood.css",
+      "sha256": "be7f9725dcceb3c10501b41940a444b78366d097497aeed882e851d0537b9cf5"
+    },
+    {
+      "path": "apps/core/theme/style/cardback/official.css",
+      "sha256": "a8282192aedf92f632b20e31318757c0e941e60a3e1febe7915c8cc5b000fdc0"
+    },
+    {
+      "path": "apps/core/theme/style/cardback/ol.css",
+      "sha256": "4191d89dec3bfa1e1235d4eb139838dee642b9b89196be713ab7ce8d3fc2ee1b"
+    },
+    {
+      "path": "apps/core/theme/style/cardback/custom.css",
+      "sha256": "451779de2a457937376b1100e5cc48983cb14dc01fbf0f555d88e78fcb5247b1"
+    },
+    {
+      "path": "apps/core/theme/style/cardback/default.css",
+      "sha256": "e390f18222a7af5ba6ed52f477659608d5b897083c5caf890e0e1cb1f7d4a453"
+    },
+    {
+      "path": "apps/core/theme/style/cardback/new.css",
+      "sha256": "2793ae2dcc0ada3256a22621167bfdafb441a18c027bb81ad50cfbf7cd068d80"
+    },
+    {
+      "path": "apps/core/theme/style/cardback/feicheng.css",
+      "sha256": "69b18c8ad625e9f2d219d7150beca6da0231eed88c143633015979d2848a4bb7"
+    },
+    {
+      "path": "apps/core/theme/style/player/gold1.png",
+      "sha256": "b1ddfc2390c1f0d420e54728813eff62cf4ab8394e551a1f2dbc92491f5a56fb"
+    },
+    {
+      "path": "apps/core/theme/style/player/gold3.png",
+      "sha256": "aa8f082ee6e245b1f5ff1c5453b35208098cf6b142c3eab0c714f3e510b4e0b8"
+    },
+    {
+      "path": "apps/core/theme/style/player/gold2.png",
+      "sha256": "584151c04aeff2ffd18cc3ca0e0201ab17b0d2487010e765d5d05755f267b778"
+    },
+    {
+      "path": "apps/core/theme/style/player/silver2.png",
+      "sha256": "c9cde4ab97b4c6a34a5285b9ea50c52a79ae7328cb112db97aca581dc55c8058"
+    },
+    {
+      "path": "apps/core/theme/style/player/silver3.png",
+      "sha256": "555bb8af8c4e0a9c628a2cb328c47bfb301aaa57fb8ec72a80edb2d1f1b7903e"
+    },
+    {
+      "path": "apps/core/theme/style/player/silver_d1.png",
+      "sha256": "ce87ae1e6de6fb21c425f23060bfa13e7d38cd55d00303c648a2b85288435539"
+    },
+    {
+      "path": "apps/core/theme/style/player/silver1.png",
+      "sha256": "be85c1c1174ac16a8c1e31d650b4ad87901169709afc25907b54073bb1badbf8"
+    },
+    {
+      "path": "apps/core/theme/style/player/silver_d2.png",
+      "sha256": "6108d7d436cae22373e23115645a7d178b716174bd380391f009863d33d9bcea"
+    },
+    {
+      "path": "apps/core/theme/style/player/bronze_d1.png",
+      "sha256": "8a16d6a29c15efe0a24b445204c51ecdd0008e185bdfd44c6116f33553a51489"
+    },
+    {
+      "path": "apps/core/theme/style/player/bronze_d2.png",
+      "sha256": "666cde140019d706472bc6fbaf27d3692b6396d74e755168ea188731d0c3fe33"
+    },
+    {
+      "path": "apps/core/theme/style/player/bronze2.png",
+      "sha256": "0e47d0cd6f57610344725355d1e6e7b370eaa1853cf89b93ce6427401a80ddb7"
+    },
+    {
+      "path": "apps/core/theme/style/player/bronze3.png",
+      "sha256": "2d98acd04f288730b0f448ac41701053a1355594c1a7dd96504ea6010e0e2513"
+    },
+    {
+      "path": "apps/core/theme/style/player/bronze1.png",
+      "sha256": "535ac3d52d6eeac071259283372d2b7005dbc39bc1ad051f9751d15c76194569"
+    },
+    {
+      "path": "apps/core/theme/style/player/gold_d2.png",
+      "sha256": "88c7e40a2373c063b70cd7d5128ad016273c136fb2200fd1c23b144924aaf69c"
+    },
+    {
+      "path": "apps/core/theme/style/player/gold_d1.png",
+      "sha256": "fe693caf5d5c5bc787fab868a80111e57f34571a2422622b4fc53f106a319ab4"
+    },
+    {
+      "path": "apps/core/theme/woodden/wood.png",
+      "sha256": "b6d5f93628c2924829e39c0c79c179406d548588d80fe5823417f1a646deb4ee"
+    },
+    {
+      "path": "apps/core/theme/woodden/grid.png",
+      "sha256": "5a1ceffa6f6eae1fbb9f8a30dacc721e65ddc86aac062c6233e6527b7fa2d4b3"
+    },
+    {
+      "path": "apps/core/theme/woodden/wood2.png",
+      "sha256": "08e347ae787636e73d6b52052fe0e11183ccb29f3ed8ba8ef15675dcb398c8cd"
+    },
+    {
+      "path": "apps/core/theme/woodden/style.css",
+      "sha256": "42119acf79b94689aa523d640b327b7e4ffe1240f6a4dd127e6b73ae6e2f9dd4"
+    },
+    {
+      "path": "apps/core/theme/simple/card.png",
+      "sha256": "00a9b12f8c767487085e8c0698c9da6b908fb1963fc9c1eaacb0c9f5d127f87f"
+    },
+    {
+      "path": "apps/core/theme/simple/unknown.png",
+      "sha256": "0bbff07cc6d44e12e4b8506fced68cfdfafd1df867657b08b78a5d3b6214573c"
+    },
+    {
+      "path": "apps/core/theme/simple/wood.png",
+      "sha256": "19d8622c4fa4bbadee826d282027a1cfd3c14566922e7d8812ebedf6cfcc730d"
+    },
+    {
+      "path": "apps/core/theme/simple/grid.png",
+      "sha256": "5a1ceffa6f6eae1fbb9f8a30dacc721e65ddc86aac062c6233e6527b7fa2d4b3"
+    },
+    {
+      "path": "apps/core/theme/simple/card2.png",
+      "sha256": "51f8b768315402a241ef23a8b8f5f0292637c1ac3978aaecd3cf2aa64acdb15d"
+    },
+    {
+      "path": "apps/core/theme/simple/wood3.png",
+      "sha256": "9cffdde2fb4691e943ca0b8b3ab28a28281b086f18d4daae8905c93562682425"
+    },
+    {
+      "path": "apps/core/theme/simple/style.css",
+      "sha256": "1c32ad7f97e38c4945616f5ede5b597808c5e161f1f70399dfc79f644c0d8c03"
+    },
+    {
+      "path": "apps/core/scripts/vite-plugin-importmap.ts",
+      "sha256": "de4ed58b671451f0bf2a6ab7e7365a72228328e57ba22306aee95d3a499c398f"
+    },
+    {
+      "path": "apps/core/scripts/generateAsset.ts",
+      "sha256": "e28d782eba8a8371990f0f181637bdf4fbb5f5fe6323e9b93ecf2ff3178c7c0f"
+    },
+    {
+      "path": "apps/core/scripts/directory.js",
+      "sha256": "3d5a7a8d36ed8b2cc9dabf7c34d9c32704ad6eba58e63388f99b5b9d7cafd8ec"
+    },
+    {
+      "path": "apps/core/scripts/build.ts",
+      "sha256": "10738ea4db4400ed1e7dd2fa8f379e0675e7ba73d408afc8cfe25cfe32711e91"
+    },
+    {
+      "path": "apps/core/noname/entry.ts",
+      "sha256": "4a23b1f25c1342cfaab1f180dcabfb6fa04568487bd12b9ed4649e4fcf31fef9"
+    },
+    {
+      "path": "apps/core/noname/init/polyfill.ts",
+      "sha256": "bc36e4ef5f5d5160a554f8a2b6483e766f31940049381e460e9a20de8e99486c"
+    },
+    {
+      "path": "apps/core/noname/init/cordova.js",
+      "sha256": "a0e4397e0b913f27f21cab6242d857020b38fbb48353d9ac367128b753e312af"
+    },
+    {
+      "path": "apps/core/noname/init/compatible.js",
+      "sha256": "86ac7166b986c50f010f83cf9fa11b7faa97765876ee8c4f6f6906f945818b38"
+    },
+    {
+      "path": "apps/core/noname/init/node.js",
+      "sha256": "c7370fcea756637e774dd0cb2782abc3e5bb97a3baca43c48a58c6adf4f2e5a2"
+    },
+    {
+      "path": "apps/core/noname/init/index.ts",
+      "sha256": "f3bd29b5801ab84bc62c9ba627f9eaf361ce3687c8a12522399e8502660f7f99"
+    },
+    {
+      "path": "apps/core/noname/init/browser.js",
+      "sha256": "5ed9b75109eeecec45f1aa63fec4f5bbb4a602c172d60e16e039321c6c1f701e"
+    },
+    {
+      "path": "apps/core/noname/init/loading.ts",
+      "sha256": "41da4383c3c3f514ed51a97bb1ca267da4fd645f22a9a301044b8e97d9a15e19"
+    },
+    {
+      "path": "apps/core/noname/init/import.ts",
+      "sha256": "525a4b97fd5b387dbc1c599d9be2d8d4a356f860f43a14b4b238634539290d18"
+    },
+    {
+      "path": "apps/core/noname/init/onload/onload-splash.d.ts",
+      "sha256": "c19aeed0bd68922bf207950b28bad2603759bedb53971dd2385201d4c19047ba"
+    },
+    {
+      "path": "apps/core/noname/init/onload/wide-splash.ts",
+      "sha256": "67fb9040b5e2c5339a0fc44723f34247fe80a91f2c5e5039956568b7821dfca3"
+    },
+    {
+      "path": "apps/core/noname/init/onload/default-splash.ts",
+      "sha256": "b0eedf9c43e01323c5e9c06240c0c0b53ab4db97236076da5a9fbb8fc5b6b3f7"
+    },
+    {
+      "path": "apps/core/noname/init/onload/index.ts",
+      "sha256": "952eab553064cc07dbce928cbb2fa415ce799e10b8f61c9547a85f96ed9ad0ba"
+    },
+    {
+      "path": "apps/core/noname/ui/index.js",
+      "sha256": "2ef7247ef8283c9eae28883d6880e080a7f14bbcf0c75e4cccedc87765c83baa"
+    },
+    {
+      "path": "apps/core/noname/ui/click/index.js",
+      "sha256": "6c85a0c7a1ecf7bc23534349fb82de18a1c2f436b882189dae5341fa5e6d69e1"
+    },
+    {
+      "path": "apps/core/noname/ui/create/index.js",
+      "sha256": "460073e1c3a230a0c78daa4ada32c468b0c616fa3d13c633cc8519a41d582b44"
+    },
+    {
+      "path": "apps/core/noname/ui/create/menu/nonameConfig.js",
+      "sha256": "5bb955238435ed462e228e91b09f987afb2e50d6de6ce1fd417e32bf43a13fd1"
+    },
+    {
+      "path": "apps/core/noname/ui/create/menu/startMenu.js",
+      "sha256": "b848582e191f19896deff48470fc6a026be2824f46b6710193c4dff00c7b53d8"
+    },
+    {
+      "path": "apps/core/noname/ui/create/menu/index.js",
+      "sha256": "b9a70875426419cc3f234c13568505d8f4e77466431f131013dd253b781ffb2b"
+    },
+    {
+      "path": "apps/core/noname/ui/create/menu/new.js",
+      "sha256": "0c6d9a1fac586d16184f1113dd336d2eaabbebc0a16d91d849aa2f05cd31c069"
+    },
+    {
+      "path": "apps/core/noname/ui/create/menu/pages/exetensionMenu.js",
+      "sha256": "e427c5bae865adddb903b5ef49083ecb28f5538401746608d403574b9c6e5099"
+    },
+    {
+      "path": "apps/core/noname/ui/create/menu/pages/optionsMenu.js",
+      "sha256": "6a887e9e8a3a2c9ab229e8f79c5c6d208ddc3bcd622be83b3ef6845d6a63cda5"
+    },
+    {
+      "path": "apps/core/noname/ui/create/menu/pages/startMenu.js",
+      "sha256": "316ce4143d453656905dcec171def66d11f7e6e8966f8ab478511c59f02723db"
+    },
+    {
+      "path": "apps/core/noname/ui/create/menu/pages/cardPackMenu.js",
+      "sha256": "366b5ebefe0daa1ae076d992decbf0e7291649ec6f36d95dd9260123bd0165b5"
+    },
+    {
+      "path": "apps/core/noname/ui/create/menu/pages/otherMenu.js",
+      "sha256": "01d0826a628f632294ffd4068ec83605a2855eb93b69eceba6c6047b174edda9"
+    },
+    {
+      "path": "apps/core/noname/ui/create/menu/pages/characterPackMenu.js",
+      "sha256": "ff29ca635e41eec47c5afbce5f37c4f502103f77b9ddaee6df0a33e4ef0cf777"
+    },
+    {
+      "path": "apps/core/noname/util/meta.ts",
+      "sha256": "0fc555b7125fde4eab6fcc18395f0efddd47a027f24e21986314e2b8c0ffba28"
+    },
+    {
+      "path": "apps/core/noname/util/utils.ts",
+      "sha256": "1da6cbcc6c0bfce7a3be7c60ef3aa8b624c580677a151211b703e7424f573429"
+    },
+    {
+      "path": "apps/core/noname/util/index.js",
+      "sha256": "cec3b2b3e208fd3c0ede3936b341083acc8ef68fe2998f54edbfe30794eff0a6"
+    },
+    {
+      "path": "apps/core/noname/util/sandbox.ts",
+      "sha256": "89c72dfc91e623792a4a6bc96cde88126949262a4866ca89019d96c2b9c625df"
+    },
+    {
+      "path": "apps/core/noname/util/config.js",
+      "sha256": "4869d1305e31cf403c8e317f7c0fe241f0cfdaae67ccf11bb1744a6b45147dd6"
+    },
+    {
+      "path": "apps/core/noname/util/pagination.js",
+      "sha256": "2d8c5277620899537833f39aa72943fbe5195b3f0855c8fefb74cdd15951b39a"
+    },
+    {
+      "path": "apps/core/noname/util/error.ts",
+      "sha256": "1bf428478165cd4fbe26d1eaf0d09cb136f6fe45eb49b9ef174edf03398e716e"
+    },
+    {
+      "path": "apps/core/noname/util/sandbox/security.js",
+      "sha256": "6a516854aa0f8d02425bfc03cffca367e9ef2aa241b14ef955030def0152665e"
+    },
+    {
+      "path": "apps/core/noname/util/sandbox/initRealms.js",
+      "sha256": "890a98543e823a5c8a418131509175bae4600ba0e7929ea78fe99f564751a4f2"
+    },
+    {
+      "path": "apps/core/noname/util/sandbox/sandbox.js",
+      "sha256": "462a156b1feb0523c9ddf29772eaea1dc22c88c8e0f306e468fa936a6af07aed"
+    },
+    {
+      "path": "apps/core/noname/util/sandbox/error.ts",
+      "sha256": "7dba8ceb0a165150b54d6247740379996b550afc5472a561c0323ac3721009d0"
+    },
+    {
+      "path": "apps/core/noname/get/is.js",
+      "sha256": "bc4678bdb710b647f460c64a87ecd681b2eff6852adbd9a285916e745906d1b4"
+    },
+    {
+      "path": "apps/core/noname/get/audio.ts",
+      "sha256": "5b847e079d04bcdb42b89ae37a7a8df0066385e7dde84f6524ded702dc06bebb"
+    },
+    {
+      "path": "apps/core/noname/get/index.js",
+      "sha256": "8515ed7242d2638720180507a778cb273d8f33743eac12c5237d2f50e805823d"
+    },
+    {
+      "path": "apps/core/noname/get/promises.ts",
+      "sha256": "67f4a0f3c4e67663604019fc29fb71d71df3cf2db9c6f4b93cf1dc6cbe15ef3a"
+    },
+    {
+      "path": "apps/core/noname/get/pinyins/index.js",
+      "sha256": "2d954543e1b548b5ed64531eb8959b652edf1da2dfb5492f8e59d938c41cb4ac"
+    },
+    {
+      "path": "apps/core/noname/get/pinyins/noname-dict.js",
+      "sha256": "80c668954fbce96e473d5b05d96faa4215b2ffcacab33d9f2b590ca9dd529e3f"
+    },
+    {
+      "path": "apps/core/noname/library/update-urls.js",
+      "sha256": "77a87b6ce821a0e8a7ab014ef22db6b6e0313ab6df6533fc228fca4be087a53f"
+    },
+    {
+      "path": "apps/core/noname/library/zhanfa.js",
+      "sha256": "f0105001bb2078089b3355f99e1d1e4ea6388801ace64f5eeddffe0d4343f1e1"
+    },
+    {
+      "path": "apps/core/noname/library/update.js",
+      "sha256": "eac89b09245fe8c1e9baff070fcb99a7bb125f93dff6fd7a51e1785e86bd0159"
+    },
+    {
+      "path": "apps/core/noname/library/skill.js",
+      "sha256": "d21356bbe6a5ee8768f2295f9c4572c3411f69343dc1b574a639ab3bd20742d6"
+    },
+    {
+      "path": "apps/core/noname/library/index.js",
+      "sha256": "49bf9ca0017c8de8d061ed8aedca908c911cb07bf8830fd2840efce51bf2df09"
+    },
+    {
+      "path": "apps/core/noname/library/poptip.js",
+      "sha256": "7191f1fca020f5e80168cb183a4a4e02ca2147b9fc3785ba227285a7eab8a7ef"
+    },
+    {
+      "path": "apps/core/noname/library/init/promises.js",
+      "sha256": "0a912492f10097eb16b2d20d69e892bd6d38d3757653d5067f8c8483e456b1e6"
+    },
+    {
+      "path": "apps/core/noname/library/init/index.js",
+      "sha256": "19c940d29780e98f3b68bf302567879068238091359bf13f249ca0b0e52778c8"
+    },
+    {
+      "path": "apps/core/noname/library/experimental/symbol.js",
+      "sha256": "445b8d24fdac186cad7387b3c388489792d5539ef52aac3e8bf2561307ee3399"
+    },
+    {
+      "path": "apps/core/noname/library/experimental/index.js",
+      "sha256": "19de7cad30a9f7efbf7f4548248f17954afb9198d8e2ecc61e666187f2be42d2"
+    },
+    {
+      "path": "apps/core/noname/library/announce/index.js",
+      "sha256": "cac4ade5415bdb751ab601f83b794bc6ded6b3d25eaf694b84bd31fef1d76fab"
+    },
+    {
+      "path": "apps/core/noname/library/cache/childNodesWatcher.js",
+      "sha256": "4fb5fd07f210bbb1d96e9a5e4571b4d75acacf1e0b71f0dc289e99e564ac7b10"
+    },
+    {
+      "path": "apps/core/noname/library/cache/cacheContext.js",
+      "sha256": "2468f5de08f16d1c5490acf01676a71466e29ed2b77c140aaa074198135d93ab"
+    },
+    {
+      "path": "apps/core/noname/library/element/client.js",
+      "sha256": "d1dbbb1c3354bc9224e31d5191803cf7237377bed8c47339c061f25441183d3f"
+    },
+    {
+      "path": "apps/core/noname/library/element/control.js",
+      "sha256": "e4af81a3674c27b104c9b03b3b81e9fc1428419b374b2e70468441f59dd2727d"
+    },
+    {
+      "path": "apps/core/noname/library/element/dialog.js",
+      "sha256": "24893150df03829703e56c3156f63c784d536f42d1168d77674a167124521b03"
+    },
+    {
+      "path": "apps/core/noname/library/element/index.js",
+      "sha256": "8a0245cf4988aad5b3361f46accadb529e83a742aadc2b21f05b0e5f19e5848d"
+    },
+    {
+      "path": "apps/core/noname/library/element/content.ts",
+      "sha256": "09951b61fe8d9199ed1eb8b373faaf206d683e24b2a93a75ffc2259330891e6c"
+    },
+    {
+      "path": "apps/core/noname/library/element/gameEvent.ts",
+      "sha256": "9a777f0f88f46d706bb6539c8ea2ae09c87d90e5ffad43c289e1a8423a2be4b8"
+    },
+    {
+      "path": "apps/core/noname/library/element/vcard.js",
+      "sha256": "fa7dd2b7d239847553a1df50bf11f46a6bd379bcbdb68af30190437d65ce9c5c"
+    },
+    {
+      "path": "apps/core/noname/library/element/player.js",
+      "sha256": "9ec265664ffa48750bc4117e3204bffe367679b6d260a23254fa14d2fc3163d4"
+    },
+    {
+      "path": "apps/core/noname/library/element/button.js",
+      "sha256": "a6d14019e080385e37e8419850ee70c13960472b7e8b0d3c030e938db8ea0f09"
+    },
+    {
+      "path": "apps/core/noname/library/element/nodeWS.js",
+      "sha256": "20eab687e449241b59a2497b6266aef7e4f4429a17e4db25583d73011b96642a"
+    },
+    {
+      "path": "apps/core/noname/library/element/card.js",
+      "sha256": "5d3a07fadafa1c5661ec197edb8c71f613b3db1129933fdf7d8aa311f5811f8d"
+    },
+    {
+      "path": "apps/core/noname/library/element/character.js",
+      "sha256": "7000dd85430ac98dca105b14614686f5eed6912185a2ab470e315a5f7edc1438"
+    },
+    {
+      "path": "apps/core/noname/library/element/GameEvent/GameEventManager.ts",
+      "sha256": "ee362deb9e4b6571b82cbf9caa63e348d2ab4810ca1c163815e1ab783bfc3183"
+    },
+    {
+      "path": "apps/core/noname/library/element/GameEvent/compilers/ContentCompiler.ts",
+      "sha256": "025d00a5e6060ed3173e0091465e54e7bb1e3d69c040816438bb57c5bccf9a45"
+    },
+    {
+      "path": "apps/core/noname/library/element/GameEvent/compilers/AsyncCompiler.ts",
+      "sha256": "ec41f2d2089d941861f0be34bd894f4f67a5f2e1359bb9cd611861710bf57e4e"
+    },
+    {
+      "path": "apps/core/noname/library/element/GameEvent/compilers/IContentCompiler.ts",
+      "sha256": "501517544c1caf3dd0eac156da26f7ec6428fa4366733edba8ec0516496f6eab"
+    },
+    {
+      "path": "apps/core/noname/library/element/GameEvent/compilers/ArrayCompiler.ts",
+      "sha256": "78d495e8871751bc38749775c1b402f810e234547ab4e6a12565160d4950853e"
+    },
+    {
+      "path": "apps/core/noname/library/element/GameEvent/compilers/ContentCompilerBase.ts",
+      "sha256": "ea0174cdbc2ce664532335df11e120efa45b5c35253ecba5f28a73e0271c6cee"
+    },
+    {
+      "path": "apps/core/noname/library/element/GameEvent/compilers/StepCompiler.ts",
+      "sha256": "44da634f4d8d856a2fc9daef1f77f3e4acde2853ebb666af859d05ba892580a9"
+    },
+    {
+      "path": "apps/core/noname/library/element/Player/type.d.ts",
+      "sha256": "4ae0092867dc9216c8c4f7f6575eded6279785939f268f3841c7a36515239aae"
+    },
+    {
+      "path": "apps/core/noname/library/hooks/index.ts",
+      "sha256": "4046f9dcdd71108e726386176ad2b02794640b040471269ffcebaaa6d9ee9ff3"
+    },
+    {
+      "path": "apps/core/noname/library/fs/errors.ts",
+      "sha256": "31554273929f73de4c1efa3ef11e0d817fbb1de20f1e84314a5c0d66d78b928a"
+    },
+    {
+      "path": "apps/core/noname/library/fs/types.ts",
+      "sha256": "0a3a049cafc18f6f671e5d586d4905544924e3f13b7f15555fb5081a7a0549aa"
+    },
+    {
+      "path": "apps/core/noname/library/fs/adapter.ts",
+      "sha256": "e809f7082652f1db1ca9d046e2f57f8e3f0841c6d7cf70819045a0a02a17c498"
+    },
+    {
+      "path": "apps/core/noname/library/fs/handle.ts",
+      "sha256": "0a14fa4fedea5060c8b9ae7bd6d2e8ac584d775e675a2ea34a56fbeb5b395074"
+    },
+    {
+      "path": "apps/core/noname/library/fs/index.ts",
+      "sha256": "81a6f72fad4f426bf1e52fb1e9ba6291d0f9f0407e14458c648cebdbf5579438"
+    },
+    {
+      "path": "apps/core/noname/library/fs/legacy.ts",
+      "sha256": "6f6789b64668525d11099e74810d21070b348c06d7328ca62026c1b3e154aef7"
+    },
+    {
+      "path": "apps/core/noname/library/help/game-controls.ts",
+      "sha256": "cfd12577ea339e71bb1e4674117a734def5a5d6321a825038dd372d79889cb08"
+    },
+    {
+      "path": "apps/core/noname/library/help/about-game.ts",
+      "sha256": "0de7f0be834082a0ca270f887be972c8ccd1768db8472c90e1107d48fcb17463"
+    },
+    {
+      "path": "apps/core/noname/library/help/index.ts",
+      "sha256": "0d3591160f1827b2716ad6ec16fdbcfef53e6243a450997a563bd1fefeb4e9e1"
+    },
+    {
+      "path": "apps/core/noname/library/help/game-api.ts",
+      "sha256": "bc3539ce101f86ead8d818038766a13469ae4eeefc1d44e212beb151e67bfc5b"
+    },
+    {
+      "path": "apps/core/noname/game/promises.js",
+      "sha256": "96376bafa7b73096f951477830c46535b1aa57e229055eb9bdb92586e6239e76"
+    },
+    {
+      "path": "apps/core/noname/game/index.js",
+      "sha256": "da122319d82a384c8ef4ad501870657533a52d24b753a4bd46680e2a4ecd9d5c"
+    },
+    {
+      "path": "apps/core/noname/game/check.js",
+      "sha256": "802b65210f6dc7eb76e22af82e8f95706b445f9c3b15c297750f6202ec287c9d"
+    },
+    {
+      "path": "apps/core/noname/game/PauseManager.ts",
+      "sha256": "84781f873eb2864b001b179ed70eadab3d0c8134a200eb0b658f5f529aa88e97"
+    },
+    {
+      "path": "apps/core/noname/game/connect-url.js",
+      "sha256": "d06df98df7103e1543c6df06a852de09ed80d1381fda7033abb910dbdcc0388a"
+    },
+    {
+      "path": "apps/core/noname/game/dynamic-style/index.js",
+      "sha256": "017e5191f0472e3b77e2848e1415fbe49c891a3f5201128c3b521b5c442c92af"
+    },
+    {
+      "path": "apps/core/noname/status/index.js",
+      "sha256": "96a6298500c6630d10accb4f230819bcddb83acbad5089fdf825564d8ded9612"
+    },
+    {
+      "path": "apps/core/noname/ai/index.js",
+      "sha256": "b2b2839fc5decccf12517fcaccdc0d1f50d9f8a030c1959dbd7ce31ba7dff0d8"
+    },
+    {
+      "path": "apps/core/noname/ai/basic.js",
+      "sha256": "c32e43e690563d685929838635a40878baeb3333f52a2f585638fbe37655d83d"
+    },
+    {
+      "path": "packages/fs/pnpm-lock.yaml",
+      "sha256": "7d0b7563f7d866236734d33706b23ddbf9d08ded94e4c5be3dfb252ffd36f077"
+    },
+    {
+      "path": "packages/fs/README.md",
+      "sha256": "d60706c91b766796a4ba16ef882d756e8f5bc39ecf189cc3b0bfff3a2bcbb744"
+    },
+    {
+      "path": "packages/fs/package.json",
+      "sha256": "c0907c6104c7f88b621ed4933b8aac7be3632baba9448e8265c95182f9e39d09"
+    },
+    {
+      "path": "packages/fs/tsup.config.ts",
+      "sha256": "10860f0601349f59bd59f3ca14e53fb78e2ef901c6abe0233f4264ba638d2f1d"
+    },
+    {
+      "path": "packages/fs/sea-config.json",
+      "sha256": "1b04bc6319895756e09b0d0252679c143c19b0e1b11c64ee84490783bf65932f"
+    },
+    {
+      "path": "packages/fs/build.ts",
+      "sha256": "d255c7517808bf4a95c58e14ca4ffcbdfa7b9c2091992f3ed1c84b676d4784a4"
+    },
+    {
+      "path": "packages/fs/src/entry.ts",
+      "sha256": "7fbf22f193d88d3662562813b8b197b8ad907006f10da00491ef8368eb5e3ed6"
+    },
+    {
+      "path": "packages/fs/src/index.ts",
+      "sha256": "fc9dd879bb060f3854c7880bc9871d7500e575f01ad9bc5958264fe28aae5314"
+    },
+    {
+      "path": "packages/jit/pnpm-lock.yaml",
+      "sha256": "9bb94bc51304935d65fe3e5ca747420bcca10c1c5a3bb6407c862c103011dabe"
+    },
+    {
+      "path": "packages/jit/package.json",
+      "sha256": "1c7d39500d3d6d3aa3a4df43b801d639a15135a7d138fa618fcce3ecec7efeec"
+    },
+    {
+      "path": "packages/jit/build.ts",
+      "sha256": "f71a6a40f28b5e6635aa52b5a0e026a0e45860723084a0733650a9bb72d351dc"
+    },
+    {
+      "path": "packages/jit/public/jit-test.ts",
+      "sha256": "de19bf7614f4955540bbe6febcaa3fcb851b7f88bdf9266b7881a30053dd2a54"
+    },
+    {
+      "path": "packages/jit/src/entry.ts",
+      "sha256": "715e0ba85d84c41839f30b7035cc6d8b50a22f5c0c7fd7a9010723ea4aaa37d6"
+    },
+    {
+      "path": "packages/jit/src/index.ts",
+      "sha256": "04b80a8c9ae5926e0ca16da19c2481f905742271e9cf3ab28c2c9b40c0006ee6"
+    },
+    {
+      "path": "packages/jit/src/service-worker/ts-compiler.ts",
+      "sha256": "44240ef3640b3a432ed0a88b76eee4366976b099779977a595eed4dbca690c76"
+    },
+    {
+      "path": "packages/jit/src/service-worker/index.ts",
+      "sha256": "87ad6f70628765ce34b28d06a2c07f83e34e81cbfddfdbfef62e90b975c313bb"
+    },
+    {
+      "path": "packages/jit/src/service-worker/compile-strategy.ts",
+      "sha256": "5530d5a7dc7335351fb99d4b328796a1041b1c450b254f1cacf3e1e5c2f83917"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "891d106409f54b08ee8acea9e5c9440784b9fc6ca40e82bdab4e5edda0e955af"
+    },
+    {
+      "path": "apps/core/mode/guozhan/src/help/App.vue",
+      "sha256": "e3b45912b860fb30fbcd3e2b292b745fbcc3104f9146b9f6b26f24c4de630fdf"
+    },
+    {
+      "path": "apps/core/noname/init/onload/OnloadSplash.vue",
+      "sha256": "9dc7801a2b8294b5a599d33feaea364e96e3a414b008b5027f0031b7264befc6"
+    },
+    {
+      "path": "apps/core/noname/ui/create/menu/views/index.vue",
+      "sha256": "6faf318d85bc5b43ffa4a6a3efec410a13a0dd593fce3c9c09df9ddac621ed13"
+    },
+    {
+      "path": "apps/core/noname/library/help/GamePoptip.vue",
+      "sha256": "bda14344d2badbda496bf7e8edb24f45227076941753241c28744249e669fa4c"
+    }
+  ],
+  "excluded_spine": true,
+  "scope": "Runtime-only fixture work; no maintained product source or inventory is changed."
+}

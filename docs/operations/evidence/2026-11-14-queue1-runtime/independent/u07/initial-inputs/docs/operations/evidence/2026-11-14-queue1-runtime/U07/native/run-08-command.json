@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-13T18:13:33.622997+00:00",
+  "command": "CARGO_TARGET_DIR=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target NONAME_REPO_ROOT=/Users/ruyimg/Documents/Claude/sanguosha/noname-next U07_ARCHIVE_DIR=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives cargo run --offline --manifest-path /private/tmp/noname-queue1-u07-native/Cargo.toml",
+  "stdout": "08-isolated.log",
+  "stderr": "08-isolated.stderr",
+  "source": "probe-08.rs",
+  "reason": "initial existing backup sha branches, same source; fixed browser onfree fixture isolation independently"
+}

@@ -1,0 +1,77 @@
+{
+  "at": "2026-11-13T18:14:14.498149+00:00",
+  "refs": [
+    {
+      "path": "../../../../../../archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js",
+      "line": 422,
+      "meaning": "youzhan trigger/filter/cost/content",
+      "sha256": "e3d3256f6428eba85beed87a4d293d6063da7d8893e8da0def08d0bc89081076"
+    },
+    {
+      "path": "../../../../../../archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js",
+      "line": 508,
+      "meaning": "fuchou gift/cancel",
+      "sha256": "e3d3256f6428eba85beed87a4d293d6063da7d8893e8da0def08d0bc89081076"
+    },
+    {
+      "path": "../../../../../../archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js",
+      "line": 548,
+      "meaning": "fuchou2 delayed draw + immediate pre-draw hasSha/chooseToUse or loseHp",
+      "sha256": "e3d3256f6428eba85beed87a4d293d6063da7d8893e8da0def08d0bc89081076"
+    },
+    {
+      "path": "../../../../../../archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js",
+      "line": 586,
+      "meaning": "choudu useCard for all alive players",
+      "sha256": "e3d3256f6428eba85beed87a4d293d6063da7d8893e8da0def08d0bc89081076"
+    },
+    {
+      "path": "../../../../../../archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js",
+      "line": 4,
+      "meaning": "diaobingqianjiang draw/reveal/swap/final deck-top choices",
+      "sha256": "a9f8dd509ee32aabdc52a664e2f2ce753b0ec5ee2a07da625842a7a0cc5f8ccf"
+    },
+    {
+      "path": "../../../../../../archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js",
+      "line": 169,
+      "meaning": "youdishenru cancel attack/repeat actual sha/damage on refusal",
+      "sha256": "a9f8dd509ee32aabdc52a664e2f2ce753b0ec5ee2a07da625842a7a0cc5f8ccf"
+    },
+    {
+      "path": "../../../../../crates/engine-native-kernel/src/kernel/sha/resume.rs",
+      "line": 58,
+      "meaning": "fuchou returns original attack card and transfers cost",
+      "sha256": "dbea7f6af994ec5caa3ff3f5532e5f6f4838def8e7c6777555b863668981e7bd"
+    },
+    {
+      "path": "../../../../../crates/engine-native-content/src/content/host/step/wudian_status.rs",
+      "line": 124,
+      "meaning": "fuchou2 draws then automatic virtual sha",
+      "sha256": "dced5e21f44f3bfd7061f6bff079c715602ccd0beac9e79db4829d51d5b59e9b"
+    },
+    {
+      "path": "../../../../../crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+      "line": 439,
+      "meaning": "youzhan original cancellation and counter sha",
+      "sha256": "6f4a42562c201f37b508195abac226eb3e3839a74468b21347e1f772e9164e22"
+    },
+    {
+      "path": "../../../../../crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+      "line": 572,
+      "meaning": "choudu cost/target with only selected target passed to Diaobing",
+      "sha256": "6f4a42562c201f37b508195abac226eb3e3839a74468b21347e1f772e9164e22"
+    },
+    {
+      "path": "../../../../../crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+      "line": 718,
+      "meaning": "diaobing fixed first market card; remaining cards discarded",
+      "sha256": "6f4a42562c201f37b508195abac226eb3e3839a74468b21347e1f772e9164e22"
+    },
+    {
+      "path": "../../../../../../archive/upstream/noname/apps/core/extension/玩点论杀/card/list.js",
+      "line": 25,
+      "meaning": "upstream physical Diaobing cards heart4/diamond4 exist in list; native formal catalog has none",
+      "sha256": "b76bb05416a8bd1065e35e2d00fd005512481dc9a7655e0fab70f8a0d8aa84af"
+    }
+  ]
+}

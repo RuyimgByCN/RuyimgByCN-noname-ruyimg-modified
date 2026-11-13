@@ -1,0 +1,184 @@
+{
+  "rows": [
+    {
+      "case": "q_A",
+      "initial_equal": true,
+      "direct_commands_requests_replies_states_logs_equal": true,
+      "direct_final_equal": true,
+      "direct_final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "q_B",
+      "initial_equal": true,
+      "direct_commands_requests_replies_states_logs_equal": true,
+      "direct_final_equal": true,
+      "direct_final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "q_target_B",
+      "initial_equal": true,
+      "direct_commands_requests_replies_states_logs_equal": true,
+      "direct_final_equal": true,
+      "direct_final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "q_cancel_initial",
+      "initial_equal": true,
+      "direct_commands_requests_replies_states_logs_equal": true,
+      "direct_final_equal": true,
+      "direct_final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "q_cancel_target",
+      "initial_equal": true,
+      "direct_commands_requests_replies_states_logs_equal": true,
+      "direct_final_equal": true,
+      "direct_final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "q_cancel_suit_attempt",
+      "initial_equal": true,
+      "direct_commands_requests_replies_states_logs_equal": true,
+      "direct_final_equal": true,
+      "direct_final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "q_no_hand",
+      "initial_equal": true,
+      "direct_commands_requests_replies_states_logs_equal": true,
+      "direct_final_equal": true,
+      "direct_final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "j_active_gain",
+      "initial_equal": true,
+      "direct_commands_requests_replies_states_logs_equal": true,
+      "direct_final_equal": true,
+      "direct_final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "j_active_cancel_gain",
+      "initial_equal": true,
+      "direct_commands_requests_replies_states_logs_equal": true,
+      "direct_final_equal": true,
+      "direct_final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "j_active_facedown",
+      "initial_equal": true,
+      "direct_commands_requests_replies_states_logs_equal": true,
+      "direct_final_equal": true,
+      "direct_final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "j_no_skill",
+      "initial_equal": true,
+      "direct_commands_requests_replies_states_logs_equal": true,
+      "direct_final_equal": true,
+      "direct_final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "j_damage_back_accept_gain",
+      "initial_equal": true,
+      "direct_commands_requests_replies_states_logs_equal": true,
+      "direct_final_equal": true,
+      "direct_final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "j_damage_back_cancel",
+      "initial_equal": true,
+      "direct_commands_requests_replies_states_logs_equal": true,
+      "direct_final_equal": true,
+      "direct_final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "j_damage_faceup",
+      "initial_equal": true,
+      "direct_commands_requests_replies_states_logs_equal": true,
+      "direct_final_equal": true,
+      "direct_final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "f_skill_A",
+      "initial_equal": true,
+      "direct_commands_requests_replies_states_logs_equal": true,
+      "direct_final_equal": true,
+      "direct_final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "f_ban_B",
+      "initial_equal": true,
+      "direct_commands_requests_replies_states_logs_equal": true,
+      "direct_final_equal": true,
+      "direct_final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "f_target_B",
+      "initial_equal": true,
+      "direct_commands_requests_replies_states_logs_equal": true,
+      "direct_final_equal": true,
+      "direct_final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "f_cancel_target",
+      "initial_equal": true,
+      "direct_commands_requests_replies_states_logs_equal": true,
+      "direct_final_equal": true,
+      "direct_final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "f_last_target",
+      "initial_equal": true,
+      "direct_commands_requests_replies_states_logs_equal": true,
+      "direct_final_equal": true,
+      "direct_final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "f_self_attempt",
+      "initial_equal": true,
+      "direct_commands_requests_replies_states_logs_equal": true,
+      "direct_final_equal": true,
+      "direct_final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "f_cancel_mode_attempt",
+      "initial_equal": true,
+      "direct_commands_requests_replies_states_logs_equal": true,
+      "direct_final_equal": true,
+      "direct_final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "f_no_skill",
+      "initial_equal": true,
+      "direct_commands_requests_replies_states_logs_equal": true,
+      "direct_final_equal": true,
+      "direct_final_ngsa_bytes_equal": true
+    }
+  ],
+  "all22_initial_direct_commands_and_final_archives_equal": true,
+  "runtime_pack_metadata_and_content_lock_equal": true,
+  "metadata_before": {
+    "content_lock": 14312970378986227901,
+    "pack_cards": 0,
+    "pack_enabled": true,
+    "pack_host_skills": 6,
+    "pack_name": "longxue-upstream-liuli",
+    "pack_version": 1,
+    "pack_vm_skills": 0,
+    "seats": 4,
+    "seed": 202611140029,
+    "snapshot_bound_ruleset_version": 14312970378986228208
+  },
+  "metadata_after": {
+    "content_lock": 14312970378986227901,
+    "pack_cards": 0,
+    "pack_enabled": true,
+    "pack_host_skills": 6,
+    "pack_name": "longxue-upstream-liuli",
+    "pack_version": 1,
+    "pack_vm_skills": 0,
+    "seats": 4,
+    "seed": 202611140029,
+    "snapshot_bound_ruleset_version": 14312970378986228208
+  }
+}

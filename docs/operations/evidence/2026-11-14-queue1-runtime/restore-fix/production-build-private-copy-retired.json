@@ -1,0 +1,9 @@
+{
+  "at": "2026-11-14T02:23:20.991428+08:00",
+  "manifest": "production-build-output-and-restore.json",
+  "private_copy": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-q1-jiushi-production-build-0xjllivn/dist",
+  "all_build_hashes_verified_before_removal": true,
+  "bytes_retired": 64674147,
+  "removed": true,
+  "scope": "Only this batch private copy retired after build/output validation; original tracked dist restored and source/native-pkg retained."
+}

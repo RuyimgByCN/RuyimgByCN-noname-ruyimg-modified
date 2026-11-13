@@ -1,0 +1,87 @@
+﻿2026-11-13T17:41:25.1560108Z ##[group]Run Swatinem/rust-cache@v2
+2026-11-13T17:41:25.1560525Z with:
+2026-11-13T17:41:25.1560844Z   workspaces: noname-next
+2026-11-13T17:41:25.1561162Z   prefix-key: v0-rust
+2026-11-13T17:41:25.1561483Z   add-job-id-key: true
+2026-11-13T17:41:25.1561800Z   add-rust-environment-hash-key: true
+2026-11-13T17:41:25.1562432Z   cache-targets: true
+2026-11-13T17:41:25.1562749Z   cache-all-crates: false
+2026-11-13T17:41:25.1563071Z   cache-workspace-crates: false
+2026-11-13T17:41:25.1563537Z   save-if: true
+2026-11-13T17:41:25.1563827Z   cache-provider: github
+2026-11-13T17:41:25.1564138Z   cache-bin: true
+2026-11-13T17:41:25.1564453Z   lookup-only: false
+2026-11-13T17:41:25.1564739Z   cmd-format: {0}
+2026-11-13T17:41:25.1565008Z env:
+2026-11-13T17:41:25.1565289Z   CARGO_TERM_COLOR: always
+2026-11-13T17:41:25.1565647Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T17:41:25.1565990Z   CARGO_INCREMENTAL: 0
+2026-11-13T17:41:25.1566274Z ##[endgroup]
+2026-11-13T17:41:29.2897927Z ##[group]Cache Configuration
+2026-11-13T17:41:29.2899611Z Cache Provider:
+2026-11-13T17:41:29.2901800Z     github
+2026-11-13T17:41:29.2902429Z Workspaces:
+2026-11-13T17:41:29.2903476Z     /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next
+2026-11-13T17:41:29.2904364Z Cache Paths:
+2026-11-13T17:41:29.2904844Z     /home/runner/.cargo/bin
+2026-11-13T17:41:29.2905519Z     /home/runner/.cargo/.crates.toml
+2026-11-13T17:41:29.2906199Z     /home/runner/.cargo/.crates2.json
+2026-11-13T17:41:29.2906880Z     /home/runner/.cargo/registry
+2026-11-13T17:41:29.2907522Z     /home/runner/.cargo/git
+2026-11-13T17:41:29.2908460Z     /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/target
+2026-11-13T17:41:29.2909484Z Restore Key:
+2026-11-13T17:41:29.2910120Z     v0-rust-desktop-Linux-x64-2fd77104
+2026-11-13T17:41:29.2910737Z Cache Key:
+2026-11-13T17:41:29.2911302Z     v0-rust-desktop-Linux-x64-2fd77104-fbf8b572
+2026-11-13T17:41:29.2912161Z .. Prefix:
+2026-11-13T17:41:29.2912756Z   - v0-rust-desktop-Linux-x64
+2026-11-13T17:41:29.2913364Z .. Environment considered:
+2026-11-13T17:41:29.2914198Z   - Rust Versions:
+2026-11-13T17:41:29.2914820Z     - 1.100.0 x86_64-unknown-linux-gnu 0ef1bc386059596dada8fb65b50425aab2ea637a
+2026-11-13T17:41:29.2915523Z   - CARGO_HOME
+2026-11-13T17:41:29.2915901Z   - CARGO_INCREMENTAL
+2026-11-13T17:41:29.2916309Z   - CARGO_TERM_COLOR
+2026-11-13T17:41:29.2916836Z .. Lockfiles considered:
+2026-11-13T17:41:29.2917826Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/apps/benchmark-runner/Cargo.toml
+2026-11-13T17:41:29.2919419Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/apps/content-cli/Cargo.toml
+2026-11-13T17:41:29.2920943Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/apps/desktop-client/Cargo.toml
+2026-11-13T17:41:29.2922666Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/apps/engine-cli/Cargo.toml
+2026-11-13T17:41:29.2924231Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/apps/extension-studio/Cargo.toml
+2026-11-13T17:41:29.2925798Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/apps/game-server/Cargo.toml
+2026-11-13T17:41:29.2927238Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/Cargo.lock
+2026-11-13T17:41:29.2928711Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/accessibility-schema/Cargo.toml
+2026-11-13T17:41:29.2929977Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/conformance/Cargo.toml
+2026-11-13T17:41:29.2930914Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/content-compiler/Cargo.toml
+2026-11-13T17:41:29.2932521Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/content-native-loader/Cargo.toml
+2026-11-13T17:41:29.2933865Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/content-runtime/Cargo.toml
+2026-11-13T17:41:29.2935110Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/content-schema/Cargo.toml
+2026-11-13T17:41:29.2936536Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/devtools/Cargo.toml
+2026-11-13T17:41:29.2938050Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/diagnostics/Cargo.toml
+2026-11-13T17:41:29.2939821Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-ai/Cargo.toml
+2026-11-13T17:41:29.2941703Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-api/Cargo.toml
+2026-11-13T17:41:29.2943669Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-core/Cargo.toml
+2026-11-13T17:41:29.2945450Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-native-content/Cargo.toml
+2026-11-13T17:41:29.2947115Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-native-kernel/Cargo.toml
+2026-11-13T17:41:29.2948614Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-native-wasm/Cargo.toml
+2026-11-13T17:41:29.2950132Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-native/Cargo.toml
+2026-11-13T17:41:29.2951623Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-protocol/Cargo.toml
+2026-11-13T17:41:29.2953321Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-wasm/Cargo.toml
+2026-11-13T17:41:29.2954797Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/legacy-analyzer/Cargo.toml
+2026-11-13T17:41:29.2956263Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/licensing-schema/Cargo.toml
+2026-11-13T17:41:29.2957747Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/resource-compiler/Cargo.toml
+2026-11-13T17:41:29.2959487Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/resource-schema/Cargo.toml
+2026-11-13T17:41:29.2961048Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/rule-api/Cargo.toml
+2026-11-13T17:41:29.2962507Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/rule-vm/Cargo.toml
+2026-11-13T17:41:29.2964095Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/packages/renderer-runtime/Cargo.toml
+2026-11-13T17:41:29.2965802Z   - /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/packages/resource-runtime/Cargo.toml
+2026-11-13T17:41:29.2967407Z ##[endgroup]
+2026-11-13T17:41:29.2967688Z 
+2026-11-13T17:41:29.2967879Z ... Restoring cache ...
+2026-11-13T17:41:29.4187000Z Cache hit for: v0-rust-desktop-Linux-x64-2fd77104-fbf8b572
+2026-11-13T17:41:30.5346977Z Received 134217728 of 432015784 (31.1%), 128.0 MBs/sec
+2026-11-13T17:41:31.5351571Z Received 343932928 of 432015784 (79.6%), 164.0 MBs/sec
+2026-11-13T17:41:31.9303701Z Received 432015784 of 432015784 (100.0%), 172.0 MBs/sec
+2026-11-13T17:41:31.9305246Z Cache Size: ~412 MB (432015784 B)
+2026-11-13T17:41:31.9333718Z [command]/usr/bin/tar -xf /home/runner/work/_temp/9fa6f395-b9ea-4cfc-9948-cdf4fe25c584/cache.tzst -P -C /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified --use-compress-program unzstd
+2026-11-13T17:41:36.6400609Z Cache restored successfully
+2026-11-13T17:41:36.6592697Z Restored from cache key "v0-rust-desktop-Linux-x64-2fd77104-fbf8b572" full match: true.

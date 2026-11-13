@@ -1,0 +1,9 @@
+{
+  "at": "2026-11-13T18:08:16.059396+00:00",
+  "added": [
+    "choudu-top-return: actual final pool card returned to deck top",
+    "fuchou-settle-draw-sha-use: actual drawn sha used on marked attacker",
+    "youzhan-counter-dodge-stop: counter sha dodged, attacker declines repeated required sha"
+  ],
+  "change": "additional actual choices, without changing rule functions; compare only after native23-case log is available"
+}

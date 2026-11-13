@@ -1,0 +1,938 @@
+{
+  "at": "2026-11-13T18:00:20.677121+00:00",
+  "native_directory": "native-round4",
+  "browser_directory": "browser-round8",
+  "case_count": 22,
+  "projection_checks_passed": 22,
+  "restore_attempts": 68,
+  "restore_successful_attempts": 58,
+  "restore_failed_attempts": 10,
+  "cases_with_restore_failure": [
+    "j_active_gain",
+    "j_active_cancel_gain",
+    "j_damage_back_accept_gain",
+    "j_damage_back_cancel"
+  ],
+  "semantic_equivalence_signed": false,
+  "rows": [
+    {
+      "case": "q_A",
+      "browser_file": "browser-round8/upstream-q_A.json",
+      "native_file": "native-round4/native-q_A.json",
+      "projection_checks": {
+        "upstream_runner_completed": true,
+        "all_four_initial_fixtures_checked": true,
+        "native_fixture_same_as_browser_input": true,
+        "final_hp": true,
+        "final_max_hp": true,
+        "final_face_down": true,
+        "final_hand_id_name_suit_rank_nature_multiset": true,
+        "final_equip_id_name_suit_rank_nature_multiset": true
+      },
+      "differences": [
+        {
+          "kind": "owner_payment_timing",
+          "upstream_owner_hand": [
+            51
+          ],
+          "native_owner_hand": [
+            85,
+            114,
+            51
+          ]
+        },
+        {
+          "kind": "damage_source",
+          "upstream": [
+            {
+              "method": "damage_created",
+              "seat": 1,
+              "source": 0,
+              "amount": 1
+            }
+          ],
+          "native": [
+            "DamageDealt { source: None, target: 1, amount: 1, redirected_from: [], card: None, presentation: Some(DamageDealt { source: None, target: PlayerId(2), amount: 1, nature: Normal }) }"
+          ]
+        }
+      ],
+      "restore": {
+        "direct_checkpoints": 4,
+        "successful_attempts": 8,
+        "failed_attempts": 0,
+        "errors": [],
+        "all_successful_snapshots_equal_except_auth_generation": true,
+        "final_snapshot_equal_except_auth_generation_if_all_restores_succeeded": true,
+        "final_ngsa_bytes_equal": false,
+        "final_state_hash_equal": true
+      },
+      "spent_fixture_cards_in_upstream_discard": [
+        8,
+        85,
+        114
+      ],
+      "spent_fixture_cards_in_native_discard": [
+        8,
+        85,
+        114
+      ],
+      "unmapped_initial_deck_count": 17,
+      "native_initial_discard_count": 16,
+      "upstream_initial_discard_count": 10
+    },
+    {
+      "case": "q_B",
+      "browser_file": "browser-round8/upstream-q_B.json",
+      "native_file": "native-round4/native-q_B.json",
+      "projection_checks": {
+        "upstream_runner_completed": true,
+        "all_four_initial_fixtures_checked": true,
+        "native_fixture_same_as_browser_input": true,
+        "final_hp": true,
+        "final_max_hp": true,
+        "final_face_down": true,
+        "final_hand_id_name_suit_rank_nature_multiset": true,
+        "final_equip_id_name_suit_rank_nature_multiset": true
+      },
+      "differences": [
+        {
+          "kind": "owner_payment_timing",
+          "upstream_owner_hand": [
+            114,
+            85
+          ],
+          "native_owner_hand": [
+            85,
+            114,
+            51
+          ]
+        }
+      ],
+      "restore": {
+        "direct_checkpoints": 4,
+        "successful_attempts": 8,
+        "failed_attempts": 0,
+        "errors": [],
+        "all_successful_snapshots_equal_except_auth_generation": true,
+        "final_snapshot_equal_except_auth_generation_if_all_restores_succeeded": true,
+        "final_ngsa_bytes_equal": false,
+        "final_state_hash_equal": true
+      },
+      "spent_fixture_cards_in_upstream_discard": [
+        51,
+        69,
+        105
+      ],
+      "spent_fixture_cards_in_native_discard": [
+        51,
+        69,
+        105
+      ],
+      "unmapped_initial_deck_count": 17,
+      "native_initial_discard_count": 16,
+      "upstream_initial_discard_count": 10
+    },
+    {
+      "case": "q_target_B",
+      "browser_file": "browser-round8/upstream-q_target_B.json",
+      "native_file": "native-round4/native-q_target_B.json",
+      "projection_checks": {
+        "upstream_runner_completed": true,
+        "all_four_initial_fixtures_checked": true,
+        "native_fixture_same_as_browser_input": true,
+        "final_hp": true,
+        "final_max_hp": true,
+        "final_face_down": true,
+        "final_hand_id_name_suit_rank_nature_multiset": true,
+        "final_equip_id_name_suit_rank_nature_multiset": true
+      },
+      "differences": [
+        {
+          "kind": "owner_payment_timing",
+          "upstream_owner_hand": [
+            51
+          ],
+          "native_owner_hand": [
+            85,
+            114,
+            51
+          ]
+        },
+        {
+          "kind": "damage_source",
+          "upstream": [
+            {
+              "method": "damage_created",
+              "seat": 2,
+              "source": 0,
+              "amount": 1
+            }
+          ],
+          "native": [
+            "DamageDealt { source: None, target: 2, amount: 1, redirected_from: [], card: None, presentation: Some(DamageDealt { source: None, target: PlayerId(3), amount: 1, nature: Normal }) }"
+          ]
+        }
+      ],
+      "restore": {
+        "direct_checkpoints": 4,
+        "successful_attempts": 8,
+        "failed_attempts": 0,
+        "errors": [],
+        "all_successful_snapshots_equal_except_auth_generation": true,
+        "final_snapshot_equal_except_auth_generation_if_all_restores_succeeded": true,
+        "final_ngsa_bytes_equal": false,
+        "final_state_hash_equal": true
+      },
+      "spent_fixture_cards_in_upstream_discard": [
+        24,
+        85,
+        114
+      ],
+      "spent_fixture_cards_in_native_discard": [
+        24,
+        85,
+        114
+      ],
+      "unmapped_initial_deck_count": 17,
+      "native_initial_discard_count": 16,
+      "upstream_initial_discard_count": 10
+    },
+    {
+      "case": "q_cancel_initial",
+      "browser_file": "browser-round8/upstream-q_cancel_initial.json",
+      "native_file": "native-round4/native-q_cancel_initial.json",
+      "projection_checks": {
+        "upstream_runner_completed": true,
+        "all_four_initial_fixtures_checked": true,
+        "native_fixture_same_as_browser_input": true,
+        "final_hp": true,
+        "final_max_hp": true,
+        "final_face_down": true,
+        "final_hand_id_name_suit_rank_nature_multiset": true,
+        "final_equip_id_name_suit_rank_nature_multiset": true
+      },
+      "differences": [],
+      "restore": {
+        "direct_checkpoints": 1,
+        "successful_attempts": 2,
+        "failed_attempts": 0,
+        "errors": [],
+        "all_successful_snapshots_equal_except_auth_generation": true,
+        "final_snapshot_equal_except_auth_generation_if_all_restores_succeeded": true,
+        "final_ngsa_bytes_equal": false,
+        "final_state_hash_equal": true
+      },
+      "spent_fixture_cards_in_upstream_discard": [],
+      "spent_fixture_cards_in_native_discard": [],
+      "unmapped_initial_deck_count": 17,
+      "native_initial_discard_count": 16,
+      "upstream_initial_discard_count": 10
+    },
+    {
+      "case": "q_cancel_target",
+      "browser_file": "browser-round8/upstream-q_cancel_target.json",
+      "native_file": "native-round4/native-q_cancel_target.json",
+      "projection_checks": {
+        "upstream_runner_completed": true,
+        "all_four_initial_fixtures_checked": true,
+        "native_fixture_same_as_browser_input": true,
+        "final_hp": true,
+        "final_max_hp": true,
+        "final_face_down": true,
+        "final_hand_id_name_suit_rank_nature_multiset": true,
+        "final_equip_id_name_suit_rank_nature_multiset": true
+      },
+      "differences": [],
+      "restore": {
+        "direct_checkpoints": 3,
+        "successful_attempts": 6,
+        "failed_attempts": 0,
+        "errors": [],
+        "all_successful_snapshots_equal_except_auth_generation": true,
+        "final_snapshot_equal_except_auth_generation_if_all_restores_succeeded": true,
+        "final_ngsa_bytes_equal": false,
+        "final_state_hash_equal": true
+      },
+      "spent_fixture_cards_in_upstream_discard": [],
+      "spent_fixture_cards_in_native_discard": [],
+      "unmapped_initial_deck_count": 17,
+      "native_initial_discard_count": 16,
+      "upstream_initial_discard_count": 10
+    },
+    {
+      "case": "q_cancel_suit_attempt",
+      "browser_file": "browser-round8/upstream-q_cancel_suit_attempt.json",
+      "native_file": "native-round4/native-q_cancel_suit_attempt.json",
+      "projection_checks": {
+        "upstream_runner_completed": true,
+        "all_four_initial_fixtures_checked": true,
+        "native_fixture_same_as_browser_input": true,
+        "final_hp": true,
+        "final_max_hp": true,
+        "final_face_down": true,
+        "final_hand_id_name_suit_rank_nature_multiset": true,
+        "final_equip_id_name_suit_rank_nature_multiset": true
+      },
+      "differences": [
+        {
+          "kind": "owner_suit_cancel",
+          "upstream_cancelled": true,
+          "native_rejected_and_pending": true
+        }
+      ],
+      "restore": {
+        "direct_checkpoints": 2,
+        "successful_attempts": 4,
+        "failed_attempts": 0,
+        "errors": [],
+        "all_successful_snapshots_equal_except_auth_generation": true,
+        "final_snapshot_equal_except_auth_generation_if_all_restores_succeeded": true,
+        "final_ngsa_bytes_equal": false,
+        "final_state_hash_equal": true
+      },
+      "spent_fixture_cards_in_upstream_discard": [],
+      "spent_fixture_cards_in_native_discard": [],
+      "unmapped_initial_deck_count": 17,
+      "native_initial_discard_count": 16,
+      "upstream_initial_discard_count": 10
+    },
+    {
+      "case": "q_no_hand",
+      "browser_file": "browser-round8/upstream-q_no_hand.json",
+      "native_file": "native-round4/native-q_no_hand.json",
+      "projection_checks": {
+        "upstream_runner_completed": true,
+        "all_four_initial_fixtures_checked": true,
+        "native_fixture_same_as_browser_input": true,
+        "final_hp": true,
+        "final_max_hp": true,
+        "final_face_down": true,
+        "final_hand_id_name_suit_rank_nature_multiset": true,
+        "final_equip_id_name_suit_rank_nature_multiset": true
+      },
+      "differences": [],
+      "restore": {
+        "direct_checkpoints": 0,
+        "successful_attempts": 0,
+        "failed_attempts": 0,
+        "errors": [],
+        "all_successful_snapshots_equal_except_auth_generation": true,
+        "final_snapshot_equal_except_auth_generation_if_all_restores_succeeded": true,
+        "final_ngsa_bytes_equal": true,
+        "final_state_hash_equal": true
+      },
+      "spent_fixture_cards_in_upstream_discard": [],
+      "spent_fixture_cards_in_native_discard": [],
+      "unmapped_initial_deck_count": 17,
+      "native_initial_discard_count": 16,
+      "upstream_initial_discard_count": 10
+    },
+    {
+      "case": "j_active_gain",
+      "browser_file": "browser-round8/upstream-j_active_gain.json",
+      "native_file": "native-round4/native-j_active_gain.json",
+      "projection_checks": {
+        "upstream_runner_completed": true,
+        "all_four_initial_fixtures_checked": true,
+        "native_fixture_same_as_browser_input": true,
+        "final_hp": true,
+        "final_max_hp": true,
+        "final_face_down": true,
+        "final_hand_id_name_suit_rank_nature_multiset": true,
+        "final_equip_id_name_suit_rank_nature_multiset": true
+      },
+      "differences": [
+        {
+          "kind": "jiu_effect_timing_at_gain_question",
+          "upstream_jiu_mark": 0,
+          "native_jiu_active": true
+        }
+      ],
+      "restore": {
+        "direct_checkpoints": 1,
+        "successful_attempts": 0,
+        "failed_attempts": 2,
+        "errors": [
+          {
+            "auth_before": 0,
+            "bytes": 2218,
+            "error": "OpenChoiceMismatch { observer: 0 }",
+            "file": "j_active_gain-direct-pending-0.ngsa",
+            "prompt": "mbcmjiushi_gain_confirm"
+          },
+          {
+            "auth_before": 0,
+            "bytes": 2218,
+            "error": "OpenChoiceMismatch { observer: 0 }",
+            "file": "j_active_gain-restored-pending-0.ngsa",
+            "prompt": "mbcmjiushi_gain_confirm"
+          }
+        ],
+        "all_successful_snapshots_equal_except_auth_generation": true,
+        "final_snapshot_equal_except_auth_generation_if_all_restores_succeeded": null,
+        "final_ngsa_bytes_equal": true,
+        "final_state_hash_equal": true
+      },
+      "spent_fixture_cards_in_upstream_discard": [],
+      "spent_fixture_cards_in_native_discard": [],
+      "unmapped_initial_deck_count": 17,
+      "native_initial_discard_count": 16,
+      "upstream_initial_discard_count": 10
+    },
+    {
+      "case": "j_active_cancel_gain",
+      "browser_file": "browser-round8/upstream-j_active_cancel_gain.json",
+      "native_file": "native-round4/native-j_active_cancel_gain.json",
+      "projection_checks": {
+        "upstream_runner_completed": true,
+        "all_four_initial_fixtures_checked": true,
+        "native_fixture_same_as_browser_input": true,
+        "final_hp": true,
+        "final_max_hp": true,
+        "final_face_down": true,
+        "final_hand_id_name_suit_rank_nature_multiset": true,
+        "final_equip_id_name_suit_rank_nature_multiset": true
+      },
+      "differences": [
+        {
+          "kind": "jiu_effect_timing_at_gain_question",
+          "upstream_jiu_mark": 0,
+          "native_jiu_active": true
+        }
+      ],
+      "restore": {
+        "direct_checkpoints": 1,
+        "successful_attempts": 0,
+        "failed_attempts": 2,
+        "errors": [
+          {
+            "auth_before": 0,
+            "bytes": 2218,
+            "error": "OpenChoiceMismatch { observer: 0 }",
+            "file": "j_active_cancel_gain-direct-pending-0.ngsa",
+            "prompt": "mbcmjiushi_gain_confirm"
+          },
+          {
+            "auth_before": 0,
+            "bytes": 2218,
+            "error": "OpenChoiceMismatch { observer: 0 }",
+            "file": "j_active_cancel_gain-restored-pending-0.ngsa",
+            "prompt": "mbcmjiushi_gain_confirm"
+          }
+        ],
+        "all_successful_snapshots_equal_except_auth_generation": true,
+        "final_snapshot_equal_except_auth_generation_if_all_restores_succeeded": null,
+        "final_ngsa_bytes_equal": true,
+        "final_state_hash_equal": true
+      },
+      "spent_fixture_cards_in_upstream_discard": [],
+      "spent_fixture_cards_in_native_discard": [],
+      "unmapped_initial_deck_count": 17,
+      "native_initial_discard_count": 16,
+      "upstream_initial_discard_count": 10
+    },
+    {
+      "case": "j_active_facedown",
+      "browser_file": "browser-round8/upstream-j_active_facedown.json",
+      "native_file": "native-round4/native-j_active_facedown.json",
+      "projection_checks": {
+        "upstream_runner_completed": true,
+        "all_four_initial_fixtures_checked": true,
+        "native_fixture_same_as_browser_input": true,
+        "final_hp": true,
+        "final_max_hp": true,
+        "final_face_down": true,
+        "final_hand_id_name_suit_rank_nature_multiset": true,
+        "final_equip_id_name_suit_rank_nature_multiset": true
+      },
+      "differences": [],
+      "restore": {
+        "direct_checkpoints": 0,
+        "successful_attempts": 0,
+        "failed_attempts": 0,
+        "errors": [],
+        "all_successful_snapshots_equal_except_auth_generation": true,
+        "final_snapshot_equal_except_auth_generation_if_all_restores_succeeded": true,
+        "final_ngsa_bytes_equal": true,
+        "final_state_hash_equal": true
+      },
+      "spent_fixture_cards_in_upstream_discard": [],
+      "spent_fixture_cards_in_native_discard": [],
+      "unmapped_initial_deck_count": 17,
+      "native_initial_discard_count": 16,
+      "upstream_initial_discard_count": 10
+    },
+    {
+      "case": "j_no_skill",
+      "browser_file": "browser-round8/upstream-j_no_skill.json",
+      "native_file": "native-round4/native-j_no_skill.json",
+      "projection_checks": {
+        "upstream_runner_completed": true,
+        "all_four_initial_fixtures_checked": true,
+        "native_fixture_same_as_browser_input": true,
+        "final_hp": true,
+        "final_max_hp": true,
+        "final_face_down": true,
+        "final_hand_id_name_suit_rank_nature_multiset": true,
+        "final_equip_id_name_suit_rank_nature_multiset": true
+      },
+      "differences": [],
+      "restore": {
+        "direct_checkpoints": 0,
+        "successful_attempts": 0,
+        "failed_attempts": 0,
+        "errors": [],
+        "all_successful_snapshots_equal_except_auth_generation": true,
+        "final_snapshot_equal_except_auth_generation_if_all_restores_succeeded": true,
+        "final_ngsa_bytes_equal": true,
+        "final_state_hash_equal": true
+      },
+      "spent_fixture_cards_in_upstream_discard": [],
+      "spent_fixture_cards_in_native_discard": [],
+      "unmapped_initial_deck_count": 17,
+      "native_initial_discard_count": 16,
+      "upstream_initial_discard_count": 10
+    },
+    {
+      "case": "j_damage_back_accept_gain",
+      "browser_file": "browser-round8/upstream-j_damage_back_accept_gain.json",
+      "native_file": "native-round4/native-j_damage_back_accept_gain.json",
+      "projection_checks": {
+        "upstream_runner_completed": true,
+        "all_four_initial_fixtures_checked": true,
+        "native_fixture_same_as_browser_input": true,
+        "final_hp": true,
+        "final_max_hp": true,
+        "final_face_down": true,
+        "final_hand_id_name_suit_rank_nature_multiset": true,
+        "final_equip_id_name_suit_rank_nature_multiset": true
+      },
+      "differences": [],
+      "restore": {
+        "direct_checkpoints": 2,
+        "successful_attempts": 0,
+        "failed_attempts": 4,
+        "errors": [
+          {
+            "auth_before": 0,
+            "bytes": 2255,
+            "error": "OpenChoiceMismatch { observer: 0 }",
+            "file": "j_damage_back_accept_gain-direct-pending-0.ngsa",
+            "prompt": "mbcmjiushi_turnback_confirm"
+          },
+          {
+            "auth_before": 0,
+            "bytes": 2330,
+            "error": "OpenChoiceMismatch { observer: 0 }",
+            "file": "j_damage_back_accept_gain-direct-pending-1.ngsa",
+            "prompt": "mbcmjiushi_gain_confirm"
+          },
+          {
+            "auth_before": 0,
+            "bytes": 2255,
+            "error": "OpenChoiceMismatch { observer: 0 }",
+            "file": "j_damage_back_accept_gain-restored-pending-0.ngsa",
+            "prompt": "mbcmjiushi_turnback_confirm"
+          },
+          {
+            "auth_before": 0,
+            "bytes": 2330,
+            "error": "OpenChoiceMismatch { observer: 0 }",
+            "file": "j_damage_back_accept_gain-restored-pending-1.ngsa",
+            "prompt": "mbcmjiushi_gain_confirm"
+          }
+        ],
+        "all_successful_snapshots_equal_except_auth_generation": true,
+        "final_snapshot_equal_except_auth_generation_if_all_restores_succeeded": null,
+        "final_ngsa_bytes_equal": true,
+        "final_state_hash_equal": true
+      },
+      "spent_fixture_cards_in_upstream_discard": [
+        8
+      ],
+      "spent_fixture_cards_in_native_discard": [
+        8
+      ],
+      "unmapped_initial_deck_count": 17,
+      "native_initial_discard_count": 16,
+      "upstream_initial_discard_count": 10
+    },
+    {
+      "case": "j_damage_back_cancel",
+      "browser_file": "browser-round8/upstream-j_damage_back_cancel.json",
+      "native_file": "native-round4/native-j_damage_back_cancel.json",
+      "projection_checks": {
+        "upstream_runner_completed": true,
+        "all_four_initial_fixtures_checked": true,
+        "native_fixture_same_as_browser_input": true,
+        "final_hp": true,
+        "final_max_hp": true,
+        "final_face_down": true,
+        "final_hand_id_name_suit_rank_nature_multiset": true,
+        "final_equip_id_name_suit_rank_nature_multiset": true
+      },
+      "differences": [],
+      "restore": {
+        "direct_checkpoints": 1,
+        "successful_attempts": 0,
+        "failed_attempts": 2,
+        "errors": [
+          {
+            "auth_before": 0,
+            "bytes": 2255,
+            "error": "OpenChoiceMismatch { observer: 0 }",
+            "file": "j_damage_back_cancel-direct-pending-0.ngsa",
+            "prompt": "mbcmjiushi_turnback_confirm"
+          },
+          {
+            "auth_before": 0,
+            "bytes": 2255,
+            "error": "OpenChoiceMismatch { observer: 0 }",
+            "file": "j_damage_back_cancel-restored-pending-0.ngsa",
+            "prompt": "mbcmjiushi_turnback_confirm"
+          }
+        ],
+        "all_successful_snapshots_equal_except_auth_generation": true,
+        "final_snapshot_equal_except_auth_generation_if_all_restores_succeeded": null,
+        "final_ngsa_bytes_equal": true,
+        "final_state_hash_equal": true
+      },
+      "spent_fixture_cards_in_upstream_discard": [
+        8
+      ],
+      "spent_fixture_cards_in_native_discard": [
+        8
+      ],
+      "unmapped_initial_deck_count": 17,
+      "native_initial_discard_count": 16,
+      "upstream_initial_discard_count": 10
+    },
+    {
+      "case": "j_damage_faceup",
+      "browser_file": "browser-round8/upstream-j_damage_faceup.json",
+      "native_file": "native-round4/native-j_damage_faceup.json",
+      "projection_checks": {
+        "upstream_runner_completed": true,
+        "all_four_initial_fixtures_checked": true,
+        "native_fixture_same_as_browser_input": true,
+        "final_hp": true,
+        "final_max_hp": true,
+        "final_face_down": true,
+        "final_hand_id_name_suit_rank_nature_multiset": true,
+        "final_equip_id_name_suit_rank_nature_multiset": true
+      },
+      "differences": [],
+      "restore": {
+        "direct_checkpoints": 0,
+        "successful_attempts": 0,
+        "failed_attempts": 0,
+        "errors": [],
+        "all_successful_snapshots_equal_except_auth_generation": true,
+        "final_snapshot_equal_except_auth_generation_if_all_restores_succeeded": true,
+        "final_ngsa_bytes_equal": true,
+        "final_state_hash_equal": true
+      },
+      "spent_fixture_cards_in_upstream_discard": [
+        8
+      ],
+      "spent_fixture_cards_in_native_discard": [
+        8
+      ],
+      "unmapped_initial_deck_count": 17,
+      "native_initial_discard_count": 16,
+      "upstream_initial_discard_count": 10
+    },
+    {
+      "case": "f_skill_A",
+      "browser_file": "browser-round8/upstream-f_skill_A.json",
+      "native_file": "native-round4/native-f_skill_A.json",
+      "projection_checks": {
+        "upstream_runner_completed": true,
+        "all_four_initial_fixtures_checked": true,
+        "native_fixture_same_as_browser_input": true,
+        "final_hp": true,
+        "final_max_hp": true,
+        "final_face_down": true,
+        "final_hand_id_name_suit_rank_nature_multiset": true,
+        "final_equip_id_name_suit_rank_nature_multiset": true
+      },
+      "differences": [
+        {
+          "kind": "fangzhu_skill_scope",
+          "upstream": {
+            "mashu": {
+              "name": "mashu",
+              "disabled": false,
+              "blocked_by_fangzhu": true
+            },
+            "mbcmjiushi": {
+              "name": "mbcmjiushi",
+              "disabled": false,
+              "blocked_by_fangzhu": false
+            },
+            "mbcmfangzhu_baiban": {
+              "name": "mbcmfangzhu_baiban",
+              "disabled": false,
+              "blocked_by_fangzhu": false
+            }
+          },
+          "native": {
+            "马术": {
+              "enabled": true,
+              "name": "马术",
+              "once_used": false
+            },
+            "mbcmjiushi": {
+              "enabled": false,
+              "name": "mbcmjiushi",
+              "once_used": false
+            }
+          }
+        }
+      ],
+      "restore": {
+        "direct_checkpoints": 2,
+        "successful_attempts": 4,
+        "failed_attempts": 0,
+        "errors": [],
+        "all_successful_snapshots_equal_except_auth_generation": true,
+        "final_snapshot_equal_except_auth_generation_if_all_restores_succeeded": true,
+        "final_ngsa_bytes_equal": false,
+        "final_state_hash_equal": true
+      },
+      "spent_fixture_cards_in_upstream_discard": [],
+      "spent_fixture_cards_in_native_discard": [],
+      "unmapped_initial_deck_count": 17,
+      "native_initial_discard_count": 16,
+      "upstream_initial_discard_count": 10
+    },
+    {
+      "case": "f_ban_B",
+      "browser_file": "browser-round8/upstream-f_ban_B.json",
+      "native_file": "native-round4/native-f_ban_B.json",
+      "projection_checks": {
+        "upstream_runner_completed": true,
+        "all_four_initial_fixtures_checked": true,
+        "native_fixture_same_as_browser_input": true,
+        "final_hp": true,
+        "final_max_hp": true,
+        "final_face_down": true,
+        "final_hand_id_name_suit_rank_nature_multiset": true,
+        "final_equip_id_name_suit_rank_nature_multiset": true
+      },
+      "differences": [],
+      "restore": {
+        "direct_checkpoints": 2,
+        "successful_attempts": 4,
+        "failed_attempts": 0,
+        "errors": [],
+        "all_successful_snapshots_equal_except_auth_generation": true,
+        "final_snapshot_equal_except_auth_generation_if_all_restores_succeeded": true,
+        "final_ngsa_bytes_equal": false,
+        "final_state_hash_equal": true
+      },
+      "spent_fixture_cards_in_upstream_discard": [],
+      "spent_fixture_cards_in_native_discard": [],
+      "unmapped_initial_deck_count": 17,
+      "native_initial_discard_count": 16,
+      "upstream_initial_discard_count": 10
+    },
+    {
+      "case": "f_target_B",
+      "browser_file": "browser-round8/upstream-f_target_B.json",
+      "native_file": "native-round4/native-f_target_B.json",
+      "projection_checks": {
+        "upstream_runner_completed": true,
+        "all_four_initial_fixtures_checked": true,
+        "native_fixture_same_as_browser_input": true,
+        "final_hp": true,
+        "final_max_hp": true,
+        "final_face_down": true,
+        "final_hand_id_name_suit_rank_nature_multiset": true,
+        "final_equip_id_name_suit_rank_nature_multiset": true
+      },
+      "differences": [],
+      "restore": {
+        "direct_checkpoints": 2,
+        "successful_attempts": 4,
+        "failed_attempts": 0,
+        "errors": [],
+        "all_successful_snapshots_equal_except_auth_generation": true,
+        "final_snapshot_equal_except_auth_generation_if_all_restores_succeeded": true,
+        "final_ngsa_bytes_equal": false,
+        "final_state_hash_equal": true
+      },
+      "spent_fixture_cards_in_upstream_discard": [],
+      "spent_fixture_cards_in_native_discard": [],
+      "unmapped_initial_deck_count": 17,
+      "native_initial_discard_count": 16,
+      "upstream_initial_discard_count": 10
+    },
+    {
+      "case": "f_cancel_target",
+      "browser_file": "browser-round8/upstream-f_cancel_target.json",
+      "native_file": "native-round4/native-f_cancel_target.json",
+      "projection_checks": {
+        "upstream_runner_completed": true,
+        "all_four_initial_fixtures_checked": true,
+        "native_fixture_same_as_browser_input": true,
+        "final_hp": true,
+        "final_max_hp": true,
+        "final_face_down": true,
+        "final_hand_id_name_suit_rank_nature_multiset": true,
+        "final_equip_id_name_suit_rank_nature_multiset": true
+      },
+      "differences": [],
+      "restore": {
+        "direct_checkpoints": 1,
+        "successful_attempts": 2,
+        "failed_attempts": 0,
+        "errors": [],
+        "all_successful_snapshots_equal_except_auth_generation": true,
+        "final_snapshot_equal_except_auth_generation_if_all_restores_succeeded": true,
+        "final_ngsa_bytes_equal": false,
+        "final_state_hash_equal": true
+      },
+      "spent_fixture_cards_in_upstream_discard": [],
+      "spent_fixture_cards_in_native_discard": [],
+      "unmapped_initial_deck_count": 17,
+      "native_initial_discard_count": 16,
+      "upstream_initial_discard_count": 10
+    },
+    {
+      "case": "f_last_target",
+      "browser_file": "browser-round8/upstream-f_last_target.json",
+      "native_file": "native-round4/native-f_last_target.json",
+      "projection_checks": {
+        "upstream_runner_completed": true,
+        "all_four_initial_fixtures_checked": true,
+        "native_fixture_same_as_browser_input": true,
+        "final_hp": true,
+        "final_max_hp": true,
+        "final_face_down": true,
+        "final_hand_id_name_suit_rank_nature_multiset": true,
+        "final_equip_id_name_suit_rank_nature_multiset": true
+      },
+      "differences": [],
+      "restore": {
+        "direct_checkpoints": 1,
+        "successful_attempts": 2,
+        "failed_attempts": 0,
+        "errors": [],
+        "all_successful_snapshots_equal_except_auth_generation": true,
+        "final_snapshot_equal_except_auth_generation_if_all_restores_succeeded": true,
+        "final_ngsa_bytes_equal": false,
+        "final_state_hash_equal": true
+      },
+      "spent_fixture_cards_in_upstream_discard": [],
+      "spent_fixture_cards_in_native_discard": [],
+      "unmapped_initial_deck_count": 17,
+      "native_initial_discard_count": 16,
+      "upstream_initial_discard_count": 10
+    },
+    {
+      "case": "f_self_attempt",
+      "browser_file": "browser-round8/upstream-f_self_attempt.json",
+      "native_file": "native-round4/native-f_self_attempt.json",
+      "projection_checks": {
+        "upstream_runner_completed": true,
+        "all_four_initial_fixtures_checked": true,
+        "native_fixture_same_as_browser_input": true,
+        "final_hp": true,
+        "final_max_hp": true,
+        "final_face_down": true,
+        "final_hand_id_name_suit_rank_nature_multiset": true,
+        "final_equip_id_name_suit_rank_nature_multiset": true
+      },
+      "differences": [],
+      "restore": {
+        "direct_checkpoints": 1,
+        "successful_attempts": 2,
+        "failed_attempts": 0,
+        "errors": [],
+        "all_successful_snapshots_equal_except_auth_generation": true,
+        "final_snapshot_equal_except_auth_generation_if_all_restores_succeeded": true,
+        "final_ngsa_bytes_equal": false,
+        "final_state_hash_equal": true
+      },
+      "spent_fixture_cards_in_upstream_discard": [],
+      "spent_fixture_cards_in_native_discard": [],
+      "unmapped_initial_deck_count": 17,
+      "native_initial_discard_count": 16,
+      "upstream_initial_discard_count": 10
+    },
+    {
+      "case": "f_cancel_mode_attempt",
+      "browser_file": "browser-round8/upstream-f_cancel_mode_attempt.json",
+      "native_file": "native-round4/native-f_cancel_mode_attempt.json",
+      "projection_checks": {
+        "upstream_runner_completed": true,
+        "all_four_initial_fixtures_checked": true,
+        "native_fixture_same_as_browser_input": true,
+        "final_hp": true,
+        "final_max_hp": true,
+        "final_face_down": true,
+        "final_hand_id_name_suit_rank_nature_multiset": true,
+        "final_equip_id_name_suit_rank_nature_multiset": true
+      },
+      "differences": [],
+      "restore": {
+        "direct_checkpoints": 2,
+        "successful_attempts": 4,
+        "failed_attempts": 0,
+        "errors": [],
+        "all_successful_snapshots_equal_except_auth_generation": true,
+        "final_snapshot_equal_except_auth_generation_if_all_restores_succeeded": true,
+        "final_ngsa_bytes_equal": false,
+        "final_state_hash_equal": true
+      },
+      "spent_fixture_cards_in_upstream_discard": [],
+      "spent_fixture_cards_in_native_discard": [],
+      "unmapped_initial_deck_count": 17,
+      "native_initial_discard_count": 16,
+      "upstream_initial_discard_count": 10
+    },
+    {
+      "case": "f_no_skill",
+      "browser_file": "browser-round8/upstream-f_no_skill.json",
+      "native_file": "native-round4/native-f_no_skill.json",
+      "projection_checks": {
+        "upstream_runner_completed": true,
+        "all_four_initial_fixtures_checked": true,
+        "native_fixture_same_as_browser_input": true,
+        "final_hp": true,
+        "final_max_hp": true,
+        "final_face_down": true,
+        "final_hand_id_name_suit_rank_nature_multiset": true,
+        "final_equip_id_name_suit_rank_nature_multiset": true
+      },
+      "differences": [],
+      "restore": {
+        "direct_checkpoints": 0,
+        "successful_attempts": 0,
+        "failed_attempts": 0,
+        "errors": [],
+        "all_successful_snapshots_equal_except_auth_generation": true,
+        "final_snapshot_equal_except_auth_generation_if_all_restores_succeeded": true,
+        "final_ngsa_bytes_equal": true,
+        "final_state_hash_equal": true
+      },
+      "spent_fixture_cards_in_upstream_discard": [],
+      "spent_fixture_cards_in_native_discard": [],
+      "unmapped_initial_deck_count": 17,
+      "native_initial_discard_count": 16,
+      "upstream_initial_discard_count": 10
+    }
+  ],
+  "not_compared": [
+    "full upstream/native state or event stream",
+    "full initial deck: 17 native cards have no chosen upstream face mapping",
+    "full initial discard: native16 vs upstream10; unmapped6 excluded",
+    "RNG state/stream and native/upstream absolute event/choice IDs",
+    "full hand ordering and complete damageSource side effects",
+    "full extension wrapper/unlocking/visual hooks/config",
+    "target next-turn expiry and repeated real turns",
+    "all native play/respond legality under fangzhu_ban; observed upstream cardEnabled query and native ban flag only",
+    "Cross-engine save/archive compatibility: NGSA checks are native-only"
+  ]
+}

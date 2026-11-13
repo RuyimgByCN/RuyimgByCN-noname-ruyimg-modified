@@ -1,0 +1,6 @@
+{
+  "at": "2026-11-13T18:10:29.332745+00:00",
+  "earlier_case": "ninth choudu-swap-b completed; selected second pool card has same spade-9 face as first pool card",
+  "reason": "ID/provenance difference alone is weaker than a distinct visible face comparison",
+  "change": "fresh rerun only swap-b, select pool index2 (spade10) while trading same tao; native offers only outgoing hand card and always receives index0 (spade9). Earlier raw successful case retained; no rule logic change"
+}

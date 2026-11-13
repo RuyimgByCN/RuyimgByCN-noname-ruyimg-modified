@@ -1,5 +1,17 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-14T02:33:04+08:00 队列1运行补课当前日期表（未提交／发布）
+
+源码HEAD `605201f3f49e10cea61c31d52a61bbb66c85599d` + tracked dirty；规则333／NGSA107／schema5／ABI759／WS8不变。 当前逐来源数量以[37来源新日期表](../../operations/evidence/2026-11-14-queue1-runtime/source-counts-runtime-03.md)为准，旧表保留历史语境；U07本次再撤回2条旧等价，本批合计撤回6、新签0。酒诗恢复本地完整代码门禁与首轮preflight21项通过，最终文档复核与发布另记。队列1仍部分、队列2未开始，整包八项0/37；局部指定投影与恢复一致不替代八项验收。
+
+## 2026-11-14T02:17:53+08:00 队列1卡牌条目补充撤回（未提交／发布）
+
+HEAD `605201f3f49e10cea61c31d52a61bbb66c85599d` + tracked dirty；规则333／NGSA107／schema5／ABI759／WS8。现630／3794／0、合4424，本批撤回4旧等价、新增等价0。U06猴子/写轮眼两卡绑定的规则真实不一致，原条目未只签静态字段，不能事后缩口径保留无差异；[独立补充裁定](../../operations/evidence/2026-11-14-queue1-runtime/independent/u06-l29/card-entry-adjudication.md)。[37来源日期表](../../operations/evidence/2026-11-14-queue1-runtime/source-counts-runtime-02.md)，U06现5／6／0、L29为1／8／0。酒诗只修恢复定义、其余规则差异保留；本地门禁仍在收口。队列1部分、八项0/37；本次先提交已冻结U06/L29证据，U07/L10继续采样，不进入队列2。
+
+## 2026-11-14T02:11:43+08:00 队列1实际运行补课撤回旧等价（未提交／发布）
+
+HEAD `605201f3f49e10cea61c31d52a61bbb66c85599d` + tracked dirty；333／107／5／759／WS8。清单现632／3792／0、合4424；清正/酒诗2项旧整技能等价因实际上游差异撤回，本批新增等价0，L29现1／8／0、U06仍7／4／0。其余来源见[37来源日期快照](../../operations/evidence/2026-11-14-queue1-runtime/source-counts-runtime-01.md)，具体分支与首次失败见[本批证据](../../operations/evidence/2026-11-14-queue1-runtime/README.md)。整包八项0/37，不因选择恢复修复或部分投影相同上调；队列1仍部分，未开始队列2。
+
 ## 2026-11-14T01:33:42+08:00 队列1部分增量发布与CI
 
 代码 `1fa8ac6cc3a70446436d97ff49aa19ea4626e22d` 已按裁决25正常发布；[精确SHA CI](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43468568765) attempt1全部10作业success／0失败／0取消，未由agent补跑。记录时HEAD为该代码加文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8。 [本地及精确代码CI记录](../../operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/README.md)。[37来源清单](../../operations/evidence/2026-11-13-queue1-review/source-counts-reviewed.md)634／3790／0、本批撤回215、新增等价0；八项0/37、队列1部分。旧状态沿用不作本轮重新认证，保留下方全部历史表。

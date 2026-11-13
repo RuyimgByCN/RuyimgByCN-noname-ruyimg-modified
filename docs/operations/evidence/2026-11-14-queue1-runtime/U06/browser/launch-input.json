@@ -1,0 +1,7 @@
+{
+  "url": "http://127.0.0.1:5173/",
+  "upstream": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-runtime-modern-b789ktt1/apps/core",
+  "spine_probe_status": 404,
+  "source_recipe": "2026-11-13-queue1-review/browser/launch.mjs",
+  "launch_sha256": "69bb5ea68d42c9497c073b002b3984dcfe49aca780cea245d039b718572f42f2"
+}

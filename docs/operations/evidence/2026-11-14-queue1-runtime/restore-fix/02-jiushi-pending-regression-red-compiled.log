@@ -1,0 +1,22 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.39s
+     Running tests/groups/l_rounds.rs (target/debug/deps/l_rounds-6b5ace321b7c4bdf)
+
+running 1 test
+test l29_longxue_eight::l29_jiushi_pending_confirmations_restore_and_match_direct_answers ... FAILED
+
+failures:
+
+---- l29_longxue_eight::l29_jiushi_pending_confirmations_restore_and_match_direct_answers stdout ----
+
+thread 'l29_longxue_eight::l29_jiushi_pending_confirmations_restore_and_match_direct_answers' (3401446) panicked at crates/engine-native/tests/groups/../l29_longxue_eight.rs:947:18:
+真实酒诗确认窗在回答前必须可恢复: OpenChoiceMismatch { observer: 0 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    l29_longxue_eight::l29_jiushi_pending_confirmations_restore_and_match_direct_answers
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 81 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-native --test l_rounds`

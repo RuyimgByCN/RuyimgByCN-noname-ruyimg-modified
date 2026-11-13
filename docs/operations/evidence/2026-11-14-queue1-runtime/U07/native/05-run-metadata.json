@@ -1,0 +1,16 @@
+{
+  "at": "2026-11-13T18:04:11.011751+00:00",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "tracked_dirty": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n",
+  "binary_sha256": "4d13f0c49f5e08676eb374d6f87529a834de87860c4f19fd05f7ad8b957eb002",
+  "probe_sha256": "4345d1b1aee439342d7a0bb229ffdb98ce1d28f550a295caddd0f5ddee058283",
+  "target": "shared repository target, no cleaning",
+  "commands": [
+    "CARGO_TARGET_DIR=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target NONAME_REPO_ROOT=/Users/ruyimg/Documents/Claude/sanguosha/noname-next cargo run --offline --manifest-path /private/tmp/noname-queue1-u07-native/Cargo.toml > native/01-first.log 2> native/01-first.stderr",
+    "CARGO_TARGET_DIR=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target NONAME_REPO_ROOT=/Users/ruyimg/Documents/Claude/sanguosha/noname-next cargo run --offline --manifest-path /private/tmp/noname-queue1-u07-native/Cargo.toml > native/02-second.log 2> native/02-second.stderr",
+    "CARGO_TARGET_DIR=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target NONAME_REPO_ROOT=/Users/ruyimg/Documents/Claude/sanguosha/noname-next cargo run --offline --manifest-path /private/tmp/noname-queue1-u07-native/Cargo.toml > native/03-third.log 2> native/03-third.stderr",
+    "CARGO_TARGET_DIR=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target NONAME_REPO_ROOT=/Users/ruyimg/Documents/Claude/sanguosha/noname-next cargo run --offline --manifest-path /private/tmp/noname-queue1-u07-native/Cargo.toml > native/04-fourth.log 2> native/04-fourth.stderr",
+    "CARGO_TARGET_DIR=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target NONAME_REPO_ROOT=/Users/ruyimg/Documents/Claude/sanguosha/noname-next cargo run --offline --manifest-path /private/tmp/noname-queue1-u07-native/Cargo.toml > native/05-fifth.log 2> native/05-fifth.stderr"
+  ],
+  "scope": "Run metadata after these first probe attempts; initial-input.json records source hashes before them. Do not infer exact build tree for unrelated concurrent L29 edits."
+}

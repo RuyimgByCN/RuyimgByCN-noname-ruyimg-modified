@@ -1,0 +1,10 @@
+{
+  "at": "2026-11-14T02:06:54.219189+08:00",
+  "native_build_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "native_run_metadata": "02-native-probe-first.json",
+  "source_sha256": "a1bcf1e2957d9b0c10ac0781736c1c10a32dd70aee2751e53c5d4b7d527eb39e",
+  "binary": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-u06-runtime-target-q8uuc_sy/debug/noname-u06-runtime-probe",
+  "binary_sha256": "51cb5f9df6e9ed149131d0b8d15947cab83d4751ae419d901c1041692a645114",
+  "binary_bytes": 33897368,
+  "scope": "Standalone diagnostic binary captured before retirement; runtime results were recorded before the L29-only product fix."
+}

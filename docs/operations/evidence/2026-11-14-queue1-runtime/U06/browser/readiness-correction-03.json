@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-14T01:57:45.536508+08:00",
+  "first_command": "07-browser-all-fresh-pages.json",
+  "cause": "A real fresh page pauses at general selection with eight created player nodes but seven unset character names. All nodes and standard cards are already initialized.",
+  "observed": "CDP reply 2026-11-13T17:56:20.968Z records players=8, all nodes=true, cardReady=true, event=chooseButton, names partly null.",
+  "correction": "Wait for eight handcard nodes and loaded Sha, then explicitly initialize the same dummy fixture on both engines. Do not require original character assignment that the fixture replaces.",
+  "upstream_code_changed": false
+}

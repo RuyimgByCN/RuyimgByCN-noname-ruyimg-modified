@@ -1,0 +1,644 @@
+{
+  "at": "2026-11-14T02:32:47.908116+08:00",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "dirty": true,
+  "product_status_observed": "M  crates/engine-native-content/src/content/host/asks_wudian.rs\nM  crates/engine-native/tests/l29_longxue_eight.rs\n",
+  "command": "python3 -B docs/operations/evidence/2026-11-14-queue1-runtime/independent/u07/finalize-input-check.py",
+  "manifest_input_checks": [
+    {
+      "manifest": "initial-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+      "expected": "6f4a42562c201f37b508195abac226eb3e3839a74468b21347e1f772e9164e22",
+      "current": "6f4a42562c201f37b508195abac226eb3e3839a74468b21347e1f772e9164e22",
+      "snapshot": "6f4a42562c201f37b508195abac226eb3e3839a74468b21347e1f772e9164e22"
+    },
+    {
+      "manifest": "initial-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/wudian_status.rs",
+      "expected": "dced5e21f44f3bfd7061f6bff079c715602ccd0beac9e79db4829d51d5b59e9b",
+      "current": "dced5e21f44f3bfd7061f6bff079c715602ccd0beac9e79db4829d51d5b59e9b",
+      "snapshot": "dced5e21f44f3bfd7061f6bff079c715602ccd0beac9e79db4829d51d5b59e9b"
+    },
+    {
+      "manifest": "initial-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/filtering/common.rs",
+      "expected": "e93844349439f339d39a5dd8061b872a7a6650729c19c23a6f9094b7a23f4b0a",
+      "current": "e93844349439f339d39a5dd8061b872a7a6650729c19c23a6f9094b7a23f4b0a",
+      "snapshot": "e93844349439f339d39a5dd8061b872a7a6650729c19c23a6f9094b7a23f4b0a"
+    },
+    {
+      "manifest": "initial-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/activation/wudian.rs",
+      "expected": "8c6a9b94f80c6558f9918ab11cb999bf7337aebdfc40c72bc2c7281518f6f9c2",
+      "current": "8c6a9b94f80c6558f9918ab11cb999bf7337aebdfc40c72bc2c7281518f6f9c2",
+      "snapshot": "8c6a9b94f80c6558f9918ab11cb999bf7337aebdfc40c72bc2c7281518f6f9c2"
+    },
+    {
+      "manifest": "initial-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/asks_wudian.rs",
+      "expected": "042cc996fb573f782cd5af3a6bc21258f7e350836f1556905627e6857d9a107a",
+      "current": "042cc996fb573f782cd5af3a6bc21258f7e350836f1556905627e6857d9a107a",
+      "snapshot": "042cc996fb573f782cd5af3a6bc21258f7e350836f1556905627e6857d9a107a"
+    },
+    {
+      "manifest": "initial-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/kernel/sha/resume.rs",
+      "expected": "dbea7f6af994ec5caa3ff3f5532e5f6f4838def8e7c6777555b863668981e7bd",
+      "current": "dbea7f6af994ec5caa3ff3f5532e5f6f4838def8e7c6777555b863668981e7bd",
+      "snapshot": "dbea7f6af994ec5caa3ff3f5532e5f6f4838def8e7c6777555b863668981e7bd"
+    },
+    {
+      "manifest": "initial-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/vocabulary/host/metadata/wudian.rs",
+      "expected": "7d6142dd966b0ded7806f9e87bc7522ab8e647486f7dc2ef2c9197397d5704f6",
+      "current": "7d6142dd966b0ded7806f9e87bc7522ab8e647486f7dc2ef2c9197397d5704f6",
+      "snapshot": "7d6142dd966b0ded7806f9e87bc7522ab8e647486f7dc2ef2c9197397d5704f6"
+    },
+    {
+      "manifest": "initial-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/wudian-upstream-noname/assets/cards.json",
+      "expected": "7ccf4bb8cba84606949c5d434c7abc6a916d10871aae53a699e0920517823b27",
+      "current": "7ccf4bb8cba84606949c5d434c7abc6a916d10871aae53a699e0920517823b27",
+      "snapshot": "7ccf4bb8cba84606949c5d434c7abc6a916d10871aae53a699e0920517823b27"
+    },
+    {
+      "manifest": "initial-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/probe-07.rs",
+      "expected": "87d9473ee7a115a951dfe66f5ba5654af0d168bf86c86d14d93b3fee492bc44f",
+      "current": "87d9473ee7a115a951dfe66f5ba5654af0d168bf86c86d14d93b3fee492bc44f",
+      "snapshot": "87d9473ee7a115a951dfe66f5ba5654af0d168bf86c86d14d93b3fee492bc44f"
+    },
+    {
+      "manifest": "initial-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/probe-08.rs",
+      "expected": "73ec6ce50ce0f6ef7a75d13d92db79414f8966e7cf7986a1bdb7b9ea10b24e56",
+      "current": "73ec6ce50ce0f6ef7a75d13d92db79414f8966e7cf7986a1bdb7b9ea10b24e56",
+      "snapshot": "73ec6ce50ce0f6ef7a75d13d92db79414f8966e7cf7986a1bdb7b9ea10b24e56"
+    },
+    {
+      "manifest": "initial-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/07-verified.log",
+      "expected": "f420d0cf2dc673dada66a2e8a4d61f0521a05dbb5ba68479fa69def27dbeed02",
+      "current": "f420d0cf2dc673dada66a2e8a4d61f0521a05dbb5ba68479fa69def27dbeed02",
+      "snapshot": "f420d0cf2dc673dada66a2e8a4d61f0521a05dbb5ba68479fa69def27dbeed02"
+    },
+    {
+      "manifest": "initial-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/08-isolated.log",
+      "expected": "6b8f33ddbb03ae1520e3766682f72ff01d7a5e52e08257ed0790c4d2705fddf6",
+      "current": "6b8f33ddbb03ae1520e3766682f72ff01d7a5e52e08257ed0790c4d2705fddf6",
+      "snapshot": "6b8f33ddbb03ae1520e3766682f72ff01d7a5e52e08257ed0790c4d2705fddf6"
+    },
+    {
+      "manifest": "initial-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/run-07-command.json",
+      "expected": "c4ce787aec6d49313b99cf28b1e86342cd4b484fd107634d658ccc7e933dbe93",
+      "current": "c4ce787aec6d49313b99cf28b1e86342cd4b484fd107634d658ccc7e933dbe93",
+      "snapshot": "c4ce787aec6d49313b99cf28b1e86342cd4b484fd107634d658ccc7e933dbe93"
+    },
+    {
+      "manifest": "initial-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/run-08-command.json",
+      "expected": "6268f25445117a7088b7d63a829dc4713d6ae3beb559f6794685ea6c9f204e58",
+      "current": "6268f25445117a7088b7d63a829dc4713d6ae3beb559f6794685ea6c9f204e58",
+      "snapshot": "6268f25445117a7088b7d63a829dc4713d6ae3beb559f6794685ea6c9f204e58"
+    },
+    {
+      "manifest": "initial-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/browser/start-case.js",
+      "expected": "d6041fb3aeae4c99ba1948caad0d4d2ed3f62348ce6a230f16c8bdb8b994acf9",
+      "current": "d6041fb3aeae4c99ba1948caad0d4d2ed3f62348ce6a230f16c8bdb8b994acf9",
+      "snapshot": "d6041fb3aeae4c99ba1948caad0d4d2ed3f62348ce6a230f16c8bdb8b994acf9"
+    },
+    {
+      "manifest": "initial-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/browser/run-cases.py",
+      "expected": "5f22e8fe1681b05e4c0785c89bdfac240d83ed45af43b6e0a2cc7b359d392996",
+      "current": "5f22e8fe1681b05e4c0785c89bdfac240d83ed45af43b6e0a2cc7b359d392996",
+      "snapshot": "5f22e8fe1681b05e4c0785c89bdfac240d83ed45af43b6e0a2cc7b359d392996"
+    },
+    {
+      "manifest": "initial-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js",
+      "expected": "e3d3256f6428eba85beed87a4d293d6063da7d8893e8da0def08d0bc89081076",
+      "current": "e3d3256f6428eba85beed87a4d293d6063da7d8893e8da0def08d0bc89081076",
+      "snapshot": "e3d3256f6428eba85beed87a4d293d6063da7d8893e8da0def08d0bc89081076"
+    },
+    {
+      "manifest": "initial-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js",
+      "expected": "a9f8dd509ee32aabdc52a664e2f2ce753b0ec5ee2a07da625842a7a0cc5f8ccf",
+      "current": "a9f8dd509ee32aabdc52a664e2f2ce753b0ec5ee2a07da625842a7a0cc5f8ccf",
+      "snapshot": "a9f8dd509ee32aabdc52a664e2f2ce753b0ec5ee2a07da625842a7a0cc5f8ccf"
+    },
+    {
+      "manifest": "initial-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/玩点论杀/card/skill.js",
+      "expected": "be87d05bacd4295050191471bba11fa32b2755183e5c842e8c284894baf1e5f9",
+      "current": "be87d05bacd4295050191471bba11fa32b2755183e5c842e8c284894baf1e5f9",
+      "snapshot": "be87d05bacd4295050191471bba11fa32b2755183e5c842e8c284894baf1e5f9"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/probe-09.rs",
+      "expected": "73d5daa434ae72254169be95879f73d9df76d7c77b64fe9c8ccd7c2c38471dab",
+      "current": "73d5daa434ae72254169be95879f73d9df76d7c77b64fe9c8ccd7c2c38471dab",
+      "snapshot": "73d5daa434ae72254169be95879f73d9df76d7c77b64fe9c8ccd7c2c38471dab"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/09-formal.log",
+      "expected": "f665f97467d9ffd588f79e762bc89250671a56e8b48ca025262dcf644c328682",
+      "current": "f665f97467d9ffd588f79e762bc89250671a56e8b48ca025262dcf644c328682",
+      "snapshot": "f665f97467d9ffd588f79e762bc89250671a56e8b48ca025262dcf644c328682"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/09-formal.stderr",
+      "expected": "338d317db23bcf9b9329ecdebc0c03d085b083eb11c5ad9b2ebdffd9732e3678",
+      "current": "338d317db23bcf9b9329ecdebc0c03d085b083eb11c5ad9b2ebdffd9732e3678",
+      "snapshot": "338d317db23bcf9b9329ecdebc0c03d085b083eb11c5ad9b2ebdffd9732e3678"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-catalog-without-placeholder.json",
+      "expected": "fcf832a087871588df7519f972dccf642fed5b66b7b9c5860a6a6a0100ecf765",
+      "current": "fcf832a087871588df7519f972dccf642fed5b66b7b9c5860a6a6a0100ecf765",
+      "snapshot": "fcf832a087871588df7519f972dccf642fed5b66b7b9c5860a6a6a0100ecf765"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/browser/case-results-twelfth.jsonl",
+      "expected": "a40fc47f592a518a03f6b41e796dbbdea324567bd760fd250a46b1287b08ba99",
+      "current": "a40fc47f592a518a03f6b41e796dbbdea324567bd760fd250a46b1287b08ba99",
+      "snapshot": "a40fc47f592a518a03f6b41e796dbbdea324567bd760fd250a46b1287b08ba99"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/browser/start-case.js",
+      "expected": "d6041fb3aeae4c99ba1948caad0d4d2ed3f62348ce6a230f16c8bdb8b994acf9",
+      "current": "d6041fb3aeae4c99ba1948caad0d4d2ed3f62348ce6a230f16c8bdb8b994acf9",
+      "snapshot": "d6041fb3aeae4c99ba1948caad0d4d2ed3f62348ce6a230f16c8bdb8b994acf9"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/browser/run-cases.py",
+      "expected": "5f22e8fe1681b05e4c0785c89bdfac240d83ed45af43b6e0a2cc7b359d392996",
+      "current": "5f22e8fe1681b05e4c0785c89bdfac240d83ed45af43b6e0a2cc7b359d392996",
+      "snapshot": "5f22e8fe1681b05e4c0785c89bdfac240d83ed45af43b6e0a2cc7b359d392996"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/browser/active-session-wudian.json",
+      "expected": "ef9eea9ed5e60376dec8b571c8a78369cb0e3b58483022e913839ba02eb84423",
+      "current": "ef9eea9ed5e60376dec8b571c8a78369cb0e3b58483022e913839ba02eb84423",
+      "snapshot": "ef9eea9ed5e60376dec8b571c8a78369cb0e3b58483022e913839ba02eb84423"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/final-input-index.json",
+      "expected": "4bf0d611ca74bda600a1f1a3f7006fc75bd244447ad232acff656909762cda7c",
+      "current": "4bf0d611ca74bda600a1f1a3f7006fc75bd244447ad232acff656909762cda7c",
+      "snapshot": "4bf0d611ca74bda600a1f1a3f7006fc75bd244447ad232acff656909762cda7c"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-002-wudian_choudu_card.ngsa",
+      "expected": "06e8409d46d4d52e2eb5bc4ac925744b7db2c95d2f2ab61d076731f6327a2a28",
+      "current": "06e8409d46d4d52e2eb5bc4ac925744b7db2c95d2f2ab61d076731f6327a2a28",
+      "snapshot": "06e8409d46d4d52e2eb5bc4ac925744b7db2c95d2f2ab61d076731f6327a2a28"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-004-wudian_choudu_target.ngsa",
+      "expected": "cd2ba43a969f568beca8758ea8275e27df48b7349490727cc73d036144c19443",
+      "current": "cd2ba43a969f568beca8758ea8275e27df48b7349490727cc73d036144c19443",
+      "snapshot": "cd2ba43a969f568beca8758ea8275e27df48b7349490727cc73d036144c19443"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-006-wudian_diaobing_swap.ngsa",
+      "expected": "6d650ad1cb6dbc05962cdb61de5a06da773df2927788878f104175328cb5cd43",
+      "current": "6d650ad1cb6dbc05962cdb61de5a06da773df2927788878f104175328cb5cd43",
+      "snapshot": "6d650ad1cb6dbc05962cdb61de5a06da773df2927788878f104175328cb5cd43"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-009-wudian_choudu_card.ngsa",
+      "expected": "d49de3ef28d2df0d6cac8c11e3e847d247fe9f0d15090b27c450b38c5fb89d54",
+      "current": "d49de3ef28d2df0d6cac8c11e3e847d247fe9f0d15090b27c450b38c5fb89d54",
+      "snapshot": "d49de3ef28d2df0d6cac8c11e3e847d247fe9f0d15090b27c450b38c5fb89d54"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-011-wudian_choudu_target.ngsa",
+      "expected": "41e073be54c57562479f7bff2e088fed5a415bd255148c7c335b98d73818e5d7",
+      "current": "41e073be54c57562479f7bff2e088fed5a415bd255148c7c335b98d73818e5d7",
+      "snapshot": "41e073be54c57562479f7bff2e088fed5a415bd255148c7c335b98d73818e5d7"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-013-wudian_diaobing_swap.ngsa",
+      "expected": "b69e563937b4293d80c30aa20981b649803e46115c83ec8d94aa08613169ba5f",
+      "current": "b69e563937b4293d80c30aa20981b649803e46115c83ec8d94aa08613169ba5f",
+      "snapshot": "b69e563937b4293d80c30aa20981b649803e46115c83ec8d94aa08613169ba5f"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-016-wudian_choudu_card.ngsa",
+      "expected": "df4d54468b686d92cde722d7259fdec17344f2d5ad3a77d3bcef3af18d11982d",
+      "current": "df4d54468b686d92cde722d7259fdec17344f2d5ad3a77d3bcef3af18d11982d",
+      "snapshot": "df4d54468b686d92cde722d7259fdec17344f2d5ad3a77d3bcef3af18d11982d"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-018-wudian_choudu_target.ngsa",
+      "expected": "bd6a58376c808376d31250172b44aa5b7869bd20f15751ea37a82bfa876fa244",
+      "current": "bd6a58376c808376d31250172b44aa5b7869bd20f15751ea37a82bfa876fa244",
+      "snapshot": "bd6a58376c808376d31250172b44aa5b7869bd20f15751ea37a82bfa876fa244"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-020-wudian_diaobing_swap.ngsa",
+      "expected": "da82e5e8ffcba211b3ea514e2596cacfd557a6cf6b7125e01d6f80f3a6a30ba5",
+      "current": "da82e5e8ffcba211b3ea514e2596cacfd557a6cf6b7125e01d6f80f3a6a30ba5",
+      "snapshot": "da82e5e8ffcba211b3ea514e2596cacfd557a6cf6b7125e01d6f80f3a6a30ba5"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-023-wudian_choudu_card.ngsa",
+      "expected": "6a8e9823ab419d2225c7b9fb4c772ac405f20eff8b552c1a74571019f741f988",
+      "current": "6a8e9823ab419d2225c7b9fb4c772ac405f20eff8b552c1a74571019f741f988",
+      "snapshot": "6a8e9823ab419d2225c7b9fb4c772ac405f20eff8b552c1a74571019f741f988"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-025-wudian_choudu_target.ngsa",
+      "expected": "3b33d20b681dc45af181c1aca12cc1a573f0529fa1d256f0e43d715c7156e7dd",
+      "current": "3b33d20b681dc45af181c1aca12cc1a573f0529fa1d256f0e43d715c7156e7dd",
+      "snapshot": "3b33d20b681dc45af181c1aca12cc1a573f0529fa1d256f0e43d715c7156e7dd"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-027-wudian_diaobing_swap.ngsa",
+      "expected": "cf601bc2426a9dab857fb4d66568996f31e77b50d559b160dbdbf90e138e3c2e",
+      "current": "cf601bc2426a9dab857fb4d66568996f31e77b50d559b160dbdbf90e138e3c2e",
+      "snapshot": "cf601bc2426a9dab857fb4d66568996f31e77b50d559b160dbdbf90e138e3c2e"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-030-wudian_choudu_card.ngsa",
+      "expected": "3234fdf6b3f71101400ef4f2120bcf637736d5c6c168aa35f7711845215d4c4c",
+      "current": "3234fdf6b3f71101400ef4f2120bcf637736d5c6c168aa35f7711845215d4c4c",
+      "snapshot": "3234fdf6b3f71101400ef4f2120bcf637736d5c6c168aa35f7711845215d4c4c"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-032-wudian_choudu_target.ngsa",
+      "expected": "da45740297c9fd34e5fd664ebb09aa285bf0210376fdf5f1bf86ec1d163ef038",
+      "current": "da45740297c9fd34e5fd664ebb09aa285bf0210376fdf5f1bf86ec1d163ef038",
+      "snapshot": "da45740297c9fd34e5fd664ebb09aa285bf0210376fdf5f1bf86ec1d163ef038"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-034-wudian_diaobing_swap.ngsa",
+      "expected": "07366ebaf0d67614edf14b892bf323324d72c03f0c343c5ef26af0590b49fb70",
+      "current": "07366ebaf0d67614edf14b892bf323324d72c03f0c343c5ef26af0590b49fb70",
+      "snapshot": "07366ebaf0d67614edf14b892bf323324d72c03f0c343c5ef26af0590b49fb70"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-037-wudian_choudu_card.ngsa",
+      "expected": "7a79df99bb3e57e5adffcb6511909be9543dd908559c68a8af107918ce78605f",
+      "current": "7a79df99bb3e57e5adffcb6511909be9543dd908559c68a8af107918ce78605f",
+      "snapshot": "7a79df99bb3e57e5adffcb6511909be9543dd908559c68a8af107918ce78605f"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-039-wudian_choudu_target.ngsa",
+      "expected": "f80183a649d51b360b6894835011057f6ee3319cc2e72d8a9fce2f71ef004350",
+      "current": "f80183a649d51b360b6894835011057f6ee3319cc2e72d8a9fce2f71ef004350",
+      "snapshot": "f80183a649d51b360b6894835011057f6ee3319cc2e72d8a9fce2f71ef004350"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-041-wudian_diaobing_swap.ngsa",
+      "expected": "16065654d24ce02190ba77796c5211735452183d39f0f072324b39e87abd4da9",
+      "current": "16065654d24ce02190ba77796c5211735452183d39f0f072324b39e87abd4da9",
+      "snapshot": "16065654d24ce02190ba77796c5211735452183d39f0f072324b39e87abd4da9"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-044-wudian_choudu_card.ngsa",
+      "expected": "b7d787480f86fcef51955e310cac5b9297ea18c95b193660c393e95efd63f06a",
+      "current": "b7d787480f86fcef51955e310cac5b9297ea18c95b193660c393e95efd63f06a",
+      "snapshot": "b7d787480f86fcef51955e310cac5b9297ea18c95b193660c393e95efd63f06a"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-047-wudian_choudu_card.ngsa",
+      "expected": "311ee3af6a30df7b15d3f9005e8fda83111352ac5608d9be67720eb81c017413",
+      "current": "311ee3af6a30df7b15d3f9005e8fda83111352ac5608d9be67720eb81c017413",
+      "snapshot": "311ee3af6a30df7b15d3f9005e8fda83111352ac5608d9be67720eb81c017413"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-049-wudian_choudu_target.ngsa",
+      "expected": "1570019e5c738dc6a13344352de55d058c4948f27fd6f81c4883aa81a64d6eda",
+      "current": "1570019e5c738dc6a13344352de55d058c4948f27fd6f81c4883aa81a64d6eda",
+      "snapshot": "1570019e5c738dc6a13344352de55d058c4948f27fd6f81c4883aa81a64d6eda"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-053-wudian_fuchou_cancel.ngsa",
+      "expected": "ea2ff168f389a371c4a09ddd1cceff5420c349246eda329971f172c406ab271b",
+      "current": "ea2ff168f389a371c4a09ddd1cceff5420c349246eda329971f172c406ab271b",
+      "snapshot": "ea2ff168f389a371c4a09ddd1cceff5420c349246eda329971f172c406ab271b"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-056-wudian_fuchou_cancel.ngsa",
+      "expected": "987e11059db7eb2cd9ff49005d6013fd455a5063eaaf92aec54c7908cfd1eefd",
+      "current": "987e11059db7eb2cd9ff49005d6013fd455a5063eaaf92aec54c7908cfd1eefd",
+      "snapshot": "987e11059db7eb2cd9ff49005d6013fd455a5063eaaf92aec54c7908cfd1eefd"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-059-wudian_fuchou_cancel.ngsa",
+      "expected": "26605f1306a47547e7d4b5056877182783608a9be63747f81551bcf5a1fb7435",
+      "current": "26605f1306a47547e7d4b5056877182783608a9be63747f81551bcf5a1fb7435",
+      "snapshot": "26605f1306a47547e7d4b5056877182783608a9be63747f81551bcf5a1fb7435"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-061-respond_shan.ngsa",
+      "expected": "34bfc4dde0ec05c210ef6b504b4e54b3afeaff43706026380d3c394a9f859cd2",
+      "current": "34bfc4dde0ec05c210ef6b504b4e54b3afeaff43706026380d3c394a9f859cd2",
+      "snapshot": "34bfc4dde0ec05c210ef6b504b4e54b3afeaff43706026380d3c394a9f859cd2"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-065-wudian_fuchou_cancel.ngsa",
+      "expected": "d9fa4121c06d47aa11fc1797082e223bb86cfacc492835ecd74f86861710db2e",
+      "current": "d9fa4121c06d47aa11fc1797082e223bb86cfacc492835ecd74f86861710db2e",
+      "snapshot": "d9fa4121c06d47aa11fc1797082e223bb86cfacc492835ecd74f86861710db2e"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-070-respond_shan.ngsa",
+      "expected": "76ab4bea475ff590b95d3ef6b30a4dfe3f033175738db7cdf21f4c2d52f722ac",
+      "current": "76ab4bea475ff590b95d3ef6b30a4dfe3f033175738db7cdf21f4c2d52f722ac",
+      "snapshot": "76ab4bea475ff590b95d3ef6b30a4dfe3f033175738db7cdf21f4c2d52f722ac"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-073-wudian_fuchou_cancel.ngsa",
+      "expected": "db3d4832cf3bc455c75deaa83745e86a1fd4ab360ef7f2397d16db4c74233c57",
+      "current": "db3d4832cf3bc455c75deaa83745e86a1fd4ab360ef7f2397d16db4c74233c57",
+      "snapshot": "db3d4832cf3bc455c75deaa83745e86a1fd4ab360ef7f2397d16db4c74233c57"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-078-respond_shan.ngsa",
+      "expected": "e7ce8ec0610ced8ff76aafd26de6fb14bad54b18b51865ea37fe3e663542670d",
+      "current": "e7ce8ec0610ced8ff76aafd26de6fb14bad54b18b51865ea37fe3e663542670d",
+      "snapshot": "e7ce8ec0610ced8ff76aafd26de6fb14bad54b18b51865ea37fe3e663542670d"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-081-wudian_fuchou_cancel.ngsa",
+      "expected": "5b87aee70915dab580b9f51dc2fd907a9060e01deaa13e6d15d678e236e96458",
+      "current": "5b87aee70915dab580b9f51dc2fd907a9060e01deaa13e6d15d678e236e96458",
+      "snapshot": "5b87aee70915dab580b9f51dc2fd907a9060e01deaa13e6d15d678e236e96458"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-086-respond_shan.ngsa",
+      "expected": "126bbc2844cf60f317bf3d68272c52cb1decb67b1ab5756292e345ad2eba2ada",
+      "current": "126bbc2844cf60f317bf3d68272c52cb1decb67b1ab5756292e345ad2eba2ada",
+      "snapshot": "126bbc2844cf60f317bf3d68272c52cb1decb67b1ab5756292e345ad2eba2ada"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-089-wudian_fuchou_cancel.ngsa",
+      "expected": "89617a3f991087d31a51fb0d6af485fa8144f722a3fda11b9629e808c76e8fd6",
+      "current": "89617a3f991087d31a51fb0d6af485fa8144f722a3fda11b9629e808c76e8fd6",
+      "snapshot": "89617a3f991087d31a51fb0d6af485fa8144f722a3fda11b9629e808c76e8fd6"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-094-respond_shan.ngsa",
+      "expected": "51b9eb8c1290bf5470ff033cf70eeb44e51547ce75b4576e5293cefe2dafc47e",
+      "current": "51b9eb8c1290bf5470ff033cf70eeb44e51547ce75b4576e5293cefe2dafc47e",
+      "snapshot": "51b9eb8c1290bf5470ff033cf70eeb44e51547ce75b4576e5293cefe2dafc47e"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-097-wudian_youzhan_discard.ngsa",
+      "expected": "90b631419a90abcc947805a7d580531657884e7a961298b2f8067eb7c56de092",
+      "current": "90b631419a90abcc947805a7d580531657884e7a961298b2f8067eb7c56de092",
+      "snapshot": "90b631419a90abcc947805a7d580531657884e7a961298b2f8067eb7c56de092"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-100-wudian_youzhan_discard.ngsa",
+      "expected": "3a59f366806660b6b6e2ebc03fc6d5a396a4b31cf199340255efe90ebc1d472e",
+      "current": "3a59f366806660b6b6e2ebc03fc6d5a396a4b31cf199340255efe90ebc1d472e",
+      "snapshot": "3a59f366806660b6b6e2ebc03fc6d5a396a4b31cf199340255efe90ebc1d472e"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-103-wudian_youzhan_discard.ngsa",
+      "expected": "21f9738f60e400f92d92450768f711b8ec3c8fa8911e124c4e49f99a39afcda9",
+      "current": "21f9738f60e400f92d92450768f711b8ec3c8fa8911e124c4e49f99a39afcda9",
+      "snapshot": "21f9738f60e400f92d92450768f711b8ec3c8fa8911e124c4e49f99a39afcda9"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-108-wudian_youzhan_discard.ngsa",
+      "expected": "95ef2169e3f8af78882ad76d52f251c8f596e3dfc5a1b930c7f2ac03d552a82c",
+      "current": "95ef2169e3f8af78882ad76d52f251c8f596e3dfc5a1b930c7f2ac03d552a82c",
+      "snapshot": "95ef2169e3f8af78882ad76d52f251c8f596e3dfc5a1b930c7f2ac03d552a82c"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-110-wudian_youdishenru_sha.ngsa",
+      "expected": "e267b17365f1054281ea64caaca9af255373634da7ffa9b1b5559e4d98f17445",
+      "current": "e267b17365f1054281ea64caaca9af255373634da7ffa9b1b5559e4d98f17445",
+      "snapshot": "e267b17365f1054281ea64caaca9af255373634da7ffa9b1b5559e4d98f17445"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-112-wudian_youzhan_discard.ngsa",
+      "expected": "5bc280dc671cf0e4d766b687de849b5f23e4bd699accfaffdf4f2f05d29ea147",
+      "current": "5bc280dc671cf0e4d766b687de849b5f23e4bd699accfaffdf4f2f05d29ea147",
+      "snapshot": "5bc280dc671cf0e4d766b687de849b5f23e4bd699accfaffdf4f2f05d29ea147"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-115-wudian_youzhan_discard.ngsa",
+      "expected": "b5269cecdcb89f57a148a9b6802f4aafef6ac0f9f2ab6513fb15a861b96898c4",
+      "current": "b5269cecdcb89f57a148a9b6802f4aafef6ac0f9f2ab6513fb15a861b96898c4",
+      "snapshot": "b5269cecdcb89f57a148a9b6802f4aafef6ac0f9f2ab6513fb15a861b96898c4"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-117-wudian_youdishenru_sha.ngsa",
+      "expected": "8729ac2769681346b479798b401c794642fc1dd2b79548a26d8409bdae57b8d0",
+      "current": "8729ac2769681346b479798b401c794642fc1dd2b79548a26d8409bdae57b8d0",
+      "snapshot": "8729ac2769681346b479798b401c794642fc1dd2b79548a26d8409bdae57b8d0"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-119-wudian_youzhan_discard.ngsa",
+      "expected": "84ea3a2e58efcb6a947d706ce60b55d14219f04ab1da00d0e8fba5f63fdc0e23",
+      "current": "84ea3a2e58efcb6a947d706ce60b55d14219f04ab1da00d0e8fba5f63fdc0e23",
+      "snapshot": "84ea3a2e58efcb6a947d706ce60b55d14219f04ab1da00d0e8fba5f63fdc0e23"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-121-respond_shan.ngsa",
+      "expected": "96baccee7365fc31090c2d5f84b9b2cab35463278513e25ece5c93ebad379a69",
+      "current": "96baccee7365fc31090c2d5f84b9b2cab35463278513e25ece5c93ebad379a69",
+      "snapshot": "96baccee7365fc31090c2d5f84b9b2cab35463278513e25ece5c93ebad379a69"
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/browser/session-wudian-1794592764804-requests.jsonl",
+      "expected": "034168492fe031dafc8e0990fe333f6e13b64a86be2cfc5e74562a82b2303f32",
+      "current": "034168492fe031dafc8e0990fe333f6e13b64a86be2cfc5e74562a82b2303f32",
+      "snapshot": null
+    },
+    {
+      "manifest": "final-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/browser/session-wudian-1794592764804-replies.jsonl",
+      "expected": "cba26390f74d50a22ea8f46f31e5c4167ddad0f19d361ffdbddbb665049ff997",
+      "current": "cba26390f74d50a22ea8f46f31e5c4167ddad0f19d361ffdbddbb665049ff997",
+      "snapshot": null
+    },
+    {
+      "manifest": "review-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host.rs",
+      "expected": "5040fd7da574e87f28bd26d28fa304e0a4fbc623a58fe63043a1dfc77f2a801c",
+      "current": "5040fd7da574e87f28bd26d28fa304e0a4fbc623a58fe63043a1dfc77f2a801c",
+      "snapshot": "5040fd7da574e87f28bd26d28fa304e0a4fbc623a58fe63043a1dfc77f2a801c"
+    },
+    {
+      "manifest": "review-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/factory.rs",
+      "expected": "1e62e8ab39709ccbbfc01fbbe1d11b7004d2f77240477a23df4640a180367b4c",
+      "current": "1e62e8ab39709ccbbfc01fbbe1d11b7004d2f77240477a23df4640a180367b4c",
+      "snapshot": "1e62e8ab39709ccbbfc01fbbe1d11b7004d2f77240477a23df4640a180367b4c"
+    },
+    {
+      "manifest": "review-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/intrinsic_named_ext.rs",
+      "expected": "c5ff8bee5363b705bb0a364d8a784a1b8c1b0d946dce9fad108ff2b812f2f18e",
+      "current": "c5ff8bee5363b705bb0a364d8a784a1b8c1b0d946dce9fad108ff2b812f2f18e",
+      "snapshot": "c5ff8bee5363b705bb0a364d8a784a1b8c1b0d946dce9fad108ff2b812f2f18e"
+    },
+    {
+      "manifest": "review-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/machine.rs",
+      "expected": "219c8c8fc913ad743af196734f4a0bca87565c52331feb0b7442e4915b379197",
+      "current": "219c8c8fc913ad743af196734f4a0bca87565c52331feb0b7442e4915b379197",
+      "snapshot": "219c8c8fc913ad743af196734f4a0bca87565c52331feb0b7442e4915b379197"
+    },
+    {
+      "manifest": "review-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/kernel/sha/step.rs",
+      "expected": "878061c4301a87ae9eb9e1024e0a3a831d2f987faaf0f1edaa71d96f08a4754d",
+      "current": "878061c4301a87ae9eb9e1024e0a3a831d2f987faaf0f1edaa71d96f08a4754d",
+      "snapshot": "878061c4301a87ae9eb9e1024e0a3a831d2f987faaf0f1edaa71d96f08a4754d"
+    },
+    {
+      "manifest": "review-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/src/engine/snapshot.rs",
+      "expected": "d94617bb19fea4b4840a5af0856c901ed7675ece0dc5fc131a7f0e2c5417c914",
+      "current": "d94617bb19fea4b4840a5af0856c901ed7675ece0dc5fc131a7f0e2c5417c914",
+      "snapshot": "d94617bb19fea4b4840a5af0856c901ed7675ece0dc5fc131a7f0e2c5417c914"
+    },
+    {
+      "manifest": "review-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/src/engine/play_card.rs",
+      "expected": "da02ada44729bcde3fbbc7fd41b7d753459ef97c40afbf0419ff87af8ea3cab5",
+      "current": "da02ada44729bcde3fbbc7fd41b7d753459ef97c40afbf0419ff87af8ea3cab5",
+      "snapshot": "da02ada44729bcde3fbbc7fd41b7d753459ef97c40afbf0419ff87af8ea3cab5"
+    },
+    {
+      "manifest": "review-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/src/engine/play_card_targets.rs",
+      "expected": "d5cf246b1c5d9757f0d45224c1bf5937e30420748dbcd5a5a4332d9aa708bed7",
+      "current": "d5cf246b1c5d9757f0d45224c1bf5937e30420748dbcd5a5a4332d9aa708bed7",
+      "snapshot": "d5cf246b1c5d9757f0d45224c1bf5937e30420748dbcd5a5a4332d9aa708bed7"
+    },
+    {
+      "manifest": "review-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/src/engine/legal_actions.rs",
+      "expected": "b77664d4fd414a1f2c06e0aa0f2158e31bb292084599ae3c0de5d87f325a58ba",
+      "current": "b77664d4fd414a1f2c06e0aa0f2158e31bb292084599ae3c0de5d87f325a58ba",
+      "snapshot": "b77664d4fd414a1f2c06e0aa0f2158e31bb292084599ae3c0de5d87f325a58ba"
+    },
+    {
+      "manifest": "review-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader/src/decision34_pack9.rs",
+      "expected": "57677960381809834e0a6990cdb0b0082474f9a0c55819059046b98529ecd428",
+      "current": "57677960381809834e0a6990cdb0b0082474f9a0c55819059046b98529ecd428",
+      "snapshot": "57677960381809834e0a6990cdb0b0082474f9a0c55819059046b98529ecd428"
+    },
+    {
+      "manifest": "review-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader/src/host_skill_bindings.rs",
+      "expected": "f105655a7fadf096d816cd185218cf6738d6e2dd2bd79b37d334150af9713119",
+      "current": "f105655a7fadf096d816cd185218cf6738d6e2dd2bd79b37d334150af9713119",
+      "snapshot": "f105655a7fadf096d816cd185218cf6738d6e2dd2bd79b37d334150af9713119"
+    },
+    {
+      "manifest": "review-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-api/src/version.rs",
+      "expected": "e7126262a55bf26def446dfdf93e67cdec3de8a3b11d322693d0416225a0fbd1",
+      "current": "e7126262a55bf26def446dfdf93e67cdec3de8a3b11d322693d0416225a0fbd1",
+      "snapshot": "e7126262a55bf26def446dfdf93e67cdec3de8a3b11d322693d0416225a0fbd1"
+    },
+    {
+      "manifest": "review-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-protocol/src/lib.rs",
+      "expected": "eb573f15efd6a24ec82724d53d77026aacdd2c0cd6d5b88973f6c0cd059fbbfd",
+      "current": "eb573f15efd6a24ec82724d53d77026aacdd2c0cd6d5b88973f6c0cd059fbbfd",
+      "snapshot": "eb573f15efd6a24ec82724d53d77026aacdd2c0cd6d5b88973f6c0cd059fbbfd"
+    },
+    {
+      "manifest": "review-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/standard.rs",
+      "expected": "2f56610f8001f507fd846f2b4a9f2f619641d74ddba6be77df2a77fec4ba63fb",
+      "current": "2f56610f8001f507fd846f2b4a9f2f619641d74ddba6be77df2a77fec4ba63fb",
+      "snapshot": "2f56610f8001f507fd846f2b4a9f2f619641d74ddba6be77df2a77fec4ba63fb"
+    },
+    {
+      "manifest": "review-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/archive.rs",
+      "expected": "f85174e6cb3de81dd75354e41286f7971e2e6878f0c5343b25db04e685cdd825",
+      "current": "f85174e6cb3de81dd75354e41286f7971e2e6878f0c5343b25db04e685cdd825",
+      "snapshot": "f85174e6cb3de81dd75354e41286f7971e2e6878f0c5343b25db04e685cdd825"
+    },
+    {
+      "manifest": "review-inputs.json",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/玩点论杀/card/list.js",
+      "expected": "b76bb05416a8bd1065e35e2d00fd005512481dc9a7655e0fab70f8a0d8aa84af",
+      "current": "b76bb05416a8bd1065e35e2d00fd005512481dc9a7655e0fab70f8a0d8aa84af",
+      "snapshot": "b76bb05416a8bd1065e35e2d00fd005512481dc9a7655e0fab70f8a0d8aa84af"
+    }
+  ],
+  "manifest_input_changes": 0,
+  "snapshot_changes": 0,
+  "frozen_u07_files_checked": 298,
+  "frozen_u07_file_changes": 0,
+  "final_index_sha256": "4bf0d611ca74bda600a1f1a3f7006fc75bd244447ad232acff656909762cda7c",
+  "frozen_u07_manifest_sha256": "cffbd31ac37c7d5cf0e252094cb33db87545bff2cb34dbc2ee7d4cb4634c0a35",
+  "local_report_links_checked": 17,
+  "bad_links": [],
+  "findings_inventory_keys_exist": true,
+  "source_line_bounds_valid": true,
+  "cargo_or_browser_rerun": false,
+  "passed": true
+}

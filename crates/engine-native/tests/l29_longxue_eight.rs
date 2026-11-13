@@ -897,3 +897,130 @@ fn l29_mbcmfangzhu_and_mbjuejin_six_dimensions() {
         CommandOutcome::Rejected(_)
     ));
 }
+
+/// 上游 archive/upstream/noname-liuli/noname/extension/龙血玄黄/extension.js:1
+/// 的 mbcmjiushi：主动翻面、受伤翻回及翻面后
+/// 获锦囊都是可选确认。真实事件创建的确认窗必须能在回答前保存恢复。
+#[test]
+fn l29_jiushi_pending_confirmations_restore_and_match_direct_answers() {
+    let pack = longxue_pack();
+    for (turnback, first_confirm, gain_confirm) in [
+        (false, true, true),
+        (false, false, false),
+        (true, false, false),
+        (true, true, true),
+        (true, true, false),
+    ] {
+        let mut e = Engine::new_with_extensions(2026111429, 3, &[&pack]).unwrap();
+        e.state_core_mut().skills.clear();
+        for seat in 0..3 {
+            e.debug_clear_hand(seat);
+        }
+        e.debug_grant(0, "mbcmjiushi");
+        if turnback {
+            e.state_core_mut().player_mut(0).face_down = true;
+            e.debug_set_turn(1, Phase::Play, 1);
+            let sha = e.debug_place(1, "sha");
+            assert!(matches!(
+                submit(
+                    &mut e,
+                    1,
+                    GameAction::PlayCard {
+                        card: sha,
+                        targets: vec![0]
+                    }
+                ),
+                CommandOutcome::Pending { .. }
+            ));
+        } else {
+            e.debug_set_turn(0, Phase::Play, 1);
+            let skill = e.catalog().skill_by_name("mbcmjiushi").unwrap();
+            assert!(matches!(
+                submit(&mut e, 0, GameAction::ActivateSkill { skill }),
+                CommandOutcome::Pending { .. }
+            ));
+        }
+        let mut answers = 0;
+        while let Some(choice) = e.open_choice().cloned() {
+            assert!(answers < 2, "酒诗最多两个确认窗");
+            let is_turnback = choice.spec.prompt == "mbcmjiushi_turnback_confirm";
+            assert!(is_turnback || choice.spec.prompt == "mbcmjiushi_gain_confirm");
+            assert_eq!(choice.observer, 0);
+            assert_eq!(choice.spec.options, vec![ChoiceOption::Confirm]);
+            assert!(choice.spec.allow_cancel);
+
+            let bytes = encode_archive(&e.save());
+            let snapshot = decode_archive(&bytes).unwrap();
+            let mut resumed = Engine::restore_with_extensions(&snapshot, &[&pack])
+                .expect("真实酒诗确认窗在回答前必须可恢复");
+            assert_eq!(e.state_hash(), resumed.state_hash());
+            assert_eq!(e.open_choice(), resumed.open_choice());
+
+            // 损坏候选仍须拒绝，不能通过放宽开放选择校验修复恢复失败。
+            let mut corrupt = snapshot.clone();
+            corrupt
+                .resolution
+                .open_choice
+                .as_mut()
+                .unwrap()
+                .spec
+                .options
+                .push(ChoiceOption::Pass);
+            assert!(Engine::restore_with_extensions(&corrupt, &[&pack]).is_err());
+
+            let confirm = if answers == 0 {
+                first_confirm
+            } else {
+                gain_confirm
+            };
+            let selection = if confirm {
+                vec![ChoiceOption::Confirm]
+            } else {
+                vec![]
+            };
+            let before = e.log().len();
+            let direct = submit(
+                &mut e,
+                0,
+                GameAction::Answer {
+                    choice_id: choice.id,
+                    selection: selection.clone(),
+                },
+            );
+            let restored = submit(
+                &mut resumed,
+                0,
+                GameAction::Answer {
+                    choice_id: choice.id,
+                    selection,
+                },
+            );
+            assert!(
+                matches!(
+                    direct,
+                    CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+                ),
+                "{direct:?}"
+            );
+            assert_eq!(
+                std::mem::discriminant(&direct),
+                std::mem::discriminant(&restored)
+            );
+            assert_eq!(e.state_hash(), resumed.state_hash());
+            assert_eq!(&e.log()[before..], resumed.log());
+            assert_eq!(e.open_choice(), resumed.open_choice());
+            answers += 1;
+        }
+        assert_eq!(answers, if turnback && first_confirm { 2 } else { 1 });
+        assert_eq!(
+            e.state_core().player(0).face_down,
+            !turnback || !first_confirm
+        );
+        let gained = if turnback {
+            first_confirm && gain_confirm
+        } else {
+            first_confirm
+        };
+        assert_eq!(e.debug_hand(0).len(), usize::from(gained));
+    }
+}

@@ -1,0 +1,9 @@
+{
+  "at": "2026-11-14T01:50:40.041867+08:00",
+  "first_command": "03-browser-monkey-first.json",
+  "first_source": "start-case-first-failure.js",
+  "reason": "removeSkill uses _status.event.clearStepCache; create the new root immediately after resetting EventManager, matching the previous proven launch fixture order",
+  "before_sha256": "2c83693aa3ced1e1ce700b2208df011bc6aaba17cd8a022043e6360c3bbe7276",
+  "after_sha256": "6a4ffac3a6096351e1ddf68c3e6e04e69ca4d509a38fd24fb7e7aa2490bfc0ca",
+  "skill_code_changed": false
+}

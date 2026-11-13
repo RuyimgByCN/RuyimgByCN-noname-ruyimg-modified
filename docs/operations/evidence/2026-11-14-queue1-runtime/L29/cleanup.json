@@ -1,0 +1,13 @@
+{
+  "at": "2026-11-13T18:05:05.186144+00:00",
+  "launcher_pid": 80226,
+  "launcher_command": "node docs/operations/evidence/2026-11-14-queue1-runtime/L29/launch.mjs",
+  "signalled": "SIGTERM",
+  "chrome_pid": 80234,
+  "chrome_running_after": false,
+  "profile": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-l29-runtime-chrome-2fYoCi",
+  "profile_exists_after": false,
+  "shared_target_cleaned": false,
+  "private_cargo_target_created": false,
+  "preserved_before_binary": "/private/tmp/noname-l29-runtime-preserved-kr0fipes/probe-before-jiushi-fix"
+}

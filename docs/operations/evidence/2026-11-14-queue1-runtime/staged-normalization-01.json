@@ -1,0 +1,224 @@
+{
+  "at": "2026-11-14T02:35:58.606461+08:00",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "index_paths_checked": 2150,
+  "original_untracked_paths_staged": 0,
+  "normalizations": [
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/6_build-windows-latest.txt",
+      "working_bytes": 361764,
+      "staged_bytes": 358026,
+      "working_sha256": "3b0c32d6e10fe62f1dd94e5bb6456acb174c6d96e205754b8b4eb7db9e6941d2",
+      "staged_sha256": "690c325e51d9c77cd0f15e4684ded8e293a37e250c9f9a8f91f48799c8f9c455",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/7_desktop-windows-latest.txt",
+      "working_bytes": 164920,
+      "staged_bytes": 162796,
+      "working_sha256": "7adeee96a6b29676a1dee7c12f1b4c70b9d6c081f9fcb22aa09dc5c42535cf60",
+      "staged_sha256": "aa734c5a23f8850c5f94b3e23675ae309e264dfc1f1d289c4caa3aeffc13a0a8",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/build-windows-latest/11_Post Run Swatinem_rust-cache@v2.txt",
+      "working_bytes": 99,
+      "staged_bytes": 97,
+      "working_sha256": "5a08ad95e823fd279c314f6b4fcb9d390e3ff99acc6bf55a9f6c7b43530693db",
+      "staged_sha256": "3743e74703d35e4ee737dbf2187d7d4c83c94ef6e26d1504d29301ea6c2fe5b4",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/build-windows-latest/12_Post Run actions_checkout@v4.txt",
+      "working_bytes": 1979,
+      "staged_bytes": 1965,
+      "working_sha256": "448389c24b9445348e063b34f86cda58ae8a1354ed258fc85063c798a2f8b3fd",
+      "staged_sha256": "f3a85e8c329957b2ba84faec80bb288e6333727693da8da76273cd730e4e35e2",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/build-windows-latest/13_Complete job.txt",
+      "working_bytes": 425,
+      "staged_bytes": 422,
+      "working_sha256": "aa9e2b05784eb2779d9d9d092f5f8c9332c13f3c50268816cbd51eba5ab782e4",
+      "staged_sha256": "3dec82d184847329507eb96e0648195d864a4bbae52ff6b5098f4370309922a5",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/build-windows-latest/1_Set up job.txt",
+      "working_bytes": 2260,
+      "staged_bytes": 2226,
+      "working_sha256": "95aed71815b558d1afda3a29f8d7a5ff2f393bb1da7fcf4ebab39b3316f62018",
+      "staged_sha256": "3107be9a4f108ce18b60f0b57515d410d68c3c20cf898fb21a97f4d20085edd0",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/build-windows-latest/2_Run actions_checkout@v4.txt",
+      "working_bytes": 14555,
+      "staged_bytes": 14356,
+      "working_sha256": "c8886ccb79d808c1e0c733d7e90dc5f56c3d0e9b7522a8d6e3361417691bbe2b",
+      "staged_sha256": "375eb49e4f62f96b9edec22e808af4de4a816c2211c49b6d6cf5ca5a9467e583",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/build-windows-latest/3_Run dtolnay_rust-toolchain@stable.txt",
+      "working_bytes": 17114,
+      "staged_bytes": 16910,
+      "working_sha256": "1efec40d685e660e36970d9fcb02c68f2d27f841d037a9cd9b329a7132b773de",
+      "staged_sha256": "d52443f9e909c1126a32536c82e8a274efe40f99dd35ca3d4dfd282b5dfbca8d",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/build-windows-latest/4_Run Swatinem_rust-cache@v2.txt",
+      "working_bytes": 8333,
+      "staged_bytes": 8247,
+      "working_sha256": "f4d91483b8189873650dbd03dd733b5a7884f8bf8242879d9b1ba4f758ff966b",
+      "staged_sha256": "5ecdc54dab72d21075f21d494cf241a580376fad207e6a7b5c729d48c1fee885",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/build-windows-latest/5_Build workspace.txt",
+      "working_bytes": 116066,
+      "staged_bytes": 114815,
+      "working_sha256": "52acc3baec4032ce5858b9c7d226b386c3b4b387e64a8fbd42c4aab2de093c53",
+      "staged_sha256": "bceb88c2d261b4d618cf388d3b20144aa4b7cf673b2deb7ce0f1fd8debaff6af",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/build-windows-latest/6_Unit tests.txt",
+      "working_bytes": 200957,
+      "staged_bytes": 199012,
+      "working_sha256": "87fc46a4df61be0cabb1947140668e01beec4d09c8b562cabce48a8a1e50c8f9",
+      "staged_sha256": "06186a33d33939da17ce7c9ec1ee68a1d10f942fa719f8e9fea722ab8cde192c",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/desktop-windows-latest/10_Produce installer (tauri beforeBuildCommand builds the web client).txt",
+      "working_bytes": 85952,
+      "staged_bytes": 84813,
+      "working_sha256": "fd89277055aa518a284f5bc1e4bbfe3dd42fca5ef523c7a42e15c17b623b864e",
+      "staged_sha256": "3f0cb196f7ca54b3c4922438b7ff0e24876422526cffd4f11620a5e3194903b6",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/desktop-windows-latest/11_Upload installer artifact.txt",
+      "working_bytes": 2650,
+      "staged_bytes": 2617,
+      "working_sha256": "e4e61b0c522376a1094df96b154d85cf255265d867be26bdc5622f64ff026bae",
+      "staged_sha256": "499c1c39099e7ccc2346c55b83271dfe449d919f7383c3fd96833600bb8bd49a",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/desktop-windows-latest/19_Post Run ._noname-next_.github_actions_prepare-original-content.txt",
+      "working_bytes": 2534,
+      "staged_bytes": 2515,
+      "working_sha256": "e4e1280613156138757a7db8fe332ce0723bcd24d87f121eb44b62fd8a0be6cb",
+      "staged_sha256": "86806b13aa39ad5d9d3ef17265fc1425f5cf73eb2075b34b893a7d7b45474fcf",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/desktop-windows-latest/1_Set up job.txt",
+      "working_bytes": 2524,
+      "staged_bytes": 2488,
+      "working_sha256": "132a8b627a0cf76e480e38706deab68b1e0548ff524f699558326a5f1ca18daa",
+      "staged_sha256": "c2b5b37cf4d8b1c32e68b6646da244c1a6b9072a5699e0a04178f8cf362bb437",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/desktop-windows-latest/20_Post Run actions_setup-node@v4.txt",
+      "working_bytes": 308,
+      "staged_bytes": 305,
+      "working_sha256": "965e464dd168bfec77e36181f14e9d7e81cd33540a668d586708624ae67f798c",
+      "staged_sha256": "af4d715f7b095c8e958b5c6b4f1bd026de50bbe119fb075137021d7ac0c8b01a",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/desktop-windows-latest/21_Post Run Swatinem_rust-cache@v2.txt",
+      "working_bytes": 99,
+      "staged_bytes": 97,
+      "working_sha256": "74c49592e8d27383a4604580836edf46874167a527298b5a2db84b7fe778a6db",
+      "staged_sha256": "2bf1d97f6a97036288eec7b38d13f26e91d7ccdeda00348b2eea098a279a3f00",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/desktop-windows-latest/22_Post Run actions_checkout@v4.txt",
+      "working_bytes": 1979,
+      "staged_bytes": 1965,
+      "working_sha256": "d227da892c48cba57e0c87eee1743c1d181c3f9291878f19b14ddbdf37dcb0e2",
+      "staged_sha256": "9827fc90f37378c1ec289b9693144deb75840589a8f6d3442050750d3933282f",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/desktop-windows-latest/23_Complete job.txt",
+      "working_bytes": 498,
+      "staged_bytes": 495,
+      "working_sha256": "c5b9a8b2bac58332374c12c3ce59f096b2fa7e0d3f3684af0d67918f7948e380",
+      "staged_sha256": "dd33ff9312f7cdc2616afcb6023e7c71c846cdaab78f5101817049231c690b4c",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/desktop-windows-latest/2_Run actions_checkout@v4.txt",
+      "working_bytes": 14621,
+      "staged_bytes": 14421,
+      "working_sha256": "85bddd97e9bfb42ef88e6c850563e739361b23fe5a0d58943f7cb72d6e8632d0",
+      "staged_sha256": "ba57fa37fd75275a5af3f8907fd8901292595385208d86093eeeb2303f99c6e7",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/desktop-windows-latest/3_Run dtolnay_rust-toolchain@stable.txt",
+      "working_bytes": 17114,
+      "staged_bytes": 16910,
+      "working_sha256": "ecd4e64dc6f854dbc93744aa645bc56552fc7d1cc4e0d9276c95b0a6eaef5d67",
+      "staged_sha256": "5e66b136c025c07e4c7d2c4f860d8c76f986a5be196e98e61734b31999fc4502",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/desktop-windows-latest/4_Run Swatinem_rust-cache@v2.txt",
+      "working_bytes": 8591,
+      "staged_bytes": 8502,
+      "working_sha256": "8b101a92e3b358625edacdf6cf5f3eda4bd32940a9cdb9617cf346f9989f1188",
+      "staged_sha256": "29105ca6bf5cfc14e424573cf42faf7011f9cc210120e74e3af2370ccea822fb",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/desktop-windows-latest/5_Run actions_setup-node@v4.txt",
+      "working_bytes": 1427,
+      "staged_bytes": 1404,
+      "working_sha256": "49496714a77d7135267761a8efd3e05b9cc07c0b4dc7edca1532252830522478",
+      "staged_sha256": "879f56b2e9e572f1ee5b4a83dae7a6133fb545df653317dd85ac1d1fa2213108",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/desktop-windows-latest/7_Run ._noname-next_.github_actions_prepare-original-content.txt",
+      "working_bytes": 24601,
+      "staged_bytes": 24270,
+      "working_sha256": "0ad903973be6c5a0696563ad500f227791455d5b76a30914bc54f69728b749ac",
+      "staged_sha256": "9ec2f6390a5f81d51fe0538738713a7ea29fb0649b526a187af9dea569c10fb9",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/desktop-windows-latest/8_Install wasm-pack.txt",
+      "working_bytes": 1034,
+      "staged_bytes": 1020,
+      "working_sha256": "7ec73129bf7df85426890a8244e63b81c7cb5d426bc47c0233a999fc56b0ed1c",
+      "staged_sha256": "ec843141b3e2cdbc01d4fd5aae6cffc44bf027c3007532b97685e2dedecf25e5",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first/desktop-windows-latest/9_Install Tauri CLI.txt",
+      "working_bytes": 1030,
+      "staged_bytes": 1016,
+      "working_sha256": "eb0582d1e64a3078ea1d2d30c6fb3dfed1f790b72e5a1812848d8edfadbbf14d",
+      "staged_sha256": "c39653f05a2db5cb576c754c706e38bcbe79c226945e7410b46444e0ba7cfe28",
+      "operation": "existing Git CRLF-to-LF normalization only"
+    }
+  ],
+  "all_other_staged_files_equal_working_bytes": true,
+  "canonical_raw_ci_archive": {
+    "path": "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/logs-first.zip",
+    "bytes": 1870038,
+    "sha256": "2227264c078e8373c638403cc789f10688c91e113d62f05fdfc092783061e0eb",
+    "index_bytes_equal": true
+  },
+  "scope": "保持原始ZIP字节。26份Windows解包文本按既有Git属性仅CRLF归一为LF；不重写工作区原始日志。冻结U07与独立证据工作字节均与index一致。"
+}

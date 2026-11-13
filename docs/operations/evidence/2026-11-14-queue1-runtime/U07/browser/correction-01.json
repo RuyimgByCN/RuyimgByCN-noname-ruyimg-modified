@@ -1,0 +1,6 @@
+{
+  "at": "2026-11-13T18:04:11.011515+00:00",
+  "failure": "case-results-first.jsonl",
+  "cause": "unused native deck suffix includes native catalog aliases not registered as upstream card names",
+  "change": "explicit alias map, including native namespaced U07 cards; generic weapon/horse/armor suffix mapping is harness-only, not an equivalence claim; exercised draw prefix consists only sha/shan/tao; native armor is only hand cost in these cases"
+}

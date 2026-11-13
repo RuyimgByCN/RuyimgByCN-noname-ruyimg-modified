@@ -1,0 +1,22 @@
+{
+  "at": "2026-11-14T02:14:10.863493+08:00",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "owned_product_files": [
+    "crates/engine-native-content/src/content/host/asks_wudian.rs",
+    "crates/engine-native/tests/l29_longxue_eight.rs"
+  ],
+  "owned_evidence_roots": [
+    "docs/operations/evidence/2026-11-14-queue1-runtime/U06",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/L29",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/independent/u06-l29",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/restore-fix",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/publication"
+  ],
+  "excluded_active_evidence_roots": [
+    "docs/operations/evidence/2026-11-14-queue1-runtime/U07",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/L10",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/independent/u07"
+  ],
+  "scope": "First publish the completed L29 archive restoration fix with frozen U06/L29 evidence and independent review after all required gates. U07/L10 continue independently as later documentation evidence; do not stage an active writer or claim those sources complete.",
+  "stage_policy": "Explicit owned tracked paths and completed evidence prefixes only; no git add ., no git add -A; preserve all original untracked paths and worktrees."
+}

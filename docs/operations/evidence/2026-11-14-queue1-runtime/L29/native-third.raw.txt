@@ -1,0 +1,25 @@
+   Compiling l29-queue1-runtime-probe v0.0.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-probe)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.99s
+     Running `target/debug/l29-queue1-runtime-probe`
+{"case":"q_A","final_choice":null,"final_ngsa_bytes_equal":false,"pending_checkpoints":4}
+{"case":"q_B","final_choice":null,"final_ngsa_bytes_equal":false,"pending_checkpoints":4}
+{"case":"q_target_B","final_choice":null,"final_ngsa_bytes_equal":false,"pending_checkpoints":4}
+{"case":"q_cancel_initial","final_choice":null,"final_ngsa_bytes_equal":false,"pending_checkpoints":1}
+{"case":"q_cancel_target","final_choice":null,"final_ngsa_bytes_equal":false,"pending_checkpoints":3}
+{"case":"q_cancel_suit_attempt","final_choice":{"allow_cancel":false,"id":2,"kind":"PickTag","max":1,"min":1,"observer":0,"options":["Tag(0)","Tag(1)"],"prompt":"mbcmqingzheng_suit"},"final_ngsa_bytes_equal":false,"pending_checkpoints":2}
+{"case":"q_no_hand","final_choice":null,"final_ngsa_bytes_equal":true,"pending_checkpoints":0}
+{"case":"j_active_gain","final_choice":null,"final_ngsa_bytes_equal":true,"pending_checkpoints":1}
+{"case":"j_active_cancel_gain","final_choice":null,"final_ngsa_bytes_equal":true,"pending_checkpoints":1}
+{"case":"j_active_facedown","final_choice":null,"final_ngsa_bytes_equal":true,"pending_checkpoints":0}
+{"case":"j_no_skill","final_choice":null,"final_ngsa_bytes_equal":true,"pending_checkpoints":0}
+{"case":"j_damage_back_accept_gain","final_choice":null,"final_ngsa_bytes_equal":true,"pending_checkpoints":2}
+{"case":"j_damage_back_cancel","final_choice":null,"final_ngsa_bytes_equal":true,"pending_checkpoints":1}
+{"case":"j_damage_faceup","final_choice":null,"final_ngsa_bytes_equal":true,"pending_checkpoints":0}
+{"case":"f_skill_A","final_choice":null,"final_ngsa_bytes_equal":false,"pending_checkpoints":2}
+{"case":"f_ban_B","final_choice":null,"final_ngsa_bytes_equal":false,"pending_checkpoints":2}
+{"case":"f_target_B","final_choice":null,"final_ngsa_bytes_equal":false,"pending_checkpoints":2}
+{"case":"f_cancel_target","final_choice":{"allow_cancel":true,"id":2,"kind":"SelectPlayers","max":1,"min":1,"observer":0,"options":["Player(1)","Player(2)","Player(3)"],"prompt":"mbcmfangzhu_target"},"final_ngsa_bytes_equal":false,"pending_checkpoints":1}
+{"case":"f_last_target","final_choice":{"allow_cancel":true,"id":1,"kind":"SelectPlayers","max":1,"min":1,"observer":0,"options":["Player(2)","Player(3)"],"prompt":"mbcmfangzhu_target"},"final_ngsa_bytes_equal":false,"pending_checkpoints":1}
+{"case":"f_self_attempt","final_choice":{"allow_cancel":true,"id":1,"kind":"SelectPlayers","max":1,"min":1,"observer":0,"options":["Player(1)","Player(2)","Player(3)"],"prompt":"mbcmfangzhu_target"},"final_ngsa_bytes_equal":false,"pending_checkpoints":1}
+{"case":"f_cancel_mode_attempt","final_choice":{"allow_cancel":false,"id":2,"kind":"PickTag","max":1,"min":1,"observer":0,"options":["Tag(0)","Tag(1)"],"prompt":"mbcmfangzhu_option"},"final_ngsa_bytes_equal":false,"pending_checkpoints":2}
+{"case":"f_no_skill","final_choice":null,"final_ngsa_bytes_equal":true,"pending_checkpoints":0}

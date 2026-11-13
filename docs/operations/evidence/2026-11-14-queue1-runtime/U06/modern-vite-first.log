@@ -1,0 +1,15 @@
+
+  VITE v7.3.1  ready in 183 ms
+
+  ➜  Local:   http://127.0.0.1:5173/
+(!) Failed to run dependency scan. Skipping dependency pre-bundling. Error: The following dependencies are imported but could not be resolved:
+
+  @electron/remote (imported by /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-runtime-modern-b789ktt1/apps/core/noname/init/node.js)
+  electron (imported by /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-runtime-modern-b789ktt1/apps/core/noname/init/node.js)
+
+Are they installed?
+    at file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-runtime-modern-b789ktt1/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:31903:33
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-runtime-modern-b789ktt1/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:34111:15
+1:46:47 AM [vite] (client) ✨ new dependencies optimized: core-js-bundle, vue/dist/vue.esm-browser.js, pinyin-pro, jszip, dedent, crypto-js, codemirror, @codemirror/view, @codemirror/lint, @codemirror/search, @codemirror/lang-javascript, eslint-linter-browserify, @codemirror/lang-css, @codemirror/lang-json, @codemirror/lang-html, @lezer/html, @lezer/javascript, @lezer/common, @codemirror/language, @codemirror/lang-markdown, @codemirror/lang-vue, nosleep.js, vue, stackframe, error-stack-parser, stacktrace-gps, path-browserify-esm
+1:46:47 AM [vite] (client) ✨ optimized dependencies changed. reloading

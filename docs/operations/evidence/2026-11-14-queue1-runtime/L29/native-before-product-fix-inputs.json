@@ -1,0 +1,32 @@
+{
+  "at": "2026-11-13T17:58:06.602301+00:00",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "tracked_status": "",
+  "binary": {
+    "path": "/private/tmp/noname-l29-runtime-preserved-kr0fipes/probe-before-jiushi-fix",
+    "bytes": 34641512,
+    "sha256": "f562f543921040b9c6afa078ecd7db0f44ca6faf084ff6663f407bcc8e3abcc1"
+  },
+  "files": {
+    "crates/engine-native-content/src/content/host/asks_wudian.rs": {
+      "sha256": "ab96cbb7c9a6a9aba3aef567ac42a1f144683e832c76404c56966a0742582b7b",
+      "bytes": 31963
+    },
+    "crates/engine-native-content/src/content/host/step/skills_targets.rs": {
+      "sha256": "4b6ada0cdef44232f86d1bd94c1c6d9264f11cbc021b314941dea2f408ecdf12",
+      "bytes": 37034
+    },
+    "crates/engine-native-content/src/content/host/step/skills_damage.rs": {
+      "sha256": "8d907001c0eeac813b1e6accc00bc38e8efc20e62a1148d85af45a15c211a075",
+      "bytes": 41526
+    },
+    "crates/engine-native/tests/l29_longxue_eight.rs": {
+      "sha256": "8f3fda8be5e6ed69e6ca341d630592363d13244fd628b15c6ba05e1181e9ed64",
+      "bytes": 34359
+    },
+    "packages/extensions/longxue-upstream-liuli/assets/cards.json": {
+      "sha256": "ca66fc4d3543f87515ac00053d1750529c714e1ce9d7db5b792aac2a268828c3",
+      "bytes": 1355
+    }
+  }
+}

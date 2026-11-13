@@ -1,0 +1,435 @@
+{
+  "count": 43,
+  "archives": [
+    {
+      "case": "choudu-top-return",
+      "prompt": "wudian_choudu_card",
+      "observer": 0,
+      "selection": "[Card(0)]",
+      "path": "native/isolated-archives/pending-002-wudian_choudu_card.ngsa",
+      "bytes": 3116,
+      "sha256": "1ea8f512948cfb3f18427f546c224546cfc8d7c3c5e2f4ddf8897da2d4daf8a2",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "choudu-top-return",
+      "prompt": "wudian_choudu_target",
+      "observer": 0,
+      "selection": "[Player(1)]",
+      "path": "native/isolated-archives/pending-004-wudian_choudu_target.ngsa",
+      "bytes": 3128,
+      "sha256": "4c00690f1d3488a1999a9b673dfecb2b81c9dd7297975fab1830449f64a28b4e",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "choudu-top-return",
+      "prompt": "wudian_diaobing_swap",
+      "observer": 1,
+      "selection": "[]",
+      "path": "native/isolated-archives/pending-006-wudian_diaobing_swap.ngsa",
+      "bytes": 3208,
+      "sha256": "7ee5a298c41313395352c6df45d8a35991c2d7a0843e1c0dd7153244fa54bf97",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "choudu-target1",
+      "prompt": "wudian_choudu_card",
+      "observer": 0,
+      "selection": "[Card(0)]",
+      "path": "native/isolated-archives/pending-009-wudian_choudu_card.ngsa",
+      "bytes": 3116,
+      "sha256": "8930a3dc1e356c6c9fbc635affdbe8e8e10a1b220049dfa3638d55e27fbb6462",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "choudu-target1",
+      "prompt": "wudian_choudu_target",
+      "observer": 0,
+      "selection": "[Player(1)]",
+      "path": "native/isolated-archives/pending-011-wudian_choudu_target.ngsa",
+      "bytes": 3128,
+      "sha256": "29c1ec9dd46d1e527574d815bf3ef4ada354080f96678bee52e41a107b8e5dc4",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "choudu-target1",
+      "prompt": "wudian_diaobing_swap",
+      "observer": 1,
+      "selection": "[]",
+      "path": "native/isolated-archives/pending-013-wudian_diaobing_swap.ngsa",
+      "bytes": 3208,
+      "sha256": "acb661452070ab4302e4883bd365a68a458d214a79fd74ab88f4102a4f5bff03",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "choudu-target2",
+      "prompt": "wudian_choudu_card",
+      "observer": 0,
+      "selection": "[Card(0)]",
+      "path": "native/isolated-archives/pending-016-wudian_choudu_card.ngsa",
+      "bytes": 3116,
+      "sha256": "2883eeaadc8e14775d47da82d4d081606cee02985252d288b27b95537f541e5d",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "choudu-target2",
+      "prompt": "wudian_choudu_target",
+      "observer": 0,
+      "selection": "[Player(2)]",
+      "path": "native/isolated-archives/pending-018-wudian_choudu_target.ngsa",
+      "bytes": 3128,
+      "sha256": "fbc08621de669b9a198c8e9072d272d88b3c7893367e37d73360c7403d554db3",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "choudu-target2",
+      "prompt": "wudian_diaobing_swap",
+      "observer": 2,
+      "selection": "[]",
+      "path": "native/isolated-archives/pending-020-wudian_diaobing_swap.ngsa",
+      "bytes": 3203,
+      "sha256": "a463384be1519ea44f8371332fceb36bcad7ee8d60409264e2e9c980733a2b5c",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "choudu-swap-a",
+      "prompt": "wudian_choudu_card",
+      "observer": 0,
+      "selection": "[Card(0)]",
+      "path": "native/isolated-archives/pending-023-wudian_choudu_card.ngsa",
+      "bytes": 3116,
+      "sha256": "b68c9a1e71e2c34c24739398d0da3e332a503216e5f387582027a4d244bcc53e",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "choudu-swap-a",
+      "prompt": "wudian_choudu_target",
+      "observer": 0,
+      "selection": "[Player(1)]",
+      "path": "native/isolated-archives/pending-025-wudian_choudu_target.ngsa",
+      "bytes": 3128,
+      "sha256": "723e9b1ac166168f285ad9553795dc7f80a47b24f8ccd835dd4f127eee350abe",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "choudu-swap-a",
+      "prompt": "wudian_diaobing_swap",
+      "observer": 1,
+      "selection": "[Card(30)]",
+      "path": "native/isolated-archives/pending-027-wudian_diaobing_swap.ngsa",
+      "bytes": 3208,
+      "sha256": "5871f4c0a63137fa2bdf30fc5e9879cf4a06ca3eb38650efd8f724d2548e85f7",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "choudu-swap-b",
+      "prompt": "wudian_choudu_card",
+      "observer": 0,
+      "selection": "[Card(0)]",
+      "path": "native/isolated-archives/pending-030-wudian_choudu_card.ngsa",
+      "bytes": 3116,
+      "sha256": "28637a0bd80c666051e9f22864b4b039ff15072f58953a3685fd93b73c4f7400",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "choudu-swap-b",
+      "prompt": "wudian_choudu_target",
+      "observer": 0,
+      "selection": "[Player(1)]",
+      "path": "native/isolated-archives/pending-032-wudian_choudu_target.ngsa",
+      "bytes": 3128,
+      "sha256": "6736f4a06b386ebf7d01314ecf352d67ab4756047211dc042371c07fb77832a6",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "choudu-swap-b",
+      "prompt": "wudian_diaobing_swap",
+      "observer": 1,
+      "selection": "[Card(46)]",
+      "path": "native/isolated-archives/pending-034-wudian_diaobing_swap.ngsa",
+      "bytes": 3208,
+      "sha256": "95e43d449467418224ec687227d6210e3c9dd7308b6c67224af616aca4f89464",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "choudu-equip-target1",
+      "prompt": "wudian_choudu_card",
+      "observer": 0,
+      "selection": "[Card(136)]",
+      "path": "native/isolated-archives/pending-037-wudian_choudu_card.ngsa",
+      "bytes": 3116,
+      "sha256": "d36f2f5a95b35de7536a19fda94449ae82cdfc04babca86981cb2daf3f43444a",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "choudu-equip-target1",
+      "prompt": "wudian_choudu_target",
+      "observer": 0,
+      "selection": "[Player(1)]",
+      "path": "native/isolated-archives/pending-039-wudian_choudu_target.ngsa",
+      "bytes": 3128,
+      "sha256": "c091d6af02d2ae06a70c4581ff859650165a7f7b9bf59c4c4e242154d3af71c4",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "choudu-equip-target1",
+      "prompt": "wudian_diaobing_swap",
+      "observer": 1,
+      "selection": "[]",
+      "path": "native/isolated-archives/pending-041-wudian_diaobing_swap.ngsa",
+      "bytes": 3200,
+      "sha256": "50ce3c204900350024055aaad9cd79f50ec14d9ebfca97ef1a0ca302bd6b4502",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "choudu-cancel-card",
+      "prompt": "wudian_choudu_card",
+      "observer": 0,
+      "selection": "[]",
+      "path": "native/isolated-archives/pending-044-wudian_choudu_card.ngsa",
+      "bytes": 3116,
+      "sha256": "778bd996c9ae0c8d7787673f8af85cc4d477c11fac6c929a6ad56b7ab9fa6779",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "choudu-cancel-target",
+      "prompt": "wudian_choudu_card",
+      "observer": 0,
+      "selection": "[Card(0)]",
+      "path": "native/isolated-archives/pending-047-wudian_choudu_card.ngsa",
+      "bytes": 3116,
+      "sha256": "5b9a34577bfdaa60d521a0beec0129da3c718547b35c3b12ca3689faaff0868b",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "choudu-cancel-target",
+      "prompt": "wudian_choudu_target",
+      "observer": 0,
+      "selection": "[]",
+      "path": "native/isolated-archives/pending-049-wudian_choudu_target.ngsa",
+      "bytes": 3128,
+      "sha256": "cf74aa95f6eac374ec7ae95c72d81ec5fd189619eed190c78505dc85718dff03",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "fuchou-hand",
+      "prompt": "wudian_fuchou_cancel",
+      "observer": 1,
+      "selection": "[Card(30)]",
+      "path": "native/isolated-archives/pending-053-wudian_fuchou_cancel.ngsa",
+      "bytes": 3164,
+      "sha256": "fe9de9e76509044c73ac6b7e239d6ada5bcebdf22617027e86b8a37be109a6ba",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "fuchou-equip",
+      "prompt": "wudian_fuchou_cancel",
+      "observer": 1,
+      "selection": "[Card(136)]",
+      "path": "native/isolated-archives/pending-056-wudian_fuchou_cancel.ngsa",
+      "bytes": 3164,
+      "sha256": "67f43487b4fd5e0cb9aadb3262a9881da0849288bf528237971d09c92e4d824d",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "fuchou-cancel",
+      "prompt": "wudian_fuchou_cancel",
+      "observer": 1,
+      "selection": "[]",
+      "path": "native/isolated-archives/pending-059-wudian_fuchou_cancel.ngsa",
+      "bytes": 3164,
+      "sha256": "5dd6d2ff7c1d31678a6accf5e3dd365537ce91bba66457b6a37732489f6f9f82",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "fuchou-cancel",
+      "prompt": "respond_shan",
+      "observer": 1,
+      "selection": "[Pass]",
+      "path": "native/isolated-archives/pending-061-respond_shan.ngsa",
+      "bytes": 3156,
+      "sha256": "6a296b56fa6de9361a9393d045cf3272318e46ece617f305d99f42b277f12466",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "fuchou-settle-no-sha",
+      "prompt": "wudian_fuchou_cancel",
+      "observer": 1,
+      "selection": "[Card(30)]",
+      "path": "native/isolated-archives/pending-065-wudian_fuchou_cancel.ngsa",
+      "bytes": 3164,
+      "sha256": "192c37ba4caa2a5ff5ffe1569af29e0e0f2e84070415c425edf601e3744f3dba",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "fuchou-settle-no-sha",
+      "prompt": "respond_shan",
+      "observer": 0,
+      "selection": "[Pass]",
+      "path": "native/isolated-archives/pending-070-respond_shan.ngsa",
+      "bytes": 3312,
+      "sha256": "b8371d1f4a111bd78edb52b563627a0d1a1308135ddde377623f5c2de19270f0",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "fuchou-settle-draw-sha",
+      "prompt": "wudian_fuchou_cancel",
+      "observer": 1,
+      "selection": "[Card(30)]",
+      "path": "native/isolated-archives/pending-073-wudian_fuchou_cancel.ngsa",
+      "bytes": 3164,
+      "sha256": "ba0f1a8af4ca1bfa5cb7642d677f075f310c909a601b9486e48a3cc137977a6d",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "fuchou-settle-draw-sha",
+      "prompt": "respond_shan",
+      "observer": 0,
+      "selection": "[Pass]",
+      "path": "native/isolated-archives/pending-078-respond_shan.ngsa",
+      "bytes": 3312,
+      "sha256": "f760256ba862b65cfba8654a0f797662ff4203ced7d92b85329fed0f51b393b5",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "fuchou-settle-have-sha-cancel",
+      "prompt": "wudian_fuchou_cancel",
+      "observer": 1,
+      "selection": "[]",
+      "path": "native/isolated-archives/pending-081-wudian_fuchou_cancel.ngsa",
+      "bytes": 3169,
+      "sha256": "74f08dc3f9c9c0693913c3743b2dc089ed0cfa38fb6e31456e8d27e2f11faebc",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "fuchou-settle-have-sha-cancel",
+      "prompt": "respond_shan",
+      "observer": 1,
+      "selection": "[Pass]",
+      "path": "native/isolated-archives/pending-083-respond_shan.ngsa",
+      "bytes": 3156,
+      "sha256": "ac693929be7927f3057ec8efc7397b57ef7b89a45927c42bed987b5525f5c830",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "fuchou-settle-have-sha-use",
+      "prompt": "wudian_fuchou_cancel",
+      "observer": 1,
+      "selection": "[Card(30)]",
+      "path": "native/isolated-archives/pending-089-wudian_fuchou_cancel.ngsa",
+      "bytes": 3169,
+      "sha256": "e20432d54a96ef69a8f87cf8e04d1b44fabe5a59a9e5c907ccb11475c052aea7",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "fuchou-settle-have-sha-use",
+      "prompt": "respond_shan",
+      "observer": 0,
+      "selection": "[Pass]",
+      "path": "native/isolated-archives/pending-094-respond_shan.ngsa",
+      "bytes": 3312,
+      "sha256": "848c610182ff56bfdf5b448d3d71d038b4857e01bdca6c2c1d6ae3c1fa4a83a7",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "youzhan-hand-stop",
+      "prompt": "wudian_youzhan_discard",
+      "observer": 0,
+      "selection": "[Card(92)]",
+      "path": "native/isolated-archives/pending-097-wudian_youzhan_discard.ngsa",
+      "bytes": 3207,
+      "sha256": "1e3f2e1ef0aeded608d6d23ab11bf5777d51519dc99b82f19265ed6689f0f8f0",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "youzhan-equip-stop",
+      "prompt": "wudian_youzhan_discard",
+      "observer": 0,
+      "selection": "[Card(136)]",
+      "path": "native/isolated-archives/pending-100-wudian_youzhan_discard.ngsa",
+      "bytes": 3207,
+      "sha256": "f99d30730a462d67ec74e5fed92c1eef545da40d2f677a79d5429ce787a1f9de",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "youzhan-cancel",
+      "prompt": "wudian_youzhan_discard",
+      "observer": 0,
+      "selection": "[]",
+      "path": "native/isolated-archives/pending-103-wudian_youzhan_discard.ngsa",
+      "bytes": 3207,
+      "sha256": "ace7b46916154dfe47708be0c6825051beeb65db9e60722c52277cda2cf5ffda",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "youzhan-counter-use",
+      "prompt": "wudian_youzhan_discard",
+      "observer": 0,
+      "selection": "[Card(92)]",
+      "path": "native/isolated-archives/pending-108-wudian_youzhan_discard.ngsa",
+      "bytes": 3207,
+      "sha256": "1deff4becafba7cad5d551be286c82777fb3e536f43d4046f596a09bb93f253d",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "youzhan-counter-use",
+      "prompt": "wudian_youdishenru_sha",
+      "observer": 1,
+      "selection": "[Card(2)]",
+      "path": "native/isolated-archives/pending-110-wudian_youdishenru_sha.ngsa",
+      "bytes": 3269,
+      "sha256": "4968c9488687090e727728f133ff535dd59fc48eabb99fad40fd8cabb11aa3bd",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "youzhan-counter-use",
+      "prompt": "wudian_youzhan_discard",
+      "observer": 0,
+      "selection": "[]",
+      "path": "native/isolated-archives/pending-112-wudian_youzhan_discard.ngsa",
+      "bytes": 3371,
+      "sha256": "00de87bcf9374a021e77bedec4d56ae1baefe54b4bb49ecde81e4dd9027ae354",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "youzhan-counter-dodge-stop",
+      "prompt": "wudian_youzhan_discard",
+      "observer": 0,
+      "selection": "[Card(92)]",
+      "path": "native/isolated-archives/pending-115-wudian_youzhan_discard.ngsa",
+      "bytes": 3207,
+      "sha256": "0d36afed9c31f40687fcf239782dcd78055cf7b5a154c9238239eced0a81e8ce",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "youzhan-counter-dodge-stop",
+      "prompt": "wudian_youdishenru_sha",
+      "observer": 1,
+      "selection": "[Card(2)]",
+      "path": "native/isolated-archives/pending-117-wudian_youdishenru_sha.ngsa",
+      "bytes": 3269,
+      "sha256": "8fdf0a47b1ff5416c8a250fd1137e4d2a964d13b8116b824ffad84f1032a7e4e",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "youzhan-counter-dodge-stop",
+      "prompt": "wudian_youzhan_discard",
+      "observer": 0,
+      "selection": "[]",
+      "path": "native/isolated-archives/pending-119-wudian_youzhan_discard.ngsa",
+      "bytes": 3371,
+      "sha256": "6068bf46edc77c6825beb5dbf006a7dadbf316304122808055123fb9d6b65688",
+      "original_restore_answer_hash_and_new_log_equal": true
+    },
+    {
+      "case": "youzhan-counter-dodge-stop",
+      "prompt": "respond_shan",
+      "observer": 0,
+      "selection": "[Card(30)]",
+      "path": "native/isolated-archives/pending-121-respond_shan.ngsa",
+      "bytes": 3313,
+      "sha256": "d0f995c8697cc71ed183cdf99339b617523d2ae705f795a6d5b71221f1f12990",
+      "original_restore_answer_hash_and_new_log_equal": true
+    }
+  ]
+}

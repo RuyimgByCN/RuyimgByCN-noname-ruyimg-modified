@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "pnpm",
+    "typecheck"
+  ],
+  "command": "pnpm typecheck",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0"
+  },
+  "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n",
+  "start_utc": "2026-11-13T18:03:15.086658+00:00",
+  "exit_code": 0,
+  "duration_seconds": 2.654,
+  "end_utc": "2026-11-13T18:03:17.740616+00:00"
+}

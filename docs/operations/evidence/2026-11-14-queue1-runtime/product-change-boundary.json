@@ -1,0 +1,11 @@
+{
+  "at": "2026-11-14T02:15:16.427027+08:00",
+  "baseline": "../2026-11-13-queue1-review/frozen-product-inputs.json",
+  "baseline_file_count": 32259,
+  "changed_paths": [
+    "crates/engine-native-content/src/content/host/asks_wudian.rs",
+    "crates/engine-native/tests/l29_longxue_eight.rs"
+  ],
+  "expected_owned_changes_only": true,
+  "scope": "All other frozen maintained inputs including original/ported package assets and 14 golden fixture inputs stayed byte-identical. Current two-file gate freeze checked separately."
+}

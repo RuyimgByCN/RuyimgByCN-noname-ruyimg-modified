@@ -1,0 +1,15 @@
+{
+  "at": "2026-11-13T18:05:04.433096+00:00",
+  "browser": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+    "platform": "MacIntel",
+    "url": "http://127.0.0.1:56407/",
+    "upstreamVersion": "1.10.1.0.1"
+  },
+  "chrome_command": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome --headless=new --enable-webgl --ignore-gpu-blocklist --no-sandbox --autoplay-policy=no-user-gesture-required --user-data-dir=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-l29-runtime-chrome-2fYoCi --remote-debugging-port=0 --window-size=1440,1080 about:blank",
+  "ports": {
+    "upstreamPort": 56407,
+    "controlPort": 56440,
+    "cdpPort": 56410
+  }
+}

@@ -1,0 +1,99 @@
+﻿2026-11-13T17:49:31.4284920Z ##[group]Run pnpm smoke:native
+2026-11-13T17:49:31.4285295Z [36;1mpnpm smoke:native[0m
+2026-11-13T17:49:31.4329860Z shell: /usr/bin/bash -e {0}
+2026-11-13T17:49:31.4330063Z env:
+2026-11-13T17:49:31.4330201Z   CARGO_TERM_COLOR: always
+2026-11-13T17:49:31.4330348Z   WASM_PACK_TARGET: web
+2026-11-13T17:49:31.4330499Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T17:49:31.4330656Z   CARGO_INCREMENTAL: 0
+2026-11-13T17:49:31.4330797Z   CACHE_ON_FAILURE: false
+2026-11-13T17:49:31.4331000Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-11-13T17:49:31.4331186Z ##[endgroup]
+2026-11-13T17:49:31.7103516Z 
+2026-11-13T17:49:31.7104713Z > noname-next-web-client@0.1.0 smoke:native /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/apps/web-client
+2026-11-13T17:49:31.7105343Z > node --import ./scripts/ts-register.mjs scripts/native-worker-smoke.mjs
+2026-11-13T17:49:31.7105532Z 
+2026-11-13T17:49:32.5029363Z PASS init_web
+2026-11-13T17:49:33.3142332Z PASS create
+2026-11-13T17:49:33.3161764Z PASS observer_view
+2026-11-13T17:49:33.3209899Z PASS endPhase
+2026-11-13T17:49:33.3395070Z PASS autoStep_progress | steps=40
+2026-11-13T17:49:33.3414357Z PASS save_hex | bytes=1929
+2026-11-13T17:49:33.4216420Z PASS restore_hex | rev=41
+2026-11-13T17:49:33.4224039Z PASS playCard_shape | rev=41
+2026-11-13T17:49:33.4284719Z PASS extension_package_inventory | packs=48 dirs=48 no_npack=0
+2026-11-13T17:49:33.5157413Z PASS extension_catalog_consistent | catalog=15 uncovered=33
+2026-11-13T17:49:33.5423268Z PASS pack_enters_match | hnl_=7
+2026-11-13T17:49:33.5643608Z PASS missing_pack_refused
+2026-11-13T17:49:33.6098700Z PASS same_pack_restore
+2026-11-13T17:49:33.6119768Z PASS wrong_version_refused | 恢复失败: RuleVersionMismatch { snapshot: 18108255759521434491, catalog: 14674392498690061931 }
+2026-11-13T17:49:33.8085047Z PASS adapter_choice_token_roundtrip | choice=2 options=5 label=card:113 token=0 submission=[0] outcome=accepted value_as_token_refused=true
+2026-11-13T17:49:33.8334550Z PASS legal_actions_shape | seat=0 revision=2 n=6
+2026-11-13T17:49:33.8335169Z PASS legal_actions_revision_matches_engine | json=2 engine=2
+2026-11-13T17:49:33.8335887Z PASS legal_actions_non_empty | n=6 kinds=["PlayCard","PlayCard","PlayCard","PlayCard","PlayCard","EndPhase"]
+2026-11-13T17:49:33.8338076Z PASS adapter_passes_kernel_actions_verbatim | adapter=[{"PlayCard":{"card":113,"targets":[]}},{"PlayCard":{"card":86,"targets":[]}},{"PlayCard":{"card":21,"targets":[1]}},{"PlayCard":{"card":21,"targets":[3]}},{"PlayCard":{"card":119,"targets":[]}},"EndPhase"] kernel=[{"PlayCard":{"card":113,"targets":[]}},{"PlayCard":{"card":86,"targets":[]}},{"PlayCard":{"card":21,"targets":[1]}},{"PlayCard":{"card":21,"targets":[3]}},{"PlayCard":{"card":119,"targets":[]}},"EndPhase"]
+2026-11-13T17:49:33.9324755Z PASS adapter_hash_hex_authoritative | hash=b6ea70e52f1481a5a12c401a3e8c2bbaf85aa86bfd8a72b61da1790e9b40ce23
+2026-11-13T17:49:33.9325602Z PASS adapter_events_authoritative | codes=[8,8,10]
+2026-11-13T17:49:33.9326283Z PASS adapter_observer_does_not_drain_events | events=0 hash=b6ea70e52f1481a5a12c401a3e8c2bbaf85aa86bfd8a72b61da1790e9b40ce23
+2026-11-13T17:49:34.5153685Z PASS legal_actions_sampled_all_accepted | sampled=6 refused=[]
+2026-11-13T17:49:34.5155325Z PASS forged_card_rejected_with_reason | result={"finished":false,"outcome":"rejected","reason":"CardNotInHand","revision":2}
+2026-11-13T17:49:34.5156358Z PASS legal_actions_seat_boundary_refused | legal_actions: 座位越界（9 ≥ 4）
+2026-11-13T17:49:34.5399969Z PASS general_candidates_from_catalog | count=93 before_skills=[]
+2026-11-13T17:49:34.5413492Z PASS choose_general_changes_skills | name=样例·张角组合 skills=["天妒","鬼道"]
+2026-11-13T17:49:34.5420248Z PASS choose_general_assignment_shape | seat=0 revision=0 hash=735f7ffc4b34…
+2026-11-13T17:49:34.5420996Z PASS choose_general_unknown_refused | Error: native: 选将失败(seat=0, name=查无此将): assign_general 被拒绝: NoSuchGeneral
+2026-11-13T17:49:34.5421590Z PASS choose_general_seat_boundary_refused | Error: native: 选将失败(seat=9, name=样例·张角组合): assign_general: 座位越界（9 ≥ 4）
+2026-11-13T17:49:34.5855506Z PASS worker_native_init | {"id":901,"ok":true,"data":"native ready"}
+2026-11-13T17:49:34.6325094Z PASS worker_installed_cards_and_pile_enter_start | deck=228 standard=108 error=
+2026-11-13T17:49:34.6329650Z PASS worker_installed_general_candidate
+2026-11-13T17:49:34.6341679Z PASS worker_installed_general_assignment | ["dddjinggou","dddmoyan"]
+2026-11-13T17:49:34.6344589Z PASS worker_installed_save
+2026-11-13T17:49:34.6575889Z PASS worker_installed_missing_refused
+2026-11-13T17:49:34.6815598Z PASS worker_installed_exact_version_refused
+2026-11-13T17:49:34.7048127Z PASS worker_installed_changed_asset_refused
+2026-11-13T17:49:34.7288125Z PASS worker_duplicate_slot_refused_without_changing_match | ["packs[3]: 重复包槽位 upstream-noname/d3-select","packs[3]: 重复包槽位 upstream-noname/d3-select","packs[3]: 重复包槽位 upstream-noname/d3-select"]
+2026-11-13T17:49:34.7515675Z PASS worker_invalid_identity_refused_without_changing_match | ["packs[0]: manifest.namespace 须为有效的身份字段","packs[0]: manifest.namespace 须为有效的身份字段","packs[0]: manifest.namespace 须为有效的身份字段"]
+2026-11-13T17:49:34.8202940Z PASS worker_installed_same_lock_restore
+2026-11-13T17:49:34.9123328Z PASS worker_dependency_valid_start_and_restore
+2026-11-13T17:49:34.9771576Z PASS worker_dependency_refused_without_changing_match | {"errors":["packs[0]: 缺少依赖 upstream-noname/huanle-cards@1.0.0","packs[0]: 缺少依赖 upstream-noname/huanle-cards@1.0.0","packs[0]: 缺少依赖 upstream-noname/huanle-cards@1.0.0","packs[1]: 依赖版本或指纹不匹配 upstream-noname/huanle-cards@wrong","packs[1]: 依赖版本或指纹不匹配 upstream-noname/huanle-cards@wrong","packs[1]: 依赖版本或指纹不匹配 upstream-noname/huanle-cards@wrong","packs[1]: 依赖版本或指纹不匹配 upstream-noname/huanle-cards@1.0.0","packs[1]: 依赖版本或指纹不匹配 upstream-noname/huanle-cards@1.0.0","packs[1]: 依赖版本或指纹不匹配 upstream-noname/huanle-cards@1.0.0"],"immediateRestorePreservesBytes":false,"rejectedCommandsPreserveBytes":true}
+2026-11-13T17:49:35.0224715Z PASS worker_identity_keeps_packs_and_lord_bonus | hp=5 error=
+2026-11-13T17:49:35.0225208Z PASS worker_identity_projection_filtered_not_placeholder | seats=["Lord",null,null,null]
+2026-11-13T17:49:35.0230804Z PASS worker_visible_general_definition_reaches_seat_view | expected=37 actual=37
+2026-11-13T17:49:35.0231523Z PASS worker_identity_selection_keeps_lord_bonus_and_global_skills | hp=5 skills=["dddjinggou","dddmoyan","wuxing_shengke"]
+2026-11-13T17:49:35.0235844Z PASS worker_identity_invalid_seats_refused
+2026-11-13T17:49:35.1293847Z PASS worker_vm_formal_import_installed_copy_reaches_match | {"lifecycle":"active","dir":"imported","version":"0.1.0"}
+2026-11-13T17:49:35.2576698Z PASS worker_visible_hand_faces_not_placeholder | hand=[{"id":42,"def":1,"suit":"Diamond","rank":10,"owner":0,"zone":"Hand","kind":"Shan"},{"id":96,"def":7,"suit":"Spade","rank":1,"owner":0,"zone":"Hand","kind":"ShaFire"},{"id":122,"def":103,"suit":"Spade","rank":2,"owner":0,"zone":"Hand","kind":"Other"}]
+2026-11-13T17:49:35.2578354Z PASS worker_vm_formal_install_start_identity_and_restore | start=true identity=true restore=true hash=44f7d83f0ff736b161c71cf22adb5b2778f025983c40562204e976a84840fd0d
+2026-11-13T17:49:35.2854404Z PASS worker_vm_only_corrupt_module_refused_without_mutation | ["npack: module vm_fixture_phase_end_phase_end: logic_hash mismatch","npack: module vm_fixture_phase_end_phase_end: logic_hash mismatch"]
+2026-11-13T17:49:35.2861187Z PASS worker_vm_unmapped_general_skill_refused | packs[0]: 包数据字段 generals[].skills[].name 非法: VM 包的武将技能 missing_vm_skill 未映射
+2026-11-13T17:49:35.2864240Z PASS worker_vm_changed_trigger_hash_refused | npack: logic_hash mismatch
+2026-11-13T17:49:35.3328233Z PASS worker_vm_changed_trigger_restore_refused_without_mutation | npack: logic_hash mismatch
+2026-11-13T17:49:35.3552344Z PASS worker_vm_changed_module_hash_refused_without_mutation | ["npack: module vm_fixture_phase_end_phase_end: logic_hash mismatch","npack: module vm_fixture_phase_end_phase_end: logic_hash mismatch","npack: module vm_fixture_phase_end_phase_end: logic_hash mismatch"]
+2026-11-13T17:49:35.3785640Z PASS worker_vm_jump_invalid_control_flow_refused | ["npack: module nc04_control_probe_phase_end: invalid bytecode: jump target 6 is not an instruction boundary","npack: module nc04_control_probe_phase_end: invalid bytecode: jump target 6 is not an instruction boundary","npack: module nc04_control_probe_phase_end: invalid bytecode: jump target 6 is not an instruction boundary"]
+2026-11-13T17:49:35.4018210Z PASS worker_vm_entry_invalid_control_flow_refused | ["npack: module nc04_control_probe_phase_end: invalid bytecode: entry_pc 1 is not an instruction boundary","npack: module nc04_control_probe_phase_end: invalid bytecode: entry_pc 1 is not an instruction boundary","npack: module nc04_control_probe_phase_end: invalid bytecode: entry_pc 1 is not an instruction boundary"]
+2026-11-13T17:49:35.4358673Z PASS worker_vm_general_owns_module | vm_fixture_phase_end
+2026-11-13T17:49:35.4359357Z PASS worker_vm_effect_at_end_phase | delta=1
+2026-11-13T17:49:35.5043698Z PASS worker_vm_same_package_restore_and_replay | restored=true replayed=true  
+2026-11-13T17:49:35.5051045Z PASS worker_validate_package_accepts_valid_fixture | {"id":12780,"ok":true,"data":{"valid":true}}
+2026-11-13T17:49:35.5063476Z PASS worker_validate_package_rejects_corrupt_module_local_count | npack: module vm_fixture_phase_end_phase_end: logic_hash mismatch
+2026-11-13T17:49:35.5064720Z PASS worker_validate_package_rejects_tampered_trigger_event | npack: logic_hash mismatch
+2026-11-13T17:49:35.5066493Z PASS worker_validate_package_rejects_entry_pc_out_of_range | npack: module vm_fixture_phase_end_phase_end: invalid bytecode: entry_pc out of range
+2026-11-13T17:49:35.5072123Z PASS worker_validate_package_rejects_trigger_unknown_module | npack: trigger references unknown skill/module identity
+2026-11-13T17:49:35.5073344Z PASS worker_validate_package_rejects_invalid_identity | npack: invalid package_id "../x"
+2026-11-13T17:49:35.5074475Z PASS worker_validate_package_rejects_same_version_different_content | npack: module vm_fixture_phase_end_phase_end: logic_hash mismatch
+2026-11-13T17:49:35.5375283Z PASS worker_validate_package_rejects_abi_window | 包数据字段 modifier_index 非法: native VM modifier declarations are unsupported
+2026-11-13T17:49:35.5434575Z PASS worker_validate_package_does_not_touch_current_match | {"id":12789,"ok":true,"data":{"kind":"status","revision":5,"finished":false}}
+2026-11-13T17:49:35.5494483Z PASS worker_vm_import_upgrade_keeps_history_and_old_copy | {"version":"0.1.1","history":["0.1.0","0.1.1"]}
+2026-11-13T17:49:35.5763153Z PASS worker_vm_upgrade_new_match_uses_new_version | delta=2
+2026-11-13T17:49:35.6418012Z PASS worker_vm_old_save_keeps_frozen_old_version_after_upgrade | restored=true replayed=true  
+2026-11-13T17:49:35.6641974Z PASS worker_vm_old_save_with_new_version_copy_refused | 恢复失败: RuleVersionMismatch { snapshot: 13564440097726919882, catalog: 11640427018416606452 }
+2026-11-13T17:49:35.6645905Z PASS worker_vm_rollback_restores_old_version_for_new_matches | 0.1.0
+2026-11-13T17:49:35.7571568Z PASS worker_vm_disabled_absent_from_new_match_but_old_save_restores | Error: native: 选将失败(seat=0, name=vm_fixture): assign_general 被拒绝: NoSuchGeneral
+2026-11-13T17:49:35.8272585Z PASS worker_vm_uninstalled_old_save_restores_from_frozen_copy | restored=true replayed=true  
+2026-11-13T17:49:35.8492053Z PASS worker_standard_restart
+2026-11-13T17:49:35.8496251Z PASS worker_general_candidates | count=93 error=
+2026-11-13T17:49:35.8500942Z PASS worker_choose_general_reply | name=样例·张角组合 skills=["天妒","鬼道"] hash=735f7ffc4b34…
+2026-11-13T17:49:35.8502107Z PASS worker_choose_general_unknown_refused | reply={"id":904,"ok":false,"error":"Error: native: 选将失败(seat=0, name=查无此将): assign_general 被拒绝: NoSuchGeneral"}
+2026-11-13T17:49:35.8503357Z PASS worker_choose_general_seat_refused | reply={"id":905,"ok":false,"error":"Error: native: 选将失败(seat=9, name=样例·张角组合): assign_general: 座位越界（9 ≥ 4）"}
+2026-11-13T17:49:39.8206722Z PASS worker_all_37_sources_46_packages_locked_matrix | sources=37/37 packages=46/46
+2026-11-13T17:49:39.8207589Z {"total":83,"failed":0}

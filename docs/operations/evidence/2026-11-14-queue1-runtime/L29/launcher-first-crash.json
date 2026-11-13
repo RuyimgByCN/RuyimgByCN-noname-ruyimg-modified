@@ -1,0 +1,7 @@
+{
+  "runnerPidsTerminated": [
+    80041
+  ],
+  "ownedChromePidTerminated": 77698,
+  "reason": "interrupted round5 request aborted async HTTP request body; launcher uncaught ECONNRESET, preserved launch-first.raw.txt; round6 requests received 502 and are excluded"
+}

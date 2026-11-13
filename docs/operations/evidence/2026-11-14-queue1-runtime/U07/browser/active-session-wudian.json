@@ -1,0 +1,13 @@
+{
+  "at": "2026-11-13T17:59:25.279Z",
+  "label": "wudian",
+  "url": "http://127.0.0.1:5173/",
+  "upstream": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-runtime-modern-b789ktt1/apps/core",
+  "profile": "/private/tmp/noname-queue1-u07-chrome-hM1eM0",
+  "upstreamPort": 5173,
+  "controlPort": 58687,
+  "cdpPort": 58660,
+  "chromePid": 80931,
+  "transcript": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/browser/session-wudian-1794592764804",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d"
+}

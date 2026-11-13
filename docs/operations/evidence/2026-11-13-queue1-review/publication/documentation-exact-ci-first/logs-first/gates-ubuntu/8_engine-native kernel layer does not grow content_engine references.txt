@@ -1,0 +1,17 @@
+﻿2026-11-13T17:42:43.3641524Z ##[group]Run python3 -B -m unittest discover -s scripts -p 'test_check_native_layering.py'
+2026-11-13T17:42:43.3642041Z [36;1mpython3 -B -m unittest discover -s scripts -p 'test_check_native_layering.py'[0m
+2026-11-13T17:42:43.3642419Z [36;1mpython3 scripts/check-native-layering.py[0m
+2026-11-13T17:42:43.3687745Z shell: /usr/bin/bash -e {0}
+2026-11-13T17:42:43.3687970Z env:
+2026-11-13T17:42:43.3688157Z   CARGO_TERM_COLOR: always
+2026-11-13T17:42:43.3688378Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T17:42:43.3688608Z   CARGO_INCREMENTAL: 0
+2026-11-13T17:42:43.3688804Z   CACHE_ON_FAILURE: false
+2026-11-13T17:42:43.3689063Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-11-13T17:42:43.3689323Z ##[endgroup]
+2026-11-13T17:42:43.6498115Z .........
+2026-11-13T17:42:43.6498548Z ----------------------------------------------------------------------
+2026-11-13T17:42:43.6498893Z Ran 9 tests in 0.227s
+2026-11-13T17:42:43.6499018Z 
+2026-11-13T17:42:43.6499106Z OK
+2026-11-13T17:42:43.9150893Z engine-native layering passed: 0 upward references <= 0

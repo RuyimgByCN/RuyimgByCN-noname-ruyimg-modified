@@ -1,0 +1,6 @@
+{
+  "at": "2026-11-13T18:04:46.307918+00:00",
+  "failure": "case-results-third.jsonl fuchou-settle-*",
+  "cause": "upstream gain animation uses paused without a choice; harness treated every paused event as choice",
+  "change": "only operate on actual original choose* events; await delay/gain animation; fresh reruns"
+}

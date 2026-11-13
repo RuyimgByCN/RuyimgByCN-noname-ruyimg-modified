@@ -1,0 +1,4336 @@
+{
+  "summary": {
+    "at": "2026-11-13T18:15:47.334299+00:00",
+    "cases": 24,
+    "native_pending_ngsa_roundtrips": 43,
+    "final_projection_equal_cases": 13,
+    "final_projection_different_cases": 11,
+    "all_initial_projections_equal": true,
+    "source_cohorts": [
+      {
+        "before": "native-08-before.json",
+        "after": "native-08-after.json",
+        "head_equal": true,
+        "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+        "entries": 479,
+        "input_files": 478,
+        "input_hashes_all_equal": true,
+        "changed_entries": [
+          "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target/debug/queue1-u07-runtime-probe"
+        ],
+        "binary_sha256_after": "da6b98d74d2ff19cb2dcc3dc1c5821a4dde738e37520f96f126125cdbe6d084f"
+      },
+      {
+        "before": "browser-isolated-before.json",
+        "after": "browser-isolated-after.json",
+        "head_equal": true,
+        "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+        "entries": 479,
+        "input_files": 478,
+        "input_hashes_all_equal": true,
+        "changed_entries": [],
+        "binary_sha256_after": "da6b98d74d2ff19cb2dcc3dc1c5821a4dde738e37520f96f126125cdbe6d084f"
+      }
+    ],
+    "new_equivalence_signoff": false,
+    "uncompared": [
+      "full event/continuation/RNG identity across engines",
+      "initial identities/generals and AI values",
+      "hand/discard physical ordering",
+      "unused deck suffix rule semantics (generic catalog equipment aliases are harness-only)",
+      "installed extension/product/UI acceptance",
+      "all unexecuted skill branches"
+    ]
+  },
+  "cases": [
+    {
+      "case": "choudu-top-return",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseToUse",
+          "player": 0,
+          "at": 1794593633121
+        },
+        {
+          "created": "chooseButton",
+          "player": 1,
+          "at": 1794593636081
+        },
+        {
+          "created": "chooseButton",
+          "player": 2,
+          "at": 1794593636351
+        },
+        {
+          "created": "chooseButton",
+          "player": 1,
+          "at": 1794593637647
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 0,
+          "parent": "phaseUse",
+          "step": 0,
+          "skillButtons": [
+            "choudu"
+          ],
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            0
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请选择要使用的牌"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "skill": "choudu",
+          "player": 0,
+          "parent": "phaseUse",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            0,
+            136
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请选择要使用的牌"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseButton",
+          "player": 1,
+          "parent": "diaobingqianjiang",
+          "step": 0,
+          "forced": false,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [
+            {
+              "i": 0,
+              "id": 3,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 1,
+              "id": 4,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 2,
+              "id": 5,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            },
+            {
+              "i": 3,
+              "id": 6,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            }
+          ],
+          "caption": "调兵遣将\n♠︎ 9\n杀\n♠︎ 9\n杀\n♠︎ 10\n杀\n♠︎ 10\n杀"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseButton",
+          "player": 2,
+          "parent": "diaobingqianjiang",
+          "step": 0,
+          "forced": false,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [
+            {
+              "i": 0,
+              "id": 3,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 1,
+              "id": 4,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 2,
+              "id": 5,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            },
+            {
+              "i": 3,
+              "id": 6,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            }
+          ],
+          "caption": "调兵遣将\n♠︎ 9\n杀\n♠︎ 9\n杀\n♠︎ 10\n杀\n♠︎ 10\n杀"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseButton",
+          "player": 1,
+          "parent": "diaobingqianjiangContentAfter",
+          "step": 0,
+          "forced": false,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [
+            {
+              "i": 0,
+              "id": 3,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 1,
+              "id": 4,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 2,
+              "id": 5,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            },
+            {
+              "i": 3,
+              "id": 6,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            }
+          ],
+          "caption": "调兵遣将\n♠︎ 9\n杀\n♠︎ 9\n杀\n♠︎ 10\n杀\n♠︎ 10\n杀"
+        }
+      ],
+      "native_choices": [
+        {
+          "prompt": "wudian_choudu_card",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(0), Card(136)]",
+          "selection": "[Card(0)]",
+          "archive_bytes": 3116,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-002-wudian_choudu_card.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "wudian_choudu_target",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Player(0), Player(1), Player(2), Player(3), Player(4), Player(5), Player(6), Player(7)]",
+          "selection": "[Player(1)]",
+          "archive_bytes": 3128,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-004-wudian_choudu_target.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "wudian_diaobing_swap",
+          "observer": 1,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(30), Card(46), Card(45)]",
+          "selection": "[]",
+          "archive_bytes": 3208,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-006-wudian_diaobing_swap.ngsa",
+          "resume_state_hash_log_equal": true
+        }
+      ],
+      "native_ngsa_roundtrips": 3,
+      "final_projection_equal": false,
+      "final_projection_differences": [
+        {
+          "field": "deck_draw_order",
+          "upstream": [
+            3,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            1,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            137,
+            138
+          ],
+          "native": [
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            1,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            137,
+            138
+          ]
+        },
+        {
+          "field": "discard_multiset",
+          "upstream": [
+            0,
+            4,
+            5,
+            6
+          ],
+          "native": [
+            0,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      ],
+      "note": "上游选定角色在最后展示池窗口选1张放回牌堆顶；原生没有此窗口，余牌全弃。"
+    },
+    {
+      "case": "choudu-target1",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseToUse",
+          "player": 0,
+          "at": 1794593638978
+        },
+        {
+          "created": "chooseButton",
+          "player": 1,
+          "at": 1794593641935
+        },
+        {
+          "created": "chooseButton",
+          "player": 2,
+          "at": 1794593642229
+        },
+        {
+          "created": "chooseButton",
+          "player": 1,
+          "at": 1794593643546
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 0,
+          "parent": "phaseUse",
+          "step": 0,
+          "skillButtons": [
+            "choudu"
+          ],
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            0
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请选择要使用的牌"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "skill": "choudu",
+          "player": 0,
+          "parent": "phaseUse",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            0,
+            136
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请选择要使用的牌"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseButton",
+          "player": 1,
+          "parent": "diaobingqianjiang",
+          "step": 0,
+          "forced": false,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [
+            {
+              "i": 0,
+              "id": 3,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 1,
+              "id": 4,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 2,
+              "id": 5,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            },
+            {
+              "i": 3,
+              "id": 6,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            }
+          ],
+          "caption": "调兵遣将\n♠︎ 9\n杀\n♠︎ 9\n杀\n♠︎ 10\n杀\n♠︎ 10\n杀"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseButton",
+          "player": 2,
+          "parent": "diaobingqianjiang",
+          "step": 0,
+          "forced": false,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [
+            {
+              "i": 0,
+              "id": 3,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 1,
+              "id": 4,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 2,
+              "id": 5,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            },
+            {
+              "i": 3,
+              "id": 6,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            }
+          ],
+          "caption": "调兵遣将\n♠︎ 9\n杀\n♠︎ 9\n杀\n♠︎ 10\n杀\n♠︎ 10\n杀"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseButton",
+          "player": 1,
+          "parent": "diaobingqianjiangContentAfter",
+          "step": 0,
+          "forced": false,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [
+            {
+              "i": 0,
+              "id": 3,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 1,
+              "id": 4,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 2,
+              "id": 5,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            },
+            {
+              "i": 3,
+              "id": 6,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            }
+          ],
+          "caption": "调兵遣将\n♠︎ 9\n杀\n♠︎ 9\n杀\n♠︎ 10\n杀\n♠︎ 10\n杀"
+        }
+      ],
+      "native_choices": [
+        {
+          "prompt": "wudian_choudu_card",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(0), Card(136)]",
+          "selection": "[Card(0)]",
+          "archive_bytes": 3116,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-009-wudian_choudu_card.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "wudian_choudu_target",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Player(0), Player(1), Player(2), Player(3), Player(4), Player(5), Player(6), Player(7)]",
+          "selection": "[Player(1)]",
+          "archive_bytes": 3128,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-011-wudian_choudu_target.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "wudian_diaobing_swap",
+          "observer": 1,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(30), Card(46), Card(45)]",
+          "selection": "[]",
+          "archive_bytes": 3208,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-013-wudian_diaobing_swap.ngsa",
+          "resume_state_hash_log_equal": true
+        }
+      ],
+      "native_ngsa_roundtrips": 3,
+      "final_projection_equal": true,
+      "final_projection_differences": [],
+      "note": "选手牌成本、角色1，所有换牌和放顶均取消；终态可相同，上游另询问角色2和末尾放顶，原生只询问角色1换出牌。"
+    },
+    {
+      "case": "choudu-target2",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseToUse",
+          "player": 0,
+          "at": 1794593644699
+        },
+        {
+          "created": "chooseButton",
+          "player": 1,
+          "at": 1794593647648
+        },
+        {
+          "created": "chooseButton",
+          "player": 2,
+          "at": 1794593647941
+        },
+        {
+          "created": "chooseButton",
+          "player": 2,
+          "at": 1794593649262
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 0,
+          "parent": "phaseUse",
+          "step": 0,
+          "skillButtons": [
+            "choudu"
+          ],
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            0
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请选择要使用的牌"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "skill": "choudu",
+          "player": 0,
+          "parent": "phaseUse",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            0,
+            136
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请选择要使用的牌"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseButton",
+          "player": 1,
+          "parent": "diaobingqianjiang",
+          "step": 0,
+          "forced": false,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [
+            {
+              "i": 0,
+              "id": 3,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 1,
+              "id": 4,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 2,
+              "id": 5,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            },
+            {
+              "i": 3,
+              "id": 6,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            }
+          ],
+          "caption": "调兵遣将\n♠︎ 9\n杀\n♠︎ 9\n杀\n♠︎ 10\n杀\n♠︎ 10\n杀"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseButton",
+          "player": 2,
+          "parent": "diaobingqianjiang",
+          "step": 0,
+          "forced": false,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [
+            {
+              "i": 0,
+              "id": 3,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 1,
+              "id": 4,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 2,
+              "id": 5,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            },
+            {
+              "i": 3,
+              "id": 6,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            }
+          ],
+          "caption": "调兵遣将\n♠︎ 9\n杀\n♠︎ 9\n杀\n♠︎ 10\n杀\n♠︎ 10\n杀"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseButton",
+          "player": 2,
+          "parent": "diaobingqianjiangContentAfter",
+          "step": 0,
+          "forced": false,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [
+            {
+              "i": 0,
+              "id": 3,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 1,
+              "id": 4,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 2,
+              "id": 5,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            },
+            {
+              "i": 3,
+              "id": 6,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            }
+          ],
+          "caption": "将任意张牌以任意顺序置于牌堆顶（先选择的在上）\n♠︎ 9\n杀\n♠︎ 9\n杀\n♠︎ 10\n杀\n♠︎ 10\n杀"
+        }
+      ],
+      "native_choices": [
+        {
+          "prompt": "wudian_choudu_card",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(0), Card(136)]",
+          "selection": "[Card(0)]",
+          "archive_bytes": 3116,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-016-wudian_choudu_card.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "wudian_choudu_target",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Player(0), Player(1), Player(2), Player(3), Player(4), Player(5), Player(6), Player(7)]",
+          "selection": "[Player(2)]",
+          "archive_bytes": 3128,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-018-wudian_choudu_target.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "wudian_diaobing_swap",
+          "observer": 2,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(2), Card(45)]",
+          "selection": "[]",
+          "archive_bytes": 3203,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-020-wudian_diaobing_swap.ngsa",
+          "resume_state_hash_log_equal": true
+        }
+      ],
+      "native_ngsa_roundtrips": 3,
+      "final_projection_equal": true,
+      "final_projection_differences": [],
+      "note": "选手牌成本、角色2；所有后续选择取消。上游仍询问其他有手牌角色及末尾放顶，原生只询问角色2。"
+    },
+    {
+      "case": "choudu-swap-a",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseToUse",
+          "player": 0,
+          "at": 1794593650712
+        },
+        {
+          "created": "chooseButton",
+          "player": 1,
+          "at": 1794593653690
+        },
+        {
+          "created": "chooseCard",
+          "player": 1,
+          "prompt": "用一张牌牌替换杀【♠︎9】",
+          "at": 1794593653738
+        },
+        {
+          "created": "chooseButton",
+          "player": 2,
+          "at": 1794593655102
+        },
+        {
+          "created": "chooseButton",
+          "player": 1,
+          "at": 1794593656402
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 0,
+          "parent": "phaseUse",
+          "step": 0,
+          "skillButtons": [
+            "choudu"
+          ],
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            0
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请选择要使用的牌"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "skill": "choudu",
+          "player": 0,
+          "parent": "phaseUse",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            0,
+            136
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请选择要使用的牌"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseButton",
+          "player": 1,
+          "parent": "diaobingqianjiang",
+          "step": 0,
+          "forced": false,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [
+            {
+              "i": 0,
+              "id": 3,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 1,
+              "id": 4,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 2,
+              "id": 5,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            },
+            {
+              "i": 3,
+              "id": 6,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            }
+          ],
+          "caption": "调兵遣将\n♠︎ 9\n杀\n♠︎ 9\n杀\n♠︎ 10\n杀\n♠︎ 10\n杀"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseCard",
+          "player": 1,
+          "prompt": "用一张牌牌替换杀【♠︎9】",
+          "parent": "diaobingqianjiang",
+          "step": 1,
+          "forced": true,
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            45,
+            46,
+            30
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "用一张牌牌替换杀【♠︎9】\n0/1"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseButton",
+          "player": 2,
+          "parent": "diaobingqianjiang",
+          "step": 0,
+          "forced": false,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [
+            {
+              "i": 0,
+              "id": 4,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 1,
+              "id": 5,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            },
+            {
+              "i": 2,
+              "id": 6,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            },
+            {
+              "i": 3,
+              "id": 30,
+              "name": "shan",
+              "text": "♥︎ 2\n闪"
+            }
+          ],
+          "caption": "调兵遣将\n♠︎ 9\n杀\n♠︎ 10\n杀\n♠︎ 10\n杀\n♥︎ 2\n闪"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseButton",
+          "player": 1,
+          "parent": "diaobingqianjiangContentAfter",
+          "step": 0,
+          "forced": false,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [
+            {
+              "i": 0,
+              "id": 4,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 1,
+              "id": 5,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            },
+            {
+              "i": 2,
+              "id": 6,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            },
+            {
+              "i": 3,
+              "id": 30,
+              "name": "shan",
+              "text": "♥︎ 2\n闪"
+            }
+          ],
+          "caption": "调兵遣将\n♠︎ 9\n杀\n♠︎ 10\n杀\n♠︎ 10\n杀\n♥︎ 2\n闪"
+        }
+      ],
+      "native_choices": [
+        {
+          "prompt": "wudian_choudu_card",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(0), Card(136)]",
+          "selection": "[Card(0)]",
+          "archive_bytes": 3116,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-023-wudian_choudu_card.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "wudian_choudu_target",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Player(0), Player(1), Player(2), Player(3), Player(4), Player(5), Player(6), Player(7)]",
+          "selection": "[Player(1)]",
+          "archive_bytes": 3128,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-025-wudian_choudu_target.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "wudian_diaobing_swap",
+          "observer": 1,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(30), Card(46), Card(45)]",
+          "selection": "[Card(30)]",
+          "archive_bytes": 3208,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-027-wudian_diaobing_swap.ngsa",
+          "resume_state_hash_log_equal": true
+        }
+      ],
+      "native_ngsa_roundtrips": 3,
+      "final_projection_equal": true,
+      "final_projection_differences": [],
+      "note": "角色1换出闪并选入首张展示杀；其他角色与末尾放顶取消。当前终态投影相同，原生缺选入展示牌窗口。"
+    },
+    {
+      "case": "choudu-swap-b",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseToUse",
+          "player": 0,
+          "at": 1794593659216
+        },
+        {
+          "created": "chooseButton",
+          "player": 1,
+          "at": 1794593662206
+        },
+        {
+          "created": "chooseCard",
+          "player": 1,
+          "prompt": "用一张牌牌替换杀【♠︎10】",
+          "at": 1794593662284
+        },
+        {
+          "created": "chooseButton",
+          "player": 2,
+          "at": 1794593663672
+        },
+        {
+          "created": "chooseButton",
+          "player": 1,
+          "at": 1794593664984
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 0,
+          "parent": "phaseUse",
+          "step": 0,
+          "skillButtons": [
+            "choudu"
+          ],
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            0
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请选择要使用的牌"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "skill": "choudu",
+          "player": 0,
+          "parent": "phaseUse",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            0,
+            136
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请选择要使用的牌"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseButton",
+          "player": 1,
+          "parent": "diaobingqianjiang",
+          "step": 0,
+          "forced": false,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [
+            {
+              "i": 0,
+              "id": 3,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 1,
+              "id": 4,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 2,
+              "id": 5,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            },
+            {
+              "i": 3,
+              "id": 6,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            }
+          ],
+          "caption": "调兵遣将\n♠︎ 9\n杀\n♠︎ 9\n杀\n♠︎ 10\n杀\n♠︎ 10\n杀"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseCard",
+          "player": 1,
+          "prompt": "用一张牌牌替换杀【♠︎10】",
+          "parent": "diaobingqianjiang",
+          "step": 1,
+          "forced": true,
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            45,
+            46,
+            30
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "用一张牌牌替换杀【♠︎10】\n0/1"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseButton",
+          "player": 2,
+          "parent": "diaobingqianjiang",
+          "step": 0,
+          "forced": false,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [
+            {
+              "i": 0,
+              "id": 3,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 1,
+              "id": 4,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 2,
+              "id": 6,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            },
+            {
+              "i": 3,
+              "id": 46,
+              "name": "tao",
+              "text": "♥︎ 4\n桃"
+            }
+          ],
+          "caption": "调兵遣将\n♠︎ 9\n杀\n♠︎ 9\n杀\n♠︎ 10\n杀\n♥︎ 4\n桃"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseButton",
+          "player": 1,
+          "parent": "diaobingqianjiangContentAfter",
+          "step": 0,
+          "forced": false,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [
+            {
+              "i": 0,
+              "id": 3,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 1,
+              "id": 4,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 2,
+              "id": 6,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            },
+            {
+              "i": 3,
+              "id": 46,
+              "name": "tao",
+              "text": "♥︎ 4\n桃"
+            }
+          ],
+          "caption": "调兵遣将\n♠︎ 9\n杀\n♠︎ 9\n杀\n♠︎ 10\n杀\n♥︎ 4\n桃"
+        }
+      ],
+      "native_choices": [
+        {
+          "prompt": "wudian_choudu_card",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(0), Card(136)]",
+          "selection": "[Card(0)]",
+          "archive_bytes": 3116,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-030-wudian_choudu_card.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "wudian_choudu_target",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Player(0), Player(1), Player(2), Player(3), Player(4), Player(5), Player(6), Player(7)]",
+          "selection": "[Player(1)]",
+          "archive_bytes": 3128,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-032-wudian_choudu_target.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "wudian_diaobing_swap",
+          "observer": 1,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(30), Card(46), Card(45)]",
+          "selection": "[Card(46)]",
+          "archive_bytes": 3208,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-034-wudian_diaobing_swap.ngsa",
+          "resume_state_hash_log_equal": true
+        }
+      ],
+      "native_ngsa_roundtrips": 3,
+      "final_projection_equal": false,
+      "final_projection_differences": [
+        {
+          "field": "players[1].hand",
+          "upstream": [
+            5,
+            30,
+            45
+          ],
+          "native": [
+            3,
+            30,
+            45
+          ]
+        },
+        {
+          "field": "discard_multiset",
+          "upstream": [
+            0,
+            3,
+            4,
+            6,
+            46
+          ],
+          "native": [
+            0,
+            4,
+            5,
+            6,
+            46
+          ]
+        }
+      ],
+      "note": "角色1换出同一桃，上游选择展示池index2的黑桃10杀；原生仅能选换出牌且固定取得index0的黑桃9杀。"
+    },
+    {
+      "case": "choudu-equip-target1",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseToUse",
+          "player": 0,
+          "at": 1794593673833
+        },
+        {
+          "created": "chooseButton",
+          "player": 0,
+          "at": 1794593676561
+        },
+        {
+          "created": "chooseButton",
+          "player": 1,
+          "at": 1794593676846
+        },
+        {
+          "created": "chooseButton",
+          "player": 2,
+          "at": 1794593677148
+        },
+        {
+          "created": "chooseButton",
+          "player": 1,
+          "at": 1794593678471
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 0,
+          "parent": "phaseUse",
+          "step": 0,
+          "skillButtons": [
+            "choudu"
+          ],
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            0
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请选择要使用的牌"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "skill": "choudu",
+          "player": 0,
+          "parent": "phaseUse",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            0,
+            136
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请选择要使用的牌"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseButton",
+          "player": 0,
+          "parent": "diaobingqianjiang",
+          "step": 0,
+          "forced": false,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [
+            {
+              "i": 0,
+              "id": 3,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 1,
+              "id": 4,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 2,
+              "id": 5,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            },
+            {
+              "i": 3,
+              "id": 6,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            }
+          ],
+          "caption": "选择一张牌并用一张手牌替换之\n♠︎ 9\n杀\n♠︎ 9\n杀\n♠︎ 10\n杀\n♠︎ 10\n杀"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseButton",
+          "player": 1,
+          "parent": "diaobingqianjiang",
+          "step": 0,
+          "forced": false,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [
+            {
+              "i": 0,
+              "id": 3,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 1,
+              "id": 4,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 2,
+              "id": 5,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            },
+            {
+              "i": 3,
+              "id": 6,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            }
+          ],
+          "caption": "调兵遣将\n♠︎ 9\n杀\n♠︎ 9\n杀\n♠︎ 10\n杀\n♠︎ 10\n杀"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseButton",
+          "player": 2,
+          "parent": "diaobingqianjiang",
+          "step": 0,
+          "forced": false,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [
+            {
+              "i": 0,
+              "id": 3,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 1,
+              "id": 4,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 2,
+              "id": 5,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            },
+            {
+              "i": 3,
+              "id": 6,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            }
+          ],
+          "caption": "调兵遣将\n♠︎ 9\n杀\n♠︎ 9\n杀\n♠︎ 10\n杀\n♠︎ 10\n杀"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseButton",
+          "player": 1,
+          "parent": "diaobingqianjiangContentAfter",
+          "step": 0,
+          "forced": false,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [
+            {
+              "i": 0,
+              "id": 3,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 1,
+              "id": 4,
+              "name": "sha",
+              "text": "♠︎ 9\n杀"
+            },
+            {
+              "i": 2,
+              "id": 5,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            },
+            {
+              "i": 3,
+              "id": 6,
+              "name": "sha",
+              "text": "♠︎ 10\n杀"
+            }
+          ],
+          "caption": "调兵遣将\n♠︎ 9\n杀\n♠︎ 9\n杀\n♠︎ 10\n杀\n♠︎ 10\n杀"
+        }
+      ],
+      "native_choices": [
+        {
+          "prompt": "wudian_choudu_card",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(0), Card(136)]",
+          "selection": "[Card(136)]",
+          "archive_bytes": 3116,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-037-wudian_choudu_card.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "wudian_choudu_target",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Player(0), Player(1), Player(2), Player(3), Player(4), Player(5), Player(6), Player(7)]",
+          "selection": "[Player(1)]",
+          "archive_bytes": 3128,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-039-wudian_choudu_target.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "wudian_diaobing_swap",
+          "observer": 1,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(30), Card(46), Card(45)]",
+          "selection": "[]",
+          "archive_bytes": 3200,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-041-wudian_diaobing_swap.ngsa",
+          "resume_state_hash_log_equal": true
+        }
+      ],
+      "native_ngsa_roundtrips": 3,
+      "final_projection_equal": true,
+      "final_projection_differences": [],
+      "note": "弃已装备三尖两刃刀、选角色1，后续全取消。上游还询问角色0、2和末尾放顶，原生只询问角色1。"
+    },
+    {
+      "case": "choudu-cancel-card",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseToUse",
+          "player": 0,
+          "at": 1794593679819
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 0,
+          "parent": "phaseUse",
+          "step": 0,
+          "skillButtons": [
+            "choudu"
+          ],
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            0
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请选择要使用的牌"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "skill": "choudu",
+          "player": 0,
+          "parent": "phaseUse",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            0,
+            136
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请选择要使用的牌"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 0,
+          "parent": "phaseUse",
+          "step": 0,
+          "skillButtons": [
+            "choudu"
+          ],
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            0
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请选择要使用的牌"
+        }
+      ],
+      "native_choices": [
+        {
+          "prompt": "wudian_choudu_card",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(0), Card(136)]",
+          "selection": "[]",
+          "archive_bytes": 3116,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-044-wudian_choudu_card.ngsa",
+          "resume_state_hash_log_equal": true
+        }
+      ],
+      "native_ngsa_roundtrips": 1,
+      "final_projection_equal": true,
+      "final_projection_differences": [],
+      "note": "上游进入筹度后取消并退出本次出牌选择；原生在选成本窗口取消，均保留手牌和装备。"
+    },
+    {
+      "case": "choudu-cancel-target",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseToUse",
+          "player": 0,
+          "at": 1794593683005
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 0,
+          "parent": "phaseUse",
+          "step": 0,
+          "skillButtons": [
+            "choudu"
+          ],
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            0
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请选择要使用的牌"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "skill": "choudu",
+          "player": 0,
+          "parent": "phaseUse",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            0,
+            136
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请选择要使用的牌"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 0,
+          "parent": "phaseUse",
+          "step": 0,
+          "skillButtons": [
+            "choudu"
+          ],
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            0
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请选择要使用的牌"
+        }
+      ],
+      "native_choices": [
+        {
+          "prompt": "wudian_choudu_card",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(0), Card(136)]",
+          "selection": "[Card(0)]",
+          "archive_bytes": 3116,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-047-wudian_choudu_card.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "wudian_choudu_target",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Player(0), Player(1), Player(2), Player(3), Player(4), Player(5), Player(6), Player(7)]",
+          "selection": "[]",
+          "archive_bytes": 3128,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-049-wudian_choudu_target.ngsa",
+          "resume_state_hash_log_equal": true
+        }
+      ],
+      "native_ngsa_roundtrips": 2,
+      "final_projection_equal": true,
+      "final_projection_differences": [],
+      "note": "上游已选成本后取消联合选牌/选目标；原生选成本后在目标窗口取消，均没有实际支付成本。"
+    },
+    {
+      "case": "choudu-empty",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseToUse",
+          "player": 0,
+          "at": 1794593685166
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 0,
+          "parent": "phaseUse",
+          "step": 0,
+          "skillButtons": [
+            "choudu"
+          ],
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请选择要使用的牌"
+        }
+      ],
+      "native_choices": [],
+      "native_ngsa_roundtrips": 0,
+      "final_projection_equal": true,
+      "final_projection_differences": [],
+      "note": "上游无he牌，出牌选择中没有可支付筹度成本并退出；原生ActivateSkill被InvalidChoice拒绝，无筹度结算。未据此覆盖其他filterTarget条件。"
+    },
+    {
+      "case": "fuchou-hand",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseCard",
+          "player": 1,
+          "prompt": "是否对runtime_dummy发动【负仇】？",
+          "at": 1794593686447
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseCard",
+          "player": 1,
+          "prompt": "是否对runtime_dummy发动【负仇】？",
+          "parent": "fuchou",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            30,
+            136
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "是否对runtime_dummy发动【负仇】？\n0/1"
+        }
+      ],
+      "native_choices": [
+        {
+          "prompt": "wudian_fuchou_cancel",
+          "observer": 1,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(30), Card(136)]",
+          "selection": "[Card(30)]",
+          "archive_bytes": 3164,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-053-wudian_fuchou_cancel.ngsa",
+          "resume_state_hash_log_equal": true
+        }
+      ],
+      "native_ngsa_roundtrips": 1,
+      "final_projection_equal": false,
+      "final_projection_differences": [
+        {
+          "field": "players[0].hand",
+          "upstream": [
+            30
+          ],
+          "native": [
+            1,
+            30
+          ]
+        },
+        {
+          "field": "discard_multiset",
+          "upstream": [
+            1
+          ],
+          "native": []
+        }
+      ],
+      "note": "交手牌闪给攻击者并取消原杀。上游原杀进入弃牌堆；原生把原杀额外加入攻击者手牌。"
+    },
+    {
+      "case": "fuchou-equip",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseCard",
+          "player": 1,
+          "prompt": "是否对runtime_dummy发动【负仇】？",
+          "at": 1794593688331
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseCard",
+          "player": 1,
+          "prompt": "是否对runtime_dummy发动【负仇】？",
+          "parent": "fuchou",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            30,
+            136
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "是否对runtime_dummy发动【负仇】？\n0/1"
+        }
+      ],
+      "native_choices": [
+        {
+          "prompt": "wudian_fuchou_cancel",
+          "observer": 1,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(30), Card(136)]",
+          "selection": "[Card(136)]",
+          "archive_bytes": 3164,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-056-wudian_fuchou_cancel.ngsa",
+          "resume_state_hash_log_equal": true
+        }
+      ],
+      "native_ngsa_roundtrips": 1,
+      "final_projection_equal": false,
+      "final_projection_differences": [
+        {
+          "field": "players[0].hand",
+          "upstream": [
+            136
+          ],
+          "native": [
+            1,
+            136
+          ]
+        },
+        {
+          "field": "discard_multiset",
+          "upstream": [
+            1
+          ],
+          "native": []
+        }
+      ],
+      "note": "交已装备三尖两刃刀给攻击者并取消原杀。两边卸装；上游原杀弃置，原生把原杀额外加入攻击者手牌。"
+    },
+    {
+      "case": "fuchou-cancel",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseCard",
+          "player": 1,
+          "prompt": "是否对runtime_dummy发动【负仇】？",
+          "at": 1794593690354
+        },
+        {
+          "created": "chooseToUse",
+          "player": 1,
+          "prompt": "请使用一张闪响应杀",
+          "at": 1794593690384
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseCard",
+          "player": 1,
+          "prompt": "是否对runtime_dummy发动【负仇】？",
+          "parent": "fuchou",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            30,
+            136
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "是否对runtime_dummy发动【负仇】？\n0/1"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 1,
+          "prompt": "请使用一张闪响应杀",
+          "parent": "sha",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            30
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请使用一张闪响应杀"
+        }
+      ],
+      "native_choices": [
+        {
+          "prompt": "wudian_fuchou_cancel",
+          "observer": 1,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(30), Card(136)]",
+          "selection": "[]",
+          "archive_bytes": 3164,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-059-wudian_fuchou_cancel.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "respond_shan",
+          "observer": 1,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": false,
+          "options": "[Pass, Card(30)]",
+          "selection": "[Pass]",
+          "archive_bytes": 3156,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-061-respond_shan.ngsa",
+          "resume_state_hash_log_equal": true
+        }
+      ],
+      "native_ngsa_roundtrips": 2,
+      "final_projection_equal": true,
+      "final_projection_differences": [],
+      "note": "取消交牌，原杀照常命中且不登记复仇来源；本次终态投影相同。"
+    },
+    {
+      "case": "fuchou-empty",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseToUse",
+          "player": 1,
+          "prompt": "请使用一张闪响应杀",
+          "at": 1794593691834
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 1,
+          "prompt": "请使用一张闪响应杀",
+          "parent": "sha",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请使用一张闪响应杀"
+        }
+      ],
+      "native_choices": [],
+      "native_ngsa_roundtrips": 0,
+      "final_projection_equal": true,
+      "final_projection_differences": [],
+      "note": "目标无he牌，未出现交牌选择，原杀命中；本次终态投影相同。"
+    },
+    {
+      "case": "fuchou-settle-no-sha",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseCard",
+          "player": 1,
+          "prompt": "是否对runtime_dummy发动【负仇】？",
+          "at": 1794593693120
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseCard",
+          "player": 1,
+          "prompt": "是否对runtime_dummy发动【负仇】？",
+          "parent": "fuchou",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            30,
+            136
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "是否对runtime_dummy发动【负仇】？\n0/1"
+        }
+      ],
+      "native_choices": [
+        {
+          "prompt": "wudian_fuchou_cancel",
+          "observer": 1,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(30), Card(136)]",
+          "selection": "[Card(30)]",
+          "archive_bytes": 3164,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-065-wudian_fuchou_cancel.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "respond_shan",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": false,
+          "options": "[Pass, Card(30)]",
+          "selection": "[Pass]",
+          "archive_bytes": 3312,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-070-respond_shan.ngsa",
+          "resume_state_hash_log_equal": true
+        }
+      ],
+      "native_ngsa_roundtrips": 2,
+      "final_projection_equal": false,
+      "final_projection_differences": [
+        {
+          "field": "players[0].hp",
+          "upstream": 8,
+          "native": 7
+        },
+        {
+          "field": "players[0].hand",
+          "upstream": [
+            30
+          ],
+          "native": [
+            1,
+            30
+          ]
+        },
+        {
+          "field": "players[1].hp",
+          "upstream": 7,
+          "native": 8
+        },
+        {
+          "field": "deck_draw_order",
+          "upstream": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            0,
+            2,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            137,
+            138
+          ],
+          "native": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            0,
+            2,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            137
+          ]
+        },
+        {
+          "field": "discard_multiset",
+          "upstream": [
+            1
+          ],
+          "native": [
+            138
+          ]
+        }
+      ],
+      "note": "交闪后触发phaseAfter，复仇者摸到桃、无杀可用。上游复仇者失1HP；原生自动虚拟杀伤攻击者1HP，未要求实际杀/未令复仇者失HP。"
+    },
+    {
+      "case": "fuchou-settle-draw-sha",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseCard",
+          "player": 1,
+          "prompt": "是否对runtime_dummy发动【负仇】？",
+          "at": 1794593695932
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseCard",
+          "player": 1,
+          "prompt": "是否对runtime_dummy发动【负仇】？",
+          "parent": "fuchou",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            30,
+            136
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "是否对runtime_dummy发动【负仇】？\n0/1"
+        }
+      ],
+      "native_choices": [
+        {
+          "prompt": "wudian_fuchou_cancel",
+          "observer": 1,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(30), Card(136)]",
+          "selection": "[Card(30)]",
+          "archive_bytes": 3164,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-073-wudian_fuchou_cancel.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "respond_shan",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": false,
+          "options": "[Pass, Card(30)]",
+          "selection": "[Pass]",
+          "archive_bytes": 3312,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-078-respond_shan.ngsa",
+          "resume_state_hash_log_equal": true
+        }
+      ],
+      "native_ngsa_roundtrips": 2,
+      "final_projection_equal": false,
+      "final_projection_differences": [
+        {
+          "field": "players[0].hp",
+          "upstream": 8,
+          "native": 7
+        },
+        {
+          "field": "players[0].hand",
+          "upstream": [
+            30
+          ],
+          "native": [
+            1,
+            30
+          ]
+        },
+        {
+          "field": "players[1].hp",
+          "upstream": 7,
+          "native": 8
+        },
+        {
+          "field": "deck_draw_order",
+          "upstream": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            0,
+            2,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            137,
+            138
+          ],
+          "native": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            0,
+            2,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            137
+          ]
+        },
+        {
+          "field": "discard_multiset",
+          "upstream": [
+            1
+          ],
+          "native": [
+            138
+          ]
+        }
+      ],
+      "note": "交闪后初手无杀；phaseAfter调度摸到杀，但上游旧step在调度draw同一步先检查hasSha，实际未创建出杀选择并失1HP；原生自动虚拟杀伤攻击者1HP。本案不计已执行的出杀取消。"
+    },
+    {
+      "case": "fuchou-settle-have-sha-cancel",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseCard",
+          "player": 1,
+          "prompt": "是否对runtime_dummy发动【负仇】？",
+          "at": 1794593698624
+        },
+        {
+          "created": "chooseToUse",
+          "player": 1,
+          "prompt": "请使用一张闪响应杀",
+          "at": 1794593698647
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseCard",
+          "player": 1,
+          "prompt": "是否对runtime_dummy发动【负仇】？",
+          "parent": "fuchou",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            2,
+            30,
+            136
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "是否对runtime_dummy发动【负仇】？\n0/1"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 1,
+          "prompt": "请使用一张闪响应杀",
+          "parent": "sha",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            30
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请使用一张闪响应杀"
+        }
+      ],
+      "native_choices": [
+        {
+          "prompt": "wudian_fuchou_cancel",
+          "observer": 1,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(30), Card(2), Card(136)]",
+          "selection": "[]",
+          "archive_bytes": 3169,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-081-wudian_fuchou_cancel.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "respond_shan",
+          "observer": 1,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": false,
+          "options": "[Pass, Card(30)]",
+          "selection": "[Pass]",
+          "archive_bytes": 3156,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-083-respond_shan.ngsa",
+          "resume_state_hash_log_equal": true
+        }
+      ],
+      "native_ngsa_roundtrips": 2,
+      "final_projection_equal": true,
+      "final_projection_differences": [],
+      "note": "初手有备用杀，phaseAfter实际出现chooseToUse；玩家取消，复仇者失1HP并保留备用杀与新摸桃。原生自动虚拟杀伤攻击者1HP，没有相应确认窗口。"
+    },
+    {
+      "case": "fuchou-settle-have-sha-use",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseCard",
+          "player": 1,
+          "prompt": "是否对runtime_dummy发动【负仇】？",
+          "at": 1794593699942
+        },
+        {
+          "created": "chooseToUse",
+          "player": 1,
+          "prompt": "对runtime_dummy使用一张杀，或失去1点体力",
+          "at": 1794593700476
+        },
+        {
+          "created": "chooseToUse",
+          "player": 0,
+          "prompt": "请使用一张闪响应杀",
+          "at": 1794593702064
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseCard",
+          "player": 1,
+          "prompt": "是否对runtime_dummy发动【负仇】？",
+          "parent": "fuchou",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            2,
+            30,
+            136
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "是否对runtime_dummy发动【负仇】？\n0/1"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 1,
+          "prompt": "对runtime_dummy使用一张杀，或失去1点体力",
+          "parent": "fuchou2",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            2
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "对runtime_dummy使用一张杀，或失去1点体力"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 0,
+          "prompt": "请使用一张闪响应杀",
+          "parent": "sha",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            30
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请使用一张闪响应杀"
+        }
+      ],
+      "native_choices": [
+        {
+          "prompt": "wudian_fuchou_cancel",
+          "observer": 1,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(30), Card(2), Card(136)]",
+          "selection": "[Card(30)]",
+          "archive_bytes": 3169,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-089-wudian_fuchou_cancel.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "respond_shan",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": false,
+          "options": "[Pass, Card(30)]",
+          "selection": "[Pass]",
+          "archive_bytes": 3312,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-094-respond_shan.ngsa",
+          "resume_state_hash_log_equal": true
+        }
+      ],
+      "native_ngsa_roundtrips": 2,
+      "final_projection_equal": false,
+      "final_projection_differences": [
+        {
+          "field": "players[0].hand",
+          "upstream": [
+            30
+          ],
+          "native": [
+            1,
+            30
+          ]
+        },
+        {
+          "field": "players[1].hand",
+          "upstream": [],
+          "native": [
+            2,
+            45
+          ]
+        },
+        {
+          "field": "players[7].hp",
+          "upstream": 7,
+          "native": 8
+        },
+        {
+          "field": "deck_draw_order",
+          "upstream": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            0,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            137,
+            138
+          ],
+          "native": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            0,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            137
+          ]
+        },
+        {
+          "field": "discard_multiset",
+          "upstream": [
+            1,
+            2,
+            45
+          ],
+          "native": [
+            138
+          ]
+        }
+      ],
+      "note": "初手有备用杀，phaseAfter实际选择该杀攻击标记来源，来源取消闪响应。上游消耗备用杀并伤来源1HP；原生同样伤来源但保留备用杀并使用虚拟杀，且仍多返还原杀。"
+    },
+    {
+      "case": "youzhan-hand-stop",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseToDiscard",
+          "player": 0,
+          "prompt": "是否对runtime_dummy（你）发动【诱战】？",
+          "at": 1794593704390
+        },
+        {
+          "created": "chooseToUse",
+          "player": 1,
+          "prompt": "对runtime_dummy使用一张杀，或受到1点伤害",
+          "at": 1794593705470
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToDiscard",
+          "player": 0,
+          "prompt": "是否对runtime_dummy（你）发动【诱战】？",
+          "parent": "youzhan_cost",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            92,
+            136
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "是否对runtime_dummy（你）发动【诱战】？\n0/1"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 1,
+          "prompt": "对runtime_dummy使用一张杀，或受到1点伤害",
+          "parent": "youdishenru",
+          "step": 1,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "对runtime_dummy使用一张杀，或受到1点伤害"
+        }
+      ],
+      "native_choices": [
+        {
+          "prompt": "wudian_youzhan_discard",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(92), Card(136)]",
+          "selection": "[Card(92)]",
+          "archive_bytes": 3207,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-097-wudian_youzhan_discard.ngsa",
+          "resume_state_hash_log_equal": true
+        }
+      ],
+      "native_ngsa_roundtrips": 1,
+      "final_projection_equal": false,
+      "final_projection_differences": [
+        {
+          "field": "players[0].hp",
+          "upstream": 8,
+          "native": 7
+        }
+      ],
+      "note": "弃手牌装备；攻击者无备用杀。上游取消原杀并只令攻击者受1伤；原生还令原目标承受原杀伤害。"
+    },
+    {
+      "case": "youzhan-equip-stop",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseToDiscard",
+          "player": 0,
+          "prompt": "是否对runtime_dummy（你）发动【诱战】？",
+          "at": 1794593707308
+        },
+        {
+          "created": "chooseToUse",
+          "player": 1,
+          "prompt": "对runtime_dummy使用一张杀，或受到1点伤害",
+          "at": 1794593708370
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToDiscard",
+          "player": 0,
+          "prompt": "是否对runtime_dummy（你）发动【诱战】？",
+          "parent": "youzhan_cost",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            92,
+            136
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "是否对runtime_dummy（你）发动【诱战】？\n0/1"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 1,
+          "prompt": "对runtime_dummy使用一张杀，或受到1点伤害",
+          "parent": "youdishenru",
+          "step": 1,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "对runtime_dummy使用一张杀，或受到1点伤害"
+        }
+      ],
+      "native_choices": [
+        {
+          "prompt": "wudian_youzhan_discard",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(92), Card(136)]",
+          "selection": "[Card(136)]",
+          "archive_bytes": 3207,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-100-wudian_youzhan_discard.ngsa",
+          "resume_state_hash_log_equal": true
+        }
+      ],
+      "native_ngsa_roundtrips": 1,
+      "final_projection_equal": false,
+      "final_projection_differences": [
+        {
+          "field": "players[0].hp",
+          "upstream": 8,
+          "native": 7
+        }
+      ],
+      "note": "弃已装备武器；攻击者无备用杀。上游取消原杀并只令攻击者受1伤；原生还令原目标承受原杀伤害。"
+    },
+    {
+      "case": "youzhan-cancel",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseToDiscard",
+          "player": 0,
+          "prompt": "是否对runtime_dummy（你）发动【诱战】？",
+          "at": 1794593710018
+        },
+        {
+          "created": "chooseToUse",
+          "player": 0,
+          "prompt": "请使用一张闪响应杀",
+          "at": 1794593710031
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToDiscard",
+          "player": 0,
+          "prompt": "是否对runtime_dummy（你）发动【诱战】？",
+          "parent": "youzhan_cost",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            92,
+            136
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "是否对runtime_dummy（你）发动【诱战】？\n0/1"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 0,
+          "prompt": "请使用一张闪响应杀",
+          "parent": "sha",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请使用一张闪响应杀"
+        }
+      ],
+      "native_choices": [
+        {
+          "prompt": "wudian_youzhan_discard",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(92), Card(136)]",
+          "selection": "[]",
+          "archive_bytes": 3207,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-103-wudian_youzhan_discard.ngsa",
+          "resume_state_hash_log_equal": true
+        }
+      ],
+      "native_ngsa_roundtrips": 1,
+      "final_projection_equal": true,
+      "final_projection_differences": [],
+      "note": "取消弃装备，原杀正常命中；本次终态投影相同。"
+    },
+    {
+      "case": "youzhan-far",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseToUse",
+          "player": 2,
+          "prompt": "请使用一张闪响应杀",
+          "at": 1794593711300
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 2,
+          "prompt": "请使用一张闪响应杀",
+          "parent": "sha",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请使用一张闪响应杀"
+        }
+      ],
+      "native_choices": [],
+      "native_ngsa_roundtrips": 0,
+      "final_projection_equal": true,
+      "final_projection_differences": [],
+      "note": "8人局角色0持技能，角色1对2出杀，0到2距离2；诱战未触发，本次终态投影相同。"
+    },
+    {
+      "case": "youzhan-no-equip",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseToUse",
+          "player": 0,
+          "prompt": "请使用一张闪响应杀",
+          "at": 1794593712556
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 0,
+          "prompt": "请使用一张闪响应杀",
+          "parent": "sha",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请使用一张闪响应杀"
+        }
+      ],
+      "native_choices": [],
+      "native_ngsa_roundtrips": 0,
+      "final_projection_equal": true,
+      "final_projection_differences": [],
+      "note": "技能拥有者he无装备牌，诱战未触发；原杀正常命中，本次终态投影相同。"
+    },
+    {
+      "case": "youzhan-counter-use",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseToDiscard",
+          "player": 0,
+          "prompt": "是否对runtime_dummy（你）发动【诱战】？",
+          "at": 1794593713872
+        },
+        {
+          "created": "chooseToUse",
+          "player": 1,
+          "prompt": "对runtime_dummy使用一张杀，或受到1点伤害",
+          "at": 1794593714949
+        },
+        {
+          "created": "chooseToDiscard",
+          "player": 0,
+          "prompt": "是否对runtime_dummy（你）发动【诱战】？",
+          "at": 1794593715528
+        },
+        {
+          "created": "chooseToUse",
+          "player": 0,
+          "prompt": "请使用一张闪响应杀",
+          "at": 1794593715589
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToDiscard",
+          "player": 0,
+          "prompt": "是否对runtime_dummy（你）发动【诱战】？",
+          "parent": "youzhan_cost",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            92,
+            136
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "是否对runtime_dummy（你）发动【诱战】？\n0/1"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 1,
+          "prompt": "对runtime_dummy使用一张杀，或受到1点伤害",
+          "parent": "youdishenru",
+          "step": 1,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            2
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "对runtime_dummy使用一张杀，或受到1点伤害"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToDiscard",
+          "player": 0,
+          "prompt": "是否对runtime_dummy（你）发动【诱战】？",
+          "parent": "youzhan_cost",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            136
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "是否对runtime_dummy（你）发动【诱战】？\n0/1"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 0,
+          "prompt": "请使用一张闪响应杀",
+          "parent": "sha",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请使用一张闪响应杀"
+        }
+      ],
+      "native_choices": [
+        {
+          "prompt": "wudian_youzhan_discard",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(92), Card(136)]",
+          "selection": "[Card(92)]",
+          "archive_bytes": 3207,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-108-wudian_youzhan_discard.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "wudian_youdishenru_sha",
+          "observer": 1,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(2)]",
+          "selection": "[Card(2)]",
+          "archive_bytes": 3269,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-110-wudian_youdishenru_sha.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "wudian_youzhan_discard",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(136)]",
+          "selection": "[]",
+          "archive_bytes": 3371,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-112-wudian_youzhan_discard.ngsa",
+          "resume_state_hash_log_equal": true
+        }
+      ],
+      "native_ngsa_roundtrips": 3,
+      "final_projection_equal": false,
+      "final_projection_differences": [
+        {
+          "field": "players[0].hp",
+          "upstream": 7,
+          "native": 6
+        }
+      ],
+      "note": "支付手牌装备后攻击者实际再出1张杀；再次诱战取消，目标无闪。按实际终态列差别，未声称原杀取消路径等价。"
+    },
+    {
+      "case": "youzhan-counter-dodge-stop",
+      "upstream_run": "eleventh",
+      "initial_projection_equal": true,
+      "initial_residual_virtual_equipment_or_judge": false,
+      "upstream_original_choice_constructors": [
+        {
+          "created": "chooseToDiscard",
+          "player": 0,
+          "prompt": "是否对runtime_dummy（你）发动【诱战】？",
+          "at": 1794593717846
+        },
+        {
+          "created": "chooseToUse",
+          "player": 1,
+          "prompt": "对runtime_dummy使用一张杀，或受到1点伤害",
+          "at": 1794593718916
+        },
+        {
+          "created": "chooseToDiscard",
+          "player": 0,
+          "prompt": "是否对runtime_dummy（你）发动【诱战】？",
+          "at": 1794593719509
+        },
+        {
+          "created": "chooseToUse",
+          "player": 0,
+          "prompt": "请使用一张闪响应杀",
+          "at": 1794593719548
+        },
+        {
+          "created": "chooseToUse",
+          "player": 1,
+          "prompt": "对runtime_dummy使用一张杀，或受到1点伤害",
+          "at": 1794593720395
+        }
+      ],
+      "upstream_manual_decision_states": [
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToDiscard",
+          "player": 0,
+          "prompt": "是否对runtime_dummy（你）发动【诱战】？",
+          "parent": "youzhan_cost",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            92,
+            136
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "是否对runtime_dummy（你）发动【诱战】？\n0/1"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 1,
+          "prompt": "对runtime_dummy使用一张杀，或受到1点伤害",
+          "parent": "youdishenru",
+          "step": 1,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            2
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "对runtime_dummy使用一张杀，或受到1点伤害"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToDiscard",
+          "player": 0,
+          "prompt": "是否对runtime_dummy（你）发动【诱战】？",
+          "parent": "youzhan_cost",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            136
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "是否对runtime_dummy（你）发动【诱战】？\n0/1"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 0,
+          "prompt": "请使用一张闪响应杀",
+          "parent": "sha",
+          "step": 0,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [
+            30
+          ],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "请使用一张闪响应杀"
+        },
+        {
+          "done": false,
+          "error": null,
+          "paused": true,
+          "event": "chooseToUse",
+          "player": 1,
+          "prompt": "对runtime_dummy使用一张杀，或受到1点伤害",
+          "parent": "youdishenru",
+          "step": 1,
+          "confirm": "c",
+          "selectedCards": [],
+          "selectedTargets": [],
+          "selectableCards": [],
+          "selectableTargets": [],
+          "buttons": [],
+          "caption": "对runtime_dummy使用一张杀，或受到1点伤害"
+        }
+      ],
+      "native_choices": [
+        {
+          "prompt": "wudian_youzhan_discard",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(92), Card(136)]",
+          "selection": "[Card(92)]",
+          "archive_bytes": 3207,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-115-wudian_youzhan_discard.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "wudian_youdishenru_sha",
+          "observer": 1,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(2)]",
+          "selection": "[Card(2)]",
+          "archive_bytes": 3269,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-117-wudian_youdishenru_sha.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "wudian_youzhan_discard",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": true,
+          "options": "[Card(136)]",
+          "selection": "[]",
+          "archive_bytes": 3371,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-119-wudian_youzhan_discard.ngsa",
+          "resume_state_hash_log_equal": true
+        },
+        {
+          "prompt": "respond_shan",
+          "observer": 0,
+          "min": 1,
+          "max": 1,
+          "allow_cancel": false,
+          "options": "[Pass, Card(30)]",
+          "selection": "[Card(30)]",
+          "archive_bytes": 3313,
+          "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/isolated-archives/pending-121-respond_shan.ngsa",
+          "resume_state_hash_log_equal": true
+        }
+      ],
+      "native_ngsa_roundtrips": 4,
+      "final_projection_equal": false,
+      "final_projection_differences": [
+        {
+          "field": "players[0].hp",
+          "upstream": 8,
+          "native": 7
+        },
+        {
+          "field": "players[1].hp",
+          "upstream": 7,
+          "native": 8
+        }
+      ],
+      "note": "反击杀被目标手牌闪抵消，再次诱战取消。上游随后重新要求攻击者出杀，取消后攻击者受伤；原生无对应重复出杀窗口。"
+    }
+  ]
+}

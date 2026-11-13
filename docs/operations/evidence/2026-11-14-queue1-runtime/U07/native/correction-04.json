@@ -1,0 +1,6 @@
+{
+  "at": "2026-11-13T18:02:43.663196+00:00",
+  "failed_run": "04-fourth.stderr",
+  "cause": "respond_shan uses Pass option, empty selection was rejected and loop hit guard",
+  "change": "answer respond_shan with ChoiceOption::Pass and explicitly fail on rejected probe answers; no product change"
+}

@@ -1,0 +1,173 @@
+{
+  "at": "2026-11-14T02:04:51.638010+08:00",
+  "inputs": [
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/asks_wudian.rs",
+      "snapshot": "initial-inputs/crates/engine-native-content/src/content/host/asks_wudian.rs",
+      "sha256": "042cc996fb573f782cd5af3a6bc21258f7e350836f1556905627e6857d9a107a",
+      "bytes": 31921
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/tests/l29_longxue_eight.rs",
+      "snapshot": "initial-inputs/crates/engine-native/tests/l29_longxue_eight.rs",
+      "sha256": "fd40388d5e2d7dae0690d6308240528c7a1aa308ee467a38eea1303805ea07b4",
+      "bytes": 39100
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/skills_targets.rs",
+      "snapshot": "initial-inputs/crates/engine-native-content/src/content/host/step/skills_targets.rs",
+      "sha256": "4b6ada0cdef44232f86d1bd94c1c6d9264f11cbc021b314941dea2f408ecdf12",
+      "bytes": 37034
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/skills_status.rs",
+      "snapshot": "initial-inputs/crates/engine-native-content/src/content/host/step/skills_status.rs",
+      "sha256": "54676c9e2779a122713fd83d5f74be0f5ca3ae96f3545f05c89496802a3ea721",
+      "bytes": 47720
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/asks.rs",
+      "snapshot": "initial-inputs/crates/engine-native-content/src/content/host/asks.rs",
+      "sha256": "fbb4c2cf7f422e5b315f13d5688bb5ff59544e8a7582c039c01db407d2e32089",
+      "bytes": 37685
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/filtering/common.rs",
+      "snapshot": "initial-inputs/crates/engine-native-content/src/content/host/filtering/common.rs",
+      "sha256": "e93844349439f339d39a5dd8061b872a7a6650729c19c23a6f9094b7a23f4b0a",
+      "bytes": 58305
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/factory.rs",
+      "snapshot": "initial-inputs/crates/engine-native-content/src/content/host/factory.rs",
+      "sha256": "1e62e8ab39709ccbbfc01fbbe1d11b7004d2f77240477a23df4640a180367b4c",
+      "bytes": 31697
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/choice.rs",
+      "snapshot": "initial-inputs/crates/engine-native-kernel/src/choice.rs",
+      "sha256": "b25f8cd4685cd994af387cf3f1e0e6ae085489f58ad0b772a0011a1672450d5f",
+      "bytes": 3966
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/machine.rs",
+      "snapshot": "initial-inputs/crates/engine-native-kernel/src/machine.rs",
+      "sha256": "219c8c8fc913ad743af196734f4a0bca87565c52331feb0b7442e4915b379197",
+      "bytes": 36079
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/src/engine/snapshot.rs",
+      "snapshot": "initial-inputs/crates/engine-native/src/engine/snapshot.rs",
+      "sha256": "d94617bb19fea4b4840a5af0856c901ed7675ece0dc5fc131a7f0e2c5417c914",
+      "bytes": 32363
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/snap/asks.rs",
+      "snapshot": "initial-inputs/crates/engine-native-kernel/src/snap/asks.rs",
+      "sha256": "eb010a4b4740e72b563a13dcc7ea3df7eaa3f592ffc1f84ac2130361a1b80210",
+      "bytes": 29183
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/huanle-upstream-noname/assets/cards.json",
+      "snapshot": "initial-inputs/packages/extensions/huanle-upstream-noname/assets/cards.json",
+      "sha256": "49d48fbe83a8288da8260e287665eef0012d65fe1dea48d5cf72d8fe498bc41b",
+      "bytes": 1358
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U06/native-probe.rs",
+      "snapshot": "initial-inputs/evidence/U06/native-probe.rs",
+      "sha256": "a1bcf1e2957d9b0c10ac0781736c1c10a32dd70aee2751e53c5d4b7d527eb39e",
+      "bytes": 9545
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U06/native-results-first.json",
+      "snapshot": "initial-inputs/evidence/U06/native-results-first.json",
+      "sha256": "3712a0ff00aa999c32d04b3295d012e9836b73150570a497c057dae54b6fe6c9",
+      "bytes": 83977
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U06/02-native-probe-first.log",
+      "snapshot": "initial-inputs/evidence/U06/02-native-probe-first.log",
+      "sha256": "56626060c2be2fd11456f01df78dd958d5c44209b982b7892e2ce1cebc8e20bc",
+      "bytes": 54122
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U06/browser/start-case.js",
+      "snapshot": "initial-inputs/evidence/U06/browser/start-case.js",
+      "sha256": "6a4ffac3a6096351e1ddf68c3e6e04e69ca4d509a38fd24fb7e7aa2490bfc0ca",
+      "bytes": 4685
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U06/browser/run-cases.py",
+      "snapshot": "initial-inputs/evidence/U06/browser/run-cases.py",
+      "sha256": "e1de0e99b837d6c9824f0e78be33e7876ba4641e7108553f483f0c6b40cd2f7f",
+      "bytes": 3923
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U06/browser/finish-case.js",
+      "snapshot": "initial-inputs/evidence/U06/browser/finish-case.js",
+      "sha256": "585cc1db3706ede01783f8fc282faf107b3f18240aebc7d52a3bda4212d81cb5",
+      "bytes": 1565
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U06/browser/await-choice.js",
+      "snapshot": "initial-inputs/evidence/U06/browser/await-choice.js",
+      "sha256": "c799aec03094b8e6d50862c5f3c1dae9d292de4ed72eed958f614120e89b47a4",
+      "bytes": 1354
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U06/browser/case-results.jsonl",
+      "snapshot": "initial-inputs/evidence/U06/browser/case-results.jsonl",
+      "sha256": "2c68c62fdb6793ef561de15739c100fd036306f3d242cc19468b93e86c57efa1",
+      "bytes": 100544
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U06/browser/session-modern-1794592005610-requests.jsonl",
+      "snapshot": "initial-inputs/evidence/U06/browser/session-modern-1794592005610-requests.jsonl",
+      "sha256": "c382e7e98b9e6c1c66f9e3cf33c50491673bd322e7c6516510766ebd83433113",
+      "bytes": 368772
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U06/browser/session-modern-1794592005610-replies.jsonl",
+      "snapshot": "initial-inputs/evidence/U06/browser/session-modern-1794592005610-replies.jsonl",
+      "sha256": "a9838d753724b583b0be60b161f0125cce0d8d82c511abc5e36f7fb88f83ba37",
+      "bytes": 124984
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U06/browser/launch-input.json",
+      "snapshot": "initial-inputs/evidence/U06/browser/launch-input.json",
+      "sha256": "e30639528794745c61ff84e58e4c3f345a9866f811f22c254799db76ddf540da",
+      "bytes": 334
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js",
+      "snapshot": "initial-inputs/upstream/archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js",
+      "sha256": "e99244d552f0dccc30477b61aef8cca5bc758dc3d9b32221c2dba8a8e0bc9bfd",
+      "bytes": 3585
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js",
+      "snapshot": "initial-inputs/upstream/archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js",
+      "sha256": "96d74f2aa088718a1990c7960aab47c39a618405922a3f325b51c39aac4fc71b",
+      "bytes": 2216
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/library/element/player.js",
+      "snapshot": "initial-inputs/upstream/archive/upstream/noname/apps/core/noname/library/element/player.js",
+      "sha256": "9ec265664ffa48750bc4117e3204bffe367679b6d260a23254fa14d2fc3163d4",
+      "bytes": 463064
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/character/mobile.js",
+      "snapshot": "initial-inputs/upstream/archive/upstream/noname-liuli/noname/character/mobile.js",
+      "sha256": "24a3c1fa495d58abeff716335804ecc19fafafdec46af10ef6a717b469d161f0",
+      "bytes": 791477
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/龙血玄黄/extension.js",
+      "snapshot": "initial-inputs/upstream/archive/upstream/noname-liuli/noname/extension/龙血玄黄/extension.js",
+      "sha256": "e3fad7cf47bfb5a6f6b55d21bd6dbdd7b44753a6b92d7407a2a1c88bb71d2db7",
+      "bytes": 434126
+    }
+  ]
+}

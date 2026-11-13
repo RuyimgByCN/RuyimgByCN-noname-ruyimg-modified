@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-13T18:17:21.974724+00:00",
+  "command": "CARGO_TARGET_DIR=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target NONAME_REPO_ROOT=/Users/ruyimg/Documents/Claude/sanguosha/noname-next U07_ARCHIVE_DIR=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives U07_CATALOG_REPORT=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-catalog-without-placeholder.json cargo run --offline --manifest-path /private/tmp/noname-queue1-u07-native/Cargo.toml",
+  "stdout": "09-formal.log",
+  "stderr": "09-formal.stderr",
+  "source": "probe-09.rs",
+  "reason": "remove extra catalog placeholder; actual formal pack plus initial-existing-sha decline/use branches isolated from sanjian equipment side skill"
+}

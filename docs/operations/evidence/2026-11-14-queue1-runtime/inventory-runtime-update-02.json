@@ -1,0 +1,84 @@
+{
+  "at": "2026-11-14T02:17:53+08:00",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "tracked_dirty": true,
+  "withdrawn_in_this_update": 2,
+  "withdrawn_in_this_batch": 4,
+  "new_equivalence_signoffs": 0,
+  "counts": {
+    "已复核等价": 630,
+    "简化近似": 3794,
+    "缺失": 0,
+    "上游未定义": 0
+  },
+  "updates": [
+    {
+      "key": "U06:cards:monkey@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:4",
+      "before": {
+        "source_id": "U06",
+        "category": "cards",
+        "id": "monkey",
+        "upstream_ref": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:4",
+        "target": "原生规则 / `rule-vm` 包",
+        "status": "已复核等价",
+        "reviewer": "u06-verifier",
+        "review_date": "2026-11-12",
+        "upstream_file_line": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:4-15",
+        "test_name": "u06_monkey_six_dimension_real_match_equivalence",
+        "difference": "无",
+        "note": null,
+        "reason": null
+      },
+      "after": {
+        "source_id": "U06",
+        "category": "cards",
+        "id": "monkey",
+        "upstream_ref": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:4",
+        "target": "原生规则 / `rule-vm` 包",
+        "status": "简化近似",
+        "reviewer": "/root/queue0_independent_review",
+        "review_date": "2026-11-14",
+        "upstream_file_line": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:4-15",
+        "test_name": "u06_monkey_six_dimension_real_match_equivalence",
+        "difference": "取消猴子后上游桃消耗入弃牌堆，原生回复体力后桃仍在手。原卡牌定义绑定该技能，旧条目未限于静态牌面字段，故整卡无差异声明撤回。",
+        "note": "\n2026-11-14T02:17:53+08:00 实际运行补课：取消猴子后上游桃消耗入弃牌堆，原生回复体力后桃仍在手。原卡牌定义绑定该技能，旧条目未限于静态牌面字段，故整卡无差异声明撤回。 独立补充裁定 docs/operations/evidence/2026-11-14-queue1-runtime/independent/u06-l29/card-entry-adjudication.md；不通过事后缩小条目口径维持旧等价，本批新增等价0。",
+        "reason": null,
+        "diff": "取消猴子后上游桃消耗入弃牌堆，原生回复体力后桃仍在手。原卡牌定义绑定该技能，旧条目未限于静态牌面字段，故整卡无差异声明撤回。"
+      }
+    },
+    {
+      "key": "U06:cards:xuelunyang@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:97",
+      "before": {
+        "source_id": "U06",
+        "category": "cards",
+        "id": "xuelunyang",
+        "upstream_ref": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:97",
+        "target": "原生规则 / `rule-vm` 包",
+        "status": "已复核等价",
+        "reviewer": "u06-verifier",
+        "review_date": "2026-11-12",
+        "upstream_file_line": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:97-108",
+        "test_name": "u06_xuelunyang_six_dimension_real_match_equivalence",
+        "difference": "无",
+        "note": null,
+        "reason": null
+      },
+      "after": {
+        "source_id": "U06",
+        "category": "cards",
+        "id": "xuelunyang",
+        "upstream_ref": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:97",
+        "target": "原生规则 / `rule-vm` 包",
+        "status": "简化近似",
+        "reviewer": "/root/queue0_independent_review",
+        "review_date": "2026-11-14",
+        "upstream_file_line": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:97-108",
+        "test_name": "u06_xuelunyang_six_dimension_real_match_equivalence",
+        "difference": "写轮眼第二步技能选择上游可取消并结束，原生拒绝空答并继续挂起。原卡牌定义绑定该技能，旧条目未限于静态牌面字段，故整卡无差异声明撤回。",
+        "note": "\n2026-11-14T02:17:53+08:00 实际运行补课：写轮眼第二步技能选择上游可取消并结束，原生拒绝空答并继续挂起。原卡牌定义绑定该技能，旧条目未限于静态牌面字段，故整卡无差异声明撤回。 独立补充裁定 docs/operations/evidence/2026-11-14-queue1-runtime/independent/u06-l29/card-entry-adjudication.md；不通过事后缩小条目口径维持旧等价，本批新增等价0。",
+        "reason": null,
+        "diff": "写轮眼第二步技能选择上游可取消并结束，原生拒绝空答并继续挂起。原卡牌定义绑定该技能，旧条目未限于静态牌面字段，故整卡无差异声明撤回。"
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "at": "2026-11-13T18:17:21.974952+00:00",
+  "supersedes": "comparison-isolated.json/.md for have-sha-decline/use interpretation and formal catalog boundary; earlier files unchanged",
+  "issues": [
+    {
+      "case": "fuchou-settle-have-sha-cancel",
+      "actual": "suffix-cancel branch cancelled the initial gift, so no retaliation mark was set",
+      "fix": "rename decline-retaliation; initial gift remains positive, later chooseToUse cancellation is explicit"
+    },
+    {
+      "case": "fuchou-settle-have-sha-use",
+      "actual": "existing sanjian equipment produced unrelated additional discard/damage after actual retaliation",
+      "fix": "remove unrelated equip only from all phaseAfter isolation fixtures; independent equipped-gift case remains"
+    },
+    {
+      "scope": "native probes01-08",
+      "actual": "probe manually added Diaobing=Wuzhong catalog placeholder following historical test fixture",
+      "fix": "authoritative run09 adds no card; preserve old runs and report formal catalog missing real entity independently"
+    }
+  ],
+  "next_cohort": "native09 and browser twelfth, all24 unique cases, no deduplication"
+}

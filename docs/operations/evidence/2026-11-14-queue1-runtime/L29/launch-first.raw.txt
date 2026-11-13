@@ -1,0 +1,14 @@
+{"at":"2026-11-13T17:45:32.129Z","label":"l29","url":"http://127.0.0.1:50920/","upstream":"/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname","profile":"/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-l29-runtime-chrome-44w8w9","upstreamPort":50920,"controlPort":50957,"cdpPort":50930,"chromePid":77698,"transcript":"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/session-l29-1794591931110","head":"605201f3f49e10cea61c31d52a61bbb66c85599d"}
+node:internal/process/promises:324
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+Error: aborted
+    at abortIncoming (node:_http_server:942:17)
+    at socketOnClose (node:_http_server:935:3)
+    at Socket.emit (node:events:526:24)
+    at TCP.<anonymous> (node:net:362:12) {
+  code: 'ECONNRESET'
+}
+
+Node.js v26.13.0

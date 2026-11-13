@@ -1,0 +1,4107 @@
+{
+  "at": "2026-11-14T02:10:38.881735+08:00",
+  "method": "Independent functions in this script; no producer comparator imported; card/hand multisets only; full event/RNG/skill equivalence is not asserted.",
+  "u06": {
+    "native_cases": 13,
+    "raw_upstream_cases": 26,
+    "valid_fresh_cases": 13,
+    "exploratory_cases_preserved": 13,
+    "initial_equal": 13,
+    "all_projected_final_fields_equal": 11,
+    "different_cases": [
+      "monkey-cancel",
+      "xuelun-skill-cancel"
+    ],
+    "native_answer_attempts_and_restore_checkpoints": 15,
+    "native_raw_log_exactly_matches_json": true,
+    "rows": [
+      {
+        "case": "monkey-confirm",
+        "checks": {
+          "initial_players": true,
+          "final_players": true,
+          "final_discard": true,
+          "settled": true
+        },
+        "native_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [
+                [
+                  "tao",
+                  "heart",
+                  3,
+                  null
+                ]
+              ],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 1,
+              "hp": 2,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [
+            [
+              "monkey",
+              "diamond",
+              5,
+              null
+            ]
+          ],
+          "settled": true,
+          "pending": null
+        },
+        "upstream_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [
+                [
+                  "tao",
+                  "heart",
+                  3,
+                  null
+                ]
+              ],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 1,
+              "hp": 2,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [
+            [
+              "monkey",
+              "diamond",
+              5,
+              null
+            ]
+          ],
+          "settled": true
+        },
+        "native_answer_attempts": [
+          {
+            "allow_cancel": false,
+            "archive_bytes": 3027,
+            "max": 1,
+            "min": 1,
+            "observer": 0,
+            "options": "[Confirm, Pass]",
+            "outcome": "Accepted { state_hash: [102, 118, 116, 247, 209, 14, 139, 101, 185, 84, 214, 164, 37, 90, 175, 139, 5, 8, 190, 118, 70, 106, 7, 225, 5, 195, 146, 138, 100, 202, 107, 77] }",
+            "prompt": "huanle_monkey_confirm",
+            "rejected": false,
+            "resumed_hash_and_log_equal": true,
+            "selection": "[Confirm]"
+          }
+        ],
+        "upstream_choices": [
+          {
+            "event": "chooseBool",
+            "prompt": "是否发动【猴子】？",
+            "player": 0,
+            "confirm": "oc",
+            "responses": [],
+            "selectableTargets": [],
+            "hand": [],
+            "buttons": []
+          }
+        ],
+        "generated_cleanup_skills_separately_recorded": [],
+        "cdp_indices_zero_based": {
+          "setup": 186,
+          "choices": [
+            188
+          ],
+          "final": 190,
+          "all_exact_final_matches_including_exploration": [
+            8,
+            190
+          ]
+        }
+      },
+      {
+        "case": "monkey-cancel",
+        "checks": {
+          "initial_players": true,
+          "final_players": false,
+          "final_discard": false,
+          "settled": true
+        },
+        "native_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "monkey",
+                  "diamond",
+                  5,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "monkey"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 3,
+              "max_hp": 8,
+              "hand": [
+                [
+                  "tao",
+                  "heart",
+                  3,
+                  null
+                ]
+              ],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [],
+          "settled": true,
+          "pending": null
+        },
+        "upstream_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "monkey",
+                  "diamond",
+                  5,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "monkey"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 3,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [
+            [
+              "tao",
+              "heart",
+              3,
+              null
+            ]
+          ],
+          "settled": true
+        },
+        "native_answer_attempts": [
+          {
+            "allow_cancel": false,
+            "archive_bytes": 3027,
+            "max": 1,
+            "min": 1,
+            "observer": 0,
+            "options": "[Confirm, Pass]",
+            "outcome": "Accepted { state_hash: [76, 54, 237, 136, 78, 77, 115, 178, 89, 7, 239, 225, 152, 23, 194, 25, 2, 248, 170, 2, 98, 1, 182, 176, 217, 210, 146, 190, 2, 167, 189, 247] }",
+            "prompt": "huanle_monkey_confirm",
+            "rejected": false,
+            "resumed_hash_and_log_equal": true,
+            "selection": "[Pass]"
+          }
+        ],
+        "upstream_choices": [
+          {
+            "event": "chooseBool",
+            "prompt": "是否发动【猴子】？",
+            "player": 0,
+            "confirm": "oc",
+            "responses": [],
+            "selectableTargets": [],
+            "hand": [],
+            "buttons": []
+          }
+        ],
+        "generated_cleanup_skills_separately_recorded": [],
+        "cdp_indices_zero_based": {
+          "setup": 194,
+          "choices": [
+            196
+          ],
+          "final": 198,
+          "all_exact_final_matches_including_exploration": [
+            14,
+            198
+          ]
+        }
+      },
+      {
+        "case": "monkey-self",
+        "checks": {
+          "initial_players": true,
+          "final_players": true,
+          "final_discard": true,
+          "settled": true
+        },
+        "native_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 3,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "monkey",
+                  "diamond",
+                  5,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "monkey"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [
+            [
+              "tao",
+              "heart",
+              3,
+              null
+            ]
+          ],
+          "settled": true,
+          "pending": null
+        },
+        "upstream_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 3,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "monkey",
+                  "diamond",
+                  5,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "monkey"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [
+            [
+              "tao",
+              "heart",
+              3,
+              null
+            ]
+          ],
+          "settled": true
+        },
+        "native_answer_attempts": [],
+        "upstream_choices": [],
+        "generated_cleanup_skills_separately_recorded": [],
+        "cdp_indices_zero_based": {
+          "setup": 202,
+          "choices": [],
+          "final": 203,
+          "all_exact_final_matches_including_exploration": [
+            17,
+            203
+          ]
+        }
+      },
+      {
+        "case": "kuwu-hand",
+        "checks": {
+          "initial_players": true,
+          "final_players": true,
+          "final_discard": true,
+          "settled": true
+        },
+        "native_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "kuwu",
+                  "spade",
+                  6,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "kuwu"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 7,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "monkey",
+                  "diamond",
+                  5,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "monkey"
+              ]
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [
+            [
+              "sha",
+              "spade",
+              7,
+              null
+            ],
+            [
+              "tao",
+              "heart",
+              3,
+              null
+            ]
+          ],
+          "settled": true,
+          "pending": null
+        },
+        "upstream_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "kuwu",
+                  "spade",
+                  6,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "kuwu"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 7,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "monkey",
+                  "diamond",
+                  5,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "monkey"
+              ]
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [
+            [
+              "sha",
+              "spade",
+              7,
+              null
+            ],
+            [
+              "tao",
+              "heart",
+              3,
+              null
+            ]
+          ],
+          "settled": true
+        },
+        "native_answer_attempts": [
+          {
+            "allow_cancel": false,
+            "archive_bytes": 3267,
+            "max": 1,
+            "min": 1,
+            "observer": 1,
+            "options": "[Card(45), Card(127)]",
+            "outcome": "Rejected(InvalidChoice)",
+            "prompt": "kuwu_discard",
+            "rejected": true,
+            "resumed_hash_and_log_equal": true,
+            "selection": "[]"
+          },
+          {
+            "allow_cancel": false,
+            "archive_bytes": 3267,
+            "max": 1,
+            "min": 1,
+            "observer": 1,
+            "options": "[Card(45), Card(127)]",
+            "outcome": "Accepted { state_hash: [89, 158, 206, 182, 152, 53, 177, 110, 51, 149, 76, 81, 192, 76, 79, 102, 207, 140, 217, 230, 63, 34, 251, 217, 179, 146, 40, 38, 5, 109, 42, 192] }",
+            "prompt": "kuwu_discard",
+            "rejected": false,
+            "resumed_hash_and_log_equal": true,
+            "selection": "[Card(45)]"
+          }
+        ],
+        "upstream_choices": [
+          {
+            "event": "chooseToDiscard",
+            "player": 1,
+            "forced": true,
+            "responses": [
+              {
+                "name": "chooseToUse",
+                "player": 1,
+                "decision": "cancel"
+              }
+            ],
+            "selectableTargets": [],
+            "hand": [
+              {
+                "name": "tao",
+                "suit": "heart",
+                "rank": 3
+              }
+            ],
+            "buttons": []
+          }
+        ],
+        "generated_cleanup_skills_separately_recorded": [],
+        "cdp_indices_zero_based": {
+          "setup": 207,
+          "choices": [
+            209
+          ],
+          "final": 211,
+          "all_exact_final_matches_including_exploration": [
+            211
+          ]
+        }
+      },
+      {
+        "case": "kuwu-equip",
+        "checks": {
+          "initial_players": true,
+          "final_players": true,
+          "final_discard": true,
+          "settled": true
+        },
+        "native_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "kuwu",
+                  "spade",
+                  6,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "kuwu"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 7,
+              "max_hp": 8,
+              "hand": [
+                [
+                  "tao",
+                  "heart",
+                  3,
+                  null
+                ]
+              ],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [
+            [
+              "monkey",
+              "diamond",
+              5,
+              null
+            ],
+            [
+              "sha",
+              "spade",
+              7,
+              null
+            ]
+          ],
+          "settled": true,
+          "pending": null
+        },
+        "upstream_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "kuwu",
+                  "spade",
+                  6,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "kuwu"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 7,
+              "max_hp": 8,
+              "hand": [
+                [
+                  "tao",
+                  "heart",
+                  3,
+                  null
+                ]
+              ],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [
+            [
+              "monkey",
+              "diamond",
+              5,
+              null
+            ],
+            [
+              "sha",
+              "spade",
+              7,
+              null
+            ]
+          ],
+          "settled": true
+        },
+        "native_answer_attempts": [
+          {
+            "allow_cancel": false,
+            "archive_bytes": 3267,
+            "max": 1,
+            "min": 1,
+            "observer": 1,
+            "options": "[Card(45), Card(127)]",
+            "outcome": "Rejected(InvalidChoice)",
+            "prompt": "kuwu_discard",
+            "rejected": true,
+            "resumed_hash_and_log_equal": true,
+            "selection": "[]"
+          },
+          {
+            "allow_cancel": false,
+            "archive_bytes": 3267,
+            "max": 1,
+            "min": 1,
+            "observer": 1,
+            "options": "[Card(45), Card(127)]",
+            "outcome": "Accepted { state_hash: [229, 141, 114, 200, 55, 217, 77, 170, 54, 177, 46, 82, 32, 111, 25, 61, 87, 136, 17, 213, 244, 97, 212, 168, 34, 218, 32, 30, 239, 56, 55, 94] }",
+            "prompt": "kuwu_discard",
+            "rejected": false,
+            "resumed_hash_and_log_equal": true,
+            "selection": "[Card(127)]"
+          }
+        ],
+        "upstream_choices": [
+          {
+            "event": "chooseToDiscard",
+            "player": 1,
+            "forced": true,
+            "responses": [
+              {
+                "name": "chooseToUse",
+                "player": 1,
+                "decision": "cancel"
+              }
+            ],
+            "selectableTargets": [],
+            "hand": [
+              {
+                "name": "tao",
+                "suit": "heart",
+                "rank": 3
+              }
+            ],
+            "buttons": []
+          }
+        ],
+        "generated_cleanup_skills_separately_recorded": [],
+        "cdp_indices_zero_based": {
+          "setup": 215,
+          "choices": [
+            217
+          ],
+          "final": 219,
+          "all_exact_final_matches_including_exploration": [
+            219
+          ]
+        }
+      },
+      {
+        "case": "kuwu-empty",
+        "checks": {
+          "initial_players": true,
+          "final_players": true,
+          "final_discard": true,
+          "settled": true
+        },
+        "native_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "kuwu",
+                  "spade",
+                  6,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "kuwu"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 7,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [
+            [
+              "sha",
+              "spade",
+              7,
+              null
+            ]
+          ],
+          "settled": true,
+          "pending": null
+        },
+        "upstream_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "kuwu",
+                  "spade",
+                  6,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "kuwu"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 7,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [
+            [
+              "sha",
+              "spade",
+              7,
+              null
+            ]
+          ],
+          "settled": true
+        },
+        "native_answer_attempts": [],
+        "upstream_choices": [],
+        "generated_cleanup_skills_separately_recorded": [],
+        "cdp_indices_zero_based": {
+          "setup": 223,
+          "choices": [],
+          "final": 224,
+          "all_exact_final_matches_including_exploration": [
+            224
+          ]
+        }
+      },
+      {
+        "case": "kuwu-duel",
+        "checks": {
+          "initial_players": true,
+          "final_players": true,
+          "final_discard": true,
+          "settled": true
+        },
+        "native_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "kuwu",
+                  "spade",
+                  6,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "kuwu"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 7,
+              "max_hp": 8,
+              "hand": [
+                [
+                  "tao",
+                  "heart",
+                  3,
+                  null
+                ]
+              ],
+              "equips": [
+                [
+                  "monkey",
+                  "diamond",
+                  5,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "monkey"
+              ]
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [
+            [
+              "juedou",
+              "spade",
+              1,
+              null
+            ]
+          ],
+          "settled": true,
+          "pending": null
+        },
+        "upstream_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "kuwu",
+                  "spade",
+                  6,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "kuwu"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 7,
+              "max_hp": 8,
+              "hand": [
+                [
+                  "tao",
+                  "heart",
+                  3,
+                  null
+                ]
+              ],
+              "equips": [
+                [
+                  "monkey",
+                  "diamond",
+                  5,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "monkey"
+              ]
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [
+            [
+              "juedou",
+              "spade",
+              1,
+              null
+            ]
+          ],
+          "settled": true
+        },
+        "native_answer_attempts": [],
+        "upstream_choices": [],
+        "generated_cleanup_skills_separately_recorded": [],
+        "cdp_indices_zero_based": {
+          "setup": 228,
+          "choices": [],
+          "final": 229,
+          "all_exact_final_matches_including_exploration": [
+            229
+          ]
+        }
+      },
+      {
+        "case": "xuelun-skill-a",
+        "checks": {
+          "initial_players": true,
+          "final_players": true,
+          "final_discard": true,
+          "settled": true
+        },
+        "native_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "xuelunyang",
+                  "heart",
+                  2,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "mashu",
+                "xuelunyang"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": [
+                "mashu",
+                "paoxiao"
+              ]
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": [
+                "wusheng"
+              ]
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [],
+          "settled": true,
+          "pending": null
+        },
+        "upstream_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "xuelunyang",
+                  "heart",
+                  2,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "mashu",
+                "xuelunyang"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": [
+                "mashu",
+                "paoxiao"
+              ]
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": [
+                "wusheng"
+              ]
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [],
+          "settled": true
+        },
+        "native_answer_attempts": [
+          {
+            "allow_cancel": true,
+            "archive_bytes": 3262,
+            "max": 1,
+            "min": 1,
+            "observer": 0,
+            "options": "[Player(1), Player(2)]",
+            "outcome": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"huanle_xuelunyang_skill\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+            "prompt": "huanle_xuelunyang_target",
+            "rejected": false,
+            "resumed_hash_and_log_equal": true,
+            "selection": "[Player(1)]"
+          },
+          {
+            "allow_cancel": false,
+            "archive_bytes": 3266,
+            "max": 1,
+            "min": 1,
+            "observer": 0,
+            "options": "[Tag(0), Tag(1)]",
+            "outcome": "Accepted { state_hash: [44, 219, 247, 52, 102, 245, 227, 134, 20, 122, 241, 211, 195, 63, 235, 231, 147, 191, 228, 170, 192, 161, 188, 213, 58, 25, 140, 117, 170, 7, 192, 115] }",
+            "prompt": "huanle_xuelunyang_skill",
+            "rejected": false,
+            "resumed_hash_and_log_equal": true,
+            "selection": "[Tag(0)]"
+          }
+        ],
+        "upstream_choices": [
+          {
+            "event": "chooseTarget",
+            "prompt": "是否发动【写轮眼】？",
+            "player": 0,
+            "confirm": "c",
+            "responses": [],
+            "selectableTargets": [],
+            "hand": [],
+            "buttons": []
+          },
+          {
+            "event": "chooseButton",
+            "player": 0,
+            "forced": false,
+            "confirm": "c",
+            "responses": [],
+            "selectableTargets": [],
+            "hand": [],
+            "buttons": [
+              {
+                "text": "马术",
+                "link": "mashu"
+              },
+              {
+                "text": "咆哮",
+                "link": "paoxiao"
+              }
+            ]
+          }
+        ],
+        "generated_cleanup_skills_separately_recorded": [
+          {
+            "seat": 0,
+            "skills": [
+              "player_when_flmwdj8h"
+            ],
+            "additionalSkills": {
+              "player_tempSkills_em35tqp9": [
+                "mashu"
+              ]
+            }
+          }
+        ],
+        "cdp_indices_zero_based": {
+          "setup": 233,
+          "choices": [
+            235,
+            238
+          ],
+          "final": 240,
+          "all_exact_final_matches_including_exploration": [
+            240
+          ]
+        }
+      },
+      {
+        "case": "xuelun-skill-b",
+        "checks": {
+          "initial_players": true,
+          "final_players": true,
+          "final_discard": true,
+          "settled": true
+        },
+        "native_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "xuelunyang",
+                  "heart",
+                  2,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "paoxiao",
+                "xuelunyang"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": [
+                "mashu",
+                "paoxiao"
+              ]
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": [
+                "wusheng"
+              ]
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [],
+          "settled": true,
+          "pending": null
+        },
+        "upstream_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "xuelunyang",
+                  "heart",
+                  2,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "paoxiao",
+                "xuelunyang"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": [
+                "mashu",
+                "paoxiao"
+              ]
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": [
+                "wusheng"
+              ]
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [],
+          "settled": true
+        },
+        "native_answer_attempts": [
+          {
+            "allow_cancel": true,
+            "archive_bytes": 3262,
+            "max": 1,
+            "min": 1,
+            "observer": 0,
+            "options": "[Player(1), Player(2)]",
+            "outcome": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"huanle_xuelunyang_skill\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+            "prompt": "huanle_xuelunyang_target",
+            "rejected": false,
+            "resumed_hash_and_log_equal": true,
+            "selection": "[Player(1)]"
+          },
+          {
+            "allow_cancel": false,
+            "archive_bytes": 3266,
+            "max": 1,
+            "min": 1,
+            "observer": 0,
+            "options": "[Tag(0), Tag(1)]",
+            "outcome": "Accepted { state_hash: [105, 68, 242, 72, 82, 37, 166, 130, 194, 68, 143, 89, 175, 21, 205, 16, 199, 23, 71, 84, 237, 252, 11, 255, 222, 72, 235, 119, 216, 237, 147, 32] }",
+            "prompt": "huanle_xuelunyang_skill",
+            "rejected": false,
+            "resumed_hash_and_log_equal": true,
+            "selection": "[Tag(1)]"
+          }
+        ],
+        "upstream_choices": [
+          {
+            "event": "chooseTarget",
+            "prompt": "是否发动【写轮眼】？",
+            "player": 0,
+            "confirm": "c",
+            "responses": [],
+            "selectableTargets": [],
+            "hand": [],
+            "buttons": []
+          },
+          {
+            "event": "chooseButton",
+            "player": 0,
+            "forced": false,
+            "confirm": "c",
+            "responses": [],
+            "selectableTargets": [],
+            "hand": [],
+            "buttons": [
+              {
+                "text": "马术",
+                "link": "mashu"
+              },
+              {
+                "text": "咆哮",
+                "link": "paoxiao"
+              }
+            ]
+          }
+        ],
+        "generated_cleanup_skills_separately_recorded": [
+          {
+            "seat": 0,
+            "skills": [
+              "player_when_9xp8vfup"
+            ],
+            "additionalSkills": {
+              "player_tempSkills_hu5kzq2g": [
+                "paoxiao"
+              ]
+            }
+          }
+        ],
+        "cdp_indices_zero_based": {
+          "setup": 244,
+          "choices": [
+            246,
+            249
+          ],
+          "final": 251,
+          "all_exact_final_matches_including_exploration": [
+            251
+          ]
+        }
+      },
+      {
+        "case": "xuelun-target-b",
+        "checks": {
+          "initial_players": true,
+          "final_players": true,
+          "final_discard": true,
+          "settled": true
+        },
+        "native_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "xuelunyang",
+                  "heart",
+                  2,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "wusheng",
+                "xuelunyang"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": [
+                "mashu",
+                "paoxiao"
+              ]
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": [
+                "wusheng"
+              ]
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [],
+          "settled": true,
+          "pending": null
+        },
+        "upstream_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "xuelunyang",
+                  "heart",
+                  2,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "wusheng",
+                "xuelunyang"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": [
+                "mashu",
+                "paoxiao"
+              ]
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": [
+                "wusheng"
+              ]
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [],
+          "settled": true
+        },
+        "native_answer_attempts": [
+          {
+            "allow_cancel": true,
+            "archive_bytes": 3262,
+            "max": 1,
+            "min": 1,
+            "observer": 0,
+            "options": "[Player(1), Player(2)]",
+            "outcome": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"huanle_xuelunyang_skill\", options: [Tag(0)], min: 1, max: 1, allow_cancel: false } } }",
+            "prompt": "huanle_xuelunyang_target",
+            "rejected": false,
+            "resumed_hash_and_log_equal": true,
+            "selection": "[Player(2)]"
+          },
+          {
+            "allow_cancel": false,
+            "archive_bytes": 3264,
+            "max": 1,
+            "min": 1,
+            "observer": 0,
+            "options": "[Tag(0)]",
+            "outcome": "Accepted { state_hash: [48, 171, 137, 131, 56, 87, 227, 119, 29, 183, 192, 35, 218, 240, 178, 110, 164, 11, 179, 247, 154, 144, 67, 193, 9, 144, 24, 66, 65, 215, 41, 242] }",
+            "prompt": "huanle_xuelunyang_skill",
+            "rejected": false,
+            "resumed_hash_and_log_equal": true,
+            "selection": "[Tag(0)]"
+          }
+        ],
+        "upstream_choices": [
+          {
+            "event": "chooseTarget",
+            "prompt": "是否发动【写轮眼】？",
+            "player": 0,
+            "confirm": "c",
+            "responses": [],
+            "selectableTargets": [],
+            "hand": [],
+            "buttons": []
+          },
+          {
+            "event": "chooseButton",
+            "player": 0,
+            "forced": false,
+            "confirm": "c",
+            "responses": [],
+            "selectableTargets": [],
+            "hand": [],
+            "buttons": [
+              {
+                "text": "武圣",
+                "link": "wusheng"
+              }
+            ]
+          }
+        ],
+        "generated_cleanup_skills_separately_recorded": [
+          {
+            "seat": 0,
+            "skills": [
+              "player_when_1m6i6ing"
+            ],
+            "additionalSkills": {
+              "player_tempSkills_ru4v52ie": [
+                "wusheng"
+              ]
+            }
+          }
+        ],
+        "cdp_indices_zero_based": {
+          "setup": 255,
+          "choices": [
+            257,
+            260
+          ],
+          "final": 262,
+          "all_exact_final_matches_including_exploration": [
+            262
+          ]
+        }
+      },
+      {
+        "case": "xuelun-target-cancel",
+        "checks": {
+          "initial_players": true,
+          "final_players": true,
+          "final_discard": true,
+          "settled": true
+        },
+        "native_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "xuelunyang",
+                  "heart",
+                  2,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "xuelunyang"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": [
+                "mashu",
+                "paoxiao"
+              ]
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": [
+                "wusheng"
+              ]
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [],
+          "settled": true,
+          "pending": null
+        },
+        "upstream_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "xuelunyang",
+                  "heart",
+                  2,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "xuelunyang"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": [
+                "mashu",
+                "paoxiao"
+              ]
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": [
+                "wusheng"
+              ]
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [],
+          "settled": true
+        },
+        "native_answer_attempts": [
+          {
+            "allow_cancel": true,
+            "archive_bytes": 3262,
+            "max": 1,
+            "min": 1,
+            "observer": 0,
+            "options": "[Player(1), Player(2)]",
+            "outcome": "Accepted { state_hash: [161, 7, 85, 156, 115, 220, 100, 160, 81, 205, 124, 120, 172, 28, 73, 20, 44, 184, 231, 191, 198, 49, 155, 15, 12, 158, 173, 10, 243, 134, 166, 243] }",
+            "prompt": "huanle_xuelunyang_target",
+            "rejected": false,
+            "resumed_hash_and_log_equal": true,
+            "selection": "[]"
+          }
+        ],
+        "upstream_choices": [
+          {
+            "event": "chooseTarget",
+            "prompt": "是否发动【写轮眼】？",
+            "player": 0,
+            "confirm": "c",
+            "responses": [],
+            "selectableTargets": [],
+            "hand": [],
+            "buttons": []
+          }
+        ],
+        "generated_cleanup_skills_separately_recorded": [],
+        "cdp_indices_zero_based": {
+          "setup": 266,
+          "choices": [
+            268
+          ],
+          "final": 270,
+          "all_exact_final_matches_including_exploration": [
+            270
+          ]
+        }
+      },
+      {
+        "case": "xuelun-skill-cancel",
+        "checks": {
+          "initial_players": true,
+          "final_players": true,
+          "final_discard": true,
+          "settled": false
+        },
+        "native_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "xuelunyang",
+                  "heart",
+                  2,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "xuelunyang"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": [
+                "mashu",
+                "paoxiao"
+              ]
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": [
+                "wusheng"
+              ]
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [],
+          "settled": false,
+          "pending": {
+            "allow_cancel": false,
+            "options": "[Tag(0), Tag(1)]",
+            "prompt": "huanle_xuelunyang_skill"
+          }
+        },
+        "upstream_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "xuelunyang",
+                  "heart",
+                  2,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "xuelunyang"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": [
+                "mashu",
+                "paoxiao"
+              ]
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": [
+                "wusheng"
+              ]
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [],
+          "settled": true
+        },
+        "native_answer_attempts": [
+          {
+            "allow_cancel": true,
+            "archive_bytes": 3262,
+            "max": 1,
+            "min": 1,
+            "observer": 0,
+            "options": "[Player(1), Player(2)]",
+            "outcome": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"huanle_xuelunyang_skill\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+            "prompt": "huanle_xuelunyang_target",
+            "rejected": false,
+            "resumed_hash_and_log_equal": true,
+            "selection": "[Player(1)]"
+          },
+          {
+            "allow_cancel": false,
+            "archive_bytes": 3266,
+            "max": 1,
+            "min": 1,
+            "observer": 0,
+            "options": "[Tag(0), Tag(1)]",
+            "outcome": "Rejected(InvalidChoice)",
+            "prompt": "huanle_xuelunyang_skill",
+            "rejected": true,
+            "resumed_hash_and_log_equal": true,
+            "selection": "[]"
+          }
+        ],
+        "upstream_choices": [
+          {
+            "event": "chooseTarget",
+            "prompt": "是否发动【写轮眼】？",
+            "player": 0,
+            "confirm": "c",
+            "responses": [],
+            "selectableTargets": [],
+            "hand": [],
+            "buttons": []
+          },
+          {
+            "event": "chooseButton",
+            "player": 0,
+            "forced": false,
+            "confirm": "c",
+            "responses": [],
+            "selectableTargets": [],
+            "hand": [],
+            "buttons": [
+              {
+                "text": "马术",
+                "link": "mashu"
+              },
+              {
+                "text": "咆哮",
+                "link": "paoxiao"
+              }
+            ]
+          }
+        ],
+        "generated_cleanup_skills_separately_recorded": [],
+        "cdp_indices_zero_based": {
+          "setup": 274,
+          "choices": [
+            276,
+            279
+          ],
+          "final": 281,
+          "all_exact_final_matches_including_exploration": [
+            281
+          ]
+        }
+      },
+      {
+        "case": "xuelun-no-skills",
+        "checks": {
+          "initial_players": true,
+          "final_players": true,
+          "final_discard": true,
+          "settled": true
+        },
+        "native_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "xuelunyang",
+                  "heart",
+                  2,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "xuelunyang"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [],
+          "settled": true,
+          "pending": null
+        },
+        "upstream_final": {
+          "players": [
+            {
+              "seat": 0,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [
+                [
+                  "xuelunyang",
+                  "heart",
+                  2,
+                  null
+                ]
+              ],
+              "semantic_skills": [
+                "xuelunyang"
+              ]
+            },
+            {
+              "seat": 1,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 2,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 3,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 4,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 5,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 6,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            },
+            {
+              "seat": 7,
+              "hp": 8,
+              "max_hp": 8,
+              "hand": [],
+              "equips": [],
+              "semantic_skills": []
+            }
+          ],
+          "discard": [],
+          "settled": true
+        },
+        "native_answer_attempts": [],
+        "upstream_choices": [],
+        "generated_cleanup_skills_separately_recorded": [],
+        "cdp_indices_zero_based": {
+          "setup": 285,
+          "choices": [],
+          "final": 286,
+          "all_exact_final_matches_including_exploration": [
+            286
+          ]
+        }
+      }
+    ]
+  },
+  "l29": {
+    "own_before_exit": 0,
+    "own_after_exit": 0,
+    "old_archives_restored": 68,
+    "full_snapshot_equal_except_auth_generation": 68,
+    "continuation_commands_request_reply_log_equal": 136,
+    "final_full_snapshot_and_hash_equal": 68,
+    "before_after_direct_cases_equal_including_final_archive_bytes": [
+      {
+        "case": "f_ban_B",
+        "checks": {
+          "initial": true,
+          "commands": true,
+          "final": true,
+          "final_archive_hex": true
+        }
+      },
+      {
+        "case": "f_cancel_mode_attempt",
+        "checks": {
+          "initial": true,
+          "commands": true,
+          "final": true,
+          "final_archive_hex": true
+        }
+      },
+      {
+        "case": "f_cancel_target",
+        "checks": {
+          "initial": true,
+          "commands": true,
+          "final": true,
+          "final_archive_hex": true
+        }
+      },
+      {
+        "case": "f_last_target",
+        "checks": {
+          "initial": true,
+          "commands": true,
+          "final": true,
+          "final_archive_hex": true
+        }
+      },
+      {
+        "case": "f_no_skill",
+        "checks": {
+          "initial": true,
+          "commands": true,
+          "final": true,
+          "final_archive_hex": true
+        }
+      },
+      {
+        "case": "f_self_attempt",
+        "checks": {
+          "initial": true,
+          "commands": true,
+          "final": true,
+          "final_archive_hex": true
+        }
+      },
+      {
+        "case": "f_skill_A",
+        "checks": {
+          "initial": true,
+          "commands": true,
+          "final": true,
+          "final_archive_hex": true
+        }
+      },
+      {
+        "case": "f_target_B",
+        "checks": {
+          "initial": true,
+          "commands": true,
+          "final": true,
+          "final_archive_hex": true
+        }
+      },
+      {
+        "case": "j_active_cancel_gain",
+        "checks": {
+          "initial": true,
+          "commands": true,
+          "final": true,
+          "final_archive_hex": true
+        }
+      },
+      {
+        "case": "j_active_facedown",
+        "checks": {
+          "initial": true,
+          "commands": true,
+          "final": true,
+          "final_archive_hex": true
+        }
+      },
+      {
+        "case": "j_active_gain",
+        "checks": {
+          "initial": true,
+          "commands": true,
+          "final": true,
+          "final_archive_hex": true
+        }
+      },
+      {
+        "case": "j_damage_back_accept_gain",
+        "checks": {
+          "initial": true,
+          "commands": true,
+          "final": true,
+          "final_archive_hex": true
+        }
+      },
+      {
+        "case": "j_damage_back_cancel",
+        "checks": {
+          "initial": true,
+          "commands": true,
+          "final": true,
+          "final_archive_hex": true
+        }
+      },
+      {
+        "case": "j_damage_faceup",
+        "checks": {
+          "initial": true,
+          "commands": true,
+          "final": true,
+          "final_archive_hex": true
+        }
+      },
+      {
+        "case": "j_no_skill",
+        "checks": {
+          "initial": true,
+          "commands": true,
+          "final": true,
+          "final_archive_hex": true
+        }
+      },
+      {
+        "case": "q_A",
+        "checks": {
+          "initial": true,
+          "commands": true,
+          "final": true,
+          "final_archive_hex": true
+        }
+      },
+      {
+        "case": "q_B",
+        "checks": {
+          "initial": true,
+          "commands": true,
+          "final": true,
+          "final_archive_hex": true
+        }
+      },
+      {
+        "case": "q_cancel_initial",
+        "checks": {
+          "initial": true,
+          "commands": true,
+          "final": true,
+          "final_archive_hex": true
+        }
+      },
+      {
+        "case": "q_cancel_suit_attempt",
+        "checks": {
+          "initial": true,
+          "commands": true,
+          "final": true,
+          "final_archive_hex": true
+        }
+      },
+      {
+        "case": "q_cancel_target",
+        "checks": {
+          "initial": true,
+          "commands": true,
+          "final": true,
+          "final_archive_hex": true
+        }
+      },
+      {
+        "case": "q_no_hand",
+        "checks": {
+          "initial": true,
+          "commands": true,
+          "final": true,
+          "final_archive_hex": true
+        }
+      },
+      {
+        "case": "q_target_B",
+        "checks": {
+          "initial": true,
+          "commands": true,
+          "final": true,
+          "final_archive_hex": true
+        }
+      }
+    ],
+    "same_pack_content_lock_and_ruleset": {
+      "content_lock": 14312970378986227901,
+      "pack_cards": 0,
+      "pack_enabled": true,
+      "pack_host_skills": 6,
+      "pack_name": "longxue-upstream-liuli",
+      "pack_version": 1,
+      "pack_vm_skills": 0,
+      "seats": 4,
+      "seed": 202611140029,
+      "snapshot_bound_ruleset_version": 14312970378986228208
+    },
+    "old_archive_input_digests_and_before_binary_reproduction": [
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_ban_B-direct-pending-0.ngsa",
+        "bytes": 2101,
+        "sha256": "636746271d3c97d4bec0aa6a254fedf630c25d2001deeabe22f4e97a6aff6e86",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_ban_B-direct-pending-1.ngsa",
+        "bytes": 2100,
+        "sha256": "918d79af0f9e2a547bf9e277ed2017fc6c8c96aed080e5f26f9300cb108cd63f",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_ban_B-restored-pending-0.ngsa",
+        "bytes": 2101,
+        "sha256": "636746271d3c97d4bec0aa6a254fedf630c25d2001deeabe22f4e97a6aff6e86",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_ban_B-restored-pending-1.ngsa",
+        "bytes": 2100,
+        "sha256": "0f9137924720ab65734f239ffd7f84dda0ba0358433fe2b8099c396422c8beb3",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_cancel_mode_attempt-direct-pending-0.ngsa",
+        "bytes": 2101,
+        "sha256": "636746271d3c97d4bec0aa6a254fedf630c25d2001deeabe22f4e97a6aff6e86",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_cancel_mode_attempt-direct-pending-1.ngsa",
+        "bytes": 2100,
+        "sha256": "918d79af0f9e2a547bf9e277ed2017fc6c8c96aed080e5f26f9300cb108cd63f",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_cancel_mode_attempt-restored-pending-0.ngsa",
+        "bytes": 2101,
+        "sha256": "636746271d3c97d4bec0aa6a254fedf630c25d2001deeabe22f4e97a6aff6e86",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_cancel_mode_attempt-restored-pending-1.ngsa",
+        "bytes": 2100,
+        "sha256": "0f9137924720ab65734f239ffd7f84dda0ba0358433fe2b8099c396422c8beb3",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_cancel_target-direct-pending-0.ngsa",
+        "bytes": 2101,
+        "sha256": "636746271d3c97d4bec0aa6a254fedf630c25d2001deeabe22f4e97a6aff6e86",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_cancel_target-restored-pending-0.ngsa",
+        "bytes": 2101,
+        "sha256": "636746271d3c97d4bec0aa6a254fedf630c25d2001deeabe22f4e97a6aff6e86",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_last_target-direct-pending-0.ngsa",
+        "bytes": 2135,
+        "sha256": "5955dd381ed885918aa3b08b79c3d7c5b138a62bc0e6e9f5ef861046efa27e3c",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_last_target-restored-pending-0.ngsa",
+        "bytes": 2135,
+        "sha256": "5955dd381ed885918aa3b08b79c3d7c5b138a62bc0e6e9f5ef861046efa27e3c",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_self_attempt-direct-pending-0.ngsa",
+        "bytes": 2101,
+        "sha256": "636746271d3c97d4bec0aa6a254fedf630c25d2001deeabe22f4e97a6aff6e86",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_self_attempt-restored-pending-0.ngsa",
+        "bytes": 2101,
+        "sha256": "636746271d3c97d4bec0aa6a254fedf630c25d2001deeabe22f4e97a6aff6e86",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_skill_A-direct-pending-0.ngsa",
+        "bytes": 2101,
+        "sha256": "636746271d3c97d4bec0aa6a254fedf630c25d2001deeabe22f4e97a6aff6e86",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_skill_A-direct-pending-1.ngsa",
+        "bytes": 2100,
+        "sha256": "918d79af0f9e2a547bf9e277ed2017fc6c8c96aed080e5f26f9300cb108cd63f",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_skill_A-restored-pending-0.ngsa",
+        "bytes": 2101,
+        "sha256": "636746271d3c97d4bec0aa6a254fedf630c25d2001deeabe22f4e97a6aff6e86",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_skill_A-restored-pending-1.ngsa",
+        "bytes": 2100,
+        "sha256": "0f9137924720ab65734f239ffd7f84dda0ba0358433fe2b8099c396422c8beb3",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_target_B-direct-pending-0.ngsa",
+        "bytes": 2101,
+        "sha256": "636746271d3c97d4bec0aa6a254fedf630c25d2001deeabe22f4e97a6aff6e86",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_target_B-direct-pending-1.ngsa",
+        "bytes": 2100,
+        "sha256": "b5eefe17ba96f6ef0ae0dcb5fc68a705b7db66f038ae35f6568cf68875c939d5",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_target_B-restored-pending-0.ngsa",
+        "bytes": 2101,
+        "sha256": "636746271d3c97d4bec0aa6a254fedf630c25d2001deeabe22f4e97a6aff6e86",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_target_B-restored-pending-1.ngsa",
+        "bytes": 2100,
+        "sha256": "a6a813bc183d044d531287328db468d55e0465a4282a68619417f65dbdde2605",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/j_active_cancel_gain-direct-pending-0.ngsa",
+        "bytes": 2218,
+        "sha256": "d69267243569fbe0ac62fd1206c82beb27c7a2c227cdbb170b43c82cde83e7b1",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/j_active_cancel_gain-restored-pending-0.ngsa",
+        "bytes": 2218,
+        "sha256": "d69267243569fbe0ac62fd1206c82beb27c7a2c227cdbb170b43c82cde83e7b1",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/j_active_gain-direct-pending-0.ngsa",
+        "bytes": 2218,
+        "sha256": "d69267243569fbe0ac62fd1206c82beb27c7a2c227cdbb170b43c82cde83e7b1",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/j_active_gain-restored-pending-0.ngsa",
+        "bytes": 2218,
+        "sha256": "d69267243569fbe0ac62fd1206c82beb27c7a2c227cdbb170b43c82cde83e7b1",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/j_damage_back_accept_gain-direct-pending-0.ngsa",
+        "bytes": 2255,
+        "sha256": "0e81943feade72c4a5677e8a04df0de05bd0346b459c92c7ae46dd530514eb8d",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/j_damage_back_accept_gain-direct-pending-1.ngsa",
+        "bytes": 2330,
+        "sha256": "f8a5da88aca12dba8b4c2addd3bf2c8aefed43ab152d9d77829ac9950d6bb618",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/j_damage_back_accept_gain-restored-pending-0.ngsa",
+        "bytes": 2255,
+        "sha256": "0e81943feade72c4a5677e8a04df0de05bd0346b459c92c7ae46dd530514eb8d",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/j_damage_back_accept_gain-restored-pending-1.ngsa",
+        "bytes": 2330,
+        "sha256": "f8a5da88aca12dba8b4c2addd3bf2c8aefed43ab152d9d77829ac9950d6bb618",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/j_damage_back_cancel-direct-pending-0.ngsa",
+        "bytes": 2255,
+        "sha256": "0e81943feade72c4a5677e8a04df0de05bd0346b459c92c7ae46dd530514eb8d",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/j_damage_back_cancel-restored-pending-0.ngsa",
+        "bytes": 2255,
+        "sha256": "0e81943feade72c4a5677e8a04df0de05bd0346b459c92c7ae46dd530514eb8d",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_A-direct-pending-0.ngsa",
+        "bytes": 2107,
+        "sha256": "f5ebff9009afa54a9387905deddfe0344255619430f765fd6a8e8f65fadb3461",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_A-direct-pending-1.ngsa",
+        "bytes": 2157,
+        "sha256": "f530d51bef9e2210bb4847614578d86bda096e6f70b896245b530eb9cfc1291d",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_A-direct-pending-2.ngsa",
+        "bytes": 2167,
+        "sha256": "9c44cd54c225dba059e3ef47498951924fb434fad16a49df610e441ec4a60fd9",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_A-direct-pending-3.ngsa",
+        "bytes": 2173,
+        "sha256": "d0f798257e7cc696d831ed0ca219c288fb0b5ba53d79ea07df1ef58a8ee50caf",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_A-restored-pending-0.ngsa",
+        "bytes": 2107,
+        "sha256": "f5ebff9009afa54a9387905deddfe0344255619430f765fd6a8e8f65fadb3461",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_A-restored-pending-1.ngsa",
+        "bytes": 2157,
+        "sha256": "5460bcd33e0be7d769993e9e1a2cfe64fbe45e1d8974d3155d6c969b867fbd4c",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_A-restored-pending-2.ngsa",
+        "bytes": 2167,
+        "sha256": "b8f8b9b15f5f695ef286ad93ae37285ac0b6a590a154207bf088af1bb4052de0",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_A-restored-pending-3.ngsa",
+        "bytes": 2173,
+        "sha256": "d14c6658f381b6d7e7cd536d1e2fa66d64959d4476b23e75a05cdf3647ec91ee",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_B-direct-pending-0.ngsa",
+        "bytes": 2107,
+        "sha256": "f5ebff9009afa54a9387905deddfe0344255619430f765fd6a8e8f65fadb3461",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_B-direct-pending-1.ngsa",
+        "bytes": 2157,
+        "sha256": "f530d51bef9e2210bb4847614578d86bda096e6f70b896245b530eb9cfc1291d",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_B-direct-pending-2.ngsa",
+        "bytes": 2163,
+        "sha256": "f7d25dea138802e020e574c3cbd37d421c4bac1f106630232f9aef24bb399369",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_B-direct-pending-3.ngsa",
+        "bytes": 2169,
+        "sha256": "e67715a11f7dceaadd1d2b6633a1dec9a3164d6a519bbc834491f862e6b49fac",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_B-restored-pending-0.ngsa",
+        "bytes": 2107,
+        "sha256": "f5ebff9009afa54a9387905deddfe0344255619430f765fd6a8e8f65fadb3461",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_B-restored-pending-1.ngsa",
+        "bytes": 2157,
+        "sha256": "5460bcd33e0be7d769993e9e1a2cfe64fbe45e1d8974d3155d6c969b867fbd4c",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_B-restored-pending-2.ngsa",
+        "bytes": 2163,
+        "sha256": "608ced1cbbf6d001292951eb62d8a3ead05aa6662d760d67642f02b3c93e7ff5",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_B-restored-pending-3.ngsa",
+        "bytes": 2169,
+        "sha256": "0dc6324221851568a1ba2d7ae3e33cabccf5eaa5481843bb2ac7bef620d9e004",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_initial-direct-pending-0.ngsa",
+        "bytes": 2107,
+        "sha256": "f5ebff9009afa54a9387905deddfe0344255619430f765fd6a8e8f65fadb3461",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_initial-restored-pending-0.ngsa",
+        "bytes": 2107,
+        "sha256": "f5ebff9009afa54a9387905deddfe0344255619430f765fd6a8e8f65fadb3461",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_suit_attempt-direct-pending-0.ngsa",
+        "bytes": 2107,
+        "sha256": "f5ebff9009afa54a9387905deddfe0344255619430f765fd6a8e8f65fadb3461",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_suit_attempt-direct-pending-1.ngsa",
+        "bytes": 2157,
+        "sha256": "f530d51bef9e2210bb4847614578d86bda096e6f70b896245b530eb9cfc1291d",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_suit_attempt-restored-pending-0.ngsa",
+        "bytes": 2107,
+        "sha256": "f5ebff9009afa54a9387905deddfe0344255619430f765fd6a8e8f65fadb3461",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_suit_attempt-restored-pending-1.ngsa",
+        "bytes": 2157,
+        "sha256": "5460bcd33e0be7d769993e9e1a2cfe64fbe45e1d8974d3155d6c969b867fbd4c",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_target-direct-pending-0.ngsa",
+        "bytes": 2107,
+        "sha256": "f5ebff9009afa54a9387905deddfe0344255619430f765fd6a8e8f65fadb3461",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_target-direct-pending-1.ngsa",
+        "bytes": 2157,
+        "sha256": "f530d51bef9e2210bb4847614578d86bda096e6f70b896245b530eb9cfc1291d",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_target-direct-pending-2.ngsa",
+        "bytes": 2167,
+        "sha256": "9c44cd54c225dba059e3ef47498951924fb434fad16a49df610e441ec4a60fd9",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_target-restored-pending-0.ngsa",
+        "bytes": 2107,
+        "sha256": "f5ebff9009afa54a9387905deddfe0344255619430f765fd6a8e8f65fadb3461",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_target-restored-pending-1.ngsa",
+        "bytes": 2157,
+        "sha256": "5460bcd33e0be7d769993e9e1a2cfe64fbe45e1d8974d3155d6c969b867fbd4c",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_target-restored-pending-2.ngsa",
+        "bytes": 2167,
+        "sha256": "b8f8b9b15f5f695ef286ad93ae37285ac0b6a590a154207bf088af1bb4052de0",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_target_B-direct-pending-0.ngsa",
+        "bytes": 2107,
+        "sha256": "f5ebff9009afa54a9387905deddfe0344255619430f765fd6a8e8f65fadb3461",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_target_B-direct-pending-1.ngsa",
+        "bytes": 2157,
+        "sha256": "f530d51bef9e2210bb4847614578d86bda096e6f70b896245b530eb9cfc1291d",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_target_B-direct-pending-2.ngsa",
+        "bytes": 2167,
+        "sha256": "9c44cd54c225dba059e3ef47498951924fb434fad16a49df610e441ec4a60fd9",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_target_B-direct-pending-3.ngsa",
+        "bytes": 2171,
+        "sha256": "157c5d480be9e07bf12eb682a326f61fe3d8229ff493558029bde76cfab3ff76",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_target_B-restored-pending-0.ngsa",
+        "bytes": 2107,
+        "sha256": "f5ebff9009afa54a9387905deddfe0344255619430f765fd6a8e8f65fadb3461",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_target_B-restored-pending-1.ngsa",
+        "bytes": 2157,
+        "sha256": "5460bcd33e0be7d769993e9e1a2cfe64fbe45e1d8974d3155d6c969b867fbd4c",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_target_B-restored-pending-2.ngsa",
+        "bytes": 2167,
+        "sha256": "b8f8b9b15f5f695ef286ad93ae37285ac0b6a590a154207bf088af1bb4052de0",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      },
+      {
+        "file": "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_target_B-restored-pending-3.ngsa",
+        "bytes": 2171,
+        "sha256": "e7823020b2e5b7e003e6b88d5b1287dc21ad39763011bd08c926d9b3ea5afb20",
+        "exact_match_to_independently_executed_preserved_before_binary": true
+      }
+    ],
+    "own_old_restore_results_exactly_equal_producer_after_results": true,
+    "l29_semantic_counterexample_raw_links": [
+      {
+        "case": "q_A",
+        "initial_players_id_face_hp_skills_equal": true,
+        "stage_to_raw_cdp": [
+          {
+            "label": "phaseUseBegin",
+            "matches": [
+              {
+                "session": "session-l29-1794591931110",
+                "index": 304
+              },
+              {
+                "session": "session-l29-1794591931110",
+                "index": 487
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 6
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 279
+              }
+            ]
+          },
+          {
+            "label": "owner_suit_selected",
+            "matches": [
+              {
+                "session": "session-l29-1794591931110",
+                "index": 306
+              },
+              {
+                "session": "session-l29-1794591931110",
+                "index": 489
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 8
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 281
+              }
+            ]
+          },
+          {
+            "label": "target_question",
+            "matches": [
+              {
+                "session": "session-l29-1794591931110",
+                "index": 308
+              },
+              {
+                "session": "session-l29-1794591931110",
+                "index": 491
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 10
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 283
+              }
+            ]
+          },
+          {
+            "label": "target_suit_question_after_owner_payment",
+            "matches": [
+              {
+                "session": "session-l29-1794591931110",
+                "index": 311
+              },
+              {
+                "session": "session-l29-1794591931110",
+                "index": 494
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 286
+              }
+            ]
+          },
+          {
+            "label": "resolved",
+            "matches": [
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 288
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 289
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "q_B",
+        "initial_players_id_face_hp_skills_equal": true,
+        "stage_to_raw_cdp": [
+          {
+            "label": "phaseUseBegin",
+            "matches": [
+              {
+                "session": "session-l29-1794591931110",
+                "index": 317
+              },
+              {
+                "session": "session-l29-1794591931110",
+                "index": 500
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 23
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 296
+              }
+            ]
+          },
+          {
+            "label": "owner_suit_selected",
+            "matches": [
+              {
+                "session": "session-l29-1794591931110",
+                "index": 319
+              },
+              {
+                "session": "session-l29-1794591931110",
+                "index": 502
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 25
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 298
+              }
+            ]
+          },
+          {
+            "label": "target_question",
+            "matches": [
+              {
+                "session": "session-l29-1794591931110",
+                "index": 321
+              },
+              {
+                "session": "session-l29-1794591931110",
+                "index": 504
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 27
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 300
+              }
+            ]
+          },
+          {
+            "label": "target_suit_question_after_owner_payment",
+            "matches": [
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 303
+              }
+            ]
+          },
+          {
+            "label": "resolved",
+            "matches": [
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 305
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 306
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "j_active_gain",
+        "initial_players_id_face_hp_skills_equal": true,
+        "stage_to_raw_cdp": [
+          {
+            "label": "phaseUse_active_candidates",
+            "matches": [
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 99
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 372
+              }
+            ]
+          },
+          {
+            "label": "jiushi_use_selected",
+            "matches": [
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 101
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 374
+              }
+            ]
+          },
+          {
+            "label": "gain_question",
+            "matches": [
+              {
+                "session": "session-l29-1794591931110",
+                "index": 373
+              },
+              {
+                "session": "session-l29-1794591931110",
+                "index": 556
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 103
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 376
+              }
+            ]
+          },
+          {
+            "label": "gain_answered",
+            "matches": [
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 378
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 379
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "j_active_cancel_gain",
+        "initial_players_id_face_hp_skills_equal": true,
+        "stage_to_raw_cdp": [
+          {
+            "label": "phaseUse_active_candidates",
+            "matches": [
+              {
+                "session": "session-l29-1794591931110",
+                "index": 379
+              },
+              {
+                "session": "session-l29-1794591931110",
+                "index": 562
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 113
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 386
+              }
+            ]
+          },
+          {
+            "label": "jiushi_use_selected",
+            "matches": [
+              {
+                "session": "session-l29-1794591931110",
+                "index": 381
+              },
+              {
+                "session": "session-l29-1794591931110",
+                "index": 564
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 115
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 388
+              }
+            ]
+          },
+          {
+            "label": "gain_question",
+            "matches": [
+              {
+                "session": "session-l29-1794591931110",
+                "index": 383
+              },
+              {
+                "session": "session-l29-1794591931110",
+                "index": 566
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 117
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 390
+              }
+            ]
+          },
+          {
+            "label": "gain_answered",
+            "matches": [
+              {
+                "session": "session-l29-1794591931110",
+                "index": 385
+              },
+              {
+                "session": "session-l29-1794591931110",
+                "index": 386
+              },
+              {
+                "session": "session-l29-1794591931110",
+                "index": 568
+              },
+              {
+                "session": "session-l29-1794591931110",
+                "index": 569
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 119
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 120
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 392
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 393
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "j_damage_back_accept_gain",
+        "initial_players_id_face_hp_skills_equal": true,
+        "stage_to_raw_cdp": [
+          {
+            "label": "sha_damage_window",
+            "matches": [
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 416
+              }
+            ]
+          },
+          {
+            "label": "gain_after_turnback",
+            "matches": [
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 418
+              }
+            ]
+          },
+          {
+            "label": "accept_gain",
+            "matches": [
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 420
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 421
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "case": "j_damage_back_cancel",
+        "initial_players_id_face_hp_skills_equal": true,
+        "stage_to_raw_cdp": [
+          {
+            "label": "sha_damage_window",
+            "matches": [
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 428
+              }
+            ]
+          },
+          {
+            "label": "cancel_turnback",
+            "matches": [
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 430
+              },
+              {
+                "session": "session-l29b-1794592604612",
+                "index": 431
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

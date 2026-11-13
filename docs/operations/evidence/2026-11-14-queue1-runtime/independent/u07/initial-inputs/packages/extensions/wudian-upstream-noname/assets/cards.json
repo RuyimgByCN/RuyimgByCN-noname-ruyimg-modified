@@ -1,0 +1,337 @@
+{
+  "source": "noname",
+  "upstream_path": "apps/core/extension/玩点论杀/",
+  "upstream_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+  "pack": {
+    "name": "wudian-upstream-noname",
+    "version": 2,
+    "description": "G1 玩点论杀",
+    "card_prefix": "wd_"
+  },
+  "cards": [
+    {
+      "name": "sha",
+      "kind": "sha",
+      "suit": "diamond",
+      "rank": 9
+    },
+    {
+      "name": "sha",
+      "kind": "sha",
+      "suit": "spade",
+      "rank": 6
+    },
+    {
+      "name": "shan",
+      "kind": "shan",
+      "suit": "heart",
+      "rank": 6
+    },
+    {
+      "name": "shan",
+      "kind": "shan",
+      "suit": "diamond",
+      "rank": 3
+    },
+    {
+      "name": "shan",
+      "kind": "shan",
+      "suit": "diamond",
+      "rank": 11
+    },
+    {
+      "name": "tao",
+      "kind": "tao",
+      "suit": "heart",
+      "rank": 5
+    },
+    {
+      "name": "tao",
+      "kind": "tao",
+      "suit": "heart",
+      "rank": 7
+    },
+    {
+      "name": "wangmeizhike",
+      "kind": "wangmeizhike",
+      "suit": "club",
+      "rank": 8
+    },
+    {
+      "name": "wangmeizhike",
+      "kind": "wangmeizhike",
+      "suit": "club",
+      "rank": 11
+    },
+    {
+      "name": "youdishenru",
+      "kind": "youdishenru",
+      "suit": "club",
+      "rank": 9
+    },
+    {
+      "name": "youdishenru",
+      "kind": "youdishenru",
+      "suit": "spade",
+      "rank": 11
+    },
+    {
+      "name": "youdishenru",
+      "kind": "youdishenru",
+      "suit": "spade",
+      "rank": 12
+    },
+    {
+      "name": "sanjian",
+      "kind": "sanjian",
+      "suit": "club",
+      "rank": 5,
+      "range": 3,
+      "equip_skills": [
+        "wd_sanjian"
+      ]
+    },
+    {
+      "name": "tiesuo",
+      "kind": "tiesuo",
+      "suit": "spade",
+      "rank": 4
+    }
+  ],
+  "deferred": [
+    {
+      "name": "diaobingqianjiang",
+      "count": 2,
+      "reason": "多人方向选择多步结算"
+    }
+  ],
+  "skills": [
+    {
+      "name": "wd_wangmeizhike",
+      "card": "wangmeizhike",
+      "mapping": "host:wangmeizhike_card"
+    },
+    {
+      "name": "wd_sanjian",
+      "card": "sanjian",
+      "mapping": "host:sanjian_weapon"
+    },
+    {
+      "name": "moshou",
+      "general": "wdb_feishi",
+      "mapping": "host:moshou_immunity"
+    },
+    {
+      "name": "ciqiu",
+      "general": "wdb_hanlong",
+      "mapping": "host:wudian_ciqiu"
+    },
+    {
+      "name": "nsshuaiyan",
+      "general": "wdb_feishi",
+      "mapping": "host:wudian_shuaiyan"
+    },
+    {
+      "name": "zhucheng",
+      "general": "wdb_liufu",
+      "mapping": "host:wudian_zhucheng"
+    },
+    {
+      "name": "zhucheng2",
+      "general": "wdb_liufu",
+      "mapping": "host:wudian_zhucheng_guard"
+    },
+    {
+      "name": "kangyin",
+      "general": "wdb_liuzan",
+      "mapping": "host:wudian_kangyin"
+    },
+    {
+      "name": "chezhen",
+      "general": "wdb_tianyu",
+      "mapping": "host:wudian_chezhen"
+    },
+    {
+      "name": "juedao",
+      "general": "wdb_liuyan",
+      "mapping": "host:wudian_juedao"
+    },
+    {
+      "name": "geju",
+      "general": "wdb_liuyan",
+      "mapping": "host:wudian_geju"
+    },
+    {
+      "name": "duoqi",
+      "general": "wdb_liufu",
+      "mapping": null,
+      "reason": "phaseUse 中止未建模+依赖筑城标记——2026-10-08 正式暂缓"
+    },
+    {
+      "name": "youzhan",
+      "general": "wdb_tianyu",
+      "mapping": null,
+      "reason": "shaBefore 时点映射偏晚+虚拟 useCard 组合——2026-10-08 正式暂缓"
+    }
+  ],
+  "generals": [
+    {
+      "name": "费诗",
+      "faction": "shu",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "nsshuaiyan",
+          "mapping": "host:wudian_shuaiyan"
+        },
+        {
+          "name": "moshou",
+          "mapping": "host:moshou_immunity"
+        }
+      ]
+    },
+    {
+      "name": "韩龙",
+      "faction": "wei",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "siji",
+          "mapping": "host:siji_discard_draw"
+        },
+        {
+          "name": "ciqiu",
+          "mapping": "host:wudian_ciqiu"
+        }
+      ]
+    },
+    {
+      "name": "刘馥",
+      "faction": "wei",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "zhucheng",
+          "mapping": "host:wudian_zhucheng"
+        },
+        {
+          "name": "zhucheng2",
+          "mapping": "host:wudian_zhucheng_guard"
+        },
+        {
+          "name": "duoqi",
+          "mapping": null,
+          "reason": "phaseUse 中止（evt.skipped）未建模+依赖筑城标记——2026-10-08 正式暂缓"
+        }
+      ]
+    },
+    {
+      "name": "刘焉",
+      "faction": "qun",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "juedao",
+          "mapping": "host:wudian_juedao"
+        },
+        {
+          "name": "geju",
+          "mapping": "host:wudian_geju"
+        }
+      ]
+    },
+    {
+      "name": "留赞",
+      "faction": "wu",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "kangyin",
+          "mapping": "host:wudian_kangyin"
+        }
+      ]
+    },
+    {
+      "name": "田豫",
+      "faction": "wei",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "chezhen",
+          "mapping": "host:wudian_chezhen"
+        },
+        {
+          "name": "youzhan",
+          "mapping": null,
+          "reason": "shaBefore 时点（原生映射 AfterTriggers 偏晚）+令目标虚拟 useCard 诱敌深入组合——2026-10-08 正式暂缓"
+        }
+      ]
+    },
+    {
+      "name": "西真夕红",
+      "faction": "shu",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "jinyan",
+          "mapping": "host:wudian_jinyan"
+        },
+        {
+          "name": "fuchou",
+          "mapping": "host:fuchou"
+        },
+        {
+          "name": "fuchou2",
+          "mapping": "host:fuchou2"
+        },
+        {
+          "name": "jianbi",
+          "mapping": "host:wudian_jianbi"
+        }
+      ]
+    },
+    {
+      "name": "造之仁君",
+      "faction": "wei",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "liangce",
+          "mapping": "host:liangce_remain"
+        },
+        {
+          "name": "jianbi",
+          "mapping": null
+        },
+        {
+          "name": "diyjuntun",
+          "mapping": "host:wudian_diyjuntun"
+        }
+      ]
+    },
+    {
+      "name": "杨仪",
+      "faction": "shu",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        {
+          "name": "choudu",
+          "mapping": null
+        },
+        {
+          "name": "liduan",
+          "mapping": "host:wudian_liduan"
+        }
+      ]
+    }
+  ]
+}

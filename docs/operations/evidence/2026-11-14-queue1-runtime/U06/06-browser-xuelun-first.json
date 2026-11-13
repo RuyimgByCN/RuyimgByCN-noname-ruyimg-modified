@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "python3",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/U06/browser/run-cases.py"
+  ],
+  "command": "python3 docs/operations/evidence/2026-11-14-queue1-runtime/U06/browser/run-cases.py",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0",
+    "U06_ONLY": "xuelun"
+  },
+  "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "tracked_status": "",
+  "start_utc": "2026-11-13T17:53:08.916817+00:00",
+  "exit_code": 0,
+  "duration_seconds": 0.441,
+  "end_utc": "2026-11-13T17:53:09.358234+00:00"
+}

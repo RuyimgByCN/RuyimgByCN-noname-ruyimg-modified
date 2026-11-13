@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "python3",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/U06/compare.py"
+  ],
+  "command": "python3 docs/operations/evidence/2026-11-14-queue1-runtime/U06/compare.py",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0"
+  },
+  "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n",
+  "start_utc": "2026-11-13T18:04:11.198066+00:00",
+  "exit_code": 1,
+  "duration_seconds": 0.028,
+  "end_utc": "2026-11-13T18:04:11.226404+00:00"
+}

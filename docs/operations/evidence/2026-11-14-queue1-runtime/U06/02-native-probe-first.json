@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "cargo",
+    "run",
+    "--offline",
+    "--manifest-path",
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-u06-runtime-probe-0n7kavvq/Cargo.toml"
+  ],
+  "command": "cargo run --offline --manifest-path /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-u06-runtime-probe-0n7kavvq/Cargo.toml",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-u06-runtime-target-q8uuc_sy",
+    "NONAME_REPO_ROOT": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next"
+  },
+  "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "tracked_status": "",
+  "start_utc": "2026-11-13T17:48:08.622566+00:00",
+  "exit_code": 0,
+  "duration_seconds": 21.278,
+  "end_utc": "2026-11-13T17:48:29.900814+00:00"
+}

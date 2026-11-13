@@ -1,0 +1,18 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+error[E0369]: binary operation `==` cannot be applied to type `CommandOutcome`
+   --> crates/engine-native/tests/groups/../l29_longxue_eight.rs:966:13
+    |
+966 |             assert_eq!(direct, restored);
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |             |
+    |             CommandOutcome
+    |             CommandOutcome
+    |
+note: `CommandOutcome` does not implement `PartialEq`
+   --> crates/engine-native/src/engine.rs:125:1
+    |
+125 | pub enum CommandOutcome {
+    | ^^^^^^^^^^^^^^^^^^^^^^^ `CommandOutcome` is defined in another crate
+
+For more information about this error, try `rustc --explain E0369`.
+error: could not compile `engine-native` (test "l_rounds") due to 1 previous error

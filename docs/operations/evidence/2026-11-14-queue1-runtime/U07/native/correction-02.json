@@ -1,0 +1,6 @@
+{
+  "at": "2026-11-13T18:01:33.276623+00:00",
+  "failed_run": "02-second.stderr",
+  "cause": "probe looked up upstream bagua instead of native generic armor catalog name",
+  "change": "actual native armor used only as hand equipment discard cost; browser maps this identity to bagua, no armor effect tested; product unchanged"
+}

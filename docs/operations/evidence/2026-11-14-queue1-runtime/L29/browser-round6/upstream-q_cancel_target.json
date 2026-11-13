@@ -1,0 +1,1189 @@
+{
+  "case": "q_cancel_target",
+  "native_fixture": "native-round3/native-q_cancel_target.json",
+  "fixture": {
+    "choice": null,
+    "deck_top_first": [
+      {
+        "id": 49,
+        "kind": "Tao",
+        "name": "tao",
+        "nature": null,
+        "rank": 8,
+        "suit": "heart",
+        "upstream_name": "tao"
+      },
+      {
+        "id": 59,
+        "kind": "Snatch",
+        "name": "snatch",
+        "nature": null,
+        "rank": 3,
+        "suit": "spade",
+        "upstream_name": "shunshou"
+      },
+      {
+        "id": 64,
+        "kind": "Dismantle",
+        "name": "dismantle",
+        "nature": null,
+        "rank": 3,
+        "suit": "spade",
+        "upstream_name": "guohe"
+      },
+      {
+        "id": 17,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 10,
+        "suit": "club",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 36,
+        "kind": "Shan",
+        "name": "shan",
+        "nature": null,
+        "rank": 4,
+        "suit": "diamond",
+        "upstream_name": "shan"
+      },
+      {
+        "id": 90,
+        "kind": "Weapon",
+        "name": "weapon2b",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": null
+      },
+      {
+        "id": 21,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 10,
+        "suit": "heart",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 67,
+        "kind": "Dismantle",
+        "name": "dismantle",
+        "nature": null,
+        "rank": 3,
+        "suit": "club",
+        "upstream_name": "guohe"
+      },
+      {
+        "id": 41,
+        "kind": "Shan",
+        "name": "shan",
+        "nature": null,
+        "rank": 9,
+        "suit": "diamond",
+        "upstream_name": "shan"
+      },
+      {
+        "id": 60,
+        "kind": "Snatch",
+        "name": "snatch",
+        "nature": null,
+        "rank": 4,
+        "suit": "spade",
+        "upstream_name": "shunshou"
+      },
+      {
+        "id": 18,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 10,
+        "suit": "club",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 92,
+        "kind": "Armor",
+        "name": "armor",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": null
+      },
+      {
+        "id": 84,
+        "kind": "HorseMinus",
+        "name": "horse_minus",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": null
+      },
+      {
+        "id": 32,
+        "kind": "Shan",
+        "name": "shan",
+        "nature": null,
+        "rank": 13,
+        "suit": "heart",
+        "upstream_name": "shan"
+      },
+      {
+        "id": 80,
+        "kind": "HorsePlus",
+        "name": "horse_plus",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": null
+      },
+      {
+        "id": 26,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 8,
+        "suit": "diamond",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 5,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 10,
+        "suit": "spade",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 76,
+        "kind": "Le",
+        "name": "le",
+        "nature": null,
+        "rank": 6,
+        "suit": "heart",
+        "upstream_name": "lebu"
+      },
+      {
+        "id": 110,
+        "kind": "Wugu",
+        "name": "wugu",
+        "nature": null,
+        "rank": 4,
+        "suit": "heart",
+        "upstream_name": "wugu"
+      },
+      {
+        "id": 82,
+        "kind": "HorsePlus",
+        "name": "horse_plus",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": null
+      },
+      {
+        "id": 14,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 8,
+        "suit": "club",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 29,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 13,
+        "suit": "diamond",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 0,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 7,
+        "suit": "spade",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 120,
+        "kind": "Qinglong",
+        "name": "qinglong",
+        "nature": null,
+        "rank": 5,
+        "suit": "spade",
+        "upstream_name": null
+      },
+      {
+        "id": 75,
+        "kind": "Le",
+        "name": "le",
+        "nature": null,
+        "rank": 6,
+        "suit": "club",
+        "upstream_name": "lebu"
+      },
+      {
+        "id": 27,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 9,
+        "suit": "diamond",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 74,
+        "kind": "Le",
+        "name": "le",
+        "nature": null,
+        "rank": 6,
+        "suit": "spade",
+        "upstream_name": "lebu"
+      },
+      {
+        "id": 71,
+        "kind": "Nullify",
+        "name": "nullify",
+        "nature": null,
+        "rank": 12,
+        "suit": "club",
+        "upstream_name": "wuxie"
+      },
+      {
+        "id": 45,
+        "kind": "Tao",
+        "name": "tao",
+        "nature": null,
+        "rank": 3,
+        "suit": "heart",
+        "upstream_name": "tao"
+      },
+      {
+        "id": 119,
+        "kind": "Guanshi",
+        "name": "guanshi",
+        "nature": null,
+        "rank": 5,
+        "suit": "diamond",
+        "upstream_name": null
+      },
+      {
+        "id": 62,
+        "kind": "Snatch",
+        "name": "snatch",
+        "nature": null,
+        "rank": 3,
+        "suit": "diamond",
+        "upstream_name": "shunshou"
+      },
+      {
+        "id": 56,
+        "kind": "Duel",
+        "name": "duel",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "juedou"
+      },
+      {
+        "id": 13,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 8,
+        "suit": "club",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 77,
+        "kind": "ShanDian",
+        "name": "shandian",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "shandian"
+      },
+      {
+        "id": 107,
+        "kind": "Wuzhong",
+        "name": "wuzhong",
+        "nature": null,
+        "rank": 11,
+        "suit": "heart",
+        "upstream_name": "wuzhong"
+      },
+      {
+        "id": 97,
+        "kind": "FireSha",
+        "name": "fire_sha",
+        "nature": "fire",
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 50,
+        "kind": "Tao",
+        "name": "tao",
+        "nature": null,
+        "rank": 9,
+        "suit": "heart",
+        "upstream_name": "tao"
+      },
+      {
+        "id": 108,
+        "kind": "Taoyuan",
+        "name": "taoyuan",
+        "nature": null,
+        "rank": 1,
+        "suit": "heart",
+        "upstream_name": "taoyuan"
+      },
+      {
+        "id": 95,
+        "kind": "FireSha",
+        "name": "fire_sha",
+        "nature": "fire",
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 2,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 8,
+        "suit": "spade",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 63,
+        "kind": "Snatch",
+        "name": "snatch",
+        "nature": null,
+        "rank": 4,
+        "suit": "diamond",
+        "upstream_name": "shunshou"
+      },
+      {
+        "id": 47,
+        "kind": "Tao",
+        "name": "tao",
+        "nature": null,
+        "rank": 6,
+        "suit": "heart",
+        "upstream_name": "tao"
+      },
+      {
+        "id": 70,
+        "kind": "Nullify",
+        "name": "nullify",
+        "nature": null,
+        "rank": 11,
+        "suit": "spade",
+        "upstream_name": "wuxie"
+      },
+      {
+        "id": 88,
+        "kind": "LeiSha",
+        "name": "leisha",
+        "nature": "thunder",
+        "rank": 5,
+        "suit": "club",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 1,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 8,
+        "suit": "spade",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 78,
+        "kind": "ShanDian",
+        "name": "shandian_safe",
+        "nature": null,
+        "rank": 12,
+        "suit": "heart",
+        "upstream_name": "shandian"
+      },
+      {
+        "id": 93,
+        "kind": "Armor",
+        "name": "armor",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": null
+      },
+      {
+        "id": 46,
+        "kind": "Tao",
+        "name": "tao",
+        "nature": null,
+        "rank": 4,
+        "suit": "heart",
+        "upstream_name": "tao"
+      },
+      {
+        "id": 53,
+        "kind": "SavageAttack",
+        "name": "savage",
+        "nature": null,
+        "rank": 7,
+        "suit": "spade",
+        "upstream_name": "nanman"
+      },
+      {
+        "id": 87,
+        "kind": "LeiSha",
+        "name": "leisha",
+        "nature": "thunder",
+        "rank": 4,
+        "suit": "spade",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 98,
+        "kind": "Chain",
+        "name": "chain",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "tiesuo"
+      },
+      {
+        "id": 65,
+        "kind": "Dismantle",
+        "name": "dismantle",
+        "nature": null,
+        "rank": 4,
+        "suit": "spade",
+        "upstream_name": "guohe"
+      },
+      {
+        "id": 35,
+        "kind": "Shan",
+        "name": "shan",
+        "nature": null,
+        "rank": 3,
+        "suit": "diamond",
+        "upstream_name": "shan"
+      },
+      {
+        "id": 102,
+        "kind": "ArcheryAttack",
+        "name": "archery",
+        "nature": null,
+        "rank": 1,
+        "suit": "heart",
+        "upstream_name": "wanjian"
+      },
+      {
+        "id": 10,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 5,
+        "suit": "club",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 106,
+        "kind": "Wuzhong",
+        "name": "wuzhong",
+        "nature": null,
+        "rank": 9,
+        "suit": "heart",
+        "upstream_name": "wuzhong"
+      },
+      {
+        "id": 48,
+        "kind": "Tao",
+        "name": "tao",
+        "nature": null,
+        "rank": 7,
+        "suit": "heart",
+        "upstream_name": "tao"
+      },
+      {
+        "id": 61,
+        "kind": "Snatch",
+        "name": "snatch",
+        "nature": null,
+        "rank": 11,
+        "suit": "spade",
+        "upstream_name": "shunshou"
+      },
+      {
+        "id": 73,
+        "kind": "Nullify",
+        "name": "nullify",
+        "nature": null,
+        "rank": 12,
+        "suit": "diamond",
+        "upstream_name": "wuxie"
+      },
+      {
+        "id": 31,
+        "kind": "Shan",
+        "name": "shan",
+        "nature": null,
+        "rank": 2,
+        "suit": "heart",
+        "upstream_name": "shan"
+      },
+      {
+        "id": 52,
+        "kind": "Tao",
+        "name": "tao",
+        "nature": null,
+        "rank": 12,
+        "suit": "diamond",
+        "upstream_name": "tao"
+      },
+      {
+        "id": 72,
+        "kind": "Nullify",
+        "name": "nullify",
+        "nature": null,
+        "rank": 13,
+        "suit": "club",
+        "upstream_name": "wuxie"
+      },
+      {
+        "id": 109,
+        "kind": "Wugu",
+        "name": "wugu",
+        "nature": null,
+        "rank": 3,
+        "suit": "heart",
+        "upstream_name": "wugu"
+      },
+      {
+        "id": 96,
+        "kind": "FireSha",
+        "name": "fire_sha",
+        "nature": "fire",
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 37,
+        "kind": "Shan",
+        "name": "shan",
+        "nature": null,
+        "rank": 5,
+        "suit": "diamond",
+        "upstream_name": "shan"
+      },
+      {
+        "id": 112,
+        "kind": "Jiedao",
+        "name": "jiedao",
+        "nature": null,
+        "rank": 13,
+        "suit": "club",
+        "upstream_name": null
+      },
+      {
+        "id": 25,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 7,
+        "suit": "diamond",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 6,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 10,
+        "suit": "spade",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 99,
+        "kind": "Chain",
+        "name": "chain",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "tiesuo"
+      },
+      {
+        "id": 43,
+        "kind": "Shan",
+        "name": "shan",
+        "nature": null,
+        "rank": 11,
+        "suit": "diamond",
+        "upstream_name": "shan"
+      },
+      {
+        "id": 19,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 11,
+        "suit": "club",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 40,
+        "kind": "Shan",
+        "name": "shan",
+        "nature": null,
+        "rank": 8,
+        "suit": "diamond",
+        "upstream_name": "shan"
+      },
+      {
+        "id": 30,
+        "kind": "Shan",
+        "name": "shan",
+        "nature": null,
+        "rank": 2,
+        "suit": "heart",
+        "upstream_name": "shan"
+      },
+      {
+        "id": 101,
+        "kind": "Chain",
+        "name": "chain",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "tiesuo"
+      },
+      {
+        "id": 7,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 2,
+        "suit": "club",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 123,
+        "kind": "Fangtian",
+        "name": "fangtian",
+        "nature": null,
+        "rank": 5,
+        "suit": "diamond",
+        "upstream_name": null
+      },
+      {
+        "id": 42,
+        "kind": "Shan",
+        "name": "shan",
+        "nature": null,
+        "rank": 10,
+        "suit": "diamond",
+        "upstream_name": "shan"
+      },
+      {
+        "id": 104,
+        "kind": "Wuzhong",
+        "name": "wuzhong",
+        "nature": null,
+        "rank": 7,
+        "suit": "heart",
+        "upstream_name": "wuzhong"
+      },
+      {
+        "id": 115,
+        "kind": "Qilin",
+        "name": "qilin",
+        "nature": null,
+        "rank": 5,
+        "suit": "heart",
+        "upstream_name": null
+      },
+      {
+        "id": 22,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 10,
+        "suit": "heart",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 81,
+        "kind": "HorsePlus",
+        "name": "horse_plus",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": null
+      },
+      {
+        "id": 23,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 11,
+        "suit": "heart",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 66,
+        "kind": "Dismantle",
+        "name": "dismantle",
+        "nature": null,
+        "rank": 12,
+        "suit": "spade",
+        "upstream_name": "guohe"
+      },
+      {
+        "id": 28,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 10,
+        "suit": "diamond",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 111,
+        "kind": "Jiedao",
+        "name": "jiedao",
+        "nature": null,
+        "rank": 12,
+        "suit": "club",
+        "upstream_name": null
+      },
+      {
+        "id": 12,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 7,
+        "suit": "club",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 89,
+        "kind": "Weapon",
+        "name": "weapon2",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": null
+      },
+      {
+        "id": 3,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 9,
+        "suit": "spade",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 16,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 9,
+        "suit": "club",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 103,
+        "kind": "Bing",
+        "name": "bing",
+        "nature": null,
+        "rank": 3,
+        "suit": "club",
+        "upstream_name": "bingliang"
+      },
+      {
+        "id": 121,
+        "kind": "Zhangba",
+        "name": "zhangba",
+        "nature": null,
+        "rank": 12,
+        "suit": "spade",
+        "upstream_name": null
+      },
+      {
+        "id": 117,
+        "kind": "Zhuge",
+        "name": "zhuge",
+        "nature": null,
+        "rank": 1,
+        "suit": "club",
+        "upstream_name": null
+      },
+      {
+        "id": 86,
+        "kind": "Jiu",
+        "name": "jiu",
+        "nature": null,
+        "rank": 9,
+        "suit": "club",
+        "upstream_name": "jiu"
+      },
+      {
+        "id": 20,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 11,
+        "suit": "club",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 15,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 9,
+        "suit": "club",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 11,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 6,
+        "suit": "club",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 9,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 4,
+        "suit": "club",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 122,
+        "kind": "Cixiong",
+        "name": "cixiong",
+        "nature": null,
+        "rank": 2,
+        "suit": "spade",
+        "upstream_name": null
+      },
+      {
+        "id": 94,
+        "kind": "FireSha",
+        "name": "fire_sha",
+        "nature": "fire",
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 100,
+        "kind": "Chain",
+        "name": "chain",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "tiesuo"
+      },
+      {
+        "id": 55,
+        "kind": "SavageAttack",
+        "name": "savage",
+        "nature": null,
+        "rank": 7,
+        "suit": "club",
+        "upstream_name": "nanman"
+      }
+    ],
+    "discard": [
+      {
+        "id": 38,
+        "kind": "Shan",
+        "name": "shan",
+        "nature": null,
+        "rank": 6,
+        "suit": "diamond",
+        "upstream_name": "shan"
+      },
+      {
+        "id": 113,
+        "kind": "Renwang",
+        "name": "renwang",
+        "nature": null,
+        "rank": 2,
+        "suit": "club",
+        "upstream_name": null
+      },
+      {
+        "id": 68,
+        "kind": "Dismantle",
+        "name": "dismantle",
+        "nature": null,
+        "rank": 4,
+        "suit": "club",
+        "upstream_name": "guohe"
+      },
+      {
+        "id": 58,
+        "kind": "Duel",
+        "name": "duel",
+        "nature": null,
+        "rank": 1,
+        "suit": "diamond",
+        "upstream_name": "juedou"
+      },
+      {
+        "id": 79,
+        "kind": "HorsePlus",
+        "name": "horse_plus",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": null
+      },
+      {
+        "id": 33,
+        "kind": "Shan",
+        "name": "shan",
+        "nature": null,
+        "rank": 2,
+        "suit": "diamond",
+        "upstream_name": "shan"
+      },
+      {
+        "id": 57,
+        "kind": "Duel",
+        "name": "duel",
+        "nature": null,
+        "rank": 1,
+        "suit": "club",
+        "upstream_name": "juedou"
+      },
+      {
+        "id": 91,
+        "kind": "Weapon",
+        "name": "weapon3",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": null
+      },
+      {
+        "id": 34,
+        "kind": "Shan",
+        "name": "shan",
+        "nature": null,
+        "rank": 2,
+        "suit": "diamond",
+        "upstream_name": "shan"
+      },
+      {
+        "id": 118,
+        "kind": "Zhuge",
+        "name": "zhuge",
+        "nature": null,
+        "rank": 1,
+        "suit": "diamond",
+        "upstream_name": null
+      },
+      {
+        "id": 116,
+        "kind": "Hanbing",
+        "name": "hanbing",
+        "nature": null,
+        "rank": 2,
+        "suit": "spade",
+        "upstream_name": null
+      },
+      {
+        "id": 44,
+        "kind": "Shan",
+        "name": "shan",
+        "nature": null,
+        "rank": 11,
+        "suit": "diamond",
+        "upstream_name": "shan"
+      },
+      {
+        "id": 39,
+        "kind": "Shan",
+        "name": "shan",
+        "nature": null,
+        "rank": 7,
+        "suit": "diamond",
+        "upstream_name": "shan"
+      },
+      {
+        "id": 4,
+        "kind": "Sha",
+        "name": "sha",
+        "nature": null,
+        "rank": 9,
+        "suit": "spade",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 83,
+        "kind": "HorseMinus",
+        "name": "horse_minus",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": null
+      },
+      {
+        "id": 54,
+        "kind": "SavageAttack",
+        "name": "savage",
+        "nature": null,
+        "rank": 13,
+        "suit": "spade",
+        "upstream_name": "nanman"
+      }
+    ],
+    "flags": [],
+    "hash": "[fa, 14, 24, f1, 8c, 69, cd, f2, eb, 93, 32, f9, 85, 7e, de, d7, 1e, eb, 25, 35, eb, 33, fe, f3, 4c, ae, 35, 80, 4e, c7, aa, 9d]",
+    "jiu_active": false,
+    "jiu_used": false,
+    "players": [
+      {
+        "equips": [],
+        "face_down": false,
+        "hand": [
+          {
+            "id": 85,
+            "kind": "Jiu",
+            "name": "jiu",
+            "nature": null,
+            "rank": 3,
+            "suit": "spade",
+            "upstream_name": "jiu"
+          },
+          {
+            "id": 114,
+            "kind": "Qinggang",
+            "name": "qinggang",
+            "nature": null,
+            "rank": 6,
+            "suit": "spade",
+            "upstream_name": "qinggang"
+          },
+          {
+            "id": 51,
+            "kind": "Tao",
+            "name": "tao",
+            "nature": null,
+            "rank": 12,
+            "suit": "heart",
+            "upstream_name": "tao"
+          }
+        ],
+        "hp": 4,
+        "hujia": 0,
+        "max_hp": 4,
+        "seat": 0,
+        "skills": [
+          {
+            "enabled": true,
+            "name": "mbcmqingzheng",
+            "once_used": false
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "face_down": false,
+        "hand": [
+          {
+            "id": 8,
+            "kind": "Sha",
+            "name": "sha",
+            "nature": null,
+            "rank": 3,
+            "suit": "club",
+            "upstream_name": "sha"
+          },
+          {
+            "id": 105,
+            "kind": "Wuzhong",
+            "name": "wuzhong",
+            "nature": null,
+            "rank": 8,
+            "suit": "heart",
+            "upstream_name": "wuzhong"
+          },
+          {
+            "id": 69,
+            "kind": "Dismantle",
+            "name": "dismantle",
+            "nature": null,
+            "rank": 12,
+            "suit": "heart",
+            "upstream_name": "guohe"
+          }
+        ],
+        "hp": 4,
+        "hujia": 0,
+        "max_hp": 4,
+        "seat": 1,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "face_down": false,
+        "hand": [
+          {
+            "id": 24,
+            "kind": "Sha",
+            "name": "sha",
+            "nature": null,
+            "rank": 6,
+            "suit": "diamond",
+            "upstream_name": "sha"
+          }
+        ],
+        "hp": 4,
+        "hujia": 0,
+        "max_hp": 4,
+        "seat": 2,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "face_down": false,
+        "hand": [],
+        "hp": 4,
+        "hujia": 0,
+        "max_hp": 4,
+        "seat": 3,
+        "skills": []
+      }
+    ],
+    "revision": 0,
+    "table": [],
+    "turn": "TurnState { current: 0, phase: Draw, round: 1, sha_used_play_phase: false, mufeng_used_basic: false, wangchen_discard_basic: false, shenmiguo_used: false, shuchui_armed: false, shuchui_hit: false, lianda_used: false, land_used: false, land_sha_used: false, discard_phase_discarded: 0, ciqiu_dying: [], kangyin2: None, huanxia_track: [], cards_used_play_phase: 0, cards_used_turn: 0, liaoyuan_count: 0, xuanyuanjian_marked: false, kunlunjing_snapshot: [], kunlunjing_hp: 0, extra_phases: [], extra_phase_lingwu: false, bte_used_play_phase: 0, phase_number: 0, rende_given: 0, jiu_used: false, mujiaren_used: false, jiu_active: false, turn_opened: true, skip_draw_phase: false, skip_play_phase: false, guxing_armed: false, guxing_count: 0, mengtai_draw_pending: false, mengtai_use_pending: false, zhufangshenshi_target: None, yuedong_num: 0, yuedong_eff: 0, yuedong_recover: false, liangou_hook: None, liangou_bonus_used: false, feitiao_target: None, fanling_used: false, diewu_draw_used: false, lueying_used: false, txianqu_used: false, jtjubao_used: false, zhuyue_targets: [], sheling_used: 0, sheying_used: false, zhangmu_used: false, yingfeng_chain: false, luanjian_card: None, minwan_targets: [], yanyu_count: 0, xjyufeng_used: 0, qizuo_copy: None, jidian_chain: false }"
+  },
+  "stages": [],
+  "runner_completed": false,
+  "runner_error": "Traceback (most recent call last):\n  File \"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/run-browser.py\", line 82, in run\n    row['page_loaded_initial'] = reload_page()\n  File \"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/run-browser.py\", line 41, in reload_page\n    c.evaluate('location.reload();true')\n  File \"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/control.py\", line 13, in evaluate\n    response = json.loads(urllib.request.urlopen(request, timeout=55).read())\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/urllib/request.py\", line 216, in urlopen\n    return opener.open(url, data, timeout)\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/urllib/request.py\", line 525, in open\n    response = meth(req, response)\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/urllib/request.py\", line 634, in http_response\n    response = self.parent.error(\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/urllib/request.py\", line 563, in error\n    return self._call_chain(*args)\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/urllib/request.py\", line 496, in _call_chain\n    result = func(*args)\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/urllib/request.py\", line 643, in http_error_default\n    raise HTTPError(req.full_url, code, msg, hdrs, fp)\nurllib.error.HTTPError: HTTP Error 502: Bad Gateway\n",
+  "snapshot_error": "Traceback (most recent call last):\n  File \"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/run-browser.py\", line 82, in run\n    row['page_loaded_initial'] = reload_page()\n  File \"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/run-browser.py\", line 41, in reload_page\n    c.evaluate('location.reload();true')\n  File \"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/control.py\", line 13, in evaluate\n    response = json.loads(urllib.request.urlopen(request, timeout=55).read())\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/urllib/request.py\", line 216, in urlopen\n    return opener.open(url, data, timeout)\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/urllib/request.py\", line 525, in open\n    response = meth(req, response)\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/urllib/request.py\", line 634, in http_response\n    response = self.parent.error(\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/urllib/request.py\", line 563, in error\n    return self._call_chain(*args)\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/urllib/request.py\", line 496, in _call_chain\n    result = func(*args)\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/urllib/request.py\", line 643, in http_error_default\n    raise HTTPError(req.full_url, code, msg, hdrs, fp)\nurllib.error.HTTPError: HTTP Error 502: Bad Gateway\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/run-browser.py\", line 198, in run\n    row['failure_snapshot'] = c.snapshot()\n  File \"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/control.py\", line 46, in snapshot\n    return evaluate('JSON.stringify(window.l29Snapshot())')\n  File \"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/control.py\", line 13, in evaluate\n    response = json.loads(urllib.request.urlopen(request, timeout=55).read())\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/urllib/request.py\", line 216, in urlopen\n    return opener.open(url, data, timeout)\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/urllib/request.py\", line 525, in open\n    response = meth(req, response)\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/urllib/request.py\", line 634, in http_response\n    response = self.parent.error(\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/urllib/request.py\", line 563, in error\n    return self._call_chain(*args)\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/urllib/request.py\", line 496, in _call_chain\n    result = func(*args)\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/urllib/request.py\", line 643, in http_error_default\n    raise HTTPError(req.full_url, code, msg, hdrs, fp)\nurllib.error.HTTPError: HTTP Error 502: Bad Gateway\n"
+}

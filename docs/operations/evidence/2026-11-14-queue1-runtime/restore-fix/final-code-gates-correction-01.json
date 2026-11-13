@@ -1,0 +1,51 @@
+{
+  "at": "2026-11-14T02:33:04+08:00",
+  "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "tracked_dirty": true,
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "code_gate_source": "required-code-gates.json",
+  "all_code_logs_hash_verified": true,
+  "preflight_first": {
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/preflight.py"
+    ],
+    "command": "python3 -B scripts/preflight.py",
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "env_overrides": {
+      "CARGO_INCREMENTAL": "0"
+    },
+    "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+    "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L29-龙血玄黄.md\n M docs/migration/g0/README.md\n M docs/migration/g0/U06-欢乐卡牌.md\n M docs/migration/g0/inventory_status.json\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n",
+    "start_utc": "2026-11-13T18:19:06.081261+00:00",
+    "exit_code": 0,
+    "duration_seconds": 672.915,
+    "end_utc": "2026-11-13T18:30:18.997321+00:00",
+    "log": "22-preflight-first.log",
+    "log_sha256": "39506f7e67d017b7bca3246edfbf225f5aca9014962078176f2b25e1acb9fb7b",
+    "passed_checks": 21
+  },
+  "product_inputs_checked": 32259,
+  "changed_product_inputs": [
+    "crates/engine-native-content/src/content/host/asks_wudian.rs",
+    "crates/engine-native/tests/l29_longxue_eight.rs"
+  ],
+  "gates_inputs_checked": 21211,
+  "gates_input_drift": [],
+  "original_untracked_paths_present": 672,
+  "old_worktree_blocks_unchanged": 8,
+  "shared_target_cleaned": false,
+  "private_cache_retirement_records": [
+    "production-build-private-copy-retired.json"
+  ],
+  "limitations": "The first complete preflight passed before final dated documentation and U07 scope integration. Later relevant documentation checks are recorded separately. Counts overlap and are not added as unique coverage.",
+  "correction_of": "final-code-gates.json",
+  "correction": "private_cache_retirement_records仅文件名有误；原始退休记录及结论未变。"
+}

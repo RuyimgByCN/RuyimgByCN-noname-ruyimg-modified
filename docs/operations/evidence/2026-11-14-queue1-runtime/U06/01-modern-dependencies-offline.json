@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "pnpm",
+    "install",
+    "--offline",
+    "--ignore-scripts"
+  ],
+  "command": "pnpm install --offline --ignore-scripts",
+  "cwd": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-runtime-modern-b789ktt1",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0"
+  },
+  "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "tracked_status": "",
+  "start_utc": "2026-11-13T17:44:49.888969+00:00",
+  "exit_code": 0,
+  "duration_seconds": 1.078,
+  "end_utc": "2026-11-13T17:44:50.967141+00:00"
+}

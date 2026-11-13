@@ -1,0 +1,22 @@
+{
+  "at": "2026-11-14T02:34:03.349679+08:00",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "worktree_dirty": true,
+  "checks": [
+    {
+      "root": "docs/operations/evidence/2026-11-14-queue1-runtime/U07",
+      "manifest": "frozen-file-manifest.json",
+      "manifest_sha256": "cffbd31ac37c7d5cf0e252094cb33db87545bff2cb34dbc2ee7d4cb4634c0a35",
+      "files": 298,
+      "mismatches": []
+    },
+    {
+      "root": "docs/operations/evidence/2026-11-14-queue1-runtime/independent/u07",
+      "manifest": "frozen-review-manifest.json",
+      "manifest_sha256": "fe626d95ce7df101733f7aed5c72ab7cbc74bd48d9f2c5a0289701e8e9a259b4",
+      "files": 99,
+      "mismatches": []
+    }
+  ],
+  "inventory_used_final_independent_findings": true
+}

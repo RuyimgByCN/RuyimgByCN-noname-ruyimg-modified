@@ -1,0 +1,23 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--test",
+    "l_rounds",
+    "l29_longxue_eight"
+  ],
+  "command": "cargo test --offline -p engine-native --test l_rounds l29_longxue_eight",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0"
+  },
+  "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n",
+  "start_utc": "2026-11-13T18:01:52.795290+00:00",
+  "exit_code": 0,
+  "duration_seconds": 5.336,
+  "end_utc": "2026-11-13T18:01:58.131485+00:00"
+}

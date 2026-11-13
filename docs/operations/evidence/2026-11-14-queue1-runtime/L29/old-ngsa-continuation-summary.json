@@ -1,0 +1,14 @@
+{
+  "counts": {
+    "old_archives": 68,
+    "restore_success": 68,
+    "exact_state_except_auth": 68,
+    "continuations": 136,
+    "requests_equal": 136,
+    "replies_equal": 136,
+    "logs_equal": 136,
+    "final_state_equal_except_auth": 68,
+    "final_hash_equal": 68
+  },
+  "failed": []
+}

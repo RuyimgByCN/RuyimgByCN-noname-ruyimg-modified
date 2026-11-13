@@ -1,0 +1,19 @@
+{
+  "at": "2026-11-14T02:33:04+08:00",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "tracked_dirty": true,
+  "supersedes_scope_only": "commit-scope-plan.json",
+  "reason": "U07采集已冻结且独立报告已确认额外旧等价不成立。为避免发布明知不实的当前等价条目，本批增加U07原始证据、独立复核及清单纠偏；产品修改仍只有酒诗恢复定义与回归测试两文件。",
+  "added_evidence_roots": [
+    "docs/operations/evidence/2026-11-14-queue1-runtime/U07",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/independent/u07"
+  ],
+  "added_public_document": "docs/migration/g0/U07-玩点论杀.md",
+  "still_excluded_evidence_roots": [
+    "docs/operations/evidence/2026-11-14-queue1-runtime/L10",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/U08",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/independent/l10"
+  ],
+  "product_gates_unchanged": true,
+  "documentation_checks_after_integration_required": true
+}

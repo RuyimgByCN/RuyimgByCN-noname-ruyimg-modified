@@ -1,0 +1,37 @@
+{
+  "at": "2026-11-14T02:16:33.465165+08:00",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "inventory_modified_by_reviewer": false,
+  "recommendation": "withdraw_both_existing_whole_card_equivalence_claims_to_simplified_approximation",
+  "inventory_keys": [
+    "U06:cards:monkey@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:4",
+    "U06:cards:xuelunyang@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:97"
+  ],
+  "reason": "这两项旧target为原生规则/rule-vm包，difference=无，test_name引用含实际规则的六维测试，未明示只签牌面字段。上游卡定义各自通过skills绑定monkey/xuelunyang；原生实牌PlayCard装备并取得对应技能，真实反例正由该装备载体触发，属于整卡行为。不得事后把条目缩成静态牌面以维持等价数。",
+  "cards": [
+    {
+      "key": "U06:cards:monkey@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:4",
+      "upstream_binding": "card/card.js:9 skills:[monkey]",
+      "native_binding_evidence": "U06/native-probe.rs:equip通过GameAction::PlayCard; native-results-first.json:monkey-cancel.initial.players[0] equipped hnl_monkey_3 + huanle:monkey",
+      "runtime_finding": "U06-R01",
+      "mismatch": "取消后桃未消耗",
+      "only_retained_claim": "本次样本中的方块五装备能被加载、真实装备并提供猴子技能；该静态/绑定事实不等于整卡规则等价。"
+    },
+    {
+      "key": "U06:cards:xuelunyang@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:97",
+      "upstream_binding": "card/card.js:102 skills:[xuelunyang]",
+      "native_binding_evidence": "U06/native-probe.rs:equip通过GameAction::PlayCard; native-results-first.json:xuelun-skill-cancel.initial.fixture.players[0] equipped hnl_xuelunyang_4 + huanle:xuelunyang",
+      "runtime_finding": "U06-R02",
+      "mismatch": "第二技能选择窗口取消被拒且保持挂起",
+      "only_retained_claim": "本次样本中的红桃二装备能被加载、真实装备并提供写轮眼技能；该静态/绑定事实不等于整卡规则等价。"
+    }
+  ],
+  "kuwu": {
+    "key": "U06:cards:kuwu@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:81",
+    "finding": "U06-N01",
+    "classification": "verified_native_duplicate_log_only",
+    "new_cross_engine_whole_card_difference_signed": false,
+    "reason": "苦无弃一手牌重复CardDiscarded已由实际原生日志及双写源码确认；上游本次仅记录skillEvents，没有完整弃牌事件数量证据。四个样本牌区结果一致，但不构成全卡背书，也不据此新上调/改窄口径。"
+  },
+  "equivalence_signoffs": 0
+}

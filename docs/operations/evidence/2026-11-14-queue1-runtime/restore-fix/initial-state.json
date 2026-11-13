@@ -1,0 +1,17 @@
+{
+  "at": "2026-11-14T01:58:20.032112+08:00",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "tracked_status": " M crates/engine-native/tests/l29_longxue_eight.rs\n",
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "owned_product_files": [
+    "crates/engine-native-content/src/content/host/asks_wudian.rs",
+    "crates/engine-native/tests/l29_longxue_eight.rs"
+  ],
+  "scope": "Correct only the reconstruction of two existing runtime confirmation windows; no runtime settlement change, version/ABI/schema adjustment or broad snapshot-validation relaxation."
+}

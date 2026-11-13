@@ -1,0 +1,331 @@
+{
+  "at": "2026-11-14T02:21:00.194542+08:00",
+  "inputs": [
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/probe-09.rs",
+      "bytes": 9925,
+      "sha256": "73d5daa434ae72254169be95879f73d9df76d7c77b64fe9c8ccd7c2c38471dab",
+      "snapshot": "final-inputs/native/probe-09.rs"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/09-formal.log",
+      "bytes": 1413468,
+      "sha256": "f665f97467d9ffd588f79e762bc89250671a56e8b48ca025262dcf644c328682",
+      "snapshot": "final-inputs/native/09-formal.log"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/09-formal.stderr",
+      "bytes": 210,
+      "sha256": "338d317db23bcf9b9329ecdebc0c03d085b083eb11c5ad9b2ebdffd9732e3678",
+      "snapshot": "final-inputs/native/09-formal.stderr"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-catalog-without-placeholder.json",
+      "bytes": 637,
+      "sha256": "fcf832a087871588df7519f972dccf642fed5b66b7b9c5860a6a6a0100ecf765",
+      "snapshot": "final-inputs/native/formal-catalog-without-placeholder.json"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/browser/case-results-twelfth.jsonl",
+      "bytes": 1001479,
+      "sha256": "a40fc47f592a518a03f6b41e796dbbdea324567bd760fd250a46b1287b08ba99",
+      "snapshot": "final-inputs/browser/case-results-twelfth.jsonl"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/browser/start-case.js",
+      "bytes": 6481,
+      "sha256": "d6041fb3aeae4c99ba1948caad0d4d2ed3f62348ce6a230f16c8bdb8b994acf9",
+      "snapshot": "final-inputs/browser/start-case.js"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/browser/run-cases.py",
+      "bytes": 9403,
+      "sha256": "5f22e8fe1681b05e4c0785c89bdfac240d83ed45af43b6e0a2cc7b359d392996",
+      "snapshot": "final-inputs/browser/run-cases.py"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/browser/active-session-wudian.json",
+      "bytes": 578,
+      "sha256": "ef9eea9ed5e60376dec8b571c8a78369cb0e3b58483022e913839ba02eb84423",
+      "snapshot": "final-inputs/browser/active-session-wudian.json"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/final-input-index.json",
+      "bytes": 9432,
+      "sha256": "4bf0d611ca74bda600a1f1a3f7006fc75bd244447ad232acff656909762cda7c",
+      "snapshot": "final-inputs/final-input-index.json"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-002-wudian_choudu_card.ngsa",
+      "bytes": 3112,
+      "sha256": "06e8409d46d4d52e2eb5bc4ac925744b7db2c95d2f2ab61d076731f6327a2a28",
+      "snapshot": "final-inputs/native/formal-archives/pending-002-wudian_choudu_card.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-004-wudian_choudu_target.ngsa",
+      "bytes": 3124,
+      "sha256": "cd2ba43a969f568beca8758ea8275e27df48b7349490727cc73d036144c19443",
+      "snapshot": "final-inputs/native/formal-archives/pending-004-wudian_choudu_target.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-006-wudian_diaobing_swap.ngsa",
+      "bytes": 3204,
+      "sha256": "6d650ad1cb6dbc05962cdb61de5a06da773df2927788878f104175328cb5cd43",
+      "snapshot": "final-inputs/native/formal-archives/pending-006-wudian_diaobing_swap.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-009-wudian_choudu_card.ngsa",
+      "bytes": 3112,
+      "sha256": "d49de3ef28d2df0d6cac8c11e3e847d247fe9f0d15090b27c450b38c5fb89d54",
+      "snapshot": "final-inputs/native/formal-archives/pending-009-wudian_choudu_card.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-011-wudian_choudu_target.ngsa",
+      "bytes": 3124,
+      "sha256": "41e073be54c57562479f7bff2e088fed5a415bd255148c7c335b98d73818e5d7",
+      "snapshot": "final-inputs/native/formal-archives/pending-011-wudian_choudu_target.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-013-wudian_diaobing_swap.ngsa",
+      "bytes": 3204,
+      "sha256": "b69e563937b4293d80c30aa20981b649803e46115c83ec8d94aa08613169ba5f",
+      "snapshot": "final-inputs/native/formal-archives/pending-013-wudian_diaobing_swap.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-016-wudian_choudu_card.ngsa",
+      "bytes": 3112,
+      "sha256": "df4d54468b686d92cde722d7259fdec17344f2d5ad3a77d3bcef3af18d11982d",
+      "snapshot": "final-inputs/native/formal-archives/pending-016-wudian_choudu_card.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-018-wudian_choudu_target.ngsa",
+      "bytes": 3124,
+      "sha256": "bd6a58376c808376d31250172b44aa5b7869bd20f15751ea37a82bfa876fa244",
+      "snapshot": "final-inputs/native/formal-archives/pending-018-wudian_choudu_target.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-020-wudian_diaobing_swap.ngsa",
+      "bytes": 3199,
+      "sha256": "da82e5e8ffcba211b3ea514e2596cacfd557a6cf6b7125e01d6f80f3a6a30ba5",
+      "snapshot": "final-inputs/native/formal-archives/pending-020-wudian_diaobing_swap.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-023-wudian_choudu_card.ngsa",
+      "bytes": 3112,
+      "sha256": "6a8e9823ab419d2225c7b9fb4c772ac405f20eff8b552c1a74571019f741f988",
+      "snapshot": "final-inputs/native/formal-archives/pending-023-wudian_choudu_card.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-025-wudian_choudu_target.ngsa",
+      "bytes": 3124,
+      "sha256": "3b33d20b681dc45af181c1aca12cc1a573f0529fa1d256f0e43d715c7156e7dd",
+      "snapshot": "final-inputs/native/formal-archives/pending-025-wudian_choudu_target.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-027-wudian_diaobing_swap.ngsa",
+      "bytes": 3204,
+      "sha256": "cf601bc2426a9dab857fb4d66568996f31e77b50d559b160dbdbf90e138e3c2e",
+      "snapshot": "final-inputs/native/formal-archives/pending-027-wudian_diaobing_swap.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-030-wudian_choudu_card.ngsa",
+      "bytes": 3112,
+      "sha256": "3234fdf6b3f71101400ef4f2120bcf637736d5c6c168aa35f7711845215d4c4c",
+      "snapshot": "final-inputs/native/formal-archives/pending-030-wudian_choudu_card.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-032-wudian_choudu_target.ngsa",
+      "bytes": 3124,
+      "sha256": "da45740297c9fd34e5fd664ebb09aa285bf0210376fdf5f1bf86ec1d163ef038",
+      "snapshot": "final-inputs/native/formal-archives/pending-032-wudian_choudu_target.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-034-wudian_diaobing_swap.ngsa",
+      "bytes": 3204,
+      "sha256": "07366ebaf0d67614edf14b892bf323324d72c03f0c343c5ef26af0590b49fb70",
+      "snapshot": "final-inputs/native/formal-archives/pending-034-wudian_diaobing_swap.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-037-wudian_choudu_card.ngsa",
+      "bytes": 3112,
+      "sha256": "7a79df99bb3e57e5adffcb6511909be9543dd908559c68a8af107918ce78605f",
+      "snapshot": "final-inputs/native/formal-archives/pending-037-wudian_choudu_card.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-039-wudian_choudu_target.ngsa",
+      "bytes": 3124,
+      "sha256": "f80183a649d51b360b6894835011057f6ee3319cc2e72d8a9fce2f71ef004350",
+      "snapshot": "final-inputs/native/formal-archives/pending-039-wudian_choudu_target.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-041-wudian_diaobing_swap.ngsa",
+      "bytes": 3196,
+      "sha256": "16065654d24ce02190ba77796c5211735452183d39f0f072324b39e87abd4da9",
+      "snapshot": "final-inputs/native/formal-archives/pending-041-wudian_diaobing_swap.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-044-wudian_choudu_card.ngsa",
+      "bytes": 3112,
+      "sha256": "b7d787480f86fcef51955e310cac5b9297ea18c95b193660c393e95efd63f06a",
+      "snapshot": "final-inputs/native/formal-archives/pending-044-wudian_choudu_card.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-047-wudian_choudu_card.ngsa",
+      "bytes": 3112,
+      "sha256": "311ee3af6a30df7b15d3f9005e8fda83111352ac5608d9be67720eb81c017413",
+      "snapshot": "final-inputs/native/formal-archives/pending-047-wudian_choudu_card.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-049-wudian_choudu_target.ngsa",
+      "bytes": 3124,
+      "sha256": "1570019e5c738dc6a13344352de55d058c4948f27fd6f81c4883aa81a64d6eda",
+      "snapshot": "final-inputs/native/formal-archives/pending-049-wudian_choudu_target.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-053-wudian_fuchou_cancel.ngsa",
+      "bytes": 3160,
+      "sha256": "ea2ff168f389a371c4a09ddd1cceff5420c349246eda329971f172c406ab271b",
+      "snapshot": "final-inputs/native/formal-archives/pending-053-wudian_fuchou_cancel.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-056-wudian_fuchou_cancel.ngsa",
+      "bytes": 3160,
+      "sha256": "987e11059db7eb2cd9ff49005d6013fd455a5063eaaf92aec54c7908cfd1eefd",
+      "snapshot": "final-inputs/native/formal-archives/pending-056-wudian_fuchou_cancel.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-059-wudian_fuchou_cancel.ngsa",
+      "bytes": 3160,
+      "sha256": "26605f1306a47547e7d4b5056877182783608a9be63747f81551bcf5a1fb7435",
+      "snapshot": "final-inputs/native/formal-archives/pending-059-wudian_fuchou_cancel.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-061-respond_shan.ngsa",
+      "bytes": 3152,
+      "sha256": "34bfc4dde0ec05c210ef6b504b4e54b3afeaff43706026380d3c394a9f859cd2",
+      "snapshot": "final-inputs/native/formal-archives/pending-061-respond_shan.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-065-wudian_fuchou_cancel.ngsa",
+      "bytes": 3147,
+      "sha256": "d9fa4121c06d47aa11fc1797082e223bb86cfacc492835ecd74f86861710db2e",
+      "snapshot": "final-inputs/native/formal-archives/pending-065-wudian_fuchou_cancel.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-070-respond_shan.ngsa",
+      "bytes": 3300,
+      "sha256": "76ab4bea475ff590b95d3ef6b30a4dfe3f033175738db7cdf21f4c2d52f722ac",
+      "snapshot": "final-inputs/native/formal-archives/pending-070-respond_shan.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-073-wudian_fuchou_cancel.ngsa",
+      "bytes": 3147,
+      "sha256": "db3d4832cf3bc455c75deaa83745e86a1fd4ab360ef7f2397d16db4c74233c57",
+      "snapshot": "final-inputs/native/formal-archives/pending-073-wudian_fuchou_cancel.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-078-respond_shan.ngsa",
+      "bytes": 3300,
+      "sha256": "e7ce8ec0610ced8ff76aafd26de6fb14bad54b18b51865ea37fe3e663542670d",
+      "snapshot": "final-inputs/native/formal-archives/pending-078-respond_shan.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-081-wudian_fuchou_cancel.ngsa",
+      "bytes": 3152,
+      "sha256": "5b87aee70915dab580b9f51dc2fd907a9060e01deaa13e6d15d678e236e96458",
+      "snapshot": "final-inputs/native/formal-archives/pending-081-wudian_fuchou_cancel.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-086-respond_shan.ngsa",
+      "bytes": 3300,
+      "sha256": "126bbc2844cf60f317bf3d68272c52cb1decb67b1ab5756292e345ad2eba2ada",
+      "snapshot": "final-inputs/native/formal-archives/pending-086-respond_shan.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-089-wudian_fuchou_cancel.ngsa",
+      "bytes": 3152,
+      "sha256": "89617a3f991087d31a51fb0d6af485fa8144f722a3fda11b9629e808c76e8fd6",
+      "snapshot": "final-inputs/native/formal-archives/pending-089-wudian_fuchou_cancel.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-094-respond_shan.ngsa",
+      "bytes": 3300,
+      "sha256": "51b9eb8c1290bf5470ff033cf70eeb44e51547ce75b4576e5293cefe2dafc47e",
+      "snapshot": "final-inputs/native/formal-archives/pending-094-respond_shan.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-097-wudian_youzhan_discard.ngsa",
+      "bytes": 3203,
+      "sha256": "90b631419a90abcc947805a7d580531657884e7a961298b2f8067eb7c56de092",
+      "snapshot": "final-inputs/native/formal-archives/pending-097-wudian_youzhan_discard.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-100-wudian_youzhan_discard.ngsa",
+      "bytes": 3203,
+      "sha256": "3a59f366806660b6b6e2ebc03fc6d5a396a4b31cf199340255efe90ebc1d472e",
+      "snapshot": "final-inputs/native/formal-archives/pending-100-wudian_youzhan_discard.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-103-wudian_youzhan_discard.ngsa",
+      "bytes": 3203,
+      "sha256": "21f9738f60e400f92d92450768f711b8ec3c8fa8911e124c4e49f99a39afcda9",
+      "snapshot": "final-inputs/native/formal-archives/pending-103-wudian_youzhan_discard.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-108-wudian_youzhan_discard.ngsa",
+      "bytes": 3203,
+      "sha256": "95ef2169e3f8af78882ad76d52f251c8f596e3dfc5a1b930c7f2ac03d552a82c",
+      "snapshot": "final-inputs/native/formal-archives/pending-108-wudian_youzhan_discard.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-110-wudian_youdishenru_sha.ngsa",
+      "bytes": 3265,
+      "sha256": "e267b17365f1054281ea64caaca9af255373634da7ffa9b1b5559e4d98f17445",
+      "snapshot": "final-inputs/native/formal-archives/pending-110-wudian_youdishenru_sha.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-112-wudian_youzhan_discard.ngsa",
+      "bytes": 3367,
+      "sha256": "5bc280dc671cf0e4d766b687de849b5f23e4bd699accfaffdf4f2f05d29ea147",
+      "snapshot": "final-inputs/native/formal-archives/pending-112-wudian_youzhan_discard.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-115-wudian_youzhan_discard.ngsa",
+      "bytes": 3203,
+      "sha256": "b5269cecdcb89f57a148a9b6802f4aafef6ac0f9f2ab6513fb15a861b96898c4",
+      "snapshot": "final-inputs/native/formal-archives/pending-115-wudian_youzhan_discard.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-117-wudian_youdishenru_sha.ngsa",
+      "bytes": 3265,
+      "sha256": "8729ac2769681346b479798b401c794642fc1dd2b79548a26d8409bdae57b8d0",
+      "snapshot": "final-inputs/native/formal-archives/pending-117-wudian_youdishenru_sha.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-119-wudian_youzhan_discard.ngsa",
+      "bytes": 3367,
+      "sha256": "84ea3a2e58efcb6a947d706ce60b55d14219f04ab1da00d0e8fba5f63fdc0e23",
+      "snapshot": "final-inputs/native/formal-archives/pending-119-wudian_youzhan_discard.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/formal-archives/pending-121-respond_shan.ngsa",
+      "bytes": 3309,
+      "sha256": "96baccee7365fc31090c2d5f84b9b2cab35463278513e25ece5c93ebad379a69",
+      "snapshot": "final-inputs/native/formal-archives/pending-121-respond_shan.ngsa"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/browser/session-wudian-1794592764804-requests.jsonl",
+      "bytes": 13809856,
+      "sha256": "034168492fe031dafc8e0990fe333f6e13b64a86be2cfc5e74562a82b2303f32",
+      "snapshot": null,
+      "preserved_in_original_shared_raw": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/browser/session-wudian-1794592764804-replies.jsonl",
+      "bytes": 8079323,
+      "sha256": "cba26390f74d50a22ea8f46f31e5c4167ddad0f19d361ffdbddbb665049ff997",
+      "snapshot": null,
+      "preserved_in_original_shared_raw": true
+    }
+  ]
+}

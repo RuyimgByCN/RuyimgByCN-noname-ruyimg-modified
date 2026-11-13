@@ -1,0 +1,19 @@
+{
+  "at": "2026-11-13T18:19:20.901Z",
+  "version": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/157.0.8103.52",
+    "revision": "@0985600c06a688b9c669e74afde7dacd5aaed047",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+    "jsVersion": "15.7.112.23"
+  },
+  "state": {
+    "result": {
+      "type": "string",
+      "value": "{\"case\":\"youzhan-counter-dodge-stop\",\"settled\":true}"
+    }
+  },
+  "screenshot": "final-table.png",
+  "cdpPort": 58660,
+  "chromePid": 80931
+}

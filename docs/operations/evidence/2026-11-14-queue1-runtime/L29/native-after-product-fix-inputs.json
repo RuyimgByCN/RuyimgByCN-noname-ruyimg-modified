@@ -1,0 +1,31 @@
+{
+  "at": "2026-11-13T18:03:15.419642+00:00",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n",
+  "files": {
+    "crates/engine-native-content/src/content/host/asks_wudian.rs": {
+      "bytes": 31921,
+      "sha256": "042cc996fb573f782cd5af3a6bc21258f7e350836f1556905627e6857d9a107a"
+    },
+    "crates/engine-native-content/src/content/host/step/skills_targets.rs": {
+      "bytes": 37034,
+      "sha256": "4b6ada0cdef44232f86d1bd94c1c6d9264f11cbc021b314941dea2f408ecdf12"
+    },
+    "crates/engine-native-content/src/content/host/step/skills_damage.rs": {
+      "bytes": 41526,
+      "sha256": "8d907001c0eeac813b1e6accc00bc38e8efc20e62a1148d85af45a15c211a075"
+    },
+    "crates/engine-native/tests/l29_longxue_eight.rs": {
+      "bytes": 39100,
+      "sha256": "fd40388d5e2d7dae0690d6308240528c7a1aa308ee467a38eea1303805ea07b4"
+    },
+    "packages/extensions/longxue-upstream-liuli/assets/cards.json": {
+      "bytes": 1355,
+      "sha256": "ca66fc4d3543f87515ac00053d1750529c714e1ce9d7db5b792aac2a268828c3"
+    },
+    "docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-probe/src/main.rs": {
+      "bytes": 18324,
+      "sha256": "e8cf53c45cdda5e3ced2ac945781a50d83e92b65e369d016ab64c2a40165777f"
+    }
+  }
+}

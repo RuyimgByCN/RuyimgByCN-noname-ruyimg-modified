@@ -1,0 +1,57 @@
+{
+ "source": "noname-liuli",
+ "upstream_path": "noname/extension/龙血玄黄/extension.js",
+ "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+ "pack": {
+  "name": "longxue-upstream-liuli",
+  "version": 1,
+  "description": "D5 龙血玄黄：潜龙道心值（mbqianlong）+ 卫统（mbweitong）；宿主武将手杀曹髦",
+  "card_prefix": "lx_"
+ },
+ "cards": [],
+ "host_skills": [],
+ "deferred": [],
+ "skills": [
+  {
+   "name": "mbcmqingzheng",
+   "general": "mb_caomao",
+   "mapping": "host:mbcmqingzheng"
+  },
+  {
+   "name": "mbcmjiushi",
+   "general": "mb_caomao",
+   "mapping": null,
+   "reason": "外部依赖：liuli mobile 包酒诗（50 阈值），未转换——2026-10-17 登记"
+  },
+  {
+   "name": "mbcmfangzhu",
+   "general": "mb_caomao",
+   "mapping": null,
+   "reason": "外部依赖：liuli mobile 包放逐（75 阈值），未转换——2026-10-17 登记"
+  },
+  {
+   "name": "mbjuejin",
+   "general": "mb_caomao",
+   "mapping": null,
+   "reason": "外部依赖：liuli mobile 包绝进（99 阈值），未转换——2026-10-17 登记"
+  }
+ ],
+ "generals": [
+  {
+   "name": "mb_caomao",
+   "faction": "wei",
+   "hp": 3,
+   "gender": "male",
+   "skills": [
+    {
+     "name": "mbqianlong",
+     "mapping": "host:mbqianlong"
+    },
+    {
+     "name": "mbweitong",
+     "mapping": "host:mbweitong"
+    }
+   ]
+  }
+ ]
+}

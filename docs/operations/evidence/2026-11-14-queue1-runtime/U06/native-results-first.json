@@ -1,0 +1,2990 @@
+[
+  {
+    "case": "monkey-confirm",
+    "choices": [
+      {
+        "allow_cancel": false,
+        "archive_bytes": 3027,
+        "max": 1,
+        "min": 1,
+        "observer": 0,
+        "options": "[Confirm, Pass]",
+        "outcome": "Accepted { state_hash: [102, 118, 116, 247, 209, 14, 139, 101, 185, 84, 214, 164, 37, 90, 175, 139, 5, 8, 190, 118, 70, 106, 7, 225, 5, 195, 146, 138, 100, 202, 107, 77] }",
+        "prompt": "huanle_monkey_confirm",
+        "rejected": false,
+        "resumed_hash_and_log_equal": true,
+        "selection": "[Confirm]"
+      }
+    ],
+    "discard": [
+      {
+        "id": 127,
+        "kind": "Monkey",
+        "name": "hnl_monkey_3",
+        "rank": 5,
+        "suit": "diamond"
+      }
+    ],
+    "initial": {
+      "actor": 1,
+      "attack": {
+        "id": 45,
+        "kind": "Tao",
+        "name": "tao",
+        "rank": 3,
+        "suit": "heart"
+      },
+      "players": [
+        {
+          "equips": [
+            {
+              "id": 127,
+              "kind": "Monkey",
+              "name": "hnl_monkey_3",
+              "rank": 5,
+              "suit": "diamond"
+            }
+          ],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 0,
+          "skills": [
+            {
+              "expires_end_of_turn": false,
+              "name": "huanle:monkey"
+            }
+          ]
+        },
+        {
+          "equips": [],
+          "hand": [
+            {
+              "id": 45,
+              "kind": "Tao",
+              "name": "tao",
+              "rank": 3,
+              "suit": "heart"
+            }
+          ],
+          "hp": 2,
+          "max_hp": 8,
+          "seat": 1,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 2,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 3,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 4,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 5,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 6,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 7,
+          "skills": []
+        }
+      ]
+    },
+    "log": [
+      "Equipped { player: 0, card: 127, replaced: None }",
+      "ChoiceOpened { id: 1, observer: 0, prompt: \"huanle_monkey_confirm\" }",
+      "ChoiceAnswered { id: 1, options: [\"confirm\"] }",
+      "CardsGivenPublic { from: 1, to: 0, cards: [45] }",
+      "CardDiscarded { player: 0, cards: [127] }"
+    ],
+    "pending": null,
+    "players": [
+      {
+        "equips": [],
+        "hand": [
+          {
+            "id": 45,
+            "kind": "Tao",
+            "name": "tao",
+            "rank": 3,
+            "suit": "heart"
+          }
+        ],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 0,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 2,
+        "max_hp": 8,
+        "seat": 1,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 2,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 3,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 4,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 5,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 6,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 7,
+        "skills": []
+      }
+    ],
+    "settled": true,
+    "turn": "TurnState { current: 1, phase: Play, round: 1, sha_used_play_phase: false, mufeng_used_basic: false, wangchen_discard_basic: false, shenmiguo_used: false, shuchui_armed: false, shuchui_hit: false, lianda_used: false, land_used: false, land_sha_used: false, discard_phase_discarded: 0, ciqiu_dying: [], kangyin2: None, huanxia_track: [], cards_used_play_phase: 0, cards_used_turn: 0, liaoyuan_count: 0, xuanyuanjian_marked: false, kunlunjing_snapshot: [], kunlunjing_hp: 0, extra_phases: [], extra_phase_lingwu: false, bte_used_play_phase: 0, phase_number: 0, rende_given: 0, jiu_used: false, mujiaren_used: false, jiu_active: false, turn_opened: true, skip_draw_phase: false, skip_play_phase: false, guxing_armed: false, guxing_count: 0, mengtai_draw_pending: false, mengtai_use_pending: false, zhufangshenshi_target: None, yuedong_num: 0, yuedong_eff: 0, yuedong_recover: false, liangou_hook: None, liangou_bonus_used: false, feitiao_target: None, fanling_used: false, diewu_draw_used: false, lueying_used: false, txianqu_used: false, jtjubao_used: false, zhuyue_targets: [], sheling_used: 0, sheying_used: false, zhangmu_used: false, yingfeng_chain: false, luanjian_card: None, minwan_targets: [], yanyu_count: 0, xjyufeng_used: 0, qizuo_copy: None, jidian_chain: false }"
+  },
+  {
+    "case": "monkey-cancel",
+    "choices": [
+      {
+        "allow_cancel": false,
+        "archive_bytes": 3027,
+        "max": 1,
+        "min": 1,
+        "observer": 0,
+        "options": "[Confirm, Pass]",
+        "outcome": "Accepted { state_hash: [76, 54, 237, 136, 78, 77, 115, 178, 89, 7, 239, 225, 152, 23, 194, 25, 2, 248, 170, 2, 98, 1, 182, 176, 217, 210, 146, 190, 2, 167, 189, 247] }",
+        "prompt": "huanle_monkey_confirm",
+        "rejected": false,
+        "resumed_hash_and_log_equal": true,
+        "selection": "[Pass]"
+      }
+    ],
+    "discard": [],
+    "initial": {
+      "actor": 1,
+      "attack": {
+        "id": 45,
+        "kind": "Tao",
+        "name": "tao",
+        "rank": 3,
+        "suit": "heart"
+      },
+      "players": [
+        {
+          "equips": [
+            {
+              "id": 127,
+              "kind": "Monkey",
+              "name": "hnl_monkey_3",
+              "rank": 5,
+              "suit": "diamond"
+            }
+          ],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 0,
+          "skills": [
+            {
+              "expires_end_of_turn": false,
+              "name": "huanle:monkey"
+            }
+          ]
+        },
+        {
+          "equips": [],
+          "hand": [
+            {
+              "id": 45,
+              "kind": "Tao",
+              "name": "tao",
+              "rank": 3,
+              "suit": "heart"
+            }
+          ],
+          "hp": 2,
+          "max_hp": 8,
+          "seat": 1,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 2,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 3,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 4,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 5,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 6,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 7,
+          "skills": []
+        }
+      ]
+    },
+    "log": [
+      "Equipped { player: 0, card: 127, replaced: None }",
+      "ChoiceOpened { id: 1, observer: 0, prompt: \"huanle_monkey_confirm\" }",
+      "ChoiceAnswered { id: 1, options: [\"pass\"] }",
+      "HpRecovered { player: 1, amount: 1, presentation: Some(HpRecovered { actor: PlayerId(2), amount: 1 }) }"
+    ],
+    "pending": null,
+    "players": [
+      {
+        "equips": [
+          {
+            "id": 127,
+            "kind": "Monkey",
+            "name": "hnl_monkey_3",
+            "rank": 5,
+            "suit": "diamond"
+          }
+        ],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 0,
+        "skills": [
+          {
+            "expires_end_of_turn": false,
+            "name": "huanle:monkey"
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "hand": [
+          {
+            "id": 45,
+            "kind": "Tao",
+            "name": "tao",
+            "rank": 3,
+            "suit": "heart"
+          }
+        ],
+        "hp": 3,
+        "max_hp": 8,
+        "seat": 1,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 2,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 3,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 4,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 5,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 6,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 7,
+        "skills": []
+      }
+    ],
+    "settled": true,
+    "turn": "TurnState { current: 1, phase: Play, round: 1, sha_used_play_phase: false, mufeng_used_basic: false, wangchen_discard_basic: false, shenmiguo_used: false, shuchui_armed: false, shuchui_hit: false, lianda_used: false, land_used: false, land_sha_used: false, discard_phase_discarded: 0, ciqiu_dying: [], kangyin2: None, huanxia_track: [], cards_used_play_phase: 0, cards_used_turn: 0, liaoyuan_count: 0, xuanyuanjian_marked: false, kunlunjing_snapshot: [], kunlunjing_hp: 0, extra_phases: [], extra_phase_lingwu: false, bte_used_play_phase: 0, phase_number: 0, rende_given: 0, jiu_used: false, mujiaren_used: false, jiu_active: false, turn_opened: true, skip_draw_phase: false, skip_play_phase: false, guxing_armed: false, guxing_count: 0, mengtai_draw_pending: false, mengtai_use_pending: false, zhufangshenshi_target: None, yuedong_num: 0, yuedong_eff: 0, yuedong_recover: false, liangou_hook: None, liangou_bonus_used: false, feitiao_target: None, fanling_used: false, diewu_draw_used: false, lueying_used: false, txianqu_used: false, jtjubao_used: false, zhuyue_targets: [], sheling_used: 0, sheying_used: false, zhangmu_used: false, yingfeng_chain: false, luanjian_card: None, minwan_targets: [], yanyu_count: 0, xjyufeng_used: 0, qizuo_copy: None, jidian_chain: false }"
+  },
+  {
+    "case": "monkey-self",
+    "choices": [],
+    "discard": [
+      {
+        "id": 45,
+        "kind": "Tao",
+        "name": "tao",
+        "rank": 3,
+        "suit": "heart"
+      }
+    ],
+    "initial": {
+      "actor": 0,
+      "attack": {
+        "id": 45,
+        "kind": "Tao",
+        "name": "tao",
+        "rank": 3,
+        "suit": "heart"
+      },
+      "players": [
+        {
+          "equips": [
+            {
+              "id": 127,
+              "kind": "Monkey",
+              "name": "hnl_monkey_3",
+              "rank": 5,
+              "suit": "diamond"
+            }
+          ],
+          "hand": [
+            {
+              "id": 45,
+              "kind": "Tao",
+              "name": "tao",
+              "rank": 3,
+              "suit": "heart"
+            }
+          ],
+          "hp": 2,
+          "max_hp": 8,
+          "seat": 0,
+          "skills": [
+            {
+              "expires_end_of_turn": false,
+              "name": "huanle:monkey"
+            }
+          ]
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 1,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 2,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 3,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 4,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 5,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 6,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 7,
+          "skills": []
+        }
+      ]
+    },
+    "log": [
+      "Equipped { player: 0, card: 127, replaced: None }",
+      "CardPlayed { card: 45, player: 0, targets: [], presentation: Some(CardUsed { actor: PlayerId(1), targets: Some([]), effective: EffectivePresentationCard { kind: \"tao\", key: \"tao\", nature: Normal }, voice: None }) }",
+      "HpRecovered { player: 0, amount: 1, presentation: Some(HpRecovered { actor: PlayerId(1), amount: 1 }) }"
+    ],
+    "pending": null,
+    "players": [
+      {
+        "equips": [
+          {
+            "id": 127,
+            "kind": "Monkey",
+            "name": "hnl_monkey_3",
+            "rank": 5,
+            "suit": "diamond"
+          }
+        ],
+        "hand": [],
+        "hp": 3,
+        "max_hp": 8,
+        "seat": 0,
+        "skills": [
+          {
+            "expires_end_of_turn": false,
+            "name": "huanle:monkey"
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 1,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 2,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 3,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 4,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 5,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 6,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 7,
+        "skills": []
+      }
+    ],
+    "settled": true,
+    "turn": "TurnState { current: 0, phase: Play, round: 1, sha_used_play_phase: false, mufeng_used_basic: true, wangchen_discard_basic: false, shenmiguo_used: false, shuchui_armed: false, shuchui_hit: false, lianda_used: false, land_used: false, land_sha_used: false, discard_phase_discarded: 0, ciqiu_dying: [], kangyin2: None, huanxia_track: [], cards_used_play_phase: 1, cards_used_turn: 1, liaoyuan_count: 0, xuanyuanjian_marked: false, kunlunjing_snapshot: [], kunlunjing_hp: 0, extra_phases: [], extra_phase_lingwu: false, bte_used_play_phase: 1, phase_number: 0, rende_given: 0, jiu_used: false, mujiaren_used: false, jiu_active: false, turn_opened: true, skip_draw_phase: false, skip_play_phase: false, guxing_armed: false, guxing_count: 0, mengtai_draw_pending: false, mengtai_use_pending: false, zhufangshenshi_target: None, yuedong_num: 0, yuedong_eff: 0, yuedong_recover: false, liangou_hook: None, liangou_bonus_used: false, feitiao_target: None, fanling_used: false, diewu_draw_used: false, lueying_used: false, txianqu_used: false, jtjubao_used: false, zhuyue_targets: [], sheling_used: 0, sheying_used: false, zhangmu_used: false, yingfeng_chain: false, luanjian_card: None, minwan_targets: [], yanyu_count: 0, xjyufeng_used: 0, qizuo_copy: None, jidian_chain: false }"
+  },
+  {
+    "case": "kuwu-hand",
+    "choices": [
+      {
+        "allow_cancel": false,
+        "archive_bytes": 3267,
+        "max": 1,
+        "min": 1,
+        "observer": 1,
+        "options": "[Card(45), Card(127)]",
+        "outcome": "Rejected(InvalidChoice)",
+        "prompt": "kuwu_discard",
+        "rejected": true,
+        "resumed_hash_and_log_equal": true,
+        "selection": "[]"
+      },
+      {
+        "allow_cancel": false,
+        "archive_bytes": 3267,
+        "max": 1,
+        "min": 1,
+        "observer": 1,
+        "options": "[Card(45), Card(127)]",
+        "outcome": "Accepted { state_hash: [89, 158, 206, 182, 152, 53, 177, 110, 51, 149, 76, 81, 192, 76, 79, 102, 207, 140, 217, 230, 63, 34, 251, 217, 179, 146, 40, 38, 5, 109, 42, 192] }",
+        "prompt": "kuwu_discard",
+        "rejected": false,
+        "resumed_hash_and_log_equal": true,
+        "selection": "[Card(45)]"
+      }
+    ],
+    "discard": [
+      {
+        "id": 0,
+        "kind": "Sha",
+        "name": "sha",
+        "rank": 7,
+        "suit": "spade"
+      },
+      {
+        "id": 45,
+        "kind": "Tao",
+        "name": "tao",
+        "rank": 3,
+        "suit": "heart"
+      }
+    ],
+    "initial": {
+      "actor": 0,
+      "attack": {
+        "id": 0,
+        "kind": "Sha",
+        "name": "sha",
+        "rank": 7,
+        "suit": "spade"
+      },
+      "players": [
+        {
+          "equips": [
+            {
+              "id": 124,
+              "kind": "Weapon",
+              "name": "hnl_kuwu_0",
+              "rank": 6,
+              "suit": "spade"
+            }
+          ],
+          "hand": [
+            {
+              "id": 0,
+              "kind": "Sha",
+              "name": "sha",
+              "rank": 7,
+              "suit": "spade"
+            }
+          ],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 0,
+          "skills": [
+            {
+              "expires_end_of_turn": false,
+              "name": "huanle_kuwu"
+            }
+          ]
+        },
+        {
+          "equips": [
+            {
+              "id": 127,
+              "kind": "Monkey",
+              "name": "hnl_monkey_3",
+              "rank": 5,
+              "suit": "diamond"
+            }
+          ],
+          "hand": [
+            {
+              "id": 45,
+              "kind": "Tao",
+              "name": "tao",
+              "rank": 3,
+              "suit": "heart"
+            }
+          ],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 1,
+          "skills": [
+            {
+              "expires_end_of_turn": false,
+              "name": "huanle:monkey"
+            }
+          ]
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 2,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 3,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 4,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 5,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 6,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 7,
+          "skills": []
+        }
+      ]
+    },
+    "log": [
+      "Equipped { player: 0, card: 124, replaced: None }",
+      "Equipped { player: 1, card: 127, replaced: None }",
+      "CardPlayed { card: 0, player: 0, targets: [1], presentation: Some(CardUsed { actor: PlayerId(1), targets: Some([PlayerId(2)]), effective: EffectivePresentationCard { kind: \"sha\", key: \"sha\", nature: Normal }, voice: None }) }",
+      "DamageDealt { source: Some(0), target: 1, amount: 1, redirected_from: [], card: Some(0), presentation: Some(DamageDealt { source: Some(PlayerId(1)), target: PlayerId(2), amount: 1, nature: Normal }) }",
+      "SkillTriggered { skill: \"huanle_kuwu\", owner: 0, presentation: None }",
+      "ChoiceOpened { id: 1, observer: 1, prompt: \"kuwu_discard\" }",
+      "ChoiceAnswered { id: 1, options: [\"card:45\"] }",
+      "CardDiscarded { player: 1, cards: [45] }",
+      "CardDiscarded { player: 1, cards: [45] }"
+    ],
+    "pending": null,
+    "players": [
+      {
+        "equips": [
+          {
+            "id": 124,
+            "kind": "Weapon",
+            "name": "hnl_kuwu_0",
+            "rank": 6,
+            "suit": "spade"
+          }
+        ],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 0,
+        "skills": [
+          {
+            "expires_end_of_turn": false,
+            "name": "huanle_kuwu"
+          }
+        ]
+      },
+      {
+        "equips": [
+          {
+            "id": 127,
+            "kind": "Monkey",
+            "name": "hnl_monkey_3",
+            "rank": 5,
+            "suit": "diamond"
+          }
+        ],
+        "hand": [],
+        "hp": 7,
+        "max_hp": 8,
+        "seat": 1,
+        "skills": [
+          {
+            "expires_end_of_turn": false,
+            "name": "huanle:monkey"
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 2,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 3,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 4,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 5,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 6,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 7,
+        "skills": []
+      }
+    ],
+    "settled": true,
+    "turn": "TurnState { current: 0, phase: Play, round: 1, sha_used_play_phase: true, mufeng_used_basic: true, wangchen_discard_basic: false, shenmiguo_used: false, shuchui_armed: false, shuchui_hit: false, lianda_used: false, land_used: false, land_sha_used: false, discard_phase_discarded: 0, ciqiu_dying: [], kangyin2: None, huanxia_track: [], cards_used_play_phase: 1, cards_used_turn: 1, liaoyuan_count: 0, xuanyuanjian_marked: false, kunlunjing_snapshot: [], kunlunjing_hp: 0, extra_phases: [], extra_phase_lingwu: false, bte_used_play_phase: 1, phase_number: 0, rende_given: 0, jiu_used: false, mujiaren_used: false, jiu_active: false, turn_opened: true, skip_draw_phase: false, skip_play_phase: false, guxing_armed: false, guxing_count: 0, mengtai_draw_pending: false, mengtai_use_pending: false, zhufangshenshi_target: None, yuedong_num: 0, yuedong_eff: 0, yuedong_recover: false, liangou_hook: None, liangou_bonus_used: false, feitiao_target: None, fanling_used: false, diewu_draw_used: false, lueying_used: false, txianqu_used: false, jtjubao_used: false, zhuyue_targets: [], sheling_used: 0, sheying_used: false, zhangmu_used: false, yingfeng_chain: false, luanjian_card: None, minwan_targets: [], yanyu_count: 0, xjyufeng_used: 0, qizuo_copy: None, jidian_chain: false }"
+  },
+  {
+    "case": "kuwu-equip",
+    "choices": [
+      {
+        "allow_cancel": false,
+        "archive_bytes": 3267,
+        "max": 1,
+        "min": 1,
+        "observer": 1,
+        "options": "[Card(45), Card(127)]",
+        "outcome": "Rejected(InvalidChoice)",
+        "prompt": "kuwu_discard",
+        "rejected": true,
+        "resumed_hash_and_log_equal": true,
+        "selection": "[]"
+      },
+      {
+        "allow_cancel": false,
+        "archive_bytes": 3267,
+        "max": 1,
+        "min": 1,
+        "observer": 1,
+        "options": "[Card(45), Card(127)]",
+        "outcome": "Accepted { state_hash: [229, 141, 114, 200, 55, 217, 77, 170, 54, 177, 46, 82, 32, 111, 25, 61, 87, 136, 17, 213, 244, 97, 212, 168, 34, 218, 32, 30, 239, 56, 55, 94] }",
+        "prompt": "kuwu_discard",
+        "rejected": false,
+        "resumed_hash_and_log_equal": true,
+        "selection": "[Card(127)]"
+      }
+    ],
+    "discard": [
+      {
+        "id": 0,
+        "kind": "Sha",
+        "name": "sha",
+        "rank": 7,
+        "suit": "spade"
+      },
+      {
+        "id": 127,
+        "kind": "Monkey",
+        "name": "hnl_monkey_3",
+        "rank": 5,
+        "suit": "diamond"
+      }
+    ],
+    "initial": {
+      "actor": 0,
+      "attack": {
+        "id": 0,
+        "kind": "Sha",
+        "name": "sha",
+        "rank": 7,
+        "suit": "spade"
+      },
+      "players": [
+        {
+          "equips": [
+            {
+              "id": 124,
+              "kind": "Weapon",
+              "name": "hnl_kuwu_0",
+              "rank": 6,
+              "suit": "spade"
+            }
+          ],
+          "hand": [
+            {
+              "id": 0,
+              "kind": "Sha",
+              "name": "sha",
+              "rank": 7,
+              "suit": "spade"
+            }
+          ],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 0,
+          "skills": [
+            {
+              "expires_end_of_turn": false,
+              "name": "huanle_kuwu"
+            }
+          ]
+        },
+        {
+          "equips": [
+            {
+              "id": 127,
+              "kind": "Monkey",
+              "name": "hnl_monkey_3",
+              "rank": 5,
+              "suit": "diamond"
+            }
+          ],
+          "hand": [
+            {
+              "id": 45,
+              "kind": "Tao",
+              "name": "tao",
+              "rank": 3,
+              "suit": "heart"
+            }
+          ],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 1,
+          "skills": [
+            {
+              "expires_end_of_turn": false,
+              "name": "huanle:monkey"
+            }
+          ]
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 2,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 3,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 4,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 5,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 6,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 7,
+          "skills": []
+        }
+      ]
+    },
+    "log": [
+      "Equipped { player: 0, card: 124, replaced: None }",
+      "Equipped { player: 1, card: 127, replaced: None }",
+      "CardPlayed { card: 0, player: 0, targets: [1], presentation: Some(CardUsed { actor: PlayerId(1), targets: Some([PlayerId(2)]), effective: EffectivePresentationCard { kind: \"sha\", key: \"sha\", nature: Normal }, voice: None }) }",
+      "DamageDealt { source: Some(0), target: 1, amount: 1, redirected_from: [], card: Some(0), presentation: Some(DamageDealt { source: Some(PlayerId(1)), target: PlayerId(2), amount: 1, nature: Normal }) }",
+      "SkillTriggered { skill: \"huanle_kuwu\", owner: 0, presentation: None }",
+      "ChoiceOpened { id: 1, observer: 1, prompt: \"kuwu_discard\" }",
+      "ChoiceAnswered { id: 1, options: [\"card:127\"] }",
+      "CardDiscarded { player: 1, cards: [127] }"
+    ],
+    "pending": null,
+    "players": [
+      {
+        "equips": [
+          {
+            "id": 124,
+            "kind": "Weapon",
+            "name": "hnl_kuwu_0",
+            "rank": 6,
+            "suit": "spade"
+          }
+        ],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 0,
+        "skills": [
+          {
+            "expires_end_of_turn": false,
+            "name": "huanle_kuwu"
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "hand": [
+          {
+            "id": 45,
+            "kind": "Tao",
+            "name": "tao",
+            "rank": 3,
+            "suit": "heart"
+          }
+        ],
+        "hp": 7,
+        "max_hp": 8,
+        "seat": 1,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 2,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 3,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 4,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 5,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 6,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 7,
+        "skills": []
+      }
+    ],
+    "settled": true,
+    "turn": "TurnState { current: 0, phase: Play, round: 1, sha_used_play_phase: true, mufeng_used_basic: true, wangchen_discard_basic: false, shenmiguo_used: false, shuchui_armed: false, shuchui_hit: false, lianda_used: false, land_used: false, land_sha_used: false, discard_phase_discarded: 0, ciqiu_dying: [], kangyin2: None, huanxia_track: [], cards_used_play_phase: 1, cards_used_turn: 1, liaoyuan_count: 0, xuanyuanjian_marked: false, kunlunjing_snapshot: [], kunlunjing_hp: 0, extra_phases: [], extra_phase_lingwu: false, bte_used_play_phase: 1, phase_number: 0, rende_given: 0, jiu_used: false, mujiaren_used: false, jiu_active: false, turn_opened: true, skip_draw_phase: false, skip_play_phase: false, guxing_armed: false, guxing_count: 0, mengtai_draw_pending: false, mengtai_use_pending: false, zhufangshenshi_target: None, yuedong_num: 0, yuedong_eff: 0, yuedong_recover: false, liangou_hook: None, liangou_bonus_used: false, feitiao_target: None, fanling_used: false, diewu_draw_used: false, lueying_used: false, txianqu_used: false, jtjubao_used: false, zhuyue_targets: [], sheling_used: 0, sheying_used: false, zhangmu_used: false, yingfeng_chain: false, luanjian_card: None, minwan_targets: [], yanyu_count: 0, xjyufeng_used: 0, qizuo_copy: None, jidian_chain: false }"
+  },
+  {
+    "case": "kuwu-empty",
+    "choices": [],
+    "discard": [
+      {
+        "id": 0,
+        "kind": "Sha",
+        "name": "sha",
+        "rank": 7,
+        "suit": "spade"
+      }
+    ],
+    "initial": {
+      "actor": 0,
+      "attack": {
+        "id": 0,
+        "kind": "Sha",
+        "name": "sha",
+        "rank": 7,
+        "suit": "spade"
+      },
+      "players": [
+        {
+          "equips": [
+            {
+              "id": 124,
+              "kind": "Weapon",
+              "name": "hnl_kuwu_0",
+              "rank": 6,
+              "suit": "spade"
+            }
+          ],
+          "hand": [
+            {
+              "id": 0,
+              "kind": "Sha",
+              "name": "sha",
+              "rank": 7,
+              "suit": "spade"
+            }
+          ],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 0,
+          "skills": [
+            {
+              "expires_end_of_turn": false,
+              "name": "huanle_kuwu"
+            }
+          ]
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 1,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 2,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 3,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 4,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 5,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 6,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 7,
+          "skills": []
+        }
+      ]
+    },
+    "log": [
+      "Equipped { player: 0, card: 124, replaced: None }",
+      "CardPlayed { card: 0, player: 0, targets: [1], presentation: Some(CardUsed { actor: PlayerId(1), targets: Some([PlayerId(2)]), effective: EffectivePresentationCard { kind: \"sha\", key: \"sha\", nature: Normal }, voice: None }) }",
+      "DamageDealt { source: Some(0), target: 1, amount: 1, redirected_from: [], card: Some(0), presentation: Some(DamageDealt { source: Some(PlayerId(1)), target: PlayerId(2), amount: 1, nature: Normal }) }"
+    ],
+    "pending": null,
+    "players": [
+      {
+        "equips": [
+          {
+            "id": 124,
+            "kind": "Weapon",
+            "name": "hnl_kuwu_0",
+            "rank": 6,
+            "suit": "spade"
+          }
+        ],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 0,
+        "skills": [
+          {
+            "expires_end_of_turn": false,
+            "name": "huanle_kuwu"
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 7,
+        "max_hp": 8,
+        "seat": 1,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 2,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 3,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 4,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 5,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 6,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 7,
+        "skills": []
+      }
+    ],
+    "settled": true,
+    "turn": "TurnState { current: 0, phase: Play, round: 1, sha_used_play_phase: true, mufeng_used_basic: true, wangchen_discard_basic: false, shenmiguo_used: false, shuchui_armed: false, shuchui_hit: false, lianda_used: false, land_used: false, land_sha_used: false, discard_phase_discarded: 0, ciqiu_dying: [], kangyin2: None, huanxia_track: [], cards_used_play_phase: 1, cards_used_turn: 1, liaoyuan_count: 0, xuanyuanjian_marked: false, kunlunjing_snapshot: [], kunlunjing_hp: 0, extra_phases: [], extra_phase_lingwu: false, bte_used_play_phase: 1, phase_number: 0, rende_given: 0, jiu_used: false, mujiaren_used: false, jiu_active: false, turn_opened: true, skip_draw_phase: false, skip_play_phase: false, guxing_armed: false, guxing_count: 0, mengtai_draw_pending: false, mengtai_use_pending: false, zhufangshenshi_target: None, yuedong_num: 0, yuedong_eff: 0, yuedong_recover: false, liangou_hook: None, liangou_bonus_used: false, feitiao_target: None, fanling_used: false, diewu_draw_used: false, lueying_used: false, txianqu_used: false, jtjubao_used: false, zhuyue_targets: [], sheling_used: 0, sheying_used: false, zhangmu_used: false, yingfeng_chain: false, luanjian_card: None, minwan_targets: [], yanyu_count: 0, xjyufeng_used: 0, qizuo_copy: None, jidian_chain: false }"
+  },
+  {
+    "case": "kuwu-duel",
+    "choices": [],
+    "discard": [
+      {
+        "id": 56,
+        "kind": "Duel",
+        "name": "duel",
+        "rank": 1,
+        "suit": "spade"
+      }
+    ],
+    "initial": {
+      "actor": 0,
+      "attack": {
+        "id": 56,
+        "kind": "Duel",
+        "name": "duel",
+        "rank": 1,
+        "suit": "spade"
+      },
+      "players": [
+        {
+          "equips": [
+            {
+              "id": 124,
+              "kind": "Weapon",
+              "name": "hnl_kuwu_0",
+              "rank": 6,
+              "suit": "spade"
+            }
+          ],
+          "hand": [
+            {
+              "id": 56,
+              "kind": "Duel",
+              "name": "duel",
+              "rank": 1,
+              "suit": "spade"
+            }
+          ],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 0,
+          "skills": [
+            {
+              "expires_end_of_turn": false,
+              "name": "huanle_kuwu"
+            }
+          ]
+        },
+        {
+          "equips": [
+            {
+              "id": 127,
+              "kind": "Monkey",
+              "name": "hnl_monkey_3",
+              "rank": 5,
+              "suit": "diamond"
+            }
+          ],
+          "hand": [
+            {
+              "id": 45,
+              "kind": "Tao",
+              "name": "tao",
+              "rank": 3,
+              "suit": "heart"
+            }
+          ],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 1,
+          "skills": [
+            {
+              "expires_end_of_turn": false,
+              "name": "huanle:monkey"
+            }
+          ]
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 2,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 3,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 4,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 5,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 6,
+          "skills": []
+        },
+        {
+          "equips": [],
+          "hand": [],
+          "hp": 8,
+          "max_hp": 8,
+          "seat": 7,
+          "skills": []
+        }
+      ]
+    },
+    "log": [
+      "Equipped { player: 0, card: 124, replaced: None }",
+      "Equipped { player: 1, card: 127, replaced: None }",
+      "CardPlayed { card: 56, player: 0, targets: [1], presentation: Some(CardUsed { actor: PlayerId(1), targets: Some([PlayerId(2)]), effective: EffectivePresentationCard { kind: \"juedou\", key: \"juedou\", nature: Normal }, voice: None }) }",
+      "DamageDealt { source: Some(0), target: 1, amount: 1, redirected_from: [], card: None, presentation: Some(DamageDealt { source: Some(PlayerId(1)), target: PlayerId(2), amount: 1, nature: Normal }) }"
+    ],
+    "pending": null,
+    "players": [
+      {
+        "equips": [
+          {
+            "id": 124,
+            "kind": "Weapon",
+            "name": "hnl_kuwu_0",
+            "rank": 6,
+            "suit": "spade"
+          }
+        ],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 0,
+        "skills": [
+          {
+            "expires_end_of_turn": false,
+            "name": "huanle_kuwu"
+          }
+        ]
+      },
+      {
+        "equips": [
+          {
+            "id": 127,
+            "kind": "Monkey",
+            "name": "hnl_monkey_3",
+            "rank": 5,
+            "suit": "diamond"
+          }
+        ],
+        "hand": [
+          {
+            "id": 45,
+            "kind": "Tao",
+            "name": "tao",
+            "rank": 3,
+            "suit": "heart"
+          }
+        ],
+        "hp": 7,
+        "max_hp": 8,
+        "seat": 1,
+        "skills": [
+          {
+            "expires_end_of_turn": false,
+            "name": "huanle:monkey"
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 2,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 3,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 4,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 5,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 6,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 7,
+        "skills": []
+      }
+    ],
+    "settled": true,
+    "turn": "TurnState { current: 0, phase: Play, round: 1, sha_used_play_phase: false, mufeng_used_basic: false, wangchen_discard_basic: false, shenmiguo_used: false, shuchui_armed: false, shuchui_hit: false, lianda_used: false, land_used: false, land_sha_used: false, discard_phase_discarded: 0, ciqiu_dying: [], kangyin2: None, huanxia_track: [], cards_used_play_phase: 1, cards_used_turn: 1, liaoyuan_count: 0, xuanyuanjian_marked: false, kunlunjing_snapshot: [], kunlunjing_hp: 0, extra_phases: [], extra_phase_lingwu: false, bte_used_play_phase: 1, phase_number: 0, rende_given: 0, jiu_used: false, mujiaren_used: false, jiu_active: false, turn_opened: true, skip_draw_phase: false, skip_play_phase: false, guxing_armed: false, guxing_count: 0, mengtai_draw_pending: false, mengtai_use_pending: false, zhufangshenshi_target: None, yuedong_num: 0, yuedong_eff: 0, yuedong_recover: false, liangou_hook: None, liangou_bonus_used: false, feitiao_target: None, fanling_used: false, diewu_draw_used: false, lueying_used: false, txianqu_used: false, jtjubao_used: false, zhuyue_targets: [], sheling_used: 0, sheying_used: false, zhangmu_used: false, yingfeng_chain: false, luanjian_card: None, minwan_targets: [], yanyu_count: 0, xjyufeng_used: 0, qizuo_copy: None, jidian_chain: false }"
+  },
+  {
+    "case": "xuelun-skill-a",
+    "choices": [
+      {
+        "allow_cancel": true,
+        "archive_bytes": 3262,
+        "max": 1,
+        "min": 1,
+        "observer": 0,
+        "options": "[Player(1), Player(2)]",
+        "outcome": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"huanle_xuelunyang_skill\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+        "prompt": "huanle_xuelunyang_target",
+        "rejected": false,
+        "resumed_hash_and_log_equal": true,
+        "selection": "[Player(1)]"
+      },
+      {
+        "allow_cancel": false,
+        "archive_bytes": 3266,
+        "max": 1,
+        "min": 1,
+        "observer": 0,
+        "options": "[Tag(0), Tag(1)]",
+        "outcome": "Accepted { state_hash: [44, 219, 247, 52, 102, 245, 227, 134, 20, 122, 241, 211, 195, 63, 235, 231, 147, 191, 228, 170, 192, 161, 188, 213, 58, 25, 140, 117, 170, 7, 192, 115] }",
+        "prompt": "huanle_xuelunyang_skill",
+        "rejected": false,
+        "resumed_hash_and_log_equal": true,
+        "selection": "[Tag(0)]"
+      }
+    ],
+    "discard": [],
+    "initial": {
+      "fixture": {
+        "actor": 0,
+        "players": [
+          {
+            "equips": [
+              {
+                "id": 128,
+                "kind": "Xuelunyang",
+                "name": "hnl_xuelunyang_4",
+                "rank": 2,
+                "suit": "heart"
+              }
+            ],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 0,
+            "skills": [
+              {
+                "expires_end_of_turn": false,
+                "name": "huanle:xuelunyang"
+              }
+            ]
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 1,
+            "skills": [
+              {
+                "expires_end_of_turn": false,
+                "name": "马术"
+              },
+              {
+                "expires_end_of_turn": false,
+                "name": "咆哮"
+              }
+            ]
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 2,
+            "skills": [
+              {
+                "expires_end_of_turn": false,
+                "name": "武圣"
+              }
+            ]
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 3,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 4,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 5,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 6,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 7,
+            "skills": []
+          }
+        ],
+        "trigger": "phaseBegin"
+      },
+      "selected_skill": "马术"
+    },
+    "log": [
+      "Equipped { player: 0, card: 128, replaced: None }",
+      "PhaseChanged { player: 7, phase: End, begin: false }",
+      "TurnEnded { player: 7 }",
+      "TurnPhaseEnded { player: 7 }",
+      "TurnPhaseAfter { player: 7 }",
+      "SkillTriggered { skill: \"huanle:xuelunyang\", owner: 0, presentation: None }",
+      "ChoiceOpened { id: 1, observer: 0, prompt: \"huanle_xuelunyang_target\" }",
+      "ChoiceAnswered { id: 1, options: [\"player:1\"] }",
+      "ChoiceOpened { id: 2, observer: 0, prompt: \"huanle_xuelunyang_skill\" }",
+      "ChoiceAnswered { id: 2, options: [\"nature:0\"] }",
+      "SkillToggled { player: 0, skill: \"马术\", enabled: true }",
+      "PhaseChanged { player: 0, phase: Prepare, begin: true }",
+      "PhaseChanged { player: 0, phase: Prepare, begin: false }",
+      "PhaseChanged { player: 0, phase: Judge, begin: true }"
+    ],
+    "pending": null,
+    "players": [
+      {
+        "equips": [
+          {
+            "id": 128,
+            "kind": "Xuelunyang",
+            "name": "hnl_xuelunyang_4",
+            "rank": 2,
+            "suit": "heart"
+          }
+        ],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 0,
+        "skills": [
+          {
+            "expires_end_of_turn": true,
+            "name": "马术"
+          },
+          {
+            "expires_end_of_turn": false,
+            "name": "huanle:xuelunyang"
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 1,
+        "skills": [
+          {
+            "expires_end_of_turn": false,
+            "name": "马术"
+          },
+          {
+            "expires_end_of_turn": false,
+            "name": "咆哮"
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 2,
+        "skills": [
+          {
+            "expires_end_of_turn": false,
+            "name": "武圣"
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 3,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 4,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 5,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 6,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 7,
+        "skills": []
+      }
+    ],
+    "settled": true,
+    "turn": "TurnState { current: 0, phase: Judge, round: 2, sha_used_play_phase: false, mufeng_used_basic: false, wangchen_discard_basic: false, shenmiguo_used: false, shuchui_armed: false, shuchui_hit: false, lianda_used: false, land_used: false, land_sha_used: false, discard_phase_discarded: 0, ciqiu_dying: [], kangyin2: None, huanxia_track: [], cards_used_play_phase: 0, cards_used_turn: 0, liaoyuan_count: 0, xuanyuanjian_marked: false, kunlunjing_snapshot: [], kunlunjing_hp: 0, extra_phases: [], extra_phase_lingwu: false, bte_used_play_phase: 0, phase_number: 1, rende_given: 0, jiu_used: false, mujiaren_used: false, jiu_active: false, turn_opened: true, skip_draw_phase: false, skip_play_phase: false, guxing_armed: false, guxing_count: 0, mengtai_draw_pending: false, mengtai_use_pending: false, zhufangshenshi_target: None, yuedong_num: 0, yuedong_eff: 0, yuedong_recover: false, liangou_hook: None, liangou_bonus_used: false, feitiao_target: None, fanling_used: false, diewu_draw_used: false, lueying_used: false, txianqu_used: false, jtjubao_used: false, zhuyue_targets: [], sheling_used: 0, sheying_used: false, zhangmu_used: false, yingfeng_chain: false, luanjian_card: None, minwan_targets: [], yanyu_count: 0, xjyufeng_used: 0, qizuo_copy: None, jidian_chain: false }"
+  },
+  {
+    "case": "xuelun-skill-b",
+    "choices": [
+      {
+        "allow_cancel": true,
+        "archive_bytes": 3262,
+        "max": 1,
+        "min": 1,
+        "observer": 0,
+        "options": "[Player(1), Player(2)]",
+        "outcome": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"huanle_xuelunyang_skill\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+        "prompt": "huanle_xuelunyang_target",
+        "rejected": false,
+        "resumed_hash_and_log_equal": true,
+        "selection": "[Player(1)]"
+      },
+      {
+        "allow_cancel": false,
+        "archive_bytes": 3266,
+        "max": 1,
+        "min": 1,
+        "observer": 0,
+        "options": "[Tag(0), Tag(1)]",
+        "outcome": "Accepted { state_hash: [105, 68, 242, 72, 82, 37, 166, 130, 194, 68, 143, 89, 175, 21, 205, 16, 199, 23, 71, 84, 237, 252, 11, 255, 222, 72, 235, 119, 216, 237, 147, 32] }",
+        "prompt": "huanle_xuelunyang_skill",
+        "rejected": false,
+        "resumed_hash_and_log_equal": true,
+        "selection": "[Tag(1)]"
+      }
+    ],
+    "discard": [],
+    "initial": {
+      "fixture": {
+        "actor": 0,
+        "players": [
+          {
+            "equips": [
+              {
+                "id": 128,
+                "kind": "Xuelunyang",
+                "name": "hnl_xuelunyang_4",
+                "rank": 2,
+                "suit": "heart"
+              }
+            ],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 0,
+            "skills": [
+              {
+                "expires_end_of_turn": false,
+                "name": "huanle:xuelunyang"
+              }
+            ]
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 1,
+            "skills": [
+              {
+                "expires_end_of_turn": false,
+                "name": "马术"
+              },
+              {
+                "expires_end_of_turn": false,
+                "name": "咆哮"
+              }
+            ]
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 2,
+            "skills": [
+              {
+                "expires_end_of_turn": false,
+                "name": "武圣"
+              }
+            ]
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 3,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 4,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 5,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 6,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 7,
+            "skills": []
+          }
+        ],
+        "trigger": "phaseBegin"
+      },
+      "selected_skill": "咆哮"
+    },
+    "log": [
+      "Equipped { player: 0, card: 128, replaced: None }",
+      "PhaseChanged { player: 7, phase: End, begin: false }",
+      "TurnEnded { player: 7 }",
+      "TurnPhaseEnded { player: 7 }",
+      "TurnPhaseAfter { player: 7 }",
+      "SkillTriggered { skill: \"huanle:xuelunyang\", owner: 0, presentation: None }",
+      "ChoiceOpened { id: 1, observer: 0, prompt: \"huanle_xuelunyang_target\" }",
+      "ChoiceAnswered { id: 1, options: [\"player:1\"] }",
+      "ChoiceOpened { id: 2, observer: 0, prompt: \"huanle_xuelunyang_skill\" }",
+      "ChoiceAnswered { id: 2, options: [\"nature:1\"] }",
+      "SkillToggled { player: 0, skill: \"咆哮\", enabled: true }",
+      "PhaseChanged { player: 0, phase: Prepare, begin: true }",
+      "PhaseChanged { player: 0, phase: Prepare, begin: false }",
+      "PhaseChanged { player: 0, phase: Judge, begin: true }"
+    ],
+    "pending": null,
+    "players": [
+      {
+        "equips": [
+          {
+            "id": 128,
+            "kind": "Xuelunyang",
+            "name": "hnl_xuelunyang_4",
+            "rank": 2,
+            "suit": "heart"
+          }
+        ],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 0,
+        "skills": [
+          {
+            "expires_end_of_turn": true,
+            "name": "咆哮"
+          },
+          {
+            "expires_end_of_turn": false,
+            "name": "huanle:xuelunyang"
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 1,
+        "skills": [
+          {
+            "expires_end_of_turn": false,
+            "name": "马术"
+          },
+          {
+            "expires_end_of_turn": false,
+            "name": "咆哮"
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 2,
+        "skills": [
+          {
+            "expires_end_of_turn": false,
+            "name": "武圣"
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 3,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 4,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 5,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 6,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 7,
+        "skills": []
+      }
+    ],
+    "settled": true,
+    "turn": "TurnState { current: 0, phase: Judge, round: 2, sha_used_play_phase: false, mufeng_used_basic: false, wangchen_discard_basic: false, shenmiguo_used: false, shuchui_armed: false, shuchui_hit: false, lianda_used: false, land_used: false, land_sha_used: false, discard_phase_discarded: 0, ciqiu_dying: [], kangyin2: None, huanxia_track: [], cards_used_play_phase: 0, cards_used_turn: 0, liaoyuan_count: 0, xuanyuanjian_marked: false, kunlunjing_snapshot: [], kunlunjing_hp: 0, extra_phases: [], extra_phase_lingwu: false, bte_used_play_phase: 0, phase_number: 1, rende_given: 0, jiu_used: false, mujiaren_used: false, jiu_active: false, turn_opened: true, skip_draw_phase: false, skip_play_phase: false, guxing_armed: false, guxing_count: 0, mengtai_draw_pending: false, mengtai_use_pending: false, zhufangshenshi_target: None, yuedong_num: 0, yuedong_eff: 0, yuedong_recover: false, liangou_hook: None, liangou_bonus_used: false, feitiao_target: None, fanling_used: false, diewu_draw_used: false, lueying_used: false, txianqu_used: false, jtjubao_used: false, zhuyue_targets: [], sheling_used: 0, sheying_used: false, zhangmu_used: false, yingfeng_chain: false, luanjian_card: None, minwan_targets: [], yanyu_count: 0, xjyufeng_used: 0, qizuo_copy: None, jidian_chain: false }"
+  },
+  {
+    "case": "xuelun-target-b",
+    "choices": [
+      {
+        "allow_cancel": true,
+        "archive_bytes": 3262,
+        "max": 1,
+        "min": 1,
+        "observer": 0,
+        "options": "[Player(1), Player(2)]",
+        "outcome": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"huanle_xuelunyang_skill\", options: [Tag(0)], min: 1, max: 1, allow_cancel: false } } }",
+        "prompt": "huanle_xuelunyang_target",
+        "rejected": false,
+        "resumed_hash_and_log_equal": true,
+        "selection": "[Player(2)]"
+      },
+      {
+        "allow_cancel": false,
+        "archive_bytes": 3264,
+        "max": 1,
+        "min": 1,
+        "observer": 0,
+        "options": "[Tag(0)]",
+        "outcome": "Accepted { state_hash: [48, 171, 137, 131, 56, 87, 227, 119, 29, 183, 192, 35, 218, 240, 178, 110, 164, 11, 179, 247, 154, 144, 67, 193, 9, 144, 24, 66, 65, 215, 41, 242] }",
+        "prompt": "huanle_xuelunyang_skill",
+        "rejected": false,
+        "resumed_hash_and_log_equal": true,
+        "selection": "[Tag(0)]"
+      }
+    ],
+    "discard": [],
+    "initial": {
+      "fixture": {
+        "actor": 0,
+        "players": [
+          {
+            "equips": [
+              {
+                "id": 128,
+                "kind": "Xuelunyang",
+                "name": "hnl_xuelunyang_4",
+                "rank": 2,
+                "suit": "heart"
+              }
+            ],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 0,
+            "skills": [
+              {
+                "expires_end_of_turn": false,
+                "name": "huanle:xuelunyang"
+              }
+            ]
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 1,
+            "skills": [
+              {
+                "expires_end_of_turn": false,
+                "name": "马术"
+              },
+              {
+                "expires_end_of_turn": false,
+                "name": "咆哮"
+              }
+            ]
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 2,
+            "skills": [
+              {
+                "expires_end_of_turn": false,
+                "name": "武圣"
+              }
+            ]
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 3,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 4,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 5,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 6,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 7,
+            "skills": []
+          }
+        ],
+        "trigger": "phaseBegin"
+      },
+      "selected_skill": "武圣"
+    },
+    "log": [
+      "Equipped { player: 0, card: 128, replaced: None }",
+      "PhaseChanged { player: 7, phase: End, begin: false }",
+      "TurnEnded { player: 7 }",
+      "TurnPhaseEnded { player: 7 }",
+      "TurnPhaseAfter { player: 7 }",
+      "SkillTriggered { skill: \"huanle:xuelunyang\", owner: 0, presentation: None }",
+      "ChoiceOpened { id: 1, observer: 0, prompt: \"huanle_xuelunyang_target\" }",
+      "ChoiceAnswered { id: 1, options: [\"player:2\"] }",
+      "ChoiceOpened { id: 2, observer: 0, prompt: \"huanle_xuelunyang_skill\" }",
+      "ChoiceAnswered { id: 2, options: [\"nature:0\"] }",
+      "SkillToggled { player: 0, skill: \"武圣\", enabled: true }",
+      "PhaseChanged { player: 0, phase: Prepare, begin: true }",
+      "PhaseChanged { player: 0, phase: Prepare, begin: false }",
+      "PhaseChanged { player: 0, phase: Judge, begin: true }"
+    ],
+    "pending": null,
+    "players": [
+      {
+        "equips": [
+          {
+            "id": 128,
+            "kind": "Xuelunyang",
+            "name": "hnl_xuelunyang_4",
+            "rank": 2,
+            "suit": "heart"
+          }
+        ],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 0,
+        "skills": [
+          {
+            "expires_end_of_turn": true,
+            "name": "武圣"
+          },
+          {
+            "expires_end_of_turn": false,
+            "name": "huanle:xuelunyang"
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 1,
+        "skills": [
+          {
+            "expires_end_of_turn": false,
+            "name": "马术"
+          },
+          {
+            "expires_end_of_turn": false,
+            "name": "咆哮"
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 2,
+        "skills": [
+          {
+            "expires_end_of_turn": false,
+            "name": "武圣"
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 3,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 4,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 5,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 6,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 7,
+        "skills": []
+      }
+    ],
+    "settled": true,
+    "turn": "TurnState { current: 0, phase: Judge, round: 2, sha_used_play_phase: false, mufeng_used_basic: false, wangchen_discard_basic: false, shenmiguo_used: false, shuchui_armed: false, shuchui_hit: false, lianda_used: false, land_used: false, land_sha_used: false, discard_phase_discarded: 0, ciqiu_dying: [], kangyin2: None, huanxia_track: [], cards_used_play_phase: 0, cards_used_turn: 0, liaoyuan_count: 0, xuanyuanjian_marked: false, kunlunjing_snapshot: [], kunlunjing_hp: 0, extra_phases: [], extra_phase_lingwu: false, bte_used_play_phase: 0, phase_number: 1, rende_given: 0, jiu_used: false, mujiaren_used: false, jiu_active: false, turn_opened: true, skip_draw_phase: false, skip_play_phase: false, guxing_armed: false, guxing_count: 0, mengtai_draw_pending: false, mengtai_use_pending: false, zhufangshenshi_target: None, yuedong_num: 0, yuedong_eff: 0, yuedong_recover: false, liangou_hook: None, liangou_bonus_used: false, feitiao_target: None, fanling_used: false, diewu_draw_used: false, lueying_used: false, txianqu_used: false, jtjubao_used: false, zhuyue_targets: [], sheling_used: 0, sheying_used: false, zhangmu_used: false, yingfeng_chain: false, luanjian_card: None, minwan_targets: [], yanyu_count: 0, xjyufeng_used: 0, qizuo_copy: None, jidian_chain: false }"
+  },
+  {
+    "case": "xuelun-target-cancel",
+    "choices": [
+      {
+        "allow_cancel": true,
+        "archive_bytes": 3262,
+        "max": 1,
+        "min": 1,
+        "observer": 0,
+        "options": "[Player(1), Player(2)]",
+        "outcome": "Accepted { state_hash: [161, 7, 85, 156, 115, 220, 100, 160, 81, 205, 124, 120, 172, 28, 73, 20, 44, 184, 231, 191, 198, 49, 155, 15, 12, 158, 173, 10, 243, 134, 166, 243] }",
+        "prompt": "huanle_xuelunyang_target",
+        "rejected": false,
+        "resumed_hash_and_log_equal": true,
+        "selection": "[]"
+      }
+    ],
+    "discard": [],
+    "initial": {
+      "fixture": {
+        "actor": 0,
+        "players": [
+          {
+            "equips": [
+              {
+                "id": 128,
+                "kind": "Xuelunyang",
+                "name": "hnl_xuelunyang_4",
+                "rank": 2,
+                "suit": "heart"
+              }
+            ],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 0,
+            "skills": [
+              {
+                "expires_end_of_turn": false,
+                "name": "huanle:xuelunyang"
+              }
+            ]
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 1,
+            "skills": [
+              {
+                "expires_end_of_turn": false,
+                "name": "马术"
+              },
+              {
+                "expires_end_of_turn": false,
+                "name": "咆哮"
+              }
+            ]
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 2,
+            "skills": [
+              {
+                "expires_end_of_turn": false,
+                "name": "武圣"
+              }
+            ]
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 3,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 4,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 5,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 6,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 7,
+            "skills": []
+          }
+        ],
+        "trigger": "phaseBegin"
+      },
+      "selected_skill": null
+    },
+    "log": [
+      "Equipped { player: 0, card: 128, replaced: None }",
+      "PhaseChanged { player: 7, phase: End, begin: false }",
+      "TurnEnded { player: 7 }",
+      "TurnPhaseEnded { player: 7 }",
+      "TurnPhaseAfter { player: 7 }",
+      "SkillTriggered { skill: \"huanle:xuelunyang\", owner: 0, presentation: None }",
+      "ChoiceOpened { id: 1, observer: 0, prompt: \"huanle_xuelunyang_target\" }",
+      "ChoiceAnswered { id: 1, options: [] }",
+      "PhaseChanged { player: 0, phase: Prepare, begin: true }",
+      "PhaseChanged { player: 0, phase: Prepare, begin: false }",
+      "PhaseChanged { player: 0, phase: Judge, begin: true }"
+    ],
+    "pending": null,
+    "players": [
+      {
+        "equips": [
+          {
+            "id": 128,
+            "kind": "Xuelunyang",
+            "name": "hnl_xuelunyang_4",
+            "rank": 2,
+            "suit": "heart"
+          }
+        ],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 0,
+        "skills": [
+          {
+            "expires_end_of_turn": false,
+            "name": "huanle:xuelunyang"
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 1,
+        "skills": [
+          {
+            "expires_end_of_turn": false,
+            "name": "马术"
+          },
+          {
+            "expires_end_of_turn": false,
+            "name": "咆哮"
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 2,
+        "skills": [
+          {
+            "expires_end_of_turn": false,
+            "name": "武圣"
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 3,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 4,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 5,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 6,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 7,
+        "skills": []
+      }
+    ],
+    "settled": true,
+    "turn": "TurnState { current: 0, phase: Judge, round: 2, sha_used_play_phase: false, mufeng_used_basic: false, wangchen_discard_basic: false, shenmiguo_used: false, shuchui_armed: false, shuchui_hit: false, lianda_used: false, land_used: false, land_sha_used: false, discard_phase_discarded: 0, ciqiu_dying: [], kangyin2: None, huanxia_track: [], cards_used_play_phase: 0, cards_used_turn: 0, liaoyuan_count: 0, xuanyuanjian_marked: false, kunlunjing_snapshot: [], kunlunjing_hp: 0, extra_phases: [], extra_phase_lingwu: false, bte_used_play_phase: 0, phase_number: 1, rende_given: 0, jiu_used: false, mujiaren_used: false, jiu_active: false, turn_opened: true, skip_draw_phase: false, skip_play_phase: false, guxing_armed: false, guxing_count: 0, mengtai_draw_pending: false, mengtai_use_pending: false, zhufangshenshi_target: None, yuedong_num: 0, yuedong_eff: 0, yuedong_recover: false, liangou_hook: None, liangou_bonus_used: false, feitiao_target: None, fanling_used: false, diewu_draw_used: false, lueying_used: false, txianqu_used: false, jtjubao_used: false, zhuyue_targets: [], sheling_used: 0, sheying_used: false, zhangmu_used: false, yingfeng_chain: false, luanjian_card: None, minwan_targets: [], yanyu_count: 0, xjyufeng_used: 0, qizuo_copy: None, jidian_chain: false }"
+  },
+  {
+    "case": "xuelun-skill-cancel",
+    "choices": [
+      {
+        "allow_cancel": true,
+        "archive_bytes": 3262,
+        "max": 1,
+        "min": 1,
+        "observer": 0,
+        "options": "[Player(1), Player(2)]",
+        "outcome": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"huanle_xuelunyang_skill\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+        "prompt": "huanle_xuelunyang_target",
+        "rejected": false,
+        "resumed_hash_and_log_equal": true,
+        "selection": "[Player(1)]"
+      },
+      {
+        "allow_cancel": false,
+        "archive_bytes": 3266,
+        "max": 1,
+        "min": 1,
+        "observer": 0,
+        "options": "[Tag(0), Tag(1)]",
+        "outcome": "Rejected(InvalidChoice)",
+        "prompt": "huanle_xuelunyang_skill",
+        "rejected": true,
+        "resumed_hash_and_log_equal": true,
+        "selection": "[]"
+      }
+    ],
+    "discard": [],
+    "initial": {
+      "fixture": {
+        "actor": 0,
+        "players": [
+          {
+            "equips": [
+              {
+                "id": 128,
+                "kind": "Xuelunyang",
+                "name": "hnl_xuelunyang_4",
+                "rank": 2,
+                "suit": "heart"
+              }
+            ],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 0,
+            "skills": [
+              {
+                "expires_end_of_turn": false,
+                "name": "huanle:xuelunyang"
+              }
+            ]
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 1,
+            "skills": [
+              {
+                "expires_end_of_turn": false,
+                "name": "马术"
+              },
+              {
+                "expires_end_of_turn": false,
+                "name": "咆哮"
+              }
+            ]
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 2,
+            "skills": [
+              {
+                "expires_end_of_turn": false,
+                "name": "武圣"
+              }
+            ]
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 3,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 4,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 5,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 6,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 7,
+            "skills": []
+          }
+        ],
+        "trigger": "phaseBegin"
+      },
+      "selected_skill": null
+    },
+    "log": [
+      "Equipped { player: 0, card: 128, replaced: None }",
+      "PhaseChanged { player: 7, phase: End, begin: false }",
+      "TurnEnded { player: 7 }",
+      "TurnPhaseEnded { player: 7 }",
+      "TurnPhaseAfter { player: 7 }",
+      "SkillTriggered { skill: \"huanle:xuelunyang\", owner: 0, presentation: None }",
+      "ChoiceOpened { id: 1, observer: 0, prompt: \"huanle_xuelunyang_target\" }",
+      "ChoiceAnswered { id: 1, options: [\"player:1\"] }",
+      "ChoiceOpened { id: 2, observer: 0, prompt: \"huanle_xuelunyang_skill\" }"
+    ],
+    "pending": {
+      "allow_cancel": false,
+      "options": "[Tag(0), Tag(1)]",
+      "prompt": "huanle_xuelunyang_skill"
+    },
+    "players": [
+      {
+        "equips": [
+          {
+            "id": 128,
+            "kind": "Xuelunyang",
+            "name": "hnl_xuelunyang_4",
+            "rank": 2,
+            "suit": "heart"
+          }
+        ],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 0,
+        "skills": [
+          {
+            "expires_end_of_turn": false,
+            "name": "huanle:xuelunyang"
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 1,
+        "skills": [
+          {
+            "expires_end_of_turn": false,
+            "name": "马术"
+          },
+          {
+            "expires_end_of_turn": false,
+            "name": "咆哮"
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 2,
+        "skills": [
+          {
+            "expires_end_of_turn": false,
+            "name": "武圣"
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 3,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 4,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 5,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 6,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 7,
+        "skills": []
+      }
+    ],
+    "settled": false,
+    "turn": "TurnState { current: 0, phase: Judge, round: 2, sha_used_play_phase: false, mufeng_used_basic: false, wangchen_discard_basic: false, shenmiguo_used: false, shuchui_armed: false, shuchui_hit: false, lianda_used: false, land_used: false, land_sha_used: false, discard_phase_discarded: 0, ciqiu_dying: [], kangyin2: None, huanxia_track: [], cards_used_play_phase: 0, cards_used_turn: 0, liaoyuan_count: 0, xuanyuanjian_marked: false, kunlunjing_snapshot: [], kunlunjing_hp: 0, extra_phases: [], extra_phase_lingwu: false, bte_used_play_phase: 0, phase_number: 0, rende_given: 0, jiu_used: false, mujiaren_used: false, jiu_active: false, turn_opened: true, skip_draw_phase: false, skip_play_phase: false, guxing_armed: false, guxing_count: 0, mengtai_draw_pending: false, mengtai_use_pending: false, zhufangshenshi_target: None, yuedong_num: 0, yuedong_eff: 0, yuedong_recover: false, liangou_hook: None, liangou_bonus_used: false, feitiao_target: None, fanling_used: false, diewu_draw_used: false, lueying_used: false, txianqu_used: false, jtjubao_used: false, zhuyue_targets: [], sheling_used: 0, sheying_used: false, zhangmu_used: false, yingfeng_chain: false, luanjian_card: None, minwan_targets: [], yanyu_count: 0, xjyufeng_used: 0, qizuo_copy: None, jidian_chain: false }"
+  },
+  {
+    "case": "xuelun-no-skills",
+    "choices": [],
+    "discard": [],
+    "initial": {
+      "fixture": {
+        "actor": 0,
+        "players": [
+          {
+            "equips": [
+              {
+                "id": 128,
+                "kind": "Xuelunyang",
+                "name": "hnl_xuelunyang_4",
+                "rank": 2,
+                "suit": "heart"
+              }
+            ],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 0,
+            "skills": [
+              {
+                "expires_end_of_turn": false,
+                "name": "huanle:xuelunyang"
+              }
+            ]
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 1,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 2,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 3,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 4,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 5,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 6,
+            "skills": []
+          },
+          {
+            "equips": [],
+            "hand": [],
+            "hp": 8,
+            "max_hp": 8,
+            "seat": 7,
+            "skills": []
+          }
+        ],
+        "trigger": "phaseBegin"
+      },
+      "selected_skill": null
+    },
+    "log": [
+      "Equipped { player: 0, card: 128, replaced: None }",
+      "PhaseChanged { player: 7, phase: End, begin: false }",
+      "TurnEnded { player: 7 }",
+      "TurnPhaseEnded { player: 7 }",
+      "TurnPhaseAfter { player: 7 }",
+      "PhaseChanged { player: 0, phase: Prepare, begin: true }",
+      "PhaseChanged { player: 0, phase: Prepare, begin: false }",
+      "PhaseChanged { player: 0, phase: Judge, begin: true }"
+    ],
+    "pending": null,
+    "players": [
+      {
+        "equips": [
+          {
+            "id": 128,
+            "kind": "Xuelunyang",
+            "name": "hnl_xuelunyang_4",
+            "rank": 2,
+            "suit": "heart"
+          }
+        ],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 0,
+        "skills": [
+          {
+            "expires_end_of_turn": false,
+            "name": "huanle:xuelunyang"
+          }
+        ]
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 1,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 2,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 3,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 4,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 5,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 6,
+        "skills": []
+      },
+      {
+        "equips": [],
+        "hand": [],
+        "hp": 8,
+        "max_hp": 8,
+        "seat": 7,
+        "skills": []
+      }
+    ],
+    "settled": true,
+    "turn": "TurnState { current: 0, phase: Judge, round: 2, sha_used_play_phase: false, mufeng_used_basic: false, wangchen_discard_basic: false, shenmiguo_used: false, shuchui_armed: false, shuchui_hit: false, lianda_used: false, land_used: false, land_sha_used: false, discard_phase_discarded: 0, ciqiu_dying: [], kangyin2: None, huanxia_track: [], cards_used_play_phase: 0, cards_used_turn: 0, liaoyuan_count: 0, xuanyuanjian_marked: false, kunlunjing_snapshot: [], kunlunjing_hp: 0, extra_phases: [], extra_phase_lingwu: false, bte_used_play_phase: 0, phase_number: 1, rende_given: 0, jiu_used: false, mujiaren_used: false, jiu_active: false, turn_opened: true, skip_draw_phase: false, skip_play_phase: false, guxing_armed: false, guxing_count: 0, mengtai_draw_pending: false, mengtai_use_pending: false, zhufangshenshi_target: None, yuedong_num: 0, yuedong_eff: 0, yuedong_recover: false, liangou_hook: None, liangou_bonus_used: false, feitiao_target: None, fanling_used: false, diewu_draw_used: false, lueying_used: false, txianqu_used: false, jtjubao_used: false, zhuyue_targets: [], sheling_used: 0, sheying_used: false, zhangmu_used: false, yingfeng_chain: false, luanjian_card: None, minwan_targets: [], yanyu_count: 0, xjyufeng_used: 0, qizuo_copy: None, jidian_chain: false }"
+  }
+]

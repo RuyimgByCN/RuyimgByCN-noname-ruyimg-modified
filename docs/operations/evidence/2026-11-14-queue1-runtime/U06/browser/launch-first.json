@@ -1,0 +1,13 @@
+{
+  "at": "2026-11-14T01:46:45.513843+08:00",
+  "pid": 77935,
+  "argv": [
+    "node",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U06/browser/launch.mjs"
+  ],
+  "env_overrides": {
+    "QUEUE1_UPSTREAM_URL": "http://127.0.0.1:5173/",
+    "QUEUE1_LABEL": "modern"
+  },
+  "log": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U06/browser/launch-first.log"
+}

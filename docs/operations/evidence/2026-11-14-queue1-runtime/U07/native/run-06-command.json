@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-13T18:06:50.934655+00:00",
+  "command": "CARGO_TARGET_DIR=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target NONAME_REPO_ROOT=/Users/ruyimg/Documents/Claude/sanguosha/noname-next U07_ARCHIVE_DIR=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/final-archives cargo run --offline --manifest-path /private/tmp/noname-queue1-u07-native/Cargo.toml",
+  "stdout": "06-sixth.log",
+  "stderr": "06-sixth.stderr",
+  "source": "probe-06.rs",
+  "change": "three additional actual branch cases and raw pending NGSA evidence; no product changes"
+}

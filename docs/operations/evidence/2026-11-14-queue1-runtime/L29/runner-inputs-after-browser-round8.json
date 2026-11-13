@@ -1,0 +1,26 @@
+{
+  "at": "2026-11-13T17:59:16.999458+00:00",
+  "notes": "browser-round8 completed on scripts except main.rs subsequently added old-archive restore option; shell/cdp transcripts remain raw",
+  "files": {
+    "launch.mjs": {
+      "sha256": "06791729ac3b18a32ebd238157ec6e9724030a93a00a2bcd28b7906e552cd311",
+      "bytes": 6836
+    },
+    "control.py": {
+      "sha256": "a50790ceeedd86f54a76a16333f93a7c0f5eb15edcfd3bec8584a6f8573e1054",
+      "bytes": 2024
+    },
+    "upstream-setup.js": {
+      "sha256": "949291524c36eb1bd2774c673c82c4191b4744a104d4f6fd58ed3e74ae1f3fa4",
+      "bytes": 7979
+    },
+    "run-browser.py": {
+      "sha256": "2b6cf038f918b6c7ba49f1f4b80a67e7ade32e0af5702337a139c126ef23007c",
+      "bytes": 11424
+    },
+    "native-probe/src/main.rs": {
+      "sha256": "89675cb3642c0bb1ff5957f8ec66303a8ee4c1eb0b8dae9a604b7438c382ca91",
+      "bytes": 15064
+    }
+  }
+}

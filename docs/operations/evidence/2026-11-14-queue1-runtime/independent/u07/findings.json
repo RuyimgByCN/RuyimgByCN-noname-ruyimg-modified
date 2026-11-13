@@ -1,0 +1,899 @@
+{
+  "reviewer": "/root/queue0_independent_review",
+  "at": "2026-11-14T02:31:30.282534+08:00",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "worktree_dirty": true,
+  "rules": 333,
+  "ngsa": 107,
+  "content_schema": 5,
+  "abi": 759,
+  "ws": 8,
+  "new_equivalence_signoff": false,
+  "product_changes_by_reviewer": false,
+  "inventory_changes_by_reviewer": false,
+  "shared_target_used_for_u07": false,
+  "independent_recomputation": "recompute.py",
+  "raw_cases": {
+    "native": 24,
+    "browser": 24,
+    "unique_each": 24,
+    "deduplicated": 0,
+    "discarded_from_final_cohort": 0
+  },
+  "projected_results": {
+    "initial_equal": 24,
+    "final_equal": 12,
+    "final_different": 12,
+    "resume_checkpoints": 43
+  },
+  "strict_recommendations": {
+    "runtime_confirmed_revoke_if_still_equivalent": [
+      "U07:skills:fuchou2@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:548"
+    ],
+    "runtime_confirmed_keep_approximate": [
+      "U07:skills:choudu@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:586",
+      "U07:skills:fuchou@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:508",
+      "U07:skills:youzhan@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:422",
+      "U07:cards:diaobingqianjiang@archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js:4"
+    ],
+    "source_confirmed_revoke_if_still_equivalent": [
+      "U07:cards:youdishenru@archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js:169"
+    ],
+    "not_newly_adjudicated_or_signed": [
+      "U07:skills:g_youdishenru@archive/upstream/noname/apps/core/extension/玩点论杀/card/skill.js:16"
+    ],
+    "source_confirmed_keep_approximate": [
+      "U07:skills:youdishenru@archive/upstream/noname/apps/core/extension/玩点论杀/card/skill.js:5"
+    ]
+  },
+  "findings": [
+    {
+      "id": "U07-R01",
+      "classification": "verified_runtime_difference",
+      "inventory_key": "U07:skills:choudu@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:586",
+      "affected_inventory_keys": [
+        "U07:cards:diaobingqianjiang@archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js:4"
+      ],
+      "title": "调兵结束没有置顶选择",
+      "difference": "上游使用者可将市场牌按选择顺序置顶；原生所有余牌直接弃置。top-return中玩家区域相同，但原生弃3且牌堆首7，上游将3置顶。",
+      "upstream": [
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js",
+          "line": 99,
+          "reason": "contentAfter的选择与置顶"
+        },
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js",
+          "line": 600,
+          "reason": "筹度实际调用调兵"
+        }
+      ],
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+          "line": 707,
+          "reason": "无后续目标时余牌全部弃置"
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+          "line": 757,
+          "reason": "换牌后余牌全部弃置"
+        }
+      ],
+      "runtime_evidence": [
+        {
+          "case": "choudu-top-return",
+          "native_log": "U07/native/09-formal.log",
+          "native_line": 1,
+          "browser_log": "U07/browser/case-results-twelfth.jsonl",
+          "browser_line": 1,
+          "raw_cdp_prefix": "U07/browser/session-wudian-1794592764804",
+          "raw_cdp_fixture_line": 4251,
+          "raw_cdp_choice_lines": [
+            4253,
+            4255,
+            4321,
+            4327,
+            4356
+          ],
+          "raw_cdp_final_line": 4359
+        }
+      ],
+      "observed_fields": [
+        "final.deck_draw_order",
+        "final.discard"
+      ],
+      "counterexample_or_next_probe": "八人桌，0弃牌0令1使用调兵，所有换牌取消；上游最终选择置顶市场牌3。原生没有对应窗口。",
+      "disposition": "保留/下调为简化近似，不新签等价"
+    },
+    {
+      "id": "U07-R02",
+      "classification": "verified_runtime_difference",
+      "inventory_key": "U07:skills:choudu@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:586",
+      "affected_inventory_keys": [
+        "U07:cards:diaobingqianjiang@archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js:4"
+      ],
+      "title": "选市场第三张被替换为固定首张",
+      "difference": "上游先选择任一市场牌，再用手牌替换；原生只有选择手牌的窗口且固定移走市场第一张。swap-b中同样支付46，上游取得5，原生取得3。",
+      "upstream": [
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js",
+          "line": 68,
+          "reason": "chooseButton选择市场牌"
+        },
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js",
+          "line": 78,
+          "reason": "选手牌替换所选市场牌"
+        }
+      ],
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+          "line": 694,
+          "reason": "只询问目标手牌"
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+          "line": 722,
+          "reason": "固定self.cards.remove(0)"
+        }
+      ],
+      "runtime_evidence": [
+        {
+          "case": "choudu-swap-a",
+          "native_log": "U07/native/09-formal.log",
+          "native_line": 4,
+          "browser_log": "U07/browser/case-results-twelfth.jsonl",
+          "browser_line": 4,
+          "raw_cdp_prefix": "U07/browser/session-wudian-1794592764804",
+          "raw_cdp_fixture_line": 4580,
+          "raw_cdp_choice_lines": [
+            4582,
+            4584,
+            4643,
+            4645,
+            4671,
+            4698
+          ],
+          "raw_cdp_final_line": 4719
+        },
+        {
+          "case": "choudu-swap-b",
+          "native_log": "U07/native/09-formal.log",
+          "native_line": 5,
+          "browser_log": "U07/browser/case-results-twelfth.jsonl",
+          "browser_line": 5,
+          "raw_cdp_prefix": "U07/browser/session-wudian-1794592764804",
+          "raw_cdp_fixture_line": 4722,
+          "raw_cdp_choice_lines": [
+            4724,
+            4726,
+            4782,
+            4784,
+            4810,
+            4833
+          ],
+          "raw_cdp_final_line": 4849
+        }
+      ],
+      "observed_fields": [
+        "choices",
+        "final.players[1].hand",
+        "final.discard"
+      ],
+      "counterexample_or_next_probe": "swap-a以手牌30换首张3作为受限正例；swap-b以手牌46换第三张5，必须分别得到3和5。",
+      "disposition": "保留/下调为简化近似，不新签等价"
+    },
+    {
+      "id": "U07-R03",
+      "classification": "verified_runtime_difference",
+      "inventory_key": "U07:skills:choudu@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:586",
+      "affected_inventory_keys": [],
+      "title": "筹度没有询问其它参与者",
+      "difference": "上游传入完整存活玩家目标表；正式实跑target1仍询问玩家2，equip-target1还询问玩家0。原生在转入调兵时把目标表置为单个所选使用者；其它人未获得换牌机会。多数人取消使部分终态碰巧相同。",
+      "upstream": [
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js",
+          "line": 598,
+          "reason": "取得完整存活玩家"
+        },
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js",
+          "line": 599,
+          "reason": "按使用者座位排序"
+        },
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js",
+          "line": 600,
+          "reason": "完整目标表useCard"
+        }
+      ],
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+          "line": 646,
+          "reason": "令所选目标成为使用者"
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+          "line": 647,
+          "reason": "targets固定为vec![t]"
+        }
+      ],
+      "runtime_evidence": [
+        {
+          "case": "choudu-target1",
+          "native_log": "U07/native/09-formal.log",
+          "native_line": 2,
+          "browser_log": "U07/browser/case-results-twelfth.jsonl",
+          "browser_line": 2,
+          "raw_cdp_prefix": "U07/browser/session-wudian-1794592764804",
+          "raw_cdp_fixture_line": 4362,
+          "raw_cdp_choice_lines": [
+            4364,
+            4366,
+            4431,
+            4437,
+            4466
+          ],
+          "raw_cdp_final_line": 4469
+        },
+        {
+          "case": "choudu-target2",
+          "native_log": "U07/native/09-formal.log",
+          "native_line": 3,
+          "browser_log": "U07/browser/case-results-twelfth.jsonl",
+          "browser_line": 3,
+          "raw_cdp_prefix": "U07/browser/session-wudian-1794592764804",
+          "raw_cdp_fixture_line": 4472,
+          "raw_cdp_choice_lines": [
+            4474,
+            4476,
+            4540,
+            4546,
+            4574
+          ],
+          "raw_cdp_final_line": 4577
+        },
+        {
+          "case": "choudu-equip-target1",
+          "native_log": "U07/native/09-formal.log",
+          "native_line": 6,
+          "browser_log": "U07/browser/case-results-twelfth.jsonl",
+          "browser_line": 6,
+          "raw_cdp_prefix": "U07/browser/session-wudian-1794592764804",
+          "raw_cdp_fixture_line": 4852,
+          "raw_cdp_choice_lines": [
+            4854,
+            4856,
+            4908,
+            4914,
+            4920,
+            4945
+          ],
+          "raw_cdp_final_line": 4948
+        }
+      ],
+      "observed_fields": [
+        "choices[*].observer",
+        "upstream_choices[*].player",
+        "upstream_choices[*].parent"
+      ],
+      "counterexample_or_next_probe": "令使用者1及玩家2各有手牌，上游2可选择换市场牌，原生只询问1。本轮已观察缺失的问答；2选择换牌的额外运行尚未追加。",
+      "disposition": "保留/下调为简化近似，不新签等价"
+    },
+    {
+      "id": "U07-R04",
+      "classification": "verified_runtime_difference",
+      "inventory_key": "U07:skills:fuchou@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:508",
+      "affected_inventory_keys": [],
+      "title": "取消杀时将原杀额外退还来源",
+      "difference": "上游只取消目标杀并给出所选牌，原杀1正常弃置。原生把原杀1从桌面移入来源手牌，来源多得一张。手牌与装备给予均复现。",
+      "upstream": [
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js",
+          "line": 535,
+          "reason": "成功时cancel与gain选中成本"
+        }
+      ],
+      "native": [
+        {
+          "path": "crates/engine-native-kernel/src/kernel/sha/resume.rs",
+          "line": 59,
+          "reason": "从桌面移除原杀"
+        },
+        {
+          "path": "crates/engine-native-kernel/src/kernel/sha/resume.rs",
+          "line": 60,
+          "reason": "将原杀加入来源手牌"
+        }
+      ],
+      "runtime_evidence": [
+        {
+          "case": "fuchou-hand",
+          "native_log": "U07/native/09-formal.log",
+          "native_line": 10,
+          "browser_log": "U07/browser/case-results-twelfth.jsonl",
+          "browser_line": 10,
+          "raw_cdp_prefix": "U07/browser/session-wudian-1794592764804",
+          "raw_cdp_fixture_line": 4984,
+          "raw_cdp_choice_lines": [
+            4986
+          ],
+          "raw_cdp_final_line": 4999
+        },
+        {
+          "case": "fuchou-equip",
+          "native_log": "U07/native/09-formal.log",
+          "native_line": 11,
+          "browser_log": "U07/browser/case-results-twelfth.jsonl",
+          "browser_line": 11,
+          "raw_cdp_prefix": "U07/browser/session-wudian-1794592764804",
+          "raw_cdp_fixture_line": 5002,
+          "raw_cdp_choice_lines": [
+            5004
+          ],
+          "raw_cdp_final_line": 5016
+        }
+      ],
+      "observed_fields": [
+        "after_attack.players[0].hand",
+        "after_attack.discard",
+        "final.players[0].hand",
+        "final.discard"
+      ],
+      "counterexample_or_next_probe": "来源0使用杀1指定1，1分别给予手牌30或装备136；上游来源只收到成本牌，原生额外收到杀1。取消/无he负例12/13正常命中。",
+      "disposition": "保留/下调为简化近似，不新签等价"
+    },
+    {
+      "id": "U07-R05",
+      "classification": "verified_runtime_difference",
+      "inventory_key": "U07:skills:fuchou2@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:548",
+      "affected_inventory_keys": [
+        "U07:skills:fuchou@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:508"
+      ],
+      "title": "清算自动借底牌发杀，缺少真实杀或失去体力选择",
+      "difference": "上游清算逐个标记，依据当前step处canUse/hasSha进入真实chooseToUse或loseHp；拒绝也loseHp。原生清算强制以牌堆底137为载体发虚拟杀，不消耗手中真实杀2，也没有持有者拒绝或loseHp分支。14–16行损血对象相反；17行HP相同但消耗和牌堆不同。draw-sha的上游实跑无出杀窗口，不假定draw调用已同步完成。",
+      "upstream": [
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js",
+          "line": 548,
+          "reason": "fuchou2定义"
+        },
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js",
+          "line": 553,
+          "reason": "global phaseAfter"
+        },
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js",
+          "line": 568,
+          "reason": "按标记安排draw及canUse/hasSha条件"
+        },
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js",
+          "line": 570,
+          "reason": "chooseToUse真实杀或loseHp"
+        },
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js",
+          "line": 580,
+          "reason": "拒绝loseHp"
+        }
+      ],
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/filtering/common.rs",
+          "line": 23,
+          "reason": "实际为全局TurnEndWindow after:true，不采用相反的旧注释"
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/wudian_status.rs",
+          "line": 124,
+          "reason": "收取全部标记并安排摸牌"
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/wudian_status.rs",
+          "line": 136,
+          "reason": "无选择地use_virtual_card"
+        },
+        {
+          "path": "crates/engine-native-kernel/src/machine.rs",
+          "line": 660,
+          "reason": "牌堆底实体载体"
+        }
+      ],
+      "runtime_evidence": [
+        {
+          "case": "fuchou-settle-no-sha",
+          "native_log": "U07/native/09-formal.log",
+          "native_line": 14,
+          "browser_log": "U07/browser/case-results-twelfth.jsonl",
+          "browser_line": 14,
+          "raw_cdp_prefix": "U07/browser/session-wudian-1794592764804",
+          "raw_cdp_fixture_line": 5038,
+          "raw_cdp_choice_lines": [
+            5040
+          ],
+          "raw_cdp_final_line": 5073
+        },
+        {
+          "case": "fuchou-settle-draw-sha",
+          "native_log": "U07/native/09-formal.log",
+          "native_line": 15,
+          "browser_log": "U07/browser/case-results-twelfth.jsonl",
+          "browser_line": 15,
+          "raw_cdp_prefix": "U07/browser/session-wudian-1794592764804",
+          "raw_cdp_fixture_line": 5076,
+          "raw_cdp_choice_lines": [
+            5078
+          ],
+          "raw_cdp_final_line": 5111
+        },
+        {
+          "case": "fuchou-settle-have-sha-decline-retaliation",
+          "native_log": "U07/native/09-formal.log",
+          "native_line": 16,
+          "browser_log": "U07/browser/case-results-twelfth.jsonl",
+          "browser_line": 16,
+          "raw_cdp_prefix": "U07/browser/session-wudian-1794592764804",
+          "raw_cdp_fixture_line": 5114,
+          "raw_cdp_choice_lines": [
+            5116,
+            5148
+          ],
+          "raw_cdp_final_line": 5151
+        },
+        {
+          "case": "fuchou-settle-have-sha-use",
+          "native_log": "U07/native/09-formal.log",
+          "native_line": 17,
+          "browser_log": "U07/browser/case-results-twelfth.jsonl",
+          "browser_line": 17,
+          "raw_cdp_prefix": "U07/browser/session-wudian-1794592764804",
+          "raw_cdp_fixture_line": 5154,
+          "raw_cdp_choice_lines": [
+            5156,
+            5187,
+            5200
+          ],
+          "raw_cdp_final_line": 5212
+        }
+      ],
+      "observed_fields": [
+        "choices",
+        "phase_outcomes",
+        "final.players[0].hp",
+        "final.players[1].hp",
+        "final.players[1].hand",
+        "final.deck_draw_order",
+        "final.discard"
+      ],
+      "counterexample_or_next_probe": "正式native/browser第14–17行，CDP终态5073/5111/5151/5212。第17行上游使用真实杀2，原生保留2且弃137；第16行上游拒绝后玩家1失去体力，原生却损玩家0。",
+      "disposition": "撤回该精确fuchou2旧已复核等价，改简化近似；本复核不直接改清单。"
+    },
+    {
+      "id": "U07-R06",
+      "classification": "verified_runtime_difference",
+      "inventory_key": "U07:skills:youzhan@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:422",
+      "affected_inventory_keys": [],
+      "title": "付费诱战后原杀仍命中目标",
+      "difference": "上游诱敌内容取消原始sha事件。原生尝试给当前CardUsed帧标cancelled后，实际正式运行仍出现原杀1的伤害。无后续杀时双方弃牌成本相同，原生目标额外损1；counter-use原生目标额外损1。",
+      "upstream": [
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js",
+          "line": 445,
+          "reason": "目标虚拟使用诱敌"
+        },
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js",
+          "line": 182,
+          "reason": "取消原sha事件"
+        }
+      ],
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+          "line": 488,
+          "reason": "移除并弃原杀载体"
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+          "line": 492,
+          "reason": "尝试修改当前帧cancelled"
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+          "line": 551,
+          "reason": "另发反击杀"
+        }
+      ],
+      "runtime_evidence": [
+        {
+          "case": "youzhan-hand-stop",
+          "native_log": "U07/native/09-formal.log",
+          "native_line": 18,
+          "browser_log": "U07/browser/case-results-twelfth.jsonl",
+          "browser_line": 18,
+          "raw_cdp_prefix": "U07/browser/session-wudian-1794592764804",
+          "raw_cdp_fixture_line": 5215,
+          "raw_cdp_choice_lines": [
+            5217,
+            5238
+          ],
+          "raw_cdp_final_line": 5250
+        },
+        {
+          "case": "youzhan-equip-stop",
+          "native_log": "U07/native/09-formal.log",
+          "native_line": 19,
+          "browser_log": "U07/browser/case-results-twelfth.jsonl",
+          "browser_line": 19,
+          "raw_cdp_prefix": "U07/browser/session-wudian-1794592764804",
+          "raw_cdp_fixture_line": 5253,
+          "raw_cdp_choice_lines": [
+            5255,
+            5278
+          ],
+          "raw_cdp_final_line": 5289
+        },
+        {
+          "case": "youzhan-counter-use",
+          "native_log": "U07/native/09-formal.log",
+          "native_line": 23,
+          "browser_log": "U07/browser/case-results-twelfth.jsonl",
+          "browser_line": 23,
+          "raw_cdp_prefix": "U07/browser/session-wudian-1794592764804",
+          "raw_cdp_fixture_line": 5318,
+          "raw_cdp_choice_lines": [
+            5320,
+            5342,
+            5355,
+            5357
+          ],
+          "raw_cdp_final_line": 5378
+        }
+      ],
+      "observed_fields": [
+        "final.players[0].hp",
+        "final.players[1].hp",
+        "native.log[*].DamageDealt(card=1)"
+      ],
+      "counterexample_or_next_probe": "手牌装备92与已装备136各付费一次；来源停止时上游HP(0,1)=(8,7)，原生(7,7)。有反击杀2时上游0为7，原生0为6。",
+      "disposition": "保留/下调为简化近似，不新签等价"
+    },
+    {
+      "id": "U07-R07",
+      "classification": "verified_runtime_difference",
+      "inventory_key": "U07:skills:youzhan@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:422",
+      "affected_inventory_keys": [
+        "U07:skills:youdishenru@archive/upstream/noname/apps/core/extension/玩点论杀/card/skill.js:5"
+      ],
+      "title": "反击杀被闪后未继续询问来源",
+      "difference": "上游由杀成功造成damageEnd才清除追问状态，闪避后再次chooseToUse；停止后受到被杀目标造成的1伤害。原生发出第一张反击杀即Flow::Done，子杀被闪后没有再询问。第24行原生(0,1)HP=(7,8)，上游(8,7)。",
+      "upstream": [
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js",
+          "line": 191,
+          "reason": "根据状态循环goto(1)或惩罚"
+        },
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/card/skill.js",
+          "line": 5,
+          "reason": "仅实际sha damageEnd清除状态"
+        }
+      ],
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+          "line": 541,
+          "reason": "读取唯一一次反击杀"
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+          "line": 556,
+          "reason": "发反击杀后Done"
+        }
+      ],
+      "runtime_evidence": [
+        {
+          "case": "youzhan-counter-dodge-stop",
+          "native_log": "U07/native/09-formal.log",
+          "native_line": 24,
+          "browser_log": "U07/browser/case-results-twelfth.jsonl",
+          "browser_line": 24,
+          "raw_cdp_prefix": "U07/browser/session-wudian-1794592764804",
+          "raw_cdp_fixture_line": 5381,
+          "raw_cdp_choice_lines": [
+            5383,
+            5405,
+            5418,
+            5420,
+            5437
+          ],
+          "raw_cdp_final_line": 5449
+        }
+      ],
+      "observed_fields": [
+        "choices",
+        "final.players[0].hp",
+        "final.players[1].hp",
+        "final.discard"
+      ],
+      "counterexample_or_next_probe": "来源使用杀2，目标用闪30；第二个诱战窗口取消；上游随后继续问来源并取消，原生没有这个窗口。本行弃牌区域相同不能掩盖差异。",
+      "disposition": "保留/下调为简化近似，不新签等价"
+    },
+    {
+      "id": "U07-S01",
+      "classification": "verified_source_difference",
+      "inventory_key": "U07:cards:diaobingqianjiang@archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js:4",
+      "affected_inventory_keys": [],
+      "title": "正式包缺少上游两张调兵实体",
+      "difference": "上游有效牌表含红桃4/方片4两张调兵。原生正式包将其留在deferred；loader仅当整个包无牌才补卡，实际14张包不会补。正式目录138牌中无调兵ID。本次通过筹度跑虚拟路径，未伪造物理ID。",
+      "upstream": [
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/card/list.js",
+          "line": 25,
+          "reason": "有效两张物理调兵"
+        }
+      ],
+      "native": [
+        {
+          "path": "packages/extensions/wudian-upstream-noname/assets/cards.json",
+          "line": 101,
+          "reason": "仍deferred count2"
+        },
+        {
+          "path": "crates/content-native-loader/src/decision34_pack9.rs",
+          "line": 549,
+          "reason": "仅!had_cards补一张"
+        },
+        {
+          "path": "docs/operations/evidence/2026-11-14-queue1-runtime/U07/native/probe-09.rs",
+          "line": 73,
+          "reason": "正式bridge+attach，不追加实体"
+        }
+      ],
+      "runtime_evidence": [],
+      "observed_fields": [
+        "formal-catalog-without-placeholder.json.real_diaobingqianjiang_cards",
+        "formal-catalog-without-placeholder.json.pack_cards"
+      ],
+      "counterexample_or_next_probe": "使用实际正式加载目录检索diaobingqianjiang实体；当前为空。增加实体需另做包/牌张范围授权核对，本复核不实现。",
+      "disposition": "保留/下调为简化近似，不新签等价"
+    },
+    {
+      "id": "U07-S02",
+      "classification": "verified_source_difference",
+      "inventory_key": "U07:cards:youdishenru@archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js:169",
+      "affected_inventory_keys": [
+        "U07:skills:youdishenru@archive/upstream/noname/apps/core/extension/玩点论杀/card/skill.js:5"
+      ],
+      "title": "实体诱敌也只允许一次再杀",
+      "difference": "不能从共用HostBehavior锚推定实体不存在：实体在杀响应内核有独立实现。但原生实体路径问一次真实杀后发子事件就Done，未保存等待子杀成功伤害后继续询问的状态。上游card.js:191–200的持续追问与card/skill.js成功伤害停止条件未保留。该实体入口本轮未执行。",
+      "upstream": [
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js",
+          "line": 187,
+          "reason": "反复chooseToUse"
+        },
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js",
+          "line": 191,
+          "reason": "未造成杀伤害继续循环"
+        },
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/card/skill.js",
+          "line": 5,
+          "reason": "成功伤害才停止"
+        }
+      ],
+      "native": [
+        {
+          "path": "crates/engine-native-kernel/src/kernel/sha/step.rs",
+          "line": 711,
+          "reason": "实体诱敌加入响应选项"
+        },
+        {
+          "path": "crates/engine-native-kernel/src/kernel/sha/step.rs",
+          "line": 874,
+          "reason": "实体取消原杀并请求一次杀"
+        },
+        {
+          "path": "crates/engine-native-kernel/src/kernel/sha/resume.rs",
+          "line": 302,
+          "reason": "实体再杀应答"
+        },
+        {
+          "path": "crates/engine-native-kernel/src/kernel/sha/resume.rs",
+          "line": 323,
+          "reason": "发子杀即Done"
+        }
+      ],
+      "runtime_evidence": [],
+      "observed_fields": [
+        "source_only_no_physical_card_runtime"
+      ],
+      "counterexample_or_next_probe": "另建实体诱敌响应：来源有两杀、目标有一闪，第一杀被闪后上游继续问；原生当前无保留循环状态。本轮未追加场景。",
+      "disposition": "旧整卡/成功伤害停止辅助技能的无差异声明应按源码差异撤回；不冒充实体实跑。g_youdishenru不因同名绑定自动下调或新签。"
+    },
+    {
+      "id": "U07-G01",
+      "classification": "potential_gap",
+      "inventory_key": "U07:skills:choudu@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:586",
+      "affected_inventory_keys": [
+        "U07:skills:fuchou@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:508"
+      ],
+      "title": "额外出牌阶段、可用性修正器及复仇重复标记未覆盖",
+      "difference": "筹度上游usable1属于phaseUse，原生声明once_per_turn；目标上游检查cardEnabled，原生本段候选只取存活者。复仇标记上游.add而原生.push。额外阶段、外层计数适配/禁牌修正器、同来源多次标记未在24案运行；不以条件名称差别或缺测试单独签确定反例。",
+      "upstream": [
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js",
+          "line": 586,
+          "reason": "phaseUse/usable/filterTarget"
+        },
+        {
+          "path": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js",
+          "line": 543,
+          "reason": "fuchou2.add来源"
+        }
+      ],
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host.rs",
+          "line": 381,
+          "reason": "筹度次数声明once_per_turn"
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+          "line": 604,
+          "reason": "存活目标候选"
+        },
+        {
+          "path": "crates/engine-native-kernel/src/kernel/sha/resume.rs",
+          "line": 68,
+          "reason": "push来源标记"
+        }
+      ],
+      "runtime_evidence": [],
+      "observed_fields": [],
+      "counterexample_or_next_probe": "补同回合额外phaseUse、禁止所选目标用调兵以及同来源第二次复仇的真实反例。",
+      "disposition": "待核验；不单凭该gap新增撤回或等价签署。"
+    },
+    {
+      "id": "U07-N01",
+      "classification": "native_observation",
+      "inventory_key": "U07:skills:youzhan@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:422",
+      "affected_inventory_keys": [
+        "U07:skills:choudu@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:586"
+      ],
+      "title": "原生重复CardDiscarded/CardPlayed日志",
+      "difference": "筹度弃手牌0与诱战弃手中装备92各两次CardDiscarded；反击杀2两次CardPlayed，实体只移一次。上游结果未采完整对应事件流，故这是原生日志观察，不称跨引擎事件次数已实测不同。",
+      "upstream": [],
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+          "line": 476,
+          "reason": "helper已记弃牌后再次log"
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+          "line": 638,
+          "reason": "筹度手牌弃置后再次log"
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+          "line": 545,
+          "reason": "显式CardPlayed后又发CardUsed"
+        }
+      ],
+      "runtime_evidence": [
+        {
+          "case": "choudu-target1",
+          "native_log": "U07/native/09-formal.log",
+          "native_line": 2,
+          "browser_log": "U07/browser/case-results-twelfth.jsonl",
+          "browser_line": 2,
+          "raw_cdp_prefix": "U07/browser/session-wudian-1794592764804",
+          "raw_cdp_fixture_line": 4362,
+          "raw_cdp_choice_lines": [
+            4364,
+            4366,
+            4431,
+            4437,
+            4466
+          ],
+          "raw_cdp_final_line": 4469
+        },
+        {
+          "case": "youzhan-hand-stop",
+          "native_log": "U07/native/09-formal.log",
+          "native_line": 18,
+          "browser_log": "U07/browser/case-results-twelfth.jsonl",
+          "browser_line": 18,
+          "raw_cdp_prefix": "U07/browser/session-wudian-1794592764804",
+          "raw_cdp_fixture_line": 5215,
+          "raw_cdp_choice_lines": [
+            5217,
+            5238
+          ],
+          "raw_cdp_final_line": 5250
+        },
+        {
+          "case": "youzhan-counter-use",
+          "native_log": "U07/native/09-formal.log",
+          "native_line": 23,
+          "browser_log": "U07/browser/case-results-twelfth.jsonl",
+          "browser_line": 23,
+          "raw_cdp_prefix": "U07/browser/session-wudian-1794592764804",
+          "raw_cdp_fixture_line": 5318,
+          "raw_cdp_choice_lines": [
+            5320,
+            5342,
+            5355,
+            5357
+          ],
+          "raw_cdp_final_line": 5378
+        }
+      ],
+      "observed_fields": [
+        "native.log"
+      ],
+      "counterexample_or_next_probe": "补完整上游CardUsed/弃牌事件采样后再做跨引擎事件次数对照。",
+      "disposition": "登记原生观察，未以缺失上游日志冒充整卡反例。"
+    },
+    {
+      "id": "U07-L01",
+      "classification": "unmeasured_scope",
+      "title": "初态只比ID/name/suit/rank及指定玩家字段",
+      "facts": {
+        "all_24_initial_projected_equal": true,
+        "nature_not_created_or_captured_native_ids": [
+          87,
+          88,
+          94,
+          95,
+          96,
+          97
+        ],
+        "zone_order_compared": false,
+        "deck_draw_order_compared": true,
+        "full_rng_compared": false,
+        "full_damage_source_target_event_fields_captured_upstream": false
+      },
+      "limitation": "性质杀未执行；上游伤害归属以实际源码推断，不是上游runtime damage字段对照。完整初态/回合/所有修正器未比较。"
+    },
+    {
+      "id": "U07-L02",
+      "classification": "unmeasured_scope",
+      "title": "43档恢复是原生特定问答检查点",
+      "facts": {
+        "saved_archive_bytes_verified": 43,
+        "archive_version": 107,
+        "producer_probe_asserts": [
+          "hash before answer",
+          "CommandOutcome after same Answer",
+          "state_hash after same Answer",
+          "new log slice after same Answer"
+        ],
+        "own_u07_rust_decode_or_replay": 0,
+        "own_u07_cargo_or_browser_rerun": 0,
+        "full_snapshot_field_comparison": false,
+        "u07_corrupt_selection_or_old_version_probe": false
+      },
+      "limitation": "读取探针实际断言与原始执行结果并核对档案字节；不签跨引擎恢复、旧版本或损坏档案边界。"
+    }
+  ],
+  "inventory_observed_at": "2026-11-14T02:32:32.858306+08:00",
+  "inventory_status_observation": {
+    "U07:skills:fuchou2@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:548": "已复核等价",
+    "U07:skills:choudu@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:586": "简化近似",
+    "U07:skills:fuchou@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:508": "简化近似",
+    "U07:skills:youzhan@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:422": "简化近似",
+    "U07:cards:diaobingqianjiang@archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js:4": "简化近似",
+    "U07:cards:youdishenru@archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js:169": "已复核等价",
+    "U07:skills:g_youdishenru@archive/upstream/noname/apps/core/extension/玩点论杀/card/skill.js:16": "已复核等价",
+    "U07:skills:youdishenru@archive/upstream/noname/apps/core/extension/玩点论杀/card/skill.js:5": "简化近似"
+  }
+}

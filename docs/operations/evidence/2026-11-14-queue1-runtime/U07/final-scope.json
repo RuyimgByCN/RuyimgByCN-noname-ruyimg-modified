@@ -1,0 +1,395 @@
+{
+  "at": "2026-11-13T18:22:24.807612+00:00",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "rules": 333,
+  "ngsa": 107,
+  "schema": 5,
+  "abi": 759,
+  "ws": 8,
+  "final_cohort": "native09/formal + browser twelfth",
+  "unique_cases": 24,
+  "ngsa_native_windows": 43,
+  "compared": [
+    "player seat, hp/max_hp, alive, linked, face_down, hujia",
+    "player hand/equip/judge ID multisets; normalized skill keys and fuchou source marks",
+    "initial native ID → upstream normalized name/suit/rank metadata (not nature)",
+    "deck ID order; discard/table ID multisets; no foreign card append after fixture"
+  ],
+  "not_compared": [
+    "complete initial state identity across engines",
+    "elemental-card nature: leisha/fire_sha mapped to sha without nature; IDs87/88/94–97 untouched",
+    "semantic equality of unused deck suffix, generic equipment/mount aliases",
+    "initial general/identity/AI values",
+    "full cross-engine event/continuation/RNG history",
+    "hand and discard physical ordering",
+    "independent install/package lifecycle or normal product UI acceptance",
+    "unexecuted skill branches"
+  ],
+  "new_equivalence_signoff": false,
+  "initial_face_checks": [
+    {
+      "case": "choudu-top-return",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": [
+        0,
+        3,
+        4,
+        5,
+        6,
+        45
+      ]
+    },
+    {
+      "case": "choudu-target1",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": [
+        0,
+        3,
+        4,
+        5,
+        6,
+        45
+      ]
+    },
+    {
+      "case": "choudu-target2",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": [
+        0,
+        3,
+        4,
+        5,
+        6,
+        45
+      ]
+    },
+    {
+      "case": "choudu-swap-a",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": [
+        0,
+        3,
+        4,
+        5,
+        6,
+        30,
+        45
+      ]
+    },
+    {
+      "case": "choudu-swap-b",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": [
+        0,
+        3,
+        4,
+        5,
+        6,
+        45,
+        46
+      ]
+    },
+    {
+      "case": "choudu-equip-target1",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": [
+        3,
+        4,
+        5,
+        6,
+        45,
+        136
+      ]
+    },
+    {
+      "case": "choudu-cancel-card",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": []
+    },
+    {
+      "case": "choudu-cancel-target",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": []
+    },
+    {
+      "case": "choudu-empty",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": []
+    },
+    {
+      "case": "fuchou-hand",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": [
+        1,
+        30
+      ]
+    },
+    {
+      "case": "fuchou-equip",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": [
+        1,
+        136
+      ]
+    },
+    {
+      "case": "fuchou-cancel",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": [
+        1
+      ]
+    },
+    {
+      "case": "fuchou-empty",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": [
+        1
+      ]
+    },
+    {
+      "case": "fuchou-settle-no-sha",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": [
+        1,
+        30,
+        45,
+        137
+      ]
+    },
+    {
+      "case": "fuchou-settle-draw-sha",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": [
+        1,
+        3,
+        30,
+        137
+      ]
+    },
+    {
+      "case": "fuchou-settle-have-sha-decline-retaliation",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": [
+        1,
+        30,
+        45,
+        137
+      ]
+    },
+    {
+      "case": "fuchou-settle-have-sha-use",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": [
+        1,
+        2,
+        30,
+        45,
+        137
+      ]
+    },
+    {
+      "case": "youzhan-hand-stop",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": [
+        1,
+        92
+      ]
+    },
+    {
+      "case": "youzhan-equip-stop",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": [
+        1,
+        136
+      ]
+    },
+    {
+      "case": "youzhan-cancel",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": [
+        1
+      ]
+    },
+    {
+      "case": "youzhan-far",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": [
+        1
+      ]
+    },
+    {
+      "case": "youzhan-no-equip",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": [
+        1
+      ]
+    },
+    {
+      "case": "youzhan-counter-use",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": [
+        1,
+        2,
+        92
+      ]
+    },
+    {
+      "case": "youzhan-counter-dodge-stop",
+      "initial_normalized_name_suit_rank_equal": true,
+      "unmapped_or_foreign_final_cards": false,
+      "elemental_six_moved_in_compared_run": false,
+      "moved_ids": [
+        1,
+        2,
+        30,
+        92
+      ]
+    }
+  ],
+  "browser_attempt_history": [
+    {
+      "file": "browser/case-results-eighth.jsonl",
+      "rows": 8,
+      "unique_cases": 8,
+      "success_records": 8,
+      "failure_records": 0,
+      "sha256": "c9516547e507beb8db990b2d72331ede39490a475257d92c2f38d1715c7eb089"
+    },
+    {
+      "file": "browser/case-results-eleventh.jsonl",
+      "rows": 24,
+      "unique_cases": 24,
+      "success_records": 24,
+      "failure_records": 0,
+      "sha256": "5067b2f3090cb026194504ad5db39bc1ea6eeecadccde888be989d512fd01eb8"
+    },
+    {
+      "file": "browser/case-results-fifth.jsonl",
+      "rows": 6,
+      "unique_cases": 6,
+      "success_records": 0,
+      "failure_records": 6,
+      "sha256": "fe2081cec074e882ff500dd9609317c8cb3f0a04a2344419e87040fc0d654413"
+    },
+    {
+      "file": "browser/case-results-first.jsonl",
+      "rows": 1,
+      "unique_cases": 1,
+      "success_records": 0,
+      "failure_records": 1,
+      "sha256": "a4edbb4c71cd8838810772ac28cabcce3e891d8ec971426a1f64bc755e1e4e47"
+    },
+    {
+      "file": "browser/case-results-fourth.jsonl",
+      "rows": 2,
+      "unique_cases": 2,
+      "success_records": 2,
+      "failure_records": 0,
+      "sha256": "4401d468ca2cb8524a47108320ad92c2575a99f9bea17ae619833af801cb96e4"
+    },
+    {
+      "file": "browser/case-results-ninth.jsonl",
+      "rows": 23,
+      "unique_cases": 23,
+      "success_records": 23,
+      "failure_records": 0,
+      "sha256": "ab109f13a51e9f6a4e0b4307151ee62da45e6cf21308ee807e7b33ad0ec92fce"
+    },
+    {
+      "file": "browser/case-results-second.jsonl",
+      "rows": 1,
+      "unique_cases": 1,
+      "success_records": 0,
+      "failure_records": 1,
+      "sha256": "0f1fdae3c43863055d8c7d4e0ff651718ec5e369d665d6b1c667b2fcff09e1e0"
+    },
+    {
+      "file": "browser/case-results-seventh.jsonl",
+      "rows": 8,
+      "unique_cases": 8,
+      "success_records": 3,
+      "failure_records": 5,
+      "sha256": "78b0c72a607912060832d7ec364ea64d2841cdb540fa32aab7fc34a767e721bb"
+    },
+    {
+      "file": "browser/case-results-sixth.jsonl",
+      "rows": 6,
+      "unique_cases": 6,
+      "success_records": 6,
+      "failure_records": 0,
+      "sha256": "eb44d6471fb21bfc2bb53d77090401f5216dbbb3cc95879145d946786e10d2f6"
+    },
+    {
+      "file": "browser/case-results-tenth.jsonl",
+      "rows": 1,
+      "unique_cases": 1,
+      "success_records": 1,
+      "failure_records": 0,
+      "sha256": "b85312a8c9b5a10db0fdc8e5bf4e0895d27015fdae803dcad8bbc405bb7799c6"
+    },
+    {
+      "file": "browser/case-results-third.jsonl",
+      "rows": 6,
+      "unique_cases": 6,
+      "success_records": 4,
+      "failure_records": 2,
+      "sha256": "6162387facff2218d2fcb0c58f7005b2b464634d7c626d233d483c65d630323c"
+    },
+    {
+      "file": "browser/case-results-twelfth.jsonl",
+      "rows": 24,
+      "unique_cases": 24,
+      "success_records": 24,
+      "failure_records": 0,
+      "sha256": "a40fc47f592a518a03f6b41e796dbbdea324567bd760fd250a46b1287b08ba99"
+    }
+  ],
+  "old_attempt_binary_limit": "native01–04 retained source/stderr, but no per-attempt binary fingerprint was captured; these are setup failures, not final reproducible-version acceptance",
+  "final_binary_sha256": "fc687225a12ae9e42965afb86f5c4ec744ade92e42414c201c09461f3558370a"
+}

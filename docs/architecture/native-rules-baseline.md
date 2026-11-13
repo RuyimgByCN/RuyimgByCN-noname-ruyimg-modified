@@ -1,5 +1,13 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+## 2026-11-14T02:33:04+08:00 酒诗恢复与U07规则差异边界
+
+源码HEAD `605201f3f49e10cea61c31d52a61bbb66c85599d` + tracked dirty；规则333／NGSA107／schema5／ABI759／WS8不变。 酒诗仅恢复定义与实时确认窗一致，完整代码门禁通过；未改结算、版本、NGSA结构或严格验证。U07复仇清算的真实杀/拒绝/失去体力分支，以及筹度市场/置顶、诱战取消原杀/持续追问差异均保留；实体诱敌深入另有独立内核，仅源码确认单次追杀缺陷，未在本批跑实体入口。[独立审查及原始证据](../operations/evidence/2026-11-14-queue1-runtime/independent/u07/review.md)。当前状态以[进度主稿](native-progress.md)和[清单](../migration/g0/inventory_status.json)为准；未据恢复成功签规则等价，发布待。
+
+## 2026-11-14T02:08:35+08:00 U06/L29 运行差异与恢复修复边界（未提交／发布）
+
+HEAD `605201f3f49e10cea61c31d52a61bbb66c85599d` + tracked dirty；333／107／5／759／WS8。U06猴子取消后原生桃未消费、写轮眼第二步取消被拒绝已实际复现；L29清正伤害来源/付款/取消窗、放逐封技能范围、酒诗酒生效中间时点仍有差异。清正与酒诗旧等价撤回，632／3792／0、新增等价0。[逐样本原始对照](../operations/evidence/2026-11-14-queue1-runtime/README.md)。酒诗本次只修恢复期询问重建，使其与既有运行时确认窗一致，不放宽严格校验；68份修复前NGSA恢复与136次原续行相同。完整本地门禁／发布尚待，不作全规则或历史存档普遍兼容承诺。
+
 ## 2026-11-14T01:33:42+08:00 聚贤部分修复发布与代码CI
 
 代码 `1fa8ac6cc3a70446436d97ff49aa19ea4626e22d` 已按裁决25正常发布；[精确SHA CI](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43468568765) attempt1全部10作业success／0失败／0取消，未由agent补跑。记录时HEAD为该代码加文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8。 [完整原始门禁与CI](../operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/README.md)。14标准golden及一份旧NGSA107核验不变；聚贤J01–J05仍保留，整技能为简化近似。634／3790／0、新增等价0；没有因CI或5技能指定投影相同签整源规则等价。

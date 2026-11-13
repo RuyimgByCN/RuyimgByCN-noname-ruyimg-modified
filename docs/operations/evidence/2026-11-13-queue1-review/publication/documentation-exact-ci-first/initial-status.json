@@ -1,0 +1,91 @@
+{
+  "at": "2026-11-14T01:40:37.191652+08:00",
+  "head_sha": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "run_id": 43475076340,
+  "status": "queued",
+  "conclusion": null,
+  "attempt": 1,
+  "jobs": [
+    [
+      "desktop-macos-latest",
+      "queued",
+      null
+    ],
+    [
+      "gates-ubuntu",
+      "in_progress",
+      null
+    ],
+    [
+      "perf-ubuntu-latest",
+      "in_progress",
+      null
+    ],
+    [
+      "build-windows-latest",
+      "in_progress",
+      null
+    ],
+    [
+      "perf-macos-latest",
+      "queued",
+      null
+    ],
+    [
+      "build-ubuntu-latest",
+      "in_progress",
+      null
+    ],
+    [
+      "desktop-ubuntu-latest",
+      "in_progress",
+      null
+    ],
+    [
+      "desktop-windows-latest",
+      "in_progress",
+      null
+    ],
+    [
+      "build-macos-latest",
+      "in_progress",
+      null
+    ],
+    [
+      "native-web",
+      "in_progress",
+      null
+    ]
+  ],
+  "commands": [
+    {
+      "argv": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs?head_sha=605201f3f49e10cea61c31d52a61bbb66c85599d&event=push&per_page=100"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340/jobs?per_page=100"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "agent_dispatched_reruns": 0,
+  "scope": "Pure documentation/evidence companion. Required exact-code CI was already successful for parent 1fa8ac6c. This initial state is not a terminal success claim."
+}

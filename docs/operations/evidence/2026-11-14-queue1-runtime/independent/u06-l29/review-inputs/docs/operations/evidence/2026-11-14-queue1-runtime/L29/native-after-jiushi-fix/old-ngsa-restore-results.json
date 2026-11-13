@@ -1,0 +1,2532 @@
+[
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2101,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [\"player:1\"] }",
+            "ChoiceOpened { id: 2, observer: 0, prompt: \"mbcmfangzhu_option\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmfangzhu_option\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Player(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:0\"] }",
+            "SkillTriggered { skill: \"mbcmfangzhu\", owner: 0, presentation: None }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [57, 41, 25, 221, 194, 147, 96, 249, 165, 182, 230, 171, 49, 193, 150, 235, 244, 88, 20, 245, 157, 44, 25, 160, 93, 54, 152, 238, 252, 124, 2, 91] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(0)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(SkillAlreadyUsed)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: ActivateSkill { skill: 232 } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_ban_B-direct-pending-0.ngsa",
+    "prompt": "mbcmfangzhu_target",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2100,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:0\"] }",
+            "SkillTriggered { skill: \"mbcmfangzhu\", owner: 0, presentation: None }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [57, 41, 25, 221, 194, 147, 96, 249, 165, 182, 230, 171, 49, 193, 150, 235, 244, 88, 20, 245, 157, 44, 25, 160, 93, 54, 152, 238, 252, 124, 2, 91] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(0)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(SkillAlreadyUsed)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: ActivateSkill { skill: 232 } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_ban_B-direct-pending-1.ngsa",
+    "prompt": "mbcmfangzhu_option",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2101,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [\"player:1\"] }",
+            "ChoiceOpened { id: 2, observer: 0, prompt: \"mbcmfangzhu_option\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmfangzhu_option\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Player(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:0\"] }",
+            "SkillTriggered { skill: \"mbcmfangzhu\", owner: 0, presentation: None }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [57, 41, 25, 221, 194, 147, 96, 249, 165, 182, 230, 171, 49, 193, 150, 235, 244, 88, 20, 245, 157, 44, 25, 160, 93, 54, 152, 238, 252, 124, 2, 91] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(0)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(SkillAlreadyUsed)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: ActivateSkill { skill: 232 } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_ban_B-restored-pending-0.ngsa",
+    "prompt": "mbcmfangzhu_target",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "bytes": 2100,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:0\"] }",
+            "SkillTriggered { skill: \"mbcmfangzhu\", owner: 0, presentation: None }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [57, 41, 25, 221, 194, 147, 96, 249, 165, 182, 230, 171, 49, 193, 150, 235, 244, 88, 20, 245, 157, 44, 25, 160, 93, 54, 152, 238, 252, 124, 2, 91] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(0)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(SkillAlreadyUsed)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: ActivateSkill { skill: 232 } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_ban_B-restored-pending-1.ngsa",
+    "prompt": "mbcmfangzhu_option",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2101,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [\"player:1\"] }",
+            "ChoiceOpened { id: 2, observer: 0, prompt: \"mbcmfangzhu_option\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmfangzhu_option\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Player(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(InvalidChoice)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_cancel_mode_attempt-direct-pending-0.ngsa",
+    "prompt": "mbcmfangzhu_target",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2100,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(InvalidChoice)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_cancel_mode_attempt-direct-pending-1.ngsa",
+    "prompt": "mbcmfangzhu_option",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2101,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [\"player:1\"] }",
+            "ChoiceOpened { id: 2, observer: 0, prompt: \"mbcmfangzhu_option\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmfangzhu_option\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Player(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(InvalidChoice)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_cancel_mode_attempt-restored-pending-0.ngsa",
+    "prompt": "mbcmfangzhu_target",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "bytes": 2100,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(InvalidChoice)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_cancel_mode_attempt-restored-pending-1.ngsa",
+    "prompt": "mbcmfangzhu_option",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2101,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [] }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [40, 190, 68, 183, 76, 143, 103, 32, 195, 146, 208, 193, 137, 201, 65, 96, 229, 140, 71, 39, 238, 55, 165, 84, 131, 97, 194, 156, 238, 182, 89, 118] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceOpened { id: 2, observer: 0, prompt: \"mbcmfangzhu_target\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"mbcmfangzhu_target\", options: [Player(1), Player(2), Player(3)], min: 1, max: 1, allow_cancel: true } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: ActivateSkill { skill: 232 } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_cancel_target-direct-pending-0.ngsa",
+    "prompt": "mbcmfangzhu_target",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2101,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [] }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [40, 190, 68, 183, 76, 143, 103, 32, 195, 146, 208, 193, 137, 201, 65, 96, 229, 140, 71, 39, 238, 55, 165, 84, 131, 97, 194, 156, 238, 182, 89, 118] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceOpened { id: 2, observer: 0, prompt: \"mbcmfangzhu_target\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"mbcmfangzhu_target\", options: [Player(1), Player(2), Player(3)], min: 1, max: 1, allow_cancel: true } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: ActivateSkill { skill: 232 } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_cancel_target-restored-pending-0.ngsa",
+    "prompt": "mbcmfangzhu_target",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2135,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(InvalidChoice)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Player(1)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_last_target-direct-pending-0.ngsa",
+    "prompt": "mbcmfangzhu_target",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2135,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(InvalidChoice)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Player(1)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_last_target-restored-pending-0.ngsa",
+    "prompt": "mbcmfangzhu_target",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2101,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(InvalidChoice)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Player(0)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_self_attempt-direct-pending-0.ngsa",
+    "prompt": "mbcmfangzhu_target",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2101,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(InvalidChoice)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Player(0)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_self_attempt-restored-pending-0.ngsa",
+    "prompt": "mbcmfangzhu_target",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2101,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [\"player:1\"] }",
+            "ChoiceOpened { id: 2, observer: 0, prompt: \"mbcmfangzhu_option\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmfangzhu_option\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Player(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:1\"] }",
+            "SkillTriggered { skill: \"mbcmfangzhu\", owner: 0, presentation: None }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [75, 106, 37, 155, 165, 202, 233, 72, 31, 201, 218, 116, 252, 220, 234, 71, 16, 213, 11, 145, 163, 165, 6, 203, 69, 68, 204, 79, 151, 62, 236, 174] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(SkillAlreadyUsed)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: ActivateSkill { skill: 232 } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_skill_A-direct-pending-0.ngsa",
+    "prompt": "mbcmfangzhu_target",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2100,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:1\"] }",
+            "SkillTriggered { skill: \"mbcmfangzhu\", owner: 0, presentation: None }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [75, 106, 37, 155, 165, 202, 233, 72, 31, 201, 218, 116, 252, 220, 234, 71, 16, 213, 11, 145, 163, 165, 6, 203, 69, 68, 204, 79, 151, 62, 236, 174] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(SkillAlreadyUsed)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: ActivateSkill { skill: 232 } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_skill_A-direct-pending-1.ngsa",
+    "prompt": "mbcmfangzhu_option",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2101,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [\"player:1\"] }",
+            "ChoiceOpened { id: 2, observer: 0, prompt: \"mbcmfangzhu_option\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmfangzhu_option\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Player(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:1\"] }",
+            "SkillTriggered { skill: \"mbcmfangzhu\", owner: 0, presentation: None }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [75, 106, 37, 155, 165, 202, 233, 72, 31, 201, 218, 116, 252, 220, 234, 71, 16, 213, 11, 145, 163, 165, 6, 203, 69, 68, 204, 79, 151, 62, 236, 174] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(SkillAlreadyUsed)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: ActivateSkill { skill: 232 } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_skill_A-restored-pending-0.ngsa",
+    "prompt": "mbcmfangzhu_target",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "bytes": 2100,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:1\"] }",
+            "SkillTriggered { skill: \"mbcmfangzhu\", owner: 0, presentation: None }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [75, 106, 37, 155, 165, 202, 233, 72, 31, 201, 218, 116, 252, 220, 234, 71, 16, 213, 11, 145, 163, 165, 6, 203, 69, 68, 204, 79, 151, 62, 236, 174] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(SkillAlreadyUsed)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: ActivateSkill { skill: 232 } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_skill_A-restored-pending-1.ngsa",
+    "prompt": "mbcmfangzhu_option",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2101,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [\"player:2\"] }",
+            "ChoiceOpened { id: 2, observer: 0, prompt: \"mbcmfangzhu_option\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmfangzhu_option\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Player(2)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:0\"] }",
+            "SkillTriggered { skill: \"mbcmfangzhu\", owner: 0, presentation: None }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [149, 116, 26, 146, 112, 191, 164, 107, 195, 20, 167, 95, 84, 26, 131, 135, 40, 213, 213, 36, 189, 73, 169, 41, 247, 25, 23, 35, 85, 184, 99, 90] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(0)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(SkillAlreadyUsed)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: ActivateSkill { skill: 232 } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_target_B-direct-pending-0.ngsa",
+    "prompt": "mbcmfangzhu_target",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2100,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:0\"] }",
+            "SkillTriggered { skill: \"mbcmfangzhu\", owner: 0, presentation: None }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [149, 116, 26, 146, 112, 191, 164, 107, 195, 20, 167, 95, 84, 26, 131, 135, 40, 213, 213, 36, 189, 73, 169, 41, 247, 25, 23, 35, 85, 184, 99, 90] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(0)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(SkillAlreadyUsed)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: ActivateSkill { skill: 232 } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_target_B-direct-pending-1.ngsa",
+    "prompt": "mbcmfangzhu_option",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2101,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [\"player:2\"] }",
+            "ChoiceOpened { id: 2, observer: 0, prompt: \"mbcmfangzhu_option\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmfangzhu_option\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Player(2)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:0\"] }",
+            "SkillTriggered { skill: \"mbcmfangzhu\", owner: 0, presentation: None }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [149, 116, 26, 146, 112, 191, 164, 107, 195, 20, 167, 95, 84, 26, 131, 135, 40, 213, 213, 36, 189, 73, 169, 41, 247, 25, 23, 35, 85, 184, 99, 90] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(0)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(SkillAlreadyUsed)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: ActivateSkill { skill: 232 } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_target_B-restored-pending-0.ngsa",
+    "prompt": "mbcmfangzhu_target",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "bytes": 2100,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:0\"] }",
+            "SkillTriggered { skill: \"mbcmfangzhu\", owner: 0, presentation: None }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [149, 116, 26, 146, 112, 191, 164, 107, 195, 20, 167, 95, 84, 26, 131, 135, 40, 213, 213, 36, 189, 73, 169, 41, 247, 25, 23, 35, 85, 184, 99, 90] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(0)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(SkillAlreadyUsed)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: ActivateSkill { skill: 232 } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/f_target_B-restored-pending-1.ngsa",
+    "prompt": "mbcmfangzhu_option",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2218,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [] }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [85, 3, 203, 239, 89, 140, 92, 214, 180, 130, 209, 192, 147, 31, 13, 243, 2, 199, 120, 122, 112, 131, 2, 108, 19, 240, 2, 158, 76, 112, 78, 149] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/j_active_cancel_gain-direct-pending-0.ngsa",
+    "prompt": "mbcmjiushi_gain_confirm",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2218,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [] }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [85, 3, 203, 239, 89, 140, 92, 214, 180, 130, 209, 192, 147, 31, 13, 243, 2, 199, 120, 122, 112, 131, 2, 108, 19, 240, 2, 158, 76, 112, 78, 149] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/j_active_cancel_gain-restored-pending-0.ngsa",
+    "prompt": "mbcmjiushi_gain_confirm",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2218,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [\"confirm\"] }",
+            "CardsDrawn { player: 0, cards: [105] }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [78, 234, 95, 107, 104, 223, 100, 180, 56, 201, 175, 76, 145, 168, 81, 39, 227, 161, 234, 221, 40, 178, 233, 185, 249, 229, 1, 202, 18, 198, 100, 24] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Confirm] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/j_active_gain-direct-pending-0.ngsa",
+    "prompt": "mbcmjiushi_gain_confirm",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2218,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [\"confirm\"] }",
+            "CardsDrawn { player: 0, cards: [105] }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [78, 234, 95, 107, 104, 223, 100, 180, 56, 201, 175, 76, 145, 168, 81, 39, 227, 161, 234, 221, 40, 178, 233, 185, 249, 229, 1, 202, 18, 198, 100, 24] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Confirm] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/j_active_gain-restored-pending-0.ngsa",
+    "prompt": "mbcmjiushi_gain_confirm",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2255,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [\"confirm\"] }",
+            "SkillTriggered { skill: \"mbcmjiushi\", owner: 0, presentation: None }",
+            "SkillTriggered { skill: \"mbcmjiushi\", owner: 0, presentation: None }",
+            "ChoiceOpened { id: 2, observer: 0, prompt: \"mbcmjiushi_gain_confirm\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: Confirm, prompt: \"mbcmjiushi_gain_confirm\", options: [Confirm], min: 1, max: 1, allow_cancel: true } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Confirm] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"confirm\"] }",
+            "CardsDrawn { player: 0, cards: [105] }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [187, 11, 202, 156, 107, 228, 51, 43, 73, 217, 90, 209, 161, 249, 5, 248, 56, 241, 148, 32, 63, 146, 116, 190, 95, 140, 197, 148, 57, 198, 192, 99] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Confirm] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/j_damage_back_accept_gain-direct-pending-0.ngsa",
+    "prompt": "mbcmjiushi_turnback_confirm",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2330,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"confirm\"] }",
+            "CardsDrawn { player: 0, cards: [105] }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [187, 11, 202, 156, 107, 228, 51, 43, 73, 217, 90, 209, 161, 249, 5, 248, 56, 241, 148, 32, 63, 146, 116, 190, 95, 140, 197, 148, 57, 198, 192, 99] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Confirm] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/j_damage_back_accept_gain-direct-pending-1.ngsa",
+    "prompt": "mbcmjiushi_gain_confirm",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2255,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [\"confirm\"] }",
+            "SkillTriggered { skill: \"mbcmjiushi\", owner: 0, presentation: None }",
+            "SkillTriggered { skill: \"mbcmjiushi\", owner: 0, presentation: None }",
+            "ChoiceOpened { id: 2, observer: 0, prompt: \"mbcmjiushi_gain_confirm\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: Confirm, prompt: \"mbcmjiushi_gain_confirm\", options: [Confirm], min: 1, max: 1, allow_cancel: true } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Confirm] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"confirm\"] }",
+            "CardsDrawn { player: 0, cards: [105] }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [187, 11, 202, 156, 107, 228, 51, 43, 73, 217, 90, 209, 161, 249, 5, 248, 56, 241, 148, 32, 63, 146, 116, 190, 95, 140, 197, 148, 57, 198, 192, 99] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Confirm] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/j_damage_back_accept_gain-restored-pending-0.ngsa",
+    "prompt": "mbcmjiushi_turnback_confirm",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2330,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"confirm\"] }",
+            "CardsDrawn { player: 0, cards: [105] }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [187, 11, 202, 156, 107, 228, 51, 43, 73, 217, 90, 209, 161, 249, 5, 248, 56, 241, 148, 32, 63, 146, 116, 190, 95, 140, 197, 148, 57, 198, 192, 99] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Confirm] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/j_damage_back_accept_gain-restored-pending-1.ngsa",
+    "prompt": "mbcmjiushi_gain_confirm",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2255,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [] }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [226, 146, 97, 105, 145, 121, 167, 217, 181, 254, 198, 112, 46, 239, 95, 211, 62, 114, 17, 30, 43, 246, 163, 213, 158, 44, 123, 36, 139, 35, 12, 53] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/j_damage_back_cancel-direct-pending-0.ngsa",
+    "prompt": "mbcmjiushi_turnback_confirm",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2255,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [] }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [226, 146, 97, 105, 145, 121, 167, 217, 181, 254, 198, 112, 46, 239, 95, 211, 62, 114, 17, 30, 43, 246, 163, 213, 158, 44, 123, 36, 139, 35, 12, 53] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/j_damage_back_cancel-restored-pending-0.ngsa",
+    "prompt": "mbcmjiushi_turnback_confirm",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2107,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [\"confirm\"] }",
+            "SkillTriggered { skill: \"mbcmqingzheng\", owner: 0, presentation: None }",
+            "ChoiceOpened { id: 2, observer: 0, prompt: \"mbcmqingzheng_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_suit\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Confirm] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:0\"] }",
+            "ChoiceOpened { id: 3, observer: 0, prompt: \"mbcmqingzheng_target\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"mbcmqingzheng_target\", options: [Player(1), Player(2)], min: 1, max: 1, allow_cancel: true } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(0)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [\"player:1\"] }",
+            "ChoiceOpened { id: 4, observer: 0, prompt: \"mbcmqingzheng_target_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 4, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_target_suit\", options: [Tag(1), Tag(2)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Player(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:2\"] }",
+            "CardDiscarded { player: 0, cards: [85] }",
+            "CardDiscarded { player: 0, cards: [114] }",
+            "CardDiscarded { player: 1, cards: [8] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }",
+            "DamageDealt { source: None, target: 1, amount: 1, redirected_from: [], card: None, presentation: Some(DamageDealt { source: None, target: PlayerId(2), amount: 1, nature: Normal }) }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [76, 123, 31, 140, 67, 243, 179, 209, 164, 38, 251, 3, 212, 2, 118, 66, 1, 111, 4, 88, 213, 92, 159, 87, 238, 53, 54, 162, 76, 36, 160, 97] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(2)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_A-direct-pending-0.ngsa",
+    "prompt": "trigger_confirm",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2157,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:0\"] }",
+            "ChoiceOpened { id: 3, observer: 0, prompt: \"mbcmqingzheng_target\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"mbcmqingzheng_target\", options: [Player(1), Player(2)], min: 1, max: 1, allow_cancel: true } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(0)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [\"player:1\"] }",
+            "ChoiceOpened { id: 4, observer: 0, prompt: \"mbcmqingzheng_target_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 4, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_target_suit\", options: [Tag(1), Tag(2)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Player(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:2\"] }",
+            "CardDiscarded { player: 0, cards: [85] }",
+            "CardDiscarded { player: 0, cards: [114] }",
+            "CardDiscarded { player: 1, cards: [8] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }",
+            "DamageDealt { source: None, target: 1, amount: 1, redirected_from: [], card: None, presentation: Some(DamageDealt { source: None, target: PlayerId(2), amount: 1, nature: Normal }) }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [76, 123, 31, 140, 67, 243, 179, 209, 164, 38, 251, 3, 212, 2, 118, 66, 1, 111, 4, 88, 213, 92, 159, 87, 238, 53, 54, 162, 76, 36, 160, 97] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(2)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_A-direct-pending-1.ngsa",
+    "prompt": "mbcmqingzheng_suit",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2167,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [\"player:1\"] }",
+            "ChoiceOpened { id: 4, observer: 0, prompt: \"mbcmqingzheng_target_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 4, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_target_suit\", options: [Tag(1), Tag(2)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Player(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:2\"] }",
+            "CardDiscarded { player: 0, cards: [85] }",
+            "CardDiscarded { player: 0, cards: [114] }",
+            "CardDiscarded { player: 1, cards: [8] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }",
+            "DamageDealt { source: None, target: 1, amount: 1, redirected_from: [], card: None, presentation: Some(DamageDealt { source: None, target: PlayerId(2), amount: 1, nature: Normal }) }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [76, 123, 31, 140, 67, 243, 179, 209, 164, 38, 251, 3, 212, 2, 118, 66, 1, 111, 4, 88, 213, 92, 159, 87, 238, 53, 54, 162, 76, 36, 160, 97] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(2)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_A-direct-pending-2.ngsa",
+    "prompt": "mbcmqingzheng_target",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2173,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:2\"] }",
+            "CardDiscarded { player: 0, cards: [85] }",
+            "CardDiscarded { player: 0, cards: [114] }",
+            "CardDiscarded { player: 1, cards: [8] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }",
+            "DamageDealt { source: None, target: 1, amount: 1, redirected_from: [], card: None, presentation: Some(DamageDealt { source: None, target: PlayerId(2), amount: 1, nature: Normal }) }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [76, 123, 31, 140, 67, 243, 179, 209, 164, 38, 251, 3, 212, 2, 118, 66, 1, 111, 4, 88, 213, 92, 159, 87, 238, 53, 54, 162, 76, 36, 160, 97] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(2)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_A-direct-pending-3.ngsa",
+    "prompt": "mbcmqingzheng_target_suit",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2107,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [\"confirm\"] }",
+            "SkillTriggered { skill: \"mbcmqingzheng\", owner: 0, presentation: None }",
+            "ChoiceOpened { id: 2, observer: 0, prompt: \"mbcmqingzheng_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_suit\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Confirm] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:0\"] }",
+            "ChoiceOpened { id: 3, observer: 0, prompt: \"mbcmqingzheng_target\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"mbcmqingzheng_target\", options: [Player(1), Player(2)], min: 1, max: 1, allow_cancel: true } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(0)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [\"player:1\"] }",
+            "ChoiceOpened { id: 4, observer: 0, prompt: \"mbcmqingzheng_target_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 4, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_target_suit\", options: [Tag(1), Tag(2)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Player(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:2\"] }",
+            "CardDiscarded { player: 0, cards: [85] }",
+            "CardDiscarded { player: 0, cards: [114] }",
+            "CardDiscarded { player: 1, cards: [8] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }",
+            "DamageDealt { source: None, target: 1, amount: 1, redirected_from: [], card: None, presentation: Some(DamageDealt { source: None, target: PlayerId(2), amount: 1, nature: Normal }) }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [76, 123, 31, 140, 67, 243, 179, 209, 164, 38, 251, 3, 212, 2, 118, 66, 1, 111, 4, 88, 213, 92, 159, 87, 238, 53, 54, 162, 76, 36, 160, 97] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(2)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_A-restored-pending-0.ngsa",
+    "prompt": "trigger_confirm",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "bytes": 2157,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:0\"] }",
+            "ChoiceOpened { id: 3, observer: 0, prompt: \"mbcmqingzheng_target\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"mbcmqingzheng_target\", options: [Player(1), Player(2)], min: 1, max: 1, allow_cancel: true } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(0)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [\"player:1\"] }",
+            "ChoiceOpened { id: 4, observer: 0, prompt: \"mbcmqingzheng_target_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 4, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_target_suit\", options: [Tag(1), Tag(2)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Player(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:2\"] }",
+            "CardDiscarded { player: 0, cards: [85] }",
+            "CardDiscarded { player: 0, cards: [114] }",
+            "CardDiscarded { player: 1, cards: [8] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }",
+            "DamageDealt { source: None, target: 1, amount: 1, redirected_from: [], card: None, presentation: Some(DamageDealt { source: None, target: PlayerId(2), amount: 1, nature: Normal }) }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [76, 123, 31, 140, 67, 243, 179, 209, 164, 38, 251, 3, 212, 2, 118, 66, 1, 111, 4, 88, 213, 92, 159, 87, 238, 53, 54, 162, 76, 36, 160, 97] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(2)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_A-restored-pending-1.ngsa",
+    "prompt": "mbcmqingzheng_suit",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 3,
+    "auth_before": 2,
+    "bytes": 2167,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [\"player:1\"] }",
+            "ChoiceOpened { id: 4, observer: 0, prompt: \"mbcmqingzheng_target_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 4, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_target_suit\", options: [Tag(1), Tag(2)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Player(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:2\"] }",
+            "CardDiscarded { player: 0, cards: [85] }",
+            "CardDiscarded { player: 0, cards: [114] }",
+            "CardDiscarded { player: 1, cards: [8] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }",
+            "DamageDealt { source: None, target: 1, amount: 1, redirected_from: [], card: None, presentation: Some(DamageDealt { source: None, target: PlayerId(2), amount: 1, nature: Normal }) }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [76, 123, 31, 140, 67, 243, 179, 209, 164, 38, 251, 3, 212, 2, 118, 66, 1, 111, 4, 88, 213, 92, 159, 87, 238, 53, 54, 162, 76, 36, 160, 97] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(2)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_A-restored-pending-2.ngsa",
+    "prompt": "mbcmqingzheng_target",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 4,
+    "auth_before": 3,
+    "bytes": 2173,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:2\"] }",
+            "CardDiscarded { player: 0, cards: [85] }",
+            "CardDiscarded { player: 0, cards: [114] }",
+            "CardDiscarded { player: 1, cards: [8] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }",
+            "DamageDealt { source: None, target: 1, amount: 1, redirected_from: [], card: None, presentation: Some(DamageDealt { source: None, target: PlayerId(2), amount: 1, nature: Normal }) }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [76, 123, 31, 140, 67, 243, 179, 209, 164, 38, 251, 3, 212, 2, 118, 66, 1, 111, 4, 88, 213, 92, 159, 87, 238, 53, 54, 162, 76, 36, 160, 97] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(2)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_A-restored-pending-3.ngsa",
+    "prompt": "mbcmqingzheng_target_suit",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2107,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [\"confirm\"] }",
+            "SkillTriggered { skill: \"mbcmqingzheng\", owner: 0, presentation: None }",
+            "ChoiceOpened { id: 2, observer: 0, prompt: \"mbcmqingzheng_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_suit\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Confirm] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:1\"] }",
+            "ChoiceOpened { id: 3, observer: 0, prompt: \"mbcmqingzheng_target\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"mbcmqingzheng_target\", options: [Player(1), Player(2)], min: 1, max: 1, allow_cancel: true } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [\"player:1\"] }",
+            "ChoiceOpened { id: 4, observer: 0, prompt: \"mbcmqingzheng_target_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 4, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_target_suit\", options: [Tag(1), Tag(2)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Player(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:1\"] }",
+            "CardDiscarded { player: 0, cards: [51] }",
+            "CardDiscarded { player: 1, cards: [105] }",
+            "CardDiscarded { player: 1, cards: [69] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [119, 66, 243, 11, 2, 151, 116, 19, 43, 226, 31, 36, 148, 57, 63, 194, 38, 10, 142, 68, 86, 216, 174, 135, 103, 206, 47, 195, 218, 215, 6, 196] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(1)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_B-direct-pending-0.ngsa",
+    "prompt": "trigger_confirm",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2157,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:1\"] }",
+            "ChoiceOpened { id: 3, observer: 0, prompt: \"mbcmqingzheng_target\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"mbcmqingzheng_target\", options: [Player(1), Player(2)], min: 1, max: 1, allow_cancel: true } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [\"player:1\"] }",
+            "ChoiceOpened { id: 4, observer: 0, prompt: \"mbcmqingzheng_target_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 4, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_target_suit\", options: [Tag(1), Tag(2)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Player(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:1\"] }",
+            "CardDiscarded { player: 0, cards: [51] }",
+            "CardDiscarded { player: 1, cards: [105] }",
+            "CardDiscarded { player: 1, cards: [69] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [119, 66, 243, 11, 2, 151, 116, 19, 43, 226, 31, 36, 148, 57, 63, 194, 38, 10, 142, 68, 86, 216, 174, 135, 103, 206, 47, 195, 218, 215, 6, 196] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(1)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_B-direct-pending-1.ngsa",
+    "prompt": "mbcmqingzheng_suit",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2163,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [\"player:1\"] }",
+            "ChoiceOpened { id: 4, observer: 0, prompt: \"mbcmqingzheng_target_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 4, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_target_suit\", options: [Tag(1), Tag(2)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Player(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:1\"] }",
+            "CardDiscarded { player: 0, cards: [51] }",
+            "CardDiscarded { player: 1, cards: [105] }",
+            "CardDiscarded { player: 1, cards: [69] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [119, 66, 243, 11, 2, 151, 116, 19, 43, 226, 31, 36, 148, 57, 63, 194, 38, 10, 142, 68, 86, 216, 174, 135, 103, 206, 47, 195, 218, 215, 6, 196] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(1)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_B-direct-pending-2.ngsa",
+    "prompt": "mbcmqingzheng_target",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2169,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:1\"] }",
+            "CardDiscarded { player: 0, cards: [51] }",
+            "CardDiscarded { player: 1, cards: [105] }",
+            "CardDiscarded { player: 1, cards: [69] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [119, 66, 243, 11, 2, 151, 116, 19, 43, 226, 31, 36, 148, 57, 63, 194, 38, 10, 142, 68, 86, 216, 174, 135, 103, 206, 47, 195, 218, 215, 6, 196] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(1)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_B-direct-pending-3.ngsa",
+    "prompt": "mbcmqingzheng_target_suit",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2107,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [\"confirm\"] }",
+            "SkillTriggered { skill: \"mbcmqingzheng\", owner: 0, presentation: None }",
+            "ChoiceOpened { id: 2, observer: 0, prompt: \"mbcmqingzheng_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_suit\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Confirm] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:1\"] }",
+            "ChoiceOpened { id: 3, observer: 0, prompt: \"mbcmqingzheng_target\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"mbcmqingzheng_target\", options: [Player(1), Player(2)], min: 1, max: 1, allow_cancel: true } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [\"player:1\"] }",
+            "ChoiceOpened { id: 4, observer: 0, prompt: \"mbcmqingzheng_target_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 4, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_target_suit\", options: [Tag(1), Tag(2)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Player(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:1\"] }",
+            "CardDiscarded { player: 0, cards: [51] }",
+            "CardDiscarded { player: 1, cards: [105] }",
+            "CardDiscarded { player: 1, cards: [69] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [119, 66, 243, 11, 2, 151, 116, 19, 43, 226, 31, 36, 148, 57, 63, 194, 38, 10, 142, 68, 86, 216, 174, 135, 103, 206, 47, 195, 218, 215, 6, 196] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(1)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_B-restored-pending-0.ngsa",
+    "prompt": "trigger_confirm",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "bytes": 2157,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:1\"] }",
+            "ChoiceOpened { id: 3, observer: 0, prompt: \"mbcmqingzheng_target\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"mbcmqingzheng_target\", options: [Player(1), Player(2)], min: 1, max: 1, allow_cancel: true } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [\"player:1\"] }",
+            "ChoiceOpened { id: 4, observer: 0, prompt: \"mbcmqingzheng_target_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 4, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_target_suit\", options: [Tag(1), Tag(2)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Player(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:1\"] }",
+            "CardDiscarded { player: 0, cards: [51] }",
+            "CardDiscarded { player: 1, cards: [105] }",
+            "CardDiscarded { player: 1, cards: [69] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [119, 66, 243, 11, 2, 151, 116, 19, 43, 226, 31, 36, 148, 57, 63, 194, 38, 10, 142, 68, 86, 216, 174, 135, 103, 206, 47, 195, 218, 215, 6, 196] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(1)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_B-restored-pending-1.ngsa",
+    "prompt": "mbcmqingzheng_suit",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 3,
+    "auth_before": 2,
+    "bytes": 2163,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [\"player:1\"] }",
+            "ChoiceOpened { id: 4, observer: 0, prompt: \"mbcmqingzheng_target_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 4, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_target_suit\", options: [Tag(1), Tag(2)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Player(1)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:1\"] }",
+            "CardDiscarded { player: 0, cards: [51] }",
+            "CardDiscarded { player: 1, cards: [105] }",
+            "CardDiscarded { player: 1, cards: [69] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [119, 66, 243, 11, 2, 151, 116, 19, 43, 226, 31, 36, 148, 57, 63, 194, 38, 10, 142, 68, 86, 216, 174, 135, 103, 206, 47, 195, 218, 215, 6, 196] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(1)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_B-restored-pending-2.ngsa",
+    "prompt": "mbcmqingzheng_target",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 4,
+    "auth_before": 3,
+    "bytes": 2169,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:1\"] }",
+            "CardDiscarded { player: 0, cards: [51] }",
+            "CardDiscarded { player: 1, cards: [105] }",
+            "CardDiscarded { player: 1, cards: [69] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [119, 66, 243, 11, 2, 151, 116, 19, 43, 226, 31, 36, 148, 57, 63, 194, 38, 10, 142, 68, 86, 216, 174, 135, 103, 206, 47, 195, 218, 215, 6, 196] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(1)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_B-restored-pending-3.ngsa",
+    "prompt": "mbcmqingzheng_target_suit",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2107,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [] }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [14, 213, 3, 2, 78, 122, 146, 77, 17, 0, 36, 48, 96, 184, 142, 169, 138, 176, 59, 31, 244, 13, 203, 10, 7, 229, 206, 5, 208, 85, 222, 72] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_initial-direct-pending-0.ngsa",
+    "prompt": "trigger_confirm",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2107,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [] }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [14, 213, 3, 2, 78, 122, 146, 77, 17, 0, 36, 48, 96, 184, 142, 169, 138, 176, 59, 31, 244, 13, 203, 10, 7, 229, 206, 5, 208, 85, 222, 72] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_initial-restored-pending-0.ngsa",
+    "prompt": "trigger_confirm",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2107,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [\"confirm\"] }",
+            "SkillTriggered { skill: \"mbcmqingzheng\", owner: 0, presentation: None }",
+            "ChoiceOpened { id: 2, observer: 0, prompt: \"mbcmqingzheng_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_suit\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Confirm] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(InvalidChoice)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_suit_attempt-direct-pending-0.ngsa",
+    "prompt": "trigger_confirm",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2157,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(InvalidChoice)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_suit_attempt-direct-pending-1.ngsa",
+    "prompt": "mbcmqingzheng_suit",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2107,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [\"confirm\"] }",
+            "SkillTriggered { skill: \"mbcmqingzheng\", owner: 0, presentation: None }",
+            "ChoiceOpened { id: 2, observer: 0, prompt: \"mbcmqingzheng_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_suit\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Confirm] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(InvalidChoice)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_suit_attempt-restored-pending-0.ngsa",
+    "prompt": "trigger_confirm",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "bytes": 2157,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [],
+          "log_delta_equal_to_before": true,
+          "reply": "Rejected(InvalidChoice)",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_suit_attempt-restored-pending-1.ngsa",
+    "prompt": "mbcmqingzheng_suit",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2107,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [\"confirm\"] }",
+            "SkillTriggered { skill: \"mbcmqingzheng\", owner: 0, presentation: None }",
+            "ChoiceOpened { id: 2, observer: 0, prompt: \"mbcmqingzheng_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_suit\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Confirm] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:0\"] }",
+            "ChoiceOpened { id: 3, observer: 0, prompt: \"mbcmqingzheng_target\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"mbcmqingzheng_target\", options: [Player(1), Player(2)], min: 1, max: 1, allow_cancel: true } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(0)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [] }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [28, 17, 57, 124, 34, 106, 135, 90, 238, 103, 54, 111, 198, 109, 85, 147, 246, 35, 162, 58, 129, 158, 7, 255, 70, 54, 241, 145, 244, 182, 114, 192] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_target-direct-pending-0.ngsa",
+    "prompt": "trigger_confirm",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2157,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:0\"] }",
+            "ChoiceOpened { id: 3, observer: 0, prompt: \"mbcmqingzheng_target\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"mbcmqingzheng_target\", options: [Player(1), Player(2)], min: 1, max: 1, allow_cancel: true } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(0)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [] }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [28, 17, 57, 124, 34, 106, 135, 90, 238, 103, 54, 111, 198, 109, 85, 147, 246, 35, 162, 58, 129, 158, 7, 255, 70, 54, 241, 145, 244, 182, 114, 192] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_target-direct-pending-1.ngsa",
+    "prompt": "mbcmqingzheng_suit",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2167,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [] }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [28, 17, 57, 124, 34, 106, 135, 90, 238, 103, 54, 111, 198, 109, 85, 147, 246, 35, 162, 58, 129, 158, 7, 255, 70, 54, 241, 145, 244, 182, 114, 192] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_target-direct-pending-2.ngsa",
+    "prompt": "mbcmqingzheng_target",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2107,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [\"confirm\"] }",
+            "SkillTriggered { skill: \"mbcmqingzheng\", owner: 0, presentation: None }",
+            "ChoiceOpened { id: 2, observer: 0, prompt: \"mbcmqingzheng_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_suit\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Confirm] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:0\"] }",
+            "ChoiceOpened { id: 3, observer: 0, prompt: \"mbcmqingzheng_target\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"mbcmqingzheng_target\", options: [Player(1), Player(2)], min: 1, max: 1, allow_cancel: true } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(0)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [] }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [28, 17, 57, 124, 34, 106, 135, 90, 238, 103, 54, 111, 198, 109, 85, 147, 246, 35, 162, 58, 129, 158, 7, 255, 70, 54, 241, 145, 244, 182, 114, 192] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_target-restored-pending-0.ngsa",
+    "prompt": "trigger_confirm",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "bytes": 2157,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:0\"] }",
+            "ChoiceOpened { id: 3, observer: 0, prompt: \"mbcmqingzheng_target\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"mbcmqingzheng_target\", options: [Player(1), Player(2)], min: 1, max: 1, allow_cancel: true } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(0)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [] }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [28, 17, 57, 124, 34, 106, 135, 90, 238, 103, 54, 111, 198, 109, 85, 147, 246, 35, 162, 58, 129, 158, 7, 255, 70, 54, 241, 145, 244, 182, 114, 192] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_target-restored-pending-1.ngsa",
+    "prompt": "mbcmqingzheng_suit",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 3,
+    "auth_before": 2,
+    "bytes": 2167,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [] }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [28, 17, 57, 124, 34, 106, 135, 90, 238, 103, 54, 111, 198, 109, 85, 147, 246, 35, 162, 58, 129, 158, 7, 255, 70, 54, 241, 145, 244, 182, 114, 192] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_cancel_target-restored-pending-2.ngsa",
+    "prompt": "mbcmqingzheng_target",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2107,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [\"confirm\"] }",
+            "SkillTriggered { skill: \"mbcmqingzheng\", owner: 0, presentation: None }",
+            "ChoiceOpened { id: 2, observer: 0, prompt: \"mbcmqingzheng_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_suit\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Confirm] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:0\"] }",
+            "ChoiceOpened { id: 3, observer: 0, prompt: \"mbcmqingzheng_target\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"mbcmqingzheng_target\", options: [Player(1), Player(2)], min: 1, max: 1, allow_cancel: true } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(0)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [\"player:2\"] }",
+            "ChoiceOpened { id: 4, observer: 0, prompt: \"mbcmqingzheng_target_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 4, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_target_suit\", options: [Tag(3)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Player(2)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:3\"] }",
+            "CardDiscarded { player: 0, cards: [85] }",
+            "CardDiscarded { player: 0, cards: [114] }",
+            "CardDiscarded { player: 2, cards: [24] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }",
+            "DamageDealt { source: None, target: 2, amount: 1, redirected_from: [], card: None, presentation: Some(DamageDealt { source: None, target: PlayerId(3), amount: 1, nature: Normal }) }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [75, 109, 200, 82, 186, 35, 39, 21, 58, 58, 219, 188, 68, 128, 224, 129, 191, 38, 29, 7, 172, 87, 233, 226, 28, 93, 211, 118, 119, 64, 10, 103] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(3)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_target_B-direct-pending-0.ngsa",
+    "prompt": "trigger_confirm",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2157,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:0\"] }",
+            "ChoiceOpened { id: 3, observer: 0, prompt: \"mbcmqingzheng_target\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"mbcmqingzheng_target\", options: [Player(1), Player(2)], min: 1, max: 1, allow_cancel: true } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(0)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [\"player:2\"] }",
+            "ChoiceOpened { id: 4, observer: 0, prompt: \"mbcmqingzheng_target_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 4, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_target_suit\", options: [Tag(3)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Player(2)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:3\"] }",
+            "CardDiscarded { player: 0, cards: [85] }",
+            "CardDiscarded { player: 0, cards: [114] }",
+            "CardDiscarded { player: 2, cards: [24] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }",
+            "DamageDealt { source: None, target: 2, amount: 1, redirected_from: [], card: None, presentation: Some(DamageDealt { source: None, target: PlayerId(3), amount: 1, nature: Normal }) }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [75, 109, 200, 82, 186, 35, 39, 21, 58, 58, 219, 188, 68, 128, 224, 129, 191, 38, 29, 7, 172, 87, 233, 226, 28, 93, 211, 118, 119, 64, 10, 103] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(3)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_target_B-direct-pending-1.ngsa",
+    "prompt": "mbcmqingzheng_suit",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2167,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [\"player:2\"] }",
+            "ChoiceOpened { id: 4, observer: 0, prompt: \"mbcmqingzheng_target_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 4, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_target_suit\", options: [Tag(3)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Player(2)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:3\"] }",
+            "CardDiscarded { player: 0, cards: [85] }",
+            "CardDiscarded { player: 0, cards: [114] }",
+            "CardDiscarded { player: 2, cards: [24] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }",
+            "DamageDealt { source: None, target: 2, amount: 1, redirected_from: [], card: None, presentation: Some(DamageDealt { source: None, target: PlayerId(3), amount: 1, nature: Normal }) }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [75, 109, 200, 82, 186, 35, 39, 21, 58, 58, 219, 188, 68, 128, 224, 129, 191, 38, 29, 7, 172, 87, 233, 226, 28, 93, 211, 118, 119, 64, 10, 103] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(3)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_target_B-direct-pending-2.ngsa",
+    "prompt": "mbcmqingzheng_target",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2171,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:3\"] }",
+            "CardDiscarded { player: 0, cards: [85] }",
+            "CardDiscarded { player: 0, cards: [114] }",
+            "CardDiscarded { player: 2, cards: [24] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }",
+            "DamageDealt { source: None, target: 2, amount: 1, redirected_from: [], card: None, presentation: Some(DamageDealt { source: None, target: PlayerId(3), amount: 1, nature: Normal }) }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [75, 109, 200, 82, 186, 35, 39, 21, 58, 58, 219, 188, 68, 128, 224, 129, 191, 38, 29, 7, 172, 87, 233, 226, 28, 93, 211, 118, 119, 64, 10, 103] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(3)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_target_B-direct-pending-3.ngsa",
+    "prompt": "mbcmqingzheng_target_suit",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "bytes": 2107,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 1, options: [\"confirm\"] }",
+            "SkillTriggered { skill: \"mbcmqingzheng\", owner: 0, presentation: None }",
+            "ChoiceOpened { id: 2, observer: 0, prompt: \"mbcmqingzheng_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_suit\", options: [Tag(0), Tag(1)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Confirm] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:0\"] }",
+            "ChoiceOpened { id: 3, observer: 0, prompt: \"mbcmqingzheng_target\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"mbcmqingzheng_target\", options: [Player(1), Player(2)], min: 1, max: 1, allow_cancel: true } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(0)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [\"player:2\"] }",
+            "ChoiceOpened { id: 4, observer: 0, prompt: \"mbcmqingzheng_target_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 4, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_target_suit\", options: [Tag(3)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Player(2)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:3\"] }",
+            "CardDiscarded { player: 0, cards: [85] }",
+            "CardDiscarded { player: 0, cards: [114] }",
+            "CardDiscarded { player: 2, cards: [24] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }",
+            "DamageDealt { source: None, target: 2, amount: 1, redirected_from: [], card: None, presentation: Some(DamageDealt { source: None, target: PlayerId(3), amount: 1, nature: Normal }) }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [75, 109, 200, 82, 186, 35, 39, 21, 58, 58, 219, 188, 68, 128, 224, 129, 191, 38, 29, 7, 172, 87, 233, 226, 28, 93, 211, 118, 119, 64, 10, 103] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(3)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_target_B-restored-pending-0.ngsa",
+    "prompt": "trigger_confirm",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "bytes": 2157,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 2, options: [\"nature:0\"] }",
+            "ChoiceOpened { id: 3, observer: 0, prompt: \"mbcmqingzheng_target\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"mbcmqingzheng_target\", options: [Player(1), Player(2)], min: 1, max: 1, allow_cancel: true } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Tag(0)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [\"player:2\"] }",
+            "ChoiceOpened { id: 4, observer: 0, prompt: \"mbcmqingzheng_target_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 4, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_target_suit\", options: [Tag(3)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Player(2)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:3\"] }",
+            "CardDiscarded { player: 0, cards: [85] }",
+            "CardDiscarded { player: 0, cards: [114] }",
+            "CardDiscarded { player: 2, cards: [24] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }",
+            "DamageDealt { source: None, target: 2, amount: 1, redirected_from: [], card: None, presentation: Some(DamageDealt { source: None, target: PlayerId(3), amount: 1, nature: Normal }) }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [75, 109, 200, 82, 186, 35, 39, 21, 58, 58, 219, 188, 68, 128, 224, 129, 191, 38, 29, 7, 172, 87, 233, 226, 28, 93, 211, 118, 119, 64, 10, 103] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(3)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_target_B-restored-pending-1.ngsa",
+    "prompt": "mbcmqingzheng_suit",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 3,
+    "auth_before": 2,
+    "bytes": 2167,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 3, options: [\"player:2\"] }",
+            "ChoiceOpened { id: 4, observer: 0, prompt: \"mbcmqingzheng_target_suit\" }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Pending { choice: OpenChoice { id: 4, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"mbcmqingzheng_target_suit\", options: [Tag(3)], min: 1, max: 1, allow_cancel: false } } }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Player(2)] } }",
+          "request_equal_to_before": true
+        },
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:3\"] }",
+            "CardDiscarded { player: 0, cards: [85] }",
+            "CardDiscarded { player: 0, cards: [114] }",
+            "CardDiscarded { player: 2, cards: [24] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }",
+            "DamageDealt { source: None, target: 2, amount: 1, redirected_from: [], card: None, presentation: Some(DamageDealt { source: None, target: PlayerId(3), amount: 1, nature: Normal }) }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [75, 109, 200, 82, 186, 35, 39, 21, 58, 58, 219, 188, 68, 128, 224, 129, 191, 38, 29, 7, 172, 87, 233, 226, 28, 93, 211, 118, 119, 64, 10, 103] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(3)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_target_B-restored-pending-2.ngsa",
+    "prompt": "mbcmqingzheng_target",
+    "snapshot_equal_except_auth_generation": true
+  },
+  {
+    "auth_after": 4,
+    "auth_before": 3,
+    "bytes": 2171,
+    "continuation": {
+      "commands": [
+        {
+          "log_delta": [
+            "ChoiceAnswered { id: 4, options: [\"nature:3\"] }",
+            "CardDiscarded { player: 0, cards: [85] }",
+            "CardDiscarded { player: 0, cards: [114] }",
+            "CardDiscarded { player: 2, cards: [24] }",
+            "SkillTriggered { skill: \"清正\", owner: 0, presentation: None }",
+            "DamageDealt { source: None, target: 2, amount: 1, redirected_from: [], card: None, presentation: Some(DamageDealt { source: None, target: PlayerId(3), amount: 1, nature: Normal }) }"
+          ],
+          "log_delta_equal_to_before": true,
+          "reply": "Accepted { state_hash: [75, 109, 200, 82, 186, 35, 39, 21, 58, 58, 219, 188, 68, 128, 224, 129, 191, 38, 29, 7, 172, 87, 233, 226, 28, 93, 211, 118, 119, 64, 10, 103] }",
+          "reply_equal_to_before": true,
+          "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 4, selection: [Tag(3)] } }",
+          "request_equal_to_before": true
+        }
+      ],
+      "final_snapshot_equal_except_auth_generation": true,
+      "final_state_hash_equal": true
+    },
+    "error": null,
+    "input": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4/q_target_B-restored-pending-3.ngsa",
+    "prompt": "mbcmqingzheng_target_suit",
+    "snapshot_equal_except_auth_generation": true
+  }
+]

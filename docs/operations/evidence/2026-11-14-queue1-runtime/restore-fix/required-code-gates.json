@@ -1,0 +1,424 @@
+{
+  "at": "2026-11-14T02:18:46.053716+08:00",
+  "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "tracked_dirty": true,
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "all_listed_code_gate_commands_exit_zero": true,
+  "complete_preflight_still_pending": true,
+  "commands": [
+    {
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native"
+      ],
+      "command": "cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+      "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n",
+      "start_utc": "2026-11-13T18:02:31.415916+00:00",
+      "exit_code": 0,
+      "duration_seconds": 110.342,
+      "end_utc": "2026-11-13T18:04:21.758302+00:00",
+      "name": "05-native-three-final",
+      "meta": "05-native-three-final.json",
+      "log": "05-native-three-final.log",
+      "log_sha256": "ca2bd2e4f94ab94732856aa30b1621c55067d38cb3caf0b3e35db315d9c469fd",
+      "rust_test_counts": {
+        "passed": 2447,
+        "failed": 0,
+        "ignored": 6,
+        "measured": 0,
+        "filtered": 0
+      },
+      "result_sections": 18
+    },
+    {
+      "argv": [
+        "cargo",
+        "check",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "-p",
+        "engine-native-wasm",
+        "-p",
+        "content-native-loader",
+        "--all-targets"
+      ],
+      "command": "cargo check -p engine-native-kernel -p engine-native-content -p engine-native -p engine-native-wasm -p content-native-loader --all-targets",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-q1-jiushi-strict-yn2wg3gi",
+        "RUSTFLAGS": "-D warnings"
+      },
+      "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+      "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n",
+      "start_utc": "2026-11-13T18:03:08.121416+00:00",
+      "exit_code": 0,
+      "duration_seconds": 28.012,
+      "end_utc": "2026-11-13T18:03:36.133576+00:00",
+      "name": "06-strict-all-targets-second",
+      "meta": "06-strict-all-targets-second.json",
+      "log": "06-strict-all-targets-second.log",
+      "log_sha256": "b5e703a6b15e179cf4a3072cb61cd5fc88b87fb01bc2885487c3e7904f06507b"
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "command": "python3 -B -m unittest discover -s scripts -p test_check_source_lines.py",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+      "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n",
+      "start_utc": "2026-11-13T18:02:53.115979+00:00",
+      "exit_code": 0,
+      "duration_seconds": 0.135,
+      "end_utc": "2026-11-13T18:02:53.250815+00:00",
+      "name": "07-source-line-unit",
+      "meta": "07-source-line-unit.json",
+      "log": "07-source-line-unit.log",
+      "log_sha256": "d944844ae478d06fa0be329673c278dca464d67b2a55fa3214f75bf6821b3d73"
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "command": "python3 -B scripts/check-source-lines.py",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+      "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n",
+      "start_utc": "2026-11-13T18:02:53.379865+00:00",
+      "exit_code": 0,
+      "duration_seconds": 10.767,
+      "end_utc": "2026-11-13T18:03:04.146682+00:00",
+      "name": "08-source-line-limit",
+      "meta": "08-source-line-limit.json",
+      "log": "08-source-line-limit.log",
+      "log_sha256": "6a7c91170985a6d0f1e3d238d3573042e001a0f9315b976c7bd2bec8da27b0c5"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "test"
+      ],
+      "command": "pnpm test",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+      "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n",
+      "start_utc": "2026-11-13T18:03:08.088863+00:00",
+      "exit_code": 0,
+      "duration_seconds": 6.863,
+      "end_utc": "2026-11-13T18:03:14.954251+00:00",
+      "name": "09-frontend-test-second",
+      "meta": "09-frontend-test-second.json",
+      "log": "09-frontend-test-second.log",
+      "log_sha256": "8897267cca20b9aacaa2a456f75d307d5061737dd238e1f2fcb019705797832f",
+      "frontend_counts": {
+        "tests": 489,
+        "pass": 489,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "argv": [
+        "pnpm",
+        "typecheck"
+      ],
+      "command": "pnpm typecheck",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+      "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n",
+      "start_utc": "2026-11-13T18:03:15.086658+00:00",
+      "exit_code": 0,
+      "duration_seconds": 2.654,
+      "end_utc": "2026-11-13T18:03:17.740616+00:00",
+      "name": "10-frontend-typecheck-second",
+      "meta": "10-frontend-typecheck-second.json",
+      "log": "10-frontend-typecheck-second.log",
+      "log_sha256": "a11e85cf8e75986fbed77dfb08bc7a4f73d1ce745bc4ee50186c0cec7e34f565"
+    },
+    {
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "--workspace",
+        "--no-fail-fast"
+      ],
+      "command": "cargo test --offline --workspace --no-fail-fast",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+      "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n",
+      "start_utc": "2026-11-13T18:04:29.881487+00:00",
+      "exit_code": 0,
+      "duration_seconds": 699.335,
+      "end_utc": "2026-11-13T18:16:09.227140+00:00",
+      "name": "13-workspace-final",
+      "meta": "13-workspace-final.json",
+      "log": "13-workspace-final.log",
+      "log_sha256": "08599918fdc28c9b32fdb356d10b8e954d1fe4856d13ebead9e0a0d85bf5dd6a",
+      "rust_test_counts": {
+        "passed": 7843,
+        "failed": 0,
+        "ignored": 8,
+        "measured": 0,
+        "filtered": 0
+      },
+      "result_sections": 178
+    },
+    {
+      "argv": [
+        "cargo",
+        "check",
+        "--target",
+        "wasm32-unknown-unknown",
+        "-p",
+        "engine-native-wasm"
+      ],
+      "command": "cargo check --target wasm32-unknown-unknown -p engine-native-wasm",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0",
+        "PATH": "/Users/ruyimg/.cargo/bin:/Users/ruyimg/.local/bin:/Library/Frameworks/Python.framework/Versions/3.10/bin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/ruyimg/.codex/tmp/arg0-macos/codex-arg0Fr9rcz:/Users/ruyimg/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/Users/ruyimg/.dbx/bin:/opt/zerobrew/bin:/opt/zerobrew/sbin:/Users/ruyimg/.zerobrew/bin:/Users/ruyimg/.local/share/fnm/node-versions/v26.4.0/installation/bin:/Users/ruyimg/.kimi-code/bin:/Users/ruyimg/.local/bin:/Users/ruyimg/.grok/bin:/Users/ruyimg/.local/state/fnm_multishells/1704_1794573835225/bin:/Users/ruyimg/.opencode/bin:/Users/ruyimg/Library/Android/sdk/cmdline-tools/latest/bin:/Users/ruyimg/Library/Android/sdk/platform-tools:/Users/ruyimg/.cargo/bin:/Users/ruyimg/.bun/bin:/Users/ruyimg/Documents/maven/apache-maven-3.9.10/bin:/Library/Frameworks/Python.framework/Versions/3.10/bin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/ruyimg/Library/Application Support/JetBrains/Toolbox/scripts:/Users/ruyimg/.orbstack/bin:/Users/ruyimg/.lmstudio/bin:/Users/ruyimg/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:/Users/ruyimg/Library/Application Support/JetBrains/Toolbox/scripts:/Users/ruyimg/.orbstack/bin"
+      },
+      "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+      "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n",
+      "start_utc": "2026-11-13T18:04:29.914370+00:00",
+      "exit_code": 0,
+      "duration_seconds": 209.257,
+      "end_utc": "2026-11-13T18:07:59.172171+00:00",
+      "name": "14-wasm-target-final",
+      "meta": "14-wasm-target-final.json",
+      "log": "14-wasm-target-final.log",
+      "log_sha256": "7359f0683be724b213d9fb2a4aa335acb1e438aa0224654a1dc55ec7d4177dc7"
+    },
+    {
+      "argv": [
+        "cargo",
+        "run",
+        "-p",
+        "conformance"
+      ],
+      "command": "cargo run -p conformance",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+      "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L29-龙血玄黄.md\n M docs/migration/g0/README.md\n M docs/migration/g0/U06-欢乐卡牌.md\n M docs/migration/g0/inventory_status.json\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n",
+      "start_utc": "2026-11-13T18:16:13.970153+00:00",
+      "exit_code": 0,
+      "duration_seconds": 0.806,
+      "end_utc": "2026-11-13T18:16:14.776590+00:00",
+      "name": "15-conformance-final",
+      "meta": "15-conformance-final.json",
+      "log": "15-conformance-final.log",
+      "log_sha256": "177eb56e99497fa02a90c0c019e90ad92c50afb55bf7ada079bcb1378e26f285"
+    },
+    {
+      "argv": [
+        "bash",
+        "scripts/cross-target-hash.sh"
+      ],
+      "command": "bash scripts/cross-target-hash.sh",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0",
+        "PATH": "/Users/ruyimg/.cargo/bin:/Users/ruyimg/.local/bin:/Library/Frameworks/Python.framework/Versions/3.10/bin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/ruyimg/.codex/tmp/arg0-macos/codex-arg0Fr9rcz:/Users/ruyimg/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/Users/ruyimg/.dbx/bin:/opt/zerobrew/bin:/opt/zerobrew/sbin:/Users/ruyimg/.zerobrew/bin:/Users/ruyimg/.local/share/fnm/node-versions/v26.4.0/installation/bin:/Users/ruyimg/.kimi-code/bin:/Users/ruyimg/.local/bin:/Users/ruyimg/.grok/bin:/Users/ruyimg/.local/state/fnm_multishells/1704_1794573835225/bin:/Users/ruyimg/.opencode/bin:/Users/ruyimg/Library/Android/sdk/cmdline-tools/latest/bin:/Users/ruyimg/Library/Android/sdk/platform-tools:/Users/ruyimg/.cargo/bin:/Users/ruyimg/.bun/bin:/Users/ruyimg/Documents/maven/apache-maven-3.9.10/bin:/Library/Frameworks/Python.framework/Versions/3.10/bin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/ruyimg/Library/Application Support/JetBrains/Toolbox/scripts:/Users/ruyimg/.orbstack/bin:/Users/ruyimg/.lmstudio/bin:/Users/ruyimg/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:/Users/ruyimg/Library/Application Support/JetBrains/Toolbox/scripts:/Users/ruyimg/.orbstack/bin"
+      },
+      "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+      "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L29-龙血玄黄.md\n M docs/migration/g0/README.md\n M docs/migration/g0/U06-欢乐卡牌.md\n M docs/migration/g0/inventory_status.json\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n",
+      "start_utc": "2026-11-13T18:16:14.896427+00:00",
+      "exit_code": 0,
+      "duration_seconds": 3.17,
+      "end_utc": "2026-11-13T18:16:18.067023+00:00",
+      "name": "16-cross-target-final",
+      "meta": "16-cross-target-final.json",
+      "log": "16-cross-target-final.log",
+      "log_sha256": "f6a4d0cab81adb2698f32d4e67f9fb619387f79e879aaf415a67e62486736947"
+    },
+    {
+      "argv": [
+        "cargo",
+        "test",
+        "-p",
+        "desktop-client"
+      ],
+      "command": "cargo test -p desktop-client",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+      "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L29-龙血玄黄.md\n M docs/migration/g0/README.md\n M docs/migration/g0/U06-欢乐卡牌.md\n M docs/migration/g0/inventory_status.json\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n",
+      "start_utc": "2026-11-13T18:16:18.197571+00:00",
+      "exit_code": 0,
+      "duration_seconds": 32.319,
+      "end_utc": "2026-11-13T18:16:50.516642+00:00",
+      "name": "17-desktop-final",
+      "meta": "17-desktop-final.json",
+      "log": "17-desktop-final.log",
+      "log_sha256": "69fdd942f34e0927392569906f9242125a1d7c9b63cb6c6f430f886747821b43",
+      "rust_test_counts": {
+        "passed": 20,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      "result_sections": 4
+    },
+    {
+      "argv": [
+        "pnpm",
+        "build:native"
+      ],
+      "command": "pnpm build:native",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+      "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L29-龙血玄黄.md\n M docs/migration/g0/README.md\n M docs/migration/g0/U06-欢乐卡牌.md\n M docs/migration/g0/inventory_status.json\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n",
+      "start_utc": "2026-11-13T18:16:50.649374+00:00",
+      "exit_code": 0,
+      "duration_seconds": 35.222,
+      "end_utc": "2026-11-13T18:17:25.871712+00:00",
+      "name": "18-build-native-final",
+      "meta": "18-build-native-final.json",
+      "log": "18-build-native-final.log",
+      "log_sha256": "b52610c6b69c6dc09765e0140d6a4d371cbd51620d12c048ca9b9df55fc90985"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "smoke:native"
+      ],
+      "command": "pnpm smoke:native",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+      "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L29-龙血玄黄.md\n M docs/migration/g0/README.md\n M docs/migration/g0/U06-欢乐卡牌.md\n M docs/migration/g0/inventory_status.json\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n",
+      "start_utc": "2026-11-13T18:17:26.000970+00:00",
+      "exit_code": 0,
+      "duration_seconds": 3.811,
+      "end_utc": "2026-11-13T18:17:29.811939+00:00",
+      "name": "19-smoke-native-final",
+      "meta": "19-smoke-native-final.json",
+      "log": "19-smoke-native-final.log",
+      "log_sha256": "3e0bb31c806e865cc9462c5e42f71cfbdc54a702f005636596644a77e5c4ab52",
+      "worker_smoke_counts": {
+        "total": 83,
+        "failed": 0
+      }
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-native-wasm-cross-target.py"
+      ],
+      "command": "python3 -B scripts/check-native-wasm-cross-target.py",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+      "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L29-龙血玄黄.md\n M docs/migration/g0/README.md\n M docs/migration/g0/U06-欢乐卡牌.md\n M docs/migration/g0/inventory_status.json\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n",
+      "start_utc": "2026-11-13T18:17:29.941444+00:00",
+      "exit_code": 0,
+      "duration_seconds": 17.886,
+      "end_utc": "2026-11-13T18:17:47.827794+00:00",
+      "name": "20-native-wasm-cross-target-final",
+      "meta": "20-native-wasm-cross-target-final.json",
+      "log": "20-native-wasm-cross-target-final.log",
+      "log_sha256": "67a29e437dc943256d948466717e97259fc65dcd8b3a6aa93f30879d33e19474",
+      "rust_test_counts": {
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 140
+      },
+      "result_sections": 2
+    },
+    {
+      "argv": [
+        "pnpm",
+        "build"
+      ],
+      "command": "pnpm build",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+      "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L29-龙血玄黄.md\n M docs/migration/g0/README.md\n M docs/migration/g0/U06-欢乐卡牌.md\n M docs/migration/g0/inventory_status.json\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n",
+      "start_utc": "2026-11-13T18:17:47.961272+00:00",
+      "exit_code": 0,
+      "duration_seconds": 3.903,
+      "end_utc": "2026-11-13T18:17:51.863994+00:00",
+      "name": "21-frontend-build-final",
+      "meta": "21-frontend-build-final.json",
+      "log": "21-frontend-build-final.log",
+      "log_sha256": "29d193cb1755bf73fc675922bd1913477ec02b5b0a04aa22e5109d8d0254ac0a"
+    }
+  ],
+  "first_failures_preserved": [
+    "01-jiushi-pending-regression-red.json: regression compilation error",
+    "02-jiushi-pending-regression-red-compiled.json: genuine OpenChoiceMismatch before product fix",
+    "launcher-correction-01.json: env/cwd options wrongly placed, executables did not start",
+    "11-u06-comparison-first.json: missing duel name alias in diagnostic comparer"
+  ],
+  "scope": "Counts overlap across commands; whole-source and platform acceptance are separate. Strict checks use native1.99.1; WASM uses rustup1.95.0; preceding exact CI uses stable1.100.0. No new UI/Worker/rendering code, no new native UI screenshots or device/signing acceptance."
+}

@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "--offline",
+    "--workspace",
+    "--no-fail-fast"
+  ],
+  "command": "cargo test --offline --workspace --no-fail-fast",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0"
+  },
+  "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n",
+  "start_utc": "2026-11-13T18:04:29.881487+00:00",
+  "exit_code": 0,
+  "duration_seconds": 699.335,
+  "end_utc": "2026-11-13T18:16:09.227140+00:00"
+}

@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "bash",
+    "scripts/cross-target-hash.sh"
+  ],
+  "command": "bash scripts/cross-target-hash.sh",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0",
+    "PATH": "/Users/ruyimg/.cargo/bin:/Users/ruyimg/.local/bin:/Library/Frameworks/Python.framework/Versions/3.10/bin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/ruyimg/.codex/tmp/arg0-macos/codex-arg0Fr9rcz:/Users/ruyimg/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/Users/ruyimg/.dbx/bin:/opt/zerobrew/bin:/opt/zerobrew/sbin:/Users/ruyimg/.zerobrew/bin:/Users/ruyimg/.local/share/fnm/node-versions/v26.4.0/installation/bin:/Users/ruyimg/.kimi-code/bin:/Users/ruyimg/.local/bin:/Users/ruyimg/.grok/bin:/Users/ruyimg/.local/state/fnm_multishells/1704_1794573835225/bin:/Users/ruyimg/.opencode/bin:/Users/ruyimg/Library/Android/sdk/cmdline-tools/latest/bin:/Users/ruyimg/Library/Android/sdk/platform-tools:/Users/ruyimg/.cargo/bin:/Users/ruyimg/.bun/bin:/Users/ruyimg/Documents/maven/apache-maven-3.9.10/bin:/Library/Frameworks/Python.framework/Versions/3.10/bin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/ruyimg/Library/Application Support/JetBrains/Toolbox/scripts:/Users/ruyimg/.orbstack/bin:/Users/ruyimg/.lmstudio/bin:/Users/ruyimg/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:/Users/ruyimg/Library/Application Support/JetBrains/Toolbox/scripts:/Users/ruyimg/.orbstack/bin"
+  },
+  "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L29-龙血玄黄.md\n M docs/migration/g0/README.md\n M docs/migration/g0/U06-欢乐卡牌.md\n M docs/migration/g0/inventory_status.json\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n",
+  "start_utc": "2026-11-13T18:16:14.896427+00:00",
+  "exit_code": 0,
+  "duration_seconds": 3.17,
+  "end_utc": "2026-11-13T18:16:18.067023+00:00"
+}

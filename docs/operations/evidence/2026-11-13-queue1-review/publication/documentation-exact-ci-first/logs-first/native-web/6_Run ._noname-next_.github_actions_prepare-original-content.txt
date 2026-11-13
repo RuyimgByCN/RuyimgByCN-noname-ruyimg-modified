@@ -1,0 +1,484 @@
+﻿2026-11-13T17:41:24.3351909Z Prepare all required actions
+2026-11-13T17:41:24.3352316Z Getting action download info
+2026-11-13T17:41:24.4850842Z Download action repository 'pnpm/action-setup@v4' (SHA:b906affcce14559ad1aafd4ab0e942779e9f58b1)
+2026-11-13T17:41:24.9234587Z ##[group]Run ./noname-next/.github/actions/prepare-original-content
+2026-11-13T17:41:24.9234837Z with:
+2026-11-13T17:41:24.9234967Z   integration-sources: true
+2026-11-13T17:41:24.9235109Z env:
+2026-11-13T17:41:24.9235222Z   CARGO_TERM_COLOR: always
+2026-11-13T17:41:24.9235369Z   WASM_PACK_TARGET: web
+2026-11-13T17:41:24.9235508Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T17:41:24.9235662Z   CARGO_INCREMENTAL: 0
+2026-11-13T17:41:24.9235795Z   CACHE_ON_FAILURE: false
+2026-11-13T17:41:24.9235933Z ##[endgroup]
+2026-11-13T17:41:24.9239995Z ##[start-action display=Run actions/checkout@v4;id=__self.__actions_checkout]
+2026-11-13T17:41:24.9275941Z ##[group]Run actions/checkout@v4
+2026-11-13T17:41:24.9276105Z with:
+2026-11-13T17:41:24.9276240Z   repository: libnoname/noname
+2026-11-13T17:41:24.9276452Z   ref: 1a548c95acdf8ac1ef44d74473403eda2ac86cf0
+2026-11-13T17:41:24.9276632Z   path: archive/upstream/noname
+2026-11-13T17:41:24.9276791Z   sparse-checkout: apps/core
+2026-11-13T17:41:24.9276941Z   persist-credentials: false
+2026-11-13T17:41:24.9278700Z   token: ***
+2026-11-13T17:41:24.9278834Z   ssh-strict: true
+2026-11-13T17:41:24.9278957Z   ssh-user: git
+2026-11-13T17:41:24.9279076Z   clean: true
+2026-11-13T17:41:24.9279210Z   sparse-checkout-cone-mode: true
+2026-11-13T17:41:24.9279367Z   fetch-depth: 1
+2026-11-13T17:41:24.9279489Z   fetch-tags: false
+2026-11-13T17:41:24.9279620Z   show-progress: true
+2026-11-13T17:41:24.9279747Z   lfs: false
+2026-11-13T17:41:24.9279864Z   submodules: false
+2026-11-13T17:41:24.9279995Z   set-safe-directory: true
+2026-11-13T17:41:24.9280147Z   allow-unsafe-pr-checkout: false
+2026-11-13T17:41:24.9280294Z env:
+2026-11-13T17:41:24.9280411Z   CARGO_TERM_COLOR: always
+2026-11-13T17:41:24.9280553Z   WASM_PACK_TARGET: web
+2026-11-13T17:41:24.9280694Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T17:41:24.9280847Z   CARGO_INCREMENTAL: 0
+2026-11-13T17:41:24.9280983Z   CACHE_ON_FAILURE: false
+2026-11-13T17:41:24.9281121Z ##[endgroup]
+2026-11-13T17:41:24.9900117Z Syncing repository: libnoname/noname
+2026-11-13T17:41:24.9900701Z ##[group]Getting Git version info
+2026-11-13T17:41:24.9902164Z Working directory is '/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/archive/upstream/noname'
+2026-11-13T17:41:24.9924518Z [command]/usr/bin/git version
+2026-11-13T17:41:24.9961154Z git version 2.56.1
+2026-11-13T17:41:24.9973289Z ##[endgroup]
+2026-11-13T17:41:24.9984376Z Temporarily overriding HOME='/home/runner/work/_temp/bfaeb656-a390-4fc1-be30-a38bff1af5a0' before making global git config changes
+2026-11-13T17:41:24.9985462Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-13T17:41:24.9989098Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/archive/upstream/noname
+2026-11-13T17:41:25.0033919Z ##[group]Initializing the repository
+2026-11-13T17:41:25.0037948Z [command]/usr/bin/git init /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/archive/upstream/noname
+2026-11-13T17:41:25.0086831Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-13T17:41:25.0089577Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-13T17:41:25.0089921Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-13T17:41:25.0090150Z hint: call:
+2026-11-13T17:41:25.0090272Z hint:
+2026-11-13T17:41:25.0090465Z hint: 	git config --global init.defaultBranch <name>
+2026-11-13T17:41:25.0090647Z hint:
+2026-11-13T17:41:25.0090864Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-13T17:41:25.0091191Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-13T17:41:25.0091753Z hint:
+2026-11-13T17:41:25.0091892Z hint: 	git branch -m <name>
+2026-11-13T17:41:25.0092036Z hint:
+2026-11-13T17:41:25.0092264Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-13T17:41:25.0092802Z Initialized empty Git repository in /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/archive/upstream/noname/.git/
+2026-11-13T17:41:25.0100867Z [command]/usr/bin/git remote add origin https://github.com/libnoname/noname
+2026-11-13T17:41:25.0137624Z ##[endgroup]
+2026-11-13T17:41:25.0138034Z ##[group]Disabling automatic garbage collection
+2026-11-13T17:41:25.0141701Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-13T17:41:25.0172562Z ##[endgroup]
+2026-11-13T17:41:25.0172929Z ##[group]Setting up auth
+2026-11-13T17:41:25.0178780Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-13T17:41:25.0211688Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-13T17:41:25.0494620Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-13T17:41:25.0519563Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-13T17:41:25.0765643Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-13T17:41:25.0796774Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-13T17:41:25.1037906Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-13T17:41:25.1076732Z ##[endgroup]
+2026-11-13T17:41:25.1077045Z ##[group]Fetching the repository
+2026-11-13T17:41:25.1083803Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --filter=blob:none --depth=1 origin 1a548c95acdf8ac1ef44d74473403eda2ac86cf0
+2026-11-13T17:41:25.5417983Z From https://github.com/libnoname/noname
+2026-11-13T17:41:25.5418388Z  * branch            1a548c95acdf8ac1ef44d74473403eda2ac86cf0 -> FETCH_HEAD
+2026-11-13T17:41:25.5422673Z ##[endgroup]
+2026-11-13T17:41:25.5423252Z ##[group]Determining the checkout info
+2026-11-13T17:41:25.5425357Z ##[endgroup]
+2026-11-13T17:41:25.5425818Z ##[group]Setting up sparse checkout
+2026-11-13T17:41:25.5430718Z [command]/usr/bin/git sparse-checkout set apps/core
+2026-11-13T17:41:25.5464741Z ##[endgroup]
+2026-11-13T17:41:25.5464982Z ##[group]Checking out the ref
+2026-11-13T17:41:25.5468824Z [command]/usr/bin/git checkout --progress --force 1a548c95acdf8ac1ef44d74473403eda2ac86cf0
+2026-11-13T17:41:43.8199904Z Updating files:   0% (1/15443)
+2026-11-13T17:41:43.8461706Z Updating files:   1% (155/15443)
+2026-11-13T17:41:43.8804759Z Updating files:   2% (309/15443)
+2026-11-13T17:41:43.9142168Z Updating files:   3% (464/15443)
+2026-11-13T17:41:43.9508527Z Updating files:   4% (618/15443)
+2026-11-13T17:41:43.9958043Z Updating files:   5% (773/15443)
+2026-11-13T17:41:44.0339982Z Updating files:   6% (927/15443)
+2026-11-13T17:41:44.0645576Z Updating files:   7% (1082/15443)
+2026-11-13T17:41:44.1039559Z Updating files:   8% (1236/15443)
+2026-11-13T17:41:44.1414415Z Updating files:   9% (1390/15443)
+2026-11-13T17:41:44.1745842Z Updating files:  10% (1545/15443)
+2026-11-13T17:41:44.2095566Z Updating files:  11% (1699/15443)
+2026-11-13T17:41:44.2523598Z Updating files:  12% (1854/15443)
+2026-11-13T17:41:44.2869614Z Updating files:  13% (2008/15443)
+2026-11-13T17:41:44.3135673Z Updating files:  14% (2163/15443)
+2026-11-13T17:41:44.3440892Z Updating files:  15% (2317/15443)
+2026-11-13T17:41:44.3730653Z Updating files:  16% (2471/15443)
+2026-11-13T17:41:44.4074015Z Updating files:  17% (2626/15443)
+2026-11-13T17:41:44.4442480Z Updating files:  18% (2780/15443)
+2026-11-13T17:41:44.4786901Z Updating files:  19% (2935/15443)
+2026-11-13T17:41:44.5172165Z Updating files:  20% (3089/15443)
+2026-11-13T17:41:44.5553249Z Updating files:  21% (3244/15443)
+2026-11-13T17:41:44.5559980Z Updating files:  21% (3396/15443)
+2026-11-13T17:41:44.5866674Z Updating files:  22% (3398/15443)
+2026-11-13T17:41:44.6178578Z Updating files:  23% (3552/15443)
+2026-11-13T17:41:44.6558321Z Updating files:  24% (3707/15443)
+2026-11-13T17:41:44.6866476Z Updating files:  25% (3861/15443)
+2026-11-13T17:41:44.7149781Z Updating files:  26% (4016/15443)
+2026-11-13T17:41:44.7443718Z Updating files:  27% (4170/15443)
+2026-11-13T17:41:44.7700807Z Updating files:  28% (4325/15443)
+2026-11-13T17:41:44.8003867Z Updating files:  29% (4479/15443)
+2026-11-13T17:41:44.8382862Z Updating files:  30% (4633/15443)
+2026-11-13T17:41:44.8639319Z Updating files:  31% (4788/15443)
+2026-11-13T17:41:44.8961373Z Updating files:  32% (4942/15443)
+2026-11-13T17:41:44.9370373Z Updating files:  33% (5097/15443)
+2026-11-13T17:41:44.9792536Z Updating files:  34% (5251/15443)
+2026-11-13T17:41:45.0102723Z Updating files:  35% (5406/15443)
+2026-11-13T17:41:45.0618426Z Updating files:  36% (5560/15443)
+2026-11-13T17:41:45.1054448Z Updating files:  37% (5714/15443)
+2026-11-13T17:41:45.1536218Z Updating files:  38% (5869/15443)
+2026-11-13T17:41:45.1910037Z Updating files:  39% (6023/15443)
+2026-11-13T17:41:45.2327060Z Updating files:  40% (6178/15443)
+2026-11-13T17:41:45.2696032Z Updating files:  41% (6332/15443)
+2026-11-13T17:41:45.3131495Z Updating files:  42% (6487/15443)
+2026-11-13T17:41:45.3407942Z Updating files:  43% (6641/15443)
+2026-11-13T17:41:45.3680924Z Updating files:  44% (6795/15443)
+2026-11-13T17:41:45.3936707Z Updating files:  45% (6950/15443)
+2026-11-13T17:41:45.4213806Z Updating files:  46% (7104/15443)
+2026-11-13T17:41:45.4548983Z Updating files:  47% (7259/15443)
+2026-11-13T17:41:45.4895245Z Updating files:  48% (7413/15443)
+2026-11-13T17:41:45.5169967Z Updating files:  49% (7568/15443)
+2026-11-13T17:41:45.5457257Z Updating files:  50% (7722/15443)
+2026-11-13T17:41:45.5553707Z Updating files:  51% (7876/15443)
+2026-11-13T17:41:45.5853574Z Updating files:  51% (7918/15443)
+2026-11-13T17:41:45.6133662Z Updating files:  52% (8031/15443)
+2026-11-13T17:41:45.6453918Z Updating files:  53% (8185/15443)
+2026-11-13T17:41:45.6771777Z Updating files:  54% (8340/15443)
+2026-11-13T17:41:45.7067269Z Updating files:  55% (8494/15443)
+2026-11-13T17:41:45.7427202Z Updating files:  56% (8649/15443)
+2026-11-13T17:41:45.7827085Z Updating files:  57% (8803/15443)
+2026-11-13T17:41:45.8102945Z Updating files:  58% (8957/15443)
+2026-11-13T17:41:45.8379707Z Updating files:  59% (9112/15443)
+2026-11-13T17:41:45.8657673Z Updating files:  60% (9266/15443)
+2026-11-13T17:41:45.8931119Z Updating files:  61% (9421/15443)
+2026-11-13T17:41:45.9274023Z Updating files:  62% (9575/15443)
+2026-11-13T17:41:45.9559419Z Updating files:  63% (9730/15443)
+2026-11-13T17:41:45.9766304Z Updating files:  64% (9884/15443)
+2026-11-13T17:41:45.9897605Z Updating files:  65% (10038/15443)
+2026-11-13T17:41:46.0141454Z Updating files:  66% (10193/15443)
+2026-11-13T17:41:46.0350281Z Updating files:  67% (10347/15443)
+2026-11-13T17:41:46.0693929Z Updating files:  68% (10502/15443)
+2026-11-13T17:41:46.1072227Z Updating files:  69% (10656/15443)
+2026-11-13T17:41:46.2662905Z Updating files:  70% (10811/15443)
+2026-11-13T17:41:46.2804985Z Updating files:  71% (10965/15443)
+2026-11-13T17:41:46.2970945Z Updating files:  72% (11119/15443)
+2026-11-13T17:41:46.3270861Z Updating files:  73% (11274/15443)
+2026-11-13T17:41:46.3583718Z Updating files:  74% (11428/15443)
+2026-11-13T17:41:46.3936805Z Updating files:  75% (11583/15443)
+2026-11-13T17:41:46.4268463Z Updating files:  76% (11737/15443)
+2026-11-13T17:41:46.4635490Z Updating files:  77% (11892/15443)
+2026-11-13T17:41:46.5182277Z Updating files:  78% (12046/15443)
+2026-11-13T17:41:46.5490204Z Updating files:  79% (12200/15443)
+2026-11-13T17:41:46.5551577Z Updating files:  80% (12355/15443)
+2026-11-13T17:41:46.5819062Z Updating files:  80% (12384/15443)
+2026-11-13T17:41:46.6221788Z Updating files:  81% (12509/15443)
+2026-11-13T17:41:46.6573782Z Updating files:  82% (12664/15443)
+2026-11-13T17:41:46.7011390Z Updating files:  83% (12818/15443)
+2026-11-13T17:41:46.7313880Z Updating files:  84% (12973/15443)
+2026-11-13T17:41:46.7656248Z Updating files:  85% (13127/15443)
+2026-11-13T17:41:46.7932065Z Updating files:  86% (13281/15443)
+2026-11-13T17:41:46.8190577Z Updating files:  87% (13436/15443)
+2026-11-13T17:41:46.8537136Z Updating files:  88% (13590/15443)
+2026-11-13T17:41:46.8849965Z Updating files:  89% (13745/15443)
+2026-11-13T17:41:46.9214278Z Updating files:  90% (13899/15443)
+2026-11-13T17:41:46.9946932Z Updating files:  91% (14054/15443)
+2026-11-13T17:41:47.0909461Z Updating files:  92% (14208/15443)
+2026-11-13T17:41:47.1159756Z Updating files:  93% (14362/15443)
+2026-11-13T17:41:47.1340607Z Updating files:  94% (14517/15443)
+2026-11-13T17:41:47.1568791Z Updating files:  95% (14671/15443)
+2026-11-13T17:41:47.1738363Z Updating files:  96% (14826/15443)
+2026-11-13T17:41:47.1863283Z Updating files:  97% (14980/15443)
+2026-11-13T17:41:47.2029304Z Updating files:  98% (15135/15443)
+2026-11-13T17:41:47.2145575Z Updating files:  99% (15289/15443)
+2026-11-13T17:41:47.2146204Z Updating files: 100% (15443/15443)
+2026-11-13T17:41:47.2146549Z Updating files: 100% (15443/15443), done.
+2026-11-13T17:41:47.2228574Z Note: switching to '1a548c95acdf8ac1ef44d74473403eda2ac86cf0'.
+2026-11-13T17:41:47.2228886Z 
+2026-11-13T17:41:47.2229142Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-11-13T17:41:47.2229614Z changes and commit them, and you can discard any commits you make in this
+2026-11-13T17:41:47.2230064Z state without impacting any branches by switching back to a branch.
+2026-11-13T17:41:47.2230301Z 
+2026-11-13T17:41:47.2230515Z If you want to create a new branch to retain commits you create, you may
+2026-11-13T17:41:47.2230970Z do so (now or later) by using -c with the switch command. Example:
+2026-11-13T17:41:47.2231227Z 
+2026-11-13T17:41:47.2231344Z   git switch -c <new-branch-name>
+2026-11-13T17:41:47.2231500Z 
+2026-11-13T17:41:47.2231612Z Or undo this operation with:
+2026-11-13T17:41:47.2231751Z 
+2026-11-13T17:41:47.2231841Z   git switch -
+2026-11-13T17:41:47.2231952Z 
+2026-11-13T17:41:47.2232466Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-11-13T17:41:47.2232724Z 
+2026-11-13T17:41:47.2233531Z HEAD is now at 1a548c9 docs(changelog): 汇总 db773dad..a44934c5 的变更
+2026-11-13T17:41:47.2419554Z ##[endgroup]
+2026-11-13T17:41:47.2459280Z [command]/usr/bin/git log -1 --format=%H
+2026-11-13T17:41:47.2485532Z 1a548c95acdf8ac1ef44d74473403eda2ac86cf0
+2026-11-13T17:41:47.2496736Z ##[group]Removing auth
+2026-11-13T17:41:47.2497199Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-13T17:41:47.2528458Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-13T17:41:47.2774901Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-13T17:41:47.2798420Z http.https://github.com/.extraheader
+2026-11-13T17:41:47.2805197Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-13T17:41:47.2834157Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-13T17:41:47.3074208Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-13T17:41:47.3103722Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-13T17:41:47.3343633Z ##[endgroup]
+2026-11-13T17:41:47.3440032Z ##[end-action id=__self.__actions_checkout;outcome=success;conclusion=success;duration_ms=22419]
+2026-11-13T17:41:47.3441963Z ##[start-action display=Bind CI checkout origin to adopted provenance;id=__self.__run]
+2026-11-13T17:41:47.3455935Z ##[group]Run git remote set-url origin https://github.com/libnoname/noname.git
+2026-11-13T17:41:47.3456259Z [36;1mgit remote set-url origin https://github.com/libnoname/noname.git[0m
+2026-11-13T17:41:47.3498323Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-13T17:41:47.3498517Z env:
+2026-11-13T17:41:47.3498647Z   CARGO_TERM_COLOR: always
+2026-11-13T17:41:47.3498787Z   WASM_PACK_TARGET: web
+2026-11-13T17:41:47.3498931Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T17:41:47.3499082Z   CARGO_INCREMENTAL: 0
+2026-11-13T17:41:47.3499217Z   CACHE_ON_FAILURE: false
+2026-11-13T17:41:47.3499350Z ##[endgroup]
+2026-11-13T17:41:47.3585716Z ##[end-action id=__self.__run;outcome=success;conclusion=success;duration_ms=14]
+2026-11-13T17:41:47.3587437Z ##[start-action display=Run actions/checkout@v4;id=__self.__actions_checkout_2]
+2026-11-13T17:41:47.3637410Z ##[group]Run actions/checkout@v4
+2026-11-13T17:41:47.3637573Z with:
+2026-11-13T17:41:47.3637714Z   repository: Helasisy1984/Noname-Liuli-Modified
+2026-11-13T17:41:47.3637915Z   ref: 8485dbb29ff16f9b258a766b1a17ef75f883aade
+2026-11-13T17:41:47.3638093Z   path: archive/upstream/noname-liuli
+2026-11-13T17:41:47.3638274Z   sparse-checkout-cone-mode: false
+2026-11-13T17:41:47.3639180Z   sparse-checkout: /noname/character/extra.js
+/noname/extension/史诗卡牌/extension.js
+/noname/extension/拖拽读取/extension.js
+/noname/extension/斗转星移/data/inputPlan/空白
+/noname/extension/斗转星移/data/inputPlan/标准包
+/noname/extension/斗转星移/data/inputPlan/风林火山
+/noname/extension/斗转星移/data/outputPlan/无
+/noname/extension/更新保护/extension.js
+/noname/extension/武皇争霸/extension.js
+/noname/extension/武皇争霸/mightyFoe.js
+/noname/extension/笨蛋插件/extension.js
+/noname/extension/龙血玄黄/extension.js
+
+2026-11-13T17:41:47.3640048Z   persist-credentials: false
+2026-11-13T17:41:47.3641781Z   token: ***
+2026-11-13T17:41:47.3641903Z   ssh-strict: true
+2026-11-13T17:41:47.3642044Z   ssh-user: git
+2026-11-13T17:41:47.3642161Z   clean: true
+2026-11-13T17:41:47.3642277Z   fetch-depth: 1
+2026-11-13T17:41:47.3642401Z   fetch-tags: false
+2026-11-13T17:41:47.3642529Z   show-progress: true
+2026-11-13T17:41:47.3642652Z   lfs: false
+2026-11-13T17:41:47.3642766Z   submodules: false
+2026-11-13T17:41:47.3643172Z   set-safe-directory: true
+2026-11-13T17:41:47.3643363Z   allow-unsafe-pr-checkout: false
+2026-11-13T17:41:47.3643511Z env:
+2026-11-13T17:41:47.3643625Z   CARGO_TERM_COLOR: always
+2026-11-13T17:41:47.3643769Z   WASM_PACK_TARGET: web
+2026-11-13T17:41:47.3643907Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T17:41:47.3644056Z   CARGO_INCREMENTAL: 0
+2026-11-13T17:41:47.3644189Z   CACHE_ON_FAILURE: false
+2026-11-13T17:41:47.3644322Z ##[endgroup]
+2026-11-13T17:41:47.4257198Z Syncing repository: Helasisy1984/Noname-Liuli-Modified
+2026-11-13T17:41:47.4258922Z ##[group]Getting Git version info
+2026-11-13T17:41:47.4260250Z Working directory is '/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/archive/upstream/noname-liuli'
+2026-11-13T17:41:47.4261664Z [command]/usr/bin/git version
+2026-11-13T17:41:47.4297598Z git version 2.56.1
+2026-11-13T17:41:47.4309673Z ##[endgroup]
+2026-11-13T17:41:47.4320312Z Temporarily overriding HOME='/home/runner/work/_temp/980abf2e-ac7e-4a06-b986-93f41fee2ae1' before making global git config changes
+2026-11-13T17:41:47.4321420Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-13T17:41:47.4327797Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/archive/upstream/noname-liuli
+2026-11-13T17:41:47.4359492Z ##[group]Initializing the repository
+2026-11-13T17:41:47.4363510Z [command]/usr/bin/git init /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/archive/upstream/noname-liuli
+2026-11-13T17:41:47.4412288Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-13T17:41:47.4413479Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-13T17:41:47.4419340Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-13T17:41:47.4420535Z hint: call:
+2026-11-13T17:41:47.4421020Z hint:
+2026-11-13T17:41:47.4421396Z hint: 	git config --global init.defaultBranch <name>
+2026-11-13T17:41:47.4421695Z hint:
+2026-11-13T17:41:47.4422037Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-13T17:41:47.4422588Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-13T17:41:47.4422935Z hint:
+2026-11-13T17:41:47.4423280Z hint: 	git branch -m <name>
+2026-11-13T17:41:47.4423494Z hint:
+2026-11-13T17:41:47.4423901Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-13T17:41:47.4424808Z Initialized empty Git repository in /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/archive/upstream/noname-liuli/.git/
+2026-11-13T17:41:47.4426474Z [command]/usr/bin/git remote add origin https://github.com/Helasisy1984/Noname-Liuli-Modified
+2026-11-13T17:41:47.4460904Z ##[endgroup]
+2026-11-13T17:41:47.4461333Z ##[group]Disabling automatic garbage collection
+2026-11-13T17:41:47.4465385Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-13T17:41:47.4497888Z ##[endgroup]
+2026-11-13T17:41:47.4498267Z ##[group]Setting up auth
+2026-11-13T17:41:47.4504501Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-13T17:41:47.4536104Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-13T17:41:47.4805105Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-13T17:41:47.4864662Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-13T17:41:47.5096059Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-13T17:41:47.5127769Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-13T17:41:47.5361372Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-13T17:41:47.5398624Z ##[endgroup]
+2026-11-13T17:41:47.5398998Z ##[group]Fetching the repository
+2026-11-13T17:41:47.5407075Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --filter=blob:none --depth=1 origin 8485dbb29ff16f9b258a766b1a17ef75f883aade
+2026-11-13T17:41:47.9231592Z From https://github.com/Helasisy1984/Noname-Liuli-Modified
+2026-11-13T17:41:47.9232156Z  * branch            8485dbb29ff16f9b258a766b1a17ef75f883aade -> FETCH_HEAD
+2026-11-13T17:41:47.9235432Z ##[endgroup]
+2026-11-13T17:41:47.9235753Z ##[group]Determining the checkout info
+2026-11-13T17:41:47.9237364Z ##[endgroup]
+2026-11-13T17:41:47.9237629Z ##[group]Setting up sparse checkout
+2026-11-13T17:41:47.9242588Z [command]/usr/bin/git config core.sparseCheckout true
+2026-11-13T17:41:47.9276315Z [command]/usr/bin/git rev-parse --git-path info/sparse-checkout
+2026-11-13T17:41:47.9298856Z .git/info/sparse-checkout
+2026-11-13T17:41:47.9306155Z ##[endgroup]
+2026-11-13T17:41:47.9306508Z ##[group]Checking out the ref
+2026-11-13T17:41:47.9309576Z [command]/usr/bin/git checkout --progress --force 8485dbb29ff16f9b258a766b1a17ef75f883aade
+2026-11-13T17:41:48.5979110Z Note: switching to '8485dbb29ff16f9b258a766b1a17ef75f883aade'.
+2026-11-13T17:41:48.5979397Z 
+2026-11-13T17:41:48.5979571Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-11-13T17:41:48.5979909Z changes and commit them, and you can discard any commits you make in this
+2026-11-13T17:41:48.5980261Z state without impacting any branches by switching back to a branch.
+2026-11-13T17:41:48.5980752Z 
+2026-11-13T17:41:48.5980984Z If you want to create a new branch to retain commits you create, you may
+2026-11-13T17:41:48.5981443Z do so (now or later) by using -c with the switch command. Example:
+2026-11-13T17:41:48.5981695Z 
+2026-11-13T17:41:48.5981817Z   git switch -c <new-branch-name>
+2026-11-13T17:41:48.5981982Z 
+2026-11-13T17:41:48.5982101Z Or undo this operation with:
+2026-11-13T17:41:48.5982251Z 
+2026-11-13T17:41:48.5982348Z   git switch -
+2026-11-13T17:41:48.5982465Z 
+2026-11-13T17:41:48.5982718Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-11-13T17:41:48.5982992Z 
+2026-11-13T17:41:48.5983335Z HEAD is now at 8485dbb Add Desktop Client Extensions
+2026-11-13T17:41:48.5984866Z ##[endgroup]
+2026-11-13T17:41:48.6025217Z [command]/usr/bin/git log -1 --format=%H
+2026-11-13T17:41:48.6048621Z 8485dbb29ff16f9b258a766b1a17ef75f883aade
+2026-11-13T17:41:48.6057068Z ##[group]Removing auth
+2026-11-13T17:41:48.6060045Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-13T17:41:48.6088429Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-13T17:41:48.6326244Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-13T17:41:48.6349300Z http.https://github.com/.extraheader
+2026-11-13T17:41:48.6357065Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-13T17:41:48.6386923Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-13T17:41:48.6624655Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-13T17:41:48.6654569Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-13T17:41:48.6891152Z ##[endgroup]
+2026-11-13T17:41:48.6990769Z ##[end-action id=__self.__actions_checkout_2;outcome=success;conclusion=success;duration_ms=1340]
+2026-11-13T17:41:48.6992973Z ##[start-action display=Restore adopted Longxue source input;id=__self.__run_2]
+2026-11-13T17:41:48.7008835Z ##[group]Run node --input-type=module <<'NODE'
+2026-11-13T17:41:48.7009079Z [36;1mnode --input-type=module <<'NODE'[0m
+2026-11-13T17:41:48.7009271Z [36;1mimport assert from 'node:assert/strict';[0m
+2026-11-13T17:41:48.7009479Z [36;1mimport { readFileSync } from 'node:fs';[0m
+2026-11-13T17:41:48.7009672Z [36;1mimport { createHash } from 'node:crypto';[0m
+2026-11-13T17:41:48.7009889Z [36;1mimport { execFileSync } from 'node:child_process';[0m
+2026-11-13T17:41:48.7010102Z [36;1mimport path from 'node:path';[0m
+2026-11-13T17:41:48.7010299Z [36;1mconst file = 'noname/extension/龙血玄黄/extension.js';[0m
+2026-11-13T17:41:48.7010527Z [36;1mconst hash = () => createHash('sha256')[0m
+2026-11-13T17:41:48.7010730Z [36;1m  .update(readFileSync(file)).digest('hex');[0m
+2026-11-13T17:41:48.7010920Z [36;1massert.equal(hash(),[0m
+2026-11-13T17:41:48.7011166Z [36;1m  'cf953876295d884bf2a766dd3a74e953d30073dc7a513ecb16cd59d50ad0db76');[0m
+2026-11-13T17:41:48.7011466Z [36;1mexecFileSync('git', ['apply', path.join(process.env.GITHUB_WORKSPACE,[0m
+2026-11-13T17:41:48.7011784Z [36;1m  'noname-next/.github/actions/prepare-original-content/liuli-longxue.patch')]);[0m
+2026-11-13T17:41:48.7012072Z [36;1massert.equal(hash(),[0m
+2026-11-13T17:41:48.7012301Z [36;1m  'e3fad7cf47bfb5a6f6b55d21bd6dbdd7b44753a6b92d7407a2a1c88bb71d2db7');[0m
+2026-11-13T17:41:48.7012545Z [36;1mNODE[0m
+2026-11-13T17:41:48.7058456Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-13T17:41:48.7058680Z env:
+2026-11-13T17:41:48.7058815Z   CARGO_TERM_COLOR: always
+2026-11-13T17:41:48.7059125Z   WASM_PACK_TARGET: web
+2026-11-13T17:41:48.7059295Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T17:41:48.7059448Z   CARGO_INCREMENTAL: 0
+2026-11-13T17:41:48.7059581Z   CACHE_ON_FAILURE: false
+2026-11-13T17:41:48.7059726Z ##[endgroup]
+2026-11-13T17:41:48.7482383Z ##[end-action id=__self.__run_2;outcome=success;conclusion=success;duration_ms=48]
+2026-11-13T17:41:48.7484459Z ##[start-action display=Run pnpm/action-setup@v4;id=__self.__pnpm_action-setup]
+2026-11-13T17:41:48.7508632Z ##[group]Run pnpm/action-setup@v4
+2026-11-13T17:41:48.7508810Z with:
+2026-11-13T17:41:48.7508930Z   version: 9
+2026-11-13T17:41:48.7509053Z   dest: ~/setup-pnpm
+2026-11-13T17:41:48.7509190Z   run_install: null
+2026-11-13T17:41:48.7509315Z   cache: false
+2026-11-13T17:41:48.7509454Z   cache_dependency_path: pnpm-lock.yaml
+2026-11-13T17:41:48.7509626Z   package_json_file: package.json
+2026-11-13T17:41:48.7509776Z   standalone: false
+2026-11-13T17:41:48.7509910Z env:
+2026-11-13T17:41:48.7510032Z   CARGO_TERM_COLOR: always
+2026-11-13T17:41:48.7510196Z   WASM_PACK_TARGET: web
+2026-11-13T17:41:48.7510342Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T17:41:48.7510497Z   CARGO_INCREMENTAL: 0
+2026-11-13T17:41:48.7510631Z   CACHE_ON_FAILURE: false
+2026-11-13T17:41:48.7510768Z ##[endgroup]
+2026-11-13T17:41:48.8518517Z ##[group]Running self-installer...
+2026-11-13T17:41:49.1064576Z (node:2916) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-13T17:41:49.1065959Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-13T17:41:49.3116097Z Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-11-13T17:41:49.3176616Z Packages: +1
+2026-11-13T17:41:49.3176930Z +
+2026-11-13T17:41:49.6192031Z Progress: resolved 1, reused 0, downloaded 1, added 1, done
+2026-11-13T17:41:49.6424512Z 
+2026-11-13T17:41:49.6425167Z dependencies:
+2026-11-13T17:41:49.6425603Z + pnpm 9.15.9 (12.18.0 is available)
+2026-11-13T17:41:49.6425809Z 
+2026-11-13T17:41:49.6443319Z Done in 673ms
+2026-11-13T17:41:49.6643749Z ##[endgroup]
+2026-11-13T17:41:49.6644235Z Installation Completed!
+2026-11-13T17:41:49.6726494Z ##[end-action id=__self.__pnpm_action-setup;outcome=success;conclusion=success;duration_ms=924]
+2026-11-13T17:41:49.6728609Z ##[start-action display=Install frontend dependencies;id=__self.__run_3]
+2026-11-13T17:41:49.6742492Z ##[group]Run pnpm --dir apps/web-client install --frozen-lockfile
+2026-11-13T17:41:49.6742796Z [36;1mpnpm --dir apps/web-client install --frozen-lockfile[0m
+2026-11-13T17:41:49.6785744Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-13T17:41:49.6785948Z env:
+2026-11-13T17:41:49.6786084Z   CARGO_TERM_COLOR: always
+2026-11-13T17:41:49.6786228Z   WASM_PACK_TARGET: web
+2026-11-13T17:41:49.6786372Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T17:41:49.6786527Z   CARGO_INCREMENTAL: 0
+2026-11-13T17:41:49.6786668Z   CACHE_ON_FAILURE: false
+2026-11-13T17:41:49.6786855Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-11-13T17:41:49.6787036Z ##[endgroup]
+2026-11-13T17:41:49.9562269Z Lockfile is up to date, resolution step is skipped
+2026-11-13T17:41:49.9778329Z Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-11-13T17:41:49.9894519Z Packages: +63
+2026-11-13T17:41:49.9923923Z +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2026-11-13T17:41:50.5902824Z Progress: resolved 63, reused 0, downloaded 63, added 63, done
+2026-11-13T17:41:50.6234422Z .../node_modules/@swc/core postinstall$ node postinstall.js
+2026-11-13T17:41:50.6413383Z .../esbuild@0.25.12/node_modules/esbuild postinstall$ node install.js
+2026-11-13T17:41:50.6681842Z .../node_modules/@swc/core postinstall: Done
+2026-11-13T17:41:50.6925543Z .../esbuild@0.25.12/node_modules/esbuild postinstall: Done
+2026-11-13T17:41:50.8348094Z 
+2026-11-13T17:41:50.8348863Z dependencies:
+2026-11-13T17:41:50.8349221Z + @tauri-apps/api 2.11.1
+2026-11-13T17:41:50.8349475Z + vue 3.5.39
+2026-11-13T17:41:50.8350094Z + vue-router 4.6.4
+2026-11-13T17:41:50.8350225Z 
+2026-11-13T17:41:50.8350318Z devDependencies:
+2026-11-13T17:41:50.8350531Z + @tauri-apps/cli 2.11.4
+2026-11-13T17:41:50.8350797Z + @vitejs/plugin-vue 5.2.4
+2026-11-13T17:41:50.8351047Z + typescript 5.9.3
+2026-11-13T17:41:50.8351267Z + vite 6.4.3
+2026-11-13T17:41:50.8351515Z + vite-plugin-top-level-await 1.6.0
+2026-11-13T17:41:50.8351803Z + vite-plugin-wasm 3.6.0
+2026-11-13T17:41:50.8352011Z + vue-tsc 2.2.12
+2026-11-13T17:41:50.8352128Z 
+2026-11-13T17:41:50.8476357Z Done in 1.1s using pnpm v9.15.9
+2026-11-13T17:41:50.8719499Z ##[end-action id=__self.__run_3;outcome=success;conclusion=success;duration_ms=1199]
+2026-11-13T17:41:50.8721295Z ##[start-action display=Restore and verify adopted resource bytes;id=__self.__run_4]
+2026-11-13T17:41:50.8739210Z ##[group]Run node scripts/sync-original-content.mjs --resources-only
+2026-11-13T17:41:50.8739692Z [36;1mnode scripts/sync-original-content.mjs --resources-only[0m
+2026-11-13T17:41:50.8740168Z [36;1mnode scripts/sync-original-content.mjs --resources-only --verify-only[0m
+2026-11-13T17:41:50.8740575Z [36;1mgit diff --exit-code -- content/original[0m
+2026-11-13T17:41:50.8796483Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-13T17:41:50.8796852Z env:
+2026-11-13T17:41:50.8797061Z   CARGO_TERM_COLOR: always
+2026-11-13T17:41:50.8797299Z   WASM_PACK_TARGET: web
+2026-11-13T17:41:50.8797522Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T17:41:50.8797768Z   CARGO_INCREMENTAL: 0
+2026-11-13T17:41:50.8797984Z   CACHE_ON_FAILURE: false
+2026-11-13T17:41:50.8798254Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-11-13T17:41:50.8798549Z ##[endgroup]
+2026-11-13T17:42:06.4876796Z original content resources synced:
+2026-11-13T17:42:06.4877827Z   portraits: 2707 files, 387.6 MiB, 2707 linked, 0 copied
+2026-11-13T17:42:06.4878217Z   audio: 9652 files, 620.9 MiB, 9652 linked, 0 copied
+2026-11-13T17:42:06.4878459Z   audio-compat: 5 files, 257.4 KiB, 0 linked, 5 copied
+2026-11-13T17:42:18.3611705Z original content resources verified:
+2026-11-13T17:42:18.3612414Z   portraits: 2707 files, 387.6 MiB, 2707 linked, 0 copied
+2026-11-13T17:42:18.3612773Z   audio: 9652 files, 620.9 MiB, 9652 linked, 0 copied
+2026-11-13T17:42:18.3613286Z   audio-compat: 5 files, 257.4 KiB, 0 linked, 5 copied
+2026-11-13T17:42:18.8946225Z ##[end-action id=__self.__run_4;outcome=success;conclusion=success;duration_ms=28022]

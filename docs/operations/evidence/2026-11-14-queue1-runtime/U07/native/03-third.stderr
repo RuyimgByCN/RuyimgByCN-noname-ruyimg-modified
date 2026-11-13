@@ -1,0 +1,11 @@
+    Blocking waiting for file lock on build directory
+   Compiling engine-native-content v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+   Compiling queue1-u07-runtime-probe v0.1.0 (/private/tmp/noname-queue1-u07-native)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 21.28s
+     Running `target/debug/queue1-u07-runtime-probe`
+
+thread 'main' (3404200) panicked at src/main.rs:18:161:
+called `Result::unwrap()` on an `Err` value: IdOutOfBounds { what: "card_missing_from_all_zones", got: 1 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

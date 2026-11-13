@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "scripts/check-source-lines.py"
+  ],
+  "command": "python3 -B scripts/check-source-lines.py",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0"
+  },
+  "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n",
+  "start_utc": "2026-11-13T18:02:53.379865+00:00",
+  "exit_code": 0,
+  "duration_seconds": 10.767,
+  "end_utc": "2026-11-13T18:03:04.146682+00:00"
+}

@@ -1,0 +1,270 @@
+{
+  "at": "2026-11-13T18:20:40.248476+00:00",
+  "cohort": "native09 + browser twelfth, immutable raw inputs",
+  "unique_cases": 24,
+  "native_jsonl": "native/09-formal.log",
+  "browser_jsonl": "browser/case-results-twelfth.jsonl",
+  "probe_source": "native/probe-09.rs",
+  "fixture_source": "browser/start-case.js",
+  "runner_source": "browser/run-cases.py",
+  "raw_requests": "browser/session-wudian-1794592764804-requests.jsonl",
+  "raw_replies": "browser/session-wudian-1794592764804-replies.jsonl",
+  "cases": [
+    {
+      "case": "choudu-top-return",
+      "native_jsonl_line": 1,
+      "browser_jsonl_line": 1,
+      "browser_at": "2026-11-13T18:17:35.371041+00:00",
+      "raw_fixture_request_line": 4251,
+      "raw_final_request_line": 4359,
+      "raw_final_reply_line": 4359,
+      "native_ngsa_windows": 3
+    },
+    {
+      "case": "choudu-target1",
+      "native_jsonl_line": 2,
+      "browser_jsonl_line": 2,
+      "browser_at": "2026-11-13T18:17:41.116477+00:00",
+      "raw_fixture_request_line": 4362,
+      "raw_final_request_line": 4469,
+      "raw_final_reply_line": 4469,
+      "native_ngsa_windows": 3
+    },
+    {
+      "case": "choudu-target2",
+      "native_jsonl_line": 3,
+      "browser_jsonl_line": 3,
+      "browser_at": "2026-11-13T18:17:46.890804+00:00",
+      "raw_fixture_request_line": 4472,
+      "raw_final_request_line": 4577,
+      "raw_final_reply_line": 4577,
+      "native_ngsa_windows": 3
+    },
+    {
+      "case": "choudu-swap-a",
+      "native_jsonl_line": 4,
+      "browser_jsonl_line": 4,
+      "browser_at": "2026-11-13T18:17:52.600045+00:00",
+      "raw_fixture_request_line": 4580,
+      "raw_final_request_line": 4719,
+      "raw_final_reply_line": 4719,
+      "native_ngsa_windows": 3
+    },
+    {
+      "case": "choudu-swap-b",
+      "native_jsonl_line": 5,
+      "browser_jsonl_line": 5,
+      "browser_at": "2026-11-13T18:18:00.510583+00:00",
+      "raw_fixture_request_line": 4722,
+      "raw_final_request_line": 4849,
+      "raw_final_reply_line": 4849,
+      "native_ngsa_windows": 3
+    },
+    {
+      "case": "choudu-equip-target1",
+      "native_jsonl_line": 6,
+      "browser_jsonl_line": 6,
+      "browser_at": "2026-11-13T18:18:08.574948+00:00",
+      "raw_fixture_request_line": 4852,
+      "raw_final_request_line": 4948,
+      "raw_final_reply_line": 4948,
+      "native_ngsa_windows": 3
+    },
+    {
+      "case": "choudu-cancel-card",
+      "native_jsonl_line": 7,
+      "browser_jsonl_line": 7,
+      "browser_at": "2026-11-13T18:18:14.569035+00:00",
+      "raw_fixture_request_line": 4951,
+      "raw_final_request_line": 4960,
+      "raw_final_reply_line": 4960,
+      "native_ngsa_windows": 1
+    },
+    {
+      "case": "choudu-cancel-target",
+      "native_jsonl_line": 8,
+      "browser_jsonl_line": 8,
+      "browser_at": "2026-11-13T18:18:16.072315+00:00",
+      "raw_fixture_request_line": 4963,
+      "raw_final_request_line": 4973,
+      "raw_final_reply_line": 4973,
+      "native_ngsa_windows": 2
+    },
+    {
+      "case": "choudu-empty",
+      "native_jsonl_line": 9,
+      "browser_jsonl_line": 9,
+      "browser_at": "2026-11-13T18:18:17.609288+00:00",
+      "raw_fixture_request_line": 4976,
+      "raw_final_request_line": 4981,
+      "raw_final_reply_line": 4981,
+      "native_ngsa_windows": 0
+    },
+    {
+      "case": "fuchou-hand",
+      "native_jsonl_line": 10,
+      "browser_jsonl_line": 10,
+      "browser_at": "2026-11-13T18:18:18.857329+00:00",
+      "raw_fixture_request_line": 4984,
+      "raw_final_request_line": 4999,
+      "raw_final_reply_line": 4999,
+      "native_ngsa_windows": 1
+    },
+    {
+      "case": "fuchou-equip",
+      "native_jsonl_line": 11,
+      "browser_jsonl_line": 11,
+      "browser_at": "2026-11-13T18:18:20.497689+00:00",
+      "raw_fixture_request_line": 5002,
+      "raw_final_request_line": 5016,
+      "raw_final_reply_line": 5016,
+      "native_ngsa_windows": 1
+    },
+    {
+      "case": "fuchou-cancel",
+      "native_jsonl_line": 12,
+      "browser_jsonl_line": 12,
+      "browser_at": "2026-11-13T18:18:22.133405+00:00",
+      "raw_fixture_request_line": 5019,
+      "raw_final_request_line": 5026,
+      "raw_final_reply_line": 5026,
+      "native_ngsa_windows": 2
+    },
+    {
+      "case": "fuchou-empty",
+      "native_jsonl_line": 13,
+      "browser_jsonl_line": 13,
+      "browser_at": "2026-11-13T18:18:23.467011+00:00",
+      "raw_fixture_request_line": 5029,
+      "raw_final_request_line": 5034,
+      "raw_final_reply_line": 5034,
+      "native_ngsa_windows": 0
+    },
+    {
+      "case": "fuchou-settle-no-sha",
+      "native_jsonl_line": 14,
+      "browser_jsonl_line": 14,
+      "browser_at": "2026-11-13T18:18:24.777707+00:00",
+      "raw_fixture_request_line": 5038,
+      "raw_final_request_line": 5073,
+      "raw_final_reply_line": 5073,
+      "native_ngsa_windows": 2
+    },
+    {
+      "case": "fuchou-settle-draw-sha",
+      "native_jsonl_line": 15,
+      "browser_jsonl_line": 15,
+      "browser_at": "2026-11-13T18:18:27.615606+00:00",
+      "raw_fixture_request_line": 5076,
+      "raw_final_request_line": 5111,
+      "raw_final_reply_line": 5111,
+      "native_ngsa_windows": 2
+    },
+    {
+      "case": "fuchou-settle-have-sha-decline-retaliation",
+      "native_jsonl_line": 16,
+      "browser_jsonl_line": 16,
+      "browser_at": "2026-11-13T18:18:30.365942+00:00",
+      "raw_fixture_request_line": 5114,
+      "raw_final_request_line": 5151,
+      "raw_final_reply_line": 5151,
+      "native_ngsa_windows": 2
+    },
+    {
+      "case": "fuchou-settle-have-sha-use",
+      "native_jsonl_line": 17,
+      "browser_jsonl_line": 17,
+      "browser_at": "2026-11-13T18:18:33.146976+00:00",
+      "raw_fixture_request_line": 5154,
+      "raw_final_request_line": 5212,
+      "raw_final_reply_line": 5212,
+      "native_ngsa_windows": 2
+    },
+    {
+      "case": "youzhan-hand-stop",
+      "native_jsonl_line": 18,
+      "browser_jsonl_line": 18,
+      "browser_at": "2026-11-13T18:18:36.954091+00:00",
+      "raw_fixture_request_line": 5215,
+      "raw_final_request_line": 5250,
+      "raw_final_reply_line": 5250,
+      "native_ngsa_windows": 1
+    },
+    {
+      "case": "youzhan-equip-stop",
+      "native_jsonl_line": 19,
+      "browser_jsonl_line": 19,
+      "browser_at": "2026-11-13T18:18:39.720184+00:00",
+      "raw_fixture_request_line": 5253,
+      "raw_final_request_line": 5289,
+      "raw_final_reply_line": 5289,
+      "native_ngsa_windows": 1
+    },
+    {
+      "case": "youzhan-cancel",
+      "native_jsonl_line": 20,
+      "browser_jsonl_line": 20,
+      "browser_at": "2026-11-13T18:18:42.600789+00:00",
+      "raw_fixture_request_line": 5292,
+      "raw_final_request_line": 5299,
+      "raw_final_reply_line": 5299,
+      "native_ngsa_windows": 1
+    },
+    {
+      "case": "youzhan-far",
+      "native_jsonl_line": 21,
+      "browser_jsonl_line": 21,
+      "browser_at": "2026-11-13T18:18:43.949201+00:00",
+      "raw_fixture_request_line": 5302,
+      "raw_final_request_line": 5307,
+      "raw_final_reply_line": 5307,
+      "native_ngsa_windows": 0
+    },
+    {
+      "case": "youzhan-no-equip",
+      "native_jsonl_line": 22,
+      "browser_jsonl_line": 22,
+      "browser_at": "2026-11-13T18:18:45.158956+00:00",
+      "raw_fixture_request_line": 5310,
+      "raw_final_request_line": 5315,
+      "raw_final_reply_line": 5315,
+      "native_ngsa_windows": 0
+    },
+    {
+      "case": "youzhan-counter-use",
+      "native_jsonl_line": 23,
+      "browser_jsonl_line": 23,
+      "browser_at": "2026-11-13T18:18:46.422949+00:00",
+      "raw_fixture_request_line": 5318,
+      "raw_final_request_line": 5378,
+      "raw_final_reply_line": 5378,
+      "native_ngsa_windows": 3
+    },
+    {
+      "case": "youzhan-counter-dodge-stop",
+      "native_jsonl_line": 24,
+      "browser_jsonl_line": 24,
+      "browser_at": "2026-11-13T18:18:50.443664+00:00",
+      "raw_fixture_request_line": 5381,
+      "raw_final_request_line": 5449,
+      "raw_final_reply_line": 5449,
+      "native_ngsa_windows": 4
+    }
+  ],
+  "sha256": {
+    "native/09-formal.log": "f665f97467d9ffd588f79e762bc89250671a56e8b48ca025262dcf644c328682",
+    "browser/case-results-twelfth.jsonl": "a40fc47f592a518a03f6b41e796dbbdea324567bd760fd250a46b1287b08ba99",
+    "browser/session-wudian-1794592764804-requests.jsonl": "034168492fe031dafc8e0990fe333f6e13b64a86be2cfc5e74562a82b2303f32",
+    "browser/session-wudian-1794592764804-replies.jsonl": "cba26390f74d50a22ea8f46f31e5c4167ddad0f19d361ffdbddbb665049ff997",
+    "native/probe-09.rs": "73d5daa434ae72254169be95879f73d9df76d7c77b64fe9c8ccd7c2c38471dab",
+    "browser/start-case.js": "d6041fb3aeae4c99ba1948caad0d4d2ed3f62348ce6a230f16c8bdb8b994acf9",
+    "browser/run-cases.py": "5f22e8fe1681b05e4c0785c89bdfac240d83ed45af43b6e0a2cc7b359d392996",
+    "native/formal-catalog-without-placeholder.json": "fcf832a087871588df7519f972dccf642fed5b66b7b9c5860a6a6a0100ecf765",
+    "native/archive-manifest-formal.json": "9d1d4f40791152744d1a5f1d9fca26854a57b755a97b116cae0a9efa87dc5c1c",
+    "native-09-before.json": "f472bfddcdd7006a941de1c7adee84d0191093d1b4003cbc0aff48261c867d66",
+    "native-09-after.json": "4db358106c472e115af5444eabd2a3b4630f7a6b61d092c8a4c82cfdff9a4178",
+    "browser-formal-before.json": "52cebbb6dbf05c6b9659c87904e6bb98c7c6b744dea9becb9644d6f51d32e76b",
+    "browser-formal-after.json": "e3264590fcd54566097f1eaf9497a261aa9fecfd608e173e68c611838ecc041c"
+  },
+  "new_equivalence_signoff": false
+}

@@ -1,0 +1,23 @@
+{"case": "q_A", "runner_completed": true, "error": null, "stages": ["phaseUseBegin", "owner_suit_selected", "target_question", "target_suit_question_after_owner_payment", "resolved"]}
+{"case": "q_B", "runner_completed": true, "error": null, "stages": ["phaseUseBegin", "owner_suit_selected", "target_question", "target_suit_question_after_owner_payment", "resolved"]}
+{"case": "q_target_B", "runner_completed": true, "error": null, "stages": ["phaseUseBegin", "owner_suit_selected", "target_question", "target_suit_question_after_owner_payment", "resolved"]}
+{"case": "q_cancel_initial", "runner_completed": true, "error": null, "stages": ["phaseUseBegin", "cancel_owner_suit"]}
+{"case": "q_cancel_target", "runner_completed": true, "error": null, "stages": ["phaseUseBegin", "owner_suit_selected", "target_question", "cancel_target"]}
+{"case": "q_cancel_suit_attempt", "runner_completed": true, "error": null, "stages": ["phaseUseBegin", "cancel_owner_suit"]}
+{"case": "q_no_hand", "runner_completed": true, "error": null, "stages": ["phaseUseBegin"]}
+{"case": "j_active_gain", "runner_completed": true, "error": null, "stages": ["phaseUse_active_candidates", "jiushi_use_selected", "gain_question", "gain_answered"]}
+{"case": "j_active_cancel_gain", "runner_completed": true, "error": null, "stages": ["phaseUse_active_candidates", "jiushi_use_selected", "gain_question", "gain_answered"]}
+{"case": "j_active_facedown", "runner_completed": true, "error": null, "stages": ["phaseUse_active_candidates"]}
+{"case": "j_no_skill", "runner_completed": true, "error": null, "stages": ["phaseUse_active_candidates"]}
+{"case": "j_damage_back_accept_gain", "runner_completed": true, "error": null, "stages": ["sha_damage_window", "gain_after_turnback", "accept_gain"]}
+{"case": "j_damage_back_cancel", "runner_completed": true, "error": null, "stages": ["sha_damage_window", "cancel_turnback"]}
+{"case": "j_damage_faceup", "runner_completed": true, "error": null, "stages": ["sha_damage_window", "faceup_damage_no_jiushi"]}
+{"case": "f_skill_A", "runner_completed": true, "error": null, "stages": ["phaseUse_active_candidates", "target_question", "mode_question", "resolved"]}
+{"case": "f_ban_B", "runner_completed": true, "error": null, "stages": ["phaseUse_active_candidates", "target_question", "mode_question", "resolved"]}
+{"case": "f_target_B", "runner_completed": true, "error": null, "stages": ["phaseUse_active_candidates", "target_question", "mode_question", "resolved"]}
+{"case": "f_cancel_target", "runner_completed": true, "error": null, "stages": ["phaseUse_active_candidates", "target_question", "cancel_target", "reactivate_after_cancel"]}
+{"case": "f_last_target", "runner_completed": true, "error": null, "stages": ["phaseUse_active_candidates", "target_question", "invalid_target_click_ignored"]}
+{"case": "f_self_attempt", "runner_completed": true, "error": null, "stages": ["phaseUse_active_candidates", "target_question", "invalid_target_click_ignored"]}
+{"case": "f_cancel_mode_attempt", "runner_completed": true, "error": null, "stages": ["phaseUse_active_candidates", "target_question", "mode_question", "mode_has_no_cancel_control"]}
+{"case": "f_no_skill", "runner_completed": true, "error": null, "stages": ["phaseUse_active_candidates"]}
+{"cases": 22, "runner_completed": 22, "runner_failed": 0}

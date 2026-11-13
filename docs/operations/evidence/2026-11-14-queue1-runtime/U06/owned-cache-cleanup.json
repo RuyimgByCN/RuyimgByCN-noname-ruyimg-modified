@@ -1,0 +1,28 @@
+{
+  "at": "2026-11-14T02:18:44.759945+08:00",
+  "retired": [
+    {
+      "launcher_pid": 77935,
+      "chrome_pid": 77936,
+      "profile": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-chrome-eGaRWh",
+      "profile_removed_by_launcher": true
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-u06-runtime-probe-0n7kavvq",
+      "bytes": 16765,
+      "removed": true
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-u06-runtime-target-q8uuc_sy",
+      "bytes": 843214025,
+      "removed": true
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-q1-jiushi-strict-yn2wg3gi",
+      "bytes": 160161263,
+      "removed": true
+    }
+  ],
+  "preserved_shared_services": "Vite5173/FS51215 and temporary modern source still used by U07; shared target and other agent profiles unchanged",
+  "private_lock_sha256": "758280f7c972e28c5659be39179beab3fdd6206274b3600f913539445f6eb945"
+}

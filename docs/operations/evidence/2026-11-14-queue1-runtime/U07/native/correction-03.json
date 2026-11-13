@@ -1,0 +1,6 @@
+{
+  "at": "2026-11-13T18:02:25.800773+00:00",
+  "failed_run": "03-third.stderr",
+  "cause": "fixture discarded unused catalog card IDs when rebuilding a short deck; NGSA correctly rejects missing card from all zones",
+  "change": "preserve every catalog card exactly once; fixed deterministic draw prefix plus remaining cards, remove fixture hand/equip cards from deck; no product change"
+}

@@ -1,0 +1,6 @@
+{
+  "at": "2026-11-13T18:01:06.299122+00:00",
+  "failed_run": "01-first.stderr",
+  "cause": "probe looked up exact sanjian; bridge namespaces U07 card name",
+  "change": "lookup sanjian by actual catalog name containing sanjian; fixture captures actual name; product unchanged"
+}

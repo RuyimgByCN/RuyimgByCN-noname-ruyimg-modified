@@ -1,0 +1,24 @@
+{
+  "at_source": "formal bridge_pack + attach_formal_package_upstream_rules, no card added",
+  "catalog_cards": 138,
+  "choudu_skill_present": true,
+  "pack_cards": [
+    "wd_sha_0",
+    "wd_sha_1",
+    "wd_shan_2",
+    "wd_shan_3",
+    "wd_shan_4",
+    "wd_tao_5",
+    "wd_tao_6",
+    "wd_wangmeizhike_7",
+    "wd_wangmeizhike_8",
+    "wd_youdishenru_9",
+    "wd_youdishenru_10",
+    "wd_youdishenru_11",
+    "wd_sanjian_12",
+    "wd_tiesuo_13"
+  ],
+  "physical_use_attempt": "no valid diaobingqianjiang ID exists; not fabricated, no PlayCard action for that entity",
+  "placeholder_added": false,
+  "real_diaobingqianjiang_cards": []
+}

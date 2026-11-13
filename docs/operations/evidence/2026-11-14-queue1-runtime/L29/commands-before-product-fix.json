@@ -1,0 +1,70 @@
+{
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "target": "existing shared target; never cleaned",
+  "commands": [
+    {
+      "command": "node docs/operations/evidence/2026-11-14-queue1-runtime/L29/launch.mjs > docs/operations/evidence/2026-11-14-queue1-runtime/L29/launch-first.raw.txt 2>&1",
+      "outcome": "launched; later aborted HTTP request crashed launcher; original raw log retained"
+    },
+    {
+      "command": "L29_REPO=/Users/ruyimg/Documents/Claude/sanguosha/noname-next L29_EVIDENCE=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29 cargo run --offline --manifest-path docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-probe/Cargo.toml --target-dir target > docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-first.raw.txt 2>&1",
+      "outcome": "compile failed: E0599 ExtensionPack::to_json; probe only"
+    },
+    {
+      "command": "L29_REPO=/Users/ruyimg/Documents/Claude/sanguosha/noname-next L29_EVIDENCE=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29 cargo run --offline --manifest-path docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-probe/Cargo.toml --target-dir target > docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-second.raw.txt 2>&1",
+      "outcome": "22 cases; damage fixtures rejected IllegalTargets; restore failure observed"
+    },
+    {
+      "command": "L29_REPO=/Users/ruyimg/Documents/Claude/sanguosha/noname-next L29_EVIDENCE=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round2 cargo run --offline --manifest-path docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-probe/Cargo.toml --target-dir target > docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-third.raw.txt 2>&1",
+      "outcome": "22 cases each direct plus restore-attempt; adjacent damage actor; full snapshot normalization only auth_generation"
+    },
+    {
+      "command": "L29_REPO=/Users/ruyimg/Documents/Claude/sanguosha/noname-next L29_EVIDENCE=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round3 cargo run --offline --manifest-path docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-probe/Cargo.toml --target-dir target > docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-fourth.raw.txt 2>&1",
+      "outcome": "22 cases each direct plus restore-attempt; Qinggang face mapping corrected; no product change"
+    },
+    {
+      "command": "L29_REPO=/Users/ruyimg/Documents/Claude/sanguosha/noname-next L29_EVIDENCE=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-round4 cargo run --offline --manifest-path docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-probe/Cargo.toml --target-dir target > docs/operations/evidence/2026-11-14-queue1-runtime/L29/native-fifth.raw.txt 2>&1",
+      "outcome": "22 cases each direct plus restore-attempt; runtime content lock metadata and failure prompt retained"
+    },
+    {
+      "command": "python3 -B docs/operations/evidence/2026-11-14-queue1-runtime/L29/run-browser.py browser-round1 > docs/operations/evidence/2026-11-14-queue1-runtime/L29/browser-first.raw.txt 2>&1",
+      "outcome": "14 runner completed/8 failed: unmapped hand face and top-level JS let/const redeclarations"
+    },
+    {
+      "command": "python3 -B docs/operations/evidence/2026-11-14-queue1-runtime/L29/run-browser.py browser-round2 > docs/operations/evidence/2026-11-14-queue1-runtime/L29/browser-second.raw.txt 2>&1",
+      "outcome": "16 completed/6 unmapped Qinggang fixture failures"
+    },
+    {
+      "command": "python3 -B docs/operations/evidence/2026-11-14-queue1-runtime/L29/run-browser.py browser-round3 > docs/operations/evidence/2026-11-14-queue1-runtime/L29/browser-third.raw.txt 2>&1",
+      "outcome": "20 completed/2 initedSkills/storage isolation failures"
+    },
+    {
+      "command": "python3 -B docs/operations/evidence/2026-11-14-queue1-runtime/L29/run-browser.py browser-round4 > docs/operations/evidence/2026-11-14-queue1-runtime/L29/browser-fourth.raw.txt 2>&1",
+      "outcome": "22 completed but page reused; excluded from final acceptance"
+    },
+    {
+      "command": "python3 -B docs/operations/evidence/2026-11-14-queue1-runtime/L29/run-browser.py browser-round5 > docs/operations/evidence/2026-11-14-queue1-runtime/L29/browser-fifth.raw.txt 2>&1",
+      "outcome": "interrupted; reload ready condition over-restrictive, then launcher request abort"
+    },
+    {
+      "command": "python3 -B docs/operations/evidence/2026-11-14-queue1-runtime/L29/run-browser.py browser-round6 > docs/operations/evidence/2026-11-14-queue1-runtime/L29/browser-sixth.raw.txt 2>&1",
+      "outcome": "interrupted after launcher crash/502; excluded"
+    },
+    {
+      "command": "QUEUE1_LABEL=l29b node docs/operations/evidence/2026-11-14-queue1-runtime/L29/launch.mjs > docs/operations/evidence/2026-11-14-queue1-runtime/L29/launch-second.raw.txt 2>&1",
+      "outcome": "new unique profile/ports; robust request abort handling"
+    },
+    {
+      "command": "L29_SESSION=l29b python3 -B docs/operations/evidence/2026-11-14-queue1-runtime/L29/run-browser.py browser-round7 > docs/operations/evidence/2026-11-14-queue1-runtime/L29/browser-seventh.raw.txt 2>&1",
+      "outcome": "22/22 runner completed; each case reload, exact fixture assertions"
+    },
+    {
+      "command": "L29_SESSION=l29b python3 -B docs/operations/evidence/2026-11-14-queue1-runtime/L29/run-browser.py browser-round8 > docs/operations/evidence/2026-11-14-queue1-runtime/L29/browser-eighth.raw.txt 2>&1",
+      "outcome": "22/22 runner completed; extra observational damage.source recording"
+    },
+    {
+      "command": "python3 -B docs/operations/evidence/2026-11-14-queue1-runtime/L29/compare.py > docs/operations/evidence/2026-11-14-queue1-runtime/L29/comparison-before.raw.txt 2>&1",
+      "outcome": "22/22 declared final projections checked; 58 successful native restore attempts/10 failed"
+    }
+  ]
+}

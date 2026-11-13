@@ -1,0 +1,15 @@
+{
+  "at": "2026-11-13T18:19:43.110559+00:00",
+  "own_launcher_pid": 80918,
+  "own_chrome_pid": 80931,
+  "profile": "/private/tmp/noname-queue1-u07-chrome-hM1eM0",
+  "profile_bytes_before": 569348096,
+  "profile_removed": true,
+  "external_crate": "/private/tmp/noname-queue1-u07-native",
+  "external_crate_bytes_before": 24576,
+  "external_crate_removed": true,
+  "private_cargo_target_created": false,
+  "shared_target_preserved": true,
+  "shared_vite_and_fs_preserved": true,
+  "df_after": "Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s5   926Gi   776Gi   125Gi    87%    6.2M  1.3G    0%   /System/Volumes/Data\n"
+}

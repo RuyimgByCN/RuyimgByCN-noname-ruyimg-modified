@@ -1,0 +1,1 @@
+{"head": "605201f3f49e10cea61c31d52a61bbb66c85599d", "manifest_input_changes": 0, "snapshot_changes": 0, "frozen_u07_files_checked": 298, "frozen_u07_file_changes": 0, "local_report_links_checked": 17, "passed": true}

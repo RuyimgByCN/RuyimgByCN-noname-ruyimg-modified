@@ -1,0 +1,42 @@
+{
+  "at": "2026-11-14T01:45:30.746454+08:00",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "tracked_dirty": false,
+  "index_dirty": false,
+  "owner": "/root/fix_dddanzhi",
+  "exclusive_directory": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L29",
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "node": "v26.13.0",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (Homebrew)",
+  "platform": "macOS-27.2.1-arm64-arm-64bit",
+  "spine_boundary": "All localhost static requests containing spine (case insensitive) return404 before file read; no official runtime read/copied/loaded.",
+  "commands": [
+    "git rev-parse HEAD",
+    "git diff --name-only",
+    "git diff --cached --name-only"
+  ],
+  "inputs": {
+    "docs/operations/evidence/2026-11-13-queue1-review/browser/launch.mjs": {
+      "sha256": "682d4f34a9dc2c53c4b9c594bb0a6838c27226b57bec8dfa5e53bb6ca05983ae",
+      "bytes": 6304
+    },
+    "crates/engine-native/tests/l29_longxue_eight.rs": {
+      "sha256": "8f3fda8be5e6ed69e6ca341d630592363d13244fd628b15c6ba05e1181e9ed64",
+      "bytes": 34359
+    },
+    "packages/extensions/longxue-upstream-liuli/assets/cards.json": {
+      "sha256": "ca66fc4d3543f87515ac00053d1750529c714e1ce9d7db5b792aac2a268828c3",
+      "bytes": 1355
+    },
+    "../archive/upstream/noname-liuli/noname/character/mobile.js": {
+      "sha256": "24a3c1fa495d58abeff716335804ecc19fafafdec46af10ef6a717b469d161f0",
+      "bytes": 791477
+    }
+  }
+}

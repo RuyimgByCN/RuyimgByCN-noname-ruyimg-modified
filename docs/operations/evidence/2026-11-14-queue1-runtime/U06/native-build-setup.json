@@ -1,0 +1,9 @@
+{
+  "at": "2026-11-14T01:48:08.481495+08:00",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "crate": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-u06-runtime-probe-0n7kavvq",
+  "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-u06-runtime-target-q8uuc_sy",
+  "source_copy": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U06/native-probe.rs",
+  "manifest": "[package]\nname = \"noname-u06-runtime-probe\"\nversion = \"0.0.0\"\nedition = \"2021\"\n\n[dependencies]\nengine-native = { path = \"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native\" }\ncontent-native-loader = { path = \"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader\" }\nserde_json = \"1\"\n",
+  "cleanup_policy": "Retain raw evidence; retire only this private crate and target after comparison/review; shared target untouched."
+}

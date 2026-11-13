@@ -1,0 +1,6 @@
+{
+  "at": "2026-11-13T18:06:09.056663+00:00",
+  "failure": "case-results-seventh.jsonl choudu positive cases",
+  "cause": "actual activation result contains player/event references; raw JSON serialization detected circular structure after settlement",
+  "change": "serialize only bool/skill/card IDs/target seats of actual result; retain failed attempt; refresh all reruns"
+}

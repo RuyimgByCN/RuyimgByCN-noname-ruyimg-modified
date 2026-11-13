@@ -1,0 +1,14 @@
+{
+  "at": "2026-11-13T18:13:33.622828+00:00",
+  "superseded_summary": "comparison.json / comparison.md are preliminary and invalid for whole deck difference counts and draw-sha-use branch interpretation; kept unchanged",
+  "observations": [
+    "upstream official ui.create.cardsAsync via lib.onfree appended 161 untagged standard cards after earlier initial snapshot; no such append is attributed to U07 rules",
+    "fuchou2 old step schedules draw and checks existing hasSha in same step; initial-empty-hand draw-sha cases did not actually create chooseToUse. The earlier case name intent does not establish execution."
+  ],
+  "corrections": [
+    "drain real lib.init.onfree callbacks and waitingForCards before fixture creation",
+    "observe pile mutations and reject unknown card IDs at final settlement",
+    "add initial existing backup sha use/cancel pair; remove misleading duplicate attempted draw-sha-use from new authoritative cohort",
+    "fresh full 24-case cohort; preserve earlier outputs and table; publish comparison-isolated.* after invariants pass"
+  ]
+}

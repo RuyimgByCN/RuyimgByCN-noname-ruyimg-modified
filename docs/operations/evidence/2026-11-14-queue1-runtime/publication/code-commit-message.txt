@@ -1,0 +1,7 @@
+fix(native): restore jiushi pending confirmations
+
+将酒诗两处恢复询问与既有实时确认窗对齐，保留严格候选验证。
+补真实主动／受伤路径的确认、取消与挂起恢复回归；未改结算或版本。
+记录 U06/L29/U07 实际运行和独立复核，撤回六条旧等价判断。
+
+Evidence: docs/operations/evidence/2026-11-14-queue1-runtime/

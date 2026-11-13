@@ -1,5 +1,21 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+## 2026-11-14T02:45:30+08:00 本地最终门禁与待发布范围
+
+HEAD `605201f3f49e10cea61c31d52a61bbb66c85599d` + tracked dirty；333／107／5／759／WS8。完整代码门禁及最终preflight21项通过；本批尚未提交/发布，范围及628／3796／0当前清单见[进度主稿](native-progress.md)。队列1仍部分、八项0/37，L10/U08/L28及其它候选继续待，未开始队列2。
+
+## 2026-11-14T02:33:04+08:00 队列1仍为部分
+
+源码HEAD `605201f3f49e10cea61c31d52a61bbb66c85599d` + tracked dirty；规则333／NGSA107／schema5／ABI759／WS8不变。 本地完整代码门禁与首轮preflight21项通过，尚未提交／发布本批。[当前清单及三来源逐场表](native-progress.md)、[剩余范围](../operations/evidence/2026-11-14-queue1-runtime/remaining-scope.md)。U07复仇清算仍自动借底牌发杀、没有真实杀/拒绝/失去体力分支；筹度仍固定市场首牌且缺其它参与者与置顶，诱战缺少命中前追问并继续原杀。已确认必需升号项仍0，不代表全部剩余交互已证明可表达。L10/U08与其余交互补课、队列2以后、UI／Spine／真机签名和第六阶段保持待，八项0/37。
+
+## 2026-11-14T02:14:51+08:00 实跑撤回与本批范围（尚未提交／发布）
+
+HEAD `605201f3f49e10cea61c31d52a61bbb66c85599d` + tracked dirty；333／107／5／759／WS8。当前632／3792／0，清正与酒诗旧等价2项撤回、新增等价0；[37来源日期快照](../operations/evidence/2026-11-14-queue1-runtime/source-counts-runtime-01.md)。本次先收口酒诗恢复修复、U06/L29实际对照及独立复核；U07/L10采样独立继续，尚不纳入本次已核验结果。完整三crate2447通过／0失败／6忽略、严格all-targets与wasm32通过，workspace及其余第五节门禁仍在执行。[本批证据](../operations/evidence/2026-11-14-queue1-runtime/README.md)。八项0/37、队列1部分、队列2及以后待，界面/Spine/真机签名/第六阶段不变。
+
+## 2026-11-14T02:05:03+08:00 队列1运行补课与恢复修复执行中（未提交／发布）
+
+HEAD `605201f3f49e10cea61c31d52a61bbb66c85599d` + tracked dirty；333／107／5／759／WS8。酒诗确认挂起恢复失败已实际复现并定向修正，新增回归覆盖确认、取消、连续确认和篡改候选拒绝；L29定向5通过／0失败，完整三crate及严格all-targets已通过，其余第五节门禁仍在执行。U06三技能13场景重载上游实跑，13初态投影相同、11最终投影连同结算状态相同；猴子桃消耗及写轮眼第二步取消差异保留。634／3790／0、新增等价0、八项0/37；队列1仍部分，不进入队列2。[本批原始证据与未验范围](../operations/evidence/2026-11-14-queue1-runtime/README.md)。
+
 ## 2026-11-14T01:33:42+08:00 队列1部分增量已发布、代码CI通过
 
 代码 `1fa8ac6cc3a70446436d97ff49aa19ea4626e22d` 已按裁决25正常发布；[精确SHA CI](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43468568765) attempt1全部10作业success／0失败／0取消，未由agent补跑。记录时HEAD为该代码加文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8。 完整本地必跑命令通过，首失败/忽略项保留[门禁表](../operations/evidence/2026-11-13-queue1-review/final-local-gates.md)；[CI原始及逐作业范围](../operations/evidence/2026-11-13-queue1-review/publication/code-exact-ci-first/README.md)。634／3790／0、新增等价0、八项0/37；队列1尚余10来源30交互候选、L22自动规则及已登记差异后续修复，不开始队列2。全自动/固定选择清单未完成37来源穷举、尚无证明必须升号项；UI、Spine、设备/签名、第六阶段仍按[剩余范围](../operations/evidence/2026-11-13-queue1-review/remaining-scope.md)。

@@ -3,8 +3,8 @@
   "updated_at": "2026-11-14",
   "total_items": 4424,
   "counts": {
-    "已复核等价": 634,
-    "简化近似": 3790,
+    "已复核等价": 628,
+    "简化近似": 3796,
     "缺失": 0,
     "上游未定义": 0
   },
@@ -26760,10 +26760,10 @@
       "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:5-31",
       "test_name": "u06_monkey_six_dimension_real_match_equivalence",
-      "difference": "过滤缺载体仍在处理区条件；允许从手中取且仅一个 card，不能表达上游多载体/某载体已离开处理区的 filterInD 语义。",
-      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+      "difference": "过滤缺载体仍在处理区条件；允许从手中取且仅一个 card，不能表达上游多载体/某载体已离开处理区的 filterInD 语义。 2026-11-14实际fresh页面对照 monkey-cancel：两端使用者HP2→3，上游桃离手入弃牌堆，原生桃仍在手且弃牌堆空。",
+      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14T02:08:34+08:00 运行补课：2026-11-14实际fresh页面对照 monkey-cancel：两端使用者HP2→3，上游桃离手入弃牌堆，原生桃仍在手且弃牌堆空。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/U06/；独立核对见同批independent/。本批新增等价签署0。",
       "reason": null,
-      "diff": "过滤缺载体仍在处理区条件；允许从手中取且仅一个 card，不能表达上游多载体/某载体已离开处理区的 filterInD 语义。"
+      "diff": "过滤缺载体仍在处理区条件；允许从手中取且仅一个 card，不能表达上游多载体/某载体已离开处理区的 filterInD 语义。 2026-11-14实际fresh页面对照 monkey-cancel：两端使用者HP2→3，上游桃离手入弃牌堆，原生桃仍在手且弃牌堆空。"
     },
     "U06:skills:mianju@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:32": {
       "source_id": "U06",
@@ -26793,7 +26793,7 @@
       "upstream_file_line": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:53-69",
       "test_name": "u06_kuwu_six_dimension_real_match_equivalence",
       "difference": "过滤依实体牌种判杀，未体现 use_as 杀的转化与 _notrigger 排除；不能把实体杀正例覆盖当完整条件一致。",
-      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14T02:08:34+08:00 运行补课：2026-11-14实际fresh页面对照手牌/装备二选、无he、决斗负例；仅这些指定投影相同，不覆盖use_as、连环和_notrigger全部条件。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/U06/；独立核对见同批independent/。本批新增等价签署0。",
       "reason": null,
       "diff": "过滤依实体牌种判杀，未体现 use_as 杀的转化与 _notrigger 排除；不能把实体杀正例覆盖当完整条件一致。"
     },
@@ -26808,10 +26808,10 @@
       "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:70-128",
       "test_name": "u06_xuelunyang_six_dimension_real_match_equivalence",
-      "difference": "候选技能过滤过宽，且第二级选择不能取消。",
-      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+      "difference": "候选技能过滤过宽，且第二级选择不能取消。 2026-11-14实际fresh页面对照 xuelun-skill-cancel：上游第二步可取消并结束；原生空回答被拒绝且保持挂起。借技期限及完整候选边界仍未验。",
+      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14T02:08:34+08:00 运行补课：2026-11-14实际fresh页面对照 xuelun-skill-cancel：上游第二步可取消并结束；原生空回答被拒绝且保持挂起。借技期限及完整候选边界仍未验。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/U06/；独立核对见同批independent/。本批新增等价签署0。",
       "reason": null,
-      "diff": "候选技能过滤过宽，且第二级选择不能取消。"
+      "diff": "候选技能过滤过宽，且第二级选择不能取消。 2026-11-14实际fresh页面对照 xuelun-skill-cancel：上游第二步可取消并结束；原生空回答被拒绝且保持挂起。借技期限及完整候选边界仍未验。"
     },
     "U06:skills:jiuwei@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:129": {
       "source_id": "U06",
@@ -26834,14 +26834,15 @@
       "id": "monkey",
       "upstream_ref": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:4",
       "target": "原生规则 / `rule-vm` 包",
-      "status": "已复核等价",
-      "reviewer": "u06-verifier",
-      "review_date": "2026-11-12",
+      "status": "简化近似",
+      "reviewer": "/root/queue0_independent_review",
+      "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:4-15",
       "test_name": "u06_monkey_six_dimension_real_match_equivalence",
-      "difference": "无",
-      "note": null,
-      "reason": null
+      "difference": "取消猴子后上游桃消耗入弃牌堆，原生回复体力后桃仍在手。原卡牌定义绑定该技能，旧条目未限于静态牌面字段，故整卡无差异声明撤回。",
+      "note": "\n2026-11-14T02:17:53+08:00 实际运行补课：取消猴子后上游桃消耗入弃牌堆，原生回复体力后桃仍在手。原卡牌定义绑定该技能，旧条目未限于静态牌面字段，故整卡无差异声明撤回。 独立补充裁定 docs/operations/evidence/2026-11-14-queue1-runtime/independent/u06-l29/card-entry-adjudication.md；不通过事后缩小条目口径维持旧等价，本批新增等价0。",
+      "reason": null,
+      "diff": "取消猴子后上游桃消耗入弃牌堆，原生回复体力后桃仍在手。原卡牌定义绑定该技能，旧条目未限于静态牌面字段，故整卡无差异声明撤回。"
     },
     "U06:cards:mianju@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:16": {
       "source_id": "U06",
@@ -26894,14 +26895,15 @@
       "id": "xuelunyang",
       "upstream_ref": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:97",
       "target": "原生规则 / `rule-vm` 包",
-      "status": "已复核等价",
-      "reviewer": "u06-verifier",
-      "review_date": "2026-11-12",
+      "status": "简化近似",
+      "reviewer": "/root/queue0_independent_review",
+      "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:97-108",
       "test_name": "u06_xuelunyang_six_dimension_real_match_equivalence",
-      "difference": "无",
-      "note": null,
-      "reason": null
+      "difference": "写轮眼第二步技能选择上游可取消并结束，原生拒绝空答并继续挂起。原卡牌定义绑定该技能，旧条目未限于静态牌面字段，故整卡无差异声明撤回。",
+      "note": "\n2026-11-14T02:17:53+08:00 实际运行补课：写轮眼第二步技能选择上游可取消并结束，原生拒绝空答并继续挂起。原卡牌定义绑定该技能，旧条目未限于静态牌面字段，故整卡无差异声明撤回。 独立补充裁定 docs/operations/evidence/2026-11-14-queue1-runtime/independent/u06-l29/card-entry-adjudication.md；不通过事后缩小条目口径维持旧等价，本批新增等价0。",
+      "reason": null,
+      "diff": "写轮眼第二步技能选择上游可取消并结束，原生拒绝空答并继续挂起。原卡牌定义绑定该技能，旧条目未限于静态牌面字段，故整卡无差异声明撤回。"
     },
     "U06:cards:jiuwei@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:109": {
       "source_id": "U06",
@@ -27082,11 +27084,11 @@
       "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname/apps/core/extension/玩点论杀/card/skill.js:5-15",
       "test_name": "u07_youdishenru_six_dimension_real_match_equivalence",
-      "difference": "不是仅因辅助host无机器判漏：实际替代路径只允许一张后续杀并结束，若后续杀再被闪，不会按上游storage追杀直至命中或放弃。",
-      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+      "difference": "不是仅因辅助host无机器判漏：实际替代路径只允许一张后续杀并结束，若后续杀再被闪，不会按上游storage追杀直至命中或放弃。 实体独立内核只在发出一次子杀后结束，缺少上游damageEnd确认命中前持续追问；本批实体入口只做源码核对，虚拟诱战的闪后差异另有运行证据。",
+      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14T02:33:04+08:00 U07运行补课及独立核对：实体独立内核只在发出一次子杀后结束，缺少上游damageEnd确认命中前持续追问；本批实体入口只做源码核对，虚拟诱战的闪后差异另有运行证据。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/independent/u07/review.md；不签新增等价。",
       "reason": null,
       "native": "HostBehavior::WudianYoudishenruFollowup (wudian_status.rs:423-444)",
-      "diff": "不是仅因辅助host无机器判漏：实际替代路径只允许一张后续杀并结束，若后续杀再被闪，不会按上游storage追杀直至命中或放弃。"
+      "diff": "不是仅因辅助host无机器判漏：实际替代路径只允许一张后续杀并结束，若后续杀再被闪，不会按上游storage追杀直至命中或放弃。 实体独立内核只在发出一次子杀后结束，缺少上游damageEnd确认命中前持续追问；本批实体入口只做源码核对，虚拟诱战的闪后差异另有运行证据。"
     },
     "U07:skills:g_youdishenru@archive/upstream/noname/apps/core/extension/玩点论杀/card/skill.js:16": {
       "source_id": "U07",
@@ -27337,11 +27339,11 @@
       "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:422-447",
       "test_name": "u07_wdb_tianyu_chezhen_and_youzhan_six_dimension_real_match_equivalence",
-      "difference": "多目标杀只看首目标，且整帧cancel会影响其他目标；并非逐shaBefore目标独立处理。",
-      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+      "difference": "多目标杀只看首目标，且整帧cancel会影响其他目标；并非逐shaBefore目标独立处理。 正式实跑弃装备后原杀仍在原生结算；反击被闪后上游继续问/可停止受罚，原生仅一次再杀并继续原杀。上游伤害来源事件字段未采，来源仅按源码推断。",
+      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14T02:33:04+08:00 U07运行补课及独立核对：正式实跑弃装备后原杀仍在原生结算；反击被闪后上游继续问/可停止受罚，原生仅一次再杀并继续原杀。上游伤害来源事件字段未采，来源仅按源码推断。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/independent/u07/review.md；不签新增等价。",
       "reason": null,
       "native": "HostBehavior::WudianYouzhan + sha/step.rs:190-228 + sha/resume.rs:185-234",
-      "diff": "多目标杀只看首目标，且整帧cancel会影响其他目标；并非逐shaBefore目标独立处理。"
+      "diff": "多目标杀只看首目标，且整帧cancel会影响其他目标；并非逐shaBefore目标独立处理。 正式实跑弃装备后原杀仍在原生结算；反击被闪后上游继续问/可停止受罚，原生仅一次再杀并继续原杀。上游伤害来源事件字段未采，来源仅按源码推断。"
     },
     "U07:skills:jinyan@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:448": {
       "source_id": "U07",
@@ -27371,11 +27373,11 @@
       "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:508-547",
       "test_name": "u07_wdb_xizhenxihong_jinyan_and_fuchou_six_dimension_real_match_equivalence",
-      "difference": "额外返还杀实体，牌消耗与上游不符。",
-      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+      "difference": "额外返还杀实体，牌消耗与上游不符。 正式实跑给予手牌30或装备136均使原生额外把原杀1退回来源手牌，上游原杀弃置；取消与无he负例正常命中。",
+      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14T02:33:04+08:00 U07运行补课及独立核对：正式实跑给予手牌30或装备136均使原生额外把原杀1退回来源手牌，上游原杀弃置；取消与无he负例正常命中。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/independent/u07/review.md；不签新增等价。",
       "reason": null,
       "native": "HostBehavior::WudianFuchou + HostStage::WudianFuchouPickCard (asks_wudian.rs:240-264, wudian_status.rs:446-486)",
-      "diff": "额外返还杀实体，牌消耗与上游不符。"
+      "diff": "额外返还杀实体，牌消耗与上游不符。 正式实跑给予手牌30或装备136均使原生额外把原杀1退回来源手牌，上游原杀弃置；取消与无he负例正常命中。"
     },
     "U07:skills:fuchou2@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:548": {
       "source_id": "U07",
@@ -27383,16 +27385,16 @@
       "id": "fuchou2",
       "upstream_ref": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:548",
       "target": "原生规则 / `rule-vm` 包",
-      "status": "已复核等价",
-      "reviewer": "u07-verifier",
-      "review_date": "2026-11-12",
+      "status": "简化近似",
+      "reviewer": "/root/queue0_independent_review",
+      "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:548-585",
       "test_name": "u07_wdb_xizhenxihong_jinyan_and_fuchou_six_dimension_real_match_equivalence",
-      "difference": "无语义差异（已通过独立复核与 6 维真实事件路径测试）",
-      "note": null,
+      "difference": "上游复仇清算有真实杀选择，拒绝或无杀时持有者失去体力；原生自动借底牌137发虚拟杀并保留手中杀2，无拒绝或失去体力分支。正式实跑第14–17场确认；第17场HP相同仍有牌消耗差异。",
+      "note": "\n2026-11-14T02:33:04+08:00 U07运行补课及独立核对：上游复仇清算有真实杀选择，拒绝或无杀时持有者失去体力；原生自动借底牌137发虚拟杀并保留手中杀2，无拒绝或失去体力分支。正式实跑第14–17场确认；第17场HP相同仍有牌消耗差异。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/independent/u07/review.md；不签新增等价。",
       "reason": null,
       "native": "HostBehavior::WudianFuchou2 + asks_wudian.rs:266-288 + wudian_status.rs:488-518",
-      "diff": "无语义差异（已通过独立复核与 6 维真实事件路径测试）"
+      "diff": "上游复仇清算有真实杀选择，拒绝或无杀时持有者失去体力；原生自动借底牌137发虚拟杀并保留手中杀2，无拒绝或失去体力分支。正式实跑第14–17场确认；第17场HP相同仍有牌消耗差异。"
     },
     "U07:skills:choudu@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:586": {
       "source_id": "U07",
@@ -27405,11 +27407,11 @@
       "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:586-615",
       "test_name": "u07_wdb_yangyi_choudu_and_liduan_six_dimension_real_match_equivalence",
-      "difference": "将使用者错误兼作唯一目标；其余角色失去换牌窗口，且沿用调兵池/收尾差异。",
-      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+      "difference": "将使用者错误兼作唯一目标；其余角色失去换牌窗口，且沿用调兵池/收尾差异。 正式实跑筹度缺少其它参与者换牌、市场任意选牌及末尾置顶窗口；swap-b与top-return的实体和牌堆不同。部分终态相同仅因上游额外选择均取消。",
+      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14T02:33:04+08:00 U07运行补课及独立核对：正式实跑筹度缺少其它参与者换牌、市场任意选牌及末尾置顶窗口；swap-b与top-return的实体和牌堆不同。部分终态相同仅因上游额外选择均取消。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/independent/u07/review.md；不签新增等价。",
       "reason": null,
       "native": "HostBehavior::WudianChoudu + HostStage::{WudianChouduConfirm,WudianChouduPutTop} (asks_wudian.rs:290-310, wudian_status.rs:520-564)",
-      "diff": "将使用者错误兼作唯一目标；其余角色失去换牌窗口，且沿用调兵池/收尾差异。"
+      "diff": "将使用者错误兼作唯一目标；其余角色失去换牌窗口，且沿用调兵池/收尾差异。 正式实跑筹度缺少其它参与者换牌、市场任意选牌及末尾置顶窗口；swap-b与top-return的实体和牌堆不同。部分终态相同仅因上游额外选择均取消。"
     },
     "U07:skills:liduan@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:616": {
       "source_id": "U07",
@@ -27490,11 +27492,11 @@
       "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js:4-168",
       "test_name": "u07_diaobingqianjiang_six_dimension_real_match_equivalence",
-      "difference": "缺池牌自由选择、对战方向及末尾置顶选择。",
-      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+      "difference": "缺池牌自由选择、对战方向及末尾置顶选择。 正式目录没有上游两张调兵实体，assets仍deferred；未补造实体。筹度调用同机器的市场选择/置顶差异已经真实运行；实体调兵入口未实跑。",
+      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14T02:33:04+08:00 U07运行补课及独立核对：正式目录没有上游两张调兵实体，assets仍deferred；未补造实体。筹度调用同机器的市场选择/置顶差异已经真实运行；实体调兵入口未实跑。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/independent/u07/review.md；不签新增等价。",
       "reason": null,
       "native": "HostBehavior::WudianDiaobingqianjiang + HostStage::{WudianDiaobingTargets,WudianDiaobingPick,WudianDiaobingUseMode,WudianDiaobingUseTarget,WudianDiaobingReplaceHand} (wudian_cards.rs:172-468)",
-      "diff": "缺池牌自由选择、对战方向及末尾置顶选择。"
+      "diff": "缺池牌自由选择、对战方向及末尾置顶选择。 正式目录没有上游两张调兵实体，assets仍deferred；未补造实体。筹度调用同机器的市场选择/置顶差异已经真实运行；实体调兵入口未实跑。"
     },
     "U07:cards:youdishenru@archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js:169": {
       "source_id": "U07",
@@ -27502,16 +27504,16 @@
       "id": "youdishenru",
       "upstream_ref": "archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js:169",
       "target": "原生规则 / `rule-vm` 包",
-      "status": "已复核等价",
-      "reviewer": "u07-verifier",
-      "review_date": "2026-11-12",
+      "status": "简化近似",
+      "reviewer": "/root/queue0_independent_review",
+      "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js:169-219",
       "test_name": "u07_youdishenru_six_dimension_real_match_equivalence",
-      "difference": "无语义差异（已通过独立复核与 6 维真实事件路径测试）",
-      "note": null,
+      "difference": "实体诱敌深入有独立内核响应路径，不能因宿主共名判缺失；但再杀被闪后不按上游持续追问至真正造成杀伤害，而在发出一次子杀后结束。此为上下游源码确认；本批虚拟诱战场景已实跑，实体卡入口尚未实跑，不冒称实体运行反例。",
+      "note": "\n2026-11-14T02:33:04+08:00 U07运行补课及独立核对：实体诱敌深入有独立内核响应路径，不能因宿主共名判缺失；但再杀被闪后不按上游持续追问至真正造成杀伤害，而在发出一次子杀后结束。此为上下游源码确认；本批虚拟诱战场景已实跑，实体卡入口尚未实跑，不冒称实体运行反例。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/independent/u07/review.md；不签新增等价。",
       "reason": null,
       "native": "HostBehavior::WudianYoudishenru + HostStage::{WudianYoudishenruConfirm,WudianYoudishenruChaseSha} + HostBehavior::WudianYoudishenruFollowup (wudian_cards.rs:31-170, wudian_status.rs:423-444)",
-      "diff": "无语义差异（已通过独立复核与 6 维真实事件路径测试）"
+      "diff": "实体诱敌深入有独立内核响应路径，不能因宿主共名判缺失；但再杀被闪后不按上游持续追问至真正造成杀伤害，而在发出一次子杀后结束。此为上下游源码确认；本批虚拟诱战场景已实跑，实体卡入口尚未实跑，不冒称实体运行反例。"
     },
     "U07:cards:wangmeizhike@archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js:220": {
       "source_id": "U07",
@@ -69442,16 +69444,16 @@
       "id": "mbcmqingzheng",
       "upstream_ref": "noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1",
       "target": "原生规则 / `longxue-upstream-liuli`",
-      "status": "已复核等价",
-      "reviewer": "l29-signoff",
-      "review_date": "2026-11-12",
+      "status": "简化近似",
+      "reviewer": "/root/queue0_independent_review",
+      "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/龙血玄黄/extension.js:177-303",
       "test_name": "l29_mbqianlong_mbweitong_and_mbcmqingzheng_six_dimensions + qingzheng_discards_both_sides_and_punishes_fewer + qingzheng_no_damage_when_target_discards_enough",
-      "difference": "无语义差异（已通过独立复核与 6 维真实事件路径测试）",
-      "note": null,
+      "difference": "2026-11-14实际fresh页面对照 q_A：上游伤害source=seat0，原生DamageDealt.source=None；目标花色询问时上游owner已付牌、原生尚未付牌。上游选花色可取消窗口也不同。旧整技能等价撤回。",
+      "note": "\n2026-11-14T02:08:34+08:00 运行补课：2026-11-14实际fresh页面对照 q_A：上游伤害source=seat0，原生DamageDealt.source=None；目标花色询问时上游owner已付牌、原生尚未付牌。上游选花色可取消窗口也不同。旧整技能等价撤回。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/L29/；独立核对见同批independent/。本批新增等价签署0。",
       "reason": null,
       "native": "crates/engine-native-content/src/content/host/filtering/common.rs:417-419 + step/skills_damage.rs:453-568 + crates/engine-native/src/ai/extension_choices.rs:46-75 (HostBehavior::MbcmQingzheng)",
-      "diff": "无语义差异（已通过独立复核与 6 维真实事件路径测试）"
+      "diff": "2026-11-14实际fresh页面对照 q_A：上游伤害source=seat0，原生DamageDealt.source=None；目标花色询问时上游owner已付牌、原生尚未付牌。上游选花色可取消窗口也不同。旧整技能等价撤回。"
     },
     "L29:skills:mbcmjiushi@noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1": {
       "source_id": "L29",
@@ -69459,16 +69461,16 @@
       "id": "mbcmjiushi",
       "upstream_ref": "noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1",
       "target": "原生规则 / `longxue-upstream-liuli`",
-      "status": "已复核等价",
-      "reviewer": "l29-signoff",
-      "review_date": "2026-11-12",
+      "status": "简化近似",
+      "reviewer": "/root/queue0_independent_review",
+      "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/character/mobile/skill.js:14399-14558",
       "test_name": "l29_mbcmjiushi_six_dimensions + l29_eight_dimension_from_fresh_install",
-      "difference": "无语义差异（已通过独立复核与 6 维真实事件路径测试）",
-      "note": null,
+      "difference": "2026-11-14实际fresh页面对照 j_active_gain：翻面得牌询问时上游jiu_mark=0，原生jiu_active/jiu_used已true，存在中间事件顺序差异。仅确认窗恢复定义已修复；确认/取消结算时点差异仍待修。旧整技能等价撤回。",
+      "note": "\n2026-11-14T02:08:34+08:00 运行补课：2026-11-14实际fresh页面对照 j_active_gain：翻面得牌询问时上游jiu_mark=0，原生jiu_active/jiu_used已true，存在中间事件顺序差异。仅确认窗恢复定义已修复；确认/取消结算时点差异仍待修。旧整技能等价撤回。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/L29/；独立核对见同批independent/。本批新增等价签署0。",
       "reason": null,
       "native": "crates/engine-native-content/src/content/host/activation/common.rs:511-525 + filtering/common.rs:421-459 + step/skills_targets.rs:439-535 (HostBehavior::MbcmJiushi)",
-      "diff": "无语义差异（已通过独立复核与 6 维真实事件路径测试）"
+      "diff": "2026-11-14实际fresh页面对照 j_active_gain：翻面得牌询问时上游jiu_mark=0，原生jiu_active/jiu_used已true，存在中间事件顺序差异。仅确认窗恢复定义已修复；确认/取消结算时点差异仍待修。旧整技能等价撤回。"
     },
     "L29:skills:mbcmfangzhu@noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1": {
       "source_id": "L29",
@@ -69481,11 +69483,11 @@
       "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/character/mobile/skill.js:14559-14750",
       "test_name": "l29_mbcmfangzhu_and_mbjuejin_six_dimensions + l29_eight_dimension_from_fresh_install",
-      "difference": "用锁定技中文白名单代替forever/charlotte，禁牌还多了in_hand限制；目标记录解除时机也需对照。",
-      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+      "difference": "用锁定技中文白名单代替forever/charlotte，禁牌还多了in_hand限制；目标记录解除时机也需对照。 2026-11-14实际fresh页面对照上游保留forever酒诗且封马术，原生封酒诗而保留马术。完整禁牌/到期组合未验，保持简化近似。",
+      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14T02:08:34+08:00 运行补课：2026-11-14实际fresh页面对照上游保留forever酒诗且封马术，原生封酒诗而保留马术。完整禁牌/到期组合未验，保持简化近似。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/L29/；独立核对见同批independent/。本批新增等价签署0。",
       "reason": null,
       "native": "crates/engine-native-content/src/content/host/activation/common.rs:526-550 + step/skills_targets.rs:537-668 + crates/engine-native-kernel/src/kernel/combat_rules.rs:146-181 + events/turn.rs:365-393 + phase.rs:256-268 (HostBehavior::MbcmFangzhu)",
-      "diff": "用锁定技中文白名单代替forever/charlotte，禁牌还多了in_hand限制；目标记录解除时机也需对照。"
+      "diff": "用锁定技中文白名单代替forever/charlotte，禁牌还多了in_hand限制；目标记录解除时机也需对照。 2026-11-14实际fresh页面对照上游保留forever酒诗且封马术，原生封酒诗而保留马术。完整禁牌/到期组合未验，保持简化近似。"
     },
     "L29:skills:mbjuejin@noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1": {
       "source_id": "L29",

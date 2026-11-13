@@ -1,0 +1,97 @@
+{
+  "at": "2026-11-14T02:45:30+08:00",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "tracked_dirty": true,
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "index_tree_before_this_audit": "69f47fccb230a2b1e55ade1d04ed9dc9782de2f3",
+  "staged_paths": 2216,
+  "staged_blob_working_bytes": 264801383,
+  "maximum_file_bytes": 13809856,
+  "owned_product_paths": [
+    "crates/engine-native-content/src/content/host/asks_wudian.rs",
+    "crates/engine-native/tests/l29_longxue_eight.rs"
+  ],
+  "public_doc_paths": [
+    "docs/architecture/native-progress.md",
+    "docs/architecture/native-remaining-ledger.md",
+    "docs/architecture/native-rules-baseline.md",
+    "docs/migration/g0/L29-龙血玄黄.md",
+    "docs/migration/g0/README.md",
+    "docs/migration/g0/U06-欢乐卡牌.md",
+    "docs/migration/g0/U07-玩点论杀.md",
+    "docs/migration/g0/inventory_status.json",
+    "docs/migration/upstream-extension-reconstruction.md",
+    "docs/operations/evidence/2026-10-19-source-signoff-32/README.md"
+  ],
+  "evidence_prefixes": [
+    "docs/operations/evidence/2026-11-14-queue1-runtime/U06/",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/L29/",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/U07/",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/independent/u06-l29/",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/independent/u07/",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/restore-fix/",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/publication/",
+    "docs/operations/evidence/2026-11-13-queue1-review/publication/documentation-exact-ci-first/"
+  ],
+  "unexpected_staged_paths": [],
+  "unstaged_tracked_paths": [],
+  "all_frozen_evidence_files_indexed": true,
+  "original_untracked_paths_preserved": 672,
+  "original_untracked_paths_staged": 0,
+  "old_worktree_blocks_unchanged": 8,
+  "gates_inputs_unchanged": 21211,
+  "test_original_prefix_unchanged": true,
+  "existing_git_crlf_only_normalizations": 26,
+  "diff_check": {
+    "argv": [
+      "git",
+      "diff",
+      "--cached",
+      "--check",
+      "--",
+      "crates/engine-native-content/src/content/host/asks_wudian.rs",
+      "crates/engine-native/tests/l29_longxue_eight.rs",
+      "docs/architecture/native-progress.md",
+      "docs/architecture/native-remaining-ledger.md",
+      "docs/architecture/native-rules-baseline.md",
+      "docs/migration/g0/L29-龙血玄黄.md",
+      "docs/migration/g0/README.md",
+      "docs/migration/g0/U06-欢乐卡牌.md",
+      "docs/migration/g0/U07-玩点论杀.md",
+      "docs/migration/g0/inventory_status.json",
+      "docs/migration/upstream-extension-reconstruction.md",
+      "docs/operations/evidence/2026-10-19-source-signoff-32/README.md"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "stage": {
+    "argv": [
+      "git",
+      "add",
+      "--",
+      "docs/operations/evidence/2026-11-14-queue1-runtime/restore-fix",
+      "docs/operations/evidence/2026-11-14-queue1-runtime/README.md",
+      "docs/operations/evidence/2026-11-14-queue1-runtime/stage-owned-prefixes-01.json",
+      "docs/operations/evidence/2026-11-14-queue1-runtime/staged-normalization-01.json",
+      "docs/operations/evidence/2026-11-14-queue1-runtime/publication",
+      "docs/architecture/native-progress.md",
+      "docs/architecture/native-remaining-ledger.md"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "preflight_final": {
+    "command": "python3 -B scripts/preflight.py",
+    "exit_code": 0,
+    "log_sha256": "39506f7e67d017b7bca3246edfbf225f5aca9014962078176f2b25e1acb9fb7b"
+  }
+}

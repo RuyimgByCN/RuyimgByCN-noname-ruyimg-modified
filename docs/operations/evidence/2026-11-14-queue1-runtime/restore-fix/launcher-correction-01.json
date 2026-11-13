@@ -1,0 +1,16 @@
+{
+  "recorded_at": "2026-11-14T02:03:07.865565+08:00",
+  "type": "evidence launcher invocation error; check executables did not start",
+  "affected_attempts": [
+    "06-strict-all-targets-final",
+    "09-frontend-test-final",
+    "10-frontend-typecheck-final"
+  ],
+  "observed_errors": [
+    "FileNotFoundError: [Errno 2] No such file or directory: --env",
+    "FileNotFoundError: [Errno 2] No such file or directory: --cwd"
+  ],
+  "cause": "argparse.REMAINDER consumes runner options placed after positional name",
+  "correction": "Place --cwd/--env before name; use new immutable attempt labels",
+  "empty_first_logs_preserved": true
+}

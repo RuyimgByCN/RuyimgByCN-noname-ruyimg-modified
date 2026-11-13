@@ -1,0 +1,8 @@
+     Locking 33 packages to highest compatible versions
+   Compiling queue1-u07-runtime-probe v0.1.0 (/private/tmp/noname-queue1-u07-native)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.71s
+     Running `target/debug/queue1-u07-runtime-probe`
+
+thread 'main' (3400562) panicked at src/main.rs:16:151:
+missing sanjian 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

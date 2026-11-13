@@ -1,0 +1,332 @@
+{
+  "start": {
+    "started": true,
+    "initial": {
+      "case": "q_exploration",
+      "done": false,
+      "paused": true,
+      "stack": [
+        {
+          "name": "l29Probe",
+          "step": 0
+        }
+      ],
+      "choice": {
+        "name": "l29Probe",
+        "selectablePlayers": [],
+        "buttons": []
+      },
+      "players": [
+        {
+          "seat": 0,
+          "hp": 4,
+          "max_hp": 4,
+          "face_down": false,
+          "hand": [
+            {
+              "id": 3,
+              "name": "shan",
+              "suit": "heart",
+              "rank": 2,
+              "nature": null
+            },
+            {
+              "id": 2,
+              "name": "wuxie",
+              "suit": "spade",
+              "rank": 11,
+              "nature": null
+            },
+            {
+              "id": 1,
+              "name": "sha",
+              "suit": "spade",
+              "rank": 7,
+              "nature": null
+            }
+          ],
+          "equips": [],
+          "skills": [
+            {
+              "name": "mbcmqingzheng",
+              "disabled": false,
+              "blocked_by_fangzhu": false
+            }
+          ],
+          "last_target": -1,
+          "enabled": {
+            "sha": true,
+            "jiu": true,
+            "wuzhong": true
+          },
+          "jiu_mark": 0
+        },
+        {
+          "seat": 1,
+          "hp": 4,
+          "max_hp": 4,
+          "face_down": false,
+          "hand": [
+            {
+              "id": 4,
+              "name": "sha",
+              "suit": "club",
+              "rank": 7,
+              "nature": null
+            }
+          ],
+          "equips": [],
+          "skills": [],
+          "last_target": -1,
+          "enabled": {
+            "sha": true,
+            "jiu": true,
+            "wuzhong": true
+          },
+          "jiu_mark": 0
+        },
+        {
+          "seat": 2,
+          "hp": 4,
+          "max_hp": 4,
+          "face_down": false,
+          "hand": [],
+          "equips": [],
+          "skills": [],
+          "last_target": -1,
+          "enabled": {
+            "sha": true,
+            "jiu": true,
+            "wuzhong": true
+          },
+          "jiu_mark": 0
+        },
+        {
+          "seat": 3,
+          "hp": 4,
+          "max_hp": 4,
+          "face_down": false,
+          "hand": [],
+          "equips": [],
+          "skills": [],
+          "last_target": -1,
+          "enabled": {
+            "sha": true,
+            "jiu": true,
+            "wuzhong": true
+          },
+          "jiu_mark": 0
+        }
+      ],
+      "discard": [],
+      "ordering": [],
+      "deck": [
+        {
+          "id": 8,
+          "name": "wuzhong",
+          "suit": "heart",
+          "rank": 7,
+          "nature": null
+        }
+      ],
+      "unmappedDeck": [],
+      "trace": []
+    }
+  },
+  "first_choice": {
+    "case": "q_exploration",
+    "done": false,
+    "paused": true,
+    "stack": [
+      {
+        "name": "chooseButton",
+        "step": 1
+      },
+      {
+        "name": "mbcmqingzheng",
+        "step": 1
+      },
+      {
+        "name": "trigger",
+        "step": 4,
+        "skill": "mbcmqingzheng"
+      },
+      {
+        "name": "arrangeTrigger",
+        "step": 7
+      },
+      {
+        "name": "phaseUse",
+        "step": 0
+      },
+      {
+        "name": "l29Probe",
+        "step": 0
+      }
+    ],
+    "choice": {
+      "name": "chooseButton",
+      "forced": false,
+      "confirm": "c",
+      "skills": [],
+      "selectablePlayers": [],
+      "buttons": [
+        {
+          "index": 0,
+          "link": [
+            "",
+            "",
+            "lukai_club"
+          ],
+          "selectable": false,
+          "selected": false
+        },
+        {
+          "index": 1,
+          "link": [
+            "",
+            "",
+            "lukai_spade"
+          ],
+          "selectable": true,
+          "selected": false
+        },
+        {
+          "index": 2,
+          "link": [
+            "",
+            "",
+            "lukai_diamond"
+          ],
+          "selectable": false,
+          "selected": false
+        },
+        {
+          "index": 3,
+          "link": [
+            "",
+            "",
+            "lukai_heart"
+          ],
+          "selectable": true,
+          "selected": false
+        }
+      ]
+    },
+    "players": [
+      {
+        "seat": 0,
+        "hp": 4,
+        "max_hp": 4,
+        "face_down": false,
+        "hand": [
+          {
+            "id": 3,
+            "name": "shan",
+            "suit": "heart",
+            "rank": 2,
+            "nature": null
+          },
+          {
+            "id": 2,
+            "name": "wuxie",
+            "suit": "spade",
+            "rank": 11,
+            "nature": null
+          },
+          {
+            "id": 1,
+            "name": "sha",
+            "suit": "spade",
+            "rank": 7,
+            "nature": null
+          }
+        ],
+        "equips": [],
+        "skills": [
+          {
+            "name": "mbcmqingzheng",
+            "disabled": false,
+            "blocked_by_fangzhu": false
+          }
+        ],
+        "last_target": -1,
+        "enabled": {
+          "sha": true,
+          "jiu": true,
+          "wuzhong": true
+        },
+        "jiu_mark": 0
+      },
+      {
+        "seat": 1,
+        "hp": 4,
+        "max_hp": 4,
+        "face_down": false,
+        "hand": [
+          {
+            "id": 4,
+            "name": "sha",
+            "suit": "club",
+            "rank": 7,
+            "nature": null
+          }
+        ],
+        "equips": [],
+        "skills": [],
+        "last_target": -1,
+        "enabled": {
+          "sha": true,
+          "jiu": true,
+          "wuzhong": true
+        },
+        "jiu_mark": 0
+      },
+      {
+        "seat": 2,
+        "hp": 4,
+        "max_hp": 4,
+        "face_down": false,
+        "hand": [],
+        "equips": [],
+        "skills": [],
+        "last_target": -1,
+        "enabled": {
+          "sha": true,
+          "jiu": true,
+          "wuzhong": true
+        },
+        "jiu_mark": 0
+      },
+      {
+        "seat": 3,
+        "hp": 4,
+        "max_hp": 4,
+        "face_down": false,
+        "hand": [],
+        "equips": [],
+        "skills": [],
+        "last_target": -1,
+        "enabled": {
+          "sha": true,
+          "jiu": true,
+          "wuzhong": true
+        },
+        "jiu_mark": 0
+      }
+    ],
+    "discard": [],
+    "ordering": [],
+    "deck": [
+      {
+        "id": 8,
+        "name": "wuzhong",
+        "suit": "heart",
+        "rank": 7,
+        "nature": null
+      }
+    ],
+    "unmappedDeck": [],
+    "trace": []
+  }
+}

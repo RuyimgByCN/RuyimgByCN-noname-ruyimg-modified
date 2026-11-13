@@ -1,0 +1,305 @@
+{
+  "at": "2026-11-14T02:11:19.727424+08:00",
+  "head_sha": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "run_id": 43475076340,
+  "run_attempt": 1,
+  "run_status": "completed",
+  "conclusion": "success",
+  "commands": [
+    {
+      "argv": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340/jobs?per_page=100"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340/artifacts?per_page=100"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43475076340/logs"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "archive_sha256": "2227264c078e8373c638403cc789f10688c91e113d62f05fdfc092783061e0eb",
+  "archive_bytes": 1870038,
+  "job_success_count": 10,
+  "job_failure_count": 0,
+  "job_cancelled_count": 0,
+  "jobs": [
+    {
+      "job_id": 132056736691,
+      "name": "desktop-macos-latest",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-13T17:45:27Z",
+      "completed_at": "2026-11-13T18:10:18Z",
+      "logs": [
+        "logs-first/3_desktop-macos-latest.txt"
+      ],
+      "rust_test_result_sections": 0,
+      "rust_test_counts": null,
+      "setup_rustc_versions": [
+        "1.100.0"
+      ],
+      "existing_tier_report_attempt_exits": [],
+      "new_juxian_tests_passed": []
+    },
+    {
+      "job_id": 132056736723,
+      "name": "gates-ubuntu",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-13T17:40:23Z",
+      "completed_at": "2026-11-13T18:06:31Z",
+      "logs": [
+        "logs-first/9_gates-ubuntu.txt"
+      ],
+      "rust_test_result_sections": 178,
+      "rust_test_counts": {
+        "passed": 7842,
+        "failed": 0,
+        "ignored": 8,
+        "measured": 0,
+        "filtered": 0
+      },
+      "setup_rustc_versions": [
+        "1.100.0"
+      ],
+      "existing_tier_report_attempt_exits": [],
+      "new_juxian_tests_passed": [
+        "test u01_juxian_gain::juxian_gain_planner_does_not_inspect_foreign_hand_faces ... ok",
+        "test u01_juxian_gain::juxian_top_mode_requires_other_he_and_mode_cancel_keeps_payment ... ok",
+        "test u01_juxian_gain::juxian_gain_selects_each_hidden_card_or_public_equipment_and_resumes_archive ... ok",
+        "test u01_juxian_gain::juxian_hidden_order_uses_rng_is_archived_and_rejects_invalid_mapping ... ok"
+      ]
+    },
+    {
+      "job_id": 132056736763,
+      "name": "perf-ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-13T17:40:24Z",
+      "completed_at": "2026-11-13T17:45:20Z",
+      "logs": [
+        "logs-first/1_perf-ubuntu-latest.txt"
+      ],
+      "rust_test_result_sections": 0,
+      "rust_test_counts": null,
+      "setup_rustc_versions": [
+        "1.100.0"
+      ],
+      "existing_tier_report_attempt_exits": [
+        {
+          "attempt": 1,
+          "exit": 0
+        }
+      ],
+      "new_juxian_tests_passed": []
+    },
+    {
+      "job_id": 132056736828,
+      "name": "build-windows-latest",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-13T17:40:24Z",
+      "completed_at": "2026-11-13T17:46:29Z",
+      "logs": [
+        "logs-first/6_build-windows-latest.txt"
+      ],
+      "rust_test_result_sections": 26,
+      "rust_test_counts": {
+        "passed": 872,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 0
+      },
+      "setup_rustc_versions": [
+        "1.100.0"
+      ],
+      "existing_tier_report_attempt_exits": [],
+      "new_juxian_tests_passed": []
+    },
+    {
+      "job_id": 132056736874,
+      "name": "perf-macos-latest",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-13T17:45:27Z",
+      "completed_at": "2026-11-13T17:55:14Z",
+      "logs": [
+        "logs-first/4_perf-macos-latest.txt"
+      ],
+      "rust_test_result_sections": 0,
+      "rust_test_counts": null,
+      "setup_rustc_versions": [
+        "1.100.0"
+      ],
+      "existing_tier_report_attempt_exits": [
+        {
+          "attempt": 1,
+          "exit": 0
+        }
+      ],
+      "new_juxian_tests_passed": []
+    },
+    {
+      "job_id": 132056736908,
+      "name": "build-ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-13T17:40:24Z",
+      "completed_at": "2026-11-13T17:43:34Z",
+      "logs": [
+        "logs-first/5_build-ubuntu-latest.txt"
+      ],
+      "rust_test_result_sections": 26,
+      "rust_test_counts": {
+        "passed": 872,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 0
+      },
+      "setup_rustc_versions": [
+        "1.100.0"
+      ],
+      "existing_tier_report_attempt_exits": [],
+      "new_juxian_tests_passed": []
+    },
+    {
+      "job_id": 132056736978,
+      "name": "desktop-ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-13T17:40:24Z",
+      "completed_at": "2026-11-13T17:55:07Z",
+      "logs": [
+        "logs-first/8_desktop-ubuntu-latest.txt"
+      ],
+      "rust_test_result_sections": 0,
+      "rust_test_counts": null,
+      "setup_rustc_versions": [
+        "1.100.0"
+      ],
+      "existing_tier_report_attempt_exits": [],
+      "new_juxian_tests_passed": []
+    },
+    {
+      "job_id": 132056737020,
+      "name": "desktop-windows-latest",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-13T17:40:24Z",
+      "completed_at": "2026-11-13T17:57:54Z",
+      "logs": [
+        "logs-first/7_desktop-windows-latest.txt"
+      ],
+      "rust_test_result_sections": 0,
+      "rust_test_counts": null,
+      "setup_rustc_versions": [
+        "1.100.0"
+      ],
+      "existing_tier_report_attempt_exits": [],
+      "new_juxian_tests_passed": []
+    },
+    {
+      "job_id": 132056737033,
+      "name": "build-macos-latest",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-13T17:40:26Z",
+      "completed_at": "2026-11-13T17:46:10Z",
+      "logs": [
+        "logs-first/2_build-macos-latest.txt"
+      ],
+      "rust_test_result_sections": 26,
+      "rust_test_counts": {
+        "passed": 872,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 0
+      },
+      "setup_rustc_versions": [
+        "1.100.0"
+      ],
+      "existing_tier_report_attempt_exits": [],
+      "new_juxian_tests_passed": []
+    },
+    {
+      "job_id": 132056737308,
+      "name": "native-web",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-13T17:40:24Z",
+      "completed_at": "2026-11-13T17:50:11Z",
+      "logs": [
+        "logs-first/0_native-web.txt"
+      ],
+      "rust_test_result_sections": 56,
+      "rust_test_counts": {
+        "passed": 2583,
+        "failed": 0,
+        "ignored": 6,
+        "measured": 0,
+        "filtered": 0
+      },
+      "setup_rustc_versions": [
+        "1.100.0"
+      ],
+      "existing_tier_report_attempt_exits": [],
+      "new_juxian_tests_passed": [
+        "test u01_juxian_gain::juxian_gain_planner_does_not_inspect_foreign_hand_faces ... ok",
+        "test u01_juxian_gain::juxian_top_mode_requires_other_he_and_mode_cancel_keeps_payment ... ok",
+        "test u01_juxian_gain::juxian_gain_selects_each_hidden_card_or_public_equipment_and_resumes_archive ... ok",
+        "test u01_juxian_gain::juxian_hidden_order_uses_rng_is_archived_and_rejects_invalid_mapping ... ok"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "name": "installer-macos-latest",
+      "size_in_bytes": 48181969,
+      "expired": false,
+      "id": 14064024080
+    },
+    {
+      "name": "installer-ubuntu-latest",
+      "size_in_bytes": 311678762,
+      "expired": false,
+      "id": 14063756525
+    },
+    {
+      "name": "installer-windows-latest",
+      "size_in_bytes": 39539958,
+      "expired": false,
+      "id": 14063273964
+    }
+  ],
+  "agent_dispatched_reruns": 0,
+  "scope": "Per-job test counts overlap between jobs and must not be added as unique product coverage. Build matrix uses --lib, full integration gates run on Linux. Installer upload does not establish installation/signing/notarization/device acceptance."
+}
