@@ -47,6 +47,33 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
         finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Cancelled);
         return;
     }
+    let has_wluoyan = (!ctx.catalog.is_tieji_sealed(ctx.core, d.target)
+        && ctx
+            .catalog
+            .skill_by_name("wluoyan")
+            .is_some_and(|def| ctx.core.has_skill(d.target, def)))
+        || ctx
+            .core
+            .vm_aux
+            .flags
+            .get(&(d.target, "wluoyan_active".to_string()))
+            .copied()
+            .unwrap_or(0)
+            > 0;
+    if has_wluoyan {
+        let target = d.target;
+        d.prevented = true;
+        ctx.log(LogEvent::DamagePrevented {
+            target,
+            presentation: None,
+        });
+        finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::ReplacedByLoseHp);
+        ctx.emit(EventData::LoseHp {
+            player: target,
+            amount: 1,
+        });
+        return;
+    }
     if ctx.core.is_damage_taken_canceled(
         ctx.catalog,
         d.source,

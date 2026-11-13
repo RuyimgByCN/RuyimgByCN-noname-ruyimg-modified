@@ -1648,4 +1648,12 @@ pub enum HostBehavior {
     L20MarkBatchA,
     /// L20 标记补充 Batch B（tag 562，标记补充/extension.js 整肃/贞仪/破围/清玉等 20 个核心技能）。
     L20MarkBatchB,
+    /// U08 英雄杀 Batch A（tag 563，英雄杀/character/skill.js 23 技能：兰陵王/妺喜/魏忠贤/南丁格尔/张三丰/唐伯虎/杨广/赵雍/鲁智深/小乔）。
+    U08YxsBatchA,
+    /// U08 英雄杀 Batch B（tag 564，英雄杀/character/skill.js 27 技能：华佗/吕雉/岳飞/项羽/程咬金/孙武/狄仁杰/霍去病/王昭君/虞姬）。
+    U08YxsBatchB,
+    /// U08 英雄杀 Batch C（tag 565，英雄杀/character/skill.js 27 技能：成吉思汗/范蠡/李师师/刘邦/秦始皇/武则天/杨玉环/褒姒）。
+    U08YxsBatchC,
+    /// U08 英雄杀 Batch D（tag 566，英雄杀/character/skill.js 27 技能：伯乐/曹操/貂蝉/勾践/花木兰/墨子/拿破仑/孙膑/赢政/荆轲/李白/鲁班）。
+    U08YxsBatchD,
 }

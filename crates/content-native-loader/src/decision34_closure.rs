@@ -82,9 +82,9 @@ pub const L20_MARK_SPECS: [(&str, &str, u32); 14] = [
     ("niepan", "涅槃", 1_920_060_014),
 ];
 
-/// U08 (`hero-kill-upstream-noname`) 31 cross-package standard skills referenced by
+/// U08 (`hero-kill-upstream-noname`) 33 cross-package standard skills referenced by
 /// upstream `character/character.js` (`(upstream_key, native_catalog_name)`).
-pub const U08_STANDARD_SKILL_REFS: [(&str, &str); 31] = [
+pub const U08_STANDARD_SKILL_REFS: [(&str, &str); 33] = [
     ("fanjian", "反间"),
     ("wushuang", "无双"),
     ("rende", "仁德"),
@@ -116,6 +116,8 @@ pub const U08_STANDARD_SKILL_REFS: [(&str, &str); 31] = [
     ("luoyi", "裸衣"),
     ("tiandu", "天妒"),
     ("yiji", "遗计"),
+    ("qiangxi", "强袭"),
+    ("kanpo", "看破"),
 ];
 
 const DECISION34_SKILL_SPECS: [(
@@ -354,6 +356,11 @@ pub fn decision34_closure_extension_pack() -> ExtensionPack {
             &[],
             engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
         ));
+    }
+    for &sk_name in ["qiangxi", "kanpo"].iter() {
+        if let Some(behavior) = crate::lookup_upstream_host_behavior(sk_name) {
+            crate::push_host_skill_if_unseen(sk_name, behavior, &mut host_skills, &mut seen_skills);
+        }
     }
     for &sk_name in &L10_SCS_COMPANION_SKILLS {
         vm_skills.push(build_d34_vm_decl(

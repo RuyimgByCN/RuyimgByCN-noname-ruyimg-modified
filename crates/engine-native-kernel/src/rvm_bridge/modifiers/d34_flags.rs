@@ -523,7 +523,20 @@ pub fn apply_card_target_canceled(
     }
     if (kind.is_sha_like() || is_trick)
         && (has_ext_skill(state, catalog, target, "chajue2")
+            || flag_val(state, target, "chajue2_active") > 0
             || flag_val(state, target, "yxs_chajue_immune") > 0)
+    {
+        canceled = true;
+    }
+    if kind == CardKind::Duel
+        && actor != target
+        && (has_ext_skill(state, catalog, target, "nvquan3")
+            || has_ext_skill(state, catalog, target, "nvquan")
+            || flag_val(state, target, "nvquan3_active") > 0)
+        && state.player(actor).general_slots[0]
+            .and_then(|def| catalog.general_meta(def).map(|(_, _, _, _, gender)| gender))
+            .unwrap_or_else(|| state.effective_gender(actor))
+            == crate::vocabulary::generals::Gender::Male
     {
         canceled = true;
     }
@@ -643,7 +656,12 @@ pub fn apply_card_use_canceled(
     if let Some(s) = suit {
         let sc = suit_code(s);
         for p in state.alive_players() {
-            if p != actor && flag_val(state, p, "yxs_ducai_forbidden_suit") == sc {
+            if p != actor
+                && (flag_val(state, p, "yxs_ducai_forbidden_suit") == sc
+                    || flag_val(state, p, "ducai_suit") == sc)
+                && !has_ext_skill(state, catalog, actor, "ducai2")
+                && flag_val(state, actor, "ducai2_active") == 0
+            {
                 canceled = true;
                 break;
             }
@@ -695,7 +713,12 @@ pub fn apply_dying_peach_target_canceled(
     if let Some(s) = card_suit(catalog, Some(card)) {
         let sc = suit_code(s);
         for p in state.alive_players() {
-            if p != actor && flag_val(state, p, "yxs_ducai_forbidden_suit") == sc {
+            if p != actor
+                && (flag_val(state, p, "yxs_ducai_forbidden_suit") == sc
+                    || flag_val(state, p, "ducai_suit") == sc)
+                && !has_ext_skill(state, catalog, actor, "ducai2")
+                && flag_val(state, actor, "ducai2_active") == 0
+            {
                 canceled = true;
                 break;
             }
@@ -714,6 +737,11 @@ pub fn apply_damage_amount(
     mut cur: i32,
 ) -> i32 {
     if cur <= 0 {
+        return 0;
+    }
+    if has_ext_skill(state, catalog, target, "wluoyan")
+        || flag_val(state, target, "wluoyan_active") > 0
+    {
         return 0;
     }
     let ckind = card.map(|c| catalog.card_kind(c));

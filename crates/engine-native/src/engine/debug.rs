@@ -398,6 +398,46 @@ impl Engine {
                 rounds: 0,
             },
         );
+        if name == "kuangchan" {
+            let is_lord = self
+                .state
+                .core
+                .identity_roles()
+                .and_then(|roles| roles.get(player as usize))
+                == Some(&crate::state::Role::Lord)
+                || self
+                    .state
+                    .core
+                    .vm_aux
+                    .flags
+                    .get(&(player, "is_zhu".to_string()))
+                    .copied()
+                    .unwrap_or(0)
+                    > 0;
+            let already = self
+                .state
+                .core
+                .vm_aux
+                .flags
+                .get(&(player, "kuangchan_init_done".to_string()))
+                .copied()
+                .unwrap_or(0)
+                > 0;
+            if is_lord && !already {
+                self.state
+                    .core
+                    .vm_aux
+                    .flags
+                    .insert((player, "kuangchan_init_done".to_string()), 1);
+                let p = self.state.core.player_mut(player);
+                if p.max_hp > 1 && p.max_hp != crate::state::INFINITE_HP {
+                    p.max_hp -= 1;
+                    if p.hp > p.max_hp as i32 {
+                        p.hp = p.max_hp as i32;
+                    }
+                }
+            }
+        }
     }
 
     /// 测试/工具：按武将名授予完整技能集（N08 完整武将授予）。

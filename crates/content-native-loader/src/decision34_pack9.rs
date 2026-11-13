@@ -330,6 +330,9 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
     for &s in &U08_YXS_SKILLS {
         push_skill(s, super::U08_YXS_SKILL_ID);
     }
+    for &s in &["kanpo", "qiangxi"] {
+        push_skill(s, super::U08_YXS_SKILL_ID);
+    }
     for &s in &super::L10_SCS_COMPANION_SKILLS {
         push_skill(s, super::L10_SCS_SKILL_ID);
     }
@@ -577,6 +580,9 @@ pub fn attach_formal_package_upstream_rules(
         ("upstream-noname", "hero-kill") => {
             push_skill("yxs_menshen2_guard", super::YXS_MENSHEN2_GUARD_ID);
             for &s in &U08_YXS_SKILLS {
+                push_skill(s, super::U08_YXS_SKILL_ID);
+            }
+            for &s in &["kanpo", "qiangxi"] {
                 push_skill(s, super::U08_YXS_SKILL_ID);
             }
             for &(sym, faction, gender, max_hp, sk_list) in &U08_YXS_GENERALS {

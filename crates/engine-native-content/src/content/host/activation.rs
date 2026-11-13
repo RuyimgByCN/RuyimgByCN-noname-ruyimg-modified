@@ -236,6 +236,18 @@ impl HostSkillBehavior {
             HostBehavior::L20MarkBatchB => {
                 super::step::l20_batch_b::activate_l20_batch_b(self, ctx, owner)
             }
+            HostBehavior::U08YxsBatchA => {
+                super::step::u08_batch_a::activate_u08_batch_a(self, ctx, owner)
+            }
+            HostBehavior::U08YxsBatchB => {
+                super::step::u08_batch_b::activate_u08_batch_b(self, ctx, owner)
+            }
+            HostBehavior::U08YxsBatchC => {
+                super::step::u08_batch_c::activate_u08_batch_c(self, ctx, owner)
+            }
+            HostBehavior::U08YxsBatchD => {
+                super::step::u08_batch_d::activate_u08_batch_d(self, ctx, owner)
+            }
             _ => None,
         }
     }

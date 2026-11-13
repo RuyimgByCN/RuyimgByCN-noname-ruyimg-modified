@@ -590,6 +590,10 @@ impl HostBehavior {
             HostBehavior::L19DoomsdayBatchB => "host:l19_doomsday_batch_b",
             HostBehavior::L20MarkBatchA => "host:l20_mark_batch_a",
             HostBehavior::L20MarkBatchB => "host:l20_mark_batch_b",
+            HostBehavior::U08YxsBatchA => "host:u08_yxs_batch_a",
+            HostBehavior::U08YxsBatchB => "host:u08_yxs_batch_b",
+            HostBehavior::U08YxsBatchC => "host:u08_yxs_batch_c",
+            HostBehavior::U08YxsBatchD => "host:u08_yxs_batch_d",
         }
     }
 }

@@ -742,6 +742,31 @@ pub fn lookup_upstream_host_behavior(skill_name: &str) -> Option<HostBehavior> {
         | "shouye"
         | "mbmowang"
         | "_chongzhu" => Some(HostBehavior::L20MarkBatchB),
+        // U08 英雄杀 Batch A（23 技能）
+        "guimian" | "lyuxue" | "lyuxue2" | "yaoji" | "liebo" | "zhuxin" | "wlianhuan"
+        | "huli" | "yixin" | "xianqu" | "zbudao" | "zbudao2" | "taiji" | "fengliu"
+        | "luobi" | "yaoyi" | "shiqin" | "zyhufu" | "hanbei" | "yxsdili" | "kuangchan"
+        | "zhijie" | "chujia" => Some(HostBehavior::U08YxsBatchA),
+        // U08 英雄杀 Batch B（26 技能 + kanpo）
+        "baihe" | "yinyang" | "xiushen" | "jiean" | "yanyi" | "batu" | "wumu" | "ysheshen"
+        | "yxschangnian" | "yxschangnian2" | "yxsciqiu" | "sanbanfu" | "sanbanfu2"
+        | "sanbanfu3" | "bingsheng" | "taolue" | "shentan" | "kanpo" | "hanqiang" | "biaoqi"
+        | "wluoyan" | "heqin" | "heqin2" | "heqin3" | "chajue" | "chajue2" | "tiewan" => {
+            Some(HostBehavior::U08YxsBatchB)
+        }
+        // U08 英雄杀 Batch C（27 技能）
+        "qianglue" | "sheshu" | "lguiyin" | "tongyu" | "jimin" | "xiadao" | "lzhangyi"
+        | "yizhuang" | "yizhuang2" | "kongju" | "tuqiang" | "xumou" | "zhensha" | "ducai"
+        | "ducai2" | "ducai3" | "tongling" | "fanpu" | "fenghuo" | "nichang" | "nichang2"
+        | "fengyan" | "fengyi" | "wange" | "wange2" | "seyou" | "sheshi" => {
+            Some(HostBehavior::U08YxsBatchC)
+        }
+        // U08 英雄杀 Batch D（26 技能 + qiangxi）
+        "bolehuiyan" | "bolehuiyan2" | "bolehuiyan3" | "oldbolehuiyan" | "oldbolehuiyan2"
+        | "xiangma" | "yxsweiyi" | "qiandu" | "nvquan" | "nvquan1" | "nvquan2" | "nvquan3"
+        | "feigong" | "jianai" | "jieyong" | "jieyong2" | "jieyong3" | "zhulu" | "xieling"
+        | "qiangyun" | "cike" | "qiangxi" | "miaobix" | "miaobi" | "zhexian" | "guifu"
+        | "lshengong" => Some(HostBehavior::U08YxsBatchD),
         _ => None,
     }
 }

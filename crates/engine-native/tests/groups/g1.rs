@@ -42,3 +42,9 @@ mod l19_doomsday_match;
 
 #[path = "../l20_mark_supplement_match.rs"]
 mod l20_mark_supplement_match;
+
+#[path = "../u08_hero_kill_match.rs"]
+mod u08_hero_kill_match;
+
+#[path = "../u08_hero_kill_match_b.rs"]
+mod u08_hero_kill_match_b;

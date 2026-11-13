@@ -60,6 +60,11 @@ pub(super) mod l19_batch_a;
 pub(super) mod l19_batch_b;
 pub(super) mod l20_batch_a;
 pub(super) mod l20_batch_b;
+pub(super) mod u08_batch_a;
+pub(super) mod u08_batch_a_asks;
+pub(super) mod u08_batch_b;
+pub(super) mod u08_batch_c;
+pub(super) mod u08_batch_d;
 
 impl HostMachine {
     pub(super) fn step_behavior(&mut self, ctx: &mut Ctx<'_>) -> Flow {
@@ -1092,6 +1097,10 @@ impl HostMachine {
             HostBehavior::L19DoomsdayBatchB => l19_batch_b::handle_l19_batch_b(self, ctx),
             HostBehavior::L20MarkBatchA => l20_batch_a::handle_l20_batch_a(self, ctx),
             HostBehavior::L20MarkBatchB => l20_batch_b::handle_l20_batch_b(self, ctx),
+            HostBehavior::U08YxsBatchA => u08_batch_a::handle_u08_batch_a(self, ctx),
+            HostBehavior::U08YxsBatchB => u08_batch_b::handle_u08_batch_b(self, ctx),
+            HostBehavior::U08YxsBatchC => u08_batch_c::handle_u08_batch_c(self, ctx),
+            HostBehavior::U08YxsBatchD => u08_batch_d::handle_u08_batch_d(self, ctx),
         }
     }
 }

@@ -1017,18 +1017,53 @@ fn formal_packages_extensions_load_and_execute_on_locked_product_path() {
     assert_eq!(flag(&e, 0, "ciqiu_dying_instant_kill"), 1);
     invoke_p9_op(&mut e, 0, "kangyin2", content_native_loader::U07_WUDIAN_SKILL_ID);
     assert_eq!(flag(&e, 0, "kangyin2_bonus_applied"), 1);
-    for &yxs_sk in &content_native_loader::U08_YXS_SKILLS {
-        if e.state_core().player(1).hp < 3 {
-            e.state_core_mut().player_mut(1).max_hp = 10;
-            e.state_core_mut().player_mut(1).hp = 10;
-            e.state_core_mut().player_mut(1).dying = false;
-        }
-        invoke_p9_op(&mut e, 0, yxs_sk, content_native_loader::U08_YXS_SKILL_ID);
-        assert_eq!(flag(&e, 0, &format!("u08_skill:{yxs_sk}")), 1);
+    e.state_core_mut().player_mut(1).max_hp = 10;
+    e.state_core_mut().player_mut(1).hp = 10;
+    e.state_core_mut().player_mut(1).dying = false;
+    for &yxs_sk in content_native_loader::U08_YXS_SKILLS
+        .iter()
+        .chain(["qiangxi", "kanpo"].iter())
+    {
+        let sid = e
+            .catalog()
+            .skill_by_name(yxs_sk)
+            .unwrap_or_else(|| panic!("U08 skill {yxs_sk} must be in locked Catalog"));
+        assert!(
+            e.catalog().skills[sid as usize].behavior.as_host_behavior().is_some(),
+            "U08 skill {yxs_sk} must bind native HostBehavior on locked product path"
+        );
     }
-    assert_eq!(flag(&e, 0, "yxs_fanji_counter"), 1);
-    assert_eq!(flag(&e, 0, "yxs_yixin_resolved"), 1);
-    assert_eq!(flag(&e, 0, "yxs_lshengong_copied_equip"), 1);
+    let mut u08_probe = start_locked_engine(260205, 2, LockedStartMode::Prototype, &verified).unwrap();
+    for &(gname, _, _, _, _) in &content_native_loader::U08_YXS_GENERALS {
+        let _ = find_general(&u08_probe, gname);
+    }
+    u08_probe.debug_grant(0, "zhijie");
+    u08_probe.debug_set_turn(0, Phase::Play, 1);
+    let heart_cid = (0..u08_probe.catalog().cards.len() as u32)
+        .find(|&cid| u08_probe.catalog().cards[cid as usize].suit == engine_native::catalog::Suit::Heart)
+        .unwrap();
+    u08_probe.state_core_mut().player_mut(0).hand.clear();
+    u08_probe.state_core_mut().player_mut(0).hand.push(heart_cid);
+    let zhijie_sid = u08_probe.catalog().skill_by_name("zhijie").unwrap();
+    let _ = u08_probe.submit(GameCommand {
+        actor: 0,
+        expected_revision: u08_probe.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::ActivateSkill { skill: zhijie_sid },
+    });
+    if let Some(c) = u08_probe.open_choice().cloned() {
+        let _ = u08_probe.submit(GameCommand {
+            actor: c.observer,
+            expected_revision: u08_probe.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::Answer {
+                choice_id: c.id,
+                selection: vec![engine_native::ChoiceOption::Card(heart_cid)],
+            },
+        });
+    }
+    drain(&mut u08_probe);
+    assert_eq!(u08_probe.state_core().player(0).hand.len(), 2);
 
     // 6. U01 `dddjinggou` (`3D精选/character/skill.js:443-471`) & `dddmoyan` (`skill.js:472-509`, 0 draw on owner)
     invoke_p9_op(&mut e, 0, "dddjinggou", DDD_SKILL_DISPATCH_ID);

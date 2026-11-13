@@ -855,7 +855,11 @@ impl HostBehavior {
             | HostBehavior::L19DoomsdayBatchA
             | HostBehavior::L19DoomsdayBatchB
             | HostBehavior::L20MarkBatchA
-            | HostBehavior::L20MarkBatchB => None,
+            | HostBehavior::L20MarkBatchB
+            | HostBehavior::U08YxsBatchA
+            | HostBehavior::U08YxsBatchB
+            | HostBehavior::U08YxsBatchC
+            | HostBehavior::U08YxsBatchD => None,
         };
         if let (Some(meta), Some((timing, priority, selectable))) = (&mut meta, self.source_order()) {
             meta.timing = timing;

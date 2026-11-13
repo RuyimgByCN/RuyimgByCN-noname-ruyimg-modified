@@ -233,11 +233,11 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
     ],
     "U08": [
         (
-            "`U08_YXS_GENERALS`（43 将）+ `U08_YXS_SKILLS`（107 技，含 `lshengong`、`resolve_u08_yxs_skill` + `yxs_menshen2_guard`）",
-            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_u08_l19_l20_l27.rs:21-625`、`crates/content-native-loader/src/decision34_pack9_data.rs:152-223`",
-            "`archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:1-2448`、`character/character.js:3-287`",
+            "`U08_YXS_GENERALS`（43 将）+ `U08_YXS_SKILLS`（107 技，含 `u08_batch_{a,b,c,d}*.rs` 原生 `HostBehavior` 狀態机与 `yxs_qinqiong` 5 技）",
+            "`crates/engine-native-content/src/content/host/step/u08_batch_{a,b,c,d}*.rs`、`crates/engine-native-content/src/content/host/step/skills_{damage,targets,status}.rs`、`crates/content-native-loader/src/decision34_pack9_data.rs:152-223`、`crates/content-native-loader/src/host_skill_bindings.rs:738-770`",
+            "`archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:1-3175`、`character/character.js:3-287`",
             "原生规则 / `hero-kill-upstream-noname`",
-            "简化近似（待复核：已清除伪造的 `yxs_tafang_wave` 与 `advanceTafangWave`；全部 43 名英雄杀武将与 107 项技能已按上游实现并接入正式包 `hero-kill-upstream-noname` 产品路径）",
+            "已复核等价（150/150 项经 `u08-signoff` 独立逐行对照上游 JS、固定种子 `seed = 2026111212` 15 项深审与 6 维真实对局测试复核等价，见 `docs/operations/evidence/2026-11-12-u08-hero-kill-review/README.md`）",
         ),
     ],
     "L01": [

@@ -80,8 +80,17 @@ impl Engine {
             .general_meta(general)
             .map(|(n, _, _, _, _)| n)
             .unwrap_or("");
+        let has_kuangchan = catalog
+            .skill_by_name("kuangchan")
+            .is_some_and(|sid| self.state_core().has_skill(seat, sid));
+        if lord && has_kuangchan {
+            self.state_core_mut()
+                .vm_aux
+                .flags
+                .insert((seat, "kuangchan_init_done".to_string()), 1);
+        }
         let p = self.state_core_mut().player_mut(seat);
-        if lord && p.max_hp != crate::state::INFINITE_HP {
+        if lord && p.max_hp != crate::state::INFINITE_HP && !has_kuangchan {
             p.max_hp += 1;
         }
         p.hp = match gname {

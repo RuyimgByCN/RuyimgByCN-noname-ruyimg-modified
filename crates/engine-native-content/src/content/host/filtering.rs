@@ -721,6 +721,18 @@ impl HostSkillBehavior {
             HostBehavior::L20MarkBatchB => {
                 super::step::l20_batch_b::filter_l20_batch_b(self, ctx, owner, event)
             }
+            HostBehavior::U08YxsBatchA => {
+                super::step::u08_batch_a::filter_u08_batch_a(self, ctx, owner, event)
+            }
+            HostBehavior::U08YxsBatchB => {
+                super::step::u08_batch_b::filter_u08_batch_b(self, ctx, owner, event)
+            }
+            HostBehavior::U08YxsBatchC => {
+                super::step::u08_batch_c::filter_u08_batch_c(self, ctx, owner, event)
+            }
+            HostBehavior::U08YxsBatchD => {
+                super::step::u08_batch_d::filter_u08_batch_d(self, ctx, owner, event)
+            }
             _ => false,
         }
     }

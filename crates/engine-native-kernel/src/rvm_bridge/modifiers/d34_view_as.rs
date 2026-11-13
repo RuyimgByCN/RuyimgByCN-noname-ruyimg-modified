@@ -487,6 +487,32 @@ fn d34_view_as_table() -> &'static Vec<D34ViewAsRule> {
                     false,
                 ),
             },
+            // U08 `kanpo` (`英雄杀/character/skill.js`): Black hand card -> Nullify (`Wuxie`)
+            D34ViewAsRule {
+                activation: D34ViewAsActivation::SkillOrFlag("kanpo", "yxs_kanpo_viewas"),
+                spec: make_spec(
+                    1_926_900_067,
+                    "kanpo",
+                    CardKind::Nullify,
+                    VmViewAsWindow::Any,
+                    VmViewAsZone::Hand,
+                    VmViewAsFilter::Black,
+                    false,
+                ),
+            },
+            // U08 `fenghuo` (`英雄杀/character/skill.js:2120-2143`): Equip zone card -> SavageAttack (`Nanman`) in PlayPhase
+            D34ViewAsRule {
+                activation: D34ViewAsActivation::SkillOrFlag("fenghuo", "yxs_fenghuo_viewas"),
+                spec: make_spec(
+                    1_926_900_068,
+                    "fenghuo",
+                    CardKind::SavageAttack,
+                    VmViewAsWindow::PlayPhase,
+                    VmViewAsZone::Equip,
+                    VmViewAsFilter::Any,
+                    false,
+                ),
+            },
         ];
 
         let u05_flag_map: &[(&str, CardKind)] = &[

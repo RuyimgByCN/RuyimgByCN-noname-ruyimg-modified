@@ -495,10 +495,10 @@ fn u08_hero_kill_31_standard_skills_and_menshen2_guard() {
     let mut e = Engine::new_with_extensions(2026110904, 4, &[&yxs_pack, &d34_pack])
         .expect("new_with_extensions");
 
-    // Verify all 31 cross-package standard skills referenced by U08 exist in Catalog
+    // Verify all 33 cross-package standard skills referenced by U08 exist in Catalog
     let count = verify_u08_standard_skill_bindings(e.catalog())
-        .expect("all 31 U08 standard skills must resolve in Catalog");
-    assert_eq!(count, 31);
+        .expect("all 33 U08 standard skills must resolve in Catalog");
+    assert_eq!(count, 33);
 
     // Fabricated yxs_tafang_wave must not exist in Catalog
     assert!(e.catalog().skill_by_name("yxs_tafang_wave").is_none());

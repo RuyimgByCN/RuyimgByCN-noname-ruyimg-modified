@@ -467,7 +467,7 @@ fn resolve_l19_doomsday_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerI
             }
         }
         other => {
-            super::decision34_u08_l19_l20_l27::resolve_l19_doomsday_remaining(ctx, other, owner);
+            super::decision34_l19_l20_l27::resolve_l19_doomsday_remaining(ctx, other, owner);
         }
     }
 }
@@ -483,7 +483,7 @@ fn resolve_l20_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
     set_flag(ctx.core, owner, &format!("l20_skill:{skill_name}"), 1);
     let count = flag(ctx.core, owner, "l20_skill_trigger_count") + 1;
     set_flag(ctx.core, owner, "l20_skill_trigger_count", count);
-    super::decision34_u08_l19_l20_l27::resolve_l20_mark_remaining(ctx, skill_name, owner);
+    super::decision34_l19_l20_l27::resolve_l20_mark_remaining(ctx, skill_name, owner);
 }
 
 /// `L24` (`皮肤切换` — `archive/upstream/noname-liuli/noname/extension/皮肤切换/extension.js`):
@@ -555,7 +555,7 @@ fn resolve_l27_select_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId)
         let marks = (flag(ctx.core, owner, "l27_baonue_marks") + 1).min(5);
         set_flag(ctx.core, owner, "l27_baonue_marks", marks);
     } else {
-        super::decision34_u08_l19_l20_l27::resolve_l27_select_remaining(ctx, skill_name, owner);
+        super::decision34_l19_l20_l27::resolve_l27_select_remaining(ctx, skill_name, owner);
     }
 }
 

@@ -925,6 +925,7 @@ impl VmAux {
                 && key != "th_geyuan_used_turn"
                 && !key.starts_with("zexing_visited:")
                 && !key.starts_with("mbcmjiushi_")
+                && key != "yxs_guimian_sha_limit_bonus"
         });
     }
 

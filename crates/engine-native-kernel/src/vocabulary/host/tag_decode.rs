@@ -563,6 +563,10 @@ impl HostBehavior {
             560 => HostBehavior::L19DoomsdayBatchB,
             561 => HostBehavior::L20MarkBatchA,
             562 => HostBehavior::L20MarkBatchB,
+            563 => HostBehavior::U08YxsBatchA,
+            564 => HostBehavior::U08YxsBatchB,
+            565 => HostBehavior::U08YxsBatchC,
+            566 => HostBehavior::U08YxsBatchD,
             _ => return None,
         })
     }
