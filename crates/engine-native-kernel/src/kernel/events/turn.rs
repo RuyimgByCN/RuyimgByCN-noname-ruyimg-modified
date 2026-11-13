@@ -144,6 +144,17 @@ pub(in crate::kernel) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: Playe
                 });
             }
         }
+        // 暗织覆盖 phaseEnd，须在 phaseAfter 的 BeforeTriggers 收集前到期。
+        for seat in 0..ctx.core.players.len() as PlayerId {
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(seat, "dddanzhi_immune".to_string()));
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(seat, "dddanzhi_stamp".to_string()));
+        }
         ctx.emit(EventData::TurnEndWindow {
             player,
             after: true,

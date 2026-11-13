@@ -1,0 +1,6 @@
+at: 2026-11-13T22:00:48.346713+08:00
+cwd: /Users/ruyimg/Documents/Claude/sanguosha/noname-next
+command: python3 -B scripts/report_phase_filters.py --check
+registry 一致（37 条）
+
+exit_code=0

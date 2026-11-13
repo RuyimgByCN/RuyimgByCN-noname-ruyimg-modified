@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "pnpm",
+    "build:native"
+  ],
+  "command": "pnpm build:native",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0"
+  },
+  "source_head": "3a6e398485db6ef0729abe3013c3c4b7705a5d6d",
+  "tracked_status": " M apps/game-server/tests/native_product_path.rs\n M apps/web-client/scripts/approved-b-metadata.test.mjs\n M crates/engine-native-content/src/content/host/step/u01_batch_d.rs\n M crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs\n M crates/engine-native-kernel/src/kernel.rs\n M crates/engine-native-kernel/src/kernel/equipment.rs\n M crates/engine-native-kernel/src/kernel/events.rs\n M crates/engine-native-kernel/src/kernel/events/turn.rs\n M crates/engine-native-kernel/src/kernel/intrinsic.rs\n M crates/engine-native-kernel/src/kernel/tricks.rs\n M crates/engine-native-kernel/src/resolution.rs\n M crates/engine-native-kernel/src/snap/asks.rs\n M crates/engine-native-kernel/src/snap/restore.rs\n M crates/engine-native-kernel/src/snap/validation.rs\n M crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs\n M crates/engine-native/src/engine/play_card.rs\n M crates/engine-native/tests/c331_source33_integration.rs\n M crates/engine-native/tests/c331_source_order_phase5.rs\n M crates/engine-native/tests/e2e/e2e_tier5_adversarial_c1.rs\n M crates/engine-native/tests/groups/g1.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L19-末日乱斗.md\n M docs/migration/g0/L20-标记补充.md\n M docs/migration/g0/L27-选将美化.md\n M docs/migration/g0/README.md\n M docs/migration/g0/U01-3D精选.md\n M docs/migration/g0/U05-杀海拾遗.md\n M docs/migration/g0/inventory_status.json\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n M docs/operations/evidence/2026-11-12-l10-epic-cards-review/README.md\n M docs/operations/evidence/2026-11-12-l27-beautify-review/README.md\n M docs/operations/evidence/2026-11-12-step1-choice-channel-prototype/README.md\n M docs/operations/evidence/2026-11-12-u01-ddd-review/README.md\n M docs/operations/evidence/2026-11-12-u06-huanle-review/README.md\n M docs/operations/evidence/2026-11-12-u07-wudian-review/README.md\n M scripts/report_phase_filters.py\n M scripts/test_report_phase_filters.py\n",
+  "start_utc": "2026-11-13T14:00:18.306515+00:00",
+  "exit_code": 0,
+  "duration_seconds": 42.786,
+  "end_utc": "2026-11-13T14:01:01.092437+00:00"
+}

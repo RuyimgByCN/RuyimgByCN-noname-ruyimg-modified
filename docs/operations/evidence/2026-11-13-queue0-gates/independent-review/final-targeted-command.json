@@ -1,0 +1,25 @@
+{
+  "started_at": "2026-11-13T13:29:58.933326+00:00",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--test",
+    "g1",
+    "u01_dddanzhi_regression",
+    "--",
+    "--nocapture"
+  ],
+  "head": "3a6e398485db6ef0729abe3013c3c4b7705a5d6d",
+  "dirty": true,
+  "rules": 333,
+  "ngsa": 107,
+  "schema": 5,
+  "abi": 759,
+  "ws": 8,
+  "finished_at": "2026-11-13T13:30:41.447188+00:00",
+  "exit_code": 0
+}

@@ -303,8 +303,19 @@ fn native_character_only_installed_package_enters_match() {
         .load("d3-select")
         .expect("仅 character.json 的正式包");
     assert_eq!(loaded.pack.generals.len(), 32);
-    assert_eq!(loaded.pack.host_skills.len(), 2);
-    assert_eq!(loaded.pack.vm_skills.len(), 62);
+    assert_eq!(loaded.pack.host_skills.len(), 64);
+    assert!(loaded.pack.vm_skills.is_empty());
+    let actual: std::collections::BTreeSet<_> = loaded
+        .pack
+        .host_skills
+        .iter()
+        .map(|skill| skill.name)
+        .collect();
+    let expected: std::collections::BTreeSet<_> = content_native_loader::U01_DDD_SKILLS
+        .iter()
+        .copied()
+        .collect();
+    assert_eq!(actual, expected, "U01 迁移后的全部技能须从正式安装副本装载");
     assert!(loaded.pack.cards.is_empty());
     let mut engine = engine_native::Engine::new_with_extensions(4242, 4, &[&loaded.pack]).unwrap();
     let name = loaded.pack.generals[0].name;

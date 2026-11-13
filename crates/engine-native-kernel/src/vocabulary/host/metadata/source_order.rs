@@ -133,6 +133,8 @@ impl HostBehavior {
             Self::Zhenlie => (Timing::Normal, 0, true),
             // noname-liuli/noname/extension/标记补充/extension.js:5199
             Self::FzXinKuanggu => (Timing::Normal, 0, true),
+            // 保留 L20 委托的既有选序；上游 (0, true) 差异另行核验。
+            Self::FzLiegong => (Timing::Normal, 1, false),
             // extension/杀海拾遗/character/swd/skill.js:1806 (bingfeng2)
             Self::Bingfeng2 => (Timing::Normal, 0, true),
             // extension/杀海拾遗/character/swd/skill.js:4 (cyqiaoxie)

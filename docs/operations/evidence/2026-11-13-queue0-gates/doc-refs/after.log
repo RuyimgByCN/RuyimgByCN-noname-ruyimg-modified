@@ -1,0 +1,16 @@
+$ python3 -B scripts/check_doc_line_refs.py
+检查 8793 处 `file:line` 引用；文件不存在 48 种；越界 0 处
+
+找不到的文件（可能是文档里的示例路径）：
+  - filt/common.rs（44 处）
+  - meta/common.rs（35 处）
+  - filt/swd.rs（32 处）
+  - meta/swd.rs（31 处）
+  - kern/phase/judge.rs（26 处）
+  - kern/phase.rs（24 处）
+  - ...character/skill.js（22 处）
+  - meta/xianjian.rs（15 处）
+  - filt/xianjian.rs（15 处）
+  - std/standard_skills.rs（11 处）
+
+exit_code=0

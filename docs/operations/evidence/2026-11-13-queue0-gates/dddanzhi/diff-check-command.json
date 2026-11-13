@@ -1,0 +1,26 @@
+{
+  "command": [
+    "git",
+    "diff",
+    "--check",
+    "--",
+    "crates/engine-native-content/src/content/host/step/u01_batch_d.rs",
+    "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs",
+    "crates/engine-native-kernel/src/kernel.rs",
+    "crates/engine-native-kernel/src/kernel/equipment.rs",
+    "crates/engine-native-kernel/src/kernel/events.rs",
+    "crates/engine-native-kernel/src/kernel/events/turn.rs",
+    "crates/engine-native-kernel/src/kernel/intrinsic.rs",
+    "crates/engine-native-kernel/src/kernel/tricks.rs",
+    "crates/engine-native-kernel/src/resolution.rs",
+    "crates/engine-native-kernel/src/snap/asks.rs",
+    "crates/engine-native-kernel/src/snap/restore.rs",
+    "crates/engine-native-kernel/src/snap/validation.rs",
+    "crates/engine-native/src/engine/play_card.rs",
+    "crates/engine-native/tests/groups/g1.rs",
+    "crates/engine-native/tests/u01_dddanzhi_regression.rs",
+    "crates/engine-native/tests/fixtures/u01-dddanzhi-pending-v107.ngsa"
+  ],
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "returncode": 2
+}

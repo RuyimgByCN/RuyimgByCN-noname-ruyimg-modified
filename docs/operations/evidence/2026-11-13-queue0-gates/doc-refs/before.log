@@ -1,0 +1,38 @@
+$ python3 -B scripts/check_doc_line_refs.py
+检查 8764 处 `file:line` 引用；文件不存在 48 种；越界 23 处
+
+找不到的文件（可能是文档里的示例路径）：
+  - filt/common.rs（44 处）
+  - meta/common.rs（35 处）
+  - filt/swd.rs（32 处）
+  - meta/swd.rs（31 处）
+  - kern/phase/judge.rs（26 处）
+  - kern/phase.rs（24 处）
+  - ...character/skill.js（22 处）
+  - meta/xianjian.rs（15 处）
+  - filt/xianjian.rs（15 处）
+  - std/standard_skills.rs（11 处）
+
+越界的引用：
+  - docs/operations/evidence/2026-11-12-u06-huanle-review/README.md: skills_status.rs:1048 超出所有候选的最大行数 1035
+  - docs/operations/evidence/2026-11-12-u06-huanle-review/README.md: skills_status.rs:1054 超出所有候选的最大行数 1035
+  - docs/operations/evidence/2026-11-12-u07-wudian-review/README.md: crates/engine-native-content/src/content/host/step/wudian_status.rs:444 超出所有候选的最大行数 384
+  - docs/operations/evidence/2026-11-12-u07-wudian-review/README.md: crates/engine-native/tests/g1_wudian.rs:536 超出所有候选的最大行数 485
+  - docs/operations/evidence/2026-11-12-u07-wudian-review/README.md: crates/engine-native-content/src/content/host/step/wudian_status.rs:393 超出所有候选的最大行数 384
+  - docs/operations/evidence/2026-11-12-u07-wudian-review/README.md: crates/engine-native-content/src/content/host/step/wudian_status.rs:399 超出所有候选的最大行数 384
+  - docs/operations/evidence/2026-11-12-u07-wudian-review/README.md: crates/engine-native-content/src/content/host/step/wudian_status.rs:406 超出所有候选的最大行数 384
+  - docs/operations/evidence/2026-11-12-u07-wudian-review/README.md: crates/engine-native-content/src/content/host/step/wudian_status.rs:413 超出所有候选的最大行数 384
+  - docs/operations/evidence/2026-11-12-u07-wudian-review/README.md: crates/engine-native-content/src/content/host/step/wudian_status.rs:421 超出所有候选的最大行数 384
+  - docs/operations/evidence/2026-11-12-u07-wudian-review/README.md: crates/engine-native-content/src/content/host/step/wudian_status.rs:486 超出所有候选的最大行数 384
+  - docs/operations/evidence/2026-11-12-u07-wudian-review/README.md: crates/engine-native-content/src/content/host/step/wudian_status.rs:518 超出所有候选的最大行数 384
+  - docs/operations/evidence/2026-11-12-u07-wudian-review/README.md: crates/engine-native-content/src/content/host/step/wudian_status.rs:564 超出所有候选的最大行数 384
+  - docs/operations/evidence/2026-11-12-u07-wudian-review/README.md: crates/engine-native-content/src/content/host/step/wudian_status.rs:646 超出所有候选的最大行数 384
+  - docs/operations/evidence/2026-11-12-u07-wudian-review/README.md: crates/engine-native-content/src/content/host/step/wudian_status.rs:714 超出所有候选的最大行数 384
+  - docs/operations/evidence/2026-11-12-u07-wudian-review/README.md: crates/engine-native-content/src/content/host/step/wudian_status.rs:772 超出所有候选的最大行数 384
+  - docs/operations/evidence/2026-11-12-u07-wudian-review/README.md: crates/engine-native-content/src/content/host/step/wudian_status.rs:812 超出所有候选的最大行数 384
+  - docs/operations/evidence/2026-11-12-u07-wudian-review/README.md: crates/engine-native-content/src/content/host/step/wudian_status.rs:444 超出所有候选的最大行数 384
+  - docs/operations/evidence/2026-11-12-l27-beautify-review/README.md: crates/engine-native-content/src/content/host/step/l27_batch_a.rs:1058 超出所有候选的最大行数 1051
+  - docs/operations/evidence/2026-11-12-l27-beautify-review/README.md: l27_batch_a.rs:1057 超出所有候选的最大行数 1051
+  - docs/operations/evidence/2026-11-12-l10-epic-cards-review/README.md: asks_wudian.rs:918 超出所有候选的最大行数 896
+
+exit_code=0

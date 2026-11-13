@@ -55,10 +55,20 @@ pub fn intrinsic_machine(
             round_used: false,
             guihan_asked: false,
         })),
-        EventData::CardUsed(u) => {
+        EventData::CardUsed(mut u) => {
             // 筑城守卫（U07 批三，规则 v113）等 AfterTriggers 机器写回的
             // 取消：跳过结算（杀已由守卫归还手牌）
             if u.cancelled {
+                return None;
+            }
+            // 追加/移除目标的 after 窗口已完成，按最终目标消费一次免疫。
+            if dddanzhi_remove_targets(ctx, frame_id, &mut u) {
+                if let Some(card) = u.card {
+                    if ctx.core.table.contains(&card) {
+                        ctx.core.table.retain(|&c| c != card);
+                        ctx.to_discard(card);
+                    }
+                }
                 return None;
             }
             let effective_kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));

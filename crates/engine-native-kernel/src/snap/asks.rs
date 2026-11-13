@@ -208,6 +208,20 @@ pub fn active_ask(
             judge::active_judge_ask(owner, current, core, catalog)
         }
         MachineSnapshot::PlaceDelayed { .. } => None,
+        MachineSnapshot::Wugu { cards, pickers, .. } => {
+            if cards.is_empty() {
+                return None;
+            }
+            Some(ask(
+                *pickers.first()?,
+                "wugu_pick",
+                ChoiceKind::SelectCards,
+                hand_card_options(cards),
+                1,
+                1,
+                false,
+            ))
+        }
         MachineSnapshot::Aoe { inner, .. } => {
             let e = inner.as_deref()?;
             active_ask(e, core, catalog)

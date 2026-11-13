@@ -1,0 +1,11 @@
+test_brace_matching_respects_nested_objects (test_audit_upstream_skill_flags.ParserTests) ... ok
+test_brace_matching_skips_string_literals (test_audit_upstream_skill_flags.ParserTests) ... ok
+test_inspector_runs_on_known_skill (test_audit_upstream_skill_flags.ParserTests) ... ok
+test_once_allowlist_ignores_nested_block_comments_before_parsing (test_audit_upstream_skill_flags.ParserTests) ... ok
+test_once_allowlist_keeps_function_and_arm_boundaries (test_audit_upstream_skill_flags.ParserTests) ... ok
+test_usage_without_args (test_audit_upstream_skill_flags.ParserTests) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.156s
+
+OK

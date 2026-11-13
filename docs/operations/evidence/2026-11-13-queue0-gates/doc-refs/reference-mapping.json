@@ -1,0 +1,156 @@
+[
+  {
+    "doc": "docs/operations/evidence/2026-11-12-u06-huanle-review/README.md",
+    "old": "skills_status.rs:997-1048",
+    "new": "skills_status.rs:939-990",
+    "reason": "HuanleMonkeyCard 完整结算分支",
+    "count": 1
+  },
+  {
+    "doc": "docs/operations/evidence/2026-11-12-u06-huanle-review/README.md",
+    "old": "skills_status.rs:1049-1054",
+    "new": "skills_status.rs:991-997",
+    "reason": "HuanleMianjuCard 翻面取消分支",
+    "count": 1
+  },
+  {
+    "doc": "docs/operations/evidence/2026-11-12-u07-wudian-review/README.md",
+    "old": "crates/engine-native-content/src/content/host/step/wudian_status.rs:423-444",
+    "new": "crates/engine-native-kernel/src/kernel/sha/step.rs:872-919` · `crates/engine-native-kernel/src/kernel/sha/resume.rs:301-341",
+    "reason": "诱敌深入真实响应/追杀续行；旧文提到的 WudianYoudishenruFollowup 当前不存在，保留旧结论待队列1重审",
+    "count": 2
+  },
+  {
+    "doc": "docs/operations/evidence/2026-11-12-u07-wudian-review/README.md",
+    "old": "crates/engine-native/tests/g1_wudian.rs:433-536",
+    "new": "crates/engine-native/tests/g1_wudian/wangmeizhike.rs:1-76` · `crates/engine-native/tests/g1_wudian/u07.rs:1427-1498",
+    "reason": "当前望梅正向双分支测试与真实事件补充用例；旧文测试函数名当前不存在，未改历史结论",
+    "count": 1
+  },
+  {
+    "doc": "docs/operations/evidence/2026-11-12-u07-wudian-review/README.md",
+    "old": "crates/engine-native-content/src/content/host/step/wudian_status.rs:356-393",
+    "new": "crates/engine-native-content/src/content/host/step/wudian_cards.rs:250-389",
+    "reason": "WudianKangyin 状态机",
+    "count": 1
+  },
+  {
+    "doc": "docs/operations/evidence/2026-11-12-u07-wudian-review/README.md",
+    "old": "crates/engine-native-content/src/content/host/step/wudian_status.rs:394-399",
+    "new": "crates/engine-native-content/src/content/host/step/wudian_cards.rs:350-372` · `crates/engine-native-kernel/src/state/core_ops_modifiers.rs:121-126",
+    "reason": "kangyin2 标记授予与距离修饰读取",
+    "count": 1
+  },
+  {
+    "doc": "docs/operations/evidence/2026-11-12-u07-wudian-review/README.md",
+    "old": "crates/engine-native-content/src/content/host/step/wudian_status.rs:401-406",
+    "new": "crates/engine-native-content/src/content/host/step/wudian_status.rs:187-193` · `crates/engine-native-kernel/src/state/core_ops_modifiers.rs:161-181",
+    "reason": "WudianChezhen 查询锚及距离效果",
+    "count": 1
+  },
+  {
+    "doc": "docs/operations/evidence/2026-11-12-u07-wudian-review/README.md",
+    "old": "crates/engine-native-content/src/content/host/step/wudian_status.rs:408-413",
+    "new": "crates/engine-native-content/src/content/host/step/wudian_cards.rs:439-571",
+    "reason": "WudianYouzhan 状态机",
+    "count": 1
+  },
+  {
+    "doc": "docs/operations/evidence/2026-11-12-u07-wudian-review/README.md",
+    "old": "crates/engine-native-content/src/content/host/step/wudian_status.rs:415-421",
+    "new": "crates/engine-native-content/src/content/host/step/wudian_status.rs:153-154` · `crates/engine-native/src/engine/play_rules.rs:56-77",
+    "reason": "WudianJinyan 查询锚及实际出牌校验；不认证旧表条件",
+    "count": 1
+  },
+  {
+    "doc": "docs/operations/evidence/2026-11-12-u07-wudian-review/README.md",
+    "old": "crates/engine-native-content/src/content/host/step/wudian_status.rs:446-486",
+    "new": "crates/engine-native-content/src/content/host/step/wudian_status.rs:6-7` · `crates/engine-native-kernel/src/kernel/sha/resume.rs:8-78",
+    "reason": "WudianFuchou 目录锚及 shaBefore 交牌取消步骤；不认证旧表 damageEnd 叙述",
+    "count": 1
+  },
+  {
+    "doc": "docs/operations/evidence/2026-11-12-u07-wudian-review/README.md",
+    "old": "crates/engine-native-content/src/content/host/step/wudian_status.rs:488-518",
+    "new": "crates/engine-native-content/src/content/host/step/wudian_status.rs:118-148",
+    "reason": "WudianFuchou2 先摸牌后逐标记虚拟杀续行；不认证旧表双向伤害叙述",
+    "count": 1
+  },
+  {
+    "doc": "docs/operations/evidence/2026-11-12-u07-wudian-review/README.md",
+    "old": "crates/engine-native-content/src/content/host/step/wudian_status.rs:520-564",
+    "new": "crates/engine-native-content/src/content/host/step/wudian_cards.rs:572-654",
+    "reason": "WudianChoudu 选牌/选目标及转调兵状态机",
+    "count": 1
+  },
+  {
+    "doc": "docs/operations/evidence/2026-11-12-u07-wudian-review/README.md",
+    "old": "crates/engine-native-content/src/content/host/step/wudian_status.rs:566-646",
+    "new": "crates/engine-native-content/src/content/host/step/wudian_status.rs:10-117",
+    "reason": "WudianLiduan 交牌/装备分支",
+    "count": 1
+  },
+  {
+    "doc": "docs/operations/evidence/2026-11-12-u07-wudian-review/README.md",
+    "old": "crates/engine-native-content/src/content/host/step/wudian_status.rs:648-714",
+    "new": "crates/engine-native-content/src/content/host/step/wudian_status.rs:149-150` · `crates/engine-native-kernel/src/kernel/tricks.rs:215-244` · `crates/engine-native-kernel/src/catalog.rs:1073-1090",
+    "reason": "WudianLiangceRemain 查询锚、五谷余牌归获查询与结算",
+    "count": 1
+  },
+  {
+    "doc": "docs/operations/evidence/2026-11-12-u07-wudian-review/README.md",
+    "old": "crates/engine-native-content/src/content/host/step/wudian_status.rs:716-772",
+    "new": "crates/engine-native-content/src/content/host/step/wudian_status.rs:8-9` · `crates/engine-native-kernel/src/kernel/aoe.rs:263-280` · `crates/engine-native-kernel/src/catalog.rs:1093-1111",
+    "reason": "WudianJianbi 查询锚及 AOE 排除查询/消费",
+    "count": 1
+  },
+  {
+    "doc": "docs/operations/evidence/2026-11-12-u07-wudian-review/README.md",
+    "old": "crates/engine-native-content/src/content/host/step/wudian_status.rs:774-812",
+    "new": "crates/engine-native-content/src/content/host/step/wudian_cards.rs:8-82",
+    "reason": "WudianDiyjuntun 当前装备重铸状态机；不认证旧表军屯标记叙述",
+    "count": 1
+  },
+  {
+    "doc": "docs/operations/evidence/2026-11-12-l10-epic-cards-review/README.md",
+    "old": "asks_wudian.rs:853-918",
+    "new": "asks_wudian.rs:853-893",
+    "reason": "Rangjie 所有四种挂起询问分支完整范围",
+    "count": 1
+  },
+  {
+    "doc": "docs/operations/evidence/2026-11-12-l27-beautify-review/README.md",
+    "old": "crates/engine-native-content/src/content/host/step/l27_batch_a.rs:1-1058",
+    "new": "crates/engine-native-content/src/content/host/step/l27_batch_a.rs:1-1051",
+    "reason": "Batch A 当前文件从模块声明至 taoluan 尾的完整范围；另有原文已列出的 asks 模块",
+    "count": 1
+  },
+  {
+    "doc": "docs/operations/evidence/2026-11-12-l27-beautify-review/README.md",
+    "old": "l27_batch_a.rs:1053-1057",
+    "new": "l27_batch_a.rs:666",
+    "reason": "huamu 与两个标记共用的惰性 dispatch 分支；旧表写入 disabled 标记叙述当前不在该分支，留待队列1",
+    "count": 1
+  },
+  {
+    "doc": "docs/migration/g0/U05-杀海拾遗.md",
+    "old": "crates/engine-native-content/src/content/host/intrinsic_named_ext.rs:1-531",
+    "new": "crates/engine-native-content/src/content/host/intrinsic_named_ext.rs:130-202`、`crates/engine-native-content/src/content/host/intrinsic_named_ext.rs:205-510",
+    "reason": "按实际机关牌与具名扩展牌两个完整解析/结算入口定位，不用越界的文件总长",
+    "count": 1
+  },
+  {
+    "doc": "docs/migration/g0/L19-末日乱斗.md",
+    "old": "crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_u08_l19_l20_l27.rs:58-326",
+    "new": "crates/engine-native-content/src/content/host/step/l19_batch_a.rs:193-598`、`crates/engine-native-content/src/content/host/step/l19_batch_a_asks.rs:113-364`、`crates/engine-native-content/src/content/host/step/l19_batch_b.rs:294-900`、`crates/engine-native-content/src/content/host/step/l19_batch_b_asks.rs:112-372",
+    "reason": "L19 当前两批 trigger/filter/machine/handle 与独立询问/步骤模块",
+    "count": 1
+  },
+  {
+    "doc": "docs/migration/g0/L27-选将美化.md",
+    "old": "crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_l19_l20_l27.rs:555-853",
+    "new": "crates/engine-native-content/src/content/host/step/l27_batch_a.rs:636-1051`、`crates/engine-native-content/src/content/host/step/l27_batch_a_asks.rs:338-789`、`crates/engine-native-content/src/content/host/step/l27_batch_b.rs:630-809`、`crates/engine-native-content/src/content/host/step/l27_batch_b_asks.rs:372-396`、`crates/engine-native-content/src/content/host/step/l27_batch_b_tw.rs:22-872",
+    "reason": "L27 当前两批技能 handler 与拆出的 asks/tw 结算步骤",
+    "count": 1
+  }
+]

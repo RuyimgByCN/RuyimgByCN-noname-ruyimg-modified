@@ -1,0 +1,9 @@
+{
+  "at_utc": "2026-11-13T13:31:17.491745+00:00",
+  "target": "/private/tmp/noname-queue0-strict-g105iu3t",
+  "purpose_completed": "严格all-targets检查已完成；不再保留私有编译缓存",
+  "size_before": "155M\t/private/tmp/noname-queue0-strict-g105iu3t",
+  "shared_target_touched": false,
+  "removed": true,
+  "disk_after": "Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s5   926Gi   760Gi   141Gi    85%    6.2M  1.5G    0%   /System/Volumes/Data\n"
+}

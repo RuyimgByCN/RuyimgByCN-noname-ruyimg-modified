@@ -1,0 +1,8 @@
+$ python3 -B scripts/check_local_links.py --all
+坏链: docs/operations/evidence/2026-11-12-step1-choice-channel-prototype/README.md -> ../../../../apps/web-client/src/components/battle/BattleView.vue
+坏链: docs/operations/evidence/2026-11-12-u01-ddd-review/README.md -> ../../../../crates/content-native-loader/src/d3_gallery.rs
+坏链: docs/operations/evidence/2026-11-12-u01-ddd-review/README.md -> ../../../../crates/engine-native-content/src/content/host/filtering/u01_ddd.rs
+坏链: docs/operations/evidence/2026-11-13-queue0-gates/doc-refs/README.md -> after.log
+检查 2053 个文件，坏链 4
+
+exit_code=1

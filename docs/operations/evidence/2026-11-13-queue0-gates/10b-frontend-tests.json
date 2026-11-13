@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "pnpm",
+    "test"
+  ],
+  "command": "pnpm test",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0"
+  },
+  "source_head": "3a6e398485db6ef0729abe3013c3c4b7705a5d6d",
+  "tracked_status": " M apps/web-client/scripts/approved-b-metadata.test.mjs\n M crates/engine-native/tests/groups/g1.rs\n M docs/migration/g0/L19-末日乱斗.md\n M docs/migration/g0/L27-选将美化.md\n M docs/migration/g0/U05-杀海拾遗.md\n M docs/migration/g0/inventory_status.json\n M docs/operations/evidence/2026-11-12-l10-epic-cards-review/README.md\n M docs/operations/evidence/2026-11-12-l27-beautify-review/README.md\n M docs/operations/evidence/2026-11-12-u06-huanle-review/README.md\n M docs/operations/evidence/2026-11-12-u07-wudian-review/README.md\n",
+  "start_utc": "2026-11-13T12:54:22.835777+00:00",
+  "exit_code": 0,
+  "duration_seconds": 5.809,
+  "end_utc": "2026-11-13T12:54:28.644911+00:00"
+}

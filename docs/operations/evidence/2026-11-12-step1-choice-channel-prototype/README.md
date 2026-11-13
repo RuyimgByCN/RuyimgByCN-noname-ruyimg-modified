@@ -11,7 +11,7 @@
 1. **路径 A（在 `rule-vm` / `rvm_bridge` 内新增挂起选择）**：需要在 `RULE_VM_ABI_VERSION = 759` 中引入可中断的 VM 帧快照并修改 `NGSA 107` 的 `FrameSnapshot` 二进制编码，必然触发 ABI 与存档格式升号；
 2. **路径 B（复用既有 `HostBehavior + HostStage + ChoiceKind` 通道，本次采用）**：
    - **二进制存档（`NGSA 107`）零变更**：[`resolution.rs`](../../../../crates/engine-native-kernel/src/archive/resolution.rs) 中 `MachineSnapshot::Host` 的 `behavior` 以 `u16` tag（`w.u16(b.tag())` / `HostBehavior::from_tag(r.u16()?)`）编码，`stage` 复用既有 `HostStage` 变体（`0=Init`、`1=Confirm`、`2=SelectCard`、`5=TargetChoice`、`14=Followup`），`prompt` 校验复用编译期静态表 `KNOWN_PROMPTS`（归档中仅存储 `has_pending` 布尔位，恢复时由 [`asks.rs`](../../../../crates/engine-native-content/src/content/host/asks.rs) 的 `active_ask_host` 重建 `PendingChoice`）；
-   - **前端与联机协议（`WS_PROTOCOL_VERSION = 8`）零变更**：前端 [`BattleView.vue`](../../../../apps/web-client/src/components/battle/BattleView.vue) 与 `game-server` 已原生消费 `ChoiceView { seat, kind: ChoiceKind, prompt }` 并通过 `Command::Answer { selection }` 回传玩家选择或取消（`selection: vec![]`）；
+   - **前端与联机协议（`WS_PROTOCOL_VERSION = 8`）零变更**：前端 [`BattleView.vue`](../../../../apps/web-client/src/views/BattleView.vue) 与 `game-server` 已原生消费 `ChoiceView { seat, kind: ChoiceKind, prompt }` 并通过 `Command::Answer { selection }` 回传玩家选择或取消（`selection: vec![]`）；
    - **标准 14 场 Golden 哈希零变化**：[`host_skill_bindings.rs`](../../../../crates/content-native-loader/src/host_skill_bindings.rs) 仅将扩展包中的技能 ID（`"boss_chuanyun"`、`"boss_tianyun"`、`"dddxiaxing"`）映射到对应 `HostBehavior`，不影响标准包目录或 `c331` 源序。
 
 ---

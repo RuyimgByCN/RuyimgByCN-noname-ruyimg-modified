@@ -1,0 +1,22 @@
+{
+  "L20:skills:fz_liegong@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:5160": {
+    "source_id": "L20",
+    "category": "skills",
+    "id": "fz_liegong",
+    "upstream_ref": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:5160",
+    "target": "原生规则 / `rule-vm` 包",
+    "status": "已复核等价",
+    "reviewer": "l20-signoff / l20-verifier",
+    "review_date": "2026-11-12",
+    "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:5160-5197",
+    "test_name": "l20_batch_b_20_canonical_skills_six_dimensions + l20_mark_supplement_eight_dimension_acceptance",
+    "difference": "无语义差异（HostBehavior::L20MarkBatchB & HostBehavior::FzLiegong：逐目标通过 fz_liegong:confirm 交互询问，按条件分别施加当前【杀】不可响应与当前【杀】伤害+1，有 shouyue 时攻击范围+1，已通过独立复核与 6 维真实事件对局测试）",
+    "note": null,
+    "reason": null,
+    "upstream_summary": "烈弓（当你使用【杀】指定目标后，若其手牌数≤你的手牌数或≥你的体力值，你可发动烈弓：手牌数≤你令其不能使用【闪】响应此【杀】，手牌数≥你体力值令此【杀】伤害+1；若场上有「首钺」则你的攻击范围+1）",
+    "native_summary": "HostBehavior::L20MarkBatchB & HostBehavior::FzLiegong：逐目标通过 fz_liegong:confirm 交互询问，按条件分别施加当前【杀】不可响应与当前【杀】伤害+1，有 shouyue 时攻击范围+1",
+    "native_ref": "crates/engine-native-content/src/content/host/step/l20_batch_b_ext.rs:397-436 + crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_l11_mods.rs:144-175,595-608",
+    "native": "crates/engine-native-content/src/content/host/step/l20_batch_b_ext.rs:397-436 + crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_l11_mods.rs:144-175,595-608",
+    "diff": "无"
+  }
+}

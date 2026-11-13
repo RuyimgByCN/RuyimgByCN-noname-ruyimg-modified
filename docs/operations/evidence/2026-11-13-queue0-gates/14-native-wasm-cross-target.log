@@ -1,0 +1,58 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.53s
+     Running tests/groups/nc08.rs (target/debug/deps/nc08-a2cbf342d7a5594f)
+
+running 2 tests
+test nc08_cross_target_real::native_standard_one_player_trajectory ... ok
+test nc08_cross_target_real::native_all_seven_modes_cross_target_and_restore_trajectories ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 140 filtered out; finished in 0.06s
+
+{"steps":40,"final_hash":"6a59d996f801868eef0ddaa2ea08162f706811adcdea88a522780eac19edfcbd","wasm":"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm"}
+{
+  "direct_steps": 40,
+  "restore_before_steps": 20,
+  "restore_after_steps": 20,
+  "final_revision": 40,
+  "final_hash": "6a59d996f801868eef0ddaa2ea08162f706811adcdea88a522780eac19edfcbd",
+  "native_wasm_match": true
+}
+   Compiling once_cell v1.21.4
+   Compiling serde_json v1.0.150
+   Compiling syn v2.0.118
+   Compiling wasm-bindgen-macro-support v0.2.126
+   Compiling serde_derive v1.0.228
+   Compiling thiserror-impl v2.0.18
+   Compiling thiserror v2.0.18
+   Compiling wasm-bindgen-macro v0.2.126
+   Compiling serde v1.0.228
+   Compiling wasm-bindgen v0.2.126
+   Compiling engine-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-api)
+   Compiling resource-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/resource-schema)
+   Compiling licensing-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/licensing-schema)
+   Compiling rule-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-api)
+   Compiling rule-vm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-vm)
+   Compiling engine-native-kernel v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel)
+   Compiling content-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema)
+   Compiling engine-native-content v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content)
+   Compiling content-runtime v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-runtime)
+   Compiling content-compiler v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-compiler)
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+   Compiling engine-native-wasm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1m 01s
+     Running tests/cross_target_package.rs (target/debug/deps/cross_target_package-e01e613d387c9103)
+
+running 1 test
+test native_huanle_package_trajectory ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.30s
+
+{"steps":20,"final_hash":"42d745661c22c4126cbc5bedb72e5d82b315b22ebae07d8ae3391b3dfbbe1e3d"}
+{
+  "direct_steps": 20,
+  "restore_before_steps": 10,
+  "restore_after_steps": 10,
+  "final_revision": 20,
+  "final_hash": "42d745661c22c4126cbc5bedb72e5d82b315b22ebae07d8ae3391b3dfbbe1e3d",
+  "native_wasm_match": true
+}

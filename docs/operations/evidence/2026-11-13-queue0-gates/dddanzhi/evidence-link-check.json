@@ -1,0 +1,9 @@
+{
+  "date": "2026-11-13T13:31:10.759587+00:00",
+  "file": "docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/README.md",
+  "local_links_missing": [],
+  "final_patch_includes_untracked": [
+    "crates/engine-native/tests/u01_dddanzhi_regression.rs",
+    "crates/engine-native/tests/fixtures/u01-dddanzhi-pending-v107.ngsa"
+  ]
+}

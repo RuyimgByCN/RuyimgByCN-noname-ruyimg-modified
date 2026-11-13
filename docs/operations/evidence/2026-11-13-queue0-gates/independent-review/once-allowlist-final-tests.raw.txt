@@ -1,0 +1,15 @@
+{"started_at": "2026-11-13T22:12:01.299660+08:00", "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next", "head": "3a6e398485db6ef0729abe3013c3c4b7705a5d6d", "tracked_dirty": true, "command": ["python3", "-B", "-m", "unittest", "discover", "-s", "scripts", "-p", "test_audit_upstream_skill_flags.py", "-v"], "versions": {"rules": 333, "NGSA": 107, "schema": 5, "ABI": 759, "WS": 8}, "input_sha256": {"scripts/audit_upstream_skill_flags.py": "a7baef28233d129ec1ac4717045fb11c7c2ef61d6cc2ab364610acacaad36905", "scripts/test_audit_upstream_skill_flags.py": "4a219a51427f25f1e7720bc700788913dc386d462e9867d6c26e59ba8995fefa", "scripts/rust_effective_lines.py": "1115ad0d5002d3587232f96c0fa0a6e70cef5008d07eb53c4528dfc057136554", "scripts/test_report_event_arms.py": "638069ad8d6b90b3a9deb3766d71e69724b1e42122f5d5811a10ddd2cfc7f834", "scripts/report_event_arms.py": "157f20738e3f5f04ec150674f3445f97eaea0045b84d2dc386c5f1710121e8f5", "crates/engine-native-content/src/content/host.rs": "5040fd7da574e87f28bd26d28fa304e0a4fbc623a58fe63043a1dfc77f2a801c", "crates/engine-native-content/src/content/host/filtering/common.rs": "e93844349439f339d39a5dd8061b872a7a6650729c19c23a6f9094b7a23f4b0a"}}
+
+test_brace_matching_respects_nested_objects (test_audit_upstream_skill_flags.ParserTests) ... ok
+test_brace_matching_skips_string_literals (test_audit_upstream_skill_flags.ParserTests) ... ok
+test_inspector_runs_on_known_skill (test_audit_upstream_skill_flags.ParserTests) ... ok
+test_once_allowlist_ignores_nested_block_comments_before_parsing (test_audit_upstream_skill_flags.ParserTests) ... ok
+test_once_allowlist_keeps_function_and_arm_boundaries (test_audit_upstream_skill_flags.ParserTests) ... ok
+test_usage_without_args (test_audit_upstream_skill_flags.ParserTests) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.159s
+
+OK
+
+exit_code=0

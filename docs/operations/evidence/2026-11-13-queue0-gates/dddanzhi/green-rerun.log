@@ -1,0 +1,36 @@
+   Compiling engine-native-kernel v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 20.08s
+     Running tests/groups/g1.rs (target/debug/deps/g1-a4e6ec7f8e101885)
+
+running 10 tests
+
+thread 'u01_dddanzhi_regression::dddanzhi_wugu_without_skill_restores_held_reveal_cards' (2827784) panicked at crates/engine-native/tests/groups/../u01_dddanzhi_regression.rs:417:51:
+called `Result::unwrap()` on an `Err` value: OpenChoiceMismatch { observer: 0 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test u01_dddanzhi_regression::dddanzhi_wugu_without_skill_restores_held_reveal_cards ... FAILED
+old NGSA 2149 bytes: exact decode/encode and restored snapshot match; locks unchanged
+test u01_dddanzhi_regression::dddanzhi_pre_fix_pending_ngsa_retains_content_lock_and_resumes ... ok
+test u01_dddanzhi_regression::dddanzhi_only_first_black_target_is_immune_and_red_does_not_consume ... ok
+test u01_dddanzhi_regression::dddanzhi_discard_without_history_and_last_red_do_not_trigger ... ok
+
+thread 'u01_dddanzhi_regression::dddanzhi_black_view_as_wugu_skips_only_immune_picker_after_restore' (2827777) panicked at crates/engine-native/tests/groups/../u01_dddanzhi_regression.rs:351:75:
+called `Result::unwrap()` on an `Err` value: OpenChoiceMismatch { observer: 0 }
+test u01_dddanzhi_regression::dddanzhi_black_view_as_wugu_skips_only_immune_picker_after_restore ... FAILED
+test u01_dddanzhi_regression::dddanzhi_last_response_color_overrides_used_card_color ... ok
+test u01_dddanzhi_regression::dddanzhi_black_implicit_self_target_is_consumed_and_counted ... ok
+test u01_dddanzhi_regression::dddanzhi_black_multitarget_card_only_loses_the_selected_target ... ok
+test u01_dddanzhi_regression::dddanzhi_ward_expires_at_turn_end_and_survives_grantor_skill_loss ... ok
+test u01_dddanzhi_regression::dddanzhi_target_choice_cancel_and_pending_archive_are_distinct ... ok
+
+failures:
+
+failures:
+    u01_dddanzhi_regression::dddanzhi_black_view_as_wugu_skips_only_immune_picker_after_restore
+    u01_dddanzhi_regression::dddanzhi_wugu_without_skill_restores_held_reveal_cards
+
+test result: FAILED. 8 passed; 2 failed; 0 ignored; 0 measured; 221 filtered out; finished in 0.08s
+
+error: test failed, to rerun pass `-p engine-native --test g1`

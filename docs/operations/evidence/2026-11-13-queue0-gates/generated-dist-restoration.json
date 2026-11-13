@@ -1,0 +1,15 @@
+{
+  "at": "2026-11-13T14:12:09.063473+00:00",
+  "reason": "恢复本批pnpm build改写的已跟踪生成dist；起点这些路径干净，构建产物已备份，产品源码未改。",
+  "backup": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue0-build-dist-mkh3tc5u/validated-dist.tar.gz",
+  "backup_sha256": "5a8b33fab3ad3d157861726b0101ffa9283d4633022f6ef6b6717c34ec0b05ba",
+  "restored_tracked_paths": [
+    "apps/web-client/dist/assets/engine.worker-6iNxSyL2.js",
+    "apps/web-client/dist/assets/engine_wasm_bg-BumAzGma.wasm",
+    "apps/web-client/dist/assets/index-CsFu7D1w.js",
+    "apps/web-client/dist/assets/index-DHWyqN42.css",
+    "apps/web-client/dist/index.html"
+  ],
+  "unrelated_source_restored": false,
+  "remaining_dist_diff": false
+}

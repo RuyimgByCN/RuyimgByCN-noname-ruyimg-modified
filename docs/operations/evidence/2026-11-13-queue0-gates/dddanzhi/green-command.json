@@ -1,0 +1,17 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--test",
+    "g1",
+    "u01_dddanzhi_regression",
+    "--",
+    "--nocapture"
+  ],
+  "env": {
+    "CARGO_INCREMENTAL": "0"
+  }
+}

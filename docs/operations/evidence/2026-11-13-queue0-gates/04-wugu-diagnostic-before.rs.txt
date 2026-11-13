@@ -1,0 +1,30 @@
+/// Adv-21: Empirical discovery of Defect C1-01 (Wugu / Taoyuan missing restore arm in NullifyWindow)
+/// and Defect C1-02 (Wugu cards missing from machine_held_cards in ownership validation).
+/// This test scans a game trajectory, isolates the exact step where Wugu/Taoyuan NullifyWindow is open,
+/// and empirically proves that `restore_snapshot` fails with `UnknownMachine` or `card_missing_from_all_zones`.
+#[test]
+fn test_t5_adv_21_empirical_reproduce_wugu_restore_defects() {
+    let mut session = OpaqueGameSession::new_identity_match(10148, 5).expect("match");
+    let mut defect_observed = false;
+    for _step in 0..40 {
+        if session.is_finished() {
+            break;
+        }
+        let _ = session.auto_step();
+        let hex = session.save_snapshot();
+        if let Err(err_msg) = OpaqueGameSession::restore_snapshot(&hex) {
+            // Defect successfully reproduced!
+            assert!(
+                err_msg.contains("UnknownMachine") || err_msg.contains("card_missing_from_all_zones"),
+                "Expected Defect C1-01 or C1-02, got: {err_msg}"
+            );
+            defect_observed = true;
+            break;
+        }
+    }
+    assert!(
+        defect_observed,
+        "Empirical proof: Seed 10148 must trigger Defect C1-01/C1-02 within 40 steps"
+    );
+}
+

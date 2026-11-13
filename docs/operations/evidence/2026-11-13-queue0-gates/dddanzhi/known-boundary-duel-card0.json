@@ -1,0 +1,20 @@
+{
+  "observed_in": "green-final-rerun.log",
+  "command_file": "green-final-rerun-command.json",
+  "failed_test": "dddanzhi_protects_phase_end_card_until_phase_after",
+  "carrier": {
+    "id": 0,
+    "kind": "Sha",
+    "suit": "Spade",
+    "rank": 7
+  },
+  "path": "black physical carrier through existing Qizuo copy as Duel; phaseAfter branch no longer protected",
+  "observation": "HP branch passed; discard.contains(carrier) failed. No complete state dump was captured in this attempt.",
+  "source_path": "crates/engine-native-kernel/src/kernel/duel.rs",
+  "source_head_equals_working": true,
+  "source_head_sha256": "cce4a70b5001781c87bdd688832b0b767439b96f948f2de0cb2bef8d9360a5ee",
+  "source_working_sha256": "cce4a70b5001781c87bdd688832b0b767439b96f948f2de0cb2bef8d9360a5ee",
+  "cause_from_source": "DuelMachine::finish treats card == 0 as no physical carrier and skips discard/table removal. Physical CardId 0 exists.",
+  "separate_head_runtime_reproduction": "not run; evidence is failed runtime in unchanged Duel path and byte-identical HEAD/current Duel source",
+  "final_dddanzhi_fixture": "Qizuo tests use real nonzero black Jiu carrier to isolate history/lifetime behavior; Duel was not changed"
+}

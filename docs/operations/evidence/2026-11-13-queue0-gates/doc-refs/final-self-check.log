@@ -1,0 +1,10 @@
+PASS reference-only changes: docs/operations/evidence/2026-11-12-u06-huanle-review/README.md
+PASS reference-only changes: docs/operations/evidence/2026-11-12-u07-wudian-review/README.md
+PASS reference-only changes: docs/operations/evidence/2026-11-12-l10-epic-cards-review/README.md
+PASS reference-only changes: docs/operations/evidence/2026-11-12-l27-beautify-review/README.md
+PASS reference-only changes: docs/migration/g0/U05-杀海拾遗.md
+PASS reference-only changes: docs/migration/g0/L19-末日乱斗.md
+PASS reference-only changes: docs/migration/g0/L27-选将美化.md
+PASS reference-only changes: docs/operations/evidence/2026-11-12-step1-choice-channel-prototype/README.md
+PASS reference-only changes: docs/operations/evidence/2026-11-12-u01-ddd-review/README.md
+PASS: 23 original out-of-bounds occurrences across 7 documents; 3 broken link targets across 2 additional documents; 40 replacement range entries resolve.

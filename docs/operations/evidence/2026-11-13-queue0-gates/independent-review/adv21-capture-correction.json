@@ -1,0 +1,17 @@
+{
+  "at": "2026-11-13T21:39:22.047795+08:00",
+  "same_captured_source_sha256": true,
+  "same_captured_diff": true,
+  "invalid_observation_field": "adv21-source-before-acceptance-strengthening.json: observations.requires_command_accepted_or_pending",
+  "reason": "中间实际源码读取后主agent并发补入断言；首次保存证据时已采到加强后的源码。初次探针用不存在的提示文案 continuous step must be accepted 作为检测条件，false不能证明缺少断言。保留该原始探针和diff，以最终检查的真实matches!表达式为准。",
+  "authoritative_final_checks": {
+    "both_sessions_iterated": true,
+    "rejects_rejected_outcome": true,
+    "requires_wugu": true,
+    "checks_full_snapshot": true,
+    "normalizes_only_auth_generation": true,
+    "checks_state_hash": true,
+    "diff_one_hunk": true
+  },
+  "production_changes": false
+}

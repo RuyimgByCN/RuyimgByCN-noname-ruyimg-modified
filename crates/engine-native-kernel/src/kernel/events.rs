@@ -51,6 +51,7 @@ pub(super) fn commit_linked(ctx: &mut Ctx<'_>, frame_id: EventId, player: Player
 /// 出牌提交：牌离开手牌区。杀置桌面等待结算；桃立即回复。
 /// 猴子偷桃（E03）取消的使用的牌已在确认机器中移走，跳过结算。
 pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseData) {
+    let frame_id = ctx.current_frame_id();
     // 奇佐副本载体槽（Boss 郭嘉，规则 v259）：任一非载体卡牌提交即清
     //（副本用牌自身的提交保留槽位，供其 AfterTriggers 过滤拒递归）
     if ctx.core.turn.qizuo_copy != u.card {
@@ -80,6 +81,16 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
             }
         }
     }
+    let nullified = matches!(
+        u.effective_kind(ctx.catalog),
+        CardKind::Tao
+            | CardKind::Jiu
+            | CardKind::Tianxianjiu
+            | CardKind::Zhufangshenshi
+            | CardKind::Caoyao
+            | CardKind::Xuejibingbao
+    )
+        && dddanzhi_remove_targets(ctx, frame_id, &mut u);
     if let Some(card) = u.card {
         if ctx.core.player(u.player).hand.contains(&card) {
             ctx.take_hand_card(u.player, card);
@@ -287,30 +298,38 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
                 .flags
                 .remove(&(u.player, "vm_va_recover_bonus".to_string()))
                 .unwrap_or(0);
-            ctx.recover(u.player, 1u32.saturating_add(bonus), u.card);
+            if !nullified {
+                ctx.recover(u.player, 1u32.saturating_add(bonus), u.card);
+            }
         }
         CardKind::Zhufangshenshi => {
             // 贴房绅视（U05 swd 第十批，规则 v94）：本回合无视距离指定
             // 该目标（sha 距离校验豁免）并摸一张牌。登记差异：上游为
             // 锦囊可被无懈（AI 权重 0 实战不戒），原生简化为直接结算。
-            let t = *u.targets.first().expect("zhufangshenshi has one target");
-            ctx.core.turn.zhufangshenshi_target = Some(t);
             ctx.to_discard(u.card);
-            ctx.start_draw(u.player, 1);
+            if !nullified {
+                let t = *u.targets.first().expect("zhufangshenshi has one target");
+                ctx.core.turn.zhufangshenshi_target = Some(t);
+                ctx.start_draw(u.player, 1);
+            }
         }
         CardKind::Caoyao => {
             // 草药（U05 swd 第三批，规则 v87）：为受伤目标回复 1 点体力
             //（目标合法性在 PlayCard 门控：距离 1 + hp<maxHp）
             ctx.to_discard(u.card);
-            let t = *u.targets.first().expect("caoyao has one target");
-            ctx.recover(t, 1, u.card);
+            if !nullified {
+                let t = *u.targets.first().expect("caoyao has one target");
+                ctx.recover(t, 1, u.card);
+            }
         }
         CardKind::Xuejibingbao => {
             // 雪霁冰雹（swd 卡牌面补切批②）：目标标记 2 个摸牌阶段摸牌
             // 数 +1（Draw 钩消费；重标记在 PlayCard 门控拒绝）
             ctx.to_discard(u.card);
-            let t = *u.targets.first().expect("xuejibingbao has one target");
-            ctx.core.player_mut(t).xuejibingbao = 2;
+            if !nullified {
+                let t = *u.targets.first().expect("xuejibingbao has one target");
+                ctx.core.player_mut(t).xuejibingbao = 2;
+            }
         }
         CardKind::Fengyinzhidan => {
             // 封印之丹（swd 卡牌面补切批②）：随机使用两张普通锦囊牌——
@@ -422,7 +441,9 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
             // 共享每回合一次计数）
             ctx.to_discard(u.card);
             ctx.core.turn.jiu_used = true;
-            ctx.core.turn.jiu_active = true;
+            if !nullified {
+                ctx.core.turn.jiu_active = true;
+            }
         }
         CardKind::Shenmiguo => {
             // 神秘果（swd 卡牌面窗口机批）：载体牌直接弃置（不置桌面）
@@ -447,6 +468,93 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
     if effective.is_basic_trick_or_equip() {
         ctx.core.turn.bte_used_play_phase += 1;
     }
+    if nullified {
+        if let Some(card) = u.card {
+            ctx.core.table.retain(|&c| c != card);
+            if !ctx.core.discard.contains(&card) {
+                ctx.to_discard(card);
+            }
+        }
+    }
+}
+
+/// 暗织（3D精选 skill.js:5825-5836）：接收者独立持有一次黑色目标免疫。
+pub(super) fn dddanzhi_remove_targets(
+    ctx: &mut Ctx<'_>,
+    frame_id: EventId,
+    u: &mut crate::event::CardUseData,
+) -> bool {
+    if !u
+        .suit(ctx.catalog)
+        .is_some_and(|s| matches!(s, crate::catalog::Suit::Spade | crate::catalog::Suit::Club))
+    {
+        return false;
+    }
+    let kind = u.effective_kind(ctx.catalog);
+    let mut targets = match kind {
+        CardKind::Wugu => ctx.core.alive_players().collect(),
+        CardKind::Taoyuan => ctx
+            .core
+            .alive_players()
+            .filter(|&p| p != u.player)
+            .collect(),
+        _ if !u.targets.is_empty() => u.targets.clone(),
+        CardKind::Tao
+        | CardKind::Jiu
+        | CardKind::Tianxianjiu
+        | CardKind::Wuzhong
+        | CardKind::ShanDian => vec![u.player],
+        _ => return false,
+    };
+    let before = targets.len();
+    let card = u.card.expect("black card has a physical suit");
+    targets.retain(|&target| !consume_dddanzhi_ward(ctx, target, card));
+    if targets.len() == before {
+        return false;
+    }
+    u.targets = targets;
+    ctx.res
+        .frame_mut(frame_id)
+        .expect("card use frame")
+        .card_use_mut()
+        .targets = u.targets.clone();
+    if !u.targets.is_empty() && matches!(kind, CardKind::Wugu | CardKind::Taoyuan) {
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((u.player, format!("dddanzhi_targets:{frame_id}")), 1);
+    }
+    u.targets.is_empty() || (kind == CardKind::Jiedao && u.targets.len() < 2)
+}
+
+pub(super) fn consume_dddanzhi_ward(
+    ctx: &mut Ctx<'_>,
+    target: PlayerId,
+    card: crate::ids::CardId,
+) -> bool {
+    if !matches!(
+        ctx.catalog.cards[card as usize].suit,
+        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+    ) {
+        return false;
+    }
+    let stamp = ctx.core.turn.round.saturating_mul(100) + u32::from(ctx.core.turn.current) + 1;
+    let flags = &mut ctx.core.vm_aux.flags;
+    let active = flags
+        .get(&(target, "dddanzhi_immune".to_string()))
+        .copied()
+        .unwrap_or(0)
+        > 0
+        && flags
+            .get(&(target, "dddanzhi_stamp".to_string()))
+            .copied()
+            .unwrap_or(0)
+            == stamp;
+    if active {
+        flags.remove(&(target, "dddanzhi_immune".to_string()));
+        flags.remove(&(target, "dddanzhi_stamp".to_string()));
+    }
+    active
 }
 
 /// E03 翻面提交：取消位为真则跳过翻转（漩涡面具等锁定技）；
@@ -726,6 +834,15 @@ pub(super) fn zhp_def(ctx: &Ctx<'_>) -> crate::ids::SkillDefId {
 
 /// 回合收束：到期技能移除，然后交给下一位存活玩家并开启判定阶段。
 pub(super) fn record_vm_history(ctx: &mut Ctx<'_>, data: &EventData) {
+    // 暗织读全局末牌历史，即使当时未持有/被封禁；不依赖 VM 牌史开关。
+    let card = match data {
+        EventData::CardUsed(u) if !u.cancelled => Some(u.card),
+        EventData::CardResponded { card, .. } => Some(Some(*card)),
+        _ => None,
+    };
+    if let Some(card) = card {
+        record_dddanzhi_card(ctx.core, ctx.catalog, card);
+    }
     // 标准局面没有 VM 技能时不记。空 VmAux 不写摘要，v295 golden 保持。
     if !ctx.catalog.vm_card_history {
         return;
@@ -817,6 +934,28 @@ pub(super) fn record_vm_history(ctx: &mut Ctx<'_>, data: &EventData) {
                 .or_insert(0) |= 4;
         }
         _ => {}
+    }
+}
+
+/// 实际开始的使用/打出；装备 PlayCard 在其前置触发之前调用。
+pub fn record_dddanzhi_card(
+    core: &mut crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    card: Option<crate::ids::CardId>,
+) {
+    if catalog.skill_by_name("dddanzhi").is_none() {
+        return;
+    }
+    let black = card.is_some_and(|c| {
+        matches!(
+            catalog.cards[c as usize].suit,
+            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+        )
+    });
+    for owner in 0..core.players.len() as PlayerId {
+        core.vm_aux
+            .flags
+            .insert((owner, "dddanzhi_last_black".to_string()), u32::from(black));
     }
 }
 

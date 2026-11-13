@@ -1,0 +1,5 @@
+at: 2026-11-13T21:39:40.174588+08:00
+command: git diff --check
+cwd: /Users/ruyimg/Documents/Claude/sanguosha/noname-next
+
+exit_code=0

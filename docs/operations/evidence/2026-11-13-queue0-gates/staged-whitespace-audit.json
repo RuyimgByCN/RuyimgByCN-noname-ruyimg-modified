@@ -1,0 +1,62 @@
+{
+  "at": "2026-11-13T14:22:41.546192+00:00",
+  "all_staged_diff_check": {
+    "argv": [
+      "git",
+      "diff",
+      "--cached",
+      "--check"
+    ],
+    "exit_code": 2,
+    "raw": "staged-whitespace-original.log"
+  },
+  "affected_paths": [
+    "docs/architecture/native-phase-filter-registry.tsv",
+    "docs/operations/evidence/2026-11-13-queue0-gates/04-wugu-diagnostic-before.rs.txt",
+    "docs/operations/evidence/2026-11-13-queue0-gates/04a-wugu-restoration-regression.log",
+    "docs/operations/evidence/2026-11-13-queue0-gates/04b-native-three-complete.log",
+    "docs/operations/evidence/2026-11-13-queue0-gates/04c-wugu-restoration-regression.log",
+    "docs/operations/evidence/2026-11-13-queue0-gates/04d-native-three-complete-final.log",
+    "docs/operations/evidence/2026-11-13-queue0-gates/07-workspace-complete.log",
+    "docs/operations/evidence/2026-11-13-queue0-gates/11-frontend-typecheck.log",
+    "docs/operations/evidence/2026-11-13-queue0-gates/13-smoke-native.log",
+    "docs/operations/evidence/2026-11-13-queue0-gates/16-desktop-tests.log",
+    "docs/operations/evidence/2026-11-13-queue0-gates/18-preflight-first.log",
+    "docs/operations/evidence/2026-11-13-queue0-gates/19-preflight-final.log",
+    "docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/duel-head-source.txt",
+    "docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/final-source-changes.patch",
+    "docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/final-tracked-source-changes.patch",
+    "docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/green-final.log",
+    "docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/source-changes.patch",
+    "docs/operations/evidence/2026-11-13-queue0-gates/independent-review/adv21-final-review.diff",
+    "docs/operations/evidence/2026-11-13-queue0-gates/independent-review/adv21-source-before-acceptance-strengthening.diff",
+    "docs/operations/evidence/2026-11-13-queue0-gates/independent-review/ddd-source-before.txt",
+    "docs/operations/evidence/2026-11-13-queue0-gates/independent-review/final-reviewed-tracked.diff",
+    "docs/operations/evidence/2026-11-13-queue0-gates/independent-review/final-source-audit.txt",
+    "docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-final-reviewed.diff",
+    "docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-initial-reviewed.diff",
+    "docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-current.tsv",
+    "docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed-final.diff",
+    "docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed.diff",
+    "docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-source-audit.txt",
+    "docs/operations/evidence/2026-11-13-queue0-gates/independent-review/static-source-round1.txt",
+    "docs/operations/evidence/2026-11-13-queue0-gates/phase-registry-before.diff",
+    "docs/operations/evidence/2026-11-13-queue0-gates/precheck-02.txt"
+  ],
+  "scope_reason": "原始命令输出和源码diff保留逐字节；六列TSV空依据列必须保留末尾tab，不改写历史32行。",
+  "tsv_rows_including_header": 38,
+  "tsv_columns": 6,
+  "product_tests_scripts_and_authored_docs_check": {
+    "argv": [
+      "git",
+      "diff",
+      "--cached",
+      "--check",
+      "--",
+      ".",
+      ":(exclude)docs/operations/evidence/2026-11-13-queue0-gates/**",
+      ":(exclude)docs/architecture/native-phase-filter-registry.tsv"
+    ],
+    "exit_code": 0
+  }
+}

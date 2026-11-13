@@ -12,6 +12,24 @@ impl MachineSnapshot {
             return m;
         }
         match self {
+            MachineSnapshot::Taoyuan { owner } => Ok(Box::new(crate::kernel::TaoyuanMachine {
+                owner: *owner,
+                card: None,
+            })),
+            MachineSnapshot::Wugu {
+                owner,
+                cards,
+                pickers,
+            } => Ok(Box::new(crate::kernel::WuguMachine {
+                owner: *owner,
+                cards: cards.clone(),
+                pickers: pickers.clone(),
+                stage: if cards.is_empty() {
+                    crate::kernel::WuguStage::Init
+                } else {
+                    crate::kernel::WuguStage::Pick
+                },
+            })),
             MachineSnapshot::JudgeContinuation {
                 owner,
                 queue,

@@ -1,0 +1,257 @@
+{
+  "created_at": "2026-11-13T14:21:49.434433+00:00",
+  "source_head": "3a6e398485db6ef0729abe3013c3c4b7705a5d6d",
+  "tracked_dirty": true,
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "checks": [
+    {
+      "name": "02-line-check-tests",
+      "command": "python3 -B -m unittest discover -s scripts -p test_check_source_lines.py",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "exit_code": 0,
+      "duration_seconds": 0.093,
+      "rust_counts": null,
+      "node_counts": null,
+      "log": "02-line-check-tests.log",
+      "metadata": "02-line-check-tests.json"
+    },
+    {
+      "name": "03b-source-lines-final",
+      "command": "python3 -B scripts/check-source-lines.py",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "exit_code": 0,
+      "duration_seconds": 8.853,
+      "rust_counts": null,
+      "node_counts": null,
+      "log": "03b-source-lines-final.log",
+      "metadata": "03b-source-lines-final.json"
+    },
+    {
+      "name": "04d-native-three-complete-final",
+      "command": "cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "exit_code": 0,
+      "duration_seconds": 61.842,
+      "rust_counts": {
+        "passed": 2442,
+        "failed": 0,
+        "ignored": 6
+      },
+      "node_counts": null,
+      "log": "04d-native-three-complete-final.log",
+      "metadata": "04d-native-three-complete-final.json"
+    },
+    {
+      "name": "05c-strict-all-targets-final",
+      "command": "cargo check -p engine-native-kernel -p engine-native-content -p engine-native -p engine-native-wasm -p content-native-loader --all-targets",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0",
+        "RUSTFLAGS": "-D warnings",
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue0-strict-final-5li1vzx0"
+      },
+      "exit_code": 0,
+      "duration_seconds": 19.222,
+      "rust_counts": null,
+      "node_counts": null,
+      "log": "05c-strict-all-targets-final.log",
+      "metadata": "05c-strict-all-targets-final.json"
+    },
+    {
+      "name": "06b-wasm-check-rustup",
+      "command": "cargo check --target wasm32-unknown-unknown -p engine-native-wasm",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0",
+        "PATH": "/Users/ruyimg/.cargo/bin:/Users/ruyimg/.local/bin:/Library/Frameworks/Python.framework/Versions/3.10/bin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/ruyimg/.codex/tmp/arg0-macos/codex-arg0Fr9rcz:/Users/ruyimg/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/Users/ruyimg/.dbx/bin:/opt/zerobrew/bin:/opt/zerobrew/sbin:/Users/ruyimg/.zerobrew/bin:/Users/ruyimg/.local/share/fnm/node-versions/v26.4.0/installation/bin:/Users/ruyimg/.kimi-code/bin:/Users/ruyimg/.local/bin:/Users/ruyimg/.grok/bin:/Users/ruyimg/.local/state/fnm_multishells/1704_1794573835225/bin:/Users/ruyimg/.opencode/bin:/Users/ruyimg/Library/Android/sdk/cmdline-tools/latest/bin:/Users/ruyimg/Library/Android/sdk/platform-tools:/Users/ruyimg/.cargo/bin:/Users/ruyimg/.bun/bin:/Users/ruyimg/Documents/maven/apache-maven-3.9.10/bin:/Library/Frameworks/Python.framework/Versions/3.10/bin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/ruyimg/Library/Application Support/JetBrains/Toolbox/scripts:/Users/ruyimg/.orbstack/bin:/Users/ruyimg/.lmstudio/bin:/Users/ruyimg/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:/Users/ruyimg/Library/Application Support/JetBrains/Toolbox/scripts:/Users/ruyimg/.orbstack/bin"
+      },
+      "exit_code": 0,
+      "duration_seconds": 37.819,
+      "rust_counts": null,
+      "node_counts": null,
+      "log": "06b-wasm-check-rustup.log",
+      "metadata": "06b-wasm-check-rustup.json"
+    },
+    {
+      "name": "07-workspace-complete",
+      "command": "cargo test --offline --workspace --no-fail-fast",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "exit_code": 0,
+      "duration_seconds": 1103.613,
+      "rust_counts": {
+        "passed": 7838,
+        "failed": 0,
+        "ignored": 8
+      },
+      "node_counts": null,
+      "log": "07-workspace-complete.log",
+      "metadata": "07-workspace-complete.json"
+    },
+    {
+      "name": "08-conformance",
+      "command": "cargo run -p conformance",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "exit_code": 0,
+      "duration_seconds": 22.01,
+      "rust_counts": null,
+      "node_counts": null,
+      "log": "08-conformance.log",
+      "metadata": "08-conformance.json"
+    },
+    {
+      "name": "10d-frontend-tests",
+      "command": "pnpm test",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "exit_code": 0,
+      "duration_seconds": 3.974,
+      "rust_counts": null,
+      "node_counts": null,
+      "log": "10d-frontend-tests.log",
+      "metadata": "10d-frontend-tests.json"
+    },
+    {
+      "name": "11-frontend-typecheck",
+      "command": "pnpm typecheck",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "exit_code": 0,
+      "duration_seconds": 4.296,
+      "rust_counts": null,
+      "node_counts": null,
+      "log": "11-frontend-typecheck.log",
+      "metadata": "11-frontend-typecheck.json"
+    },
+    {
+      "name": "12-build-native",
+      "command": "pnpm build:native",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "exit_code": 0,
+      "duration_seconds": 42.786,
+      "rust_counts": null,
+      "node_counts": null,
+      "log": "12-build-native.log",
+      "metadata": "12-build-native.json"
+    },
+    {
+      "name": "13-smoke-native",
+      "command": "pnpm smoke:native",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "exit_code": 0,
+      "duration_seconds": 4.133,
+      "rust_counts": null,
+      "node_counts": null,
+      "log": "13-smoke-native.log",
+      "metadata": "13-smoke-native.json"
+    },
+    {
+      "name": "14-native-wasm-cross-target",
+      "command": "python3 -B scripts/check-native-wasm-cross-target.py",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "exit_code": 0,
+      "duration_seconds": 64.546,
+      "rust_counts": {
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0
+      },
+      "node_counts": null,
+      "log": "14-native-wasm-cross-target.log",
+      "metadata": "14-native-wasm-cross-target.json"
+    },
+    {
+      "name": "15-cross-target-hash",
+      "command": "bash scripts/cross-target-hash.sh",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "exit_code": 0,
+      "duration_seconds": 6.204,
+      "rust_counts": null,
+      "node_counts": null,
+      "log": "15-cross-target-hash.log",
+      "metadata": "15-cross-target-hash.json"
+    },
+    {
+      "name": "16-desktop-tests",
+      "command": "cargo test -p desktop-client",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "exit_code": 0,
+      "duration_seconds": 182.854,
+      "rust_counts": {
+        "passed": 20,
+        "failed": 0,
+        "ignored": 1
+      },
+      "node_counts": null,
+      "log": "16-desktop-tests.log",
+      "metadata": "16-desktop-tests.json"
+    },
+    {
+      "name": "17-frontend-build",
+      "command": "pnpm build",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "exit_code": 0,
+      "duration_seconds": 4.32,
+      "rust_counts": null,
+      "node_counts": null,
+      "log": "17-frontend-build.log",
+      "metadata": "17-frontend-build.json"
+    },
+    {
+      "name": "22b-preflight-frozen-v4",
+      "command": "python3 -B scripts/preflight.py",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "exit_code": 0,
+      "duration_seconds": 559.165,
+      "rust_counts": null,
+      "node_counts": null,
+      "log": "22b-preflight-frozen-v4.log",
+      "metadata": "22b-preflight-frozen-v4.json"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "expected_remote_before": "99d9091bb28b55e28b620be16d1b7f343682783f",
+  "head": "3a6e398485db6ef0729abe3013c3c4b7705a5d6d",
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "99d9091bb28b55e28b620be16d1b7f343682783f",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "log",
+        "--format=%H %s",
+        "99d9091bb28b55e28b620be16d1b7f343682783f..HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "3a6e398485db6ef0729abe3013c3c4b7705a5d6d docs(native): 2026-11-13 scan of queue items 0-2, flag red gate, rewrite handoff prompt\nafa72d46bb1f7eab49ad952cc1b63303c7a7e86f feat(l25): complete 257/257 upstream equivalence and 6D real-match verification for L25 祖安武将\nb434f0dafcbc966655da265bf6c4925b76b2c28b feat(u08): complete 150/150 upstream equivalence and 6D real-match verification for U08 英雄杀\n87b64c732793979597690c741611d5b88902dcff feat(l20): complete 92/92 non-CSS upstream equivalence and 6D real-match verification for L20 标记补充\na35eb64074052348b594485ac179373451b34ada feat(l19): complete 69/69 upstream equivalence and 6D real-match verification for L19 末日乱斗\ne70f48d2ff102b10a47d1273de8ce398bdd53b09 feat(l27): complete 53/53 gameplay, config & hook upstream equivalence and 6D real-match verification for L27 选将美化\n3138c6b43011ad59756097313de41fca5d4230eb feat(l28): complete 55/55 gameplay & config upstream equivalence and 6D real-match verification for L28 雷霆万钧\n5b265bbceb963d67102156b617ec17e41f8056cd feat(u01): complete 95/95 upstream equivalence and 6D real-match verification for U01 3D精选\n0d5795f3bde907973a61d2f7594220b742afd174 feat(l10): complete 14/14 gameplay & config upstream equivalence and 6D real-match verification for L10 史诗卡牌\n14b2b43f7979e5b20afbf1f51ba75d4eb44a34b1 feat(l29): complete 6/6 gameplay & config upstream equivalence and 6D real-match verification for L29 龙血玄黄\n27ea43c6d4a8f634b24b711c9f05161e547f8fbf feat(l22): complete 8/8 upstream equivalence and 6D real-match verification for L22 段位制裁\na942380cad1a29b9537cee6fbb1196e1ef6bc2b6 feat(l06): complete 3/3 upstream equivalence and 6D real-match verification for L06 wuxing\n6e90433745e0924602080596f71760df5dcb402c feat(u07): complete 36/36 upstream equivalence and 6D real-match verification for U07 玩点论杀\n1b387df16df798cba5715ea550ffefb432eeb70a feat(u06): complete 11/11 upstream equivalence and 6D real-match verification for U06 欢乐卡牌\nc47831ddbb38cb2ff000a5bab400abfa73fcb188 feat(native): prototype Decision 40 choice channel on boss_chuanyun, boss_tianyun, and dddxiaxing (Step 1)\nc9cf9c7def763a17b2b25d2d38100cd7137fd912 chore(step0): clean up workspace, fix choice_routing attitude leak, and calibrate G0/doc honesty\n2e80ee7b3354b4d20b9325733104748fee99aa98 docs(native): 2026-11-11 night scan evidence and rewritten handoff prompt\n057ba178901ee139f7bd02481e297eff74e11169 docs(native): 2026-11-11 scan, revoke \"faithful 4424/0/0\" claims, record Decision 40\n245dd0a939f33907ea4192618e7ebf53a315780d docs(decisions): record Decisions 37-39 for Section 3.4 recommended boundaries\n003b2a44e477abb2933be02c0293ed63f89df909 docs(progress,evidence): record exact-head CI Run 42836669884 (10/10 PASS) for L11 review fixes\n",
+      "stderr": ""
+    }
+  ]
+}

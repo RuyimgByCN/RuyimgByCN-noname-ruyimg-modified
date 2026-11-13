@@ -1,0 +1,14 @@
+--- historical-32
++++ current-37
+@@ -17,6 +17,11 @@
+ WudianXiyang	wudian_xiyang	End	false	已核	v607 反查比对
+ WudianYuedong	wudian_yuedong	Play	false	已核	基准对应章节
+ BossBaiyi	baiyi	Judge	true	已核	基准对应章节
++BossChuanyun	boss_chuanyun	End	true	未核	
++BossTianyun	boss_tianyun	End	true	未核	
++DddXiaxing	dddxiaxing	Prepare	true	未核	
++KMowang	k_mowang	Prepare	true	未核	
++KMowang	k_mowang	End	false	未核	
+ SwdDaixing	daixing	End	false	已核	基准对应章节
+ SwdZhuhai	zhuhai	End	true	已核	基准对应章节
+ SwdRumeng	rumeng	Play	true	已核	基准对应章节

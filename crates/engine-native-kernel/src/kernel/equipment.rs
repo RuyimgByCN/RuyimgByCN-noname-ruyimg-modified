@@ -73,6 +73,19 @@ pub(super) fn commit_equip(
         panic!("commit_equip on non-equip card");
     };
     ctx.take_hand_card(player, card);
+    let played = ctx
+        .core
+        .vm_aux
+        .flags
+        .remove(&(player, format!("dddanzhi_equip_use:{frame_id}")))
+        .is_some();
+    if played && consume_dddanzhi_ward(ctx, player, card) {
+        ctx.to_discard(card);
+        ctx.log(LogEvent::CardNullified { player, card });
+        // 未执行装备效果，不得再派发 equipAfter（如劫行重置）。
+        ctx.res.frame_mut(frame_id).expect("equip frame").stage = crate::event::Stage::Done;
+        return;
+    }
     // 同**栏位**替换（改造后同栏位不同牌种亦替换）
     let replaced = ctx
         .core

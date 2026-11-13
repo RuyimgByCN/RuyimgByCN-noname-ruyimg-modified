@@ -1,0 +1,4 @@
+$ python3 -B scripts/check_local_links.py --all
+检查 2054 个文件，坏链 0
+
+exit_code=0

@@ -1,0 +1,21 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--test",
+    "g1",
+    "u01_dddanzhi_regression",
+    "--",
+    "--nocapture"
+  ],
+  "env": {
+    "CARGO_INCREMENTAL": "0"
+  },
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "started": "2026-11-13T13:27:32.356155+00:00",
+  "returncode": 0,
+  "finished": "2026-11-13T13:27:51.469392+00:00"
+}

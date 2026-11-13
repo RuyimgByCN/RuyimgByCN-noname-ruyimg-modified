@@ -1,0 +1,311 @@
+时间 2026-11-13T20:52:01.828634+08:00
+HEAD 3a6e398485db6ef0729abe3013c3c4b7705a5d6d
+tracked dirty:
+无
+
+$ rg -n source_order\( crates/engine-native-kernel/src crates/engine-native-content/src crates/engine-native/src
+crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs:5:    pub fn source_order(&self) -> Option<(Timing, i32, bool)> {
+crates/engine-native-kernel/src/vocabulary/host/metadata.rs:871:        if let (Some(meta), Some((timing, priority, selectable))) = (&mut meta, self.source_order()) {
+
+exit 0
+
+$ sed -n 168,195p crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs
+            }),
+            // 殁亡（L10 史诗卡牌）：濒死修整、准备阶段归来、结束阶段后崩解
+            HostBehavior::KMowang => Some(TriggerMeta {
+                event: EventKind::Dying,
+                timing: Timing::Normal,
+                priority: 15,
+                order_selectable: false,
+                optional: false,
+                extra_events: vec![EventKind::PhaseBegin, EventKind::PhaseEnd],
+            }),
+            // 烈弓：使用【杀】指定目标后（L20 `fz_liegong` 委托）
+            HostBehavior::FzLiegong => Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 1,
+                order_selectable: false,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 狂骨：自己造成伤害后（可选）
+            HostBehavior::FzXinKuanggu => Some(TriggerMeta {
+                event: EventKind::Damage,
+                timing: Timing::Normal,
+                priority: 0,
+                order_selectable: true,
+                optional: true,
+                extra_events: Vec::new(),
+            }),
+
+exit 0
+
+$ sed -n 858,883p crates/engine-native-kernel/src/vocabulary/host/metadata.rs
+            | HostBehavior::L20MarkBatchB
+            | HostBehavior::U08YxsBatchA
+            | HostBehavior::U08YxsBatchB
+            | HostBehavior::U08YxsBatchC
+            | HostBehavior::U08YxsBatchD
+            | HostBehavior::L25ZuanBatchA
+            | HostBehavior::L25ZuanBatchB
+            | HostBehavior::L25ZuanBatchC
+            | HostBehavior::L25ZuanBatchD
+            | HostBehavior::L25ZuanBatchE
+            | HostBehavior::L25ZuanBatchF
+            | HostBehavior::L25ZuanBatchG => None,
+        };
+        if let (Some(meta), Some((timing, priority, selectable))) = (&mut meta, self.source_order()) {
+            meta.timing = timing;
+            meta.priority = priority;
+            meta.order_selectable = selectable;
+        }
+        meta
+    }
+}
+
+exit 0
+
+$ sed -n 254,276p crates/engine-native-content/src/content/host.rs
+pub fn host_skill_trigger_meta(
+    name: &str,
+    behavior: HostBehavior,
+) -> Option<crate::catalog::TriggerMeta> {
+    match behavior {
+        HostBehavior::U01DddBatchA => step::u01_batch_a::trigger_meta_u01_batch_a(name),
+        HostBehavior::U01DddBatchB => step::u01_batch_b::trigger_meta_u01_batch_b(name),
+        HostBehavior::U01DddBatchC => step::u01_batch_c::trigger_meta_u01_batch_c(name),
+        HostBehavior::U01DddBatchD => step::u01_batch_d::trigger_meta_u01_batch_d(name),
+        HostBehavior::L28ThunderBatchA => step::l28_batch_a::trigger_meta_l28_batch_a(name),
+        HostBehavior::L28ThunderBatchB => step::l28_batch_b::trigger_meta_l28_batch_b(name),
+        HostBehavior::L27BeautifyBatchA => step::l27_batch_a::trigger_meta_l27_batch_a(name),
+        HostBehavior::L27BeautifyBatchB => step::l27_batch_b::trigger_meta_l27_batch_b(name),
+        HostBehavior::L19DoomsdayBatchA => step::l19_batch_a::trigger_meta_l19_batch_a(name),
+        HostBehavior::L19DoomsdayBatchB => step::l19_batch_b::trigger_meta_l19_batch_b(name),
+        HostBehavior::L20MarkBatchA => step::l20_batch_a::trigger_meta_l20_batch_a(name),
+        HostBehavior::L20MarkBatchB | HostBehavior::FzLiegong => {
+            step::l20_batch_b::trigger_meta_l20_batch_b(name)
+        }
+        HostBehavior::U08YxsBatchA => step::u08_batch_a::trigger_meta_u08_batch_a(name),
+        HostBehavior::U08YxsBatchB => step::u08_batch_b::trigger_meta_u08_batch_b(name),
+        HostBehavior::U08YxsBatchC => step::u08_batch_c::trigger_meta_u08_batch_c(name),
+        HostBehavior::U08YxsBatchD => step::u08_batch_d::trigger_meta_u08_batch_d(name),
+
+exit 0
+
+$ sed -n 300,329p crates/engine-native-content/src/content/host/step/l20_batch_b.rs
+    let meta = |event: EventKind, extra_events: Vec<EventKind>| TriggerMeta {
+        event,
+        timing: Timing::Normal,
+        priority: 1,
+        order_selectable: false,
+        optional: false,
+        extra_events,
+    };
+    match name {
+        "zhengsu" => Some(meta(EventKind::PhaseEnd, vec![EventKind::CardUsed, EventKind::Equipped, EventKind::CardsDiscarded])),
+        "zhenyi_spade" => Some(TriggerMeta {
+            event: EventKind::OrdinaryJudge,
+            timing: Timing::First,
+            priority: 2,
+            order_selectable: false,
+            optional: false,
+            extra_events: Vec::new(),
+        }),
+        "xinhongyan" => Some(meta(EventKind::OrdinaryJudge, Vec::new())),
+        "xinfu_langxi" => Some(meta(EventKind::PhaseBegin, Vec::new())),
+        "fz_gzpaoxiao" => Some(meta(EventKind::CardUsed, Vec::new())),
+        "tspowei" => Some(meta(EventKind::TurnBegin, vec![EventKind::PhaseBegin, EventKind::TurnEnded, EventKind::Damage, EventKind::Dying])),
+        "qingyu" => Some(meta(EventKind::DamageBefore, vec![EventKind::PhaseBegin, EventKind::Dying])),
+        // 装备牌在原生出牌路径只发 `Equipped`（不发 CardUsed）——上游 useCard 同计。
+        "mibei" => Some(meta(EventKind::CardUsed, vec![EventKind::PhaseBegin, EventKind::Equipped])),
+        "fz_new_longdan" => Some(meta(EventKind::CardResponded, vec![EventKind::ShaDodged, EventKind::CardUsed])),
+        "fz_new_tieji" | "fz_liegong" => Some(meta(EventKind::CardUsed, Vec::new())),
+        "sbtieji" | "shouye" => Some(meta(EventKind::CardUsed, vec![EventKind::TurnBegin, EventKind::TurnEnded])),
+        "fz_xinkuanggu" => Some(meta(EventKind::Damage, Vec::new())),
+        "rekuanshi" => Some(meta(EventKind::PhaseBegin, vec![EventKind::TurnBegin, EventKind::Damage])),
+
+exit 0
+
+$ sed -n 232,245p crates/engine-native-content/src/content/extension.rs
+            value(&mut h, gen.name.as_bytes());
+            h.update(&[gen.faction as u8, gen.gender as u8]);
+            h.update(&gen.max_hp.to_le_bytes());
+            h.update(&(gen.skills.len() as u64).to_le_bytes());
+            for sk in gen.skills {
+                value(&mut h, sk.as_bytes());
+            }
+        }
+        h.update(&(pack.host_skills.len() as u64).to_le_bytes());
+        for skill in &pack.host_skills {
+            h.update(&(skill.name.len() as u64).to_le_bytes()); h.update(skill.name.as_bytes()); h.update(&skill.behavior.tag().to_le_bytes());
+            if let Some(meta) = crate::content::host::host_skill_trigger_meta(skill.name, skill.behavior) { crate::rvm_bridge::hash_trigger_meta(&mut h, &meta); }
+        }
+        h.update(&(pack.vm_skills.len() as u64).to_le_bytes());
+
+exit 0
+
+$ sed -n 5158,5200p ../archive/upstream/noname-liuli/noname/extension/标记补充/extension.js
+                        },
+                    }
+                    lib.skill.fz_liegong = {
+                        audio: true,
+                        mark: true,
+                        marktext: "眩惑 黄忠烈弓",
+                        intro: { name: '眩惑', content: 'info', },
+                        inherit: "liegong",
+                        shaRelated: true,
+                        audioname: ["re_huangzhong"],
+                        trigger: {
+                            player: "useCardToPlayered",
+                        },
+                        check: function (event, player) {
+                            return get.attitude(player, event.target) <= 0;
+                        },
+                        logTarget: "target",
+                        filter: function (event, player) {
+                            if (event.card.name != 'sha') return false;
+                            var length = event.target.countCards('h');
+                            return (length >= player.hp || length <= player.getAttackRange());
+                        },
+                        preHidden: true,
+                        content: function () {
+                            trigger.getParent().directHit.push(trigger.target);
+                        },
+                        locked: false,
+                        mod: {
+                            attackRange: function (player, distance) {
+                                if (get.zhu(player, 'shouyue')) return distance + 1;
+                            },
+                        },
+                        ai: {
+                            "directHit_ai": true,
+                            skillTagFilter: function (player, tag, arg) {
+                                if (get.attitude(player, arg.target) > 0 || arg.card.name != 'sha') return false;
+                                var length = arg.target.countCards('h');
+                                return (length >= player.hp || length <= player.getAttackRange());
+                            },
+                        },
+                    }
+                    lib.skill.fz_xinkuanggu = {
+                        audio: true,
+
+exit 0
+
+$ sed -n 6456,6497p ../archive/upstream/noname-liuli/noname/character/shenhua.js
+			liegong:{
+				shaRelated:true,
+				audio:2,
+				audioname:['re_huangzhong'],
+				trigger:{player:'useCardToPlayered'},
+				check:function(event,player){
+					return get.attitude(player,event.target)<=0;
+				},
+				logTarget:'target',
+				filter:function(event,player){
+					if(event.card.name!='sha') return false;
+					var length=event.target.countCards('h');
+					return (length>=player.hp||length<=player.getAttackRange());
+				},
+				preHidden:true,
+				content:function(){
+					trigger.getParent().directHit.push(trigger.target);
+				},
+				locked:false,
+				mod:{
+					attackRange:function(player,distance){
+						if(get.zhu(player,'shouyue')) return distance+1;
+					}
+				},
+				ai:{
+					directHit_ai:true,
+					skillTagFilter:function(player,tag,arg){
+						if(get.attitude(player,arg.target)>0||arg.card.name!='sha') return false;
+						var length=arg.target.countCards('h');
+					return (length>=player.hp||length<=player.getAttackRange());
+					},
+				},
+			},
+			kuanggu:{
+				audio:2,
+				audioname:['re_weiyan','ol_weiyan'],
+				trigger:{source:'damageSource'},
+				forced:true,
+				filter:function(event,player){
+					return get.distance(player,event.player)<=1&&player.isDamaged();
+				},
+				content:function(){
+
+exit 0
+
+$ sed -n 60166,60184p ../archive/upstream/noname-liuli/noname/game/game.js
+		//优先度判断
+		priority:function(skill){
+			const info=get.info(skill);
+			if(!info) return 0;
+			if(info.hasOwnProperty('_priority')) return info._priority;
+			let priority=0;
+			if(info.priority){
+				priority=info.priority*100;
+			}
+			if(info.silent){
+				priority++;
+			}
+			if(info.equipSkill) priority-=25;
+			if(info.cardSkill) priority-=50;
+			if(info.ruleSkill) priority-=75;
+			info._priority=priority;
+			return priority;
+		},
+		//新装备栏相关
+
+exit 0
+
+$ sed -n 15276,15289p ../archive/upstream/noname-liuli/noname/game/game.js
+						if(info[1].isOut()&&!lib.skill[info[0]].forceOut) return false;
+						return lib.filter.filterTrigger(trigger,info[1],event.triggername,info[0]);
+					}
+					event.filter2=function(info2){
+						var info=lib.skill[info2[0]];
+						if(!lib.translate[info2[0]]||info.silent) return false;
+						return true;
+					}
+					event.filter3=function(info,info2){
+						return event.filter2(info2)&&event.filter1(info2)&&info2[1]==info[1]&&info[2]==info2[2]&&(lib.skill.global.contains(info2[0])||info[1].hasSkill(info2[0],true));
+					}
+					'step 1'
+					if(trigger.filterStop&&trigger.filterStop()){
+						event.finish();
+
+exit 0
+
+$ sed -n 15325,15351p ../archive/upstream/noname-liuli/noname/game/game.js
+					for(var i=0;i<event.num;i++){
+						if(event.doing.list[i][2]>priority){
+							event.doing.list.splice(i--,1);
+							event.num--;
+						}
+					}
+					event.choice=[];
+					if(event.num<event.doing.list.length-1&&event.filter2(event.doing.list[event.num])){
+						var current=event.doing.list[event.num];
+						event.choice.push(current);
+						for(var i=event.num+1;i<event.doing.list.length;i++){
+							if(event.filter3(current,event.doing.list[i])) event.choice.push(event.doing.list[i]);
+						}
+					}
+					if(event.choice.length<2) event.goto(6);
+					'step 4'
+					var controls=[];
+					event.current=event.choice[0][1]
+					for(var i=0;i<event.choice.length;i++){
+						controls.push(event.choice[i][0]);
+					}
+					event.current.chooseControl(controls)
+					.set('prompt','选择下一个触发的技能').set('forceDie',true).set('arrangeSkill',true).set('includeOut',true)
+					'step 5'
+					if(result.control){
+						for(var i=0;i<event.doing.list.length;i++){
+							if(event.doing.list[i][0]==result.control&&event.doing.list[i][1]==event.current){
+
+exit 0

@@ -1,0 +1,6 @@
+初版引用范围自检（实际执行于本轮）输出：
+Traceback (most recent call last):
+  File "<stdin>", line 17, in <module>
+AssertionError: ('crates/engine-native/tests/g1_wudian/wangmeizhike.rs', '1', '78')
+
+原因：新引用终点手填 78，实际文件结尾为 76；已按完整两个测试函数的实际末行改为 76。该错误在执行最终 check_doc_line_refs.py 前被自检查出。

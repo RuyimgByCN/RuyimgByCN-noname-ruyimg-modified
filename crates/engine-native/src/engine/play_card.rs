@@ -16,7 +16,8 @@ pub(super) fn play_card(
             return Err(RejectReason::IllegalTargets);
         }
         let player = core.turn.current;
-        crate::resolution::push_frame(
+        crate::kernel::record_dddanzhi_card(&mut state.core, catalog, Some(card));
+        let frame = crate::resolution::push_frame(
             &mut state.resolution,
             EventData::Equipped {
                 player,
@@ -24,6 +25,13 @@ pub(super) fn play_card(
                 replaced: None,
             },
         );
+        if catalog.skill_by_name("dddanzhi").is_some() {
+            state
+                .core
+                .vm_aux
+                .flags
+                .insert((player, format!("dddanzhi_equip_use:{frame}")), 1);
+        }
         return Ok(());
     }
     check_play_use_restrictions(core, catalog, card, kind, &targets)?;

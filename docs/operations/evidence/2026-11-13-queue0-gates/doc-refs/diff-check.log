@@ -1,0 +1,3 @@
+$ git diff --check -- <9 authorized docs> docs/operations/evidence/2026-11-13-queue0-gates/doc-refs
+
+exit_code=0

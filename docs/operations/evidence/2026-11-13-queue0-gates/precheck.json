@@ -1,0 +1,86 @@
+{
+  "date": "2026-11-13T20:51:26.774411+08:00",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "log": "precheck-00.txt"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain=v1",
+        "--untracked-files=all"
+      ],
+      "exit_code": 0,
+      "log": "precheck-01.txt"
+    },
+    {
+      "argv": [
+        "git",
+        "worktree",
+        "list",
+        "--porcelain"
+      ],
+      "exit_code": 0,
+      "log": "precheck-02.txt"
+    },
+    {
+      "argv": [
+        "git",
+        "ls-remote",
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+        "refs/heads/native-convergence"
+      ],
+      "exit_code": 0,
+      "log": "precheck-03.txt"
+    },
+    {
+      "argv": [
+        "rustc",
+        "--version"
+      ],
+      "exit_code": 0,
+      "log": "precheck-04.txt"
+    },
+    {
+      "argv": [
+        "cargo",
+        "--version"
+      ],
+      "exit_code": 0,
+      "log": "precheck-05.txt"
+    },
+    {
+      "argv": [
+        "node",
+        "--version"
+      ],
+      "exit_code": 0,
+      "log": "precheck-06.txt"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "--version"
+      ],
+      "exit_code": 0,
+      "log": "precheck-07.txt"
+    },
+    {
+      "argv": [
+        "df",
+        "-h",
+        "."
+      ],
+      "exit_code": 0,
+      "log": "precheck-08.txt"
+    }
+  ]
+}

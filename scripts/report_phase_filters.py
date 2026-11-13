@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
-"""重新生成「阶段过滤审计登记表」（52 条）的骨架，**保留已填的状态列**。
+"""重新生成当前「阶段过滤审计登记表」的骨架，**保留已填的状态列**。
 
 **为什么需要**：`docs/operations/evidence/2026-10-19-phase-audit/registry.txt`
 最初由一段临时脚本生成，**没有入库** ⇒ 无法复现、无法在 filter 改动后重新核对。
 本脚本让它可以「随时重生成」，并**保留人工填好的 `状态`/`依据` 两列**。
+当前表位于 `docs/architecture/native-phase-filter-registry.tsv`；原日期目录的表保留为历史快照。
 
 **切片规则见 `arms()`**（段切片，不截断到第一个 `=>`）——
 切片方式会改变条数（52 vs 51），详见
 `docs/operations/evidence/2026-10-19-g14-guard/slicing.md`。
 
 用法：
-    python3 -B scripts/report_phase_filters.py            # 重生成 registry.txt
+    python3 -B scripts/report_phase_filters.py            # 重生成当前 TSV
     python3 -B scripts/report_phase_filters.py --check     # 只比对，不一致则 exit 1
 """
 
@@ -23,7 +24,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 HOST = ROOT / "crates/engine-native-content/src/content/host"
 KEYS = ROOT / "crates/engine-native-kernel/src/vocabulary/host/keys.rs"
-REG = ROOT / "docs/operations/evidence/2026-10-19-phase-audit/registry.txt"
+REG = ROOT / "docs/architecture/native-phase-filter-registry.tsv"
 
 PHASE = re.compile(r"phase:\s*crate::event::Phase::(\w+),\s*begin:\s*(true|false)")
 BEHAVIOR = re.compile(r"HostBehavior::(\w+)\s*=>")

@@ -1,0 +1,19 @@
+{
+  "block_comment_fake_arm": {
+    "source": "pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::SkillLimits {\n    match behavior {\n        /* HostBehavior::Commented => crate::catalog::SkillLimits { once_per_turn: true }, */\n        HostBehavior::Real => crate::catalog::SkillLimits { once_per_turn: true },\n        _ => crate::catalog::SkillLimits::default(),\n    }\n}\n",
+    "actual": [
+      "Commented",
+      "Real"
+    ],
+    "expected": [
+      "Real"
+    ]
+  },
+  "block_comment_true_inside_false": {
+    "source": "pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::SkillLimits {\n    match behavior {\n        HostBehavior::Unlimited => crate::catalog::SkillLimits { /* once_per_turn: true, */ once_per_turn: false, ..Default::default() },\n        _ => crate::catalog::SkillLimits::default(),\n    }\n}\n",
+    "actual": [
+      "Unlimited"
+    ],
+    "expected": []
+  }
+}

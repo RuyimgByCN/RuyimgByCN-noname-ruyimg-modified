@@ -1,0 +1,152 @@
+{
+  "date": "2026-11-13",
+  "frozen_at": "2026-11-13T13:29:39.022812+00:00",
+  "head": "3a6e398485db6ef0729abe3013c3c4b7705a5d6d",
+  "dirty": true,
+  "production": [
+    "crates/engine-native-content/src/content/host/step/u01_batch_d.rs",
+    "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs",
+    "crates/engine-native-kernel/src/kernel.rs",
+    "crates/engine-native-kernel/src/kernel/equipment.rs",
+    "crates/engine-native-kernel/src/kernel/events.rs",
+    "crates/engine-native-kernel/src/kernel/events/turn.rs",
+    "crates/engine-native-kernel/src/kernel/intrinsic.rs",
+    "crates/engine-native-kernel/src/kernel/tricks.rs",
+    "crates/engine-native-kernel/src/resolution.rs",
+    "crates/engine-native-kernel/src/snap/asks.rs",
+    "crates/engine-native-kernel/src/snap/restore.rs",
+    "crates/engine-native-kernel/src/snap/validation.rs",
+    "crates/engine-native/src/engine/play_card.rs"
+  ],
+  "tests": [
+    "crates/engine-native/tests/groups/g1.rs",
+    "crates/engine-native/tests/u01_dddanzhi_regression.rs"
+  ],
+  "fixture": "crates/engine-native/tests/fixtures/u01-dddanzhi-pending-v107.ngsa",
+  "files": [
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_d.rs",
+      "sha256": "bfb244869571a338c29b4ca09955bebcc44f23a434112e8c5d5888240b508ef4",
+      "bytes": 31478,
+      "physical_lines": 724,
+      "effective_lines": 721
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs",
+      "sha256": "f88656c9b3224f2a18804aba00cfd0e3da36b2b96f28de06d0b62b063c8785a0",
+      "bytes": 22342,
+      "physical_lines": 696,
+      "effective_lines": 683
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel.rs",
+      "sha256": "05e8ad63cb63a3ad94e17a5c4c5ae13739f6b9f411cd22e83e3a124c976c465c",
+      "bytes": 3438,
+      "physical_lines": 103,
+      "effective_lines": 92
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/equipment.rs",
+      "sha256": "86de3b881c41e68eaf6ccb3a8733d4a99819a5c57e71bb24ff5104e68a69ace5",
+      "bytes": 5482,
+      "physical_lines": 154,
+      "effective_lines": 139
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/events.rs",
+      "sha256": "7d3e248a85b9b98bc63035b671cbbc01e45baab081ef0d20320b4d126489f6e6",
+      "bytes": 41069,
+      "physical_lines": 1011,
+      "effective_lines": 873
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/events/turn.rs",
+      "sha256": "a39d889077039d9040a9e04f7a24bc83fac8a9b1d28f099a7890219594eb0ca4",
+      "bytes": 32351,
+      "physical_lines": 735,
+      "effective_lines": 610
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/intrinsic.rs",
+      "sha256": "626c4064c7ba16d542eedfe12f770f8d6d95f62492a8be3d58e8a9f0037ff996",
+      "bytes": 31011,
+      "physical_lines": 725,
+      "effective_lines": 657
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/tricks.rs",
+      "sha256": "92d3fff371ddeb1affc5bc07b0496148a5cd5c69979b8946cbc6f59e069a4c50",
+      "bytes": 20830,
+      "physical_lines": 567,
+      "effective_lines": 519
+    },
+    {
+      "path": "crates/engine-native-kernel/src/resolution.rs",
+      "sha256": "a2f100ca9c74ae66b0f611ea8d24082e446f8718338edb6712900721c5763b07",
+      "bytes": 39430,
+      "physical_lines": 976,
+      "effective_lines": 835
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/asks.rs",
+      "sha256": "eb010a4b4740e72b563a13dcc7ea3df7eaa3f592ffc1f84ac2130361a1b80210",
+      "bytes": 29183,
+      "physical_lines": 900,
+      "effective_lines": 868
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/restore.rs",
+      "sha256": "5a29653b078cf176168e72f49a29c270b0c9c6d5d06f7e738a51f8499e02b21a",
+      "bytes": 19116,
+      "physical_lines": 505,
+      "effective_lines": 496
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/validation.rs",
+      "sha256": "ab64f32f63735458f68f7fb7356daa92dd28602315bd72b442933fb375412f4b",
+      "bytes": 24736,
+      "physical_lines": 688,
+      "effective_lines": 638
+    },
+    {
+      "path": "crates/engine-native/src/engine/play_card.rs",
+      "sha256": "da02ada44729bcde3fbbc7fd41b7d753459ef97c40afbf0419ff87af8ea3cab5",
+      "bytes": 56280,
+      "physical_lines": 1138,
+      "effective_lines": 996
+    },
+    {
+      "path": "crates/engine-native/tests/groups/g1.rs",
+      "sha256": "015883d7e0ed22007f721c3b01095f7511e8866bd58937f759bbf93c413c3a9c",
+      "bytes": 1331,
+      "physical_lines": 60,
+      "effective_lines": null
+    },
+    {
+      "path": "crates/engine-native/tests/u01_dddanzhi_regression.rs",
+      "sha256": "090dea98792933b6544e3b1ce4e7a209f3e8ee7fb36b2735bb9bdbe351b7e847",
+      "bytes": 33624,
+      "physical_lines": 902,
+      "effective_lines": null
+    },
+    {
+      "path": "crates/engine-native/tests/fixtures/u01-dddanzhi-pending-v107.ngsa",
+      "sha256": "3158038e27eb46cffd15b4fc1eb4e378daa381cc9a01e16b96ef8f6656178736",
+      "bytes": 2149
+    }
+  ],
+  "diff_check_returncode": 0,
+  "before_archive_sha256": "3158038e27eb46cffd15b4fc1eb4e378daa381cc9a01e16b96ef8f6656178736",
+  "fixture_matches_before": true,
+  "versions": {
+    "rules": 333,
+    "ngsa": 107,
+    "schema": 5,
+    "abi": 759,
+    "ws": 8
+  },
+  "post_green_whitespace_cleanup": [
+    "crates/engine-native-kernel/src/kernel/equipment.rs",
+    "crates/engine-native-kernel/src/kernel/events.rs"
+  ]
+}

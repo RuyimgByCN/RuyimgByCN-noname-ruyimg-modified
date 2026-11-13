@@ -1,0 +1,169 @@
+{
+  "at": "2026-11-13T21:33:09.314242+08:00",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "head": "3a6e398485db6ef0729abe3013c3c4b7705a5d6d",
+  "tracked_dirty": true,
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "toolchain": {
+    "cargo": "cargo 1.99.1 (5f94df478 2026-08-27) (Homebrew)",
+    "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (Homebrew)"
+  },
+  "files": {
+    "apps/game-server/tests/native_product_path.rs": {
+      "sha256": "89a54c3c8eb011b3c5afb4428d277e8687d6dc683b401e3cc199233b5e02eb56",
+      "bytes": 21724,
+      "head_sha256": "2542850161165cad4822dfcb3afb5e91b2621f3e645c44aeae7c1b4ab23593e6",
+      "equals_HEAD": false
+    },
+    "apps/web-client/scripts/approved-b-metadata.test.mjs": {
+      "sha256": "bd1612ab0c99f082c47264a92baf68ef5c21a3581716a8d23fb8f86d194fc235",
+      "bytes": 7408,
+      "head_sha256": "9f9a8876334b05a94395379fd7e7084b7961115825e95107d3d8068952701a91",
+      "equals_HEAD": false
+    },
+    "crates/engine-native-content/src/content/host/step/u01_batch_d.rs": {
+      "sha256": "bfb244869571a338c29b4ca09955bebcc44f23a434112e8c5d5888240b508ef4",
+      "bytes": 31478,
+      "head_sha256": "f46fce42a8691128b9343dbfe8270b92a64bcacaafd2abd4a6c0bf497d1a398f",
+      "equals_HEAD": false
+    },
+    "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs": {
+      "sha256": "f88656c9b3224f2a18804aba00cfd0e3da36b2b96f28de06d0b62b063c8785a0",
+      "bytes": 22342,
+      "head_sha256": "853094eb44139337180a18429e290a136c9afd3d05c15fc6ed86092285c00be6",
+      "equals_HEAD": false
+    },
+    "crates/engine-native-kernel/src/kernel.rs": {
+      "sha256": "05e8ad63cb63a3ad94e17a5c4c5ae13739f6b9f411cd22e83e3a124c976c465c",
+      "bytes": 3438,
+      "head_sha256": "923ac322c09fd0ba5ee4e59e7c957a56e9b527962d4bef6e51db4cc4182e563d",
+      "equals_HEAD": false
+    },
+    "crates/engine-native-kernel/src/kernel/equipment.rs": {
+      "sha256": "86de3b881c41e68eaf6ccb3a8733d4a99819a5c57e71bb24ff5104e68a69ace5",
+      "bytes": 5482,
+      "head_sha256": "20131de7ea225aff68967e6fc1956b5b0d37b3643f158cdd5bb49485137e14b1",
+      "equals_HEAD": false
+    },
+    "crates/engine-native-kernel/src/kernel/events.rs": {
+      "sha256": "7d3e248a85b9b98bc63035b671cbbc01e45baab081ef0d20320b4d126489f6e6",
+      "bytes": 41069,
+      "head_sha256": "455d310241f57cd17cef6b90b98a4c4aa7b077ece52c4867fa302dd8a1006728",
+      "equals_HEAD": false
+    },
+    "crates/engine-native-kernel/src/kernel/events/turn.rs": {
+      "sha256": "a39d889077039d9040a9e04f7a24bc83fac8a9b1d28f099a7890219594eb0ca4",
+      "bytes": 32351,
+      "head_sha256": "f796a3291760330aa9cbf9c86cd545d728ed16f7986ec7fba2452e0789471801",
+      "equals_HEAD": false
+    },
+    "crates/engine-native-kernel/src/kernel/intrinsic.rs": {
+      "sha256": "626c4064c7ba16d542eedfe12f770f8d6d95f62492a8be3d58e8a9f0037ff996",
+      "bytes": 31011,
+      "head_sha256": "ad75ec070d2b9c224365285096710e8ba85978359473c7cbfb1b6a7d6b0367ca",
+      "equals_HEAD": false
+    },
+    "crates/engine-native-kernel/src/kernel/tricks.rs": {
+      "sha256": "92d3fff371ddeb1affc5bc07b0496148a5cd5c69979b8946cbc6f59e069a4c50",
+      "bytes": 20830,
+      "head_sha256": "a7984ad34135fb0e2386ff475080b6cbe62b39928abe2ae843df3e7593a90b53",
+      "equals_HEAD": false
+    },
+    "crates/engine-native-kernel/src/resolution.rs": {
+      "sha256": "a2f100ca9c74ae66b0f611ea8d24082e446f8718338edb6712900721c5763b07",
+      "bytes": 39430,
+      "head_sha256": "d57cf9a93e9bcf5feecc2c3f8e6f09b708663c57c595ffba0470aab618fb1bf1",
+      "equals_HEAD": false
+    },
+    "crates/engine-native-kernel/src/snap/asks.rs": {
+      "sha256": "eb010a4b4740e72b563a13dcc7ea3df7eaa3f592ffc1f84ac2130361a1b80210",
+      "bytes": 29183,
+      "head_sha256": "29f8899b4df3373fc6b3966805cd2d3b66c51888599cfb2990bf99c2fb6d21f3",
+      "equals_HEAD": false
+    },
+    "crates/engine-native-kernel/src/snap/restore.rs": {
+      "sha256": "5a29653b078cf176168e72f49a29c270b0c9c6d5d06f7e738a51f8499e02b21a",
+      "bytes": 19116,
+      "head_sha256": "aae3dd36d48acfe7d3c7558c099782382d48c043ae66f476ceee76831adcb8c8",
+      "equals_HEAD": false
+    },
+    "crates/engine-native-kernel/src/snap/validation.rs": {
+      "sha256": "ab64f32f63735458f68f7fb7356daa92dd28602315bd72b442933fb375412f4b",
+      "bytes": 24736,
+      "head_sha256": "7eea87423c713cde6417b77a03f2aa4aac3d646410b0f0a78fec4b45b0a7f03c",
+      "equals_HEAD": false
+    },
+    "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs": {
+      "sha256": "1a6f7746cf75330648480b0e46b52f50427a73532f9e6c5a985f502d4382ed13",
+      "bytes": 36158,
+      "head_sha256": "909501d65fa0ba98d0241c18811158961b1cecac71e53fc43601846ec334f923",
+      "equals_HEAD": false
+    },
+    "crates/engine-native/src/engine/play_card.rs": {
+      "sha256": "da02ada44729bcde3fbbc7fd41b7d753459ef97c40afbf0419ff87af8ea3cab5",
+      "bytes": 56280,
+      "head_sha256": "6adccdf6db28919bde95dcfd18b49538bc446eeb54e60e05116c67ca0fc861d7",
+      "equals_HEAD": false
+    },
+    "crates/engine-native/tests/c331_source33_integration.rs": {
+      "sha256": "1e27cc4e8dd0bece7111a40c1dc98f98c86619af0b68f48891e9664c612f8f90",
+      "bytes": 4092,
+      "head_sha256": "8d0587c061cb15c34d697ea890702e59d62a2b3d11ff9505ef50ed782badedc2",
+      "equals_HEAD": false
+    },
+    "crates/engine-native/tests/c331_source_order_phase5.rs": {
+      "sha256": "b23549bad94f0e2d380b6d6b3b712493e258394bdd58d0ddeceeab3240a2ba49",
+      "bytes": 12999,
+      "head_sha256": "822eab9b223225d98f27de6cb3a2096da86271e6b599d539ab1c2ade969b4124",
+      "equals_HEAD": false
+    },
+    "crates/engine-native/tests/groups/g1.rs": {
+      "sha256": "015883d7e0ed22007f721c3b01095f7511e8866bd58937f759bbf93c413c3a9c",
+      "bytes": 1331,
+      "head_sha256": "604cbff12d794fa1bffd4288c3855301a780848aedad3ba7d80b77919c83e0d9",
+      "equals_HEAD": false
+    },
+    "crates/engine-native/tests/u01_dddanzhi_regression.rs": {
+      "sha256": "090dea98792933b6544e3b1ce4e7a209f3e8ee7fb36b2735bb9bdbe351b7e847",
+      "bytes": 33624,
+      "head_sha256": null,
+      "equals_HEAD": false
+    },
+    "crates/engine-native/tests/fixtures/u01-dddanzhi-pending-v107.ngsa": {
+      "sha256": "3158038e27eb46cffd15b4fc1eb4e378daa381cc9a01e16b96ef8f6656178736",
+      "bytes": 2149,
+      "head_sha256": null,
+      "equals_HEAD": false
+    },
+    "crates/engine-native-kernel/src/kernel/duel.rs": {
+      "sha256": "cce4a70b5001781c87bdd688832b0b767439b96f948f2de0cb2bef8d9360a5ee",
+      "bytes": 10647,
+      "head_sha256": "cce4a70b5001781c87bdd688832b0b767439b96f948f2de0cb2bef8d9360a5ee",
+      "equals_HEAD": true
+    },
+    "crates/engine-native-kernel/src/snap/machine_validation.rs": {
+      "sha256": "0cd8cf60fa9496886dbf541dd4de0d653e78fc2c5f05cb14e8107e547867eb1b",
+      "bytes": 20081,
+      "head_sha256": "0cd8cf60fa9496886dbf541dd4de0d653e78fc2c5f05cb14e8107e547867eb1b",
+      "equals_HEAD": true
+    },
+    "crates/engine-native-kernel/src/snap/types.rs": {
+      "sha256": "138672a3c2f39f6021889d35c4125c2d5c4562c350c91e0caa73b3c9e4ddb1df",
+      "bytes": 25138,
+      "head_sha256": "138672a3c2f39f6021889d35c4125c2d5c4562c350c91e0caa73b3c9e4ddb1df",
+      "equals_HEAD": true
+    },
+    "crates/engine-native/src/engine/snapshot.rs": {
+      "sha256": "d94617bb19fea4b4840a5af0856c901ed7675ece0dc5fc131a7f0e2c5417c914",
+      "bytes": 32363,
+      "head_sha256": "d94617bb19fea4b4840a5af0856c901ed7675ece0dc5fc131a7f0e2c5417c914",
+      "equals_HEAD": true
+    }
+  }
+}

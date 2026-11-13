@@ -1,0 +1,44 @@
+worktree /Users/ruyimg/Documents/Claude/sanguosha/noname-next
+HEAD 3a6e398485db6ef0729abe3013c3c4b7705a5d6d
+branch refs/heads/main
+
+worktree /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree
+HEAD 38ab1678df9b4b7b991d3b3122b1d937fd2648a1
+detached
+prunable gitdir file points to non-existent location
+
+worktree /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/worktree
+HEAD 9dbc65530feb695688d3160dc38b6cf64ad39ecd
+detached
+prunable gitdir file points to non-existent location
+
+worktree /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree
+HEAD 2b3348eff0a6a7f07d6f2ba3520e4ca243e344a6
+detached
+prunable gitdir file points to non-existent location
+
+worktree /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree
+HEAD 255bbfbd7f6916ee77bd29799826a225bd10871f
+detached
+prunable gitdir file points to non-existent location
+
+worktree /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/worktree
+HEAD 977cdf1f35bc3f08aba137528a3672f3dad5f391
+detached
+prunable gitdir file points to non-existent location
+
+worktree /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree
+HEAD 100489f554fe89d3389e35196947d9070673c2a1
+detached
+locked initializing
+
+worktree /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree
+HEAD f6b7bb57bf27251b00832243b1e0826e6b3bc751
+detached
+prunable gitdir file points to non-existent location
+
+worktree /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/worktree
+HEAD 44982f45edfb1a365163ecdacc08fa972219684e
+detached
+prunable gitdir file points to non-existent location
+

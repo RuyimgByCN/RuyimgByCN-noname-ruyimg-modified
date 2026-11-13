@@ -489,7 +489,7 @@ pub(crate) fn filter_u01_batch_d(
                 phase: Phase::Prepare,
                 begin: true,
                 ..
-            } => flag(ctx.state, owner, "dddanzhi_last_black") > 0 || !ctx.state.discard.is_empty(),
+            } => flag(ctx.state, owner, "dddanzhi_last_black") > 0,
             _ => false,
         },
         "dddshixing" => match event {

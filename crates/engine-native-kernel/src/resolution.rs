@@ -671,7 +671,9 @@ pub fn run(
                 let kind = res.frame(top).expect("frame").kind;
                 let next = next_stage(kind, Stage::Commit);
                 let f = res.frame_mut(top).expect("frame");
-                f.stage = next;
+                if f.stage != Stage::Done {
+                    f.stage = next;
+                }
                 f.planned = false;
             }
             Stage::Intrinsic => {
@@ -733,7 +735,15 @@ pub fn run(
             }
             Stage::Done => {
                 if let Some(popped) = res.stack.pop() {
-                    if let EventData::CardUsed(_) = &popped.data {
+                    if let EventData::Equipped { player, .. } = &popped.data {
+                        core.vm_aux
+                            .flags
+                            .remove(&(*player, format!("dddanzhi_equip_use:{}", popped.id)));
+                    }
+                    if let EventData::CardUsed(u) = &popped.data {
+                        core.vm_aux
+                            .flags
+                            .remove(&(u.player, format!("dddanzhi_targets:{}", popped.id)));
                         for p in 0..core.players.len() as PlayerId {
                             core.vm_aux
                                 .flags

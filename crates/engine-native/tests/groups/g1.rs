@@ -22,6 +22,9 @@ mod g1_wuxing;
 #[path = "../u01_ddd_eight.rs"]
 mod u01_ddd_eight;
 
+#[path = "../u01_dddanzhi_regression.rs"]
+mod u01_dddanzhi_regression;
+
 #[path = "../l28_thunder_eight_match.rs"]
 mod l28_thunder_eight_match;
 

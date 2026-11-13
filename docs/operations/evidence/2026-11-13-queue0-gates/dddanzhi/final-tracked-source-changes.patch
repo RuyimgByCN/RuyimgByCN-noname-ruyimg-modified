@@ -1,0 +1,578 @@
+diff --git a/crates/engine-native-content/src/content/host/step/u01_batch_d.rs b/crates/engine-native-content/src/content/host/step/u01_batch_d.rs
+index bb0be2bc3..bc8b25d7f 100644
+--- a/crates/engine-native-content/src/content/host/step/u01_batch_d.rs
++++ b/crates/engine-native-content/src/content/host/step/u01_batch_d.rs
+@@ -422,11 +422,7 @@ pub(crate) fn step_u01_batch_d(machine: &mut HostMachine, ctx: &mut Ctx<'_>) ->
+         },
+         "dddanzhi" => {
+             if machine.stage == HostStage::Act && machine.card == Some(1) {
+-                let is_blk = machine
+-                    .cards
+-                    .first()
+-                    .is_some_and(|&c| !is_red(ctx.catalog, c));
+-                set_flag(ctx.core, owner, "dddanzhi_last_black", u32::from(is_blk));
++                // 全局末牌历史由内核记录；保留旧注册以兼容内容锁/挂起机器。
+                 return Flow::Done;
+             }
+             match machine.stage {
+@@ -434,9 +430,6 @@ pub(crate) fn step_u01_batch_d(machine: &mut HostMachine, ctx: &mut Ctx<'_>) ->
+                 HostStage::TargetChoice => {
+                     if let Some(ChoiceOption::Player(t)) = ctx.answer().first().copied() {
+                         set_turn_flag(ctx.core, t, "dddanzhi_immune", "dddanzhi_stamp", 1);
+-                        if t != owner {
+-                            set_turn_flag(ctx.core, owner, "dddanzhi_immune", "dddanzhi_stamp", 1);
+-                        }
+                         ctx.log(LogEvent::SkillTriggered {
+                             skill: "dddanzhi",
+                             owner,
+diff --git a/crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs b/crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs
+index a25adc00c..9ad083586 100644
+--- a/crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs
++++ b/crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs
+@@ -489,7 +489,7 @@ pub(crate) fn filter_u01_batch_d(
+                 phase: Phase::Prepare,
+                 begin: true,
+                 ..
+-            } => flag(ctx.state, owner, "dddanzhi_last_black") > 0 || !ctx.state.discard.is_empty(),
++            } => flag(ctx.state, owner, "dddanzhi_last_black") > 0,
+             _ => false,
+         },
+         "dddshixing" => match event {
+diff --git a/crates/engine-native-kernel/src/kernel.rs b/crates/engine-native-kernel/src/kernel.rs
+index e99c2439d..559a94f6b 100644
+--- a/crates/engine-native-kernel/src/kernel.rs
++++ b/crates/engine-native-kernel/src/kernel.rs
+@@ -67,6 +67,7 @@ pub use damage_flow::DamageFlow;
+ pub use draw::{DrawMachine, DrawPhaseMachine, GainMachine};
+ pub use damage_skill::NativeDamageSkill;
+ mod events;
++pub use events::record_dddanzhi_card;
+ use events::*;
+ mod equipment;
+ use equipment::commit_equip;
+diff --git a/crates/engine-native-kernel/src/kernel/equipment.rs b/crates/engine-native-kernel/src/kernel/equipment.rs
+index 0eb7216f9..8f3c03e58 100644
+--- a/crates/engine-native-kernel/src/kernel/equipment.rs
++++ b/crates/engine-native-kernel/src/kernel/equipment.rs
+@@ -73,6 +73,19 @@ pub(super) fn commit_equip(
+         panic!("commit_equip on non-equip card");
+     };
+     ctx.take_hand_card(player, card);
++    let played = ctx
++        .core
++        .vm_aux
++        .flags
++        .remove(&(player, format!("dddanzhi_equip_use:{frame_id}")))
++        .is_some();
++    if played && consume_dddanzhi_ward(ctx, player, card) {
++        ctx.to_discard(card);
++        ctx.log(LogEvent::CardNullified { player, card });
++        // 未执行装备效果，不得再派发 equipAfter（如劫行重置）。
++        ctx.res.frame_mut(frame_id).expect("equip frame").stage = crate::event::Stage::Done;
++        return;
++    }
+     // 同**栏位**替换（改造后同栏位不同牌种亦替换）
+     let replaced = ctx
+         .core
+diff --git a/crates/engine-native-kernel/src/kernel/events.rs b/crates/engine-native-kernel/src/kernel/events.rs
+index 9b22d43b4..630750114 100644
+--- a/crates/engine-native-kernel/src/kernel/events.rs
++++ b/crates/engine-native-kernel/src/kernel/events.rs
+@@ -51,6 +51,7 @@ pub(super) fn commit_linked(ctx: &mut Ctx<'_>, frame_id: EventId, player: Player
+ /// 出牌提交：牌离开手牌区。杀置桌面等待结算；桃立即回复。
+ /// 猴子偷桃（E03）取消的使用的牌已在确认机器中移走，跳过结算。
+ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseData) {
++    let frame_id = ctx.current_frame_id();
+     // 奇佐副本载体槽（Boss 郭嘉，规则 v259）：任一非载体卡牌提交即清
+     //（副本用牌自身的提交保留槽位，供其 AfterTriggers 过滤拒递归）
+     if ctx.core.turn.qizuo_copy != u.card {
+@@ -80,6 +81,16 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
+             }
+         }
+     }
++    let nullified = matches!(
++        u.effective_kind(ctx.catalog),
++        CardKind::Tao
++            | CardKind::Jiu
++            | CardKind::Tianxianjiu
++            | CardKind::Zhufangshenshi
++            | CardKind::Caoyao
++            | CardKind::Xuejibingbao
++    )
++        && dddanzhi_remove_targets(ctx, frame_id, &mut u);
+     if let Some(card) = u.card {
+         if ctx.core.player(u.player).hand.contains(&card) {
+             ctx.take_hand_card(u.player, card);
+@@ -287,30 +298,38 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
+                 .flags
+                 .remove(&(u.player, "vm_va_recover_bonus".to_string()))
+                 .unwrap_or(0);
+-            ctx.recover(u.player, 1u32.saturating_add(bonus), u.card);
++            if !nullified {
++                ctx.recover(u.player, 1u32.saturating_add(bonus), u.card);
++            }
+         }
+         CardKind::Zhufangshenshi => {
+             // 贴房绅视（U05 swd 第十批，规则 v94）：本回合无视距离指定
+             // 该目标（sha 距离校验豁免）并摸一张牌。登记差异：上游为
+             // 锦囊可被无懈（AI 权重 0 实战不戒），原生简化为直接结算。
+-            let t = *u.targets.first().expect("zhufangshenshi has one target");
+-            ctx.core.turn.zhufangshenshi_target = Some(t);
+             ctx.to_discard(u.card);
+-            ctx.start_draw(u.player, 1);
++            if !nullified {
++                let t = *u.targets.first().expect("zhufangshenshi has one target");
++                ctx.core.turn.zhufangshenshi_target = Some(t);
++                ctx.start_draw(u.player, 1);
++            }
+         }
+         CardKind::Caoyao => {
+             // 草药（U05 swd 第三批，规则 v87）：为受伤目标回复 1 点体力
+             //（目标合法性在 PlayCard 门控：距离 1 + hp<maxHp）
+             ctx.to_discard(u.card);
+-            let t = *u.targets.first().expect("caoyao has one target");
+-            ctx.recover(t, 1, u.card);
++            if !nullified {
++                let t = *u.targets.first().expect("caoyao has one target");
++                ctx.recover(t, 1, u.card);
++            }
+         }
+         CardKind::Xuejibingbao => {
+             // 雪霁冰雹（swd 卡牌面补切批②）：目标标记 2 个摸牌阶段摸牌
+             // 数 +1（Draw 钩消费；重标记在 PlayCard 门控拒绝）
+             ctx.to_discard(u.card);
+-            let t = *u.targets.first().expect("xuejibingbao has one target");
+-            ctx.core.player_mut(t).xuejibingbao = 2;
++            if !nullified {
++                let t = *u.targets.first().expect("xuejibingbao has one target");
++                ctx.core.player_mut(t).xuejibingbao = 2;
++            }
+         }
+         CardKind::Fengyinzhidan => {
+             // 封印之丹（swd 卡牌面补切批②）：随机使用两张普通锦囊牌——
+@@ -422,7 +441,9 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
+             // 共享每回合一次计数）
+             ctx.to_discard(u.card);
+             ctx.core.turn.jiu_used = true;
+-            ctx.core.turn.jiu_active = true;
++            if !nullified {
++                ctx.core.turn.jiu_active = true;
++            }
+         }
+         CardKind::Shenmiguo => {
+             // 神秘果（swd 卡牌面窗口机批）：载体牌直接弃置（不置桌面）
+@@ -447,6 +468,93 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
+     if effective.is_basic_trick_or_equip() {
+         ctx.core.turn.bte_used_play_phase += 1;
+     }
++    if nullified {
++        if let Some(card) = u.card {
++            ctx.core.table.retain(|&c| c != card);
++            if !ctx.core.discard.contains(&card) {
++                ctx.to_discard(card);
++            }
++        }
++    }
++}
++
++/// 暗织（3D精选 skill.js:5825-5836）：接收者独立持有一次黑色目标免疫。
++pub(super) fn dddanzhi_remove_targets(
++    ctx: &mut Ctx<'_>,
++    frame_id: EventId,
++    u: &mut crate::event::CardUseData,
++) -> bool {
++    if !u
++        .suit(ctx.catalog)
++        .is_some_and(|s| matches!(s, crate::catalog::Suit::Spade | crate::catalog::Suit::Club))
++    {
++        return false;
++    }
++    let kind = u.effective_kind(ctx.catalog);
++    let mut targets = match kind {
++        CardKind::Wugu => ctx.core.alive_players().collect(),
++        CardKind::Taoyuan => ctx
++            .core
++            .alive_players()
++            .filter(|&p| p != u.player)
++            .collect(),
++        _ if !u.targets.is_empty() => u.targets.clone(),
++        CardKind::Tao
++        | CardKind::Jiu
++        | CardKind::Tianxianjiu
++        | CardKind::Wuzhong
++        | CardKind::ShanDian => vec![u.player],
++        _ => return false,
++    };
++    let before = targets.len();
++    let card = u.card.expect("black card has a physical suit");
++    targets.retain(|&target| !consume_dddanzhi_ward(ctx, target, card));
++    if targets.len() == before {
++        return false;
++    }
++    u.targets = targets;
++    ctx.res
++        .frame_mut(frame_id)
++        .expect("card use frame")
++        .card_use_mut()
++        .targets = u.targets.clone();
++    if !u.targets.is_empty() && matches!(kind, CardKind::Wugu | CardKind::Taoyuan) {
++        ctx.core
++            .vm_aux
++            .flags
++            .insert((u.player, format!("dddanzhi_targets:{frame_id}")), 1);
++    }
++    u.targets.is_empty() || (kind == CardKind::Jiedao && u.targets.len() < 2)
++}
++
++pub(super) fn consume_dddanzhi_ward(
++    ctx: &mut Ctx<'_>,
++    target: PlayerId,
++    card: crate::ids::CardId,
++) -> bool {
++    if !matches!(
++        ctx.catalog.cards[card as usize].suit,
++        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
++    ) {
++        return false;
++    }
++    let stamp = ctx.core.turn.round.saturating_mul(100) + u32::from(ctx.core.turn.current) + 1;
++    let flags = &mut ctx.core.vm_aux.flags;
++    let active = flags
++        .get(&(target, "dddanzhi_immune".to_string()))
++        .copied()
++        .unwrap_or(0)
++        > 0
++        && flags
++            .get(&(target, "dddanzhi_stamp".to_string()))
++            .copied()
++            .unwrap_or(0)
++            == stamp;
++    if active {
++        flags.remove(&(target, "dddanzhi_immune".to_string()));
++        flags.remove(&(target, "dddanzhi_stamp".to_string()));
++    }
++    active
+ }
+ 
+ /// E03 翻面提交：取消位为真则跳过翻转（漩涡面具等锁定技）；
+@@ -726,6 +834,15 @@ pub(super) fn zhp_def(ctx: &Ctx<'_>) -> crate::ids::SkillDefId {
+ 
+ /// 回合收束：到期技能移除，然后交给下一位存活玩家并开启判定阶段。
+ pub(super) fn record_vm_history(ctx: &mut Ctx<'_>, data: &EventData) {
++    // 暗织读全局末牌历史，即使当时未持有/被封禁；不依赖 VM 牌史开关。
++    let card = match data {
++        EventData::CardUsed(u) if !u.cancelled => Some(u.card),
++        EventData::CardResponded { card, .. } => Some(Some(*card)),
++        _ => None,
++    };
++    if let Some(card) = card {
++        record_dddanzhi_card(ctx.core, ctx.catalog, card);
++    }
+     // 标准局面没有 VM 技能时不记。空 VmAux 不写摘要，v295 golden 保持。
+     if !ctx.catalog.vm_card_history {
+         return;
+@@ -820,6 +937,28 @@ pub(super) fn record_vm_history(ctx: &mut Ctx<'_>, data: &EventData) {
+     }
+ }
+ 
++/// 实际开始的使用/打出；装备 PlayCard 在其前置触发之前调用。
++pub fn record_dddanzhi_card(
++    core: &mut crate::state::GameStateCore,
++    catalog: &crate::catalog::Catalog,
++    card: Option<crate::ids::CardId>,
++) {
++    if catalog.skill_by_name("dddanzhi").is_none() {
++        return;
++    }
++    let black = card.is_some_and(|c| {
++        matches!(
++            catalog.cards[c as usize].suit,
++            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
++        )
++    });
++    for owner in 0..core.players.len() as PlayerId {
++        core.vm_aux
++            .flags
++            .insert((owner, "dddanzhi_last_black".to_string()), u32::from(black));
++    }
++}
++
+ /// 积财（Boss 饕餮，规则 v216）：回复结算后——回复者==持有者 → 持有
+ /// 者摸 2；否则持有者与回复者各摸 1（上游 boss_jicai recoverAfter 同
+ /// 口径；仅实际回复量>0 的 Recover 事件进入）。
+diff --git a/crates/engine-native-kernel/src/kernel/events/turn.rs b/crates/engine-native-kernel/src/kernel/events/turn.rs
+index 87fc18e28..fa689b5c8 100644
+--- a/crates/engine-native-kernel/src/kernel/events/turn.rs
++++ b/crates/engine-native-kernel/src/kernel/events/turn.rs
+@@ -144,6 +144,17 @@ pub(in crate::kernel) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: Playe
+                 });
+             }
+         }
++        // 暗织覆盖 phaseEnd，须在 phaseAfter 的 BeforeTriggers 收集前到期。
++        for seat in 0..ctx.core.players.len() as PlayerId {
++            ctx.core
++                .vm_aux
++                .flags
++                .remove(&(seat, "dddanzhi_immune".to_string()));
++            ctx.core
++                .vm_aux
++                .flags
++                .remove(&(seat, "dddanzhi_stamp".to_string()));
++        }
+         ctx.emit(EventData::TurnEndWindow {
+             player,
+             after: true,
+diff --git a/crates/engine-native-kernel/src/kernel/intrinsic.rs b/crates/engine-native-kernel/src/kernel/intrinsic.rs
+index f5f42c930..896be6289 100644
+--- a/crates/engine-native-kernel/src/kernel/intrinsic.rs
++++ b/crates/engine-native-kernel/src/kernel/intrinsic.rs
+@@ -55,12 +55,22 @@ pub fn intrinsic_machine(
+             round_used: false,
+             guihan_asked: false,
+         })),
+-        EventData::CardUsed(u) => {
++        EventData::CardUsed(mut u) => {
+             // 筑城守卫（U07 批三，规则 v113）等 AfterTriggers 机器写回的
+             // 取消：跳过结算（杀已由守卫归还手牌）
+             if u.cancelled {
+                 return None;
+             }
++            // 追加/移除目标的 after 窗口已完成，按最终目标消费一次免疫。
++            if dddanzhi_remove_targets(ctx, frame_id, &mut u) {
++                if let Some(card) = u.card {
++                    if ctx.core.table.contains(&card) {
++                        ctx.core.table.retain(|&c| c != card);
++                        ctx.to_discard(card);
++                    }
++                }
++                return None;
++            }
+             let effective_kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
+             // 目标被结算窗全部移出（贞烈等「移出目标」类，swd 批 139）：
+             // 需要「恰一名目标」的牌种在目标清空后不结算（避免机器对
+diff --git a/crates/engine-native-kernel/src/kernel/tricks.rs b/crates/engine-native-kernel/src/kernel/tricks.rs
+index bfa90ab21..820f38a91 100644
+--- a/crates/engine-native-kernel/src/kernel/tricks.rs
++++ b/crates/engine-native-kernel/src/kernel/tricks.rs
+@@ -1,5 +1,14 @@
+ use super::*;
+ 
++fn take_dddanzhi_targets(ctx: &mut Ctx<'_>, owner: PlayerId) -> Option<Vec<PlayerId>> {
++    let frame = ctx.current_frame_id();
++    ctx.core
++        .vm_aux
++        .flags
++        .remove(&(owner, format!("dddanzhi_targets:{frame}")))?;
++    ctx.current_card_use().ok().map(|u| u.targets.clone())
++}
++
+ /// 无中生有结算：使用者摸 2。
+ #[derive(Clone)]
+ pub struct WuzhongMachine {
+@@ -53,11 +62,15 @@ impl crate::catalog::SkillMachine for TaoyuanMachine {
+         crate::snap::MachineSnapshot::Taoyuan { owner: self.owner }
+     }
+     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+-        let others: Vec<PlayerId> = ctx
++        let card = ctx.current_card_use().ok().and_then(|u| u.card);
++        let mut others: Vec<PlayerId> = ctx
+             .core
+             .alive_players()
+             .filter(|p| *p != self.owner)
+             .collect();
++        if let Some(targets) = take_dddanzhi_targets(ctx, self.owner) {
++            others.retain(|p| targets.contains(p));
++        }
+         for p in others {
+             let (hp, max) = {
+                 let pl = ctx.core.player(p);
+@@ -67,14 +80,11 @@ impl crate::catalog::SkillMachine for TaoyuanMachine {
+                 ctx.recover(p, 1, None);
+             }
+         }
+-        if let Some(pos) = ctx
+-            .core
+-            .table
+-            .iter()
+-            .position(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Taoyuan)
+-        {
+-            let card = ctx.core.table.remove(pos);
+-            ctx.to_discard(card);
++        if let Some(card) = card {
++            if let Some(pos) = ctx.core.table.iter().position(|&c| c == card) {
++                ctx.core.table.remove(pos);
++                ctx.to_discard(card);
++            }
+         }
+         Flow::Done
+     }
+@@ -159,6 +169,9 @@ impl crate::catalog::SkillMachine for WuguMachine {
+                 let new_len = ctx.core.deck.len() - take;
+                 self.cards = ctx.core.deck.split_off(new_len);
+                 self.pickers = alive;
++                if let Some(targets) = take_dddanzhi_targets(ctx, self.owner) {
++                    self.pickers.retain(|p| targets.contains(p));
++                }
+                 self.stage = WuguStage::Pick;
+                 self.open_pick(ctx)
+             }
+@@ -240,14 +253,11 @@ impl WuguMachine {
+                 ctx.to_discard(c);
+             }
+         }
+-        if let Some(c) = ctx
+-            .core
+-            .table
+-            .iter()
+-            .position(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Wugu)
+-        {
+-            let card = ctx.core.table.remove(c);
+-            ctx.to_discard(card);
++        if let Some(card) = ctx.current_card_use().ok().and_then(|u| u.card) {
++            if let Some(c) = ctx.core.table.iter().position(|&c| c == card) {
++                ctx.core.table.remove(c);
++                ctx.to_discard(card);
++            }
+         }
+         Flow::Done
+     }
+diff --git a/crates/engine-native-kernel/src/resolution.rs b/crates/engine-native-kernel/src/resolution.rs
+index e2d508b57..0261c0f17 100644
+--- a/crates/engine-native-kernel/src/resolution.rs
++++ b/crates/engine-native-kernel/src/resolution.rs
+@@ -671,7 +671,9 @@ pub fn run(
+                 let kind = res.frame(top).expect("frame").kind;
+                 let next = next_stage(kind, Stage::Commit);
+                 let f = res.frame_mut(top).expect("frame");
+-                f.stage = next;
++                if f.stage != Stage::Done {
++                    f.stage = next;
++                }
+                 f.planned = false;
+             }
+             Stage::Intrinsic => {
+@@ -733,7 +735,15 @@ pub fn run(
+             }
+             Stage::Done => {
+                 if let Some(popped) = res.stack.pop() {
+-                    if let EventData::CardUsed(_) = &popped.data {
++                    if let EventData::Equipped { player, .. } = &popped.data {
++                        core.vm_aux
++                            .flags
++                            .remove(&(*player, format!("dddanzhi_equip_use:{}", popped.id)));
++                    }
++                    if let EventData::CardUsed(u) = &popped.data {
++                        core.vm_aux
++                            .flags
++                            .remove(&(u.player, format!("dddanzhi_targets:{}", popped.id)));
+                         for p in 0..core.players.len() as PlayerId {
+                             core.vm_aux
+                                 .flags
+diff --git a/crates/engine-native-kernel/src/snap/asks.rs b/crates/engine-native-kernel/src/snap/asks.rs
+index 60d852a75..8115e1ae3 100644
+--- a/crates/engine-native-kernel/src/snap/asks.rs
++++ b/crates/engine-native-kernel/src/snap/asks.rs
+@@ -208,6 +208,20 @@ pub fn active_ask(
+             judge::active_judge_ask(owner, current, core, catalog)
+         }
+         MachineSnapshot::PlaceDelayed { .. } => None,
++        MachineSnapshot::Wugu { cards, pickers, .. } => {
++            if cards.is_empty() {
++                return None;
++            }
++            Some(ask(
++                *pickers.first()?,
++                "wugu_pick",
++                ChoiceKind::SelectCards,
++                hand_card_options(cards),
++                1,
++                1,
++                false,
++            ))
++        }
+         MachineSnapshot::Aoe { inner, .. } => {
+             let e = inner.as_deref()?;
+             active_ask(e, core, catalog)
+diff --git a/crates/engine-native-kernel/src/snap/restore.rs b/crates/engine-native-kernel/src/snap/restore.rs
+index 8be9a7bbb..52428c023 100644
+--- a/crates/engine-native-kernel/src/snap/restore.rs
++++ b/crates/engine-native-kernel/src/snap/restore.rs
+@@ -12,6 +12,24 @@ impl MachineSnapshot {
+             return m;
+         }
+         match self {
++            MachineSnapshot::Taoyuan { owner } => Ok(Box::new(crate::kernel::TaoyuanMachine {
++                owner: *owner,
++                card: None,
++            })),
++            MachineSnapshot::Wugu {
++                owner,
++                cards,
++                pickers,
++            } => Ok(Box::new(crate::kernel::WuguMachine {
++                owner: *owner,
++                cards: cards.clone(),
++                pickers: pickers.clone(),
++                stage: if cards.is_empty() {
++                    crate::kernel::WuguStage::Init
++                } else {
++                    crate::kernel::WuguStage::Pick
++                },
++            })),
+             MachineSnapshot::JudgeContinuation {
+                 owner,
+                 queue,
+diff --git a/crates/engine-native-kernel/src/snap/validation.rs b/crates/engine-native-kernel/src/snap/validation.rs
+index 68c092b41..023e5fa7c 100644
+--- a/crates/engine-native-kernel/src/snap/validation.rs
++++ b/crates/engine-native-kernel/src/snap/validation.rs
+@@ -536,6 +536,7 @@ pub fn machine_held_cards(m: &MachineSnapshot, out: &mut Vec<CardId>) {
+             out.extend(card);
+         }
+         MachineSnapshot::GuanXing { top, .. } => out.extend(top.iter().copied()),
++        MachineSnapshot::Wugu { cards, .. } => out.extend(cards.iter().copied()),
+         // 末焱/调兵遣将展示牌已离开牌库，挂起期间只在宿主机器上。
+         MachineSnapshot::Host {
+             behavior, cards, ..
+diff --git a/crates/engine-native/src/engine/play_card.rs b/crates/engine-native/src/engine/play_card.rs
+index 694f8c707..be9d6f743 100644
+--- a/crates/engine-native/src/engine/play_card.rs
++++ b/crates/engine-native/src/engine/play_card.rs
+@@ -16,7 +16,8 @@ pub(super) fn play_card(
+             return Err(RejectReason::IllegalTargets);
+         }
+         let player = core.turn.current;
+-        crate::resolution::push_frame(
++        crate::kernel::record_dddanzhi_card(&mut state.core, catalog, Some(card));
++        let frame = crate::resolution::push_frame(
+             &mut state.resolution,
+             EventData::Equipped {
+                 player,
+@@ -24,6 +25,13 @@ pub(super) fn play_card(
+                 replaced: None,
+             },
+         );
++        if catalog.skill_by_name("dddanzhi").is_some() {
++            state
++                .core
++                .vm_aux
++                .flags
++                .insert((player, format!("dddanzhi_equip_use:{frame}")), 1);
++        }
+         return Ok(());
+     }
+     check_play_use_restrictions(core, catalog, card, kind, &targets)?;
+diff --git a/crates/engine-native/tests/groups/g1.rs b/crates/engine-native/tests/groups/g1.rs
+index 850640ed7..24f34710e 100644
+--- a/crates/engine-native/tests/groups/g1.rs
++++ b/crates/engine-native/tests/groups/g1.rs
+@@ -22,6 +22,9 @@ mod g1_wuxing;
+ #[path = "../u01_ddd_eight.rs"]
+ mod u01_ddd_eight;
+ 
++#[path = "../u01_dddanzhi_regression.rs"]
++mod u01_dddanzhi_regression;
++
+ #[path = "../l28_thunder_eight_match.rs"]
+ mod l28_thunder_eight_match;
+ 

@@ -1,0 +1,158 @@
+   Compiling engine-native-kernel v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1m 03s
+     Running unittests src/lib.rs (target/debug/deps/engine_native-6869373975421c7f)
+
+running 15 tests
+test ai::remap::tests::host_scalar_payloads_are_never_generic_card_references ... ok
+test a0_lib_tests::standard_skill_ids_append_only ... ok
+test engine::tests::ruleset_version_changes_digest ... ok
+test ai::redact::active_candidate_tests::variant_one_does_not_include_active_skill_candidates ... ok
+test ai::redact::active_candidate_tests::variant_zero_does_not_include_active_skill_candidates ... ok
+test ai::redact::active_candidate_tests::variant_two_weights_damage_by_enemy_skill_threat ... ok
+test engine::tests::park_machine_state_changes_digest ... ok
+test a0_lib_tests::host_behavior_keys_bijective ... ok
+test ai::redact::active_candidate_tests::variant_two_can_choose_granted_active_skill ... ok
+test engine::choice_source::tests::source_catalog_alias_is_not_resolved_by_first_match ... ok
+test engine::commands::pa02_simulation_tests::simulation_submit_skips_session_work_and_matches_authoritative_state ... ok
+test engine::choice_source::tests::source_uses_only_the_actual_direct_inner_ask ... ok
+test engine::choice_source::tests::source_requires_actual_ready_consumer_not_just_a_unique_active_ask ... ok
+test ai::redact::active_candidate_tests::variant_two_includes_granted_active_skill_candidates ... ok
+test engine::choice_source::tests::source_wrong_shape_multiple_asks_and_unowned_defs_stay_unknown ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/groups/e2e.rs (target/debug/deps/e2e-4244f7518b56b221)
+
+running 113 tests
+test e2e_tier1_part1::test_t1_f5_phase_enum_distinct_2 ... ok
+test e2e_tier1_part1::test_t1_f5_inactive_player_next_phase_rejected_3 ... ok
+test e2e_harness::tests::test_harness_match_startup ... ok
+test e2e_tier1_part1::test_t1_f5_stale_revision_next_phase_rejected_5 ... ok
+test e2e_tier1_part1::test_t1_f6_open_choice_json_format_4 ... ok
+test e2e_tier1_part1::test_t1_f6_out_of_bounds_target_seat_rejected_2 ... ok
+test e2e_tier1_part1::test_t1_f6_invalid_card_play_rejected_1 ... ok
+test e2e_harness::tests::test_harness_rejection_zero_mutation ... ok
+test e2e_tier1_part1::test_t1_f7_duplicate_dedup_skill_activation_rejected_4 ... ok
+test e2e_tier1_part1::test_t1_f7_unknown_skill_activation_rejected_1 ... ok
+test e2e_tier1_part1::test_t1_f7_inactive_seat_skill_activation_rejected_2 ... ok
+test e2e_tier1_part1::test_t1_f7_stale_revision_skill_activation_rejected_3 ... ok
+test e2e_tier1_part1::test_t1_f6_legal_actions_target_bounds_3 ... ok
+test e2e_tier1_part1::test_t1_f5_phase_progression_1 ... ok
+test e2e_tier1_part1::test_t1_f8_answer_by_inactive_player_rejected_4 ... ok
+test e2e_tier1_part1::test_t1_f8_answer_without_open_choice_rejected_3 ... ok
+test e2e_tier1_part1::test_t1_f6_legal_actions_json_format_5 ... ok
+test e2e_tier1_part1::test_t1_f7_rejected_skill_activation_preserves_hash_5 ... ok
+test e2e_harness::tests::test_harness_step_resolution ... ok
+test e2e_tier1_part2::test_t1_f10_duplicate_dedup_id_rejected_4 ... ok
+test e2e_tier1_part2::test_t1_f10_out_of_turn_card_play_rejected_2 ... ok
+test e2e_tier1_part2::test_t1_f10_unknown_actor_rejected_5 ... ok
+test e2e_tier1_part2::test_t1_f9_active_player_has_legal_actions_4 ... ok
+test e2e_tier1_part2::test_t1_f10_unowned_card_play_rejected_1 ... ok
+test e2e_tier1_part2::test_t1_f10_stale_revision_rejected_3 ... ok
+test e2e_tier1_part2::test_t1_invalid_seat_count_rejected ... ok
+test e2e_tier1_part2::test_t1_f9_auto_step_advances_state_3 ... ok
+test e2e_tier1_part2::test_t1_f9_initial_hand_card_count_2 ... ok
+test e2e_tier1_part2::test_t1_monotonic_revision_increment ... ok
+test e2e_tier1_part2::test_t1_f9_initial_hp_distribution_1 ... ok
+test e2e_tier1_part1::test_t1_f8_initial_snapshot_roundtrip_5 ... ok
+test e2e_tier1_part2::test_t1_session_initial_state_invariants ... ok
+test e2e_tier2_part1::test_t2_f5_timing_boundary_1 ... ok
+test e2e_tier1_part2::test_t1_repeated_invalid_skill_preserves_hash ... ok
+test e2e_tier1_part2::test_t1_deterministic_multiple_snapshot_restores ... ok
+test e2e_tier2_part1::test_t2_f5_timing_boundary_3 ... ok
+test e2e_tier2_part1::test_t2_f5_timing_boundary_2 ... ok
+test e2e_tier2_part1::test_t2_f5_timing_boundary_5 ... ok
+test e2e_tier2_part1::test_t2_f6_choice_boundary_1 ... ok
+test e2e_tier2_part1::test_t2_f6_choice_boundary_3 ... ok
+test e2e_tier1_part2::test_t1_snapshot_hex_encoding_format ... ok
+test e2e_tier2_part1::test_t2_f7_skill_boundary_1 ... ok
+test e2e_tier2_part1::test_t2_f7_skill_boundary_2 ... ok
+test e2e_tier2_part1::test_t2_f6_choice_boundary_4 ... ok
+test e2e_tier2_part1::test_t2_f7_skill_boundary_4 ... ok
+test e2e_tier2_part1::test_t2_f8_archive_restore_boundary_2 ... ok
+test e2e_tier2_part1::test_t2_f6_choice_boundary_2 ... ok
+test e2e_tier2_part1::test_t2_f7_skill_boundary_5 ... ok
+test e2e_tier2_part1::test_t2_f7_skill_boundary_3 ... ok
+test e2e_tier2_part1::test_t2_f8_archive_restore_boundary_1 ... ok
+test e2e_tier2_part2::test_t2_f10_counterexample_boundary_1 ... ok
+test e2e_tier2_part2::test_t2_f10_counterexample_boundary_3 ... ok
+test e2e_tier2_part1::test_t2_f8_archive_restore_boundary_3 ... ok
+test e2e_tier2_part2::test_t2_f10_counterexample_boundary_4 ... ok
+test e2e_tier2_part2::test_t2_f9_real_event_boundary_1 ... ok
+test e2e_tier2_part2::test_t2_f10_counterexample_boundary_5 ... ok
+test e2e_tier2_part2::test_t2_f9_real_event_boundary_2 ... ok
+test e2e_tier2_part1::test_t2_f6_choice_boundary_5 ... ok
+test e2e_tier2_part2::test_t2_f9_real_event_boundary_3 ... ok
+test e2e_tier2_part2::test_t2_f9_real_event_boundary_5 ... ok
+test e2e_tier2_part2::test_t2_invalid_seat_counts_rejected ... ok
+test e2e_tier2_part2::test_t2_f9_real_event_boundary_4 ... ok
+test e2e_harness::tests::test_harness_snapshot_roundtrip ... ok
+test e2e_tier2_part2::test_t2_out_of_bounds_seat_queries_return_none ... ok
+test e2e_tier2_part2::test_t2_rejected_command_state_immutability ... ok
+test e2e_tier3_interactions::test_t3_interaction_15_play_phase_invalid_card_rejected ... ok
+test e2e_harness::tests::test_harness_choice_answering ... ok
+test e2e_tier2_part1::test_t2_f8_archive_restore_boundary_5 ... ok
+test e2e_tier2_part1::test_t2_f8_archive_restore_boundary_4 ... ok
+test e2e_tier3_interactions::test_t3_interaction_4_interactive_target_counterexample ... ok
+test e2e_tier2_part2::test_t2_midgame_snapshot_recovery ... ok
+test e2e_tier3_interactions::test_t3_interaction_6_open_choice_json_seat_projection ... ok
+test e2e_tier3_interactions::test_t3_interaction_17_ngsa_archive_magic_and_restore ... ok
+test e2e_tier2_part1::test_t2_f5_timing_boundary_4 ... ok
+test e2e_tier2_part2::test_t2_f10_counterexample_boundary_2 ... ok
+test e2e_tier1_part2::test_t1_run_until_step_limit ... ok
+test e2e_tier4_scenarios::test_t4_scenario_5_malicious_save_fault_injection_zero_leak ... ok
+test e2e_tier1_part1::test_t1_f5_turn_rotation_to_next_seat_4 ... ok
+test e2e_tier3_interactions::test_t3_interaction_8_counterexample_prng_sampling ... ok
+test e2e_tier5_adversarial_c1::test_t5_adv_01_unknown_actor_boundary ... ok
+test e2e_tier1_part1::test_t1_f8_snapshot_roundtrip_2 ... ok
+test e2e_tier5_adversarial_c1::test_t5_adv_03_duplicate_and_zero_dedup_id ... ok
+test e2e_tier5_adversarial_c1::test_t5_adv_04_out_of_turn_phase_advancement ... ok
+test e2e_tier1_part1::test_t1_f8_open_choice_projection_1 ... ok
+test e2e_tier3_interactions::test_t3_interaction_5_multi_step_event_progression ... ok
+test e2e_tier5_adversarial_c1::test_t5_adv_02_stale_and_future_revision ... ok
+test e2e_tier1_part2::test_t1_f9_bounded_simulation_steps_5 ... ok
+test e2e_tier5_adversarial_c1::test_t5_adv_09_time_sliced_suspension_rejection ... ok
+test e2e_tier5_adversarial_c1::test_t5_adv_10_abort_segment_checkpoint_rollback ... ok
+test e2e_tier3_interactions::test_t3_interaction_3_phase_advance_save_restore_roundtrip ... ok
+test e2e_tier5_adversarial_c1::test_t5_adv_12_malformed_hex_decoding_fuzz ... ok
+test e2e_tier5_adversarial_c1::test_t5_adv_13_forged_checksum_payload_corruption ... ok
+test e2e_tier3_interactions::test_t3_interaction_16_midgame_save_restore_continuation ... ok
+test e2e_tier5_adversarial_c1::test_t5_adv_15_rng_deterministic_trajectory_invariance ... ok
+test e2e_tier5_adversarial_c1::test_t5_adv_14_ruleset_version_tamper_rejection ... ok
+test e2e_tier5_adversarial_c1::test_t5_adv_08_choice_invalid_and_duplicate_selection ... ok
+test e2e_tier4_scenarios::test_t4_scenario_6_standard_4p_match_progression_and_roundtrip ... ok
+test e2e_tier5_adversarial_c1::test_t5_adv_07_choice_wrong_observer_impersonation ... ok
+test e2e_tier5_adversarial_c1::test_t5_adv_06_choice_pending_command_lockout ... ok
+test e2e_tier5_adversarial_c1::test_t5_adv_11_time_slice_resume_trajectory_invariance ... ok
+test e2e_tier5_adversarial_c1::test_t5_adv_16_rng_save_restore_interrupted_parity ... ok
+test e2e_tier5_adversarial_c1::test_t5_adv_05_post_match_outcome_lockout ... ok
+test e2e_tier5_adversarial_c1::test_t5_adv_19_self_targeting_other_trick_rejected ... ok
+test e2e_tier4_scenarios::test_t4_scenario_2_identity_8p_multi_turn_progression ... ok
+test e2e_tier5_adversarial_c1::test_t5_adv_17_concurrent_multi_thread_isolation_stress ... ok
+test e2e_tier4_scenarios::test_t4_scenario_3_client_disconnect_reconnect_recovery ... ok
+test e2e_tier4_scenarios::test_t4_scenario_1_identity_5p_midgame_save_restore ... ok
+test e2e_tier5_adversarial_c1::test_t5_adv_21_empirical_reproduce_wugu_restore_defects ... FAILED
+test e2e_tier4_scenarios::test_t4_scenario_10_deterministic_trajectory_parity_and_seed_divergence ... ok
+test e2e_tier5_adversarial_c1::test_t5_adv_18_identity_8p_long_run_roundtrip ... ok
+test e2e_tier5_adversarial_c1::test_t5_adv_20_identity_4p_100_step_roundtrip ... ok
+test e2e_tier4_scenarios::test_t4_scenario_9_bounded_ai_planner_tournament ... ok
+test e2e_tier4_scenarios::test_t4_scenario_4_high_concurrency_multi_room_stress ... ok
+
+failures:
+
+---- e2e_tier5_adversarial_c1::test_t5_adv_21_empirical_reproduce_wugu_restore_defects stdout ----
+
+thread 'e2e_tier5_adversarial_c1::test_t5_adv_21_empirical_reproduce_wugu_restore_defects' (2880510) panicked at crates/engine-native/tests/groups/../e2e/e2e_tier5_adversarial_c1.rs:591:5:
+Empirical proof: Seed 10148 must trigger Defect C1-01/C1-02 within 40 steps
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    e2e_tier5_adversarial_c1::test_t5_adv_21_empirical_reproduce_wugu_restore_defects
+
+test result: FAILED. 112 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.24s
+
+error: test failed, to rerun pass `-p engine-native --test e2e`

@@ -1,0 +1,22 @@
+{
+  "at": "2026-11-13T21:38:52.441751+08:00",
+  "head": "3a6e398485db6ef0729abe3013c3c4b7705a5d6d",
+  "tracked_dirty": true,
+  "file": "crates/engine-native/tests/e2e/e2e_tier5_adversarial_c1.rs",
+  "sha256": "10d599a9a34a19766931d33477ecbdaca62ea428343cb9265d7f30b4c8b28048",
+  "checks": {
+    "both_sessions_iterated": true,
+    "rejects_rejected_outcome": true,
+    "requires_wugu": true,
+    "checks_full_snapshot": true,
+    "normalizes_only_auth_generation": true,
+    "checks_state_hash": true,
+    "diff_one_hunk": true
+  },
+  "execution": {
+    "executed_by": "root",
+    "log": "docs/operations/evidence/2026-11-13-queue0-gates/04c-wugu-restoration-regression.log",
+    "result": "1 passed; 0 failed; 0 ignored; 112 filtered out",
+    "independent_agent_did_not_run_cargo": true
+  }
+}

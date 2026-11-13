@@ -53,8 +53,9 @@ test('production prompt literals and extension keys have readable presentation w
  const {join} = await import('node:path');
  const {fileURLToPath} = await import('node:url');
  const {choicePromptLabel} = await import('../src/engine/observerMetadata.ts');
- const source=readFileSync(new URL('../../../crates/engine-native-kernel/src/archive/resolution.rs',import.meta.url),'utf8');
- const prompts=[...source.split('KNOWN_PROMPTS:')[1].split('];')[0].matchAll(/^    "([^"]+)",/gm)].map(match=>match[1]);
+ const archive=new URL('../../../crates/engine-native-kernel/src/archive/',import.meta.url);
+ const prompts=readdirSync(archive).filter(name=>/^known_prompts(?:_[a-z0-9_]+)?\.rs$/.test(name)).flatMap(name=>[...readFileSync(new URL(name,archive),'utf8').matchAll(/"([^"]+)"\s*,/g)].map(match=>match[1]));
+ assert(prompts.length>0,'known prompt registry must not be empty');
  // Literal inventory is a presentation guard, not a reachability/restore proof.
  const visit=directory=>readdirSync(directory,{withFileTypes:true}).flatMap(entry=>entry.isDirectory()?visit(join(directory,entry.name)):entry.name.endsWith('.rs')?[join(directory,entry.name)]:[]);
  const files=['engine-native-kernel','engine-native-content','engine-native'].flatMap(crate=>visit(fileURLToPath(new URL(`../../../crates/${crate}/src`,import.meta.url))));

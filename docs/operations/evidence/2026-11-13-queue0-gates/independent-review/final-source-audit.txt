@@ -1,0 +1,306 @@
+crates/engine-native-kernel/src/kernel/duel.rs
+SHA256 cce4a70b5001781c87bdd688832b0b767439b96f948f2de0cb2bef8d9360a5ee
+212: impl DuelMachine {
+213:     fn finish(&self, ctx: &mut Ctx<'_>) -> Flow {
+214:         let card = self.card;
+215:         ctx.core
+216:             .vm_aux
+217:             .flags
+218:             .remove(&(self.source, format!("card_damage_bonus:{card}")));
+219:         ctx.core
+220:             .vm_aux
+221:             .flags
+222:             .remove(&(self.source, "duel_jijiang_skip".to_string()));
+223:         ctx.core
+224:             .vm_aux
+225:             .flags
+226:             .remove(&(self.target, "duel_jijiang_skip".to_string()));
+227:         if card != 0 {
+228:             ctx.to_discard(card);
+229:             ctx.core.table.retain(|c| *c != card);
+230:         }
+231:         Flow::Done
+232:     }
+233: }
+
+crates/engine-native-kernel/src/kernel/intrinsic.rs
+SHA256 626c4064c7ba16d542eedfe12f770f8d6d95f62492a8be3d58e8a9f0037ff996
+55:             round_used: false,
+56:             guihan_asked: false,
+57:         })),
+58:         EventData::CardUsed(mut u) => {
+59:             // 筑城守卫（U07 批三，规则 v113）等 AfterTriggers 机器写回的
+60:             // 取消：跳过结算（杀已由守卫归还手牌）
+61:             if u.cancelled {
+62:                 return None;
+63:             }
+64:             // 追加/移除目标的 after 窗口已完成，按最终目标消费一次免疫。
+65:             if dddanzhi_remove_targets(ctx, frame_id, &mut u) {
+66:                 if let Some(card) = u.card {
+67:                     if ctx.core.table.contains(&card) {
+68:                         ctx.core.table.retain(|&c| c != card);
+69:                         ctx.to_discard(card);
+70:                     }
+71:                 }
+72:                 return None;
+73:             }
+74:             let effective_kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
+75:             // 目标被结算窗全部移出（贞烈等「移出目标」类，swd 批 139）：
+76:             // 需要「恰一名目标」的牌种在目标清空后不结算（避免机器对
+158:                             pickers: Vec::new(),
+159:                             stage: WuguStage::Init,
+160:                         }));
+161:                     }
+162:                     CardKind::Duel => {
+163:                         if let Some(&target) = u.targets.first() {
+164:                             return Some(Box::new(DuelMachine {
+165:                                 card: 0,
+166:                                 source: u.player,
+167:                                 target,
+168:                                 on_target: true,
+169:                                 asked: false,
+170:                                 second_pending: false,
+171:                             }));
+172:                         }
+173:                     }
+174:                     _ => {}
+294:                 CardKind::Duel => {
+295:                     let effect = DuelMachine {
+296:                         card: card,
+297:                         source: u.player,
+298:                         target: *u.targets.first().expect("duel has one target"),
+299:                         on_target: true,
+300:                         asked: false,
+301:                         second_pending: false,
+302:                     };
+303:                     Some(Box::new(wrap_nullify_window(
+304:                         ctx,
+305:                         card,
+306:                         u.player,
+307:                         Box::new(effect),
+308:                     )))
+309:                 }
+310:                 CardKind::Zhufangshenshi => {
+311:                     // 贴房绅视（U05 swd 第十批，规则 v94）：他人锦囊——本回合
+
+crates/engine-native-kernel/src/kernel/tricks.rs
+SHA256 92d3fff371ddeb1affc5bc07b0496148a5cd5c69979b8946cbc6f59e069a4c50
+1: use super::*;
+2: 
+3: fn take_dddanzhi_targets(ctx: &mut Ctx<'_>, owner: PlayerId) -> Option<Vec<PlayerId>> {
+4:     let frame = ctx.current_frame_id();
+5:     ctx.core
+6:         .vm_aux
+7:         .flags
+8:         .remove(&(owner, format!("dddanzhi_targets:{frame}")))?;
+9:     ctx.current_card_use().ok().map(|u| u.targets.clone())
+10: }
+11: 
+49: 
+50: /// 桃园结义结算：所有其他存活角色回复 1 点体力。
+51: #[derive(Clone)]
+52: pub struct TaoyuanMachine {
+53:     pub owner: PlayerId,
+54:     pub card: Option<crate::ids::CardId>,
+55: }
+56: 
+57: impl crate::catalog::SkillMachine for TaoyuanMachine {
+58:     fn fork(&self) -> Box<dyn crate::catalog::SkillMachine> {
+59:         Box::new(self.clone())
+60:     }
+61:     fn snapshot(&self) -> crate::snap::MachineSnapshot {
+62:         crate::snap::MachineSnapshot::Taoyuan { owner: self.owner }
+63:     }
+64:     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+65:         let card = ctx.current_card_use().ok().and_then(|u| u.card);
+66:         let mut others: Vec<PlayerId> = ctx
+67:             .core
+68:             .alive_players()
+69:             .filter(|p| *p != self.owner)
+70:             .collect();
+71:         if let Some(targets) = take_dddanzhi_targets(ctx, self.owner) {
+72:             others.retain(|p| targets.contains(p));
+73:         }
+74:         for p in others {
+75:             let (hp, max) = {
+76:                 let pl = ctx.core.player(p);
+77:                 (pl.hp, pl.max_hp)
+78:             };
+79:             if hp < max as i32 {
+80:                 ctx.recover(p, 1, None);
+81:             }
+82:         }
+83:         if let Some(card) = card {
+84:             if let Some(pos) = ctx.core.table.iter().position(|&c| c == card) {
+85:                 ctx.core.table.remove(pos);
+86:                 ctx.to_discard(card);
+87:             }
+88:         }
+89:         Flow::Done
+90:     }
+91: }
+92: 
+93: /// 地载阵结算（zhenfa 首切片，规则 v110）：所有非大势力存活角色各摸
+160:     }
+161:     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+162:         match self.stage {
+163:             WuguStage::Init => {
+164:                 let alive: Vec<PlayerId> = ctx.core.alive_players().collect();
+165:                 let take = alive.len().min(ctx.core.deck.len());
+166:                 if take == 0 || self.cards.is_empty() == false {
+167:                     return Flow::Done;
+168:                 }
+169:                 let new_len = ctx.core.deck.len() - take;
+170:                 self.cards = ctx.core.deck.split_off(new_len);
+171:                 self.pickers = alive;
+172:                 if let Some(targets) = take_dddanzhi_targets(ctx, self.owner) {
+173:                     self.pickers.retain(|p| targets.contains(p));
+174:                 }
+175:                 self.stage = WuguStage::Pick;
+176:                 self.open_pick(ctx)
+177:             }
+178:             WuguStage::Pick => {
+179:                 // 读当前择牌者应答，交牌并推进。
+180:                 let picker = match self.pickers.first().copied() {
+250:             }
+251:         } else {
+252:             for c in self.cards.drain(..) {
+253:                 ctx.to_discard(c);
+254:             }
+255:         }
+256:         if let Some(card) = ctx.current_card_use().ok().and_then(|u| u.card) {
+257:             if let Some(c) = ctx.core.table.iter().position(|&c| c == card) {
+258:                 ctx.core.table.remove(c);
+259:                 ctx.to_discard(card);
+260:             }
+261:         }
+262:         Flow::Done
+263:     }
+264: }
+265: 
+266: /// 借刀杀人结算：武器持有者出杀（登记差异：直接伤害，无出闪窗口）
+267: /// 或把武器交給另一名目标。
+268: #[derive(Clone)]
+269: pub struct JiedaoMachine {
+
+crates/engine-native-kernel/src/snap/machine_validation.rs
+SHA256 0cd8cf60fa9496886dbf541dd4de0d653e78fc2c5f05cb14e8107e547867eb1b
+127:         }
+128:         MachineSnapshot::NullifyWindow {
+129:             card,
+130:             source,
+131:             queue,
+132:             effect,
+133:             ..
+134:         } => {
+135:             check_card(*card, b)?;
+136:             check_pid(*source, b)?;
+137:             check_pids(queue, b)?;
+138:             if let Some(e) = effect {
+139:                 check_machine(e, b, core)?;
+140:             }
+141:         }
+339:         MachineSnapshot::WangZun { owner, target } => {
+340:             check_pid(*owner, b)?;
+341:             check_pid(*target, b)?;
+342:         }
+343:         MachineSnapshot::TongJi { owner, .. } => check_pid(*owner, b)?,
+344:         MachineSnapshot::Wuzhong { owner } => check_pid(*owner, b)?,
+345:         MachineSnapshot::Taoyuan { owner } => check_pid(*owner, b)?,
+346:         MachineSnapshot::Wugu {
+347:             owner,
+348:             cards,
+349:             pickers,
+350:         } => {
+351:             check_pid(*owner, b)?;
+352:             for c in cards {
+353:                 check_card(*c, b)?;
+354:             }
+355:             check_pids(pickers, b)?;
+356:         }
+357:         MachineSnapshot::Jiedao {
+358:             owner,
+
+crates/engine-native-kernel/src/snap/validation.rs
+SHA256 ab64f32f63735458f68f7fb7356daa92dd28602315bd72b442933fb375412f4b
+531:         MachineSnapshot::JiJie {
+532:             stage: JiJieStageSnap::Read,
+533:             card,
+534:             ..
+535:         } => {
+536:             out.extend(card);
+537:         }
+538:         MachineSnapshot::GuanXing { top, .. } => out.extend(top.iter().copied()),
+539:         MachineSnapshot::Wugu { cards, .. } => out.extend(cards.iter().copied()),
+540:         // 末焱/调兵遣将展示牌已离开牌库，挂起期间只在宿主机器上。
+541:         MachineSnapshot::Host {
+542:             behavior, cards, ..
+543:         } if *behavior == HostBehavior::D3Moyan.tag()
+544:             || *behavior == HostBehavior::WudianDiaobingCard.tag() =>
+545:         {
+546:             out.extend(cards.iter().copied());
+547:         }
+548:         MachineSnapshot::OptionalGate { inner, .. }
+549:         | MachineSnapshot::NullifyWindow { effect: inner, .. }
+550:         | MachineSnapshot::Aoe { inner, .. }
+551:         | MachineSnapshot::Jijiang { inner, .. }
+552:         | MachineSnapshot::LiJian { inner, .. } => {
+553:             if let Some(m) = inner {
+554:                 machine_held_cards(m, out);
+640:         if p.resume_depth > resolution.stack.len() {
+641:             return Err(oob("resume_depth", p.resume_depth as u64));
+642:         }
+643:         let frame = match p.slot {
+644:             Slot::Intrinsic { frame } => frame,
+645:             Slot::Trigger { frame } => frame,
+646:         };
+647:         // 会话级挂起槽（NO_FRAME 哨兵）豁免帧存在性检查
+648:         if frame != NO_FRAME && !ids.contains_key(&frame) {
+649:             return Err(oob("park_frame", frame as u64));
+650:         }
+651:         check_machine(&p.machine, b, core)?;
+652:         super::damage_validation::check_park_binding(p, resolution)?;
+653:         if let MachineSnapshot::DamageFlow { root } = p.machine {
+654:             if !matches!(p.slot,Slot::Intrinsic{frame}if frame==root)
+
+crates/engine-native/src/engine/snapshot.rs
+SHA256 d94617bb19fea4b4840a5af0856c901ed7675ece0dc5fc131a7f0e2c5417c914
+60:         if snapshot.ruleset_version != catalog.ruleset_version {
+61:             return Err(SnapshotError::RuleVersionMismatch {
+62:                 snapshot: snapshot.ruleset_version,
+63:                 catalog: catalog.ruleset_version,
+64:             });
+65:         }
+66:         let bounds = bounds_from(&catalog, snapshot.core.players.len());
+67:         validate_core(&snapshot.core, &bounds)?;
+68:         // N04-f：牌归属多重集——每张牌恰在一个牌区，机器持牌登记在界
+69:         crate::snap::validate_card_ownership(&snapshot.core, &snapshot.resolution, &bounds)?;
+70:         // 栈帧父子/帧号水位、挂起深度与槽位帧引用、选择/应答 ID 与机器树全部校验。
+71:         validate_resolution(&snapshot.resolution, &bounds, &snapshot.core)?;
+72:         crate::resolution::validate_trigger_bindings(&snapshot.resolution, &snapshot.core, &catalog)?;
+73:         // 段开放必须携带检查点（N04）：无检查点的开放段快照恢复后
+74:         // 无法中止，属非法状态而非「恢复后再报错」。
+
+../archive/upstream/noname/apps/core/card/standard.js
+SHA256 33ebe708722f3d8b038d5c2855259699f9009cf73ef3c0fe8b1e9b6bd482f6fa
+1265: 		taoyuan: {
+1266: 			audio: true,
+1267: 			fullskin: true,
+1268: 			type: "trick",
+1269: 			enable: true,
+1270: 			selectTarget: -1,
+1271: 			cardcolor: "red",
+1272: 			reverseOrder: true,
+1273: 			defaultYingbianEffect: "remove",
+1274: 			filterTarget(card, player, target) {
+1275: 				//return target.hp<target.maxHp;
+1276: 				return true;
+1277: 			},
+1278: 			ignoreTarget(card, player, target) {
+1279: 				return target.isHealthy();
+1280: 			},
+1281: 			async content(event, trigger, player) {
+1282: 				event.target.recover();
+1283: 			},
+1284: 			ai: {
+

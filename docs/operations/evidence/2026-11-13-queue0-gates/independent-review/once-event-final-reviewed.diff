@@ -1,0 +1,128 @@
+diff --git a/scripts/audit_upstream_skill_flags.py b/scripts/audit_upstream_skill_flags.py
+index b876cdb18..bfae73e9b 100644
+--- a/scripts/audit_upstream_skill_flags.py
++++ b/scripts/audit_upstream_skill_flags.py
+@@ -15,7 +15,7 @@
+ |---|---|---|
+ | 可选性 | `forced: true` / `direct: true` / 都没有 | `TriggerMeta.optional` |
+ | 触发事件 | `trigger: { player/global/...: "X" }` | `TriggerMeta.event`（经映射表）|
+-| 每阶段一次 | `usable: 1` + `enable:` | `host.rs` 的 `once_per_turn` 允许表 |
++| 每阶段一次 | `usable: 1` + `enable:` | `host.rs` 中直接声明 `once_per_turn` 的行为 |
+ | 每局一次 | `limited: true` | behavior 块里的 once/used 痕迹 |
+ 
+ 用法：
+@@ -32,6 +32,8 @@ import re
+ import sys
+ from pathlib import Path
+ 
++from rust_effective_lines import strip_comments
++
+ ROOT = Path(__file__).resolve().parent.parent
+ ARCH = ROOT.parent / "archive/upstream"
+ 
+@@ -196,9 +198,23 @@ def host_keys() -> dict[str, str]:
+ 
+ 
+ def once_allowlist() -> set[str]:
++    """只列直接声明的行为；按技能名委托的限制须另查，不能据此判为不限次。"""
+     t = (ROOT / "crates/engine-native-content/src/content/host.rs").read_text(encoding="utf-8")
+-    m = re.search(r"let limits = match behavior \{(.*?)\n    \};", t, re.S)
+-    return set(re.findall(r"HostBehavior::(\w+)", m.group(1))) if m else set()
++    t = strip_comments(t)
++    function = re.search(r"^pub fn host_skill_limits\b.*?^}", t, re.S | re.M)
++    if not function:
++        return set()
++    arms = re.finditer(
++        r"((?:HostBehavior::\w+\s*\|?\s*)+)=>\s*(?:\{\s*)?"
++        r"crate::catalog::SkillLimits\s*\{([^}]+)\}",
++        function.group(),
++    )
++    return {
++        behavior
++        for arm in arms
++        if re.search(r"\bonce_per_turn:\s*true\b", arm.group(2))
++        for behavior in re.findall(r"HostBehavior::(\w+)", arm.group(1))
++    }
+ 
+ 
+ def main() -> int:
+diff --git a/scripts/test_audit_upstream_skill_flags.py b/scripts/test_audit_upstream_skill_flags.py
+index 52625ff36..993233635 100644
+--- a/scripts/test_audit_upstream_skill_flags.py
++++ b/scripts/test_audit_upstream_skill_flags.py
+@@ -6,6 +6,7 @@
+ import subprocess
+ import sys
+ import unittest
++from unittest import mock
+ from pathlib import Path
+ 
+ ROOT = Path(__file__).resolve().parent.parent
+@@ -15,6 +16,52 @@ import audit_upstream_skill_flags as tool  # noqa: E402
+ 
+ 
+ class ParserTests(unittest.TestCase):
++    def test_once_allowlist_keeps_function_and_arm_boundaries(self):
++        source = """
++pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::SkillLimits {
++    match behavior {
++        // HostBehavior::Commented must not be included.
++        HostBehavior::Limited
++        | HostBehavior::Alias => crate::catalog::SkillLimits {
++            once_per_turn: true, ..Default::default()
++        },
++        HostBehavior::Unlimited => crate::catalog::SkillLimits {
++            once_per_turn: false, ..Default::default()
++        },
++        HostBehavior::Delegated => named_limits(name),
++    }
++}
++pub fn neighbor() {
++    HostBehavior::Neighbor => crate::catalog::SkillLimits { once_per_turn: true }
++}
++"""
++        with mock.patch.object(Path, "read_text", return_value=source):
++            self.assertEqual(tool.once_allowlist(), {"Limited", "Alias"})
++
++    def test_once_allowlist_ignores_nested_block_comments_before_parsing(self):
++        source = """
++/*
++pub fn host_skill_limits() {
++    HostBehavior::CommentedFunction => crate::catalog::SkillLimits { once_per_turn: true }
++}
++*/
++pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::SkillLimits {
++    match behavior {
++        /* /* nested */
++        HostBehavior::CommentedArm => crate::catalog::SkillLimits { once_per_turn: true }
++        */
++        HostBehavior::Unlimited => crate::catalog::SkillLimits {
++            /* once_per_turn: true */ once_per_turn: false, ..Default::default()
++        },
++        HostBehavior::Limited => crate::catalog::SkillLimits {
++            once_per_turn: true, ..Default::default()
++        },
++    }
++}
++"""
++        with mock.patch.object(Path, "read_text", return_value=source):
++            self.assertEqual(tool.once_allowlist(), {"Limited"})
++
+     def test_brace_matching_respects_nested_objects(self):
+         txt = '\n\tskill_a: {\n\t\tfilter(e, p) {\n\t\t\tif (p) { return 1; }\n\t\t},\n\t\tusable: 1,\n\t},\n\tskill_b: { enable: "phaseUse" },\n'
+         blocks = tool.skill_blocks(txt)
+diff --git a/scripts/test_report_event_arms.py b/scripts/test_report_event_arms.py
+index c055c79d2..4e1b51d77 100644
+--- a/scripts/test_report_event_arms.py
++++ b/scripts/test_report_event_arms.py
+@@ -73,7 +73,9 @@ class ArmTests(unittest.TestCase):
+         cls.rows = cls.mod.arms()
+ 
+     def test_damage_arms_are_enumerated(self):
+-        self.assertEqual(len(self.rows), 88)
++        # L29 已有酒诗伤害分支（14b2b43f7），原断言未同步。
++        self.assertEqual(len(self.rows), 89)
++        self.assertIn(("MbcmJiushi", "Damage"), [(row[0], row[1]) for row in self.rows])
+ 
+     def test_every_row_has_behavior_and_kind(self):
+         for behavior, which, *_ in self.rows:

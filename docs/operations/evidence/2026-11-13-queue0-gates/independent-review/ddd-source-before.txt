@@ -1,0 +1,200 @@
+$ sed -n 5796,5840p ../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js
+	dddanzhi: {
+		audio: 2,
+		trigger: { global: "phaseBegin" },
+		filter(event, player) {
+			var evts = game.getAllGlobalHistory("everything", evt => ["useCard", "respond"].includes(evt.name));
+			if (!evts.length) {
+				return false;
+			}
+			const color = get.color(evts.lastItem.card, false);
+			return color === "black";
+		},
+		direct: true,
+		content() {
+			"step 0";
+			player.chooseTarget(get.prompt("dddanzhi"), "选择一名角色，此回合其第一次成为黑色牌的目标时，此牌对其无效").set("ai", target => {
+				return get.attitude(_status.event.player, target);
+			});
+			"step 1";
+			if (result.bool) {
+				var target = result.targets[0];
+				player.logSkill("dddanzhi", target);
+				target.addTempSkill("dddanzhi_effect");
+			}
+		},
+		subSkill: {
+			effect: {
+				trigger: { target: "useCardToTarget" },
+				filter(event, player) {
+					return get.color(event.card) === "black";
+				},
+				forced: true,
+				charlotte: true,
+				content() {
+					trigger.targets.remove(player);
+					trigger.getParent().triggeredTargets2.remove(player);
+					trigger.untrigger();
+					game.log(trigger.card, "对", player, "无效了");
+					game.delayx();
+					player.removeSkill("dddanzhi_effect");
+				},
+			},
+		},
+	},
+	//刘宏
+	dddshixing: {
+
+exit 0
+
+$ sed -n 4827,4850p ../archive/upstream/noname/apps/core/noname/library/element/content.ts
+			}
+			player.ai.tempIgnore = [];
+			if (ui.land && ui.land.player == player) {
+				game.addVideo("destroyLand");
+				ui.land.destroy();
+			}
+		},
+		async (event, trigger, player) => {
+			//规则集中的“回合开始后⑦”，国战武将明置武将牌
+			await event.trigger("phaseBeginStart");
+		},
+		async (event, trigger, player) => {
+			//规则集中的“回合开始后⑨”，进行当先，化身等操作
+			//没有⑧ 因为⑧用不到
+			await event.trigger("phaseBegin");
+		},
+		//阶段部分
+		async (event, trigger, player) => {
+			const { num } = event;
+			if (num < event.phaseList.length) {
+				//规则集中没有的新时机 可以用来插入额外阶段啥的
+				if (player.isIn()) {
+					await event.trigger("phaseChange");
+				}
+
+exit 0
+
+$ sed -n 281,304p crates/engine-native-kernel/src/kernel/events/turn.rs
+    if ctx.core.current_land == Some(crate::catalog::CardKind::Feixu)
+        && !ctx.core.discard.is_empty()
+    {
+        let n = ctx.core.discard.len() as u32;
+        let i = ctx.core.rng.gen_range(n) as usize;
+        let c = ctx.core.discard.remove(i);
+        ctx.core.deck.push(c);
+        crate::kernel::elo_mark_deck_insert(ctx.core, c, false);
+    }
+    ctx.core.turn.phase = Phase::Prepare;
+    ctx.emit(EventData::Phase {
+        player,
+        phase: Phase::Prepare,
+        begin: false,
+    });
+    ctx.emit(EventData::Phase {
+        player,
+        phase: Phase::Prepare,
+        begin: true,
+    });
+}
+
+pub(in crate::kernel) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
+    if ctx.core.turn.extra_phases.is_empty() {
+
+exit 0
+
+$ sed -n 350,390p crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs
+        spec.kind,
+        spec.options,
+        spec.min,
+        spec.max,
+        spec.allow_cancel,
+    ))
+}
+
+pub(crate) fn trigger_meta_u01_batch_d(name: &str) -> Option<TriggerMeta> {
+    let meta = |event: EventKind, extra_events: Vec<EventKind>| TriggerMeta {
+        event,
+        timing: Timing::Normal,
+        priority: 1,
+        order_selectable: false,
+        optional: false,
+        extra_events,
+    };
+    match name {
+        "dddyouxue" | "dddchengjing" | "dddlangzhi" | "dddzhuanshe" | "ddddanggu"
+        | "dddlanghuai" | "dddbailei" => Some(meta(EventKind::PhaseBegin, Vec::new())),
+        "dddduanbing" => Some(meta(EventKind::Damage, Vec::new())),
+        "dddxiaoxing" => Some(meta(EventKind::PhaseBegin, vec![EventKind::Dying])),
+        "dddfuyi" => Some(meta(EventKind::Death, Vec::new())),
+        "dddweiqiu" => Some(meta(EventKind::Recover, Vec::new())),
+        "dddlianer" => Some(meta(EventKind::CardUsed, Vec::new())),
+        "dddanzhi" => Some(meta(EventKind::PhaseBegin, vec![EventKind::CardUsed])),
+        "dddshixing" => Some(meta(
+            EventKind::PhaseBegin,
+            vec![EventKind::Damage, EventKind::Recover, EventKind::CardUsed],
+        )),
+        "dddfuzong" => Some(meta(EventKind::PhaseBegin, vec![EventKind::Death])),
+        "dddxuanlun" => Some(meta(EventKind::Damage, vec![EventKind::PhaseBegin])),
+        "dddjiexing" => Some(meta(EventKind::Recover, vec![EventKind::Equipped])),
+        _ => None,
+    }
+}
+
+pub(crate) fn limits_u01_batch_d(name: &str) -> crate::catalog::SkillLimits {
+    match name {
+        "dddchengjing" | "dddduanbing" => crate::catalog::SkillLimits {
+            once_per_turn: true,
+
+exit 0
+
+$ sed -n 482,497p crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs
+            event,
+            EventData::CardUsed(u)
+            if u.player == owner && !u.cancelled && u.card.is_some_and(|c| is_red(ctx.catalog, c))
+        ),
+        "dddanzhi" => match event {
+            EventData::CardUsed(u) => !u.cancelled,
+            EventData::Phase {
+                phase: Phase::Prepare,
+                begin: true,
+                ..
+            } => flag(ctx.state, owner, "dddanzhi_last_black") > 0 || !ctx.state.discard.is_empty(),
+            _ => false,
+        },
+        "dddshixing" => match event {
+            EventData::Phase {
+                player,
+
+exit 0
+
+$ sed -n 423,448p crates/engine-native-content/src/content/host/step/u01_batch_d.rs
+        "dddanzhi" => {
+            if machine.stage == HostStage::Act && machine.card == Some(1) {
+                let is_blk = machine
+                    .cards
+                    .first()
+                    .is_some_and(|&c| !is_red(ctx.catalog, c));
+                set_flag(ctx.core, owner, "dddanzhi_last_black", u32::from(is_blk));
+                return Flow::Done;
+            }
+            match machine.stage {
+                HostStage::Act => wait_ask_d(machine, ctx, HostStage::TargetChoice, 313),
+                HostStage::TargetChoice => {
+                    if let Some(ChoiceOption::Player(t)) = ctx.answer().first().copied() {
+                        set_turn_flag(ctx.core, t, "dddanzhi_immune", "dddanzhi_stamp", 1);
+                        if t != owner {
+                            set_turn_flag(ctx.core, owner, "dddanzhi_immune", "dddanzhi_stamp", 1);
+                        }
+                        ctx.log(LogEvent::SkillTriggered {
+                            skill: "dddanzhi",
+                            owner,
+                            presentation: None,
+                        });
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+
+exit 0
+

@@ -1,0 +1,4 @@
+command: git diff --check
+cwd: /Users/ruyimg/Documents/Claude/sanguosha/noname-next
+
+exit_code=0

@@ -15,7 +15,7 @@
 |---|---|---|
 | 可选性 | `forced: true` / `direct: true` / 都没有 | `TriggerMeta.optional` |
 | 触发事件 | `trigger: { player/global/...: "X" }` | `TriggerMeta.event`（经映射表）|
-| 每阶段一次 | `usable: 1` + `enable:` | `host.rs` 的 `once_per_turn` 允许表 |
+| 每阶段一次 | `usable: 1` + `enable:` | `host.rs` 中直接声明 `once_per_turn` 的行为 |
 | 每局一次 | `limited: true` | behavior 块里的 once/used 痕迹 |
 
 用法：
@@ -31,6 +31,8 @@ import json
 import re
 import sys
 from pathlib import Path
+
+from rust_effective_lines import strip_comments
 
 ROOT = Path(__file__).resolve().parent.parent
 ARCH = ROOT.parent / "archive/upstream"
@@ -196,9 +198,23 @@ def host_keys() -> dict[str, str]:
 
 
 def once_allowlist() -> set[str]:
+    """只列直接声明的行为；按技能名委托的限制须另查，不能据此判为不限次。"""
     t = (ROOT / "crates/engine-native-content/src/content/host.rs").read_text(encoding="utf-8")
-    m = re.search(r"let limits = match behavior \{(.*?)\n    \};", t, re.S)
-    return set(re.findall(r"HostBehavior::(\w+)", m.group(1))) if m else set()
+    t = strip_comments(t)
+    function = re.search(r"^pub fn host_skill_limits\b.*?^}", t, re.S | re.M)
+    if not function:
+        return set()
+    arms = re.finditer(
+        r"((?:HostBehavior::\w+\s*\|?\s*)+)=>\s*(?:\{\s*)?"
+        r"crate::catalog::SkillLimits\s*\{([^}]+)\}",
+        function.group(),
+    )
+    return {
+        behavior
+        for arm in arms
+        if re.search(r"\bonce_per_turn:\s*true\b", arm.group(2))
+        for behavior in re.findall(r"HostBehavior::(\w+)", arm.group(1))
+    }
 
 
 def main() -> int:

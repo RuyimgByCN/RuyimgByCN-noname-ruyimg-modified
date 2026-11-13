@@ -1,0 +1,104 @@
+..F....................................................................................................F...................................s...............................F..FFFF.F............
+======================================================================
+FAIL: test_inspector_runs_on_known_skill (test_audit_upstream_skill_flags.ParserTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/test_audit_upstream_skill_flags.py", line 39, in test_inspector_runs_on_known_skill
+    self.assertIn("in once_per_turn 允许表: True", proc.stdout)
+AssertionError: 'in once_per_turn 允许表: True' not found in '技能: jiefen  来源: U05\n\n--- 上游块 noname/apps/core/extension/杀海拾遗/character/swd/skill.js ---\njiefen: { enable: "phaseUse", usable: 1, filterTarget(card, player, target) { return target.countCards("h") > player.countCards("h"); }, filter(event, player) { return !player.isMaxHandcard(); }, content() { "step 0"; target.chooseCard("h", true, "交给" + get.translation(player) + "一张牌"); "step 1"; if (result.bool) { player.gain(result.cards, target); target.$giveAuto(result.cards, player); } else { event.finish(); } "step 2"; var nh = player.countCards("h"); if ( game.hasPlayer(function (current) { return current.countCards("h") < nh; }) ) { player.chooseCardTarget({ forced: true, filterTarget(card, player, target) { return target.countCards("h") < nh; }, filterCard: true, ai1(card) { return 9 - get.value(card); }, ai2(target) { return get.attitude(player, target) / Math.sqrt(target.countCards("h") + 1); }, prompt: "交给一名手牌数少于你的角色一张牌", }); } else { event.finish(); } "step 3"; if (result.bool && result.targets && result.targets.length) { result.targets[0].gain(result.cards, player); player.$giveAuto(result.cards, result.targets[0]); player.line(result.targets, "green"); } }, ai: { order: 7, result: { target: -1, }, }, }\n\n--- 原生 SwdJiefen ---\n  (无显式 TriggerMeta)\n  in once_per_turn 允许表: False\n  原生块长度 5472 字符；含 once/used 痕迹: False\n'
+
+======================================================================
+FAIL: test_damage_arms_are_enumerated (test_report_event_arms.ArmTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/test_report_event_arms.py", line 76, in test_damage_arms_are_enumerated
+    self.assertEqual(len(self.rows), 88)
+AssertionError: 89 != 88
+
+======================================================================
+FAIL: test_arms_count_matches (test_report_phase_filters.ArmSlicingTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/test_report_phase_filters.py", line 65, in test_arms_count_matches
+    self.assertEqual(len(rows), 37)
+AssertionError: 37 != 32
+
+======================================================================
+FAIL: test_render_keeps_status_columns (test_report_phase_filters.RenderTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/test_report_phase_filters.py", line 43, in test_render_keeps_status_columns
+    self.assertEqual(len(lines), 38)
+AssertionError: 38 != 33
+
+======================================================================
+FAIL: test_status_counts (test_report_phase_filters.RenderTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/test_report_phase_filters.py", line 53, in test_status_counts
+    self.assertEqual(c["已核"] + c["不适用"] + c["未核"], 37)
+AssertionError: 37 != 32
+
+======================================================================
+FAIL: test_begin_true_count (test_report_phase_filters.ScanTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/test_report_phase_filters.py", line 25, in test_begin_true_count
+    self.assertEqual(n, 21, "begin=true 的条数变了")
+AssertionError: 21 != 17 : begin=true 的条数变了
+
+======================================================================
+FAIL: test_phase_distribution (test_report_phase_filters.ScanTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/test_report_phase_filters.py", line 32, in test_phase_distribution
+    self.assertEqual(
+AssertionError: {'Prepare': 4, 'Play': 8, 'Draw': 7, 'Discard': 3, 'End': 14, 'Judge': 1} != {'Prepare': 2, 'Judge': 1, 'Draw': 7, 'Play': 8, 'Discard': 3, 'End': 11}
+- {'Discard': 3, 'Draw': 7, 'End': 14, 'Judge': 1, 'Play': 8, 'Prepare': 4}
+?                                   ^                                    ^
+
++ {'Discard': 3, 'Draw': 7, 'End': 11, 'Judge': 1, 'Play': 8, 'Prepare': 2}
+?                                   ^                                    ^
+
+
+======================================================================
+FAIL: test_scans_phase_filters (test_report_phase_filters.ScanTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/test_report_phase_filters.py", line 14, in test_scans_phase_filters
+    self.assertEqual(len(rows), 37, "阶段过滤条数变了 ⇒ 先核对是否有新增/删除")
+AssertionError: 37 != 32 : 阶段过滤条数变了 ⇒ 先核对是否有新增/删除
+
+----------------------------------------------------------------------
+Ran 192 tests in 413.733s
+
+FAILED (failures=8, skipped=1)
+ADR 编号检查（scripts/check-adr-index.py）
+- ADR 文件 3（编号文件 2，唯一编号 1）
+- 重复编号 1 组 / 2 个文件
+- 消歧表登记 0 组
+- 标题错号 0
+- 未登记冲突 1，过时登记 0，登记内容不符 0，索引坏链 0
+  [未登记冲突] 0001: 0001-first.md, 0001-second.md
+检查结果：失败 1 项
+{
+ "adr_dir": "docs/adr",
+ "adr_files": 3,
+ "duplicate_files": 2,
+ "duplicate_groups": 1,
+ "duplicates": {
+  "0001": [
+   "0001-first.md",
+   "0001-second.md"
+  ]
+ },
+ "failures": 0,
+ "heading_mismatches": [],
+ "link_missing": [],
+ "numbered_files": 2,
+ "registry_duplicate_groups": 1,
+ "registry_mismatch": [],
+ "registry_missing": [],
+ "registry_stale": [],
+ "unique_numbers": 1
+}

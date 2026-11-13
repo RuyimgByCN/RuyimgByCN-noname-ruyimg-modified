@@ -1,0 +1,19 @@
+{
+  "verified_at": "2026-11-13T13:59:50.911515+00:00",
+  "historical_path": "docs/operations/evidence/2026-10-19-phase-audit/registry.txt",
+  "historical_sha256": "5bdc93d018484779bdd533ca9ef451860008315ee2942be50632e219da501292",
+  "historical_unchanged": true,
+  "current_path": "docs/architecture/native-phase-filter-registry.tsv",
+  "current_sha256": "35bdcec2bbd482634b950eaf28deafe4ef0b71f166b6e0acad597e7adcc1b30d",
+  "historical_rows": 32,
+  "current_rows": 37,
+  "historical_rows_and_statuses_preserved": true,
+  "added_rows": [
+    "BossChuanyun\tboss_chuanyun\tEnd\ttrue\t未核\t",
+    "BossTianyun\tboss_tianyun\tEnd\ttrue\t未核\t",
+    "DddXiaxing\tdddxiaxing\tPrepare\ttrue\t未核\t",
+    "KMowang\tk_mowang\tEnd\tfalse\t未核\t",
+    "KMowang\tk_mowang\tPrepare\ttrue\t未核\t"
+  ],
+  "scope": "Existing explicit-phase scanner only; not all host behaviors and not upstream equivalence signoff"
+}

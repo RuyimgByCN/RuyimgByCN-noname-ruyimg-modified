@@ -1,0 +1,20 @@
+{
+  "key": "U01:skills:dddanzhi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5796",
+  "item": {
+    "source_id": "U01",
+    "category": "skills",
+    "id": "dddanzhi",
+    "upstream_ref": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5796",
+    "target": "原生规则 / `d3-upstream-noname`",
+    "status": "已复核等价",
+    "reviewer": "u01-signoff",
+    "review_date": "2026-11-12",
+    "upstream_file_line": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5796-5839",
+    "test_name": "u01_batch_c_and_d_real_match_6d_verification + u01_d3_all_31_generals_and_64_ddd_skills_execute_and_roundtrip",
+    "difference": "与上游一致",
+    "note": null,
+    "reason": null,
+    "diff": "与上游一致",
+    "native": "crates/engine-native-content/src/content/host/step/u01_batch_d.rs:423 + crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs (HostBehavior::U01DddBatchD)"
+  }
+}

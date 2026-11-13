@@ -1,0 +1,54 @@
+{
+  "paths": {
+    "argv": [
+      "/bin/zsh",
+      "-lc",
+      "which cargo rustc rustup"
+    ],
+    "exit_code": 0,
+    "stdout": "/opt/homebrew/bin/cargo\n/opt/homebrew/bin/rustc\n/Users/ruyimg/.cargo/bin/rustup\n",
+    "stderr": ""
+  },
+  "native": {
+    "argv": [
+      "rustc",
+      "--version"
+    ],
+    "exit_code": 0,
+    "stdout": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (Homebrew)\n",
+    "stderr": ""
+  },
+  "active": {
+    "argv": [
+      "rustup",
+      "show",
+      "active-toolchain"
+    ],
+    "exit_code": 0,
+    "stdout": "stable-aarch64-apple-darwin (default)\n",
+    "stderr": ""
+  },
+  "targets": {
+    "argv": [
+      "rustup",
+      "target",
+      "list",
+      "--installed"
+    ],
+    "exit_code": 0,
+    "stdout": "aarch64-apple-darwin\naarch64-apple-ios\naarch64-apple-ios-sim\naarch64-linux-android\narmv7-linux-androideabi\ni686-linux-android\ni686-pc-windows-msvc\nwasm32-unknown-unknown\nx86_64-apple-darwin\nx86_64-apple-ios\nx86_64-linux-android\nx86_64-pc-windows-msvc\n",
+    "stderr": ""
+  },
+  "rustup-rustc": {
+    "argv": [
+      "rustup",
+      "run",
+      "stable",
+      "rustc",
+      "--version"
+    ],
+    "exit_code": 0,
+    "stdout": "rustc 1.95.0 (59807616e 2026-04-14)\n",
+    "stderr": ""
+  }
+}

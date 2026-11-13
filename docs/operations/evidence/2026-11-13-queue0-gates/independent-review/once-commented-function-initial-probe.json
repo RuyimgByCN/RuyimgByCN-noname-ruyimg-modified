@@ -1,0 +1,11 @@
+{
+  "at": "2026-11-13T22:09:47.084535+08:00",
+  "script_sha256": "3e84869ac2186c976583387dbb3d4231aec878658e3463680abf449ba07bc7b5",
+  "source": "/*\npub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::SkillLimits {\n    HostBehavior::CommentedFunction => crate::catalog::SkillLimits { once_per_turn: true }\n}\n*/\npub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::SkillLimits {\n    match behavior {\n        HostBehavior::Real => crate::catalog::SkillLimits { once_per_turn: true },\n        _ => crate::catalog::SkillLimits::default(),\n    }\n}\n",
+  "expected": [
+    "Real"
+  ],
+  "actual": [
+    "CommentedFunction"
+  ]
+}

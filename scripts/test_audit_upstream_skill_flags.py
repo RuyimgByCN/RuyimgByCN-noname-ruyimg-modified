@@ -6,6 +6,7 @@
 import subprocess
 import sys
 import unittest
+from unittest import mock
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -15,6 +16,52 @@ import audit_upstream_skill_flags as tool  # noqa: E402
 
 
 class ParserTests(unittest.TestCase):
+    def test_once_allowlist_keeps_function_and_arm_boundaries(self):
+        source = """
+pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::SkillLimits {
+    match behavior {
+        // HostBehavior::Commented must not be included.
+        HostBehavior::Limited
+        | HostBehavior::Alias => crate::catalog::SkillLimits {
+            once_per_turn: true, ..Default::default()
+        },
+        HostBehavior::Unlimited => crate::catalog::SkillLimits {
+            once_per_turn: false, ..Default::default()
+        },
+        HostBehavior::Delegated => named_limits(name),
+    }
+}
+pub fn neighbor() {
+    HostBehavior::Neighbor => crate::catalog::SkillLimits { once_per_turn: true }
+}
+"""
+        with mock.patch.object(Path, "read_text", return_value=source):
+            self.assertEqual(tool.once_allowlist(), {"Limited", "Alias"})
+
+    def test_once_allowlist_ignores_nested_block_comments_before_parsing(self):
+        source = """
+/*
+pub fn host_skill_limits() {
+    HostBehavior::CommentedFunction => crate::catalog::SkillLimits { once_per_turn: true }
+}
+*/
+pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::SkillLimits {
+    match behavior {
+        /* /* nested */
+        HostBehavior::CommentedArm => crate::catalog::SkillLimits { once_per_turn: true }
+        */
+        HostBehavior::Unlimited => crate::catalog::SkillLimits {
+            /* once_per_turn: true */ once_per_turn: false, ..Default::default()
+        },
+        HostBehavior::Limited => crate::catalog::SkillLimits {
+            once_per_turn: true, ..Default::default()
+        },
+    }
+}
+"""
+        with mock.patch.object(Path, "read_text", return_value=source):
+            self.assertEqual(tool.once_allowlist(), {"Limited"})
+
     def test_brace_matching_respects_nested_objects(self):
         txt = '\n\tskill_a: {\n\t\tfilter(e, p) {\n\t\t\tif (p) { return 1; }\n\t\t},\n\t\tusable: 1,\n\t},\n\tskill_b: { enable: "phaseUse" },\n'
         blocks = tool.skill_blocks(txt)

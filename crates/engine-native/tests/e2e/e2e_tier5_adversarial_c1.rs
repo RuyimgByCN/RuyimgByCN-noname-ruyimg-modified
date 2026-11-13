@@ -564,33 +564,54 @@ fn test_t5_adv_17_concurrent_multi_thread_isolation_stress() {
     }
 }
 
-/// Adv-21: Empirical discovery of Defect C1-01 (Wugu / Taoyuan missing restore arm in NullifyWindow)
-/// and Defect C1-02 (Wugu cards missing from machine_held_cards in ownership validation).
-/// This test scans a game trajectory, isolates the exact step where Wugu/Taoyuan NullifyWindow is open,
-/// and empirically proves that `restore_snapshot` fails with `UnknownMachine` or `card_missing_from_all_zones`.
+/// Adv-21: The former C1-01/C1-02 seed must reach Wugu and restore every step,
+/// preserving the full snapshot and the uninterrupted trajectory.
 #[test]
-fn test_t5_adv_21_empirical_reproduce_wugu_restore_defects() {
+fn test_t5_adv_21_wugu_restore_preserves_trajectory() {
+    use engine_native::snap::MachineSnapshot;
+
+    fn contains_wugu(machine: &MachineSnapshot) -> bool {
+        match machine {
+            MachineSnapshot::Wugu { .. } => true,
+            MachineSnapshot::NullifyWindow {
+                effect: Some(effect),
+                ..
+            } => contains_wugu(effect),
+            _ => false,
+        }
+    }
+
     let mut session = OpaqueGameSession::new_identity_match(10148, 5).expect("match");
-    let mut defect_observed = false;
-    for _step in 0..40 {
+    let mut resumed = OpaqueGameSession::new_identity_match(10148, 5).expect("resumed match");
+    let mut wugu_observed = false;
+    for step in 0..40 {
         if session.is_finished() {
             break;
         }
-        let _ = session.auto_step();
-        let hex = session.save_snapshot();
-        if let Err(err_msg) = OpaqueGameSession::restore_snapshot(&hex) {
-            // Defect successfully reproduced!
+        for current in [&mut session, &mut resumed] {
+            let outcome = current.auto_step().expect("trajectory step");
             assert!(
-                err_msg.contains("UnknownMachine") || err_msg.contains("card_missing_from_all_zones"),
-                "Expected Defect C1-01 or C1-02, got: {err_msg}"
+                matches!(outcome, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+                "step {step}: {outcome:?}"
             );
-            defect_observed = true;
-            break;
         }
+        assert_eq!(session.state_hash(), resumed.state_hash(), "step {step}");
+        let expected = session.engine().save();
+        wugu_observed |= expected
+            .resolution
+            .parks
+            .iter()
+            .any(|p| contains_wugu(&p.machine));
+        resumed = OpaqueGameSession::restore_snapshot(&resumed.save_snapshot())
+            .unwrap_or_else(|err| panic!("step {step}: {err}"));
+        let mut actual = resumed.engine().save();
+        // Restore advances authorization generation; all rule and RNG state must match.
+        actual.auth_generation = expected.auth_generation;
+        assert_eq!(actual, expected, "restored snapshot at step {step}");
     }
     assert!(
-        defect_observed,
-        "Empirical proof: Seed 10148 must trigger Defect C1-01/C1-02 within 40 steps"
+        wugu_observed,
+        "seed 10148 must exercise a suspended Wugu within 40 steps"
     );
 }
 

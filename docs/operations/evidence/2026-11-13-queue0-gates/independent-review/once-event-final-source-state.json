@@ -1,0 +1,58 @@
+{
+  "at": "2026-11-13T22:12:33.532603+08:00",
+  "head": "3a6e398485db6ef0729abe3013c3c4b7705a5d6d",
+  "tracked_dirty": true,
+  "input_sha256": {
+    "scripts/audit_upstream_skill_flags.py": "a7baef28233d129ec1ac4717045fb11c7c2ef61d6cc2ab364610acacaad36905",
+    "scripts/test_audit_upstream_skill_flags.py": "4a219a51427f25f1e7720bc700788913dc386d462e9867d6c26e59ba8995fefa",
+    "scripts/rust_effective_lines.py": "1115ad0d5002d3587232f96c0fa0a6e70cef5008d07eb53c4528dfc057136554",
+    "scripts/test_report_event_arms.py": "638069ad8d6b90b3a9deb3766d71e69724b1e42122f5d5811a10ddd2cfc7f834",
+    "scripts/report_event_arms.py": "157f20738e3f5f04ec150674f3445f97eaea0045b84d2dc386c5f1710121e8f5",
+    "crates/engine-native-content/src/content/host.rs": "5040fd7da574e87f28bd26d28fa304e0a4fbc623a58fe63043a1dfc77f2a801c",
+    "crates/engine-native-content/src/content/host/filtering/common.rs": "e93844349439f339d39a5dd8061b872a7a6650729c19c23a6f9094b7a23f4b0a"
+  },
+  "all_input_hashes_unchanged_after_tests": true,
+  "event_group_tested_hashes_unchanged": true,
+  "existing_comment_helper_equals_HEAD": true,
+  "original_3_probes_replayed": [
+    {
+      "case": "block_comment_fake_arm",
+      "expected": [
+        "Real"
+      ],
+      "before": [
+        "Commented",
+        "Real"
+      ],
+      "after": [
+        "Real"
+      ],
+      "pass": true
+    },
+    {
+      "case": "block_comment_true_inside_false",
+      "expected": [],
+      "before": [
+        "Unlimited"
+      ],
+      "after": [],
+      "pass": true
+    },
+    {
+      "case": "commented_same_name_function",
+      "expected": [
+        "Real"
+      ],
+      "before": [
+        "CommentedFunction"
+      ],
+      "after": [
+        "Real"
+      ],
+      "pass": true
+    }
+  ],
+  "current_once_direct_count": 65,
+  "source_state": "host.rs/common.rs均与HEAD相等；无产品源码改动。",
+  "scope": "既有Rust格式直接SkillLimits true臂的有限文本扫描；不推断按名委托的限次，也不宣称完整Rust语法解析。"
+}

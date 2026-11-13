@@ -1,0 +1,18 @@
+{
+  "at": "2026-11-13T22:01:55.551818+08:00",
+  "doc_links_checked": 77,
+  "broken_links": [
+    {
+      "doc": "docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-incremental-review.md",
+      "href": "phase-registry-final-inputs.json"
+    },
+    {
+      "doc": "docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-incremental-review.md",
+      "href": "phase-registry-reviewed-final.diff"
+    }
+  ],
+  "diff_check_exit_code": 0,
+  "diff_check_output": "",
+  "head": "3a6e398485db6ef0729abe3013c3c4b7705a5d6d",
+  "tracked_dirty": true
+}

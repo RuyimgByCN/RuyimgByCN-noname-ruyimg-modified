@@ -1,0 +1,12 @@
+{
+  "packages/extensions/d3-upstream-noname/assets/character.json": "b8487caf28b0066c443dfb8646e110b0f133f808299f06f58702d4e43ef5fff2",
+  "crates/engine-native-content/src/content/extension.rs": "1f132a88995605352797ab8367506ece7021b7c8e3790bb2bfdd1c82e358c6c6",
+  "crates/content-native-loader/src/decision34_pack9.rs": "57677960381809834e0a6990cdb0b0082474f9a0c55819059046b98529ecd428",
+  "crates/content-native-loader/src/decision34_pack9_data.rs": "8385ed736dae59c7dacd4559a1212a696621a8e2b9b46712725a0726400d271c",
+  "crates/content-native-loader/src/decision34_pack9_triggers.rs": "e17abd9d1d0c60f96029966e0ca72338c5f93080be59482c2666201c7f8aa53f",
+  "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs": "853094eb44139337180a18429e290a136c9afd3d05c15fc6ed86092285c00be6",
+  "crates/engine-native-content/src/content/host/step/u01_batch_d.rs": "f46fce42a8691128b9343dbfe8270b92a64bcacaafd2abd4a6c0bf497d1a398f",
+  "crates/engine-native-kernel/src/kernel/events.rs": "455d310241f57cd17cef6b90b98a4c4aa7b077ece52c4867fa302dd8a1006728",
+  "crates/engine-native-kernel/src/state.rs": "5aa22cf0f9ac5c138adb431a42ed227dbf39f4cb62370effd8972b49260d4a8f",
+  "pending.ngsa": "3158038e27eb46cffd15b4fc1eb4e378daa381cc9a01e16b96ef8f6656178736"
+}

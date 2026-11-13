@@ -1,5 +1,25 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+## 2026-11-13T22:21:49+08:00 第0项本地验证与待发布状态
+
+源码HEAD `3a6e398485db6ef0729abe3013c3c4b7705a5d6d` + tracked dirty；版本333／107／5／759／WS8。全部要求的本地门禁与独立复核已通过，原始失败／补跑见[最终本地表](../operations/evidence/2026-11-13-queue0-gates/final-local-gates.md)；当前尚未提交、推送或登记本批CI。14场golden没有重录；一份旧NGSA107精确字节、内容锁与续行通过。前述Prepare／选序、桃园和实体Duel0差异保留，不据绿色门禁称规则等价。后续进度仍写在[当前进度](native-progress.md)，实际发布结果另增记录。
+
+## 2026-11-13T21:42:47+08:00 第 0 项已实现范围与保留差异
+
+- 源码 HEAD `3a6e398485db6ef0729abe3013c3c4b7705a5d6d` + tracked dirty；规则 333／NGSA 107／content schema 5／ABI 759／WS8，未新增字段、tag 或 ADR。最终三 crate 2442 通过／0 失败／6 忽略，标准14场 golden 测试通过且期望源码未改；[黄金与旧档证据](../operations/evidence/2026-11-13-queue0-gates/golden-and-old-archive.json)覆盖14场和一份2,149字节修复前NGSA107挂起档，不泛指所有历史档。产品其余门禁、提交和发布仍待。
+- `dddanzhi` 黑色末牌条件含真实使用／打出，只有所选目标获一次免疫，覆盖最终追加目标、真实装备与强制移装备区别、phaseEnd至phaseAfter边界；20项定向与20项独立复核通过。五谷持牌归属、Init/Pick及无懈包裹恢复、桃园恢复分派与载体回收已补。旧“必须复现五谷恢复缺陷”诊断改为固定种子40步成功恢复、完整快照（含RNG）与未中断轨迹相等的回归；首失败及原文保留。详见[独立逐分支表](../operations/evidence/2026-11-13-queue0-gates/independent-review/final-report.md)。
+- **仍为简化近似**：暗织仍在 Prepare 宿主窗，上游为真回合开始；暗织和Fz仍为 `(Normal,1,false)`，上游有效值为 `(Normal,0,true)`。本批Fz仅同值补登记，不改变真实调度与内容锁；后续真实纠偏会改变并列触发轨迹，须按用户目标先报告边界。没有上调这两项等价状态。
+- **原生桃园目标模型未修**：仍仅回复其他存活角色，上游包含使用者；本次免疫及恢复按现有模型工作，不能签署整牌等价。**实体Duel CardId=0未修**：既有finish以0作无实体哨兵，导致真实0号牌漏弃；本批未改duel.rs，整合失败原文、HEAD字节对比与边界见[证据](../operations/evidence/2026-11-13-queue0-gates/dddanzhi/known-boundary-duel-card0.json)。尚未另跑纯HEAD行为复现，不以源码相同替代该证明。
+- 其他扩展特有隐式目标尚未穷举；上游浏览器实际触发0。本次不证明13来源整源等价。
+
+
+## 2026-11-13 第 0 项执行边界（修复中）
+
+- 核验时刻：2026-11-13T21:19:01+08:00；源码 HEAD `3a6e398485db6ef0729abe3013c3c4b7705a5d6d`，tracked dirty；规则 333／NGSA 107／schema 5／ABI 759／WS8 不升号，不新增 ADR、存档字段或协议。
+- `FzLiegong` 仅补既有 `(Normal,1,false)` 选序登记。上游默认 `(Normal,0,true)` 的真实纠偏会改变并列触发选序，须先报告轨迹边界，不在本批暗改；详见[独立边界复核](../operations/evidence/2026-11-13-queue0-gates/independent-review/fz-selection-boundary.md)。
+- `dddanzhi` 的黑色历史、所选目标独占免疫与消费／到期路径正在修复。既有 Prepare 触发与 `(Normal,1,false)` 元数据保留，以保持原内容锁；上游真回合开始及 `(Normal,0,true)` 差异仍在，清单已退为简化近似。当前反例、旧档恢复与最终完整门禁以[本批证据](../operations/evidence/2026-11-13-queue0-gates/README.md)为准，本条执行记录不能充当全量通过或上游等价证明。
+
+
 **2026-11-12 Step 1 交互通道打样（按[裁决 40](../operations/evidence/2026-10-28-user-decisions/README.md)复用既有 `HostBehavior + HostStage + ChoiceKind` 选择通道，零升号：规则 333 / NGSA 107 / content schema 5 / ABI 759 / WS 8 冻结保持，14 场 golden 哈希零变化；见[Step 1 交互通道打样与迁移指南](../operations/evidence/2026-11-12-step1-choice-channel-prototype/README.md)）**：
 - **代表技能真实玩家选择落地与独立复核**：将选目标代表技 `boss_chuanyun`（`HostBehavior::BossChuanyun = 539`）、可选发动+选目标代表技 `boss_tianyun`（`HostBehavior::BossTianyun = 540`）与选牌置牌堆顶+视为用酒/桃+0 卡转化技代表技 `dddxiaxing`（`HostBehavior::DddXiaxing = 541`）迁入真实 `Flow::WaitChoice` + `active_ask_host` 挂起选择通道，支持玩家任选合法目标/卡牌、取消不发动、AI 座位基于公开 `PolicyInput` 启发式应答以及选择挂起中途 `save() -> restore()` 无损恢复；经 `step1-verifier` 独立复核后，全仓 4,424 项实体更新为 `已复核等价 3 / 简化近似 4,421 / 缺失 0`（其余尚未迁入挂起选择通道的扩展技能仍保持 `简化近似` 状态）。
 

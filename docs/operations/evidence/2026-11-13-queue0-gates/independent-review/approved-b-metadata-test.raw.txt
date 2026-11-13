@@ -1,0 +1,20 @@
+at: 2026-11-13T21:09:59.847811+08:00
+cwd: /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client
+command: node --import ./scripts/ts-register.mjs --test scripts/approved-b-metadata.test.mjs
+✔ u32 choice counts reject malformed fields before host acceptance (1.359459ms)
+✔ two slots preserve def zero and defaults accept old payloads (0.345ms)
+✔ canonical kinds and prompts reach real envelope conversion (0.276458ms)
+✔ metadata wrong types refuse explicitly at local JSON boundary (0.186542ms)
+✔ old functional TypeScript reader ignores extra metadata (2.685334ms)
+✔ production prompt literals and extension keys have readable presentation without internal keys (14.442166ms)
+✔ r05h linked, r05_effects, and tiqi_adjustment context preserve signed/zero values and reject malformed payloads (0.477875ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 325.733459
+
+exit_code: 0

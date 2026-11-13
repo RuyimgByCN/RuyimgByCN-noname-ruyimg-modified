@@ -1,0 +1,18 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--test",
+    "g1",
+    "u01_dddanzhi_regression",
+    "--",
+    "--nocapture"
+  ],
+  "env": {
+    "CARGO_INCREMENTAL": "0",
+    "DDDANZHI_CAPTURE_DIR": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/before"
+  }
+}

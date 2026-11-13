@@ -1,0 +1,44 @@
+{"started_at": "2026-11-13T13:29:58.933326+00:00", "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next", "command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "g1", "u01_dddanzhi_regression", "--", "--nocapture"], "head": "3a6e398485db6ef0729abe3013c3c4b7705a5d6d", "dirty": true, "rules": 333, "ngsa": 107, "schema": 5, "abi": 759, "ws": 8}
+
+   Compiling engine-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-api)
+   Compiling resource-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/resource-schema)
+   Compiling licensing-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/licensing-schema)
+   Compiling rule-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-api)
+   Compiling rule-vm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-vm)
+   Compiling engine-native-kernel v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel)
+   Compiling content-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema)
+   Compiling engine-native-content v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content)
+   Compiling content-runtime v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-runtime)
+   Compiling content-compiler v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-compiler)
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 42.12s
+     Running tests/groups/g1.rs (target/debug/deps/g1-b6f375635d5ff985)
+
+running 20 tests
+test u01_dddanzhi_regression::dddanzhi_no_ward_virtual_group_subset_keeps_global_recipients ... ok
+test u01_dddanzhi_regression::dddanzhi_nullified_equipment_keeps_old_slot_and_has_no_equip_after ... ok
+test u01_dddanzhi_regression::dddanzhi_direct_equipment_move_neither_changes_history_nor_consumes_ward ... ok
+old NGSA 2149 bytes: exact decode/encode and restored snapshot match; locks unchanged
+test u01_dddanzhi_regression::dddanzhi_pre_fix_pending_ngsa_retains_content_lock_and_resumes ... ok
+test u01_dddanzhi_regression::dddanzhi_only_first_black_target_is_immune_and_red_does_not_consume ... ok
+test u01_dddanzhi_regression::dddanzhi_last_response_color_overrides_used_card_color ... ok
+test u01_dddanzhi_regression::dddanzhi_discard_without_history_and_last_red_do_not_trigger ... ok
+test u01_dddanzhi_regression::dddanzhi_wugu_without_skill_restores_held_reveal_cards ... ok
+test u01_dddanzhi_regression::dddanzhi_black_view_as_wugu_skips_only_immune_picker_after_restore ... ok
+test u01_dddanzhi_regression::dddanzhi_actual_equipment_use_updates_last_color ... ok
+test u01_dddanzhi_regression::dddanzhi_final_targets_include_after_trigger_additions ... ok
+test u01_dddanzhi_regression::dddanzhi_black_implicit_self_target_is_consumed_and_counted ... ok
+test u01_dddanzhi_regression::dddanzhi_black_multitarget_card_only_loses_the_selected_target ... ok
+test u01_dddanzhi_regression::dddanzhi_nested_use_and_response_do_not_get_overwritten_by_parent ... ok
+test u01_dddanzhi_regression::dddanzhi_protects_phase_end_card_until_phase_after ... ok
+test u01_dddanzhi_regression::dddanzhi_sibling_duels_record_execution_order_instead_of_frame_ids ... ok
+test u01_dddanzhi_regression::dddanzhi_ward_expires_at_turn_end_and_survives_grantor_skill_loss ... ok
+test u01_dddanzhi_regression::dddanzhi_black_fengze_taoyuan_restores_nullify_window_and_carrier ... ok
+test u01_dddanzhi_regression::dddanzhi_wugu_pending_init_restores_and_nullification_cleans_marker ... ok
+test u01_dddanzhi_regression::dddanzhi_target_choice_cancel_and_pending_archive_are_distinct ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 221 filtered out; finished in 0.13s
+
+
+exit_code=0

@@ -1,0 +1,254 @@
+docs/architecture/native-phase-filter-registry.tsv:20: trailing whitespace.
++BossChuanyun	boss_chuanyun	End	true	未核	
+docs/architecture/native-phase-filter-registry.tsv:21: trailing whitespace.
++BossTianyun	boss_tianyun	End	true	未核	
+docs/architecture/native-phase-filter-registry.tsv:22: trailing whitespace.
++DddXiaxing	dddxiaxing	Prepare	true	未核	
+docs/architecture/native-phase-filter-registry.tsv:23: trailing whitespace.
++KMowang	k_mowang	Prepare	true	未核	
+docs/architecture/native-phase-filter-registry.tsv:24: trailing whitespace.
++KMowang	k_mowang	End	false	未核	
+docs/architecture/native-phase-filter-registry.tsv:28: trailing whitespace.
++SwdBaishouzhihuHeld		Discard	false	未核	
+docs/operations/evidence/2026-11-13-queue0-gates/04-wugu-diagnostic-before.rs.txt:30: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue0-gates/04a-wugu-restoration-regression.log:9: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue0-gates/04b-native-three-complete.log:2558: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue0-gates/04c-wugu-restoration-regression.log:9: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue0-gates/04d-native-three-complete-final.log:2557: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue0-gates/07-workspace-complete.log:15110: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue0-gates/11-frontend-typecheck.log:4: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue0-gates/13-smoke-native.log:65: trailing whitespace.
++PASS worker_vm_same_package_restore_and_replay | restored=true replayed=true  
+docs/operations/evidence/2026-11-13-queue0-gates/13-smoke-native.log:77: trailing whitespace.
++PASS worker_vm_old_save_keeps_frozen_old_version_after_upgrade | restored=true replayed=true  
+docs/operations/evidence/2026-11-13-queue0-gates/13-smoke-native.log:81: trailing whitespace.
++PASS worker_vm_uninstalled_old_save_restores_from_frozen_copy | restored=true replayed=true  
+docs/operations/evidence/2026-11-13-queue0-gates/16-desktop-tests.log:140: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue0-gates/18-preflight-first.log:23: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue0-gates/19-preflight-final.log:23: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/duel-head-source.txt:287: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/final-source-changes.patch:256: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/final-source-changes.patch:259: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/final-source-changes.patch:277: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/final-source-changes.patch:359: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/final-source-changes.patch:572: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/final-source-changes.patch:578: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/final-source-changes.patch:1508: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/final-tracked-source-changes.patch:256: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/final-tracked-source-changes.patch:259: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/final-tracked-source-changes.patch:277: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/final-tracked-source-changes.patch:359: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/final-tracked-source-changes.patch:572: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/final-tracked-source-changes.patch:578: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/final-tracked-source-changes.patch:578: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/green-final.log:32: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/source-changes.patch:270: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/source-changes.patch:273: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/source-changes.patch:291: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/source-changes.patch:378: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/source-changes.patch:591: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/source-changes.patch:597: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/dddanzhi/source-changes.patch:597: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/adv21-final-review.diff:8: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/adv21-final-review.diff:76: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/adv21-final-review.diff:76: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/adv21-source-before-acceptance-strengthening.diff:8: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/adv21-source-before-acceptance-strengthening.diff:76: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/adv21-source-before-acceptance-strengthening.diff:76: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/ddd-source-before.txt:200: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/final-reviewed-tracked.diff:298: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/final-reviewed-tracked.diff:301: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/final-reviewed-tracked.diff:319: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/final-reviewed-tracked.diff:401: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/final-reviewed-tracked.diff:652: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/final-reviewed-tracked.diff:658: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/final-reviewed-tracked.diff:658: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/final-source-audit.txt:89: trailing whitespace.
++2: 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/final-source-audit.txt:98: trailing whitespace.
++11: 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/final-source-audit.txt:99: trailing whitespace.
++49: 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/final-source-audit.txt:106: trailing whitespace.
++56: 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/final-source-audit.txt:142: trailing whitespace.
++92: 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/final-source-audit.txt:180: trailing whitespace.
++265: 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/final-source-audit.txt:306: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-final-reviewed.diff:12: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-final-reviewed.diff:17: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-final-reviewed.diff:22: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-final-reviewed.diff:24: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-final-reviewed.diff:25: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-final-reviewed.diff:46: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-final-reviewed.diff:47: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-final-reviewed.diff:59: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-final-reviewed.diff:62: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-final-reviewed.diff:63: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-final-reviewed.diff:120: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-final-reviewed.diff:126: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-initial-reviewed.diff:12: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-initial-reviewed.diff:15: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-initial-reviewed.diff:16: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-initial-reviewed.diff:37: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-initial-reviewed.diff:38: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-initial-reviewed.diff:50: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-initial-reviewed.diff:53: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-initial-reviewed.diff:54: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-initial-reviewed.diff:87: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/once-event-initial-reviewed.diff:93: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-current.tsv:20: trailing whitespace.
++BossChuanyun	boss_chuanyun	End	true	未核	
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-current.tsv:21: trailing whitespace.
++BossTianyun	boss_tianyun	End	true	未核	
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-current.tsv:22: trailing whitespace.
++DddXiaxing	dddxiaxing	Prepare	true	未核	
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-current.tsv:23: trailing whitespace.
++KMowang	k_mowang	Prepare	true	未核	
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-current.tsv:24: trailing whitespace.
++KMowang	k_mowang	End	false	未核	
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-current.tsv:28: trailing whitespace.
++SwdBaishouzhihuHeld		Discard	false	未核	
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed-final.diff:9: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed-final.diff:14: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed-final.diff:18: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed-final.diff:24: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed-final.diff:31: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed-final.diff:44: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed-final.diff:49: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed-final.diff:56: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed-final.diff:59: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed-final.diff:68: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed-final.diff:69: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed-final.diff:81: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed-final.diff:85: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed-final.diff:86: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed-final.diff:89: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed-final.diff:90: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed-final.diff:94: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed-final.diff:99: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed.diff:9: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed.diff:14: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed.diff:18: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed.diff:24: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed.diff:31: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed.diff:44: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed.diff:49: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed.diff:56: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed.diff:59: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed.diff:68: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed.diff:69: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed.diff:81: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed.diff:85: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed.diff:86: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed.diff:89: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed.diff:90: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed.diff:94: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-reviewed.diff:99: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/phase-registry-source-audit.txt:134: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/static-source-round1.txt:101: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/static-source-round1.txt:263: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/static-source-round1.txt:268: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/independent-review/static-source-round1.txt:310: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue0-gates/phase-registry-before.diff:7: trailing whitespace.
+++BossChuanyun	boss_chuanyun	End	true	未核	
+docs/operations/evidence/2026-11-13-queue0-gates/phase-registry-before.diff:8: trailing whitespace.
+++BossTianyun	boss_tianyun	End	true	未核	
+docs/operations/evidence/2026-11-13-queue0-gates/phase-registry-before.diff:9: trailing whitespace.
+++DddXiaxing	dddxiaxing	Prepare	true	未核	
+docs/operations/evidence/2026-11-13-queue0-gates/phase-registry-before.diff:10: trailing whitespace.
+++KMowang	k_mowang	Prepare	true	未核	
+docs/operations/evidence/2026-11-13-queue0-gates/phase-registry-before.diff:11: trailing whitespace.
+++KMowang	k_mowang	End	false	未核	
+docs/operations/evidence/2026-11-13-queue0-gates/precheck-02.txt:44: new blank line at EOF.

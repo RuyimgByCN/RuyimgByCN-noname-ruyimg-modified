@@ -32,6 +32,7 @@ pub const DECLS: &[(H, Timing, i32, bool)] = &[
     (H::BossXuanlin3, Timing::Normal, 1, false),
     (H::BossXuanlin3x, Timing::Normal, -1000, false),
     (H::DddXiaxing, Timing::Normal, 0, true),
+    (H::FzLiegong, Timing::Normal, 1, false),
     (H::GujianYunvyuanshen, Timing::Normal, 610, true),
     (H::GwentBirinState, Timing::Normal, 1, false),
     (H::GwentCiguState, Timing::Normal, 0, true),

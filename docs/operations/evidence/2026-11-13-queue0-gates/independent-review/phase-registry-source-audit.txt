@@ -1,0 +1,134 @@
+BossChuanyun End true
+956:                 if !matches!(
+957:                     event,
+958:                     EventData::Phase {
+959:                         player,
+960:                         phase: crate::event::Phase::End,
+961:                         begin: true,
+962:                     } if *player == owner
+963:                 ) {
+964:                     return false;
+965:                 }
+966:                 let owner_hp = ctx.state.player(owner).hp;
+c47831ddbb38cb2ff000a5bab400abfa73fcb188 901 960 1
+author ruyimg
+author-mail <2689302609@qq.com>
+author-time 1794422623
+author-tz +0800
+committer ruyimg
+committer-mail <2689302609@qq.com>
+committer-time 1794422623
+committer-tz +0800
+summary feat(native): prototype Decision 40 choice channel on boss_chuanyun, boss_tianyun, and dddxiaxing (Step 1)
+previous c9cf9c7def763a17b2b25d2d38100cd7137fd912 crates/engine-native-content/src/content/host/filtering/common.rs
+filename crates/engine-native-content/src/content/host/filtering/common.rs
+	                        phase: crate::event::Phase::End,
+
+
+BossTianyun End true
+973:                 matches!(
+974:                     event,
+975:                     EventData::Phase {
+976:                         player,
+977:                         phase: crate::event::Phase::End,
+978:                         begin: true,
+979:                     } if *player == owner
+980:                 ) && ctx.state.alive_players().any(|p| p != owner)
+981:             }
+982:             // 侠行（3D精选·character/skill.js:59）：每轮限一次（!hasSkill("dddxiaxing_used")）且 he 区有牌，
+983:             // 任意角色准备阶段开始或濒死时触发（持有「侠」标记不阻碍触发，标记跨轮保留直至被转化消费）
+c47831ddbb38cb2ff000a5bab400abfa73fcb188 918 977 1
+author ruyimg
+author-mail <2689302609@qq.com>
+author-time 1794422623
+author-tz +0800
+committer ruyimg
+committer-mail <2689302609@qq.com>
+committer-time 1794422623
+committer-tz +0800
+summary feat(native): prototype Decision 40 choice channel on boss_chuanyun, boss_tianyun, and dddxiaxing (Step 1)
+previous c9cf9c7def763a17b2b25d2d38100cd7137fd912 crates/engine-native-content/src/content/host/filtering/common.rs
+filename crates/engine-native-content/src/content/host/filtering/common.rs
+	                        phase: crate::event::Phase::End,
+
+
+DddXiaxing Prepare true
+999:                 }
+1000:                 match event {
+1001:                     EventData::Phase {
+1002:                         player,
+1003:                         phase: crate::event::Phase::Prepare,
+1004:                         begin: true,
+1005:                     } => ctx.state.player(*player).alive,
+1006:                     EventData::Dying { player, .. } => {
+1007:                         ctx.state.player(*player).alive && ctx.state.player(*player).hp <= 0
+1008:                     }
+1009:                     _ => false,
+c47831ddbb38cb2ff000a5bab400abfa73fcb188 944 1003 1
+author ruyimg
+author-mail <2689302609@qq.com>
+author-time 1794422623
+author-tz +0800
+committer ruyimg
+committer-mail <2689302609@qq.com>
+committer-time 1794422623
+committer-tz +0800
+summary feat(native): prototype Decision 40 choice channel on boss_chuanyun, boss_tianyun, and dddxiaxing (Step 1)
+previous c9cf9c7def763a17b2b25d2d38100cd7137fd912 crates/engine-native-content/src/content/host/filtering/common.rs
+filename crates/engine-native-content/src/content/host/filtering/common.rs
+	                        phase: crate::event::Phase::Prepare,
+
+
+KMowang End false
+1100:                             > 0
+1101:                 }
+1102:                 EventData::Phase {
+1103:                     player,
+1104:                     phase: crate::event::Phase::End,
+1105:                     begin: false,
+1106:                 } => *player == owner,
+1107:                 _ => false,
+1108:             },
+1109:             _ => unreachable!("behavior routed to the wrong filter module"),
+1110:         }
+0d5795f3bde907973a61d2f7594220b742afd174 1096 1104 1
+author ruyimg
+author-mail <2689302609@qq.com>
+author-time 1794458526
+author-tz +0800
+committer ruyimg
+committer-mail <2689302609@qq.com>
+committer-time 1794458526
+committer-tz +0800
+summary feat(l10): complete 14/14 gameplay & config upstream equivalence and 6D real-match verification for L10 史诗卡牌
+previous 14b2b43f7979e5b20afbf1f51ba75d4eb44a34b1 crates/engine-native-content/src/content/host/filtering/common.rs
+filename crates/engine-native-content/src/content/host/filtering/common.rs
+	                    phase: crate::event::Phase::End,
+
+
+KMowang Prepare true
+1085:                             != 0
+1086:                 }
+1087:                 EventData::Phase {
+1088:                     player,
+1089:                     phase: crate::event::Phase::Prepare,
+1090:                     begin: true,
+1091:                 } => {
+1092:                     *player == owner
+1093:                         && ctx
+1094:                             .state
+1095:                             .vm_aux
+0d5795f3bde907973a61d2f7594220b742afd174 1081 1089 1
+author ruyimg
+author-mail <2689302609@qq.com>
+author-time 1794458526
+author-tz +0800
+committer ruyimg
+committer-mail <2689302609@qq.com>
+committer-time 1794458526
+committer-tz +0800
+summary feat(l10): complete 14/14 gameplay & config upstream equivalence and 6D real-match verification for L10 史诗卡牌
+previous 14b2b43f7979e5b20afbf1f51ba75d4eb44a34b1 crates/engine-native-content/src/content/host/filtering/common.rs
+filename crates/engine-native-content/src/content/host/filtering/common.rs
+	                    phase: crate::event::Phase::Prepare,
+

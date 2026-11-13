@@ -1,0 +1,26 @@
+{
+  "changed_item_keys": [
+    "U01:skills:dddanzhi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5796"
+  ],
+  "other_items_unchanged": 4423,
+  "counts": {
+    "已复核等价": 849,
+    "简化近似": 3575,
+    "缺失": 0,
+    "上游未定义": 0
+  },
+  "source_counts": {
+    "U01": {
+      "已复核等价": 94,
+      "简化近似": 1,
+      "缺失": 0
+    },
+    "L20": {
+      "已复核等价": 91,
+      "简化近似": 4,
+      "缺失": 0
+    }
+  },
+  "before_sha256": "390c4b6c1de203222f8456a7eb5d4409a3c65fadc8141ffd95b4e0a5ea02e21f",
+  "after_sha256": "4792c24d1855c8c156345ce5d013a348b849236aa779973bd51107e236605033"
+}

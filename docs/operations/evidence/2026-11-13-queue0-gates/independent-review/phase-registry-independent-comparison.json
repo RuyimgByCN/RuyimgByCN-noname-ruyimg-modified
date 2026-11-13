@@ -1,0 +1,108 @@
+{
+  "at": "2026-11-13T22:00:48.301988+08:00",
+  "head": "3a6e398485db6ef0729abe3013c3c4b7705a5d6d",
+  "tracked_dirty": true,
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "old_registry": {
+    "file": "docs/operations/evidence/2026-10-19-phase-audit/registry.txt",
+    "sha256": "5bdc93d018484779bdd533ca9ef451860008315ee2942be50632e219da501292",
+    "equals_HEAD_bytes": true,
+    "rows": 32,
+    "states": {
+      "已核": 29,
+      "不适用": 2,
+      "未核": 1
+    }
+  },
+  "current_registry": {
+    "file": "docs/architecture/native-phase-filter-registry.tsv",
+    "sha256": "35bdcec2bbd482634b950eaf28deafe4ef0b71f166b6e0acad597e7adcc1b30d",
+    "rows": 37,
+    "states": {
+      "已核": 29,
+      "不适用": 2,
+      "未核": 6
+    },
+    "begin_true": 21,
+    "phases": {
+      "Prepare": 4,
+      "Play": 8,
+      "Draw": 7,
+      "Discard": 3,
+      "End": 14,
+      "Judge": 1
+    }
+  },
+  "old_32_rows_in_current_byte_content_and_order_equal": true,
+  "removed_keys": [],
+  "changed_old_rows": [],
+  "new_branches": [
+    {
+      "behavior": "BossChuanyun",
+      "key": "boss_chuanyun",
+      "phase": "End",
+      "begin": "true",
+      "source_file": "crates/engine-native-content/src/content/host/filtering/common.rs",
+      "phase_line": 960,
+      "existing_HEAD_commit": "c47831ddbb38cb2ff000a5bab400abfa73fcb188",
+      "new_registry_status": "未核",
+      "new_registry_reason": ""
+    },
+    {
+      "behavior": "BossTianyun",
+      "key": "boss_tianyun",
+      "phase": "End",
+      "begin": "true",
+      "source_file": "crates/engine-native-content/src/content/host/filtering/common.rs",
+      "phase_line": 977,
+      "existing_HEAD_commit": "c47831ddbb38cb2ff000a5bab400abfa73fcb188",
+      "new_registry_status": "未核",
+      "new_registry_reason": ""
+    },
+    {
+      "behavior": "DddXiaxing",
+      "key": "dddxiaxing",
+      "phase": "Prepare",
+      "begin": "true",
+      "source_file": "crates/engine-native-content/src/content/host/filtering/common.rs",
+      "phase_line": 1003,
+      "existing_HEAD_commit": "c47831ddbb38cb2ff000a5bab400abfa73fcb188",
+      "new_registry_status": "未核",
+      "new_registry_reason": ""
+    },
+    {
+      "behavior": "KMowang",
+      "key": "k_mowang",
+      "phase": "End",
+      "begin": "false",
+      "source_file": "crates/engine-native-content/src/content/host/filtering/common.rs",
+      "phase_line": 1104,
+      "existing_HEAD_commit": "0d5795f3bde907973a61d2f7594220b742afd174",
+      "new_registry_status": "未核",
+      "new_registry_reason": ""
+    },
+    {
+      "behavior": "KMowang",
+      "key": "k_mowang",
+      "phase": "Prepare",
+      "begin": "true",
+      "source_file": "crates/engine-native-content/src/content/host/filtering/common.rs",
+      "phase_line": 1089,
+      "existing_HEAD_commit": "0d5795f3bde907973a61d2f7594220b742afd174",
+      "new_registry_status": "未核",
+      "new_registry_reason": ""
+    }
+  ],
+  "all_5_new_statuses_unreviewed_and_reason_empty": true,
+  "native_filter_source_unchanged_vs_HEAD": true,
+  "scripts": {
+    "scripts/report_phase_filters.py": "b7a60521640d78dca12dd3870a4a99766c2d804e929fb97852952a545203f62a",
+    "scripts/test_report_phase_filters.py": "b9b4c3c266004f3d740caeddd5de358d64e2b5f2505b6cdc6558c86e948b2aa9"
+  }
+}

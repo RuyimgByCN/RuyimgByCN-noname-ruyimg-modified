@@ -1,5 +1,14 @@
 use super::*;
 
+fn take_dddanzhi_targets(ctx: &mut Ctx<'_>, owner: PlayerId) -> Option<Vec<PlayerId>> {
+    let frame = ctx.current_frame_id();
+    ctx.core
+        .vm_aux
+        .flags
+        .remove(&(owner, format!("dddanzhi_targets:{frame}")))?;
+    ctx.current_card_use().ok().map(|u| u.targets.clone())
+}
+
 /// 无中生有结算：使用者摸 2。
 #[derive(Clone)]
 pub struct WuzhongMachine {
@@ -53,11 +62,15 @@ impl crate::catalog::SkillMachine for TaoyuanMachine {
         crate::snap::MachineSnapshot::Taoyuan { owner: self.owner }
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
-        let others: Vec<PlayerId> = ctx
+        let card = ctx.current_card_use().ok().and_then(|u| u.card);
+        let mut others: Vec<PlayerId> = ctx
             .core
             .alive_players()
             .filter(|p| *p != self.owner)
             .collect();
+        if let Some(targets) = take_dddanzhi_targets(ctx, self.owner) {
+            others.retain(|p| targets.contains(p));
+        }
         for p in others {
             let (hp, max) = {
                 let pl = ctx.core.player(p);
@@ -67,14 +80,11 @@ impl crate::catalog::SkillMachine for TaoyuanMachine {
                 ctx.recover(p, 1, None);
             }
         }
-        if let Some(pos) = ctx
-            .core
-            .table
-            .iter()
-            .position(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Taoyuan)
-        {
-            let card = ctx.core.table.remove(pos);
-            ctx.to_discard(card);
+        if let Some(card) = card {
+            if let Some(pos) = ctx.core.table.iter().position(|&c| c == card) {
+                ctx.core.table.remove(pos);
+                ctx.to_discard(card);
+            }
         }
         Flow::Done
     }
@@ -159,6 +169,9 @@ impl crate::catalog::SkillMachine for WuguMachine {
                 let new_len = ctx.core.deck.len() - take;
                 self.cards = ctx.core.deck.split_off(new_len);
                 self.pickers = alive;
+                if let Some(targets) = take_dddanzhi_targets(ctx, self.owner) {
+                    self.pickers.retain(|p| targets.contains(p));
+                }
                 self.stage = WuguStage::Pick;
                 self.open_pick(ctx)
             }
@@ -240,14 +253,11 @@ impl WuguMachine {
                 ctx.to_discard(c);
             }
         }
-        if let Some(c) = ctx
-            .core
-            .table
-            .iter()
-            .position(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Wugu)
-        {
-            let card = ctx.core.table.remove(c);
-            ctx.to_discard(card);
+        if let Some(card) = ctx.current_card_use().ok().and_then(|u| u.card) {
+            if let Some(c) = ctx.core.table.iter().position(|&c| c == card) {
+                ctx.core.table.remove(c);
+                ctx.to_discard(card);
+            }
         }
         Flow::Done
     }

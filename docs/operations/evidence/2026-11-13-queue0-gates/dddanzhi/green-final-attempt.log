@@ -1,0 +1,67 @@
+   Compiling engine-native-kernel v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 20.35s
+     Running tests/groups/g1.rs (target/debug/deps/g1-a4e6ec7f8e101885)
+
+running 18 tests
+
+thread 'u01_dddanzhi_regression::dddanzhi_no_ward_virtual_group_subset_keeps_global_recipients' (2855763) panicked at crates/engine-native/tests/groups/../u01_dddanzhi_regression.rs:489:9:
+assertion failed: e.log().iter().any(|log|
+        matches!(log, LogEvent::VirtualCardPlayed
+            { kind: actual, targets, .. } if *actual == kind && targets ==
+            &[0]))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test u01_dddanzhi_regression::dddanzhi_no_ward_virtual_group_subset_keeps_global_recipients ... FAILED
+
+thread 'u01_dddanzhi_regression::dddanzhi_nullified_equipment_keeps_old_slot_and_has_no_equip_after' (2855764) panicked at crates/engine-native/tests/groups/../u01_dddanzhi_regression.rs:634:5:
+assertion failed: e.debug_has_skill(2, "zhangba")
+test u01_dddanzhi_regression::dddanzhi_nullified_equipment_keeps_old_slot_and_has_no_equip_after ... FAILED
+
+thread 'u01_dddanzhi_regression::dddanzhi_nested_use_and_response_do_not_get_overwritten_by_parent' (2855762) panicked at crates/engine-native/tests/groups/../u01_dddanzhi_regression.rs:34:47:
+called `Option::unwrap()` on a `None` value
+test u01_dddanzhi_regression::dddanzhi_nested_use_and_response_do_not_get_overwritten_by_parent ... FAILED
+
+thread 'u01_dddanzhi_regression::dddanzhi_protects_phase_end_card_until_phase_after' (2855767) panicked at crates/engine-native/tests/groups/../u01_dddanzhi_regression.rs:34:47:
+called `Option::unwrap()` on a `None` value
+test u01_dddanzhi_regression::dddanzhi_protects_phase_end_card_until_phase_after ... FAILED
+
+thread 'u01_dddanzhi_regression::dddanzhi_direct_equipment_move_neither_changes_history_nor_consumes_ward' (2855758) panicked at crates/engine-native/tests/groups/../u01_dddanzhi_regression.rs:569:5:
+assertion `left == right` failed
+  left: []
+ right: [121]
+old NGSA 2149 bytes: exact decode/encode and restored snapshot match; locks unchanged
+test u01_dddanzhi_regression::dddanzhi_pre_fix_pending_ngsa_retains_content_lock_and_resumes ... ok
+test u01_dddanzhi_regression::dddanzhi_direct_equipment_move_neither_changes_history_nor_consumes_ward ... FAILED
+test u01_dddanzhi_regression::dddanzhi_only_first_black_target_is_immune_and_red_does_not_consume ... ok
+test u01_dddanzhi_regression::dddanzhi_wugu_without_skill_restores_held_reveal_cards ... ok
+test u01_dddanzhi_regression::dddanzhi_discard_without_history_and_last_red_do_not_trigger ... ok
+test u01_dddanzhi_regression::dddanzhi_black_view_as_wugu_skips_only_immune_picker_after_restore ... ok
+test u01_dddanzhi_regression::dddanzhi_last_response_color_overrides_used_card_color ... ok
+test u01_dddanzhi_regression::dddanzhi_black_multitarget_card_only_loses_the_selected_target ... ok
+test u01_dddanzhi_regression::dddanzhi_actual_equipment_use_updates_last_color ... ok
+
+thread 'u01_dddanzhi_regression::dddanzhi_final_targets_include_after_trigger_additions' (2855760) panicked at crates/engine-native/tests/groups/../u01_dddanzhi_regression.rs:515:9:
+assertion `left == right` failed: initial=1
+  left: 20
+ right: 19
+test u01_dddanzhi_regression::dddanzhi_final_targets_include_after_trigger_additions ... FAILED
+test u01_dddanzhi_regression::dddanzhi_black_implicit_self_target_is_consumed_and_counted ... ok
+test u01_dddanzhi_regression::dddanzhi_ward_expires_at_turn_end_and_survives_grantor_skill_loss ... ok
+test u01_dddanzhi_regression::dddanzhi_wugu_pending_init_restores_and_nullification_cleans_marker ... ok
+test u01_dddanzhi_regression::dddanzhi_target_choice_cancel_and_pending_archive_are_distinct ... ok
+
+failures:
+
+failures:
+    u01_dddanzhi_regression::dddanzhi_direct_equipment_move_neither_changes_history_nor_consumes_ward
+    u01_dddanzhi_regression::dddanzhi_final_targets_include_after_trigger_additions
+    u01_dddanzhi_regression::dddanzhi_nested_use_and_response_do_not_get_overwritten_by_parent
+    u01_dddanzhi_regression::dddanzhi_no_ward_virtual_group_subset_keeps_global_recipients
+    u01_dddanzhi_regression::dddanzhi_nullified_equipment_keeps_old_slot_and_has_no_equip_after
+    u01_dddanzhi_regression::dddanzhi_protects_phase_end_card_until_phase_after
+
+test result: FAILED. 12 passed; 6 failed; 0 ignored; 0 measured; 221 filtered out; finished in 0.12s
+
+error: test failed, to rerun pass `-p engine-native --test g1`

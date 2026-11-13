@@ -73,7 +73,9 @@ class ArmTests(unittest.TestCase):
         cls.rows = cls.mod.arms()
 
     def test_damage_arms_are_enumerated(self):
-        self.assertEqual(len(self.rows), 88)
+        # L29 已有酒诗伤害分支（14b2b43f7），原断言未同步。
+        self.assertEqual(len(self.rows), 89)
+        self.assertIn(("MbcmJiushi", "Damage"), [(row[0], row[1]) for row in self.rows])
 
     def test_every_row_has_behavior_and_kind(self):
         for behavior, which, *_ in self.rows:

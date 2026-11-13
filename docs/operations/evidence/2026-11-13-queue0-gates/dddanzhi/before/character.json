@@ -1,0 +1,19 @@
+{
+  "source": "noname",
+  "upstream_path": "apps/core/extension/3D精选/",
+  "upstream_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+  "pack": { "name": "d3-upstream-noname", "version": 1, "description": "G1 3D精选", "card_prefix": "ddd_" },
+  "generals": [
+    {
+      "id": "ddd_liuchong",
+      "name": "ddd刘冲",
+      "faction": "qun",
+      "hp": 4,
+      "gender": "male",
+      "skills": [
+        { "name": "dddjinggou", "title": "精彀", "mapping": "host:max_range_weapon_damage" },
+        { "name": "dddmoyan", "title": "末焱", "mapping": "host:d3_moyan" }
+      ]
+    }
+  ]
+}

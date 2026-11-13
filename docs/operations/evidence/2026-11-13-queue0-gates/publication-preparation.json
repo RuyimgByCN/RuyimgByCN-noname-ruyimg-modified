@@ -1,0 +1,49 @@
+{
+  "remotes": {
+    "argv": [
+      "git",
+      "remote",
+      "-v"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "index": {
+    "argv": [
+      "git",
+      "diff",
+      "--cached",
+      "--name-only"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "worktrees": {
+    "argv": [
+      "git",
+      "worktree",
+      "list",
+      "--porcelain"
+    ],
+    "exit_code": 0,
+    "stdout": "worktree /Users/ruyimg/Documents/Claude/sanguosha/noname-next\nHEAD 3a6e398485db6ef0729abe3013c3c4b7705a5d6d\nbranch refs/heads/main\n\nworktree /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree\nHEAD 38ab1678df9b4b7b991d3b3122b1d937fd2648a1\ndetached\nprunable gitdir file points to non-existent location\n\nworktree /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/worktree\nHEAD 9dbc65530feb695688d3160dc38b6cf64ad39ecd\ndetached\nprunable gitdir file points to non-existent location\n\nworktree /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree\nHEAD 2b3348eff0a6a7f07d6f2ba3520e4ca243e344a6\ndetached\nprunable gitdir file points to non-existent location\n\nworktree /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree\nHEAD 255bbfbd7f6916ee77bd29799826a225bd10871f\ndetached\nprunable gitdir file points to non-existent location\n\nworktree /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/worktree\nHEAD 977cdf1f35bc3f08aba137528a3672f3dad5f391\ndetached\nprunable gitdir file points to non-existent location\n\nworktree /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree\nHEAD 100489f554fe89d3389e35196947d9070673c2a1\ndetached\nlocked initializing\n\nworktree /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree\nHEAD f6b7bb57bf27251b00832243b1e0826e6b3bc751\ndetached\nprunable gitdir file points to non-existent location\n\nworktree /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/worktree\nHEAD 44982f45edfb1a365163ecdacc08fa972219684e\ndetached\nprunable gitdir file points to non-existent location\n\n",
+    "stderr": ""
+  },
+  "hooks_path": {
+    "argv": [
+      "git",
+      "config",
+      "--get",
+      "core.hooksPath"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": ""
+  },
+  "original_pre_push": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/.git/hooks/pre-push",
+    "content": "#!/bin/sh\n# noname-next 仓库仅在本地使用（基线/检查点/回退），按约定不推送到任何远端。\necho \"noname-next: 本仓库仅本地使用，已阻止 push。\" >&2\nexit 1\n"
+  }
+}

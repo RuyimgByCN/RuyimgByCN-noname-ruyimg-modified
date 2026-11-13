@@ -422,11 +422,7 @@ pub(crate) fn step_u01_batch_d(machine: &mut HostMachine, ctx: &mut Ctx<'_>) -> 
         },
         "dddanzhi" => {
             if machine.stage == HostStage::Act && machine.card == Some(1) {
-                let is_blk = machine
-                    .cards
-                    .first()
-                    .is_some_and(|&c| !is_red(ctx.catalog, c));
-                set_flag(ctx.core, owner, "dddanzhi_last_black", u32::from(is_blk));
+                // 全局末牌历史由内核记录；保留旧注册以兼容内容锁/挂起机器。
                 return Flow::Done;
             }
             match machine.stage {
@@ -434,9 +430,6 @@ pub(crate) fn step_u01_batch_d(machine: &mut HostMachine, ctx: &mut Ctx<'_>) -> 
                 HostStage::TargetChoice => {
                     if let Some(ChoiceOption::Player(t)) = ctx.answer().first().copied() {
                         set_turn_flag(ctx.core, t, "dddanzhi_immune", "dddanzhi_stamp", 1);
-                        if t != owner {
-                            set_turn_flag(ctx.core, owner, "dddanzhi_immune", "dddanzhi_stamp", 1);
-                        }
                         ctx.log(LogEvent::SkillTriggered {
                             skill: "dddanzhi",
                             owner,

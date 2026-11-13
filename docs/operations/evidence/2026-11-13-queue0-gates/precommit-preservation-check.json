@@ -1,0 +1,14 @@
+{
+  "at": "2026-11-13T14:15:29.678388+00:00",
+  "source_head": "3a6e398485db6ef0729abe3013c3c4b7705a5d6d",
+  "initial_untracked_outside_batch": 667,
+  "all_initial_untracked_paths_still_present": true,
+  "new_untracked_outside_evidence": [
+    "crates/engine-native/tests/fixtures/u01-dddanzhi-pending-v107.ngsa",
+    "crates/engine-native/tests/u01_dddanzhi_regression.rs",
+    "docs/architecture/native-phase-filter-registry.tsv"
+  ],
+  "worktree_registration_byte_identical": true,
+  "worktree_registration_sha256": "4dc47a965992bf166a3c86fa45356b315f037eb0afd211df69217292bc5901d6",
+  "byte_preservation_of_initial_untracked_files": "Not asserted; initial snapshot recorded paths, not byte hashes. No edits or cleanup were directed at these paths."
+}

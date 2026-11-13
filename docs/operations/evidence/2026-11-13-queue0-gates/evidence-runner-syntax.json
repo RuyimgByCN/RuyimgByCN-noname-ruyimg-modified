@@ -1,0 +1,30 @@
+{
+  "verified_at": "2026-11-13T13:52:20.365136+00:00",
+  "checks": [
+    {
+      "file": "check-runner.py",
+      "sha256": "91a4b19e5a96e8a7e7566e0da86fbd4fb9f0b20d702d1a389616e0d5388e9892",
+      "syntax": "pass"
+    },
+    {
+      "file": "product-gates-runner.py",
+      "sha256": "566611b17752625c58d58a0f36be31baf7e2fc144247b6703f858588744943f1",
+      "syntax": "pass"
+    },
+    {
+      "file": "product-gates-resume.py",
+      "sha256": "fbbb352dc2ed10a5fdd4e4c9bd3194ab91f0dc7798727e9ddebda58ee682c008",
+      "syntax": "pass"
+    },
+    {
+      "file": "gate-summary-runner.py",
+      "sha256": "0060867c1d5d5fe1678e3024f7a7d5ecab49f1ddca0cfb09c2a5d72d3230e88c",
+      "syntax": "pass"
+    },
+    {
+      "file": "exact-publication-runner.py",
+      "sha256": "b9c9da1bd5d68b46c2b1c5b5bdbaa46b871ee6bafd159d51021cc48b26144ce3",
+      "syntax": "pass"
+    }
+  ]
+}

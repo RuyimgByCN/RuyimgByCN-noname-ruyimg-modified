@@ -1,0 +1,101 @@
+diff --git a/scripts/report_phase_filters.py b/scripts/report_phase_filters.py
+index c90b1a145..13a29c41c 100644
+--- a/scripts/report_phase_filters.py
++++ b/scripts/report_phase_filters.py
+@@ -1,16 +1,17 @@
+ #!/usr/bin/env python3
+-"""重新生成「阶段过滤审计登记表」（52 条）的骨架，**保留已填的状态列**。
++"""重新生成当前「阶段过滤审计登记表」的骨架，**保留已填的状态列**。
+ 
+ **为什么需要**：`docs/operations/evidence/2026-10-19-phase-audit/registry.txt`
+ 最初由一段临时脚本生成，**没有入库** ⇒ 无法复现、无法在 filter 改动后重新核对。
+ 本脚本让它可以「随时重生成」，并**保留人工填好的 `状态`/`依据` 两列**。
++当前表位于 `docs/architecture/native-phase-filter-registry.tsv`；原日期目录的表保留为历史快照。
+ 
+ **切片规则见 `arms()`**（段切片，不截断到第一个 `=>`）——
+ 切片方式会改变条数（52 vs 51），详见
+ `docs/operations/evidence/2026-10-19-g14-guard/slicing.md`。
+ 
+ 用法：
+-    python3 -B scripts/report_phase_filters.py            # 重生成 registry.txt
++    python3 -B scripts/report_phase_filters.py            # 重生成当前 TSV
+     python3 -B scripts/report_phase_filters.py --check     # 只比对，不一致则 exit 1
+ """
+ 
+@@ -23,7 +24,7 @@ from pathlib import Path
+ ROOT = Path(__file__).resolve().parent.parent
+ HOST = ROOT / "crates/engine-native-content/src/content/host"
+ KEYS = ROOT / "crates/engine-native-kernel/src/vocabulary/host/keys.rs"
+-REG = ROOT / "docs/operations/evidence/2026-10-19-phase-audit/registry.txt"
++REG = ROOT / "docs/architecture/native-phase-filter-registry.tsv"
+ 
+ PHASE = re.compile(r"phase:\s*crate::event::Phase::(\w+),\s*begin:\s*(true|false)")
+ BEHAVIOR = re.compile(r"HostBehavior::(\w+)\s*=>")
+diff --git a/scripts/test_report_phase_filters.py b/scripts/test_report_phase_filters.py
+index 45545fd34..fad3d70e2 100644
+--- a/scripts/test_report_phase_filters.py
++++ b/scripts/test_report_phase_filters.py
+@@ -11,7 +11,7 @@ import report_phase_filters as rp
+ class ScanTest(unittest.TestCase):
+     def test_scans_phase_filters(self) -> None:
+         rows = rp.scan()
+-        self.assertEqual(len(rows), 32, "阶段过滤条数变了 ⇒ 先核对是否有新增/删除")
++        self.assertEqual(len(rows), 37, "阶段过滤条数变了 ⇒ 先核对是否有新增/删除")
+ 
+     def test_rows_are_well_formed(self) -> None:
+         for beh, key, phase, begin in rp.scan():
+@@ -20,18 +20,18 @@ class ScanTest(unittest.TestCase):
+             self.assertIn(begin, {"true", "false"})
+ 
+     def test_begin_true_count(self) -> None:
+-        # 实测值（R05-A2 TurnBegin/Prepare 迁移后）：begin=true 共 17 条
++        # 2026-11-13：两 Boss、侠行和魔王新增四个 begin=true 过滤分支。
+         n = sum(1 for r in rp.scan() if r[3] == "true")
+-        self.assertEqual(n, 17, "begin=true 的条数变了")
++        self.assertEqual(n, 21, "begin=true 的条数变了")
+ 
+     def test_phase_distribution(self) -> None:
+         from collections import Counter
+ 
+         c = Counter(r[2] for r in rp.scan())
+-        # 实测分布（R05-A2 迁移后）：End 11 / Play 8 / Draw 7 / Discard 3 / Prepare 2 / Judge 1 = 32
++        # 原32条保留，新增 Prepare 两条、End 三条。
+         self.assertEqual(
+             dict(c),
+-            {"Prepare": 2, "Judge": 1, "Draw": 7, "Play": 8, "Discard": 3, "End": 11},
++            {"Prepare": 4, "Judge": 1, "Draw": 7, "Play": 8, "Discard": 3, "End": 14},
+         )
+ 
+ 
+@@ -40,7 +40,7 @@ class RenderTest(unittest.TestCase):
+         text = rp.render(rp.scan())
+         lines = text.strip().splitlines()
+         self.assertEqual(lines[0], "行为\tkey\tPhase\tbegin\t状态\t依据")
+-        self.assertEqual(len(lines), 33)
++        self.assertEqual(len(lines), 38)
+         for line in lines[1:]:
+             cells = line.split("\t")
+             self.assertEqual(len(cells), 6)
+@@ -50,7 +50,7 @@ class RenderTest(unittest.TestCase):
+         from collections import Counter
+ 
+         c = Counter(line.split("\t")[4] for line in rp.render(rp.scan()).strip().splitlines()[1:])
+-        self.assertEqual(c["已核"] + c["不适用"] + c["未核"], 32)
++        self.assertEqual(c["已核"] + c["不适用"] + c["未核"], 37)
+ 
+ 
+ if __name__ == "__main__":
+@@ -58,11 +58,11 @@ if __name__ == "__main__":
+ 
+ 
+ class ArmSlicingTest(unittest.TestCase):
+-    """钉住「段切片」规则：32 条，且 `Xiefang` 的 Draw 分支必须在。"""
++    """钉住「段切片」规则：37 条，且 `Xiefang` 的 Draw 分支必须在。"""
+ 
+     def test_arms_count_matches(self) -> None:
+         rows = rp.scan()
+-        self.assertEqual(len(rows), 32)
++        self.assertEqual(len(rows), 37)
+ 
+     def test_xiefang_has_draw_branch(self) -> None:
+         got = [(p, b) for beh, _key, p, b in rp.scan() if beh == "Xiefang"]

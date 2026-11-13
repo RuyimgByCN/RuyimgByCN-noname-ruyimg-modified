@@ -1,0 +1,6 @@
+{
+  "created_utc": "2026-11-13T13:28:22.563736+00:00",
+  "target": "/private/tmp/noname-queue0-strict-g105iu3t",
+  "purpose": "独立严格编译；完成后只清理此私有目录，保留共享target",
+  "shared_target_preserved": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target"
+}

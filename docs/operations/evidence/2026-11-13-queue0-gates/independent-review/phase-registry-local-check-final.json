@@ -1,0 +1,10 @@
+{
+  "at": "2026-11-13T22:02:31.075482+08:00",
+  "doc_links_checked": 77,
+  "broken_links": [],
+  "diff_check_exit_code": 0,
+  "diff_check_output": "",
+  "head": "3a6e398485db6ef0729abe3013c3c4b7705a5d6d",
+  "tracked_dirty": true,
+  "prior_check_retained": "phase-registry-local-check.json；当时两个final证据文件尚未生成导致2个坏链，生成后本次均已存在。"
+}

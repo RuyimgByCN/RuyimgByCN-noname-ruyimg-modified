@@ -1,0 +1,15 @@
+{
+  "at": "2026-11-13T14:00:42.983600+00:00",
+  "source_head": "3a6e398485db6ef0729abe3013c3c4b7705a5d6d",
+  "tracked_dirty": true,
+  "previous_source_freeze": "validated-final-inputs-v3.json",
+  "rust_frontend_test_fixture_inputs_unchanged": true,
+  "reason": "注释名称夏行纠正为侠行；无行为或断言变化。",
+  "files": {
+    "scripts/report_phase_filters.py": "b7a60521640d78dca12dd3870a4a99766c2d804e929fb97852952a545203f62a",
+    "scripts/test_report_phase_filters.py": "b9b4c3c266004f3d740caeddd5de358d64e2b5f2505b6cdc6558c86e948b2aa9",
+    "docs/architecture/native-phase-filter-registry.tsv": "35bdcec2bbd482634b950eaf28deafe4ef0b71f166b6e0acad597e7adcc1b30d",
+    "docs/operations/evidence/2026-10-19-phase-audit/registry.txt": "5bdc93d018484779bdd533ca9ef451860008315ee2942be50632e219da501292"
+  },
+  "previous_manifest": "validated-tooling-inputs.json"
+}

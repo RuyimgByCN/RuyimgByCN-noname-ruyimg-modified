@@ -1,0 +1,23 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "game-server",
+    "--test",
+    "native_product_path",
+    "native_character_only_installed_package_enters_match"
+  ],
+  "command": "cargo test --offline -p game-server --test native_product_path native_character_only_installed_package_enters_match",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0"
+  },
+  "source_head": "3a6e398485db6ef0729abe3013c3c4b7705a5d6d",
+  "tracked_status": "",
+  "start_utc": "2026-11-13T12:51:27.001193+00:00",
+  "exit_code": 101,
+  "duration_seconds": 309.608,
+  "end_utc": "2026-11-13T12:56:36.608588+00:00"
+}

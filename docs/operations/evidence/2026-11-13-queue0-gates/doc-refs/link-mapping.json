@@ -1,0 +1,23 @@
+[
+  {
+    "doc": "docs/operations/evidence/2026-11-12-step1-choice-channel-prototype/README.md",
+    "old": "apps/web-client/src/components/battle/BattleView.vue",
+    "new": "apps/web-client/src/views/BattleView.vue",
+    "reason": "实际视图包含待选择 section 与选择操作；原 components/battle 路径不存在",
+    "count": 1
+  },
+  {
+    "doc": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+    "old": "crates/content-native-loader/src/d3_gallery.rs",
+    "new": "crates/content-native-loader/src/decision34_pack9.rs",
+    "reason": "resolve_u01_3d_gallery 当前定义位于 decision34_pack9.rs；同时改同文档的标签和重复路径，不改等价结论",
+    "count": 3
+  },
+  {
+    "doc": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+    "old": "filtering/u01_ddd.rs",
+    "new": "filtering/common.rs",
+    "reason": "MaxRangeWeaponDamage 与 D3Moyan 的过滤分支实际位于 common.rs；同时改同文档的标签和重复路径，不改 HostBehavior 旧名/结论",
+    "count": 4
+  }
+]

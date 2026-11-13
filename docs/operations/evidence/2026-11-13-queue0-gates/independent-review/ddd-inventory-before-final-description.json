@@ -1,0 +1,17 @@
+{
+  "source_id": "U01",
+  "category": "skills",
+  "id": "dddanzhi",
+  "upstream_ref": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5796",
+  "target": "原生规则 / `d3-upstream-noname`",
+  "status": "简化近似",
+  "reviewer": "queue0_independent_review",
+  "review_date": "2026-11-13",
+  "upstream_file_line": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5796-5839",
+  "test_name": "u01_dddanzhi_regression（已登记tests/groups/g1.rs；新增反例与最终运行结果待独立复核）",
+  "difference": "独立源码复核确认仍有框架差异：上游为全局真回合开始 phaseBegin、有效 priority 0／可选序；原生仍在 Prepare 的 PhaseBegin 提问，命名元数据 priority 1／不可选序。本批第0项正在修复末张useCard/respond黑色条件、所选目标独占一次黑牌免疫及装备／嵌套历史／群体牌／回合末／追加目标与恢复反例，最终行为与实测结果尚待独立复核，不计等价。",
+  "note": "2026-11-13 第0项独立复核降级；历史原项保存在 docs/operations/evidence/2026-11-13-queue0-gates/independent-review/ddd-inventory-before.json，首轮具体反例见同目录 static-review-round1.md。未进行上游浏览器实际触发；不得作为U01整源等价背书。",
+  "reason": "已证伪的历史等价项立即下调；保留未获授权改动的触发时机／选序差异，修复过程与最终验证分开记录。",
+  "diff": "Prepare PhaseBegin ≠ 上游真回合phaseBegin；原生 Normal/1/false ≠ 上游 Normal/0/true。本批反例修复执行中，最终定向回归及兼容门禁待核验。",
+  "native": "crates/engine-native-content/src/content/host/step/u01_batch_d.rs（HostBehavior::U01DddBatchD 选择）+ u01_batch_d_asks.rs（Prepare过滤及既有触发元数据）+ crates/engine-native-kernel/src/kernel/events.rs（共同末牌历史与目标免疫；本批修复中）"
+}

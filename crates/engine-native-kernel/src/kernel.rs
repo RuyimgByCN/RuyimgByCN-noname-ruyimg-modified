@@ -67,6 +67,7 @@ pub use damage_flow::DamageFlow;
 pub use draw::{DrawMachine, DrawPhaseMachine, GainMachine};
 pub use damage_skill::NativeDamageSkill;
 mod events;
+pub use events::record_dddanzhi_card;
 use events::*;
 mod equipment;
 use equipment::commit_equip;

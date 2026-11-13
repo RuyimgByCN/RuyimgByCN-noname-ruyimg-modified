@@ -1,0 +1,19 @@
+{
+  "at": "2026-11-13T22:02:18.692120+08:00",
+  "head": "3a6e398485db6ef0729abe3013c3c4b7705a5d6d",
+  "tracked_dirty": true,
+  "sha256": {
+    "scripts/report_phase_filters.py": "b7a60521640d78dca12dd3870a4a99766c2d804e929fb97852952a545203f62a",
+    "scripts/test_report_phase_filters.py": "b9b4c3c266004f3d740caeddd5de358d64e2b5f2505b6cdc6558c86e948b2aa9",
+    "docs/operations/evidence/2026-10-19-phase-audit/registry.txt": "5bdc93d018484779bdd533ca9ef451860008315ee2942be50632e219da501292",
+    "docs/architecture/native-phase-filter-registry.tsv": "35bdcec2bbd482634b950eaf28deafe4ef0b71f166b6e0acad597e7adcc1b30d"
+  },
+  "current_matches_first_comparison_capture": true,
+  "final_comment_uses_correct_skill_name": true,
+  "capture_timing_note": "最初只读输出仍为夏行；首次comparison保存时已经是侠行，因此无法用反向替换重建首次comparison哈希。两次实际保存的脚本哈希直接相同，以直接相等核对为准。",
+  "report_script_unchanged": true,
+  "registries_unchanged_after_tests": true,
+  "old_registry_equals_HEAD_bytes": true,
+  "cargo_not_run": true,
+  "production_and_registry_not_edited_by_reviewer": true
+}
