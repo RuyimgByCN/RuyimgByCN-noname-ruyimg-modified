@@ -859,7 +859,14 @@ impl HostBehavior {
             | HostBehavior::U08YxsBatchA
             | HostBehavior::U08YxsBatchB
             | HostBehavior::U08YxsBatchC
-            | HostBehavior::U08YxsBatchD => None,
+            | HostBehavior::U08YxsBatchD
+            | HostBehavior::L25ZuanBatchA
+            | HostBehavior::L25ZuanBatchB
+            | HostBehavior::L25ZuanBatchC
+            | HostBehavior::L25ZuanBatchD
+            | HostBehavior::L25ZuanBatchE
+            | HostBehavior::L25ZuanBatchF
+            | HostBehavior::L25ZuanBatchG => None,
         };
         if let (Some(meta), Some((timing, priority, selectable))) = (&mut meta, self.source_order()) {
             meta.timing = timing;

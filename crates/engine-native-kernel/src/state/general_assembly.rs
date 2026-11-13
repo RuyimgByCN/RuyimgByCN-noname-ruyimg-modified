@@ -9,6 +9,8 @@ pub fn general_starting_hp(name: &str, max_hp: u32) -> i32 {
     match name {
         "ddd_zhangkai" => 3,
         "th_guanning" => 3,
+        "ssr_machao" | "ssr_taishici" => 2,
+        "ssr_re_lidian" => 3,
         _ => max_hp as i32,
     }
 }
@@ -30,6 +32,14 @@ pub fn apply_general_assembly(
             } else if name == "th_guanning" {
                 p.max_hp = 7;
                 p.hp = p.hp.min(3);
+            } else if name == "ssr_machao" || name == "ssr_taishici" {
+                p.max_hp = 4;
+                p.hp = p.hp.min(2);
+                p.hujia = 2;
+            } else if name == "ssr_re_lidian" {
+                p.max_hp = 4;
+                p.hp = p.hp.min(3);
+                p.hujia = 1;
             } else {
                 p.max_hp = hp;
                 let start_hp = general_starting_hp(name, hp);

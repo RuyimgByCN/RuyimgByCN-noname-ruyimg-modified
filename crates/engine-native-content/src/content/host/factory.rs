@@ -59,6 +59,27 @@ impl HostSkillBehavior {
             HostBehavior::U08YxsBatchD => {
                 return super::step::u08_batch_d::machine_u08_batch_d(self, owner, event);
             }
+            HostBehavior::L25ZuanBatchA => {
+                return super::step::l25_batch_a::machine_l25_batch_a(self, owner, event);
+            }
+            HostBehavior::L25ZuanBatchB => {
+                return super::step::l25_batch_b::machine_l25_batch_b(self, owner, event);
+            }
+            HostBehavior::L25ZuanBatchC => {
+                return super::step::l25_batch_c::machine_l25_batch_c(self, owner, event);
+            }
+            HostBehavior::L25ZuanBatchD => {
+                return super::step::l25_batch_d::machine_l25_batch_d(self, owner, event);
+            }
+            HostBehavior::L25ZuanBatchE => {
+                return super::step::l25_batch_e::machine_l25_batch_e(self, owner, event);
+            }
+            HostBehavior::L25ZuanBatchF => {
+                return super::step::l25_batch_f::machine_l25_batch_f(self, owner, event);
+            }
+            HostBehavior::L25ZuanBatchG => {
+                return super::step::l25_batch_g::machine_l25_batch_g(self, owner, event);
+            }
             _ => {}
         }
         let (target, card) = match self.behavior {

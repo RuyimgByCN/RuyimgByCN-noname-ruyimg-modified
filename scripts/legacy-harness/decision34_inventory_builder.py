@@ -421,18 +421,11 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
     ],
     "L25": [
         (
-            "`L25_SSR_GENERALS`（60 名 `ssr_*` 武将）+ `L25_ALL_RULE_SKILLS` + `L25_ZUAN_SKILLS`（124 项规则/特效技）+ `L25_ZUAN_FORMAL_CARDS`（6 牌）",
-            "`crates/content-native-loader/src/zuan_data.rs:8-370`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_l25_{ssr,ssr_mods,rules}.rs`、`crates/engine-native-content/src/content/host/intrinsic_named_ext.rs:1-531`",
-            "`archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:338-397,536-51470`",
-            "原生规则 / `zuan-upstream-liuli`",
-            "简化近似（待复核：已清除 5 个 `subSkill` 正则伪影 `wuxie`/`equip`/`res`/`defend`/`zhou` 及 `l25_unhandled_skill:*` 兜底；60 名 `ssr_*` 武将、130 项自带技能、全部规则/音效技能与 6 张专属卡牌均按上游逐项实现并接入正式包 `zuan-upstream-liuli`）",
-        ),
-        (
-            "`ZUAN_UI_HOOK_IDS`（40 项攻击指示线、语音与判定全屏特效钩子）",
-            "`apps/web-client/src/engine/surfaces/zuanSurface.ts:6-179`",
-            "`archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:37514-48503`",
-            "原生前端组件",
-            "示意（待对照：40 项攻击线样式、纸张音效与闪电/火山/洪水/浮雷/乐不思蜀/兵粮寸断判定特效钩子已在前端运行时完整落地）",
+            "`L25_SSR_GENERALS`（60 名 `ssr_*` 武将，含 `ssr_machao` `2/4/2`、`ssr_taishici` `2/4/2`、`ssr_re_lidian` `3/4/1`）+ `L25_ALL_RULE_SKILLS` + `L25_ZUAN_SKILLS`（84 项顶层技 + 130 项 `ssr_*` 武将技，`l25_batch_{a..g}*.rs`）+ `L25_ZUAN_FORMAL_CARDS`（5 卡 + 玉玺衍生卡）+ `ZUAN_UI_HOOK_IDS`（40 项）+ 68 项配置",
+            "`crates/engine-native-content/src/content/host/step/l25_batch_{a,b,c,d,e,f,g}*.rs`、`crates/engine-native-kernel/src/rvm_bridge/modifiers/{d34_l25_mods,d34_view_as,d34_flags}.rs`、`crates/content-native-loader/src/{zuan_data,zuan,decision34_pack9,host_skill_bindings}.rs`、`crates/engine-native-kernel/src/state/general_assembly.rs:32-44,152-182`、`apps/web-client/src/engine/surfaces/zuanSurface.ts:6-179`",
+            "`archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:338-397,401-51474`",
+            "原生规则 / `zuan-upstream-liuli` + 原生前端组件",
+            "已复核等价（257/257 项连带 130 项 `ssr_*` 武将自带技经 `l25-signoff` 独立逐行对照上游 JS、固定种子 `seed = 2026111213` 26 项深审与 6 维真实对局测试复核等价，见 `docs/operations/evidence/2026-11-12-l25-zuan-review/README.md`）",
         ),
     ],
     "L26": [],

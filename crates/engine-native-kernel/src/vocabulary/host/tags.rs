@@ -571,6 +571,13 @@ impl HostBehavior {
             HostBehavior::U08YxsBatchB => 564,
             HostBehavior::U08YxsBatchC => 565,
             HostBehavior::U08YxsBatchD => 566,
+            HostBehavior::L25ZuanBatchA => 567,
+            HostBehavior::L25ZuanBatchB => 568,
+            HostBehavior::L25ZuanBatchC => 569,
+            HostBehavior::L25ZuanBatchD => 570,
+            HostBehavior::L25ZuanBatchE => 571,
+            HostBehavior::L25ZuanBatchF => 572,
+            HostBehavior::L25ZuanBatchG => 573,
         }
     }
 

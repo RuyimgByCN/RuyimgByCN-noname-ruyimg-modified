@@ -256,22 +256,21 @@ pub(super) fn try_named_ext_card(
             set_flag(ctx, owner, "l28_taipingyaoshu_equipped", 1);
             ctx.start_draw(owner, 2);
         }
-        // L25 祖安武将/extension.js:6535-28385: 三策 & 锦帆
-        "ssr_newsance_xicheng" => {
-            if let Some(t) = first_target_or_other(ctx, u) {
-                deal_damage(ctx, owner, t, 1, DamageNature::Normal);
+        // L25 祖安武将/extension.js:28179-28410: 三策 & 锦帆
+        "ssr_newsance_xicheng" | "ssr_newsance_weicheng" | "ssr_newsance_shoucheng" => {
+            if key == "ssr_newsance_weicheng" {
+                set_flag(ctx, owner, "l25_sance_weicheng", 1);
             }
-            ctx.start_draw(owner, 1);
-        }
-        "ssr_newsance_weicheng" => {
-            if let Some(t) = first_target_or_other(ctx, u) {
-                let _ = discard_up_to(ctx, t, 1);
-            }
-            set_flag(ctx, owner, "l25_sance_weicheng", 1);
-        }
-        "ssr_newsance_shoucheng" => {
-            change_hujia(ctx, owner, 1);
-            ctx.start_draw(owner, 2);
+            return Some(Some(Box::new(crate::content::host::HostMachine {
+                def_key: key.to_string(),
+                behavior: crate::vocabulary::host::HostBehavior::L25ZuanBatchA,
+                owner,
+                target: first_target_or_other(ctx, u),
+                card: Some(card),
+                cards: Vec::new(),
+                targets: u.targets.clone(),
+                stage: crate::content::host::HostStage::Act,
+            })));
         }
         "ssr_jinfan" => {
             if let Some(t) = first_target_or_other(ctx, u) {

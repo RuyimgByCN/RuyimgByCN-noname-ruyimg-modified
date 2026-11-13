@@ -384,6 +384,27 @@ pub(super) fn active_ask_batches(
         HostBehavior::U08YxsBatchD => super::step::u08_batch_d::ask_u08_batch_d(
             stage, owner, target, targets, card, cards, core, catalog,
         ),
+        HostBehavior::L25ZuanBatchA => super::step::l25_batch_a::ask_l25_batch_a(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::L25ZuanBatchB => super::step::l25_batch_b::ask_l25_batch_b(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::L25ZuanBatchC => super::step::l25_batch_c::ask_l25_batch_c(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::L25ZuanBatchD => super::step::l25_batch_d::ask_l25_batch_d(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::L25ZuanBatchE => super::step::l25_batch_e::ask_l25_batch_e(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::L25ZuanBatchF => super::step::l25_batch_f::ask_l25_batch_f(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::L25ZuanBatchG => super::step::l25_batch_g::ask_l25_batch_g(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
         HostBehavior::NewMeibu => {
             if stage != HostStage::SelectCard {
                 return None;

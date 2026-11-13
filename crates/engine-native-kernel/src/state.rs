@@ -1055,7 +1055,7 @@ pub struct GameState {
 }
 
 mod general_assembly;
-pub use general_assembly::apply_general_assembly;
+pub use general_assembly::{apply_general_assembly, general_starting_hp};
 pub mod scoped_storage;
 pub use scoped_storage::{
     export_scoped_skill_storage, get_scoped_skill_field, import_scoped_skill_storage,

@@ -96,8 +96,17 @@ impl Engine {
         p.hp = match gname {
             "ddd_zhangkai" => (p.max_hp as i32).saturating_sub(1),
             "th_guanning" => 3 + i32::from(lord),
+            "ssr_machao" | "ssr_taishici" => 2 + i32::from(lord),
+            "ssr_re_lidian" => 3 + i32::from(lord),
             _ => p.max_hp as i32,
         };
+        if matches!(gname, "ssr_machao" | "ssr_taishici") {
+            p.hujia = 2;
+        } else if gname == "ssr_re_lidian" {
+            p.hujia = 1;
+        } else {
+            p.hujia = 0;
+        }
         p.alive = true;
         p.dying = false;
         Ok(())

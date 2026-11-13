@@ -11,6 +11,9 @@ use crate::state::GameStateCore;
 use super::flag_val;
 use super::has_ext_skill;
 
+#[path = "d34_l25_mods.rs"]
+mod d34_l25_mods;
+
 fn has_armor(state: &GameStateCore, catalog: &Catalog, seat: PlayerId) -> bool {
     state
         .player(seat)
@@ -124,12 +127,21 @@ pub(super) fn apply_hand_limit(
     }
     // L20 标记补充 (`_yinyang_mark_add`, `extension.js:1802`: +2 maxHandcard this turn)
     limit += flag_val(state, player, "yinyang_hand_bonus") as i32;
-    limit
+    // L25 祖安武将 Batch A (`xinjuejing` +2 hand limit; `g_nzry_jieying` `mark:ying` +1 hand limit)
+    if has_ext_skill(state, catalog, player, "xinjuejing")
+        || flag_val(state, player, "xinjuejing_active") > 0
+    {
+        limit += 2;
+    }
+    if flag_val(state, player, "mark:ying") > 0 {
+        limit += 1;
+    }
+    d34_l25_mods::apply_hand_limit(state, catalog, player, limit)
 }
 
 pub fn apply_draw_count(
     state: &GameStateCore,
-    _catalog: &Catalog,
+    catalog: &Catalog,
     player: PlayerId,
     mut cur: i32,
 ) -> i32 {
@@ -138,7 +150,7 @@ pub fn apply_draw_count(
         .max(flag_val(state, player, "sbtongye")) as i32;
     cur += flag_val(state, player, "sbjianxiong")
         .max(flag_val(state, player, "sbjianxiong_marks")) as i32;
-    cur.max(0)
+    d34_l25_mods::apply_draw_count(state, catalog, player, cur.max(0))
 }
 
 pub(super) fn apply_attack_range(
@@ -204,6 +216,13 @@ pub(super) fn apply_distance_total(
     {
         return 1;
     }
+    // L25 祖安武将 Batch A (`_taohuaskill`, `extension.js:42450`: distance to opposite gender is 1)
+    if (has_ext_skill(state, catalog, from, "_taohuaskill")
+        || flag_val(state, from, "l25_taohua_active") > 0)
+        && state.effective_gender(from) != state.effective_gender(to)
+    {
+        return 1;
+    }
     // extension.js:3460 (`txmazhan`: globalFrom - 2, globalTo + 1)
     if flag_val(state, from, "l11_mod:txmazhan") > 0
         || has_ext_skill(state, catalog, from, "txmazhan")
@@ -237,7 +256,7 @@ pub(super) fn apply_distance_total(
     {
         dist += 1;
     }
-    dist
+    d34_l25_mods::apply_distance_total(state, catalog, from, to, dist)
 }
 
 pub(super) fn apply_sha_use_limit(
@@ -302,12 +321,17 @@ pub(super) fn apply_sha_use_limit(
     if has_ext_skill(state, catalog, player, "baozou")
         || has_ext_skill(state, catalog, player, "paoxiao")
         || has_ext_skill(state, catalog, player, "fz_gzpaoxiao")
+        || has_ext_skill(state, catalog, player, "wushen")
+        || flag_val(state, player, "nzry_longnu_thunder_turn") > 0
         || flag_val(state, player, "baozou_unlimited") > 0
         || flag_val(state, player, "l19_baozou_sha_unlimited") > 0
     {
         unlimited = true;
     }
-    (cur, unlimited)
+    if flag_val(state, player, "mark:ying") > 0 {
+        cur += 1;
+    }
+    d34_l25_mods::apply_sha_use_limit(state, catalog, player, cur, unlimited)
 }
 
 pub(super) fn apply_sha_extra_targets(
@@ -327,7 +351,7 @@ pub(super) fn apply_sha_extra_targets(
         extra += flag_val(state, player, "l11_mod:guju_extra") as i32;
         extra += flag_val(state, player, "l11_mod:twhengjiang_extra") as i32;
     }
-    extra
+    d34_l25_mods::apply_sha_extra_targets(state, catalog, player, kind, extra)
 }
 
 pub(super) fn apply_card_distance_unlimited(
@@ -386,7 +410,17 @@ pub(super) fn apply_card_distance_unlimited(
     {
         unlimited = true;
     }
-    unlimited
+    if kind.is_sha_like()
+        && ((catalog
+            .cards
+            .get(card as usize)
+            .is_some_and(|cd| cd.suit == Suit::Heart)
+            && has_ext_skill(state, catalog, player, "wushen"))
+            || flag_val(state, player, "nzry_longnu_fire_turn") > 0)
+    {
+        unlimited = true;
+    }
+    d34_l25_mods::apply_card_distance_unlimited(state, catalog, player, card, kind, unlimited)
 }
 
 pub(super) fn apply_card_target_canceled(
@@ -521,7 +555,7 @@ pub(super) fn apply_card_target_canceled(
     {
         canceled = true;
     }
-    canceled
+    d34_l25_mods::apply_card_target_canceled(state, catalog, actor, target, kind, canceled)
 }
 
 pub(super) fn apply_card_use_canceled(
@@ -560,7 +594,7 @@ pub(super) fn apply_card_use_canceled(
     {
         canceled = true;
     }
-    canceled
+    d34_l25_mods::apply_card_use_canceled(state, catalog, actor, kind, in_hand, canceled)
 }
 
 pub(super) fn apply_damage_amount(
@@ -759,7 +793,7 @@ pub(super) fn apply_damage_amount(
             cur = (cur - 1).max(0);
         }
     }
-    cur
+    d34_l25_mods::apply_damage_amount(state, catalog, source, target, card, nature, cur)
 }
 
 pub(super) fn apply_ignore_armor(
@@ -773,7 +807,7 @@ pub(super) fn apply_ignore_armor(
     {
         ignore = true;
     }
-    ignore
+    d34_l25_mods::apply_ignore_armor(state, source, ignore)
 }
 
 pub(super) fn apply_card_unrespondable(
@@ -807,5 +841,5 @@ pub(super) fn apply_card_unrespondable(
     if xiafeng_x > 0 && state.turn.cards_used_play_phase <= xiafeng_x {
         unrespondable = true;
     }
-    unrespondable
+    d34_l25_mods::apply_card_unrespondable(state, catalog, source, kind, unrespondable)
 }

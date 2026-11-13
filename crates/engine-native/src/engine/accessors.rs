@@ -95,4 +95,13 @@ impl Engine {
     pub fn resolution(&self) -> &crate::resolution::Resolution {
         &self.state.resolution
     }
+
+    /// 测试/工具：注入真实事件帧并经引擎同一提交管线驱动。
+    pub fn debug_drive_event(&mut self, event: EventData) -> CommandOutcome {
+        let log_mark = self.log.len();
+        let mut work = self.state.clone();
+        work.resolution.budget = self.debug_budget.unwrap_or(DEFAULT_BUDGET);
+        crate::resolution::push_frame(&mut work.resolution, event);
+        self.finish_segment(work, log_mark)
+    }
 }

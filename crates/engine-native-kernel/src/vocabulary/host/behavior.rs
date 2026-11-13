@@ -1656,4 +1656,18 @@ pub enum HostBehavior {
     U08YxsBatchC,
     /// U08 英雄杀 Batch D（tag 566，英雄杀/character/skill.js 27 技能：伯乐/曹操/貂蝉/勾践/花木兰/墨子/拿破仑/孙膑/赢政/荆轲/李白/鲁班）。
     U08YxsBatchD,
+    /// L25 祖安武将 Batch A（tag 567，祖安武将/extension.js 4 卡 + 23 全局/模式/神将技 + 77 被动展示钩子）。
+    L25ZuanBatchA,
+    /// L25 祖安武将 Batch B（tag 568，祖安武将/extension.js 武将 1–10 共 22 技能）。
+    L25ZuanBatchB,
+    /// L25 祖安武将 Batch C（tag 569，祖安武将/extension.js 武将 11–20 共 22 技能）。
+    L25ZuanBatchC,
+    /// L25 祖安武将 Batch D（tag 570，祖安武将/extension.js 武将 21–30 共 22 技能）。
+    L25ZuanBatchD,
+    /// L25 祖安武将 Batch E（tag 571，祖安武将/extension.js 武将 31–40 共 22 技能）。
+    L25ZuanBatchE,
+    /// L25 祖安武将 Batch F（tag 572，祖安武将/extension.js 武将 41–50 共 22 技能）。
+    L25ZuanBatchF,
+    /// L25 祖安武将 Batch G（tag 573，祖安武将/extension.js 武将 51–60 共 22 技能）。
+    L25ZuanBatchG,
 }

@@ -48,3 +48,10 @@ mod u08_hero_kill_match;
 
 #[path = "../u08_hero_kill_match_b.rs"]
 mod u08_hero_kill_match_b;
+
+#[path = "../l25_zuan_match.rs"]
+mod l25_zuan_match;
+
+#[path = "../l25_zuan_match_b.rs"]
+mod l25_zuan_match_b;
+

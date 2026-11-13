@@ -525,8 +525,13 @@ impl Engine {
             .expect("player")
             .general_slots[0] = Some(def);
         apply_general_assembly(&mut self.state.core, &self.catalog, player, 0);
+        let gname = self
+            .catalog
+            .general_meta(def)
+            .map(|(n, _, _, _, _)| n)
+            .unwrap_or("");
         let p = self.state.core.player_mut(player);
-        p.hp = p.max_hp as i32;
+        p.hp = crate::state::general_starting_hp(gname, p.max_hp);
         p.alive = true;
         p.dying = false;
     }

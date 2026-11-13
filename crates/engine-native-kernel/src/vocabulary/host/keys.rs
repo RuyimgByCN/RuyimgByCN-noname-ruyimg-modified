@@ -594,6 +594,13 @@ impl HostBehavior {
             HostBehavior::U08YxsBatchB => "host:u08_yxs_batch_b",
             HostBehavior::U08YxsBatchC => "host:u08_yxs_batch_c",
             HostBehavior::U08YxsBatchD => "host:u08_yxs_batch_d",
+            HostBehavior::L25ZuanBatchA => "host:l25_zuan_batch_a",
+            HostBehavior::L25ZuanBatchB => "host:l25_zuan_batch_b",
+            HostBehavior::L25ZuanBatchC => "host:l25_zuan_batch_c",
+            HostBehavior::L25ZuanBatchD => "host:l25_zuan_batch_d",
+            HostBehavior::L25ZuanBatchE => "host:l25_zuan_batch_e",
+            HostBehavior::L25ZuanBatchF => "host:l25_zuan_batch_f",
+            HostBehavior::L25ZuanBatchG => "host:l25_zuan_batch_g",
         }
     }
 }

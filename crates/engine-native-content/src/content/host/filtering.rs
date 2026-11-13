@@ -733,6 +733,27 @@ impl HostSkillBehavior {
             HostBehavior::U08YxsBatchD => {
                 super::step::u08_batch_d::filter_u08_batch_d(self, ctx, owner, event)
             }
+            HostBehavior::L25ZuanBatchA => {
+                super::step::l25_batch_a::filter_l25_batch_a(self, ctx, owner, event)
+            }
+            HostBehavior::L25ZuanBatchB => {
+                super::step::l25_batch_b::filter_l25_batch_b(self, ctx, owner, event)
+            }
+            HostBehavior::L25ZuanBatchC => {
+                super::step::l25_batch_c::filter_l25_batch_c(self, ctx, owner, event)
+            }
+            HostBehavior::L25ZuanBatchD => {
+                super::step::l25_batch_d::filter_l25_batch_d(self, ctx, owner, event)
+            }
+            HostBehavior::L25ZuanBatchE => {
+                super::step::l25_batch_e::filter_l25_batch_e(self, ctx, owner, event)
+            }
+            HostBehavior::L25ZuanBatchF => {
+                super::step::l25_batch_f::filter_l25_batch_f(self, ctx, owner, event)
+            }
+            HostBehavior::L25ZuanBatchG => {
+                super::step::l25_batch_g::filter_l25_batch_g(self, ctx, owner, event)
+            }
             _ => false,
         }
     }

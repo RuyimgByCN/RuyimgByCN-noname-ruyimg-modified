@@ -259,7 +259,9 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
         if seen_cards.insert(cname.to_string()) {
             let interned = names::intern(cname.to_string());
             let mut cdef = CardDef::basic(interned, kind).with_suit_rank(suit, rank);
-            if kind == CardKind::WuxingPan {
+            if matches!(cname, "ssr_yongsi_yuxi_card" | "ssr_yongsi") {
+                cdef.equip_skills = vec!["ssr_yongsi_yuxi_card"];
+            } else if kind == CardKind::WuxingPan {
                 cdef.equip_skills = vec!["wuxingpan_skill"];
             } else if kind.equip_slot().is_some() {
                 cdef.equip_skills = vec![interned];
@@ -366,6 +368,7 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
         .iter()
         .chain(super::L25_ALL_RULE_SKILLS.iter())
         .chain(["ssr_yongsi", "ssr_yongsi_yuxi_card"].iter())
+        .chain(super::zuan_data::L25_BATCH_A_EXTRA_SKILLS.iter())
         .chain(L25_ZUAN_SKILLS.iter())
     {
         push_skill(s, L25_ZUAN_SKILL_ID);
@@ -500,7 +503,9 @@ pub fn attach_formal_package_upstream_rules(
         if seen_cards.insert(cname.to_string()) {
             let interned = names::intern(cname.to_string());
             let mut cdef = CardDef::basic(interned, kind).with_suit_rank(suit, rank);
-            if kind == CardKind::WuxingPan {
+            if matches!(cname, "ssr_yongsi_yuxi_card" | "ssr_yongsi") {
+                cdef.equip_skills = vec!["ssr_yongsi_yuxi_card"];
+            } else if kind == CardKind::WuxingPan {
                 cdef.equip_skills = vec!["wuxingpan_skill"];
             } else if kind.equip_slot().is_some() {
                 cdef.equip_skills = vec![interned];
@@ -706,6 +711,7 @@ pub fn attach_formal_package_upstream_rules(
                 .iter()
                 .chain(super::L25_ALL_RULE_SKILLS.iter())
                 .chain(["ssr_yongsi", "ssr_yongsi_yuxi_card"].iter())
+                .chain(super::zuan_data::L25_BATCH_A_EXTRA_SKILLS.iter())
                 .chain(L25_ZUAN_SKILLS.iter())
             {
                 push_skill(s, L25_ZUAN_SKILL_ID);

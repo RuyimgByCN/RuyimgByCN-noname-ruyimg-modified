@@ -274,6 +274,13 @@ pub fn host_skill_trigger_meta(
         HostBehavior::U08YxsBatchB => step::u08_batch_b::trigger_meta_u08_batch_b(name),
         HostBehavior::U08YxsBatchC => step::u08_batch_c::trigger_meta_u08_batch_c(name),
         HostBehavior::U08YxsBatchD => step::u08_batch_d::trigger_meta_u08_batch_d(name),
+        HostBehavior::L25ZuanBatchA => step::l25_batch_a::trigger_meta_l25_batch_a(name),
+        HostBehavior::L25ZuanBatchB => step::l25_batch_b::trigger_meta_l25_batch_b(name),
+        HostBehavior::L25ZuanBatchC => step::l25_batch_c::trigger_meta_l25_batch_c(name),
+        HostBehavior::L25ZuanBatchD => step::l25_batch_d::trigger_meta_l25_batch_d(name),
+        HostBehavior::L25ZuanBatchE => step::l25_batch_e::trigger_meta_l25_batch_e(name),
+        HostBehavior::L25ZuanBatchF => step::l25_batch_f::trigger_meta_l25_batch_f(name),
+        HostBehavior::L25ZuanBatchG => step::l25_batch_g::trigger_meta_l25_batch_g(name),
         _ => crate::event::NativeDamageEffect::from_host(behavior)
             .map(|e| e.meta())
             .or_else(|| behavior.trigger_meta()),
@@ -299,6 +306,13 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         HostBehavior::U08YxsBatchB => step::u08_batch_b::limits_u08_batch_b(name),
         HostBehavior::U08YxsBatchC => step::u08_batch_c::limits_u08_batch_c(name),
         HostBehavior::U08YxsBatchD => step::u08_batch_d::limits_u08_batch_d(name),
+        HostBehavior::L25ZuanBatchA => step::l25_batch_a::limits_l25_batch_a(name),
+        HostBehavior::L25ZuanBatchB => step::l25_batch_b::limits_l25_batch_b(name),
+        HostBehavior::L25ZuanBatchC => step::l25_batch_c::limits_l25_batch_c(name),
+        HostBehavior::L25ZuanBatchD => step::l25_batch_d::limits_l25_batch_d(name),
+        HostBehavior::L25ZuanBatchE => step::l25_batch_e::limits_l25_batch_e(name),
+        HostBehavior::L25ZuanBatchF => step::l25_batch_f::limits_l25_batch_f(name),
+        HostBehavior::L25ZuanBatchG => step::l25_batch_g::limits_l25_batch_g(name),
         HostBehavior::GujianFoodQingtuan | HostBehavior::GujianFoodLuyugeng => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,
