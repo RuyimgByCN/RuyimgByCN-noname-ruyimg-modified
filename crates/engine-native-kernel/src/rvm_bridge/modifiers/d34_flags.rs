@@ -200,9 +200,7 @@ pub fn apply_hand_limit(
     if flag_val(state, player, "u05_mod:lingshi") > 0 {
         limit += 2;
     }
-    if flag_val(state, player, "l20_xinhongyan_heart_lock") > 0
-        || flag_val(state, player, "dddqiahua_has_xunxun") > 0
-    {
+    if flag_val(state, player, "dddqiahua_has_xunxun") > 0 {
         limit += 1;
     }
     if flag_val(state, player, "th_yingshi_hermit") > 0 {
@@ -355,7 +353,6 @@ pub fn apply_sha_use_limit(
         || flag_val(state, player, "l25_paoxiao_unlimited") > 0
         || flag_val(state, player, "l19_baozou_sha_unlimited") > 0
         || flag_val(state, player, "l19_paoxiao_unlimited_sha") > 0
-        || flag_val(state, player, "l20_paoxiao_unlimited") > 0
         || flag_val(state, player, "l27_kuangcai_unlimited") > 0
     {
         unlimited = true;
@@ -481,13 +478,15 @@ pub fn apply_card_distance_unlimited(
             unlimited = true;
         }
         if suit == Some(Suit::Diamond)
-            && flag_val(state, player, "l20_wusheng_diamond_unlimited") > 0
+            && (has_ext_skill(state, catalog, player, "fz_new_rewusheng")
+                || flag_val(state, player, "l20_wusheng_diamond_unlimited") > 0
+                || flag_val(state, player, "fz_new_rewusheng_unlimited") > 0)
         {
             unlimited = true;
         }
     }
     let unlimited = d34_u05_mods::apply_card_distance_unlimited(state, player, kind, unlimited);
-    d34_l11_mods::apply_card_distance_unlimited(state, catalog, player, kind, unlimited)
+    d34_l11_mods::apply_card_distance_unlimited(state, catalog, player, card, kind, unlimited)
 }
 
 pub fn apply_card_target_canceled(
@@ -673,6 +672,15 @@ pub fn apply_dying_peach_target_canceled(
     kind: CardKind,
     mut canceled: bool,
 ) -> bool {
+    if catalog.has_diaohulishan(state, dying_target) || catalog.has_diaohulishan(state, actor) {
+        canceled = true;
+    }
+    if kind == CardKind::Tao
+        && (flag_val(state, actor, "aozhan_active") > 0
+            || has_ext_skill(state, catalog, actor, "aozhan"))
+    {
+        canceled = true;
+    }
     if actor != dying_target && kind == CardKind::Tao {
         for p in state.alive_players() {
             if p != actor
@@ -884,7 +892,9 @@ pub fn apply_ignore_armor(
         || has_ext_skill(state, catalog, source, "ssr_pojia")
         || has_ext_skill(state, catalog, source, "ssr_hubu")
         || flag_val(state, source, "l25_pojia_ignore_armor") > 0
-        || flag_val(state, source, "l20_paoxiao_unlimited") > 0
+        || (has_ext_skill(state, catalog, source, "fz_gzpaoxiao")
+            && (has_ext_skill(state, catalog, source, "shouyue")
+                || flag_val(state, source, "shouyue_active") > 0))
         || flag_val(state, source, "l27_twxiafeng_spent") > 0
     {
         ignore = true;

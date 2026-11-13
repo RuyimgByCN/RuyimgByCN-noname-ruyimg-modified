@@ -127,7 +127,7 @@ pub fn matches_vm_modifier_selector(
             _ => false,
         };
     };
-    let suit = def.suit;
+    let suit = catalog.effective_card_suit(state, owner, card);
     let is_red = matches!(suit, Suit::Heart | Suit::Diamond);
     let is_black = matches!(suit, Suit::Spade | Suit::Club);
     let rank = def.rank;

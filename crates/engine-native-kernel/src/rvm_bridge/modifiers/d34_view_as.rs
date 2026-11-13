@@ -15,6 +15,7 @@ enum D34ViewAsActivation {
     Flag(&'static str),
     SkillOrFlag(&'static str, &'static str),
     JiminNoEquip,
+    FzRewushengShouyue,
 }
 
 struct D34ViewAsRule {
@@ -297,7 +298,7 @@ fn d34_view_as_table() -> &'static Vec<D34ViewAsRule> {
                     false,
                 ),
             },
-            // `fz_new_rewusheng` (`标记补充/extension.js:4676-4823`): Red -> distance-unlimited Sha
+            // `fz_new_rewusheng` (`标记补充/extension.js:4676-4823`): Red -> Sha (or Any -> Sha when `shouyue` is active on the table)
             D34ViewAsRule {
                 activation: D34ViewAsActivation::SkillOrFlag(
                     "fz_new_rewusheng",
@@ -310,10 +311,22 @@ fn d34_view_as_table() -> &'static Vec<D34ViewAsRule> {
                     VmViewAsWindow::Any,
                     VmViewAsZone::HandEquip,
                     VmViewAsFilter::Red,
-                    true,
+                    false,
                 ),
             },
-            // `fz_new_longdan` (`标记补充/extension.js:4860-5088`): Sha<->Shan & Tao<->Jiu
+            D34ViewAsRule {
+                activation: D34ViewAsActivation::FzRewushengShouyue,
+                spec: make_spec(
+                    1_926_900_023,
+                    "fz_new_rewusheng",
+                    CardKind::Sha,
+                    VmViewAsWindow::Any,
+                    VmViewAsZone::HandEquip,
+                    VmViewAsFilter::Any,
+                    false,
+                ),
+            },
+            // `fz_new_longdan` (`标记补充/extension.js:4860-5088`): Sha<->Shan
             D34ViewAsRule {
                 activation: D34ViewAsActivation::SkillOrFlag(
                     "fz_new_longdan",
@@ -342,52 +355,6 @@ fn d34_view_as_table() -> &'static Vec<D34ViewAsRule> {
                     VmViewAsZone::Hand,
                     VmViewAsFilter::Sha,
                     false,
-                ),
-            },
-            D34ViewAsRule {
-                activation: D34ViewAsActivation::SkillOrFlag(
-                    "fz_new_longdan",
-                    "l20_longdan_converted",
-                ),
-                spec: make_spec(
-                    1_926_900_023,
-                    "fz_new_longdan",
-                    CardKind::Jiu,
-                    VmViewAsWindow::Any,
-                    VmViewAsZone::Hand,
-                    VmViewAsFilter::Tao,
-                    false,
-                ),
-            },
-            D34ViewAsRule {
-                activation: D34ViewAsActivation::SkillOrFlag(
-                    "fz_new_longdan",
-                    "l20_longdan_converted",
-                ),
-                spec: make_spec(
-                    1_926_900_024,
-                    "fz_new_longdan",
-                    CardKind::Tao,
-                    VmViewAsWindow::Any,
-                    VmViewAsZone::Hand,
-                    VmViewAsFilter::Jiu,
-                    false,
-                ),
-            },
-            // `sbduanliang` (`标记补充/extension.js:5760-5828`): Black basic/equip -> Bingliang
-            D34ViewAsRule {
-                activation: D34ViewAsActivation::SkillOrFlag(
-                    "sbduanliang",
-                    "l20_sbduanliang_applied",
-                ),
-                spec: make_spec(
-                    1_926_900_025,
-                    "sbduanliang",
-                    CardKind::Bing,
-                    VmViewAsWindow::PlayPhase,
-                    VmViewAsZone::HandEquip,
-                    VmViewAsFilter::BlackBasicEquip,
-                    true,
                 ),
             },
             // `txhj_leijimu` (`太虚幻境/extension_card.js:580`): Sha -> LeiSha
@@ -570,6 +537,31 @@ fn d34_view_as_table() -> &'static Vec<D34ViewAsRule> {
                 ),
             });
         }
+        // L20 标记补充 (`_aozhan_judge` / `aozhan`, `extension.js:2152`): Tao in hand can be used/responded as Sha or Shan
+        v.push(D34ViewAsRule {
+            activation: D34ViewAsActivation::SkillOrFlag("aozhan", "aozhan_active"),
+            spec: make_spec(
+                1_926_900_300,
+                "aozhan",
+                CardKind::Sha,
+                VmViewAsWindow::Any,
+                VmViewAsZone::Hand,
+                VmViewAsFilter::Tao,
+                false,
+            ),
+        });
+        v.push(D34ViewAsRule {
+            activation: D34ViewAsActivation::SkillOrFlag("aozhan", "aozhan_active"),
+            spec: make_spec(
+                1_926_900_301,
+                "aozhan_shan",
+                CardKind::Shan,
+                VmViewAsWindow::Any,
+                VmViewAsZone::Hand,
+                VmViewAsFilter::Tao,
+                false,
+            ),
+        });
         v
     })
 }
@@ -585,7 +577,11 @@ pub fn find_d34_flag_view_as(
     if core.vm_aux.flags.is_empty() && catalog.skills.len() <= 24 {
         return None;
     }
+    let sealed = catalog.is_tieji_sealed(core, player);
     for entry in d34_view_as_table() {
+        if sealed && !Catalog::is_locked_skill_name(&entry.spec.skill_name, None) {
+            continue;
+        }
         let active = match entry.activation {
             D34ViewAsActivation::Skill(sk) => has_ext_skill(core, catalog, player, sk),
             D34ViewAsActivation::Flag(fl) => flag_val(core, player, fl) > 0,
@@ -596,6 +592,15 @@ pub fn find_d34_flag_view_as(
                 core.player(player).equips.is_empty()
                     && (has_ext_skill(core, catalog, player, "jimin")
                         || flag_val(core, player, "yxs_jimin_shan") > 0)
+            }
+            D34ViewAsActivation::FzRewushengShouyue => {
+                (has_ext_skill(core, catalog, player, "fz_new_rewusheng")
+                    || flag_val(core, player, "l20_wusheng_diamond_unlimited") > 0)
+                    && (0..core.players.len() as PlayerId).any(|p| {
+                        core.player(p).alive
+                            && (has_ext_skill(core, catalog, p, "shouyue")
+                                || flag_val(core, p, "shouyue_active") > 0)
+                    })
             }
         };
         if active && entry.spec.matches_card(core, catalog, player, card, in_play, target_kind) {

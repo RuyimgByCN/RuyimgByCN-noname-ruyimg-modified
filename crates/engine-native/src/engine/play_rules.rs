@@ -124,12 +124,19 @@ pub(super) fn play_kind(
     targets: &[PlayerId],
 ) -> (CardKind, bool) {
     let actor = core.turn.current;
+    let sealed = catalog.is_tieji_sealed(core, actor);
     if !core.player(actor).hand.contains(&card) {
         if let Some(spec) = catalog.find_player_vm_view_as(core, actor, card, true, None) {
             return (spec.as_kind, false);
         }
     }
     let mut kind = catalog.card_kind(card);
+    if sealed {
+        if let Some(spec) = catalog.find_player_vm_view_as(core, actor, card, true, None) {
+            kind = spec.as_kind;
+        }
+        return (kind, false);
+    }
     // 良策（造之仁君，玩点论杀批 15）：基本手牌当【五谷丰登】
     //（viewAs 转化，独立于杀转化链——sha 牌可转化；登记差异：
     // 上游 usable:1，原生不限次——厉焰同款登记）
@@ -151,7 +158,7 @@ pub(super) fn play_kind(
             .map(|d| core.has_skill(actor, d))
             .unwrap_or(false);
         let diamond = matches!(
-            catalog.cards[card as usize].suit,
+            catalog.effective_card_suit(core, actor, card),
             crate::catalog::Suit::Diamond
         );
         if guose && diamond {
@@ -172,14 +179,9 @@ pub(super) fn play_kind(
             .skill_by_name(crate::content::standard::QI_XI)
             .map(|d| core.has_skill(actor, d))
             .unwrap_or(false);
-        let black = matches!(
-            catalog.cards[card as usize].suit,
-            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
-        );
-        let red = matches!(
-            catalog.cards[card as usize].suit,
-            crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
-        );
+        let suit = catalog.effective_card_suit(core, actor, card);
+        let black = matches!(suit, crate::catalog::Suit::Spade | crate::catalog::Suit::Club);
+        let red = matches!(suit, crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond);
         if (wusheng && red) || (longdan && kind == CardKind::Shan) {
             kind = CardKind::Sha;
         }
@@ -393,10 +395,10 @@ pub(super) fn play_kind(
     }
     if kind == catalog.card_kind(card) && !mark_mutoumianju {
         if let Some(spec) = catalog.find_player_vm_view_as(core, actor, card, true, None) {
-            if (kind != CardKind::Sha && kind != CardKind::Le)
+            if (kind != CardKind::Sha && kind != CardKind::Le && !(kind == CardKind::Tao && targets.is_empty()))
                 || spec.filter == crate::rvm_bridge::VmViewAsFilter::Sha
-                || spec.as_kind.is_sha_like()
-                || targets.is_empty()
+                || (spec.as_kind.is_sha_like() && !targets.is_empty())
+                || (targets.is_empty() && kind != CardKind::Tao)
                 || (kind == CardKind::Sha && core.turn.sha_used_play_phase)
             {
                 kind = spec.as_kind;

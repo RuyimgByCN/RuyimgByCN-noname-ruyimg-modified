@@ -385,18 +385,18 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
     ],
     "L20": [
         (
-            "`L20_MARK_SUPPLEMENT_CARDS`（已清除 12 名伪造 `ms_*` 武将与 `ms_longmark`，保留 3 张 `zhengsu_*` 牌并接入正式包）",
-            "`crates/content-native-loader/src/decision34_pack9_data.rs:266-267`、`crates/content-native-loader/src/locked_content.rs:114-126`",
-            "`archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6319-6321,6493-6505`",
+            "`L20_MARK_SUPPLEMENT_CARDS` + `MarkSupplementConfig`（3 张 `zhengsu_*` 展示牌 + 15 项扩展配置）",
+            "`crates/content-native-loader/src/mark_supplement.rs:1-357`、`crates/content-native-loader/src/decision34_pack9_data.rs:266-267`",
+            "`archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6319-6321,6398-6491`",
             "原生规则 / `mark-supplement-upstream-liuli`",
-            "简化近似（待复核：已清除 12 名伪造 `ms_*` 武将与 `ms_longmark`；上游 3 张 `zhengsu_*` 衍生牌已接入正式包 `mark-supplement-upstream-liuli` 产品路径）",
+            "已复核等价（复核人: l20-signoff, 日期: 2026-11-12, 3 张整肃展示牌与 15 项扩展配置已通过独立复核与 6 维真实事件对局测试）",
         ),
         (
-            "`L20_MARK_SUPPLEMENT_SKILLS` + `resolve_l20_skill` / `resolve_l20_mark_remaining` + `applyL20MarkCssTheme`（74 项标记技能与钩子）",
-            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:489-533`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_u08_l19_l20_l27.rs:329-552`、`apps/web-client/src/engine/extensionSurfaceRuntime.ts:361-380,1348-1359`",
-            "`archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6319-6480`",
+            "`HostBehavior::L20MarkBatchA` + `HostBehavior::L20MarkBatchB`（28 项技能 + 46 项钩子）+ `applyL20MarkCssTheme`（3 项 CSS 渲染面）",
+            "`crates/engine-native-content/src/content/host/step/l20_batch_{a,a_asks,b,b_asks,b_ext,b_mouyi}.rs`、`crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_{l11_mods,view_as,flags}.rs`",
+            "`archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:577-6308`",
             "原生规则 / `mark-supplement-upstream-liuli` + 原生前端组件",
-            "简化近似（待复核：已清除全部分组摸 1 与空操作桩，按上游逐项实现 `kurou`/`qingyu`/`mibei`/`wengua5`/`zuoxing`/`_chongzhu`/`_xigua_xueliangfanbei_` 等全部 74 项技能/钩子与 CSS 主题切换并接入正式包）",
+            "已复核等价 92/95 项（复核人: l20-signoff, 日期: 2026-11-12；全部 28 项技能与 46 项 `ui_hooks` 均按上游 `file:line` 对齐并通过 6 维真实事件对局测试；仅 3 项纯 CSS 表面文件保留 `简化近似`，待总排队第 5 项 UI 阶段对齐）",
         ),
     ],
     "L21": [

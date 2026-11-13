@@ -32,7 +32,9 @@ fn drain(e: &mut Engine) {
     for _ in 0..64 {
         let Some(c) = e.open_choice().cloned() else { break };
         let has_pass = c.spec.options.contains(&ChoiceOption::Pass);
-        let sel: Vec<ChoiceOption> = if has_pass {
+        let sel: Vec<ChoiceOption> = if c.spec.prompt == "fz_liegong:confirm" {
+            vec![ChoiceOption::Confirm]
+        } else if has_pass {
             vec![ChoiceOption::Pass]
         } else if c.spec.allow_cancel {
             Vec::new()
@@ -141,7 +143,7 @@ fn xinkuanggu_draws_or_recovers() {
             });
             continue;
         }
-        if c.spec.prompt == "fz_xinkuanggu_choice" {
+        if c.spec.prompt == "fz_xinkuanggu_choice" || c.spec.prompt == "fz_xinkuanggu:choose_mode" {
             let out = e.submit(GameCommand {
                 actor: c.observer,
                 expected_revision: e.revision(),

@@ -109,6 +109,11 @@ pub(super) fn eligible(
     let Some(meta) = &def.trigger else {
         return false;
     };
+    if catalog.is_tieji_sealed(core, q.owner)
+        && !Catalog::is_locked_skill_name(def.name, Some(meta))
+    {
+        return false;
+    }
     let helper = def
         .behavior
         .native_damage_effect(kind)

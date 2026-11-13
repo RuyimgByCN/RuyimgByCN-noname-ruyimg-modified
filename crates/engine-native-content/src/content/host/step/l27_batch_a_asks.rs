@@ -87,7 +87,7 @@ fn card_ask(
     )
 }
 
-const CANCELLABLE_ASKS: [u32; 15] = [
+const CANCELLABLE_ASKS: [u32; 16] = [
     ASK_REGUSHE_TARGETS,
     ASK_REGUSHE_TARGET_DISCARD,
     ASK_REGUSHE_CONFIRM_DRAW,
@@ -97,6 +97,7 @@ const CANCELLABLE_ASKS: [u32; 15] = [
     ASK_TAOLUAN_HELPER_GIVE,
     ASK_SHOUXI_DECLARE,
     ASK_SHOUXI_ATTACKER_DISCARD,
+    ASK_SHOUXI_ATTACKER_GAIN,
     ASK_DINGHAN_ADJUST,
     ASK_QUANJI_CONFIRM,
     ASK_POTZHUANGSHI_DISCARD,
@@ -226,16 +227,37 @@ fn build_ask_spec(
                 .min(SHOUXI_KINDS.len() - 1);
             let decl_kind = SHOUXI_KINDS[decl_idx];
             let all_he = hand_and_equips(core, attacker);
-            let matching: Vec<CardId> = all_he
+            let mut opts: Vec<ChoiceOption> = all_he
                 .iter()
                 .copied()
                 .filter(|&c| {
                     let k = catalog.card_kind(c);
                     k == decl_kind || (decl_kind == CardKind::Sha && k.is_sha_like())
                 })
+                .map(ChoiceOption::Card)
                 .collect();
-            let opts = if matching.is_empty() { all_he } else { matching };
-            card_ask(attacker, "shouxi:attacker_discard", opts, 1, 1)
+            opts.push(ChoiceOption::Pass);
+            Some((
+                attacker,
+                ChoiceSpec {
+                    kind: ChoiceKind::SelectCards,
+                    prompt: "shouxi:attacker_discard",
+                    options: opts,
+                    min: 1,
+                    max: 1,
+                    allow_cancel: true,
+                },
+            ))
+        }
+        ASK_SHOUXI_ATTACKER_GAIN => {
+            let attacker = target.unwrap_or(owner);
+            card_ask(
+                attacker,
+                "shouxi:attacker_gain",
+                hand_and_equips(core, owner),
+                0,
+                1,
+            )
         }
         ASK_DINGHAN_ADJUST => tag_ask(owner, "dinghan:adjust_record", 0..15),
         ASK_QUANJI_CONFIRM => tag_ask(owner, "quanji:confirm", 0..=1),
@@ -371,8 +393,10 @@ pub(super) fn step_shouxi(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             match ctx.answer().first().copied() {
                 Some(ChoiceOption::Card(c)) => {
                     discard_cards(ctx, attacker, &[c]);
-                    if let Some(&steal_cid) = hand_and_equips(ctx.core, owner).first() {
-                        move_cards_to_hand(ctx, owner, attacker, &[steal_cid]);
+                    if ctx.core.player(attacker).alive
+                        && !hand_and_equips(ctx.core, owner).is_empty()
+                    {
+                        return wait_ask(m, ctx, HostStage::TargetChoice, ASK_SHOUXI_ATTACKER_GAIN);
                     }
                 }
                 _ => {
@@ -381,6 +405,14 @@ pub(super) fn step_shouxi(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                         set_flag(ctx.core, owner, "l27_shouxi_nullified", 1);
                     }
                 }
+            }
+            set_flag(ctx.core, owner, "l27_ask_id", 0);
+            Flow::Done
+        }
+        HostStage::TargetChoice => {
+            let attacker = m.target.unwrap_or(owner);
+            if let Some(ChoiceOption::Card(steal_cid)) = ctx.answer().first().copied() {
+                move_cards_to_hand(ctx, owner, attacker, &[steal_cid]);
             }
             set_flag(ctx.core, owner, "l27_ask_id", 0);
             Flow::Done

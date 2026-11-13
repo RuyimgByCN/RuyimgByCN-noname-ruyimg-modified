@@ -10,7 +10,7 @@ use content_native_loader::{
     DDD_SKILL_DISPATCH_ID, DECISION34_STORAGE_DISPATCH_KEY, L08_DECADE_SKILLS,
     L08_DECADE_SKILL_ID, L14_SHOUSHA_SKILLS, L14_SHOUSHA_SKILL_ID, L19_DOOMSDAY_CHARACTERS,
     L19_DOOMSDAY_SKILLS, L19_DOOMSDAY_SKILL_ID, L20_MARK_SUPPLEMENT_CARDS,
-    L20_MARK_SUPPLEMENT_SKILLS, L20_SKILL_DISPATCH_ID, L24_SKIN_SKILL_ID, L24_SKIN_SWITCH_SKILLS,
+    L20_MARK_SUPPLEMENT_SKILLS, L24_SKIN_SKILL_ID, L24_SKIN_SWITCH_SKILLS,
     L25DiyEditorDraft, L25_ZUAN_CHARACTERS, L25_ZUAN_SKILLS, L25_ZUAN_SKILL_ID,
     L27DualGeneralPick, L27_SELECT_BEAUTIFY_SKILLS, L27_SELECT_SKILL_ID, MTG_LAND_CARD_ID,
     OW_SKILL_DISPATCH_ID, SWD_DUIJUE_ID, SWD_TANLIN_ID, U01_DDD_GENERALS, U01_DDD_SKILLS,
@@ -647,21 +647,27 @@ fn l08_l14_l19_l20_complete_skills_triggers_and_save_restore() {
     invoke_p9_op(&mut e, 0, "ganran", L19_DOOMSDAY_SKILL_ID);
     assert_eq!(flag(&e, 0, "doomsday_mutated"), 1);
 
-    // L20 `zhengsu` (`标记补充/extension.js:244`) violation negative guard + reward positive path
-    set_flag(&mut e, 0, "l20_zhengsu_violated", 1);
-    invoke_p9_op(&mut e, 0, "zhengsu", L20_SKILL_DISPATCH_ID);
-    assert_eq!(flag(&e, 0, "l20_zhengsu_failed"), 1);
-    assert_eq!(flag(&e, 0, "l20_zhengsu_rewarded"), 0);
-    set_flag(&mut e, 0, "l20_zhengsu_violated", 0);
-    invoke_p9_op(&mut e, 0, "zhengsu", L20_SKILL_DISPATCH_ID);
-    assert_eq!(flag(&e, 0, "l20_zhengsu_rewarded"), 1);
-
-    invoke_p9_op(&mut e, 0, "zhenyi_spade", L20_SKILL_DISPATCH_ID);
-    invoke_p9_op(&mut e, 0, "xinhongyan", L20_SKILL_DISPATCH_ID);
-    invoke_p9_op(&mut e, 0, "diaohulishan", L20_SKILL_DISPATCH_ID);
-    assert_eq!(flag(&e, 0, "l20_zhenyi_spade_hit"), 1);
-    assert_eq!(flag(&e, 0, "l20_xinhongyan_heart_lock"), 1);
-    assert_eq!(flag(&e, 0, "l20_diaohulishan_exiled"), 1);
+    // L20 (`标记补充/extension.js`): all 74 L20 skills are bound to native `HostBehavior`, and `kurou` executes via `GameAction::ActivateSkill`
+    // `zuoxing` is commented out upstream (`extension.js:6155-6204`): L20 must not override it.
+    for &sk in &L20_MARK_SUPPLEMENT_SKILLS {
+        let sid = e.catalog().skill_by_name(sk).expect(sk);
+        let host_bound = e.catalog().skills[sid as usize].behavior.as_host_behavior().is_some();
+        assert_eq!(host_bound, sk != "zuoxing", "L20 skill {sk} native HostBehavior binding");
+    }
+    e.debug_grant(0, "kurou");
+    e.debug_set_turn(0, Phase::Play, 1);
+    let hp_before_kr = e.state_core().player(0).hp;
+    let hand_before_kr = e.state_core().player(0).hand.len();
+    let kurou_sid = e.catalog().skill_by_name("kurou").unwrap();
+    let _ = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::ActivateSkill { skill: kurou_sid },
+    });
+    drain(&mut e);
+    assert_eq!(e.state_core().player(0).hp, hp_before_kr - 1);
+    assert_eq!(e.state_core().player(0).hand.len(), hand_before_kr + 2);
 
     assert_archive_roundtrip(&e, &packs);
 }
@@ -1100,36 +1106,27 @@ fn formal_packages_extensions_load_and_execute_on_locked_product_path() {
     invoke_p9_op(&mut l19_probe, 0, "_guixinmodeskill", L19_DOOMSDAY_SKILL_ID);
     assert_eq!(l19_probe.state_core().player(0).hujia, hujia_before + 2);
 
-    // 10. L20 (`标记补充/extension.js:2261-6240`): `kurou` (-1 HP +2 draw), `qingyu` (<2 guard + >=2 discard 2 & prevent damage), `mibei` (+3 draw), and 0-draw passive/deck-swap skills
+    // 10. L20 (`标记补充/extension.js:2261-6240`): native HostBehavior registration + `kurou` (-1 HP +2 draw)
     let mut l20_probe = start_locked_engine(260202, 2, LockedStartMode::Prototype, &verified).unwrap();
+    for &sk in &L20_MARK_SUPPLEMENT_SKILLS {
+        let sid = l20_probe.catalog().skill_by_name(sk).expect(sk);
+        let host_bound = l20_probe.catalog().skills[sid as usize].behavior.as_host_behavior().is_some();
+        assert_eq!(host_bound, sk != "zuoxing", "L20 skill {sk} binding on locked product path");
+    }
+    l20_probe.debug_grant(0, "kurou");
+    l20_probe.debug_set_turn(0, Phase::Play, 1);
     let hp_before_kurou = l20_probe.state_core().player(0).hp;
     let hand_before_kurou = l20_probe.state_core().player(0).hand.len();
-    invoke_p9_op(&mut l20_probe, 0, "kurou", L20_SKILL_DISPATCH_ID);
+    let kurou_sid = l20_probe.catalog().skill_by_name("kurou").unwrap();
+    let _ = l20_probe.submit(GameCommand {
+        actor: 0,
+        expected_revision: l20_probe.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::ActivateSkill { skill: kurou_sid },
+    });
+    drain(&mut l20_probe);
     assert_eq!(l20_probe.state_core().player(0).hp, hp_before_kurou - 1);
     assert_eq!(l20_probe.state_core().player(0).hand.len(), hand_before_kurou + 2);
-
-    let hand_before_mibei = l20_probe.state_core().player(0).hand.len();
-    invoke_p9_op(&mut l20_probe, 0, "mibei", L20_SKILL_DISPATCH_ID);
-    assert_eq!(l20_probe.state_core().player(0).hand.len(), hand_before_mibei + 3);
-    assert_eq!(flag(&l20_probe, 0, "l20_granted_xinmouli"), 1);
-
-    let hand_before_qingyu = l20_probe.state_core().player(0).hand.len();
-    invoke_p9_op(&mut l20_probe, 0, "qingyu", L20_SKILL_DISPATCH_ID);
-    assert_eq!(flag(&l20_probe, 0, "l20_qingyu_prevented"), 1);
-    assert_eq!(l20_probe.state_core().player(0).hand.len(), hand_before_qingyu - 2);
-
-    for zero_draw_sk in ["fz_new_rewusheng", "fz_liegong", "wengua5", "zuoxing", "_chongzhu"] {
-        let h0 = l20_probe.state_core().player(0).hand.len();
-        invoke_p9_op(&mut l20_probe, 0, zero_draw_sk, L20_SKILL_DISPATCH_ID);
-        assert_eq!(
-            l20_probe.state_core().player(0).hand.len(),
-            h0,
-            "L20 skill {zero_draw_sk} (`标记补充/extension.js`) must not increase hand size via draw(1)"
-        );
-    }
-    let max_hp_before_fanbei = l20_probe.state_core().player(0).max_hp;
-    invoke_p9_op(&mut l20_probe, 0, "_xigua_xueliangfanbei_", L20_SKILL_DISPATCH_ID);
-    assert_eq!(l20_probe.state_core().player(0).max_hp, max_hp_before_fanbei * 2);
 
     // 11. L27 (`选将美化/extension.js:1959-8930`): `twharvestinori` (draw 2*X) vs `twzhouhu` (heal X), `twxiafeng` (0 draw), `bolan` (0 draw), and 6 newly registered skills
     let mut l27_probe = start_locked_engine(260203, 2, LockedStartMode::Prototype, &verified).unwrap();

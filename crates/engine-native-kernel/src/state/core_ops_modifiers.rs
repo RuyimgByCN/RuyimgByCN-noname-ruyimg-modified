@@ -308,9 +308,53 @@ impl GameStateCore {
         )
     }
 
-    /// 存活玩家间的座位最短距离（死亡玩家的座位不计数）。
+    /// 存活玩家间的座位最短距离（死亡玩家及调虎离山 `undist` 座位不计数）。
     pub fn seat_distance_alive(&self, a: PlayerId, b: PlayerId) -> u8 {
-        let alive: Vec<PlayerId> = self.alive_players().collect();
+        if a == b {
+            return 0;
+        }
+        let alive: Vec<PlayerId> = self
+            .alive_players()
+            .filter(|&p| {
+                p == a
+                    || p == b
+                    || (self
+                        .vm_aux
+                        .flags
+                        .get(&(p, "diaohulishan_active".to_string()))
+                        .copied()
+                        .unwrap_or(0)
+                        == 0
+                        && self
+                            .vm_aux
+                            .flags
+                            .get(&(p, "mbmowang_resting".to_string()))
+                            .copied()
+                            .unwrap_or(0)
+                            == 0)
+            })
+            .collect();
+        let n = alive.len() as i16;
+        let ia = alive.iter().position(|p| *p == a).expect("a must be alive") as i16;
+        let ib = alive.iter().position(|p| *p == b).expect("b must be alive") as i16;
+        let cw = (ib - ia).rem_euclid(n) as u8;
+        let ccw = (ia - ib).rem_euclid(n) as u8;
+        cw.min(ccw)
+    }
+
+    pub fn seat_distance_alive_with_catalog(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        a: PlayerId,
+        b: PlayerId,
+    ) -> u8 {
+        if a == b {
+            return 0;
+        }
+        let alive: Vec<PlayerId> = self
+            .alive_players()
+            .filter(|&p| p == a || p == b || !catalog.has_diaohulishan(self, p))
+            .collect();
         let n = alive.len() as i16;
         let ia = alive.iter().position(|p| *p == a).expect("a must be alive") as i16;
         let ib = alive.iter().position(|p| *p == b).expect("b must be alive") as i16;

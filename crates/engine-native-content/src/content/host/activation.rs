@@ -230,6 +230,12 @@ impl HostSkillBehavior {
             HostBehavior::L19DoomsdayBatchB => {
                 super::step::l19_batch_b::activate_l19_batch_b(self, ctx, owner)
             }
+            HostBehavior::L20MarkBatchA => {
+                super::step::l20_batch_a::activate_l20_batch_a(self, ctx, owner)
+            }
+            HostBehavior::L20MarkBatchB => {
+                super::step::l20_batch_b::activate_l20_batch_b(self, ctx, owner)
+            }
             _ => None,
         }
     }

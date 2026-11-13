@@ -364,6 +364,14 @@ pub(super) fn active_ask_batches(
         HostBehavior::L19DoomsdayBatchB => super::step::l19_batch_b::ask_l19_batch_b(
             stage, owner, target, targets, card, cards, core, catalog,
         ),
+        HostBehavior::L20MarkBatchA => super::step::l20_batch_a::ask_l20_batch_a(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::L20MarkBatchB
+        | HostBehavior::FzLiegong
+        | HostBehavior::FzXinKuanggu => super::step::l20_batch_b::ask_l20_batch_b(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
         HostBehavior::NewMeibu => {
             if stage != HostStage::SelectCard {
                 return None;

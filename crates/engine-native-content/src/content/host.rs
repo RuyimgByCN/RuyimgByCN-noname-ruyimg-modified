@@ -266,6 +266,10 @@ pub fn host_skill_trigger_meta(
         HostBehavior::L27BeautifyBatchB => step::l27_batch_b::trigger_meta_l27_batch_b(name),
         HostBehavior::L19DoomsdayBatchA => step::l19_batch_a::trigger_meta_l19_batch_a(name),
         HostBehavior::L19DoomsdayBatchB => step::l19_batch_b::trigger_meta_l19_batch_b(name),
+        HostBehavior::L20MarkBatchA => step::l20_batch_a::trigger_meta_l20_batch_a(name),
+        HostBehavior::L20MarkBatchB | HostBehavior::FzLiegong => {
+            step::l20_batch_b::trigger_meta_l20_batch_b(name)
+        }
         _ => crate::event::NativeDamageEffect::from_host(behavior)
             .map(|e| e.meta())
             .or_else(|| behavior.trigger_meta()),
@@ -285,6 +289,8 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         HostBehavior::L27BeautifyBatchB => step::l27_batch_b::limits_l27_batch_b(name),
         HostBehavior::L19DoomsdayBatchA => step::l19_batch_a::limits_l19_batch_a(name),
         HostBehavior::L19DoomsdayBatchB => step::l19_batch_b::limits_l19_batch_b(name),
+        HostBehavior::L20MarkBatchA => step::l20_batch_a::limits_l20_batch_a(name),
+        HostBehavior::L20MarkBatchB => step::l20_batch_b::limits_l20_batch_b(name),
         HostBehavior::GujianFoodQingtuan | HostBehavior::GujianFoodLuyugeng => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,

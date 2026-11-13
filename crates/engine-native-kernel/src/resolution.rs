@@ -732,7 +732,39 @@ pub fn run(
                 }
             }
             Stage::Done => {
-                res.stack.pop();
+                if let Some(popped) = res.stack.pop() {
+                    if let EventData::CardUsed(_) = &popped.data {
+                        for p in 0..core.players.len() as PlayerId {
+                            core.vm_aux
+                                .flags
+                                .remove(&(p, "xinfu_lingren_vuln_from".to_string()));
+                            core.vm_aux
+                                .flags
+                                .remove(&(p, "xinfu_lingren_vuln_card".to_string()));
+                            core.vm_aux
+                                .flags
+                                .remove(&(p, "xinfu_lingren_vuln_target".to_string()));
+                            if let Some(val) = core
+                                .vm_aux
+                                .flags
+                                .remove(&(p, "shouye_pending_gain_card".to_string()))
+                            {
+                                if val > 0 {
+                                    let cid = val - 1;
+                                    let in_table = core.table.contains(&cid);
+                                    let in_discard = core.discard.contains(&cid);
+                                    if (in_table || in_discard) && core.player(p).alive {
+                                        core.table.retain(|&x| x != cid);
+                                        core.discard.retain(|&x| x != cid);
+                                        if !core.player(p).hand.contains(&cid) {
+                                            core.player_mut(p).hand.push(cid);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

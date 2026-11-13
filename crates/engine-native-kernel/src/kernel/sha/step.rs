@@ -124,20 +124,6 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         // 诈降（L27 批 4，`sbzhaxiang`）：本阶段用牌数 ≤ 已损失体力时，所用
         // 【杀】不可被闪避（上游 useCard forced directHit 全场同口径；原生
         // 直伤面仅【杀】有闪避窗口）
-        // 烈弓（L20 批 3，`fz_liegong`）：持技者对目标出【杀】时，若目标手牌数
-        // ≥ 自己体力 或 ≤ 自己攻击范围 → 该目标不可被闪避（上游
-        // useCardToPlayered → directHit.push(target) 同口径）
-        let fz_liegong_direct_hit = ctx
-            .catalog
-            .skill_by_name(crate::vocabulary::host::L20_FZ_LIEGONG_KEY)
-            .map(|def| ctx.core.has_skill(self.source, def))
-            .unwrap_or(false)
-            && {
-                let hand = ctx.core.player(self.target).hand.len() as i32;
-                let hp = ctx.core.player(self.source).hp;
-                let range = ctx.core.attack_range(ctx.catalog, self.source) as i32;
-                hand >= hp || hand <= range
-            };
         // 反击·红杀直伤（U08 批 1，`yxs_fanji2`）：持技者使用的**红色**【杀】
         // 不可被闪避（上游 yxs_fanji2 shaBegin → trigger.directHit 同口径）
         let yxs_fanji2_direct_hit = {
@@ -188,7 +174,6 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             self.armor_judged = true;
             let has_armor = !qinggang_pierce
                 && !fentian_direct_hit
-                && !fz_liegong_direct_hit
                 && !yxs_fanji2_direct_hit
                 && !sbzhaxiang_direct_hit
                 && !poyue_direct_hit
@@ -253,6 +238,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 if let Some(ChoiceOption::Card(shan)) = ctx.answer().first().copied() {
                     if ctx.core.player(holder).hand.contains(&shan) {
                         ctx.discard_from_hand(holder, shan);
+                        note_longdan_sha_source(ctx, holder, self.source);
                         ctx.emit(EventData::CardResponded {
                             card: shan,
                             player: holder,
@@ -364,7 +350,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             let renwang_blocks = !qinggang_pierce && {
                 let black = self.card.is_some_and(|c| {
                     matches!(
-                        ctx.catalog.cards[c as usize].suit,
+                        ctx.catalog.effective_card_suit(ctx.core, self.source, c),
                         crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                     )
                 });
@@ -680,19 +666,22 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 }
             }
             // 龙胆：杀可当闪打出——响应选项并入目标手牌中的杀
-            let longdan = ctx
-                .catalog
-                .skill_by_name(crate::vocabulary::names::LONG_DAN)
-                .map(|d| ctx.core.has_skill(self.target, d))
-                .unwrap_or(false);
+            let target_sealed = ctx.catalog.is_tieji_sealed(ctx.core, self.target);
+            let longdan = !target_sealed
+                && ctx
+                    .catalog
+                    .skill_by_name(crate::vocabulary::names::LONG_DAN)
+                    .map(|d| ctx.core.has_skill(self.target, d))
+                    .unwrap_or(false);
             let tieji_blocks = self.tieji_red == Some(true)
                 || ctx.core.vm_aux.flags.get(&(self.target, "mbcmfangzhu_ban".to_string())).copied().unwrap_or(0) > 0;
             // 倾国（甄姬，v202 对齐上游 position "hs"）：黑色手牌可当闪打出——并入响应选项
-            let qingguo = ctx
-                .catalog
-                .skill_by_name(crate::vocabulary::names::QING_GUO)
-                .map(|d| ctx.core.has_skill(self.target, d))
-                .unwrap_or(false);
+            let qingguo = !target_sealed
+                && ctx
+                    .catalog
+                    .skill_by_name(crate::vocabulary::names::QING_GUO)
+                    .map(|d| ctx.core.has_skill(self.target, d))
+                    .unwrap_or(false);
             // 堡垒哨卫（U05 ow，规则 v125）目标侧：持有者不能闪避杀
             let target_sentinel = ctx
                 .catalog
@@ -729,7 +718,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     let kind = ctx.catalog.card_kind(c);
                     let already = kind == CardKind::Shan || (longdan && kind == CardKind::Sha);
                     let black = matches!(
-                        ctx.catalog.cards[c as usize].suit,
+                        ctx.catalog.effective_card_suit(ctx.core, self.target, c),
                         crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                     );
                     if black && !already {
@@ -839,7 +828,6 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 || lingshi_direct_hit
                 || sbzhaxiang_direct_hit
                 || yxs_fanji2_direct_hit
-                || fz_liegong_direct_hit
             {
                 return self.emit_sha_damage(ctx);
             }
@@ -948,6 +936,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             } else {
                 ctx.to_discard(shan);
             }
+            note_longdan_sha_source(ctx, self.target, self.source);
             ctx.emit(EventData::CardResponded {
                 card: shan,
                 player: self.target,
@@ -1116,5 +1105,20 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         });
         // 目标已死等无伤害路径：推进队列/弃置杀本体。
         return self.advance_target(ctx);
+    }
+}
+
+/// 龙胆（L20 `fz_new_longdan`，`extension.js:4860-5087`）需要知道「为哪名角色的【杀】打出【闪】」；
+/// 只给持有该技能的响应者写入，避免无关对局的状态摘要出现残留标记。
+fn note_longdan_sha_source(ctx: &mut Ctx<'_>, responder: PlayerId, source: PlayerId) {
+    if ctx
+        .catalog
+        .skill_by_name("fz_new_longdan")
+        .is_some_and(|d| ctx.core.has_skill(responder, d))
+    {
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((responder, "responding_to_sha_from".to_string()), u32::from(source) + 1);
     }
 }

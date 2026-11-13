@@ -79,7 +79,13 @@ pub(super) fn apply_command(
             let Some(inst) = state.core.skills.get(&(actor, skill)) else {
                 return Err(RejectReason::NoSuchSkill);
             };
-            if !inst.enabled {
+            if !inst.enabled
+                || (catalog.is_tieji_sealed(&state.core, actor)
+                    && !crate::catalog::Catalog::is_locked_skill_name(
+                        def.name,
+                        def.trigger.as_ref(),
+                    ))
+            {
                 return Err(RejectReason::SkillDisabled);
             }
             if inst.once_used {

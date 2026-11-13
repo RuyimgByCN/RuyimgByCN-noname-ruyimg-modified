@@ -473,6 +473,7 @@ fn resolve_l19_doomsday_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerI
 }
 
 /// `L20` (`标记补充` — `archive/upstream/noname-liuli/noname/extension/标记补充/extension.js`):
+/// All 55 L20 skills execute through `HostBehavior::L20MarkBatchA` / `HostBehavior::L20MarkBatchB`.
 fn resolve_l20_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
     let skill_name = if executing.is_empty() {
         "zhengsu"
@@ -482,41 +483,7 @@ fn resolve_l20_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
     set_flag(ctx.core, owner, &format!("l20_skill:{skill_name}"), 1);
     let count = flag(ctx.core, owner, "l20_skill_trigger_count") + 1;
     set_flag(ctx.core, owner, "l20_skill_trigger_count", count);
-
-    match skill_name {
-        "zhengsu" => {
-            if flag(ctx.core, owner, "l20_zhengsu_violated") == 1 {
-                set_flag(ctx.core, owner, "l20_zhengsu_failed", 1);
-                return;
-            }
-            let choice = flag(ctx.core, owner, "l20_zhengsu_choice").max(1);
-            set_flag(ctx.core, owner, "l20_zhengsu_choice", choice);
-            set_flag(ctx.core, owner, "l20_zhengsu_rewarded", 1);
-            ctx.start_draw(owner, 2);
-        }
-        "zhenyi_spade" => {
-            set_flag(ctx.core, owner, "l20_zhenyi_spade_hit", 1);
-            if let Some(t) = hostile_target(ctx, owner) {
-                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                    Some(owner),
-                    t,
-                    1,
-                    DamageNature::Thunder,
-                    None,
-                )));
-            }
-            ctx.start_draw(owner, 1);
-        }
-        "xinhongyan" => {
-            set_flag(ctx.core, owner, "l20_xinhongyan_heart_lock", 1);
-        }
-        "diaohulishan" => {
-            set_flag(ctx.core, owner, "l20_diaohulishan_exiled", 1);
-        }
-        other => {
-            super::decision34_u08_l19_l20_l27::resolve_l20_mark_remaining(ctx, other, owner);
-        }
-    }
+    super::decision34_u08_l19_l20_l27::resolve_l20_mark_remaining(ctx, skill_name, owner);
 }
 
 /// `L24` (`皮肤切换` — `archive/upstream/noname-liuli/noname/extension/皮肤切换/extension.js`):

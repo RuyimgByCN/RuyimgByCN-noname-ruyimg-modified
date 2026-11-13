@@ -1644,4 +1644,8 @@ pub enum HostBehavior {
     L19DoomsdayBatchA,
     /// L19 末日乱斗 Batch B（tag 560，末日乱斗/extension.js 模式 4–10 RPG/祖安桥接技能）。
     L19DoomsdayBatchB,
+    /// L20 标记补充 Batch A（tag 561，标记补充/extension.js 国战标记/调虎离山/问卦及 41 个 UI/标记桩）。
+    L20MarkBatchA,
+    /// L20 标记补充 Batch B（tag 562，标记补充/extension.js 整肃/贞仪/破围/清玉等 20 个核心技能）。
+    L20MarkBatchB,
 }

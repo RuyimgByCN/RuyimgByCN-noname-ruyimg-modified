@@ -122,6 +122,8 @@ pub(super) fn apply_hand_limit(
         limit += flag_val(state, player, "wujin_hand_bonus")
             .max(flag_val(state, player, "l19_wujin_hand_limit_bonus")) as i32;
     }
+    // L20 标记补充 (`_yinyang_mark_add`, `extension.js:1802`: +2 maxHandcard this turn)
+    limit += flag_val(state, player, "yinyang_hand_bonus") as i32;
     limit
 }
 
@@ -165,6 +167,17 @@ pub(super) fn apply_attack_range(
     } else if has_ext_skill(state, catalog, player, "twxiangyu") {
         cur += 1;
     }
+    // L20 标记补充 (`fz_liegong`, `extension.js:5181-5210`): +1 attack range when `shouyue` is active on the table
+    if (has_ext_skill(state, catalog, player, "fz_liegong")
+        || flag_val(state, player, "fz_liegong_active") > 0)
+        && (0..state.players.len() as PlayerId).any(|p| {
+            state.player(p).alive
+                && (has_ext_skill(state, catalog, p, "shouyue")
+                    || flag_val(state, p, "shouyue_active") > 0)
+        })
+    {
+        cur += 1;
+    }
     cur
 }
 
@@ -175,8 +188,13 @@ pub(super) fn apply_distance_total(
     to: PlayerId,
     mut dist: i32,
 ) -> i32 {
-    // `sp.js:15556` (`fenxun`) & `sp.js:11358` (`refenxun`): distance to target treated as 1
-    if flag_val(state, from, "l11_mod:fenxun_dist1") > 0 {
+    // `sp.js:15556` (`fenxun`) & `sp.js:11358` (`refenxun`) & L20 `tspowei` (`extension.js:4499`): distance between owner and target treated as 1 (`inRangeOf(from, to) { if (from == player || to == player) return true; }`)
+    if flag_val(state, from, "l11_mod:fenxun_dist1") > 0
+        || flag_val(state, from, "tspowei_in_range") == u32::from(to) + 1
+        || flag_val(state, to, "tspowei_in_range") == u32::from(from) + 1
+        || flag_val(state, from, &format!("tspowei_in_range:{to}")) > 0
+        || flag_val(state, to, &format!("tspowei_in_range:{from}")) > 0
+    {
         return 1;
     }
     // `sp.js:7210` (`olzhuiji`: distance to characters with hp <= owner.hp is 1)
@@ -280,9 +298,10 @@ pub(super) fn apply_sha_use_limit(
     if xiafeng_x > 0 && state.turn.cards_used_play_phase < xiafeng_x {
         unlimited = true;
     }
-    // L19 末日乱斗 (`baozou`, `paoxiao` on `jiangshifz`/`jiangshinj`)
+    // L19 末日乱斗 (`baozou`, `paoxiao` on `jiangshifz`/`jiangshinj`) & L20 标记补充 (`fz_gzpaoxiao`)
     if has_ext_skill(state, catalog, player, "baozou")
         || has_ext_skill(state, catalog, player, "paoxiao")
+        || has_ext_skill(state, catalog, player, "fz_gzpaoxiao")
         || flag_val(state, player, "baozou_unlimited") > 0
         || flag_val(state, player, "l19_baozou_sha_unlimited") > 0
     {
@@ -315,6 +334,7 @@ pub(super) fn apply_card_distance_unlimited(
     state: &GameStateCore,
     catalog: &Catalog,
     player: PlayerId,
+    card: CardId,
     kind: CardKind,
     mut unlimited: bool,
 ) -> bool {
@@ -354,6 +374,16 @@ pub(super) fn apply_card_distance_unlimited(
     let xiafeng_x = flag_val(state, player, "twxiafeng_x")
         .max(flag_val(state, player, "l27_twxiafeng_spent"));
     if xiafeng_x > 0 && state.turn.cards_used_play_phase < xiafeng_x {
+        unlimited = true;
+    }
+    if kind.is_sha_like()
+        && catalog
+            .cards
+            .get(card as usize)
+            .is_some_and(|cd| cd.suit == Suit::Diamond)
+        && (has_ext_skill(state, catalog, player, "fz_new_rewusheng")
+            || flag_val(state, player, "fz_new_rewusheng_unlimited") > 0)
+    {
         unlimited = true;
     }
     unlimited
@@ -480,6 +510,17 @@ pub(super) fn apply_card_target_canceled(
     {
         canceled = true;
     }
+    // L20 标记补充 (`diaohulishan`, `extension.js:1432`: target cannot be targeted by cards this turn)
+    if catalog.has_diaohulishan(state, target) {
+        canceled = true;
+    }
+    // L20 标记补充 (`_aozhan_judge`, `extension.js:2152`: real Tao cannot target ANY player)
+    if kind == CardKind::Tao
+        && (flag_val(state, actor, "aozhan_active") > 0
+            || has_ext_skill(state, catalog, actor, "aozhan"))
+    {
+        canceled = true;
+    }
     canceled
 }
 
@@ -508,6 +549,17 @@ pub(super) fn apply_card_use_canceled(
     {
         canceled = true;
     }
+    // L20 标记补充 (`diaohulishan`, `extension.js:1432`: cannot use/respond with cards while out of game)
+    if catalog.has_diaohulishan(state, actor) {
+        canceled = true;
+    }
+    // L20 标记补充 (`_aozhan_judge`, `extension.js:2152`: real Tao cannot be used to heal/save)
+    if kind == CardKind::Tao
+        && (flag_val(state, actor, "aozhan_active") > 0
+            || has_ext_skill(state, catalog, actor, "aozhan"))
+    {
+        canceled = true;
+    }
     canceled
 }
 
@@ -520,7 +572,7 @@ pub(super) fn apply_damage_amount(
     nature: DamageNature,
     mut cur: i32,
 ) -> i32 {
-    if cur <= 0 {
+    if cur <= 0 || catalog.has_diaohulishan(state, target) {
         return 0;
     }
     let ckind = card.map(|c| catalog.card_kind(c));
@@ -564,6 +616,14 @@ pub(super) fn apply_damage_amount(
             cur += 1;
         }
         if card.is_some() && flag_val(state, src, "mbwuling_spirit") == 1 {
+            cur += 1;
+        }
+        let vuln_from = flag_val(state, target, "xinfu_lingren_vuln_from");
+        let vuln_card = flag_val(state, target, "xinfu_lingren_vuln_card");
+        if vuln_from == u32::from(src) + 1
+            && (is_sha || is_trick)
+            && card.is_some_and(|c| c + 1 == vuln_card)
+        {
             cur += 1;
         }
     }

@@ -2,7 +2,8 @@ use super::*;
 
 /// Submit one canonical source amount; DamageFlow owns later callbacks and Dying.
 pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::event::DamageData) {
-    if d.prevented {
+    if d.prevented || ctx.catalog.has_diaohulishan(ctx.core, d.target) {
+        d.prevented = true;
         ctx.log(LogEvent::DamagePrevented { target: d.target, presentation: None });
         finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Cancelled);
         return;
@@ -448,7 +449,7 @@ pub(crate) fn hutian_return_deposit(ctx: &mut Ctx<'_>, owner: PlayerId) {
 /// 无伤害前置窗口/铁索传导/伤害来源触发技（LoseHp 是独立事件种）；
 /// 体力 ≤0 与伤害同口径进入濒死（上游 loseHp 语义）。
 pub(crate) fn commit_lose_hp(ctx: &mut Ctx<'_>, player: PlayerId, mut amount: u32) {
-    if amount == 0 {
+    if amount == 0 || ctx.catalog.has_diaohulishan(ctx.core, player) {
         return;
     }
     // 护天护体（swd 批 131，规则 v314）：失去体力同样以「体力降至寄存数」

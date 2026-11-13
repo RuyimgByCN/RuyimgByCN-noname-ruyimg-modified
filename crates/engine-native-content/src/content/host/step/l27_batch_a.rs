@@ -47,6 +47,7 @@ pub(super) const ASK_TAOLUAN_HELPER: u32 = 42;
 pub(super) const ASK_TAOLUAN_HELPER_GIVE: u32 = 43;
 pub(super) const ASK_SHOUXI_DECLARE: u32 = 50;
 pub(super) const ASK_SHOUXI_ATTACKER_DISCARD: u32 = 51;
+pub(super) const ASK_SHOUXI_ATTACKER_GAIN: u32 = 52;
 pub(super) const ASK_DINGHAN_ADJUST: u32 = 60;
 pub(super) const ASK_QUANJI_CONFIRM: u32 = 70;
 pub(super) const ASK_QUANJI_PUT_CARD: u32 = 71;
@@ -95,19 +96,11 @@ pub(super) const TAOLUAN_KINDS: [CardKind; 12] = [
     CardKind::Chain,
 ];
 
-pub(super) const SHOUXI_KINDS: [CardKind; 12] = [
-    CardKind::Sha,
-    CardKind::Shan,
-    CardKind::Tao,
-    CardKind::Jiu,
-    CardKind::Wuzhong,
-    CardKind::Dismantle,
-    CardKind::Snatch,
-    CardKind::Duel,
-    CardKind::SavageAttack,
-    CardKind::ArcheryAttack,
-    CardKind::Chain,
-    CardKind::Nullify,
+pub(super) const SHOUXI_KINDS: [CardKind; 15] = [
+    CardKind::Sha, CardKind::Shan, CardKind::Tao, CardKind::Jiu, CardKind::Wuzhong,
+    CardKind::Dismantle, CardKind::Snatch, CardKind::Duel, CardKind::SavageAttack,
+    CardKind::ArcheryAttack, CardKind::Chain, CardKind::Nullify, CardKind::Jiedao,
+    CardKind::Wugu, CardKind::Taoyuan,
 ];
 
 pub(super) fn flag(core: &GameStateCore, p: PlayerId, key: &str) -> u32 {

@@ -99,19 +99,30 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
         }
         loop {
             let p = ctx.core.player(self.dying);
-            if p.hp > 0 && !p.dying {
+            let mbmowang_rest = ctx
+                .core
+                .vm_aux
+                .flags
+                .get(&(self.dying, "mbmowang_resting".to_string()))
+                .copied()
+                .unwrap_or(0)
+                > 0;
+            if (p.hp > 0 && !p.dying) || mbmowang_rest {
+                ctx.core.player_mut(self.dying).dying = false;
                 ctx.core
                     .vm_aux
                     .flags
                     .remove(&(self.dying, format!("jsrgzonghai_forbid:{}", self.dying)));
-                // 救援成功（dyingAfter 等价，规则 v157）：发射救回事件，
-                // 觉醒技（姜城·焚逝）等触发挂在该事件的 AfterTriggers 窗
-                // 口——时序在固有救援机之后，与上游 dyingAfter 一致。
-                ctx.emit(EventData::DyingSaved {
-                    player: self.dying,
-                    source: self.source,
-                });
-                return Flow::Done; // 已被救回
+                if !mbmowang_rest {
+                    // 救援成功（dyingAfter 等价，规则 v157）：发射救回事件，
+                    // 觉醒技（姜城·焚逝）等触发挂在该事件的 AfterTriggers 窗
+                    // 口——时序在固有救援机之后，与上游 dyingAfter 一致。
+                    ctx.emit(EventData::DyingSaved {
+                        player: self.dying,
+                        source: self.source,
+                    });
+                }
+                return Flow::Done; // 已被救回或进入殁亡修整
             }
             // 跳过已死亡或无桃的应答者；队列耗尽即一轮问完——
             // 本轮有人用桃且场上仍有桃 → 开新一轮（负体力可由同一

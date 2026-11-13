@@ -93,9 +93,9 @@ impl HostSkillBehavior {
             HostBehavior::YxsMenshen2 => self.filter_common(ctx, owner, event),
             HostBehavior::XiguaMopaiFanbei => self.filter_common(ctx, owner, event),
             HostBehavior::Kurou => self.filter_common(ctx, owner, event),
-            HostBehavior::FzLiegong => self.filter_common(ctx, owner, event),
-            // 狂骨：自己为伤害来源、距离 ≤1 且伤害 >0
-            HostBehavior::FzXinKuanggu => self.filter_common(ctx, owner, event),
+            HostBehavior::FzLiegong | HostBehavior::FzXinKuanggu => {
+                super::step::l20_batch_b::filter_l20_batch_b(self, ctx, owner, event)
+            }
             // 主亡忠继：死亡者为主公且自己为忠臣
             HostBehavior::ZhuWanzhongJi => self.filter_common(ctx, owner, event),
             // 血量翻倍：自己首次阶段开始（标记未置位）
@@ -714,6 +714,12 @@ impl HostSkillBehavior {
             }
             HostBehavior::L19DoomsdayBatchB => {
                 super::step::l19_batch_b::filter_l19_batch_b(self, ctx, owner, event)
+            }
+            HostBehavior::L20MarkBatchA => {
+                super::step::l20_batch_a::filter_l20_batch_a(self, ctx, owner, event)
+            }
+            HostBehavior::L20MarkBatchB => {
+                super::step::l20_batch_b::filter_l20_batch_b(self, ctx, owner, event)
             }
             _ => false,
         }

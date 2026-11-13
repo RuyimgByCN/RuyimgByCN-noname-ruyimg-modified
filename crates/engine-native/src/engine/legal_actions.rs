@@ -202,7 +202,14 @@ fn certainly_illegal(engine: &Engine, seat: crate::ids::PlayerId, action: &GameA
             let Some(inst) = core.skills.get(&(seat, *skill)) else {
                 return true;
             };
-            if !inst.enabled || inst.once_used {
+            if !inst.enabled
+                || inst.once_used
+                || (catalog.is_tieji_sealed(core, seat)
+                    && !crate::catalog::Catalog::is_locked_skill_name(
+                        def.name,
+                        def.trigger.as_ref(),
+                    ))
+            {
                 return true;
             }
             let qctx = crate::catalog::QueryCtx {

@@ -36,14 +36,22 @@ impl HostMachine {
                 }
                 _ => Flow::Done,
             },
-            // 血量翻倍：体力上限 + 当前体力并回复等量（一次性）
+            // 血量翻倍：体力上限 + 当前体力并回复等量（一次性，`extension.js:2261-2269`）
             HostBehavior::XiguaXueliangFanbei => {
                 let hp = ctx.core.player(self.owner).hp.max(0);
                 if hp > 0 {
                     ctx.core.player_mut(self.owner).max_hp += hp as u32;
                     ctx.recover(self.owner, hp as u32, None);
                 }
-                if let Some(def) = ctx.catalog.skill_by_name(L20_XUELIANG_KEY) {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((self.owner, "xigua_xueliangfanbei_done".to_string()), 1);
+                if let Some(def) = ctx
+                    .catalog
+                    .skill_by_name(&self.def_key)
+                    .or_else(|| ctx.catalog.skill_by_name(L20_XUELIANG_KEY))
+                {
                     ctx.core
                         .vm_aux
                         .marks

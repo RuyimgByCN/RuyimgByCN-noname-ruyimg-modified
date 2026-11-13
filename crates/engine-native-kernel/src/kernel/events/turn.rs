@@ -29,6 +29,24 @@ pub(in crate::kernel) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: Playe
         for p in ctx.core.players.iter_mut() {
             p.fengyin_active = false;
         }
+        for seat in 0..ctx.core.players.len() as PlayerId {
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(seat, "fz_new_tieji_target_sealed".to_string()));
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(seat, "sbtieji_target_sealed".to_string()));
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(seat, "tspowei_in_range".to_string()));
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(seat, "rekuanshi_turn_dmg".to_string()));
+        }
         // K52：往事封禁清零（十殿阎罗孟婆）。
         for p in ctx.core.players.iter_mut() {
             p.wangshi_ban = false;

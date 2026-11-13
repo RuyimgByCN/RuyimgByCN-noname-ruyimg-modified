@@ -175,8 +175,15 @@ impl HostBehavior {
                 optional: false,
                 extra_events: vec![EventKind::PhaseBegin, EventKind::PhaseEnd],
             }),
-            // 烈弓：被动（杀机器内联，无触发时机）
-            HostBehavior::FzLiegong => None,
+            // 烈弓：使用【杀】指定目标后（L20 `fz_liegong` 委托）
+            HostBehavior::FzLiegong => Some(TriggerMeta {
+                event: EventKind::CardUsed,
+                timing: Timing::Normal,
+                priority: 1,
+                order_selectable: false,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
             // 狂骨：自己造成伤害后（可选）
             HostBehavior::FzXinKuanggu => Some(TriggerMeta {
                 event: EventKind::Damage,
@@ -199,14 +206,14 @@ impl HostBehavior {
             }),
             // 摸牌翻倍：被动（摸牌收束内联，无触发时机）
             HostBehavior::XiguaMopaiFanbei => None,
-            // 血量翻倍：首次阶段开始（一次性；近似 gameStart）
+            // 血量翻倍：开局（global: gameStart；一次性）
             HostBehavior::XiguaXueliangFanbei => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::GameStart,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
                 optional: false,
-                extra_events: Vec::new(),
+                extra_events: vec![EventKind::TurnBegin],
             }),
             // 门神（A2 H51）：上游 player phaseEnd＝自己整回合结束（可选）。
             HostBehavior::YxsMenshen => Some(TriggerMeta {

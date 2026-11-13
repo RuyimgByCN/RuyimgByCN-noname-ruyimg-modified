@@ -58,6 +58,8 @@ pub(super) mod l27_batch_a;
 pub(super) mod l27_batch_b;
 pub(super) mod l19_batch_a;
 pub(super) mod l19_batch_b;
+pub(super) mod l20_batch_a;
+pub(super) mod l20_batch_b;
 
 impl HostMachine {
     pub(super) fn step_behavior(&mut self, ctx: &mut Ctx<'_>) -> Flow {
@@ -68,16 +70,16 @@ impl HostMachine {
             HostBehavior::NewMeibuRange => self.step_skills_status(ctx),
             // 反击·红杀直伤：无效果步（杀机器内联消费）
             HostBehavior::YxsFanji2 => self.step_skills_status(ctx),
-            // 烈弓：无效果步（杀机器内联消费）
-            HostBehavior::FzLiegong => self.step_skills_status(ctx),
+            // 烈弓：委托 L20 `fz_liegong` 精确实现
+            HostBehavior::FzLiegong => l20_batch_b::handle_l20_batch_b(self, ctx),
             // 门神·标记持有：无效果步（主体 70 KB 效果待批次）
             HostBehavior::YxsMenshen2 => self.step_skills_status(ctx),
             // 摸牌翻倍：无效果步（摸牌收束内联消费）
             HostBehavior::XiguaMopaiFanbei => self.step_skills_status(ctx),
             // 诈降：无效果步（出牌校验/杀机器/摸牌收束内联消费）
             HostBehavior::SbZhaXiang => self.step_skills_status(ctx),
-            // 狂骨：选「回复 1」或「摸 1」
-            HostBehavior::FzXinKuanggu => self.step_skills_recovery(ctx),
+            // 狂骨：委托 L20 `fz_xinkuanggu` 精确实现
+            HostBehavior::FzXinKuanggu => l20_batch_b::handle_l20_batch_b(self, ctx),
             // 苦肉：失去 1 点体力并摸 2 张
             HostBehavior::Kurou => self.step_skills_status(ctx),
             // 主亡忠继：忠臣继位为主公（身份互换）
@@ -1088,6 +1090,8 @@ impl HostMachine {
             HostBehavior::L27BeautifyBatchB => l27_batch_b::handle_l27_batch_b(self, ctx),
             HostBehavior::L19DoomsdayBatchA => l19_batch_a::handle_l19_batch_a(self, ctx),
             HostBehavior::L19DoomsdayBatchB => l19_batch_b::handle_l19_batch_b(self, ctx),
+            HostBehavior::L20MarkBatchA => l20_batch_a::handle_l20_batch_a(self, ctx),
+            HostBehavior::L20MarkBatchB => l20_batch_b::handle_l20_batch_b(self, ctx),
         }
     }
 }

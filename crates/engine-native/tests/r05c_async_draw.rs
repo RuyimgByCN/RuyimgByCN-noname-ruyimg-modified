@@ -246,7 +246,9 @@ fn r05c_kuanggu_trigger_log_precedes_async_draw_delivery() {
         let Some(c) = e.open_choice().cloned() else { break };
         let sel = if c.spec.prompt == "trigger_confirm" {
             vec![ChoiceOption::Confirm]
-        } else if c.spec.prompt == "fz_xinkuanggu_choice" {
+        } else if c.spec.prompt == "fz_xinkuanggu_choice"
+            || c.spec.prompt == "fz_xinkuanggu:choose_mode"
+        {
             chose_draw = true;
             vec![ChoiceOption::Tag(1)]
         } else if c.spec.options.contains(&ChoiceOption::Pass) {

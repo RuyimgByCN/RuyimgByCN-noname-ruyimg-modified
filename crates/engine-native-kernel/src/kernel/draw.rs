@@ -304,7 +304,7 @@ fn host_pending_adjust(ctx: &Ctx<'_>, player: PlayerId) -> i32 {
         }
     }
     // 摸牌翻倍：+2
-    if name(crate::vocabulary::host::L20_MOPAI_KEY) {
+    if name(crate::vocabulary::host::L20_MOPAI_KEY) || name("_xigua_mopaifanbei_") {
         delta += 2;
     }
     // 脉轮：5=−1、6=+1；刺骨寒霜：−1（num>0 才减，执行入口统一 max(0)）

@@ -160,35 +160,43 @@ impl HostSkillBehavior {
                 }
                 _ => false,
             },
-            // 主亡忠继：死亡者为主公且自己为忠臣
+            // 主亡忠继：死亡者为主公且自己为忠臣（`extension.js:2270-2285`）
             HostBehavior::ZhuWanzhongJi => match event {
                 EventData::Death { player, .. } => {
                     let roles = ctx.state.identity_roles().unwrap_or_default();
-                    roles.get(*player as usize) == Some(&crate::state::Role::Lord)
+                    ctx.state.player(owner).alive
+                        && roles.get(*player as usize) == Some(&crate::state::Role::Lord)
                         && roles.get(owner as usize) == Some(&crate::state::Role::Loyalist)
                 }
                 _ => false,
             },
-            // 血量翻倍：自己首次阶段开始（标记未置位）
+            // 血量翻倍：开局（`extension.js:2261-2269` global: gameStart；标记未置位）
             HostBehavior::XiguaXueliangFanbei => match event {
-                EventData::Phase {
-                    player,
-                    begin: true,
-                    ..
-                } if *player == owner => {
+                EventData::Phase { begin: true, .. } | EventData::TurnBegin { .. } => {
+                    if !ctx.state.player(owner).alive {
+                        return false;
+                    }
+                    let def_id = ctx
+                        .catalog
+                        .skill_by_name(&self.name)
+                        .or_else(|| ctx.catalog.skill_by_name(L20_XUELIANG_KEY))
+                        .map(u32::from)
+                        .unwrap_or_default();
                     ctx.state
                         .vm_aux
                         .marks
-                        .get(&(
-                            owner,
-                            ctx.catalog
-                                .skill_by_name(L20_XUELIANG_KEY)
-                                .map(u32::from)
-                                .unwrap_or_default(),
-                        ))
+                        .get(&(owner, def_id))
                         .copied()
                         .unwrap_or(0)
                         == 0
+                        && ctx
+                            .state
+                            .vm_aux
+                            .flags
+                            .get(&(owner, "xigua_xueliangfanbei_done".to_string()))
+                            .copied()
+                            .unwrap_or(0)
+                            == 0
                 }
                 _ => false,
             },

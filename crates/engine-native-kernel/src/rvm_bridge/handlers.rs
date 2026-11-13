@@ -214,7 +214,14 @@ impl VmViewAsFilter {
             return false;
         };
         let kind = def.kind;
-        let suit = def.suit;
+        let has_xinhongyan = catalog
+            .skill_by_name("xinhongyan")
+            .is_some_and(|s| state.has_skill(owner, s));
+        let suit = if has_xinhongyan && def.suit == Suit::Spade {
+            Suit::Heart
+        } else {
+            def.suit
+        };
         let is_red = matches!(suit, Suit::Heart | Suit::Diamond);
         let is_black = matches!(suit, Suit::Spade | Suit::Club);
         let is_trick = !kind.is_basic_kind() && !kind.is_equip();

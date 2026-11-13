@@ -771,6 +771,9 @@ impl<'a> Ctx<'a> {
     }
 
     pub fn recover(&mut self, player: PlayerId, amount: u32, by_card: Option<CardId>) -> u32 {
+        if self.catalog.has_diaohulishan(self.core, player) {
+            return 0;
+        }
         let p = self.core.player_mut(player);
         if !p.alive {
             return 0;

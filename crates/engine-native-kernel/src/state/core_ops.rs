@@ -791,6 +791,9 @@ impl GameStateCore {
         b: PlayerId,
     ) -> u32 {
         use crate::catalog::CardKind;
+        if a != b && (catalog.has_diaohulishan(self, a) || catalog.has_diaohulishan(self, b)) {
+            return 999;
+        }
         if a == self.turn.current && self.turn.liangou_hook == Some(b) {
             return 1;
         }
@@ -798,8 +801,8 @@ impl GameStateCore {
             return 1;
         }
         let base = match self.player(a).yuexing_pair {
-            Some(p) if p != a => self.seat_distance_alive(p, b) as u32,
-            _ => self.seat_distance_alive(a, b) as u32,
+            Some(p) if p != a => self.seat_distance_alive_with_catalog(catalog, p, b) as u32,
+            _ => self.seat_distance_alive_with_catalog(catalog, a, b) as u32,
         };
         let plus = self
             .player(b)

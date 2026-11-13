@@ -8,16 +8,19 @@ pub fn intrinsic_machine(
     let data = ctx.res.frame(frame_id).expect("frame").data.clone();
     match data {
         EventData::OrdinaryJudge { owner, invocation } => {
-            if invocation == 0
-                || !ctx
-                    .res
-                    .frame(invocation)
-                    .is_some_and(|f| matches!(f.data, EventData::SkillInvocation(_)))
+            let is_host_judge = invocation == u32::MAX;
+            if !is_host_judge
+                && (invocation == 0
+                    || ctx.res.frame(frame_id).and_then(|f| f.parent) != Some(invocation)
+                    || !ctx
+                        .res
+                        .frame(invocation)
+                        .is_some_and(|f| matches!(f.data, EventData::SkillInvocation(_))))
             {
                 return None;
             }
             let mut m = JudgePhaseMachine::new(owner, Vec::new(), None);
-            m.ordinary = Some(invocation);
+            m.ordinary = Some(if is_host_judge { frame_id } else { invocation });
             Some(Box::new(m))
         }
         EventData::SkillInvocation(data) if data.phase == crate::event::InvocationPhase::Body => {

@@ -255,6 +255,11 @@ pub(super) fn discard_response_card(
                 from_none = true;
             }
         }
+    } else {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(player, "event_view_as_skill".to_string()));
     }
     if from_none {
         return;

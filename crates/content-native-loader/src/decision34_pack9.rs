@@ -353,6 +353,9 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
     for &s in &L20_MARK_SUPPLEMENT_SKILLS {
         push_skill(s, L20_SKILL_DISPATCH_ID);
     }
+    for &s in &["wengua5", "xianqu_mark", "kuanshi", "kuanshi2"] {
+        push_skill(s, L20_SKILL_DISPATCH_ID);
+    }
     for &s in &L24_SKIN_SWITCH_SKILLS {
         push_skill(s, L24_SKIN_SKILL_ID);
     }

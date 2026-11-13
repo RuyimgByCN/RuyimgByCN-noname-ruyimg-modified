@@ -80,8 +80,6 @@ pub fn lookup_upstream_host_behavior(skill_name: &str) -> Option<HostBehavior> {
         "fuchou2" => Some(HostBehavior::WudianFuchou2),
         "funiao" => Some(HostBehavior::SwdFuniao),
         "fuyan" => Some(HostBehavior::SwdFuyan),
-        "fz_liegong" => Some(HostBehavior::FzLiegong),
-        "fz_xinkuanggu" => Some(HostBehavior::FzXinKuanggu),
         "fzhenwei" => Some(HostBehavior::SwdFzhenwei),
         "gaizao" => Some(HostBehavior::Gaizao),
         "geju" => Some(HostBehavior::WudianGeju),
@@ -337,8 +335,10 @@ pub fn lookup_upstream_host_behavior(skill_name: &str) -> Option<HostBehavior> {
         "xielei" => Some(HostBehavior::SwdXielei),
         "xielv" => Some(HostBehavior::SwdXielv),
         "xiepan" => Some(HostBehavior::XianjianXiepan),
-        "xigua_mopaifanbei" => Some(HostBehavior::XiguaMopaiFanbei),
-        "xigua_xueliangfanbei" => Some(HostBehavior::XiguaXueliangFanbei),
+        "xigua_mopaifanbei" | "_xigua_mopaifanbei_" => Some(HostBehavior::XiguaMopaiFanbei),
+        "xigua_xueliangfanbei" | "_xigua_xueliangfanbei_" => {
+            Some(HostBehavior::XiguaXueliangFanbei)
+        }
         "xingdian" => Some(HostBehavior::SwdXingdian),
         "xingzhui" => Some(HostBehavior::SwdXingzhui),
         "xiongzi" => Some(HostBehavior::YunchouXiongzi),
@@ -416,7 +416,7 @@ pub fn lookup_upstream_host_behavior(skill_name: &str) -> Option<HostBehavior> {
         "zhucheng" => Some(HostBehavior::WudianZhucheng),
         "zhucheng2" => Some(HostBehavior::WudianZhuchengGuard),
         "zhuhai" => Some(HostBehavior::SwdZhuhai),
-        "zhuwanzhongji" => Some(HostBehavior::ZhuWanzhongJi),
+        "zhuwanzhongji" | "_xigua_zhuwanzhongji_" => Some(HostBehavior::ZhuWanzhongJi),
         "zhuyu" => Some(HostBehavior::SwdZhuyu),
         "zhuyue" => Some(HostBehavior::XianjianZhuyue),
         "ziyu" => Some(HostBehavior::WudianZiyu),
@@ -671,6 +671,77 @@ pub fn lookup_upstream_host_behavior(skill_name: &str) -> Option<HostBehavior> {
         | "_seadreammodeskill"
         | "_dietime"
         | "_anshaskill" => Some(HostBehavior::L19DoomsdayBatchB),
+        // L20 标记补充 Batch A（8 个国战/修改技能 + 3 个空标记桩 + 34 个纯 UI/Spine/音效钩子）
+        "wengua"
+        | "wengua5"
+        | "diaohulishan"
+        | "_guozhan_marks"
+        | "xianqu_mark"
+        | "_zhulianbihe_mark_tao"
+        | "_yinyang_mark_add"
+        | "_aozhan_judge"
+        | "zhulianbihe_mark"
+        | "yinyang_mark"
+        | "yexinjia_mark"
+        | "_xigua_feiyanbahu_"
+        | "_shiqihujia_"
+        | "_guozhanChooseControlCHG"
+        | "_guozhan_diebiaoji_"
+        | "_guozhan_duiweibiaoji_gua_"
+        | "_guozhan_duiweibiaoji_gua_gua_"
+        | "_guozhanhalfchghp"
+        | "_shoushajisha_"
+        | "_shoushajisha_delete_"
+        | "_diankuangtulu_gua"
+        | "_wanjunqushou_gua"
+        | "_o_o_recovertrigger"
+        | "_o_o_miaoshouhuichun"
+        | "_o_o_yishugaochao"
+        | "_losehp_"
+        | "_mianshang_"
+        | "_player_baojiA"
+        | "_player_baojiB"
+        | "_player_baojiC"
+        | "_player_baojiD"
+        | "_player_baojiE"
+        | "_player_baojiF"
+        | "_player_baojiG"
+        | "_player_baojiH"
+        | "_jiubuff_"
+        | "_jiubuff_xiaoshi_"
+        | "_player_game_guagua"
+        | "_guozhan_quanjubiaoji_guagua"
+        | "_shiyongkapaitexiao_"
+        | "_shiyongkapaitexiao_xi_gua_"
+        | "_shanghaipaishiyongtexiao_"
+        | "_player_daojianfu_xxgg_fuzi_"
+        | "_binglintu"
+        | "_dysp" => Some(HostBehavior::L20MarkBatchA),
+        // L20 标记补充 Batch B（23 个核心规则技能；`zuoxing` 在上游 extension.js:6155-6204
+        // 整段注释，L20 不覆盖该技能）
+        "zhengsu"
+        | "zhenyi_spade"
+        | "xinhongyan"
+        | "xinfu_langxi"
+        | "tspowei"
+        | "qingyu"
+        | "mibei"
+        | "fz_new_rewusheng"
+        | "fz_gzpaoxiao"
+        | "fz_new_longdan"
+        | "fz_new_tieji"
+        | "fz_liegong"
+        | "fz_xinkuanggu"
+        | "rekuanshi"
+        | "kuanshi"
+        | "kuanshi2"
+        | "rechuhai"
+        | "xinfu_lingren"
+        | "sbtieji"
+        | "sbduanliang"
+        | "shouye"
+        | "mbmowang"
+        | "_chongzhu" => Some(HostBehavior::L20MarkBatchB),
         _ => None,
     }
 }

@@ -1299,12 +1299,16 @@ impl Catalog {
         in_play: bool,
         target_kind: Option<CardKind>,
     ) -> Option<&crate::rvm_bridge::VmViewAsSpec> {
+        let sealed = self.is_tieji_sealed(core, player);
         core.skills
             .range((player, u16::MIN)..)
             .take_while(|((p, _), _)| *p == player)
             .filter(|((_, _), inst)| inst.enabled)
             .find_map(|((_, def), _)| {
                 let s = self.skills.get(*def as usize)?;
+                if sealed && !Self::is_locked_skill_name(s.name, s.trigger.as_ref()) {
+                    return None;
+                }
                 s.behavior.vm_view_as().iter().find(|spec| {
                     spec.matches_card(core, self, player, card, in_play, target_kind)
                 })
@@ -1394,62 +1398,10 @@ impl Catalog {
     pub fn card_kind(&self, card: CardId) -> CardKind {
         self.cards[card as usize].kind
     }
-
-    /// 牌的**实际**装备栏（swd 批 143 改造）：`declared_slots` 覆盖优先，
-    /// 否则取牌种固有栏位。装备技能仍按牌种授予（牌种未变）。
-    pub fn card_slot_of(
-        &self,
-        core: &crate::state::GameStateCore,
-        card: CardId,
-    ) -> Option<EquipSlot> {
-        core.declared_slots
-            .get(&card)
-            .copied()
-            .or_else(|| self.card_kind(card).equip_slot())
-    }
-
-    /// 某事件类别的候选触发定义（静态顺序，确定）。
-    pub fn candidates(&self, kind: EventKind) -> &[SkillDefId] {
-        self.dispatch.get(&kind).map(Vec::as_slice).unwrap_or(&[])
-    }
-
-    /// G1 目标过滤原语：`p` 是否持有「延时锦囊目标免疫」类技能
-    ///（墨守：乐/兵不能指定其为目标）。
-    /// 出牌封锁查询（swd 批 134 冰封）：玩家任一启用实例的行为声明封锁。
-    pub fn blocks_all_cards(
-        &self,
-        core: &crate::state::GameStateCore,
-        p: crate::ids::PlayerId,
-    ) -> bool {
-        core.skills.iter().any(|((o, def), inst)| {
-            *o == p
-                && inst.enabled
-                && self.skills[*def as usize]
-                    .behavior
-                    .blocks_all_cards_when(self, core, p)
-        })
-    }
-
-    pub fn blocks_delayed_trick(
-        &self,
-        core: &crate::state::GameStateCore,
-        p: crate::ids::PlayerId,
-    ) -> bool {
-        core.skills
-            .keys()
-            .any(|(o, _)| *o == p)
-            .then(|| {
-                core.skills.iter().any(|((o, def), inst)| {
-                    *o == p
-                        && inst.enabled
-                        && self.skills[*def as usize]
-                            .behavior
-                            .blocks_delayed_trick_target()
-                })
-            })
-            .unwrap_or(false)
-    }
 }
+
+#[path = "catalog_queries.rs"]
+mod catalog_queries;
 
 /// `Arc` 化目录别名：引擎全程共享一份。
 pub type SharedCatalog = Arc<Catalog>;

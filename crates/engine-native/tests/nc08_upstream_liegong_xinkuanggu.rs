@@ -51,7 +51,9 @@ fn ms_engine(seed: u64) -> Engine {
 fn drain(e: &mut Engine) {
     for _ in 0..64 {
         let Some(c) = e.open_choice().cloned() else { break };
-        let sel: Vec<ChoiceOption> = if c.spec.options.contains(&ChoiceOption::Pass) {
+        let sel: Vec<ChoiceOption> = if c.spec.prompt == "fz_liegong:confirm" {
+            vec![ChoiceOption::Confirm]
+        } else if c.spec.options.contains(&ChoiceOption::Pass) {
             vec![ChoiceOption::Pass]
         } else if c.spec.allow_cancel {
             Vec::new()

@@ -39,3 +39,6 @@ mod l27_beautify_batch_b;
 
 #[path = "../l19_doomsday_match.rs"]
 mod l19_doomsday_match;
+
+#[path = "../l20_mark_supplement_match.rs"]
+mod l20_mark_supplement_match;

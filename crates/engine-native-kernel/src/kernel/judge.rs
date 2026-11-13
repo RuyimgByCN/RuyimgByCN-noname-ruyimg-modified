@@ -631,6 +631,40 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                 // 判定牌确定（N08-d 顺序：Rewritten×N → Finalized → 效果 →
                 // 天妒 Gained）：Finalized 恰好记一次、在效果与天妒询问前。
                 if !cur.finalized {
+                    let pre_key = (self.owner, format!("judge_pre_finalized:{}", cur.judge_card));
+                    if ctx.core.vm_aux.flags.get(&pre_key).copied().unwrap_or(0) == 0 {
+                        ctx.core.vm_aux.flags.insert(pre_key, 1);
+                        let pre_evt = EventData::OrdinaryJudge {
+                            owner: self.owner,
+                            invocation: cur.judge_card,
+                        };
+                        let qctx = ctx.query();
+                        let has_host_listener = ctx.core.skills.iter().any(|((owner, sdef), inst)| {
+                            let def_entry = &ctx.catalog.skills[*sdef as usize];
+                            inst.enabled
+                                && ctx.core.player(*owner).alive
+                                && !def_entry.behavior.is_vm_skill()
+                                && def_entry.trigger.as_ref().is_some_and(|m| {
+                                    m.event == crate::event::EventKind::OrdinaryJudge
+                                        || m.extra_events
+                                            .contains(&crate::event::EventKind::OrdinaryJudge)
+                                })
+                                && def_entry.behavior.filter_in_window(
+                                    &qctx,
+                                    *owner,
+                                    &pre_evt,
+                                    crate::event::EventKind::OrdinaryJudge,
+                                )
+                        });
+                        if has_host_listener {
+                            ctx.emit(pre_evt);
+                            return Flow::Yield;
+                        }
+                    }
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(self.owner, format!("judge_pre_finalized:{}", cur.judge_card)));
                     cur.finalized = true;
                     let trick = cur.trick;
                     let judge_card = cur.judge_card;
@@ -647,14 +681,39 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                     if let Some(trick) = trick {
                         Self::apply_judgement(self.owner, ctx, trick, judge_card, machine_holds);
                     } else {
+                        let (suit, rank) = Self::effective_judge_suit_rank(
+                            ctx.core,
+                            ctx.catalog,
+                            self.owner,
+                            judge_card,
+                        );
+                        // 宿主技判定（`invocation == u32::MAX`，如铁骑）无 SkillInvocation 帧可
+                        // 回写结果——改记到判定者标记供宿主技读取；其它判定不留标记。
+                        let host_judge = self.ordinary.is_some_and(|f| {
+                            ctx.res.frame(f).is_some_and(|fr| {
+                                matches!(fr.data, EventData::OrdinaryJudge { invocation, .. } if invocation == u32::MAX)
+                            })
+                        });
+                        if host_judge {
+                            let code = match suit {
+                                crate::catalog::Suit::Spade => 1,
+                                crate::catalog::Suit::Heart => 2,
+                                crate::catalog::Suit::Club => 3,
+                                crate::catalog::Suit::Diamond => 4,
+                            };
+                            ctx.core.vm_aux.flags.insert((self.owner, "last_judge_suit".to_string()), code);
+                            ctx.core
+                                .vm_aux
+                                .flags
+                                .insert((self.owner, "last_judge_rank".to_string()), u32::from(rank));
+                        }
                         if !machine_holds {
                             ctx.to_discard(judge_card);
                         }
                         if let Some(invocation) = self.ordinary {
                             if let Some(frame) = ctx.res.frame_mut(invocation) {
                                 if let EventData::SkillInvocation(data) = &mut frame.data {
-                                    data.judgement =
-                                        Some(ctx.catalog.cards[judge_card as usize].suit);
+                                    data.judgement = Some(suit);
                                 }
                             }
                         }
@@ -814,6 +873,37 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
 }
 
 impl JudgePhaseMachine {
+    fn effective_judge_suit_rank(
+        core: &mut crate::state::GameStateCore,
+        catalog: &crate::catalog::Catalog,
+        owner: PlayerId,
+        judge_card: crate::ids::CardId,
+    ) -> (crate::catalog::Suit, u8) {
+        let suit_from_code = |c: u32| match c {
+            1 => crate::catalog::Suit::Spade,
+            2 => crate::catalog::Suit::Heart,
+            3 => crate::catalog::Suit::Club,
+            _ => crate::catalog::Suit::Diamond,
+        };
+        let def = &catalog.cards[judge_card as usize];
+        let (mut suit, mut rank) = (def.suit, def.rank);
+        let override_suit = core.vm_aux.flags.remove(&(owner, "zhenyi_judge_suit".to_string())).unwrap_or(0);
+        let override_num = core.vm_aux.flags.remove(&(owner, "zhenyi_judge_number".to_string())).unwrap_or(0);
+        if override_suit > 0 {
+            suit = suit_from_code(override_suit);
+            rank = if override_num > 0 { override_num as u8 } else { 5 };
+        } else if suit == crate::catalog::Suit::Spade
+            && catalog.skill_by_name("xinhongyan").is_some_and(|d| core.has_skill(owner, d))
+        {
+            suit = crate::catalog::Suit::Heart;
+        }
+        let xhy_suit = core.vm_aux.flags.remove(&(owner, "xinhongyan_judge_suit".to_string())).unwrap_or(0);
+        if xhy_suit > 0 {
+            suit = suit_from_code(xhy_suit);
+        }
+        (suit, rank)
+    }
+
     /// 判定牌生效：按锦囊种类套用效果（`machine_holds` 为真时判定牌仍由
     /// 机器持有——天妒未决——不随效果弃置）。
     fn apply_judgement(
@@ -832,27 +922,15 @@ impl JudgePhaseMachine {
             .unwrap_or_else(|| ctx.catalog.card_kind(trick));
         // 声明消费后移除（牌已结算，残留条目会在后续洗回场景误判）
         ctx.core.declared_kinds.remove(&trick);
-        let (suit, rank) = {
-            let def = &ctx.catalog.cards[judge_card as usize];
-            (def.suit, def.rank)
-        };
-        // 神裔（Boss 青龙共有技，规则 v233）：判定阶段的延时锦囊判定对
-        // 持有者恒不生效（上游 mod judge event.type=="phase"：bool
-        // true→false、false→null——各臂效果条件一并短路；牌去向不变：
-        // 锦囊照常弃置、闪电照常传下家）
-        let shenyi_voids = ctx
-            .catalog
-            .skill_by_name(crate::vocabulary::names::BOSS_SHENYI)
-            .map(|def| ctx.core.has_skill(owner, def))
-            .unwrap_or(false)
-            // 隐月·判（T11 Boss 诸葛亮族批 115，规则 v303）：上游
-            // `hlss_yueyin2` mod judge 对阶段判定「true→false、false→null」
-            // ——两臂皆不生效（牌去向不变），与神裔同口径。
-            || ctx
-                .catalog
-                .skill_by_name(crate::vocabulary::host::HLSS_YUEYIN2_KEY)
-                .map(|def| ctx.core.has_skill(owner, def))
-                .unwrap_or(false);
+        let (suit, rank) = Self::effective_judge_suit_rank(ctx.core, ctx.catalog, owner, judge_card);
+        // 神裔（Boss 青龙共有技，规则 v233）/ 隐月·判（T11 Boss 诸葛亮族批 115，规则 v303）：
+        // 判定阶段的延时锦囊判定对持有者恒不生效（牌去向不变：锦囊照常弃置、闪电照常传下家）。
+        let shenyi_voids = [
+            crate::vocabulary::names::BOSS_SHENYI,
+            crate::vocabulary::host::HLSS_YUEYIN2_KEY,
+        ]
+        .iter()
+        .any(|k| ctx.catalog.skill_by_name(k).is_some_and(|def| ctx.core.has_skill(owner, def)));
         match trick_kind {
             CardKind::Le => {
                 if !shenyi_voids && !suit.is_heart() {
