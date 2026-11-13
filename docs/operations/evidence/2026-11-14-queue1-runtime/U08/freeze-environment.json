@@ -1,0 +1,37 @@
+{
+  "at": "2026-11-13T18:47:26.776164+00:00",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "tracked_status": " M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/operations/evidence/2026-11-14-queue1-runtime/README.md\n M docs/operations/evidence/2026-11-14-queue1-runtime/publication/README.md\n",
+  "tracked_clean": false,
+  "initial_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "initial_tracked_status_retained_in": "preflight.json",
+  "relevant_u08_product_source_and_pack_hashes_match_initial": {
+    "crates/engine-native-content/src/content/host/step/u08_batch_a.rs": true,
+    "crates/engine-native-content/src/content/host/step/u08_batch_a_asks.rs": true,
+    "crates/engine-native-content/src/content/host/step/u08_batch_d.rs": true,
+    "crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs": true,
+    "crates/engine-native-content/src/content/host/step/u08_batch_d_ext.rs": true,
+    "crates/content-native-loader/src/decision34_pack9.rs": true,
+    "packages/extensions/hero-kill-upstream-noname/assets/cards.json": true,
+    "../archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js": true,
+    "../archive/upstream/noname/apps/core/extension/英雄杀/character/translate.js": true
+  },
+  "parent_change": "Only parent staged/committed the jiushi restore definitions/test plus collected documentation; U08 did not alter product. Current head was reported by parent as 5c73d1d9158145e33f98f2018013914667d13964.",
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "preserved_probe": {
+    "path": "/private/tmp/noname-u08-runtime-preserved-edoyg7eg/native-probe-round2",
+    "sha256": "6a08977ed231a8c71229dc50c650ee8b4fd02973d96389dc38d60239c4d3dffd",
+    "bytes": 35305176,
+    "original": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target/debug/u08-queue1-runtime-probe",
+    "purpose": "Retain exact linked external probe for independent review; this is not a Cargo cache. Remove only after parent releases it.",
+    "private_cargo_target_created": false,
+    "shared_target_cleaned": false
+  },
+  "status_scope": "tracked status excludes this untracked U08 evidence directory; no index mutation made by this agent"
+}

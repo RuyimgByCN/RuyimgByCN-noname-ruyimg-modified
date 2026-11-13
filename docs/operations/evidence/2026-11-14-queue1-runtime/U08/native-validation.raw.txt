@@ -1,0 +1,1 @@
+{"cases": 31, "pending_checks": 76, "raw_ngsa_file_count": 138, "all_assertions_satisfied": true}

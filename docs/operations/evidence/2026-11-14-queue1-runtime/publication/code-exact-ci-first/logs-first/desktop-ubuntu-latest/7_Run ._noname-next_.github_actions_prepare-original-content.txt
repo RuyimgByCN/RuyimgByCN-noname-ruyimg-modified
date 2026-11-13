@@ -1,0 +1,332 @@
+﻿2026-11-13T18:48:20.8992382Z Prepare all required actions
+2026-11-13T18:48:20.8992869Z Getting action download info
+2026-11-13T18:48:21.1895529Z Download action repository 'pnpm/action-setup@v4' (SHA:b906affcce14559ad1aafd4ab0e942779e9f58b1)
+2026-11-13T18:48:21.4538645Z ##[group]Run ./noname-next/.github/actions/prepare-original-content
+2026-11-13T18:48:21.4538978Z with:
+2026-11-13T18:48:21.4539159Z   integration-sources: false
+2026-11-13T18:48:21.4539372Z env:
+2026-11-13T18:48:21.4539533Z   CARGO_TERM_COLOR: always
+2026-11-13T18:48:21.4539736Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T18:48:21.4539942Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:48:21.4540126Z   CACHE_ON_FAILURE: false
+2026-11-13T18:48:21.4540316Z ##[endgroup]
+2026-11-13T18:48:21.4546081Z ##[start-action display=Run actions/checkout@v4;id=__self.__actions_checkout]
+2026-11-13T18:48:21.4591669Z ##[group]Run actions/checkout@v4
+2026-11-13T18:48:21.4591890Z with:
+2026-11-13T18:48:21.4592097Z   repository: libnoname/noname
+2026-11-13T18:48:21.4592328Z   ref: 1a548c95acdf8ac1ef44d74473403eda2ac86cf0
+2026-11-13T18:48:21.4592644Z   path: archive/upstream/noname
+2026-11-13T18:48:21.4592864Z   sparse-checkout: apps/core
+2026-11-13T18:48:21.4593077Z   persist-credentials: false
+2026-11-13T18:48:21.4595242Z   token: ***
+2026-11-13T18:48:21.4595416Z   ssh-strict: true
+2026-11-13T18:48:21.4595642Z   ssh-user: git
+2026-11-13T18:48:21.4595805Z   clean: true
+2026-11-13T18:48:21.4595985Z   sparse-checkout-cone-mode: true
+2026-11-13T18:48:21.4596195Z   fetch-depth: 1
+2026-11-13T18:48:21.4596366Z   fetch-tags: false
+2026-11-13T18:48:21.4596545Z   show-progress: true
+2026-11-13T18:48:21.4596723Z   lfs: false
+2026-11-13T18:48:21.4596889Z   submodules: false
+2026-11-13T18:48:21.4597072Z   set-safe-directory: true
+2026-11-13T18:48:21.4597289Z   allow-unsafe-pr-checkout: false
+2026-11-13T18:48:21.4597497Z env:
+2026-11-13T18:48:21.4597659Z   CARGO_TERM_COLOR: always
+2026-11-13T18:48:21.4597850Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T18:48:21.4598062Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:48:21.4598252Z   CACHE_ON_FAILURE: false
+2026-11-13T18:48:21.4598439Z ##[endgroup]
+2026-11-13T18:48:21.5335191Z Syncing repository: libnoname/noname
+2026-11-13T18:48:21.5340904Z ##[group]Getting Git version info
+2026-11-13T18:48:21.5342133Z Working directory is '/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/archive/upstream/noname'
+2026-11-13T18:48:21.5374252Z [command]/usr/bin/git version
+2026-11-13T18:48:21.5413718Z git version 2.56.0
+2026-11-13T18:48:21.5435910Z ##[endgroup]
+2026-11-13T18:48:21.5442560Z Temporarily overriding HOME='/home/runner/work/_temp/fa13e8ab-f755-4f91-81d4-74af212ae941' before making global git config changes
+2026-11-13T18:48:21.5443858Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-13T18:48:21.5447986Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/archive/upstream/noname
+2026-11-13T18:48:21.5491012Z ##[group]Initializing the repository
+2026-11-13T18:48:21.5492102Z [command]/usr/bin/git init /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/archive/upstream/noname
+2026-11-13T18:48:21.5539229Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-13T18:48:21.5540307Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-13T18:48:21.5541321Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-13T18:48:21.5541846Z hint: call:
+2026-11-13T18:48:21.5542081Z hint:
+2026-11-13T18:48:21.5542492Z hint: 	git config --global init.defaultBranch <name>
+2026-11-13T18:48:21.5542856Z hint:
+2026-11-13T18:48:21.5543303Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-13T18:48:21.5544207Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-13T18:48:21.5544642Z hint:
+2026-11-13T18:48:21.5544910Z hint: 	git branch -m <name>
+2026-11-13T18:48:21.5545522Z hint:
+2026-11-13T18:48:21.5546000Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-13T18:48:21.5547192Z Initialized empty Git repository in /home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/archive/upstream/noname/.git/
+2026-11-13T18:48:21.5551321Z [command]/usr/bin/git remote add origin https://github.com/libnoname/noname
+2026-11-13T18:48:21.5593647Z ##[endgroup]
+2026-11-13T18:48:21.5594153Z ##[group]Disabling automatic garbage collection
+2026-11-13T18:48:21.5598932Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-13T18:48:21.5635779Z ##[endgroup]
+2026-11-13T18:48:21.5636270Z ##[group]Setting up auth
+2026-11-13T18:48:21.5641979Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-13T18:48:21.5678167Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-13T18:48:21.5977427Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-13T18:48:21.6027586Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-13T18:48:21.6300073Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-13T18:48:21.6339783Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-13T18:48:21.6628555Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-13T18:48:21.6675055Z ##[endgroup]
+2026-11-13T18:48:21.6675794Z ##[group]Fetching the repository
+2026-11-13T18:48:21.6686984Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --filter=blob:none --depth=1 origin 1a548c95acdf8ac1ef44d74473403eda2ac86cf0
+2026-11-13T18:48:22.1540951Z From https://github.com/libnoname/noname
+2026-11-13T18:48:22.1542054Z  * branch            1a548c95acdf8ac1ef44d74473403eda2ac86cf0 -> FETCH_HEAD
+2026-11-13T18:48:22.1545483Z ##[endgroup]
+2026-11-13T18:48:22.1546250Z ##[group]Determining the checkout info
+2026-11-13T18:48:22.1547939Z ##[endgroup]
+2026-11-13T18:48:22.1548367Z ##[group]Setting up sparse checkout
+2026-11-13T18:48:22.1553528Z [command]/usr/bin/git sparse-checkout set apps/core
+2026-11-13T18:48:22.1592588Z ##[endgroup]
+2026-11-13T18:48:22.1593136Z ##[group]Checking out the ref
+2026-11-13T18:48:22.1606798Z [command]/usr/bin/git checkout --progress --force 1a548c95acdf8ac1ef44d74473403eda2ac86cf0
+2026-11-13T18:48:50.8577887Z Updating files:   0% (1/15443)
+2026-11-13T18:48:50.8884451Z Updating files:   1% (155/15443)
+2026-11-13T18:48:50.9290857Z Updating files:   2% (309/15443)
+2026-11-13T18:48:50.9687870Z Updating files:   3% (464/15443)
+2026-11-13T18:48:51.0110578Z Updating files:   4% (618/15443)
+2026-11-13T18:48:51.0634360Z Updating files:   5% (773/15443)
+2026-11-13T18:48:51.1090368Z Updating files:   6% (927/15443)
+2026-11-13T18:48:51.1452487Z Updating files:   7% (1082/15443)
+2026-11-13T18:48:51.1707836Z Updating files:   8% (1236/15443)
+2026-11-13T18:48:51.1921545Z Updating files:   8% (1312/15443)
+2026-11-13T18:48:51.2367241Z Updating files:   9% (1390/15443)
+2026-11-13T18:48:51.2757533Z Updating files:  10% (1545/15443)
+2026-11-13T18:48:51.3178206Z Updating files:  11% (1699/15443)
+2026-11-13T18:48:51.3682828Z Updating files:  12% (1854/15443)
+2026-11-13T18:48:51.4096399Z Updating files:  13% (2008/15443)
+2026-11-13T18:48:51.4409553Z Updating files:  14% (2163/15443)
+2026-11-13T18:48:51.4772834Z Updating files:  15% (2317/15443)
+2026-11-13T18:48:51.5117684Z Updating files:  16% (2471/15443)
+2026-11-13T18:48:51.5527398Z Updating files:  17% (2626/15443)
+2026-11-13T18:48:51.5969570Z Updating files:  18% (2780/15443)
+2026-11-13T18:48:51.6386354Z Updating files:  19% (2935/15443)
+2026-11-13T18:48:51.6849648Z Updating files:  20% (3089/15443)
+2026-11-13T18:48:51.7315155Z Updating files:  21% (3244/15443)
+2026-11-13T18:48:51.7678133Z Updating files:  22% (3398/15443)
+2026-11-13T18:48:51.8052456Z Updating files:  23% (3552/15443)
+2026-11-13T18:48:51.8503573Z Updating files:  24% (3707/15443)
+2026-11-13T18:48:51.8872139Z Updating files:  25% (3861/15443)
+2026-11-13T18:48:51.9206856Z Updating files:  26% (4016/15443)
+2026-11-13T18:48:51.9557560Z Updating files:  27% (4170/15443)
+2026-11-13T18:48:51.9863241Z Updating files:  28% (4325/15443)
+2026-11-13T18:48:52.0222934Z Updating files:  29% (4479/15443)
+2026-11-13T18:48:52.0677897Z Updating files:  30% (4633/15443)
+2026-11-13T18:48:52.0979925Z Updating files:  31% (4788/15443)
+2026-11-13T18:48:52.1367157Z Updating files:  32% (4942/15443)
+2026-11-13T18:48:52.1708233Z Updating files:  33% (5097/15443)
+2026-11-13T18:48:52.1861238Z Updating files:  33% (5199/15443)
+2026-11-13T18:48:52.2364310Z Updating files:  34% (5251/15443)
+2026-11-13T18:48:52.2732045Z Updating files:  35% (5406/15443)
+2026-11-13T18:48:52.3340776Z Updating files:  36% (5560/15443)
+2026-11-13T18:48:52.3858151Z Updating files:  37% (5714/15443)
+2026-11-13T18:48:52.4351624Z Updating files:  38% (5869/15443)
+2026-11-13T18:48:52.4801822Z Updating files:  39% (6023/15443)
+2026-11-13T18:48:52.5295152Z Updating files:  40% (6178/15443)
+2026-11-13T18:48:52.5737462Z Updating files:  41% (6332/15443)
+2026-11-13T18:48:52.6244116Z Updating files:  42% (6487/15443)
+2026-11-13T18:48:52.6568083Z Updating files:  43% (6641/15443)
+2026-11-13T18:48:52.6891061Z Updating files:  44% (6795/15443)
+2026-11-13T18:48:52.7193303Z Updating files:  45% (6950/15443)
+2026-11-13T18:48:52.7521638Z Updating files:  46% (7104/15443)
+2026-11-13T18:48:52.7919807Z Updating files:  47% (7259/15443)
+2026-11-13T18:48:52.8331958Z Updating files:  48% (7413/15443)
+2026-11-13T18:48:52.8658315Z Updating files:  49% (7568/15443)
+2026-11-13T18:48:52.9002507Z Updating files:  50% (7722/15443)
+2026-11-13T18:48:52.9477174Z Updating files:  51% (7876/15443)
+2026-11-13T18:48:52.9812653Z Updating files:  52% (8031/15443)
+2026-11-13T18:48:53.0196042Z Updating files:  53% (8185/15443)
+2026-11-13T18:48:53.0579452Z Updating files:  54% (8340/15443)
+2026-11-13T18:48:53.0923613Z Updating files:  55% (8494/15443)
+2026-11-13T18:48:53.1340976Z Updating files:  56% (8649/15443)
+2026-11-13T18:48:53.1706773Z Updating files:  57% (8803/15443)
+2026-11-13T18:48:53.1802935Z Updating files:  57% (8910/15443)
+2026-11-13T18:48:53.2124145Z Updating files:  58% (8957/15443)
+2026-11-13T18:48:53.2444001Z Updating files:  59% (9112/15443)
+2026-11-13T18:48:53.2766567Z Updating files:  60% (9266/15443)
+2026-11-13T18:48:53.3085700Z Updating files:  61% (9421/15443)
+2026-11-13T18:48:53.3469757Z Updating files:  62% (9575/15443)
+2026-11-13T18:48:53.3769832Z Updating files:  63% (9730/15443)
+2026-11-13T18:48:53.3991310Z Updating files:  64% (9884/15443)
+2026-11-13T18:48:53.4137261Z Updating files:  65% (10038/15443)
+2026-11-13T18:48:53.4420745Z Updating files:  66% (10193/15443)
+2026-11-13T18:48:53.4664682Z Updating files:  67% (10347/15443)
+2026-11-13T18:48:53.5070559Z Updating files:  68% (10502/15443)
+2026-11-13T18:48:53.5514598Z Updating files:  69% (10656/15443)
+2026-11-13T18:48:53.7317124Z Updating files:  70% (10811/15443)
+2026-11-13T18:48:53.7484936Z Updating files:  71% (10965/15443)
+2026-11-13T18:48:53.7678580Z Updating files:  72% (11119/15443)
+2026-11-13T18:48:53.8036492Z Updating files:  73% (11274/15443)
+2026-11-13T18:48:53.8407843Z Updating files:  74% (11428/15443)
+2026-11-13T18:48:53.8829878Z Updating files:  75% (11583/15443)
+2026-11-13T18:48:53.9223306Z Updating files:  76% (11737/15443)
+2026-11-13T18:48:53.9645024Z Updating files:  77% (11892/15443)
+2026-11-13T18:48:54.0295095Z Updating files:  78% (12046/15443)
+2026-11-13T18:48:54.0662847Z Updating files:  79% (12200/15443)
+2026-11-13T18:48:54.1055149Z Updating files:  80% (12355/15443)
+2026-11-13T18:48:54.1532068Z Updating files:  81% (12509/15443)
+2026-11-13T18:48:54.1706316Z Updating files:  82% (12664/15443)
+2026-11-13T18:48:54.1950866Z Updating files:  82% (12715/15443)
+2026-11-13T18:48:54.2471124Z Updating files:  83% (12818/15443)
+2026-11-13T18:48:54.2833140Z Updating files:  84% (12973/15443)
+2026-11-13T18:48:54.3235029Z Updating files:  85% (13127/15443)
+2026-11-13T18:48:54.3564964Z Updating files:  86% (13281/15443)
+2026-11-13T18:48:54.3874441Z Updating files:  87% (13436/15443)
+2026-11-13T18:48:54.4291729Z Updating files:  88% (13590/15443)
+2026-11-13T18:48:54.4670611Z Updating files:  89% (13745/15443)
+2026-11-13T18:48:54.5101141Z Updating files:  90% (13899/15443)
+2026-11-13T18:48:54.5959370Z Updating files:  91% (14054/15443)
+2026-11-13T18:48:54.7080761Z Updating files:  92% (14208/15443)
+2026-11-13T18:48:54.7376752Z Updating files:  93% (14362/15443)
+2026-11-13T18:48:54.7588630Z Updating files:  94% (14517/15443)
+2026-11-13T18:48:54.7859961Z Updating files:  95% (14671/15443)
+2026-11-13T18:48:54.8062116Z Updating files:  96% (14826/15443)
+2026-11-13T18:48:54.8205462Z Updating files:  97% (14980/15443)
+2026-11-13T18:48:54.8386308Z Updating files:  98% (15135/15443)
+2026-11-13T18:48:54.8524847Z Updating files:  99% (15289/15443)
+2026-11-13T18:48:54.8525367Z Updating files: 100% (15443/15443)
+2026-11-13T18:48:54.8525703Z Updating files: 100% (15443/15443), done.
+2026-11-13T18:48:54.8631914Z Note: switching to '1a548c95acdf8ac1ef44d74473403eda2ac86cf0'.
+2026-11-13T18:48:54.8632355Z 
+2026-11-13T18:48:54.8632684Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-11-13T18:48:54.8633137Z changes and commit them, and you can discard any commits you make in this
+2026-11-13T18:48:54.8633851Z state without impacting any branches by switching back to a branch.
+2026-11-13T18:48:54.8634070Z 
+2026-11-13T18:48:54.8634286Z If you want to create a new branch to retain commits you create, you may
+2026-11-13T18:48:54.8634706Z do so (now or later) by using -c with the switch command. Example:
+2026-11-13T18:48:54.8634914Z 
+2026-11-13T18:48:54.8635033Z   git switch -c <new-branch-name>
+2026-11-13T18:48:54.8635203Z 
+2026-11-13T18:48:54.8635303Z Or undo this operation with:
+2026-11-13T18:48:54.8635439Z 
+2026-11-13T18:48:54.8635519Z   git switch -
+2026-11-13T18:48:54.8635614Z 
+2026-11-13T18:48:54.8635846Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-11-13T18:48:54.8636351Z 
+2026-11-13T18:48:54.8636833Z HEAD is now at 1a548c9 docs(changelog): 汇总 db773dad..a44934c5 的变更
+2026-11-13T18:48:54.8809225Z ##[endgroup]
+2026-11-13T18:48:54.8848949Z [command]/usr/bin/git log -1 --format=%H
+2026-11-13T18:48:54.8875525Z 1a548c95acdf8ac1ef44d74473403eda2ac86cf0
+2026-11-13T18:48:54.8887970Z ##[group]Removing auth
+2026-11-13T18:48:54.8888629Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-13T18:48:54.8921039Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-13T18:48:54.9182345Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-13T18:48:54.9206966Z http.https://github.com/.extraheader
+2026-11-13T18:48:54.9214534Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-13T18:48:54.9258603Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-13T18:48:54.9513642Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-13T18:48:54.9546131Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-13T18:48:54.9804790Z ##[endgroup]
+2026-11-13T18:48:54.9911646Z ##[end-action id=__self.__actions_checkout;outcome=success;conclusion=success;duration_ms=33536]
+2026-11-13T18:48:54.9914130Z ##[start-action display=Bind CI checkout origin to adopted provenance;id=__self.__run]
+2026-11-13T18:48:54.9930383Z ##[group]Run git remote set-url origin https://github.com/libnoname/noname.git
+2026-11-13T18:48:54.9930835Z [36;1mgit remote set-url origin https://github.com/libnoname/noname.git[0m
+2026-11-13T18:48:54.9976470Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-13T18:48:54.9976766Z env:
+2026-11-13T18:48:54.9976951Z   CARGO_TERM_COLOR: always
+2026-11-13T18:48:54.9977157Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T18:48:54.9977363Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:48:54.9977545Z   CACHE_ON_FAILURE: false
+2026-11-13T18:48:54.9977735Z ##[endgroup]
+2026-11-13T18:48:55.0067480Z ##[end-action id=__self.__run;outcome=success;conclusion=success;duration_ms=15]
+2026-11-13T18:48:55.0069520Z ##[start-action display=Run actions/checkout@v4;id=__self.__actions_checkout_2]
+2026-11-13T18:48:55.0073235Z ##[end-action id=__self.__actions_checkout_2;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-11-13T18:48:55.0075048Z ##[start-action display=Restore adopted Longxue source input;id=__self.__run_2]
+2026-11-13T18:48:55.0077594Z ##[end-action id=__self.__run_2;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-11-13T18:48:55.0078983Z ##[start-action display=Run pnpm/action-setup@v4;id=__self.__pnpm_action-setup]
+2026-11-13T18:48:55.0106646Z ##[group]Run pnpm/action-setup@v4
+2026-11-13T18:48:55.0106859Z with:
+2026-11-13T18:48:55.0107022Z   version: 9
+2026-11-13T18:48:55.0107182Z   dest: ~/setup-pnpm
+2026-11-13T18:48:55.0107358Z   run_install: null
+2026-11-13T18:48:55.0107518Z   cache: false
+2026-11-13T18:48:55.0107698Z   cache_dependency_path: pnpm-lock.yaml
+2026-11-13T18:48:55.0108095Z   package_json_file: package.json
+2026-11-13T18:48:55.0108367Z   standalone: false
+2026-11-13T18:48:55.0108601Z env:
+2026-11-13T18:48:55.0108757Z   CARGO_TERM_COLOR: always
+2026-11-13T18:48:55.0108962Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T18:48:55.0109164Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:48:55.0109355Z   CACHE_ON_FAILURE: false
+2026-11-13T18:48:55.0109536Z ##[endgroup]
+2026-11-13T18:48:55.1338939Z ##[group]Running self-installer...
+2026-11-13T18:48:55.4458394Z (node:4703) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-13T18:48:55.4459710Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-13T18:48:55.5720985Z Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-11-13T18:48:55.5806497Z Packages: +1
+2026-11-13T18:48:55.5806848Z +
+2026-11-13T18:48:55.8841455Z Progress: resolved 1, reused 0, downloaded 1, added 1, done
+2026-11-13T18:48:55.9313541Z 
+2026-11-13T18:48:55.9314092Z dependencies:
+2026-11-13T18:48:55.9314399Z + pnpm 9.15.9 (12.18.0 is available)
+2026-11-13T18:48:55.9314582Z 
+2026-11-13T18:48:55.9332968Z Done in 659ms
+2026-11-13T18:48:55.9529513Z ##[endgroup]
+2026-11-13T18:48:55.9530000Z Installation Completed!
+2026-11-13T18:48:55.9619704Z ##[end-action id=__self.__pnpm_action-setup;outcome=success;conclusion=success;duration_ms=954]
+2026-11-13T18:48:55.9621712Z ##[start-action display=Install frontend dependencies;id=__self.__run_3]
+2026-11-13T18:48:55.9637214Z ##[group]Run pnpm --dir apps/web-client install --frozen-lockfile
+2026-11-13T18:48:55.9637603Z [36;1mpnpm --dir apps/web-client install --frozen-lockfile[0m
+2026-11-13T18:48:55.9683307Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-13T18:48:55.9683764Z env:
+2026-11-13T18:48:55.9683934Z   CARGO_TERM_COLOR: always
+2026-11-13T18:48:55.9684142Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T18:48:55.9684349Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:48:55.9684535Z   CACHE_ON_FAILURE: false
+2026-11-13T18:48:55.9684780Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-11-13T18:48:55.9685030Z ##[endgroup]
+2026-11-13T18:48:56.3132385Z Lockfile is up to date, resolution step is skipped
+2026-11-13T18:48:56.3392177Z Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-11-13T18:48:56.3570918Z Packages: +63
+2026-11-13T18:48:56.3604567Z +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2026-11-13T18:48:57.0119648Z Progress: resolved 63, reused 0, downloaded 63, added 63, done
+2026-11-13T18:48:57.0572923Z .../node_modules/@swc/core postinstall$ node postinstall.js
+2026-11-13T18:48:57.0719732Z .../esbuild@0.25.12/node_modules/esbuild postinstall$ node install.js
+2026-11-13T18:48:57.1009849Z .../node_modules/@swc/core postinstall: Done
+2026-11-13T18:48:57.2173221Z .../esbuild@0.25.12/node_modules/esbuild postinstall: Done
+2026-11-13T18:48:57.2959731Z 
+2026-11-13T18:48:57.2960399Z dependencies:
+2026-11-13T18:48:57.2960772Z + @tauri-apps/api 2.11.1
+2026-11-13T18:48:57.2961112Z + vue 3.5.39
+2026-11-13T18:48:57.2961390Z + vue-router 4.6.4
+2026-11-13T18:48:57.2961563Z 
+2026-11-13T18:48:57.2961669Z devDependencies:
+2026-11-13T18:48:57.2961962Z + @tauri-apps/cli 2.11.4
+2026-11-13T18:48:57.2962299Z + @vitejs/plugin-vue 5.2.4
+2026-11-13T18:48:57.2962650Z + typescript 5.9.3
+2026-11-13T18:48:57.2962900Z + vite 6.4.3
+2026-11-13T18:48:57.2963239Z + vite-plugin-top-level-await 1.6.0
+2026-11-13T18:48:57.2963731Z + vite-plugin-wasm 3.6.0
+2026-11-13T18:48:57.2963987Z + vue-tsc 2.2.12
+2026-11-13T18:48:57.2964160Z 
+2026-11-13T18:48:57.3082493Z Done in 1.3s using pnpm v9.15.9
+2026-11-13T18:48:57.3307755Z ##[end-action id=__self.__run_3;outcome=success;conclusion=success;duration_ms=1368]
+2026-11-13T18:48:57.3310527Z ##[start-action display=Restore and verify adopted resource bytes;id=__self.__run_4]
+2026-11-13T18:48:57.3332451Z ##[group]Run node scripts/sync-original-content.mjs --resources-only
+2026-11-13T18:48:57.3333071Z [36;1mnode scripts/sync-original-content.mjs --resources-only[0m
+2026-11-13T18:48:57.3333840Z [36;1mnode scripts/sync-original-content.mjs --resources-only --verify-only[0m
+2026-11-13T18:48:57.3334254Z [36;1mgit diff --exit-code -- content/original[0m
+2026-11-13T18:48:57.3380736Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-13T18:48:57.3381166Z env:
+2026-11-13T18:48:57.3381402Z   CARGO_TERM_COLOR: always
+2026-11-13T18:48:57.3381724Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T18:48:57.3382041Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:48:57.3382307Z   CACHE_ON_FAILURE: false
+2026-11-13T18:48:57.3382926Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-11-13T18:48:57.3383310Z ##[endgroup]
+2026-11-13T18:49:16.7389338Z original content resources synced:
+2026-11-13T18:49:16.7390441Z   portraits: 2707 files, 387.6 MiB, 2707 linked, 0 copied
+2026-11-13T18:49:16.7390969Z   audio: 9652 files, 620.9 MiB, 9652 linked, 0 copied
+2026-11-13T18:49:16.7391447Z   audio-compat: 5 files, 257.4 KiB, 0 linked, 5 copied
+2026-11-13T18:49:31.3331127Z original content resources verified:
+2026-11-13T18:49:31.3332010Z   portraits: 2707 files, 387.6 MiB, 2707 linked, 0 copied
+2026-11-13T18:49:31.3332471Z   audio: 9652 files, 620.9 MiB, 9652 linked, 0 copied
+2026-11-13T18:49:31.3332877Z   audio-compat: 5 files, 257.4 KiB, 0 linked, 5 copied
+2026-11-13T18:49:31.8388715Z ##[end-action id=__self.__run_4;outcome=success;conclusion=success;duration_ms=34507]

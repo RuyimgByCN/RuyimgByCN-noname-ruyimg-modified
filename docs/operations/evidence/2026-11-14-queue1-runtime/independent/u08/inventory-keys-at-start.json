@@ -1,0 +1,47 @@
+{
+  "U08:skills:yixin@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:337": {
+    "source_id": "U08",
+    "category": "skills",
+    "id": "yixin",
+    "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:337",
+    "status": "已复核等价",
+    "reviewer": "u08-signoff",
+    "review_date": "2026-11-12"
+  },
+  "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407": {
+    "source_id": "U08",
+    "category": "skills",
+    "id": "bolehuiyan",
+    "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+    "status": "简化近似",
+    "reviewer": "/root/fix_dddanzhi",
+    "review_date": "2026-11-14"
+  },
+  "U08:skills:bolehuiyan2@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2477": {
+    "source_id": "U08",
+    "category": "skills",
+    "id": "bolehuiyan2",
+    "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2477",
+    "status": "已复核等价",
+    "reviewer": "u08-signoff",
+    "review_date": "2026-11-12"
+  },
+  "U08:skills:bolehuiyan3@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2495": {
+    "source_id": "U08",
+    "category": "skills",
+    "id": "bolehuiyan3",
+    "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2495",
+    "status": "已复核等价",
+    "reviewer": "u08-signoff",
+    "review_date": "2026-11-12"
+  },
+  "U08:skills:guifu@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:3095": {
+    "source_id": "U08",
+    "category": "skills",
+    "id": "guifu",
+    "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:3095",
+    "status": "已复核等价",
+    "reviewer": "u08-signoff",
+    "review_date": "2026-11-12"
+  }
+}

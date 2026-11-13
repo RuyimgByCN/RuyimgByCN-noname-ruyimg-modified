@@ -1,0 +1,17 @@
+﻿2026-11-13T18:48:07.8865579Z ##[group]Run python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'
+2026-11-13T18:48:07.8866026Z [36;1mpython3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'[0m
+2026-11-13T18:48:07.8866307Z [36;1mpython3 scripts/check-source-lines.py[0m
+2026-11-13T18:48:07.8910069Z shell: /usr/bin/bash -e {0}
+2026-11-13T18:48:07.8910249Z env:
+2026-11-13T18:48:07.8910388Z   CARGO_TERM_COLOR: always
+2026-11-13T18:48:07.8910552Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T18:48:07.8910727Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:48:07.8910874Z   CACHE_ON_FAILURE: false
+2026-11-13T18:48:07.8911057Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-11-13T18:48:07.8911262Z ##[endgroup]
+2026-11-13T18:48:08.0315183Z ..
+2026-11-13T18:48:08.0315649Z ----------------------------------------------------------------------
+2026-11-13T18:48:08.0316204Z Ran 2 tests in 0.007s
+2026-11-13T18:48:08.0316300Z 
+2026-11-13T18:48:08.0316377Z OK
+2026-11-13T18:48:12.1263730Z Source line limit passed: 9352 files <= 2000 lines; Rust non-test files <= 1000 effective lines

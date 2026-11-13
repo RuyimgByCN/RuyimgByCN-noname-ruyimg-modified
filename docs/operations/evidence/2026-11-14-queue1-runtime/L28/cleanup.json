@@ -1,0 +1,17 @@
+{
+  "before_at": "2026-11-13T18:57:42.038948+00:00",
+  "owned_chrome_pid": 94379,
+  "owned_service_pid": 94370,
+  "profile": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-l28-runtime-chrome-nZGK2m",
+  "scratch": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-l28-native-5wz51exi",
+  "profile_disk_usage": "142748\t/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-l28-runtime-chrome-nZGK2m",
+  "scratch_disk_usage": "24\t/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-l28-native-5wz51exi",
+  "shared_target_touched_by_cleanup": false,
+  "shared_services": "modern 5173 and FS51215 retained",
+  "after_at": "2026-11-13T18:57:51.789879+00:00",
+  "profile_removed": true,
+  "scratch_removed": true,
+  "service_pid_present": false,
+  "chrome_pid_present": false,
+  "disk_after": "Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s5   926Gi   777Gi   124Gi    87%    6.2M  1.3G    0%   /System/Volumes/Data\n"
+}

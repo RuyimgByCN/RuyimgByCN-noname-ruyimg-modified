@@ -1,0 +1,573 @@
+[
+  {
+    "case": "g_sha_ally",
+    "assessment": "所选投影相同，交互不同",
+    "specific_review": "真载体桃45声明普通杀；三名上游他座实际逐人选择不质疑，座1扣1。原生仅由座0答载体/声明/目标，完全没有他座质疑窗口；HP和已用牌区相同不能签该技能等价。",
+    "finding_ids": [
+      "F01",
+      "F05"
+    ],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": true,
+    "native_pending_at_stop": null,
+    "upstream_root_done": false,
+    "native_pending_archives_direct_plus_restored": 6,
+    "cdp_setup_line": 145,
+    "cdp_final_reply_lines": [
+      169,
+      170
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "g_sha_question_fake",
+    "assessment": "已观察到结算反例",
+    "specific_review": "上游座1实际质疑桃45冒充杀，声明作废，座1摸无中104且HP4。原生直接造成杀伤，座1HP3且未摸104。",
+    "finding_ids": [
+      "F01",
+      "F05"
+    ],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": false,
+    "native_pending_at_stop": null,
+    "upstream_root_done": true,
+    "native_pending_archives_direct_plus_restored": 6,
+    "cdp_setup_line": 176,
+    "cdp_final_reply_lines": [
+      200,
+      201
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "g_true_question_discard",
+    "assessment": "已观察到结算反例",
+    "specific_review": "载体杀8声明杀，上游座2实际质疑，座2选弃桃45并获rechanyuan；原生座2桃45仍在手且未获该技能，虽座1同为HP3也不等价。",
+    "finding_ids": [
+      "F01",
+      "F05"
+    ],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": false,
+    "native_pending_at_stop": null,
+    "upstream_root_done": false,
+    "native_pending_archives_direct_plus_restored": 6,
+    "cdp_setup_line": 207,
+    "cdp_final_reply_lines": [
+      234,
+      235
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "g_true_question_losehp",
+    "assessment": "已观察到结算反例",
+    "specific_review": "真杀被座2质疑后，上游在弃牌问句点击取消，座2失去1体力至3且获rechanyuan、桃45保留；原生没有该问句、座2仍HP4。",
+    "finding_ids": [
+      "F01",
+      "F05"
+    ],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": false,
+    "native_pending_at_stop": null,
+    "upstream_root_done": false,
+    "native_pending_archives_direct_plus_restored": 6,
+    "cdp_setup_line": 241,
+    "cdp_final_reply_lines": [
+      268,
+      269
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "g_tao",
+    "assessment": "所选投影相同，交互不同",
+    "specific_review": "杀8声明桃并以自己为目标，双方HP2→3；上游仍实际询问三名他座质疑，原生没有。桃的实际候选包含自身0；保留所选恢复结果相同的窄结论。",
+    "finding_ids": [
+      "F01",
+      "F05"
+    ],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": true,
+    "native_pending_at_stop": null,
+    "upstream_root_done": false,
+    "native_pending_archives_direct_plus_restored": 6,
+    "cdp_setup_line": 275,
+    "cdp_final_reply_lines": [
+      299,
+      300
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "g_cancel_card",
+    "assessment": "操作并不相同",
+    "specific_review": "上游先声明杀，在尚未选载体时实际点击“结束回合”，出牌阶段结束；原生在首个载体问句空答退出技能，随后重试被拒且once已记。牌区相同，但不能当作同一取消操作/同一阶段轨迹。",
+    "finding_ids": [
+      "B04"
+    ],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": true,
+    "native_pending_at_stop": null,
+    "upstream_root_done": true,
+    "native_pending_archives_direct_plus_restored": 2,
+    "cdp_setup_line": 306,
+    "cdp_final_reply_lines": [
+      318,
+      319
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "g_cancel_name",
+    "assessment": "已观察到取消差别",
+    "specific_review": "上游实际取消声明名对话后仍停在出牌菜单，reguhuo仍可见且可发动；原生空答声明后重试Rejected(InvalidChoice)，once已在首次进入时记账。",
+    "finding_ids": [
+      "F03",
+      "F05"
+    ],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": true,
+    "native_pending_at_stop": null,
+    "upstream_root_done": false,
+    "native_pending_archives_direct_plus_restored": 4,
+    "cdp_setup_line": 325,
+    "cdp_final_reply_lines": [
+      334,
+      335
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "g_cancel_target",
+    "assessment": "已观察到退出差别",
+    "specific_review": "上游选载体后没有选目标，实际点击“结束回合”结束出牌阶段；原生目标空答Rejected(InvalidChoice)，终态仍挂reguhuo_targets。不是“目标空取消成功”。",
+    "finding_ids": [
+      "F04",
+      "F05"
+    ],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": true,
+    "native_pending_at_stop": {
+      "allow_cancel": false,
+      "id": 3,
+      "kind": "SelectPlayers",
+      "max": 1,
+      "min": 1,
+      "observer": 0,
+      "options": [
+        "Player(1)",
+        "Player(3)"
+      ],
+      "prompt": "reguhuo_targets"
+    },
+    "upstream_root_done": true,
+    "native_pending_archives_direct_plus_restored": 6,
+    "cdp_setup_line": 341,
+    "cdp_final_reply_lines": [
+      355,
+      356
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "g_no_hand",
+    "assessment": "条件反例，限采集投影",
+    "specific_review": "同为无手牌；上游出牌窗口没有蛊惑候选，原生激活被拒且无pending/无牌区变化。上游根事件尚未结束，仅证明此处不发动。",
+    "finding_ids": [],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": true,
+    "native_pending_at_stop": null,
+    "upstream_root_done": false,
+    "native_pending_archives_direct_plus_restored": 0,
+    "cdp_setup_line": 362,
+    "cdp_final_reply_lines": [
+      364,
+      365
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "g_no_skill",
+    "assessment": "条件反例，限采集投影",
+    "specific_review": "有桃45但未授蛊惑；上游没有蛊惑候选，原生激活被拒，牌区与HP保留。未测试别的技能/包共存。",
+    "finding_ids": [],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": true,
+    "native_pending_at_stop": null,
+    "upstream_root_done": false,
+    "native_pending_archives_direct_plus_restored": 0,
+    "cdp_setup_line": 371,
+    "cdp_final_reply_lines": [
+      373,
+      374
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "g_response",
+    "assessment": "已观察到结算反例",
+    "specific_review": "同一座1杀8来杀；上游在真实杀响应chooseToUse中可声明闪、消耗桃45，三人不质疑后免伤，座0HP4。原生一条PlayCard即Accepted、无待答，座0HP3、桃45留手；probe未实际提交ActivateSkill。",
+    "finding_ids": [
+      "F02"
+    ],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": false,
+    "native_pending_at_stop": null,
+    "upstream_root_done": true,
+    "native_pending_archives_direct_plus_restored": 0,
+    "cdp_setup_line": 380,
+    "cdp_final_reply_lines": [
+      403,
+      404
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "r_basic",
+    "assessment": "已观察到结算反例",
+    "specific_review": "同受1点伤并选获得基本牌：均先摸无中104；上游随后取牌堆靠顶桃45，原生取靠底酒85，终手牌实体/牌名及剩余牌堆不同。",
+    "finding_ids": [
+      "F06",
+      "F09"
+    ],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": false,
+    "native_pending_at_stop": null,
+    "upstream_root_done": true,
+    "native_pending_archives_direct_plus_restored": 6,
+    "cdp_setup_line": 410,
+    "cdp_final_reply_lines": [
+      417,
+      418
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "r_trick",
+    "assessment": "所选投影相同，交互不同",
+    "specific_review": "均受伤后摸无中104并取得过河67，最终所比牌区/HP相同；原生先增加trigger_confirm再问rangjie_choice，上游直接给获得牌/取消菜单。该夹具仅一个后续锦囊，不能用此案否认反向搜索反例。",
+    "finding_ids": [
+      "F09"
+    ],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": true,
+    "native_pending_at_stop": null,
+    "upstream_root_done": true,
+    "native_pending_archives_direct_plus_restored": 6,
+    "cdp_setup_line": 424,
+    "cdp_final_reply_lines": [
+      431,
+      432
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "r_equip",
+    "assessment": "已观察到结算反例",
+    "specific_review": "同受伤后摸无中104，选装备牌；上游取青釭114，原生取诸葛118，牌堆检索方向不同。",
+    "finding_ids": [
+      "F06",
+      "F09"
+    ],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": false,
+    "native_pending_at_stop": null,
+    "upstream_root_done": true,
+    "native_pending_archives_direct_plus_restored": 6,
+    "cdp_setup_line": 438,
+    "cdp_final_reply_lines": [
+      445,
+      446
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "r_move_A",
+    "assessment": "所选投影相同，交互不同",
+    "specific_review": "先真实使用诸葛118装备座1，再受真实杀；双方摸无中104并把诸葛118移至座0装备区。上游实际选源1及目的0，原生先选牌再选目的0；本案未执行占槽/判定牌/非法目的反例。",
+    "finding_ids": [
+      "F09"
+    ],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": true,
+    "native_pending_at_stop": null,
+    "upstream_root_done": true,
+    "native_pending_archives_direct_plus_restored": 8,
+    "cdp_setup_line": 452,
+    "cdp_final_reply_lines": [
+      462,
+      463,
+      464
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "r_move_B",
+    "assessment": "所选投影相同，交互不同",
+    "specific_review": "同样把座1装备诸葛118移至座2而非座0，双方可见装备落点确实随A/B不同；上游两目标选择、原生牌→目标顺序不同；未把额外候选当已执行。",
+    "finding_ids": [
+      "F09"
+    ],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": true,
+    "native_pending_at_stop": null,
+    "upstream_root_done": true,
+    "native_pending_archives_direct_plus_restored": 8,
+    "cdp_setup_line": 470,
+    "cdp_final_reply_lines": [
+      480,
+      481,
+      482
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "r_cancel_choice",
+    "assessment": "已观察到结算反例",
+    "specific_review": "上游实际点击字面“取消”，因代码只判断cancel2，仍logSkill、摸无中104，继而无可移动牌结束；原生实际Tag2直接结束，不摸牌。不能按通常取消语义改写上游实际行为。",
+    "finding_ids": [
+      "F07",
+      "F09"
+    ],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": false,
+    "native_pending_at_stop": null,
+    "upstream_root_done": true,
+    "native_pending_archives_direct_plus_restored": 4,
+    "cdp_setup_line": 488,
+    "cdp_final_reply_lines": [
+      492,
+      493
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "r_cancel_type",
+    "assessment": "已观察到取消差别",
+    "specific_review": "上游摸无中104后类型对话forced=false，实际点击可见取消并到根事件done；原生摸同牌后空答类型被拒、终态仍挂rangjie_type，虽然此刻手牌/HP相同。",
+    "finding_ids": [
+      "F08",
+      "F09"
+    ],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": true,
+    "native_pending_at_stop": {
+      "allow_cancel": false,
+      "id": 3,
+      "kind": "PickTag",
+      "max": 1,
+      "min": 1,
+      "observer": 0,
+      "options": [
+        "Tag(0)",
+        "Tag(1)",
+        "Tag(2)"
+      ],
+      "prompt": "rangjie_type"
+    },
+    "upstream_root_done": true,
+    "native_pending_archives_direct_plus_restored": 6,
+    "cdp_setup_line": 499,
+    "cdp_final_reply_lines": [
+      506,
+      507
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "r_no_skill",
+    "assessment": "条件反例，限采集投影",
+    "specific_review": "未授让节，真实来杀扣座0至HP3；上游无让节菜单且根事件done，原生无pending。只证明该未授技能条件。",
+    "finding_ids": [],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": true,
+    "native_pending_at_stop": null,
+    "upstream_root_done": true,
+    "native_pending_archives_direct_plus_restored": 0,
+    "cdp_setup_line": 513,
+    "cdp_final_reply_lines": [
+      515,
+      516
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "r_other_target",
+    "assessment": "条件反例，限采集投影",
+    "specific_review": "让节在座0，真实杀指向座2；双方座2HP3、座0HP4且无让节选择，未把他人受伤当自己触发。",
+    "finding_ids": [],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": true,
+    "native_pending_at_stop": null,
+    "upstream_root_done": true,
+    "native_pending_archives_direct_plus_restored": 0,
+    "cdp_setup_line": 522,
+    "cdp_final_reply_lines": [
+      524,
+      525
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "r_double",
+    "assessment": "已观察到结算反例",
+    "specific_review": "座1先真实使用酒再杀造成2伤，双方座0HP2、实际各执行两轮获得牌。上游最终无中104/桃45/青釭114/杀10，原生无中104/酒86/桃45/闪43；不能只按摸/获牌数量相同判断。",
+    "finding_ids": [
+      "F06",
+      "F09"
+    ],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": false,
+    "native_pending_at_stop": null,
+    "upstream_root_done": true,
+    "native_pending_archives_direct_plus_restored": 10,
+    "cdp_setup_line": 531,
+    "cdp_final_reply_lines": [
+      543,
+      544
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "k_A",
+    "assessment": "上游UI阻塞，补逐行反例",
+    "specific_review": "上游真实phaseBefore进入k_danggu step0后dui缺失，尚未抽首常侍/显示伙伴候选，未执行A；原生first=8、可选Tag0/1，选择0。bridge-only只记flags；正式登记复跑确授scsniqu+scstaoluan，但方向冲突表及后续自动消费另有反例。",
+    "finding_ids": [
+      "F10",
+      "F11",
+      "F12",
+      "B02"
+    ],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": true,
+    "native_pending_at_stop": null,
+    "upstream_root_done": false,
+    "native_pending_archives_direct_plus_restored": 2,
+    "cdp_setup_line": 550,
+    "cdp_final_reply_lines": [
+      553,
+      555
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "k_B",
+    "assessment": "上游UI阻塞，补逐行反例",
+    "specific_review": "同一真实入口在step0被dui阻断，未执行B；原生选择Tag1，正式登记复跑确授scsniqu+scschiyan。与A实际授技不同，不能以此补称上游A/B已运行。",
+    "finding_ids": [
+      "F10",
+      "F11",
+      "F12",
+      "B02"
+    ],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": true,
+    "native_pending_at_stop": null,
+    "upstream_root_done": false,
+    "native_pending_archives_direct_plus_restored": 2,
+    "cdp_setup_line": 561,
+    "cdp_final_reply_lines": [
+      564,
+      566
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "k_cancel",
+    "assessment": "上游UI阻塞，取消未发生",
+    "specific_review": "上游在任何伙伴选择以前即dui异常，未提供/点击伙伴取消；原生强制伙伴问句allow_cancel=false，空答Rejected并仍挂起。上游源码自定义UI须二次点击选定伙伴，没有取消入口；仅作静态核对。",
+    "finding_ids": [
+      "F10",
+      "F12",
+      "B02"
+    ],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": true,
+    "native_pending_at_stop": {
+      "allow_cancel": false,
+      "id": 1,
+      "kind": "PickTag",
+      "max": 1,
+      "min": 1,
+      "observer": 0,
+      "options": [
+        "Tag(0)",
+        "Tag(1)"
+      ],
+      "prompt": "k_danggu_partner"
+    },
+    "upstream_root_done": false,
+    "native_pending_archives_direct_plus_restored": 2,
+    "cdp_setup_line": 572,
+    "cdp_final_reply_lines": [
+      575,
+      577
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "k_after_initial_no_trigger",
+    "assessment": "不发动条件已观察，终点不同",
+    "specific_review": "原生用inited=1阻止初次结党，上游用phaseNumber=1令phaseBefore过滤不触发，均无党锢log/候选；上游继续整回合到出牌阶段并摸104/45，原生只Prepare→Judge。终态牌区差异来自取样终点不同，不能记成党锢发牌规则差异。",
+    "finding_ids": [
+      "B03"
+    ],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": false,
+    "native_pending_at_stop": null,
+    "upstream_root_done": false,
+    "native_pending_archives_direct_plus_restored": 0,
+    "cdp_setup_line": 583,
+    "cdp_final_reply_lines": [
+      585,
+      586
+    ],
+    "new_equivalence_signed": false
+  },
+  {
+    "case": "k_no_skill",
+    "assessment": "不发动条件已观察，终点不同",
+    "specific_review": "均未授党锢、未出现该技能触发；上游实际完整phase入口继续摸104/45到出牌窗口，原生只推进一个阶段。这里只核对未授技能不触发，不比较全回合终态。",
+    "finding_ids": [
+      "B03"
+    ],
+    "initial_projection_match": true,
+    "initial_available_discard_projection_diff": true,
+    "final_used_card_hp_projection_equal": false,
+    "native_pending_at_stop": null,
+    "upstream_root_done": false,
+    "native_pending_archives_direct_plus_restored": 0,
+    "cdp_setup_line": 592,
+    "cdp_final_reply_lines": [
+      594,
+      595
+    ],
+    "new_equivalence_signed": false
+  }
+]

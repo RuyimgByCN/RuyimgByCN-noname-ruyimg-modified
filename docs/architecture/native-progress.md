@@ -9,6 +9,30 @@
 
 ## 当前交付与带日期核验记录
 
+## 2026-11-14T03:29:13.975149+08:00 后三来源文档preflight通过，待提交／发布
+
+源码HEAD `5c73d1d9158145e33f98f2018013914667d13964` + 文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8。L10/U08/L28纯文档批完整 `python3 -B scripts/preflight.py` 无过滤执行，21项通过／0失败；[实际命令/输出与边界](../operations/evidence/2026-11-14-queue1-runtime/documentation-local-checks.md)。产品沿用已发布且首次精确代码CI10/10成功的相同字节，本批没有新产品/测试更改。当前625／3799／0、新签0、八项0/37，队列1仍部分；[37来源与逐案表](../operations/evidence/2026-11-14-queue1-runtime/source-counts-runtime-04.md)。最后明确路径stage/字节审计及本地链接复核后才提交、正常推送并另登记文档SHA CI；此刻尚未提交/发布。
+
+## 2026-11-14T03:16:45.676673+08:00 L10／U08／L28独立补课冻结，代码CI通过，文档批待发布
+
+源码HEAD `5c73d1d9158145e33f98f2018013914667d13964` + 文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8不变。酒诗恢复代码已正常发布，精确SHA[run43485811587](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43485811587) attempt1为10成功／0失败／0取消，agent补跑0，两平台性能内部首试均exit0。[原始ZIP、作业/工具链/测试计数](../operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/README.md)。本地代码门禁沿用该相同产品字节的三crate2447／0／6、workspace7843／0／8、前端489／0／0及其余实际命令；21,211个门禁输入零漂移，原672未跟踪路径和8旧工作树保留。[冻结输入保护核验](../operations/evidence/2026-11-14-queue1-runtime/documentation-product-protection-before-01.json)。本纯文档批完整preflight尚待，不预称文档已提交/发布。
+
+L10三技能26案：8个已观察结算反例与其它取消/退出/源UI阻塞分列；正式授技后的逆取/滔乱/鸱咽自动结算继续待修。U08三技能31案：30个目标事件完成、1个强制弃牌仍挂起，28个指定终态投影同、3异；加入次数标记为27同。慧眼受控/真实取消已有实跑反例，两辅助另以仁王盾取消/无双第一闪界雷击的源码路径撤回，未冒称这些组合已实跑。L28三技能25案：21完成目标分支、4整经filter因dcdAnim缺失阻塞；业炎费用/时序/配置及两火表达不同，21个非原牌表元组逐案列限制，不把夹具称完整原牌堆。[L10独立逐案](../operations/evidence/2026-11-14-queue1-runtime/independent/l10/README.md)／[U08独立逐案](../operations/evidence/2026-11-14-queue1-runtime/independent/u08/case-table.md)／[辅助源码裁定](../operations/evidence/2026-11-14-queue1-runtime/independent/u08-auxiliary-adjudication.md)／[L28独立逐案](../operations/evidence/2026-11-14-queue1-runtime/independent/l28/case-review.md)。
+
+本纯文档批撤回3旧等价，当前625／3799／0、合4424、新签0；L10为8／9／0、U08为143／7／0、L28为50／6／0。[37来源新日期表](../operations/evidence/2026-11-14-queue1-runtime/source-counts-runtime-04.md)与[清单前后原文](../operations/evidence/2026-11-14-queue1-runtime/inventory-runtime-update-05.json)。队列0完成、队列1仍部分；L27/L19/L20/L25共12交互候选、L22自动钩子及已知差异修复继续待，不开始队列2。[剩余范围/外部条件](../operations/evidence/2026-11-14-queue1-runtime/remaining-scope.md)。UI并排截图／Spine逐特性、净室与用户验证／八项0/37／真机签名／第六阶段保持待。
+
+## 2026-11-14T02:51:05+08:00 L10独立补课定稿，证据批待提交／发布
+
+HEAD `5c73d1d9158145e33f98f2018013914667d13964` + 文档/证据dirty，规则333／NGSA107／schema5／ABI759／WS8。L10三技能26案，8个结算反例与取消/退出差别分列，党锢3案上游UI阻塞；正式attach确授技后又有阶段自动结算反例。原/正式102／102个挂起记录及4追加续行恢复通过；初态弃牌/性质/阶段终点边界不作等价背书。[逐案独立表与原始证据](../operations/evidence/2026-11-14-queue1-runtime/independent/l10/README.md)。L10仍8／9／0，全清单628／3796／0、新签0；[清单说明变更原文](../operations/evidence/2026-11-14-queue1-runtime/inventory-runtime-update-04.json)。酒诗代码已发布、同一run43485811587待终态；本次L10文档未提交/发布，队列1仍部分、八项0/37，不进入队列2。
+
+
+## 2026-11-14T02:47:05+08:00 队列1酒诗恢复增量已发布，精确SHA CI待终态
+
+代码 `5c73d1d9158145e33f98f2018013914667d13964` 已按裁决25正常推送批准分支；[提交/精确推送守卫证据](../operations/evidence/2026-11-14-queue1-runtime/publication/README.md)。代码提交后tracked clean，登记本条后仅文档/证据dirty；版本333／NGSA107／schema5／ABI759／WS8不变。完整本地三crate2447通过／0失败／6忽略、workspace7843／0／8及其它门禁/最终preflight21项通过。精确SHA的[CI run43485811587](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43485811587) attempt1首次观测为queued，10作业已登记，未重启/补跑；终态另增记录，不预称通过。
+
+清单628／3796／0、本批撤回6旧等价、新签0、八项0/37；[37来源日期表](../operations/evidence/2026-11-14-queue1-runtime/source-counts-runtime-03.md)。本提交含酒诗恢复定义和回归、U06/L29/U07冻结对照及独立复核；L10/U08/L28仍在后续证据批。队列0完成、队列1部分，队列2未开始；UI／Spine／真机签名／第六阶段保持待。
+
+
 ## 2026-11-14T02:45:30+08:00 本批最终本地核验通过（未提交／发布）
 
 源码HEAD `605201f3f49e10cea61c31d52a61bbb66c85599d` + tracked dirty；规则333／NGSA107／schema5／ABI759／WS8。完整三crate2447通过／0失败／6忽略、workspace7843／0／8，前端489／0／0与其余第五节命令exit0；U07整合后的第二次完整preflight21项也全部通过。[完整命令/首次失败/边界](../operations/evidence/2026-11-14-queue1-runtime/restore-fix/final-local-gates.md)。产品输入仍与门禁冻结相同，14标准golden未重录。清单628／3796／0，本批撤回6旧等价、新签0；[37来源和样本](../operations/evidence/2026-11-14-queue1-runtime/source-counts-runtime-03.md)。本批准备提交酒诗恢复修复及U06/L29/U07冻结证据，L10/U08/L28仍另批。队列0完成、队列1部分，八项0/37；后续队列、UI/Spine/真机签名和第六阶段保持待。

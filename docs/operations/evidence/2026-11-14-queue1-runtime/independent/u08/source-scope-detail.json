@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-14",
+  "scope": "补充findings.json U08-S1的主技能/辅助过滤边界；原记录保留，不新增实跑场景或签署。",
+  "source_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d.rs",
+  "source_sha256": "7aacf3857f18c290bba4992570ffa443b8088579fb4326a74f9654d208dc2839",
+  "inventory_keys": [
+    "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+    "U08:skills:bolehuiyan2@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2477",
+    "U08:skills:bolehuiyan3@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2495"
+  ],
+  "native_main": {
+    "CardUsed": "first target only; reject if owner is attacker or among any targets",
+    "Damage": "positive unprevented Damage plus stored attacker/target match",
+    "ShaDodged": "stored attacker/target match"
+  },
+  "native_helper2": {
+    "line": 641,
+    "events": [
+      "ShaDodged",
+      "TurnEnded"
+    ],
+    "filter": "only bolehuiyan_pred > 0; no attacker/target/card check"
+  },
+  "native_helper3": {
+    "line": 647,
+    "events": [
+      "Damage"
+    ],
+    "filter": "positive unprevented Damage and bolehuiyan_pred > 0; no attacker/target/card/kind check"
+  },
+  "upstream_helpers": {
+    "bolehuiyan2": "global shaEnd; storage.bolehuiyan truthy only",
+    "bolehuiyan3": "global shaDamage; storage.bolehuiyan truthy only",
+    "no_stored_attacker_target_or_card_binding": true
+  },
+  "evidence_level": "实际源码确认；本31案未实际插入非杀嵌套伤害或无伤shaEnd，不记新增运行反例。",
+  "consequence": "不能只看原生主技能filter便称全部结算被来源/目标绑定；临时授予的bolehuiyan2/3有独立更宽filter。上游辅助也不是独立校验同一杀的invocation，只靠sha事件族与storage。",
+  "recommendation": "主慧眼维持简化近似；两辅助旧已复核等价不获本轮全分支背书，另列事件族/过滤范围待定向运行核验；不改清单。"
+}

@@ -1,0 +1,1621 @@
+[
+  {
+    "case": "y_target_A",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [
+          {
+            "file": "y_target_A-direct-pending-0.ngsa",
+            "bytes": 3072,
+            "sha256": "120facee9bc9491ece16f1a26fbfa0ae40f7a57a2956caaae765556c0145e30f",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:discard_two",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "y_target_A-direct-pending-1.ngsa",
+            "bytes": 3071,
+            "sha256": "c0ba8e90feb492d8538ba2df2304c8584c1bbad2b88a55d7603a4f9f0f49ec0d",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:choose_target",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [
+          {
+            "file": "y_target_A-restored-pending-0.ngsa",
+            "bytes": 3072,
+            "sha256": "120facee9bc9491ece16f1a26fbfa0ae40f7a57a2956caaae765556c0145e30f",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:discard_two",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "y_target_A-restored-pending-1.ngsa",
+            "bytes": 3071,
+            "sha256": "5434c913df9b846afa64c22008eafa609c72287b68c465b0d0b6190632a7d3f2",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:choose_target",
+            "auth_before": 1,
+            "auth_after": 2,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": false
+  },
+  {
+    "case": "y_target_B",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [
+          {
+            "file": "y_target_B-direct-pending-0.ngsa",
+            "bytes": 3072,
+            "sha256": "120facee9bc9491ece16f1a26fbfa0ae40f7a57a2956caaae765556c0145e30f",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:discard_two",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "y_target_B-direct-pending-1.ngsa",
+            "bytes": 3071,
+            "sha256": "c0ba8e90feb492d8538ba2df2304c8584c1bbad2b88a55d7603a4f9f0f49ec0d",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:choose_target",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [
+          {
+            "file": "y_target_B-restored-pending-0.ngsa",
+            "bytes": 3072,
+            "sha256": "120facee9bc9491ece16f1a26fbfa0ae40f7a57a2956caaae765556c0145e30f",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:discard_two",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "y_target_B-restored-pending-1.ngsa",
+            "bytes": 3071,
+            "sha256": "5434c913df9b846afa64c22008eafa609c72287b68c465b0d0b6190632a7d3f2",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:choose_target",
+            "auth_before": 1,
+            "auth_after": 2,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": false
+  },
+  {
+    "case": "y_cost_B",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [
+          {
+            "file": "y_cost_B-direct-pending-0.ngsa",
+            "bytes": 3072,
+            "sha256": "120facee9bc9491ece16f1a26fbfa0ae40f7a57a2956caaae765556c0145e30f",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:discard_two",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "y_cost_B-direct-pending-1.ngsa",
+            "bytes": 3071,
+            "sha256": "de367cbd315ecb22bb2c87bf9543d540300066eb5677fa38ac49400c6e167f3a",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:choose_target",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [
+          {
+            "file": "y_cost_B-restored-pending-0.ngsa",
+            "bytes": 3072,
+            "sha256": "120facee9bc9491ece16f1a26fbfa0ae40f7a57a2956caaae765556c0145e30f",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:discard_two",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "y_cost_B-restored-pending-1.ngsa",
+            "bytes": 3071,
+            "sha256": "1386c9e230e9ade6525c132ed6657c140e9ec927c608fa955345f0ded2e3ce16",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:choose_target",
+            "auth_before": 1,
+            "auth_after": 2,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": false
+  },
+  {
+    "case": "y_self",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [
+          {
+            "file": "y_self-direct-pending-0.ngsa",
+            "bytes": 3072,
+            "sha256": "e224f87e6cc499405c3e4c026fbd213d42500c9f109dc214ba856c66ce8562c0",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:discard_two",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "y_self-direct-pending-1.ngsa",
+            "bytes": 3073,
+            "sha256": "59b12fcbcd78251bda3608fc16a5dda23eac497f28dbf8c0e26b70745243fbc1",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:choose_target",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [
+          {
+            "file": "y_self-restored-pending-0.ngsa",
+            "bytes": 3072,
+            "sha256": "e224f87e6cc499405c3e4c026fbd213d42500c9f109dc214ba856c66ce8562c0",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:discard_two",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "y_self-restored-pending-1.ngsa",
+            "bytes": 3073,
+            "sha256": "bc7ebc6045583d4f38f67e16b7097b822583d8a7a6e848f351f1842bfe1fada9",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:choose_target",
+            "auth_before": 1,
+            "auth_after": 2,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": false
+  },
+  {
+    "case": "y_cancel_cards",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [
+          {
+            "file": "y_cancel_cards-direct-pending-0.ngsa",
+            "bytes": 3072,
+            "sha256": "120facee9bc9491ece16f1a26fbfa0ae40f7a57a2956caaae765556c0145e30f",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:discard_two",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "y_cancel_cards-direct-pending-1.ngsa",
+            "bytes": 3072,
+            "sha256": "bebeabdee9cfc9b924719aecd44e21377fe7e2d9244a20f82280957419cca3ac",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:discard_two",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [
+          {
+            "file": "y_cancel_cards-restored-pending-0.ngsa",
+            "bytes": 3072,
+            "sha256": "120facee9bc9491ece16f1a26fbfa0ae40f7a57a2956caaae765556c0145e30f",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:discard_two",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "y_cancel_cards-restored-pending-1.ngsa",
+            "bytes": 3072,
+            "sha256": "bee673d50c6c069a8746bb38c14730e24b311938ca473c8e0a1c526a046400d6",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:discard_two",
+            "auth_before": 1,
+            "auth_after": 2,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": false
+  },
+  {
+    "case": "y_cancel_target",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [
+          {
+            "file": "y_cancel_target-direct-pending-0.ngsa",
+            "bytes": 3072,
+            "sha256": "120facee9bc9491ece16f1a26fbfa0ae40f7a57a2956caaae765556c0145e30f",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:discard_two",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "y_cancel_target-direct-pending-1.ngsa",
+            "bytes": 3071,
+            "sha256": "c0ba8e90feb492d8538ba2df2304c8584c1bbad2b88a55d7603a4f9f0f49ec0d",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:choose_target",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "y_cancel_target-direct-pending-2.ngsa",
+            "bytes": 3072,
+            "sha256": "0118609003ef00c3b82061bd943537f684dc909d128ee9ff299a2f17c664e8ae",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:discard_two",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [
+          {
+            "file": "y_cancel_target-restored-pending-0.ngsa",
+            "bytes": 3072,
+            "sha256": "120facee9bc9491ece16f1a26fbfa0ae40f7a57a2956caaae765556c0145e30f",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:discard_two",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "y_cancel_target-restored-pending-1.ngsa",
+            "bytes": 3071,
+            "sha256": "5434c913df9b846afa64c22008eafa609c72287b68c465b0d0b6190632a7d3f2",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:choose_target",
+            "auth_before": 1,
+            "auth_after": 2,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "y_cancel_target-restored-pending-2.ngsa",
+            "bytes": 3072,
+            "sha256": "7f49c08778c81a29b97f1d6c9615c70a354e8c1901d854b475bcab123f6ec2e6",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:discard_two",
+            "auth_before": 2,
+            "auth_after": 3,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": false
+  },
+  {
+    "case": "y_two_cards",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": true
+  },
+  {
+    "case": "y_no_wound",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": true
+  },
+  {
+    "case": "y_reuse",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [
+          {
+            "file": "y_reuse-direct-pending-0.ngsa",
+            "bytes": 3082,
+            "sha256": "b4b2a3c2dfe155ccaac2044be9b1eca9419696fd1ee63ad53653d835d6fe6afe",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:discard_two",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "y_reuse-direct-pending-1.ngsa",
+            "bytes": 3071,
+            "sha256": "4b20a5d94ac3c2a019c278757de50fa44de426823c42435670cf81563decbdd8",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:choose_target",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [
+          {
+            "file": "y_reuse-restored-pending-0.ngsa",
+            "bytes": 3082,
+            "sha256": "b4b2a3c2dfe155ccaac2044be9b1eca9419696fd1ee63ad53653d835d6fe6afe",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:discard_two",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "y_reuse-restored-pending-1.ngsa",
+            "bytes": 3071,
+            "sha256": "1901b6d27ca923b8fdc548037a5abd54dd33fb2c4b0c2e8086effd7f5fe84981",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "yixin:choose_target",
+            "auth_before": 1,
+            "auth_after": 2,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": false
+  },
+  {
+    "case": "y_no_skill",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": true
+  },
+  {
+    "case": "g_target_A",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [
+          {
+            "file": "g_target_A-direct-pending-0.ngsa",
+            "bytes": 3063,
+            "sha256": "b2dc5dbfdb5e94f1118a87432f9de0cb46c4260b0f4755b81f1e254242bf9a8f",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "guifu:choose_target",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [
+          {
+            "file": "g_target_A-restored-pending-0.ngsa",
+            "bytes": 3063,
+            "sha256": "b2dc5dbfdb5e94f1118a87432f9de0cb46c4260b0f4755b81f1e254242bf9a8f",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "guifu:choose_target",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": false
+  },
+  {
+    "case": "g_target_B",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [
+          {
+            "file": "g_target_B-direct-pending-0.ngsa",
+            "bytes": 3063,
+            "sha256": "b2dc5dbfdb5e94f1118a87432f9de0cb46c4260b0f4755b81f1e254242bf9a8f",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "guifu:choose_target",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [
+          {
+            "file": "g_target_B-restored-pending-0.ngsa",
+            "bytes": 3063,
+            "sha256": "b2dc5dbfdb5e94f1118a87432f9de0cb46c4260b0f4755b81f1e254242bf9a8f",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "guifu:choose_target",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": false
+  },
+  {
+    "case": "g_cancel_target",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [
+          {
+            "file": "g_cancel_target-direct-pending-0.ngsa",
+            "bytes": 3063,
+            "sha256": "b2dc5dbfdb5e94f1118a87432f9de0cb46c4260b0f4755b81f1e254242bf9a8f",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "guifu:choose_target",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "g_cancel_target-direct-pending-1.ngsa",
+            "bytes": 3063,
+            "sha256": "a79958577ea53daac644a33c0e8f47954d9174a5279e37f127bed69e089807c7",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "guifu:choose_target",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [
+          {
+            "file": "g_cancel_target-restored-pending-0.ngsa",
+            "bytes": 3063,
+            "sha256": "b2dc5dbfdb5e94f1118a87432f9de0cb46c4260b0f4755b81f1e254242bf9a8f",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "guifu:choose_target",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "g_cancel_target-restored-pending-1.ngsa",
+            "bytes": 3063,
+            "sha256": "1054359b7807090fcc92d2a8b4723a9682cab77d2eac4e955f76fc8cfad0e4d3",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "guifu:choose_target",
+            "auth_before": 1,
+            "auth_after": 2,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": false
+  },
+  {
+    "case": "g_no_equip",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": true
+  },
+  {
+    "case": "g_only_own",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": true
+  },
+  {
+    "case": "g_reuse",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [
+          {
+            "file": "g_reuse-direct-pending-0.ngsa",
+            "bytes": 3063,
+            "sha256": "b2dc5dbfdb5e94f1118a87432f9de0cb46c4260b0f4755b81f1e254242bf9a8f",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "guifu:choose_target",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [
+          {
+            "file": "g_reuse-restored-pending-0.ngsa",
+            "bytes": 3063,
+            "sha256": "b2dc5dbfdb5e94f1118a87432f9de0cb46c4260b0f4755b81f1e254242bf9a8f",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "guifu:choose_target",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": false
+  },
+  {
+    "case": "g_no_skill",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": true
+  },
+  {
+    "case": "b_hit",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [
+          {
+            "file": "b_hit-direct-pending-0.ngsa",
+            "bytes": 3149,
+            "sha256": "088912438af1e88e43444996e7a3d0d63bd04d967ee2ba71644cc4cdb57bc1e7",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:predict",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [
+          {
+            "file": "b_hit-restored-pending-0.ngsa",
+            "bytes": 3149,
+            "sha256": "088912438af1e88e43444996e7a3d0d63bd04d967ee2ba71644cc4cdb57bc1e7",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:predict",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": false
+  },
+  {
+    "case": "b_miss",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [
+          {
+            "file": "b_miss-direct-pending-0.ngsa",
+            "bytes": 3149,
+            "sha256": "8f637f7560197e61b1c201d05d9842fe26561eb4c5b07e8780848d3390eb6d72",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:predict",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "b_miss-direct-pending-1.ngsa",
+            "bytes": 3231,
+            "sha256": "a17fccd8fafdb3bdb3db44078a679426da4b3058553f0ed95131e067e77281df",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "respond_shan",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [
+          {
+            "file": "b_miss-restored-pending-0.ngsa",
+            "bytes": 3149,
+            "sha256": "8f637f7560197e61b1c201d05d9842fe26561eb4c5b07e8780848d3390eb6d72",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:predict",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "b_miss-restored-pending-1.ngsa",
+            "bytes": 3231,
+            "sha256": "18f3d7cdb66092b2ad930953f0da91173b225e07b8733c8b6bacac8e9c45bf0d",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "respond_shan",
+            "auth_before": 1,
+            "auth_after": 2,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": false
+  },
+  {
+    "case": "b_wrong_A",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [
+          {
+            "file": "b_wrong_A-direct-pending-0.ngsa",
+            "bytes": 3149,
+            "sha256": "8f637f7560197e61b1c201d05d9842fe26561eb4c5b07e8780848d3390eb6d72",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:predict",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "b_wrong_A-direct-pending-1.ngsa",
+            "bytes": 3231,
+            "sha256": "dcd070a933afd1649750a25ab634ae72e0593b6acc1332acf5a98d2e8e321461",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "respond_shan",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "b_wrong_A-direct-pending-2.ngsa",
+            "bytes": 3288,
+            "sha256": "a7da67fa9764a760749ce389016dd6cf674ef8813c3f1dfcfc53445e7516b087",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:discard",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [
+          {
+            "file": "b_wrong_A-restored-pending-0.ngsa",
+            "bytes": 3149,
+            "sha256": "8f637f7560197e61b1c201d05d9842fe26561eb4c5b07e8780848d3390eb6d72",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:predict",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "b_wrong_A-restored-pending-1.ngsa",
+            "bytes": 3231,
+            "sha256": "82274290781c5ff64a9a937af85698e1196923deb1f183ce4f471a236f3aade6",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "respond_shan",
+            "auth_before": 1,
+            "auth_after": 2,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "b_wrong_A-restored-pending-2.ngsa",
+            "bytes": 3288,
+            "sha256": "3759cfa879a15e40bb45bf1707ce763d226e4d10e31b1b9c32d457dc3bb36c32",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:discard",
+            "auth_before": 2,
+            "auth_after": 3,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": false
+  },
+  {
+    "case": "b_wrong_B",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [
+          {
+            "file": "b_wrong_B-direct-pending-0.ngsa",
+            "bytes": 3149,
+            "sha256": "8f637f7560197e61b1c201d05d9842fe26561eb4c5b07e8780848d3390eb6d72",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:predict",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "b_wrong_B-direct-pending-1.ngsa",
+            "bytes": 3231,
+            "sha256": "dcd070a933afd1649750a25ab634ae72e0593b6acc1332acf5a98d2e8e321461",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "respond_shan",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "b_wrong_B-direct-pending-2.ngsa",
+            "bytes": 3288,
+            "sha256": "a7da67fa9764a760749ce389016dd6cf674ef8813c3f1dfcfc53445e7516b087",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:discard",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [
+          {
+            "file": "b_wrong_B-restored-pending-0.ngsa",
+            "bytes": 3149,
+            "sha256": "8f637f7560197e61b1c201d05d9842fe26561eb4c5b07e8780848d3390eb6d72",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:predict",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "b_wrong_B-restored-pending-1.ngsa",
+            "bytes": 3231,
+            "sha256": "82274290781c5ff64a9a937af85698e1196923deb1f183ce4f471a236f3aade6",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "respond_shan",
+            "auth_before": 1,
+            "auth_after": 2,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "b_wrong_B-restored-pending-2.ngsa",
+            "bytes": 3288,
+            "sha256": "3759cfa879a15e40bb45bf1707ce763d226e4d10e31b1b9c32d457dc3bb36c32",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:discard",
+            "auth_before": 2,
+            "auth_after": 3,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": false
+  },
+  {
+    "case": "b_wrong_miss",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [
+          {
+            "file": "b_wrong_miss-direct-pending-0.ngsa",
+            "bytes": 3149,
+            "sha256": "088912438af1e88e43444996e7a3d0d63bd04d967ee2ba71644cc4cdb57bc1e7",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:predict",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "b_wrong_miss-direct-pending-1.ngsa",
+            "bytes": 3300,
+            "sha256": "c656bd1f13f177d4bc7667e9b479e267a7301b52b05f50b709a0e40e1a6ed2a8",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:discard",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [
+          {
+            "file": "b_wrong_miss-restored-pending-0.ngsa",
+            "bytes": 3149,
+            "sha256": "088912438af1e88e43444996e7a3d0d63bd04d967ee2ba71644cc4cdb57bc1e7",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:predict",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "b_wrong_miss-restored-pending-1.ngsa",
+            "bytes": 3300,
+            "sha256": "cc8911195f24f3f7b31a8610e7774b0201b7cf3bc2f018520e58255b4895874f",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:discard",
+            "auth_before": 1,
+            "auth_after": 2,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": false
+  },
+  {
+    "case": "b_cancel_predict",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [
+          {
+            "file": "b_cancel_predict-direct-pending-0.ngsa",
+            "bytes": 3149,
+            "sha256": "088912438af1e88e43444996e7a3d0d63bd04d967ee2ba71644cc4cdb57bc1e7",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:predict",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [
+          {
+            "file": "b_cancel_predict-restored-pending-0.ngsa",
+            "bytes": 3149,
+            "sha256": "088912438af1e88e43444996e7a3d0d63bd04d967ee2ba71644cc4cdb57bc1e7",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:predict",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": false
+  },
+  {
+    "case": "b_cancel_discard",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [
+          {
+            "file": "b_cancel_discard-direct-pending-0.ngsa",
+            "bytes": 3149,
+            "sha256": "088912438af1e88e43444996e7a3d0d63bd04d967ee2ba71644cc4cdb57bc1e7",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:predict",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "b_cancel_discard-direct-pending-1.ngsa",
+            "bytes": 3300,
+            "sha256": "c656bd1f13f177d4bc7667e9b479e267a7301b52b05f50b709a0e40e1a6ed2a8",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:discard",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [
+          {
+            "file": "b_cancel_discard-restored-pending-0.ngsa",
+            "bytes": 3149,
+            "sha256": "088912438af1e88e43444996e7a3d0d63bd04d967ee2ba71644cc4cdb57bc1e7",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:predict",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "b_cancel_discard-restored-pending-1.ngsa",
+            "bytes": 3300,
+            "sha256": "cc8911195f24f3f7b31a8610e7774b0201b7cf3bc2f018520e58255b4895874f",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:discard",
+            "auth_before": 1,
+            "auth_after": 2,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": false
+  },
+  {
+    "case": "b_empty_target",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": true
+  },
+  {
+    "case": "b_owner_attacker",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": true
+  },
+  {
+    "case": "b_owner_target",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": true
+  },
+  {
+    "case": "b_under_control",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [
+          {
+            "file": "b_under_control-direct-pending-0.ngsa",
+            "bytes": 3149,
+            "sha256": "088912438af1e88e43444996e7a3d0d63bd04d967ee2ba71644cc4cdb57bc1e7",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:predict",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [
+          {
+            "file": "b_under_control-restored-pending-0.ngsa",
+            "bytes": 3149,
+            "sha256": "088912438af1e88e43444996e7a3d0d63bd04d967ee2ba71644cc4cdb57bc1e7",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:predict",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": false
+  },
+  {
+    "case": "b_repeat",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [
+          {
+            "file": "b_repeat-direct-pending-0.ngsa",
+            "bytes": 3149,
+            "sha256": "ddcae9fccbec1f5379946dc59c646785e19247f30b61190199fd445b1488deb8",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:predict",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [
+          {
+            "file": "b_repeat-restored-pending-0.ngsa",
+            "bytes": 3149,
+            "sha256": "ddcae9fccbec1f5379946dc59c646785e19247f30b61190199fd445b1488deb8",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:predict",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": false
+  },
+  {
+    "case": "b_cancel_then_retry",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [
+          {
+            "file": "b_cancel_then_retry-direct-pending-0.ngsa",
+            "bytes": 3149,
+            "sha256": "ddcae9fccbec1f5379946dc59c646785e19247f30b61190199fd445b1488deb8",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:predict",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "b_cancel_then_retry-direct-pending-1.ngsa",
+            "bytes": 3154,
+            "sha256": "e9d7ad70fb0e9c7f49686ff4625f4ac1533578530c4db3d32440329dce006a17",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:predict",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [
+          {
+            "file": "b_cancel_then_retry-restored-pending-0.ngsa",
+            "bytes": 3149,
+            "sha256": "ddcae9fccbec1f5379946dc59c646785e19247f30b61190199fd445b1488deb8",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:predict",
+            "auth_before": 0,
+            "auth_after": 1,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          },
+          {
+            "file": "b_cancel_then_retry-restored-pending-1.ngsa",
+            "bytes": 3154,
+            "sha256": "07ad8af57f501aec5ebd41d71c0110f439b1dd14ca75823496393fcf989a8d45",
+            "ngsa_magic": "NGSA",
+            "format_version_little_endian": 107,
+            "prompt": "bolehuiyan:predict",
+            "auth_before": 1,
+            "auth_after": 2,
+            "error": null,
+            "snapshot_equal_except_auth_generation": true,
+            "state_hash_identical": true
+          }
+        ],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": false
+  },
+  {
+    "case": "b_no_skill",
+    "modes": [
+      {
+        "mode": "direct",
+        "pending": [],
+        "final_archive_hex_agrees_with_file": true
+      },
+      {
+        "mode": "restored",
+        "pending": [],
+        "final_archive_hex_agrees_with_file": true
+      }
+    ],
+    "full_final_debug_equal_except_auth_generation": true,
+    "full_exported_final_states_equal": true,
+    "command_records_equal": true,
+    "raw_final_archive_bytes_equal": true
+  }
+]

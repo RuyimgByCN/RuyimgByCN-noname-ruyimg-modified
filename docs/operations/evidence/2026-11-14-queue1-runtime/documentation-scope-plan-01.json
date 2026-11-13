@@ -1,0 +1,44 @@
+{
+  "at": "2026-11-14T02:54:39.795508+08:00",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "tracked_dirty": true,
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "batch_type": "仅文档与原始证据；不改产品或测试",
+  "publication_dependency": "5c73d1d9158145e33f98f2018013914667d13964 的首次exact-head CI终态通过；首次失败若有则另存，不覆盖。",
+  "sources": [
+    "L10",
+    "U08",
+    "L28"
+  ],
+  "required_before_staging": [
+    "各采集目录与独立复核目录均已冻结并逐文件校验",
+    "只按具体已证反例撤回旧等价，新增等价为0；不从HP/终态投影/恢复成功推整技能等价",
+    "公共台账写入前重读；保留旧日期记录及before/after变更原文",
+    "本地文档/清单/行号检查通过；产品输入与已验收代码提交字节相同",
+    "只stage明确自有路径，不stage原672未跟踪路径或未冻结的作者目录"
+  ],
+  "evidence_roots": [
+    "docs/operations/evidence/2026-11-14-queue1-runtime/L10",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/U08",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/L28",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/independent/l10",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/independent/u08",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/independent/l28",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/publication"
+  ],
+  "root_evidence": "本批自有的新状态/清单变更/冻结/发布与外部条件记录，最终由明确文件列表审计。",
+  "excluded": [
+    "其它来源未完成任务",
+    "未冻结目录/活跃日志",
+    "用户原未跟踪文件",
+    "原工作树/refs/stashes",
+    "共享target与任何产品/测试/协议/版本改动"
+  ],
+  "release_target": "裁决25既有URL的refs/heads/native-convergence，正常推送，旧远端必须为5c73d1d9158145e33f98f2018013914667d13964。"
+}

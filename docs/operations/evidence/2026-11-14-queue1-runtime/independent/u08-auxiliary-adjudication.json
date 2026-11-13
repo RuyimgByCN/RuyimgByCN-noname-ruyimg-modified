@@ -1,0 +1,255 @@
+{
+  "review_date": "2026-11-14",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "reviewer": "/root/repair_doc_refs",
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "verdict": "两项旧已复核等价均应撤回为简化近似；不建议缺失；新增等价0",
+  "evidence_level": "独立实际源码路径确认；未新增浏览器/native采集或双端运行反例",
+  "inventory_changes_written": false,
+  "frozen_u08_manifest_sha256": "16b41ca13fb93284c65a0ad2697cfa93433f58dd9894693df1c1f8714338675f",
+  "frozen_u08_modified": false,
+  "entries": [
+    {
+      "key": "U08:skills:bolehuiyan2@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2477",
+      "old_status": "已复核等价",
+      "old_reviewer": "u08-signoff",
+      "recommended_status": "简化近似",
+      "counterexample": "有效Tag2预测后，仁王盾在shaBegin cancel黑杀；上游cancel设置_triggered=5，当前杀没有shaEnd且2辅助不监听回合结束；原生无Damage/ShaDodged后残留pred由TurnEnded按miss结算，多摸1并清预测。",
+      "which_native_handler_runs": "主技能TurnEnded或2辅助先消费都导致同一职责发生上游没有的结算；不伪造日志必须出现2辅助名。",
+      "difference_suggestion": "原生ShaDodged/TurnEnded替代上游shaEnd；仁王盾取消黑杀后额外在TurnEnded按未命中判分，存在结算与清预测差异。源码确认，该组合未新增双端实跑。",
+      "source_anchor_keys": [
+        "predict",
+        "renwang",
+        "untrigger",
+        "cancel",
+        "loop",
+        "up2",
+        "nrenwang",
+        "nmeta",
+        "nfilter",
+        "nturn",
+        "nresolve"
+      ]
+    },
+    {
+      "key": "U08:skills:bolehuiyan3@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2495",
+      "old_status": "已复核等价",
+      "old_reviewer": "u08-signoff",
+      "recommended_status": "简化近似",
+      "counterexample": "无双杀需2闪，预测Tag2；目标第一闪触发界雷击，对下一座V判黑桃造成2点非杀Damage；原生第一闪不足2闪时Yield尚无ShaDodged，临时3对该正Damage提前按hit判错并清预测；上游3不因普通damage触发，第二闪后2才按shaEnd判对摸1。",
+      "native_main_filter_does_not_guard_helper3": "source=None/target=V不匹配主技能保存的attacker/target，但3辅助独立filter无该约束，仍触发。",
+      "difference_suggestion": "原生辅助3接受任意正且未prevented的Damage，未限shaDamage事件族/card/来源/目标；无双第一闪的界雷击可提前错误判分。源码确认，该组合未新增双端实跑。",
+      "source_anchor_keys": [
+        "up2",
+        "up3",
+        "wushuang",
+        "releiji",
+        "nresponse",
+        "nyield",
+        "nreleiji",
+        "emit",
+        "shaend",
+        "shadamage",
+        "nfilter",
+        "nhelper",
+        "nresolve"
+      ]
+    }
+  ],
+  "source_anchors": {
+    "up2": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 2477,
+      "label": "上游bolehuiyan2",
+      "source_text": "\tbolehuiyan2: {",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "up3": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 2495,
+      "label": "上游bolehuiyan3",
+      "source_text": "\tbolehuiyan3: {",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "predict": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 2407,
+      "label": "上游预测priority11",
+      "source_text": "\tbolehuiyan: {",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "renwang": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/card/standard.js",
+      "line": 3486,
+      "label": "仁王盾priority6与cancel",
+      "source_text": "\t\trenwang_skill: {",
+      "sha256": "33ebe708722f3d8b038d5c2855259699f9009cf73ef3c0fe8b1e9b6bd482f6fa"
+    },
+    "untrigger": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/library/element/gameEvent.ts",
+      "line": 650,
+      "label": "untrigger把触发阶段改为5",
+      "source_text": "\tuntrigger(all = true, player?: Player) {",
+      "sha256": "9a777f0f88f46d706bb6539c8ea2ae09c87d90e5ffad43c289e1a8423a2be4b8"
+    },
+    "cancel": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/library/element/gameEvent.ts",
+      "line": 677,
+      "label": "cancel调用untrigger并finish",
+      "source_text": "\tcancel(all?: any, player?: any, notrigger?: any) {",
+      "sha256": "9a777f0f88f46d706bb6539c8ea2ae09c87d90e5ffad43c289e1a8423a2be4b8"
+    },
+    "loop": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/library/element/gameEvent.ts",
+      "line": 278,
+      "label": "End仅在触发阶段2派发",
+      "source_text": "\t\t\t} else {",
+      "sha256": "9a777f0f88f46d706bb6539c8ea2ae09c87d90e5ffad43c289e1a8423a2be4b8"
+    },
+    "nrenwang": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/kernel/sha/step.rs",
+      "line": 374,
+      "label": "原生黑杀仁王盾直接结束",
+      "source_text": "            if renwang_blocks {",
+      "sha256": "878061c4301a87ae9eb9e1024e0a3a831d2f987faaf0f1edaa71d96f08a4754d"
+    },
+    "nmeta": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d.rs",
+      "line": 559,
+      "label": "原生两辅助事件登记",
+      "source_text": "        \"bolehuiyan3\" => Some(meta(EventKind::Damage, Vec::new())),",
+      "sha256": "7aacf3857f18c290bba4992570ffa443b8088579fb4326a74f9654d208dc2839"
+    },
+    "nfilter": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d.rs",
+      "line": 641,
+      "label": "原生两辅助filter",
+      "source_text": "        \"bolehuiyan2\" => match event {",
+      "sha256": "7aacf3857f18c290bba4992570ffa443b8088579fb4326a74f9654d208dc2839"
+    },
+    "nturn": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs",
+      "line": 837,
+      "label": "原生回合结束按未命中处理",
+      "source_text": "                Some(4) => {",
+      "sha256": "d379df8a66a70b044e4047b69d93e0ce691d6a5d849852babda94cc62ebb7b12"
+    },
+    "nresolve": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs",
+      "line": 765,
+      "label": "原生判分与清预测",
+      "source_text": "pub(super) fn resolve_bolehuiyan_outcome(",
+      "sha256": "d379df8a66a70b044e4047b69d93e0ce691d6a5d849852babda94cc62ebb7b12"
+    },
+    "ngrant": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs",
+      "line": 854,
+      "label": "原生记录预测并授两辅助",
+      "source_text": "                set_flag(ctx.core, owner, \"bolehuiyan_used_turn\", 1);",
+      "sha256": "d379df8a66a70b044e4047b69d93e0ce691d6a5d849852babda94cc62ebb7b12"
+    },
+    "nhelper": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs",
+      "line": 871,
+      "label": "原生辅助2/3结算入口",
+      "source_text": "        \"bolehuiyan2\" => match m.stage {",
+      "sha256": "d379df8a66a70b044e4047b69d93e0ce691d6a5d849852babda94cc62ebb7b12"
+    },
+    "wushuang": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/character/standard/skill.js",
+      "line": 2134,
+      "label": "无双将该杀需要的闪改为2",
+      "source_text": "\t\taudio: \"wushuang\",",
+      "sha256": "ee769399395b93f3d8293cd5b880b8e708864329bd0d79a0b4f0d8bd6f855a9e"
+    },
+    "releiji": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/character/shenhua/skill.js",
+      "line": 7483,
+      "label": "界雷击在使用闪时判定并伤害",
+      "source_text": "\treleiji: {",
+      "sha256": "7e87ec26c3f183b83878f886e3872bd78a0f69a5e51e7f46a64bfcc79362cd62"
+    },
+    "nresponse": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/kernel/sha/step.rs",
+      "line": 940,
+      "label": "第一闪发射响应及界雷击",
+      "source_text": "            ctx.emit(EventData::CardResponded {",
+      "sha256": "878061c4301a87ae9eb9e1024e0a3a831d2f987faaf0f1edaa71d96f08a4754d"
+    },
+    "nyield": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/kernel/sha/step.rs",
+      "line": 949,
+      "label": "第一闪不足2张时Yield",
+      "source_text": "            // 目标本人询问；不弃杀、不受伤）",
+      "sha256": "878061c4301a87ae9eb9e1024e0a3a831d2f987faaf0f1edaa71d96f08a4754d"
+    },
+    "nreleiji": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/kernel/events.rs",
+      "line": 566,
+      "label": "原生界雷击发射非杀Damage",
+      "source_text": "pub(super) fn releiji_on_shan(ctx: &mut Ctx<'_>, holder: PlayerId) {",
+      "sha256": "7d3e248a85b9b98bc63035b671cbbc01e45baab081ef0d20320b4d126489f6e6"
+    },
+    "emit": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/machine.rs",
+      "line": 403,
+      "label": "emit将伤害压为子帧",
+      "source_text": "    pub fn emit(&mut self, data: EventData) {",
+      "sha256": "219c8c8fc913ad743af196734f4a0bca87565c52331feb0b7442e4915b379197"
+    },
+    "shaend": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/card/standard.js",
+      "line": 243,
+      "label": "上游等两闪后结束杀内容",
+      "source_text": "\t\t\t\twhile (true) {",
+      "sha256": "33ebe708722f3d8b038d5c2855259699f9009cf73ef3c0fe8b1e9b6bd482f6fa"
+    },
+    "shadamage": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/card/standard.js",
+      "line": 145,
+      "label": "上游杀伤害才显式派发shaDamage",
+      "source_text": "\t\t\t\tconst damageTarget = async () => {",
+      "sha256": "33ebe708722f3d8b038d5c2855259699f9009cf73ef3c0fe8b1e9b6bd482f6fa"
+    }
+  },
+  "not_executed": [
+    "new upstream browser cases",
+    "new native probe or product cases",
+    "complete product gates",
+    "inventory edits"
+  ],
+  "new_equivalence_signoffs": 0,
+  "verification": {
+    "verified_at_utc": "2026-11-13T19:18:07.555109+00:00",
+    "head": "5c73d1d9158145e33f98f2018013914667d13964",
+    "source_anchor_count": 22,
+    "source_anchor_text_and_whole_file_hash_mismatches": [],
+    "supplementary_markdown_local_links": 27,
+    "supplementary_markdown_source_line_anchors": 26,
+    "supplementary_missing_links_or_out_of_bounds_lines": [],
+    "frozen_u08_manifest_sha256": "16b41ca13fb93284c65a0ad2697cfa93433f58dd9894693df1c1f8714338675f",
+    "frozen_u08_files_checked": 514,
+    "frozen_u08_bytes_checked": 33608652,
+    "frozen_u08_file_mismatches": [],
+    "first_full_local_links_check": {
+      "command": "python3 -B scripts/check_local_links.py --all",
+      "exit_code": 1,
+      "raw_stdout_stderr": "坏链: docs/architecture/native-remaining-ledger.md -> ../operations/evidence/2026-11-14-queue1-runtime/known-automatic-choice-gaps-01.json\n检查 2148 个文件，坏链 1\n",
+      "scope": "唯一坏链不在本补充或冻结u08目录；未修改公共主稿或该目标。",
+      "subsequent_parent_message": "主agent随后报告目标JSON已按序落档，并由主agent运行完整preflight；本补充不将该消息当作自己复跑通过。"
+    },
+    "not_rerun": [
+      "full local links after parent integration",
+      "complete preflight",
+      "browser",
+      "native probe",
+      "product tests"
+    ]
+  }
+}

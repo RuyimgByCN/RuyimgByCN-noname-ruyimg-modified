@@ -1,0 +1,114 @@
+[
+  {
+    "kind": "skills",
+    "name": "th_chengye",
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+    "start_line": 6182,
+    "end_line": 6371,
+    "sha256": "0f88287bb75245e71e9ba7283cd317d1210edc6c8b3fa48a10b80d16d573c645"
+  },
+  {
+    "kind": "skills",
+    "name": "th_buxu",
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+    "start_line": 6372,
+    "end_line": 6514,
+    "sha256": "63aec31a18ebe4fae294393a3919ea3b1b74ba8eea93ae3abec232e4dbb60acb"
+  },
+  {
+    "kind": "skills",
+    "name": "th_zhengjing",
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+    "start_line": 6018,
+    "end_line": 6161,
+    "sha256": "84e3193b38bb1ba91c2a4d6f2b1d45c9eae679b63796f62bf2b029064d649b10"
+  },
+  {
+    "kind": "skills",
+    "name": "th_zhengjing2",
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+    "start_line": 6162,
+    "end_line": 6181,
+    "sha256": "d129e3c7da96df38756fda328308c30e1e3a4069df98c0f061eb6dbe0c8e175b"
+  },
+  {
+    "kind": "skills",
+    "name": "th_yeyan",
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+    "start_line": 8636,
+    "end_line": 8940,
+    "sha256": "28f2f1473d3657b25acb004b997e8c5708dbc130c47638d739d11a65af336ebd"
+  },
+  {
+    "kind": "helpers",
+    "name": "thunderIsPhone",
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+    "start_line": 1932,
+    "end_line": 1939,
+    "sha256": "fbe4fad9ba032a223ae7fffa2290f3672d97e67b01551cd0a1e3e89c80c33a03"
+  },
+  {
+    "kind": "helpers",
+    "name": "thunderForbidTouch",
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+    "start_line": 2046,
+    "end_line": 2062,
+    "sha256": "42583cd59ffe663123129d8698c17194de875f5be60f6ba47e8b60e40d120432"
+  },
+  {
+    "kind": "helpers",
+    "name": "thunderAllowTouch",
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+    "start_line": 2063,
+    "end_line": 2077,
+    "sha256": "957cceda2281b91bd3bc8bb1633143de458f83b1ad21c4203a8df0626af9eefe"
+  },
+  {
+    "kind": "helpers",
+    "name": "thunderCreateTimer",
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+    "start_line": 2078,
+    "end_line": 2118,
+    "sha256": "665cf7f01ce0ff56fca38109f69669b0bd059e82c5f078760dd6c0980b8b2d60"
+  },
+  {
+    "kind": "helpers",
+    "name": "thunderInterval",
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+    "start_line": 2119,
+    "end_line": 2131,
+    "sha256": "23dbbf2ff835a9284460b7aac71f4077d9e61451d2a3ddfa3151d632fdd15078"
+  },
+  {
+    "kind": "helpers",
+    "name": "thunderClearInterval",
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+    "start_line": 2132,
+    "end_line": 2135,
+    "sha256": "16da7d949b31886364ea7f65ee790846e93c226e8a2d7d4d51051bf4dbc1186f"
+  },
+  {
+    "kind": "helpers",
+    "name": "thunderDialog",
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+    "start_line": 2136,
+    "end_line": 2344,
+    "sha256": "9a6f5c182ffe8dd07082e68f8a3a0a127bb869844818aebb3808a8fdc4d61bce"
+  },
+  {
+    "kind": "helpers",
+    "name": "thunderCreateStand",
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+    "start_line": 1940,
+    "end_line": 1959,
+    "sha256": "3d8d3e24e4301d12ce1d9b96229fa2d8210aa52548f650b2f3b16f5c1057a30e"
+  },
+  {
+    "kind": "helpers",
+    "name": "thunderFileExist",
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+    "start_line": 1898,
+    "end_line": 1912,
+    "sha256": "1304693793e91592fbd9d4300ffe21b3d0aeee45574c953e89abd4343f42cdfd"
+  }
+]

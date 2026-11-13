@@ -1,0 +1,41 @@
+{
+  "at": "2026-11-14T02:46:31.509449+08:00",
+  "head_sha": "5c73d1d9158145e33f98f2018013914667d13964",
+  "run_id": 43485811587,
+  "run_attempt": 1,
+  "event": "push",
+  "status": "queued",
+  "conclusion": null,
+  "url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43485811587",
+  "job_count_initial": 10,
+  "commands": [
+    {
+      "argv": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs?head_sha=5c73d1d9158145e33f98f2018013914667d13964&event=push&per_page=100"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43485811587"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43485811587/jobs?per_page=100"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "agent_dispatched_reruns": 0
+}

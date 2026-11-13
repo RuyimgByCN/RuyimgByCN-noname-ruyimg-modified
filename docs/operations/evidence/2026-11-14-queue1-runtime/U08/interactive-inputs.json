@@ -1,0 +1,35 @@
+{
+  "candidates": [
+    {
+      "key": "U08:skills:yixin@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:337",
+      "source_id": "U08",
+      "category": "skills",
+      "id": "yixin",
+      "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:337",
+      "calling_event": "phaseUse limited, two he cards and injured target",
+      "native_test_location": "crates/engine-native/tests/u08_hero_kill_match.rs:403",
+      "browser_executed_by_this_reviewer": false
+    },
+    {
+      "key": "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+      "source_id": "U08",
+      "category": "skills",
+      "id": "bolehuiyan",
+      "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+      "calling_event": "global shaBegin, owner neither source nor target",
+      "native_test_location": "crates/engine-native/tests/u08_hero_kill_match_b.rs:311",
+      "browser_executed_by_this_reviewer": false
+    },
+    {
+      "key": "U08:skills:guifu@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:3095",
+      "source_id": "U08",
+      "category": "skills",
+      "id": "guifu",
+      "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:3095",
+      "calling_event": "phaseUse once; choose other target with equipped card, discard its e, then both draw1",
+      "native_test_location": "crates/engine-native/tests/u08_hero_kill_match_b.rs:431",
+      "browser_executed_by_this_reviewer": false
+    }
+  ],
+  "insufficiency": null
+}

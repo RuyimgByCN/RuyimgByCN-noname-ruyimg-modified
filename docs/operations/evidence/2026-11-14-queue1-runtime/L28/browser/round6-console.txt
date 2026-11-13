@@ -1,0 +1,25 @@
+{"case": "buxu-basic", "completed": true, "error": null, "stages": ["phaseUse-choice", "buxu-cost-selected", "buxu-cost-cards", "buxu-chambers", "buxu-resolved"]}
+{"case": "buxu-equip", "completed": true, "error": null, "stages": ["phaseUse-choice", "buxu-cost-selected", "buxu-cost-cards", "buxu-chambers", "buxu-resolved"]}
+{"case": "buxu-nullify", "completed": true, "error": null, "stages": ["phaseUse-choice", "buxu-cost-selected", "buxu-cost-cards", "buxu-chambers", "buxu-resolved"]}
+{"case": "buxu-cancel", "completed": true, "error": null, "stages": ["phaseUse-choice", "buxu-cost-selected", "cancel-cost"]}
+{"case": "buxu-empty", "completed": true, "error": null, "stages": ["phaseUse-choice"]}
+{"case": "buxu-full", "completed": true, "error": null, "stages": ["phaseUse-choice"]}
+{"case": "buxu-twice", "completed": true, "error": null, "stages": ["phaseUse-choice", "buxu-cost-selected", "buxu-cost-cards", "buxu-chambers", "buxu-resolved", "buxu-cost-selected", "buxu-cost-cards", "buxu-chambers", "buxu-resolved"]}
+{"case": "buxu-invalid", "completed": true, "error": null, "stages": ["phaseUse-choice", "buxu-cost-selected", "buxu-cost-cards", "buxu-chambers", "buxu-resolved"]}
+{"case": "zhengjing-one-self", "completed": false, "error": "RuntimeError: {\"result\": {\"type\": \"object\", \"subtype\": \"error\", \"className\": \"ReferenceError\", \"description\": \"ReferenceError: dcdAnim is not defined\\n    at Object.filter (eval at", "stages": []}
+{"case": "zhengjing-three-target", "completed": false, "error": "RuntimeError: {\"result\": {\"type\": \"object\", \"subtype\": \"error\", \"className\": \"ReferenceError\", \"description\": \"ReferenceError: dcdAnim is not defined\\n    at Object.filter (eval at", "stages": []}
+{"case": "zhengjing-zero", "completed": false, "error": "RuntimeError: {\"result\": {\"type\": \"object\", \"subtype\": \"error\", \"className\": \"ReferenceError\", \"description\": \"ReferenceError: dcdAnim is not defined\\n    at Object.filter (eval at", "stages": []}
+{"case": "zhengjing-cancel", "completed": false, "error": "RuntimeError: {\"result\": {\"type\": \"object\", \"subtype\": \"error\", \"className\": \"ReferenceError\", \"description\": \"ReferenceError: dcdAnim is not defined\\n    at Object.filter (eval at", "stages": []}
+{"case": "zhengjing-no-skill", "completed": true, "error": null, "stages": ["phaseUse-choice"]}
+{"case": "yeyan-small-one", "completed": true, "error": null, "stages": ["phaseUse-choice", "yeyan-flames", "flame-0-to-1", "yeyan-resolved"]}
+{"case": "yeyan-small-three", "completed": true, "error": null, "stages": ["phaseUse-choice", "yeyan-flames", "flame-0-to-1", "flame-1-to-2", "flame-2-to-3", "yeyan-resolved"]}
+{"case": "yeyan-great-one", "completed": true, "error": null, "stages": ["phaseUse-choice", "yeyan-flames", "flame-0-to-1", "flame-1-to-1", "flame-2-to-1", "yeyan-resolved"]}
+{"case": "yeyan-great-split", "completed": true, "error": null, "stages": ["phaseUse-choice", "yeyan-flames", "flame-0-to-3", "flame-1-to-3", "flame-2-to-1", "yeyan-resolved"]}
+{"case": "yeyan-cancel", "completed": true, "error": null, "stages": ["phaseUse-choice", "yeyan-flames", "yeyan-cancelled"]}
+{"case": "yeyan-used", "completed": true, "error": null, "stages": ["phaseUse-choice"]}
+{"case": "yeyan-no-four", "completed": true, "error": null, "stages": ["phaseUse-choice", "yeyan-flames", "flame-0-to-1", "second-flame-without-four-suits", "yeyan-resolved"]}
+{"case": "yeyan-target-cancel", "completed": true, "error": null, "stages": ["phaseUse-choice", "yeyan-flames", "flame-0-to-1", "yeyan-cancel-after-allocation"]}
+{"case": "yeyan-great-discard-cancel", "completed": false, "error": "RuntimeError: {\"result\": {\"type\": \"object\", \"subtype\": \"error\", \"className\": \"Error\", \"description\": \"Error: no cancel\\n    at <anonymous>:1:42\", \"objectId\": \"-8800266436720872452.", "stages": ["phaseUse-choice", "yeyan-flames", "flame-0-to-1", "flame-1-to-1", "flame-2-to-1"]}
+{"case": "yeyan-great-one-default", "completed": true, "error": null, "stages": ["phaseUse-choice", "yeyan-flames", "flame-0-to-1", "flame-1-to-1", "flame-2-to-1", "yeyan-resolved"]}
+{"case": "yeyan-great-split-default", "completed": true, "error": null, "stages": ["phaseUse-choice", "yeyan-flames", "flame-0-to-3", "flame-1-to-3", "flame-2-to-1", "yeyan-resolved"]}
+{"case": "yeyan-great-two", "completed": true, "error": null, "stages": ["phaseUse-choice", "yeyan-flames", "flame-0-to-1", "flame-1-to-1", "yeyan-resolved"]}

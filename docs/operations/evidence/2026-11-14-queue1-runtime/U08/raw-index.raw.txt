@@ -1,0 +1,1 @@
+{"cases": 70, "cohorts": {"browser-round1": 4, "browser-round2": 4, "browser-round3": 31, "browser-round4": 31}, "request_lines": 1072, "reply_lines": 1072, "spine_requests": 0}

@@ -1,0 +1,625 @@
+[
+  {
+    "case": "g_sha_ally",
+    "pending_archives": 6,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "reguhuo",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "reguhuo",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "g_sha_question_fake",
+    "pending_archives": 6,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "reguhuo",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "reguhuo",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "g_true_question_discard",
+    "pending_archives": 6,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "reguhuo",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "reguhuo",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "g_true_question_losehp",
+    "pending_archives": 6,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "reguhuo",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "reguhuo",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "g_tao",
+    "pending_archives": 6,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "reguhuo",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "reguhuo",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "g_cancel_card",
+    "pending_archives": 2,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "reguhuo",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "reguhuo",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "g_cancel_name",
+    "pending_archives": 4,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "reguhuo",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "reguhuo",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "g_cancel_target",
+    "pending_archives": 6,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "reguhuo",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "reguhuo",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": {
+      "allow_cancel": false,
+      "id": 3,
+      "kind": "SelectPlayers",
+      "max": 1,
+      "min": 1,
+      "observer": 0,
+      "options": [
+        "Player(1)",
+        "Player(3)"
+      ],
+      "prompt": "reguhuo_targets"
+    },
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "g_no_hand",
+    "pending_archives": 0,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "reguhuo",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "reguhuo",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "g_no_skill",
+    "pending_archives": 0,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [],
+    "formal_skills": [],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "g_response",
+    "pending_archives": 0,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "reguhuo",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "reguhuo",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "r_basic",
+    "pending_archives": 6,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "rangjie",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "rangjie",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "r_trick",
+    "pending_archives": 6,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "rangjie",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "rangjie",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "r_equip",
+    "pending_archives": 6,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "rangjie",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "rangjie",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "r_move_A",
+    "pending_archives": 8,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "rangjie",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "rangjie",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "r_move_B",
+    "pending_archives": 8,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "rangjie",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "rangjie",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "r_cancel_choice",
+    "pending_archives": 4,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "rangjie",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "rangjie",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "r_cancel_type",
+    "pending_archives": 6,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "rangjie",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "rangjie",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": {
+      "allow_cancel": false,
+      "id": 3,
+      "kind": "PickTag",
+      "max": 1,
+      "min": 1,
+      "observer": 0,
+      "options": [
+        "Tag(0)",
+        "Tag(1)",
+        "Tag(2)"
+      ],
+      "prompt": "rangjie_type"
+    },
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "r_no_skill",
+    "pending_archives": 0,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [],
+    "formal_skills": [],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "r_other_target",
+    "pending_archives": 0,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "rangjie",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "rangjie",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "r_double",
+    "pending_archives": 10,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "rangjie",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "rangjie",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "k_A",
+    "pending_archives": 2,
+    "same_final_capture_except_content_bound_hash": false,
+    "changed_fields": [
+      "players"
+    ],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "k_danggu",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "k_danggu",
+        "once_used": false
+      },
+      {
+        "enabled": true,
+        "name": "scstaoluan",
+        "once_used": false
+      },
+      {
+        "enabled": true,
+        "name": "scsniqu",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "k_B",
+    "pending_archives": 2,
+    "same_final_capture_except_content_bound_hash": false,
+    "changed_fields": [
+      "players"
+    ],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "k_danggu",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "k_danggu",
+        "once_used": false
+      },
+      {
+        "enabled": true,
+        "name": "scschiyan",
+        "once_used": false
+      },
+      {
+        "enabled": true,
+        "name": "scsniqu",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "k_cancel",
+    "pending_archives": 2,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "k_danggu",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "k_danggu",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": {
+      "allow_cancel": false,
+      "id": 1,
+      "kind": "PickTag",
+      "max": 1,
+      "min": 1,
+      "observer": 0,
+      "options": [
+        "Tag(0)",
+        "Tag(1)"
+      ],
+      "prompt": "k_danggu_partner"
+    },
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "k_after_initial_no_trigger",
+    "pending_archives": 0,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [
+      {
+        "enabled": true,
+        "name": "k_danggu",
+        "once_used": false
+      }
+    ],
+    "formal_skills": [
+      {
+        "enabled": true,
+        "name": "k_danggu",
+        "once_used": false
+      }
+    ],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  },
+  {
+    "case": "k_no_skill",
+    "pending_archives": 0,
+    "same_final_capture_except_content_bound_hash": true,
+    "changed_fields": [],
+    "bridge_skills": [],
+    "formal_skills": [],
+    "formal_pending_at_stop": null,
+    "direct_restored_final_and_commands_equal": true,
+    "direct_restored_full_debug_equal_except_auth_generation": true
+  }
+]

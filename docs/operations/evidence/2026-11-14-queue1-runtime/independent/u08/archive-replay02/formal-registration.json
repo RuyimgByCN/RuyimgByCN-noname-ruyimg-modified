@@ -1,0 +1,31 @@
+{
+  "bound_ruleset": 18410807972335883120,
+  "content_lock": 9187435935481107005,
+  "host_skills": 109,
+  "namespace": "upstream-noname",
+  "pack_cards": 0,
+  "package_id": "hero-kill",
+  "skills": [
+    {
+      "id": 243,
+      "name": "yixin"
+    },
+    {
+      "id": 311,
+      "name": "bolehuiyan"
+    },
+    {
+      "id": 312,
+      "name": "bolehuiyan2"
+    },
+    {
+      "id": 313,
+      "name": "bolehuiyan3"
+    },
+    {
+      "id": 335,
+      "name": "guifu"
+    }
+  ],
+  "vm_skills": 0
+}

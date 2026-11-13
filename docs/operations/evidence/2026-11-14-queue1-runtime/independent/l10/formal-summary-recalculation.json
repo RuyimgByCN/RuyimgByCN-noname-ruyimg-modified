@@ -1,0 +1,117 @@
+{
+  "at_utc": "2026-11-13T18:40:11.426237+00:00",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "route": "bridge_pack then attach_formal_package_upstream_rules(upstream-liuli,epic-cards,prior_packs=[]) without injected entities",
+  "extra_sources_read": [
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/character/mobile.js",
+      "bytes": 791477,
+      "sha256": "24a3c1fa495d58abeff716335804ecc19fafafdec46af10ef6a717b469d161f0"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/game/game.js",
+      "bytes": 2148860,
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/card/standard.js",
+      "bytes": 100821,
+      "sha256": "dabb598438dc030a621dd2fac83989aac9ae783f521a1521f142891a5e16c8b5"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_flags.rs",
+      "bytes": 35826,
+      "sha256": "edb99b92bb9f08ad0278ee75f482b397b329dec1a9d1f08fafaf5e30238d8c90"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34.rs",
+      "bytes": 30567,
+      "sha256": "15db40afbe5dc164e3059c6ecbe2ad24a42fbbac590decf67ef9ad59b4639a36"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs",
+      "bytes": 42760,
+      "sha256": "6ae990da15a70d82dcdbf092df047aa58eb9bc2b7ac64a182af9e1aa644fe752"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/independent/l10/formal-probe/Cargo.lock",
+      "bytes": 6684,
+      "sha256": "54e4d1838eaaf8830d4c334e29fd0c0638d84fd6d080a2bf18c9ea9ea987a1c6"
+    }
+  ],
+  "formal_metadata": {
+    "content_lock": 6741593128147419874,
+    "host_skills": 4,
+    "pack_name": "epic-cards-upstream-liuli",
+    "pack_version": 1,
+    "seats": 4,
+    "seed": 202611140010,
+    "snapshot_bound_ruleset_version": 15964965165002195887,
+    "vm_skills": 10
+  },
+  "original_bridge_metadata": {
+    "content_lock": 8553837534554433482,
+    "host_skills": 4,
+    "pack_name": "epic-cards-upstream-liuli",
+    "pack_version": 1,
+    "seats": 4,
+    "seed": 202611140010,
+    "snapshot_bound_ruleset_version": 17777209571409208967,
+    "vm_skills": 0
+  },
+  "formal_original_cases": 26,
+  "formal_pending_archives_checked": 102,
+  "formal_direct_restored_complete_debug_equal_except_auth_cases": 26,
+  "formal_only_skill_list_change_at_clique_selection": [
+    "k_A",
+    "k_B"
+  ],
+  "formal_companion_catalog": [
+    {
+      "id": 234,
+      "name": "scstaoluan"
+    },
+    {
+      "id": 235,
+      "name": "scschiyan"
+    },
+    {
+      "id": 236,
+      "name": "scszimou"
+    },
+    {
+      "id": 237,
+      "name": "scspicai"
+    },
+    {
+      "id": 238,
+      "name": "scsyaozhuo"
+    },
+    {
+      "id": 239,
+      "name": "scsxiaolu"
+    },
+    {
+      "id": 240,
+      "name": "scskuiji"
+    },
+    {
+      "id": 241,
+      "name": "scschihe"
+    },
+    {
+      "id": 242,
+      "name": "scsniqu"
+    },
+    {
+      "id": 243,
+      "name": "scsanruo"
+    }
+  ],
+  "extra_continuation_cases": 2,
+  "extra_continuation_pending_archives_checked": 4,
+  "reviewed_product_rs_files_unchanged_after_build_run": 474,
+  "product_rs_changed": [],
+  "comparison_boundary": "The formal run uses existing registration, without manifest validation, installation, all-package coexistence, browser-side dependency stubs, or injected entities. Upstream full clique/continuation is statically reviewed, not dynamically completed.",
+  "new_equivalence_signed": 0
+}

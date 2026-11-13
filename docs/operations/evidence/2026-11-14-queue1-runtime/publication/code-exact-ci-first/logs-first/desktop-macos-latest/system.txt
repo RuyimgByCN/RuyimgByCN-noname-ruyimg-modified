@@ -1,0 +1,11 @@
+2026-11-13T18:46:08.1950000Z Requested labels: macos-latest
+2026-11-13T18:46:08.1950000Z Job defined at: RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/.github/workflows/ci.yml@refs/heads/native-convergence
+2026-11-13T18:46:08.1950000Z Waiting for a runner to pick up this job...
+2026-11-13T18:46:08.1930000Z Evaluating desktop.if
+2026-11-13T18:46:08.1930000Z Evaluating: success()
+2026-11-13T18:46:08.1930000Z Result: true
+2026-11-13T18:46:08.4180000Z Job is about to start running on the hosted runner: GitHub Actions 1000001387
+2026-11-13T18:46:08.4170000Z Job is waiting for a hosted runner to come online.
+2026-11-13T18:51:08.4920000Z Requested labels: macos-latest
+2026-11-13T18:51:08.4920000Z Job defined at: RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/.github/workflows/ci.yml@refs/heads/native-convergence
+2026-11-13T18:51:08.4920000Z Waiting for a runner to pick up this job...

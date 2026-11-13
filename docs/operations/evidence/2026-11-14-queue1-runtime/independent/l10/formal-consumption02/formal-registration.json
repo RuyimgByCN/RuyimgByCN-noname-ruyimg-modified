@@ -1,0 +1,100 @@
+{
+  "bridge_counts": {
+    "cards": 0,
+    "generals": 0,
+    "host_skills": 4,
+    "vm_skills": 0
+  },
+  "cards": 0,
+  "generals": [
+    {
+      "max_hp": 1,
+      "name": "shichangshi",
+      "skills": [
+        "k_danggu",
+        "k_mowang"
+      ]
+    }
+  ],
+  "host_skills": [
+    {
+      "behavior": "Reguhuo",
+      "name": "reguhuo"
+    },
+    {
+      "behavior": "Rangjie",
+      "name": "rangjie"
+    },
+    {
+      "behavior": "KDanggu",
+      "name": "k_danggu"
+    },
+    {
+      "behavior": "KMowang",
+      "name": "k_mowang"
+    }
+  ],
+  "route": "bridge_pack then attach_formal_package_upstream_rules(upstream-liuli,epic-cards,prior_packs=[]) without injected entities",
+  "vm_skills": [
+    {
+      "filter": "Declared { skill_def_id: 1920002003, hand_limit_base_max_hp: false, modifiers: [], choice_actor: Owner, inner: OwnerIsTarget }",
+      "module": "scstaoluan#d34p9",
+      "name": "scstaoluan",
+      "trigger": "TriggerMeta { event: PhaseBegin, timing: Normal, priority: 15, order_selectable: false, optional: false, extra_events: [] }"
+    },
+    {
+      "filter": "Declared { skill_def_id: 1920002004, hand_limit_base_max_hp: false, modifiers: [], choice_actor: Owner, inner: OwnerIsTarget }",
+      "module": "scschiyan#d34p9",
+      "name": "scschiyan",
+      "trigger": "TriggerMeta { event: PhaseBegin, timing: Normal, priority: 15, order_selectable: false, optional: false, extra_events: [] }"
+    },
+    {
+      "filter": "Declared { skill_def_id: 1920002005, hand_limit_base_max_hp: false, modifiers: [], choice_actor: Owner, inner: OwnerIsTarget }",
+      "module": "scszimou#d34p9",
+      "name": "scszimou",
+      "trigger": "TriggerMeta { event: PhaseBegin, timing: Normal, priority: 15, order_selectable: false, optional: false, extra_events: [] }"
+    },
+    {
+      "filter": "Declared { skill_def_id: 1920002006, hand_limit_base_max_hp: false, modifiers: [], choice_actor: Owner, inner: OwnerIsTarget }",
+      "module": "scspicai#d34p9",
+      "name": "scspicai",
+      "trigger": "TriggerMeta { event: PhaseBegin, timing: Normal, priority: 15, order_selectable: false, optional: false, extra_events: [] }"
+    },
+    {
+      "filter": "Declared { skill_def_id: 1920002007, hand_limit_base_max_hp: false, modifiers: [], choice_actor: Owner, inner: OwnerIsTarget }",
+      "module": "scsyaozhuo#d34p9",
+      "name": "scsyaozhuo",
+      "trigger": "TriggerMeta { event: PhaseBegin, timing: Normal, priority: 15, order_selectable: false, optional: false, extra_events: [] }"
+    },
+    {
+      "filter": "Declared { skill_def_id: 1920002008, hand_limit_base_max_hp: false, modifiers: [], choice_actor: Owner, inner: OwnerIsTarget }",
+      "module": "scsxiaolu#d34p9",
+      "name": "scsxiaolu",
+      "trigger": "TriggerMeta { event: PhaseBegin, timing: Normal, priority: 15, order_selectable: false, optional: false, extra_events: [] }"
+    },
+    {
+      "filter": "Declared { skill_def_id: 1920002009, hand_limit_base_max_hp: false, modifiers: [], choice_actor: Owner, inner: OwnerIsTarget }",
+      "module": "scskuiji#d34p9",
+      "name": "scskuiji",
+      "trigger": "TriggerMeta { event: PhaseBegin, timing: Normal, priority: 15, order_selectable: false, optional: false, extra_events: [] }"
+    },
+    {
+      "filter": "Declared { skill_def_id: 1920002010, hand_limit_base_max_hp: false, modifiers: [], choice_actor: Owner, inner: OwnerIsTarget }",
+      "module": "scschihe#d34p9",
+      "name": "scschihe",
+      "trigger": "TriggerMeta { event: PhaseBegin, timing: Normal, priority: 15, order_selectable: false, optional: false, extra_events: [] }"
+    },
+    {
+      "filter": "Declared { skill_def_id: 1920002011, hand_limit_base_max_hp: false, modifiers: [], choice_actor: Owner, inner: OwnerIsTarget }",
+      "module": "scsniqu#d34p9",
+      "name": "scsniqu",
+      "trigger": "TriggerMeta { event: PhaseBegin, timing: Normal, priority: 15, order_selectable: false, optional: false, extra_events: [] }"
+    },
+    {
+      "filter": "Declared { skill_def_id: 1920002012, hand_limit_base_max_hp: false, modifiers: [], choice_actor: Owner, inner: OwnerIsTarget }",
+      "module": "scsanruo#d34p9",
+      "name": "scsanruo",
+      "trigger": "TriggerMeta { event: PhaseBegin, timing: Normal, priority: 15, order_selectable: false, optional: false, extra_events: [] }"
+    }
+  ]
+}

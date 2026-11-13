@@ -1,0 +1,16 @@
+{
+  "at": "2026-11-14T03:18:40.716961+08:00",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "tracked_dirty": true,
+  "prior_snapshot_records": [
+    "inventory-runtime-update-05.json",
+    "documentation-integration-check-01.json"
+  ],
+  "prior_json_sha256": "a5f3edab8611605430507963b9109a124e4770ba5138a78d110fa431bff8b533",
+  "final_json_sha256": "df0ec58f2d333163a61aae6ecfe0b04c1287e3151207a83b6860d84c3ce1d602",
+  "final_markdown_sha256": "12f67cf3612f982f4c7b20e3207bd47d702655d147a4af7916d0e64a9135e0ec",
+  "only_added_verification": true,
+  "removing_verification_exactly_reconstructs_prior_bytes": true,
+  "all_source_anchors_current": true,
+  "scope": "前两份带时刻记录引用的是独立agent加最终核验栏之前的字节，保留为当时快照。现加verification而裁定/源码/具体反例字节未变；本文件登记最终冻结hash，不覆盖初始记录。verification保留瞬时全库坏链首次失败，主agent完整preflight另记。"
+}

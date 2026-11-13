@@ -3,8 +3,8 @@
   "updated_at": "2026-11-14",
   "total_items": 4424,
   "counts": {
-    "已复核等价": 628,
-    "简化近似": 3796,
+    "已复核等价": 625,
+    "简化近似": 3799,
     "缺失": 0,
     "上游未定义": 0
   },
@@ -28663,14 +28663,14 @@
       "review_date": "2026-11-12",
       "upstream_file_line": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:337",
       "test_name": "u08_batch_a_combat_and_active_skills_6d_real_match + u08_batch_a_support_and_modifiers_6d_real_match + u08_all_43_generals_107_skills_and_9_cross_package_standard_skills_assemble",
-      "difference": "无语义差异（HostBehavior::U08YxsBatchA `yixin`：按上游 英雄杀/character/skill.js 完整实现触发/主动选牌选目标/被动修饰状态机（零自造直发或自动代选），已通过 u08-signoff 独立复核与 6 维真实对局测试）",
-      "note": null,
+      "difference": "本轮10案只核指定牌区/HP投影，不新增整技能等价签署，保留旧复核人。满两张费用后退出案上游实际为结束回合，原生为空目标答，不能当相同取消；装备费用、下一回合重用和组合仍未覆盖。",
+      "note": "2026-11-14T03:15:48.287535+08:00 实际运行补课及独立复核：本轮10案只核指定牌区/HP投影，不新增整技能等价签署，保留旧复核人。满两张费用后退出案上游实际为结束回合，原生为空目标答，不能当相同取消；装备费用、下一回合重用和组合仍未覆盖。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/independent/u08/README.md。新增等价0；保留的旧等价不表示本轮全分支重新签署。",
       "reason": null,
       "upstream_summary": "医心：限定技，你可以弃置两张牌，然后令一名已受伤角色回复X点体力并摸4-X张牌（X为该角色已损失的体力值且不超过4）。",
       "native_summary": "HostBehavior::U08YxsBatchA `yixin`：按上游 英雄杀/character/skill.js 完整实现触发/主动选牌选目标/被动修饰状态机（零自造直发或自动代选）",
       "native_ref": "crates/engine-native-content/src/content/host/step/u08_batch_a.rs:1-861 + crates/engine-native-content/src/content/host/step/u08_batch_a_asks.rs:1-672 + crates/content-native-loader/src/host_skill_bindings.rs:738-749",
       "native": "crates/engine-native-content/src/content/host/step/u08_batch_a.rs:1-861 + crates/engine-native-content/src/content/host/step/u08_batch_a_asks.rs:1-672 + crates/content-native-loader/src/host_skill_bindings.rs:738-749",
-      "diff": "无"
+      "diff": "本轮10案只核指定牌区/HP投影，不新增整技能等价签署，保留旧复核人。满两张费用后退出案上游实际为结束回合，原生为空目标答，不能当相同取消；装备费用、下一回合重用和组合仍未覆盖。"
     },
     "U08:skills:xianqu@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:373": {
       "source_id": "U08",
@@ -30019,18 +30019,18 @@
       "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
       "target": "原生规则 / `rule-vm` 包",
       "status": "简化近似",
-      "reviewer": "/root/fix_dddanzhi",
+      "reviewer": "/root/repair_doc_refs",
       "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
       "test_name": "u08_batch_d_bo_le_wu_ze_tian_mo_zi_and_lu_ban_6d_real_match + u08_batch_c_and_d_remaining_skills_6d_real_match + u08_all_43_generals_107_skills_and_9_cross_package_standard_skills_assemble",
-      "difference": "逐目标shaBegin变成整牌首目标，漏受控目标过滤；预测后同一来源对目标的其他嵌套伤害也能结算该预测，未约束同一次杀。",
-      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+      "difference": "受控目标应过滤但原生仍询问并摸牌；上游真实DOM取消无control字段却消耗本回合次数，原生空答不耗次并可再预测。逐目标shaBegin/priority11被整牌首目标/priority1替代。主技能Damage会核来源/目标，临时辅助不受该过滤约束；上游辅助也未独立绑定同一次杀，不能把其事件族差异写成上游必绑同一invocation。",
+      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14T03:15:48.287535+08:00 实际运行补课及独立复核：受控目标应过滤但原生仍询问并摸牌；上游真实DOM取消无control字段却消耗本回合次数，原生空答不耗次并可再预测。逐目标shaBegin/priority11被整牌首目标/priority1替代。主技能Damage会核来源/目标，临时辅助不受该过滤约束；上游辅助也未独立绑定同一次杀，不能把其事件族差异写成上游必绑同一invocation。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/independent/u08/README.md。新增等价0；保留的旧等价不表示本轮全分支重新签署。",
       "reason": null,
       "upstream_summary": "慧眼：当一名有手牌的其他角色成为来源不为你的【杀】的目标时，你可以预言此【杀】能否命中，若预言正确，你摸一张牌，否则你须弃置一张牌。每回合限发动一次。",
       "native_summary": "HostBehavior::U08YxsBatchD `bolehuiyan`：按上游 英雄杀/character/skill.js 完整实现触发/主动选牌选目标/被动修饰状态机（零自造直发或自动代选）",
       "native_ref": "crates/engine-native-content/src/content/host/step/u08_batch_d.rs:1-1011 + crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs:1-964 + crates/engine-native-content/src/content/host/step/u08_batch_d_ext.rs:1-794 + crates/content-native-loader/src/host_skill_bindings.rs:764-770",
       "native": "crates/engine-native-content/src/content/host/step/u08_batch_d.rs:1-1011 + crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs:1-964 + crates/engine-native-content/src/content/host/step/u08_batch_d_ext.rs:1-794 + crates/content-native-loader/src/host_skill_bindings.rs:764-770",
-      "diff": "逐目标shaBegin变成整牌首目标，漏受控目标过滤；预测后同一来源对目标的其他嵌套伤害也能结算该预测，未约束同一次杀。"
+      "diff": "受控目标应过滤但原生仍询问并摸牌；上游真实DOM取消无control字段却消耗本回合次数，原生空答不耗次并可再预测。逐目标shaBegin/priority11被整牌首目标/priority1替代。主技能Damage会核来源/目标，临时辅助不受该过滤约束；上游辅助也未独立绑定同一次杀，不能把其事件族差异写成上游必绑同一invocation。"
     },
     "U08:skills:bolehuiyan2@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2477": {
       "source_id": "U08",
@@ -30038,19 +30038,19 @@
       "id": "bolehuiyan2",
       "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2477",
       "target": "原生规则 / `rule-vm` 包",
-      "status": "已复核等价",
-      "reviewer": "u08-signoff",
-      "review_date": "2026-11-12",
+      "status": "简化近似",
+      "reviewer": "/root/repair_doc_refs",
+      "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2477",
       "test_name": "u08_batch_d_bo_le_wu_ze_tian_mo_zi_and_lu_ban_6d_real_match + u08_batch_c_and_d_remaining_skills_6d_real_match + u08_all_43_generals_107_skills_and_9_cross_package_standard_skills_assemble",
-      "difference": "无语义差异（HostBehavior::U08YxsBatchD `bolehuiyan2`：按上游 英雄杀/character/skill.js 完整实现触发/主动选牌选目标/被动修饰状态机（零自造直发或自动代选），已通过 u08-signoff 独立复核与 6 维真实对局测试）",
-      "note": null,
-      "reason": null,
+      "difference": "上游仅global shaEnd；原生改用ShaDodged/TurnEnded。有效未命中预测后仁王盾在shaBegin取消黑杀，上游取消路径不会派发shaEnd，原生到TurnEnded却按未命中判分、多摸1并清预测。独立源码路径确认；该组合未新增双端实跑，不把原31案算作此反例运行。",
+      "note": "2026-11-14T03:15:48.287535+08:00 实际运行补课及独立复核：上游仅global shaEnd；原生改用ShaDodged/TurnEnded。有效未命中预测后仁王盾在shaBegin取消黑杀，上游取消路径不会派发shaEnd，原生到TurnEnded却按未命中判分、多摸1并清预测。独立源码路径确认；该组合未新增双端实跑，不把原31案算作此反例运行。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/independent/u08-auxiliary-adjudication.md。新增等价0；保留的旧等价不表示本轮全分支重新签署。",
+      "reason": "上游仅global shaEnd；原生改用ShaDodged/TurnEnded。有效未命中预测后仁王盾在shaBegin取消黑杀，上游取消路径不会派发shaEnd，原生到TurnEnded却按未命中判分、多摸1并清预测。独立源码路径确认；该组合未新增双端实跑，不把原31案算作此反例运行。",
       "upstream_summary": "触发=\"shaEnd\"；摸牌、弃牌",
       "native_summary": "HostBehavior::U08YxsBatchD `bolehuiyan2`：按上游 英雄杀/character/skill.js 完整实现触发/主动选牌选目标/被动修饰状态机（零自造直发或自动代选）",
       "native_ref": "crates/engine-native-content/src/content/host/step/u08_batch_d.rs:1-1011 + crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs:1-964 + crates/engine-native-content/src/content/host/step/u08_batch_d_ext.rs:1-794 + crates/content-native-loader/src/host_skill_bindings.rs:764-770",
       "native": "crates/engine-native-content/src/content/host/step/u08_batch_d.rs:1-1011 + crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs:1-964 + crates/engine-native-content/src/content/host/step/u08_batch_d_ext.rs:1-794 + crates/content-native-loader/src/host_skill_bindings.rs:764-770",
-      "diff": "无"
+      "diff": "上游仅global shaEnd；原生改用ShaDodged/TurnEnded。有效未命中预测后仁王盾在shaBegin取消黑杀，上游取消路径不会派发shaEnd，原生到TurnEnded却按未命中判分、多摸1并清预测。独立源码路径确认；该组合未新增双端实跑，不把原31案算作此反例运行。"
     },
     "U08:skills:bolehuiyan3@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2495": {
       "source_id": "U08",
@@ -30058,19 +30058,19 @@
       "id": "bolehuiyan3",
       "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2495",
       "target": "原生规则 / `rule-vm` 包",
-      "status": "已复核等价",
-      "reviewer": "u08-signoff",
-      "review_date": "2026-11-12",
+      "status": "简化近似",
+      "reviewer": "/root/repair_doc_refs",
+      "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2495",
       "test_name": "u08_batch_d_bo_le_wu_ze_tian_mo_zi_and_lu_ban_6d_real_match + u08_batch_c_and_d_remaining_skills_6d_real_match + u08_all_43_generals_107_skills_and_9_cross_package_standard_skills_assemble",
-      "difference": "无语义差异（HostBehavior::U08YxsBatchD `bolehuiyan3`：按上游 英雄杀/character/skill.js 完整实现触发/主动选牌选目标/被动修饰状态机（零自造直发或自动代选），已通过 u08-signoff 独立复核与 6 维真实对局测试）",
-      "note": null,
-      "reason": null,
+      "difference": "上游仅global shaDamage；原生辅助3接受任意正且未prevented的Damage，未限card/来源/目标。无双杀第一张闪触发界雷击时，原生可提前按命中错误判分；上游普通雷伤不触发shaDamage，第二闪后才按未命中判分。独立源码确认，该组合未新增双端实跑；上游辅助本身也仅靠事件族/storage而非绑定同一杀。",
+      "note": "2026-11-14T03:15:48.287535+08:00 实际运行补课及独立复核：上游仅global shaDamage；原生辅助3接受任意正且未prevented的Damage，未限card/来源/目标。无双杀第一张闪触发界雷击时，原生可提前按命中错误判分；上游普通雷伤不触发shaDamage，第二闪后才按未命中判分。独立源码确认，该组合未新增双端实跑；上游辅助本身也仅靠事件族/storage而非绑定同一杀。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/independent/u08-auxiliary-adjudication.md。新增等价0；保留的旧等价不表示本轮全分支重新签署。",
+      "reason": "上游仅global shaDamage；原生辅助3接受任意正且未prevented的Damage，未限card/来源/目标。无双杀第一张闪触发界雷击时，原生可提前按命中错误判分；上游普通雷伤不触发shaDamage，第二闪后才按未命中判分。独立源码确认，该组合未新增双端实跑；上游辅助本身也仅靠事件族/storage而非绑定同一杀。",
       "upstream_summary": "触发=\"shaDamage\"；摸牌、弃牌",
       "native_summary": "HostBehavior::U08YxsBatchD `bolehuiyan3`：按上游 英雄杀/character/skill.js 完整实现触发/主动选牌选目标/被动修饰状态机（零自造直发或自动代选）",
       "native_ref": "crates/engine-native-content/src/content/host/step/u08_batch_d.rs:1-1011 + crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs:1-964 + crates/engine-native-content/src/content/host/step/u08_batch_d_ext.rs:1-794 + crates/content-native-loader/src/host_skill_bindings.rs:764-770",
       "native": "crates/engine-native-content/src/content/host/step/u08_batch_d.rs:1-1011 + crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs:1-964 + crates/engine-native-content/src/content/host/step/u08_batch_d_ext.rs:1-794 + crates/content-native-loader/src/host_skill_bindings.rs:764-770",
-      "diff": "无"
+      "diff": "上游仅global shaDamage；原生辅助3接受任意正且未prevented的Damage，未限card/来源/目标。无双杀第一张闪触发界雷击时，原生可提前按命中错误判分；上游普通雷伤不触发shaDamage，第二闪后才按未命中判分。独立源码确认，该组合未新增双端实跑；上游辅助本身也仅靠事件族/storage而非绑定同一杀。"
     },
     "U08:skills:oldbolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2514": {
       "source_id": "U08",
@@ -30503,14 +30503,14 @@
       "review_date": "2026-11-12",
       "upstream_file_line": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:3095",
       "test_name": "u08_batch_d_bo_le_wu_ze_tian_mo_zi_and_lu_ban_6d_real_match + u08_batch_c_and_d_remaining_skills_6d_real_match + u08_all_43_generals_107_skills_and_9_cross_package_standard_skills_assemble",
-      "difference": "无语义差异（HostBehavior::U08YxsBatchD `guifu`：按上游 英雄杀/character/skill.js 完整实现触发/主动选牌选目标/被动修饰状态机（零自造直发或自动代选），已通过 u08-signoff 独立复核与 6 维真实对局测试）",
-      "note": null,
+      "difference": "本轮7案只核指定投影，不新增整技能等价签署，保留旧复核人。各目标仅1件装备，没有实际打开多装备choose_equip，选装备A/B及其挂起恢复仍未覆盖；不能据限定样本称所有分支相同。",
+      "note": "2026-11-14T03:15:48.287535+08:00 实际运行补课及独立复核：本轮7案只核指定投影，不新增整技能等价签署，保留旧复核人。各目标仅1件装备，没有实际打开多装备choose_equip，选装备A/B及其挂起恢复仍未覆盖；不能据限定样本称所有分支相同。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/independent/u08/README.md。新增等价0；保留的旧等价不表示本轮全分支重新签署。",
       "reason": null,
       "upstream_summary": "鬼斧：出牌阶段限一次，你可以弃置一名角色装备区内的一张牌，并与其各摸一张牌。",
       "native_summary": "HostBehavior::U08YxsBatchD `guifu`：按上游 英雄杀/character/skill.js 完整实现触发/主动选牌选目标/被动修饰状态机（零自造直发或自动代选）",
       "native_ref": "crates/engine-native-content/src/content/host/step/u08_batch_d.rs:1-1011 + crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs:1-964 + crates/engine-native-content/src/content/host/step/u08_batch_d_ext.rs:1-794 + crates/content-native-loader/src/host_skill_bindings.rs:764-770",
       "native": "crates/engine-native-content/src/content/host/step/u08_batch_d.rs:1-1011 + crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs:1-964 + crates/engine-native-content/src/content/host/step/u08_batch_d_ext.rs:1-794 + crates/content-native-loader/src/host_skill_bindings.rs:764-770",
-      "diff": "无"
+      "diff": "本轮7案只核指定投影，不新增整技能等价签署，保留旧复核人。各目标仅1件装备，没有实际打开多装备choose_equip，选装备A/B及其挂起恢复仍未覆盖；不能据限定样本称所有分支相同。"
     },
     "U08:skills:lshengong@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:3115": {
       "source_id": "U08",
@@ -40970,15 +40970,15 @@
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:297",
       "target": "原生规则 / `epic-cards-upstream-liuli`",
       "status": "简化近似",
-      "reviewer": "/root/fix_dddanzhi",
+      "reviewer": "/root/repair_doc_refs",
       "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:297-421",
       "test_name": "l10_reguhuo_six_dimension_real_match + l10_eight_dimension_from_fresh_install",
-      "difference": "取消过早消耗机会且省略真假质疑，固定列表不能覆盖安装扩展的新basic/trick。",
-      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+      "difference": "取消过早消耗机会且省略他座真假质疑；固定20声明候选未按当前event.filterCard过滤，不能覆盖已装牌名/性质与使用或响应上下文。上游真牌质疑的弃牌/失血/缠怨、假牌质疑作废均已实际观察；原生杀响应未开蛊惑窗。声明取消后原生再激活被拒，上游仍可再发动。目标退出案上游实际点的是结束回合，不能当同一空取消。",
+      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14T02:51:05+08:00 L10实际补课及独立正式路径复跑：取消过早消耗机会且省略他座真假质疑；固定20声明候选未按当前event.filterCard过滤，不能覆盖已装牌名/性质与使用或响应上下文。上游真牌质疑的弃牌/失血/缠怨、假牌质疑作废均已实际观察；原生杀响应未开蛊惑窗。声明取消后原生再激活被拒，上游仍可再发动。目标退出案上游实际点的是结束回合，不能当同一空取消。 初态仅四座牌区/保留牌堆指定投影；未复制21张原生初始弃牌，闪电77/78的导出性质也不同，未使用这些初始弃牌。逐案记录与正式/原始不同内容锁边界见 docs/operations/evidence/2026-11-14-queue1-runtime/independent/l10/README.md。新增等价0，本批退回。",
       "reason": null,
       "native": "crates/engine-native-content/src/content/host/activation/common.rs:52-78 + step/skills_virtual_use.rs:202-330 + asks_wudian.rs:802-852 (HostBehavior::Reguhuo, tag 515)",
-      "diff": "取消过早消耗机会且省略真假质疑，固定列表不能覆盖安装扩展的新basic/trick。"
+      "diff": "取消过早消耗机会且省略他座真假质疑；固定20声明候选未按当前event.filterCard过滤，不能覆盖已装牌名/性质与使用或响应上下文。上游真牌质疑的弃牌/失血/缠怨、假牌质疑作废均已实际观察；原生杀响应未开蛊惑窗。声明取消后原生再激活被拒，上游仍可再发动。目标退出案上游实际点的是结束回合，不能当同一空取消。"
     },
     "L10:skills:rangjie@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:422": {
       "source_id": "L10",
@@ -40987,15 +40987,15 @@
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:422",
       "target": "原生规则 / `epic-cards-upstream-liuli`",
       "status": "简化近似",
-      "reviewer": "/root/fix_dddanzhi",
+      "reviewer": "/root/repair_doc_refs",
       "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:422-565",
       "test_name": "l10_rangjie_six_dimension_real_match + l10_eight_dimension_from_fresh_install",
-      "difference": "实际取消标签与原生取消不同；移动候选只要求全场存在ej，未先筛可合法迁移目的地。deck正向find还需对照get.cardPile2的堆顶搜索方向。",
-      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+      "difference": "实际字面取消不等于cancel2，上游仍摸牌并转移而原生立即结束；类型窗上游可取消、原生拒空答并挂起。牌堆方向已实跑确认：basic原生酒85/上游桃45、equip原生诸葛118/上游青釭114；不能再以相同HP当取牌等价。原生额外先问trigger_confirm，完整交互不同；移动候选未先筛合法目的地的既有差异仍保留。",
+      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14T02:51:05+08:00 L10实际补课及独立正式路径复跑：实际字面取消不等于cancel2，上游仍摸牌并转移而原生立即结束；类型窗上游可取消、原生拒空答并挂起。牌堆方向已实跑确认：basic原生酒85/上游桃45、equip原生诸葛118/上游青釭114；不能再以相同HP当取牌等价。原生额外先问trigger_confirm，完整交互不同；移动候选未先筛合法目的地的既有差异仍保留。 初态仅四座牌区/保留牌堆指定投影；未复制21张原生初始弃牌，闪电77/78的导出性质也不同，未使用这些初始弃牌。逐案记录与正式/原始不同内容锁边界见 docs/operations/evidence/2026-11-14-queue1-runtime/independent/l10/README.md。新增等价0，本批退回。",
       "reason": null,
       "native": "crates/engine-native-content/src/content/host/filtering/common.rs:222-223 + step/skills_cards.rs:9-239 + asks_wudian.rs:853-918 (HostBehavior::Rangjie, tag 516)",
-      "diff": "实际取消标签与原生取消不同；移动候选只要求全场存在ej，未先筛可合法迁移目的地。deck正向find还需对照get.cardPile2的堆顶搜索方向。"
+      "diff": "实际字面取消不等于cancel2，上游仍摸牌并转移而原生立即结束；类型窗上游可取消、原生拒空答并挂起。牌堆方向已实跑确认：basic原生酒85/上游桃45、equip原生诸葛118/上游青釭114；不能再以相同HP当取牌等价。原生额外先问trigger_confirm，完整交互不同；移动候选未先筛合法目的地的既有差异仍保留。"
     },
     "L10:skills:k_danggu@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2276": {
       "source_id": "L10",
@@ -41004,15 +41004,15 @@
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2276",
       "target": "原生规则 / `epic-cards-upstream-liuli`",
       "status": "简化近似",
-      "reviewer": "/root/fix_dddanzhi",
+      "reviewer": "/root/repair_doc_refs",
       "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2276-2676",
       "test_name": "l10_kdanggu_kmowang_and_ten_configs_six_dimension_real_match + l10_eight_dimension_from_fresh_install",
-      "difference": "高望候选生成与随机消耗/分布不同于先抽3再shuffle；AI全冲突也从全员选择而非上游预随机一个。",
-      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+      "difference": "高望候选/随机分布及AI全冲突的既有差异保留；上游冲突表有方向，原生min/max对称化导致first郭胜缺少可选高望，此为上游UI阻塞后的源码反例。正式attach确授常侍实际技能；原bridge-only探针未授技不能推为产品缺失。正式正常阶段续行实跑逆取自动火伤、滔乱自动弃牌、鸱咽无杀也自动伤害；上游相应为主动选择或杀触发，完整党锢上游续行仍UI阻塞。",
+      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14T02:51:05+08:00 L10实际补课及独立正式路径复跑：高望候选/随机分布及AI全冲突的既有差异保留；上游冲突表有方向，原生min/max对称化导致first郭胜缺少可选高望，此为上游UI阻塞后的源码反例。正式attach确授常侍实际技能；原bridge-only探针未授技不能推为产品缺失。正式正常阶段续行实跑逆取自动火伤、滔乱自动弃牌、鸱咽无杀也自动伤害；上游相应为主动选择或杀触发，完整党锢上游续行仍UI阻塞。 初态仅四座牌区/保留牌堆指定投影；未复制21张原生初始弃牌，闪电77/78的导出性质也不同，未使用这些初始弃牌。逐案记录与正式/原始不同内容锁边界见 docs/operations/evidence/2026-11-14-queue1-runtime/independent/l10/README.md。新增等价0，本批退回。",
       "reason": null,
       "native": "crates/engine-native-content/src/content/host/filtering/common.rs:1039-1064 + step/skills_recovery.rs:330-356,444-642 + asks_wudian.rs:781-801 (HostBehavior::KDanggu, tag 549)",
-      "diff": "高望候选生成与随机消耗/分布不同于先抽3再shuffle；AI全冲突也从全员选择而非上游预随机一个。"
+      "diff": "高望候选/随机分布及AI全冲突的既有差异保留；上游冲突表有方向，原生min/max对称化导致first郭胜缺少可选高望，此为上游UI阻塞后的源码反例。正式attach确授常侍实际技能；原bridge-only探针未授技不能推为产品缺失。正式正常阶段续行实跑逆取自动火伤、滔乱自动弃牌、鸱咽无杀也自动伤害；上游相应为主动选择或杀触发，完整党锢上游续行仍UI阻塞。"
     },
     "L10:skills:k_mowang@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2677": {
       "source_id": "L10",
@@ -68872,11 +68872,11 @@
       "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6018-6161",
       "test_name": "l28_thunder_eight_batch_a_active_skills + l28_thunder_eight_batch_a_triggers + l28_thunder_eight_dimension_acceptance",
-      "difference": "小游戏结果被人工数量替代，分配被固定为1张，不能表达任意非空子集。",
-      "note": "已登记抽象：整经整理经典防炸弹 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 整理数量与置“经”目标选择交互（th_zhengjing:choose_count/choose_target），支持中断存档恢复与 AI 决策\n2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+      "difference": "原生以人工0..5数量替代小游戏，固定首张作经，其余归自己；0仍添经并摸牌，不能表达任意非空子集分配。上游4案在真实filter因dcdAnim缺失阻塞，未stub或加载Spine，小游戏成功/失败/取消仅源码对照。关联th_zhengjing2未被本轮运行裁定。",
+      "note": "已登记抽象：整经整理经典防炸弹 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 整理数量与置“经”目标选择交互（th_zhengjing:choose_count/choose_target），支持中断存档恢复与 AI 决策\n2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14T03:15:48.287535+08:00 实际运行补课及独立复核：原生以人工0..5数量替代小游戏，固定首张作经，其余归自己；0仍添经并摸牌，不能表达任意非空子集分配。上游4案在真实filter因dcdAnim缺失阻塞，未stub或加载Spine，小游戏成功/失败/取消仅源码对照。关联th_zhengjing2未被本轮运行裁定。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/independent/l28/README.md。新增等价0；保留的旧等价不表示本轮全分支重新签署。",
       "reason": null,
       "native": "crates/engine-native-content/src/content/host/step/l28_batch_a.rs:148-159 + step/l28_batch_a_asks.rs:706-768",
-      "diff": "小游戏结果被人工数量替代，分配被固定为1张，不能表达任意非空子集。"
+      "diff": "原生以人工0..5数量替代小游戏，固定首张作经，其余归自己；0仍添经并摸牌，不能表达任意非空子集分配。上游4案在真实filter因dcdAnim缺失阻塞，未stub或加载Spine，小游戏成功/失败/取消仅源码对照。关联th_zhengjing2未被本轮运行裁定。"
     },
     "L28:skills:th_zhengjing2@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6162": {
       "source_id": "L28",
@@ -68906,11 +68906,11 @@
       "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6372-6514",
       "test_name": "l28_thunder_eight_batch_a_active_skills + l28_thunder_eight_batch_a_triggers + l28_thunder_eight_dimension_acceptance",
-      "difference": "没有按经类搜索，也没保留搜不到退使用统计。",
-      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+      "difference": "分类按钮没有决定原生取牌类别，原生固定deck.pop并置所选类别mask，未按经类先搜牌堆再弃牌堆、搜不到退使用统计。无懈分支已用真实原牌表元组确认差异；装备/twice取得79及full初态89受非官方原牌元组夹具限制。",
+      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14T03:15:48.287535+08:00 实际运行补课及独立复核：分类按钮没有决定原生取牌类别，原生固定deck.pop并置所选类别mask，未按经类先搜牌堆再弃牌堆、搜不到退使用统计。无懈分支已用真实原牌表元组确认差异；装备/twice取得79及full初态89受非官方原牌元组夹具限制。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/independent/l28/README.md。新增等价0；保留的旧等价不表示本轮全分支重新签署。",
       "reason": null,
       "native": "crates/engine-native-content/src/content/host/step/l28_batch_a.rs:161-194,619-646 + step/l28_batch_a_asks.rs:769-782",
-      "diff": "没有按经类搜索，也没保留搜不到退使用统计。"
+      "diff": "分类按钮没有决定原生取牌类别，原生固定deck.pop并置所选类别mask，未按经类先搜牌堆再弃牌堆、搜不到退使用统计。无懈分支已用真实原牌表元组确认差异；装备/twice取得79及full初态89受非官方原牌元组夹具限制。"
     },
     "L28:skills:th_yufeng@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6515": {
       "source_id": "L28",
@@ -69258,16 +69258,16 @@
       "id": "th_yeyan",
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8636",
       "target": "原生规则 / `rule-vm` 包",
-      "status": "已复核等价",
-      "reviewer": "l28-signoff",
-      "review_date": "2026-11-12",
+      "status": "简化近似",
+      "reviewer": "/root/fix_dddanzhi",
+      "review_date": "2026-11-14",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8636-8926",
       "test_name": "l28_thunder_eight_batch_b_skills + l28_thunder_eight_dimension_acceptance",
-      "difference": "已登记抽象：业炎拖拽火焰分配 DOM 交互按裁决 40 抽象为有界 ChoiceSpec 模式与目标选择（1点直伤或弃4花色手牌并失3体力造成2/3点火焰伤害，連带琴音弃牌阶段弃>=2牌令全场回1血或失1血），支持中断存档恢复与 AI 决策",
-      "note": "已登记抽象：业炎拖拽火焰分配 DOM 交互按裁决 40 抽象为有界 ChoiceSpec 模式与目标选择（1点直伤或弃4花色手牌并失3体力造成2/3点火焰伤害，連带琴音弃牌阶段弃>=2牌令全场回1血或失1血），支持中断存档恢复与 AI 决策",
-      "reason": null,
+      "difference": "实际伤害顺序倒转，大业炎3血费用在原生晚于伤害；上游默认getStrength配置不付3血，原生无对应配置且总付。上游实际可只分配两火，原生单目标大模式固定3火而无同命令。业炎四费用0/7/21/24均有真实原牌表元组；未推断濒死/连环等组合已验收。",
+      "note": "已登记抽象：业炎拖拽火焰分配 DOM 交互按裁决 40 抽象为有界 ChoiceSpec 模式与目标选择（1点直伤或弃4花色手牌并失3体力造成2/3点火焰伤害，連带琴音弃牌阶段弃>=2牌令全场回1血或失1血），支持中断存档恢复与 AI 决策\n2026-11-14T03:15:48.287535+08:00 实际运行补课及独立复核：实际伤害顺序倒转，大业炎3血费用在原生晚于伤害；上游默认getStrength配置不付3血，原生无对应配置且总付。上游实际可只分配两火，原生单目标大模式固定3火而无同命令。业炎四费用0/7/21/24均有真实原牌表元组；未推断濒死/连环等组合已验收。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/independent/l28/README.md。新增等价0；保留的旧等价不表示本轮全分支重新签署。",
+      "reason": "实际伤害顺序倒转，大业炎3血费用在原生晚于伤害；上游默认getStrength配置不付3血，原生无对应配置且总付。上游实际可只分配两火，原生单目标大模式固定3火而无同命令。业炎四费用0/7/21/24均有真实原牌表元组；未推断濒死/连环等组合已验收。",
       "native": "crates/engine-native-content/src/content/host/step/l28_batch_b.rs:116-143 + step/l28_batch_b_asks.rs:266-420",
-      "diff": "已登记抽象：业炎拖拽火焰分配 DOM 交互按裁决 40 抽象为有界 ChoiceSpec 模式与目标选择（1点直伤或弃4花色手牌并失3体力造成2/3点火焰伤害，連带琴音弃牌阶段弃>=2牌令全场回1血或失1血），支持中断存档恢复与 AI 决策"
+      "diff": "实际伤害顺序倒转，大业炎3血费用在原生晚于伤害；上游默认getStrength配置不付3血，原生无对应配置且总付。上游实际可只分配两火，原生单目标大模式固定3火而无同命令。业炎四费用0/7/21/24均有真实原牌表元组；未推断濒死/连环等组合已验收。"
     },
     "L28:cards:th_taipingyaoshu@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8968": {
       "source_id": "L28",

@@ -1,5 +1,9 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+## 2026-11-14T03:16:45.676673+08:00 L10／U08／L28实际反例与规则边界
+
+源码HEAD `5c73d1d9158145e33f98f2018013914667d13964` + 文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8。本批不改产品/版本/NGSA格式或校验，仅记录实际差异与撤回旧等价；酒诗代码精确CI首次10/10成功。L10蛊惑质疑/响应、让节搜索方向/取消、党锢方向冲突及已授常侍技能自动阶段触发；U08慧眼受控过滤/真实取消用次、逐目标/事件族和两辅助源码组合；L28补叙类别搜索、整经数量/分配与业炎费用时点/伤害逆序/默认配置/两火表达仍待修。上游受UI依赖阻塞的党锢/整经不写成已动态完成；21个非原牌表元组与初始弃牌/闪电性质差别保留，不称完整原牌堆或全状态/RNG等价。实际来源链、源码/实跑等级和未验分支分别见[L10](../operations/evidence/2026-11-14-queue1-runtime/independent/l10/README.md)、[U08](../operations/evidence/2026-11-14-queue1-runtime/independent/u08/README.md)、[两辅助裁定](../operations/evidence/2026-11-14-queue1-runtime/independent/u08-auxiliary-adjudication.md)、[L28](../operations/evidence/2026-11-14-queue1-runtime/independent/l28/README.md)。当前数量与队列状态只以[进度主稿](native-progress.md)/[清单](../migration/g0/inventory_status.json)为准，本文不另立规则版本。
+
 ## 2026-11-14T02:33:04+08:00 酒诗恢复与U07规则差异边界
 
 源码HEAD `605201f3f49e10cea61c31d52a61bbb66c85599d` + tracked dirty；规则333／NGSA107／schema5／ABI759／WS8不变。 酒诗仅恢复定义与实时确认窗一致，完整代码门禁通过；未改结算、版本、NGSA结构或严格验证。U07复仇清算的真实杀/拒绝/失去体力分支，以及筹度市场/置顶、诱战取消原杀/持续追问差异均保留；实体诱敌深入另有独立内核，仅源码确认单次追杀缺陷，未在本批跑实体入口。[独立审查及原始证据](../operations/evidence/2026-11-14-queue1-runtime/independent/u07/review.md)。当前状态以[进度主稿](native-progress.md)和[清单](../migration/g0/inventory_status.json)为准；未据恢复成功签规则等价，发布待。

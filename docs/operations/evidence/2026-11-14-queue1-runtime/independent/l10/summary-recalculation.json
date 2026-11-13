@@ -1,0 +1,168 @@
+{
+  "at_utc": "2026-11-13T18:32:47.961405+00:00",
+  "head_at_recompute": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "raw_unique_cases_native": 26,
+  "raw_unique_cases_upstream": 26,
+  "common_initial_projection_matches": 26,
+  "common_projection_excludes": [
+    "all initial discard entities; 21 are unmapped, Shandian77/78 nature is null native versus thunder upstream; complete available discard differences retained per case",
+    "hand ordering",
+    "native hujia",
+    "native flags and once versus upstream storage/temp skills",
+    "RNG stream",
+    "auth/control metadata",
+    "virtual equipment objects not explicitly sampled"
+  ],
+  "available_initial_projection_mismatch_cases": [
+    "g_sha_ally",
+    "g_sha_question_fake",
+    "g_true_question_discard",
+    "g_true_question_losehp",
+    "g_tao",
+    "g_cancel_card",
+    "g_cancel_name",
+    "g_cancel_target",
+    "g_no_hand",
+    "g_no_skill",
+    "g_response",
+    "r_basic",
+    "r_trick",
+    "r_equip",
+    "r_move_A",
+    "r_move_B",
+    "r_cancel_choice",
+    "r_cancel_type",
+    "r_no_skill",
+    "r_other_target",
+    "r_double",
+    "k_A",
+    "k_B",
+    "k_cancel",
+    "k_after_initial_no_trigger",
+    "k_no_skill"
+  ],
+  "initial_discard_unchanged_in_own_runtime_cases": 26,
+  "equal_final_physical_projection_cases": [
+    "g_sha_ally",
+    "g_tao",
+    "g_cancel_card",
+    "g_cancel_name",
+    "g_cancel_target",
+    "g_no_hand",
+    "g_no_skill",
+    "r_trick",
+    "r_move_A",
+    "r_move_B",
+    "r_cancel_type",
+    "r_no_skill",
+    "r_other_target",
+    "k_A",
+    "k_B",
+    "k_cancel"
+  ],
+  "different_final_physical_projection_cases": [
+    "g_sha_question_fake",
+    "g_true_question_discard",
+    "g_true_question_losehp",
+    "g_response",
+    "r_basic",
+    "r_equip",
+    "r_cancel_choice",
+    "r_double",
+    "k_after_initial_no_trigger",
+    "k_no_skill"
+  ],
+  "native_pending_cases": [
+    "g_cancel_target",
+    "r_cancel_type",
+    "k_cancel"
+  ],
+  "upstream_root_done_cases": [
+    "g_sha_question_fake",
+    "g_cancel_card",
+    "g_cancel_target",
+    "g_response",
+    "r_basic",
+    "r_trick",
+    "r_equip",
+    "r_move_A",
+    "r_move_B",
+    "r_cancel_choice",
+    "r_cancel_type",
+    "r_no_skill",
+    "r_other_target",
+    "r_double"
+  ],
+  "upstream_root_not_done_cases": [
+    "g_sha_ally",
+    "g_true_question_discard",
+    "g_true_question_losehp",
+    "g_tao",
+    "g_cancel_name",
+    "g_no_hand",
+    "g_no_skill",
+    "k_A",
+    "k_B",
+    "k_cancel",
+    "k_after_initial_no_trigger",
+    "k_no_skill"
+  ],
+  "actual_k_ui_blocked_cases": [
+    "k_A",
+    "k_B",
+    "k_cancel"
+  ],
+  "pending_archives": 102,
+  "per_mode_pending_archives": {
+    "direct": 51,
+    "restored": 51
+  },
+  "direct_restored_final_state_and_commands_equal_cases": 26,
+  "direct_restored_final_debug_equal_except_auth_generation_cases": 26,
+  "checkpoint_state_hash_equal_and_auth_increment_one": 102,
+  "roundtrip_ngsa_raw_byte_equal_checkpoints": 0,
+  "direct_restored_final_ngsa_byte_equal_cases": 7,
+  "replayed_raw_files_byte_identical": 237,
+  "raw_cdp_requests_replies_paired": 595,
+  "final_cohort_first_setup_line": 145,
+  "raw_http_requests": 2565,
+  "local_spine_url_requests": 0,
+  "source_bodies_exact_upstream_substrings": [
+    {
+      "key": "precontentBody",
+      "exact_upstream_substring": true,
+      "line": 1063,
+      "bytes_utf8": 41730,
+      "sha256": "e567e6bfb4b8adccb5f49e02c9e12bb9be7a9daba007f1d7819c307e5845174e"
+    },
+    {
+      "key": "rangjie",
+      "exact_upstream_substring": true,
+      "line": 428,
+      "bytes_utf8": 4177,
+      "sha256": "57f0deb54e599d6f0956c641bf9b70a9858067f6ed5699d61841d9b2bb537b8b"
+    },
+    {
+      "key": "k_danggu",
+      "exact_upstream_substring": true,
+      "line": 2383,
+      "bytes_utf8": 3784,
+      "sha256": "3fe24e09d98345cf81be47fb37e6a28391e8857376335665516c81b3791f967c"
+    },
+    {
+      "key": "k_danggu_contentx",
+      "exact_upstream_substring": true,
+      "line": 2452,
+      "bytes_utf8": 9385,
+      "sha256": "f9eda4a367e7f8d9cc3d79ccaaf6a45e69f421225fb8bc0725bc855183e72f6f"
+    }
+  ],
+  "new_equivalence_signed": 0,
+  "not_run": [
+    "fresh independent Chrome rerun",
+    "product tests/Cargo build",
+    "full workspace/preflight",
+    "UI dependency stubbing or prohibited Spine load",
+    "full L10 source acceptance"
+  ]
+}

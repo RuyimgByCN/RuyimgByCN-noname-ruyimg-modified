@@ -1,0 +1,11 @@
+     Locking 33 packages to highest compatible versions
+   Compiling u08-independent-archive-review v0.0.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/independent/u08/archive-probe)
+error: no rules expected `.`
+  --> src/main.rs:84:80
+   |
+84 | ...   "skills":["yixin", "bolehuiyan", "bolehuiyan2", "bolehuiyan3", "guifu"].iter().map(|name|json!({"name":name,"id":inspect.catal...
+   |                                                                              ^ no rules expected this token in macro call
+   |
+   = note: while trying to match end of macro
+
+error: could not compile `u08-independent-archive-review` (bin "u08-independent-archive-review") due to 1 previous error

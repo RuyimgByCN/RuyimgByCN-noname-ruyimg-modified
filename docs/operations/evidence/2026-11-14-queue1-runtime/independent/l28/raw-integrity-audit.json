@@ -1,0 +1,4348 @@
+{
+  "at": "2026-11-13T19:03:25.100673+00:00",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "collector_file_count_checked": 354,
+  "collector_total_bytes": 91410066,
+  "file_errors": [],
+  "request_count": 3330,
+  "reply_count": 3330,
+  "transcript_errors": [],
+  "selected_request_count": 711,
+  "browser_case_count": 25,
+  "unique_browser_cases": 25,
+  "native_case_count": 22,
+  "case_checks": [
+    {
+      "case": "buxu-basic",
+      "native_case": "buxu-basic",
+      "browser_completed": true,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": false,
+      "requests": [
+        {
+          "line": 2620,
+          "label": "reload"
+        },
+        {
+          "line": 2621,
+          "label": "ready"
+        },
+        {
+          "line": 2622,
+          "label": "ready"
+        },
+        {
+          "line": 2623,
+          "label": "page-ready"
+        },
+        {
+          "line": 2624,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 2625,
+          "label": "install-skills"
+        },
+        {
+          "line": 2626,
+          "label": "install-helpers"
+        },
+        {
+          "line": 2627,
+          "label": "install-card"
+        },
+        {
+          "line": 2628,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 2629,
+          "label": "load-original-css"
+        },
+        {
+          "line": 2630,
+          "label": "fixture"
+        },
+        {
+          "line": 2631,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 2632,
+          "label": "snapshot"
+        },
+        {
+          "line": 2633,
+          "label": "skill-ui-handler"
+        },
+        {
+          "line": 2634,
+          "label": "snapshot"
+        },
+        {
+          "line": 2635,
+          "label": "select-cost-card"
+        },
+        {
+          "line": 2636,
+          "label": "snapshot"
+        },
+        {
+          "line": 2637,
+          "label": "confirm-ok"
+        },
+        {
+          "line": 2638,
+          "label": "snapshot"
+        },
+        {
+          "line": 2639,
+          "label": "snapshot"
+        },
+        {
+          "line": 2640,
+          "label": "click-rect"
+        },
+        {
+          "line": 2641,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 2642,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 2643,
+          "label": "snapshot"
+        },
+        {
+          "line": 2644,
+          "label": "snapshot"
+        },
+        {
+          "line": 2645,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "buxu-equip",
+      "native_case": "buxu-equip",
+      "browser_completed": true,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": false,
+      "requests": [
+        {
+          "line": 2646,
+          "label": "reload"
+        },
+        {
+          "line": 2647,
+          "label": "ready"
+        },
+        {
+          "line": 2648,
+          "label": "ready"
+        },
+        {
+          "line": 2649,
+          "label": "page-ready"
+        },
+        {
+          "line": 2650,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 2651,
+          "label": "install-skills"
+        },
+        {
+          "line": 2652,
+          "label": "install-helpers"
+        },
+        {
+          "line": 2653,
+          "label": "install-card"
+        },
+        {
+          "line": 2654,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 2655,
+          "label": "load-original-css"
+        },
+        {
+          "line": 2656,
+          "label": "fixture"
+        },
+        {
+          "line": 2657,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 2658,
+          "label": "snapshot"
+        },
+        {
+          "line": 2659,
+          "label": "skill-ui-handler"
+        },
+        {
+          "line": 2660,
+          "label": "snapshot"
+        },
+        {
+          "line": 2661,
+          "label": "select-cost-card"
+        },
+        {
+          "line": 2662,
+          "label": "snapshot"
+        },
+        {
+          "line": 2663,
+          "label": "confirm-ok"
+        },
+        {
+          "line": 2664,
+          "label": "snapshot"
+        },
+        {
+          "line": 2665,
+          "label": "snapshot"
+        },
+        {
+          "line": 2666,
+          "label": "click-rect"
+        },
+        {
+          "line": 2667,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 2668,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 2669,
+          "label": "snapshot"
+        },
+        {
+          "line": 2670,
+          "label": "snapshot"
+        },
+        {
+          "line": 2671,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "buxu-nullify",
+      "native_case": "buxu-nullify",
+      "browser_completed": true,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": false,
+      "requests": [
+        {
+          "line": 2672,
+          "label": "reload"
+        },
+        {
+          "line": 2673,
+          "label": "ready"
+        },
+        {
+          "line": 2674,
+          "label": "ready"
+        },
+        {
+          "line": 2675,
+          "label": "page-ready"
+        },
+        {
+          "line": 2676,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 2677,
+          "label": "install-skills"
+        },
+        {
+          "line": 2678,
+          "label": "install-helpers"
+        },
+        {
+          "line": 2679,
+          "label": "install-card"
+        },
+        {
+          "line": 2680,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 2681,
+          "label": "load-original-css"
+        },
+        {
+          "line": 2682,
+          "label": "fixture"
+        },
+        {
+          "line": 2683,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 2684,
+          "label": "snapshot"
+        },
+        {
+          "line": 2685,
+          "label": "skill-ui-handler"
+        },
+        {
+          "line": 2686,
+          "label": "snapshot"
+        },
+        {
+          "line": 2687,
+          "label": "select-cost-card"
+        },
+        {
+          "line": 2688,
+          "label": "snapshot"
+        },
+        {
+          "line": 2689,
+          "label": "confirm-ok"
+        },
+        {
+          "line": 2690,
+          "label": "snapshot"
+        },
+        {
+          "line": 2691,
+          "label": "snapshot"
+        },
+        {
+          "line": 2692,
+          "label": "click-rect"
+        },
+        {
+          "line": 2693,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 2694,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 2695,
+          "label": "snapshot"
+        },
+        {
+          "line": 2696,
+          "label": "snapshot"
+        },
+        {
+          "line": 2697,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "buxu-cancel",
+      "native_case": "buxu-cancel",
+      "browser_completed": true,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": false,
+      "requests": [
+        {
+          "line": 2698,
+          "label": "reload"
+        },
+        {
+          "line": 2699,
+          "label": "ready"
+        },
+        {
+          "line": 2700,
+          "label": "ready"
+        },
+        {
+          "line": 2701,
+          "label": "page-ready"
+        },
+        {
+          "line": 2702,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 2703,
+          "label": "install-skills"
+        },
+        {
+          "line": 2704,
+          "label": "install-helpers"
+        },
+        {
+          "line": 2705,
+          "label": "install-card"
+        },
+        {
+          "line": 2706,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 2707,
+          "label": "load-original-css"
+        },
+        {
+          "line": 2708,
+          "label": "fixture"
+        },
+        {
+          "line": 2709,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 2710,
+          "label": "snapshot"
+        },
+        {
+          "line": 2711,
+          "label": "skill-ui-handler"
+        },
+        {
+          "line": 2712,
+          "label": "snapshot"
+        },
+        {
+          "line": 2713,
+          "label": "confirm-cancel"
+        },
+        {
+          "line": 2714,
+          "label": "snapshot"
+        },
+        {
+          "line": 2715,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "buxu-empty",
+      "native_case": "buxu-empty",
+      "browser_completed": true,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": false,
+      "requests": [
+        {
+          "line": 2716,
+          "label": "reload"
+        },
+        {
+          "line": 2717,
+          "label": "ready"
+        },
+        {
+          "line": 2718,
+          "label": "ready"
+        },
+        {
+          "line": 2719,
+          "label": "page-ready"
+        },
+        {
+          "line": 2720,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 2721,
+          "label": "install-skills"
+        },
+        {
+          "line": 2722,
+          "label": "install-helpers"
+        },
+        {
+          "line": 2723,
+          "label": "install-card"
+        },
+        {
+          "line": 2724,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 2725,
+          "label": "load-original-css"
+        },
+        {
+          "line": 2726,
+          "label": "fixture"
+        },
+        {
+          "line": 2727,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 2728,
+          "label": "snapshot"
+        },
+        {
+          "line": 2729,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "buxu-full",
+      "native_case": "buxu-full",
+      "browser_completed": true,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": false,
+      "requests": [
+        {
+          "line": 2730,
+          "label": "reload"
+        },
+        {
+          "line": 2731,
+          "label": "ready"
+        },
+        {
+          "line": 2732,
+          "label": "ready"
+        },
+        {
+          "line": 2733,
+          "label": "page-ready"
+        },
+        {
+          "line": 2734,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 2735,
+          "label": "install-skills"
+        },
+        {
+          "line": 2736,
+          "label": "install-helpers"
+        },
+        {
+          "line": 2737,
+          "label": "install-card"
+        },
+        {
+          "line": 2738,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 2739,
+          "label": "load-original-css"
+        },
+        {
+          "line": 2740,
+          "label": "fixture"
+        },
+        {
+          "line": 2741,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 2742,
+          "label": "snapshot"
+        },
+        {
+          "line": 2743,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "buxu-twice",
+      "native_case": "buxu-twice",
+      "browser_completed": true,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": false,
+      "requests": [
+        {
+          "line": 2744,
+          "label": "reload"
+        },
+        {
+          "line": 2745,
+          "label": "ready"
+        },
+        {
+          "line": 2746,
+          "label": "ready"
+        },
+        {
+          "line": 2747,
+          "label": "page-ready"
+        },
+        {
+          "line": 2748,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 2749,
+          "label": "install-skills"
+        },
+        {
+          "line": 2750,
+          "label": "install-helpers"
+        },
+        {
+          "line": 2751,
+          "label": "install-card"
+        },
+        {
+          "line": 2752,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 2753,
+          "label": "load-original-css"
+        },
+        {
+          "line": 2754,
+          "label": "fixture"
+        },
+        {
+          "line": 2755,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 2756,
+          "label": "snapshot"
+        },
+        {
+          "line": 2757,
+          "label": "skill-ui-handler"
+        },
+        {
+          "line": 2758,
+          "label": "snapshot"
+        },
+        {
+          "line": 2759,
+          "label": "select-cost-card"
+        },
+        {
+          "line": 2760,
+          "label": "snapshot"
+        },
+        {
+          "line": 2761,
+          "label": "confirm-ok"
+        },
+        {
+          "line": 2762,
+          "label": "snapshot"
+        },
+        {
+          "line": 2763,
+          "label": "snapshot"
+        },
+        {
+          "line": 2764,
+          "label": "click-rect"
+        },
+        {
+          "line": 2765,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 2766,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 2767,
+          "label": "snapshot"
+        },
+        {
+          "line": 2768,
+          "label": "snapshot"
+        },
+        {
+          "line": 2769,
+          "label": "skill-ui-handler"
+        },
+        {
+          "line": 2770,
+          "label": "snapshot"
+        },
+        {
+          "line": 2771,
+          "label": "select-cost-card"
+        },
+        {
+          "line": 2772,
+          "label": "select-cost-card"
+        },
+        {
+          "line": 2773,
+          "label": "snapshot"
+        },
+        {
+          "line": 2774,
+          "label": "confirm-ok"
+        },
+        {
+          "line": 2775,
+          "label": "snapshot"
+        },
+        {
+          "line": 2776,
+          "label": "snapshot"
+        },
+        {
+          "line": 2777,
+          "label": "click-rect"
+        },
+        {
+          "line": 2778,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 2779,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 2780,
+          "label": "snapshot"
+        },
+        {
+          "line": 2781,
+          "label": "snapshot"
+        },
+        {
+          "line": 2782,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "buxu-invalid",
+      "native_case": "buxu-invalid",
+      "browser_completed": true,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": false,
+      "requests": [
+        {
+          "line": 2783,
+          "label": "reload"
+        },
+        {
+          "line": 2784,
+          "label": "ready"
+        },
+        {
+          "line": 2785,
+          "label": "ready"
+        },
+        {
+          "line": 2786,
+          "label": "page-ready"
+        },
+        {
+          "line": 2787,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 2788,
+          "label": "install-skills"
+        },
+        {
+          "line": 2789,
+          "label": "install-helpers"
+        },
+        {
+          "line": 2790,
+          "label": "install-card"
+        },
+        {
+          "line": 2791,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 2792,
+          "label": "load-original-css"
+        },
+        {
+          "line": 2793,
+          "label": "fixture"
+        },
+        {
+          "line": 2794,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 2795,
+          "label": "snapshot"
+        },
+        {
+          "line": 2796,
+          "label": "skill-ui-handler"
+        },
+        {
+          "line": 2797,
+          "label": "snapshot"
+        },
+        {
+          "line": 2798,
+          "label": "select-cost-card"
+        },
+        {
+          "line": 2799,
+          "label": "snapshot"
+        },
+        {
+          "line": 2800,
+          "label": "confirm-ok"
+        },
+        {
+          "line": 2801,
+          "label": "snapshot"
+        },
+        {
+          "line": 2802,
+          "label": "snapshot"
+        },
+        {
+          "line": 2803,
+          "label": "click-rect"
+        },
+        {
+          "line": 2804,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 2805,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 2806,
+          "label": "snapshot"
+        },
+        {
+          "line": 2807,
+          "label": "snapshot"
+        },
+        {
+          "line": 2808,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "zhengjing-one-self",
+      "native_case": "zhengjing-one-self",
+      "browser_completed": false,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": true,
+      "requests": [
+        {
+          "line": 2809,
+          "label": "reload"
+        },
+        {
+          "line": 2810,
+          "label": "ready"
+        },
+        {
+          "line": 2811,
+          "label": "ready"
+        },
+        {
+          "line": 2812,
+          "label": "page-ready"
+        },
+        {
+          "line": 2813,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 2814,
+          "label": "install-skills"
+        },
+        {
+          "line": 2815,
+          "label": "install-helpers"
+        },
+        {
+          "line": 2816,
+          "label": "install-card"
+        },
+        {
+          "line": 2817,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 2818,
+          "label": "load-original-css"
+        },
+        {
+          "line": 2819,
+          "label": "fixture"
+        },
+        {
+          "line": 2820,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 2821,
+          "label": "saved-initial-after-error"
+        },
+        {
+          "line": 2822,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "zhengjing-three-target",
+      "native_case": "zhengjing-three-target",
+      "browser_completed": false,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": true,
+      "requests": [
+        {
+          "line": 2823,
+          "label": "reload"
+        },
+        {
+          "line": 2824,
+          "label": "ready"
+        },
+        {
+          "line": 2825,
+          "label": "ready"
+        },
+        {
+          "line": 2826,
+          "label": "page-ready"
+        },
+        {
+          "line": 2827,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 2828,
+          "label": "install-skills"
+        },
+        {
+          "line": 2829,
+          "label": "install-helpers"
+        },
+        {
+          "line": 2830,
+          "label": "install-card"
+        },
+        {
+          "line": 2831,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 2832,
+          "label": "load-original-css"
+        },
+        {
+          "line": 2833,
+          "label": "fixture"
+        },
+        {
+          "line": 2834,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 2835,
+          "label": "saved-initial-after-error"
+        },
+        {
+          "line": 2836,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "zhengjing-zero",
+      "native_case": "zhengjing-zero",
+      "browser_completed": false,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": true,
+      "requests": [
+        {
+          "line": 2837,
+          "label": "reload"
+        },
+        {
+          "line": 2838,
+          "label": "ready"
+        },
+        {
+          "line": 2839,
+          "label": "ready"
+        },
+        {
+          "line": 2840,
+          "label": "page-ready"
+        },
+        {
+          "line": 2841,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 2842,
+          "label": "install-skills"
+        },
+        {
+          "line": 2843,
+          "label": "install-helpers"
+        },
+        {
+          "line": 2844,
+          "label": "install-card"
+        },
+        {
+          "line": 2845,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 2846,
+          "label": "load-original-css"
+        },
+        {
+          "line": 2847,
+          "label": "fixture"
+        },
+        {
+          "line": 2848,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 2849,
+          "label": "saved-initial-after-error"
+        },
+        {
+          "line": 2850,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "zhengjing-cancel",
+      "native_case": "zhengjing-cancel",
+      "browser_completed": false,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": true,
+      "requests": [
+        {
+          "line": 2851,
+          "label": "reload"
+        },
+        {
+          "line": 2852,
+          "label": "ready"
+        },
+        {
+          "line": 2853,
+          "label": "ready"
+        },
+        {
+          "line": 2854,
+          "label": "page-ready"
+        },
+        {
+          "line": 2855,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 2856,
+          "label": "install-skills"
+        },
+        {
+          "line": 2857,
+          "label": "install-helpers"
+        },
+        {
+          "line": 2858,
+          "label": "install-card"
+        },
+        {
+          "line": 2859,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 2860,
+          "label": "load-original-css"
+        },
+        {
+          "line": 2861,
+          "label": "fixture"
+        },
+        {
+          "line": 2862,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 2863,
+          "label": "saved-initial-after-error"
+        },
+        {
+          "line": 2864,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "zhengjing-no-skill",
+      "native_case": "zhengjing-no-skill",
+      "browser_completed": true,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": false,
+      "requests": [
+        {
+          "line": 2865,
+          "label": "reload"
+        },
+        {
+          "line": 2866,
+          "label": "ready"
+        },
+        {
+          "line": 2867,
+          "label": "ready"
+        },
+        {
+          "line": 2868,
+          "label": "page-ready"
+        },
+        {
+          "line": 2869,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 2870,
+          "label": "install-skills"
+        },
+        {
+          "line": 2871,
+          "label": "install-helpers"
+        },
+        {
+          "line": 2872,
+          "label": "install-card"
+        },
+        {
+          "line": 2873,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 2874,
+          "label": "load-original-css"
+        },
+        {
+          "line": 2875,
+          "label": "fixture"
+        },
+        {
+          "line": 2876,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 2877,
+          "label": "snapshot"
+        },
+        {
+          "line": 2878,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "yeyan-small-one",
+      "native_case": "yeyan-small-one",
+      "browser_completed": true,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": false,
+      "requests": [
+        {
+          "line": 2879,
+          "label": "reload"
+        },
+        {
+          "line": 2880,
+          "label": "ready"
+        },
+        {
+          "line": 2881,
+          "label": "ready"
+        },
+        {
+          "line": 2882,
+          "label": "page-ready"
+        },
+        {
+          "line": 2883,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 2884,
+          "label": "install-skills"
+        },
+        {
+          "line": 2885,
+          "label": "install-helpers"
+        },
+        {
+          "line": 2886,
+          "label": "install-card"
+        },
+        {
+          "line": 2887,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 2888,
+          "label": "load-original-css"
+        },
+        {
+          "line": 2889,
+          "label": "fixture"
+        },
+        {
+          "line": 2890,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 2891,
+          "label": "snapshot"
+        },
+        {
+          "line": 2892,
+          "label": "skill-ui-handler"
+        },
+        {
+          "line": 2893,
+          "label": "snapshot"
+        },
+        {
+          "line": 2894,
+          "label": "snapshot"
+        },
+        {
+          "line": 2895,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 2896,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 2897,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 2898,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 2899,
+          "label": "snapshot"
+        },
+        {
+          "line": 2900,
+          "label": "confirm-ok"
+        },
+        {
+          "line": 2901,
+          "label": "snapshot"
+        },
+        {
+          "line": 2902,
+          "label": "snapshot"
+        },
+        {
+          "line": 2903,
+          "label": "snapshot"
+        },
+        {
+          "line": 2904,
+          "label": "snapshot"
+        },
+        {
+          "line": 2905,
+          "label": "snapshot"
+        },
+        {
+          "line": 2906,
+          "label": "snapshot"
+        },
+        {
+          "line": 2907,
+          "label": "snapshot"
+        },
+        {
+          "line": 2908,
+          "label": "snapshot"
+        },
+        {
+          "line": 2909,
+          "label": "snapshot"
+        },
+        {
+          "line": 2910,
+          "label": "snapshot"
+        },
+        {
+          "line": 2911,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "yeyan-small-three",
+      "native_case": "yeyan-small-three",
+      "browser_completed": true,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": false,
+      "requests": [
+        {
+          "line": 2912,
+          "label": "reload"
+        },
+        {
+          "line": 2913,
+          "label": "ready"
+        },
+        {
+          "line": 2914,
+          "label": "ready"
+        },
+        {
+          "line": 2915,
+          "label": "page-ready"
+        },
+        {
+          "line": 2916,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 2917,
+          "label": "install-skills"
+        },
+        {
+          "line": 2918,
+          "label": "install-helpers"
+        },
+        {
+          "line": 2919,
+          "label": "install-card"
+        },
+        {
+          "line": 2920,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 2921,
+          "label": "load-original-css"
+        },
+        {
+          "line": 2922,
+          "label": "fixture"
+        },
+        {
+          "line": 2923,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 2924,
+          "label": "snapshot"
+        },
+        {
+          "line": 2925,
+          "label": "skill-ui-handler"
+        },
+        {
+          "line": 2926,
+          "label": "snapshot"
+        },
+        {
+          "line": 2927,
+          "label": "snapshot"
+        },
+        {
+          "line": 2928,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 2929,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 2930,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 2931,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 2932,
+          "label": "snapshot"
+        },
+        {
+          "line": 2933,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 2934,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 2935,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 2936,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 2937,
+          "label": "snapshot"
+        },
+        {
+          "line": 2938,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 2939,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 2940,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 2941,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 2942,
+          "label": "snapshot"
+        },
+        {
+          "line": 2943,
+          "label": "confirm-ok"
+        },
+        {
+          "line": 2944,
+          "label": "snapshot"
+        },
+        {
+          "line": 2945,
+          "label": "snapshot"
+        },
+        {
+          "line": 2946,
+          "label": "snapshot"
+        },
+        {
+          "line": 2947,
+          "label": "snapshot"
+        },
+        {
+          "line": 2948,
+          "label": "snapshot"
+        },
+        {
+          "line": 2949,
+          "label": "snapshot"
+        },
+        {
+          "line": 2950,
+          "label": "snapshot"
+        },
+        {
+          "line": 2951,
+          "label": "snapshot"
+        },
+        {
+          "line": 2952,
+          "label": "snapshot"
+        },
+        {
+          "line": 2953,
+          "label": "snapshot"
+        },
+        {
+          "line": 2954,
+          "label": "snapshot"
+        },
+        {
+          "line": 2955,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "yeyan-great-one",
+      "native_case": "yeyan-great-one",
+      "browser_completed": true,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": false,
+      "requests": [
+        {
+          "line": 2956,
+          "label": "reload"
+        },
+        {
+          "line": 2957,
+          "label": "ready"
+        },
+        {
+          "line": 2958,
+          "label": "ready"
+        },
+        {
+          "line": 2959,
+          "label": "page-ready"
+        },
+        {
+          "line": 2960,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 2961,
+          "label": "install-skills"
+        },
+        {
+          "line": 2962,
+          "label": "install-helpers"
+        },
+        {
+          "line": 2963,
+          "label": "install-card"
+        },
+        {
+          "line": 2964,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 2965,
+          "label": "load-original-css"
+        },
+        {
+          "line": 2966,
+          "label": "fixture"
+        },
+        {
+          "line": 2967,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 2968,
+          "label": "snapshot"
+        },
+        {
+          "line": 2969,
+          "label": "skill-ui-handler"
+        },
+        {
+          "line": 2970,
+          "label": "snapshot"
+        },
+        {
+          "line": 2971,
+          "label": "snapshot"
+        },
+        {
+          "line": 2972,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 2973,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 2974,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 2975,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 2976,
+          "label": "snapshot"
+        },
+        {
+          "line": 2977,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 2978,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 2979,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 2980,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 2981,
+          "label": "snapshot"
+        },
+        {
+          "line": 2982,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 2983,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 2984,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 2985,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 2986,
+          "label": "snapshot"
+        },
+        {
+          "line": 2987,
+          "label": "confirm-ok"
+        },
+        {
+          "line": 2988,
+          "label": "snapshot"
+        },
+        {
+          "line": 2989,
+          "label": "snapshot"
+        },
+        {
+          "line": 2990,
+          "label": "snapshot"
+        },
+        {
+          "line": 2991,
+          "label": "snapshot"
+        },
+        {
+          "line": 2992,
+          "label": "snapshot"
+        },
+        {
+          "line": 2993,
+          "label": "snapshot"
+        },
+        {
+          "line": 2994,
+          "label": "snapshot"
+        },
+        {
+          "line": 2995,
+          "label": "snapshot"
+        },
+        {
+          "line": 2996,
+          "label": "snapshot"
+        },
+        {
+          "line": 2997,
+          "label": "snapshot"
+        },
+        {
+          "line": 2998,
+          "label": "snapshot"
+        },
+        {
+          "line": 2999,
+          "label": "snapshot"
+        },
+        {
+          "line": 3000,
+          "label": "snapshot"
+        },
+        {
+          "line": 3001,
+          "label": "snapshot"
+        },
+        {
+          "line": 3002,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "yeyan-great-split",
+      "native_case": "yeyan-great-split",
+      "browser_completed": true,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": false,
+      "requests": [
+        {
+          "line": 3003,
+          "label": "reload"
+        },
+        {
+          "line": 3004,
+          "label": "ready"
+        },
+        {
+          "line": 3005,
+          "label": "ready"
+        },
+        {
+          "line": 3006,
+          "label": "page-ready"
+        },
+        {
+          "line": 3007,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 3008,
+          "label": "install-skills"
+        },
+        {
+          "line": 3009,
+          "label": "install-helpers"
+        },
+        {
+          "line": 3010,
+          "label": "install-card"
+        },
+        {
+          "line": 3011,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 3012,
+          "label": "load-original-css"
+        },
+        {
+          "line": 3013,
+          "label": "fixture"
+        },
+        {
+          "line": 3014,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 3015,
+          "label": "snapshot"
+        },
+        {
+          "line": 3016,
+          "label": "skill-ui-handler"
+        },
+        {
+          "line": 3017,
+          "label": "snapshot"
+        },
+        {
+          "line": 3018,
+          "label": "snapshot"
+        },
+        {
+          "line": 3019,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 3020,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 3021,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 3022,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 3023,
+          "label": "snapshot"
+        },
+        {
+          "line": 3024,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 3025,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 3026,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 3027,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 3028,
+          "label": "snapshot"
+        },
+        {
+          "line": 3029,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 3030,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 3031,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 3032,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 3033,
+          "label": "snapshot"
+        },
+        {
+          "line": 3034,
+          "label": "confirm-ok"
+        },
+        {
+          "line": 3035,
+          "label": "snapshot"
+        },
+        {
+          "line": 3036,
+          "label": "snapshot"
+        },
+        {
+          "line": 3037,
+          "label": "snapshot"
+        },
+        {
+          "line": 3038,
+          "label": "snapshot"
+        },
+        {
+          "line": 3039,
+          "label": "snapshot"
+        },
+        {
+          "line": 3040,
+          "label": "snapshot"
+        },
+        {
+          "line": 3041,
+          "label": "snapshot"
+        },
+        {
+          "line": 3042,
+          "label": "snapshot"
+        },
+        {
+          "line": 3043,
+          "label": "snapshot"
+        },
+        {
+          "line": 3044,
+          "label": "snapshot"
+        },
+        {
+          "line": 3045,
+          "label": "snapshot"
+        },
+        {
+          "line": 3046,
+          "label": "snapshot"
+        },
+        {
+          "line": 3047,
+          "label": "snapshot"
+        },
+        {
+          "line": 3048,
+          "label": "snapshot"
+        },
+        {
+          "line": 3049,
+          "label": "snapshot"
+        },
+        {
+          "line": 3050,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "yeyan-cancel",
+      "native_case": "yeyan-cancel",
+      "browser_completed": true,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": false,
+      "requests": [
+        {
+          "line": 3051,
+          "label": "reload"
+        },
+        {
+          "line": 3052,
+          "label": "ready"
+        },
+        {
+          "line": 3053,
+          "label": "ready"
+        },
+        {
+          "line": 3054,
+          "label": "page-ready"
+        },
+        {
+          "line": 3055,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 3056,
+          "label": "install-skills"
+        },
+        {
+          "line": 3057,
+          "label": "install-helpers"
+        },
+        {
+          "line": 3058,
+          "label": "install-card"
+        },
+        {
+          "line": 3059,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 3060,
+          "label": "load-original-css"
+        },
+        {
+          "line": 3061,
+          "label": "fixture"
+        },
+        {
+          "line": 3062,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 3063,
+          "label": "snapshot"
+        },
+        {
+          "line": 3064,
+          "label": "skill-ui-handler"
+        },
+        {
+          "line": 3065,
+          "label": "snapshot"
+        },
+        {
+          "line": 3066,
+          "label": "snapshot"
+        },
+        {
+          "line": 3067,
+          "label": "confirm-cancel"
+        },
+        {
+          "line": 3068,
+          "label": "snapshot"
+        },
+        {
+          "line": 3069,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "yeyan-used",
+      "native_case": "yeyan-used",
+      "browser_completed": true,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": false,
+      "requests": [
+        {
+          "line": 3070,
+          "label": "reload"
+        },
+        {
+          "line": 3071,
+          "label": "ready"
+        },
+        {
+          "line": 3072,
+          "label": "ready"
+        },
+        {
+          "line": 3073,
+          "label": "page-ready"
+        },
+        {
+          "line": 3074,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 3075,
+          "label": "install-skills"
+        },
+        {
+          "line": 3076,
+          "label": "install-helpers"
+        },
+        {
+          "line": 3077,
+          "label": "install-card"
+        },
+        {
+          "line": 3078,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 3079,
+          "label": "load-original-css"
+        },
+        {
+          "line": 3080,
+          "label": "fixture"
+        },
+        {
+          "line": 3081,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 3082,
+          "label": "snapshot"
+        },
+        {
+          "line": 3083,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "yeyan-no-four",
+      "native_case": "yeyan-no-four",
+      "browser_completed": true,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": false,
+      "requests": [
+        {
+          "line": 3084,
+          "label": "reload"
+        },
+        {
+          "line": 3085,
+          "label": "ready"
+        },
+        {
+          "line": 3086,
+          "label": "ready"
+        },
+        {
+          "line": 3087,
+          "label": "page-ready"
+        },
+        {
+          "line": 3088,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 3089,
+          "label": "install-skills"
+        },
+        {
+          "line": 3090,
+          "label": "install-helpers"
+        },
+        {
+          "line": 3091,
+          "label": "install-card"
+        },
+        {
+          "line": 3092,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 3093,
+          "label": "load-original-css"
+        },
+        {
+          "line": 3094,
+          "label": "fixture"
+        },
+        {
+          "line": 3095,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 3096,
+          "label": "snapshot"
+        },
+        {
+          "line": 3097,
+          "label": "skill-ui-handler"
+        },
+        {
+          "line": 3098,
+          "label": "snapshot"
+        },
+        {
+          "line": 3099,
+          "label": "snapshot"
+        },
+        {
+          "line": 3100,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 3101,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 3102,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 3103,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 3104,
+          "label": "snapshot"
+        },
+        {
+          "line": 3105,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 3106,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 3107,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 3108,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 3109,
+          "label": "snapshot"
+        },
+        {
+          "line": 3110,
+          "label": "confirm-ok"
+        },
+        {
+          "line": 3111,
+          "label": "snapshot"
+        },
+        {
+          "line": 3112,
+          "label": "snapshot"
+        },
+        {
+          "line": 3113,
+          "label": "snapshot"
+        },
+        {
+          "line": 3114,
+          "label": "snapshot"
+        },
+        {
+          "line": 3115,
+          "label": "snapshot"
+        },
+        {
+          "line": 3116,
+          "label": "snapshot"
+        },
+        {
+          "line": 3117,
+          "label": "snapshot"
+        },
+        {
+          "line": 3118,
+          "label": "snapshot"
+        },
+        {
+          "line": 3119,
+          "label": "snapshot"
+        },
+        {
+          "line": 3120,
+          "label": "snapshot"
+        },
+        {
+          "line": 3121,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "yeyan-target-cancel",
+      "native_case": "yeyan-target-cancel",
+      "browser_completed": true,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": false,
+      "requests": [
+        {
+          "line": 3122,
+          "label": "reload"
+        },
+        {
+          "line": 3123,
+          "label": "ready"
+        },
+        {
+          "line": 3124,
+          "label": "ready"
+        },
+        {
+          "line": 3125,
+          "label": "page-ready"
+        },
+        {
+          "line": 3126,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 3127,
+          "label": "install-skills"
+        },
+        {
+          "line": 3128,
+          "label": "install-helpers"
+        },
+        {
+          "line": 3129,
+          "label": "install-card"
+        },
+        {
+          "line": 3130,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 3131,
+          "label": "load-original-css"
+        },
+        {
+          "line": 3132,
+          "label": "fixture"
+        },
+        {
+          "line": 3133,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 3134,
+          "label": "snapshot"
+        },
+        {
+          "line": 3135,
+          "label": "skill-ui-handler"
+        },
+        {
+          "line": 3136,
+          "label": "snapshot"
+        },
+        {
+          "line": 3137,
+          "label": "snapshot"
+        },
+        {
+          "line": 3138,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 3139,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 3140,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 3141,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 3142,
+          "label": "snapshot"
+        },
+        {
+          "line": 3143,
+          "label": "confirm-cancel"
+        },
+        {
+          "line": 3144,
+          "label": "snapshot"
+        },
+        {
+          "line": 3145,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "yeyan-great-discard-cancel",
+      "native_case": "yeyan-great-discard-cancel",
+      "browser_completed": true,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": false,
+      "requests": [
+        {
+          "line": 3146,
+          "label": "reload"
+        },
+        {
+          "line": 3147,
+          "label": "ready"
+        },
+        {
+          "line": 3148,
+          "label": "ready"
+        },
+        {
+          "line": 3149,
+          "label": "page-ready"
+        },
+        {
+          "line": 3150,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 3151,
+          "label": "install-skills"
+        },
+        {
+          "line": 3152,
+          "label": "install-helpers"
+        },
+        {
+          "line": 3153,
+          "label": "install-card"
+        },
+        {
+          "line": 3154,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 3155,
+          "label": "load-original-css"
+        },
+        {
+          "line": 3156,
+          "label": "fixture"
+        },
+        {
+          "line": 3157,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 3158,
+          "label": "snapshot"
+        },
+        {
+          "line": 3159,
+          "label": "skill-ui-handler"
+        },
+        {
+          "line": 3160,
+          "label": "snapshot"
+        },
+        {
+          "line": 3161,
+          "label": "snapshot"
+        },
+        {
+          "line": 3162,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 3163,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 3164,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 3165,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 3166,
+          "label": "snapshot"
+        },
+        {
+          "line": 3167,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 3168,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 3169,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 3170,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 3171,
+          "label": "snapshot"
+        },
+        {
+          "line": 3172,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 3173,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 3174,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 3175,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 3176,
+          "label": "snapshot"
+        },
+        {
+          "line": 3177,
+          "label": "snapshot"
+        },
+        {
+          "line": 3178,
+          "label": "click-rect"
+        },
+        {
+          "line": 3179,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 3180,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 3181,
+          "label": "snapshot"
+        },
+        {
+          "line": 3182,
+          "label": "click-rect"
+        },
+        {
+          "line": 3183,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 3184,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 3185,
+          "label": "snapshot"
+        },
+        {
+          "line": 3186,
+          "label": "click-rect"
+        },
+        {
+          "line": 3187,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 3188,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 3189,
+          "label": "snapshot"
+        },
+        {
+          "line": 3190,
+          "label": "confirm-cancel"
+        },
+        {
+          "line": 3191,
+          "label": "snapshot"
+        },
+        {
+          "line": 3192,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "yeyan-great-one-default",
+      "native_case": "yeyan-great-one",
+      "browser_completed": true,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": null,
+        "result": false
+      },
+      "strength_final": {
+        "stored": null,
+        "result": false
+      },
+      "source_entry_exception": false,
+      "requests": [
+        {
+          "line": 3193,
+          "label": "reload"
+        },
+        {
+          "line": 3194,
+          "label": "ready"
+        },
+        {
+          "line": 3195,
+          "label": "ready"
+        },
+        {
+          "line": 3196,
+          "label": "page-ready"
+        },
+        {
+          "line": 3197,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 3198,
+          "label": "install-skills"
+        },
+        {
+          "line": 3199,
+          "label": "install-helpers"
+        },
+        {
+          "line": 3200,
+          "label": "install-card"
+        },
+        {
+          "line": 3201,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 3202,
+          "label": "load-original-css"
+        },
+        {
+          "line": 3203,
+          "label": "fixture"
+        },
+        {
+          "line": 3204,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 3205,
+          "label": "snapshot"
+        },
+        {
+          "line": 3206,
+          "label": "skill-ui-handler"
+        },
+        {
+          "line": 3207,
+          "label": "snapshot"
+        },
+        {
+          "line": 3208,
+          "label": "snapshot"
+        },
+        {
+          "line": 3209,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 3210,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 3211,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 3212,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 3213,
+          "label": "snapshot"
+        },
+        {
+          "line": 3214,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 3215,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 3216,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 3217,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 3218,
+          "label": "snapshot"
+        },
+        {
+          "line": 3219,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 3220,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 3221,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 3222,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 3223,
+          "label": "snapshot"
+        },
+        {
+          "line": 3224,
+          "label": "confirm-ok"
+        },
+        {
+          "line": 3225,
+          "label": "snapshot"
+        },
+        {
+          "line": 3226,
+          "label": "snapshot"
+        },
+        {
+          "line": 3227,
+          "label": "snapshot"
+        },
+        {
+          "line": 3228,
+          "label": "snapshot"
+        },
+        {
+          "line": 3229,
+          "label": "snapshot"
+        },
+        {
+          "line": 3230,
+          "label": "snapshot"
+        },
+        {
+          "line": 3231,
+          "label": "snapshot"
+        },
+        {
+          "line": 3232,
+          "label": "snapshot"
+        },
+        {
+          "line": 3233,
+          "label": "snapshot"
+        },
+        {
+          "line": 3234,
+          "label": "snapshot"
+        },
+        {
+          "line": 3235,
+          "label": "snapshot"
+        },
+        {
+          "line": 3236,
+          "label": "snapshot"
+        },
+        {
+          "line": 3237,
+          "label": "snapshot"
+        },
+        {
+          "line": 3238,
+          "label": "snapshot"
+        },
+        {
+          "line": 3239,
+          "label": "snapshot"
+        },
+        {
+          "line": 3240,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "yeyan-great-split-default",
+      "native_case": "yeyan-great-split",
+      "browser_completed": true,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": null,
+        "result": false
+      },
+      "strength_final": {
+        "stored": null,
+        "result": false
+      },
+      "source_entry_exception": false,
+      "requests": [
+        {
+          "line": 3241,
+          "label": "reload"
+        },
+        {
+          "line": 3242,
+          "label": "ready"
+        },
+        {
+          "line": 3243,
+          "label": "ready"
+        },
+        {
+          "line": 3244,
+          "label": "page-ready"
+        },
+        {
+          "line": 3245,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 3246,
+          "label": "install-skills"
+        },
+        {
+          "line": 3247,
+          "label": "install-helpers"
+        },
+        {
+          "line": 3248,
+          "label": "install-card"
+        },
+        {
+          "line": 3249,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 3250,
+          "label": "load-original-css"
+        },
+        {
+          "line": 3251,
+          "label": "fixture"
+        },
+        {
+          "line": 3252,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 3253,
+          "label": "snapshot"
+        },
+        {
+          "line": 3254,
+          "label": "skill-ui-handler"
+        },
+        {
+          "line": 3255,
+          "label": "snapshot"
+        },
+        {
+          "line": 3256,
+          "label": "snapshot"
+        },
+        {
+          "line": 3257,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 3258,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 3259,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 3260,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 3261,
+          "label": "snapshot"
+        },
+        {
+          "line": 3262,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 3263,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 3264,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 3265,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 3266,
+          "label": "snapshot"
+        },
+        {
+          "line": 3267,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 3268,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 3269,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 3270,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 3271,
+          "label": "snapshot"
+        },
+        {
+          "line": 3272,
+          "label": "confirm-ok"
+        },
+        {
+          "line": 3273,
+          "label": "snapshot"
+        },
+        {
+          "line": 3274,
+          "label": "snapshot"
+        },
+        {
+          "line": 3275,
+          "label": "snapshot"
+        },
+        {
+          "line": 3276,
+          "label": "snapshot"
+        },
+        {
+          "line": 3277,
+          "label": "snapshot"
+        },
+        {
+          "line": 3278,
+          "label": "snapshot"
+        },
+        {
+          "line": 3279,
+          "label": "snapshot"
+        },
+        {
+          "line": 3280,
+          "label": "snapshot"
+        },
+        {
+          "line": 3281,
+          "label": "snapshot"
+        },
+        {
+          "line": 3282,
+          "label": "snapshot"
+        },
+        {
+          "line": 3283,
+          "label": "snapshot"
+        },
+        {
+          "line": 3284,
+          "label": "snapshot"
+        },
+        {
+          "line": 3285,
+          "label": "snapshot"
+        },
+        {
+          "line": 3286,
+          "label": "snapshot"
+        },
+        {
+          "line": 3287,
+          "label": "snapshot"
+        },
+        {
+          "line": 3288,
+          "label": "snapshot"
+        }
+      ]
+    },
+    {
+      "case": "yeyan-great-two",
+      "native_case": "yeyan-great-one",
+      "browser_completed": true,
+      "initial_projection_equal": false,
+      "initial_fields_equal": {
+        "players": true,
+        "deck_draw_order": false,
+        "discard": true,
+        "table": true
+      },
+      "seats_checked": 8,
+      "physical_ids_count": 125,
+      "initial_unique_ids": true,
+      "browser_physical_ids_conserved": true,
+      "native_physical_ids_conserved": true,
+      "final_has_null_ids": false,
+      "foreign_pile_mutations": [],
+      "snapshot_binding_errors": [],
+      "ready": {
+        "version": "1.10.1.0.1",
+        "url": "http://127.0.0.1:52217/",
+        "event": "game",
+        "players": 8,
+        "spine": "undefined"
+      },
+      "bootstrap": {
+        "onfreeCallbacks": 0,
+        "waitingForCards": true,
+        "deck": 0,
+        "after": {
+          "waitingForCards": false,
+          "deck": 161
+        }
+      },
+      "strength_initial": {
+        "stored": "forbid",
+        "result": true
+      },
+      "strength_final": {
+        "stored": "forbid",
+        "result": true
+      },
+      "source_entry_exception": false,
+      "requests": [
+        {
+          "line": 3289,
+          "label": "reload"
+        },
+        {
+          "line": 3290,
+          "label": "ready"
+        },
+        {
+          "line": 3291,
+          "label": "ready"
+        },
+        {
+          "line": 3292,
+          "label": "page-ready"
+        },
+        {
+          "line": 3293,
+          "label": "drain-original-card-bootstrap"
+        },
+        {
+          "line": 3294,
+          "label": "install-skills"
+        },
+        {
+          "line": 3295,
+          "label": "install-helpers"
+        },
+        {
+          "line": 3296,
+          "label": "install-card"
+        },
+        {
+          "line": 3297,
+          "label": "register-original-skills"
+        },
+        {
+          "line": 3298,
+          "label": "load-original-css"
+        },
+        {
+          "line": 3299,
+          "label": "fixture"
+        },
+        {
+          "line": 3300,
+          "label": "actual-phaseUse-start"
+        },
+        {
+          "line": 3301,
+          "label": "snapshot"
+        },
+        {
+          "line": 3302,
+          "label": "skill-ui-handler"
+        },
+        {
+          "line": 3303,
+          "label": "snapshot"
+        },
+        {
+          "line": 3304,
+          "label": "snapshot"
+        },
+        {
+          "line": 3305,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 3306,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 3307,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 3308,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 3309,
+          "label": "snapshot"
+        },
+        {
+          "line": 3310,
+          "label": "drag-geometry"
+        },
+        {
+          "line": 3311,
+          "label": "mouse-mousePressed"
+        },
+        {
+          "line": 3312,
+          "label": "mouse-mouseMoved"
+        },
+        {
+          "line": 3313,
+          "label": "mouse-mouseReleased"
+        },
+        {
+          "line": 3314,
+          "label": "snapshot"
+        },
+        {
+          "line": 3315,
+          "label": "confirm-ok"
+        },
+        {
+          "line": 3316,
+          "label": "snapshot"
+        },
+        {
+          "line": 3317,
+          "label": "snapshot"
+        },
+        {
+          "line": 3318,
+          "label": "snapshot"
+        },
+        {
+          "line": 3319,
+          "label": "snapshot"
+        },
+        {
+          "line": 3320,
+          "label": "snapshot"
+        },
+        {
+          "line": 3321,
+          "label": "snapshot"
+        },
+        {
+          "line": 3322,
+          "label": "snapshot"
+        },
+        {
+          "line": 3323,
+          "label": "snapshot"
+        },
+        {
+          "line": 3324,
+          "label": "snapshot"
+        },
+        {
+          "line": 3325,
+          "label": "snapshot"
+        },
+        {
+          "line": 3326,
+          "label": "snapshot"
+        },
+        {
+          "line": 3327,
+          "label": "snapshot"
+        },
+        {
+          "line": 3328,
+          "label": "snapshot"
+        },
+        {
+          "line": 3329,
+          "label": "snapshot"
+        },
+        {
+          "line": 3330,
+          "label": "snapshot"
+        }
+      ]
+    }
+  ],
+  "source_checks": [
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/l28_batch_a.rs",
+      "current_sha256": "783937e8f29efca517bdfbb8d918905b2fb08b3465d710339ec14154748a2f33",
+      "snapshot_sha256": "783937e8f29efca517bdfbb8d918905b2fb08b3465d710339ec14154748a2f33",
+      "announced_sha256": "783937e8f29efca517bdfbb8d918905b2fb08b3465d710339ec14154748a2f33",
+      "current_and_snapshot_match": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/l28_batch_a_asks.rs",
+      "current_sha256": "fde73a4f9286316c553e0d84b7a4d6e5edc6ab9a5d5f8aa01ff43938d0414879",
+      "snapshot_sha256": "fde73a4f9286316c553e0d84b7a4d6e5edc6ab9a5d5f8aa01ff43938d0414879",
+      "announced_sha256": "fde73a4f9286316c553e0d84b7a4d6e5edc6ab9a5d5f8aa01ff43938d0414879",
+      "current_and_snapshot_match": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/l28_batch_b.rs",
+      "current_sha256": "1ec78d469401027dea8f40d91f64c137f3d2fb6e92ea841eb459c203dadb8ba2",
+      "snapshot_sha256": "1ec78d469401027dea8f40d91f64c137f3d2fb6e92ea841eb459c203dadb8ba2",
+      "announced_sha256": "1ec78d469401027dea8f40d91f64c137f3d2fb6e92ea841eb459c203dadb8ba2",
+      "current_and_snapshot_match": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/l28_batch_b_asks.rs",
+      "current_sha256": "90bddf7020c0c1560b58361a22b83ce20c8b4f0c1f1436f7f944205f35fc70ca",
+      "snapshot_sha256": "90bddf7020c0c1560b58361a22b83ce20c8b4f0c1f1436f7f944205f35fc70ca",
+      "announced_sha256": "90bddf7020c0c1560b58361a22b83ce20c8b4f0c1f1436f7f944205f35fc70ca",
+      "current_and_snapshot_match": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/tests/l28_thunder_eight_match.rs",
+      "current_sha256": "cc1fe34b7b2eb83fa6c965b0c43a065d114ba6a44158a92046308be5671471a6",
+      "snapshot_sha256": "cc1fe34b7b2eb83fa6c965b0c43a065d114ba6a44158a92046308be5671471a6",
+      "announced_sha256": "cc1fe34b7b2eb83fa6c965b0c43a065d114ba6a44158a92046308be5671471a6",
+      "current_and_snapshot_match": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/tests/l28_thunder_eight_batch_b.rs",
+      "current_sha256": "2b4416e29833406a9a8a7050f8aaf60e2a31c4f903f3ce0c7e66b26ab458589d",
+      "snapshot_sha256": "2b4416e29833406a9a8a7050f8aaf60e2a31c4f903f3ce0c7e66b26ab458589d",
+      "announced_sha256": "2b4416e29833406a9a8a7050f8aaf60e2a31c4f903f3ce0c7e66b26ab458589d",
+      "current_and_snapshot_match": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader/src/locked_content.rs",
+      "current_sha256": "b1f4663d8830d1b3ce059870d9a343aa9eaad1044bb09dd5a2c19f8f2e871933",
+      "snapshot_sha256": "b1f4663d8830d1b3ce059870d9a343aa9eaad1044bb09dd5a2c19f8f2e871933",
+      "announced_sha256": "b1f4663d8830d1b3ce059870d9a343aa9eaad1044bb09dd5a2c19f8f2e871933",
+      "current_and_snapshot_match": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader/src/decision34_pack9.rs",
+      "current_sha256": "57677960381809834e0a6990cdb0b0082474f9a0c55819059046b98529ecd428",
+      "snapshot_sha256": "57677960381809834e0a6990cdb0b0082474f9a0c55819059046b98529ecd428",
+      "announced_sha256": "57677960381809834e0a6990cdb0b0082474f9a0c55819059046b98529ecd428",
+      "current_and_snapshot_match": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/thunder-upstream-liuli/package.npack.json",
+      "current_sha256": "84521165ed9d5c12c1021c9a5669d514dc151b0dbf57b225af3719254a509f2b",
+      "snapshot_sha256": "84521165ed9d5c12c1021c9a5669d514dc151b0dbf57b225af3719254a509f2b",
+      "announced_sha256": "84521165ed9d5c12c1021c9a5669d514dc151b0dbf57b225af3719254a509f2b",
+      "current_and_snapshot_match": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/thunder-upstream-liuli/assets/config.json",
+      "current_sha256": "de64ace113e18098eed39cbc6dc80389dae83e49e8608c4ce1911d50174eebaa",
+      "snapshot_sha256": "de64ace113e18098eed39cbc6dc80389dae83e49e8608c4ce1911d50174eebaa",
+      "announced_sha256": "de64ace113e18098eed39cbc6dc80389dae83e49e8608c4ce1911d50174eebaa",
+      "current_and_snapshot_match": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+      "current_sha256": "3f7add04e6d347d450facb9b6fd506f5c4cd64a5e3fbc626e47e79d8a3aa13b2",
+      "snapshot_sha256": "3f7add04e6d347d450facb9b6fd506f5c4cd64a5e3fbc626e47e79d8a3aa13b2",
+      "announced_sha256": "3f7add04e6d347d450facb9b6fd506f5c4cd64a5e3fbc626e47e79d8a3aa13b2",
+      "current_and_snapshot_match": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/game/game.js",
+      "current_sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5",
+      "snapshot_sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5",
+      "announced_sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5",
+      "current_and_snapshot_match": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/card/standard.js",
+      "current_sha256": "dabb598438dc030a621dd2fac83989aac9ae783f521a1521f142891a5e16c8b5",
+      "snapshot_sha256": "dabb598438dc030a621dd2fac83989aac9ae783f521a1521f142891a5e16c8b5",
+      "announced_sha256": "dabb598438dc030a621dd2fac83989aac9ae783f521a1521f142891a5e16c8b5",
+      "current_and_snapshot_match": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/card/extra.js",
+      "current_sha256": "7998d90d7a8eb855d34713cacb1958bad7cd854ccf04bd3bea47a6a303c7007d",
+      "snapshot_sha256": "7998d90d7a8eb855d34713cacb1958bad7cd854ccf04bd3bea47a6a303c7007d",
+      "announced_sha256": "7998d90d7a8eb855d34713cacb1958bad7cd854ccf04bd3bea47a6a303c7007d",
+      "current_and_snapshot_match": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/雷霆万钧/thunder.css",
+      "current_sha256": "34680c46dfb528adf8808543eb425594fae46309f1c8f3c78d3117f402e9fb24",
+      "snapshot_sha256": "34680c46dfb528adf8808543eb425594fae46309f1c8f3c78d3117f402e9fb24",
+      "announced_sha256": "34680c46dfb528adf8808543eb425594fae46309f1c8f3c78d3117f402e9fb24",
+      "current_and_snapshot_match": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/kernel/judge.rs",
+      "current_sha256": "e82acb6540051038973474b9ccb61d0b26f85135c5b756cf1acc158793377685",
+      "snapshot_sha256": "e82acb6540051038973474b9ccb61d0b26f85135c5b756cf1acc158793377685",
+      "announced_sha256": "e82acb6540051038973474b9ccb61d0b26f85135c5b756cf1acc158793377685",
+      "current_and_snapshot_match": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/catalog.rs",
+      "current_sha256": "df441f4cb9f288971c4121135ca9a51ecc34d492dbeb0363c852b4f972c2b876",
+      "snapshot_sha256": "df441f4cb9f288971c4121135ca9a51ecc34d492dbeb0363c852b4f972c2b876",
+      "announced_sha256": "df441f4cb9f288971c4121135ca9a51ecc34d492dbeb0363c852b4f972c2b876",
+      "current_and_snapshot_match": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/catalog/card_kind.rs",
+      "current_sha256": "8b60d23374a57fdc2e3603893c80d302a12b77c413f864a4080a8c376a50b3d8",
+      "snapshot_sha256": "8b60d23374a57fdc2e3603893c80d302a12b77c413f864a4080a8c376a50b3d8",
+      "announced_sha256": "8b60d23374a57fdc2e3603893c80d302a12b77c413f864a4080a8c376a50b3d8",
+      "current_and_snapshot_match": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/standard/cards.rs",
+      "current_sha256": "72e38d8f9418bc400592c9e4b901a6e654d89237f1d401d8b14ef2a7511923fe",
+      "snapshot_sha256": "72e38d8f9418bc400592c9e4b901a6e654d89237f1d401d8b14ef2a7511923fe",
+      "announced_sha256": "72e38d8f9418bc400592c9e4b901a6e654d89237f1d401d8b14ef2a7511923fe",
+      "current_and_snapshot_match": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/Cargo.lock",
+      "current_sha256": "5d56dba182060ed914dedfe8eb3ff8a7627ce32c3913207fb5ea7e9c070b5926",
+      "snapshot_sha256": "5d56dba182060ed914dedfe8eb3ff8a7627ce32c3913207fb5ea7e9c070b5926",
+      "announced_sha256": "5d56dba182060ed914dedfe8eb3ff8a7627ce32c3913207fb5ea7e9c070b5926",
+      "current_and_snapshot_match": true
+    }
+  ],
+  "slice_checks": [
+    {
+      "name": "th_chengye",
+      "kind": "skills",
+      "source_lines": [
+        6182,
+        6371
+      ],
+      "source_hash_matches": [
+        "with_final_newline"
+      ]
+    },
+    {
+      "name": "th_buxu",
+      "kind": "skills",
+      "source_lines": [
+        6372,
+        6514
+      ],
+      "source_hash_matches": [
+        "with_final_newline"
+      ]
+    },
+    {
+      "name": "th_zhengjing",
+      "kind": "skills",
+      "source_lines": [
+        6018,
+        6161
+      ],
+      "source_hash_matches": [
+        "with_final_newline"
+      ]
+    },
+    {
+      "name": "th_zhengjing2",
+      "kind": "skills",
+      "source_lines": [
+        6162,
+        6181
+      ],
+      "source_hash_matches": [
+        "with_final_newline"
+      ]
+    },
+    {
+      "name": "th_yeyan",
+      "kind": "skills",
+      "source_lines": [
+        8636,
+        8940
+      ],
+      "source_hash_matches": [
+        "with_final_newline"
+      ]
+    },
+    {
+      "name": "thunderIsPhone",
+      "kind": "helpers",
+      "source_lines": [
+        1932,
+        1939
+      ],
+      "source_hash_matches": [
+        "with_final_newline"
+      ]
+    },
+    {
+      "name": "thunderForbidTouch",
+      "kind": "helpers",
+      "source_lines": [
+        2046,
+        2062
+      ],
+      "source_hash_matches": [
+        "with_final_newline"
+      ]
+    },
+    {
+      "name": "thunderAllowTouch",
+      "kind": "helpers",
+      "source_lines": [
+        2063,
+        2077
+      ],
+      "source_hash_matches": [
+        "with_final_newline"
+      ]
+    },
+    {
+      "name": "thunderCreateTimer",
+      "kind": "helpers",
+      "source_lines": [
+        2078,
+        2118
+      ],
+      "source_hash_matches": [
+        "with_final_newline"
+      ]
+    },
+    {
+      "name": "thunderInterval",
+      "kind": "helpers",
+      "source_lines": [
+        2119,
+        2131
+      ],
+      "source_hash_matches": [
+        "with_final_newline"
+      ]
+    },
+    {
+      "name": "thunderClearInterval",
+      "kind": "helpers",
+      "source_lines": [
+        2132,
+        2135
+      ],
+      "source_hash_matches": [
+        "with_final_newline"
+      ]
+    },
+    {
+      "name": "thunderDialog",
+      "kind": "helpers",
+      "source_lines": [
+        2136,
+        2344
+      ],
+      "source_hash_matches": [
+        "with_final_newline"
+      ]
+    },
+    {
+      "name": "thunderCreateStand",
+      "kind": "helpers",
+      "source_lines": [
+        1940,
+        1959
+      ],
+      "source_hash_matches": [
+        "with_final_newline"
+      ]
+    },
+    {
+      "name": "thunderFileExist",
+      "kind": "helpers",
+      "source_lines": [
+        1898,
+        1912
+      ],
+      "source_hash_matches": [
+        "with_final_newline"
+      ]
+    },
+    {
+      "kind": "skills",
+      "exact_object_reassembly_equal": true,
+      "source_len": 40422,
+      "actual_len": 40422
+    },
+    {
+      "kind": "helpers",
+      "exact_object_reassembly_equal": true,
+      "source_len": 18156,
+      "actual_len": 18156
+    }
+  ],
+  "spine_http_paths": [],
+  "narrative_or_comparison_code_used": false,
+  "projection_boundary": "Initial mapping covers ordered native id/upstream name/suit/rank/nature in all captured zones, eight seats HP/maxHP/alive/link/face/hujia, enabled skills, once-used/awakened and mapped expansions. It is not full upstream storage/event/RNG equivalence. Native generic equipment face mapping requires a separate real-card audit."
+}

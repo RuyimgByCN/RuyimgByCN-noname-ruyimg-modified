@@ -1,0 +1,3050 @@
+[
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "y_target_A",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_target_A-direct-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"card:9\", \"card:42\"] }",
+          "ChoiceOpened { id: 2, observer: 0, prompt: \"yixin:choose_target\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"yixin:choose_target\", options: [Player(1), Player(2), Pass], min: 1, max: 1, allow_cancel: true } } }",
+        "actual_state_hash": "[6a, 3e, ee, 60, 61, fd, d8, ee, 2c, 4f, 37, 8b, 95, 8d, dc, b2, 4e, b2, e3, 2c, 0f, 46, c4, 78, ae, 6b, 95, 08, c6, 97, f6, ef]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Card(9), Card(42)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"player:1\"] }",
+          "CardDiscarded { player: 0, cards: [9] }",
+          "CardDiscarded { player: 0, cards: [42] }",
+          "HpRecovered { player: 1, amount: 2, presentation: Some(HpRecovered { actor: PlayerId(2), amount: 2 }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [228, 77, 37, 215, 230, 21, 151, 86, 32, 210, 42, 93, 248, 199, 32, 220, 188, 21, 213, 91, 151, 95, 107, 238, 50, 185, 88, 36, 205, 180, 46, 217] }",
+        "actual_state_hash": "[e4, 4d, 25, d7, e6, 15, 97, 56, 20, d2, 2a, 5d, f8, c7, 20, dc, bc, 15, d5, 5b, 97, 5f, 6b, ee, 32, b9, 58, 24, cd, b4, 2e, d9]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Player(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "y_target_A",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_target_A-direct-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"player:1\"] }",
+          "CardDiscarded { player: 0, cards: [9] }",
+          "CardDiscarded { player: 0, cards: [42] }",
+          "HpRecovered { player: 1, amount: 2, presentation: Some(HpRecovered { actor: PlayerId(2), amount: 2 }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [228, 77, 37, 215, 230, 21, 151, 86, 32, 210, 42, 93, 248, 199, 32, 220, 188, 21, 213, 91, 151, 95, 107, 238, 50, 185, 88, 36, 205, 180, 46, 217] }",
+        "actual_state_hash": "[e4, 4d, 25, d7, e6, 15, 97, 56, 20, d2, 2a, 5d, f8, c7, 20, dc, bc, 15, d5, 5b, 97, 5f, 6b, ee, 32, b9, 58, 24, cd, b4, 2e, d9]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Player(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "y_target_A",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_target_A-restored-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 2,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"card:9\", \"card:42\"] }",
+          "ChoiceOpened { id: 2, observer: 0, prompt: \"yixin:choose_target\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"yixin:choose_target\", options: [Player(1), Player(2), Pass], min: 1, max: 1, allow_cancel: true } } }",
+        "actual_state_hash": "[6a, 3e, ee, 60, 61, fd, d8, ee, 2c, 4f, 37, 8b, 95, 8d, dc, b2, 4e, b2, e3, 2c, 0f, 46, c4, 78, ae, 6b, 95, 08, c6, 97, f6, ef]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Card(9), Card(42)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"player:1\"] }",
+          "CardDiscarded { player: 0, cards: [9] }",
+          "CardDiscarded { player: 0, cards: [42] }",
+          "HpRecovered { player: 1, amount: 2, presentation: Some(HpRecovered { actor: PlayerId(2), amount: 2 }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [228, 77, 37, 215, 230, 21, 151, 86, 32, 210, 42, 93, 248, 199, 32, 220, 188, 21, 213, 91, 151, 95, 107, 238, 50, 185, 88, 36, 205, 180, 46, 217] }",
+        "actual_state_hash": "[e4, 4d, 25, d7, e6, 15, 97, 56, 20, d2, 2a, 5d, f8, c7, 20, dc, bc, 15, d5, 5b, 97, 5f, 6b, ee, 32, b9, 58, 24, cd, b4, 2e, d9]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Player(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "case": "y_target_A",
+    "final_auth_generation": 2,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_target_A-restored-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 2,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"player:1\"] }",
+          "CardDiscarded { player: 0, cards: [9] }",
+          "CardDiscarded { player: 0, cards: [42] }",
+          "HpRecovered { player: 1, amount: 2, presentation: Some(HpRecovered { actor: PlayerId(2), amount: 2 }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [228, 77, 37, 215, 230, 21, 151, 86, 32, 210, 42, 93, 248, 199, 32, 220, 188, 21, 213, 91, 151, 95, 107, 238, 50, 185, 88, 36, 205, 180, 46, 217] }",
+        "actual_state_hash": "[e4, 4d, 25, d7, e6, 15, 97, 56, 20, d2, 2a, 5d, f8, c7, 20, dc, bc, 15, d5, 5b, 97, 5f, 6b, ee, 32, b9, 58, 24, cd, b4, 2e, d9]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Player(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "y_target_B",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_target_B-direct-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"card:9\", \"card:42\"] }",
+          "ChoiceOpened { id: 2, observer: 0, prompt: \"yixin:choose_target\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"yixin:choose_target\", options: [Player(1), Player(2), Pass], min: 1, max: 1, allow_cancel: true } } }",
+        "actual_state_hash": "[6a, 3e, ee, 60, 61, fd, d8, ee, 2c, 4f, 37, 8b, 95, 8d, dc, b2, 4e, b2, e3, 2c, 0f, 46, c4, 78, ae, 6b, 95, 08, c6, 97, f6, ef]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Card(9), Card(42)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"player:2\"] }",
+          "CardDiscarded { player: 0, cards: [9] }",
+          "CardDiscarded { player: 0, cards: [42] }",
+          "HpRecovered { player: 2, amount: 4, presentation: Some(HpRecovered { actor: PlayerId(3), amount: 4 }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [163, 26, 227, 29, 97, 224, 4, 26, 142, 86, 179, 58, 7, 201, 213, 98, 44, 133, 62, 68, 148, 68, 89, 74, 233, 155, 197, 57, 51, 222, 167, 116] }",
+        "actual_state_hash": "[a3, 1a, e3, 1d, 61, e0, 04, 1a, 8e, 56, b3, 3a, 07, c9, d5, 62, 2c, 85, 3e, 44, 94, 44, 59, 4a, e9, 9b, c5, 39, 33, de, a7, 74]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Player(2)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "y_target_B",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_target_B-direct-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"player:2\"] }",
+          "CardDiscarded { player: 0, cards: [9] }",
+          "CardDiscarded { player: 0, cards: [42] }",
+          "HpRecovered { player: 2, amount: 4, presentation: Some(HpRecovered { actor: PlayerId(3), amount: 4 }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [163, 26, 227, 29, 97, 224, 4, 26, 142, 86, 179, 58, 7, 201, 213, 98, 44, 133, 62, 68, 148, 68, 89, 74, 233, 155, 197, 57, 51, 222, 167, 116] }",
+        "actual_state_hash": "[a3, 1a, e3, 1d, 61, e0, 04, 1a, 8e, 56, b3, 3a, 07, c9, d5, 62, 2c, 85, 3e, 44, 94, 44, 59, 4a, e9, 9b, c5, 39, 33, de, a7, 74]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Player(2)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "y_target_B",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_target_B-restored-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 2,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"card:9\", \"card:42\"] }",
+          "ChoiceOpened { id: 2, observer: 0, prompt: \"yixin:choose_target\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"yixin:choose_target\", options: [Player(1), Player(2), Pass], min: 1, max: 1, allow_cancel: true } } }",
+        "actual_state_hash": "[6a, 3e, ee, 60, 61, fd, d8, ee, 2c, 4f, 37, 8b, 95, 8d, dc, b2, 4e, b2, e3, 2c, 0f, 46, c4, 78, ae, 6b, 95, 08, c6, 97, f6, ef]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Card(9), Card(42)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"player:2\"] }",
+          "CardDiscarded { player: 0, cards: [9] }",
+          "CardDiscarded { player: 0, cards: [42] }",
+          "HpRecovered { player: 2, amount: 4, presentation: Some(HpRecovered { actor: PlayerId(3), amount: 4 }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [163, 26, 227, 29, 97, 224, 4, 26, 142, 86, 179, 58, 7, 201, 213, 98, 44, 133, 62, 68, 148, 68, 89, 74, 233, 155, 197, 57, 51, 222, 167, 116] }",
+        "actual_state_hash": "[a3, 1a, e3, 1d, 61, e0, 04, 1a, 8e, 56, b3, 3a, 07, c9, d5, 62, 2c, 85, 3e, 44, 94, 44, 59, 4a, e9, 9b, c5, 39, 33, de, a7, 74]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Player(2)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "case": "y_target_B",
+    "final_auth_generation": 2,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_target_B-restored-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 2,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"player:2\"] }",
+          "CardDiscarded { player: 0, cards: [9] }",
+          "CardDiscarded { player: 0, cards: [42] }",
+          "HpRecovered { player: 2, amount: 4, presentation: Some(HpRecovered { actor: PlayerId(3), amount: 4 }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [163, 26, 227, 29, 97, 224, 4, 26, 142, 86, 179, 58, 7, 201, 213, 98, 44, 133, 62, 68, 148, 68, 89, 74, 233, 155, 197, 57, 51, 222, 167, 116] }",
+        "actual_state_hash": "[a3, 1a, e3, 1d, 61, e0, 04, 1a, 8e, 56, b3, 3a, 07, c9, d5, 62, 2c, 85, 3e, 44, 94, 44, 59, 4a, e9, 9b, c5, 39, 33, de, a7, 74]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Player(2)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "y_cost_B",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_cost_B-direct-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"card:42\", \"card:46\"] }",
+          "ChoiceOpened { id: 2, observer: 0, prompt: \"yixin:choose_target\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"yixin:choose_target\", options: [Player(1), Player(2), Pass], min: 1, max: 1, allow_cancel: true } } }",
+        "actual_state_hash": "[62, 71, bf, d0, 19, 63, e5, 73, 22, 4a, 28, 36, 9f, f8, b9, bb, 6b, ba, a6, 60, 6c, 62, e9, 06, 52, 4a, f6, d3, b2, d0, 4d, 60]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Card(42), Card(46)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"player:1\"] }",
+          "CardDiscarded { player: 0, cards: [42] }",
+          "CardDiscarded { player: 0, cards: [46] }",
+          "HpRecovered { player: 1, amount: 2, presentation: Some(HpRecovered { actor: PlayerId(2), amount: 2 }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [178, 180, 238, 54, 178, 235, 141, 133, 24, 84, 72, 223, 204, 242, 192, 129, 84, 120, 171, 155, 94, 64, 230, 21, 115, 151, 200, 165, 62, 30, 75, 16] }",
+        "actual_state_hash": "[b2, b4, ee, 36, b2, eb, 8d, 85, 18, 54, 48, df, cc, f2, c0, 81, 54, 78, ab, 9b, 5e, 40, e6, 15, 73, 97, c8, a5, 3e, 1e, 4b, 10]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Player(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "y_cost_B",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_cost_B-direct-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"player:1\"] }",
+          "CardDiscarded { player: 0, cards: [42] }",
+          "CardDiscarded { player: 0, cards: [46] }",
+          "HpRecovered { player: 1, amount: 2, presentation: Some(HpRecovered { actor: PlayerId(2), amount: 2 }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [178, 180, 238, 54, 178, 235, 141, 133, 24, 84, 72, 223, 204, 242, 192, 129, 84, 120, 171, 155, 94, 64, 230, 21, 115, 151, 200, 165, 62, 30, 75, 16] }",
+        "actual_state_hash": "[b2, b4, ee, 36, b2, eb, 8d, 85, 18, 54, 48, df, cc, f2, c0, 81, 54, 78, ab, 9b, 5e, 40, e6, 15, 73, 97, c8, a5, 3e, 1e, 4b, 10]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Player(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "y_cost_B",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_cost_B-restored-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 2,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"card:42\", \"card:46\"] }",
+          "ChoiceOpened { id: 2, observer: 0, prompt: \"yixin:choose_target\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"yixin:choose_target\", options: [Player(1), Player(2), Pass], min: 1, max: 1, allow_cancel: true } } }",
+        "actual_state_hash": "[62, 71, bf, d0, 19, 63, e5, 73, 22, 4a, 28, 36, 9f, f8, b9, bb, 6b, ba, a6, 60, 6c, 62, e9, 06, 52, 4a, f6, d3, b2, d0, 4d, 60]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Card(42), Card(46)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"player:1\"] }",
+          "CardDiscarded { player: 0, cards: [42] }",
+          "CardDiscarded { player: 0, cards: [46] }",
+          "HpRecovered { player: 1, amount: 2, presentation: Some(HpRecovered { actor: PlayerId(2), amount: 2 }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [178, 180, 238, 54, 178, 235, 141, 133, 24, 84, 72, 223, 204, 242, 192, 129, 84, 120, 171, 155, 94, 64, 230, 21, 115, 151, 200, 165, 62, 30, 75, 16] }",
+        "actual_state_hash": "[b2, b4, ee, 36, b2, eb, 8d, 85, 18, 54, 48, df, cc, f2, c0, 81, 54, 78, ab, 9b, 5e, 40, e6, 15, 73, 97, c8, a5, 3e, 1e, 4b, 10]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Player(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "case": "y_cost_B",
+    "final_auth_generation": 2,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_cost_B-restored-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 2,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"player:1\"] }",
+          "CardDiscarded { player: 0, cards: [42] }",
+          "CardDiscarded { player: 0, cards: [46] }",
+          "HpRecovered { player: 1, amount: 2, presentation: Some(HpRecovered { actor: PlayerId(2), amount: 2 }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [178, 180, 238, 54, 178, 235, 141, 133, 24, 84, 72, 223, 204, 242, 192, 129, 84, 120, 171, 155, 94, 64, 230, 21, 115, 151, 200, 165, 62, 30, 75, 16] }",
+        "actual_state_hash": "[b2, b4, ee, 36, b2, eb, 8d, 85, 18, 54, 48, df, cc, f2, c0, 81, 54, 78, ab, 9b, 5e, 40, e6, 15, 73, 97, c8, a5, 3e, 1e, 4b, 10]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Player(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "y_self",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_self-direct-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"card:9\", \"card:42\"] }",
+          "ChoiceOpened { id: 2, observer: 0, prompt: \"yixin:choose_target\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"yixin:choose_target\", options: [Player(0), Player(1), Player(2), Pass], min: 1, max: 1, allow_cancel: true } } }",
+        "actual_state_hash": "[05, 92, b1, f7, af, 87, e5, c6, 7b, a9, 44, c5, 09, 85, 4a, 49, f1, 01, 5e, f3, 20, db, 74, 8e, 83, 65, c4, 8c, ab, 3a, 1f, 88]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Card(9), Card(42)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"player:0\"] }",
+          "CardDiscarded { player: 0, cards: [9] }",
+          "CardDiscarded { player: 0, cards: [42] }",
+          "HpRecovered { player: 0, amount: 2, presentation: Some(HpRecovered { actor: PlayerId(1), amount: 2 }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [101, 85, 99, 12, 21, 122, 90, 194, 207, 41, 73, 179, 17, 9, 100, 55, 11, 114, 91, 84, 189, 169, 199, 239, 5, 47, 198, 84, 81, 207, 94, 233] }",
+        "actual_state_hash": "[65, 55, 63, 0c, 15, 7a, 5a, c2, cf, 29, 49, b3, 11, 09, 64, 37, 0b, 72, 5b, 54, bd, a9, c7, ef, 05, 2f, c6, 54, 51, cf, 5e, e9]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Player(0)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "y_self",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_self-direct-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"player:0\"] }",
+          "CardDiscarded { player: 0, cards: [9] }",
+          "CardDiscarded { player: 0, cards: [42] }",
+          "HpRecovered { player: 0, amount: 2, presentation: Some(HpRecovered { actor: PlayerId(1), amount: 2 }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [101, 85, 99, 12, 21, 122, 90, 194, 207, 41, 73, 179, 17, 9, 100, 55, 11, 114, 91, 84, 189, 169, 199, 239, 5, 47, 198, 84, 81, 207, 94, 233] }",
+        "actual_state_hash": "[65, 55, 63, 0c, 15, 7a, 5a, c2, cf, 29, 49, b3, 11, 09, 64, 37, 0b, 72, 5b, 54, bd, a9, c7, ef, 05, 2f, c6, 54, 51, cf, 5e, e9]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Player(0)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "y_self",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_self-restored-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 2,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"card:9\", \"card:42\"] }",
+          "ChoiceOpened { id: 2, observer: 0, prompt: \"yixin:choose_target\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"yixin:choose_target\", options: [Player(0), Player(1), Player(2), Pass], min: 1, max: 1, allow_cancel: true } } }",
+        "actual_state_hash": "[05, 92, b1, f7, af, 87, e5, c6, 7b, a9, 44, c5, 09, 85, 4a, 49, f1, 01, 5e, f3, 20, db, 74, 8e, 83, 65, c4, 8c, ab, 3a, 1f, 88]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Card(9), Card(42)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"player:0\"] }",
+          "CardDiscarded { player: 0, cards: [9] }",
+          "CardDiscarded { player: 0, cards: [42] }",
+          "HpRecovered { player: 0, amount: 2, presentation: Some(HpRecovered { actor: PlayerId(1), amount: 2 }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [101, 85, 99, 12, 21, 122, 90, 194, 207, 41, 73, 179, 17, 9, 100, 55, 11, 114, 91, 84, 189, 169, 199, 239, 5, 47, 198, 84, 81, 207, 94, 233] }",
+        "actual_state_hash": "[65, 55, 63, 0c, 15, 7a, 5a, c2, cf, 29, 49, b3, 11, 09, 64, 37, 0b, 72, 5b, 54, bd, a9, c7, ef, 05, 2f, c6, 54, 51, cf, 5e, e9]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Player(0)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "case": "y_self",
+    "final_auth_generation": 2,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_self-restored-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 2,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"player:0\"] }",
+          "CardDiscarded { player: 0, cards: [9] }",
+          "CardDiscarded { player: 0, cards: [42] }",
+          "HpRecovered { player: 0, amount: 2, presentation: Some(HpRecovered { actor: PlayerId(1), amount: 2 }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [101, 85, 99, 12, 21, 122, 90, 194, 207, 41, 73, 179, 17, 9, 100, 55, 11, 114, 91, 84, 189, 169, 199, 239, 5, 47, 198, 84, 81, 207, 94, 233] }",
+        "actual_state_hash": "[65, 55, 63, 0c, 15, 7a, 5a, c2, cf, 29, 49, b3, 11, 09, 64, 37, 0b, 72, 5b, 54, bd, a9, c7, ef, 05, 2f, c6, 54, 51, cf, 5e, e9]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Player(0)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "y_cancel_cards",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_cancel_cards-direct-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [110, 40, 177, 103, 219, 137, 16, 248, 49, 127, 4, 206, 30, 11, 149, 160, 48, 188, 135, 174, 110, 93, 119, 59, 140, 171, 50, 119, 56, 4, 209, 154] }",
+        "actual_state_hash": "[6e, 28, b1, 67, db, 89, 10, f8, 31, 7f, 04, ce, 1e, 0b, 95, a0, 30, bc, 87, ae, 6e, 5d, 77, 3b, 8c, ab, 32, 77, 38, 04, d1, 9a]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceOpened { id: 2, observer: 0, prompt: \"yixin:discard_two\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: \"yixin:discard_two\", options: [Card(9), Card(42), Card(46), Pass], min: 2, max: 2, allow_cancel: true } } }",
+        "actual_state_hash": "[6b, fa, ab, 6f, bb, e0, 2d, 17, 78, ca, 07, d1, 02, e1, d5, 4b, c4, 06, 5b, 9a, b4, e9, 5b, fc, ea, d7, 12, c0, 96, 40, 65, 6c]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: ActivateSkill { skill: 243 } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [199, 13, 96, 118, 63, 101, 62, 67, 244, 233, 139, 18, 223, 63, 254, 228, 81, 227, 173, 201, 10, 165, 142, 171, 63, 150, 34, 234, 96, 14, 25, 194] }",
+        "actual_state_hash": "[c7, 0d, 60, 76, 3f, 65, 3e, 43, f4, e9, 8b, 12, df, 3f, fe, e4, 51, e3, ad, c9, 0a, a5, 8e, ab, 3f, 96, 22, ea, 60, 0e, 19, c2]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 2, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "y_cancel_cards",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_cancel_cards-direct-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [199, 13, 96, 118, 63, 101, 62, 67, 244, 233, 139, 18, 223, 63, 254, 228, 81, 227, 173, 201, 10, 165, 142, 171, 63, 150, 34, 234, 96, 14, 25, 194] }",
+        "actual_state_hash": "[c7, 0d, 60, 76, 3f, 65, 3e, 43, f4, e9, 8b, 12, df, 3f, fe, e4, 51, e3, ad, c9, 0a, a5, 8e, ab, 3f, 96, 22, ea, 60, 0e, 19, c2]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 2, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "y_cancel_cards",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_cancel_cards-restored-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 2,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [110, 40, 177, 103, 219, 137, 16, 248, 49, 127, 4, 206, 30, 11, 149, 160, 48, 188, 135, 174, 110, 93, 119, 59, 140, 171, 50, 119, 56, 4, 209, 154] }",
+        "actual_state_hash": "[6e, 28, b1, 67, db, 89, 10, f8, 31, 7f, 04, ce, 1e, 0b, 95, a0, 30, bc, 87, ae, 6e, 5d, 77, 3b, 8c, ab, 32, 77, 38, 04, d1, 9a]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceOpened { id: 2, observer: 0, prompt: \"yixin:discard_two\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: \"yixin:discard_two\", options: [Card(9), Card(42), Card(46), Pass], min: 2, max: 2, allow_cancel: true } } }",
+        "actual_state_hash": "[6b, fa, ab, 6f, bb, e0, 2d, 17, 78, ca, 07, d1, 02, e1, d5, 4b, c4, 06, 5b, 9a, b4, e9, 5b, fc, ea, d7, 12, c0, 96, 40, 65, 6c]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: ActivateSkill { skill: 243 } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [199, 13, 96, 118, 63, 101, 62, 67, 244, 233, 139, 18, 223, 63, 254, 228, 81, 227, 173, 201, 10, 165, 142, 171, 63, 150, 34, 234, 96, 14, 25, 194] }",
+        "actual_state_hash": "[c7, 0d, 60, 76, 3f, 65, 3e, 43, f4, e9, 8b, 12, df, 3f, fe, e4, 51, e3, ad, c9, 0a, a5, 8e, ab, 3f, 96, 22, ea, 60, 0e, 19, c2]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 2, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "case": "y_cancel_cards",
+    "final_auth_generation": 2,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_cancel_cards-restored-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 2,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [199, 13, 96, 118, 63, 101, 62, 67, 244, 233, 139, 18, 223, 63, 254, 228, 81, 227, 173, 201, 10, 165, 142, 171, 63, 150, 34, 234, 96, 14, 25, 194] }",
+        "actual_state_hash": "[c7, 0d, 60, 76, 3f, 65, 3e, 43, f4, e9, 8b, 12, df, 3f, fe, e4, 51, e3, ad, c9, 0a, a5, 8e, ab, 3f, 96, 22, ea, 60, 0e, 19, c2]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 2, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "y_cancel_target",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_cancel_target-direct-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"card:9\", \"card:42\"] }",
+          "ChoiceOpened { id: 2, observer: 0, prompt: \"yixin:choose_target\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"yixin:choose_target\", options: [Player(1), Player(2), Pass], min: 1, max: 1, allow_cancel: true } } }",
+        "actual_state_hash": "[6a, 3e, ee, 60, 61, fd, d8, ee, 2c, 4f, 37, 8b, 95, 8d, dc, b2, 4e, b2, e3, 2c, 0f, 46, c4, 78, ae, 6b, 95, 08, c6, 97, f6, ef]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Card(9), Card(42)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [58, 112, 51, 65, 193, 92, 138, 248, 100, 98, 130, 138, 20, 125, 144, 95, 165, 139, 85, 102, 160, 49, 127, 32, 235, 254, 108, 131, 134, 46, 218, 132] }",
+        "actual_state_hash": "[3a, 70, 33, 41, c1, 5c, 8a, f8, 64, 62, 82, 8a, 14, 7d, 90, 5f, a5, 8b, 55, 66, a0, 31, 7f, 20, eb, fe, 6c, 83, 86, 2e, da, 84]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceOpened { id: 3, observer: 0, prompt: \"yixin:discard_two\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: \"yixin:discard_two\", options: [Card(9), Card(42), Card(46), Pass], min: 2, max: 2, allow_cancel: true } } }",
+        "actual_state_hash": "[fa, 58, e1, a5, ab, 14, a1, 7a, 6b, b3, fd, 80, a5, d4, c4, 45, 74, e0, 5a, 9c, e4, 2d, 04, 47, 6f, f7, ea, b0, 53, bc, 40, c2]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: ActivateSkill { skill: 243 } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 3, options: [] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [139, 42, 24, 192, 176, 98, 73, 253, 75, 237, 97, 110, 147, 138, 125, 183, 219, 190, 66, 39, 220, 200, 237, 252, 138, 247, 81, 177, 73, 70, 16, 77] }",
+        "actual_state_hash": "[8b, 2a, 18, c0, b0, 62, 49, fd, 4b, ed, 61, 6e, 93, 8a, 7d, b7, db, be, 42, 27, dc, c8, ed, fc, 8a, f7, 51, b1, 49, 46, 10, 4d]",
+        "command_index": 4,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 3, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "y_cancel_target",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_cancel_target-direct-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [58, 112, 51, 65, 193, 92, 138, 248, 100, 98, 130, 138, 20, 125, 144, 95, 165, 139, 85, 102, 160, 49, 127, 32, 235, 254, 108, 131, 134, 46, 218, 132] }",
+        "actual_state_hash": "[3a, 70, 33, 41, c1, 5c, 8a, f8, 64, 62, 82, 8a, 14, 7d, 90, 5f, a5, 8b, 55, 66, a0, 31, 7f, 20, eb, fe, 6c, 83, 86, 2e, da, 84]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceOpened { id: 3, observer: 0, prompt: \"yixin:discard_two\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: \"yixin:discard_two\", options: [Card(9), Card(42), Card(46), Pass], min: 2, max: 2, allow_cancel: true } } }",
+        "actual_state_hash": "[fa, 58, e1, a5, ab, 14, a1, 7a, 6b, b3, fd, 80, a5, d4, c4, 45, 74, e0, 5a, 9c, e4, 2d, 04, 47, 6f, f7, ea, b0, 53, bc, 40, c2]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: ActivateSkill { skill: 243 } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 3, options: [] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [139, 42, 24, 192, 176, 98, 73, 253, 75, 237, 97, 110, 147, 138, 125, 183, 219, 190, 66, 39, 220, 200, 237, 252, 138, 247, 81, 177, 73, 70, 16, 77] }",
+        "actual_state_hash": "[8b, 2a, 18, c0, b0, 62, 49, fd, 4b, ed, 61, 6e, 93, 8a, 7d, b7, db, be, 42, 27, dc, c8, ed, fc, 8a, f7, 51, b1, 49, 46, 10, 4d]",
+        "command_index": 4,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 3, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "y_cancel_target",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_cancel_target-direct-pending-2.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 3, options: [] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [139, 42, 24, 192, 176, 98, 73, 253, 75, 237, 97, 110, 147, 138, 125, 183, 219, 190, 66, 39, 220, 200, 237, 252, 138, 247, 81, 177, 73, 70, 16, 77] }",
+        "actual_state_hash": "[8b, 2a, 18, c0, b0, 62, 49, fd, 4b, ed, 61, 6e, 93, 8a, 7d, b7, db, be, 42, 27, dc, c8, ed, fc, 8a, f7, 51, b1, 49, 46, 10, 4d]",
+        "command_index": 4,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 3, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "y_cancel_target",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_cancel_target-restored-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 3,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"card:9\", \"card:42\"] }",
+          "ChoiceOpened { id: 2, observer: 0, prompt: \"yixin:choose_target\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"yixin:choose_target\", options: [Player(1), Player(2), Pass], min: 1, max: 1, allow_cancel: true } } }",
+        "actual_state_hash": "[6a, 3e, ee, 60, 61, fd, d8, ee, 2c, 4f, 37, 8b, 95, 8d, dc, b2, 4e, b2, e3, 2c, 0f, 46, c4, 78, ae, 6b, 95, 08, c6, 97, f6, ef]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Card(9), Card(42)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [58, 112, 51, 65, 193, 92, 138, 248, 100, 98, 130, 138, 20, 125, 144, 95, 165, 139, 85, 102, 160, 49, 127, 32, 235, 254, 108, 131, 134, 46, 218, 132] }",
+        "actual_state_hash": "[3a, 70, 33, 41, c1, 5c, 8a, f8, 64, 62, 82, 8a, 14, 7d, 90, 5f, a5, 8b, 55, 66, a0, 31, 7f, 20, eb, fe, 6c, 83, 86, 2e, da, 84]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceOpened { id: 3, observer: 0, prompt: \"yixin:discard_two\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: \"yixin:discard_two\", options: [Card(9), Card(42), Card(46), Pass], min: 2, max: 2, allow_cancel: true } } }",
+        "actual_state_hash": "[fa, 58, e1, a5, ab, 14, a1, 7a, 6b, b3, fd, 80, a5, d4, c4, 45, 74, e0, 5a, 9c, e4, 2d, 04, 47, 6f, f7, ea, b0, 53, bc, 40, c2]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: ActivateSkill { skill: 243 } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 3, options: [] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [139, 42, 24, 192, 176, 98, 73, 253, 75, 237, 97, 110, 147, 138, 125, 183, 219, 190, 66, 39, 220, 200, 237, 252, 138, 247, 81, 177, 73, 70, 16, 77] }",
+        "actual_state_hash": "[8b, 2a, 18, c0, b0, 62, 49, fd, 4b, ed, 61, 6e, 93, 8a, 7d, b7, db, be, 42, 27, dc, c8, ed, fc, 8a, f7, 51, b1, 49, 46, 10, 4d]",
+        "command_index": 4,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 3, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "case": "y_cancel_target",
+    "final_auth_generation": 2,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_cancel_target-restored-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 3,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [58, 112, 51, 65, 193, 92, 138, 248, 100, 98, 130, 138, 20, 125, 144, 95, 165, 139, 85, 102, 160, 49, 127, 32, 235, 254, 108, 131, 134, 46, 218, 132] }",
+        "actual_state_hash": "[3a, 70, 33, 41, c1, 5c, 8a, f8, 64, 62, 82, 8a, 14, 7d, 90, 5f, a5, 8b, 55, 66, a0, 31, 7f, 20, eb, fe, 6c, 83, 86, 2e, da, 84]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceOpened { id: 3, observer: 0, prompt: \"yixin:discard_two\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: \"yixin:discard_two\", options: [Card(9), Card(42), Card(46), Pass], min: 2, max: 2, allow_cancel: true } } }",
+        "actual_state_hash": "[fa, 58, e1, a5, ab, 14, a1, 7a, 6b, b3, fd, 80, a5, d4, c4, 45, 74, e0, 5a, 9c, e4, 2d, 04, 47, 6f, f7, ea, b0, 53, bc, 40, c2]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: ActivateSkill { skill: 243 } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 3, options: [] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [139, 42, 24, 192, 176, 98, 73, 253, 75, 237, 97, 110, 147, 138, 125, 183, 219, 190, 66, 39, 220, 200, 237, 252, 138, 247, 81, 177, 73, 70, 16, 77] }",
+        "actual_state_hash": "[8b, 2a, 18, c0, b0, 62, 49, fd, 4b, ed, 61, 6e, 93, 8a, 7d, b7, db, be, 42, 27, dc, c8, ed, fc, 8a, f7, 51, b1, 49, 46, 10, 4d]",
+        "command_index": 4,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 3, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 3,
+    "auth_before": 2,
+    "case": "y_cancel_target",
+    "final_auth_generation": 3,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_cancel_target-restored-pending-2.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 3,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 3, options: [] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [139, 42, 24, 192, 176, 98, 73, 253, 75, 237, 97, 110, 147, 138, 125, 183, 219, 190, 66, 39, 220, 200, 237, 252, 138, 247, 81, 177, 73, 70, 16, 77] }",
+        "actual_state_hash": "[8b, 2a, 18, c0, b0, 62, 49, fd, 4b, ed, 61, 6e, 93, 8a, 7d, b7, db, be, 42, 27, dc, c8, ed, fc, 8a, f7, 51, b1, 49, 46, 10, 4d]",
+        "command_index": 4,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 4, dedup_id: 5, action: Answer { choice_id: 3, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "y_reuse",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_reuse-direct-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"card:9\", \"card:42\"] }",
+          "ChoiceOpened { id: 2, observer: 0, prompt: \"yixin:choose_target\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"yixin:choose_target\", options: [Player(1), Player(2), Pass], min: 1, max: 1, allow_cancel: true } } }",
+        "actual_state_hash": "[48, f0, 07, 88, 09, ac, cc, d0, f0, fc, 03, bd, b6, bf, 37, 3f, 1a, ba, f7, 9e, 1d, 5f, 53, 81, 5a, 15, 2f, b2, ee, f4, e7, 38]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Card(9), Card(42)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"player:1\"] }",
+          "CardDiscarded { player: 0, cards: [9] }",
+          "CardDiscarded { player: 0, cards: [42] }",
+          "HpRecovered { player: 1, amount: 2, presentation: Some(HpRecovered { actor: PlayerId(2), amount: 2 }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [143, 123, 31, 10, 183, 110, 7, 62, 178, 241, 135, 61, 167, 85, 90, 198, 145, 195, 173, 9, 160, 120, 68, 108, 168, 188, 87, 126, 132, 171, 182, 243] }",
+        "actual_state_hash": "[8f, 7b, 1f, 0a, b7, 6e, 07, 3e, b2, f1, 87, 3d, a7, 55, 5a, c6, 91, c3, ad, 09, a0, 78, 44, 6c, a8, bc, 57, 7e, 84, ab, b6, f3]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Player(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [],
+        "actual_reply": "Rejected(SkillAlreadyUsed)",
+        "actual_state_hash": "[8f, 7b, 1f, 0a, b7, 6e, 07, 3e, b2, f1, 87, 3d, a7, 55, 5a, c6, 91, c3, ad, 09, a0, 78, 44, 6c, a8, bc, 57, 7e, 84, ab, b6, f3]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: ActivateSkill { skill: 243 } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "y_reuse",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_reuse-direct-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"player:1\"] }",
+          "CardDiscarded { player: 0, cards: [9] }",
+          "CardDiscarded { player: 0, cards: [42] }",
+          "HpRecovered { player: 1, amount: 2, presentation: Some(HpRecovered { actor: PlayerId(2), amount: 2 }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [143, 123, 31, 10, 183, 110, 7, 62, 178, 241, 135, 61, 167, 85, 90, 198, 145, 195, 173, 9, 160, 120, 68, 108, 168, 188, 87, 126, 132, 171, 182, 243] }",
+        "actual_state_hash": "[8f, 7b, 1f, 0a, b7, 6e, 07, 3e, b2, f1, 87, 3d, a7, 55, 5a, c6, 91, c3, ad, 09, a0, 78, 44, 6c, a8, bc, 57, 7e, 84, ab, b6, f3]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Player(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [],
+        "actual_reply": "Rejected(SkillAlreadyUsed)",
+        "actual_state_hash": "[8f, 7b, 1f, 0a, b7, 6e, 07, 3e, b2, f1, 87, 3d, a7, 55, 5a, c6, 91, c3, ad, 09, a0, 78, 44, 6c, a8, bc, 57, 7e, 84, ab, b6, f3]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: ActivateSkill { skill: 243 } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "y_reuse",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_reuse-restored-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 2,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"card:9\", \"card:42\"] }",
+          "ChoiceOpened { id: 2, observer: 0, prompt: \"yixin:choose_target\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"yixin:choose_target\", options: [Player(1), Player(2), Pass], min: 1, max: 1, allow_cancel: true } } }",
+        "actual_state_hash": "[48, f0, 07, 88, 09, ac, cc, d0, f0, fc, 03, bd, b6, bf, 37, 3f, 1a, ba, f7, 9e, 1d, 5f, 53, 81, 5a, 15, 2f, b2, ee, f4, e7, 38]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Card(9), Card(42)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"player:1\"] }",
+          "CardDiscarded { player: 0, cards: [9] }",
+          "CardDiscarded { player: 0, cards: [42] }",
+          "HpRecovered { player: 1, amount: 2, presentation: Some(HpRecovered { actor: PlayerId(2), amount: 2 }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [143, 123, 31, 10, 183, 110, 7, 62, 178, 241, 135, 61, 167, 85, 90, 198, 145, 195, 173, 9, 160, 120, 68, 108, 168, 188, 87, 126, 132, 171, 182, 243] }",
+        "actual_state_hash": "[8f, 7b, 1f, 0a, b7, 6e, 07, 3e, b2, f1, 87, 3d, a7, 55, 5a, c6, 91, c3, ad, 09, a0, 78, 44, 6c, a8, bc, 57, 7e, 84, ab, b6, f3]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Player(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [],
+        "actual_reply": "Rejected(SkillAlreadyUsed)",
+        "actual_state_hash": "[8f, 7b, 1f, 0a, b7, 6e, 07, 3e, b2, f1, 87, 3d, a7, 55, 5a, c6, 91, c3, ad, 09, a0, 78, 44, 6c, a8, bc, 57, 7e, 84, ab, b6, f3]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: ActivateSkill { skill: 243 } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "case": "y_reuse",
+    "final_auth_generation": 2,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "y_reuse-restored-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 2,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"player:1\"] }",
+          "CardDiscarded { player: 0, cards: [9] }",
+          "CardDiscarded { player: 0, cards: [42] }",
+          "HpRecovered { player: 1, amount: 2, presentation: Some(HpRecovered { actor: PlayerId(2), amount: 2 }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [143, 123, 31, 10, 183, 110, 7, 62, 178, 241, 135, 61, 167, 85, 90, 198, 145, 195, 173, 9, 160, 120, 68, 108, 168, 188, 87, 126, 132, 171, 182, 243] }",
+        "actual_state_hash": "[8f, 7b, 1f, 0a, b7, 6e, 07, 3e, b2, f1, 87, 3d, a7, 55, 5a, c6, 91, c3, ad, 09, a0, 78, 44, 6c, a8, bc, 57, 7e, 84, ab, b6, f3]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Player(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [],
+        "actual_reply": "Rejected(SkillAlreadyUsed)",
+        "actual_state_hash": "[8f, 7b, 1f, 0a, b7, 6e, 07, 3e, b2, f1, 87, 3d, a7, 55, 5a, c6, 91, c3, ad, 09, a0, 78, 44, 6c, a8, bc, 57, 7e, 84, ab, b6, f3]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: ActivateSkill { skill: 243 } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "g_target_A",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "g_target_A-direct-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"player:1\"] }",
+          "CardDiscarded { player: 1, cards: [114] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [231, 133, 252, 198, 85, 105, 13, 193, 251, 146, 146, 101, 154, 36, 79, 14, 52, 8, 95, 48, 68, 147, 119, 239, 29, 77, 16, 98, 217, 167, 167, 237] }",
+        "actual_state_hash": "[e7, 85, fc, c6, 55, 69, 0d, c1, fb, 92, 92, 65, 9a, 24, 4f, 0e, 34, 08, 5f, 30, 44, 93, 77, ef, 1d, 4d, 10, 62, d9, a7, a7, ed]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Player(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "g_target_A",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "g_target_A-restored-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 1,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"player:1\"] }",
+          "CardDiscarded { player: 1, cards: [114] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [231, 133, 252, 198, 85, 105, 13, 193, 251, 146, 146, 101, 154, 36, 79, 14, 52, 8, 95, 48, 68, 147, 119, 239, 29, 77, 16, 98, 217, 167, 167, 237] }",
+        "actual_state_hash": "[e7, 85, fc, c6, 55, 69, 0d, c1, fb, 92, 92, 65, 9a, 24, 4f, 0e, 34, 08, 5f, 30, 44, 93, 77, ef, 1d, 4d, 10, 62, d9, a7, a7, ed]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Player(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "g_target_B",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "g_target_B-direct-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"player:2\"] }",
+          "CardDiscarded { player: 2, cards: [118] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [56, 144, 91, 191, 149, 35, 243, 161, 1, 55, 229, 234, 221, 5, 55, 207, 97, 7, 109, 6, 173, 243, 47, 239, 165, 48, 33, 29, 52, 144, 169, 195] }",
+        "actual_state_hash": "[38, 90, 5b, bf, 95, 23, f3, a1, 01, 37, e5, ea, dd, 05, 37, cf, 61, 07, 6d, 06, ad, f3, 2f, ef, a5, 30, 21, 1d, 34, 90, a9, c3]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Player(2)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "g_target_B",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "g_target_B-restored-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 1,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"player:2\"] }",
+          "CardDiscarded { player: 2, cards: [118] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [56, 144, 91, 191, 149, 35, 243, 161, 1, 55, 229, 234, 221, 5, 55, 207, 97, 7, 109, 6, 173, 243, 47, 239, 165, 48, 33, 29, 52, 144, 169, 195] }",
+        "actual_state_hash": "[38, 90, 5b, bf, 95, 23, f3, a1, 01, 37, e5, ea, dd, 05, 37, cf, 61, 07, 6d, 06, ad, f3, 2f, ef, a5, 30, 21, 1d, 34, 90, a9, c3]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Player(2)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "g_cancel_target",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "g_cancel_target-direct-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [117, 233, 173, 159, 223, 250, 165, 69, 76, 67, 216, 108, 213, 168, 64, 128, 113, 34, 126, 225, 143, 228, 147, 163, 227, 32, 122, 238, 196, 12, 13, 27] }",
+        "actual_state_hash": "[75, e9, ad, 9f, df, fa, a5, 45, 4c, 43, d8, 6c, d5, a8, 40, 80, 71, 22, 7e, e1, 8f, e4, 93, a3, e3, 20, 7a, ee, c4, 0c, 0d, 1b]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceOpened { id: 2, observer: 0, prompt: \"guifu:choose_target\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"guifu:choose_target\", options: [Player(1), Player(2), Pass], min: 1, max: 1, allow_cancel: true } } }",
+        "actual_state_hash": "[c7, ea, 05, 56, 5e, e7, 0c, a0, 1e, 6f, 05, 59, 10, 58, da, 65, 40, c7, 75, f1, 02, 1d, 00, 9f, 3e, 31, cb, cf, 32, f0, 12, 5f]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: ActivateSkill { skill: 335 } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [103, 100, 106, 212, 241, 63, 200, 243, 24, 216, 142, 153, 252, 185, 228, 101, 207, 114, 13, 230, 128, 224, 183, 226, 223, 94, 114, 120, 219, 77, 25, 213] }",
+        "actual_state_hash": "[67, 64, 6a, d4, f1, 3f, c8, f3, 18, d8, 8e, 99, fc, b9, e4, 65, cf, 72, 0d, e6, 80, e0, b7, e2, df, 5e, 72, 78, db, 4d, 19, d5]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 2, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "g_cancel_target",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "g_cancel_target-direct-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [103, 100, 106, 212, 241, 63, 200, 243, 24, 216, 142, 153, 252, 185, 228, 101, 207, 114, 13, 230, 128, 224, 183, 226, 223, 94, 114, 120, 219, 77, 25, 213] }",
+        "actual_state_hash": "[67, 64, 6a, d4, f1, 3f, c8, f3, 18, d8, 8e, 99, fc, b9, e4, 65, cf, 72, 0d, e6, 80, e0, b7, e2, df, 5e, 72, 78, db, 4d, 19, d5]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 2, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "g_cancel_target",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "g_cancel_target-restored-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 2,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [117, 233, 173, 159, 223, 250, 165, 69, 76, 67, 216, 108, 213, 168, 64, 128, 113, 34, 126, 225, 143, 228, 147, 163, 227, 32, 122, 238, 196, 12, 13, 27] }",
+        "actual_state_hash": "[75, e9, ad, 9f, df, fa, a5, 45, 4c, 43, d8, 6c, d5, a8, 40, 80, 71, 22, 7e, e1, 8f, e4, 93, a3, e3, 20, 7a, ee, c4, 0c, 0d, 1b]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceOpened { id: 2, observer: 0, prompt: \"guifu:choose_target\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: SelectPlayers, prompt: \"guifu:choose_target\", options: [Player(1), Player(2), Pass], min: 1, max: 1, allow_cancel: true } } }",
+        "actual_state_hash": "[c7, ea, 05, 56, 5e, e7, 0c, a0, 1e, 6f, 05, 59, 10, 58, da, 65, 40, c7, 75, f1, 02, 1d, 00, 9f, 3e, 31, cb, cf, 32, f0, 12, 5f]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: ActivateSkill { skill: 335 } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [103, 100, 106, 212, 241, 63, 200, 243, 24, 216, 142, 153, 252, 185, 228, 101, 207, 114, 13, 230, 128, 224, 183, 226, 223, 94, 114, 120, 219, 77, 25, 213] }",
+        "actual_state_hash": "[67, 64, 6a, d4, f1, 3f, c8, f3, 18, d8, 8e, 99, fc, b9, e4, 65, cf, 72, 0d, e6, 80, e0, b7, e2, df, 5e, 72, 78, db, 4d, 19, d5]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 2, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "case": "g_cancel_target",
+    "final_auth_generation": 2,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "g_cancel_target-restored-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 2,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [103, 100, 106, 212, 241, 63, 200, 243, 24, 216, 142, 153, 252, 185, 228, 101, 207, 114, 13, 230, 128, 224, 183, 226, 223, 94, 114, 120, 219, 77, 25, 213] }",
+        "actual_state_hash": "[67, 64, 6a, d4, f1, 3f, c8, f3, 18, d8, 8e, 99, fc, b9, e4, 65, cf, 72, 0d, e6, 80, e0, b7, e2, df, 5e, 72, 78, db, 4d, 19, d5]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 2, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "g_reuse",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "g_reuse-direct-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"player:1\"] }",
+          "CardDiscarded { player: 1, cards: [114] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [231, 133, 252, 198, 85, 105, 13, 193, 251, 146, 146, 101, 154, 36, 79, 14, 52, 8, 95, 48, 68, 147, 119, 239, 29, 77, 16, 98, 217, 167, 167, 237] }",
+        "actual_state_hash": "[e7, 85, fc, c6, 55, 69, 0d, c1, fb, 92, 92, 65, 9a, 24, 4f, 0e, 34, 08, 5f, 30, 44, 93, 77, ef, 1d, 4d, 10, 62, d9, a7, a7, ed]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Player(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [],
+        "actual_reply": "Rejected(SkillAlreadyUsed)",
+        "actual_state_hash": "[e7, 85, fc, c6, 55, 69, 0d, c1, fb, 92, 92, 65, 9a, 24, 4f, 0e, 34, 08, 5f, 30, 44, 93, 77, ef, 1d, 4d, 10, 62, d9, a7, a7, ed]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: ActivateSkill { skill: 335 } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "g_reuse",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "g_reuse-restored-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 1,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"player:1\"] }",
+          "CardDiscarded { player: 1, cards: [114] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [231, 133, 252, 198, 85, 105, 13, 193, 251, 146, 146, 101, 154, 36, 79, 14, 52, 8, 95, 48, 68, 147, 119, 239, 29, 77, 16, 98, 217, 167, 167, 237] }",
+        "actual_state_hash": "[e7, 85, fc, c6, 55, 69, 0d, c1, fb, 92, 92, 65, 9a, 24, 4f, 0e, 34, 08, 5f, 30, 44, 93, 77, ef, 1d, 4d, 10, 62, d9, a7, a7, ed]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Player(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [],
+        "actual_reply": "Rejected(SkillAlreadyUsed)",
+        "actual_state_hash": "[e7, 85, fc, c6, 55, 69, 0d, c1, fb, 92, 92, 65, 9a, 24, 4f, 0e, 34, 08, 5f, 30, 44, 93, 77, ef, 1d, 4d, 10, 62, d9, a7, a7, ed]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: ActivateSkill { skill: 335 } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_hit",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_hit-direct-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"nature:1\"] }",
+          "DamageDealt { source: Some(1), target: 2, amount: 1, redirected_from: [], card: Some(9), presentation: Some(DamageDealt { source: Some(PlayerId(2)), target: PlayerId(3), amount: 1, nature: Normal }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }"
+        ],
+        "actual_reply": "Accepted { state_hash: [201, 122, 117, 217, 241, 133, 76, 214, 36, 89, 235, 63, 111, 57, 112, 216, 148, 216, 154, 26, 3, 64, 120, 240, 135, 228, 35, 24, 107, 129, 172, 28] }",
+        "actual_state_hash": "[c9, 7a, 75, d9, f1, 85, 4c, d6, 24, 59, eb, 3f, 6f, 39, 70, d8, 94, d8, 9a, 1a, 03, 40, 78, f0, 87, e4, 23, 18, 6b, 81, ac, 1c]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Tag(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_hit",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_hit-restored-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 1,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"nature:1\"] }",
+          "DamageDealt { source: Some(1), target: 2, amount: 1, redirected_from: [], card: Some(9), presentation: Some(DamageDealt { source: Some(PlayerId(2)), target: PlayerId(3), amount: 1, nature: Normal }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }"
+        ],
+        "actual_reply": "Accepted { state_hash: [201, 122, 117, 217, 241, 133, 76, 214, 36, 89, 235, 63, 111, 57, 112, 216, 148, 216, 154, 26, 3, 64, 120, 240, 135, 228, 35, 24, 107, 129, 172, 28] }",
+        "actual_state_hash": "[c9, 7a, 75, d9, f1, 85, 4c, d6, 24, 59, eb, 3f, 6f, 39, 70, d8, 94, d8, 9a, 1a, 03, 40, 78, f0, 87, e4, 23, 18, 6b, 81, ac, 1c]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Tag(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_miss",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_miss-direct-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"nature:2\"] }",
+          "ChoiceOpened { id: 2, observer: 2, prompt: \"respond_shan\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 2, spec: ChoiceSpec { kind: RespondCard, prompt: \"respond_shan\", options: [Pass, Card(42)], min: 1, max: 1, allow_cancel: false } } }",
+        "actual_state_hash": "[e2, e1, 5c, c8, bc, 86, 1c, 68, 44, 13, 2d, 4d, f1, b5, 66, cd, ba, 8a, 6f, 6e, 55, 4d, e1, 5f, 51, e6, cc, 32, 99, 43, 81, 15]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Tag(2)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"card:42\"] }",
+          "CardDiscarded { player: 2, cards: [42] }",
+          "CardResponded { card: 42, player: 2, presentation: Some(CardResponded { actor: PlayerId(3), effective: EffectivePresentationCard { kind: \"shan\", key: \"shan\", nature: Normal }, voice: None }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }"
+        ],
+        "actual_reply": "Accepted { state_hash: [2, 98, 87, 63, 37, 131, 106, 7, 217, 226, 19, 169, 27, 153, 184, 20, 157, 229, 250, 83, 176, 32, 67, 148, 75, 115, 55, 209, 80, 188, 159, 251] }",
+        "actual_state_hash": "[02, 62, 57, 3f, 25, 83, 6a, 07, d9, e2, 13, a9, 1b, 99, b8, 14, 9d, e5, fa, 53, b0, 20, 43, 94, 4b, 73, 37, d1, 50, bc, 9f, fb]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 2, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Card(42)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_miss",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_miss-direct-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"card:42\"] }",
+          "CardDiscarded { player: 2, cards: [42] }",
+          "CardResponded { card: 42, player: 2, presentation: Some(CardResponded { actor: PlayerId(3), effective: EffectivePresentationCard { kind: \"shan\", key: \"shan\", nature: Normal }, voice: None }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }"
+        ],
+        "actual_reply": "Accepted { state_hash: [2, 98, 87, 63, 37, 131, 106, 7, 217, 226, 19, 169, 27, 153, 184, 20, 157, 229, 250, 83, 176, 32, 67, 148, 75, 115, 55, 209, 80, 188, 159, 251] }",
+        "actual_state_hash": "[02, 62, 57, 3f, 25, 83, 6a, 07, d9, e2, 13, a9, 1b, 99, b8, 14, 9d, e5, fa, 53, b0, 20, 43, 94, 4b, 73, 37, d1, 50, bc, 9f, fb]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 2, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Card(42)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_miss",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_miss-restored-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 2,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"nature:2\"] }",
+          "ChoiceOpened { id: 2, observer: 2, prompt: \"respond_shan\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 2, spec: ChoiceSpec { kind: RespondCard, prompt: \"respond_shan\", options: [Pass, Card(42)], min: 1, max: 1, allow_cancel: false } } }",
+        "actual_state_hash": "[e2, e1, 5c, c8, bc, 86, 1c, 68, 44, 13, 2d, 4d, f1, b5, 66, cd, ba, 8a, 6f, 6e, 55, 4d, e1, 5f, 51, e6, cc, 32, 99, 43, 81, 15]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Tag(2)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"card:42\"] }",
+          "CardDiscarded { player: 2, cards: [42] }",
+          "CardResponded { card: 42, player: 2, presentation: Some(CardResponded { actor: PlayerId(3), effective: EffectivePresentationCard { kind: \"shan\", key: \"shan\", nature: Normal }, voice: None }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }"
+        ],
+        "actual_reply": "Accepted { state_hash: [2, 98, 87, 63, 37, 131, 106, 7, 217, 226, 19, 169, 27, 153, 184, 20, 157, 229, 250, 83, 176, 32, 67, 148, 75, 115, 55, 209, 80, 188, 159, 251] }",
+        "actual_state_hash": "[02, 62, 57, 3f, 25, 83, 6a, 07, d9, e2, 13, a9, 1b, 99, b8, 14, 9d, e5, fa, 53, b0, 20, 43, 94, 4b, 73, 37, d1, 50, bc, 9f, fb]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 2, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Card(42)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "case": "b_miss",
+    "final_auth_generation": 2,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_miss-restored-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 2,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"card:42\"] }",
+          "CardDiscarded { player: 2, cards: [42] }",
+          "CardResponded { card: 42, player: 2, presentation: Some(CardResponded { actor: PlayerId(3), effective: EffectivePresentationCard { kind: \"shan\", key: \"shan\", nature: Normal }, voice: None }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }"
+        ],
+        "actual_reply": "Accepted { state_hash: [2, 98, 87, 63, 37, 131, 106, 7, 217, 226, 19, 169, 27, 153, 184, 20, 157, 229, 250, 83, 176, 32, 67, 148, 75, 115, 55, 209, 80, 188, 159, 251] }",
+        "actual_state_hash": "[02, 62, 57, 3f, 25, 83, 6a, 07, d9, e2, 13, a9, 1b, 99, b8, 14, 9d, e5, fa, 53, b0, 20, 43, 94, 4b, 73, 37, d1, 50, bc, 9f, fb]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 2, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Card(42)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_wrong_A",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_wrong_A-direct-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"nature:1\"] }",
+          "ChoiceOpened { id: 2, observer: 2, prompt: \"respond_shan\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 2, spec: ChoiceSpec { kind: RespondCard, prompt: \"respond_shan\", options: [Pass, Card(42)], min: 1, max: 1, allow_cancel: false } } }",
+        "actual_state_hash": "[b5, 2c, 84, 3b, 61, a2, 94, aa, 7f, b0, df, 2b, 36, 54, f0, 22, 12, da, 0c, 7e, 08, f6, 0a, d1, 0b, ae, 74, 4e, 1a, f1, 1d, a5]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Tag(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"card:42\"] }",
+          "CardDiscarded { player: 2, cards: [42] }",
+          "CardResponded { card: 42, player: 2, presentation: Some(CardResponded { actor: PlayerId(3), effective: EffectivePresentationCard { kind: \"shan\", key: \"shan\", nature: Normal }, voice: None }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }",
+          "ChoiceOpened { id: 3, observer: 0, prompt: \"bolehuiyan:discard\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: \"bolehuiyan:discard\", options: [Card(4), Card(46)], min: 1, max: 1, allow_cancel: false } } }",
+        "actual_state_hash": "[75, e8, 2b, c5, a3, 6e, 8e, 7f, 3b, 3f, be, c1, 95, fd, d0, 4f, 2b, 4b, b3, 30, f4, 18, 7b, 6f, 90, de, cb, 37, ba, f2, ca, 0e]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 2, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Card(42)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 3, options: [\"card:4\"] }",
+          "CardDiscarded { player: 0, cards: [4] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [219, 198, 200, 88, 62, 212, 188, 116, 223, 130, 155, 148, 4, 137, 209, 233, 85, 196, 223, 254, 104, 147, 114, 121, 16, 175, 151, 59, 121, 188, 67, 25] }",
+        "actual_state_hash": "[db, c6, c8, 58, 3e, d4, bc, 74, df, 82, 9b, 94, 04, 89, d1, e9, 55, c4, df, fe, 68, 93, 72, 79, 10, af, 97, 3b, 79, bc, 43, 19]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Card(4)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_wrong_A",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_wrong_A-direct-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"card:42\"] }",
+          "CardDiscarded { player: 2, cards: [42] }",
+          "CardResponded { card: 42, player: 2, presentation: Some(CardResponded { actor: PlayerId(3), effective: EffectivePresentationCard { kind: \"shan\", key: \"shan\", nature: Normal }, voice: None }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }",
+          "ChoiceOpened { id: 3, observer: 0, prompt: \"bolehuiyan:discard\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: \"bolehuiyan:discard\", options: [Card(4), Card(46)], min: 1, max: 1, allow_cancel: false } } }",
+        "actual_state_hash": "[75, e8, 2b, c5, a3, 6e, 8e, 7f, 3b, 3f, be, c1, 95, fd, d0, 4f, 2b, 4b, b3, 30, f4, 18, 7b, 6f, 90, de, cb, 37, ba, f2, ca, 0e]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 2, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Card(42)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 3, options: [\"card:4\"] }",
+          "CardDiscarded { player: 0, cards: [4] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [219, 198, 200, 88, 62, 212, 188, 116, 223, 130, 155, 148, 4, 137, 209, 233, 85, 196, 223, 254, 104, 147, 114, 121, 16, 175, 151, 59, 121, 188, 67, 25] }",
+        "actual_state_hash": "[db, c6, c8, 58, 3e, d4, bc, 74, df, 82, 9b, 94, 04, 89, d1, e9, 55, c4, df, fe, 68, 93, 72, 79, 10, af, 97, 3b, 79, bc, 43, 19]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Card(4)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_wrong_A",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_wrong_A-direct-pending-2.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 3, options: [\"card:4\"] }",
+          "CardDiscarded { player: 0, cards: [4] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [219, 198, 200, 88, 62, 212, 188, 116, 223, 130, 155, 148, 4, 137, 209, 233, 85, 196, 223, 254, 104, 147, 114, 121, 16, 175, 151, 59, 121, 188, 67, 25] }",
+        "actual_state_hash": "[db, c6, c8, 58, 3e, d4, bc, 74, df, 82, 9b, 94, 04, 89, d1, e9, 55, c4, df, fe, 68, 93, 72, 79, 10, af, 97, 3b, 79, bc, 43, 19]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Card(4)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_wrong_A",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_wrong_A-restored-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 3,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"nature:1\"] }",
+          "ChoiceOpened { id: 2, observer: 2, prompt: \"respond_shan\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 2, spec: ChoiceSpec { kind: RespondCard, prompt: \"respond_shan\", options: [Pass, Card(42)], min: 1, max: 1, allow_cancel: false } } }",
+        "actual_state_hash": "[b5, 2c, 84, 3b, 61, a2, 94, aa, 7f, b0, df, 2b, 36, 54, f0, 22, 12, da, 0c, 7e, 08, f6, 0a, d1, 0b, ae, 74, 4e, 1a, f1, 1d, a5]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Tag(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"card:42\"] }",
+          "CardDiscarded { player: 2, cards: [42] }",
+          "CardResponded { card: 42, player: 2, presentation: Some(CardResponded { actor: PlayerId(3), effective: EffectivePresentationCard { kind: \"shan\", key: \"shan\", nature: Normal }, voice: None }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }",
+          "ChoiceOpened { id: 3, observer: 0, prompt: \"bolehuiyan:discard\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: \"bolehuiyan:discard\", options: [Card(4), Card(46)], min: 1, max: 1, allow_cancel: false } } }",
+        "actual_state_hash": "[75, e8, 2b, c5, a3, 6e, 8e, 7f, 3b, 3f, be, c1, 95, fd, d0, 4f, 2b, 4b, b3, 30, f4, 18, 7b, 6f, 90, de, cb, 37, ba, f2, ca, 0e]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 2, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Card(42)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 3, options: [\"card:4\"] }",
+          "CardDiscarded { player: 0, cards: [4] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [219, 198, 200, 88, 62, 212, 188, 116, 223, 130, 155, 148, 4, 137, 209, 233, 85, 196, 223, 254, 104, 147, 114, 121, 16, 175, 151, 59, 121, 188, 67, 25] }",
+        "actual_state_hash": "[db, c6, c8, 58, 3e, d4, bc, 74, df, 82, 9b, 94, 04, 89, d1, e9, 55, c4, df, fe, 68, 93, 72, 79, 10, af, 97, 3b, 79, bc, 43, 19]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Card(4)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "case": "b_wrong_A",
+    "final_auth_generation": 2,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_wrong_A-restored-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 3,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"card:42\"] }",
+          "CardDiscarded { player: 2, cards: [42] }",
+          "CardResponded { card: 42, player: 2, presentation: Some(CardResponded { actor: PlayerId(3), effective: EffectivePresentationCard { kind: \"shan\", key: \"shan\", nature: Normal }, voice: None }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }",
+          "ChoiceOpened { id: 3, observer: 0, prompt: \"bolehuiyan:discard\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: \"bolehuiyan:discard\", options: [Card(4), Card(46)], min: 1, max: 1, allow_cancel: false } } }",
+        "actual_state_hash": "[75, e8, 2b, c5, a3, 6e, 8e, 7f, 3b, 3f, be, c1, 95, fd, d0, 4f, 2b, 4b, b3, 30, f4, 18, 7b, 6f, 90, de, cb, 37, ba, f2, ca, 0e]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 2, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Card(42)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 3, options: [\"card:4\"] }",
+          "CardDiscarded { player: 0, cards: [4] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [219, 198, 200, 88, 62, 212, 188, 116, 223, 130, 155, 148, 4, 137, 209, 233, 85, 196, 223, 254, 104, 147, 114, 121, 16, 175, 151, 59, 121, 188, 67, 25] }",
+        "actual_state_hash": "[db, c6, c8, 58, 3e, d4, bc, 74, df, 82, 9b, 94, 04, 89, d1, e9, 55, c4, df, fe, 68, 93, 72, 79, 10, af, 97, 3b, 79, bc, 43, 19]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Card(4)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 3,
+    "auth_before": 2,
+    "case": "b_wrong_A",
+    "final_auth_generation": 3,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_wrong_A-restored-pending-2.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 3,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 3, options: [\"card:4\"] }",
+          "CardDiscarded { player: 0, cards: [4] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [219, 198, 200, 88, 62, 212, 188, 116, 223, 130, 155, 148, 4, 137, 209, 233, 85, 196, 223, 254, 104, 147, 114, 121, 16, 175, 151, 59, 121, 188, 67, 25] }",
+        "actual_state_hash": "[db, c6, c8, 58, 3e, d4, bc, 74, df, 82, 9b, 94, 04, 89, d1, e9, 55, c4, df, fe, 68, 93, 72, 79, 10, af, 97, 3b, 79, bc, 43, 19]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Card(4)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_wrong_B",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_wrong_B-direct-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"nature:1\"] }",
+          "ChoiceOpened { id: 2, observer: 2, prompt: \"respond_shan\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 2, spec: ChoiceSpec { kind: RespondCard, prompt: \"respond_shan\", options: [Pass, Card(42)], min: 1, max: 1, allow_cancel: false } } }",
+        "actual_state_hash": "[b5, 2c, 84, 3b, 61, a2, 94, aa, 7f, b0, df, 2b, 36, 54, f0, 22, 12, da, 0c, 7e, 08, f6, 0a, d1, 0b, ae, 74, 4e, 1a, f1, 1d, a5]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Tag(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"card:42\"] }",
+          "CardDiscarded { player: 2, cards: [42] }",
+          "CardResponded { card: 42, player: 2, presentation: Some(CardResponded { actor: PlayerId(3), effective: EffectivePresentationCard { kind: \"shan\", key: \"shan\", nature: Normal }, voice: None }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }",
+          "ChoiceOpened { id: 3, observer: 0, prompt: \"bolehuiyan:discard\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: \"bolehuiyan:discard\", options: [Card(4), Card(46)], min: 1, max: 1, allow_cancel: false } } }",
+        "actual_state_hash": "[75, e8, 2b, c5, a3, 6e, 8e, 7f, 3b, 3f, be, c1, 95, fd, d0, 4f, 2b, 4b, b3, 30, f4, 18, 7b, 6f, 90, de, cb, 37, ba, f2, ca, 0e]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 2, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Card(42)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 3, options: [\"card:46\"] }",
+          "CardDiscarded { player: 0, cards: [46] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [148, 144, 184, 90, 83, 90, 108, 133, 183, 26, 219, 15, 209, 39, 215, 213, 232, 16, 2, 115, 52, 168, 125, 137, 98, 215, 101, 224, 22, 7, 183, 104] }",
+        "actual_state_hash": "[94, 90, b8, 5a, 53, 5a, 6c, 85, b7, 1a, db, 0f, d1, 27, d7, d5, e8, 10, 02, 73, 34, a8, 7d, 89, 62, d7, 65, e0, 16, 07, b7, 68]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Card(46)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_wrong_B",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_wrong_B-direct-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"card:42\"] }",
+          "CardDiscarded { player: 2, cards: [42] }",
+          "CardResponded { card: 42, player: 2, presentation: Some(CardResponded { actor: PlayerId(3), effective: EffectivePresentationCard { kind: \"shan\", key: \"shan\", nature: Normal }, voice: None }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }",
+          "ChoiceOpened { id: 3, observer: 0, prompt: \"bolehuiyan:discard\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: \"bolehuiyan:discard\", options: [Card(4), Card(46)], min: 1, max: 1, allow_cancel: false } } }",
+        "actual_state_hash": "[75, e8, 2b, c5, a3, 6e, 8e, 7f, 3b, 3f, be, c1, 95, fd, d0, 4f, 2b, 4b, b3, 30, f4, 18, 7b, 6f, 90, de, cb, 37, ba, f2, ca, 0e]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 2, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Card(42)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 3, options: [\"card:46\"] }",
+          "CardDiscarded { player: 0, cards: [46] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [148, 144, 184, 90, 83, 90, 108, 133, 183, 26, 219, 15, 209, 39, 215, 213, 232, 16, 2, 115, 52, 168, 125, 137, 98, 215, 101, 224, 22, 7, 183, 104] }",
+        "actual_state_hash": "[94, 90, b8, 5a, 53, 5a, 6c, 85, b7, 1a, db, 0f, d1, 27, d7, d5, e8, 10, 02, 73, 34, a8, 7d, 89, 62, d7, 65, e0, 16, 07, b7, 68]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Card(46)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_wrong_B",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_wrong_B-direct-pending-2.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 3, options: [\"card:46\"] }",
+          "CardDiscarded { player: 0, cards: [46] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [148, 144, 184, 90, 83, 90, 108, 133, 183, 26, 219, 15, 209, 39, 215, 213, 232, 16, 2, 115, 52, 168, 125, 137, 98, 215, 101, 224, 22, 7, 183, 104] }",
+        "actual_state_hash": "[94, 90, b8, 5a, 53, 5a, 6c, 85, b7, 1a, db, 0f, d1, 27, d7, d5, e8, 10, 02, 73, 34, a8, 7d, 89, 62, d7, 65, e0, 16, 07, b7, 68]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Card(46)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_wrong_B",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_wrong_B-restored-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 3,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"nature:1\"] }",
+          "ChoiceOpened { id: 2, observer: 2, prompt: \"respond_shan\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 2, spec: ChoiceSpec { kind: RespondCard, prompt: \"respond_shan\", options: [Pass, Card(42)], min: 1, max: 1, allow_cancel: false } } }",
+        "actual_state_hash": "[b5, 2c, 84, 3b, 61, a2, 94, aa, 7f, b0, df, 2b, 36, 54, f0, 22, 12, da, 0c, 7e, 08, f6, 0a, d1, 0b, ae, 74, 4e, 1a, f1, 1d, a5]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Tag(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"card:42\"] }",
+          "CardDiscarded { player: 2, cards: [42] }",
+          "CardResponded { card: 42, player: 2, presentation: Some(CardResponded { actor: PlayerId(3), effective: EffectivePresentationCard { kind: \"shan\", key: \"shan\", nature: Normal }, voice: None }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }",
+          "ChoiceOpened { id: 3, observer: 0, prompt: \"bolehuiyan:discard\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: \"bolehuiyan:discard\", options: [Card(4), Card(46)], min: 1, max: 1, allow_cancel: false } } }",
+        "actual_state_hash": "[75, e8, 2b, c5, a3, 6e, 8e, 7f, 3b, 3f, be, c1, 95, fd, d0, 4f, 2b, 4b, b3, 30, f4, 18, 7b, 6f, 90, de, cb, 37, ba, f2, ca, 0e]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 2, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Card(42)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 3, options: [\"card:46\"] }",
+          "CardDiscarded { player: 0, cards: [46] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [148, 144, 184, 90, 83, 90, 108, 133, 183, 26, 219, 15, 209, 39, 215, 213, 232, 16, 2, 115, 52, 168, 125, 137, 98, 215, 101, 224, 22, 7, 183, 104] }",
+        "actual_state_hash": "[94, 90, b8, 5a, 53, 5a, 6c, 85, b7, 1a, db, 0f, d1, 27, d7, d5, e8, 10, 02, 73, 34, a8, 7d, 89, 62, d7, 65, e0, 16, 07, b7, 68]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Card(46)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "case": "b_wrong_B",
+    "final_auth_generation": 2,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_wrong_B-restored-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 3,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"card:42\"] }",
+          "CardDiscarded { player: 2, cards: [42] }",
+          "CardResponded { card: 42, player: 2, presentation: Some(CardResponded { actor: PlayerId(3), effective: EffectivePresentationCard { kind: \"shan\", key: \"shan\", nature: Normal }, voice: None }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }",
+          "ChoiceOpened { id: 3, observer: 0, prompt: \"bolehuiyan:discard\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 3, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: \"bolehuiyan:discard\", options: [Card(4), Card(46)], min: 1, max: 1, allow_cancel: false } } }",
+        "actual_state_hash": "[75, e8, 2b, c5, a3, 6e, 8e, 7f, 3b, 3f, be, c1, 95, fd, d0, 4f, 2b, 4b, b3, 30, f4, 18, 7b, 6f, 90, de, cb, 37, ba, f2, ca, 0e]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 2, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Card(42)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 3, options: [\"card:46\"] }",
+          "CardDiscarded { player: 0, cards: [46] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [148, 144, 184, 90, 83, 90, 108, 133, 183, 26, 219, 15, 209, 39, 215, 213, 232, 16, 2, 115, 52, 168, 125, 137, 98, 215, 101, 224, 22, 7, 183, 104] }",
+        "actual_state_hash": "[94, 90, b8, 5a, 53, 5a, 6c, 85, b7, 1a, db, 0f, d1, 27, d7, d5, e8, 10, 02, 73, 34, a8, 7d, 89, 62, d7, 65, e0, 16, 07, b7, 68]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Card(46)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 3,
+    "auth_before": 2,
+    "case": "b_wrong_B",
+    "final_auth_generation": 3,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_wrong_B-restored-pending-2.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 3,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 3, options: [\"card:46\"] }",
+          "CardDiscarded { player: 0, cards: [46] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [148, 144, 184, 90, 83, 90, 108, 133, 183, 26, 219, 15, 209, 39, 215, 213, 232, 16, 2, 115, 52, 168, 125, 137, 98, 215, 101, 224, 22, 7, 183, 104] }",
+        "actual_state_hash": "[94, 90, b8, 5a, 53, 5a, 6c, 85, b7, 1a, db, 0f, d1, 27, d7, d5, e8, 10, 02, 73, 34, a8, 7d, 89, 62, d7, 65, e0, 16, 07, b7, 68]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 3, selection: [Card(46)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_wrong_miss",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_wrong_miss-direct-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"nature:2\"] }",
+          "DamageDealt { source: Some(1), target: 2, amount: 1, redirected_from: [], card: Some(9), presentation: Some(DamageDealt { source: Some(PlayerId(2)), target: PlayerId(3), amount: 1, nature: Normal }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }",
+          "ChoiceOpened { id: 2, observer: 0, prompt: \"bolehuiyan:discard\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: \"bolehuiyan:discard\", options: [Card(4), Card(46)], min: 1, max: 1, allow_cancel: false } } }",
+        "actual_state_hash": "[a8, 0f, 5d, 48, 35, f1, 3b, 11, 13, 14, cd, 67, e3, 57, 79, d8, ae, a1, 52, d0, f8, de, ae, 88, b5, 51, 7d, 06, 24, 92, b8, 2e]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Tag(2)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"card:4\"] }",
+          "CardDiscarded { player: 0, cards: [4] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [151, 238, 127, 86, 69, 20, 169, 142, 169, 1, 222, 177, 127, 18, 223, 150, 108, 200, 183, 151, 86, 32, 23, 62, 30, 183, 153, 49, 127, 189, 109, 247] }",
+        "actual_state_hash": "[97, ee, 7f, 56, 45, 14, a9, 8e, a9, 01, de, b1, 7f, 12, df, 96, 6c, c8, b7, 97, 56, 20, 17, 3e, 1e, b7, 99, 31, 7f, bd, 6d, f7]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Card(4)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_wrong_miss",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_wrong_miss-direct-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"card:4\"] }",
+          "CardDiscarded { player: 0, cards: [4] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [151, 238, 127, 86, 69, 20, 169, 142, 169, 1, 222, 177, 127, 18, 223, 150, 108, 200, 183, 151, 86, 32, 23, 62, 30, 183, 153, 49, 127, 189, 109, 247] }",
+        "actual_state_hash": "[97, ee, 7f, 56, 45, 14, a9, 8e, a9, 01, de, b1, 7f, 12, df, 96, 6c, c8, b7, 97, 56, 20, 17, 3e, 1e, b7, 99, 31, 7f, bd, 6d, f7]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Card(4)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_wrong_miss",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_wrong_miss-restored-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 2,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"nature:2\"] }",
+          "DamageDealt { source: Some(1), target: 2, amount: 1, redirected_from: [], card: Some(9), presentation: Some(DamageDealt { source: Some(PlayerId(2)), target: PlayerId(3), amount: 1, nature: Normal }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }",
+          "ChoiceOpened { id: 2, observer: 0, prompt: \"bolehuiyan:discard\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: \"bolehuiyan:discard\", options: [Card(4), Card(46)], min: 1, max: 1, allow_cancel: false } } }",
+        "actual_state_hash": "[a8, 0f, 5d, 48, 35, f1, 3b, 11, 13, 14, cd, 67, e3, 57, 79, d8, ae, a1, 52, d0, f8, de, ae, 88, b5, 51, 7d, 06, 24, 92, b8, 2e]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Tag(2)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"card:4\"] }",
+          "CardDiscarded { player: 0, cards: [4] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [151, 238, 127, 86, 69, 20, 169, 142, 169, 1, 222, 177, 127, 18, 223, 150, 108, 200, 183, 151, 86, 32, 23, 62, 30, 183, 153, 49, 127, 189, 109, 247] }",
+        "actual_state_hash": "[97, ee, 7f, 56, 45, 14, a9, 8e, a9, 01, de, b1, 7f, 12, df, 96, 6c, c8, b7, 97, 56, 20, 17, 3e, 1e, b7, 99, 31, 7f, bd, 6d, f7]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Card(4)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "case": "b_wrong_miss",
+    "final_auth_generation": 2,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_wrong_miss-restored-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 2,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"card:4\"] }",
+          "CardDiscarded { player: 0, cards: [4] }"
+        ],
+        "actual_reply": "Accepted { state_hash: [151, 238, 127, 86, 69, 20, 169, 142, 169, 1, 222, 177, 127, 18, 223, 150, 108, 200, 183, 151, 86, 32, 23, 62, 30, 183, 153, 49, 127, 189, 109, 247] }",
+        "actual_state_hash": "[97, ee, 7f, 56, 45, 14, a9, 8e, a9, 01, de, b1, 7f, 12, df, 96, 6c, c8, b7, 97, 56, 20, 17, 3e, 1e, b7, 99, 31, 7f, bd, 6d, f7]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [Card(4)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_cancel_predict",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_cancel_predict-direct-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [] }",
+          "DamageDealt { source: Some(1), target: 2, amount: 1, redirected_from: [], card: Some(9), presentation: Some(DamageDealt { source: Some(PlayerId(2)), target: PlayerId(3), amount: 1, nature: Normal }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [218, 18, 109, 219, 58, 12, 119, 44, 33, 201, 225, 156, 211, 5, 187, 35, 186, 2, 40, 19, 255, 149, 235, 28, 118, 118, 147, 158, 150, 41, 123, 146] }",
+        "actual_state_hash": "[da, 12, 6d, db, 3a, 0c, 77, 2c, 21, c9, e1, 9c, d3, 05, bb, 23, ba, 02, 28, 13, ff, 95, eb, 1c, 76, 76, 93, 9e, 96, 29, 7b, 92]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_cancel_predict",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_cancel_predict-restored-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 1,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [] }",
+          "DamageDealt { source: Some(1), target: 2, amount: 1, redirected_from: [], card: Some(9), presentation: Some(DamageDealt { source: Some(PlayerId(2)), target: PlayerId(3), amount: 1, nature: Normal }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [218, 18, 109, 219, 58, 12, 119, 44, 33, 201, 225, 156, 211, 5, 187, 35, 186, 2, 40, 19, 255, 149, 235, 28, 118, 118, 147, 158, 150, 41, 123, 146] }",
+        "actual_state_hash": "[da, 12, 6d, db, 3a, 0c, 77, 2c, 21, c9, e1, 9c, d3, 05, bb, 23, ba, 02, 28, 13, ff, 95, eb, 1c, 76, 76, 93, 9e, 96, 29, 7b, 92]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_cancel_discard",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_cancel_discard-direct-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"nature:2\"] }",
+          "DamageDealt { source: Some(1), target: 2, amount: 1, redirected_from: [], card: Some(9), presentation: Some(DamageDealt { source: Some(PlayerId(2)), target: PlayerId(3), amount: 1, nature: Normal }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }",
+          "ChoiceOpened { id: 2, observer: 0, prompt: \"bolehuiyan:discard\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: \"bolehuiyan:discard\", options: [Card(4), Card(46)], min: 1, max: 1, allow_cancel: false } } }",
+        "actual_state_hash": "[a8, 0f, 5d, 48, 35, f1, 3b, 11, 13, 14, cd, 67, e3, 57, 79, d8, ae, a1, 52, d0, f8, de, ae, 88, b5, 51, 7d, 06, 24, 92, b8, 2e]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Tag(2)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [],
+        "actual_reply": "Rejected(InvalidChoice)",
+        "actual_state_hash": "[a8, 0f, 5d, 48, 35, f1, 3b, 11, 13, 14, cd, 67, e3, 57, 79, d8, ae, a1, 52, d0, f8, de, ae, 88, b5, 51, 7d, 06, 24, 92, b8, 2e]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_cancel_discard",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_cancel_discard-direct-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [],
+        "actual_reply": "Rejected(InvalidChoice)",
+        "actual_state_hash": "[a8, 0f, 5d, 48, 35, f1, 3b, 11, 13, 14, cd, 67, e3, 57, 79, d8, ae, a1, 52, d0, f8, de, ae, 88, b5, 51, 7d, 06, 24, 92, b8, 2e]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_cancel_discard",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_cancel_discard-restored-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 2,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"nature:2\"] }",
+          "DamageDealt { source: Some(1), target: 2, amount: 1, redirected_from: [], card: Some(9), presentation: Some(DamageDealt { source: Some(PlayerId(2)), target: PlayerId(3), amount: 1, nature: Normal }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }",
+          "ChoiceOpened { id: 2, observer: 0, prompt: \"bolehuiyan:discard\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: \"bolehuiyan:discard\", options: [Card(4), Card(46)], min: 1, max: 1, allow_cancel: false } } }",
+        "actual_state_hash": "[a8, 0f, 5d, 48, 35, f1, 3b, 11, 13, 14, cd, 67, e3, 57, 79, d8, ae, a1, 52, d0, f8, de, ae, 88, b5, 51, 7d, 06, 24, 92, b8, 2e]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Tag(2)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [],
+        "actual_reply": "Rejected(InvalidChoice)",
+        "actual_state_hash": "[a8, 0f, 5d, 48, 35, f1, 3b, 11, 13, 14, cd, 67, e3, 57, 79, d8, ae, a1, 52, d0, f8, de, ae, 88, b5, 51, 7d, 06, 24, 92, b8, 2e]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "case": "b_cancel_discard",
+    "final_auth_generation": 2,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_cancel_discard-restored-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 2,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [],
+        "actual_reply": "Rejected(InvalidChoice)",
+        "actual_state_hash": "[a8, 0f, 5d, 48, 35, f1, 3b, 11, 13, 14, cd, 67, e3, 57, 79, d8, ae, a1, 52, d0, f8, de, ae, 88, b5, 51, 7d, 06, 24, 92, b8, 2e]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 2, dedup_id: 3, action: Answer { choice_id: 2, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_under_control",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_under_control-direct-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"nature:1\"] }",
+          "DamageDealt { source: Some(1), target: 2, amount: 1, redirected_from: [], card: Some(9), presentation: Some(DamageDealt { source: Some(PlayerId(2)), target: PlayerId(3), amount: 1, nature: Normal }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }"
+        ],
+        "actual_reply": "Accepted { state_hash: [201, 122, 117, 217, 241, 133, 76, 214, 36, 89, 235, 63, 111, 57, 112, 216, 148, 216, 154, 26, 3, 64, 120, 240, 135, 228, 35, 24, 107, 129, 172, 28] }",
+        "actual_state_hash": "[c9, 7a, 75, d9, f1, 85, 4c, d6, 24, 59, eb, 3f, 6f, 39, 70, d8, 94, d8, 9a, 1a, 03, 40, 78, f0, 87, e4, 23, 18, 6b, 81, ac, 1c]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Tag(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_under_control",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_under_control-restored-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 1,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"nature:1\"] }",
+          "DamageDealt { source: Some(1), target: 2, amount: 1, redirected_from: [], card: Some(9), presentation: Some(DamageDealt { source: Some(PlayerId(2)), target: PlayerId(3), amount: 1, nature: Normal }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }"
+        ],
+        "actual_reply": "Accepted { state_hash: [201, 122, 117, 217, 241, 133, 76, 214, 36, 89, 235, 63, 111, 57, 112, 216, 148, 216, 154, 26, 3, 64, 120, 240, 135, 228, 35, 24, 107, 129, 172, 28] }",
+        "actual_state_hash": "[c9, 7a, 75, d9, f1, 85, 4c, d6, 24, 59, eb, 3f, 6f, 39, 70, d8, 94, d8, 9a, 1a, 03, 40, 78, f0, 87, e4, 23, 18, 6b, 81, ac, 1c]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Tag(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_repeat",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_repeat-direct-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"nature:1\"] }",
+          "DamageDealt { source: Some(1), target: 2, amount: 1, redirected_from: [], card: Some(9), presentation: Some(DamageDealt { source: Some(PlayerId(2)), target: PlayerId(3), amount: 1, nature: Normal }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }"
+        ],
+        "actual_reply": "Accepted { state_hash: [114, 67, 215, 216, 106, 177, 204, 194, 116, 156, 22, 30, 5, 96, 34, 140, 144, 181, 216, 208, 239, 191, 172, 95, 111, 219, 21, 243, 154, 159, 207, 75] }",
+        "actual_state_hash": "[72, 43, d7, d8, 6a, b1, cc, c2, 74, 9c, 16, 1e, 05, 60, 22, 8c, 90, b5, d8, d0, ef, bf, ac, 5f, 6f, db, 15, f3, 9a, 9f, cf, 4b]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Tag(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "CardPlayed { card: 10, player: 1, targets: [2], presentation: Some(CardUsed { actor: PlayerId(2), targets: Some([PlayerId(3)]), effective: EffectivePresentationCard { kind: \"sha\", key: \"sha\", nature: Normal }, voice: None }) }",
+          "DamageDealt { source: Some(1), target: 2, amount: 1, redirected_from: [], card: Some(10), presentation: Some(DamageDealt { source: Some(PlayerId(2)), target: PlayerId(3), amount: 1, nature: Normal }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [196, 107, 115, 124, 149, 151, 182, 255, 93, 225, 46, 183, 201, 20, 110, 18, 107, 192, 67, 68, 8, 87, 249, 171, 173, 14, 18, 188, 34, 216, 234, 229] }",
+        "actual_state_hash": "[c4, 6b, 73, 7c, 95, 97, b6, ff, 5d, e1, 2e, b7, c9, 14, 6e, 12, 6b, c0, 43, 44, 08, 57, f9, ab, ad, 0e, 12, bc, 22, d8, ea, e5]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 1, expected_revision: 2, dedup_id: 3, action: PlayCard { card: 10, targets: [2] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_repeat",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_repeat-restored-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 1,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [\"nature:1\"] }",
+          "DamageDealt { source: Some(1), target: 2, amount: 1, redirected_from: [], card: Some(9), presentation: Some(DamageDealt { source: Some(PlayerId(2)), target: PlayerId(3), amount: 1, nature: Normal }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }"
+        ],
+        "actual_reply": "Accepted { state_hash: [114, 67, 215, 216, 106, 177, 204, 194, 116, 156, 22, 30, 5, 96, 34, 140, 144, 181, 216, 208, 239, 191, 172, 95, 111, 219, 21, 243, 154, 159, 207, 75] }",
+        "actual_state_hash": "[72, 43, d7, d8, 6a, b1, cc, c2, 74, 9c, 16, 1e, 05, 60, 22, 8c, 90, b5, d8, d0, ef, bf, ac, 5f, 6f, db, 15, f3, 9a, 9f, cf, 4b]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [Tag(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "CardPlayed { card: 10, player: 1, targets: [2], presentation: Some(CardUsed { actor: PlayerId(2), targets: Some([PlayerId(3)]), effective: EffectivePresentationCard { kind: \"sha\", key: \"sha\", nature: Normal }, voice: None }) }",
+          "DamageDealt { source: Some(1), target: 2, amount: 1, redirected_from: [], card: Some(10), presentation: Some(DamageDealt { source: Some(PlayerId(2)), target: PlayerId(3), amount: 1, nature: Normal }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [196, 107, 115, 124, 149, 151, 182, 255, 93, 225, 46, 183, 201, 20, 110, 18, 107, 192, 67, 68, 8, 87, 249, 171, 173, 14, 18, 188, 34, 216, 234, 229] }",
+        "actual_state_hash": "[c4, 6b, 73, 7c, 95, 97, b6, ff, 5d, e1, 2e, b7, c9, 14, 6e, 12, 6b, c0, 43, 44, 08, 57, f9, ab, ad, 0e, 12, bc, 22, d8, ea, e5]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 1, expected_revision: 2, dedup_id: 3, action: PlayCard { card: 10, targets: [2] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_cancel_then_retry",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_cancel_then_retry-direct-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [] }",
+          "DamageDealt { source: Some(1), target: 2, amount: 1, redirected_from: [], card: Some(9), presentation: Some(DamageDealt { source: Some(PlayerId(2)), target: PlayerId(3), amount: 1, nature: Normal }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [26, 46, 181, 63, 8, 237, 187, 161, 123, 53, 163, 184, 195, 207, 1, 71, 175, 236, 226, 176, 123, 241, 208, 204, 167, 182, 99, 251, 143, 220, 181, 152] }",
+        "actual_state_hash": "[1a, 2e, b5, 3f, 08, ed, bb, a1, 7b, 35, a3, b8, c3, cf, 01, 47, af, ec, e2, b0, 7b, f1, d0, cc, a7, b6, 63, fb, 8f, dc, b5, 98]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "CardPlayed { card: 10, player: 1, targets: [2], presentation: Some(CardUsed { actor: PlayerId(2), targets: Some([PlayerId(3)]), effective: EffectivePresentationCard { kind: \"sha\", key: \"sha\", nature: Normal }, voice: None }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }",
+          "ChoiceOpened { id: 2, observer: 0, prompt: \"bolehuiyan:predict\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"bolehuiyan:predict\", options: [Tag(1), Tag(2), Pass], min: 0, max: 1, allow_cancel: true } } }",
+        "actual_state_hash": "[ed, fc, e0, 7a, f6, b6, 7a, d2, 6e, 39, f6, dc, f6, 2b, dc, 55, 99, 8a, 5a, a1, b6, ad, 9c, 88, 4c, 35, bb, d7, 41, 16, 03, 49]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 1, expected_revision: 2, dedup_id: 3, action: PlayCard { card: 10, targets: [2] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"nature:1\"] }",
+          "DamageDealt { source: Some(1), target: 2, amount: 1, redirected_from: [], card: Some(10), presentation: Some(DamageDealt { source: Some(PlayerId(2)), target: PlayerId(3), amount: 1, nature: Normal }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }"
+        ],
+        "actual_reply": "Accepted { state_hash: [230, 188, 54, 0, 254, 213, 214, 57, 7, 129, 163, 164, 180, 252, 127, 33, 99, 226, 115, 168, 109, 170, 27, 180, 110, 120, 148, 87, 38, 249, 127, 252] }",
+        "actual_state_hash": "[e6, bc, 36, 00, fe, d5, d6, 39, 07, 81, a3, a4, b4, fc, 7f, 21, 63, e2, 73, a8, 6d, aa, 1b, b4, 6e, 78, 94, 57, 26, f9, 7f, fc]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 2, selection: [Tag(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_cancel_then_retry",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_cancel_then_retry-direct-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "direct",
+    "recorded_final_auth_generation": 0,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"nature:1\"] }",
+          "DamageDealt { source: Some(1), target: 2, amount: 1, redirected_from: [], card: Some(10), presentation: Some(DamageDealt { source: Some(PlayerId(2)), target: PlayerId(3), amount: 1, nature: Normal }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }"
+        ],
+        "actual_reply": "Accepted { state_hash: [230, 188, 54, 0, 254, 213, 214, 57, 7, 129, 163, 164, 180, 252, 127, 33, 99, 226, 115, 168, 109, 170, 27, 180, 110, 120, 148, 87, 38, 249, 127, 252] }",
+        "actual_state_hash": "[e6, bc, 36, 00, fe, d5, d6, 39, 07, 81, a3, a4, b4, fc, 7f, 21, 63, e2, 73, a8, 6d, aa, 1b, b4, 6e, 78, 94, 57, 26, f9, 7f, fc]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 2, selection: [Tag(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 1,
+    "auth_before": 0,
+    "case": "b_cancel_then_retry",
+    "final_auth_generation": 1,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_cancel_then_retry-restored-pending-0.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 2,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 1, options: [] }",
+          "DamageDealt { source: Some(1), target: 2, amount: 1, redirected_from: [], card: Some(9), presentation: Some(DamageDealt { source: Some(PlayerId(2)), target: PlayerId(3), amount: 1, nature: Normal }) }"
+        ],
+        "actual_reply": "Accepted { state_hash: [26, 46, 181, 63, 8, 237, 187, 161, 123, 53, 163, 184, 195, 207, 1, 71, 175, 236, 226, 176, 123, 241, 208, 204, 167, 182, 99, 251, 143, 220, 181, 152] }",
+        "actual_state_hash": "[1a, 2e, b5, 3f, 08, ed, bb, a1, 7b, 35, a3, b8, c3, cf, 01, 47, af, ec, e2, b0, 7b, f1, d0, cc, a7, b6, 63, fb, 8f, dc, b5, 98]",
+        "command_index": 1,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 1, dedup_id: 2, action: Answer { choice_id: 1, selection: [] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "CardPlayed { card: 10, player: 1, targets: [2], presentation: Some(CardUsed { actor: PlayerId(2), targets: Some([PlayerId(3)]), effective: EffectivePresentationCard { kind: \"sha\", key: \"sha\", nature: Normal }, voice: None }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }",
+          "ChoiceOpened { id: 2, observer: 0, prompt: \"bolehuiyan:predict\" }"
+        ],
+        "actual_reply": "Pending { choice: OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: PickTag, prompt: \"bolehuiyan:predict\", options: [Tag(1), Tag(2), Pass], min: 0, max: 1, allow_cancel: true } } }",
+        "actual_state_hash": "[ed, fc, e0, 7a, f6, b6, 7a, d2, 6e, 39, f6, dc, f6, 2b, dc, 55, 99, 8a, 5a, a1, b6, ad, 9c, 88, 4c, 35, bb, d7, 41, 16, 03, 49]",
+        "command_index": 2,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 1, expected_revision: 2, dedup_id: 3, action: PlayCard { card: 10, targets: [2] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      },
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"nature:1\"] }",
+          "DamageDealt { source: Some(1), target: 2, amount: 1, redirected_from: [], card: Some(10), presentation: Some(DamageDealt { source: Some(PlayerId(2)), target: PlayerId(3), amount: 1, nature: Normal }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }"
+        ],
+        "actual_reply": "Accepted { state_hash: [230, 188, 54, 0, 254, 213, 214, 57, 7, 129, 163, 164, 180, 252, 127, 33, 99, 226, 115, 168, 109, 170, 27, 180, 110, 120, 148, 87, 38, 249, 127, 252] }",
+        "actual_state_hash": "[e6, bc, 36, 00, fe, d5, d6, 39, 07, 81, a3, a4, b4, fc, 7f, 21, 63, e2, 73, a8, 6d, aa, 1b, b4, 6e, 78, 94, 57, 26, f9, 7f, fc]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 2, selection: [Tag(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  },
+  {
+    "auth_after": 2,
+    "auth_before": 1,
+    "case": "b_cancel_then_retry",
+    "final_auth_generation": 2,
+    "final_full_snapshot_equal_except_auth_generation": true,
+    "input_decoded_reencoded_bytes_exact": true,
+    "input_file": "b_cancel_then_retry-restored-pending-1.ngsa",
+    "input_full_snapshot_equal_except_auth_generation": true,
+    "mode": "restored",
+    "recorded_final_auth_generation": 2,
+    "restored_choice_equals_recorded_choice": true,
+    "suffix_commands": [
+      {
+        "actual_log_delta": [
+          "ChoiceAnswered { id: 2, options: [\"nature:1\"] }",
+          "DamageDealt { source: Some(1), target: 2, amount: 1, redirected_from: [], card: Some(10), presentation: Some(DamageDealt { source: Some(PlayerId(2)), target: PlayerId(3), amount: 1, nature: Normal }) }",
+          "SkillTriggered { skill: \"bolehuiyan\", owner: 0, presentation: None }"
+        ],
+        "actual_reply": "Accepted { state_hash: [230, 188, 54, 0, 254, 213, 214, 57, 7, 129, 163, 164, 180, 252, 127, 33, 99, 226, 115, 168, 109, 170, 27, 180, 110, 120, 148, 87, 38, 249, 127, 252] }",
+        "actual_state_hash": "[e6, bc, 36, 00, fe, d5, d6, 39, 07, 81, a3, a4, b4, fc, 7f, 21, 63, e2, 73, a8, 6d, aa, 1b, b4, 6e, 78, 94, 57, 26, f9, 7f, fc]",
+        "command_index": 3,
+        "log_delta_exact": true,
+        "reply_exact": true,
+        "request": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 4, action: Answer { choice_id: 2, selection: [Tag(1)] } }",
+        "request_reconstruction_exact": true,
+        "state_hash_exact": true
+      }
+    ]
+  }
+]

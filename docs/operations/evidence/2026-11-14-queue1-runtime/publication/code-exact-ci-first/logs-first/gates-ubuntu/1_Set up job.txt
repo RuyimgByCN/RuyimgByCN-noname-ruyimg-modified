@@ -1,0 +1,35 @@
+﻿2026-11-13T18:46:10.4297827Z Current runner version: '2.338.2'
+2026-11-13T18:46:10.4317539Z ##[group]Runner Image Provisioner
+2026-11-13T18:46:10.4318117Z Hosted Compute Agent
+2026-11-13T18:46:10.4318573Z Version: 20261103.629
+2026-11-13T18:46:10.4318965Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+2026-11-13T18:46:10.4319475Z Build Date: 2026-11-03T17:26:59Z
+2026-11-13T18:46:10.4319910Z Worker ID: {57cebbd5-ef79-41f1-b72c-fb8fee6b47e7}
+2026-11-13T18:46:10.4320354Z Region: southcentralus
+2026-11-13T18:46:10.4320747Z Cloud: Azure
+2026-11-13T18:46:10.4321091Z ##[endgroup]
+2026-11-13T18:46:10.4322332Z ##[group]Operating System
+2026-11-13T18:46:10.4322725Z Ubuntu
+2026-11-13T18:46:10.4323055Z 26.04.1
+2026-11-13T18:46:10.4323409Z LTS
+2026-11-13T18:46:10.4323736Z ##[endgroup]
+2026-11-13T18:46:10.4324101Z ##[group]Runner Image
+2026-11-13T18:46:10.4324567Z Image: ubuntu-26.04
+2026-11-13T18:46:10.4324933Z Version: 20261111.196.1
+2026-11-13T18:46:10.4325667Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261111.196/images/ubuntu/Ubuntu2604-Readme.md
+2026-11-13T18:46:10.4326766Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261111.196
+2026-11-13T18:46:10.4327518Z ##[endgroup]
+2026-11-13T18:46:10.4328202Z ##[group]GITHUB_TOKEN Permissions
+2026-11-13T18:46:10.4329506Z Contents: read
+2026-11-13T18:46:10.4329906Z Metadata: read
+2026-11-13T18:46:10.4330329Z ##[endgroup]
+2026-11-13T18:46:10.4331660Z Secret source: Actions
+2026-11-13T18:46:10.4332251Z Cache mode: write
+2026-11-13T18:46:10.4332689Z Prepare workflow directory
+2026-11-13T18:46:10.4609125Z Prepare all required actions
+2026-11-13T18:46:10.4642324Z Getting action download info
+2026-11-13T18:46:10.7148749Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-13T18:46:10.8039824Z Download action repository 'dtolnay/rust-toolchain@stable' (SHA:b725eda525362e7cf34af9a7243cac1e3f01a7ec)
+2026-11-13T18:46:11.0641385Z Download action repository 'Swatinem/rust-cache@v2' (SHA:d1527c8f67ef9af357290475d4af4b0fab8f12e0)
+2026-11-13T18:46:11.5296508Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-11-13T18:46:11.7024036Z Complete job name: gates-ubuntu

@@ -1,0 +1,254 @@
+[
+  {
+    "finding": "F01",
+    "path": "../archive/upstream/noname-liuli/noname/character/refresh.js",
+    "line": 10639,
+    "text": "\t\t\treguhuo_guess:{",
+    "file_line_count": 15118
+  },
+  {
+    "finding": "F01",
+    "path": "../archive/upstream/noname-liuli/noname/character/refresh.js",
+    "line": 10717,
+    "text": "\t\t\t\t\t\tvar b=event.betrays.contains(i);",
+    "file_line_count": 15118
+  },
+  {
+    "finding": "F01",
+    "path": "../archive/upstream/noname-liuli/noname/character/refresh.js",
+    "line": 10740,
+    "text": "\t\t\t\t\t}",
+    "file_line_count": 15118
+  },
+  {
+    "finding": "F01",
+    "path": "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+    "line": 202,
+    "text": "            HostBehavior::Reguhuo => match self.stage {",
+    "file_line_count": 540
+  },
+  {
+    "finding": "F02",
+    "path": "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+    "line": 300,
+    "text": "            enable: ['chooseToUse', 'chooseToRespond'],",
+    "file_line_count": 2975
+  },
+  {
+    "finding": "F02",
+    "path": "crates/engine-native-content/src/content/host/activation/common.rs",
+    "line": 52,
+    "text": "            HostBehavior::Reguhuo => {",
+    "file_line_count": 577
+  },
+  {
+    "finding": "F03",
+    "path": "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+    "line": 204,
+    "text": "                    // 蛊惑：每回合一次（第 942 轮）——进入执行即记账，turn 结束清",
+    "file_line_count": 540
+  },
+  {
+    "finding": "F03",
+    "path": "../archive/upstream/noname-liuli/noname/character/refresh.js",
+    "line": 10653,
+    "text": "\t\t\t\t\tplayer.addTempSkill('reguhuo_phase');",
+    "file_line_count": 15118
+  },
+  {
+    "finding": "F04",
+    "path": "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+    "line": 287,
+    "text": "                        observer: self.owner,",
+    "file_line_count": 540
+  },
+  {
+    "finding": "F04",
+    "path": "crates/engine-native-content/src/content/host/asks_wudian.rs",
+    "line": 835,
+    "text": "                    .first()",
+    "file_line_count": 896
+  },
+  {
+    "finding": "F05",
+    "path": "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+    "line": 317,
+    "text": "    chooseButton: {",
+    "file_line_count": 2975
+  },
+  {
+    "finding": "F05",
+    "path": "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+    "line": 329,
+    "text": "        filter: function(button, player) {",
+    "file_line_count": 2975
+  },
+  {
+    "finding": "F05",
+    "path": "crates/engine-native-content/src/content/host/constants.rs",
+    "line": 8,
+    "text": "pub(super) const REGUHUO_KINDS: [crate::catalog::CardKind; 20] = [",
+    "file_line_count": 40
+  },
+  {
+    "finding": "F06",
+    "path": "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+    "line": 487,
+    "text": "                            var card = get.cardPile2(function (card) {",
+    "file_line_count": 2975
+  },
+  {
+    "finding": "F06",
+    "path": "../archive/upstream/noname-liuli/noname/game/game.js",
+    "line": 63187,
+    "text": "\t\t\t\tvar num=get.rand(0,ui.cardPile.childNodes.length-1);",
+    "file_line_count": 65804
+  },
+  {
+    "finding": "F06",
+    "path": "../archive/upstream/noname-liuli/noname/game/game.js",
+    "line": 63223,
+    "text": "\t\tcardPile2:function(name){",
+    "file_line_count": 65804
+  },
+  {
+    "finding": "F06",
+    "path": "crates/engine-native-content/src/content/host/step/skills_cards.rs",
+    "line": 140,
+    "text": "                        }",
+    "file_line_count": 480
+  },
+  {
+    "finding": "F07",
+    "path": "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+    "line": 439,
+    "text": "                        //player.chooseControl('cancel2').set('choice', choiceList).set('prompt', get.prompt('rangjie')).set('ai', function () {",
+    "file_line_count": 2975
+  },
+  {
+    "finding": "F07",
+    "path": "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+    "line": 451,
+    "text": "                        else {",
+    "file_line_count": 2975
+  },
+  {
+    "finding": "F07",
+    "path": "crates/engine-native-content/src/content/host/step/skills_cards.rs",
+    "line": 50,
+    "text": "                    self.cards.pop();",
+    "file_line_count": 480
+  },
+  {
+    "finding": "F08",
+    "path": "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+    "line": 475,
+    "text": "                                    if (player.hp <= 3 && !player.countCards('h', { name: ['shan', 'tao'] })) return 'basic';",
+    "file_line_count": 2975
+  },
+  {
+    "finding": "F08",
+    "path": "crates/engine-native-content/src/content/host/step/skills_cards.rs",
+    "line": 112,
+    "text": "                            options: vec![",
+    "file_line_count": 480
+  },
+  {
+    "finding": "F08",
+    "path": "crates/engine-native-content/src/content/host/asks_wudian.rs",
+    "line": 868,
+    "text": "                \"rangjie_type\",",
+    "file_line_count": 896
+  },
+  {
+    "finding": "F09",
+    "path": "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+    "line": 427,
+    "text": "                    direct: true,",
+    "file_line_count": 2975
+  },
+  {
+    "finding": "F09",
+    "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+    "line": 312,
+    "text": "            HostBehavior::Rangjie => Some(TriggerMeta {",
+    "file_line_count": 1058
+  },
+  {
+    "finding": "F10",
+    "path": "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+    "line": 2378,
+    "text": "              scs_duangui: ['scs_guosheng'],",
+    "file_line_count": 2975
+  },
+  {
+    "finding": "F10",
+    "path": "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+    "line": 2480,
+    "text": "                var others = list.filter(changshi => {",
+    "file_line_count": 2975
+  },
+  {
+    "finding": "F10",
+    "path": "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+    "line": 2518,
+    "text": "                  let temp = others[i];",
+    "file_line_count": 2975
+  },
+  {
+    "finding": "F10",
+    "path": "crates/engine-native-content/src/content/host/step/skills_recovery.rs",
+    "line": 561,
+    "text": "fn k_danggu_conflicts(a: u32, b: u32) -> bool {",
+    "file_line_count": 686
+  },
+  {
+    "finding": "F11",
+    "path": "../archive/upstream/noname-liuli/noname/character/mobile.js",
+    "line": 4669,
+    "text": "\t\t\tscstaoluan:{",
+    "file_line_count": 20322
+  },
+  {
+    "finding": "F11",
+    "path": "../archive/upstream/noname-liuli/noname/character/mobile.js",
+    "line": 4727,
+    "text": "\t\t\tscschiyan:{",
+    "file_line_count": 20322
+  },
+  {
+    "finding": "F11",
+    "path": "../archive/upstream/noname-liuli/noname/character/mobile.js",
+    "line": 5183,
+    "text": "\t\t\tscsniqu:{",
+    "file_line_count": 20322
+  },
+  {
+    "finding": "F11",
+    "path": "crates/content-native-loader/src/decision34_pack9.rs",
+    "line": 44,
+    "text": "pub(super) fn make_vm_skill_decl(name_str: &str, dispatch_id: u32, idx: usize) -> Option<VmSkillDecl> {",
+    "file_line_count": 929
+  },
+  {
+    "finding": "F11",
+    "path": "crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs",
+    "line": 77,
+    "text": "pub(super) fn resolve_l10_scs_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: PlayerId) {",
+    "file_line_count": 1007
+  },
+  {
+    "finding": "F12",
+    "path": "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+    "line": 2278,
+    "text": "            trigger: {",
+    "file_line_count": 2975
+  },
+  {
+    "finding": "F12",
+    "path": "crates/engine-native-content/src/content/host/filtering/common.rs",
+    "line": 1047,
+    "text": "            HostBehavior::KDanggu => match event {",
+    "file_line_count": 1112
+  }
+]

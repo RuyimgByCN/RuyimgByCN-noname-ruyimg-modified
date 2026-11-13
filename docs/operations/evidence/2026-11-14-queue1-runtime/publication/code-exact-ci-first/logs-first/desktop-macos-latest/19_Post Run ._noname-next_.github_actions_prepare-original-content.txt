@@ -1,0 +1,20 @@
+﻿2026-11-13T19:13:35.9977730Z Post job cleanup.
+2026-11-13T19:13:35.9983260Z ##[start-action display=Run pnpm/action-setup@v4;id=__dd523cf5-487b-456d-bd59-bb5dfa3937b4.__pnpm_action-setup]
+2026-11-13T19:13:36.0033730Z Post job cleanup.
+2026-11-13T19:13:36.3114490Z Pruning is unnecessary.
+2026-11-13T19:13:36.3154620Z ##[end-action id=__dd523cf5-487b-456d-bd59-bb5dfa3937b4.__pnpm_action-setup;outcome=success;conclusion=success;duration_ms=317]
+2026-11-13T19:13:36.3157710Z ##[start-action display=Run actions/checkout@v4;id=__dd523cf5-487b-456d-bd59-bb5dfa3937b4.__actions_checkout]
+2026-11-13T19:13:36.3759240Z Post job cleanup.
+2026-11-13T19:13:36.6427020Z [command]/opt/homebrew/bin/git version
+2026-11-13T19:13:36.7176510Z git version 2.56.0
+2026-11-13T19:13:36.7253060Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/13c8ad0d-139a-420b-be28-80c4a627bffe/.gitconfig'
+2026-11-13T19:13:36.7257440Z Temporarily overriding HOME='/Users/runner/work/_temp/13c8ad0d-139a-420b-be28-80c4a627bffe' before making global git config changes
+2026-11-13T19:13:36.7258550Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-13T19:13:36.7259760Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/archive/upstream/noname
+2026-11-13T19:13:36.7384690Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-13T19:13:36.7475310Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-13T19:13:36.9973380Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-13T19:13:37.0049640Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-13T19:13:37.1368850Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-13T19:13:37.1555500Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-13T19:13:37.2509920Z ##[end-action id=__dd523cf5-487b-456d-bd59-bb5dfa3937b4.__actions_checkout;outcome=success;conclusion=success;duration_ms=935]

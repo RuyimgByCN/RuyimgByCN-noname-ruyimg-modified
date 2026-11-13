@@ -1,0 +1,15 @@
+{
+  "at": "2026-11-13T18:23:34.403385+00:00",
+  "launcher_pid": 86531,
+  "launcher_command_checked": "node docs/operations/evidence/2026-11-14-queue1-runtime/L10/launch.mjs",
+  "profile_removed": true,
+  "ports_after_close": {
+    "upstreamPort": "timed out",
+    "controlPort": "timed out",
+    "cdpPort": "timed out"
+  },
+  "other_browsers_touched": false,
+  "shared_target_cleaned": false,
+  "private_target_created": false,
+  "preserved_binary": "/private/tmp/noname-l10-runtime-preserved-tvv_75wj/native-probe-round2"
+}

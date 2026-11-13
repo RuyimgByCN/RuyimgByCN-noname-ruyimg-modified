@@ -1,0 +1,97 @@
+{
+  "at": "2026-11-13T19:00:01.828915+00:00",
+  "local_links_checked": 40,
+  "missing": [],
+  "source_inputs_checked": 20,
+  "source_inputs": [
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/l28_batch_a.rs",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/l28_batch_a_asks.rs",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/l28_batch_b.rs",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/l28_batch_b_asks.rs",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/tests/l28_thunder_eight_match.rs",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/tests/l28_thunder_eight_batch_b.rs",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader/src/locked_content.rs",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader/src/decision34_pack9.rs",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/thunder-upstream-liuli/package.npack.json",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/thunder-upstream-liuli/assets/config.json",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/game/game.js",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/card/standard.js",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/card/extra.js",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/雷霆万钧/thunder.css",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/kernel/judge.rs",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/catalog.rs",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/catalog/card_kind.rs",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/standard/cards.rs",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/Cargo.lock",
+      "unchanged": true
+    }
+  ],
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "dirty_tracked": [
+    " M docs/architecture/native-progress.md",
+    " M docs/architecture/native-remaining-ledger.md",
+    " M docs/migration/g0/L10-史诗卡牌.md",
+    " M docs/migration/g0/inventory_status.json",
+    " M docs/operations/evidence/2026-11-14-queue1-runtime/README.md",
+    " M docs/operations/evidence/2026-11-14-queue1-runtime/publication/README.md"
+  ]
+}

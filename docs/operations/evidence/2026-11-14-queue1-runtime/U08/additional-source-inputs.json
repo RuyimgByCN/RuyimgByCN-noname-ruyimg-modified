@@ -1,0 +1,44 @@
+[
+  {
+    "source": "../archive/upstream/noname/apps/core/noname/library/element/content.ts",
+    "copy": "source-inputs/upstream/archive/upstream/noname/apps/core/noname/library/element/content.ts",
+    "bytes": 404295,
+    "sha256": "09951b61fe8d9199ed1eb8b373faaf206d683e24b2a93a75ffc2259330891e6c"
+  },
+  {
+    "source": "../archive/upstream/noname/apps/core/noname/ui/click/index.js",
+    "copy": "source-inputs/upstream/archive/upstream/noname/apps/core/noname/ui/click/index.js",
+    "bytes": 153589,
+    "sha256": "6c85a0c7a1ecf7bc23534349fb82de18a1c2f436b882189dae5341fa5e6d69e1"
+  },
+  {
+    "source": "crates/engine-native-kernel/src/snap/asks.rs",
+    "copy": "source-inputs/crates/engine-native-kernel/src/snap/asks.rs",
+    "bytes": 29183,
+    "sha256": "eb010a4b4740e72b563a13dcc7ea3df7eaa3f592ffc1f84ac2130361a1b80210"
+  },
+  {
+    "source": "crates/engine-native-kernel/src/snap/restore.rs",
+    "copy": "source-inputs/crates/engine-native-kernel/src/snap/restore.rs",
+    "bytes": 19116,
+    "sha256": "5a29653b078cf176168e72f49a29c270b0c9c6d5d06f7e738a51f8499e02b21a"
+  },
+  {
+    "source": "crates/engine-native-content/src/content/host/asks.rs",
+    "copy": "source-inputs/crates/engine-native-content/src/content/host/asks.rs",
+    "bytes": 37685,
+    "sha256": "fbb4c2cf7f422e5b315f13d5688bb5ff59544e8a7582c039c01db407d2e32089"
+  },
+  {
+    "source": "crates/engine-native-content/src/content/host/step.rs",
+    "copy": "source-inputs/crates/engine-native-content/src/content/host/step.rs",
+    "bytes": 82704,
+    "sha256": "0109ea58bbb6165495c8ed4f0689066b219cac4217987fc53c0a7abc2a7365b9"
+  },
+  {
+    "source": "crates/engine-native-content/src/content/host.rs",
+    "copy": "source-inputs/crates/engine-native-content/src/content/host.rs",
+    "bytes": 17595,
+    "sha256": "5040fd7da574e87f28bd26d28fa304e0a4fbc623a58fe63043a1dfc77f2a801c"
+  }
+]

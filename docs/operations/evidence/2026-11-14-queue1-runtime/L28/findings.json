@@ -1,0 +1,124 @@
+{
+  "at": "2026-11-13T18:57:27.130183+00:00",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "role": "runtime collector, not independent reviewer",
+  "versions": {
+    "rule": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "product_changes": false,
+  "inventory_changes": false,
+  "new_equivalence_signoffs": 0,
+  "recommended_withdrawal_keys": [
+    "L28:skills:th_yeyan@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8636"
+  ],
+  "already_approximate_keys": [
+    "L28:skills:th_buxu@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6372",
+    "L28:skills:th_zhengjing@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6018"
+  ],
+  "findings": [
+    {
+      "id": "B01",
+      "inventory_key": "L28:skills:th_buxu@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6372",
+      "classification": "verified_runtime_difference",
+      "upstream_location": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6431",
+      "native_location": "crates/engine-native-content/src/content/host/step/l28_batch_a_asks.rs:738",
+      "difference": "选择装备/无懈后原生取连续牌堆顶杀，而上游按真实经类取对应卡。",
+      "cases": [
+        "buxu-equip",
+        "buxu-nullify",
+        "buxu-twice"
+      ],
+      "recommendation": "保持简化近似，待独立复核；不新增撤回或升号。"
+    },
+    {
+      "id": "B02",
+      "inventory_key": "L28:skills:th_buxu@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6372",
+      "classification": "verified_source_difference_not_runtime_sampled",
+      "upstream_location": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6435",
+      "native_location": "crates/engine-native-content/src/content/host/step/l28_batch_a_asks.rs:729",
+      "difference": "搜不到指定经类时，上游退使用统计；原生不做类别搜索且仍增加使用统计和mask。",
+      "counterexample_to_run": "移走所有装备但保留基本牌，再付成本选装备；比较下一次成本与展开区。",
+      "recommendation": "保留未实跑标记。"
+    },
+    {
+      "id": "Z01",
+      "inventory_key": "L28:skills:th_zhengjing@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6018",
+      "classification": "verified_source_difference_with_native_runtime",
+      "upstream_location": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6052",
+      "native_location": "crates/engine-native-content/src/content/host/step/l28_batch_a_asks.rs:608",
+      "difference": "上游不同牌名且排毒的候选被原生连续顶部N张替代；count3实得ID0/1/2全部杀。小游戏未实跑。",
+      "cases": [
+        "zhengjing-three-target"
+      ],
+      "recommendation": "保持简化近似。"
+    },
+    {
+      "id": "Z02",
+      "inventory_key": "L28:skills:th_zhengjing@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6018",
+      "classification": "verified_source_difference_not_browser_completed",
+      "upstream_location": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6123",
+      "native_location": "crates/engine-native-content/src/content/host/step/l28_batch_a_asks.rs:621",
+      "difference": "上游允许任意非空经典子集置目标，原生固定第一张置目标，其余归自己。",
+      "counterexample_to_run": "整理三种不同名字牌，选目标1，把两张置目标、一张自取；原生没有该分配输入。",
+      "recommendation": "保持简化近似。"
+    },
+    {
+      "id": "Z03",
+      "inventory_key": "L28:skills:th_zhengjing@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6018",
+      "classification": "environment_blocker_not_upstream_package_bug",
+      "upstream_location": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6032",
+      "native_location": "not applicable",
+      "difference": "隔离运行依限制未安装/加载Spine运行库；四个fresh页面实际phaseUse检查首次filter均ReferenceError dcdAnim。没有绕过已经设置的zhengjingxiao，后续小游戏/分配未验。",
+      "cases": [
+        "zhengjing-one-self",
+        "zhengjing-three-target",
+        "zhengjing-zero",
+        "zhengjing-cancel"
+      ],
+      "recommendation": "源码逐行替代并保留未运行边界。"
+    },
+    {
+      "id": "Y01",
+      "inventory_key": "L28:skills:th_yeyan@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8636",
+      "classification": "verified_runtime_difference",
+      "upstream_location": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8893 + game/game.js:249",
+      "native_location": "crates/engine-native-content/src/content/host/step/l28_batch_b_asks.rs:405",
+      "difference": "真实liuli默认strengthen_skill=null时getStrength(true,false)=false，大业炎不loseHp；原生固定loseHp3。forbid配置另采，不把两者混为默认。",
+      "cases": [
+        "yeyan-great-one-default",
+        "yeyan-great-split-default"
+      ],
+      "recommendation": "撤回当前已复核等价为简化近似，待独立复核。"
+    },
+    {
+      "id": "Y02",
+      "inventory_key": "L28:skills:th_yeyan@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8636",
+      "classification": "verified_runtime_difference",
+      "upstream_location": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8889-8903",
+      "native_location": "crates/engine-native-content/src/content/host/step/l28_batch_b_asks.rs:405-418",
+      "difference": "forbid配置下上游先loseHp3再座次1/3伤害；原生实际日志先3/1伤害后HpLost3。小三目标上游1/2/3而原生3/2/1。",
+      "cases": [
+        "yeyan-small-three",
+        "yeyan-great-one",
+        "yeyan-great-split"
+      ],
+      "recommendation": "撤回当前已复核等价，不能因最终HP相同保留。"
+    },
+    {
+      "id": "Y03",
+      "inventory_key": "L28:skills:th_yeyan@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8636",
+      "classification": "verified_source_and_browser_choice_gap",
+      "upstream_location": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8902",
+      "native_location": "crates/engine-native-content/src/content/host/step/l28_batch_b_asks.rs:391",
+      "difference": "实际DOM可以给单目标只分配2团火，需四花色并仅伤2；原生大模式单目标固定3，没有对应数量输入。最近输入的配对不是同输入比较。",
+      "cases": [
+        "yeyan-great-two"
+      ],
+      "recommendation": "作为同一th_yeyan项剩余差异，不扩大新等价范围。"
+    }
+  ]
+}

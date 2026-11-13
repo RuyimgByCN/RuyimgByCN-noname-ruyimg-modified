@@ -1,0 +1,26 @@
+{
+  "at": "2026-11-13T18:48:32.327212+00:00",
+  "verified_owned_node_command": "  PID  PPID COMMAND\n92560  1718 node docs/operations/evidence/2026-11-14-queue1-runtime/U08/launch.mjs\n",
+  "command": "kill -TERM 92560 (verified U08 launch.mjs node; launcher closes only own Chrome, CDP, control and profile)",
+  "ports_before": {
+    "5173": true,
+    "51215": true,
+    "50185": true,
+    "50210": true
+  },
+  "ports_after": {
+    "5173": true,
+    "51215": true,
+    "50185": false,
+    "50210": false
+  },
+  "profile_path": "/private/tmp/noname-queue1-u08-chrome-pPmflj",
+  "profile_removed": true,
+  "owned_temp_response_copied_then_removed": true,
+  "shared_services_stopped": false,
+  "shared_target_cleaned": false,
+  "private_cargo_target_created": false,
+  "private_cargo_cache_remaining": false,
+  "retained_executable": "preserved-probe.json",
+  "other_l29_l10_retained_binaries": "Untouched; awaiting parent release."
+}

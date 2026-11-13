@@ -1,0 +1,11 @@
+{
+  "at": "2026-11-14T03:15:03.245179+08:00",
+  "argv": [
+    "python3",
+    "-"
+  ],
+  "exit_code": 1,
+  "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 17, in <module>\nAssertionError\n",
+  "cause": "ZIP逐字节校验已完成并写raw-log-integrity；后续为README创建使用assert not exists，已有首次CI入口，因此守卫中止。未覆盖旧记录，也非产品/CI失败。",
+  "correction": "保留已验证字节记录，改为读取旧README后追加带日期终态；不重新采集CI。"
+}

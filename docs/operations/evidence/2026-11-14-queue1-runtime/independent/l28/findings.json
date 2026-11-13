@@ -1,0 +1,355 @@
+{
+  "at": "2026-11-13T19:10:13.807207+00:00",
+  "reviewer": "/root/fix_dddanzhi",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "versions": {
+    "rule": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "source_id": "L28",
+  "sample_keys": [
+    "L28:skills:th_buxu@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6372",
+    "L28:skills:th_zhengjing@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6018",
+    "L28:skills:th_yeyan@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8636"
+  ],
+  "related_key_not_runtime_reviewed": "L28:skills:th_zhengjing2@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6162",
+  "case_counts": {
+    "有限投影一致": 11,
+    "类别结算不一致": 3,
+    "源入口阻塞": 4,
+    "结算时序不一致": 3,
+    "取消交互分段不同": 1,
+    "配置维度不一致": 2,
+    "分配能力不具备": 1
+  },
+  "raw_counts": {
+    "browser_cases": 25,
+    "source_branch_completed": 21,
+    "source_original_filter_errors": 4,
+    "native_cases": 22,
+    "unique_native_pending": 39,
+    "native_final_archives": 22
+  },
+  "findings": [
+    {
+      "id": "L28-R1",
+      "inventory_key": "L28:skills:th_buxu@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6372",
+      "classification": "已观察规则差异",
+      "severity": "high",
+      "recommendation": "维持或改为简化近似；不签等价",
+      "cases": [
+        "buxu-equip",
+        "buxu-nullify",
+        "buxu-twice"
+      ],
+      "finding": "分类按钮未决定原生取牌类别，原生总deck.pop并设置所选类别mask。",
+      "upstream": "extension.js:6187–6197的六类过滤及6372–6514补叙；game.js:63172先全牌堆、再弃牌堆检索。",
+      "native": "l28_batch_a_asks.rs:702–750丢费用、选Tag后无条件deck.pop。",
+      "runtime_proof": "buxu-nullify源实际70黑桃J无懈（真实原牌表元组），原生1黑桃8杀；基本/无懈按钮A/B在原生得同一顶牌。",
+      "limits": "装备分支的79为原生通用映射黑桃1绝影，官方原实体不可认证；不影响无懈分支的类别反例。",
+      "unrun_repro_design": "用真实牌表的杀/无懈/桃建受控牌区，让牌堆仅有杀、弃牌堆有无懈后选礼；另测牌堆/弃牌均无该类时费用已付但原getStat次数回退。尚未运行，不纳入已测计数。"
+    },
+    {
+      "id": "L28-R2",
+      "inventory_key": "L28:skills:th_yeyan@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8636",
+      "classification": "已观察规则差异",
+      "severity": "high",
+      "recommendation": "维持或改为简化近似；不签等价",
+      "cases": [
+        "yeyan-small-three",
+        "yeyan-great-one",
+        "yeyan-great-split"
+      ],
+      "finding": "原生伤害顺序倒转；大业炎失去3体力晚于伤害。",
+      "upstream": "extension.js:8889–8915先discard、配置允许时loseHp，再按座次damage；game.js:41695逐个shift子事件。",
+      "native": "l28_batch_b_asks.rs:399–420依次emit而machine.rs:403/resolution.rs:130压栈，resolution.rs:632读stack.last。",
+      "runtime_proof": "源小业炎伤害1→2→3，native日志3→2→1；源forbid大分配顺序loseHp0→damage1(1)→damage3(2)，native damage3(2)→damage1(1)→loseHp0。",
+      "limits": "八座HP8，无濒死/死亡/连环/其他触发，不推断这些后果已经实测；四费用牌0/7/21/24均有真实原牌表元组。",
+      "unrun_repro_design": "以真实四花色手牌、业炎者HP3及伤害后反击/死亡相关技能测费用引发濒死先后，保留完整事件轨迹；本批未运行。"
+    },
+    {
+      "id": "L28-R3",
+      "inventory_key": "L28:skills:th_yeyan@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8636",
+      "classification": "已观察配置/规则差异",
+      "severity": "high",
+      "recommendation": "与同key合并保留简化近似",
+      "cases": [
+        "yeyan-great-one-default",
+        "yeyan-great-split-default"
+      ],
+      "finding": "原生无strengthen_skill维度，大业炎无条件失3血；原上游默认强化配置不付3血。",
+      "upstream": "liuli game.js:249–267的真实getStrength；extension.js:8894附近只在getStrength(true,false)为真时loseHp。",
+      "native": "l28_batch_b_asks.rs:399–407 great无条件emit LoseHp。",
+      "runtime_proof": "真实localStorage null→getStrength=false，源两场0保持8；原生近似分支均0降5。",
+      "limits": "native没有对应配置初态，因此不是两个完整配置状态相同的对答；源forbid/default真实配置两支均已采集。"
+    },
+    {
+      "id": "L28-R4",
+      "inventory_key": "L28:skills:th_yeyan@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8636",
+      "classification": "已观察表达能力差异",
+      "severity": "medium",
+      "recommendation": "与同key合并保留简化近似",
+      "cases": [
+        "yeyan-great-two"
+      ],
+      "finding": "原生不能只给单目标2火并留第三火未分配。",
+      "upstream": "真实火焰UI允许任意未分配火；原content以targets非空和result.bool确认，伤害数取每人的实际火焰数组长度。",
+      "native": "l28_batch_b_asks.rs:391–396大模式一个目标固定3，多目标首位2其余1；mode/targets/cost窗无2火值。",
+      "runtime_proof": "源两火拖给1且第三未用，目标8→6；最近的native单人大业炎为8→5。",
+      "limits": "无对应native命令，不能称同一命令回包不一致；原生分支缺失由候选和实际源码明确确认。"
+    },
+    {
+      "id": "L28-R5",
+      "inventory_key": "L28:skills:th_zhengjing@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6018",
+      "classification": "源入口已实际阻塞；规则差异由源码确认",
+      "severity": "high",
+      "recommendation": "维持或改为简化近似；不签等价",
+      "cases": [
+        "zhengjing-one-self",
+        "zhengjing-three-target",
+        "zhengjing-zero",
+        "zhengjing-cancel"
+      ],
+      "finding": "原生用人工0..5询问代替真实切水果、固定首张作经；0仍添经并摸牌。",
+      "upstream": "extension.js:6018–6161中按不同牌名且非毒检索、真实thunderFruit、无成功结束、强制目标、chooseToMove至少一张作经自由分配；thunderFruit结果代码同文件:475–548。",
+      "native": "l28_batch_a_asks.rs:581–625 count取顶N，固定first作经，其余归自己；count0添顶牌经再摸1。",
+      "runtime_proof": "四场都由真实phaseUse/chooseToUse首次filter抛dcdAnim ReferenceError；并未运行上游小游戏。native count3实取同名杀0/1/2，0固定给目标、1/2给自己；count0仍授辅助技能/取经/摸牌，全部保存恢复可核。",
+      "limits": "遵守裁决35，未读/加载官方Spine，未stub或提前置zhengjingxiao；未取得上游小游戏成功/失败/取消/自由分配的runtime证据。关联th_zhengjing2不因本结论自动签署或撤回。"
+    },
+    {
+      "id": "L28-I1",
+      "inventory_key": "L28:skills:th_yeyan@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8636",
+      "classification": "已观察交互分段边界",
+      "severity": "medium",
+      "recommendation": "记录交互差异；不单独新增等价或撤回计数",
+      "cases": [
+        "yeyan-great-discard-cancel"
+      ],
+      "finding": "源真实叠火自动选四牌后只有OK；撤火至一火再取消。native独立弃牌窗可直接空答取消。",
+      "runtime_proof": "source DOM确认串从o经撤火变oc，最终无费用/觉醒/伤害；nativediscard窗allow_cancel=true，直接空答退出。",
+      "limits": "最终无效果投影相符，原场景名称不能当成源直接取消四牌窗的证明。"
+    }
+  ],
+  "signed_equivalent_items": [],
+  "not_a_full_source_audit": "仅复核这三技25个已采集场景和所需源链，不覆盖L28全部inventory条目；有限投影一致行不签为整个技能等价。",
+  "fixture_boundaries": {
+    "strict_initial_projection_matches_before_normalization": 0,
+    "after_only_intrinsic_lightning_nature_normalization": 25,
+    "native_catalog_fixture_count": 125,
+    "original_standard_extra_pile_count": 161,
+    "native_faces_not_original_pile_tuples": [
+      {
+        "id": 79,
+        "kind": "horse_plus",
+        "name": "horse_plus",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "jueying"
+      },
+      {
+        "id": 80,
+        "kind": "horse_plus",
+        "name": "horse_plus",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "jueying"
+      },
+      {
+        "id": 81,
+        "kind": "horse_plus",
+        "name": "horse_plus",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "jueying"
+      },
+      {
+        "id": 82,
+        "kind": "horse_plus",
+        "name": "horse_plus",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "jueying"
+      },
+      {
+        "id": 83,
+        "kind": "horse_minus",
+        "name": "horse_minus",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "chitu"
+      },
+      {
+        "id": 84,
+        "kind": "horse_minus",
+        "name": "horse_minus",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "chitu"
+      },
+      {
+        "id": 89,
+        "kind": "weapon",
+        "name": "weapon2",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "qinggang"
+      },
+      {
+        "id": 90,
+        "kind": "weapon",
+        "name": "weapon2b",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "cixiong"
+      },
+      {
+        "id": 91,
+        "kind": "weapon",
+        "name": "weapon3",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "qinglong"
+      },
+      {
+        "id": 92,
+        "kind": "armor",
+        "name": "armor",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "bagua"
+      },
+      {
+        "id": 93,
+        "kind": "armor",
+        "name": "armor",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "bagua"
+      },
+      {
+        "id": 94,
+        "kind": "huosha",
+        "name": "fire_sha",
+        "nature": "fire",
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 95,
+        "kind": "huosha",
+        "name": "fire_sha",
+        "nature": "fire",
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 96,
+        "kind": "huosha",
+        "name": "fire_sha",
+        "nature": "fire",
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 97,
+        "kind": "huosha",
+        "name": "fire_sha",
+        "nature": "fire",
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "sha"
+      },
+      {
+        "id": 98,
+        "kind": "tiesuo",
+        "name": "chain",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "tiesuo"
+      },
+      {
+        "id": 99,
+        "kind": "tiesuo",
+        "name": "chain",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "tiesuo"
+      },
+      {
+        "id": 100,
+        "kind": "tiesuo",
+        "name": "chain",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "tiesuo"
+      },
+      {
+        "id": 101,
+        "kind": "tiesuo",
+        "name": "chain",
+        "nature": null,
+        "rank": 1,
+        "suit": "spade",
+        "upstream_name": "tiesuo"
+      },
+      {
+        "id": 103,
+        "kind": "bingliang",
+        "name": "bing",
+        "nature": null,
+        "rank": 3,
+        "suit": "club",
+        "upstream_name": "bingliang"
+      },
+      {
+        "id": 123,
+        "kind": "fangtian",
+        "name": "fangtian",
+        "nature": null,
+        "rank": 5,
+        "suit": "diamond",
+        "upstream_name": "fangtian"
+      }
+    ],
+    "affected_interaction_cases": {
+      "buxu-equip": "取得79黑桃1绝影，不作官方实体认证；仍可看到该真实定义属装备而native拿杀。",
+      "buxu-twice": "第二次同79，限于递增费用和类别差异观察。",
+      "buxu-full": "初态扩展89黑桃1青釭非原元组，满6反例仅核数量。"
+    },
+    "all_other_cases": "21个非原元组多为闲置牌堆元素，不能称完整牌堆同；逐案没有触及这些卡的费用/HP/伤害时序观察仍保留。"
+  },
+  "native_replay": {
+    "pending_restore_before_full_snapshot_except_auth": 39,
+    "answer_hash_outcome_logs_same": 39,
+    "answer_after_full_snapshot_same_to_next_or_final_except_auth": 38,
+    "separate_activation_boundary": {
+      "case": "buxu-twice",
+      "choice_index": 1,
+      "reason": "回答第一轮分类后采集者再提交第二次ActivateSkill，所以下一个pending不是直接后的完整快照；仍核当前应答hash/日志/回包，不把缺失的直接后NGSA编成已比较。"
+    },
+    "final_restore_full_snapshot_except_auth": 22,
+    "failures": 0,
+    "complete_upstream_state_events_rng_compared": false
+  },
+  "review_source_rule": "先源码后冻结raw；未读取采集者README、findings或比较器决定预期。完整manifest仅按字节hash核对，未将报告文字用作规则证据。"
+}

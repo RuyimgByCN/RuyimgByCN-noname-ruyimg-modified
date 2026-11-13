@@ -1,0 +1,3899 @@
+{
+  "counts": {
+    "final_cohort": 25,
+    "initial_projection_matches": 25,
+    "completed": 21,
+    "blocked": 4,
+    "native_cases": 22,
+    "pending_restorations": 39,
+    "declared_state_payment_hp_events_match_only": 12,
+    "observed_difference_in_declared_projection": 8,
+    "allocation_not_representable_in_native_choice_spec; paired to nearest one-target great mode, not an identical input": 1
+  },
+  "canonicalization_notes": [
+    "The first comparison assertion rejected two ShanDian faces: raw probe only encoded nature for elemental Sha, whereas upstream cardnature adds thunder. Final projection derives thunder from native ShanDian kind (kernel/judge.rs:1014-1024); raw outputs remain unchanged.",
+    "Pre-bootstrap browser rounds are retained as fixture diagnostics: asynchronous original pile creation appended cards without native IDs. The final cohort drains the real upstream onfree/cardsAsync before fixture setup and asserts no foreign cards."
+  ],
+  "projection": "All eight players: hp/max/alive/link/turnover/armor, ordered card faces incl nature and identity in hand/equipment/judgment/classics; enabled skill names, Yeyan limited use, Buxu count; ordered draw/discard/table. HP event sequence and payment sequence compared separately. Excludes other storage/events/RNG and unexecuted full card semantics. Configuration is recorded, not assumed matched.",
+  "results": [
+    {
+      "case": "buxu-basic",
+      "native_case": "buxu-basic",
+      "initial_projection_equal": true,
+      "browser_completed": true,
+      "spine_entry_blocked": false,
+      "native_choice_count": 2,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "final_projection_equal": true,
+      "final_differences": [],
+      "native_hp_events": [],
+      "upstream_hp_events": [],
+      "hp_event_sequence_equal": true,
+      "native_payment": [
+        0
+      ],
+      "upstream_payment": [
+        0
+      ],
+      "payment_sequence_equal": true,
+      "native_yeyan_spent": false,
+      "upstream_yeyan_spent": false,
+      "classification": "declared_state_payment_hp_events_match_only"
+    },
+    {
+      "case": "buxu-equip",
+      "native_case": "buxu-equip",
+      "initial_projection_equal": true,
+      "browser_completed": true,
+      "spine_entry_blocked": false,
+      "native_choice_count": 2,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "final_projection_equal": false,
+      "final_differences": [
+        {
+          "path": ".deck_draw_order[0].id",
+          "native": 2,
+          "upstream": 1
+        },
+        {
+          "path": ".deck_draw_order[1].id",
+          "native": 3,
+          "upstream": 2
+        },
+        {
+          "path": ".deck_draw_order[1].rank",
+          "native": 9,
+          "upstream": 8
+        },
+        {
+          "path": ".deck_draw_order[2].id",
+          "native": 4,
+          "upstream": 3
+        },
+        {
+          "path": ".deck_draw_order[3].id",
+          "native": 5,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[3].rank",
+          "native": 10,
+          "upstream": 9
+        },
+        {
+          "path": ".deck_draw_order[4].id",
+          "native": 6,
+          "upstream": 5
+        },
+        {
+          "path": ".deck_draw_order[5].id",
+          "native": 7,
+          "upstream": 6
+        },
+        {
+          "path": ".deck_draw_order[5].rank",
+          "native": 2,
+          "upstream": 10
+        },
+        {
+          "path": ".deck_draw_order[5].suit",
+          "native": "club",
+          "upstream": "spade"
+        },
+        {
+          "path": ".deck_draw_order[6].id",
+          "native": 8,
+          "upstream": 7
+        },
+        {
+          "path": ".deck_draw_order[6].rank",
+          "native": 3,
+          "upstream": 2
+        },
+        {
+          "path": ".deck_draw_order[7].id",
+          "native": 9,
+          "upstream": 8
+        },
+        {
+          "path": ".deck_draw_order[7].rank",
+          "native": 4,
+          "upstream": 3
+        },
+        {
+          "path": ".deck_draw_order[8].id",
+          "native": 10,
+          "upstream": 9
+        },
+        {
+          "path": ".deck_draw_order[8].rank",
+          "native": 5,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[9].id",
+          "native": 11,
+          "upstream": 10
+        },
+        {
+          "path": ".deck_draw_order[9].rank",
+          "native": 6,
+          "upstream": 5
+        },
+        {
+          "path": ".deck_draw_order[10].id",
+          "native": 12,
+          "upstream": 11
+        },
+        {
+          "path": ".deck_draw_order[10].rank",
+          "native": 7,
+          "upstream": 6
+        },
+        {
+          "path": ".deck_draw_order[11].id",
+          "native": 13,
+          "upstream": 12
+        },
+        {
+          "path": ".deck_draw_order[11].rank",
+          "native": 8,
+          "upstream": 7
+        },
+        {
+          "path": ".deck_draw_order[12].id",
+          "native": 14,
+          "upstream": 13
+        },
+        {
+          "path": ".deck_draw_order[13].id",
+          "native": 15,
+          "upstream": 14
+        },
+        {
+          "path": ".deck_draw_order[13].rank",
+          "native": 9,
+          "upstream": 8
+        },
+        {
+          "path": ".deck_draw_order[14].id",
+          "native": 16,
+          "upstream": 15
+        },
+        {
+          "path": ".deck_draw_order[15].id",
+          "native": 17,
+          "upstream": 16
+        },
+        {
+          "path": ".deck_draw_order[15].rank",
+          "native": 10,
+          "upstream": 9
+        },
+        {
+          "path": ".deck_draw_order[16].id",
+          "native": 18,
+          "upstream": 17
+        },
+        {
+          "path": ".deck_draw_order[17].id",
+          "native": 19,
+          "upstream": 18
+        },
+        {
+          "path": ".deck_draw_order[17].rank",
+          "native": 11,
+          "upstream": 10
+        },
+        {
+          "path": ".deck_draw_order[18].id",
+          "native": 20,
+          "upstream": 19
+        },
+        {
+          "path": ".deck_draw_order[19].id",
+          "native": 21,
+          "upstream": 20
+        },
+        {
+          "path": ".deck_draw_order[19].rank",
+          "native": 10,
+          "upstream": 11
+        },
+        {
+          "path": ".deck_draw_order[19].suit",
+          "native": "heart",
+          "upstream": "club"
+        },
+        {
+          "path": ".deck_draw_order[20].id",
+          "native": 22,
+          "upstream": 21
+        },
+        {
+          "path": ".deck_draw_order[21].id",
+          "native": 23,
+          "upstream": 22
+        },
+        {
+          "path": ".deck_draw_order[21].rank",
+          "native": 11,
+          "upstream": 10
+        },
+        {
+          "path": ".deck_draw_order[22].id",
+          "native": 24,
+          "upstream": 23
+        },
+        {
+          "path": ".deck_draw_order[22].rank",
+          "native": 6,
+          "upstream": 11
+        },
+        {
+          "path": ".deck_draw_order[22].suit",
+          "native": "diamond",
+          "upstream": "heart"
+        },
+        {
+          "path": ".deck_draw_order[23].id",
+          "native": 25,
+          "upstream": 24
+        },
+        {
+          "path": ".deck_draw_order[23].rank",
+          "native": 7,
+          "upstream": 6
+        },
+        {
+          "path": ".deck_draw_order[24].id",
+          "native": 26,
+          "upstream": 25
+        },
+        {
+          "path": ".deck_draw_order[24].rank",
+          "native": 8,
+          "upstream": 7
+        },
+        {
+          "path": ".deck_draw_order[25].id",
+          "native": 27,
+          "upstream": 26
+        },
+        {
+          "path": ".deck_draw_order[25].rank",
+          "native": 9,
+          "upstream": 8
+        },
+        {
+          "path": ".deck_draw_order[26].id",
+          "native": 28,
+          "upstream": 27
+        },
+        {
+          "path": ".deck_draw_order[26].rank",
+          "native": 10,
+          "upstream": 9
+        },
+        {
+          "path": ".deck_draw_order[27].id",
+          "native": 29,
+          "upstream": 28
+        },
+        {
+          "path": ".deck_draw_order[27].rank",
+          "native": 13,
+          "upstream": 10
+        },
+        {
+          "path": ".deck_draw_order[28].id",
+          "native": 31,
+          "upstream": 29
+        },
+        {
+          "path": ".deck_draw_order[28].name",
+          "native": "shan",
+          "upstream": "sha"
+        },
+        {
+          "path": ".deck_draw_order[28].rank",
+          "native": 2,
+          "upstream": 13
+        },
+        {
+          "path": ".deck_draw_order[28].suit",
+          "native": "heart",
+          "upstream": "diamond"
+        },
+        {
+          "path": ".deck_draw_order[29].id",
+          "native": 32,
+          "upstream": 31
+        },
+        {
+          "path": ".deck_draw_order[29].rank",
+          "native": 13,
+          "upstream": 2
+        },
+        {
+          "path": ".deck_draw_order[30].id",
+          "native": 33,
+          "upstream": 32
+        },
+        {
+          "path": ".deck_draw_order[30].rank",
+          "native": 2,
+          "upstream": 13
+        },
+        {
+          "path": ".deck_draw_order[30].suit",
+          "native": "diamond",
+          "upstream": "heart"
+        },
+        {
+          "path": ".deck_draw_order[31].id",
+          "native": 34,
+          "upstream": 33
+        },
+        {
+          "path": ".deck_draw_order[32].id",
+          "native": 35,
+          "upstream": 34
+        },
+        {
+          "path": ".deck_draw_order[32].rank",
+          "native": 3,
+          "upstream": 2
+        },
+        {
+          "path": ".deck_draw_order[33].id",
+          "native": 36,
+          "upstream": 35
+        },
+        {
+          "path": ".deck_draw_order[33].rank",
+          "native": 4,
+          "upstream": 3
+        },
+        {
+          "path": ".deck_draw_order[34].id",
+          "native": 37,
+          "upstream": 36
+        },
+        {
+          "path": ".deck_draw_order[34].rank",
+          "native": 5,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[35].id",
+          "native": 38,
+          "upstream": 37
+        },
+        {
+          "path": ".deck_draw_order[35].rank",
+          "native": 6,
+          "upstream": 5
+        },
+        {
+          "path": ".deck_draw_order[36].id",
+          "native": 39,
+          "upstream": 38
+        },
+        {
+          "path": ".deck_draw_order[36].rank",
+          "native": 7,
+          "upstream": 6
+        },
+        {
+          "path": ".deck_draw_order[37].id",
+          "native": 40,
+          "upstream": 39
+        },
+        {
+          "path": ".deck_draw_order[37].rank",
+          "native": 8,
+          "upstream": 7
+        },
+        {
+          "path": ".deck_draw_order[38].id",
+          "native": 41,
+          "upstream": 40
+        },
+        {
+          "path": ".deck_draw_order[38].rank",
+          "native": 9,
+          "upstream": 8
+        },
+        {
+          "path": ".deck_draw_order[39].id",
+          "native": 42,
+          "upstream": 41
+        },
+        {
+          "path": ".deck_draw_order[39].rank",
+          "native": 10,
+          "upstream": 9
+        },
+        {
+          "path": ".deck_draw_order[40].id",
+          "native": 43,
+          "upstream": 42
+        },
+        {
+          "path": ".deck_draw_order[40].rank",
+          "native": 11,
+          "upstream": 10
+        },
+        {
+          "path": ".deck_draw_order[41].id",
+          "native": 44,
+          "upstream": 43
+        },
+        {
+          "path": ".deck_draw_order[42].id",
+          "native": 46,
+          "upstream": 44
+        },
+        {
+          "path": ".deck_draw_order[42].name",
+          "native": "tao",
+          "upstream": "shan"
+        },
+        {
+          "path": ".deck_draw_order[42].rank",
+          "native": 4,
+          "upstream": 11
+        },
+        {
+          "path": ".deck_draw_order[42].suit",
+          "native": "heart",
+          "upstream": "diamond"
+        },
+        {
+          "path": ".deck_draw_order[43].id",
+          "native": 47,
+          "upstream": 46
+        },
+        {
+          "path": ".deck_draw_order[43].rank",
+          "native": 6,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[44].id",
+          "native": 48,
+          "upstream": 47
+        },
+        {
+          "path": ".deck_draw_order[44].rank",
+          "native": 7,
+          "upstream": 6
+        },
+        {
+          "path": ".deck_draw_order[45].id",
+          "native": 49,
+          "upstream": 48
+        },
+        {
+          "path": ".deck_draw_order[45].rank",
+          "native": 8,
+          "upstream": 7
+        },
+        {
+          "path": ".deck_draw_order[46].id",
+          "native": 50,
+          "upstream": 49
+        },
+        {
+          "path": ".deck_draw_order[46].rank",
+          "native": 9,
+          "upstream": 8
+        },
+        {
+          "path": ".deck_draw_order[47].id",
+          "native": 51,
+          "upstream": 50
+        },
+        {
+          "path": ".deck_draw_order[47].rank",
+          "native": 12,
+          "upstream": 9
+        },
+        {
+          "path": ".deck_draw_order[48].id",
+          "native": 52,
+          "upstream": 51
+        },
+        {
+          "path": ".deck_draw_order[48].suit",
+          "native": "diamond",
+          "upstream": "heart"
+        },
+        {
+          "path": ".deck_draw_order[49].id",
+          "native": 53,
+          "upstream": 52
+        },
+        {
+          "path": ".deck_draw_order[49].name",
+          "native": "nanman",
+          "upstream": "tao"
+        },
+        {
+          "path": ".deck_draw_order[49].rank",
+          "native": 7,
+          "upstream": 12
+        },
+        {
+          "path": ".deck_draw_order[49].suit",
+          "native": "spade",
+          "upstream": "diamond"
+        },
+        {
+          "path": ".deck_draw_order[50].id",
+          "native": 54,
+          "upstream": 53
+        },
+        {
+          "path": ".deck_draw_order[50].rank",
+          "native": 13,
+          "upstream": 7
+        },
+        {
+          "path": ".deck_draw_order[51].id",
+          "native": 55,
+          "upstream": 54
+        },
+        {
+          "path": ".deck_draw_order[51].rank",
+          "native": 7,
+          "upstream": 13
+        },
+        {
+          "path": ".deck_draw_order[51].suit",
+          "native": "club",
+          "upstream": "spade"
+        },
+        {
+          "path": ".deck_draw_order[52].id",
+          "native": 56,
+          "upstream": 55
+        },
+        {
+          "path": ".deck_draw_order[52].name",
+          "native": "juedou",
+          "upstream": "nanman"
+        },
+        {
+          "path": ".deck_draw_order[52].rank",
+          "native": 1,
+          "upstream": 7
+        },
+        {
+          "path": ".deck_draw_order[52].suit",
+          "native": "spade",
+          "upstream": "club"
+        },
+        {
+          "path": ".deck_draw_order[53].id",
+          "native": 57,
+          "upstream": 56
+        },
+        {
+          "path": ".deck_draw_order[53].suit",
+          "native": "club",
+          "upstream": "spade"
+        },
+        {
+          "path": ".deck_draw_order[54].id",
+          "native": 58,
+          "upstream": 57
+        },
+        {
+          "path": ".deck_draw_order[54].suit",
+          "native": "diamond",
+          "upstream": "club"
+        },
+        {
+          "path": ".deck_draw_order[55].id",
+          "native": 59,
+          "upstream": 58
+        },
+        {
+          "path": ".deck_draw_order[55].name",
+          "native": "shunshou",
+          "upstream": "juedou"
+        },
+        {
+          "path": ".deck_draw_order[55].rank",
+          "native": 3,
+          "upstream": 1
+        },
+        {
+          "path": ".deck_draw_order[55].suit",
+          "native": "spade",
+          "upstream": "diamond"
+        },
+        {
+          "path": ".deck_draw_order[56].id",
+          "native": 60,
+          "upstream": 59
+        },
+        {
+          "path": ".deck_draw_order[56].rank",
+          "native": 4,
+          "upstream": 3
+        },
+        {
+          "path": ".deck_draw_order[57].id",
+          "native": 61,
+          "upstream": 60
+        },
+        {
+          "path": ".deck_draw_order[57].rank",
+          "native": 11,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[58].id",
+          "native": 62,
+          "upstream": 61
+        },
+        {
+          "path": ".deck_draw_order[58].rank",
+          "native": 3,
+          "upstream": 11
+        },
+        {
+          "path": ".deck_draw_order[58].suit",
+          "native": "diamond",
+          "upstream": "spade"
+        },
+        {
+          "path": ".deck_draw_order[59].id",
+          "native": 63,
+          "upstream": 62
+        },
+        {
+          "path": ".deck_draw_order[59].rank",
+          "native": 4,
+          "upstream": 3
+        },
+        {
+          "path": ".deck_draw_order[60].id",
+          "native": 64,
+          "upstream": 63
+        },
+        {
+          "path": ".deck_draw_order[60].name",
+          "native": "guohe",
+          "upstream": "shunshou"
+        },
+        {
+          "path": ".deck_draw_order[60].rank",
+          "native": 3,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[60].suit",
+          "native": "spade",
+          "upstream": "diamond"
+        },
+        {
+          "path": ".deck_draw_order[61].id",
+          "native": 65,
+          "upstream": 64
+        },
+        {
+          "path": ".deck_draw_order[61].rank",
+          "native": 4,
+          "upstream": 3
+        },
+        {
+          "path": ".deck_draw_order[62].id",
+          "native": 66,
+          "upstream": 65
+        },
+        {
+          "path": ".deck_draw_order[62].rank",
+          "native": 12,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[63].id",
+          "native": 67,
+          "upstream": 66
+        },
+        {
+          "path": ".deck_draw_order[63].rank",
+          "native": 3,
+          "upstream": 12
+        },
+        {
+          "path": ".deck_draw_order[63].suit",
+          "native": "club",
+          "upstream": "spade"
+        },
+        {
+          "path": ".deck_draw_order[64].id",
+          "native": 68,
+          "upstream": 67
+        },
+        {
+          "path": ".deck_draw_order[64].rank",
+          "native": 4,
+          "upstream": 3
+        },
+        {
+          "path": ".deck_draw_order[65].id",
+          "native": 69,
+          "upstream": 68
+        },
+        {
+          "path": ".deck_draw_order[65].rank",
+          "native": 12,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[65].suit",
+          "native": "heart",
+          "upstream": "club"
+        },
+        {
+          "path": ".deck_draw_order[66].id",
+          "native": 70,
+          "upstream": 69
+        },
+        {
+          "path": ".deck_draw_order[66].name",
+          "native": "wuxie",
+          "upstream": "guohe"
+        },
+        {
+          "path": ".deck_draw_order[66].rank",
+          "native": 11,
+          "upstream": 12
+        },
+        {
+          "path": ".deck_draw_order[66].suit",
+          "native": "spade",
+          "upstream": "heart"
+        },
+        {
+          "path": ".deck_draw_order[67].id",
+          "native": 71,
+          "upstream": 70
+        },
+        {
+          "path": ".deck_draw_order[67].rank",
+          "native": 12,
+          "upstream": 11
+        },
+        {
+          "path": ".deck_draw_order[67].suit",
+          "native": "club",
+          "upstream": "spade"
+        },
+        {
+          "path": ".deck_draw_order[68].id",
+          "native": 72,
+          "upstream": 71
+        },
+        {
+          "path": ".deck_draw_order[68].rank",
+          "native": 13,
+          "upstream": 12
+        },
+        {
+          "path": ".deck_draw_order[69].id",
+          "native": 73,
+          "upstream": 72
+        },
+        {
+          "path": ".deck_draw_order[69].rank",
+          "native": 12,
+          "upstream": 13
+        },
+        {
+          "path": ".deck_draw_order[69].suit",
+          "native": "diamond",
+          "upstream": "club"
+        },
+        {
+          "path": ".deck_draw_order[70].id",
+          "native": 74,
+          "upstream": 73
+        },
+        {
+          "path": ".deck_draw_order[70].name",
+          "native": "lebu",
+          "upstream": "wuxie"
+        },
+        {
+          "path": ".deck_draw_order[70].rank",
+          "native": 6,
+          "upstream": 12
+        },
+        {
+          "path": ".deck_draw_order[70].suit",
+          "native": "spade",
+          "upstream": "diamond"
+        },
+        {
+          "path": ".deck_draw_order[71].id",
+          "native": 75,
+          "upstream": 74
+        },
+        {
+          "path": ".deck_draw_order[71].suit",
+          "native": "club",
+          "upstream": "spade"
+        },
+        {
+          "path": ".deck_draw_order[72].id",
+          "native": 76,
+          "upstream": 75
+        },
+        {
+          "path": ".deck_draw_order[72].suit",
+          "native": "heart",
+          "upstream": "club"
+        },
+        {
+          "path": ".deck_draw_order[73].id",
+          "native": 77,
+          "upstream": 76
+        },
+        {
+          "path": ".deck_draw_order[73].name",
+          "native": "shandian",
+          "upstream": "lebu"
+        },
+        {
+          "path": ".deck_draw_order[73].nature",
+          "native": "thunder",
+          "upstream": null
+        },
+        {
+          "path": ".deck_draw_order[73].rank",
+          "native": 1,
+          "upstream": 6
+        },
+        {
+          "path": ".deck_draw_order[73].suit",
+          "native": "spade",
+          "upstream": "heart"
+        },
+        {
+          "path": ".deck_draw_order[74].id",
+          "native": 78,
+          "upstream": 77
+        },
+        {
+          "path": ".deck_draw_order[74].rank",
+          "native": 12,
+          "upstream": 1
+        },
+        {
+          "path": ".deck_draw_order[74].suit",
+          "native": "heart",
+          "upstream": "spade"
+        },
+        {
+          "path": ".deck_draw_order[75].id",
+          "native": 79,
+          "upstream": 78
+        },
+        {
+          "path": ".deck_draw_order[75].name",
+          "native": "jueying",
+          "upstream": "shandian"
+        },
+        {
+          "path": ".deck_draw_order[75].nature",
+          "native": null,
+          "upstream": "thunder"
+        },
+        {
+          "path": ".deck_draw_order[75].rank",
+          "native": 1,
+          "upstream": 12
+        },
+        {
+          "path": ".deck_draw_order[75].suit",
+          "native": "spade",
+          "upstream": "heart"
+        },
+        {
+          "path": ".players[0].classics[0].id",
+          "native": 1,
+          "upstream": 79
+        },
+        {
+          "path": ".players[0].classics[0].name",
+          "native": "sha",
+          "upstream": "jueying"
+        },
+        {
+          "path": ".players[0].classics[0].rank",
+          "native": 8,
+          "upstream": 1
+        }
+      ],
+      "native_hp_events": [],
+      "upstream_hp_events": [],
+      "hp_event_sequence_equal": true,
+      "native_payment": [
+        0
+      ],
+      "upstream_payment": [
+        0
+      ],
+      "payment_sequence_equal": true,
+      "native_yeyan_spent": false,
+      "upstream_yeyan_spent": false,
+      "classification": "observed_difference_in_declared_projection"
+    },
+    {
+      "case": "buxu-nullify",
+      "native_case": "buxu-nullify",
+      "initial_projection_equal": true,
+      "browser_completed": true,
+      "spine_entry_blocked": false,
+      "native_choice_count": 2,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "final_projection_equal": false,
+      "final_differences": [
+        {
+          "path": ".deck_draw_order[0].id",
+          "native": 2,
+          "upstream": 1
+        },
+        {
+          "path": ".deck_draw_order[1].id",
+          "native": 3,
+          "upstream": 2
+        },
+        {
+          "path": ".deck_draw_order[1].rank",
+          "native": 9,
+          "upstream": 8
+        },
+        {
+          "path": ".deck_draw_order[2].id",
+          "native": 4,
+          "upstream": 3
+        },
+        {
+          "path": ".deck_draw_order[3].id",
+          "native": 5,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[3].rank",
+          "native": 10,
+          "upstream": 9
+        },
+        {
+          "path": ".deck_draw_order[4].id",
+          "native": 6,
+          "upstream": 5
+        },
+        {
+          "path": ".deck_draw_order[5].id",
+          "native": 7,
+          "upstream": 6
+        },
+        {
+          "path": ".deck_draw_order[5].rank",
+          "native": 2,
+          "upstream": 10
+        },
+        {
+          "path": ".deck_draw_order[5].suit",
+          "native": "club",
+          "upstream": "spade"
+        },
+        {
+          "path": ".deck_draw_order[6].id",
+          "native": 8,
+          "upstream": 7
+        },
+        {
+          "path": ".deck_draw_order[6].rank",
+          "native": 3,
+          "upstream": 2
+        },
+        {
+          "path": ".deck_draw_order[7].id",
+          "native": 9,
+          "upstream": 8
+        },
+        {
+          "path": ".deck_draw_order[7].rank",
+          "native": 4,
+          "upstream": 3
+        },
+        {
+          "path": ".deck_draw_order[8].id",
+          "native": 10,
+          "upstream": 9
+        },
+        {
+          "path": ".deck_draw_order[8].rank",
+          "native": 5,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[9].id",
+          "native": 11,
+          "upstream": 10
+        },
+        {
+          "path": ".deck_draw_order[9].rank",
+          "native": 6,
+          "upstream": 5
+        },
+        {
+          "path": ".deck_draw_order[10].id",
+          "native": 12,
+          "upstream": 11
+        },
+        {
+          "path": ".deck_draw_order[10].rank",
+          "native": 7,
+          "upstream": 6
+        },
+        {
+          "path": ".deck_draw_order[11].id",
+          "native": 13,
+          "upstream": 12
+        },
+        {
+          "path": ".deck_draw_order[11].rank",
+          "native": 8,
+          "upstream": 7
+        },
+        {
+          "path": ".deck_draw_order[12].id",
+          "native": 14,
+          "upstream": 13
+        },
+        {
+          "path": ".deck_draw_order[13].id",
+          "native": 15,
+          "upstream": 14
+        },
+        {
+          "path": ".deck_draw_order[13].rank",
+          "native": 9,
+          "upstream": 8
+        },
+        {
+          "path": ".deck_draw_order[14].id",
+          "native": 16,
+          "upstream": 15
+        },
+        {
+          "path": ".deck_draw_order[15].id",
+          "native": 17,
+          "upstream": 16
+        },
+        {
+          "path": ".deck_draw_order[15].rank",
+          "native": 10,
+          "upstream": 9
+        },
+        {
+          "path": ".deck_draw_order[16].id",
+          "native": 18,
+          "upstream": 17
+        },
+        {
+          "path": ".deck_draw_order[17].id",
+          "native": 19,
+          "upstream": 18
+        },
+        {
+          "path": ".deck_draw_order[17].rank",
+          "native": 11,
+          "upstream": 10
+        },
+        {
+          "path": ".deck_draw_order[18].id",
+          "native": 20,
+          "upstream": 19
+        },
+        {
+          "path": ".deck_draw_order[19].id",
+          "native": 21,
+          "upstream": 20
+        },
+        {
+          "path": ".deck_draw_order[19].rank",
+          "native": 10,
+          "upstream": 11
+        },
+        {
+          "path": ".deck_draw_order[19].suit",
+          "native": "heart",
+          "upstream": "club"
+        },
+        {
+          "path": ".deck_draw_order[20].id",
+          "native": 22,
+          "upstream": 21
+        },
+        {
+          "path": ".deck_draw_order[21].id",
+          "native": 23,
+          "upstream": 22
+        },
+        {
+          "path": ".deck_draw_order[21].rank",
+          "native": 11,
+          "upstream": 10
+        },
+        {
+          "path": ".deck_draw_order[22].id",
+          "native": 24,
+          "upstream": 23
+        },
+        {
+          "path": ".deck_draw_order[22].rank",
+          "native": 6,
+          "upstream": 11
+        },
+        {
+          "path": ".deck_draw_order[22].suit",
+          "native": "diamond",
+          "upstream": "heart"
+        },
+        {
+          "path": ".deck_draw_order[23].id",
+          "native": 25,
+          "upstream": 24
+        },
+        {
+          "path": ".deck_draw_order[23].rank",
+          "native": 7,
+          "upstream": 6
+        },
+        {
+          "path": ".deck_draw_order[24].id",
+          "native": 26,
+          "upstream": 25
+        },
+        {
+          "path": ".deck_draw_order[24].rank",
+          "native": 8,
+          "upstream": 7
+        },
+        {
+          "path": ".deck_draw_order[25].id",
+          "native": 27,
+          "upstream": 26
+        },
+        {
+          "path": ".deck_draw_order[25].rank",
+          "native": 9,
+          "upstream": 8
+        },
+        {
+          "path": ".deck_draw_order[26].id",
+          "native": 28,
+          "upstream": 27
+        },
+        {
+          "path": ".deck_draw_order[26].rank",
+          "native": 10,
+          "upstream": 9
+        },
+        {
+          "path": ".deck_draw_order[27].id",
+          "native": 29,
+          "upstream": 28
+        },
+        {
+          "path": ".deck_draw_order[27].rank",
+          "native": 13,
+          "upstream": 10
+        },
+        {
+          "path": ".deck_draw_order[28].id",
+          "native": 31,
+          "upstream": 29
+        },
+        {
+          "path": ".deck_draw_order[28].name",
+          "native": "shan",
+          "upstream": "sha"
+        },
+        {
+          "path": ".deck_draw_order[28].rank",
+          "native": 2,
+          "upstream": 13
+        },
+        {
+          "path": ".deck_draw_order[28].suit",
+          "native": "heart",
+          "upstream": "diamond"
+        },
+        {
+          "path": ".deck_draw_order[29].id",
+          "native": 32,
+          "upstream": 31
+        },
+        {
+          "path": ".deck_draw_order[29].rank",
+          "native": 13,
+          "upstream": 2
+        },
+        {
+          "path": ".deck_draw_order[30].id",
+          "native": 33,
+          "upstream": 32
+        },
+        {
+          "path": ".deck_draw_order[30].rank",
+          "native": 2,
+          "upstream": 13
+        },
+        {
+          "path": ".deck_draw_order[30].suit",
+          "native": "diamond",
+          "upstream": "heart"
+        },
+        {
+          "path": ".deck_draw_order[31].id",
+          "native": 34,
+          "upstream": 33
+        },
+        {
+          "path": ".deck_draw_order[32].id",
+          "native": 35,
+          "upstream": 34
+        },
+        {
+          "path": ".deck_draw_order[32].rank",
+          "native": 3,
+          "upstream": 2
+        },
+        {
+          "path": ".deck_draw_order[33].id",
+          "native": 36,
+          "upstream": 35
+        },
+        {
+          "path": ".deck_draw_order[33].rank",
+          "native": 4,
+          "upstream": 3
+        },
+        {
+          "path": ".deck_draw_order[34].id",
+          "native": 37,
+          "upstream": 36
+        },
+        {
+          "path": ".deck_draw_order[34].rank",
+          "native": 5,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[35].id",
+          "native": 38,
+          "upstream": 37
+        },
+        {
+          "path": ".deck_draw_order[35].rank",
+          "native": 6,
+          "upstream": 5
+        },
+        {
+          "path": ".deck_draw_order[36].id",
+          "native": 39,
+          "upstream": 38
+        },
+        {
+          "path": ".deck_draw_order[36].rank",
+          "native": 7,
+          "upstream": 6
+        },
+        {
+          "path": ".deck_draw_order[37].id",
+          "native": 40,
+          "upstream": 39
+        },
+        {
+          "path": ".deck_draw_order[37].rank",
+          "native": 8,
+          "upstream": 7
+        },
+        {
+          "path": ".deck_draw_order[38].id",
+          "native": 41,
+          "upstream": 40
+        },
+        {
+          "path": ".deck_draw_order[38].rank",
+          "native": 9,
+          "upstream": 8
+        },
+        {
+          "path": ".deck_draw_order[39].id",
+          "native": 42,
+          "upstream": 41
+        },
+        {
+          "path": ".deck_draw_order[39].rank",
+          "native": 10,
+          "upstream": 9
+        },
+        {
+          "path": ".deck_draw_order[40].id",
+          "native": 43,
+          "upstream": 42
+        },
+        {
+          "path": ".deck_draw_order[40].rank",
+          "native": 11,
+          "upstream": 10
+        },
+        {
+          "path": ".deck_draw_order[41].id",
+          "native": 44,
+          "upstream": 43
+        },
+        {
+          "path": ".deck_draw_order[42].id",
+          "native": 46,
+          "upstream": 44
+        },
+        {
+          "path": ".deck_draw_order[42].name",
+          "native": "tao",
+          "upstream": "shan"
+        },
+        {
+          "path": ".deck_draw_order[42].rank",
+          "native": 4,
+          "upstream": 11
+        },
+        {
+          "path": ".deck_draw_order[42].suit",
+          "native": "heart",
+          "upstream": "diamond"
+        },
+        {
+          "path": ".deck_draw_order[43].id",
+          "native": 47,
+          "upstream": 46
+        },
+        {
+          "path": ".deck_draw_order[43].rank",
+          "native": 6,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[44].id",
+          "native": 48,
+          "upstream": 47
+        },
+        {
+          "path": ".deck_draw_order[44].rank",
+          "native": 7,
+          "upstream": 6
+        },
+        {
+          "path": ".deck_draw_order[45].id",
+          "native": 49,
+          "upstream": 48
+        },
+        {
+          "path": ".deck_draw_order[45].rank",
+          "native": 8,
+          "upstream": 7
+        },
+        {
+          "path": ".deck_draw_order[46].id",
+          "native": 50,
+          "upstream": 49
+        },
+        {
+          "path": ".deck_draw_order[46].rank",
+          "native": 9,
+          "upstream": 8
+        },
+        {
+          "path": ".deck_draw_order[47].id",
+          "native": 51,
+          "upstream": 50
+        },
+        {
+          "path": ".deck_draw_order[47].rank",
+          "native": 12,
+          "upstream": 9
+        },
+        {
+          "path": ".deck_draw_order[48].id",
+          "native": 52,
+          "upstream": 51
+        },
+        {
+          "path": ".deck_draw_order[48].suit",
+          "native": "diamond",
+          "upstream": "heart"
+        },
+        {
+          "path": ".deck_draw_order[49].id",
+          "native": 53,
+          "upstream": 52
+        },
+        {
+          "path": ".deck_draw_order[49].name",
+          "native": "nanman",
+          "upstream": "tao"
+        },
+        {
+          "path": ".deck_draw_order[49].rank",
+          "native": 7,
+          "upstream": 12
+        },
+        {
+          "path": ".deck_draw_order[49].suit",
+          "native": "spade",
+          "upstream": "diamond"
+        },
+        {
+          "path": ".deck_draw_order[50].id",
+          "native": 54,
+          "upstream": 53
+        },
+        {
+          "path": ".deck_draw_order[50].rank",
+          "native": 13,
+          "upstream": 7
+        },
+        {
+          "path": ".deck_draw_order[51].id",
+          "native": 55,
+          "upstream": 54
+        },
+        {
+          "path": ".deck_draw_order[51].rank",
+          "native": 7,
+          "upstream": 13
+        },
+        {
+          "path": ".deck_draw_order[51].suit",
+          "native": "club",
+          "upstream": "spade"
+        },
+        {
+          "path": ".deck_draw_order[52].id",
+          "native": 56,
+          "upstream": 55
+        },
+        {
+          "path": ".deck_draw_order[52].name",
+          "native": "juedou",
+          "upstream": "nanman"
+        },
+        {
+          "path": ".deck_draw_order[52].rank",
+          "native": 1,
+          "upstream": 7
+        },
+        {
+          "path": ".deck_draw_order[52].suit",
+          "native": "spade",
+          "upstream": "club"
+        },
+        {
+          "path": ".deck_draw_order[53].id",
+          "native": 57,
+          "upstream": 56
+        },
+        {
+          "path": ".deck_draw_order[53].suit",
+          "native": "club",
+          "upstream": "spade"
+        },
+        {
+          "path": ".deck_draw_order[54].id",
+          "native": 58,
+          "upstream": 57
+        },
+        {
+          "path": ".deck_draw_order[54].suit",
+          "native": "diamond",
+          "upstream": "club"
+        },
+        {
+          "path": ".deck_draw_order[55].id",
+          "native": 59,
+          "upstream": 58
+        },
+        {
+          "path": ".deck_draw_order[55].name",
+          "native": "shunshou",
+          "upstream": "juedou"
+        },
+        {
+          "path": ".deck_draw_order[55].rank",
+          "native": 3,
+          "upstream": 1
+        },
+        {
+          "path": ".deck_draw_order[55].suit",
+          "native": "spade",
+          "upstream": "diamond"
+        },
+        {
+          "path": ".deck_draw_order[56].id",
+          "native": 60,
+          "upstream": 59
+        },
+        {
+          "path": ".deck_draw_order[56].rank",
+          "native": 4,
+          "upstream": 3
+        },
+        {
+          "path": ".deck_draw_order[57].id",
+          "native": 61,
+          "upstream": 60
+        },
+        {
+          "path": ".deck_draw_order[57].rank",
+          "native": 11,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[58].id",
+          "native": 62,
+          "upstream": 61
+        },
+        {
+          "path": ".deck_draw_order[58].rank",
+          "native": 3,
+          "upstream": 11
+        },
+        {
+          "path": ".deck_draw_order[58].suit",
+          "native": "diamond",
+          "upstream": "spade"
+        },
+        {
+          "path": ".deck_draw_order[59].id",
+          "native": 63,
+          "upstream": 62
+        },
+        {
+          "path": ".deck_draw_order[59].rank",
+          "native": 4,
+          "upstream": 3
+        },
+        {
+          "path": ".deck_draw_order[60].id",
+          "native": 64,
+          "upstream": 63
+        },
+        {
+          "path": ".deck_draw_order[60].name",
+          "native": "guohe",
+          "upstream": "shunshou"
+        },
+        {
+          "path": ".deck_draw_order[60].rank",
+          "native": 3,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[60].suit",
+          "native": "spade",
+          "upstream": "diamond"
+        },
+        {
+          "path": ".deck_draw_order[61].id",
+          "native": 65,
+          "upstream": 64
+        },
+        {
+          "path": ".deck_draw_order[61].rank",
+          "native": 4,
+          "upstream": 3
+        },
+        {
+          "path": ".deck_draw_order[62].id",
+          "native": 66,
+          "upstream": 65
+        },
+        {
+          "path": ".deck_draw_order[62].rank",
+          "native": 12,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[63].id",
+          "native": 67,
+          "upstream": 66
+        },
+        {
+          "path": ".deck_draw_order[63].rank",
+          "native": 3,
+          "upstream": 12
+        },
+        {
+          "path": ".deck_draw_order[63].suit",
+          "native": "club",
+          "upstream": "spade"
+        },
+        {
+          "path": ".deck_draw_order[64].id",
+          "native": 68,
+          "upstream": 67
+        },
+        {
+          "path": ".deck_draw_order[64].rank",
+          "native": 4,
+          "upstream": 3
+        },
+        {
+          "path": ".deck_draw_order[65].id",
+          "native": 69,
+          "upstream": 68
+        },
+        {
+          "path": ".deck_draw_order[65].rank",
+          "native": 12,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[65].suit",
+          "native": "heart",
+          "upstream": "club"
+        },
+        {
+          "path": ".deck_draw_order[66].id",
+          "native": 70,
+          "upstream": 69
+        },
+        {
+          "path": ".deck_draw_order[66].name",
+          "native": "wuxie",
+          "upstream": "guohe"
+        },
+        {
+          "path": ".deck_draw_order[66].rank",
+          "native": 11,
+          "upstream": 12
+        },
+        {
+          "path": ".deck_draw_order[66].suit",
+          "native": "spade",
+          "upstream": "heart"
+        },
+        {
+          "path": ".players[0].classics[0].id",
+          "native": 1,
+          "upstream": 70
+        },
+        {
+          "path": ".players[0].classics[0].name",
+          "native": "sha",
+          "upstream": "wuxie"
+        },
+        {
+          "path": ".players[0].classics[0].rank",
+          "native": 8,
+          "upstream": 11
+        }
+      ],
+      "native_hp_events": [],
+      "upstream_hp_events": [],
+      "hp_event_sequence_equal": true,
+      "native_payment": [
+        0
+      ],
+      "upstream_payment": [
+        0
+      ],
+      "payment_sequence_equal": true,
+      "native_yeyan_spent": false,
+      "upstream_yeyan_spent": false,
+      "classification": "observed_difference_in_declared_projection"
+    },
+    {
+      "case": "buxu-cancel",
+      "native_case": "buxu-cancel",
+      "initial_projection_equal": true,
+      "browser_completed": true,
+      "spine_entry_blocked": false,
+      "native_choice_count": 1,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "final_projection_equal": true,
+      "final_differences": [],
+      "native_hp_events": [],
+      "upstream_hp_events": [],
+      "hp_event_sequence_equal": true,
+      "native_payment": [],
+      "upstream_payment": [],
+      "payment_sequence_equal": true,
+      "native_yeyan_spent": false,
+      "upstream_yeyan_spent": false,
+      "classification": "declared_state_payment_hp_events_match_only"
+    },
+    {
+      "case": "buxu-empty",
+      "native_case": "buxu-empty",
+      "initial_projection_equal": true,
+      "browser_completed": true,
+      "spine_entry_blocked": false,
+      "native_choice_count": 0,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "final_projection_equal": true,
+      "final_differences": [],
+      "native_hp_events": [],
+      "upstream_hp_events": [],
+      "hp_event_sequence_equal": true,
+      "native_payment": [],
+      "upstream_payment": [],
+      "payment_sequence_equal": true,
+      "native_yeyan_spent": false,
+      "upstream_yeyan_spent": false,
+      "classification": "declared_state_payment_hp_events_match_only"
+    },
+    {
+      "case": "buxu-full",
+      "native_case": "buxu-full",
+      "initial_projection_equal": true,
+      "browser_completed": true,
+      "spine_entry_blocked": false,
+      "native_choice_count": 0,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "final_projection_equal": true,
+      "final_differences": [],
+      "native_hp_events": [],
+      "upstream_hp_events": [],
+      "hp_event_sequence_equal": true,
+      "native_payment": [],
+      "upstream_payment": [],
+      "payment_sequence_equal": true,
+      "native_yeyan_spent": false,
+      "upstream_yeyan_spent": false,
+      "classification": "declared_state_payment_hp_events_match_only"
+    },
+    {
+      "case": "buxu-twice",
+      "native_case": "buxu-twice",
+      "initial_projection_equal": true,
+      "browser_completed": true,
+      "spine_entry_blocked": false,
+      "native_choice_count": 4,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "final_projection_equal": false,
+      "final_differences": [
+        {
+          "path": ".deck_draw_order[0].id",
+          "native": 3,
+          "upstream": 2
+        },
+        {
+          "path": ".deck_draw_order[0].rank",
+          "native": 9,
+          "upstream": 8
+        },
+        {
+          "path": ".deck_draw_order[1].id",
+          "native": 4,
+          "upstream": 3
+        },
+        {
+          "path": ".deck_draw_order[2].id",
+          "native": 5,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[2].rank",
+          "native": 10,
+          "upstream": 9
+        },
+        {
+          "path": ".deck_draw_order[3].id",
+          "native": 6,
+          "upstream": 5
+        },
+        {
+          "path": ".deck_draw_order[4].id",
+          "native": 7,
+          "upstream": 6
+        },
+        {
+          "path": ".deck_draw_order[4].rank",
+          "native": 2,
+          "upstream": 10
+        },
+        {
+          "path": ".deck_draw_order[4].suit",
+          "native": "club",
+          "upstream": "spade"
+        },
+        {
+          "path": ".deck_draw_order[5].id",
+          "native": 8,
+          "upstream": 7
+        },
+        {
+          "path": ".deck_draw_order[5].rank",
+          "native": 3,
+          "upstream": 2
+        },
+        {
+          "path": ".deck_draw_order[6].id",
+          "native": 9,
+          "upstream": 8
+        },
+        {
+          "path": ".deck_draw_order[6].rank",
+          "native": 4,
+          "upstream": 3
+        },
+        {
+          "path": ".deck_draw_order[7].id",
+          "native": 10,
+          "upstream": 9
+        },
+        {
+          "path": ".deck_draw_order[7].rank",
+          "native": 5,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[8].id",
+          "native": 11,
+          "upstream": 10
+        },
+        {
+          "path": ".deck_draw_order[8].rank",
+          "native": 6,
+          "upstream": 5
+        },
+        {
+          "path": ".deck_draw_order[9].id",
+          "native": 12,
+          "upstream": 11
+        },
+        {
+          "path": ".deck_draw_order[9].rank",
+          "native": 7,
+          "upstream": 6
+        },
+        {
+          "path": ".deck_draw_order[10].id",
+          "native": 13,
+          "upstream": 12
+        },
+        {
+          "path": ".deck_draw_order[10].rank",
+          "native": 8,
+          "upstream": 7
+        },
+        {
+          "path": ".deck_draw_order[11].id",
+          "native": 14,
+          "upstream": 13
+        },
+        {
+          "path": ".deck_draw_order[12].id",
+          "native": 15,
+          "upstream": 14
+        },
+        {
+          "path": ".deck_draw_order[12].rank",
+          "native": 9,
+          "upstream": 8
+        },
+        {
+          "path": ".deck_draw_order[13].id",
+          "native": 16,
+          "upstream": 15
+        },
+        {
+          "path": ".deck_draw_order[14].id",
+          "native": 17,
+          "upstream": 16
+        },
+        {
+          "path": ".deck_draw_order[14].rank",
+          "native": 10,
+          "upstream": 9
+        },
+        {
+          "path": ".deck_draw_order[15].id",
+          "native": 18,
+          "upstream": 17
+        },
+        {
+          "path": ".deck_draw_order[16].id",
+          "native": 19,
+          "upstream": 18
+        },
+        {
+          "path": ".deck_draw_order[16].rank",
+          "native": 11,
+          "upstream": 10
+        },
+        {
+          "path": ".deck_draw_order[17].id",
+          "native": 20,
+          "upstream": 19
+        },
+        {
+          "path": ".deck_draw_order[18].id",
+          "native": 21,
+          "upstream": 20
+        },
+        {
+          "path": ".deck_draw_order[18].rank",
+          "native": 10,
+          "upstream": 11
+        },
+        {
+          "path": ".deck_draw_order[18].suit",
+          "native": "heart",
+          "upstream": "club"
+        },
+        {
+          "path": ".deck_draw_order[19].id",
+          "native": 22,
+          "upstream": 21
+        },
+        {
+          "path": ".deck_draw_order[20].id",
+          "native": 23,
+          "upstream": 22
+        },
+        {
+          "path": ".deck_draw_order[20].rank",
+          "native": 11,
+          "upstream": 10
+        },
+        {
+          "path": ".deck_draw_order[21].id",
+          "native": 24,
+          "upstream": 23
+        },
+        {
+          "path": ".deck_draw_order[21].rank",
+          "native": 6,
+          "upstream": 11
+        },
+        {
+          "path": ".deck_draw_order[21].suit",
+          "native": "diamond",
+          "upstream": "heart"
+        },
+        {
+          "path": ".deck_draw_order[22].id",
+          "native": 25,
+          "upstream": 24
+        },
+        {
+          "path": ".deck_draw_order[22].rank",
+          "native": 7,
+          "upstream": 6
+        },
+        {
+          "path": ".deck_draw_order[23].id",
+          "native": 26,
+          "upstream": 25
+        },
+        {
+          "path": ".deck_draw_order[23].rank",
+          "native": 8,
+          "upstream": 7
+        },
+        {
+          "path": ".deck_draw_order[24].id",
+          "native": 27,
+          "upstream": 26
+        },
+        {
+          "path": ".deck_draw_order[24].rank",
+          "native": 9,
+          "upstream": 8
+        },
+        {
+          "path": ".deck_draw_order[25].id",
+          "native": 28,
+          "upstream": 27
+        },
+        {
+          "path": ".deck_draw_order[25].rank",
+          "native": 10,
+          "upstream": 9
+        },
+        {
+          "path": ".deck_draw_order[26].id",
+          "native": 29,
+          "upstream": 28
+        },
+        {
+          "path": ".deck_draw_order[26].rank",
+          "native": 13,
+          "upstream": 10
+        },
+        {
+          "path": ".deck_draw_order[27].id",
+          "native": 31,
+          "upstream": 29
+        },
+        {
+          "path": ".deck_draw_order[27].name",
+          "native": "shan",
+          "upstream": "sha"
+        },
+        {
+          "path": ".deck_draw_order[27].rank",
+          "native": 2,
+          "upstream": 13
+        },
+        {
+          "path": ".deck_draw_order[27].suit",
+          "native": "heart",
+          "upstream": "diamond"
+        },
+        {
+          "path": ".deck_draw_order[28].id",
+          "native": 32,
+          "upstream": 31
+        },
+        {
+          "path": ".deck_draw_order[28].rank",
+          "native": 13,
+          "upstream": 2
+        },
+        {
+          "path": ".deck_draw_order[29].id",
+          "native": 33,
+          "upstream": 32
+        },
+        {
+          "path": ".deck_draw_order[29].rank",
+          "native": 2,
+          "upstream": 13
+        },
+        {
+          "path": ".deck_draw_order[29].suit",
+          "native": "diamond",
+          "upstream": "heart"
+        },
+        {
+          "path": ".deck_draw_order[30].id",
+          "native": 34,
+          "upstream": 33
+        },
+        {
+          "path": ".deck_draw_order[31].id",
+          "native": 35,
+          "upstream": 34
+        },
+        {
+          "path": ".deck_draw_order[31].rank",
+          "native": 3,
+          "upstream": 2
+        },
+        {
+          "path": ".deck_draw_order[32].id",
+          "native": 36,
+          "upstream": 35
+        },
+        {
+          "path": ".deck_draw_order[32].rank",
+          "native": 4,
+          "upstream": 3
+        },
+        {
+          "path": ".deck_draw_order[33].id",
+          "native": 37,
+          "upstream": 36
+        },
+        {
+          "path": ".deck_draw_order[33].rank",
+          "native": 5,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[34].id",
+          "native": 38,
+          "upstream": 37
+        },
+        {
+          "path": ".deck_draw_order[34].rank",
+          "native": 6,
+          "upstream": 5
+        },
+        {
+          "path": ".deck_draw_order[35].id",
+          "native": 39,
+          "upstream": 38
+        },
+        {
+          "path": ".deck_draw_order[35].rank",
+          "native": 7,
+          "upstream": 6
+        },
+        {
+          "path": ".deck_draw_order[36].id",
+          "native": 40,
+          "upstream": 39
+        },
+        {
+          "path": ".deck_draw_order[36].rank",
+          "native": 8,
+          "upstream": 7
+        },
+        {
+          "path": ".deck_draw_order[37].id",
+          "native": 41,
+          "upstream": 40
+        },
+        {
+          "path": ".deck_draw_order[37].rank",
+          "native": 9,
+          "upstream": 8
+        },
+        {
+          "path": ".deck_draw_order[38].id",
+          "native": 42,
+          "upstream": 41
+        },
+        {
+          "path": ".deck_draw_order[38].rank",
+          "native": 10,
+          "upstream": 9
+        },
+        {
+          "path": ".deck_draw_order[39].id",
+          "native": 43,
+          "upstream": 42
+        },
+        {
+          "path": ".deck_draw_order[39].rank",
+          "native": 11,
+          "upstream": 10
+        },
+        {
+          "path": ".deck_draw_order[40].id",
+          "native": 44,
+          "upstream": 43
+        },
+        {
+          "path": ".deck_draw_order[41].id",
+          "native": 46,
+          "upstream": 44
+        },
+        {
+          "path": ".deck_draw_order[41].name",
+          "native": "tao",
+          "upstream": "shan"
+        },
+        {
+          "path": ".deck_draw_order[41].rank",
+          "native": 4,
+          "upstream": 11
+        },
+        {
+          "path": ".deck_draw_order[41].suit",
+          "native": "heart",
+          "upstream": "diamond"
+        },
+        {
+          "path": ".deck_draw_order[42].id",
+          "native": 47,
+          "upstream": 46
+        },
+        {
+          "path": ".deck_draw_order[42].rank",
+          "native": 6,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[43].id",
+          "native": 48,
+          "upstream": 47
+        },
+        {
+          "path": ".deck_draw_order[43].rank",
+          "native": 7,
+          "upstream": 6
+        },
+        {
+          "path": ".deck_draw_order[44].id",
+          "native": 49,
+          "upstream": 48
+        },
+        {
+          "path": ".deck_draw_order[44].rank",
+          "native": 8,
+          "upstream": 7
+        },
+        {
+          "path": ".deck_draw_order[45].id",
+          "native": 50,
+          "upstream": 49
+        },
+        {
+          "path": ".deck_draw_order[45].rank",
+          "native": 9,
+          "upstream": 8
+        },
+        {
+          "path": ".deck_draw_order[46].id",
+          "native": 51,
+          "upstream": 50
+        },
+        {
+          "path": ".deck_draw_order[46].rank",
+          "native": 12,
+          "upstream": 9
+        },
+        {
+          "path": ".deck_draw_order[47].id",
+          "native": 52,
+          "upstream": 51
+        },
+        {
+          "path": ".deck_draw_order[47].suit",
+          "native": "diamond",
+          "upstream": "heart"
+        },
+        {
+          "path": ".deck_draw_order[48].id",
+          "native": 53,
+          "upstream": 52
+        },
+        {
+          "path": ".deck_draw_order[48].name",
+          "native": "nanman",
+          "upstream": "tao"
+        },
+        {
+          "path": ".deck_draw_order[48].rank",
+          "native": 7,
+          "upstream": 12
+        },
+        {
+          "path": ".deck_draw_order[48].suit",
+          "native": "spade",
+          "upstream": "diamond"
+        },
+        {
+          "path": ".deck_draw_order[49].id",
+          "native": 54,
+          "upstream": 53
+        },
+        {
+          "path": ".deck_draw_order[49].rank",
+          "native": 13,
+          "upstream": 7
+        },
+        {
+          "path": ".deck_draw_order[50].id",
+          "native": 55,
+          "upstream": 54
+        },
+        {
+          "path": ".deck_draw_order[50].rank",
+          "native": 7,
+          "upstream": 13
+        },
+        {
+          "path": ".deck_draw_order[50].suit",
+          "native": "club",
+          "upstream": "spade"
+        },
+        {
+          "path": ".deck_draw_order[51].id",
+          "native": 56,
+          "upstream": 55
+        },
+        {
+          "path": ".deck_draw_order[51].name",
+          "native": "juedou",
+          "upstream": "nanman"
+        },
+        {
+          "path": ".deck_draw_order[51].rank",
+          "native": 1,
+          "upstream": 7
+        },
+        {
+          "path": ".deck_draw_order[51].suit",
+          "native": "spade",
+          "upstream": "club"
+        },
+        {
+          "path": ".deck_draw_order[52].id",
+          "native": 57,
+          "upstream": 56
+        },
+        {
+          "path": ".deck_draw_order[52].suit",
+          "native": "club",
+          "upstream": "spade"
+        },
+        {
+          "path": ".deck_draw_order[53].id",
+          "native": 58,
+          "upstream": 57
+        },
+        {
+          "path": ".deck_draw_order[53].suit",
+          "native": "diamond",
+          "upstream": "club"
+        },
+        {
+          "path": ".deck_draw_order[54].id",
+          "native": 59,
+          "upstream": 58
+        },
+        {
+          "path": ".deck_draw_order[54].name",
+          "native": "shunshou",
+          "upstream": "juedou"
+        },
+        {
+          "path": ".deck_draw_order[54].rank",
+          "native": 3,
+          "upstream": 1
+        },
+        {
+          "path": ".deck_draw_order[54].suit",
+          "native": "spade",
+          "upstream": "diamond"
+        },
+        {
+          "path": ".deck_draw_order[55].id",
+          "native": 60,
+          "upstream": 59
+        },
+        {
+          "path": ".deck_draw_order[55].rank",
+          "native": 4,
+          "upstream": 3
+        },
+        {
+          "path": ".deck_draw_order[56].id",
+          "native": 61,
+          "upstream": 60
+        },
+        {
+          "path": ".deck_draw_order[56].rank",
+          "native": 11,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[57].id",
+          "native": 62,
+          "upstream": 61
+        },
+        {
+          "path": ".deck_draw_order[57].rank",
+          "native": 3,
+          "upstream": 11
+        },
+        {
+          "path": ".deck_draw_order[57].suit",
+          "native": "diamond",
+          "upstream": "spade"
+        },
+        {
+          "path": ".deck_draw_order[58].id",
+          "native": 63,
+          "upstream": 62
+        },
+        {
+          "path": ".deck_draw_order[58].rank",
+          "native": 4,
+          "upstream": 3
+        },
+        {
+          "path": ".deck_draw_order[59].id",
+          "native": 64,
+          "upstream": 63
+        },
+        {
+          "path": ".deck_draw_order[59].name",
+          "native": "guohe",
+          "upstream": "shunshou"
+        },
+        {
+          "path": ".deck_draw_order[59].rank",
+          "native": 3,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[59].suit",
+          "native": "spade",
+          "upstream": "diamond"
+        },
+        {
+          "path": ".deck_draw_order[60].id",
+          "native": 65,
+          "upstream": 64
+        },
+        {
+          "path": ".deck_draw_order[60].rank",
+          "native": 4,
+          "upstream": 3
+        },
+        {
+          "path": ".deck_draw_order[61].id",
+          "native": 66,
+          "upstream": 65
+        },
+        {
+          "path": ".deck_draw_order[61].rank",
+          "native": 12,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[62].id",
+          "native": 67,
+          "upstream": 66
+        },
+        {
+          "path": ".deck_draw_order[62].rank",
+          "native": 3,
+          "upstream": 12
+        },
+        {
+          "path": ".deck_draw_order[62].suit",
+          "native": "club",
+          "upstream": "spade"
+        },
+        {
+          "path": ".deck_draw_order[63].id",
+          "native": 68,
+          "upstream": 67
+        },
+        {
+          "path": ".deck_draw_order[63].rank",
+          "native": 4,
+          "upstream": 3
+        },
+        {
+          "path": ".deck_draw_order[64].id",
+          "native": 69,
+          "upstream": 68
+        },
+        {
+          "path": ".deck_draw_order[64].rank",
+          "native": 12,
+          "upstream": 4
+        },
+        {
+          "path": ".deck_draw_order[64].suit",
+          "native": "heart",
+          "upstream": "club"
+        },
+        {
+          "path": ".deck_draw_order[65].id",
+          "native": 70,
+          "upstream": 69
+        },
+        {
+          "path": ".deck_draw_order[65].name",
+          "native": "wuxie",
+          "upstream": "guohe"
+        },
+        {
+          "path": ".deck_draw_order[65].rank",
+          "native": 11,
+          "upstream": 12
+        },
+        {
+          "path": ".deck_draw_order[65].suit",
+          "native": "spade",
+          "upstream": "heart"
+        },
+        {
+          "path": ".deck_draw_order[66].id",
+          "native": 71,
+          "upstream": 70
+        },
+        {
+          "path": ".deck_draw_order[66].rank",
+          "native": 12,
+          "upstream": 11
+        },
+        {
+          "path": ".deck_draw_order[66].suit",
+          "native": "club",
+          "upstream": "spade"
+        },
+        {
+          "path": ".deck_draw_order[67].id",
+          "native": 72,
+          "upstream": 71
+        },
+        {
+          "path": ".deck_draw_order[67].rank",
+          "native": 13,
+          "upstream": 12
+        },
+        {
+          "path": ".deck_draw_order[68].id",
+          "native": 73,
+          "upstream": 72
+        },
+        {
+          "path": ".deck_draw_order[68].rank",
+          "native": 12,
+          "upstream": 13
+        },
+        {
+          "path": ".deck_draw_order[68].suit",
+          "native": "diamond",
+          "upstream": "club"
+        },
+        {
+          "path": ".deck_draw_order[69].id",
+          "native": 74,
+          "upstream": 73
+        },
+        {
+          "path": ".deck_draw_order[69].name",
+          "native": "lebu",
+          "upstream": "wuxie"
+        },
+        {
+          "path": ".deck_draw_order[69].rank",
+          "native": 6,
+          "upstream": 12
+        },
+        {
+          "path": ".deck_draw_order[69].suit",
+          "native": "spade",
+          "upstream": "diamond"
+        },
+        {
+          "path": ".deck_draw_order[70].id",
+          "native": 75,
+          "upstream": 74
+        },
+        {
+          "path": ".deck_draw_order[70].suit",
+          "native": "club",
+          "upstream": "spade"
+        },
+        {
+          "path": ".deck_draw_order[71].id",
+          "native": 76,
+          "upstream": 75
+        },
+        {
+          "path": ".deck_draw_order[71].suit",
+          "native": "heart",
+          "upstream": "club"
+        },
+        {
+          "path": ".deck_draw_order[72].id",
+          "native": 77,
+          "upstream": 76
+        },
+        {
+          "path": ".deck_draw_order[72].name",
+          "native": "shandian",
+          "upstream": "lebu"
+        },
+        {
+          "path": ".deck_draw_order[72].nature",
+          "native": "thunder",
+          "upstream": null
+        },
+        {
+          "path": ".deck_draw_order[72].rank",
+          "native": 1,
+          "upstream": 6
+        },
+        {
+          "path": ".deck_draw_order[72].suit",
+          "native": "spade",
+          "upstream": "heart"
+        },
+        {
+          "path": ".deck_draw_order[73].id",
+          "native": 78,
+          "upstream": 77
+        },
+        {
+          "path": ".deck_draw_order[73].rank",
+          "native": 12,
+          "upstream": 1
+        },
+        {
+          "path": ".deck_draw_order[73].suit",
+          "native": "heart",
+          "upstream": "spade"
+        },
+        {
+          "path": ".deck_draw_order[74].id",
+          "native": 79,
+          "upstream": 78
+        },
+        {
+          "path": ".deck_draw_order[74].name",
+          "native": "jueying",
+          "upstream": "shandian"
+        },
+        {
+          "path": ".deck_draw_order[74].nature",
+          "native": null,
+          "upstream": "thunder"
+        },
+        {
+          "path": ".deck_draw_order[74].rank",
+          "native": 1,
+          "upstream": 12
+        },
+        {
+          "path": ".deck_draw_order[74].suit",
+          "native": "spade",
+          "upstream": "heart"
+        },
+        {
+          "path": ".players[0].classics[0].id",
+          "native": 1,
+          "upstream": 79
+        },
+        {
+          "path": ".players[0].classics[0].name",
+          "native": "sha",
+          "upstream": "jueying"
+        },
+        {
+          "path": ".players[0].classics[0].rank",
+          "native": 8,
+          "upstream": 1
+        },
+        {
+          "path": ".players[0].classics[1].id",
+          "native": 2,
+          "upstream": 1
+        }
+      ],
+      "native_hp_events": [],
+      "upstream_hp_events": [],
+      "hp_event_sequence_equal": true,
+      "native_payment": [
+        0,
+        30,
+        45
+      ],
+      "upstream_payment": [
+        0,
+        30,
+        45
+      ],
+      "payment_sequence_equal": true,
+      "native_yeyan_spent": false,
+      "upstream_yeyan_spent": false,
+      "classification": "observed_difference_in_declared_projection"
+    },
+    {
+      "case": "buxu-invalid",
+      "native_case": "buxu-invalid",
+      "initial_projection_equal": true,
+      "browser_completed": true,
+      "spine_entry_blocked": false,
+      "native_choice_count": 3,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "final_projection_equal": true,
+      "final_differences": [],
+      "native_hp_events": [],
+      "upstream_hp_events": [],
+      "hp_event_sequence_equal": true,
+      "native_payment": [
+        0
+      ],
+      "upstream_payment": [
+        0
+      ],
+      "payment_sequence_equal": true,
+      "native_yeyan_spent": false,
+      "upstream_yeyan_spent": false,
+      "classification": "declared_state_payment_hp_events_match_only"
+    },
+    {
+      "case": "zhengjing-one-self",
+      "native_case": "zhengjing-one-self",
+      "initial_projection_equal": true,
+      "browser_completed": false,
+      "spine_entry_blocked": true,
+      "native_choice_count": 2,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "classification": "blocked_before_choice; source comparison required"
+    },
+    {
+      "case": "zhengjing-three-target",
+      "native_case": "zhengjing-three-target",
+      "initial_projection_equal": true,
+      "browser_completed": false,
+      "spine_entry_blocked": true,
+      "native_choice_count": 2,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "classification": "blocked_before_choice; source comparison required"
+    },
+    {
+      "case": "zhengjing-zero",
+      "native_case": "zhengjing-zero",
+      "initial_projection_equal": true,
+      "browser_completed": false,
+      "spine_entry_blocked": true,
+      "native_choice_count": 1,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "classification": "blocked_before_choice; source comparison required"
+    },
+    {
+      "case": "zhengjing-cancel",
+      "native_case": "zhengjing-cancel",
+      "initial_projection_equal": true,
+      "browser_completed": false,
+      "spine_entry_blocked": true,
+      "native_choice_count": 1,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "classification": "blocked_before_choice; source comparison required"
+    },
+    {
+      "case": "zhengjing-no-skill",
+      "native_case": "zhengjing-no-skill",
+      "initial_projection_equal": true,
+      "browser_completed": true,
+      "spine_entry_blocked": false,
+      "native_choice_count": 0,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "final_projection_equal": true,
+      "final_differences": [],
+      "native_hp_events": [],
+      "upstream_hp_events": [],
+      "hp_event_sequence_equal": true,
+      "native_payment": [],
+      "upstream_payment": [],
+      "payment_sequence_equal": true,
+      "native_yeyan_spent": false,
+      "upstream_yeyan_spent": false,
+      "classification": "declared_state_payment_hp_events_match_only"
+    },
+    {
+      "case": "yeyan-small-one",
+      "native_case": "yeyan-small-one",
+      "initial_projection_equal": true,
+      "browser_completed": true,
+      "spine_entry_blocked": false,
+      "native_choice_count": 2,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "final_projection_equal": true,
+      "final_differences": [],
+      "native_hp_events": [
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 1,
+          "amount": 1,
+          "nature": "fire"
+        }
+      ],
+      "upstream_hp_events": [
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 1,
+          "amount": 1,
+          "nature": "fire"
+        }
+      ],
+      "hp_event_sequence_equal": true,
+      "native_payment": [],
+      "upstream_payment": [],
+      "payment_sequence_equal": true,
+      "native_yeyan_spent": true,
+      "upstream_yeyan_spent": true,
+      "classification": "declared_state_payment_hp_events_match_only"
+    },
+    {
+      "case": "yeyan-small-three",
+      "native_case": "yeyan-small-three",
+      "initial_projection_equal": true,
+      "browser_completed": true,
+      "spine_entry_blocked": false,
+      "native_choice_count": 2,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "final_projection_equal": true,
+      "final_differences": [],
+      "native_hp_events": [
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 3,
+          "amount": 1,
+          "nature": "fire"
+        },
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 2,
+          "amount": 1,
+          "nature": "fire"
+        },
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 1,
+          "amount": 1,
+          "nature": "fire"
+        }
+      ],
+      "upstream_hp_events": [
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 1,
+          "amount": 1,
+          "nature": "fire"
+        },
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 2,
+          "amount": 1,
+          "nature": "fire"
+        },
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 3,
+          "amount": 1,
+          "nature": "fire"
+        }
+      ],
+      "hp_event_sequence_equal": false,
+      "native_payment": [],
+      "upstream_payment": [],
+      "payment_sequence_equal": true,
+      "native_yeyan_spent": true,
+      "upstream_yeyan_spent": true,
+      "classification": "observed_difference_in_declared_projection"
+    },
+    {
+      "case": "yeyan-great-one",
+      "native_case": "yeyan-great-one",
+      "initial_projection_equal": true,
+      "browser_completed": true,
+      "spine_entry_blocked": false,
+      "native_choice_count": 3,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "final_projection_equal": true,
+      "final_differences": [],
+      "native_hp_events": [
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 1,
+          "amount": 3,
+          "nature": "fire"
+        },
+        {
+          "kind": "loseHp",
+          "source": null,
+          "target": 0,
+          "amount": 3,
+          "nature": null
+        }
+      ],
+      "upstream_hp_events": [
+        {
+          "kind": "loseHp",
+          "source": null,
+          "target": 0,
+          "amount": 3,
+          "nature": null
+        },
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 1,
+          "amount": 3,
+          "nature": "fire"
+        }
+      ],
+      "hp_event_sequence_equal": false,
+      "native_payment": [
+        0,
+        7,
+        21,
+        24
+      ],
+      "upstream_payment": [
+        0,
+        7,
+        21,
+        24
+      ],
+      "payment_sequence_equal": true,
+      "native_yeyan_spent": true,
+      "upstream_yeyan_spent": true,
+      "classification": "observed_difference_in_declared_projection"
+    },
+    {
+      "case": "yeyan-great-split",
+      "native_case": "yeyan-great-split",
+      "initial_projection_equal": true,
+      "browser_completed": true,
+      "spine_entry_blocked": false,
+      "native_choice_count": 3,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "final_projection_equal": true,
+      "final_differences": [],
+      "native_hp_events": [
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 3,
+          "amount": 2,
+          "nature": "fire"
+        },
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 1,
+          "amount": 1,
+          "nature": "fire"
+        },
+        {
+          "kind": "loseHp",
+          "source": null,
+          "target": 0,
+          "amount": 3,
+          "nature": null
+        }
+      ],
+      "upstream_hp_events": [
+        {
+          "kind": "loseHp",
+          "source": null,
+          "target": 0,
+          "amount": 3,
+          "nature": null
+        },
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 1,
+          "amount": 1,
+          "nature": "fire"
+        },
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 3,
+          "amount": 2,
+          "nature": "fire"
+        }
+      ],
+      "hp_event_sequence_equal": false,
+      "native_payment": [
+        0,
+        7,
+        21,
+        24
+      ],
+      "upstream_payment": [
+        0,
+        7,
+        21,
+        24
+      ],
+      "payment_sequence_equal": true,
+      "native_yeyan_spent": true,
+      "upstream_yeyan_spent": true,
+      "classification": "observed_difference_in_declared_projection"
+    },
+    {
+      "case": "yeyan-cancel",
+      "native_case": "yeyan-cancel",
+      "initial_projection_equal": true,
+      "browser_completed": true,
+      "spine_entry_blocked": false,
+      "native_choice_count": 1,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "final_projection_equal": true,
+      "final_differences": [],
+      "native_hp_events": [],
+      "upstream_hp_events": [],
+      "hp_event_sequence_equal": true,
+      "native_payment": [],
+      "upstream_payment": [],
+      "payment_sequence_equal": true,
+      "native_yeyan_spent": false,
+      "upstream_yeyan_spent": false,
+      "classification": "declared_state_payment_hp_events_match_only"
+    },
+    {
+      "case": "yeyan-used",
+      "native_case": "yeyan-used",
+      "initial_projection_equal": true,
+      "browser_completed": true,
+      "spine_entry_blocked": false,
+      "native_choice_count": 0,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "final_projection_equal": true,
+      "final_differences": [],
+      "native_hp_events": [],
+      "upstream_hp_events": [],
+      "hp_event_sequence_equal": true,
+      "native_payment": [],
+      "upstream_payment": [],
+      "payment_sequence_equal": true,
+      "native_yeyan_spent": true,
+      "upstream_yeyan_spent": true,
+      "classification": "declared_state_payment_hp_events_match_only"
+    },
+    {
+      "case": "yeyan-no-four",
+      "native_case": "yeyan-no-four",
+      "initial_projection_equal": true,
+      "browser_completed": true,
+      "spine_entry_blocked": false,
+      "native_choice_count": 3,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "final_projection_equal": true,
+      "final_differences": [],
+      "native_hp_events": [
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 1,
+          "amount": 1,
+          "nature": "fire"
+        }
+      ],
+      "upstream_hp_events": [
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 1,
+          "amount": 1,
+          "nature": "fire"
+        }
+      ],
+      "hp_event_sequence_equal": true,
+      "native_payment": [],
+      "upstream_payment": [],
+      "payment_sequence_equal": true,
+      "native_yeyan_spent": true,
+      "upstream_yeyan_spent": true,
+      "classification": "declared_state_payment_hp_events_match_only"
+    },
+    {
+      "case": "yeyan-target-cancel",
+      "native_case": "yeyan-target-cancel",
+      "initial_projection_equal": true,
+      "browser_completed": true,
+      "spine_entry_blocked": false,
+      "native_choice_count": 2,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "final_projection_equal": true,
+      "final_differences": [],
+      "native_hp_events": [],
+      "upstream_hp_events": [],
+      "hp_event_sequence_equal": true,
+      "native_payment": [],
+      "upstream_payment": [],
+      "payment_sequence_equal": true,
+      "native_yeyan_spent": false,
+      "upstream_yeyan_spent": false,
+      "classification": "declared_state_payment_hp_events_match_only"
+    },
+    {
+      "case": "yeyan-great-discard-cancel",
+      "native_case": "yeyan-great-discard-cancel",
+      "initial_projection_equal": true,
+      "browser_completed": true,
+      "spine_entry_blocked": false,
+      "native_choice_count": 3,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "final_projection_equal": true,
+      "final_differences": [],
+      "native_hp_events": [],
+      "upstream_hp_events": [],
+      "hp_event_sequence_equal": true,
+      "native_payment": [],
+      "upstream_payment": [],
+      "payment_sequence_equal": true,
+      "native_yeyan_spent": false,
+      "upstream_yeyan_spent": false,
+      "classification": "declared_state_payment_hp_events_match_only"
+    },
+    {
+      "case": "yeyan-great-one-default",
+      "native_case": "yeyan-great-one",
+      "initial_projection_equal": true,
+      "browser_completed": true,
+      "spine_entry_blocked": false,
+      "native_choice_count": 3,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "final_projection_equal": false,
+      "final_differences": [
+        {
+          "path": ".players[0].hp",
+          "native": 5,
+          "upstream": 8
+        }
+      ],
+      "native_hp_events": [
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 1,
+          "amount": 3,
+          "nature": "fire"
+        },
+        {
+          "kind": "loseHp",
+          "source": null,
+          "target": 0,
+          "amount": 3,
+          "nature": null
+        }
+      ],
+      "upstream_hp_events": [
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 1,
+          "amount": 3,
+          "nature": "fire"
+        }
+      ],
+      "hp_event_sequence_equal": false,
+      "native_payment": [
+        0,
+        7,
+        21,
+        24
+      ],
+      "upstream_payment": [
+        0,
+        7,
+        21,
+        24
+      ],
+      "payment_sequence_equal": true,
+      "native_yeyan_spent": true,
+      "upstream_yeyan_spent": true,
+      "classification": "observed_difference_in_declared_projection"
+    },
+    {
+      "case": "yeyan-great-split-default",
+      "native_case": "yeyan-great-split",
+      "initial_projection_equal": true,
+      "browser_completed": true,
+      "spine_entry_blocked": false,
+      "native_choice_count": 3,
+      "native_settled": true,
+      "same_requested_allocation": true,
+      "final_projection_equal": false,
+      "final_differences": [
+        {
+          "path": ".players[0].hp",
+          "native": 5,
+          "upstream": 8
+        }
+      ],
+      "native_hp_events": [
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 3,
+          "amount": 2,
+          "nature": "fire"
+        },
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 1,
+          "amount": 1,
+          "nature": "fire"
+        },
+        {
+          "kind": "loseHp",
+          "source": null,
+          "target": 0,
+          "amount": 3,
+          "nature": null
+        }
+      ],
+      "upstream_hp_events": [
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 1,
+          "amount": 1,
+          "nature": "fire"
+        },
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 3,
+          "amount": 2,
+          "nature": "fire"
+        }
+      ],
+      "hp_event_sequence_equal": false,
+      "native_payment": [
+        0,
+        7,
+        21,
+        24
+      ],
+      "upstream_payment": [
+        0,
+        7,
+        21,
+        24
+      ],
+      "payment_sequence_equal": true,
+      "native_yeyan_spent": true,
+      "upstream_yeyan_spent": true,
+      "classification": "observed_difference_in_declared_projection"
+    },
+    {
+      "case": "yeyan-great-two",
+      "native_case": "yeyan-great-one",
+      "initial_projection_equal": true,
+      "browser_completed": true,
+      "spine_entry_blocked": false,
+      "native_choice_count": 3,
+      "native_settled": true,
+      "same_requested_allocation": false,
+      "final_projection_equal": false,
+      "final_differences": [
+        {
+          "path": ".players[1].hp",
+          "native": 5,
+          "upstream": 6
+        }
+      ],
+      "native_hp_events": [
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 1,
+          "amount": 3,
+          "nature": "fire"
+        },
+        {
+          "kind": "loseHp",
+          "source": null,
+          "target": 0,
+          "amount": 3,
+          "nature": null
+        }
+      ],
+      "upstream_hp_events": [
+        {
+          "kind": "loseHp",
+          "source": null,
+          "target": 0,
+          "amount": 3,
+          "nature": null
+        },
+        {
+          "kind": "damage",
+          "source": 0,
+          "target": 1,
+          "amount": 2,
+          "nature": "fire"
+        }
+      ],
+      "hp_event_sequence_equal": false,
+      "native_payment": [
+        0,
+        7,
+        21,
+        24
+      ],
+      "upstream_payment": [
+        0,
+        7,
+        21,
+        24
+      ],
+      "payment_sequence_equal": true,
+      "native_yeyan_spent": true,
+      "upstream_yeyan_spent": true,
+      "classification": "allocation_not_representable_in_native_choice_spec; paired to nearest one-target great mode, not an identical input"
+    }
+  ],
+  "restorations": [
+    {
+      "case": "buxu-basic",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/buxu-basic-pending-00-th_buxu-discard_cards.ngsa",
+      "archive_bytes": 3113,
+      "sha256": "f1626c19668e1e57232d44aac950cce24814cfa9c02b270b470321726023b7b8",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "buxu-basic",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/buxu-basic-pending-01-th_buxu-choose_chamber.ngsa",
+      "archive_bytes": 3182,
+      "sha256": "7c6ff1add78e3e59335fc78ec0c1094b5ad89d638f732ef2f254eceef310e3d0",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "buxu-equip",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/buxu-equip-pending-00-th_buxu-discard_cards.ngsa",
+      "archive_bytes": 3113,
+      "sha256": "f1626c19668e1e57232d44aac950cce24814cfa9c02b270b470321726023b7b8",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "buxu-equip",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/buxu-equip-pending-01-th_buxu-choose_chamber.ngsa",
+      "archive_bytes": 3182,
+      "sha256": "7c6ff1add78e3e59335fc78ec0c1094b5ad89d638f732ef2f254eceef310e3d0",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "buxu-nullify",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/buxu-nullify-pending-00-th_buxu-discard_cards.ngsa",
+      "archive_bytes": 3113,
+      "sha256": "f1626c19668e1e57232d44aac950cce24814cfa9c02b270b470321726023b7b8",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "buxu-nullify",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/buxu-nullify-pending-01-th_buxu-choose_chamber.ngsa",
+      "archive_bytes": 3182,
+      "sha256": "7c6ff1add78e3e59335fc78ec0c1094b5ad89d638f732ef2f254eceef310e3d0",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "buxu-cancel",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/buxu-cancel-pending-00-th_buxu-discard_cards.ngsa",
+      "archive_bytes": 3113,
+      "sha256": "f1626c19668e1e57232d44aac950cce24814cfa9c02b270b470321726023b7b8",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "buxu-twice",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/buxu-twice-pending-00-th_buxu-discard_cards.ngsa",
+      "archive_bytes": 3113,
+      "sha256": "f1626c19668e1e57232d44aac950cce24814cfa9c02b270b470321726023b7b8",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "buxu-twice",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/buxu-twice-pending-01-th_buxu-choose_chamber.ngsa",
+      "archive_bytes": 3182,
+      "sha256": "7c6ff1add78e3e59335fc78ec0c1094b5ad89d638f732ef2f254eceef310e3d0",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "buxu-twice",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/buxu-twice-pending-02-th_buxu-discard_cards.ngsa",
+      "archive_bytes": 3295,
+      "sha256": "4061ba140a763296b45726c2c66f4a2d395f56c613cc203a15b36b7be42e8a44",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "buxu-twice",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/buxu-twice-pending-03-th_buxu-choose_chamber.ngsa",
+      "archive_bytes": 3407,
+      "sha256": "ed0d38c98df52953a3c802db322a99a1234b97e653232334b8c7afa30bba6e93",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "buxu-invalid",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/buxu-invalid-pending-00-th_buxu-discard_cards.ngsa",
+      "archive_bytes": 3113,
+      "sha256": "f1626c19668e1e57232d44aac950cce24814cfa9c02b270b470321726023b7b8",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "buxu-invalid",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/buxu-invalid-pending-01-th_buxu-choose_chamber.ngsa",
+      "archive_bytes": 3182,
+      "sha256": "7c6ff1add78e3e59335fc78ec0c1094b5ad89d638f732ef2f254eceef310e3d0",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "buxu-invalid",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/buxu-invalid-pending-02-th_buxu-choose_chamber.ngsa",
+      "archive_bytes": 3182,
+      "sha256": "7c6ff1add78e3e59335fc78ec0c1094b5ad89d638f732ef2f254eceef310e3d0",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "zhengjing-one-self",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/zhengjing-one-self-pending-00-th_zhengjing-choose_count.ngsa",
+      "archive_bytes": 3124,
+      "sha256": "9854c15c9be9aa0c88dac55501f4a997648701f6de13ba25ff8da5a1c1ee02c6",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "zhengjing-one-self",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/zhengjing-one-self-pending-01-th_zhengjing-choose_target.ngsa",
+      "archive_bytes": 3165,
+      "sha256": "59c35e2dbe65c26e19531e09f0c5acb714f3a83c3e61af4dcdd414a7bb5cd4fb",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "zhengjing-three-target",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/zhengjing-three-target-pending-00-th_zhengjing-choose_count.ngsa",
+      "archive_bytes": 3124,
+      "sha256": "9854c15c9be9aa0c88dac55501f4a997648701f6de13ba25ff8da5a1c1ee02c6",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "zhengjing-three-target",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/zhengjing-three-target-pending-01-th_zhengjing-choose_target.ngsa",
+      "archive_bytes": 3173,
+      "sha256": "bc9538fa92a2994728f82b6ec01631e8ac6cab6610b5c82b765c6f9e6eaf7eb0",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "zhengjing-zero",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/zhengjing-zero-pending-00-th_zhengjing-choose_count.ngsa",
+      "archive_bytes": 3124,
+      "sha256": "9854c15c9be9aa0c88dac55501f4a997648701f6de13ba25ff8da5a1c1ee02c6",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "zhengjing-cancel",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/zhengjing-cancel-pending-00-th_zhengjing-choose_count.ngsa",
+      "archive_bytes": 3124,
+      "sha256": "9854c15c9be9aa0c88dac55501f4a997648701f6de13ba25ff8da5a1c1ee02c6",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "yeyan-small-one",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/yeyan-small-one-pending-00-th_yeyan-choose_mode.ngsa",
+      "archive_bytes": 3103,
+      "sha256": "778ac67e6ca6fe720f89c25feca646b86622635a651561b055a4ffec2fb80a9d",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "yeyan-small-one",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/yeyan-small-one-pending-01-th_yeyan-choose_targets.ngsa",
+      "archive_bytes": 3118,
+      "sha256": "2c094fe57e8a995f8ebc796c980a8861fe89c140268b8df330ffdec878fd0145",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "yeyan-small-three",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/yeyan-small-three-pending-00-th_yeyan-choose_mode.ngsa",
+      "archive_bytes": 3103,
+      "sha256": "778ac67e6ca6fe720f89c25feca646b86622635a651561b055a4ffec2fb80a9d",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "yeyan-small-three",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/yeyan-small-three-pending-01-th_yeyan-choose_targets.ngsa",
+      "archive_bytes": 3118,
+      "sha256": "2c094fe57e8a995f8ebc796c980a8861fe89c140268b8df330ffdec878fd0145",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "yeyan-great-one",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/yeyan-great-one-pending-00-th_yeyan-choose_mode.ngsa",
+      "archive_bytes": 3103,
+      "sha256": "778ac67e6ca6fe720f89c25feca646b86622635a651561b055a4ffec2fb80a9d",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "yeyan-great-one",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/yeyan-great-one-pending-01-th_yeyan-choose_targets.ngsa",
+      "archive_bytes": 3144,
+      "sha256": "4d77bf6aa9be1f63c5073125c0e3da62393d19e91be31bb6372c9b86999202ab",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "yeyan-great-one",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/yeyan-great-one-pending-02-th_yeyan-discard_cards.ngsa",
+      "archive_bytes": 3148,
+      "sha256": "1de704c4ec37f1457dfc9f3853d61648daaee44e2d7f5be100cae599a6343565",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "yeyan-great-split",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/yeyan-great-split-pending-00-th_yeyan-choose_mode.ngsa",
+      "archive_bytes": 3103,
+      "sha256": "778ac67e6ca6fe720f89c25feca646b86622635a651561b055a4ffec2fb80a9d",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "yeyan-great-split",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/yeyan-great-split-pending-01-th_yeyan-choose_targets.ngsa",
+      "archive_bytes": 3144,
+      "sha256": "4d77bf6aa9be1f63c5073125c0e3da62393d19e91be31bb6372c9b86999202ab",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "yeyan-great-split",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/yeyan-great-split-pending-02-th_yeyan-discard_cards.ngsa",
+      "archive_bytes": 3149,
+      "sha256": "f044e5fdec00e7cbcd0cc0979cd2c4008043aa59bee6400f661ee55f64c6ae97",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "yeyan-cancel",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/yeyan-cancel-pending-00-th_yeyan-choose_mode.ngsa",
+      "archive_bytes": 3103,
+      "sha256": "778ac67e6ca6fe720f89c25feca646b86622635a651561b055a4ffec2fb80a9d",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "yeyan-no-four",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/yeyan-no-four-pending-00-th_yeyan-choose_mode.ngsa",
+      "archive_bytes": 3101,
+      "sha256": "aa76a67180fecc823aacf22f1eb0001b19bcf313b99dcd18a59e8e1703519392",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "yeyan-no-four",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/yeyan-no-four-pending-01-th_yeyan-choose_mode.ngsa",
+      "archive_bytes": 3101,
+      "sha256": "aa76a67180fecc823aacf22f1eb0001b19bcf313b99dcd18a59e8e1703519392",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "yeyan-no-four",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/yeyan-no-four-pending-02-th_yeyan-choose_targets.ngsa",
+      "archive_bytes": 3118,
+      "sha256": "a0e1846d537bb635644afbcf8dab345b37df45f142dc4968f6e22b950b914cb9",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "yeyan-target-cancel",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/yeyan-target-cancel-pending-00-th_yeyan-choose_mode.ngsa",
+      "archive_bytes": 3103,
+      "sha256": "778ac67e6ca6fe720f89c25feca646b86622635a651561b055a4ffec2fb80a9d",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "yeyan-target-cancel",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/yeyan-target-cancel-pending-01-th_yeyan-choose_targets.ngsa",
+      "archive_bytes": 3118,
+      "sha256": "2c094fe57e8a995f8ebc796c980a8861fe89c140268b8df330ffdec878fd0145",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "yeyan-great-discard-cancel",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/yeyan-great-discard-cancel-pending-00-th_yeyan-choose_mode.ngsa",
+      "archive_bytes": 3103,
+      "sha256": "778ac67e6ca6fe720f89c25feca646b86622635a651561b055a4ffec2fb80a9d",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "yeyan-great-discard-cancel",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/yeyan-great-discard-cancel-pending-01-th_yeyan-choose_targets.ngsa",
+      "archive_bytes": 3144,
+      "sha256": "4d77bf6aa9be1f63c5073125c0e3da62393d19e91be31bb6372c9b86999202ab",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    },
+    {
+      "case": "yeyan-great-discard-cancel",
+      "archive_file": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2/yeyan-great-discard-cancel-pending-02-th_yeyan-discard_cards.ngsa",
+      "archive_bytes": 3148,
+      "sha256": "1de704c4ec37f1457dfc9f3853d61648daaee44e2d7f5be100cae599a6343565",
+      "decode_restore_ok": true,
+      "full_snapshot_before_equal_except_auth_generation": true,
+      "full_snapshot_after_equal_except_auth_generation": true,
+      "state_hash_equal": true,
+      "outcome_equal": true,
+      "new_logs_equal": true
+    }
+  ],
+  "all_retained_browser_rounds": [
+    {
+      "file": "browser/round1/case-results.jsonl",
+      "sha256": "d4fb28f53074b55922312ade87fd05da273aea17da7dadf22117e577d089848a",
+      "raw_rows": 1,
+      "completed": 1,
+      "not_completed": 0
+    },
+    {
+      "file": "browser/round2/case-results.jsonl",
+      "sha256": "175b7932a157752648a273a1eb09c190d2817e7d58ee6a195213283e46b6f403",
+      "raw_rows": 22,
+      "completed": 10,
+      "not_completed": 12
+    },
+    {
+      "file": "browser/round3/case-results.jsonl",
+      "sha256": "bf297b0ee4e73d9f13e1b7dcd2a672283bd3980418ac38652df6944d626883cf",
+      "raw_rows": 9,
+      "completed": 9,
+      "not_completed": 0
+    },
+    {
+      "file": "browser/round4-formal/case-results.jsonl",
+      "sha256": "cb9087c463000c33b5a456de79e53b472967a70372896b416eba86962ed802f8",
+      "raw_rows": 22,
+      "completed": 18,
+      "not_completed": 4
+    },
+    {
+      "file": "browser/round5-history/case-results.jsonl",
+      "sha256": "39e9f1507a4b82f9c789485c4e0ee05c3d0020ae67ec6e09e2eca1afa0ea8203",
+      "raw_rows": 22,
+      "completed": 18,
+      "not_completed": 4
+    },
+    {
+      "file": "browser/round6-final/case-results.jsonl",
+      "sha256": "0a322a1cfb7c9d6fcf10a1416c76c7b45149acadbce5e0332dddc417512c9f67",
+      "raw_rows": 25,
+      "completed": 20,
+      "not_completed": 5
+    },
+    {
+      "file": "browser/round7-cancel-clear/case-results.jsonl",
+      "sha256": "ff42ea211fb1a7b911d77a8d814ddc9cfa4c47f892997a3211f04b82e4519a6e",
+      "raw_rows": 1,
+      "completed": 1,
+      "not_completed": 0
+    },
+    {
+      "file": "browser/round8-clean/case-results.jsonl",
+      "sha256": "a73c790e6894c811d7cc52093b6be4a836e6576fbb53f38e544061eb13cb752c",
+      "raw_rows": 25,
+      "completed": 21,
+      "not_completed": 4
+    }
+  ],
+  "limitations": [
+    "Collector result, not independent signoff. No skill or source equivalence certification.",
+    "Four fresh Zhengjing entries stop before a selectable skill: no minigame result or target/distribution completion was injected.",
+    "The three original selected skills/helpers and physical card property execute unchanged; extension installation/precontent and Spine runtime are never executed.",
+    "Named mapping of generic equipment is a fixture mapping; all deck faces/order/nature are checked, but unexecuted weapon/armor rule semantics are not certified."
+  ]
+}

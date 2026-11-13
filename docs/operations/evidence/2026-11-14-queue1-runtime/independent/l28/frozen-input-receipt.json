@@ -1,0 +1,30 @@
+{
+  "at": "2026-11-13T19:11:25.512292+00:00",
+  "source": "collector /root/queue0_independent_review frozen handoff",
+  "received_hashes": {
+    "raw-input-index.json": "a91b0c8463c4352e89d11bf33150bf4391aca2d72c5d695226244c4aaa51b75c",
+    "frozen-file-manifest.json": "7f9120cd3c349d5bc4c346e50df6aadffc63b20dc4a4d8aea3377920b20a9136",
+    "browser/round8-clean/case-results.jsonl": "a73c790e6894c811d7cc52093b6be4a836e6576fbb53f38e544061eb13cb752c",
+    "native/probe-02.rs": "5384093a99da622ca7e19d3595a96dafbd41b50aa9ef6d95f25e5ffdb32b45d6",
+    "native/round2.jsonl": "3fe8850398c92045a0771fb2f068b1a5cf46cd70bf84b57bc8741eb2a872dc6d"
+  },
+  "versions": {
+    "rule": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "formal_frozen_binding": {
+    "namespace": "upstream-liuli",
+    "package_id": "thunder",
+    "version": "1.0.0",
+    "logic_hash": "0f3f8c28e0cd27e00272fa22f825de5cd23a87bc89aa01f4659702eace25de81",
+    "content_hash": "1a8621a4cf70fee68d547ff4f9c4fe9cabb2d84b4a6b3901340b04d1c922110a"
+  },
+  "snapshot_ruleset_version": 16661273807015048040,
+  "collector_session_meta_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "frozen_head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "source_hashes_match_current": 20,
+  "note": "Browser session began before publication commit; all20 captured source/package inputs independently hash-match current source. No source/narrative substitution for actual runtime."
+}

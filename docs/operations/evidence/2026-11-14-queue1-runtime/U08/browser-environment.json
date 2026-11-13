@@ -1,0 +1,38 @@
+{
+  "at": "2026-11-13T18:44:40.489861+00:00",
+  "active_session": {
+    "at": "2026-11-13T18:31:13.121Z",
+    "label": "u08",
+    "url": "http://127.0.0.1:5173/",
+    "upstream": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-runtime-modern-b789ktt1/apps/core",
+    "profile": "/private/tmp/noname-queue1-u08-chrome-pPmflj",
+    "upstreamPort": 5173,
+    "controlPort": 50210,
+    "cdpPort": 50185,
+    "chromePid": 92575,
+    "transcript": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/session-u08-1794594672096",
+    "head": "605201f3f49e10cea61c31d52a61bbb66c85599d"
+  },
+  "version": {
+    "Browser": "Chrome/157.0.8103.52",
+    "File-Path-Style": "posix",
+    "Protocol-Version": "1.3",
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+    "V8-Version": "15.7.112.23",
+    "WebKit-Version": "537.36 (@0985600c06a688b9c669e74afde7dacd5aaed047)",
+    "webSocketDebuggerUrl": "ws://127.0.0.1:50185/devtools/browser/6de3692c-4a07-48a2-8fee-d85c4bec917c"
+  },
+  "chrome_process": "  PID  PPID COMMAND\n92575 92560 /Applications/Google Chrome.app/Contents/MacOS/Google Chrome --headless=new --enable-webgl --ignore-gpu-blocklist --no-sandbox --autoplay-policy=no-user-gesture-required --user-data-dir=/private/tmp/noname-queue1-u08-chrome-pPmflj --remote-debugging-port=0 --window-size=1440,1080 about:blank\n",
+  "chrome_process_returncode": 0,
+  "shared_services_owned_by_parent": [
+    5173,
+    51215
+  ],
+  "owns_only": [
+    "Chrome PID 92575",
+    "CDP 50185",
+    "control 50210",
+    "/private/tmp/noname-queue1-u08-chrome-pPmflj"
+  ],
+  "source_verification": "source-load-verification.json"
+}

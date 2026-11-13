@@ -1,0 +1,1 @@
+{"cases": 26, "projection_match": 9, "observed_difference": 12, "condition_only": 2, "upstream_blocked": 3}

@@ -1,0 +1,892 @@
+{
+  "date": "2026-11-14",
+  "native_input": "native-round2",
+  "cases": 31,
+  "pending_checks": 76,
+  "auth_only_normalization": "Only Snapshot.auth_generation field is normalized; real NGSA bytes remain in native-round2; final Debug snapshot comparison replaces exactly auth_generation digits.",
+  "rows": [
+    {
+      "case": "y_target_A",
+      "direct_pending": 2,
+      "restored_pending": 2,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "raw_pending_bytes_identical": false,
+      "final_raw_ngsa_identical": false,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "4cad3eb8584924587bf11b9b81c6c82ce256a9133aa9b85f466e2f4c2ec89420",
+        "restored": "b51a59e681a5a03b94bc63c2a54a8132760c3dcaca404ecb27a7cf7dabb92e57"
+      }
+    },
+    {
+      "case": "y_target_B",
+      "direct_pending": 2,
+      "restored_pending": 2,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "raw_pending_bytes_identical": false,
+      "final_raw_ngsa_identical": false,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "6b8969678bf8f25b35ead8f3eb57d2408a1695f281b52e8a0d1a1ad743dbaf52",
+        "restored": "7ab35ac7ea8985b27fce0584309aac04806055ee7b812aae6c6307c94e1694b1"
+      }
+    },
+    {
+      "case": "y_cost_B",
+      "direct_pending": 2,
+      "restored_pending": 2,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "raw_pending_bytes_identical": false,
+      "final_raw_ngsa_identical": false,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "2c5eb12dde073e6c3d6d6e2668161864104a867fef08f6d93d4c565f7ebe26f6",
+        "restored": "ed217cae9f78d779cdf46dbd96de6357a170ebcd442ba9def3c4d0e25e9091ff"
+      }
+    },
+    {
+      "case": "y_self",
+      "direct_pending": 2,
+      "restored_pending": 2,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "raw_pending_bytes_identical": false,
+      "final_raw_ngsa_identical": false,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "a6f8e55689872ecf01a1017a76357e1d6f22cf4e3c9f954c058cf0fdf148b9b2",
+        "restored": "902be4690323a989ca41916024940a72a84dd06deaf9d4920e5c3bc3ccd7c03b"
+      }
+    },
+    {
+      "case": "y_cancel_cards",
+      "direct_pending": 2,
+      "restored_pending": 2,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "raw_pending_bytes_identical": false,
+      "final_raw_ngsa_identical": false,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "b7c5c6b3e8a44949f44b41eebfe00f19a8e4bbc9d8284c789362faf1b679dd14",
+        "restored": "4ff81526f6ca65c1e7263f0456579d01aa6c0564b432fa68fddff62bf66cc445"
+      }
+    },
+    {
+      "case": "y_cancel_target",
+      "direct_pending": 3,
+      "restored_pending": 3,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "raw_pending_bytes_identical": false,
+      "final_raw_ngsa_identical": false,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "fcd09a9bda619472c1c7209e7ddafca2ff2d2480a4c087346d9333542fcbe380",
+        "restored": "4387b1d1dc3e6c40c7b15e0de46388968bf62eb4965af5c55376c900eb528352"
+      }
+    },
+    {
+      "case": "y_two_cards",
+      "direct_pending": 0,
+      "restored_pending": 0,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [],
+      "raw_pending_bytes_identical": true,
+      "final_raw_ngsa_identical": true,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "171a499dfd75b18bd7e881ede74e3d4b61b946117eca79d0ee3d1f5427952666",
+        "restored": "171a499dfd75b18bd7e881ede74e3d4b61b946117eca79d0ee3d1f5427952666"
+      }
+    },
+    {
+      "case": "y_no_wound",
+      "direct_pending": 0,
+      "restored_pending": 0,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [],
+      "raw_pending_bytes_identical": true,
+      "final_raw_ngsa_identical": true,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "b05aa4dcd27de861470e23fc82a466d92c3e147811112719055544998a914c4c",
+        "restored": "b05aa4dcd27de861470e23fc82a466d92c3e147811112719055544998a914c4c"
+      }
+    },
+    {
+      "case": "y_reuse",
+      "direct_pending": 2,
+      "restored_pending": 2,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "raw_pending_bytes_identical": false,
+      "final_raw_ngsa_identical": false,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "277a1ed5f8c2c540726a56f01ccf8e266567a51cd9ded2f7c68976da4df27ab5",
+        "restored": "20206c50def4637ecb322805f1e1fcd324e026718b44e6f8921d74936841bc1a"
+      }
+    },
+    {
+      "case": "y_no_skill",
+      "direct_pending": 0,
+      "restored_pending": 0,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [],
+      "raw_pending_bytes_identical": true,
+      "final_raw_ngsa_identical": true,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "f8c9ea5cc15e43bcb019006d8a32d1f7b3d5b2cb6215c203590c41c1c4ffa437",
+        "restored": "f8c9ea5cc15e43bcb019006d8a32d1f7b3d5b2cb6215c203590c41c1c4ffa437"
+      }
+    },
+    {
+      "case": "g_target_A",
+      "direct_pending": 1,
+      "restored_pending": 1,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "raw_pending_bytes_identical": false,
+      "final_raw_ngsa_identical": false,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "3612d71926b4c712d36482bfd02f55f1563ca03b37d5254fd8a0cd57e0475239",
+        "restored": "e09809cfb7f4e749f0b26f61ad1fd2dc2405f627b6d20e5723f5e28a13a5c650"
+      }
+    },
+    {
+      "case": "g_target_B",
+      "direct_pending": 1,
+      "restored_pending": 1,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "raw_pending_bytes_identical": false,
+      "final_raw_ngsa_identical": false,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "71dd18d4f662b4902d51f5851bb5ac0be061a6f63e9ec19271334280f6f36f3e",
+        "restored": "c91ebaa0dea614a12e04f184234f5840fa3f50146bd6f33b701997ad12ec3d86"
+      }
+    },
+    {
+      "case": "g_cancel_target",
+      "direct_pending": 2,
+      "restored_pending": 2,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "raw_pending_bytes_identical": false,
+      "final_raw_ngsa_identical": false,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "ec9e9f1912af80d082970d005c7fa3d33bc4a6c9a8a1faf6bfb6ae9edb10326f",
+        "restored": "3d34f1532b4cf46497c04a2c15d58bcc51b46a5f55eb396a74f070ff3485f62a"
+      }
+    },
+    {
+      "case": "g_no_equip",
+      "direct_pending": 0,
+      "restored_pending": 0,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [],
+      "raw_pending_bytes_identical": true,
+      "final_raw_ngsa_identical": true,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "2c0672d61d84861c510a74475a7cda819ef02460bcda64fcd3b0b8da8030104d",
+        "restored": "2c0672d61d84861c510a74475a7cda819ef02460bcda64fcd3b0b8da8030104d"
+      }
+    },
+    {
+      "case": "g_only_own",
+      "direct_pending": 0,
+      "restored_pending": 0,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [],
+      "raw_pending_bytes_identical": true,
+      "final_raw_ngsa_identical": true,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "63223b2619b04260ba36e6896d1606a65fdc422b6b5375123fa6f6b59caee0dc",
+        "restored": "63223b2619b04260ba36e6896d1606a65fdc422b6b5375123fa6f6b59caee0dc"
+      }
+    },
+    {
+      "case": "g_reuse",
+      "direct_pending": 1,
+      "restored_pending": 1,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "raw_pending_bytes_identical": false,
+      "final_raw_ngsa_identical": false,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "3612d71926b4c712d36482bfd02f55f1563ca03b37d5254fd8a0cd57e0475239",
+        "restored": "e09809cfb7f4e749f0b26f61ad1fd2dc2405f627b6d20e5723f5e28a13a5c650"
+      }
+    },
+    {
+      "case": "g_no_skill",
+      "direct_pending": 0,
+      "restored_pending": 0,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [],
+      "raw_pending_bytes_identical": true,
+      "final_raw_ngsa_identical": true,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "b4791661cd81ffedbc3f3f4728b326c915422f9dea764d28a495b21153921556",
+        "restored": "b4791661cd81ffedbc3f3f4728b326c915422f9dea764d28a495b21153921556"
+      }
+    },
+    {
+      "case": "b_hit",
+      "direct_pending": 1,
+      "restored_pending": 1,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "raw_pending_bytes_identical": false,
+      "final_raw_ngsa_identical": false,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "bd2a191d33833270c9bdeb48f4f5f86072459856a3a010d30ea38086758aed44",
+        "restored": "40d5b25088df1961ad64a79f901fd4de1ece562d7114b1bf1383f337ed821074"
+      }
+    },
+    {
+      "case": "b_miss",
+      "direct_pending": 2,
+      "restored_pending": 2,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "raw_pending_bytes_identical": false,
+      "final_raw_ngsa_identical": false,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "c3cdade3ebd985b056296b5da798d4d0a7385dd18b93869d45e090d94505176b",
+        "restored": "9370d592d150b17313e7479a189ed6c81db21d7280cc8951002dea40e5c86a67"
+      }
+    },
+    {
+      "case": "b_wrong_A",
+      "direct_pending": 3,
+      "restored_pending": 3,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "raw_pending_bytes_identical": false,
+      "final_raw_ngsa_identical": false,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "0465f567fc62b937fb4a752a8d58dcb311d0c7e403f5412293d09871eb5a2e70",
+        "restored": "ec8c535ddcf47dadd761d2b7a69e5e389527ed32cea974748267810a8e7d98b5"
+      }
+    },
+    {
+      "case": "b_wrong_B",
+      "direct_pending": 3,
+      "restored_pending": 3,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "raw_pending_bytes_identical": false,
+      "final_raw_ngsa_identical": false,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "8b107c6542faf723ccc52241383c7047a9cc314e65727029b8bd0f6ce00f3b2a",
+        "restored": "f2dd26426707a17bf470109129e5bc4df9a2c89fa00075f5bb96bc7dbaba7542"
+      }
+    },
+    {
+      "case": "b_wrong_miss",
+      "direct_pending": 2,
+      "restored_pending": 2,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "raw_pending_bytes_identical": false,
+      "final_raw_ngsa_identical": false,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "1ad37c0cee169eec0cf6341aa5fbffe8bc0f9788179a96f27422636f93f8d5f1",
+        "restored": "de799a147c976d6b59eb92d3f035dcaecf0cf856c4049a6cef04d6a7a6075bd8"
+      }
+    },
+    {
+      "case": "b_cancel_predict",
+      "direct_pending": 1,
+      "restored_pending": 1,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "raw_pending_bytes_identical": false,
+      "final_raw_ngsa_identical": false,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "a63c8fd1a2b79c4955a2368f0246d6edb43e4e2ce60b1ad44aea9b433031d1f4",
+        "restored": "d74cafe6f9497d1da73c7948b4123977f1970f723f2f7f5967ec1f15b10e2abc"
+      }
+    },
+    {
+      "case": "b_cancel_discard",
+      "direct_pending": 2,
+      "restored_pending": 2,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "raw_pending_bytes_identical": false,
+      "final_raw_ngsa_identical": false,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "c656bd1f13f177d4bc7667e9b479e267a7301b52b05f50b709a0e40e1a6ed2a8",
+        "restored": "0b70bedec7de044049dcf7a858f14156a930c63b3f0878219db7f56a35d8c406"
+      }
+    },
+    {
+      "case": "b_empty_target",
+      "direct_pending": 0,
+      "restored_pending": 0,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [],
+      "raw_pending_bytes_identical": true,
+      "final_raw_ngsa_identical": true,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "8b87128458748607ef5c54bc88d1e7062eeb5525b4378ab6896cb4c0cece6aba",
+        "restored": "8b87128458748607ef5c54bc88d1e7062eeb5525b4378ab6896cb4c0cece6aba"
+      }
+    },
+    {
+      "case": "b_owner_attacker",
+      "direct_pending": 0,
+      "restored_pending": 0,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [],
+      "raw_pending_bytes_identical": true,
+      "final_raw_ngsa_identical": true,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "80da188d6972d95f1e50ad2ce052cca2262ac5a06428d7020f20d050b8e4e0ae",
+        "restored": "80da188d6972d95f1e50ad2ce052cca2262ac5a06428d7020f20d050b8e4e0ae"
+      }
+    },
+    {
+      "case": "b_owner_target",
+      "direct_pending": 0,
+      "restored_pending": 0,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [],
+      "raw_pending_bytes_identical": true,
+      "final_raw_ngsa_identical": true,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "6205c73a7a1bf440348092efb7fc12b08895b55b7c06d5bd3068f8a3cf8aaf1b",
+        "restored": "6205c73a7a1bf440348092efb7fc12b08895b55b7c06d5bd3068f8a3cf8aaf1b"
+      }
+    },
+    {
+      "case": "b_under_control",
+      "direct_pending": 1,
+      "restored_pending": 1,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "raw_pending_bytes_identical": false,
+      "final_raw_ngsa_identical": false,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "bd2a191d33833270c9bdeb48f4f5f86072459856a3a010d30ea38086758aed44",
+        "restored": "40d5b25088df1961ad64a79f901fd4de1ece562d7114b1bf1383f337ed821074"
+      }
+    },
+    {
+      "case": "b_repeat",
+      "direct_pending": 1,
+      "restored_pending": 1,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "raw_pending_bytes_identical": false,
+      "final_raw_ngsa_identical": false,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "ba334e77dd28a29b874581c1419b202e5eca3b749d39322880d8d38440aeb9a2",
+        "restored": "5e4b01451c01737cd8cd8e327049e01efa222fc3ae6fd1526eaad0b1e16d31d2"
+      }
+    },
+    {
+      "case": "b_cancel_then_retry",
+      "direct_pending": 2,
+      "restored_pending": 2,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "raw_pending_bytes_identical": false,
+      "final_raw_ngsa_identical": false,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "29ce07d437bce651856cf29a09e225919ee37577017b99778ed5335c53ec3cfa",
+        "restored": "2279aaa64e72a9254ebd851e6f3e6ed9695c488bc5e6b885129fb82f9b89ce98"
+      }
+    },
+    {
+      "case": "b_no_skill",
+      "direct_pending": 0,
+      "restored_pending": 0,
+      "restore_errors": [],
+      "all_pending_hashes_identical": true,
+      "all_pending_complete_snapshots_except_auth_identical": true,
+      "all_pending_auth_before_after": [],
+      "raw_pending_bytes_identical": true,
+      "final_raw_ngsa_identical": true,
+      "final_state_projection_identical": true,
+      "command_request_reply_log_delta_identical": true,
+      "complete_final_snapshot_debug_identical_except_auth_generation": true,
+      "final_archive_sha256": {
+        "direct": "551da1195f5fc455c4d73551d1657aea667468fbec234ff60a6b5dfd48366a64",
+        "restored": "551da1195f5fc455c4d73551d1657aea667468fbec234ff60a6b5dfd48366a64"
+      }
+    }
+  ]
+}

@@ -1,0 +1,1780 @@
+{
+  "frozen_at": "2026-11-13T19:00:39.683570+00:00",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "directory": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28",
+  "scope": "L28 collector inputs/outputs and reports only; independent reviewer owns a separate directory",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 6425,
+      "sha256": "cb29f604b4d6d1a002fc46d86ddcddd5aa7a1a9bd08e02d1903003be3e9f2627"
+    },
+    {
+      "path": "active-session-l28.json",
+      "bytes": 584,
+      "sha256": "163f2d87dbc331d185cc6e86d1c7421bb5a2cf5ca86b4209c0a1aae2af7261dd"
+    },
+    {
+      "path": "browser/readiness-first.json",
+      "bytes": 229,
+      "sha256": "7285b82a05008ee8518fce4fe01b8db4b6eee9022cb8e5d47fb627358126bbd4"
+    },
+    {
+      "path": "browser/round1/buxu-basic.json",
+      "bytes": 223858,
+      "sha256": "f5d944745e213f22fb137c462a5c0f9fb078b1ceac7696c5b86aa89eb9afdd11"
+    },
+    {
+      "path": "browser/round1/case-results.jsonl",
+      "bytes": 114764,
+      "sha256": "d4fb28f53074b55922312ade87fd05da273aea17da7dadf22117e577d089848a"
+    },
+    {
+      "path": "browser/round1/control-map.jsonl",
+      "bytes": 3908,
+      "sha256": "94f35f92f5eef084096bca3ff3e8a6c303197290117c8881508210b8bf706117"
+    },
+    {
+      "path": "browser/round2/buxu-basic.json",
+      "bytes": 223858,
+      "sha256": "f5d944745e213f22fb137c462a5c0f9fb078b1ceac7696c5b86aa89eb9afdd11"
+    },
+    {
+      "path": "browser/round2/buxu-cancel.json",
+      "bytes": 162409,
+      "sha256": "eec6b813859dbd6e8a10b574b5fe0372de07a855cdad7f398d628f462fe1bd87"
+    },
+    {
+      "path": "browser/round2/buxu-empty.json",
+      "bytes": 105505,
+      "sha256": "265a3fb3222f791480f72b042b8294e0a895f3be66ffb69ce0cbd506ee7c68ca"
+    },
+    {
+      "path": "browser/round2/buxu-equip.json",
+      "bytes": 223868,
+      "sha256": "7abb5de7b0dd9b50d49d4e714819e4ae9550cb21d2a1f25685be949a4e9588fd"
+    },
+    {
+      "path": "browser/round2/buxu-full.json",
+      "bytes": 107388,
+      "sha256": "af0d5df447eb4da63e1b8310252fdcb06e6ae5d1a70713845ef62486c6a30527"
+    },
+    {
+      "path": "browser/round2/buxu-invalid.json",
+      "bytes": 223912,
+      "sha256": "3c04604a430f483402a0620daab36d6c92807b346c150054b924a8467e935c68"
+    },
+    {
+      "path": "browser/round2/buxu-nullify.json",
+      "bytes": 223886,
+      "sha256": "c7b4e9e2e6cf86b994a8e02c33bac9fde44c2facd65b44cf566d3f57cf619406"
+    },
+    {
+      "path": "browser/round2/buxu-twice.json",
+      "bytes": 497577,
+      "sha256": "474da6024d58a1ab6d0cb0b74377b7a36a118458e7277f97bbd02b2161dba0fc"
+    },
+    {
+      "path": "browser/round2/case-results.jsonl",
+      "bytes": 1642622,
+      "sha256": "175b7932a157752648a273a1eb09c190d2817e7d58ee6a195213283e46b6f403"
+    },
+    {
+      "path": "browser/round2/control-map.jsonl",
+      "bytes": 60506,
+      "sha256": "134e780ccd329ee45283a42fe84881463663051c1eb342025a3e0f3b32c7862c"
+    },
+    {
+      "path": "browser/round2/yeyan-cancel.json",
+      "bytes": 109083,
+      "sha256": "8e1c74e9b83f83bba2c6311555d267f5aa29cc923386c07bf311959de122f7fd"
+    },
+    {
+      "path": "browser/round2/yeyan-great-one-default.json",
+      "bytes": 109133,
+      "sha256": "fbf9038550416c1b35a8dea65add348ae8f69893f19cdffc6ebb25ba5a6afe45"
+    },
+    {
+      "path": "browser/round2/yeyan-great-one.json",
+      "bytes": 109100,
+      "sha256": "71a83007374e9f17fba43f3c674decd50af1a2042e033edfda3718c7c3ed0fbd"
+    },
+    {
+      "path": "browser/round2/yeyan-great-split-default.json",
+      "bytes": 109145,
+      "sha256": "f2f88c59ec26af66e1402701e47a019613f72bb7812aac5af4e482cfee3b7f0a"
+    },
+    {
+      "path": "browser/round2/yeyan-great-split.json",
+      "bytes": 109112,
+      "sha256": "d78731af797792d19a1181ee1a81a839f631134ecc2b7e3cdcd8f20decedc75f"
+    },
+    {
+      "path": "browser/round2/yeyan-no-four.json",
+      "bytes": 108232,
+      "sha256": "d1fb5966eb0ada753486f575a6d5e31c5d5397d97bba4a4be9bc4b80d9d58540"
+    },
+    {
+      "path": "browser/round2/yeyan-small-one.json",
+      "bytes": 109100,
+      "sha256": "7f0ee29481a9d67a887b1d624d2b5629244749b844e1a23802c388b9cbb1dcc1"
+    },
+    {
+      "path": "browser/round2/yeyan-small-three.json",
+      "bytes": 109112,
+      "sha256": "f1a02351dbfe43dc6239853c3e1517f6eac5a13cc008e595b6daa3f976cfadce"
+    },
+    {
+      "path": "browser/round2/yeyan-used.json",
+      "bytes": 107469,
+      "sha256": "f7c1fbb30dcd6adc5b3aa7ccd5c0189790a98eb3578e9b3d686c78107d29c7f0"
+    },
+    {
+      "path": "browser/round2/zhengjing-cancel.json",
+      "bytes": 55937,
+      "sha256": "02b258059b3e7d21a4f4869a3ac87dd74e0fdcaf53ed256d6f6ff9124c4ab673"
+    },
+    {
+      "path": "browser/round2/zhengjing-no-skill.json",
+      "bytes": 105325,
+      "sha256": "4a86181e382734be2babe9d3338a1e16698fcb8ef948a5db4e76f96e21e3f9b2"
+    },
+    {
+      "path": "browser/round2/zhengjing-one-self.json",
+      "bytes": 55945,
+      "sha256": "8b5fa5c168b12a0c6929911c9afdc93e4c150ae3b08ea4ec839d6f8069aebfce"
+    },
+    {
+      "path": "browser/round2/zhengjing-three-target.json",
+      "bytes": 55961,
+      "sha256": "850df38fddcc114118446736328363262d25510f94bbce9b724809f65fd573d7"
+    },
+    {
+      "path": "browser/round2/zhengjing-zero.json",
+      "bytes": 55929,
+      "sha256": "e4643cfc124b44a7035ecd2287764b0c9b5e5239f8e94a48e2dd4f40eb010a9a"
+    },
+    {
+      "path": "browser/round3/case-results.jsonl",
+      "bytes": 1342395,
+      "sha256": "bf297b0ee4e73d9f13e1b7dcd2a672283bd3980418ac38652df6944d626883cf"
+    },
+    {
+      "path": "browser/round3/control-map.jsonl",
+      "bytes": 55552,
+      "sha256": "215fbc31a6058d9e1e6e13bc4abd8ce2a353a4e2f83b125293d500df95ff05ba"
+    },
+    {
+      "path": "browser/round3/yeyan-cancel.json",
+      "bytes": 167907,
+      "sha256": "288a9944e9552148cecd737820bd6602f176eb9f27584970044f3f7919e5fce0"
+    },
+    {
+      "path": "browser/round3/yeyan-great-one-default.json",
+      "bytes": 361429,
+      "sha256": "82572c977fa33de3751b9392ca4f3f8acc2ebc7dab6d03565022795d0676f157"
+    },
+    {
+      "path": "browser/round3/yeyan-great-one.json",
+      "bytes": 362109,
+      "sha256": "8e0fb8388ad6faea6dc00f733689d4bee4b87b176d3f3665bddbd325c93cf83b"
+    },
+    {
+      "path": "browser/round3/yeyan-great-split-default.json",
+      "bytes": 362376,
+      "sha256": "6e6674cd4011fde51b3ca243e784862ce149f158bd96b5eef52b2ee229b10673"
+    },
+    {
+      "path": "browser/round3/yeyan-great-split.json",
+      "bytes": 363032,
+      "sha256": "0c96c0095ef8ec5e1a9a05282cc9cca7d85ae7b4b0e4f8d1f1a8053b914b1cb3"
+    },
+    {
+      "path": "browser/round3/yeyan-no-four.json",
+      "bytes": 300045,
+      "sha256": "764e7ff1e52f67751dafa7b693343fb561eb88f478aa9a9a68f2b47f1e31521c"
+    },
+    {
+      "path": "browser/round3/yeyan-small-one.json",
+      "bytes": 246536,
+      "sha256": "5d53fa7a2b1b0ff12535cd81594dba8a408caf1276ef131883b6867656fb7fcf"
+    },
+    {
+      "path": "browser/round3/yeyan-small-three.json",
+      "bytes": 359832,
+      "sha256": "0e33e6ea703c94d9839602df89a1d0741a90b3db5a93487aee6ef6470980cd5e"
+    },
+    {
+      "path": "browser/round3/yeyan-used.json",
+      "bytes": 107469,
+      "sha256": "f7c1fbb30dcd6adc5b3aa7ccd5c0189790a98eb3578e9b3d686c78107d29c7f0"
+    },
+    {
+      "path": "browser/round4-console.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "browser/round4-console.txt",
+      "bytes": 3822,
+      "sha256": "af38e417ce304eb35ac87b2a5a49b992bd96c43ee713b00afd2328fede2efc83"
+    },
+    {
+      "path": "browser/round4-formal/buxu-basic.json",
+      "bytes": 245004,
+      "sha256": "95bfded483aa67e065d9bf38af91085c19e4f5fa97927855ddee753a0826b9f9"
+    },
+    {
+      "path": "browser/round4-formal/buxu-cancel.json",
+      "bytes": 183267,
+      "sha256": "e76b0448a0db25375e042f3ff6d157e81abee62e4fbb81dc1811424f7a1bb1a6"
+    },
+    {
+      "path": "browser/round4-formal/buxu-empty.json",
+      "bytes": 126363,
+      "sha256": "46890276c631f91154b6b0c94bdd2fcb08134b222906eebd99b9dbd2deb49c97"
+    },
+    {
+      "path": "browser/round4-formal/buxu-equip.json",
+      "bytes": 270380,
+      "sha256": "c87430ebe5b2f78d49797d29ed52c441dbff67c09b37c6ebde09a5581643ff94"
+    },
+    {
+      "path": "browser/round4-formal/buxu-full.json",
+      "bytes": 128246,
+      "sha256": "35df0baa198e963ed6b7d5c36bc37d20e83edfef6ef0ab4df1b317ca5f4ab203"
+    },
+    {
+      "path": "browser/round4-formal/buxu-invalid.json",
+      "bytes": 270424,
+      "sha256": "48fc992afa49ff67d47a226df767bd15f54a0a616cc2bbc2e2b67c4e8e99acf3"
+    },
+    {
+      "path": "browser/round4-formal/buxu-nullify.json",
+      "bytes": 270398,
+      "sha256": "5956d6bc7bae87d462ec25bef92f7b82d130467cb87a9cd690367db65b7eff7e"
+    },
+    {
+      "path": "browser/round4-formal/buxu-twice.json",
+      "bytes": 497884,
+      "sha256": "d0c97b60a7c29d2447db552b4c43350795e414c5f4ce4d7c332da4cd37489f20"
+    },
+    {
+      "path": "browser/round4-formal/case-results.jsonl",
+      "bytes": 2657213,
+      "sha256": "cb9087c463000c33b5a456de79e53b472967a70372896b416eba86962ed802f8"
+    },
+    {
+      "path": "browser/round4-formal/control-map.jsonl",
+      "bytes": 94668,
+      "sha256": "fab932dc96cc0ced2c9b30376b3a21b047726073db60f5ec0a77e5525ecad426"
+    },
+    {
+      "path": "browser/round4-formal/yeyan-cancel.json",
+      "bytes": 188765,
+      "sha256": "5ee15edf12bc19e3c70c78b68e84ddc1379815840a97d78d5327e70dcc5b968a"
+    },
+    {
+      "path": "browser/round4-formal/yeyan-great-one-default.json",
+      "bytes": 361430,
+      "sha256": "fcf6e4a4127b2c2a57aa3343b7d87b8ac0f6d10805d66db2cfb2185ae66fba8c"
+    },
+    {
+      "path": "browser/round4-formal/yeyan-great-one.json",
+      "bytes": 362098,
+      "sha256": "3d132814fba95bba8c1c777b7f70813467c6d35fbc0b63a519c28ea99c0dc378"
+    },
+    {
+      "path": "browser/round4-formal/yeyan-great-split-default.json",
+      "bytes": 362386,
+      "sha256": "a0f2bd0b8125ccb2ccb844da0c1588164ccbd5f3ff99023b5c7529a5e8eef19f"
+    },
+    {
+      "path": "browser/round4-formal/yeyan-great-split.json",
+      "bytes": 363053,
+      "sha256": "5fa2675624f0bb4bd53a6078a5d7320d32f845f218137f54a1819987d2f2556f"
+    },
+    {
+      "path": "browser/round4-formal/yeyan-no-four.json",
+      "bytes": 300047,
+      "sha256": "33da7c855a8d9268730347bca27153c7cd985e399f002a9ca1f8146448363057"
+    },
+    {
+      "path": "browser/round4-formal/yeyan-small-one.json",
+      "bytes": 246541,
+      "sha256": "8af00651123b9f9b60311f35d743a21605915a94f15974ff38e1e46c798516e6"
+    },
+    {
+      "path": "browser/round4-formal/yeyan-small-three.json",
+      "bytes": 359811,
+      "sha256": "ed548f74b9e752c21940d7114d8e2f97af5b851a65f79d6f7b08a9c289793f4d"
+    },
+    {
+      "path": "browser/round4-formal/yeyan-used.json",
+      "bytes": 128327,
+      "sha256": "e3824dde349d5a8c276e3439e37856ee6854cf447f8d5525ca0aabb8e51b85ee"
+    },
+    {
+      "path": "browser/round4-formal/zhengjing-cancel.json",
+      "bytes": 78521,
+      "sha256": "3cecb04caa2882a8b3fc8b7d42e2595e81de5b11a483ca29e521f259c8b1dddc"
+    },
+    {
+      "path": "browser/round4-formal/zhengjing-no-skill.json",
+      "bytes": 126183,
+      "sha256": "e7b100eef766aae6a0df87a52582a94639550287435b3e92ecadadcee5bfc26e"
+    },
+    {
+      "path": "browser/round4-formal/zhengjing-one-self.json",
+      "bytes": 78531,
+      "sha256": "6d3851be4a9016119927afc044437d9317e020e48ba3b990c171130e5209931d"
+    },
+    {
+      "path": "browser/round4-formal/zhengjing-three-target.json",
+      "bytes": 78551,
+      "sha256": "7ad8a7ae5d4276099876f29634ba41f4ce4032d9c493a08e47314e689b0bb86f"
+    },
+    {
+      "path": "browser/round4-formal/zhengjing-zero.json",
+      "bytes": 78511,
+      "sha256": "874f404c87bac485caa28ba86f54ab34461a5b2855026e14122935fb9ddf2a8e"
+    },
+    {
+      "path": "browser/round5-console.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "browser/round5-console.txt",
+      "bytes": 3822,
+      "sha256": "af38e417ce304eb35ac87b2a5a49b992bd96c43ee713b00afd2328fede2efc83"
+    },
+    {
+      "path": "browser/round5-history/buxu-basic.json",
+      "bytes": 270743,
+      "sha256": "991fd1cc9b11830b818b764892ef64a8110700c78537d272ae5a80483eab542c"
+    },
+    {
+      "path": "browser/round5-history/buxu-cancel.json",
+      "bytes": 183530,
+      "sha256": "4bf2c0bb7903fd67f4da67c26ee038667d5ce425af9e7ddf9343a1b89317b756"
+    },
+    {
+      "path": "browser/round5-history/buxu-empty.json",
+      "bytes": 126516,
+      "sha256": "d0a03042dc46844193a7922024849ac0d9270a9656ef12c276c22a7fa9f992a7"
+    },
+    {
+      "path": "browser/round5-history/buxu-equip.json",
+      "bytes": 270753,
+      "sha256": "4e645f76a02cacb137cc26ce987c6621bffe29134848bd904a22c40409ac3b93"
+    },
+    {
+      "path": "browser/round5-history/buxu-full.json",
+      "bytes": 128399,
+      "sha256": "d9096aae772c5dfa49f2b9e6e5d0672894217b39e95569edf30a90ed9300eb3e"
+    },
+    {
+      "path": "browser/round5-history/buxu-invalid.json",
+      "bytes": 270797,
+      "sha256": "bb3d0a75b75e2783057a4b1a25ec80bf459cf882f9e17e8a2c3ba3922b477df5"
+    },
+    {
+      "path": "browser/round5-history/buxu-nullify.json",
+      "bytes": 270771,
+      "sha256": "28a0301619557bd3c4d1bc4097377aec09e5e19a69bb6dc26f9a94b6c6f97de7"
+    },
+    {
+      "path": "browser/round5-history/buxu-twice.json",
+      "bytes": 498477,
+      "sha256": "3bea1e8f15b698dabc36b61b48a1c10555dd79ca4769cbbe83e27a1141f514c6"
+    },
+    {
+      "path": "browser/round5-history/case-results.jsonl",
+      "bytes": 2693237,
+      "sha256": "39e9f1507a4b82f9c789485c4e0ee05c3d0020ae67ec6e09e2eca1afa0ea8203"
+    },
+    {
+      "path": "browser/round5-history/control-map.jsonl",
+      "bytes": 94767,
+      "sha256": "a0b51378c6818c6ff5c2d093219ba0f685d08763b1923a3b44f3697a5c424b47"
+    },
+    {
+      "path": "browser/round5-history/yeyan-cancel.json",
+      "bytes": 189028,
+      "sha256": "ec4d757ba745905729120ba1e0f3868021ca6a9f4b87002cf6fab0f53eda4f83"
+    },
+    {
+      "path": "browser/round5-history/yeyan-great-one-default.json",
+      "bytes": 388229,
+      "sha256": "7801858654eb9a7a62e82625d19433a5e0d549f041b1b27c5e784e944bca05af"
+    },
+    {
+      "path": "browser/round5-history/yeyan-great-one.json",
+      "bytes": 364528,
+      "sha256": "be850a40587fb477e4ee3377d5ff384e2af526b6d3cfddab410c1e3e832b87c7"
+    },
+    {
+      "path": "browser/round5-history/yeyan-great-split-default.json",
+      "bytes": 364793,
+      "sha256": "89503a9e5297d93f5d5b48b1992c34e10eb622261d099d852f630c28cdf9d8c4"
+    },
+    {
+      "path": "browser/round5-history/yeyan-great-split.json",
+      "bytes": 366474,
+      "sha256": "7efa63dbd569f3653f181ee7e5417a53a1b64e2ca0d1b88f24f11fcf89fc18ae"
+    },
+    {
+      "path": "browser/round5-history/yeyan-no-four.json",
+      "bytes": 301433,
+      "sha256": "3511e9ea7aa4fb5a2d0be2d6928eba1c03b89a5c340dadb4678b10bee07632e9"
+    },
+    {
+      "path": "browser/round5-history/yeyan-small-one.json",
+      "bytes": 247870,
+      "sha256": "39a41b90acaa9fbb5051905daf1c1d26e4a2cb2cd68ae841587a8a0652befd2a"
+    },
+    {
+      "path": "browser/round5-history/yeyan-small-three.json",
+      "bytes": 363214,
+      "sha256": "7105e1df650d07e27a5b83da0b9bc0a70be6cc67bb88e7279ff343bd2f5d639b"
+    },
+    {
+      "path": "browser/round5-history/yeyan-used.json",
+      "bytes": 128480,
+      "sha256": "c1aae272a7747a64eb29e4b4bc80eb9e5fefd64249ed556aeb16ed7f6946eeb0"
+    },
+    {
+      "path": "browser/round5-history/zhengjing-cancel.json",
+      "bytes": 78617,
+      "sha256": "5f2560505fbf870c2b59bb7b3c6aba75036fdd375acdf5057f2a54efdde198ef"
+    },
+    {
+      "path": "browser/round5-history/zhengjing-no-skill.json",
+      "bytes": 126336,
+      "sha256": "38bada134726df686f6b1ddde460017bf7076e4f490a7e0eec9410c3de0eb58b"
+    },
+    {
+      "path": "browser/round5-history/zhengjing-one-self.json",
+      "bytes": 78627,
+      "sha256": "11019e13d401d4905132a50cffed674bf969926bf7ddfb7a97665e346b99aa76"
+    },
+    {
+      "path": "browser/round5-history/zhengjing-three-target.json",
+      "bytes": 78647,
+      "sha256": "0736338a22d1eb1ab09ae7d87f9614d8373bf52d1bda7ad4a3d843361017e6a3"
+    },
+    {
+      "path": "browser/round5-history/zhengjing-zero.json",
+      "bytes": 78607,
+      "sha256": "ed4f602bc05cd1d4eaa543321012da62464daaaaeb38aabb6ef1081d96fa2e26"
+    },
+    {
+      "path": "browser/round6-console.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "browser/round6-console.txt",
+      "bytes": 4512,
+      "sha256": "abb4d08c29981f7a94443413e6abc7df374951a06c644c2177afc0451d8d7997"
+    },
+    {
+      "path": "browser/round6-final/buxu-basic.json",
+      "bytes": 270743,
+      "sha256": "236ffb2dd16c54424908d8b36659d2da3b816250f29faebe59cdde8f239757b7"
+    },
+    {
+      "path": "browser/round6-final/buxu-cancel.json",
+      "bytes": 183530,
+      "sha256": "3b7741bafce552a1771f6b16c174216fb167b3a0576965fffcabababdcc7366f"
+    },
+    {
+      "path": "browser/round6-final/buxu-empty.json",
+      "bytes": 126516,
+      "sha256": "17364145d32696b1639280219d2f148b53582dd0e68df9bff943d433735d13e4"
+    },
+    {
+      "path": "browser/round6-final/buxu-equip.json",
+      "bytes": 270753,
+      "sha256": "f1b440e27726b8cfc940d70f95d366bc4d2a83f3024d0b29d952656c790a4874"
+    },
+    {
+      "path": "browser/round6-final/buxu-full.json",
+      "bytes": 128399,
+      "sha256": "0c0893ddb1de3e0c8252339f2cabf7df4ad85d7a5abf69476a35d19b4492cd39"
+    },
+    {
+      "path": "browser/round6-final/buxu-invalid.json",
+      "bytes": 270797,
+      "sha256": "c5415679533c84daa099adfa58955bdbb3c0186b348b69f0cd68036e2c5a76bc"
+    },
+    {
+      "path": "browser/round6-final/buxu-nullify.json",
+      "bytes": 270771,
+      "sha256": "4b2eef34db60b79e40787b668e398a7bca43a4806a1abf86337124fe28fb21fe"
+    },
+    {
+      "path": "browser/round6-final/buxu-twice.json",
+      "bytes": 498477,
+      "sha256": "5582caa2ba06c7fed562b66fac54f549153aa069bcbf2b6473abc5d3f6a896ba"
+    },
+    {
+      "path": "browser/round6-final/case-results.jsonl",
+      "bytes": 3197218,
+      "sha256": "0a322a1cfb7c9d6fcf10a1416c76c7b45149acadbce5e0332dddc417512c9f67"
+    },
+    {
+      "path": "browser/round6-final/control-map.jsonl",
+      "bytes": 110973,
+      "sha256": "71cbacfca49c56470b81191a64975676eb27e9ebbc2bde5e777a04e4bed0667e"
+    },
+    {
+      "path": "browser/round6-final/yeyan-cancel.json",
+      "bytes": 189028,
+      "sha256": "ff1194b84696843b737542c71b8928f60ddf6ff02261394f3084a4a86afdbf57"
+    },
+    {
+      "path": "browser/round6-final/yeyan-great-discard-cancel.json",
+      "bytes": 329911,
+      "sha256": "04a69e2706a289914a106f1fb0161ba1ecd7465639b9bacfe192d181920e838a"
+    },
+    {
+      "path": "browser/round6-final/yeyan-great-one-default.json",
+      "bytes": 388227,
+      "sha256": "591fe004245e9abe4298af927f3ccd45422d4836b3c0dae21bef85baedea6dc0"
+    },
+    {
+      "path": "browser/round6-final/yeyan-great-one.json",
+      "bytes": 364529,
+      "sha256": "2b4430ead9fc2ec071b7ed85ae3c6bd96fb71a666fdd88e5a1bd70280b9f2492"
+    },
+    {
+      "path": "browser/round6-final/yeyan-great-split-default.json",
+      "bytes": 390171,
+      "sha256": "2e3e962f830ef9b5205db17c07d784ee753a73bcb6a0d43cab457cdf152c06e0"
+    },
+    {
+      "path": "browser/round6-final/yeyan-great-split.json",
+      "bytes": 366466,
+      "sha256": "b597e901ecdf55e76528de7c68211a70432d15c8845cc05ae1cba320550d6b8d"
+    },
+    {
+      "path": "browser/round6-final/yeyan-great-two.json",
+      "bytes": 332788,
+      "sha256": "0500ceb06d6e9de22ccf706b87514dc63b71b495b55f160f6b1b2cef71d557e6"
+    },
+    {
+      "path": "browser/round6-final/yeyan-no-four.json",
+      "bytes": 326800,
+      "sha256": "cf8a72169cff404c5d59569623ccd609d83ef7624db206c4f53718a846530d75"
+    },
+    {
+      "path": "browser/round6-final/yeyan-small-one.json",
+      "bytes": 247858,
+      "sha256": "0717f9882c2a504511445d2fc5e39954448da88de7597784a2d961018dc8a9cb"
+    },
+    {
+      "path": "browser/round6-final/yeyan-small-three.json",
+      "bytes": 363234,
+      "sha256": "0e5249135f36e589a65fbe04c2dca0d6d3af418bd141568134d9adc92920ba5f"
+    },
+    {
+      "path": "browser/round6-final/yeyan-target-cancel.json",
+      "bytes": 270206,
+      "sha256": "ebde35c9cc2a4e0e396a3b1d157a38377b5da2a07d93b6c085fdf7f406759a31"
+    },
+    {
+      "path": "browser/round6-final/yeyan-used.json",
+      "bytes": 128480,
+      "sha256": "7139a1d34b24de20f5fe85f989927c3d17b2866116f08b7dbfdf643bd85d21ac"
+    },
+    {
+      "path": "browser/round6-final/zhengjing-cancel.json",
+      "bytes": 78623,
+      "sha256": "7522d999477d75bb143c4c1c8fbbefeca28ffd60fd88f8366d7f2e5008ea2aa6"
+    },
+    {
+      "path": "browser/round6-final/zhengjing-no-skill.json",
+      "bytes": 126336,
+      "sha256": "fddf81cd6de428d2297f5dbb21314fbd0ba2ffcf5dc0e73c0776a340fe4f5dae"
+    },
+    {
+      "path": "browser/round6-final/zhengjing-one-self.json",
+      "bytes": 78633,
+      "sha256": "3cbf530365a2b188d8721ef2a906b5cb30920ec95b5e13d7e51311c28a0e9372"
+    },
+    {
+      "path": "browser/round6-final/zhengjing-three-target.json",
+      "bytes": 78653,
+      "sha256": "9b9c7ff500b1f6fad2bb363a1d85fc642748baf206520348ade09e5162a24f23"
+    },
+    {
+      "path": "browser/round6-final/zhengjing-zero.json",
+      "bytes": 78613,
+      "sha256": "32329e2cf65aaa80aae3d345ffc84252ee4f6e0756a6c3ead1a66abcc6b6c22f"
+    },
+    {
+      "path": "browser/round7-cancel-clear/case-results.jsonl",
+      "bytes": 262678,
+      "sha256": "ff42ea211fb1a7b911d77a8d814ddc9cfa4c47f892997a3211f04b82e4519a6e"
+    },
+    {
+      "path": "browser/round7-cancel-clear/control-map.jsonl",
+      "bytes": 8099,
+      "sha256": "9f26d73dc30104a9b949e5a2463c471b13da3d9f61d813e0879b2a38438ff714"
+    },
+    {
+      "path": "browser/round7-cancel-clear/yeyan-great-discard-cancel.json",
+      "bytes": 526864,
+      "sha256": "67c93e4f446a785ba830f47b2c4e54b1eb6afcdf4612b1765fdb0273c57151f5"
+    },
+    {
+      "path": "browser/round7-console.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "browser/round7-console.txt",
+      "bytes": 285,
+      "sha256": "5aee851fb7a18565876b03076924f2994f9fa0ac987f9965d1c0b9ce9838e2d8"
+    },
+    {
+      "path": "browser/round8-clean/buxu-basic.json",
+      "bytes": 224942,
+      "sha256": "bd1b51a90a08c9c98643983832a48a65ba0d182d1b7e603dff655a71995dde43"
+    },
+    {
+      "path": "browser/round8-clean/buxu-cancel.json",
+      "bytes": 163019,
+      "sha256": "02498811b500f9453f208ba8e665be694093628e2fa771d3488f181cd2572b2a"
+    },
+    {
+      "path": "browser/round8-clean/buxu-empty.json",
+      "bytes": 105929,
+      "sha256": "b43524f2a1bfe1bbb3347191b92bf4338d02ccf39a4af4865e854ca9b2b0b5e0"
+    },
+    {
+      "path": "browser/round8-clean/buxu-equip.json",
+      "bytes": 224952,
+      "sha256": "753e9d287269763725fb3d0fa9a75f699fcb51809da45fe440e55325b35dc768"
+    },
+    {
+      "path": "browser/round8-clean/buxu-full.json",
+      "bytes": 107812,
+      "sha256": "379abc648fd5359c10a54616fcf4f0365e50d5ff00bd28cf4523f0989c0c1a68"
+    },
+    {
+      "path": "browser/round8-clean/buxu-invalid.json",
+      "bytes": 224996,
+      "sha256": "16f8cc8176088ce58c5069c1b4e67435fb5ccdb29b159e496908091bf0fe9160"
+    },
+    {
+      "path": "browser/round8-clean/buxu-nullify.json",
+      "bytes": 224970,
+      "sha256": "ec4d09205f44dd60c7f4a3f9986fda9d1fa5ef2404ac2ee2ac6b134c7b4d8e05"
+    },
+    {
+      "path": "browser/round8-clean/buxu-twice.json",
+      "bytes": 351364,
+      "sha256": "75374d01edd0937e9cd586a5fd887b59c27ef39d424543395f06a9e829aef286"
+    },
+    {
+      "path": "browser/round8-clean/case-results.jsonl",
+      "bytes": 2542014,
+      "sha256": "a73c790e6894c811d7cc52093b6be4a836e6576fbb53f38e544061eb13cb752c"
+    },
+    {
+      "path": "browser/round8-clean/control-map.jsonl",
+      "bytes": 117631,
+      "sha256": "ad7538bdfa2856c442b5fa4be006116c9ba96fcdc388fd343dd0a081ff5f73ac"
+    },
+    {
+      "path": "browser/round8-clean/yeyan-cancel.json",
+      "bytes": 168517,
+      "sha256": "aca16e146b51176e86403d341ebaa2b19918e0043ea03122741621bcb062abcc"
+    },
+    {
+      "path": "browser/round8-clean/yeyan-great-discard-cancel.json",
+      "bytes": 354385,
+      "sha256": "95847e24d8470b54aead82617438a941c255c65b7d93a5a89f5a6537c54077ef"
+    },
+    {
+      "path": "browser/round8-clean/yeyan-great-one-default.json",
+      "bytes": 266372,
+      "sha256": "504a6b7de7976ba5539c843a0abc629d8331b8e09f19db4aa1d0d199dee25b69"
+    },
+    {
+      "path": "browser/round8-clean/yeyan-great-one.json",
+      "bytes": 268040,
+      "sha256": "a7eed18c118cc37de3e14886a5fd95e5611ca94429b9a960f173832eebe3f69a"
+    },
+    {
+      "path": "browser/round8-clean/yeyan-great-split-default.json",
+      "bytes": 268296,
+      "sha256": "c1fac3f09bf4db9ca15f1a0295f57f3183a02b3ad411bb6e7bbd795a591b466a"
+    },
+    {
+      "path": "browser/round8-clean/yeyan-great-split.json",
+      "bytes": 269991,
+      "sha256": "33078997312af377fcb7b147b30c875c421fd7e745e8b80aa37912f872c99a37"
+    },
+    {
+      "path": "browser/round8-clean/yeyan-great-two.json",
+      "bytes": 236261,
+      "sha256": "a61e4b1bdae2a85c278bd5ffeb2d9a904e98438fc99fdf14f72242cccc62a373"
+    },
+    {
+      "path": "browser/round8-clean/yeyan-no-four.json",
+      "bytes": 230263,
+      "sha256": "32ec001cb9d3bda9ebba0899cd60d01199f18fa8cc0b6e0b99b9fa12ecab098b"
+    },
+    {
+      "path": "browser/round8-clean/yeyan-small-one.json",
+      "bytes": 202026,
+      "sha256": "d7d1e0b2dc605fb45b8830df976acfd902989aedee0815fe086a7cd6e964a20f"
+    },
+    {
+      "path": "browser/round8-clean/yeyan-small-three.json",
+      "bytes": 266740,
+      "sha256": "57dd88642fa8ceb3504c7cc116d58a6f1de3ee48935dd619f240b9c7da15de78"
+    },
+    {
+      "path": "browser/round8-clean/yeyan-target-cancel.json",
+      "bytes": 199001,
+      "sha256": "9261ea2ec7db2a9ef6f693d29a28ac2f412725846660c17aa090bc39e0d81306"
+    },
+    {
+      "path": "browser/round8-clean/yeyan-used.json",
+      "bytes": 107893,
+      "sha256": "fdf43c65858aa433f184713741ec72e7560cbf21c5d2b38d4d0fac26a80bd931"
+    },
+    {
+      "path": "browser/round8-clean/zhengjing-cancel.json",
+      "bytes": 78856,
+      "sha256": "b3fa8efa9dfabc93692e50fa216200c377ade0d4b223043172a3b54d21adbbe5"
+    },
+    {
+      "path": "browser/round8-clean/zhengjing-no-skill.json",
+      "bytes": 105749,
+      "sha256": "30dbc5a912ee42bcec645e44c45118f19f7e1a9d01c77cf83e961a86fcaadc1a"
+    },
+    {
+      "path": "browser/round8-clean/zhengjing-one-self.json",
+      "bytes": 78866,
+      "sha256": "4227b49f2bb0821245577e7798b3160b07b140dbad4c8a41832809898b0151b5"
+    },
+    {
+      "path": "browser/round8-clean/zhengjing-three-target.json",
+      "bytes": 78886,
+      "sha256": "785c14637255df3254114696c54ea7ee113b316fc0153116ad0f720ce48cbb88"
+    },
+    {
+      "path": "browser/round8-clean/zhengjing-zero.json",
+      "bytes": 78846,
+      "sha256": "88f61003d0bc441f9c9e439d5d54ae54a425b4334e61a9fe8b9333f691327bf7"
+    },
+    {
+      "path": "browser/round8-console.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "browser/round8-console.txt",
+      "bytes": 4428,
+      "sha256": "ef062b8f046f374d0d2a8d290a129948fc61f365076adda3dc7290a4ebec1edc"
+    },
+    {
+      "path": "browser/run-cases-01.py",
+      "bytes": 8924,
+      "sha256": "118c86310e904a43d662760aaca663991043f3788a6e4c054ea6d948768ea38a"
+    },
+    {
+      "path": "browser/run-cases-02.py",
+      "bytes": 9104,
+      "sha256": "ec7636375a314873a6effbb7a6d1310f89e8a73cc8bc8dd168f7c28f35f7c95d"
+    },
+    {
+      "path": "browser/run-cases-03.py",
+      "bytes": 9127,
+      "sha256": "68b4b8fc9bc5423736ac30b1e7df4c3f9b746b83c18085ef16d2692f9b509281"
+    },
+    {
+      "path": "browser/run-cases-04.py",
+      "bytes": 9546,
+      "sha256": "16cc01d061828968f67a06aa80cbc09df6d2a5030299a31f099f9aaa8b35674d"
+    },
+    {
+      "path": "browser/run-cases-05.py",
+      "bytes": 9893,
+      "sha256": "6621f992a1b759b32a2d150d7d5ae5272ba9346c6249cae350ed1ad49ef57965"
+    },
+    {
+      "path": "browser/run-cases.py",
+      "bytes": 10695,
+      "sha256": "f01312670cfcf641369e7f002a7d261e7ff9f3949093c4d78618aaa9a79f780d"
+    },
+    {
+      "path": "browser/start-case-01.js",
+      "bytes": 6446,
+      "sha256": "437694267fca7fa9e2d791639d901f850fc73f98bd01c2b37e1aabb4231b2bfe"
+    },
+    {
+      "path": "browser/start-case-02.js",
+      "bytes": 7112,
+      "sha256": "a4bb8a57493e28909d0a0750e38262b48ca799f6d49d2b2f93b1621aab441e89"
+    },
+    {
+      "path": "browser/start-case-03.js",
+      "bytes": 7285,
+      "sha256": "735bc1e8e89446eefdb7a34de96265cea811fa34c2ae29d74aff7e75130a3287"
+    },
+    {
+      "path": "browser/start-case.js",
+      "bytes": 7658,
+      "sha256": "3543fd4fcbffe0440bec85f963be69ba76d60c1adc571d02ad8badb09f349fb4"
+    },
+    {
+      "path": "browser/yeyan-history-first.json",
+      "bytes": 671,
+      "sha256": "3339f2b589f6b82e1a7c1b05943004d3e5ed688bfd7ad1eb776bc479915a1056"
+    },
+    {
+      "path": "case-index-before-bootstrap.json",
+      "bytes": 24693,
+      "sha256": "3c1163df1e327f9ec93c2082a5e44f6e3187cfb2c92f05f1856b496e70e40361"
+    },
+    {
+      "path": "cleanup.json",
+      "bytes": 996,
+      "sha256": "c9ccd4d957f14799dfd4ce7ca65b5d9146f6651a7be781ec82078036dd64d475"
+    },
+    {
+      "path": "compare-01.py",
+      "bytes": 11694,
+      "sha256": "5e1ebc9b8bd91effa4610488d93f71735b7118cd529b04350c097881ce5f5e93"
+    },
+    {
+      "path": "compare-02.py",
+      "bytes": 11924,
+      "sha256": "3ede849ae30019a4e79d47417d2518449d1a98fdce1e2973390027368848fd13"
+    },
+    {
+      "path": "compare-first.stderr",
+      "bytes": 433,
+      "sha256": "de77128bc689697dc6cd3a9847887109a6504d1f07fbef1cdc13627886920fd1"
+    },
+    {
+      "path": "compare-first.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compare-second.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compare-second.stdout",
+      "bytes": 356,
+      "sha256": "4cfd4e74cb67b106ae31617b664cc61024af052360def04cc38562975591532d"
+    },
+    {
+      "path": "compare-third.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compare-third.stdout",
+      "bytes": 356,
+      "sha256": "18b538ec514cc285a06a486a37668d4f7f0a1b4d893f824212e4161345bc4a50"
+    },
+    {
+      "path": "compare.py",
+      "bytes": 12844,
+      "sha256": "37d05dbcc64489784444320a078750644eb72eb093b7e523daa18598942ae49e"
+    },
+    {
+      "path": "comparison-results.json",
+      "bytes": 109368,
+      "sha256": "8fc2794a90be20afcea796f5ed23297decfd908e4a56609b317cf06d3851eedd"
+    },
+    {
+      "path": "comparison-second-invalid-fixture.json",
+      "bytes": 1498036,
+      "sha256": "237d967d1b2530b9d0e514650729bdc8789b9caa4dd8963c29dce8a4e3522589"
+    },
+    {
+      "path": "comparison-second-invalid-fixture.md",
+      "bytes": 3277,
+      "sha256": "150dfb788b103662fef0b83a45329f83ceef9420b0409cb1e2697fe78271947d"
+    },
+    {
+      "path": "comparison.md",
+      "bytes": 3427,
+      "sha256": "32a3658cc120ad450f3122ea4182e480882b4ea458be4eabff838e9e9b0dce6b"
+    },
+    {
+      "path": "final-case-index.json",
+      "bytes": 25260,
+      "sha256": "5fddfae95ab3bbb4af922e82ad2f86649d07776de3087d528c9ed998b45a5c59"
+    },
+    {
+      "path": "final-local-check.json",
+      "bytes": 3788,
+      "sha256": "0ac12e01ed3da242a641372a5865c8564cb06f8481c3467536f60fc33f630d61"
+    },
+    {
+      "path": "findings.json",
+      "bytes": 6912,
+      "sha256": "1ef751dc6121ac4bfcbb634e109ee22c0fa93db9a0489c6d1750b88615a7632a"
+    },
+    {
+      "path": "index-command.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "index-command.stdout",
+      "bytes": 117,
+      "sha256": "1e1a289f3c1ed61f0650c3a9ca8147d9d07cf8e2dfe9dc631dfbef2d292db5ea"
+    },
+    {
+      "path": "index-inputs.py",
+      "bytes": 7504,
+      "sha256": "0d464a900808ea6fae95d9d4d2b26f349e3f9397e12d967efc06cf29015bc015"
+    },
+    {
+      "path": "initial-inputs.json",
+      "bytes": 3788,
+      "sha256": "b0b579e668e5331d92ed4242cee77a7c76adc453afd5044413ca0532e289b889"
+    },
+    {
+      "path": "inputs/Cargo.lock",
+      "bytes": 129538,
+      "sha256": "5d56dba182060ed914dedfe8eb3ff8a7627ce32c3913207fb5ea7e9c070b5926"
+    },
+    {
+      "path": "inputs/crates/content-native-loader/src/decision34_pack9.rs",
+      "bytes": 36898,
+      "sha256": "57677960381809834e0a6990cdb0b0082474f9a0c55819059046b98529ecd428"
+    },
+    {
+      "path": "inputs/crates/content-native-loader/src/locked_content.rs",
+      "bytes": 10514,
+      "sha256": "b1f4663d8830d1b3ce059870d9a343aa9eaad1044bb09dd5a2c19f8f2e871933"
+    },
+    {
+      "path": "inputs/crates/engine-native/tests/l28_thunder_eight_batch_b.rs",
+      "bytes": 26221,
+      "sha256": "2b4416e29833406a9a8a7050f8aaf60e2a31c4f903f3ce0c7e66b26ab458589d"
+    },
+    {
+      "path": "inputs/crates/engine-native/tests/l28_thunder_eight_match.rs",
+      "bytes": 28429,
+      "sha256": "cc1fe34b7b2eb83fa6c965b0c43a065d114ba6a44158a92046308be5671471a6"
+    },
+    {
+      "path": "inputs/crates/engine-native-content/src/content/host/step/l28_batch_a.rs",
+      "bytes": 35808,
+      "sha256": "783937e8f29efca517bdfbb8d918905b2fb08b3465d710339ec14154748a2f33"
+    },
+    {
+      "path": "inputs/crates/engine-native-content/src/content/host/step/l28_batch_a_asks.rs",
+      "bytes": 33527,
+      "sha256": "fde73a4f9286316c553e0d84b7a4d6e5edc6ab9a5d5f8aa01ff43938d0414879"
+    },
+    {
+      "path": "inputs/crates/engine-native-content/src/content/host/step/l28_batch_b.rs",
+      "bytes": 24064,
+      "sha256": "1ec78d469401027dea8f40d91f64c137f3d2fb6e92ea841eb459c203dadb8ba2"
+    },
+    {
+      "path": "inputs/crates/engine-native-content/src/content/host/step/l28_batch_b_asks.rs",
+      "bytes": 13021,
+      "sha256": "90bddf7020c0c1560b58361a22b83ce20c8b4f0c1f1436f7f944205f35fc70ca"
+    },
+    {
+      "path": "inputs/crates/engine-native-content/src/content/standard/cards.rs",
+      "bytes": 12112,
+      "sha256": "72e38d8f9418bc400592c9e4b901a6e654d89237f1d401d8b14ef2a7511923fe"
+    },
+    {
+      "path": "inputs/crates/engine-native-kernel/src/catalog/card_kind.rs",
+      "bytes": 21761,
+      "sha256": "8b60d23374a57fdc2e3603893c80d302a12b77c413f864a4080a8c376a50b3d8"
+    },
+    {
+      "path": "inputs/crates/engine-native-kernel/src/catalog.rs",
+      "bytes": 62443,
+      "sha256": "df441f4cb9f288971c4121135ca9a51ecc34d492dbeb0363c852b4f972c2b876"
+    },
+    {
+      "path": "inputs/crates/engine-native-kernel/src/kernel/judge.rs",
+      "bytes": 52640,
+      "sha256": "e82acb6540051038973474b9ccb61d0b26f85135c5b756cf1acc158793377685"
+    },
+    {
+      "path": "inputs/packages/extensions/thunder-upstream-liuli/assets/config.json",
+      "bytes": 475,
+      "sha256": "de64ace113e18098eed39cbc6dc80389dae83e49e8608c4ce1911d50174eebaa"
+    },
+    {
+      "path": "inputs/packages/extensions/thunder-upstream-liuli/package.npack.json",
+      "bytes": 1555,
+      "sha256": "84521165ed9d5c12c1021c9a5669d514dc151b0dbf57b225af3719254a509f2b"
+    },
+    {
+      "path": "inputs/upstream/archive/upstream/noname-liuli/noname/card/extra.js",
+      "bytes": 30003,
+      "sha256": "7998d90d7a8eb855d34713cacb1958bad7cd854ccf04bd3bea47a6a303c7007d"
+    },
+    {
+      "path": "inputs/upstream/archive/upstream/noname-liuli/noname/card/standard.js",
+      "bytes": 100821,
+      "sha256": "dabb598438dc030a621dd2fac83989aac9ae783f521a1521f142891a5e16c8b5"
+    },
+    {
+      "path": "inputs/upstream/archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+      "bytes": 458058,
+      "sha256": "3f7add04e6d347d450facb9b6fd506f5c4cd64a5e3fbc626e47e79d8a3aa13b2"
+    },
+    {
+      "path": "inputs/upstream/archive/upstream/noname-liuli/noname/extension/雷霆万钧/thunder.css",
+      "bytes": 27572,
+      "sha256": "34680c46dfb528adf8808543eb425594fae46309f1c8f3c78d3117f402e9fb24"
+    },
+    {
+      "path": "inputs/upstream/archive/upstream/noname-liuli/noname/game/game.js",
+      "bytes": 2148860,
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+    },
+    {
+      "path": "launch.mjs",
+      "bytes": 6964,
+      "sha256": "61c73bdcc5a66c14078a00e41cb49f90c566b3a39e435e0d5f57cc4c55a27052"
+    },
+    {
+      "path": "native/Cargo.lock",
+      "bytes": 6680,
+      "sha256": "7483a5b8f15f63cb4ac327b33de20c59a616843e859b146a8b8dd6cbd852a863"
+    },
+    {
+      "path": "native/Cargo.toml",
+      "bytes": 347,
+      "sha256": "0dfc5cce84ce4a9888e6a8612662f0369d7dd43d9bde00d52894074cb8690a42"
+    },
+    {
+      "path": "native/probe-01.rs",
+      "bytes": 11382,
+      "sha256": "c13bdc841e19cdda4e0fc35e1a2340c524e16d65908ca383659b1250b92877fa"
+    },
+    {
+      "path": "native/probe-02.rs",
+      "bytes": 11629,
+      "sha256": "5384093a99da622ca7e19d3595a96dafbd41b50aa9ef6d95f25e5ffdb32b45d6"
+    },
+    {
+      "path": "native/probe-workspace.json",
+      "bytes": 143,
+      "sha256": "83bf5cc53852d403d34bd8d6f50763f4f957c33fbf06a1773c7d38cc5a5adf73"
+    },
+    {
+      "path": "native/round1/buxu-basic-final.ngsa",
+      "bytes": 3147,
+      "sha256": "f0b4451d0ca4b2f6c313f59bdd04bc87d9873755f8d6e6c132b00d7f8312ded9"
+    },
+    {
+      "path": "native/round1/buxu-basic-pending-00-th_buxu-discard_cards.ngsa",
+      "bytes": 3113,
+      "sha256": "f1626c19668e1e57232d44aac950cce24814cfa9c02b270b470321726023b7b8"
+    },
+    {
+      "path": "native/round1/buxu-basic-pending-01-th_buxu-choose_chamber.ngsa",
+      "bytes": 3182,
+      "sha256": "7c6ff1add78e3e59335fc78ec0c1094b5ad89d638f732ef2f254eceef310e3d0"
+    },
+    {
+      "path": "native/round1/buxu-cancel-final.ngsa",
+      "bytes": 2937,
+      "sha256": "ba07802ab1a8c7d3449877315916319f16f5f2dc3defb9eaf58f174beea1c201"
+    },
+    {
+      "path": "native/round1/buxu-cancel-pending-00-th_buxu-discard_cards.ngsa",
+      "bytes": 3113,
+      "sha256": "f1626c19668e1e57232d44aac950cce24814cfa9c02b270b470321726023b7b8"
+    },
+    {
+      "path": "native/round1/buxu-empty-final.ngsa",
+      "bytes": 2908,
+      "sha256": "2209814bc254f5e165ada0dd745bfd88915d720358bf807b0e612f7030680e60"
+    },
+    {
+      "path": "native/round1/buxu-equip-final.ngsa",
+      "bytes": 3147,
+      "sha256": "ee02d7cfea30ebc14d462502f5d5aa9f42d082ebcbd62da4e68aa3e50c4cf3fb"
+    },
+    {
+      "path": "native/round1/buxu-equip-pending-00-th_buxu-discard_cards.ngsa",
+      "bytes": 3113,
+      "sha256": "f1626c19668e1e57232d44aac950cce24814cfa9c02b270b470321726023b7b8"
+    },
+    {
+      "path": "native/round1/buxu-equip-pending-01-th_buxu-choose_chamber.ngsa",
+      "bytes": 3182,
+      "sha256": "7c6ff1add78e3e59335fc78ec0c1094b5ad89d638f732ef2f254eceef310e3d0"
+    },
+    {
+      "path": "native/round1/buxu-full-final.ngsa",
+      "bytes": 3000,
+      "sha256": "86a1d25d0777f9772ad168e6b40c73a0e893ed65b50a0f9a8f5bdcfda9bb3cae"
+    },
+    {
+      "path": "native/round1/buxu-invalid-final.ngsa",
+      "bytes": 3147,
+      "sha256": "7ac51eae7e64c98642cf14b1c27ea00b820fa98c9e9de9358d5b4a02ca71305b"
+    },
+    {
+      "path": "native/round1/buxu-invalid-pending-00-th_buxu-discard_cards.ngsa",
+      "bytes": 3113,
+      "sha256": "f1626c19668e1e57232d44aac950cce24814cfa9c02b270b470321726023b7b8"
+    },
+    {
+      "path": "native/round1/buxu-invalid-pending-01-th_buxu-choose_chamber.ngsa",
+      "bytes": 3182,
+      "sha256": "7c6ff1add78e3e59335fc78ec0c1094b5ad89d638f732ef2f254eceef310e3d0"
+    },
+    {
+      "path": "native/round1/buxu-invalid-pending-02-th_buxu-choose_chamber.ngsa",
+      "bytes": 3182,
+      "sha256": "7c6ff1add78e3e59335fc78ec0c1094b5ad89d638f732ef2f254eceef310e3d0"
+    },
+    {
+      "path": "native/round1/buxu-nullify-final.ngsa",
+      "bytes": 3147,
+      "sha256": "6b4f8e1afc9088f2c152f358bfcd611bf8cc9cb4bb1f2f8466b67de91434ea75"
+    },
+    {
+      "path": "native/round1/buxu-nullify-pending-00-th_buxu-discard_cards.ngsa",
+      "bytes": 3113,
+      "sha256": "f1626c19668e1e57232d44aac950cce24814cfa9c02b270b470321726023b7b8"
+    },
+    {
+      "path": "native/round1/buxu-nullify-pending-01-th_buxu-choose_chamber.ngsa",
+      "bytes": 3182,
+      "sha256": "7c6ff1add78e3e59335fc78ec0c1094b5ad89d638f732ef2f254eceef310e3d0"
+    },
+    {
+      "path": "native/round1/buxu-twice-final.ngsa",
+      "bytes": 3147,
+      "sha256": "1e9a0afc04a07b7848345204cddec019b5ab4d813b4a3da0daea34dfc533a7c0"
+    },
+    {
+      "path": "native/round1/buxu-twice-pending-00-th_buxu-discard_cards.ngsa",
+      "bytes": 3113,
+      "sha256": "f1626c19668e1e57232d44aac950cce24814cfa9c02b270b470321726023b7b8"
+    },
+    {
+      "path": "native/round1/buxu-twice-pending-01-th_buxu-choose_chamber.ngsa",
+      "bytes": 3182,
+      "sha256": "7c6ff1add78e3e59335fc78ec0c1094b5ad89d638f732ef2f254eceef310e3d0"
+    },
+    {
+      "path": "native/round1/buxu-twice-pending-02-th_buxu-discard_cards.ngsa",
+      "bytes": 3295,
+      "sha256": "4061ba140a763296b45726c2c66f4a2d395f56c613cc203a15b36b7be42e8a44"
+    },
+    {
+      "path": "native/round1/buxu-twice-pending-03-th_buxu-choose_chamber.ngsa",
+      "bytes": 3407,
+      "sha256": "ed0d38c98df52953a3c802db322a99a1234b97e653232334b8c7afa30bba6e93"
+    },
+    {
+      "path": "native/round1/formal-frozen-package.json",
+      "bytes": 7087,
+      "sha256": "888e8e52a1cd9d94dbfabc3e7d16862ae9eda7056f1ad092ef8ba1ebb4414605"
+    },
+    {
+      "path": "native/round1/yeyan-cancel-final.ngsa",
+      "bytes": 2938,
+      "sha256": "96e8dc81bbfb351ca0f0ec9c594388f521697c3ed1f731ea4f870bd7c5eaa616"
+    },
+    {
+      "path": "native/round1/yeyan-cancel-pending-00-th_yeyan-choose_mode.ngsa",
+      "bytes": 3103,
+      "sha256": "778ac67e6ca6fe720f89c25feca646b86622635a651561b055a4ffec2fb80a9d"
+    },
+    {
+      "path": "native/round1/yeyan-great-one-final.ngsa",
+      "bytes": 3077,
+      "sha256": "299130771d3c8a4a73c9f89df38152bbf7efac88913a752dfe138f7055cb0be4"
+    },
+    {
+      "path": "native/round1/yeyan-great-one-pending-00-th_yeyan-choose_mode.ngsa",
+      "bytes": 3103,
+      "sha256": "778ac67e6ca6fe720f89c25feca646b86622635a651561b055a4ffec2fb80a9d"
+    },
+    {
+      "path": "native/round1/yeyan-great-one-pending-01-th_yeyan-choose_targets.ngsa",
+      "bytes": 3144,
+      "sha256": "4d77bf6aa9be1f63c5073125c0e3da62393d19e91be31bb6372c9b86999202ab"
+    },
+    {
+      "path": "native/round1/yeyan-great-one-pending-02-th_yeyan-discard_cards.ngsa",
+      "bytes": 3148,
+      "sha256": "1de704c4ec37f1457dfc9f3853d61648daaee44e2d7f5be100cae599a6343565"
+    },
+    {
+      "path": "native/round1/yeyan-great-split-final.ngsa",
+      "bytes": 3077,
+      "sha256": "313a0040dc6555d5ffe697395ef4e8738deac19fbe3c0e90433bbf25ce6304e2"
+    },
+    {
+      "path": "native/round1/yeyan-great-split-pending-00-th_yeyan-choose_mode.ngsa",
+      "bytes": 3103,
+      "sha256": "778ac67e6ca6fe720f89c25feca646b86622635a651561b055a4ffec2fb80a9d"
+    },
+    {
+      "path": "native/round1/yeyan-great-split-pending-01-th_yeyan-choose_targets.ngsa",
+      "bytes": 3144,
+      "sha256": "4d77bf6aa9be1f63c5073125c0e3da62393d19e91be31bb6372c9b86999202ab"
+    },
+    {
+      "path": "native/round1/yeyan-great-split-pending-02-th_yeyan-discard_cards.ngsa",
+      "bytes": 3149,
+      "sha256": "f044e5fdec00e7cbcd0cc0979cd2c4008043aa59bee6400f661ee55f64c6ae97"
+    },
+    {
+      "path": "native/round1/yeyan-no-four-final.ngsa",
+      "bytes": 3051,
+      "sha256": "dd05b54edeb7f4ca4a4e5d62bfc5889bb3f3e15dd78677754a15468e6b8cc394"
+    },
+    {
+      "path": "native/round1/yeyan-no-four-pending-00-th_yeyan-choose_mode.ngsa",
+      "bytes": 3101,
+      "sha256": "aa76a67180fecc823aacf22f1eb0001b19bcf313b99dcd18a59e8e1703519392"
+    },
+    {
+      "path": "native/round1/yeyan-no-four-pending-01-th_yeyan-choose_mode.ngsa",
+      "bytes": 3101,
+      "sha256": "aa76a67180fecc823aacf22f1eb0001b19bcf313b99dcd18a59e8e1703519392"
+    },
+    {
+      "path": "native/round1/yeyan-no-four-pending-02-th_yeyan-choose_targets.ngsa",
+      "bytes": 3118,
+      "sha256": "a0e1846d537bb635644afbcf8dab345b37df45f142dc4968f6e22b950b914cb9"
+    },
+    {
+      "path": "native/round1/yeyan-small-one-final.ngsa",
+      "bytes": 3051,
+      "sha256": "9e3f742d1e742d479e68ab87e421f49feb216ac6470e1d3581b085974df4b44f"
+    },
+    {
+      "path": "native/round1/yeyan-small-one-pending-00-th_yeyan-choose_mode.ngsa",
+      "bytes": 3103,
+      "sha256": "778ac67e6ca6fe720f89c25feca646b86622635a651561b055a4ffec2fb80a9d"
+    },
+    {
+      "path": "native/round1/yeyan-small-one-pending-01-th_yeyan-choose_targets.ngsa",
+      "bytes": 3118,
+      "sha256": "2c094fe57e8a995f8ebc796c980a8861fe89c140268b8df330ffdec878fd0145"
+    },
+    {
+      "path": "native/round1/yeyan-small-three-final.ngsa",
+      "bytes": 3051,
+      "sha256": "a3989cc552c2f2d0403dc6feca9226074ff6b68abd9d664a3ef7c4073ce66719"
+    },
+    {
+      "path": "native/round1/yeyan-small-three-pending-00-th_yeyan-choose_mode.ngsa",
+      "bytes": 3103,
+      "sha256": "778ac67e6ca6fe720f89c25feca646b86622635a651561b055a4ffec2fb80a9d"
+    },
+    {
+      "path": "native/round1/yeyan-small-three-pending-01-th_yeyan-choose_targets.ngsa",
+      "bytes": 3118,
+      "sha256": "2c094fe57e8a995f8ebc796c980a8861fe89c140268b8df330ffdec878fd0145"
+    },
+    {
+      "path": "native/round1/yeyan-used-final.ngsa",
+      "bytes": 2934,
+      "sha256": "6600acc6781ac0f07ab60345eb480465bf85c913a3bb8f57701378ead9f3f9fa"
+    },
+    {
+      "path": "native/round1/zhengjing-cancel-final.ngsa",
+      "bytes": 2942,
+      "sha256": "cc432611d6d27533af0a6a308555f3f3fd8c9590911ade672eda43c8e8e27587"
+    },
+    {
+      "path": "native/round1/zhengjing-cancel-pending-00-th_zhengjing-choose_count.ngsa",
+      "bytes": 3124,
+      "sha256": "9854c15c9be9aa0c88dac55501f4a997648701f6de13ba25ff8da5a1c1ee02c6"
+    },
+    {
+      "path": "native/round1/zhengjing-no-skill-final.ngsa",
+      "bytes": 2900,
+      "sha256": "d65041ea0ee0305f71b50a7091d02f07d4f2ccc1f8de0adee2dd45361cc6be0b"
+    },
+    {
+      "path": "native/round1/zhengjing-one-self-final.ngsa",
+      "bytes": 3029,
+      "sha256": "6316c4dfd9a35bcb04cccd1bb9aa2ab10831ad2890edb846ade23f424109766e"
+    },
+    {
+      "path": "native/round1/zhengjing-one-self-pending-00-th_zhengjing-choose_count.ngsa",
+      "bytes": 3124,
+      "sha256": "9854c15c9be9aa0c88dac55501f4a997648701f6de13ba25ff8da5a1c1ee02c6"
+    },
+    {
+      "path": "native/round1/zhengjing-one-self-pending-01-th_zhengjing-choose_target.ngsa",
+      "bytes": 3165,
+      "sha256": "59c35e2dbe65c26e19531e09f0c5acb714f3a83c3e61af4dcdd414a7bb5cd4fb"
+    },
+    {
+      "path": "native/round1/zhengjing-three-target-final.ngsa",
+      "bytes": 3029,
+      "sha256": "f49173e866b6c7baa2700cd8ec9a862bd50c6eecd7549320631c84b8b87594b5"
+    },
+    {
+      "path": "native/round1/zhengjing-three-target-pending-00-th_zhengjing-choose_count.ngsa",
+      "bytes": 3124,
+      "sha256": "9854c15c9be9aa0c88dac55501f4a997648701f6de13ba25ff8da5a1c1ee02c6"
+    },
+    {
+      "path": "native/round1/zhengjing-three-target-pending-01-th_zhengjing-choose_target.ngsa",
+      "bytes": 3173,
+      "sha256": "bc9538fa92a2994728f82b6ec01631e8ac6cab6610b5c82b765c6f9e6eaf7eb0"
+    },
+    {
+      "path": "native/round1/zhengjing-zero-final.ngsa",
+      "bytes": 3059,
+      "sha256": "68c71895f1d10ae75df4c4b68630e32713e3564c3a740cd4183021746bb044c3"
+    },
+    {
+      "path": "native/round1/zhengjing-zero-pending-00-th_zhengjing-choose_count.ngsa",
+      "bytes": 3124,
+      "sha256": "9854c15c9be9aa0c88dac55501f4a997648701f6de13ba25ff8da5a1c1ee02c6"
+    },
+    {
+      "path": "native/round1-command.json",
+      "bytes": 573,
+      "sha256": "8537d550261f2ec91450e8833a284dd0af040b5b3a1736c0f90880856372e5ef"
+    },
+    {
+      "path": "native/round1-exit.json",
+      "bytes": 18,
+      "sha256": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d"
+    },
+    {
+      "path": "native/round1.jsonl",
+      "bytes": 1223886,
+      "sha256": "f4b5470749c5ff7107619f3b5a5552a167cf4ce5658a37bd0a208d221eade464"
+    },
+    {
+      "path": "native/round1.stderr",
+      "bytes": 311,
+      "sha256": "a21e62751950dc09d2238f839f615ec257ac8785c9bcd1c1cd112f9eec3734c9"
+    },
+    {
+      "path": "native/round2/buxu-basic-final.ngsa",
+      "bytes": 3147,
+      "sha256": "f0b4451d0ca4b2f6c313f59bdd04bc87d9873755f8d6e6c132b00d7f8312ded9"
+    },
+    {
+      "path": "native/round2/buxu-basic-pending-00-th_buxu-discard_cards.ngsa",
+      "bytes": 3113,
+      "sha256": "f1626c19668e1e57232d44aac950cce24814cfa9c02b270b470321726023b7b8"
+    },
+    {
+      "path": "native/round2/buxu-basic-pending-01-th_buxu-choose_chamber.ngsa",
+      "bytes": 3182,
+      "sha256": "7c6ff1add78e3e59335fc78ec0c1094b5ad89d638f732ef2f254eceef310e3d0"
+    },
+    {
+      "path": "native/round2/buxu-cancel-final.ngsa",
+      "bytes": 2937,
+      "sha256": "ba07802ab1a8c7d3449877315916319f16f5f2dc3defb9eaf58f174beea1c201"
+    },
+    {
+      "path": "native/round2/buxu-cancel-pending-00-th_buxu-discard_cards.ngsa",
+      "bytes": 3113,
+      "sha256": "f1626c19668e1e57232d44aac950cce24814cfa9c02b270b470321726023b7b8"
+    },
+    {
+      "path": "native/round2/buxu-empty-final.ngsa",
+      "bytes": 2908,
+      "sha256": "2209814bc254f5e165ada0dd745bfd88915d720358bf807b0e612f7030680e60"
+    },
+    {
+      "path": "native/round2/buxu-equip-final.ngsa",
+      "bytes": 3147,
+      "sha256": "ee02d7cfea30ebc14d462502f5d5aa9f42d082ebcbd62da4e68aa3e50c4cf3fb"
+    },
+    {
+      "path": "native/round2/buxu-equip-pending-00-th_buxu-discard_cards.ngsa",
+      "bytes": 3113,
+      "sha256": "f1626c19668e1e57232d44aac950cce24814cfa9c02b270b470321726023b7b8"
+    },
+    {
+      "path": "native/round2/buxu-equip-pending-01-th_buxu-choose_chamber.ngsa",
+      "bytes": 3182,
+      "sha256": "7c6ff1add78e3e59335fc78ec0c1094b5ad89d638f732ef2f254eceef310e3d0"
+    },
+    {
+      "path": "native/round2/buxu-full-final.ngsa",
+      "bytes": 3000,
+      "sha256": "86a1d25d0777f9772ad168e6b40c73a0e893ed65b50a0f9a8f5bdcfda9bb3cae"
+    },
+    {
+      "path": "native/round2/buxu-invalid-final.ngsa",
+      "bytes": 3147,
+      "sha256": "7ac51eae7e64c98642cf14b1c27ea00b820fa98c9e9de9358d5b4a02ca71305b"
+    },
+    {
+      "path": "native/round2/buxu-invalid-pending-00-th_buxu-discard_cards.ngsa",
+      "bytes": 3113,
+      "sha256": "f1626c19668e1e57232d44aac950cce24814cfa9c02b270b470321726023b7b8"
+    },
+    {
+      "path": "native/round2/buxu-invalid-pending-01-th_buxu-choose_chamber.ngsa",
+      "bytes": 3182,
+      "sha256": "7c6ff1add78e3e59335fc78ec0c1094b5ad89d638f732ef2f254eceef310e3d0"
+    },
+    {
+      "path": "native/round2/buxu-invalid-pending-02-th_buxu-choose_chamber.ngsa",
+      "bytes": 3182,
+      "sha256": "7c6ff1add78e3e59335fc78ec0c1094b5ad89d638f732ef2f254eceef310e3d0"
+    },
+    {
+      "path": "native/round2/buxu-nullify-final.ngsa",
+      "bytes": 3147,
+      "sha256": "6b4f8e1afc9088f2c152f358bfcd611bf8cc9cb4bb1f2f8466b67de91434ea75"
+    },
+    {
+      "path": "native/round2/buxu-nullify-pending-00-th_buxu-discard_cards.ngsa",
+      "bytes": 3113,
+      "sha256": "f1626c19668e1e57232d44aac950cce24814cfa9c02b270b470321726023b7b8"
+    },
+    {
+      "path": "native/round2/buxu-nullify-pending-01-th_buxu-choose_chamber.ngsa",
+      "bytes": 3182,
+      "sha256": "7c6ff1add78e3e59335fc78ec0c1094b5ad89d638f732ef2f254eceef310e3d0"
+    },
+    {
+      "path": "native/round2/buxu-twice-final.ngsa",
+      "bytes": 3147,
+      "sha256": "1e9a0afc04a07b7848345204cddec019b5ab4d813b4a3da0daea34dfc533a7c0"
+    },
+    {
+      "path": "native/round2/buxu-twice-pending-00-th_buxu-discard_cards.ngsa",
+      "bytes": 3113,
+      "sha256": "f1626c19668e1e57232d44aac950cce24814cfa9c02b270b470321726023b7b8"
+    },
+    {
+      "path": "native/round2/buxu-twice-pending-01-th_buxu-choose_chamber.ngsa",
+      "bytes": 3182,
+      "sha256": "7c6ff1add78e3e59335fc78ec0c1094b5ad89d638f732ef2f254eceef310e3d0"
+    },
+    {
+      "path": "native/round2/buxu-twice-pending-02-th_buxu-discard_cards.ngsa",
+      "bytes": 3295,
+      "sha256": "4061ba140a763296b45726c2c66f4a2d395f56c613cc203a15b36b7be42e8a44"
+    },
+    {
+      "path": "native/round2/buxu-twice-pending-03-th_buxu-choose_chamber.ngsa",
+      "bytes": 3407,
+      "sha256": "ed0d38c98df52953a3c802db322a99a1234b97e653232334b8c7afa30bba6e93"
+    },
+    {
+      "path": "native/round2/formal-frozen-package.json",
+      "bytes": 7087,
+      "sha256": "888e8e52a1cd9d94dbfabc3e7d16862ae9eda7056f1ad092ef8ba1ebb4414605"
+    },
+    {
+      "path": "native/round2/yeyan-cancel-final.ngsa",
+      "bytes": 2938,
+      "sha256": "96e8dc81bbfb351ca0f0ec9c594388f521697c3ed1f731ea4f870bd7c5eaa616"
+    },
+    {
+      "path": "native/round2/yeyan-cancel-pending-00-th_yeyan-choose_mode.ngsa",
+      "bytes": 3103,
+      "sha256": "778ac67e6ca6fe720f89c25feca646b86622635a651561b055a4ffec2fb80a9d"
+    },
+    {
+      "path": "native/round2/yeyan-great-discard-cancel-final.ngsa",
+      "bytes": 2964,
+      "sha256": "5ff14c05de1b6d967f6d867f6fecd3ba1d64900d6dc2ace644ef6ea09338b41a"
+    },
+    {
+      "path": "native/round2/yeyan-great-discard-cancel-pending-00-th_yeyan-choose_mode.ngsa",
+      "bytes": 3103,
+      "sha256": "778ac67e6ca6fe720f89c25feca646b86622635a651561b055a4ffec2fb80a9d"
+    },
+    {
+      "path": "native/round2/yeyan-great-discard-cancel-pending-01-th_yeyan-choose_targets.ngsa",
+      "bytes": 3144,
+      "sha256": "4d77bf6aa9be1f63c5073125c0e3da62393d19e91be31bb6372c9b86999202ab"
+    },
+    {
+      "path": "native/round2/yeyan-great-discard-cancel-pending-02-th_yeyan-discard_cards.ngsa",
+      "bytes": 3148,
+      "sha256": "1de704c4ec37f1457dfc9f3853d61648daaee44e2d7f5be100cae599a6343565"
+    },
+    {
+      "path": "native/round2/yeyan-great-one-final.ngsa",
+      "bytes": 3077,
+      "sha256": "299130771d3c8a4a73c9f89df38152bbf7efac88913a752dfe138f7055cb0be4"
+    },
+    {
+      "path": "native/round2/yeyan-great-one-pending-00-th_yeyan-choose_mode.ngsa",
+      "bytes": 3103,
+      "sha256": "778ac67e6ca6fe720f89c25feca646b86622635a651561b055a4ffec2fb80a9d"
+    },
+    {
+      "path": "native/round2/yeyan-great-one-pending-01-th_yeyan-choose_targets.ngsa",
+      "bytes": 3144,
+      "sha256": "4d77bf6aa9be1f63c5073125c0e3da62393d19e91be31bb6372c9b86999202ab"
+    },
+    {
+      "path": "native/round2/yeyan-great-one-pending-02-th_yeyan-discard_cards.ngsa",
+      "bytes": 3148,
+      "sha256": "1de704c4ec37f1457dfc9f3853d61648daaee44e2d7f5be100cae599a6343565"
+    },
+    {
+      "path": "native/round2/yeyan-great-split-final.ngsa",
+      "bytes": 3077,
+      "sha256": "313a0040dc6555d5ffe697395ef4e8738deac19fbe3c0e90433bbf25ce6304e2"
+    },
+    {
+      "path": "native/round2/yeyan-great-split-pending-00-th_yeyan-choose_mode.ngsa",
+      "bytes": 3103,
+      "sha256": "778ac67e6ca6fe720f89c25feca646b86622635a651561b055a4ffec2fb80a9d"
+    },
+    {
+      "path": "native/round2/yeyan-great-split-pending-01-th_yeyan-choose_targets.ngsa",
+      "bytes": 3144,
+      "sha256": "4d77bf6aa9be1f63c5073125c0e3da62393d19e91be31bb6372c9b86999202ab"
+    },
+    {
+      "path": "native/round2/yeyan-great-split-pending-02-th_yeyan-discard_cards.ngsa",
+      "bytes": 3149,
+      "sha256": "f044e5fdec00e7cbcd0cc0979cd2c4008043aa59bee6400f661ee55f64c6ae97"
+    },
+    {
+      "path": "native/round2/yeyan-no-four-final.ngsa",
+      "bytes": 3051,
+      "sha256": "dd05b54edeb7f4ca4a4e5d62bfc5889bb3f3e15dd78677754a15468e6b8cc394"
+    },
+    {
+      "path": "native/round2/yeyan-no-four-pending-00-th_yeyan-choose_mode.ngsa",
+      "bytes": 3101,
+      "sha256": "aa76a67180fecc823aacf22f1eb0001b19bcf313b99dcd18a59e8e1703519392"
+    },
+    {
+      "path": "native/round2/yeyan-no-four-pending-01-th_yeyan-choose_mode.ngsa",
+      "bytes": 3101,
+      "sha256": "aa76a67180fecc823aacf22f1eb0001b19bcf313b99dcd18a59e8e1703519392"
+    },
+    {
+      "path": "native/round2/yeyan-no-four-pending-02-th_yeyan-choose_targets.ngsa",
+      "bytes": 3118,
+      "sha256": "a0e1846d537bb635644afbcf8dab345b37df45f142dc4968f6e22b950b914cb9"
+    },
+    {
+      "path": "native/round2/yeyan-small-one-final.ngsa",
+      "bytes": 3051,
+      "sha256": "9e3f742d1e742d479e68ab87e421f49feb216ac6470e1d3581b085974df4b44f"
+    },
+    {
+      "path": "native/round2/yeyan-small-one-pending-00-th_yeyan-choose_mode.ngsa",
+      "bytes": 3103,
+      "sha256": "778ac67e6ca6fe720f89c25feca646b86622635a651561b055a4ffec2fb80a9d"
+    },
+    {
+      "path": "native/round2/yeyan-small-one-pending-01-th_yeyan-choose_targets.ngsa",
+      "bytes": 3118,
+      "sha256": "2c094fe57e8a995f8ebc796c980a8861fe89c140268b8df330ffdec878fd0145"
+    },
+    {
+      "path": "native/round2/yeyan-small-three-final.ngsa",
+      "bytes": 3051,
+      "sha256": "a3989cc552c2f2d0403dc6feca9226074ff6b68abd9d664a3ef7c4073ce66719"
+    },
+    {
+      "path": "native/round2/yeyan-small-three-pending-00-th_yeyan-choose_mode.ngsa",
+      "bytes": 3103,
+      "sha256": "778ac67e6ca6fe720f89c25feca646b86622635a651561b055a4ffec2fb80a9d"
+    },
+    {
+      "path": "native/round2/yeyan-small-three-pending-01-th_yeyan-choose_targets.ngsa",
+      "bytes": 3118,
+      "sha256": "2c094fe57e8a995f8ebc796c980a8861fe89c140268b8df330ffdec878fd0145"
+    },
+    {
+      "path": "native/round2/yeyan-target-cancel-final.ngsa",
+      "bytes": 2938,
+      "sha256": "5fc69da5e922c13e776ed74a42747cc6b426e4450de7209796a13d73943fbac1"
+    },
+    {
+      "path": "native/round2/yeyan-target-cancel-pending-00-th_yeyan-choose_mode.ngsa",
+      "bytes": 3103,
+      "sha256": "778ac67e6ca6fe720f89c25feca646b86622635a651561b055a4ffec2fb80a9d"
+    },
+    {
+      "path": "native/round2/yeyan-target-cancel-pending-01-th_yeyan-choose_targets.ngsa",
+      "bytes": 3118,
+      "sha256": "2c094fe57e8a995f8ebc796c980a8861fe89c140268b8df330ffdec878fd0145"
+    },
+    {
+      "path": "native/round2/yeyan-used-final.ngsa",
+      "bytes": 2934,
+      "sha256": "6600acc6781ac0f07ab60345eb480465bf85c913a3bb8f57701378ead9f3f9fa"
+    },
+    {
+      "path": "native/round2/zhengjing-cancel-final.ngsa",
+      "bytes": 2942,
+      "sha256": "cc432611d6d27533af0a6a308555f3f3fd8c9590911ade672eda43c8e8e27587"
+    },
+    {
+      "path": "native/round2/zhengjing-cancel-pending-00-th_zhengjing-choose_count.ngsa",
+      "bytes": 3124,
+      "sha256": "9854c15c9be9aa0c88dac55501f4a997648701f6de13ba25ff8da5a1c1ee02c6"
+    },
+    {
+      "path": "native/round2/zhengjing-no-skill-final.ngsa",
+      "bytes": 2900,
+      "sha256": "d65041ea0ee0305f71b50a7091d02f07d4f2ccc1f8de0adee2dd45361cc6be0b"
+    },
+    {
+      "path": "native/round2/zhengjing-one-self-final.ngsa",
+      "bytes": 3029,
+      "sha256": "6316c4dfd9a35bcb04cccd1bb9aa2ab10831ad2890edb846ade23f424109766e"
+    },
+    {
+      "path": "native/round2/zhengjing-one-self-pending-00-th_zhengjing-choose_count.ngsa",
+      "bytes": 3124,
+      "sha256": "9854c15c9be9aa0c88dac55501f4a997648701f6de13ba25ff8da5a1c1ee02c6"
+    },
+    {
+      "path": "native/round2/zhengjing-one-self-pending-01-th_zhengjing-choose_target.ngsa",
+      "bytes": 3165,
+      "sha256": "59c35e2dbe65c26e19531e09f0c5acb714f3a83c3e61af4dcdd414a7bb5cd4fb"
+    },
+    {
+      "path": "native/round2/zhengjing-three-target-final.ngsa",
+      "bytes": 3029,
+      "sha256": "f49173e866b6c7baa2700cd8ec9a862bd50c6eecd7549320631c84b8b87594b5"
+    },
+    {
+      "path": "native/round2/zhengjing-three-target-pending-00-th_zhengjing-choose_count.ngsa",
+      "bytes": 3124,
+      "sha256": "9854c15c9be9aa0c88dac55501f4a997648701f6de13ba25ff8da5a1c1ee02c6"
+    },
+    {
+      "path": "native/round2/zhengjing-three-target-pending-01-th_zhengjing-choose_target.ngsa",
+      "bytes": 3173,
+      "sha256": "bc9538fa92a2994728f82b6ec01631e8ac6cab6610b5c82b765c6f9e6eaf7eb0"
+    },
+    {
+      "path": "native/round2/zhengjing-zero-final.ngsa",
+      "bytes": 3059,
+      "sha256": "68c71895f1d10ae75df4c4b68630e32713e3564c3a740cd4183021746bb044c3"
+    },
+    {
+      "path": "native/round2/zhengjing-zero-pending-00-th_zhengjing-choose_count.ngsa",
+      "bytes": 3124,
+      "sha256": "9854c15c9be9aa0c88dac55501f4a997648701f6de13ba25ff8da5a1c1ee02c6"
+    },
+    {
+      "path": "native/round2-command.json",
+      "bytes": 534,
+      "sha256": "b63f34f3b5ed977eaba49865e19ab5f7f021ad35410e89492ee466af7a4c1e97"
+    },
+    {
+      "path": "native/round2-exit.json",
+      "bytes": 18,
+      "sha256": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d"
+    },
+    {
+      "path": "native/round2.jsonl",
+      "bytes": 1372904,
+      "sha256": "3fe8850398c92045a0771fb2f068b1a5cf46cd70bf84b57bc8741eb2a872dc6d"
+    },
+    {
+      "path": "native/round2.stderr",
+      "bytes": 255,
+      "sha256": "df40c56d8558995ecf861d626a4432ade3cb12265c7372ed4f256b6be443fdb2"
+    },
+    {
+      "path": "publication-boundary-inputs.json",
+      "bytes": 4256,
+      "sha256": "f2646dc1e1b36f7f4d73cf30deb9db8aa4728a886a1165c33fb97da5e8a31dfa"
+    },
+    {
+      "path": "raw-input-index.json",
+      "bytes": 227320,
+      "sha256": "a91b0c8463c4352e89d11bf33150bf4391aca2d72c5d695226244c4aaa51b75c"
+    },
+    {
+      "path": "session-l28-1794595037613-events.jsonl",
+      "bytes": 763312,
+      "sha256": "dfa4b920ce78b8d5a94e0713a60b683ef169a39b7fa74182c60a12ec0ee9041e"
+    },
+    {
+      "path": "session-l28-1794595037613-http.jsonl",
+      "bytes": 905206,
+      "sha256": "cd66511c210b5e730ad07b4d0824a13b362284908d6485dd573f875ab85ca6ca"
+    },
+    {
+      "path": "session-l28-1794595037613-replies.jsonl",
+      "bytes": 26147667,
+      "sha256": "2c50efeed01b61d005e40ced8a7e35112a7118eff2631915376f5ed5263b0d4a"
+    },
+    {
+      "path": "session-l28-1794595037613-requests.jsonl",
+      "bytes": 12408011,
+      "sha256": "399184776ca373795974d11efe9338633c779fc33d39ce6c4a3048793efb1efc"
+    },
+    {
+      "path": "source-comparison.md",
+      "bytes": 9487,
+      "sha256": "fff648ca3991e27cba7e12cda8e6e44d09c2f38c83d5ae961332cabbe282f199"
+    },
+    {
+      "path": "upstream/card-first-extraction-error.txt",
+      "bytes": 139,
+      "sha256": "ea6a55e78bb84da97bf9e22eed3fe271753812d2c76a3837a7b1b455aa03b0d2"
+    },
+    {
+      "path": "upstream/card-original.js",
+      "bytes": 1907,
+      "sha256": "e33be1e706cac07fd6f747af2aca0062d8f59c1b2e4d28d657dc1eebf3b838f5"
+    },
+    {
+      "path": "upstream/card-source.json",
+      "bytes": 309,
+      "sha256": "79e7fbc8cd2362285d540c5e21086a2e6c8a04b46cdf71fcc22839f20b9b9cf6"
+    },
+    {
+      "path": "upstream/extraction-first-error.txt",
+      "bytes": 211,
+      "sha256": "46aaa2a0398ca3eb5adcfd4d2f921793b72dda2947ad89679c9e668770b2ef92"
+    },
+    {
+      "path": "upstream/helpers-original.js",
+      "bytes": 18504,
+      "sha256": "be377ea35e66532dbf5e782df4df8bdcb014fbeec8910de0038b9450b081cc89"
+    },
+    {
+      "path": "upstream/skills-original.js",
+      "bytes": 41107,
+      "sha256": "b271a5c600fc923e0f4d2360b311ba91695729d4ae2c6ecc3675a46e27c9c186"
+    },
+    {
+      "path": "upstream/source-slices.json",
+      "bytes": 4481,
+      "sha256": "f2da2d853d74b632a23c85b2ee4930fc267f7a47efbc13aff134a7a174afd540"
+    }
+  ],
+  "file_count_excluding_manifest": 354,
+  "total_bytes_excluding_manifest": 91410066
+}

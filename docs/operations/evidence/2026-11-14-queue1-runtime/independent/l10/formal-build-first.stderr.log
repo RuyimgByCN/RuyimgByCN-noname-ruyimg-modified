@@ -1,0 +1,12 @@
+     Locking 33 packages to highest compatible versions
+   Compiling l10-independent-formal-probe v0.0.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/independent/l10/formal-probe)
+warning: unused import: `Suit`
+ --> src/main.rs:3:40
+  |
+3 | use engine_native::catalog::{CardKind, Suit};
+  |                                        ^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `l10-independent-formal-probe` (bin "l10-independent-formal-probe") generated 1 warning (run `cargo fix --bin "l10-independent-formal-probe" -p l10-independent-formal-probe` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.21s

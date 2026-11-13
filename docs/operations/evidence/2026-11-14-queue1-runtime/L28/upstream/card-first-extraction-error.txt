@@ -1,0 +1,1 @@
+First attempted slice 8968..9025 was rejected by end-brace assertion before any file/eval. Correct actual card property ends at line 9016.

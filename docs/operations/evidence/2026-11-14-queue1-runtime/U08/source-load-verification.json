@@ -1,0 +1,12 @@
+{
+  "original_path": "../archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+  "staged_path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-runtime-modern-b789ktt1/apps/core/extension/英雄杀/character/skill.js",
+  "staged_resolved_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-runtime-modern-b789ktt1/apps/core/extension/英雄杀/character/skill.js",
+  "original_sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98",
+  "staged_sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98",
+  "disk_bytes_equal": true,
+  "disk_diff": [],
+  "vite_response": "served-skill-vite-response.txt",
+  "vite_response_sha256": "fe85d1b0f12265c11477f7e94107e221f02e8642aac86becd9fbc27b208baa68",
+  "note": "Vite rewrites the bare noname import and adds module/source-map metadata; disk rule source is recorded separately."
+}

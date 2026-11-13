@@ -1,0 +1,661 @@
+[
+  {
+    "case": "k_A",
+    "exceptions": [
+      {
+        "request_reply_line": 551,
+        "at": "2026-11-13T18:20:29.867Z",
+        "expression_kind": "setup",
+        "raw_reply": {
+          "at": "2026-11-13T18:20:29.867Z",
+          "result": {
+            "result": {
+              "type": "object",
+              "subtype": "error",
+              "className": "ReferenceError",
+              "description": "ReferenceError: dui is not defined\n    at Object.eval [as content] (eval at Legacy (http://127.0.0.1:50341/game/game.js:12132:14), <anonymous>:17:29)\n    at Object.loop (http://127.0.0.1:50341/game/game.js:41802:15)\n    at Object.resume (http://127.0.0.1:50341/game/game.js:41836:10)\n    at <anonymous>:134:8\n    at <anonymous>:136:3",
+              "objectId": "-1845823834457249673.30.2"
+            },
+            "exceptionDetails": {
+              "exceptionId": 33,
+              "text": "Uncaught",
+              "lineNumber": 16,
+              "columnNumber": 28,
+              "scriptId": "516",
+              "stackTrace": {
+                "callFrames": [
+                  {
+                    "functionName": "eval",
+                    "scriptId": "516",
+                    "url": "",
+                    "lineNumber": 16,
+                    "columnNumber": 28
+                  },
+                  {
+                    "functionName": "loop",
+                    "scriptId": "7",
+                    "url": "http://127.0.0.1:50341/game/game.js",
+                    "lineNumber": 41801,
+                    "columnNumber": 14
+                  },
+                  {
+                    "functionName": "resume",
+                    "scriptId": "7",
+                    "url": "http://127.0.0.1:50341/game/game.js",
+                    "lineNumber": 41835,
+                    "columnNumber": 9
+                  },
+                  {
+                    "functionName": "",
+                    "scriptId": "513",
+                    "url": "",
+                    "lineNumber": 133,
+                    "columnNumber": 7
+                  },
+                  {
+                    "functionName": "",
+                    "scriptId": "513",
+                    "url": "",
+                    "lineNumber": 135,
+                    "columnNumber": 2
+                  }
+                ]
+              },
+              "exception": {
+                "type": "object",
+                "subtype": "error",
+                "className": "ReferenceError",
+                "description": "ReferenceError: dui is not defined\n    at Object.eval [as content] (eval at Legacy (http://127.0.0.1:50341/game/game.js:12132:14), <anonymous>:17:29)\n    at Object.loop (http://127.0.0.1:50341/game/game.js:41802:15)\n    at Object.resume (http://127.0.0.1:50341/game/game.js:41836:10)\n    at <anonymous>:134:8\n    at <anonymous>:136:3",
+                "objectId": "-1845823834457249673.30.3"
+              }
+            }
+          }
+        }
+      },
+      {
+        "request_reply_line": 554,
+        "at": "2026-11-13T18:20:29.887Z",
+        "expression_kind": "EpicFX.initSCSAnim();true",
+        "raw_reply": {
+          "at": "2026-11-13T18:20:29.887Z",
+          "result": {
+            "result": {
+              "type": "object",
+              "subtype": "error",
+              "className": "ReferenceError",
+              "description": "ReferenceError: dcdAnim is not defined\n    at load (eval at <anonymous> (:10:14), <anonymous>:1961:11)\n    at window.EpicFX.initSCSAnim (eval at <anonymous> (:10:14), <anonymous>:1968:9)\n    at <anonymous>:1:8",
+              "objectId": "-1845823834457249673.30.4"
+            },
+            "exceptionDetails": {
+              "exceptionId": 34,
+              "text": "Uncaught",
+              "lineNumber": 1960,
+              "columnNumber": 10,
+              "scriptId": "183",
+              "stackTrace": {
+                "callFrames": [
+                  {
+                    "functionName": "load",
+                    "scriptId": "183",
+                    "url": "",
+                    "lineNumber": 1960,
+                    "columnNumber": 10
+                  },
+                  {
+                    "functionName": "window.EpicFX.initSCSAnim",
+                    "scriptId": "183",
+                    "url": "",
+                    "lineNumber": 1967,
+                    "columnNumber": 8
+                  },
+                  {
+                    "functionName": "",
+                    "scriptId": "518",
+                    "url": "",
+                    "lineNumber": 0,
+                    "columnNumber": 7
+                  }
+                ]
+              },
+              "exception": {
+                "type": "object",
+                "subtype": "error",
+                "className": "ReferenceError",
+                "description": "ReferenceError: dcdAnim is not defined\n    at load (eval at <anonymous> (:10:14), <anonymous>:1961:11)\n    at window.EpicFX.initSCSAnim (eval at <anonymous> (:10:14), <anonymous>:1968:9)\n    at <anonymous>:1:8",
+                "objectId": "-1845823834457249673.30.5"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "actual_final_stack": [
+      {
+        "name": "k_danggu",
+        "step": 0
+      },
+      {
+        "name": "trigger",
+        "step": 4,
+        "skill": "k_danggu"
+      },
+      {
+        "name": "arrangeTrigger",
+        "step": 7
+      },
+      {
+        "name": "phase",
+        "step": 0
+      },
+      {
+        "name": "l10Probe",
+        "step": 0
+      }
+    ],
+    "actual_trace": [
+      {
+        "method": "logSkill",
+        "seat": 0,
+        "args": [
+          "k_danggu",
+          false,
+          null
+        ],
+        "event": "trigger",
+        "step": 3
+      }
+    ],
+    "actual_kUI": [
+      {
+        "candidates": []
+      },
+      null,
+      null,
+      null
+    ],
+    "upstream_partner_choice_executed": false,
+    "native_final_choice": null,
+    "native_flags": [
+      {
+        "key": "k_danggu_active_eunuch",
+        "seat": 0,
+        "value": 9
+      },
+      {
+        "key": "k_danggu_active_mask",
+        "seat": 0,
+        "value": 257
+      },
+      {
+        "key": "k_danggu_back_resolved",
+        "seat": 0,
+        "value": 1
+      },
+      {
+        "key": "k_danggu_first",
+        "seat": 0,
+        "value": 8
+      },
+      {
+        "key": "k_danggu_inited",
+        "seat": 0,
+        "value": 1
+      },
+      {
+        "key": "k_danggu_partner_eunuch",
+        "seat": 0,
+        "value": 1
+      },
+      {
+        "key": "k_danggu_roster_mask",
+        "seat": 0,
+        "value": 766
+      },
+      {
+        "key": "k_danggu_triggered",
+        "seat": 0,
+        "value": 1
+      }
+    ]
+  },
+  {
+    "case": "k_B",
+    "exceptions": [
+      {
+        "request_reply_line": 562,
+        "at": "2026-11-13T18:20:31.334Z",
+        "expression_kind": "setup",
+        "raw_reply": {
+          "at": "2026-11-13T18:20:31.334Z",
+          "result": {
+            "result": {
+              "type": "object",
+              "subtype": "error",
+              "className": "ReferenceError",
+              "description": "ReferenceError: dui is not defined\n    at Object.eval [as content] (eval at Legacy (http://127.0.0.1:50341/game/game.js:12132:14), <anonymous>:17:29)\n    at Object.loop (http://127.0.0.1:50341/game/game.js:41802:15)\n    at Object.resume (http://127.0.0.1:50341/game/game.js:41836:10)\n    at <anonymous>:134:8\n    at <anonymous>:136:3",
+              "objectId": "-1845823834457249673.31.2"
+            },
+            "exceptionDetails": {
+              "exceptionId": 36,
+              "text": "Uncaught",
+              "lineNumber": 16,
+              "columnNumber": 28,
+              "scriptId": "516",
+              "stackTrace": {
+                "callFrames": [
+                  {
+                    "functionName": "eval",
+                    "scriptId": "516",
+                    "url": "",
+                    "lineNumber": 16,
+                    "columnNumber": 28
+                  },
+                  {
+                    "functionName": "loop",
+                    "scriptId": "7",
+                    "url": "http://127.0.0.1:50341/game/game.js",
+                    "lineNumber": 41801,
+                    "columnNumber": 14
+                  },
+                  {
+                    "functionName": "resume",
+                    "scriptId": "7",
+                    "url": "http://127.0.0.1:50341/game/game.js",
+                    "lineNumber": 41835,
+                    "columnNumber": 9
+                  },
+                  {
+                    "functionName": "",
+                    "scriptId": "513",
+                    "url": "",
+                    "lineNumber": 133,
+                    "columnNumber": 7
+                  },
+                  {
+                    "functionName": "",
+                    "scriptId": "513",
+                    "url": "",
+                    "lineNumber": 135,
+                    "columnNumber": 2
+                  }
+                ]
+              },
+              "exception": {
+                "type": "object",
+                "subtype": "error",
+                "className": "ReferenceError",
+                "description": "ReferenceError: dui is not defined\n    at Object.eval [as content] (eval at Legacy (http://127.0.0.1:50341/game/game.js:12132:14), <anonymous>:17:29)\n    at Object.loop (http://127.0.0.1:50341/game/game.js:41802:15)\n    at Object.resume (http://127.0.0.1:50341/game/game.js:41836:10)\n    at <anonymous>:134:8\n    at <anonymous>:136:3",
+                "objectId": "-1845823834457249673.31.3"
+              }
+            }
+          }
+        }
+      },
+      {
+        "request_reply_line": 565,
+        "at": "2026-11-13T18:20:31.358Z",
+        "expression_kind": "EpicFX.initSCSAnim();true",
+        "raw_reply": {
+          "at": "2026-11-13T18:20:31.358Z",
+          "result": {
+            "result": {
+              "type": "object",
+              "subtype": "error",
+              "className": "ReferenceError",
+              "description": "ReferenceError: dcdAnim is not defined\n    at load (eval at <anonymous> (:10:14), <anonymous>:1961:11)\n    at window.EpicFX.initSCSAnim (eval at <anonymous> (:10:14), <anonymous>:1968:9)\n    at <anonymous>:1:8",
+              "objectId": "-1845823834457249673.31.4"
+            },
+            "exceptionDetails": {
+              "exceptionId": 37,
+              "text": "Uncaught",
+              "lineNumber": 1960,
+              "columnNumber": 10,
+              "scriptId": "183",
+              "stackTrace": {
+                "callFrames": [
+                  {
+                    "functionName": "load",
+                    "scriptId": "183",
+                    "url": "",
+                    "lineNumber": 1960,
+                    "columnNumber": 10
+                  },
+                  {
+                    "functionName": "window.EpicFX.initSCSAnim",
+                    "scriptId": "183",
+                    "url": "",
+                    "lineNumber": 1967,
+                    "columnNumber": 8
+                  },
+                  {
+                    "functionName": "",
+                    "scriptId": "518",
+                    "url": "",
+                    "lineNumber": 0,
+                    "columnNumber": 7
+                  }
+                ]
+              },
+              "exception": {
+                "type": "object",
+                "subtype": "error",
+                "className": "ReferenceError",
+                "description": "ReferenceError: dcdAnim is not defined\n    at load (eval at <anonymous> (:10:14), <anonymous>:1961:11)\n    at window.EpicFX.initSCSAnim (eval at <anonymous> (:10:14), <anonymous>:1968:9)\n    at <anonymous>:1:8",
+                "objectId": "-1845823834457249673.31.5"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "actual_final_stack": [
+      {
+        "name": "k_danggu",
+        "step": 0
+      },
+      {
+        "name": "trigger",
+        "step": 4,
+        "skill": "k_danggu"
+      },
+      {
+        "name": "arrangeTrigger",
+        "step": 7
+      },
+      {
+        "name": "phase",
+        "step": 0
+      },
+      {
+        "name": "l10Probe",
+        "step": 0
+      }
+    ],
+    "actual_trace": [
+      {
+        "method": "logSkill",
+        "seat": 0,
+        "args": [
+          "k_danggu",
+          false,
+          null
+        ],
+        "event": "trigger",
+        "step": 3
+      }
+    ],
+    "actual_kUI": [
+      {
+        "candidates": []
+      },
+      null,
+      null,
+      null
+    ],
+    "upstream_partner_choice_executed": false,
+    "native_final_choice": null,
+    "native_flags": [
+      {
+        "key": "k_danggu_active_eunuch",
+        "seat": 0,
+        "value": 9
+      },
+      {
+        "key": "k_danggu_active_mask",
+        "seat": 0,
+        "value": 258
+      },
+      {
+        "key": "k_danggu_back_resolved",
+        "seat": 0,
+        "value": 1
+      },
+      {
+        "key": "k_danggu_first",
+        "seat": 0,
+        "value": 8
+      },
+      {
+        "key": "k_danggu_inited",
+        "seat": 0,
+        "value": 1
+      },
+      {
+        "key": "k_danggu_partner_eunuch",
+        "seat": 0,
+        "value": 2
+      },
+      {
+        "key": "k_danggu_roster_mask",
+        "seat": 0,
+        "value": 765
+      },
+      {
+        "key": "k_danggu_triggered",
+        "seat": 0,
+        "value": 1
+      }
+    ]
+  },
+  {
+    "case": "k_cancel",
+    "exceptions": [
+      {
+        "request_reply_line": 573,
+        "at": "2026-11-13T18:20:32.809Z",
+        "expression_kind": "setup",
+        "raw_reply": {
+          "at": "2026-11-13T18:20:32.809Z",
+          "result": {
+            "result": {
+              "type": "object",
+              "subtype": "error",
+              "className": "ReferenceError",
+              "description": "ReferenceError: dui is not defined\n    at Object.eval [as content] (eval at Legacy (http://127.0.0.1:50341/game/game.js:12132:14), <anonymous>:17:29)\n    at Object.loop (http://127.0.0.1:50341/game/game.js:41802:15)\n    at Object.resume (http://127.0.0.1:50341/game/game.js:41836:10)\n    at <anonymous>:134:8\n    at <anonymous>:136:3",
+              "objectId": "-1845823834457249673.32.2"
+            },
+            "exceptionDetails": {
+              "exceptionId": 39,
+              "text": "Uncaught",
+              "lineNumber": 16,
+              "columnNumber": 28,
+              "scriptId": "516",
+              "stackTrace": {
+                "callFrames": [
+                  {
+                    "functionName": "eval",
+                    "scriptId": "516",
+                    "url": "",
+                    "lineNumber": 16,
+                    "columnNumber": 28
+                  },
+                  {
+                    "functionName": "loop",
+                    "scriptId": "7",
+                    "url": "http://127.0.0.1:50341/game/game.js",
+                    "lineNumber": 41801,
+                    "columnNumber": 14
+                  },
+                  {
+                    "functionName": "resume",
+                    "scriptId": "7",
+                    "url": "http://127.0.0.1:50341/game/game.js",
+                    "lineNumber": 41835,
+                    "columnNumber": 9
+                  },
+                  {
+                    "functionName": "",
+                    "scriptId": "513",
+                    "url": "",
+                    "lineNumber": 133,
+                    "columnNumber": 7
+                  },
+                  {
+                    "functionName": "",
+                    "scriptId": "513",
+                    "url": "",
+                    "lineNumber": 135,
+                    "columnNumber": 2
+                  }
+                ]
+              },
+              "exception": {
+                "type": "object",
+                "subtype": "error",
+                "className": "ReferenceError",
+                "description": "ReferenceError: dui is not defined\n    at Object.eval [as content] (eval at Legacy (http://127.0.0.1:50341/game/game.js:12132:14), <anonymous>:17:29)\n    at Object.loop (http://127.0.0.1:50341/game/game.js:41802:15)\n    at Object.resume (http://127.0.0.1:50341/game/game.js:41836:10)\n    at <anonymous>:134:8\n    at <anonymous>:136:3",
+                "objectId": "-1845823834457249673.32.3"
+              }
+            }
+          }
+        }
+      },
+      {
+        "request_reply_line": 576,
+        "at": "2026-11-13T18:20:32.828Z",
+        "expression_kind": "EpicFX.initSCSAnim();true",
+        "raw_reply": {
+          "at": "2026-11-13T18:20:32.828Z",
+          "result": {
+            "result": {
+              "type": "object",
+              "subtype": "error",
+              "className": "ReferenceError",
+              "description": "ReferenceError: dcdAnim is not defined\n    at load (eval at <anonymous> (:10:14), <anonymous>:1961:11)\n    at window.EpicFX.initSCSAnim (eval at <anonymous> (:10:14), <anonymous>:1968:9)\n    at <anonymous>:1:8",
+              "objectId": "-1845823834457249673.32.4"
+            },
+            "exceptionDetails": {
+              "exceptionId": 40,
+              "text": "Uncaught",
+              "lineNumber": 1960,
+              "columnNumber": 10,
+              "scriptId": "183",
+              "stackTrace": {
+                "callFrames": [
+                  {
+                    "functionName": "load",
+                    "scriptId": "183",
+                    "url": "",
+                    "lineNumber": 1960,
+                    "columnNumber": 10
+                  },
+                  {
+                    "functionName": "window.EpicFX.initSCSAnim",
+                    "scriptId": "183",
+                    "url": "",
+                    "lineNumber": 1967,
+                    "columnNumber": 8
+                  },
+                  {
+                    "functionName": "",
+                    "scriptId": "518",
+                    "url": "",
+                    "lineNumber": 0,
+                    "columnNumber": 7
+                  }
+                ]
+              },
+              "exception": {
+                "type": "object",
+                "subtype": "error",
+                "className": "ReferenceError",
+                "description": "ReferenceError: dcdAnim is not defined\n    at load (eval at <anonymous> (:10:14), <anonymous>:1961:11)\n    at window.EpicFX.initSCSAnim (eval at <anonymous> (:10:14), <anonymous>:1968:9)\n    at <anonymous>:1:8",
+                "objectId": "-1845823834457249673.32.5"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "actual_final_stack": [
+      {
+        "name": "k_danggu",
+        "step": 0
+      },
+      {
+        "name": "trigger",
+        "step": 4,
+        "skill": "k_danggu"
+      },
+      {
+        "name": "arrangeTrigger",
+        "step": 7
+      },
+      {
+        "name": "phase",
+        "step": 0
+      },
+      {
+        "name": "l10Probe",
+        "step": 0
+      }
+    ],
+    "actual_trace": [
+      {
+        "method": "logSkill",
+        "seat": 0,
+        "args": [
+          "k_danggu",
+          false,
+          null
+        ],
+        "event": "trigger",
+        "step": 3
+      }
+    ],
+    "actual_kUI": [
+      {
+        "candidates": []
+      },
+      null,
+      null,
+      null
+    ],
+    "upstream_partner_choice_executed": false,
+    "native_final_choice": {
+      "allow_cancel": false,
+      "id": 1,
+      "kind": "PickTag",
+      "max": 1,
+      "min": 1,
+      "observer": 0,
+      "options": [
+        "Tag(0)",
+        "Tag(1)"
+      ],
+      "prompt": "k_danggu_partner"
+    },
+    "native_flags": [
+      {
+        "key": "k_danggu_active_eunuch",
+        "seat": 0,
+        "value": 9
+      },
+      {
+        "key": "k_danggu_active_mask",
+        "seat": 0,
+        "value": 0
+      },
+      {
+        "key": "k_danggu_first",
+        "seat": 0,
+        "value": 8
+      },
+      {
+        "key": "k_danggu_inited",
+        "seat": 0,
+        "value": 1
+      },
+      {
+        "key": "k_danggu_roster_mask",
+        "seat": 0,
+        "value": 767
+      },
+      {
+        "key": "k_danggu_triggered",
+        "seat": 0,
+        "value": 1
+      }
+    ]
+  }
+]

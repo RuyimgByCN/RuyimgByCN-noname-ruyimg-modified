@@ -1,0 +1,14 @@
+{
+  "command": [
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target/debug/l10-independent-formal-probe"
+  ],
+  "environment": {
+    "L10_EVIDENCE": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/independent/l10/formal-consumption02",
+    "L10_REPO": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "L10_FOLLOWUP_ONLY": "1"
+  },
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "binary_sha256": "25db551fce1d2fcfa2aafe14dc0eb5045aecd83a0e64e320c3a3b13008aaa816",
+  "source_sha256": "76ab0e7f635bb11fa5c3a248ee06f009f00e6c0c2eebc3e0d86d2b5f45c5c15a",
+  "started_utc": "2026-11-13T18:37:50.770619+00:00"
+}

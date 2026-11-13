@@ -1,0 +1,31 @@
+{
+  "at": "2026-11-14T03:11:05.872688+08:00",
+  "source_head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "tracked_dirty": true,
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "checks": [
+    {
+      "manifest": "U08/manifest.json",
+      "manifest_sha256": "7934ad115c63fd0ace23d3b3800d1e2703e621554e9db6391035f09a1185205c",
+      "files": 404,
+      "bytes": 79684128,
+      "all_hashes_match": true,
+      "all_files_covered": true
+    },
+    {
+      "manifest": "independent/u08/frozen-file-manifest.json",
+      "manifest_sha256": "16b41ca13fb93284c65a0ad2697cfa93433f58dd9894693df1c1f8714338675f",
+      "files": 514,
+      "bytes": 33608652,
+      "all_hashes_match": true,
+      "all_files_covered": true
+    }
+  ],
+  "scope": "主agent仅核原始冻结字节和完整性；语义裁定见独立复核。不重跑已通过产品门禁。"
+}

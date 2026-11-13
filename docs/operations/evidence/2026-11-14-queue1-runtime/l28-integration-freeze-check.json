@@ -1,0 +1,41 @@
+{
+  "at": "2026-11-14T03:12:33.572562+08:00",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "tracked_dirty": true,
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "checks": [
+    {
+      "manifest": "L28/frozen-file-manifest.json",
+      "manifest_sha256": "7f9120cd3c349d5bc4c346e50df6aadffc63b20dc4a4d8aea3377920b20a9136",
+      "files": 354,
+      "bytes": 91410066,
+      "all_hashes_match": true,
+      "all_files_covered": true
+    },
+    {
+      "manifest": "independent/l28/manifest.json",
+      "manifest_sha256": "2f6f40ca7482b19e0db46a4624303a39919e50efb03ae9b0d8223ae46474a5e0",
+      "files": 175,
+      "bytes": 4398117,
+      "all_hashes_match": true,
+      "all_files_covered": true
+    }
+  ],
+  "case_counts": {
+    "有限投影一致": 11,
+    "类别结算不一致": 3,
+    "源入口阻塞": 4,
+    "结算时序不一致": 3,
+    "取消交互分段不同": 1,
+    "配置维度不一致": 2,
+    "分配能力不具备": 1
+  },
+  "new_equivalence_signoffs": 0,
+  "scope": "354原始文件及175独立文件逐字节核对；只因已证业炎具体反例撤回该旧等价，不外推辅助状态或完整原牌堆等价。"
+}

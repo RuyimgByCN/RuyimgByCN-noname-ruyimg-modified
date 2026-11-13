@@ -1,0 +1,255 @@
+{
+  "source_id": "L10",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "dirty_basis": "HEAD + 主agent酒诗asks_wudian两个恢复定义及其回归；相关L10源码/包/上游8项hash从preflight到末尾均未变。其他并发文档/构建产物dirty见environment-final。",
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "new_equivalence_signoff": false,
+  "findings": [
+    {
+      "id": "L10-runtime-reguhuo-question",
+      "category": "skills",
+      "item": "reguhuo",
+      "key": "L10:skills:reguhuo@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:297",
+      "kind": "runtime_difference",
+      "severity": "high",
+      "cases": [
+        "g_sha_question_fake",
+        "g_true_question_discard",
+        "g_true_question_losehp"
+      ],
+      "observed": "上游真实经过其他三座的质疑/不质疑，假牌被质疑作废并令质疑者摸104；真牌质疑者可弃45或失1血且均获rechanyuan。原生没有质疑询问，直接结算声明牌，未作废/奖励/惩罚或授予缠怨。",
+      "upstream_refs": [
+        "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:419",
+        "archive/upstream/noname-liuli/noname/character/refresh.js:10639",
+        "archive/upstream/noname-liuli/noname/character/refresh.js:10726",
+        "archive/upstream/noname-liuli/noname/character/refresh.js:10754"
+      ],
+      "native_refs": [
+        "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs:202",
+        "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs:316"
+      ],
+      "evidence": [
+        "browser-round4/upstream-g_sha_question_fake.json",
+        "browser-round4/upstream-g_true_question_discard.json",
+        "browser-round4/upstream-g_true_question_losehp.json",
+        "native-round2/native-results.json"
+      ]
+    },
+    {
+      "id": "L10-runtime-reguhuo-response",
+      "category": "skills",
+      "item": "reguhuo",
+      "kind": "runtime_difference",
+      "severity": "high",
+      "cases": [
+        "g_response"
+      ],
+      "observed": "面对真实杀，上游座0用桃45蛊惑声明闪，三座不质疑后响应成功并维持4血。原生相同初态没有蛊惑响应入口，杀自动命中至3血且保留45。",
+      "upstream_refs": [
+        "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:300"
+      ],
+      "native_refs": [
+        "crates/engine-native-content/src/content/host/filtering/common.rs:232",
+        "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs:202"
+      ],
+      "evidence": [
+        "browser-round4/upstream-g_response.json",
+        "native-round2/native-g_response.json"
+      ]
+    },
+    {
+      "id": "L10-runtime-reguhuo-cancel-once",
+      "category": "skills",
+      "item": "reguhuo",
+      "kind": "runtime_difference",
+      "severity": "medium",
+      "cases": [
+        "g_cancel_card",
+        "g_cancel_name"
+      ],
+      "observed": "上游取消牌名/载体选择时不耗牌且不加reguhuo_phase；取消牌名后仍显示可发动reguhuo。原生进入Act就记once，取消两窗后均保留牌，但再次ActivateSkill被InvalidChoice拒绝。",
+      "upstream_refs": [
+        "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:304",
+        "archive/upstream/noname-liuli/noname/character/refresh.js:10653"
+      ],
+      "native_refs": [
+        "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs:206"
+      ],
+      "evidence": [
+        "browser-round4/upstream-g_cancel_card.json",
+        "browser-round4/upstream-g_cancel_name.json",
+        "native-round2/native-g_cancel_card.json",
+        "native-round2/native-g_cancel_name.json"
+      ]
+    },
+    {
+      "id": "L10-runtime-reguhuo-target-cancel",
+      "category": "skills",
+      "item": "reguhuo",
+      "kind": "runtime_difference",
+      "severity": "medium",
+      "cases": [
+        "g_cancel_target"
+      ],
+      "observed": "上游备份技能已选实体载体但未选目标时，点实际可见取消能退出且不耗牌、不加reguhuo_phase。原生目标窗allow_cancel=false；空答复被拒绝且目标窗仍pending。",
+      "upstream_refs": [
+        "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:365"
+      ],
+      "native_refs": [
+        "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs:285",
+        "crates/engine-native-content/src/content/host/asks_wudian.rs:843"
+      ],
+      "evidence": [
+        "browser-round4/upstream-g_cancel_target.json",
+        "native-round2/native-g_cancel_target.json"
+      ]
+    },
+    {
+      "id": "L10-runtime-rangjie-deck-search",
+      "category": "skills",
+      "item": "rangjie",
+      "key": "L10:skills:rangjie@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:422",
+      "kind": "runtime_difference",
+      "severity": "high",
+      "cases": [
+        "r_basic",
+        "r_equip",
+        "r_double"
+      ],
+      "observed": "同ID同牌面同顺序的7/8张牌堆中，摸顶104后，上游从顶检索符合类型的牌（基本45、装备114），原生core.deck.iter()从底寻找（基本85、装备118）；两伤两次选择也产生不同实体。锦囊场只有一张剩余符合牌67，有限投影相同，不能据此证明顺序一致。",
+      "upstream_refs": [
+        "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:487"
+      ],
+      "native_refs": [
+        "crates/engine-native-content/src/content/host/step/skills_cards.rs:135"
+      ],
+      "evidence": [
+        "browser-round4/upstream-r_basic.json",
+        "browser-round4/upstream-r_equip.json",
+        "browser-round4/upstream-r_double.json",
+        "native-round2/native-results.json"
+      ]
+    },
+    {
+      "id": "L10-runtime-rangjie-type-cancel",
+      "category": "skills",
+      "item": "rangjie",
+      "kind": "runtime_difference",
+      "severity": "medium",
+      "cases": [
+        "r_cancel_type"
+      ],
+      "observed": "双方已先摸104。上游chooseButton类型窗可点取消并结束；原生rangjie_type不可取消，空答复被InvalidChoice拒绝并保持pending。",
+      "upstream_refs": [
+        "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:473",
+        "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:486"
+      ],
+      "native_refs": [
+        "crates/engine-native-content/src/content/host/step/skills_cards.rs:106",
+        "crates/engine-native-content/src/content/host/asks_wudian.rs:866"
+      ],
+      "evidence": [
+        "browser-round4/upstream-r_cancel_type.json",
+        "native-round2/native-r_cancel_type.json"
+      ]
+    },
+    {
+      "id": "L10-runtime-rangjie-literal-cancel",
+      "category": "skills",
+      "item": "rangjie",
+      "kind": "runtime_difference_including_upstream_bug",
+      "severity": "medium",
+      "cases": [
+        "r_cancel_choice"
+      ],
+      "observed": "上游实际控件是中文取消，源码却仅对cancel2结束；真实点击后仍logSkill、摸104、调用moveCard。原生Tag2是真取消且不摸牌。本轮保留实际差异，不为实现消除上游异常或修改期望。",
+      "upstream_refs": [
+        "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:438",
+        "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:450"
+      ],
+      "native_refs": [
+        "crates/engine-native-content/src/content/host/step/skills_cards.rs:51",
+        "crates/engine-native-content/src/content/host/step/skills_cards.rs:77"
+      ],
+      "evidence": [
+        "browser-round4/upstream-r_cancel_choice.json",
+        "native-round2/native-r_cancel_choice.json"
+      ]
+    },
+    {
+      "id": "L10-runtime-k-danggu-ui-dependency",
+      "category": "skills",
+      "item": "k_danggu",
+      "key": "L10:skills:k_danggu@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2276",
+      "kind": "upstream_runtime_blocker",
+      "severity": "scope_boundary",
+      "cases": [
+        "k_A",
+        "k_B",
+        "k_cancel"
+      ],
+      "observed": "每个fresh场真实phaseBefore进入k_danggu step0，栈含trigger/arrangeTrigger/phase，随后dui.element.create抛ReferenceError: dui is not defined。已执行真正precontent/content（后者十周年UI未启用即返回）。另直接调用真正EpicFX.initSCSAnim，在其定义getEPICscs前调用load()，抛dcdAnim未定义。没有stub，也没有读/复制/加载任何官方或上游打包Spine运行库。",
+      "upstream_refs": [
+        "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:522",
+        "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:1953",
+        "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:1961",
+        "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:1976",
+        "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2418",
+        "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2419",
+        "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2429"
+      ],
+      "evidence": [
+        "browser-round3/upstream-k_A.json",
+        "browser-round4/upstream-k_A.json",
+        "browser-round4/upstream-k_B.json",
+        "browser-round4/upstream-k_cancel.json",
+        "session-l10-1794593358863-requests.jsonl",
+        "session-l10-1794593358863-replies.jsonl"
+      ],
+      "not_executed_upstream": [
+        "随机首常侍/伙伴候选",
+        "自定义UI伙伴A/B与取消",
+        "实际授技及伙伴效果"
+      ]
+    },
+    {
+      "id": "L10-static-k-danggu-trigger",
+      "category": "skills",
+      "item": "k_danggu",
+      "kind": "static_difference_not_browser_validated",
+      "severity": "medium",
+      "observed": "原始trigger为玩家enterGame或全局phaseBefore且phaseNumber=0；原生filter只处理owner的Phase begin、inited==0或Prepare的rest_returning。初始全局时点、入场时点与尚未初始化owner任意阶段的门控表达不同。本轮只实跑两个不触发反例，未实跑这些不同触发条件。",
+      "upstream_refs": [
+        "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2278"
+      ],
+      "native_refs": [
+        "crates/engine-native-content/src/content/host/filtering/common.rs:1047"
+      ],
+      "future_repro": "在他人首回合开始前给非当前座拥有党锢，观察上游全局phaseBefore即触发，而原生仅owner Phase begin；另观察非初始时enterGame。需先具备获授权的实际UI依赖，不能以stub结果代替。"
+    },
+    {
+      "id": "L10-static-k-danggu-conflict-direction",
+      "category": "skills",
+      "item": "k_danggu",
+      "kind": "static_difference_not_browser_validated",
+      "severity": "medium",
+      "observed": "上游conflictMap按首常侍到候选的单向表检查（checkConflict返回map[source].includes(target)）；原生k_danggu_conflicts以min/max形成对称关系。例首scs_guosheng索引8：上游仅拒绝7，允许必入候选的scs_gaowang索引9；原生还拒绝9。当前seed原生first=8，但上游被阻塞在随机和选择之前，本轮不将该静态反例称实际上游选择已复现。",
+      "upstream_refs": [
+        "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:1898",
+        "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2370",
+        "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2520"
+      ],
+      "native_refs": [
+        "crates/engine-native-content/src/content/host/step/skills_recovery.rs:485",
+        "crates/engine-native-content/src/content/host/step/skills_recovery.rs:562"
+      ],
+      "future_repro": "真实党锢到伙伴选择，首为scs_guosheng时核对高望可选；同一首和候选配置对照原生。先补合法UI运行条件，本轮不改产品。"
+    }
+  ]
+}

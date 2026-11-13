@@ -1,0 +1,14 @@
+{
+  "command": [
+    "cargo",
+    "build",
+    "--offline",
+    "--manifest-path",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/independent/l10/formal-probe/Cargo.toml"
+  ],
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "environment": {
+    "CARGO_TARGET_DIR": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target"
+  },
+  "started_utc": "2026-11-13T18:35:51.745433+00:00"
+}

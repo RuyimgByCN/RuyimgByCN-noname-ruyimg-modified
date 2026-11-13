@@ -1,0 +1,2115 @@
+﻿2026-11-13T18:46:10.5700823Z Current runner version: '2.338.2'
+2026-11-13T18:46:10.5717445Z ##[group]Runner Image Provisioner
+2026-11-13T18:46:10.5717918Z Hosted Compute Agent
+2026-11-13T18:46:10.5718279Z Version: 20261103.629
+2026-11-13T18:46:10.5718643Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+2026-11-13T18:46:10.5719027Z Build Date: 2026-11-03T17:26:59Z
+2026-11-13T18:46:10.5719446Z Worker ID: {12e2c291-e412-455b-ad75-a6c320469805}
+2026-11-13T18:46:10.5719838Z Region: westus3
+2026-11-13T18:46:10.5720169Z Cloud: Azure
+2026-11-13T18:46:10.5720486Z ##[endgroup]
+2026-11-13T18:46:10.5721198Z ##[group]Operating System
+2026-11-13T18:46:10.5721917Z Microsoft Windows Server 2025
+2026-11-13T18:46:10.5722237Z 10.0.26100
+2026-11-13T18:46:10.5722519Z Datacenter
+2026-11-13T18:46:10.5722825Z ##[endgroup]
+2026-11-13T18:46:10.5723138Z ##[group]Runner Image
+2026-11-13T18:46:10.5723586Z Image: windows-2025-vs2026
+2026-11-13T18:46:10.5723909Z Version: 20261103.298.1
+2026-11-13T18:46:10.5725028Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20261103.298/images/windows/Windows2025-VS2026-Readme.md
+2026-11-13T18:46:10.5725928Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20261103.298
+2026-11-13T18:46:10.5726509Z ##[endgroup]
+2026-11-13T18:46:10.5727105Z ##[group]GITHUB_TOKEN Permissions
+2026-11-13T18:46:10.5728280Z Contents: read
+2026-11-13T18:46:10.5728657Z Metadata: read
+2026-11-13T18:46:10.5728963Z ##[endgroup]
+2026-11-13T18:46:10.5730168Z Secret source: Actions
+2026-11-13T18:46:10.5730708Z Cache mode: write
+2026-11-13T18:46:10.5731103Z Prepare workflow directory
+2026-11-13T18:46:10.5974587Z Prepare all required actions
+2026-11-13T18:46:10.6005647Z Getting action download info
+2026-11-13T18:46:10.9015494Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-13T18:46:10.9721328Z Download action repository 'dtolnay/rust-toolchain@stable' (SHA:b725eda525362e7cf34af9a7243cac1e3f01a7ec)
+2026-11-13T18:46:11.2073459Z Download action repository 'Swatinem/rust-cache@v2' (SHA:d1527c8f67ef9af357290475d4af4b0fab8f12e0)
+2026-11-13T18:46:11.8203909Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-11-13T18:46:11.9126691Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-11-13T18:46:12.1481964Z Complete job name: desktop-windows-latest
+2026-11-13T18:46:12.2460473Z ##[group]Run actions/checkout@v4
+2026-11-13T18:46:12.2461156Z with:
+2026-11-13T18:46:12.2461374Z   path: noname-next
+2026-11-13T18:46:12.2461683Z   repository: RuyimgByCN/RuyimgByCN-noname-ruyimg-modified
+2026-11-13T18:46:12.2464181Z   token: ***
+2026-11-13T18:46:12.2464399Z   ssh-strict: true
+2026-11-13T18:46:12.2464632Z   ssh-user: git
+2026-11-13T18:46:12.2464861Z   persist-credentials: true
+2026-11-13T18:46:12.2465120Z   clean: true
+2026-11-13T18:46:12.2465359Z   sparse-checkout-cone-mode: true
+2026-11-13T18:46:12.2465640Z   fetch-depth: 1
+2026-11-13T18:46:12.2465887Z   fetch-tags: false
+2026-11-13T18:46:12.2466129Z   show-progress: true
+2026-11-13T18:46:12.2466360Z   lfs: false
+2026-11-13T18:46:12.2466576Z   submodules: false
+2026-11-13T18:46:12.2466814Z   set-safe-directory: true
+2026-11-13T18:46:12.2467083Z   allow-unsafe-pr-checkout: false
+2026-11-13T18:46:12.2467450Z env:
+2026-11-13T18:46:12.2467660Z   CARGO_TERM_COLOR: always
+2026-11-13T18:46:12.2467930Z   GIT_CONFIG_COUNT: 1
+2026-11-13T18:46:12.2468179Z   GIT_CONFIG_KEY_0: core.longpaths
+2026-11-13T18:46:12.2468454Z   GIT_CONFIG_VALUE_0: true
+2026-11-13T18:46:12.2468700Z ##[endgroup]
+2026-11-13T18:46:12.3449279Z Syncing repository: RuyimgByCN/RuyimgByCN-noname-ruyimg-modified
+2026-11-13T18:46:12.3450993Z ##[group]Getting Git version info
+2026-11-13T18:46:12.3451670Z Working directory is 'D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next'
+2026-11-13T18:46:12.3863341Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-11-13T18:46:12.6652681Z git version 2.56.0.windows.4
+2026-11-13T18:46:12.6688661Z ##[endgroup]
+2026-11-13T18:46:12.6700903Z Temporarily overriding HOME='D:\a\_temp\f0d9ccaf-77fc-4c62-aef1-0fa11adf22f3' before making global git config changes
+2026-11-13T18:46:12.6702449Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-13T18:46:12.6708334Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next
+2026-11-13T18:46:12.7177852Z ##[group]Initializing the repository
+2026-11-13T18:46:12.7184190Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next
+2026-11-13T18:46:12.7780560Z Initialized empty Git repository in D:/a/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/.git/
+2026-11-13T18:46:12.7811249Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified
+2026-11-13T18:46:12.8351591Z ##[endgroup]
+2026-11-13T18:46:12.8352683Z ##[group]Disabling automatic garbage collection
+2026-11-13T18:46:12.8357530Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2026-11-13T18:46:12.8616411Z ##[endgroup]
+2026-11-13T18:46:12.8617746Z ##[group]Setting up auth
+2026-11-13T18:46:12.8624898Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-11-13T18:46:12.8859438Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-11-13T18:46:14.0529533Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-13T18:46:14.0781360Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-11-13T18:46:14.4761784Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-13T18:46:14.5013237Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-13T18:46:14.8637927Z [command]"C:\Program Files\Git\bin\git.exe" config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2026-11-13T18:46:14.8899782Z ##[endgroup]
+2026-11-13T18:46:14.8900105Z ##[group]Fetching the repository
+2026-11-13T18:46:14.8907383Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +5c73d1d9158145e33f98f2018013914667d13964:refs/remotes/origin/native-convergence
+2026-11-13T18:46:33.6296769Z From https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified
+2026-11-13T18:46:33.6297375Z  * [new ref]           5c73d1d9158145e33f98f2018013914667d13964 -> origin/native-convergence
+2026-11-13T18:46:33.6326562Z ##[endgroup]
+2026-11-13T18:46:33.6327283Z ##[group]Determining the checkout info
+2026-11-13T18:46:33.6329315Z ##[endgroup]
+2026-11-13T18:46:33.6337124Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2026-11-13T18:46:33.6734174Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2026-11-13T18:46:33.6984957Z ##[group]Checking out the ref
+2026-11-13T18:46:33.6993278Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force -B native-convergence refs/remotes/origin/native-convergence
+2026-11-13T18:46:34.8406871Z Updating files:   1% (1442/73715)
+2026-11-13T18:46:35.1277868Z Updating files:   2% (1475/73715)
+2026-11-13T18:46:35.4283280Z Updating files:   3% (2212/73715)
+2026-11-13T18:46:35.6538473Z Updating files:   4% (2949/73715)
+2026-11-13T18:46:35.8347963Z Updating files:   5% (3686/73715)
+2026-11-13T18:46:35.9883851Z Updating files:   5% (4108/73715)
+2026-11-13T18:46:36.2456310Z Updating files:   6% (4423/73715)
+2026-11-13T18:46:36.4940902Z Updating files:   7% (5161/73715)
+2026-11-13T18:46:36.6233763Z Updating files:   8% (5898/73715)
+2026-11-13T18:46:36.7907806Z Updating files:   9% (6635/73715)
+2026-11-13T18:46:36.8777583Z Updating files:   9% (7200/73715)
+2026-11-13T18:46:37.1313172Z Updating files:  10% (7372/73715)
+2026-11-13T18:46:37.4267604Z Updating files:  11% (8109/73715)
+2026-11-13T18:46:37.6949756Z Updating files:  12% (8846/73715)
+2026-11-13T18:46:37.7961393Z Updating files:  13% (9583/73715)
+2026-11-13T18:46:38.0279319Z Updating files:  13% (9734/73715)
+2026-11-13T18:46:38.2336950Z Updating files:  14% (10321/73715)
+2026-11-13T18:46:38.5249308Z Updating files:  15% (11058/73715)
+2026-11-13T18:46:38.7979550Z Updating files:  16% (11795/73715)
+2026-11-13T18:46:38.8514299Z Updating files:  16% (12131/73715)
+2026-11-13T18:46:39.0544624Z Updating files:  17% (12532/73715)
+2026-11-13T18:46:39.3014818Z Updating files:  18% (13269/73715)
+2026-11-13T18:46:39.5138592Z Updating files:  19% (14006/73715)
+2026-11-13T18:46:39.8036757Z Updating files:  20% (14743/73715)
+2026-11-13T18:46:39.8437487Z Updating files:  20% (15387/73715)
+2026-11-13T18:46:40.3091840Z Updating files:  21% (15481/73715)
+2026-11-13T18:46:40.5456226Z Updating files:  22% (16218/73715)
+2026-11-13T18:46:40.7289731Z Updating files:  23% (16955/73715)
+2026-11-13T18:46:40.8042207Z Updating files:  24% (17692/73715)
+2026-11-13T18:46:40.8385750Z Updating files:  24% (18243/73715)
+2026-11-13T18:46:40.9442818Z Updating files:  25% (18429/73715)
+2026-11-13T18:46:41.1365729Z Updating files:  26% (19166/73715)
+2026-11-13T18:46:41.2474823Z Updating files:  27% (19904/73715)
+2026-11-13T18:46:41.3362111Z Updating files:  28% (20641/73715)
+2026-11-13T18:46:41.6118036Z Updating files:  29% (21378/73715)
+2026-11-13T18:46:41.7351316Z Updating files:  30% (22115/73715)
+2026-11-13T18:46:41.8090919Z Updating files:  31% (22852/73715)
+2026-11-13T18:46:41.9083050Z Updating files:  31% (23325/73715)
+2026-11-13T18:46:42.0378990Z Updating files:  32% (23589/73715)
+2026-11-13T18:46:42.8558449Z Updating files:  33% (24326/73715)
+2026-11-13T18:46:43.1777615Z Updating files:  33% (24768/73715)
+2026-11-13T18:46:43.3397615Z Updating files:  34% (25064/73715)
+2026-11-13T18:46:43.5113759Z Updating files:  35% (25801/73715)
+2026-11-13T18:46:43.6785622Z Updating files:  36% (26538/73715)
+2026-11-13T18:46:43.7810719Z Updating files:  37% (27275/73715)
+2026-11-13T18:46:43.8397865Z Updating files:  38% (28012/73715)
+2026-11-13T18:46:43.9432119Z Updating files:  38% (28204/73715)
+2026-11-13T18:46:44.4859870Z Updating files:  39% (28749/73715)
+2026-11-13T18:46:44.8321694Z Updating files:  40% (29486/73715)
+2026-11-13T18:46:44.8647658Z Updating files:  40% (30215/73715)
+2026-11-13T18:46:45.1141553Z Updating files:  41% (30224/73715)
+2026-11-13T18:46:45.2800993Z Updating files:  42% (30961/73715)
+2026-11-13T18:46:45.8312730Z Updating files:  43% (31698/73715)
+2026-11-13T18:46:45.8436867Z Updating files:  43% (32356/73715)
+2026-11-13T18:46:46.2403161Z Updating files:  44% (32435/73715)
+2026-11-13T18:46:46.5431118Z Updating files:  45% (33172/73715)
+2026-11-13T18:46:46.6707108Z Updating files:  46% (33909/73715)
+2026-11-13T18:46:46.7605899Z Updating files:  47% (34647/73715)
+2026-11-13T18:46:46.8323921Z Updating files:  48% (35384/73715)
+2026-11-13T18:46:46.8471994Z Updating files:  48% (35989/73715)
+2026-11-13T18:46:47.2887322Z Updating files:  49% (36121/73715)
+2026-11-13T18:46:47.3901946Z Updating files:  50% (36858/73715)
+2026-11-13T18:46:47.6734087Z Updating files:  51% (37595/73715)
+2026-11-13T18:46:47.8119196Z Updating files:  52% (38332/73715)
+2026-11-13T18:46:47.8370333Z Updating files:  53% (39069/73715)
+2026-11-13T18:46:47.9049863Z Updating files:  53% (39270/73715)
+2026-11-13T18:46:48.0045630Z Updating files:  54% (39807/73715)
+2026-11-13T18:46:48.0977683Z Updating files:  55% (40544/73715)
+2026-11-13T18:46:48.1889154Z Updating files:  56% (41281/73715)
+2026-11-13T18:46:48.6336847Z Updating files:  57% (42018/73715)
+2026-11-13T18:46:48.7198543Z Updating files:  58% (42755/73715)
+2026-11-13T18:46:48.8129109Z Updating files:  59% (43492/73715)
+2026-11-13T18:46:48.8365598Z Updating files:  60% (44229/73715)
+2026-11-13T18:46:48.9000621Z Updating files:  60% (44439/73715)
+2026-11-13T18:46:48.9937695Z Updating files:  61% (44967/73715)
+2026-11-13T18:46:49.1184885Z Updating files:  62% (45704/73715)
+2026-11-13T18:46:49.2023228Z Updating files:  63% (46441/73715)
+2026-11-13T18:46:49.2916729Z Updating files:  64% (47178/73715)
+2026-11-13T18:46:49.3799243Z Updating files:  65% (47915/73715)
+2026-11-13T18:46:49.4651576Z Updating files:  66% (48652/73715)
+2026-11-13T18:46:49.5609031Z Updating files:  67% (49390/73715)
+2026-11-13T18:46:49.9684484Z Updating files:  68% (50127/73715)
+2026-11-13T18:46:50.0345063Z Updating files:  68% (50470/73715)
+2026-11-13T18:46:50.1174365Z Updating files:  69% (50864/73715)
+2026-11-13T18:46:50.2159758Z Updating files:  70% (51601/73715)
+2026-11-13T18:46:50.3173761Z Updating files:  71% (52338/73715)
+2026-11-13T18:46:50.4389046Z Updating files:  72% (53075/73715)
+2026-11-13T18:46:50.6719888Z Updating files:  73% (53812/73715)
+2026-11-13T18:46:50.8435108Z Updating files:  74% (54550/73715)
+2026-11-13T18:46:50.8983324Z Updating files:  74% (54923/73715)
+2026-11-13T18:46:51.8530899Z Updating files:  75% (55287/73715)
+2026-11-13T18:46:51.8662559Z Updating files:  75% (55926/73715)
+2026-11-13T18:46:51.9562495Z Updating files:  76% (56024/73715)
+2026-11-13T18:46:52.1709036Z Updating files:  77% (56761/73715)
+2026-11-13T18:46:52.8518978Z Updating files:  78% (57498/73715)
+2026-11-13T18:46:52.8659409Z Updating files:  78% (58135/73715)
+2026-11-13T18:46:53.2738629Z Updating files:  79% (58235/73715)
+2026-11-13T18:46:53.4872192Z Updating files:  80% (58972/73715)
+2026-11-13T18:46:53.7489859Z Updating files:  81% (59710/73715)
+2026-11-13T18:46:54.0784699Z Updating files:  82% (60447/73715)
+2026-11-13T18:46:54.3866430Z Updating files:  82% (60495/73715)
+2026-11-13T18:46:54.6212848Z Updating files:  83% (61184/73715)
+2026-11-13T18:46:54.8603981Z Updating files:  84% (61921/73715)
+2026-11-13T18:46:54.8930637Z Updating files:  84% (62604/73715)
+2026-11-13T18:46:55.7214585Z Updating files:  85% (62658/73715)
+2026-11-13T18:46:55.8641886Z Updating files:  86% (63395/73715)
+2026-11-13T18:46:56.0434777Z Updating files:  86% (63701/73715)
+2026-11-13T18:46:56.4527995Z Updating files:  87% (64133/73715)
+2026-11-13T18:46:57.0311349Z Updating files:  88% (64870/73715)
+2026-11-13T18:46:57.3147602Z Updating files:  88% (65000/73715)
+2026-11-13T18:46:57.7082292Z Updating files:  89% (65607/73715)
+2026-11-13T18:46:58.4513358Z Updating files:  90% (66344/73715)
+2026-11-13T18:46:58.9834787Z Updating files:  90% (66605/73715)
+2026-11-13T18:46:59.8584933Z Updating files:  90% (66631/73715)
+2026-11-13T18:46:59.8705122Z Updating files:  91% (67081/73715)
+2026-11-13T18:47:00.1839287Z Updating files:  91% (67111/73715)
+2026-11-13T18:47:00.8817008Z Updating files:  92% (67818/73715)
+2026-11-13T18:47:00.9115160Z Updating files:  92% (68504/73715)
+2026-11-13T18:47:01.2649054Z Updating files:  93% (68555/73715)
+2026-11-13T18:47:01.5965268Z Updating files:  94% (69293/73715)
+2026-11-13T18:47:02.1389799Z Updating files:  95% (70030/73715)
+2026-11-13T18:47:02.3407327Z Updating files:  95% (70281/73715)
+2026-11-13T18:47:02.6948576Z Updating files:  96% (70767/73715)
+2026-11-13T18:47:02.8919522Z Updating files:  97% (71504/73715)
+2026-11-13T18:47:03.0288282Z Updating files:  97% (71933/73715)
+2026-11-13T18:47:03.8121882Z Updating files:  98% (72241/73715)
+2026-11-13T18:47:03.8971954Z Updating files:  99% (72978/73715)
+2026-11-13T18:47:04.0624075Z Updating files:  99% (73168/73715)
+2026-11-13T18:47:04.0625008Z Updating files: 100% (73715/73715)
+2026-11-13T18:47:04.0625265Z Updating files: 100% (73715/73715), done.
+2026-11-13T18:47:04.1297543Z Switched to a new branch 'native-convergence'
+2026-11-13T18:47:04.1407422Z branch 'native-convergence' set up to track 'origin/native-convergence'.
+2026-11-13T18:47:04.2652063Z ##[endgroup]
+2026-11-13T18:47:04.3035601Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2026-11-13T18:47:04.3312150Z 5c73d1d9158145e33f98f2018013914667d13964
+2026-11-13T18:47:04.3711923Z ##[group]Run dtolnay/rust-toolchain@stable
+2026-11-13T18:47:04.3712132Z with:
+2026-11-13T18:47:04.3712259Z   targets: wasm32-unknown-unknown
+2026-11-13T18:47:04.3712405Z   toolchain: stable
+2026-11-13T18:47:04.3712519Z env:
+2026-11-13T18:47:04.3712633Z   CARGO_TERM_COLOR: always
+2026-11-13T18:47:04.3712765Z ##[endgroup]
+2026-11-13T18:47:04.3761864Z ##[start-action display=Parse toolchain version;id=__dtolnay_rust-toolchain.parse]
+2026-11-13T18:47:04.3873628Z ##[group]Run if [[ -z $toolchain ]]; then
+2026-11-13T18:47:04.3873868Z [36;1mif [[ -z $toolchain ]]; then[0m
+2026-11-13T18:47:04.3874219Z [36;1m  # GitHub does not enforce `required: true` inputs itself. https://github.com/actions/runner/issues/1070[0m
+2026-11-13T18:47:04.3874543Z [36;1m  echo "'toolchain' is a required input" >&2[0m
+2026-11-13T18:47:04.3874723Z [36;1m  exit 1[0m
+2026-11-13T18:47:04.3874920Z [36;1melif [[ $toolchain =~ ^stable' '[0-9]+' '(year|month|week|day)s?' 'ago$ ]]; then[0m
+2026-11-13T18:47:04.3875189Z [36;1m  if [[ Windows == macOS ]]; then[0m
+2026-11-13T18:47:04.3875506Z [36;1m    echo "toolchain=1.$((($(date -v-$(sed 's/stable \([0-9]*\) \(.\).*/\1\2/' <<< $toolchain) +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT[0m
+2026-11-13T18:47:04.3875795Z [36;1m  else[0m
+2026-11-13T18:47:04.3876027Z [36;1m    echo "toolchain=1.$((($(date --date "${toolchain#stable }" +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT[0m
+2026-11-13T18:47:04.3876281Z [36;1m  fi[0m
+2026-11-13T18:47:04.3876453Z [36;1melif [[ $toolchain =~ ^stable' 'minus' '[0-9]+' 'releases?$ ]]; then[0m
+2026-11-13T18:47:04.3876759Z [36;1m  echo "toolchain=1.$((($(date +%s)/60/60/24-16569)/7/6-${toolchain//[^0-9]/}))" >> $GITHUB_OUTPUT[0m
+2026-11-13T18:47:04.3877019Z [36;1melif [[ $toolchain =~ ^1\.[0-9]+$ ]]; then[0m
+2026-11-13T18:47:04.3877317Z [36;1m  echo "toolchain=1.$((i=${toolchain#1.}, c=($(date +%s)/60/60/24-16569)/7/6, i+9*i*(10*i<=c)+90*i*(100*i<=c)))" >> $GITHUB_OUTPUT[0m
+2026-11-13T18:47:04.3877594Z [36;1melse[0m
+2026-11-13T18:47:04.3877708Z [36;1m  delimiter=EOF[0m
+2026-11-13T18:47:04.3877889Z [36;1m  while [[ $toolchain == *$delimiter* ]]; do delimiter+=_; done[0m
+2026-11-13T18:47:04.3878177Z [36;1m  printf 'toolchain<<%s\n%s\n%s\n' "$delimiter" "$toolchain" "$delimiter" >> $GITHUB_OUTPUT[0m
+2026-11-13T18:47:04.3878411Z [36;1mfi[0m
+2026-11-13T18:47:04.3890181Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2026-11-13T18:47:04.3890412Z env:
+2026-11-13T18:47:04.3890542Z   CARGO_TERM_COLOR: always
+2026-11-13T18:47:04.3890679Z   toolchain: stable
+2026-11-13T18:47:04.3890807Z ##[endgroup]
+2026-11-13T18:47:04.5360782Z ##[end-action id=__dtolnay_rust-toolchain.parse;outcome=success;conclusion=success;duration_ms=159]
+2026-11-13T18:47:04.5363984Z ##[start-action display=Set $CARGO_HOME;id=__dtolnay_rust-toolchain.__run]
+2026-11-13T18:47:04.7780408Z ##[group]Run echo CARGO_HOME=${CARGO_HOME:-"$USERPROFILE\.cargo"} >> $GITHUB_ENV
+2026-11-13T18:47:04.7780739Z [36;1mecho CARGO_HOME=${CARGO_HOME:-"$USERPROFILE\.cargo"} >> $GITHUB_ENV[0m
+2026-11-13T18:47:04.7789260Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2026-11-13T18:47:04.7789485Z env:
+2026-11-13T18:47:04.7789609Z   CARGO_TERM_COLOR: always
+2026-11-13T18:47:04.7789742Z ##[endgroup]
+2026-11-13T18:47:04.8141562Z ##[end-action id=__dtolnay_rust-toolchain.__run;outcome=success;conclusion=success;duration_ms=277]
+2026-11-13T18:47:04.8143196Z ##[start-action display=Install rustup if needed;id=__dtolnay_rust-toolchain.__run_2]
+2026-11-13T18:47:04.8149337Z ##[end-action id=__dtolnay_rust-toolchain.__run_2;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-11-13T18:47:04.8151313Z ##[start-action display=Install rustup if needed on windows;id=__dtolnay_rust-toolchain.__run_3]
+2026-11-13T18:47:04.8251588Z ##[group]Run if ! command -v rustup &>/dev/null; then
+2026-11-13T18:47:04.8251817Z [36;1mif ! command -v rustup &>/dev/null; then[0m
+2026-11-13T18:47:04.8253991Z [36;1m  curl --proto '=https' --tlsv1.2 --retry 10 --retry-connrefused --location --silent --show-error --fail https://win.rustup.rs/x86_64 --output 'D:\a\_temp\rustup-init.exe'[0m
+2026-11-13T18:47:04.8254499Z [36;1m  'D:\a\_temp\rustup-init.exe' --default-toolchain none --no-modify-path -y[0m
+2026-11-13T18:47:04.8254747Z [36;1m  echo "$CARGO_HOME\bin" >> $GITHUB_PATH[0m
+2026-11-13T18:47:04.8254908Z [36;1mfi[0m
+2026-11-13T18:47:04.8262147Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2026-11-13T18:47:04.8262366Z env:
+2026-11-13T18:47:04.8262481Z   CARGO_TERM_COLOR: always
+2026-11-13T18:47:04.8262639Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-11-13T18:47:04.8262791Z ##[endgroup]
+2026-11-13T18:47:04.8806917Z ##[end-action id=__dtolnay_rust-toolchain.__run_3;outcome=success;conclusion=success;duration_ms=65]
+2026-11-13T18:47:04.8816596Z ##[start-action display=rustup toolchain install stable;id=__dtolnay_rust-toolchain.__run_4]
+2026-11-13T18:47:04.8892737Z ##[group]Run set -f  # split targets and components on commas and whitespace, without glob expansion
+2026-11-13T18:47:04.8893126Z [36;1mset -f  # split targets and components on commas and whitespace, without glob expansion[0m
+2026-11-13T18:47:04.8893364Z [36;1mflags=()[0m
+2026-11-13T18:47:04.8893518Z [36;1mfor t in ${targets//,/ }; do flags+=(--target "$t"); done[0m
+2026-11-13T18:47:04.8893746Z [36;1mfor c in ${components//,/ }; do flags+=(--component "$c"); done[0m
+2026-11-13T18:47:04.8894025Z [36;1mif [[ $toolchain == nightly && -n $components ]]; then flags+=(--allow-downgrade); fi[0m
+2026-11-13T18:47:04.8894265Z [36;1mlog=$(mktemp)[0m
+2026-11-13T18:47:04.8894400Z [36;1mtrap 'rm -f "$log"' EXIT[0m
+2026-11-13T18:47:04.8894544Z [36;1mfor attempt in 1 2 3 4 5; do[0m
+2026-11-13T18:47:04.8894858Z [36;1m  if rustup toolchain install "$toolchain" "${flags[@]}" --profile minimal --no-self-update --force-non-host 2>&1 | tee "$log"; then[0m
+2026-11-13T18:47:04.8895292Z [36;1m    break[0m
+2026-11-13T18:47:04.8895456Z [36;1m  else[0m
+2026-11-13T18:47:04.8895564Z [36;1m    status=$?[0m
+2026-11-13T18:47:04.8895682Z [36;1m  fi[0m
+2026-11-13T18:47:04.8895845Z [36;1m  if [[ $attempt == 5 ]] || ! grep -Fq 'checksum failed for ' "$log" \[0m
+2026-11-13T18:47:04.8896155Z [36;1m      || ! grep -Fq 'this is likely due to an ongoing update of the official release server' "$log"; then[0m
+2026-11-13T18:47:04.8896415Z [36;1m    exit "$status"[0m
+2026-11-13T18:47:04.8896669Z [36;1m  fi[0m
+2026-11-13T18:47:04.8896865Z [36;1m  echo "Retrying rustup toolchain install in 30 seconds (retry $attempt of 4)" >&2[0m
+2026-11-13T18:47:04.8897098Z [36;1m  sleep 30[0m
+2026-11-13T18:47:04.8897207Z [36;1mdone[0m
+2026-11-13T18:47:04.8904200Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2026-11-13T18:47:04.8904414Z env:
+2026-11-13T18:47:04.8904523Z   CARGO_TERM_COLOR: always
+2026-11-13T18:47:04.8904659Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-11-13T18:47:04.8904807Z   toolchain: stable
+2026-11-13T18:47:04.8904932Z   targets: wasm32-unknown-unknown
+2026-11-13T18:47:04.8905072Z   components: 
+2026-11-13T18:47:04.8905186Z   RUSTUP_PERMIT_COPY_RENAME: 1
+2026-11-13T18:47:04.8905313Z ##[endgroup]
+2026-11-13T18:47:08.3290096Z info: syncing channel updates for stable-x86_64-pc-windows-msvc
+2026-11-13T18:47:08.7373438Z info: latest update on 2026-11-12 for version 1.100.0 (0ef1bc386 2026-11-09)
+2026-11-13T18:47:08.7691186Z info: removing previous version of component rustfmt
+2026-11-13T18:47:08.7861337Z info: removing previous version of component clippy
+2026-11-13T18:47:08.8006637Z info: removing previous version of component rust-std for target x86_64-pc-windows-gnu
+2026-11-13T18:47:08.9263718Z info: removing previous version of component rust-std for target i686-pc-windows-msvc
+2026-11-13T18:47:09.0047796Z info: removing previous version of component cargo
+2026-11-13T18:47:09.0835578Z info: removing previous version of component rust-std
+2026-11-13T18:47:09.1615936Z info: removing previous version of component rustc
+2026-11-13T18:47:09.2088051Z info: downloading 8 components
+2026-11-13T18:47:21.8295015Z 
+2026-11-13T18:47:23.1610909Z   stable-x86_64-pc-windows-msvc updated - rustc 1.100.0 (0ef1bc386 2026-11-09) (from rustc 1.99.1 (58cf8f9c3 2026-10-13))
+2026-11-13T18:47:23.1611222Z 
+2026-11-13T18:47:23.1861757Z ##[end-action id=__dtolnay_rust-toolchain.__run_4;outcome=success;conclusion=success;duration_ms=18304]
+2026-11-13T18:47:23.1867583Z ##[start-action display=rustup default stable;id=__dtolnay_rust-toolchain.__run_5]
+2026-11-13T18:47:23.1952881Z ##[group]Run rustup default "$toolchain" --force-non-host
+2026-11-13T18:47:23.1953136Z [36;1mrustup default "$toolchain" --force-non-host[0m
+2026-11-13T18:47:23.1960641Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2026-11-13T18:47:23.1960892Z env:
+2026-11-13T18:47:23.1961015Z   CARGO_TERM_COLOR: always
+2026-11-13T18:47:23.1961188Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-11-13T18:47:23.1961355Z   toolchain: stable
+2026-11-13T18:47:23.1961482Z ##[endgroup]
+2026-11-13T18:47:23.2414731Z info: using existing install for stable-x86_64-pc-windows-msvc
+2026-11-13T18:47:23.2458224Z info: default toolchain set to stable-x86_64-pc-windows-msvc
+2026-11-13T18:47:23.2458460Z 
+2026-11-13T18:47:23.2606394Z   stable-x86_64-pc-windows-msvc unchanged - rustc 1.100.0 (0ef1bc386 2026-11-09)
+2026-11-13T18:47:23.2606726Z 
+2026-11-13T18:47:23.2664780Z ##[end-action id=__dtolnay_rust-toolchain.__run_5;outcome=success;conclusion=success;duration_ms=79]
+2026-11-13T18:47:23.2667649Z ##[start-action display=Create cachekey;id=__dtolnay_rust-toolchain.rustc-version]
+2026-11-13T18:47:23.2751907Z ##[group]Run DATE=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')
+2026-11-13T18:47:23.2752422Z [36;1mDATE=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')[0m
+2026-11-13T18:47:23.2752813Z [36;1mHASH=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-hash: //p')[0m
+2026-11-13T18:47:23.2753108Z [36;1mecho "cachekey=$(echo $DATE$HASH | head -c12)" >> $GITHUB_OUTPUT[0m
+2026-11-13T18:47:23.2760742Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2026-11-13T18:47:23.2760971Z env:
+2026-11-13T18:47:23.2761097Z   CARGO_TERM_COLOR: always
+2026-11-13T18:47:23.2761248Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-11-13T18:47:23.2761405Z   toolchain: stable
+2026-11-13T18:47:23.2761530Z ##[endgroup]
+2026-11-13T18:47:23.8561086Z ##[end-action id=__dtolnay_rust-toolchain.rustc-version;outcome=success;conclusion=success;duration_ms=589]
+2026-11-13T18:47:23.8563335Z ##[start-action display=Disable incremental compilation;id=__dtolnay_rust-toolchain.__run_6]
+2026-11-13T18:47:23.8652182Z ##[group]Run if [ -z "${CARGO_INCREMENTAL+set}" ]; then
+2026-11-13T18:47:23.8652444Z [36;1mif [ -z "${CARGO_INCREMENTAL+set}" ]; then[0m
+2026-11-13T18:47:23.8652644Z [36;1m  echo CARGO_INCREMENTAL=0 >> $GITHUB_ENV[0m
+2026-11-13T18:47:23.8652819Z [36;1mfi[0m
+2026-11-13T18:47:23.8661081Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2026-11-13T18:47:23.8661345Z env:
+2026-11-13T18:47:23.8661473Z   CARGO_TERM_COLOR: always
+2026-11-13T18:47:23.8661630Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-11-13T18:47:23.8661798Z ##[endgroup]
+2026-11-13T18:47:23.8952804Z ##[end-action id=__dtolnay_rust-toolchain.__run_6;outcome=success;conclusion=success;duration_ms=38]
+2026-11-13T18:47:23.8954519Z ##[start-action display=Enable colors in Cargo output;id=__dtolnay_rust-toolchain.__run_7]
+2026-11-13T18:47:23.9037334Z ##[group]Run if [ -z "${CARGO_TERM_COLOR+set}" ]; then
+2026-11-13T18:47:23.9037577Z [36;1mif [ -z "${CARGO_TERM_COLOR+set}" ]; then[0m
+2026-11-13T18:47:23.9037784Z [36;1m  echo CARGO_TERM_COLOR=always >> $GITHUB_ENV[0m
+2026-11-13T18:47:23.9038169Z [36;1mfi[0m
+2026-11-13T18:47:23.9045394Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2026-11-13T18:47:23.9045634Z env:
+2026-11-13T18:47:23.9045760Z   CARGO_TERM_COLOR: always
+2026-11-13T18:47:23.9045917Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-11-13T18:47:23.9046084Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:47:23.9046213Z ##[endgroup]
+2026-11-13T18:47:23.9336234Z ##[end-action id=__dtolnay_rust-toolchain.__run_7;outcome=success;conclusion=success;duration_ms=38]
+2026-11-13T18:47:23.9338836Z ##[start-action display=Enable Cargo sparse registry;id=__dtolnay_rust-toolchain.__run_8]
+2026-11-13T18:47:23.9424767Z ##[group]Run # implemented in 1.66, stabilized in 1.68, made default in 1.70
+2026-11-13T18:47:23.9425156Z [36;1m# implemented in 1.66, stabilized in 1.68, made default in 1.70[0m
+2026-11-13T18:47:23.9425600Z [36;1mif [ -z "${CARGO_REGISTRIES_CRATES_IO_PROTOCOL+set}" -o -f "D:\a\_temp"/.implicit_cargo_registries_crates_io_protocol ]; then[0m
+2026-11-13T18:47:23.9426075Z [36;1m  if rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.6[89]\.'; then[0m
+2026-11-13T18:47:23.9426431Z [36;1m    touch "D:\a\_temp"/.implicit_cargo_registries_crates_io_protocol || true[0m
+2026-11-13T18:47:23.9426758Z [36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse >> $GITHUB_ENV[0m
+2026-11-13T18:47:23.9427108Z [36;1m  elif rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.6[67]\.'; then[0m
+2026-11-13T18:47:23.9427456Z [36;1m    touch "D:\a\_temp"/.implicit_cargo_registries_crates_io_protocol || true[0m
+2026-11-13T18:47:23.9427891Z [36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=git >> $GITHUB_ENV[0m
+2026-11-13T18:47:23.9428139Z [36;1m  fi[0m
+2026-11-13T18:47:23.9428263Z [36;1mfi[0m
+2026-11-13T18:47:23.9435938Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2026-11-13T18:47:23.9436193Z env:
+2026-11-13T18:47:23.9436324Z   CARGO_TERM_COLOR: always
+2026-11-13T18:47:23.9436496Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-11-13T18:47:23.9436676Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:47:23.9436813Z   toolchain: stable
+2026-11-13T18:47:23.9436948Z ##[endgroup]
+2026-11-13T18:47:24.2036234Z ##[end-action id=__dtolnay_rust-toolchain.__run_8;outcome=success;conclusion=success;duration_ms=269]
+2026-11-13T18:47:24.2039558Z ##[start-action display=Work around spurious network errors in curl 8.0;id=__dtolnay_rust-toolchain.__run_9]
+2026-11-13T18:47:24.2121732Z ##[group]Run # https://rust-lang.zulipchat.com/#narrow/stream/246057-t-cargo/topic/timeout.20investigation
+2026-11-13T18:47:24.2122215Z [36;1m# https://rust-lang.zulipchat.com/#narrow/stream/246057-t-cargo/topic/timeout.20investigation[0m
+2026-11-13T18:47:24.2122805Z [36;1mif rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.7[01]\.'; then[0m
+2026-11-13T18:47:24.2123117Z [36;1m  echo CARGO_HTTP_MULTIPLEXING=false >> $GITHUB_ENV[0m
+2026-11-13T18:47:24.2123314Z [36;1mfi[0m
+2026-11-13T18:47:24.2131688Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2026-11-13T18:47:24.2131945Z env:
+2026-11-13T18:47:24.2132073Z   CARGO_TERM_COLOR: always
+2026-11-13T18:47:24.2132230Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-11-13T18:47:24.2132400Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:47:24.2132532Z   toolchain: stable
+2026-11-13T18:47:24.2132650Z ##[endgroup]
+2026-11-13T18:47:24.2823922Z ##[end-action id=__dtolnay_rust-toolchain.__run_9;outcome=success;conclusion=success;duration_ms=78]
+2026-11-13T18:47:24.2827506Z ##[start-action display=rustc +stable --version --verbose;id=__dtolnay_rust-toolchain.__run_10]
+2026-11-13T18:47:24.2909854Z ##[group]Run rustc +"$toolchain" --version --verbose
+2026-11-13T18:47:24.2910096Z [36;1mrustc +"$toolchain" --version --verbose[0m
+2026-11-13T18:47:24.2917790Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2026-11-13T18:47:24.2918039Z env:
+2026-11-13T18:47:24.2918160Z   CARGO_TERM_COLOR: always
+2026-11-13T18:47:24.2918466Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-11-13T18:47:24.2918637Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:47:24.2918766Z   toolchain: stable
+2026-11-13T18:47:24.2918888Z ##[endgroup]
+2026-11-13T18:47:24.3480390Z rustc 1.100.0 (0ef1bc386 2026-11-09)
+2026-11-13T18:47:24.3480687Z binary: rustc
+2026-11-13T18:47:24.3480936Z commit-hash: 0ef1bc386059596dada8fb65b50425aab2ea637a
+2026-11-13T18:47:24.3481173Z commit-date: 2026-11-09
+2026-11-13T18:47:24.3481325Z host: x86_64-pc-windows-msvc
+2026-11-13T18:47:24.3481479Z release: 1.100.0
+2026-11-13T18:47:24.3482564Z LLVM version: 23.1.5
+2026-11-13T18:47:24.3567126Z ##[end-action id=__dtolnay_rust-toolchain.__run_10;outcome=success;conclusion=success;duration_ms=73]
+2026-11-13T18:47:24.3713200Z ##[group]Run Swatinem/rust-cache@v2
+2026-11-13T18:47:24.3713398Z with:
+2026-11-13T18:47:24.3713521Z   workspaces: noname-next
+2026-11-13T18:47:24.3713658Z   prefix-key: v0-rust
+2026-11-13T18:47:24.3713783Z   add-job-id-key: true
+2026-11-13T18:47:24.3713919Z   add-rust-environment-hash-key: true
+2026-11-13T18:47:24.3714071Z   cache-targets: true
+2026-11-13T18:47:24.3714192Z   cache-all-crates: false
+2026-11-13T18:47:24.3714333Z   cache-workspace-crates: false
+2026-11-13T18:47:24.3714467Z   save-if: true
+2026-11-13T18:47:24.3714586Z   cache-provider: github
+2026-11-13T18:47:24.3714712Z   cache-bin: true
+2026-11-13T18:47:24.3714825Z   lookup-only: false
+2026-11-13T18:47:24.3714941Z   cmd-format: {0}
+2026-11-13T18:47:24.3715045Z env:
+2026-11-13T18:47:24.3715156Z   CARGO_TERM_COLOR: always
+2026-11-13T18:47:24.3715295Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-11-13T18:47:24.3715470Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:47:24.3715589Z ##[endgroup]
+2026-11-13T18:47:29.8387157Z ##[group]Cache Configuration
+2026-11-13T18:47:29.8387649Z Cache Provider:
+2026-11-13T18:47:29.8392429Z     github
+2026-11-13T18:47:29.8392940Z Workspaces:
+2026-11-13T18:47:29.8393425Z     D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next
+2026-11-13T18:47:29.8393960Z Cache Paths:
+2026-11-13T18:47:29.8394256Z     C:\Users\runneradmin\.cargo\bin
+2026-11-13T18:47:29.8394611Z     C:\Users\runneradmin\.cargo\.crates.toml
+2026-11-13T18:47:29.8394990Z     C:\Users\runneradmin\.cargo\.crates2.json
+2026-11-13T18:47:29.8395342Z     C:\Users\runneradmin\.cargo\registry
+2026-11-13T18:47:29.8395689Z     C:\Users\runneradmin\.cargo\git
+2026-11-13T18:47:29.8396218Z     D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\target
+2026-11-13T18:47:29.8396757Z Restore Key:
+2026-11-13T18:47:29.8397071Z     v0-rust-desktop-Windows_NT-x64-ea627442
+2026-11-13T18:47:29.8397441Z Cache Key:
+2026-11-13T18:47:29.8397762Z     v0-rust-desktop-Windows_NT-x64-ea627442-fbf8b572
+2026-11-13T18:47:29.8398136Z .. Prefix:
+2026-11-13T18:47:29.8398426Z   - v0-rust-desktop-Windows_NT-x64
+2026-11-13T18:47:29.8398773Z .. Environment considered:
+2026-11-13T18:47:29.8399081Z   - Rust Versions:
+2026-11-13T18:47:29.8399734Z     - 1.100.0 x86_64-pc-windows-msvc 0ef1bc386059596dada8fb65b50425aab2ea637a
+2026-11-13T18:47:29.8400084Z   - CARGO_HOME
+2026-11-13T18:47:29.8400260Z   - CARGO_INCREMENTAL
+2026-11-13T18:47:29.8400454Z   - CARGO_TERM_COLOR
+2026-11-13T18:47:29.8400650Z .. Lockfiles considered:
+2026-11-13T18:47:29.8401381Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\apps\benchmark-runner\Cargo.toml
+2026-11-13T18:47:29.8402199Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\apps\content-cli\Cargo.toml
+2026-11-13T18:47:29.8403024Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\apps\desktop-client\Cargo.toml
+2026-11-13T18:47:29.8404985Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\apps\engine-cli\Cargo.toml
+2026-11-13T18:47:29.8405778Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\apps\extension-studio\Cargo.toml
+2026-11-13T18:47:29.8406556Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\apps\game-server\Cargo.toml
+2026-11-13T18:47:29.8407265Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\Cargo.lock
+2026-11-13T18:47:29.8408021Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\accessibility-schema\Cargo.toml
+2026-11-13T18:47:29.8408840Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\conformance\Cargo.toml
+2026-11-13T18:47:29.8409636Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\content-compiler\Cargo.toml
+2026-11-13T18:47:29.8412675Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\content-native-loader\Cargo.toml
+2026-11-13T18:47:29.8413551Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\content-runtime\Cargo.toml
+2026-11-13T18:47:29.8414173Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\content-schema\Cargo.toml
+2026-11-13T18:47:29.8414894Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\devtools\Cargo.toml
+2026-11-13T18:47:29.8415550Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\diagnostics\Cargo.toml
+2026-11-13T18:47:29.8416046Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\engine-ai\Cargo.toml
+2026-11-13T18:47:29.8416494Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\engine-api\Cargo.toml
+2026-11-13T18:47:29.8416935Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\engine-core\Cargo.toml
+2026-11-13T18:47:29.8417506Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\engine-native-content\Cargo.toml
+2026-11-13T18:47:29.8418172Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\engine-native-kernel\Cargo.toml
+2026-11-13T18:47:29.8418783Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\engine-native-wasm\Cargo.toml
+2026-11-13T18:47:29.8419282Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\engine-native\Cargo.toml
+2026-11-13T18:47:29.8419847Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\engine-protocol\Cargo.toml
+2026-11-13T18:47:29.8420817Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\engine-wasm\Cargo.toml
+2026-11-13T18:47:29.8421560Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\legacy-analyzer\Cargo.toml
+2026-11-13T18:47:29.8422361Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\licensing-schema\Cargo.toml
+2026-11-13T18:47:29.8423182Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\resource-compiler\Cargo.toml
+2026-11-13T18:47:29.8423985Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\resource-schema\Cargo.toml
+2026-11-13T18:47:29.8424756Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\rule-api\Cargo.toml
+2026-11-13T18:47:29.8425467Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\rule-vm\Cargo.toml
+2026-11-13T18:47:29.8426409Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\packages\renderer-runtime\Cargo.toml
+2026-11-13T18:47:29.8427229Z   - D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\packages\resource-runtime\Cargo.toml
+2026-11-13T18:47:29.8427990Z ##[endgroup]
+2026-11-13T18:47:29.8428103Z 
+2026-11-13T18:47:29.8428191Z ... Restoring cache ...
+2026-11-13T18:47:30.1206966Z Cache hit for: v0-rust-desktop-Windows_NT-x64-ea627442-fbf8b572
+2026-11-13T18:47:31.3643711Z Received 67108864 of 445246166 (15.1%), 63.9 MBs/sec
+2026-11-13T18:47:32.3678494Z Received 176160768 of 445246166 (39.6%), 83.8 MBs/sec
+2026-11-13T18:47:33.3702368Z Received 297795584 of 445246166 (66.9%), 94.5 MBs/sec
+2026-11-13T18:47:34.4148859Z Received 402653184 of 445246166 (90.4%), 94.8 MBs/sec
+2026-11-13T18:47:34.7868271Z Received 445246166 of 445246166 (100.0%), 96.0 MBs/sec
+2026-11-13T18:47:34.7871464Z Cache Size: ~425 MB (445246166 B)
+2026-11-13T18:47:34.7900585Z [command]"C:\Program Files\Git\usr\bin\tar.exe" -xf D:/a/_temp/b1867f09-4365-45ee-9c06-b705f55357d9/cache.tzst -P -C D:/a/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified --force-local --use-compress-program "zstd -d"
+2026-11-13T18:47:44.4812103Z Cache restored successfully
+2026-11-13T18:47:44.5160244Z Restored from cache key "v0-rust-desktop-Windows_NT-x64-ea627442-fbf8b572" full match: true.
+2026-11-13T18:47:44.5458851Z ##[group]Run actions/setup-node@v4
+2026-11-13T18:47:44.5459057Z with:
+2026-11-13T18:47:44.5459177Z   node-version: 20
+2026-11-13T18:47:44.5459298Z   always-auth: false
+2026-11-13T18:47:44.5459421Z   check-latest: false
+2026-11-13T18:47:44.5461000Z   token: ***
+2026-11-13T18:47:44.5461113Z env:
+2026-11-13T18:47:44.5461227Z   CARGO_TERM_COLOR: always
+2026-11-13T18:47:44.5461373Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-11-13T18:47:44.5461537Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:47:44.5461674Z   CACHE_ON_FAILURE: false
+2026-11-13T18:47:44.5461803Z ##[endgroup]
+2026-11-13T18:47:44.6636928Z Attempting to download 20...
+2026-11-13T18:47:44.6759238Z (node:5456) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-13T18:47:44.6759912Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-13T18:47:45.6387036Z Acquiring 20.20.2 - x64 from https://github.com/actions/node-versions/releases/download/20.20.2-23521894959/node-20.20.2-win32-x64.7z
+2026-11-13T18:47:46.0447876Z Extracting ...
+2026-11-13T18:47:47.7990268Z Adding to the cache ...
+2026-11-13T18:47:49.9940315Z ##[group]Environment details
+2026-11-13T18:47:50.8724720Z node: v20.20.2
+2026-11-13T18:47:50.8724937Z npm: 10.8.2
+2026-11-13T18:47:50.8725113Z yarn: 1.22.22
+2026-11-13T18:47:50.8725654Z ##[endgroup]
+2026-11-13T18:47:50.8994864Z Prepare all required actions
+2026-11-13T18:47:50.8995355Z Getting action download info
+2026-11-13T18:47:51.1673877Z Download action repository 'pnpm/action-setup@v4' (SHA:b906affcce14559ad1aafd4ab0e942779e9f58b1)
+2026-11-13T18:47:51.7703087Z ##[group]Run ./noname-next/.github/actions/prepare-original-content
+2026-11-13T18:47:51.7703309Z with:
+2026-11-13T18:47:51.7703432Z   integration-sources: false
+2026-11-13T18:47:51.7703573Z env:
+2026-11-13T18:47:51.7703683Z   CARGO_TERM_COLOR: always
+2026-11-13T18:47:51.7703824Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-11-13T18:47:51.7703977Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:47:51.7704102Z   CACHE_ON_FAILURE: false
+2026-11-13T18:47:51.7704228Z ##[endgroup]
+2026-11-13T18:47:51.7707910Z ##[start-action display=Run actions/checkout@v4;id=__self.__actions_checkout]
+2026-11-13T18:47:51.7824143Z ##[group]Run actions/checkout@v4
+2026-11-13T18:47:51.7824293Z with:
+2026-11-13T18:47:51.7824412Z   repository: libnoname/noname
+2026-11-13T18:47:51.7824601Z   ref: 1a548c95acdf8ac1ef44d74473403eda2ac86cf0
+2026-11-13T18:47:51.7824786Z   path: archive/upstream/noname
+2026-11-13T18:47:51.7825086Z   sparse-checkout: apps/core
+2026-11-13T18:47:51.7825231Z   persist-credentials: false
+2026-11-13T18:47:51.7826705Z   token: ***
+2026-11-13T18:47:51.7838979Z   ssh-strict: true
+2026-11-13T18:47:51.7839134Z   ssh-user: git
+2026-11-13T18:47:51.7839247Z   clean: true
+2026-11-13T18:47:51.7839436Z   sparse-checkout-cone-mode: true
+2026-11-13T18:47:51.7839666Z   fetch-depth: 1
+2026-11-13T18:47:51.7839998Z   fetch-tags: false
+2026-11-13T18:47:51.7840202Z   show-progress: true
+2026-11-13T18:47:51.7840396Z   lfs: false
+2026-11-13T18:47:51.7840566Z   submodules: false
+2026-11-13T18:47:51.7840755Z   set-safe-directory: true
+2026-11-13T18:47:51.7840995Z   allow-unsafe-pr-checkout: false
+2026-11-13T18:47:51.7841230Z env:
+2026-11-13T18:47:51.7841399Z   CARGO_TERM_COLOR: always
+2026-11-13T18:47:51.7841633Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-11-13T18:47:51.7841885Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:47:51.7842088Z   CACHE_ON_FAILURE: false
+2026-11-13T18:47:51.7842304Z ##[endgroup]
+2026-11-13T18:47:51.8611438Z Syncing repository: libnoname/noname
+2026-11-13T18:47:51.8614891Z ##[group]Getting Git version info
+2026-11-13T18:47:51.8615396Z Working directory is 'D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\archive\upstream\noname'
+2026-11-13T18:47:51.8954849Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-11-13T18:47:51.9209482Z git version 2.56.0.windows.4
+2026-11-13T18:47:51.9238656Z ##[endgroup]
+2026-11-13T18:47:51.9249780Z Temporarily overriding HOME='D:\a\_temp\603e5d1d-d761-4f90-8fab-35f1aa59c569' before making global git config changes
+2026-11-13T18:47:51.9250325Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-13T18:47:51.9256206Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\archive\upstream\noname
+2026-11-13T18:47:51.9515690Z ##[group]Initializing the repository
+2026-11-13T18:47:51.9522633Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\archive\upstream\noname
+2026-11-13T18:47:51.9810989Z Initialized empty Git repository in D:/a/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/archive/upstream/noname/.git/
+2026-11-13T18:47:51.9839484Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/libnoname/noname
+2026-11-13T18:47:52.0093248Z ##[endgroup]
+2026-11-13T18:47:52.0093483Z ##[group]Disabling automatic garbage collection
+2026-11-13T18:47:52.0099603Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2026-11-13T18:47:52.0366113Z ##[endgroup]
+2026-11-13T18:47:52.0366441Z ##[group]Setting up auth
+2026-11-13T18:47:52.0376477Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-11-13T18:47:52.0634716Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-11-13T18:47:52.4609185Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-13T18:47:52.4865543Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-11-13T18:47:52.9040095Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-13T18:47:52.9292241Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-13T18:47:53.3318796Z [command]"C:\Program Files\Git\bin\git.exe" config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2026-11-13T18:47:53.3574112Z ##[endgroup]
+2026-11-13T18:47:53.3574354Z ##[group]Fetching the repository
+2026-11-13T18:47:53.3582258Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --filter=blob:none --depth=1 origin 1a548c95acdf8ac1ef44d74473403eda2ac86cf0
+2026-11-13T18:47:54.2498371Z From https://github.com/libnoname/noname
+2026-11-13T18:47:54.2498777Z  * branch            1a548c95acdf8ac1ef44d74473403eda2ac86cf0 -> FETCH_HEAD
+2026-11-13T18:47:54.2525783Z ##[endgroup]
+2026-11-13T18:47:54.2526045Z ##[group]Determining the checkout info
+2026-11-13T18:47:54.2527724Z ##[endgroup]
+2026-11-13T18:47:54.2528107Z ##[group]Setting up sparse checkout
+2026-11-13T18:47:54.2534903Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout set apps/core
+2026-11-13T18:47:54.2808003Z ##[endgroup]
+2026-11-13T18:47:54.2808318Z ##[group]Checking out the ref
+2026-11-13T18:47:54.2815352Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force 1a548c95acdf8ac1ef44d74473403eda2ac86cf0
+2026-11-13T18:48:12.7231511Z Updating files:   0% (1/15443)
+2026-11-13T18:48:12.7812655Z Updating files:   1% (155/15443)
+2026-11-13T18:48:12.8559056Z Updating files:   2% (309/15443)
+2026-11-13T18:48:12.9301774Z Updating files:   3% (464/15443)
+2026-11-13T18:48:13.0094989Z Updating files:   4% (618/15443)
+2026-11-13T18:48:13.1018831Z Updating files:   5% (773/15443)
+2026-11-13T18:48:13.1846368Z Updating files:   6% (927/15443)
+2026-11-13T18:48:13.2524041Z Updating files:   7% (1082/15443)
+2026-11-13T18:48:13.3379225Z Updating files:   8% (1236/15443)
+2026-11-13T18:48:13.3800574Z Updating files:   9% (1390/15443)
+2026-11-13T18:48:13.4171887Z Updating files:   9% (1470/15443)
+2026-11-13T18:48:13.4892099Z Updating files:  10% (1545/15443)
+2026-11-13T18:48:13.5654644Z Updating files:  11% (1699/15443)
+2026-11-13T18:48:13.6537330Z Updating files:  12% (1854/15443)
+2026-11-13T18:48:13.7263921Z Updating files:  13% (2008/15443)
+2026-11-13T18:48:13.7841798Z Updating files:  14% (2163/15443)
+2026-11-13T18:48:13.8510347Z Updating files:  15% (2317/15443)
+2026-11-13T18:48:13.9146215Z Updating files:  16% (2471/15443)
+2026-11-13T18:48:13.9886343Z Updating files:  17% (2626/15443)
+2026-11-13T18:48:14.0703004Z Updating files:  18% (2780/15443)
+2026-11-13T18:48:14.2345694Z Updating files:  19% (2935/15443)
+2026-11-13T18:48:14.3168467Z Updating files:  20% (3089/15443)
+2026-11-13T18:48:14.3814873Z Updating files:  21% (3244/15443)
+2026-11-13T18:48:14.4006546Z Updating files:  21% (3359/15443)
+2026-11-13T18:48:14.4671907Z Updating files:  22% (3398/15443)
+2026-11-13T18:48:14.5356760Z Updating files:  23% (3552/15443)
+2026-11-13T18:48:14.6183609Z Updating files:  24% (3707/15443)
+2026-11-13T18:48:14.6855041Z Updating files:  25% (3861/15443)
+2026-11-13T18:48:14.7481868Z Updating files:  26% (4016/15443)
+2026-11-13T18:48:14.8124885Z Updating files:  27% (4170/15443)
+2026-11-13T18:48:14.8703228Z Updating files:  28% (4325/15443)
+2026-11-13T18:48:14.9376097Z Updating files:  29% (4479/15443)
+2026-11-13T18:48:15.0229457Z Updating files:  30% (4633/15443)
+2026-11-13T18:48:15.0805565Z Updating files:  31% (4788/15443)
+2026-11-13T18:48:15.1515093Z Updating files:  32% (4942/15443)
+2026-11-13T18:48:15.2395419Z Updating files:  33% (5097/15443)
+2026-11-13T18:48:15.3290993Z Updating files:  34% (5251/15443)
+2026-11-13T18:48:15.3922822Z Updating files:  35% (5406/15443)
+2026-11-13T18:48:15.3972966Z Updating files:  35% (5546/15443)
+2026-11-13T18:48:15.6502736Z Updating files:  36% (5560/15443)
+2026-11-13T18:48:15.7573347Z Updating files:  37% (5714/15443)
+2026-11-13T18:48:15.8464476Z Updating files:  38% (5869/15443)
+2026-11-13T18:48:15.9281032Z Updating files:  39% (6023/15443)
+2026-11-13T18:48:16.0146608Z Updating files:  40% (6178/15443)
+2026-11-13T18:48:16.0927866Z Updating files:  41% (6332/15443)
+2026-11-13T18:48:16.1807467Z Updating files:  42% (6487/15443)
+2026-11-13T18:48:16.2424966Z Updating files:  43% (6641/15443)
+2026-11-13T18:48:16.3030073Z Updating files:  44% (6795/15443)
+2026-11-13T18:48:16.3593511Z Updating files:  45% (6950/15443)
+2026-11-13T18:48:16.3922956Z Updating files:  46% (7104/15443)
+2026-11-13T18:48:16.4195496Z Updating files:  46% (7193/15443)
+2026-11-13T18:48:16.5012999Z Updating files:  47% (7259/15443)
+2026-11-13T18:48:16.5767165Z Updating files:  48% (7413/15443)
+2026-11-13T18:48:16.6374446Z Updating files:  49% (7568/15443)
+2026-11-13T18:48:16.7003179Z Updating files:  50% (7722/15443)
+2026-11-13T18:48:16.7828984Z Updating files:  51% (7876/15443)
+2026-11-13T18:48:16.8440470Z Updating files:  52% (8031/15443)
+2026-11-13T18:48:17.0301622Z Updating files:  53% (8185/15443)
+2026-11-13T18:48:17.0984427Z Updating files:  54% (8340/15443)
+2026-11-13T18:48:17.1616138Z Updating files:  55% (8494/15443)
+2026-11-13T18:48:17.2375870Z Updating files:  56% (8649/15443)
+2026-11-13T18:48:17.3212649Z Updating files:  57% (8803/15443)
+2026-11-13T18:48:17.3812374Z Updating files:  58% (8957/15443)
+2026-11-13T18:48:17.3921377Z Updating files:  59% (9112/15443)
+2026-11-13T18:48:17.4403017Z Updating files:  59% (9150/15443)
+2026-11-13T18:48:17.4997209Z Updating files:  60% (9266/15443)
+2026-11-13T18:48:17.5606374Z Updating files:  61% (9421/15443)
+2026-11-13T18:48:17.6346086Z Updating files:  62% (9575/15443)
+2026-11-13T18:48:17.6885022Z Updating files:  63% (9730/15443)
+2026-11-13T18:48:17.7355778Z Updating files:  64% (9884/15443)
+2026-11-13T18:48:17.7713839Z Updating files:  65% (10038/15443)
+2026-11-13T18:48:17.8313877Z Updating files:  66% (10193/15443)
+2026-11-13T18:48:17.8856092Z Updating files:  67% (10347/15443)
+2026-11-13T18:48:17.9622735Z Updating files:  68% (10502/15443)
+2026-11-13T18:48:18.0426323Z Updating files:  69% (10656/15443)
+2026-11-13T18:48:18.5472690Z Updating files:  70% (10811/15443)
+2026-11-13T18:48:18.5509088Z Updating files:  70% (10947/15443)
+2026-11-13T18:48:18.5886883Z Updating files:  71% (10965/15443)
+2026-11-13T18:48:18.6319119Z Updating files:  72% (11119/15443)
+2026-11-13T18:48:18.7235678Z Updating files:  73% (11274/15443)
+2026-11-13T18:48:18.8149687Z Updating files:  74% (11428/15443)
+2026-11-13T18:48:18.9134808Z Updating files:  75% (11583/15443)
+2026-11-13T18:48:19.0147284Z Updating files:  76% (11737/15443)
+2026-11-13T18:48:19.1305370Z Updating files:  77% (11892/15443)
+2026-11-13T18:48:19.2515730Z Updating files:  78% (12046/15443)
+2026-11-13T18:48:19.3431202Z Updating files:  79% (12200/15443)
+2026-11-13T18:48:19.3957136Z Updating files:  80% (12355/15443)
+2026-11-13T18:48:19.4286063Z Updating files:  80% (12449/15443)
+2026-11-13T18:48:19.5309284Z Updating files:  81% (12509/15443)
+2026-11-13T18:48:19.6608405Z Updating files:  82% (12664/15443)
+2026-11-13T18:48:19.8031925Z Updating files:  83% (12818/15443)
+2026-11-13T18:48:19.8926180Z Updating files:  84% (12973/15443)
+2026-11-13T18:48:19.9838320Z Updating files:  85% (13127/15443)
+2026-11-13T18:48:20.0664234Z Updating files:  86% (13281/15443)
+2026-11-13T18:48:20.1495344Z Updating files:  87% (13436/15443)
+2026-11-13T18:48:20.2464969Z Updating files:  88% (13590/15443)
+2026-11-13T18:48:20.3341237Z Updating files:  89% (13745/15443)
+2026-11-13T18:48:20.4040164Z Updating files:  90% (13899/15443)
+2026-11-13T18:48:20.4266202Z Updating files:  90% (14005/15443)
+2026-11-13T18:48:20.5822364Z Updating files:  91% (14054/15443)
+2026-11-13T18:48:20.7812365Z Updating files:  92% (14208/15443)
+2026-11-13T18:48:20.8500626Z Updating files:  93% (14362/15443)
+2026-11-13T18:48:20.8934933Z Updating files:  94% (14517/15443)
+2026-11-13T18:48:20.9513158Z Updating files:  95% (14671/15443)
+2026-11-13T18:48:21.2785490Z Updating files:  96% (14826/15443)
+2026-11-13T18:48:21.3128918Z Updating files:  97% (14980/15443)
+2026-11-13T18:48:21.3524164Z Updating files:  98% (15135/15443)
+2026-11-13T18:48:21.3854376Z Updating files:  99% (15289/15443)
+2026-11-13T18:48:21.3854755Z Updating files: 100% (15443/15443)
+2026-11-13T18:48:21.3855028Z Updating files: 100% (15443/15443), done.
+2026-11-13T18:48:21.4024320Z Note: switching to '1a548c95acdf8ac1ef44d74473403eda2ac86cf0'.
+2026-11-13T18:48:21.4024596Z 
+2026-11-13T18:48:21.4024838Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-11-13T18:48:21.4025319Z changes and commit them, and you can discard any commits you make in this
+2026-11-13T18:48:21.4025782Z state without impacting any branches by switching back to a branch.
+2026-11-13T18:48:21.4026042Z 
+2026-11-13T18:48:21.4026262Z If you want to create a new branch to retain commits you create, you may
+2026-11-13T18:48:21.4026710Z do so (now or later) by using -c with the switch command. Example:
+2026-11-13T18:48:21.4026945Z 
+2026-11-13T18:48:21.4027098Z   git switch -c <new-branch-name>
+2026-11-13T18:48:21.4027254Z 
+2026-11-13T18:48:21.4027367Z Or undo this operation with:
+2026-11-13T18:48:21.4027513Z 
+2026-11-13T18:48:21.4027615Z   git switch -
+2026-11-13T18:48:21.4027728Z 
+2026-11-13T18:48:21.4027984Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-11-13T18:48:21.4028277Z 
+2026-11-13T18:48:21.4028895Z HEAD is now at 1a548c9 docs(changelog): 汇总 db773dad..a44934c5 的变更
+2026-11-13T18:48:21.5258241Z ##[endgroup]
+2026-11-13T18:48:21.5537517Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2026-11-13T18:48:21.5759598Z 1a548c95acdf8ac1ef44d74473403eda2ac86cf0
+2026-11-13T18:48:21.5787532Z ##[group]Removing auth
+2026-11-13T18:48:21.5799889Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-11-13T18:48:21.6094978Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-11-13T18:48:22.0271628Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-13T18:48:22.0500691Z http.https://github.com/.extraheader
+2026-11-13T18:48:22.0527987Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all http.https://github.com/.extraheader
+2026-11-13T18:48:22.0779670Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-11-13T18:48:22.4637765Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-13T18:48:22.4900021Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-13T18:48:22.8561718Z ##[endgroup]
+2026-11-13T18:48:22.8687512Z ##[end-action id=__self.__actions_checkout;outcome=success;conclusion=success;duration_ms=31097]
+2026-11-13T18:48:22.8689287Z ##[start-action display=Bind CI checkout origin to adopted provenance;id=__self.__run]
+2026-11-13T18:48:22.8778477Z ##[group]Run git remote set-url origin https://github.com/libnoname/noname.git
+2026-11-13T18:48:22.8778783Z [36;1mgit remote set-url origin https://github.com/libnoname/noname.git[0m
+2026-11-13T18:48:22.8786609Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2026-11-13T18:48:22.8786825Z env:
+2026-11-13T18:48:22.8786940Z   CARGO_TERM_COLOR: always
+2026-11-13T18:48:22.8787080Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-11-13T18:48:22.8787234Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:48:22.8787354Z   CACHE_ON_FAILURE: false
+2026-11-13T18:48:22.8787477Z ##[endgroup]
+2026-11-13T18:48:22.9420287Z ##[end-action id=__self.__run;outcome=success;conclusion=success;duration_ms=73]
+2026-11-13T18:48:22.9421724Z ##[start-action display=Run actions/checkout@v4;id=__self.__actions_checkout_2]
+2026-11-13T18:48:22.9424655Z ##[end-action id=__self.__actions_checkout_2;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-11-13T18:48:22.9425829Z ##[start-action display=Restore adopted Longxue source input;id=__self.__run_2]
+2026-11-13T18:48:22.9427628Z ##[end-action id=__self.__run_2;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-11-13T18:48:22.9428482Z ##[start-action display=Run pnpm/action-setup@v4;id=__self.__pnpm_action-setup]
+2026-11-13T18:48:22.9511836Z ##[group]Run pnpm/action-setup@v4
+2026-11-13T18:48:22.9511976Z with:
+2026-11-13T18:48:22.9512084Z   version: 9
+2026-11-13T18:48:22.9512194Z   dest: ~/setup-pnpm
+2026-11-13T18:48:22.9512307Z   run_install: null
+2026-11-13T18:48:22.9512416Z   cache: false
+2026-11-13T18:48:22.9512533Z   cache_dependency_path: pnpm-lock.yaml
+2026-11-13T18:48:22.9512696Z   package_json_file: package.json
+2026-11-13T18:48:22.9512828Z   standalone: false
+2026-11-13T18:48:22.9512934Z env:
+2026-11-13T18:48:22.9513035Z   CARGO_TERM_COLOR: always
+2026-11-13T18:48:22.9513181Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-11-13T18:48:22.9513327Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:48:22.9513517Z   CACHE_ON_FAILURE: false
+2026-11-13T18:48:22.9513707Z ##[endgroup]
+2026-11-13T18:48:23.0647542Z ##[group]Running self-installer...
+2026-11-13T18:48:23.3511182Z (node:5828) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-13T18:48:23.3512015Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-13T18:48:23.5097337Z Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-11-13T18:48:23.5160471Z Packages: +1
+2026-11-13T18:48:23.5160720Z +
+2026-11-13T18:48:24.5122526Z Progress: resolved 1, reused 0, downloaded 1, added 0
+2026-11-13T18:48:25.1265589Z Progress: resolved 1, reused 0, downloaded 1, added 1, done
+2026-11-13T18:48:25.1643212Z 
+2026-11-13T18:48:25.1643639Z dependencies:
+2026-11-13T18:48:25.1643920Z + pnpm 9.15.9 (12.18.0 is available)
+2026-11-13T18:48:25.1644047Z 
+2026-11-13T18:48:25.1735889Z Done in 1.9s
+2026-11-13T18:48:25.1973077Z ##[endgroup]
+2026-11-13T18:48:25.1973675Z Installation Completed!
+2026-11-13T18:48:25.2092307Z ##[end-action id=__self.__pnpm_action-setup;outcome=success;conclusion=success;duration_ms=2266]
+2026-11-13T18:48:25.2093883Z ##[start-action display=Install frontend dependencies;id=__self.__run_3]
+2026-11-13T18:48:25.2190572Z ##[group]Run pnpm --dir apps/web-client install --frozen-lockfile
+2026-11-13T18:48:25.2190873Z [36;1mpnpm --dir apps/web-client install --frozen-lockfile[0m
+2026-11-13T18:48:25.2199097Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2026-11-13T18:48:25.2199317Z env:
+2026-11-13T18:48:25.2199433Z   CARGO_TERM_COLOR: always
+2026-11-13T18:48:25.2199573Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-11-13T18:48:25.2199724Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:48:25.2199851Z   CACHE_ON_FAILURE: false
+2026-11-13T18:48:25.2200615Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-11-13T18:48:25.2200805Z ##[endgroup]
+2026-11-13T18:48:25.6421087Z Lockfile is up to date, resolution step is skipped
+2026-11-13T18:48:25.6633982Z Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-11-13T18:48:25.6755536Z Packages: +64
+2026-11-13T18:48:25.6756231Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2026-11-13T18:48:26.6644415Z Progress: resolved 64, reused 0, downloaded 62, added 55
+2026-11-13T18:48:26.7522976Z Progress: resolved 64, reused 0, downloaded 64, added 64, done
+2026-11-13T18:48:26.8337571Z .../node_modules/@swc/core postinstall$ node postinstall.js
+2026-11-13T18:48:26.8422948Z .../esbuild@0.25.12/node_modules/esbuild postinstall$ node install.js
+2026-11-13T18:48:26.9451630Z .../node_modules/@swc/core postinstall: Done
+2026-11-13T18:48:26.9976455Z .../esbuild@0.25.12/node_modules/esbuild postinstall: Done
+2026-11-13T18:48:27.0343480Z 
+2026-11-13T18:48:27.0344164Z dependencies:
+2026-11-13T18:48:27.0344689Z + @tauri-apps/api 2.11.1
+2026-11-13T18:48:27.0345033Z + vue 3.5.39
+2026-11-13T18:48:27.0345511Z + vue-router 4.6.4
+2026-11-13T18:48:27.0345679Z 
+2026-11-13T18:48:27.0345809Z devDependencies:
+2026-11-13T18:48:27.0346063Z + @tauri-apps/cli 2.11.4
+2026-11-13T18:48:27.0346340Z + @vitejs/plugin-vue 5.2.4
+2026-11-13T18:48:27.0346615Z + typescript 5.9.3
+2026-11-13T18:48:27.0346842Z + vite 6.4.3
+2026-11-13T18:48:27.0347127Z + vite-plugin-top-level-await 1.6.0
+2026-11-13T18:48:27.0347441Z + vite-plugin-wasm 3.6.0
+2026-11-13T18:48:27.0347690Z + vue-tsc 2.2.12
+2026-11-13T18:48:27.0348382Z 
+2026-11-13T18:48:27.0494056Z Done in 1.6s using pnpm v9.15.9
+2026-11-13T18:48:27.0674243Z ##[end-action id=__self.__run_3;outcome=success;conclusion=success;duration_ms=1857]
+2026-11-13T18:48:27.0676535Z ##[start-action display=Restore and verify adopted resource bytes;id=__self.__run_4]
+2026-11-13T18:48:27.0778949Z ##[group]Run node scripts/sync-original-content.mjs --resources-only
+2026-11-13T18:48:27.0779396Z [36;1mnode scripts/sync-original-content.mjs --resources-only[0m
+2026-11-13T18:48:27.0779855Z [36;1mnode scripts/sync-original-content.mjs --resources-only --verify-only[0m
+2026-11-13T18:48:27.0780267Z [36;1mgit diff --exit-code -- content/original[0m
+2026-11-13T18:48:27.0790841Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2026-11-13T18:48:27.0791193Z env:
+2026-11-13T18:48:27.0791363Z   CARGO_TERM_COLOR: always
+2026-11-13T18:48:27.0791590Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-11-13T18:48:27.0791844Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:48:27.0792039Z   CACHE_ON_FAILURE: false
+2026-11-13T18:48:27.0792313Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-11-13T18:48:27.0792618Z ##[endgroup]
+2026-11-13T18:48:48.2324968Z original content resources synced:
+2026-11-13T18:48:48.2326975Z   portraits: 2707 files, 387.6 MiB, 2707 linked, 0 copied
+2026-11-13T18:48:48.2327728Z   audio: 9652 files, 620.9 MiB, 9652 linked, 0 copied
+2026-11-13T18:48:48.2327989Z   audio-compat: 5 files, 257.4 KiB, 0 linked, 5 copied
+2026-11-13T18:49:02.0868046Z original content resources verified:
+2026-11-13T18:49:02.0869311Z   portraits: 2707 files, 387.6 MiB, 2707 linked, 0 copied
+2026-11-13T18:49:02.0869679Z   audio: 9652 files, 620.9 MiB, 9652 linked, 0 copied
+2026-11-13T18:49:02.0869916Z   audio-compat: 5 files, 257.4 KiB, 0 linked, 5 copied
+2026-11-13T18:49:02.2066514Z warning: in the working copy of 'content/original/asset-manifest.json', LF will be replaced by CRLF the next time Git touches it
+2026-11-13T18:49:02.3591191Z ##[end-action id=__self.__run_4;outcome=success;conclusion=success;duration_ms=35290]
+2026-11-13T18:49:02.3695505Z ##[group]Run cargo install wasm-pack --version 0.15.0 --locked
+2026-11-13T18:49:02.3695830Z [36;1mcargo install wasm-pack --version 0.15.0 --locked[0m
+2026-11-13T18:49:02.4253745Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-11-13T18:49:02.4253970Z env:
+2026-11-13T18:49:02.4254093Z   CARGO_TERM_COLOR: always
+2026-11-13T18:49:02.4254245Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-11-13T18:49:02.4254426Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:49:02.4254566Z   CACHE_ON_FAILURE: false
+2026-11-13T18:49:02.4254743Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-11-13T18:49:02.4254938Z ##[endgroup]
+2026-11-13T18:49:03.2171058Z [1m[92m    Updating[0m crates.io index
+2026-11-13T18:49:03.3131637Z [1m[92m Downloading[0m crates ...
+2026-11-13T18:49:03.4837154Z [1m[92m  Downloaded[0m wasm-pack v0.15.0
+2026-11-13T18:49:03.6144676Z [1m[92m     Ignored[0m package `wasm-pack v0.15.0` is already installed, use --force to override
+2026-11-13T18:49:03.9217837Z ##[group]Run cargo install tauri-cli --version "^2" --locked
+2026-11-13T18:49:03.9218142Z [36;1mcargo install tauri-cli --version "^2" --locked[0m
+2026-11-13T18:49:03.9264824Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-11-13T18:49:03.9265043Z env:
+2026-11-13T18:49:03.9265170Z   CARGO_TERM_COLOR: always
+2026-11-13T18:49:03.9265324Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-11-13T18:49:03.9266268Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:49:03.9266412Z   CACHE_ON_FAILURE: false
+2026-11-13T18:49:03.9266594Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-11-13T18:49:03.9266790Z ##[endgroup]
+2026-11-13T18:49:04.1509225Z [1m[92m    Updating[0m crates.io index
+2026-11-13T18:49:04.2463685Z [1m[92m Downloading[0m crates ...
+2026-11-13T18:49:04.4462652Z [1m[92m  Downloaded[0m tauri-cli v2.12.4
+2026-11-13T18:49:04.9928501Z [1m[92m     Ignored[0m package `tauri-cli v2.12.4` is already installed, use --force to override
+2026-11-13T18:49:05.0778315Z ##[group]Run cargo tauri build
+2026-11-13T18:49:05.0778535Z [36;1mcargo tauri build[0m
+2026-11-13T18:49:05.0825650Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-11-13T18:49:05.0825879Z env:
+2026-11-13T18:49:05.0826004Z   CARGO_TERM_COLOR: always
+2026-11-13T18:49:05.0826155Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-11-13T18:49:05.0826469Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:49:05.0826622Z   CACHE_ON_FAILURE: false
+2026-11-13T18:49:05.0826804Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-11-13T18:49:05.0827005Z   TAURI_SIGNING_PRIVATE_KEY: 
+2026-11-13T18:49:05.0827145Z ##[endgroup]
+2026-11-13T18:49:05.3668447Z         Info Looking up installed tauri packages to check mismatched versions...
+2026-11-13T18:49:05.8234199Z      Running beforeBuildCommand `pnpm build:desktop`
+2026-11-13T18:49:06.1226751Z 
+2026-11-13T18:49:06.1227543Z > noname-next-web-client@0.1.0 build:desktop D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\apps\web-client
+2026-11-13T18:49:06.1228194Z > node scripts/build-desktop.mjs
+2026-11-13T18:49:06.1228312Z 
+2026-11-13T18:49:06.4650156Z 
+2026-11-13T18:49:06.4651371Z > noname-next-web-client@0.1.0 build:native D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\apps\web-client
+2026-11-13T18:49:06.4651841Z > node scripts/build-native.mjs
+2026-11-13T18:49:06.4651988Z 
+2026-11-13T18:49:19.7882295Z [INFO]: Checking for the Wasm target...
+2026-11-13T18:49:19.8424785Z [INFO]: Compiling to Wasm...
+2026-11-13T18:49:19.8756386Z [1m[93mwarning[0m[1m[97m: unused workspace dependency `accessibility-schema`[0m
+2026-11-13T18:49:19.8756876Z   [1m[96m--> [0mCargo.toml:72:1
+2026-11-13T18:49:19.8757120Z    [1m[96m|[0m
+2026-11-13T18:49:19.8757556Z [1m[96m72[0m [1m[96m|[0m accessibility-schema = { path = "crates/accessibility-schema" }
+2026-11-13T18:49:19.8758134Z    [1m[96m|[0m [1m[93m^^^^^^^^^^^^^^^^^^^^[0m
+2026-11-13T18:49:19.8758450Z    [1m[96m|[0m
+2026-11-13T18:49:19.8759733Z    [1m[96m= [0m[1m[97mnote[0m: `cargo::unused_workspace_dependencies` is set to `warn` by default
+2026-11-13T18:49:19.8760306Z [1m[96mhelp[0m: consider removing the workspace dependency `accessibility-schema`
+2026-11-13T18:49:19.8760667Z [1m[93mwarning[0m[1m[97m: unused workspace dependency `bytemuck`[0m
+2026-11-13T18:49:19.8760932Z   [1m[96m--> [0mCargo.toml:80:1
+2026-11-13T18:49:19.8761102Z    [1m[96m|[0m
+2026-11-13T18:49:19.8761356Z [1m[96m80[0m [1m[96m|[0m bytemuck = { version = "1", features = ["derive"] }
+2026-11-13T18:49:19.8761604Z    [1m[96m|[0m [1m[93m^^^^^^^^[0m
+2026-11-13T18:49:19.8761776Z    [1m[96m|[0m
+2026-11-13T18:49:19.8762009Z [1m[96mhelp[0m: consider removing the workspace dependency `bytemuck`
+2026-11-13T18:49:19.8762324Z [1m[93mwarning[0m[1m[97m: unused workspace dependency `devtools`[0m
+2026-11-13T18:49:19.8762570Z   [1m[96m--> [0mCargo.toml:73:1
+2026-11-13T18:49:19.8762730Z    [1m[96m|[0m
+2026-11-13T18:49:19.8762944Z [1m[96m73[0m [1m[96m|[0m devtools = { path = "crates/devtools" }
+2026-11-13T18:49:19.8763170Z    [1m[96m|[0m [1m[93m^^^^^^^^[0m
+2026-11-13T18:49:19.8763324Z    [1m[96m|[0m
+2026-11-13T18:49:19.8763547Z [1m[96mhelp[0m: consider removing the workspace dependency `devtools`
+2026-11-13T18:49:19.8763864Z [1m[93mwarning[0m[1m[97m: unused workspace dependency `diagnostics`[0m
+2026-11-13T18:49:19.8764341Z   [1m[96m--> [0mCargo.toml:69:1
+2026-11-13T18:49:19.8764494Z    [1m[96m|[0m
+2026-11-13T18:49:19.8764714Z [1m[96m69[0m [1m[96m|[0m diagnostics = { path = "crates/diagnostics" }
+2026-11-13T18:49:19.8764951Z    [1m[96m|[0m [1m[93m^^^^^^^^^^^[0m
+2026-11-13T18:49:19.8765108Z    [1m[96m|[0m
+2026-11-13T18:49:19.8765341Z [1m[96mhelp[0m: consider removing the workspace dependency `diagnostics`
+2026-11-13T18:49:19.8767370Z [1m[93mwarning[0m[1m[97m: unused field `repository` in `workspace.package`[0m
+2026-11-13T18:49:19.8767674Z   [1m[96m--> [0mCargo.toml:59:1
+2026-11-13T18:49:19.8767824Z    [1m[96m|[0m
+2026-11-13T18:49:19.8768076Z [1m[96m59[0m [1m[96m|[0m repository = "https://github.com/local/noname-next"
+2026-11-13T18:49:19.8768369Z    [1m[96m|[0m [1m[93m^^^^^^^^^^[0m
+2026-11-13T18:49:19.8768571Z    [1m[96m|[0m
+2026-11-13T18:49:19.8768892Z    [1m[96m= [0m[1m[97mnote[0m: `cargo::unused_workspace_package_fields` is set to `warn` by default
+2026-11-13T18:49:19.8769483Z [1m[96mhelp[0m: consider removing the field `workspace.package.repository`
+2026-11-13T18:49:19.8769801Z [1m[93mwarning[0m: workspace (manifest) generated 5 warnings
+2026-11-13T18:49:20.3524999Z [1m[92m   Compiling[0m engine-api v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\engine-api)
+2026-11-13T18:49:20.3531565Z [1m[92m   Compiling[0m resource-schema v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\resource-schema)
+2026-11-13T18:49:20.3532913Z [1m[92m   Compiling[0m licensing-schema v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\licensing-schema)
+2026-11-13T18:49:22.6884351Z [1m[92m   Compiling[0m rule-api v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\rule-api)
+2026-11-13T18:49:36.1847070Z [1m[92m   Compiling[0m rule-vm v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\rule-vm)
+2026-11-13T18:49:37.0205531Z [1m[92m   Compiling[0m engine-native-kernel v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\engine-native-kernel)
+2026-11-13T18:49:37.0207207Z [1m[92m   Compiling[0m content-schema v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\content-schema)
+2026-11-13T18:49:43.3549730Z [1m[92m   Compiling[0m engine-native-content v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\engine-native-content)
+2026-11-13T18:49:52.0302323Z [1m[92m   Compiling[0m content-runtime v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\content-runtime)
+2026-11-13T18:50:04.0901806Z [1m[92m   Compiling[0m engine-native v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\engine-native)
+2026-11-13T18:50:09.8350975Z [1m[92m   Compiling[0m content-native-loader v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\content-native-loader)
+2026-11-13T18:50:39.4223749Z [1m[92m   Compiling[0m engine-native-wasm v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\engine-native-wasm)
+2026-11-13T18:50:51.8277087Z [1m[92m    Finished[0m `release` profile [optimized] target(s) in 1m 31s
+2026-11-13T18:50:51.8563239Z [INFO]: Installing wasm-bindgen...
+2026-11-13T18:50:53.3191691Z [INFO]: Optional fields missing from Cargo.toml: 'repository', 'license'. These are not necessary, but recommended
+2026-11-13T18:50:53.3195656Z [INFO]: :-) Done in 1m 33s
+2026-11-13T18:50:53.3196197Z [INFO]: :-) Your wasm pkg is ready to publish at D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\apps\web-client\src\worker\.native-pkg-tmp.
+2026-11-13T18:50:53.3460554Z native engine pkg (web) deployed to D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\apps\web-client\src\worker\native-pkg
+2026-11-13T18:50:53.6425517Z 
+2026-11-13T18:50:53.6426375Z > noname-next-web-client@0.1.0 build:wasm D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\apps\web-client
+2026-11-13T18:50:53.6426796Z > node scripts/build-wasm.mjs
+2026-11-13T18:50:53.6426892Z 
+2026-11-13T18:50:53.6935015Z Using wasm-pack…
+2026-11-13T18:50:53.9365754Z [INFO]: Checking for the Wasm target...
+2026-11-13T18:50:53.9883471Z [INFO]: Compiling to Wasm...
+2026-11-13T18:50:54.0219185Z [1m[93mwarning[0m[1m[97m: unused workspace dependency `accessibility-schema`[0m
+2026-11-13T18:50:54.0219720Z   [1m[96m--> [0mCargo.toml:72:1
+2026-11-13T18:50:54.0219990Z    [1m[96m|[0m
+2026-11-13T18:50:54.0220458Z [1m[96m72[0m [1m[96m|[0m accessibility-schema = { path = "crates/accessibility-schema" }
+2026-11-13T18:50:54.0220924Z    [1m[96m|[0m [1m[93m^^^^^^^^^^^^^^^^^^^^[0m
+2026-11-13T18:50:54.0221335Z    [1m[96m|[0m
+2026-11-13T18:50:54.0222075Z    [1m[96m= [0m[1m[97mnote[0m: `cargo::unused_workspace_dependencies` is set to `warn` by default
+2026-11-13T18:50:54.0222712Z [1m[96mhelp[0m: consider removing the workspace dependency `accessibility-schema`
+2026-11-13T18:50:54.0223277Z [1m[93mwarning[0m[1m[97m: unused workspace dependency `bytemuck`[0m
+2026-11-13T18:50:54.0223653Z   [1m[96m--> [0mCargo.toml:80:1
+2026-11-13T18:50:54.0223911Z    [1m[96m|[0m
+2026-11-13T18:50:54.0224164Z [1m[96m80[0m [1m[96m|[0m bytemuck = { version = "1", features = ["derive"] }
+2026-11-13T18:50:54.0224412Z    [1m[96m|[0m [1m[93m^^^^^^^^[0m
+2026-11-13T18:50:54.0224573Z    [1m[96m|[0m
+2026-11-13T18:50:54.0224814Z [1m[96mhelp[0m: consider removing the workspace dependency `bytemuck`
+2026-11-13T18:50:54.0225126Z [1m[93mwarning[0m[1m[97m: unused workspace dependency `devtools`[0m
+2026-11-13T18:50:54.0225369Z   [1m[96m--> [0mCargo.toml:73:1
+2026-11-13T18:50:54.0225530Z    [1m[96m|[0m
+2026-11-13T18:50:54.0225747Z [1m[96m73[0m [1m[96m|[0m devtools = { path = "crates/devtools" }
+2026-11-13T18:50:54.0225973Z    [1m[96m|[0m [1m[93m^^^^^^^^[0m
+2026-11-13T18:50:54.0226136Z    [1m[96m|[0m
+2026-11-13T18:50:54.0226364Z [1m[96mhelp[0m: consider removing the workspace dependency `devtools`
+2026-11-13T18:50:54.0226685Z [1m[93mwarning[0m[1m[97m: unused workspace dependency `diagnostics`[0m
+2026-11-13T18:50:54.0226936Z   [1m[96m--> [0mCargo.toml:69:1
+2026-11-13T18:50:54.0227086Z    [1m[96m|[0m
+2026-11-13T18:50:54.0227311Z [1m[96m69[0m [1m[96m|[0m diagnostics = { path = "crates/diagnostics" }
+2026-11-13T18:50:54.0227554Z    [1m[96m|[0m [1m[93m^^^^^^^^^^^[0m
+2026-11-13T18:50:54.0227716Z    [1m[96m|[0m
+2026-11-13T18:50:54.0227953Z [1m[96mhelp[0m: consider removing the workspace dependency `diagnostics`
+2026-11-13T18:50:54.0228294Z [1m[93mwarning[0m[1m[97m: unused field `repository` in `workspace.package`[0m
+2026-11-13T18:50:54.0228549Z   [1m[96m--> [0mCargo.toml:59:1
+2026-11-13T18:50:54.0228704Z    [1m[96m|[0m
+2026-11-13T18:50:54.0228948Z [1m[96m59[0m [1m[96m|[0m repository = "https://github.com/local/noname-next"
+2026-11-13T18:50:54.0229204Z    [1m[96m|[0m [1m[93m^^^^^^^^^^[0m
+2026-11-13T18:50:54.0229361Z    [1m[96m|[0m
+2026-11-13T18:50:54.0229674Z    [1m[96m= [0m[1m[97mnote[0m: `cargo::unused_workspace_package_fields` is set to `warn` by default
+2026-11-13T18:50:54.0230057Z [1m[96mhelp[0m: consider removing the field `workspace.package.repository`
+2026-11-13T18:50:54.0230372Z [1m[93mwarning[0m: workspace (manifest) generated 5 warnings
+2026-11-13T18:50:54.1169917Z [1m[92m   Compiling[0m resource-schema v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\resource-schema)
+2026-11-13T18:50:54.1171329Z [1m[92m   Compiling[0m licensing-schema v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\licensing-schema)
+2026-11-13T18:50:54.3514703Z [1m[92m   Compiling[0m content-schema v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\content-schema)
+2026-11-13T18:51:06.3441856Z [1m[92m   Compiling[0m content-compiler v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\content-compiler)
+2026-11-13T18:51:06.3443726Z [1m[92m   Compiling[0m content-runtime v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\content-runtime)
+2026-11-13T18:51:09.9690641Z [1m[92m   Compiling[0m engine-core v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\engine-core)
+2026-11-13T18:51:12.9003711Z warning: unused imports: `choose_gain_other_skill`, `lose_gained_skill`, and `resolve_potheyun`
+2026-11-13T18:51:12.9074277Z   --> crates\engine-core\src\effect\mod.rs:12:5
+2026-11-13T18:51:12.9134210Z    |
+2026-11-13T18:51:12.9233087Z 12 |     choose_gain_other_skill, lose_gained_skill, resolve_choose_gain_other_skill,
+2026-11-13T18:51:12.9337114Z    |     ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+2026-11-13T18:51:12.9412507Z 13 |     resolve_lose_gained_skill, resolve_potheyun, resolve_potheyun_pick,
+2026-11-13T18:51:12.9453723Z    |                                ^^^^^^^^^^^^^^^^
+2026-11-13T18:51:12.9550054Z    |
+2026-11-13T18:51:12.9673129Z    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+2026-11-13T18:51:12.9730570Z 
+2026-11-13T18:51:12.9788258Z 
+2026-11-13T18:51:12.9887226Z warning: unused import: `primitives::enable_equip_slot`
+2026-11-13T18:51:12.9989223Z   --> crates\engine-core\src\effect\mod.rs:21:16
+2026-11-13T18:51:13.0052326Z    |
+2026-11-13T18:51:13.0112479Z 21 | pub(crate) use primitives::enable_equip_slot;
+2026-11-13T18:51:13.0207982Z    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T18:51:13.0322623Z 
+2026-11-13T18:51:13.0380519Z 
+2026-11-13T18:51:13.0442257Z warning: unused import: `primitives::resolve_xinfu_qiai`
+2026-11-13T18:51:13.0524965Z   --> crates\engine-core\src\effect\mod.rs:24:16
+2026-11-13T18:51:13.0641575Z    |
+2026-11-13T18:51:13.0704907Z 24 | pub(crate) use primitives::resolve_xinfu_qiai;
+2026-11-13T18:51:13.0761293Z    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T18:51:13.0859029Z 
+2026-11-13T18:51:13.0959707Z 
+2026-11-13T18:51:13.1038852Z warning: unused import: `primitives::resolve_twxiongjun`
+2026-11-13T18:51:13.1080729Z   --> crates\engine-core\src\effect\mod.rs:62:16
+2026-11-13T18:51:13.1176730Z    |
+2026-11-13T18:51:13.1292266Z 62 | pub(crate) use primitives::resolve_twxiongjun;
+2026-11-13T18:51:13.1373436Z    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T18:51:13.1412880Z 
+2026-11-13T18:51:13.1511167Z 
+2026-11-13T18:51:13.1610943Z warning: unused import: `primitives::resolve_yixiang`
+2026-11-13T18:51:13.1696579Z   --> crates\engine-core\src\effect\mod.rs:63:16
+2026-11-13T18:51:13.1736221Z    |
+2026-11-13T18:51:13.1832697Z 63 | pub(crate) use primitives::resolve_yixiang;
+2026-11-13T18:51:13.1948777Z    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T18:51:13.2036501Z 
+2026-11-13T18:51:13.2069170Z 
+2026-11-13T18:51:13.2161074Z warning: unused import: `primitives::resolve_qiangyong`
+2026-11-13T18:51:13.2364027Z   --> crates\engine-core\src\effect\mod.rs:64:16
+2026-11-13T18:51:13.2483401Z    |
+2026-11-13T18:51:13.2701191Z 64 | pub(crate) use primitives::resolve_qiangyong;
+2026-11-13T18:51:13.2797457Z    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T18:51:13.2818769Z 
+2026-11-13T18:51:13.2821392Z 
+2026-11-13T18:51:13.3024658Z warning: unused import: `primitives::resolve_duoduan`
+2026-11-13T18:51:13.3116874Z   --> crates\engine-core\src\effect\mod.rs:66:16
+2026-11-13T18:51:13.3135424Z    |
+2026-11-13T18:51:13.3154911Z 66 | pub(crate) use primitives::resolve_duoduan;
+2026-11-13T18:51:13.3356926Z    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T18:51:13.3437894Z 
+2026-11-13T18:51:13.3457772Z 
+2026-11-13T18:51:13.3473808Z warning: unused import: `primitives::resolve_reliangyin`
+2026-11-13T18:51:13.3674032Z   --> crates\engine-core\src\effect\mod.rs:70:16
+2026-11-13T18:51:13.3774896Z    |
+2026-11-13T18:51:13.3791471Z 70 | pub(crate) use primitives::resolve_reliangyin;
+2026-11-13T18:51:13.3791854Z    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T18:51:13.3792093Z 
+2026-11-13T18:51:13.4004874Z 
+2026-11-13T18:51:13.4107402Z warning: unused import: `commit_hand_compare`
+2026-11-13T18:51:13.4126677Z   --> crates\engine-core\src\effect\mod.rs:75:26
+2026-11-13T18:51:13.4329091Z    |
+2026-11-13T18:51:13.4426025Z 75 |     commit_guanxing_top, commit_hand_compare, commit_hand_compare_between,
+2026-11-13T18:51:13.4426980Z    |                          ^^^^^^^^^^^^^^^^^^^
+2026-11-13T18:51:13.4447269Z 
+2026-11-13T18:51:13.4660321Z 
+2026-11-13T18:51:13.4746796Z warning: unused imports: `RESOLVE_ZHENGSU_CHOICE` and `resolve_rechuhai_choice`
+2026-11-13T18:51:13.4779705Z    --> crates\engine-core\src\effect\mod.rs:145:31
+2026-11-13T18:51:13.4981921Z     |
+2026-11-13T18:51:13.5062693Z 145 |     resolve_potzhouyu_choice, resolve_rechuhai_choice, skill_pile_def, twchengpu_field_cards,
+2026-11-13T18:51:13.5082292Z     |                               ^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T18:51:13.5095655Z ...
+2026-11-13T18:51:13.5317443Z 206 |     RESOLVE_ZHENGRONG_CUSTOM_CHOICE, RESOLVE_ZHENGSU_CHOICE, RESOLVE_ZHENLIANG_DAMAGE,
+2026-11-13T18:51:13.5398540Z     |                                      ^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T18:51:13.5398808Z 
+2026-11-13T18:51:13.5398816Z 
+2026-11-13T18:51:13.5398968Z warning: unused import: `Serialize`
+2026-11-13T18:51:13.5399320Z     --> crates\engine-core\src\state\turn.rs:1390:44
+2026-11-13T18:51:13.5399611Z      |
+2026-11-13T18:51:13.5400020Z 1390 |     use serde::{Deserialize, Deserializer, Serialize, Serializer};
+2026-11-13T18:51:13.5400452Z      |                                            ^^^^^^^^^
+2026-11-13T18:51:13.5400660Z 
+2026-11-13T18:51:13.5400666Z 
+2026-11-13T18:51:20.6405982Z warning: unused variable: `skill`
+2026-11-13T18:51:20.6410927Z    --> crates\engine-core\src\command\resolve_choice\group_post_3\resolve_resolve_tianxiang.rs:679:9
+2026-11-13T18:51:20.6412020Z     |
+2026-11-13T18:51:20.6412517Z 679 |     let skill = engine_api::SkillId::new(payload[2]);
+2026-11-13T18:51:20.6413109Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:20.6413559Z     |
+2026-11-13T18:51:20.6413985Z     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+2026-11-13T18:51:20.6414370Z 
+2026-11-13T18:51:20.6414541Z 
+2026-11-13T18:51:20.6447701Z warning: unused variable: `skill`
+2026-11-13T18:51:20.6448316Z   --> crates\engine-core\src\command\resolve_choice\group_post_3\resolve_resolve_lulve.rs:90:9
+2026-11-13T18:51:20.6448908Z    |
+2026-11-13T18:51:20.6449301Z 90 |     let skill = engine_api::SkillId::new(*skill);
+2026-11-13T18:51:20.6449830Z    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:20.6450210Z 
+2026-11-13T18:51:20.6450341Z 
+2026-11-13T18:51:20.6493037Z warning: unused variable: `skill`
+2026-11-13T18:51:20.6493689Z    --> crates\engine-core\src\command\resolve_choice\group_post_3\resolve_resolve_lulve.rs:235:17
+2026-11-13T18:51:20.6494232Z     |
+2026-11-13T18:51:20.6494653Z 235 |             let skill = engine_api::SkillId::new(*skill);
+2026-11-13T18:51:20.6495203Z     |                 ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:20.6495614Z 
+2026-11-13T18:51:20.6495754Z 
+2026-11-13T18:51:20.6621417Z warning: unused variable: `target`
+2026-11-13T18:51:20.6622273Z    --> crates\engine-core\src\command\resolve_choice\group_post_4\resolve_resolve_dctingxian.rs:199:13
+2026-11-13T18:51:20.6623109Z     |
+2026-11-13T18:51:20.6623542Z 199 |         let target = PlayerId::new(payload[3]);
+2026-11-13T18:51:20.6624098Z     |             ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+2026-11-13T18:51:20.6624417Z 
+2026-11-13T18:51:20.6624441Z 
+2026-11-13T18:51:20.6751587Z warning: variable does not need to be mutable
+2026-11-13T18:51:20.6752450Z   --> crates\engine-core\src\command\resolve_choice\group_post_4\resolve_resolve_zhiba.rs:93:9
+2026-11-13T18:51:20.6752934Z    |
+2026-11-13T18:51:20.6754728Z 93 |     let mut target = PlayerId::new(*payload.get(3).unwrap_or(&0));
+2026-11-13T18:51:20.6755174Z    |         ----^^^^^^
+2026-11-13T18:51:20.6755435Z    |         |
+2026-11-13T18:51:20.6755663Z    |         help: remove this `mut`
+2026-11-13T18:51:20.6755875Z    |
+2026-11-13T18:51:20.6756197Z    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+2026-11-13T18:51:20.6756480Z 
+2026-11-13T18:51:20.6756506Z 
+2026-11-13T18:51:20.6988557Z warning: unused variable: `skill`
+2026-11-13T18:51:20.6989481Z    --> crates\engine-core\src\command\resolve_choice\group_post_4\settle_releiji_judgment.rs:103:9
+2026-11-13T18:51:20.6990167Z     |
+2026-11-13T18:51:20.6990748Z 103 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+2026-11-13T18:51:20.6991428Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:20.6991856Z 
+2026-11-13T18:51:20.6992015Z 
+2026-11-13T18:51:20.7011678Z warning: unused variable: `skill`
+2026-11-13T18:51:20.7012527Z    --> crates\engine-core\src\command\resolve_choice\group_post_4\settle_releiji_judgment.rs:160:9
+2026-11-13T18:51:20.7013085Z     |
+2026-11-13T18:51:20.7013618Z 160 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+2026-11-13T18:51:20.7014231Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:20.7014636Z 
+2026-11-13T18:51:20.7014779Z 
+2026-11-13T18:51:20.7070851Z warning: unused variable: `player`
+2026-11-13T18:51:20.7071528Z    --> crates\engine-core\src\command\resolve_choice\group_post_4\settle_releiji_judgment.rs:344:5
+2026-11-13T18:51:20.7072146Z     |
+2026-11-13T18:51:20.7072500Z 344 |     player: PlayerId,
+2026-11-13T18:51:20.7072980Z     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+2026-11-13T18:51:20.7073362Z 
+2026-11-13T18:51:20.7073491Z 
+2026-11-13T18:51:20.7073725Z warning: unused variable: `skill`
+2026-11-13T18:51:20.7074312Z    --> crates\engine-core\src\command\resolve_choice\group_post_4\settle_releiji_judgment.rs:348:5
+2026-11-13T18:51:20.7074888Z     |
+2026-11-13T18:51:20.7075281Z 348 |     skill: engine_api::SkillId,
+2026-11-13T18:51:20.7075811Z     |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:20.7076223Z 
+2026-11-13T18:51:20.7076323Z 
+2026-11-13T18:51:20.7093797Z warning: unused variable: `skill`
+2026-11-13T18:51:20.7094634Z    --> crates\engine-core\src\command\resolve_choice\group_post_4\settle_releiji_judgment.rs:405:9
+2026-11-13T18:51:20.7095251Z     |
+2026-11-13T18:51:20.7095780Z 405 |     let skill = engine_api::SkillId::new(*payload.get(5).unwrap_or(&0));
+2026-11-13T18:51:20.7096463Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:20.7096878Z 
+2026-11-13T18:51:20.7097040Z 
+2026-11-13T18:51:20.7165469Z warning: unused variable: `skill`
+2026-11-13T18:51:20.7166647Z    --> crates\engine-core\src\command\resolve_choice\group_post_4\settle_releiji_judgment.rs:575:9
+2026-11-13T18:51:20.7167259Z     |
+2026-11-13T18:51:20.7167765Z 575 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+2026-11-13T18:51:20.7168392Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:20.7168783Z 
+2026-11-13T18:51:20.7168930Z 
+2026-11-13T18:51:20.7179772Z warning: unused variable: `skill`
+2026-11-13T18:51:20.7180791Z    --> crates\engine-core\src\command\resolve_choice\group_post_4\settle_releiji_judgment.rs:655:9
+2026-11-13T18:51:20.7181335Z     |
+2026-11-13T18:51:20.7182794Z 655 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+2026-11-13T18:51:20.7184123Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:20.7184772Z 
+2026-11-13T18:51:20.7185975Z 
+2026-11-13T18:51:20.7200696Z warning: unused variable: `skill`
+2026-11-13T18:51:20.7201876Z    --> crates\engine-core\src\command\resolve_choice\group_post_4\settle_releiji_judgment.rs:702:9
+2026-11-13T18:51:20.7202668Z     |
+2026-11-13T18:51:20.7203214Z 702 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+2026-11-13T18:51:20.7203833Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:20.7204234Z 
+2026-11-13T18:51:20.7204363Z 
+2026-11-13T18:51:20.7262101Z warning: unused variable: `skill`
+2026-11-13T18:51:20.7262875Z    --> crates\engine-core\src\command\resolve_choice\group_post_4\resolve_qizhi_target.rs:144:9
+2026-11-13T18:51:20.7263404Z     |
+2026-11-13T18:51:20.7263862Z 144 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+2026-11-13T18:51:20.7264468Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:20.7264854Z 
+2026-11-13T18:51:20.7264997Z 
+2026-11-13T18:51:20.7275653Z warning: unused variable: `skill`
+2026-11-13T18:51:20.7276395Z    --> crates\engine-core\src\command\resolve_choice\group_post_4\resolve_qizhi_target.rs:198:9
+2026-11-13T18:51:20.7276919Z     |
+2026-11-13T18:51:20.7277383Z 198 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+2026-11-13T18:51:20.7277969Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:20.7278358Z 
+2026-11-13T18:51:20.7278485Z 
+2026-11-13T18:51:20.7348343Z warning: unused variable: `skill`
+2026-11-13T18:51:20.7349124Z    --> crates\engine-core\src\command\resolve_choice\group_post_4\resolve_qizhi_target.rs:408:9
+2026-11-13T18:51:20.7349682Z     |
+2026-11-13T18:51:20.7350163Z 408 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+2026-11-13T18:51:20.7350789Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:20.7351182Z 
+2026-11-13T18:51:20.7351330Z 
+2026-11-13T18:51:20.7426018Z warning: unused variable: `skill`
+2026-11-13T18:51:20.7426793Z    --> crates\engine-core\src\command\resolve_choice\group_post_4\resolve_qizhi_target.rs:596:9
+2026-11-13T18:51:20.7427357Z     |
+2026-11-13T18:51:20.7427828Z 596 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+2026-11-13T18:51:20.7428428Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:20.7428810Z 
+2026-11-13T18:51:20.7428954Z 
+2026-11-13T18:51:20.7437199Z warning: unused variable: `skill`
+2026-11-13T18:51:20.7437962Z    --> crates\engine-core\src\command\resolve_choice\group_post_4\resolve_qizhi_target.rs:633:9
+2026-11-13T18:51:20.7438496Z     |
+2026-11-13T18:51:20.7438964Z 633 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+2026-11-13T18:51:20.7439551Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:20.7440039Z 
+2026-11-13T18:51:20.7440190Z 
+2026-11-13T18:51:20.7461806Z warning: unused variable: `skill`
+2026-11-13T18:51:20.7462589Z    --> crates\engine-core\src\command\resolve_choice\group_post_4\resolve_qizhi_target.rs:710:9
+2026-11-13T18:51:20.7463135Z     |
+2026-11-13T18:51:20.7463822Z 710 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+2026-11-13T18:51:20.7464455Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:20.7464852Z 
+2026-11-13T18:51:20.7464988Z 
+2026-11-13T18:51:20.7481968Z warning: unused variable: `skill`
+2026-11-13T18:51:20.7483157Z   --> crates\engine-core\src\command\resolve_choice\group_post_4\resolve_kuizhu_damage.rs:14:9
+2026-11-13T18:51:20.7483700Z    |
+2026-11-13T18:51:20.7484150Z 14 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+2026-11-13T18:51:20.7484755Z    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:20.7485139Z 
+2026-11-13T18:51:20.7485275Z 
+2026-11-13T18:51:20.7872567Z warning: unused variable: `pile_zone`
+2026-11-13T18:51:20.7873844Z    --> crates\engine-core\src\command\resolve_choice\group_post_5\resolve_twjuxiang_card.rs:726:9
+2026-11-13T18:51:20.7874472Z     |
+2026-11-13T18:51:20.7874787Z 726 |     let pile_zone = tx
+2026-11-13T18:51:20.7875351Z     |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_pile_zone`
+2026-11-13T18:51:20.7875996Z 
+2026-11-13T18:51:20.7876161Z 
+2026-11-13T18:51:20.8025110Z warning: unused variable: `phase`
+2026-11-13T18:51:20.8025983Z    --> crates\engine-core\src\command\resolve_choice\group_post_5\resolve_qiaobian_discard.rs:352:9
+2026-11-13T18:51:20.8026597Z     |
+2026-11-13T18:51:20.8026993Z 352 |     let phase = *payload.get(2).unwrap_or(&0);
+2026-11-13T18:51:20.8027527Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_phase`
+2026-11-13T18:51:20.8027910Z 
+2026-11-13T18:51:20.8028077Z 
+2026-11-13T18:51:20.8028309Z warning: unused variable: `skill`
+2026-11-13T18:51:20.8028893Z    --> crates\engine-core\src\command\resolve_choice\group_post_5\resolve_qiaobian_discard.rs:354:9
+2026-11-13T18:51:20.8029435Z     |
+2026-11-13T18:51:20.8029932Z 354 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+2026-11-13T18:51:20.8030532Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:20.8030918Z 
+2026-11-13T18:51:20.8031021Z 
+2026-11-13T18:51:20.8086720Z warning: variable does not need to be mutable
+2026-11-13T18:51:20.8087650Z    --> crates\engine-core\src\command\resolve_choice\group_post_5\resolve_resolve_xinkuangfu.rs:185:21
+2026-11-13T18:51:20.8088173Z     |
+2026-11-13T18:51:20.8088487Z 185 |                 let mut next_payload = vec![
+2026-11-13T18:51:20.8088849Z     |                     ----^^^^^^^^^^^^
+2026-11-13T18:51:20.8089151Z     |                     |
+2026-11-13T18:51:20.8089455Z     |                     help: remove this `mut`
+2026-11-13T18:51:20.8089706Z 
+2026-11-13T18:51:20.8089795Z 
+2026-11-13T18:51:20.8463559Z warning: unused variable: `count`
+2026-11-13T18:51:20.8464326Z   --> crates\engine-core\src\command\resolve_choice\group_post_6\resolve_resolve_xinxingluan.rs:23:9
+2026-11-13T18:51:20.8464823Z    |
+2026-11-13T18:51:20.8465216Z 23 |     let count = payload.get(6).copied().unwrap_or(0) as usize;
+2026-11-13T18:51:20.8465721Z    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_count`
+2026-11-13T18:51:20.8466072Z 
+2026-11-13T18:51:20.8466205Z 
+2026-11-13T18:51:20.8466397Z warning: unused variable: `draw`
+2026-11-13T18:51:20.8466930Z    --> crates\engine-core\src\command\resolve_choice\group_post_6\resolve_resolve_xinxingluan.rs:213:17
+2026-11-13T18:51:20.8467416Z     |
+2026-11-13T18:51:20.8467684Z 213 |             let draw = tx
+2026-11-13T18:51:20.8468101Z     |                 ^^^^ help: if this is intentional, prefix it with an underscore: `_draw`
+2026-11-13T18:51:20.8468424Z 
+2026-11-13T18:51:20.8468480Z 
+2026-11-13T18:51:21.0201167Z warning: unused variable: `skill`
+2026-11-13T18:51:21.0202330Z    --> crates\engine-core\src\command\resolve_choice\group_post_8\open_equipment_pair_choice.rs:625:9
+2026-11-13T18:51:21.0202836Z     |
+2026-11-13T18:51:21.0203239Z 625 |     let skill = engine_api::SkillId::new(payload[2]);
+2026-11-13T18:51:21.0203735Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:21.0204073Z 
+2026-11-13T18:51:21.0204176Z 
+2026-11-13T18:51:21.0528963Z warning: unused variable: `target`
+2026-11-13T18:51:21.0530201Z    --> crates\engine-core\src\command\resolve_choice\group_post_8\resolve_resolve_biaozhao3.rs:186:9
+2026-11-13T18:51:21.0530729Z     |
+2026-11-13T18:51:21.0531005Z 186 |     let target = payload[5];
+2026-11-13T18:51:21.0531444Z     |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+2026-11-13T18:51:21.0531775Z 
+2026-11-13T18:51:21.0531890Z 
+2026-11-13T18:51:21.0542736Z warning: unused variable: `target`
+2026-11-13T18:51:21.0543733Z    --> crates\engine-core\src\command\resolve_choice\group_post_8\resolve_resolve_biaozhao3.rs:232:9
+2026-11-13T18:51:21.0544260Z     |
+2026-11-13T18:51:21.0544676Z 232 |     let target = payload[6];
+2026-11-13T18:51:21.0545119Z     |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+2026-11-13T18:51:21.0545407Z 
+2026-11-13T18:51:21.0545497Z 
+2026-11-13T18:51:21.0556204Z warning: unused variable: `kind`
+2026-11-13T18:51:21.0556907Z    --> crates\engine-core\src\command\resolve_choice\group_post_8\resolve_resolve_biaozhao3.rs:292:9
+2026-11-13T18:51:21.0557391Z     |
+2026-11-13T18:51:21.0557652Z 292 |     let kind = payload[4];
+2026-11-13T18:51:21.0558070Z     |         ^^^^ help: if this is intentional, prefix it with an underscore: `_kind`
+2026-11-13T18:51:21.0558390Z 
+2026-11-13T18:51:21.0558479Z 
+2026-11-13T18:51:21.2029602Z warning: unused variable: `mode`
+2026-11-13T18:51:21.2030377Z   --> crates\engine-core\src\command\resolve_choice\group_post_9\resolve_houfeng_choice.rs:19:9
+2026-11-13T18:51:21.2030893Z    |
+2026-11-13T18:51:21.2031167Z 19 |     let mode = payload[3] as u8;
+2026-11-13T18:51:21.2031619Z    |         ^^^^ help: if this is intentional, prefix it with an underscore: `_mode`
+2026-11-13T18:51:21.2032143Z 
+2026-11-13T18:51:21.2032235Z 
+2026-11-13T18:51:21.2233605Z warning: unused variable: `skill`
+2026-11-13T18:51:21.2234578Z    --> crates\engine-core\src\command\resolve_choice\group_post_9\resolve_tongduo_choice.rs:320:9
+2026-11-13T18:51:21.2235057Z     |
+2026-11-13T18:51:21.2235383Z 320 |     let skill = engine_api::SkillId::new(payload[4]);
+2026-11-13T18:51:21.2235814Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:21.2236097Z 
+2026-11-13T18:51:21.2236130Z 
+2026-11-13T18:51:21.3701023Z warning: unused variable: `actor`
+2026-11-13T18:51:21.3702103Z    --> crates\engine-core\src\command\resolve_choice\group_pre_2\resolve_twniujin_custom.rs:513:9
+2026-11-13T18:51:21.3702534Z     |
+2026-11-13T18:51:21.3702872Z 513 |     let actor = PlayerId::new(payload[1]);
+2026-11-13T18:51:21.3703306Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_actor`
+2026-11-13T18:51:21.3703588Z 
+2026-11-13T18:51:21.3703623Z 
+2026-11-13T18:51:22.0672133Z warning: unreachable pattern
+2026-11-13T18:51:22.0672955Z    --> crates\engine-core\src\content\registry\default_view_as_card_count.rs:499:9
+2026-11-13T18:51:22.0673364Z     |
+2026-11-13T18:51:22.0673951Z 474 |         ModifierValueSource::OwnerSkillPileCount => {
+2026-11-13T18:51:22.0674523Z     |         ---------------------------------------- matches all the relevant values
+2026-11-13T18:51:22.0674948Z ...
+2026-11-13T18:51:22.0675399Z 499 |         ModifierValueSource::OwnerSkillPileCount => "owner_skill_pile_count",
+2026-11-13T18:51:22.0675965Z     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+2026-11-13T18:51:22.0676333Z     |
+2026-11-13T18:51:22.0676795Z     = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+2026-11-13T18:51:22.0677184Z 
+2026-11-13T18:51:22.0677345Z 
+2026-11-13T18:51:22.1755593Z warning: unused variable: `player`
+2026-11-13T18:51:22.1756609Z    --> crates\engine-core\src\effect\primitives\pack_bingshi_1\begin_choose_compare_selected_hand_card.rs:496:5
+2026-11-13T18:51:22.1757270Z     |
+2026-11-13T18:51:22.1757600Z 496 |     player: PlayerId,
+2026-11-13T18:51:22.1758056Z     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+2026-11-13T18:51:22.1758781Z 
+2026-11-13T18:51:22.1758926Z 
+2026-11-13T18:51:22.2524721Z warning: variable does not need to be mutable
+2026-11-13T18:51:22.2525735Z    --> crates\engine-core\src\effect\primitives\pack_bingshi_1\resolve_potzhouyu_choice.rs:442:9
+2026-11-13T18:51:22.2526176Z     |
+2026-11-13T18:51:22.2526423Z 442 |     let mut options: Vec<_> = tx
+2026-11-13T18:51:22.2526687Z     |         ----^^^^^^^
+2026-11-13T18:51:22.2526900Z     |         |
+2026-11-13T18:51:22.2528460Z     |         help: remove this `mut`
+2026-11-13T18:51:22.2528672Z 
+2026-11-13T18:51:22.2528709Z 
+2026-11-13T18:51:22.2824877Z warning: unused variable: `skill`
+2026-11-13T18:51:22.2825846Z    --> crates\engine-core\src\effect\primitives\pack_bingshi_1\zuozhan_distinct_basics_from_discard.rs:477:5
+2026-11-13T18:51:22.2826332Z     |
+2026-11-13T18:51:22.2826622Z 477 |     skill: engine_api::SkillId,
+2026-11-13T18:51:22.2827023Z     |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:22.2827350Z 
+2026-11-13T18:51:22.2827662Z 
+2026-11-13T18:51:22.2995722Z warning: unused variable: `skill`
+2026-11-13T18:51:22.2996529Z    --> crates\engine-core\src\effect\primitives\pack_bingshi_1\resolve_dcbingji.rs:414:9
+2026-11-13T18:51:22.2996905Z     |
+2026-11-13T18:51:22.2997216Z 414 |     let skill = engine_api::SkillId::new(skill_raw);
+2026-11-13T18:51:22.2997631Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:22.2997876Z 
+2026-11-13T18:51:22.2998125Z 
+2026-11-13T18:51:22.3093336Z warning: unused variable: `skill`
+2026-11-13T18:51:22.3094174Z    --> crates\engine-core\src\effect\primitives\pack_bingshi_1\resolve_dcbingji.rs:633:9
+2026-11-13T18:51:22.3094581Z     |
+2026-11-13T18:51:22.3094879Z 633 |     let skill = engine_api::SkillId::new(skill_raw);
+2026-11-13T18:51:22.3095295Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:22.3095587Z 
+2026-11-13T18:51:22.3095621Z 
+2026-11-13T18:51:22.3124867Z warning: unused variable: `count`
+2026-11-13T18:51:22.3125609Z    --> crates\engine-core\src\effect\primitives\pack_bingshi_1\twmouzhi_card_color.rs:110:5
+2026-11-13T18:51:22.3126153Z     |
+2026-11-13T18:51:22.3126438Z 110 |     count: u32,
+2026-11-13T18:51:22.3126875Z     |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_count`
+2026-11-13T18:51:22.3127255Z 
+2026-11-13T18:51:22.3127384Z 
+2026-11-13T18:51:22.3610696Z warning: variable does not need to be mutable
+2026-11-13T18:51:22.3611655Z    --> crates\engine-core\src\effect\primitives\pack_bingshi_1\resolve_yangming_round.rs:255:9
+2026-11-13T18:51:22.3612090Z     |
+2026-11-13T18:51:22.3612318Z 255 |     let mut payload = vec![
+2026-11-13T18:51:22.3612567Z     |         ----^^^^^^^
+2026-11-13T18:51:22.3612769Z     |         |
+2026-11-13T18:51:22.3612993Z     |         help: remove this `mut`
+2026-11-13T18:51:22.3613172Z 
+2026-11-13T18:51:22.3613195Z 
+2026-11-13T18:51:22.3751435Z warning: variable does not need to be mutable
+2026-11-13T18:51:22.3752354Z    --> crates\engine-core\src\effect\primitives\pack_bingshi_1\resolve_yangming_round.rs:733:17
+2026-11-13T18:51:22.3752790Z     |
+2026-11-13T18:51:22.3753191Z 733 |             let mut events = crate::effect::draw_cards(tx, player, 1)?;
+2026-11-13T18:51:22.3753649Z     |                 ----^^^^^^
+2026-11-13T18:51:22.3753913Z     |                 |
+2026-11-13T18:51:22.3754165Z     |                 help: remove this `mut`
+2026-11-13T18:51:22.3754383Z 
+2026-11-13T18:51:22.3754415Z 
+2026-11-13T18:51:22.3787193Z warning: unused variable: `player`
+2026-11-13T18:51:22.3787691Z   --> crates\engine-core\src\effect\primitives\pack_bingshi_1\resolve_dcmoukui_stage.rs:61:5
+2026-11-13T18:51:22.3788219Z    |
+2026-11-13T18:51:22.3788590Z 61 |     player: PlayerId,
+2026-11-13T18:51:22.3789066Z    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+2026-11-13T18:51:22.3789764Z 
+2026-11-13T18:51:22.3789900Z 
+2026-11-13T18:51:22.3922135Z warning: unused variable: `dodger`
+2026-11-13T18:51:22.3922942Z    --> crates\engine-core\src\effect\primitives\pack_bingshi_1\resolve_dcmoukui_stage.rs:553:5
+2026-11-13T18:51:22.3923555Z     |
+2026-11-13T18:51:22.3923848Z 553 |     dodger: PlayerId,
+2026-11-13T18:51:22.3924299Z     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_dodger`
+2026-11-13T18:51:22.3924674Z 
+2026-11-13T18:51:22.3924801Z 
+2026-11-13T18:51:22.3948026Z warning: variable does not need to be mutable
+2026-11-13T18:51:22.3948762Z    --> crates\engine-core\src\effect\primitives\pack_bingshi_1\resolve_dcmoukui_stage.rs:615:17
+2026-11-13T18:51:22.3949172Z     |
+2026-11-13T18:51:22.3949550Z 615 |             let mut drawn = crate::effect::draw_cards(tx, player, draw_n)?;
+2026-11-13T18:51:22.3949906Z     |                 ----^^^^^
+2026-11-13T18:51:22.3950140Z     |                 |
+2026-11-13T18:51:22.3950529Z     |                 help: remove this `mut`
+2026-11-13T18:51:22.3950805Z 
+2026-11-13T18:51:22.3950925Z 
+2026-11-13T18:51:22.4330899Z warning: unused variable: `player`
+2026-11-13T18:51:22.4331637Z    --> crates\engine-core\src\effect\primitives\pack_bingshi_1\resolve_olqiaozhi.rs:325:5
+2026-11-13T18:51:22.4332193Z     |
+2026-11-13T18:51:22.4332494Z 325 |     player: PlayerId,
+2026-11-13T18:51:22.4333088Z     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+2026-11-13T18:51:22.4333446Z 
+2026-11-13T18:51:22.4333588Z 
+2026-11-13T18:51:22.4403739Z warning: variable does not need to be mutable
+2026-11-13T18:51:22.4404528Z    --> crates\engine-core\src\effect\primitives\pack_bingshi_1\resolve_mbzhenann.rs:124:9
+2026-11-13T18:51:22.4404910Z     |
+2026-11-13T18:51:22.4405259Z 124 |     let mut events = crate::effect::draw_cards(tx, source, 2)?;
+2026-11-13T18:51:22.4405570Z     |         ----^^^^^^
+2026-11-13T18:51:22.4405778Z     |         |
+2026-11-13T18:51:22.4405999Z     |         help: remove this `mut`
+2026-11-13T18:51:22.4406161Z 
+2026-11-13T18:51:22.4406191Z 
+2026-11-13T18:51:22.4490137Z warning: unused variable: `player`
+2026-11-13T18:51:22.4490987Z    --> crates\engine-core\src\effect\primitives\pack_bingshi_1\resolve_mbzhenann.rs:445:5
+2026-11-13T18:51:22.4491373Z     |
+2026-11-13T18:51:22.4491567Z 445 |     player: PlayerId,
+2026-11-13T18:51:22.4491896Z     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+2026-11-13T18:51:22.4492149Z 
+2026-11-13T18:51:22.4492173Z 
+2026-11-13T18:51:22.8698763Z warning: unused variable: `card`
+2026-11-13T18:51:22.8699335Z   --> crates\engine-core\src\effect\primitives\pack_ddd_2\resolve_ddd_zhaoang.rs:11:5
+2026-11-13T18:51:22.8699732Z    |
+2026-11-13T18:51:22.8699927Z 11 |     card: CardId,
+2026-11-13T18:51:22.8700275Z    |     ^^^^ help: if this is intentional, prefix it with an underscore: `_card`
+2026-11-13T18:51:22.8700533Z 
+2026-11-13T18:51:22.8700539Z 
+2026-11-13T18:51:23.1682939Z warning: variable does not need to be mutable
+2026-11-13T18:51:23.1683498Z    --> crates\engine-core\src\effect\primitives\pack_huicui\resolve_dcchiying.rs:590:9
+2026-11-13T18:51:23.1683884Z     |
+2026-11-13T18:51:23.1684234Z 590 |     let mut effects = vec![EffectRequest::RevealCards {
+2026-11-13T18:51:23.1684552Z     |         ----^^^^^^^
+2026-11-13T18:51:23.1684758Z     |         |
+2026-11-13T18:51:23.1684959Z     |         help: remove this `mut`
+2026-11-13T18:51:23.1685127Z 
+2026-11-13T18:51:23.1685134Z 
+2026-11-13T18:51:23.1685299Z warning: unused variable: `view`
+2026-11-13T18:51:23.1685704Z    --> crates\engine-core\src\effect\primitives\pack_huicui\resolve_dcchiying.rs:515:5
+2026-11-13T18:51:23.1686078Z     |
+2026-11-13T18:51:23.1686272Z 515 |     view: Vec<CardId>,
+2026-11-13T18:51:23.1686616Z     |     ^^^^ help: if this is intentional, prefix it with an underscore: `_view`
+2026-11-13T18:51:23.1686882Z 
+2026-11-13T18:51:23.1686888Z 
+2026-11-13T18:51:23.2038767Z warning: unused variable: `skill`
+2026-11-13T18:51:23.2039360Z    --> crates\engine-core\src\effect\primitives\pack_jsrg.rs:559:9
+2026-11-13T18:51:23.2039807Z     |
+2026-11-13T18:51:23.2040218Z 559 |     let skill = engine_api::SkillId::new(*skill);
+2026-11-13T18:51:23.2040749Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:23.2041125Z 
+2026-11-13T18:51:23.2041131Z 
+2026-11-13T18:51:23.4522065Z warning: unused variable: `skill`
+2026-11-13T18:51:23.4523223Z    --> crates\engine-core\src\effect\primitives\pack_refresh\choose_gain_target_card_alternate_zone_then_target_draw.rs:534:9
+2026-11-13T18:51:23.4523780Z     |
+2026-11-13T18:51:23.4524210Z 534 |     let skill = engine_api::SkillId::new(*payload.get(2).unwrap_or(&0));
+2026-11-13T18:51:23.4524726Z     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:23.4525021Z 
+2026-11-13T18:51:23.4525036Z 
+2026-11-13T18:51:23.4848649Z warning: variable does not need to be mutable
+2026-11-13T18:51:23.4849303Z    --> crates\engine-core\src\effect\primitives\pack_shenhua_1\resolve_zhiba.rs:170:5
+2026-11-13T18:51:23.4849717Z     |
+2026-11-13T18:51:23.4849949Z 170 |     mut targets: Vec<PlayerId>,
+2026-11-13T18:51:23.4850220Z     |     ----^^^^^^^
+2026-11-13T18:51:23.4850427Z     |     |
+2026-11-13T18:51:23.4850633Z     |     help: remove this `mut`
+2026-11-13T18:51:23.4850804Z 
+2026-11-13T18:51:23.4850811Z 
+2026-11-13T18:51:23.4942745Z warning: unused variable: `target`
+2026-11-13T18:51:23.4943351Z    --> crates\engine-core\src\effect\primitives\pack_shenhua_1\resolve_zhiba.rs:587:5
+2026-11-13T18:51:23.4943751Z     |
+2026-11-13T18:51:23.4943965Z 587 |     target: PlayerId,
+2026-11-13T18:51:23.4944352Z     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+2026-11-13T18:51:23.4944629Z 
+2026-11-13T18:51:23.4944636Z 
+2026-11-13T18:51:23.4987334Z warning: unused variable: `player`
+2026-11-13T18:51:23.4987836Z    --> crates\engine-core\src\effect\primitives\pack_shenhua_1\resolve_zhiba.rs:738:5
+2026-11-13T18:51:23.4988238Z     |
+2026-11-13T18:51:23.4988446Z 738 |     player: PlayerId,
+2026-11-13T18:51:23.4988814Z     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+2026-11-13T18:51:23.4989085Z 
+2026-11-13T18:51:23.4989091Z 
+2026-11-13T18:51:23.5127187Z warning: unused variable: `target`
+2026-11-13T18:51:23.5127746Z    --> crates\engine-core\src\effect\primitives\pack_shenhua_1\guanxing_top_by_falu_marks.rs:500:5
+2026-11-13T18:51:23.5128167Z     |
+2026-11-13T18:51:23.5128388Z 500 |     target: PlayerId,
+2026-11-13T18:51:23.5128763Z     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+2026-11-13T18:51:23.5129028Z 
+2026-11-13T18:51:23.5129035Z 
+2026-11-13T18:51:23.5146376Z warning: unused variable: `target`
+2026-11-13T18:51:23.5146983Z    --> crates\engine-core\src\effect\primitives\pack_shenhua_1\guanxing_top_by_falu_marks.rs:619:5
+2026-11-13T18:51:23.5147453Z     |
+2026-11-13T18:51:23.5147662Z 619 |     target: PlayerId,
+2026-11-13T18:51:23.5148028Z     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+2026-11-13T18:51:23.5148309Z 
+2026-11-13T18:51:23.5148326Z 
+2026-11-13T18:51:23.5183206Z warning: unused variable: `targets`
+2026-11-13T18:51:23.5183579Z   --> crates\engine-core\src\effect\primitives\pack_shenhua_1\resolve_haoshi.rs:85:5
+2026-11-13T18:51:23.5183829Z    |
+2026-11-13T18:51:23.5184021Z 85 |     targets: &[PlayerId],
+2026-11-13T18:51:23.5184276Z    |     ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_targets`
+2026-11-13T18:51:23.5184457Z 
+2026-11-13T18:51:23.5184466Z 
+2026-11-13T18:51:23.5503840Z warning: unused variable: `player`
+2026-11-13T18:51:23.5504519Z    --> crates\engine-core\src\effect\primitives\pack_shenhua_2\qizhi_count.rs:550:52
+2026-11-13T18:51:23.5504918Z     |
+2026-11-13T18:51:23.5505343Z 550 | pub(crate) fn turn_discard_count(tx: &Transaction, player: PlayerId) -> u32 {
+2026-11-13T18:51:23.5506305Z     |                                                    ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+2026-11-13T18:51:23.5506653Z 
+2026-11-13T18:51:23.5506659Z 
+2026-11-13T18:51:23.5645802Z warning: unused variable: `value`
+2026-11-13T18:51:23.5646302Z    --> crates\engine-core\src\effect\primitives\pack_shenhua_2\liangyin_mark.rs:194:23
+2026-11-13T18:51:23.5646712Z     |
+2026-11-13T18:51:23.5646966Z 194 |                 .map(|value| vec![card])
+2026-11-13T18:51:23.5647695Z     |                       ^^^^^ help: if this is intentional, prefix it with an underscore: `_value`
+2026-11-13T18:51:23.5648001Z 
+2026-11-13T18:51:23.5648009Z 
+2026-11-13T18:51:23.5737166Z warning: variable does not need to be mutable
+2026-11-13T18:51:23.5737841Z    --> crates\engine-core\src\effect\primitives\pack_shenhua_2\liangyin_mark.rs:532:9
+2026-11-13T18:51:23.5738225Z     |
+2026-11-13T18:51:23.5738465Z 532 |     let mut events = run_effects(
+2026-11-13T18:51:23.5738741Z     |         ----^^^^^^
+2026-11-13T18:51:23.5738950Z     |         |
+2026-11-13T18:51:23.5739218Z     |         help: remove this `mut`
+2026-11-13T18:51:23.5739387Z 
+2026-11-13T18:51:23.5739393Z 
+2026-11-13T18:51:23.5787618Z warning: unused variable: `kongsheng_def`
+2026-11-13T18:51:23.5788163Z  --> crates\engine-core\src\effect\primitives\pack_shenhua_2\resolve_liangyin.rs:8:5
+2026-11-13T18:51:23.5788423Z   |
+2026-11-13T18:51:23.5788635Z 8 |     kongsheng_def: engine_api::SkillDefId,
+2026-11-13T18:51:23.5788937Z   |     ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_kongsheng_def`
+2026-11-13T18:51:23.5789131Z 
+2026-11-13T18:51:23.5789139Z 
+2026-11-13T18:51:23.6302290Z warning: unused variable: `source`
+2026-11-13T18:51:23.6302680Z    --> crates\engine-core\src\effect\primitives\pack_shiji\resolve_spchijie.rs:155:5
+2026-11-13T18:51:23.6302929Z     |
+2026-11-13T18:51:23.6303073Z 155 |     source: PlayerId,
+2026-11-13T18:51:23.6303348Z     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_source`
+2026-11-13T18:51:23.6303521Z 
+2026-11-13T18:51:23.6303525Z 
+2026-11-13T18:51:23.6594051Z warning: variable does not need to be mutable
+2026-11-13T18:51:23.6594757Z    --> crates\engine-core\src\effect\primitives\pack_shiji\resolve_xinyangjie.rs:612:17
+2026-11-13T18:51:23.6595228Z     |
+2026-11-13T18:51:23.6595723Z 612 |             let mut events = add_skill(tx, target, engine_api::SkillDefId::new(def))?;
+2026-11-13T18:51:23.6596187Z     |                 ----^^^^^^
+2026-11-13T18:51:23.6596507Z     |                 |
+2026-11-13T18:51:23.6596812Z     |                 help: remove this `mut`
+2026-11-13T18:51:23.6597051Z 
+2026-11-13T18:51:23.6597152Z 
+2026-11-13T18:51:23.6733821Z warning: unused variable: `action`
+2026-11-13T18:51:23.6734483Z   --> crates\engine-core\src\effect\primitives\pack_shiji\resolve_xiongshu.rs:15:5
+2026-11-13T18:51:23.6734929Z    |
+2026-11-13T18:51:23.6735165Z 15 |     action: u8,
+2026-11-13T18:51:23.6735605Z    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_action`
+2026-11-13T18:51:23.6735938Z 
+2026-11-13T18:51:23.6736033Z 
+2026-11-13T18:51:23.6955895Z warning: unused variable: `card`
+2026-11-13T18:51:23.6956238Z     --> crates\engine-core\src\effect\primitives\pack_shiji\resolve_xiongshu.rs:1051:5
+2026-11-13T18:51:23.6956491Z      |
+2026-11-13T18:51:23.6956616Z 1051 |     card: CardId,
+2026-11-13T18:51:23.6956835Z      |     ^^^^ help: if this is intentional, prefix it with an underscore: `_card`
+2026-11-13T18:51:23.6957030Z 
+2026-11-13T18:51:23.6957035Z 
+2026-11-13T18:51:23.9465388Z warning: unused variable: `skill`
+2026-11-13T18:51:23.9465960Z    --> crates\engine-core\src\effect\primitives\pack_tw_1\resolve_twtanfeng.rs:516:24
+2026-11-13T18:51:23.9466399Z     |
+2026-11-13T18:51:23.9466663Z 516 |     let [player, _sub, skill] = payload else {
+2026-11-13T18:51:23.9467114Z     |                        ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:23.9467835Z 
+2026-11-13T18:51:23.9467841Z 
+2026-11-13T18:51:24.3296758Z warning: unused variable: `player`
+2026-11-13T18:51:24.3297429Z    --> crates\engine-core\src\effect\primitives\pack_xianding_2\continue_dcsbyingmou_spree.rs:685:5
+2026-11-13T18:51:24.3297887Z     |
+2026-11-13T18:51:24.3298103Z 685 |     player: PlayerId,
+2026-11-13T18:51:24.3298469Z     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+2026-11-13T18:51:24.3298753Z 
+2026-11-13T18:51:24.3298759Z 
+2026-11-13T18:51:24.3568961Z warning: unused variable: `skill`
+2026-11-13T18:51:24.3569497Z    --> crates\engine-core\src\effect\primitives\choose_others_add_mark.rs:587:18
+2026-11-13T18:51:24.3569871Z     |
+2026-11-13T18:51:24.3570111Z 587 |     let [player, skill] = payload else {
+2026-11-13T18:51:24.3570546Z     |                  ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+2026-11-13T18:51:24.3570843Z 
+2026-11-13T18:51:24.3570861Z 
+2026-11-13T18:51:24.3702962Z warning: unused variable: `player`
+2026-11-13T18:51:24.3703493Z   --> crates\engine-core\src\effect\primitives\dispatch_draw_cards.rs:21:49
+2026-11-13T18:51:24.3703886Z    |
+2026-11-13T18:51:24.3704250Z 21 |         EffectRequest::SetDrawPhaseFromBottom { player } => {
+2026-11-13T18:51:24.3704718Z    |                                                 ^^^^^^ help: try ignoring the field: `player: _`
+2026-11-13T18:51:24.3704979Z 
+2026-11-13T18:51:24.3704985Z 
+2026-11-13T18:51:24.4004154Z warning: unused variable: `skill`
+2026-11-13T18:51:24.4004790Z    --> crates\engine-core\src\effect\primitives\dispatch_resolve_twxiawei_resolvers.rs:883:13
+2026-11-13T18:51:24.4005172Z     |
+2026-11-13T18:51:24.4005305Z 883 |             skill,
+2026-11-13T18:51:24.4005508Z     |             ^^^^^ help: try ignoring the field: `skill: _`
+2026-11-13T18:51:24.4005643Z 
+2026-11-13T18:51:24.4005647Z 
+2026-11-13T18:51:24.4075174Z warning: unreachable pattern
+2026-11-13T18:51:24.4075757Z    --> crates\engine-core\src\effect\primitives\dispatch_resolve_zhangjian_resolvers.rs:698:9
+2026-11-13T18:51:24.4076197Z     |
+2026-11-13T18:51:24.4076502Z 691 | /         EffectRequest::ResolveQiaobian {
+2026-11-13T18:51:24.4076783Z 692 | |             player,
+2026-11-13T18:51:24.4077018Z 693 | |             phase,
+2026-11-13T18:51:24.4077232Z 694 | |             stage,
+2026-11-13T18:51:24.4077449Z 695 | |             skill,
+2026-11-13T18:51:24.4077803Z 696 | |         } => resolve_qiaobian(tx, player, phase, stage, skill),
+2026-11-13T18:51:24.4078170Z     | |_________- matches all the relevant values
+2026-11-13T18:51:24.4079326Z 697 |           // ponytail: 巧变（ABI 559）由 C 段（omp）实现中，stub 保持编译通过。
+2026-11-13T18:51:24.4079832Z 698 |           EffectRequest::ResolveQiaobian { .. } => Ok(Vec::new()),
+2026-11-13T18:51:24.4080278Z     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+2026-11-13T18:51:24.4080524Z 
+2026-11-13T18:51:24.4080546Z 
+2026-11-13T18:51:24.4080675Z warning: unreachable pattern
+2026-11-13T18:51:24.4081157Z    --> crates\engine-core\src\effect\primitives\dispatch_resolve_zhangjian_resolvers.rs:728:9
+2026-11-13T18:51:24.4081615Z     |
+2026-11-13T18:51:24.4082073Z 728 |         EffectRequest::BanUseAgainst { .. } | EffectRequest::ResolveJuzhan { .. } => Ok(Vec::new()),
+2026-11-13T18:51:24.4082631Z     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+2026-11-13T18:51:24.4082954Z     |
+2026-11-13T18:51:24.4083275Z note: multiple earlier patterns match some of the same values
+2026-11-13T18:51:24.4083810Z    --> crates\engine-core\src\effect\primitives\dispatch_resolve_zhangjian_resolvers.rs:728:9
+2026-11-13T18:51:24.4084221Z     |
+2026-11-13T18:51:24.4084810Z 717 |           EffectRequest::BanUseAgainst { user, target } => ban_use_against(tx, user, target),
+2026-11-13T18:51:24.4085365Z     |           --------------------------------------------- matches some of the same values
+2026-11-13T18:51:24.4085980Z 718 |
+2026-11-13T18:51:24.4086218Z 719 | /         EffectRequest::ResolveJuzhan {
+2026-11-13T18:51:24.4086507Z 720 | |             player,
+2026-11-13T18:51:24.4086744Z 721 | |             source,
+2026-11-13T18:51:24.4086976Z 722 | |             card,
+2026-11-13T18:51:24.4087184Z ...   |
+2026-11-13T18:51:24.4087359Z 725 | |             skill,
+2026-11-13T18:51:24.4087734Z 726 | |         } => resolve_juzhan(tx, player, source, card, &targets, stage, skill),
+2026-11-13T18:51:24.4088150Z     | |_________- matches some of the same values
+2026-11-13T18:51:24.4088946Z 727 |           // ponytail: 并行会话中间态（ban-use-pairs / 拒战）stub 保持编译通过。
+2026-11-13T18:51:24.4089702Z 728 |           EffectRequest::BanUseAgainst { .. } | EffectRequest::ResolveJuzhan { .. } => Ok(Vec::new()),
+2026-11-13T18:51:24.4090251Z     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ collectively making this unreachable
+2026-11-13T18:51:24.4090529Z 
+2026-11-13T18:51:24.4090545Z 
+2026-11-13T18:51:24.4194243Z warning: unreachable pattern
+2026-11-13T18:51:24.4194675Z    --> crates\engine-core\src\effect\source_skill.rs:462:11
+2026-11-13T18:51:24.4194986Z     |
+2026-11-13T18:51:24.4195256Z 343 |         | EffectRequest::ResolveOllinjie { skill, .. }
+2026-11-13T18:51:24.4195857Z     |           -------------------------------------------- matches all the relevant values
+2026-11-13T18:51:24.4196182Z ...
+2026-11-13T18:51:24.4196427Z 462 |         | EffectRequest::ResolveOllinjie { skill, .. }
+2026-11-13T18:51:24.4196809Z     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+2026-11-13T18:51:24.4197576Z 
+2026-11-13T18:51:24.4197592Z 
+2026-11-13T18:51:24.4197958Z warning: unreachable pattern
+2026-11-13T18:51:24.4198367Z    --> crates\engine-core\src\effect\source_skill.rs:463:11
+2026-11-13T18:51:24.4198693Z     |
+2026-11-13T18:51:24.4199053Z 346 |         | EffectRequest::ChooseTargetGainMaxHp { skill, .. }
+2026-11-13T18:51:24.4199586Z     |           -------------------------------------------------- matches all the relevant values
+2026-11-13T18:51:24.4199965Z ...
+2026-11-13T18:51:24.4200282Z 463 |         | EffectRequest::ChooseTargetGainMaxHp { skill, .. }
+2026-11-13T18:51:24.4200717Z     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+2026-11-13T18:51:24.4200970Z 
+2026-11-13T18:51:24.4200976Z 
+2026-11-13T18:51:24.4201094Z warning: unreachable pattern
+2026-11-13T18:51:24.4201425Z    --> crates\engine-core\src\effect\source_skill.rs:464:11
+2026-11-13T18:51:24.4201732Z     |
+2026-11-13T18:51:24.4202024Z 347 |         | EffectRequest::GainTargetHandCard { skill, .. }
+2026-11-13T18:51:24.4202480Z     |           ----------------------------------------------- matches all the relevant values
+2026-11-13T18:51:24.4202821Z ...
+2026-11-13T18:51:24.4211851Z 464 |         | EffectRequest::GainTargetHandCard { skill, .. } => skill.raw(),
+2026-11-13T18:51:24.4212354Z     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+2026-11-13T18:51:24.4212599Z 
+2026-11-13T18:51:24.4212605Z 
+2026-11-13T18:51:24.4212747Z warning: unreachable pattern
+2026-11-13T18:51:24.4213074Z    --> crates\engine-core\src\effect\source_skill.rs:496:11
+2026-11-13T18:51:24.4213370Z     |
+2026-11-13T18:51:24.4213690Z 495 |         | EffectRequest::GiveSelectedThenRecoverSelf { skill, .. }
+2026-11-13T18:51:24.4214217Z     |           -------------------------------------------------------- matches all the relevant values
+2026-11-13T18:51:24.4215011Z 496 |         | EffectRequest::GiveSelectedThenRecoverSelf { skill, .. }
+2026-11-13T18:51:24.4215508Z     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+2026-11-13T18:51:24.4215798Z 
+2026-11-13T18:51:24.4215804Z 
+2026-11-13T18:51:24.5396271Z warning: unreachable pattern
+2026-11-13T18:51:24.5396754Z    --> crates\engine-core\src\hash\effects_choose_gain_discard_card_by_kind_resolvers.rs:336:9
+2026-11-13T18:51:24.5397322Z     |
+2026-11-13T18:51:24.5397521Z 322 | /         EffectRequest::ResolveSpshanxi {
+2026-11-13T18:51:24.5397705Z 323 | |             player,
+2026-11-13T18:51:24.5397857Z 324 | |             target,
+2026-11-13T18:51:24.5397993Z 325 | |             stage,
+2026-11-13T18:51:24.5398131Z 326 | |             skill,
+2026-11-13T18:51:24.5398259Z 327 | |         } => {
+2026-11-13T18:51:24.5398423Z     | |_________- matches all the relevant values
+2026-11-13T18:51:24.5398587Z ...
+2026-11-13T18:51:24.5398915Z 336 |           EffectRequest::ResolveSpshanxi { .. } => {
+2026-11-13T18:51:24.5399148Z     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+2026-11-13T18:51:24.5399283Z 
+2026-11-13T18:51:24.5399307Z 
+2026-11-13T18:51:24.5399372Z warning: unreachable pattern
+2026-11-13T18:51:24.5399643Z    --> crates\engine-core\src\hash\effects_choose_gain_discard_card_by_kind_resolvers.rs:355:9
+2026-11-13T18:51:24.5399888Z     |
+2026-11-13T18:51:24.5400056Z 341 | /         EffectRequest::ResolveSpshanxiSuoming {
+2026-11-13T18:51:24.5400245Z 342 | |             player,
+2026-11-13T18:51:24.5400388Z 343 | |             actor,
+2026-11-13T18:51:24.5400523Z 344 | |             stage,
+2026-11-13T18:51:24.5400656Z 345 | |             skill,
+2026-11-13T18:51:24.5400794Z 346 | |         } => {
+2026-11-13T18:51:24.5400944Z     | |_________- matches all the relevant values
+2026-11-13T18:51:24.5401103Z ...
+2026-11-13T18:51:24.5401284Z 355 |           EffectRequest::ResolveSpshanxiSuoming { .. } => {
+2026-11-13T18:51:24.5401520Z     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+2026-11-13T18:51:24.5401665Z 
+2026-11-13T18:51:24.5401668Z 
+2026-11-13T18:51:24.5518481Z warning: unreachable pattern
+2026-11-13T18:51:24.5519039Z    --> crates\engine-core\src\hash\effects_choose_gain_discard_card_by_kind_resolvers_r_z.rs:141:9
+2026-11-13T18:51:24.5519306Z     |
+2026-11-13T18:51:24.5519506Z 123 | /         EffectRequest::ResolveRechuhai {
+2026-11-13T18:51:24.5519727Z 124 | |             player,
+2026-11-13T18:51:24.5519870Z 125 | |             target,
+2026-11-13T18:51:24.5520002Z 126 | |             card,
+2026-11-13T18:51:24.5520138Z ...   |
+2026-11-13T18:51:24.5520255Z 129 | |             skill,
+2026-11-13T18:51:24.5520389Z 130 | |         } => {
+2026-11-13T18:51:24.5520543Z     | |_________- matches all the relevant values
+2026-11-13T18:51:24.5520712Z ...
+2026-11-13T18:51:24.5520893Z 141 |           EffectRequest::ResolveRechuhai { .. } => {
+2026-11-13T18:51:24.5521129Z     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+2026-11-13T18:51:24.5521275Z 
+2026-11-13T18:51:24.5521280Z 
+2026-11-13T18:51:24.5521356Z warning: unreachable pattern
+2026-11-13T18:51:24.5521626Z    --> crates\engine-core\src\hash\effects_choose_gain_discard_card_by_kind_resolvers_r_z.rs:165:9
+2026-11-13T18:51:24.5521924Z     |
+2026-11-13T18:51:24.5522080Z 147 | /         EffectRequest::ResolveXiongshu {
+2026-11-13T18:51:24.5522268Z 148 | |             player,
+2026-11-13T18:51:24.5522405Z 149 | |             target,
+2026-11-13T18:51:24.5522537Z 150 | |             card,
+2026-11-13T18:51:24.5522666Z ...   |
+2026-11-13T18:51:24.5522777Z 153 | |             skill,
+2026-11-13T18:51:24.5522903Z 154 | |         } => {
+2026-11-13T18:51:24.5523052Z     | |_________- matches all the relevant values
+2026-11-13T18:51:24.5523213Z ...
+2026-11-13T18:51:24.5523370Z 165 |           EffectRequest::ResolveXiongshu { .. } => {
+2026-11-13T18:51:24.5523584Z     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+2026-11-13T18:51:24.5523715Z 
+2026-11-13T18:51:24.5523719Z 
+2026-11-13T18:51:24.5586129Z warning: unreachable pattern
+2026-11-13T18:51:24.5586552Z   --> crates\engine-core\src\hash\effects_draw_cards.rs:19:9
+2026-11-13T18:51:24.5586874Z    |
+2026-11-13T18:51:24.5587148Z  7 | /         EffectRequest::ModifyCurrentDamage {
+2026-11-13T18:51:24.5587455Z  8 | |             player,
+2026-11-13T18:51:24.5589117Z  9 | |             delta,
+2026-11-13T18:51:24.5589395Z 10 | |             skill,
+2026-11-13T18:51:24.5589617Z 11 | |         } => {
+2026-11-13T18:51:24.5589879Z    | |_________- matches all the relevant values
+2026-11-13T18:51:24.5590164Z ...
+2026-11-13T18:51:24.5590428Z 19 | /         EffectRequest::ModifyCurrentDamage {
+2026-11-13T18:51:24.5590728Z 20 | |             player,
+2026-11-13T18:51:24.5590969Z 21 | |             delta,
+2026-11-13T18:51:24.5591198Z 22 | |             skill,
+2026-11-13T18:51:24.5591413Z 23 | |         } => {
+2026-11-13T18:51:24.5591824Z    | |_________^ no value can reach this
+2026-11-13T18:51:24.5592003Z 
+2026-11-13T18:51:24.5592009Z 
+2026-11-13T18:51:24.5686333Z warning: unused variable: `flipped`
+2026-11-13T18:51:24.5686741Z    --> crates\engine-core\src\hash\effects_draw_cards.rs:630:13
+2026-11-13T18:51:24.5687076Z     |
+2026-11-13T18:51:24.5687276Z 630 |             flipped,
+2026-11-13T18:51:24.5687588Z     |             ^^^^^^^ help: try ignoring the field: `flipped: _`
+2026-11-13T18:51:24.5687839Z 
+2026-11-13T18:51:24.5687845Z 
+2026-11-13T18:51:26.6084669Z warning: function `validate_sha_target` is never used
+2026-11-13T18:51:26.6085545Z    --> crates\engine-core\src\command\play\play_as_kind_with_extra_damage_flags.rs:366:15
+2026-11-13T18:51:26.6085977Z     |
+2026-11-13T18:51:26.6086206Z 366 | pub(crate) fn validate_sha_target(
+2026-11-13T18:51:26.6086376Z     |               ^^^^^^^^^^^^^^^^^^^
+2026-11-13T18:51:26.6086516Z     |
+2026-11-13T18:51:26.6086697Z     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+2026-11-13T18:51:26.6086883Z 
+2026-11-13T18:51:26.6086888Z 
+2026-11-13T18:51:26.6086981Z warning: function `wuxie_tokens` is never used
+2026-11-13T18:51:26.6087387Z    --> crates\engine-core\src\command\play\use_youdishenru_for_saved_sha.rs:291:15
+2026-11-13T18:51:26.6087604Z     |
+2026-11-13T18:51:26.6088024Z 291 | pub(crate) fn wuxie_tokens(state: &crate::state::GameState, player: PlayerId) -> Vec<u32> {
+2026-11-13T18:51:26.6088316Z     |               ^^^^^^^^^^^^
+2026-11-13T18:51:26.6088405Z 
+2026-11-13T18:51:26.6088409Z 
+2026-11-13T18:51:26.6088554Z warning: constant `RESOLVE_TWMOUZHI_MAGIC` is never used
+2026-11-13T18:51:26.6088937Z   --> crates\engine-core\src\effect\primitives\pack_bingshi_1.rs:39:7
+2026-11-13T18:51:26.6089286Z    |
+2026-11-13T18:51:26.6089828Z 39 | const RESOLVE_TWMOUZHI_MAGIC: u32 = 0x4D4F_0001;
+2026-11-13T18:51:26.6090139Z    |       ^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T18:51:26.6090285Z 
+2026-11-13T18:51:26.6090289Z 
+2026-11-13T18:51:26.6090473Z warning: constant `RESOLVE_BIAOZHAO2_MAGIC` is never used
+2026-11-13T18:51:26.6090874Z   --> crates\engine-core\src\effect\primitives\pack_bingshi_1.rs:61:7
+2026-11-13T18:51:26.6091195Z    |
+2026-11-13T18:51:26.6091443Z 61 | const RESOLVE_BIAOZHAO2_MAGIC: u32 = 0x425A_0002;
+2026-11-13T18:51:26.6091714Z    |       ^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T18:51:26.6091807Z 
+2026-11-13T18:51:26.6091810Z 
+2026-11-13T18:51:26.6091908Z warning: constant `RESOLVE_DCNIJI_MAGIC` is never used
+2026-11-13T18:51:26.6092247Z   --> crates\engine-core\src\effect\primitives\pack_bingshi_1.rs:63:7
+2026-11-13T18:51:26.6092496Z    |
+2026-11-13T18:51:26.6092699Z 63 | const RESOLVE_DCNIJI_MAGIC: u32 = 0x4E4A_0001;
+2026-11-13T18:51:26.6092909Z    |       ^^^^^^^^^^^^^^^^^^^^
+2026-11-13T18:51:26.6092999Z 
+2026-11-13T18:51:26.6093002Z 
+2026-11-13T18:51:26.6093101Z warning: constant `RESOLVE_QINMIAN_MAGIC` is never used
+2026-11-13T18:51:26.6093339Z   --> crates\engine-core\src\effect\primitives\pack_bingshi_1.rs:77:7
+2026-11-13T18:51:26.6093585Z    |
+2026-11-13T18:51:26.6093947Z 77 | const RESOLVE_QINMIAN_MAGIC: u32 = 0x514D_0001;
+2026-11-13T18:51:26.6094125Z    |       ^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T18:51:26.6094209Z 
+2026-11-13T18:51:26.6094212Z 
+2026-11-13T18:51:26.6094304Z warning: function `suit_from_tag` is never used
+2026-11-13T18:51:26.6094573Z    --> crates\engine-core\src\effect\primitives\pack_bingshi_1\resolve_dcbingji.rs:140:15
+2026-11-13T18:51:26.6095000Z     |
+2026-11-13T18:51:26.6095183Z 140 | pub(crate) fn suit_from_tag(tag: u32) -> engine_api::Suit {
+2026-11-13T18:51:26.6095378Z     |               ^^^^^^^^^^^^^
+2026-11-13T18:51:26.6095470Z 
+2026-11-13T18:51:26.6095473Z 
+2026-11-13T18:51:26.6095583Z warning: function `mingren_color_mask` is never used
+2026-11-13T18:51:26.6095842Z    --> crates\engine-core\src\effect\primitives\pack_shenhua_2\qizhi_count.rs:353:15
+2026-11-13T18:51:26.6096065Z     |
+2026-11-13T18:51:26.6096193Z 353 | pub(crate) fn mingren_color_mask(
+2026-11-13T18:51:26.6097040Z     |               ^^^^^^^^^^^^^^^^^^
+2026-11-13T18:51:26.6097140Z 
+2026-11-13T18:51:26.6097144Z 
+2026-11-13T18:51:26.6097264Z warning: function `kongsheng_pile_cards_by_def` is never used
+2026-11-13T18:51:26.6097540Z    --> crates\engine-core\src\effect\primitives\pack_shenhua_2\qizhi_count.rs:779:15
+2026-11-13T18:51:26.6097753Z     |
+2026-11-13T18:51:26.6097905Z 779 | pub(crate) fn kongsheng_pile_cards_by_def(
+2026-11-13T18:51:26.6098087Z     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T18:51:26.6098193Z 
+2026-11-13T18:51:26.6098196Z 
+2026-11-13T18:51:26.6098298Z warning: constant `RESOLVE_ZHENGSU_CHOICE` is never used
+2026-11-13T18:51:26.6098540Z   --> crates\engine-core\src\effect\primitives\pack_shiji.rs:27:18
+2026-11-13T18:51:26.6098727Z    |
+2026-11-13T18:51:26.6098891Z 27 | pub(crate) const RESOLVE_ZHENGSU_CHOICE: u32 = 0xDCDA_4320;
+2026-11-13T18:51:26.6099092Z    |                  ^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T18:51:26.6099189Z 
+2026-11-13T18:51:26.6099192Z 
+2026-11-13T18:51:26.6099303Z warning: function `resolve_rechuhai_choice` is never used
+2026-11-13T18:51:26.6099578Z    --> crates\engine-core\src\effect\primitives\pack_shiji\resolve_xinyangjie.rs:672:15
+2026-11-13T18:51:26.6099804Z     |
+2026-11-13T18:51:26.6099937Z 672 | pub(crate) fn resolve_rechuhai_choice(
+2026-11-13T18:51:26.6100105Z     |               ^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T18:51:26.6100204Z 
+2026-11-13T18:51:26.6100207Z 
+2026-11-13T18:51:26.6309776Z warning: unused `Result` that must be used
+2026-11-13T18:51:26.6310069Z    --> crates\engine-core\src\command\resolve_choice\group_post_8\resolve_resolve_mbbeiming.rs:284:13
+2026-11-13T18:51:26.6310316Z     |
+2026-11-13T18:51:26.6310572Z 284 |             crate::command::play::make_saved_sha_target_unrespondable(tx, source, card, player);
+2026-11-13T18:51:26.6310865Z     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T18:51:26.6311039Z     |
+2026-11-13T18:51:26.6311218Z     = note: this `Result` may be an `Err` variant, which should be handled
+2026-11-13T18:51:26.6311490Z     = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+2026-11-13T18:51:26.6311748Z help: use `let _ = ...` to ignore the resulting value
+2026-11-13T18:51:26.6311919Z     |
+2026-11-13T18:51:26.6312171Z 284 |             let _ = crate::command::play::make_saved_sha_target_unrespondable(tx, source, card, player);
+2026-11-13T18:51:26.6312426Z     |             +++++++
+2026-11-13T18:51:26.6312509Z 
+2026-11-13T18:51:26.6312513Z 
+2026-11-13T18:51:36.3994175Z [1m[92m   Compiling[0m engine-ai v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\engine-ai)
+2026-11-13T18:51:36.6110815Z warning: unused variable: `c`
+2026-11-13T18:51:36.6111451Z    --> crates\engine-ai\src\fork_strategy.rs:166:78
+2026-11-13T18:51:36.6111891Z     |
+2026-11-13T18:51:36.6112504Z 166 |         self.snapshot_bytes.len() as u64 + self.applied_commands.iter().map(|c| 100).sum::<u64>()
+2026-11-13T18:51:36.6113302Z     |                                                                              ^ help: if this is intentional, prefix it with an underscore: `_c`
+2026-11-13T18:51:36.6113802Z     |
+2026-11-13T18:51:36.6114214Z     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+2026-11-13T18:51:36.6114591Z 
+2026-11-13T18:51:36.6114735Z 
+2026-11-13T18:51:36.6912411Z warning: struct `ForkMeta` is never constructed
+2026-11-13T18:51:36.6913303Z   --> crates\engine-ai\src\fork.rs:69:12
+2026-11-13T18:51:36.6913687Z    |
+2026-11-13T18:51:36.6913966Z 69 | pub struct ForkMeta {
+2026-11-13T18:51:36.6914256Z    |            ^^^^^^^^
+2026-11-13T18:51:36.6914526Z    |
+2026-11-13T18:51:36.6914879Z    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+2026-11-13T18:51:36.6915224Z 
+2026-11-13T18:51:36.6915368Z 
+2026-11-13T18:51:36.6915646Z warning: function `assert_no_foreign_hand_faces` is never used
+2026-11-13T18:51:36.6916273Z   --> crates\engine-ai\src\info_set.rs:56:8
+2026-11-13T18:51:36.6916614Z    |
+2026-11-13T18:51:36.6917039Z 56 | pub fn assert_no_foreign_hand_faces(view: &InformationSetView) -> bool {
+2026-11-13T18:51:36.6917483Z    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-13T18:51:36.6917728Z 
+2026-11-13T18:51:36.6917828Z 
+2026-11-13T18:53:58.3332313Z [1m[92m   Compiling[0m engine-wasm v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\engine-wasm)
+2026-11-13T18:54:02.3799388Z [1m[92m    Finished[0m `release` profile [optimized] target(s) in 3m 08s
+2026-11-13T18:54:02.4073546Z [INFO]: Installing wasm-bindgen...
+2026-11-13T18:54:03.2931142Z [INFO]: Optional field missing from Cargo.toml: 'repository'. This is not necessary, but recommended
+2026-11-13T18:54:03.2937068Z [INFO]: License key is set in Cargo.toml but no LICENSE file(s) were found; Please add the LICENSE file(s) to your project directory
+2026-11-13T18:54:03.2939236Z [INFO]: :-) Done in 3m 09s
+2026-11-13T18:54:03.2939963Z [INFO]: :-) Your wasm pkg is ready to publish at D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\apps\web-client\src\wasm-pkg.
+2026-11-13T18:54:03.3123955Z WASM package written to D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\apps\web-client\src\wasm-pkg
+2026-11-13T18:54:03.6303672Z 
+2026-11-13T18:54:03.6304646Z > noname-next-web-client@0.1.0 build D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\apps\web-client
+2026-11-13T18:54:03.6305347Z > vue-tsc --noEmit && vite build
+2026-11-13T18:54:03.6305524Z 
+2026-11-13T18:54:07.6602873Z [36mvite v6.4.3 [32mbuilding for production...[36m[39m
+2026-11-13T18:54:07.7391276Z transforming...
+2026-11-13T18:54:09.6764331Z [32m✓[39m 196 modules transformed.
+2026-11-13T18:54:09.8922095Z rendering chunks...
+2026-11-13T18:54:10.2176345Z computing gzip size...
+2026-11-13T18:54:10.5930767Z [2mdist/[22m[32mindex.html                                  [39m[1m[2m     0.47 kB[22m[1m[22m[2m │ gzip:     0.32 kB[22m
+2026-11-13T18:54:10.5931582Z [2mdist/[22m[32massets/engine.worker-HjclhH94.js            [39m[1m[2m     9.01 kB[22m[1m[22m
+2026-11-13T18:54:10.5932279Z [2mdist/[22m[32massets/engine.native.worker-DTCOwjt7.js     [39m[1m[2m    35.63 kB[22m[1m[22m
+2026-11-13T18:54:10.5937648Z [2mdist/[22m[32massets/engine_wasm_bg-ClePBZn9.wasm         [39m[1m[2m16,118.93 kB[22m[1m[22m[2m │ gzip: 3,453.09 kB[22m
+2026-11-13T18:54:10.5938437Z [2mdist/[22m[32massets/engine_native_wasm_bg-Dl2vaJ1C.wasm  [39m[1m[2m27,906.82 kB[22m[1m[22m[2m │ gzip: 5,126.38 kB[22m
+2026-11-13T18:54:10.5938968Z [2mdist/[22m[35massets/index-BahEwCNE.css                   [39m[1m[2m    49.87 kB[22m[1m[22m[2m │ gzip:    10.14 kB[22m
+2026-11-13T18:54:10.5939466Z [2mdist/[22m[36massets/index-Ck0566bi.js                    [39m[1m[33m   841.11 kB[39m[22m[2m │ gzip:   208.46 kB[22m
+2026-11-13T18:54:10.5941483Z [33m
+2026-11-13T18:54:10.5941812Z (!) Some chunks are larger than 500 kB after minification. Consider:
+2026-11-13T18:54:10.5942219Z - Using dynamic import() to code-split the application
+2026-11-13T18:54:10.5942672Z - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+2026-11-13T18:54:10.5943177Z - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+2026-11-13T18:54:10.5943937Z [32m✓ built in 2.92s[39m
+2026-11-13T18:54:10.8368179Z [1m[93mwarning[0m[1m[97m: unused workspace dependency `accessibility-schema`[0m
+2026-11-13T18:54:10.8368621Z   [1m[96m--> [0mCargo.toml:72:1
+2026-11-13T18:54:10.8368805Z    [1m[96m|[0m
+2026-11-13T18:54:10.8369105Z [1m[96m72[0m [1m[96m|[0m accessibility-schema = { path = "crates/accessibility-schema" }
+2026-11-13T18:54:10.8369398Z    [1m[96m|[0m [1m[93m^^^^^^^^^^^^^^^^^^^^[0m
+2026-11-13T18:54:10.8369583Z    [1m[96m|[0m
+2026-11-13T18:54:10.8370386Z    [1m[96m= [0m[1m[97mnote[0m: `cargo::unused_workspace_dependencies` is set to `warn` by default
+2026-11-13T18:54:10.8370796Z [1m[96mhelp[0m: consider removing the workspace dependency `accessibility-schema`
+2026-11-13T18:54:10.8371380Z [1m[93mwarning[0m[1m[97m: unused workspace dependency `bytemuck`[0m
+2026-11-13T18:54:10.8371632Z   [1m[96m--> [0mCargo.toml:80:1
+2026-11-13T18:54:10.8371805Z    [1m[96m|[0m
+2026-11-13T18:54:10.8372048Z [1m[96m80[0m [1m[96m|[0m bytemuck = { version = "1", features = ["derive"] }
+2026-11-13T18:54:10.8372287Z    [1m[96m|[0m [1m[93m^^^^^^^^[0m
+2026-11-13T18:54:10.8372444Z    [1m[96m|[0m
+2026-11-13T18:54:10.8372684Z [1m[96mhelp[0m: consider removing the workspace dependency `bytemuck`
+2026-11-13T18:54:10.8372995Z [1m[93mwarning[0m[1m[97m: unused workspace dependency `devtools`[0m
+2026-11-13T18:54:10.8373227Z   [1m[96m--> [0mCargo.toml:73:1
+2026-11-13T18:54:10.8373386Z    [1m[96m|[0m
+2026-11-13T18:54:10.8373605Z [1m[96m73[0m [1m[96m|[0m devtools = { path = "crates/devtools" }
+2026-11-13T18:54:10.8373833Z    [1m[96m|[0m [1m[93m^^^^^^^^[0m
+2026-11-13T18:54:10.8373996Z    [1m[96m|[0m
+2026-11-13T18:54:10.8374217Z [1m[96mhelp[0m: consider removing the workspace dependency `devtools`
+2026-11-13T18:54:10.8374531Z [1m[93mwarning[0m[1m[97m: unused workspace dependency `diagnostics`[0m
+2026-11-13T18:54:10.8374763Z   [1m[96m--> [0mCargo.toml:69:1
+2026-11-13T18:54:10.8374922Z    [1m[96m|[0m
+2026-11-13T18:54:10.8375138Z [1m[96m69[0m [1m[96m|[0m diagnostics = { path = "crates/diagnostics" }
+2026-11-13T18:54:10.8375364Z    [1m[96m|[0m [1m[93m^^^^^^^^^^^[0m
+2026-11-13T18:54:10.8375526Z    [1m[96m|[0m
+2026-11-13T18:54:10.8375756Z [1m[96mhelp[0m: consider removing the workspace dependency `diagnostics`
+2026-11-13T18:54:10.8376088Z [1m[93mwarning[0m[1m[97m: unused field `repository` in `workspace.package`[0m
+2026-11-13T18:54:10.8376338Z   [1m[96m--> [0mCargo.toml:59:1
+2026-11-13T18:54:10.8376484Z    [1m[96m|[0m
+2026-11-13T18:54:10.8376722Z [1m[96m59[0m [1m[96m|[0m repository = "https://github.com/local/noname-next"
+2026-11-13T18:54:10.8376965Z    [1m[96m|[0m [1m[93m^^^^^^^^^^[0m
+2026-11-13T18:54:10.8377118Z    [1m[96m|[0m
+2026-11-13T18:54:10.8377437Z    [1m[96m= [0m[1m[97mnote[0m: `cargo::unused_workspace_package_fields` is set to `warn` by default
+2026-11-13T18:54:10.8377810Z [1m[96mhelp[0m: consider removing the field `workspace.package.repository`
+2026-11-13T18:54:10.8378114Z [1m[93mwarning[0m: workspace (manifest) generated 5 warnings
+2026-11-13T18:54:12.5437386Z [1m[92m   Compiling[0m engine-api v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\engine-api)
+2026-11-13T18:54:12.5556520Z [1m[92m   Compiling[0m resource-schema v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\resource-schema)
+2026-11-13T18:54:12.5557855Z [1m[92m   Compiling[0m licensing-schema v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\licensing-schema)
+2026-11-13T18:54:12.5605539Z [1m[92m   Compiling[0m desktop-client v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\apps\desktop-client)
+2026-11-13T18:54:15.0183591Z [1m[92m   Compiling[0m rule-api v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\rule-api)
+2026-11-13T18:54:15.4167431Z [1m[92m   Compiling[0m diagnostics v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\diagnostics)
+2026-11-13T18:54:29.0409784Z [1m[92m   Compiling[0m rule-vm v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\rule-vm)
+2026-11-13T18:54:29.8836135Z [1m[92m   Compiling[0m engine-native-kernel v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\engine-native-kernel)
+2026-11-13T18:54:29.8837915Z [1m[92m   Compiling[0m content-schema v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\content-schema)
+2026-11-13T18:54:37.2077935Z [1m[92m   Compiling[0m engine-native-content v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\engine-native-content)
+2026-11-13T18:54:47.6106122Z [1m[92m   Compiling[0m content-runtime v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\content-runtime)
+2026-11-13T18:55:12.8441000Z [1m[92m   Compiling[0m engine-native v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\engine-native)
+2026-11-13T18:55:18.3369564Z [1m[92m   Compiling[0m content-native-loader v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\content-native-loader)
+2026-11-13T18:55:53.6863284Z [1m[92m   Compiling[0m engine-native-wasm v0.1.0 (D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\crates\engine-native-wasm)
+2026-11-13T18:59:06.3576487Z [1m[92m    Finished[0m `release` profile [optimized] target(s) in 4m 55s
+2026-11-13T18:59:06.3980253Z        Built application at: D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\target\release\noname-next-desktop.exe
+2026-11-13T18:59:06.4502607Z         Info Patching D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\target\release\noname-next-desktop.exe with bundle type information: msi
+2026-11-13T18:59:06.6090853Z         Info Verifying wix package
+2026-11-13T18:59:06.6091312Z  Downloading https://github.com/wixtoolset/wix3/releases/download/wix3141rtm/wix314-binaries.zip
+2026-11-13T18:59:07.0164453Z         Info validating hash
+2026-11-13T18:59:07.0368779Z         Info extracting WIX
+2026-11-13T18:59:07.6465007Z         Info Target: x64
+2026-11-13T18:59:07.6532745Z      Running candle for "D:\\a\\RuyimgByCN-noname-ruyimg-modified\\RuyimgByCN-noname-ruyimg-modified\\noname-next\\target\\release\\wix\\x64\\main.wxs"
+2026-11-13T18:59:10.5493292Z      Running light to produce D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\target\release\bundle\msi\无名杀 Next_0.1.0_x64_zh-CN.msi
+2026-11-13T18:59:17.1221576Z         Info Patching D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\target\release\noname-next-desktop.exe with bundle type information: nsis
+2026-11-13T18:59:17.2804923Z         Info Verifying NSIS package
+2026-11-13T18:59:17.2805400Z  Downloading https://github.com/tauri-apps/binary-releases/releases/download/nsis-3.13/nsis-3.13.zip
+2026-11-13T18:59:17.5207610Z         Info validating hash
+2026-11-13T18:59:17.5217839Z         Info extracting NSIS
+2026-11-13T18:59:18.4935644Z  Downloading https://github.com/tauri-apps/nsis-tauri-utils/releases/download/nsis_tauri_utils-v0.5.3/nsis_tauri_utils.dll
+2026-11-13T18:59:18.7515703Z         Info validating hash
+2026-11-13T18:59:18.7530374Z         Info Target: x64
+2026-11-13T18:59:18.7653978Z      Running makensis to produce D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\target\release\bundle\nsis\无名杀 Next_0.1.0_x64-setup.exe
+2026-11-13T18:59:32.3573193Z     Finished 2 bundles at:
+2026-11-13T18:59:32.3575010Z         D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\target\release\bundle\msi\无名杀 Next_0.1.0_x64_zh-CN.msi (20.61 MiB)
+2026-11-13T18:59:32.3575780Z         D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next\target\release\bundle\nsis\无名杀 Next_0.1.0_x64-setup.exe (17.32 MiB)
+2026-11-13T18:59:32.3576151Z 
+2026-11-13T18:59:32.4547785Z ##[group]Run actions/upload-artifact@v4
+2026-11-13T18:59:32.4548056Z with:
+2026-11-13T18:59:32.4548237Z   name: installer-windows-latest
+2026-11-13T18:59:32.4548461Z   path: noname-next/target/release/bundle/**
+
+2026-11-13T18:59:32.4548710Z   if-no-files-found: error
+2026-11-13T18:59:32.4548900Z   compression-level: 6
+2026-11-13T18:59:32.4549079Z   overwrite: false
+2026-11-13T18:59:32.4549256Z   include-hidden-files: false
+2026-11-13T18:59:32.4549462Z env:
+2026-11-13T18:59:32.4549621Z   CARGO_TERM_COLOR: always
+2026-11-13T18:59:32.4549815Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-11-13T18:59:32.4550039Z   CARGO_INCREMENTAL: 0
+2026-11-13T18:59:32.4550236Z   CACHE_ON_FAILURE: false
+2026-11-13T18:59:32.4550461Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-11-13T18:59:32.4550699Z ##[endgroup]
+2026-11-13T18:59:32.5861410Z (node:8944) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-13T18:59:32.5861938Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-13T18:59:32.5913485Z With the provided path, there will be 2 files uploaded
+2026-11-13T18:59:32.5916730Z Artifact name is valid!
+2026-11-13T18:59:32.5917448Z Root directory input is valid!
+2026-11-13T18:59:32.9255135Z Beginning upload of artifact content to blob storage
+2026-11-13T18:59:33.1083852Z (node:8944) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-13T18:59:34.1204718Z Uploaded bytes 8388608
+2026-11-13T18:59:34.3639506Z Uploaded bytes 16777216
+2026-11-13T18:59:34.5485410Z Uploaded bytes 25165824
+2026-11-13T18:59:34.7972974Z Uploaded bytes 33554432
+2026-11-13T18:59:35.0463595Z Uploaded bytes 39542489
+2026-11-13T18:59:35.1126364Z Finished uploading artifact content to blob storage!
+2026-11-13T18:59:35.1127270Z SHA256 digest of uploaded artifact zip is 80dd620b94afd26e9fe532db221ee96303480a28598386f6636a3573a4d6dfaf
+2026-11-13T18:59:35.1129247Z Finalizing artifact upload
+2026-11-13T18:59:35.4913363Z Artifact installer-windows-latest.zip successfully finalized. Artifact ID 14067164833
+2026-11-13T18:59:35.4914522Z Artifact installer-windows-latest has been successfully uploaded! Final size is 39542489 bytes. Artifact ID is 14067164833
+2026-11-13T18:59:35.4915190Z Artifact download URL: https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43485811587/artifacts/14067164833
+2026-11-13T18:59:35.5246211Z Post job cleanup.
+2026-11-13T18:59:35.5250198Z ##[start-action display=Run pnpm/action-setup@v4;id=__e998d74d-8a63-4a3c-8b72-1c2e375e2dd9.__pnpm_action-setup]
+2026-11-13T18:59:35.5341516Z Post job cleanup.
+2026-11-13T18:59:35.6532590Z Pruning is unnecessary.
+2026-11-13T18:59:35.6641159Z ##[end-action id=__e998d74d-8a63-4a3c-8b72-1c2e375e2dd9.__pnpm_action-setup;outcome=success;conclusion=success;duration_ms=139]
+2026-11-13T18:59:35.6643322Z ##[start-action display=Run actions/checkout@v4;id=__e998d74d-8a63-4a3c-8b72-1c2e375e2dd9.__actions_checkout]
+2026-11-13T18:59:35.6766816Z Post job cleanup.
+2026-11-13T18:59:35.8014596Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-11-13T18:59:35.8280989Z git version 2.56.0.windows.4
+2026-11-13T18:59:35.8336102Z Temporarily overriding HOME='D:\a\_temp\a4daed85-589d-4106-9bb5-22f90716f311' before making global git config changes
+2026-11-13T18:59:35.8337035Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-13T18:59:35.8344079Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\archive\upstream\noname
+2026-11-13T18:59:35.8635961Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-11-13T18:59:35.8911668Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-11-13T18:59:36.2975754Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-13T18:59:36.3242027Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-11-13T18:59:36.7562691Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-13T18:59:36.7830323Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-13T18:59:37.2208419Z ##[end-action id=__e998d74d-8a63-4a3c-8b72-1c2e375e2dd9.__actions_checkout;outcome=success;conclusion=success;duration_ms=1556]
+2026-11-13T18:59:37.2342420Z Post job cleanup.
+2026-11-13T18:59:37.3380377Z (node:5960) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-13T18:59:37.3380923Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-13T18:59:37.3631317Z Post job cleanup.
+2026-11-13T18:59:37.4687620Z Cache up-to-date.
+2026-11-13T18:59:37.4932130Z Post job cleanup.
+2026-11-13T18:59:37.6031612Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-11-13T18:59:37.6286508Z git version 2.56.0.windows.4
+2026-11-13T18:59:37.6335414Z Temporarily overriding HOME='D:\a\_temp\d84e4f9a-dc86-4443-b21a-294edfbdc969' before making global git config changes
+2026-11-13T18:59:37.6335881Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-13T18:59:37.6343029Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\RuyimgByCN-noname-ruyimg-modified\RuyimgByCN-noname-ruyimg-modified\noname-next
+2026-11-13T18:59:37.6614361Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-11-13T18:59:37.6874901Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-11-13T18:59:38.1266715Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-13T18:59:38.1517594Z http.https://github.com/.extraheader
+2026-11-13T18:59:38.1552173Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all http.https://github.com/.extraheader
+2026-11-13T18:59:38.1823307Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-11-13T18:59:38.5968379Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-13T18:59:38.6247255Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-13T18:59:39.1173622Z Cleaning up orphan processes
+2026-11-13T18:59:39.1482750Z Terminate orphan process: pid (3776) (vctip)
+2026-11-13T18:59:39.2395000Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4, actions/upload-artifact@v4, pnpm/action-setup@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

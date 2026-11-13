@@ -1,0 +1,53 @@
+{
+  "at": "2026-11-13T18:23:11.281592+00:00",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L29-龙血玄黄.md\n M docs/migration/g0/README.md\n M docs/migration/g0/U06-欢乐卡牌.md\n M docs/migration/g0/inventory_status.json\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n",
+  "index_diff": "",
+  "toolchain": {
+    "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (Homebrew)",
+    "cargo": "cargo 1.99.1 (5f94df478 2026-08-27) (Homebrew)",
+    "node": "v26.13.0",
+    "python": "Python 3.10.10",
+    "chrome": "Google Chrome 157.0.8103.52",
+    "os": "ProductName:\t\tmacOS\nProductVersion:\t\t27.2.1\nBuildVersion:\t\t26B131"
+  },
+  "browser": {
+    "at": "2026-11-13T18:09:19.357Z",
+    "label": "l10",
+    "url": "http://127.0.0.1:50341/",
+    "upstream": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname",
+    "profile": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-l10-runtime-chrome-pzztlJ",
+    "upstreamPort": 50341,
+    "controlPort": 50398,
+    "cdpPort": 50357,
+    "chromePid": 86543,
+    "transcript": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L10/session-l10-1794593358863",
+    "head": "605201f3f49e10cea61c31d52a61bbb66c85599d"
+  },
+  "binary": {
+    "built_at_shared_path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target/debug/l10-queue1-runtime-probe",
+    "preserved_path": "/private/tmp/noname-l10-runtime-preserved-tvv_75wj/native-probe-round2",
+    "sha256": "6b3aa08e59da2a9dc1eb3a98c17fbcf5498a6619a473432deda7adfd704ef3ef",
+    "preserved_sha256": "6b3aa08e59da2a9dc1eb3a98c17fbcf5498a6619a473432deda7adfd704ef3ef",
+    "bytes": 34650872
+  },
+  "private_target_created": false,
+  "shared_target_cleaned": false,
+  "input_hashes_still_match_preflight": {
+    "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs": true,
+    "crates/engine-native-content/src/content/host/step/skills_cards.rs": true,
+    "crates/engine-native-content/src/content/host/step/skills_recovery.rs": true,
+    "crates/engine-native-content/src/content/host/asks_wudian.rs": true,
+    "crates/engine-native/tests/l10_epic_cards_eight.rs": true,
+    "packages/extensions/epic-cards-upstream-liuli/assets/cards.json": true,
+    "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js": true,
+    "../archive/upstream/noname-liuli/noname/character/refresh.js": true
+  },
+  "spine_guard": {
+    "guard_before_any_file_read": true,
+    "all_requests": 2565,
+    "spine_requests": 0,
+    "official_or_bundled_spine_runtime_read_or_loaded": false
+  }
+}

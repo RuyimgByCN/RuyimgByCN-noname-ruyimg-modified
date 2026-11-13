@@ -1,0 +1,244 @@
+{
+  "at": "2026-11-13T19:11:46.401124+00:00",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "tracked_status": " M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/migration/g0/L10-史诗卡牌.md\n M docs/migration/g0/inventory_status.json\n M docs/operations/evidence/2026-11-14-queue1-runtime/README.md\n M docs/operations/evidence/2026-11-14-queue1-runtime/publication/README.md\n",
+  "product_changed_tracked_paths": [],
+  "versions": {
+    "rule": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "collector_files_rechecked": 354,
+  "collector_file_hash_changes": [],
+  "source_inputs_rechecked": [
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/l28_batch_a.rs",
+      "sha256": "783937e8f29efca517bdfbb8d918905b2fb08b3465d710339ec14154748a2f33",
+      "same_as_review_input": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/l28_batch_a_asks.rs",
+      "sha256": "fde73a4f9286316c553e0d84b7a4d6e5edc6ab9a5d5f8aa01ff43938d0414879",
+      "same_as_review_input": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/l28_batch_b.rs",
+      "sha256": "1ec78d469401027dea8f40d91f64c137f3d2fb6e92ea841eb459c203dadb8ba2",
+      "same_as_review_input": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/l28_batch_b_asks.rs",
+      "sha256": "90bddf7020c0c1560b58361a22b83ce20c8b4f0c1f1436f7f944205f35fc70ca",
+      "same_as_review_input": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/tests/l28_thunder_eight_match.rs",
+      "sha256": "cc1fe34b7b2eb83fa6c965b0c43a065d114ba6a44158a92046308be5671471a6",
+      "same_as_review_input": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/tests/l28_thunder_eight_batch_b.rs",
+      "sha256": "2b4416e29833406a9a8a7050f8aaf60e2a31c4f903f3ce0c7e66b26ab458589d",
+      "same_as_review_input": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader/src/locked_content.rs",
+      "sha256": "b1f4663d8830d1b3ce059870d9a343aa9eaad1044bb09dd5a2c19f8f2e871933",
+      "same_as_review_input": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader/src/decision34_pack9.rs",
+      "sha256": "57677960381809834e0a6990cdb0b0082474f9a0c55819059046b98529ecd428",
+      "same_as_review_input": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/thunder-upstream-liuli/package.npack.json",
+      "sha256": "84521165ed9d5c12c1021c9a5669d514dc151b0dbf57b225af3719254a509f2b",
+      "same_as_review_input": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/thunder-upstream-liuli/assets/config.json",
+      "sha256": "de64ace113e18098eed39cbc6dc80389dae83e49e8608c4ce1911d50174eebaa",
+      "same_as_review_input": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+      "sha256": "3f7add04e6d347d450facb9b6fd506f5c4cd64a5e3fbc626e47e79d8a3aa13b2",
+      "same_as_review_input": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/game/game.js",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5",
+      "same_as_review_input": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/card/standard.js",
+      "sha256": "dabb598438dc030a621dd2fac83989aac9ae783f521a1521f142891a5e16c8b5",
+      "same_as_review_input": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/card/extra.js",
+      "sha256": "7998d90d7a8eb855d34713cacb1958bad7cd854ccf04bd3bea47a6a303c7007d",
+      "same_as_review_input": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/雷霆万钧/thunder.css",
+      "sha256": "34680c46dfb528adf8808543eb425594fae46309f1c8f3c78d3117f402e9fb24",
+      "same_as_review_input": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/kernel/judge.rs",
+      "sha256": "e82acb6540051038973474b9ccb61d0b26f85135c5b756cf1acc158793377685",
+      "same_as_review_input": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/catalog.rs",
+      "sha256": "df441f4cb9f288971c4121135ca9a51ecc34d492dbeb0363c852b4f972c2b876",
+      "same_as_review_input": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/catalog/card_kind.rs",
+      "sha256": "8b60d23374a57fdc2e3603893c80d302a12b77c413f864a4080a8c376a50b3d8",
+      "same_as_review_input": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/standard/cards.rs",
+      "sha256": "72e38d8f9418bc400592c9e4b901a6e654d89237f1d401d8b14ef2a7511923fe",
+      "same_as_review_input": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/Cargo.lock",
+      "sha256": "5d56dba182060ed914dedfe8eb3ff8a7627ce32c3913207fb5ea7e9c070b5926",
+      "same_as_review_input": true
+    }
+  ],
+  "local_markdown_links": [
+    {
+      "document": "README.md",
+      "line": 5,
+      "target": "findings.json",
+      "exists": true
+    },
+    {
+      "document": "README.md",
+      "line": 7,
+      "target": "case-review.md",
+      "exists": true
+    },
+    {
+      "document": "README.md",
+      "line": 7,
+      "target": "case-review.json",
+      "exists": true
+    },
+    {
+      "document": "README.md",
+      "line": 11,
+      "target": "frozen-input-receipt.json",
+      "exists": true
+    },
+    {
+      "document": "README.md",
+      "line": 11,
+      "target": "raw-integrity-audit.json",
+      "exists": true
+    },
+    {
+      "document": "README.md",
+      "line": 11,
+      "target": "raw-snapshot-index.json",
+      "exists": true
+    },
+    {
+      "document": "README.md",
+      "line": 11,
+      "target": "entry-and-boundary-audit.json",
+      "exists": true
+    },
+    {
+      "document": "README.md",
+      "line": 13,
+      "target": "audit-raw-first.stdout",
+      "exists": true
+    },
+    {
+      "document": "README.md",
+      "line": 13,
+      "target": "projection-audit.json",
+      "exists": true
+    },
+    {
+      "document": "README.md",
+      "line": 15,
+      "target": "native-replay/src/main.rs",
+      "exists": true
+    },
+    {
+      "document": "README.md",
+      "line": 15,
+      "target": "native-replay-first.jsonl",
+      "exists": true
+    },
+    {
+      "document": "README.md",
+      "line": 15,
+      "target": "native-replay-first.stderr",
+      "exists": true
+    },
+    {
+      "document": "README.md",
+      "line": 15,
+      "target": "native-replay/first/",
+      "exists": true
+    },
+    {
+      "document": "README.md",
+      "line": 17,
+      "target": "commands-and-first-failures.json",
+      "exists": true
+    },
+    {
+      "document": "case-review.md",
+      "line": 35,
+      "target": "case-review.json",
+      "exists": true
+    },
+    {
+      "document": "case-review.md",
+      "line": 35,
+      "target": "raw-snapshot-index.json",
+      "exists": true
+    },
+    {
+      "document": "case-review.md",
+      "line": 35,
+      "target": "findings.json",
+      "exists": true
+    }
+  ],
+  "local_link_errors": [],
+  "case_count": 25,
+  "case_classifications": {
+    "有限投影一致": 11,
+    "类别结算不一致": 3,
+    "源入口阻塞": 4,
+    "结算时序不一致": 3,
+    "取消交互分段不同": 1,
+    "配置维度不一致": 2,
+    "分配能力不具备": 1
+  },
+  "replay_summary": {
+    "failed": 0,
+    "final": 22,
+    "kind": "summary",
+    "pending": 39
+  },
+  "new_equivalence_signoffs": 0,
+  "written_scope": "independent/l28 only; original L28 and public/source/index read-only",
+  "private_cache_created": false,
+  "shared_target_cleaned": false,
+  "browser_or_service_started_by_reviewer": false,
+  "disk": "Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s5   926Gi   777Gi   124Gi    87%    6.2M  1.3G    0%   /System/Volumes/Data\n"
+}

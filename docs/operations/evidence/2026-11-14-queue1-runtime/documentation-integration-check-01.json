@@ -1,0 +1,42 @@
+{
+  "at": "2026-11-14T03:17:58.715498+08:00",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "tracked_dirty": true,
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "auxiliary_frozen_files": [
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/independent/u08-auxiliary-adjudication.md",
+      "bytes": 8918,
+      "sha256": "12f67cf3612f982f4c7b20e3207bd47d702655d147a4af7916d0e64a9135e0ec"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/independent/u08-auxiliary-adjudication.json",
+      "bytes": 11192,
+      "sha256": "a5f3edab8611605430507963b9109a124e4770ba5138a78d110fa431bff8b533"
+    }
+  ],
+  "auxiliary_source_anchors_current": true,
+  "inventory_before_after_auxiliary_hash_matches": true,
+  "tracked_changes_only_docs": true,
+  "historical_nonblank_markdown_lines_preserved_in_order": [
+    "docs/architecture/native-progress.md",
+    "docs/architecture/native-remaining-ledger.md",
+    "docs/architecture/native-rules-baseline.md",
+    "docs/migration/g0/L10-史诗卡牌.md",
+    "docs/migration/g0/L28-雷霆万钧.md",
+    "docs/migration/g0/README.md",
+    "docs/migration/g0/U08-英雄杀.md",
+    "docs/migration/upstream-extension-reconstruction.md",
+    "docs/operations/evidence/2026-10-19-source-signoff-32/README.md",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/README.md",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/publication/README.md",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/remaining-scope.md"
+  ],
+  "scope": "保留全部旧日期段落/表/失败原文；只新增当前日期记录。清单当前值替换有独立before/after原文，不把历史状态改写为当前。"
+}

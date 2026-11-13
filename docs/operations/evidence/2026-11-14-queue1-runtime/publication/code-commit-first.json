@@ -1,0 +1,15 @@
+{
+  "started_at": "2026-11-14T02:45:49.798579+08:00",
+  "parent": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "argv": [
+    "git",
+    "commit",
+    "--file",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-commit-message.txt"
+  ],
+  "expected_paths": 2217,
+  "authorization": "目标第三节队列1、10及裁决25；全部本地门禁通过。",
+  "exit_code": 0,
+  "finished_at": "2026-11-14T02:45:50.545023+08:00",
+  "head_after": "5c73d1d9158145e33f98f2018013914667d13964"
+}

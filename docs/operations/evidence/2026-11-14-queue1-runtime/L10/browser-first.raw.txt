@@ -1,0 +1,4 @@
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L10/run-browser.py", line 124
+    wanted=0 if name=='g_tao'else1
+           ^^^^^^^^^^^^^^^^^^
+SyntaxError: expected 'else' after 'if' expression

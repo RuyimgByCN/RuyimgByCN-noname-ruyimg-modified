@@ -1,0 +1,15 @@
+{
+  "cmd": [
+    "cargo",
+    "run",
+    "--offline",
+    "--manifest-path",
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-l28-native-5wz51exi/Cargo.toml"
+  ],
+  "env": {
+    "NONAME_REPO_ROOT": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "L28_OUTPUT": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/native/round2",
+    "CARGO_TARGET_DIR": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target"
+  },
+  "probe": "probe-02.rs"
+}

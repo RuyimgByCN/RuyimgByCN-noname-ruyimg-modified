@@ -1,0 +1,9 @@
+{
+  "path": "/private/tmp/noname-u08-runtime-preserved-edoyg7eg/native-probe-round2",
+  "sha256": "6a08977ed231a8c71229dc50c650ee8b4fd02973d96389dc38d60239c4d3dffd",
+  "bytes": 35305176,
+  "original": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target/debug/u08-queue1-runtime-probe",
+  "purpose": "Retain exact linked external probe for independent review; this is not a Cargo cache. Remove only after parent releases it.",
+  "private_cargo_target_created": false,
+  "shared_target_cleaned": false
+}

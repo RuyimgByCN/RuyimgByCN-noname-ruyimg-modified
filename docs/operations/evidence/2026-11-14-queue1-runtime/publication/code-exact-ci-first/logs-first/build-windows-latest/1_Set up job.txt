@@ -1,0 +1,34 @@
+﻿2026-11-13T18:46:10.4614279Z Current runner version: '2.338.2'
+2026-11-13T18:46:10.4656619Z ##[group]Runner Image Provisioner
+2026-11-13T18:46:10.4657155Z Hosted Compute Agent
+2026-11-13T18:46:10.4657477Z Version: 20261103.629
+2026-11-13T18:46:10.4658189Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+2026-11-13T18:46:10.4658592Z Build Date: 2026-11-03T17:26:59Z
+2026-11-13T18:46:10.4658965Z Worker ID: {fec6b12a-5fab-46d3-8af3-12c6240cb597}
+2026-11-13T18:46:10.4659385Z Region: southcentralus
+2026-11-13T18:46:10.4659751Z Cloud: Azure
+2026-11-13T18:46:10.4660091Z ##[endgroup]
+2026-11-13T18:46:10.4660884Z ##[group]Operating System
+2026-11-13T18:46:10.4661221Z Microsoft Windows Server 2025
+2026-11-13T18:46:10.4661559Z 10.0.26100
+2026-11-13T18:46:10.4661840Z Datacenter
+2026-11-13T18:46:10.4662128Z ##[endgroup]
+2026-11-13T18:46:10.4662420Z ##[group]Runner Image
+2026-11-13T18:46:10.4662777Z Image: windows-2025-vs2026
+2026-11-13T18:46:10.4663120Z Version: 20261103.298.1
+2026-11-13T18:46:10.4663773Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20261103.298/images/windows/Windows2025-VS2026-Readme.md
+2026-11-13T18:46:10.4664920Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20261103.298
+2026-11-13T18:46:10.4665448Z ##[endgroup]
+2026-11-13T18:46:10.4666089Z ##[group]GITHUB_TOKEN Permissions
+2026-11-13T18:46:10.4667276Z Contents: read
+2026-11-13T18:46:10.4667597Z Metadata: read
+2026-11-13T18:46:10.4667900Z ##[endgroup]
+2026-11-13T18:46:10.4669260Z Secret source: Actions
+2026-11-13T18:46:10.4669769Z Cache mode: write
+2026-11-13T18:46:10.4670209Z Prepare workflow directory
+2026-11-13T18:46:10.4984348Z Prepare all required actions
+2026-11-13T18:46:10.5030245Z Getting action download info
+2026-11-13T18:46:10.7455023Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-13T18:46:10.8287696Z Download action repository 'dtolnay/rust-toolchain@stable' (SHA:b725eda525362e7cf34af9a7243cac1e3f01a7ec)
+2026-11-13T18:46:11.0358984Z Download action repository 'Swatinem/rust-cache@v2' (SHA:d1527c8f67ef9af357290475d4af4b0fab8f12e0)
+2026-11-13T18:46:11.6425945Z Complete job name: build-windows-latest

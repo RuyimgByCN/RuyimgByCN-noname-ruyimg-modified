@@ -1,0 +1,11 @@
+{
+  "at_utc": "2026-11-13T18:37:32.335629+00:00",
+  "previous_source": "formal-probe-round1-source.rs",
+  "previous_sha256": "50bb9dba1062d70b0d18954989354a6cabfc1eac79f312794847078b9dbdb41f",
+  "new_source_sha256": "76ab0e7f635bb11fa5c3a248ee06f009f00e6c0c2eebc3e0d86d2b5f45c5c15a",
+  "changes": [
+    "Retain 26 original cases when L10_FOLLOWUP_ONLY unset",
+    "L10_FOLLOWUP_ONLY=1 runs k_A/B actual clique answers then two normal NextPhase commands, direct/restored; no injected skills/entities",
+    "Remove unused Suit import copied from original probe"
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "review_date": "2026-11-14",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "reviewer": "/root/repair_doc_refs",
+  "scope": "U08三交互技31案独立复核",
+  "batch_result": "退回；慧眼有已实际确认差异，不新增规则等价签署。",
+  "runtime_difference_cases": [
+    "b_under_control",
+    "b_cancel_predict",
+    "b_cancel_then_retry"
+  ],
+  "pending_region_difference_cases": [
+    "b_cancel_discard"
+  ],
+  "specified_projection_match_count": 28,
+  "specified_projection_different_count": 3,
+  "specified_projection_and_usage_flags_match_count": 27,
+  "new_equivalence_signoffs": 0,
+  "findings": [
+    {
+      "id": "U08-R1",
+      "title": "受控目标过滤缺失",
+      "inventory_keys": [
+        "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407"
+      ],
+      "cases": [
+        "b_under_control"
+      ],
+      "evidence_level": "上游真实触发负例+原生真实命令+独立原生复跑+源码过滤反例",
+      "native_observed": "仍问Tag1，预测命中后座0多获得实体106，牌堆少106、used_turn=true。",
+      "upstream_observed": "初始目标2._trueMe=座0、isUnderControl=true；无chooseControl、无106、bolehuiyan4=false。",
+      "boundary": "共同初态只含座位HP/牌面等；控制关系是上游附加条件，原生没有对应过滤，不称全初态同一。",
+      "source_anchors": [
+        "ubcontrol",
+        "under",
+        "nbfilter",
+        "setupcontrol"
+      ],
+      "recommendation": "保留/维持简化近似并补该实际反例；不新增等价。"
+    },
+    {
+      "id": "U08-R2",
+      "title": "真实cancel返回值导致上游消耗本回合慧眼次数",
+      "inventory_keys": [
+        "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407"
+      ],
+      "cases": [
+        "b_cancel_predict",
+        "b_cancel_then_retry"
+      ],
+      "evidence_level": "原始DOM点击结果+上游实际标记与后续杀+原生空答与后续杀+独立原生复跑",
+      "upstream_observed": "DOM link=cancel实际走ui.click.cancel，返回confirm=cancel/bool=false而无control；源result.control!==cancel为真，加bolehuiyan4但storage未形成有效预测。第二杀不再提供预测。",
+      "native_observed": "空答不设置bolehuiyan_used_turn；第二杀可再问Tag1并摸106。",
+      "boundary": "取消字符串的意图不能替换真实返回字段；两杀案例实体顺序不同，但上游取消后的bolehuiyan4与原生未用标记在第二杀前已不同。",
+      "source_anchors": [
+        "control",
+        "cancel",
+        "ubcancel",
+        "nbstep"
+      ],
+      "recommendation": "差别栏应记录当前上游真实取消行为；不擅自修正上游或把原生意图写成等价。"
+    },
+    {
+      "id": "U08-R3",
+      "title": "强制弃牌挂起时使用中的杀区域不同",
+      "inventory_keys": [
+        "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+        "U08:skills:bolehuiyan3@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2495"
+      ],
+      "cases": [
+        "b_cancel_discard"
+      ],
+      "evidence_level": "双方实际已受伤并停于强制弃牌，原始牌区快照+源码时序",
+      "native_observed": "空答被Rejected(InvalidChoice)，仍待bolehuiyan:discard；杀9已经进入discard，table空。",
+      "upstream_observed": "chooseToDiscard forced、无取消键；杀9仍在ordering，未进入discard，root.done=false。没有注入隐藏取消答案。",
+      "source_anchors": [
+        "shaemit",
+        "shaadvance",
+        "ushadamage",
+        "nbdiscard"
+      ],
+      "recommendation": "保留挂起时点/实体区域差异；不能按最终未弃费用、HP相同写全状态或完整结算通过。此案不是上游失败，也不是强制取消成功。"
+    },
+    {
+      "id": "U08-S1",
+      "title": "慧眼触发和结算事件范围不同，31案未覆盖其全部反例",
+      "inventory_keys": [
+        "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+        "U08:skills:bolehuiyan2@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2477",
+        "U08:skills:bolehuiyan3@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2495"
+      ],
+      "cases": [],
+      "evidence_level": "仅本轮独立源码确认；没有新增对应上游运行场景",
+      "upstream_observed": "主技能逐目标shaBegin/priority11且过滤受控；辅助分别shaEnd、shaDamage。",
+      "native_observed": "主技能整牌CardUsed/priority1只取首目标且targets含自己就整体拒绝；未命中辅助为ShaDodged/TurnEnded，命中辅助为普通Damage，过滤检查来源/目标但不核对本次杀的card/kind。",
+      "source_anchors": [
+        "ub",
+        "ub2",
+        "ub3",
+        "nbmeta",
+        "nbfilter",
+        "nbdamage",
+        "ushend"
+      ],
+      "recommendation": "多目标、第一目标无手牌而后续有手牌、免伤/无伤shaEnd、其他嵌套非杀伤害及优先级组合继续待验。不得拿本31案签两辅助或整个来源全分支等价。"
+    }
+  ],
+  "boundaries": [
+    {
+      "id": "B1",
+      "description": "31案每案均重载页面，并实查八座HP/maxHP/face_down、he/j实体id/name/suit/rank/nature、主技能，以及上游虚拟装备/判定与实体对应、无旧预测/觉醒残留。原生牌堆保留7或8张，逐案顺序与牌面严格相同。"
+    },
+    {
+      "id": "B2",
+      "description": "每案21张未映射的原生初始discard实体未在上游创建；另77/78闪电的native导出nature=null、上游固有thunder。本轮不归一后称完整初态相同；这些初始discard在双方各自执行中保持原样。"
+    },
+    {
+      "id": "B3",
+      "description": "上游directgain形成的手牌顺序与原生不同，比较he/j是实体集合与牌面，不包含手牌排列；b_repeat/b_cancel_then_retry因此普通杀实体出牌顺序相反。"
+    },
+    {
+      "id": "B4",
+      "description": "y_cancel_target上游实际点结束回合，原生空目标取消仍在Play，不能当相同取消协议/阶段轨迹。y_no_wound/g_no_equip/g_only_own上游可点技能再发现无目标，原生直接拒绝；均无实际费用或效果。"
+    },
+    {
+      "id": "B5",
+      "description": "鬼斧每个目标均仅一件装备，实际没有打开guifu:choose_equip；多装备选择A/B/强制选牌挂起恢复未覆盖。医心费用只选手牌，没有装备费用/下一回合限定标记重用/其他技能组合。"
+    },
+    {
+      "id": "B6",
+      "description": "原生使用正式hero-kill注册，109host/0VM/0新增card；夹具通过debug_grant赋三技和自设回合/牌区，不是武将自然装配、服务器/Worker/产品UI或整局验收。上游手建phase/phaseUse root，但真实调用原版useCard/chooseToUse及DOM控件，不替换技能结算函数。"
+    },
+    {
+      "id": "B7",
+      "description": "恢复证明是原生内每份原始NGSA的完整快照、继续命令、日志与摘要；只允许auth_generation变化。它不证明上游事件/RNG/存档与原生完整同一。强制待答案仍pending，不写31案全部完成结算。"
+    },
+    {
+      "id": "B8",
+      "description": "未重新启动上游浏览器；逐stage/最终快照、夹具赋值和真实点击均回溯最终原始CDP。未运行完整preflight、产品三crate/全工作区门禁、其他平台或资源/界面验收。未读/加载/复制禁止Spine运行库；原网络日志38215请求中无Spine URL。"
+    }
+  ],
+  "inventory_modified": false,
+  "original_source_evidence_modified": false,
+  "collector_report_or_comparator_read": false
+}

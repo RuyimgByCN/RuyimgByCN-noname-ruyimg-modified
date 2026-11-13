@@ -1,0 +1,260 @@
+{
+  "date": "2026-11-14",
+  "frozen_at": "2026-11-13T18:50:53.492249+00:00",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "owner": "/root/fix_dddanzhi",
+  "directory_frozen": true,
+  "product_source_modified_by_owner": false,
+  "shared_target_cleaned": false,
+  "private_target_created": false,
+  "local_markdown_link_checks": [
+    {
+      "file": "README.md",
+      "target": "preflight.json"
+    },
+    {
+      "file": "README.md",
+      "target": "freeze-environment.json"
+    },
+    {
+      "file": "README.md",
+      "target": "browser-round4/results.json"
+    },
+    {
+      "file": "README.md",
+      "target": "initial-validation-audit.json"
+    },
+    {
+      "file": "README.md",
+      "target": "source-load-verification.json"
+    },
+    {
+      "file": "README.md",
+      "target": "native-probe/src/main.rs"
+    },
+    {
+      "file": "README.md",
+      "target": "native-round2/native-input-metadata.json"
+    },
+    {
+      "file": "README.md",
+      "target": "native-round2/native-results.json"
+    },
+    {
+      "file": "README.md",
+      "target": "native-round2/native-direct-commands.jsonl"
+    },
+    {
+      "file": "README.md",
+      "target": "native-round2/native-restored-commands.jsonl"
+    },
+    {
+      "file": "README.md",
+      "target": "native-validation-audit.json"
+    },
+    {
+      "file": "README.md",
+      "target": "cases.md"
+    },
+    {
+      "file": "README.md",
+      "target": "comparison.json"
+    },
+    {
+      "file": "README.md",
+      "target": "findings.json"
+    },
+    {
+      "file": "README.md",
+      "target": "native-first.raw.txt"
+    },
+    {
+      "file": "README.md",
+      "target": "native-first-source.rs"
+    },
+    {
+      "file": "README.md",
+      "target": "browser-first.raw.txt"
+    },
+    {
+      "file": "README.md",
+      "target": "browser-second.raw.txt"
+    },
+    {
+      "file": "README.md",
+      "target": "browser-third.raw.txt"
+    },
+    {
+      "file": "README.md",
+      "target": "browser-fourth.raw.txt"
+    },
+    {
+      "file": "README.md",
+      "target": "commands.md"
+    },
+    {
+      "file": "README.md",
+      "target": "runtime-inputs.json"
+    },
+    {
+      "file": "README.md",
+      "target": "review-input-manifest.json"
+    },
+    {
+      "file": "README.md",
+      "target": "raw-transcript-index.json"
+    },
+    {
+      "file": "README.md",
+      "target": "cleanup.json"
+    },
+    {
+      "file": "README.md",
+      "target": "preserved-probe.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-y_target_A.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-y_target_B.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-y_cost_B.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-y_self.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-y_cancel_cards.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-y_cancel_target.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-y_two_cards.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-y_no_wound.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-y_reuse.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-y_no_skill.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-g_target_A.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-g_target_B.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-g_cancel_target.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-g_no_equip.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-g_only_own.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-g_reuse.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-g_no_skill.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-b_hit.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-b_miss.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-b_wrong_A.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-b_wrong_B.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-b_wrong_miss.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-b_cancel_predict.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-b_cancel_discard.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-b_empty_target.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-b_owner_attacker.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-b_owner_target.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-b_under_control.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-b_repeat.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-b_cancel_then_retry.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "browser-round4/upstream-b_no_skill.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "initial-validation-audit.json"
+    },
+    {
+      "file": "cases.md",
+      "target": "native-round2/native-direct-commands.jsonl"
+    },
+    {
+      "file": "cases.md",
+      "target": "native-round2/native-restored-commands.jsonl"
+    }
+  ],
+  "scope": "Evidence collection complete. Independent review pending; no equivalence signoff. Only manifest metadata/log are excluded to avoid recursive file hashes.",
+  "manifest_excluded": [
+    "manifest.json",
+    "manifest.raw.txt",
+    "manifest.sha256"
+  ],
+  "temporary_browser_cleanup": "cleanup.json",
+  "retained_probe": "preserved-probe.json"
+}

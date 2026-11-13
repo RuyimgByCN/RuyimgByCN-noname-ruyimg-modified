@@ -1,0 +1,19 @@
+{
+  "started_at": "2026-11-14T02:49:15.434821+08:00",
+  "head_sha": "5c73d1d9158145e33f98f2018013914667d13964",
+  "run_id": 43485811587,
+  "argv": [
+    "gh",
+    "run",
+    "watch",
+    "43485811587",
+    "--repo",
+    "RuyimgByCN/RuyimgByCN-noname-ruyimg-modified",
+    "--exit-status",
+    "--interval",
+    "30"
+  ],
+  "agent_reruns": 0,
+  "exit_code": 0,
+  "finished_at": "2026-11-14T03:13:56.063142+08:00"
+}

@@ -1,0 +1,49 @@
+{
+  "at": "2026-11-13T18:09:18.644551+00:00",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "tracked_status": " M crates/engine-native-content/src/content/host/asks_wudian.rs\n M crates/engine-native/tests/l29_longxue_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L29-龙血玄黄.md\n M docs/migration/g0/U06-欢乐卡牌.md\n M docs/migration/g0/inventory_status.json\n",
+  "index_status": "",
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "ownership": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L10",
+  "owner": "/root/fix_dddanzhi",
+  "files": {
+    "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs": {
+      "sha256": "f29b5eeb92dcfbca5e86841f14e883216877a47a6442ab20b5390ef67fbf79d1",
+      "bytes": 25297
+    },
+    "crates/engine-native-content/src/content/host/step/skills_cards.rs": {
+      "sha256": "f0fcb004b48b8ceb2d91b8cedfcfd8748741eb1866d8341d894772baed45835d",
+      "bytes": 22074
+    },
+    "crates/engine-native-content/src/content/host/step/skills_recovery.rs": {
+      "sha256": "776874aeaae6cb6cabe53981c08779ddd863d23382e6c40f2f38db72e12de327",
+      "bytes": 29562
+    },
+    "crates/engine-native-content/src/content/host/asks_wudian.rs": {
+      "sha256": "042cc996fb573f782cd5af3a6bc21258f7e350836f1556905627e6857d9a107a",
+      "bytes": 31921
+    },
+    "crates/engine-native/tests/l10_epic_cards_eight.rs": {
+      "sha256": "4934f5f29317afe0ec945c5b11215db927cf640d5f39e7a863c7307eaf25c933",
+      "bytes": 34677
+    },
+    "packages/extensions/epic-cards-upstream-liuli/assets/cards.json": {
+      "sha256": "aa22cfedd7c333b4d6481935a4fc092d0754d1b68152a4d1d24a72943a9cec2d",
+      "bytes": 663
+    },
+    "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js": {
+      "sha256": "07f7960942e479d465bf52eec2ad600f4f93471c6b739da2d1cb00dd2425b23c",
+      "bytes": 137764
+    },
+    "../archive/upstream/noname-liuli/noname/character/refresh.js": {
+      "sha256": "f9829f4567fa975ec7116360d9da78c1eb047dc5da9dd350bf49ec23ea38349a",
+      "bytes": 514980
+    }
+  }
+}

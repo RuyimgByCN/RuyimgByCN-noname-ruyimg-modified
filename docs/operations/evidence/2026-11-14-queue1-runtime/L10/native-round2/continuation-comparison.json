@@ -1,0 +1,269 @@
+{
+  "cases": 26,
+  "pending": 102,
+  "pending_success": 102,
+  "all_command_reply_state_log_equal": true,
+  "all_final_full_snapshots_equal_except_auth_generation": true,
+  "cases_detail": [
+    {
+      "case": "g_sha_ally",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 6,
+      "pending_success": 6,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": false
+    },
+    {
+      "case": "g_sha_question_fake",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 6,
+      "pending_success": 6,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": false
+    },
+    {
+      "case": "g_true_question_discard",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 6,
+      "pending_success": 6,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": false
+    },
+    {
+      "case": "g_true_question_losehp",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 6,
+      "pending_success": 6,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": false
+    },
+    {
+      "case": "g_tao",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 6,
+      "pending_success": 6,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": false
+    },
+    {
+      "case": "g_cancel_card",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 2,
+      "pending_success": 2,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": false
+    },
+    {
+      "case": "g_cancel_name",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 4,
+      "pending_success": 4,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": false
+    },
+    {
+      "case": "g_cancel_target",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 6,
+      "pending_success": 6,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": false
+    },
+    {
+      "case": "g_no_hand",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 0,
+      "pending_success": 0,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "g_no_skill",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 0,
+      "pending_success": 0,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "g_response",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 0,
+      "pending_success": 0,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "r_basic",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 6,
+      "pending_success": 6,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": false
+    },
+    {
+      "case": "r_trick",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 6,
+      "pending_success": 6,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": false
+    },
+    {
+      "case": "r_equip",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 6,
+      "pending_success": 6,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": false
+    },
+    {
+      "case": "r_move_A",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 8,
+      "pending_success": 8,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": false
+    },
+    {
+      "case": "r_move_B",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 8,
+      "pending_success": 8,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": false
+    },
+    {
+      "case": "r_cancel_choice",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 4,
+      "pending_success": 4,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": false
+    },
+    {
+      "case": "r_cancel_type",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 6,
+      "pending_success": 6,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": false
+    },
+    {
+      "case": "r_no_skill",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 0,
+      "pending_success": 0,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "r_other_target",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 0,
+      "pending_success": 0,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "r_double",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 10,
+      "pending_success": 10,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": false
+    },
+    {
+      "case": "k_A",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 2,
+      "pending_success": 2,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": false
+    },
+    {
+      "case": "k_B",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 2,
+      "pending_success": 2,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": false
+    },
+    {
+      "case": "k_cancel",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 2,
+      "pending_success": 2,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": false
+    },
+    {
+      "case": "k_after_initial_no_trigger",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 0,
+      "pending_success": 0,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": true
+    },
+    {
+      "case": "k_no_skill",
+      "commands_equal": true,
+      "final_projection_equal": true,
+      "final_full_snapshot_equal_except_auth_generation": true,
+      "pending": 0,
+      "pending_success": 0,
+      "checkpoints_equal_except_auth": true,
+      "final_ngsa_bytes_equal": true
+    }
+  ]
+}

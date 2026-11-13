@@ -1,0 +1,32 @@
+{
+  "at": "2026-11-13T19:00:27.972493+00:00",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "mode": "source only; collector runtime input still unfrozen and unread",
+  "files": [
+    {
+      "path": "crates/content-native-loader/src/lib.rs",
+      "sha256": "9a5f44ec4ae6655baae0b85ba0e034a6436005465bc71011d6248666ac32582e",
+      "bytes": 49171
+    },
+    {
+      "path": "crates/content-native-loader/src/locked_content.rs",
+      "sha256": "b1f4663d8830d1b3ce059870d9a343aa9eaad1044bb09dd5a2c19f8f2e871933",
+      "bytes": 10514
+    },
+    {
+      "path": "packages/extensions/thunder-upstream-liuli/package.npack.json",
+      "sha256": "84521165ed9d5c12c1021c9a5669d514dc151b0dbf57b225af3719254a509f2b",
+      "bytes": 1555
+    },
+    {
+      "path": "packages/extensions/thunder-upstream-liuli/manifest.json",
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    {
+      "path": "packages/extensions/thunder-upstream-liuli/assets/config.json",
+      "sha256": "de64ace113e18098eed39cbc6dc80389dae83e49e8608c4ce1911d50174eebaa",
+      "bytes": 475
+    }
+  ]
+}

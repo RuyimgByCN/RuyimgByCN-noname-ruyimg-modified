@@ -1,0 +1,110 @@
+{
+  "at": "2026-11-13T18:56:18.026018+00:00",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "mode": "source only, before frozen collector runtime input",
+  "collector_narrative_or_comparison_code_read": false,
+  "source_files": [
+    {
+      "path": "../archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+      "sha256": "3f7add04e6d347d450facb9b6fd506f5c4cd64a5e3fbc626e47e79d8a3aa13b2",
+      "bytes": 458058,
+      "physical_lines": 9187
+    },
+    {
+      "path": "../archive/upstream/noname-liuli/noname/game/game.js",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5",
+      "bytes": 2148860,
+      "physical_lines": 65804
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/l28_batch_a.rs",
+      "sha256": "783937e8f29efca517bdfbb8d918905b2fb08b3465d710339ec14154748a2f33",
+      "bytes": 35808,
+      "physical_lines": 946
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/l28_batch_a_asks.rs",
+      "sha256": "fde73a4f9286316c553e0d84b7a4d6e5edc6ab9a5d5f8aa01ff43938d0414879",
+      "bytes": 33527,
+      "physical_lines": 847
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/l28_batch_b.rs",
+      "sha256": "1ec78d469401027dea8f40d91f64c137f3d2fb6e92ea841eb459c203dadb8ba2",
+      "bytes": 24064,
+      "physical_lines": 613
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/l28_batch_b_asks.rs",
+      "sha256": "90bddf7020c0c1560b58361a22b83ce20c8b4f0c1f1436f7f944205f35fc70ca",
+      "bytes": 13021,
+      "physical_lines": 420
+    },
+    {
+      "path": "crates/content-native-loader/src/host_skill_bindings.rs",
+      "sha256": "f105655a7fadf096d816cd185218cf6738d6e2dd2bd79b37d334150af9713119",
+      "bytes": 43075,
+      "physical_lines": 842
+    },
+    {
+      "path": "crates/content-native-loader/src/decision34_pack9.rs",
+      "sha256": "57677960381809834e0a6990cdb0b0082474f9a0c55819059046b98529ecd428",
+      "bytes": 36898,
+      "physical_lines": 929
+    },
+    {
+      "path": "crates/engine-native-kernel/src/machine.rs",
+      "sha256": "219c8c8fc913ad743af196734f4a0bca87565c52331feb0b7442e4915b379197",
+      "bytes": 36079,
+      "physical_lines": 1050
+    },
+    {
+      "path": "crates/engine-native-kernel/src/resolution.rs",
+      "sha256": "a2f100ca9c74ae66b0f611ea8d24082e446f8718338edb6712900721c5763b07",
+      "bytes": 39430,
+      "physical_lines": 976
+    },
+    {
+      "path": "crates/engine-native/tests/l28_thunder_eight_match.rs",
+      "sha256": "cc1fe34b7b2eb83fa6c965b0c43a065d114ba6a44158a92046308be5671471a6",
+      "bytes": 28429,
+      "physical_lines": 797
+    },
+    {
+      "path": "crates/engine-native/tests/l28_thunder_eight_batch_b.rs",
+      "sha256": "2b4416e29833406a9a8a7050f8aaf60e2a31c4f903f3ce0c7e66b26ab458589d",
+      "bytes": 26221,
+      "physical_lines": 653
+    }
+  ],
+  "inventory_key_identity_only": [
+    {
+      "inventory_key": "L28:skills:th_zhengjing@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6018",
+      "source_id": "L28",
+      "category": "skills",
+      "id": "th_zhengjing",
+      "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6018"
+    },
+    {
+      "inventory_key": "L28:skills:th_zhengjing2@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6162",
+      "source_id": "L28",
+      "category": "skills",
+      "id": "th_zhengjing2",
+      "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6162"
+    },
+    {
+      "inventory_key": "L28:skills:th_buxu@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6372",
+      "source_id": "L28",
+      "category": "skills",
+      "id": "th_buxu",
+      "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6372"
+    },
+    {
+      "inventory_key": "L28:skills:th_yeyan@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8636",
+      "source_id": "L28",
+      "category": "skills",
+      "id": "th_yeyan",
+      "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8636"
+    }
+  ]
+}

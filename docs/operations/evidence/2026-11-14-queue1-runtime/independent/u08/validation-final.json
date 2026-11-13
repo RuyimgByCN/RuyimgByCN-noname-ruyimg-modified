@@ -1,0 +1,1449 @@
+{
+  "recorded_at_utc": "2026-11-13T19:08:47.549610+00:00",
+  "owned_markdown_files": 5,
+  "owned_local_links": 121,
+  "owned_line_anchors": 31,
+  "owned_broken_links": [],
+  "owned_out_of_bounds_line_anchors": [],
+  "link_checks": [
+    {
+      "document": "README.md",
+      "target": "case-table.md",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "README.md",
+      "target": "case-assessments.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "README.md",
+      "target": "source-review.md",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "README.md",
+      "target": "findings.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "README.md",
+      "target": "input-validation-first.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "README.md",
+      "target": "cdp-provenance-second.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "README.md",
+      "target": "native-replay01-validation.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "README.md",
+      "target": "native-replay01/native-results.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "README.md",
+      "target": "archive-replay02/pending-suffix-results.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "README.md",
+      "target": "archive-replay02.raw.log",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "README.md",
+      "target": "archive-replay01.raw.log",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "README.md",
+      "target": "archive-probe-first-source.rs",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "README.md",
+      "target": "recompute-first-source.py",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "README.md",
+      "target": "archive-replay02/formal-registration.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "README.md",
+      "target": "../../U08/browser-environment.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "README.md",
+      "target": "../../U08/source-load-verification.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "README.md",
+      "target": "../../U08/raw-transcript-index.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "README.md",
+      "target": "commands.md",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "README.md",
+      "target": "freeze-context.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "README.md",
+      "target": "validation-final.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "README.md",
+      "target": "frozen-file-manifest.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "README.md",
+      "target": "source-scope-detail.md",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "README.md",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-y_target_A.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-y_target_A.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-y_target_B.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-y_target_B.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-y_cost_B.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-y_cost_B.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-y_self.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-y_self.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-y_cancel_cards.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-y_cancel_cards.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-y_cancel_target.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-y_cancel_target.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-y_two_cards.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-y_two_cards.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-y_no_wound.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-y_no_wound.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-y_reuse.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-y_reuse.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-y_no_skill.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-y_no_skill.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-g_target_A.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-g_target_A.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-g_target_B.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-g_target_B.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-g_cancel_target.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-g_cancel_target.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-g_no_equip.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-g_no_equip.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-g_only_own.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-g_only_own.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-g_reuse.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-g_reuse.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-g_no_skill.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-g_no_skill.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-b_hit.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-b_hit.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-b_miss.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-b_miss.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-b_wrong_A.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-b_wrong_A.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-b_wrong_B.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-b_wrong_B.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-b_wrong_miss.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-b_wrong_miss.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-b_cancel_predict.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-b_cancel_predict.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-b_cancel_discard.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-b_cancel_discard.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-b_empty_target.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-b_empty_target.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-b_owner_attacker.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-b_owner_attacker.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-b_owner_target.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-b_owner_target.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-b_under_control.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-b_under_control.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-b_repeat.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-b_repeat.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-b_cancel_then_retry.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-b_cancel_then_retry.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/browser-round4/upstream-b_no_skill.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "case-table.md",
+      "target": "../../U08/native-round2/native-b_no_skill.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "source-review.md",
+      "target": "source-anchors.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../../archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js#L337",
+      "exists": true,
+      "line": 337,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../crates/engine-native-content/src/content/host/step/u08_batch_a.rs#L633",
+      "exists": true,
+      "line": 633,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../crates/engine-native/src/engine/apply_command.rs#L63",
+      "exists": true,
+      "line": 63,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../crates/engine-native-content/src/content/host/step/u08_batch_a_asks.rs#L67",
+      "exists": true,
+      "line": 67,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../../archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js#L2407",
+      "exists": true,
+      "line": 2407,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../../archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js#L2465",
+      "exists": true,
+      "line": 2465,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../../archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js#L2477",
+      "exists": true,
+      "line": 2477,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../../archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js#L2495",
+      "exists": true,
+      "line": 2495,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../crates/engine-native-content/src/content/host/step/u08_batch_d.rs#L549",
+      "exists": true,
+      "line": 549,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../crates/engine-native-content/src/content/host/step/u08_batch_d.rs#L607",
+      "exists": true,
+      "line": 607,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs#L832",
+      "exists": true,
+      "line": 832,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs#L765",
+      "exists": true,
+      "line": 765,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../../archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js#L3095",
+      "exists": true,
+      "line": 3095,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../crates/engine-native/src/engine/apply_command.rs#L63",
+      "exists": true,
+      "line": 63,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../crates/engine-native-content/src/content/host/step/u08_batch_d_ext.rs#L701",
+      "exists": true,
+      "line": 701,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../crates/engine-native-content/src/content/host/step/u08_batch_d_ext.rs#L42",
+      "exists": true,
+      "line": 42,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs#L645",
+      "exists": true,
+      "line": 645,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../../archive/upstream/noname/apps/core/noname/ui/click/index.js#L3020",
+      "exists": true,
+      "line": 3020,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../../archive/upstream/noname/apps/core/noname/ui/click/index.js#L3167",
+      "exists": true,
+      "line": 3167,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../crates/engine-native-kernel/src/kernel/sha.rs#L285",
+      "exists": true,
+      "line": 285,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../crates/engine-native-kernel/src/kernel/sha.rs#L194",
+      "exists": true,
+      "line": 194,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../../archive/upstream/noname/apps/core/card/standard.js#L151",
+      "exists": true,
+      "line": 151,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../crates/content-native-loader/src/locked_content.rs#L115",
+      "exists": true,
+      "line": 115,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../../../../../crates/content-native-loader/src/decision34_pack9.rs#L585",
+      "exists": true,
+      "line": 585,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../U08/native-probe/src/main.rs#L201",
+      "exists": true,
+      "line": 201,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "archive-probe/src/main.rs",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "source-review.md",
+      "target": "archive-replay02/formal-registration.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../U08/native-probe/src/main.rs#L112",
+      "exists": true,
+      "line": 112,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../U08/browser-round4-upstream-setup.js#L30",
+      "exists": true,
+      "line": 30,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../U08/browser-round4-upstream-setup.js#L99",
+      "exists": true,
+      "line": 99,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-review.md",
+      "target": "../../U08/browser-round4-upstream-setup.js#L58",
+      "exists": true,
+      "line": 58,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-scope-detail.md",
+      "target": "findings.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    },
+    {
+      "document": "source-scope-detail.md",
+      "target": "../../../../../../crates/engine-native-content/src/content/host/step/u08_batch_d.rs#L641",
+      "exists": true,
+      "line": 641,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-scope-detail.md",
+      "target": "../../../../../../crates/engine-native-content/src/content/host/step/u08_batch_d.rs#L647",
+      "exists": true,
+      "line": 647,
+      "line_in_bounds": true
+    },
+    {
+      "document": "source-scope-detail.md",
+      "target": "source-scope-detail.json",
+      "exists": true,
+      "line": null,
+      "line_in_bounds": null
+    }
+  ],
+  "source_anchor_checks": [
+    {
+      "key": "uy",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 337,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "uycost",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 342,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "uyrecover",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 354,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "ub",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 2407,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "ubcontrol",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 2415,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "ubcancel",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 2465,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "ub2",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 2477,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "ub3",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 2495,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "ug",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 3095,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "ny",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_a_asks.rs",
+      "line": 67,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "nyrefund",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_a_asks.rs",
+      "line": 79,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "nytarget",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_a_asks.rs",
+      "line": 562,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "nygate",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_a.rs",
+      "line": 633,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "nbmeta",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d.rs",
+      "line": 549,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "nbfilter",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d.rs",
+      "line": 607,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "nbdamage",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d.rs",
+      "line": 618,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "nbresolve",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs",
+      "line": 765,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "nbstep",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs",
+      "line": 832,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "nbdiscard",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs",
+      "line": 118,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "ng",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d_ext.rs",
+      "line": 701,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "ngdraw",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d_ext.rs",
+      "line": 42,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "ngask",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs",
+      "line": 645,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "gate",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/src/engine/apply_command.rs",
+      "line": 63,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "formal",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader/src/decision34_pack9.rs",
+      "line": 585,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "locked",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader/src/locked_content.rs",
+      "line": 115,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "control",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/ui/click/index.js",
+      "line": 3020,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "cancel",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/ui/click/index.js",
+      "line": 3167,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "under",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/library/element/player.js",
+      "line": 13304,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "shaemit",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/kernel/sha.rs",
+      "line": 285,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "shaadvance",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/kernel/sha.rs",
+      "line": 194,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "ushadamage",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/card/standard.js",
+      "line": 151,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "ushend",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/library/element/gameEvent.ts",
+      "line": 282,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "probeformal",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-probe/src/main.rs",
+      "line": 201,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "probesetup",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-probe/src/main.rs",
+      "line": 112,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "setupreset",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4-upstream-setup.js",
+      "line": 30,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "setupcontrol",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4-upstream-setup.js",
+      "line": 58,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "setupentry",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4-upstream-setup.js",
+      "line": 99,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "runnercontrol",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4-browser-runner.py",
+      "line": 83,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    },
+    {
+      "key": "runnertargetcancel",
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4-browser-runner.py",
+      "line": 87,
+      "in_bounds": true,
+      "source_text_matches": true,
+      "source_hash_matches": true
+    }
+  ],
+  "input_product_rust_source_count": 489,
+  "all_product_rust_sources_unchanged": true,
+  "all_initial_declared_sources_unchanged": true,
+  "all_source_anchor_texts_and_hashes_match": true,
+  "all_62_individual_case_files_match_aggregates": true,
+  "per_case_input_checks": [
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-y_target_A.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-y_target_B.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-y_cost_B.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-y_self.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-y_cancel_cards.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-y_cancel_target.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-y_two_cards.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-y_no_wound.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-y_reuse.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-y_no_skill.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-g_target_A.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-g_target_B.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-g_cancel_target.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-g_no_equip.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-g_only_own.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-g_reuse.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-g_no_skill.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_hit.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_miss.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_wrong_A.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_wrong_B.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_wrong_miss.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_cancel_predict.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_cancel_discard.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_empty_target.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_owner_attacker.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_owner_target.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_under_control.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_repeat.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_cancel_then_retry.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_no_skill.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-y_target_A.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-y_target_B.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-y_cost_B.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-y_self.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-y_cancel_cards.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-y_cancel_target.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-y_two_cards.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-y_no_wound.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-y_reuse.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-y_no_skill.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-g_target_A.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-g_target_B.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-g_cancel_target.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-g_no_equip.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-g_only_own.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-g_reuse.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-g_no_skill.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_hit.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_miss.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_wrong_A.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_wrong_B.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_wrong_miss.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_cancel_predict.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_cancel_discard.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_empty_target.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_owner_attacker.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_owner_target.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_under_control.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_repeat.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_cancel_then_retry.json",
+      "aggregate_matches_individual": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_no_skill.json",
+      "aggregate_matches_individual": true
+    }
+  ],
+  "original_manifest_sha256": "7934ad115c63fd0ace23d3b3800d1e2703e621554e9db6391035f09a1185205c",
+  "original_manifest_sha256_matches_notified_freeze": true,
+  "original_frozen_file_count": 404,
+  "all_original_frozen_files_unchanged": true,
+  "pending_independently_redecoded_and_suffix_replayed": 76,
+  "suffix_commands_replayed": 134,
+  "all_pending_suffix_checks_pass": true,
+  "network_request_count": 38215,
+  "spine_network_urls": [],
+  "owned_git_index_entries": "",
+  "tracked_product_status": "",
+  "global_local_links_command": [
+    "python3",
+    "-B",
+    "scripts/check_local_links.py",
+    "--all"
+  ],
+  "global_local_links_exit_code": 0,
+  "global_local_links_log": "local-links-all-final.log",
+  "global_doc_line_refs_check_executed": false,
+  "line_validation_scope": "本目录所有#L锚点，另逐个核39源码锚点的语义原文与整文件哈希；没有将其称全库file:line扫描。",
+  "complete_preflight_executed": false,
+  "owned_scope_all_pass": true
+}

@@ -1,0 +1,13 @@
+{
+  "at": "2026-11-13T18:31:13.121Z",
+  "label": "u08",
+  "url": "http://127.0.0.1:5173/",
+  "upstream": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-runtime-modern-b789ktt1/apps/core",
+  "profile": "/private/tmp/noname-queue1-u08-chrome-pPmflj",
+  "upstreamPort": 5173,
+  "controlPort": 50210,
+  "cdpPort": 50185,
+  "chromePid": 92575,
+  "transcript": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/session-u08-1794594672096",
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d"
+}

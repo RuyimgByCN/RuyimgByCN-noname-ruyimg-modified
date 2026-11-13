@@ -1,0 +1,1569 @@
+{
+  "at": "2026-11-13T19:06:14.139672+00:00",
+  "normalization": "Only shandian null->thunder for the explicitly listed intrinsic lightning nature; strict first-pass mismatch preserved in raw-integrity-audit.json/audit-raw-first.stdout.",
+  "initial_matches_after_that_normalization": 25,
+  "official_tuple_input_sources": [
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/card/standard.js",
+      "sha256": "dabb598438dc030a621dd2fac83989aac9ae783f521a1521f142891a5e16c8b5",
+      "literal_pile_count": 108
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/card/extra.js",
+      "sha256": "7998d90d7a8eb855d34713cacb1958bad7cd854ccf04bd3bea47a6a303c7007d",
+      "literal_pile_count": 53
+    }
+  ],
+  "native_fixture_card_count": 125,
+  "native_faces_absent_from_official_standard_extra_and_real_th_taipingyaoshu": [
+    {
+      "id": 79,
+      "kind": "horse_plus",
+      "name": "horse_plus",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": "jueying"
+    },
+    {
+      "id": 80,
+      "kind": "horse_plus",
+      "name": "horse_plus",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": "jueying"
+    },
+    {
+      "id": 81,
+      "kind": "horse_plus",
+      "name": "horse_plus",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": "jueying"
+    },
+    {
+      "id": 82,
+      "kind": "horse_plus",
+      "name": "horse_plus",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": "jueying"
+    },
+    {
+      "id": 83,
+      "kind": "horse_minus",
+      "name": "horse_minus",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": "chitu"
+    },
+    {
+      "id": 84,
+      "kind": "horse_minus",
+      "name": "horse_minus",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": "chitu"
+    },
+    {
+      "id": 89,
+      "kind": "weapon",
+      "name": "weapon2",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": "qinggang"
+    },
+    {
+      "id": 90,
+      "kind": "weapon",
+      "name": "weapon2b",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": "cixiong"
+    },
+    {
+      "id": 91,
+      "kind": "weapon",
+      "name": "weapon3",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": "qinglong"
+    },
+    {
+      "id": 92,
+      "kind": "armor",
+      "name": "armor",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": "bagua"
+    },
+    {
+      "id": 93,
+      "kind": "armor",
+      "name": "armor",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": "bagua"
+    },
+    {
+      "id": 94,
+      "kind": "huosha",
+      "name": "fire_sha",
+      "nature": "fire",
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": "sha"
+    },
+    {
+      "id": 95,
+      "kind": "huosha",
+      "name": "fire_sha",
+      "nature": "fire",
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": "sha"
+    },
+    {
+      "id": 96,
+      "kind": "huosha",
+      "name": "fire_sha",
+      "nature": "fire",
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": "sha"
+    },
+    {
+      "id": 97,
+      "kind": "huosha",
+      "name": "fire_sha",
+      "nature": "fire",
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": "sha"
+    },
+    {
+      "id": 98,
+      "kind": "tiesuo",
+      "name": "chain",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": "tiesuo"
+    },
+    {
+      "id": 99,
+      "kind": "tiesuo",
+      "name": "chain",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": "tiesuo"
+    },
+    {
+      "id": 100,
+      "kind": "tiesuo",
+      "name": "chain",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": "tiesuo"
+    },
+    {
+      "id": 101,
+      "kind": "tiesuo",
+      "name": "chain",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": "tiesuo"
+    },
+    {
+      "id": 103,
+      "kind": "bingliang",
+      "name": "bing",
+      "nature": null,
+      "rank": 3,
+      "suit": "club",
+      "upstream_name": "bingliang"
+    },
+    {
+      "id": 123,
+      "kind": "fangtian",
+      "name": "fangtian",
+      "nature": null,
+      "rank": 5,
+      "suit": "diamond",
+      "upstream_name": "fangtian"
+    }
+  ],
+  "all_fixture_cards_are_official_pile_tuples": false,
+  "case_checks": [
+    {
+      "case": "buxu-basic",
+      "native_case": "buxu-basic",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": true,
+      "hp_browser": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": true,
+      "discard_ids_browser": [
+        0
+      ],
+      "discard_ids_native": [
+        0
+      ],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [
+        1
+      ],
+      "classics_ids_native": [
+        1
+      ],
+      "classics_ids_equal": true,
+      "source_hp_event_order": [],
+      "native_hp_event_order": [],
+      "hp_event_order_equal": true,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": false
+    },
+    {
+      "case": "buxu-equip",
+      "native_case": "buxu-equip",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": true,
+      "hp_browser": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": true,
+      "discard_ids_browser": [
+        0
+      ],
+      "discard_ids_native": [
+        0
+      ],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [
+        79
+      ],
+      "classics_ids_native": [
+        1
+      ],
+      "classics_ids_equal": false,
+      "source_hp_event_order": [],
+      "native_hp_event_order": [],
+      "hp_event_order_equal": true,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [
+        79
+      ],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": false
+    },
+    {
+      "case": "buxu-nullify",
+      "native_case": "buxu-nullify",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": true,
+      "hp_browser": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": true,
+      "discard_ids_browser": [
+        0
+      ],
+      "discard_ids_native": [
+        0
+      ],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [
+        70
+      ],
+      "classics_ids_native": [
+        1
+      ],
+      "classics_ids_equal": false,
+      "source_hp_event_order": [],
+      "native_hp_event_order": [],
+      "hp_event_order_equal": true,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": false
+    },
+    {
+      "case": "buxu-cancel",
+      "native_case": "buxu-cancel",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": true,
+      "hp_browser": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": true,
+      "discard_ids_browser": [],
+      "discard_ids_native": [],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [],
+      "classics_ids_native": [],
+      "classics_ids_equal": true,
+      "source_hp_event_order": [],
+      "native_hp_event_order": [],
+      "hp_event_order_equal": true,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": false
+    },
+    {
+      "case": "buxu-empty",
+      "native_case": "buxu-empty",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": true,
+      "hp_browser": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": true,
+      "discard_ids_browser": [],
+      "discard_ids_native": [],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [],
+      "classics_ids_native": [],
+      "classics_ids_equal": true,
+      "source_hp_event_order": [],
+      "native_hp_event_order": [],
+      "hp_event_order_equal": true,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": false
+    },
+    {
+      "case": "buxu-full",
+      "native_case": "buxu-full",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": true,
+      "hp_browser": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": true,
+      "discard_ids_browser": [],
+      "discard_ids_native": [],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [
+        45,
+        56,
+        70,
+        74,
+        89,
+        104
+      ],
+      "classics_ids_native": [
+        45,
+        56,
+        70,
+        74,
+        89,
+        104
+      ],
+      "classics_ids_equal": true,
+      "source_hp_event_order": [],
+      "native_hp_event_order": [],
+      "hp_event_order_equal": true,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [
+        89
+      ],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": false
+    },
+    {
+      "case": "buxu-twice",
+      "native_case": "buxu-twice",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": true,
+      "hp_browser": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": true,
+      "discard_ids_browser": [
+        0,
+        30,
+        45
+      ],
+      "discard_ids_native": [
+        0,
+        30,
+        45
+      ],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [
+        1,
+        79
+      ],
+      "classics_ids_native": [
+        1,
+        2
+      ],
+      "classics_ids_equal": false,
+      "source_hp_event_order": [],
+      "native_hp_event_order": [],
+      "hp_event_order_equal": true,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [
+        79
+      ],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": false
+    },
+    {
+      "case": "buxu-invalid",
+      "native_case": "buxu-invalid",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": true,
+      "hp_browser": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": true,
+      "discard_ids_browser": [
+        0
+      ],
+      "discard_ids_native": [
+        0
+      ],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [
+        1
+      ],
+      "classics_ids_native": [
+        1
+      ],
+      "classics_ids_equal": true,
+      "source_hp_event_order": [],
+      "native_hp_event_order": [],
+      "hp_event_order_equal": true,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": false
+    },
+    {
+      "case": "zhengjing-one-self",
+      "native_case": "zhengjing-one-self",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": false,
+      "hp_browser": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": true,
+      "discard_ids_browser": [],
+      "discard_ids_native": [],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [],
+      "classics_ids_native": [],
+      "classics_ids_equal": true,
+      "source_hp_event_order": [],
+      "native_hp_event_order": [],
+      "hp_event_order_equal": true,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": false
+    },
+    {
+      "case": "zhengjing-three-target",
+      "native_case": "zhengjing-three-target",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": false,
+      "hp_browser": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": true,
+      "discard_ids_browser": [],
+      "discard_ids_native": [],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [],
+      "classics_ids_native": [],
+      "classics_ids_equal": true,
+      "source_hp_event_order": [],
+      "native_hp_event_order": [],
+      "hp_event_order_equal": true,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": false
+    },
+    {
+      "case": "zhengjing-zero",
+      "native_case": "zhengjing-zero",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": false,
+      "hp_browser": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": true,
+      "discard_ids_browser": [],
+      "discard_ids_native": [],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [],
+      "classics_ids_native": [],
+      "classics_ids_equal": true,
+      "source_hp_event_order": [],
+      "native_hp_event_order": [],
+      "hp_event_order_equal": true,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": false
+    },
+    {
+      "case": "zhengjing-cancel",
+      "native_case": "zhengjing-cancel",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": false,
+      "hp_browser": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": true,
+      "discard_ids_browser": [],
+      "discard_ids_native": [],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [],
+      "classics_ids_native": [],
+      "classics_ids_equal": true,
+      "source_hp_event_order": [],
+      "native_hp_event_order": [],
+      "hp_event_order_equal": true,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": false
+    },
+    {
+      "case": "zhengjing-no-skill",
+      "native_case": "zhengjing-no-skill",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": true,
+      "hp_browser": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": true,
+      "discard_ids_browser": [],
+      "discard_ids_native": [],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [],
+      "classics_ids_native": [],
+      "classics_ids_equal": true,
+      "source_hp_event_order": [],
+      "native_hp_event_order": [],
+      "hp_event_order_equal": true,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": false
+    },
+    {
+      "case": "yeyan-small-one",
+      "native_case": "yeyan-small-one",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": true,
+      "hp_browser": [
+        8,
+        7,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        8,
+        7,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": true,
+      "discard_ids_browser": [],
+      "discard_ids_native": [],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [],
+      "classics_ids_native": [],
+      "classics_ids_equal": true,
+      "source_hp_event_order": [
+        [
+          "damage",
+          0,
+          1,
+          1,
+          "fire"
+        ]
+      ],
+      "native_hp_event_order": [
+        [
+          "damage",
+          0,
+          1,
+          1,
+          "fire"
+        ]
+      ],
+      "hp_event_order_equal": true,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": false
+    },
+    {
+      "case": "yeyan-small-three",
+      "native_case": "yeyan-small-three",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": true,
+      "hp_browser": [
+        8,
+        7,
+        7,
+        7,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        8,
+        7,
+        7,
+        7,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": true,
+      "discard_ids_browser": [],
+      "discard_ids_native": [],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [],
+      "classics_ids_native": [],
+      "classics_ids_equal": true,
+      "source_hp_event_order": [
+        [
+          "damage",
+          0,
+          1,
+          1,
+          "fire"
+        ],
+        [
+          "damage",
+          0,
+          2,
+          1,
+          "fire"
+        ],
+        [
+          "damage",
+          0,
+          3,
+          1,
+          "fire"
+        ]
+      ],
+      "native_hp_event_order": [
+        [
+          "damage",
+          0,
+          3,
+          1,
+          "fire"
+        ],
+        [
+          "damage",
+          0,
+          2,
+          1,
+          "fire"
+        ],
+        [
+          "damage",
+          0,
+          1,
+          1,
+          "fire"
+        ]
+      ],
+      "hp_event_order_equal": false,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": false
+    },
+    {
+      "case": "yeyan-great-one",
+      "native_case": "yeyan-great-one",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": true,
+      "hp_browser": [
+        5,
+        5,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        5,
+        5,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": true,
+      "discard_ids_browser": [
+        0,
+        7,
+        21,
+        24
+      ],
+      "discard_ids_native": [
+        0,
+        7,
+        21,
+        24
+      ],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [],
+      "classics_ids_native": [],
+      "classics_ids_equal": true,
+      "source_hp_event_order": [
+        [
+          "loseHp",
+          null,
+          0,
+          3,
+          null
+        ],
+        [
+          "damage",
+          0,
+          1,
+          3,
+          "fire"
+        ]
+      ],
+      "native_hp_event_order": [
+        [
+          "damage",
+          0,
+          1,
+          3,
+          "fire"
+        ],
+        [
+          "loseHp",
+          null,
+          0,
+          3,
+          null
+        ]
+      ],
+      "hp_event_order_equal": false,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": false
+    },
+    {
+      "case": "yeyan-great-split",
+      "native_case": "yeyan-great-split",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": true,
+      "hp_browser": [
+        5,
+        7,
+        8,
+        6,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        5,
+        7,
+        8,
+        6,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": true,
+      "discard_ids_browser": [
+        0,
+        7,
+        21,
+        24
+      ],
+      "discard_ids_native": [
+        0,
+        7,
+        21,
+        24
+      ],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [],
+      "classics_ids_native": [],
+      "classics_ids_equal": true,
+      "source_hp_event_order": [
+        [
+          "loseHp",
+          null,
+          0,
+          3,
+          null
+        ],
+        [
+          "damage",
+          0,
+          1,
+          1,
+          "fire"
+        ],
+        [
+          "damage",
+          0,
+          3,
+          2,
+          "fire"
+        ]
+      ],
+      "native_hp_event_order": [
+        [
+          "damage",
+          0,
+          3,
+          2,
+          "fire"
+        ],
+        [
+          "damage",
+          0,
+          1,
+          1,
+          "fire"
+        ],
+        [
+          "loseHp",
+          null,
+          0,
+          3,
+          null
+        ]
+      ],
+      "hp_event_order_equal": false,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": false
+    },
+    {
+      "case": "yeyan-cancel",
+      "native_case": "yeyan-cancel",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": true,
+      "hp_browser": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": true,
+      "discard_ids_browser": [],
+      "discard_ids_native": [],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [],
+      "classics_ids_native": [],
+      "classics_ids_equal": true,
+      "source_hp_event_order": [],
+      "native_hp_event_order": [],
+      "hp_event_order_equal": true,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": false
+    },
+    {
+      "case": "yeyan-used",
+      "native_case": "yeyan-used",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": true,
+      "hp_browser": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": true,
+      "discard_ids_browser": [],
+      "discard_ids_native": [],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [],
+      "classics_ids_native": [],
+      "classics_ids_equal": true,
+      "source_hp_event_order": [],
+      "native_hp_event_order": [],
+      "hp_event_order_equal": true,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": false
+    },
+    {
+      "case": "yeyan-no-four",
+      "native_case": "yeyan-no-four",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": true,
+      "hp_browser": [
+        8,
+        7,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        8,
+        7,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": true,
+      "discard_ids_browser": [],
+      "discard_ids_native": [],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [],
+      "classics_ids_native": [],
+      "classics_ids_equal": true,
+      "source_hp_event_order": [
+        [
+          "damage",
+          0,
+          1,
+          1,
+          "fire"
+        ]
+      ],
+      "native_hp_event_order": [
+        [
+          "damage",
+          0,
+          1,
+          1,
+          "fire"
+        ]
+      ],
+      "hp_event_order_equal": true,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": false
+    },
+    {
+      "case": "yeyan-target-cancel",
+      "native_case": "yeyan-target-cancel",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": true,
+      "hp_browser": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": true,
+      "discard_ids_browser": [],
+      "discard_ids_native": [],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [],
+      "classics_ids_native": [],
+      "classics_ids_equal": true,
+      "source_hp_event_order": [],
+      "native_hp_event_order": [],
+      "hp_event_order_equal": true,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": false
+    },
+    {
+      "case": "yeyan-great-discard-cancel",
+      "native_case": "yeyan-great-discard-cancel",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": true,
+      "hp_browser": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": true,
+      "discard_ids_browser": [],
+      "discard_ids_native": [],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [],
+      "classics_ids_native": [],
+      "classics_ids_equal": true,
+      "source_hp_event_order": [],
+      "native_hp_event_order": [],
+      "hp_event_order_equal": true,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": false
+    },
+    {
+      "case": "yeyan-great-one-default",
+      "native_case": "yeyan-great-one",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": true,
+      "hp_browser": [
+        8,
+        5,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        5,
+        5,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": false,
+      "discard_ids_browser": [
+        0,
+        7,
+        21,
+        24
+      ],
+      "discard_ids_native": [
+        0,
+        7,
+        21,
+        24
+      ],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [],
+      "classics_ids_native": [],
+      "classics_ids_equal": true,
+      "source_hp_event_order": [
+        [
+          "damage",
+          0,
+          1,
+          3,
+          "fire"
+        ]
+      ],
+      "native_hp_event_order": [
+        [
+          "damage",
+          0,
+          1,
+          3,
+          "fire"
+        ],
+        [
+          "loseHp",
+          null,
+          0,
+          3,
+          null
+        ]
+      ],
+      "hp_event_order_equal": false,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": true
+    },
+    {
+      "case": "yeyan-great-split-default",
+      "native_case": "yeyan-great-split",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": true,
+      "hp_browser": [
+        8,
+        7,
+        8,
+        6,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        5,
+        7,
+        8,
+        6,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": false,
+      "discard_ids_browser": [
+        0,
+        7,
+        21,
+        24
+      ],
+      "discard_ids_native": [
+        0,
+        7,
+        21,
+        24
+      ],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [],
+      "classics_ids_native": [],
+      "classics_ids_equal": true,
+      "source_hp_event_order": [
+        [
+          "damage",
+          0,
+          1,
+          1,
+          "fire"
+        ],
+        [
+          "damage",
+          0,
+          3,
+          2,
+          "fire"
+        ]
+      ],
+      "native_hp_event_order": [
+        [
+          "damage",
+          0,
+          3,
+          2,
+          "fire"
+        ],
+        [
+          "damage",
+          0,
+          1,
+          1,
+          "fire"
+        ],
+        [
+          "loseHp",
+          null,
+          0,
+          3,
+          null
+        ]
+      ],
+      "hp_event_order_equal": false,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": false,
+      "native_has_no_strength_config_input": true
+    },
+    {
+      "case": "yeyan-great-two",
+      "native_case": "yeyan-great-one",
+      "initial_equal_after_only_shandian_intrinsic_nature_normalization": true,
+      "browser_completed": true,
+      "hp_browser": [
+        5,
+        6,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_native": [
+        5,
+        5,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "hp_equal": false,
+      "discard_ids_browser": [
+        0,
+        7,
+        21,
+        24
+      ],
+      "discard_ids_native": [
+        0,
+        7,
+        21,
+        24
+      ],
+      "discard_ids_equal": true,
+      "classics_ids_browser": [],
+      "classics_ids_native": [],
+      "classics_ids_equal": true,
+      "source_hp_event_order": [
+        [
+          "loseHp",
+          null,
+          0,
+          3,
+          null
+        ],
+        [
+          "damage",
+          0,
+          1,
+          2,
+          "fire"
+        ]
+      ],
+      "native_hp_event_order": [
+        [
+          "damage",
+          0,
+          1,
+          3,
+          "fire"
+        ],
+        [
+          "loseHp",
+          null,
+          0,
+          3,
+          null
+        ]
+      ],
+      "hp_event_order_equal": false,
+      "interacted_cards_absent_from_official_pile_tuple_lists": [],
+      "initial_projection_is_complete_runtime_state": false,
+      "native_unsupported_same_allocation": true,
+      "native_has_no_strength_config_input": false
+    }
+  ],
+  "scope": "These are explicit card/HP/event-order projections. Initial equality uses collector-provided native-to-upstream names; the official tuple audit is a separate additional restriction, not erased by that equality."
+}

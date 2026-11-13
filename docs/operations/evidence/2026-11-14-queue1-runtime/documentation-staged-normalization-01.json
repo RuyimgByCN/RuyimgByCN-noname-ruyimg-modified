@@ -1,0 +1,260 @@
+{
+  "at": "2026-11-14T03:30:40.272456+08:00",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "index_paths_checked": 2551,
+  "all_other_staged_files_equal_working_bytes": true,
+  "normalizations": [
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/1_desktop-windows-latest.txt",
+      "working_bytes": 164274,
+      "staged_bytes": 162160,
+      "working_sha256": "c5684ac9f7c8ccb743a4acfcc9d5612bbfff8502b80279346ae5cb821ee0a3d3",
+      "staged_sha256": "69391775933fa0190228d7ed68ce00fd6151a38a5ce90cd1d9d28d720f63df37",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/4_build-windows-latest.txt",
+      "working_bytes": 361338,
+      "staged_bytes": 357607,
+      "working_sha256": "79d9e30c079f870d5703b6d9c36e5fec78051f873232c78402ff7821017a86aa",
+      "staged_sha256": "fc868887e973d77cca2b1864760a2e63813f2ab5817452e90b104652c672d8a2",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/build-windows-latest/11_Post Run Swatinem_rust-cache@v2.txt",
+      "working_bytes": 99,
+      "staged_bytes": 97,
+      "working_sha256": "4013e1d87f4ece0eddede27aa43446dfe540e997303c559103851ff9dedde4e0",
+      "staged_sha256": "4b59e9aa3eadb8f8a54165d92f9bef3d33e824c1e3aac81f62d17be774ad63df",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/build-windows-latest/12_Post Run actions_checkout@v4.txt",
+      "working_bytes": 1979,
+      "staged_bytes": 1965,
+      "working_sha256": "d9e928903becb91f0f6cccc67130ad104ae1c77b99d61a15b284ded4a1a7444f",
+      "staged_sha256": "36e9e072e2d8e14273f13f9a9088dcc2e0b7db6c08ca5f74791acc11cfb820db",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/build-windows-latest/13_Complete job.txt",
+      "working_bytes": 425,
+      "staged_bytes": 422,
+      "working_sha256": "40bb0118603db71d3a3316b785e5c44cf5549c7a98fe70bc50e2da53420c0203",
+      "staged_sha256": "9987e38858624ed885536c8b36e170f5615e3c83593eacbf047e10ebfe45ee74",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/build-windows-latest/1_Set up job.txt",
+      "working_bytes": 2268,
+      "staged_bytes": 2234,
+      "working_sha256": "f48c06bb06604b9da86ca7c2bea73906a8b8833fe41babf210ef9c8c57736420",
+      "staged_sha256": "9411137da1c2bafa439ef3890ff1ac86e2b5de1f5a0d41ad09f0efe0ab52add7",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/build-windows-latest/2_Run actions_checkout@v4.txt",
+      "working_bytes": 14038,
+      "staged_bytes": 13847,
+      "working_sha256": "18a5df285c620c345cb72ed14e43f1f537e50844ef58a6225b8e44e92a23eaa2",
+      "staged_sha256": "20b536d183680b26e0e8c7ae994ba8e0301b365a3c13e8753ea9be680affd77e",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/build-windows-latest/3_Run dtolnay_rust-toolchain@stable.txt",
+      "working_bytes": 17113,
+      "staged_bytes": 16909,
+      "working_sha256": "6d04e6834fd2465999c5acb0b0920952ed6feb15bd3932543caeab9e0ea4c4e7",
+      "staged_sha256": "77016ffc96a4be6337a9e93900a29a89f79a89b7ee718fcd546e1a776953eb04",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/build-windows-latest/4_Run Swatinem_rust-cache@v2.txt",
+      "working_bytes": 8417,
+      "staged_bytes": 8330,
+      "working_sha256": "ef855a1f88909dd451bf2ed3af2389d5258640e31ccd41fba91231970db21c00",
+      "staged_sha256": "2bfb6c1d306640304b19c34f10310748ab88715abcaac5f1f8938b5d1db156f1",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/build-windows-latest/5_Build workspace.txt",
+      "working_bytes": 116066,
+      "staged_bytes": 114815,
+      "working_sha256": "48dab5daf62a6966bf79d778e46bb5e4ca32a446bbb09ef3885920b4a5fa3f51",
+      "staged_sha256": "d077cedd663b20844e685bcec72dbdfc38f432cfa2d634735672ed21e0870a1f",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/build-windows-latest/6_Unit tests.txt",
+      "working_bytes": 200957,
+      "staged_bytes": 199012,
+      "working_sha256": "4eebae3a3ee0744b89bcd403358c55bd11639fbaaecbade6e573b76f84f95d58",
+      "staged_sha256": "df11fd5512850009d303fd615923ac52d8a163f2a0f38debd5c3e9f4a2f62b6b",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/desktop-windows-latest/10_Produce installer (tauri beforeBuildCommand builds the web client).txt",
+      "working_bytes": 85952,
+      "staged_bytes": 84813,
+      "working_sha256": "c99e68d09f4079d95da57a4b1d84c1bb5ec5eff27c5a16968562bb31c53fabf5",
+      "staged_sha256": "0db449584f99c517309e89c4af9dea04aa92d64bbe2e71c84f82fb74e9a82cf8",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/desktop-windows-latest/11_Upload installer artifact.txt",
+      "working_bytes": 2650,
+      "staged_bytes": 2617,
+      "working_sha256": "4c41eafb76bdc8b4b87237475383f02563b6e7ead7dde77f9c80f2a820b11c5e",
+      "staged_sha256": "3224fef2f652d7bbc739b85afcb614f60b2b82e25aa2ae2afe45735d53df1d10",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/desktop-windows-latest/19_Post Run ._noname-next_.github_actions_prepare-original-content.txt",
+      "working_bytes": 2534,
+      "staged_bytes": 2515,
+      "working_sha256": "8868941eee6a2b930074638438da890a5af0bbdfeb45a12d10b09823242e8161",
+      "staged_sha256": "f599eaad83efc6057429fce8cd0ff86d31313f0cc2b9518b8c03d4f83aebcfc9",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/desktop-windows-latest/1_Set up job.txt",
+      "working_bytes": 2524,
+      "staged_bytes": 2488,
+      "working_sha256": "e3bb2a829f3ca49e2142ec59328b86ebcc3dc44812a4bccb75bf7131be6fdd60",
+      "staged_sha256": "d32536e27d6d4acb1ff2cdbb311924c33d165dcaec518aad707b8b7d6d62f9d4",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/desktop-windows-latest/20_Post Run actions_setup-node@v4.txt",
+      "working_bytes": 308,
+      "staged_bytes": 305,
+      "working_sha256": "9559a8349acff3750522ed871ce1766501ff32d8c0bb5636f8c5063ac63da289",
+      "staged_sha256": "add5f7b74ba4a8b25017ffe3440949a59bf3c6d0434ad1684336d380c0deb62a",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/desktop-windows-latest/21_Post Run Swatinem_rust-cache@v2.txt",
+      "working_bytes": 99,
+      "staged_bytes": 97,
+      "working_sha256": "d029af4cd764891d3dd55eea1ce180578d7fd1ce5a06bc52fbbb293a590222af",
+      "staged_sha256": "c029ba08ee259661159de46eccbe55fc92cd9d990f2dec1b09ae41d84edbe1be",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/desktop-windows-latest/22_Post Run actions_checkout@v4.txt",
+      "working_bytes": 1979,
+      "staged_bytes": 1965,
+      "working_sha256": "ea984036217004b3ed96796c9e6b76f09930f904045f0d638c05762f3a11b1f2",
+      "staged_sha256": "04e2c461130898a589fbb2f9f299603d0447eabe91aa1a9104b09ebc55dbe8ac",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/desktop-windows-latest/23_Complete job.txt",
+      "working_bytes": 498,
+      "staged_bytes": 495,
+      "working_sha256": "1eb5a37186620545e4cca29092911d64d7f4bbe5b96b3add74ccb224baebbba5",
+      "staged_sha256": "9a2ff2fd6fa14b41786e2487b83cf13ec1e364b62dc8c6dccce328ab0c71301f",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/desktop-windows-latest/2_Run actions_checkout@v4.txt",
+      "working_bytes": 14295,
+      "staged_bytes": 14100,
+      "working_sha256": "6211445ebacac3a0a4473d8c7a31a3355ba9287799b98f8fc9e794fb60eaf242",
+      "staged_sha256": "8018374ff24d4533051f94154b1d3cb5b30385146ccb497b8a5a762ad6bc5e41",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/desktop-windows-latest/3_Run dtolnay_rust-toolchain@stable.txt",
+      "working_bytes": 17112,
+      "staged_bytes": 16908,
+      "working_sha256": "8dcee5af893845d6fdf2f3ff6537aa79103dfb8fd56dc2a012d69c3126231328",
+      "staged_sha256": "e467d1ff24a9bc53d7373bb43bdb7d9b41dfc86d9bbefe22e9d8d928e7587610",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/desktop-windows-latest/4_Run Swatinem_rust-cache@v2.txt",
+      "working_bytes": 8592,
+      "staged_bytes": 8503,
+      "working_sha256": "eae51ec91b53c7cf3c809cc7154ea3ea392e9b8124a67ee5ab514f5c86db0631",
+      "staged_sha256": "16ef02e0b11617666b1d011134ab946e4e160bf8f95d5d533c847e7101bcff74",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/desktop-windows-latest/5_Run actions_setup-node@v4.txt",
+      "working_bytes": 1427,
+      "staged_bytes": 1404,
+      "working_sha256": "b4539a76aa671a52938f89a0cffc73da53139bae75c5b0497ab137dc6ab45333",
+      "staged_sha256": "cc6d0d392da18ad9a7becc99df43018355dbe8456ddd9f1ca24a63277750af19",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/desktop-windows-latest/7_Run ._noname-next_.github_actions_prepare-original-content.txt",
+      "working_bytes": 24282,
+      "staged_bytes": 23956,
+      "working_sha256": "5237158db875034c09aef3dc400d88f7c9536edc8a92bba75b116cd3034a1333",
+      "staged_sha256": "f82f88e21591d9c92cd06bc9f982f5321e46d05b6e4b6954f667308f7d582260",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/desktop-windows-latest/8_Install wasm-pack.txt",
+      "working_bytes": 1034,
+      "staged_bytes": 1020,
+      "working_sha256": "58daa30f3e1d14cd99ce4045619caec211c939139fe847baa121eb422759a4b7",
+      "staged_sha256": "3a8310f3527b0204ae479421a0dc6a860a3d1627a2d88e198e4ff831faaf4baa",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    },
+    {
+      "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first/desktop-windows-latest/9_Install Tauri CLI.txt",
+      "working_bytes": 1030,
+      "staged_bytes": 1016,
+      "working_sha256": "b61d26d1e4f34e6d6faed99b2f82f8f598f41b51e8747dee4fd6e6c0c06e48fc",
+      "staged_sha256": "61b5b3184b5fe7046cb0e4c2700a60bb2f04f4d1676ad3164d0a2d61980eb869",
+      "operation": "现有Git属性仅CRLF归一LF；原始ZIP保持逐字节相同"
+    }
+  ],
+  "canonical_raw_ci_archive": {
+    "path": "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/logs-first.zip",
+    "bytes": 1865393,
+    "sha256": "29739c480bd44168b4acf029b4d405d2d1661c4415112f8701dcda2b6fb10b5d",
+    "index_bytes_equal": true
+  },
+  "frozen_directories_all_index_bytes_equal": [
+    {
+      "manifest": "docs/operations/evidence/2026-11-14-queue1-runtime/L10/frozen-manifest.json",
+      "sha256": "2f0ea5dbfc279464ade200c93d497c78efb9ea3affb9200dd611f1145ae921a6",
+      "indexed_raw_files": 318,
+      "all_hashes_and_index_bytes_match": true
+    },
+    {
+      "manifest": "docs/operations/evidence/2026-11-14-queue1-runtime/U08/manifest.json",
+      "sha256": "7934ad115c63fd0ace23d3b3800d1e2703e621554e9db6391035f09a1185205c",
+      "indexed_raw_files": 404,
+      "all_hashes_and_index_bytes_match": true
+    },
+    {
+      "manifest": "docs/operations/evidence/2026-11-14-queue1-runtime/L28/frozen-file-manifest.json",
+      "sha256": "7f9120cd3c349d5bc4c346e50df6aadffc63b20dc4a4d8aea3377920b20a9136",
+      "indexed_raw_files": 354,
+      "all_hashes_and_index_bytes_match": true
+    },
+    {
+      "manifest": "docs/operations/evidence/2026-11-14-queue1-runtime/independent/l10/frozen-file-manifest.json",
+      "sha256": "8880422bdf16b372a198266b3326f7a567ad670ebe20ec9f77b1f795aeb710ca",
+      "indexed_raw_files": 572,
+      "all_hashes_and_index_bytes_match": true
+    },
+    {
+      "manifest": "docs/operations/evidence/2026-11-14-queue1-runtime/independent/u08/frozen-file-manifest.json",
+      "sha256": "16b41ca13fb93284c65a0ad2697cfa93433f58dd9894693df1c1f8714338675f",
+      "indexed_raw_files": 514,
+      "all_hashes_and_index_bytes_match": true
+    },
+    {
+      "manifest": "docs/operations/evidence/2026-11-14-queue1-runtime/independent/l28/manifest.json",
+      "sha256": "2f6f40ca7482b19e0db46a4624303a39919e50efb03ae9b0d8223ae46474a5e0",
+      "indexed_raw_files": 175,
+      "all_hashes_and_index_bytes_match": true
+    }
+  ]
+}

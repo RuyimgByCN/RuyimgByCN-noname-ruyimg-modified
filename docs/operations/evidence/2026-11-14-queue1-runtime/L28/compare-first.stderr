@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28/compare.py", line 93, in <module>
+    assert not initial_diff,(row['case'],initial_diff)
+AssertionError: ('buxu-basic', [{'path': '.deck_draw_order[74].nature', 'native': None, 'upstream': 'thunder'}, {'path': '.deck_draw_order[75].nature', 'native': None, 'upstream': 'thunder'}])

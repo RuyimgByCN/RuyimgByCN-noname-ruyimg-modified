@@ -1,0 +1,11 @@
+{
+  "pid_check": {
+    "86531": "",
+    "86543": ""
+  },
+  "direct_tcp": {
+    "upstreamPort": 61,
+    "controlPort": 61,
+    "cdpPort": 61
+  }
+}

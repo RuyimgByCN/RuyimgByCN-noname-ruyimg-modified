@@ -1,0 +1,1 @@
+First extraction attempt stopped before producing snippets: AssertionError: ('th_chengye', [3733, 6181]); translation key and skill definition shared name. Corrected property type guard, no rule source changed.

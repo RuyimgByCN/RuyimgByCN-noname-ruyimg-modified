@@ -1,0 +1,15 @@
+     Locking 33 packages to highest compatible versions
+   Compiling u08-queue1-runtime-probe v0.0.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-probe)
+error: unexpected closing delimiter: `}`
+   --> src/main.rs:222:1
+    |
+203 | fn main(){
+    |          - the nearest open delimiter
+...
+211 |     fs::write(base.join("native-bound-snapshot-debug.txt")),format!("{:#?}",inspect.save())).unwrap();
+    |                                                                                            - missing open `(` for this delimiter
+...
+222 | }
+    | ^ unexpected closing delimiter
+
+error: could not compile `u08-queue1-runtime-probe` (bin "u08-queue1-runtime-probe") due to 1 previous error

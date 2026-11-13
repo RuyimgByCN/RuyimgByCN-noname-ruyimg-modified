@@ -1,0 +1,34 @@
+   Compiling u08-queue1-runtime-probe v0.0.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-probe)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.88s
+     Running `target/debug/u08-queue1-runtime-probe`
+{"case":"y_target_A","final_choice":null,"pending":2}
+{"case":"y_target_B","final_choice":null,"pending":2}
+{"case":"y_cost_B","final_choice":null,"pending":2}
+{"case":"y_self","final_choice":null,"pending":2}
+{"case":"y_cancel_cards","final_choice":null,"pending":2}
+{"case":"y_cancel_target","final_choice":null,"pending":3}
+{"case":"y_two_cards","final_choice":null,"pending":0}
+{"case":"y_no_wound","final_choice":null,"pending":0}
+{"case":"y_reuse","final_choice":null,"pending":2}
+{"case":"y_no_skill","final_choice":null,"pending":0}
+{"case":"g_target_A","final_choice":null,"pending":1}
+{"case":"g_target_B","final_choice":null,"pending":1}
+{"case":"g_cancel_target","final_choice":null,"pending":2}
+{"case":"g_no_equip","final_choice":null,"pending":0}
+{"case":"g_only_own","final_choice":null,"pending":0}
+{"case":"g_reuse","final_choice":null,"pending":1}
+{"case":"g_no_skill","final_choice":null,"pending":0}
+{"case":"b_hit","final_choice":null,"pending":1}
+{"case":"b_miss","final_choice":null,"pending":2}
+{"case":"b_wrong_A","final_choice":null,"pending":3}
+{"case":"b_wrong_B","final_choice":null,"pending":3}
+{"case":"b_wrong_miss","final_choice":null,"pending":2}
+{"case":"b_cancel_predict","final_choice":null,"pending":1}
+{"case":"b_cancel_discard","final_choice":{"allow_cancel":false,"id":2,"kind":"SelectCards","max":1,"min":1,"observer":0,"options":["Card(4)","Card(46)"],"prompt":"bolehuiyan:discard"},"pending":2}
+{"case":"b_empty_target","final_choice":null,"pending":0}
+{"case":"b_owner_attacker","final_choice":null,"pending":0}
+{"case":"b_owner_target","final_choice":null,"pending":0}
+{"case":"b_under_control","final_choice":null,"pending":1}
+{"case":"b_repeat","final_choice":null,"pending":1}
+{"case":"b_cancel_then_retry","final_choice":null,"pending":2}
+{"case":"b_no_skill","final_choice":null,"pending":0}

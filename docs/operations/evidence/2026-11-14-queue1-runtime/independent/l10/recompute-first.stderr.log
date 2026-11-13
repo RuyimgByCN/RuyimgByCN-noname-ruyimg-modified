@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/independent/l10/recompute.py", line 204, in <module>
+    assert initial_n == initial_u
+AssertionError

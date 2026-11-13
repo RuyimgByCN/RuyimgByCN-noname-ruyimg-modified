@@ -1,0 +1,17 @@
+     Locking 33 packages to highest compatible versions
+   Compiling l10-queue1-runtime-probe v0.0.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L10/native-probe)
+warning: unused import: `Suit`
+ --> src/main.rs:3:40
+  |
+3 | use engine_native::catalog::{CardKind, Suit};
+  |                                        ^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `l10-queue1-runtime-probe` (bin "l10-queue1-runtime-probe") generated 1 warning (run `cargo fix --bin "l10-queue1-runtime-probe" -p l10-queue1-runtime-probe` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.20s
+     Running `target/debug/l10-queue1-runtime-probe`
+
+thread 'main' (3447215) panicked at /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/src/engine/debug.rs:891:32:
+unknown card name guohe
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

@@ -1,0 +1,83 @@
+{
+  "at": "2026-11-14T03:17:20.655459+08:00",
+  "source_head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "tracked_dirty": true,
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "prior_non_exhaustive_items": "../2026-11-13-queue1-review/known-automatic-choice-gaps.json",
+  "prior_count": 9,
+  "additional_or_refined_items": [
+    {
+      "key": "U07:skills:fuchou2@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:548",
+      "source": "U07",
+      "id": "fuchou2",
+      "reason": "原生借底牌137自动虚拟杀且保留真实杀2；上游要求实际可用杀或拒绝后失体力。",
+      "evidence": "independent/u07/review.md",
+      "required_version_change_proven": false
+    },
+    {
+      "key": "U07:skills:choudu@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:586",
+      "source": "U07",
+      "id": "choudu",
+      "reason": "原生固定市场首张，缺其他参与者选择和剩余牌置顶；上下游实际终态不同。",
+      "evidence": "independent/u07/review.md",
+      "required_version_change_proven": false
+    },
+    {
+      "key": "L28:skills:th_buxu@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6372",
+      "source": "L28",
+      "id": "th_buxu",
+      "reason": "分类按钮后无条件取牌堆顶，未按六经类别搜索；无懈实际取杀，不能以交互已询问替代实际选择语义。",
+      "evidence": "independent/l28/findings.json",
+      "required_version_change_proven": false
+    },
+    {
+      "key": "L28:skills:th_zhengjing@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6018",
+      "source": "L28",
+      "id": "th_zhengjing",
+      "reason": "人工数量代替真实小游戏结果，固定首张作经；0仍添经和摸牌；自由分配非空子集缺失。原上游filter受依赖阻塞，后续为源码确认。",
+      "evidence": "independent/l28/findings.json",
+      "required_version_change_proven": false
+    },
+    {
+      "key": "L28:skills:th_yeyan@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8636",
+      "source": "L28",
+      "id": "th_yeyan",
+      "reason": "大模式单目标固定3火，多目标固定首位2其余1，无法表达上游实际两火单目标；费用配置和结算顺序另有差异。",
+      "evidence": "independent/l28/findings.json",
+      "required_version_change_proven": false
+    },
+    {
+      "source": "L10正式k_danggu授予的跨包伴随技能",
+      "id": "scsniqu",
+      "reason": "正常NextPhase即自动火伤，源为phaseUse主动限次并选目标。",
+      "evidence": "independent/l10/findings.json",
+      "evidence_level": "正式原生NextPhase实跑对照上游源码；上游党锢完整续行仍受UI阻塞",
+      "required_version_change_proven": false
+    },
+    {
+      "source": "L10正式k_danggu授予的跨包伴随技能",
+      "id": "scstaoluan",
+      "reason": "正常进入Play即自动弃牌，源为主动转化及对应选牌/实际使用。",
+      "evidence": "independent/l10/findings.json",
+      "evidence_level": "正式原生NextPhase实跑对照上游源码；上游党锢完整续行仍受UI阻塞",
+      "required_version_change_proven": false
+    },
+    {
+      "source": "L10正式k_danggu授予的跨包伴随技能",
+      "id": "scschiyan",
+      "reason": "正常进入Play未用杀即自动伤害，源要求useCardToPlayered杀且目标he非空。",
+      "evidence": "independent/l10/findings.json",
+      "evidence_level": "正式原生NextPhase实跑对照上游源码；上游党锢完整续行仍受UI阻塞",
+      "required_version_change_proven": false
+    }
+  ],
+  "not_exhaustive": true,
+  "skills_proven_to_require_version_bump": [],
+  "scope": "沿用原9项，不覆盖或重写旧日期清单。新增/细化条目不全是首次发现；不能将缺实现、固定选择或抽象错误直接当成既有协议无法表达。具体升号需求尚未证明，遇确实越界方案再请求授权。"
+}

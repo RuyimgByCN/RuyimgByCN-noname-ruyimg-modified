@@ -1,0 +1,9 @@
+docs(native): correct three runtime equivalence claims
+
+记录L10、U08、L28的实际上游交互样本、原生续行和独立复核。
+撤回慧眼两辅助及业炎的旧等价，保留所有初次失败、夹具限制和历史日期记录；新增等价签署0。
+
+本批仅文档与冻结证据，产品保持5c73d1d9158145e33f98f2018013914667d13964。
+规则333 / NGSA107 / schema5 / ABI759 / WS8不变；队列1仍部分，八项签署0/37。
+
+Evidence: docs/operations/evidence/2026-11-14-queue1-runtime/

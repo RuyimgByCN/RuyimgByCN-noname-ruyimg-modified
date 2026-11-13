@@ -1,0 +1,102 @@
+{
+  "at": "2026-11-14T03:30:40.272456+08:00",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "tracked_dirty": true,
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "index_tree_before_audit_files": "4c10c806f94c2006b3faa9968a8a4d4a8d388ae8",
+  "staged_paths_before_audit_files": 2551,
+  "working_bytes": 326609904,
+  "maximum_file_bytes": 26147667,
+  "all_paths_are_owned_docs_and_evidence": true,
+  "original_untracked_paths_preserved": 672,
+  "original_untracked_paths_staged": 0,
+  "old_worktree_blocks_unchanged": 8,
+  "gates_inputs_unchanged": 21211,
+  "frozen_directories": [
+    {
+      "manifest": "docs/operations/evidence/2026-11-14-queue1-runtime/L10/frozen-manifest.json",
+      "sha256": "2f0ea5dbfc279464ade200c93d497c78efb9ea3affb9200dd611f1145ae921a6",
+      "indexed_raw_files": 318,
+      "all_hashes_and_index_bytes_match": true
+    },
+    {
+      "manifest": "docs/operations/evidence/2026-11-14-queue1-runtime/U08/manifest.json",
+      "sha256": "7934ad115c63fd0ace23d3b3800d1e2703e621554e9db6391035f09a1185205c",
+      "indexed_raw_files": 404,
+      "all_hashes_and_index_bytes_match": true
+    },
+    {
+      "manifest": "docs/operations/evidence/2026-11-14-queue1-runtime/L28/frozen-file-manifest.json",
+      "sha256": "7f9120cd3c349d5bc4c346e50df6aadffc63b20dc4a4d8aea3377920b20a9136",
+      "indexed_raw_files": 354,
+      "all_hashes_and_index_bytes_match": true
+    },
+    {
+      "manifest": "docs/operations/evidence/2026-11-14-queue1-runtime/independent/l10/frozen-file-manifest.json",
+      "sha256": "8880422bdf16b372a198266b3326f7a567ad670ebe20ec9f77b1f795aeb710ca",
+      "indexed_raw_files": 572,
+      "all_hashes_and_index_bytes_match": true
+    },
+    {
+      "manifest": "docs/operations/evidence/2026-11-14-queue1-runtime/independent/u08/frozen-file-manifest.json",
+      "sha256": "16b41ca13fb93284c65a0ad2697cfa93433f58dd9894693df1c1f8714338675f",
+      "indexed_raw_files": 514,
+      "all_hashes_and_index_bytes_match": true
+    },
+    {
+      "manifest": "docs/operations/evidence/2026-11-14-queue1-runtime/independent/l28/manifest.json",
+      "sha256": "2f6f40ca7482b19e0db46a4624303a39919e50efb03ae9b0d8223ae46474a5e0",
+      "indexed_raw_files": 175,
+      "all_hashes_and_index_bytes_match": true
+    }
+  ],
+  "normalizations_count": 26,
+  "source_head_exact_code_ci": "publication/code-exact-ci-first/terminal-summary.json",
+  "complete_preflight": {
+    "command": "python3 -B scripts/preflight.py",
+    "exit_code": 0,
+    "checks_passed": 21,
+    "checks_failed": 0,
+    "metadata": "restore-fix/24-preflight-documentation-batch.json"
+  },
+  "post_notes_links": {
+    "exit_code": 0,
+    "metadata": "restore-fix/25-links-after-documentation-notes.json"
+  },
+  "diff_check": {
+    "argv": [
+      "git",
+      "diff",
+      "--cached",
+      "--check",
+      "--",
+      "docs/architecture/native-progress.md",
+      "docs/architecture/native-remaining-ledger.md",
+      "docs/architecture/native-rules-baseline.md",
+      "docs/migration/g0/L10-史诗卡牌.md",
+      "docs/migration/g0/L28-雷霆万钧.md",
+      "docs/migration/g0/README.md",
+      "docs/migration/g0/U08-英雄杀.md",
+      "docs/migration/g0/inventory_status.json",
+      "docs/migration/upstream-extension-reconstruction.md",
+      "docs/operations/evidence/2026-10-19-source-signoff-32/README.md",
+      "docs/operations/evidence/2026-11-14-queue1-runtime/README.md",
+      "docs/operations/evidence/2026-11-14-queue1-runtime/publication/README.md",
+      "docs/operations/evidence/2026-11-14-queue1-runtime/remaining-scope.md",
+      "docs/operations/evidence/2026-11-14-queue1-runtime/documentation-local-checks.md",
+      "docs/operations/evidence/2026-11-14-queue1-runtime/source-counts-runtime-04.md",
+      "docs/operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/README.md"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "raw_device_evidence": "external-prerequisites-publication-redaction-01.json",
+  "scope": "仅文档与冻结证据；原始设备JSON仅公开隐名副本，未改原始本机字节。首次失败、原始ZIP、历史表/日期记录保留；无产品、测试、协议、版本、共享target或无关refs变更。"
+}

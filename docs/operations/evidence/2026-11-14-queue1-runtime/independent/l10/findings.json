@@ -1,0 +1,384 @@
+{
+  "review_date": "2026-11-14",
+  "reviewer": "/root/repair_doc_refs",
+  "source_head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "versions": {
+    "rules": 333,
+    "ngsa": 107,
+    "schema": 5,
+    "abi": 759,
+    "ws": 8
+  },
+  "verdict": "L10本批退回，不新增已复核等价",
+  "original_unique_cases": 26,
+  "extra_formal_continuations": 2,
+  "source_runtime_findings": [
+    {
+      "id": "F01",
+      "kind": "actual_upstream_and_native_runtime",
+      "skills": [
+        "reguhuo"
+      ],
+      "cases": [
+        "g_sha_ally",
+        "g_sha_question_fake",
+        "g_true_question_discard",
+        "g_true_question_losehp",
+        "g_tao"
+      ],
+      "difference": "原生从持牌者三个问句直接发CardUsed，没有他座质疑。上游实际向座1/2/3逐人问盟/叛；假牌被质疑作废并给质疑者摸牌，真牌质疑者实际弃牌或失体力并获rechanyuan。",
+      "anchors": [
+        [
+          "../archive/upstream/noname-liuli/noname/character/refresh.js",
+          10639
+        ],
+        [
+          "../archive/upstream/noname-liuli/noname/character/refresh.js",
+          10717
+        ],
+        [
+          "../archive/upstream/noname-liuli/noname/character/refresh.js",
+          10740
+        ],
+        [
+          "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+          202
+        ]
+      ],
+      "verdict": "退回"
+    },
+    {
+      "id": "F02",
+      "kind": "actual_upstream_and_native_runtime",
+      "skills": [
+        "reguhuo"
+      ],
+      "cases": [
+        "g_response"
+      ],
+      "difference": "上游真实杀响应可发动蛊惑声明闪，桃45被消耗且座0不受伤；原生无原始闪手牌时未开响应选择，单条PlayCard直接伤1，未提交ActivateSkill。原生活跃入口另限定自己回合Play。",
+      "anchors": [
+        [
+          "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+          300
+        ],
+        [
+          "crates/engine-native-content/src/content/host/activation/common.rs",
+          52
+        ]
+      ],
+      "verdict": "退回"
+    },
+    {
+      "id": "F03",
+      "kind": "actual_upstream_and_native_runtime",
+      "skills": [
+        "reguhuo"
+      ],
+      "cases": [
+        "g_cancel_name"
+      ],
+      "difference": "上游在声明名对话取消后仍可见reguhuo；原生首次进入便写once(scope1)，声明取消后再次激活被拒。取消载体的案子实际选择了结束回合，另作操作边界，不混为本例。",
+      "anchors": [
+        [
+          "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+          204
+        ],
+        [
+          "../archive/upstream/noname-liuli/noname/character/refresh.js",
+          10653
+        ]
+      ],
+      "verdict": "退回"
+    },
+    {
+      "id": "F04",
+      "kind": "actual_exit_opportunity_diff",
+      "skills": [
+        "reguhuo"
+      ],
+      "cases": [
+        "g_cancel_target"
+      ],
+      "difference": "上游实际在已选载体后点击可见结束回合而退出出牌阶段；原生该目标问句无退出/空取消，空答InvalidChoice且保留pending。两端实际动作名称不同，未称同一空取消已执行。",
+      "anchors": [
+        [
+          "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+          287
+        ],
+        [
+          "crates/engine-native-content/src/content/host/asks_wudian.rs",
+          835
+        ]
+      ],
+      "verdict": "退回，按实际退出动作限定"
+    },
+    {
+      "id": "F05",
+      "kind": "actual_candidate_lists_and_source",
+      "skills": [
+        "reguhuo"
+      ],
+      "cases": [
+        "g_sha_ally",
+        "g_sha_question_fake",
+        "g_true_question_discard",
+        "g_true_question_losehp",
+        "g_tao",
+        "g_cancel_name",
+        "g_cancel_target"
+      ],
+      "difference": "原生声明问句固定20牌种且不先按当前event.filterCard过滤；上游从本场lib.inpile与性质集合生成，再按当前使用/响应上下文过滤。完整候选集合与具体缺/多项另存candidate-recalculation.json，不能把候选显示当全部已选。",
+      "anchors": [
+        [
+          "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+          317
+        ],
+        [
+          "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+          329
+        ],
+        [
+          "crates/engine-native-content/src/content/host/constants.rs",
+          8
+        ]
+      ],
+      "verdict": "退回"
+    },
+    {
+      "id": "F06",
+      "kind": "actual_upstream_and_native_runtime",
+      "skills": [
+        "rangjie"
+      ],
+      "cases": [
+        "r_basic",
+        "r_equip",
+        "r_double"
+      ],
+      "difference": "上游get.cardPile2实际从DOM牌堆顶侧首张检索；原生ctx.core.deck.iter从向量底侧找。basic=原生酒85/上游桃45；equip=原生诸葛118/上游青釭114；double的第二次摸牌和检索也随首次移牌分叉。",
+      "anchors": [
+        [
+          "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+          487
+        ],
+        [
+          "../archive/upstream/noname-liuli/noname/game/game.js",
+          63187
+        ],
+        [
+          "../archive/upstream/noname-liuli/noname/game/game.js",
+          63223
+        ],
+        [
+          "crates/engine-native-content/src/content/host/step/skills_cards.rs",
+          140
+        ]
+      ],
+      "verdict": "退回"
+    },
+    {
+      "id": "F07",
+      "kind": "actual_upstream_and_native_runtime",
+      "skills": [
+        "rangjie"
+      ],
+      "cases": [
+        "r_cancel_choice"
+      ],
+      "difference": "上游菜单插入字面取消，代码却仅对cancel2退出，故实际字面取消仍摸无中104再走moveCard(true)；原生Tag2立即结束且不摸。此处按上游实际运行保留其不一致控制值，不用描述性规则修正原始观察。",
+      "anchors": [
+        [
+          "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+          439
+        ],
+        [
+          "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+          451
+        ],
+        [
+          "crates/engine-native-content/src/content/host/step/skills_cards.rs",
+          50
+        ]
+      ],
+      "verdict": "退回"
+    },
+    {
+      "id": "F08",
+      "kind": "actual_upstream_and_native_runtime",
+      "skills": [
+        "rangjie"
+      ],
+      "cases": [
+        "r_cancel_type"
+      ],
+      "difference": "上游类型chooseButton为非强制并实际可取消后结算结束；原生rangjie_type allow_cancel=false，空答被拒，终态保留待答。不能因双方此刻同有无中104而称取消相同。",
+      "anchors": [
+        [
+          "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+          475
+        ],
+        [
+          "crates/engine-native-content/src/content/host/step/skills_cards.rs",
+          112
+        ],
+        [
+          "crates/engine-native-content/src/content/host/asks_wudian.rs",
+          868
+        ]
+      ],
+      "verdict": "退回"
+    },
+    {
+      "id": "F09",
+      "kind": "actual_interaction_trace_gap",
+      "skills": [
+        "rangjie"
+      ],
+      "cases": [
+        "r_basic",
+        "r_trick",
+        "r_equip",
+        "r_move_A",
+        "r_move_B",
+        "r_cancel_choice",
+        "r_cancel_type",
+        "r_double"
+      ],
+      "difference": "原生先有允许空取消的trigger_confirm，再问rangjie_choice；上游实际直接进获得牌/移动牌/取消菜单。所选move A/B和trick的实体结果相同，但多一步确认和不同候选顺序没有被证明为完整交互等价。未执行原生首确认取消，不把该未跑选择另报运行反例。",
+      "anchors": [
+        [
+          "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+          427
+        ],
+        [
+          "crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+          312
+        ]
+      ],
+      "verdict": "保留具体交互差别，不签技能等价"
+    },
+    {
+      "id": "F10",
+      "kind": "upstream_blocked_then_independent_line_review",
+      "skills": [
+        "k_danggu"
+      ],
+      "cases": [
+        "k_A",
+        "k_B",
+        "k_cancel"
+      ],
+      "difference": "上游conflictMap有方向：Guosheng只锁Duangui，Gaowang对Guosheng的冲突不反向；保留Gaowang时others必含它，first=Guosheng可选Gaowang。原生min/max对称化后把(8,9)也锁掉。本轮三案native first=8，菜单只有Tag0/1，缺必含且按上游可选的9。浏览器未到候选阶段，该反例明确来自源码替代核对。",
+      "anchors": [
+        [
+          "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+          2378
+        ],
+        [
+          "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+          2480
+        ],
+        [
+          "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+          2518
+        ],
+        [
+          "crates/engine-native-content/src/content/host/step/skills_recovery.rs",
+          561
+        ]
+      ],
+      "verdict": "退回，静态反例"
+    },
+    {
+      "id": "F11",
+      "kind": "formal_native_runtime_against_upstream_actual_source",
+      "skills": [
+        "k_danggu",
+        "scsniqu",
+        "scstaoluan",
+        "scschiyan"
+      ],
+      "cases": [
+        "k_A_followup",
+        "k_B_followup"
+      ],
+      "difference": "正式登记确授实际常侍技能后，两个正常NextPhase均自动触发scsniqu火伤座1；A进Play还自动弃无中104，B进Play还无杀而自动scschiyan伤1。没有主动技能/选目标/转化牌命令或待答。上游逆取/滔乱为phaseUse usable1主动，鸱咽须useCardToPlayered的杀且目标he>0。上游完整党锢续行仍被UI阻塞；这里是原生实跑对照已读上游源码，不冒称上游动态续行已执行。",
+      "anchors": [
+        [
+          "../archive/upstream/noname-liuli/noname/character/mobile.js",
+          4669
+        ],
+        [
+          "../archive/upstream/noname-liuli/noname/character/mobile.js",
+          4727
+        ],
+        [
+          "../archive/upstream/noname-liuli/noname/character/mobile.js",
+          5183
+        ],
+        [
+          "crates/content-native-loader/src/decision34_pack9.rs",
+          44
+        ],
+        [
+          "crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs",
+          77
+        ]
+      ],
+      "verdict": "退回，正式路径自动结算反例"
+    },
+    {
+      "id": "F12",
+      "kind": "source_timing_boundary_with_actual_entry",
+      "skills": [
+        "k_danggu"
+      ],
+      "cases": [
+        "k_A",
+        "k_B",
+        "k_cancel"
+      ],
+      "difference": "上游enterGame或全局phaseBefore且phaseNumber==0发动；原生未inited时任何自己的PhaseBegin均可发动，本轮Prepare→Judge触发。只观察到前者phaseBefore入口异常与后者Judge已开菜单，未证明进入游戏/其他座首回合/恢复归来的所有时机一致。",
+      "anchors": [
+        [
+          "../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+          2278
+        ],
+        [
+          "crates/engine-native-content/src/content/host/filtering/common.rs",
+          1047
+        ]
+      ],
+      "verdict": "时机差别保留，未验收分支保留"
+    }
+  ],
+  "boundaries": [
+    {
+      "id": "B01",
+      "kind": "fixture_projection_boundary",
+      "difference": "26案四座hp/max_hp/朝向/实体h/e/j、初始主技能名和保留7/8张deck的ID/name/suit/rank/nature相同。每案21个原生初始discard实体无映射未复制；另原已映射闪电77/78在浏览器createCard后性质为thunder、native face导出null，不能称其余discard也完全相同。原生与上游各自的全部初始discard在本轮都保持原位/原面，未用到或洗回牌堆。首次重算因此断言失败保留；主终态对照排除全部初始discard基线并保留完整可用差异。此为导出/默认性质表示边界，未据此断言闪电实际规则错误。"
+    },
+    {
+      "id": "B02",
+      "kind": "load_route_boundary",
+      "difference": "原采样仅bridge_pack为4host/0VM，故A/B只记常侍flags；该事实不能推成产品缺失。独立formal-run01经现有正式attach，4host/10VM、目录234–243真实存在，A/B实际获技能。仍未跑PackageStore安装/包清单验证/多包共存/全产品入口；两个content_lock及bound_ruleset不同，不能跨路径比较存档字节来声称恢复失败。"
+    },
+    {
+      "id": "B03",
+      "kind": "phase_endpoint_boundary",
+      "difference": "k_after_initial_no_trigger/k_no_skill在上游整phase继续到phaseUse，期间摸两张；native只一次NextPhase停Judge。两案“不触发党锢”观察可保留，终牌区不在同一阶段终点，不计成党锢规则反例。"
+    },
+    {
+      "id": "B04",
+      "kind": "actual_cancel_operation_boundary",
+      "difference": "g_cancel_card以及g_cancel_target的浏览器实际操作是可见结束回合，不是不可见的空目标/空牌协议。逐案记录真实动作、原生拒绝与阶段落点；不因case名含cancel就写上游取消技能已完成。"
+    },
+    {
+      "id": "B05",
+      "kind": "blocked_ui_boundary",
+      "difference": "k_A/B/cancel三场原始step0在dui处失败。额外直接调用原始EpicFX.initSCSAnim产生dcdAnim未定义；这是独立诊断调用，原k_danggu里的initSCSAnim调用是注释，不能把该诊断冒写成强制触发轨迹。未stub、未读/加载官方或打包Spine运行库；本地HTTP共2565条、spine URL为0。"
+    }
+  ],
+  "new_equivalence_signed": 0
+}

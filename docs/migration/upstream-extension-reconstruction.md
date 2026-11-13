@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-14T03:16:45.676673+08:00 三来源运行复核日期表（文档批待提交／发布）
+
+源码HEAD `5c73d1d9158145e33f98f2018013914667d13964` + 文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8。酒诗代码已正常发布且首次精确CI10/10成功，本纯文档批尚未提交/发布。当前逐来源按[37来源新日期表](../operations/evidence/2026-11-14-queue1-runtime/source-counts-runtime-04.md)；本批明确撤回慧眼2/3与业炎3旧等价、新签0，不从局部投影或恢复通过上调签署。[逐案与原始证据](../operations/evidence/2026-11-14-queue1-runtime/README.md)、[变更前后原文](../operations/evidence/2026-11-14-queue1-runtime/inventory-runtime-update-05.json)。第①项只计已复核等价，第⑧项保留各来源全部尚存差异；八项整包仍0/37，队列1仍部分、队列2未开始。原表/日期记录保持历史快照。
+
 ## 2026-11-14T02:33:04+08:00 队列1运行补课当前日期表（未提交／发布）
 
 源码HEAD `605201f3f49e10cea61c31d52a61bbb66c85599d` + tracked dirty；规则333／NGSA107／schema5／ABI759／WS8不变。 当前逐来源数量以[37来源新日期表](../operations/evidence/2026-11-14-queue1-runtime/source-counts-runtime-03.md)为准，旧表保留历史语境；U07本次再撤回2条旧等价，本批合计撤回6、新签0。酒诗恢复本地完整代码门禁与首轮preflight21项通过，最终文档复核与发布另记。队列1仍部分、队列2未开始，整包八项0/37；局部指定投影与恢复一致不替代八项验收。

@@ -1,0 +1,17 @@
+{
+  "at": "2026-11-14T03:28:35.335842+08:00",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "tracked_dirty": true,
+  "actual_command_record": "docs/operations/evidence/2026-11-14-queue1-runtime/external-prerequisites-01.json",
+  "original_sha256": "73a6271904ff4c755059b595a81786c9e876b858c856f48fcca595b720eb7f0d",
+  "original_bytes": 2879,
+  "unaltered_original_retained_locally": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-q1-runtime-private-device-evidence-mr2jhfmw/external-prerequisites-01.json",
+  "private_backup_mode": "0o600",
+  "public_sha256": "aac206fba8162e7abe2d456f1b9e466ec4d336fb87346ccf2f4aa203706bcff7",
+  "public_bytes": 3436,
+  "redacted_device_rows": 8,
+  "original_command_results_unchanged_except_identifiers_and_names": true,
+  "frozen_source_and_reviewer_directories_modified": false,
+  "original_672_paths_modified_or_selected": false,
+  "scope": "此条登记公开副本的派生转换，不删改原始探测字节；旧日期记录、结论和Markdown链接不动。不读取私钥或凭据。"
+}

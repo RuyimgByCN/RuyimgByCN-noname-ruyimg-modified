@@ -1,0 +1,1 @@
+{"cases": 31, "seat_checks": 248, "all_assertions_satisfied": true}

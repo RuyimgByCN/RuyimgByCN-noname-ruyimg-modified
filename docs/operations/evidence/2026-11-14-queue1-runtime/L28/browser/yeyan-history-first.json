@@ -1,0 +1,9 @@
+{
+  "at": "2026-11-13T18:48:00.433Z",
+  "result": {
+    "result": {
+      "type": "string",
+      "value": "{\"events\":[{\"name\":\"damage\",\"source\":0,\"player\":1,\"num\":1,\"nature\":\"fire\",\"parent\":\"th_yeyan\"},{\"name\":\"changeHp\",\"source\":-1,\"player\":1,\"num\":-1,\"nature\":null,\"parent\":\"damage\"},{\"name\":\"damage\",\"source\":0,\"player\":3,\"num\":2,\"nature\":\"fire\",\"parent\":\"th_yeyan\"},{\"name\":\"changeHp\",\"source\":-1,\"player\":3,\"num\":-2,\"nature\":null,\"parent\":\"damage\"}],\"hp\":[{\"num\":-1,\"player\":1,\"parent\":\"damage\",\"source\":0},{\"num\":-2,\"player\":3,\"parent\":\"damage\",\"source\":0}]}"
+    }
+  }
+}

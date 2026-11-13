@@ -1,0 +1,24 @@
+{
+  "source": "noname",
+  "upstream_path": "apps/core/extension/英雄杀/character/skill.js",
+  "upstream_commit": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "pack": {
+    "name": "hero-kill-upstream-noname",
+    "version": 1,
+    "description": "G1 转换：上游英雄杀批 1-2（反击族/门神标记）",
+    "card_prefix": "yxs_"
+  },
+  "cards": [],
+  "skills": [
+    { "name": "yxs_fanji", "mapping": "host:yxs_fanji" },
+    { "name": "yxs_fanji2", "mapping": "host:yxs_fanji2" },
+    { "name": "yxs_menshen", "mapping": "host:yxs_menshen" },
+    { "name": "yxs_menshen3", "mapping": "host:yxs_menshen3" },
+    { "name": "yxs_menshen2", "mapping": "host:yxs_menshen2" }
+  ],
+  "generals": [],
+  "deferred": [
+        { "name": "character_table", "reason": "43 条武将（character.js）引用大量外部技能（nvquan/qiandu/yxsweiyi 等，本仓他处定义）——依赖未齐" },
+    { "name": "skill_batch_rest", "reason": "yxs_menshen/yxs_menshen3 与外部技能待批次" }
+  ]
+}

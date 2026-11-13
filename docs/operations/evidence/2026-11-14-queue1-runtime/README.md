@@ -27,3 +27,21 @@ L29与U07各由独立文件所有者收集实际上游／原生证据；旧存�
 ## 2026-11-14T02:45:30+08:00 最终本地检查可提交
 
 HEAD `605201f3f49e10cea61c31d52a61bbb66c85599d` + tracked dirty，版本333／107／5／759／WS8。最终完整preflight21项通过，[完整门禁及所有已知边界](restore-fix/final-local-gates.md)。当前628／3796／0、新签0、八项0/37；产品仅两自有路径、3个采集来源及其独立证据冻结。L10/U08/L28及independent/l10不纳入本代码提交。[阶段性stage范围](stage-owned-prefixes-01.json)、[原始ZIP与26份Windows解包文本换行归一](staged-normalization-01.json)均已核验。准备提交，尚未发布/取得本代码CI。
+
+## 2026-11-14T02:47:05+08:00 代码已发布，首次CI进行中
+
+代码 `5c73d1d9158145e33f98f2018013914667d13964` 已正常推送native-convergence，原钩子及持久配置不变；提交后tracked clean，当前仅本条及公共文档/后续证据dirty。规则333／NGSA107／schema5／ABI759／WS8。精确代码[run43485811587](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43485811587) push事件/attempt1已登记，初始queued、10作业，未重启或补跑，终态另增记录。628／3796／0、新签0、八项0/37；本批发布不代表队列1或整技能等价完成。
+
+## 2026-11-14T02:51:05+08:00 L10独立报告整合（文档尚未提交／发布）
+
+源码HEAD `5c73d1d9158145e33f98f2018013914667d13964` + 文档/证据dirty，333／107／5／759／WS8。L10原318及独立572文件哈希全符，[主agent冻结输入核对](l10-integration-freeze-check.json)。[独立26案/正式续行](independent/l10/README.md)本批退回，新增等价0，原/正式各102和追加4个挂起档恢复通过；8个已观察结算反例与其它取消/退出/源码差异分列。L10数量8／9／0未变，全清单628／3796／0；[差别栏变更前后](inventory-runtime-update-04.json)。本段不改产品字节，不把CI或恢复相同当规则签署。
+
+## 2026-11-14T03:16:45.676673+08:00 后三来源已冻结，代码CI通过，文档批待发布
+
+HEAD `5c73d1d9158145e33f98f2018013914667d13964` + 文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8。酒诗修复已发布且同一[精确代码CI](publication/code-exact-ci-first/README.md) attempt1为10成功／0失败／0取消，未补跑，两平台性能内部首试exit0。本次仅整合L10/U08/L28及各自独立报告：[L10](independent/l10/README.md)／[U08](independent/u08/README.md)／[L28](independent/l28/README.md)，无产品/测试变化。两辅助补充[独立裁定](independent/u08-auxiliary-adjudication.md)在已冻结U08目录外单列，不篡改旧报告。主agent冻结字节核验见[L10](l10-integration-freeze-check.json)、[U08](u08-integration-freeze-check.json)、[L28](l28-integration-freeze-check.json)。
+
+当前[625／3799／0](source-counts-runtime-04.md)、新增等价0，本纯文档批再撤回3旧等价；[清单前后原文](inventory-runtime-update-05.json)，本目录累计撤回9。源夹具限制、首失败和源码/运行证据层级全部保留；存档续行通过不签规则等价。[原未跟踪路径/工作树/21211产品门禁输入核验](documentation-product-protection-before-01.json)、[外部条件实际探测](external-prerequisites-01.json)。文档全preflight与发布尚待，队列1仍部分；四来源12交互候选、L22自动规则、已知差异及[其它门槛](remaining-scope.md)继续待。
+
+## 2026-11-14T03:29:13.975149+08:00 本批完整文档preflight通过，尚未提交／发布
+
+HEAD `5c73d1d9158145e33f98f2018013914667d13964` + 文档/证据dirty；333／107／5／759／WS8。完整preflight21项通过／0失败，[命令、原始输出及未验范围](documentation-local-checks.md)。当前625／3799／0、新签0、队列1部分、八项0/37；酒诗代码首次精确CI10/10成功。最后明确stage/字节/链接审计、提交及正常发布随后分别记录，不以准备状态冒称已发布。

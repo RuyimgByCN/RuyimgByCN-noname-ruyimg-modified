@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/independent/l28/audit-projection.py", line 36, in <module>
+    tuples=ast.literal_eval(literal)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/ast.py", line 64, in literal_eval
+    node_or_string = parse(node_or_string.lstrip(" \t"), mode='eval')
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/ast.py", line 50, in parse
+    return compile(source, filename, mode, flags,
+  File "<unknown>", line 1
+    [
+    ^
+SyntaxError: '[' was never closed

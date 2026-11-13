@@ -1,0 +1,68 @@
+{
+  "at": "2026-11-14T02:53:05.155015+08:00",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "tracked_dirty": true,
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "checks": [
+    {
+      "name": "adb",
+      "at": "2026-11-14T02:53:05.155015+08:00",
+      "argv": [
+        "/opt/homebrew/bin/adb",
+        "devices",
+        "-l"
+      ],
+      "exit_code": 0,
+      "stdout": "List of devices attached\n\n",
+      "stderr": "",
+      "duration_seconds": 0.013
+    },
+    {
+      "name": "devicectl",
+      "at": "2026-11-14T02:53:05.154737+08:00",
+      "argv": [
+        "/usr/bin/xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "exit_code": 0,
+      "stdout": "Name                    Hostname   Identifier                                    State         Model                              Reality  \n---------------------   --------   -------------------------------------------   -----------   --------------------------------   ---------\n<设备名称已隐藏>  <设备标识已隐藏> (UDID)              unavailable   iPhone17,2                                  \n<设备名称已隐藏>  <设备标识已隐藏> (UDID)   shutdown      iPad Pro 11-inch (M5) (iPad17,2)   simulated\n<设备名称已隐藏>  <设备标识已隐藏> (UDID)   shutdown      iPhone 17 (iPhone18,3)             simulated\n<设备名称已隐藏>  <设备标识已隐藏> (UDID)   shutdown      iPhone 17 (iPhone18,3)             simulated\n<设备名称已隐藏>  <设备标识已隐藏> (UDID)   shutdown      iPhone 17 Pro (iPhone18,1)         simulated\n<设备名称已隐藏>  <设备标识已隐藏> (UDID)   shutdown      iPhone 17 Pro Max (iPhone18,2)     simulated\n<设备名称已隐藏>  <设备标识已隐藏> (UDID)   shutdown      iPhone 18 Pro (iPhone19,2)         simulated\n<设备名称已隐藏>  <设备标识已隐藏> (UDID)   shutdown      iPhone Duo (iPhone19,4)            simulated\n",
+      "stderr": "",
+      "duration_seconds": 0.121
+    },
+    {
+      "name": "codesign-identities",
+      "at": "2026-11-14T02:53:05.155314+08:00",
+      "argv": [
+        "/usr/bin/security",
+        "find-identity",
+        "-v",
+        "-p",
+        "codesigning"
+      ],
+      "exit_code": 0,
+      "stdout": "     0 valid identities found\n",
+      "stderr": "",
+      "duration_seconds": 0.009
+    }
+  ],
+  "scope": "本次实际只读探测：ADB设备列表空，物理iPhone仍unavailable，codesigning有效身份0；模拟器不代替物理设备。未读取私钥/凭据、未签名、公证或安装。仍需可用Android/iOS真机及签名/公证输入，继续其它不受阻项。",
+  "public_redaction": {
+    "recorded_at": "2026-11-14T03:28:35.335842+08:00",
+    "original_sha256": "73a6271904ff4c755059b595a81786c9e876b858c856f48fcca595b720eb7f0d",
+    "unaltered_original_retained_locally": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-q1-runtime-private-device-evidence-mr2jhfmw/external-prerequisites-01.json",
+    "fields": [
+      "设备名称",
+      "设备标识"
+    ],
+    "device_states_models_and_command_metadata_unchanged": true,
+    "scope": "沿用上一批physical-ios-inventory-redaction记录的做法。原始JSON逐字节保留本机；本路径发布明确标注的公开副本，未改变原探测时刻、实际命令/退出码、设备状态/型号或签名结论。"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "scripts/check_local_links.py",
+    "--all"
+  ],
+  "command": "python3 -B scripts/check_local_links.py --all",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0"
+  },
+  "source_head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "tracked_status": " M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L10-史诗卡牌.md\n M docs/migration/g0/L28-雷霆万钧.md\n M docs/migration/g0/README.md\n M docs/migration/g0/U08-英雄杀.md\n M docs/migration/g0/inventory_status.json\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n M docs/operations/evidence/2026-11-14-queue1-runtime/README.md\n M docs/operations/evidence/2026-11-14-queue1-runtime/publication/README.md\n M docs/operations/evidence/2026-11-14-queue1-runtime/remaining-scope.md\n",
+  "start_utc": "2026-11-13T19:29:26.512865+00:00",
+  "exit_code": 0,
+  "duration_seconds": 0.713,
+  "end_utc": "2026-11-13T19:29:27.226566+00:00"
+}

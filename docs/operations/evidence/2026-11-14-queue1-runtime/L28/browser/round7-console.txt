@@ -1,0 +1,1 @@
+{"case": "yeyan-great-discard-cancel", "completed": true, "error": null, "stages": ["phaseUse-choice", "yeyan-flames", "flame-0-to-1", "flame-1-to-1", "flame-2-to-1", "remove-allocated-flame-0", "remove-allocated-flame-1", "remove-allocated-flame-2", "yeyan-cancel-after-allocation"]}

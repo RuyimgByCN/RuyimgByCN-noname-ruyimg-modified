@@ -1,0 +1,46 @@
+{
+  "at": "2026-11-13T19:11:25.511247+00:00",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "actual_shell_command": "CARGO_TARGET_DIR=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target L28_REVIEW_INPUT=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/L28 L28_REPLAY_OUTPUT=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/independent/l28/native-replay/first cargo run --offline --manifest-path docs/operations/evidence/2026-11-14-queue1-runtime/independent/l28/native-replay/Cargo.toml > docs/operations/evidence/2026-11-14-queue1-runtime/independent/l28/native-replay-first.jsonl 2> docs/operations/evidence/2026-11-14-queue1-runtime/independent/l28/native-replay-first.stderr",
+  "exit_code": 0,
+  "note": "native-replay-command.json stored the equivalent normalized absolute manifest argv before launch. The actual shell invocation used the relative manifest path printed here.",
+  "commands": [
+    {
+      "command": "python3 -B docs/operations/evidence/2026-11-14-queue1-runtime/independent/l28/audit-raw.py",
+      "stdout": "audit-raw-first.stdout",
+      "stderr": "audit-raw-first.stderr",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 -B docs/operations/evidence/2026-11-14-queue1-runtime/independent/l28/audit-projection.py",
+      "script_snapshot": "audit-projection-first.py",
+      "stdout": "audit-projection-first.stdout",
+      "stderr": "audit-projection-first.stderr",
+      "exit_code": 1,
+      "failure": "literal extraction ended at the first child tuple; SyntaxError before any comparison report was generated"
+    },
+    {
+      "command": "python3 -B docs/operations/evidence/2026-11-14-queue1-runtime/independent/l28/audit-projection.py",
+      "stdout": "audit-projection-second.stdout",
+      "stderr": "audit-projection-second.stderr",
+      "exit_code": 0,
+      "correction": "closed the actual outer literal pile array; no rule source or expectation changed"
+    },
+    {
+      "command": "python3 -B docs/operations/evidence/2026-11-14-queue1-runtime/independent/l28/audit-boundaries.py",
+      "stdout": "audit-boundaries-first.stdout",
+      "stderr": "audit-boundaries-first.stderr",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 -B docs/operations/evidence/2026-11-14-queue1-runtime/independent/l28/write-review.py",
+      "stdout": "write-review-first.stdout",
+      "stderr": "write-review-first.stderr",
+      "exit_code": 0
+    }
+  ],
+  "shared_target": "used only for l28-independent-archive-replay build; no cargo tests/checks or shared target cleanup performed",
+  "private_target_created": false,
+  "private_browser_or_service_started": false,
+  "own_temporary_cache_to_remove": []
+}

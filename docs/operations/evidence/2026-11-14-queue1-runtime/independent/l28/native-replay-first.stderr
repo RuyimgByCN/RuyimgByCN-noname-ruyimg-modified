@@ -1,0 +1,4 @@
+     Locking 33 packages to highest compatible versions
+   Compiling l28-independent-archive-replay v0.0.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/independent/l28/native-replay)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.93s
+     Running `target/debug/l28-independent-archive-replay`

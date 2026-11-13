@@ -1,0 +1,15 @@
+{
+  "command": [
+    "/private/tmp/noname-l10-runtime-preserved-tvv_75wj/native-probe-round2"
+  ],
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "environment": {
+    "L10_EVIDENCE": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/independent/l10/native-replay01",
+    "L10_REPO": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next"
+  },
+  "head": "605201f3f49e10cea61c31d52a61bbb66c85599d",
+  "started_utc": "2026-11-13T18:27:44.715133+00:00",
+  "binary_sha256": "6b3aa08e59da2a9dc1eb3a98c17fbcf5498a6619a473432deda7adfd704ef3ef",
+  "pack_sha256": "aa22cfedd7c333b4d6481935a4fc092d0754d1b68152a4d1d24a72943a9cec2d",
+  "no_compile": true
+}

@@ -1,0 +1,1058 @@
+{
+  "case": "g_sha_exploration",
+  "done": false,
+  "paused": true,
+  "stack": [
+    {
+      "name": "chooseToUse",
+      "step": 1,
+      "skill": "reguhuo"
+    },
+    {
+      "name": "phaseUse",
+      "step": 1
+    },
+    {
+      "name": "l10Probe",
+      "step": 0
+    }
+  ],
+  "choice": {
+    "name": "chooseToUse",
+    "skill": "reguhuo",
+    "prompt": false,
+    "confirm": "oc",
+    "selectablePlayers": [],
+    "actor": 0,
+    "uiControls": [
+      [
+        {
+          "link": "ok",
+          "text": "确定"
+        },
+        {
+          "link": "cancel",
+          "text": "取消"
+        }
+      ],
+      [
+        {
+          "link": "结束回合",
+          "text": "结束回合"
+        }
+      ]
+    ],
+    "buttons": []
+  },
+  "players": [
+    {
+      "seat": 0,
+      "hp": 4,
+      "max_hp": 4,
+      "face_down": false,
+      "judge": [],
+      "hand": [
+        {
+          "id": 45,
+          "name": "tao",
+          "suit": "heart",
+          "rank": 3,
+          "nature": null
+        }
+      ],
+      "equips": [],
+      "skills": [
+        {
+          "name": "reguhuo",
+          "disabled": false,
+          "blocked_by_fangzhu": false
+        }
+      ],
+      "reguhuo_phase": false,
+      "enabled": {
+        "sha": true,
+        "jiu": true,
+        "wuzhong": true
+      },
+      "jiu_mark": 0
+    },
+    {
+      "seat": 1,
+      "hp": 4,
+      "max_hp": 4,
+      "face_down": false,
+      "judge": [],
+      "hand": [],
+      "equips": [],
+      "skills": [],
+      "reguhuo_phase": false,
+      "enabled": {
+        "sha": true,
+        "jiu": true,
+        "wuzhong": true
+      },
+      "jiu_mark": 0
+    },
+    {
+      "seat": 2,
+      "hp": 4,
+      "max_hp": 4,
+      "face_down": false,
+      "judge": [],
+      "hand": [],
+      "equips": [],
+      "skills": [],
+      "reguhuo_phase": false,
+      "enabled": {
+        "sha": true,
+        "jiu": true,
+        "wuzhong": true
+      },
+      "jiu_mark": 0
+    },
+    {
+      "seat": 3,
+      "hp": 4,
+      "max_hp": 4,
+      "face_down": false,
+      "judge": [],
+      "hand": [],
+      "equips": [],
+      "skills": [],
+      "reguhuo_phase": false,
+      "enabled": {
+        "sha": true,
+        "jiu": true,
+        "wuzhong": true
+      },
+      "jiu_mark": 0
+    }
+  ],
+  "discard": [
+    {
+      "id": 55,
+      "name": "nanman",
+      "suit": "club",
+      "rank": 7,
+      "nature": null
+    },
+    {
+      "id": 25,
+      "name": "sha",
+      "suit": "diamond",
+      "rank": 7,
+      "nature": null
+    },
+    {
+      "id": 64,
+      "name": "guohe",
+      "suit": "spade",
+      "rank": 3,
+      "nature": null
+    },
+    {
+      "id": 109,
+      "name": "wugu",
+      "suit": "heart",
+      "rank": 3,
+      "nature": null
+    },
+    {
+      "id": 110,
+      "name": "wugu",
+      "suit": "heart",
+      "rank": 4,
+      "nature": null
+    },
+    {
+      "id": 48,
+      "name": "tao",
+      "suit": "heart",
+      "rank": 7,
+      "nature": null
+    },
+    {
+      "id": 97,
+      "name": "sha",
+      "suit": "spade",
+      "rank": 1,
+      "nature": "fire"
+    },
+    {
+      "id": 47,
+      "name": "tao",
+      "suit": "heart",
+      "rank": 6,
+      "nature": null
+    },
+    {
+      "id": 52,
+      "name": "tao",
+      "suit": "diamond",
+      "rank": 12,
+      "nature": null
+    },
+    {
+      "id": 70,
+      "name": "wuxie",
+      "suit": "spade",
+      "rank": 11,
+      "nature": null
+    },
+    {
+      "id": 7,
+      "name": "sha",
+      "suit": "club",
+      "rank": 2,
+      "nature": null
+    },
+    {
+      "id": 32,
+      "name": "shan",
+      "suit": "heart",
+      "rank": 13,
+      "nature": null
+    },
+    {
+      "id": 15,
+      "name": "sha",
+      "suit": "club",
+      "rank": 9,
+      "nature": null
+    },
+    {
+      "id": 0,
+      "name": "sha",
+      "suit": "spade",
+      "rank": 7,
+      "nature": null
+    },
+    {
+      "id": 100,
+      "name": "tiesuo",
+      "suit": "spade",
+      "rank": 1,
+      "nature": null
+    },
+    {
+      "id": 40,
+      "name": "shan",
+      "suit": "diamond",
+      "rank": 8,
+      "nature": null
+    },
+    {
+      "id": 96,
+      "name": "sha",
+      "suit": "spade",
+      "rank": 1,
+      "nature": "fire"
+    },
+    {
+      "id": 75,
+      "name": "lebu",
+      "suit": "club",
+      "rank": 6,
+      "nature": null
+    },
+    {
+      "id": 10,
+      "name": "sha",
+      "suit": "club",
+      "rank": 5,
+      "nature": null
+    },
+    {
+      "id": 58,
+      "name": "juedou",
+      "suit": "diamond",
+      "rank": 1,
+      "nature": null
+    },
+    {
+      "id": 22,
+      "name": "sha",
+      "suit": "heart",
+      "rank": 10,
+      "nature": null
+    },
+    {
+      "id": 108,
+      "name": "taoyuan",
+      "suit": "heart",
+      "rank": 1,
+      "nature": null
+    },
+    {
+      "id": 103,
+      "name": "bingliang",
+      "suit": "club",
+      "rank": 3,
+      "nature": null
+    },
+    {
+      "id": 87,
+      "name": "sha",
+      "suit": "spade",
+      "rank": 4,
+      "nature": "thunder"
+    },
+    {
+      "id": 39,
+      "name": "shan",
+      "suit": "diamond",
+      "rank": 7,
+      "nature": null
+    },
+    {
+      "id": 38,
+      "name": "shan",
+      "suit": "diamond",
+      "rank": 6,
+      "nature": null
+    },
+    {
+      "id": 57,
+      "name": "juedou",
+      "suit": "club",
+      "rank": 1,
+      "nature": null
+    },
+    {
+      "id": 71,
+      "name": "wuxie",
+      "suit": "club",
+      "rank": 12,
+      "nature": null
+    },
+    {
+      "id": 23,
+      "name": "sha",
+      "suit": "heart",
+      "rank": 11,
+      "nature": null
+    },
+    {
+      "id": 94,
+      "name": "sha",
+      "suit": "spade",
+      "rank": 1,
+      "nature": "fire"
+    },
+    {
+      "id": 1,
+      "name": "sha",
+      "suit": "spade",
+      "rank": 8,
+      "nature": null
+    },
+    {
+      "id": 20,
+      "name": "sha",
+      "suit": "club",
+      "rank": 11,
+      "nature": null
+    },
+    {
+      "id": 11,
+      "name": "sha",
+      "suit": "club",
+      "rank": 6,
+      "nature": null
+    },
+    {
+      "id": 101,
+      "name": "tiesuo",
+      "suit": "spade",
+      "rank": 1,
+      "nature": null
+    },
+    {
+      "id": 63,
+      "name": "shunshou",
+      "suit": "diamond",
+      "rank": 4,
+      "nature": null
+    },
+    {
+      "id": 16,
+      "name": "sha",
+      "suit": "club",
+      "rank": 9,
+      "nature": null
+    },
+    {
+      "id": 77,
+      "name": "shandian",
+      "suit": "spade",
+      "rank": 1,
+      "nature": "thunder"
+    },
+    {
+      "id": 33,
+      "name": "shan",
+      "suit": "diamond",
+      "rank": 2,
+      "nature": null
+    },
+    {
+      "id": 13,
+      "name": "sha",
+      "suit": "club",
+      "rank": 8,
+      "nature": null
+    },
+    {
+      "id": 21,
+      "name": "sha",
+      "suit": "heart",
+      "rank": 10,
+      "nature": null
+    },
+    {
+      "id": 3,
+      "name": "sha",
+      "suit": "spade",
+      "rank": 9,
+      "nature": null
+    },
+    {
+      "id": 34,
+      "name": "shan",
+      "suit": "diamond",
+      "rank": 2,
+      "nature": null
+    },
+    {
+      "id": 50,
+      "name": "tao",
+      "suit": "heart",
+      "rank": 9,
+      "nature": null
+    },
+    {
+      "id": 102,
+      "name": "wanjian",
+      "suit": "heart",
+      "rank": 1,
+      "nature": null
+    },
+    {
+      "id": 56,
+      "name": "juedou",
+      "suit": "spade",
+      "rank": 1,
+      "nature": null
+    },
+    {
+      "id": 36,
+      "name": "shan",
+      "suit": "diamond",
+      "rank": 4,
+      "nature": null
+    },
+    {
+      "id": 24,
+      "name": "sha",
+      "suit": "diamond",
+      "rank": 6,
+      "nature": null
+    },
+    {
+      "id": 117,
+      "name": "zhuge",
+      "suit": "club",
+      "rank": 1,
+      "nature": null
+    },
+    {
+      "id": 29,
+      "name": "sha",
+      "suit": "diamond",
+      "rank": 13,
+      "nature": null
+    },
+    {
+      "id": 35,
+      "name": "shan",
+      "suit": "diamond",
+      "rank": 3,
+      "nature": null
+    },
+    {
+      "id": 26,
+      "name": "sha",
+      "suit": "diamond",
+      "rank": 8,
+      "nature": null
+    },
+    {
+      "id": 62,
+      "name": "shunshou",
+      "suit": "diamond",
+      "rank": 3,
+      "nature": null
+    },
+    {
+      "id": 73,
+      "name": "wuxie",
+      "suit": "diamond",
+      "rank": 12,
+      "nature": null
+    },
+    {
+      "id": 31,
+      "name": "shan",
+      "suit": "heart",
+      "rank": 2,
+      "nature": null
+    },
+    {
+      "id": 88,
+      "name": "sha",
+      "suit": "club",
+      "rank": 5,
+      "nature": "thunder"
+    },
+    {
+      "id": 59,
+      "name": "shunshou",
+      "suit": "spade",
+      "rank": 3,
+      "nature": null
+    },
+    {
+      "id": 105,
+      "name": "wuzhong",
+      "suit": "heart",
+      "rank": 8,
+      "nature": null
+    },
+    {
+      "id": 86,
+      "name": "jiu",
+      "suit": "club",
+      "rank": 9,
+      "nature": null
+    },
+    {
+      "id": 60,
+      "name": "shunshou",
+      "suit": "spade",
+      "rank": 4,
+      "nature": null
+    },
+    {
+      "id": 106,
+      "name": "wuzhong",
+      "suit": "heart",
+      "rank": 9,
+      "nature": null
+    },
+    {
+      "id": 65,
+      "name": "guohe",
+      "suit": "spade",
+      "rank": 4,
+      "nature": null
+    },
+    {
+      "id": 95,
+      "name": "sha",
+      "suit": "spade",
+      "rank": 1,
+      "nature": "fire"
+    },
+    {
+      "id": 4,
+      "name": "sha",
+      "suit": "spade",
+      "rank": 9,
+      "nature": null
+    },
+    {
+      "id": 30,
+      "name": "shan",
+      "suit": "heart",
+      "rank": 2,
+      "nature": null
+    },
+    {
+      "id": 18,
+      "name": "sha",
+      "suit": "club",
+      "rank": 10,
+      "nature": null
+    },
+    {
+      "id": 53,
+      "name": "nanman",
+      "suit": "spade",
+      "rank": 7,
+      "nature": null
+    },
+    {
+      "id": 69,
+      "name": "guohe",
+      "suit": "heart",
+      "rank": 12,
+      "nature": null
+    },
+    {
+      "id": 72,
+      "name": "wuxie",
+      "suit": "club",
+      "rank": 13,
+      "nature": null
+    },
+    {
+      "id": 107,
+      "name": "wuzhong",
+      "suit": "heart",
+      "rank": 11,
+      "nature": null
+    },
+    {
+      "id": 66,
+      "name": "guohe",
+      "suit": "spade",
+      "rank": 12,
+      "nature": null
+    },
+    {
+      "id": 54,
+      "name": "nanman",
+      "suit": "spade",
+      "rank": 13,
+      "nature": null
+    },
+    {
+      "id": 19,
+      "name": "sha",
+      "suit": "club",
+      "rank": 11,
+      "nature": null
+    },
+    {
+      "id": 68,
+      "name": "guohe",
+      "suit": "club",
+      "rank": 4,
+      "nature": null
+    },
+    {
+      "id": 5,
+      "name": "sha",
+      "suit": "spade",
+      "rank": 10,
+      "nature": null
+    },
+    {
+      "id": 49,
+      "name": "tao",
+      "suit": "heart",
+      "rank": 8,
+      "nature": null
+    },
+    {
+      "id": 14,
+      "name": "sha",
+      "suit": "club",
+      "rank": 8,
+      "nature": null
+    },
+    {
+      "id": 46,
+      "name": "tao",
+      "suit": "heart",
+      "rank": 4,
+      "nature": null
+    },
+    {
+      "id": 12,
+      "name": "sha",
+      "suit": "club",
+      "rank": 7,
+      "nature": null
+    },
+    {
+      "id": 37,
+      "name": "shan",
+      "suit": "diamond",
+      "rank": 5,
+      "nature": null
+    },
+    {
+      "id": 99,
+      "name": "tiesuo",
+      "suit": "spade",
+      "rank": 1,
+      "nature": null
+    },
+    {
+      "id": 44,
+      "name": "shan",
+      "suit": "diamond",
+      "rank": 11,
+      "nature": null
+    },
+    {
+      "id": 2,
+      "name": "sha",
+      "suit": "spade",
+      "rank": 8,
+      "nature": null
+    },
+    {
+      "id": 61,
+      "name": "shunshou",
+      "suit": "spade",
+      "rank": 11,
+      "nature": null
+    },
+    {
+      "id": 41,
+      "name": "shan",
+      "suit": "diamond",
+      "rank": 9,
+      "nature": null
+    },
+    {
+      "id": 42,
+      "name": "shan",
+      "suit": "diamond",
+      "rank": 10,
+      "nature": null
+    },
+    {
+      "id": 28,
+      "name": "sha",
+      "suit": "diamond",
+      "rank": 10,
+      "nature": null
+    },
+    {
+      "id": 9,
+      "name": "sha",
+      "suit": "club",
+      "rank": 4,
+      "nature": null
+    },
+    {
+      "id": 78,
+      "name": "shandian",
+      "suit": "heart",
+      "rank": 12,
+      "nature": "thunder"
+    },
+    {
+      "id": 27,
+      "name": "sha",
+      "suit": "diamond",
+      "rank": 9,
+      "nature": null
+    },
+    {
+      "id": 98,
+      "name": "tiesuo",
+      "suit": "spade",
+      "rank": 1,
+      "nature": null
+    },
+    {
+      "id": 76,
+      "name": "lebu",
+      "suit": "heart",
+      "rank": 6,
+      "nature": null
+    },
+    {
+      "id": 6,
+      "name": "sha",
+      "suit": "spade",
+      "rank": 10,
+      "nature": null
+    },
+    {
+      "id": 74,
+      "name": "lebu",
+      "suit": "spade",
+      "rank": 6,
+      "nature": null
+    },
+    {
+      "id": 17,
+      "name": "sha",
+      "suit": "club",
+      "rank": 10,
+      "nature": null
+    }
+  ],
+  "ordering": [],
+  "deck": [
+    {
+      "id": 104,
+      "name": "wuzhong",
+      "suit": "heart",
+      "rank": 7,
+      "nature": null
+    },
+    {
+      "id": 51,
+      "name": "tao",
+      "suit": "heart",
+      "rank": 12,
+      "nature": null
+    },
+    {
+      "id": 114,
+      "name": "qinggang",
+      "suit": "spade",
+      "rank": 6,
+      "nature": null
+    },
+    {
+      "id": 8,
+      "name": "sha",
+      "suit": "club",
+      "rank": 3,
+      "nature": null
+    },
+    {
+      "id": 67,
+      "name": "guohe",
+      "suit": "club",
+      "rank": 3,
+      "nature": null
+    },
+    {
+      "id": 43,
+      "name": "shan",
+      "suit": "diamond",
+      "rank": 11,
+      "nature": null
+    },
+    {
+      "id": 118,
+      "name": "zhuge",
+      "suit": "diamond",
+      "rank": 1,
+      "nature": null
+    },
+    {
+      "id": 85,
+      "name": "jiu",
+      "suit": "spade",
+      "rank": 3,
+      "nature": null
+    }
+  ],
+  "unmappedDeck": [],
+  "skippedInitialDiscard": [
+    {
+      "id": 83,
+      "kind": "HorseMinus",
+      "name": "horse_minus",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": null
+    },
+    {
+      "id": 91,
+      "kind": "Weapon",
+      "name": "weapon3",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": null
+    },
+    {
+      "id": 89,
+      "kind": "Weapon",
+      "name": "weapon2",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": null
+    },
+    {
+      "id": 120,
+      "kind": "Qinglong",
+      "name": "qinglong",
+      "nature": null,
+      "rank": 5,
+      "suit": "spade",
+      "upstream_name": null
+    },
+    {
+      "id": 80,
+      "kind": "HorsePlus",
+      "name": "horse_plus",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": null
+    },
+    {
+      "id": 112,
+      "kind": "Jiedao",
+      "name": "jiedao",
+      "nature": null,
+      "rank": 13,
+      "suit": "club",
+      "upstream_name": null
+    },
+    {
+      "id": 84,
+      "kind": "HorseMinus",
+      "name": "horse_minus",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": null
+    },
+    {
+      "id": 111,
+      "kind": "Jiedao",
+      "name": "jiedao",
+      "nature": null,
+      "rank": 12,
+      "suit": "club",
+      "upstream_name": null
+    },
+    {
+      "id": 122,
+      "kind": "Cixiong",
+      "name": "cixiong",
+      "nature": null,
+      "rank": 2,
+      "suit": "spade",
+      "upstream_name": null
+    },
+    {
+      "id": 93,
+      "kind": "Armor",
+      "name": "armor",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": null
+    },
+    {
+      "id": 79,
+      "kind": "HorsePlus",
+      "name": "horse_plus",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": null
+    },
+    {
+      "id": 92,
+      "kind": "Armor",
+      "name": "armor",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": null
+    },
+    {
+      "id": 81,
+      "kind": "HorsePlus",
+      "name": "horse_plus",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": null
+    },
+    {
+      "id": 113,
+      "kind": "Renwang",
+      "name": "renwang",
+      "nature": null,
+      "rank": 2,
+      "suit": "club",
+      "upstream_name": null
+    },
+    {
+      "id": 116,
+      "kind": "Hanbing",
+      "name": "hanbing",
+      "nature": null,
+      "rank": 2,
+      "suit": "spade",
+      "upstream_name": null
+    },
+    {
+      "id": 123,
+      "kind": "Fangtian",
+      "name": "fangtian",
+      "nature": null,
+      "rank": 5,
+      "suit": "diamond",
+      "upstream_name": null
+    },
+    {
+      "id": 90,
+      "kind": "Weapon",
+      "name": "weapon2b",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": null
+    },
+    {
+      "id": 115,
+      "kind": "Qilin",
+      "name": "qilin",
+      "nature": null,
+      "rank": 5,
+      "suit": "heart",
+      "upstream_name": null
+    },
+    {
+      "id": 121,
+      "kind": "Zhangba",
+      "name": "zhangba",
+      "nature": null,
+      "rank": 12,
+      "suit": "spade",
+      "upstream_name": null
+    },
+    {
+      "id": 82,
+      "kind": "HorsePlus",
+      "name": "horse_plus",
+      "nature": null,
+      "rank": 1,
+      "suit": "spade",
+      "upstream_name": null
+    },
+    {
+      "id": 119,
+      "kind": "Guanshi",
+      "name": "guanshi",
+      "nature": null,
+      "rank": 5,
+      "suit": "diamond",
+      "upstream_name": null
+    }
+  ],
+  "untaggedDeck": [],
+  "kUI": [
+    null,
+    null,
+    null,
+    null
+  ],
+  "trace": [
+    {
+      "method": "chooseToUse",
+      "seat": 0,
+      "args": [],
+      "event": "phaseUse",
+      "step": 0
+    }
+  ]
+}

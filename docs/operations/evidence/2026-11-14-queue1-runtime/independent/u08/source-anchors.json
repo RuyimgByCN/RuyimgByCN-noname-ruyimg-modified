@@ -1,0 +1,275 @@
+{
+  "uy": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+    "line": 337,
+    "source_text": "\tyixin: {",
+    "label": "上游医心",
+    "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+  },
+  "uycost": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+    "line": 342,
+    "source_text": "\t\t\treturn player.countCards(\"he\") > 2;",
+    "label": "医心费用门槛",
+    "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+  },
+  "uyrecover": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+    "line": 354,
+    "source_text": "\t\t\tplayer.awakenSkill(event.name);",
+    "label": "医心限定标记与回复",
+    "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+  },
+  "ub": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+    "line": 2407,
+    "source_text": "\tbolehuiyan: {",
+    "label": "上游慧眼",
+    "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+  },
+  "ubcontrol": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+    "line": 2415,
+    "source_text": "\t\t\tif (event.target.isUnderControl()) {",
+    "label": "慧眼受控目标过滤",
+    "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+  },
+  "ubcancel": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+    "line": 2465,
+    "source_text": "\t\t\tif (result.control !== \"cancel\") {",
+    "label": "慧眼取消判断",
+    "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+  },
+  "ub2": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+    "line": 2477,
+    "source_text": "\tbolehuiyan2: {",
+    "label": "上游慧眼未命中结算",
+    "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+  },
+  "ub3": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+    "line": 2495,
+    "source_text": "\tbolehuiyan3: {",
+    "label": "上游慧眼命中结算",
+    "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+  },
+  "ug": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+    "line": 3095,
+    "source_text": "\tguifu: {",
+    "label": "上游鬼斧",
+    "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+  },
+  "ny": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_a_asks.rs",
+    "line": 67,
+    "source_text": "        \"yixin\" => match m.stage {",
+    "label": "原生医心步骤",
+    "sha256": "8efc2d21f3d9172fe7aa3b1ebe166766a19c7bf6def82e615fc44fb957ce95de"
+  },
+  "nyrefund": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_a_asks.rs",
+    "line": 79,
+    "source_text": "                    refund_once_used(ctx, owner, \"yixin\");",
+    "label": "医心取消返还次数",
+    "sha256": "8efc2d21f3d9172fe7aa3b1ebe166766a19c7bf6def82e615fc44fb957ce95de"
+  },
+  "nytarget": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_a_asks.rs",
+    "line": 562,
+    "source_text": "        ASK_YIXIN_TARGET => {",
+    "label": "医心目标候选",
+    "sha256": "8efc2d21f3d9172fe7aa3b1ebe166766a19c7bf6def82e615fc44fb957ce95de"
+  },
+  "nygate": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_a.rs",
+    "line": 633,
+    "source_text": "        \"yixin\" => {",
+    "label": "医心激活条件",
+    "sha256": "d132a7325cb1cabfffce369012dc93348e5278d2836425b79f83a715c5e1c115"
+  },
+  "nbmeta": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d.rs",
+    "line": 549,
+    "source_text": "        \"bolehuiyan\" => Some(meta(",
+    "label": "慧眼触发元数据",
+    "sha256": "7aacf3857f18c290bba4992570ffa443b8088579fb4326a74f9654d208dc2839"
+  },
+  "nbfilter": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d.rs",
+    "line": 607,
+    "source_text": "        \"bolehuiyan\" => match event {",
+    "label": "慧眼过滤",
+    "sha256": "7aacf3857f18c290bba4992570ffa443b8088579fb4326a74f9654d208dc2839"
+  },
+  "nbdamage": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d.rs",
+    "line": 618,
+    "source_text": "                let pred = flag(ctx.state, owner, \"bolehuiyan_pred\");",
+    "label": "慧眼普通 Damage 过滤",
+    "sha256": "7aacf3857f18c290bba4992570ffa443b8088579fb4326a74f9654d208dc2839"
+  },
+  "nbresolve": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs",
+    "line": 765,
+    "source_text": "pub(super) fn resolve_bolehuiyan_outcome(",
+    "label": "慧眼结算",
+    "sha256": "d379df8a66a70b044e4047b69d93e0ce691d6a5d849852babda94cc62ebb7b12"
+  },
+  "nbstep": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs",
+    "line": 832,
+    "source_text": "        \"bolehuiyan\" => match m.stage {",
+    "label": "慧眼取消与次数记录",
+    "sha256": "d379df8a66a70b044e4047b69d93e0ce691d6a5d849852babda94cc62ebb7b12"
+  },
+  "nbdiscard": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs",
+    "line": 118,
+    "source_text": "        ASK_BOLEHUIYAN_DISCARD => {",
+    "label": "慧眼强制弃牌候选",
+    "sha256": "d379df8a66a70b044e4047b69d93e0ce691d6a5d849852babda94cc62ebb7b12"
+  },
+  "ng": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d_ext.rs",
+    "line": 701,
+    "source_text": "        \"guifu\" => match m.stage {",
+    "label": "鬼斧步骤",
+    "sha256": "8fa2126cc502e85b3525473415ae18904c9c67aaed7ba20367ba71e14e2d6cc7"
+  },
+  "ngdraw": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d_ext.rs",
+    "line": 42,
+    "source_text": "fn guifu_draw_both(ctx: &mut Ctx<'_>, owner: PlayerId, target: PlayerId) {",
+    "label": "鬼斧摸牌座次",
+    "sha256": "8fa2126cc502e85b3525473415ae18904c9c67aaed7ba20367ba71e14e2d6cc7"
+  },
+  "ngask": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/u08_batch_d_asks.rs",
+    "line": 645,
+    "source_text": "        ASK_GUIFU_EQUIP => {",
+    "label": "鬼斧多装备必选询问",
+    "sha256": "d379df8a66a70b044e4047b69d93e0ce691d6a5d849852babda94cc62ebb7b12"
+  },
+  "gate": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/src/engine/apply_command.rs",
+    "line": 63,
+    "source_text": "        GameAction::ActivateSkill { skill } => {",
+    "label": "统一回合与出牌阶段门控",
+    "sha256": "a9d87ea9a76d1478b432a08394c27fa7b733b5d2155d7a996fd22390f2e78616"
+  },
+  "formal": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader/src/decision34_pack9.rs",
+    "line": 585,
+    "source_text": "        (\"upstream-noname\", \"hero-kill\") => {",
+    "label": "正式英雄杀注册",
+    "sha256": "57677960381809834e0a6990cdb0b0082474f9a0c55819059046b98529ecd428"
+  },
+  "locked": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader/src/locked_content.rs",
+    "line": 115,
+    "source_text": "    crate::decision34_pack9::attach_formal_package_upstream_rules(",
+    "label": "锁定内容正式装载调用",
+    "sha256": "b1f4663d8830d1b3ce059870d9a343aa9eaad1044bb09dd5a2c19f8f2e871933"
+  },
+  "control": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/ui/click/index.js",
+    "line": 3020,
+    "source_text": "\t\t} else if (this.link == \"cancel\") {",
+    "label": "真实 control 点击分发",
+    "sha256": "6c85a0c7a1ecf7bc23534349fb82de18a1c2f436b882189dae5341fa5e6d69e1"
+  },
+  "cancel": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/ui/click/index.js",
+    "line": 3167,
+    "source_text": "\tcancel(node) {",
+    "label": "真实取消返回值",
+    "sha256": "6c85a0c7a1ecf7bc23534349fb82de18a1c2f436b882189dae5341fa5e6d69e1"
+  },
+  "under": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/library/element/player.js",
+    "line": 13304,
+    "source_text": "\tisUnderControl(self, me) {",
+    "label": "受控关系计算",
+    "sha256": "9ec265664ffa48750bc4117e3204bffe367679b6d260a23254fa14d2fc3163d4"
+  },
+  "shaemit": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/kernel/sha.rs",
+    "line": 285,
+    "source_text": "    fn emit_sha_damage(&mut self, ctx: &mut Ctx<'_>) -> Flow {",
+    "label": "原生杀发射 Damage 后推进",
+    "sha256": "6841786bdfad50ea7cb939e0e3da4a5ec52c8319d7c2d84adca6a73bf9fd6f24"
+  },
+  "shaadvance": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/kernel/sha.rs",
+    "line": 194,
+    "source_text": "    fn advance_target(&mut self, ctx: &mut Ctx<'_>) -> Flow {",
+    "label": "原生杀移入弃牌堆",
+    "sha256": "6841786bdfad50ea7cb939e0e3da4a5ec52c8319d7c2d84adca6a73bf9fd6f24"
+  },
+  "ushadamage": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/card/standard.js",
+    "line": 151,
+    "source_text": "\t\t\t\t\tawait event.trigger(\"shaDamage\");",
+    "label": "上游杀等待 shaDamage 子事件",
+    "sha256": "33ebe708722f3d8b038d5c2855259699f9009cf73ef3c0fe8b1e9b6bd482f6fa"
+  },
+  "ushend": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/library/element/gameEvent.ts",
+    "line": 282,
+    "source_text": "\t\t\t\t\tawait trigger(\"End\", 3);",
+    "label": "上游通用事件 End 窗口",
+    "sha256": "9a777f0f88f46d706bb6539c8ea2ae09c87d90e5ffad43c289e1a8423a2be4b8"
+  },
+  "probeformal": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-probe/src/main.rs",
+    "line": 201,
+    "source_text": "    content_native_loader::attach_formal_package_upstream_rules(\"upstream-noname\",\"hero-kill\",&mut pack,&[]);",
+    "label": "采集 probe 正式包路径",
+    "sha256": "803814884294fab2d1bb4f428863afd225b45d737e67ff2a7eb799cede8874b5"
+  },
+  "probesetup": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-probe/src/main.rs",
+    "line": 112,
+    "source_text": "fn setup(pack: &ExtensionPack, name: &str) -> Engine {",
+    "label": "原生实际夹具",
+    "sha256": "803814884294fab2d1bb4f428863afd225b45d737e67ff2a7eb799cede8874b5"
+  },
+  "setupreset": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4-upstream-setup.js",
+    "line": 30,
+    "source_text": "    for (const card of p.getVCards('e').slice()) p.removeVirtualEquip(card);",
+    "label": "上游实际虚拟区清理",
+    "sha256": "64555a4e28c957af4c9ae8ffb56ddb6f440137c95836210912c4458bbf1a72a1"
+  },
+  "setupcontrol": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4-upstream-setup.js",
+    "line": 58,
+    "source_text": "  if (name === 'b_under_control') game.players[2]._trueMe = game.players[0];",
+    "label": "受控条件实际设置",
+    "sha256": "64555a4e28c957af4c9ae8ffb56ddb6f440137c95836210912c4458bbf1a72a1"
+  },
+  "setupentry": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4-upstream-setup.js",
+    "line": 99,
+    "source_text": "  root.setContent(async function(event) {",
+    "label": "上游真实 useCard/chooseToUse 入口",
+    "sha256": "64555a4e28c957af4c9ae8ffb56ddb6f440137c95836210912c4458bbf1a72a1"
+  },
+  "runnercontrol": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4-browser-runner.py",
+    "line": 83,
+    "source_text": "def control(name):",
+    "label": "真实 DOM 控件点击",
+    "sha256": "1de870a02a1e6ca1000a930980e5db71ed0af38f9647425d73b17551215170f9"
+  },
+  "runnertargetcancel": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4-browser-runner.py",
+    "line": 87,
+    "source_text": "def cancel_visible():",
+    "label": "取消与可见结束按钮分支",
+    "sha256": "1de870a02a1e6ca1000a930980e5db71ed0af38f9647425d73b17551215170f9"
+  }
+}

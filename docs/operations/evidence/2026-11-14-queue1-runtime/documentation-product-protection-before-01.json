@@ -1,0 +1,12 @@
+{
+  "at": "2026-11-14T03:13:18.303155+08:00",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "tracked_dirty": true,
+  "gates_input_count": 21211,
+  "gates_inputs_drift": [],
+  "original_untracked_paths": 672,
+  "original_untracked_missing": [],
+  "old_worktree_blocks_unchanged": 8,
+  "product_changes_since_published_code": [],
+  "scope": "只对初始未跟踪路径存在性背书；初始未作内容哈希，不能宣称历史字节未变。当前产品门禁输入逐文件与已通过冻结相符。"
+}

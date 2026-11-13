@@ -1,0 +1,46 @@
+{
+  "at": "2026-11-14T02:49:58.963143+08:00",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "tracked_dirty": true,
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "frozen_inputs": [
+    {
+      "root": "docs/operations/evidence/2026-11-14-queue1-runtime/L10",
+      "manifest": "frozen-manifest.json",
+      "sha256": "2f0ea5dbfc279464ade200c93d497c78efb9ea3affb9200dd611f1145ae921a6",
+      "file_count": 318,
+      "bytes": 47114568,
+      "mismatches": []
+    },
+    {
+      "root": "docs/operations/evidence/2026-11-14-queue1-runtime/independent/l10",
+      "manifest": "frozen-file-manifest.json",
+      "sha256": "8880422bdf16b372a198266b3326f7a567ad670ebe20ec9f77b1f795aeb710ca",
+      "file_count": 572,
+      "bytes": 50341444,
+      "mismatches": []
+    }
+  ],
+  "unique_cases": 26,
+  "assessment_categories": {
+    "所选投影相同，交互不同": 5,
+    "已观察到结算反例": 8,
+    "操作并不相同": 1,
+    "已观察到取消差别": 2,
+    "已观察到退出差别": 1,
+    "条件反例，限采集投影": 4,
+    "上游UI阻塞，补逐行反例": 2,
+    "上游UI阻塞，取消未发生": 1,
+    "不发动条件已观察，终点不同": 2
+  },
+  "formal_registered_host_skills": 4,
+  "formal_registered_vm_skills": 10,
+  "new_equivalence_signoffs": 0,
+  "scope": "主agent核对冻结输入字节、逐案独立评语与正式登记raw；没有把桥接探针未授技断言成正式产品缺失。独立完整审查与复跑方法见independent/l10，不代替整包验收。"
+}

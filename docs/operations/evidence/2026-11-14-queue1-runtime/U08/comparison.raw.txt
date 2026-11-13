@@ -1,0 +1,5 @@
+{"cases": 31, "actual_source_completed": 30, "intentional_forced_pending": 1, "runner_errors": 0, "projection_equal": 27, "projection_different": 4, "native_prediction_window_counts_different": 2}
+b_cancel_predict prediction {'native': 1, 'upstream': 1} diff_paths ['/players/0/bolehuiyan_used'] error None
+b_cancel_discard prediction {'native': 1, 'upstream': 1} diff_paths ['/discard', '/in_resolution'] error None
+b_under_control prediction {'native': 1, 'upstream': 0} diff_paths ['/deck_top_first', '/players/0/bolehuiyan_used', '/players/0/hand'] error None
+b_cancel_then_retry prediction {'native': 2, 'upstream': 1} diff_paths ['/deck_top_first', '/players/0/hand'] error None

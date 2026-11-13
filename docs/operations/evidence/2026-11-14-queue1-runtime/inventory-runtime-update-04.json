@@ -1,0 +1,141 @@
+{
+  "at": "2026-11-14T02:51:05+08:00",
+  "source_head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "tracked_dirty": true,
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "counts_before": {
+    "已复核等价": 628,
+    "简化近似": 3796,
+    "缺失": 0,
+    "上游未定义": 0
+  },
+  "counts_after": {
+    "已复核等价": 628,
+    "简化近似": 3796,
+    "缺失": 0,
+    "上游未定义": 0
+  },
+  "revoked_old_equivalence": 0,
+  "new_equivalence_signoffs": 0,
+  "independent_reviewer": "/root/repair_doc_refs",
+  "frozen_inputs": "l10-integration-freeze-check.json",
+  "records": [
+    {
+      "key": "L10:skills:reguhuo@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:297",
+      "before": {
+        "source_id": "L10",
+        "category": "skills",
+        "id": "reguhuo",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:297",
+        "target": "原生规则 / `epic-cards-upstream-liuli`",
+        "status": "简化近似",
+        "reviewer": "/root/fix_dddanzhi",
+        "review_date": "2026-11-14",
+        "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:297-421",
+        "test_name": "l10_reguhuo_six_dimension_real_match + l10_eight_dimension_from_fresh_install",
+        "difference": "取消过早消耗机会且省略真假质疑，固定列表不能覆盖安装扩展的新basic/trick。",
+        "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+        "reason": null,
+        "native": "crates/engine-native-content/src/content/host/activation/common.rs:52-78 + step/skills_virtual_use.rs:202-330 + asks_wudian.rs:802-852 (HostBehavior::Reguhuo, tag 515)",
+        "diff": "取消过早消耗机会且省略真假质疑，固定列表不能覆盖安装扩展的新basic/trick。"
+      },
+      "after": {
+        "source_id": "L10",
+        "category": "skills",
+        "id": "reguhuo",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:297",
+        "target": "原生规则 / `epic-cards-upstream-liuli`",
+        "status": "简化近似",
+        "reviewer": "/root/repair_doc_refs",
+        "review_date": "2026-11-14",
+        "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:297-421",
+        "test_name": "l10_reguhuo_six_dimension_real_match + l10_eight_dimension_from_fresh_install",
+        "difference": "取消过早消耗机会且省略他座真假质疑；固定20声明候选未按当前event.filterCard过滤，不能覆盖已装牌名/性质与使用或响应上下文。上游真牌质疑的弃牌/失血/缠怨、假牌质疑作废均已实际观察；原生杀响应未开蛊惑窗。声明取消后原生再激活被拒，上游仍可再发动。目标退出案上游实际点的是结束回合，不能当同一空取消。",
+        "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14T02:51:05+08:00 L10实际补课及独立正式路径复跑：取消过早消耗机会且省略他座真假质疑；固定20声明候选未按当前event.filterCard过滤，不能覆盖已装牌名/性质与使用或响应上下文。上游真牌质疑的弃牌/失血/缠怨、假牌质疑作废均已实际观察；原生杀响应未开蛊惑窗。声明取消后原生再激活被拒，上游仍可再发动。目标退出案上游实际点的是结束回合，不能当同一空取消。 初态仅四座牌区/保留牌堆指定投影；未复制21张原生初始弃牌，闪电77/78的导出性质也不同，未使用这些初始弃牌。逐案记录与正式/原始不同内容锁边界见 docs/operations/evidence/2026-11-14-queue1-runtime/independent/l10/README.md。新增等价0，本批退回。",
+        "reason": null,
+        "native": "crates/engine-native-content/src/content/host/activation/common.rs:52-78 + step/skills_virtual_use.rs:202-330 + asks_wudian.rs:802-852 (HostBehavior::Reguhuo, tag 515)",
+        "diff": "取消过早消耗机会且省略他座真假质疑；固定20声明候选未按当前event.filterCard过滤，不能覆盖已装牌名/性质与使用或响应上下文。上游真牌质疑的弃牌/失血/缠怨、假牌质疑作废均已实际观察；原生杀响应未开蛊惑窗。声明取消后原生再激活被拒，上游仍可再发动。目标退出案上游实际点的是结束回合，不能当同一空取消。"
+      }
+    },
+    {
+      "key": "L10:skills:rangjie@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:422",
+      "before": {
+        "source_id": "L10",
+        "category": "skills",
+        "id": "rangjie",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:422",
+        "target": "原生规则 / `epic-cards-upstream-liuli`",
+        "status": "简化近似",
+        "reviewer": "/root/fix_dddanzhi",
+        "review_date": "2026-11-14",
+        "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:422-565",
+        "test_name": "l10_rangjie_six_dimension_real_match + l10_eight_dimension_from_fresh_install",
+        "difference": "实际取消标签与原生取消不同；移动候选只要求全场存在ej，未先筛可合法迁移目的地。deck正向find还需对照get.cardPile2的堆顶搜索方向。",
+        "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+        "reason": null,
+        "native": "crates/engine-native-content/src/content/host/filtering/common.rs:222-223 + step/skills_cards.rs:9-239 + asks_wudian.rs:853-918 (HostBehavior::Rangjie, tag 516)",
+        "diff": "实际取消标签与原生取消不同；移动候选只要求全场存在ej，未先筛可合法迁移目的地。deck正向find还需对照get.cardPile2的堆顶搜索方向。"
+      },
+      "after": {
+        "source_id": "L10",
+        "category": "skills",
+        "id": "rangjie",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:422",
+        "target": "原生规则 / `epic-cards-upstream-liuli`",
+        "status": "简化近似",
+        "reviewer": "/root/repair_doc_refs",
+        "review_date": "2026-11-14",
+        "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:422-565",
+        "test_name": "l10_rangjie_six_dimension_real_match + l10_eight_dimension_from_fresh_install",
+        "difference": "实际字面取消不等于cancel2，上游仍摸牌并转移而原生立即结束；类型窗上游可取消、原生拒空答并挂起。牌堆方向已实跑确认：basic原生酒85/上游桃45、equip原生诸葛118/上游青釭114；不能再以相同HP当取牌等价。原生额外先问trigger_confirm，完整交互不同；移动候选未先筛合法目的地的既有差异仍保留。",
+        "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14T02:51:05+08:00 L10实际补课及独立正式路径复跑：实际字面取消不等于cancel2，上游仍摸牌并转移而原生立即结束；类型窗上游可取消、原生拒空答并挂起。牌堆方向已实跑确认：basic原生酒85/上游桃45、equip原生诸葛118/上游青釭114；不能再以相同HP当取牌等价。原生额外先问trigger_confirm，完整交互不同；移动候选未先筛合法目的地的既有差异仍保留。 初态仅四座牌区/保留牌堆指定投影；未复制21张原生初始弃牌，闪电77/78的导出性质也不同，未使用这些初始弃牌。逐案记录与正式/原始不同内容锁边界见 docs/operations/evidence/2026-11-14-queue1-runtime/independent/l10/README.md。新增等价0，本批退回。",
+        "reason": null,
+        "native": "crates/engine-native-content/src/content/host/filtering/common.rs:222-223 + step/skills_cards.rs:9-239 + asks_wudian.rs:853-918 (HostBehavior::Rangjie, tag 516)",
+        "diff": "实际字面取消不等于cancel2，上游仍摸牌并转移而原生立即结束；类型窗上游可取消、原生拒空答并挂起。牌堆方向已实跑确认：basic原生酒85/上游桃45、equip原生诸葛118/上游青釭114；不能再以相同HP当取牌等价。原生额外先问trigger_confirm，完整交互不同；移动候选未先筛合法目的地的既有差异仍保留。"
+      }
+    },
+    {
+      "key": "L10:skills:k_danggu@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2276",
+      "before": {
+        "source_id": "L10",
+        "category": "skills",
+        "id": "k_danggu",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2276",
+        "target": "原生规则 / `epic-cards-upstream-liuli`",
+        "status": "简化近似",
+        "reviewer": "/root/fix_dddanzhi",
+        "review_date": "2026-11-14",
+        "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2276-2676",
+        "test_name": "l10_kdanggu_kmowang_and_ten_configs_six_dimension_real_match + l10_eight_dimension_from_fresh_install",
+        "difference": "高望候选生成与随机消耗/分布不同于先抽3再shuffle；AI全冲突也从全员选择而非上游预随机一个。",
+        "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+        "reason": null,
+        "native": "crates/engine-native-content/src/content/host/filtering/common.rs:1039-1064 + step/skills_recovery.rs:330-356,444-642 + asks_wudian.rs:781-801 (HostBehavior::KDanggu, tag 549)",
+        "diff": "高望候选生成与随机消耗/分布不同于先抽3再shuffle；AI全冲突也从全员选择而非上游预随机一个。"
+      },
+      "after": {
+        "source_id": "L10",
+        "category": "skills",
+        "id": "k_danggu",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2276",
+        "target": "原生规则 / `epic-cards-upstream-liuli`",
+        "status": "简化近似",
+        "reviewer": "/root/repair_doc_refs",
+        "review_date": "2026-11-14",
+        "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2276-2676",
+        "test_name": "l10_kdanggu_kmowang_and_ten_configs_six_dimension_real_match + l10_eight_dimension_from_fresh_install",
+        "difference": "高望候选/随机分布及AI全冲突的既有差异保留；上游冲突表有方向，原生min/max对称化导致first郭胜缺少可选高望，此为上游UI阻塞后的源码反例。正式attach确授常侍实际技能；原bridge-only探针未授技不能推为产品缺失。正式正常阶段续行实跑逆取自动火伤、滔乱自动弃牌、鸱咽无杀也自动伤害；上游相应为主动选择或杀触发，完整党锢上游续行仍UI阻塞。",
+        "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14T02:51:05+08:00 L10实际补课及独立正式路径复跑：高望候选/随机分布及AI全冲突的既有差异保留；上游冲突表有方向，原生min/max对称化导致first郭胜缺少可选高望，此为上游UI阻塞后的源码反例。正式attach确授常侍实际技能；原bridge-only探针未授技不能推为产品缺失。正式正常阶段续行实跑逆取自动火伤、滔乱自动弃牌、鸱咽无杀也自动伤害；上游相应为主动选择或杀触发，完整党锢上游续行仍UI阻塞。 初态仅四座牌区/保留牌堆指定投影；未复制21张原生初始弃牌，闪电77/78的导出性质也不同，未使用这些初始弃牌。逐案记录与正式/原始不同内容锁边界见 docs/operations/evidence/2026-11-14-queue1-runtime/independent/l10/README.md。新增等价0，本批退回。",
+        "reason": null,
+        "native": "crates/engine-native-content/src/content/host/filtering/common.rs:1039-1064 + step/skills_recovery.rs:330-356,444-642 + asks_wudian.rs:781-801 (HostBehavior::KDanggu, tag 549)",
+        "diff": "高望候选/随机分布及AI全冲突的既有差异保留；上游冲突表有方向，原生min/max对称化导致first郭胜缺少可选高望，此为上游UI阻塞后的源码反例。正式attach确授常侍实际技能；原bridge-only探针未授技不能推为产品缺失。正式正常阶段续行实跑逆取自动火伤、滔乱自动弃牌、鸱咽无杀也自动伤害；上游相应为主动选择或杀触发，完整党锢上游续行仍UI阻塞。"
+      }
+    }
+  ]
+}

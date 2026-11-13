@@ -1,0 +1,62 @@
+﻿2026-11-13T19:01:24.2189794Z ##[group]Run cargo check -p engine-native-kernel -p engine-native-content -p engine-native --all-targets
+2026-11-13T19:01:24.2193059Z [36;1mcargo check -p engine-native-kernel -p engine-native-content -p engine-native --all-targets[0m
+2026-11-13T19:01:24.2749566Z shell: /usr/bin/bash -e {0}
+2026-11-13T19:01:24.2749771Z env:
+2026-11-13T19:01:24.2749916Z   CARGO_TERM_COLOR: always
+2026-11-13T19:01:24.2750069Z   CARGO_HOME: /home/runner/.cargo
+2026-11-13T19:01:24.2750229Z   CARGO_INCREMENTAL: 0
+2026-11-13T19:01:24.2750367Z   CACHE_ON_FAILURE: false
+2026-11-13T19:01:24.2750547Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-11-13T19:01:24.2750748Z   RUSTFLAGS: -D warnings
+2026-11-13T19:01:24.2750894Z ##[endgroup]
+2026-11-13T19:01:24.3182850Z [1m[33mwarning[0m[1m: unused workspace dependency `accessibility-schema`[0m
+2026-11-13T19:01:24.3183250Z   [1m[94m--> [0mCargo.toml:72:1
+2026-11-13T19:01:24.3183446Z    [1m[94m|[0m
+2026-11-13T19:01:24.3183810Z [1m[94m72[0m [1m[94m|[0m accessibility-schema = { path = "crates/accessibility-schema" }
+2026-11-13T19:01:24.3184179Z    [1m[94m|[0m [1m[33m^^^^^^^^^^^^^^^^^^^^[0m
+2026-11-13T19:01:24.3184366Z    [1m[94m|[0m
+2026-11-13T19:01:24.3184850Z    [1m[94m= [0m[1mnote[0m: `cargo::unused_workspace_dependencies` is set to `warn` by default
+2026-11-13T19:01:24.3185260Z [1m[96mhelp[0m: consider removing the workspace dependency `accessibility-schema`
+2026-11-13T19:01:24.3185655Z [1m[33mwarning[0m[1m: unused workspace dependency `bytemuck`[0m
+2026-11-13T19:01:24.3185903Z   [1m[94m--> [0mCargo.toml:80:1
+2026-11-13T19:01:24.3186081Z    [1m[94m|[0m
+2026-11-13T19:01:24.3186356Z [1m[94m80[0m [1m[94m|[0m bytemuck = { version = "1", features = ["derive"] }
+2026-11-13T19:01:24.3186614Z    [1m[94m|[0m [1m[33m^^^^^^^^[0m
+2026-11-13T19:01:24.3186786Z    [1m[94m|[0m
+2026-11-13T19:01:24.3187041Z [1m[96mhelp[0m: consider removing the workspace dependency `bytemuck`
+2026-11-13T19:01:24.3187589Z [1m[33mwarning[0m[1m: unused workspace dependency `devtools`[0m
+2026-11-13T19:01:24.3187837Z   [1m[94m--> [0mCargo.toml:73:1
+2026-11-13T19:01:24.3188000Z    [1m[94m|[0m
+2026-11-13T19:01:24.3188237Z [1m[94m73[0m [1m[94m|[0m devtools = { path = "crates/devtools" }
+2026-11-13T19:01:24.3188472Z    [1m[94m|[0m [1m[33m^^^^^^^^[0m
+2026-11-13T19:01:24.3188638Z    [1m[94m|[0m
+2026-11-13T19:01:24.3188905Z [1m[96mhelp[0m: consider removing the workspace dependency `devtools`
+2026-11-13T19:01:24.3189253Z [1m[33mwarning[0m[1m: unused workspace dependency `diagnostics`[0m
+2026-11-13T19:01:24.3189508Z   [1m[94m--> [0mCargo.toml:69:1
+2026-11-13T19:01:24.3189679Z    [1m[94m|[0m
+2026-11-13T19:01:24.3189944Z [1m[94m69[0m [1m[94m|[0m diagnostics = { path = "crates/diagnostics" }
+2026-11-13T19:01:24.3190198Z    [1m[94m|[0m [1m[33m^^^^^^^^^^^[0m
+2026-11-13T19:01:24.3190373Z    [1m[94m|[0m
+2026-11-13T19:01:24.3190633Z [1m[96mhelp[0m: consider removing the workspace dependency `diagnostics`
+2026-11-13T19:01:24.3191286Z [1m[33mwarning[0m[1m: unused field `repository` in `workspace.package`[0m
+2026-11-13T19:01:24.3191557Z   [1m[94m--> [0mCargo.toml:59:1
+2026-11-13T19:01:24.3191724Z    [1m[94m|[0m
+2026-11-13T19:01:24.3192000Z [1m[94m59[0m [1m[94m|[0m repository = "https://github.com/local/noname-next"
+2026-11-13T19:01:24.3192260Z    [1m[94m|[0m [1m[33m^^^^^^^^^^[0m
+2026-11-13T19:01:24.3192436Z    [1m[94m|[0m
+2026-11-13T19:01:24.3192754Z    [1m[94m= [0m[1mnote[0m: `cargo::unused_workspace_package_fields` is set to `warn` by default
+2026-11-13T19:01:24.3193137Z [1m[96mhelp[0m: consider removing the field `workspace.package.repository`
+2026-11-13T19:01:24.3193468Z [1m[33mwarning[0m: workspace (manifest) generated 5 warnings
+2026-11-13T19:01:24.5741837Z [1m[92m    Checking[0m engine-api v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-api)
+2026-11-13T19:01:24.5781970Z [1m[92m    Checking[0m resource-schema v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/resource-schema)
+2026-11-13T19:01:24.5783687Z [1m[92m    Checking[0m licensing-schema v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/licensing-schema)
+2026-11-13T19:01:25.8875306Z [1m[92m    Checking[0m rule-api v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/rule-api)
+2026-11-13T19:01:35.2220492Z [1m[92m    Checking[0m rule-vm v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/rule-vm)
+2026-11-13T19:01:35.6966090Z [1m[92m    Checking[0m engine-native-kernel v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-native-kernel)
+2026-11-13T19:01:35.6967841Z [1m[92m    Checking[0m content-schema v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/content-schema)
+2026-11-13T19:01:40.2290066Z [1m[92m    Checking[0m engine-native-content v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-native-content)
+2026-11-13T19:01:44.3299493Z [1m[92m    Checking[0m engine-native v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/engine-native)
+2026-11-13T19:01:45.4124252Z [1m[92m    Checking[0m content-runtime v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/content-runtime)
+2026-11-13T19:01:45.4125778Z [1m[92m    Checking[0m content-compiler v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/content-compiler)
+2026-11-13T19:01:45.9179361Z [1m[92m    Checking[0m content-native-loader v0.1.0 (/home/runner/work/RuyimgByCN-noname-ruyimg-modified/RuyimgByCN-noname-ruyimg-modified/noname-next/crates/content-native-loader)
+2026-11-13T19:01:52.8512274Z [1m[92m    Finished[0m `dev` profile [unoptimized + debuginfo] target(s) in 28.54s

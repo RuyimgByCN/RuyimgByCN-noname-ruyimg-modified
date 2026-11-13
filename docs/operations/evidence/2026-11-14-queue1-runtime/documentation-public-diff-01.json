@@ -1,0 +1,28 @@
+{
+  "at": "2026-11-14T03:29:26.537177+08:00",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "argv": [
+    "git",
+    "diff",
+    "--check",
+    "--",
+    "docs/architecture/native-progress.md",
+    "docs/architecture/native-remaining-ledger.md",
+    "docs/architecture/native-rules-baseline.md",
+    "docs/migration/g0/L10-史诗卡牌.md",
+    "docs/migration/g0/L28-雷霆万钧.md",
+    "docs/migration/g0/README.md",
+    "docs/migration/g0/U08-英雄杀.md",
+    "docs/migration/g0/inventory_status.json",
+    "docs/migration/upstream-extension-reconstruction.md",
+    "docs/operations/evidence/2026-10-19-source-signoff-32/README.md",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/README.md",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/publication/README.md",
+    "docs/operations/evidence/2026-11-14-queue1-runtime/remaining-scope.md"
+  ],
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "scope": "自有公共文档与清单；冻结原始转录/失败输出不为消除历史空白而改写。新增根说明在stage后另查。"
+}

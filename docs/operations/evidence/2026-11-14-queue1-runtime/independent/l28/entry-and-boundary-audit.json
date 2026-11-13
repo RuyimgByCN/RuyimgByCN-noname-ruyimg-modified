@@ -1,0 +1,327 @@
+{
+  "at": "2026-11-13T19:08:08.296663+00:00",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "exact_card_property_reassembly_equal": true,
+  "card_source_lines": [
+    8968,
+    9016
+  ],
+  "case_checks": [
+    {
+      "case": "buxu-basic",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 2,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "buxu-equip",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 2,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "buxu-nullify",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 2,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "buxu-cancel",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 0,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "buxu-empty",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 0,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "buxu-full",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 0,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "buxu-twice",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 4,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "buxu-invalid",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 2,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "zhengjing-one-self",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 0,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "zhengjing-three-target",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 0,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "zhengjing-zero",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 0,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "zhengjing-cancel",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 0,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "zhengjing-no-skill",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 0,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "yeyan-small-one",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 3,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "yeyan-small-three",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 9,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "yeyan-great-one",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 9,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "yeyan-great-split",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 9,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "yeyan-cancel",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 0,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "yeyan-used",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 0,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "yeyan-no-four",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 6,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "yeyan-target-cancel",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 3,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "yeyan-great-discard-cancel",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 15,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "yeyan-great-one-default",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 9,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "yeyan-great-split-default",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 9,
+      "original_card_bootstrap_drained_before_fixture": true
+    },
+    {
+      "case": "yeyan-great-two",
+      "exact_driver_payload_matches": {
+        "actual-phaseUse-start": true,
+        "install-skills": true,
+        "install-helpers": true,
+        "install-card": true,
+        "reload": true
+      },
+      "mouse_event_count": 6,
+      "original_card_bootstrap_drained_before_fixture": true
+    }
+  ],
+  "runtime_scope": {
+    "upstream_core": "original noname-liuli game/game.js 1.10.1.0.1",
+    "original_extension_properties": "five skill properties, nine original game helpers, one real card property are injected unchanged and registered by finishSkill; extension content/precontent is not executed",
+    "actual_entry": "fresh location.reload per case, original onfree/cardsAsync drained, then real phaseUse/chooseToUse, ui.click.skill/card/ok/cancel and actual CDP Input.dispatchMouseEvent for custom buttons/flames",
+    "not_verified": [
+      "complete extension installation/precontent/content/default interactions",
+      "full original standard+extra pile parity; native125 is a subset with21 tuples absent from original lists",
+      "complete upstream storage/event queue/history/RNG state",
+      "death/dying/chained fire damage, effective-suit modifiers, natural extra-phase/turn resets",
+      "th_zhengjing successful mini-game/target/distribution/cancellation upstream; dcdAnim ReferenceError occurs in original filter",
+      "direct UI cancellation while four-card great-Yeyan auto-selection is active; observed cancel follows undo to one flame",
+      "buxu missing-class/no-match and discard-pile fallback runtime; only source proves behavior here",
+      "th_zhengjing2 actual next Prepare resolution is outside this25-case runtime cohort"
+    ]
+  },
+  "no_equivalence_signoff": true
+}

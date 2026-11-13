@@ -1,0 +1,4 @@
+   Compiling u08-independent-archive-review v0.0.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/independent/u08/archive-probe)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.13s
+     Running `target/debug/u08-independent-archive-review`
+{"all_pass":true,"pending_archive_count":76}

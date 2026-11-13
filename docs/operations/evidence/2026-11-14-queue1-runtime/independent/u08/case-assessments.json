@@ -1,0 +1,1174 @@
+[
+  {
+    "case": "y_target_A",
+    "inventory_key": "U08:skills:yixin@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:337",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "实际选弃牌9/42、目标1；损失2体力→回复2、摸106/49，目标HP=4。费用候选与受伤目标候选相同。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-y_target_A.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-y_target_A.json",
+    "cdp_assignment_line": 588,
+    "cdp_final_snapshot_line": 600,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 2,
+      "restored": 2
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 337,
+      "source_text": "\tyixin: {",
+      "label": "上游医心",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "y_target_B",
+    "inventory_key": "U08:skills:yixin@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:337",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "实际选弃牌9/42、目标2；其6上限/1体力→回复4至5，不摸牌；不是回复满至6。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-y_target_B.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-y_target_B.json",
+    "cdp_assignment_line": 605,
+    "cdp_final_snapshot_line": 617,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 2,
+      "restored": 2
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 337,
+      "source_text": "\tyixin: {",
+      "label": "上游医心",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "y_cost_B",
+    "inventory_key": "U08:skills:yixin@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:337",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "改选弃牌42/46，剩手牌9；目标1仍回复2并摸106/49，费用A/B产生不同剩手牌。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-y_cost_B.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-y_cost_B.json",
+    "cdp_assignment_line": 622,
+    "cdp_final_snapshot_line": 634,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 2,
+      "restored": 2
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 337,
+      "source_text": "\tyixin: {",
+      "label": "上游医心",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "y_self",
+    "inventory_key": "U08:skills:yixin@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:337",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "目标实际为自己；HP 2→4，弃9/42后摸106/49；目标候选含自己。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-y_self.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-y_self.json",
+    "cdp_assignment_line": 639,
+    "cdp_final_snapshot_line": 651,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 2,
+      "restored": 2
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 337,
+      "source_text": "\tyixin: {",
+      "label": "上游医心",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "y_cancel_cards",
+    "inventory_key": "U08:skills:yixin@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:337",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "真实取消选技能后退回，重新打开再次取消；原生两次空答均接受、未弃牌/回复/摸牌/消耗限定标记。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-y_cancel_cards.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-y_cancel_cards.json",
+    "cdp_assignment_line": 656,
+    "cdp_final_snapshot_line": 672,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 2,
+      "restored": 2
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 337,
+      "source_text": "\tyixin: {",
+      "label": "上游医心",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "y_cancel_target",
+    "inventory_key": "U08:skills:yixin@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:337",
+    "assessment": "指定牌区/HP/标记相同；实际取消动作与阶段端点不同",
+    "observed_behavior": "上游选满两张牌后没有取消按钮，实际点“结束回合”并结束phaseUse；原生空目标答后可在原Play阶段重开。费用和限定标记均未消耗，但取消动作与阶段端点不同。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-y_cancel_target.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-y_cancel_target.json",
+    "cdp_assignment_line": 677,
+    "cdp_final_snapshot_line": 689,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 3,
+      "restored": 3
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 337,
+      "source_text": "\tyixin: {",
+      "label": "上游医心",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "y_two_cards",
+    "inventory_key": "U08:skills:yixin@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:337",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "恰有2张he；上游候选不含医心，原生ActivateSkill拒绝；没有付费或结算。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-y_two_cards.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-y_two_cards.json",
+    "cdp_assignment_line": 694,
+    "cdp_final_snapshot_line": 700,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 0,
+      "restored": 0
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 337,
+      "source_text": "\tyixin: {",
+      "label": "上游医心",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "y_no_wound",
+    "inventory_key": "U08:skills:yixin@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:337",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "无人受伤；上游仍可点技能但无合法目标/确认键，取消退回；原生ActivateSkill直接拒绝。均未结算，不把候选UI差别写成规则效果差异。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-y_no_wound.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-y_no_wound.json",
+    "cdp_assignment_line": 705,
+    "cdp_final_snapshot_line": 716,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 0,
+      "restored": 0
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 337,
+      "source_text": "\tyixin: {",
+      "label": "上游医心",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "y_reuse",
+    "inventory_key": "U08:skills:yixin@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:337",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "首次选9/42与目标1成功；第二次上游候选不含医心、原生命令拒绝。本案只测同一阶段再次发动，未跑下一回合。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-y_reuse.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-y_reuse.json",
+    "cdp_assignment_line": 721,
+    "cdp_final_snapshot_line": 736,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 2,
+      "restored": 2
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 337,
+      "source_text": "\tyixin: {",
+      "label": "上游医心",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "y_no_skill",
+    "inventory_key": "U08:skills:yixin@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:337",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "未授医心；上游候选不含，原生NoSuchSkill；牌区和HP未变。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-y_no_skill.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-y_no_skill.json",
+    "cdp_assignment_line": 741,
+    "cdp_final_snapshot_line": 747,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 0,
+      "restored": 0
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 337,
+      "source_text": "\tyixin: {",
+      "label": "上游医心",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "g_target_A",
+    "inventory_key": "U08:skills:guifu@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:3095",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "实际目标1，弃其青釭114；依次给座0无中106、座1桃46，另一座2连弩118保留。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-g_target_A.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-g_target_A.json",
+    "cdp_assignment_line": 752,
+    "cdp_final_snapshot_line": 761,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 1,
+      "restored": 1
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 3095,
+      "source_text": "\tguifu: {",
+      "label": "上游鬼斧",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "g_target_B",
+    "inventory_key": "U08:skills:guifu@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:3095",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "实际目标2，弃其连弩118；座0摸106、座2摸46，座1青釭114保留。目标A/B确有不同装备及获牌者。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-g_target_B.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-g_target_B.json",
+    "cdp_assignment_line": 766,
+    "cdp_final_snapshot_line": 775,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 1,
+      "restored": 1
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 3095,
+      "source_text": "\tguifu: {",
+      "label": "上游鬼斧",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "g_cancel_target",
+    "inventory_key": "U08:skills:guifu@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:3095",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "真实取消后重开又取消；原生空目标答两次接受并返还次数；双方未弃装备、未摸牌。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-g_cancel_target.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-g_cancel_target.json",
+    "cdp_assignment_line": 780,
+    "cdp_final_snapshot_line": 796,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 2,
+      "restored": 2
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 3095,
+      "source_text": "\tguifu: {",
+      "label": "上游鬼斧",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "g_no_equip",
+    "inventory_key": "U08:skills:guifu@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:3095",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "全桌无装备；上游可点技能但无合法目标，原生直接拒绝；双方未弃牌/摸牌。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-g_no_equip.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-g_no_equip.json",
+    "cdp_assignment_line": 801,
+    "cdp_final_snapshot_line": 812,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 0,
+      "restored": 0
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 3095,
+      "source_text": "\tguifu: {",
+      "label": "上游鬼斧",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "g_only_own",
+    "inventory_key": "U08:skills:guifu@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:3095",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "仅自己有青釭114；上游无合法目标、原生拒绝；自己装备保留，不可对自己发动。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-g_only_own.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-g_only_own.json",
+    "cdp_assignment_line": 817,
+    "cdp_final_snapshot_line": 828,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 0,
+      "restored": 0
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 3095,
+      "source_text": "\tguifu: {",
+      "label": "上游鬼斧",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "g_reuse",
+    "inventory_key": "U08:skills:guifu@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:3095",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "首次弃目标1青釭并各摸1；第二次上游候选不含鬼斧、原生SkillAlreadyUsed。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-g_reuse.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-g_reuse.json",
+    "cdp_assignment_line": 833,
+    "cdp_final_snapshot_line": 845,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 1,
+      "restored": 1
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 3095,
+      "source_text": "\tguifu: {",
+      "label": "上游鬼斧",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "g_no_skill",
+    "inventory_key": "U08:skills:guifu@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:3095",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "未授鬼斧；上游候选不含，原生NoSuchSkill；他人装备未动。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-g_no_skill.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-g_no_skill.json",
+    "cdp_assignment_line": 850,
+    "cdp_final_snapshot_line": 856,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 0,
+      "restored": 0
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 3095,
+      "source_text": "\tguifu: {",
+      "label": "上游鬼斧",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "b_hit",
+    "inventory_key": "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "真实点击“能命中”/原生Tag1；目标未出闪，HP 4→3，慧眼主摸106并消耗本回合次数。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_hit.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_hit.json",
+    "cdp_assignment_line": 861,
+    "cdp_final_snapshot_line": 871,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 1,
+      "restored": 1
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 2407,
+      "source_text": "\tbolehuiyan: {",
+      "label": "上游慧眼",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "b_miss",
+    "inventory_key": "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "真实点击“不能命中”/Tag2，目标真实使用闪42；目标HP=4，慧眼主摸106。原生RespondCard、上游chooseToUse分列。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_miss.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_miss.json",
+    "cdp_assignment_line": 876,
+    "cdp_final_snapshot_line": 887,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 2,
+      "restored": 2
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 2407,
+      "source_text": "\tbolehuiyan: {",
+      "label": "上游慧眼",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "b_wrong_A",
+    "inventory_key": "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "预测能命中后目标真实使用闪42；失败强制弃主手牌4，剩46，不额外摸牌；实际失败弃牌窗口已触发。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_wrong_A.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_wrong_A.json",
+    "cdp_assignment_line": 892,
+    "cdp_final_snapshot_line": 907,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 3,
+      "restored": 3
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 2407,
+      "source_text": "\tbolehuiyan: {",
+      "label": "上游慧眼",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "b_wrong_B",
+    "inventory_key": "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "同一预测失败分支改弃46，剩4；弃牌A/B实际选择不同实体。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_wrong_B.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_wrong_B.json",
+    "cdp_assignment_line": 912,
+    "cdp_final_snapshot_line": 927,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 3,
+      "restored": 3
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 2407,
+      "source_text": "\tbolehuiyan: {",
+      "label": "上游慧眼",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "b_wrong_miss",
+    "inventory_key": "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "预测不能命中、目标未出闪；HP 4→3，慧眼主强制弃4、剩46；没有预测失败摸牌。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_wrong_miss.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_wrong_miss.json",
+    "cdp_assignment_line": 932,
+    "cdp_final_snapshot_line": 946,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 2,
+      "restored": 2
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 2407,
+      "source_text": "\tbolehuiyan: {",
+      "label": "上游慧眼",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "b_cancel_predict",
+    "inventory_key": "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+    "assessment": "双端实际取消行为差异",
+    "observed_behavior": "真实DOM点击cancel返回{confirm:cancel,bool:false}，没有control。上游因此加bolehuiyan4，原生空答不设used_turn；HP和牌区相同仍不能签取消语义相同。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_cancel_predict.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_cancel_predict.json",
+    "cdp_assignment_line": 951,
+    "cdp_final_snapshot_line": 961,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [
+      {
+        "field": "bolehuiyan_used_this_turn",
+        "native": false,
+        "upstream": true
+      }
+    ],
+    "pending_counts": {
+      "direct": 1,
+      "restored": 1
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 2407,
+      "source_text": "\tbolehuiyan: {",
+      "label": "上游慧眼",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "b_cancel_discard",
+    "inventory_key": "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+    "assessment": "双端均待答；强制待答时使用牌所在区域不同",
+    "observed_behavior": "预测不能命中后实际受伤，停于强制弃牌；上游无取消按钮、未尝试隐藏空答；原生空答被拒且仍pending。杀9此时上游ordering、原生discard。该案未完成结算。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_cancel_discard.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_cancel_discard.json",
+    "cdp_assignment_line": 966,
+    "cdp_final_snapshot_line": 975,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [
+      {
+        "field": "new_discard_entities_unordered",
+        "native": [
+          {
+            "id": 9,
+            "name": "sha",
+            "suit": "club",
+            "rank": 4,
+            "nature": null
+          }
+        ],
+        "upstream": []
+      },
+      {
+        "field": "table_or_ordering_entities",
+        "native": [],
+        "upstream": [
+          {
+            "id": 9,
+            "name": "sha",
+            "suit": "club",
+            "rank": 4,
+            "nature": null
+          }
+        ]
+      }
+    ],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 2,
+      "restored": 2
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 2407,
+      "source_text": "\tbolehuiyan: {",
+      "label": "上游慧眼",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "b_empty_target",
+    "inventory_key": "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "目标初始无手牌，双方均无预测；杀使其HP 4→3。上游仍打开无闪chooseToUse并被真实取消，原生直接结算。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_empty_target.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_empty_target.json",
+    "cdp_assignment_line": 981,
+    "cdp_final_snapshot_line": 988,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 0,
+      "restored": 0
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 2407,
+      "source_text": "\tbolehuiyan: {",
+      "label": "上游慧眼",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "b_owner_attacker",
+    "inventory_key": "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "慧眼主自己作为来源出杀，双方均不预测；目标1 HP 4→3。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_owner_attacker.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_owner_attacker.json",
+    "cdp_assignment_line": 993,
+    "cdp_final_snapshot_line": 1000,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 0,
+      "restored": 0
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 2407,
+      "source_text": "\tbolehuiyan: {",
+      "label": "上游慧眼",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "b_owner_target",
+    "inventory_key": "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "慧眼主自己成为目标，双方均不预测；其HP 4→3。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_owner_target.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_owner_target.json",
+    "cdp_assignment_line": 1005,
+    "cdp_final_snapshot_line": 1012,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 0,
+      "restored": 0
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 2407,
+      "source_text": "\tbolehuiyan: {",
+      "label": "上游慧眼",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "b_under_control",
+    "inventory_key": "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+    "assessment": "双端实际受控条件差异；控制关系不属于共同初态投影",
+    "observed_behavior": "上游目标2._trueMe=座0且isUnderControl=true，未出现预测；原生缺该条件仍问Tag1并额外摸106。控制关系不在双方共同初态投影内。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_under_control.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_under_control.json",
+    "cdp_assignment_line": 1017,
+    "cdp_final_snapshot_line": 1024,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [
+      {
+        "field": "players[0].hand",
+        "native": [
+          {
+            "id": 106,
+            "name": "wuzhong",
+            "suit": "heart",
+            "rank": 9,
+            "nature": null
+          },
+          {
+            "id": 4,
+            "name": "sha",
+            "suit": "spade",
+            "rank": 9,
+            "nature": null
+          },
+          {
+            "id": 46,
+            "name": "tao",
+            "suit": "heart",
+            "rank": 4,
+            "nature": null
+          }
+        ],
+        "upstream": [
+          {
+            "id": 4,
+            "name": "sha",
+            "suit": "spade",
+            "rank": 9,
+            "nature": null
+          },
+          {
+            "id": 46,
+            "name": "tao",
+            "suit": "heart",
+            "rank": 4,
+            "nature": null
+          }
+        ]
+      },
+      {
+        "field": "deck_top_first",
+        "native": [
+          {
+            "id": 50,
+            "name": "tao",
+            "suit": "heart",
+            "rank": 9,
+            "nature": null
+          },
+          {
+            "id": 114,
+            "name": "qinggang",
+            "suit": "spade",
+            "rank": 6,
+            "nature": null
+          },
+          {
+            "id": 10,
+            "name": "sha",
+            "suit": "club",
+            "rank": 5,
+            "nature": null
+          },
+          {
+            "id": 65,
+            "name": "guohe",
+            "suit": "spade",
+            "rank": 4,
+            "nature": null
+          },
+          {
+            "id": 42,
+            "name": "shan",
+            "suit": "diamond",
+            "rank": 10,
+            "nature": null
+          },
+          {
+            "id": 118,
+            "name": "zhuge",
+            "suit": "diamond",
+            "rank": 1,
+            "nature": null
+          },
+          {
+            "id": 86,
+            "name": "jiu",
+            "suit": "club",
+            "rank": 9,
+            "nature": null
+          }
+        ],
+        "upstream": [
+          {
+            "id": 106,
+            "name": "wuzhong",
+            "suit": "heart",
+            "rank": 9,
+            "nature": null
+          },
+          {
+            "id": 50,
+            "name": "tao",
+            "suit": "heart",
+            "rank": 9,
+            "nature": null
+          },
+          {
+            "id": 114,
+            "name": "qinggang",
+            "suit": "spade",
+            "rank": 6,
+            "nature": null
+          },
+          {
+            "id": 10,
+            "name": "sha",
+            "suit": "club",
+            "rank": 5,
+            "nature": null
+          },
+          {
+            "id": 65,
+            "name": "guohe",
+            "suit": "spade",
+            "rank": 4,
+            "nature": null
+          },
+          {
+            "id": 42,
+            "name": "shan",
+            "suit": "diamond",
+            "rank": 10,
+            "nature": null
+          },
+          {
+            "id": 118,
+            "name": "zhuge",
+            "suit": "diamond",
+            "rank": 1,
+            "nature": null
+          },
+          {
+            "id": 86,
+            "name": "jiu",
+            "suit": "club",
+            "rank": 9,
+            "nature": null
+          }
+        ]
+      }
+    ],
+    "semantic_usage_flag_differences": [
+      {
+        "field": "bolehuiyan_used_this_turn",
+        "native": true,
+        "upstream": false
+      }
+    ],
+    "pending_counts": {
+      "direct": 1,
+      "restored": 1
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 2407,
+      "source_text": "\tbolehuiyan: {",
+      "label": "上游慧眼",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "b_repeat",
+    "inventory_key": "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "同回合两张普通杀只实际预测一次，目标HP=2、慧眼主只摸106一次。上游出杀ID顺序10→9、原生9→10，不能称完整轨迹同一。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_repeat.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_repeat.json",
+    "cdp_assignment_line": 1029,
+    "cdp_final_snapshot_line": 1042,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 1,
+      "restored": 1
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 2407,
+      "source_text": "\tbolehuiyan: {",
+      "label": "上游慧眼",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "b_cancel_then_retry",
+    "inventory_key": "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+    "assessment": "双端实际取消行为差异",
+    "observed_behavior": "第一次真实cancel已使上游加bolehuiyan4；第二杀不上预测、未摸106。原生第一次空答后第二杀再次Tag1并摸106。出杀实体先后同样不同，取消后的次数差异在第二杀前已直接可见。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_cancel_then_retry.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_cancel_then_retry.json",
+    "cdp_assignment_line": 1047,
+    "cdp_final_snapshot_line": 1060,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [
+      {
+        "field": "players[0].hand",
+        "native": [
+          {
+            "id": 106,
+            "name": "wuzhong",
+            "suit": "heart",
+            "rank": 9,
+            "nature": null
+          },
+          {
+            "id": 4,
+            "name": "sha",
+            "suit": "spade",
+            "rank": 9,
+            "nature": null
+          },
+          {
+            "id": 46,
+            "name": "tao",
+            "suit": "heart",
+            "rank": 4,
+            "nature": null
+          }
+        ],
+        "upstream": [
+          {
+            "id": 4,
+            "name": "sha",
+            "suit": "spade",
+            "rank": 9,
+            "nature": null
+          },
+          {
+            "id": 46,
+            "name": "tao",
+            "suit": "heart",
+            "rank": 4,
+            "nature": null
+          }
+        ]
+      },
+      {
+        "field": "deck_top_first",
+        "native": [
+          {
+            "id": 50,
+            "name": "tao",
+            "suit": "heart",
+            "rank": 9,
+            "nature": null
+          },
+          {
+            "id": 114,
+            "name": "qinggang",
+            "suit": "spade",
+            "rank": 6,
+            "nature": null
+          },
+          {
+            "id": 7,
+            "name": "sha",
+            "suit": "club",
+            "rank": 2,
+            "nature": null
+          },
+          {
+            "id": 65,
+            "name": "guohe",
+            "suit": "spade",
+            "rank": 4,
+            "nature": null
+          },
+          {
+            "id": 42,
+            "name": "shan",
+            "suit": "diamond",
+            "rank": 10,
+            "nature": null
+          },
+          {
+            "id": 86,
+            "name": "jiu",
+            "suit": "club",
+            "rank": 9,
+            "nature": null
+          }
+        ],
+        "upstream": [
+          {
+            "id": 106,
+            "name": "wuzhong",
+            "suit": "heart",
+            "rank": 9,
+            "nature": null
+          },
+          {
+            "id": 50,
+            "name": "tao",
+            "suit": "heart",
+            "rank": 9,
+            "nature": null
+          },
+          {
+            "id": 114,
+            "name": "qinggang",
+            "suit": "spade",
+            "rank": 6,
+            "nature": null
+          },
+          {
+            "id": 7,
+            "name": "sha",
+            "suit": "club",
+            "rank": 2,
+            "nature": null
+          },
+          {
+            "id": 65,
+            "name": "guohe",
+            "suit": "spade",
+            "rank": 4,
+            "nature": null
+          },
+          {
+            "id": 42,
+            "name": "shan",
+            "suit": "diamond",
+            "rank": 10,
+            "nature": null
+          },
+          {
+            "id": 86,
+            "name": "jiu",
+            "suit": "club",
+            "rank": 9,
+            "nature": null
+          }
+        ]
+      }
+    ],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 2,
+      "restored": 2
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 2407,
+      "source_text": "\tbolehuiyan: {",
+      "label": "上游慧眼",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  },
+  {
+    "case": "b_no_skill",
+    "inventory_key": "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+    "assessment": "指定终态投影与用次标记相同；不代表完整规则等价",
+    "observed_behavior": "未授慧眼；双方均无预测，目标HP 4→3，慧眼主未摸106。",
+    "native_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/native-round2/native-b_no_skill.json",
+    "upstream_raw": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-14-queue1-runtime/U08/browser-round4/upstream-b_no_skill.json",
+    "cdp_assignment_line": 1065,
+    "cdp_final_snapshot_line": 1072,
+    "initial_player_projection_matches": true,
+    "initial_deck_projection_matches": true,
+    "full_initial_state_compared_or_equal": false,
+    "specified_final_projection_differences": [],
+    "semantic_usage_flag_differences": [],
+    "pending_counts": {
+      "direct": 0,
+      "restored": 0
+    },
+    "source_skill_anchor": {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js",
+      "line": 2407,
+      "source_text": "\tbolehuiyan: {",
+      "label": "上游慧眼",
+      "sha256": "3c07c24d79b7abf6fb07584d89b57a6584ccc0c85388c2b747d528f0113d4f98"
+    },
+    "new_equivalence_signoff": false
+  }
+]

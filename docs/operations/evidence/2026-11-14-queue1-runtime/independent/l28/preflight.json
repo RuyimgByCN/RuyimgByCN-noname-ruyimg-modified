@@ -1,0 +1,15 @@
+{
+  "at": "2026-11-13T18:52:13.996427+00:00",
+  "owner": "/root/fix_dddanzhi",
+  "source": "L28",
+  "head": "5c73d1d9158145e33f98f2018013914667d13964",
+  "tracked_status": " M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/migration/g0/L10-史诗卡牌.md\n M docs/migration/g0/inventory_status.json\n M docs/operations/evidence/2026-11-14-queue1-runtime/README.md\n M docs/operations/evidence/2026-11-14-queue1-runtime/publication/README.md\n",
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "scope": "Independent source review first; runtime input not frozen yet. Only upstream/native source and original tests read. Collector narratives/conclusions/comparison code excluded."
+}
