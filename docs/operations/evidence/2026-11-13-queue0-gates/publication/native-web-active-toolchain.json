@@ -1,0 +1,14 @@
+{
+  "at": "2026-11-13T14:47:43.209570+00:00",
+  "source_head": "1d59f42b8b493e1fbac7a0e8b8c781ccef1ea61c",
+  "run_id": 43442212867,
+  "job": "native-web",
+  "active_rustc_versions": [
+    "1.100.0"
+  ],
+  "old_preinstalled_version_mentioned": "1.99.1",
+  "local_strict_new_test_rustc": "1.99.1",
+  "local_wasm_rustup_rustc": "1.95.0",
+  "workflow_toolchain_configuration_changed": false,
+  "log": "native-web-completed-job.log"
+}

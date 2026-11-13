@@ -1,5 +1,9 @@
 # 32 个已映射来源的**八项签署状态**（第 494 轮基线 + 2026-11-10 裁决 34/35 第五轮死旗标清退与如实复核）
 
+## 2026-11-13T23:03:20+08:00 第0项代码发布及CI记录
+
+代码 `1d59f42b8b493e1fbac7a0e8b8c781ccef1ea61c` 已发布到批准分支；[精确SHA的CI](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43442212867) attempt 1全部10作业success，完整[发布与验证证据](../2026-11-13-queue0-gates/publication/code-exact-ci-first/README.md)。记录时HEAD为代码提交加文档dirty，规则333／NGSA107／schema5／ABI759／WS8不变，产品／工具冻结输入相同。全部37来源八项签署保持0/37，没有以绿色测试替代功能、配置、依赖、组合、保存恢复、目标平台、性能和全部差异逐源验收。
+
 ## 2026-11-13T22:21:49+08:00 第0项本地验证与待发布状态
 
 源码HEAD `3a6e398485db6ef0729abe3013c3c4b7705a5d6d` + tracked dirty；版本333／107／5／759／WS8。全部要求的本地门禁与独立复核已通过，原始失败／补跑见[最终本地表](../2026-11-13-queue0-gates/final-local-gates.md)；当前尚未提交、推送或登记本批CI。本地门禁不代替来源功能及全部差异签署，整包八项保持0/37；旧日期表格原样保留。后续进度仍写在[当前进度](../../../architecture/native-progress.md)，实际发布结果另增记录。

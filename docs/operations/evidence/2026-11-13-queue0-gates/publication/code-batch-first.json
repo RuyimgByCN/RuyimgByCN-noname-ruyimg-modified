@@ -1,0 +1,86 @@
+{
+  "started_at": "2026-11-13T14:23:01.841013+00:00",
+  "authorization": "Decision 25 and queue item 0",
+  "approved_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+  "approved_sha": "1d59f42b8b493e1fbac7a0e8b8c781ccef1ea61c",
+  "expected_remote_old": "99d9091bb28b55e28b620be16d1b7f343682783f",
+  "target_ref": "refs/heads/native-convergence",
+  "original_hook_sha256": "e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7",
+  "selftests": [
+    {
+      "case": "exact",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "wrong-remote-name",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "stderr": "Exact publication guard rejected unexpected URL, SHA, ref, or remote parent\n"
+    },
+    {
+      "case": "wrong-url",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "stderr": "Exact publication guard rejected unexpected URL, SHA, ref, or remote parent\n"
+    },
+    {
+      "case": "wrong-local-ref",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "stderr": "Exact publication guard rejected unexpected URL, SHA, ref, or remote parent\n"
+    },
+    {
+      "case": "wrong-local-sha",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "stderr": "Exact publication guard rejected unexpected URL, SHA, ref, or remote parent\n"
+    },
+    {
+      "case": "wrong-target",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "stderr": "Exact publication guard rejected unexpected URL, SHA, ref, or remote parent\n"
+    },
+    {
+      "case": "wrong-remote-parent",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "stderr": "Exact publication guard rejected unexpected URL, SHA, ref, or remote parent\n"
+    },
+    {
+      "case": "delete",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "stderr": "Exact publication guard rejected unexpected URL, SHA, ref, or remote parent\n"
+    },
+    {
+      "case": "multiple-updates",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "stderr": "Exact publication guard rejected unexpected URL, SHA, ref, or remote parent\n"
+    },
+    {
+      "case": "empty",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "stderr": "Exact publication guard rejected unexpected URL, SHA, ref, or remote parent\n"
+    }
+  ],
+  "argv": [
+    "git",
+    "-c",
+    "core.hooksPath=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue0-exact-push-omg0yad5",
+    "push",
+    "--porcelain",
+    "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+    "1d59f42b8b493e1fbac7a0e8b8c781ccef1ea61c:refs/heads/native-convergence"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-11-13T14:23:09.514853+00:00",
+  "remote_after": "1d59f42b8b493e1fbac7a0e8b8c781ccef1ea61c\trefs/heads/native-convergence",
+  "original_hook_unchanged": true,
+  "persistent_git_configuration_unchanged": true,
+  "temporary_guard_removed": true
+}

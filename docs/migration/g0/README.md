@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-13T23:03:20+08:00 第0项发布核验
+
+代码 `1d59f42b8b493e1fbac7a0e8b8c781ccef1ea61c` 已推送，精确SHA的[CI](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43442212867)通过。规则333／NGSA107／schema5／ABI759／WS8；记录时该HEAD加文档dirty。当前清单仍为849／3575／0，U01和L20保留本批下调，未新增等价认证；[逐来源表](../../operations/evidence/2026-11-13-queue0-gates/source-counts.md)及[独立分支样本](../../operations/evidence/2026-11-13-queue0-gates/independent-review/final-report.md)。整包八项0/37，队列1以后未开始。
+
 ## 2026-11-13T21:42:47+08:00 第 0 项逐来源计数核验
 
 HEAD `3a6e398485db6ef0729abe3013c3c4b7705a5d6d` + tracked dirty；规则 333／NGSA 107／schema 5／ABI 759／WS8。清单逐对象重算，共 4,424 项。暗织及 Fz 两项降为简化近似，其余状态沿用原清单，未由本批重新认证；13 来源的上游实际触发补课仍待。完整产品门禁执行中，尚未提交／发布。原始计数与 SHA256 见[统计证据](../../operations/evidence/2026-11-13-queue0-gates/source-counts.json)，逐分支复核见[独立报告](../../operations/evidence/2026-11-13-queue0-gates/independent-review/final-report.md)。

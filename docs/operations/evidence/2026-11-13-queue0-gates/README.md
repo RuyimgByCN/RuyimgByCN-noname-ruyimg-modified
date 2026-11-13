@@ -1,5 +1,9 @@
 # 2026-11-13 队列第 0 项：门禁、已知偏差与补发布
 
+## 2026-11-13T23:03:20+08:00 第0项代码发布后核验
+
+代码 `1d59f42b8b493e1fbac7a0e8b8c781ccef1ea61c` 已提交并非force推至 `native-convergence`，同一SHA的[CI 43442212867](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43442212867) attempt 1全部10作业success；[完整日志、平台计数和证据](publication/code-exact-ci-first/README.md)。本地门禁、独立复核及首次失败均保留；规则333／NGSA107／schema5／ABI759／WS8不变。清单849／3575／0，上游实际触发0，整包八项0/37；[后续范围](remaining-scope.md)尚待，不进入下一项。记录时HEAD为代码提交加本次文档dirty；后续仅发布本次证据回填。以下未注明其他时刻的开工段属于执行起点，旧记录不覆盖。
+
 - 执行起点：`3a6e398485db6ef0729abe3013c3c4b7705a5d6d`（main，最后代码提交 `afa72d46b`）。起点已跟踪文件干净，历史未跟踪证据及全部临时工作树登记保留；详见 [precheck.json](precheck.json)。本目录为本批新增证据。
 - 版本：规则 333／NGSA 107／content schema 5／ABI 759／WS8；不新增 ADR、协议或版本号。
 - 状态：执行中，尚未提交、发布或登记本批 CI。队列第 1 项及后续尚未开始。
@@ -83,3 +87,7 @@
 ## 2026-11-13T22:21:49+08:00 最终本地验收（尚未提交／发布）
 
 全部本地门禁已通过，完整命令、准确计数、工具链及首失败边界见[最终表](final-local-gates.md)和[机器汇总](gate-summary.json)。产品25输入／工具8输入哈希未变；独立暗织、选序／安装／提示词及两轮脚本增量均无剩余阻断。此时源码仍为起点HEAD加本批dirty；提交、远端与exact-head CI结果另行追加，不把本地通过写成已发布。
+
+## 2026-11-13T22:23:35+08:00 代码批首次发布成功，精确SHA的CI观察中
+
+代码提交 `1d59f42b8b493e1fbac7a0e8b8c781ccef1ea61c` 已按裁决25非force推送到批准分支，实际[发布元数据](publication/code-batch-first.json)及[push原文](publication/code-batch-first.log)。10项精确目标守卫自检通过，原无条件钩子／持久config不变、临时守卫已移除。当前HEAD为该提交加后续文档dirty；CI仍待终态，不用历史99d CI代替，不进入下一批。

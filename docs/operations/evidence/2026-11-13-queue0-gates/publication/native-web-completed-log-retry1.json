@@ -1,0 +1,30 @@
+{
+  "at": "2026-11-13T14:46:50.726964+00:00",
+  "argv": [
+    "gh",
+    "api",
+    "--allow-escape-sequences",
+    "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/131942422780/logs"
+  ],
+  "exit_code": 0,
+  "job_id": 131942422780,
+  "job_conclusion": "success",
+  "stderr": "",
+  "terminal_escapes_not_printed": "raw bytes saved, ANSI removed before numerical parsing",
+  "log": "native-web-completed-job.log",
+  "sha256": "badf91d1749cd0552d7f1ff4a517aec875ec33abbcf51f5c65b2e95176b67c9f",
+  "rust_counts": [
+    2579,
+    0,
+    6
+  ],
+  "rustc_versions": [
+    "1.100.0",
+    "1.99.1"
+  ],
+  "node_counts": {
+    "pass": 489,
+    "fail": 0,
+    "skipped": 0
+  }
+}

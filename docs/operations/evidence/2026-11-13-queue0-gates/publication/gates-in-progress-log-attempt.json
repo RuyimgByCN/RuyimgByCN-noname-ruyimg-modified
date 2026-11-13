@@ -1,0 +1,12 @@
+{
+  "at": "2026-11-13T14:45:46.012898+00:00",
+  "argv": [
+    "gh",
+    "api",
+    "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/131942436045/logs"
+  ],
+  "exit_code": 1,
+  "job_id": 131942436045,
+  "stderr": "gh: HTTP 404\n",
+  "while_job_in_progress": true
+}

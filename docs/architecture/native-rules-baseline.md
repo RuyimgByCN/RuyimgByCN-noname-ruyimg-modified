@@ -1,5 +1,9 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+## 2026-11-13T23:03:20+08:00 第0项代码发布及CI记录
+
+代码 `1d59f42b8b493e1fbac7a0e8b8c781ccef1ea61c` 已发布到批准分支；[精确SHA的CI](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43442212867) attempt 1全部10作业success，完整[发布与验证证据](../operations/evidence/2026-11-13-queue0-gates/publication/code-exact-ci-first/README.md)。记录时HEAD为代码提交加文档dirty，规则333／NGSA107／schema5／ABI759／WS8不变，产品／工具冻结输入相同。本批Fz只补同值登记；14场golden未重录、一份NGSA107旧档续行通过。暗织Prepare／选序、桃园自身目标及Duel实体0差异保留，CI不作规则等价背书。
+
 ## 2026-11-13T22:21:49+08:00 第0项本地验证与待发布状态
 
 源码HEAD `3a6e398485db6ef0729abe3013c3c4b7705a5d6d` + tracked dirty；版本333／107／5／759／WS8。全部要求的本地门禁与独立复核已通过，原始失败／补跑见[最终本地表](../operations/evidence/2026-11-13-queue0-gates/final-local-gates.md)；当前尚未提交、推送或登记本批CI。14场golden没有重录；一份旧NGSA107精确字节、内容锁与续行通过。前述Prepare／选序、桃园和实体Duel0差异保留，不据绿色门禁称规则等价。后续进度仍写在[当前进度](native-progress.md)，实际发布结果另增记录。

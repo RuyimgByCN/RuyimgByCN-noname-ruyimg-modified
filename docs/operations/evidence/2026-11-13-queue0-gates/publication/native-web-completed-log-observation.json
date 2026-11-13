@@ -1,0 +1,12 @@
+{
+  "at": "2026-11-13T14:46:13.672500+00:00",
+  "argv": [
+    "gh",
+    "api",
+    "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/131942422780/logs"
+  ],
+  "exit_code": 1,
+  "job_id": 131942422780,
+  "job_conclusion": "success",
+  "stderr": "the response contains terminal escape sequences; pass --allow-escape-sequences to output it anyway\n"
+}

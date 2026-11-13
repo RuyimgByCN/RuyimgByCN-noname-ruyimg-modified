@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "scripts/check_local_links.py",
+    "--all"
+  ],
+  "command": "python3 -B scripts/check_local_links.py --all",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0"
+  },
+  "source_head": "1d59f42b8b493e1fbac7a0e8b8c781ccef1ea61c",
+  "tracked_status": " M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/README.md\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n M docs/operations/evidence/2026-11-13-queue0-gates/README.md\n M docs/operations/evidence/2026-11-13-queue0-gates/remaining-scope.md\n",
+  "start_utc": "2026-11-13T15:04:41.123075+00:00",
+  "exit_code": 0,
+  "duration_seconds": 0.601,
+  "end_utc": "2026-11-13T15:04:41.724444+00:00"
+}

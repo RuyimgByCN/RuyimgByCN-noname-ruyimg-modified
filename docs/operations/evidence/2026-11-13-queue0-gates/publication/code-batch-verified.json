@@ -1,0 +1,20 @@
+{
+  "at": "2026-11-13T23:03:20+08:00",
+  "code_sha": "1d59f42b8b493e1fbac7a0e8b8c781ccef1ea61c",
+  "code_published": true,
+  "target_ref": "refs/heads/native-convergence",
+  "workflow_run": 43442212867,
+  "attempt": 1,
+  "ci_conclusion": "success",
+  "all_10_jobs_success": true,
+  "product_and_tooling_frozen_inputs_unchanged": true,
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "next_queue_item_started": false,
+  "full_goal_complete": false
+}

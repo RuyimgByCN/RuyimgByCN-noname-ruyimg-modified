@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-13T23:03:20+08:00 第0项代码发布及CI记录
+
+代码 `1d59f42b8b493e1fbac7a0e8b8c781ccef1ea61c` 已发布到批准分支；[精确SHA的CI](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43442212867) attempt 1全部10作业success，完整[发布与验证证据](../operations/evidence/2026-11-13-queue0-gates/publication/code-exact-ci-first/README.md)。记录时HEAD为代码提交加文档dirty，规则333／NGSA107／schema5／ABI759／WS8不变，产品／工具冻结输入相同。原有逐来源状态未上调，整包八项0/37；第①项仅按清单等价计，第⑧项仍需各来源全部差异，上游实际触发、界面和真机等保持待验。
+
 ## 2026-11-13T22:21:49+08:00 第0项本地验证与待发布状态
 
 源码HEAD `3a6e398485db6ef0729abe3013c3c4b7705a5d6d` + tracked dirty；版本333／107／5／759／WS8。全部要求的本地门禁与独立复核已通过，原始失败／补跑见[最终本地表](../operations/evidence/2026-11-13-queue0-gates/final-local-gates.md)；当前尚未提交、推送或登记本批CI。逐来源状态与差异未上调，整包八项0/37；上游实际触发、UI／Spine及平台外部条件仍待。后续进度仍写在[当前进度](../architecture/native-progress.md)，实际发布结果另增记录。

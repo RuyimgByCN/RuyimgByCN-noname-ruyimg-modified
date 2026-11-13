@@ -29,3 +29,7 @@
 ## 2026-11-13T22:21:49+08:00 本批本地门禁更新
 
 第0项的[完整本地门禁](final-local-gates.md)与独立复核已通过；此时仍未提交／发布／取得本批CI，后续队列继续未开始。上表为21:13快照，当前发布状态以[本批主记录](README.md)的新日期记录为准；其他范围与外部条件未变化。
+
+## 2026-11-13T23:03:20+08:00 第0项代码已发布并通过CI
+
+代码 `1d59f42b8b493e1fbac7a0e8b8c781ccef1ea61c` 的本地完整门禁、独立复核与精确SHA的[CI](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43442212867)通过，发布证明见[代码CI记录](publication/code-exact-ci-first/README.md)。队列1以后仍未开始，原表其他未验范围及所需设备／凭据不变。

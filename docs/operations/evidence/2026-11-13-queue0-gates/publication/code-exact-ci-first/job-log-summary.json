@@ -1,0 +1,351 @@
+{
+  "at": "2026-11-13T15:03:13.576462+00:00",
+  "source_head": "1d59f42b8b493e1fbac7a0e8b8c781ccef1ea61c",
+  "run_id": 43442212867,
+  "attempt": 1,
+  "conclusion": "success",
+  "argv": [
+    "gh",
+    "api",
+    "--allow-escape-sequences",
+    "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43442212867/attempts/1/logs"
+  ],
+  "archive": "complete-job-logs.zip",
+  "archive_sha256": "6fe00451e3a7872d43c1d4549991bc79b2d0e71c281314d83713a3ca62e857cb",
+  "archive_bytes": 2170377,
+  "root_job_logs_only": true,
+  "all_archive_entries": [
+    "0_gates-ubuntu.txt",
+    "gates-ubuntu/system.txt",
+    "gates-ubuntu/1_Set up job.txt",
+    "gates-ubuntu/2_Run actions_checkout@v4.txt",
+    "gates-ubuntu/3_Run dtolnay_rust-toolchain@stable.txt",
+    "gates-ubuntu/4_Run Swatinem_rust-cache@v2.txt",
+    "gates-ubuntu/5_Run actions_setup-node@v4.txt",
+    "gates-ubuntu/6_Run ._noname-next_.github_actions_prepare-original-content.txt",
+    "gates-ubuntu/7_Source files stay within 2,000 lines (Rust non-test code within 1,000 effective lines).txt",
+    "gates-ubuntu/8_engine-native kernel layer does not grow content_engine references.txt",
+    "gates-ubuntu/9_Gate 1 — cargo test --workspace.txt",
+    "gates-ubuntu/10_Gate 1b — engine-native all targets warnings denied.txt",
+    "gates-ubuntu/11_Gate 2 — conformance.txt",
+    "gates-ubuntu/12_Install wasm-pack.txt",
+    "gates-ubuntu/13_Gate 3 — cross-target hash (Native vs WASM).txt",
+    "gates-ubuntu/14_Gate 4 — original content sync verify.txt",
+    "gates-ubuntu/25_Post Run ._noname-next_.github_actions_prepare-original-content.txt",
+    "gates-ubuntu/26_Post Run actions_setup-node@v4.txt",
+    "gates-ubuntu/27_Post Run Swatinem_rust-cache@v2.txt",
+    "gates-ubuntu/28_Post Run actions_checkout@v4.txt",
+    "gates-ubuntu/29_Complete job.txt",
+    "1_build-ubuntu-latest.txt",
+    "build-ubuntu-latest/system.txt",
+    "build-ubuntu-latest/1_Set up job.txt",
+    "build-ubuntu-latest/2_Run actions_checkout@v4.txt",
+    "build-ubuntu-latest/3_Run dtolnay_rust-toolchain@stable.txt",
+    "build-ubuntu-latest/4_Run Swatinem_rust-cache@v2.txt",
+    "build-ubuntu-latest/5_Build workspace.txt",
+    "build-ubuntu-latest/6_Unit tests.txt",
+    "build-ubuntu-latest/11_Post Run Swatinem_rust-cache@v2.txt",
+    "build-ubuntu-latest/12_Post Run actions_checkout@v4.txt",
+    "build-ubuntu-latest/13_Complete job.txt",
+    "2_build-windows-latest.txt",
+    "build-windows-latest/system.txt",
+    "build-windows-latest/1_Set up job.txt",
+    "build-windows-latest/2_Run actions_checkout@v4.txt",
+    "build-windows-latest/3_Run dtolnay_rust-toolchain@stable.txt",
+    "build-windows-latest/4_Run Swatinem_rust-cache@v2.txt",
+    "build-windows-latest/5_Build workspace.txt",
+    "build-windows-latest/6_Unit tests.txt",
+    "build-windows-latest/11_Post Run Swatinem_rust-cache@v2.txt",
+    "build-windows-latest/12_Post Run actions_checkout@v4.txt",
+    "build-windows-latest/13_Complete job.txt",
+    "3_desktop-windows-latest.txt",
+    "desktop-windows-latest/system.txt",
+    "desktop-windows-latest/1_Set up job.txt",
+    "desktop-windows-latest/2_Run actions_checkout@v4.txt",
+    "desktop-windows-latest/3_Run dtolnay_rust-toolchain@stable.txt",
+    "desktop-windows-latest/4_Run Swatinem_rust-cache@v2.txt",
+    "desktop-windows-latest/5_Run actions_setup-node@v4.txt",
+    "desktop-windows-latest/7_Run ._noname-next_.github_actions_prepare-original-content.txt",
+    "desktop-windows-latest/8_Install wasm-pack.txt",
+    "desktop-windows-latest/9_Install Tauri CLI.txt",
+    "desktop-windows-latest/10_Produce installer (tauri beforeBuildCommand builds the web client).txt",
+    "desktop-windows-latest/11_Upload installer artifact.txt",
+    "desktop-windows-latest/19_Post Run ._noname-next_.github_actions_prepare-original-content.txt",
+    "desktop-windows-latest/20_Post Run actions_setup-node@v4.txt",
+    "desktop-windows-latest/21_Post Run Swatinem_rust-cache@v2.txt",
+    "desktop-windows-latest/22_Post Run actions_checkout@v4.txt",
+    "desktop-windows-latest/23_Complete job.txt",
+    "4_perf-macos-latest.txt",
+    "perf-macos-latest/system.txt",
+    "perf-macos-latest/1_Set up job.txt",
+    "perf-macos-latest/2_Run actions_checkout@v4.txt",
+    "perf-macos-latest/3_Run dtolnay_rust-toolchain@stable.txt",
+    "perf-macos-latest/4_Run Swatinem_rust-cache@v2.txt",
+    "perf-macos-latest/5_Tier list.txt",
+    "perf-macos-latest/6_Tier report (server-baseline budget).txt",
+    "perf-macos-latest/11_Post Run Swatinem_rust-cache@v2.txt",
+    "perf-macos-latest/12_Post Run actions_checkout@v4.txt",
+    "perf-macos-latest/13_Complete job.txt",
+    "5_desktop-macos-latest.txt",
+    "desktop-macos-latest/system.txt",
+    "desktop-macos-latest/1_Set up job.txt",
+    "desktop-macos-latest/2_Run actions_checkout@v4.txt",
+    "desktop-macos-latest/3_Run dtolnay_rust-toolchain@stable.txt",
+    "desktop-macos-latest/4_Run Swatinem_rust-cache@v2.txt",
+    "desktop-macos-latest/5_Run actions_setup-node@v4.txt",
+    "desktop-macos-latest/7_Run ._noname-next_.github_actions_prepare-original-content.txt",
+    "desktop-macos-latest/8_Install wasm-pack.txt",
+    "desktop-macos-latest/9_Install Tauri CLI.txt",
+    "desktop-macos-latest/10_Produce installer (tauri beforeBuildCommand builds the web client).txt",
+    "desktop-macos-latest/11_Upload installer artifact.txt",
+    "desktop-macos-latest/19_Post Run ._noname-next_.github_actions_prepare-original-content.txt",
+    "desktop-macos-latest/20_Post Run actions_setup-node@v4.txt",
+    "desktop-macos-latest/21_Post Run Swatinem_rust-cache@v2.txt",
+    "desktop-macos-latest/22_Post Run actions_checkout@v4.txt",
+    "desktop-macos-latest/23_Complete job.txt",
+    "6_build-macos-latest.txt",
+    "build-macos-latest/system.txt",
+    "build-macos-latest/1_Set up job.txt",
+    "build-macos-latest/2_Run actions_checkout@v4.txt",
+    "build-macos-latest/3_Run dtolnay_rust-toolchain@stable.txt",
+    "build-macos-latest/4_Run Swatinem_rust-cache@v2.txt",
+    "build-macos-latest/5_Build workspace.txt",
+    "build-macos-latest/6_Unit tests.txt",
+    "build-macos-latest/11_Post Run Swatinem_rust-cache@v2.txt",
+    "build-macos-latest/12_Post Run actions_checkout@v4.txt",
+    "build-macos-latest/13_Complete job.txt",
+    "7_native-web.txt",
+    "native-web/system.txt",
+    "native-web/1_Set up job.txt",
+    "native-web/2_Run actions_checkout@v4.txt",
+    "native-web/3_Run dtolnay_rust-toolchain@stable.txt",
+    "native-web/4_Run Swatinem_rust-cache@v2.txt",
+    "native-web/5_Run actions_setup-node@v4.txt",
+    "native-web/6_Run ._noname-next_.github_actions_prepare-original-content.txt",
+    "native-web/7_Install wasm-pack.txt",
+    "native-web/8_Rebuild native WASM from current source.txt",
+    "native-web/9_Rebuild legacy WASM (still imported by the client).txt",
+    "native-web/10_Native kernel and package loader regressions.txt",
+    "native-web/11_Real native Worker smoke.txt",
+    "native-web/12_Frontend regressions.txt",
+    "native-web/13_Frontend typecheck and production build.txt",
+    "native-web/23_Post Run ._noname-next_.github_actions_prepare-original-content.txt",
+    "native-web/24_Post Run actions_setup-node@v4.txt",
+    "native-web/25_Post Run Swatinem_rust-cache@v2.txt",
+    "native-web/26_Post Run actions_checkout@v4.txt",
+    "native-web/27_Complete job.txt",
+    "8_desktop-ubuntu-latest.txt",
+    "desktop-ubuntu-latest/system.txt",
+    "desktop-ubuntu-latest/1_Set up job.txt",
+    "desktop-ubuntu-latest/2_Run actions_checkout@v4.txt",
+    "desktop-ubuntu-latest/3_Run dtolnay_rust-toolchain@stable.txt",
+    "desktop-ubuntu-latest/4_Run Swatinem_rust-cache@v2.txt",
+    "desktop-ubuntu-latest/5_Run actions_setup-node@v4.txt",
+    "desktop-ubuntu-latest/6_Install Linux Tauri dependencies.txt",
+    "desktop-ubuntu-latest/7_Run ._noname-next_.github_actions_prepare-original-content.txt",
+    "desktop-ubuntu-latest/8_Install wasm-pack.txt",
+    "desktop-ubuntu-latest/9_Install Tauri CLI.txt",
+    "desktop-ubuntu-latest/10_Produce installer (tauri beforeBuildCommand builds the web client).txt",
+    "desktop-ubuntu-latest/11_Upload installer artifact.txt",
+    "desktop-ubuntu-latest/19_Post Run ._noname-next_.github_actions_prepare-original-content.txt",
+    "desktop-ubuntu-latest/20_Post Run actions_setup-node@v4.txt",
+    "desktop-ubuntu-latest/21_Post Run Swatinem_rust-cache@v2.txt",
+    "desktop-ubuntu-latest/22_Post Run actions_checkout@v4.txt",
+    "desktop-ubuntu-latest/23_Complete job.txt",
+    "9_perf-ubuntu-latest.txt",
+    "perf-ubuntu-latest/system.txt",
+    "perf-ubuntu-latest/1_Set up job.txt",
+    "perf-ubuntu-latest/2_Run actions_checkout@v4.txt",
+    "perf-ubuntu-latest/3_Run dtolnay_rust-toolchain@stable.txt",
+    "perf-ubuntu-latest/4_Run Swatinem_rust-cache@v2.txt",
+    "perf-ubuntu-latest/5_Tier list.txt",
+    "perf-ubuntu-latest/6_Tier report (server-baseline budget).txt",
+    "perf-ubuntu-latest/11_Post Run Swatinem_rust-cache@v2.txt",
+    "perf-ubuntu-latest/12_Post Run actions_checkout@v4.txt",
+    "perf-ubuntu-latest/13_Complete job.txt"
+  ],
+  "jobs": [
+    {
+      "archive_entry": "0_gates-ubuntu.txt",
+      "rustc_versions": [
+        "1.100.0"
+      ],
+      "rustc_versions_mentioned": [
+        "1.100.0",
+        "1.99.1"
+      ],
+      "performance_budget_attempts": [],
+      "rust_test_binary_results": 178,
+      "rust_counts": {
+        "passed": 7838,
+        "failed": 0,
+        "ignored": 8
+      },
+      "node_counts": {
+        "pass": 17,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "archive_entry": "1_build-ubuntu-latest.txt",
+      "rustc_versions": [
+        "1.100.0"
+      ],
+      "rustc_versions_mentioned": [
+        "1.100.0",
+        "1.99.1"
+      ],
+      "performance_budget_attempts": [],
+      "rust_test_binary_results": 26,
+      "rust_counts": {
+        "passed": 872,
+        "failed": 0,
+        "ignored": 0
+      },
+      "node_counts": null
+    },
+    {
+      "archive_entry": "2_build-windows-latest.txt",
+      "rustc_versions": [
+        "1.100.0"
+      ],
+      "rustc_versions_mentioned": [
+        "1.100.0",
+        "1.99.1"
+      ],
+      "performance_budget_attempts": [],
+      "rust_test_binary_results": 26,
+      "rust_counts": {
+        "passed": 872,
+        "failed": 0,
+        "ignored": 0
+      },
+      "node_counts": null
+    },
+    {
+      "archive_entry": "3_desktop-windows-latest.txt",
+      "rustc_versions": [
+        "1.100.0"
+      ],
+      "rustc_versions_mentioned": [
+        "1.100.0",
+        "1.99.1"
+      ],
+      "performance_budget_attempts": [],
+      "rust_test_binary_results": 0,
+      "rust_counts": null,
+      "node_counts": null
+    },
+    {
+      "archive_entry": "4_perf-macos-latest.txt",
+      "rustc_versions": [
+        "1.100.0"
+      ],
+      "rustc_versions_mentioned": [
+        "1.100.0",
+        "1.99.1"
+      ],
+      "performance_budget_attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 1
+        },
+        {
+          "attempt": 2,
+          "exit_code": 0
+        }
+      ],
+      "rust_test_binary_results": 0,
+      "rust_counts": null,
+      "node_counts": null
+    },
+    {
+      "archive_entry": "5_desktop-macos-latest.txt",
+      "rustc_versions": [
+        "1.100.0"
+      ],
+      "rustc_versions_mentioned": [
+        "1.100.0",
+        "1.99.1"
+      ],
+      "performance_budget_attempts": [],
+      "rust_test_binary_results": 0,
+      "rust_counts": null,
+      "node_counts": null
+    },
+    {
+      "archive_entry": "6_build-macos-latest.txt",
+      "rustc_versions": [
+        "1.100.0"
+      ],
+      "rustc_versions_mentioned": [
+        "1.100.0",
+        "1.99.1"
+      ],
+      "performance_budget_attempts": [],
+      "rust_test_binary_results": 26,
+      "rust_counts": {
+        "passed": 872,
+        "failed": 0,
+        "ignored": 0
+      },
+      "node_counts": null
+    },
+    {
+      "archive_entry": "7_native-web.txt",
+      "rustc_versions": [
+        "1.100.0"
+      ],
+      "rustc_versions_mentioned": [
+        "1.100.0",
+        "1.99.1"
+      ],
+      "performance_budget_attempts": [],
+      "rust_test_binary_results": 56,
+      "rust_counts": {
+        "passed": 2579,
+        "failed": 0,
+        "ignored": 6
+      },
+      "node_counts": {
+        "pass": 489,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "archive_entry": "8_desktop-ubuntu-latest.txt",
+      "rustc_versions": [
+        "1.100.0"
+      ],
+      "rustc_versions_mentioned": [
+        "1.100.0",
+        "1.99.1"
+      ],
+      "performance_budget_attempts": [],
+      "rust_test_binary_results": 0,
+      "rust_counts": null,
+      "node_counts": null
+    },
+    {
+      "archive_entry": "9_perf-ubuntu-latest.txt",
+      "rustc_versions": [
+        "1.100.0"
+      ],
+      "rustc_versions_mentioned": [
+        "1.100.0",
+        "1.99.1"
+      ],
+      "performance_budget_attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0
+        }
+      ],
+      "rust_test_binary_results": 0,
+      "rust_counts": null,
+      "node_counts": null
+    }
+  ]
+}

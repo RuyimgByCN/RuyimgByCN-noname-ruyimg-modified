@@ -1,0 +1,73 @@
+{
+  "verified_at": "2026-11-13T15:02:51.234299+00:00",
+  "source_head": "1d59f42b8b493e1fbac7a0e8b8c781ccef1ea61c",
+  "run_id": 43442212867,
+  "attempt": 1,
+  "workflow_id": 401719763,
+  "url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43442212867",
+  "status": "completed",
+  "conclusion": "success",
+  "duration_observed_seconds": 2378.754,
+  "jobs": [
+    {
+      "id": 131942422780,
+      "name": "native-web",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 131942422962,
+      "name": "build-macos-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 131942423083,
+      "name": "desktop-macos-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 131942423126,
+      "name": "desktop-ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 131942423138,
+      "name": "perf-ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 131942423746,
+      "name": "perf-macos-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 131942424490,
+      "name": "build-windows-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 131942424590,
+      "name": "desktop-windows-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 131942425550,
+      "name": "build-ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 131942436045,
+      "name": "gates-ubuntu",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ]
+}
