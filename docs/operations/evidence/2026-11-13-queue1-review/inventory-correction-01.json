@@ -1,0 +1,63 @@
+{
+  "at": "2026-11-14T00:24:20.567038+08:00",
+  "key": "L20:ui_hooks:_xigua_zhuwanzhongji_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2290",
+  "reason": "Independent application review rejected a wrong host binding; actual ZhuWanzhongJi mutates roles. Restore old claim without a new signoff.",
+  "before_sha256": "45629cc212b1a89ee91bdaaff7764bf522e9029a4bd339dc656d1e21aea27b96",
+  "after_sha256": "9efa988583ca18b38de761897ad68d67b930a5d1452a6b9c9e8f8c60fee8b601",
+  "before": {
+    "source_id": "L20",
+    "category": "ui_hooks",
+    "id": "_xigua_zhuwanzhongji_",
+    "upstream_ref": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2290",
+    "target": "原生前端组件",
+    "status": "简化近似",
+    "reviewer": "/root/fix_dddanzhi",
+    "review_date": "2026-11-14",
+    "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2290-2312",
+    "test_name": "l20_configs_15_and_zhengsu_cards_3_and_dedicated_9_skills_six_dimensions + l20_mark_supplement_eight_dimension_acceptance",
+    "difference": "漏掉主公继任的身份/主公迁移规则；inventory中的ui_hooks分类不能消除此差异。；实际规则项；ZhuWanzhongJi 有身份继承落点。本轮仅区分规则执行与显示，不重新签署完整条件/选择/存读档。配置是否启停另见对应 configs 行。",
+    "note": "2026-11-14 队列1补课：/root/fix_dddanzhi、/root/repair_doc_refs独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+    "reason": null,
+    "upstream_summary": "主亡忠继模式规则技（身份模式主公阵亡时，存活忠臣与主公互换身份继任主公）",
+    "native_summary": "HostBehavior::ZhuWanzhongJi：身份模式主公阵亡时存活忠臣身份切换为 Lord、原主公切换为 Loyalist",
+    "native_ref": "crates/engine-native-content/src/content/host/filtering/common.rs:164-172 + crates/engine-native-content/src/content/host/step/skills_status.rs:31-48",
+    "native": "crates/engine-native-content/src/content/host/filtering/common.rs:164-172 + crates/engine-native-content/src/content/host/step/skills_status.rs:31-48",
+    "diff": "漏掉主公继任的身份/主公迁移规则；inventory中的ui_hooks分类不能消除此差异。；实际规则项；ZhuWanzhongJi 有身份继承落点。本轮仅区分规则执行与显示，不重新签署完整条件/选择/存读档。配置是否启停另见对应 configs 行。"
+  },
+  "after": {
+    "source_id": "L20",
+    "category": "ui_hooks",
+    "id": "_xigua_zhuwanzhongji_",
+    "upstream_ref": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2290",
+    "target": "原生前端组件",
+    "status": "已复核等价",
+    "reviewer": "l20-signoff / l20-verifier",
+    "review_date": "2026-11-12",
+    "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2290-2312",
+    "test_name": "l20_configs_15_and_zhengsu_cards_3_and_dedicated_9_skills_six_dimensions + l20_mark_supplement_eight_dimension_acceptance",
+    "difference": "更正首次补课误判：实际先绑定ZhuWanzhongJi，已有死亡者为主公/主人为忠臣的过滤及双方身份交换，不是L20BatchA通用flag。保留旧状态，不是本轮整技能等价签署；mingzhong/game.zhong、zhuUpdate及完整死亡时序仍待同场景核验。",
+    "note": "2026-11-14 队列1补课：/root/fix_dddanzhi、/root/repair_doc_refs独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14 应用复审更正：/root/repair_doc_refs 与 /root/fix_dddanzhi 沿实际优先绑定/step链确认原“未继任”结论错误，撤回该理由及本次状态下调，恢复原复核人/日期；首次建议及应用快照保留。",
+    "reason": null,
+    "upstream_summary": "主亡忠继模式规则技（身份模式主公阵亡时，存活忠臣与主公互换身份继任主公）",
+    "native_summary": "HostBehavior::ZhuWanzhongJi：身份模式主公阵亡时存活忠臣身份切换为 Lord、原主公切换为 Loyalist",
+    "native_ref": "crates/engine-native-content/src/content/host/filtering/common.rs:164-172 + crates/engine-native-content/src/content/host/step/skills_status.rs:31-48",
+    "native": "crates/engine-native-content/src/content/host/filtering/common.rs:164-172 + crates/engine-native-content/src/content/host/step/skills_status.rs:31-48",
+    "diff": "更正首次补课误判：实际先绑定ZhuWanzhongJi，已有死亡者为主公/主人为忠臣的过滤及双方身份交换，不是L20BatchA通用flag。保留旧状态，不是本轮整技能等价签署；mingzhong/game.zhong、zhuUpdate及完整死亡时序仍待同场景核验。"
+  },
+  "counts": {
+    "已复核等价": 624,
+    "简化近似": 3800,
+    "缺失": 0,
+    "上游未定义": 0
+  },
+  "effective_status_withdrawals": 225,
+  "new_equivalence_signoffs": 0,
+  "source_refs": [
+    "crates/content-native-loader/src/host_skill_bindings.rs:419",
+    "crates/content-native-loader/src/decision34_pack9.rs:522",
+    "crates/engine-native-content/src/content/host/step.rs:98",
+    "crates/engine-native-content/src/content/host/step/skills_status.rs:31",
+    "crates/engine-native-content/src/content/host/filtering/common.rs:164",
+    "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2290"
+  ]
+}

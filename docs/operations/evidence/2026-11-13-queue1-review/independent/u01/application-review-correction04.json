@@ -1,0 +1,821 @@
+{
+  "at": "2026-11-14T00:30:10.092644+08:00",
+  "reviewer": "/root/queue0_independent_review",
+  "conclusion": "limited_character_description_increment_pass",
+  "current_inventory_sha256": "2658808bbe361ab248e53166157e25606c47155eb31fa19947cb601eb3f35c89",
+  "whole_inventory_matches_correction04_after": false,
+  "whole_inventory_delta_outside_u01_not_reviewed": true,
+  "current_counts_identification_only": {
+    "已复核等价": 634,
+    "简化近似": 3790,
+    "缺失": 0,
+    "上游未定义": 0
+  },
+  "u01_skills64_equal_original_application_after": true,
+  "u01_generals31_only_concrete_field_prefix_added": true,
+  "u01_status_reviewer_date_changed_by_correction04": 0,
+  "characters": [
+    {
+      "key": "U01:generals:ddd_handang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:5",
+      "source_fields": {
+        "sex": "male",
+        "group": "wu",
+        "hp": 4,
+        "max_hp": 4,
+        "skills": [
+          "dddxianxi"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "wu",
+        "max_hp": 4,
+        "skills": [
+          "dddxianxi"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_wuzhi@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:11",
+      "source_fields": {
+        "sex": "male",
+        "group": "wei",
+        "hp": 3,
+        "max_hp": 3,
+        "skills": [
+          "dddlingyong",
+          "dddxuxiao"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "wei",
+        "max_hp": 3,
+        "skills": [
+          "dddlingyong",
+          "dddxuxiao"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_xujing@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:17",
+      "source_fields": {
+        "sex": "male",
+        "group": "shu",
+        "hp": 3,
+        "max_hp": 3,
+        "skills": [
+          "dddxuyu",
+          "dddshijian"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "shu",
+        "max_hp": 3,
+        "skills": [
+          "dddxuyu",
+          "dddshijian"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_caomao@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:23",
+      "source_fields": {
+        "sex": "male",
+        "group": "wei",
+        "hp": 3,
+        "max_hp": 3,
+        "skills": [
+          "dddtaisi",
+          "dddquche",
+          "dddqianlong"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "wei",
+        "max_hp": 3,
+        "skills": [
+          "dddtaisi",
+          "dddquche",
+          "dddqianlong"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_xinxianying@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:30",
+      "source_fields": {
+        "sex": "female",
+        "group": "wei",
+        "hp": 3,
+        "max_hp": 3,
+        "skills": [
+          "ddddongcha",
+          "dddzhijie"
+        ]
+      },
+      "native_fields": {
+        "sex": "female",
+        "group": "wei",
+        "max_hp": 3,
+        "skills": [
+          "ddddongcha",
+          "dddzhijie"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_xianglang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:36",
+      "source_fields": {
+        "sex": "male",
+        "group": "shu",
+        "hp": 3,
+        "max_hp": 3,
+        "skills": [
+          "dddqiahua",
+          "dddfusi",
+          "dddtuoji"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "shu",
+        "max_hp": 3,
+        "skills": [
+          "dddqiahua",
+          "dddfusi",
+          "dddtuoji"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_yujin@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:42",
+      "source_fields": {
+        "sex": "male",
+        "group": "wei",
+        "hp": 4,
+        "max_hp": 4,
+        "skills": [
+          "dddzhengjun"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "wei",
+        "max_hp": 4,
+        "skills": [
+          "dddzhengjun"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_liuye@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:48",
+      "source_fields": {
+        "sex": "male",
+        "group": "wei",
+        "hp": 3,
+        "max_hp": 3,
+        "skills": [
+          "dddchashi",
+          "dddqice"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "wei",
+        "max_hp": 3,
+        "skills": [
+          "dddchashi",
+          "dddqice"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_baosanniang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:54",
+      "source_fields": {
+        "sex": "female",
+        "group": "shu",
+        "hp": 3,
+        "max_hp": 3,
+        "skills": [
+          "dddzhilian",
+          "dddjijian"
+        ]
+      },
+      "native_fields": {
+        "sex": "female",
+        "group": "shu",
+        "max_hp": 3,
+        "skills": [
+          "dddzhilian",
+          "dddjijian"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_zhenji@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:60",
+      "source_fields": {
+        "sex": "female",
+        "group": "wei",
+        "hp": 3,
+        "max_hp": 3,
+        "skills": [
+          "dddmiaoxing",
+          "dddfushi"
+        ]
+      },
+      "native_fields": {
+        "sex": "female",
+        "group": "wei",
+        "max_hp": 3,
+        "skills": [
+          "dddmiaoxing",
+          "dddfushi"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_zhaoang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:66",
+      "source_fields": {
+        "sex": "male",
+        "group": "wei",
+        "hp": 4,
+        "max_hp": 4,
+        "skills": [
+          "dddfenji"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "wei",
+        "max_hp": 4,
+        "skills": [
+          "dddfenji"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_zhouchu@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:72",
+      "source_fields": {
+        "sex": "male",
+        "group": "wu",
+        "hp": 5,
+        "max_hp": 5,
+        "skills": [
+          "dddxiaheng"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "wu",
+        "max_hp": 5,
+        "skills": [
+          "dddxiaheng"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_liuba@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:78",
+      "source_fields": {
+        "sex": "male",
+        "group": "shu",
+        "hp": 3,
+        "max_hp": 3,
+        "skills": [
+          "dddfengzheng",
+          "dddyulv"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "shu",
+        "max_hp": 3,
+        "skills": [
+          "dddfengzheng",
+          "dddyulv"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_jianshuo@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:84",
+      "source_fields": {
+        "sex": "male",
+        "group": "qun",
+        "hp": 4,
+        "max_hp": 4,
+        "skills": [
+          "dddfenye",
+          "dddshichao"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "qun",
+        "max_hp": 4,
+        "skills": [
+          "dddfenye",
+          "dddshichao"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_guanning@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:90",
+      "source_fields": {
+        "sex": "male",
+        "group": "qun",
+        "hp": 3,
+        "max_hp": 3,
+        "skills": [
+          "dddyouxue",
+          "dddchengjing"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "qun",
+        "max_hp": 3,
+        "skills": [
+          "dddyouxue",
+          "dddchengjing"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_dingfeng@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:96",
+      "source_fields": {
+        "sex": "male",
+        "group": "wu",
+        "hp": 4,
+        "max_hp": 4,
+        "skills": [
+          "dddduanbing"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "wu",
+        "max_hp": 4,
+        "skills": [
+          "dddduanbing"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_caoshuang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:102",
+      "source_fields": {
+        "sex": "male",
+        "group": "wei",
+        "hp": 5,
+        "max_hp": 5,
+        "skills": [
+          "dddzhuanshe",
+          "dddweiqiu"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "wei",
+        "max_hp": 5,
+        "skills": [
+          "dddzhuanshe",
+          "dddweiqiu"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_xuelingyun@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:108",
+      "source_fields": {
+        "sex": "female",
+        "group": "wei",
+        "hp": 3,
+        "max_hp": 3,
+        "skills": [
+          "dddlianer",
+          "dddanzhi"
+        ]
+      },
+      "native_fields": {
+        "sex": "female",
+        "group": "wei",
+        "max_hp": 3,
+        "skills": [
+          "dddlianer",
+          "dddanzhi"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_liuhong@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:114",
+      "source_fields": {
+        "sex": "male",
+        "group": "qun",
+        "hp": 4,
+        "max_hp": 4,
+        "skills": [
+          "dddshixing",
+          "ddddanggu",
+          "dddfuzong"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "qun",
+        "max_hp": 4,
+        "skills": [
+          "dddshixing",
+          "ddddanggu",
+          "dddfuzong"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_xiahouxuan@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:121",
+      "source_fields": {
+        "sex": "male",
+        "group": "wei",
+        "hp": 3,
+        "max_hp": 3,
+        "skills": [
+          "dddlanghuai",
+          "dddxuanlun"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "wei",
+        "max_hp": 3,
+        "skills": [
+          "dddlanghuai",
+          "dddxuanlun"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_zhangkai@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:128",
+      "source_fields": {
+        "sex": "male",
+        "group": "qun",
+        "hp": 3,
+        "max_hp": 4,
+        "skills": [
+          "dddjiexing",
+          "dddbailei"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "qun",
+        "max_hp": 4,
+        "skills": [
+          "dddjiexing",
+          "dddbailei"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_liangxi@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:135",
+      "source_fields": {
+        "sex": "male",
+        "group": "wei",
+        "hp": 4,
+        "max_hp": 4,
+        "skills": [
+          "dddtongyu"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "wei",
+        "max_hp": 4,
+        "skills": [
+          "dddtongyu"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_wangkanglvkai@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:141",
+      "source_fields": {
+        "sex": "male",
+        "group": "shu",
+        "hp": 4,
+        "max_hp": 4,
+        "skills": [
+          "dddbingjian"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "shu",
+        "max_hp": 4,
+        "skills": [
+          "dddbingjian"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_sunliang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:148",
+      "source_fields": {
+        "sex": "male",
+        "group": "wu",
+        "hp": 3,
+        "max_hp": 3,
+        "skills": [
+          "ddddiedang",
+          "dddanliu",
+          "dddguiying"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "wu",
+        "max_hp": 3,
+        "skills": [
+          "ddddiedang",
+          "dddanliu",
+          "dddguiying"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_lie@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:155",
+      "source_fields": {
+        "sex": "female",
+        "group": "wu",
+        "hp": 3,
+        "max_hp": 3,
+        "skills": [
+          "dddyeshen",
+          "dddqiaoduan"
+        ]
+      },
+      "native_fields": {
+        "sex": "female",
+        "group": "wu",
+        "max_hp": 3,
+        "skills": [
+          "dddyeshen",
+          "dddqiaoduan"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_kebineng@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:161",
+      "source_fields": {
+        "sex": "male",
+        "group": "qun",
+        "hp": 4,
+        "max_hp": 4,
+        "skills": [
+          "dddxiaoxing",
+          "dddlangzhi",
+          "dddfuyi"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "qun",
+        "max_hp": 4,
+        "skills": [
+          "dddxiaoxing",
+          "dddlangzhi",
+          "dddfuyi"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_qianzhao@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:169",
+      "source_fields": {
+        "sex": "male",
+        "group": "wei",
+        "hp": 4,
+        "max_hp": 4,
+        "skills": [
+          "dddyuanzhen",
+          "dddzhishu"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "wei",
+        "max_hp": 4,
+        "skills": [
+          "dddyuanzhen",
+          "dddzhishu"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_zhangmiao@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:175",
+      "source_fields": {
+        "sex": "male",
+        "group": "qun",
+        "hp": 4,
+        "max_hp": 4,
+        "skills": [
+          "dddxiaxing"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "qun",
+        "max_hp": 4,
+        "skills": [
+          "dddxiaxing"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_zhangcheng@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:181",
+      "source_fields": {
+        "sex": "male",
+        "group": "wu",
+        "hp": 3,
+        "max_hp": 3,
+        "skills": [
+          "dddjuxian",
+          "dddjungui"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "wu",
+        "max_hp": 3,
+        "skills": [
+          "dddjuxian",
+          "dddjungui"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_liuchong@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:187",
+      "source_fields": {
+        "sex": "male",
+        "group": "qun",
+        "hp": 4,
+        "max_hp": 4,
+        "skills": [
+          "dddjinggou",
+          "dddmoyan"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "qun",
+        "max_hp": 4,
+        "skills": [
+          "dddjinggou",
+          "dddmoyan"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    },
+    {
+      "key": "U01:generals:ddd_luoxian@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:193",
+      "source_fields": {
+        "sex": "male",
+        "group": "shu",
+        "hp": 4,
+        "max_hp": 4,
+        "skills": [
+          "dddshilie"
+        ]
+      },
+      "native_fields": {
+        "sex": "male",
+        "group": "shu",
+        "max_hp": 4,
+        "skills": [
+          "dddshilie"
+        ]
+      },
+      "description_matches_actual_fields": true,
+      "only_difference_and_diff_changed": true,
+      "status_reviewer_date_unchanged": true
+    }
+  ],
+  "all32259_frozen_product_inputs_still_equal": true,
+  "inputs": [
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-13-queue1-review/independent/u01/application-review-correction04-check.py",
+      "sha256": "ed197d44a5e47a329fc1a208d7599c0ab44fe576afc992070116b87374f62ac6"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/migration/g0/inventory_status.json",
+      "sha256": "2658808bbe361ab248e53166157e25606c47155eb31fa19947cb601eb3f35c89"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-13-queue1-review/inventory-correction-04.json",
+      "sha256": "b3d8e45c95617ae7287368ceb6c18c2be9bd5f12bd0a8cd2141e24e5de8eacd4"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+      "sha256": "49b87ae81935e0e90feeadd2be1f8950e92d2b681ef3622f3d65e9843ca87338"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader/src/decision34_pack9_data.rs",
+      "sha256": "8385ed736dae59c7dacd4559a1212a696621a8e2b9b46712725a0726400d271c"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/state/general_assembly.rs",
+      "sha256": "6e27316aca4dc6101213bda559c867fec6347cf74dd5ea236b7d735f243b9dcf"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/src/engine/general_select.rs",
+      "sha256": "055afa96af8848d30d62a516f298eb491ca78bdd796df505dd4050583cffa2b8"
+    }
+  ],
+  "executed_cargo": 0,
+  "executed_browser": 0,
+  "new_equivalence_signoffs": 0,
+  "non_u01_224_description_changes_semantically_reviewed": false
+}

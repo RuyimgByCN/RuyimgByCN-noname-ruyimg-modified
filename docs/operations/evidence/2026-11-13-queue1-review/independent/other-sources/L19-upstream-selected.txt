@@ -1,0 +1,344 @@
+
+=== configs zuan_brawl | archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:3363 ===
+        "zuan_brawl":{
+            "name":"祖安武将-乱斗",
+            "init":"all",
+            "intro":"接入『祖安武将』扩展的娱乐模式和玩法到乱斗模式中，需打开祖安武将扩展。",
+            "item":{
+                "off":"关闭所有",
+                "standard":"简洁展示",
+                "random":"随机展示",
+                "all":"全部展示",
+                "daily":"每日活动",
+            }
+        }
+
+=== skills _guandieskill | archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:2847 ===
+lib.skill._guandieskill={
+                trigger:{
+                    player:["dieBefore"],
+                },
+                priority:-99,
+                forced:true,
+                filter:function(event,player){
+                    //if(get.mode()!='identity') return false;
+                    if(player.hasSkill('jingcheng')) return false;
+                    if(player.identity!='zhu') return false;
+                    return true; 
+                },
+                content:function(){
+                    'step 0'
+                    if(trigger.source) game.zuanExp(trigger.source,25);
+                        var skills=player.getSkills(true,false);
+                        for(var i=0;i<skills.length;i++){
+                            var info=get.info(skills[i]);
+                            if(skills[i]=='thundershow'||skills[i]=='jingcheng'||skills[i]=='bazhu'||skills[i]=='guanfu'||info.charlotte){
+                                skills.splice(i--,1);
+                            }
+                        }
+                        player.disableSkill('lockskill',skills);
+                    'step 1'
+                    player.addMark('zuan_panjun',2,false);
+                    if(lib.config['extension_祖安设置_newover']) {
+                        if(player.storage.zuan_guanbing>=10){
+                            //内奸获胜的条件是结束游戏时还活着
+                            if(game.me.identity=='nei') {
+                                if(game.me.isAlive()) {
+                                    game.over(true);
+                                }else {
+                                    game.over(false);
+                                }
+                            }else if(player.isFriendsOf(game.me)) {
+                                game.over(false);
+                            }else {
+                                game.over(true);
+                            }
+                        }else if(player.storage.zuan_panjun>=10){
+                            //内奸获胜的条件是结束游戏时还活着
+                            if(game.me.identity=='nei') {
+                                if(game.me.isAlive()) {
+                                    game.over(true);
+                                }else {
+                                    game.over(false);
+                                }
+                            }else if(player.isFriendsOf(game.me)) {
+                                game.over(true);
+                            }else {
+                                game.over(false);
+                            }
+                        }
+                    }else {
+                        if(player.storage.zuan_guanbing>=10){
+                            for(var i=0;i<game.players.length;i++){
+                                if(!game.players[i].isFriendsOf(player)) {
+                                    //if(game.players[i].identity=='fan'||game.players[i].identity=='nei'){
+                                    game.players[i].die();
+                                }
+                            }
+                        }else if(player.storage.zuan_panjun>=10){
+                            player.die();
+                        }
+                    }
+                    trigger.cancel();
+                    player.storage.zhumaxhp=player.maxHp;
+                    player.maxHp=player.storage.tamaxhp;
+                    player.hp=player.storage.tahp;
+                    player.addSkill('jingcheng');
+                    player.update();
+                    'step 2'
+                    player.link(false);
+                    player.turnOver(false);
+                    player.discard(player.getCards('hej'));
+                    'step 3'
+                if(game.getLocalItem('ZUANbingletexiaoSET','mode')){
+                    if(player.storage.dyingimgshow) {
+                        player.storage.dyingimgshow=false;
+                        game.broadcastAll(function(player){
+                            player.storage.dying_img.style.opacity=0;//'translateY(-200px)'
+                            player.storage.dying_img.delete();
+                        },player);
+                    }
+                    event.newui=parseFloat(lib.config['extension_祖安设置_newui']);
+                    var translists=['none','tutou','shousha','zhounian'];
+                    player.storage.jingchengimgshow=true;
+                    game.broadcastAll(function(player){
+                        player.storage.jingcheng_img = document.createElement('div');
+                        if(event.newui!='0') {   
+                            player.storage.jingcheng_img.setBackgroundImage('extension/祖安武将/cover/'+translists[event.newui]+'_guanfu.png');
+                        }
+                        //player.storage.jingcheng_img.style.opacity=lib.config.zuancoveropacity;
+                        player.storage.jingcheng_img.style.opacity=lib.config.zuancoveropacity;
+                        player.storage.jingcheng_img.style.backgroundSize='cover';
+                        player.storage.jingcheng_img.style.width='100%';
+                        player.storage.jingcheng_img.style.height='100%';
+                        player.storage.jingcheng_img.style.opacity=0;//'translateY(-200px)'
+                        player.node.avatar.appendChild(player.storage.jingcheng_img);
+                        ui.refresh(player.storage.jingcheng_img);
+                        player.storage.jingcheng_img.style.transition='all 0.7s';//TIETU
+                        player.storage.jingcheng_img.style.opacity=1;//transform='';
+                    },player);
+                }
+                var tex=lib.config['extension_祖安设置_texiao']; 
+                if(tex) {
+                    game.newalive('extension/祖安武将/mode/mode_guanfu.gif',3.5,lib.config.zuancoveropacity);
+                }
+                    player.addSkill('notarget');
+                    player.identity='zhu';
+        player.setIdentity('亡');
+        player.node.identity.dataset.color='zhu';
+        player.identityShown=true;
+        player.storage.zuan_identity=['亡','zhu'];
+                    },
+                }
+
+=== skills _huzhu | archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:698 ===
+lib.skill._huzhu={
+				enable:'phaseUse',
+				usable:1,
+				filterCard:function(card,player){
+					return card.name=='tao';
+				},
+				filter:function(event,player){
+					return player.identity=='zhong'||player.identity=='zhu';
+				},
+				filterTarget:function(card,player,target){
+					if(player==target) return false;
+					return get.distance(player,target)<=1&&target.isDamaged()&&(target.identity=='zhong'||target.identity=='zhu');
+				},
+				content:function(){
+					player.useCard({name:'tao'},target)
+				}
+			}
+
+=== skills _jiangshi2 | archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:574 ===
+lib.skill._jiangshi2={
+				trigger:{player:'phaseBegin'},
+				forced:true,
+				popup:false,
+				silent:true,
+				priority:15,
+				filter:function(event,player){
+					if(game.players.length<=6) return !player.storage._tuizhi&&game.zhu.storage._tuizhi==2&&Math.random()<=(game.zhu.storage.jisuangailv/(game.players.length-1))-game.zhu.storage.fzjsNumber;
+					if(game.players.length>6&&game.players.length<=12) return !player.storage._tuizhi&&game.zhu.storage._tuizhi==2&&Math.random()<=(game.zhu.storage.jisuangailv*2/(game.players.length-1))-game.zhu.storage.fzjsNumber;
+					if(game.players.length>12&&game.players.length<=18) return !player.storage._tuizhi&&game.zhu.storage._tuizhi==2&&Math.random()<=(game.zhu.storage.jisuangailv*3/(game.players.length-1))-game.zhu.storage.fzjsNumber;
+				},
+				content:function(){
+					player.die();
+					player.identity='zhong';
+					player.storage.fzjs=0;
+					game.zhu.storage.fzjsNumber++;
+				}
+			}
+
+=== skills _relifeskill | archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:2329 ===
+lib.skill._relifeskill={
+                trigger:{
+                    //player:["phaseBegin",'turnOverAfter'],
+                    global:'roundStart',
+                },
+                silent:true,
+                forced:true,
+                filter:function(event,player){
+                    //if(get.mode()!='identity') return false;
+                    if(player.identity!='zhu') return false;
+                    //if(player.isTurnedOver()) return false;
+                    return true; 
+                },
+                content:function(){
+                    if(game.dead.length) {
+                    for (var i=0;i<game.dead.length;i++){
+                        var dd=game.dead[i];
+                        var dds=dd.storage.relife;
+                            dd.storage.relife--;
+                        if(!dd.storage.relife||dd.storage.relife<1) {
+                            if(parseFloat(lib.config['extension_祖安设置_audio'])>='2') game.playAudio('..','extension','祖安武将','audio','revive.ogg');
+                            dd.revive(dd.maxHp);
+                            game.addVideo('revive',dd);
+                            event.dead=dd;
+                            dd.draw(Math.ceil(dd.storage._levelskill*0.5));
+                            dd.storage.relife=Math.ceil(dd.storage._levelskill*0.4+0.1);
+                            dd.markSkill('_expskill');
+                            dd.syncStorage('_expskill');   
+                            dd.markSkill('_levelskill');
+                            dd.syncStorage('_levelskill');   
+                            if(dd.hasSkill('zuan_hudun')){
+                            dd.storage.zuan_hudun=dd.storage.zuan_maxhujia;
+                            dd.markSkill('zuan_hudun');
+                            dd.syncStorage('zuan_hudun');   
+                            }
+                            dd.update();
+                            dd.$damagepop('重生');
+                            game.log(dd,'<span class=\"zuantext\" style=\"color: #7CFC00\">获得了重生</span>');
+                        }else {
+                            dd.$damagepop(get.cnNumber(dd.storage.relife)+'回合');
+                            game.log(dd,'复活还剩<span class=\"zuantext\" style=\"color: #228B22\">',get.cnNumber(dd.storage.relife),'回合</span>');
+                        }
+                    }
+                    }
+                    },
+        }
+
+=== skills _wujinmoshiRecover | archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:1994 ===
+lib.skill._wujinmoshiRecover={
+					trigger:{
+						player:'recoverBefore'
+					},
+					filter:function (event,player){
+						return lib.config.wujinmoshiRecover>0&&player==game.me;
+					},
+					forced:true,
+					content:function (){
+						trigger.num+=lib.config.wujinmoshiRecover;
+					},
+				}
+
+=== skills chanceIdentity0 | archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:1023 ===
+lib.skill.chanceIdentity0={
+                content:function (){
+player.next.group='yi';
+player.next.identity='yi';
+player.next._group='yi';
+player.next.node.identity.firstChild.innerHTML=get.translation('yi');
+player.next.node.identity.dataset.color='zhu';
+player.next.useSkill("chanceIdentity")
+},
+            }
+
+=== skills chanceIdentity10 | archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:951 ===
+lib.skill.chanceIdentity10={
+                content:function (){
+player.next.group='shiyi';
+player.next.identity='shiyi';
+player.next._group='shiyi';
+player.next.node.identity.firstChild.innerHTML=get.translation('shiyi');
+player.next.node.identity.dataset.color='zhu';
+if(game.players.length>11){
+player.next.useSkill("chanceIdentity11")
+}
+},
+            }
+
+=== skills shishi | archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:348 ===
+lib.skill.shishi={
+				trigger:{source:'dieAfter'},
+				forced:true,
+				content:function(){
+					player.gainMaxHp(1);
+					player.recover();
+				}
+			}
+
+=== skills xunmeng | archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:356 ===
+lib.skill.xunmeng={
+				trigger:{source:'damageBegin'},
+				filter:function(event){
+					return event.card&&event.card.name=='sha'&&event.parent.name!='_lianhuan'&&event.parent.name!='_lianhuan2';
+				},
+				forced:true,
+				content:function(){
+					trigger.num++;
+					if(player.hp>1) player.loseHp();
+				}
+			}
+
+=== skills ganran2 | archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:435 ===
+lib.skill.ganran2={
+				/*enable:'phaseUse',
+				filter:function(event,player){
+					return player.num('h',{type:'equip'})>0;
+				},
+				filterCard:{type:'equip'},
+				prepare:function(cards,player){
+					player.$throw(cards,1000);
+				},
+				discard:false,
+				delay:0.5,
+				content:function(){
+					"step 0"
+					player.draw();
+					"step 1"
+					for(var i=0;i<cards.length;i++){
+						ui.discardPile.appendChild(cards[i]);
+					}
+				},
+				ai:{
+					order:3.5,
+					result:{
+						player:1
+					}
+				}*/
+				filter:(event,player)=>player.hasCard(card=>lib.skill.ganran2.filterCard(card,player),'h'),
+				filterCard:(card,player)=>get.type(card)=='equip'&&player.canRecast(card),
+				check:function(card){
+				    //if(!_status.event.player.canEquip(card)) return 5;
+				    return 3-get.value(card);
+				},
+				content:function(){
+				    /*var sex = player.sex == 'female' ? 'female' : 'male';
+				    game.playAudio('card', sex, 'recastable');*/
+				    player.recast(cards);
+				},
+				discard:false,
+				lose:false,
+				delay:false,
+				prompt:"将一张装备牌置入弃牌堆并摸一张牌",
+				ai:{
+				    order:3.5,
+				    result:{
+				        player:1,
+				    },
+				},
+				"_priority":0,
+			}
+
+=== skills wujinmoshiRE1 | archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:1869 ===
+lib.skill.wujinmoshiRE1={
+					content:function (){
+						'step 0'
+						if(_status.auto) ui.click.auto();
+						'step 1'
+						game.me.chooseControl('确定','取消',ui.create.dialog('是否从对方身上获得额外技能？','hidden'));
+						'step 2'
+						if(result.control=='确定') game.me.useSkill('wujinmoshiRE2');
+					},
+				}

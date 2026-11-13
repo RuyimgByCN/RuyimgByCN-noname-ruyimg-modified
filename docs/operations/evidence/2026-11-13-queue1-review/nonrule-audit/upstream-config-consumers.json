@@ -1,0 +1,3294 @@
+[
+  {
+    "key": "L10:configs:分割线01@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2173",
+    "path": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L10:configs:skillEffects@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2185",
+    "path": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L10:configs:skillEffectsScale@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2189",
+    "path": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L10:configs:cardFold@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2205",
+    "path": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L10:configs:cardFold_proportion@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2215",
+    "path": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L10:configs:cardPhantom@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2231",
+    "path": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L10:configs:cardEmoji@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2238",
+    "path": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L10:configs:shichangshi@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2245",
+    "path": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L10:configs:meihuaskills@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2250",
+    "path": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L10:configs:分割线02@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2258",
+    "path": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L19:configs:zuan_brawl@archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:3363",
+    "path": "archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js",
+    "matches": [
+      {
+        "line": 40,
+        "text": "if(config.zuan_brawl=='daily') {"
+      },
+      {
+        "line": 49,
+        "text": "if(lib.config.extension_祖安设置_enable&&config.zuan_brawl!='off') {"
+      },
+      {
+        "line": 79,
+        "text": "if(config.zuan_brawl=='daily'&&lib.config.zuan_brawl_daily[2]&&!lib.config.zuan_brawl_daily[2].contains(name)) {"
+      },
+      {
+        "line": 2034,
+        "text": "if(lib.config.extension_祖安设置_enable&&config.zuan_brawl!='off') {"
+      },
+      {
+        "line": 2036,
+        "text": "if(config.zuan_brawl=='standard') {"
+      },
+      {
+        "line": 2039,
+        "text": "if(config.zuan_brawl=='random') {"
+      }
+    ]
+  },
+  {
+    "key": "L20:configs:jinengxiugai@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6398",
+    "path": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js",
+    "matches": [
+      {
+        "line": 6138,
+        "text": "if (config.jinengxiugai) {"
+      }
+    ]
+  },
+  {
+    "key": "L20:configs:biaojixiugai@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6403",
+    "path": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js",
+    "matches": [
+      {
+        "line": 4320,
+        "text": "if (config.biaojixiugai) {"
+      }
+    ]
+  },
+  {
+    "key": "L20:configs:zhijiechifa@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6408",
+    "path": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js",
+    "matches": [
+      {
+        "line": 6206,
+        "text": "if (config.zhijiechifa) {"
+      }
+    ]
+  },
+  {
+    "key": "L20:configs:doudizhu_guanqiuxiaoguo@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6413",
+    "path": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js",
+    "matches": [
+      {
+        "line": 575,
+        "text": "if (config.doudizhu_guanqiuxiaoguo) {"
+      }
+    ]
+  },
+  {
+    "key": "L20:configs:huajiatexiao@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6418",
+    "path": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js",
+    "matches": [
+      {
+        "line": 673,
+        "text": "if (config.huajiatexiao) {"
+      }
+    ]
+  },
+  {
+    "key": "L20:configs:guozhanmeihua@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6423",
+    "path": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js",
+    "matches": [
+      {
+        "line": 1171,
+        "text": "if (lib.config.mode == 'guozhan' && config.guozhanmeihua) {"
+      },
+      {
+        "line": 2222,
+        "text": "if (config.guozhanmeihua) {"
+      }
+    ]
+  },
+  {
+    "key": "L20:configs:shoushajishatexiao@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6428",
+    "path": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js",
+    "matches": [
+      {
+        "line": 2316,
+        "text": "if (config.shoushajishatexiao) {"
+      }
+    ]
+  },
+  {
+    "key": "L20:configs:shiyongkapaitixiao@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6433",
+    "path": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js",
+    "matches": [
+      {
+        "line": 2963,
+        "text": "if (config.shiyongkapaitixiao) {"
+      }
+    ]
+  },
+  {
+    "key": "L20:configs:youxishengfu@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6438",
+    "path": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js",
+    "matches": [
+      {
+        "line": 4014,
+        "text": "if (config.youxishengfu == 'identity') {"
+      },
+      {
+        "line": 4053,
+        "text": "if (config.youxishengfu == 'mobileMode') {"
+      }
+    ]
+  },
+  {
+    "key": "L20:configs:daojianfu@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6449",
+    "path": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L20:configs:daojianfu_type@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6459",
+    "path": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L20:configs:xinshadoudizhu@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6471",
+    "path": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js",
+    "matches": [
+      {
+        "line": 4072,
+        "text": "if (config.xinshadoudizhu) {"
+      }
+    ]
+  },
+  {
+    "key": "L20:configs:xlfbmoshi@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6477",
+    "path": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js",
+    "matches": [
+      {
+        "line": 2260,
+        "text": "if (config.xlfbmoshi) {"
+      }
+    ]
+  },
+  {
+    "key": "L20:configs:mpfbmoshi@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6482",
+    "path": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js",
+    "matches": [
+      {
+        "line": 2275,
+        "text": "if (config.mpfbmoshi) {"
+      }
+    ]
+  },
+  {
+    "key": "L20:configs:zhujizhongwang@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6487",
+    "path": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js",
+    "matches": [
+      {
+        "line": 2289,
+        "text": "if (config.zhujizhongwang && lib.config.mode == 'identity') {"
+      }
+    ]
+  },
+  {
+    "key": "L22:configs:eloPlayers@archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:462",
+    "path": "archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L22:configs:eloDifficulty@archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:467",
+    "path": "archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L22:configs:timeKiller@archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:482",
+    "path": "archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L25:configs:informknow@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:160",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 34951,
+        "text": "lib.config['extension_祖安设置_informknow'] = '0';"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:about1@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:173",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L25:configs:about2@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:185",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L25:configs:blank1@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:198",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L25:configs:blank2@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:210",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L25:configs:Myfriend@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:231",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L25:configs:about4@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:308",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L25:configs:falseedit@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:320",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 34953,
+        "text": "lib.config['extension_祖安设置_falseedit'] = '0';"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:ssr_luoyi@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:15031",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L25:configs:ssr_lieren@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:22337",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L25:configs:free@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50301",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L25:configs:aboutZ@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50307",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L25:configs:settext@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50319",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L25:configs:aboutX@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50331",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L25:configs:linea@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50343",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L25:configs:mode@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50352",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 823,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_mode']) != '2') {"
+      },
+      {
+        "line": 959,
+        "text": "if (lib.config.mode == 'guozhan' && get.config('guozhan_mode') != 'mingjiang') {"
+      },
+      {
+        "line": 1082,
+        "text": "if (lib.config.mode == 'guozhan' && get.config('guozhan_mode') != 'mingjiang') {"
+      },
+      {
+        "line": 1360,
+        "text": "if (lib.config.mode != 'guozhan') {"
+      },
+      {
+        "line": 2042,
+        "text": "if (!spmod.contains(parseFloat(lib.config['extension_祖安设置_mode']))) {"
+      },
+      {
+        "line": 2097,
+        "text": "if (lib.config.mode != 'guozhan') {"
+      },
+      {
+        "line": 2328,
+        "text": "if (spmod.contains(parseFloat(lib.config['extension_祖安设置_mode']))) {"
+      },
+      {
+        "line": 3629,
+        "text": "if (spmod.contains(parseFloat(lib.config['extension_祖安设置_mode']))) {"
+      },
+      {
+        "line": 8951,
+        "text": "if (lib.config.mode == 'stone' && !player.isMin()) {"
+      },
+      {
+        "line": 9206,
+        "text": "if (lib.config.mode == 'stone' && !player.isMin()) {"
+      },
+      {
+        "line": 17382,
+        "text": "if (lib.config.mode == 'stone' && !player.isMin()) {"
+      },
+      {
+        "line": 19317,
+        "text": "if (lib.config.mode == 'identity' && game.zhu.isZhu && player.identity == 'fan') {"
+      },
+      {
+        "line": 19470,
+        "text": "if (lib.config.mode == 'identity' && game.zhu.isZhu && player.identity == 'fan') {"
+      },
+      {
+        "line": 19571,
+        "text": "if (lib.config.mode == 'identity' && game.zhu.isZhu && player.identity == 'fan') {"
+      },
+      {
+        "line": 34956,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_mode']) != '1' && parseFloat(lib.config['extension_祖安设置_upspeed']) == '0') {"
+      },
+      {
+        "line": 35476,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_mode']) == '6') {"
+      },
+      {
+        "line": 35485,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_mode']) == '6') {"
+      },
+      {
+        "line": 35509,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_mode']) == '7' && player.group != 'western' && Math.ceil(player.storage._levelskill * 0.5) != player.storage._levelskill * 0.5) {"
+      },
+      {
+        "line": 35791,
+        "text": "/*if(lib.config.mode=='boss') {"
+      },
+      {
+        "line": 35795,
+        "text": "if(lib.config.mode=='chess'||lib.config.mode=='tafang'||lib.config.mode=='stone') {"
+      },
+      {
+        "line": 35799,
+        "text": "if (lib.config.mode == 'versus' || lib.config.mode == 'single') {"
+      },
+      {
+        "line": 38272,
+        "text": "var mode = parseFloat(lib.config['extension_祖安设置_mode']);"
+      },
+      {
+        "line": 38710,
+        "text": "var mode = lib.config.mode;"
+      },
+      {
+        "line": 39048,
+        "text": "if (target === game.zhu && lib.config.mode !== \"doudizhu\") {"
+      },
+      {
+        "line": 41511,
+        "text": "/*if(lib.config.mode=='boss') {"
+      },
+      {
+        "line": 41528,
+        "text": "if(lib.config.mode=='chess'||lib.config.mode=='tafang'||lib.config.mode=='stone') {"
+      },
+      {
+        "line": 41532,
+        "text": "if (lib.config.mode == 'single') {"
+      },
+      {
+        "line": 41536,
+        "text": "if (lib.config.mode == 'versus') {"
+      },
+      {
+        "line": 41553,
+        "text": "return (lib.config.mode == 'boss' && player.identity == 'zhu');"
+      },
+      {
+        "line": 41926,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_mode']) != '1') {"
+      },
+      {
+        "line": 42613,
+        "text": "if (lib.config.mode != 'guozhan') {"
+      },
+      {
+        "line": 42615,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_mode']) == '8') {"
+      },
+      {
+        "line": 42744,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_mode']) == '7') {"
+      },
+      {
+        "line": 42891,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_mode']) == '6') {"
+      },
+      {
+        "line": 42938,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_mode']) == '5') {"
+      },
+      {
+        "line": 42977,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_mode']) == '4') {"
+      },
+      {
+        "line": 43151,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_mode']) == '3') {"
+      },
+      {
+        "line": 43171,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_mode']) == '2') {"
+      },
+      {
+        "line": 43401,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_mode']) == '2' || parseFloat(lib.config['extension_祖安设置_mode']) == '4') {"
+      },
+      {
+        "line": 43452,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_upspeed']) != '0' || parseFloat(lib.config['extension_祖安设置_mode']) != '1') {"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:fun@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50367",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 34974,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_fun'])=='7') {"
+      },
+      {
+        "line": 34975,
+        "text": "lib.config['extension_祖安设置_fun']='1';"
+      },
+      {
+        "line": 42389,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_fun']) == '7') {"
+      },
+      {
+        "line": 42431,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_fun']) == '6') {"
+      },
+      {
+        "line": 42449,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_fun']) == '5') {"
+      },
+      {
+        "line": 42479,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_fun']) == '4') {"
+      },
+      {
+        "line": 42504,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_fun']) == '3') {"
+      },
+      {
+        "line": 42542,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_fun']) == '2') {"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:goodluck@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50381",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 47609,
+        "text": "if (player == game.me && lib.config['extension_祖安设置_goodluck'] && ui.cardPile.childElementCount > 1) {"
+      },
+      {
+        "line": 47672,
+        "text": "return (!lib.config['extension_祖安设置_goodluck']) || (player != game.me);"
+      },
+      {
+        "line": 47696,
+        "text": "return lib.config['extension_祖安设置_goodluck'] && player == game.me;"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:washhandcard@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50386",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 40928,
+        "text": "if (lib.config.extension_祖安设置_washhandcard) {"
+      },
+      {
+        "line": 40929,
+        "text": "var choice = lib.config.extension_祖安设置_washhandcard;"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:levelstrong@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50396",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 2129,
+        "text": "if (lib.config['extension_祖安设置_levelstrong'] != 'off') {"
+      },
+      {
+        "line": 35493,
+        "text": "if (lib.config['extension_祖安设置_levelstrong'] == 'old') {"
+      },
+      {
+        "line": 35502,
+        "text": "} else if (lib.config['extension_祖安设置_levelstrong'] == 'new') {"
+      },
+      {
+        "line": 43464,
+        "text": "if (lib.config['extension_祖安设置_levelstrong'] == 'off') return false;"
+      },
+      {
+        "line": 43475,
+        "text": "if (lib.config['extension_祖安设置_levelstrong'] == 'off') return;"
+      },
+      {
+        "line": 43478,
+        "text": "if (player.storage._levelskill >= 6 && lib.config['extension_祖安设置_levelstrong'] == 'old') plus++;"
+      },
+      {
+        "line": 43482,
+        "text": "if (lib.config['extension_祖安设置_levelstrong'] == 'off') return;"
+      },
+      {
+        "line": 43486,
+        "text": "if (lib.config['extension_祖安设置_levelstrong'] == 'new' && from.storage._levelskill >= 4) return distance - 1;"
+      },
+      {
+        "line": 43489,
+        "text": "if (lib.config['extension_祖安设置_levelstrong'] == 'off') return;"
+      },
+      {
+        "line": 43493,
+        "text": "if (lib.config['extension_祖安设置_levelstrong'] != 'new') return;"
+      },
+      {
+        "line": 43503,
+        "text": "if (lib.config['extension_祖安设置_levelstrong'] == 'off' || player.storage._levelskill < 10) return false;"
+      },
+      {
+        "line": 43610,
+        "text": "//if(lib.config['extension_祖安设置_levelstrong']) player.addSkill('levelcard');"
+      },
+      {
+        "line": 43622,
+        "text": "if (lib.config['extension_祖安设置_levelstrong'] == 'old') {"
+      },
+      {
+        "line": 43632,
+        "text": "} else if (lib.config['extension_祖安设置_levelstrong'] == 'new') {"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:upspeed@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50406",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 3136,
+        "text": "if (trigger.source && (lib.config['extension_祖安设置_upspeed'] != \"0\" || !lib.brawl)) game.zuanExp(trigger.source, hurt * 7);"
+      },
+      {
+        "line": 34908,
+        "text": "lib.config['extension_祖安设置_upspeed'] = '0';"
+      },
+      {
+        "line": 34956,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_mode']) != '1' && parseFloat(lib.config['extension_祖安设置_upspeed']) == '0') {"
+      },
+      {
+        "line": 34957,
+        "text": "game.saveConfig('extension_祖安设置_upspeed', '10');"
+      },
+      {
+        "line": 35453,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_upspeed']) != '0') {"
+      },
+      {
+        "line": 35454,
+        "text": "var speed = 0.1 * parseFloat(lib.config['extension_祖安设置_upspeed']);"
+      },
+      {
+        "line": 43452,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_upspeed']) != '0' || parseFloat(lib.config['extension_祖安设置_mode']) != '1') {"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:relife@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50433",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 891,
+        "text": "return parseFloat(lib.config['extension_祖安设置_relife']) != '0';"
+      },
+      {
+        "line": 931,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_relife']) != '0') {"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:balance@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50444",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 836,
+        "text": "if (lib.config['extension_祖安设置_balance']) {"
+      },
+      {
+        "line": 1039,
+        "text": "if (lib.config['extension_祖安设置_balance']) return - Infinity;"
+      },
+      {
+        "line": 1042,
+        "text": "if (!lib.config['extension_祖安设置_balance']) return;"
+      },
+      {
+        "line": 1049,
+        "text": "if (!lib.config['extension_祖安设置_balance']) return;"
+      },
+      {
+        "line": 1174,
+        "text": "if (!lib.config['extension_祖安设置_balance']) {"
+      },
+      {
+        "line": 1198,
+        "text": "if (!lib.config['extension_祖安设置_balance']) return num + 2;"
+      },
+      {
+        "line": 1203,
+        "text": "if (lib.config['extension_祖安设置_balance']) {"
+      },
+      {
+        "line": 1224,
+        "text": "return player.hp > 0 || lib.config['extension_祖安设置_balance'];"
+      },
+      {
+        "line": 1241,
+        "text": "if (lib.config['extension_祖安设置_balance']) event.goto(2);"
+      },
+      {
+        "line": 1313,
+        "text": "}) <= 1 && event.player.identity == 'fan' && lib.config['extension_祖安设置_balance'] && player.storage.zuan_guanbing < 10;"
+      },
+      {
+        "line": 1485,
+        "text": "if (lib.config['extension_祖安设置_balance']) return false;"
+      },
+      {
+        "line": 1516,
+        "text": "if (lib.config['extension_祖安设置_balance']) {"
+      },
+      {
+        "line": 1640,
+        "text": "if(card.name=='tao'&&!player.isDying()&&(lib.config['extension_祖安设置_balance'])) return false;"
+      },
+      {
+        "line": 1643,
+        "text": "if(card.name=='tao'&&!player.isDying()&&(lib.config['extension_祖安设置_balance'])) return false;"
+      },
+      {
+        "line": 1676,
+        "text": "if (lib.config['extension_祖安设置_balance']) trigger.source.changeHujia();"
+      },
+      {
+        "line": 1740,
+        "text": "if (!lib.config['extension_祖安设置_balance'] || trigger.player.identity == 'fan') {"
+      },
+      {
+        "line": 1753,
+        "text": "if (lib.config['extension_祖安设置_balance']) {"
+      },
+      {
+        "line": 1768,
+        "text": "if (lib.config['extension_祖安设置_balance']) {"
+      },
+      {
+        "line": 2489,
+        "text": "if (lib.config['extension_祖安设置_balance']) {"
+      },
+      {
+        "line": 2544,
+        "text": "if (!lib.config['extension_祖安设置_balance']) {"
+      },
+      {
+        "line": 2566,
+        "text": "if (lib.config['extension_祖安设置_balance']) {"
+      },
+      {
+        "line": 2582,
+        "text": "if (lib.config['extension_祖安设置_balance']) {"
+      },
+      {
+        "line": 2622,
+        "text": "if (!lib.config['extension_祖安设置_balance']) {"
+      },
+      {
+        "line": 2637,
+        "text": "return event.player != player && (lib.config['extension_祖安设置_balance']);"
+      },
+      {
+        "line": 2652,
+        "text": "return event.player != player && (lib.config['extension_祖安设置_balance']);"
+      },
+      {
+        "line": 2669,
+        "text": "return event.player != player && (lib.config['extension_祖安设置_balance']);"
+      },
+      {
+        "line": 3969,
+        "text": "if (lib.config['extension_祖安设置_balance']) {"
+      },
+      {
+        "line": 35474,
+        "text": "if (!lib.config['extension_祖安设置_balance']) player.draw();"
+      },
+      {
+        "line": 42420,
+        "text": "if (lib.config['extension_祖安设置_balance']) add++;"
+      },
+      {
+        "line": 42634,
+        "text": "if (lib.config['extension_祖安设置_balance']) {"
+      },
+      {
+        "line": 42642,
+        "text": "if (lib.config['extension_祖安设置_balance']) {"
+      },
+      {
+        "line": 42695,
+        "text": "if (lib.config['extension_祖安设置_balance']) {"
+      },
+      {
+        "line": 42848,
+        "text": "if (lib.config['extension_祖安设置_balance']) {"
+      },
+      {
+        "line": 42855,
+        "text": "if (lib.config['extension_祖安设置_balance']) {"
+      },
+      {
+        "line": 42951,
+        "text": "if (!lib.config['extension_祖安设置_balance']) {"
+      },
+      {
+        "line": 43172,
+        "text": "if (lib.config['extension_祖安设置_balance']) {"
+      },
+      {
+        "line": 43226,
+        "text": "return lib.config['extension_祖安设置_balance'];"
+      },
+      {
+        "line": 43270,
+        "text": "var balance = lib.config['extension_祖安设置_balance'];"
+      },
+      {
+        "line": 43643,
+        "text": "if (!lib.config['extension_祖安设置_balance']) var str = str + '<li>每提升一个等级可以摸一张牌';"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:newover@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50449",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 1181,
+        "text": "if (lib.config['extension_祖安设置_newover']) {"
+      },
+      {
+        "line": 1369,
+        "text": "if (lib.config['extension_祖安设置_newover']) {"
+      },
+      {
+        "line": 2676,
+        "text": "if (lib.config['extension_祖安设置_newover']) {"
+      },
+      {
+        "line": 42728,
+        "text": "if (lib.config['extension_祖安设置_newover']) {"
+      },
+      {
+        "line": 43050,
+        "text": "if (lib.config['extension_祖安设置_newover']) {"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:lineb@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50454",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L25:configs:bingletexiao@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50463",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 47764,
+        "text": "//if(lib.config['extension_祖安设置_bingletexiao']){"
+      },
+      {
+        "line": 50504,
+        "text": "game.saveConfig('extension_祖安设置_bingletexiao', \"none\");"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:texiao@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50522",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 1349,
+        "text": "var tex = lib.config['extension_祖安设置_texiao'];"
+      },
+      {
+        "line": 1608,
+        "text": "var tex = lib.config['extension_祖安设置_texiao'];"
+      },
+      {
+        "line": 41297,
+        "text": "if (lib.config['extension_祖安设置_texiao']) {"
+      },
+      {
+        "line": 41327,
+        "text": "var tex=lib.config['extension_祖安设置_texiao'];"
+      },
+      {
+        "line": 42673,
+        "text": "var tex = lib.config['extension_祖安设置_texiao'];"
+      },
+      {
+        "line": 42718,
+        "text": "var tex = lib.config['extension_祖安设置_texiao'];"
+      },
+      {
+        "line": 42831,
+        "text": "var tex = lib.config['extension_祖安设置_texiao'];"
+      },
+      {
+        "line": 43131,
+        "text": "var tex = lib.config['extension_祖安设置_texiao'];"
+      },
+      {
+        "line": 43381,
+        "text": "var tex = lib.config['extension_祖安设置_texiao'];"
+      },
+      {
+        "line": 47785,
+        "text": "/*var tex=lib.config['extension_祖安设置_texiao'];"
+      },
+      {
+        "line": 47889,
+        "text": "var tex = lib.config['extension_祖安设置_texiao'];"
+      },
+      {
+        "line": 47998,
+        "text": "var tex=lib.config['extension_祖安设置_texiao'];"
+      },
+      {
+        "line": 48044,
+        "text": "var tex=lib.config['extension_祖安设置_texiao'];"
+      },
+      {
+        "line": 48090,
+        "text": "var tex=lib.config['extension_祖安设置_texiao'];"
+      },
+      {
+        "line": 48136,
+        "text": "var tex=lib.config['extension_祖安设置_texiao'];"
+      },
+      {
+        "line": 48515,
+        "text": "var tex=lib.config['extension_祖安设置_texiao'];"
+      },
+      {
+        "line": 48522,
+        "text": "var tex=lib.config['extension_祖安设置_texiao'];"
+      },
+      {
+        "line": 48529,
+        "text": "var tex=lib.config['extension_祖安设置_texiao'];"
+      },
+      {
+        "line": 48536,
+        "text": "var tex=lib.config['extension_祖安设置_texiao'];"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:zuancoveropacity@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50527",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 1351,
+        "text": "game.newalive('extension/祖安武将/mode/mode_hellfire.gif', 1.5, lib.config.zuancoveropacity);"
+      },
+      {
+        "line": 1610,
+        "text": "game.newalive('extension/祖安武将/mode/mode_guifu.gif', 1.5, lib.config.zuancoveropacity);"
+      },
+      {
+        "line": 34967,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_zuancoveropacity']) != 'NaN') {"
+      },
+      {
+        "line": 34968,
+        "text": "lib.config.zuancoveropacity = parseFloat(lib.config['extension_祖安设置_zuancoveropacity'] * 0.1);"
+      },
+      {
+        "line": 34970,
+        "text": "lib.config.zuancoveropacity = '0.8';"
+      },
+      {
+        "line": 35101,
+        "text": "player.storage.dying_img.style.opacity = lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 42675,
+        "text": "game.newalive('extension/祖安武将/mode/mode_yemu.gif', 2, lib.config.zuancoveropacity);"
+      },
+      {
+        "line": 42720,
+        "text": "game.newalive('extension/祖安武将/mode/mode_yemu.gif', 2, lib.config.zuancoveropacity);"
+      },
+      {
+        "line": 42833,
+        "text": "game.newalive('extension/祖安武将/mode/mode_canghai.gif', 2, lib.config.zuancoveropacity);"
+      },
+      {
+        "line": 43118,
+        "text": "//player.storage.jingcheng_img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 43119,
+        "text": "player.storage.jingcheng_img.style.opacity = lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 43133,
+        "text": "game.newalive('extension/祖安武将/mode/mode_guanfu.gif', 3.5, lib.config.zuancoveropacity);"
+      },
+      {
+        "line": 43368,
+        "text": "//player.storage.jingcheng_img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 43369,
+        "text": "player.storage.jingcheng_img.style.opacity = lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 43383,
+        "text": "game.newalive('extension/祖安武将/mode/mode_jingcheng.gif', 2, lib.config.zuancoveropacity);"
+      },
+      {
+        "line": 47787,
+        "text": "game.newalive('extension/祖安武将/effects/'+trigger.card.name+'.gif',1,lib.config.zuancoveropacity);"
+      },
+      {
+        "line": 47815,
+        "text": "player.storage.delayimg[trigger.card.name].style.opacity = lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 47894,
+        "text": "game.newalive('extension/祖安武将/effects/' + trigger.card.name + '.gif', 1, lib.config.zuancoveropacity);"
+      },
+      {
+        "line": 47933,
+        "text": "player.storage.dying_img.style.opacity = lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48000,
+        "text": "game.newalive('extension/祖安武将/effects/thunder.gif',1,lib.config.zuancoveropacity);"
+      },
+      {
+        "line": 48011,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48046,
+        "text": "game.newalive('extension/祖安武将/effects/volcano.gif',2.5,lib.config.zuancoveropacity);"
+      },
+      {
+        "line": 48057,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48092,
+        "text": "game.newalive('extension/祖安武将/effects/flood.gif',2.5,lib.config.zuancoveropacity);"
+      },
+      {
+        "line": 48103,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48138,
+        "text": "game.newalive('extension/祖安武将/effects/fulei.gif',1,lib.config.zuancoveropacity);"
+      },
+      {
+        "line": 48149,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48188,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48217,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48270,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48290,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48310,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48330,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48350,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48370,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48408,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48430,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48452,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48474,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48517,
+        "text": "game.newalive('extension/祖安武将/effects/thunder.gif',1,lib.config.zuancoveropacity);"
+      },
+      {
+        "line": 48524,
+        "text": "game.newalive('extension/祖安武将/effects/volcano.gif',2.5,lib.config.zuancoveropacity);"
+      },
+      {
+        "line": 48531,
+        "text": "game.newalive('extension/祖安武将/effects/flood.gif',2.5,lib.config.zuancoveropacity);"
+      },
+      {
+        "line": 48538,
+        "text": "game.newalive('extension/祖安武将/effects/fulei.gif',1,lib.config.zuancoveropacity);"
+      },
+      {
+        "line": 48608,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48635,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48673,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48693,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48713,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48733,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48815,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48835,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48855,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48874,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48894,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48914,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      },
+      {
+        "line": 48934,
+        "text": "img.style.opacity=lib.config.zuancoveropacity;"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:huihe@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50542",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 35304,
+        "text": "var huihe = parseFloat(lib.config['extension_祖安设置_huihe']);"
+      },
+      {
+        "line": 35379,
+        "text": "var huihe = parseFloat(lib.config['extension_祖安设置_huihe']);"
+      },
+      {
+        "line": 41570,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_huihe']) != '0') {"
+      },
+      {
+        "line": 41670,
+        "text": "var opa = Math.sqrt(1 - strg, 3) * lib.config['extension_祖安设置_huihe'] / 10;"
+      },
+      {
+        "line": 41843,
+        "text": "event.head.style.cssText = 'text-align: center;margin: auto;pointer-events: none;opacity: ' + event.num * 0.01 * parseFloat(lib.config['extension_祖安设置_huihe']) / event.zuanspeed + ';display: block;width: ' + width + 'px;height: ' + height + 'px;position: absolute;top: 0;left: ' + left + 'px;bottom: 0;background:none;z-index:6';"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:huiheopa@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50558",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 35371,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_huiheopa']) == 'NaN') {"
+      },
+      {
+        "line": 35374,
+        "text": "var zuanspeed = parseFloat(lib.config['extension_祖安设置_huiheopa']) * 0.1;"
+      },
+      {
+        "line": 41683,
+        "text": "scale = scale * (lib.config['extension_祖安设置_huiheopa'] / 10);"
+      },
+      {
+        "line": 41699,
+        "text": "//window.bgphaseTX.style.cssText='pointer-events: none;text-align: center;margin: auto;opacity: '+lib.config['extension_祖安设置_huiheopa']+';display: block;position: absolute;background:none;z-index: -5;'+zuan_wid+'!important;left: 0;bottom: 0';"
+      },
+      {
+        "line": 41707,
+        "text": "//window.bgphaseTX.style.cssText='pointer-events: none;text-align: center;margin: auto;opacity: '+lib.config['extension_祖安设置_huiheopa']+';display: block;position: absolute;background:none;z-index: -5;'+zuan_wid+'!important;left: 0;bottom: 0';"
+      },
+      {
+        "line": 41811,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_huiheopa']) == 'NaN') {"
+      },
+      {
+        "line": 41814,
+        "text": "event.zuanspeed = parseFloat(lib.config['extension_祖安设置_huiheopa']) * 0.1;"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:newhuihe@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50572",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 41675,
+        "text": "if (lib.config['extension_祖安设置_newhuihe'] == 'new_brighten') {"
+      },
+      {
+        "line": 41677,
+        "text": "} else if (lib.config['extension_祖安设置_newhuihe'] == 'new_shine') {"
+      },
+      {
+        "line": 41717,
+        "text": "if (lib.config['extension_祖安设置_newhuihe'].indexOf('new_') == -1) return false;"
+      },
+      {
+        "line": 41751,
+        "text": "if (lib.config['extension_祖安设置_newhuihe'] != 'old') return false;"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:imgtime@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50583",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 41739,
+        "text": "game.zuanhideBackground(img, lib.config['extension_祖安设置_imgtime'] / 10, lib.config['extension_祖安设置_imgfps']);"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:imgfps@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50601",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 41739,
+        "text": "game.zuanhideBackground(img, lib.config['extension_祖安设置_imgtime'] / 10, lib.config['extension_祖安设置_imgfps']);"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:fujiaset@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50614",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 50625,
+        "text": "game.saveConfig('extension_祖安设置_fujiaset', item);"
+      },
+      {
+        "line": 50639,
+        "text": "game.saveConfig('extension_祖安设置_fujiaset', '0');"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:newui@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50643",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 2806,
+        "text": "game.dyingShow(player, parseFloat(lib.config['extension_祖安设置_newui']));"
+      },
+      {
+        "line": 2934,
+        "text": "game.dyingShow(player, parseFloat(lib.config['extension_祖安设置_newui']));"
+      },
+      {
+        "line": 2945,
+        "text": "game.dyingShow(player, parseFloat(lib.config['extension_祖安设置_newui']));"
+      },
+      {
+        "line": 3141,
+        "text": "game.dyingShow(player, parseFloat(lib.config['extension_祖安设置_newui']));"
+      },
+      {
+        "line": 3326,
+        "text": "game.dyingShow(player, parseFloat(lib.config['extension_祖安设置_newui']));"
+      },
+      {
+        "line": 3334,
+        "text": "game.dyingShow(player, parseFloat(lib.config['extension_祖安设置_newui']));"
+      },
+      {
+        "line": 4644,
+        "text": "game.dyingShow(player, parseFloat(lib.config['extension_祖安设置_newui']));"
+      },
+      {
+        "line": 4660,
+        "text": "game.dyingShow(player, parseFloat(lib.config['extension_祖安设置_newui']));"
+      },
+      {
+        "line": 4686,
+        "text": "game.dyingShow(player, parseFloat(lib.config['extension_祖安设置_newui']));"
+      },
+      {
+        "line": 4792,
+        "text": "game.dyingShow(player, parseFloat(lib.config['extension_祖安设置_newui']));"
+      },
+      {
+        "line": 4800,
+        "text": "game.dyingShow(player, parseFloat(lib.config['extension_祖安设置_newui']));"
+      },
+      {
+        "line": 34909,
+        "text": "lib.config['extension_祖安设置_newui'] = '4';"
+      },
+      {
+        "line": 42425,
+        "text": "game.dyingShow(player, parseFloat(lib.config['extension_祖安设置_newui']));"
+      },
+      {
+        "line": 43110,
+        "text": "event.newui = parseFloat(lib.config['extension_祖安设置_newui']);"
+      },
+      {
+        "line": 43360,
+        "text": "event.newui = parseFloat(lib.config['extension_祖安设置_newui']);"
+      },
+      {
+        "line": 47775,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_newui']) == 0) return false;"
+      },
+      {
+        "line": 47806,
+        "text": "event.newui = parseFloat(lib.config['extension_祖安设置_newui']);"
+      },
+      {
+        "line": 47907,
+        "text": "//if(parseFloat(lib.config['extension_祖安设置_newui'])==0) return false;"
+      },
+      {
+        "line": 47926,
+        "text": "event.newui = parseFloat(lib.config['extension_祖安设置_newui']);"
+      },
+      {
+        "line": 47965,
+        "text": "//if(parseFloat(lib.config['extension_祖安设置_newui'])==0) return false;"
+      },
+      {
+        "line": 48005,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48006,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_shandian.png');"
+      },
+      {
+        "line": 48007,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10shandian.png');"
+      },
+      {
+        "line": 48008,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hshandian.png');"
+      },
+      {
+        "line": 48009,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sshandian.png');"
+      },
+      {
+        "line": 48051,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48052,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_huoshan.png');"
+      },
+      {
+        "line": 48053,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10huoshan.png');"
+      },
+      {
+        "line": 48054,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hhuoshan.png');"
+      },
+      {
+        "line": 48055,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Shuoshan.png');"
+      },
+      {
+        "line": 48097,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48098,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_hongshui.png');"
+      },
+      {
+        "line": 48099,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10hongshui.png');"
+      },
+      {
+        "line": 48100,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hhongshui.png');"
+      },
+      {
+        "line": 48101,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Shongshui.png');"
+      },
+      {
+        "line": 48143,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48144,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_fulei.png');"
+      },
+      {
+        "line": 48145,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10fulei.png');"
+      },
+      {
+        "line": 48146,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hfulei.png');"
+      },
+      {
+        "line": 48147,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sfulei.png');"
+      },
+      {
+        "line": 48182,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48183,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_lebu.png');"
+      },
+      {
+        "line": 48184,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10lebu.png');"
+      },
+      {
+        "line": 48185,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hlebu.png');"
+      },
+      {
+        "line": 48186,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Slebu.png');"
+      },
+      {
+        "line": 48211,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48212,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_bingliang.jpg');"
+      },
+      {
+        "line": 48213,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10bingliang.png');"
+      },
+      {
+        "line": 48214,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hbingliang.png');"
+      },
+      {
+        "line": 48215,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sbingliang.png');"
+      },
+      {
+        "line": 48264,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48265,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_dying.png');"
+      },
+      {
+        "line": 48266,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10dying.png');"
+      },
+      {
+        "line": 48267,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hdying.png');"
+      },
+      {
+        "line": 48268,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sdying.png');"
+      },
+      {
+        "line": 48284,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48285,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_lebu.png');"
+      },
+      {
+        "line": 48286,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10lebu.png');"
+      },
+      {
+        "line": 48287,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hlebu.png');"
+      },
+      {
+        "line": 48288,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Slebu.png');"
+      },
+      {
+        "line": 48304,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48305,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_bingliang.jpg');"
+      },
+      {
+        "line": 48306,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10bingliang.png');"
+      },
+      {
+        "line": 48307,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hbingliang.png');"
+      },
+      {
+        "line": 48308,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sbingliang.png');"
+      },
+      {
+        "line": 48324,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48325,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_huoshan.png');"
+      },
+      {
+        "line": 48326,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10huoshan.png');"
+      },
+      {
+        "line": 48327,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hhuoshan.png');"
+      },
+      {
+        "line": 48328,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Shuoshan.png');"
+      },
+      {
+        "line": 48344,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48345,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_hongshui.png');"
+      },
+      {
+        "line": 48346,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10hongshui.png');"
+      },
+      {
+        "line": 48347,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hhongshui.png');"
+      },
+      {
+        "line": 48348,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Shongshui.png');"
+      },
+      {
+        "line": 48364,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48365,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_shandian.png');"
+      },
+      {
+        "line": 48366,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10shandian.png');"
+      },
+      {
+        "line": 48367,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hshandian.png');"
+      },
+      {
+        "line": 48368,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sshandian.png');"
+      },
+      {
+        "line": 48401,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48402,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_shandian.png');"
+      },
+      {
+        "line": 48403,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10shandian.png');"
+      },
+      {
+        "line": 48404,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hshandian.png');"
+      },
+      {
+        "line": 48405,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sshandian.png');"
+      },
+      {
+        "line": 48423,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48424,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_huoshan.png');"
+      },
+      {
+        "line": 48425,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10huoshan.png');"
+      },
+      {
+        "line": 48426,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hhuoshan.png');"
+      },
+      {
+        "line": 48427,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Shuoshan.png');"
+      },
+      {
+        "line": 48445,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48446,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_hongshui.png');"
+      },
+      {
+        "line": 48447,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10hongshui.png');"
+      },
+      {
+        "line": 48448,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hhongshui.png');"
+      },
+      {
+        "line": 48449,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Shongshui.png');"
+      },
+      {
+        "line": 48467,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48468,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_fulei.png');"
+      },
+      {
+        "line": 48469,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10fulei.png');"
+      },
+      {
+        "line": 48470,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hfulei.png');"
+      },
+      {
+        "line": 48471,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sfulei.png');"
+      },
+      {
+        "line": 48602,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48603,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_dying.png');"
+      },
+      {
+        "line": 48604,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10dying.png');"
+      },
+      {
+        "line": 48605,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hdying.png');"
+      },
+      {
+        "line": 48606,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sdying.png');"
+      },
+      {
+        "line": 48629,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48630,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_lebu.png');"
+      },
+      {
+        "line": 48631,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10lebu.png');"
+      },
+      {
+        "line": 48632,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hlebu.png');"
+      },
+      {
+        "line": 48633,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Slebu.png');"
+      },
+      {
+        "line": 48649,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48650,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_bingliang.jpg');"
+      },
+      {
+        "line": 48651,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10bingliang.png');"
+      },
+      {
+        "line": 48652,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hbingliang.png');"
+      },
+      {
+        "line": 48653,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sbingliang.png');"
+      },
+      {
+        "line": 48667,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48668,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_huoshan.png');"
+      },
+      {
+        "line": 48669,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10huoshan.png');"
+      },
+      {
+        "line": 48670,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hhuoshan.png');"
+      },
+      {
+        "line": 48671,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Shuoshan.png');"
+      },
+      {
+        "line": 48687,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48688,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_hongshui.png');"
+      },
+      {
+        "line": 48689,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10hongshui.png');"
+      },
+      {
+        "line": 48690,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hhongshui.png');"
+      },
+      {
+        "line": 48691,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Shongshui.png');"
+      },
+      {
+        "line": 48707,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48708,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_fulei.png');"
+      },
+      {
+        "line": 48709,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10fulei.png');"
+      },
+      {
+        "line": 48710,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hfulei.png');"
+      },
+      {
+        "line": 48711,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sfulei.png');"
+      },
+      {
+        "line": 48727,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48728,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_shandian.png');"
+      },
+      {
+        "line": 48729,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10shandian.png');"
+      },
+      {
+        "line": 48730,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hshandian.png');"
+      },
+      {
+        "line": 48731,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sshandian.png');"
+      },
+      {
+        "line": 48809,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48810,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_dying.png');"
+      },
+      {
+        "line": 48811,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10dying.png');"
+      },
+      {
+        "line": 48812,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hdying.png');"
+      },
+      {
+        "line": 48813,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sdying.png');"
+      },
+      {
+        "line": 48829,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48830,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_lebu.png');"
+      },
+      {
+        "line": 48831,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10lebu.png');"
+      },
+      {
+        "line": 48832,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hlebu.png');"
+      },
+      {
+        "line": 48833,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Slebu.png');"
+      },
+      {
+        "line": 48849,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48850,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_bingliang.jpg');"
+      },
+      {
+        "line": 48851,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10bingliang.png');"
+      },
+      {
+        "line": 48852,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hbingliang.png');"
+      },
+      {
+        "line": 48853,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sbingliang.png');"
+      },
+      {
+        "line": 48868,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48869,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_huoshan.png');"
+      },
+      {
+        "line": 48870,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10huoshan.png');"
+      },
+      {
+        "line": 48871,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hhuoshan.png');"
+      },
+      {
+        "line": 48872,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Shuoshan.png');"
+      },
+      {
+        "line": 48888,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48889,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_hongshui.png');"
+      },
+      {
+        "line": 48890,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10hongshui.png');"
+      },
+      {
+        "line": 48891,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hhongshui.png');"
+      },
+      {
+        "line": 48892,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Shongshui.png');"
+      },
+      {
+        "line": 48908,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48909,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_fulei.png');"
+      },
+      {
+        "line": 48910,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10fulei.png');"
+      },
+      {
+        "line": 48911,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hfulei.png');"
+      },
+      {
+        "line": 48912,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sfulei.png');"
+      },
+      {
+        "line": 48928,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {"
+      },
+      {
+        "line": 48929,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_shandian.png');"
+      },
+      {
+        "line": 48930,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10shandian.png');"
+      },
+      {
+        "line": 48931,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hshandian.png');"
+      },
+      {
+        "line": 48932,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sshandian.png');"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:helasisy@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50654",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 34910,
+        "text": "lib.config['extension_祖安设置_helasisy'] = true;"
+      },
+      {
+        "line": 41195,
+        "text": "var off=lib.config['extension_祖安设置_helasisy'];"
+      },
+      {
+        "line": 41357,
+        "text": "var off = lib.config['extension_祖安设置_helasisy'];"
+      },
+      {
+        "line": 41920,
+        "text": "var off = lib.config['extension_祖安设置_helasisy'];"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:linec@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50659",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L25:configs:perspective@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50757",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 41206,
+        "text": "if (lib.config['extension_祖安设置_perspective']) {"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:bizhi@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50762",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 34912,
+        "text": "lib.config['extension_祖安设置_bizhi'] = '3';"
+      },
+      {
+        "line": 34961,
+        "text": "var bizhi = parseFloat(lib.config['extension_祖安设置_bizhi']);"
+      },
+      {
+        "line": 34962,
+        "text": "if (bizhi == '0' || bizhi == '2' || bizhi == '4') lib.config['extension_祖安设置_bizhi']++;"
+      },
+      {
+        "line": 35779,
+        "text": "var bizhi = parseFloat(lib.config['extension_祖安设置_bizhi']);"
+      },
+      {
+        "line": 41186,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_bizhi'])!='1'&&parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'&&!lib.config['extension_祖安设置_exwallpaper']) {"
+      },
+      {
+        "line": 41197,
+        "text": "return parseFloat(lib.config['extension_祖安设置_bizhi'])!='1';"
+      },
+      {
+        "line": 50801,
+        "text": "game.saveConfig('extension_祖安设置_bizhi', items);"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:wallpaper@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50804",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 1353,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 1612,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 34913,
+        "text": "lib.config['extension_祖安设置_wallpaper'] = '10';"
+      },
+      {
+        "line": 34959,
+        "text": "var wallpaper = parseFloat(lib.config['extension_祖安设置_wallpaper']);"
+      },
+      {
+        "line": 34960,
+        "text": "if (wallpaper == '0' || wallpaper == '2' || wallpaper == '6') lib.config['extension_祖安设置_wallpaper']++;"
+      },
+      {
+        "line": 41186,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_bizhi'])!='1'&&parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'&&!lib.config['extension_祖安设置_exwallpaper']) {"
+      },
+      {
+        "line": 41287,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_wallpaper']) != '1' || lib.config['extension_祖安设置_exwallpaper']) {"
+      },
+      {
+        "line": 41298,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_wallpaper']) == '1' && !lib.config['extension_祖安设置_exwallpaper']) return false;"
+      },
+      {
+        "line": 41305,
+        "text": "if ((parseFloat(lib.config['extension_祖安设置_wallpaper']) != '1' || (lib.config['extension_祖安设置_exwallpaper'] && lib.config.zuanexwallpaper == 'on')) && parseFloat(lib.config['extension_祖安设置_isPC']) != '0') {"
+      },
+      {
+        "line": 41330,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_wallpaper'])=='1'&&!lib.config['extension_祖安设置_exwallpaper']) return false;"
+      },
+      {
+        "line": 41352,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_wallpaper']) == '1' && !lib.config['extension_祖安设置_exwallpaper']) return false;"
+      },
+      {
+        "line": 41367,
+        "text": "var backnum = parseFloat(lib.config['extension_祖安设置_wallpaper']);"
+      },
+      {
+        "line": 42676,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 42721,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 42834,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 43134,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 43385,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 47835,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 47872,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 48022,
+        "text": "if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 48068,
+        "text": "if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 48114,
+        "text": "if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 48160,
+        "text": "if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 48381,
+        "text": "if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 50843,
+        "text": "game.saveConfig('extension_祖安设置_wallpaper', items);"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:paperchoose@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50846",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 41373,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_paperchoose']) == '1') {"
+      },
+      {
+        "line": 41381,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_paperchoose']) == '2') {"
+      },
+      {
+        "line": 41385,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_paperchoose']) == '3') {"
+      },
+      {
+        "line": 41431,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_paperchoose']) == '1') {"
+      },
+      {
+        "line": 41439,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_paperchoose']) == '2') {"
+      },
+      {
+        "line": 41443,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_paperchoose']) == '3') {"
+      },
+      {
+        "line": 41452,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_paperchoose']) == '1') {"
+      },
+      {
+        "line": 41460,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_paperchoose']) == '2') {"
+      },
+      {
+        "line": 41464,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_paperchoose']) == '3') {"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:exwallpaper@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50856",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 1353,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 1612,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 35790,
+        "text": "if (lib.config['extension_祖安设置_exwallpaper']) {"
+      },
+      {
+        "line": 41186,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_bizhi'])!='1'&&parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'&&!lib.config['extension_祖安设置_exwallpaper']) {"
+      },
+      {
+        "line": 41287,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_wallpaper']) != '1' || lib.config['extension_祖安设置_exwallpaper']) {"
+      },
+      {
+        "line": 41298,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_wallpaper']) == '1' && !lib.config['extension_祖安设置_exwallpaper']) return false;"
+      },
+      {
+        "line": 41305,
+        "text": "if ((parseFloat(lib.config['extension_祖安设置_wallpaper']) != '1' || (lib.config['extension_祖安设置_exwallpaper'] && lib.config.zuanexwallpaper == 'on')) && parseFloat(lib.config['extension_祖安设置_isPC']) != '0') {"
+      },
+      {
+        "line": 41330,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_wallpaper'])=='1'&&!lib.config['extension_祖安设置_exwallpaper']) return false;"
+      },
+      {
+        "line": 41352,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_wallpaper']) == '1' && !lib.config['extension_祖安设置_exwallpaper']) return false;"
+      },
+      {
+        "line": 41510,
+        "text": "if (lib.config['extension_祖安设置_exwallpaper']) {"
+      },
+      {
+        "line": 41552,
+        "text": "if (lib.config['extension_祖安设置_exwallpaper']) {"
+      },
+      {
+        "line": 42676,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 42721,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 42834,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 43134,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 43385,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 47835,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 47872,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 48022,
+        "text": "if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 48068,
+        "text": "if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 48114,
+        "text": "if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 48160,
+        "text": "if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 48381,
+        "text": "if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:qiankuang@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50861",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 41024,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_biankuang']) != '0' || parseFloat(lib.config['extension_祖安设置_qiankuang']) != '0') {"
+      },
+      {
+        "line": 41063,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_qiankuang']) == '1') event.cover = ['donghai', 'beimo', 'tianshan'].randomGet();"
+      },
+      {
+        "line": 41064,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_qiankuang']) == '2') event.cover = 'donghai';"
+      },
+      {
+        "line": 41065,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_qiankuang']) == '3') event.cover = 'beimo';"
+      },
+      {
+        "line": 41066,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_qiankuang']) == '4') event.cover = 'tianshan';"
+      },
+      {
+        "line": 41120,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_qiankuang']) != '0') {"
+      },
+      {
+        "line": 41138,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_qiankuang']) != '0') {"
+      },
+      {
+        "line": 41168,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_qiankuang']) != '0') {"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:backgroundttop@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50910",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 50945,
+        "text": "game.saveConfig('extension_祖安设置_backgroundttop', items);"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:zhishixian@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50949",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 34963,
+        "text": "var items = lib.config['extension_祖安设置_zhishixian'];"
+      },
+      {
+        "line": 34965,
+        "text": "lib.config['extension_祖安设置_zhishixian'] = items.slice(5);"
+      },
+      {
+        "line": 35827,
+        "text": "if (lib.config['extension_祖安设置_zhishixian'] && lib.config['extension_祖安设置_zhishixian'] != 'moren') {"
+      },
+      {
+        "line": 35828,
+        "text": "if (['yulong', 'jingdian', 'guanjie'].contains(lib.config['extension_祖安设置_zhishixian'])) {"
+      },
+      {
+        "line": 35851,
+        "text": "if (lib.config['extension_祖安设置_zhishixian'] == \"yulong\") {"
+      },
+      {
+        "line": 36099,
+        "text": "if (lib.config['extension_祖安设置_zhishixian'] == \"jingdian\") {"
+      },
+      {
+        "line": 36347,
+        "text": "if (lib.config['extension_祖安设置_zhishixian'] == \"guanjie\") {"
+      },
+      {
+        "line": 37504,
+        "text": "game.saveConfig('zuanzhishixian', lib.config['extension_祖安设置_zhishixian']);"
+      },
+      {
+        "line": 37505,
+        "text": "game.saveConfig('extension_十周年UI_playerLineEffect', lib.config['extension_祖安设置_zhishixian']);"
+      },
+      {
+        "line": 37506,
+        "text": "if (window.decadeUI) decadeUI.config.playerLineEffect = lib.config['extension_祖安设置_zhishixian'];"
+      },
+      {
+        "line": 37507,
+        "text": "if (lib.config['extension_祖安设置_zhishixian'] == 'moren') {"
+      },
+      {
+        "line": 37510,
+        "text": "game.linexy = game['zs' + lib.config['extension_祖安设置_zhishixian'] + 'LineXy'];"
+      },
+      {
+        "line": 37525,
+        "text": "game.saveConfig('zuanzhishixian', lib.config['extension_祖安设置_zhishixian']);"
+      },
+      {
+        "line": 37526,
+        "text": "game.saveConfig('extension_十周年UI_playerLineEffect', lib.config['extension_祖安设置_zhishixian']);"
+      },
+      {
+        "line": 37527,
+        "text": "if (window.decadeUI) decadeUI.config.playerLineEffect = lib.config['extension_祖安设置_zhishixian'];"
+      },
+      {
+        "line": 37528,
+        "text": "if (lib.config['extension_祖安设置_zhishixian'] == 'moren') {"
+      },
+      {
+        "line": 37531,
+        "text": "game.linexy = game['zs' + lib.config['extension_祖安设置_zhishixian'] + 'LineXy'];"
+      },
+      {
+        "line": 38118,
+        "text": "game.saveConfig('zuanzhishixian', lib.config['extension_祖安设置_zhishixian']);"
+      },
+      {
+        "line": 38119,
+        "text": "game.saveConfig('extension_十周年UI_playerLineEffect', lib.config['extension_祖安设置_zhishixian']);"
+      },
+      {
+        "line": 38120,
+        "text": "if (window.decadeUI) decadeUI.config.playerLineEffect = lib.config['extension_祖安设置_zhishixian'];"
+      },
+      {
+        "line": 38121,
+        "text": "if (lib.config['extension_祖安设置_zhishixian'] == 'moren') {"
+      },
+      {
+        "line": 38124,
+        "text": "game.linexy = game['zs' + lib.config['extension_祖安设置_zhishixian'] + 'LineXy'];"
+      },
+      {
+        "line": 38136,
+        "text": "if (!lib.config['extension_祖安设置_zhishixian'] || lib.config['extension_祖安设置_zhishixian'] == 'moren') return false;"
+      },
+      {
+        "line": 38137,
+        "text": "if (['jingdian', 'yulong'].contains(lib.config['extension_祖安设置_zhishixian'])) return false;"
+      },
+      {
+        "line": 38141,
+        "text": "game.saveConfig('zuanzhishixian', lib.config['extension_祖安设置_zhishixian']);"
+      },
+      {
+        "line": 38142,
+        "text": "game.saveConfig('extension_十周年UI_playerLineEffect', lib.config['extension_祖安设置_zhishixian']);"
+      },
+      {
+        "line": 38143,
+        "text": "if (window.decadeUI) decadeUI.config.playerLineEffect = lib.config['extension_祖安设置_zhishixian'];"
+      },
+      {
+        "line": 38144,
+        "text": "if (lib.config['extension_祖安设置_zhishixian'] == 'moren') {"
+      },
+      {
+        "line": 38147,
+        "text": "game.linexy = game['zs' + lib.config['extension_祖安设置_zhishixian'] + 'LineXy'];"
+      },
+      {
+        "line": 51031,
+        "text": "game.saveConfig('extension_祖安设置_zhishixian', items);"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:zhishiopi@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51042",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 37130,
+        "text": "div1.style.opacity = lib.config['extension_祖安设置_zhishiopi'] / 10;"
+      },
+      {
+        "line": 37228,
+        "text": "div2.style.opacity = lib.config['extension_祖安设置_zhishiopi'] / 10;"
+      },
+      {
+        "line": 37623,
+        "text": "div1.style.opacity = lib.config['extension_祖安设置_zhishiopi'] / 10;"
+      },
+      {
+        "line": 37721,
+        "text": "div2.style.opacity = lib.config['extension_祖安设置_zhishiopi'] / 10;"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:lined@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51060",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L25:configs:zuantype@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51069",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 43746,
+        "text": "if (lib.config['extension_祖安设置_zuantype'].indexOf('new') == -1) return false;"
+      },
+      {
+        "line": 43747,
+        "text": "if (lib.config['extension_祖安设置_zuantype'] == 'new_chg') {"
+      },
+      {
+        "line": 43788,
+        "text": "if (lib.config['extension_祖安设置_zuantype'] == 'new_chg') {"
+      },
+      {
+        "line": 45973,
+        "text": "if (lib.config['extension_祖安设置_zuantype'].indexOf('new') == -1) return false;"
+      },
+      {
+        "line": 45974,
+        "text": "if (lib.config['extension_祖安设置_zuantype'] == 'new_chg') {"
+      },
+      {
+        "line": 46068,
+        "text": "if (lib.config['extension_祖安设置_zuantype'] == 'new_chg') {"
+      },
+      {
+        "line": 46395,
+        "text": "if (lib.config['extension_祖安设置_zuantype'].indexOf('new') == -1) return false;"
+      },
+      {
+        "line": 46397,
+        "text": "if (lib.config['extension_祖安设置_zuantype'] == 'new_chg') {"
+      },
+      {
+        "line": 46486,
+        "text": "if (lib.config['extension_祖安设置_zuantype'] == 'new_chg') {"
+      },
+      {
+        "line": 46663,
+        "text": "if (lib.config['extension_祖安设置_zuantype'] != 'old') return false;"
+      },
+      {
+        "line": 46734,
+        "text": "if (lib.config['extension_祖安设置_zuantype'] != 'old') return false;"
+      },
+      {
+        "line": 46807,
+        "text": "if (lib.config['extension_祖安设置_zuantype'] != 'old') return false;"
+      },
+      {
+        "line": 46841,
+        "text": "if (lib.config['extension_祖安设置_zuantype'] != 'old') return false;"
+      },
+      {
+        "line": 47053,
+        "text": "if (lib.config['extension_祖安设置_zuantype'] != 'old') return false;"
+      },
+      {
+        "line": 47307,
+        "text": "if (lib.config['extension_祖安设置_zuantype'] != 'old') return false;"
+      },
+      {
+        "line": 47578,
+        "text": "if (lib.config['extension_祖安设置_zuantype'] == 'old' && say == 1) {"
+      },
+      {
+        "line": 47610,
+        "text": "if (lib.config['extension_祖安设置_zuantype'] == 'old') {"
+      },
+      {
+        "line": 47618,
+        "text": "if (lib.config['extension_祖安设置_zuantype'] == 'old' && say == 1) player.say(chat);"
+      },
+      {
+        "line": 47648,
+        "text": "} else if (lib.config['extension_祖安设置_zuantype'] == 'old') {"
+      },
+      {
+        "line": 47656,
+        "text": "if (lib.config['extension_祖安设置_zuantype'] == 'old' && say == 1) player.say(chat);"
+      },
+      {
+        "line": 47671,
+        "text": "if (lib.config['extension_祖安设置_zuantype'] != 'old') return false;"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:ransay@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51079",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 43751,
+        "text": "return parseFloat(lib.config['extension_祖安设置_ransay']) != '0';"
+      },
+      {
+        "line": 43759,
+        "text": "if (Math.random() * 100 >= parseFloat(lib.config['extension_祖安设置_ransay'])) {"
+      },
+      {
+        "line": 45978,
+        "text": "return parseFloat(lib.config['extension_祖安设置_ransay']) != '0';"
+      },
+      {
+        "line": 45986,
+        "text": "if (Math.random() * 100 >= parseFloat(lib.config['extension_祖安设置_ransay'])) {"
+      },
+      {
+        "line": 46401,
+        "text": "return parseFloat(lib.config['extension_祖安设置_ransay']) != '0';"
+      },
+      {
+        "line": 46409,
+        "text": "if (Math.random() * 100 >= parseFloat(lib.config['extension_祖安设置_ransay']) * 0.5) {"
+      },
+      {
+        "line": 46664,
+        "text": "return parseFloat(lib.config['extension_祖安设置_ransay']) != '0';"
+      },
+      {
+        "line": 46722,
+        "text": "if (Math.random() * 100 > parseFloat(lib.config['extension_祖安设置_ransay'])) var say = 0;"
+      },
+      {
+        "line": 46735,
+        "text": "return parseFloat(lib.config['extension_祖安设置_ransay']) != '0';"
+      },
+      {
+        "line": 46793,
+        "text": "if (Math.random() * 100 > parseFloat(lib.config['extension_祖安设置_ransay'])) var say = 0;"
+      },
+      {
+        "line": 46808,
+        "text": "return parseFloat(lib.config['extension_祖安设置_ransay']) != '0';"
+      },
+      {
+        "line": 46826,
+        "text": "if (Math.random() * 100 > parseFloat(lib.config['extension_祖安设置_ransay'])) var say = 0;"
+      },
+      {
+        "line": 46842,
+        "text": "return parseFloat(lib.config['extension_祖安设置_ransay']) != '0';"
+      },
+      {
+        "line": 47039,
+        "text": "if (Math.random() * 100 > parseFloat(lib.config['extension_祖安设置_ransay'])) var say = 0;"
+      },
+      {
+        "line": 47054,
+        "text": "return parseFloat(lib.config['extension_祖安设置_ransay']) != '0' && event.player != player;"
+      },
+      {
+        "line": 47294,
+        "text": "if (Math.random() * 100 > parseFloat(lib.config['extension_祖安设置_ransay'])) var say = 0;"
+      },
+      {
+        "line": 47308,
+        "text": "return parseFloat(lib.config['extension_祖安设置_ransay']) != '0';"
+      },
+      {
+        "line": 47534,
+        "text": "if (Math.random() * 100 > parseFloat(lib.config['extension_祖安设置_ransay'])) var say = 0;"
+      },
+      {
+        "line": 47577,
+        "text": "if (Math.random() * 100 > parseFloat(lib.config['extension_祖安设置_ransay'])) var say = 0;"
+      },
+      {
+        "line": 47617,
+        "text": "if (Math.random() * 100 > parseFloat(lib.config['extension_祖安设置_ransay'])) var say = 0;"
+      },
+      {
+        "line": 47655,
+        "text": "if (Math.random() * 100 > parseFloat(lib.config['extension_祖安设置_ransay'])) var say = 0;"
+      },
+      {
+        "line": 47682,
+        "text": "if (Math.random() * 100 > parseFloat(lib.config['extension_祖安设置_ransay'])) var say = 0;"
+      },
+      {
+        "line": 47752,
+        "text": "if (Math.random() * 100 > parseFloat(lib.config['extension_祖安设置_ransay'])) var say = 0;"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:levelsay@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51096",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 35460,
+        "text": "if (lib.config['extension_祖安设置_levelsay']) player.say('获得了' + adds + '点经验');"
+      },
+      {
+        "line": 35507,
+        "text": "if (lib.config['extension_祖安设置_levelsay']) player.say('提升了一个等级');"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:girlspeak@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51101",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 46674,
+        "text": "if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {"
+      },
+      {
+        "line": 46681,
+        "text": "if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {"
+      },
+      {
+        "line": 46690,
+        "text": "if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {"
+      },
+      {
+        "line": 46697,
+        "text": "if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {"
+      },
+      {
+        "line": 46707,
+        "text": "if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {"
+      },
+      {
+        "line": 46714,
+        "text": "if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {"
+      },
+      {
+        "line": 46745,
+        "text": "if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {"
+      },
+      {
+        "line": 46752,
+        "text": "if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {"
+      },
+      {
+        "line": 46761,
+        "text": "if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {"
+      },
+      {
+        "line": 46768,
+        "text": "if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {"
+      },
+      {
+        "line": 46778,
+        "text": "if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {"
+      },
+      {
+        "line": 46785,
+        "text": "if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {"
+      },
+      {
+        "line": 46812,
+        "text": "if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {"
+      },
+      {
+        "line": 46819,
+        "text": "if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {"
+      },
+      {
+        "line": 46846,
+        "text": "if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {"
+      },
+      {
+        "line": 47058,
+        "text": "if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {"
+      },
+      {
+        "line": 47312,
+        "text": "if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {"
+      },
+      {
+        "line": 47572,
+        "text": "if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {"
+      },
+      {
+        "line": 47612,
+        "text": "if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {"
+      },
+      {
+        "line": 47650,
+        "text": "if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {"
+      },
+      {
+        "line": 47677,
+        "text": "if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {"
+      },
+      {
+        "line": 47747,
+        "text": "if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:zuanemotion@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51106",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 40210,
+        "text": "return lib.config['extension_祖安设置_zuanemotion'] && player.throwEmotion && (Math.random() >= 0.3);"
+      },
+      {
+        "line": 40289,
+        "text": "return lib.config['extension_祖安设置_zuanemotion'] && game.filterPlayer(current =>current != player).length >= 2 && player.throwEmotion && Math.random() <= (0.3 / game.filterPlayer(current =>current != player).length); //(Math.random() >= 0.75);"
+      },
+      {
+        "line": 40333,
+        "text": "return lib.config['extension_祖安设置_zuanemotion'] && !game.isMine(player)"
+      },
+      {
+        "line": 40348,
+        "text": "if (!lib.config['extension_祖安设置_zuanemotion']) {"
+      },
+      {
+        "line": 40377,
+        "text": "if (!lib.config['extension_祖安设置_zuanemotion']) {"
+      },
+      {
+        "line": 40416,
+        "text": "return lib.config['extension_祖安设置_zuanemotion'] && get.attitude(player, event.player) > 0 && get.attitude(event.player, player) > 0;"
+      },
+      {
+        "line": 40418,
+        "text": "return get.attitude(player, event.player) > 0 && get.attitude(event.player, player) > 0 && event.player.countCards('h') > 5 && lib.config['extension_祖安设置_zuanemotion'] && !player.isUnderControl(true) && player.throwEmotion;"
+      },
+      {
+        "line": 40440,
+        "text": "return ! player.hasSkillTag('maixie') && !player.hasSkillTag('maixie_hp') && event.source && get.attitude(player, event.source) > 0 && lib.config['extension_祖安设置_zuanemotion'] && !game.isMine(player)"
+      },
+      {
+        "line": 40459,
+        "text": "return event.source && event.num > 1 && get.attitude(player, event.player) < 0 && get.attitude(player, event.source) > 0 && lib.config['extension_祖安设置_zuanemotion'] && !game.isMine(player)"
+      },
+      {
+        "line": 40478,
+        "text": "return get.attitude(player, event.player) < 0 && lib.config['extension_祖安设置_zuanemotion'] && !game.isMine(player)"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:linef@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51111",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L25:configs:shenst@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51158",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 48950,
+        "text": "if (lib.config['extension_祖安设置_shenst']) {"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:showboss@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51163",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 18,
+        "text": "if (!lib.config['extension_祖安设置_showboss']) return;"
+      },
+      {
+        "line": 93,
+        "text": "if (!lib.config['extension_祖安设置_showboss']) return;"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:hidessr@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51168",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 34893,
+        "text": "if (lib.config['extension_祖安设置_hidessr']) {"
+      },
+      {
+        "line": 34899,
+        "text": "if (lib.config['extension_祖安设置_hidessr']) {"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:delkey@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51173",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 34862,
+        "text": "if (lib.config['extension_祖安设置_delkey']) {"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:hideide@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51239",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 41949,
+        "text": "//lib.config['extension_祖安设置_hideide']='game';"
+      },
+      {
+        "line": 41950,
+        "text": "if (lib.config['extension_祖安设置_hideide'] != 'none' && get.mode() == 'identity') {"
+      },
+      {
+        "line": 42015,
+        "text": "if (lib.config['extension_祖安设置_hideide'] == 'player') {"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:lineg@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51251",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L25:configs:audio_draw@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51272",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 40624,
+        "text": "if (lib.config['extension_祖安设置_audio_draw']) return false;"
+      },
+      {
+        "line": 40646,
+        "text": "if (lib.config['extension_祖安设置_audio_draw']) return false;"
+      },
+      {
+        "line": 40681,
+        "text": "if (lib.config['extension_祖安设置_audio_draw']) return false;"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:audio_start@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51277",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 41902,
+        "text": "if (lib.config['extension_祖安设置_audio_start'] != 'none') {"
+      },
+      {
+        "line": 41903,
+        "text": "switch (lib.config['extension_祖安设置_audio_start']) {"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:lineh@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51289",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L25:configs:isPC@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51298",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 1353,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 1612,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 34916,
+        "text": "lib.config['extension_祖安设置_isPC'] = '1';"
+      },
+      {
+        "line": 34973,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_isPC'])=='2') {"
+      },
+      {
+        "line": 35290,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_isPC']) == '1') {"
+      },
+      {
+        "line": 35356,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_isPC']) == '1') {"
+      },
+      {
+        "line": 35366,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_isPC']) == '1') {"
+      },
+      {
+        "line": 41069,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_isPC']) == '1') {"
+      },
+      {
+        "line": 41077,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_isPC']) == '2') {"
+      },
+      {
+        "line": 41085,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_isPC']) == '3') {"
+      },
+      {
+        "line": 41097,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_isPC']) == '1') {"
+      },
+      {
+        "line": 41127,
+        "text": "} else if (parseFloat(lib.config['extension_祖安设置_isPC']) == '2') {"
+      },
+      {
+        "line": 41305,
+        "text": "if ((parseFloat(lib.config['extension_祖安设置_wallpaper']) != '1' || (lib.config['extension_祖安设置_exwallpaper'] && lib.config.zuanexwallpaper == 'on')) && parseFloat(lib.config['extension_祖安设置_isPC']) != '0') {"
+      },
+      {
+        "line": 41329,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_isPC'])>='2') return false;"
+      },
+      {
+        "line": 41571,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_isPC']) != '1') {"
+      },
+      {
+        "line": 41584,
+        "text": "return parseFloat(lib.config['extension_祖安设置_isPC']) == '1' && game.roundNumber != game.roundNumberCad;"
+      },
+      {
+        "line": 41764,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_isPC']) == '1') {"
+      },
+      {
+        "line": 41806,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_isPC']) == '1') {"
+      },
+      {
+        "line": 41822,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_isPC'])=='1') {"
+      },
+      {
+        "line": 41829,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_isPC'])=='2') {"
+      },
+      {
+        "line": 41836,
+        "text": "if(parseFloat(lib.config['extension_祖安设置_isPC'])=='3') {"
+      },
+      {
+        "line": 42676,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 42721,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 42834,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 43134,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 43385,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 47835,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 47872,
+        "text": "/*if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 48022,
+        "text": "if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 48068,
+        "text": "if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 48114,
+        "text": "if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 48160,
+        "text": "if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 48381,
+        "text": "if((parseFloat(lib.config['extension_祖安设置_wallpaper'])!='1'||(lib.config['extension_祖安设置_exwallpaper']&&lib.config.zuanexwallpaper=='on'))&&parseFloat(lib.config['extension_祖安设置_isPC'])!='0') {"
+      },
+      {
+        "line": 49908,
+        "text": "if (parseFloat(lib.config['extension_祖安设置_isPC']) == '1' || windows == \"7\") {"
+      },
+      {
+        "line": 51339,
+        "text": "game.saveConfig('extension_祖安设置_isPC', item);"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:windowHigh@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51344",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 51366,
+        "text": "game.saveConfig('extension_祖安设置_windowHigh', items);"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:aboutH@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51392",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L25:configs:text@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51404",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": [
+      {
+        "line": 34915,
+        "text": "lib.config['extension_祖安设置_text'] = true;"
+      },
+      {
+        "line": 39597,
+        "text": "//if(lib.config['extension_祖安设置_text']) {"
+      },
+      {
+        "line": 39610,
+        "text": "return (player == game.me && lib.config['extension_祖安设置_text']);"
+      }
+    ]
+  },
+  {
+    "key": "L25:configs:about0@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51409",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L25:configs:falsedelete@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51434",
+    "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L27:configs:twotwo@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9014",
+    "path": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js",
+    "matches": [
+      {
+        "line": 72,
+        "text": "if (config.twotwo) {"
+      }
+    ]
+  },
+  {
+    "key": "L27:configs:gaibiaoji@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9024",
+    "path": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js",
+    "matches": [
+      {
+        "line": 1160,
+        "text": "if (config.gaibiaoji) {"
+      }
+    ]
+  },
+  {
+    "key": "L27:configs:dianjibiaoji@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9029",
+    "path": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js",
+    "matches": [
+      {
+        "line": 2283,
+        "text": "if (config.dianjibiaoji) {"
+      }
+    ]
+  },
+  {
+    "key": "L27:configs:shoupaihuase@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9034",
+    "path": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js",
+    "matches": [
+      {
+        "line": 3596,
+        "text": "if (config.shoupaihuase) {"
+      }
+    ]
+  },
+  {
+    "key": "L27:configs:feichuxuanxiang@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9039",
+    "path": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js",
+    "matches": [
+      {
+        "line": 5145,
+        "text": "if (config.feichuxuanxiang) {"
+      }
+    ]
+  },
+  {
+    "key": "L27:configs:shuzianniu@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9044",
+    "path": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js",
+    "matches": [
+      {
+        "line": 5900,
+        "text": "if (config.shuzianniu) {"
+      }
+    ]
+  },
+  {
+    "key": "L27:configs:xuanzejineng@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9049",
+    "path": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js",
+    "matches": [
+      {
+        "line": 7566,
+        "text": "if (config.xuanzejineng) {"
+      }
+    ]
+  },
+  {
+    "key": "L27:configs:zediewugu@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9054",
+    "path": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js",
+    "matches": [
+      {
+        "line": 8360,
+        "text": "if (config.zediewugu) {"
+      }
+    ]
+  },
+  {
+    "key": "L27:configs:jinxuanbiaoyu@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9059",
+    "path": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js",
+    "matches": [
+      {
+        "line": 8433,
+        "text": "if (config.jinxuanbiaoyu) {"
+      }
+    ]
+  },
+  {
+    "key": "L27:configs:jinengtexiaoxiugai@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9064",
+    "path": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js",
+    "matches": [
+      {
+        "line": 8787,
+        "text": "if (config.jinengtexiaoxiugai) {"
+      }
+    ]
+  },
+  {
+    "key": "L28:configs:gameSpeed@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9068",
+    "path": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L28:configs:replaceCha@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9081",
+    "path": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L28:configs:hidePack@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9085",
+    "path": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L28:configs:UIItroduc@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9091",
+    "path": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L28:configs:yuqiTheme@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9109",
+    "path": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L28:configs:timeTheme@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9120",
+    "path": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+    "matches": []
+  },
+  {
+    "key": "L28:configs:standPath@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9134",
+    "path": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+    "matches": []
+  }
+]

@@ -11,6 +11,18 @@ use crate::state::GameStateCore;
 mod asks;
 pub(crate) use asks::*;
 
+fn finish_juxian(ctx: &mut Ctx<'_>, owner: PlayerId, paid: CardId, gained: Option<CardId>) -> Flow {
+    if gained.is_some_and(|c| is_red(ctx.catalog, paid) != is_red(ctx.catalog, c)) {
+        set_turn_flag(ctx.core, owner, "dddjuxian_ban", "dddjuxian_stamp", 1);
+    }
+    ctx.log(LogEvent::SkillTriggered {
+        skill: "dddjuxian",
+        owner,
+        presentation: None,
+    });
+    Flow::Done
+}
+
 pub(crate) fn step_u01_batch_a(machine: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     let owner = machine.owner;
     match machine.def_key.as_str() {
@@ -126,31 +138,44 @@ pub(crate) fn step_u01_batch_a(machine: &mut HostMachine, ctx: &mut Ctx<'_>) -> 
                 if !u01_remove_owned(ctx, owner, c1) {
                     return Flow::Done;
                 }
-                let c2 = if mode == 0 {
+                if mode == 0 {
                     set_turn_flag(ctx.core, owner, "dddjuxian_top_used", "dddjuxian_stamp", 1);
                     ctx.core.deck.push(c1);
-                    let got = he_cards(ctx.core, t).first().copied();
-                    if let Some(g) = got {
-                        u01_remove_owned(ctx, t, g);
-                        ctx.core.player_mut(owner).hand.push(g);
-                    }
-                    got
+                    machine.target = Some(t);
+                    // Upstream gainPlayerCard shuffles hidden buttons; keep that map on resume.
+                    let mut hand = ctx.core.player(t).hand.clone();
+                    ctx.core.rng.shuffle(&mut hand);
+                    machine.cards.extend(hand);
+                    wait_ask(machine, ctx, HostStage::CardsAsk, 28)
                 } else {
                     set_turn_flag(ctx.core, owner, "dddjuxian_hand_used", "dddjuxian_stamp", 1);
                     ctx.core.player_mut(t).hand.push(c1);
-                    u01_draw_now(ctx, owner, 1).first().copied()
-                };
-                if let Some(g) = c2 {
-                    if is_red(ctx.catalog, c1) != is_red(ctx.catalog, g) {
-                        set_turn_flag(ctx.core, owner, "dddjuxian_ban", "dddjuxian_stamp", 1);
-                    }
+                    let gained = u01_draw_now(ctx, owner, 1).first().copied();
+                    finish_juxian(ctx, owner, c1, gained)
                 }
-                ctx.log(LogEvent::SkillTriggered {
-                    skill: "dddjuxian",
-                    owner,
-                    presentation: None,
-                });
-                Flow::Done
+            }
+            HostStage::CardsAsk => {
+                let (Some(t), Some(&paid)) = (machine.target, machine.cards.first()) else {
+                    return Flow::Done;
+                };
+                let player = ctx.core.player(t);
+                let gained = match ctx.answer().first() {
+                    Some(ChoiceOption::HiddenCard(slot)) => machine
+                        .cards
+                        .get(*slot as usize + 1)
+                        .copied()
+                        .filter(|c| player.hand.contains(c)),
+                    Some(ChoiceOption::Card(c)) if player.equips.contains(c) => Some(*c),
+                    _ => None,
+                };
+                let Some(gained) = gained else {
+                    return Flow::Done;
+                };
+                if !u01_remove_owned(ctx, t, gained) {
+                    return Flow::Done;
+                }
+                ctx.core.player_mut(owner).hand.push(gained);
+                finish_juxian(ctx, owner, paid, Some(gained))
             }
             _ => Flow::Done,
         },
@@ -216,8 +241,8 @@ pub(crate) fn step_u01_batch_a(machine: &mut HostMachine, ctx: &mut Ctx<'_>) -> 
                         Some(ChoiceOption::Tag(v)) => usize::from(v),
                         _ => 0,
                     };
-                    let rem = distinct_suits(&ctx.core.player(t).hand, ctx.catalog)
-                        .saturating_sub(dec);
+                    let rem =
+                        distinct_suits(&ctx.core.player(t).hand, ctx.catalog).saturating_sub(dec);
                     if rem == 0 {
                         ctx.log(LogEvent::SkillTriggered {
                             skill: "dddjungui",
@@ -284,8 +309,7 @@ pub(crate) fn step_u01_batch_a(machine: &mut HostMachine, ctx: &mut Ctx<'_>) -> 
                     .iter()
                     .map(|&c| u32::from(ctx.catalog.cards[c as usize].rank))
                     .sum();
-                let need = (ctx.core.player(owner).hp
-                    + ctx.core.player(ctx.core.turn.current).hp)
+                let need = (ctx.core.player(owner).hp + ctx.core.player(ctx.core.turn.current).hp)
                     .max(1) as u32;
                 if sum < need {
                     return Flow::Done;
@@ -833,4 +857,3 @@ pub(crate) fn step_u01_batch_a(machine: &mut HostMachine, ctx: &mut Ctx<'_>) -> 
         _ => Flow::Done,
     }
 }
-

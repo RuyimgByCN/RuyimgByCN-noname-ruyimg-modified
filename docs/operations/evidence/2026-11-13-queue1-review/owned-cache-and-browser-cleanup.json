@@ -1,0 +1,60 @@
+{
+  "started_at": "2026-11-13T16:31:51.762276+00:00",
+  "finished_at": "2026-11-13T16:31:55.033653+00:00",
+  "owned_processes": [
+    {
+      "pid": 45830,
+      "command": "node docs/operations/evidence/2026-11-13-queue1-review/browser/launch.mjs",
+      "signal": "SIGTERM"
+    },
+    {
+      "pid": 45936,
+      "command": "node docs/operations/evidence/2026-11-13-queue1-review/browser/launch.mjs",
+      "signal": "SIGTERM"
+    },
+    {
+      "pid": 45719,
+      "command": "node ./node_modules/.bin/../.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/bin/vite.js --host 127.0.0.1 --port 0 --strictPort",
+      "signal": "SIGTERM"
+    },
+    {
+      "pid": 47130,
+      "command": "node /private/tmp/noname-queue1-modern-fox8y_xy/node_modules/.bin/../.pnpm/tsx@4.21.0/node_modules/tsx/dist/cli.mjs src/entry.ts --dirname=/private/tmp/noname-queue1-modern-fox8y_xy/apps/core --port=8089",
+      "signal": "SIGTERM"
+    },
+    {
+      "pid": 47136,
+      "command": "/opt/homebrew/Cellar/node/26.13.0_2/bin/node --require /private/tmp/noname-queue1-modern-fox8y_xy/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/preflight.cjs --import file:///private/tmp/noname-queue1-modern-fox8y_xy/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/loader.mjs src/entry.ts --dirname=/private/tmp/noname-queue1-modern-fox8y_xy/apps/core --port=8089",
+      "signal": "SIGTERM"
+    }
+  ],
+  "profiles": [
+    {
+      "metadata": "active-session-liuli.json",
+      "pid_terminal": true,
+      "profile": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-chrome-FoZq5D",
+      "profile_removed": true
+    },
+    {
+      "metadata": "active-session-modern.json",
+      "pid_terminal": true,
+      "profile": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-chrome-MSmBny",
+      "profile_removed": true
+    },
+    {
+      "metadata": "active-session.json",
+      "pid_terminal": true,
+      "profile": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-chrome-MxMQKR",
+      "profile_removed": true
+    }
+  ],
+  "strict_target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-strict-5crxac6m",
+  "strict_target_removed": true,
+  "strict_target_kib": 159148,
+  "temporary_upstream_copy": "/private/tmp/noname-queue1-modern-fox8y_xy",
+  "temporary_upstream_copy_removed": true,
+  "temporary_upstream_copy_kib": 313180,
+  "shared_target_removed": false,
+  "pre_existing_worktrees_removed": 0,
+  "disk_after": "Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s5   926Gi   773Gi   128Gi    86%    6.2M  1.3G    0%   /System/Volumes/Data\n"
+}

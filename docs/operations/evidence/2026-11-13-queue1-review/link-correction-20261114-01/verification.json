@@ -1,0 +1,61 @@
+{
+  "verified_at_utc": "2026-11-13T16:51:16.035883+00:00",
+  "result": "passed",
+  "modified_existing_markdown_files": [
+    "docs/operations/evidence/2026-11-13-queue1-review/independent/u01/characters.md",
+    "docs/operations/evidence/2026-11-13-queue1-review/independent/u01/draft-before-strict-classification/characters.md",
+    "docs/operations/evidence/2026-11-13-queue1-review/independent/u01/draft-before-strict-classification/skills-a.md",
+    "docs/operations/evidence/2026-11-13-queue1-review/independent/u01/draft-before-strict-classification/skills-b.md",
+    "docs/operations/evidence/2026-11-13-queue1-review/independent/u01/draft-before-strict-classification/skills-c.md",
+    "docs/operations/evidence/2026-11-13-queue1-review/independent/u01/draft-before-strict-classification/skills-d.md",
+    "docs/operations/evidence/2026-11-13-queue1-review/independent/u01/skills-a.md",
+    "docs/operations/evidence/2026-11-13-queue1-review/independent/u01/skills-b.md",
+    "docs/operations/evidence/2026-11-13-queue1-review/independent/u01/skills-c.md",
+    "docs/operations/evidence/2026-11-13-queue1-review/independent/u01/skills-d.md"
+  ],
+  "existing_markdown_files_changed": 10,
+  "href_replacements": 636,
+  "draft_depth_corrections": 318,
+  "exact_existing_targets": 31,
+  "line_anchors_checked": 636,
+  "line_numbers_preserved_and_in_bounds": true,
+  "body_labels_dates_and_tables_unchanged": true,
+  "first_failure_and_protected_inventory_check_scripts_unchanged": true,
+  "final_full_local_links": {
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check_local_links.py",
+      "--all"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+    "started_at_utc": "2026-11-13T16:51:14.836703+00:00",
+    "ended_at_utc": "2026-11-13T16:51:16.032578+00:00",
+    "duration_seconds": 1.196,
+    "exit_code": 0,
+    "combined_stdout_stderr_log": "docs/operations/evidence/2026-11-13-queue1-review/link-correction-20261114-01/local-links-all-final-20261113T165114836703Z.log",
+    "log_sha256": "0d22f3457fa5e310c4261efc465a83db4ba7018fbee64ff0aab24cc838a8d743",
+    "reason": "修复证据追加实际检查结果后再次验证最终Markdown集合；不覆盖首次或前次检查。",
+    "full_preflight": false
+  },
+  "final_full_local_links_output": "检查 2101 个文件，坏链 0\n",
+  "strict_file_line_refs": {
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check_doc_line_refs.py",
+      "--strict"
+    ],
+    "exit_code": 0,
+    "references_checked": 10584,
+    "unresolved_path_kinds": 48,
+    "out_of_bounds": 0,
+    "record": "docs/operations/evidence/2026-11-13-queue1-review/link-correction-20261114-01/doc-line-refs-strict-20261113T164826124725Z.json"
+  },
+  "correction_md_append_only_before_sha256": "afb99ac6fc8473d7fb22bca2bcd4b03453b65e84052ad127ce579cfdcf2e21ed",
+  "correction_md_final_sha256": "d3033c14ac2ce707fa2fda9ef4050ce35050d2d74fc3dd61bb4fcaf1c7078f76",
+  "correction_json_sha256": "b004b181f07377f8406492da218a843aeb5f11057136b1ac0634aaa1e5334403",
+  "full_preflight_run_by_this_agent": false,
+  "product_tests_run": 0
+}

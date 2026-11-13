@@ -1,0 +1,443 @@
+{
+  "at": "2026-11-14T00:57:58.387710+08:00",
+  "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "tracked_dirty": true,
+  "versions": {
+    "rules": 333,
+    "ngsa": 107,
+    "schema": 5,
+    "abi": 759,
+    "ws": 8
+  },
+  "all_required_local_gate_commands_exit_zero": true,
+  "commands": [
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "command": "python3 -B -m unittest discover -s scripts -p test_check_source_lines.py",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+      "tracked_status": " M crates/engine-native-content/src/content/host/step/u01_batch_a.rs\n M crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs\n M crates/engine-native-kernel/src/archive/known_prompts.rs\n M crates/engine-native/tests/groups/g1.rs\n M crates/engine-native/tests/u01_ddd_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L06-wuxing.md\n M docs/migration/g0/L10-史诗卡牌.md\n M docs/migration/g0/L19-末日乱斗.md\n M docs/migration/g0/L20-标记补充.md\n M docs/migration/g0/L22-段位制裁.md\n M docs/migration/g0/L25-祖安武将.md\n M docs/migration/g0/L27-选将美化.md\n M docs/migration/g0/L28-雷霆万钧.md\n M docs/migration/g0/L29-龙血玄黄.md\n M docs/migration/g0/README.md\n M docs/migration/g0/U01-3D精选.md\n M docs/migration/g0/U06-欢乐卡牌.md\n M docs/migration/g0/U07-玩点论杀.md\n M docs/migration/g0/U08-英雄杀.md\n M docs/migration/g0/inventory_status.json\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n",
+      "start_utc": "2026-11-13T16:30:42.730486+00:00",
+      "exit_code": 0,
+      "duration_seconds": 0.291,
+      "end_utc": "2026-11-13T16:30:43.021596+00:00",
+      "name": "01-line-unit-final",
+      "result": "2通过／0失败",
+      "meta": "01-line-unit-final.json",
+      "log": "01-line-unit-final.log",
+      "log_sha256": "181a3a87efe6f647089f97233eb1048bd525b9710198a756af0ac1b20fbfb13b"
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "command": "python3 -B scripts/check-source-lines.py",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+      "tracked_status": " M crates/engine-native-content/src/content/host/step/u01_batch_a.rs\n M crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs\n M crates/engine-native-kernel/src/archive/known_prompts.rs\n M crates/engine-native/tests/groups/g1.rs\n M crates/engine-native/tests/u01_ddd_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L06-wuxing.md\n M docs/migration/g0/L10-史诗卡牌.md\n M docs/migration/g0/L19-末日乱斗.md\n M docs/migration/g0/L20-标记补充.md\n M docs/migration/g0/L22-段位制裁.md\n M docs/migration/g0/L25-祖安武将.md\n M docs/migration/g0/L27-选将美化.md\n M docs/migration/g0/L28-雷霆万钧.md\n M docs/migration/g0/L29-龙血玄黄.md\n M docs/migration/g0/README.md\n M docs/migration/g0/U01-3D精选.md\n M docs/migration/g0/U06-欢乐卡牌.md\n M docs/migration/g0/U07-玩点论杀.md\n M docs/migration/g0/U08-英雄杀.md\n M docs/migration/g0/inventory_status.json\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n",
+      "start_utc": "2026-11-13T16:30:43.157288+00:00",
+      "exit_code": 0,
+      "duration_seconds": 9.596,
+      "end_utc": "2026-11-13T16:30:52.753719+00:00",
+      "name": "02-line-limit-final",
+      "result": "9364文件；物理≤2000／Rust非测试有效≤1000",
+      "meta": "02-line-limit-final.json",
+      "log": "02-line-limit-final.log",
+      "log_sha256": "6a7c91170985a6d0f1e3d238d3573042e001a0f9315b976c7bd2bec8da27b0c5"
+    },
+    {
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native"
+      ],
+      "command": "cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+      "tracked_status": " M crates/engine-native-content/src/content/host/step/u01_batch_a.rs\n M crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs\n M crates/engine-native-kernel/src/archive/known_prompts.rs\n M crates/engine-native/tests/groups/g1.rs\n M crates/engine-native/tests/u01_ddd_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n",
+      "start_utc": "2026-11-13T16:18:59.902086+00:00",
+      "exit_code": 0,
+      "duration_seconds": 107.047,
+      "end_utc": "2026-11-13T16:20:46.949975+00:00",
+      "name": "03-native-three-final",
+      "result": "2446通过／0失败／6忽略，18段，过滤0",
+      "meta": "03-native-three-final.json",
+      "log": "03-native-three-final.log",
+      "log_sha256": "7fd2847bec93b4585f37ddfe875008fe06d09db304f17ec2977ea43f8a948a8f",
+      "test_counts": {
+        "passed": 2446,
+        "failed": 0,
+        "ignored": 6,
+        "measured": 0,
+        "filtered": 0
+      },
+      "result_sections": 18
+    },
+    {
+      "argv": [
+        "cargo",
+        "check",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "-p",
+        "engine-native-wasm",
+        "-p",
+        "content-native-loader",
+        "--all-targets"
+      ],
+      "command": "cargo check -p engine-native-kernel -p engine-native-content -p engine-native -p engine-native-wasm -p content-native-loader --all-targets",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-strict-5crxac6m",
+        "RUSTFLAGS": "-D warnings"
+      },
+      "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+      "tracked_status": " M crates/engine-native-content/src/content/host/step/u01_batch_a.rs\n M crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs\n M crates/engine-native-kernel/src/archive/known_prompts.rs\n M crates/engine-native/tests/groups/g1.rs\n M crates/engine-native/tests/u01_ddd_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n",
+      "start_utc": "2026-11-13T16:20:47.083976+00:00",
+      "exit_code": 0,
+      "duration_seconds": 6.043,
+      "end_utc": "2026-11-13T16:20:53.127333+00:00",
+      "name": "04-strict-all-targets-final",
+      "result": "独立CARGO_TARGET_DIR，RUSTFLAGS=-D warnings",
+      "meta": "04-strict-all-targets-final.json",
+      "log": "04-strict-all-targets-final.log",
+      "log_sha256": "448c9cf361fcf206e888cef385a3c9b2bdb1796e6a8ff69afba1937d47dca732"
+    },
+    {
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "--workspace",
+        "--no-fail-fast"
+      ],
+      "command": "cargo test --offline --workspace --no-fail-fast",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+      "tracked_status": " M crates/engine-native-content/src/content/host/step/u01_batch_a.rs\n M crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs\n M crates/engine-native-kernel/src/archive/known_prompts.rs\n M crates/engine-native/tests/groups/g1.rs\n M crates/engine-native/tests/u01_ddd_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/migration/g0/inventory_status.json\n",
+      "start_utc": "2026-11-13T16:21:12.108221+00:00",
+      "exit_code": 0,
+      "duration_seconds": 685.293,
+      "end_utc": "2026-11-13T16:32:37.400641+00:00",
+      "name": "05-workspace-final",
+      "result": "7842通过／0失败／8忽略，178段，过滤0",
+      "meta": "05-workspace-final.json",
+      "log": "05-workspace-final.log",
+      "log_sha256": "089f2c5524cf33c82fb5fa942e0b94bb64b6513016feb42aabff391d941916ac",
+      "test_counts": {
+        "passed": 7842,
+        "failed": 0,
+        "ignored": 8,
+        "measured": 0,
+        "filtered": 0
+      },
+      "result_sections": 178
+    },
+    {
+      "argv": [
+        "cargo",
+        "run",
+        "-p",
+        "conformance"
+      ],
+      "command": "cargo run -p conformance",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+      "tracked_status": " M crates/engine-native-content/src/content/host/step/u01_batch_a.rs\n M crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs\n M crates/engine-native-kernel/src/archive/known_prompts.rs\n M crates/engine-native/tests/groups/g1.rs\n M crates/engine-native/tests/u01_ddd_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L06-wuxing.md\n M docs/migration/g0/L10-史诗卡牌.md\n M docs/migration/g0/L19-末日乱斗.md\n M docs/migration/g0/L20-标记补充.md\n M docs/migration/g0/L22-段位制裁.md\n M docs/migration/g0/L25-祖安武将.md\n M docs/migration/g0/L27-选将美化.md\n M docs/migration/g0/L28-雷霆万钧.md\n M docs/migration/g0/L29-龙血玄黄.md\n M docs/migration/g0/README.md\n M docs/migration/g0/U01-3D精选.md\n M docs/migration/g0/U06-欢乐卡牌.md\n M docs/migration/g0/U07-玩点论杀.md\n M docs/migration/g0/U08-英雄杀.md\n M docs/migration/g0/inventory_status.json\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n",
+      "start_utc": "2026-11-13T16:32:37.600379+00:00",
+      "exit_code": 0,
+      "duration_seconds": 0.859,
+      "end_utc": "2026-11-13T16:32:38.459576+00:00",
+      "name": "06-conformance-final",
+      "result": "ALL PASS；旧线conformance范围",
+      "meta": "06-conformance-final.json",
+      "log": "06-conformance-final.log",
+      "log_sha256": "24dab8f11786ce599f109effcb9b2f6a184ea6f83c46f1d27d29385e3a8d1661"
+    },
+    {
+      "argv": [
+        "cargo",
+        "check",
+        "--target",
+        "wasm32-unknown-unknown",
+        "-p",
+        "engine-native-wasm"
+      ],
+      "command": "cargo check --target wasm32-unknown-unknown -p engine-native-wasm",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0",
+        "PATH": "/Users/ruyimg/.cargo/bin:/Users/ruyimg/.local/bin:/Library/Frameworks/Python.framework/Versions/3.10/bin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/ruyimg/.codex/tmp/arg0-macos/codex-arg0Fr9rcz:/Users/ruyimg/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/Users/ruyimg/.dbx/bin:/opt/zerobrew/bin:/opt/zerobrew/sbin:/Users/ruyimg/.zerobrew/bin:/Users/ruyimg/.local/share/fnm/node-versions/v26.4.0/installation/bin:/Users/ruyimg/.kimi-code/bin:/Users/ruyimg/.local/bin:/Users/ruyimg/.grok/bin:/Users/ruyimg/.local/state/fnm_multishells/1704_1794573835225/bin:/Users/ruyimg/.opencode/bin:/Users/ruyimg/Library/Android/sdk/cmdline-tools/latest/bin:/Users/ruyimg/Library/Android/sdk/platform-tools:/Users/ruyimg/.cargo/bin:/Users/ruyimg/.bun/bin:/Users/ruyimg/Documents/maven/apache-maven-3.9.10/bin:/Library/Frameworks/Python.framework/Versions/3.10/bin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/ruyimg/Library/Application Support/JetBrains/Toolbox/scripts:/Users/ruyimg/.orbstack/bin:/Users/ruyimg/.lmstudio/bin:/Users/ruyimg/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:/Users/ruyimg/Library/Application Support/JetBrains/Toolbox/scripts:/Users/ruyimg/.orbstack/bin"
+      },
+      "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+      "tracked_status": " M crates/engine-native-content/src/content/host/step/u01_batch_a.rs\n M crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs\n M crates/engine-native-kernel/src/archive/known_prompts.rs\n M crates/engine-native/tests/groups/g1.rs\n M crates/engine-native/tests/u01_ddd_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n",
+      "start_utc": "2026-11-13T16:20:53.255162+00:00",
+      "exit_code": 0,
+      "duration_seconds": 18.719,
+      "end_utc": "2026-11-13T16:21:11.974799+00:00",
+      "name": "07-wasm-target-final",
+      "result": "wasm32检查通过",
+      "meta": "07-wasm-target-final.json",
+      "log": "07-wasm-target-final.log",
+      "log_sha256": "e739c42be5a07b12682f0d1de5f49de1653418ec91b4328c77ee360964b83a26"
+    },
+    {
+      "argv": [
+        "bash",
+        "scripts/cross-target-hash.sh"
+      ],
+      "command": "bash scripts/cross-target-hash.sh",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0",
+        "PATH": "/Users/ruyimg/.cargo/bin:/Users/ruyimg/.local/bin:/Library/Frameworks/Python.framework/Versions/3.10/bin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/ruyimg/.codex/tmp/arg0-macos/codex-arg0Fr9rcz:/Users/ruyimg/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/Users/ruyimg/.dbx/bin:/opt/zerobrew/bin:/opt/zerobrew/sbin:/Users/ruyimg/.zerobrew/bin:/Users/ruyimg/.local/share/fnm/node-versions/v26.4.0/installation/bin:/Users/ruyimg/.kimi-code/bin:/Users/ruyimg/.local/bin:/Users/ruyimg/.grok/bin:/Users/ruyimg/.local/state/fnm_multishells/1704_1794573835225/bin:/Users/ruyimg/.opencode/bin:/Users/ruyimg/Library/Android/sdk/cmdline-tools/latest/bin:/Users/ruyimg/Library/Android/sdk/platform-tools:/Users/ruyimg/.cargo/bin:/Users/ruyimg/.bun/bin:/Users/ruyimg/Documents/maven/apache-maven-3.9.10/bin:/Library/Frameworks/Python.framework/Versions/3.10/bin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/ruyimg/Library/Application Support/JetBrains/Toolbox/scripts:/Users/ruyimg/.orbstack/bin:/Users/ruyimg/.lmstudio/bin:/Users/ruyimg/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:/Users/ruyimg/Library/Application Support/JetBrains/Toolbox/scripts:/Users/ruyimg/.orbstack/bin"
+      },
+      "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+      "tracked_status": " M crates/engine-native-content/src/content/host/step/u01_batch_a.rs\n M crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs\n M crates/engine-native-kernel/src/archive/known_prompts.rs\n M crates/engine-native/tests/groups/g1.rs\n M crates/engine-native/tests/u01_ddd_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L06-wuxing.md\n M docs/migration/g0/L10-史诗卡牌.md\n M docs/migration/g0/L19-末日乱斗.md\n M docs/migration/g0/L20-标记补充.md\n M docs/migration/g0/L22-段位制裁.md\n M docs/migration/g0/L25-祖安武将.md\n M docs/migration/g0/L27-选将美化.md\n M docs/migration/g0/L28-雷霆万钧.md\n M docs/migration/g0/L29-龙血玄黄.md\n M docs/migration/g0/README.md\n M docs/migration/g0/U01-3D精选.md\n M docs/migration/g0/U06-欢乐卡牌.md\n M docs/migration/g0/U07-玩点论杀.md\n M docs/migration/g0/U08-英雄杀.md\n M docs/migration/g0/inventory_status.json\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n",
+      "start_utc": "2026-11-13T16:32:38.589552+00:00",
+      "exit_code": 0,
+      "duration_seconds": 62.833,
+      "end_utc": "2026-11-13T16:33:41.422810+00:00",
+      "name": "08-cross-target-final",
+      "result": "ALL CROSS-TARGET CHECKS PASSED",
+      "meta": "08-cross-target-final.json",
+      "log": "08-cross-target-final.log",
+      "log_sha256": "f6a4d0cab81adb2698f32d4e67f9fb619387f79e879aaf415a67e62486736947"
+    },
+    {
+      "argv": [
+        "cargo",
+        "test",
+        "-p",
+        "desktop-client"
+      ],
+      "command": "cargo test -p desktop-client",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+      "tracked_status": " M crates/engine-native-content/src/content/host/step/u01_batch_a.rs\n M crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs\n M crates/engine-native-kernel/src/archive/known_prompts.rs\n M crates/engine-native/tests/groups/g1.rs\n M crates/engine-native/tests/u01_ddd_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L06-wuxing.md\n M docs/migration/g0/L10-史诗卡牌.md\n M docs/migration/g0/L19-末日乱斗.md\n M docs/migration/g0/L20-标记补充.md\n M docs/migration/g0/L22-段位制裁.md\n M docs/migration/g0/L25-祖安武将.md\n M docs/migration/g0/L27-选将美化.md\n M docs/migration/g0/L28-雷霆万钧.md\n M docs/migration/g0/L29-龙血玄黄.md\n M docs/migration/g0/README.md\n M docs/migration/g0/U01-3D精选.md\n M docs/migration/g0/U06-欢乐卡牌.md\n M docs/migration/g0/U07-玩点论杀.md\n M docs/migration/g0/U08-英雄杀.md\n M docs/migration/g0/inventory_status.json\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n",
+      "start_utc": "2026-11-13T16:33:41.620809+00:00",
+      "exit_code": 0,
+      "duration_seconds": 37.782,
+      "end_utc": "2026-11-13T16:34:19.402865+00:00",
+      "name": "09-desktop-final",
+      "result": "20通过／0失败／1忽略，4段",
+      "meta": "09-desktop-final.json",
+      "log": "09-desktop-final.log",
+      "log_sha256": "32c5068bcf6ec66a72853276c3e0331431c6378c8147efedcd08466ea056a4c2",
+      "test_counts": {
+        "passed": 20,
+        "failed": 0,
+        "ignored": 1,
+        "measured": 0,
+        "filtered": 0
+      },
+      "result_sections": 4
+    },
+    {
+      "argv": [
+        "pnpm",
+        "test"
+      ],
+      "command": "pnpm test",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+      "tracked_status": " M crates/engine-native-content/src/content/host/step/u01_batch_a.rs\n M crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs\n M crates/engine-native-kernel/src/archive/known_prompts.rs\n M crates/engine-native/tests/groups/g1.rs\n M crates/engine-native/tests/u01_ddd_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n",
+      "start_utc": "2026-11-13T16:18:54.194005+00:00",
+      "exit_code": 0,
+      "duration_seconds": 4.164,
+      "end_utc": "2026-11-13T16:18:58.358257+00:00",
+      "name": "10-frontend-test-final",
+      "result": "489通过／0失败／0跳过",
+      "meta": "10-frontend-test-final.json",
+      "log": "10-frontend-test-final.log",
+      "log_sha256": "887c32098bb99cb05ded729f7f9de78da68027d83bbb03c385aa3ba0a303b133"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "typecheck"
+      ],
+      "command": "pnpm typecheck",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+      "tracked_status": " M crates/engine-native-content/src/content/host/step/u01_batch_a.rs\n M crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs\n M crates/engine-native-kernel/src/archive/known_prompts.rs\n M crates/engine-native/tests/groups/g1.rs\n M crates/engine-native/tests/u01_ddd_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n",
+      "start_utc": "2026-11-13T16:18:58.484257+00:00",
+      "exit_code": 0,
+      "duration_seconds": 2.263,
+      "end_utc": "2026-11-13T16:19:00.747147+00:00",
+      "name": "11-frontend-typecheck-final",
+      "result": "exit0",
+      "meta": "11-frontend-typecheck-final.json",
+      "log": "11-frontend-typecheck-final.log",
+      "log_sha256": "a11e85cf8e75986fbed77dfb08bc7a4f73d1ce745bc4ee50186c0cec7e34f565"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "build:native"
+      ],
+      "command": "pnpm build:native",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+      "tracked_status": " M crates/engine-native-content/src/content/host/step/u01_batch_a.rs\n M crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs\n M crates/engine-native-kernel/src/archive/known_prompts.rs\n M crates/engine-native/tests/groups/g1.rs\n M crates/engine-native/tests/u01_ddd_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L06-wuxing.md\n M docs/migration/g0/L10-史诗卡牌.md\n M docs/migration/g0/L19-末日乱斗.md\n M docs/migration/g0/L20-标记补充.md\n M docs/migration/g0/L22-段位制裁.md\n M docs/migration/g0/L25-祖安武将.md\n M docs/migration/g0/L27-选将美化.md\n M docs/migration/g0/L28-雷霆万钧.md\n M docs/migration/g0/L29-龙血玄黄.md\n M docs/migration/g0/README.md\n M docs/migration/g0/U01-3D精选.md\n M docs/migration/g0/U06-欢乐卡牌.md\n M docs/migration/g0/U07-玩点论杀.md\n M docs/migration/g0/U08-英雄杀.md\n M docs/migration/g0/inventory_status.json\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n",
+      "start_utc": "2026-11-13T16:34:24.855744+00:00",
+      "exit_code": 0,
+      "duration_seconds": 40.946,
+      "end_utc": "2026-11-13T16:35:05.802456+00:00",
+      "name": "12-build-native-final",
+      "result": "原生WASM产物重建成功",
+      "meta": "12-build-native-final.json",
+      "log": "12-build-native-final.log",
+      "log_sha256": "4eab6634d8618ce6191c9f661401368fef40f89f7f55b1192461c0adbe4dd2ee"
+    },
+    {
+      "argv": [
+        "pnpm",
+        "smoke:native"
+      ],
+      "command": "pnpm smoke:native",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+      "tracked_status": " M crates/engine-native-content/src/content/host/step/u01_batch_a.rs\n M crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs\n M crates/engine-native-kernel/src/archive/known_prompts.rs\n M crates/engine-native/tests/groups/g1.rs\n M crates/engine-native/tests/u01_ddd_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L06-wuxing.md\n M docs/migration/g0/L10-史诗卡牌.md\n M docs/migration/g0/L19-末日乱斗.md\n M docs/migration/g0/L20-标记补充.md\n M docs/migration/g0/L22-段位制裁.md\n M docs/migration/g0/L25-祖安武将.md\n M docs/migration/g0/L27-选将美化.md\n M docs/migration/g0/L28-雷霆万钧.md\n M docs/migration/g0/L29-龙血玄黄.md\n M docs/migration/g0/README.md\n M docs/migration/g0/U01-3D精选.md\n M docs/migration/g0/U06-欢乐卡牌.md\n M docs/migration/g0/U07-玩点论杀.md\n M docs/migration/g0/U08-英雄杀.md\n M docs/migration/g0/inventory_status.json\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n",
+      "start_utc": "2026-11-13T16:35:05.987566+00:00",
+      "exit_code": 0,
+      "duration_seconds": 3.912,
+      "end_utc": "2026-11-13T16:35:09.899673+00:00",
+      "name": "13-smoke-native-final",
+      "result": "83检查／0失败",
+      "meta": "13-smoke-native-final.json",
+      "log": "13-smoke-native-final.log",
+      "log_sha256": "3e0bb31c806e865cc9462c5e42f71cfbdc54a702f005636596644a77e5c4ab52"
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-native-wasm-cross-target.py"
+      ],
+      "command": "python3 -B scripts/check-native-wasm-cross-target.py",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+      "tracked_status": " M crates/engine-native-content/src/content/host/step/u01_batch_a.rs\n M crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs\n M crates/engine-native-kernel/src/archive/known_prompts.rs\n M crates/engine-native/tests/groups/g1.rs\n M crates/engine-native/tests/u01_ddd_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L06-wuxing.md\n M docs/migration/g0/L10-史诗卡牌.md\n M docs/migration/g0/L19-末日乱斗.md\n M docs/migration/g0/L20-标记补充.md\n M docs/migration/g0/L22-段位制裁.md\n M docs/migration/g0/L25-祖安武将.md\n M docs/migration/g0/L27-选将美化.md\n M docs/migration/g0/L28-雷霆万钧.md\n M docs/migration/g0/L29-龙血玄黄.md\n M docs/migration/g0/README.md\n M docs/migration/g0/U01-3D精选.md\n M docs/migration/g0/U06-欢乐卡牌.md\n M docs/migration/g0/U07-玩点论杀.md\n M docs/migration/g0/U08-英雄杀.md\n M docs/migration/g0/inventory_status.json\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n",
+      "start_utc": "2026-11-13T16:35:10.024090+00:00",
+      "exit_code": 0,
+      "duration_seconds": 22.963,
+      "end_utc": "2026-11-13T16:35:32.986967+00:00",
+      "name": "14-native-wasm-cross-target-final",
+      "result": "标准及欢乐包轨迹/恢复一致；脚本内Rust定向3通过／140过滤，不算全量crate",
+      "meta": "14-native-wasm-cross-target-final.json",
+      "log": "14-native-wasm-cross-target-final.log",
+      "log_sha256": "58f5cad271a9688dd9f6fafeaae6628704a6989fb09e0fae4e91a5daf280012c",
+      "test_counts": {
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 140
+      },
+      "result_sections": 2
+    },
+    {
+      "argv": [
+        "pnpm",
+        "build"
+      ],
+      "command": "pnpm build",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+      "tracked_status": " M crates/engine-native-content/src/content/host/step/u01_batch_a.rs\n M crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs\n M crates/engine-native-kernel/src/archive/known_prompts.rs\n M crates/engine-native/tests/groups/g1.rs\n M crates/engine-native/tests/u01_ddd_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L06-wuxing.md\n M docs/migration/g0/L10-史诗卡牌.md\n M docs/migration/g0/L19-末日乱斗.md\n M docs/migration/g0/L20-标记补充.md\n M docs/migration/g0/L22-段位制裁.md\n M docs/migration/g0/L25-祖安武将.md\n M docs/migration/g0/L27-选将美化.md\n M docs/migration/g0/L28-雷霆万钧.md\n M docs/migration/g0/L29-龙血玄黄.md\n M docs/migration/g0/README.md\n M docs/migration/g0/U01-3D精选.md\n M docs/migration/g0/U06-欢乐卡牌.md\n M docs/migration/g0/U07-玩点论杀.md\n M docs/migration/g0/U08-英雄杀.md\n M docs/migration/g0/inventory_status.json\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n",
+      "start_utc": "2026-11-13T16:35:33.103720+00:00",
+      "exit_code": 0,
+      "duration_seconds": 3.833,
+      "end_utc": "2026-11-13T16:35:36.936586+00:00",
+      "name": "15-frontend-build-final",
+      "result": "生产构建成功；仅5个已核实生成文件从HEAD还原，原built副本哈希保留",
+      "meta": "15-frontend-build-final.json",
+      "log": "15-frontend-build-final.log",
+      "log_sha256": "45b5506f981d5226f1662f75456eb2848f53dfe944ccef8cc4e56cbf22a056ca"
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/preflight.py"
+      ],
+      "command": "python3 -B scripts/preflight.py",
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env_overrides": {
+        "CARGO_INCREMENTAL": "0"
+      },
+      "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+      "tracked_status": " M crates/engine-native-content/src/content/host/step/u01_batch_a.rs\n M crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs\n M crates/engine-native-kernel/src/archive/known_prompts.rs\n M crates/engine-native/tests/groups/g1.rs\n M crates/engine-native/tests/u01_ddd_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n M docs/architecture/native-rules-baseline.md\n M docs/migration/g0/L06-wuxing.md\n M docs/migration/g0/L10-史诗卡牌.md\n M docs/migration/g0/L19-末日乱斗.md\n M docs/migration/g0/L20-标记补充.md\n M docs/migration/g0/L22-段位制裁.md\n M docs/migration/g0/L25-祖安武将.md\n M docs/migration/g0/L27-选将美化.md\n M docs/migration/g0/L28-雷霆万钧.md\n M docs/migration/g0/L29-龙血玄黄.md\n M docs/migration/g0/README.md\n M docs/migration/g0/U01-3D精选.md\n M docs/migration/g0/U06-欢乐卡牌.md\n M docs/migration/g0/U07-玩点论杀.md\n M docs/migration/g0/U08-英雄杀.md\n M docs/migration/g0/inventory_status.json\n M docs/migration/upstream-extension-reconstruction.md\n M docs/operations/evidence/2026-10-19-source-signoff-32/README.md\n",
+      "start_utc": "2026-11-13T16:47:52.352560+00:00",
+      "exit_code": 0,
+      "duration_seconds": 597.314,
+      "end_utc": "2026-11-13T16:57:49.668252+00:00",
+      "name": "22-preflight-after-link-correction",
+      "result": "21项通过／0失败；第二次完整运行",
+      "meta": "22-preflight-after-link-correction.json",
+      "log": "22-preflight-after-link-correction.log",
+      "log_sha256": "39506f7e67d017b7bca3246edfbf225f5aca9014962078176f2b25e1acb9fb7b"
+    }
+  ],
+  "scope": "Counts overlap between full workspace and package gates. Ignored and script-internal filtered tests were not executed. No whole-source equivalence or device/platform acceptance."
+}

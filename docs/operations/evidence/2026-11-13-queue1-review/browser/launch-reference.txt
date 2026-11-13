@@ -1,0 +1,4 @@
+Source: apps/web-client/scripts/tabletop-comparison-cdp.mjs
+HEAD: bd58ef06d59940baed8d7f93e61ce571b152fb81
+Reused: static localhost server, dedicated Chrome profile, --headless=new, CDP Runtime/Page, dev/directstart localStorage.
+Not reused: Vite native build, cosmetic framing CSS, UI/Spine extensions.

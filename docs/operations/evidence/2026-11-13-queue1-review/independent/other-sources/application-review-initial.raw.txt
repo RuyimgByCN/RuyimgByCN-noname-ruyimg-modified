@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/application-review.py", line 354, in <module>
+    raise SystemExit(main(args.label))
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/application-review.py", line 212, in main
+    replay["items"][change["key"]] == change["before"])
+KeyError: 'before'

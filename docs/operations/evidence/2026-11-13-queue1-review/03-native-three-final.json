@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native-kernel",
+    "-p",
+    "engine-native-content",
+    "-p",
+    "engine-native"
+  ],
+  "command": "cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0"
+  },
+  "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "tracked_status": " M crates/engine-native-content/src/content/host/step/u01_batch_a.rs\n M crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs\n M crates/engine-native-kernel/src/archive/known_prompts.rs\n M crates/engine-native/tests/groups/g1.rs\n M crates/engine-native/tests/u01_ddd_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n",
+  "start_utc": "2026-11-13T16:18:59.902086+00:00",
+  "exit_code": 0,
+  "duration_seconds": 107.047,
+  "end_utc": "2026-11-13T16:20:46.949975+00:00"
+}

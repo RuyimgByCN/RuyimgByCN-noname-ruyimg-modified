@@ -1,0 +1,29 @@
+{
+  "evidence_integrity": "passed",
+  "unique_inventory_keys": 224,
+  "source_file_line_refs_checked": 942,
+  "local_markdown_links_checked": 20,
+  "original_js_files_parsed": 9,
+  "parse_errors": 0,
+  "native_source_files_searched": 581,
+  "native_source_drift": [],
+  "commented_items": 12,
+  "product_tests_run": 0,
+  "upstream_browser_triggers_run": 0,
+  "native_runtime_scenarios_run": 0,
+  "status_recommendations_applied_to_inventory": false,
+  "recommended_status": {
+    "简化近似": 194,
+    "已复核等价": 30
+  },
+  "git_head_at_validation": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "tracked_dirty_paths_at_validation": [
+    "crates/engine-native-content/src/content/host/step/u01_batch_a.rs",
+    "crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs",
+    "crates/engine-native-kernel/src/archive/known_prompts.rs",
+    "crates/engine-native/tests/groups/g1.rs",
+    "crates/engine-native/tests/u01_ddd_eight.rs",
+    "docs/architecture/native-progress.md",
+    "docs/architecture/native-remaining-ledger.md"
+  ]
+}

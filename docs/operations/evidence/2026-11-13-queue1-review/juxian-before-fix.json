@@ -1,0 +1,10 @@
+{
+  "at": "2026-11-13T15:35:31.767822+00:00",
+  "phase": "before_product_fix",
+  "files": {
+    "crates/engine-native-content/src/content/host/step/u01_batch_a.rs": "d8ac622771ef9c02308a40e700ed95bf123267974340e5e44612bf8ccaa717b0",
+    "crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs": "65f93796414495b17b7751d4251b6173916e958db8af75af1f7c2de221dd0dcf",
+    "crates/engine-native-kernel/src/archive/known_prompts.rs": "2500dfc57ea947e845d07d5129540e9162570a5e07625df6cd48e103d7f57708",
+    "crates/engine-native/tests/u01_juxian_gain.rs": "99930123580d53fc92c44d376f4225cea31b39458e02966d8697d1fbdbe5514d"
+  }
+}

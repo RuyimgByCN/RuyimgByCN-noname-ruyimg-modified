@@ -1,0 +1,125 @@
+{
+  "parser": "@babel+parser@7.29.7",
+  "files": [
+    {
+      "path": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js",
+      "sha256": "07f7960942e479d465bf52eec2ad600f4f93471c6b739da2d1cb00dd2425b23c",
+      "parse_errors": []
+    },
+    {
+      "path": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/emoji.js",
+      "sha256": "61944d3b13f641889cd92533c2771a80259b24e10b14452ed12db6a62ebc40a2",
+      "parse_errors": []
+    },
+    {
+      "path": "archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js",
+      "sha256": "aea5d4992fd03af730852187c0d7345199596e43f31bd3856136ce365b1d31f1",
+      "parse_errors": []
+    },
+    {
+      "path": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js",
+      "sha256": "df022b56df575f5ca4df92398e1ecc5acafda4ef09805aa0e851d52c46a1176f",
+      "parse_errors": []
+    },
+    {
+      "path": "archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js",
+      "sha256": "cf63497afb43f5d151c52de028d7ce1dfd4ee7297f79e70565d4e3637bab70bd",
+      "parse_errors": []
+    },
+    {
+      "path": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+      "sha256": "d8e90d70a9d7fc5b236ab9ff734daa312f3e84b3eaec5ffd1947b92cab33e829",
+      "parse_errors": []
+    },
+    {
+      "path": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js",
+      "sha256": "a5c50981044e93304f69304a3aad3795e0a1db195a0b1534f859994d8006317f",
+      "parse_errors": []
+    },
+    {
+      "path": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js",
+      "sha256": "3f7add04e6d347d450facb9b6fd506f5c4cd64a5e3fbc626e47e79d8a3aa13b2",
+      "parse_errors": []
+    },
+    {
+      "path": "archive/upstream/noname-liuli/noname/extension/龙血玄黄/extension.js",
+      "sha256": "e3fad7cf47bfb5a6f6b55d21bd6dbdd7b44753a6b92d7407a2a1c88bb71d2db7",
+      "parse_errors": []
+    }
+  ],
+  "definitions": 215,
+  "commented_items": [
+    {
+      "key": "L20:ui_hooks:_shiqihujia_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:690",
+      "comment_start": 690,
+      "comment_end": 728,
+      "kind": "CommentBlock"
+    },
+    {
+      "key": "L20:ui_hooks:zuoxing@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6155",
+      "comment_start": 6155,
+      "comment_end": 6204,
+      "kind": "CommentLine"
+    },
+    {
+      "key": "L25:configs:falsedelete@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51434",
+      "comment_start": 51421,
+      "comment_end": 51445,
+      "kind": "CommentBlock"
+    },
+    {
+      "key": "L25:ui_hooks:_newBackgroundUse@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:41318",
+      "comment_start": 41317,
+      "comment_end": 41343,
+      "kind": "CommentBlock"
+    },
+    {
+      "key": "L25:ui_hooks:_bingletexiaoshandian@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:47984",
+      "comment_start": 47983,
+      "comment_end": 48948,
+      "kind": "CommentBlock"
+    },
+    {
+      "key": "L25:ui_hooks:_bingletexiaohuoshan@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48030",
+      "comment_start": 47983,
+      "comment_end": 48948,
+      "kind": "CommentBlock"
+    },
+    {
+      "key": "L25:ui_hooks:_bingletexiaohongshui@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48076",
+      "comment_start": 47983,
+      "comment_end": 48948,
+      "kind": "CommentBlock"
+    },
+    {
+      "key": "L25:ui_hooks:_bingletexiaofulei@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48122",
+      "comment_start": 47983,
+      "comment_end": 48948,
+      "kind": "CommentBlock"
+    },
+    {
+      "key": "L25:ui_hooks:_bingletexiaole@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48168",
+      "comment_start": 47983,
+      "comment_end": 48948,
+      "kind": "CommentBlock"
+    },
+    {
+      "key": "L25:ui_hooks:_bingletexiaobingliang@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48199",
+      "comment_start": 47983,
+      "comment_end": 48948,
+      "kind": "CommentBlock"
+    },
+    {
+      "key": "L25:ui_hooks:_thundertexiao@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48389",
+      "comment_start": 47983,
+      "comment_end": 48948,
+      "kind": "CommentBlock"
+    },
+    {
+      "key": "L25:ui_hooks:_thundertexiao2@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48503",
+      "comment_start": 47983,
+      "comment_end": 48948,
+      "kind": "CommentBlock"
+    }
+  ]
+}

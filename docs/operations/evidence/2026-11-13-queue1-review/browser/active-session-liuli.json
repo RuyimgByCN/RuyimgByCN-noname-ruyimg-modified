@@ -1,0 +1,13 @@
+{
+  "at": "2026-11-13T15:15:06.492Z",
+  "label": "liuli",
+  "url": "http://127.0.0.1:54957/",
+  "upstream": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname",
+  "profile": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-chrome-FoZq5D",
+  "upstreamPort": 54957,
+  "controlPort": 54988,
+  "cdpPort": 54958,
+  "chromePid": 45838,
+  "transcript": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-13-queue1-review/browser/session-liuli-1794582906060",
+  "head": "bd58ef06d59940baed8d7f93e61ce571b152fb81"
+}

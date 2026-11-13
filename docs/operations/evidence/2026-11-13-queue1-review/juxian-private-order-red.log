@@ -1,0 +1,19 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.76s
+     Running tests/groups/g1.rs (target/debug/deps/g1-a4e6ec7f8e101885)
+
+running 1 test
+
+thread 'u01_juxian_gain::juxian_hidden_order_uses_rng_is_archived_and_rejects_invalid_mapping' (3178957) panicked at crates/engine-native/tests/groups/../u01_juxian_gain.rs:231:9:
+hidden candidates must use rule RNG
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test u01_juxian_gain::juxian_hidden_order_uses_rng_is_archived_and_rejects_invalid_mapping ... FAILED
+
+failures:
+
+failures:
+    u01_juxian_gain::juxian_hidden_order_uses_rng_is_archived_and_rejects_invalid_mapping
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 244 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native --test g1`

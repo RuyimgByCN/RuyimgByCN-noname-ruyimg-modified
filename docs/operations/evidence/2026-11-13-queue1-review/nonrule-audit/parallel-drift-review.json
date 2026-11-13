@@ -1,0 +1,26 @@
+{
+  "reviewed_at_utc": "2026-11-13T15:38:20.179254+00:00",
+  "reason": "并行 U01 dddjuxian 选牌修复使消费者快照失效，首次验证 exit 1 已保留在 static-commands.jsonl。",
+  "drifted_files": [
+    {
+      "path": "crates/engine-native-kernel/src/archive/known_prompts.rs",
+      "previous_sha256": "2500dfc57ea947e845d07d5129540e9162570a5e07625df6cd48e103d7f57708",
+      "current_sha256": "df28ab7930c8c94ccd55e780f101c44f4fec19d55e4e9516ddf1a1cddcfd184c"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_a.rs",
+      "previous_sha256": "d8ac622771ef9c02308a40e700ed95bf123267974340e5e44612bf8ccaa717b0",
+      "current_sha256": "772c0aadf77db9b7bd930f343dbced053a13cb0cdf6c207179d3c688c06cde80"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs",
+      "previous_sha256": "65f93796414495b17b7751d4251b6173916e958db8af75af1f7c2de221dd0dcf",
+      "current_sha256": "fad7bb6780159afb1176c37ebfb1c94b90a6cbdd699d53746c43bd53c488be44"
+    }
+  ],
+  "affected_audit_keys": [],
+  "source_diff_review": "已读实际 git diff：U01 新增 dddjuxian 获取牌选择步骤及 prompt，另有局部格式变化；没有改动本审查224项的 handler/parser/UI 消费。known_prompts 仅在末尾新增 dddjuxian_gain。",
+  "previous_snapshot": "consumer-probes.before-u01-refresh.json",
+  "previous_validation": "validation.before-u01-refresh.json",
+  "runtime_reproduction": false
+}

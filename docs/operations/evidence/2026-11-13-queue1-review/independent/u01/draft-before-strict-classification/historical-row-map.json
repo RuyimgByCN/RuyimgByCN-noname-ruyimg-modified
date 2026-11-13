@@ -1,0 +1,1491 @@
+{
+  "method": "extract table identifiers and line numbers only; no historical conclusion consumed",
+  "historical_full_table_rows": 95,
+  "new_unique_skill_rows": 64,
+  "new_unique_character_rows": 31,
+  "note": "覆盖旧完整95行和其抽样重复行，故包含原72模板行的全部标识范围；未以旧表判断规则。",
+  "rows": [
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 17,
+      "identifiers": [
+        "dddyulv_old"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddyulv_old",
+          "inventory_key": "U01:skills:dddyulv_old@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4307",
+          "report": "skills-c.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 18,
+      "identifiers": [
+        "ddddiedang"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddddiedang",
+          "inventory_key": "U01:skills:ddddiedang@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:802",
+          "report": "skills-a.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 19,
+      "identifiers": [
+        "dddjijian"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddjijian",
+          "inventory_key": "U01:skills:dddjijian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1676",
+          "report": "skills-b.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 20,
+      "identifiers": [
+        "ddd_qianzhao"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_qianzhao",
+          "inventory_key": "U01:generals:ddd_qianzhao@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:169",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 21,
+      "identifiers": [
+        "dddshixing"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddshixing",
+          "inventory_key": "U01:skills:dddshixing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5840",
+          "report": "skills-d.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 22,
+      "identifiers": [
+        "dddqiahua"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddqiahua",
+          "inventory_key": "U01:skills:dddqiahua@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3068",
+          "report": "skills-c.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 23,
+      "identifiers": [
+        "dddlangzhi"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddlangzhi",
+          "inventory_key": "U01:skills:dddlangzhi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5296",
+          "report": "skills-d.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 24,
+      "identifiers": [
+        "ddd_xianglang"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_xianglang",
+          "inventory_key": "U01:generals:ddd_xianglang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:36",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 25,
+      "identifiers": [
+        "dddanzhi"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddanzhi",
+          "inventory_key": "U01:skills:dddanzhi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5796",
+          "report": "skills-d.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 26,
+      "identifiers": [
+        "dddshijian"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddshijian",
+          "inventory_key": "U01:skills:dddshijian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2423",
+          "report": "skills-b.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 34,
+      "identifiers": [
+        "ddd_handang"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_handang",
+          "inventory_key": "U01:generals:ddd_handang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:5",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 35,
+      "identifiers": [
+        "ddd_wuzhi"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_wuzhi",
+          "inventory_key": "U01:generals:ddd_wuzhi@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:11",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 36,
+      "identifiers": [
+        "ddd_xujing"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_xujing",
+          "inventory_key": "U01:generals:ddd_xujing@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:17",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 37,
+      "identifiers": [
+        "ddd_caomao"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_caomao",
+          "inventory_key": "U01:generals:ddd_caomao@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:23",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 38,
+      "identifiers": [
+        "ddd_xinxianying"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_xinxianying",
+          "inventory_key": "U01:generals:ddd_xinxianying@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:30",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 39,
+      "identifiers": [
+        "ddd_xianglang"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_xianglang",
+          "inventory_key": "U01:generals:ddd_xianglang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:36",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 40,
+      "identifiers": [
+        "ddd_yujin"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_yujin",
+          "inventory_key": "U01:generals:ddd_yujin@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:42",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 41,
+      "identifiers": [
+        "ddd_liuye"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_liuye",
+          "inventory_key": "U01:generals:ddd_liuye@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:48",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 42,
+      "identifiers": [
+        "ddd_baosanniang"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_baosanniang",
+          "inventory_key": "U01:generals:ddd_baosanniang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:54",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 43,
+      "identifiers": [
+        "ddd_zhenji"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_zhenji",
+          "inventory_key": "U01:generals:ddd_zhenji@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:60",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 44,
+      "identifiers": [
+        "ddd_zhaoang"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_zhaoang",
+          "inventory_key": "U01:generals:ddd_zhaoang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:66",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 45,
+      "identifiers": [
+        "ddd_zhouchu"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_zhouchu",
+          "inventory_key": "U01:generals:ddd_zhouchu@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:72",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 46,
+      "identifiers": [
+        "ddd_liuba"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_liuba",
+          "inventory_key": "U01:generals:ddd_liuba@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:78",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 47,
+      "identifiers": [
+        "ddd_jianshuo"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_jianshuo",
+          "inventory_key": "U01:generals:ddd_jianshuo@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:84",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 48,
+      "identifiers": [
+        "ddd_guanning"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_guanning",
+          "inventory_key": "U01:generals:ddd_guanning@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:90",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 49,
+      "identifiers": [
+        "ddd_dingfeng"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_dingfeng",
+          "inventory_key": "U01:generals:ddd_dingfeng@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:96",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 50,
+      "identifiers": [
+        "ddd_caoshuang"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_caoshuang",
+          "inventory_key": "U01:generals:ddd_caoshuang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:102",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 51,
+      "identifiers": [
+        "ddd_xuelingyun"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_xuelingyun",
+          "inventory_key": "U01:generals:ddd_xuelingyun@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:108",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 52,
+      "identifiers": [
+        "ddd_liuhong"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_liuhong",
+          "inventory_key": "U01:generals:ddd_liuhong@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:114",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 53,
+      "identifiers": [
+        "ddd_xiahouxuan"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_xiahouxuan",
+          "inventory_key": "U01:generals:ddd_xiahouxuan@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:121",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 54,
+      "identifiers": [
+        "ddd_zhangkai",
+        "dddjiexing",
+        "dddbailei"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_zhangkai",
+          "inventory_key": "U01:generals:ddd_zhangkai@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:128",
+          "report": "characters.md"
+        },
+        {
+          "identifier": "dddjiexing",
+          "inventory_key": "U01:skills:dddjiexing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:6236",
+          "report": "skills-d.md"
+        },
+        {
+          "identifier": "dddbailei",
+          "inventory_key": "U01:skills:dddbailei@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:6302",
+          "report": "skills-d.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 55,
+      "identifiers": [
+        "ddd_liangxi"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_liangxi",
+          "inventory_key": "U01:generals:ddd_liangxi@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:135",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 56,
+      "identifiers": [
+        "ddd_wangkanglvkai"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_wangkanglvkai",
+          "inventory_key": "U01:generals:ddd_wangkanglvkai@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:141",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 57,
+      "identifiers": [
+        "ddd_sunliang"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_sunliang",
+          "inventory_key": "U01:generals:ddd_sunliang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:148",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 58,
+      "identifiers": [
+        "ddd_lie"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_lie",
+          "inventory_key": "U01:generals:ddd_lie@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:155",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 59,
+      "identifiers": [
+        "ddd_kebineng"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_kebineng",
+          "inventory_key": "U01:generals:ddd_kebineng@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:161",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 60,
+      "identifiers": [
+        "ddd_qianzhao"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_qianzhao",
+          "inventory_key": "U01:generals:ddd_qianzhao@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:169",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 61,
+      "identifiers": [
+        "ddd_zhangmiao"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_zhangmiao",
+          "inventory_key": "U01:generals:ddd_zhangmiao@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:175",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 62,
+      "identifiers": [
+        "ddd_zhangcheng"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_zhangcheng",
+          "inventory_key": "U01:generals:ddd_zhangcheng@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:181",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 63,
+      "identifiers": [
+        "ddd_liuchong"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_liuchong",
+          "inventory_key": "U01:generals:ddd_liuchong@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:187",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 64,
+      "identifiers": [
+        "ddd_luoxian"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddd_luoxian",
+          "inventory_key": "U01:generals:ddd_luoxian@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:193",
+          "report": "characters.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 65,
+      "identifiers": [
+        "dddyuanzhen"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddyuanzhen",
+          "inventory_key": "U01:skills:dddyuanzhen@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:6",
+          "report": "skills-a.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 66,
+      "identifiers": [
+        "dddzhishu"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddzhishu",
+          "inventory_key": "U01:skills:dddzhishu@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:37",
+          "report": "skills-a.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 67,
+      "identifiers": [
+        "dddxiaxing"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddxiaxing",
+          "inventory_key": "U01:skills:dddxiaxing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:59",
+          "report": "skills-a.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 68,
+      "identifiers": [
+        "dddjuxian"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddjuxian",
+          "inventory_key": "U01:skills:dddjuxian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:244",
+          "report": "skills-a.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 69,
+      "identifiers": [
+        "dddjungui"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddjungui",
+          "inventory_key": "U01:skills:dddjungui@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:384",
+          "report": "skills-a.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 70,
+      "identifiers": [
+        "dddjinggou"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddjinggou",
+          "inventory_key": "U01:skills:dddjinggou@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:443",
+          "report": "skills-a.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 71,
+      "identifiers": [
+        "dddmoyan"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddmoyan",
+          "inventory_key": "U01:skills:dddmoyan@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:472",
+          "report": "skills-a.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 72,
+      "identifiers": [
+        "dddshilie"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddshilie",
+          "inventory_key": "U01:skills:dddshilie@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:511",
+          "report": "skills-a.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 73,
+      "identifiers": [
+        "dddyeshen"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddyeshen",
+          "inventory_key": "U01:skills:dddyeshen@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:656",
+          "report": "skills-a.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 74,
+      "identifiers": [
+        "dddqiaoduan"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddqiaoduan",
+          "inventory_key": "U01:skills:dddqiaoduan@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:747",
+          "report": "skills-a.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 75,
+      "identifiers": [
+        "ddddiedang"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddddiedang",
+          "inventory_key": "U01:skills:ddddiedang@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:802",
+          "report": "skills-a.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 76,
+      "identifiers": [
+        "dddanliu"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddanliu",
+          "inventory_key": "U01:skills:dddanliu@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:861",
+          "report": "skills-a.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 77,
+      "identifiers": [
+        "dddguiying"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddguiying",
+          "inventory_key": "U01:skills:dddguiying@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:968",
+          "report": "skills-a.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 78,
+      "identifiers": [
+        "dddbingjian"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddbingjian",
+          "inventory_key": "U01:skills:dddbingjian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1204",
+          "report": "skills-a.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 79,
+      "identifiers": [
+        "dddtongyu"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddtongyu",
+          "inventory_key": "U01:skills:dddtongyu@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1443",
+          "report": "skills-a.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 80,
+      "identifiers": [
+        "dddzhilian"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddzhilian",
+          "inventory_key": "U01:skills:dddzhilian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1584",
+          "report": "skills-b.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 81,
+      "identifiers": [
+        "dddjijian"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddjijian",
+          "inventory_key": "U01:skills:dddjijian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1676",
+          "report": "skills-b.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 82,
+      "identifiers": [
+        "dddjijian_old"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddjijian_old",
+          "inventory_key": "U01:skills:dddjijian_old@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1807",
+          "report": "skills-b.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 83,
+      "identifiers": [
+        "dddzhengjun"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddzhengjun",
+          "inventory_key": "U01:skills:dddzhengjun@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2005",
+          "report": "skills-b.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 84,
+      "identifiers": [
+        "dddxianxi"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddxianxi",
+          "inventory_key": "U01:skills:dddxianxi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2194",
+          "report": "skills-b.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 85,
+      "identifiers": [
+        "dddlingyong"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddlingyong",
+          "inventory_key": "U01:skills:dddlingyong@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2296",
+          "report": "skills-b.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 86,
+      "identifiers": [
+        "dddxuxiao"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddxuxiao",
+          "inventory_key": "U01:skills:dddxuxiao@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2333",
+          "report": "skills-b.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 87,
+      "identifiers": [
+        "dddxuyu"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddxuyu",
+          "inventory_key": "U01:skills:dddxuyu@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2407",
+          "report": "skills-b.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 88,
+      "identifiers": [
+        "dddshijian"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddshijian",
+          "inventory_key": "U01:skills:dddshijian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2423",
+          "report": "skills-b.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 89,
+      "identifiers": [
+        "dddxuyu_old"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddxuyu_old",
+          "inventory_key": "U01:skills:dddxuyu_old@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2519",
+          "report": "skills-b.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 90,
+      "identifiers": [
+        "dddshijian_old"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddshijian_old",
+          "inventory_key": "U01:skills:dddshijian_old@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2574",
+          "report": "skills-b.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 91,
+      "identifiers": [
+        "dddtaisi"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddtaisi",
+          "inventory_key": "U01:skills:dddtaisi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2636",
+          "report": "skills-b.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 92,
+      "identifiers": [
+        "dddquche"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddquche",
+          "inventory_key": "U01:skills:dddquche@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2706",
+          "report": "skills-b.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 93,
+      "identifiers": [
+        "dddqianlong"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddqianlong",
+          "inventory_key": "U01:skills:dddqianlong@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2819",
+          "report": "skills-b.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 94,
+      "identifiers": [
+        "ddddongcha"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddddongcha",
+          "inventory_key": "U01:skills:ddddongcha@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2851",
+          "report": "skills-b.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 95,
+      "identifiers": [
+        "dddzhijie"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddzhijie",
+          "inventory_key": "U01:skills:dddzhijie@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2941",
+          "report": "skills-b.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 96,
+      "identifiers": [
+        "dddqiahua"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddqiahua",
+          "inventory_key": "U01:skills:dddqiahua@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3068",
+          "report": "skills-c.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 97,
+      "identifiers": [
+        "dddxunxun"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddxunxun",
+          "inventory_key": "U01:skills:dddxunxun@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3112",
+          "report": "skills-c.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 98,
+      "identifiers": [
+        "dddfusi"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddfusi",
+          "inventory_key": "U01:skills:dddfusi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3149",
+          "report": "skills-c.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 99,
+      "identifiers": [
+        "dddfusi_global"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddfusi_global",
+          "inventory_key": "U01:skills:dddfusi_global@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3174",
+          "report": "skills-c.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 100,
+      "identifiers": [
+        "dddtuoji"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddtuoji",
+          "inventory_key": "U01:skills:dddtuoji@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3369",
+          "report": "skills-c.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 101,
+      "identifiers": [
+        "dddchashi"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddchashi",
+          "inventory_key": "U01:skills:dddchashi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3388",
+          "report": "skills-c.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 102,
+      "identifiers": [
+        "dddqice"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddqice",
+          "inventory_key": "U01:skills:dddqice@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3507",
+          "report": "skills-c.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 103,
+      "identifiers": [
+        "dddmiaoxing"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddmiaoxing",
+          "inventory_key": "U01:skills:dddmiaoxing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3569",
+          "report": "skills-c.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 104,
+      "identifiers": [
+        "dddfushi"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddfushi",
+          "inventory_key": "U01:skills:dddfushi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3727",
+          "report": "skills-c.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 105,
+      "identifiers": [
+        "dddfenji"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddfenji",
+          "inventory_key": "U01:skills:dddfenji@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3866",
+          "report": "skills-c.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 106,
+      "identifiers": [
+        "dddxiaheng"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddxiaheng",
+          "inventory_key": "U01:skills:dddxiaheng@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3944",
+          "report": "skills-c.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 107,
+      "identifiers": [
+        "dddfengzheng"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddfengzheng",
+          "inventory_key": "U01:skills:dddfengzheng@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4019",
+          "report": "skills-c.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 108,
+      "identifiers": [
+        "dddyulv"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddyulv",
+          "inventory_key": "U01:skills:dddyulv@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4213",
+          "report": "skills-c.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 109,
+      "identifiers": [
+        "dddyulv_old"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddyulv_old",
+          "inventory_key": "U01:skills:dddyulv_old@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4307",
+          "report": "skills-c.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 110,
+      "identifiers": [
+        "dddfenye"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddfenye",
+          "inventory_key": "U01:skills:dddfenye@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4403",
+          "report": "skills-c.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 111,
+      "identifiers": [
+        "dddshichao"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddshichao",
+          "inventory_key": "U01:skills:dddshichao@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4875",
+          "report": "skills-c.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 112,
+      "identifiers": [
+        "dddyouxue"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddyouxue",
+          "inventory_key": "U01:skills:dddyouxue@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4975",
+          "report": "skills-d.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 113,
+      "identifiers": [
+        "dddchengjing"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddchengjing",
+          "inventory_key": "U01:skills:dddchengjing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5018",
+          "report": "skills-d.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 114,
+      "identifiers": [
+        "dddduanbing"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddduanbing",
+          "inventory_key": "U01:skills:dddduanbing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5131",
+          "report": "skills-d.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 115,
+      "identifiers": [
+        "dddxiaoxing"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddxiaoxing",
+          "inventory_key": "U01:skills:dddxiaoxing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5223",
+          "report": "skills-d.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 116,
+      "identifiers": [
+        "dddlangzhi"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddlangzhi",
+          "inventory_key": "U01:skills:dddlangzhi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5296",
+          "report": "skills-d.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 117,
+      "identifiers": [
+        "dddfuyi"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddfuyi",
+          "inventory_key": "U01:skills:dddfuyi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5427",
+          "report": "skills-d.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 118,
+      "identifiers": [
+        "dddzhuanshe"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddzhuanshe",
+          "inventory_key": "U01:skills:dddzhuanshe@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5593",
+          "report": "skills-d.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 119,
+      "identifiers": [
+        "dddweiqiu"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddweiqiu",
+          "inventory_key": "U01:skills:dddweiqiu@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5714",
+          "report": "skills-d.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 120,
+      "identifiers": [
+        "dddlianer"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddlianer",
+          "inventory_key": "U01:skills:dddlianer@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5729",
+          "report": "skills-d.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 121,
+      "identifiers": [
+        "dddanzhi"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddanzhi",
+          "inventory_key": "U01:skills:dddanzhi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5796",
+          "report": "skills-d.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 122,
+      "identifiers": [
+        "dddshixing"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddshixing",
+          "inventory_key": "U01:skills:dddshixing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5840",
+          "report": "skills-d.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 123,
+      "identifiers": [
+        "ddddanggu"
+      ],
+      "covered_by": [
+        {
+          "identifier": "ddddanggu",
+          "inventory_key": "U01:skills:ddddanggu@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5889",
+          "report": "skills-d.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 124,
+      "identifiers": [
+        "dddfuzong"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddfuzong",
+          "inventory_key": "U01:skills:dddfuzong@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5948",
+          "report": "skills-d.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 125,
+      "identifiers": [
+        "dddlanghuai"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddlanghuai",
+          "inventory_key": "U01:skills:dddlanghuai@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5989",
+          "report": "skills-d.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 126,
+      "identifiers": [
+        "dddxuanlun"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddxuanlun",
+          "inventory_key": "U01:skills:dddxuanlun@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:6058",
+          "report": "skills-d.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 127,
+      "identifiers": [
+        "dddjiexing"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddjiexing",
+          "inventory_key": "U01:skills:dddjiexing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:6236",
+          "report": "skills-d.md"
+        }
+      ]
+    },
+    {
+      "old_file": "docs/operations/evidence/2026-11-12-u01-ddd-review/README.md",
+      "old_line": 128,
+      "identifiers": [
+        "dddbailei"
+      ],
+      "covered_by": [
+        {
+          "identifier": "dddbailei",
+          "inventory_key": "U01:skills:dddbailei@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:6302",
+          "report": "skills-d.md"
+        }
+      ]
+    }
+  ]
+}

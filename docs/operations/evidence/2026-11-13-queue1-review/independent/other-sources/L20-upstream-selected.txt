@@ -1,0 +1,485 @@
+
+=== cards zhengsu_bianzhen | archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6321 ===
+            lib.card.zhengsu_bianzhen = { fullskin: true }
+            //名称重置
+            //张仲景
+            lib.translate.zhangzhongjing = '张仲景';
+            lib.translate.old_zhangzhongjing = '旧张仲景';
+            //蔡文姬
+            lib.translate.caiwenji = '蔡文姬';
+            lib.translate.re_caiwenji = '界蔡文姬';
+            lib.translate.ol_caiwenji = 'OL蔡文姬';
+            lib.translate.sp_caiwenji = 'SP蔡文姬';
+            lib.translate.WEI_sp_caiwenji = '欢乐蔡文姬';
+            lib.translate.WEI_sp_caiwenji_ab = '蔡文姬';
+            lib.translate.yue_caiwenji = '乐蔡文姬';
+            //严白虎
+            lib.translate.yanbaihu = '严白虎';
+            //甄姬
+            lib.translate.zhenji = '甄姬';
+            lib.translate.re_zhenji = '界甄姬';
+            lib.translate.shen_zhenji = '神甄姬';
+            lib.translate.diy_zhenji = '甄姬';
+            lib.translate.sb_zhenji = '谋甄姬';
+            lib.translate.jsrg_zhenji = '承甄姬';
+            lib.translate.jsrg_zhenji_ab = '甄姬';
+            lib.translate.yj_zhenji = '用间甄姬';
+            lib.translate.yj_zhenji_ab = '甄姬';
+            //伏皇后
+            lib.translate.fuhuanghou = '伏皇后';
+            lib.translate.re_fuhuanghou = '新杀伏皇后';
+            lib.translate.xin_fuhuanghou = '界伏皇后';
+            lib.translate.sp_fuhuanghou = 'SP伏皇后';
+            lib.translate.old_fuhuanghou = '旧伏皇后';
+            //吉平
+            lib.translate.sp_jiben = 'SP吉平';
+            lib.translate.dc_jiben = '吉平';
+            //步练师
+            lib.translate.dc_bulianshi = '新杀步练师';
+            lib.translate.re_bulianshi = '界步练师';
+            //星武将
+            lib.translate.yj_zhanghe = "星张郃";
+            lib.translate.yj_xuhuang = "星徐晃";
+            lib.translate.yj_ganning = "星甘宁";
+            lib.translate.yj_huangzhong = "星黄忠";
+            lib.translate.yj_zhangliao = "星张辽";
+
+=== configs xinshadoudizhu | archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6471 ===
+            xinshadoudizhu: {
+                name: '兵临城下斗地主修改',
+                init: false,
+                intro: "不建议手杀ui下开启，兵临城下界面美化。",
+            }
+
+=== configs zhijiechifa | archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6408 ===
+            zhijiechifa: {
+                name: '时机修改',
+                init: true,
+                intro: "修改部分武将时机，同步手杀，重启生效。",
+            }
+
+=== skills kuanshi | archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:5299 ===
+lib.skill.kuanshi = {
+                        audio: 2,
+                        trigger: {
+                            player: "phaseJieshuBegin",
+                        },
+                        direct: true,
+                        content: function () {
+                            'step 0'
+                            player.chooseTarget(get.prompt2('kuanshi')).set('ai', function (target) {
+                                if (get.attitude(_status.event.player, target) > 0) {
+                                    return 1 / Math.sqrt(target.hp + 1);
+                                }
+                                return 0;
+                            }).animate = false;
+                            'step 1'
+                            if (result.bool) {
+                                var target = result.targets[0];
+                                player.logSkill('kuanshi');
+                                target.storage.kuanshi2 = player;
+                                target.addSkill('kuanshi2');
+                                if (player == game.me || player.isUnderControl()) {
+                                    player.storage.kuanshi_mark = '';
+                                    player.addTempSkill("kuanshi_mark", { player: 'phaseZhunbeiBegin' });
+                                    player.markSkill("kuanshi_mark", '', '宽释 ' + get.translation(target));
+                                }
+                            }
+                        },
+                        subSkill: {
+                            mark: { intro: {}, sub: true, },
+                            mark2: { mark: true, marktext: "宽释 生效", intro: { name: '宽释 生效' }, sub: true, },
+                        },
+                    }
+
+=== skills mibei | archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:4592 ===
+lib.skill.mibei = {
+                        audio: 2,
+                        trigger: {
+                            player: "useCardAfter",
+                        },
+                        dutySkill: true,
+                        forced: true,
+                        skillAnimation: true,
+                        animationColor: "water",
+                        filter: function (event, player) {
+                            if (!player.storage.xingqi || !player.storage.xingqi.length) return false;
+                            var map = { basic: 0, trick: 0, equip: 0 };
+                            for (var i of player.storage.xingqi) {
+                                var type = get.type(i);
+                                if (typeof map[type] == 'number') map[type]++;
+                            }
+                            for (var i in map) {
+                                if (map[i] < 2) return false;
+                            }
+                            return true;
+                        },
+                        content: function () {
+                            'step 0'
+                            game.log(player, '成功完成使命');
+                            player.awakenSkill('mibei');
+                            player.shixiaoSkill("mibei");
+                            var list = ['basic', 'equip', 'trick'], cards = [];
+                            for (var i of list) {
+                                var card = get.cardPile2(function (card) {
+                                    return get.type(card) == i;
+                                });
+                                if (card) cards.push(card);
+                            }
+                            if (cards.length) player.gain(cards, 'gain2');
+                            'step 1'
+                            player.addSkill('xinmouli');
+                        },
+                        group: ["mibei_fail", "mibei_silent"],
+                        derivation: "xinmouli",
+                        subSkill: {
+                            silent: {
+                                trigger: {
+                                    player: "phaseZhunbeiBegin",
+                                },
+                                silent: true,
+                                lastDo: true,
+                                filter: function (event, player) {
+                                    return !player.getStorage('xingqi').length;
+                                },
+                                content: function () {
+                                    player.addTempSkill('mibei_mark');
+                                },
+                                charlotte: true,
+                                sub: true,
+                                forced: true,
+                                popup: false,
+                            },
+                            mark: {
+                                sub: true,
+                            },
+                            fail: {
+                                trigger: {
+                                    player: "phaseJieshuBegin",
+                                },
+                                forced: true,
+                                filter: function (event, player) {
+                                    return !player.getStorage('xingqi').length && player.hasSkill('mibei_mark');
+                                },
+                                content: function () {
+                                    game.log(player, '使命失败');
+                                    /*decadeUI.animation.playSpine({ name: 'mibeishibai', speed: 1, }, { scale: 0.8, x: [0, 0.55], parent: player });*/
+                                    dcdAnim.loadSpine(xixiguagua.mibeishibai.name, "skel", function () {
+                                        dcdAnim.playSpine(xixiguagua.mibeishibai, { scale: 0.8, speed: 1, x: [0, 0.55], parent: player });
+                                    });
+                                    player.shixiaoSkill("mibei");
+                                    player.awakenSkill('mibei');
+                                    player.failSkill('mibei');
+                                    player.loseMaxHp();
+                                },
+                                sub: true,
+                            },
+                        },
+                    }
+
+=== surfaces extension.css | archive/upstream/noname-liuli/noname/extension/标记补充/extension.css:1 ===
+
+/*自己跋扈*//*整体*/
+.fubahux{
+width: 400px;
+height: 400px;         
+}
+/*x轴*/
+.fubahu{
+    background-color: none;
+    background-repeat: no-repeat;
+    background-image: url('image/bahu.png'),url('image/guangqiu_bg.png');
+    background-size: 80%;
+    width:100px;
+    height:100px;/*图高*/
+    z-index:888!important;
+    visibility:hidden;            
+    animation: center1 1.5s ease-in forwards;
+}        
+/*y轴*/
+.zibahu{           
+    animation: center2 1.5s ease-out forwards;
+    z-index:888!important;
+}
+@keyframes center1 {
+     0%  {transform: translateX(-100px);visibility: visible;opacity: 0;}	  
+     50% {transform: translateX(-100px);visibility: visible;opacity: 1;}     
+    100% {transform: translateX(80px)}
+}
+@keyframes center2 {
+     0%  {transform: translateY(10px);: visible;opacity: 0;}	
+     50% {transform: translateY(10px);visibility: visible;opacity: 1;}   
+    100% {transform: translateY(-30px)}
+}
+
+
+/*自己飞扬*//*整体*/
+.fufeiyanx{
+width: 400px;
+height: 400px;         
+}
+/*x轴*/
+.fufeiyan{
+    background-color: none;
+
+=== surfaces group.css | archive/upstream/noname-liuli/noname/extension/标记补充/group.css:1 ===
+/*选中*/
+#arena.decadeUI.selecting>.dialog.scroll1.scroll2>.content-container>.content>.buttons>.card.button.selected.selectable[data-nature="jingx"]::before{
+    border:none;
+	background-image: url('group/sgroup.png') !important;
+	background-size:100% 100%;
+background-repeat:no-repeat;
+	border-radius:50% !important;
+	width:132px;
+	height:132px;
+	top:auto;
+	left:auto;
+	right:0px;
+	bottom:0px;
+	background-position:100% 100%;
+	box-shadow: none;	
+}
+
+
+=== ui_hooks _mianshang_ | archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2603 ===
+lib.skill._mianshang_ = {
+                        trigger: {
+                            player: ['damageZero', 'damageCancelled'],
+                        },
+                        forced: true,
+                        content: function () {
+                            //   decadeUI.animation.playSpine({ name:'mianshang',speed:0.8,},{ scale: 0.75,parent: player });     
+                            dcdAnim.loadSpine(xixiguagua.mianshang.name, "skel", function () {
+                                //dcdAnim.playSpine(xixiguagua.mianshang, { scale: 0.75, parent: player });
+                                //位置和大小微调了下
+                                dcdAnim.playSpine(xixiguagua.mianshang, { scale: 0.77, x: [0, 0.525], y: [0, 0.49], parent: player });
+                            });
+                        },
+                    }
+
+=== ui_hooks _shanghaipaishiyongtexiao_ | archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:3296 ===
+lib.skill._shanghaipaishiyongtexiao_ = {
+                    trigger: {
+                        player: 'useCardBegin',
+                    },
+                    priority: 100,
+                    firstDo: true,
+                    charlotte: true,
+                    forced: true,
+                    popup: false,
+                    audio: false,
+                    content: function () {
+                        if (get.tag(trigger.card, 'damage')) {
+                            if (player != game.me) {
+                                dcdAnim.loadSpine(xixiguagua.aar_longxingzhixiang.name, "skel", function () {
+                                    dcdAnim.playSpine(xixiguagua.aar_longxingzhixiang, { speed: 0.5, scale: 0.6, parent: player });
+                                });
+                            }
+                            if (player == game.me) {
+                                dcdAnim.loadSpine(xixiguagua.aar_longxingzhixiang.name, "skel", function () {
+                                    dcdAnim.playSpine(xixiguagua.aar_longxingzhixiang, { speed: 0.4, scale: 0.6, x: [0, -3.5], y: [0, 1], parent: player });
+                                });
+                            }
+                        }
+                    },
+                }
+
+=== ui_hooks _xigua_zhuwanzhongji_ | archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2290 ===
+lib.skill._xigua_zhuwanzhongji_ = {
+                    charlotte: true,
+                    trigger: {
+                        global: "dieBegin",
+                    },
+                    forced: true,
+                    filter: function (event, player) {
+                        return event.player.identity == 'zhu' && (player.identity == 'zhong' || player.identity == 'mingzhong');
+                    },
+                    logTarget: "player",
+                    content: function () {
+                        game.broadcastAll(function (player, target) {
+                            target.identity = player.identity;
+                            if (player.identity == 'mingzhong') game.zhong = target;
+                            delete target.isZhu;
+                            player.identity = 'zhu';
+                            game.zhu = player;
+                            player.showIdentity();
+                            target.showIdentity();
+                        }, player, trigger.player);
+                        event.trigger('zhuUpdate');
+                    },
+                }
+
+=== skills tspowei | archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:4366 ===
+lib.skill.tspowei = {
+                        audio: 3,
+                        dutySkill: true,
+                        forced: true,
+                        trigger: {
+                            global: "damageEnd",
+                        },
+                        logTarget: "player",
+                        filter: function (event, player) {
+                            return event.player && event.player.isIn() && event.player.hasMark('dulie');
+                        },
+                        content: function () {
+                            trigger.player.removeMark('dulie', trigger.player.countMark('dulie'));
+                        },
+                        derivation: "shenzhu",
+                        group: ["tspowei_init", "tspowei_move", "tspowei_achieve", "tspowei_fail", "tspowei_use"],
+                        subSkill: {
+                            use: {
+                                audio: "tspowei",
+                                trigger: {
+                                    global: "phaseBegin",
+                                },
+                                direct: true,
+                                filter: function (event, player) {
+                                    return event.player != player && event.player.hasMark('dulie') &&
+                                        (player.countCards('h') > 0 || player.hp >= event.player.hp && event.player.countCards('h') > 0);
+                                },
+                                content: function () {
+                                    'step 0'
+                                    var list = [], target = trigger.player, choiceList = [
+                                        '弃置一张牌并对其造成1点伤害',
+                                        '获得其一张手牌',
+                                    ];
+                                    event.target = target;
+                                    if (player.hasCard(function (card) {
+                                        return lib.filter.cardDiscardable(card, player, 'tspowei_use');
+                                    }, 'h')) list.push('选项一');
+                                    else choiceList[0] = '<span style="opacity:0.5">' + choiceList[0] + '</span>';
+                                    if (player.hp >= target.hp && target.countCards('h') > 0) list.push('选项二');
+                                    else choiceList[1] = '<span style="opacity:0.5">' + choiceList[1] + '</span>';
+                                    player.chooseControl(list, 'cancel2').set('prompt', get.prompt('tspowei', target)).set('choiceList', choiceList).set('ai', function () {
+                                        var evt = _status.event.getParent();
+                                        if (evt.player.hasCard(function (card) {
+                                            return lib.filter.cardDiscardable(card, evt.player, 'tspowei_use') && get.value(card, evt.player) < 7;
+                                        }, 'h') && get.damageEffect(evt.target, evt.player, evt.player) > 0) return '选项一';
+                                        if (evt.player.hp >= evt.target.hp && evt.target.countCards('h') > 0 && get.attitude(evt.player, evt.target) <= 0 && !evt.target.hasSkillTag('noh')) return '选项二';
+                                        return 'cancel2';
+                                    });
+                                    'step 1'
+                                    if (result.control != 'cancel2') {
+                                        if (result.control == '选项二') {
+                                            player.logSkill('tspowei', target);
+                                            player.gainPlayerCard(target, 'h', true);
+                                            event.goto(3);
+                                        }
+                                    }
+                                    else event.finish();
+                                    'step 2'
+                                    player.chooseToDiscard('h', true).logSkill = ['tspowei_use', target];
+                                    target.damage();
+                                    'step 3'
+                                    player.addTempSkill('tspowei_inRange');
+                                },
+                                ai: {
+                                    expose: 0.2,
+                                },
+                                sub: true,
+                            },
+                            inRange: {
+                                charlotte: true,
+                                mod: {
+                                    inRangeOf: function (from, to) {
+                                        if (from == _status.currentPhase) return true;
+                                    },
+                                },
+                                sub: true,
+                            },
+                            init: {
+                                audio: "tspowei",
+                                trigger: {
+                                    global: "phaseBefore",
+                                    player: "enterGame",
+                                },
+                                forced: true,
+                                filter: function (event, player) {
+                                    return event.name != 'phase' || game.phaseNumber == 0;
+                                },
+                                logTarget: function (event, player) {
+                                    return game.filterPlayer((current) => current != player && !current.hasMark('dulie'));
+                                },
+                                content: function () {
+                                    var list = game.filterPlayer((current) => current != player && !current.hasMark('dulie')).sortBySeat();
+                                    for (var i of list) i.addMark('dulie', 1, false);
+                                },
+                                sub: true,
+                            },
+                            move: {
+                                audio: "tspowei",
+                                trigger: {
+                                    player: "phaseBegin",
+                                },
+                                forced: true,
+                                filter: function (event, player) {
+                                    return game.hasPlayer((current) => current != player && current.hasMark('dulie'));
+                                },
+                                content: function () {
+                                    var list = game.filterPlayer((current) => current != player && current.hasMark('dulie')).sortBySeat();
+                                    var map = {};
+                                    for (var i of list) {
+                                        var num = i.countMark('dulie');
+                                        i.removeMark('dulie', num);
+                                        map[i.playerid] = num;
+                                    }
+                                    for (var i of list) {
+                                        var next = i.next;
+                                        if (next == player) next = next.next;
+                                        next.addMark('dulie', map[i.playerid]);
+                                    }
+                                },
+                                sub: true,
+                            },
+                            achieve: {
+                                audio: "tspowei1",
+                                trigger: {
+                                    player: "phaseBegin",
+                                },
+                                forced: true,
+                                skillAnimation: true,
+                                animationColor: "metal",
+                                filter: function (event, player) {
+                                    return !game.hasPlayer(function (current) {
+                                        return current.hasMark('dulie');
+                                    });
+                                },
+                                content: function () {
+                                    game.log(player, '成功完成使命');
+                                    player.awakenSkill('tspowei');
+                                    player.shixiaoSkill('tspowei');
+                                    player.addSkillLog('shenzhu');
+                                },
+                                sub: true,
+                            },
+                            fail: {
+                                audio: "tspowei2",
+                                trigger: {
+                                    player: "dying",
+                                },
+                                forced: true,
+                                content: function () {
+                                    'step 0'
+                                    game.log(player, '使命失败');
+                                    //decadeUI.animation.playSpine({ name: 'shimingjishibai', speed: 1, }, { scale: 0.8, x: [0, 0.55], parent: player });
+                                    dcdAnim.loadSpine(xixiguagua.shimingjishibai.name, "skel", function () {
+                                        dcdAnim.playSpine(xixiguagua.shimingjishibai, { scale: 0.8, speed: 1, x: [0, 0.55], parent: player });
+                                    });
+                                    player.awakenSkill('tspowei');
+                                    player.failSkill('tspowei');
+                                    player.shixiaoSkill('tspowei');
+                                    if (player.hp < 1) player.recover(1 - player.hp);
+                                    'step 1'
+                                    var num = player.countCards('e');
+                                    if (num > 0) player.chooseToDiscard('e', true, num);
+                                },
+                                sub: true,
+                            },
+                        },
+                    }
+
+=== skills wengua | archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6141 ===
+lib.skill.wengua = {
+                    audio: 2,
+                    group: ["wengua5"],
+                }

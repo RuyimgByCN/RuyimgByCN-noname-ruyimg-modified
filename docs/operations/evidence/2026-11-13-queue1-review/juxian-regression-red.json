@@ -1,0 +1,25 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--test",
+    "g1",
+    "u01_juxian_gain",
+    "--",
+    "--nocapture"
+  ],
+  "command": "cargo test --offline -p engine-native --test g1 u01_juxian_gain -- --nocapture",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0"
+  },
+  "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "tracked_status": " M crates/engine-native/tests/groups/g1.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n",
+  "start_utc": "2026-11-13T15:35:23.245126+00:00",
+  "exit_code": 101,
+  "duration_seconds": 4.194,
+  "end_utc": "2026-11-13T15:35:27.439740+00:00"
+}

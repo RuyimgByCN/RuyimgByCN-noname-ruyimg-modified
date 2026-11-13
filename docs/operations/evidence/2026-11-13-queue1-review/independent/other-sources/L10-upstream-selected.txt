@@ -1,0 +1,742 @@
+
+=== configs cardEmoji | archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2238 ===
+      cardEmoji: {
+        name: "新菜篮子", init: false, 
+        unshow: true,
+        /*update: function () {
+          alert("开启或关闭后，需重启游戏生效.");
+        }*/
+      }
+
+=== configs cardFold | archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2205 ===
+      cardFold: {
+        name: "🃏手牌完全折叠",
+        init: true,
+        intro: "开启之后，当手牌过多时会禁用滑动的方式管理手牌",
+        onclick: function (item) {
+          //alert("开启或关闭后，需重启游戏生效.");
+          game.saveConfig('extension_EpicFX_cardFold',item);
+          game.saveConfig('extension_史诗卡牌_cardFold',item);
+        }
+      }
+
+=== configs cardFold_proportion | archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2215 ===
+      cardFold_proportion: {
+        name: "🃏手牌折叠比例",
+        init:10,
+        intro: "关闭『手牌完全折叠』时生效，可以设置两张手牌折叠遮住的比例",
+		item:{
+			3:'30%',
+			4:'40%',
+			5:'50%',
+			6:'60%',
+			7:'70%',
+			8:'80%',
+			9:'90%',
+			10:'100%',
+		},
+      }
+
+=== configs cardPhantom | archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2231 ===
+      cardPhantom: {
+        name: "幻影出牌", init: true, 
+        /*update: function () {
+          alert("开启或关闭后，需重启游戏生效.");
+        }*/
+      }
+
+=== configs shichangshi | archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2245 ===
+      shichangshi: {
+        name: "十常侍还原",
+        init: true,
+        intro: "开启此选项后，将修改十常侍的技能特效，使其更贴近移动版的效果。",
+      }
+
+=== configs skillEffects | archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2185 ===
+      skillEffects: {
+        name: "手杀限定/觉醒技能特效",
+        init: true,
+      }
+
+=== configs 分割线02 | archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2258 ===
+      分割线02:{
+        "name":"<img style=width:240px src="+lib.assetURL+"extension/史诗卡牌/image/line.png>",
+        "intro":"",
+        "init":true,
+        "clear":true,	   
+    }
+
+=== skills rangjie | archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:422 ===
+lib.skill.rangjie = {
+                    audio: 2,
+                    trigger: {
+                        player: "damageEnd",
+                    },
+                    direct: true,
+                    content: function () {
+                        'step 0'
+                        event.count = trigger.num;
+                        'step 1'
+                        event.count--;
+                        var choice = [];
+                        choice.push('获得牌');                    
+                        /*var choiceList = ['获得一张指定类型的牌'];*/
+                        /*if (player.canMoveCard()) choiceList.push('移动场上的一张牌');*/
+                        if (player.canMoveCard()) choice.push('移动牌');
+                        choice.push('取消')
+                        //player.chooseControl('cancel2').set('choice', choiceList).set('prompt', get.prompt('rangjie')).set('ai', function () {
+                        //    var player = _status.event.player;
+                        //    if (player.canMoveCard(true)) return 1;
+                        //    return 0;
+                        //});
+                        player.chooseControl(choice).set('prompt',get.prompt2('rangjie')).set('ai', function () {
+                            var player = _status.event.player;
+                            if (player.canMoveCard(true)) return 1;
+                            return 0;
+                        });
+                        'step 2'
+                        if (result.control == 'cancel2') event.finish();
+                        else {
+                            player.logSkill('rangjie');
+                            player.draw();
+                            if (result.index == 0) {
+                                //player.chooseControl('basic', 'trick', 'equip').set('prompt', '选择获得一种类型的牌').set('ai', function () {
+                                //    var player = _status.event.player;
+                                //    if (player.hp <= 3 && !player.countCards('h', { name: ['shan', 'tao'] })) return 'basic';
+                                //    if (player.countCards('he', { type: 'equip' }) < 2) return 'equip';
+                                //    return 'trick';
+                                //});
+                                var list = [];
+                                list.push(['', '', 'basic']);
+                                list.push(['', '', 'trick']);
+                                list.push(['', '', 'equip']);
+                                var dialog = ui.create.dialog('请选择获得牌的类型', [list, 'vcard']);
+                                for (var i = 0; i < 3; i++) {
+                                    var bte = document.querySelector('[data-card-name="' + list[i][2] + '"]');
+                                    bte.style['background-size'] = "100% 100%";
+                                    bte.style['margin-left'] = "40px";
+                                    bte.style['left'] = "-20px";
+                                    bte.setBackgroundImage('extension/史诗卡牌/image/' + list[i][2] + '.png');                             
+                                };
+                                player.chooseButton(dialog).set('ai', function (button) {
+                                    var player = _status.event.player;
+                                    if (player.hp <= 3 && !player.countCards('h', { name: ['shan', 'tao'] })) return 'basic';
+                                    if (player.countCards('he', { type: 'equip' }) < 2) return 'equip';
+                                    return 'trick';
+                                })
+                            }
+                            else {
+                                player.moveCard(true);
+                                event.goto(4);
+                            }
+                        }
+                        'step 3'
+                        if (result.bool) {
+                            var card = get.cardPile2(function (card) {
+                                return get.type(card, 'trick') == result.links[0][2];
+                            });
+                            if (card) player.gain(card, 'gain2', 'log');
+                        }
+                        'step 4'
+                        if (event.count > 0) event.goto(1);
+                    },
+                    ai: {
+                        maixie: true,
+                        "maixie_hp": true,
+                        effect: {
+                            target: function (card, player, target) {
+                                if (get.tag(card, 'damage')) {
+                                    if (player.hasSkillTag('jueqing', false, target)) return [1, -2];
+                                    if (!target.hasFriend()) return;
+                                    var num = 1;
+                                    if (get.attitude(player, target) > 0) {
+                                        if (player.needsToDiscard()) {
+                                            num = 0.7;
+                                        }
+                                        else {
+                                            num = 0.5;
+                                        }
+                                    }
+                                    if (target.hp >= 4) return [1, num * 2];
+                                    if (target.hp == 3) return [1, num * 1.5];
+                                    if (target.hp == 2) return [1, num * 0.5];
+                                }
+                            },
+                        },
+                    },
+                }
+
+=== skills reguhuo | archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:297 ===
+lib.skill.reguhuo={
+    audio: 2,
+        derivation: 'rechanyuan',
+            enable: ['chooseToUse', 'chooseToRespond'],
+                hiddenCard: function(player, name) {
+                    return (lib.inpile.contains(name) && player.countCards('h') > 0 && !player.hasSkill('reguhuo_phase'));
+                },
+    filter: function(event, player) {
+        if (!player.countCards('hs') || player.hasSkill('reguhuo_phase')) return false;
+        for (var i of lib.inpile) {
+            var type = get.type(i);
+            if ((type == 'basic' || type == 'trick') && event.filterCard({ name: i }, player, event)) return true;
+            if (i == 'sha') {
+                for (var j of lib.inpile_nature) {
+                    if (event.filterCard({ name: i, nature: j }, player, event)) return true;
+                }
+            }
+        }
+        return false;
+    },
+    chooseButton: {
+        dialog: function() {
+            var list = [];
+            for (var i of lib.inpile) {
+                var type = get.type(i);
+                if (type == 'basic' || type == 'trick') list.push([type, '', i]);
+                if (i == 'sha') {
+                    for (var j of lib.inpile_nature) list.push(['基本', '', 'sha', j]);
+                }
+            }
+            return ui.create.dialog('蛊惑', [list, 'vcard']);
+        },
+        filter: function(button, player) {
+            var evt = _status.event.getParent();
+            return evt.filterCard({ name: button.link[2], nature: button.link[3] }, player, evt);
+        },
+        check: function(button) {
+            var player = _status.event.player;
+            var rand = _status.event.getParent().getRand('reguhuo');
+            var hasEnemy = game.hasPlayer(function (current) {
+                return current != player && !current.hasSkill('rechanyuan') && (get.realAttitude || get.attitude)(current, player) < 0;
+            });
+            var card = { name: button.link[2], nature: button.link[3] };
+            if (hasEnemy && (card.name == 'shan' || card.name == 'wuxie')) {
+                if (!player.countCards('h', function (cardx) {
+                    if (card.name == cardx.name) { return true; }
+                    return false;
+                })) return 0;
+                return 10;
+            }
+            if (!hasEnemy && (card.name == 'shan' || card.name == 'wuxie')) return 6 - get.value(card);
+            var val = _status.event.getParent().type == 'phase' ? player.getUseValue(card) : 1;
+            if (val <= 0) return 0;
+            if (hasEnemy && rand > 0.3) {
+                if (!player.countCards('h', function (cardx) {
+                    if (card.name == cardx.name) {
+                        if (card.name != 'sha') return true;
+                        return get.nature(card) == get.nature(cardx);
+                    }
+                    return false;
+                })) return 0;
+                return 3 * val;
+            }
+            return val;
+        },
+        backup: function(links, player) {
+            return {
+                viewAs: {
+                    name: links[0][2],
+                    nature: links[0][3],
+                    suit: 'none',
+                    number: null,
+                },
+                filterCard: function (card, player, target) {
+                    var result = true;
+                    var suit = card.suit, number = card.number;
+                    card.suit = 'none'; card.number = null;
+                    var mod = game.checkMod(card, player, 'unchanged', 'cardEnabled2', player);
+                    if (mod != 'unchanged') result = mod;
+                    card.suit = suit; card.number = number;
+                    return result;
+                },
+                position: 'hs',
+                ignoreMod: true,
+                ai1: function (card) {
+                    var player = _status.event.player;
+                    var hasEnemy = game.hasPlayer(function (current) {
+                        return current != player && !current.hasSkill('rechanyuan') && (get.realAttitude || get.attitude)(current, player) < 0;
+                    });
+                    var rand = _status.event.getRand('reguhuo');
+                    var cardx = lib.skill.reguhuo_backup.viewAs;
+                    if (hasEnemy && rand > 0.3) {
+                        if (card.name == cardx.name && (card.name != 'sha' || card.nature == cardx.nature)) return 10;
+                        return 0;
+                    }
+                    return 6 - get.value(card);
+                },
+                precontent: function () {
+                    player.logSkill('reguhuo');
+                    var card = event.result.cards[0];
+                    event.result.card.suit = get.suit(card);
+                    event.result.card.number = get.number(card);
+                },
+            }
+        },
+        prompt: function(links) {
+            return '将一张手牌当做' + (get.translation(links[0][3]) || '') + get.translation(links[0][2]) + '使用';
+        },
+    },
+    ai: {
+        fireAttack: true,
+            respondShan: true,
+                respondSha: true,
+                    skillTagFilter: function(player) {
+                        if (!player.countCards('hs') || player.hasSkill('reguhuo_phase')) return false;
+                    },
+        order: 10,
+            result: {
+            player: 1,
+        },
+        threaten: 1.3,
+    },
+    group: ['reguhuo_guess'],
+}
+
+=== ui_hooks _emojiRebate1 | archive/upstream/noname-liuli/noname/extension/史诗卡牌/emoji.js:700 ===
+lib.skill._emojiRebate1 = {
+    trigger: {player: ['recoverAfter','dying','gainAfter','turnOverAfter']},
+    forced: true,
+    filter: function (event, player) {
+      if (!event.source || event.source == player) return false;
+      return true;
+    },
+    content: function () {
+      switch (trigger.name) {
+        case "recover":
+          let save = trigger.getParent("_save");
+          let keys = Object.keys(save);
+          if (keys.length) {
+            if (player.getEnemies().contains(save.player)) {
+              EpicFX.emoji.playEmoji(player, save.player, EpicFX.emoji.humiliationList.randomGet());
+            } else {
+              EpicFX.emoji.playEmoji(player, save.player, EpicFX.emoji.praiseList.randomGet());
+            }
+          }
+          break;
+        case "dying":
+          if (trigger.source) {
+            if (player.getEnemies().contains(trigger.source)) {
+              EpicFX.emoji.playEmoji(player, trigger.source, EpicFX.emoji.humiliationList.randomGet());
+            }
+          }
+          break;
+        case "turnOver":
+          if (trigger.parent) {
+            if (player.getEnemies().contains(trigger.parent.player)) {
+              EpicFX.emoji.playEmoji(player, trigger.parent.player, EpicFX.emoji.humiliationList.randomGet());
+            } else {
+              EpicFX.emoji.playEmoji(player, trigger.parent.player, EpicFX.emoji.praiseList.randomGet());
+            }
+          }
+          break;
+        case "gain":
+          if (trigger.giver && trigger.cards.length >= 2 && player.getFriends().contains(trigger.giver) ) {
+            EpicFX.emoji.playEmoji(player, trigger.giver, EpicFX.emoji.praiseList.randomGet());
+          }
+          break;
+      }
+    }
+  }
+
+=== skills k_danggu | archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2276 ===
+          "k_danggu": {
+            audio: 2,
+            trigger: {
+              player: 'enterGame',
+              global: 'phaseBefore',
+            },
+            filter: function (event, player) {
+              return event.name != 'phase' || game.phaseNumber == 0;
+            },
+            /*init:function(player,skill){
+                if(player!=game.me) {
+                    player.removeSkill(skill);
+                    player.addSkill('mbdanggu');
+                    player.unmarkSkill('mbdanggu');
+                }
+            },*/
+            /*init:function(player,skill){
+              ui.scsPage=function(){
+                let player=_status.event.player;
+                if(!player) return {};
+                if(!player.scsPage) {
+                    // EpicFX.initSCSAnim();
+                    const scsPage = document.createElement("div");
+                    scsPage.classList.add("scsPage");
+                    scsPage.style.display = "none";
+                    player.scsPage = scsPage;
+                    ui.window.appendChild(scsPage);
+                    const scsDialog = new EpicFX.utils.scsDialog();
+                    scsDialog.create();
+                    player.scsDialog = scsDialog;
+                    player.xz = dui.element.create("characterXZ", player);
+                    player.xz.xzz = dui.element.create("characterXZImg", player.xz, "img");
+                    player.xz.xzz.src = `${EpicFX.extensionPath}asset/img/base/game_ud_waiting.png`;
+                    player.xz.lc = dui.element.create("characterLC", player.xz);
+                    player.xz.lc.style.left='54%';
+                    player.xz.lc.p = dui.element.create("characterLC", player.xz.lc, "p");
+                    player.xz.lc.p.textContent = "1";
+                    player.xz.lc.img = dui.element.create("characterLCImg", player.xz.lc, "img");
+                    player.xz.lc.img.src = `${EpicFX.extensionPath}asset/img/base/game_ud_turn_flag.png`;
+                }
+                return player.scsPage;
+              }
+              ui.scsPopups=function(){
+                let me=_status.event.player;
+                if(!me) return {};
+                if(!me.scsPopups) {
+                  me.scsPopups= new EpicFX.utils.popup(undefined, undefined, ui.window, undefined);
+                }
+                return me.scsPopups;
+              }
+            },*/
+            derivation: 'k_danggu_faq',
+            forced: true,
+            unique: true,
+            onremove: function (player) {
+              delete player.storage.k_danggu;
+              delete player.storage.k_danggu_current;
+            },
+            popups: {
+              scstaoluan: "你可以将一张牌当任意一张牌使用。",
+              scschiyan: "你使用杀可以暂时扣置目标角色牌，若装备和手牌数均大于对方，则额外造成伤害。",
+              scszimou: "你使用第2,4,6张牌时，可以获得额外的牌。",
+              scspicai: "你可以进行判定，若花色不相同可以一直判定，直至花色相同，然后可以把判定牌交给一名角色。",
+              scsyaozhuo: "出牌阶段限一次，你可以选择一名其他角色拼点：若你赢，跳过其下一个摸牌阶段：若你没赢。你须弃置一张杀。",
+              scsxiaolu: "出牌阶段限一次，你可以摸两张牌，然后你选择一项：弃置两张手牌，或将两张手牌交给一名其他角色。",
+              scskuiji: "你可以观看一名角色手牌，并与其一共弃置四张不同花色的牌。",
+              scschihe: "你使用杀可以从牌堆项翻牌，每张花色与杀相同的牌便使此杀伤害＋1，翻出的牌也会限制对方响应此杀。",
+              scsniqu: "对一名角色造成火焰伤害。",
+              scsanruo: "可以转化手牌应对各种攻势并不断获得其他角色的手牌。",
+            },
+            lines: {
+              scs_zhangrang: "吾乃当今帝父，汝岂配与我同列？",
+              scs_zhaozhong: "汝此等语，何不以溺自照？",
+              scs_sunzhang: "闻谤而怒，见欲而喜，汝万万不能啊！",
+              scs_bilan: "吾虽鄙夫，亦远胜尔等狂叟！",
+              scs_xiayun: "宁享短福，莫为汝等庸奴！",
+              scs_hankui: "贪财好贿，其罪尚小，不敬不逊，却为大逆！",
+              scs_lisong: "区区不才可为帝之耳目，试问汝有何能？",
+              scs_duangui: "哼！不过襟裾牛马，衣冠狗彘耳！",
+              scs_guosheng: "此昏聩之徒，吾羞与为伍！",
+              scs_gaowang: "若非吾之相助，汝安有今日？",
+            },
+            changshi: [
+              ['scs_zhangrang', 'scstaoluan'],
+              ['scs_zhaozhong', 'scschiyan'],
+              ['scs_sunzhang', 'scszimou'],
+              ['scs_bilan', 'scspicai'],
+              ['scs_xiayun', 'scsyaozhuo'],
+              ['scs_hankui', 'scsxiaolu'],
+              ['scs_lisong', 'scskuiji'],
+              ['scs_duangui', 'scschihe'],
+              ['scs_guosheng', 'scsniqu'],
+              ['scs_gaowang', 'scsanruo']
+            ],
+            conflictMap: {
+              scs_zhangrang: [],
+              scs_zhaozhong: [],
+              scs_sunzhang: [],
+              scs_bilan: ['scs_hankui'],
+              scs_xiayun: [],
+              scs_hankui: ['scs_bilan'],
+              scs_lisong: [],
+              scs_duangui: ['scs_guosheng'],
+              scs_guosheng: ['scs_duangui'],
+              scs_gaowang: ['scs_hankui', 'scs_duangui', 'scs_guosheng', 'scs_bilan'],
+            },
+            group: 'k_danggu_back',
+            content: function () {
+              'step 0'
+              //game.hasDoublePossble=true;
+              /*if (!ui.scsPageItem) {
+                // EpicFX.initSCSAnim();
+                const scsPage = document.createElement("div");
+                scsPage.classList.add("scsPage");
+                scsPage.style.display = "none";
+                ui.scsPage = scsPage;
+                ui.window.appendChild(scsPage);
+                const scsDialog = new EpicFX.utils.scsDialog();
+                scsDialog.create();
+                player.scsDialog = scsDialog;
+                player.xz = dui.element.create("characterXZ", player);
+                player.xz.xzz = dui.element.create("characterXZImg", player.xz, "img");
+                player.xz.xzz.src = `${EpicFX.extensionPath}asset/img/base/game_ud_waiting.png`;
+                player.xz.lc = dui.element.create("characterLC", player.xz);
+                player.xz.lc.style.left='54%';
+                player.xz.lc.p = dui.element.create("characterLC", player.xz.lc, "p");
+                player.xz.lc.p.textContent = "1";
+                player.xz.lc.img = dui.element.create("characterLCImg", player.xz.lc, "img");
+                player.xz.lc.img.src = `${EpicFX.extensionPath}asset/img/base/game_ud_turn_flag.png`;
+                ui.scsPopups = new EpicFX.utils.popup(undefined, undefined, ui.window, undefined);
+              }*/
+              if (!player.scsPageItem) {
+                // EpicFX.initSCSAnim();
+                const scsPage = document.createElement("div");
+                scsPage.classList.add("scsPage");
+                scsPage.style.display = "none";
+                //ui.scsPage = scsPage;
+                player.scsPageItem = scsPage;
+                ui.window.appendChild(scsPage);
+                const scsDialog = new EpicFX.utils.scsDialog();
+                scsDialog.create();
+                player.scsDialog = scsDialog;
+                player.xz = dui.element.create("characterXZ", player);
+                player.xz.xzz = dui.element.create("characterXZImg", player.xz, "img");
+                player.xz.xzz.src = `${EpicFX.extensionPath}asset/img/base/game_ud_waiting.png`;
+                player.xz.lc = dui.element.create("characterLC", player.xz);
+                player.xz.lc.style.left='54%';
+                player.xz.lc.p = dui.element.create("characterLC", player.xz.lc, "p");
+                player.xz.lc.p.textContent = "1";
+                player.xz.lc.img = dui.element.create("characterLCImg", player.xz.lc, "img");
+                player.xz.lc.img.src = `${EpicFX.extensionPath}asset/img/base/game_ud_turn_flag.png`;
+                player.scsPopupsItem = new EpicFX.utils.popup(undefined, undefined, ui.window, undefined);
+              }
+              window.getEPICscs();
+              ui.scsPageItem = player.scsPageItem;
+              ui.scsPopupsItem = player.scsPopupsItem;
+              var list = lib.skill.k_danggu.changshi.map(i => i[0]);
+              player.markAuto('k_danggu', list);
+              game.broadcastAll(function (player, list) {
+                var cards = [];
+                for (var i = 0; i < list.length; i++) {
+                  var cardname = 'huashen_card_' + list[i];
+                  lib.card[cardname] = {
+                    fullimage: true,
+                    image: 'character/' + list[i]
+                  }
+                  lib.translate[cardname] = get.rawName2(list[i]);
+                  cards.push(game.createCard(cardname, '', ''));
+                }
+                player.$draw(cards, 'nobroadcast');
+              }, player, list);
+              'step 1'
+              var next = game.createEvent('k_danggu_clique');
+              next.player = player;
+              next.setContent(lib.skill.k_danggu.contentx);
+            },
+            contentx: function () {
+              'step 0'
+              var list = player.getStorage('k_danggu')||[];
+              var first = list.randomRemove(1)[0];
+              event.first = first;
+              // game.broadcastAll(function (changshi) {
+              //   if (lib.config.background_speak) game.playAudio('skill', changshi + '_enter');
+              // }, first);
+              if (lib.skill.k_danggu.isSingleShichangshi(player)) {
+                game.broadcastAll(function (player, first) {
+                  if (!player.name2) player.smoothAvatar(false);
+                  player.name1 = first;
+                  window.getEPICscs().name1 = first;
+                  // player.node.avatar.setBackground(first, 'character');
+                  player.node.avatar.setBackgroundImage(`extension/史诗卡牌/asset/img/scs/${first}.jpg`);
+                  player.node.name.innerHTML = get.slimName(first);
+                  delete player.name2;
+                  player.smoothAvatar(true);
+                  player.node.avatar2.classList.add('hidden');
+                  player.classList.remove('fullskin2');
+                  player.node.name2.innerHTML = '';
+                  window.doubleKuang(player);
+                  if (player == game.me && ui.fakeme) {
+                    ui.fakeme.style.backgroundImage = player.node.avatar.style.backgroundImage;
+                  }
+                }, player, first);
+              }
+              if (list.contains('scs_gaowang')) {
+                var others = list.filter(changshi => {
+                  return changshi != 'scs_gaowang';
+                }).randomGets(3);
+                others.push('scs_gaowang');
+                others.randomSort();
+              } else {
+                var others = list.randomGets(4);
+              }
+              //if (player == game.me) {
+              if (game.isMine(player)) {
+                game.noAuto=true;
+                game.pause();
+                let charZhu = new EpicFX.utils.characterCard(first, `${EpicFX.extensionPath}asset/img/scs/${first}.jpg`, "qun", lib.skill.k_danggu.lines[first], "shichangshi");
+                charZhu.create(player.scsDialog.zhu);
+                charZhu.addListener("click", function (e) {
+                  let target = e.target.closest(".KCharacter").obj;
+                  if (target) {
+                    let skillName;
+                    let len = lib.skill.k_danggu.changshi.length;
+                    for (let j = 0; j < len; j++) {
+                      if (lib.skill.k_danggu.changshi[j][0] == target.sourceName) {
+                        skillName = lib.skill.k_danggu.changshi[j][1];
+                        break;
+                      }
+                    }
+                    let str1 = get.translation(skillName);
+                    let str2 = lib.skill.k_danggu.popups[skillName];
+                    ui.scsPopupsItem.setPopup(str1, str2, {
+                      x: e.clientX / game.documentZoom,
+                      y: e.clientY / game.documentZoom
+                    });
+                    ui.scsPopupsItem.popup();
+                  }
+                })
+                player.scsDialog.charZhu = charZhu;
+                player.scsDialog.charFu = {};
+                let disapprove = 0;
+                for (let i = 0; i < others.length; i++) {
+                  let temp = others[i];
+                  let charFu = new EpicFX.utils.characterCard(temp, `${EpicFX.extensionPath}asset/img/scs/${temp}.jpg`, "qun", lib.skill.k_danggu.lines[temp], "shichangshi");
+                  if (EpicFX.utils.checkConflict(lib.skill.k_danggu.conflictMap, first, temp)) {
+                    charFu.lock(true);
+                    disapprove++;
+                  }
+                  charFu.create(player.scsDialog.fu);
+                  charFu.addListener("click", function (e) {
+                    let target = e.target.closest(".KCharacter").obj;
+                    if (target) {
+                      if (!target.isLock) {
+                        let skillName;
+                        let len = lib.skill.k_danggu.changshi.length;
+                        for (let j = 0; j < len; j++) {
+                          if (lib.skill.k_danggu.changshi[j][0] == target.sourceName) {
+                            skillName = lib.skill.k_danggu.changshi[j][1];
+                            break;
+                          }
+                        }
+                        let str1 = get.translation(skillName);
+                        let str2 = lib.skill.k_danggu.popups[skillName];
+                        ui.scsPopupsItem.setPopup(str1, str2, {
+                          x: e.clientX / game.documentZoom,
+                          y: e.clientY / game.documentZoom
+                        });
+                        ui.scsPopupsItem.popup();
+                        if (!player.scsDialog.target) {
+                          target.selectDiv.style.opacity = "1";
+                          player.scsDialog.target = target;
+                        } else if (player.scsDialog.target != target) {
+                          player.scsDialog.target.selectDiv.style.opacity = "0";
+                          target.selectDiv.style.opacity = "1";
+                          player.scsDialog.target = target;
+                        } else if (player.scsDialog.target == target) {
+                          event.chosen = target.sourceName;
+                          ui.scsPopupsItem.hide();
+                          player.scsDialog.show();
+                          game.resume();
+                        }
+                      } else {
+                        target.say();
+                      }
+                    }
+                  })
+                  player.scsDialog.charFu[temp] = charFu;
+                }
+                if (disapprove == others.length) {
+                  for (let key in player.scsDialog.charFu) {
+                    player.scsDialog.charFu[key].lock(false);
+                  }
+                }
+                result.bool = true;
+                player.scsDialog.show(true);
+              } else {
+                var next = player.chooseButton([
+                  '党锢：请选择结党对象',
+                  [[first], 'character'],
+                  '<div class="text center">可选常侍</div>',
+                  [others, 'character']
+                ], true);
+                next.set('filterButton', button => {
+                  if (_status.event.canChoose.contains(button.link)) return true;
+                  return false;
+                })
+                next.set('canChoose', function () {
+                  var list = others.filter(changshi => {
+                    var map = lib.skill.k_danggu.conflictMap;
+                    var names = map[first];
+                    return !names.contains(changshi);
+                  });
+                  if (list.length == 0) return others.randomGets(1);
+                  return list;
+                }());
+                next.set('ai', button => {
+                  if (button.link == 'scs_gaowang') return 10;
+                  return Math.random() * 10;
+                })
+              }
+              'step 1'
+              game.noAuto=false;
+              if (result.bool || event.chosen) {
+                var first = event.first;
+                var chosen = event.chosen || result.links[0];
+                var skills = [];
+                var list = lib.skill.k_danggu.changshi;
+                var changshis = [event.first, chosen];
+                player.unmarkAuto('k_danggu', [chosen]);
+                player.storage.k_danggu_current = changshis;
+                for (var changshi of changshis) {
+                  for (var cs of list) {
+                    if (changshi == cs[0]) skills.push(cs[1]);
+                  }
+                }
+                if (lib.skill.k_danggu.isSingleShichangshi(player)) {
+                  game.broadcastAll(function (player, chosen) {
+                    //player.node.name2.setBackgroundImage(`extension/史诗卡牌/asset/img/base/${player.group}_name2.png`);
+                    player.name2 = chosen;
+                    window.getEPICscs().name2 = chosen;
+                    player.classList.add('fullskin2');
+                    player.node.avatar2.classList.remove('hidden');
+                    // player.node.avatar2.setBackground(chosen, 'character');
+                    player.node.avatar2.setBackgroundImage(`extension/史诗卡牌/asset/img/scs/${chosen}.jpg`);
+                    player.node.name2.innerHTML = get.slimName(chosen);
+                    window.doubleKuang(player);
+                    if (player == game.me && ui.fakeme) {
+                      ui.fakeme.style.backgroundImage = player.node.avatar.style.backgroundImage;
+                    }
+                  }, player, chosen);
+                }
+                game.log(player, '选择了常侍', '#y' + get.translation(changshis));
+                // game.broadcastAll(function (changshi) {
+                //   if (lib.config.background_speak) game.playAudio('skill', changshi + '_enter');
+                // }, chosen);
+                if (skills.length) {
+                  player.addAdditionalSkill('k_danggu', skills);
+                  game.log(player, '获得了技能', '#g' + get.translation(skills));
+                  player.popup(skills);
+                }
+              }
+            },
+            isSingleShichangshi: function (player) {
+              var map = lib.skill.k_danggu.conflictMap;
+              return player.name == 'shichangshi' && (map[player.name1] && map[player.name2] || map[player.name1] && !player.name2 || !player.name1 && !player.name2 || player.name == player.name1 && !player.name2);
+            },
+            mod: {
+              aiValue: function (player, card, num) {
+                if (['shan', 'tao', 'wuxie', 'caochuan'].contains(card.name)) return num / 10;
+              },
+              aiUseful: function () {
+                return lib.skill.k_danggu.mod.aiValue.apply(this, arguments);
+              },
+            },
+            intro: {
+              mark: function (dialog, storage, player) {
+                dialog.addText('剩余常侍');
+                dialog.addSmall([storage, 'character']);
+                if (player.storage.k_danggu_current) {
+                  dialog.addText('当前常侍');
+                  dialog.addSmall([player.storage.k_danggu_current, 'character']);
+                }
+              }
+            },
+            subSkill: {
+              back: {
+                audio: 'k_danggu',
+                trigger: {global: 'restEnd'},
+                filter: function (event, player) {
+                  return event.getTrigger().player == player;
+                },
+                forced: true,
+                content: function () {
+                  var next = game.createEvent('k_danggu_clique');
+                  next.player = player;
+                  next.setContent(lib.skill.k_danggu.contentx);
+                  player.draw(2);
+                }
+              }
+            }
+          }

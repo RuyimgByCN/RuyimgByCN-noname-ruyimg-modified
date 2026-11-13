@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "cargo",
+    "run",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--example",
+    "queue1_comparison_probe"
+  ],
+  "command": "cargo run --offline -p engine-native --example queue1_comparison_probe",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0"
+  },
+  "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "tracked_status": " M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n",
+  "start_utc": "2026-11-13T15:31:29.209808+00:00",
+  "exit_code": 0,
+  "duration_seconds": 2.965,
+  "end_utc": "2026-11-13T15:31:32.174840+00:00"
+}

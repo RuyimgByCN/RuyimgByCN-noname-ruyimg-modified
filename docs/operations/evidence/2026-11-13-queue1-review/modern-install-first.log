@@ -1,0 +1,20 @@
+Scope: 3 of 4 workspace projects
+packages/fs                              | Progress: resolved 1, reused 0, downloaded 0, added 0
+packages/fs                              |  +83 ++++++++
+apps/core                                | Progress: resolved 1, reused 0, downloaded 0, added 0
+apps/core                                | +147 +++++++++++++++
+packages/jit                             | Progress: resolved 1, reused 0, downloaded 0, added 0
+packages/jit                             |  +29 +++
+packages/jit                             | Progress: resolved 29, reused 1, downloaded 0, added 29, done
+packages/fs                              | Progress: resolved 83, reused 83, downloaded 0, added 83, done
+apps/core                                | Progress: resolved 147, reused 133, downloaded 0, added 147, done
+Done in 644ms using pnpm v10.34.3
+
+   ╭──────────────────────────────────────────╮
+   │                                          │
+   │   Update available! 10.34.3 → 12.18.0.   │
+   │   Changelog: https://pnpm.io/v/12.18.0   │
+   │     To update, run: pnpm add -g pnpm     │
+   │                                          │
+   ╰──────────────────────────────────────────╯
+

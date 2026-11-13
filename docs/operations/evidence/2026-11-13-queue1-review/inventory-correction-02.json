@@ -1,0 +1,97 @@
+{
+  "at": "2026-11-14T00:25:33.478178+08:00",
+  "before_sha256": "9efa988583ca18b38de761897ad68d67b930a5d1452a6b9c9e8f8c60fee8b601",
+  "after_sha256": "d82f5ca18f3945413b8f84d4299c0821043d831377e24c7f58c4e3fd91e0044e",
+  "counts": {
+    "已复核等价": 625,
+    "简化近似": 3799,
+    "缺失": 0,
+    "上游未定义": 0
+  },
+  "effective_status_withdrawals": 224,
+  "new_equivalence_signoffs": 0,
+  "changes": [
+    {
+      "key": "L19:configs:zuan_brawl@archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:3363",
+      "before": {
+        "source_id": "L19",
+        "category": "configs",
+        "id": "zuan_brawl",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:3363",
+        "target": "原生规则（`crates/content-native-loader/src/doomsday.rs`）",
+        "status": "简化近似",
+        "reviewer": "/root/fix_dddanzhi",
+        "review_date": "2026-11-14",
+        "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:3363-3381",
+        "test_name": "l19_doomsday_brawl_modes_and_zombie_catalog + l19_eight_dimension_from_fresh_install",
+        "difference": "乱斗展示/模式接入枚举未实现，仅有部分规则函数。；待核验消费链建议，单凭静态未找到调用不据此下调：属于玩法目录/活动选择配置，不是武将禁用；仅枚举解析，未实现入口选择、祖安依赖与 daily 持久化。",
+        "note": "2026-11-14 队列1补课：/root/fix_dddanzhi、/root/repair_doc_refs独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+        "reason": null,
+        "native": "crates/content-native-loader/src/doomsday.rs:46-91 + packages/extensions/doomsday-brawl-upstream-liuli/assets/config.json:1-16",
+        "diff": "乱斗展示/模式接入枚举未实现，仅有部分规则函数。；待核验消费链建议，单凭静态未找到调用不据此下调：属于玩法目录/活动选择配置，不是武将禁用；仅枚举解析，未实现入口选择、祖安依赖与 daily 持久化。"
+      },
+      "after": {
+        "source_id": "L19",
+        "category": "configs",
+        "id": "zuan_brawl",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:3363",
+        "target": "原生规则（`crates/content-native-loader/src/doomsday.rs`）",
+        "status": "已复核等价",
+        "reviewer": "l19-signoff",
+        "review_date": "2026-11-12",
+        "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:3363-3381",
+        "test_name": "l19_doomsday_brawl_modes_and_zombie_catalog + l19_eight_dimension_from_fresh_install",
+        "difference": "更正首次补课描述：已有off/standard/random/all/daily五值枚举、校验、解析及默认all。菜单/活动入口与daily持久化应用链尚待实际off/all/daily和跨日重启核验；静态未找到消费者不足单独证明缺失，保留旧状态，不作本轮新增等价签署。",
+        "note": "2026-11-14 队列1补课：/root/fix_dddanzhi、/root/repair_doc_refs独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14 应用复审更正：/root/fix_dddanzhi撤回“枚举未实现/模式未接入”的确认差异；当前仅消费链待核验，恢复原状态/复核人/日期。首次发现与应用快照保留。",
+        "reason": null,
+        "native": "crates/content-native-loader/src/doomsday.rs:46-91 + packages/extensions/doomsday-brawl-upstream-liuli/assets/config.json:1-16",
+        "diff": "更正首次补课描述：已有off/standard/random/all/daily五值枚举、校验、解析及默认all。菜单/活动入口与daily持久化应用链尚待实际off/all/daily和跨日重启核验；静态未找到消费者不足单独证明缺失，保留旧状态，不作本轮新增等价签署。"
+      },
+      "action": "restore historical status; consumer chain remains pending"
+    },
+    {
+      "key": "L25:skills:_guanmodeskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:42978",
+      "before": {
+        "source_id": "L25",
+        "category": "skills",
+        "id": "_guanmodeskill",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:42978",
+        "target": "原生规则 / `rule-vm` 包",
+        "status": "简化近似",
+        "reviewer": "/root/fix_dddanzhi",
+        "review_date": "2026-11-14",
+        "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:42978",
+        "test_name": "engine-native::l25_zuan_match::l25_zuan_batch_a_23_global_mode_shen_skills_77_passive_hooks_and_inert_zuansaid_6d",
+        "difference": "含实质规则的模式初始化被当展示桩；缺授技与模式生命/身份记录。",
+        "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+        "reason": null,
+        "diff": "含实质规则的模式初始化被当展示桩；缺授技与模式生命/身份记录。",
+        "upstream_summary": "祖安武将 skill.skill._guanmodeskill @ archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:42978",
+        "native_summary": "HostBehavior::L25ZuanBatchA..G / L19DoomsdayBatchB 真实状态机与触发器 (_guanmodeskill)",
+        "native_ref": "crates/content-native-loader/src/zuan_data.rs:L432-L629; crates/engine-native-content/src/content/host/step/l25_batch_a.rs:L1-L435; crates/engine-native/tests/l25_zuan_match.rs:L699-L1259",
+        "native": "crates/content-native-loader/src/zuan_data.rs:L432-L629; crates/engine-native-content/src/content/host/step/l25_batch_a.rs:L1-L435; crates/engine-native/tests/l25_zuan_match.rs:L699-L1259"
+      },
+      "after": {
+        "source_id": "L25",
+        "category": "skills",
+        "id": "_guanmodeskill",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:42978",
+        "target": "原生规则 / `rule-vm` 包",
+        "status": "简化近似",
+        "reviewer": "/root/fix_dddanzhi",
+        "review_date": "2026-11-14",
+        "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:42978",
+        "test_name": "engine-native::l25_zuan_match::l25_zuan_batch_a_23_global_mode_shen_skills_77_passive_hooks_and_inert_zuansaid_6d",
+        "difference": "更正实际绑定：先走L19DoomsdayBatchB的_guanmodeskill，不是L25展示桩；该实现防翻面、每回合摸存活人数减一并伤首名他人，与本来源enterGame/gameDrawAfter按主公/身份授guanfu、guifu_nei并初始化生命/身份记录不同，仍为简化近似。",
+        "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14 应用复审更正：/root/fix_dddanzhi沿优先绑定查到共享L19实际实现，撤回“只有L25展示桩”理由，改记已读实际规则分支差异；状态仍简化近似。",
+        "reason": null,
+        "diff": "更正实际绑定：先走L19DoomsdayBatchB的_guanmodeskill，不是L25展示桩；该实现防翻面、每回合摸存活人数减一并伤首名他人，与本来源enterGame/gameDrawAfter按主公/身份授guanfu、guifu_nei并初始化生命/身份记录不同，仍为简化近似。",
+        "upstream_summary": "祖安武将 skill.skill._guanmodeskill @ archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:42978",
+        "native_summary": "HostBehavior::L25ZuanBatchA..G / L19DoomsdayBatchB 真实状态机与触发器 (_guanmodeskill)",
+        "native_ref": "crates/content-native-loader/src/zuan_data.rs:L432-L629; crates/engine-native-content/src/content/host/step/l25_batch_a.rs:L1-L435; crates/engine-native/tests/l25_zuan_match.rs:L699-L1259",
+        "native": "crates/content-native-loader/src/host_skill_bindings.rs:548 + crates/engine-native-content/src/content/host/step/l19_batch_b.rs:813"
+      },
+      "action": "correct active binding and concrete rule difference; keep simplified"
+    }
+  ]
+}

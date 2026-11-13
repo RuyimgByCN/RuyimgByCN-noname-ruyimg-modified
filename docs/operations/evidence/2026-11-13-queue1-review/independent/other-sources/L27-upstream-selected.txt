@@ -1,0 +1,1523 @@
+
+=== configs dianjibiaoji | archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9029 ===
+           dianjibiaoji:{
+                    name: '点击标记牌库',
+                    init: true,
+                    intro: "重启生效。",
+                }
+
+=== configs shuzianniu | archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9044 ===
+           shuzianniu:{
+                    name: '数字按钮',
+                    init: true,
+                    intro: "重启生效。",
+                }
+
+=== skills bolan | archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:7747 ===
+lib.skill.bolan={
+				audio:2,
+				banned:['kotomi_chuanxiang'],
+				global:'bolan_g',
+				initList:function(player){
+					var list,skills=[];
+					if(get.mode()=='guozhan'){
+						list=[];
+						for(var i in lib.characterPack.mode_guozhan) list.push(i);
+					}
+					else if(_status.connectMode) list=get.charactersOL();
+					else {
+						list=[];
+						for(var i in lib.character){
+							if(lib.filter.characterDisabled2(i)||lib.filter.characterDisabled(i)) continue;
+							list.push(i);
+						}
+					}
+					for(var i of list){
+						if(i.indexOf('gz_jun')==0) continue;
+						for(var j of lib.character[i][3]){
+							if(j=='bolan') continue;
+							var skill=lib.skill[j];
+							if(!skill||skill.juexingji||skill.hiddenSkill||skill.zhuSkill||skill.dutySkill||skill.chargeSkill||lib.skill.bolan.banned.contains(j)) continue;
+							if(skill.init||skill.ai&&(skill.ai.combo||skill.ai.notemp||skill.ai.neg)) continue;
+							var info=lib.translate[j+'_info'];
+							if(info&&info.indexOf('出牌阶段限一次')!=-1) skills.add(j);
+						}
+					}
+					player.storage.bolan=skills;
+				},
+				check:function(event,player){
+					return true;
+				},
+				trigger:{player:'phaseUseBegin'},
+				frequent:true,
+				preHidden:true,
+				content:function(){
+					'step 0'
+					if(player.isIn()){
+						if(!player.storage.bolan) lib.skill.bolan.initList(player);
+						var list=player.storage.bolan.randomGets(3);
+						if(!list.length){
+							event.finish();
+							return;
+						}						
+						event.dialog = ui.create.dialognew('#duorui');
+						event.dialog.isQingZheng = true;
+                        var eventtitle = ui.create.div('.newTitle1', event.dialog); 
+                        var txt = ui.create.div('.Footerxxgg', event.dialog);		
+                        ui.create.div('.jindutiaoxgxg', event.dialog);
+                        ui.create.div('.jindutiaoxgxgx', event.dialog);		
+                        txt.style.top = '285px';
+                        eventtitle.innerHTML = '博览<img src=' + lib.assetURL + 'extension/选将美化/assets/image/arrow.png' + ' style=width:30px;height:25px;margin-bottom:1px;left:2px;/>';               
+                        txt.innerHTML = "选择1个技能获得，持续至<span style='color: #66FF66'>"+get.translation(player.name)+"</span>的回合结束";
+                        var click = [];
+                        event.ok = ui.create.control('',function (evt) {
+                            event.ok.style.transform = 'scale(0.9)';
+                            setTimeout(function() {
+                                if(event.ok) event.ok.style.transform = 'scale(1)'; 
+                            }, 50);
+                            if (!event.link) return;                      
+                            ui.xjmhQingzhengNext();
+                        game.resume2();
+                        });                    
+                        event.dialog.appendChild(event.ok);                   
+                        event.ok.style.filter = 'grayscale(100%)';
+                        event.ok.style.marginTop = '227px';
+                        event.ok.style.marginLeft = '35px';                    
+                        event.ok.style.backgroundImage= 'url("' + lib.assetURL + 'extension/选将美化/assets/image/gbtn.png")';
+                        event.ok.style.backgroundSize = '80% 80%';
+                        event.ok.style.backgroundRepeat = 'no-repeat';  
+                        for (var i of list) {               
+				            var beijing = ui.create.div('.duoruibg', event.dialog);
+					        var jn = ui.create.div('.jinengming', beijing);
+					        var jnxc = ui.create.div('.jinengmingx-child', jn);
+					        var jnx = ui.create.div('.jinengmingx', jn);
+					        jnx.innerHTML= get.translation(i);
+					        jnxc.innerHTML= get.translation(i);
+					        var jnms = ui.create.div('.jinengmingmiaoshu', beijing);
+					        jnms.innerHTML = get.translation(i+'_info');   
+					        jn.link = i;
+					        jn.addEventListener('click', function() {
+				        	    var current=this.parentNode.parentNode.querySelector('.dianjixg');	
+								if(current){
+									current.classList.remove('dianjixg');
+									current.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/brawl_btn_spell.png")';
+									click.remove(current);
+									event.ok.style.filter = 'grayscale(100%)';
+									event.link = false;
+								}
+								if(current!=this){
+									click.add(this);
+									this.classList.add('dianjixg');
+									this.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/brawl_btn_spell_light.png")';	
+									event.ok.style.filter = 'none';
+									event.link = this.link;
+								}		 
+							});								
+                        }
+                        event.clickLogAI = function () {
+				        event.link = list.randomGet();
+                            return event.link;
+                        }                    
+				            // 暂停步骤
+                            _status.imchoosing = true;               
+                            game.pause2();
+                            event.switchToAuto = function () {
+                                event.link = event.clickLogAI();
+                                event.dialog.close();
+                                game.resume();
+                            };
+                            //if(player==game.me||player.isUnderControl()){
+                            if(game.isMine(target)) {
+                                event.dialog.open();
+                            } else {
+                                event.link = event.clickLogAI();
+                                ui.xjmhQingzhengNext();
+                                game.resume2();
+                            }
+					}
+					'step 1'
+					if (event.dialog) event.dialog.remove();
+                    if (event.ok) event.ok.remove();
+                    event.dialog = null;
+                    event.ok = null;
+					player.addTempSkill(event.link,'phaseUseEnd');
+					player.popup(event.link);
+					game.log(player,'获得了','#g【'+get.translation(event.link)+'】');
+				},
+				ai:{threaten:0.9},
+				subSkill:{
+					g:{
+						audio:'bolan',
+						forceaudio:true,
+						enable:'phaseUse',
+						usable:1,
+						prompt:'出牌阶段限一次。你可以令一名有〖博览〗的角色从三个描述中包含“出牌阶段限一次”的技能中选择一个，你获得此技能直到此阶段结束。',
+						filter:function(event,player){
+							return game.hasPlayer(function(current){
+								return current!=player&&current.hasSkill('bolan');
+							});
+						},
+						filterTarget:function(card,player,target){
+							return player!=target&&target.hasSkill('bolan');
+						},
+						selectTarget:function(){
+							if(game.countPlayer(current=>{
+								return lib.skill.bolan_g.filterTarget(null,_status.event.player,current);
+							})==1) return -1;
+							return 1;
+						},
+						content:function(){
+							'step 0'
+							player.loseHp();
+							'step 1'
+							if(target.isIn()&&player.isIn()){
+								if(!target.storage.bolan) lib.skill.bolan.initList(target);
+								var list=target.storage.bolan.randomGets(3);
+								if(!list.length){
+									event.finish();
+									return;
+								}				
+						event.dialog = ui.create.dialognew('#duorui');
+						event.dialog.isQingZheng = true;
+                        var eventtitle = ui.create.div('.newTitle1', event.dialog);    		
+                        var txt = ui.create.div('.Footerxxgg', event.dialog);		
+                        ui.create.div('.jindutiaoxgxg', event.dialog);
+                        ui.create.div('.jindutiaoxgxgx', event.dialog);		
+                        txt.style.top = '285px';
+                        eventtitle.innerHTML = '博览<img src=' + lib.assetURL + 'extension/选将美化/assets/image/arrow.png' + ' style=width:30px;height:25px;margin-bottom:1px;left:2px;/>';               
+                        txt.innerHTML = "选择1个技能令<span style='color: #66FF66'>"+get.translation(player.name)+"</span>获得，持续至<span style='color: #66FF66'>"+get.translation(player.name)+"</span>的回合结束";
+                        var click = [];
+                        event.ok = ui.create.control('',function (evt) {
+                            event.ok.style.transform = 'scale(0.9)';
+                            setTimeout(function() {
+                                if(event.ok) event.ok.style.transform = 'scale(1)'; 
+                            }, 50);
+                            if (!event.link) return;                      
+                            ui.xjmhQingzhengNext();
+                        game.resume2();
+                        });                    
+                        event.dialog.appendChild(event.ok);                   
+                        event.ok.style.filter = 'grayscale(100%)';
+                        event.ok.style.marginTop = '227px';
+                        event.ok.style.marginLeft = '35px';                    
+                        event.ok.style.backgroundImage= 'url("' + lib.assetURL + 'extension/选将美化/assets/image/gbtn.png")';
+                        event.ok.style.backgroundSize = '80% 80%';
+                        event.ok.style.backgroundRepeat = 'no-repeat';  
+                        for (var i of list) {               
+				            var beijing = ui.create.div('.duoruibg', event.dialog);
+					        var jn = ui.create.div('.jinengming', beijing);
+					        var jnxc = ui.create.div('.jinengmingx-child', jn);
+					        var jnx = ui.create.div('.jinengmingx', jn);
+					        jnx.innerHTML= get.translation(i);
+					        jnxc.innerHTML= get.translation(i);
+					        var jnms = ui.create.div('.jinengmingmiaoshu', beijing);
+					        jnms.innerHTML = get.translation(i+'_info');   
+					        jn.link = i;
+					        jn.addEventListener('click', function() {
+				        	    var current=this.parentNode.parentNode.querySelector('.dianjixg');	
+								if(current){
+									current.classList.remove('dianjixg');
+									current.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/brawl_btn_spell.png")';
+									click.remove(current);
+									event.ok.style.filter = 'grayscale(100%)';
+									event.link = false;
+								}
+								if(current!=this){
+									click.add(this);
+									this.classList.add('dianjixg');
+									this.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/brawl_btn_spell_light.png")';	
+									event.ok.style.filter = 'none';
+									event.link = this.link;
+								}		 
+							});								
+                        }
+                        event.clickLogAI = function () {
+							event.link = list.randomGet();
+                            return event.link;
+                        }                    
+				            // 暂停步骤
+                            _status.imchoosing = true;               
+                            game.pause2();
+                            event.switchToAuto = function () {
+                                event.link = event.clickLogAI();
+                                event.dialog.close();
+                                game.resume();
+                            };
+                            //if(target==game.me&&!_status.auto&&!target.isMad()&&!game.notMe) {
+                            if(game.isMine(target)){
+                                event.dialog.open();
+                            } else {
+                                event.link = event.clickLogAI();
+                                ui.xjmhQingzhengNext();
+                                game.resume2();
+                            }
+                        }
+							'step 2'
+							target.line(player);
+							if (event.dialog) event.dialog.remove();
+                    		if (event.ok) event.ok.remove();
+                    		event.dialog = null;
+                    		event.ok = null;
+							player.addTempSkill(event.link,'phaseUseEnd');
+							player.popup(event.link);
+							game.log(player,'获得了','#g【'+get.translation(event.link)+'】');
+						},
+						ai:{
+							order:function(item,player){
+								if(player.hp>=5||player.countCards('h')>=10) return 10;
+								var list=game.filterPlayer(current=>lib.skill.bolan_g.filterTarget(null,player,current));
+								for(var target of list){
+									if(get.attitude(target,player)>0) return 10;
+								}
+								return 4;
+							},
+							result:{
+								player:function(player,target){
+									if(player.hasUnknown()) return player.hp+player.countCards('h')/4-5>0?1:0;
+									var tao=player.countCards('h','tao');
+									if(player.hp+tao>4) return 4+get.attitude(player,target);
+									if(player.hp+tao>3) return get.attitude(player,target)-2;
+									return 0;
+								},
+							},
+						},
+					}
+				}
+			}
+
+=== skills clandianzhan | archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:1867 ===
+lib.skill.clandianzhan = {
+    audio:2,
+    trigger:{
+        player:"useCardAfter",
+    },
+    forced:true,
+    filter:function(event,player){
+        if(!lib.suit.contains(get.suit(event.card))) return false;
+        var card=event.card,suit=get.suit(card);
+        for(var i=player.actionHistory.length-1; i>=0; i--){
+            var history=player.actionHistory[i].useCard;
+            for(var evt of history){
+                if(evt==event) continue;
+                if(get.suit(evt.card)==suit) return false;
+            }
+            if(player.actionHistory[i].isRound) break;
+        }        
+        return event.targets&&event.targets.length==1&&(!event.targets[0].isLinked()||
+            player.getCards('h',card=>get.suit(card)==get.suit(event.card)).filter(card=>{
+                var mod=game.checkMod(card,player,'unchanged','cardChongzhuable',player);
+                if(mod!='unchanged') return true;
+                return false;
+            }).length==0);
+    },
+    content:function(){
+        'step 0'
+        if(trigger.targets&&trigger.targets.length==1){
+            trigger.targets[0].link(true);
+        }
+        var cards=player.getCards('h',card=>get.suit(card)==get.suit(trigger.card));        
+        if (!player.storage.clandianzhanx) player.storage.clandianzhanx = [];
+            player.storage.clandianzhanx.add(get.suit(cards[0]));
+        var xx = player.storage.clandianzhanx.sortBySuit().join('');
+        player.addSkill('clandianzhan_mark');
+        player.storage.clandianzhan_mark = '';
+        player.addMark("clandianzhan_mark", xx);
+        if(cards.length>0){
+            player.loseToDiscardpile(cards);
+            player.draw(cards.length);
+        }
+        'step 1'
+        player.draw();
+    },
+    group:"clandianzhan_mark1",
+    subSkill:{mark:{onremove:function(player){   
+        player.unmarkSkill('clandianzhan_mark');
+        delete player.storage.clandianzhanx;   
+    },    intro:{},sub:true,},    
+    mark1:{
+    trigger: {
+            global:"roundStart"
+        },
+    forced:true,               
+    priority:10,
+    silent:true,
+    content: function() {
+        player.removeSkill('clandianzhan_mark');
+    },
+    sub:true,},  
+    },
+}
+
+=== skills new_zhixi | archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:1738 ===
+lib.skill.new_zhixi = {
+        mod: {
+            cardEnabled: function(card, player) {
+                if (player.storage.new_zhixi2 || player.countMark('new_zhixi') >= player.hp) return false;
+            },
+            cardUsable: function(card, player) {
+                if (player.storage.new_zhixi2 || player.countMark('new_zhixi') >= player.hp) return false;
+            },
+            cardRespondable: function(card, player) {
+                if (player.storage.new_zhixi2 || player.countMark('new_zhixi') >= player.hp) return false;
+            },
+        },
+        trigger: {
+            player: "useCard",
+        },
+        forced: true,
+        popup: false,
+        onremove: function(player) {
+            player.unmarkSkill('new_meibu');
+            player.unmarkSkill('new_zhixi_mark');
+            player.unmarkSkill('new_zhixi_mark2');
+            delete player.storage.new_zhixi;
+            delete player.storage.new_zhixi2;
+        },
+        firstDo: true,
+        content: function() {
+            'step 0'
+            player.addMark('new_zhixi', 1, false);
+            if (get.type2(trigger.card) == 'trick') {
+                player.storage.new_zhixi2 = true;
+                player.addMark('new_zhixi_mark2');
+            }
+            'step 1'            
+            var mark = player.hp - player.countMark('new_zhixi');           
+            player.storage.new_zhixi_mark = mark.toString();
+            player.syncStorage("new_zhixi_mark");
+        },
+        subSkill: {        
+            mark:{
+            marktext: '止息',
+            onremove:true,
+            mark: true,
+                intro: {
+                name: '止息',
+                    content: '你还能在使用#次牌'
+                },
+                sub: true,
+            },
+            mark2: {
+                marktext: '止息锦',
+                mark: true,
+                intro: {
+                    name: '止息',
+                    content: '你使用过锦囊牌，不能再用牌啦'
+                },
+                sub: true,
+            },
+        },
+        ai: {
+            presha: true,
+            pretao: true,
+            nokeep: true,
+        },
+    }
+
+=== skills reqimou | archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:6059 ===
+lib.skill.reqimou = {
+        unique: true,
+        limited: true,
+        audio: 2,
+        // enable: "phaseUse",
+        // filter: function(event, player) {
+            // return !player.storage.reqimou;
+        // },
+        init: function(player) {
+            player.storage.reqimou = false;           
+        },
+        isEnable:true,
+        mark: true,
+        intro: {
+            content: "limited",
+        },
+        skillAnimation: true,
+        animationColor: "orange",
+        content: function() {
+            'step 0'
+            // var shas = player.getCards('h', 'sha');
+            // var num;
+            // if (player.hp >= 4 && shas.length >= 3) {
+                // num = 3;
+            // } else if (player.hp >= 3 && shas.length >= 2) {
+                // num = 2;
+            // } else {
+                // num = 1
+            // }
+            // var map = {};
+            // var list = [];
+            // for (var i = 1; i <= player.hp; i++) {
+                // var cn = get.cnNumber(i, true);
+                // map[cn] = i;
+                // list.push(cn);
+            // }
+            // event.map = map;
+            // player.awakenSkill('reqimou');
+            // player.storage.reqimou = true;
+            // player.chooseControl(list, function() {
+                // return get.cnNumber(_status.event.goon, true);
+            // })
+                // .set('prompt', '失去任意点体力')
+                // .set('goon', num);
+            'step 1'
+            // var num = event.map[result.control] || 1;
+            // player.storage.reqimou2 = num;
+            // player.loseHp(num);
+            player.awakenSkill('reqimou');
+            player.storage.reqimou = true;
+            player.draw(player.storage.reqimou2);
+            player.addTempSkill('reqimou2');
+            player.storage.reqimou_mark = '';          
+            player.addTempSkill("reqimou_mark");
+            player.markSkill("reqimou_mark", '', '奇谋 ' + player.storage.reqimou2);
+        },
+        group:"reqimou_m2",
+        subSkill: {mark: {intro: {},sub: true,},
+               m2: {
+                    enable: "phaseUse",                    
+                    direct: true,
+                    filter: function(event, player) {
+                       return !player.storage.reqimou;
+                },
+                    content: function() {
+                    'step 0'                    
+             window.shuzibg = ui.create.div('.shuzibgxx', document.body);
+                if(window.shoushaBlanks) window.shoushaBlanks.add(window.shuzibg);
+             var leftBtn = ui.create.div('.shuzijianhao', window.shuzibg);
+                 leftBtn.style.filter = 'grayscale(100%)';
+             var rightBtn = ui.create.div('.shuzijiahao', window.shuzibg);
+             var chooseType = ui.create.div('.shuzixx', window.shuzibg);
+                     var index = 0;                     
+                     var list=[];
+                    for (var i = 1; i <= player.hp; i++) {list.push(i)}               
+                     chooseType.innerHTML = list[index];
+              player.storage.reqimou2 = index + 1;                          
+              leftBtn.listen(function () {
+              if (index ==  0) return;
+              leftBtn.style.transform = 'scale(0.7)';
+              setTimeout(function() {leftBtn.style.transform = 'scale(1)'; }, 200);
+                index--;
+              if (index <= 0) leftBtn.style.filter = 'grayscale(100%)';
+              else leftBtn.style.filter = 'none';
+              if (index >= player.hp) rightBtn.style.filter = 'grayscale(100%)';
+              else rightBtn.style.filter = 'none';
+              chooseType.innerHTML = list[index];
+              player.storage.reqimou2 = index + 1;     
+              });              
+              rightBtn.listen(function () {
+              if (index == player.hp-1) return;
+              rightBtn.style.transform = 'scale(0.7)';
+              setTimeout(function() {rightBtn.style.transform = 'scale(1)'; }, 200);
+                  index++;
+              if (index <= 0) leftBtn.style.filter = 'grayscale(100%)';
+              else leftBtn.style.filter = 'none';
+              if (index >= player.hp-1) rightBtn.style.filter = 'grayscale(100%)';
+              else rightBtn.style.filter = 'none';
+              chooseType.innerHTML = list[index];
+              player.storage.reqimou2 = index + 1;    
+              });                                       
+              //if(game.me != player){
+              if(!game.isMine()) {
+              var shas = player.getCards('h', 'sha');
+              var num;
+            if (player.hp >= 4 && shas.length >= 3) {
+                num = 3;
+            } else if (player.hp >= 3 && shas.length >= 2) {
+                num = 2;
+            } else {
+                num = 1
+            }
+            player.storage.reqimou2 = num;
+              }
+              player.chooseBool('是否发动【奇谋】失去任意点体力')
+              .set('ai', function() {return true;});
+                    'step 1'
+              if (!result.bool) {
+              event.finish();                            
+              }else{              
+              player.loseHp(player.storage.reqimou2);        
+              player.useSkill('reqimou');
+              }      
+              window.shuzibg.remove();      
+              window.shuzibg = null;
+                    },
+            ai: {
+            order: 5,
+            result: {
+                player: function(player) {
+                    if (player.hp == 1) return 0;
+                    var shas = player.getCards('h', 'sha');
+                    if (!shas.length) return 0;
+                    var card = shas[0];
+                    if (!lib.filter.cardEnabled(card, player)) return 0;
+                    if (lib.filter.cardUsable(card, player)) return 0;
+                    var mindist;
+                    if (player.hp >= 4 && shas.length >= 3) {
+                        mindist = 4;
+                    } else if (player.hp >= 3 && shas.length >= 2) {
+                        mindist = 3;
+                    } else {
+                        mindist = 2;
+                    }
+                    if (game.hasPlayer(function(current) {
+                        return (current.hp <= mindist - 1 && get.distance(player, current, 'attack') <= mindist && player.canUse(card, current, false) && get.effect(current, card, player, player) > 0);
+                    })) {
+                        return 1;
+                    }
+                    return 0;
+                },
+            },
+        },
+                },           
+        },
+    }
+
+=== skills xiefang | archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:1162 ===
+lib.skill.xiefang = {
+        trigger: {
+            global: ["dieEnd", "gameDrawEnd"],
+        },
+        forced: true,
+        onremove:function(player){
+        player.removeSkill('xiefang_mark');       
+    },    
+    init:function(player){
+    var cc = (game.countPlayer(function(current) {
+                return current.hasSex('female');
+            }));
+                if (cc > 0) {
+                player.addSkill("xiefang_mark");
+                player.storage.xiefang_mark = cc;              
+                player.syncStorage("xiefang_mark");  
+            }else{
+                player.removeSkill("xiefang_mark");
+                }            
+    },                
+        priority:-1,
+        silent:true,
+        content: function() {
+            var cc = (game.countPlayer(function(current) {
+                return current.hasSex('female');
+            }));
+            if (cc > 0) {
+                player.addSkill("xiefang_mark");
+                player.storage.xiefang_mark = cc;         
+                player.syncStorage("xiefang_mark");       
+            }else{
+                player.removeSkill("xiefang_mark");
+                }            
+        },
+        subSkill: {
+             mark: {
+            mark:true,
+            marktext:"撷芳-",
+             mark:true,
+             intro: {},
+                sub: true,
+            },
+        },
+        mod: {
+            globalFrom: function(from, to, distance) {
+                return distance - game.countPlayer(function(current) {
+                    return current.hasSex('female');
+                });
+            },
+        },
+    }
+
+=== ui_hooks sbqingzheng | archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:4263 ===
+lib.skill.sbqingzheng= {
+                audio: 2,
+                trigger: {
+                    player: "phaseUseBegin",
+                },
+                filter: function (event, player) {
+                    return player.countCards('h') > 0;
+                },
+                direct: true,
+                content: function () {
+                    'step 0'
+                    event.dialog = ui.create.dialognew('#sbqingzheng', 'hidden');
+                    event.dialog.isQingZheng = true;
+                    var eventtitle = ui.create.div('.newTitle1', event.dialog);
+                    eventtitle.innerHTML = '清正<img src=' + lib.assetURL + 'extension/选将美化/assets/image/arrow.png' + ' style=width:30px;height:25px;margin-bottom:1px;left:2px;/>';
+                    var  heitao = ui.create.div('.sbqingzhengheitao', event.dialog);
+                    heitao.link = 'heitao';
+                    var meihua = ui.create.div('.sbqingzhengmeihua', event.dialog);
+                    meihua.link = 'meihua'
+                    var hongtao = ui.create.div('.sbqingzhenghongtao', event.dialog);
+                    hongtao.link = 'hongtao'
+                    var fangkuai = ui.create.div('.sbqingzhengfangkuai', event.dialog);
+                    fangkuai.link = 'fangkuai'
+                    var wenzi = ui.create.div('.Footerxx', event.dialog);
+                    var num = 3 - player.countMark('sbjianxiong');
+                    wenzi.innerHTML = "你可发动<span style='color: #9FDCD1'>清正</span>，弃置" + num + "个花色的手牌，看1名角色的手牌，然后弃置其1个花色的所有牌";
+                    ui.create.div('.qingzhengjindutiao1', event.dialog);
+                    ui.create.div('.qingzhengjindutiao2', event.dialog);
+                    var card = player.getCards('h');
+                    event.shoupai1 = player.getCards('h').length;
+                    var heitao1 = 0;
+                    var meihua1 = 0;
+                    var hongtao1 = 0;
+                    var fangkuai1 = 0;
+                    for (i = 0; i < card.length; i++) {
+                        if (get.suit(card[i]) == "spade") heitao1++;
+                        if (get.suit(card[i]) == "club") meihua1++;
+                        if (get.suit(card[i]) == "heart") hongtao1++;
+                        if (get.suit(card[i]) == "diamond") fangkuai1++;
+                    }
+                    for (i = 0; i < card.length; i++) {
+                        if (get.suit(card[i]) == "spade") {
+                            var h = ui.create.card(heitao, 'noclick', true).init(card[i]);
+                            h.classList.add('guanxingCard');
+                            h.style.width = "108px";
+                            h.style.zoom = "0.88";
+                            h.style.top = "13.5px";
+                            h.style.left = "9.72px";
+                            if (heitao1 > 2) h.style.marginRight = -(heitao1 * 16) + "px";
+                        }
+                        if (get.suit(card[i]) == "club") {
+                            var m = ui.create.card(meihua, 'noclick', true).init(card[i])
+                            m.classList.add('guanxingCard');
+                            m.style.width = "108px";
+                            m.style.zoom = "0.88";
+                            m.style.top = "13.5px";
+                            m.style.left = "9.72px";
+                            if (meihua1 > 2) m.style.marginRight = -(meihua1 * 16) + "px";
+                        }
+                        if (get.suit(card[i]) == "heart") {
+                            var r = ui.create.card(hongtao, 'noclick', true).init(card[i]);
+                            r.classList.add('guanxingCard');
+                            r.style.width = "108px";
+                            r.style.zoom = "0.88";
+                            r.style.top = "13.5px";
+                            r.style.left = "9.72px";
+                            if (hongtao1 > 2) r.style.marginRight = -(hongtao1 * 16) + "px";
+                        }
+                        if (get.suit(card[i]) == "diamond") {
+                            var f = ui.create.card(fangkuai, 'noclick', true).init(card[i]);
+                            f.classList.add('guanxingCard');
+                            f.style.width = "108px";
+                            f.style.zoom = "0.88";
+                            f.style.top = "13.5px";
+                            f.style.left = "9.72px";
+                            if (fangkuai1 > 2) f.style.marginRight = -(fangkuai1 * 16) + "px";
+                        }
+                    }
+                    var heitaox = ui.create.div('.sbqingzhengheitao1', heitao);
+                    if (heitao1 == 0) {
+                        heitaox.innerHTML = '<img src=' + lib.assetURL + 'extension/选将美化/assets/image/dialog_pokercolor2.png' + ' style=width:35px;;height:35px;margin-bottom:-15px;/*-10px*//>没有黑桃牌';
+                        heitaox.style.top = "60px";
+                        heitao.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/dlg_select_bg3.png")';
+                    } else {
+                        heitaox.innerHTML = '<img src=' + lib.assetURL + 'extension/选将美化/assets/image/dialog_pokercolor2.png' + ' style=width:35px;height:35px;margin-bottom:-15px;/*-10px*//>黑桃牌' + heitao1 + '张';
+                    }
+                    var meihuax = ui.create.div('.sbqingzhengmeihua1', meihua);
+                    if (meihua1 == 0) {
+                        meihuax.innerHTML = '<img src=' + lib.assetURL + 'extension/选将美化/assets/image/dialog_pokercolor3.png' + ' style=width:35px;;height:35px;margin-bottom:-15px;/*-10px*//>没有梅花牌';
+                        meihuax.style.top = "60px";
+                        meihua.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/dlg_select_bg3.png")';
+                    } else {
+                        meihuax.innerHTML = '<img src=' + lib.assetURL + 'extension/选将美化/assets/image/dialog_pokercolor3.png' + ' style=width:35px;;height:35px;margin-bottom:-15px;/*-10px*//>梅花牌' + meihua1 + '张';
+                    }
+                    var hongtaox = ui.create.div('.sbqingzhenghongtao1', hongtao);
+                    if (hongtao1 == 0) {
+                        hongtaox.innerHTML = '<img src=' + lib.assetURL + 'extension/选将美化/assets/image/dialog_pokercolor0.png' + ' style=width:35px;;height:35px;margin-bottom:-15px;/*-10px*//>没有红桃牌';
+                        hongtaox.style.top = "60px"
+                        hongtao.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/dlg_select_bg3.png")';
+                    } else {
+                        hongtaox.innerHTML = '<img src=' + lib.assetURL + 'extension/选将美化/assets/image/dialog_pokercolor0.png' + ' style=width:35px;;height:35px;margin-bottom:-15px;/*-10px*//>红桃牌' + hongtao1 + '张';
+                    }
+                    var fangkuaix = ui.create.div('.sbqingzhengfangkuai1', fangkuai);
+                    if (fangkuai1 == 0) {
+                        fangkuaix.innerHTML = '<img src=' + lib.assetURL + 'extension/选将美化/assets/image/dialog_pokercolor1.png' + ' style=width:35px;;height:35px;margin-bottom:-15px;/*-10px*//>没有方块牌';
+                        fangkuaix.style.top = "60px"
+                        fangkuai.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/dlg_select_bg3.png")';
+                    } else {
+                        fangkuaix.innerHTML = '<img src=' + lib.assetURL + 'extension/选将美化/assets/image/dialog_pokercolor1.png' + ' style=width:35px;;height:35px;margin-bottom:-15px;/*-10px*//>方块牌' + fangkuai1 + '张';
+                    }
+
+                    var clickLog = [];                    
+                    // var _event = event;
+                    event.clickLogAI = function () {
+                        // 瓜瓜不会ai捏,随便写点糊弄糊弄
+                        clickLog = ['hongtao','meihua','hongtao','fangkuai'];
+                        if(heitao1==0) clickLog.splice(clickLog.indexOf('heitao'), 1);
+                        if(meihua1==0) clickLog.splice(clickLog.indexOf('meihuai'), 1); 
+                        if(hongtao1==0) clickLog.splice(clickLog.indexOf('hongtao'), 1);
+                        if(fangkuai1==0) clickLog.splice(clickLog.indexOf('fangkuai'), 1);
+                        for(i=0;i<=clickLog.length;i++){
+                        if (clickLog.length != num) clickLog.shift();
+                        }                       
+                        return clickLog;                                               
+                    }   
+                    event.ok = ui.create.control('', function (evt) {
+                    event.ok.style.transform = 'scale(0.9)';
+                    setTimeout(function() {if(event.ok )event.ok.style.transform = 'scale(1)'; }, 50);
+                    if (clickLog.length!= num) return;                  
+                        event.cailick = clickLog;
+                        //继续游戏
+                        ui.xjmhQingzhengNext();
+                        game.resume2();
+                    });                    
+                    
+                    event.cancel = ui.create.control('', function (evt) {
+                    if (event.dialog)event.dialog.remove();
+                    if (event.ok) event.ok.remove();
+                    if (event.cancel) event.cancel.remove();
+                    event.dialog = null;
+                    event.ok = null;
+                    event.cancel = null;
+                        event.finish();
+                        ui.xjmhQingzhengNext();
+                        game.resume2();                        
+                    });
+                    event.dialog.appendChild(event.ok);
+                    event.dialog.appendChild(event.cancel);
+                    event.ok.style.filter = 'grayscale(100%)';
+                    //event.ok.style.marginTop = '365px';
+                    event.ok.style.top = '367px';
+                    //event.ok.style.marginLeft = '-100px';
+                    event.ok.style.left = 'calc(50% - 170px)';       
+                    event.ok.style.backgroundImage= 'url("' + lib.assetURL + 'extension/选将美化/assets/image/gbtn.png")';       
+                    event.ok.style.backgroundSize = '80% 80%';
+                    event.ok.style.backgroundRepeat = 'no-repeat';
+                    //event.cancel.style.marginTop = '365px';
+                    event.cancel.style.top = '367px';
+                    //event.cancel.style.marginLeft = '100px';
+                    event.cancel.style.left = 'calc(50% + 20px)';
+                    event.cancel.style.backgroundSize = '80% 80%';
+                    event.cancel.style.backgroundRepeat = 'no-repeat';
+                    event.cancel.style.backgroundImage= 'url("' + lib.assetURL + 'extension/选将美化/assets/image/cancel.png")';        
+                    // event.cancel.backgroundSize = '100% 100%';              
+                    // 隐藏按钮
+                    // event.ok.hide();
+                    //显示按钮
+                     //  event.ok.show();
+                    var clickItem = function (node) {
+                        if (clickLog.indexOf('heitao') == -1 && heitao1 > 0) heitao.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/dlg_select_bg1.png")';
+                        if (clickLog.indexOf('meihua') == -1 && meihua1 > 0) meihua.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/dlg_select_bg1.png")';
+                        if (clickLog.indexOf('hongtao') == -1 && hongtao1 > 0) hongtao.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/dlg_select_bg1.png")';
+                        if (clickLog.indexOf('fangkuai') == -1 && fangkuai1 > 0) fangkuai.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/dlg_select_bg1.png")';
+                        if (clickLog.includes(node.link)) {
+                            node.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/dlg_select_bg2.png")'
+                        } else {
+                            node.style.backgroundImage = '';
+                        }
+                        if (clickLog.length == num) {
+                        event.ok.style.filter = 'none';  
+                        } else {
+                        event.ok.style.filter = 'grayscale(100%)';
+                        }
+                    }
+
+                    heitao.onclick = function () {
+                        if (heitao1 == 0) return;                       
+                        if (clickLog.indexOf('heitao') == -1) {
+                            if (clickLog.length >= num) clickLog.shift();
+                            clickLog.push('heitao');
+                        } else {
+                            clickLog.splice(clickLog.indexOf('heitao'), 1);
+                        }
+                        clickItem(this);
+                    };
+                    meihua.onclick = function () {
+                        if (meihua1 == 0) return;
+                        if (clickLog.indexOf('meihua') == -1) {
+                            if (clickLog.length >= num) clickLog.shift();
+                            clickLog.push('meihua');
+                        } else {
+                            clickLog.splice(clickLog.indexOf('meihua'), 1);
+                        }
+                        clickItem(this);
+                    };
+                    hongtao.onclick = function () {
+                        if (hongtao1 == 0) return;
+                        if (clickLog.indexOf('hongtao') == -1) {
+                            if (clickLog.length >= num) clickLog.shift();
+                            clickLog.push('hongtao');
+                        } else {
+                            clickLog.splice(clickLog.indexOf('hongtao'), 1);
+                        }
+                        clickItem(this);
+                    };
+                    fangkuai.onclick = function () {
+                        if (fangkuai1 == 0) return;
+                        if (clickLog.indexOf('fangkuai') == -1) {
+                            if (clickLog.length >= num) clickLog.shift();
+                            clickLog.push('fangkuai');
+                        } else {
+                            clickLog.splice(clickLog.indexOf('fangkuai'), 1);
+                        }
+                        clickItem(this);                       
+                    };                  
+                    // 先暂停步骤，让玩家选择
+                    _status.imchoosing = true;
+                    //暂停游戏
+                    game.pause2();
+                    // 这是再选择的时候点击托管触发的事件
+                    event.switchToAuto = function () {
+                        event.cailick = event.clickLogAI();
+                        event.dialog.close();
+                        game.resume();
+                    };
+                    // game.isMine() 就是为玩家自己在操作
+                    if (game.isMine()) {
+                        event.dialog.open();
+                    } else {
+                        event.cailick = event.clickLogAI();
+                        ui.xjmhQingzhengNext();
+                        game.resume2();
+                    }                                       
+                    'step 1'
+                    //if(!event.cailick) return;
+                    // if(result.bool){
+                    //移到后面去
+                    /*if (event.cailick.indexOf('heitao') != -1) player.discard(player.getCards('h', {suit: "spade"}));
+                    if (event.cailick.indexOf('meihua') != -1) player.discard(player.getCards('h', {suit: "club"}));
+                    if (event.cailick.indexOf('hongtao') != -1) player.discard(player.getCards('h', {suit: "heart"}));
+                    if (event.cailick.indexOf('fangkuai') != -1) player.discard(player.getCards('h', {suit: "diamond"}));*/
+                    event.dialog.remove();
+                    if (event.ok) event.ok.remove();
+                    if (event.cancel) event.cancel.remove();
+                    event.dialog = null;
+                    event.ok = null;
+                    event.cancel = null;
+                    player.chooseTarget('清正：观看一名其他角色的手牌并弃置其中一种花色的所有牌', function (card, player, target) {
+                        return player != target && target.countCards('h');
+                    }).set('ai',target=>{
+                        var player=_status.event.player,att=get.attitude(player,target);
+                        if(att>=0) return 0;
+                        return 1-att/2+Math.sqrt(target.countCards('h'));
+                    });                 
+                    'step 2'
+                    if (result.bool) {
+                        var target = result.targets[0];
+                        event.target = result.targets[0];
+                        player.logSkill('sbqingzheng', target);
+                        event.dialog = ui.create.dialognew('#sbqingzheng','hidden');
+                        event.dialog.isQingZheng = true;
+                        var eventtitle = ui.create.div('.newTitle1', event.dialog);
+                        eventtitle.innerHTML = '清正<img src=' + lib.assetURL + 'extension/选将美化/assets/image/arrow.png' + ' style=width:30px;height:25px;margin-bottom:1px;left:2px;/>';
+                        var heitao = ui.create.div('.sbqingzhengheitao', event.dialog);
+                        
+                        var meihua = ui.create.div('.sbqingzhengmeihua', event.dialog);
+                        
+                        var hongtao = ui.create.div('.sbqingzhenghongtao', event.dialog);
+                        
+                        var fangkuai = ui.create.div('.sbqingzhengfangkuai', event.dialog);
+                        
+                        ui.create.div('.qingzhengjindutiao1', event.dialog);
+                        ui.create.div('.qingzhengjindutiao2', event.dialog);
+                        var wenzi = ui.create.div('.Footerxx', event.dialog);
+                        wenzi.innerHTML = "你发动了<span style='color: #9FDCD1'>清正</span>，查看<span style='color: #66FF66'>" + get.translation(target.name) + "</span>的手牌，然后弃置其1个花色的所有牌";
+                        var card = target.getCards('h');
+                        event.shoupai3 = target.getCards('h').length;
+                        heitao2 = 0;
+                        meihua2 = 0;
+                        hongtao2 = 0;
+                        fangkuai2 = 0;
+                        heitao.link = 'heitao';
+                        meihua.link = 'meihua';
+                        hongtao.link = 'hongtao';
+                        fangkuai.link = 'fangkuai';
+                        for (i = 0; i < card.length; i++) {
+                            if (get.suit(card[i]) == "spade") heitao2++;
+                            if (get.suit(card[i]) == "club") meihua2++;
+                            if (get.suit(card[i]) == "heart") hongtao2++;
+                            if (get.suit(card[i]) == "diamond") fangkuai2++;
+                        }
+                        for (i = 0; i < card.length; i++) {
+                            if (get.suit(card[i]) == "spade") {
+                                var h = ui.create.card(heitao, 'noclick', true).init(card[i]);
+                                h.classList.add('guanxingCard');
+                                h.style.width = "108px";
+                                h.style.zoom = "0.88";
+                                h.style.top = "13.5px";
+                                h.style.left = "9.72px";
+                                if (heitao2 > 2) h.style.marginRight = -(heitao2 * 16) + "px";
+                            }
+                            if (get.suit(card[i]) == "club") {
+                                var m = ui.create.card(meihua, 'noclick', true).init(card[i])
+                                m.classList.add('guanxingCard');
+                                m.style.width = "108px";
+                                m.style.zoom = "0.88";
+                                m.style.top = "13.5px";
+                                m.style.left = "9.72px";
+                                if (meihua2 > 2) m.style.marginRight = -(meihua2 * 16) + "px";
+                            }
+                            if (get.suit(card[i]) == "heart") {
+                                var r = ui.create.card(hongtao, 'noclick', true).init(card[i]);
+                                r.classList.add('guanxingCard');
+                                r.style.width = "108px";
+                                r.style.zoom = "0.88";
+                                r.style.top = "13.5px";
+                                r.style.left = "9.72px";
+                                if (hongtao2 > 2) r.style.marginRight = -(hongtao2 * 16) + "px";
+                            }
+                            if (get.suit(card[i]) == "diamond") {
+                                var f = ui.create.card(fangkuai, 'noclick', true).init(card[i]);
+                                f.classList.add('guanxingCard');
+                                f.style.width = "108px";
+                                f.style.zoom = "0.88";
+                                f.style.top = "13.5px";
+                                f.style.left = "9.72px";
+                                if (fangkuai2 > 2) f.style.marginRight = -(fangkuai2 * 16) + "px";
+                            }
+                        }
+                        var heitaox = ui.create.div('.sbqingzhengheitao1', heitao);
+                        if (heitao2 == 0) {
+                            heitaox.innerHTML = '<img src=' + lib.assetURL + 'extension/选将美化/assets/image/dialog_pokercolor2.png' + ' style=width:35px;;height:35px;margin-bottom:-15px;/*-10px*//>没有黑桃牌';
+                            heitaox.style.top = "60px";
+                            heitao.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/dlg_select_bg3.png")';
+                        } else {
+                            heitaox.innerHTML = '<img src=' + lib.assetURL + 'extension/选将美化/assets/image/dialog_pokercolor2.png' + ' style=width:35px;height:35px;margin-bottom:-15px;/*-10px*//>黑桃牌' + heitao2 + '张';
+                        }
+                        var meihuax = ui.create.div('.sbqingzhengmeihua1', meihua);
+                        if (meihua2 == 0) {
+                            meihuax.innerHTML = '<img src=' + lib.assetURL + 'extension/选将美化/assets/image/dialog_pokercolor3.png' + ' style=width:35px;;height:35px;margin-bottom:-15px;/*-10px*//>没有梅花牌';
+                            meihuax.style.top = "60px";
+                            meihua.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/dlg_select_bg3.png")';
+                        } else {
+                            meihuax.innerHTML = '<img src=' + lib.assetURL + 'extension/选将美化/assets/image/dialog_pokercolor3.png' + ' style=width:35px;;height:35px;margin-bottom:-15px;/*-10px*//>梅花牌' + meihua2 + '张';
+                        }
+                        var hongtaox = ui.create.div('.sbqingzhenghongtao1', hongtao);
+                        if (hongtao2 == 0) {
+                            hongtaox.innerHTML = '<img src=' + lib.assetURL + 'extension/选将美化/assets/image/dialog_pokercolor0.png' + ' style=width:35px;;height:35px;margin-bottom:-15px;/*-10px*//>没有红桃牌';
+                            hongtaox.style.top = "60px"
+                            hongtao.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/dlg_select_bg3.png")';
+                        } else {
+                            hongtaox.innerHTML = '<img src=' + lib.assetURL + 'extension/选将美化/assets/image/dialog_pokercolor0.png' + ' style=width:35px;;height:35px;margin-bottom:-15px;/*-10px*//>红桃牌' + hongtao2 + '张';
+                        }
+                        var fangkuaix = ui.create.div('.sbqingzhengfangkuai1', fangkuai);
+                        if (fangkuai2 == 0) {
+                            fangkuaix.innerHTML = '<img src=' + lib.assetURL + 'extension/选将美化/assets/image/dialog_pokercolor1.png' + ' style=width:35px;;height:35px;margin-bottom:-15px;/*-10px*//>没有方块牌';
+                            fangkuaix.style.top = "60px"
+                            fangkuai.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/dlg_select_bg3.png")';
+                        } else {
+                            fangkuaix.innerHTML = '<img src=' + lib.assetURL + 'extension/选将美化/assets/image/dialog_pokercolor1.png' + ' style=width:35px;;height:35px;margin-bottom:-15px;/*-10px*//>方块牌' + fangkuai2 + '张';
+                        }
+                        
+                        var clickLog = [];
+                        event.clickLogAI = function () {
+                        // 瓜瓜不会ai捏
+                        clickLog = ['hongtao','meihua','hongtao','fangkuai'];
+                        if(heitao2==0) clickLog.splice(clickLog.indexOf('heitao'), 1);
+                        if(meihua2==0) clickLog.splice(clickLog.indexOf('meihuai'), 1); 
+                        if(hongtao2==0) clickLog.splice(clickLog.indexOf('hongtao'), 1);
+                        if(fangkuai2==0) clickLog.splice(clickLog.indexOf('fangkuai'), 1);
+                        for(i=0;i<clickLog.length;i++){
+                        if (clickLog.length != 1) clickLog.shift();
+                        }
+                        return clickLog;                                               
+                    }   
+                        var clickItem = function (node) {
+                        if (clickLog.indexOf('heitao') == -1 && heitao2 > 0) heitao.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/dlg_select_bg1.png")';
+                        if (clickLog.indexOf('meihua') == -1 && meihua2 > 0) meihua.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/dlg_select_bg1.png")';
+                        if (clickLog.indexOf('hongtao') == -1 && hongtao2 > 0) hongtao.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/dlg_select_bg1.png")';
+                        if (clickLog.indexOf('fangkuai') == -1 && fangkuai2 > 0) fangkuai.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/dlg_select_bg1.png")';                    
+                        if (clickLog.indexOf(node.link)!=-1) {
+                            node.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/dlg_select_bg2.png")'
+                        } else {
+                            node.style.backgroundImage = '';
+                        }
+                        if (clickLog.length == 1) {
+                        event.ok.style.filter = 'none';  
+                        } else {
+                        event.ok.style.filter = 'grayscale(100%)';
+                        }
+                    }
+                        heitao.onclick = function () {
+                            if (heitao2 == 0) return;
+                            if (clickLog.indexOf('heitao') == -1) {
+                                if (clickLog.length >= 1) clickLog.shift();
+                                clickLog.push('heitao');
+                            } else {
+                                clickLog.splice(clickLog.indexOf('heitao'), 1);
+                            }
+                        clickItem(this);
+                        };
+                        meihua.onclick = function () {
+                            if (meihua2 == 0) return;
+                            if (clickLog.indexOf('meihua') == -1) {
+                                if (clickLog.length >= 1) clickLog.shift();
+                                clickLog.push('meihua');
+                            } else {
+                                clickLog.splice(clickLog.indexOf('meihua'), 1);
+                            }
+                        clickItem(this);
+                        };
+                        hongtao.onclick = function () {
+                            if (hongtao2 == 0) return;
+                            if (clickLog.indexOf('hongtao') == -1) {
+                                if (clickLog.length >= 1) clickLog.shift();
+                                clickLog.push('hongtao');
+                            } else {
+                                clickLog.splice(clickLog.indexOf('hongtao'), 1);
+                            }
+                        clickItem(this);
+                        };
+                        fangkuai.onclick = function () {
+                            if (fangkuai2 == 0) return;
+                            if (clickLog.indexOf('fangkuai') == -1) {
+                                if (clickLog.length >= 1) clickLog.shift();
+                                clickLog.push('fangkuai');
+                            } else {
+                                clickLog.splice(clickLog.indexOf('fangkuai'), 1);
+                            }
+                            clickItem(this);
+                        };                        
+                    
+                    // var _event = event;
+                    event.ok = ui.create.control('', function (evt) {
+                    event.ok.style.transform = 'scale(0.7)';
+                    setTimeout(function() {event.ok.style.transform = 'scale(1)'; }, 200);
+                    if (clickLog.length!=1) return;                  
+                        event.cailickx = clickLog;                        
+                        ui.xjmhQingzhengNext();
+                        game.resume2();
+                    });                    
+                    
+                    event.cancel = ui.create.control('', function (evt) {
+                    event.cancel.style.transform = 'scale(0.9)';
+                    setTimeout(function() {if(event.ok) event.cancel.style.transform = 'scale(1)'; }, 50);
+                    if (event.dialog)event.dialog.remove();
+                    if (event.ok) event.ok.remove();
+                    if (event.cancel) event.cancel.remove();
+                    event.dialog = null;
+                    event.ok = null;
+                    event.cancel = null;
+                        event.finish();
+                        ui.xjmhQingzhengNext();
+                        game.resume2();                        
+                    });
+                    event.dialog.appendChild(event.ok);
+                    event.dialog.appendChild(event.cancel);
+                    game.createCss(`.sbqingzheng-cancel{
+                        pointer-events: none;
+                        filter: grayscale(1);
+                    }`);
+                    event.cancel.classList.add('sbqingzheng-cancel');
+                    //event.dialog.appendChild(event.cancel);
+                    event.ok.style.filter = 'grayscale(100%)';
+                    event.ok.style.marginTop = '365px';
+                    //event.ok.style.marginLeft = '-100px';                    
+                    event.ok.style.left = 'calc(50% - 170px)';
+                    event.ok.style.backgroundImage= 'url("' + lib.assetURL + 'extension/选将美化/assets/image/gbtn.png")';       
+                    event.ok.style.backgroundSize = '80% 80%';
+                    event.ok.style.backgroundRepeat = 'no-repeat';
+                    event.cancel.style.marginTop = '365px';
+                    //event.cancel.style.marginLeft = '100px';                      
+                    event.cancel.style.left = 'calc(50% + 20px)';
+                    event.cancel.style.backgroundSize = '80% 80%';
+                    event.cancel.style.backgroundRepeat = 'no-repeat';
+                    event.cancel.style.backgroundImage= 'url("' + lib.assetURL + 'extension/选将美化/assets/image/cancel.png")';       
+                    
+                    // 先暂停步骤，让玩家选择
+                   // _status.imchoosing = true;
+                    //暂停游戏
+                    game.pause2();
+                    // 这是再选择的时候点击托管触发的事件
+                    event.switchToAuto = function () {
+                        event.cailickx = event.clickLogAI();
+                        event.dialog.close();
+                        game.resume();
+                    };
+                    // game.isMine() 就是为玩家自己在操作
+                    if (game.isMine()) {
+                        event.dialog.open();
+                    } else {
+                        event.cailickx = event.clickLogAI();
+                        ui.xjmhQingzhengNext();
+                        game.resume2();
+                    }
+                    }else{
+                    event.finish();
+                    }
+                    'step 3'
+                    /*if (event.cailickx.indexOf('heitao') != -1) event.target.discard(event.target.getCards('h', {suit: "spade"}), 'notBySelf').set('discarder', player);
+                    if (event.cailickx.indexOf('meihua') != -1) event.target.discard(event.target.getCards('h', {suit: "club"}), 'notBySelf').set('discarder', player);
+                    if (event.cailickx.indexOf('hongtao') != -1) event.target.discard(event.target.getCards('h', {suit: "heart"}), 'notBySelf').set('discarder', player);
+                    if (event.cailickx.indexOf('fangkuai') != -1) event.target.discard(event.target.getCards('h', {suit: "diamond"}), 'notBySelf').set('discarder', player);*/
+                    event.discardMeCards = [];
+                    event.discardHimCards = [];
+                    var suitsList = [
+                        {name: 'heitao', suit: 'spade'},
+                        {name: 'meihua', suit: 'club'},
+                        {name: 'hongtao', suit: 'heart'},
+                        {name: 'fangkuai', suit: 'diamond'}
+                    ];
+                    suitsList.forEach(suitItem => {
+                        if (event.cailick.indexOf(suitItem.name) != -1) event.discardMeCards.addArray(player.getCards('h', {suit: suitItem.suit}));
+                        if (event.cailickx.indexOf(suitItem.name) != -1) event.discardHimCards.addArray(event.target.getCards('h', {suit: suitItem.suit}));
+                    });
+                    player.discard(event.discardMeCards);
+                    event.target.discard(
+                            event.discardHimCards,
+                            'notBySelf'
+                        ).set('discarder', player);
+                    /*if (event.cailick.indexOf('heitao') != -1) player.discard(player.getCards('h', {suit: "spade"}));
+                    if (event.cailick.indexOf('meihua') != -1) player.discard(player.getCards('h', {suit: "club"}));
+                    if (event.cailick.indexOf('hongtao') != -1) player.discard(player.getCards('h', {suit: "heart"}));
+                    if (event.cailick.indexOf('fangkuai') != -1) player.discard(player.getCards('h', {suit: "diamond"}));
+                    // 将所有可能条件整理为数组结构
+                    const conditions = [
+                        { key: 'heitao', suit: 'spade' },
+                        { key: 'meihua', suit: 'club' },
+                        { key: 'hongtao', suit: 'heart' },
+                        { key: 'fangkuai', suit: 'diamond' }
+                    ];
+                    
+                    // 收集符合条件的选项
+                    const matches = conditions.filter(item => 
+                        event.cailickx.indexOf(item.key) !== -1
+                    );
+                    
+                    // 随机选择并执行一个
+                    if (matches.length > 0) {
+                        const selected = matches[Math.floor(Math.random() * matches.length)];
+                        event.target.discard(
+                            event.target.getCards('h', { suit: selected.suit }),
+                            'notBySelf'
+                        ).set('discarder', player);
+                    }*/
+                    event.dialog.remove();
+                    event.dialog = null;
+                    'step 4'
+                    event.shoupai2 = player.getCards('h').length;
+                    event.shoupai4 = event.target.getCards('h').length;
+                    var yi = event.shoupai1 - event.shoupai2;
+                    var er = event.shoupai3 - event.shoupai4;
+                    if (event.discardMeCards > event.discardHimCards && event.discardHimCards > 0) event.target.damage();
+                    'step 5'
+                    if (player.countMark('sbjianxiong') < 2 && player.hasSkill('sbjianxiong')) {
+                        player.chooseBool('是否获得1枚“治世”？').set('ai', () => Math.random() < 0.5 ? 0 : 1);
+                    } else event.finish();
+                    'step 6'
+                    if (result.bool) {
+                        player.addMark('sbjianxiong', 1);
+                    }
+                },
+                ai: {
+                    combo: "sbjianxiong",
+                },
+            }
+
+=== ui_hooks twxiafeng | archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:6350 ===
+lib.skill.twxiafeng = {
+    audio:2,
+    trigger:{
+        player:"phaseUseBegin",
+    },
+    filter:function(event,player){
+        return player.countMark('baonvezhi')>0;
+    },
+    init:function(player){lib.skill.baonvezhi.change(player,0)},
+    direct:true,
+    content:function(){
+        'step 0'
+             window.shuzibg = ui.create.div('.shuzibgxx', document.body);
+                if(window.shoushaBlanks) window.shoushaBlanks.add(window.shuzibg);
+             var leftBtn = ui.create.div('.shuzijianhao', window.shuzibg);
+                 leftBtn.style.filter = 'grayscale(100%)';
+             var rightBtn = ui.create.div('.shuzijiahao', window.shuzibg);
+             var chooseType = ui.create.div('.shuzixx', window.shuzibg);
+             var index = 0;                                 
+             var list= [];                      
+             for (var i = 0; i <= player.storage.baonvezhi; i++) {
+             if(i<=3) list.push(i);}
+              chooseType.innerHTML = list[index];
+              player.storage.twxiafeng = index;         
+              if (index <= 0) leftBtn.style.filter = 'grayscale(100%)';
+              else leftBtn.style.filter = 'none';
+              if (index >= player.storage.baonvezhi) rightBtn.style.filter = 'grayscale(100%)';
+              else rightBtn.style.filter = 'none';                  
+             leftBtn.listen(function () {
+              if (index ==  0) return;
+                index--;
+              leftBtn.style.transform = 'scale(0.7)';
+              setTimeout(function() {leftBtn.style.transform = 'scale(1)'; }, 200);
+              if (index <= 0) leftBtn.style.filter = 'grayscale(100%)';
+              else leftBtn.style.filter = 'none';
+              if (index >= player.storage.baonvezhi && player.storage.baonvezhi <= 3) rightBtn.style.filter = 'grayscale(100%)';
+              else rightBtn.style.filter = 'none';
+              chooseType.innerHTML = list[index];
+              player.storage.twxiafeng = index;     
+              });              
+              rightBtn.listen(function () {
+              if (index == player.storage.baonvezhi || index >= 3) return;
+                  index++;
+              rightBtn.style.transform = 'scale(0.7)';
+              setTimeout(function() {rightBtn.style.transform = 'scale(1)'; }, 200);    
+              if (index <= 0) leftBtn.style.filter = 'grayscale(100%)';
+              else leftBtn.style.filter = 'none';
+              if (index >= player.storage.baonvezhi || index >=3) rightBtn.style.filter = 'grayscale(100%)';
+              else rightBtn.style.filter = 'none';
+              chooseType.innerHTML = list[index];
+              player.storage.twxiafeng = index;    
+              });                     
+               //if(game.me != player){
+               if(!game.isMine()) {
+              var shas = player.getCards('h', 'sha');
+              var num;
+            if ( shas.length >= 3 && player.storage.baonvezhi >= 3) {
+                num = 3;
+            } else if (shas.length >= 2 && player.storage.baonvezhi >= 2) {
+                num = 2;
+            } else if (shas.length >= 1 && player.storage.baonvezhi >= 1){
+                num = 1;
+            } else if (shas.length == 0 && player.storage.baonvezhi == 0){
+                num = 0;            
+            }
+            player.storage.twxiafeng = num;
+              }
+              player.chooseBool('是否发动【黠凤】，你可以失去至多'+(player.storage.baonvezhi<=3?player.storage.baonvezhi:3)+'点【暴虐值】')
+              .set('ai', function() {return true;});                  
+        'step 1'
+           if (!result.bool) {
+              event.finish();                           
+              }else{      
+              if(player.storage.twxiafeng){             
+            player.logSkill('twxiafeng');          
+            player.addTempSkill('twxiafeng_effect');
+            player.storage.twxiafeng_effect=player.storage.twxiafeng;
+            lib.skill.baonvezhi.change(player,-player.storage.twxiafeng);
+            }
+              }      
+              window.shuzibg.remove();      
+              window.shuzibg = null;                                 
+    },
+    subSkill:{
+        effect:{
+            trigger:{
+                player:"useCard",
+            },
+            filter:function(event,player){
+                return !player.storage.twxiafeng_effect2;
+            },
+            forced:true,
+            content:function(){
+                var count=player.getHistory('useCard',evt=>evt.getParent('phaseUse').player==player).length;
+                if(count==player.storage.twxiafeng_effect){
+                    player.storage.twxiafeng_effect2=true;
+                }
+                if(count<=player.storage.twxiafeng_effect){
+                    trigger.directHit.addArray(game.players);
+                    if(trigger.addCount!==false){
+                        trigger.addCount=false;
+                        var stat=player.getStat().card,name=trigger.card.name;
+                        if(typeof stat[name]=='number') stat[name]--;
+                    }
+                }
+            },
+            onremove:function(player){
+                delete player.storage.twxiafeng_effect;
+                delete player.storage.twxiafeng_effect2;
+            },
+            mod:{
+                targetInRange:function(card,player,target,now){
+                    if(!player.storage.twxiafeng_effect2) return true;
+                },
+                cardUsableTarget:function(card,player,target){
+                    if(!player.storage.twxiafeng_effect2) return true;
+                },
+                maxHandcard:function(player,num){
+                    return num+(player.storage.twxiafeng_effect||0);
+                },
+            },
+            sub:true,
+            parentskill:"twxiafeng",
+        },
+    },
+}
+
+=== ui_hooks twzhouzu | archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:7441 ===
+lib.skill.twzhouzu = {
+    audio:2,
+    enable:"phaseUse",
+    usable:1,
+    mahouSkill:true,
+    direct: true,
+    filter:function(event,player){
+        return !player.hasSkill('twzhouzu_mahou');
+    },
+    line:false,
+    delay:false,
+    content:function(){
+        'step 0'
+             window.shuzibg = ui.create.div('.shuzibgxx', document.body);
+                if(window.shoushaBlanks) window.shoushaBlanks.add(window.shuzibg);
+             var leftBtn = ui.create.div('.shuzijianhao', window.shuzibg);
+                 leftBtn.style.filter = 'grayscale(100%)';
+             var rightBtn = ui.create.div('.shuzijiahao', window.shuzibg);
+             var chooseType = ui.create.div('.shuzixx', window.shuzibg);
+                     var index = 0;  
+                     var list = [1,2,3];                                                
+              chooseType.innerHTML = list[index];
+              player.storage.twzhouzu5 = index;         
+              if (index <= 0) leftBtn.style.filter = 'grayscale(100%)';
+              else leftBtn.style.filter = 'none';
+              if (index >= 2) rightBtn.style.filter = 'grayscale(100%)';
+              else rightBtn.style.filter = 'none';                                
+             leftBtn.listen(function () {
+              if (index <=  0) return;
+                index--;
+              leftBtn.style.transform = 'scale(0.7)';
+              setTimeout(function() {leftBtn.style.transform = 'scale(1)'; }, 200);
+              if (index <= 0) leftBtn.style.filter = 'grayscale(100%)';
+              else leftBtn.style.filter = 'none';
+              if (index >= 2) rightBtn.style.filter = 'grayscale(100%)';
+              else rightBtn.style.filter = 'none';
+              chooseType.innerHTML = list[index];
+              player.storage.twzhouzu5 = index;     
+              });                            
+              rightBtn.listen(function () {
+              if (index >= 2) return;
+                  index++;
+              rightBtn.style.transform = 'scale(0.7)';
+              setTimeout(function() {rightBtn.style.transform = 'scale(1)'; }, 200);    
+              if (index <= 0) leftBtn.style.filter = 'grayscale(100%)';
+              else leftBtn.style.filter = 'none';
+              if (index >= 2) rightBtn.style.filter = 'grayscale(100%)';
+              else rightBtn.style.filter = 'none';
+              chooseType.innerHTML = list[index];
+              player.storage.twzhouzu5 = index;    
+              });  
+              //if(game.me != player){
+              if(!game.isMine()) {
+             player.storage.twzhouzu5 = 2;
+              } 
+            player.chooseTarget(get.prompt2('twzhouzu'),true,function(card,player,target){ return player!=target; },);              
+        'step 1'
+                    if (!result.bool) {                        
+            event.finish();                                
+              }else{                               
+            player.storage.twzhouzu_mahou=[player.storage.twzhouzu5+1,player.storage.twzhouzu5+1,result.targets[0]];
+            player.addTempSkill('twzhouzu_mahou',{player:'die'});
+            player.addTempSkill('twzhouzu_mark', {player: 'die'});
+            player.storage.twzhouzu_mark = player.storage.twzhouzu_mahou[0]+' - '+ player.storage.twzhouzu_mahou[1];
+            player.syncStorage("twzhouzu_mark");
+              window.shuzibg.remove();      
+              window.shuzibg = null;           
+              }               
+        
+    },
+    subSkill:{
+    mark: {
+            mark:true,
+                intro: {
+                    name: "施法：咒诅",
+                    content: function(s, p) {
+                        var str = '施法：咒诅-剩余回合：'
+                        str += p.storage.twzhouzu_mahou[1];
+                        str += '<br>施法：咒诅-可抵消次数：'
+                        str += p.storage.twzhouzu_mahou[0];
+                        str += '<br>施法：咒诅-的目标是：'
+                        str +=get.translation(p.storage.twzhouzu_mahou[2]);
+                        return str;
+                    },
+                },
+                sub: true,
+            },
+        mahou:{
+            trigger:{
+                global:"phaseEnd",
+            },
+            forced:true,
+            popup:false,
+            charlotte:true,
+            content:function(){
+                var list=player.storage.twzhouzu_mahou;
+                list[1]--;
+                if(list[1]==0){
+                    game.log(player,'的“咒诅”魔法生效');
+                    var num=list[0],target=list[2];
+                    player.logSkill('twzhouzu',target);
+                    target.chooseToDiscard(get.translation(player)+'对你的“咒诅”魔法生效，请弃置'+get.cnNumber(list[0])+'张牌',list[0],true);
+                    target.damage('thunder');
+                    player.removeSkill('twzhouzu_mahou');
+                    player.removeSkill('twzhouzu_mark');                    
+                }
+                else{
+                    game.log(player,'的“咒阻”魔法剩余','#g'+(list[1])+'回合');
+                  //  player.markSkill('twzhouzu_mahou');
+                    player.storage.twzhouzu_mark = player.storage.twzhouzu_mahou[0]+' - '+ player.storage.twzhouzu_mahou[1];
+            player.syncStorage("twzhouzu_mark");
+                }
+            },            
+            sub:true,
+            parentskill:"twzhouzu",
+        },
+    },
+    ai:{
+        order:1,
+        result:{
+            target:-5,
+        },
+    },
+}
+
+=== skills new_meibu | archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:1674 ===
+lib.skill.new_meibu = {
+        audio: "meibu",
+        trigger: {
+            global: "phaseUseBegin",
+        },
+        filter: function(event, player) {
+            return event.player != player && event.player.isAlive() && player.countCards('he') > 0 && event.player.inRange(player);
+        },
+        direct: true,
+        derivation: ["new_zhixi"],
+        checkx: function(event, player) {
+            if (get.attitude(player, event.player) >= 0) return false;
+            var e2 = player.getEquip(2);
+            if (e2) {
+                if (e2.name == 'tengjia') return true;
+                if (e2.name == 'bagua') return true;
+            }
+            return event.player.countCards('h') > event.player.hp;
+        },
+        content: function() {
+            "step 0"
+            var check = lib.skill.new_meibu.checkx(trigger, player);
+            player.chooseToDiscard(get.prompt2('new_meibu', trigger.player), 'he')
+                .set('ai', function(card) {
+                if (_status.event.check) return 6 - get.value(card);
+                return 0;
+            })
+                .set('check', check)
+                .set('logSkill', 'new_meibu');
+            "step 1"
+            if (result.bool) {
+                var target = trigger.player;
+                var card = result.cards[0];
+                player.line(target, 'green');
+                target.addTempSkill('new_zhixi', 'phaseUseEnd');
+                target.addTempSkill('new_zhixi_recover', 'phaseUseEnd');
+                if (card.name != 'sha' && get.type(card) != 'trick' && get.color(card) != 'black') {
+                    target.addTempSkill('new_meibu_range', 'phaseUseEnd');
+                    target.storage.meibu = player;
+                }
+                /*   target.markSkillCharacter('new_meibu',player,'止息','锁定技，出牌阶段，你至多可使用X张牌，你使用了锦囊牌后不能再使用牌（X为你的体力值）。');*/
+                target.addTempSkill("new_zhixi_mark",'phaseUseEnd');
+                var mark = target.hp - target.countMark('new_zhixi');
+                target.storage.new_zhixi_mark = mark.toString();
+                target.syncStorage("new_zhixi_mark");
+            }
+        },
+        ai: {
+            expose: 0.2,
+        },
+        subSkill: {
+            range: {
+                mod: {
+                    globalFrom: function(from, to, num) {
+                        if (to == from.storage.meibu) {
+                            return -Infinity;
+                        }
+                    },
+                },
+                sub: true,
+            },
+        },
+    }

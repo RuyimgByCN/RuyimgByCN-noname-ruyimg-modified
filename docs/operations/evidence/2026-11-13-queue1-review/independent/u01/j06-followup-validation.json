@@ -1,0 +1,19 @@
+{
+  "checked_at": "2026-11-13T23:52:00.709419+08:00",
+  "scope": "Followup evidence structure and source identity; not game tests",
+  "actual_command_description": "python3 -B inline validation in the task transcript; checks input SHA256, preserved rejection, diff SHA256, local links/line bounds and owned diff whitespace",
+  "passed": 5,
+  "failed": 0,
+  "checks": [
+    "26 captured input hashes match saved copies and current source",
+    "initial J06 rejection body and JSON preserved unchanged",
+    "actual six-file incremental diff hash preserved; new test snapshot included",
+    "348 top-level local report links and cited line bounds",
+    "git diff --check for the owned evidence directory"
+  ],
+  "local_links": 348,
+  "cargo_runs": 0,
+  "browser_runs": 0,
+  "upstream_game_runs": 0,
+  "rule_equivalence_signoffs": 0
+}

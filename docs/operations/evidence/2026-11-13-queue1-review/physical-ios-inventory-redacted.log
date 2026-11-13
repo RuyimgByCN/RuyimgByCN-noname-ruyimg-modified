@@ -1,0 +1,10 @@
+Name                    Hostname   Identifier                                    State         Model                              Reality  
+---------------------   --------   -------------------------------------------   -----------   --------------------------------   ---------
+physical iPhone                            <device-id-redacted> (UDID)              unavailable   iPhone17,2                                  
+iPad Pro 11-inch (M5)              <device-id-redacted> (UDID)   shutdown      iPad Pro 11-inch (M5) (iPad17,2)   simulated
+iPhone 17                          <device-id-redacted> (UDID)   shutdown      iPhone 17 (iPhone18,3)             simulated
+iPhone 17                          <device-id-redacted> (UDID)   shutdown      iPhone 17 (iPhone18,3)             simulated
+iPhone 17 Pro                      <device-id-redacted> (UDID)   shutdown      iPhone 17 Pro (iPhone18,1)         simulated
+iPhone 17 Pro Max                  <device-id-redacted> (UDID)   shutdown      iPhone 17 Pro Max (iPhone18,2)     simulated
+iPhone 18 Pro                      <device-id-redacted> (UDID)   shutdown      iPhone 18 Pro (iPhone19,2)         simulated
+iPhone Duo                         <device-id-redacted> (UDID)   shutdown      iPhone Duo (iPhone19,4)            simulated

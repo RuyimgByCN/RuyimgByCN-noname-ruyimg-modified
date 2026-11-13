@@ -1,0 +1,186 @@
+{
+  "at": "2026-11-14T00:29:45.503713+08:00",
+  "before_sha256": "92f9aa17ad9f21027e2363d77ce7f9371765699791ffa0073035864eb1494702",
+  "after_sha256": "2658808bbe361ab248e53166157e25606c47155eb31fa19947cb601eb3f35c89",
+  "reason": "Preserve actual L20 trigger/filter implementation; make four animation/CSS differences concrete. No status or review metadata change.",
+  "counts": {
+    "已复核等价": 634,
+    "简化近似": 3790,
+    "缺失": 0,
+    "上游未定义": 0
+  },
+  "effective_status_withdrawals": 215,
+  "new_equivalence_signoffs": 0,
+  "changes": [
+    {
+      "key": "L20:ui_hooks:_xigua_feiyanbahu_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:577",
+      "before_difference": "上游条目语义：进入游戏/gameStart 时显示飞扬跋扈、官阶/国标标题与光球。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：进入游戏/gameStart 时显示飞扬跋扈、官阶/国标标题与光球。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_guozhanChooseControlCHG@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:1172",
+      "before_difference": "上游条目语义：本机国战选择/弃牌/用牌控制窗口前后调整背景遮罩透明度。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：本机国战选择/弃牌/用牌控制窗口前后调整背景遮罩透明度。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_guozhan_diebiaoji_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:1854",
+      "before_difference": "上游条目语义：国战角色阵亡时删除其标记 UI 节点与背景。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：国战角色阵亡时删除其标记 UI 节点与背景。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_guozhan_duiweibiaoji_gua_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:1906",
+      "before_difference": "上游条目语义：国战势力/对位标记的初始化和位置布局。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：国战势力/对位标记的初始化和位置布局。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_guozhan_duiweibiaoji_gua_gua_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:1931",
+      "before_difference": "上游条目语义：国战对位标记随身份/角色变化刷新布局。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：国战对位标记随身份/角色变化刷新布局。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_guozhanhalfchghp@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2235",
+      "before_difference": "上游条目语义：国战开局临时调用 HP 样式点击处理器，保留原配置以兼容半血显示。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：国战开局临时调用 HP 样式点击处理器，保留原配置以兼容半血显示。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_shoushajisha_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2317",
+      "before_difference": "上游条目语义：记录击杀者连杀，按击杀数播放首杀/双杀等声音和动画。 无规则效果；原生额外递增 _shoushajisha_count；其余只置 UI flag，没有连杀语音/动画。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：记录击杀者连杀，按击杀数播放首杀/双杀等声音和动画。 无规则效果；原生额外递增 _shoushajisha_count；其余只置 UI flag，没有连杀语音/动画。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_diankuangtulu_gua@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2475",
+      "before_difference": "上游条目语义：source damageBegin4 且伤害恰为 3 时显示癫狂屠戮表演及语音。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：source damageBegin4 且伤害恰为 3 时显示癫狂屠戮表演及语音。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_wanjunqushou_gua@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2494",
+      "before_difference": "上游条目语义：source damageBegin4 且伤害至少 4 时显示万军取首动画/语音。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：source damageBegin4 且伤害至少 4 时显示万军取首动画/语音。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_o_o_recovertrigger@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2512",
+      "before_difference": "上游条目语义：recoverEnd 记录自身回合自回累计 3 点、或为他人回复达到其当前体力的累计次数；达阈值发自定义表现事件并定时清理。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：recoverEnd 记录自身回合自回累计 3 点、或为他人回复达到其当前体力的累计次数；达阈值发自定义表现事件并定时清理。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_o_o_miaoshouhuichun@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2557",
+      "before_difference": "上游条目语义：每轮救助其他角色达到三次的 o_omiaoshouhuichun 事件播放动画与语音。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：每轮救助其他角色达到三次的 o_omiaoshouhuichun 事件播放动画与语音。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_o_o_yishugaochao@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2572",
+      "before_difference": "上游条目语义：自身回合自回累计三点触发 o_oyishugaochao，播放动画与语音。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：自身回合自回累计三点触发 o_oyishugaochao，播放动画与语音。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_losehp_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2588",
+      "before_difference": "上游条目语义：失去体力事件播放对应音效。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：失去体力事件播放对应音效。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_mianshang_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2603",
+      "before_difference": "上游条目语义：伤害被防止/降为零时显示免伤提示特效。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游在damageZero/damageCancelled显示免伤定位动画（parent=player、scale=.77、x=[0,.525]/y=[0,.49]），不含减伤规则或独立音频。原生已有事件登记和prevented/amount<=0筛选，但handler仅写hook flag，未输出该定位动画；未实跑画面对照，仍简化近似。"
+    },
+    {
+      "key": "L20:ui_hooks:_player_baojiA@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2618",
+      "before_difference": "上游条目语义：event.num > 1 且 <= 2 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：event.num > 1 且 <= 2 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_player_baojiB@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2636",
+      "before_difference": "上游条目语义：event.num > 2 且 <= 3 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：event.num > 2 且 <= 3 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_player_baojiC@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2653",
+      "before_difference": "上游条目语义：event.num > 3 且 <= 4 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：event.num > 3 且 <= 4 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_player_baojiD@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2670",
+      "before_difference": "上游条目语义：event.num > 4 且 <= 5 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：event.num > 4 且 <= 5 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_player_baojiE@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2687",
+      "before_difference": "上游条目语义：event.num > 5 且 <= 6 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：event.num > 5 且 <= 6 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_player_baojiF@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2704",
+      "before_difference": "上游条目语义：原文字面 event > 6 且 event.num <=7（不是 event.num >6） 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：原文字面 event > 6 且 event.num <=7（不是 event.num >6） 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_player_baojiG@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2721",
+      "before_difference": "上游条目语义：event.num > 7 且 <= 8 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：event.num > 7 且 <= 8 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_player_baojiH@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2738",
+      "before_difference": "上游条目语义：event.num > 8 且 <= 9 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：event.num > 8 且 <= 9 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_jiubuff_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2755",
+      "before_difference": "上游条目语义：酒生效后给角色添加酒覆盖层。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：酒生效后给角色添加酒覆盖层。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_jiubuff_xiaoshi_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2777",
+      "before_difference": "上游条目语义：酒加成失效/结算后移除酒覆盖层。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：酒加成失效/结算后移除酒覆盖层。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_player_game_guagua@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2802",
+      "before_difference": "上游条目语义：回合/阶段变化时在角色处展示阶段标签与动态节点。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：回合/阶段变化时在角色处展示阶段标签与动态节点。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_guozhan_quanjubiaoji_guagua@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2921",
+      "before_difference": "上游条目语义：国战全局标记变动时更新对应 UI/提示音。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：国战全局标记变动时更新对应 UI/提示音。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_shiyongkapaitexiao_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2965",
+      "before_difference": "上游条目语义：按所用杀闪桃酒等牌创建专属动画并播放语音。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：按所用杀闪桃酒等牌创建专属动画并播放语音。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_shiyongkapaitexiao_xi_gua_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:3141",
+      "before_difference": "上游条目语义：用牌指定目标时按牌种/对象绘制专属指示线与命中特效。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：用牌指定目标时按牌种/对象绘制专属指示线与命中特效。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_shanghaipaishiyongtexiao_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:3296",
+      "before_difference": "上游条目语义：伤害牌使用时播放特定卡牌展示效果。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游useCardBegin且damage标签时播放龙形aar_longxingzhixiang，按是否game.me分speed=.5/.4、scale=.6及本人定位。原生已有CardUsed/伤害Kind白名单过滤，但handler仅写flag，未输出两分支实际龙形动画；未实跑对照，仍简化近似。"
+    },
+    {
+      "key": "L20:ui_hooks:_player_daojianfu_xxgg_fuzi_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:3337",
+      "before_difference": "上游条目语义：按刀剑斧风格、类型和伤害事件显示命中动画及声音。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：按刀剑斧风格、类型和伤害事件显示命中动画及声音。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_binglintu@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:4079",
+      "before_difference": "上游条目语义：斗地主兵临城下开局创建角色周边和中央界面的背景/按钮层。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：斗地主兵临城下开局创建角色周边和中央界面的背景/按钮层。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:ui_hooks:_dysp@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:4148",
+      "before_difference": "上游条目语义：开局调用手杀特效播放视频/动态表演。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：开局调用手杀特效播放视频/动态表演。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。已有触发/过滤不等于可见效果已迁入；对应动画/音频仍待实际组件消费与对照。"
+    },
+    {
+      "key": "L20:surfaces:extension.css@archive/upstream/noname-liuli/noname/extension/标记补充/extension.css:1-881",
+      "before_difference": "上游条目语义：入场、暴击、连杀、国战与各种角色覆盖/动画样式。 无规则效果；未把样式注入实际牌桌或建立相应 DOM，调试 patch 标志不是界面对照证据。",
+      "after_difference": "无规则效果；上游含本机/AI跋扈、飞扬的bahu/feiyan及guangqiu_bg图层、1.5s双轴keyframes，以及地主框/明忠/官阶/整肃/仁库/国战覆盖。原生applyL20MarkCssTheme只返回decade/shousha/classic.css路径；调试mark计数不是上述图层与关键帧的并排对照，保持原简化近似。"
+    },
+    {
+      "key": "L20:surfaces:group.css@archive/upstream/noname-liuli/noname/extension/标记补充/group.css:1-17",
+      "before_difference": "上游条目语义：选将选中角色的特定势力/data-nature 光效与边框。 无规则效果；未把样式注入实际牌桌或建立相应 DOM，调试 patch 标志不是界面对照证据。",
+      "after_difference": "无规则效果；上游专限decadeUI选将selected.selectable[data-nature=jingx]::before，使用group/sgroup.png的132x132圆环且无边框/阴影。当前未证明原生选择器/伪元素圆环与其一致；调试mark不能代替并排对照，保持原简化近似。"
+    }
+  ]
+}

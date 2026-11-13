@@ -412,6 +412,15 @@ fn u01_batch_a_real_match_6d_verification() {
         },
     );
     assert_eq!(e.state_core().deck.last().copied(), Some(red_c0));
+    let gain = e.open_choice().expect("dddjuxian_gain").clone();
+    let _ = submit(
+        &mut e,
+        0,
+        GameAction::Answer {
+            choice_id: gain.id,
+            selection: vec![ChoiceOption::HiddenCard(0)],
+        },
+    );
     assert!(e.state_core().player(0).hand.contains(&red_c1));
     assert_eq!(flag(&e, 0, "dddjuxian_top_used"), 1);
     assert_eq!(flag(&e, 0, "dddjuxian_ban"), 0);

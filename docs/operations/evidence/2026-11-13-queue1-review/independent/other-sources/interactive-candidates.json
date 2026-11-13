@@ -1,0 +1,385 @@
+{
+  "U06": {
+    "candidates": [
+      {
+        "key": "U06:skills:monkey@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:5",
+        "source_id": "U06",
+        "category": "skills",
+        "id": "monkey",
+        "upstream_ref": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:5",
+        "calling_event": "global useCardToBegin, other player Tao",
+        "native_test_location": "crates/engine-native/tests/g1_huanle/u06.rs:514",
+        "browser_executed_by_this_reviewer": false
+      },
+      {
+        "key": "U06:skills:xuelunyang@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:70",
+        "source_id": "U06",
+        "category": "skills",
+        "id": "xuelunyang",
+        "upstream_ref": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:70",
+        "calling_event": "player phaseBegin",
+        "native_test_location": "crates/engine-native/tests/g1_huanle/u06.rs:1017",
+        "browser_executed_by_this_reviewer": false
+      },
+      {
+        "key": "U06:skills:kuwu@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:53",
+        "source_id": "U06",
+        "category": "skills",
+        "id": "kuwu",
+        "upstream_ref": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:53",
+        "calling_event": "source damageSource, unlinked Sha damage; victim chooses he discard",
+        "native_test_location": "crates/engine-native/tests/g1_huanle/u06.rs:883",
+        "browser_executed_by_this_reviewer": false
+      }
+    ],
+    "insufficiency": null
+  },
+  "U07": {
+    "candidates": [
+      {
+        "key": "U07:skills:choudu@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:586",
+        "source_id": "U07",
+        "category": "skills",
+        "id": "choudu",
+        "upstream_ref": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:586",
+        "calling_event": "phaseUse, once",
+        "native_test_location": "crates/engine-native/tests/g1_wudian/u07.rs:551",
+        "browser_executed_by_this_reviewer": false
+      },
+      {
+        "key": "U07:skills:fuchou@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:508",
+        "source_id": "U07",
+        "category": "skills",
+        "id": "fuchou",
+        "upstream_ref": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:508",
+        "calling_event": "target shaBefore",
+        "native_test_location": "crates/engine-native/tests/g1_wudian/u07.rs:1086",
+        "browser_executed_by_this_reviewer": false
+      },
+      {
+        "key": "U07:skills:youzhan@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:422",
+        "source_id": "U07",
+        "category": "skills",
+        "id": "youzhan",
+        "upstream_ref": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:422",
+        "calling_event": "global shaBefore, target within distance 1",
+        "native_test_location": "crates/engine-native/tests/g1_wudian/u07.rs:344",
+        "browser_executed_by_this_reviewer": false
+      }
+    ],
+    "insufficiency": null
+  },
+  "L06": {
+    "candidates": [
+      {
+        "key": "L06:skills:_shengke@archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:62",
+        "source_id": "L06",
+        "category": "skills",
+        "id": "_shengke",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:62",
+        "calling_event": "target useCardToBegin, card element overcomes target element",
+        "native_test_location": "crates/engine-native/tests/l06_wuxing_eight.rs:103",
+        "browser_executed_by_this_reviewer": false
+      },
+      {
+        "key": "L06:skills:wuxingpan_skill@archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:173",
+        "source_id": "L06",
+        "category": "skills",
+        "id": "wuxingpan_skill",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:173",
+        "calling_event": "phaseUse, once, equipped",
+        "native_test_location": "crates/engine-native/tests/l06_wuxing_eight.rs:439",
+        "browser_executed_by_this_reviewer": false
+      }
+    ],
+    "insufficiency": "只有两个技能；卡牌wuxingpan不是第三个技能。"
+  },
+  "L22": {
+    "candidates": [],
+    "insufficiency": "五个技能都是静默自动钩子，没有玩家技能选择；三配置不充作技能。"
+  },
+  "L29": {
+    "candidates": [
+      {
+        "key": "L29:skills:mbcmqingzheng@noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1",
+        "source_id": "L29",
+        "category": "skills",
+        "id": "mbcmqingzheng",
+        "upstream_ref": "noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1",
+        "calling_event": "player phaseUseBegin",
+        "native_test_location": "crates/engine-native/tests/l29_longxue_eight.rs:417",
+        "browser_executed_by_this_reviewer": false,
+        "actual_upstream_definition": "archive/upstream/noname-liuli/noname/character/mobile.js:17117"
+      },
+      {
+        "key": "L29:skills:mbcmjiushi@noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1",
+        "source_id": "L29",
+        "category": "skills",
+        "id": "mbcmjiushi",
+        "upstream_ref": "noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1",
+        "calling_event": "chooseToUse Jiu; damageBegin/End and turnOverAfter subskills",
+        "native_test_location": "crates/engine-native/tests/l29_longxue_eight.rs:577",
+        "browser_executed_by_this_reviewer": false,
+        "actual_upstream_definition": "archive/upstream/noname-liuli/noname/character/mobile.js:17251"
+      },
+      {
+        "key": "L29:skills:mbcmfangzhu@noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1",
+        "source_id": "L29",
+        "category": "skills",
+        "id": "mbcmfangzhu",
+        "upstream_ref": "noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1",
+        "calling_event": "phaseUse once, other target distinct from last",
+        "native_test_location": "crates/engine-native/tests/l29_longxue_eight.rs:686",
+        "browser_executed_by_this_reviewer": false,
+        "actual_upstream_definition": "archive/upstream/noname-liuli/noname/character/mobile.js:17410"
+      }
+    ],
+    "insufficiency": null
+  },
+  "L10": {
+    "candidates": [
+      {
+        "key": "L10:skills:reguhuo@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:297",
+        "source_id": "L10",
+        "category": "skills",
+        "id": "reguhuo",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:297",
+        "calling_event": "chooseToUse / chooseToRespond",
+        "native_test_location": "crates/engine-native/tests/l10_epic_cards_eight.rs:498",
+        "browser_executed_by_this_reviewer": false
+      },
+      {
+        "key": "L10:skills:rangjie@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:422",
+        "source_id": "L10",
+        "category": "skills",
+        "id": "rangjie",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:422",
+        "calling_event": "player damageEnd, once per damage point",
+        "native_test_location": "crates/engine-native/tests/l10_epic_cards_eight.rs:609",
+        "browser_executed_by_this_reviewer": false
+      },
+      {
+        "key": "L10:skills:k_danggu@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2276",
+        "source_id": "L10",
+        "category": "skills",
+        "id": "k_danggu",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2276",
+        "calling_event": "enterGame / initial phaseBefore; choose clique partner",
+        "native_test_location": "crates/engine-native/tests/l10_epic_cards_eight.rs:717",
+        "browser_executed_by_this_reviewer": false
+      }
+    ],
+    "insufficiency": null
+  },
+  "L28": {
+    "candidates": [
+      {
+        "key": "L28:skills:th_buxu@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6372",
+        "source_id": "L28",
+        "category": "skills",
+        "id": "th_buxu",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6372",
+        "calling_event": "phaseUse, escalating he cost",
+        "native_test_location": "crates/engine-native/tests/l28_thunder_eight_match.rs:615",
+        "browser_executed_by_this_reviewer": false
+      },
+      {
+        "key": "L28:skills:th_zhengjing@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6018",
+        "source_id": "L28",
+        "category": "skills",
+        "id": "th_zhengjing",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6018",
+        "calling_event": "phaseUse once, timed minigame then distribute jing",
+        "native_test_location": "crates/engine-native/tests/l28_thunder_eight_match.rs:578",
+        "browser_executed_by_this_reviewer": false
+      },
+      {
+        "key": "L28:skills:th_yeyan@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8636",
+        "source_id": "L28",
+        "category": "skills",
+        "id": "th_yeyan",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8636",
+        "calling_event": "phaseUse limited, small/big mode",
+        "native_test_location": "crates/engine-native/tests/l28_thunder_eight_batch_b.rs:440",
+        "browser_executed_by_this_reviewer": false
+      }
+    ],
+    "insufficiency": null
+  },
+  "L27": {
+    "candidates": [
+      {
+        "key": "L27:skills:bolan@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:7747",
+        "source_id": "L27",
+        "category": "skills",
+        "id": "bolan",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:7747",
+        "calling_event": "player phaseUseBegin, random three skill candidates",
+        "native_test_location": "crates/engine-native/tests/l27_beautify_batch_b.rs:21",
+        "browser_executed_by_this_reviewer": false
+      },
+      {
+        "key": "L27:skills:reqimou@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:6059",
+        "source_id": "L27",
+        "category": "skills",
+        "id": "reqimou",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:6059",
+        "calling_event": "reqimou_m2.enable phaseUse -> choose number + chooseBool; confirm loseHp then useSkill(reqimou)",
+        "native_test_location": "crates/engine-native/tests/l27_beautify_match.rs:583",
+        "browser_executed_by_this_reviewer": false
+      },
+      {
+        "key": "L27:skills:new_meibu@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:1674",
+        "source_id": "L27",
+        "category": "skills",
+        "id": "new_meibu",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:1674",
+        "calling_event": "global phaseUseBegin, optional he discard",
+        "native_test_location": "crates/engine-native/tests/l27_new_meibu_batch3.rs:102",
+        "browser_executed_by_this_reviewer": false
+      }
+    ],
+    "insufficiency": null
+  },
+  "L19": {
+    "candidates": [
+      {
+        "key": "L19:skills:_huzhu@archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:698",
+        "source_id": "L19",
+        "category": "skills",
+        "id": "_huzhu",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:698",
+        "calling_event": "phaseUse once, human Tao to nearby injured human",
+        "native_test_location": "crates/engine-native/tests/l19_doomsday_match.rs:418",
+        "browser_executed_by_this_reviewer": false
+      },
+      {
+        "key": "L19:skills:ganran2@archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:435",
+        "source_id": "L19",
+        "category": "skills",
+        "id": "ganran2",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:435",
+        "calling_event": "recast equipment; active enable missing/commented in upstream",
+        "native_test_location": "crates/engine-native/tests/l19_doomsday_match.rs:373",
+        "browser_executed_by_this_reviewer": false
+      },
+      {
+        "key": "L19:skills:wujinmoshiRE1@archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:1869",
+        "source_id": "L19",
+        "category": "skills",
+        "id": "wujinmoshiRE1",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:1869",
+        "calling_event": "called by _wujinmoshiRE on enemy dieBefore; game.me accept/cancel extra skill",
+        "native_test_location": "crates/engine-native/tests/l19_doomsday_match.rs:519",
+        "browser_executed_by_this_reviewer": false
+      }
+    ],
+    "insufficiency": null
+  },
+  "L20": {
+    "candidates": [
+      {
+        "key": "L20:skills:kuanshi@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:5299",
+        "source_id": "L20",
+        "category": "skills",
+        "id": "kuanshi",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:5299",
+        "calling_event": "player phaseJieshuBegin",
+        "native_test_location": "crates/engine-native/tests/l20_mark_supplement_match.rs:821",
+        "browser_executed_by_this_reviewer": false
+      },
+      {
+        "key": "L20:skills:tspowei@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:4366",
+        "source_id": "L20",
+        "category": "skills",
+        "id": "tspowei",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:4366",
+        "calling_event": "initial phaseBefore/enterGame; own phaseBegin; global damageEnd; other phaseBegin optional action; dying fail",
+        "native_test_location": "crates/engine-native/tests/l20_mark_supplement_match.rs:697",
+        "browser_executed_by_this_reviewer": false
+      },
+      {
+        "key": "L20:skills:wengua@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6141",
+        "source_id": "L20",
+        "category": "skills",
+        "id": "wengua",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6141",
+        "calling_event": "wengua only audio/group after overwrite; use actual group wengua5 grant/other-player contribution entry",
+        "native_test_location": "crates/engine-native/tests/l20_mark_supplement_match.rs:425",
+        "browser_executed_by_this_reviewer": false
+      }
+    ],
+    "insufficiency": null
+  },
+  "U08": {
+    "candidates": [
+      {
+        "key": "U08:skills:yixin@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:337",
+        "source_id": "U08",
+        "category": "skills",
+        "id": "yixin",
+        "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:337",
+        "calling_event": "phaseUse limited, two he cards and injured target",
+        "native_test_location": "crates/engine-native/tests/u08_hero_kill_match.rs:403",
+        "browser_executed_by_this_reviewer": false
+      },
+      {
+        "key": "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+        "source_id": "U08",
+        "category": "skills",
+        "id": "bolehuiyan",
+        "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+        "calling_event": "global shaBegin, owner neither source nor target",
+        "native_test_location": "crates/engine-native/tests/u08_hero_kill_match_b.rs:311",
+        "browser_executed_by_this_reviewer": false
+      },
+      {
+        "key": "U08:skills:guifu@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:3095",
+        "source_id": "U08",
+        "category": "skills",
+        "id": "guifu",
+        "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:3095",
+        "calling_event": "phaseUse once; choose other target with equipped card, discard its e, then both draw1",
+        "native_test_location": "crates/engine-native/tests/u08_hero_kill_match_b.rs:431",
+        "browser_executed_by_this_reviewer": false
+      }
+    ],
+    "insufficiency": null
+  },
+  "L25": {
+    "candidates": [
+      {
+        "key": "L25:skills:wumou@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48975",
+        "source_id": "L25",
+        "category": "skills",
+        "id": "wumou",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48975",
+        "calling_event": "player phaseJieshuBegin, normal trick used in Play this turn",
+        "native_test_location": "crates/engine-native/tests/l25_zuan_match.rs:1029",
+        "browser_executed_by_this_reviewer": false
+      },
+      {
+        "key": "L25:skills:new_guixin@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:49077",
+        "source_id": "L25",
+        "category": "skills",
+        "id": "new_guixin",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:49077",
+        "calling_event": "player damageEnd, optional per damage point",
+        "native_test_location": "crates/engine-native/tests/l25_zuan_match.rs:1055",
+        "browser_executed_by_this_reviewer": false
+      },
+      {
+        "key": "L25:skills:gongxin@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:49506",
+        "source_id": "L25",
+        "category": "skills",
+        "id": "gongxin",
+        "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:49506",
+        "calling_event": "phaseUse twice, other handcard holder not gongxin_temp",
+        "native_test_location": "crates/engine-native/tests/decision34_round4_l25_zuan.rs:252",
+        "browser_executed_by_this_reviewer": false,
+        "native_existing_test_scope": "decision34_round4_l25_zuan.rs:252 is legacy debug VM. Current shared host real-event tests in swd_gongxin_hand_peek.rs:94/190 cover discard/topdeck version, not the L25 obtain/seal version."
+      }
+    ],
+    "insufficiency": null
+  }
+}

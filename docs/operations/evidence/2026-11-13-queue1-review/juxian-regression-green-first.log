@@ -1,0 +1,14 @@
+   Compiling engine-native-kernel v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 19.13s
+     Running tests/groups/g1.rs (target/debug/deps/g1-a4e6ec7f8e101885)
+
+running 3 tests
+test u01_juxian_gain::juxian_top_mode_requires_other_he_and_mode_cancel_keeps_payment ... ok
+test u01_juxian_gain::juxian_gain_planner_does_not_inspect_foreign_hand_faces ... ok
+test u01_juxian_gain::juxian_gain_selects_each_hidden_card_or_public_equipment_and_resumes_archive ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 241 filtered out; finished in 0.03s
+

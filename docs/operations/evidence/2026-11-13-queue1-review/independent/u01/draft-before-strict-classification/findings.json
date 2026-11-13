@@ -1,0 +1,2168 @@
+{
+  "reviewer": "/root/queue0_independent_review",
+  "date": "2026-11-13",
+  "head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "tracked_dirty_at_capture": false,
+  "versions": {
+    "rule": 333,
+    "ngsa": 107,
+    "schema": 5,
+    "abi": 759,
+    "ws": 8
+  },
+  "source_root": "/Users/ruyimg/Documents/Claude/sanguosha",
+  "native_root": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "executed": {
+    "cargo": 0,
+    "upstream_game": 0,
+    "browser": 0
+  },
+  "counts": {
+    "skills_reviewed": 64,
+    "generals_core_fields_compared": 31,
+    "equivalence_signoffs": 0,
+    "skill_recommendations_simplified": 64
+  },
+  "findings": [
+    {
+      "id": "U01-S01",
+      "inventory_key": "U01:skills:dddyuanzhen@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:6",
+      "skill": "dddyuanzhen",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 6,
+        "end_line": 36
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a.rs",
+          "line": 17
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "上游逐目标事件 useCardToPlayered 对照原生 CardUsed；后续增加或移除目标时，当前过滤依赖当时 u.targets，不能证明与最终单目标一致。内容中的弃牌/取消摸牌分支有实际实现。",
+      "counterexample_suggestion": "用牌初始仅一名距离2目标，在另一个触发中追加第二目标；比较远振是否仍要求弃牌。再做初始双目标删为单目标的反向场景。",
+      "existing_test_scope_and_gap": "u01_ddd_eight.rs:263 起确实断言距离1不触发、距离2弃牌/取消结果及挂起恢复/AI；未覆盖 useCardToPlayered 顺序和追加目标。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S02",
+      "inventory_key": "U01:skills:dddzhishu@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:37",
+      "skill": "dddzhishu",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 37,
+        "end_line": 58
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a.rs",
+          "line": 52
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "原生完全不枚举判定区牌；挪装备直接改 equips 并 grant/revoke，不能提供上游 moveCard 事件链。",
+      "counterexample_suggestion": "全场无装备，A判定区有可移给B的乐不思蜀；上游应能发动移动并令A对B用过河，原生入口无候选。",
+      "existing_test_scope_and_gap": "注册测试仅证明技能存在；未发现志书的真实移动、过河、取消或 pending 恢复断言。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S03",
+      "inventory_key": "U01:skills:dddxiaxing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:59",
+      "skill": "dddxiaxing",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 59,
+        "end_line": 243
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/skills_targets.rs",
+          "line": 306
+        },
+        {
+          "path": "crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_view_as.rs",
+          "line": 379
+        }
+      ],
+      "difference": "原生救人直接监听 Dying 并 emit 桃，没有上游 _save/chooseToUse 的可用牌过滤；主动 ActivateSkill 只检 sha_used_play_phase 并列全部其他角色，没有正常杀的距离过滤。共享 view-as 表确实另提供闪，不能误报缺闪。",
+      "counterexample_suggestion": "四人无武器，持侠标记者对距离2角色 ActivateSkill；核对正常杀不可达时是否被错误允许。救人时令被救者不能使用桃，再比较是否仍清本轮次数/发桃事件。",
+      "existing_test_scope_and_gap": "decision34_pack9_closure.rs:130–232 与 l11_taixu_boss_events.rs:618–865 有准备A/B/取消、无he、跨轮标记、主动杀、pending hash/event及AI隐藏牌独立断言；后者实际未造濒死、未响应闪、未测远目标/禁桃。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S04",
+      "inventory_key": "U01:skills:dddjuxian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:244",
+      "skill": "dddjuxian",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 244,
+        "end_line": 383
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a.rs",
+          "line": 100
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "缺获得目标 he 的选牌窗口；固定首张可能改变颜色以及第二次发动资格。每阶段次数被 turn_stamp 扩成每回合。",
+      "counterexample_suggestion": "目标同时有红色装备和黑色手牌，主人付红；选择红/黑应决定能否再次发动，原生只拿第一张。增加同回合第二出牌阶段再测模式重置。",
+      "existing_test_scope_and_gap": "u01_ddd_eight.rs:263 组的聚贤段覆盖mode取消不耗、唯一目标牌top同色、hand异色禁用及重复拒绝；没给目标两张可选he，没有选牌A/B、额外阶段或该后续窗口恢复。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S05",
+      "inventory_key": "U01:skills:dddjungui@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:384",
+      "skill": "dddjungui",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 384,
+        "end_line": 442
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a.rs",
+          "line": 157
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "弃牌候选没有各不相同花色限制，能弃两张同花色；本回合虚拟牌/转化花色记录不完整，并以 cards_used_play_phase>0 回退为一种花色。",
+      "counterexample_suggestion": "主人本回合未用牌，目标摸后有红桃红桃黑桃，需弃2时选择两红桃；原生可接受，上游过滤应拒绝。另用带花色虚拟牌验证减免。",
+      "existing_test_scope_and_gap": "旧closure对本技能是直接 invoke_p9_op(StorageSet) 并断言flags，非当前Host。未见当前Host异花色弃牌、两主体选择或挂起恢复测试。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S06",
+      "inventory_key": "U01:skills:dddjinggou@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:443",
+      "skill": "dddjinggou",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 443,
+        "end_line": 471
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/skills_damage.rs",
+          "line": 638
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/filtering/common.rs",
+          "line": 643
+        }
+      ],
+      "difference": "直接移入装备区也会发 Equipped，因此可能在没有使用武器时触发；实际用牌中询问早于 useCardAfter。范围与强制伤害分支本身存在。",
+      "counterexample_suggestion": "用技能从牌堆直接装备全场最大射程武器；上游没有 useCardAfter，原生 Equipped 会触发精彀。再叠加装备使用结束触发以检查询问顺序。",
+      "existing_test_scope_and_gap": "u01_ddd_eight.rs A组测非最大不触发、并列最大、目标伤1与pending恢复；g1_d3.rs:117、u01_d3_select_eight.rs 实装武器路径和恢复。未测直接装备与使用后的时序。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S07",
+      "inventory_key": "U01:skills:dddmoyan@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:472",
+      "skill": "dddmoyan",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 472,
+        "end_line": 510
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/support.rs",
+          "line": 768
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/skills_damage.rs",
+          "line": 902
+        }
+      ],
+      "difference": "global roundStart 被延后到本轮首次判定阶段。准备阶段前后发生伤害、跳过判定或轮首摸牌均可改变展示和增伤生效区间；原生直接处分未取牌，需另核对 ordering 的离场事件。",
+      "counterexample_suggestion": "上一轮末焱目标满足增伤条件，本轮 roundStart 后、首次判定前发生伤害；上游旧临时技能已到期并可能重选，原生尚未重开窗口。让第一角色跳过Judge可观察进一步延后。",
+      "existing_test_scope_and_gap": "u01_d3_moyan.rs:150 起实际测选人/取牌两次NGSA恢复、手牌超限/目标死亡/同轮/下一轮/取消/空库；nc10_live_hidden_cards.rs:319 测两公开持牌窗口隐藏牌独立；均没有 roundStart 对照，部分断言已固定首次Judge近似。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S08",
+      "inventory_key": "U01:skills:dddshilie@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:511",
+      "skill": "dddshilie",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 511,
+        "end_line": 655
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a.rs",
+          "line": 269
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "Host只能本人Play主动虚拟杀；未写响应闪所需flag。只存 shown_count，不能排除已明置实体。当前回合等于自己使条件固定为两倍自己hp。",
+      "counterexample_suggestion": "他人杀指向自己时持足点数未明手牌：上游可发动示烈当闪，原生没有窗口。第二回合重用同一已明牌，上游不得再选而原生仅有计数。",
+      "existing_test_scope_and_gap": "旧closure通过直接旧VM写flag断言可转杀闪，不能证明Host。未发现当前Host示烈选择、等和补明、响应或保存恢复断言。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S09",
+      "inventory_key": "U01:skills:dddyeshen@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:656",
+      "skill": "dddyeshen",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 656,
+        "end_line": 746
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a.rs",
+          "line": 327
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "省去黑牌A/B选择；目标上限固定2且跳过铁索 CardUsed/重铸的牌事件，不能正确带动用牌历史、暗织等相关技能。",
+      "counterexample_suggestion": "底3中放黑杀和黑过河拆桥，当前角色选择过河拆桥当铁索应可选四目标；另取消目标应重铸并留下用牌/重铸事件，原生固定首黑且最多2。",
+      "existing_test_scope_and_gap": "旧closure直接invoke旧VM验证3→2→1→火伤，不是当前Host End路径；没测选黑A/B、0目标重铸、多于2目标、底牌次序或pending。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S10",
+      "inventory_key": "U01:skills:dddqiaoduan@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:747",
+      "skill": "dddqiaoduan",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 747,
+        "end_line": 801
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a.rs",
+          "line": 426
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "上游 chooseCardTarget 未传position，player.js 默认h；native he_options额外允许装备。分拆窗口保留取消前不支付，但不能把候选区差异视为等价。",
+      "counterexample_suggestion": "自己无手牌只有1装备，场上刚横置人数1且有伤者；上游默认手牌选择器无可选牌，原生可选装备置底并回血。",
+      "existing_test_scope_and_gap": "旧closure直接invoke旧VM测试linkflag/回血；没有当前Host两分支、装备候选、取消两窗口与NGSA恢复断言。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S11",
+      "inventory_key": "U01:skills:ddddiedang@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:802",
+      "skill": "ddddiedang",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 802,
+        "end_line": 860
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a.rs",
+          "line": 513
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "次数是每回合，源为每个出牌阶段一次；同回合额外出牌阶段被错误拒绝。原生状态0在选弃牌前已摸3，需严格保持强制支付语义。",
+      "counterexample_suggestion": "同回合增加第二个出牌阶段，第一阶段用一次后，第二阶段源允许再次用，原生once_per_turn拒绝。另在状态1测试弃3/取消非法选择。",
+      "existing_test_scope_and_gap": "u01_ddd_eight.rs A组断言状态0净增2、非极值不翻、次turn极值翻和本turn重复拒绝；未实际测状态1弃3摸1或额外Play。旧closure两种状态为旧VM直调。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S12",
+      "inventory_key": "U01:skills:dddanliu@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:861",
+      "skill": "dddanliu",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 861,
+        "end_line": 967
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a.rs",
+          "line": 568
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "原生异色反而自动交换；源无交换、无奖励。该差异无需把AI偏好当规则即可构造。",
+      "counterexample_suggestion": "主人展示红桃桃、对方展示黑桃杀；源两牌原位结束，原生互换。另同黑选拒绝验证不摸2，同红同意验证回血。",
+      "existing_test_scope_and_gap": "未发现当前Host暗流真实事件断言；缺异色不交换、同色同意/拒绝、双方选牌A/B与各窗口恢复。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S13",
+      "inventory_key": "U01:skills:dddguiying@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:968",
+      "skill": "dddguiying",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 968,
+        "end_line": 1203
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a.rs",
+          "line": 639
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "没有主公资格检查；只处理第一吴角色，且没有响应拒绝、最高同点和最低场牌选取/取消窗口。",
+      "counterexample_suggestion": "非主公孙亮且两名吴角色各有同点两牌；源不能发主公技，原生可先处理第一人。改为真主公让第一人拒绝、第二人响应，检查循环和选牌。",
+      "existing_test_scope_and_gap": "仅注册了技能，无归萤的实际主公/多人响应、平点选择、拒绝或挂起恢复断言。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S14",
+      "inventory_key": "U01:skills:dddbingjian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1204",
+      "skill": "dddbingjian",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 1204,
+        "end_line": 1442
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a.rs",
+          "line": 688
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "无响应闪/响应杀入口；原生将帮助对象直接当杀目标，取消帮助就不出牌，对他人弃牌固定前N而非自行选。",
+      "counterexample_suggestion": "本人1手牌遭杀，用并肩当闪并不选择帮助目标；源应补1后闪掉，原生无入口。主动杀时帮助友方A但杀敌方B，原生不能分开。",
+      "existing_test_scope_and_gap": "未发现当前Host并肩的真实事件测试；缺1/3手牌正例、2手牌负例、两次上限、帮助取消和响应恢复。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S15",
+      "inventory_key": "U01:skills:dddtongyu@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1443",
+      "skill": "dddtongyu",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 1443,
+        "end_line": 1583
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a.rs",
+          "line": 768
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "原生未走五谷：仅额外抽所付张数，Tag0另摸1只写 hand_locked，Tag1取得全部remaining。该锁flag没有消费者，缺方向、人数牌池和余牌赠送。",
+      "counterexample_suggestion": "三人付两张不同花色牌，应公开5张逐人选；原生只生成2张。第一人选择锁手牌后尝试使用手牌，源禁用而原生flag未落实。",
+      "existing_test_scope_and_gap": "仅注册测试；没有五谷真实事件、异花色反例、两方向、锁牌、退出、余牌给回或恢复断言。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S16",
+      "inventory_key": "U01:skills:dddzhilian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1584",
+      "skill": "dddzhilian",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 1584,
+        "end_line": 1675
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b.rs",
+          "line": 44
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "结算提前到结束阶段开始；弃牌固定每人he第一张；回收遍历整个弃牌堆杀，不限本回合。",
+      "counterexample_suggestion": "弃牌堆预放上一回合杀，当前仅主人和男A各用一张牌。选择摸牌后，上游旧杀仍弃，原生收回；选弃时给每人两张he检验选牌。",
+      "existing_test_scope_and_gap": "没有当前Host执恋的两人/三人、男女、生死、旧杀范围、双主体弃牌或pending测试。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S17",
+      "inventory_key": "U01:skills:dddjijian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1676",
+      "skill": "dddjijian",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 1676,
+        "end_line": 1806
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b.rs",
+          "line": 105
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "男性展示任意手牌，没有同色/杀或锦囊约束；完成后双方直接各摸1，完全没有虚拟牌选择与使用。次数也按turn而非phase。",
+      "counterexample_suggestion": "男性展示红色无中生有与红杀，双方应各用其中一个不重复牌名；原生只摸1。另选红桃桃应被上游拒绝，原生可展示。",
+      "existing_test_scope_and_gap": "技能注册存在；没有赍剑当前Host的交杀、男性反例、同色约束、两次用牌或取消/恢复测试。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S18",
+      "inventory_key": "U01:skills:dddjijian_old@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1807",
+      "skill": "dddjijian_old",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 1807,
+        "end_line": 2004
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b.rs",
+          "line": 150
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "省掉男性按手牌名称连续使用虚拟牌，只按同色判断后摸1；没有每次去名/目标窗口，once_per_turn也限制额外阶段。",
+      "counterexample_suggestion": "男性展示两张黑牌，主人交黑杀，另有未展示无中、过河；源应能连续选两种牌使用，原生仅摸1。",
+      "existing_test_scope_and_gap": "仅注册旧版名称；没有先展示/不交/两次虚拟用牌/重名拒绝与保存恢复断言。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S19",
+      "inventory_key": "U01:skills:dddzhengjun@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2005",
+      "skill": "dddzhengjun",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 2005,
+        "end_line": 2193
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b.rs",
+          "line": 211
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "候选没有绑定事件受影响者，不能选择多个相等者或自己；手牌弃牌自动首he；装备确认后自动挑首装备/首空槽，fallback甚至向占槽角色追加装备。",
+      "counterexample_suggestion": "在Play令座位B失牌，但旁观者A先于B且手牌与主人相等；原生会处理A。装备类设所有槽占满，检查是否出现两件同槽装备。",
+      "existing_test_scope_and_gap": "没有真实整军事件/三类别/受影响者过滤、分类次数、装备合法移动或pending恢复测试。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S20",
+      "inventory_key": "U01:skills:dddxianxi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2194",
+      "skill": "dddxianxi",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 2194,
+        "end_line": 2295
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b.rs",
+          "line": 360
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "没有修改原杀targets，也不等杀结算和伤害结果；N固定为1、仅一目标，因此不是原技能的追加攻击及未伤补偿。",
+      "counterexample_suggestion": "原杀只有A，追加B和C，令B响应闪、C受杀伤；源事后只算B一次，原生无法追加两人且提前处理伤害。",
+      "existing_test_scope_and_gap": "旧closure仅名称存在；没有原杀追加、伤害来源关联、N=0/2、支付取消或各窗口恢复断言。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S21",
+      "inventory_key": "U01:skills:dddlingyong@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2296",
+      "skill": "dddlingyong",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 2296,
+        "end_line": 2332
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b.rs",
+          "line": 417
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "以拿牌代替判定牌直接使用；硬上限2次；时机由PhaseBegin猜测，不能涵盖所有phaseCancelled/Skipped。",
+      "counterexample_suggestion": "跳过出牌阶段且预置连续3张非杀判定牌，第3张之后才杀；源可连续使用3张，原生至多取2到手。",
+      "existing_test_scope_and_gap": "未发现当前Host灵涌触发断言；缺真实跳过/取消、连续3次、实际用牌、杀停止与pending恢复。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S22",
+      "inventory_key": "U01:skills:dddxuxiao@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2333",
+      "skill": "dddxuxiao",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 2333,
+        "end_line": 2406
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b.rs",
+          "line": 460
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "CardsLost分支未限定discard原因；一次只用一张，没有多牌循环；目标检查以当前Bing为主，不能代替完整兵粮合法性。",
+      "counterexample_suggestion": "同一次弃牌阶段弃两张黑基本，原生放一张后结束，源可再放另一张。再用非discard失牌入弃事件检验误触发。",
+      "existing_test_scope_and_gap": "u01_ddd_eight.rs:约680起实际弃牌阶段：红桃不触发，黑杀转Bing且目标摸2，选牌窗口恢复；只弃1张，未测多牌循环、非discard及第二选择取消。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S23",
+      "inventory_key": "U01:skills:dddxuyu@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2407",
+      "skill": "dddxuyu",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 2407,
+        "end_line": 2422
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b.rs",
+          "line": 490
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "形成严格摸/弃交替，第二张弃后本体不再询问摸；时机也在正常CardUsed而非牌完全用后。",
+      "counterexample_suggestion": "连续使用两张牌，第一次同意摸；第二次弃1后源仍可再摸1并挂义务，原生直接结束。",
+      "existing_test_scope_and_gap": "u01_ddd_eight.rs:585起断言第一张pass/confirm、恢复和第二张强制弃flag清零；没有断言第二张弃后还能发动，因此覆盖并未排除该缺口。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S24",
+      "inventory_key": "U01:skills:dddshijian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2423",
+      "skill": "dddshijian",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 2423,
+        "end_line": 2518
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b.rs",
+          "line": 533
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "额外结算选项被替换成用牌者摸1；没有增加原牌效果次数，触发在使用中而非useAfter。",
+      "counterexample_suggestion": "目标第3牌为无中生有，主人选额外结算应使该牌多结算一次（额外摸2）；原生只给用牌者摸1。另一分支应主人摸1。",
+      "existing_test_scope_and_gap": "只有注册及旧路径名称，未见当前Host第2/3计数、额外结算A/B、不给牌、无目标牌或pending恢复断言。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S25",
+      "inventory_key": "U01:skills:dddxuyu_old@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2519",
+      "skill": "dddxuyu_old",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 2519,
+        "end_line": 2573
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b.rs",
+          "line": 595
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "整回合牌数替代本出牌阶段牌数；第二出牌阶段不会以第1张重新触发；当前询问也早于useCardAfter。",
+      "counterexample_suggestion": "同回合插入两个出牌阶段，各阶段第一张都应可旧续语摸2；原生使用回合总计数使第二阶段失去机会。",
+      "existing_test_scope_and_gap": "仅旧版注册；没有第1/3张、摸取消、两个Play、阶段外用牌或保存恢复断言。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S26",
+      "inventory_key": "U01:skills:dddshijian_old@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2574",
+      "skill": "dddshijian_old",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 2574,
+        "end_line": 2635
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b.rs",
+          "line": 648
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "把临时全局条件缩成特定角色后继；计数与时机仍为CardUsed/turn而非出牌阶段useAfter。",
+      "counterexample_suggestion": "同一回合的第二个出牌阶段，第3张后应可重新发动；原生按turn总计数可能漏掉。目标限定差异需在phaseUseAfter到期前构造嵌套其他人phaseUse方可实测，不能直接跨普通回合认作反例。",
+      "existing_test_scope_and_gap": "没有当前Host旧实荐的第三/第四张、不同后继人、无he反例、取消或恢复测试。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S27",
+      "inventory_key": "U01:skills:dddtaisi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2636",
+      "skill": "dddtaisi",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 2636,
+        "end_line": 2705
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b.rs",
+          "line": 707
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "可赠送旧回合弃牌；多名伤害来源只认最后一人，且rawflag在未显式清理时可能跨回合。End begin也提前于phaseEnd。",
+      "counterexample_suggestion": "A先伤主人、B后伤主人，本回合End把牌给A仍应摸2，原生只认B。弃牌堆另放旧回合实体，验证不应可选。",
+      "existing_test_scope_and_gap": "没有太思体力变化/旧弃牌过滤、多来源伤害、数量选择、取消或pending恢复断言。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S28",
+      "inventory_key": "U01:skills:dddquche@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2706",
+      "skill": "dddquche",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 2706,
+        "end_line": 2818
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b.rs",
+          "line": 762
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "没有循环和距离减少，黑杀无法另选目标；只覆盖一次红给和对同一人的杀。",
+      "counterexample_suggestion": "红给友方A、黑杀敌方B，再红给C继续；源可以完成，原生黑牌直接杀A且流程结束。设B原距2检查距离累计。",
+      "existing_test_scope_and_gap": "u01_ddd_eight.rs B组确实测首红取消不耗限定、给红后黑杀同人伤1、重复限定拒绝和黑牌pending恢复；没有异目标、距离或第二轮。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S29",
+      "inventory_key": "U01:skills:dddqianlong@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2819",
+      "skill": "dddqianlong",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 2819,
+        "end_line": 2850
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b.rs",
+          "line": 818
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "没主公资格检查；没有取消奖惩事件的消费者，原有奖惩可与摸3同时发生。",
+      "counterexample_suggestion": "非主公曹髦杀人应无主公技摸3；作为主公杀忠臣应取消弃光奖惩而保留手牌，核对原生是否仍执行惩罚。",
+      "existing_test_scope_and_gap": "decision34_pack9_closure.rs:233起用invoke旧VM断言摸3和flag，不是真实死亡/奖惩Host路径；没有主公资格、奖惩取消或保存恢复测试。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S30",
+      "inventory_key": "U01:skills:ddddongcha@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2851",
+      "skill": "ddddongcha",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 2851,
+        "end_line": 2940
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b.rs",
+          "line": 828
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "时机从TurnBegin/phaseEnd变成Prepare/End begin；鉴多于2时把所有余牌交当前人，缺其选1窗口及保留存量。",
+      "counterexample_suggestion": "先在鉴堆预存2，再本次双方各放1共4；End主人拿1，目标应只拿1留2，原生目标拿3清堆。",
+      "existing_test_scope_and_gap": "u01_ddd_eight.rs B组实测双方各放1、第二窗口observer为目标、堆len2；没有鉴>2的End分配、双方选牌A/B、取消发动或该阶段恢复。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S31",
+      "inventory_key": "U01:skills:dddzhijie@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2941",
+      "skill": "dddzhijie",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 2941,
+        "end_line": 3067
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b.rs",
+          "line": 902
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "该flag没有读取者；不是闪/无懈响应，允许主动空做弃2摸2，且错误加每回合上限。",
+      "counterexample_suggestion": "他人杀指向本人，两同色鉴应能当闪；异色鉴在无懈窗口可响应。原生没有这两个入口，却可在自己Play发动。",
+      "existing_test_scope_and_gap": "u01_ddd_eight.rs B组主动异色弃2后断言flag2与手牌2、鉴不足拒绝和pending恢复；这些断言没有实际响应，正固定了当前近似。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S32",
+      "inventory_key": "U01:skills:dddqiahua@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3068",
+      "skill": "dddqiahua",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 3068,
+        "end_line": 3111
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c.rs",
+          "line": 21
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "计数代替明牌实体，不能过滤已明牌；仅flag没有实际grant恂恂。已有恂恂实例的filter能读取flag，不能令不持技角色凭空拥有该实例。",
+      "counterexample_suggestion": "目标无恂恂，hp2，主人明置其两牌；推进目标Draw，应出现恂恂但当前没有授技。下回合仍持原牌时检查不能重复明置。",
+      "existing_test_scope_and_gap": "仅注册；没有他人回合、未明数量、hp变化、实际临时恂恂及选择恢复断言。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S33",
+      "inventory_key": "U01:skills:dddxunxun@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3112",
+      "skill": "dddxunxun",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 3112,
+        "end_line": 3148
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c.rs",
+          "line": 60
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "没有四牌不足时重洗；只提供选2而无组内重排，且中途允许取消。恰化flag也不等于给目标真正安装此技能。",
+      "counterexample_suggestion": "四张已知牌A/B/C/D，将顶组改成B/A；原生只有集合选择不能表示两种顺序。牌库仅2而弃牌足够时比较实际取牌数。",
+      "existing_test_scope_and_gap": "无当前Host恂恂执行测试；缺强制摆牌、顶/底双组排序、洗牌、恰化临时授技与pending恢复。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S34",
+      "inventory_key": "U01:skills:dddfusi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3149",
+      "skill": "dddfusi",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 3149,
+        "end_line": 3173
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c.rs",
+          "line": 111
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "没有明牌身份，仅count；一到Discard就把全部牌忽略上限，未明手牌同样受益。全明锁手所需另flag当前Host未写。",
+      "counterexample_suggestion": "给主人1明牌加3未明牌且hp1，Discard应丢未明超限牌，原生全部忽略。再给全明主人回合中的他人响应闪，核对未禁手牌。",
+      "existing_test_scope_and_gap": "无当前Host腹笥混合明暗手牌/全明锁use与respond、获牌解除或恢复断言。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S35",
+      "inventory_key": "U01:skills:dddfusi_global@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3174",
+      "skill": "dddfusi_global",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 3174,
+        "end_line": 3368
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c.rs",
+          "line": 120
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "fusi_source可回退到没有腹笥的自己或非当前人的任意手牌；只有同意/拒绝，没有四种记忆；转移到手而非借用实体实际用牌。",
+      "counterexample_suggestion": "当前人需要闪/桃而腹笥角色有明牌，源可借用；原生只Play转给当前人。一个来源选择本回合拒绝后再次申请，原生无记忆。",
+      "existing_test_scope_and_gap": "仅注册，没有来源资格、明牌过滤、四分支、真实用牌/响应、次数或两主体pending恢复测试。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S36",
+      "inventory_key": "U01:skills:dddtuoji@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3369",
+      "skill": "dddtuoji",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 3369,
+        "end_line": 3387
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c.rs",
+          "line": 157
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "未关联实际借用实体和原主；用牌尚未结束即问，shown_count使普通他人用牌也可能触发。",
+      "counterexample_suggestion": "主人有shown_count且没有发生借用，他人从自己手中用普通杀，源不触发拓迹，原生可问摸3。另让借用牌结算中主人获未明牌。",
+      "existing_test_scope_and_gap": "无借用来源身份、未明牌负例、取消或拓迹pending恢复断言；仅存在注册名。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S37",
+      "inventory_key": "U01:skills:dddchashi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3388",
+      "skill": "dddchashi",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 3388,
+        "end_line": 3506
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c.rs",
+          "line": 172
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "同type2只实现trick对trick，漏基本对基本及装备对装备；后续任意他人匹配牌可能兑现，未绑定原目标。",
+      "counterexample_suggestion": "主人弃红桃杀，目标用黑桃闪类基本牌（合法窗口）时type2同为basic应兑现；原生不同花色且非trick不认。另让旁人先用匹配牌。",
+      "existing_test_scope_and_gap": "没有当前Host察势suit/type2两路径、原目标限制、匹配后清除、取消或恢复测试。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S38",
+      "inventory_key": "U01:skills:dddqice@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3507",
+      "skill": "dddqice",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 3507,
+        "end_line": 3568
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c.rs",
+          "line": 219
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "实际追到card_kind.rs:71后确认Le/Bing/ShanDian均在is_trick_kind内，不能误报缺延时锦囊。内容的摸2/禁用/用锦囊解除有落点；可证差异是触发优先级1且不可选序，而上游本体未声明priority、get.priority返回0。",
+      "counterexample_suggestion": "给同一人另一个默认优先级的准备阶段技能，安排其消耗/检查禁用状态，记录两个技能可选次序及结果；这是选序反例建议，尚无实跑。另补延时锦囊解除回归以守住当前正确范围。",
+      "existing_test_scope_and_gap": "u01_ddd_eight.rs:891起覆盖confirm/pass、禁用负例、Wuzhong解除、pending恢复/AI；仅用普通锦囊，未测延时锦囊或useCard1顺序。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S39",
+      "inventory_key": "U01:skills:dddmiaoxing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3569",
+      "skill": "dddmiaoxing",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 3569,
+        "end_line": 3726
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c.rs",
+          "line": 241
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "省略三倍初发与三组分配；每组空时可能重新初始化，数量固定2+2；只选1组且自动弃，无调两组选择。",
+      "counterexample_suggestion": "初发4应得12再分4/4/4，原生普通4后Draw时另造2/2。让一水相耗空后再摸牌，检查是否错误再建而非保持空。",
+      "existing_test_scope_and_gap": "仅注册；无gameDraw倍率、开局分组、两组平衡、选弃实体、0张水相持久化或pending恢复测试。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S40",
+      "inventory_key": "U01:skills:dddfushi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3727",
+      "skill": "dddfushi",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 3727,
+        "end_line": 3865
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c.rs",
+          "line": 313
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "缺男目标自己的组选与取消，强制沿用主人组选；时机为CardUsed/CardResponded Normal。",
+      "counterexample_suggestion": "主人先交换水相1，再选男性A；A应可拒绝或选水相2，原生直接交换1。分别记录三处实体牌集合，检验不是等张数假相同。",
+      "existing_test_scope_and_gap": "无真实基本响应/回合一次、两主体不同组选、男方拒绝、女性过滤或恢复断言。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S41",
+      "inventory_key": "U01:skills:dddfenji@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3866",
+      "skill": "dddfenji",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 3866,
+        "end_line": 3943
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c.rs",
+          "line": 376
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "只有三种锦囊；没有设置原摸牌为0或取消原弃牌，也没有按伤害摸/按目标数弃的后效。",
+      "counterexample_suggestion": "选择无中生有或五谷，上游牌堆存在时可选，原生没有；选决斗并实际造成1伤，核对原摸2是否仍执行及额外摸伤害数。",
+      "existing_test_scope_and_gap": "u01_ddd_eight.rs C组断言只三Tag、决斗伤1和used mask、第二触发排Tag0、pending恢复；未检查取消原阶段和两种后效，实际固化三牌近似。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S42",
+      "inventory_key": "U01:skills:dddxiaheng@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3944",
+      "skill": "dddxiaheng",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 3944,
+        "end_line": 4018
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c.rs",
+          "line": 417
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "同目标并未移除实际技能；没有伤过3不同人后的代价改写；原生自动弃牌且上限强制保底1。",
+      "counterexample_suggestion": "两次Play均选同一个他人，第一次上游已失狭横，第二次不应再问，原生flag不阻止。另已伤3人时选两个他人应不再减上限。",
+      "existing_test_scope_and_gap": "u01_ddd_eight.rs C组测试两人是否含本人决定maxhp、同目标flag；没有检查实际失技，反而只断言flag。弃牌A/B、三人改写、强制与恢复均缺。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S43",
+      "inventory_key": "U01:skills:dddfengzheng@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4019",
+      "skill": "dddfengzheng",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 4019,
+        "end_line": 4212
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c.rs",
+          "line": 461
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "没有点数13校验，非持技者无全局入口；N计使用次数而非人数，分配仅一人且没有>2失技。",
+      "counterexample_suggestion": "选单张点数1在原生可发动；源不允许。让两名不同非持技者各用一次13，再分N给两人，对比入口与轮首牌数。",
+      "existing_test_scope_and_gap": "没有Host丰政sum13反例、全局使用者、上一轮人数、多人分配、失技或pending恢复测试。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S44",
+      "inventory_key": "U01:skills:dddyulv@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4213",
+      "skill": "dddyulv",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 4213,
+        "end_line": 4306
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c.rs",
+          "line": 525
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "漏loseAsync/cardsDiscard/equip等其他入弃路径；没有第二次强制换律；当前人弃牌不自选且可以取消。",
+      "counterexample_suggestion": "同回合连续两次弃与律同点牌，第二次源必须换律，原生律不变。再用使用后自然入弃的同点牌检查漏触发。",
+      "existing_test_scope_and_gap": "仅注册；无开局入场、各种入弃原因、同点负例、第二次更换、被询问者选择或恢复测试。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S45",
+      "inventory_key": "U01:skills:dddyulv_old@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4307",
+      "skill": "dddyulv_old",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 4307,
+        "end_line": 4402
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c.rs",
+          "line": 576
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "没有连续选项历史、重宣和结束当前回合，且漏源其他入弃事件；不能与新版合并背书。",
+      "counterexample_suggestion": "同回合两次点7入弃且两次都选摸，源第二次后必须改点并结束turn，原生照常继续出牌。",
+      "existing_test_scope_and_gap": "无旧玉律声明边界、相同/不同选项、终止turn、取消非法输入或恢复测试。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S46",
+      "inventory_key": "U01:skills:dddfenye@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4403",
+      "skill": "dddfenye",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 4403,
+        "end_line": 4874
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c.rs",
+          "line": 617
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "整个旁人加入、组均值、多人胜者/不重复败者和逐次取消被省去；一次普通拼点不能替代。",
+      "counterexample_suggestion": "主人10点对手9点，旁人以1点加入主人方，均值5.5应败；原生仍判主人10胜。赢者拒绝出杀时原生已自动杀。",
+      "existing_test_scope_and_gap": "仅注册；没有组队A/B/取消、均值同点、多名赢家、合法杀选择或挂起恢复断言。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S47",
+      "inventory_key": "U01:skills:dddshichao@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4875",
+      "skill": "dddshichao",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 4875,
+        "end_line": 4974
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c.rs",
+          "line": 671
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_c_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "调整的主体倒置；候选不按第N大档；guard没有伤害取消消费者或加mark，次轮递进不存在。",
+      "counterexample_suggestion": "主人2手上限4、主公上限6，选到5手目标，应把主人调成5且目标仍5；原生反把目标调成4，主人仍2。目标之后伤主人，比较取消选择。",
+      "existing_test_scope_and_gap": "无实际逝潮手牌档、自己调整、受伤前A/B、mark递进和恢复测试。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S48",
+      "inventory_key": "U01:skills:dddyouxue@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4975",
+      "skill": "dddyouxue",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 4975,
+        "end_line": 5017
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d.rs",
+          "line": 21
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "每轮变每本人回合；首次可选别人；每个owner有独立holder而非全场唯一游标，距离最低1也改变0距离边界。",
+      "counterexample_suggestion": "两名管宁共存，先后到自己Prepare，应引用同一游标，原生各自建holder。第一轮直接选他人能观察初始化差别。",
+      "existing_test_scope_and_gap": "u01_ddd_eight.rs D组断言Prepare选1后下次排除1，只验证私有flag；没有roundStart、第一轮本人、双持技者共享、距离与恢复。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S49",
+      "inventory_key": "U01:skills:dddchengjing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5018",
+      "skill": "dddchengjing",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 5018,
+        "end_line": 5130
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d.rs",
+          "line": 46
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "未核对游标、原用牌者及使用历史，弃牌也可当经；没有经时仍可转换为杀；缺使用后给下家的实体选择。",
+      "counterexample_suggestion": "无游标角色结束前弃一装备，原生可错误记经。清空经堆后主动应拒绝却默认sha；有经转换后验证赠送原实体。",
+      "existing_test_scope_and_gap": "注册之外未见承经真实历史、无经拒绝、载体属性、游标下家赠送和挂起恢复断言。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S50",
+      "inventory_key": "U01:skills:dddduanbing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5131",
+      "skill": "dddduanbing",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 5131,
+        "end_line": 5222
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d.rs",
+          "line": 138
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "错误新增每回合一次，强迫预选杀目标；伤害不要求卡牌，转移未筛兵粮/全部，可把乐或闪电移走且没完整重复兵粮检查。",
+      "counterexample_suggestion": "先兵粮摸2后拒绝用杀，上游仍完成前半；原生先需杀目标。自己judge仅乐不思蜀，造成非牌技能伤害时源不触发转移，原生会移动该乐。",
+      "existing_test_scope_and_gap": "u01_ddd_eight.rs D组测黑杀变Bing、虚拟杀伤1、转移该唯一Bing、once拒绝与transfer pending恢复；未测原生新增限制及非兵粮/技能伤害反例。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S51",
+      "inventory_key": "U01:skills:dddxiaoxing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5223",
+      "skill": "dddxiaoxing",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 5223,
+        "end_line": 5295
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d.rs",
+          "line": 216
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "没有gameDraw/init时点，range/handlimit没有对应消费者；lostflag不是实际removeSkills，其他依赖真实技能存在的规则会看到错误状态。",
+      "counterexample_suggestion": "开局第一次Prepare前比较应有手牌7而原生4；放距离4目标验证range+3。获得技能后立即查看补牌，及濒死后实际has_skill。",
+      "existing_test_scope_and_gap": "没有枭行开局、过程中获得、两个modifier、濒死实际失技或恢复断言。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S52",
+      "inventory_key": "U01:skills:dddlangzhi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5296",
+      "skill": "dddlangzhi",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 5296,
+        "end_line": 5426
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d.rs",
+          "line": 230
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "漏攻击范围、逐人展示选牌及等量多张交换；取消没有拿全/失技，不能表示源的另一结算分支。",
+      "counterexample_suggestion": "一名范围外有牌者、一名范围内有两张he；源只处理内者且可选第二张，原生取两人的首牌。选择不交换应拿全并失技，原生结束。",
+      "existing_test_scope_and_gap": "仅注册；缺范围正反例、每人选牌A/B、多张交换、不换失技和多窗口恢复断言。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S53",
+      "inventory_key": "U01:skills:dddfuyi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5427",
+      "skill": "dddfuyi",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 5427,
+        "end_line": 5592
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d.rs",
+          "line": 293
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "原生可发动而当前上游本体恒不发动；也无群/主公资格、实际缺stock技能恢复、选恢复1项；global群杀flag只有旧VM写。意图修复需另作规则裁定，不能称此为等价。",
+      "counterexample_suggestion": "把原生lostflag置真，任意非群杀手造成死亡：原生出现附义；在当前上游同条件不会出现。小JS布尔求值仅可证明表达式，不能充当游戏实际触发。",
+      "existing_test_scope_and_gap": "未发现真实附义死亡、群主公资格、上游filter表达式、弃2自选、恢复某个技能或群杀次数回归。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S54",
+      "inventory_key": "U01:skills:dddzhuanshe@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5593",
+      "skill": "dddzhuanshe",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 5593,
+        "end_line": 5713
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d.rs",
+          "line": 315
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "没有同名牌追加目标，也没有是否曾用同名的核对；给牌者即使用了仍可被伤害，时机提前。",
+      "counterexample_suggestion": "给A一张杀，A本阶段真实用杀；源可加目标且End不能以没用伤A，原生没有追加而仍问伤A。",
+      "existing_test_scope_and_gap": "没有交牌名称、同名/不同名、allowMultiple反例、使用后禁止惩罚、取消或恢复测试。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S55",
+      "inventory_key": "U01:skills:dddweiqiu@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5714",
+      "skill": "dddweiqiu",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 5714,
+        "end_line": 5728
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d.rs",
+          "line": 379
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "完全未取消原Recover，所以目标仍能回血；本技能最关键的替代效果缺失。",
+      "counterexample_suggestion": "主人空手，A从1/3回1：源A仍1、主人摸1；原生A变2、主人摸1。再连发第二次检查空手条件。",
+      "existing_test_scope_and_gap": "无危秋真实回血正例、主人非空手反例、取消恢复/次数与恢复轨迹测试。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S56",
+      "inventory_key": "U01:skills:dddlianer@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5729",
+      "skill": "dddlianer",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 5729,
+        "end_line": 5795
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d.rs",
+          "line": 388
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "限点flag没有消费者，用/打出/救人仍可高点；抢在使用中回收会干扰实体载体；不在table/discard时的摸1是上游不存在的收益。",
+      "counterexample_suggestion": "红桃7用完并回收后尝试用8/响应8/救人8，源均不合法，原生无过滤。装备使用在手中时触发的回收fallback可额外摸1。",
+      "existing_test_scope_and_gap": "暗织测试特意disable涟洏，不是涟洏覆盖；没有实体回收、三动作点数边界、多载体不设cap、取消与pending恢复测试。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S57",
+      "inventory_key": "U01:skills:dddanzhi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5796",
+      "skill": "dddanzhi",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 5796,
+        "end_line": 5839
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d.rs",
+          "line": 423
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "队列0已修末色、目标独占、首次黑目标和挂起恢复；当前仍在Prepare而非TurnBegin，trigger为Normal/1/不可选序而上游默认0/可选序。Taoyuan的原生整体无懈模型与上游逐目标模型，以及既有Duel实体CardId0收尾限制仍未清。不得上调等价。",
+      "counterexample_suggestion": "轮开始后但Prepare前嵌入用牌/响应，比较暗织判断所见末色；同窗口另一技能与暗织选序互换。单独保留Taoyuan逐目标无懈和Duel实体0的边界，不把它们冒充本轮新实跑。",
+      "existing_test_scope_and_gap": "当前u01_dddanzhi_regression.rs20测试实际断言末次响应双色、A/B/取消、pending完整档仅归一auth_generation、首黑/红、失技和到期、多目标/隐式目标、五谷/桃园无懈恢复、装备/直接装备、嵌套历史、AfterTriggers加目标两方向、phaseEnd仍保留；本agent本轮未重跑，非浏览器对照。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S58",
+      "inventory_key": "U01:skills:dddshixing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5840",
+      "skill": "dddshixing",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 5840,
+        "end_line": 5888
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d.rs",
+          "line": 444
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "互斥分支丢掉同时拥有；用任意牌计数替代是否使用锦囊；只写mode没人读取/授技，漏LoseHp事件。",
+      "counterexample_suggestion": "场上健康女性且本回合未用锦囊，源同时有享乐与酒诗，原生只有mode1且均无实际授予；令女性LoseHp验证重算。",
+      "existing_test_scope_and_gap": "无失兴两独立条件四种组合、锦囊/非锦囊、女性体力增减、实际技能能力或恢复断言。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S59",
+      "inventory_key": "U01:skills:ddddanggu@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5889",
+      "skill": "ddddanggu",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 5889,
+        "end_line": 5947
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d.rs",
+          "line": 454
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "漏横置数<群数和最少差额，link只日志而非事件，无法带动巧断；没有negative的he弃牌规则。",
+      "counterexample_suggestion": "群2人、已有2横置且另人未横置，源不触发而原生问；群3且0横置，原生可只选1。检查巧断是否随此link触发。",
+      "existing_test_scope_and_gap": "未见群/横置差额边界、强制多选、真实Linked下游、装备计手限/弃牌或pending恢复测试。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S60",
+      "inventory_key": "U01:skills:dddfuzong@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5948",
+      "skill": "dddfuzong",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 5948,
+        "end_line": 5988
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d.rs",
+          "line": 483
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "没有主公/群死者过滤；开局延后、数量保底1；死亡选牌主体与实际卡选择都缺失。",
+      "counterexample_suggestion": "非主公刘宏或非群角色死亡，源无此弃牌，原生仍弃。真主公有红装和黑手牌，死者应能选其中任意，原生固定首。",
+      "existing_test_scope_and_gap": "只有注册；没有主公/非主公、非群死亡负例、开局时点、死者选牌A/B或恢复测试。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S61",
+      "inventory_key": "U01:skills:dddlanghuai@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5989",
+      "skill": "dddlanghuai",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 5989,
+        "end_line": 6057
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d.rs",
+          "line": 508
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "把替代摸牌变额外摸，结果为0时错误保底1；即使allow_cancel=false，confirm_spec仍含Pass且步骤只识Confirm，强制场景可能通过Pass绕过。",
+      "counterexample_suggestion": "空手且状态0，源发动后本次摸0，原生至少额外1并保留原摸2；del状态直接答Pass验证是否绕过必发动。",
+      "existing_test_scope_and_gap": "u01_ddd_eight.rs D组只断言del时allow_cancel=false、确认后清del并切state，没断言总摸牌数；缺0/4花色、两个状态数量、Pass非法拒绝及恢复。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S62",
+      "inventory_key": "U01:skills:dddxuanlun@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:6058",
+      "skill": "dddxuanlun",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 6058,
+        "end_line": 6235
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d.rs",
+          "line": 532
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "End时机提前；不能表达上下分置及组内排序；数量允许少于4；del后仍可重复选第二项，未按手牌/装备数量限制选项。",
+      "counterexample_suggestion": "受伤确认后he恰4，A全部放底与B两顶两底应有不同牌堆，原生只顶；已有del再次到End仍可选Tag1，源不允许。取消应在最初damageEnd。",
+      "existing_test_scope_and_gap": "u01_ddd_eight.rs D组真实决斗伤害后摸4、End选Tag1、下次朗怀强制，未覆盖置牌选项、4张下界、del禁止项或取消；推荐root浏览器第3样本，本agent未实跑。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S63",
+      "inventory_key": "U01:skills:dddjiexing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:6236",
+      "skill": "dddjiexing",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 6236,
+        "end_line": 6301
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d.rs",
+          "line": 617
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "恢复未改向，原人仍回复，数量也固定1；装备在别人实际装上及相关触发后才偷，原人的use/equip副作用已经发生；直接装备也会错误重置。",
+      "counterexample_suggestion": "别人将回2，确认劫形后源仅主人回2，原生别人回2加主人回1。别人使用武器带精彀，比较原人是否已触发精彀；直接移装自己检验不应重置。",
+      "existing_test_scope_and_gap": "暗织回归涉及劫形/装备历史但没有证明劫形恢复改向、num2、原装备排除/重置条件；没有独立当前Host劫形正反/取消/恢复断言。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    },
+    {
+      "id": "U01-S64",
+      "inventory_key": "U01:skills:dddbailei@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:6302",
+      "skill": "dddbailei",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+        "line": 6302,
+        "end_line": 6368
+      },
+      "native": [
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d.rs",
+          "line": 680
+        },
+        {
+          "path": "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs",
+          "line": 1
+        }
+      ],
+      "difference": "无装备最多/hp1候选限制；拿牌不能自选；伤害前lostflag使被救回仍失技能，并非确认离场。",
+      "counterexample_suggestion": "选装备非最多且hp2目标，源无合法分支，原生可伤。hp1目标受伤后有人桃救活，源应保留拜泪，原生早置lost。",
+      "existing_test_scope_and_gap": "u01_ddd_eight.rs D组测拿唯一牌A与对hp1伤害B后lost、下次不问、mode pending；没测候选非法、两he选牌、被救活和真实removeSkills。",
+      "evidence_type": "static_source_comparison",
+      "runtime_reproduced_by_reviewer": false,
+      "status_recommendation": "简化近似"
+    }
+  ],
+  "general_data_boundaries": [
+    {
+      "inventory_key": "U01:generals:ddd_handang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:5",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 5
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 11
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_wuzhi@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:11",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 11
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 12
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_xujing@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:17",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 17
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 13
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_caomao@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:23",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 23
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 14
+      },
+      "boundaries": [
+        "isZhugong=true没有对应ExtensionGeneral字段；本项主公资格/候选池未验证，相关主公技能另见逐技能表",
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_xinxianying@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:30",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 30
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 15
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_xianglang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:36",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 36
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 16
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_yujin@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:42",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 42
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 17
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_liuye@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:48",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 48
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 18
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_baosanniang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:54",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 54
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 19
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_zhenji@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:60",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 60
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 20
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_zhaoang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:66",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 66
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 21
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_zhouchu@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:72",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 72
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 22
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_liuba@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:78",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 78
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 23
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_jianshuo@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:84",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 84
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 24
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_guanning@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:90",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 90
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 25
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_dingfeng@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:96",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 96
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 26
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_caoshuang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:102",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 102
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 27
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_xuelingyun@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:108",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 108
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 28
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_liuhong@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:114",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 114
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 29
+      },
+      "boundaries": [
+        "isZhugong=true没有对应ExtensionGeneral字段；本项主公资格/候选池未验证，相关主公技能另见逐技能表",
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_xiahouxuan@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:121",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 121
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 30
+      },
+      "boundaries": [
+        "names=夏侯|玄没有对应字段，姓名显示/姓名规则未验证",
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_zhangkai@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:128",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 128
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 31
+      },
+      "boundaries": [
+        "源hp3/maxHp4；general_assembly.rs:10及general_select.rs:97有初始hp专门分支，不能把常量4误报为hp4",
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_liangxi@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:135",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 135
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 32
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_wangkanglvkai@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:141",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 141
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 33
+      },
+      "boundaries": [
+        "names=王|伉-吕|凯没有对应字段，姓名显示/姓名规则未验证",
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_sunliang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:148",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 148
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 34
+      },
+      "boundaries": [
+        "isZhugong=true没有对应ExtensionGeneral字段；本项主公资格/候选池未验证，相关主公技能另见逐技能表",
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_lie@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:155",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 155
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 35
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_kebineng@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:161",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 161
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 36
+      },
+      "boundaries": [
+        "isZhugong=true没有对应ExtensionGeneral字段；本项主公资格/候选池未验证，相关主公技能另见逐技能表",
+        "names=null|null没有对应字段，姓名显示/姓名规则未验证",
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_qianzhao@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:169",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 169
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 37
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_zhangmiao@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:175",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 175
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 38
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_zhangcheng@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:181",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 181
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 39
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_liuchong@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:187",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 187
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 40
+      },
+      "boundaries": [
+        "资产另有中文ddd刘冲；coexistence按name去重，不能与ddd_liuchong视为同一个目录ID",
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    },
+    {
+      "inventory_key": "U01:generals:ddd_luoxian@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:193",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+        "line": 193
+      },
+      "native": {
+        "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+        "line": 41
+      },
+      "boundaries": [
+        "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+      ],
+      "core_fields_equal": true
+    }
+  ]
+}

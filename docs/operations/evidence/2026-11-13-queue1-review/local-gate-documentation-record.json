@@ -1,0 +1,42 @@
+{
+  "at": "2026-11-14T00:58:36+08:00",
+  "method": "Read full file immediately before additive insert; old dated sections and tables preserved.",
+  "files": [
+    {
+      "path": "docs/architecture/native-progress.md",
+      "before_sha256": "a8afbf3e68045638e4bc62be26789adf2180d490b97fd752c497e7f50fc05f39",
+      "after_sha256": "9fd0a918849ad9da4febe81903abfd461e4a6cab7215543604e681e375898b87",
+      "old_text_preserved": true
+    },
+    {
+      "path": "docs/architecture/native-remaining-ledger.md",
+      "before_sha256": "9be59dc0f001ed6c577401ae576309580cfad8cc743c3d5b5814315ec2955bc6",
+      "after_sha256": "47be5c1ebfec4100be24ac3b598428ec944829f83b7c0403eef9b12c6a355131",
+      "old_text_preserved": false
+    },
+    {
+      "path": "docs/architecture/native-rules-baseline.md",
+      "before_sha256": "992013f10ef38116901c26ab2545b75d87334b214e5622bb9b89d306b575a70d",
+      "after_sha256": "66bb0a201a34ae1b7984178298099f6c95337f3588828cffb8967042070a3d0a",
+      "old_text_preserved": false
+    },
+    {
+      "path": "docs/migration/g0/README.md",
+      "before_sha256": "88ec62345c75a6ba87c7bc30dbdc9c1bad5f7b259cc57f89ba82d6b5e10ba198",
+      "after_sha256": "74e1318e9e0f34e1d6b2556fa184ef1b3431217e51b3a1e55c5bcec76e87b5e4",
+      "old_text_preserved": false
+    },
+    {
+      "path": "docs/migration/upstream-extension-reconstruction.md",
+      "before_sha256": "a35b66ba35c1f7033fdb3d9deaaf48daadce8358ad5129ee29f6c74ff332ecab",
+      "after_sha256": "492ace1b139b28a225d602e974043d2769f15e1c3783366aa1b84f9c598e001f",
+      "old_text_preserved": false
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-19-source-signoff-32/README.md",
+      "before_sha256": "4d89001b0f0a4ff20cd4ac1d279194d2e949ee7b03f5b133819537c0e473236d",
+      "after_sha256": "2e83f1331fe9356ccbcc2d8df92ccd86eb532c14e3d3b3a7b4e1fd4ede9dc41a",
+      "old_text_preserved": false
+    }
+  ]
+}

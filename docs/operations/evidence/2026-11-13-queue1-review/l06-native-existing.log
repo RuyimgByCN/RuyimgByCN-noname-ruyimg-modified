@@ -1,0 +1,9 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.31s
+     Running tests/groups/l_rounds.rs (target/debug/deps/l_rounds-6b5ace321b7c4bdf)
+
+running 2 tests
+test l06_wuxing_eight::l06_wuxingpan_and_skill_six_dimension_real_match_equivalence ... ok
+test l06_wuxing_eight::l06_shengke_six_dimension_real_match_equivalence ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 79 filtered out; finished in 0.05s
+

@@ -1,0 +1,23 @@
+{
+  "raw_path": "archive/upstream/noname-liuli/noname/extension/龙血玄黄/extension.js",
+  "raw_sha256": "e3fad7cf47bfb5a6f6b55d21bd6dbdd7b44753a6b92d7407a2a1c88bb71d2db7",
+  "old_decoded_source_path": "docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js",
+  "old_decoded_source_sha256": "8be88d4425367646cf8364a2ded0493bce384604bd2460279ed4394cbfad69fe",
+  "checks": [
+    {
+      "id": "mbqianlong",
+      "raw_char_offset": 426634,
+      "raw_block_chars": 4427,
+      "decoded_block_chars": 4427,
+      "exact_block_equal": true
+    },
+    {
+      "id": "_CMeffects",
+      "raw_char_offset": 376065,
+      "raw_block_chars": 50567,
+      "decoded_block_chars": 45067,
+      "exact_block_equal": false
+    }
+  ],
+  "scope": "重新读取并提取真实archive对象，不读旧复核结论。整体尾段并非字节相同，不能据局部相同说整个副本等价；只有各对象exact_block_equal的结果有效。"
+}

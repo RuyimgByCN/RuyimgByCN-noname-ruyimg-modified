@@ -1,0 +1,38 @@
+{
+  "at": "2026-11-14T00:56:17.621031+08:00",
+  "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "owned_product_files": [
+    "crates/engine-native-content/src/content/host/step/u01_batch_a.rs",
+    "crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs",
+    "crates/engine-native-kernel/src/archive/known_prompts.rs",
+    "crates/engine-native/tests/groups/g1.rs",
+    "crates/engine-native/tests/u01_ddd_eight.rs",
+    "crates/engine-native/tests/u01_juxian_gain.rs"
+  ],
+  "owned_public_documents": [
+    "docs/architecture/native-progress.md",
+    "docs/architecture/native-remaining-ledger.md",
+    "docs/architecture/native-rules-baseline.md",
+    "docs/migration/upstream-extension-reconstruction.md",
+    "docs/operations/evidence/2026-10-19-source-signoff-32/README.md",
+    "docs/migration/g0/README.md",
+    "docs/migration/g0/L06-wuxing.md",
+    "docs/migration/g0/L10-史诗卡牌.md",
+    "docs/migration/g0/L19-末日乱斗.md",
+    "docs/migration/g0/L20-标记补充.md",
+    "docs/migration/g0/L22-段位制裁.md",
+    "docs/migration/g0/L25-祖安武将.md",
+    "docs/migration/g0/L27-选将美化.md",
+    "docs/migration/g0/L28-雷霆万钧.md",
+    "docs/migration/g0/L29-龙血玄黄.md",
+    "docs/migration/g0/U01-3D精选.md",
+    "docs/migration/g0/U06-欢乐卡牌.md",
+    "docs/migration/g0/U07-玩点论杀.md",
+    "docs/migration/g0/U08-英雄杀.md"
+  ],
+  "owned_inventory": "docs/migration/g0/inventory_status.json",
+  "owned_evidence_prefix": "docs/operations/evidence/2026-11-13-queue1-review",
+  "preserve_initial_untracked_paths": 672,
+  "exact_tracked_changes_verified": true,
+  "stage_policy": "Explicit owned files plus owned evidence prefix only; no repository-wide add, no initial untracked path may enter the index."
+}

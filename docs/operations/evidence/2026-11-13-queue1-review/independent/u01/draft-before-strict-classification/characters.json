@@ -1,0 +1,995 @@
+[
+  {
+    "name": "ddd_handang",
+    "inventory_key": "U01:generals:ddd_handang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:5",
+    "upstream": {
+      "sex": "male",
+      "group": "wu",
+      "hp": 4,
+      "max_hp": 4,
+      "skills": [
+        "dddxianxi"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 5
+    },
+    "native": {
+      "group": "wu",
+      "sex": "male",
+      "max_hp": 4,
+      "skills": [
+        "dddxianxi"
+      ],
+      "line": 11
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_wuzhi",
+    "inventory_key": "U01:generals:ddd_wuzhi@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:11",
+    "upstream": {
+      "sex": "male",
+      "group": "wei",
+      "hp": 3,
+      "max_hp": 3,
+      "skills": [
+        "dddlingyong",
+        "dddxuxiao"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 11
+    },
+    "native": {
+      "group": "wei",
+      "sex": "male",
+      "max_hp": 3,
+      "skills": [
+        "dddlingyong",
+        "dddxuxiao"
+      ],
+      "line": 12
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_xujing",
+    "inventory_key": "U01:generals:ddd_xujing@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:17",
+    "upstream": {
+      "sex": "male",
+      "group": "shu",
+      "hp": 3,
+      "max_hp": 3,
+      "skills": [
+        "dddxuyu",
+        "dddshijian"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 17
+    },
+    "native": {
+      "group": "shu",
+      "sex": "male",
+      "max_hp": 3,
+      "skills": [
+        "dddxuyu",
+        "dddshijian"
+      ],
+      "line": 13
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_caomao",
+    "inventory_key": "U01:generals:ddd_caomao@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:23",
+    "upstream": {
+      "sex": "male",
+      "group": "wei",
+      "hp": 3,
+      "max_hp": 3,
+      "skills": [
+        "dddtaisi",
+        "dddquche",
+        "dddqianlong"
+      ],
+      "lord": true,
+      "names": null,
+      "line": 23
+    },
+    "native": {
+      "group": "wei",
+      "sex": "male",
+      "max_hp": 3,
+      "skills": [
+        "dddtaisi",
+        "dddquche",
+        "dddqianlong"
+      ],
+      "line": 14
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "isZhugong=true没有对应ExtensionGeneral字段；本项主公资格/候选池未验证，相关主公技能另见逐技能表",
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_xinxianying",
+    "inventory_key": "U01:generals:ddd_xinxianying@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:30",
+    "upstream": {
+      "sex": "female",
+      "group": "wei",
+      "hp": 3,
+      "max_hp": 3,
+      "skills": [
+        "ddddongcha",
+        "dddzhijie"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 30
+    },
+    "native": {
+      "group": "wei",
+      "sex": "female",
+      "max_hp": 3,
+      "skills": [
+        "ddddongcha",
+        "dddzhijie"
+      ],
+      "line": 15
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_xianglang",
+    "inventory_key": "U01:generals:ddd_xianglang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:36",
+    "upstream": {
+      "sex": "male",
+      "group": "shu",
+      "hp": 3,
+      "max_hp": 3,
+      "skills": [
+        "dddqiahua",
+        "dddfusi",
+        "dddtuoji"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 36
+    },
+    "native": {
+      "group": "shu",
+      "sex": "male",
+      "max_hp": 3,
+      "skills": [
+        "dddqiahua",
+        "dddfusi",
+        "dddtuoji"
+      ],
+      "line": 16
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_yujin",
+    "inventory_key": "U01:generals:ddd_yujin@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:42",
+    "upstream": {
+      "sex": "male",
+      "group": "wei",
+      "hp": 4,
+      "max_hp": 4,
+      "skills": [
+        "dddzhengjun"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 42
+    },
+    "native": {
+      "group": "wei",
+      "sex": "male",
+      "max_hp": 4,
+      "skills": [
+        "dddzhengjun"
+      ],
+      "line": 17
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_liuye",
+    "inventory_key": "U01:generals:ddd_liuye@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:48",
+    "upstream": {
+      "sex": "male",
+      "group": "wei",
+      "hp": 3,
+      "max_hp": 3,
+      "skills": [
+        "dddchashi",
+        "dddqice"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 48
+    },
+    "native": {
+      "group": "wei",
+      "sex": "male",
+      "max_hp": 3,
+      "skills": [
+        "dddchashi",
+        "dddqice"
+      ],
+      "line": 18
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_baosanniang",
+    "inventory_key": "U01:generals:ddd_baosanniang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:54",
+    "upstream": {
+      "sex": "female",
+      "group": "shu",
+      "hp": 3,
+      "max_hp": 3,
+      "skills": [
+        "dddzhilian",
+        "dddjijian"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 54
+    },
+    "native": {
+      "group": "shu",
+      "sex": "female",
+      "max_hp": 3,
+      "skills": [
+        "dddzhilian",
+        "dddjijian"
+      ],
+      "line": 19
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_zhenji",
+    "inventory_key": "U01:generals:ddd_zhenji@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:60",
+    "upstream": {
+      "sex": "female",
+      "group": "wei",
+      "hp": 3,
+      "max_hp": 3,
+      "skills": [
+        "dddmiaoxing",
+        "dddfushi"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 60
+    },
+    "native": {
+      "group": "wei",
+      "sex": "female",
+      "max_hp": 3,
+      "skills": [
+        "dddmiaoxing",
+        "dddfushi"
+      ],
+      "line": 20
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_zhaoang",
+    "inventory_key": "U01:generals:ddd_zhaoang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:66",
+    "upstream": {
+      "sex": "male",
+      "group": "wei",
+      "hp": 4,
+      "max_hp": 4,
+      "skills": [
+        "dddfenji"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 66
+    },
+    "native": {
+      "group": "wei",
+      "sex": "male",
+      "max_hp": 4,
+      "skills": [
+        "dddfenji"
+      ],
+      "line": 21
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_zhouchu",
+    "inventory_key": "U01:generals:ddd_zhouchu@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:72",
+    "upstream": {
+      "sex": "male",
+      "group": "wu",
+      "hp": 5,
+      "max_hp": 5,
+      "skills": [
+        "dddxiaheng"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 72
+    },
+    "native": {
+      "group": "wu",
+      "sex": "male",
+      "max_hp": 5,
+      "skills": [
+        "dddxiaheng"
+      ],
+      "line": 22
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_liuba",
+    "inventory_key": "U01:generals:ddd_liuba@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:78",
+    "upstream": {
+      "sex": "male",
+      "group": "shu",
+      "hp": 3,
+      "max_hp": 3,
+      "skills": [
+        "dddfengzheng",
+        "dddyulv"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 78
+    },
+    "native": {
+      "group": "shu",
+      "sex": "male",
+      "max_hp": 3,
+      "skills": [
+        "dddfengzheng",
+        "dddyulv"
+      ],
+      "line": 23
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_jianshuo",
+    "inventory_key": "U01:generals:ddd_jianshuo@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:84",
+    "upstream": {
+      "sex": "male",
+      "group": "qun",
+      "hp": 4,
+      "max_hp": 4,
+      "skills": [
+        "dddfenye",
+        "dddshichao"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 84
+    },
+    "native": {
+      "group": "qun",
+      "sex": "male",
+      "max_hp": 4,
+      "skills": [
+        "dddfenye",
+        "dddshichao"
+      ],
+      "line": 24
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_guanning",
+    "inventory_key": "U01:generals:ddd_guanning@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:90",
+    "upstream": {
+      "sex": "male",
+      "group": "qun",
+      "hp": 3,
+      "max_hp": 3,
+      "skills": [
+        "dddyouxue",
+        "dddchengjing"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 90
+    },
+    "native": {
+      "group": "qun",
+      "sex": "male",
+      "max_hp": 3,
+      "skills": [
+        "dddyouxue",
+        "dddchengjing"
+      ],
+      "line": 25
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_dingfeng",
+    "inventory_key": "U01:generals:ddd_dingfeng@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:96",
+    "upstream": {
+      "sex": "male",
+      "group": "wu",
+      "hp": 4,
+      "max_hp": 4,
+      "skills": [
+        "dddduanbing"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 96
+    },
+    "native": {
+      "group": "wu",
+      "sex": "male",
+      "max_hp": 4,
+      "skills": [
+        "dddduanbing"
+      ],
+      "line": 26
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_caoshuang",
+    "inventory_key": "U01:generals:ddd_caoshuang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:102",
+    "upstream": {
+      "sex": "male",
+      "group": "wei",
+      "hp": 5,
+      "max_hp": 5,
+      "skills": [
+        "dddzhuanshe",
+        "dddweiqiu"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 102
+    },
+    "native": {
+      "group": "wei",
+      "sex": "male",
+      "max_hp": 5,
+      "skills": [
+        "dddzhuanshe",
+        "dddweiqiu"
+      ],
+      "line": 27
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_xuelingyun",
+    "inventory_key": "U01:generals:ddd_xuelingyun@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:108",
+    "upstream": {
+      "sex": "female",
+      "group": "wei",
+      "hp": 3,
+      "max_hp": 3,
+      "skills": [
+        "dddlianer",
+        "dddanzhi"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 108
+    },
+    "native": {
+      "group": "wei",
+      "sex": "female",
+      "max_hp": 3,
+      "skills": [
+        "dddlianer",
+        "dddanzhi"
+      ],
+      "line": 28
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_liuhong",
+    "inventory_key": "U01:generals:ddd_liuhong@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:114",
+    "upstream": {
+      "sex": "male",
+      "group": "qun",
+      "hp": 4,
+      "max_hp": 4,
+      "skills": [
+        "dddshixing",
+        "ddddanggu",
+        "dddfuzong"
+      ],
+      "lord": true,
+      "names": null,
+      "line": 114
+    },
+    "native": {
+      "group": "qun",
+      "sex": "male",
+      "max_hp": 4,
+      "skills": [
+        "dddshixing",
+        "ddddanggu",
+        "dddfuzong"
+      ],
+      "line": 29
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "isZhugong=true没有对应ExtensionGeneral字段；本项主公资格/候选池未验证，相关主公技能另见逐技能表",
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_xiahouxuan",
+    "inventory_key": "U01:generals:ddd_xiahouxuan@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:121",
+    "upstream": {
+      "sex": "male",
+      "group": "wei",
+      "hp": 3,
+      "max_hp": 3,
+      "skills": [
+        "dddlanghuai",
+        "dddxuanlun"
+      ],
+      "lord": false,
+      "names": "夏侯|玄",
+      "line": 121
+    },
+    "native": {
+      "group": "wei",
+      "sex": "male",
+      "max_hp": 3,
+      "skills": [
+        "dddlanghuai",
+        "dddxuanlun"
+      ],
+      "line": 30
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "names=夏侯|玄没有对应字段，姓名显示/姓名规则未验证",
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_zhangkai",
+    "inventory_key": "U01:generals:ddd_zhangkai@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:128",
+    "upstream": {
+      "sex": "male",
+      "group": "qun",
+      "hp": 3,
+      "max_hp": 4,
+      "skills": [
+        "dddjiexing",
+        "dddbailei"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 128
+    },
+    "native": {
+      "group": "qun",
+      "sex": "male",
+      "max_hp": 4,
+      "skills": [
+        "dddjiexing",
+        "dddbailei"
+      ],
+      "line": 31
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "源hp3/maxHp4；general_assembly.rs:10及general_select.rs:97有初始hp专门分支，不能把常量4误报为hp4",
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_liangxi",
+    "inventory_key": "U01:generals:ddd_liangxi@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:135",
+    "upstream": {
+      "sex": "male",
+      "group": "wei",
+      "hp": 4,
+      "max_hp": 4,
+      "skills": [
+        "dddtongyu"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 135
+    },
+    "native": {
+      "group": "wei",
+      "sex": "male",
+      "max_hp": 4,
+      "skills": [
+        "dddtongyu"
+      ],
+      "line": 32
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_wangkanglvkai",
+    "inventory_key": "U01:generals:ddd_wangkanglvkai@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:141",
+    "upstream": {
+      "sex": "male",
+      "group": "shu",
+      "hp": 4,
+      "max_hp": 4,
+      "skills": [
+        "dddbingjian"
+      ],
+      "lord": false,
+      "names": "王|伉-吕|凯",
+      "line": 141
+    },
+    "native": {
+      "group": "shu",
+      "sex": "male",
+      "max_hp": 4,
+      "skills": [
+        "dddbingjian"
+      ],
+      "line": 33
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "names=王|伉-吕|凯没有对应字段，姓名显示/姓名规则未验证",
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_sunliang",
+    "inventory_key": "U01:generals:ddd_sunliang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:148",
+    "upstream": {
+      "sex": "male",
+      "group": "wu",
+      "hp": 3,
+      "max_hp": 3,
+      "skills": [
+        "ddddiedang",
+        "dddanliu",
+        "dddguiying"
+      ],
+      "lord": true,
+      "names": null,
+      "line": 148
+    },
+    "native": {
+      "group": "wu",
+      "sex": "male",
+      "max_hp": 3,
+      "skills": [
+        "ddddiedang",
+        "dddanliu",
+        "dddguiying"
+      ],
+      "line": 34
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "isZhugong=true没有对应ExtensionGeneral字段；本项主公资格/候选池未验证，相关主公技能另见逐技能表",
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_lie",
+    "inventory_key": "U01:generals:ddd_lie@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:155",
+    "upstream": {
+      "sex": "female",
+      "group": "wu",
+      "hp": 3,
+      "max_hp": 3,
+      "skills": [
+        "dddyeshen",
+        "dddqiaoduan"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 155
+    },
+    "native": {
+      "group": "wu",
+      "sex": "female",
+      "max_hp": 3,
+      "skills": [
+        "dddyeshen",
+        "dddqiaoduan"
+      ],
+      "line": 35
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_kebineng",
+    "inventory_key": "U01:generals:ddd_kebineng@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:161",
+    "upstream": {
+      "sex": "male",
+      "group": "qun",
+      "hp": 4,
+      "max_hp": 4,
+      "skills": [
+        "dddxiaoxing",
+        "dddlangzhi",
+        "dddfuyi"
+      ],
+      "lord": true,
+      "names": "null|null",
+      "line": 161
+    },
+    "native": {
+      "group": "qun",
+      "sex": "male",
+      "max_hp": 4,
+      "skills": [
+        "dddxiaoxing",
+        "dddlangzhi",
+        "dddfuyi"
+      ],
+      "line": 36
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "isZhugong=true没有对应ExtensionGeneral字段；本项主公资格/候选池未验证，相关主公技能另见逐技能表",
+      "names=null|null没有对应字段，姓名显示/姓名规则未验证",
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_qianzhao",
+    "inventory_key": "U01:generals:ddd_qianzhao@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:169",
+    "upstream": {
+      "sex": "male",
+      "group": "wei",
+      "hp": 4,
+      "max_hp": 4,
+      "skills": [
+        "dddyuanzhen",
+        "dddzhishu"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 169
+    },
+    "native": {
+      "group": "wei",
+      "sex": "male",
+      "max_hp": 4,
+      "skills": [
+        "dddyuanzhen",
+        "dddzhishu"
+      ],
+      "line": 37
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_zhangmiao",
+    "inventory_key": "U01:generals:ddd_zhangmiao@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:175",
+    "upstream": {
+      "sex": "male",
+      "group": "qun",
+      "hp": 4,
+      "max_hp": 4,
+      "skills": [
+        "dddxiaxing"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 175
+    },
+    "native": {
+      "group": "qun",
+      "sex": "male",
+      "max_hp": 4,
+      "skills": [
+        "dddxiaxing"
+      ],
+      "line": 38
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_zhangcheng",
+    "inventory_key": "U01:generals:ddd_zhangcheng@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:181",
+    "upstream": {
+      "sex": "male",
+      "group": "wu",
+      "hp": 3,
+      "max_hp": 3,
+      "skills": [
+        "dddjuxian",
+        "dddjungui"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 181
+    },
+    "native": {
+      "group": "wu",
+      "sex": "male",
+      "max_hp": 3,
+      "skills": [
+        "dddjuxian",
+        "dddjungui"
+      ],
+      "line": 39
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_liuchong",
+    "inventory_key": "U01:generals:ddd_liuchong@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:187",
+    "upstream": {
+      "sex": "male",
+      "group": "qun",
+      "hp": 4,
+      "max_hp": 4,
+      "skills": [
+        "dddjinggou",
+        "dddmoyan"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 187
+    },
+    "native": {
+      "group": "qun",
+      "sex": "male",
+      "max_hp": 4,
+      "skills": [
+        "dddjinggou",
+        "dddmoyan"
+      ],
+      "line": 40
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "资产另有中文ddd刘冲；coexistence按name去重，不能与ddd_liuchong视为同一个目录ID",
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  },
+  {
+    "name": "ddd_luoxian",
+    "inventory_key": "U01:generals:ddd_luoxian@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:193",
+    "upstream": {
+      "sex": "male",
+      "group": "shu",
+      "hp": 4,
+      "max_hp": 4,
+      "skills": [
+        "dddshilie"
+      ],
+      "lord": false,
+      "names": null,
+      "line": 193
+    },
+    "native": {
+      "group": "shu",
+      "sex": "male",
+      "max_hp": 4,
+      "skills": [
+        "dddshilie"
+      ],
+      "line": 41
+    },
+    "core_fields_equal": true,
+    "additional_boundaries": [
+      "上游逐将img及characterReplace注册未在本次验证原生可见效果"
+    ],
+    "rule_equivalence_signed": false
+  }
+]

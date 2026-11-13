@@ -1,0 +1,19 @@
+{
+  "at": "2026-11-14T00:48:15.294835+08:00",
+  "head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "tracked_dirty": true,
+  "frozen_product_file_count": 32259,
+  "frozen_product_drift": [],
+  "initial_untracked_path_count": 672,
+  "initial_untracked_missing": [],
+  "registered_worktrees_identical_to_initial": true,
+  "inventory_sha256": "2658808bbe361ab248e53166157e25606c47155eb31fa19947cb601eb3f35c89",
+  "versions": {
+    "rules": 333,
+    "ngsa": 107,
+    "schema": 5,
+    "abi": 759,
+    "ws": 8
+  },
+  "scope": "Read-only file hash, existence and registration checks; no assertion that original untracked contents were hashed at task start."
+}

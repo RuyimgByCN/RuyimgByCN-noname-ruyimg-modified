@@ -1,0 +1,122 @@
+{
+  "at": "2026-11-14T00:28:01.730922+08:00",
+  "command": "python3 -B /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-13-queue1-review/independent/u01/application-review-check.py",
+  "checks": [
+    {
+      "check": "before inventory SHA equals HEAD bytes",
+      "pass": true
+    },
+    {
+      "check": "exactly 95 U01 keys",
+      "pass": true
+    },
+    {
+      "check": "application contains all U01 keys",
+      "pass": true
+    },
+    {
+      "check": "all 378 application before records equal HEAD",
+      "pass": true
+    },
+    {
+      "check": "current U01 equals recorded after",
+      "pass": true
+    },
+    {
+      "check": "exact 61 strict U01 downgrades",
+      "pass": true
+    },
+    {
+      "check": "33 retained records preserve original status and metadata",
+      "pass": true
+    },
+    {
+      "check": "all U01 old notes retained as prefix",
+      "pass": true
+    },
+    {
+      "check": "dddanzhi remains approximate with old reviewer/date",
+      "pass": true
+    },
+    {
+      "check": "current global counts equal actual item statuses",
+      "pass": true
+    },
+    {
+      "check": "no U01 new equivalence signoffs",
+      "pass": true
+    },
+    {
+      "check": "native 13 rows unique and equal raw command log",
+      "pass": true
+    },
+    {
+      "check": "all 27 recorded native pending checks succeeded",
+      "pass": true
+    },
+    {
+      "check": "native comparison flags are actual 0/1",
+      "pass": true
+    },
+    {
+      "check": "green and final actual fixture lists identical",
+      "pass": true
+    },
+    {
+      "check": "all 31 rich result records match distinct prior CDP replies",
+      "pass": true
+    },
+    {
+      "check": "reviewed cohort 24 of 31 with 7 explorations retained",
+      "pass": true
+    },
+    {
+      "check": "all reviewed24 projections equal",
+      "pass": true
+    },
+    {
+      "check": "all original16 projections equal",
+      "pass": true
+    },
+    {
+      "check": "all 19 modern reviewed fixture face objects match native",
+      "pass": true
+    },
+    {
+      "check": "runtime-comparison-final.json branch/sample manifest exactly matches independent grouping",
+      "pass": true
+    },
+    {
+      "check": "runtime-comparison-final.json result projections match independent computation",
+      "pass": true
+    },
+    {
+      "check": "runtime-comparison-reviewed.json branch/sample manifest exactly matches independent grouping",
+      "pass": true
+    },
+    {
+      "check": "runtime-comparison-reviewed.json result projections match independent computation",
+      "pass": true
+    },
+    {
+      "check": "all 32259 frozen product inputs still match",
+      "pass": true
+    },
+    {
+      "check": "850 copied modern upstream inputs match actual source",
+      "pass": true
+    },
+    {
+      "check": "existing dddanzhi107 fixture unchanged from HEAD",
+      "pass": true
+    },
+    {
+      "check": "native probe source matches recorded cleanup SHA",
+      "pass": true
+    }
+  ],
+  "passed": 28,
+  "failed": 0,
+  "reviewer_cargo_runs": 0,
+  "reviewer_browser_runs": 0
+}

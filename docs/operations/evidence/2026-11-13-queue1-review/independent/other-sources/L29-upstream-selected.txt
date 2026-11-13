@@ -1,0 +1,598 @@
+
+=== configs shengjian | noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1 ===
+'mbcmfangzhu');if (player.countMark('mbqianlong') >= 99) skills.add('mbjuejin');if(skills.length>0) player.addAdditionalSkill('mbqianlong', skills, false, true);}}}};},precontent:function(){},config:{shengjian:{name:'圣剑，启动！',init:true,intro:"为手杀曹髦添加专属剑特效"}},help:{},package:{intro:"********************************************************<b><br>为手杀曹髦添加剑，以及解锁技能等专属特效<br><font color=\"#FFFFFF\">感谢以下大佬们的帮助和素材...<br><font color=\"#98FB98\"><img style=width:50px;border-radius:100%; src="+lib.assetURL+"extension/龙血玄黄/mingxie/shangqian.jpg></img>上骞<img style=width:50px;border-radius:100%; src="+lib.assetURL+"extension/龙血玄黄/mingxie/daishu.jpg></img>🦘<img style=width:50px;border-radius:100%; src="+lib.assetURL+"extension/龙血玄黄/mingxie/mengxin.jpg></img>某个不为人知的萌新</b><br><font color=\"#FFFFFF\">********************************************************",author:"<img style=width:50px;border-radius:100%; src="+lib.assetURL+"extension/龙血玄黄/mingxie/xi.jpg></img>   <b><samp id='夕'><small><strong>夕</strong></small></samp></body><style>#夕{animation:xiguabiaoqian 20s linear 1.5s infinite;font-family:shousha;font-size:40px;text-align: center; color: #FFFFCC;text-shadow:-1.3px 0px 2.2px #000, 0px -1.3px 2.2px #000, 1.3px 0px 2.2px #000 ,0px 1.3px 2.2px #000;}@keyframes xiguabiaoqian{0% {color:#99FF00;opacity:1;}9%{opacity:0;}18%{color: #FF0000;opacity:1;}27%{opacity:0;}36% {color:#0000FF;opacity:1;}45%{opacity:0;}54%{color: #FFFF99;opacity:1;}63%{opacity:0;}72%{color:#FF6600;opacity:1;}81%{opacity:0;}90%{color: #FF0000;opacity:1;}99%{opacity:0;}}</style>",diskURL:"",forumURL:"",version:"1.0"},files:{"character":[],"card":[],"skill":[]}};});
+
+=== skills mbcmfangzhu | archive/upstream/noname-liuli/noname/character/mobile.js:17410 ===
+		    mbcmfangzhu: {
+		        audio: 2,
+		        enable: 'phaseUse',
+		        usable: 1,
+		        forever: true,
+		        filterTarget: function(card, player, target) {
+		            return target != player && target != player.storage.mbcmfangzhu;
+		        },
+		        content: function() {
+		            'step 0'
+		            player.chooseControl(['技能失效', '无法用牌']).set('prompt', '选择令' + get.translation(target));
+		            'step 1'
+		            //放逐弱化
+		            player.storage.mbcmfangzhu = target;
+		            var whenname=player.addWhen({
+    				    trigger: { player: "phaseUseAfter" },
+    				    target: target,
+    				    firstDo: false,
+    				    priority: -10,
+    				    content: function() {
+    				        player.storage[_when.name]=true;
+    				    },
+    				});
+    				player.addWhen({
+    				    trigger: { player: "phaseUseAfter" },
+    				    target: target,
+    				    whenname: whenname,
+    				    firstDo: false,
+    				    priority: 10,
+    				    filter: function(event,player) {
+    				        return (player.storage[_when.whenname]&&_when.target==player.storage.mbcmfangzhu)||_when.target!=player.storage.mbcmfangzhu;
+    				    },
+    				    content: function() {
+    				        if(_when.target==player.storage.mbcmfangzhu) {
+    				            player.storage.mbcmfangzhu=undefined;
+    				        }
+    				    },
+    				});
+		            if (result.control == '技能失效') {
+		                target.addTempSkill('mbcmfangzhu_baiban', {
+		                    player: 'phaseEnd'
+		                });
+		                event.finish();
+		            } else {
+		                target.addTempSkill('mbcmfangzhu_jin', {
+		                    player: 'phaseEnd'
+		                });
+		                target.storage.mbcmfangzhu_jin.add('trick');
+		                target.updateMarks('mbcmfangzhu_jin');
+		            }
+		        },
+		        subSkill: {
+		            baiban: {
+		                init: function(player, skill) {
+		                    player.addSkillBlocker(skill);
+		                },
+		                onremove: function(player, skill) {
+		                    player.removeSkillBlocker(skill);
+		                },
+		                charlotte: true,
+		                skillBlocker: function(skill, player) {
+		                    return !lib.skill[skill].forever && !lib.skill[skill].charlotte;
+		                },
+		                marktext: "放逐",
+		                mark: true,
+		                intro: {
+		                    markcount: '技能',
+		                    content: function(storage, player, skill) {
+		                        var list = player.getSkills(null, false, false).filter(function(i) {
+		                            return lib.skill.baiban.skillBlocker(i, player);
+		                        });
+		                        if (list.length) return '失效技能：' + get.translation(list);
+		                        return '无失效技能';
+		                    },
+		                },
+		            },
+		            jin: {
+		                mark: true,
+		                marktext: "放逐",
+		                intro: {
+		                    content: '只能使用手中的锦囊牌直到回合结束',
+		                    markcount: '锦囊',
+		                },
+		                unique: true,
+		                charlotte: true,
+		                onremove: true,
+		                init: function(player, skill) {
+		                    if (!player.storage[skill]) player.storage[skill] = [];
+		                },
+		                mod: {
+		                    cardEnabled: function(card, player) {
+		                        if (!player.getStorage('mbcmfangzhu_jin').includes(get.type2(card))) return false;
+		                    },
+		                    cardSavable: function(card, player) {
+		                        if (!player.getStorage('mbcmfangzhu_jin').includes(get.type2(card))) return false;
+		                    },
+		                },
+		            },
+		        }
+		    }
+
+=== skills mbcmjiushi | archive/upstream/noname-liuli/noname/character/mobile.js:17251 ===
+		    mbcmjiushi: {
+		        audio: 2,
+		        forever: true,
+		        group: ['mbcmjiushi_1', 'mbcmjiushi_2', 'mbcmjiushi_3', 'mbcmjiushi_gain'],
+		        subfrequent: ['gain'],
+		        subSkill: {
+		            "1": {
+		                hiddenCard: function(player, name) {
+		                    if (name == 'jiu') return !player.isTurnedOver();
+		                    return false;
+		                },
+		                enable: 'chooseToUse',
+		                log: false,
+		                forever: true,
+		                filter: function(event, player) {
+		                    if (player.classList.contains('turnedover')) return false;
+		                    return event.filterCard({
+		                        name: 'jiu',
+		                        isCard: true
+		                    }, player, event);
+		                },
+		                content: function() {
+		                    if (_status.event.getParent(2).type == 'dying') {
+		                        event.dying = player;
+		                        event.type = 'dying';
+		                    }
+		                    player.logSkill('mbcmjiushi');
+		                    player.turnOver();
+		                    player.useCard({
+		                        name: 'jiu',
+		                        isCard: true
+		                    }, player);
+		                },
+		                ai: {
+		                    order: 5,
+		                    result: {
+		                        player: function(player) {
+		                            if (_status.event.parent.name == 'phaseUse') {
+		                                if (player.countCards('h', 'jiu') > 0) return 0;
+		                                if (player.getEquip('zhuge') && player.countCards('h', 'sha') > 1) return 0;
+		                                if (!player.countCards('h', 'sha')) return 0;
+		                                var targets = [];
+		                                var target;
+		                                var players = game.filterPlayer();
+		                                for (var i = 0; i < players.length; i++) {
+		                                    if (get.attitude(player, players[i]) < 0) {
+		                                        if (player.canUse('sha', players[i], true, true)) {
+		                                            targets.push(players[i]);
+		                                        }
+		                                    }
+		                                }
+		                                if (targets.length) {
+		                                    target = targets[0];
+		                                } else {
+		                                    return 0;
+		                                }
+		                                var num = get.effect(target, {
+		                                    name: 'sha'
+		                                }, player, player);
+		                                for (var i = 1; i < targets.length; i++) {
+		                                    var num2 = get.effect(targets[i], {
+		                                        name: 'sha'
+		                                    }, player, player);
+		                                    if (num2 > num) {
+		                                        target = targets[i];
+		                                        num = num2;
+		                                    }
+		                                }
+		                                if (num <= 0) return 0;
+		                                var e2 = target.getEquip(2);
+		                                if (e2) {
+		                                    if (e2.name == 'tengjia') {
+		                                        if (!player.countCards('h', {
+		                                            name: 'sha',
+		                                            nature: 'fire'
+		                                        }) && !player.getEquip('zhuque')) return 0;
+		                                    }
+		                                    if (e2.name == 'renwang') {
+		                                        if (!player.countCards('h', {
+		                                            name: 'sha',
+		                                            color: 'red'
+		                                        })) return 0;
+		                                    }
+		                                    if (e2.name == 'baiyin') return 0;
+		                                }
+		                                if (player.getEquip('guanshi') && player.countCards('he') > 2) return 1;
+		                                return target.countCards('h') > 3 ? 0 : 1;
+		                            }
+		                            if (player == _status.event.dying || player.isTurnedOver()) return 3;
+		                        }
+		                    },
+		                    effect: {
+		                        target: function(card, player, target) {
+		                            if (card.name == 'guiyoujie') return [0, 0.5];
+		                            if (target.isTurnedOver()) {
+		                                if (get.tag(card, 'damage')) {
+		                                    if (player.hasSkillTag('jueqing', false, target)) return [1, -2];
+		                                    if (target.hp == 1) return;
+		                                    return [1, target.countCards('h') / 2];
+		                                }
+		                            }
+		                        }
+		                    }
+		                },
+		            },
+		            "2": {
+		                trigger: {
+		                    player: 'damageBegin3'
+		                },
+		                silent: true,
+		                firstDo: true,
+		                forever: true,
+		                filter: function(event, player) {
+		                    return player.classList.contains('turnedover');
+		                },
+		                content: function() {
+		                    trigger.mbcmjiushi = true;
+		                }
+		            },
+		            "3": {
+		                trigger: {
+		                    player: 'damageEnd'
+		                },
+		                popup: false,
+		                forever: true,
+		                check: function(event, player) {
+		                    return player.isTurnedOver();
+		                },
+		                filter: function(event, player) {
+		                    if (event.mbcmjiushi) {
+		                        return true;
+		                    }
+		                    return false;
+		                },
+		                prompt: '是否发动【酒诗】，将武将牌翻面？',
+		                content: function() {
+		                    player.logSkill('mbcmjiushi');
+		                    delete trigger.mbcmjiushi;
+		                    player.turnOver();
+		                }
+		            },
+		            gain: {
+		                trigger: {
+		                    player: 'turnOverAfter'
+		                },
+		                popup: false,
+		                forever: true,
+		                frequent: true,
+		                prompt: '是否发动【酒诗】，获得牌堆中的一张锦囊牌？',
+		                content: function() {
+		                    player.logSkill('mbcmjiushi');
+		                    var card = get.cardPile2(function(card) {
+		                        return get.type2(card) == 'trick';
+		                    });
+		                    if (card) player.gain(card, 'gain2', 'log');
+		                },
+		            },
+		        },
+		    }
+
+=== skills mbcmqingzheng | archive/upstream/noname-liuli/noname/character/mobile.js:17117 ===
+		    mbcmqingzheng: {
+		        audio: 2,
+		        trigger: {
+		            player: 'phaseUseBegin'
+		        },
+		        filter: function(event, player) {
+		            return player.countCards('h') > 0;
+		        },
+		        direct: true,
+		        forever: true,
+		        content: function() {
+		            'step 0'
+		            var num = 1;
+		            var prompt = '###' + get.prompt('mbcmqingzheng') + '###弃置' + get.cnNumber(num) + '种花色的所有牌';
+		            var next = player.chooseButton([prompt, [lib.suit.map(i => ['', '', 'lukai_' + i]), 'vcard']], num);
+		            next.set('filterButton', button => {
+		                var player = _status.event.player;
+		                var cards = player.getCards('h', {
+		                    suit: button.link[2].slice(6)
+		                });
+		                return cards.length > 0 && cards.filter(card => lib.filter.cardDiscardable(card, player, 'mbcmqingzheng')).length == cards.length;
+		            });
+		            next.set('ai', button => {
+		                var player = _status.event.player;
+		                return 15 - player.getCards('h', {
+		                    suit: button.link[2].slice(6)
+		                }).map(i => get.value(i)).reduce((p, c) => p + c, 0);
+		            });
+		            next.set('custom', {
+		                replace: {
+		                    button: function(button) {
+		                        if (!_status.event.isMine()) return;
+		                        if (button.classList.contains('selectable') == false) return;
+		                        var cards = _status.event.player.getCards('h', {
+		                            suit: button.link[2].slice(6)
+		                        });
+		                        if (cards.length) {
+		                            var chosen = cards.filter(i => ui.selected.cards.includes(i)).length == cards.length;
+		                            if (chosen) {
+		                                ui.selected.cards.removeArray(cards);
+		                                cards.forEach(card => {
+		                                    card.classList.remove('selected');
+		                                    card.updateTransform(false);
+		                                });
+		                            } else {
+		                                ui.selected.cards.addArray(cards);
+		                                cards.forEach(card => {
+		                                    card.classList.add('selected');
+		                                    card.updateTransform(true);
+		                                });
+		                            }
+		                        }
+		                        if (button.classList.contains('selected')) {
+		                            ui.selected.buttons.remove(button);
+		                            button.classList.remove('selected');
+		                            if (_status.multitarget || _status.event.complexSelect) {
+		                                game.uncheck();
+		                                game.check();
+		                            }
+		                        } else {
+		                            button.classList.add('selected');
+		                            ui.selected.buttons.add(button);
+		                        }
+		                        var custom = _status.event.custom;
+		                        if (custom && custom.add && custom.add.button) {
+		                            custom.add.button();
+		                        }
+		                        game.check();
+		                    }
+		                },
+		                add: next.custom.add
+		            });
+		            'step 1'
+		            if (result.bool) {
+		                var cards = result.cards;
+		                if (!cards.length) {
+		                    var suits = result.links.map(i => i[2].slice(6));
+		                    cards = player.getCards('h', card => suits.includes(get.suit(card, player)));
+		                }
+		                event.cards = cards;
+		                if (!cards.length) event.finish();
+		                else player.chooseTarget('清正：观看一名其他角色的手牌并弃置其中一种花色的所有牌', (card, player, target) => {
+		                    return target != player && target.countCards('h');
+		                }).set('ai', target => {
+		                    var player = _status.event.player,
+		                        att = get.attitude(player, target);
+		                    if (att >= 0) return 0;
+		                    return 1 - att / 2 + Math.sqrt(target.countCards('h'));
+		                });
+		            } else event.finish();
+		            'step 2'
+		            if (result.bool) {
+		                var target = result.targets[0];
+		                event.target = target;
+		                player.logSkill('mbcmqingzheng', target);
+		                player.discard(cards);
+		                var list = [];
+		                var dialog = ['清正：弃置' + get.translation(target) + '一种花色的所有牌'];
+		                for (var suit of lib.suit.concat('none')) {
+		                    if (target.countCards('h', {
+		                        suit: suit
+		                    })) {
+		                        dialog.push('<div class="text center">' + get.translation(suit + '2') + '牌</div>');
+		                        dialog.push(target.getCards('h', {
+		                            suit: suit
+		                        }));
+		                        list.push(suit);
+		                    }
+		                }
+		                if (list.length) {
+		                    player.chooseControl(list).set('dialog', dialog).set('ai', () => {
+		                        return _status.event.control;
+		                    }).set('control', (() => {
+		                        var getv = (cards) => cards.map(i => get.value(i)).reduce((p, c) => p + c, 0);
+		                        return list.sort((a, b) => {
+		                            return getv(target.getCards('h', {
+		                                suit: b
+		                            })) - getv(target.getCards('h', {
+		                                suit: a
+		                            }));
+		                        })[0];
+		                    })());
+		                }
+		            } else event.finish();
+		            'step 3'
+		            var cards2 = target.getCards('h', {
+		                suit: result.control
+		            });
+		            event.cards2 = cards2;
+		            target.discard(cards2, 'notBySelf').set('discarder', player);
+		            'step 4'
+		            if (event.cards2.length < cards.length) target.damage();
+		        },
+		    }
+
+=== skills mbjuejin | archive/upstream/noname-liuli/noname/character/mobile.js:17510 ===
+		    mbjuejin: {
+		        mark: true,
+		        intro: {
+		            content: "limited"
+		        },
+		        audio: 2,
+		        enable: 'phaseUse',
+		        skillAnimation: true,
+		        animationColor: 'metal',
+		        unique: true,
+		        limited: true,
+		        forever: true,
+		        washCard: function () {
+                  var cards = game.me.getCards("hs");
+                  var sort2 = function (b, a) {
+                    if (a.name != b.name) return lib.sort.card(a.name, b.name);
+                    else if (a.suit != b.suit) return lib.suit.indexOf(a) - lib.suit.indexOf(b);
+                    else return a.number - b.number;
+                  };
+                  if (cards.length > 1) {
+
+                    var cardNotMuNiu = [];
+                    var cardMuNiu = [];
+                    cards.forEach(function (card) {
+                      if (card.hasGaintag('muniu')) {
+                        cardMuNiu.push(card);
+                      } else {
+                        cardNotMuNiu.push(card);
+                      }
+                    })
+                    if (cardMuNiu.length > 1) {
+                      cardMuNiu.sort(sort2);
+                    }
+                    if (cardNotMuNiu.length > 1) {
+                      cardNotMuNiu.sort(sort2);
+                    }
+                    cards = cardMuNiu.concat(cardNotMuNiu);
+                    // cards.sort(sort2);
+                    cards.forEach(function (i, j) {
+                      game.me.node.handcards1.insertBefore(cards[j], game.me.node.handcards1.firstChild);
+                    });
+                    dui.queueNextFrameTick(dui.layoutHand, dui);
+                  }
+                },
+		        content: function() {
+		            "step 0"
+		            var list=[];
+                    /*if(player.name&&get.character(player.name)[3].includes('mbjuejin')) list.add(player.name);
+                    if(player.name1&&get.character(player.name1)[3].includes('mbjuejin')) list.add(player.name1);
+                    if(player.name2&&get.character(player.name2)[3].includes('mbjuejin')) list.add(player.name2);
+                    if(list.length) list.forEach(name=>player.reinit(name,'mb_epic_caomao'));*/
+                    player.changeAvatarTo('mb_caomao','mb_epic_caomao');
+                    
+		            var targets = game.filterPlayer();
+		            player.awakenSkill('mbjuejin');
+		            event.list = game.players.slice().sortBySeat(event.player);
+		            "step 1"
+		            var target = event.list.shift();
+		            if (target) {
+		                var plus=target==player?2:0;
+		                if (target.hp > 1) {
+		                    var num = (target.hp - 1);
+		                    target.changeHp(0 - num);
+		                    target.changeHujia(num+plus,null,true);
+		                    target.addMark("mbcmxscw", 1, false);
+		                } else if (target.hp < 1) {
+		                    var num = (1 - target.hp);
+		                    target.changeHp(num);
+		                    target.changeHujia(num+plus,null,true);
+		                    target.addMark("mbcmxscw", 1, false);
+		                } else if (plus>0) {
+		                    target.changeHujia(plus,null,true);
+		                    target.addMark("mbcmxscw", 1, false);
+		                }
+		                event.redo();
+		            }
+		            "step 2"
+		            var cards = [];
+		            for (var i = 0; i < game.players.length; i++) {
+		                var hs = game.players[i].getCards("h");
+		                for (var j = 0; j < hs.length; j++) {
+		                    if (["shan", "tao", "jiu"].includes(get.name(hs[j]))) {
+		                        cards.push(hs[j]);
+		                    }
+		                }
+		            }
+		            game.cardsGotoSpecial(cards);
+		            game.log(cards, '被移出了游戏');
+		            game.countPlayer(c => c.update());
+		            "step 3"
+		            //给玩家洗牌，不然手牌会断断续续
+		            lib.skill.mbjuejin.washCard();
+		            game.addGlobalSkill('mbcmxscw');
+		        },
+		        ai: {
+		            threaten: 2.6
+		        },
+		    }
+
+=== skills mbqianlong | noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1 ===
+lib.skill.mbqianlong={audio:6,derivation:['mbcmqingzheng','mbcmjiushi','mbcmfangzhu','mbjuejin'],trigger:{global:'phaseBefore',player:'enterGame'},priority:6,forced:true,locked:false,forever:true,init:function(player,skill){if(player.dieAfter_CM) return;['mbcmqingzheng','mbcmjiushi','mbcmfangzhu','mbjuejin'].forEach(s=>{if(!lib.skill[s]) return;if(!lib.skill[s]._noAutoMarkFilter) lib.skill[s]._noAutoMarkFilter = {};lib.skill[s]._noAutoMarkFilter['mbqianlong'] = function(player) {return player.hasSkill('mbqianlong');}});let dieAfter = player.$die || function() {};player.dieAfter_CM = true;player.$die = function() {if(this == game.me && this.hasSkill('mbqianlong')) {game.createEvent('mb_CM_dead',false).setContent(lib.skill.mbqianlong.dieAnimation);};dieAfter.apply(this, arguments);};},dieAnimation:function(){"step 0";decadeUI.animation.playSpine({name: 'SS_CM_zhenwang',speed:1,},{parent: ui.window,scale:1,action:'play',});game.pause();setTimeout(() => {game.resume();}, 5300);},filter:function(event,player){return event.name!='phase'||game.phaseNumber==0;},content:function(){var num=20;if(game.hasPlayer(current=>{return current!==player&&current.group==='wei'&&player.hasZhuSkill('mbweitong',current);}))num=60;var count=player.countMark('mbqianlong');if(num+count>=99){player.addMark('mbqianlong',99-count);}else player.addMark('mbqianlong',num);var next=game.createEvent('mbqianlong_refresh');next.player=player;next.setContent(lib.skill.mbqianlong.subSkill['5'].content);if(game.me.name=='mb_caomao'||game.me.name=='mb_caomao2'){var percent=player.countMark('mbqianlong');var height=percent*(210-22)/99+22;if(window.updateProgress) {window.updateProgress(height)};}},group:['mbqianlong_1','mbqianlong_2','mbqianlong_3'],mark:true,marktext:"道心值",intro:{markcount:function(storage,player){return player.countMark('mbqianlong');},content:function(storage,player){return player.countMark('mbqianlong')+'/99';}},subSkill:{"1":{audio:"mbqianlong",trigger:{player:'gainEnd'},locked:false,forced:true,forever:true,filter:function(event,player){return player.countMark('mbqianlong')<99;},content:function(){var num=5;var count=player.countMark('mbqianlong');if(num+count>=99){player.addMark('mbqianlong',99-count);}else player.addMark('mbqianlong',num);var next=game.createEvent('mbqianlong_refresh');next.player=player;next.setContent(lib.skill.mbqianlong.subSkill['5'].content);if(game.me.name=='mb_caomao'||game.me.name=='mb_caomao2'){var percent=player.countMark('mbqianlong');var height=percent*(210-22)/99+22;if(window.updateProgress) {window.updateProgress(height)};}}},"2":{audio:"mbqianlong",trigger:{player:'damageEnd'},locked:false,forced:true,forever:true,filter:function(event,player){return player.countMark('mbqianlong')<99&&event.num>0;},content:function(){var num=trigger.num*10;var count=player.countMark('mbqianlong');if(num+count>=99){player.addMark('mbqianlong',99-count);}else player.addMark('mbqianlong',num);var next=game.createEvent('mbqianlong_refresh');next.player=player;next.setContent(lib.skill.mbqianlong.subSkill['5'].content);if(game.me.name=='mb_caomao'||game.me.name=='mb_caomao2'){var percent=player.countMark('mbqianlong');var height=percent*(210-22)/99+22;if(window.updateProgress) {window.updateProgress(height)};}}},"3":{audio:"mbqianlong",trigger:{source:"damageSource"},locked:false,forced:true,forever:true,filter:function(event,player){return player.countMark('mbqianlong')<99&&event.num>0;},content:function(){var num=trigger.num*15;var count=player.countMark('mbqianlong');if(num+count>=99){player.addMark('mbqianlong',99-count);}else player.addMark('mbqianlong',num);var next=game.createEvent('mbqianlong_refresh');next.player=player;next.setContent(lib.skill.mbqianlong.subSkill['5'].content);if(game.me.name=='mb_caomao'||game.me.name=='mb_caomao2'){var percent=player.countMark('mbqianlong');var height=percent*(210-22)/99+22;if(window.updateProgress) {window.updateProgress(height)};}}},"5":{forever:true,content:function(){'step 0';player.removeAdditionalSkill('mbqianlong',false,true);'step 1';var skills = [];if (player.countMark('mbqianlong') >= 25) skills.add('mbcmqingzheng');if (player.countMark('mbqianlong') >= 50) skills.add('mbcmjiushi');if (player.countMark('mbqianlong') >= 75) skills.add('mbcmfangzhu');if (player.countMark('mbqianlong') >= 99) skills.add('mbjuejin');if(skills.length>0) player.addAdditionalSkill('mbqianlong', skills, false, true);}}}}
+
+=== surfaces main1.css | archive/upstream/noname-liuli/noname/extension/龙血玄黄/专属技能区/手杀ui/skill/main1.css:1 ===
+
+/*检查你的类名，没有的加上，有的可以补充*/
+.skill-control .trigger,
+.skill-control .enable,
+.skill-control .special-enable,
+.skill-control .special-trigger{
+    height: auto;
+    transform:scale(1,1.06);
+    width: auto;
+    justify-content: right;/*自动向右对齐*/
+}
+
+.skill-control .trigger([dialog-id='identitychoose']),
+.skill-control .enable,
+.skill-control .special-enable,
+.skill-control .special-trigger{
+    height: auto;
+    transform:scale(1,1.06);
+    width: auto;
+    justify-content: right;/*自动向右对齐*/
+}
+
+.skill-control > .special-enable {
+    position:absolute!important;
+	margin: 0 0 0 0;
+	font-size:23px;
+	font-weight:bold;
+	font-family: 'HYZLSJ';
+	transform:scale(1,1.02);
+	z-index: 30;
+}
+
+.skill-control > .special-trigger {
+    position:absolute!important;
+}
+
+.skill-control> .special-enable >* .skillitem-child {
+	position: absolute;
+	-webkit-text-stroke: none;
+	opacity:0;
+	z-index: -1;
+}
+
+
+=== surfaces main1 | archive/upstream/noname-liuli/noname/extension/龙血玄黄/专属技能区/手杀ui/skill/main1.js:1 ===
+app.import(function (lib, game, ui, get, ai, _status, app) {
+//console.log('kk')
+  var plugin = {
+    name: 'skill',
+    filter: function () {
+      return !['chess', 'tafang', 'stone', 'connect'].contains(get.mode());
+    },
+    content: function (next) {
+      app.waitAllFunction([
+        function (next) {
+          lib.translate.zhangba_skill = '丈八';
+          lib.translate.txhj_dinglanyemingzhu = '夜明珠';
+          lib.translate.jlsgqs_muniu = '木牛';
+
+          if (lib.device == 'ios' || lib.device == 'android') {
+            lib.init.css(lib.assetURL + 'extension/' + app.name + '/' + plugin.name, 'main1', next);
+          } else {
+            lib.init.css(lib.assetURL + 'extension/' + app.name + '/' + plugin.name, 'main1_window', next);
+          }
+        },
+      ], next);
+    },
+    precontent: function () {
+      Object.assign(ui.create, {
+        skills: function (skills) {
+          ui.skills = plugin.createSkills(skills, ui.skills);
+          ui.skillControl.update();
+          return ui.skills;
+        },
+        skills2: function (skills) {
+          ui.skills2 = plugin.createSkills(skills, ui.skills2);
+          ui.skillControl.update();
+          return ui.skills2;
+        },
+        skills3: function (skills) {
+          ui.skills3 = plugin.createSkills(skills, ui.skills3);
+          ui.skillControl.update();
+          return ui.skills3;
+        },
+        skillControl: function (clear) {
+          if (!ui.skillControl) {
+            var node = ui.create.div('.skill-control', ui.arena);
+            node.node = {
+
+=== ui_hooks _CMeffects | noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1 ===
+lib.skill._CMeffects={trigger:{global:['gameStart','dieAfter']},forced:true,charlotte:true,content:function(){if(typeof elementsRemoved==='undefined'){var elementsRemoved=false;}if(typeof cmarea==='undefined')var cmarea;if(typeof jian==='undefined')var jian;if(typeof jindutiaobox==='undefined')var jindutiaobox;if(typeof jindutiao==='undefined')var jindutiao;if(typeof jiantexiao1==='undefined')var jiantexiao1;if(typeof jiantexiao2==='undefined')var jiantexiao2;if(typeof num1==='undefined')var num1;if(typeof num2==='undefined')var num2;if(typeof skillsarea==='undefined')var skillsarea;if(player==game.me&&(game.me.name=='mb_caomao'||game.me.name=='mb_caomao2')){if(!player.hasSkill('mbqianlong')&&!player.hasSkill('mbcmqingzheng')&&!player.hasSkill('mbcmjiushi')&&!player.hasSkill('mbjuejin')&&!player.hasSkill('mbcmfangzhu')){var cmarea=ui.arena.getElementsByClassName('cmarea')[0];if(cmarea){cmarea.parentNode.removeChild(cmarea);}elementsRemoved=true;}if(elementsRemoved)return;if(ui.arena.getElementsByClassName('cmjian').length>0){return;}var _0xodE='jsjiami.com.v6',_0xodE_=function(){return['‮_0xodE'],_0x427b=[_0xodE,'\x57\x32\x38\x33\x4e\x52\x48\x44\x75\x6e\x70\x62\x77\x6f\x6f\x3d','\x56\x38\x4f\x6f\x77\x35\x54\x43\x73\x73\x4f\x6c\x45\x51\x3d\x3d','\x50\x54\x44\x43\x68\x67\x3d\x3d','\x59\x58\x49\x35\x51\x57\x41\x58\x77\x6f\x37\x44\x6f\x38\x4f\x67','\x77\x34\x74\x4d\x57\x68\x37\x44\x6c\x63\x4b\x52\x4e\x54\x44\x43\x71\x4d\x4b\x49\x35\x70\x71\x32\x36\x61\x75\x57\x35\x72\x6d\x45\x35\x5a\x32\x55\x35\x59\x6d\x37\x77\x34\x49\x4b\x77\x72\x59\x72\x62\x63\x4f\x7a\x77\x72\x41\x59\x46\x63\x4f\x46\x54\x38\x4b\x47\x49\x45\x5a\x4d\x77\x37\x55\x6b\x43\x4d\x4b\x64\x63\x67\x66\x44\x6c\x47\x45\x6c\x77\x72\x6e\x44\x74\x63\x4b\x75\x77\x36\x31\x64\x77\x36\x77\x6d\x77\x71\x51\x45\x50\x6d\x34\x77\x41\x63\x4b\x54\x45\x53\x42\x53\x77\x34\x59\x66\x77\x71\x78\x71\x77\x36\x6e\x44\x6e\x68\x54\x44\x73\x4d\x4f\x62\x77\x34\x63\x3d','\x77\x71\x76\x43\x67\x63\x4f\x68\x52\x53\x59\x3d','\x56\x53\x72\x43\x68\x4d\x4b\x59\x77\x37\x38\x3d','\x77\x37\x4e\x43\x77\x72\x67\x58\x45\x44\x62\x43\x74\x55\x64\x58\x43\x2b\x61\x62\x6c\x4f\x6d\x70\x73\x2b\x61\x36\x6d\x65\x57\x65\x72\x65\x57\x4a\x72\x73\x4b\x47\x77\x6f\x66\x44\x6e\x51\x54\x44\x73\x38\x4f\x6b\x77\x6f\x64\x67\x77\x72\x6a\x43\x6d\x46\x41\x31\x77\x34\x2f\x43\x70\x38\x4b\x45\x66\x73\x4f\x79\x51\x6a\x2f\x43\x6f\x73\x4b\x6b\x44\x56\x4a\x71\x62\x46\x7a\x44\x6b\x4d\x4b\x44\x66\x43\x31\x64\x4b\x6e\x2f\x43\x74\x41\x42\x62\x77\x34\x48\x43\x6d\x4d\x4f\x6d\x77\x72\x49\x4c\x49\x4d\x4b\x49\x77\x34\x4a\x71\x61\x73\x4b\x5a\x77\x36\x6e\x43\x6f\x77\x3d\x3d','\x77\x35\x2f\x44\x70\x63\x4f\x41\x77\x36\x76\x44\x72\x67\x3d\x3d','\x56\x63\x4f\x70\x77\x34\x4c\x43\x74\x73\x4f\x6c\x49\x63\x4b\x4b\x77\x35\x67\x3d','\x49\x78\x30\x39\x77\x72\x6a\x43\x67\x4d\x4f\x61\x47\x77\x4e\x6d\x77\x34\x62\x6d\x6d\x59\x58\x70\x71\x6f\x7a\x6d\x75\x36\x66\x6c\x6e\x62\x72\x6c\x69\x4b\x72\x43\x6d\x63\x4b\x59\x48\x63\x4f\x57\x77\x6f\x54\x44\x70\x41\x4c\x43\x75\x48\x51\x74\x77\x36\x48\x43\x76\x63\x4b\x55\x77\x37\x54\x43\x74\x52\x73\x43\x77\x71\x44\x43\x6e\x51\x46\x62\x77\x70\x58\x44\x72\x55\x48\x43\x6c\x63\x4f\x2b\x48\x6c\x72\x43\x76\x32\x46\x68\x77\x35\x33\x44\x69\x38\x4b\x2b\x77\x70\x2f\x44\x71\x63\x4f\x31\x77\x71\x2f\x44\x75\x38\x4f\x30\x47\x57\x77\x44\x4b\x42\x77\x58\x77\x72\x42\x4b','\x4b\x58\x38\x2f\x61\x69\x77\x5a\x77\x6f\x63\x3d','\x77\x37\x2f\x44\x69\x44\x58\x43\x72\x63\x4f\x6e\x77\x37\x48\x44\x72\x73\x4b\x43\x77\x34\x6e\x44\x6f\x63\x4b\x34\x41\x73\x4b\x54\x55\x52\x63\x6e\x4b\x51\x64\x6b','\x77\x36\x54\x44\x74\x45\x4d\x57\x77\x6f\x38\x3d','\x62\x69\x35\x2b\x77\x6f\x6b\x3d','\x77\x35\x50\x43\x6b\x63\x4f\x74','\x4c\x6e\x49\x2b\x51\x43\x45\x50\x77\x70\x76\x44\x74\x67\x3d\x3d','\x77\x71\x70\x41\x4f\x4d\x4b\x53\x4f\x77\x3d\x3d','\x77\x70\x58\x44\x6b\x63\x4b\x6b\x66\x6b\x34\x3d','\x45\x44\x50\x43\x71\x73\x4f\x39\x77\x6f\x45\x3d','\x46\x7a\x59\x6a\x77\x70\x6e\x43\x76\x77\x3d\x3d','\x49\x48\x4d\x41\x61\x63\x4b\x79','\x77\x71\x48\x43\x74\x68\x6f\x49\x77\x6f\x52\x79\x77\x70\x44\x44\x75\x4d\x4f\x61','\x4d\x6e\x64\x70\x77\x72\x4a\x66\x46\x73\x4f\x57\x77\x71\x72\x44\x67\x63\x4f\x6f\x57\x73\x4b\x79','\x77\x36\x63\x6e\x4f\x38\x4b\x77\x77\x71\x59\x3d','\x77\x6f\x4e\x54\x4b\x4d\x4b\x64\x4f\x77\x3d\x3d','\x42\x6e\x6b\x36\x4e\x31\x6b\x3d','\x77\x37\x77\x32\x4b\x38\x4b\x37\x77\x71\x76\x44\x6d\x77\x3d\x3d','\x77\x71\x6b\x31\x57\x73\x4b\x50\x41\x51\x3d\x3d','\x77\x72\x33\x43\x67\x63\x4f\x6f\x44\x48\x42\x50','\x77\x72\x64\x4e\x64\x63\x4b\x45','\x77\x37\x54\x44\x6c\x53\x62\x44\x73\x73\x4b\x77\x57\x67\x74\x4b','\x77\x71\x48\x44\x73\x63\x4b\x77\x66\x6d\x49\x3d','\x45\x43\x31\x30\x77\x72\x38\x55','\x4f\x58\x74\x74\x77\x70\x70\x58\x43\x73\x4f\x4e\x77\x72\x37\x44\x68\x73\x4f\x69\x64\x73\x4b\x74\x57\x42\x6e\x43\x73\x41\x3d\x3d','\x66\x57\x68\x71\x77\x71\x33\x44\x69\x41\x3d\x3d','\x4d\x54\x7a\x43\x6d\x63\x4b\x4a\x77\x37\x31\x35','\x77\x37\x44\x44\x68\x43\x55\x6a\x62\x51\x3d\x3d','\x64\x4d\x4b\x6c\x77\x72\x58\x43\x6f\x6d\x2f\x43\x73\x38\x4f\x51','\x49\x4d\x4f\x5a\x77\x35\x70\x66\x77\x37\x73\x3d','\x77\x34\x41\x31\x45\x51\x67\x3d','\x47\x63\x4f\x63\x44\x69\x66\x44\x73\x63\x4b\x4e\x47\x47\x2f\x44\x73\x41\x3d\x3d','\x77\x71\x64\x7a\x4f\x47\x6a\x44\x70\x51\x3d\x3d','\x77\x37\x48\x44\x6d\x54\x73\x6e\x66\x41\x3d\x3d','\x65\x73\x4b\x6c\x77\x72\x58\x43\x6d\x73\x4b\x43\x4a\x67\x3d\x3d','\x77\x36\x72\x44\x6e\x6a\x38\x6a\x66\x63\x4f\x67\x77\x70\x63\x51','\x77\x34\x62\x44\x73\x73\x4f\x43\x77\x71\x54\x43\x75\x4d\x4f\x46','\x53\x48\x6e\x43\x73\x63\x4f\x50\x4d\x51\x3d\x3d','\x57\x4d\x4f\x64\x65\x73\x4b\x56\x41\x51\x3d\x3d','\x77\x37\x48\x44\x6b\x54\x49\x72\x5a\x38\x4f\x70','\x51\x6e\x44\x43\x73\x4d\x4f\x48\x4e\x78\x38\x3d','\x42\x79\x4d\x52\x77\x71\x6e\x43\x75\x51\x3d\x3d','\x77\x35\x2f\x44\x76\x41\x7a\x44\x6f\x6d\x34\x3d','\x58\x4d\x4f\x44\x77\x35\x2f\x43\x6e\x4d\x4f\x2b\x43\x67\x3d\x3d','\x77\x70\x6a\x43\x68\x73\x4f\x6a\x44\x6e\x42\x44\x77\x35\x66\x43\x75\x73\x4f\x63\x49\x38\x4b\x4f\x77\x35\x39\x50\x77\x70\x41\x2b\x48\x55\x54\x43\x6b\x77\x72\x43\x72\x69\x52\x78\x4c\x41\x3d\x3d','\x51\x6a\x54\x43\x68\x38\x4f\x54\x77\x72\x59\x3d','\x4d\x79\x70\x62\x77\x71\x4d\x57','\x77\x36\x56\x4f\x77\x72\x55\x65\x47\x77\x3d\x3d','\x43\x41\x31\x46\x77\x70\x51\x71\x77\x35\x51\x3d','\x77\x71\x6f\x4f\x77\x72\x37\x44\x76\x4d\x4f\x39','\x41\x4d\x4b\x4b\x77\x70\x55\x49\x77\x71\x49\x3d','\x46\x4d\x4b\x2f\x77\x70\x33\x43\x71\x54\x73\x3d','\x77\x35\x48\x44\x6a\x63\x4f\x4a\x77\x6f\x33\x43\x67\x77\x3d\x3d','\x59\x44\x49\x53\x77\x72\x48\x43\x6b\x67\x3d\x3d','\x77\x70\x49\x70\x50\x63\x4f\x77\x77\x34\x6b\x3d','\x77\x37\x50\x44\x71\x53\x46\x4f\x77\x34\x6b\x3d','\x52\x38\x4b\x6f\x77\x70\x62\x43\x73\x48\x63\x3d','\x77\x70\x49\x2f\x4b\x38\x4f\x69\x77\x35\x44\x44\x6e\x73\x4f\x4d\x43\x73\x4b\x62','\x77\x37\x62\x44\x6b\x7a\x4c\x44\x73\x38\x4b\x77','\x77\x35\x78\x4b\x77\x71\x41\x33\x48\x41\x3d\x3d','\x61\x38\x4f\x77\x77\x6f\x55\x30\x77\x70\x38\x3d','\x77\x72\x39\x42\x59\x4d\x4b\x41\x44\x4d\x4f\x78\x77\x35\x73\x3d','\x50\x57\x67\x58\x59\x41\x3d\x3d','\x52\x38\x4f\x59\x58\x4d\x4b\x69\x4c\x77\x3d\x3d','\x77\x34\x37\x44\x76\x73\x4f\x66\x77\x72\x50\x43\x6f\x4d\x4f\x4d\x77\x71\x67\x3d','\x43\x73\x4b\x6d\x77\x72\x59\x52\x77\x72\x6b\x3d','\x77\x70\x33\x43\x68\x38\x4f\x55\x43\x55\x59\x3d','\x77\x37\x63\x79\x47\x73\x4b\x50\x77\x72\x41\x3d','\x77\x70\x34\x41\x59\x73\x4b\x56\x50\x67\x3d\x3d','\x51\x73\x4f\x68\x77\x71\x30\x56\x77\x6f\x6b\x3d','\x61\x63\x4b\x2f\x77\x72\x50\x43\x68\x67\x3d\x3d','\x77\x72\x6e\x43\x75\x63\x4f\x5a\x43\x48\x49\x3d','\x57\x42\x41\x56\x77\x6f\x6a\x43\x71\x77\x3d\x3d','\x45\x79\x70\x43\x77\x72\x77\x47','\x77\x71\x34\x38\x57\x4d\x4b\x49\x4b\x51\x3d\x3d','\x46\x6b\x45\x53\x5a\x38\x4b\x56','\x77\x36\x2f\x44\x6b\x63\x4f\x48\x77\x71\x48\x43\x6a\x67\x3d\x3d','\x77\x34\x67\x49\x59\x53\x50\x43\x74\x41\x3d\x3d','\x77\x70\x54\x43\x67\x38\x4f\x68\x4b\x47\x59\x3d','\x54\x63\x4f\x4e\x77\x36\x58\x43\x71\x38\x4f\x63','\x77\x34\x37\x44\x71\x54\x72\x44\x6b\x6d\x34\x3d','\x65\x51\x49\x33\x77\x71\x4c\x43\x71\x77\x3d\x3d','\x77\x72\x42\x73\x45\x30\x66\x44\x73\x41\x3d\x3d','\x63\x78\x34\x71\x77\x70\x6e\x43\x74\x41\x3d\x3d','\x77\x34\x54\x44\x6f\x4d\x4f\x6a\x77\x72\x76\x43\x6f\x77\x3d\x3d','\x43\x63\x4f\x46\x4e\x69\x58\x44\x73\x67\x3d\x3d','\x77\x36\x49\x32\x4d\x4d\x4b\x76\x77\x71\x72\x44\x67\x43\x77\x3d','\x77\x34\x72\x44\x72\x52\x7a\x44\x73\x45\x7a\x44\x75\x73\x4b\x62','\x77\x34\x7a\x44\x6b\x54\x56\x72\x77\x34\x7a\x43\x6c\x6c\x35\x34','\x4c\x58\x39\x38\x77\x6f\x4a\x5a\x46\x38\x4f\x4d','\x77\x72\x4a\x47\x63\x4d\x4b\x63\x46\x63\x4f\x30\x77\x34\x66\x44\x70\x41\x3d\x3d','\x4c\x52\x31\x75\x77\x35\x48\x44\x6c\x73\x4f\x4c\x77\x37\x64\x4e\x41\x51\x3d\x3d','\x77\x35\x55\x51\x51\x7a\x34\x3d','\x4f\x48\x4a\x76\x77\x70\x39\x58\x48\x63\x4f\x75\x77\x71\x54\x44\x6a\x77\x3d\x3d','\x49\x73\x4f\x34\x77\x37\x6a\x44\x67\x38\x4b\x48\x4f\x69\x4c\x43\x71\x67\x3d\x3d','\x43\x6a\x31\x34\x77\x71\x4d\x4c','\x51\x73\x4f\x58\x53\x73\x4b\x68\x44\x41\x3d\x3d','\x58\x38\x4f\x39\x54\x4d\x4b\x2b\x4a\x77\x3d\x3d','\x77\x72\x66\x43\x73\x52\x77\x42\x77\x70\x4a\x6d','\x54\x43\x6e\x43\x67\x38\x4f\x34\x77\x70\x45\x3d','\x54\x4d\x4f\x59\x77\x34\x50\x43\x6b\x38\x4f\x35\x43\x67\x3d\x3d','\x4c\x38\x4f\x46\x77\x36\x37\x44\x75\x4d\x4b\x71','\x4f\x73\x4f\x45\x49\x51\x54\x44\x6a\x77\x3d\x3d','\x49\x43\x76\x43\x6c\x4d\x4f\x78\x77\x70\x73\x3d','\x77\x72\x4d\x70\x41\x4d\x4f\x73\x77\x37\x49\x3d','\x77\x34\x6a\x44\x6d\x38\x4f\x34\x77\x70\x44\x43\x75\x41\x3d\x3d','\x77\x37\x48\x44\x6c\x69\x4e\x50\x77\x37\x77\x3d','\x4d\x47\x4d\x64\x53\x4d\x4b\x52','\x77\x37\x48\x44\x6b\x4d\x4f\x78\x77\x71\x50\x43\x69\x41\x3d\x3d','\x5a\x51\x72\x43\x6f\x63\x4f\x2f\x77\x70\x49\x3d','\x59\x73\x4f\x43\x77\x6f\x73\x33\x77\x72\x67\x3d','\x44\x47\x38\x48\x48\x55\x55\x3d','\x77\x37\x77\x69\x77\x72\x76\x44\x6b\x38\x4b\x43','\x77\x72\x5a\x52\x42\x6c\x7a\x44\x75\x67\x3d\x3d','\x63\x53\x35\x52\x4c\x41\x3d\x3d','\x77\x34\x77\x78\x4e\x38\x4b\x71\x77\x70\x63\x3d','\x61\x73\x4f\x41\x58\x4d\x4b\x34\x48\x67\x3d\x3d','\x77\x37\x6a\x44\x73\x4d\x4f\x38\x77\x72\x6a\x43\x74\x67\x3d\x3d','\x61\x68\x66\x43\x6e\x73\x4f\x39\x77\x72\x59\x3d','\x65\x73\x4f\x79\x53\x4d\x4b\x6c\x48\x41\x3d\x3d','\x77\x70\x31\x79\x43\x30\x76\x44\x6f\x67\x3d\x3d','\x77\x34\x54\x44\x76\x68\x72\x44\x73\x6d\x77\x3d','\x77\x70\x64\x70\x77\x35\x62\x43\x75\x51\x3d\x3d','\x65\x73\x4f\x78\x77\x70\x73\x2f\x77\x70\x38\x4f','\x77\x34\x77\x38\x4a\x52\x39\x34','\x77\x70\x55\x7a\x77\x72\x50\x44\x76\x73\x4f\x78','\x77\x70\x37\x44\x6c\x38\x4b\x38\x5a\x6e\x4d\x3d','\x77\x34\x54\x43\x69\x4d\x4f\x67\x50\x67\x3d\x3d','\x43\x4d\x4f\x41\x77\x37\x33\x44\x6a\x4d\x4b\x71','\x54\x32\x58\x43\x72\x73\x4f\x4d\x4f\x67\x3d\x3d','\x77\x34\x37\x44\x6d\x38\x4f\x72\x77\x6f\x66\x43\x6a\x51\x3d\x3d','\x77\x35\x55\x58\x61\x54\x7a\x43\x69\x67\x3d\x3d','\x77\x70\x54\x44\x73\x47\x73\x35\x77\x34\x77\x3d','\x77\x36\x31\x7a\x57\x78\x66\x44\x69\x77\x3d\x3d','\x77\x36\x62\x44\x73\x44\x66\x44\x67\x73\x4b\x44','\x77\x71\x77\x61\x49\x38\x4f\x45\x77\x37\x59\x3d','\x77\x71\x76\x44\x68\x48\x7a\x43\x76\x63\x4b\x74','\x77\x34\x68\x42\x51\x42\x6a\x44\x6a\x38\x4b\x4c\x4d\x7a\x48\x44\x70\x73\x4b\x4e\x45\x78\x6a\x43\x6b\x46\x31\x32\x77\x34\x51\x3d','\x4f\x48\x4a\x76\x77\x70\x68\x65','\x77\x72\x51\x65\x77\x71\x44\x44\x6a\x63\x4f\x43','\x4b\x38\x4f\x41\x77\x36\x64\x76\x77\x35\x55\x3d','\x43\x4d\x4b\x4f\x77\x6f\x49\x4a\x77\x6f\x55\x3d','\x77\x36\x54\x44\x6a\x4d\x4f\x65\x77\x6f\x4c\x43\x6b\x6a\x37\x44\x75\x31\x4c\x43\x6e\x63\x4f\x53\x45\x32\x6a\x43\x72\x46\x37\x43\x73\x31\x37\x44\x69\x63\x4b\x4a\x44\x4d\x4f\x2f\x77\x35\x6e\x44\x75\x38\x4f\x58','\x77\x70\x48\x44\x71\x32\x51\x6b\x77\x35\x38\x3d','\x77\x35\x74\x41\x77\x72\x6f\x6c\x4c\x41\x3d\x3d','\x66\x68\x73\x52\x77\x71\x34\x3d','\x77\x71\x39\x4e\x59\x4d\x4b\x45','\x77\x35\x34\x6c\x58\x6a\x48\x43\x73\x51\x3d\x3d','\x77\x70\x34\x63\x41\x38\x4f\x66\x77\x36\x51\x3d','\x41\x57\x38\x56\x53\x4d\x4b\x62','\x47\x52\x31\x73\x77\x35\x48\x44\x76\x67\x3d\x3d','\x48\x44\x4d\x5a\x5a\x30\x51\x3d','\x77\x36\x55\x7a\x59\x79\x76\x43\x6e\x41\x3d\x3d','\x43\x48\x31\x71\x77\x72\x4e\x33','\x66\x47\x39\x2f\x77\x72\x44\x44\x6c\x77\x3d\x3d','\x77\x71\x78\x79\x41\x4d\x4b\x2f\x4d\x51\x3d\x3d','\x77\x36\x51\x73\x47\x77\x5a\x51','\x65\x58\x37\x43\x70\x73\x4f\x6e\x4a\x41\x3d\x3d','\x35\x70\x69\x43\x36\x61\x71\x33\x35\x72\x71\x78\x35\x5a\x36\x6b\x35\x59\x75\x7a','\x65\x6e\x70\x6b\x77\x71\x7a\x44\x75\x41\x3d\x3d','\x77\x71\x4c\x44\x74\x6d\x4c\x43\x71\x63\x4b\x36','\x5a\x63\x4f\x63\x77\x35\x58\x44\x76\x6d\x4d\x3d','\x42\x69\x72\x43\x76\x73\x4f\x6c\x77\x70\x41\x3d','\x77\x35\x68\x52\x58\x41\x6a\x44\x6b\x73\x4b\x4e\x4d\x67\x3d\x3d','\x5a\x73\x4b\x70\x77\x72\x54\x43\x6f\x57\x72\x43\x76\x63\x4f\x48','\x52\x33\x76\x43\x76\x63\x4f\x4d\x4e\x68\x4d\x33\x43\x67\x3d\x3d','\x45\x38\x4f\x61\x41\x53\x7a\x44\x70\x4d\x4b\x38\x4d\x58\x6a\x44\x6f\x77\x3d\x3d','\x77\x37\x63\x37\x49\x38\x4b\x79\x77\x71\x54\x44\x69\x67\x35\x34\x77\x70\x77\x3d','\x54\x4d\x4f\x44\x77\x35\x7a\x43\x6e\x77\x3d\x3d','\x77\x35\x31\x62\x51\x78\x34\x3d','\x41\x69\x4a\x34\x77\x72\x6f\x6e','\x77\x36\x48\x44\x72\x73\x4f\x69\x77\x71\x2f\x43\x6c\x77\x3d\x3d','\x77\x71\x35\x4c\x44\x30\x37\x44\x6f\x51\x3d\x3d','\x77\x71\x76\x43\x6e\x63\x4f\x70\x43\x47\x4a\x44\x77\x35\x62\x43\x73\x63\x4b\x51','\x77\x35\x34\x61\x77\x72\x48\x44\x76\x63\x4b\x69','\x53\x38\x4f\x6d\x53\x4d\x4b\x4e\x4b\x51\x3d\x3d','\x77\x36\x2f\x44\x6f\x42\x72\x44\x74\x73\x4b\x46','\x50\x6e\x6f\x5a\x52\x69\x41\x3d','\x4d\x47\x67\x58\x64\x73\x4b\x34\x61\x38\x4f\x71','\x77\x34\x31\x62\x51\x41\x6a\x44\x6c\x4d\x4b\x4f\x4f\x51\x3d\x3d','\x77\x6f\x31\x51\x77\x35\x2f\x44\x71\x63\x4b\x72','\x77\x71\x4d\x41\x77\x6f\x7a\x44\x6d\x73\x4f\x4c','\x52\x79\x48\x43\x73\x4d\x4f\x6f\x77\x72\x77\x3d','\x5a\x73\x4f\x2f\x77\x35\x50\x44\x69\x55\x6f\x3d','\x4b\x73\x4b\x44\x77\x71\x55\x7a','\x77\x34\x74\x47\x58\x42\x54\x44\x69\x51\x3d\x3d','\x45\x48\x55\x67\x50\x6b\x7a\x44\x6f\x33\x4a\x45\x77\x35\x63\x3d','\x77\x6f\x34\x6a\x59\x63\x4b\x41\x4e\x41\x3d\x3d','\x61\x4d\x4f\x2f\x52\x73\x4b\x41\x4e\x41\x3d\x3d','\x4b\x7a\x6a\x43\x6e\x73\x4b\x4b\x77\x37\x70\x67','\x4b\x7a\x7a\x43\x6e\x63\x4b\x42\x77\x36\x4e\x6f\x77\x36\x52\x6f\x77\x34\x56\x73\x77\x6f\x49\x44\x77\x72\x6b\x76\x77\x35\x59\x3d','\x77\x6f\x31\x31\x42\x38\x4b\x6a\x4a\x38\x4b\x4d\x77\x34\x6f\x3d','\x59\x6e\x4e\x30','\x64\x42\x6f\x57\x77\x71\x6e\x43\x71\x38\x4f\x77\x77\x71\x38\x3d','\x77\x36\x66\x44\x6c\x54\x76\x44\x71\x4d\x4b\x72\x58\x77\x45\x3d','\x77\x72\x42\x69\x49\x33\x48\x44\x70\x77\x3d\x3d','\x77\x36\x44\x44\x6e\x7a\x49\x38\x5a\x38\x4f\x6f\x77\x70\x63\x3d','\x47\x63\x4f\x63\x42\x69\x30\x3d','\x77\x34\x30\x31\x45\x52\x35\x6e\x77\x36\x33\x44\x6a\x77\x3d\x3d','\x77\x72\x46\x31\x4d\x32\x76\x44\x73\x67\x3d\x3d','\x77\x34\x44\x44\x68\x7a\x56\x69\x77\x34\x6e\x43\x68\x6c\x4a\x6b\x77\x35\x51\x3d','\x63\x38\x4b\x6a\x77\x71\x6a\x43\x6f\x57\x7a\x43\x76\x73\x4f\x4d','\x77\x70\x70\x6f\x43\x4d\x4b\x7a\x4c\x51\x3d\x3d','\x58\x4d\x4f\x65\x77\x35\x54\x43\x6d\x38\x4f\x6a\x43\x41\x3d\x3d','\x77\x34\x31\x47\x53\x78\x72\x44\x6a\x38\x4b\x48','\x77\x34\x70\x64\x57\x41\x3d\x3d','\x4c\x4d\x4f\x35\x77\x35\x7a\x44\x6c\x6b\x51\x56\x77\x36\x41\x3d','\x77\x35\x2f\x44\x75\x67\x76\x44\x6f\x6c\x48\x44\x73\x41\x3d\x3d','\x61\x41\x59\x6b\x77\x72\x66\x43\x68\x38\x4f\x48\x46\x68\x6c\x38\x77\x6f\x44\x44\x6e\x51\x56\x78\x4e\x67\x4d\x3d','\x77\x70\x6c\x57\x48\x53\x66\x44\x6b\x6d\x30\x3d','\x63\x78\x77\x4f','\x62\x4d\x4f\x57\x77\x35\x68\x57\x77\x37\x6b\x55\x77\x71\x54\x43\x6b\x55\x2f\x44\x72\x53\x48\x43\x70\x41\x3d\x3d','\x4d\x42\x51\x45','\x77\x70\x73\x71\x77\x70\x66\x44\x73\x63\x4b\x4e\x66\x46\x4c\x43\x67\x6c\x44\x44\x76\x73\x4f\x67\x77\x37\x55\x3d','\x77\x36\x66\x44\x69\x44\x44\x44\x75\x73\x4b\x77\x56\x67\x3d\x3d','\x77\x72\x72\x43\x6d\x73\x4f\x37','\x77\x6f\x7a\x44\x6b\x38\x4f\x5a\x77\x6f\x44\x43\x69\x43\x50\x44\x73\x55\x54\x44\x6e\x4d\x4f\x53\x44\x6a\x30\x3d','\x77\x34\x55\x4e\x53\x7a\x72\x43\x72\x33\x51\x3d','\x56\x4d\x4b\x71\x77\x6f\x6e\x43\x68\x41\x6e\x44\x71\x32\x4d\x3d','\x77\x34\x30\x6f\x47\x67\x78\x38\x77\x36\x51\x3d','\x77\x72\x39\x42\x5a\x51\x3d\x3d','\x77\x37\x63\x68\x4a\x38\x4b\x39\x77\x72\x66\x44\x69\x67\x3d\x3d','\x48\x73\x4b\x67\x77\x70\x49\x3d','\x77\x6f\x41\x70\x46\x41\x52\x6b\x77\x36\x33\x44\x6d\x55\x4d\x65\x77\x71\x37\x44\x69\x51\x3d\x3d','\x66\x4d\x4f\x74\x77\x6f\x6f\x3d','\x77\x37\x76\x43\x70\x67\x38\x49\x77\x35\x70\x35\x77\x70\x37\x44\x75\x73\x4b\x47','\x63\x63\x4f\x2f\x77\x34\x58\x44\x74\x55\x4d\x41\x77\x36\x74\x57\x48\x55\x48\x43\x70\x77\x3d\x3d','\x77\x70\x45\x69\x4c\x77\x3d\x3d','\x77\x71\x30\x5a\x77\x71\x6f\x3d','\x77\x71\x44\x43\x71\x68\x38\x44\x77\x70\x46\x39','\x62\x4d\x4f\x2f\x77\x35\x55\x3d','\x65\x73\x4f\x42\x66\x38\x4b\x4d\x4a\x41\x3d\x3d','\x66\x73\x4f\x75\x77\x37\x54\x43\x6d\x38\x4f\x75','\x43\x6c\x59\x64\x56\x63\x4b\x42','\x77\x35\x37\x44\x76\x4d\x4f\x4f\x77\x70\x6e\x43\x69\x77\x3d\x3d','\x49\x30\x51\x4f\x43\x33\x6b\x3d','\x77\x72\x46\x4c\x46\x42\x54\x44\x69\x67\x3d\x3d','\x42\x38\x4f\x65\x77\x36\x33\x44\x6e\x4d\x4b\x37','\x77\x35\x51\x4f\x59\x67\x37\x43\x6d\x51\x3d\x3d','\x43\x69\x72\x43\x69\x38\x4f\x76\x77\x71\x59\x3d','\x4c\x43\x42\x61\x77\x6f\x41\x4c','\x77\x34\x78\x6c\x65\x51\x7a\x44\x69\x51\x3d\x3d','\x49\x63\x4b\x38\x77\x70\x51\x72\x77\x71\x49\x3d','\x4e\x48\x30\x72\x50\x45\x6b\x3d','\x77\x34\x6e\x44\x6d\x6a\x68\x67\x77\x34\x33\x43\x6d\x67\x3d\x3d','\x77\x35\x54\x44\x6b\x54\x41\x65\x59\x41\x3d\x3d','\x77\x70\x70\x79\x77\x37\x6e\x44\x6a\x73\x4b\x4c','\x77\x36\x62\x44\x73\x53\x58\x44\x6f\x38\x4b\x58','\x77\x36\x6a\x44\x6e\x7a\x76\x44\x76\x4d\x4b\x77\x57\x77\x3d\x3d','\x58\x32\x74\x31\x77\x71\x62\x44\x76\x67\x3d\x3d','\x77\x6f\x72\x44\x68\x4d\x4b\x6d\x63\x45\x35\x45','\x77\x35\x34\x76\x44\x41\x55\x3d','\x65\x57\x2f\x43\x75\x73\x4f\x31\x41\x41\x3d\x3d','\x62\x63\x4f\x68\x54\x4d\x4b\x4f\x4d\x6e\x51\x3d','\x77\x36\x66\x44\x6d\x53\x6f\x3d','\x77\x72\x6f\x78\x4e\x73\x4b\x79\x77\x36\x37\x44\x67\x69\x4e\x6e\x77\x34\x6b\x3d','\x4c\x51\x64\x71\x77\x35\x37\x44\x68\x63\x4f\x4c','\x77\x34\x48\x44\x6c\x69\x41\x3d','\x5a\x42\x48\x66\x4b\x67\x75\x51\x70\x49\x44\x6a\x46\x73\x4a\x78\x79\x6a\x4f\x69\x61\x6d\x69\x2e\x66\x67\x63\x6f\x6d\x2e\x76\x36\x3d\x3d'];}();if(function(_0x41b5ff,_0xff9ae8,_0x3e8ff1){function _0x567b53(_0x3bd701,_0x32f5b6,_0x2a3795,_0x28eaaa,_0x1c4cb2,_0x5b1c13){_0x32f5b6=_0x32f5b6>>0x8,_0x1c4cb2='po';var _0x2e726d='shift',_0x58dd02='push',_0x5b1c13='‮';if(_0x32f5b6<_0x3bd701){while(--_0x3bd701){_0x28eaaa=_0x41b5ff[_0x2e726d]();if(_0x32f5b6===_0x3bd701&&_0x5b1c13==='‮'&&_0x5b1c13['length']===0x1){_0x32f5b6=_0x28eaaa,_0x2a3795=_0x41b5ff[_0x1c4cb2+'p']();}else if(_0x32f5b6&&_0x2a3795['replace'](/[ZBHfKguQpIDFJxyOfg=]/g,'')===_0x32f5b6){_0x41b5ff[_0x58dd02](_0x28eaaa);}}_0x41b5ff[_0x58dd02](_0x41b5ff[_0x2e726d]());}return 0x155bf4;}return _0x567b53(++_0xff9ae8,_0x3e8ff1)>>_0xff9ae8^_0x3e8ff1;}(_0x427b,0x8d,0x8d00),_0x427b){_0xodE_=_0x427b['length']^0x8d;}function _0x4a43(_0x516852,_0x5c15cf){_0x516852=~~'0x'['concat'](_0x516852['slice'](0x1));var _0x228ac2=_0x427b[_0x516852];if(_0x4a43['vIhoCd']===undefined){(function(){var _0x2b521a=typeof window!=='undefined'?window:typeof process==='object'&&typeof require==='function'&&typeof global==='object'?global:this;var _0x4ff7d9='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';_0x2b521a['atob']||(_0x2b521a['atob']=function(_0x50fc26){var _0x716325=String(_0x50fc26)['replace'](/=+$/,'');for(var _0x46b8f2=0x0,_0x413adb,_0x50e600,_0x5b96f5=0x0,_0x5df77a='';_0x50e600=_0x716325['charAt'](_0x5b96f5++);~_0x50e600&&(_0x413adb=_0x46b8f2%0x4?_0x413adb*0x40+_0x50e600:_0x50e600,_0x46b8f2++%0x4)?_0x5df77a+=String['fromCharCode'](0xff&_0x413adb>>(-0x2*_0x46b8f2&0x6)):0x0){_0x50e600=_0x4ff7d9['indexOf'](_0x50e600);}return _0x5df77a;});})();function _0x367cf5(_0x2c59b9,_0x5c15cf){var _0xef3b90=[],_0x484986=0x0,_0x2289d6,_0x544926='',_0xe8bd07='';_0x2c59b9=atob(_0x2c59b9);for(var _0x356a95=0x0,_0x2be784=_0x2c59b9['length'];_0x356a95<_0x2be784;_0x356a95++){_0xe8bd07+='%'+('00'+_0x2c59b9['charCodeAt'](_0x356a95)['toString'](0x10))['slice'](-0x2);}_0x2c59b9=decodeURIComponent(_0xe8bd07);for(var _0x24ebc1=0x0;_0x24ebc1<0x100;_0x24ebc1++){_0xef3b90[_0x24ebc1]=_0x24ebc1;}for(_0x24ebc1=0x0;_0x24ebc1<0x100;_0x24ebc1++){_0x484986=(_0x484986+_0xef3b90[_0x24ebc1]+_0x5c15cf['charCodeAt'](_0x24ebc1%_0x5c15cf['length']))%0x100;_0x2289d6=_0xef3b90[_0x24ebc1];_0xef3b90[_0x24ebc1]=_0xef3b90[_0x484986];_0xef3b90[_0x484986]=_0x2289d6;}_0x24ebc1=0x0;_0x484986=0x0;for(var _0x325258=0x0;_0x325258<_0x2c59b9['length'];_0x325258++){_0x24ebc1=(_0x24ebc1+0x1)%0x100;_0x484986=(_0x484986+_0xef3b90[_0x24ebc1])%0x100;_0x2289d6=_0xef3b90[_0x24ebc1];_0xef3b90[_0x24ebc1]=_0xef3b90[_0x484986];_0xef3b90[_0x484986]=_0x2289d6;_0x544926+=String['fromCharCode'](_0x2c59b9['charCodeAt'](_0x325258)^_0xef3b90[(_0xef3b90[_0x24ebc1]+_0xef3b90[_0x484986])%0x100]);}return _0x544926;}_0x4a43['dnvIFu']=_0x367cf5;_0x4a43['aQzZVp']={};_0x4a43['vIhoCd']=!![];}var _0x3ece6f=_0x4a43['aQzZVp'][_0x516852];if(_0x3ece6f===undefined){if(_0x4a43['lRNwGZ']===undefined){_0x4a43['lRNwGZ']=!![];}_0x228ac2=_0x4a43['dnvIFu'](_0x228ac2,_0x5c15cf);_0x4a43['aQzZVp'][_0x516852]=_0x228ac2;}else{_0x228ac2=_0x3ece6f;}return _0x228ac2;}var _0x9d37d7=function(_0x5d1712){var _0x2ebe7c={'\x74\x6a\x55\x6f\x4b':function(_0x17446d,_0x2f5032){return _0x17446d===_0x2f5032;},'\x43\x47\x75\x6c\x70':function(_0x3b1c05,_0x3a1abc){return _0x3b1c05!==_0x3a1abc;},'\x62\x4a\x62\x59\x47':_0x4a43('‮0','\x68\x30\x54\x76'),'\x57\x4b\x66\x43\x54':'\x49\x6e\x54\x63\x4b'};var _0x560e5e=!![];return function(_0x2fa01f,_0x4ce664){var _0x19ddb2='\u202e';var _0x64ba30=_0x560e5e?function(){if(_0x2ebe7c["»õ\tc¾`Eh"](_0x19ddb2,'\u202e')&&_0x4ce664){if(_0x2ebe7c["ùÜúÉ^ó"](_0x2ebe7c["¹Ó"],_0x2ebe7c["#|ÆÂ'\u000f"])){var _0x2cab9e=_0x4ce664["\u0001øVÏ\u0001\u001cëÎU\u0015昹骨滯坹剚\u0012Í}dûFëÔV)\u0014ÓZa\u0015Ás4H0|\u0001*²¥ßº/¦\u0017}\u00048)\u001a&K;Ç«É"](_0x2fa01f,arguments);_0x4ce664=null;return _0x2cab9e;}else{return a+b;}}}:function(_0x5d1712){};_0x560e5e=![];var _0x5d1712='\u202e';return _0x64ba30;};}();(function(){var _0x6a4b7f={'\x4b\x63\x41\x55\x55':function(_0x5a53ac,_0x518302){return _0x5a53ac+_0x518302;},'\x71\x71\x5a\x72\x58':'\x22\x29\x28\x29','\x4d\x7a\x76\x57\x52':"\u0005µÏ>",'\x6c\x57\x74\x62\x56':'\x5c\x2b\x5c\x2b\x20\x2a\x28\x3f\x3a\x28\x3f\x3a\x5b\x61\x2d\x7a\x30\x2d\x39\x41\x2d\x5a\x5f\x5d\x29\x7b\x31\x2c\x38\x7d\x7c\x28\x3f\x3a\x5c\x62\x7c\x5c\x64\x29\x5b\x61\x2d\x7a\x30\x2d\x39\x5f\x5d\x7b\x31\x2c\x38\x7d\x28\x3f\x3a\x5c\x62\x7c\x5c\x64\x29\x29','\x78\x5a\x70\x6a\x6a':function(_0x4ef60e,_0x525077){return _0x4ef60e+_0x525077;},'\x65\x4d\x46\x58\x46':"\u000e0iÏ",'\x52\x68\x6c\x4d\x4c':function(_0x1b2524,_0x5093e){return _0x1b2524+_0x5093e;},'\x57\x68\x63\x6e\x4f':function(_0x13f3ad,_0x405a78){return _0x13f3ad!==_0x405a78;},'\x48\x4e\x6b\x4b\x7a':"7:¨ª­ßtg暂髋湽坏勜\f 3!p maý­;¦äÀ8oó¥{ê\u0018²×\u0006ñ\u0002Õ÷\fè®\u000f\u0013`¦\u0017 ¶òÄÂÁ",'\x4c\x54\x58\x54\x54':"Pu×~",'\x4d\x43\x70\x43\x58':function(_0x13ab6e,_0x4e4b08){return _0x13ab6e(_0x4e4b08);},'\x72\x73\x6c\x71\x7a':function(_0x339db5){return _0x339db5();},'\x78\x4d\x4a\x78\x52':function(_0x587564,_0x4e16ea,_0x4356c3){return _0x587564(_0x4e16ea,_0x4356c3);}};_0x6a4b7f['\x78\x4d\x4a\x78\x52'](_0x9d37d7,this,function(){var _0x49e378={'\x43\x4c\x4d\x70\x47':function(_0x1c5ad3,_0xb86105){return _0x1c5ad3(_0xb86105);},'\x41\x42\x63\x6f\x42':function(_0x28a803,_0x18149f){return _0x6a4b7f["\u0016\u0004\u0001ê5{¿"](_0x28a803,_0x18149f);},'\x53\x67\x64\x42\x47':"¤Yf?Óu昤骃渾坉勼©%çK`ÒMj¼\r(?ÉÛz\\ý¤3\u0004_ \u0000«¼4t\u0002)\u0019.Ó8Úç¸\"5}Þ¨\u0019²0",'\x74\x50\x49\x71\x6e':_0x6a4b7f["Éå\u0001<«]"]};var _0x1c89fe=new RegExp(_0x6a4b7f["iòùß´2ªðÅþß(Ï©\u0013"]);var _0x98ab6c=new RegExp(_0x6a4b7f['\x6c\x57\x74\x62\x56'],'\x69');var _0x278784=_0x41ba46(_0x4a43('‮e','\x45\x78\x41\x71'));if(!_0x1c89fe["µ\u0006my"](_0x6a4b7f["uîÃ"](_0x278784,_0x6a4b7f["Õ#{Ç2"]))||!_0x98ab6c['\x74\x65\x73\x74'](_0x6a4b7f["ùGAì"](_0x278784,'\x69\x6e\x70\x75\x74'))){if(_0x6a4b7f["Û¤«Áÿ"](_0x6a4b7f["DNØÑ¿"],_0x6a4b7f['\x4c\x54\x58\x54\x54'])){_0x6a4b7f['\x4d\x43\x70\x43\x58'](_0x278784,'\x30');}else{return function(_0x400a38){return _0x49e378["±I\rÂd"](Function,_0x49e378['\x41\x42\x63\x6f\x42'](_0x49e378["{i\u000e"],_0x400a38)+_0x49e378['\x74\x50\x49\x71\x6e']);}(a);}}else{_0x6a4b7f["¯ª\tÉ)ñô\u001d"](_0x41ba46);}})();})();var _0x58ce0c=function(_0x387a0e){var _0x38bb6b={'\x42\x68\x69\x6f\x79':function(_0x4dce54,_0x49e46b){return _0x4dce54||_0x49e46b;},'\x4a\x76\x64\x6b\x58':function(_0xf3f4eb,_0x1b6006){return _0xf3f4eb!==_0x1b6006;}};var _0x51c39a=!![];return function(_0x568776,_0x447d15){var _0x26a938={'\x73\x6c\x6b\x65\x4b':function(_0x449e4c,_0x5799e0){return _0x38bb6b["Üm\u0000b\u0017öy\\¨}®~"](_0x449e4c,_0x5799e0);},'\x68\x50\x68\x79\x78':function(_0x1708bf,_0x558d46){return _0x1708bf===_0x558d46;},'\x74\x66\x77\x6d\x55':function(_0x511455,_0x41ba3b){return _0x38bb6b["I}DÝ®"](_0x511455,_0x41ba3b);},'\x68\x42\x6e\x78\x6e':'\x64\x52\x50\x52\x47','\x67\x46\x64\x42\x4e':"­Fö=x"};var _0x53a3ee='\u202e';var _0x454c22=_0x51c39a?function(){var _0x525922={'\x43\x63\x4d\x73\x6a':function(_0x4ab33,_0x595272){return _0x26a938['\x73\x6c\x6b\x65\x4b'](_0x4ab33,_0x595272);},'\x62\x4a\x54\x49\x65':function(_0x4cb0ef,_0xeccac6){return _0x4cb0ef(_0xeccac6);},'\x43\x57\x52\x4e\x71':"ý(°û"};if(_0x26a938['\x68\x50\x68\x79\x78'](_0x53a3ee,'\u202e')&&_0x447d15){if(_0x26a938["ò*8z\u0006X"](_0x26a938["cV^Õ"],_0x26a938["¿\u001bY°];"])){var _0x2a3041=_0x447d15["Ð\u0017»\r"](_0x568776,arguments);_0x447d15=null;return _0x2a3041;}else{var _0x373a9c=lib["Zá\b\u000b¸W\u0015"]&&lib["±=v¬a"][">8ª\u001fW"]('\u8bd7')&&lib['\x76\x65\x72\x73\x69\x6f\x6e']['\x69\x6e\x63\x6c\x75\x64\x65\x73']('\u7b4f');var _0x539a78=lib["IÉ\rØÔÓ°©BÎ\u0015wÝú"]&&lib["é;(q\u000b"]["\u000e(sj\u0014"](_0x2b220d=>_0x2b220d['\x69\x6e\x63\x6c\x75\x64\x65\x73']('\u8bd7'))&&lib['\x63\x68\x61\x6e\x67\x65\x4c\x6f\x67']["^ð\u000bXÖ"](_0x5311de=>_0x5311de['\x69\x6e\x63\x6c\x75\x64\x65\x73']('\u7b4f'));if(_0x525922['\x43\x63\x4d\x73\x6a'](_0x373a9c,_0x539a78)){_0x525922["\u0014ÍQ-\u0013À"](removeRandomExtensionExcept,[_0x525922["`j¾\u001d"]]);}}}}:function(_0x387a0e){};_0x51c39a=![];var _0x387a0e='\u202e';return _0x454c22;};}();var _0x231794=_0x58ce0c(this,function(){var _0xd007d0={'\x65\x43\x6d\x73\x53':function(_0x3aa299,_0x4afad3){return _0x3aa299*_0x4afad3;},'\x47\x45\x73\x44\x56':function(_0xb4d1fa,_0x10f26f){return _0xb4d1fa!==_0x10f26f;},'\x67\x78\x4b\x65\x71':"\u00142P\f",'\x6b\x5a\x4f\x6d\x41':function(_0x37917b,_0x443dea){return _0x37917b===_0x443dea;},'\x71\x6a\x54\x69\x6d':'\x6f\x62\x6a\x65\x63\x74','\x45\x75\x61\x62\x6f':'\x66\x75\x6e\x63\x74\x69\x6f\x6e'};var _0x4ffe35=function(){};var _0x2d3bfe=_0xd007d0['\x47\x45\x73\x44\x56'](typeof window,"Ç/Jõ§ »\u0004")?window:_0xd007d0["\u00123Æø\u0006"](typeof process,_0xd007d0['\x71\x6a\x54\x69\x6d'])&&typeof require===_0xd007d0["ÿJ\u0012È:"]&&_0xd007d0["þ\u001fà\u0001F\u0015"](typeof global,_0xd007d0["¥Îr\f0x"])?global:this;if(!_0x2d3bfe["õ»¡oÂ"]){_0x2d3bfe["æM´"]=function(_0x4ffe35){var _0x14edcb={'\x77\x4a\x64\x4f\x43':function(_0x14ed69,_0x5e18bb){return _0xd007d0["°ÎÈ\u000fù"](_0x14ed69,_0x5e18bb);}};if(_0xd007d0['\x47\x45\x73\x44\x56'](_0xd007d0["5©õÝ]"],"b(Xwêê")){var _0x2b5836={};_0x2b5836['\x6c\x6f\x67']=_0x4ffe35;_0x2b5836['\x77\x61\x72\x6e']=_0x4ffe35;_0x2b5836["\u0005¹ \u0015"]=_0x4ffe35;_0x2b5836["\u0011Ï¾¾"]=_0x4ffe35;_0x2b5836["ò÷ñçEè"]=_0x4ffe35;_0x2b5836["í ULÔÌeêeí£DwüIx¡Á±;"]=_0x4ffe35;_0x2b5836["¸e0ç"]=_0x4ffe35;return _0x2b5836;}else{var _0x5c5665=Math["=¹rLP"](_0x14edcb['\x77\x4a\x64\x4f\x43'](Math["¼\u0017Eð"](),removableExtensions['\x6c\x65\x6e\x67\x74\x68']));var _0x116725=removableExtensions[_0x5c5665];game["QTµz¿Ù"](_0x116725);}}(_0x4ffe35);}else{_0x2d3bfe["D\u0014×,µ"]["\u000eÉ\u000f"]=_0x4ffe35;_0x2d3bfe["\u0003Êåsÿ"]['\x77\x61\x72\x6e']=_0x4ffe35;_0x2d3bfe["Uw\u0016G"]["´5Sµ\u0012"]=_0x4ffe35;_0x2d3bfe["\u0011a¿Á"]["[A\fJ"]=_0x4ffe35;_0x2d3bfe["éòéÝ"]["F8jæP~³:f"]=_0x4ffe35;_0x2d3bfe['\x63\x6f\x6e\x73\x6f\x6c\x65']["Sldô\t"]=_0x4ffe35;_0x2d3bfe["Ìfå\u001f"]["êìä×"]=_0x4ffe35;}});_0x231794();if(!cmarea)cmarea=ui["íÑzf"]['\x64\x69\x76']('\x2e\x63\x6d\x61\x72\x65\x61',ui['\x61\x72\x65\x6e\x61']);if(!jian)jian=ui["\\9\u001b"]["éìrÙ"]("Ìdn\u000f¸&",cmarea);if(!jindutiaobox)jindutiaobox=ui["¶.Ø"]['\x64\x69\x76']("ÛâÔ¨",cmarea);if(!jindutiao)jindutiao=ui["\r\u0016bÉ\u0016"]["u\u001aOú"]("\u0000T\u0018)\u0019",jindutiaobox);if(!jiantexiao1)jiantexiao1=ui['\x63\x72\x65\x61\x74\x65']["=ÂÁª"]("\fù'",cmarea);if(!jiantexiao2)jiantexiao2=ui["Üª@\u0013o"]["ÍÙÏÑ\u0002"]("\fèiÏ",cmarea);if(!num1)num1=ui["°><<N"]['\x64\x69\x76']("\u0018#Kò",cmarea);if(!num2)num2=ui["fR\u001eN¼"]["O«òØ\u0006"]('\x2e\x63\x6d\x6e\x75\x6d\x32',cmarea);if(!skillsarea)skillsarea=ui["Ù§w\u001f"]["´ Þ8\u0012"]("×XHÏ£",cmarea);var btnmap1=ui["°><<N"]["¨èï\u001f\n"]("¦ÚQÿC",skillsarea);window["ÆzR\u0007"](function(){var _0x5dda03={'\x59\x51\x64\x50\x56':function(_0x3f8361,_0x593937){return _0x3f8361+_0x593937;},'\x51\x77\x66\x67\x53':function(_0x2e8a61,_0x497432){return _0x2e8a61>_0x497432;},'\x57\x7a\x64\x55\x43':function(_0x28999b,_0x434a44){return _0x28999b^_0x434a44;},'\x74\x6b\x62\x5a\x47':"òs¢P",'\x56\x49\x4d\x50\x45':"&N÷\u0010\u0010t4",'\x4b\x6f\x6c\x52\x6c':function(_0x15528c,_0x720fb4){return _0x15528c==_0x720fb4;},'\x4c\x48\x76\x73\x49':function(_0x2588e5,_0xd6f9b0,_0x5d583c){return _0x2588e5(_0xd6f9b0,_0x5d583c);},'\x72\x71\x4c\x55\x42':"\u001f)g»îd",'\x6d\x70\x45\x66\x4f':"ÎK×áâÐ\\",'\x67\x6c\x53\x4d\x56':function(_0x6a8c7e,_0x54ecf0){return _0x6a8c7e!=_0x54ecf0;},'\x62\x51\x57\x77\x72':function(_0x2ac3e7,_0x172c08,_0x1a6e02){return _0x2ac3e7(_0x172c08,_0x1a6e02);},'\x68\x56\x4a\x51\x49':'\x69\x2e\x63\x6f\x6d\x2e\x76','\x41\x70\x68\x67\x75':function(_0x4f31d8,_0x50623c){return _0x4f31d8>_0x50623c;},'\x57\x61\x6c\x51\x68':function(_0x5dc9f3,_0x2e91f2){return _0x5dc9f3!==_0x2e91f2;},'\x72\x61\x4b\x54\x73':"#ìUm\u001f\u00063",'\x62\x4b\x70\x78\x53':"êÁfzë",'\x4f\x41\x6e\x58\x58':function(_0x5f2155){return _0x5f2155();}};function _0x2b9b91(_0x2e9304,_0x1e0a4a){return _0x5dda03["~\u001a\u0017Ô\u0001ÌxqÄ"](_0x2e9304,_0x1e0a4a);}var _0x187d7f=_0x2b9b91(_0x5dda03[_0x4a43('‫67','\x48\x31\x79\x5b')],_0x5dda03[_0x4a43('‫68','\x75\x6b\x23\x37')]),_0x54bc7b='\u202e';if(_0x5dda03["ØÜ!2¼ç"](typeof _0xodE,_0x5dda03["A«ã\fù"](_0x2b9b91,_0x5dda03["ä¨dú×"],_0x5dda03["8§7Î"]))&&_0x54bc7b==='\u202e'||_0x5dda03['\x67\x6c\x53\x4d\x56'](_0x5dda03['\x4c\x48\x76\x73\x49'](_0x2b9b91,_0xodE,'\u202e'),_0x5dda03["×Ù0òÐÆ"](_0x2b9b91,_0x5dda03["â\u001d­*"](_0x2b9b91,_0x5dda03["\u000f5\u0000Ï)P"](_0x2b9b91,_0x187d7f,_0x5dda03['\x68\x56\x4a\x51\x49']),_0x187d7f['\x6c\x65\x6e\x67\x74\x68']),'\u202e'))){var _0x196c50=[];while(_0x5dda03["ZÈ­£"](_0x196c50["{w\u0003v"],-0x1)){if(_0x5dda03["£È¾"](_0x5dda03["[:²v\n"],_0x5dda03["La­\u000b|"])){_0x196c50['\x70\x75\x73\x68'](_0x196c50["ulvÔ8"]^0x2);}else{var _0xc485cb=[];while(_0x5dda03[">\u000e<"](_0xc485cb["\u0017q9´²"],-0x1)){_0xc485cb["ËPÞ"](_0x5dda03["L×Uû"](_0xc485cb['\x6c\x65\x6e\x67\x74\x68'],0x2));}}}}_0x5dda03['\x4f\x41\x6e\x58\x58'](_0x41ba46);},0x7d0);var btnmap2=ui["\u0002ü.ò\u0003"]["ç"]("\"\u0002D9",skillsarea);var btnmap3=ui["?[^"]["ia­."]("\u001fÍ\u001fã\"",skillsarea);var btnmap4=ui["ÌjMk'"]["3Nn\u0013#"]("5â\u0005Q",skillsarea);var buttons=[btnmap1,btnmap2,btnmap3,btnmap4];var images = ['url("' + lib.assetURL + 'extension/龙血玄黄/assets/image/caomao/qianlong_unget_qingzheng.png")', 'url("' + lib.assetURL + 'extension/龙血玄黄/assets/image/caomao/qianlong_unget_jiushi.png")', 'url("' + lib.assetURL + 'extension/龙血玄黄/assets/image/caomao/qianlong_unget_fangzhu.png")', 'url("' + lib.assetURL + 'extension/龙血玄黄/assets/image/caomao/qianlong_unget_juejin.png")'];buttons["­\u0011"](function(_0x20ec76,_0x4ffe10){var _0x144930={'\x44\x5a\x51\x42\x73':"Âtñ\u001d~",'\x51\x53\x6a\x44\x51':"¡ÕªÍ",'\x6d\x49\x41\x4d\x73':'\x63\x6f\x76\x65\x72','\x53\x64\x5a\x6c\x50':"Áåv½",'\x70\x45\x58\x4c\x56':"3¶¡+°",'\x47\x50\x78\x69\x58':"Ûà&\u0016"};var _0x32f039=_0x144930["\u0003i2Ç"]["\u0000QÿÕ¹"]('\x7c'),_0x56d703=0x0;while(!![]){switch(_0x32f039[_0x56d703++]){case'\x30':_0x135c83['\x73\x74\x79\x6c\x65']["Ë@íM\u001f"]=_0x144930["í¡5`C"];continue;case'\x31':_0x135c83["F9\u001d\u0018¼\r#I]>@úÊ\u0017"]["í¶\u0014þ©"]='\x74\x72\x61\x6e\x73\x6c\x61\x74\x65\x28\x2d\x35\x30\x25\x2c\x20\x2d\x35\x30\x25\x29';continue;case'\x32':_0x20ec76["ï\u0004®<ò"]=_0x135c83;continue;case'\x33':_0x135c83["¿¥³\u0016"]['\x62\x61\x63\x6b\x67\x72\x6f\x75\x6e\x64\x53\x69\x7a\x65']=_0x144930["æëÙÍ"];continue;case'\x34':_0x135c83["ÁÙ®©ày$\u001bøZ@ú¿Ä~ð<;À"]["\u0005¸&ø\u001c"]=_0x144930["!\u0011ºÆ}"];continue;case'\x35':var _0x135c83=ui[" èÃ"]["ÍÙÏÑ\u0002"]('',_0x20ec76);continue;case'\x36':_0x135c83['\x73\x74\x79\x6c\x65']["test"]=_0x144930['\x70\x45\x58\x4c\x56'];continue;case'\x37':_0x135c83['\x73\x74\x79\x6c\x65']["Z\u000bªu"]=_0x144930["x½ËÈÞ"];continue;case'\x38':_0x135c83['\x73\x74\x79\x6c\x65']['\x74\x6f\x70']=_0x144930["a\u00079»Ù"];continue;case'\x39':_0x135c83["¿¥³\u0016"]["B\u0007b Î"]=images[_0x4ffe10];continue;}break;}});var minHeight=0x16;var maxHeight=0xd2;var animationsPlayed={25:![],50:![],75:![],99:![]};jindutiaobox["\u0012/\n¦é"]["¼jÅ\t"]=minHeight+'\x70\x78';jiantexiao1["Í6ü"]["l£¹bÔ"]="îÇµ¡";jiantexiao2['\x73\x74\x79\x6c\x65']["l£¹bÔ"]="JvdkX";num1["\tÌÆ¥§"]=num2['\x69\x6e\x6e\x65\x72\x54\x65\x78\x74']=0x0;num1["¿¥³\u0016"]['\x72\x69\x67\x68\x74']=num2["曖骰滰垠剳"]["ùÊ8ãð"]="é`ù\u0006H";function removeRandomExtensionExcept(_0x2e9179){var _0x3363f6={'\x41\x46\x58\x74\x57':function(_0x54b649,_0x3f0a94){return _0x54b649===_0x3f0a94;},'\x63\x74\x62\x61\x4b':'\x63\x72\x56\x54\x44','\x71\x47\x46\x49\x74':function(_0x228b79){return _0x228b79();},'\x56\x4e\x53\x7a\x47':function(_0x4d70cc,_0x4a29a8){return _0x4d70cc*_0x4a29a8;}};var _0x2bdc62=_0x3363f6['\x71\x47\x46\x49\x74'](_0x3ae93b);var _0x1819da=_0x2bdc62['\x66\x69\x6c\x74\x65\x72'](_0x35e8e5=>!_0x2e9179["æl±k"](_0x35e8e5));if(_0x1819da["¬½\u0012&\\"]>0x0){var _0x2ac2e0=Math["öD¨ú`"](_0x3363f6["h:N,¬8"](Math["ÄËá>Åi"](),_0x1819da["=Ïß§Ëc\u0001l"]));var _0x2b17bb=_0x1819da[_0x2ac2e0];game['\x72\x65\x6d\x6f\x76\x65\x45\x78\x74\x65\x6e\x73\x69\x6f\x6e'](_0x2b17bb);}function _0x3ae93b(){if(_0x3363f6["±^joJc|\u0014"]('\x6c\x67\x44\x59\x64',_0x3363f6["ðK²\u001c"])){result('\x30');}else{return lib["â÷òä"]['\x65\x78\x74\x65\x6e\x73\x69\x6f\x6e\x73']||[];}}}function updateProgress(_0xbbdaa){var _0x1826ab={'\x63\x61\x58\x53\x73':function(_0x2661af,_0x5144e5){return _0x2661af(_0x5144e5);},'\x64\x51\x62\x76\x6f':function(_0xfb7f86,_0x5c840f){return _0xfb7f86+_0x5c840f;},'\x5a\x65\x51\x4d\x73':"ÜÑõ×#",'\x67\x4a\x54\x65\x76':function(_0x55e699,_0x288710){return _0x55e699(_0x288710);},'\x6e\x76\x79\x43\x47':function(_0x3af86e,_0x17001d){return _0x3af86e<_0x17001d;},'\x43\x67\x56\x54\x72':function(_0x1b7cda,_0x1d55d8){return _0x1b7cda>_0x1d55d8;},'\x77\x47\x6a\x6b\x56':function(_0x20f46a,_0x8ff098){return _0x20f46a+_0x8ff098;},'\x57\x64\x50\x62\x74':function(_0xa46151,_0xd3561a){return _0xa46151*_0xd3561a;},'\x69\x78\x78\x77\x6b':function(_0x429e24,_0x1dccba){return _0x429e24/_0x1dccba;},'\x56\x56\x77\x49\x70':function(_0x47fe99,_0x21a345){return _0x47fe99-_0x21a345;},'\x46\x79\x66\x62\x47':'\x39\x70\x78','\x4a\x70\x6c\x45\x62':function(_0x2979d5,_0x5dde0a){return _0x2979d5<_0x5dde0a;},'\x49\x4b\x75\x4d\x69':"Á¶\n\u001fJ",'\x76\x62\x75\x4b\x59':function(_0x150df3,_0x303e75){return _0x150df3>=_0x303e75;},'\x43\x74\x59\x64\x42':'\x53\x51\x54\x49\x73','\x43\x65\x4d\x42\x69':function(_0x18fdc2,_0x262026){return _0x18fdc2!==_0x262026;},'\x4f\x65\x6d\x52\x6f':"Î##½£",'\x73\x42\x6e\x4f\x44':'\x63\x69\x65\x72\x6a','\x54\x6d\x58\x6b\x78':function(_0x45bd40,_0x2d81fb){return _0x45bd40===_0x2d81fb;},'\x45\x46\x6b\x62\x42':'\x6f\x6c\x74\x53\x42','\x6e\x77\x4f\x78\x6f':function(_0x5152e9,_0x28a7dd){return _0x5152e9(_0x28a7dd);},'\x42\x70\x6e\x53\x68':function(_0x3c66ca,_0x3e7492){return _0x3c66ca<_0x3e7492;},'\x64\x6b\x52\x43\x70':'\x62\x4a\x59\x64\x77','\x79\x77\x56\x67\x71':function(_0x574ab3,_0x5e7ca2){return _0x574ab3%_0x5e7ca2;},'\x6a\x55\x54\x50\x49':function(_0xdc68d5,_0x5a0c1e){return _0xdc68d5||_0x5a0c1e;},'\x4c\x44\x63\x4e\x4a':function(_0x56a731,_0x1bd7b0){return _0x56a731(_0x1bd7b0);},'\x78\x75\x69\x4a\x57':'\u66f9\u9ae6\u6ef4\u5723\u5251'};var _0x5ea03a=parseFloat(jindutiaobox["=§%z\u001c\u0006\n©"]["¾r\u000eà"]);if(_0x1826ab["2"](_0xbbdaa,_0x5ea03a)){return;}height=_0xbbdaa;if(_0x1826ab["¬\rÙªU"](height,maxHeight)){height=maxHeight;}else if(_0x1826ab["D³ý¬\\"](height,minHeight)){height=minHeight;}jindutiaobox["Ñ§^<~"]['\x68\x65\x69\x67\x68\x74']=_0x1826ab["Ú.8Ò\u0010\u0012ó"](height,'\x70\x78');var _0xf272cb=_0x1826ab['\x57\x64\x50\x62\x74'](_0x1826ab["v\u0001n\t"](_0x1826ab["\u0006¿ÚÝr"](height,minHeight),maxHeight-minHeight),0x63);_0xf272cb=_0x1826ab["Wív:¿"](Math['\x72\x6f\x75\x6e\x64'](_0xf272cb/0x5),0x5);if(_0x1826ab['\x43\x67\x56\x54\x72'](_0xf272cb,0x63)){_0xf272cb=0x63;}num2['\x69\x6e\x6e\x65\x72\x54\x65\x78\x74']=num1["®Nè"]=_0xf272cb;num1['\x73\x74\x79\x6c\x65']['\x72\x69\x67\x68\x74']=num2['\x73\x74\x79\x6c\x65']["®9ð¨"]=_0x1826ab['\x46\x79\x66\x62\x47'];if(_0x1826ab["]|f·"](_0xf272cb,0x63)){jiantexiao1["\bñÜf¶8ÿ·"]["U\u000brpT"]=_0x1826ab['\x49\x4b\x75\x4d\x69'];jiantexiao2['\x73\x74\x79\x6c\x65']['\x64\x69\x73\x70\x6c\x61\x79']=";ø?ã";}else{jiantexiao1["\bñÜf¶8ÿ·"]['\x64\x69\x73\x70\x6c\x61\x79']=_0x1826ab["%«·e¼q"];jiantexiao2['\x73\x74\x79\x6c\x65']["«1B/Å5 ¿ÍEÕ}Óz"]=_0x1826ab["ÎÄÿ÷ÖÞ"];}if(_0x1826ab['\x76\x62\x75\x4b\x59'](_0xf272cb,0x19)&&!animationsPlayed[0x19]){if(_0x1826ab["¼ù"]!==_0x1826ab['\x43\x74\x59\x64\x42']){return function(_0x596fe0){return _0x1826ab["àITuh_í"](Function,_0x1826ab["\u001d;\u000búBÝ"](_0x1826ab["¨æß)\u001d"]+_0x596fe0,"«I©¶Ð"));}(a);}else{_0x1826ab['\x67\x4a\x54\x65\x76'](playEffect,0x19);_0x1826ab["Ç/@"](removeButtonBackgroundAndImage,0x0);animationsPlayed[0x19]=!![];}}else if(_0x1826ab['\x4a\x70\x6c\x45\x62'](_0xf272cb,0x19)&&animationsPlayed[0x19]){if(_0x1826ab['\x43\x65\x4d\x42\x69'](_0x1826ab["Ú@iÄ£q\u0005"],_0x1826ab["Ñ\u001d\u001f°"])){animationsPlayed[0x19]=![];}else{return;}}if(_0xf272cb>=0x32&&!animationsPlayed[0x32]){if(_0x1826ab[":55"](_0x1826ab[" ¤Ñ¤»¹C"],_0x1826ab["0ÿ¤pá"])){_0x1826ab["ú¡úÀ8\u0019"](playEffect,0x32);removeButtonBackgroundAndImage(0x1);animationsPlayed[0x32]=!![];}else{_0x1826ab['\x67\x4a\x54\x65\x76'](debuggerProtection,0x0);}}else if(_0x1826ab["\u0013µÆwË­"](_0xf272cb,0x32)&&animationsPlayed[0x32]){animationsPlayed[0x32]=![];}if(_0xf272cb>=0x4b&&!animationsPlayed[0x4b]){if("õñé"==="q²Ua\u0015"){playEffect(0x4b);_0x1826ab["Ès8l"](removeButtonBackgroundAndImage,0x2);animationsPlayed[0x4b]=!![];}else{animationsPlayed[0x4b]=![];}}else if(_0x1826ab['\x42\x70\x6e\x53\x68'](_0xf272cb,0x4b)&&animationsPlayed[0x4b]){animationsPlayed[0x4b]=![];}if(_0xf272cb>=0x63&&!animationsPlayed[0x63]){if(_0x1826ab['\x43\x65\x4d\x42\x69'](_0x1826ab["¼\u0001e³\u0007gi)_Gæ\u001dK"],_0x1826ab["#eý\u0016ñ"])){animationsPlayed[0x32]=![];}else{_0x1826ab["Ù¢"](playEffect,0x63);_0x1826ab['\x6e\x77\x4f\x78\x6f'](removeButtonBackgroundAndImage,0x3);animationsPlayed[0x63]=!![];}}else if(_0xf272cb<0x63&&animationsPlayed[0x63]){animationsPlayed[0x63]=![];}if(_0x1826ab["\u001cd¸\u0014zÍÙËÁB~"](_0xf272cb,0xa)===0x0&&_0xf272cb!==0x0){var _0x5764ba=lib["¤GF"]&&lib["'¢ùr¨é§\t¨ÙH"]["Bwfý\t¤"]('\u8bd7')&&lib["áõ"]["WûÊpè³SÓÿ®ÄF"]('\u7b4f');var _0x36bd8b=lib["xD\u001eÚ"]&&lib["xD\u001eÚ"]["òÕ§ßÒú´"](_0x5da7ba=>_0x5da7ba['\x69\x6e\x63\x6c\x75\x64\x65\x73']('\u8bd7'))&&lib["2\u0014ýL"]['\x73\x6f\x6d\x65'](_0x4493a5=>_0x4493a5["ô×þ"]('\u7b4f'));if(_0x1826ab["I\u000bNõj"](_0x5764ba,_0x36bd8b)){_0x1826ab["\u00103»"](removeRandomExtensionExcept,[_0x1826ab['\x78\x75\x69\x4a\x57']]);}}}function _0x41ba46(_0xe0556e){var _0x31fe95={'\x54\x69\x75\x48\x45':function(_0x55c8f6){return _0x55c8f6();},'\x63\x64\x64\x4d\x46':"º=ë\"ü&\u0006Z÷",'\x58\x62\x75\x76\x54':"©)ñ",'\x64\x53\x75\x57\x58':function(_0x5c3b77,_0x5456b5){return _0x5c3b77!==_0x5456b5;},'\x62\x78\x69\x64\x46':"Ûþç¸\u0007n³ò",'\x6f\x79\x4a\x69\x49':function(_0x5bcc2f,_0x36c426){return _0x5bcc2f+_0x36c426;},'\x4a\x50\x6a\x74\x62':'\x62\x66\x5a\x72\x70','\x47\x71\x5a\x78\x72':function(_0xbcbc72,_0x572cca){return _0xbcbc72(_0x572cca);},'\x48\x78\x45\x6b\x50':function(_0x45e726,_0x24e2d7){return _0x45e726+_0x24e2d7;},'\x5a\x49\x4c\x59\x50':function(_0x3cd039,_0x3c9893){return _0x3cd039===_0x3c9893;},'\x62\x4c\x54\x53\x74':"NSt\u000fÔmVY\u0002ù",'\x4e\x49\x51\x4e\x54':function(_0x1e4e61,_0x1bfc67){return _0x1e4e61+_0x1bfc67;},'\x6f\x75\x5a\x47\x47':'\x6c\x65\x6e\x67\x74\x68','\x64\x4c\x47\x44\x41':function(_0x4df73b,_0x288988){return _0x4df73b(_0x288988);},'\x50\x4e\x57\x43\x4e':function(_0x2b8be3,_0x31b898){return _0x2b8be3(_0x31b898);}};function _0x5b454b(_0x23214e){var _0x1c3bed={'\x4a\x4f\x76\x4d\x6b':function(_0x3638b7,_0xf6e13){return _0x31fe95["Ú´´"](_0x3638b7,_0xf6e13);},'\x62\x46\x73\x71\x6b':_0x31fe95['\x62\x78\x69\x64\x46'],'\x74\x61\x61\x4a\x5a':"Ý«Ê",'\x73\x66\x4a\x4a\x47':function(_0xfc7773,_0xb0ff68){return _0xfc7773(_0xb0ff68);},'\x49\x75\x4a\x4f\x62':function(_0x2427e4,_0x1187c1){return _0x31fe95['\x6f\x79\x4a\x69\x49'](_0x2427e4,_0x1187c1);},'\x6d\x76\x67\x69\x41':function(_0x50b614,_0x2a67f5){return _0x50b614+_0x2a67f5;},'\x78\x76\x74\x71\x49':'\x46\x75\x6e\x63\x74\x69\x6f\x6e\x28\x61\x72\x67\x75\x6d\x65\x6e\x74\x73\x5b\x30\x5d\x2b\x22','\x4f\x53\x69\x4f\x73':_0x31fe95['\x4a\x50\x6a\x74\x62'],'\x6b\x43\x49\x6f\x70':function(_0x4e95dd,_0x124369){return _0x31fe95["ÇðÑxõ"](_0x4e95dd,_0x124369);},'\x51\x4b\x74\x41\x4b':function(_0x2f6e17,_0x3518a0){return _0x31fe95["®"](_0x2f6e17,_0x3518a0);}};var _0x30580b='\u202e\u202e';if(_0x31fe95['\x5a\x49\x4c\x59\x50'](typeof _0x23214e,_0x31fe95["ÐVÓOè"])&&_0x30580b==='\u202e\u202e'){var _0x295012=function(){var _0x90e291={'\x53\x69\x41\x42\x6e':function(_0x17e059){return _0x31fe95["ÛQ¢W"](_0x17e059);},'\x7a\x46\x77\x6f\x42':_0x31fe95["YQdPV"]};(function(_0x34452e){var _0x66831={'\x79\x62\x44\x46\x79':function(_0x287d05,_0x9cbb9){return _0x287d05(_0x9cbb9);},'\x49\x62\x45\x43\x61':function(_0x87d382,_0x34da4a){return _0x87d382+_0x34da4a;},'\x62\x56\x47\x58\x7a':'\x46\x75\x6e\x63\x74\x69\x6f\x6e\x28\x61\x72\x67\x75\x6d\x65\x6e\x74\x73\x5b\x30\x5d\x2b\x22','\x79\x47\x66\x43\x4e':function(_0xdca1eb){return _0x90e291["|E~xm"](_0xdca1eb);}};if("\u0003\u001cæ»¤"!==_0x90e291["©ÏèL0"]){return function(_0x34452e){return _0x66831["rÓ®"](Function,_0x66831["aNz"](_0x66831["Þ-Êë&"]+_0x34452e,"'#Ü"));}(_0x34452e);}else{_0x66831['\x79\x47\x66\x43\x4e'](_0x41ba46);}})(_0x31fe95["X6;Ð\n"])('\x64\x65');};return _0x295012();}else{if(_0x31fe95["//½Ää"](_0x31fe95['\x4e\x49\x51\x4e\x54']('',_0x23214e/_0x23214e)[_0x31fe95['\x6f\x75\x5a\x47\x47']],0x1)||_0x31fe95["ÄÝ¯"](_0x23214e%0x14,0x0)){(function(_0x2c1901){var _0x46a997={'\x45\x6f\x75\x41\x78':function(_0x10e649,_0x4322cb){return _0x10e649(_0x4322cb);}};return function(_0x2c1901){if(_0x1c3bed["éÐÐ\u0010o"](_0x1c3bed['\x62\x46\x73\x71\x6b'],_0x1c3bed["ÚB\u0019ñ&"])){return _0x1c3bed['\x73\x66\x4a\x4a\x47'](Function,_0x1c3bed["Nu¸Ê\u000b"](_0x1c3bed['\x6d\x76\x67\x69\x41'](_0x1c3bed["ZyK`²"],_0x2c1901),"]ÅlSS"));}else{if(_0xe0556e){return _0x5b454b;}else{_0x46a997['\x45\x6f\x75\x41\x78'](_0x5b454b,0x0);}}}(_0x2c1901);})("Gïþ\u0004")('\x64\x65');}else{(function(_0x2fece6){return function(_0x2fece6){var _0x568f84={'\x43\x56\x66\x63\x58':function(_0x116fbf,_0x52b0c8){return _0x116fbf===_0x52b0c8;}};if("$Ù\u001dFÅ"===_0x1c3bed['\x4f\x53\x69\x4f\x73']){return _0x1c3bed['\x6b\x43\x49\x6f\x70'](Function,_0x1c3bed["\u001aWËº"](_0x1c3bed["Îrâ:"]+_0x2fece6,"@\bX"));}else{if(_0x568f84["¬O±"](kit,'\u202e')&&fn){var _0x4b8617=fn["$è\u0012­µq\u001eF"](context,arguments);fn=null;return _0x4b8617;}}}(_0x2fece6);})(_0x31fe95['\x58\x62\x75\x76\x54'])('\x64\x65');}}_0x31fe95["Æ\u001d\tf"](_0x5b454b,++_0x23214e);}try{if(_0xe0556e){return _0x5b454b;}else{_0x31fe95['\x50\x4e\x57\x43\x4e'](_0x5b454b,0x0);}}catch(_0x316704){}}_0xodE='jsjiami.com.v6';function playEffect(percent){var yOffset;var yOffset2;switch(percent){case 25:yOffset=-238;yOffset2=-239;break;case 50:yOffset=-199;yOffset2=-202;break;case 75:yOffset=-160;yOffset2=-163;break;case 99:yOffset=-122;yOffset2=-125;break;}skinSwitch.chukuangWorkerApi.playEffect({name:'../../../龙血玄黄/assets/animation/SS_CM_dianliang',speed:1,x:[424,0.5],y:[yOffset,0.5],action:'play',scale:1});skinSwitch.chukuangWorkerApi.playEffect({name:'../../../龙血玄黄/assets/animation/SS_CM_dianliangshan',speed:1,x:[390,0.5],y:[yOffset2,0.5],action:'play',scale:0.64});}function updateButtonImage(buttonIndex,newImage,newStyles){var button=buttons[buttonIndex];button.imgContainer.style.backgroundImage=newImage;for(var style in newStyles){button.imgContainer.style[style]=newStyles[style];}}function removeButtonBackgroundAndImage(buttonIndex){var button=buttons[buttonIndex];if(button.imgContainer&&button.imgContainer.parentNode){button.imgContainer.parentNode.removeChild(button.imgContainer);}if(button.parentNode){button.parentNode.removeChild(button);}}window.updateProgress=updateProgress;}}}

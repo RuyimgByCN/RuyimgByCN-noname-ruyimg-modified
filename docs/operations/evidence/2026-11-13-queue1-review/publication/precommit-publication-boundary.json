@@ -1,0 +1,13 @@
+{
+  "at": "2026-11-14T00:46:44.558097+08:00",
+  "head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "branch": "main",
+  "approved_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+  "approved_ref": "refs/heads/native-convergence",
+  "remote_old": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "persistent_config_sha256": "f862ba299c2bbd23c501ebeb0830f53caabc990a4da7e8005570470ff914bc25",
+  "pre_push_hook": ".git/hooks/pre-push",
+  "pre_push_hook_sha256": "e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7",
+  "staged_names": [],
+  "authorization": "Decision 25: command-scoped exact SHA/ref normal push only; no named remote or persistent settings change."
+}

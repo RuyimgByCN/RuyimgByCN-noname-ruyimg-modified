@@ -1,0 +1,27 @@
+Working directory: /Users/ruyimg/Documents/Claude/sanguosha/noname-next
+Date: 2026-11-13
+HEAD: bd58ef06d59940baed8d7f93e61ce571b152fb81 (dirty)
+Rules/NGSA/schema/ABI/WS: 333/107/5/759/8
+
+First generation (exit 0; 141 rows, 79 confirmed-difference rows, 36 verification gaps):
+set -o pipefail
+python3 -B docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/write-findings.py 2>&1 | tee docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/generation-01.raw.txt
+
+Final generation after calling-event/source-reference corrections:
+set -o pipefail
+python3 -B docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/write-findings.py 2>&1 | tee docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/generation-02.raw.txt
+
+Independent evidence self-check (no match execution):
+set -o pipefail
+python3 -B docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/validate-review.py 2>&1 | tee docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/validation.raw.txt
+
+First self-check exit 1: arbitrary minimum text length rejected a concise U07 general metadata sentence. Removed the length minimum instead of padding audit text. Original raw log retained.
+
+Final self-check:
+set -o pipefail
+python3 -B docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/validate-review.py 2>&1 | tee docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/validation-02.raw.txt
+
+Final generation exit 0. Final self-check exit 0: 141 exact keys/categories, 32 interactive candidates, 415 source refs/hashes, 15 local links; all JSON parsed. These are evidence checks, not native or upstream matches.
+
+Read-only source exploration used cat/sed/rg/python, with no Cargo/browser command. CodeGraph tool discovery returned no available tool, so specific-file source reads were used.
+Source provenance first failed the whole-tail equality assertion; exact command/output is preserved separately in source-provenance-01.raw.txt. The final object proof does not claim _CMeffects equals the old decoded file.

@@ -1,0 +1,341 @@
+# U01 独立逐技能表：B组
+
+核验日期：2026-11-13；HEAD `bd58ef06d59940baed8d7f93e61ce571b152fb81`，初始 tracked clean。规则333／NGSA107／schema5／ABI759／WS8。
+本表是上述冻结HEAD的独立源码比较及现有测试断言检查；本复核 Cargo执行0、浏览器执行0。反例是待执行场景，不写成已复现。A/B/C/D 及 `_asks` 指本来源对应 batch 文件。工作区后续聚贤修补独立记录，不能用其覆盖本表冻结输入。
+
+## dddzhilian
+
+键：`U01:skills:dddzhilian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1584`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1584)，规则区至1675行；[冻结副本](inputs/upstream/skill.js:1584)。原生：[u01_batch_b.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b.rs:44)；[u01_batch_b_asks.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | global phaseEnd，direct。 |
+| 过滤和次数 | 本回合使用或打出牌的在场角色恰为两人，包含本人和一名男性；分别拥有可弃牌影响选项。 |
+| 选择与取消 | 主人选双方各摸1、双方各自弃1，或不发动；各自弃时每人选择自己的牌。 |
+| 上游逐步结算 | 双方按选项摸/弃，再从本回合进入弃牌堆且仍在弃牌堆的杀中全部获得。 |
+| 当前原生执行 | B:44–104；B_asks:40–74、681–690；监听use/respond记参与者，End begin执行。 |
+| 源码差异/边界 | 结算提前到结束阶段开始；弃牌固定每人he第一张；回收遍历整个弃牌堆杀，不限本回合。 |
+| 待执行反例 | 弃牌堆预放上一回合杀，当前仅主人和男A各用一张牌。选择摸牌后，上游旧杀仍弃，原生收回；选弃时给每人两张he检验选牌。 |
+| 实际断言与缺口 | 没有当前Host执恋的两人/三人、男女、生死、旧杀范围、双主体弃牌或pending测试。 |
+
+分类：`verified_source_difference`。源码已确认：源仅收本回合入弃的杀；原生从整个弃牌堆回收全部杀。
+
+本项列入严格降级候选，建议改为「简化近似」；本复核不新增「已复核等价」签署。
+
+## dddjijian
+
+键：`U01:skills:dddjijian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1676`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1676)，规则区至1806行；[冻结副本](inputs/upstream/skill.js:1676)。原生：[u01_batch_b.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b.rs:105)；[u01_batch_b_asks.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | phaseUse 主动，每阶段一次。 |
+| 过滤和次数 | 主人可交手牌杀给另一男性；不要求男目标原有手牌。给杀后仅1张则自动展示，至少2张才选1至2张同色杀或普通锦囊。 |
+| 选择与取消 | 先选交出杀和男性目标；男性给牌后按数量自动展示或自行选合法展示牌；双方依座次各选不与另一人重复的展示牌名，正常选目标使用虚拟牌。 |
+| 上游逐步结算 | 收集交杀，男性展示限定牌，再逐人执行实际牌效果，牌名去重，不能以摸牌替代。 |
+| 当前原生执行 | B:105–149；B_asks ask101–103、833–843；limits once_per_turn。 |
+| 源码差异/边界 | 男性展示任意手牌，没有同色/杀或锦囊约束；完成后双方直接各摸1，完全没有虚拟牌选择与使用。次数也按turn而非phase。 |
+| 待执行反例 | 男性展示红色无中生有与红杀，双方应各用其中一个不重复牌名；原生只摸1。另选红桃桃应被上游拒绝，原生可展示。 |
+| 实际断言与缺口 | 技能注册存在；没有赍剑当前Host的交杀、男性反例、同色约束、两次用牌或取消/恢复测试。 |
+
+分类：`verified_source_difference`。源码已确认：源展示后双方依次真实用不重名虚拟牌；原生将该段替换为双方各摸1。
+
+本项列入严格降级候选，建议改为「简化近似」；本复核不新增「已复核等价」签署。
+
+## dddjijian_old
+
+键：`U01:skills:dddjijian_old@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1807`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1807)，规则区至2004行；[冻结副本](inputs/upstream/skill.js:1807)。原生：[u01_batch_b.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b.rs:150)；[u01_batch_b_asks.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | phaseUse 主动，每阶段一次，旧版是独立定义。 |
+| 过滤和次数 | 选择有可展示牌的男性；展示1至2张，给主人可交杀机会，交杀与展示牌同色张数决定虚拟使用次数。 |
+| 选择与取消 | 男性选展示牌；主人可不交杀；交杀后男性逐次选择未展示手牌名称的基本/普通锦囊，每次选实际目标且牌名去重。 |
+| 上游逐步结算 | 先展示后交杀，按对应色数量循环虚拟用牌，不能把展示和给予顺序互换。 |
+| 当前原生执行 | B:150–210；B_asks ask104–107、844–848；同色时目标摸1。 |
+| 源码差异/边界 | 省掉男性按手牌名称连续使用虚拟牌，只按同色判断后摸1；没有每次去名/目标窗口，once_per_turn也限制额外阶段。 |
+| 待执行反例 | 男性展示两张黑牌，主人交黑杀，另有未展示无中、过河；源应能连续选两种牌使用，原生仅摸1。 |
+| 实际断言与缺口 | 仅注册旧版名称；没有先展示/不交/两次虚拟用牌/重名拒绝与保存恢复断言。 |
+
+分类：`verified_source_difference`。源码已确认：源按同色数循环虚拟用牌；原生仅同色时摸1，没有虚拟用牌段。
+
+本项列入严格降级候选，建议改为「简化近似」；本复核不新增「已复核等价」签署。
+
+## dddzhengjun
+
+键：`U01:skills:dddzhengjun@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2005`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2005)，规则区至2193行；[冻结副本](inputs/upstream/skill.js:2005)。原生：[u01_batch_b.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b.rs:211)；[u01_batch_b_asks.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | 本人出牌阶段内global damageEnd/loseHpEnd/recoverEnd及lose/equip/addJudge/gain/loseAsync/addToExpansionAfter，受影响者由getl/getg判别。 |
+| 过滤和次数 | 事件中数值实际受影响者与主人体力、手牌或装备数相等；每类本阶段一次；可以涉及主人本身。 |
+| 选择与取消 | 体力类选满足者回1或失1；手牌类选摸1或由其自弃1；装备类选合法装备移动或取消，各类机会分别保留。 |
+| 上游逐步结算 | 先从本事件getl/getg或changeHp定位受影响者，再按相等类别询问并执行，记录该类别阶段次数。 |
+| 当前原生执行 | B:211–359；B_asks:75–120、634–644、691；先找全场第一个other相等者，按machine.card挑单类。 |
+| 源码差异/边界 | 候选没有绑定事件受影响者，不能选择多个相等者或自己；手牌弃牌自动首he；装备确认后自动挑首装备/首空槽，fallback甚至向占槽角色追加装备。 |
+| 待执行反例 | 在Play令座位B失牌，但旁观者A先于B且手牌与主人相等；原生会处理A。装备类设所有槽占满，检查是否出现两件同槽装备。 |
+| 实际断言与缺口 | 没有真实整军事件/三类别/受影响者过滤、分类次数、装备合法移动或pending恢复测试。 |
+
+分类：`verified_source_difference`。源码已确认：源从本事件getl/getg等定位受影响者；原生选全场首个数值相等的other，未绑定实际受影响者。
+
+本项列入严格降级候选，建议改为「简化近似」；本复核不新增「已复核等价」签署。
+
+## dddxianxi
+
+键：`U01:skills:dddxianxi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2194`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2194)，规则区至2295行；[冻结副本](inputs/upstream/skill.js:2194)。原生：[u01_batch_b.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b.rs:360)；[u01_batch_b_asks.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | 本人 useCard2 杀可追加目标，后继 useCardAfter 处理追加者。 |
+| 过滤和次数 | 当前是杀；可选任意个原目标以外且此杀合法的目标；只统计追加且没有受到本次杀伤害者。 |
+| 选择与取消 | 第一段选择追加目标/取消；事后按未受伤追加数N可弃N张he，或取消支付而摸N失1；伤害对象是该追加集合。 |
+| 上游逐步结算 | 将targets真正加进原杀，完整结算杀及伤害历史，结束后计算N，支付后对这N人各伤1，或摸N失血。 |
+| 当前原生执行 | B:360–416；B_asks:692–702；CardUsed时仅选1人，直接进入弃1/摸1分支。 |
+| 源码差异/边界 | 没有修改原杀targets，也不等杀结算和伤害结果；N固定为1、仅一目标，因此不是原技能的追加攻击及未伤补偿。 |
+| 待执行反例 | 原杀只有A，追加B和C，令B响应闪、C受杀伤；源事后只算B一次，原生无法追加两人且提前处理伤害。 |
+| 实际断言与缺口 | 旧closure仅名称存在；没有原杀追加、伤害来源关联、N=0/2、支付取消或各窗口恢复断言。 |
+
+分类：`verified_source_difference`。源码已确认：源向原杀追加多个targets并在useCardAfter按未伤者计算N；原生不改targets，提前固定N=1。
+
+本项列入严格降级候选，建议改为「简化近似」；本复核不新增「已复核等价」签署。
+
+## dddlingyong
+
+键：`U01:skills:dddlingyong@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2296`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2296)，规则区至2332行；[冻结副本](inputs/upstream/skill.js:2296)。原生：[u01_batch_b.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b.rs:417)；[u01_batch_b_asks.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | 本人 phaseCancelled 或 phaseSkipped。 |
+| 过滤和次数 | 确有阶段被取消或跳过；每次判定非杀且自己愿意可继续，不设两次上限。 |
+| 选择与取消 | 可取消发动；非杀判定牌可 chooseUseTarget 实际使用；之后选择继续判定或结束。杀判定直接结束。 |
+| 上游逐步结算 | 逐次judge，非杀可真正使用判定牌，询问继续，再回judge直到杀或拒绝。 |
+| 当前原生执行 | B:417–459；B_asks:703–729；从PhaseBegin的skip flags推定，第一次非杀直接入手，repeat最多再1次。 |
+| 源码差异/边界 | 以拿牌代替判定牌直接使用；硬上限2次；时机由PhaseBegin猜测，不能涵盖所有phaseCancelled/Skipped。 |
+| 待执行反例 | 跳过出牌阶段且预置连续3张非杀判定牌，第3张之后才杀；源可连续使用3张，原生至多取2到手。 |
+| 实际断言与缺口 | 未发现当前Host灵涌触发断言；缺真实跳过/取消、连续3次、实际用牌、杀停止与pending恢复。 |
+
+分类：`verified_source_difference`。源码已确认：源非杀判定牌可实际使用并无两次上限；原生将其拿到手且循环上限2。
+
+本项列入严格降级候选，建议改为「简化近似」；本复核不新增「已复核等价」签署。
+
+## dddxuxiao
+
+键：`U01:skills:dddxuxiao@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2333`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2333)，规则区至2406行；[冻结副本](inputs/upstream/skill.js:2333)。原生：[u01_batch_b.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b.rs:460)；[u01_batch_b_asks.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | 本人 loseAfter 或 global loseAsyncAfter，direct。 |
+| 过滤和次数 | 事件失牌原因是discard；其中黑色基本牌仍在弃牌堆，且有人可被这张当兵粮寸断使用。可逐张处理。 |
+| 选择与取消 | 主人选某黑基本牌/取消，选合法兵粮目标；本次完后还有合格牌可再选；目标摸2。 |
+| 上游逐步结算 | 从本次discard的仍弃实体中逐张真实使用兵粮寸断，给所选目标摸2，循环至无牌或取消。 |
+| 当前原生执行 | B:460–489；B_asks:730–740、ask115–117；一次选择后结束。 |
+| 源码差异/边界 | CardsLost分支未限定discard原因；一次只用一张，没有多牌循环；目标检查以当前Bing为主，不能代替完整兵粮合法性。 |
+| 待执行反例 | 同一次弃牌阶段弃两张黑基本，原生放一张后结束，源可再放另一张。再用非discard失牌入弃事件检验误触发。 |
+| 实际断言与缺口 | u01_ddd_eight.rs:约680起实际弃牌阶段：红桃不触发，黑杀转Bing且目标摸2，选牌窗口恢复；只弃1张，未测多牌循环、非discard及第二选择取消。 |
+
+分类：`verified_source_difference`。源码已确认：源同次弃牌可循环逐张用黑基本作兵粮；原生完成一张便结束。
+
+本项列入严格降级候选，建议改为「简化近似」；本复核不新增「已复核等价」签署。
+
+## dddxuyu
+
+键：`U01:skills:dddxuyu@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2407`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2407)，规则区至2422行；[冻结副本](inputs/upstream/skill.js:2407)。原生：[u01_batch_b.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b.rs:490)；[u01_batch_b_asks.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | 本人 useCardAfter，可选每次摸1；摸后 addTempSkill 的下一 useCardAfter 弃牌。 |
+| 过滤和次数 | 下一张用牌完成必须弃1，但弃牌子技能不禁止本体在同一 useCardAfter 再选择摸1。 |
+| 选择与取消 | 每张用牌后可确认/取消摸1；已有弃牌义务时必须自选弃1，之后本次仍有是否摸牌选择。 |
+| 上游逐步结算 | 完成原牌，清并执行上一张留下的弃牌义务，然后处理本张可选摸1并再挂下一义务。 |
+| 当前原生执行 | B:490–532；B_asks:741–744；CardUsed Normal中must_discard为真时直接弃并清flag，返回Done。 |
+| 源码差异/边界 | 形成严格摸/弃交替，第二张弃后本体不再询问摸；时机也在正常CardUsed而非牌完全用后。 |
+| 待执行反例 | 连续使用两张牌，第一次同意摸；第二次弃1后源仍可再摸1并挂义务，原生直接结束。 |
+| 实际断言与缺口 | u01_ddd_eight.rs:585起断言第一张pass/confirm、恢复和第二张强制弃flag清零；没有断言第二张弃后还能发动，因此覆盖并未排除该缺口。 |
+
+分类：`verified_source_difference`。源码已确认：源下一牌弃后本体仍可再选摸1；原生must_discard分支清flag后立即Done。
+
+本项列入严格降级候选，建议改为「简化近似」；本复核不新增「已复核等价」签署。
+
+## dddshijian
+
+键：`U01:skills:dddshijian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2423`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2423)，规则区至2518行；[冻结副本](inputs/upstream/skill.js:2423)。原生：[u01_batch_b.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b.rs:533)；[u01_batch_b_asks.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | global useCardAfter，他人在其出牌阶段用完第2张后；后续其下一张指定目标时结算临时效果。 |
+| 过滤和次数 | 触发者不是自己且恰第2张；自己有he；已交牌的目标下一张有目标时在其首次目标事件做一次选择。 |
+| 选择与取消 | 主人可给该人1张he或取消；下一张选择额外结算一次，或主人摸1；用牌者原目标不应被帮助对象替代。 |
+| 上游逐步结算 | 给牌并挂该角色后续牌效果；其下一张正常指定目标时，按主人选择增 effectCount 或主人摸1。 |
+| 当前原生执行 | B:533–594；B_asks:745–752；第2CardUsed给牌、第3CardUsed取flag。 |
+| 源码差异/边界 | 额外结算选项被替换成用牌者摸1；没有增加原牌效果次数，触发在使用中而非useAfter。 |
+| 待执行反例 | 目标第3牌为无中生有，主人选额外结算应使该牌多结算一次（额外摸2）；原生只给用牌者摸1。另一分支应主人摸1。 |
+| 实际断言与缺口 | 只有注册及旧路径名称，未见当前Host第2/3计数、额外结算A/B、不给牌、无目标牌或pending恢复断言。 |
+
+分类：`verified_source_difference`。源码已确认：源额外结算选项增加原牌effectCount；原生选项仅令用牌者摸1。
+
+本项列入严格降级候选，建议改为「简化近似」；本复核不新增「已复核等价」签署。
+
+## dddxuyu_old
+
+键：`U01:skills:dddxuyu_old@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2519`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2519)，规则区至2573行；[冻结副本](inputs/upstream/skill.js:2519)。原生：[u01_batch_b.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b.rs:595)；[u01_batch_b_asks.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | 本人 useCardAfter 的本出牌阶段第1张；挂出的弃牌子技能在第3张后触发。 |
+| 过滤和次数 | 第1张后可摸2；第3张义务只在本次已发动且仍有可弃牌时执行；出牌阶段/回合临时效果到期。 |
+| 选择与取消 | 第一张确认摸2或取消；第三张自选必须弃1。 |
+| 上游逐步结算 | 用完第1张摸2并记临时效果；用完第3张弃1并撤义务。 |
+| 当前原生执行 | B:595–647；B_asks:753–760；计数/armed使用turn_stamp及CardUsed。 |
+| 源码差异/边界 | 整回合牌数替代本出牌阶段牌数；第二出牌阶段不会以第1张重新触发；当前询问也早于useCardAfter。 |
+| 待执行反例 | 同回合插入两个出牌阶段，各阶段第一张都应可旧续语摸2；原生使用回合总计数使第二阶段失去机会。 |
+| 实际断言与缺口 | 仅旧版注册；没有第1/3张、摸取消、两个Play、阶段外用牌或保存恢复断言。 |
+
+分类：`verified_source_difference`。源码已确认：源按当前出牌阶段第1/2张分支；原生按整回合计数，额外出牌阶段不重置。
+
+本项列入严格降级候选，建议改为「简化近似」；本复核不新增「已复核等价」签署。
+
+## dddshijian_old
+
+键：`U01:skills:dddshijian_old@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2574`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2574)，规则区至2635行；[冻结副本](inputs/upstream/skill.js:2574)。原生：[u01_batch_b.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b.rs:648)；[u01_batch_b_asks.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | global useCardAfter，他人在自己出牌阶段用第3张后可令其摸1；临时子技能监听全局第4张。 |
+| 过滤和次数 | 第3张使用者不是主人；后继第4张的使用者有he即可让主人摸2，源码不把后继人限定为刚才那人。 |
+| 选择与取消 | 第3张时可确认令其摸1或取消；后继满足条件则主人摸2。 |
+| 上游逐步结算 | 第三张后给摸并加临时全局效果；之后符合第4张事件时主人摸2并清效果。 |
+| 当前原生执行 | B:648–706；B_asks:745–752；armed保存第三张使用者并只接受该目标cnt4。 |
+| 源码差异/边界 | 把临时全局条件缩成特定角色后继；计数与时机仍为CardUsed/turn而非出牌阶段useAfter。 |
+| 待执行反例 | 同一回合的第二个出牌阶段，第3张后应可重新发动；原生按turn总计数可能漏掉。目标限定差异需在phaseUseAfter到期前构造嵌套其他人phaseUse方可实测，不能直接跨普通回合认作反例。 |
+| 实际断言与缺口 | 没有当前Host旧实荐的第三/第四张、不同后继人、无he反例、取消或恢复测试。 |
+
+分类：`verified_source_difference`。源码已确认：源动态临时全局条件与useCardAfter；原生只记特定角色后继并按turn牌数处理。
+
+本项列入严格降级候选，建议改为「简化近似」；本复核不新增「已复核等价」签署。
+
+## dddtaisi
+
+键：`U01:skills:dddtaisi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2636`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2636)，规则区至2705行；[冻结副本](inputs/upstream/skill.js:2636)。原生：[u01_batch_b.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b.rs:707)；[u01_batch_b_asks.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | global phaseEnd，direct。 |
+| 过滤和次数 | 本回合自己体力值发生过变化；本回合曾进入弃牌堆且目前仍弃的实体至少1。 |
+| 选择与取消 | 主人先选任意角色/取消，再从本回合仍弃集合强制选1张给他；若该人本回合曾伤主人则主人摸2。不是任意张赠牌。 |
+| 上游逐步结算 | 收集本回合cardMove历史的仍弃集合，给所选人；检查完整sourceDamage history决定摸2。 |
+| 当前原生执行 | B:707–761；B_asks:761–775；从整个discard选牌，仅保存最后伤害来源。 |
+| 源码差异/边界 | 可赠送旧回合弃牌；多名伤害来源只认最后一人，且rawflag在未显式清理时可能跨回合。End begin也提前于phaseEnd。 |
+| 待执行反例 | A先伤主人、B后伤主人，本回合End把牌给A仍应摸2，原生只认B。弃牌堆另放旧回合实体，验证不应可选。 |
+| 实际断言与缺口 | 没有太思体力变化/旧弃牌过滤、多来源伤害、数量选择、取消或pending恢复断言。 |
+
+分类：`verified_source_difference`。源码已确认：源只能赠本回合进入弃牌堆的牌；原生候选是全弃牌堆。
+
+本项列入严格降级候选，建议改为「简化近似」；本复核不新增「已复核等价」签署。
+
+## dddquche
+
+键：`U01:skills:dddquche@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2706`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2706)，规则区至2818行；[冻结副本](inputs/upstream/skill.js:2706)。原生：[u01_batch_b.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b.rs:762)；[u01_batch_b_asks.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | phaseUse 主动，limited。 |
+| 过滤和次数 | 有红色he可给他人；后续有黑色he且能当杀用时可继续；每次给/使用步骤累计本回合距离-1。 |
+| 选择与取消 | 选红牌、另人可取消首发动；再可选黑牌当杀及其独立合法目标；之后可重复给红/黑杀，任一步不继续即结束。 |
+| 上游逐步结算 | 给红牌，增加距离标记，黑牌真实当杀使用并再增加距离，交替循环；限定次数在真正发动后消耗。 |
+| 当前原生执行 | B:762–817；B_asks:849–855；给红后只问一次黑，杀目标固定为收红者，无distance标记。 |
+| 源码差异/边界 | 没有循环和距离减少，黑杀无法另选目标；只覆盖一次红给和对同一人的杀。 |
+| 待执行反例 | 红给友方A、黑杀敌方B，再红给C继续；源可以完成，原生黑牌直接杀A且流程结束。设B原距2检查距离累计。 |
+| 实际断言与缺口 | u01_ddd_eight.rs B组确实测首红取消不耗限定、给红后黑杀同人伤1、重复限定拒绝和黑牌pending恢复；没有异目标、距离或第二轮。 |
+
+分类：`verified_source_difference`。源码已确认：源可循环给牌/拒绝并逐次减距离，黑杀可另选对象；原生只有一次给牌并对同一人用杀。
+
+本项列入严格降级候选，建议改为「简化近似」；本复核不新增「已复核等价」签署。
+
+## dddqianlong
+
+键：`U01:skills:dddqianlong@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2819`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2819)，规则区至2850行；[冻结副本](inputs/upstream/skill.js:2819)。原生：[u01_batch_b.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b.rs:818)；[u01_batch_b_asks.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | 本人 dieAfter 杀死其他角色，zhuSkill/forced；另有draw/discard奖惩取消子技能。 |
+| 过滤和次数 | 需主公技资格及有效击杀者；只取消当前击杀奖惩父链下的摸/弃，不影响其他技能摸弃。 |
+| 选择与取消 | 无选择；强制取消奖惩的draw/discard并摸3。 |
+| 上游逐步结算 | 在击杀结算中识别奖惩父事件，取消相应动作，杀人后获得固定3。 |
+| 当前原生执行 | B:818–827；B_asks:776–779；任何Death killer=owner时摸3，只写ddd_qianlong_kill_reward。 |
+| 源码差异/边界 | 没主公资格检查；没有取消奖惩事件的消费者，原有奖惩可与摸3同时发生。 |
+| 待执行反例 | 非主公曹髦杀人应无主公技摸3；作为主公杀忠臣应取消弃光奖惩而保留手牌，核对原生是否仍执行惩罚。 |
+| 实际断言与缺口 | decision34_pack9_closure.rs:233起用invoke旧VM断言摸3和flag，不是真实死亡/奖惩Host路径；没有主公资格、奖惩取消或保存恢复测试。 |
+
+分类：`verified_source_difference`。源码已确认：源取消击杀奖惩并改为摸3；原生只摸3，没有取消原奖惩的写入或消费者。
+
+本项列入严格降级候选，建议改为「简化近似」；本复核不新增「已复核等价」签署。
+
+## ddddongcha
+
+键：`U01:skills:ddddongcha@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2851`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2851)，规则区至2940行；[冻结副本](inputs/upstream/skill.js:2851)。原生：[u01_batch_b.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b.rs:828)；[u01_batch_b_asks.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | global phaseBegin（整回合开始），以及持技者自己的临时phaseEnd取鉴。 |
+| 过滤和次数 | 回合角色不是本人，双方各有手牌，可自愿发动；鉴堆可跨回合积存。 |
+| 选择与取消 | 主人可不发动；发动后双方分别强制放1手牌到鉴；结束时主人选1获得、当前回合角色再选1，其余保留。 |
+| 上游逐步结算 | 两个独立主体各存1；phaseEnd先主人取1，再当前人取1；不会把存量全部清空。 |
+| 当前原生执行 | B:828–901；B_asks:780–801；他人Prepare放牌，End begin主人取1后remaining全部给当前人。 |
+| 源码差异/边界 | 时机从TurnBegin/phaseEnd变成Prepare/End begin；鉴多于2时把所有余牌交当前人，缺其选1窗口及保留存量。 |
+| 待执行反例 | 先在鉴堆预存2，再本次双方各放1共4；End主人拿1，目标应只拿1留2，原生目标拿3清堆。 |
+| 实际断言与缺口 | u01_ddd_eight.rs B组实测双方各放1、第二窗口observer为目标、堆len2；没有鉴>2的End分配、双方选牌A/B、取消发动或该阶段恢复。 |
+
+分类：`verified_source_difference`。源码已确认：鉴超过2张时源当前角色只选1；原生主人取1后把全部余鉴交当前角色。
+
+本项列入严格降级候选，建议改为「简化近似」；本复核不新增「已复核等价」签署。
+
+## dddzhijie
+
+键：`U01:skills:dddzhijie@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2941`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2941)，规则区至3067行；[冻结副本](inputs/upstream/skill.js:2941)。原生：[u01_batch_b.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b.rs:902)；[u01_batch_b_asks.rs](inputs/crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | chooseToUse，非phase窗口的两鉴转化，没有每回合一次限制。 |
+| 过滤和次数 | 鉴至少2，当前窗口接受闪或无懈；选两张同色为闪，异色为无懈；没有响应窗口不应作为Play发动。 |
+| 选择与取消 | 选择合格两鉴并决定当前合法响应或取消；不能把用牌改成主动摸牌。 |
+| 上游逐步结算 | 消耗两鉴，完成响应闪/无懈，用后摸2。 |
+| 当前原生执行 | B:902–938；B_asks:802–816、856–861；自己Play或PhaseBegin弃两鉴摸2，写dddzhijie_viewas，limits once_per_turn。 |
+| 源码差异/边界 | 该flag没有读取者；不是闪/无懈响应，允许主动空做弃2摸2，且错误加每回合上限。 |
+| 待执行反例 | 他人杀指向本人，两同色鉴应能当闪；异色鉴在无懈窗口可响应。原生没有这两个入口，却可在自己Play发动。 |
+| 实际断言与缺口 | u01_ddd_eight.rs B组主动异色弃2后断言flag2与手牌2、鉴不足拒绝和pending恢复；这些断言没有实际响应，正固定了当前近似。 |
+
+分类：`verified_source_difference`。源码已确认：源将两鉴用于真实闪/无懈响应；原生仅自己Play弃2鉴摸2并写无人读取的flag。
+
+本项列入严格降级候选，建议改为「简化近似」；本复核不新增「已复核等价」签署。
+

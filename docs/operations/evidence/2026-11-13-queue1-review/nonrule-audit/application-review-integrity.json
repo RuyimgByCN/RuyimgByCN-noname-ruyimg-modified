@@ -1,0 +1,12 @@
+{
+  "result": "passed",
+  "inventory_sha256": "2658808bbe361ab248e53166157e25606c47155eb31fa19947cb601eb3f35c89",
+  "scope_keys": 224,
+  "local_markdown_links": 2,
+  "source_file_line_refs": 1004,
+  "source_files_hashed": 62,
+  "corrected_initial_findings": 11,
+  "unresolved_application_findings": 0,
+  "product_tests_run": 0,
+  "new_equivalence_signoffs": 0
+}

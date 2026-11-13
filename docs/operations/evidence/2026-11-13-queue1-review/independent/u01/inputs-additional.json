@@ -1,0 +1,353 @@
+{
+  "head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "basis": "native files captured from frozen HEAD; original snapshots preserved; worktree repair captured separately",
+  "inputs": [
+    {
+      "path": "crates/content-native-loader/src/host_skill_bindings.rs",
+      "snapshot_path": "inputs-additional/crates/content-native-loader/src/host_skill_bindings.rs",
+      "sha256": "f105655a7fadf096d816cd185218cf6738d6e2dd2bd79b37d334150af9713119",
+      "lines": 842,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/content-native-loader/src/host_skill_bindings.rs"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/activation/common.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native-content/src/content/host/activation/common.rs",
+      "sha256": "8b32fda003c158d4dd96fde30b762ff185e9f62a041034463508936e0da2c712",
+      "lines": 577,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native-content/src/content/host/activation/common.rs"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/filtering/common.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native-content/src/content/host/filtering/common.rs",
+      "sha256": "e93844349439f339d39a5dd8061b872a7a6650729c19c23a6f9094b7a23f4b0a",
+      "lines": 1112,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native-content/src/content/host/filtering/common.rs"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_damage.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native-content/src/content/host/step/skills_damage.rs",
+      "sha256": "8d907001c0eeac813b1e6accc00bc38e8efc20e62a1148d85af45a15c211a075",
+      "lines": 920,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native-content/src/content/host/step/skills_damage.rs"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_targets.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native-content/src/content/host/step/skills_targets.rs",
+      "sha256": "4b6ada0cdef44232f86d1bd94c1c6d9264f11cbc021b314941dea2f408ecdf12",
+      "lines": 790,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native-content/src/content/host/step/skills_targets.rs"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/support.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native-content/src/content/host/support.rs",
+      "sha256": "02af3d34cf3a7e740af676d633d75e4427977ce066158b4c684717b03d253268",
+      "lines": 1076,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native-content/src/content/host/support.rs"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_view_as.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_view_as.rs",
+      "sha256": "20bd39c92b9a805afd73147273dfb779d2440cd6b00f2136231b820744ffcac8",
+      "lines": 861,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_view_as.rs"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_flags.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_flags.rs",
+      "sha256": "edb99b92bb9f08ad0278ee75f482b397b329dec1a9d1f08fafaf5e30238d8c90",
+      "lines": 1007,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_flags.rs"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/rvm_bridge/handlers.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native-kernel/src/rvm_bridge/handlers.rs",
+      "sha256": "1920fe6459bf9c50b914c45efbbafc4ccc6688b01f560163e858d194fe520231",
+      "lines": 968,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native-kernel/src/rvm_bridge/handlers.rs"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/events.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native-kernel/src/kernel/events.rs",
+      "sha256": "7d3e248a85b9b98bc63035b671cbbc01e45baab081ef0d20320b4d126489f6e6",
+      "lines": 1011,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native-kernel/src/kernel/events.rs"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/events/turn.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native-kernel/src/kernel/events/turn.rs",
+      "sha256": "a39d889077039d9040a9e04f7a24bc83fac8a9b1d28f099a7890219594eb0ca4",
+      "lines": 735,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native-kernel/src/kernel/events/turn.rs"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/duel.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native-kernel/src/kernel/duel.rs",
+      "sha256": "cce4a70b5001781c87bdd688832b0b767439b96f948f2de0cb2bef8d9360a5ee",
+      "lines": 287,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native-kernel/src/kernel/duel.rs"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/equipment.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native-kernel/src/kernel/equipment.rs",
+      "sha256": "86de3b881c41e68eaf6ccb3a8733d4a99819a5c57e71bb24ff5104e68a69ace5",
+      "lines": 154,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native-kernel/src/kernel/equipment.rs"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/catalog/card_kind.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native-kernel/src/catalog/card_kind.rs",
+      "sha256": "8b60d23374a57fdc2e3603893c80d302a12b77c413f864a4080a8c376a50b3d8",
+      "lines": 539,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native-kernel/src/catalog/card_kind.rs"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/vocabulary/generals.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native-kernel/src/vocabulary/generals.rs",
+      "sha256": "24a685678acbb79b8431e657a5aa306bd309f82fc1484e92ab835bc0696ce305",
+      "lines": 738,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native-kernel/src/vocabulary/generals.rs"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/metadata.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native-kernel/src/vocabulary/host/metadata.rs",
+      "sha256": "03925c17fbd010dc8264115008ba22bf93fb439b4e5fba518747548d63da68f9",
+      "lines": 878,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native-kernel/src/vocabulary/host/metadata.rs"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+      "sha256": "66528fb45e1c35af41e57c69b3c4eec1dc8305729bb1d2eb988748beb3ba4f7f",
+      "lines": 1058,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+      "sha256": "1a6f7746cf75330648480b0e46b52f50427a73532f9e6c5a985f502d4382ed13",
+      "lines": 563,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/state/general_assembly.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native-kernel/src/state/general_assembly.rs",
+      "sha256": "6e27316aca4dc6101213bda559c867fec6347cf74dd5ea236b7d735f243b9dcf",
+      "lines": 87,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native-kernel/src/state/general_assembly.rs"
+    },
+    {
+      "path": "crates/engine-native/src/engine/general_select.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native/src/engine/general_select.rs",
+      "sha256": "055afa96af8848d30d62a516f298eb491ca78bdd796df505dd4050583cffa2b8",
+      "lines": 127,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native/src/engine/general_select.rs"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/resolution.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native-kernel/src/resolution.rs",
+      "sha256": "a2f100ca9c74ae66b0f611ea8d24082e446f8718338edb6712900721c5763b07",
+      "lines": 976,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native-kernel/src/resolution.rs"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/resolution/trigger_order.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native-kernel/src/resolution/trigger_order.rs",
+      "sha256": "3ef0be4686511cd8d28424128fe285b28695ff9583b3cfe36f48c93519867797",
+      "lines": 871,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native-kernel/src/resolution/trigger_order.rs"
+    },
+    {
+      "path": "crates/engine-native/tests/decision34_pack9_closure.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native/tests/decision34_pack9_closure.rs",
+      "sha256": "25aa1005cc2546994c4f9f98e1833bfdd9bd8b43a770a99e4cfa8a9119516e30",
+      "lines": 1236,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native/tests/decision34_pack9_closure.rs"
+    },
+    {
+      "path": "crates/engine-native/tests/g1_d3.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native/tests/g1_d3.rs",
+      "sha256": "4e8365340a5d7225c70e9bb236a73ff8fe68c7292a735cb55b18b2e525b6cb03",
+      "lines": 405,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native/tests/g1_d3.rs"
+    },
+    {
+      "path": "crates/engine-native/tests/l11_taixu_boss_events.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native/tests/l11_taixu_boss_events.rs",
+      "sha256": "fde82d6a552d312f349c3e8788c446e76781a83653b427b24f376a6f63ca9a2f",
+      "lines": 865,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native/tests/l11_taixu_boss_events.rs"
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_live_hidden_cards.rs",
+      "snapshot_path": "inputs-additional/crates/engine-native/tests/nc10_live_hidden_cards.rs",
+      "sha256": "00c7b796a9972a98d7476a5ec8e04f0950ce6a37f1e0accc7cd59f85fd2f3a58",
+      "lines": 473,
+      "source": "git show bd58ef06d59940baed8d7f93e61ce571b152fb81:crates/engine-native/tests/nc10_live_hidden_cards.rs"
+    },
+    {
+      "path": "archive/upstream/noname/apps/core/noname/get/index.js",
+      "snapshot_path": "inputs-additional/upstream/apps/core/noname/get/index.js",
+      "sha256": "8515ed7242d2638720180507a778cb273d8f33743eac12c5237d2f50e805823d",
+      "lines": 7857,
+      "source": "actual read-only upstream file"
+    },
+    {
+      "path": "archive/upstream/noname/apps/core/noname/library/element/player.js",
+      "snapshot_path": "inputs-additional/upstream/apps/core/noname/library/element/player.js",
+      "sha256": "9ec265664ffa48750bc4117e3204bffe367679b6d260a23254fa14d2fc3163d4",
+      "lines": 16599,
+      "source": "actual read-only upstream file"
+    },
+    {
+      "path": "archive/upstream/noname/apps/core/noname/game/check.js",
+      "snapshot_path": "inputs-additional/upstream/apps/core/noname/game/check.js",
+      "sha256": "802b65210f6dc7eb76e22af82e8f95706b445f9c3b15c297750f6202ec287c9d",
+      "lines": 204,
+      "source": "actual read-only upstream file"
+    },
+    {
+      "path": "archive/upstream/noname/apps/core/noname/library/element/content.ts",
+      "snapshot_path": "inputs-additional/upstream/apps/core/noname/library/element/content.ts",
+      "sha256": "09951b61fe8d9199ed1eb8b373faaf206d683e24b2a93a75ffc2259330891e6c",
+      "lines": 13433,
+      "source": "actual read-only upstream file"
+    }
+  ],
+  "original_27_integrity": [
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_d.rs",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_c_asks.rs",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_a.rs",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_b.rs",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_c.rs",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "crates/engine-native/tests/u01_ddd_eight.rs",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "crates/engine-native/tests/u01_dddanzhi_regression.rs",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "crates/engine-native/tests/u01_d3_moyan.rs",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "crates/engine-native/tests/u01_d3_select_eight.rs",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "crates/content-native-loader/src/decision34_pack9.rs",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host.rs",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "packages/extensions/d3-upstream-noname/assets/character.json",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "../archive/upstream/noname/apps/core/extension/3D精选/character/sort.js",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "../archive/upstream/noname/apps/core/extension/3D精选/character/characterFilter.js",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "../archive/upstream/noname/apps/core/extension/3D精选/character/translate.js",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "../archive/upstream/noname/apps/core/extension/3D精选/character/index.js",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "../archive/upstream/noname/apps/core/extension/3D精选/character/pinyin.js",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "../archive/upstream/noname/apps/core/extension/3D精选/character/intro.js",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "../archive/upstream/noname/apps/core/extension/3D精选/character/dynamicTranslate.js",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "../archive/upstream/noname/apps/core/extension/3D精选/character/card.js",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "../archive/upstream/noname/apps/core/extension/3D精选/character/voices.js",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    },
+    {
+      "path": "../archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+      "snapshot_preserved": true,
+      "matches_original_sha256": true
+    }
+  ]
+}

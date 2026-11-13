@@ -1,0 +1,457 @@
+{
+  "counts": {
+    "items": 224,
+    "original_status": {
+      "已复核等价": 213,
+      "简化近似": 11
+    },
+    "recommended_status": {
+      "简化近似": 194,
+      "已复核等价": 30
+    },
+    "actions": {
+      "建议下调": 183,
+      "维持简化近似": 2,
+      "保留原状态，仅澄清范围": 39
+    },
+    "classifications": {
+      "规则配置未接通": 20,
+      "表现配置未消费": 66,
+      "表现钩子未实现可见效果": 59,
+      "CSS/显示面保留简化": 9,
+      "UI分类内实际规则差异": 12,
+      "实际规则，保留旧状态": 15,
+      "目录/活动配置未消费": 4,
+      "无规则效果，计数消费": 1,
+      "上游注释，惰性登记": 12,
+      "菜单显示未实现": 21,
+      "规则/开发工具配置未接通": 1,
+      "配置误分类，实际规则差异": 2,
+      "上游主动禁用，惰性登记": 2
+    }
+  },
+  "by_difference_kind": {
+    "CSS/显示面仍待对照": {
+      "all_items": 9,
+      "downgrade_recommendations": 0,
+      "keys": [
+        "L10:surfaces:card.css@archive/upstream/noname-liuli/noname/extension/史诗卡牌/card.css:1-18",
+        "L10:surfaces:extension.css@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.css:1-615",
+        "L28:surfaces:thunder.css@archive/upstream/noname-liuli/noname/extension/雷霆万钧/thunder.css:1-1522",
+        "L27:surfaces:e.css@archive/upstream/noname-liuli/noname/extension/选将美化/e.css:1-2009",
+        "L29:surfaces:main1@archive/upstream/noname-liuli/noname/extension/龙血玄黄/专属技能区/手杀ui/skill/main1.js:1-1048",
+        "L29:surfaces:main1.css@archive/upstream/noname-liuli/noname/extension/龙血玄黄/专属技能区/手杀ui/skill/main1.css:1-241",
+        "L20:surfaces:extension.css@archive/upstream/noname-liuli/noname/extension/标记补充/extension.css:1-881",
+        "L20:surfaces:group.css@archive/upstream/noname-liuli/noname/extension/标记补充/group.css:1-17",
+        "L20:surfaces:mark.css@archive/upstream/noname-liuli/noname/extension/标记补充/mark.css:1-61"
+      ]
+    },
+    "上游不启用，原生惰性登记": {
+      "all_items": 14,
+      "downgrade_recommendations": 0,
+      "keys": [
+        "L20:ui_hooks:_shiqihujia_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:690",
+        "L20:ui_hooks:zuoxing@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6155",
+        "L25:configs:falsedelete@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51434",
+        "L25:ui_hooks:_extradamageskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40554",
+        "L25:ui_hooks:_extradlosehpskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40578",
+        "L25:ui_hooks:_newBackgroundUse@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:41318",
+        "L25:ui_hooks:_bingletexiaoshandian@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:47984",
+        "L25:ui_hooks:_bingletexiaohuoshan@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48030",
+        "L25:ui_hooks:_bingletexiaohongshui@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48076",
+        "L25:ui_hooks:_bingletexiaofulei@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48122",
+        "L25:ui_hooks:_bingletexiaole@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48168",
+        "L25:ui_hooks:_bingletexiaobingliang@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48199",
+        "L25:ui_hooks:_thundertexiao@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48389",
+        "L25:ui_hooks:_thundertexiao2@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48503"
+      ]
+    },
+    "仅显示计数清理，已有消费": {
+      "all_items": 1,
+      "downgrade_recommendations": 0,
+      "keys": [
+        "L20:ui_hooks:_shoushajisha_delete_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2463"
+      ]
+    },
+    "具体规则/公开信息分支差异": {
+      "all_items": 14,
+      "downgrade_recommendations": 14,
+      "keys": [
+        "L27:ui_hooks:mbcmqingzheng@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:3697",
+        "L27:ui_hooks:sbqingzheng@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:4263",
+        "L27:ui_hooks:xingchong@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:6633",
+        "L27:ui_hooks:dcxiaoxi@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:6774",
+        "L27:ui_hooks:twfengji@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:6889",
+        "L27:ui_hooks:twzhouzu@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:7441",
+        "L20:ui_hooks:_guozhan_marks@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:1523",
+        "L20:ui_hooks:_chongzhu@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6231",
+        "L25:configs:ssr_luoyi@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:15031",
+        "L25:configs:ssr_lieren@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:22337",
+        "L25:ui_hooks:_anshaskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:42659",
+        "L25:ui_hooks:_seadreammodeskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:42815",
+        "L25:ui_hooks:_relifeskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:43402",
+        "L25:ui_hooks:_haoyunlai@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:47584"
+      ]
+    },
+    "只有计数/cue/flag，未接可见/可听效果": {
+      "all_items": 59,
+      "downgrade_recommendations": 57,
+      "keys": [
+        "L10:ui_hooks:_emojiRebate1@archive/upstream/noname-liuli/noname/extension/史诗卡牌/emoji.js:700",
+        "L29:ui_hooks:_CMeffects@noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1",
+        "L20:ui_hooks:_xigua_feiyanbahu_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:577",
+        "L20:ui_hooks:_guozhanChooseControlCHG@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:1172",
+        "L20:ui_hooks:_guozhan_diebiaoji_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:1854",
+        "L20:ui_hooks:_guozhan_duiweibiaoji_gua_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:1906",
+        "L20:ui_hooks:_guozhan_duiweibiaoji_gua_gua_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:1931",
+        "L20:ui_hooks:_guozhanhalfchghp@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2235",
+        "L20:ui_hooks:_shoushajisha_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2317",
+        "L20:ui_hooks:_diankuangtulu_gua@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2475",
+        "L20:ui_hooks:_wanjunqushou_gua@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2494",
+        "L20:ui_hooks:_o_o_recovertrigger@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2512",
+        "L20:ui_hooks:_o_o_miaoshouhuichun@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2557",
+        "L20:ui_hooks:_o_o_yishugaochao@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2572",
+        "L20:ui_hooks:_losehp_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2588",
+        "L20:ui_hooks:_mianshang_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2603",
+        "L20:ui_hooks:_jiubuff_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2755",
+        "L20:ui_hooks:_jiubuff_xiaoshi_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2777",
+        "L20:ui_hooks:_player_game_guagua@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2802",
+        "L20:ui_hooks:_guozhan_quanjubiaoji_guagua@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2921",
+        "L20:ui_hooks:_shiyongkapaitexiao_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2965",
+        "L20:ui_hooks:_shiyongkapaitexiao_xi_gua_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:3141",
+        "L20:ui_hooks:_shanghaipaishiyongtexiao_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:3296",
+        "L20:ui_hooks:_player_daojianfu_xxgg_fuzi_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:3337",
+        "L20:ui_hooks:_binglintu@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:4079",
+        "L20:ui_hooks:_dysp@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:4148",
+        "L20:ui_hooks:_player_baojiA@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2618",
+        "L20:ui_hooks:_player_baojiB@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2636",
+        "L20:ui_hooks:_player_baojiC@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2653",
+        "L20:ui_hooks:_player_baojiD@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2670",
+        "L20:ui_hooks:_player_baojiE@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2687",
+        "L20:ui_hooks:_player_baojiF@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2704",
+        "L20:ui_hooks:_player_baojiG@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2721",
+        "L20:ui_hooks:_player_baojiH@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2738",
+        "L25:ui_hooks:_extraphaseskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40500",
+        "L25:ui_hooks:_extradieskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40518",
+        "L25:ui_hooks:_extraturnoverskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40536",
+        "L25:ui_hooks:_extraloseskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40597",
+        "L25:ui_hooks:_extragainskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40616",
+        "L25:ui_hooks:_extraloseCardskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40638",
+        "L25:ui_hooks:_extracompareskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40660",
+        "L25:ui_hooks:_extrauseskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40675",
+        "L25:ui_hooks:_extrajudgeskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40694",
+        "L25:ui_hooks:_extralinkskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40712",
+        "L25:ui_hooks:_comparesayskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40738",
+        "L25:ui_hooks:_equipuseskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40750",
+        "L25:ui_hooks:_damsayskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40762",
+        "L25:ui_hooks:_saveskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40774",
+        "L25:ui_hooks:_dieskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40786",
+        "L25:ui_hooks:_shanskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40798",
+        "L25:ui_hooks:_useCardsayskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40810",
+        "L25:ui_hooks:_phasebeginskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40869",
+        "L25:ui_hooks:_phaseendskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40885",
+        "L25:ui_hooks:_judgeskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40901",
+        "L25:ui_hooks:_linkskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40913",
+        "L25:ui_hooks:_zuanattacklinecheck@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:37514",
+        "L25:ui_hooks:_zuanboss@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:41545",
+        "L25:ui_hooks:_helasisyskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:41890",
+        "L25:ui_hooks:_bingleBigScreen@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:47880"
+      ]
+    },
+    "真实规则有消费，保留旧声明不重签": {
+      "all_items": 15,
+      "downgrade_recommendations": 0,
+      "keys": [
+        "L27:ui_hooks:spyanjiao@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:4839",
+        "L27:ui_hooks:twxiafeng@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:6350",
+        "L27:ui_hooks:twxingzhui@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:6479",
+        "L27:ui_hooks:twharvestinori@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:7044",
+        "L27:ui_hooks:twzhouhu@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:7168",
+        "L27:ui_hooks:twzuhuo@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:7293",
+        "L20:ui_hooks:diaohulishan@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:1432",
+        "L20:ui_hooks:_zhulianbihe_mark_tao@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:1747",
+        "L20:ui_hooks:_yinyang_mark_add@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:1802",
+        "L20:ui_hooks:_aozhan_judge@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2152",
+        "L20:ui_hooks:_xigua_xueliangfanbei_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2261",
+        "L20:ui_hooks:_xigua_mopaifanbei_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2276",
+        "L20:ui_hooks:_xigua_zhuwanzhongji_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2290",
+        "L20:ui_hooks:kuanshi2@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:5332",
+        "L20:ui_hooks:mbmowang@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:5898"
+      ]
+    },
+    "菜单模型和可见交互未接入": {
+      "all_items": 21,
+      "downgrade_recommendations": 21,
+      "keys": [
+        "L25:configs:informknow@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:160",
+        "L25:configs:about1@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:173",
+        "L25:configs:about2@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:185",
+        "L25:configs:blank1@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:198",
+        "L25:configs:blank2@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:210",
+        "L25:configs:Myfriend@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:231",
+        "L25:configs:about4@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:308",
+        "L25:configs:falseedit@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:320",
+        "L25:configs:free@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50301",
+        "L25:configs:aboutZ@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50307",
+        "L25:configs:settext@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50319",
+        "L25:configs:aboutX@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50331",
+        "L25:configs:linea@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50343",
+        "L25:configs:lineb@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50454",
+        "L25:configs:linec@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50659",
+        "L25:configs:lined@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51060",
+        "L25:configs:linef@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51111",
+        "L25:configs:lineg@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51251",
+        "L25:configs:lineh@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51289",
+        "L25:configs:aboutH@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51392",
+        "L25:configs:about0@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51409"
+      ]
+    },
+    "表现配置仅解析/未驱动显示": {
+      "all_items": 66,
+      "downgrade_recommendations": 66,
+      "keys": [
+        "L22:configs:timeKiller@archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:482",
+        "L10:configs:分割线01@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2173",
+        "L10:configs:skillEffects@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2185",
+        "L10:configs:skillEffectsScale@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2189",
+        "L10:configs:cardFold@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2205",
+        "L10:configs:cardFold_proportion@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2215",
+        "L10:configs:cardPhantom@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2231",
+        "L10:configs:cardEmoji@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2238",
+        "L10:configs:meihuaskills@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2250",
+        "L10:configs:分割线02@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2258",
+        "L28:configs:gameSpeed@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9068",
+        "L28:configs:hidePack@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9085",
+        "L28:configs:UIItroduc@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9091",
+        "L28:configs:yuqiTheme@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9109",
+        "L28:configs:timeTheme@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9120",
+        "L28:configs:standPath@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9134",
+        "L27:configs:dianjibiaoji@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9029",
+        "L27:configs:shoupaihuase@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9034",
+        "L27:configs:feichuxuanxiang@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9039",
+        "L27:configs:shuzianniu@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9044",
+        "L27:configs:xuanzejineng@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9049",
+        "L27:configs:zediewugu@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9054",
+        "L27:configs:jinxuanbiaoyu@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9059",
+        "L27:configs:jinengtexiaoxiugai@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9064",
+        "L29:configs:shengjian@noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1",
+        "L20:configs:biaojixiugai@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6403",
+        "L20:configs:doudizhu_guanqiuxiaoguo@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6413",
+        "L20:configs:huajiatexiao@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6418",
+        "L20:configs:guozhanmeihua@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6423",
+        "L20:configs:shoushajishatexiao@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6428",
+        "L20:configs:shiyongkapaitixiao@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6433",
+        "L20:configs:youxishengfu@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6438",
+        "L20:configs:daojianfu@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6449",
+        "L20:configs:daojianfu_type@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6459",
+        "L20:configs:xinshadoudizhu@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6471",
+        "L25:configs:washhandcard@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50386",
+        "L25:configs:bingletexiao@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50463",
+        "L25:configs:texiao@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50522",
+        "L25:configs:zuancoveropacity@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50527",
+        "L25:configs:huihe@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50542",
+        "L25:configs:huiheopa@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50558",
+        "L25:configs:newhuihe@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50572",
+        "L25:configs:imgtime@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50583",
+        "L25:configs:imgfps@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50601",
+        "L25:configs:fujiaset@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50614",
+        "L25:configs:newui@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50643",
+        "L25:configs:helasisy@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50654",
+        "L25:configs:perspective@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50757",
+        "L25:configs:bizhi@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50762",
+        "L25:configs:wallpaper@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50804",
+        "L25:configs:paperchoose@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50846",
+        "L25:configs:exwallpaper@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50856",
+        "L25:configs:qiankuang@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50861",
+        "L25:configs:backgroundttop@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50910",
+        "L25:configs:zhishixian@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50949",
+        "L25:configs:zhishiopi@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51042",
+        "L25:configs:zuantype@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51069",
+        "L25:configs:ransay@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51079",
+        "L25:configs:levelsay@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51096",
+        "L25:configs:girlspeak@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51101",
+        "L25:configs:zuanemotion@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51106",
+        "L25:configs:hideide@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51239",
+        "L25:configs:audio_draw@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51272",
+        "L25:configs:audio_start@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51277",
+        "L25:configs:isPC@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51298",
+        "L25:configs:windowHigh@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51344"
+      ]
+    },
+    "规则/目录配置应用链未闭合": {
+      "all_items": 25,
+      "downgrade_recommendations": 25,
+      "keys": [
+        "L22:configs:eloPlayers@archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:462",
+        "L22:configs:eloDifficulty@archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:467",
+        "L10:configs:shichangshi@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2245",
+        "L28:configs:replaceCha@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9081",
+        "L27:configs:twotwo@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9014",
+        "L27:configs:gaibiaoji@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9024",
+        "L19:configs:zuan_brawl@archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:3363",
+        "L20:configs:jinengxiugai@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6398",
+        "L20:configs:zhijiechifa@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6408",
+        "L20:configs:xlfbmoshi@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6477",
+        "L20:configs:mpfbmoshi@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6482",
+        "L20:configs:zhujizhongwang@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6487",
+        "L25:configs:mode@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50352",
+        "L25:configs:fun@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50367",
+        "L25:configs:goodluck@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50381",
+        "L25:configs:levelstrong@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50396",
+        "L25:configs:upspeed@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50406",
+        "L25:configs:relife@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50433",
+        "L25:configs:balance@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50444",
+        "L25:configs:newover@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50449",
+        "L25:configs:shenst@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51158",
+        "L25:configs:showboss@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51163",
+        "L25:configs:hidessr@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51168",
+        "L25:configs:delkey@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51173",
+        "L25:configs:text@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51404"
+      ]
+    }
+  },
+  "by_source": {
+    "U06": {
+      "audited_nonrule_category_items": 0,
+      "original_status": {},
+      "recommended_status": {},
+      "actions": {}
+    },
+    "U07": {
+      "audited_nonrule_category_items": 0,
+      "original_status": {},
+      "recommended_status": {},
+      "actions": {}
+    },
+    "L06": {
+      "audited_nonrule_category_items": 0,
+      "original_status": {},
+      "recommended_status": {},
+      "actions": {}
+    },
+    "L22": {
+      "audited_nonrule_category_items": 3,
+      "original_status": {
+        "已复核等价": 3
+      },
+      "recommended_status": {
+        "简化近似": 3
+      },
+      "actions": {
+        "建议下调": 3
+      }
+    },
+    "L29": {
+      "audited_nonrule_category_items": 4,
+      "original_status": {
+        "已复核等价": 1,
+        "简化近似": 3
+      },
+      "recommended_status": {
+        "简化近似": 4
+      },
+      "actions": {
+        "建议下调": 1,
+        "维持简化近似": 1,
+        "保留原状态，仅澄清范围": 2
+      }
+    },
+    "L10": {
+      "audited_nonrule_category_items": 13,
+      "original_status": {
+        "已复核等价": 10,
+        "简化近似": 3
+      },
+      "recommended_status": {
+        "简化近似": 13
+      },
+      "actions": {
+        "建议下调": 10,
+        "维持简化近似": 1,
+        "保留原状态，仅澄清范围": 2
+      }
+    },
+    "U01": {
+      "audited_nonrule_category_items": 0,
+      "original_status": {},
+      "recommended_status": {},
+      "actions": {}
+    },
+    "L28": {
+      "audited_nonrule_category_items": 8,
+      "original_status": {
+        "已复核等价": 7,
+        "简化近似": 1
+      },
+      "recommended_status": {
+        "简化近似": 8
+      },
+      "actions": {
+        "建议下调": 7,
+        "保留原状态，仅澄清范围": 1
+      }
+    },
+    "L27": {
+      "audited_nonrule_category_items": 23,
+      "original_status": {
+        "已复核等价": 22,
+        "简化近似": 1
+      },
+      "recommended_status": {
+        "简化近似": 17,
+        "已复核等价": 6
+      },
+      "actions": {
+        "建议下调": 16,
+        "保留原状态，仅澄清范围": 7
+      }
+    },
+    "L19": {
+      "audited_nonrule_category_items": 1,
+      "original_status": {
+        "已复核等价": 1
+      },
+      "recommended_status": {
+        "简化近似": 1
+      },
+      "actions": {
+        "建议下调": 1
+      }
+    },
+    "L20": {
+      "audited_nonrule_category_items": 64,
+      "original_status": {
+        "已复核等价": 61,
+        "简化近似": 3
+      },
+      "recommended_status": {
+        "简化近似": 52,
+        "已复核等价": 12
+      },
+      "actions": {
+        "建议下调": 49,
+        "保留原状态，仅澄清范围": 15
+      }
+    },
+    "U08": {
+      "audited_nonrule_category_items": 0,
+      "original_status": {},
+      "recommended_status": {},
+      "actions": {}
+    },
+    "L25": {
+      "audited_nonrule_category_items": 108,
+      "original_status": {
+        "已复核等价": 108
+      },
+      "recommended_status": {
+        "简化近似": 96,
+        "已复核等价": 12
+      },
+      "actions": {
+        "建议下调": 96,
+        "保留原状态，仅澄清范围": 12
+      }
+    }
+  }
+}

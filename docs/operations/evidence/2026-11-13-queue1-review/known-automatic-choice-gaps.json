@@ -1,0 +1,88 @@
+{
+  "at": "2026-11-14T00:35:02.269942+08:00",
+  "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "tracked_dirty": true,
+  "versions": {
+    "rules": 333,
+    "ngsa": 107,
+    "schema": 5,
+    "abi": 759,
+    "ws": 8
+  },
+  "items": [
+    {
+      "key": "U01:skills:dddyeshen@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:656",
+      "source": "U01",
+      "id": "dddyeshen",
+      "reason": "原生固定首张黑牌及至多2目标，直接发Linked；上游选黑牌并真实使用铁索，可0目标重铸。",
+      "scope": "已重审范围内仍有固定/自动替代选择或随机候选的已知条目；不是37来源穷举",
+      "required_version_change_proven": false
+    },
+    {
+      "key": "U01:skills:dddguiying@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:968",
+      "source": "U01",
+      "id": "dddguiying",
+      "reason": "源按座次循环吴角色且各可拒绝；原生只first_wu_responder并自动取牌，无后续响应者。",
+      "scope": "已重审范围内仍有固定/自动替代选择或随机候选的已知条目；不是37来源穷举",
+      "required_version_change_proven": false
+    },
+    {
+      "key": "U01:skills:dddfushi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3727",
+      "source": "U01",
+      "id": "dddfushi",
+      "reason": "源男目标可独立选组或取消；原生沿用主人组选并直接交换。",
+      "scope": "已重审范围内仍有固定/自动替代选择或随机候选的已知条目；不是37来源穷举",
+      "required_version_change_proven": false
+    },
+    {
+      "key": "U01:skills:dddlangzhi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5296",
+      "source": "U01",
+      "id": "dddlangzhi",
+      "reason": "源仅攻击范围内角色逐人选牌；原生从全场other各取第一张，未过滤攻击范围。",
+      "scope": "已重审范围内仍有固定/自动替代选择或随机候选的已知条目；不是37来源穷举",
+      "required_version_change_proven": false
+    },
+    {
+      "key": "U01:skills:dddfuzong@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5948",
+      "source": "U01",
+      "id": "dddfuzong",
+      "reason": "源死亡分支只限群角色；原生任意Death都会自动弃主人首he。",
+      "scope": "已重审范围内仍有固定/自动替代选择或随机候选的已知条目；不是37来源穷举",
+      "required_version_change_proven": false
+    },
+    {
+      "key": "U07:skills:zhucheng2@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:218",
+      "source": "U07",
+      "id": "zhucheng2",
+      "reason": "丢失he任意多选、强行随机补弃；无效时返杀与全帧取消也改变上游。",
+      "scope": "已重审范围内仍有固定/自动替代选择或随机候选的已知条目；不是37来源穷举",
+      "required_version_change_proven": false
+    },
+    {
+      "key": "L27:skills:bolan@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:7747",
+      "source": "L27",
+      "id": "bolan",
+      "reason": "固定三技能替代动态池与随机抽取；插件技能不能入候选。",
+      "scope": "已重审范围内仍有固定/自动替代选择或随机候选的已知条目；不是37来源穷举",
+      "required_version_change_proven": false
+    },
+    {
+      "key": "L27:ui_hooks:twzhouzu@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:7441",
+      "source": "L27",
+      "id": "twzhouzu",
+      "reason": "上游条目语义：选择他人和施法回合；完成时由目标自己选弃 X 张牌，然后受 1 雷伤。 受害者自选弃手牌被改成固定先取he，可能额外弃装备。此条含规则，不能按UI忽略。；实际规则差异：原文 :7542 为目标 chooseToDiscard，原生 :510–519 固定弃前 X 张且范围含装备，未给目标上游弃牌选择。",
+      "scope": "已重审范围内仍有固定/自动替代选择或随机候选的已知条目；不是37来源穷举",
+      "required_version_change_proven": false
+    },
+    {
+      "key": "L28:skills:th_zhengjing@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6018",
+      "source": "L28",
+      "id": "th_zhengjing",
+      "reason": "小游戏结果被人工数量替代，分配被固定为1张，不能表达任意非空子集。",
+      "scope": "已重审范围内仍有固定/自动替代选择或随机候选的已知条目；不是37来源穷举",
+      "required_version_change_proven": false
+    }
+  ],
+  "skills_proven_to_require_version_bump": [],
+  "not_exhaustive": true
+}

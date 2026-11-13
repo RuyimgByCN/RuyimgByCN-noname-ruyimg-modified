@@ -1,0 +1,11 @@
+{
+  "at": "2026-11-14T00:59:24.669704+08:00",
+  "observed_command": [
+    "python3",
+    "-"
+  ],
+  "recorded_from": "Previous exec inline script output; source documents were only read.",
+  "exit_code": 1,
+  "error": "AssertionError while reconstructing before text; native-progress hash matched, the other five did not. The reconstruction dropped the one newline after the title.",
+  "scope": "Procedural preservation-check failure, not a product test; original documents were not changed by the failed check."
+}

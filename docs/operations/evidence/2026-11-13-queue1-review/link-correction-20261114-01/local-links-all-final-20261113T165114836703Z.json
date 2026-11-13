@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "scripts/check_local_links.py",
+    "--all"
+  ],
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "started_at_utc": "2026-11-13T16:51:14.836703+00:00",
+  "ended_at_utc": "2026-11-13T16:51:16.032578+00:00",
+  "duration_seconds": 1.196,
+  "exit_code": 0,
+  "combined_stdout_stderr_log": "docs/operations/evidence/2026-11-13-queue1-review/link-correction-20261114-01/local-links-all-final-20261113T165114836703Z.log",
+  "log_sha256": "0d22f3457fa5e310c4261efc465a83db4ba7018fbee64ff0aab24cc838a8d743",
+  "reason": "修复证据追加实际检查结果后再次验证最终Markdown集合；不覆盖首次或前次检查。",
+  "full_preflight": false
+}

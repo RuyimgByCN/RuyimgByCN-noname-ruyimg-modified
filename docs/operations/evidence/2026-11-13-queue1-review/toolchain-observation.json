@@ -1,0 +1,39 @@
+{
+  "at": "2026-11-14T00:41:31.820137+08:00",
+  "native": {
+    "rustc": {
+      "resolved": "/opt/homebrew/bin/rustc",
+      "argv": [
+        "rustc",
+        "--version"
+      ],
+      "stdout": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (Homebrew)"
+    },
+    "cargo": {
+      "resolved": "/opt/homebrew/bin/cargo",
+      "argv": [
+        "cargo",
+        "--version"
+      ],
+      "stdout": "cargo 1.99.1 (5f94df478 2026-08-27) (Homebrew)"
+    }
+  },
+  "wasm": {
+    "rustc": {
+      "resolved": "/Users/ruyimg/.cargo/bin/rustc",
+      "argv": [
+        "/Users/ruyimg/.cargo/bin/rustc",
+        "--version"
+      ],
+      "stdout": "rustc 1.95.0 (59807616e 2026-04-14)"
+    },
+    "cargo": {
+      "resolved": "/Users/ruyimg/.cargo/bin/cargo",
+      "argv": [
+        "/Users/ruyimg/.cargo/bin/cargo",
+        "--version"
+      ],
+      "stdout": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)"
+    }
+  }
+}

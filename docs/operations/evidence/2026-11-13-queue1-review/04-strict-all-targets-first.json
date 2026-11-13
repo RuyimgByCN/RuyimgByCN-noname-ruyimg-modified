@@ -1,0 +1,30 @@
+{
+  "argv": [
+    "cargo",
+    "check",
+    "-p",
+    "engine-native-kernel",
+    "-p",
+    "engine-native-content",
+    "-p",
+    "engine-native",
+    "-p",
+    "engine-native-wasm",
+    "-p",
+    "content-native-loader",
+    "--all-targets"
+  ],
+  "command": "cargo check -p engine-native-kernel -p engine-native-content -p engine-native -p engine-native-wasm -p content-native-loader --all-targets",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0",
+    "RUSTFLAGS": "-D warnings",
+    "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-strict-5crxac6m"
+  },
+  "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "tracked_status": " M crates/engine-native-content/src/content/host/step/u01_batch_a.rs\n M crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs\n M crates/engine-native-kernel/src/archive/known_prompts.rs\n M crates/engine-native/tests/groups/g1.rs\n M crates/engine-native/tests/u01_ddd_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n",
+  "start_utc": "2026-11-13T15:38:45.961863+00:00",
+  "exit_code": 0,
+  "duration_seconds": 21.19,
+  "end_utc": "2026-11-13T15:39:07.151966+00:00"
+}

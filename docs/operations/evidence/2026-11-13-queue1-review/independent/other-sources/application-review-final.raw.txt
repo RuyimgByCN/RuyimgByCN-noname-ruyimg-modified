@@ -1,0 +1,25 @@
+{
+  "report": "docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/application-review-final.json",
+  "summary": {
+    "reviewed_samples": 141,
+    "original_confirmed": 79,
+    "retained_own_confirmed": 68,
+    "returned_own_confirmations": 11,
+    "corrected_support_counts": {
+      "静态未见差异": 26,
+      "待核验": 47,
+      "源码确认差异": 68
+    },
+    "current_sample_status_counts": {
+      "已复核等价": 65,
+      "简化近似": 76
+    },
+    "first_application_record_count": 378,
+    "first_application_withdrawals": 226,
+    "current_global_withdrawals_from_HEAD": 215,
+    "new_equivalence_signoffs_by_this_review": 0,
+    "checks_passed": 1136,
+    "checks_failed": 0
+  },
+  "failed_checks": []
+}

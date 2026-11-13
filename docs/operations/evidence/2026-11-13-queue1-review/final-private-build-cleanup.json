@@ -1,0 +1,10 @@
+{
+  "at": "2026-11-14T00:46:25.356168+08:00",
+  "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "owned_path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-queue1-built-web-8av7c3tx",
+  "verified_hash_manifest": "build-output-restoration.json",
+  "verified_files": 45,
+  "retired_bytes": 64674161,
+  "retired": true,
+  "preserved": "Rebuilt native-pkg WASM, generated product outputs in the existing worktree, all fingerprints/logs; shared target and initial untracked paths untouched."
+}

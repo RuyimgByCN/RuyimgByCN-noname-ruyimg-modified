@@ -1,0 +1,98 @@
+{
+  "at": "2026-11-14T00:32:02.607225+08:00",
+  "reviewer": "/root/queue0_independent_review",
+  "head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "tracked_dirty": true,
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "content_schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "conclusion": "limited_u01_inventory_application_and_projection_method_pass",
+  "new_blocking_findings": 0,
+  "scope": {
+    "u01_skills": 64,
+    "u01_characters": 31,
+    "status_withdrawals": 61,
+    "keep_simplified": [
+      "dddanzhi"
+    ],
+    "potential_gaps_keep_history": [
+      "dddyuanzhen",
+      "dddqice"
+    ],
+    "characters_only_static_fields": true
+  },
+  "current_inventory_sha256_at_final_scope_check": "2658808bbe361ab248e53166157e25606c47155eb31fa19947cb601eb3f35c89",
+  "latest_u01_application": {
+    "skills64_equal_original_after": true,
+    "generals31_only_difference_diff_concrete_prefix": true,
+    "general_fields_rechecked_from_actual_source": true,
+    "new_equivalence_signoffs": 0
+  },
+  "runtime": {
+    "original16_preserved_and_recomputed": true,
+    "reviewed_upstream_runs": 24,
+    "compared_branches": 13,
+    "u01_runs": 19,
+    "u01_branches": 8,
+    "l06_runs": 5,
+    "l06_branches": 5,
+    "raw_rich_records": 31,
+    "all31_match_distinct_cdp_replies": true,
+    "exploratory_fixtures_not_compared": 7,
+    "native_rows_match_command_log": 13,
+    "native_pending_restores_read": 27,
+    "all24_specified_projections_equal": true,
+    "whole_skill_equivalence": false,
+    "events_rng_full_snapshot_equivalence": false,
+    "same_complete_initial_state_or_dom_order_claimed": false
+  },
+  "inputs": {
+    "frozen_product_files_checked_twice": 32259,
+    "frozen_product_mismatches": 0,
+    "modern_copied_source_files_checked": 850,
+    "modern_copy_mismatches": 0,
+    "old_dddanzhi107_fixture_unchanged_from_HEAD": true,
+    "old_juxian_gain_fixture_verified": false
+  },
+  "known_juxian_boundaries": [
+    "J01 phaseUseAfter vs turn_stamp",
+    "J02 target/payment availability and sequence",
+    "J03 gainable and shown-hand branches",
+    "J04 payment loss-trigger continuation order",
+    "J05 gain/give/move/reveal event semantics"
+  ],
+  "method_qualifications": [
+    "receipt grouping is conditional on observed outcome, not probability/RNG equivalence",
+    "exact juxian cases did not fix hidden hand DOM order; later ordered cases did",
+    "modern session metadata upstream points at default unused liuli server; actual URL and modern source copy identify modern runner",
+    "27 restores are newly saved checkpoints, not historical archives",
+    "entry subskill/card selection UI partly bypassed by real useSkill calls"
+  ],
+  "evidence_checks": {
+    "initial": {
+      "passed": 28,
+      "failed": 0
+    },
+    "correction04_first_attempt": {
+      "failed": 1,
+      "reason": "Out-of-scope global inventory SHA changed concurrently in correction05; original script/error preserved"
+    },
+    "correction04_scoped_rerun": "pass"
+  },
+  "executed_by_this_reviewer": {
+    "cargo": 0,
+    "browser": 0
+  },
+  "files_written_scope": "independent/u01/application-review* only",
+  "not_reviewed": [
+    "semantic changes to other inventory sources",
+    "full product and CI gates",
+    "uncovered conditions and combinations",
+    "full legacy archive compatibility"
+  ],
+  "report_sha256": "8ace9c0c96bf5dd92b995a304841238e42d4066697e9e96f58ee222ba25269c0"
+}

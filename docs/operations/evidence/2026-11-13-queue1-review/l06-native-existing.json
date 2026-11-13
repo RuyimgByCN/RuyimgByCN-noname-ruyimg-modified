@@ -1,0 +1,25 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--test",
+    "l_rounds",
+    "l06_",
+    "--",
+    "--nocapture"
+  ],
+  "command": "cargo test --offline -p engine-native --test l_rounds l06_ -- --nocapture",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0"
+  },
+  "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "tracked_status": "",
+  "start_utc": "2026-11-13T15:17:28.977302+00:00",
+  "exit_code": 0,
+  "duration_seconds": 0.404,
+  "end_utc": "2026-11-13T15:17:29.381592+00:00"
+}

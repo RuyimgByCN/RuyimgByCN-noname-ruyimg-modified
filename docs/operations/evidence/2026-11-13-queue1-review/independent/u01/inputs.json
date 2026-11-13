@@ -1,0 +1,149 @@
+{
+  "date": "2026-11-13T23:13:04.087465+08:00",
+  "head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "tracked_dirty": false,
+  "tracked_status": "",
+  "rule": 333,
+  "ngsa": 107,
+  "schema": 5,
+  "abi": 759,
+  "ws": 8,
+  "inputs": [
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_b_asks.rs",
+      "sha256": "b90cc3af8eb5751756f8e1fd730d0b082ebfda3819c7d0aee92729f2934f8269",
+      "lines": 960
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_d.rs",
+      "sha256": "bfb244869571a338c29b4ca09955bebcc44f23a434112e8c5d5888240b508ef4",
+      "lines": 724
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_c_asks.rs",
+      "sha256": "ed7fd6a5a4a3722d1db40231cc36451226304c464d93a421938e7ec5ff87c7e2",
+      "lines": 716
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_a.rs",
+      "sha256": "d8ac622771ef9c02308a40e700ed95bf123267974340e5e44612bf8ccaa717b0",
+      "lines": 836
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs",
+      "sha256": "65f93796414495b17b7751d4251b6173916e958db8af75af1f7c2de221dd0dcf",
+      "lines": 888
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs",
+      "sha256": "f88656c9b3224f2a18804aba00cfd0e3da36b2b96f28de06d0b62b063c8785a0",
+      "lines": 696
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_b.rs",
+      "sha256": "9bbc5b9c4fd35c56d3a51f4bc76237a84c9f4f10f40ee73c98cec45ac8b0fa98",
+      "lines": 941
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_c.rs",
+      "sha256": "11960e840c215a7b9ede6115e72e274fd1d1812321be2bf4627fa0db7b702d33",
+      "lines": 707
+    },
+    {
+      "path": "crates/engine-native/tests/u01_ddd_eight.rs",
+      "sha256": "2d1600cb6bb77f69f472e5f95264ef85e3cc0696c6c9bbdc5f06ac76a94c8d70",
+      "lines": 1293
+    },
+    {
+      "path": "crates/engine-native/tests/u01_dddanzhi_regression.rs",
+      "sha256": "090dea98792933b6544e3b1ce4e7a209f3e8ee7fb36b2735bb9bdbe351b7e847",
+      "lines": 902
+    },
+    {
+      "path": "crates/engine-native/tests/u01_d3_moyan.rs",
+      "sha256": "00bf2262848576ab0f4dd0027396a215aaa1fbcbc12b0f87d22bb40deb7758f4",
+      "lines": 335
+    },
+    {
+      "path": "crates/engine-native/tests/u01_d3_select_eight.rs",
+      "sha256": "f459afb152a5352c8ded4f5526c6e33a6b5c276230267ae42725335ed0a0f528",
+      "lines": 280
+    },
+    {
+      "path": "crates/content-native-loader/src/decision34_pack9_data.rs",
+      "sha256": "8385ed736dae59c7dacd4559a1212a696621a8e2b9b46712725a0726400d271c",
+      "lines": 349
+    },
+    {
+      "path": "crates/content-native-loader/src/decision34_pack9.rs",
+      "sha256": "57677960381809834e0a6990cdb0b0082474f9a0c55819059046b98529ecd428",
+      "lines": 929
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host.rs",
+      "sha256": "5040fd7da574e87f28bd26d28fa304e0a4fbc623a58fe63043a1dfc77f2a801c",
+      "lines": 420
+    },
+    {
+      "path": "packages/extensions/d3-upstream-noname/assets/character.json",
+      "sha256": "b8487caf28b0066c443dfb8646e110b0f133f808299f06f58702d4e43ef5fff2",
+      "lines": 19
+    },
+    {
+      "path": "../archive/upstream/noname/apps/core/extension/3D精选/character/sort.js",
+      "sha256": "c4170751ad769e22dcb63ed73ce4a939bc2d76e0a2510419a49e5941447a49d5",
+      "lines": 5
+    },
+    {
+      "path": "../archive/upstream/noname/apps/core/extension/3D精选/character/characterFilter.js",
+      "sha256": "ad4091d14b41c32498bf0a5a4437bd305c0f2378b989d7b8a4a2b40fa12c3f93",
+      "lines": 5
+    },
+    {
+      "path": "../archive/upstream/noname/apps/core/extension/3D精选/character/translate.js",
+      "sha256": "4ce99f14aea02c75e758eb528eb44b308078fec66640a2108cf6dba0f0a83164",
+      "lines": 190
+    },
+    {
+      "path": "../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+      "sha256": "cc09454d5187985af77d1be16f84e381b48637e0b89a088e53231cf0b11c0662",
+      "lines": 6368
+    },
+    {
+      "path": "../archive/upstream/noname/apps/core/extension/3D精选/character/index.js",
+      "sha256": "883a2dae32d0a5d2fed3ed54f32813b0ae9278c0818eebf7bb11868d4ce2fe73",
+      "lines": 60
+    },
+    {
+      "path": "../archive/upstream/noname/apps/core/extension/3D精选/character/pinyin.js",
+      "sha256": "3eeec4dada791d0ef522345b2cecbd35a0ffcc5c8d95eb725c84761c2e43c829",
+      "lines": 2
+    },
+    {
+      "path": "../archive/upstream/noname/apps/core/extension/3D精选/character/intro.js",
+      "sha256": "106817548ed643939e5ec291b61b6b6411b724504a92c64112365cdaee628138",
+      "lines": 3
+    },
+    {
+      "path": "../archive/upstream/noname/apps/core/extension/3D精选/character/dynamicTranslate.js",
+      "sha256": "2bcd288488f777e34f3b0ea96380b5e4491f4397f58c2e2e9a6e2cff7f470bbb",
+      "lines": 27
+    },
+    {
+      "path": "../archive/upstream/noname/apps/core/extension/3D精选/character/card.js",
+      "sha256": "14567c63bc51ae2082899ebfcda63b6649cac8543fa73a73989a26c49a946c37",
+      "lines": 4
+    },
+    {
+      "path": "../archive/upstream/noname/apps/core/extension/3D精选/character/voices.js",
+      "sha256": "450f0af4f4c1ecc4c7180f2e364c8a59bfed69dd350fb6b47bce8641c2a37786",
+      "lines": 1
+    },
+    {
+      "path": "../archive/upstream/noname/apps/core/extension/3D精选/character/character.js",
+      "sha256": "49b87ae81935e0e90feeadd2be1f8950e92d2b681ef3622f3d65e9843ca87338",
+      "lines": 224
+    }
+  ],
+  "scope": "静态独立复核。未运行Cargo或上游浏览器。不读取旧复核结论与实现者说明。"
+}

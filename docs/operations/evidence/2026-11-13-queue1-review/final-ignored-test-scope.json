@@ -1,0 +1,26 @@
+{
+  "at": "2026-11-14T00:49:58.399749+08:00",
+  "logs": {
+    "03-native-three-final.log": [
+      "test g1_huanle::xly::xly_state_growth_probe ... ignored, 诊断探针：手动运行观察规模曲线",
+      "test nc10_duel_nullify_privacy::nullify_timing ... ignored, manual same-machine latency sampling",
+      "test nc10_pending_duel_privacy::pending_duel_timing ... ignored, manual same-machine latency sampling",
+      "test nc12_ai_strength_baseline::nc10_quality_matrix ... ignored, manual fixed-seed quality and latency matrix",
+      "test nc12_ai_strength_baseline::nc10_quality_matrix_production ... ignored, manual production-budget quality and latency matrix",
+      "test nc12_dangling_reference_probe::nc12_probe_scans_seeds_for_dangling_reference ... ignored, 登记缺陷守护：命中内核悬空引用故障即失败（当前 seed 44170 命中）；修复后应转为通过"
+    ],
+    "05-workspace-final.log": [
+      "test actual_single_seat_planning_compares_existing_pools_and_native_clock ... ignored, native wall-clock measurement; run explicitly with --ignored --nocapture",
+      "test original_merged_extra::original_extra_relonghun::two_hearts_can_save_a_dying_player_for_two_hp ... ignored",
+      "test g1_huanle::xly::xly_state_growth_probe ... ignored, 诊断探针：手动运行观察规模曲线",
+      "test nc10_duel_nullify_privacy::nullify_timing ... ignored, manual same-machine latency sampling",
+      "test nc10_pending_duel_privacy::pending_duel_timing ... ignored, manual same-machine latency sampling",
+      "test nc12_ai_strength_baseline::nc10_quality_matrix ... ignored, manual fixed-seed quality and latency matrix",
+      "test nc12_ai_strength_baseline::nc10_quality_matrix_production ... ignored, manual production-budget quality and latency matrix",
+      "test nc12_dangling_reference_probe::nc12_probe_scans_seeds_for_dangling_reference ... ignored, 登记缺陷守护：命中内核悬空引用故障即失败（当前 seed 44170 命中）；修复后应转为通过"
+    ],
+    "09-desktop-final.log": [
+      "test actual_single_seat_planning_compares_existing_pools_and_native_clock ... ignored, native wall-clock measurement; run explicitly with --ignored --nocapture"
+    ]
+  }
+}

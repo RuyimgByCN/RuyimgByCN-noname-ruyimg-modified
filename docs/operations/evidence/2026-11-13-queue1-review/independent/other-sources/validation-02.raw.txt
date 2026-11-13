@@ -1,0 +1,3 @@
+PASS: 12 source denominators, fixed-seed samples, 141 exact keys/categories, 32 interactive candidates, 415 source references and source hashes.
+PASS: 79 confirmed differences; 36 verification gaps; zero browser/Cargo executions or equivalent signoffs claimed.
+PASS: all JSON parsed, 15 local evidence links resolved, Longxue raw-source provenance boundary retained.

@@ -1,5 +1,15 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+## 2026-11-14T00:58:36+08:00 聚贤部分修复最终本地核验（未提交／发布）
+
+HEAD `bd58ef06d59940baed8d7f93e61ce571b152fb81` + tracked dirty；333／107／5／759／WS8不变。第五节本地命令均exit0、完整preflight复跑21项通过；[完整门禁及首次失败](../operations/evidence/2026-11-13-queue1-review/final-local-gates.md)。14标准golden未重录，一份2149字节旧NGSA107恢复/续行通过；聚贤J01–J05继续保留，[独立限定补审](../operations/evidence/2026-11-13-queue1-review/independent/u01/j06-followup-review.md)不签整技能等价。5技能24次[指定投影](../operations/evidence/2026-11-13-queue1-review/runtime-comparison.md)相同不代表完整事件/随机流等价；全清单634／3790／0，新增签署0。发布及CI待记录。
+
+## 2026-11-14T00:30:42+08:00 队列1复核补课增量（尚未提交／发布）
+
+源码HEAD `bd58ef06d59940baed8d7f93e61ce571b152fb81` + tracked dirty；版本333／107／5／759／WS8。聚贤获得目标he改为真实强制单选，暗牌以不透明槽表示，规则RNG洗牌一次并将私有映射存入既有HostMachine.cards；恢复不重洗。没有新字段、HostStage、tag或协议。仍保留J01–J05：阶段次数用turn_stamp、无他人he时提前禁top、gainable/明置手牌分支、支付loss子事件顺序与完整gain/give/reveal语义，故不签整技能等价。
+
+[独立补审](../operations/evidence/2026-11-13-queue1-review/independent/u01/j06-followup-review.md)、[13分支投影及限制](../operations/evidence/2026-11-13-queue1-review/runtime-comparison.md)、[14标准golden与一份旧NGSA107](../operations/evidence/2026-11-13-queue1-review/golden-and-old-archive-final.json)。所有其他来源具体差异仍在[当前清单](../migration/g0/inventory_status.json)，不把源码审查登记为运行复现。本批完整门禁尚在执行，未提交/发布。
+
 ## 2026-11-13T23:03:20+08:00 第0项代码发布及CI记录
 
 代码 `1d59f42b8b493e1fbac7a0e8b8c781ccef1ea61c` 已发布到批准分支；[精确SHA的CI](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43442212867) attempt 1全部10作业success，完整[发布与验证证据](../operations/evidence/2026-11-13-queue0-gates/publication/code-exact-ci-first/README.md)。记录时HEAD为代码提交加文档dirty，规则333／NGSA107／schema5／ABI759／WS8不变，产品／工具冻结输入相同。本批Fz只补同值登记；14场golden未重录、一份NGSA107旧档续行通过。暗织Prepare／选序、桃园自身目标及Duel实体0差异保留，CI不作规则等价背书。

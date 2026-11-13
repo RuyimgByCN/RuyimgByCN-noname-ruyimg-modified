@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-13-queue1-review/compare-runtime-results.py", line 27, in <module>
+    assert key not in upstream, f"ambiguous repeated result: {key}"
+AssertionError: ambiguous repeated result: juxian-top-red

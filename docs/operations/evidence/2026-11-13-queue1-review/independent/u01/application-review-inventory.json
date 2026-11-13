@@ -1,0 +1,1734 @@
+{
+  "at": "2026-11-14T00:28:01.730922+08:00",
+  "u01_records": [
+    {
+      "key": "U01:skills:dddyuanzhen@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:6",
+      "name": "dddyuanzhen",
+      "classification": "potential_gap",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "待核验：上游逐目标事件 useCardToPlayered 对照原生 CardUsed；后续增加或移除目标时，当前过滤依赖当时 u.targets，不能证明与最终单目标一致。内容中的弃牌/取消摸牌分支有实际实现。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:skills:dddzhishu@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:37",
+      "name": "dddzhishu",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "上游moveCard可移判定区；原生movable_equips只枚举装备。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddxiaxing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:59",
+      "name": "dddxiaxing",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "原生持侠标记的ActivateSkill杀候选枚举所有其他存活者，没有正常杀距离过滤。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddjuxian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:244",
+      "name": "dddjuxian",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "已补gainPlayerCard真实选牌、规则RNG私有排列及挂起恢复；仍有出牌阶段次数用turn_stamp、无他人he时预先禁止top、gainable/明置手牌分支及支付CardsLost子事件晚于获得询问等差异；详见J01–J05。13分支的局部投影对照不签整技能等价。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddjungui@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:384",
+      "name": "dddjungui",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "弃牌窗口仅限制张数，未要求各不相同花色，可接受两张同花色牌。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddjinggou@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:443",
+      "name": "dddjinggou",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "原生订阅Equipped，直接装备也满足武器和最大射程过滤；上游必须本人useCardAfter。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddmoyan@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:472",
+      "name": "dddmoyan",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "原生以每轮首次Judge开始代替global roundStart，展示及增伤生效边界随之推迟。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddshilie@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:511",
+      "name": "dddshilie",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "原生Host没有选择闪的响应入口；共享view-as要求的flag只由旧VM写入。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddyeshen@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:656",
+      "name": "dddyeshen",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "原生固定首张黑牌及至多2目标，直接发Linked；上游选黑牌并真实使用铁索，可0目标重铸。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddqiaoduan@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:747",
+      "name": "dddqiaoduan",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源chooseCardTarget默认手牌区；原生he_options额外允许装备。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:ddddiedang@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:802",
+      "name": "ddddiedang",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "上游每出牌阶段一次；原生SkillLimits.once_per_turn阻止同回合额外出牌阶段再次发动。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddanliu@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:861",
+      "name": "dddanliu",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "上游展示异色牌立即结束；原生跳过confirm后继续交换。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddguiying@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:968",
+      "name": "dddguiying",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源按座次循环吴角色且各可拒绝；原生只first_wu_responder并自动取牌，无后续响应者。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddbingjian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1204",
+      "name": "dddbingjian",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源帮助角色与虚拟牌目标分离；原生把可选帮助目标直接作为杀目标，取消帮助便不使用牌。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddtongyu@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1443",
+      "name": "dddtongyu",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源真实五谷牌池是目标人数加支付张数；原生只pop支付张数，未执行五谷逐人选牌。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddzhilian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1584",
+      "name": "dddzhilian",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源仅收本回合入弃的杀；原生从整个弃牌堆回收全部杀。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddjijian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1676",
+      "name": "dddjijian",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源展示后双方依次真实用不重名虚拟牌；原生将该段替换为双方各摸1。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddjijian_old@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1807",
+      "name": "dddjijian_old",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源按同色数循环虚拟用牌；原生仅同色时摸1，没有虚拟用牌段。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddzhengjun@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2005",
+      "name": "dddzhengjun",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源从本事件getl/getg等定位受影响者；原生选全场首个数值相等的other，未绑定实际受影响者。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddxianxi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2194",
+      "name": "dddxianxi",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源向原杀追加多个targets并在useCardAfter按未伤者计算N；原生不改targets，提前固定N=1。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddlingyong@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2296",
+      "name": "dddlingyong",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源非杀判定牌可实际使用并无两次上限；原生将其拿到手且循环上限2。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddxuxiao@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2333",
+      "name": "dddxuxiao",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源同次弃牌可循环逐张用黑基本作兵粮；原生完成一张便结束。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddxuyu@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2407",
+      "name": "dddxuyu",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源下一牌弃后本体仍可再选摸1；原生must_discard分支清flag后立即Done。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddshijian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2423",
+      "name": "dddshijian",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源额外结算选项增加原牌effectCount；原生选项仅令用牌者摸1。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddxuyu_old@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2519",
+      "name": "dddxuyu_old",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源按当前出牌阶段第1/2张分支；原生按整回合计数，额外出牌阶段不重置。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddshijian_old@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2574",
+      "name": "dddshijian_old",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源动态临时全局条件与useCardAfter；原生只记特定角色后继并按turn牌数处理。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddtaisi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2636",
+      "name": "dddtaisi",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源只能赠本回合进入弃牌堆的牌；原生候选是全弃牌堆。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddquche@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2706",
+      "name": "dddquche",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源可循环给牌/拒绝并逐次减距离，黑杀可另选对象；原生只有一次给牌并对同一人用杀。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddqianlong@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2819",
+      "name": "dddqianlong",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源取消击杀奖惩并改为摸3；原生只摸3，没有取消原奖惩的写入或消费者。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:ddddongcha@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2851",
+      "name": "ddddongcha",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "鉴超过2张时源当前角色只选1；原生主人取1后把全部余鉴交当前角色。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddzhijie@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2941",
+      "name": "dddzhijie",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源将两鉴用于真实闪/无懈响应；原生仅自己Play弃2鉴摸2并写无人读取的flag。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddqiahua@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3068",
+      "name": "dddqiahua",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源临时授予目标恂恂技能；原生只写granted flag，不创建目标的恂恂实例。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddxunxun@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3112",
+      "name": "dddxunxun",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源chooseToMove可重排顶2底2；原生只有选2张集合，无组内顺序选择。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddfusi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3149",
+      "name": "dddfusi",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源仅具体明牌忽略手限；原生dddfusi_active使全部手牌忽略上限。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddfusi_global@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3174",
+      "name": "dddfusi_global",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源获许可后实际借用明牌；原生将牌移到手中，且仅有同意/拒绝两项而非四种回合记忆。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddtuoji@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3369",
+      "name": "dddtuoji",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源须刚借用主人腹笥实体且主人无未明牌；原生他人普通CardUsed也可因shown_count满足过滤。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddchashi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3388",
+      "name": "dddchashi",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源同type2包括basic/equip；原生仅记录trick bool，漏同类基本和同类装备。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddqice@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3507",
+      "name": "dddqice",
+      "classification": "potential_gap",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "待核验：实际追到card_kind.rs:71后确认Le/Bing/ShanDian均在is_trick_kind内，不能误报缺延时锦囊。内容的摸2/禁用/用锦囊解除有落点；可证差异是触发优先级1且不可选序，而上游本体未声明priority、get.priority返回0。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:skills:dddmiaoxing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3569",
+      "name": "dddmiaoxing",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源开局三倍初发并分三组；原生首次Draw只另取2+2，没有三倍发牌与分组。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddfushi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3727",
+      "name": "dddfushi",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源男目标可独立选组或取消；原生沿用主人组选并直接交换。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddfenji@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3866",
+      "name": "dddfenji",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源替代原摸/弃阶段并有按伤害/目标数后效；原生不取消原阶段，只发三种锦囊。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddxiaheng@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:3944",
+      "name": "dddxiaheng",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源同目标后实际移除本技能；原生仅写same_target flag且过滤不以此禁止再发动。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddfengzheng@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4019",
+      "name": "dddfengzheng",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源仅手牌点数和恰13可当无中；原生任意1至4张，不核对点数。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddyulv@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4213",
+      "name": "dddyulv",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源本回合第二次必须换律；原生无该后继，律保持不变。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddyulv_old@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4307",
+      "name": "dddyulv_old",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源连续同选后重宣并立即结束当前回合；原生没有选项历史和结束回合段。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddfenye@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4403",
+      "name": "dddfenye",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源允许旁人加入两组并按平均点数；原生只做普通两人拼点。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddshichao@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4875",
+      "name": "dddshichao",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源将主人手牌调至min(所选目标手牌,主公maxHp)；原生调整的是目标手牌。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddyouxue@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4975",
+      "name": "dddyouxue",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源场上共享游标且首次立即移给无标记者；原生每owner独立holder、首次候选含本人。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddchengjing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5018",
+      "name": "dddchengjing",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源只取有游标角色本回合实际用牌的最后合格弃牌实体；原生任意End取弃牌堆末牌，没有经仍默认杀。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddduanbing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5131",
+      "name": "dddduanbing",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源只在卡牌伤害后移全部可转移兵粮；原生未要求卡牌且pop任意判定牌一张，可移走乐/闪电。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddxiaoxing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5223",
+      "name": "dddxiaoxing",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源gameDrawBegin/init补3；原生到首次本人Draw才补3，获得技能时没有init补牌。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddlangzhi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5296",
+      "name": "dddlangzhi",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源仅攻击范围内角色逐人选牌；原生从全场other各取第一张，未过滤攻击范围。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddfuyi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5427",
+      "name": "dddfuyi",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源filter中的(!非负数量)<2恒真，当前本体恒不触发；原生lost flag满足可发动。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddzhuanshe@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5593",
+      "name": "dddzhuanshe",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源同名实际用牌可加目标且用过后不罚伤；原生无CardUsed入口，End总会提供伤害选择。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddweiqiu@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5714",
+      "name": "dddweiqiu",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源cancel原recover；原生只摸1，原recover仍然提交。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddlianer@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5729",
+      "name": "dddlianer",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源回收单实体后use/respond/save受点数cap限制；原生只写rank_cap且没有消费者。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddanzhi@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5796",
+      "name": "dddanzhi",
+      "classification": "verified_source_difference",
+      "before_status": "简化近似",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "当前Prepare询问仍不同于源整回合phaseBegin；已修末色/独占免疫仍不足以消除该边界。",
+      "current_reviewer": "queue0_independent_review",
+      "current_review_date": "2026-11-13"
+    },
+    {
+      "key": "U01:skills:dddshixing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5840",
+      "name": "dddshixing",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源独立两bool可同时授享乐与酒诗；原生if/else互斥mode且不实际授技。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:ddddanggu@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5889",
+      "name": "ddddanggu",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源仅横置数<群数且最少选择差额；原生只需有未横置者，最少1。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddfuzong@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5948",
+      "name": "dddfuzong",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源死亡分支只限群角色；原生任意Death都会自动弃主人首he。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddlanghuai@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:5989",
+      "name": "dddlanghuai",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源取消原摸牌并允许替代数0；原生额外摸max(数,1)且不取消原摸。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddxuanlun@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:6058",
+      "name": "dddxuanlun",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源放牌选项可顶底分置并排序、正常恰4；原生选1至4且全部置顶，已有del仍可再选删条款。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddjiexing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:6236",
+      "name": "dddjiexing",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源recover前改接收者保留num；原生不取消原人且另给主人回固定1。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:skills:dddbailei@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:6302",
+      "name": "dddbailei",
+      "classification": "verified_source_difference",
+      "before_status": "已复核等价",
+      "current_status": "简化近似",
+      "after_matches_application": true,
+      "changed_fields": [
+        "status",
+        "reviewer",
+        "review_date",
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "源hp1伤害致目标实际离场才失技；原生伤害前即写lost，被救回也失效。",
+      "current_reviewer": "/root/queue0_independent_review",
+      "current_review_date": "2026-11-14"
+    },
+    {
+      "key": "U01:generals:ddd_handang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:5",
+      "name": "ddd_handang",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_wuzhi@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:11",
+      "name": "ddd_wuzhi",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_xujing@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:17",
+      "name": "ddd_xujing",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_caomao@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:23",
+      "name": "ddd_caomao",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；isZhugong=true没有对应ExtensionGeneral字段；本项主公资格/候选池未验证，相关主公技能另见逐技能表；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_xinxianying@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:30",
+      "name": "ddd_xinxianying",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_xianglang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:36",
+      "name": "ddd_xianglang",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_yujin@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:42",
+      "name": "ddd_yujin",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_liuye@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:48",
+      "name": "ddd_liuye",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_baosanniang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:54",
+      "name": "ddd_baosanniang",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_zhenji@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:60",
+      "name": "ddd_zhenji",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_zhaoang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:66",
+      "name": "ddd_zhaoang",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_zhouchu@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:72",
+      "name": "ddd_zhouchu",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_liuba@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:78",
+      "name": "ddd_liuba",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_jianshuo@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:84",
+      "name": "ddd_jianshuo",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_guanning@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:90",
+      "name": "ddd_guanning",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_dingfeng@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:96",
+      "name": "ddd_dingfeng",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_caoshuang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:102",
+      "name": "ddd_caoshuang",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_xuelingyun@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:108",
+      "name": "ddd_xuelingyun",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_liuhong@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:114",
+      "name": "ddd_liuhong",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；isZhugong=true没有对应ExtensionGeneral字段；本项主公资格/候选池未验证，相关主公技能另见逐技能表；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_xiahouxuan@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:121",
+      "name": "ddd_xiahouxuan",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；names=夏侯|玄没有对应字段，姓名显示/姓名规则未验证；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_zhangkai@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:128",
+      "name": "ddd_zhangkai",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；源hp3/maxHp4；general_assembly.rs:10及general_select.rs:97有初始hp专门分支，不能把常量4误报为hp4；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_liangxi@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:135",
+      "name": "ddd_liangxi",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_wangkanglvkai@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:141",
+      "name": "ddd_wangkanglvkai",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；names=王|伉-吕|凯没有对应字段，姓名显示/姓名规则未验证；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_sunliang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:148",
+      "name": "ddd_sunliang",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；isZhugong=true没有对应ExtensionGeneral字段；本项主公资格/候选池未验证，相关主公技能另见逐技能表；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_lie@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:155",
+      "name": "ddd_lie",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_kebineng@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:161",
+      "name": "ddd_kebineng",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；isZhugong=true没有对应ExtensionGeneral字段；本项主公资格/候选池未验证，相关主公技能另见逐技能表；names=null|null没有对应字段，姓名显示/姓名规则未验证；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_qianzhao@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:169",
+      "name": "ddd_qianzhao",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_zhangmiao@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:175",
+      "name": "ddd_zhangmiao",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_zhangcheng@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:181",
+      "name": "ddd_zhangcheng",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_liuchong@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:187",
+      "name": "ddd_liuchong",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；资产另有中文ddd刘冲；coexistence按name去重，不能与ddd_liuchong视为同一个目录ID；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    },
+    {
+      "key": "U01:generals:ddd_luoxian@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:193",
+      "name": "ddd_luoxian",
+      "classification": "core_fields_only",
+      "before_status": "已复核等价",
+      "current_status": "已复核等价",
+      "after_matches_application": true,
+      "changed_fields": [
+        "difference",
+        "note",
+        "diff"
+      ],
+      "current_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "current_reviewer": "u01-signoff",
+      "current_review_date": "2026-11-12"
+    }
+  ],
+  "u01_status_counts": {
+    "简化近似": 62,
+    "已复核等价": 33
+  },
+  "current_inventory_sha256": "02e47c3409378d044bfc0c0b0b48bf2d5700913b1cbdd6d19b32abf4063976cb",
+  "original_application_after_sha256": "45629cc212b1a89ee91bdaaff7764bf522e9029a4bd339dc656d1e21aea27b96",
+  "current_global_counts_for_identification_only": {
+    "已复核等价": 634,
+    "简化近似": 3790,
+    "缺失": 0,
+    "上游未定义": 0
+  },
+  "non_u01_after_changes_not_semantically_reviewed": [
+    "L10:configs:cardFold_proportion@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2215",
+    "L10:configs:分割线02@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2258",
+    "L19:configs:zuan_brawl@archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:3363",
+    "L20:ui_hooks:_xigua_zhuwanzhongji_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2290",
+    "L25:configs:bizhi@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50762",
+    "L25:configs:hidessr@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51168",
+    "L25:configs:newhuihe@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50572",
+    "L25:configs:perspective@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50757",
+    "L25:configs:showboss@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51163",
+    "L25:configs:text@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51404",
+    "L25:configs:windowHigh@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51344",
+    "L25:skills:_guanmodeskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:42978"
+  ]
+}

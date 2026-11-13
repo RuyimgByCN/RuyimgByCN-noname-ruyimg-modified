@@ -1,0 +1,11 @@
+Command:
+python3 -B docs/operations/evidence/2026-11-13-queue1-review/independent/u01/validate-review.py
+
+Initial result: exit 1 while checking the README link to the command's own
+not-yet-created validation.json output.
+
+AssertionError: ('README.md', 'validation.json')
+
+Correction: the validator permits only its own planned output path while
+checking report links; it writes validation.json after all remaining checks.
+This was an evidence-structure check, not a game test or a product gate.

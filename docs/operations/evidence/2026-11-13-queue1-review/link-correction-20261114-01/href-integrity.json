@@ -1,0 +1,11 @@
+{
+  "checked_at_utc": "2026-11-13T16:49:35.045116+00:00",
+  "result": "passed",
+  "modified_markdown_files": 10,
+  "href_replay_and_anchor_checks": 636,
+  "unique_existing_targets": 31,
+  "body_labels_dates_and_tables_preserved": true,
+  "line_numbers_preserved_and_in_bounds": true,
+  "first_failure_inventory_and_check_scripts_unchanged": true,
+  "full_preflight_run": false
+}

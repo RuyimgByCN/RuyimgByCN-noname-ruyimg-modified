@@ -1,0 +1,44 @@
+(() => {
+  game.pause();
+  _status.paused2 = false;
+  _status.over = false;
+  _status.auto = false;
+  _status.clicked = false;
+  _status.gameStarted = true;
+  _status.gameDrawed = true;
+  game.phaseNumber = 1;
+  lib.config.auto_confirm = false;
+  lib.config.touchscreen = false;
+  lib.config.errstop = true;
+  game.finishCards();
+  lib.character.queue1_dummy = ['male', 'wei', 8, []];
+  for (const p of game.players) {
+    if (!p.playerid) p.playerid = 'queue1_' + game.players.indexOf(p);
+    p.removeSkill(Object.keys(p.tempSkills || {}));
+    p.uninit();
+    p.init('queue1_dummy');
+    for (const c of p.getCards('hej')) c.remove();
+    p.wunature = undefined;
+    p.storage = {};
+    p.stat = [{ card: {}, skill: {} }];
+  }
+  const owner = game.players[0];
+  game.me = game.players.find(p => p.node.handcards1 === ui.handcards1) || owner;
+  game.swapControl(owner);
+  const first = game.createCard('sha', 'club', 7), second = game.createCard('tao', 'heart', 3);
+  const equip = game.createCard('wuxingpan', 'spade', 5);
+  owner.directgain([first, second, equip]);
+  const root = game.createEvent('phaseUse', false);
+  root.parent = null;
+  root.player = owner;
+  root.setContent(function () { window.queue1Done = true; event.finish(); game.pause(); });
+  _status.event = root;
+  _status.currentPhase = owner;
+  window.queue1Done = false;
+  window.queue1Cards = { first, second, equip };
+  window.queue1Root = root;
+  owner.useCard(equip, [owner], false).animate = false;
+  owner.useSkill('wuxingpan_skill', [window.queue1Selected === 'tao' ? second : first]);
+  game.resume();
+  return JSON.stringify({ players: game.players.length, event: _status.event.name, done: window.queue1Done });
+})();

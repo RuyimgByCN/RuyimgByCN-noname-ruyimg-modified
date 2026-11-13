@@ -1,0 +1,110 @@
+{
+  "reviewer": "/root/queue0_independent_review",
+  "reviewed_at": "2026-11-13T23:52:00.565686+08:00",
+  "input_captured_at": "2026-11-13T23:50:16.695781+08:00",
+  "head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "tracked_dirty": true,
+  "versions": {
+    "rule": 333,
+    "ngsa": 107,
+    "schema": 5,
+    "abi": 759,
+    "ws": 8
+  },
+  "inventory_key": "U01:skills:dddjuxian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:244",
+  "scope": "J06 followup source and test-assertion review only",
+  "conclusion": "limited_patch_source_review_pass",
+  "j06_status": "addressed_in_source_with_assertions_read",
+  "runtime_reproduced_by_reviewer": false,
+  "new_blocking_findings": [],
+  "evidence": [
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_a.rs",
+      "line": 147,
+      "observation": "One RuleRng.shuffle before the ask stores a private candidate permutation after the paid card."
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_a.rs",
+      "line": 165,
+      "observation": "HiddenCard maps into the stored suffix and checks current target-hand membership."
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs",
+      "line": 693,
+      "observation": "Ask reconstruction checks stage, mode, non-self target, and complete candidate multiset without shuffling."
+    },
+    {
+      "path": "crates/engine-native/tests/u01_juxian_gain.rs",
+      "line": 232,
+      "observation": "New test source asserts 8 seeded candidate orders, fixed archive mapping and RNG, and duplicate-map archive rejection."
+    }
+  ],
+  "test_assertions_read": {
+    "functions": 4,
+    "rng_seeds_in_new_test": 8,
+    "three_gain_branches_preserve_ngsa_byte_roundtrip": true,
+    "old_hidden_slot_equals_original_hand_index_assumption_removed": true,
+    "corrupt_duplicate_suffix_rejected": true
+  },
+  "executed": {
+    "cargo": 0,
+    "browser": 0,
+    "upstream_game": 0
+  },
+  "retained_source_differences": [
+    {
+      "id": "J01",
+      "difference": "Phase-local mode and usable counters remain turn-stamped.",
+      "native": "u01_batch_a_asks.rs:18; mode flags and used count",
+      "upstream": "skill.js:246; :296; :353"
+    },
+    {
+      "id": "J02",
+      "difference": "Top mode is excluded before payment when no other he; source pays before checking gainable target list.",
+      "native": "u01_batch_a_asks.rs:138",
+      "upstream": "skill.js:265; :302; :303",
+      "test_boundary": "The new no-other-he test freezes native behavior and is not an upstream-equivalence negative case."
+    },
+    {
+      "id": "J03",
+      "difference": "All target hand/equipment are enumerated; source getGainableCards and shown/viewHandcard branches are not represented by qinglong_options.",
+      "native": "event/invocation.rs:191",
+      "upstream": "content.ts:8958; :8968; :8987"
+    },
+    {
+      "id": "J04",
+      "difference": "Native waits for the gain answer before processing the emitted payment CardsLost child; source awaits player.lose before target/gain selection.",
+      "native": "u01_batch_a.rs:138; resolution.rs:598",
+      "upstream": "skill.js:302",
+      "pre_existing": true
+    },
+    {
+      "id": "J05",
+      "difference": "Full gain/give/move/reveal event semantics remain outside this patch.",
+      "native": "u01_batch_a.rs:145; :179",
+      "upstream": "skill.js:298; :302; :331; :361; :368"
+    }
+  ],
+  "status_recommendation": "简化近似",
+  "rule_equivalence_signed": false,
+  "runtime_equivalence_claim": false,
+  "not_covered": [
+    "full skill phase/turn counters",
+    "gainable and shown-hand visibility modifiers",
+    "loss/gain event-chain ordering",
+    "all private-candidate sizes and equipment combinations",
+    "bitwise JS/native RNG correspondence",
+    "exact-head full gates and goldens"
+  ],
+  "input_manifest": "j06-followup-inputs.json",
+  "preserved_initial_rejection": [
+    {
+      "path": "implementation-history/initial-unshuffled/j06-rejection-review.md",
+      "sha256": "ab67a64159a3d34b4f2dd473fa345b4e6eabf833a90e8c575c78707447d1bd15"
+    },
+    {
+      "path": "implementation-history/initial-unshuffled/j06-rejection-conclusion.json",
+      "sha256": "30385ba75ef9f896e68f8a075580cdb577fb8ec6df2d22b04d2b8e2b5190bfc9"
+    }
+  ]
+}

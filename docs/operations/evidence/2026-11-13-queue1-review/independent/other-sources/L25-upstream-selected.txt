@@ -1,0 +1,1589 @@
+
+=== cards ssr_jinfan | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:6535 ===
+                    "ssr_jinfan": {
+                        enable: 'phaseUse',
+                        filterCard: true,
+                        usable: 2,
+                        audio: 'gnjinfan',
+                        check: function(card) {
+                            return 9 - get.value(card);
+                        },
+                        filterCard: function(card) {
+                            return get.color(card) == 'black' || get.type(card) == 'equip';
+                        },
+                        filter: function(event, player) {
+                            return player.countCards('he', {
+                                color: 'black'
+                            }) + player.countCards('he', {
+                                type: 'equip'
+                            }) > 0;
+                        },
+                        //selectCard:[1,3],
+                        position: 'he',
+                        group: 'ssr_jinfan_effect',
+                        content: function() {
+                            var num = cards.length;
+                            var gains = get.cards(num * 2);
+                            //player.showCards(gains,'银铃锦帆');
+                            player.addToExpansion(gains, player, 'give').gaintag.add('ssr_jinfan');
+                        },
+                        name: "铃",
+                        intro: {
+                            name: "银铃锦帆",
+                            content: "expansion",
+                            markcount: "expansion",
+                        },
+                        onremove: function(player) {
+                            var cards = player.getExpansions('ssr_jinfan');
+                            if (cards.length) player.loseToDiscardpile(cards);
+                        },
+                        ai: {
+                            order: 9,
+                            result: {
+                                player: function(player) {
+                                    return game.countPlayer(function(current) {
+                                        return get.attitude(player, current) < -1;
+                                    });
+                                },
+                            },
+                        },
+                        subSkill: {
+                            effect: {
+                                nopop: true,
+                                trigger: {
+                                    player: "useCardToPlayered",
+                                },
+                                filter: function(event, player) {
+                                    return event.card.name == 'sha' && player.getExpansions('ssr_jinfan').length > event.target.countCards('h');
+                                },
+                                forced: true,
+                                logTarget: "target",
+                                content: function() {
+                                    trigger.target.addTempSkill('qinggang2');
+                                    trigger.target.storage.qinggang2.add(trigger.card);
+                                    trigger.target.markSkill('qinggang2');
+                                },
+                                ai: {
+                                    "unequip_ai": true,
+                                    skillTagFilter: function(player, tag, arg) {
+                                        if (arg && arg.name == 'sha') return true;
+                                        return false;
+                                    },
+                                },
+                                mod: {
+                                    targetInRange: function(card, player, target, now) {
+                                        if (card.name == 'sha' && player.getExpansions('ssr_jinfan').length > target.countCards('h')) return true;
+                                    },
+                                },
+                                sub: true,
+                            },
+                        },
+                    }
+
+=== configs bizhi | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50762 ===
+            "bizhi": {
+                "name": "<span class=\"wallpapertext\" style=\"color:#CDFF76\">菜单界面</span>壁纸",
+                "init": "1",
+                "intro": "控制开始游戏前菜单界面的壁纸<li>均为单张壁纸，无变化<li>壁纸不会持续到开始游戏后",
+                "item": {
+                    "0": "关闭壁纸",
+                    "1": "关闭壁纸",
+                    "2": "新杀春日",
+                    "3": "新杀春日",
+                    "4": "新杀春日",
+                    "5": "新杀春日",
+                    "6": "新杀夏荷",
+                    "7": "新杀月夜",
+                    "8": "秦兵马俑",
+                    "9": "曹节花园",
+                    "10": "深宫殿堂",
+                    "11": "元夕之夜",
+                    "12": "苍龙夜月",
+                    "13": "破碎庙宇"
+                },
+                "textMenu": function(node, link) {
+                    lib.setScroll(node.parentNode);
+                    switch (link) {
+                    case "0":
+                        node.innerHTML = "◈关闭———";
+                        break;
+                    case "2":
+                        node.innerHTML = "◈动态———";
+                        break;
+                    case "4":
+                        node.innerHTML = "◈静态———";
+                        break;
+                    }
+                },
+                onclick: function(item) {
+                    var items = item;
+                    if (item == "0") items = "1";
+                    if (item == "2") items = "3";
+                    if (item == "4") items = "5";
+                    game.saveConfig('extension_祖安设置_bizhi', items);
+                }
+            }
+
+=== configs hidessr | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51168 ===
+            "hidessr": {
+                "name": "<span class=\"ssrtext\" style=\"color:#F5CBA7\">祖安将包</span>隐藏",
+                "init": true,
+                "intro": "打开此选项将隐藏标准武将增强的武将包显示，这些武将不会被ai或玩家选中"
+            }
+
+=== configs newhuihe | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50572 ===
+            "newhuihe": {
+                "name": "<span class=\"huihetext\" style=\"color:#CEA3FF\">回合特效</span>版本",
+                "init": "new_standard",
+                "intro": "选择回合特效的版本<li>新版的回合特效有更细致的动画和更高的帧率，同时也提供了更多选择",
+                "item": {
+                    "old": "经典版本",
+                    "new_standard": "新版滑动",
+                    "new_brighten": "新版强调",
+                    "new_shine": "新版居中",
+                }
+            }
+
+=== configs perspective | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50757 ===
+            "perspective": {
+                "name": "<span class=\"wallpapertext\" style=\"color:#00FFFF\">武将透视</span>缩放",
+                "intro": "根据近大远小的透视原理，给场上武将调整武将牌大小，实现视觉上的立体感<li>此功能为实验性功能，卡牌和特效的缩放尚未做兼容调整，慎开",
+                "init": false,
+            }
+
+=== configs showboss | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51163 ===
+            "showboss": {
+                "name": "<span class=\"ssrtext\" style=\"color:#7FFFAA\">诸神降临</span>扩展",
+                "init": false,
+                "intro": "搬运自『诸神降临』扩展，将剑阁和挑战模式的武将添加到其它模式"
+            }
+
+=== configs text | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51404 ===
+            "text": {
+                "name": "<span style=\"animation: -webkit-animation:fairy 20s infinite;animation:fairy 20s infinite;\">◈游戏自定义工具</span>",
+                "init": false,
+                "intro": "说得那么好听，其实就是作弊工具嘛<br>┐(´-｀)┌<br>胡扯！无名杀玩家的事，能叫作弊吗？<br>╰_╯╬<li>编辑器能够自定义场上所有角色使用的武将、位置、手牌，以及能观看其身份<li>适用于各武将AI的测试以及拓展的制作<li>建议关闭 手气卡 使用，此工具内置手气卡功能"
+            }
+
+=== configs windowHigh | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51344 ===
+            "windowHigh": {
+                "name": "<span class=\"zuantext\" style=\"color: #4169E1\">窗口比例</span>设置",
+                "init": "0",
+                "intro": "可以给电脑的窗口定义大小啦！<li>似乎对手机并没有什么作用..",
+                "item": {
+                    "0": "不调整",
+                    /*"1":"720×480(3:2)",
+	                "2":"800×600(4:3)",
+	                "3":"1280×720(16:9)",
+	                "4":"1440×960(3:2)",
+	                "5":"1600×1200(4:3)",
+	                "6":"1920×1080(16:9)",
+	                "7":"1090×570(手机)"*/
+                },
+                onclick: function(item) {
+                    function resize_window(long, high) {
+                        // move the window to 0,0 (X,Y)
+                        window.moveTo(0, 0);
+                        // resize the window to 800x600
+                        window.resizeTo(long, high);
+                    }
+                    var items = item;
+                    game.saveConfig('extension_祖安设置_windowHigh', items);
+                    localStorage.setItem("zuanwindow", items);
+                    var windows = item;
+                    if (windows == "1") {
+                        resize_window(720, 480);
+                    }
+                    if (windows == "2") {
+                        resize_window(800, 600);
+                    }
+                    if (windows == "3") {
+                        resize_window(1280, 720);
+                    }
+                    if (windows == "4") {
+                        resize_window(1440, 960);
+                    }
+                    if (windows == "5") {
+                        resize_window(1600, 1200);
+                    }
+                    if (windows == "6") {
+                        resize_window(1920, 1080);
+                    }
+                    if (windows == "7") {
+                        resize_window(1090, 570);
+                    }
+                }
+            }
+
+=== generals ssr_jiaxu | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:372 ===
+                    "ssr_jiaxu": ["male", "qun", 3, ["ssr_newweimu", "ssr_guimou", "ssr_newluanwu"], []],
+                    "ssr_caiwenji": ["female", "qun", 3, ["ssr_nianlei", "ssr_newduanxian"], []],
+                    "ssr_menghuo": ["male", "shu", 4, ["ssr_manjia", "ssr_zaiqi"], []],
+                    "ssr_zhurong": ["female", "shu", 3, ["ssr_manjia", "ssr_lieren"], []],
+                    "ssr_jiangwei": ["male", "shu", 4, ["ssr_zhiji", "ssr_weilong"], []],
+                    "ssr_sunce": ["male", "wu", 4, ["ssr_hunzi", "ssr_newjiang", "ssr_newzhiba"], ["zhu", ]],
+                    "ssr_taishici": ["male", "wu", '2/4/2', ["ssr_kuiwei", "ssr_newhanzhan"], []],
+                    "ssr_zhoutai": ["male", "wu", 4, ["ssr_newbuqu", "ssr_huwei"], []],
+                    "ssr_xiahouyuan": ["male", "wei", 4, ["ssr_shensu", "ssr_hubu"], []],
+                    "ssr_caoren": ["male", "wei", 4, ["ssr_jushou", "ssr_zhuzhen"], []],
+                    "ssr_dengai": ["male", "wei", 4, ["ssr_tuntian", "ssr_zaoxian"], []],
+                    "ssr_dongzhuo": ["male", "qun", 8, ["ssr_newhengzheng", "ssr_baonue", "ssr_newjiuchi"], ["zhu", ]],
+                    "ssr_yuji": ["male", "qun", 3, ["ssr_newmizhou", "ssr_chanyuan"], []],
+                    "ssr_yuanshao": ["male", "qun", 4, ["ssr_newluanji", "ssr_newdingsheng", "ssr_newshiyi"], ["zhu", ]],
+                    "ssr_xushu": ["male", "shu", 4, ["ssr_zhuhai", "ssr_yijian"], []],
+                    "ssr_fazheng": ["male", "shu", 3, ["ssr_newfabing", "ssr_xuanhuo"], []],
+                    "ssr_pangtong": ["male", "shu", 3, ["ssr_lianhuan", "ssr_newsance"], []],
+                    "ssr_zhanghe": ["male", "wei", 4, ["ssr_newxiebian", "ssr_motu"], []],
+                    "ssr_re_lidian": ["male", "wei", '3/4/1', ["ssr_xunxun", "ssr_wangxi"], []],
+                    "ssr_xuhuang": ["male", "wei", 4, ["ssr_jieliang", "ssr_zhiyan"], []],
+                    "ssr_sunjian": ["male", "wu", 4, ["ssr_futu", "ssr_newpolu"], []],
+                    "ssr_lusu": ["male", "wu", 3, ["ssr_dimeng", "ssr_fuhui"], []],
+                    "ssr_zhangzhang": ["male", "wu", 3, ["ssr_zhijian", "ssr_guzheng"], []],
+                    "ssr_zhangjiao": ["male", "qun", 3, ["ssr_tianlei", "ssr_gaiming", "ssr_newguidao", "ssr_zhuji"], ["zhu", ]],
+                    "ssr_zhangbao": ["male", "qun", 3, ["ssr_dihuo", "ssr_gaiming", "ssr_guifu"], []],
+                    "ssr_zhangliang": ["male", "qun", 3, ["ssr_renhong", "ssr_gaiming", "ssr_fangtong"], []],
+                },
+                translate: {
+                    "ssr_luxun": "源陆逊",
+                    "ssr_sunquan": "源孙权",
+                    "ssr_zhaoyun": "源赵云",
+                    "ssr_zhugeliang": "源诸葛亮",
+                    "ssr_zhangliao": "源张辽",
+                    "ssr_ganning": "源甘宁",
+                    "ssr_machao": "源马超",
+                    "ssr_zhouyu": "源周瑜",
+                    "ssr_liubei": "源刘备",
+                    "ssr_dianwei": "源典韦",
+                    "ssr_guojia": "源郭嘉",
+                    "ssr_caocao": "源曹操",
+                    "ssr_lvbu": "源吕布",
+                    "ssr_huangzhong": "源黄忠",
+                    "ssr_xiahoudun": "源夏侯惇",
+
+=== generals ssr_lusu | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:393 ===
+                    "ssr_lusu": ["male", "wu", 3, ["ssr_dimeng", "ssr_fuhui"], []],
+                    "ssr_zhangzhang": ["male", "wu", 3, ["ssr_zhijian", "ssr_guzheng"], []],
+                    "ssr_zhangjiao": ["male", "qun", 3, ["ssr_tianlei", "ssr_gaiming", "ssr_newguidao", "ssr_zhuji"], ["zhu", ]],
+                    "ssr_zhangbao": ["male", "qun", 3, ["ssr_dihuo", "ssr_gaiming", "ssr_guifu"], []],
+                    "ssr_zhangliang": ["male", "qun", 3, ["ssr_renhong", "ssr_gaiming", "ssr_fangtong"], []],
+                },
+                translate: {
+                    "ssr_luxun": "源陆逊",
+                    "ssr_sunquan": "源孙权",
+                    "ssr_zhaoyun": "源赵云",
+                    "ssr_zhugeliang": "源诸葛亮",
+                    "ssr_zhangliao": "源张辽",
+                    "ssr_ganning": "源甘宁",
+                    "ssr_machao": "源马超",
+                    "ssr_zhouyu": "源周瑜",
+                    "ssr_liubei": "源刘备",
+                    "ssr_dianwei": "源典韦",
+                    "ssr_guojia": "源郭嘉",
+                    "ssr_caocao": "源曹操",
+                    "ssr_lvbu": "源吕布",
+                    "ssr_huangzhong": "源黄忠",
+                    "ssr_xiahoudun": "源夏侯惇",
+                    "ssr_huatuo": "源华佗",
+                    "ssr_yujin": "源于禁",
+                    "ssr_zuoci": "源左慈",
+                    "ssr_huaxiong": "源华雄",
+                    "ssr_huanggai": "源黄盖",
+                    "ssr_diaochan": "源貂蝉",
+                    "ssr_yuanshu": "源袁术",
+                    "ssr_guanyu": "源关羽",
+                    "ssr_lvmeng": "源吕蒙",
+                    "ssr_gongsunzan": "源公孙瓒",
+                    "ssr_daqiao": "源大乔",
+                    "ssr_xiaoqiao": "源小乔",
+                    "ssr_xuzhu": "源许褚",
+                    "ssr_zhangfei": "源张飞",
+                    "ssr_zhenji": "源甄姬",
+                    "ssr_sunshangxiang": "源孙尚香",
+                    "ssr_simayi": "源司马懿",
+                    "ssr_yiji": "源伊籍",
+                    "ssr_huangyueying": "源黄月英",
+                    "ssr_jiaxu": "源贾诩",
+                    "ssr_caiwenji": "源蔡文姬",
+
+=== generals ssr_taishici | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:378 ===
+                    "ssr_taishici": ["male", "wu", '2/4/2', ["ssr_kuiwei", "ssr_newhanzhan"], []],
+                    "ssr_zhoutai": ["male", "wu", 4, ["ssr_newbuqu", "ssr_huwei"], []],
+                    "ssr_xiahouyuan": ["male", "wei", 4, ["ssr_shensu", "ssr_hubu"], []],
+                    "ssr_caoren": ["male", "wei", 4, ["ssr_jushou", "ssr_zhuzhen"], []],
+                    "ssr_dengai": ["male", "wei", 4, ["ssr_tuntian", "ssr_zaoxian"], []],
+                    "ssr_dongzhuo": ["male", "qun", 8, ["ssr_newhengzheng", "ssr_baonue", "ssr_newjiuchi"], ["zhu", ]],
+                    "ssr_yuji": ["male", "qun", 3, ["ssr_newmizhou", "ssr_chanyuan"], []],
+                    "ssr_yuanshao": ["male", "qun", 4, ["ssr_newluanji", "ssr_newdingsheng", "ssr_newshiyi"], ["zhu", ]],
+                    "ssr_xushu": ["male", "shu", 4, ["ssr_zhuhai", "ssr_yijian"], []],
+                    "ssr_fazheng": ["male", "shu", 3, ["ssr_newfabing", "ssr_xuanhuo"], []],
+                    "ssr_pangtong": ["male", "shu", 3, ["ssr_lianhuan", "ssr_newsance"], []],
+                    "ssr_zhanghe": ["male", "wei", 4, ["ssr_newxiebian", "ssr_motu"], []],
+                    "ssr_re_lidian": ["male", "wei", '3/4/1', ["ssr_xunxun", "ssr_wangxi"], []],
+                    "ssr_xuhuang": ["male", "wei", 4, ["ssr_jieliang", "ssr_zhiyan"], []],
+                    "ssr_sunjian": ["male", "wu", 4, ["ssr_futu", "ssr_newpolu"], []],
+                    "ssr_lusu": ["male", "wu", 3, ["ssr_dimeng", "ssr_fuhui"], []],
+                    "ssr_zhangzhang": ["male", "wu", 3, ["ssr_zhijian", "ssr_guzheng"], []],
+                    "ssr_zhangjiao": ["male", "qun", 3, ["ssr_tianlei", "ssr_gaiming", "ssr_newguidao", "ssr_zhuji"], ["zhu", ]],
+                    "ssr_zhangbao": ["male", "qun", 3, ["ssr_dihuo", "ssr_gaiming", "ssr_guifu"], []],
+                    "ssr_zhangliang": ["male", "qun", 3, ["ssr_renhong", "ssr_gaiming", "ssr_fangtong"], []],
+                },
+                translate: {
+                    "ssr_luxun": "源陆逊",
+                    "ssr_sunquan": "源孙权",
+                    "ssr_zhaoyun": "源赵云",
+                    "ssr_zhugeliang": "源诸葛亮",
+                    "ssr_zhangliao": "源张辽",
+                    "ssr_ganning": "源甘宁",
+                    "ssr_machao": "源马超",
+                    "ssr_zhouyu": "源周瑜",
+                    "ssr_liubei": "源刘备",
+                    "ssr_dianwei": "源典韦",
+                    "ssr_guojia": "源郭嘉",
+                    "ssr_caocao": "源曹操",
+                    "ssr_lvbu": "源吕布",
+                    "ssr_huangzhong": "源黄忠",
+                    "ssr_xiahoudun": "源夏侯惇",
+                    "ssr_huatuo": "源华佗",
+                    "ssr_yujin": "源于禁",
+                    "ssr_zuoci": "源左慈",
+                    "ssr_huaxiong": "源华雄",
+                    "ssr_huanggai": "源黄盖",
+                    "ssr_diaochan": "源貂蝉",
+
+=== generals ssr_yuanshao | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:385 ===
+                    "ssr_yuanshao": ["male", "qun", 4, ["ssr_newluanji", "ssr_newdingsheng", "ssr_newshiyi"], ["zhu", ]],
+                    "ssr_xushu": ["male", "shu", 4, ["ssr_zhuhai", "ssr_yijian"], []],
+                    "ssr_fazheng": ["male", "shu", 3, ["ssr_newfabing", "ssr_xuanhuo"], []],
+                    "ssr_pangtong": ["male", "shu", 3, ["ssr_lianhuan", "ssr_newsance"], []],
+                    "ssr_zhanghe": ["male", "wei", 4, ["ssr_newxiebian", "ssr_motu"], []],
+                    "ssr_re_lidian": ["male", "wei", '3/4/1', ["ssr_xunxun", "ssr_wangxi"], []],
+                    "ssr_xuhuang": ["male", "wei", 4, ["ssr_jieliang", "ssr_zhiyan"], []],
+                    "ssr_sunjian": ["male", "wu", 4, ["ssr_futu", "ssr_newpolu"], []],
+                    "ssr_lusu": ["male", "wu", 3, ["ssr_dimeng", "ssr_fuhui"], []],
+                    "ssr_zhangzhang": ["male", "wu", 3, ["ssr_zhijian", "ssr_guzheng"], []],
+                    "ssr_zhangjiao": ["male", "qun", 3, ["ssr_tianlei", "ssr_gaiming", "ssr_newguidao", "ssr_zhuji"], ["zhu", ]],
+                    "ssr_zhangbao": ["male", "qun", 3, ["ssr_dihuo", "ssr_gaiming", "ssr_guifu"], []],
+                    "ssr_zhangliang": ["male", "qun", 3, ["ssr_renhong", "ssr_gaiming", "ssr_fangtong"], []],
+                },
+                translate: {
+                    "ssr_luxun": "源陆逊",
+                    "ssr_sunquan": "源孙权",
+                    "ssr_zhaoyun": "源赵云",
+                    "ssr_zhugeliang": "源诸葛亮",
+                    "ssr_zhangliao": "源张辽",
+                    "ssr_ganning": "源甘宁",
+                    "ssr_machao": "源马超",
+                    "ssr_zhouyu": "源周瑜",
+                    "ssr_liubei": "源刘备",
+                    "ssr_dianwei": "源典韦",
+                    "ssr_guojia": "源郭嘉",
+                    "ssr_caocao": "源曹操",
+                    "ssr_lvbu": "源吕布",
+                    "ssr_huangzhong": "源黄忠",
+                    "ssr_xiahoudun": "源夏侯惇",
+                    "ssr_huatuo": "源华佗",
+                    "ssr_yujin": "源于禁",
+                    "ssr_zuoci": "源左慈",
+                    "ssr_huaxiong": "源华雄",
+                    "ssr_huanggai": "源黄盖",
+                    "ssr_diaochan": "源貂蝉",
+                    "ssr_yuanshu": "源袁术",
+                    "ssr_guanyu": "源关羽",
+                    "ssr_lvmeng": "源吕蒙",
+                    "ssr_gongsunzan": "源公孙瓒",
+                    "ssr_daqiao": "源大乔",
+                    "ssr_xiaoqiao": "源小乔",
+                    "ssr_xuzhu": "源许褚",
+
+=== generals ssr_zhangliang | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:397 ===
+                    "ssr_zhangliang": ["male", "qun", 3, ["ssr_renhong", "ssr_gaiming", "ssr_fangtong"], []],
+                },
+                translate: {
+                    "ssr_luxun": "源陆逊",
+                    "ssr_sunquan": "源孙权",
+                    "ssr_zhaoyun": "源赵云",
+                    "ssr_zhugeliang": "源诸葛亮",
+                    "ssr_zhangliao": "源张辽",
+                    "ssr_ganning": "源甘宁",
+                    "ssr_machao": "源马超",
+                    "ssr_zhouyu": "源周瑜",
+                    "ssr_liubei": "源刘备",
+                    "ssr_dianwei": "源典韦",
+                    "ssr_guojia": "源郭嘉",
+                    "ssr_caocao": "源曹操",
+                    "ssr_lvbu": "源吕布",
+                    "ssr_huangzhong": "源黄忠",
+                    "ssr_xiahoudun": "源夏侯惇",
+                    "ssr_huatuo": "源华佗",
+                    "ssr_yujin": "源于禁",
+                    "ssr_zuoci": "源左慈",
+                    "ssr_huaxiong": "源华雄",
+                    "ssr_huanggai": "源黄盖",
+                    "ssr_diaochan": "源貂蝉",
+                    "ssr_yuanshu": "源袁术",
+                    "ssr_guanyu": "源关羽",
+                    "ssr_lvmeng": "源吕蒙",
+                    "ssr_gongsunzan": "源公孙瓒",
+                    "ssr_daqiao": "源大乔",
+                    "ssr_xiaoqiao": "源小乔",
+                    "ssr_xuzhu": "源许褚",
+                    "ssr_zhangfei": "源张飞",
+                    "ssr_zhenji": "源甄姬",
+                    "ssr_sunshangxiang": "源孙尚香",
+                    "ssr_simayi": "源司马懿",
+                    "ssr_yiji": "源伊籍",
+                    "ssr_huangyueying": "源黄月英",
+                    "ssr_jiaxu": "源贾诩",
+                    "ssr_caiwenji": "源蔡文姬",
+                    "ssr_menghuo": "源孟获",
+                    "ssr_zhurong": "源祝融",
+                    "ssr_jiangwei": "源姜维",
+                    "ssr_sunce": "源孙策",
+
+=== generals ssr_zuoci | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:355 ===
+                    "ssr_zuoci": ["male", "qun", 3, ["ssr_shendao", "ssr_newjiahe"], []],
+                    "ssr_huaxiong": ["male", "qun", 4, ["ssr_miedi", "ssr_shiyong"], []],
+                    "ssr_huanggai": ["male", "wu", 4, ["ssr_newkurou", "ssr_fenchuan"], []],
+                    "ssr_diaochan": ["female", "qun", 3, ["ssr_newlihun", "ssr_biyue"], []],
+                    "ssr_yuanshu": ["male", "qun", 4, ["ssr_yjixi", "ssr_yanji", "ssr_cuandi"], []],
+                    "ssr_guanyu": ["male", "shu", 4, ["ssr_wusheng", "ssr_yijue"], []],
+                    "ssr_lvmeng": ["male", "wu", 4, ["ssr_newbaiyi", "ssr_liecheng"], []],
+                    "ssr_gongsunzan": ["male", "qun", 4, ["ssr_newyucong", "ssr_newyicong"], []],
+                    "ssr_daqiao": ["female", "wu", 3, ["ssr_newguose", "ssr_newtongque"], []],
+                    "ssr_xiaoqiao": ["female", "wu", 3, ["ssr_newtianxiang", "ssr_newtongque"], []],
+                    "ssr_xuzhu": ["male", "wei", 4, ["ssr_huchi", "ssr_newluoyi"], []],
+                    "ssr_zhangfei": ["male", "shu", 4, ["ssr_zhenhun", "ssr_paoxiao"], []],
+                    "ssr_zhenji": ["female", "wei", 3, ["ssr_newluoshen", "ssr_yushui"], []],
+                    "ssr_sunshangxiang": ["female", "wu", 3, ["ssr_jieyin", "ssr_weigong"], []],
+                    "ssr_simayi": ["male", "wei", 3, ["ssr_tianlang", "ssr_newjilue"], []],
+                    "ssr_yiji": ["male", "shu", 3, ["ssr_newjijie", "ssr_newjiyuan"], []],
+                    "ssr_huangyueying": ["female", "shu", 3, ["ssr_jiqiao", "ssr_qicai"], []],
+                    "ssr_jiaxu": ["male", "qun", 3, ["ssr_newweimu", "ssr_guimou", "ssr_newluanwu"], []],
+                    "ssr_caiwenji": ["female", "qun", 3, ["ssr_nianlei", "ssr_newduanxian"], []],
+                    "ssr_menghuo": ["male", "shu", 4, ["ssr_manjia", "ssr_zaiqi"], []],
+                    "ssr_zhurong": ["female", "shu", 3, ["ssr_manjia", "ssr_lieren"], []],
+                    "ssr_jiangwei": ["male", "shu", 4, ["ssr_zhiji", "ssr_weilong"], []],
+                    "ssr_sunce": ["male", "wu", 4, ["ssr_hunzi", "ssr_newjiang", "ssr_newzhiba"], ["zhu", ]],
+                    "ssr_taishici": ["male", "wu", '2/4/2', ["ssr_kuiwei", "ssr_newhanzhan"], []],
+                    "ssr_zhoutai": ["male", "wu", 4, ["ssr_newbuqu", "ssr_huwei"], []],
+                    "ssr_xiahouyuan": ["male", "wei", 4, ["ssr_shensu", "ssr_hubu"], []],
+                    "ssr_caoren": ["male", "wei", 4, ["ssr_jushou", "ssr_zhuzhen"], []],
+                    "ssr_dengai": ["male", "wei", 4, ["ssr_tuntian", "ssr_zaoxian"], []],
+                    "ssr_dongzhuo": ["male", "qun", 8, ["ssr_newhengzheng", "ssr_baonue", "ssr_newjiuchi"], ["zhu", ]],
+                    "ssr_yuji": ["male", "qun", 3, ["ssr_newmizhou", "ssr_chanyuan"], []],
+                    "ssr_yuanshao": ["male", "qun", 4, ["ssr_newluanji", "ssr_newdingsheng", "ssr_newshiyi"], ["zhu", ]],
+                    "ssr_xushu": ["male", "shu", 4, ["ssr_zhuhai", "ssr_yijian"], []],
+                    "ssr_fazheng": ["male", "shu", 3, ["ssr_newfabing", "ssr_xuanhuo"], []],
+                    "ssr_pangtong": ["male", "shu", 3, ["ssr_lianhuan", "ssr_newsance"], []],
+                    "ssr_zhanghe": ["male", "wei", 4, ["ssr_newxiebian", "ssr_motu"], []],
+                    "ssr_re_lidian": ["male", "wei", '3/4/1', ["ssr_xunxun", "ssr_wangxi"], []],
+                    "ssr_xuhuang": ["male", "wei", 4, ["ssr_jieliang", "ssr_zhiyan"], []],
+                    "ssr_sunjian": ["male", "wu", 4, ["ssr_futu", "ssr_newpolu"], []],
+                    "ssr_lusu": ["male", "wu", 3, ["ssr_dimeng", "ssr_fuhui"], []],
+                    "ssr_zhangzhang": ["male", "wu", 3, ["ssr_zhijian", "ssr_guzheng"], []],
+                    "ssr_zhangjiao": ["male", "qun", 3, ["ssr_tianlei", "ssr_gaiming", "ssr_newguidao", "ssr_zhuji"], ["zhu", ]],
+                    "ssr_zhangbao": ["male", "qun", 3, ["ssr_dihuo", "ssr_gaiming", "ssr_guifu"], []],
+                    "ssr_zhangliang": ["male", "qun", 3, ["ssr_renhong", "ssr_gaiming", "ssr_fangtong"], []],
+
+=== skills _bingletexiao1 | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48747 ===
+lib.skill._bingletexiao1={
+        trigger:{
+            player:'dieBegin',
+        },
+        silent:true,
+        priority:2,
+        forced:true,                            
+        content:function(){
+        if(player.hasSkill('hpunshow')) player.removeSkill('hpunshow');  
+        if(player.hasSkill('thunderunshow')) player.removeSkill('thunderunshow');  
+        if(player.hasSkill('huoshanunshow')) player.removeSkill('huoshanunshow');        
+            game.broadcastAll(function(player){
+                imgs=player.node.avatar.querySelectorAll("div");
+                for (var i=0;i<imgs.length;i++) {
+                    var img = imgs[i];
+                    img.style.opacity=0;//'translateY(-200px)'
+                    img.delete();
+                }
+            },player)
+        },
+    }
+
+=== skills _bingletexiao2 | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48768 ===
+lib.skill._bingletexiao2={
+        trigger:{
+            player:['loseEnd'],
+        },
+        filter:function(event,player){
+            for(var i=0;i<event.cards.length;i++){
+                if(event.cards[i].original=='j') return true;
+            }
+            return false;
+        },
+        silent:true,
+        forced:true,
+        content:function(){
+            'step 0';
+                game.broadcastAll(function(player){
+                    imgs=player.node.avatar.querySelectorAll("div")
+                    for (var i=0;i<imgs.length;i++) {
+                        var img = imgs[i];
+                        img.style.opacity=0;//'translateY(-200px)'
+                        img.delete();
+                    }
+                },player)
+        if(!player.countCards('j',{name:'shandian'})&&player.hasSkill('thunderunshow')) player.removeSkill('thunderunshow');   
+        if(!player.countCards('j',{name:'huoshan'})&&player.hasSkill('huoshanunshow')) player.removeSkill('huoshanunshow');            
+        if(!player.countCards('j',{name:'hongshui'})&&player.hasSkill('hongshuiunshow')) player.removeSkill('hongshuiunshow');            
+        if(!player.countCards('j',{name:'fulei'})&&player.hasSkill('fuleiunshow')) player.removeSkill('fuleiunshow');                   
+            'step 1';
+            event.rdying=false;
+            if(player.hasSkill('zuan_hudun')) {
+                if(player.hp<=1&&player.countMark('zuan_hudun')<1) event.rdying=true;
+            }else {
+            if(player.maxHp>1) {
+                if(player.hp<=1) event.rdying=true;
+            }else {
+                if(player.hp<=0) event.rdying=true;
+            }
+            }
+            if(event.rdying) {
+                player.addTempSkill('hpunshow',{player:'die'});
+                game.broadcastAll(function(player){
+                    img = document.createElement('div');
+            if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {   
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_dying.png');      
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10dying.png');     
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hdying.png');      
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sdying.png');      
+                    }
+                    img.style.opacity=lib.config.zuancoveropacity;
+                    img.style.width='100%';
+                    img.style.height='100%';
+                    img.style.backgroundSize='cover';
+                    img.style.zIndex=window.zuancoverindex;
+                    img.style.opacity=0;//'translateY(-200px)'
+                    player.node.avatar.appendChild(img);
+                    ui.refresh(img);
+                    img.style.opacity=1;//transform='';
+                },player)
+            }
+            if(player.countCards('j',{name:'lebu'})){
+                game.broadcastAll(function(player){
+                    img = document.createElement('div');
+            if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {   
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_lebu.png');      
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10lebu.png');     
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hlebu.png');      
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Slebu.png');      
+                    }
+                    img.style.opacity=lib.config.zuancoveropacity;
+                    img.style.width='100%';
+                    img.style.height='100%';
+                    img.style.backgroundSize='cover';
+                    img.style.zIndex=window.zuancoverindex;
+                    img.style.opacity=0;//'translateY(-200px)'
+                    player.node.avatar.appendChild(img);
+                    ui.refresh(img);
+                    img.style.opacity=1;//transform='';
+                },player)
+            }   
+            if(player.countCards('j',{name:'bingliang'})){
+                game.broadcastAll(function(player){
+                    img = document.createElement('div');
+            if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {   
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_bingliang.jpg');      
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10bingliang.png');     
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hbingliang.png');      
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sbingliang.png');      
+                    }
+                    img.style.opacity=lib.config.zuancoveropacity;
+                    img.style.height='100%';
+                    img.style.backgroundSize='cover';
+                    img.style.zIndex=window.zuancoverindex;
+                    img.style.opacity=0;//'translateY(-200px)'
+                    player.node.avatar.appendChild(img);
+                    ui.refresh(img);
+                    img.style.opacity=1;//transform='';
+                },player)
+            } 
+            if(player.countCards('j',{name:'huoshan'})){
+                game.broadcastAll(function(player){
+                    img = document.createElement('div');
+            if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {   
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_huoshan.png');      
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10huoshan.png');     
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hhuoshan.png');      
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Shuoshan.png');      
+                    }
+                    img.style.opacity=lib.config.zuancoveropacity;
+                    img.style.width='100%';
+                    img.style.height='100%';
+                    img.style.backgroundSize='cover';
+                    img.style.zIndex=window.zuancoverindex;
+                    img.style.opacity=0;//'translateY(-200px)'
+                    player.node.avatar.appendChild(img);
+                    ui.refresh(img);
+                    img.style.opacity=1;//transform='';
+                },player)
+            }
+            if(player.countCards('j',{name:'hongshui'})){
+                game.broadcastAll(function(player){
+                    img = document.createElement('div');
+            if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {   
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_hongshui.png');      
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10hongshui.png');     
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hhongshui.png');      
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Shongshui.png');      
+                    }
+                    img.style.opacity=lib.config.zuancoveropacity;
+                    img.style.width='100%';
+                    img.style.height='100%';
+                    img.style.backgroundSize='cover';
+                    img.style.zIndex=window.zuancoverindex;
+                    img.style.opacity=0;//'translateY(-200px)'
+                    player.node.avatar.appendChild(img);
+                    ui.refresh(img);
+                    img.style.opacity=1;//transform='';
+                },player)
+            }
+            if(player.countCards('j',{name:'fulei'})){
+                game.broadcastAll(function(player){
+                    img = document.createElement('div');
+            if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {   
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_fulei.png');      
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10fulei.png');     
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hfulei.png');      
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sfulei.png');      
+                    }
+                    img.style.opacity=lib.config.zuancoveropacity;
+                    img.style.width='100%';
+                    img.style.height='100%';
+                    img.style.backgroundSize='cover';
+                    img.style.zIndex=window.zuancoverindex;
+                    img.style.opacity=0;//'translateY(-200px)'
+                    player.node.avatar.appendChild(img);
+                    ui.refresh(img);
+                    img.style.opacity=1;//transform='';
+                },player)
+            }
+            if(player.countCards('j',{name:'shandian'})){
+                game.broadcastAll(function(player){
+                    img = document.createElement('div');
+            if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {   
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_shandian.png');      
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10shandian.png');     
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hshandian.png');      
+            if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sshandian.png');      
+                    }
+                    img.style.opacity=lib.config.zuancoveropacity;
+                    img.style.width='100%';
+                    img.style.height='100%';
+                    img.style.backgroundSize='cover';
+                    img.style.zIndex=window.zuancoverindex;
+                    img.style.opacity=0;//'translateY(-200px)'
+                    player.node.avatar.appendChild(img);
+                    ui.refresh(img);
+                    img.style.opacity=1;//transform='';
+                },player)
+            }
+        },
+    }
+
+=== skills _fromsay | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:47046 ===
+lib.skill._fromsay = {
+                trigger: {
+                    global: "useCard",
+                },
+                silent: true,
+                frequent: true,
+                filter: function(event, player) {
+                    if (lib.config['extension_祖安设置_zuantype'] != 'old') return false;
+                    return parseFloat(lib.config['extension_祖安设置_ransay']) != '0' && event.player != player;
+                },
+                content: function() {
+                    var say = 0;
+                    if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {
+                        if (get.attitude(player, trigger.player) > 0) {
+                            if (get.name(trigger.card) == 'tao') {
+                                var chat = ['桃子桃子QvQ', '我也想吃桃子~~~', '可可爱爱的桃子诶~', '耶QvQ', '^v^好吃嘛？'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'jiu') {
+                                var chat = ['我想要香槟O.o', '干杯嘛？', '我也醉啦~~'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'wuxie') {
+                                var chat = ['仙女无懈！0.0', '我拒绝X.X', '这就对了嘛~~'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'taoyuan') {
+                                var chat = ['蟹蟹', '开心（QvQ）', '开开心心', '开森~~'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'wugu') {
+                                var chat = ['蟹蟹', '开心（QvQ）', '开开心心', '开森~~'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'nanman') {
+                                var chat = ['能打到我嘛？Q,Q', '我没杀耶..Q,Q', '我有杀哦@v@', '我...！！！'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'wanjian') {
+                                var chat = ['能打到我嘛？Q,Q', '我没闪耶..Q,Q', '我有闪哦@v@', '我...！！！'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'wuzhong') {
+                                var chat = ['哦耶！', '好耶！', '摸摸~'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'tiesuo') {
+                                var chat = ['连起来~', '绑住绑住~'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.subtype(trigger.card) == 'equip1') {
+                                var chat = ['$v$有武器辣~', '欧耶，是武器！', '打打打~'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.subtype(trigger.card) == 'equip2') {
+                                var chat = ['是盾牌嘛？', '是护盾耶！', '哇哦~QvQ'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.subtype(trigger.card) == 'equip4') {
+                                var chat = ['哦，这是马O.o', '是马耶~o.O', '有马啦，杀杀杀~Q.Q'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.subtype(trigger.card) == 'equip3') {
+                                var chat = ['哦，这是马O.o', '是马耶~o.O', '有马啦，杀杀杀~Q.Q'].randomGet();
+                                var say = 1;
+                            }
+                        } else {
+                            if (get.name(trigger.card) == 'tao') {
+                                var chat = ['哇，是桃U_U', '又是桃耶。。讨厌', '为什么我没有。。Q^Q'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'jiu') {
+                                var chat = ['TA醉了TA醉了>_<', '阔怕。。', '不准喝酒！>^<'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'wuxie') {
+                                var chat = ['不要无懈吖！', '为什么拒绝？·.·', '哼'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'taoyuan') {
+                                var chat = ['白嫖快乐！！>v<', '欧耶', '回血回血~'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'wugu') {
+                                var chat = ['白嫖快乐！！>v<', '欧耶', '白嫖~白嫖~'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'nanman') {
+                                var chat = ['别别别', '我的上帝呀TwT', '我怕怕QwQ', '不要酱紫啦~'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'wanjian') {
+                                var chat = ['别别别', '我的上帝呀TwT', '我怕怕QwQ', '不要酱紫啦~'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'wuzhong') {
+                                var chat = ['对面手气太好了。。QwQ', '好多无中生有啊www', '对面好多牌牌'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'tiesuo') {
+                                var chat = ['不要连我~', '不不不T_T'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.subtype(trigger.card) == 'equip1') {
+                                var chat = ['U_U欧，又是武器~', '快跑，TA有武器！', 'Oh不Q^Q'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.subtype(trigger.card) == 'equip2') {
+                                var chat = ['不要这个盾牌~', '穿好多衣服T^T', 'x^X呃。。'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.subtype(trigger.card) == 'equip4') {
+                                var chat = ['对面好多马呀', '我不喜欢这些马马了。。', '小马要跑不动啦！！！UwU'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.subtype(trigger.card) == 'equip3') {
+                                var chat = ['对面好多马呀', '我不喜欢这些马马了。。', '小马要跑不动啦！！！UwU'].randomGet();
+                                var say = 1;
+                            }
+                        }
+
+                    } else {
+
+                        if (get.attitude(player, trigger.player) > 0) {
+                            if (get.name(trigger.card) == 'tao') {
+                                var chat = ['辛得诸君出手相救！', '最爱吃桃子', 'Nice!', '桃子，桃子！', '舒服了！', '这鸡汤..十分滴珍贵', '行..我喝..喝！', '啧啧..这喝汤..多是一件美事啊', '不咸不淡，味道真是好极了！', '三点几啦，饮茶先啦！'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'jiu') {
+                                var chat = ['哈哈你们完了', '斗酒十千！', '喝车不开酒', '酒逢知己千杯少！'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'wuxie') {
+                                var chat = ['无懈！', '你休想！', '不，你不想', '你想都别想', '这就对了'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'taoyuan') {
+                                var chat = ['谢谢老板！', '多多益善', '蟠桃会赴会了~'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'wugu') {
+                                var chat = ['谢谢老板！', '多多益善！', '我拿走了', '谢谢兄弟，滑稽', '喝碗鸡汤算得了什么呀'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'nanman') {
+                                var chat = ['别误伤队友了哦。', '男人♂入侵', '我没杀..', '我有杀哦', '我也...'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'wanjian') {
+                                var chat = ['别误伤队友了哦。', '别乱放箭啊', '我有闪', '我没...', '我没闪', '我也...'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'wuzhong') {
+                                var chat = ['你好，我是你的朋友。', '哟吼', '摸摸摸', '多好啊'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'tiesuo') {
+                                var chat = ['连TA', '捆绑play', '绑住TA！'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'zhuge') {
+                                var chat = ['扫六合席卷八荒说的难道就是宁？', '杀遍全场了', '哈哈，AK出来了'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'guding') {
+                                var chat = ['就问你怕不怕？', '捅对面菊花~', '对面，保护好你们的菊花'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'tengjia') {
+                                var chat = ['小心点，别沾上火', '还行'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'bagua') {
+                                var chat = ['这是进口的八卦阵！', '刚去学了太极？'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.subtype(trigger.card) == 'equip4') {
+                                var chat = ['Nice，是减一马', '哈哈哈，又是马', '有马啦，杀杀杀！'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.subtype(trigger.card) == 'equip3') {
+                                var chat = ['Good，是加一马', '哈哈哈，又是马', '你砍不到我队友啦~'].randomGet();
+                                var say = 1;
+                            }
+                        } else {
+                            if (get.name(trigger.card) == 'tao') {
+                                var chat = ['哟，居然有桃', '我猴子偷桃~', '哎哟'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'jiu') {
+                                var chat = ['啊，别', '我好害怕', '还怕', '酒驾拘捕', '别动♂蕉警来查酒驾了'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'wuxie') {
+                                var chat = ['无懈？', '不，你不想！', '哎哟，有脾气了'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'taoyuan') {
+                                var chat = ['白嫖快乐！！', 'YE', '拿走了不谢'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'wugu') {
+                                var chat = ['白嫖快乐！！', '白嫖党的胜利', '鸡汤来咯！', '你要是不喝...说明你真下毒了'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'nanman') {
+                                var chat = ['我吐了', '好恶心', '爷好怕~', '我有杀', '不怕'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'wanjian') {
+                                var chat = ['你是大嘴附体？！', '爷好怕', '我有闪呵呵', '没用的', '我有闪'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'wuzhong') {
+                                var chat = ['狗托？', '我玩十年了不比你强？', '祝你摸到一手烂牌'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'tiesuo') {
+                                var chat = ['别连我~', '你好邪恶', '切，难道你有火攻吗'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'zhuge') {
+                                var chat = ['糟了AK出现了！', '闪不太够啊', '赶紧拆掉TA'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'guding') {
+                                var chat = ['是大名鼎鼎的菊花刀', '哈哈，我有牌不怕'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'tengjia') {
+                                var chat = ['穿寿衣是想来送人头？', '疼甲你也穿呵呵', '我有火攻哦'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.name(trigger.card) == 'bagua') {
+                                var chat = ['国产八卦阵来了。', '劣质的没用', '赶紧拆掉'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.subtype(trigger.card) == 'equip4') {
+                                var chat = ['好烦，又是减一马', '这马怎么这么多', '猎马弓在哪里？'].randomGet();
+                                var say = 1;
+                            }
+                            if (get.subtype(trigger.card) == 'equip3') {
+                                var chat = ['好烦，又是加一马', '这马怎么这么多', '猎马弓在哪里？'].randomGet();
+                                var say = 1;
+                            }
+                        }
+
+                    }
+                    if (Math.random() * 100 > parseFloat(lib.config['extension_祖安设置_ransay'])) var say = 0;
+                    if (say == 1) {
+                        player.say(chat);
+                    }
+                },
+            }
+
+=== skills _guanmodeskill | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:42978 ===
+lib.skill._guanmodeskill = {
+                        trigger: {
+                            player: ["enterGame"],
+                            global: "gameDrawAfter",
+                        },
+                        forced: true,
+                        filter: function(event, player) {
+                            if (get.mode() != 'identity') return false;
+                            if (player.identity != 'zhu') return false;
+                            return true;
+                        },
+                        content: function() {
+                            player.addSkill('guanfu');
+                            player.storage.zhumaxhp = player.maxHp;
+                            player.storage.tamaxhp = Infinity;
+                            player.storage.tahp = 0;
+                            player.identity = 'zhu';
+                            player.setIdentity('府');
+                            player.node.identity.dataset.color = 'nei';
+                            player.identityShown = true;
+                            player.storage.zuan_identity = ['府', 'nei'];
+                            for (var i = 0; i < game.players.length; i++) {
+                                if (game.players[i].identity == 'fan') {
+                                    game.players[i].setIdentity('叛');
+                                    game.players[i].node.identity.dataset.color = 'fan';
+                                    game.players[i].identityShown = true;
+                                    game.players[i].storage.zuan_identity = ['叛', 'fan'];
+                                } else {
+                                    if (game.players[i].identity == 'zhu') {
+                                        game.players[i].setIdentity('府');
+                                        game.players[i].node.identity.dataset.color = 'nei';
+                                        game.players[i].identityShown = true;
+                                        game.players[i].storage.zuan_identity = ['府', 'nei'];
+                                    } else {
+                                        if (game.players[i].identity == 'nei') game.players[i].addSkill('guifu_nei');
+                                        if (game.players[i] != player) {
+                                            game.players[i].setIdentity('官');
+                                            game.players[i].node.identity.dataset.color = 'zhong';
+                                            game.players[i].identityShown = true;
+                                            game.players[i].storage.zuan_identity = ['官', 'zhong'];
+                                        }
+                                    }
+                                }
+                            }
+                            player.storage.tahp = player.storage.tamaxhp;
+                        },
+                    }
+
+=== skills _newZuanPhaseTX | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:41709 ===
+lib.skill._newZuanPhaseTX = {
+                    trigger: {
+                        player: 'phaseBegin',
+                    },
+                    direct: true,
+                    silent: true,
+                    priority: Infinity,
+                    filter: function(event, player) {
+                        if (lib.config['extension_祖安设置_newhuihe'].indexOf('new_') == -1) return false;
+                        if (!game.folderExt('extension/祖安武将/character')) return false;
+                        if (!lib.chkcad || !lib.chkcad[player.name]) return false;
+                        return player.name != 'unknown';
+                    },
+                    content: function() {
+                        'step 0';
+                        //ccad
+                        if (!lib.chkreplace[player.name]) {
+                            var putname = player.name;
+                        } else {
+                            var putname = lib.chkreplace[player.name];
+                        }
+                        var picfile = lib.chkcad[putname];
+                        //alert(picfile);
+                        if (picfile) {
+                            var img = 'extension/祖安武将/character/' + putname + '/' + picfile.randomGet();
+                            //var img='extension/祖安武将/character/'+player.name+'.jpg';
+                            //event.width=270*present*(img.width*present/img.height*present);
+                            //event.height=270*present;
+                            //event.head = ui.create.node('img');
+                            //event.head.src= lib.assetURL + 'extension/祖安武将/character/'+putname+'/'+picfile.randomGet();
+                            game.zuanhideBackground(img, lib.config['extension_祖安设置_imgtime'] / 10, lib.config['extension_祖安设置_imgfps']);
+                        }
+
+                    },
+                }
+
+=== skills _zuanCHANGEHPsayskill | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:46389 ===
+lib.skill._zuanCHANGEHPsayskill = {
+                trigger: {
+                    global: ["recover", "damage", "loseHpEnd", "drawAfter", "dieAfter"],
+                },
+                filter: function(event, player) {
+                    if (game.wanqingIsOpen) return false;
+                    if (lib.config['extension_祖安设置_zuantype'].indexOf('new') == -1) return false;
+                    if (!event.name) return false;
+                    if (lib.config['extension_祖安设置_zuantype'] == 'new_chg') {
+                        if (player == game.me) return false;
+                        if (game.zuanSayCold.contains(player)) return false;
+                    }
+                    return parseFloat(lib.config['extension_祖安设置_ransay']) != '0';
+                },
+                forced: true,
+                silent: true,
+                priority: -5,
+                content: function() {
+                    'step 0';
+                    //概率随机模块
+                    if (Math.random() * 100 >= parseFloat(lib.config['extension_祖安设置_ransay']) * 0.5) {
+                        if (event && event.finish) {
+                            event.finish();
+                        } else {
+                            return;
+                        }
+                    }
+                    'step 1';
+                    //加载说话宝典
+                    if (trigger.num) { //数值模块，可以通过event.cnnum引用相关的中文数值
+                        event.cnnum = get.cnNumber(trigger.num);
+                    } else {
+                        event.cnnum = '〇';
+                    }
+                    //我 对别人
+                    /*event.say_me_none=game.ZAhpSay_me_none;
+		            //我 对别人
+		            event.say_me_from=game.ZAhpSay_me_from;
+		            //我 被人对
+		            event.say_me_to=game.ZAhpSay_me_to;
+		            //我 对自己
+		            event.say_me_self=game.ZAhpSay_me_self;
+		            //观众 两边都不帮
+		            event.say_see_none=game.ZAhpSay_see_none;
+		            //观众 只帮来源
+		            event.say_see_from=game.ZAhpSay_see_from;
+		            //观众 只帮目标
+		            event.say_see_to=game.ZAhpSay_see_to;
+		            //观众 两边都帮
+		            event.say_see_self=game.ZAhpSay_see_self;*/
+                    //判断来源和受体
+                    event.from = trigger.source;
+                    event.to = trigger.player;
+                    if (get.translation(event.from) == '') event.from = 'none';
+                    if (get.translation(event.to) == '') event.to = 'none';
+                    event.typename = trigger.name;
+                    if (trigger.num && trigger.num > 1) {
+                        event.typename = event.typename + '_heavy';
+                    }
+                    'step 2';
+                    //定位自己和类型
+                    var fromto = [event.from, event.to];
+                    if (fromto.contains(player)) {
+                        //仅对于自己和对象
+                        event.ide = 'me';
+                        var tps = ['none', 'from', 'to', 'self'];
+                        var num = 0;
+                        if (player == event.from) num++;
+                        if (player == event.to) num += 2;
+                        event.tp = tps[num];
+                    } else {
+                        //优先发起者，再判断目标
+                        event.ide = 'see';
+                        var tps = ['none', 'from', 'to', 'self'];
+                        var num = 0;
+                        if (event.from != 'none' && get.attitude(player, event.from) > 0) num++;
+                        if (event.to != 'none' && get.attitude(player, event.to) > 0) num += 2;
+                        event.tp = tps[num];
+                    }
+                    'step 3';
+                    //判断角色性别
+                    if (player.hasSex('female')) {
+                        if (player.hasSex('male')) {
+                            event.sex = ['male', 'female'].randomGet();
+                        } else {
+                            event.sex = 'female';
+                        }
+                    } else {
+                        event.sex = 'male';
+                    }
+                    'step 4';
+                    //组装语言模块
+                    event.said = game['ZAhpSay_' + event.ide + '_' + event.tp][event.typename][event.sex];
+                    event.chat = event.said.randomGet().replace('%cnnum%', event.cnnum);
+                    'step 5';
+                    //最后一道关卡，加载失败就不说话了
+                    'step 6';
+                    if (lib.config['extension_祖安设置_zuantype'] == 'new_chg') {
+                        var ransec = (2 + [0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 12, 13, 14, 15, 15, 15, 20, 40].randomGet()) * 1000 + [0, 0, 3, 5, 7].randomGet() * 100;
+                        if (!game.zuanSayCold.contains(player)) game.zuanSayCold.push(player);
+                        if (ransec > 0) setTimeout(function() {
+                            if (game.zuanSayCold.contains(player)) game.zuanSayCold.remove(player);
+                        },
+                        ransec);
+                        setTimeout(function() {
+                            player.say(event.chat);
+                        },
+                        Math.ceil(Math.random() * 2000));
+                    } else {
+                        player.say(event.chat);
+                    }
+                },
+            }
+
+=== skills _zuan_damageSendEgg | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40324 ===
+lib.skill._zuan_damageSendEgg = {
+                    forced: true,
+                    popup: false,
+                    priority: -98,
+                    trigger: {
+                        global: 'damageEnd',
+                    },
+                    filter: function(event, player) {
+                        var evt = event.getParent();
+                        return lib.config['extension_祖安设置_zuanemotion'] && !game.isMine(player)
+                        /*!player.isUnderControl(true)*/
+                        && player.throwEmotion && get.attitude(player, event.player) > 0 && game.xwGetPhasePlayer() == event.player;
+                    },
+                    content: function() {
+                        'step 0';
+                        if (Math.random() >= 0.8) {
+                            player.throwEmotion(trigger.player, ['egg', 'shoe'].randomGet());
+                        }
+                    }
+                }
+
+=== skills _zuanidentityshowskill | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:42132 ===
+lib.skill._zuanidentityshowskill = {
+                    trigger: {
+                        player: ["phaseBefore"],
+                    },
+                    firstDo: true,
+                    forced: true,
+                    silent: true,
+                    filter: function(event, player) {
+                        if (player == game.me) return false;
+                        return player.storage.Hidentity;
+                    },
+                    content: function() {
+                        'step 0';
+                        event.sourceide = player.storage.Sidentity;
+                        event.sourcezat = player.storage.zhuAtt;
+                        event.preide = player.previous.storage.Sidentity;
+                        event.nexide = player.next.storage.Sidentity;
+                        event.prezat = player.previous.storage.zhuAtt;
+                        event.nexzat = player.next.storage.zhuAtt;
+                        if (player.identityShown || ((player.ai.shown > 0.8 || Math.abs(player.storage.zhuAtt) > 80) && player.identity == event.sourceide)) {
+                            player.storage.Hidentity = false;
+                            player.identity = event.sourceide;
+                        }
+                        if (event.sourceide == 'fan') {
+                            if (event.preide == 'zhu' && (player.hp * 2 + player.countCards('e') * 1.5 + player.countCards('h') * 1 >= 12 || Math.random() > 0.6)) {
+                                player.identity = 'fan';
+                            } else if (event.preide.zhuAtt > 10 && event.nexide.zhuAtt > 10) {
+                                player.identity = ['nei', 'zhong'].randomGet();
+                            } else if (event.preide.zhuAtt < -40 || event.nexide.zhuAtt < -40 || Math.random() > 0.75) {
+                                player.identity = event.sourceide;
+                            } else {
+                                player.identity = 'nei';
+                            }
+                        }
+                        if (['zhong', 'mingzhong'].contains(event.sourceide)) {
+                            if (event.preide == 'zhu' || event.nexide == 'zhu') {
+                                player.identity = event.sourceide;
+                            } else if (event.prezat > 40 || event.nexzat > 40 || event.prezat + event.nexzat > 60 || Math.random() > 0.6) {
+                                player.identity = event.sourceide;
+                            } else if (event.preide.zhuAtt < 10 && event.nexide.zhuAtt < 10) {
+                                player.identity = ['fan', 'nei'].randomGet();
+                            } else {
+                                player.identity = 'nei';
+                            }
+                        }
+                        if (event.sourceide == 'nei') {
+                            player.identity = 'nei';
+                        }
+                    },
+                }
+
+=== ui_hooks _extraturnoverskill | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40536 ===
+lib.skill._extraturnoverskill = { //翻面音效//
+                trigger: {
+                    player: ["trunOverBefore"],
+                },
+                forced: true,
+                filter: function(event) {
+                    return (parseFloat(lib.config['extension_祖安设置_audio']) >= '4');
+                },
+                content: function() {
+                    var cho = parseFloat(lib.config['extension_祖安设置_audio']);
+                    if (cho == '4') {
+                        var verson = 'shousha';
+                    } else {
+                        var verson = 'ten';
+                    }
+                    game.playAudio('..', 'extension', '祖安武将', 'audio', verson, 'turnover.mp3');
+                },
+            }
+
+=== ui_hooks _haoyunlai | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:47584 ===
+lib.skill._haoyunlai = {
+                trigger: {
+                    player: "drawBegin",
+                },
+                forced: true,
+                silent: true,
+                filter: function() {
+                    return true;
+                },
+                content: function() {
+                    if (parseFloat(lib.config['extension_祖安设置_audio']) >= '3') {
+                        if (parseFloat(lib.config['extension_祖安设置_audio']) >= '4') {
+                            var cho = parseFloat(lib.config['extension_祖安设置_audio']);
+                            if (cho == '4') {
+                                var verson = 'shousha';
+                            } else {
+                                var verson = 'ten';
+                            }
+                            game.playAudio('..', 'extension', '祖安武将', 'audio', verson, 'draw.mp3');
+                        } else {
+                            game.playAudio('..', 'extension', '祖安武将', 'audio', 'lyl_draw.mp3');
+                        }
+                    } else {
+                        if (parseFloat(lib.config['extension_祖安设置_audio']) >= '2') game.playAudio('..', 'extension', '祖安武将', 'audio', 'draw.ogg');
+                    }
+                    if (player == game.me && lib.config['extension_祖安设置_goodluck'] && ui.cardPile.childElementCount > 1) {
+                        if (lib.config['extension_祖安设置_zuantype'] == 'old') {
+                            var chat = ['羁绊一抽！获得了' + get.cnNumber(trigger.num, true) + '张牌', '手气爆好！获得的' + get.cnNumber(trigger.num, true) + '张牌都是好牌！'].randomGet();
+                            if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {
+                                var chat2 = [' 开心>v<', ' 耶QvQ！', ' 哇QwQ..', ' OvO嘻嘻', ' 噢$w$'].randomGet();
+                                var chat = chat + chat2;
+                            }
+                            var say = 1;
+                            if (Math.random() * 100 > parseFloat(lib.config['extension_祖安设置_ransay'])) var say = 0;
+                            if (lib.config['extension_祖安设置_zuantype'] == 'old' && say == 1) player.say(chat);
+                        }
+                        var value = get.value(ui.cardPile.firstChild, player);
+                        var num = Math.min(20, ui.cardPile.childElementCount);
+                        var list = [],
+                        list2 = [],
+                        list3 = [];
+                        for (var i = 1; i < num; i++) {
+                            var val = get.value(ui.cardPile.childNodes[i], player);
+                            if (val > value) {
+                                list.push(ui.cardPile.childNodes[i]);
+                                if (val > value + 1 && val >= 7) {
+                                    list2.push(ui.cardPile.childNodes[i]);
+                                }
+                                if (val > value + 1 && val >= 8) {
+                                    list3.push(ui.cardPile.childNodes[i]);
+                                }
+                            }
+                        }
+                        var card;
+                        if (list3.length) {
+                            card = list3.randomGet();
+                        } else if (list2.length) {
+                            card = list2.randomGet();
+                        } else if (list.length) {
+                            card = list.randomGet();
+                        }
+                        if (card) {
+                            ui.cardPile.insertBefore(card, ui.cardPile.firstChild);
+                        }
+                    } else if (lib.config['extension_祖安设置_zuantype'] == 'old') {
+                        var chat = ['今天的幸运数字是' + get.cnNumber(trigger.num, true), '获得了' + get.cnNumber(trigger.num, true) + '张牌', '手牌增加了' + get.cnNumber(trigger.num, true) + '张', 'yeah', '没拿多吧？', '听话，让我康康！', '让我康康！', '摸了' + get.cnNumber(trigger.num, true) + '张牌', '牌库失去了' + get.cnNumber(trigger.num, true) + '张牌', '手牌增加了' + get.cnNumber(trigger.num, true) + '张', '摸摸摸', '好爽，好爽', '我数一数...摸' + get.cnNumber(trigger.num, true) + '张'].randomGet();
+                        if (lib.config['extension_祖安设置_girlspeak'] && player.sex == 'female') {
+                            var chat2 = [' 开心>v<', ' 耶QvQ！', ' 哇QwQ..', ' OvO嘻嘻', ' 噢$w$'].randomGet();
+                            var chat = chat + chat2;
+                        }
+                        var say = 1;
+                        if (Math.random() * 100 > parseFloat(lib.config['extension_祖安设置_ransay'])) var say = 0;
+                        if (lib.config['extension_祖安设置_zuantype'] == 'old' && say == 1) player.say(chat);
+                    }
+                },
+                popup: false,
+            }
+
+=== ui_hooks _zuanattacklinecheck | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:37514 ===
+lib.skill._zuanattacklinecheck = {
+                        trigger: {
+                            global: ['gameDrawBefore'],
+                            player: "enterGame",
+                        },
+                        direct: true,
+                        priority: 105,
+                        filter: function(event, player) {
+                            return player == game.me;
+                        },
+                        content: function() {
+                            game.saveConfig('zuanzhishixian', lib.config['extension_祖安设置_zhishixian']);
+                            game.saveConfig('extension_十周年UI_playerLineEffect', lib.config['extension_祖安设置_zhishixian']);
+                            if (window.decadeUI) decadeUI.config.playerLineEffect = lib.config['extension_祖安设置_zhishixian'];
+                            if (lib.config['extension_祖安设置_zhishixian'] == 'moren') {
+                                game.linexy = game.zsOriginLineXy;
+                            } else {
+                                game.linexy = game['zs' + lib.config['extension_祖安设置_zhishixian'] + 'LineXy'];
+                            }
+                        },
+                    }
+
+=== ui_hooks _zuanboss | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:41545 ===
+lib.skill._zuanboss = {
+                    trigger: {
+                        player: ['dieBegin'],
+                    },
+                    direct: true,
+                    priority: 15,
+                    filter: function(event, player) {
+                        if (lib.config['extension_祖安设置_exwallpaper']) {
+                            return (lib.config.mode == 'boss' && player.identity == 'zhu');
+                        }
+                    },
+                    content: function() {
+                        'step 0';
+                        //ui.background.style.backgroundImage=lib.config.standardbackground;
+                        if (lib.config.zuanboss != 'god' && lib.config.zuanboss != 'gui' && parseFloat(lib.config.zuanboss) < 3) lib.config.zuanboss++;
+                        'step 1';
+                        lib.config.zuanbackground = "extension/祖安武将/wallpaper/boss/" + lib.config.zuanboss + ".jpg";
+                        // ---------------------------------------动态壁纸刷新
+                        'step 2';
+                        game.broadcastAll() + ui.background.setBackgroundImage(lib.config.zuanbackground);
+                        // ---------------------------------------动态壁纸刷新
+                    },
+                }
+
+=== skills wumou | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48975 ===
+lib.skill['wumou'] = {
+                        audio: 2,
+                        trigger: {
+                            player: "phaseJieshuBegin",
+                        },
+                        forced: true,
+                        filter: function(event, player) {
+                            if (player.getHistory('skipped').contains('phaseUse')) return false;
+                            var history = player.getHistory('useCard');
+                            var next = false;
+                            for (var i = 0; i < history.length; i++) {
+                                if (get.type(history[i].card) == 'trick' && history[i].isPhaseUsing()) next = true;
+                            }
+                            return next;
+                        },
+                        content: function() {
+                            'step 0';
+                            if (player.hasMark('baonu')) {
+                                player.chooseControlList(['移去一枚【暴怒】标记', '失去1点体力'], true).set('ai',
+                                function(event, player) {
+                                    if (get.effect(player, {
+                                        name: 'losehp'
+                                    },
+                                    player, player) >= 0) return 1;
+                                    if (player.storage.baonu > 6) return 0;
+                                    if (player.hp + player.num('h', 'tao') > 3) return 1;
+                                    return 0;
+                                });
+                            } else {
+                                player.loseHp(); {
+                                    if (event && event.finish) {
+                                        event.finish();
+                                    } else {
+                                        return;
+                                    }
+                                }
+                            }
+                            'step 1';
+                            if (result.index == 0) {
+                                player.removeMark('baonu', 1);
+                            } else {
+                                player.loseHp();
+                            }
+                        },
+                        ai: {
+                            effect: {
+                                "player_use": function(card, player) {
+                                    if (_status.currentPhase && _status.currentPhase == player && _status.event.name == 'phaseUse' && !lib.skill['wumou'].filter(_status.event, player)) {
+                                        if (get.type(card) == 'trick' && get.value(card) < 6) {
+                                            return [0, -2];
+                                        }
+                                    }
+                                },
+                            },
+                        },
+                        "_priority": 0,
+                    }
+
+=== skills new_guixin | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:49077 ===
+lib.skill['new_guixin'] = {
+                        audio: "guixin",
+                        trigger: {
+                            player: "damageEnd",
+                        },
+                        check: function(event, player) {
+                            if (player.isTurnedOver() || event.num > 1) return true;
+                            var num = game.countPlayer(function(current) {
+                                if (current.countCards('he') && current != player && get.attitude(player, current) <= 0) {
+                                    return true;
+                                }
+                                if (current.countCards('j') && current != player && get.attitude(player, current) > 0) {
+                                    return true;
+                                }
+                            });
+                            return true;
+                            //return num>=2;
+                        },
+                        content: function() {
+                            "step 0";
+                            var targets = game.filterPlayer();
+                            targets.remove(player);
+                            targets.sort(lib.sort.seat);
+                            event.targets = targets;
+                            event.count = trigger.num;
+                            "step 1";
+                            event.gains = 0;
+                            event.num = 0;
+                            player.line(targets, 'green');
+                            player.chooseControl('手牌区', '装备区', '判定区').set('ai',
+                            function() {
+                                if (game.hasPlayer(function(current) {
+                                    return current.countCards('j') && current != player && get.attitude(player, current) > 0;
+                                })) return 2;
+                                return Math.floor(Math.random() * 3);
+                            }).set('prompt', '请选择优先获得的区域');
+                            "step 2";
+                            event.range = {手牌区: ['h', 'e', 'j'],
+                                装备区: ['e', 'h', 'j'],
+                                判定区: ['j', 'h', 'e'],
+                            } [result.control || '手牌区'];
+                            "step 3";
+                            if (num < event.targets.length) {
+                                var target = event.targets[num];
+                                var range = event.range;
+                                for (var i = 0; i < range.length; i++) {
+                                    var cards = target.getCards(range[i]);
+                                    if (cards.length) {
+                                        var card = cards.randomGet();
+                                        player.gain(card, target, 'giveAuto', 'bySelf');
+                                        event.gains++;
+                                        break;
+                                    }
+                                }
+                                event.num++;
+                            }
+                            "step 4";
+                            if (num < event.targets.length) event.goto(3);
+                            "step 5";
+                            if (event.gains > 2) player.turnOver();
+                            "step 6";
+                            event.count--;
+                            if (event.count && player.hasSkill('new_guixin')) {
+                                player.chooseBool(get.prompt2('new_guixin')).ai = function() {
+                                    return lib.skill.new_guixin.check({
+                                        num: event.count
+                                    },
+                                    player);
+                                };
+                            } else {
+                                event.finish();
+                            }
+                            "step 7";
+                            if (event.count && result.bool) {
+                                player.logSkill('new_guixin');
+                                event.goto(1);
+                            }
+                        },
+                        ai: {
+                            maixie: true,
+                            "maixie_hp": true,
+                            threaten: function(player, target) {
+                                if (target.hp == 1) return 2.5;
+                                return 1;
+                            },
+                            effect: {
+                                target: function(card, player, target) {
+                                    if (get.tag(card, 'damage')) {
+                                        if (player.hasSkillTag('jueqing', false, target)) return [1, -2];
+                                        if (target.hp == 1) return 0.8;
+                                        if (target.isTurnedOver()) return [0, 3];
+                                        var num = game.countPlayer(function(current) {
+                                            if (current.countCards('he') && current != player && get.attitude(player, current) <= 0) {
+                                                return true;
+                                            }
+                                            if (current.countCards('j') && current != player && get.attitude(player, current) > 0) {
+                                                return true;
+                                            }
+                                        });
+                                        if (num > 2) return [0, 1];
+                                        if (num == 2) return [0.5, 1];
+                                    }
+                                },
+                            },
+                        },
+                    }
+
+=== skills gongxin | archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:49506 ===
+lib.skill['gongxin'] = {
+                        audio: 2,
+                        audioname: ["re_lvmeng", "gexuan"],
+                        enable: "phaseUse",
+                        usable: 2,
+                        filterTarget: function(card, player, target) {
+                            return target != player && target.countCards('h') && !target.hasSkill('gongxin_temp');
+                        },
+                        content: function() {
+                            'step 0';
+                            target.addTempSkill('gongxin_temp');
+                            var cards = target.getCards('h');
+                            player.chooseButton(2, ['攻心', cards, [['获得此牌', '封印红牌'], 'tdnodes'], ]).set('filterButton',
+                            function(button) {
+                                var type = typeof button.link;
+                                if (ui.selected.buttons.length && type == typeof ui.selected.buttons[0].link) return false;
+                                return type == 'string' || get.suit(button.link) == 'heart';
+                            });
+                            'step 1';
+                            if (result.bool) {
+                                if (typeof result.links[0] != 'string') result.links.reverse();
+                                var card = result.links[1],
+                                choice = result.links[0];
+                                /*if(choice=='弃置此牌') target.discard(card);
+                    else{
+                        player.showCards(card,get.translation(player)+'对'+get.translation(target)+'发动了【攻心】');
+                        target.lose(card,ui.cardPile,'visible','insert');
+                    }*/
+                                player.showCards(card, get.translation(player) + '对' + get.translation(target) + '发动了【攻心】');
+                                if (choice == '获得此牌') {
+                                    player.gain(card, target, 'giveAuto', 'bySelf');
+                                } else {
+                                    target.storage.ssr_gongxin_break = player;
+                                    target.addSkill('ssr_gongxin_break');
+                                }
+                            }
+                        },
+                        ai: {
+                            threaten: 1.5,
+                            result: {
+                                target: function(player, target) {
+                                    return - target.countCards('h');
+                                },
+                            },
+                            order: 10,
+                            expose: 0.4,
+                        },
+                        subSkill: {
+                            temp: {},
+                        },
+                        "_priority": 0,
+                    }

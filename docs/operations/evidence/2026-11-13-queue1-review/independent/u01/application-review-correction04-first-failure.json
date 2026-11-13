@@ -1,0 +1,9 @@
+{
+  "observed_at": "2026-11-14T00:30:10.004879+08:00",
+  "command": "python3 -B docs/operations/evidence/2026-11-13-queue1-review/independent/u01/application-review-correction04-check.py",
+  "exit_code": 1,
+  "exception": "AssertionError",
+  "line": 57,
+  "assertion": "current whole-inventory SHA equals correction04 after_sha256",
+  "scope_error": "Concurrent non-U01 updates changed whole inventory; all preceding 31 character and 64 skill record checks passed. Scope correction follows; first failure retained."
+}

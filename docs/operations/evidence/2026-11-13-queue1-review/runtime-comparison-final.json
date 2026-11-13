@@ -1,0 +1,1106 @@
+{
+  "at": "2026-11-13T16:19:18.184334+00:00",
+  "compared_branches": 13,
+  "compared_upstream_runs": 16,
+  "native_pending_restores": 27,
+  "hidden_pairing": "Both engines' blind-slot results are classified by actual post-resolution receipt. Every upstream repeat is retained and compared; slot indices and RNG streams are not asserted equal.",
+  "projection": "all seats: hp, hand/equipment face multisets, five-element card property; U01 additionally color-ban/玄论 pending-effect flag",
+  "not_compared": [
+    "full event order, RNG and complete deck/discard",
+    "entry UI card/mode selection for direct useSkill branches",
+    "all conditions, combinations, phase boundaries and cancellation branches"
+  ],
+  "whole_skill_equivalence_signoffs": 0,
+  "results": [
+    {
+      "case": "yuanzhen-sha",
+      "engine": "modern",
+      "projection_equal": true,
+      "players": [
+        {
+          "seat": 0,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 1,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 2,
+          "hp": 7,
+          "hand": [
+            {
+              "name": "tao",
+              "suit": "heart",
+              "rank": 3,
+              "wunature": null
+            }
+          ],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 3,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 4,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 5,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 6,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 7,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        }
+      ],
+      "native_pending_restores": 1,
+      "native_prompts": [
+        "dddyuanzhen_discard"
+      ],
+      "upstream_repeats": [
+        {
+          "raw_case_label": "ordered-yuanzhen-sha",
+          "at": "2026-11-13T15:41:12.901236+00:00",
+          "projection_equal": true
+        }
+      ]
+    },
+    {
+      "case": "yuanzhen-tao",
+      "engine": "modern",
+      "projection_equal": true,
+      "players": [
+        {
+          "seat": 0,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 1,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 2,
+          "hp": 7,
+          "hand": [
+            {
+              "name": "sha",
+              "suit": "club",
+              "rank": 7,
+              "wunature": null
+            }
+          ],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 3,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 4,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 5,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 6,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 7,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        }
+      ],
+      "native_pending_restores": 2,
+      "native_prompts": [
+        "dddyuanzhen_discard",
+        "duel_sha"
+      ],
+      "upstream_repeats": [
+        {
+          "raw_case_label": "ordered-yuanzhen-tao",
+          "at": "2026-11-13T15:41:14.512837+00:00",
+          "projection_equal": true
+        }
+      ]
+    },
+    {
+      "case": "yuanzhen-cancel",
+      "engine": "modern",
+      "projection_equal": true,
+      "players": [
+        {
+          "seat": 0,
+          "hp": 8,
+          "hand": [
+            {
+              "name": "sha",
+              "suit": "diamond",
+              "rank": 6,
+              "wunature": null
+            }
+          ],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 1,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 2,
+          "hp": 7,
+          "hand": [
+            {
+              "name": "sha",
+              "suit": "club",
+              "rank": 7,
+              "wunature": null
+            },
+            {
+              "name": "tao",
+              "suit": "heart",
+              "rank": 3,
+              "wunature": null
+            }
+          ],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 3,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 4,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 5,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 6,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 7,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        }
+      ],
+      "native_pending_restores": 2,
+      "native_prompts": [
+        "dddyuanzhen_discard",
+        "duel_sha"
+      ],
+      "upstream_repeats": [
+        {
+          "raw_case_label": "ordered-yuanzhen-cancel",
+          "at": "2026-11-13T15:41:16.607870+00:00",
+          "projection_equal": true
+        }
+      ]
+    },
+    {
+      "case": "juxian-top-black",
+      "engine": "modern",
+      "projection_equal": true,
+      "players": [
+        {
+          "seat": 0,
+          "hp": 8,
+          "hand": [
+            {
+              "name": "sha",
+              "suit": "club",
+              "rank": 7,
+              "wunature": null
+            }
+          ],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 1,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 2,
+          "hp": 8,
+          "hand": [
+            {
+              "name": "tao",
+              "suit": "heart",
+              "rank": 3,
+              "wunature": null
+            }
+          ],
+          "equips": [
+            {
+              "name": "chitu",
+              "suit": "spade",
+              "rank": 1,
+              "wunature": null
+            }
+          ],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 3,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 4,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 5,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 6,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 7,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        }
+      ],
+      "native_pending_restores": 4,
+      "native_prompts": [
+        "dddjuxian_mode",
+        "dddjuxian_card",
+        "dddjuxian_target",
+        "dddjuxian_gain"
+      ],
+      "upstream_repeats": [
+        {
+          "raw_case_label": "blind-repeat-1-juxian-top-black",
+          "at": "2026-11-13T15:48:35.595288+00:00",
+          "projection_equal": true
+        },
+        {
+          "raw_case_label": "blind-repeat-1-juxian-top-red",
+          "at": "2026-11-13T15:48:37.645951+00:00",
+          "projection_equal": true
+        }
+      ]
+    },
+    {
+      "case": "juxian-top-red",
+      "engine": "modern",
+      "projection_equal": true,
+      "players": [
+        {
+          "seat": 0,
+          "hp": 8,
+          "hand": [
+            {
+              "name": "tao",
+              "suit": "heart",
+              "rank": 3,
+              "wunature": null
+            }
+          ],
+          "equips": [],
+          "juxian_ban": true,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 1,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 2,
+          "hp": 8,
+          "hand": [
+            {
+              "name": "sha",
+              "suit": "club",
+              "rank": 7,
+              "wunature": null
+            }
+          ],
+          "equips": [
+            {
+              "name": "chitu",
+              "suit": "spade",
+              "rank": 1,
+              "wunature": null
+            }
+          ],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 3,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 4,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 5,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 6,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 7,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        }
+      ],
+      "native_pending_restores": 4,
+      "native_prompts": [
+        "dddjuxian_mode",
+        "dddjuxian_card",
+        "dddjuxian_target",
+        "dddjuxian_gain"
+      ],
+      "upstream_repeats": [
+        {
+          "raw_case_label": "ordered-juxian-top-black",
+          "at": "2026-11-13T15:41:18.671448+00:00",
+          "projection_equal": true
+        },
+        {
+          "raw_case_label": "ordered-juxian-top-red",
+          "at": "2026-11-13T15:41:20.730331+00:00",
+          "projection_equal": true
+        }
+      ]
+    },
+    {
+      "case": "juxian-top-equip",
+      "engine": "modern",
+      "projection_equal": true,
+      "players": [
+        {
+          "seat": 0,
+          "hp": 8,
+          "hand": [
+            {
+              "name": "chitu",
+              "suit": "spade",
+              "rank": 1,
+              "wunature": null
+            }
+          ],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 1,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 2,
+          "hp": 8,
+          "hand": [
+            {
+              "name": "sha",
+              "suit": "club",
+              "rank": 7,
+              "wunature": null
+            },
+            {
+              "name": "tao",
+              "suit": "heart",
+              "rank": 3,
+              "wunature": null
+            }
+          ],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 3,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 4,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 5,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 6,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 7,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        }
+      ],
+      "native_pending_restores": 4,
+      "native_prompts": [
+        "dddjuxian_mode",
+        "dddjuxian_card",
+        "dddjuxian_target",
+        "dddjuxian_gain"
+      ],
+      "upstream_repeats": [
+        {
+          "raw_case_label": "ordered-juxian-top-equip",
+          "at": "2026-11-13T15:41:22.813947+00:00",
+          "projection_equal": true
+        },
+        {
+          "raw_case_label": "blind-repeat-1-juxian-top-equip",
+          "at": "2026-11-13T15:48:39.716320+00:00",
+          "projection_equal": true
+        }
+      ]
+    },
+    {
+      "case": "xuanlun-confirm",
+      "engine": "modern",
+      "projection_equal": true,
+      "players": [
+        {
+          "seat": 0,
+          "hp": 7,
+          "hand": [
+            {
+              "name": "sha",
+              "suit": "diamond",
+              "rank": 6,
+              "wunature": null
+            },
+            {
+              "name": "sha",
+              "suit": "diamond",
+              "rank": 7,
+              "wunature": null
+            },
+            {
+              "name": "sha",
+              "suit": "diamond",
+              "rank": 8,
+              "wunature": null
+            },
+            {
+              "name": "sha",
+              "suit": "diamond",
+              "rank": 9,
+              "wunature": null
+            }
+          ],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": true
+        },
+        {
+          "seat": 1,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 2,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 3,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 4,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 5,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 6,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 7,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        }
+      ],
+      "native_pending_restores": 1,
+      "native_prompts": [
+        "dddxuanlun_confirm"
+      ],
+      "upstream_repeats": [
+        {
+          "raw_case_label": "ordered-xuanlun-confirm",
+          "at": "2026-11-13T15:41:24.393540+00:00",
+          "projection_equal": true
+        }
+      ]
+    },
+    {
+      "case": "xuanlun-cancel",
+      "engine": "modern",
+      "projection_equal": true,
+      "players": [
+        {
+          "seat": 0,
+          "hp": 7,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 1,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 2,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 3,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 4,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 5,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 6,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        },
+        {
+          "seat": 7,
+          "hp": 8,
+          "hand": [],
+          "equips": [],
+          "juxian_ban": false,
+          "xuanlun_choice": false
+        }
+      ],
+      "native_pending_restores": 1,
+      "native_prompts": [
+        "dddxuanlun_confirm"
+      ],
+      "upstream_repeats": [
+        {
+          "raw_case_label": "ordered-xuanlun-cancel",
+          "at": "2026-11-13T15:41:24.440938+00:00",
+          "projection_equal": true
+        }
+      ]
+    },
+    {
+      "case": "shengke-sha",
+      "engine": "liuli",
+      "projection_equal": true,
+      "players": [
+        {
+          "seat": 0,
+          "hp": 8,
+          "hand": [],
+          "equips": []
+        },
+        {
+          "seat": 1,
+          "hp": 7,
+          "hand": [
+            {
+              "name": "tao",
+              "suit": "heart",
+              "rank": 3,
+              "wunature": null
+            }
+          ],
+          "equips": []
+        },
+        {
+          "seat": 2,
+          "hp": 8,
+          "hand": [],
+          "equips": []
+        },
+        {
+          "seat": 3,
+          "hp": 8,
+          "hand": [],
+          "equips": []
+        }
+      ],
+      "native_pending_restores": 1,
+      "native_prompts": [
+        "shengke_discard"
+      ],
+      "upstream_repeats": [
+        {
+          "raw_case_label": "shengke-sha-final",
+          "at": "2026-11-13T15:42:12.848386+00:00",
+          "projection_equal": true
+        }
+      ]
+    },
+    {
+      "case": "shengke-tao",
+      "engine": "liuli",
+      "projection_equal": true,
+      "players": [
+        {
+          "seat": 0,
+          "hp": 8,
+          "hand": [],
+          "equips": []
+        },
+        {
+          "seat": 1,
+          "hp": 7,
+          "hand": [
+            {
+              "name": "sha",
+              "suit": "club",
+              "rank": 7,
+              "wunature": null
+            }
+          ],
+          "equips": []
+        },
+        {
+          "seat": 2,
+          "hp": 8,
+          "hand": [],
+          "equips": []
+        },
+        {
+          "seat": 3,
+          "hp": 8,
+          "hand": [],
+          "equips": []
+        }
+      ],
+      "native_pending_restores": 1,
+      "native_prompts": [
+        "shengke_discard"
+      ],
+      "upstream_repeats": [
+        {
+          "raw_case_label": "shengke-tao-final",
+          "at": "2026-11-13T15:42:13.701137+00:00",
+          "projection_equal": true
+        }
+      ]
+    },
+    {
+      "case": "wuxingpan-sha-0",
+      "engine": "liuli",
+      "projection_equal": true,
+      "players": [
+        {
+          "seat": 0,
+          "hp": 8,
+          "hand": [
+            {
+              "name": "sha",
+              "suit": "club",
+              "rank": 7,
+              "wunature": 0
+            },
+            {
+              "name": "tao",
+              "suit": "heart",
+              "rank": 3,
+              "wunature": null
+            }
+          ],
+          "equips": [
+            {
+              "name": "wuxingpan",
+              "suit": "spade",
+              "rank": 5,
+              "wunature": null
+            }
+          ]
+        },
+        {
+          "seat": 1,
+          "hp": 8,
+          "hand": [],
+          "equips": []
+        },
+        {
+          "seat": 2,
+          "hp": 8,
+          "hand": [],
+          "equips": []
+        },
+        {
+          "seat": 3,
+          "hp": 8,
+          "hand": [],
+          "equips": []
+        }
+      ],
+      "native_pending_restores": 2,
+      "native_prompts": [
+        "wuxing_select_card",
+        "wuxing_select_nature"
+      ],
+      "upstream_repeats": [
+        {
+          "raw_case_label": "wuxingpan-sha-0",
+          "at": "2026-11-13T15:40:40.164426+00:00",
+          "projection_equal": true
+        }
+      ]
+    },
+    {
+      "case": "wuxingpan-sha-4",
+      "engine": "liuli",
+      "projection_equal": true,
+      "players": [
+        {
+          "seat": 0,
+          "hp": 8,
+          "hand": [
+            {
+              "name": "sha",
+              "suit": "club",
+              "rank": 7,
+              "wunature": 4
+            },
+            {
+              "name": "tao",
+              "suit": "heart",
+              "rank": 3,
+              "wunature": null
+            }
+          ],
+          "equips": [
+            {
+              "name": "wuxingpan",
+              "suit": "spade",
+              "rank": 5,
+              "wunature": null
+            }
+          ]
+        },
+        {
+          "seat": 1,
+          "hp": 8,
+          "hand": [],
+          "equips": []
+        },
+        {
+          "seat": 2,
+          "hp": 8,
+          "hand": [],
+          "equips": []
+        },
+        {
+          "seat": 3,
+          "hp": 8,
+          "hand": [],
+          "equips": []
+        }
+      ],
+      "native_pending_restores": 2,
+      "native_prompts": [
+        "wuxing_select_card",
+        "wuxing_select_nature"
+      ],
+      "upstream_repeats": [
+        {
+          "raw_case_label": "wuxingpan-sha-4",
+          "at": "2026-11-13T15:41:12.656314+00:00",
+          "projection_equal": true
+        }
+      ]
+    },
+    {
+      "case": "wuxingpan-tao-0",
+      "engine": "liuli",
+      "projection_equal": true,
+      "players": [
+        {
+          "seat": 0,
+          "hp": 8,
+          "hand": [
+            {
+              "name": "sha",
+              "suit": "club",
+              "rank": 7,
+              "wunature": null
+            },
+            {
+              "name": "tao",
+              "suit": "heart",
+              "rank": 3,
+              "wunature": 0
+            }
+          ],
+          "equips": [
+            {
+              "name": "wuxingpan",
+              "suit": "spade",
+              "rank": 5,
+              "wunature": null
+            }
+          ]
+        },
+        {
+          "seat": 1,
+          "hp": 8,
+          "hand": [],
+          "equips": []
+        },
+        {
+          "seat": 2,
+          "hp": 8,
+          "hand": [],
+          "equips": []
+        },
+        {
+          "seat": 3,
+          "hp": 8,
+          "hand": [],
+          "equips": []
+        }
+      ],
+      "native_pending_restores": 2,
+      "native_prompts": [
+        "wuxing_select_card",
+        "wuxing_select_nature"
+      ],
+      "upstream_repeats": [
+        {
+          "raw_case_label": "wuxingpan-tao-0",
+          "at": "2026-11-13T15:41:31.725720+00:00",
+          "projection_equal": true
+        }
+      ]
+    }
+  ]
+}

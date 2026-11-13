@@ -1,0 +1,4 @@
+{
+  "copied": "tsconfig.json",
+  "reason": "Vite first dependency scan could not resolve ../../tsconfig.json; source config copied unchanged"
+}

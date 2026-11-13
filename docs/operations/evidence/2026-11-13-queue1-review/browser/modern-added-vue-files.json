@@ -1,0 +1,9 @@
+{
+  "copied": [
+    "apps/core/mode/guozhan/src/help/App.vue",
+    "apps/core/noname/init/onload/OnloadSplash.vue",
+    "apps/core/noname/ui/create/menu/views/index.vue",
+    "apps/core/noname/library/help/GamePoptip.vue"
+  ],
+  "reason": "Vite imports original Vue source files"
+}

@@ -1,0 +1,23 @@
+{
+  "argv": [
+    "pnpm",
+    "--dir",
+    "/private/tmp/noname-queue1-modern-fox8y_xy",
+    "install",
+    "--frozen-lockfile",
+    "--ignore-scripts",
+    "--filter",
+    "noname..."
+  ],
+  "command": "pnpm --dir /private/tmp/noname-queue1-modern-fox8y_xy install --frozen-lockfile --ignore-scripts --filter noname...",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0"
+  },
+  "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "tracked_status": "",
+  "start_utc": "2026-11-13T15:13:54.062118+00:00",
+  "exit_code": 0,
+  "duration_seconds": 1.081,
+  "end_utc": "2026-11-13T15:13:55.143112+00:00"
+}

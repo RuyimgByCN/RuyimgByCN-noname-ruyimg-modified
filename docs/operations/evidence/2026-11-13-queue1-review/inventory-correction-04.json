@@ -1,0 +1,1292 @@
+{
+  "at": "2026-11-14T00:28:40.377438+08:00",
+  "before_sha256": "02e47c3409378d044bfc0c0b0b48bf2d5700913b1cbdd6d19b32abf4063976cb",
+  "after_sha256": "92f9aa17ad9f21027e2363d77ce7f9371765699791ffa0073035864eb1494702",
+  "reason": "Add per-key upstream behavior and concrete general fields to shared difference descriptions; preserve all status/reviewer/date fields.",
+  "changed_difference_records": 255,
+  "counts": {
+    "已复核等价": 634,
+    "简化近似": 3790,
+    "缺失": 0,
+    "上游未定义": 0
+  },
+  "effective_status_withdrawals": 215,
+  "new_equivalence_signoffs": 0,
+  "changes": [
+    {
+      "key": "L10:configs:分割线01@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2173",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；设置菜单分隔图未重建，不能把未登记字段记为配置等价。",
+      "after_difference": "上游条目语义：设置页分隔图片 line.png；clear 项，不改变牌局。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；设置菜单分隔图未重建，不能把未登记字段记为配置等价。"
+    },
+    {
+      "key": "L10:configs:skillEffects@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2185",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；仅展示开关登记，未驱动限定/觉醒特效。",
+      "after_difference": "上游条目语义：启停限定/觉醒技能展示特效，默认 true。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；仅展示开关登记，未驱动限定/觉醒特效。"
+    },
+    {
+      "key": "L10:configs:skillEffectsScale@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2189",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；合法上游值 11–15 会被拒绝，9/10 也未按上游除以 10；不能宣称比例配置等价。",
+      "after_difference": "上游条目语义：枚举 5/9/10/11/12/13/14/15，默认 11；特效使用处除以 10 得到缩放。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；合法上游值 11–15 会被拒绝，9/10 也未按上游除以 10；不能宣称比例配置等价。"
+    },
+    {
+      "key": "L10:configs:cardFold@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2205",
+      "before_difference": "默认值相反，手牌管理效果与兼容键缺失。；待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；默认值和手牌管理行为都不同，未实现完整手牌折叠。",
+      "after_difference": "上游条目语义：默认 true；手牌过多时完整折叠并禁用滑动管理，点击后同时保存两套扩展配置。 默认值相反，手牌管理效果与兼容键缺失。；待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；默认值和手牌管理行为都不同，未实现完整手牌折叠。"
+    },
+    {
+      "key": "L10:configs:cardFold_proportion@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2215",
+      "before_difference": "待核验：完整折叠关闭时设置手牌相互遮挡比例 30%–100%，默认 100%。；当前已读配置模型/资产与旧键/条目不同，但仅缺字段、键改名或静态未找到消费者，不足证明所有通用菜单/配置入口及持久化缺失。恢复旧状态，不是本轮新签署；须逐项实测开关、显示/规则效果和重启持久化。",
+      "after_difference": "上游条目语义：完整折叠关闭时设置手牌相互遮挡比例 30%–100%，默认 100%。 待核验：完整折叠关闭时设置手牌相互遮挡比例 30%–100%，默认 100%。；当前已读配置模型/资产与旧键/条目不同，但仅缺字段、键改名或静态未找到消费者，不足证明所有通用菜单/配置入口及持久化缺失。恢复旧状态，不是本轮新签署；须逐项实测开关、显示/规则效果和重启持久化。"
+    },
+    {
+      "key": "L10:configs:cardPhantom@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2231",
+      "before_difference": "默认值反向，幻影出牌画面仍无本次对照。；待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；默认值不符且未显示幻影。",
+      "after_difference": "上游条目语义：默认 true；出牌幻影外观。 默认值反向，幻影出牌画面仍无本次对照。；待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；默认值不符且未显示幻影。"
+    },
+    {
+      "key": "L10:configs:cardEmoji@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2238",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；隐藏开关没有产品消费，不能将布尔解析当作表情功能。",
+      "after_difference": "上游条目语义：隐藏设置项，新菜篮子/卡牌表情开关，默认 false。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；隐藏开关没有产品消费，不能将布尔解析当作表情功能。"
+    },
+    {
+      "key": "L10:configs:shichangshi@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2245",
+      "before_difference": "默认关闭与上游默认开启不同；技能替换成功不代表专属特效完成。；待核验消费链建议，单凭静态未找到调用不据此下调：配置有实际角色/技能替换作用；原生仅依赖计划登记，已有 k_danggu/k_mowang 独立技能不能证明此开关应用。",
+      "after_difference": "上游条目语义：默认 true；有十周年 UI/目标武将依赖时替换十常侍技能并换图。 默认关闭与上游默认开启不同；技能替换成功不代表专属特效完成。；待核验消费链建议，单凭静态未找到调用不据此下调：配置有实际角色/技能替换作用；原生仅依赖计划登记，已有 k_danggu/k_mowang 独立技能不能证明此开关应用。"
+    },
+    {
+      "key": "L10:configs:meihuaskills@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2250",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；默认值不符，未接定汉/蛊惑等的选牌显示改写。",
+      "after_difference": "上游条目语义：默认 true；优化定汉、蛊惑等部分技能的选牌显示（来自缘之空的显示改写）。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；默认值不符，未接定汉/蛊惑等的选牌显示改写。"
+    },
+    {
+      "key": "L10:configs:分割线02@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2258",
+      "before_difference": "待核验：设置页第二条 line.png 分隔图，不改变规则。；当前已读配置模型/资产与旧键/条目不同，但仅缺字段、键改名或静态未找到消费者，不足证明所有通用菜单/配置入口及持久化缺失。恢复旧状态，不是本轮新签署；须逐项实测开关、显示/规则效果和重启持久化。",
+      "after_difference": "上游条目语义：设置页第二条 line.png 分隔图，不改变规则。 待核验：设置页第二条 line.png 分隔图，不改变规则。；当前已读配置模型/资产与旧键/条目不同，但仅缺字段、键改名或静态未找到消费者，不足证明所有通用菜单/配置入口及持久化缺失。恢复旧状态，不是本轮新签署；须逐项实测开关、显示/规则效果和重启持久化。"
+    },
+    {
+      "key": "L10:ui_hooks:_emojiRebate1@archive/upstream/noname-liuli/noname/extension/史诗卡牌/emoji.js:700",
+      "before_difference": "仅手动cue函数，实际事件条件与随机表情选择缺失。；无规则效果；现为 cue 示意，未实现上游事件条件、随机对象与飞行表情，维持简化近似。",
+      "after_difference": "上游条目语义：强制在回复/濒死/获得牌/翻面等事件，根据来源关系和随机结果向其他角色丢花蛋等表情；不产生独立玩家选择。 仅手动cue函数，实际事件条件与随机表情选择缺失。；无规则效果；现为 cue 示意，未实现上游事件条件、随机对象与飞行表情，维持简化近似。"
+    },
+    {
+      "key": "L10:surfaces:card.css@archive/upstream/noname-liuli/noname/extension/史诗卡牌/card.css:1-18",
+      "before_difference": "无规则效果；通用卡面不覆盖上游 phantom 效果，保留待界面对照。",
+      "after_difference": "上游条目语义：定义卡牌字体及 .card.phantom 的幻影背景外观。 无规则效果；通用卡面不覆盖上游 phantom 效果，保留待界面对照。"
+    },
+    {
+      "key": "L10:surfaces:extension.css@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.css:1-615",
+      "before_difference": "无规则效果；cue 文本是示意，尚无上游花蛋飞行动画与菜单外观对照。",
+      "after_difference": "上游条目语义：表情容器、目标、花蛋/酒壶飞行动画及扩展菜单样式。 无规则效果；cue 文本是示意，尚无上游花蛋飞行动画与菜单外观对照。"
+    },
+    {
+      "key": "L19:configs:zuan_brawl@archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:3363",
+      "before_difference": "更正首次补课描述：已有off/standard/random/all/daily五值枚举、校验、解析及默认all。菜单/活动入口与daily持久化应用链尚待实际off/all/daily和跨日重启核验；静态未找到消费者不足单独证明缺失，保留旧状态，不作本轮新增等价签署。",
+      "after_difference": "上游条目语义：控制接入祖安乱斗入口：off 关闭，standard 三项、random 随机三项、all 全部；daily 跨日保存随机活动与新标记，需祖安扩展开启。 更正首次补课描述：已有off/standard/random/all/daily五值枚举、校验、解析及默认all。菜单/活动入口与daily持久化应用链尚待实际off/all/daily和跨日重启核验；静态未找到消费者不足单独证明缺失，保留旧状态，不作本轮新增等价签署。"
+    },
+    {
+      "key": "L20:configs:jinengxiugai@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6398",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则作用；技能覆盖开关只解析为字段，未控制原生技能目录/绑定。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。",
+      "after_difference": "上游条目语义：重启后修改部分技能和描述；实际分支包括 wengua5 等技能覆盖。 待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则作用；技能覆盖开关只解析为字段，未控制原生技能目录/绑定。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。"
+    },
+    {
+      "key": "L20:configs:biaojixiugai@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6403",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；仅字段登记；没有标记替换/显示消费者。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。",
+      "after_difference": "上游条目语义：修改部分角色和国战标记显示/介绍。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；仅字段登记；没有标记替换/显示消费者。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。"
+    },
+    {
+      "key": "L20:configs:zhijiechifa@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6408",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则作用；仅字段登记；kurou、_chongzhu 有独立实现，但不由此 bool 开关应用覆盖。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。",
+      "after_difference": "上游条目语义：调整苦肉与重铸时机/内容，包含真实规则覆盖。 待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则作用；仅字段登记；kurou、_chongzhu 有独立实现，但不由此 bool 开关应用覆盖。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。"
+    },
+    {
+      "key": "L20:configs:doudizhu_guanqiuxiaoguo@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6413",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；仅字段登记，相关钩子只置 UI 标记。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。",
+      "after_difference": "上游条目语义：斗地主光球、入场官阶/国标与标题效果。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；仅字段登记，相关钩子只置 UI 标记。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。"
+    },
+    {
+      "key": "L20:configs:huajiatexiao@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6418",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；仅字段登记，无护甲音效/动画消费者。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。",
+      "after_difference": "上游条目语义：整肃、护甲特效与音效；原始 _shiqihujia_ 本身是注释块。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；仅字段登记，无护甲音效/动画消费者。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。"
+    },
+    {
+      "key": "L20:configs:guozhanmeihua@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6423",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；仅字段登记；国战规则钩子独立绑定，未按此配置应用 UI。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。",
+      "after_difference": "上游条目语义：国战建国、军令、标记与 HP 样式的美化改写。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；仅字段登记；国战规则钩子独立绑定，未按此配置应用 UI。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。"
+    },
+    {
+      "key": "L20:configs:shoushajishatexiao@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6428",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；仅字段登记，连杀只留计数，没有动画/音频调用。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。",
+      "after_difference": "上游条目语义：击杀连杀、癫狂无双等全局动画/音效。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；仅字段登记，连杀只留计数，没有动画/音频调用。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。"
+    },
+    {
+      "key": "L20:configs:shiyongkapaitixiao@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6433",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；仅字段登记，相应钩子只有 flag。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。",
+      "after_difference": "上游条目语义：杀闪桃酒等卡牌使用的特效。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；仅字段登记，相应钩子只有 flag。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。"
+    },
+    {
+      "key": "L20:configs:youxishengfu@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6438",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；解析枚举，无结算面板主题消费。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。",
+      "after_difference": "上游条目语义：隐藏设置项：关闭/十周年身份结算/手杀结算界面，默认关闭。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；解析枚举，无结算面板主题消费。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。"
+    },
+    {
+      "key": "L20:configs:daojianfu@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6449",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；解析枚举，无刀剑斧动画组件消费。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。",
+      "after_difference": "上游条目语义：刀剑斧动画风格 shousha/4.5/off，默认 4.5。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；解析枚举，无刀剑斧动画组件消费。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。"
+    },
+    {
+      "key": "L20:configs:daojianfu_type@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6459",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；解析枚举，不驱动随机/指定动画。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。",
+      "after_difference": "上游条目语义：随机/无/刀/剑/斧指定动画类型，默认 random。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；解析枚举，不驱动随机/指定动画。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。"
+    },
+    {
+      "key": "L20:configs:xinshadoudizhu@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6471",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；仅字段登记，未切换实际斗地主界面。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。",
+      "after_difference": "上游条目语义：启用兵临城下斗地主界面美化，默认 false。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；仅字段登记，未切换实际斗地主界面。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。"
+    },
+    {
+      "key": "L20:configs:xlfbmoshi@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6477",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则作用；已有 XiguaXueliangFanbei 规则实现，但配置解析器没有产品应用方来启停技能。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。",
+      "after_difference": "上游条目语义：启用 gameStart 时体力上限加当前体力并回复同量。 待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则作用；已有 XiguaXueliangFanbei 规则实现，但配置解析器没有产品应用方来启停技能。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。"
+    },
+    {
+      "key": "L20:configs:mpfbmoshi@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6482",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则作用；已有抽牌 +2 消费，受技能启用状态控制，不读此配置。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。",
+      "after_difference": "上游条目语义：启用摸牌阶段额外摸 2 张（原文不是按任意摸牌数乘 2）。 待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则作用；已有抽牌 +2 消费，受技能启用状态控制，不读此配置。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。"
+    },
+    {
+      "key": "L20:configs:zhujizhongwang@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6487",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则作用；已有 ZhuWanzhongJi 规则实现，但此开关未接应用/模式过滤。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。",
+      "after_difference": "上游条目语义：身份模式中主公死亡时由忠臣/明忠继承身份。 待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则作用；已有 ZhuWanzhongJi 规则实现，但此开关未接应用/模式过滤。安装包配置到产品对局的应用入口未接通，不能把类型解析当作开关已生效。"
+    },
+    {
+      "key": "L20:ui_hooks:_xigua_feiyanbahu_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:577",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：进入游戏/gameStart 时显示飞扬跋扈、官阶/国标标题与光球。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_shiqihujia_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:690",
+      "before_difference": "无活动规则/显示效果；上游引用是注释，原生仅惰性登记。不能把注释内拟议行为计作已经实际触发的等价技能。",
+      "after_difference": "上游条目语义：原始 :690–728 整段注释的失去护甲声音/覆盖动画，未注册活动钩子。 无活动规则/显示效果；上游引用是注释，原生仅惰性登记。不能把注释内拟议行为计作已经实际触发的等价技能。"
+    },
+    {
+      "key": "L20:ui_hooks:_guozhanChooseControlCHG@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:1172",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：本机国战选择/弃牌/用牌控制窗口前后调整背景遮罩透明度。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:diaohulishan@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:1432",
+      "before_difference": "实际规则项；原生有伤害与用牌/目标修饰及清理落点；可见背景属于仍简化的 CSS 显示面。本轮仅区分规则执行与显示，不重新签署完整条件/选择/存读档。配置是否启停另见对应 configs 行。",
+      "after_difference": "上游条目语义：临时离场期间取消伤害/失血/回复并禁止用牌、救援、被指定，另创建离场背景。 实际规则项；原生有伤害与用牌/目标修饰及清理落点；可见背景属于仍简化的 CSS 显示面。本轮仅区分规则执行与显示，不重新签署完整条件/选择/存读档。配置是否启停另见对应 configs 行。"
+    },
+    {
+      "key": "L20:ui_hooks:_guozhan_marks@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:1523",
+      "before_difference": "实际规则/公开信息差异；不是纯 UI。上游先驱分支调用查看武将界面，原生标记未形成可消费的查看结果，不能用 invoked/viewed flag 证明玩家已看到武将。",
+      "after_difference": "上游条目语义：玩家选择消耗先驱/珠联璧合/阴阳鱼等标记，执行摸牌、回复或查看他人隐藏武将的不同分支。 实际规则/公开信息差异；不是纯 UI。上游先驱分支调用查看武将界面，原生标记未形成可消费的查看结果，不能用 invoked/viewed flag 证明玩家已看到武将。"
+    },
+    {
+      "key": "L20:ui_hooks:_zhulianbihe_mark_tao@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:1747",
+      "before_difference": "实际规则项；有确认 ask、标记消耗与恢复目标执行。本轮仅区分规则执行与显示，不重新签署完整条件/选择/存读档。配置是否启停另见对应 configs 行。",
+      "after_difference": "上游条目语义：消耗珠联璧合/野心家标记，作为桃用于合法使用/救援。 实际规则项；有确认 ask、标记消耗与恢复目标执行。本轮仅区分规则执行与显示，不重新签署完整条件/选择/存读档。配置是否启停另见对应 configs 行。"
+    },
+    {
+      "key": "L20:ui_hooks:_yinyang_mark_add@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:1802",
+      "before_difference": "实际规则项；有确认 ask、标记消耗、上限加成状态和清理。本轮仅区分规则执行与显示，不重新签署完整条件/选择/存读档。配置是否启停另见对应 configs 行。",
+      "after_difference": "上游条目语义：弃牌阶段开始可消耗阴阳鱼/野心家标记，临时增加 2 手牌上限并在回合结束清理。 实际规则项；有确认 ask、标记消耗、上限加成状态和清理。本轮仅区分规则执行与显示，不重新签署完整条件/选择/存读档。配置是否启停另见对应 configs 行。"
+    },
+    {
+      "key": "L20:ui_hooks:_guozhan_diebiaoji_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:1854",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：国战角色阵亡时删除其标记 UI 节点与背景。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_guozhan_duiweibiaoji_gua_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:1906",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：国战势力/对位标记的初始化和位置布局。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_guozhan_duiweibiaoji_gua_gua_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:1931",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：国战对位标记随身份/角色变化刷新布局。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_aozhan_judge@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2152",
+      "before_difference": "实际规则项；已有鏖战判定及技能启用消费；特效提示仍由未完成显示面承接。本轮仅区分规则执行与显示，不重新签署完整条件/选择/存读档。配置是否启停另见对应 configs 行。",
+      "after_difference": "上游条目语义：国战满足人数、非同盟/配置条件时进入鏖战并授予 aozhan；另有提示 UI。 实际规则项；已有鏖战判定及技能启用消费；特效提示仍由未完成显示面承接。本轮仅区分规则执行与显示，不重新签署完整条件/选择/存读档。配置是否启停另见对应 configs 行。"
+    },
+    {
+      "key": "L20:ui_hooks:_guozhanhalfchghp@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2235",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：国战开局临时调用 HP 样式点击处理器，保留原配置以兼容半血显示。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_xigua_xueliangfanbei_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2261",
+      "before_difference": "实际规则项；HostBehavior::XiguaXueliangFanbei 实际改 max_hp 并 recover。本轮仅区分规则执行与显示，不重新签署完整条件/选择/存读档。配置是否启停另见对应 configs 行。",
+      "after_difference": "上游条目语义：gameStart 上限增加当前体力，并回复当前体力。 实际规则项；HostBehavior::XiguaXueliangFanbei 实际改 max_hp 并 recover。本轮仅区分规则执行与显示，不重新签署完整条件/选择/存读档。配置是否启停另见对应 configs 行。"
+    },
+    {
+      "key": "L20:ui_hooks:_xigua_mopaifanbei_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2276",
+      "before_difference": "实际规则项；抽牌内核读取该启用技能并给阶段摸牌 +2。本轮仅区分规则执行与显示，不重新签署完整条件/选择/存读档。配置是否启停另见对应 configs 行。",
+      "after_difference": "上游条目语义：phaseDrawBegin2 为摸牌数增加 2。 实际规则项；抽牌内核读取该启用技能并给阶段摸牌 +2。本轮仅区分规则执行与显示，不重新签署完整条件/选择/存读档。配置是否启停另见对应 configs 行。"
+    },
+    {
+      "key": "L20:ui_hooks:_xigua_zhuwanzhongji_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2290",
+      "before_difference": "更正首次补课误判：实际先绑定ZhuWanzhongJi，已有死亡者为主公/主人为忠臣的过滤及双方身份交换，不是L20BatchA通用flag。保留旧状态，不是本轮整技能等价签署；mingzhong/game.zhong、zhuUpdate及完整死亡时序仍待同场景核验。",
+      "after_difference": "上游条目语义：主公 dieBegin 时忠臣/明忠继承主公，更新身份与 zhuUpdate。 更正首次补课误判：实际先绑定ZhuWanzhongJi，已有死亡者为主公/主人为忠臣的过滤及双方身份交换，不是L20BatchA通用flag。保留旧状态，不是本轮整技能等价签署；mingzhong/game.zhong、zhuUpdate及完整死亡时序仍待同场景核验。"
+    },
+    {
+      "key": "L20:ui_hooks:_shoushajisha_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2317",
+      "before_difference": "无规则效果；原生额外递增 _shoushajisha_count；其余只置 UI flag，没有连杀语音/动画。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：记录击杀者连杀，按击杀数播放首杀/双杀等声音和动画。 无规则效果；原生额外递增 _shoushajisha_count；其余只置 UI flag，没有连杀语音/动画。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_shoushajisha_delete_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2463",
+      "before_difference": "无规则效果；仅清理连杀展示计数，原生存在同类清零落点。此条不代表 _shoushajisha_ 的连杀动画/语音已实现。",
+      "after_difference": "上游条目语义：角色死亡时清除该角色的连杀计数。 无规则效果；仅清理连杀展示计数，原生存在同类清零落点。此条不代表 _shoushajisha_ 的连杀动画/语音已实现。"
+    },
+    {
+      "key": "L20:ui_hooks:_diankuangtulu_gua@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2475",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：source damageBegin4 且伤害恰为 3 时显示癫狂屠戮表演及语音。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_wanjunqushou_gua@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2494",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：source damageBegin4 且伤害至少 4 时显示万军取首动画/语音。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_o_o_recovertrigger@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2512",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：recoverEnd 记录自身回合自回累计 3 点、或为他人回复达到其当前体力的累计次数；达阈值发自定义表现事件并定时清理。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_o_o_miaoshouhuichun@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2557",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：每轮救助其他角色达到三次的 o_omiaoshouhuichun 事件播放动画与语音。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_o_o_yishugaochao@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2572",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：自身回合自回累计三点触发 o_oyishugaochao，播放动画与语音。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_losehp_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2588",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：失去体力事件播放对应音效。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_mianshang_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2603",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：伤害被防止/降为零时显示免伤提示特效。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_player_baojiA@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2618",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：event.num > 1 且 <= 2 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_player_baojiB@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2636",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：event.num > 2 且 <= 3 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_player_baojiC@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2653",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：event.num > 3 且 <= 4 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_player_baojiD@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2670",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：event.num > 4 且 <= 5 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_player_baojiE@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2687",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：event.num > 5 且 <= 6 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_player_baojiF@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2704",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：原文字面 event > 6 且 event.num <=7（不是 event.num >6） 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_player_baojiG@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2721",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：event.num > 7 且 <= 8 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_player_baojiH@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2738",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：event.num > 8 且 <= 9 时显示对应暴击字样/音效；保留原文条件，不推定更高伤害档。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_jiubuff_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2755",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：酒生效后给角色添加酒覆盖层。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_jiubuff_xiaoshi_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2777",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：酒加成失效/结算后移除酒覆盖层。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_player_game_guagua@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2802",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：回合/阶段变化时在角色处展示阶段标签与动态节点。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_guozhan_quanjubiaoji_guagua@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2921",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：国战全局标记变动时更新对应 UI/提示音。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_shiyongkapaitexiao_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2965",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：按所用杀闪桃酒等牌创建专属动画并播放语音。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_shiyongkapaitexiao_xi_gua_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:3141",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：用牌指定目标时按牌种/对象绘制专属指示线与命中特效。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_shanghaipaishiyongtexiao_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:3296",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：伤害牌使用时播放特定卡牌展示效果。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_player_daojianfu_xxgg_fuzi_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:3337",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：按刀剑斧风格、类型和伤害事件显示命中动画及声音。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_binglintu@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:4079",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：斗地主兵临城下开局创建角色周边和中央界面的背景/按钮层。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:_dysp@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:4148",
+      "before_difference": "无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。",
+      "after_difference": "上游条目语义：开局调用手杀特效播放视频/动态表演。 无规则效果；统一 handle_l20_batch_a 分支仅设 l20_ui_hook:<id>/invoked；没有对应 DOM、动画、音频事件。上游的可见/可听表现与条件尚未接通。"
+    },
+    {
+      "key": "L20:ui_hooks:kuanshi2@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:5332",
+      "before_difference": "实际规则项；handle_kuanshi2 防止伤害、清理保护、设置 skip_next_draw。本轮仅区分规则执行与显示，不重新签署完整条件/选择/存读档。配置是否启停另见对应 configs 行。",
+      "after_difference": "上游条目语义：宽释保护目标大额伤害前防止一次，给保护者留下跳过摸牌限制并定时清理。 实际规则项；handle_kuanshi2 防止伤害、清理保护、设置 skip_next_draw。本轮仅区分规则执行与显示，不重新签署完整条件/选择/存读档。配置是否启停另见对应 configs 行。"
+    },
+    {
+      "key": "L20:ui_hooks:mbmowang@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:5898",
+      "before_difference": "实际规则项；有休整/死亡取消、弃区域牌、回复及组合状态机；不是纯角色头像效果。本轮仅区分规则执行与显示，不重新签署完整条件/选择/存读档。配置是否启停另见对应 configs 行。",
+      "after_difference": "上游条目语义：十常侍休整/重返与死亡窗口、弃区域牌、恢复状态及组合轮换。 实际规则项；有休整/死亡取消、弃区域牌、回复及组合状态机；不是纯角色头像效果。本轮仅区分规则执行与显示，不重新签署完整条件/选择/存读档。配置是否启停另见对应 configs 行。"
+    },
+    {
+      "key": "L20:ui_hooks:zuoxing@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6155",
+      "before_difference": "无活动规则/显示效果；上游引用是注释，原生仅惰性登记。不能把注释内拟议行为计作已经实际触发的等价技能。",
+      "after_difference": "上游条目语义：原始 :6155–6204 逐行 //，拟议的佐幸锦囊选择与减上限覆盖未启用。 无活动规则/显示效果；上游引用是注释，原生仅惰性登记。不能把注释内拟议行为计作已经实际触发的等价技能。"
+    },
+    {
+      "key": "L20:ui_hooks:_chongzhu@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6231",
+      "before_difference": "实际规则项；普通重铸已有选择/弃牌/摸牌，但上游 :6263–6296 的 stone/spell 特殊分支未迁入，不能作为无规则效果钩子签署。",
+      "after_difference": "上游条目语义：玩家选择可重铸牌；普通牌摸一张；stone deck 和 spell_gold/silver 分支创建/替换对应牌类。 实际规则项；普通重铸已有选择/弃牌/摸牌，但上游 :6263–6296 的 stone/spell 特殊分支未迁入，不能作为无规则效果钩子签署。"
+    },
+    {
+      "key": "L20:surfaces:extension.css@archive/upstream/noname-liuli/noname/extension/标记补充/extension.css:1-881",
+      "before_difference": "无规则效果；未把样式注入实际牌桌或建立相应 DOM，调试 patch 标志不是界面对照证据。",
+      "after_difference": "上游条目语义：入场、暴击、连杀、国战与各种角色覆盖/动画样式。 无规则效果；未把样式注入实际牌桌或建立相应 DOM，调试 patch 标志不是界面对照证据。"
+    },
+    {
+      "key": "L20:surfaces:group.css@archive/upstream/noname-liuli/noname/extension/标记补充/group.css:1-17",
+      "before_difference": "无规则效果；未把样式注入实际牌桌或建立相应 DOM，调试 patch 标志不是界面对照证据。",
+      "after_difference": "上游条目语义：选将选中角色的特定势力/data-nature 光效与边框。 无规则效果；未把样式注入实际牌桌或建立相应 DOM，调试 patch 标志不是界面对照证据。"
+    },
+    {
+      "key": "L20:surfaces:mark.css@archive/upstream/noname-liuli/noname/extension/标记补充/mark.css:1-61",
+      "before_difference": "无规则效果；未把样式注入实际牌桌或建立相应 DOM，调试 patch 标志不是界面对照证据。",
+      "after_difference": "上游条目语义：酒状态、选牌对话框、牌名与 decadeUI-canvas 层级的样式。 无规则效果；未把样式注入实际牌桌或建立相应 DOM，调试 patch 标志不是界面对照证据。"
+    },
+    {
+      "key": "L22:configs:eloPlayers@archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:462",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：配置已解析并有可调用的规则辅助入口；未接通安装包配置到当前对局，不能由 helper/测试级接入宣称玩家切换已生效。",
+      "after_difference": "上游条目语义：开关段位制裁的人数/座位判定，影响 _eloMechanism、_eloDraw 等的启用及牌量调整。 待核验消费链建议，单凭静态未找到调用不据此下调：配置已解析并有可调用的规则辅助入口；未接通安装包配置到当前对局，不能由 helper/测试级接入宣称玩家切换已生效。"
+    },
+    {
+      "key": "L22:configs:eloDifficulty@archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:467",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：已有难度计算和内核消费能力；当前配置不是活跃对局的已接通开关，保留普通难度 helper 不能证明全部枚举生效。",
+      "after_difference": "上游条目语义：难度枚举及自动难度用于起手牌、摸牌、手牌上限/人数的段位调整。 待核验消费链建议，单凭静态未找到调用不据此下调：已有难度计算和内核消费能力；当前配置不是活跃对局的已接通开关，保留普通难度 helper 不能证明全部枚举生效。"
+    },
+    {
+      "key": "L22:configs:timeKiller@archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:482",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；原生目前是延迟/台词参数登记，未实际等待或显示台词，配置应用入口也未接产品。",
+      "after_difference": "上游条目语义：非本机角色的既有 chooseToUse/Respond/Discard 前随机等待，并可输出思考台词；不新增玩家选择。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；原生目前是延迟/台词参数登记，未实际等待或显示台词，配置应用入口也未接产品。"
+    },
+    {
+      "key": "L25:configs:informknow@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:160",
+      "before_difference": "无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。",
+      "after_difference": "上游条目语义：设置页长按说明与文字彩蛋菜单。 无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。"
+    },
+    {
+      "key": "L25:configs:about1@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:173",
+      "before_difference": "无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。",
+      "after_difference": "上游条目语义：设置页装饰分隔线及长按彩蛋。 无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。"
+    },
+    {
+      "key": "L25:configs:about2@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:185",
+      "before_difference": "无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。",
+      "after_difference": "上游条目语义：设置页祖安标题图片。 无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。"
+    },
+    {
+      "key": "L25:configs:blank1@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:198",
+      "before_difference": "无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。",
+      "after_difference": "上游条目语义：设置页留白项。 无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。"
+    },
+    {
+      "key": "L25:configs:blank2@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:210",
+      "before_difference": "无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。",
+      "after_difference": "上游条目语义：设置页第二留白项。 无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。"
+    },
+    {
+      "key": "L25:configs:Myfriend@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:231",
+      "before_difference": "无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。",
+      "after_difference": "上游条目语义：设置页好友/感谢图片。 无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。"
+    },
+    {
+      "key": "L25:configs:about4@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:308",
+      "before_difference": "无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。",
+      "after_difference": "上游条目语义：扩展首页末尾分隔线/文字菜单。 无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。"
+    },
+    {
+      "key": "L25:configs:falseedit@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:320",
+      "before_difference": "无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。",
+      "after_difference": "上游条目语义：菜单里的假编辑项，只显示不能编辑的文本彩蛋。 无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。"
+    },
+    {
+      "key": "L25:configs:ssr_luoyi@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:15031",
+      "before_difference": "实际规则且清单分类错误；原生 +1 伤害不是上游双响应，禁防具与锦囊视为决斗也未见对应消费，建议下调后进入技能修复复核。",
+      "after_difference": "上游条目语义：这不是配置：裸衣锁定技禁用防具，锦囊/延时锦囊视为决斗，杀/决斗让对方额外响应一次。 实际规则且清单分类错误；原生 +1 伤害不是上游双响应，禁防具与锦囊视为决斗也未见对应消费，建议下调后进入技能修复复核。"
+    },
+    {
+      "key": "L25:configs:ssr_lieren@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:22337",
+      "before_difference": "实际规则且清单分类错误；牌型过滤、次数和开局专属武器产生方式不同，不能当作配置解析等价。",
+      "after_difference": "上游条目语义：这不是配置：烈刃出牌可将武器放到他人武将上；开局创建专属武器，回合/濒死回收并给对方闪响应。原文没有 usable:1。 实际规则且清单分类错误；牌型过滤、次数和开局专属武器产生方式不同，不能当作配置解析等价。"
+    },
+    {
+      "key": "L25:configs:free@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50301",
+      "before_difference": "无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。",
+      "after_difference": "上游条目语义：设置页动态表情标题。 无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。"
+    },
+    {
+      "key": "L25:configs:aboutZ@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50307",
+      "before_difference": "无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。",
+      "after_difference": "上游条目语义：设置页上端分隔线。 无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。"
+    },
+    {
+      "key": "L25:configs:settext@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50319",
+      "before_difference": "无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。",
+      "after_difference": "上游条目语义：祖安设置标题 HTML。 无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。"
+    },
+    {
+      "key": "L25:configs:aboutX@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50331",
+      "before_difference": "无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。",
+      "after_difference": "上游条目语义：祖安设置标题下分隔线。 无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。"
+    },
+    {
+      "key": "L25:configs:linea@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50343",
+      "before_difference": "无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。",
+      "after_difference": "上游条目语义：模式设置分组标题。 无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。"
+    },
+    {
+      "key": "L25:configs:mode@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50352",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则/目录作用；不能用通用 mode 字段命中代替祖安八模式配置消费。原始配置目前未接通。",
+      "after_difference": "上游条目语义：八种身份玩法模式选择，改变游戏初始化、阵营/胜负与各模式技能。 待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则/目录作用；不能用通用 mode 字段命中代替祖安八模式配置消费。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:fun@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50367",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则/目录作用；部分相关技能独立存在，但选项未驱动玩法启停或初始化。原始配置目前未接通。",
+      "after_difference": "上游条目语义：关闭/大将英魂/群侠论剑/桃花落尽/同将之争/暗夜鬼城/元气等娱乐玩法选择。 待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则/目录作用；部分相关技能独立存在，但选项未驱动玩法启停或初始化。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:goodluck@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50381",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则/目录作用；这是真实抽牌/判定规则，_haoyunlai 当前仅计数/光效 cue，不能称纯显示。原始配置目前未接通。",
+      "after_difference": "上游条目语义：只为本机玩家开启摸好牌/判定偏好的天选模式，实际会移动牌堆顶牌。 待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则/目录作用；这是真实抽牌/判定规则，_haoyunlai 当前仅计数/光效 cue，不能称纯显示。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:washhandcard@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50386",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；通用手牌排序不读此选项，未还原自动/手动三个分支。原始配置目前未接通。",
+      "after_difference": "上游条目语义：关闭/自动/手动手牌整理，按类型、花色、点数与属性排序。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；通用手牌排序不读此选项，未还原自动/手动三个分支。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:levelstrong@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50396",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则/目录作用；等级/经验实现不能代替此三态奖励配置的消费。原始配置目前未接通。",
+      "after_difference": "上游条目语义：关闭/旧/新等级奖励；改变上限、使用次数、距离、抽牌等奖励。 待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则/目录作用；等级/经验实现不能代替此三态奖励配置的消费。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:upspeed@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50406",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则/目录作用；未消费此比例与关闭值来控制升级路径。原始配置目前未接通。",
+      "after_difference": "上游条目语义：0 关闭等级系统，否则按 30%–200% 缩放经验获取。 待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则/目录作用；未消费此比例与关闭值来控制升级路径。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:relife@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50433",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则/目录作用；没有把该参数接入死亡倒计时；共享 L19 复活处理是另一套行为。原始配置目前未接通。",
+      "after_difference": "上游条目语义：控制复活间隔的缩放，0 表示固定三回合，非零为比例。 待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则/目录作用；没有把该参数接入死亡倒计时；共享 L19 复活处理是另一套行为。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:balance@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50444",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则/目录作用；通用 balance 标识不能证明祖安各玩法分支应用。原始配置目前未接通。",
+      "after_difference": "上游条目语义：切换各玩法的平衡规则，涉及势力、奖励、模式伤害/恢复等分支。 待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则/目录作用；通用 balance 标识不能证明祖安各玩法分支应用。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:newover@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50449",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则/目录作用；未连接各玩法的 game.over 判定分支。原始配置目前未接通。",
+      "after_difference": "上游条目语义：切换祖安玩法的新胜负结算逻辑。 待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则/目录作用；未连接各玩法的 game.over 判定分支。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:lineb@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50454",
+      "before_difference": "无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。",
+      "after_difference": "上游条目语义：特效设置分组标题。 无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。"
+    },
+    {
+      "key": "L25:configs:bingletexiao@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50463",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；只查同名 bool 会漏掉实际 localStorage 多选集合；原生没有该集合消费。原始配置目前未接通。",
+      "after_difference": "上游条目语义：菜单多选开关组合写 ZUANbingletexiaoSET，控制兵乐、天气、濒死与模式覆盖效果。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；只查同名 bool 会漏掉实际 localStorage 多选集合；原生没有该集合消费。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:texiao@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50522",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；zuanUi 的若干 cue/flag 没有动画组件，也不读总开关。原始配置目前未接通。",
+      "after_difference": "上游条目语义：启停动态 GIF/全屏画面特效。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；zuanUi 的若干 cue/flag 没有动画组件，也不读总开关。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:zuancoveropacity@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50527",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有覆盖图组件读取透明度，也没有该归一化参数。原始配置目前未接通。",
+      "after_difference": "上游条目语义：把 0–10 设置转换为覆盖图 opacity（乘 0.1）。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有覆盖图组件读取透明度，也没有该归一化参数。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:huihe@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50542",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有用该设置绘制/调节回合覆盖层。原始配置目前未接通。",
+      "after_difference": "上游条目语义：武将回合效果强度/显示参数，进入回合覆盖图创建流程。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有用该设置绘制/调节回合覆盖层。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:huiheopa@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50558",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有消费该数值的回合动画循环。原始配置目前未接通。",
+      "after_difference": "上游条目语义：调节回合效果的尺寸/速度等表现参数。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有消费该数值的回合动画循环。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:newhuihe@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50572",
+      "before_difference": "待核验：选择旧版/新版不同回合亮化或闪光效果。；当前已读配置模型/资产与旧键/条目不同，但仅缺字段、键改名或静态未找到消费者，不足证明所有通用菜单/配置入口及持久化缺失。恢复旧状态，不是本轮新签署；须逐项实测开关、显示/规则效果和重启持久化。",
+      "after_difference": "上游条目语义：选择旧版/新版不同回合亮化或闪光效果。 待核验：选择旧版/新版不同回合亮化或闪光效果。；当前已读配置模型/资产与旧键/条目不同，但仅缺字段、键改名或静态未找到消费者，不足证明所有通用菜单/配置入口及持久化缺失。恢复旧状态，不是本轮新签署；须逐项实测开关、显示/规则效果和重启持久化。"
+    },
+    {
+      "key": "L25:configs:imgtime@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50583",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有特效计时器消费此值。原始配置目前未接通。",
+      "after_difference": "上游条目语义：回合图像特效持续时间，调用时除以 10。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有特效计时器消费此值。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:imgfps@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50601",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有该帧率驱动的动画消费。原始配置目前未接通。",
+      "after_difference": "上游条目语义：图像特效帧率，传入 zuanhideBackground 动画。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有该帧率驱动的动画消费。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:fujiaset@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50614",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有雪花、coin 依赖判断及 snowFall 应用。原始配置目前未接通。",
+      "after_difference": "上游条目语义：依赖 coin 插件切换雪花特效并保存 snowFall，缺依赖则关闭。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有雪花、coin 依赖判断及 snowFall 应用。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:newui@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50643",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；通用 newui 文本命中不是祖安立绘风格消费者。原始配置目前未接通。",
+      "after_difference": "上游条目语义：选择不同 UI 立绘/覆盖图风格与尺寸，影响诸多图片素材路径。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；通用 newui 文本命中不是祖安立绘风格消费者。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:helasisy@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50654",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；前端 helper 固定 skipOpeningSplash=true，不读取此开关，且无 splash 消费组件。原始配置目前未接通。",
+      "after_difference": "上游条目语义：关闭开局动画；false 时显示开局 splash。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；前端 helper 固定 skipOpeningSplash=true，不读取此开关，且无 splash 消费组件。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:linec@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50659",
+      "before_difference": "无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。",
+      "after_difference": "上游条目语义：美化设置分组标题。 无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。"
+    },
+    {
+      "key": "L25:configs:perspective@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50757",
+      "before_difference": "待核验：角色立绘透视缩放。；当前已读配置模型/资产与旧键/条目不同，但仅缺字段、键改名或静态未找到消费者，不足证明所有通用菜单/配置入口及持久化缺失。恢复旧状态，不是本轮新签署；须逐项实测开关、显示/规则效果和重启持久化。",
+      "after_difference": "上游条目语义：角色立绘透视缩放。 待核验：角色立绘透视缩放。；当前已读配置模型/资产与旧键/条目不同，但仅缺字段、键改名或静态未找到消费者，不足证明所有通用菜单/配置入口及持久化缺失。恢复旧状态，不是本轮新签署；须逐项实测开关、显示/规则效果和重启持久化。"
+    },
+    {
+      "key": "L25:configs:bizhi@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50762",
+      "before_difference": "待核验：菜单界面壁纸模式选择与保存。；当前已读配置模型/资产与旧键/条目不同，但仅缺字段、键改名或静态未找到消费者，不足证明所有通用菜单/配置入口及持久化缺失。恢复旧状态，不是本轮新签署；须逐项实测开关、显示/规则效果和重启持久化。",
+      "after_difference": "上游条目语义：菜单界面壁纸模式选择与保存。 待核验：菜单界面壁纸模式选择与保存。；当前已读配置模型/资产与旧键/条目不同，但仅缺字段、键改名或静态未找到消费者，不足证明所有通用菜单/配置入口及持久化缺失。恢复旧状态，不是本轮新签署；须逐项实测开关、显示/规则效果和重启持久化。"
+    },
+    {
+      "key": "L25:configs:wallpaper@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50804",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；activeWallpaper 仅数据状态，未读取原始选项，也无 Vue 背景消费者。原始配置目前未接通。",
+      "after_difference": "上游条目语义：对局场景壁纸模式选择，影响动态/角色相关背景。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；activeWallpaper 仅数据状态，未读取原始选项，也无 Vue 背景消费者。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:paperchoose@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50846",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有按该依据解析角色并请求背景资源。原始配置目前未接通。",
+      "after_difference": "上游条目语义：壁纸按指定角色/主公等依据选择。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有按该依据解析角色并请求背景资源。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:exwallpaper@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50856",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有各模式专用壁纸切换消费。原始配置目前未接通。",
+      "after_difference": "上游条目语义：特殊玩法采用专用壁纸。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有各模式专用壁纸切换消费。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:qiankuang@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50861",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有手牌边框组件或样式选择消费。原始配置目前未接通。",
+      "after_difference": "上游条目语义：手牌边框的随机/指定样式。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有手牌边框组件或样式选择消费。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:backgroundttop@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50910",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有入口页 backgroundlogo 的消费路径。原始配置目前未接通。",
+      "after_difference": "上游条目语义：选择并保存开始界面背景/Logo 美化。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有入口页 backgroundlogo 的消费路径。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:zhishixian@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50949",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；前端 attackLineStyle 固定 guanjie 且未被 Vue 使用，未实现选项与指示线同步。原始配置目前未接通。",
+      "after_difference": "上游条目语义：选择多种攻击指示特效，保存配置并同步十周年 UI/替换 game.linexy。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；前端 attackLineStyle 固定 guanjie 且未被 Vue 使用，未实现选项与指示线同步。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:zhishiopi@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51042",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有该透明度作用的线条 DOM 消费。原始配置目前未接通。",
+      "after_difference": "上游条目语义：攻击指示线透明度除以 10 后写入线条 DOM。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有该透明度作用的线条 DOM 消费。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:lined@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51060",
+      "before_difference": "无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。",
+      "after_difference": "上游条目语义：互动设置分组标题。 无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。"
+    },
+    {
+      "key": "L25:configs:zuantype@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51069",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；cue 字符串没有台词版本选择或真实播报。原始配置目前未接通。",
+      "after_difference": "上游条目语义：选择新/旧等对话台词版本，控制对应事件钩子分支。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；cue 字符串没有台词版本选择或真实播报。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:ransay@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51079",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有该概率控制的台词随机与聊天输出。原始配置目前未接通。",
+      "after_difference": "上游条目语义：0–100 概率控制互动发言/成为龙王的随机分支。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有该概率控制的台词随机与聊天输出。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:levelsay@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51096",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有读取该开关的聊天输出。原始配置目前未接通。",
+      "after_difference": "上游条目语义：升级/获得经验时发聊天播报。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有读取该开关的聊天输出。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:girlspeak@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51101",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有基于性别/开关追加文本的聊天消费。原始配置目前未接通。",
+      "after_difference": "上游条目语义：女角色发言时增添卖萌文本。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有基于性别/开关追加文本的聊天消费。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:zuanemotion@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51106",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；未实现配置驱动的随机对象、表情弹道与可见动画。原始配置目前未接通。",
+      "after_difference": "上游条目语义：在特定关系/事件与概率条件下丢花送蛋等互动表情。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；未实现配置驱动的随机对象、表情弹道与可见动画。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:linef@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51111",
+      "before_difference": "无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。",
+      "after_difference": "上游条目语义：增强设置分组标题。 无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。"
+    },
+    {
+      "key": "L25:configs:shenst@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51158",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则/目录作用；同名神将技能存在不代表此配置触发覆盖，也不能称无规则效果。原始配置目前未接通。",
+      "after_difference": "上游条目语义：启用神将增强，实际覆盖 baonu、wumou 等的触发/选择和效果。 待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则/目录作用；同名神将技能存在不代表此配置触发覆盖，也不能称无规则效果。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:showboss@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51163",
+      "before_difference": "待核验：启用诸神降临相关将包/注册入口，影响角色可用列表。；当前已读配置模型/资产与旧键/条目不同，但仅缺字段、键改名或静态未找到消费者，不足证明所有通用菜单/配置入口及持久化缺失。恢复旧状态，不是本轮新签署；须逐项实测开关、显示/规则效果和重启持久化。",
+      "after_difference": "上游条目语义：启用诸神降临相关将包/注册入口，影响角色可用列表。 待核验：启用诸神降临相关将包/注册入口，影响角色可用列表。；当前已读配置模型/资产与旧键/条目不同，但仅缺字段、键改名或静态未找到消费者，不足证明所有通用菜单/配置入口及持久化缺失。恢复旧状态，不是本轮新签署；须逐项实测开关、显示/规则效果和重启持久化。"
+    },
+    {
+      "key": "L25:configs:hidessr@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51168",
+      "before_difference": "待核验：把祖安武将加 unseen/minskin 并从 characterPack 删除隐藏其选将包。；当前已读配置模型/资产与旧键/条目不同，但仅缺字段、键改名或静态未找到消费者，不足证明所有通用菜单/配置入口及持久化缺失。恢复旧状态，不是本轮新签署；须逐项实测开关、显示/规则效果和重启持久化。",
+      "after_difference": "上游条目语义：把祖安武将加 unseen/minskin 并从 characterPack 删除隐藏其选将包。 待核验：把祖安武将加 unseen/minskin 并从 characterPack 删除隐藏其选将包。；当前已读配置模型/资产与旧键/条目不同，但仅缺字段、键改名或静态未找到消费者，不足证明所有通用菜单/配置入口及持久化缺失。恢复旧状态，不是本轮新签署；须逐项实测开关、显示/规则效果和重启持久化。"
+    },
+    {
+      "key": "L25:configs:delkey@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51173",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则/目录作用；未应用该配置过滤玩家/AI 的将池。原始配置目前未接通。",
+      "after_difference": "上游条目语义：给 key_/Key 势力动漫武将加 unseen 和 forbidai 标记。 待核验消费链建议，单凭静态未找到调用不据此下调：有真实规则/目录作用；未应用该配置过滤玩家/AI 的将池。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:hideide@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51239",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有读取此设置的身份标记隐藏逻辑；普通私有视图规则不是此 UI 配置。原始配置目前未接通。",
+      "after_difference": "上游条目语义：身份局内隐藏身份显示，按 none/game/player 等选项作用。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有读取此设置的身份标记隐藏逻辑；普通私有视图规则不是此 UI 配置。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:lineg@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51251",
+      "before_difference": "无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。",
+      "after_difference": "上游条目语义：音效设置分组标题。 无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。"
+    },
+    {
+      "key": "L25:configs:audio_draw@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51272",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；mutePaperAudio 是独立默认字段，未从该选项赋值，且 lastAudioCue 无真实播放消费者。原始配置目前未接通。",
+      "after_difference": "上游条目语义：屏蔽获得/失去/使用牌的纸牌音效，多个钩子的 filter 读取该值。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；mutePaperAudio 是独立默认字段，未从该选项赋值，且 lastAudioCue 无真实播放消费者。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:audio_start@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51277",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；helper 固定 dump_start，未处理枚举/none，没有实际音频播放消费。原始配置目前未接通。",
+      "after_difference": "上游条目语义：选择 none 或几种开局声音，enterGame/gameDrawBefore 播放对应音频。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；helper 固定 dump_start，未处理枚举/none，没有实际音频播放消费。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:lineh@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51289",
+      "before_difference": "无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。",
+      "after_difference": "上游条目语义：更多设置分组标题。 无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。"
+    },
+    {
+      "key": "L25:configs:isPC@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51298",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有该配置的 zoom/布局应用；通用响应式不等于选项生效。原始配置目前未接通。",
+      "after_difference": "上游条目语义：界面比例/PC 适配，点击调整 ui_zoom、保存 zuanpc 并影响多处布局分支。 待核验消费链建议，单凭静态未找到调用不据此下调：无牌局规则效果；没有该配置的 zoom/布局应用；通用响应式不等于选项生效。原始配置目前未接通。"
+    },
+    {
+      "key": "L25:configs:windowHigh@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51344",
+      "before_difference": "待核验：桌面窗口宽高比例，执行 moveTo/resizeTo 并保存窗口配置。；当前已读配置模型/资产与旧键/条目不同，但仅缺字段、键改名或静态未找到消费者，不足证明所有通用菜单/配置入口及持久化缺失。恢复旧状态，不是本轮新签署；须逐项实测开关、显示/规则效果和重启持久化。",
+      "after_difference": "上游条目语义：桌面窗口宽高比例，执行 moveTo/resizeTo 并保存窗口配置。 待核验：桌面窗口宽高比例，执行 moveTo/resizeTo 并保存窗口配置。；当前已读配置模型/资产与旧键/条目不同，但仅缺字段、键改名或静态未找到消费者，不足证明所有通用菜单/配置入口及持久化缺失。恢复旧状态，不是本轮新签署；须逐项实测开关、显示/规则效果和重启持久化。"
+    },
+    {
+      "key": "L25:configs:aboutH@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51392",
+      "before_difference": "无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。",
+      "after_difference": "上游条目语义：更多设置中的分隔线/长按彩蛋。 无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。"
+    },
+    {
+      "key": "L25:configs:text@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51404",
+      "before_difference": "待核验：启用游戏自定义/调试工具，可换将、换位、改手牌并查看身份。；当前已读配置模型/资产与旧键/条目不同，但仅缺字段、键改名或静态未找到消费者，不足证明所有通用菜单/配置入口及持久化缺失。恢复旧状态，不是本轮新签署；须逐项实测开关、显示/规则效果和重启持久化。",
+      "after_difference": "上游条目语义：启用游戏自定义/调试工具，可换将、换位、改手牌并查看身份。 待核验：启用游戏自定义/调试工具，可换将、换位、改手牌并查看身份。；当前已读配置模型/资产与旧键/条目不同，但仅缺字段、键改名或静态未找到消费者，不足证明所有通用菜单/配置入口及持久化缺失。恢复旧状态，不是本轮新签署；须逐项实测开关、显示/规则效果和重启持久化。"
+    },
+    {
+      "key": "L25:configs:about0@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51409",
+      "before_difference": "无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。",
+      "after_difference": "上游条目语义：开发工具下分隔线/文字彩蛋。 无规则效果；此项是菜单内容，原生未显示该标题/留白/图片/文字交互。不能用空解析或不存在规则影响称 UI 等价。"
+    },
+    {
+      "key": "L25:configs:falsedelete@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51434",
+      "before_difference": "无活动规则/显示效果；上游是假删除项的注释文本，原生没有删除行为。保留键用于历史定位，不能算实际配置功能或浏览器样本。",
+      "after_difference": "上游条目语义：整项位于 :51421–51445 块注释中，假删除彩蛋菜单未启用。 无活动规则/显示效果；上游是假删除项的注释文本，原生没有删除行为。保留键用于历史定位，不能算实际配置功能或浏览器样本。"
+    },
+    {
+      "key": "L25:ui_hooks:_zuanattacklinecheck@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:37514",
+      "before_difference": "配置同步被固定为关节线，缺本人/开局事件门和按所选类型切换线函数；透明度不是这个源钩子的要求，不据它判差异。；无规则效果；仅固定状态示意，没有上游指示线函数替换/选项同步/实际绘制。",
+      "after_difference": "上游条目语义：本机 enterGame/gameDrawBefore 时同步十周年攻击线选项，替换 game.linexy 或恢复默认线。 配置同步被固定为关节线，缺本人/开局事件门和按所选类型切换线函数；透明度不是这个源钩子的要求，不据它判差异。；无规则效果；仅固定状态示意，没有上游指示线函数替换/选项同步/实际绘制。"
+    },
+    {
+      "key": "L25:ui_hooks:_extraphaseskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40500",
+      "before_difference": "无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。",
+      "after_difference": "上游条目语义：phaseBefore、audio>=4 时按手杀/十周年版本播放 phase.mp3。 无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。"
+    },
+    {
+      "key": "L25:ui_hooks:_extradieskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40518",
+      "before_difference": "无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。",
+      "after_difference": "上游条目语义：die、audio>=4 时播放对应版本 die.mp3。 无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。"
+    },
+    {
+      "key": "L25:ui_hooks:_extraturnoverskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40536",
+      "before_difference": "原生修正了源拼写并扩大触发，且缺audio>=4条件；应登记实际源行为差异，不能虚构上游必播。；无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。",
+      "after_difference": "上游条目语义：原文 trigger 字面为 trunOverBefore（不是 turnOverBefore），audio>=4 播 turnover.mp3；不能静默修正该拼写。 原生修正了源拼写并扩大触发，且缺audio>=4条件；应登记实际源行为差异，不能虚构上游必播。；无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。"
+    },
+    {
+      "key": "L25:ui_hooks:_extradamageskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40554",
+      "before_difference": "无规则/实际音频效果；上游主动禁用，原生仅惰性计数/未播放 cue。应保留关闭语义，不能以人工调用 dispatcher 的状态变化冒充上游可触发音效。",
+      "after_difference": "上游条目语义：damageBefore 定义仍在，但 filter 无条件 return false，普通对局不播放该重复伤害音效。 无规则/实际音频效果；上游主动禁用，原生仅惰性计数/未播放 cue。应保留关闭语义，不能以人工调用 dispatcher 的状态变化冒充上游可触发音效。"
+    },
+    {
+      "key": "L25:ui_hooks:_extradlosehpskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40578",
+      "before_difference": "无规则/实际音频效果；上游主动禁用，原生仅惰性计数/未播放 cue。应保留关闭语义，不能以人工调用 dispatcher 的状态变化冒充上游可触发音效。",
+      "after_difference": "上游条目语义：loseHpBefore 定义仍在，但 filter 无条件 return false，普通对局不播放流失音效。 无规则/实际音频效果；上游主动禁用，原生仅惰性计数/未播放 cue。应保留关闭语义，不能以人工调用 dispatcher 的状态变化冒充上游可触发音效。"
+    },
+    {
+      "key": "L25:ui_hooks:_extraloseskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40597",
+      "before_difference": "无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。",
+      "after_difference": "上游条目语义：loseAfter/addCardToStorage/loseAsyncAfter 满足存储条件与 audio>=4 时播放 common.mp3。 无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。"
+    },
+    {
+      "key": "L25:ui_hooks:_extragainskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40616",
+      "before_difference": "无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。",
+      "after_difference": "上游条目语义：gainBefore 排除入储存并检查 audio_draw/audio>=4 后播放 draw.mp3。 无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。"
+    },
+    {
+      "key": "L25:ui_hooks:_extraloseCardskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40638",
+      "before_difference": "无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。",
+      "after_difference": "上游条目语义：loseBefore/discardBefore 排除储存并检查 audio_draw/audio>=4 后播放 lose.mp3。 无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。"
+    },
+    {
+      "key": "L25:ui_hooks:_extracompareskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40660",
+      "before_difference": "无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。",
+      "after_difference": "上游条目语义：chooseToCompareBefore、audio>=4 按版本播放 compare.mp3。 无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。"
+    },
+    {
+      "key": "L25:ui_hooks:_extrauseskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40675",
+      "before_difference": "无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。当前 envelope 只在通用回复/死亡/用牌事件分别分派三种 cue，没有上游完整 filter。原始条件/语音选取未接通，不能称音效已实现。",
+      "after_difference": "上游条目语义：useCardBefore/respondBefore，检查 audio_draw/audio>=4 后播放 use.mp3。 无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。当前 envelope 只在通用回复/死亡/用牌事件分别分派三种 cue，没有上游完整 filter。原始条件/语音选取未接通，不能称音效已实现。"
+    },
+    {
+      "key": "L25:ui_hooks:_extrajudgeskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40694",
+      "before_difference": "无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。",
+      "after_difference": "上游条目语义：judgeBefore、audio>=4 播对应版本 judge.mp3。 无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。"
+    },
+    {
+      "key": "L25:ui_hooks:_extralinkskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40712",
+      "before_difference": "无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。",
+      "after_difference": "上游条目语义：linkBefore、audio>=4 按当前连环状态选择 link 音频。 无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。"
+    },
+    {
+      "key": "L25:ui_hooks:_comparesayskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40738",
+      "before_difference": "无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。",
+      "after_difference": "上游条目语义：chooseToCompareBefore、audio>=2 播 compare.ogg。 无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。"
+    },
+    {
+      "key": "L25:ui_hooks:_equipuseskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40750",
+      "before_difference": "无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。",
+      "after_difference": "上游条目语义：使用装备牌且 audio>=3 时播装备语音。 无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。"
+    },
+    {
+      "key": "L25:ui_hooks:_damsayskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40762",
+      "before_difference": "无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。",
+      "after_difference": "上游条目语义：damageBegin 且 audio>=3 时播受伤语音。 无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。"
+    },
+    {
+      "key": "L25:ui_hooks:_saveskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40774",
+      "before_difference": "无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。当前 envelope 只在通用回复/死亡/用牌事件分别分派三种 cue，没有上游完整 filter。原始条件/语音选取未接通，不能称音效已实现。",
+      "after_difference": "上游条目语义：dying 且 audio>=3 时播濒死语音（不是回复事件）。 无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。当前 envelope 只在通用回复/死亡/用牌事件分别分派三种 cue，没有上游完整 filter。原始条件/语音选取未接通，不能称音效已实现。"
+    },
+    {
+      "key": "L25:ui_hooks:_dieskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40786",
+      "before_difference": "无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。当前 envelope 只在通用回复/死亡/用牌事件分别分派三种 cue，没有上游完整 filter。原始条件/语音选取未接通，不能称音效已实现。",
+      "after_difference": "上游条目语义：die 时原文还要求 get.type(event.card)=='equip' 与 audio>=3 才播死亡语音。 无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。当前 envelope 只在通用回复/死亡/用牌事件分别分派三种 cue，没有上游完整 filter。原始条件/语音选取未接通，不能称音效已实现。"
+    },
+    {
+      "key": "L25:ui_hooks:_shanskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40798",
+      "before_difference": "无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。",
+      "after_difference": "上游条目语义：respond 时原文检查 event.card.name=='equip'（并非 shan），audio>=3 才播放对应语音。 无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。"
+    },
+    {
+      "key": "L25:ui_hooks:_useCardsayskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40810",
+      "before_difference": "无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。",
+      "after_difference": "上游条目语义：useCard、audio>=2 播通用音效；>=3 按杀/拆/无懈/万箭/桃/借刀等牌名与随机值追加语音。 无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。"
+    },
+    {
+      "key": "L25:ui_hooks:_phasebeginskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40869",
+      "before_difference": "无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。",
+      "after_difference": "上游条目语义：phaseBegin、audio>=2，按语音等级播放回合开始语音。 无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。"
+    },
+    {
+      "key": "L25:ui_hooks:_phaseendskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40885",
+      "before_difference": "无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。",
+      "after_difference": "上游条目语义：phaseEnd、audio>=2，按等级播放回合结束语音。 无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。"
+    },
+    {
+      "key": "L25:ui_hooks:_judgeskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40901",
+      "before_difference": "无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。",
+      "after_difference": "上游条目语义：judgeBegin、audio>=2 播 judge.ogg。 无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。"
+    },
+    {
+      "key": "L25:ui_hooks:_linkskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40913",
+      "before_difference": "无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。",
+      "after_difference": "上游条目语义：linkAfter、audio>=2 播 link.ogg。 无牌局规则效果；后端统一钩子只计数；前端 dispatcher 若调用只写 lastAudioCue，没有 Vue/音频播放消费者。原始条件/语音选取未接通，不能称音效已实现。"
+    },
+    {
+      "key": "L25:ui_hooks:_newBackgroundUse@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:41318",
+      "before_difference": "上游原始定义不启用；原生只是惰性登记/可人工调用的未渲染状态。保留原状态仅说明无活动行为范围，不能算已迁移的上游显示效果。",
+      "after_difference": "上游条目语义：原始 :41317–41343 整段注释的用牌后动态壁纸刷新（注释内 filter 也恒 false）。 上游原始定义不启用；原生只是惰性登记/可人工调用的未渲染状态。保留原状态仅说明无活动行为范围，不能算已迁移的上游显示效果。"
+    },
+    {
+      "key": "L25:ui_hooks:_zuanboss@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:41545",
+      "before_difference": "阶段壁纸被替换成无条件旗/横幅，不保留原生命周期与配置条件。；无规则效果；原文是特殊壁纸更新，当前一个未渲染 banner flag 不是相同显示行为。",
+      "after_difference": "上游条目语义：boss 模式主公 dieBegin 且 exwallpaper 开启时替换特殊壁纸，依 boss 类型分支。 阶段壁纸被替换成无条件旗/横幅，不保留原生命周期与配置条件。；无规则效果；原文是特殊壁纸更新，当前一个未渲染 banner flag 不是相同显示行为。"
+    },
+    {
+      "key": "L25:ui_hooks:_helasisyskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:41890",
+      "before_difference": "无规则效果；未按两项配置和本机条件选择声音/开局动画，当前仅固定标志登记。",
+      "after_difference": "上游条目语义：仅本机 enterGame/gameDrawBefore 按 audio_start 播声音，helasisy 未开启时创建开局动画。 无规则效果；未按两项配置和本机条件选择声音/开局动画，当前仅固定标志登记。"
+    },
+    {
+      "key": "L25:ui_hooks:_anshaskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:42659",
+      "before_difference": "实际模式规则；上游主公回合结束的暗杀死亡/胜负并非死亡窗口身份继承，不能归类纯隐藏 UI。",
+      "after_difference": "上游条目语义：身份局主公 phaseEnd 处理暗杀倒计时、忠臣死亡/刺客暴露和胜负。 实际模式规则；上游主公回合结束的暗杀死亡/胜负并非死亡窗口身份继承，不能归类纯隐藏 UI。"
+    },
+    {
+      "key": "L25:ui_hooks:_seadreammodeskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:42815",
+      "before_difference": "实际模式规则；骰数、弃牌与封技时机不同，色调状态不能代替上游玩法。",
+      "after_difference": "上游条目语义：身份局单将主公 phaseBegin，按 balance 抽牌/骰数弃牌，特定结果暂时封禁技能/调整位置。 实际模式规则；骰数、弃牌与封技时机不同，色调状态不能代替上游玩法。"
+    },
+    {
+      "key": "L25:ui_hooks:_relifeskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:43402",
+      "before_difference": "实际复活规则；roundStart 死者倒计时与死亡窗口固定 4/4、摸四不一致，不能称单纯 HUD。",
+      "after_difference": "上游条目语义：身份局主公 roundStart 遍历死者，倒计时归零按 maxHP 复活，按等级向上取整摸牌。 实际复活规则；roundStart 死者倒计时与死亡窗口固定 4/4、摸四不一致，不能称单纯 HUD。"
+    },
+    {
+      "key": "L25:ui_hooks:_haoyunlai@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:47584",
+      "before_difference": "牌堆搜索/随机择优置顶规则缺失，被错误当纯展示。；实际抽牌规则被当 UI；缺少 goodluck 牌堆操作及条件，不能把 shimmer 标志当等价。",
+      "after_difference": "上游条目语义：drawBegin 播音效；本机开启 goodluck 时从前最多 20 张牌挑高价值牌移到牌堆顶。 牌堆搜索/随机择优置顶规则缺失，被错误当纯展示。；实际抽牌规则被当 UI；缺少 goodluck 牌堆操作及条件，不能把 shimmer 标志当等价。"
+    },
+    {
+      "key": "L25:ui_hooks:_bingleBigScreen@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:47880",
+      "before_difference": "无规则效果；没有实际大屏效果，且固定闪电不能覆盖原文按延时牌名分派。",
+      "after_difference": "上游条目语义：judgeBegin、texiao 开启且判定牌为指定延时锦囊时播放该牌名对应大屏 GIF/音效。 无规则效果；没有实际大屏效果，且固定闪电不能覆盖原文按延时牌名分派。"
+    },
+    {
+      "key": "L25:ui_hooks:_bingletexiaoshandian@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:47984",
+      "before_difference": "上游原始定义不启用；原生只是惰性登记/可人工调用的未渲染状态。保留原状态仅说明无活动行为范围，不能算已迁移的上游显示效果。",
+      "after_difference": "上游条目语义：原始 :47983–48948 注释块中的闪电覆盖/动画旧实现。 上游原始定义不启用；原生只是惰性登记/可人工调用的未渲染状态。保留原状态仅说明无活动行为范围，不能算已迁移的上游显示效果。"
+    },
+    {
+      "key": "L25:ui_hooks:_bingletexiaohuoshan@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48030",
+      "before_difference": "上游原始定义不启用；原生只是惰性登记/可人工调用的未渲染状态。保留原状态仅说明无活动行为范围，不能算已迁移的上游显示效果。",
+      "after_difference": "上游条目语义：同一注释块内的火山覆盖/动画旧实现。 上游原始定义不启用；原生只是惰性登记/可人工调用的未渲染状态。保留原状态仅说明无活动行为范围，不能算已迁移的上游显示效果。"
+    },
+    {
+      "key": "L25:ui_hooks:_bingletexiaohongshui@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48076",
+      "before_difference": "上游原始定义不启用；原生只是惰性登记/可人工调用的未渲染状态。保留原状态仅说明无活动行为范围，不能算已迁移的上游显示效果。",
+      "after_difference": "上游条目语义：同一注释块内的洪水覆盖/动画旧实现。 上游原始定义不启用；原生只是惰性登记/可人工调用的未渲染状态。保留原状态仅说明无活动行为范围，不能算已迁移的上游显示效果。"
+    },
+    {
+      "key": "L25:ui_hooks:_bingletexiaofulei@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48122",
+      "before_difference": "上游原始定义不启用；原生只是惰性登记/可人工调用的未渲染状态。保留原状态仅说明无活动行为范围，不能算已迁移的上游显示效果。",
+      "after_difference": "上游条目语义：同一注释块内的浮雷覆盖/动画旧实现。 上游原始定义不启用；原生只是惰性登记/可人工调用的未渲染状态。保留原状态仅说明无活动行为范围，不能算已迁移的上游显示效果。"
+    },
+    {
+      "key": "L25:ui_hooks:_bingletexiaole@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48168",
+      "before_difference": "上游原始定义不启用；原生只是惰性登记/可人工调用的未渲染状态。保留原状态仅说明无活动行为范围，不能算已迁移的上游显示效果。",
+      "after_difference": "上游条目语义：同一注释块内的乐不思蜀覆盖旧实现。 上游原始定义不启用；原生只是惰性登记/可人工调用的未渲染状态。保留原状态仅说明无活动行为范围，不能算已迁移的上游显示效果。"
+    },
+    {
+      "key": "L25:ui_hooks:_bingletexiaobingliang@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48199",
+      "before_difference": "上游原始定义不启用；原生只是惰性登记/可人工调用的未渲染状态。保留原状态仅说明无活动行为范围，不能算已迁移的上游显示效果。",
+      "after_difference": "上游条目语义：同一注释块内的兵粮寸断覆盖旧实现。 上游原始定义不启用；原生只是惰性登记/可人工调用的未渲染状态。保留原状态仅说明无活动行为范围，不能算已迁移的上游显示效果。"
+    },
+    {
+      "key": "L25:ui_hooks:_thundertexiao@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48389",
+      "before_difference": "上游原始定义不启用；原生只是惰性登记/可人工调用的未渲染状态。保留原状态仅说明无活动行为范围，不能算已迁移的上游显示效果。",
+      "after_difference": "上游条目语义：同一注释块内的 phaseDrawBefore 判定区覆盖刷新旧实现。 上游原始定义不启用；原生只是惰性登记/可人工调用的未渲染状态。保留原状态仅说明无活动行为范围，不能算已迁移的上游显示效果。"
+    },
+    {
+      "key": "L25:ui_hooks:_thundertexiao2@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48503",
+      "before_difference": "上游原始定义不启用；原生只是惰性登记/可人工调用的未渲染状态。保留原状态仅说明无活动行为范围，不能算已迁移的上游显示效果。",
+      "after_difference": "上游条目语义：同一注释块内的 judgeBegin 天气 GIF/音效旧实现。 上游原始定义不启用；原生只是惰性登记/可人工调用的未渲染状态。保留原状态仅说明无活动行为范围，不能算已迁移的上游显示效果。"
+    },
+    {
+      "key": "L27:configs:twotwo@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9014",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：选择流程/规则配置；调试双字符串未进入引擎双将分配，不能算 2v2 选将已实现。",
+      "after_difference": "上游条目语义：2v2 模式专用选将改写，默认 true；原文不是任意模式的自由双将选择。 待核验消费链建议，单凭静态未找到调用不据此下调：选择流程/规则配置；调试双字符串未进入引擎双将分配，不能算 2v2 选将已实现。"
+    },
+    {
+      "key": "L27:configs:gaibiaoji@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9024",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：不只是展示登记：既有默认值错误，又未消费开关来控制上游覆盖。",
+      "after_difference": "上游条目语义：部分武将技能/标记改写，默认 false。 待核验消费链建议，单凭静态未找到调用不据此下调：不只是展示登记：既有默认值错误，又未消费开关来控制上游覆盖。"
+    },
+    {
+      "key": "L27:configs:dianjibiaoji@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9029",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；布尔登记未形成点击标记牌库的交互。",
+      "after_difference": "上游条目语义：点击标记打开牌库/展开标记牌展示。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；布尔登记未形成点击标记牌库的交互。"
+    },
+    {
+      "key": "L27:configs:shoupaihuase@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9034",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；花色牌组外观与开关未接牌桌显示。",
+      "after_difference": "上游条目语义：按花色分组显示清正等技能中可见的手牌。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；花色牌组外观与开关未接牌桌显示。"
+    },
+    {
+      "key": "L27:configs:feichuxuanxiang@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9039",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；废除选项美化仅登记。",
+      "after_difference": "上游条目语义：改写废除装备栏的选项界面和提示。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；废除选项美化仅登记。"
+    },
+    {
+      "key": "L27:configs:shuzianniu@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9044",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；现有数字选择规则与此可开关美化不是同一件事，未实现配置驱动的数字按钮外观。",
+      "after_difference": "上游条目语义：把施法/数值技能改为带加减按钮的数字面板。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；现有数字选择规则与此可开关美化不是同一件事，未实现配置驱动的数字按钮外观。"
+    },
+    {
+      "key": "L27:configs:xuanzejineng@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9049",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；保留通用技能选择不代表此窗口美化已接通。",
+      "after_difference": "上游条目语义：改写获得技能的选择窗口，展示技能信息与选择按钮。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；保留通用技能选择不代表此窗口美化已接通。"
+    },
+    {
+      "key": "L27:configs:zediewugu@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9054",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；五谷折叠框仍未实现此开关对应布局。",
+      "after_difference": "上游条目语义：五谷丰登选牌框的折叠/布局样式。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；五谷折叠框仍未实现此开关对应布局。"
+    },
+    {
+      "key": "L27:configs:jinxuanbiaoyu@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9059",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；配置类型和含义均与原始快照不符，bool true 会被拒绝；也没有产品显示消费者。",
+      "after_difference": "上游条目语义：布尔开关，默认 true；不能选择时弹出文字。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；配置类型和含义均与原始快照不符，bool true 会被拒绝；也没有产品显示消费者。"
+    },
+    {
+      "key": "L27:configs:jinengtexiaoxiugai@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9064",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；特效开关惰性登记，不能用技能本身已存在替代显示效果。",
+      "after_difference": "上游条目语义：技能特效改写（如神华佗），默认 true。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；特效开关惰性登记，不能用技能本身已存在替代显示效果。"
+    },
+    {
+      "key": "L27:ui_hooks:mbcmqingzheng@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:3697",
+      "before_difference": "实际规则项；原文 :4259 比较 discardMeCards/discardHimCards 数组并要求后者 >0，原生按 len 比较，不能默认为同一条件。自定义清正牌组界面也未由配置驱动。",
+      "after_difference": "上游条目语义：出牌阶段开始可选自己一种手牌花色，再选其他角色及其一种花色；双方弃所选花色，原文伤害条件直接比较两数组。 实际规则项；原文 :4259 比较 discardMeCards/discardHimCards 数组并要求后者 >0，原生按 len 比较，不能默认为同一条件。自定义清正牌组界面也未由配置驱动。"
+    },
+    {
+      "key": "L27:ui_hooks:sbqingzheng@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:4263",
+      "before_difference": "实际规则项；上游 :4827–4832 的治世可选分支不以造成伤害为前提，原生 :790 附着在 self_cnt>target_cnt 分支；弃牌顺序/数组伤害判据也不同。",
+      "after_difference": "上游条目语义：出牌阶段开始选择 3-治世 数量的自身花色与目标花色，双方弃牌；随后有独立的可选获得治世分支。 实际规则项；上游 :4827–4832 的治世可选分支不以造成伤害为前提，原生 :790 附着在 self_cnt>target_cnt 分支；弃牌顺序/数组伤害判据也不同。"
+    },
+    {
+      "key": "L27:ui_hooks:spyanjiao@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:4839",
+      "before_difference": "实际规则而非惰性 UI：已有交牌、伤害、延迟摸牌及玩家选择路径；本轮只澄清分类，未重新核验完整规则。自定义花色面板的外观仍由简化 CSS 项承接。",
+      "after_difference": "上游条目语义：出牌阶段一次，选择手牌花色，交出该花色所有牌给所选角色并造成 1 伤害，下回合开始按牌数摸牌。 实际规则而非惰性 UI：已有交牌、伤害、延迟摸牌及玩家选择路径；本轮只澄清分类，未重新核验完整规则。自定义花色面板的外观仍由简化 CSS 项承接。"
+    },
+    {
+      "key": "L27:ui_hooks:twxiafeng@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:6350",
+      "before_difference": "实际规则项：消耗暴虐值与牌的后续修饰均有执行落点，不是无规则效果的数字 UI 登记；本次不重新签署全部修饰条件。",
+      "after_difference": "上游条目语义：出牌阶段开始可选消耗至多 3 点暴虐值，给接下来若干张牌添加黠凤修饰；回合结束清理。 实际规则项：消耗暴虐值与牌的后续修饰均有执行落点，不是无规则效果的数字 UI 登记；本次不重新签署全部修饰条件。"
+    },
+    {
+      "key": "L27:ui_hooks:twxingzhui@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:6479",
+      "before_difference": "实际规则项：施法数值与目标选择进入状态机，并非纯显示钩子；保留旧规则状态，本轮不把通用 Choice 当作自定义数值面板对照通过。",
+      "after_difference": "上游条目语义：出牌阶段一次，选择 1–3 回合施法并失去体力；倒计时结束亮 2X 张牌，选目标获得黑牌，足量则受 X 雷伤。 实际规则项：施法数值与目标选择进入状态机，并非纯显示钩子；保留旧规则状态，本轮不把通用 Choice 当作自定义数值面板对照通过。"
+    },
+    {
+      "key": "L27:ui_hooks:xingchong@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:6633",
+      "before_difference": "实际规则项；牌选择及补牌有实现，但所选牌的公开展示/标记没有可见消费，不能以内部 flags 代表上游公开信息展示。",
+      "after_difference": "上游条目语义：轮开始选择摸牌数并展示若干手牌；展示牌带公开标记，失去后按数量摸两倍牌。 实际规则项；牌选择及补牌有实现，但所选牌的公开展示/标记没有可见消费，不能以内部 flags 代表上游公开信息展示。"
+    },
+    {
+      "key": "L27:ui_hooks:dcxiaoxi@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:6774",
+      "before_difference": "实际规则差异：原文 :6882 调用 useCard(sha)，原生 :260–265 直接伤害，跳过使用杀、响应和卡牌触发；并非 UI 简化。",
+      "after_difference": "上游条目语义：出牌阶段开始强制选择失去 1–2 上限，选目标及夺取牌/视为使用相同数量【杀】。 实际规则差异：原文 :6882 调用 useCard(sha)，原生 :260–265 直接伤害，跳过使用杀、响应和卡牌触发；并非 UI 简化。"
+    },
+    {
+      "key": "L27:ui_hooks:twfengji@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:6889",
+      "before_difference": "实际规则差异：原文 :7016–7023 按 card.name 查找且不足停止，原生 :288–325 改为类型匹配/弃牌堆/补足，结果并非仅外观区别。",
+      "after_difference": "上游条目语义：选一张牌置为扩展牌与 1–3 回合施法；完成时按原牌名字从牌堆取得至多 X 张同名牌，不足不补。 实际规则差异：原文 :7016–7023 按 card.name 查找且不足停止，原生 :288–325 改为类型匹配/弃牌堆/补足，结果并非仅外观区别。"
+    },
+    {
+      "key": "L27:ui_hooks:twharvestinori@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:7044",
+      "before_difference": "实际规则项：成本、施法数值与延迟摸牌均有状态机，不应写为惰性显示登记；保留旧状态不代表本次重新复核所有取消/恢复分支。",
+      "after_difference": "上游条目语义：出牌阶段一次，弃一黑色手牌并选 1–3 回合施法；每个回合结束倒计时，完成摸 2X 张。 实际规则项：成本、施法数值与延迟摸牌均有状态机，不应写为惰性显示登记；保留旧状态不代表本次重新复核所有取消/恢复分支。"
+    },
+    {
+      "key": "L27:ui_hooks:twzhouhu@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:7168",
+      "before_difference": "实际规则项：回复并非 UI 色调；有规则执行落点，本轮仅澄清条目性质。",
+      "after_difference": "上游条目语义：出牌阶段一次，弃一红色手牌并选施法回合，完成回复 X 体力。 实际规则项：回复并非 UI 色调；有规则执行落点，本轮仅澄清条目性质。"
+    },
+    {
+      "key": "L27:ui_hooks:twzuhuo@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:7293",
+      "before_difference": "实际规则项：有付成本、倒计时和伤害抵消，不是计数式 UI 钩子；不在本次静态分类审查中重新签署所有伤害分支。",
+      "after_difference": "上游条目语义：弃一张非基本手牌/装备牌施法，完成获得 X 次阻祸标记，每次伤害前取消一次伤害并减标记。 实际规则项：有付成本、倒计时和伤害抵消，不是计数式 UI 钩子；不在本次静态分类审查中重新签署所有伤害分支。"
+    },
+    {
+      "key": "L27:ui_hooks:twzhouzu@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:7441",
+      "before_difference": "受害者自选弃手牌被改成固定先取he，可能额外弃装备。此条含规则，不能按UI忽略。；实际规则差异：原文 :7542 为目标 chooseToDiscard，原生 :510–519 固定弃前 X 张且范围含装备，未给目标上游弃牌选择。",
+      "after_difference": "上游条目语义：选择他人和施法回合；完成时由目标自己选弃 X 张牌，然后受 1 雷伤。 受害者自选弃手牌被改成固定先取he，可能额外弃装备。此条含规则，不能按UI忽略。；实际规则差异：原文 :7542 为目标 chooseToDiscard，原生 :510–519 固定弃前 X 张且范围含装备，未给目标上游弃牌选择。"
+    },
+    {
+      "key": "L27:surfaces:e.css@archive/upstream/noname-liuli/noname/extension/选将美化/e.css:1-2009",
+      "before_difference": "无规则效果；通用 Choice 可承载规则选择，但没有该 CSS 对应的定制外观，维持简化近似。",
+      "after_difference": "上游条目语义：2v2 选将、清正花色牌组、数字面板、施法标记等定制窗口样式。 无规则效果；通用 Choice 可承载规则选择，但没有该 CSS 对应的定制外观，维持简化近似。"
+    },
+    {
+      "key": "L28:configs:gameSpeed@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9068",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；速度参数仅解析，不能改变产品中的小游戏移动速度。",
+      "after_difference": "上游条目语义：小游戏中移动速度系数，默认 4；实际移动用 24+(值-4)*2。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；速度参数仅解析，不能改变产品中的小游戏移动速度。"
+    },
+    {
+      "key": "L28:configs:replaceCha@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9081",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：此项改变规则技能；仅替换计划/调试示意，未接实际角色目录替换。",
+      "after_difference": "上游条目语义：把目标基础武将实际技能列表替换为 th_* 技能。 待核验消费链建议，单凭静态未找到调用不据此下调：此项改变规则技能；仅替换计划/调试示意，未接实际角色目录替换。"
+    },
+    {
+      "key": "L28:configs:hidePack@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9085",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：属于目录可见性，不是无规则技能；开关未消费，包隐藏行为未接通。",
+      "after_difference": "上游条目语义：删除/隐藏扩展角色包的选择列表，同时保留角色技能供其他场景使用。 待核验消费链建议，单凭静态未找到调用不据此下调：属于目录可见性，不是无规则技能；开关未消费，包隐藏行为未接通。"
+    },
+    {
+      "key": "L28:configs:UIItroduc@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9091",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；帮助操作仅登记，未提供该说明界面。",
+      "after_difference": "上游条目语义：设置页操作项展示 UI 接口说明 HTML、示例和使用方法。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；帮助操作仅登记，未提供该说明界面。"
+    },
+    {
+      "key": "L28:configs:yuqiTheme@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9109",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；主题解析不等于对话框主题生效。",
+      "after_difference": "上游条目语义：控制隅泣选牌对话框的主题背景/外观。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；主题解析不等于对话框主题生效。"
+    },
+    {
+      "key": "L28:configs:timeTheme@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9120",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；未驱动上游主题进度条。",
+      "after_difference": "上游条目语义：控制小游戏/技能进度条主题素材与样式。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；未驱动上游主题进度条。"
+    },
+    {
+      "key": "L28:configs:standPath@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9134",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；路径登记尚未连接到资源请求与对话框立绘。",
+      "after_difference": "上游条目语义：选择立绘目录，供隅泣等界面读取人物立绘资源。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；路径登记尚未连接到资源请求与对话框立绘。"
+    },
+    {
+      "key": "L28:surfaces:thunder.css@archive/upstream/noname-liuli/noname/extension/雷霆万钧/thunder.css:1-1522",
+      "before_difference": "无规则效果；当前仅状态示意，小游戏与主题外观尚未对照。",
+      "after_difference": "上游条目语义：小游戏、选牌/立绘对话框、进度条与 th-* 动画样式。 无规则效果；当前仅状态示意，小游戏与主题外观尚未对照。"
+    },
+    {
+      "key": "L29:configs:shengjian@noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1",
+      "before_difference": "待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；该开关仅登记且未控制实际剑特效。BattleBoard 只有 active 类绑定，未发现对应 CSS 剑/进度条，不能以默认状态示意等同启停特效。",
+      "after_difference": "上游条目语义：默认 true；条件注册 _CMeffects，为手杀曹髦创建剑、道心进度和技能区域特效。 待核验消费链建议，单凭静态未找到调用不据此下调：无规则效果；该开关仅登记且未控制实际剑特效。BattleBoard 只有 active 类绑定，未发现对应 CSS 剑/进度条，不能以默认状态示意等同启停特效。"
+    },
+    {
+      "key": "L29:ui_hooks:_CMeffects@noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1",
+      "before_difference": "无规则效果；现为道心/布尔状态示意，未实现圣剑及技能区动画，维持简化近似。",
+      "after_difference": "上游条目语义：gameStart/dieAfter 更新 cmarea/jian/技能区 DOM，展示手杀曹髦圣剑与道心变化。 无规则效果；现为道心/布尔状态示意，未实现圣剑及技能区动画，维持简化近似。"
+    },
+    {
+      "key": "L29:surfaces:main1@archive/upstream/noname-liuli/noname/extension/龙血玄黄/专属技能区/手杀ui/skill/main1.js:1-1048",
+      "before_difference": "无规则效果；通用技能入口不代表四区技能控制、限定/使命按钮状态已对照，维持简化近似。",
+      "after_difference": "上游条目语义：技能控制插件覆盖 skills/skills2/skills3，创建主动、触发、特殊主动/触发四区，随加减技能/觉醒/使命更新按钮状态。 无规则效果；通用技能入口不代表四区技能控制、限定/使命按钮状态已对照，维持简化近似。"
+    },
+    {
+      "key": "L29:surfaces:main1.css@archive/upstream/noname-liuli/noname/extension/龙血玄黄/专属技能区/手杀ui/skill/main1.css:1-241",
+      "before_difference": "无规则效果；尚无专属技能按钮外观与状态对照，维持简化近似。",
+      "after_difference": "上游条目语义：四区技能按钮布局/渐变及 mbjuejin 等技能的选中、禁用视觉状态。 无规则效果；尚无专属技能按钮外观与状态对照，维持简化近似。"
+    },
+    {
+      "key": "U01:generals:ddd_handang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:5",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／wu／4起始、4上限；dddxianxi。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_wuzhi@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:11",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／wei／3起始、3上限；dddlingyong、dddxuxiao。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_xujing@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:17",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／shu／3起始、3上限；dddxuyu、dddshijian。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_caomao@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:23",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；isZhugong=true没有对应ExtensionGeneral字段；本项主公资格/候选池未验证，相关主公技能另见逐技能表；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／wei／3起始、3上限；dddtaisi、dddquche、dddqianlong。仅静态核对性别、势力、生命与技能组；isZhugong=true没有对应ExtensionGeneral字段；本项主公资格/候选池未验证，相关主公技能另见逐技能表；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_xinxianying@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:30",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：female／wei／3起始、3上限；ddddongcha、dddzhijie。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_xianglang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:36",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／shu／3起始、3上限；dddqiahua、dddfusi、dddtuoji。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_yujin@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:42",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／wei／4起始、4上限；dddzhengjun。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_liuye@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:48",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／wei／3起始、3上限；dddchashi、dddqice。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_baosanniang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:54",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：female／shu／3起始、3上限；dddzhilian、dddjijian。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_zhenji@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:60",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：female／wei／3起始、3上限；dddmiaoxing、dddfushi。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_zhaoang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:66",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／wei／4起始、4上限；dddfenji。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_zhouchu@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:72",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／wu／5起始、5上限；dddxiaheng。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_liuba@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:78",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／shu／3起始、3上限；dddfengzheng、dddyulv。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_jianshuo@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:84",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／qun／4起始、4上限；dddfenye、dddshichao。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_guanning@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:90",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／qun／3起始、3上限；dddyouxue、dddchengjing。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_dingfeng@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:96",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／wu／4起始、4上限；dddduanbing。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_caoshuang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:102",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／wei／5起始、5上限；dddzhuanshe、dddweiqiu。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_xuelingyun@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:108",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：female／wei／3起始、3上限；dddlianer、dddanzhi。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_liuhong@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:114",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；isZhugong=true没有对应ExtensionGeneral字段；本项主公资格/候选池未验证，相关主公技能另见逐技能表；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／qun／4起始、4上限；dddshixing、ddddanggu、dddfuzong。仅静态核对性别、势力、生命与技能组；isZhugong=true没有对应ExtensionGeneral字段；本项主公资格/候选池未验证，相关主公技能另见逐技能表；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_xiahouxuan@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:121",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；names=夏侯|玄没有对应字段，姓名显示/姓名规则未验证；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／wei／3起始、3上限；dddlanghuai、dddxuanlun。仅静态核对性别、势力、生命与技能组；names=夏侯|玄没有对应字段，姓名显示/姓名规则未验证；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_zhangkai@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:128",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；源hp3/maxHp4；general_assembly.rs:10及general_select.rs:97有初始hp专门分支，不能把常量4误报为hp4；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／qun／3起始、4上限；dddjiexing、dddbailei。仅静态核对性别、势力、生命与技能组；源hp3/maxHp4；general_assembly.rs:10及general_select.rs:97有初始hp专门分支，不能把常量4误报为hp4；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_liangxi@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:135",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／wei／4起始、4上限；dddtongyu。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_wangkanglvkai@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:141",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；names=王|伉-吕|凯没有对应字段，姓名显示/姓名规则未验证；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／shu／4起始、4上限；dddbingjian。仅静态核对性别、势力、生命与技能组；names=王|伉-吕|凯没有对应字段，姓名显示/姓名规则未验证；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_sunliang@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:148",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；isZhugong=true没有对应ExtensionGeneral字段；本项主公资格/候选池未验证，相关主公技能另见逐技能表；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／wu／3起始、3上限；ddddiedang、dddanliu、dddguiying。仅静态核对性别、势力、生命与技能组；isZhugong=true没有对应ExtensionGeneral字段；本项主公资格/候选池未验证，相关主公技能另见逐技能表；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_lie@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:155",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：female／wu／3起始、3上限；dddyeshen、dddqiaoduan。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_kebineng@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:161",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；isZhugong=true没有对应ExtensionGeneral字段；本项主公资格/候选池未验证，相关主公技能另见逐技能表；names=null|null没有对应字段，姓名显示/姓名规则未验证；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／qun／4起始、4上限；dddxiaoxing、dddlangzhi、dddfuyi。仅静态核对性别、势力、生命与技能组；isZhugong=true没有对应ExtensionGeneral字段；本项主公资格/候选池未验证，相关主公技能另见逐技能表；names=null|null没有对应字段，姓名显示/姓名规则未验证；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_qianzhao@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:169",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／wei／4起始、4上限；dddyuanzhen、dddzhishu。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_zhangmiao@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:175",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／qun／4起始、4上限；dddxiaxing。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_zhangcheng@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:181",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／wu／3起始、3上限；dddjuxian、dddjungui。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_liuchong@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:187",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；资产另有中文ddd刘冲；coexistence按name去重，不能与ddd_liuchong视为同一个目录ID；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／qun／4起始、4上限；dddjinggou、dddmoyan。仅静态核对性别、势力、生命与技能组；资产另有中文ddd刘冲；coexistence按name去重，不能与ddd_liuchong视为同一个目录ID；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    },
+    {
+      "key": "U01:generals:ddd_luoxian@archive/upstream/noname/apps/core/extension/3D精选/character/character.js:193",
+      "before_difference": "仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。",
+      "after_difference": "本次实际静态字段：male／shu／4起始、4上限；dddshilie。仅静态核对性别、势力、生命与技能组；上游逐将img及characterReplace注册未在本次验证原生可见效果。保留原状态，不是本轮整武将规则/资源等价签署。"
+    }
+  ]
+}

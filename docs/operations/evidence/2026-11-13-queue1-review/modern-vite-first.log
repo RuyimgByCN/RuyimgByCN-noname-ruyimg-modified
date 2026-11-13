@@ -1,0 +1,126 @@
+▲ [WARNING] Cannot find base config file "../../tsconfig.json" [tsconfig.json]
+
+    tsconfig.json:2:12:
+      2 │   "extends": "../../tsconfig.json",
+        ╵              ~~~~~~~~~~~~~~~~~~~~~
+
+
+  VITE v7.3.1  ready in 169 ms
+
+  ➜  Local:   http://127.0.0.1:5173/
+(!) Failed to run dependency scan. Skipping dependency pre-bundling. TSConfckParseError: failed to resolve "extends":"../../tsconfig.json" in /private/tmp/noname-queue1-modern-fox8y_xy/apps/core/tsconfig.json
+    at resolveExtends (file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:5809:8)
+    at parseExtends (file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:5775:71)
+    at parse$13 (file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:5677:23)
+    at async loadTsconfigJsonForFile (file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:6286:37)
+    at async prepareEsbuildScanner (file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:31445:24)
+    at async scan (file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:31380:14)
+    at async file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:34111:15
+11:15:18 PM [vite] (client) Pre-transform error: Failed to resolve import "./OnloadSplash.vue" from "noname/init/onload/default-splash.ts". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /private/tmp/noname-queue1-modern-fox8y_xy/apps/core/noname/init/onload/default-splash.ts:4:25
+  1  |  import { lib, game, ui } from "noname";
+  2  |  import { createApp } from "vue";
+  3  |  import OnloadSplash from "./OnloadSplash.vue";
+     |                            ^
+  4  |  export class DefaultSplash {
+  5  |    id = "style1";
+11:15:18 PM [vite] (client) Pre-transform error: Failed to resolve import "./GamePoptip.vue" from "noname/library/help/index.ts". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /private/tmp/noname-queue1-modern-fox8y_xy/apps/core/noname/library/help/index.ts:5:23
+  2  |  import gameControls from "./game-controls";
+  3  |  import gameApi from "./game-api";
+  4  |  import GamePoptip from "./GamePoptip.vue";
+     |                          ^
+  5  |  export default {
+  6  |    关于游戏: aboutGame,
+11:15:18 PM [vite] (client) Pre-transform error: Failed to resolve import "./OnloadSplash.vue" from "noname/init/onload/default-splash.ts". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /private/tmp/noname-queue1-modern-fox8y_xy/apps/core/noname/init/onload/default-splash.ts:4:25
+  1  |  import { lib, game, ui } from "noname";
+  2  |  import { createApp } from "vue";
+  3  |  import OnloadSplash from "./OnloadSplash.vue";
+     |                            ^
+  4  |  export class DefaultSplash {
+  5  |    id = "style1";
+11:15:18 PM [vite] Internal server error: Failed to resolve import "./GamePoptip.vue" from "noname/library/help/index.ts". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /private/tmp/noname-queue1-modern-fox8y_xy/apps/core/noname/library/help/index.ts:5:23
+  2  |  import gameControls from "./game-controls";
+  3  |  import gameApi from "./game-api";
+  4  |  import GamePoptip from "./GamePoptip.vue";
+     |                          ^
+  5  |  export default {
+  6  |    关于游戏: aboutGame,
+      at TransformPluginContext._formatLog (file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:28999:43)
+      at TransformPluginContext.error (file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:28996:14)
+      at normalizeUrl (file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:27119:18)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:27177:32
+      at async Promise.all (index 3)
+      at async TransformPluginContext.transform (file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:27145:4)
+      at async EnvironmentPluginContainer.transform (file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:28797:14)
+      at async loadAndTransform (file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:22670:26)
+      at async viteTransformMiddleware (file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:24542:20)
+11:15:18 PM [vite] Internal server error: Failed to resolve import "./OnloadSplash.vue" from "noname/init/onload/default-splash.ts". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /private/tmp/noname-queue1-modern-fox8y_xy/apps/core/noname/init/onload/default-splash.ts:4:25
+  1  |  import { lib, game, ui } from "noname";
+  2  |  import { createApp } from "vue";
+  3  |  import OnloadSplash from "./OnloadSplash.vue";
+     |                            ^
+  4  |  export class DefaultSplash {
+  5  |    id = "style1";
+      at TransformPluginContext._formatLog (file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:28999:43)
+      at TransformPluginContext.error (file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:28996:14)
+      at normalizeUrl (file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:27119:18)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:27177:32
+      at async Promise.all (index 2)
+      at async TransformPluginContext.transform (file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:27145:4)
+      at async EnvironmentPluginContainer.transform (file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:28797:14)
+      at async loadAndTransform (file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:22670:26)
+      at async viteTransformMiddleware (file:///private/tmp/noname-queue1-modern-fox8y_xy/apps/core/node_modules/.pnpm/vite@7.3.1_@types+node@25.2.3/node_modules/vite/dist/node/chunks/config.js:24542:20)
+11:15:19 PM [vite] (client) ✨ new dependencies optimized: core-js-bundle, vue/dist/vue.esm-browser.js, dedent, pinyin-pro, jszip, codemirror, @codemirror/view, @codemirror/lint, @codemirror/search, @codemirror/lang-javascript, eslint-linter-browserify, @codemirror/lang-css, @codemirror/lang-json, @codemirror/lang-html, @lezer/html, @lezer/javascript, @lezer/common, @codemirror/language, @codemirror/lang-markdown, @codemirror/lang-vue, nosleep.js, crypto-js, vue, stackframe, error-stack-parser, stacktrace-gps
+11:15:55 PM [vite] (client) page reload mode/guozhan/src/help/App.vue
+11:15:55 PM [vite] (client) page reload noname/init/onload/OnloadSplash.vue
+11:15:55 PM [vite] (client) page reload noname/ui/create/menu/views/index.vue
+11:15:55 PM [vite] (client) page reload noname/library/help/GamePoptip.vue
+11:15:56 PM [vite] (client) ✨ new dependencies optimized: path-browserify-esm
+11:15:56 PM [vite] (client) ✨ optimized dependencies changed. reloading
+11:15:56 PM [vite] http proxy error: /checkFile?fileName=noname.js
+Error: connect ECONNREFUSED 127.0.0.1:8089
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+11:15:56 PM [vite] http proxy error: /checkFile?fileName=noname.js
+Error: connect ECONNREFUSED 127.0.0.1:8089
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+11:16:06 PM [vite] http proxy error: /checkFile?fileName=noname.js
+Error: connect ECONNREFUSED 127.0.0.1:8089
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+11:16:17 PM [vite] http proxy error: /checkFile?fileName=noname.js
+Error: connect ECONNREFUSED 127.0.0.1:8089
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+11:16:27 PM [vite] http proxy error: /checkFile?fileName=noname.js
+Error: connect ECONNREFUSED 127.0.0.1:8089
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+11:16:37 PM [vite] http proxy error: /checkFile?fileName=noname.js
+Error: connect ECONNREFUSED 127.0.0.1:8089
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+11:16:48 PM [vite] http proxy error: /checkFile?fileName=noname.js
+Error: connect ECONNREFUSED 127.0.0.1:8089
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+11:16:58 PM [vite] http proxy error: /checkFile?fileName=noname.js
+Error: connect ECONNREFUSED 127.0.0.1:8089
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+11:17:08 PM [vite] http proxy error: /checkFile?fileName=noname.js
+Error: connect ECONNREFUSED 127.0.0.1:8089
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+11:17:18 PM [vite] http proxy error: /checkFile?fileName=noname.js
+Error: connect ECONNREFUSED 127.0.0.1:8089
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+11:17:29 PM [vite] http proxy error: /checkFile?fileName=noname.js
+Error: connect ECONNREFUSED 127.0.0.1:8089
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+11:17:39 PM [vite] http proxy error: /checkFile?fileName=noname.js
+Error: connect ECONNREFUSED 127.0.0.1:8089
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)

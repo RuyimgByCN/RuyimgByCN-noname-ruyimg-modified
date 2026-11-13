@@ -1,5 +1,19 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+## 2026-11-14T00:58:36+08:00 队列1部分增量本地验收（未提交／发布）
+
+HEAD `bd58ef06d59940baed8d7f93e61ce571b152fb81` + tracked dirty；版本333／107／5／759／WS8。完整三crate2446／0／6、workspace7842／0／8及第五节其余命令均exit0，完整preflight第二次21项通过；首次失败、忽略与未解析引用另列[门禁表](../operations/evidence/2026-11-13-queue1-review/final-local-gates.md)。当前634／3790／0、新增等价0，整包八项0/37；[对照范围及队列剩余](../operations/evidence/2026-11-13-queue1-review/remaining-scope.md)。尚未提交/发布，本批不标队列1完成，不进入队列2；实际发布/精确代码CI另增记录。
+
+## 2026-11-14T00:30:42+08:00 队列1复核补课增量（尚未提交／发布）
+
+源码HEAD `bd58ef06d59940baed8d7f93e61ce571b152fb81` + tracked dirty；规则333／NGSA107／schema5／ABI759／WS8。当前清单634／3790／0，旧等价215项按确定源码差异撤回；新增等价签署0。仅静态未找到消费链、键改名或缺字段的建议保持待核，已纠正11条误/过度确认。保留的原等价不是本轮重新签署。 队列1仍为部分；上游实际运行已覆盖U01三个、L06两个技能的限定分支，另10来源30交互候选待跑，L22自动规则尚未运行验收。聚贤选牌/RNG与恢复已实现，J01–J05及其余已确认差异继续按清单修；未证明必须升号的技能清单为空，不等于全部可在现通道表达。完整门禁执行中、未提交/发布，不进入队列2；界面/Spine/真机/签名/八项0/37/第六阶段继续待做。
+
+[来源计数](../operations/evidence/2026-11-13-queue1-review/source-counts-reviewed.md)、[逐分支实跑与未验](../operations/evidence/2026-11-13-queue1-review/runtime-comparison.md)、[源码审查和命令证据](../operations/evidence/2026-11-13-queue1-review/README.md)。下方旧日期结论保留历史语境。
+
+## 2026-11-13T23:22:20+08:00 队列第1项执行中
+
+HEAD `bd58ef06d` + 文档／证据dirty，版本333／107／5／759／WS8。独立U01全量重审、其余12来源固定抽样及224项配置／界面消费核对进行中；已发现具体选牌／响应／时机差异，仍待修复与真实事件回归。两套上游Chrome已启动，13来源最终对照未完成；清单暂849／3575／0、八项0/37，不上调。原始执行与未验范围见[队列1证据](../operations/evidence/2026-11-13-queue1-review/README.md)。本批未提交／发布，后续L11→U05、界面／Spine、设备／签名和第六阶段仍待。
+
 ## 2026-11-13T23:03:20+08:00 第0项代码发布及CI记录
 
 代码 `1d59f42b8b493e1fbac7a0e8b8c781ccef1ea61c` 已发布到批准分支；[精确SHA的CI](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43442212867) attempt 1全部10作业success，完整[发布与验证证据](../operations/evidence/2026-11-13-queue0-gates/publication/code-exact-ci-first/README.md)。记录时HEAD为代码提交加文档dirty，规则333／NGSA107／schema5／ABI759／WS8不变，产品／工具冻结输入相同。下一项为13来源复核补课，尚未开始；其后L11→U05、全源自动结算／升号盘点、界面／Spine、外部平台条件与第六阶段均待。

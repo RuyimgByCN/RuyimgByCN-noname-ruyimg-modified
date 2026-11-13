@@ -1,0 +1,315 @@
+{
+  "basis": "git show frozen HEAD; literal references only, not assertion coverage",
+  "skills": {
+    "dddxiaxing": {
+      "crates/engine-native/tests/decision34_pack9_closure.rs": [
+        130,
+        131,
+        146,
+        174,
+        194,
+        203,
+        887
+      ],
+      "crates/engine-native/tests/l11_taixu_boss_events.rs": [
+        20,
+        606,
+        611,
+        663,
+        665,
+        667,
+        725,
+        726,
+        736,
+        753,
+        802,
+        838,
+        859
+      ]
+    },
+    "dddqianlong": {
+      "crates/engine-native/tests/decision34_pack9_closure.rs": [
+        229,
+        232,
+        234
+      ]
+    },
+    "dddqiaoduan": {
+      "crates/engine-native/tests/decision34_pack9_closure.rs": [
+        237,
+        241
+      ]
+    },
+    "dddyeshen": {
+      "crates/engine-native/tests/decision34_pack9_closure.rs": [
+        245,
+        247,
+        250,
+        253
+      ]
+    },
+    "dddqice": {
+      "crates/engine-native/tests/decision34_pack9_closure.rs": [
+        258,
+        259,
+        262,
+        267,
+        271,
+        273
+      ],
+      "crates/engine-native/tests/u01_ddd_eight.rs": [
+        11,
+        888,
+        896,
+        912,
+        935,
+        941
+      ]
+    },
+    "dddjungui": {
+      "crates/engine-native/tests/decision34_pack9_closure.rs": [
+        276,
+        278
+      ]
+    },
+    "dddshilie": {
+      "crates/engine-native/tests/decision34_pack9_closure.rs": [
+        276,
+        284,
+        287
+      ]
+    },
+    "ddddiedang": {
+      "crates/engine-native/tests/decision34_pack9_closure.rs": [
+        277,
+        291,
+        294
+      ],
+      "crates/engine-native/tests/u01_ddd_eight.rs": [
+        7,
+        261,
+        465,
+        469,
+        494,
+        497
+      ]
+    },
+    "dddjuxian": {
+      "crates/engine-native/tests/decision34_pack9_closure.rs": [
+        924,
+        927
+      ],
+      "crates/engine-native/tests/u01_ddd_eight.rs": [
+        7,
+        261,
+        349,
+        353,
+        459
+      ]
+    },
+    "dddfenji": {
+      "crates/engine-native/tests/decision34_pack9_closure.rs": [
+        924,
+        930
+      ],
+      "crates/engine-native/tests/u01_ddd_eight.rs": [
+        11,
+        888,
+        956
+      ]
+    },
+    "dddduanbing": {
+      "crates/engine-native/tests/decision34_pack9_closure.rs": [
+        924,
+        934
+      ],
+      "crates/engine-native/tests/u01_ddd_eight.rs": [
+        11,
+        888,
+        1111,
+        1114,
+        1160
+      ]
+    },
+    "dddxianxi": {
+      "crates/engine-native/tests/decision34_pack9_closure.rs": [
+        924,
+        925
+      ]
+    },
+    "dddjinggou": {
+      "crates/engine-native/tests/decision34_pack9_closure.rs": [
+        1068,
+        1069
+      ],
+      "crates/engine-native/tests/g1_d3.rs": [
+        102,
+        227
+      ],
+      "crates/engine-native/tests/u01_d3_moyan.rs": [
+        74
+      ],
+      "crates/engine-native/tests/u01_d3_select_eight.rs": [
+        5,
+        8,
+        88,
+        99,
+        134,
+        144,
+        145,
+        155
+      ],
+      "crates/engine-native/tests/u01_ddd_eight.rs": [
+        7,
+        261,
+        521,
+        547
+      ]
+    },
+    "dddmoyan": {
+      "crates/engine-native/tests/decision34_pack9_closure.rs": [
+        1068,
+        1072
+      ],
+      "crates/engine-native/tests/g1_d3.rs": [
+        102
+      ],
+      "crates/engine-native/tests/nc10_live_hidden_cards.rs": [
+        328
+      ],
+      "crates/engine-native/tests/u01_d3_moyan.rs": [
+        74,
+        82,
+        168
+      ],
+      "crates/engine-native/tests/u01_d3_select_eight.rs": [
+        5,
+        8,
+        88,
+        100,
+        134,
+        151,
+        152,
+        213
+      ]
+    },
+    "dddyuanzhen": {
+      "crates/engine-native/tests/u01_ddd_eight.rs": [
+        7,
+        261,
+        268,
+        278,
+        290,
+        318
+      ]
+    },
+    "dddxuxiao": {
+      "crates/engine-native/tests/u01_ddd_eight.rs": [
+        9,
+        583,
+        667,
+        693,
+        695,
+        706
+      ]
+    },
+    "ddddongcha": {
+      "crates/engine-native/tests/u01_ddd_eight.rs": [
+        9,
+        583,
+        815,
+        827
+      ]
+    },
+    "dddxuyu": {
+      "crates/engine-native/tests/u01_ddd_eight.rs": [
+        9,
+        583,
+        590,
+        617
+      ]
+    },
+    "dddzhijie": {
+      "crates/engine-native/tests/u01_ddd_eight.rs": [
+        9,
+        583,
+        815,
+        818,
+        820,
+        867
+      ]
+    },
+    "dddquche": {
+      "crates/engine-native/tests/u01_ddd_eight.rs": [
+        9,
+        583,
+        751,
+        755,
+        808
+      ]
+    },
+    "dddyouxue": {
+      "crates/engine-native/tests/u01_ddd_eight.rs": [
+        11,
+        888,
+        1076
+      ]
+    },
+    "dddbailei": {
+      "crates/engine-native/tests/u01_ddd_eight.rs": [
+        11,
+        889,
+        1237,
+        1265,
+        1288
+      ]
+    },
+    "dddxuanlun": {
+      "crates/engine-native/tests/u01_ddd_eight.rs": [
+        11,
+        889,
+        1166,
+        1200
+      ]
+    },
+    "dddxiaheng": {
+      "crates/engine-native/tests/u01_ddd_eight.rs": [
+        11,
+        888,
+        1014,
+        1030
+      ]
+    },
+    "dddlanghuai": {
+      "crates/engine-native/tests/u01_ddd_eight.rs": [
+        11,
+        889,
+        1166,
+        1216
+      ]
+    },
+    "dddanzhi": {
+      "crates/engine-native/tests/u01_dddanzhi_regression.rs": [
+        16,
+        20,
+        292,
+        300,
+        398,
+        435,
+        742,
+        826
+      ]
+    },
+    "dddlianer": {
+      "crates/engine-native/tests/u01_dddanzhi_regression.rs": [
+        64
+      ]
+    },
+    "dddjiexing": {
+      "crates/engine-native/tests/u01_dddanzhi_regression.rs": [
+        597,
+        626
+      ]
+    }
+  }
+}

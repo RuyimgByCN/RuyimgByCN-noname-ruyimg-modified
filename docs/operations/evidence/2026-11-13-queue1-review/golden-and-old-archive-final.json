@@ -1,0 +1,78 @@
+{
+  "at": "2026-11-14T00:27:17.463378+08:00",
+  "head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "tracked_dirty": true,
+  "versions": {
+    "rules": 333,
+    "NGSA": 107,
+    "schema": 5,
+    "ABI": 759,
+    "WS": 8
+  },
+  "log": "03-native-three-final.log",
+  "golden_scenarios_unchanged": [
+    {
+      "name": "sha_dodge_then_damage",
+      "golden": "d52004cdfbfc8afb10dfce81e10c540e17ac0ab2117b7c20ff94e8cca2fed561"
+    },
+    {
+      "name": "death_terminal_single",
+      "golden": "7d5d161c37a5c7c33536c5a23fc2ec9e6e43790118d77dc9182fb1b52d39d7f3"
+    },
+    {
+      "name": "sancai_nested_chain",
+      "golden": "69b5c88f517aa8200f9591eab5e3033018f6db76796babe08634edf276a24035"
+    },
+    {
+      "name": "yishang_redirect",
+      "golden": "4127b9090b15f868fceb6901190a1459f1d7ddebddc5e37d4fa74d6d814bef71"
+    },
+    {
+      "name": "suidun_window_matrix",
+      "golden": "cbb9b795c3ec1408dbd1fca30cbbcd8e6cd1dfd754958152f3058ea749a92805"
+    },
+    {
+      "name": "shouyi_dynamic_skill",
+      "golden": "eb3f63e81a75d6981b53b11630fbd70f7708a72d836dab6e9cd34c40c6840c90"
+    },
+    {
+      "name": "discard_to_limit",
+      "golden": "5f600731fd0aa495ae2520e41b5f8744f1604305006f27ea5ee8c02b65165421"
+    },
+    {
+      "name": "rollback_invariants",
+      "golden": "a36cdff4c3649f77605cbbb0030056418b0bc676c3dc568d52f64e16357609e0"
+    },
+    {
+      "name": "equip_distance_matrix",
+      "golden": "9689e92df3b75d45455361c442145438c068641dd269ef8466a8871ab675f9a6"
+    },
+    {
+      "name": "chain_fire_propagation",
+      "golden": "f507cc04af331039bb023e964bfacf22ff1edeff6dbd17a1445a5902a565c9b9"
+    },
+    {
+      "name": "aoe_response_queue",
+      "golden": "67fcb763b3fa874e17015bb3296c7e1ad6c1fd98f8a717443438397c13258f86"
+    },
+    {
+      "name": "duel_alternating_response",
+      "golden": "6b12acc94788a9b607363eaf4b3e69fb370cdf91d8042b2eda7033dafc645423"
+    },
+    {
+      "name": "nullify_chain_on_savage",
+      "golden": "3501cda99198af8395905448800b16653fd726a5b97d20b4d53f91a2b51cf487"
+    },
+    {
+      "name": "judge_phase_delayed_tricks",
+      "golden": "5e675d48cc3b3b5f58233223764376a91542f01e2bbdcbd8f608ce9b9c26f4cb"
+    }
+  ],
+  "hashes": {
+    "crates/engine-native/tests/replay_scenarios.rs": "e8e83466cfd6778226e3683df8212b197a5ab356b9c2cb7a936c81bd33af0754",
+    "crates/engine-native/tests/fixtures/u01-dddanzhi-pending-v107.ngsa": "3158038e27eb46cffd15b4fc1eb4e378daa381cc9a01e16b96ef8f6656178736"
+  },
+  "old_fixture_bytes": 2149,
+  "old_fixture_restore_and_resume_test_passed": true,
+  "scope": "14 standard golden scenarios and one unchanged pre-fix pending NGSA107 fixture; not all historical saves or extension trajectories"
+}

@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/validate-review.py", line 85, in <module>
+    main()
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/validate-review.py", line 44, in main
+    assert len(row[field]) >= 20, (key, field)
+AssertionError: ('U07:generals:wdb_liuyan@archive/upstream/noname/apps/core/extension/玩点论杀/character/character.js:24', 'native_checked')

@@ -1,0 +1,109 @@
+{
+  "reviewer": "/root/queue0_independent_review",
+  "date": "2026-11-13",
+  "head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "tracked_dirty": true,
+  "versions": {
+    "rule": 333,
+    "ngsa": 107,
+    "schema": 5,
+    "abi": 759,
+    "ws": 8
+  },
+  "inventory_key": "U01:skills:dddjuxian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:244",
+  "skill": "dddjuxian",
+  "scope": "worktree top gain choice patch; independent source and test-assertion review only",
+  "input_manifest": "implementation-inputs.json",
+  "upstream": {
+    "path": "archive/upstream/noname/apps/core/extension/3D精选/character/skill.js",
+    "line": 244,
+    "gain_choice_line": 331
+  },
+  "conclusion": "changes_requested_private_candidate_order",
+  "new_blocking_findings": [
+    {
+      "id": "J06",
+      "classification": "verified_source_difference",
+      "difference": "Source gainPlayerCard randomizes private hand button order with hs.randomSort(); native maps HiddenCard(slot) directly to stable player.hand indices. A just-publicly-given card can be tracked at the appended hand index in native.",
+      "upstream": {
+        "path": "archive/upstream/noname/apps/core/noname/library/element/content.ts",
+        "line": 8962
+      },
+      "native": {
+        "path": "crates/engine-native-content/src/content/host/step/u01_batch_a.rs",
+        "line": 161
+      },
+      "runtime_reproduced_by_reviewer": false,
+      "scope": "New interactive selector does not yet model upstream private hand candidate permutation; root investigating RNG and persistence."
+    }
+  ],
+  "resolved_source_path": [
+    "Replaces target first-he automatic gain with a forced one-card choice.",
+    "Foreign private hand represented by HiddenCard slots, public equipment by physical Card IDs.",
+    "Existing Host payload, CardsAsk stage and NGSA active_ask reconstruction carry the new window."
+  ],
+  "static_guards_checked": [
+    "observer/id/subset/count/duplicate answer validation before mutation",
+    "owner/target/card/cards restore bounds",
+    "exact active_ask comparison including option order",
+    "new prompt registry and g1 test-module registration",
+    "paid card retained in deck rather than double-counted as machine-held"
+  ],
+  "tests_read": {
+    "new_test_functions": 3,
+    "new_test_file": "crates/engine-native/tests/u01_juxian_gain.rs",
+    "real_activation_paths_in_test_source": true,
+    "ngsa_byte_roundtrip_assertion_present": true,
+    "three_gain_choices_asserted": true,
+    "invalid_answers_asserted": [
+      "empty",
+      "foreign physical hand ID",
+      "out-of-range HiddenCard slot"
+    ],
+    "privacy_permutation_assertion_present": true,
+    "this_reviewer_executed_tests": 0
+  },
+  "executed": {
+    "cargo": 0,
+    "browser": 0,
+    "upstream_game": 0
+  },
+  "retained_source_differences": [
+    {
+      "id": "J01",
+      "difference": "Phase-local mode and usable counters remain turn-stamped.",
+      "native": "u01_batch_a_asks.rs:18; mode flags and used count",
+      "upstream": "skill.js:246; :296; :353"
+    },
+    {
+      "id": "J02",
+      "difference": "Top mode is excluded before payment when no other he; source pays before checking gainable target list.",
+      "native": "u01_batch_a_asks.rs:138",
+      "upstream": "skill.js:265; :302; :303",
+      "test_boundary": "The new no-other-he test freezes native behavior and is not an upstream-equivalence negative case."
+    },
+    {
+      "id": "J03",
+      "difference": "All target hand/equipment are enumerated; source getGainableCards and shown/viewHandcard branches are not represented by qinglong_options.",
+      "native": "event/invocation.rs:191",
+      "upstream": "content.ts:8958; :8968; :8987"
+    },
+    {
+      "id": "J04",
+      "difference": "Native waits for the gain answer before processing the emitted payment CardsLost child; source awaits player.lose before target/gain selection.",
+      "native": "u01_batch_a.rs:138; resolution.rs:598",
+      "upstream": "skill.js:302",
+      "pre_existing": true
+    },
+    {
+      "id": "J05",
+      "difference": "Full gain/give/move/reveal event semantics remain outside this patch.",
+      "native": "u01_batch_a.rs:145; :179",
+      "upstream": "skill.js:298; :302; :331; :361; :368"
+    }
+  ],
+  "status_recommendation": "简化近似",
+  "rule_equivalence_signed": false,
+  "runtime_equivalence_claim": false,
+  "followup": "Capture and review root final candidate-order patch before a limited selector signoff. No full-skill equivalence."
+}

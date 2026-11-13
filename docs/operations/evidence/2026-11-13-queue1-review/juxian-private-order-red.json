@@ -1,0 +1,25 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--test",
+    "g1",
+    "juxian_hidden_order_uses_rng_is_archived_and_rejects_invalid_mapping",
+    "--",
+    "--nocapture"
+  ],
+  "command": "cargo test --offline -p engine-native --test g1 juxian_hidden_order_uses_rng_is_archived_and_rejects_invalid_mapping -- --nocapture",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0"
+  },
+  "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "tracked_status": " M crates/engine-native-content/src/content/host/step/u01_batch_a.rs\n M crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs\n M crates/engine-native-kernel/src/archive/known_prompts.rs\n M crates/engine-native/tests/groups/g1.rs\n M crates/engine-native/tests/u01_ddd_eight.rs\n M docs/architecture/native-progress.md\n M docs/architecture/native-remaining-ledger.md\n",
+  "start_utc": "2026-11-13T15:47:33.057524+00:00",
+  "exit_code": 101,
+  "duration_seconds": 4.8,
+  "end_utc": "2026-11-13T15:47:37.857542+00:00"
+}

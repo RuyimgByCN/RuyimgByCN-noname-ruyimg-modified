@@ -1,0 +1,27 @@
+Saved from the actual tool command output; this check did not write a proof file because its assertion failed.
+
+Command body:
+python3 -B - <<'PY'
+from pathlib import Path
+import json,re,hashlib
+out=Path('docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources')
+xp=Path('../archive/upstream/noname-liuli/noname/extension/龙血玄黄/extension.js'); yp=Path('docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js')
+x=xp.read_text();y=yp.read_text();a=x.find('lib.skill._CMeffects=');b=y.find('lib.skill._CMeffects=')
+print('literal_tail_equal',x[a:]==y[b:],'offsets',a,b,'chars',len(x[a:]),len(y[b:]))
+for pattern in ['lib.skill.mbqianlong=',"lib.skill['mbqianlong']",'mbqianlong:{']:
+ z=x.find(pattern);print(pattern,z,repr(x[max(0,z):max(0,z)+140]))
+proof={'raw_path':'archive/upstream/noname-liuli/noname/extension/龙血玄黄/extension.js','raw_sha256':hashlib.sha256(xp.read_bytes()).hexdigest(),'decoded_source_path':str(yp),'decoded_source_sha256':hashlib.sha256(yp.read_bytes()).hexdigest(),'literal_tail_start':'lib.skill._CMeffects=','raw_char_offset':a,'decoded_char_offset':b,'exact_tail_equal':x[a:]==y[b:],'tail_char_length':len(x[a:]),'review_use':'本次只复核该字面保留尾段中的_CMeffects/mbqianlong；它与真实archive源码相同，不依赖旧报告结论。四个派生技能另读archive character/mobile.js。'}
+assert a>=0 and b>=0 and proof['exact_tail_equal']
+(out/'L29-raw-source-check.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')
+PY
+
+Raw output (exit 1):
+Traceback (most recent call last):
+  File "<stdin>", line 10, in <module>
+AssertionError
+literal_tail_equal False offsets 376065 536064 chars 56472 50972
+lib.skill.mbqianlong= 426634 "lib.skill.mbqianlong={audio:6,derivation:['mbcmqingzheng','mbcmjiushi','mbcmfangzhu','mbjuejin'],trigger:{global:'phaseBefore',player:'enter"
+lib.skill['mbqianlong'] -1 'game.import("extension",function(lib,game,ui,get,ai,_status){return{name:"龙血玄黄",content:function(config,pack){(function(_0x398adf,_0x4478c2)'
+mbqianlong:{ -1 'game.import("extension",function(lib,game,ui,get,ai,_status){return{name:"龙血玄黄",content:function(config,pack){(function(_0x398adf,_0x4478c2)'
+
+Disposition: rejected the whole-tail provenance assumption. Subsequently read actual raw objects; mbqianlong exact_block_equal=true, _CMeffects exact_block_equal=false. The latter remains a rendering/provenance gap, not a verified-equivalent object.

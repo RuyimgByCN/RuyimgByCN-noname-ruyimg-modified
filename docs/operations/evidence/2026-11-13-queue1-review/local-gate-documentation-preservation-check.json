@@ -1,0 +1,43 @@
+{
+  "at": "2026-11-14T00:59:24.676924+08:00",
+  "corrects": "local-gate-documentation-record.json old_text_preserved used substring containment for five title insertions, incorrectly yielding false. Removing only the inserted timestamped section with the original title newline reproduces all six full-file hashes. The initial record and failed reconstruction check are preserved.",
+  "rows": [
+    {
+      "path": "docs/architecture/native-progress.md",
+      "reconstructed_before_sha256": "a8afbf3e68045638e4bc62be26789adf2180d490b97fd752c497e7f50fc05f39",
+      "expected_before_sha256": "a8afbf3e68045638e4bc62be26789adf2180d490b97fd752c497e7f50fc05f39",
+      "preserved": true
+    },
+    {
+      "path": "docs/architecture/native-remaining-ledger.md",
+      "reconstructed_before_sha256": "9be59dc0f001ed6c577401ae576309580cfad8cc743c3d5b5814315ec2955bc6",
+      "expected_before_sha256": "9be59dc0f001ed6c577401ae576309580cfad8cc743c3d5b5814315ec2955bc6",
+      "preserved": true
+    },
+    {
+      "path": "docs/architecture/native-rules-baseline.md",
+      "reconstructed_before_sha256": "992013f10ef38116901c26ab2545b75d87334b214e5622bb9b89d306b575a70d",
+      "expected_before_sha256": "992013f10ef38116901c26ab2545b75d87334b214e5622bb9b89d306b575a70d",
+      "preserved": true
+    },
+    {
+      "path": "docs/migration/g0/README.md",
+      "reconstructed_before_sha256": "88ec62345c75a6ba87c7bc30dbdc9c1bad5f7b259cc57f89ba82d6b5e10ba198",
+      "expected_before_sha256": "88ec62345c75a6ba87c7bc30dbdc9c1bad5f7b259cc57f89ba82d6b5e10ba198",
+      "preserved": true
+    },
+    {
+      "path": "docs/migration/upstream-extension-reconstruction.md",
+      "reconstructed_before_sha256": "a35b66ba35c1f7033fdb3d9deaaf48daadce8358ad5129ee29f6c74ff332ecab",
+      "expected_before_sha256": "a35b66ba35c1f7033fdb3d9deaaf48daadce8358ad5129ee29f6c74ff332ecab",
+      "preserved": true
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-19-source-signoff-32/README.md",
+      "reconstructed_before_sha256": "4d89001b0f0a4ff20cd4ac1d279194d2e949ee7b03f5b133819537c0e473236d",
+      "expected_before_sha256": "4d89001b0f0a4ff20cd4ac1d279194d2e949ee7b03f5b133819537c0e473236d",
+      "preserved": true
+    }
+  ],
+  "passed": true
+}

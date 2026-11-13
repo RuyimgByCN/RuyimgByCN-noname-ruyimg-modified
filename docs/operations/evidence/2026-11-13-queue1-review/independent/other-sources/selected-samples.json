@@ -1,0 +1,1149 @@
+{
+  "head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "seed": 2026111301,
+  "algorithm": "For each source independently: random.Random(seed).sample(sorted(all_inventory_keys_for_source), min(total,max(10,ceil(total*0.1))))",
+  "sources": {
+    "U06": {
+      "total_inventory_items": 11,
+      "category_counts": {
+        "skills": 5,
+        "cards": 6
+      },
+      "minimum_random_sample": 10,
+      "random_samples": [
+        {
+          "key": "U06:cards:jiuwei@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:109",
+          "source_id": "U06",
+          "category": "cards",
+          "id": "jiuwei",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:109"
+        },
+        {
+          "key": "U06:cards:kuwu@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:81",
+          "source_id": "U06",
+          "category": "cards",
+          "id": "kuwu",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:81"
+        },
+        {
+          "key": "U06:cards:mianju@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:16",
+          "source_id": "U06",
+          "category": "cards",
+          "id": "mianju",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:16"
+        },
+        {
+          "key": "U06:cards:monkey@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:4",
+          "source_id": "U06",
+          "category": "cards",
+          "id": "monkey",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:4"
+        },
+        {
+          "key": "U06:cards:shoulijian@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:36",
+          "source_id": "U06",
+          "category": "cards",
+          "id": "shoulijian",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:36"
+        },
+        {
+          "key": "U06:cards:xuelunyang@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:97",
+          "source_id": "U06",
+          "category": "cards",
+          "id": "xuelunyang",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:97"
+        },
+        {
+          "key": "U06:skills:jiuwei@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:129",
+          "source_id": "U06",
+          "category": "skills",
+          "id": "jiuwei",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:129"
+        },
+        {
+          "key": "U06:skills:mianju@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:32",
+          "source_id": "U06",
+          "category": "skills",
+          "id": "mianju",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:32"
+        },
+        {
+          "key": "U06:skills:monkey@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:5",
+          "source_id": "U06",
+          "category": "skills",
+          "id": "monkey",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:5"
+        },
+        {
+          "key": "U06:skills:xuelunyang@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:70",
+          "source_id": "U06",
+          "category": "skills",
+          "id": "xuelunyang",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:70"
+        }
+      ],
+      "interactive_supplements": [
+        {
+          "key": "U06:skills:kuwu@archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:53",
+          "source_id": "U06",
+          "category": "skills",
+          "id": "kuwu",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:53"
+        }
+      ]
+    },
+    "U07": {
+      "total_inventory_items": 36,
+      "category_counts": {
+        "generals": 9,
+        "skills": 24,
+        "cards": 3
+      },
+      "minimum_random_sample": 10,
+      "random_samples": [
+        {
+          "key": "U07:cards:diaobingqianjiang@archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js:4",
+          "source_id": "U07",
+          "category": "cards",
+          "id": "diaobingqianjiang",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js:4"
+        },
+        {
+          "key": "U07:generals:wdb_liuyan@archive/upstream/noname/apps/core/extension/玩点论杀/character/character.js:24",
+          "source_id": "U07",
+          "category": "generals",
+          "id": "wdb_liuyan",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/玩点论杀/character/character.js:24"
+        },
+        {
+          "key": "U07:generals:wdb_zaozhirenjun@archive/upstream/noname/apps/core/extension/玩点论杀/character/character.js:49",
+          "source_id": "U07",
+          "category": "generals",
+          "id": "wdb_zaozhirenjun",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/玩点论杀/character/character.js:49"
+        },
+        {
+          "key": "U07:skills:choudu@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:586",
+          "source_id": "U07",
+          "category": "skills",
+          "id": "choudu",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:586"
+        },
+        {
+          "key": "U07:skills:fuchou@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:508",
+          "source_id": "U07",
+          "category": "skills",
+          "id": "fuchou",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:508"
+        },
+        {
+          "key": "U07:skills:jinyan@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:448",
+          "source_id": "U07",
+          "category": "skills",
+          "id": "jinyan",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:448"
+        },
+        {
+          "key": "U07:skills:moshou@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:43",
+          "source_id": "U07",
+          "category": "skills",
+          "id": "moshou",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:43"
+        },
+        {
+          "key": "U07:skills:youdishenru@archive/upstream/noname/apps/core/extension/玩点论杀/card/skill.js:5",
+          "source_id": "U07",
+          "category": "skills",
+          "id": "youdishenru",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/玩点论杀/card/skill.js:5"
+        },
+        {
+          "key": "U07:skills:youzhan@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:422",
+          "source_id": "U07",
+          "category": "skills",
+          "id": "youzhan",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:422"
+        },
+        {
+          "key": "U07:skills:zhucheng2@archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:218",
+          "source_id": "U07",
+          "category": "skills",
+          "id": "zhucheng2",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:218"
+        }
+      ],
+      "interactive_supplements": []
+    },
+    "L06": {
+      "total_inventory_items": 3,
+      "category_counts": {
+        "skills": 2,
+        "cards": 1
+      },
+      "minimum_random_sample": 3,
+      "random_samples": [
+        {
+          "key": "L06:cards:wuxingpan@archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:196",
+          "source_id": "L06",
+          "category": "cards",
+          "id": "wuxingpan",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:196"
+        },
+        {
+          "key": "L06:skills:_shengke@archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:62",
+          "source_id": "L06",
+          "category": "skills",
+          "id": "_shengke",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:62"
+        },
+        {
+          "key": "L06:skills:wuxingpan_skill@archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:173",
+          "source_id": "L06",
+          "category": "skills",
+          "id": "wuxingpan_skill",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:173"
+        }
+      ],
+      "interactive_supplements": []
+    },
+    "L22": {
+      "total_inventory_items": 8,
+      "category_counts": {
+        "skills": 5,
+        "configs": 3
+      },
+      "minimum_random_sample": 8,
+      "random_samples": [
+        {
+          "key": "L22:configs:eloDifficulty@archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:467",
+          "source_id": "L22",
+          "category": "configs",
+          "id": "eloDifficulty",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:467"
+        },
+        {
+          "key": "L22:configs:eloPlayers@archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:462",
+          "source_id": "L22",
+          "category": "configs",
+          "id": "eloPlayers",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:462"
+        },
+        {
+          "key": "L22:configs:timeKiller@archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:482",
+          "source_id": "L22",
+          "category": "configs",
+          "id": "timeKiller",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:482"
+        },
+        {
+          "key": "L22:skills:_eloDraw@archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:222",
+          "source_id": "L22",
+          "category": "skills",
+          "id": "_eloDraw",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:222"
+        },
+        {
+          "key": "L22:skills:_eloHandcard@archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:264",
+          "source_id": "L22",
+          "category": "skills",
+          "id": "_eloHandcard",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:264"
+        },
+        {
+          "key": "L22:skills:_eloInitCards@archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:59",
+          "source_id": "L22",
+          "category": "skills",
+          "id": "_eloInitCards",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:59"
+        },
+        {
+          "key": "L22:skills:_eloMechanism@archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:3",
+          "source_id": "L22",
+          "category": "skills",
+          "id": "_eloMechanism",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:3"
+        },
+        {
+          "key": "L22:skills:_timeKiller@archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:307",
+          "source_id": "L22",
+          "category": "skills",
+          "id": "_timeKiller",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/段位制裁/extension.js:307"
+        }
+      ],
+      "interactive_supplements": []
+    },
+    "L29": {
+      "total_inventory_items": 9,
+      "category_counts": {
+        "skills": 5,
+        "configs": 1,
+        "ui_hooks": 1,
+        "surfaces": 2
+      },
+      "minimum_random_sample": 9,
+      "random_samples": [
+        {
+          "key": "L29:configs:shengjian@noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1",
+          "source_id": "L29",
+          "category": "configs",
+          "id": "shengjian",
+          "upstream_ref": "noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1"
+        },
+        {
+          "key": "L29:skills:mbcmfangzhu@noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1",
+          "source_id": "L29",
+          "category": "skills",
+          "id": "mbcmfangzhu",
+          "upstream_ref": "noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1"
+        },
+        {
+          "key": "L29:skills:mbcmjiushi@noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1",
+          "source_id": "L29",
+          "category": "skills",
+          "id": "mbcmjiushi",
+          "upstream_ref": "noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1"
+        },
+        {
+          "key": "L29:skills:mbcmqingzheng@noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1",
+          "source_id": "L29",
+          "category": "skills",
+          "id": "mbcmqingzheng",
+          "upstream_ref": "noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1"
+        },
+        {
+          "key": "L29:skills:mbjuejin@noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1",
+          "source_id": "L29",
+          "category": "skills",
+          "id": "mbjuejin",
+          "upstream_ref": "noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1"
+        },
+        {
+          "key": "L29:skills:mbqianlong@noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1",
+          "source_id": "L29",
+          "category": "skills",
+          "id": "mbqianlong",
+          "upstream_ref": "noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1"
+        },
+        {
+          "key": "L29:surfaces:main1.css@archive/upstream/noname-liuli/noname/extension/龙血玄黄/专属技能区/手杀ui/skill/main1.css:1-241",
+          "source_id": "L29",
+          "category": "surfaces",
+          "id": "main1.css",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/龙血玄黄/专属技能区/手杀ui/skill/main1.css:1-241"
+        },
+        {
+          "key": "L29:surfaces:main1@archive/upstream/noname-liuli/noname/extension/龙血玄黄/专属技能区/手杀ui/skill/main1.js:1-1048",
+          "source_id": "L29",
+          "category": "surfaces",
+          "id": "main1",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/龙血玄黄/专属技能区/手杀ui/skill/main1.js:1-1048"
+        },
+        {
+          "key": "L29:ui_hooks:_CMeffects@noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1",
+          "source_id": "L29",
+          "category": "ui_hooks",
+          "id": "_CMeffects",
+          "upstream_ref": "noname-next/docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1"
+        }
+      ],
+      "interactive_supplements": []
+    },
+    "L10": {
+      "total_inventory_items": 17,
+      "category_counts": {
+        "skills": 4,
+        "configs": 10,
+        "ui_hooks": 1,
+        "surfaces": 2
+      },
+      "minimum_random_sample": 10,
+      "random_samples": [
+        {
+          "key": "L10:configs:cardEmoji@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2238",
+          "source_id": "L10",
+          "category": "configs",
+          "id": "cardEmoji",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2238"
+        },
+        {
+          "key": "L10:configs:cardFold@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2205",
+          "source_id": "L10",
+          "category": "configs",
+          "id": "cardFold",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2205"
+        },
+        {
+          "key": "L10:configs:cardFold_proportion@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2215",
+          "source_id": "L10",
+          "category": "configs",
+          "id": "cardFold_proportion",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2215"
+        },
+        {
+          "key": "L10:configs:cardPhantom@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2231",
+          "source_id": "L10",
+          "category": "configs",
+          "id": "cardPhantom",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2231"
+        },
+        {
+          "key": "L10:configs:shichangshi@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2245",
+          "source_id": "L10",
+          "category": "configs",
+          "id": "shichangshi",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2245"
+        },
+        {
+          "key": "L10:configs:skillEffects@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2185",
+          "source_id": "L10",
+          "category": "configs",
+          "id": "skillEffects",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2185"
+        },
+        {
+          "key": "L10:configs:分割线02@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2258",
+          "source_id": "L10",
+          "category": "configs",
+          "id": "分割线02",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2258"
+        },
+        {
+          "key": "L10:skills:rangjie@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:422",
+          "source_id": "L10",
+          "category": "skills",
+          "id": "rangjie",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:422"
+        },
+        {
+          "key": "L10:skills:reguhuo@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:297",
+          "source_id": "L10",
+          "category": "skills",
+          "id": "reguhuo",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:297"
+        },
+        {
+          "key": "L10:ui_hooks:_emojiRebate1@archive/upstream/noname-liuli/noname/extension/史诗卡牌/emoji.js:700",
+          "source_id": "L10",
+          "category": "ui_hooks",
+          "id": "_emojiRebate1",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/emoji.js:700"
+        }
+      ],
+      "interactive_supplements": [
+        {
+          "key": "L10:skills:k_danggu@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2276",
+          "source_id": "L10",
+          "category": "skills",
+          "id": "k_danggu",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2276"
+        }
+      ]
+    },
+    "L28": {
+      "total_inventory_items": 56,
+      "category_counts": {
+        "generals": 14,
+        "skills": 33,
+        "cards": 1,
+        "configs": 7,
+        "surfaces": 1
+      },
+      "minimum_random_sample": 10,
+      "random_samples": [
+        {
+          "key": "L28:cards:th_taipingyaoshu@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8968",
+          "source_id": "L28",
+          "category": "cards",
+          "id": "th_taipingyaoshu",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8968"
+        },
+        {
+          "key": "L28:configs:timeTheme@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9120",
+          "source_id": "L28",
+          "category": "configs",
+          "id": "timeTheme",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9120"
+        },
+        {
+          "key": "L28:generals:th_majun@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3666",
+          "source_id": "L28",
+          "category": "generals",
+          "id": "th_majun",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3666"
+        },
+        {
+          "key": "L28:generals:th_mamidi@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3664",
+          "source_id": "L28",
+          "category": "generals",
+          "id": "th_mamidi",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3664"
+        },
+        {
+          "key": "L28:skills:th_buxu@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6372",
+          "source_id": "L28",
+          "category": "skills",
+          "id": "th_buxu",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6372"
+        },
+        {
+          "key": "L28:skills:th_jieshu@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8591",
+          "source_id": "L28",
+          "category": "skills",
+          "id": "th_jieshu",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8591"
+        },
+        {
+          "key": "L28:skills:th_tianshu@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6914",
+          "source_id": "L28",
+          "category": "skills",
+          "id": "th_tianshu",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6914"
+        },
+        {
+          "key": "L28:skills:th_tiansuan2_3@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8157",
+          "source_id": "L28",
+          "category": "skills",
+          "id": "th_tiansuan2_3",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8157"
+        },
+        {
+          "key": "L28:skills:th_yeyan@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8636",
+          "source_id": "L28",
+          "category": "skills",
+          "id": "th_yeyan",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8636"
+        },
+        {
+          "key": "L28:skills:th_zhengjing@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6018",
+          "source_id": "L28",
+          "category": "skills",
+          "id": "th_zhengjing",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6018"
+        }
+      ],
+      "interactive_supplements": []
+    },
+    "L27": {
+      "total_inventory_items": 54,
+      "category_counts": {
+        "skills": 31,
+        "configs": 10,
+        "ui_hooks": 12,
+        "surfaces": 1
+      },
+      "minimum_random_sample": 10,
+      "random_samples": [
+        {
+          "key": "L27:configs:dianjibiaoji@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9029",
+          "source_id": "L27",
+          "category": "configs",
+          "id": "dianjibiaoji",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9029"
+        },
+        {
+          "key": "L27:configs:shuzianniu@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9044",
+          "source_id": "L27",
+          "category": "configs",
+          "id": "shuzianniu",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:9044"
+        },
+        {
+          "key": "L27:skills:bolan@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:7747",
+          "source_id": "L27",
+          "category": "skills",
+          "id": "bolan",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:7747"
+        },
+        {
+          "key": "L27:skills:clandianzhan@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:1867",
+          "source_id": "L27",
+          "category": "skills",
+          "id": "clandianzhan",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:1867"
+        },
+        {
+          "key": "L27:skills:new_zhixi@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:1738",
+          "source_id": "L27",
+          "category": "skills",
+          "id": "new_zhixi",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:1738"
+        },
+        {
+          "key": "L27:skills:reqimou@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:6059",
+          "source_id": "L27",
+          "category": "skills",
+          "id": "reqimou",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:6059"
+        },
+        {
+          "key": "L27:skills:xiefang@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:1162",
+          "source_id": "L27",
+          "category": "skills",
+          "id": "xiefang",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:1162"
+        },
+        {
+          "key": "L27:ui_hooks:sbqingzheng@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:4263",
+          "source_id": "L27",
+          "category": "ui_hooks",
+          "id": "sbqingzheng",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:4263"
+        },
+        {
+          "key": "L27:ui_hooks:twxiafeng@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:6350",
+          "source_id": "L27",
+          "category": "ui_hooks",
+          "id": "twxiafeng",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:6350"
+        },
+        {
+          "key": "L27:ui_hooks:twzhouzu@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:7441",
+          "source_id": "L27",
+          "category": "ui_hooks",
+          "id": "twzhouzu",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:7441"
+        }
+      ],
+      "interactive_supplements": [
+        {
+          "key": "L27:skills:new_meibu@archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:1674",
+          "source_id": "L27",
+          "category": "skills",
+          "id": "new_meibu",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:1674"
+        }
+      ]
+    },
+    "L19": {
+      "total_inventory_items": 69,
+      "category_counts": {
+        "generals": 2,
+        "skills": 66,
+        "configs": 1
+      },
+      "minimum_random_sample": 10,
+      "random_samples": [
+        {
+          "key": "L19:configs:zuan_brawl@archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:3363",
+          "source_id": "L19",
+          "category": "configs",
+          "id": "zuan_brawl",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:3363"
+        },
+        {
+          "key": "L19:skills:_guandieskill@archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:2847",
+          "source_id": "L19",
+          "category": "skills",
+          "id": "_guandieskill",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:2847"
+        },
+        {
+          "key": "L19:skills:_huzhu@archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:698",
+          "source_id": "L19",
+          "category": "skills",
+          "id": "_huzhu",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:698"
+        },
+        {
+          "key": "L19:skills:_jiangshi2@archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:574",
+          "source_id": "L19",
+          "category": "skills",
+          "id": "_jiangshi2",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:574"
+        },
+        {
+          "key": "L19:skills:_relifeskill@archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:2329",
+          "source_id": "L19",
+          "category": "skills",
+          "id": "_relifeskill",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:2329"
+        },
+        {
+          "key": "L19:skills:_wujinmoshiRecover@archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:1994",
+          "source_id": "L19",
+          "category": "skills",
+          "id": "_wujinmoshiRecover",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:1994"
+        },
+        {
+          "key": "L19:skills:chanceIdentity0@archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:1023",
+          "source_id": "L19",
+          "category": "skills",
+          "id": "chanceIdentity0",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:1023"
+        },
+        {
+          "key": "L19:skills:chanceIdentity10@archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:951",
+          "source_id": "L19",
+          "category": "skills",
+          "id": "chanceIdentity10",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:951"
+        },
+        {
+          "key": "L19:skills:shishi@archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:348",
+          "source_id": "L19",
+          "category": "skills",
+          "id": "shishi",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:348"
+        },
+        {
+          "key": "L19:skills:xunmeng@archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:356",
+          "source_id": "L19",
+          "category": "skills",
+          "id": "xunmeng",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:356"
+        }
+      ],
+      "interactive_supplements": [
+        {
+          "key": "L19:skills:ganran2@archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:435",
+          "source_id": "L19",
+          "category": "skills",
+          "id": "ganran2",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:435"
+        },
+        {
+          "key": "L19:skills:wujinmoshiRE1@archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:1869",
+          "source_id": "L19",
+          "category": "skills",
+          "id": "wujinmoshiRE1",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:1869"
+        }
+      ]
+    },
+    "L20": {
+      "total_inventory_items": 95,
+      "category_counts": {
+        "skills": 28,
+        "cards": 3,
+        "configs": 15,
+        "ui_hooks": 46,
+        "surfaces": 3
+      },
+      "minimum_random_sample": 10,
+      "random_samples": [
+        {
+          "key": "L20:cards:zhengsu_bianzhen@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6321",
+          "source_id": "L20",
+          "category": "cards",
+          "id": "zhengsu_bianzhen",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6321"
+        },
+        {
+          "key": "L20:configs:xinshadoudizhu@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6471",
+          "source_id": "L20",
+          "category": "configs",
+          "id": "xinshadoudizhu",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6471"
+        },
+        {
+          "key": "L20:configs:zhijiechifa@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6408",
+          "source_id": "L20",
+          "category": "configs",
+          "id": "zhijiechifa",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6408"
+        },
+        {
+          "key": "L20:skills:kuanshi@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:5299",
+          "source_id": "L20",
+          "category": "skills",
+          "id": "kuanshi",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:5299"
+        },
+        {
+          "key": "L20:skills:mibei@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:4592",
+          "source_id": "L20",
+          "category": "skills",
+          "id": "mibei",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:4592"
+        },
+        {
+          "key": "L20:surfaces:extension.css@archive/upstream/noname-liuli/noname/extension/标记补充/extension.css:1-881",
+          "source_id": "L20",
+          "category": "surfaces",
+          "id": "extension.css",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.css:1-881"
+        },
+        {
+          "key": "L20:surfaces:group.css@archive/upstream/noname-liuli/noname/extension/标记补充/group.css:1-17",
+          "source_id": "L20",
+          "category": "surfaces",
+          "id": "group.css",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/标记补充/group.css:1-17"
+        },
+        {
+          "key": "L20:ui_hooks:_mianshang_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2603",
+          "source_id": "L20",
+          "category": "ui_hooks",
+          "id": "_mianshang_",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2603"
+        },
+        {
+          "key": "L20:ui_hooks:_shanghaipaishiyongtexiao_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:3296",
+          "source_id": "L20",
+          "category": "ui_hooks",
+          "id": "_shanghaipaishiyongtexiao_",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:3296"
+        },
+        {
+          "key": "L20:ui_hooks:_xigua_zhuwanzhongji_@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2290",
+          "source_id": "L20",
+          "category": "ui_hooks",
+          "id": "_xigua_zhuwanzhongji_",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2290"
+        }
+      ],
+      "interactive_supplements": [
+        {
+          "key": "L20:skills:tspowei@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:4366",
+          "source_id": "L20",
+          "category": "skills",
+          "id": "tspowei",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:4366"
+        },
+        {
+          "key": "L20:skills:wengua@archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6141",
+          "source_id": "L20",
+          "category": "skills",
+          "id": "wengua",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6141"
+        }
+      ]
+    },
+    "U08": {
+      "total_inventory_items": 150,
+      "category_counts": {
+        "generals": 43,
+        "skills": 107
+      },
+      "minimum_random_sample": 15,
+      "random_samples": [
+        {
+          "key": "U08:generals:yxs_aijiyanhou@archive/upstream/noname/apps/core/extension/英雄杀/character/character.js:36",
+          "source_id": "U08",
+          "category": "generals",
+          "id": "yxs_aijiyanhou",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/character.js:36"
+        },
+        {
+          "key": "U08:generals:yxs_napolun@archive/upstream/noname/apps/core/extension/英雄杀/character/character.js:63",
+          "source_id": "U08",
+          "category": "generals",
+          "id": "yxs_napolun",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/character.js:63"
+        },
+        {
+          "key": "U08:generals:yxs_wuzetian@archive/upstream/noname/apps/core/extension/英雄杀/character/character.js:9",
+          "source_id": "U08",
+          "category": "generals",
+          "id": "yxs_wuzetian",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/character.js:9"
+        },
+        {
+          "key": "U08:skills:bolehuiyan@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407",
+          "source_id": "U08",
+          "category": "skills",
+          "id": "bolehuiyan",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2407"
+        },
+        {
+          "key": "U08:skills:cike@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:3001",
+          "source_id": "U08",
+          "category": "skills",
+          "id": "cike",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:3001"
+        },
+        {
+          "key": "U08:skills:fenghuo@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2120",
+          "source_id": "U08",
+          "category": "skills",
+          "id": "fenghuo",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2120"
+        },
+        {
+          "key": "U08:skills:guifu@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:3095",
+          "source_id": "U08",
+          "category": "skills",
+          "id": "guifu",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:3095"
+        },
+        {
+          "key": "U08:skills:heqin2@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:1522",
+          "source_id": "U08",
+          "category": "skills",
+          "id": "heqin2",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:1522"
+        },
+        {
+          "key": "U08:skills:nvquan3@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2709",
+          "source_id": "U08",
+          "category": "skills",
+          "id": "nvquan3",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2709"
+        },
+        {
+          "key": "U08:skills:oldbolehuiyan2@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2551",
+          "source_id": "U08",
+          "category": "skills",
+          "id": "oldbolehuiyan2",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:2551"
+        },
+        {
+          "key": "U08:skills:xumou@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:1916",
+          "source_id": "U08",
+          "category": "skills",
+          "id": "xumou",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:1916"
+        },
+        {
+          "key": "U08:skills:yixin@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:337",
+          "source_id": "U08",
+          "category": "skills",
+          "id": "yixin",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:337"
+        },
+        {
+          "key": "U08:skills:yxs_fanji2@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:23",
+          "source_id": "U08",
+          "category": "skills",
+          "id": "yxs_fanji2",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:23"
+        },
+        {
+          "key": "U08:skills:yxsciqiu@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:1217",
+          "source_id": "U08",
+          "category": "skills",
+          "id": "yxsciqiu",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:1217"
+        },
+        {
+          "key": "U08:skills:yxsdili@archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:761",
+          "source_id": "U08",
+          "category": "skills",
+          "id": "yxsdili",
+          "upstream_ref": "archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:761"
+        }
+      ],
+      "interactive_supplements": []
+    },
+    "L25": {
+      "total_inventory_items": 257,
+      "category_counts": {
+        "generals": 60,
+        "skills": 84,
+        "cards": 5,
+        "configs": 68,
+        "ui_hooks": 40
+      },
+      "minimum_random_sample": 26,
+      "random_samples": [
+        {
+          "key": "L25:cards:ssr_jinfan@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:6535",
+          "source_id": "L25",
+          "category": "cards",
+          "id": "ssr_jinfan",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:6535"
+        },
+        {
+          "key": "L25:configs:bizhi@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50762",
+          "source_id": "L25",
+          "category": "configs",
+          "id": "bizhi",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50762"
+        },
+        {
+          "key": "L25:configs:hidessr@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51168",
+          "source_id": "L25",
+          "category": "configs",
+          "id": "hidessr",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51168"
+        },
+        {
+          "key": "L25:configs:newhuihe@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50572",
+          "source_id": "L25",
+          "category": "configs",
+          "id": "newhuihe",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50572"
+        },
+        {
+          "key": "L25:configs:perspective@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50757",
+          "source_id": "L25",
+          "category": "configs",
+          "id": "perspective",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:50757"
+        },
+        {
+          "key": "L25:configs:showboss@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51163",
+          "source_id": "L25",
+          "category": "configs",
+          "id": "showboss",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51163"
+        },
+        {
+          "key": "L25:configs:text@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51404",
+          "source_id": "L25",
+          "category": "configs",
+          "id": "text",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51404"
+        },
+        {
+          "key": "L25:configs:windowHigh@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51344",
+          "source_id": "L25",
+          "category": "configs",
+          "id": "windowHigh",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:51344"
+        },
+        {
+          "key": "L25:generals:ssr_jiaxu@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:372",
+          "source_id": "L25",
+          "category": "generals",
+          "id": "ssr_jiaxu",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:372"
+        },
+        {
+          "key": "L25:generals:ssr_lusu@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:393",
+          "source_id": "L25",
+          "category": "generals",
+          "id": "ssr_lusu",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:393"
+        },
+        {
+          "key": "L25:generals:ssr_taishici@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:378",
+          "source_id": "L25",
+          "category": "generals",
+          "id": "ssr_taishici",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:378"
+        },
+        {
+          "key": "L25:generals:ssr_yuanshao@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:385",
+          "source_id": "L25",
+          "category": "generals",
+          "id": "ssr_yuanshao",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:385"
+        },
+        {
+          "key": "L25:generals:ssr_zhangliang@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:397",
+          "source_id": "L25",
+          "category": "generals",
+          "id": "ssr_zhangliang",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:397"
+        },
+        {
+          "key": "L25:generals:ssr_zuoci@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:355",
+          "source_id": "L25",
+          "category": "generals",
+          "id": "ssr_zuoci",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:355"
+        },
+        {
+          "key": "L25:skills:_bingletexiao1@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48747",
+          "source_id": "L25",
+          "category": "skills",
+          "id": "_bingletexiao1",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48747"
+        },
+        {
+          "key": "L25:skills:_bingletexiao2@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48768",
+          "source_id": "L25",
+          "category": "skills",
+          "id": "_bingletexiao2",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48768"
+        },
+        {
+          "key": "L25:skills:_fromsay@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:47046",
+          "source_id": "L25",
+          "category": "skills",
+          "id": "_fromsay",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:47046"
+        },
+        {
+          "key": "L25:skills:_guanmodeskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:42978",
+          "source_id": "L25",
+          "category": "skills",
+          "id": "_guanmodeskill",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:42978"
+        },
+        {
+          "key": "L25:skills:_newZuanPhaseTX@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:41709",
+          "source_id": "L25",
+          "category": "skills",
+          "id": "_newZuanPhaseTX",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:41709"
+        },
+        {
+          "key": "L25:skills:_zuanCHANGEHPsayskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:46389",
+          "source_id": "L25",
+          "category": "skills",
+          "id": "_zuanCHANGEHPsayskill",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:46389"
+        },
+        {
+          "key": "L25:skills:_zuan_damageSendEgg@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40324",
+          "source_id": "L25",
+          "category": "skills",
+          "id": "_zuan_damageSendEgg",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40324"
+        },
+        {
+          "key": "L25:skills:_zuanidentityshowskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:42132",
+          "source_id": "L25",
+          "category": "skills",
+          "id": "_zuanidentityshowskill",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:42132"
+        },
+        {
+          "key": "L25:ui_hooks:_extraturnoverskill@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40536",
+          "source_id": "L25",
+          "category": "ui_hooks",
+          "id": "_extraturnoverskill",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:40536"
+        },
+        {
+          "key": "L25:ui_hooks:_haoyunlai@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:47584",
+          "source_id": "L25",
+          "category": "ui_hooks",
+          "id": "_haoyunlai",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:47584"
+        },
+        {
+          "key": "L25:ui_hooks:_zuanattacklinecheck@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:37514",
+          "source_id": "L25",
+          "category": "ui_hooks",
+          "id": "_zuanattacklinecheck",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:37514"
+        },
+        {
+          "key": "L25:ui_hooks:_zuanboss@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:41545",
+          "source_id": "L25",
+          "category": "ui_hooks",
+          "id": "_zuanboss",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:41545"
+        }
+      ],
+      "interactive_supplements": [
+        {
+          "key": "L25:skills:wumou@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48975",
+          "source_id": "L25",
+          "category": "skills",
+          "id": "wumou",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:48975"
+        },
+        {
+          "key": "L25:skills:new_guixin@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:49077",
+          "source_id": "L25",
+          "category": "skills",
+          "id": "new_guixin",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:49077"
+        },
+        {
+          "key": "L25:skills:gongxin@archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:49506",
+          "source_id": "L25",
+          "category": "skills",
+          "id": "gongxin",
+          "upstream_ref": "archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:49506"
+        }
+      ]
+    }
+  }
+}

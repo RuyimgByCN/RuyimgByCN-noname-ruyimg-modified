@@ -25,6 +25,9 @@ mod u01_ddd_eight;
 #[path = "../u01_dddanzhi_regression.rs"]
 mod u01_dddanzhi_regression;
 
+#[path = "../u01_juxian_gain.rs"]
+mod u01_juxian_gain;
+
 #[path = "../l28_thunder_eight_match.rs"]
 mod l28_thunder_eight_match;
 

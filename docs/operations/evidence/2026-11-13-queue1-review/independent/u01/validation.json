@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-13",
+  "command": "python3 -B docs/operations/evidence/2026-11-13-queue1-review/independent/u01/validate-review.py",
+  "checks_passed": 7,
+  "checks_failed": 0,
+  "checks": [
+    "64 unique skills and real inventory keys, eight populated comparison fields",
+    "62 concrete differences, 61 new candidates plus one retained approximation; two gaps excluded",
+    "31 character core-field comparisons and all 95 old detailed row identifiers mapped",
+    "27 original and 30 additional input snapshots preserve recorded SHA256",
+    "339 top-level report local links and cited line bounds",
+    "21 incremental implementation snapshots match captured hashes and current read-only input",
+    "git diff --check for owned evidence directory"
+  ],
+  "local_links": 339,
+  "game_tests_executed": 0,
+  "cargo_runs": 0,
+  "browser_runs": 0,
+  "rule_equivalence_signoffs": 0
+}

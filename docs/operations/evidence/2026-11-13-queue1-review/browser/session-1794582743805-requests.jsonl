@@ -1,0 +1,1 @@
+{"at":"2026-11-13T15:12:34.249Z","expression":"JSON.stringify({ready:!!window.game,keys:['lib','ui','get','ai','_status'].map(k=>[k,!!window[k]]),players:window.game?.players?.length,errors:document.body.innerText.slice(-1500),scripts:[...document.scripts].map(s=>s.src)})"}

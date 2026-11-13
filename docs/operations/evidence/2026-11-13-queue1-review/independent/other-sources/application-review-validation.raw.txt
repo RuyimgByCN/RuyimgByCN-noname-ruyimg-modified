@@ -1,0 +1,12 @@
+{
+  "local_links_checked": 7,
+  "sample_rows_checked": 141,
+  "returned_confirmation_rows": 11,
+  "report_checks_passed": 1136,
+  "report_checks_failed": 0,
+  "input_hashes_unchanged": 11,
+  "indexed_artifact_hashes_unchanged": 7,
+  "current_inventory_sha256": "2658808bbe361ab248e53166157e25606c47155eb31fa19947cb601eb3f35c89",
+  "cargo_executed": false,
+  "browser_executed": false
+}

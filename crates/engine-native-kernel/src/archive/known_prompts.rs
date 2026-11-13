@@ -612,4 +612,5 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
     "ssr_qiangxi:confirm",
     "ssr_qingji:confirm",
     "ssr_qingji:choose_card",
+    "dddjuxian_gain",
 ];

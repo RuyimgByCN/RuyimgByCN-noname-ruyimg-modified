@@ -1,0 +1,249 @@
+diff --git a/crates/engine-native-content/src/content/host/step/u01_batch_a.rs b/crates/engine-native-content/src/content/host/step/u01_batch_a.rs
+index 35f68ffa2..480b53754 100644
+--- a/crates/engine-native-content/src/content/host/step/u01_batch_a.rs
++++ b/crates/engine-native-content/src/content/host/step/u01_batch_a.rs
+@@ -10,8 +10,20 @@ use crate::state::GameStateCore;
+ #[path = "u01_batch_a_asks.rs"]
+ mod asks;
+ pub(crate) use asks::*;
+ 
++fn finish_juxian(ctx: &mut Ctx<'_>, owner: PlayerId, paid: CardId, gained: Option<CardId>) -> Flow {
++    if gained.is_some_and(|c| is_red(ctx.catalog, paid) != is_red(ctx.catalog, c)) {
++        set_turn_flag(ctx.core, owner, "dddjuxian_ban", "dddjuxian_stamp", 1);
++    }
++    ctx.log(LogEvent::SkillTriggered {
++        skill: "dddjuxian",
++        owner,
++        presentation: None,
++    });
++    Flow::Done
++}
++
+ pub(crate) fn step_u01_batch_a(machine: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
+     let owner = machine.owner;
+     match machine.def_key.as_str() {
+         "dddyuanzhen" => match machine.stage {
+@@ -125,33 +137,46 @@ pub(crate) fn step_u01_batch_a(machine: &mut HostMachine, ctx: &mut Ctx<'_>) ->
+                 set_turn_flag(ctx.core, owner, "dddjuxian_used", "dddjuxian_stamp", used);
+                 if !u01_remove_owned(ctx, owner, c1) {
+                     return Flow::Done;
+                 }
+-                let c2 = if mode == 0 {
++                if mode == 0 {
+                     set_turn_flag(ctx.core, owner, "dddjuxian_top_used", "dddjuxian_stamp", 1);
+                     ctx.core.deck.push(c1);
+-                    let got = he_cards(ctx.core, t).first().copied();
+-                    if let Some(g) = got {
+-                        u01_remove_owned(ctx, t, g);
+-                        ctx.core.player_mut(owner).hand.push(g);
+-                    }
+-                    got
++                    machine.target = Some(t);
++                    // Upstream gainPlayerCard shuffles hidden buttons; keep that map on resume.
++                    let mut hand = ctx.core.player(t).hand.clone();
++                    ctx.core.rng.shuffle(&mut hand);
++                    machine.cards.extend(hand);
++                    wait_ask(machine, ctx, HostStage::CardsAsk, 28)
+                 } else {
+                     set_turn_flag(ctx.core, owner, "dddjuxian_hand_used", "dddjuxian_stamp", 1);
+                     ctx.core.player_mut(t).hand.push(c1);
+-                    u01_draw_now(ctx, owner, 1).first().copied()
++                    let gained = u01_draw_now(ctx, owner, 1).first().copied();
++                    finish_juxian(ctx, owner, c1, gained)
++                }
++            }
++            HostStage::CardsAsk => {
++                let (Some(t), Some(&paid)) = (machine.target, machine.cards.first()) else {
++                    return Flow::Done;
+                 };
+-                if let Some(g) = c2 {
+-                    if is_red(ctx.catalog, c1) != is_red(ctx.catalog, g) {
+-                        set_turn_flag(ctx.core, owner, "dddjuxian_ban", "dddjuxian_stamp", 1);
+-                    }
++                let player = ctx.core.player(t);
++                let gained = match ctx.answer().first() {
++                    Some(ChoiceOption::HiddenCard(slot)) => machine
++                        .cards
++                        .get(*slot as usize + 1)
++                        .copied()
++                        .filter(|c| player.hand.contains(c)),
++                    Some(ChoiceOption::Card(c)) if player.equips.contains(c) => Some(*c),
++                    _ => None,
++                };
++                let Some(gained) = gained else {
++                    return Flow::Done;
++                };
++                if !u01_remove_owned(ctx, t, gained) {
++                    return Flow::Done;
+                 }
+-                ctx.log(LogEvent::SkillTriggered {
+-                    skill: "dddjuxian",
+-                    owner,
+-                    presentation: None,
+-                });
+-                Flow::Done
++                ctx.core.player_mut(owner).hand.push(gained);
++                finish_juxian(ctx, owner, paid, Some(gained))
+             }
+             _ => Flow::Done,
+         },
+         "dddjungui" => {
+@@ -215,10 +240,10 @@ pub(crate) fn step_u01_batch_a(machine: &mut HostMachine, ctx: &mut Ctx<'_>) ->
+                     let dec = match ctx.answer().first().copied() {
+                         Some(ChoiceOption::Tag(v)) => usize::from(v),
+                         _ => 0,
+                     };
+-                    let rem = distinct_suits(&ctx.core.player(t).hand, ctx.catalog)
+-                        .saturating_sub(dec);
++                    let rem =
++                        distinct_suits(&ctx.core.player(t).hand, ctx.catalog).saturating_sub(dec);
+                     if rem == 0 {
+                         ctx.log(LogEvent::SkillTriggered {
+                             skill: "dddjungui",
+                             owner,
+@@ -283,10 +308,9 @@ pub(crate) fn step_u01_batch_a(machine: &mut HostMachine, ctx: &mut Ctx<'_>) ->
+                 let sum: u32 = picked
+                     .iter()
+                     .map(|&c| u32::from(ctx.catalog.cards[c as usize].rank))
+                     .sum();
+-                let need = (ctx.core.player(owner).hp
+-                    + ctx.core.player(ctx.core.turn.current).hp)
++                let need = (ctx.core.player(owner).hp + ctx.core.player(ctx.core.turn.current).hp)
+                     .max(1) as u32;
+                 if sum < need {
+                     return Flow::Done;
+                 }
+@@ -832,5 +856,4 @@ pub(crate) fn step_u01_batch_a(machine: &mut HostMachine, ctx: &mut Ctx<'_>) ->
+         },
+         _ => Flow::Done,
+     }
+ }
+-
+diff --git a/crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs b/crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs
+index 33f1d8b05..99014aea5 100644
+--- a/crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs
++++ b/crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs
+@@ -26,9 +26,15 @@ pub(crate) fn turn_flag(core: &GameStateCore, p: PlayerId, k: &str, stamp_key: &
+         flag(core, p, k)
+     }
+ }
+ 
+-pub(crate) fn set_turn_flag(core: &mut GameStateCore, p: PlayerId, k: &str, stamp_key: &str, v: u32) {
++pub(crate) fn set_turn_flag(
++    core: &mut GameStateCore,
++    p: PlayerId,
++    k: &str,
++    stamp_key: &str,
++    v: u32,
++) {
+     let cur = turn_stamp(core);
+     if flag(core, p, stamp_key) != cur {
+         set_flag(core, p, stamp_key, cur);
+     }
+@@ -630,8 +636,24 @@ pub(crate) fn build_ask(
+                     allow_cancel: false,
+                 },
+             ))
+         }
++        28 => {
++            let player = core.player(target?);
++            let options =
++                crate::event::qinglong_options(owner, target?, &player.hand, &player.equips);
++            (!options.is_empty()).then_some((
++                owner,
++                ChoiceSpec {
++                    kind: ChoiceKind::SelectCards,
++                    prompt: "dddjuxian_gain",
++                    options,
++                    min: 1,
++                    max: 1,
++                    allow_cancel: false,
++                },
++            ))
++        }
+         _ => None,
+     }
+ }
+ 
+@@ -657,18 +679,30 @@ pub(crate) fn wait_ask(
+     }
+ }
+ 
+ pub(crate) fn active_ask_u01_batch_a(
+-    _stage: HostStage,
++    stage: HostStage,
+     owner: PlayerId,
+     target: Option<PlayerId>,
+     _targets: &[PlayerId],
+     card: Option<u32>,
+-    _cards: &[CardId],
++    cards: &[CardId],
+     core: &GameStateCore,
+     catalog: &Catalog,
+ ) -> Option<ExpectedAsk> {
+     let ask_id = flag(core, owner, ASK_KEY);
++    if ask_id == 28 {
++        if stage != HostStage::CardsAsk || card != Some(0) || target == Some(owner) {
++            return None;
++        }
++        let mut hidden = cards.get(1..)?.to_vec();
++        let mut hand = core.player(target?).hand.clone();
++        hidden.sort_unstable();
++        hand.sort_unstable();
++        if hidden != hand {
++            return None;
++        }
++    }
+     let (observer, spec) = build_ask(ask_id, owner, target, card, core, catalog)?;
+     Some(crate::snap::ask(
+         observer,
+         spec.prompt,
+diff --git a/crates/engine-native-kernel/src/archive/known_prompts.rs b/crates/engine-native-kernel/src/archive/known_prompts.rs
+index 8cdde4839..4a82e6bef 100644
+--- a/crates/engine-native-kernel/src/archive/known_prompts.rs
++++ b/crates/engine-native-kernel/src/archive/known_prompts.rs
+@@ -611,5 +611,6 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
+     "ssr_qiangxi:choose_target",
+     "ssr_qiangxi:confirm",
+     "ssr_qingji:confirm",
+     "ssr_qingji:choose_card",
++    "dddjuxian_gain",
+ ];
+diff --git a/crates/engine-native/tests/groups/g1.rs b/crates/engine-native/tests/groups/g1.rs
+index 24f34710e..509dbc225 100644
+--- a/crates/engine-native/tests/groups/g1.rs
++++ b/crates/engine-native/tests/groups/g1.rs
+@@ -24,8 +24,11 @@ mod u01_ddd_eight;
+ 
+ #[path = "../u01_dddanzhi_regression.rs"]
+ mod u01_dddanzhi_regression;
+ 
++#[path = "../u01_juxian_gain.rs"]
++mod u01_juxian_gain;
++
+ #[path = "../l28_thunder_eight_match.rs"]
+ mod l28_thunder_eight_match;
+ 
+ #[path = "../l28_thunder_eight_triggers.rs"]
+diff --git a/crates/engine-native/tests/u01_ddd_eight.rs b/crates/engine-native/tests/u01_ddd_eight.rs
+index 509403045..e01c1bcf0 100644
+--- a/crates/engine-native/tests/u01_ddd_eight.rs
++++ b/crates/engine-native/tests/u01_ddd_eight.rs
+@@ -411,8 +411,17 @@ fn u01_batch_a_real_match_6d_verification() {
+             selection: vec![ChoiceOption::Player(1)],
+         },
+     );
+     assert_eq!(e.state_core().deck.last().copied(), Some(red_c0));
++    let gain = e.open_choice().expect("dddjuxian_gain").clone();
++    let _ = submit(
++        &mut e,
++        0,
++        GameAction::Answer {
++            choice_id: gain.id,
++            selection: vec![ChoiceOption::HiddenCard(0)],
++        },
++    );
+     assert!(e.state_core().player(0).hand.contains(&red_c1));
+     assert_eq!(flag(&e, 0, "dddjuxian_top_used"), 1);
+     assert_eq!(flag(&e, 0, "dddjuxian_ban"), 0);
+ 

@@ -1,0 +1,36 @@
+{
+  "commands": [
+    {
+      "command": "python3 -B docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/application-review.py --label initial > docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/application-review-initial.raw.txt 2>&1",
+      "exit_code": 1,
+      "output": "application-review-initial.raw.txt",
+      "reason": "review script had not supported correction04 before_difference/after_difference records"
+    },
+    {
+      "command": "python3 -B docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/application-review.py --label checked01 > docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/application-review-checked01.raw.txt 2>&1",
+      "exit_code": 0,
+      "output": "application-review-checked01.raw.txt",
+      "passed": 1100,
+      "failed": 0
+    },
+    {
+      "command": "python3 -B docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/application-review.py --label final > docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/application-review-final.raw.txt 2>&1",
+      "exit_code": 0,
+      "output": "application-review-final.raw.txt",
+      "passed": 1136,
+      "failed": 0
+    }
+  ],
+  "artifact_sha256": {
+    "application-review-checked01.json": "f0c65eb1ee84778926db486278b1f43131b146c141510c2a131303caff694b73",
+    "application-review-checked01.raw.txt": "96ce46ad8243c8851e97bbc379facbd5aa23588408365083013c305f449ca60e",
+    "application-review-final.json": "8905d47bf6cc55367692906448c91e22e94acda125676eda53130742a0a7215b",
+    "application-review-final.raw.txt": "5eb6f0059420a2584194c0eb7e2bf3063938d80a530812f1af0a04d90621ed57",
+    "application-review-initial.raw.txt": "dc320ac785f3850d7da1b90a2cfc2b7cef7d0387155c4ccec16bcbab3d9365bf",
+    "application-review.md": "b3657eb35310e24f1e5db285c55dea714af9068be40cb92ef7441508c0e70f7e",
+    "application-review.py": "59645490c41ecdc240bcd4e159b3f9ed3271ff3f1ab37668113a00e077779d8e"
+  },
+  "mutations": "only new other-sources/application-review* evidence files",
+  "cargo_and_browser_executed": false,
+  "new_equivalence_signoffs": 0
+}

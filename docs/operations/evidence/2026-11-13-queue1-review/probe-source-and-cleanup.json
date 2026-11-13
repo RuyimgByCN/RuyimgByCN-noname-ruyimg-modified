@@ -1,0 +1,6 @@
+{
+  "at": "2026-11-13T15:38:45.696844+00:00",
+  "removed_owned_temporary_example": "crates/engine-native/examples/queue1_comparison_probe.rs",
+  "source": "docs/operations/evidence/2026-11-13-queue1-review/native-comparison-probe.rs",
+  "sha256": "29ad9c5a08c5393a04407509c5a1ff72c16b5baee4391fb005c92d37b0cbb88d"
+}

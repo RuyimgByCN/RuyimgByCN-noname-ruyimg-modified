@@ -1,0 +1,1132 @@
+[
+  {
+    "key": "L10:surfaces:card.css@archive/upstream/noname-liuli/noname/extension/史诗卡牌/card.css:1-18",
+    "path": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/card.css",
+    "lines": 18,
+    "first_selectors": [
+      {
+        "line": 1,
+        "text": "@font-face {"
+      },
+      {
+        "line": 6,
+        "text": "@font-face {"
+      },
+      {
+        "line": 11,
+        "text": ".card.phantom {"
+      }
+    ]
+  },
+  {
+    "key": "L10:surfaces:extension.css@archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.css:1-615",
+    "path": "archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.css",
+    "lines": 615,
+    "first_selectors": [
+      {
+        "line": 6,
+        "text": "@font-face {"
+      },
+      {
+        "line": 11,
+        "text": ".testdiv {"
+      },
+      {
+        "line": 19,
+        "text": ".emojiBtn {"
+      },
+      {
+        "line": 31,
+        "text": ".emojiDiv {"
+      },
+      {
+        "line": 41,
+        "text": ".emojiBox {"
+      },
+      {
+        "line": 51,
+        "text": ".emojiContent {"
+      },
+      {
+        "line": 63,
+        "text": ".emojiIcon {"
+      },
+      {
+        "line": 72,
+        "text": ".emojiTarget {"
+      },
+      {
+        "line": 90,
+        "text": ".emojiEgg {"
+      },
+      {
+        "line": 99,
+        "text": ".emojiFlowerFly {"
+      },
+      {
+        "line": 108,
+        "text": ".emojiJiuHu {"
+      },
+      {
+        "line": 117,
+        "text": ".emojiEggFly {"
+      },
+      {
+        "line": 122,
+        "text": ".emojiFlowerFlying {"
+      },
+      {
+        "line": 127,
+        "text": ".emojiJiuHuFly {"
+      },
+      {
+        "line": 132,
+        "text": ".emojiEggFlyOver {"
+      },
+      {
+        "line": 138,
+        "text": ".emojiEggFly2 {"
+      },
+      {
+        "line": 143,
+        "text": ".emojiFlower {"
+      },
+      {
+        "line": 151,
+        "text": "@keyframes moveAndRotate {"
+      },
+      {
+        "line": 152,
+        "text": "from {"
+      },
+      {
+        "line": 155,
+        "text": "to {"
+      },
+      {
+        "line": 160,
+        "text": "@keyframes moveAndRotate2 {"
+      },
+      {
+        "line": 161,
+        "text": "from {"
+      },
+      {
+        "line": 164,
+        "text": "to {"
+      },
+      {
+        "line": 169,
+        "text": "@keyframes moveAndRotate3 {"
+      },
+      {
+        "line": 170,
+        "text": "from {"
+      },
+      {
+        "line": 173,
+        "text": "to {"
+      },
+      {
+        "line": 178,
+        "text": "@keyframes lose {"
+      },
+      {
+        "line": 179,
+        "text": "from {"
+      },
+      {
+        "line": 183,
+        "text": "to {"
+      },
+      {
+        "line": 189,
+        "text": "@keyframes moveAndScale {"
+      },
+      {
+        "line": 193,
+        "text": "to {"
+      },
+      {
+        "line": 198,
+        "text": ".cardShanbi {"
+      },
+      {
+        "line": 202,
+        "text": "@keyframes shanbiMove {"
+      },
+      {
+        "line": 203,
+        "text": "from {"
+      },
+      {
+        "line": 206,
+        "text": "to {"
+      },
+      {
+        "line": 211,
+        "text": ".emojiRotate {"
+      },
+      {
+        "line": 216,
+        "text": ".emojiTuoxie1 {"
+      },
+      {
+        "line": 225,
+        "text": ".emojiTuoxie2 {"
+      },
+      {
+        "line": 234,
+        "text": ".emojiImg {"
+      },
+      {
+        "line": 243,
+        "text": ".emojiDescIcon {"
+      },
+      {
+        "line": 251,
+        "text": ".emojiLevel {"
+      },
+      {
+        "line": 259,
+        "text": ".emojiText {"
+      },
+      {
+        "line": 273,
+        "text": ".SequenceFrame {"
+      },
+      {
+        "line": 281,
+        "text": ".SequenceFrameOver {"
+      },
+      {
+        "line": 286,
+        "text": "@keyframes blink {"
+      },
+      {
+        "line": 287,
+        "text": "from { opacity: 1; }"
+      },
+      {
+        "line": 288,
+        "text": "to { opacity: 0; }"
+      },
+      {
+        "line": 291,
+        "text": "@keyframes rotation {"
+      },
+      {
+        "line": 292,
+        "text": "from {"
+      },
+      {
+        "line": 295,
+        "text": "to {"
+      }
+    ]
+  },
+  {
+    "key": "L20:surfaces:extension.css@archive/upstream/noname-liuli/noname/extension/标记补充/extension.css:1-881",
+    "path": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.css",
+    "lines": 881,
+    "first_selectors": [
+      {
+        "line": 3,
+        "text": ".fubahux{"
+      },
+      {
+        "line": 8,
+        "text": ".fubahu{"
+      },
+      {
+        "line": 20,
+        "text": ".zibahu{"
+      },
+      {
+        "line": 24,
+        "text": "@keyframes center1 {"
+      },
+      {
+        "line": 25,
+        "text": "0%  {transform: translateX(-100px);visibility: visible;opacity: 0;}"
+      },
+      {
+        "line": 26,
+        "text": "50% {transform: translateX(-100px);visibility: visible;opacity: 1;}"
+      },
+      {
+        "line": 27,
+        "text": "100% {transform: translateX(80px)}"
+      },
+      {
+        "line": 29,
+        "text": "@keyframes center2 {"
+      },
+      {
+        "line": 30,
+        "text": "0%  {transform: translateY(10px);: visible;opacity: 0;}"
+      },
+      {
+        "line": 31,
+        "text": "50% {transform: translateY(10px);visibility: visible;opacity: 1;}"
+      },
+      {
+        "line": 32,
+        "text": "100% {transform: translateY(-30px)}"
+      },
+      {
+        "line": 37,
+        "text": ".fufeiyanx{"
+      },
+      {
+        "line": 42,
+        "text": ".fufeiyan{"
+      },
+      {
+        "line": 54,
+        "text": ".zifeiyan{"
+      },
+      {
+        "line": 58,
+        "text": "@keyframes feiyan1 {"
+      },
+      {
+        "line": 59,
+        "text": "0%  {transform: translateX(-140px);visibility: visible;opacity: 0;}"
+      },
+      {
+        "line": 60,
+        "text": "50% {transform: translateX(-140px);visibility: visible;opacity: 1;}"
+      },
+      {
+        "line": 61,
+        "text": "100% {transform: translateX(80px)}"
+      },
+      {
+        "line": 63,
+        "text": "@keyframes feiyan2 {"
+      },
+      {
+        "line": 64,
+        "text": "0%  {transform: translateY(10px);: visible;opacity: 0;}"
+      },
+      {
+        "line": 65,
+        "text": "50% {transform: translateY(10px);visibility: visible;opacity: 1;}"
+      },
+      {
+        "line": 66,
+        "text": "100% {transform: translateY(-30px)}"
+      },
+      {
+        "line": 70,
+        "text": ".aifubahux{"
+      },
+      {
+        "line": 75,
+        "text": ".aifubahu{"
+      },
+      {
+        "line": 87,
+        "text": ".aizibahu{"
+      },
+      {
+        "line": 91,
+        "text": "@keyframes aicenter1 {"
+      },
+      {
+        "line": 92,
+        "text": "0%  {transform: translateX(-20px);visibility: visible;opacity: 0;}"
+      },
+      {
+        "line": 93,
+        "text": "50% {transform: translateX(-20px);visibility: visible;opacity: 1;}"
+      },
+      {
+        "line": 95,
+        "text": "100% {transform: translateX(80px)}"
+      },
+      {
+        "line": 97,
+        "text": "@keyframes aicenter2 {"
+      },
+      {
+        "line": 98,
+        "text": "0%  {transform: translateY(200px);visibility: visible;opacity: 0;}"
+      },
+      {
+        "line": 99,
+        "text": "50% {transform: translateY(200px);visibility: visible;opacity: 1;}"
+      },
+      {
+        "line": 100,
+        "text": "100% {transform: translateY(-30px)}"
+      },
+      {
+        "line": 105,
+        "text": ".aifufeiyanx{"
+      },
+      {
+        "line": 110,
+        "text": ".aifufeiyan{"
+      },
+      {
+        "line": 122,
+        "text": ".aizifeiyan{"
+      },
+      {
+        "line": 126,
+        "text": "@keyframes aifeiyan1 {"
+      },
+      {
+        "line": 127,
+        "text": "0%  {transform: translateX(40px);visibility: visible;opacity: 0;}"
+      },
+      {
+        "line": 128,
+        "text": "50% {transform: translateX(40px);visibility: visible;opacity: 1;}"
+      },
+      {
+        "line": 130,
+        "text": "100% {transform: translateX(80px)}"
+      },
+      {
+        "line": 132,
+        "text": "@keyframes aifeiyan2 {"
+      },
+      {
+        "line": 133,
+        "text": "0%  {transform: translateY(200px);visibility: visible;opacity: 0;}"
+      },
+      {
+        "line": 134,
+        "text": "50% {transform: translateY(200px);visibility: visible;opacity: 1;}"
+      },
+      {
+        "line": 135,
+        "text": "100% {transform: translateY(-30px)}"
+      },
+      {
+        "line": 138,
+        "text": ".dizhukuang{"
+      },
+      {
+        "line": 155,
+        "text": ".weimingzhong{"
+      },
+      {
+        "line": 168,
+        "text": "@keyframes weimingzhong {"
+      },
+      {
+        "line": 169,
+        "text": "0%  {visibility: visible;opacity: 0.6;}"
+      },
+      {
+        "line": 170,
+        "text": "50% {opacity: 1;}"
+      },
+      {
+        "line": 171,
+        "text": "100% {opacity: 0;}"
+      }
+    ]
+  },
+  {
+    "key": "L20:surfaces:group.css@archive/upstream/noname-liuli/noname/extension/标记补充/group.css:1-17",
+    "path": "archive/upstream/noname-liuli/noname/extension/标记补充/group.css",
+    "lines": 17,
+    "first_selectors": [
+      {
+        "line": 2,
+        "text": "#arena.decadeUI.selecting>.dialog.scroll1.scroll2>.content-container>.content>.buttons>.card.button.selected.selectable[data-nature=\"jingx\"]::before{"
+      }
+    ]
+  },
+  {
+    "key": "L20:surfaces:mark.css@archive/upstream/noname-liuli/noname/extension/标记补充/mark.css:1-61",
+    "path": "archive/upstream/noname-liuli/noname/extension/标记补充/mark.css",
+    "lines": 61,
+    "first_selectors": [
+      {
+        "line": 2,
+        "text": ".player.playerjiu {"
+      },
+      {
+        "line": 18,
+        "text": ".dialog.big>.content-container>.content>.caption{"
+      },
+      {
+        "line": 28,
+        "text": ".dialog.big>.content-container>.content>.buttons>.card.button.none::before{"
+      },
+      {
+        "line": 40,
+        "text": ".dialog.big>.content-container>.content>.buttons>.card.button.none.selected {"
+      },
+      {
+        "line": 45,
+        "text": ".card.button.none>.top-name:not(.base):not(.trick):not(.equip) {"
+      },
+      {
+        "line": 49,
+        "text": ".card.button.none>.background {"
+      },
+      {
+        "line": 53,
+        "text": ".card.button.none {"
+      },
+      {
+        "line": 59,
+        "text": "#decadeUI-canvas {"
+      }
+    ]
+  },
+  {
+    "key": "L27:surfaces:e.css@archive/upstream/noname-liuli/noname/extension/选将美化/e.css:1-2009",
+    "path": "archive/upstream/noname-liuli/noname/extension/选将美化/e.css",
+    "lines": 2009,
+    "first_selectors": [
+      {
+        "line": 2,
+        "text": ".dialog#twotwo {"
+      },
+      {
+        "line": 13,
+        "text": ".dialog#twotwo>.content-container {"
+      },
+      {
+        "line": 17,
+        "text": ".biaotixx{"
+      },
+      {
+        "line": 30,
+        "text": ".jindutiaoxgxg {"
+      },
+      {
+        "line": 45,
+        "text": ".jindutiaoxgxgx {"
+      },
+      {
+        "line": 62,
+        "text": ".Footerxxxggg{"
+      },
+      {
+        "line": 110,
+        "text": ".xtxxbg{"
+      },
+      {
+        "line": 129,
+        "text": ".xtxx {"
+      },
+      {
+        "line": 140,
+        "text": ".djxtxx{"
+      },
+      {
+        "line": 149,
+        "text": ".xtxxName {"
+      },
+      {
+        "line": 170,
+        "text": ".wujiangkuangnew{"
+      },
+      {
+        "line": 182,
+        "text": ".wujiangkuangnew2{"
+      },
+      {
+        "line": 194,
+        "text": ".zijiziji{"
+      },
+      {
+        "line": 204,
+        "text": ".wujiangkuangnew>.biankuangname {"
+      },
+      {
+        "line": 214,
+        "text": ".wujiangkuangnew>.biankuangname>.dianjiqueding {"
+      },
+      {
+        "line": 223,
+        "text": ".wujiangkuangnew>.biankuangname>.dianjiqueding>.queding {"
+      },
+      {
+        "line": 234,
+        "text": ".wujiangkuangnew>.biankuangname>.name {"
+      },
+      {
+        "line": 253,
+        "text": ".wujiangkuangnew>.biankuangname>.wjtaaaa{"
+      },
+      {
+        "line": 262,
+        "text": ".wujiangkuangnew>.biankuangname>.hp-wrap {"
+      },
+      {
+        "line": 272,
+        "text": ".wujiangkuangnew>.biankuangname>.hp-wrap>.hp>.morehujia {"
+      },
+      {
+        "line": 285,
+        "text": ".wujiangkuangnew>.biankuangname>.hp-wrap>.hp {"
+      },
+      {
+        "line": 300,
+        "text": ".wujiangkuangnew>.biankuangname>.hp-wrap>.hp.textstyle {"
+      },
+      {
+        "line": 306,
+        "text": ".wujiangkuangnew>.biankuangname>.hp-wrap>.hp>div {"
+      },
+      {
+        "line": 317,
+        "text": ".lhdtxgxg{"
+      },
+      {
+        "line": 327,
+        "text": ".lhdtxgxg>.longdui{"
+      },
+      {
+        "line": 375,
+        "text": ".lhdtxgxg>.longdui2{"
+      },
+      {
+        "line": 424,
+        "text": ".lhdtxgxg>.hudui{"
+      },
+      {
+        "line": 472,
+        "text": ".lhdtxgxg>.hudui2{"
+      },
+      {
+        "line": 520,
+        "text": ".lhdtxgxg>.wenzi{"
+      },
+      {
+        "line": 536,
+        "text": ".wujiangkuangnew2>.biankuangname {"
+      },
+      {
+        "line": 546,
+        "text": ".wujiangkuangnew2>.biankuangname>.yzb {"
+      },
+      {
+        "line": 556,
+        "text": ".wujiangkuangnew2>.biankuangname>.tuijian {"
+      },
+      {
+        "line": 568,
+        "text": ".wujiangkuangnew2>.biankuangname>.tuijian>.xtxm {"
+      },
+      {
+        "line": 580,
+        "text": ".wujiangkuangnew2>.biankuangname>.tuijian>.xtxm>.xtxmname {"
+      },
+      {
+        "line": 600,
+        "text": ".wujiangkuangnew2>.biankuangname>.name {"
+      },
+      {
+        "line": 618,
+        "text": ".wujiangkuangnew2>.biankuangname>.wjtbbbb{"
+      },
+      {
+        "line": 631,
+        "text": ".wujiangkuangnew2>.biankuangname>.hp-wrap {"
+      },
+      {
+        "line": 641,
+        "text": ".wujiangkuangnew2>.biankuangname>.hp-wrap>.hp>.morehujia {"
+      },
+      {
+        "line": 654,
+        "text": ".wujiangkuangnew2>.biankuangname>.hp-wrap>.hp {"
+      },
+      {
+        "line": 669,
+        "text": ".wujiangkuangnew2>.biankuangname>.hp-wrap>.hp.textstyle {"
+      },
+      {
+        "line": 675,
+        "text": ".wujiangkuangnew2>.biankuangname>.hp-wrap>.hp>div {"
+      },
+      {
+        "line": 686,
+        "text": ".zuhebg{"
+      },
+      {
+        "line": 695,
+        "text": ".zuhebg>.zuhetuijian{"
+      },
+      {
+        "line": 739,
+        "text": ".zuhebg>.zuheziji{"
+      },
+      {
+        "line": 751,
+        "text": ".zuhebg>.zuheduiyou{"
+      },
+      {
+        "line": 763,
+        "text": ".zuhebg>.zuheziji>.zuhezijix{"
+      },
+      {
+        "line": 770,
+        "text": ".zuhebg>.zuheduiyou>.zuheduiyoux{"
+      },
+      {
+        "line": 776,
+        "text": ".zuhebg>.zuheziji>.zuhezijiz{"
+      },
+      {
+        "line": 825,
+        "text": ".zuhebg>.zuheduiyou>.zuheduiyouz{"
+      },
+      {
+        "line": 874,
+        "text": ".djjnms{"
+      }
+    ]
+  },
+  {
+    "key": "L28:surfaces:thunder.css@archive/upstream/noname-liuli/noname/extension/雷霆万钧/thunder.css:1-1522",
+    "path": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/thunder.css",
+    "lines": 1522,
+    "first_selectors": [
+      {
+        "line": 1,
+        "text": "#decadeUI-canvas {"
+      },
+      {
+        "line": 5,
+        "text": ".th-animation-player {}"
+      },
+      {
+        "line": 7,
+        "text": "#thunderDecadeUI-canvas {"
+      },
+      {
+        "line": 18,
+        "text": "@keyframes initbutton {"
+      },
+      {
+        "line": 19,
+        "text": "0% {}"
+      },
+      {
+        "line": 21,
+        "text": "50% {"
+      },
+      {
+        "line": 25,
+        "text": "100% {}"
+      },
+      {
+        "line": 28,
+        "text": "@keyframes th-cxbg {"
+      },
+      {
+        "line": 29,
+        "text": "from {}"
+      },
+      {
+        "line": 31,
+        "text": "to {"
+      },
+      {
+        "line": 37,
+        "text": "@keyframes th-cxlbtn {"
+      },
+      {
+        "line": 38,
+        "text": "from {}"
+      },
+      {
+        "line": 40,
+        "text": "to {"
+      },
+      {
+        "line": 45,
+        "text": "@keyframes th-cxrbtn {"
+      },
+      {
+        "line": 46,
+        "text": "from {}"
+      },
+      {
+        "line": 48,
+        "text": "to {"
+      },
+      {
+        "line": 53,
+        "text": "@keyframes th-cxcd {"
+      },
+      {
+        "line": 54,
+        "text": "from {}"
+      },
+      {
+        "line": 56,
+        "text": "to {"
+      },
+      {
+        "line": 61,
+        "text": "@keyframes th-harasslight {"
+      },
+      {
+        "line": 62,
+        "text": "from {}"
+      },
+      {
+        "line": 64,
+        "text": "to {"
+      },
+      {
+        "line": 69,
+        "text": "@keyframes th-sgtime {"
+      },
+      {
+        "line": 70,
+        "text": "0% {}"
+      },
+      {
+        "line": 72,
+        "text": "100% {"
+      },
+      {
+        "line": 77,
+        "text": "@keyframes th-tiechui1 {"
+      },
+      {
+        "line": 78,
+        "text": "0% {"
+      },
+      {
+        "line": 82,
+        "text": "40% {"
+      },
+      {
+        "line": 86,
+        "text": "60% {"
+      },
+      {
+        "line": 90,
+        "text": "80% {"
+      },
+      {
+        "line": 94,
+        "text": "100% {"
+      },
+      {
+        "line": 99,
+        "text": "@keyframes th-tiechui2 {"
+      },
+      {
+        "line": 100,
+        "text": "0% {"
+      },
+      {
+        "line": 104,
+        "text": "40% {"
+      },
+      {
+        "line": 108,
+        "text": "60% {"
+      },
+      {
+        "line": 112,
+        "text": "80% {"
+      },
+      {
+        "line": 116,
+        "text": "100% {"
+      },
+      {
+        "line": 121,
+        "text": "@keyframes th-yeyanflame {"
+      },
+      {
+        "line": 122,
+        "text": "0% {"
+      },
+      {
+        "line": 126,
+        "text": "33% {"
+      },
+      {
+        "line": 130,
+        "text": "66% {"
+      },
+      {
+        "line": 134,
+        "text": "100% {"
+      },
+      {
+        "line": 139,
+        "text": "@keyframes th-yeyanflame2 {"
+      },
+      {
+        "line": 140,
+        "text": "from {"
+      },
+      {
+        "line": 144,
+        "text": "to {"
+      },
+      {
+        "line": 149,
+        "text": ".th-dibeijing {"
+      },
+      {
+        "line": 158,
+        "text": ".th-skilltip {"
+      },
+      {
+        "line": 176,
+        "text": ".th-thunderDialog {"
+      },
+      {
+        "line": 185,
+        "text": ".th-thunderDssCon {"
+      },
+      {
+        "line": 195,
+        "text": ".th-thunderDssMin {"
+      }
+    ]
+  },
+  {
+    "key": "L29:surfaces:main1@archive/upstream/noname-liuli/noname/extension/龙血玄黄/专属技能区/手杀ui/skill/main1.js:1-1048",
+    "path": "archive/upstream/noname-liuli/noname/extension/龙血玄黄/专属技能区/手杀ui/skill/main1.js",
+    "lines": 1048,
+    "excerpt": [
+      "app.import(function (lib, game, ui, get, ai, _status, app) {",
+      "//console.log('kk')",
+      "  var plugin = {",
+      "    name: 'skill',",
+      "    filter: function () {",
+      "      return !['chess', 'tafang', 'stone', 'connect'].contains(get.mode());",
+      "    },",
+      "    content: function (next) {",
+      "      app.waitAllFunction([",
+      "        function (next) {",
+      "          lib.translate.zhangba_skill = '丈八';",
+      "          lib.translate.txhj_dinglanyemingzhu = '夜明珠';",
+      "          lib.translate.jlsgqs_muniu = '木牛';",
+      "",
+      "          if (lib.device == 'ios' || lib.device == 'android') {",
+      "            lib.init.css(lib.assetURL + 'extension/' + app.name + '/' + plugin.name, 'main1', next);",
+      "          } else {",
+      "            lib.init.css(lib.assetURL + 'extension/' + app.name + '/' + plugin.name, 'main1_window', next);",
+      "          }",
+      "        },",
+      "      ], next);",
+      "    },",
+      "    precontent: function () {",
+      "      Object.assign(ui.create, {",
+      "        skills: function (skills) {",
+      "          ui.skills = plugin.createSkills(skills, ui.skills);",
+      "          ui.skillControl.update();",
+      "          return ui.skills;",
+      "        },",
+      "        skills2: function (skills) {",
+      "          ui.skills2 = plugin.createSkills(skills, ui.skills2);",
+      "          ui.skillControl.update();",
+      "          return ui.skills2;",
+      "        },",
+      "        skills3: function (skills) {",
+      "          ui.skills3 = plugin.createSkills(skills, ui.skills3);",
+      "          ui.skillControl.update();",
+      "          return ui.skills3;",
+      "        },",
+      "        skillControl: function (clear) {",
+      "          if (!ui.skillControl) {",
+      "            var node = ui.create.div('.skill-control', ui.arena);",
+      "            node.node = {",
+      "              enable: ui.create.div('.enable', node),",
+      "              trigger: ui.create.div('.trigger', node),",
+      "              specialEnable: ui.create.div('.special-enable', node), ",
+      "              specialTrigger: ui.create.div('.special-trigger', node) ",
+      "            };",
+      "            for (var i in plugin.controlElement) {",
+      "              node[i] = plugin.controlElement[i];",
+      "            }",
+      "            ui.skillControl = node;",
+      "          }",
+      "          if (clear) {",
+      "            ui.skillControl.node.enable.innerHTML = '';",
+      "            ui.skillControl.node.trigger.innerHTML = '';",
+      "            ui.skillControl.node.specialEnable.innerHTML = '';",
+      "            ui.skillControl.node.specialTrigger.innerHTML = '';",
+      "          }",
+      "          return ui.skillControl;",
+      "        },",
+      "      });",
+      "",
+      "      Object.assign(ui, {",
+      "        updateSkillControl: function (player, clear) {",
+      "          var eSkills = player.getSkills('e', true, false).slice(0);",
+      "          var skills = app.get.playerSkills(player, true);",
+      "          if (ui.skills2 && ui.skills2.skills.length) {",
+      "          ",
+      "             var gSkills = ui.skills2.skills; ",
+      "             try{",
+      "              gSkills.remove('_chongzhu')",
+      "             }catch(e){",
+      "               }                   ",
+      "                  }",
+      "          skills.addArray(player.invisibleSkills.slice(0).filter(function(skill){",
+      "            var info=get.info(skill);",
+      "            return info.enable;",
+      "          }));",
+      "          for (var i = 0; i < skills.length; i++) {",
+      "            var info = lib.skill[skills[i]];",
+      "            if (!info || info.zhuSkill && !player.hasZhuSkill(skills[i])) {",
+      "              skills.splice(i--, 1);",
+      "            }",
+      "          }",
+      "",
+      "          if (player === game.me) {",
+      "            var skillControl = ui.create.skillControl(clear);",
+      "            skillControl.add(skills, eSkills);",
+      "            if(gSkills) skillControl.add(gSkills);",
+      "            skillControl.update();",
+      "            game.addVideo('updateSkillControl', player, clear);",
+      "          }",
+      "",
+      "          var juexingji = {};",
+      "          var xiandingji = {};",
+      "          app.get.playerSkills(player).forEach(function (skill) {",
+      "            var info = lib.skill[skill];",
+      "            if (!info) return;",
+      "            if (info.zhuSkill && !player.hasZhuSkill(skill)) return;",
+      "            //这里修改1{这里是分离转换技，限定技，觉醒技，使命技",
+      "            if (info.zhuanhuanji || info.limited || (info.intro && info.intro.content === 'limited')) {",
+      "              xiandingji[skill] = player.awakenedSkills.contains(skill);",
+      "            }",
+      "            if (info.juexingji || info.dutySkill) juexingji[skill] = player.awakenedSkills.contains(skill);",
+      "            //这里结束1}",
+      "          });",
+      "          plugin.updateSkillMarks(player, xiandingji, juexingji);",
+      "        },",
+      "      });",
+      "",
+      "      app.reWriteFunction(lib.element.player, {",
+      "        addSkill: [null, function () {",
+      "          ui.updateSkillControl(this, true);",
+      "        }],"
+    ]
+  },
+  {
+    "key": "L29:surfaces:main1.css@archive/upstream/noname-liuli/noname/extension/龙血玄黄/专属技能区/手杀ui/skill/main1.css:1-241",
+    "path": "archive/upstream/noname-liuli/noname/extension/龙血玄黄/专属技能区/手杀ui/skill/main1.css",
+    "lines": 241,
+    "first_selectors": [
+      {
+        "line": 6,
+        "text": ".skill-control .special-trigger{"
+      },
+      {
+        "line": 16,
+        "text": ".skill-control .special-trigger{"
+      },
+      {
+        "line": 23,
+        "text": ".skill-control > .special-enable {"
+      },
+      {
+        "line": 33,
+        "text": ".skill-control > .special-trigger {"
+      },
+      {
+        "line": 37,
+        "text": ".skill-control> .special-enable >* .skillitem-child {"
+      },
+      {
+        "line": 44,
+        "text": ".skill-control> .special-trigger >* .skillitem-child {"
+      },
+      {
+        "line": 52,
+        "text": ".skill-control > .special-trigger > div {"
+      },
+      {
+        "line": 70,
+        "text": ".skill-control > .special-enable > * {"
+      },
+      {
+        "line": 91,
+        "text": ".skill-control > .special-enable > .skillitem_mbjuejin::before {"
+      },
+      {
+        "line": 107,
+        "text": ".skill-control > .special-enable > .skillitem_mbjuejin.select::before {"
+      },
+      {
+        "line": 110,
+        "text": ".skill-control > .special-enable > .skillitem_mbjuejin:not(.usable):not(.select)::before {"
+      },
+      {
+        "line": 117,
+        "text": ".skill-control > .enable > .skillitem_mbjuejin::before {"
+      },
+      {
+        "line": 133,
+        "text": ".skill-control > .enable > .skillitem_mbjuejin.select::before {"
+      },
+      {
+        "line": 136,
+        "text": ".skill-control > .enable > .skillitem_mbjuejin:not(.usable):not(.select)::before {"
+      },
+      {
+        "line": 143,
+        "text": ".skill-control > .special-enable >.skillitem_mbcmjiushi::before {"
+      },
+      {
+        "line": 159,
+        "text": ".skill-control > .special-enable > .skillitem_mbcmjiushi.select::before {"
+      },
+      {
+        "line": 162,
+        "text": ".skill-control > .special-enable > .skillitem_mbcmjiushi:not(.usable):not(.select)::before {"
+      },
+      {
+        "line": 169,
+        "text": ".skill-control > .enable >.skillitem_mbcmjiushi::before {"
+      },
+      {
+        "line": 185,
+        "text": ".skill-control > .enable > .skillitem_mbcmjiushi.select::before {"
+      },
+      {
+        "line": 188,
+        "text": ".skill-control > .enable > .skillitem_mbcmjiushi:not(.usable):not(.select)::before {"
+      },
+      {
+        "line": 194,
+        "text": ".skill-control > .special-enable >.skillitem_mbcmfangzhu::before {"
+      },
+      {
+        "line": 210,
+        "text": ".skill-control > .special-enable > *.select::before {"
+      },
+      {
+        "line": 213,
+        "text": ".skill-control > .special-enable > .skillitem_mbcmfangzhu:not(.usable):not(.select)::before {"
+      },
+      {
+        "line": 219,
+        "text": ".skill-control > .enable >.skillitem_mbcmfangzhu::before {"
+      },
+      {
+        "line": 235,
+        "text": ".skill-control > .enable > *.select::before {"
+      },
+      {
+        "line": 238,
+        "text": ".skill-control > .enable > .skillitem_mbcmfangzhu:not(.usable):not(.select)::before {"
+      }
+    ]
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "scripts/check_doc_line_refs.py",
+    "--strict"
+  ],
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "started_at_utc": "2026-11-13T16:48:26.124725+00:00",
+  "ended_at_utc": "2026-11-13T16:50:17.963280+00:00",
+  "duration_seconds": 111.838,
+  "exit_code": 0,
+  "combined_stdout_stderr_log": "docs/operations/evidence/2026-11-13-queue1-review/link-correction-20261114-01/doc-line-refs-strict-20261113T164826124725Z.log",
+  "log_sha256": "f062e076b40532b7f6fb2e1382c78d4036d80dd537c05dd5cfa7d1bdcc867c0f",
+  "full_preflight": false
+}

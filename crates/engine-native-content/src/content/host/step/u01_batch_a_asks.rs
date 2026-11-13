@@ -27,7 +27,13 @@ pub(crate) fn turn_flag(core: &GameStateCore, p: PlayerId, k: &str, stamp_key: &
     }
 }
 
-pub(crate) fn set_turn_flag(core: &mut GameStateCore, p: PlayerId, k: &str, stamp_key: &str, v: u32) {
+pub(crate) fn set_turn_flag(
+    core: &mut GameStateCore,
+    p: PlayerId,
+    k: &str,
+    stamp_key: &str,
+    v: u32,
+) {
     let cur = turn_stamp(core);
     if flag(core, p, stamp_key) != cur {
         set_flag(core, p, stamp_key, cur);
@@ -631,6 +637,22 @@ pub(crate) fn build_ask(
                 },
             ))
         }
+        28 => {
+            let player = core.player(target?);
+            let options =
+                crate::event::qinglong_options(owner, target?, &player.hand, &player.equips);
+            (!options.is_empty()).then_some((
+                owner,
+                ChoiceSpec {
+                    kind: ChoiceKind::SelectCards,
+                    prompt: "dddjuxian_gain",
+                    options,
+                    min: 1,
+                    max: 1,
+                    allow_cancel: false,
+                },
+            ))
+        }
         _ => None,
     }
 }
@@ -658,16 +680,28 @@ pub(crate) fn wait_ask(
 }
 
 pub(crate) fn active_ask_u01_batch_a(
-    _stage: HostStage,
+    stage: HostStage,
     owner: PlayerId,
     target: Option<PlayerId>,
     _targets: &[PlayerId],
     card: Option<u32>,
-    _cards: &[CardId],
+    cards: &[CardId],
     core: &GameStateCore,
     catalog: &Catalog,
 ) -> Option<ExpectedAsk> {
     let ask_id = flag(core, owner, ASK_KEY);
+    if ask_id == 28 {
+        if stage != HostStage::CardsAsk || card != Some(0) || target == Some(owner) {
+            return None;
+        }
+        let mut hidden = cards.get(1..)?.to_vec();
+        let mut hand = core.player(target?).hand.clone();
+        hidden.sort_unstable();
+        hand.sort_unstable();
+        if hidden != hand {
+            return None;
+        }
+    }
     let (observer, spec) = build_ask(ask_id, owner, target, card, core, catalog)?;
     Some(crate::snap::ask(
         observer,

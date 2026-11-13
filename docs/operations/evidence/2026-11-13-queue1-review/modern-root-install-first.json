@@ -1,0 +1,21 @@
+{
+  "argv": [
+    "pnpm",
+    "install",
+    "--frozen-lockfile",
+    "--ignore-scripts",
+    "--filter",
+    "."
+  ],
+  "command": "pnpm install --frozen-lockfile --ignore-scripts --filter .",
+  "cwd": "/private/tmp/noname-queue1-modern-fox8y_xy",
+  "env_overrides": {
+    "CARGO_INCREMENTAL": "0"
+  },
+  "source_head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "tracked_status": "",
+  "start_utc": "2026-11-13T15:17:28.027965+00:00",
+  "exit_code": 0,
+  "duration_seconds": 0.681,
+  "end_utc": "2026-11-13T15:17:28.709312+00:00"
+}

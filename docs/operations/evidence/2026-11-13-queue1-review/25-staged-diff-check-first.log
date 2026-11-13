@@ -1,0 +1,602 @@
+docs/operations/evidence/2026-11-13-queue1-review/03-native-three-final.log:2563: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/03-native-three-first.log:2563: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/05-workspace-final.log:14937: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/05-workspace-first.log:14937: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/09-desktop-final.log:52: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/11-frontend-typecheck-final.log:4: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/11-frontend-typecheck-first.log:4: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/13-smoke-native-final.log:65: trailing whitespace.
++PASS worker_vm_same_package_restore_and_replay | restored=true replayed=true  
+docs/operations/evidence/2026-11-13-queue1-review/13-smoke-native-final.log:77: trailing whitespace.
++PASS worker_vm_old_save_keeps_frozen_old_version_after_upgrade | restored=true replayed=true  
+docs/operations/evidence/2026-11-13-queue1-review/13-smoke-native-final.log:81: trailing whitespace.
++PASS worker_vm_uninstalled_old_save_restores_from_frozen_copy | restored=true replayed=true  
+docs/operations/evidence/2026-11-13-queue1-review/20-preflight-first.log:23: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L10-upstream-selected.txt:4: trailing whitespace.
++        name: "新菜篮子", init: false, 
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L10-upstream-selected.txt:42: trailing whitespace.
++        name: "幻影出牌", init: true, 
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L10-upstream-selected.txt:66: trailing whitespace.
++        "clear":true,	   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L10-upstream-selected.txt:82: trailing whitespace.
++                        choice.push('获得牌');                    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L10-upstream-selected.txt:119: trailing whitespace.
++                                    bte.setBackgroundImage('extension/史诗卡牌/image/' + list[i][2] + '.png');                             
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L19-upstream-selected.txt:27: trailing whitespace.
++                    return true; 
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L19-upstream-selected.txt:106: trailing whitespace.
++                        if(event.newui!='0') {   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L19-upstream-selected.txt:121: trailing whitespace.
++                var tex=lib.config['extension_祖安设置_texiao']; 
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L19-upstream-selected.txt:185: trailing whitespace.
++                    return true; 
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L19-upstream-selected.txt:201: trailing whitespace.
++                            dd.syncStorage('_expskill');   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L19-upstream-selected.txt:203: trailing whitespace.
++                            dd.syncStorage('_levelskill');   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L19-upstream-selected.txt:207: trailing whitespace.
++                            dd.syncStorage('zuan_hudun');   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L20-upstream-selected.txt:185: trailing whitespace.
++height: 400px;         
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L20-upstream-selected.txt:196: trailing whitespace.
++    visibility:hidden;            
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L20-upstream-selected.txt:198: trailing whitespace.
++}        
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L20-upstream-selected.txt:200: trailing whitespace.
++.zibahu{           
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L20-upstream-selected.txt:205: trailing whitespace.
++     0%  {transform: translateX(-100px);visibility: visible;opacity: 0;}	  
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L20-upstream-selected.txt:206: trailing whitespace.
++     50% {transform: translateX(-100px);visibility: visible;opacity: 1;}     
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L20-upstream-selected.txt:210: trailing whitespace.
++     0%  {transform: translateY(10px);: visible;opacity: 0;}	
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L20-upstream-selected.txt:211: trailing whitespace.
++     50% {transform: translateY(10px);visibility: visible;opacity: 1;}   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L20-upstream-selected.txt:219: trailing whitespace.
++height: 400px;         
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L20-upstream-selected.txt:240: trailing whitespace.
++	box-shadow: none;	
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L20-upstream-selected.txt:251: trailing whitespace.
++                            //   decadeUI.animation.playSpine({ name:'mianshang',speed:0.8,},{ scale: 0.75,parent: player });     
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L22-upstream-selected.txt:229: trailing whitespace.
++                '兵者诡道，待吾筹谋', 
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L22-upstream-selected.txt:267: trailing whitespace.
++            
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:495: trailing whitespace.
++        forced:true,                            
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:497: trailing whitespace.
++        if(player.hasSkill('hpunshow')) player.removeSkill('hpunshow');  
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:498: trailing whitespace.
++        if(player.hasSkill('thunderunshow')) player.removeSkill('thunderunshow');  
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:499: trailing whitespace.
++        if(player.hasSkill('huoshanunshow')) player.removeSkill('huoshanunshow');        
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:534: trailing whitespace.
++        if(!player.countCards('j',{name:'shandian'})&&player.hasSkill('thunderunshow')) player.removeSkill('thunderunshow');   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:535: trailing whitespace.
++        if(!player.countCards('j',{name:'huoshan'})&&player.hasSkill('huoshanunshow')) player.removeSkill('huoshanunshow');            
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:536: trailing whitespace.
++        if(!player.countCards('j',{name:'hongshui'})&&player.hasSkill('hongshuiunshow')) player.removeSkill('hongshuiunshow');            
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:537: trailing whitespace.
++        if(!player.countCards('j',{name:'fulei'})&&player.hasSkill('fuleiunshow')) player.removeSkill('fuleiunshow');                   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:553: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:554: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_dying.png');      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:555: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10dying.png');     
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:556: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hdying.png');      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:557: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sdying.png');      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:573: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:574: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_lebu.png');      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:575: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10lebu.png');     
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:576: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hlebu.png');      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:577: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Slebu.png');      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:589: trailing whitespace.
++            }   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:593: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:594: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_bingliang.jpg');      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:595: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10bingliang.png');     
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:596: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hbingliang.png');      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:597: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sbingliang.png');      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:608: trailing whitespace.
++            } 
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:612: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:613: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_huoshan.png');      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:614: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10huoshan.png');     
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:615: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hhuoshan.png');      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:616: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Shuoshan.png');      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:632: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:633: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_hongshui.png');      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:634: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10hongshui.png');     
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:635: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hhongshui.png');      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:636: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Shongshui.png');      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:652: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:653: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_fulei.png');      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:654: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10fulei.png');     
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:655: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hfulei.png');      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:656: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sfulei.png');      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:672: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])!='0') {   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:673: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='1') img.setBackgroundImage('extension/祖安武将/cover/cover_shandian.png');      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:674: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='2') img.setBackgroundImage('extension/祖安武将/cover/cover_10shandian.png');     
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:675: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='3') img.setBackgroundImage('extension/祖安武将/cover/cover_Hshandian.png');      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L25-upstream-selected.txt:676: trailing whitespace.
++            if(parseFloat(lib.config['extension_祖安设置_newui'])=='4') img.setBackgroundImage('extension/祖安武将/cover/cover_Sshandian.png');      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:62: trailing whitespace.
++						}						
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:65: trailing whitespace.
++                        var eventtitle = ui.create.div('.newTitle1', event.dialog); 
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:66: trailing whitespace.
++                        var txt = ui.create.div('.Footerxxgg', event.dialog);		
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:68: trailing whitespace.
++                        ui.create.div('.jindutiaoxgxgx', event.dialog);		
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:70: trailing whitespace.
++                        eventtitle.innerHTML = '博览<img src=' + lib.assetURL + 'extension/选将美化/assets/image/arrow.png' + ' style=width:30px;height:25px;margin-bottom:1px;left:2px;/>';               
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:76: trailing whitespace.
++                                if(event.ok) event.ok.style.transform = 'scale(1)'; 
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:78: trailing whitespace.
++                            if (!event.link) return;                      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:81: trailing whitespace.
++                        });                    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:82: trailing whitespace.
++                        event.dialog.appendChild(event.ok);                   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:85: trailing whitespace.
++                        event.ok.style.marginLeft = '35px';                    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:88: trailing whitespace.
++                        event.ok.style.backgroundRepeat = 'no-repeat';  
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:89: trailing whitespace.
++                        for (var i of list) {               
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:97: trailing whitespace.
++					        jnms.innerHTML = get.translation(i+'_info');   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:100: trailing whitespace, space before tab in indent.
++				        	    var current=this.parentNode.parentNode.querySelector('.dianjixg');	
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:111: trailing whitespace.
++									this.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/brawl_btn_spell_light.png")';	
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:114: trailing whitespace.
++								}		 
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:115: trailing whitespace.
++							});								
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:120: trailing whitespace.
++                        }                    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:122: trailing whitespace.
++                            _status.imchoosing = true;               
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:179: trailing whitespace.
++								}				
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:182: trailing whitespace.
++                        var eventtitle = ui.create.div('.newTitle1', event.dialog);    		
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:183: trailing whitespace.
++                        var txt = ui.create.div('.Footerxxgg', event.dialog);		
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:185: trailing whitespace.
++                        ui.create.div('.jindutiaoxgxgx', event.dialog);		
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:187: trailing whitespace.
++                        eventtitle.innerHTML = '博览<img src=' + lib.assetURL + 'extension/选将美化/assets/image/arrow.png' + ' style=width:30px;height:25px;margin-bottom:1px;left:2px;/>';               
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:193: trailing whitespace.
++                                if(event.ok) event.ok.style.transform = 'scale(1)'; 
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:195: trailing whitespace.
++                            if (!event.link) return;                      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:198: trailing whitespace.
++                        });                    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:199: trailing whitespace.
++                        event.dialog.appendChild(event.ok);                   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:202: trailing whitespace.
++                        event.ok.style.marginLeft = '35px';                    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:205: trailing whitespace.
++                        event.ok.style.backgroundRepeat = 'no-repeat';  
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:206: trailing whitespace.
++                        for (var i of list) {               
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:214: trailing whitespace.
++					        jnms.innerHTML = get.translation(i+'_info');   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:217: trailing whitespace, space before tab in indent.
++				        	    var current=this.parentNode.parentNode.querySelector('.dianjixg');	
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:228: trailing whitespace.
++									this.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/brawl_btn_spell_light.png")';	
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:231: trailing whitespace.
++								}		 
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:232: trailing whitespace.
++							});								
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:237: trailing whitespace.
++                        }                    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:239: trailing whitespace.
++                            _status.imchoosing = true;               
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:258: space before tab in indent.
++                    		if (event.ok) event.ok.remove();
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:259: space before tab in indent.
++                    		event.dialog = null;
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:260: space before tab in indent.
++                    		event.ok = null;
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:305: trailing whitespace.
++        }        
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:318: trailing whitespace.
++        var cards=player.getCards('h',card=>get.suit(card)==get.suit(trigger.card));        
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:333: trailing whitespace.
++    subSkill:{mark:{onremove:function(player){   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:335: trailing whitespace.
++        delete player.storage.clandianzhanx;   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:336: trailing whitespace.
++    },    intro:{},sub:true,},    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:341: trailing whitespace.
++    forced:true,               
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:347: trailing whitespace.
++    sub:true,},  
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:384: trailing whitespace.
++            'step 1'            
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:385: trailing whitespace.
++            var mark = player.hp - player.countMark('new_zhixi');           
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:389: trailing whitespace.
++        subSkill: {        
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:427: trailing whitespace.
++            player.storage.reqimou = false;           
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:470: trailing whitespace.
++            player.storage.reqimou_mark = '';          
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:477: trailing whitespace.
++                    enable: "phaseUse",                    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:483: trailing whitespace.
++                    'step 0'                    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:490: trailing whitespace.
++                     var index = 0;                     
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:492: trailing whitespace.
++                    for (var i = 1; i <= player.hp; i++) {list.push(i)}               
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:494: trailing whitespace.
++              player.storage.reqimou2 = index + 1;                          
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:505: trailing whitespace.
++              player.storage.reqimou2 = index + 1;     
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:506: trailing whitespace.
++              });              
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:517: trailing whitespace.
++              player.storage.reqimou2 = index + 1;    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:518: trailing whitespace.
++              });                                       
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:536: trailing whitespace.
++              event.finish();                            
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:537: trailing whitespace.
++              }else{              
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:538: trailing whitespace.
++              player.loseHp(player.storage.reqimou2);        
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:540: trailing whitespace.
++              }      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:541: trailing whitespace.
++              window.shuzibg.remove();      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:571: trailing whitespace.
++                },           
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:582: trailing whitespace.
++        player.removeSkill('xiefang_mark');       
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:583: trailing whitespace.
++    },    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:590: trailing whitespace.
++                player.storage.xiefang_mark = cc;              
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:591: trailing whitespace.
++                player.syncStorage("xiefang_mark");  
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:594: trailing whitespace.
++                }            
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:595: trailing whitespace.
++    },                
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:604: trailing whitespace.
++                player.storage.xiefang_mark = cc;         
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:605: trailing whitespace.
++                player.syncStorage("xiefang_mark");       
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:608: trailing whitespace.
++                }            
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:740: trailing whitespace.
++                    var clickLog = [];                    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:746: trailing whitespace.
++                        if(meihua1==0) clickLog.splice(clickLog.indexOf('meihuai'), 1); 
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:751: trailing whitespace.
++                        }                       
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:752: trailing whitespace.
++                        return clickLog;                                               
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:753: trailing whitespace.
++                    }   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:757: trailing whitespace.
++                    if (clickLog.length!= num) return;                  
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:762: trailing whitespace.
++                    });                    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:763: trailing whitespace.
++                    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:773: trailing whitespace.
++                        game.resume2();                        
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:781: trailing whitespace.
++                    event.ok.style.left = 'calc(50% - 170px)';       
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:782: trailing whitespace.
++                    event.ok.style.backgroundImage= 'url("' + lib.assetURL + 'extension/选将美化/assets/image/gbtn.png")';       
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:791: trailing whitespace.
++                    event.cancel.style.backgroundImage= 'url("' + lib.assetURL + 'extension/选将美化/assets/image/cancel.png")';        
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:792: trailing whitespace.
++                    // event.cancel.backgroundSize = '100% 100%';              
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:808: trailing whitespace.
++                        event.ok.style.filter = 'none';  
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:815: trailing whitespace.
++                        if (heitao1 == 0) return;                       
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:852: trailing whitespace.
++                        clickItem(this);                       
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:853: trailing whitespace.
++                    };                  
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:871: trailing whitespace.
++                    }                                       
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:892: trailing whitespace.
++                    });                 
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:903: trailing whitespace.
++                        
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:905: trailing whitespace.
++                        
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:907: trailing whitespace.
++                        
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:909: trailing whitespace.
++                        
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1000: trailing whitespace.
++                        
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1006: trailing whitespace.
++                        if(meihua2==0) clickLog.splice(clickLog.indexOf('meihuai'), 1); 
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1012: trailing whitespace.
++                        return clickLog;                                               
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1013: trailing whitespace.
++                    }   
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1018: trailing whitespace.
++                        if (clickLog.indexOf('fangkuai') == -1 && fangkuai2 > 0) fangkuai.style.backgroundImage = 'url("' + lib.assetURL + 'extension/选将美化/assets/image/dlg_select_bg1.png")';                    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1025: trailing whitespace.
++                        event.ok.style.filter = 'none';  
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1069: trailing whitespace.
++                        };                        
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1070: trailing whitespace.
++                    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1075: trailing whitespace.
++                    if (clickLog.length!=1) return;                  
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1076: trailing whitespace.
++                        event.cailickx = clickLog;                        
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1079: trailing whitespace.
++                    });                    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1080: trailing whitespace.
++                    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1092: trailing whitespace.
++                        game.resume2();                        
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1104: trailing whitespace.
++                    //event.ok.style.marginLeft = '-100px';                    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1106: trailing whitespace.
++                    event.ok.style.backgroundImage= 'url("' + lib.assetURL + 'extension/选将美化/assets/image/gbtn.png")';       
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1110: trailing whitespace.
++                    //event.cancel.style.marginLeft = '100px';                      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1114: trailing whitespace.
++                    event.cancel.style.backgroundImage= 'url("' + lib.assetURL + 'extension/选将美化/assets/image/cancel.png")';       
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1115: trailing whitespace.
++                    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1170: trailing whitespace.
++                    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1172: trailing whitespace.
++                    const matches = conditions.filter(item => 
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1175: trailing whitespace.
++                    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1225: trailing whitespace.
++             var index = 0;                                 
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1226: trailing whitespace.
++             var list= [];                      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1230: trailing whitespace.
++              player.storage.twxiafeng = index;         
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1234: trailing whitespace.
++              else rightBtn.style.filter = 'none';                  
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1245: trailing whitespace.
++              player.storage.twxiafeng = index;     
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1246: trailing whitespace.
++              });              
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1251: trailing whitespace.
++              setTimeout(function() {rightBtn.style.transform = 'scale(1)'; }, 200);    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1257: trailing whitespace.
++              player.storage.twxiafeng = index;    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1258: trailing whitespace.
++              });                     
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1270: trailing whitespace.
++                num = 0;            
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1275: trailing whitespace.
++              .set('ai', function() {return true;});                  
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1278: trailing whitespace.
++              event.finish();                           
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1279: trailing whitespace.
++              }else{      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1280: trailing whitespace.
++              if(player.storage.twxiafeng){             
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1281: trailing whitespace.
++            player.logSkill('twxiafeng');          
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1286: trailing whitespace.
++              }      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1287: trailing whitespace.
++              window.shuzibg.remove();      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1288: trailing whitespace.
++              window.shuzibg = null;                                 
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1354: trailing whitespace.
++                     var index = 0;  
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1355: trailing whitespace.
++                     var list = [1,2,3];                                                
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1357: trailing whitespace.
++              player.storage.twzhouzu5 = index;         
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1361: trailing whitespace.
++              else rightBtn.style.filter = 'none';                                
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1372: trailing whitespace.
++              player.storage.twzhouzu5 = index;     
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1373: trailing whitespace.
++              });                            
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1378: trailing whitespace.
++              setTimeout(function() {rightBtn.style.transform = 'scale(1)'; }, 200);    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1384: trailing whitespace.
++              player.storage.twzhouzu5 = index;    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1385: trailing whitespace.
++              });  
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1389: trailing whitespace.
++              } 
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1390: trailing whitespace.
++            player.chooseTarget(get.prompt2('twzhouzu'),true,function(card,player,target){ return player!=target; },);              
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1392: trailing whitespace.
++                    if (!result.bool) {                        
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1393: trailing whitespace.
++            event.finish();                                
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1394: trailing whitespace.
++              }else{                               
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1400: trailing whitespace.
++              window.shuzibg.remove();      
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1401: trailing whitespace.
++              window.shuzibg = null;           
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1402: trailing whitespace.
++              }               
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1403: trailing whitespace.
++        
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1439: trailing whitespace.
++                    player.removeSkill('twzhouzu_mark');                    
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L27-upstream-selected.txt:1447: trailing whitespace.
++            },            
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:21: space before tab in indent.
++    				    trigger: { player: "phaseUseAfter" },
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:22: space before tab in indent.
++    				    target: target,
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:23: space before tab in indent.
++    				    firstDo: false,
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:24: space before tab in indent.
++    				    priority: -10,
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:25: space before tab in indent.
++    				    content: function() {
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:26: space before tab in indent.
++    				        player.storage[_when.name]=true;
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:27: space before tab in indent.
++    				    },
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:28: space before tab in indent.
++    				});
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:29: space before tab in indent.
++    				player.addWhen({
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:30: space before tab in indent.
++    				    trigger: { player: "phaseUseAfter" },
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:31: space before tab in indent.
++    				    target: target,
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:32: space before tab in indent.
++    				    whenname: whenname,
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:33: space before tab in indent.
++    				    firstDo: false,
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:34: space before tab in indent.
++    				    priority: 10,
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:35: space before tab in indent.
++    				    filter: function(event,player) {
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:36: space before tab in indent.
++    				        return (player.storage[_when.whenname]&&_when.target==player.storage.mbcmfangzhu)||_when.target!=player.storage.mbcmfangzhu;
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:37: space before tab in indent.
++    				    },
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:38: space before tab in indent.
++    				    content: function() {
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:39: space before tab in indent.
++    				        if(_when.target==player.storage.mbcmfangzhu) {
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:40: space before tab in indent.
++    				            player.storage.mbcmfangzhu=undefined;
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:41: space before tab in indent.
++    				        }
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:42: space before tab in indent.
++    				    },
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:43: space before tab in indent.
++    				});
+docs/operations/evidence/2026-11-13-queue1-review/independent/other-sources/L29-upstream-selected.txt:457: trailing whitespace.
++                    
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/draft-before-strict-classification/skills-a.md:290: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/draft-before-strict-classification/skills-b.md:309: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/draft-before-strict-classification/skills-c.md:309: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/draft-before-strict-classification/skills-d.md:328: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/implementation-history/initial-unshuffled/implementation-inputs/crates/engine-native/tests/groups/g1.rs:63: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/implementation-history/initial-unshuffled/implementation.diff:9: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/implementation-history/initial-unshuffled/implementation.diff:123: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/implementation-history/initial-unshuffled/implementation.diff:160: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/implementation-history/initial-unshuffled/implementation.diff:177: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/implementation-history/initial-unshuffled/implementation.diff:180: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/implementation-history/initial-unshuffled/implementation.diff:186: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/implementation-history/initial-unshuffled/implementation.diff:209: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/implementation-history/initial-unshuffled/implementation.diff:209: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/implementation-inputs/crates/engine-native/tests/groups/g1.rs:63: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/implementation.diff:9: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/implementation.diff:123: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/implementation.diff:160: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/implementation.diff:177: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/implementation.diff:180: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/implementation.diff:186: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/implementation.diff:209: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/implementation.diff:209: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/inputs-additional/crates/engine-native-kernel/src/kernel/duel.rs:287: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/inputs-additional/crates/engine-native/tests/decision34_pack9_closure.rs:1234: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/inputs/crates/engine-native-content/src/content/host/step/u01_batch_a.rs:836: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/j06-followup-inputs/crates/engine-native/tests/groups/g1.rs:63: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/j06-followup.diff:9: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/j06-followup.diff:130: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/j06-followup.diff:167: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/j06-followup.diff:171: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/j06-followup.diff:217: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/j06-followup.diff:220: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/j06-followup.diff:226: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/j06-followup.diff:249: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/j06-followup.diff:249: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/skills-a.md:320: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/skills-b.md:341: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/skills-c.md:341: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/independent/u01/skills-d.md:362: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/juxian-regression-green-first.log:14: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/juxian-regression-green-rng-first.log:14: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/l06-native-existing.log:9: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/link-correction-20261114-01/before/draft-before-strict-classification/skills-a.md.original.txt:290: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/link-correction-20261114-01/before/draft-before-strict-classification/skills-b.md.original.txt:309: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/link-correction-20261114-01/before/draft-before-strict-classification/skills-c.md.original.txt:309: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/link-correction-20261114-01/before/draft-before-strict-classification/skills-d.md.original.txt:328: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/link-correction-20261114-01/before/skills-a.md.original.txt:320: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/link-correction-20261114-01/before/skills-b.md.original.txt:341: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/link-correction-20261114-01/before/skills-c.md.original.txt:341: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/link-correction-20261114-01/before/skills-d.md.original.txt:362: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/modern-install-first.log:20: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/nonrule-audit/parallel-u01-diff.patch:8: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/nonrule-audit/parallel-u01-diff.patch:113: trailing whitespace.
++ 
+docs/operations/evidence/2026-11-13-queue1-review/physical-android-inventory.log:4: new blank line at EOF.
+docs/operations/evidence/2026-11-13-queue1-review/physical-ios-inventory-redacted.log:1: trailing whitespace.
++Name                    Hostname   Identifier                                    State         Model                              Reality  
+docs/operations/evidence/2026-11-13-queue1-review/physical-ios-inventory-redacted.log:3: trailing whitespace.
++physical iPhone                            <device-id-redacted> (UDID)              unavailable   iPhone17,2                                  

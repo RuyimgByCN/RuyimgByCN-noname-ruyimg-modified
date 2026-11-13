@@ -1,0 +1,33 @@
+{
+  "at": "2026-11-14T00:39:59.075749+08:00",
+  "head": "bd58ef06d59940baed8d7f93e61ce571b152fb81",
+  "tracked_dirty": true,
+  "frozen_product_file_count": 32259,
+  "frozen_product_drift": [],
+  "initial_untracked_path_count": 672,
+  "initial_untracked_missing": [],
+  "registered_worktrees_identical_to_initial": true,
+  "inventory_sha256": "2658808bbe361ab248e53166157e25606c47155eb31fa19947cb601eb3f35c89",
+  "counts": {
+    "已复核等价": 634,
+    "简化近似": 3790,
+    "缺失": 0,
+    "上游未定义": 0
+  },
+  "versions": {
+    "rules": 333,
+    "ngsa": 107,
+    "schema": 5,
+    "abi": 759,
+    "ws": 8
+  },
+  "native_wasm_package_hashes": {
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm.d.ts": "818b6665b5ced71c93de82b7b971d7029ad27306175449fbe73a79b49d4f5f47",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm.d.ts": "6c1bf6831aaa805ff6ed85df827d2a1215e1680cd32ca8370ae0a5cb02d6eebb",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm.js": "b580efca4d4d27e4df8c1b9bf4cae72c5bc3346caf30b2ee0a5a31b6916a0b4a",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm": "611cb570c306edfe1313d1047d7fb64c5326a84d2d297e90e8110c5a7ddab5af",
+    "apps/web-client/src/worker/native-pkg/.gitignore": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+    "apps/web-client/src/worker/native-pkg/package.json": "031e88f4a278663a094af91940d7240533f8b3c6b83a538fe6ecbd674946dbb6"
+  },
+  "disk": "Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s5   926Gi   773Gi   128Gi    86%    6.2M  1.3G    0%   /System/Volumes/Data\n"
+}

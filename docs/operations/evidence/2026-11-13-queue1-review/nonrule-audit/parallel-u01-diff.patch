@@ -1,0 +1,157 @@
+diff --git a/crates/engine-native-content/src/content/host/step/u01_batch_a.rs b/crates/engine-native-content/src/content/host/step/u01_batch_a.rs
+index 35f68ffa2..5e8c97a60 100644
+--- a/crates/engine-native-content/src/content/host/step/u01_batch_a.rs
++++ b/crates/engine-native-content/src/content/host/step/u01_batch_a.rs
+@@ -11,6 +11,18 @@ use crate::state::GameStateCore;
+ mod asks;
+ pub(crate) use asks::*;
+ 
++fn finish_juxian(ctx: &mut Ctx<'_>, owner: PlayerId, paid: CardId, gained: Option<CardId>) -> Flow {
++    if gained.is_some_and(|c| is_red(ctx.catalog, paid) != is_red(ctx.catalog, c)) {
++        set_turn_flag(ctx.core, owner, "dddjuxian_ban", "dddjuxian_stamp", 1);
++    }
++    ctx.log(LogEvent::SkillTriggered {
++        skill: "dddjuxian",
++        owner,
++        presentation: None,
++    });
++    Flow::Done
++}
++
+ pub(crate) fn step_u01_batch_a(machine: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
+     let owner = machine.owner;
+     match machine.def_key.as_str() {
+@@ -126,31 +138,38 @@ pub(crate) fn step_u01_batch_a(machine: &mut HostMachine, ctx: &mut Ctx<'_>) ->
+                 if !u01_remove_owned(ctx, owner, c1) {
+                     return Flow::Done;
+                 }
+-                let c2 = if mode == 0 {
++                if mode == 0 {
+                     set_turn_flag(ctx.core, owner, "dddjuxian_top_used", "dddjuxian_stamp", 1);
+                     ctx.core.deck.push(c1);
+-                    let got = he_cards(ctx.core, t).first().copied();
+-                    if let Some(g) = got {
+-                        u01_remove_owned(ctx, t, g);
+-                        ctx.core.player_mut(owner).hand.push(g);
+-                    }
+-                    got
++                    machine.target = Some(t);
++                    wait_ask(machine, ctx, HostStage::CardsAsk, 28)
+                 } else {
+                     set_turn_flag(ctx.core, owner, "dddjuxian_hand_used", "dddjuxian_stamp", 1);
+                     ctx.core.player_mut(t).hand.push(c1);
+-                    u01_draw_now(ctx, owner, 1).first().copied()
++                    let gained = u01_draw_now(ctx, owner, 1).first().copied();
++                    finish_juxian(ctx, owner, c1, gained)
++                }
++            }
++            HostStage::CardsAsk => {
++                let (Some(t), Some(&paid)) = (machine.target, machine.cards.first()) else {
++                    return Flow::Done;
+                 };
+-                if let Some(g) = c2 {
+-                    if is_red(ctx.catalog, c1) != is_red(ctx.catalog, g) {
+-                        set_turn_flag(ctx.core, owner, "dddjuxian_ban", "dddjuxian_stamp", 1);
++                let player = ctx.core.player(t);
++                let gained = match ctx.answer().first() {
++                    Some(ChoiceOption::HiddenCard(slot)) => {
++                        player.hand.get(*slot as usize).copied()
+                     }
++                    Some(ChoiceOption::Card(c)) if player.equips.contains(c) => Some(*c),
++                    _ => None,
++                };
++                let Some(gained) = gained else {
++                    return Flow::Done;
++                };
++                if !u01_remove_owned(ctx, t, gained) {
++                    return Flow::Done;
+                 }
+-                ctx.log(LogEvent::SkillTriggered {
+-                    skill: "dddjuxian",
+-                    owner,
+-                    presentation: None,
+-                });
+-                Flow::Done
++                ctx.core.player_mut(owner).hand.push(gained);
++                finish_juxian(ctx, owner, paid, Some(gained))
+             }
+             _ => Flow::Done,
+         },
+@@ -216,8 +235,8 @@ pub(crate) fn step_u01_batch_a(machine: &mut HostMachine, ctx: &mut Ctx<'_>) ->
+                         Some(ChoiceOption::Tag(v)) => usize::from(v),
+                         _ => 0,
+                     };
+-                    let rem = distinct_suits(&ctx.core.player(t).hand, ctx.catalog)
+-                        .saturating_sub(dec);
++                    let rem =
++                        distinct_suits(&ctx.core.player(t).hand, ctx.catalog).saturating_sub(dec);
+                     if rem == 0 {
+                         ctx.log(LogEvent::SkillTriggered {
+                             skill: "dddjungui",
+@@ -284,8 +303,7 @@ pub(crate) fn step_u01_batch_a(machine: &mut HostMachine, ctx: &mut Ctx<'_>) ->
+                     .iter()
+                     .map(|&c| u32::from(ctx.catalog.cards[c as usize].rank))
+                     .sum();
+-                let need = (ctx.core.player(owner).hp
+-                    + ctx.core.player(ctx.core.turn.current).hp)
++                let need = (ctx.core.player(owner).hp + ctx.core.player(ctx.core.turn.current).hp)
+                     .max(1) as u32;
+                 if sum < need {
+                     return Flow::Done;
+@@ -833,4 +851,3 @@ pub(crate) fn step_u01_batch_a(machine: &mut HostMachine, ctx: &mut Ctx<'_>) ->
+         _ => Flow::Done,
+     }
+ }
+-
+diff --git a/crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs b/crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs
+index 33f1d8b05..51037c673 100644
+--- a/crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs
++++ b/crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs
+@@ -27,7 +27,13 @@ pub(crate) fn turn_flag(core: &GameStateCore, p: PlayerId, k: &str, stamp_key: &
+     }
+ }
+ 
+-pub(crate) fn set_turn_flag(core: &mut GameStateCore, p: PlayerId, k: &str, stamp_key: &str, v: u32) {
++pub(crate) fn set_turn_flag(
++    core: &mut GameStateCore,
++    p: PlayerId,
++    k: &str,
++    stamp_key: &str,
++    v: u32,
++) {
+     let cur = turn_stamp(core);
+     if flag(core, p, stamp_key) != cur {
+         set_flag(core, p, stamp_key, cur);
+@@ -631,6 +637,22 @@ pub(crate) fn build_ask(
+                 },
+             ))
+         }
++        28 => {
++            let player = core.player(target?);
++            let options =
++                crate::event::qinglong_options(owner, target?, &player.hand, &player.equips);
++            (!options.is_empty()).then_some((
++                owner,
++                ChoiceSpec {
++                    kind: ChoiceKind::SelectCards,
++                    prompt: "dddjuxian_gain",
++                    options,
++                    min: 1,
++                    max: 1,
++                    allow_cancel: false,
++                },
++            ))
++        }
+         _ => None,
+     }
+ }
+diff --git a/crates/engine-native-kernel/src/archive/known_prompts.rs b/crates/engine-native-kernel/src/archive/known_prompts.rs
+index 8cdde4839..4a82e6bef 100644
+--- a/crates/engine-native-kernel/src/archive/known_prompts.rs
++++ b/crates/engine-native-kernel/src/archive/known_prompts.rs
+@@ -612,4 +612,5 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
+     "ssr_qiangxi:confirm",
+     "ssr_qingji:confirm",
+     "ssr_qingji:choose_card",
++    "dddjuxian_gain",
+ ];

@@ -1,5 +1,56 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-14T00:58:36+08:00 队列1部分增量本地门禁通过（未提交／发布）
+
+源码HEAD `bd58ef06d59940baed8d7f93e61ce571b152fb81` + tracked dirty；规则333／NGSA107／schema5／ABI759／WS8。当前[37来源清单](../../operations/evidence/2026-11-13-queue1-review/source-counts-reviewed.md)634／3790／0；撤回215旧等价、新增等价0，沿用旧状态不作为本轮认证。三crate2446／0／6、workspace7842／0／8及其他必跑命令均exit0；完整preflight复跑21项通过，见[命令、首次失败和未验范围](../../operations/evidence/2026-11-13-queue1-review/final-local-gates.md)。八项0/37、队列1部分；实际[对照样本](../../operations/evidence/2026-11-13-queue1-review/runtime-comparison.md)仅5技能指定分支。尚未提交/发布本批。
+
+## 2026-11-14T00:30:42+08:00 队列1复核补课增量（尚未提交／发布）
+
+源码HEAD `bd58ef06d59940baed8d7f93e61ce571b152fb81` + tracked dirty；规则333／NGSA107／schema5／ABI759／WS8。当前清单634／3790／0，旧等价215项按确定源码差异撤回；新增等价签署0。仅静态未找到消费链、键改名或缺字段的建议保持待核，已纠正11条误/过度确认。保留的原等价不是本轮重新签署。
+
+| 来源 | 名称 | 已复核等价 | 简化近似 | 缺失 |
+| --- | --- | ---: | ---: | ---: |
+| U01 | 3D精选 | 33 | 62 | 0 |
+| U02 | boss | 0 | 17 | 0 |
+| U03 | cardpile | 0 | 30 | 0 |
+| U04 | coin | 0 | 7 | 0 |
+| U05 | 杀海拾遗 | 0 | 1621 | 0 |
+| U06 | 欢乐卡牌 | 7 | 4 | 0 |
+| U07 | 玩点论杀 | 29 | 7 | 0 |
+| U08 | 英雄杀 | 145 | 5 | 0 |
+| L01 | AI优化 | 0 | 133 | 0 |
+| L02 | SJ Settings | 0 | 5 | 0 |
+| L03 | boss | 0 | 8 | 0 |
+| L04 | cardpile | 0 | 21 | 0 |
+| L05 | coin | 0 | 4 | 0 |
+| L06 | wuxing | 1 | 2 | 0 |
+| L07 | 全能搜索 | 0 | 13 | 0 |
+| L08 | 十周年UI | 0 | 406 | 0 |
+| L09 | 千幻聆音 | 0 | 102 | 0 |
+| L10 | 史诗卡牌 | 8 | 9 | 0 |
+| L11 | 太虚幻境 | 2 | 934 | 0 |
+| L12 | 如真似幻 | 0 | 6 | 0 |
+| L13 | 手杀MVP | 0 | 10 | 0 |
+| L14 | 手杀ui | 0 | 141 | 0 |
+| L15 | 手杀全扩 | 0 | 14 | 0 |
+| L16 | 拖拽读取 | 0 | 3 | 0 |
+| L17 | 斗转星移 | 0 | 11 | 0 |
+| L18 | 更新保护 | 0 | 13 | 0 |
+| L19 | 末日乱斗 | 60 | 9 | 0 |
+| L20 | 标记补充 | 55 | 40 | 0 |
+| L21 | 武皇争霸 | 0 | 9 | 0 |
+| L22 | 段位制裁 | 6 | 2 | 0 |
+| L23 | 电脑适配 | 0 | 1 | 0 |
+| L24 | 皮肤切换 | 0 | 46 | 0 |
+| L25 | 祖安武将 | 193 | 64 | 0 |
+| L26 | 笨蛋插件 | 0 | 7 | 0 |
+| L27 | 选将美化 | 41 | 13 | 0 |
+| L28 | 雷霆万钧 | 51 | 5 | 0 |
+| L29 | 龙血玄黄 | 3 | 6 | 0 |
+| 全部37来源 | 4424项 | 634 | 3790 | 0 |
+
+[应用复审后的计数及更正链](../../operations/evidence/2026-11-13-queue1-review/source-counts-reviewed.md)；[U01逐技能重审](../../operations/evidence/2026-11-13-queue1-review/independent/u01/README.md)、[其余12源141样本](../../operations/evidence/2026-11-13-queue1-review/independent/other-sources/samples.md)、[224分类项](../../operations/evidence/2026-11-13-queue1-review/nonrule-audit/README.md)、[5技能13分支实际上游对照](../../operations/evidence/2026-11-13-queue1-review/runtime-comparison.md)。下方日期表均保留为历史快照，旧整源等价措辞不代表当前验收。
+
 ## 2026-11-13T23:03:20+08:00 第0项发布核验
 
 代码 `1d59f42b8b493e1fbac7a0e8b8c781ccef1ea61c` 已推送，精确SHA的[CI](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43442212867)通过。规则333／NGSA107／schema5／ABI759／WS8；记录时该HEAD加文档dirty。当前清单仍为849／3575／0，U01和L20保留本批下调，未新增等价认证；[逐来源表](../../operations/evidence/2026-11-13-queue0-gates/source-counts.md)及[独立分支样本](../../operations/evidence/2026-11-13-queue0-gates/independent-review/final-report.md)。整包八项0/37，队列1以后未开始。

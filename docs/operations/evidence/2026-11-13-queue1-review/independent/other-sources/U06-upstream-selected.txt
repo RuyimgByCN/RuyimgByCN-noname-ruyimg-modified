@@ -1,0 +1,278 @@
+
+=== cards jiuwei | archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:109 ===
+	jiuwei: {
+		audio: "ext:欢乐卡牌/audio/card",
+		fullskin: true,
+		type: "equip",
+		subtype: "equip5",
+		skills: ["jiuwei"],
+		ai: {
+			basic: {
+				equipValue: 8,
+			},
+		},
+	}
+
+=== cards kuwu | archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:81 ===
+	kuwu: {
+		audio: "ext:欢乐卡牌/audio/card",
+		fullskin: true,
+		type: "equip",
+		subtype: "equip1",
+		skills: ["kuwu"],
+		nomod: true,
+		nopower: true,
+		unique: true,
+		distance: {
+			attackFrom: -1,
+		},
+		ai: {
+			equipValue: 6,
+		},
+	}
+
+=== cards mianju | archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:16 ===
+	mianju: {
+		fullskin: true,
+		type: "equip",
+		subtype: "equip2",
+		skills: ["mianju"],
+		ai: {
+			order: 9.5,
+			basic: {
+				equipValue(card, player) {
+					if (!player.isTurnedOver()) {
+						return 6;
+					}
+					if (player.isTurnedOver()) {
+						return -10;
+					}
+					return 0;
+				},
+			},
+		},
+	}
+
+=== cards monkey | archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:4 ===
+	monkey: {
+		audio: "ext:欢乐卡牌/audio/card",
+		fullskin: true,
+		type: "equip",
+		subtype: "equip5",
+		skills: ["monkey"],
+		ai: {
+			basic: {
+				equipValue: 8,
+			},
+		},
+	}
+
+=== cards shoulijian | archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:36 ===
+	shoulijian: {
+		audio: "ext:欢乐卡牌/audio/card",
+		type: "basic",
+		enable: true,
+		fullskin: true,
+		outrange: {
+			global: 2,
+		},
+		filterTarget: lib.filter.notMe,
+		async content(event, trigger, player) {
+			const target = event.target;
+			let bool;
+			if (target.countCards("he")) {
+				bool = (await target
+					.chooseToDiscard("he", { type: "equip" }, "弃置一张装备牌或受到1点伤害")
+					.set("ai", card => {
+						var player = _status.event.player;
+						var source = _status.event.getParent().player;
+						if (get.damageEffect(player, source, player) > 0) {
+							return -1;
+						}
+						return 7 - get.value(card);
+					})
+					.forResult()).bool;
+			}
+			if (!bool) {
+				await target.damage();
+			}
+		},
+		ai: {
+			basic: {
+				order: 9,
+				value: 6,
+				useful: 2,
+			},
+			result: {
+				target: -2,
+			},
+			tag: {
+				discard: 1,
+				damage: 1,
+			},
+		},
+		selectTarget: 1,
+	}
+
+=== cards xuelunyang | archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:97 ===
+	xuelunyang: {
+		audio: "ext:欢乐卡牌/audio/card",
+		fullskin: true,
+		type: "equip",
+		subtype: "equip5",
+		skills: ["xuelunyang"],
+		ai: {
+			basic: {
+				equipValue: 8,
+			},
+		},
+	}
+
+=== skills jiuwei | archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:129 ===
+	jiuwei: {
+		trigger: {
+			player: "phaseEnd",
+		},
+		audio: "ext:欢乐卡牌/audio/skill:true",
+		frequent: true,
+		equipSkill: true,
+		async content(event, trigger, player) {
+			if (player.isDamaged()) {
+				await player.recover();
+			} else {
+				await player.draw();
+			}
+		},
+	}
+
+=== skills mianju | archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:32 ===
+	mianju: {
+		// audio: "ext:欢乐卡牌/audio/skill:true",
+		trigger: {
+			player: "turnOverBefore",
+		},
+		forced: true,
+		equipSkill: true,
+		async content(event, trigger, player) {
+			trigger.cancel();
+		},
+		ai: {
+			noturnOver: true,
+			effect: {
+				target(card, player, target, current) {
+					if (get.tag(card, "turnOver")) {
+						return "zeroplayertarget";
+					}
+				},
+			},
+		},
+	}
+
+=== skills monkey | archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:5 ===
+	monkey: {
+		equipSkill: true,
+		trigger: {
+			global: "useCardToBegin",
+		},
+		audio: "ext:欢乐卡牌/audio/skill:true",
+		filter(event, player) {
+			var card = player.getEquip(5);
+			if (card) {
+				var name = card.name;
+				if (name && name.indexOf("monkey") !== -1 && event.name === "tao" && event.player !== player && event.cards.filterInD().length > 0) {
+					return true;
+				}
+			}
+			return false;
+		},
+		check(event, player) {
+			return get.attitude(player, event.player) <= 0;
+		},
+		async content(event, trigger, player) {
+			player.$fullscreenpop("猴子偷桃", "fire");
+			trigger.untrigger();
+			trigger.finish();
+			await player.discard(player.getEquip(5));
+			await player.gain(trigger.cards.filterInD(), "gain2", "log");
+		},
+	}
+
+=== skills xuelunyang | archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:70 ===
+	xuelunyang: {
+		audio: "ext:欢乐卡牌/audio/skill:true",
+		trigger: { player: "phaseBegin" },
+		equipSkill: true,
+		filter(event, player) {
+			return game.hasPlayer(
+				current =>
+					player !== current &&
+					current.getSkills(null, false, false).filter(skill => {
+						const info = get.info(skill);
+						return info && !info.charlotte;
+					}).length
+			);
+		},
+		async cost(event, trigger, player) {
+			event.result = await player
+				.chooseTarget(get.prompt2(event.skill), (card, player, target) => {
+					return (
+						player !== target &&
+						target.getSkills(null, false, false).filter(skill => {
+							const info = get.info(skill);
+							return info && !info.charlotte;
+						}).length
+					);
+				})
+				.set("ai", target => {
+					return Math.random();
+				})
+				.forResult();
+		},
+		async content(event, trigger, player) {
+			const {
+				targets: [target],
+			} = event;
+			const skills = target.getSkills(null, false, false).filter(skill => {
+				const info = get.info(skill);
+				return info && !info.charlotte;
+			});
+			if (!skills.length) {
+				return;
+			}
+			const { links } = await player
+				.chooseButton(["选择获得一个技能", [skills, "skill"]])
+				.set("displayIndex", false)
+				.set("ai", button => {
+					const player = get.player();
+					let info = get.info(button.link);
+					if (info?.ai?.neg || info?.ai?.halfneg) {
+						return 0;
+					}
+					return get.skillRank(button.link, "in");
+				})
+				.forResult();
+			if (!links?.length) {
+				return;
+			}
+			await player.addTempSkills(links[0]);
+		},
+	}
+
+=== skills kuwu | archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:53 ===
+	kuwu: {
+		audio: "ext:欢乐卡牌/audio/skill:true",
+		trigger: {
+			source: "damageSource",
+		},
+		forced: true,
+		equipSkill: true,
+		filter(event, player) {
+			if (event._notrigger.includes(event.player)) {
+				return false;
+			}
+			return event.card && event.card.name === "sha" && event.notLink() && event.player.countCards("he") > 0;
+		},
+		async content(event, trigger, player) {
+			await trigger.player.chooseToDiscard(true, "he");
+		},
+	}

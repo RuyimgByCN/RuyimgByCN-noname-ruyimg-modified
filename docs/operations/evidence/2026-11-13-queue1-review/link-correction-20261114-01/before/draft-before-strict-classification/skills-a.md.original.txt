@@ -1,0 +1,290 @@
+# U01 独立逐技能表：A组
+
+核验日期：2026-11-13；HEAD `bd58ef06d59940baed8d7f93e61ce571b152fb81`，初始 tracked clean。规则333／NGSA107／schema5／ABI759／WS8。
+本表为独立源码比较及现有测试断言检查；本复核 Cargo执行0、浏览器执行0。反例是待执行场景，不写成已复现。A/B/C/D 及 `_asks` 指本来源对应 batch 文件。
+
+## dddyuanzhen
+
+键：`U01:skills:dddyuanzhen@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:6`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:6)，规则区至36行；[冻结副本](inputs/upstream/skill.js:6)。原生：[u01_batch_a.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a.rs:17)；[u01_batch_a_asks.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | 本人 useCardToPlayered，forced，首个目标事件。 |
+| 过滤和次数 | 整张牌仅一个目标，目标不是本人，双方距离不等于1；没有阶段或次数限制。 |
+| 选择与取消 | 目标有可弃 he 时，由目标选择任意一张弃置，或取消；无牌或取消时持技者摸1。 |
+| 上游逐步结算 | 核对整张牌目标数及距离，询问目标弃牌；成功支付则结束，否则持技者摸1，随后原牌继续。 |
+| 当前原生执行 | A:17–51；A_asks:723–732；ask 1 由目标回答。当前在 CardUsed Normal 询问。 |
+| 源码差异/边界 | 上游逐目标事件 useCardToPlayered 对照原生 CardUsed；后续增加或移除目标时，当前过滤依赖当时 u.targets，不能证明与最终单目标一致。内容中的弃牌/取消摸牌分支有实际实现。 |
+| 待执行反例 | 用牌初始仅一名距离2目标，在另一个触发中追加第二目标；比较远振是否仍要求弃牌。再做初始双目标删为单目标的反向场景。 |
+| 实际断言与缺口 | u01_ddd_eight.rs:263 起确实断言距离1不触发、距离2弃牌/取消结果及挂起恢复/AI；未覆盖 useCardToPlayered 顺序和追加目标。 |
+
+本项建议保持或改为「简化近似」；本复核不签署「已复核等价」。
+
+## dddzhishu
+
+键：`U01:skills:dddzhishu@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:37`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:37)，规则区至58行；[冻结副本](inputs/upstream/skill.js:37)。原生：[u01_batch_a.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a.rs:52)；[u01_batch_a_asks.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | 本人 phaseUseBegin，可选发动。 |
+| 过滤和次数 | player.canMoveCard(null,true)；可移动的场上牌不限定为装备。 |
+| 选择与取消 | 可取消移动；成功时选择来源、目的及实际牌，之后来源角色对目的角色强制使用过河拆桥。 |
+| 上游逐步结算 | 先完成 moveCard 的合法移动并取得 result.targets，再由原来源 chooseUseTarget 过河拆桥。 |
+| 当前原生执行 | A:52–99；A_asks:97–132、733–737；仅枚举装备、空槽接收者。 |
+| 源码差异/边界 | 原生完全不枚举判定区牌；挪装备直接改 equips 并 grant/revoke，不能提供上游 moveCard 事件链。 |
+| 待执行反例 | 全场无装备，A判定区有可移给B的乐不思蜀；上游应能发动移动并令A对B用过河，原生入口无候选。 |
+| 实际断言与缺口 | 注册测试仅证明技能存在；未发现志书的真实移动、过河、取消或 pending 恢复断言。 |
+
+本项建议保持或改为「简化近似」；本复核不签署「已复核等价」。
+
+## dddxiaxing
+
+键：`U01:skills:dddxiaxing@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:59`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:59)，规则区至243行；[冻结副本](inputs/upstream/skill.js:59)。原生：[skills_targets.rs](../../../../../../crates/engine-native-content/src/content/host/step/skills_targets.rs:306)；[d34_view_as.rs](../../../../../../crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_view_as.rs:379)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | 准备阶段分支 global phaseZhunbeiBegin；救人本体是 chooseToUse dying 窗口；另有 chooseToUse 的侠标记杀/闪。 |
+| 过滤和次数 | 每轮未有 dddxiaxing_used，自己有 he；救人还要求 _save.dying 仍在场。侠标记可跨轮保留，转化不在 wuxie 窗口。 |
+| 选择与取消 | 准备/救人可选一张 he 置顶或取消；标记转化只列当前窗口合法的杀/闪，再正常选用牌目标。 |
+| 上游逐步结算 | 支付一张到牌堆顶，记本轮使用；事件角色 chooseUseTarget 酒/桃；完成后补侠标记。转化在 precontent 清标记。 |
+| 当前原生执行 | skills_targets.rs:306–436；filtering/common.rs:984–1014；activation/common.rs:483–516；d34_view_as.rs:379–400；handlers.rs 的 record_use 消费标记。 |
+| 源码差异/边界 | 原生救人直接监听 Dying 并 emit 桃，没有上游 _save/chooseToUse 的可用牌过滤；主动 ActivateSkill 只检 sha_used_play_phase 并列全部其他角色，没有正常杀的距离过滤。共享 view-as 表确实另提供闪，不能误报缺闪。 |
+| 待执行反例 | 四人无武器，持侠标记者对距离2角色 ActivateSkill；核对正常杀不可达时是否被错误允许。救人时令被救者不能使用桃，再比较是否仍清本轮次数/发桃事件。 |
+| 实际断言与缺口 | decision34_pack9_closure.rs:130–232 与 l11_taixu_boss_events.rs:618–865 有准备A/B/取消、无he、跨轮标记、主动杀、pending hash/event及AI隐藏牌独立断言；后者实际未造濒死、未响应闪、未测远目标/禁桃。 |
+
+本项建议保持或改为「简化近似」；本复核不签署「已复核等价」。
+
+## dddjuxian
+
+键：`U01:skills:dddjuxian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:244`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:244)，规则区至383行；[冻结副本](inputs/upstream/skill.js:244)。原生：[u01_batch_a.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a.rs:100)；[u01_batch_a_asks.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | phaseUse 主动，usable 2。 |
+| 过滤和次数 | 自己 hs 能放牌堆顶或手牌底；本出牌阶段每种模式最多1次；选目标须另人有 he；获得牌若与付出牌异色，本阶段失去再发动机会。 |
+| 选择与取消 | 先选 top/hand/取消，再选付出牌和目标；gainPlayerCard 由持技者选择目标 he 的一张。 |
+| 上游逐步结算 | 将选牌置顶或手牌底，获得目标选定 he，比较颜色并记录当前模式及异色禁用。 |
+| 当前原生执行 | A:100–156；A_asks:133–159；按 turn_stamp 记模式，获得 he_cards(target).first()。 |
+| 源码差异/边界 | 缺获得目标 he 的选牌窗口；固定首张可能改变颜色以及第二次发动资格。每阶段次数被 turn_stamp 扩成每回合。 |
+| 待执行反例 | 目标同时有红色装备和黑色手牌，主人付红；选择红/黑应决定能否再次发动，原生只拿第一张。增加同回合第二出牌阶段再测模式重置。 |
+| 实际断言与缺口 | u01_ddd_eight.rs:263 组的聚贤段覆盖mode取消不耗、唯一目标牌top同色、hand异色禁用及重复拒绝；没给目标两张可选he，没有选牌A/B、额外阶段或该后续窗口恢复。 |
+
+本项建议保持或改为「简化近似」；本复核不签署「已复核等价」。
+
+## dddjungui
+
+键：`U01:skills:dddjungui@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:384`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:384)，规则区至442行；[冻结副本](inputs/upstream/skill.js:384)。原生：[u01_batch_a.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a.rs:157)；[u01_batch_a_asks.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | 本人 phaseJieshuBegin，direct。 |
+| 过滤和次数 | 可选一名角色；本回合本人使用过的牌花色去重数影响弃牌上限减免；受益者摸2后展示所有手牌。 |
+| 选择与取消 | 主人选目标/取消；计算展示手牌花色数减本回合使用花色数，至多减到0；受益者按要求自选各不相同花色手牌弃置。 |
+| 上游逐步结算 | 摸2，公开手牌，计算花色差，受益者选择符合异花色约束的弃牌，完成弃置。 |
+| 当前原生执行 | A:157–268；A_asks:738–746；用物理 CardUsed 记录 suit bits，ask9仅限制数量。 |
+| 源码差异/边界 | 弃牌候选没有各不相同花色限制，能弃两张同花色；本回合虚拟牌/转化花色记录不完整，并以 cards_used_play_phase>0 回退为一种花色。 |
+| 待执行反例 | 主人本回合未用牌，目标摸后有红桃红桃黑桃，需弃2时选择两红桃；原生可接受，上游过滤应拒绝。另用带花色虚拟牌验证减免。 |
+| 实际断言与缺口 | 旧closure对本技能是直接 invoke_p9_op(StorageSet) 并断言flags，非当前Host。未见当前Host异花色弃牌、两主体选择或挂起恢复测试。 |
+
+本项建议保持或改为「简化近似」；本复核不签署「已复核等价」。
+
+## dddjinggou
+
+键：`U01:skills:dddjinggou@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:443`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:443)，规则区至471行；[冻结副本](inputs/upstream/skill.js:443)。原生：[skills_damage.rs](../../../../../../crates/engine-native-content/src/content/host/step/skills_damage.rs:638)；[common.rs](../../../../../../crates/engine-native-content/src/content/host/filtering/common.rs:643)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | 本人 useCardAfter，forced/direct。 |
+| 过滤和次数 | 刚使用的是 equip1 武器；结算后本人攻击范围不小于任何在场角色，可并列最大。 |
+| 选择与取消 | 强制选择一名其他角色，不能取消，然后对其造成1点伤害。 |
+| 上游逐步结算 | 装备牌完整使用结束后算全场攻击范围，再选目标并造成普通1伤。 |
+| 当前原生执行 | skills_damage.rs:638–684；filtering/common.rs:643–656；metadata/common.rs:729。实际事件是 Equipped。 |
+| 源码差异/边界 | 直接移入装备区也会发 Equipped，因此可能在没有使用武器时触发；实际用牌中询问早于 useCardAfter。范围与强制伤害分支本身存在。 |
+| 待执行反例 | 用技能从牌堆直接装备全场最大射程武器；上游没有 useCardAfter，原生 Equipped 会触发精彀。再叠加装备使用结束触发以检查询问顺序。 |
+| 实际断言与缺口 | u01_ddd_eight.rs A组测非最大不触发、并列最大、目标伤1与pending恢复；g1_d3.rs:117、u01_d3_select_eight.rs 实装武器路径和恢复。未测直接装备与使用后的时序。 |
+
+本项建议保持或改为「简化近似」；本复核不签署「已复核等价」。
+
+## dddmoyan
+
+键：`U01:skills:dddmoyan@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:472`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:472)，规则区至510行；[冻结副本](inputs/upstream/skill.js:472)。原生：[support.rs](../../../../../../crates/engine-native-content/src/content/host/support.rs:768)；[skills_damage.rs](../../../../../../crates/engine-native-content/src/content/host/step/skills_damage.rs:902)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | global roundStart；临时子技能本人 damageBegin3。 |
+| 过滤和次数 | 每轮展示牌堆顶3；增伤要求所选获得者仍在场，且其当前手牌数不大于当初获得张数；临时效果到下一 roundStart。 |
+| 选择与取消 | 主人选择任意角色或取消；获得者强制选1至全部展示牌。 |
+| 上游逐步结算 | 展示牌进入 ordering；选人、取牌、存目标和数量、加临时增伤；主人受伤时满足条件加1。 |
+| 当前原生执行 | support.rs:768–940；skills_damage.rs:902–917；asks.rs:586–619。每轮首次 Judge begin 展示。 |
+| 源码差异/边界 | global roundStart 被延后到本轮首次判定阶段。准备阶段前后发生伤害、跳过判定或轮首摸牌均可改变展示和增伤生效区间；原生直接处分未取牌，需另核对 ordering 的离场事件。 |
+| 待执行反例 | 上一轮末焱目标满足增伤条件，本轮 roundStart 后、首次判定前发生伤害；上游旧临时技能已到期并可能重选，原生尚未重开窗口。让第一角色跳过Judge可观察进一步延后。 |
+| 实际断言与缺口 | u01_d3_moyan.rs:150 起实际测选人/取牌两次NGSA恢复、手牌超限/目标死亡/同轮/下一轮/取消/空库；nc10_live_hidden_cards.rs:319 测两公开持牌窗口隐藏牌独立；均没有 roundStart 对照，部分断言已固定首次Judge近似。 |
+
+本项建议保持或改为「简化近似」；本复核不签署「已复核等价」。
+
+## dddshilie
+
+键：`U01:skills:dddshilie@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:511`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:511)，规则区至655行；[冻结副本](inputs/upstream/skill.js:511)。原生：[u01_batch_a.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a.rs:269)；[u01_batch_a_asks.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | chooseToUse，虚拟杀或闪，每回合一次。 |
+| 过滤和次数 | 选择尚未明置的手牌，点数和至少等于自己当前体力与当前回合角色体力之和；当前窗口必须接受杀/闪。 |
+| 选择与取消 | 选合法杀或闪，再选满足点数的未明手牌；可取消。点数恰等时摸并明置所选张数的牌。 |
+| 上游逐步结算 | 明置选牌但不消耗实体，记录明牌身份，等和时摸并继续明置，最终正常使用所选杀/闪。 |
+| 当前原生执行 | A:269–326；A_asks:812–821、limits:705；d34_view_as.rs:451–472 只在旧VM写入 ddd_shilie_viewas_shashan 后激活。 |
+| 源码差异/边界 | Host只能本人Play主动虚拟杀；未写响应闪所需flag。只存 shown_count，不能排除已明置实体。当前回合等于自己使条件固定为两倍自己hp。 |
+| 待执行反例 | 他人杀指向自己时持足点数未明手牌：上游可发动示烈当闪，原生没有窗口。第二回合重用同一已明牌，上游不得再选而原生仅有计数。 |
+| 实际断言与缺口 | 旧closure通过直接旧VM写flag断言可转杀闪，不能证明Host。未发现当前Host示烈选择、等和补明、响应或保存恢复断言。 |
+
+本项建议保持或改为「简化近似」；本复核不签署「已复核等价」。
+
+## dddyeshen
+
+键：`U01:skills:dddyeshen@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:656`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:656)，规则区至746行；[冻结副本](inputs/upstream/skill.js:656)。原生：[u01_batch_a.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a.rs:327)；[u01_batch_a_asks.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | global phaseJieshuBegin，可选。 |
+| 过滤和次数 | 本技能依次展示牌堆底3、2、1张；黑牌可供当前回合角色选作铁索；第三次完成后持技者受1火伤，计数重置3。 |
+| 选择与取消 | 主人可取消发动；当前回合角色从黑色展示牌中选1，随后选0至中文牌名长度个铁索合法目标，0目标重铸。 |
+| 上游逐步结算 | 取底牌并展示，让当前角色决定黑牌和铁索目标，以该实体真实用铁索；其余展示牌放回牌顶；第三次结算自火。 |
+| 当前原生执行 | A:327–425；A_asks:747–751、ask12/13。固定找到第一黑牌，目标最多2，直接发Linked。 |
+| 源码差异/边界 | 省去黑牌A/B选择；目标上限固定2且跳过铁索 CardUsed/重铸的牌事件，不能正确带动用牌历史、暗织等相关技能。 |
+| 待执行反例 | 底3中放黑杀和黑过河拆桥，当前角色选择过河拆桥当铁索应可选四目标；另取消目标应重铸并留下用牌/重铸事件，原生固定首黑且最多2。 |
+| 实际断言与缺口 | 旧closure直接invoke旧VM验证3→2→1→火伤，不是当前Host End路径；没测选黑A/B、0目标重铸、多于2目标、底牌次序或pending。 |
+
+本项建议保持或改为「简化近似」；本复核不签署「已复核等价」。
+
+## dddqiaoduan
+
+键：`U01:skills:dddqiaoduan@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:747`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:747)，规则区至801行；[冻结副本](inputs/upstream/skill.js:747)。原生：[u01_batch_a.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a.rs:426)；[u01_batch_a_asks.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | global linkAfter，usable 1，每回合限一次。 |
+| 过滤和次数 | 刚横置：自己he数量至少等于现横置人数且场上有人受伤；解除横置：现横置人数必须大于0。 |
+| 选择与取消 | 横置分支一个 chooseCardTarget 同选等量牌和伤者，可取消；解除分支选1至现横置人数个角色或取消。 |
+| 上游逐步结算 | 横置时按所选顺序将牌放底，再伤者回1；解除时选人按座次各摸1。 |
+| 当前原生执行 | A:426–512；A_asks:752–782；原生分两个窗口先选he再选伤者，支付在第二窗口成功后；deck.insert(0)保留先选在上。 |
+| 源码差异/边界 | 上游 chooseCardTarget 未传position，player.js 默认h；native he_options额外允许装备。分拆窗口保留取消前不支付，但不能把候选区差异视为等价。 |
+| 待执行反例 | 自己无手牌只有1装备，场上刚横置人数1且有伤者；上游默认手牌选择器无可选牌，原生可选装备置底并回血。 |
+| 实际断言与缺口 | 旧closure直接invoke旧VM测试linkflag/回血；没有当前Host两分支、装备候选、取消两窗口与NGSA恢复断言。 |
+
+本项建议保持或改为「简化近似」；本复核不签署「已复核等价」。
+
+## ddddiedang
+
+键：`U01:skills:ddddiedang@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:802`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:802)，规则区至860行；[冻结副本](inputs/upstream/skill.js:802)。原生：[u01_batch_a.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a.rs:513)；[u01_batch_a_asks.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | phaseUse 主动，usable1，转换技。 |
+| 过滤和次数 | 状态0可发动摸3弃1；状态1需可弃3，弃3摸1；完成时手牌为全场最多或最少（允许并列）才切换状态。 |
+| 选择与取消 | 主动不发动无事；发动后弃牌按分支强制选1或3，不能通过空选择保留收益。 |
+| 上游逐步结算 | 按转换状态完成摸弃，再计算最终手牌极值并切状态。 |
+| 当前原生执行 | A:513–567；A_asks:705–710、822–825；SkillLimits.once_per_turn。 |
+| 源码差异/边界 | 次数是每回合，源为每个出牌阶段一次；同回合额外出牌阶段被错误拒绝。原生状态0在选弃牌前已摸3，需严格保持强制支付语义。 |
+| 待执行反例 | 同回合增加第二个出牌阶段，第一阶段用一次后，第二阶段源允许再次用，原生once_per_turn拒绝。另在状态1测试弃3/取消非法选择。 |
+| 实际断言与缺口 | u01_ddd_eight.rs A组断言状态0净增2、非极值不翻、次turn极值翻和本turn重复拒绝；未实际测状态1弃3摸1或额外Play。旧closure两种状态为旧VM直调。 |
+
+本项建议保持或改为「简化近似」；本复核不签署「已复核等价」。
+
+## dddanliu
+
+键：`U01:skills:dddanliu@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:861`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:861)，规则区至967行；[冻结副本](inputs/upstream/skill.js:861)。原生：[u01_batch_a.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a.rs:568)；[u01_batch_a_asks.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | 本人 phaseJieshuBegin，direct。 |
+| 过滤和次数 | 本人及另一角色各有手牌；双方展示的牌颜色相同才进入是否交换。 |
+| 选择与取消 | 主人选他人/取消，双方分别自选手牌展示；同色时主人选择交换或拒绝，异色直接结束。 |
+| 上游逐步结算 | 同色且同意才交换；黑色令目标摸2，红色令主人回1。 |
+| 当前原生执行 | A:568–638；A_asks ask19–22、783–789；异色分支跳过confirm直接继续交换。 |
+| 源码差异/边界 | 原生异色反而自动交换；源无交换、无奖励。该差异无需把AI偏好当规则即可构造。 |
+| 待执行反例 | 主人展示红桃桃、对方展示黑桃杀；源两牌原位结束，原生互换。另同黑选拒绝验证不摸2，同红同意验证回血。 |
+| 实际断言与缺口 | 未发现当前Host暗流真实事件断言；缺异色不交换、同色同意/拒绝、双方选牌A/B与各窗口恢复。 |
+
+本项建议保持或改为「简化近似」；本复核不签署「已复核等价」。
+
+## dddguiying
+
+键：`U01:skills:dddguiying@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:968`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:968)，规则区至1203行；[冻结副本](inputs/upstream/skill.js:968)。原生：[u01_batch_a.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a.rs:639)；[u01_batch_a_asks.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | 本人 phaseZhunbeiBegin，zhuSkill/direct。 |
+| 过滤和次数 | 必须有主公技资格；按座次询问其他吴势力角色，逐个可响应；响应者he有牌。 |
+| 选择与取消 | 每个吴角色可拒绝；响应则交出自己he最高点牌，同点由其选；然后该角色可选全场ej最低点牌，同点可选，也可放弃。 |
+| 上游逐步结算 | 循环所有吴角色：自愿响应、最高点交主公、可取得全场最低点场牌；一次响应不会终止余人。 |
+| 当前原生执行 | A:639–687；A_asks:160–173、790–795；只 first_wu_responder，max/min自动取。 |
+| 源码差异/边界 | 没有主公资格检查；只处理第一吴角色，且没有响应拒绝、最高同点和最低场牌选取/取消窗口。 |
+| 待执行反例 | 非主公孙亮且两名吴角色各有同点两牌；源不能发主公技，原生可先处理第一人。改为真主公让第一人拒绝、第二人响应，检查循环和选牌。 |
+| 实际断言与缺口 | 仅注册了技能，无归萤的实际主公/多人响应、平点选择、拒绝或挂起恢复断言。 |
+
+本项建议保持或改为「简化近似」；本复核不签署「已复核等价」。
+
+## dddbingjian
+
+键：`U01:skills:dddbingjian@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1204`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1204)，规则区至1442行；[冻结副本](inputs/upstream/skill.js:1204)。原生：[u01_batch_a.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a.rs:688)；[u01_batch_a_asks.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | chooseToUse及chooseToRespond，杀/闪，每回合最多2。 |
+| 过滤和次数 | 当前手牌数不等于2，窗口接受杀或闪；将手牌调整到2，数差决定之后帮助角色的摸弃数量。 |
+| 选择与取消 | 选杀/闪、可选其他人调整等量手牌或不选；该可选帮助不应取消已发起虚拟牌；原牌独立选合法目标。 |
+| 上游逐步结算 | 自己补/弃至2，可选他人摸或自行弃对应张数，完成正常虚拟杀/闪结算，记次数。 |
+| 当前原生执行 | A:688–767；A_asks:826–834；只自己Play ActivateSkill，固定虚拟杀。 |
+| 源码差异/边界 | 无响应闪/响应杀入口；原生将帮助对象直接当杀目标，取消帮助就不出牌，对他人弃牌固定前N而非自行选。 |
+| 待执行反例 | 本人1手牌遭杀，用并肩当闪并不选择帮助目标；源应补1后闪掉，原生无入口。主动杀时帮助友方A但杀敌方B，原生不能分开。 |
+| 实际断言与缺口 | 未发现当前Host并肩的真实事件测试；缺1/3手牌正例、2手牌负例、两次上限、帮助取消和响应恢复。 |
+
+本项建议保持或改为「简化近似」；本复核不签署「已复核等价」。
+
+## dddtongyu
+
+键：`U01:skills:dddtongyu@archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1443`。
+
+上游：[实际定义](../../../../../../../archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:1443)，规则区至1583行；[冻结副本](inputs/upstream/skill.js:1443)。原生：[u01_batch_a.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a.rs:768)；[u01_batch_a_asks.rs](../../../../../../crates/engine-native-content/src/content/host/step/u01_batch_a_asks.rs:1)。
+
+| 核对项 | 具体比较 |
+| --- | --- |
+| 触发时机 | phaseUse 主动，每个出牌阶段1次。 |
+| 过滤和次数 | 1至4张花色各异的hs牌作为五谷实体，需正常可用；五谷展示数量增加所付张数。 |
+| 选择与取消 | 选择所付异花色牌、结算方向；各目标选择锁定本回合手牌并取牌或退出；最后可把余牌交给被排除角色。 |
+| 上游逐步结算 | 真实使用五谷，展示人数加所付张数的牌，按所选方向逐人决策并选牌，处理剩牌和暂时手牌禁用。 |
+| 当前原生执行 | A:768–832；A_asks limits:705、activate:835；自己pop所选张数，再逐人Tag0/Tag1。 |
+| 源码差异/边界 | 原生未走五谷：仅额外抽所付张数，Tag0另摸1只写 hand_locked，Tag1取得全部remaining。该锁flag没有消费者，缺方向、人数牌池和余牌赠送。 |
+| 待执行反例 | 三人付两张不同花色牌，应公开5张逐人选；原生只生成2张。第一人选择锁手牌后尝试使用手牌，源禁用而原生flag未落实。 |
+| 实际断言与缺口 | 仅注册测试；没有五谷真实事件、异花色反例、两方向、锁牌、退出、余牌给回或恢复断言。 |
+
+本项建议保持或改为「简化近似」；本复核不签署「已复核等价」。
+
