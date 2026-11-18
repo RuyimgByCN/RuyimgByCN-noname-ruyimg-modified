@@ -76,6 +76,30 @@ class DocLineRefTests(unittest.TestCase):
                               capture_output=True, text=True, cwd=ROOT)
         self.assertEqual(proc.returncode, 0, proc.stderr)
 
+    def test_doc_files_skips_evidence_raw(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            docs = root / "docs"
+            source = root / "sample.rs"
+            source.write_text("first\nsecond\n", encoding="utf-8")
+            ok_doc = docs / "architecture" / "ok.md"
+            ok_doc.parent.mkdir(parents=True)
+            ok_doc.write_text("见 `sample.rs:1`", encoding="utf-8")
+            raw_doc = docs / "operations" / "evidence-raw" / "ci" / "raw.md"
+            raw_doc.parent.mkdir(parents=True)
+            raw_doc.write_text("见 `sample.rs:999`", encoding="utf-8")
+
+            with (
+                mock.patch.object(self.mod, "ROOT", root),
+                mock.patch.object(self.mod, "DOCS", docs),
+                mock.patch.object(self.mod, "_INDEX", {}),
+                mock.patch.object(sys, "argv", [str(SCRIPT), "--strict"]),
+                contextlib.redirect_stdout(io.StringIO()),
+                contextlib.redirect_stderr(io.StringIO()),
+            ):
+                self.assertEqual(self.mod.doc_files(), [ok_doc])
+                self.assertEqual(self.mod.main(), 0)
+
 
 if __name__ == "__main__":
     unittest.main()

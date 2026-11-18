@@ -42,6 +42,7 @@ CHECKS: list[tuple[str, list[str], bool]] = [
     ("注释计数=台账", [PY, "-B", "scripts/check_comment_counts.py", "--strict"], False),
     ("脚本单测", [PY, "-B", "-m", "unittest", "discover", "-s", "scripts"], True),
     ("文档 file:line 引用", [PY, "-B", "scripts/check_doc_line_refs.py", "--strict"], False),
+    ("证据体量与类型门禁", [PY, "-B", "scripts/check_evidence_budget.py"], False),
     ("行数门禁", [PY, "-B", "scripts/check-source-lines.py"], False),
     ("原生分层棘轮", [PY, "-B", "scripts/check-native-layering.py"], False),
 ]

@@ -15,6 +15,7 @@ would be worse than not checking.
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import sys
 from collections import Counter
@@ -28,25 +29,45 @@ REF_RE = re.compile(r"([A-Za-z0-9_./-]+\.(?:rs|py|ts|tsx|js|json|toml|md)):(\d+)
 
 #: 少见的合法目标（不在 docs 的父目录树里）。
 SKIP_PREFIXES = ("http", "www.")
+SKIP_INDEX_DIRS = {".git", "target", "node_modules", ".codegraph", ".npack-store"}
+INDEX_EXTS = {".rs", ".py", ".ts", ".tsx", ".js", ".json", ".toml", ".md"}
+
+
+def raw_evidence_dir() -> Path:
+    return (DOCS / "operations" / "evidence-raw").resolve()
 
 
 def doc_files() -> list[Path]:
-    return [path for path in DOCS.rglob("*.md") if path.is_file()]
+    raw_dir = raw_evidence_dir()
+    return [
+        path
+        for path in sorted(DOCS.rglob("*.md"))
+        if path.is_file() and not path.resolve().is_relative_to(raw_dir)
+    ]
 
 
 _INDEX: dict[str, list[Path]] = {}
 
 
 def _index() -> dict[str, list[Path]]:
-    """basename -> candidate paths (built once; rglob over the archive is slow)."""
+    """basename -> candidate paths (built once; pruning target/.git/raw evidence)."""
     if _INDEX:
         return _INDEX
+    raw_dir = raw_evidence_dir()
     for base in (ROOT, ROOT.parent / "archive"):
         if not base.is_dir():
             continue
-        for path in base.rglob("*"):
-            if path.is_file() and path.suffix in {".rs", ".py", ".ts", ".tsx", ".js", ".json", ".toml", ".md"}:
-                _INDEX.setdefault(path.name, []).append(path)
+        for dirpath, dirnames, filenames in os.walk(base):
+            current = Path(dirpath)
+            dirnames[:] = sorted(
+                d
+                for d in dirnames
+                if d not in SKIP_INDEX_DIRS and (current / d).resolve() != raw_dir
+            )
+            for name in sorted(filenames):
+                path = current / name
+                if path.suffix in INDEX_EXTS:
+                    _INDEX.setdefault(name, []).append(path)
     return _INDEX
 
 

@@ -55,8 +55,29 @@ CORE = [
 ]
 
 
+def raw_evidence_dir(docs_dir: Path | None = None) -> Path:
+    """返回未入库原始证据目录（docs/operations/evidence-raw/）。"""
+    base = docs_dir if docs_dir is not None else DOCS
+    return (base / "operations" / "evidence-raw").resolve()
+
+
+def is_ignored_doc(path: Path, docs_dir: Path | None = None) -> bool:
+    """判断路径是否位于 docs/operations/evidence-raw/ 下。"""
+    return path.resolve().is_relative_to(raw_evidence_dir(docs_dir))
+
+
+def doc_files(docs_dir: Path | None = None) -> list[Path]:
+    """遍历 docs/**/*.md，跳过未入库的 docs/operations/evidence-raw/。"""
+    base = docs_dir if docs_dir is not None else DOCS
+    return [
+        path
+        for path in sorted(base.rglob("*.md"))
+        if path.is_file() and not is_ignored_doc(path, base)
+    ]
+
+
 def check(path: Path) -> list[str]:
-    """返回该文件里的坏链（相对路径不存在）。"""
+    """返回该文件里的坏链（相对路径不存在，或指向未入库 evidence-raw）。"""
     text = path.read_text(encoding="utf-8", errors="ignore")
     bad: list[str] = []
     for m in LINK.finditer(text):
@@ -67,7 +88,7 @@ def check(path: Path) -> list[str]:
         if not target:
             continue
         resolved = (path.parent / target).resolve()
-        if (
+        if is_ignored_doc(resolved) or (
             not resolved.exists()
             and target not in KNOWN_BAD
             and not target.startswith(KNOWN_BAD_PREFIXES)
@@ -77,7 +98,7 @@ def check(path: Path) -> list[str]:
 
 
 def main(argv: list[str]) -> int:
-    files = sorted(DOCS.rglob("*.md")) if "--all" in argv else [ROOT / p for p in CORE]
+    files = doc_files(DOCS) if "--all" in argv else [ROOT / p for p in CORE]
     total = broken = 0
     for f in files:
         if not f.exists():

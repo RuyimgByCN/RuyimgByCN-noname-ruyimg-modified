@@ -1,5 +1,9 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+## 2026-11-18T13:23+08:00 队列第 0 项证据存放改造（待提交／发布）
+
+基线 HEAD `21266d00c0583b692d3c7c7090678c487f211843` + 本批第 0 项规则与工具改动，规则 333／NGSA 107／content schema 5／ABI 759／WS 8 不变。完成 `.gitignore` 忽略 `/docs/operations/evidence-raw/`、`check_local_links.py` / `check_doc_line_refs.py` 跳过原始目录、`check_evidence_budget.py`（基线 `21266d00c`、200 KB／2 MB 硬限与后缀禁用）接入 `preflight.py`、`publish_decision25.py` 及 [CI 运行台账](../operations/evidence/ci-runs.md)，详见[队列第 0 项摘要](../operations/evidence/2026-11-18-queue0-evidence-cap/README.md)与[进度主稿](native-progress.md)。本地 `unittest discover -s scripts`（207 项：206 通过／1 既有跳过）、`check-source-lines.py`（9,368 文件）及 `preflight.py`（22 项）通过；本批未合入规则修复（修复 0 项），清单保持 `625／3,799／0`，八项签署 `0/37`，待提交发布并等待 rule-fix 分支复核合入。
+
 ## 2026-11-14T04:05:48.382493+08:00 队列1继续四来源交互补课（尚未提交／发布）
 
 HEAD `e0178e2651e66512153f3d85ff39432eeecb5c01` + 前轮终态文档/新证据dirty；规则333／NGSA107／schema5／ABI759／WS8。队列0完成、队列1部分、队列2未开始；当前625／3799／0、新增等价0、八项0/37。本轮开始L27／L19／L20／L25各3交互候选的真实运行与不同agent复核，不把历史候选当已实跑。[本批工作区与逐案入口](../operations/evidence/2026-11-14-queue1-next-sources/README.md)。原有5份未提交终态/CI证据、672原未跟踪路径、8旧工作树与共享target继续保留；目前无产品改动。

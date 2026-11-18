@@ -54,6 +54,24 @@ class PreflightTests(unittest.TestCase):
         for name, argv, _slow in self.mod.CHECKS:
             self.assertIn("-B", argv, name)
 
+    def test_evidence_budget_gate_registered_and_blocks_on_failure(self):
+        expected = (
+            "证据体量与类型门禁",
+            [self.mod.PY, "-B", "scripts/check_evidence_budget.py"],
+            False,
+        )
+        self.assertIn(expected, self.mod.CHECKS)
+
+        def result(name, _argv):
+            return name, int(name == "证据体量与类型门禁"), "oversized evidence"
+
+        errors = io.StringIO()
+        with patch.object(self.mod, "run", side_effect=result), \
+                patch.object(self.mod.sys, "argv", [str(SCRIPT)]), \
+                redirect_stdout(io.StringIO()), redirect_stderr(errors):
+            self.assertEqual(self.mod.main(), 1)
+        self.assertIn("preflight 失败 1 项：证据体量与类型门禁", errors.getvalue())
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -9,6 +9,13 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-18T13:23+08:00 队列第 0 项：证据存放改造与体量/类型门禁（待提交／发布）
+
+- 基线 HEAD `21266d00c0583b692d3c7c7090678c487f211843` + 本批第 0 项规则与门禁工具改动（未改任何业务规则或产品代码，规则 333／NGSA 107／content schema 5／ABI 759／WS 8 不变）。
+- 改造内容：1）`.gitignore` 追加 `/docs/operations/evidence-raw/` 并本地建目录存放原始日志、`.ngsa` 存档、CDP 会话、CI 下载包与原尺寸截图；2）`check_local_links.py` 与 `check_doc_line_refs.py` 跳过 `evidence-raw/`（入库 Markdown 改用反引号路径 + sha256）；3）新增 `check_evidence_budget.py`（含 `scripts/evidence_legacy_untracked.json` 基线 2,985 条未跟踪原件快照）并接入 `preflight.py`（第 20 项「证据体量与类型门禁」），硬限单文件 `<= 200 KB`、单批/新子目录 `<= 2 MB` 与禁用后缀；4）新增 `publish_decision25.py`（裁决 25 守卫，原始推送/CI 日志入 `docs/operations/evidence-raw/ci/<sha>/`）与 [CI 运行台账](../operations/evidence/ci-runs.md)。详见[队列第 0 项摘要](../operations/evidence/2026-11-18-queue0-evidence-cap/README.md)。
+- 本地门禁：`python3 -B -m unittest discover -s scripts`（207 项：206 通过／0 失败／1 既有跳过）、`python3 -B scripts/check-source-lines.py`（9,368 文件通过）、`python3 -B scripts/preflight.py`（22 项通过／0 失败）。
+- 队列与清单状态：新队列第 0 项本地验收完成、待提交并按裁决 25 发布登记 exact-head CI；第 1 项规则修复尚未合入（本批修复 0 项），清单维持 `已复核等价 625／简化近似 3,799／缺失 0`，整包八项签署 `0/37`。
+
 **状态扫描（2026-11-18 12:31–13:40，Claude Code 核对；HEAD `e0178e265`，已与远端 `native-convergence` 一致；工作区另有其他 agent 于 2026-11-14 04:05 写下、未提交的 5 个文档记录（即本条下方 11-14 各条），之后 4 天无人写入；规则 333／NGSA 107／content schema 5／ABI 759／WS8）**：实跑三 crate **2447/0/6**、workspace **7843/0/8**、行数门禁通过，与下方自报一致。**确实做到的**：队列第 0 项完成（`FzLiegong` 选序、过期断言、`dddanzhi` 两处偏差均已修，发布并 CI 首跑通过）；队列第 1 项部分完成（U06、L29、U07、L10、U08、L28 各 3 个交互技能在上游实际运行比对，修了 `juxian`、`jiushi`）；实际运行后把已复核等价从 851 撤回到 **625**（简化近似 3,799），撤回是对的。**未做**：L27、L19、L20、L25 共 12 个候选未运行，L22 自动钩子未处理；实际运行发现的几十处规则差异只登记、未修；队列第 2 项起（L11、U05 等）、界面、Spine 验证、八项签署（**0/37**）、真机与签名、第六阶段均未开始。**新问题**：证据体量失控——6 个提交约 1,800 行代码、约 1,480 万行证据，`2026-11-14-queue1-runtime/` 一个目录约 560 MB、4,584 个文件（含 1,973 个 `.ngsa`、单个 26 MB 的会话日志），已推送远端，本地 `.git` 1.5 GB。是否改写历史清除需用户决定。详见[2026-11-18 扫描证据](../operations/evidence/2026-11-18-progress-scan/README.md)。
 
 ## 2026-11-14T04:05:48.382493+08:00 队列1继续四来源交互补课（尚未提交／发布）
