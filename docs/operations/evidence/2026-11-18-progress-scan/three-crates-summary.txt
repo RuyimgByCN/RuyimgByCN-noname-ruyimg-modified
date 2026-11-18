@@ -1,0 +1,34 @@
+     Running unittests src/lib.rs (target/debug/deps/engine_native-81b5fbac821f0024)
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/groups/e2e.rs (target/debug/deps/e2e-769ca5ac126f40b4)
+test result: ok. 113 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.28s
+     Running tests/groups/g1.rs (target/debug/deps/g1-d9a1e148806c1b63)
+test result: ok. 244 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 5.36s
+     Running tests/groups/g1_shahai.rs (target/debug/deps/g1_shahai-18db209aff65f91f)
+test result: ok. 181 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.64s
+     Running tests/groups/kernel.rs (target/debug/deps/kernel-ad1759ec734af149)
+test result: ok. 435 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.79s
+     Running tests/groups/l_rounds.rs (target/debug/deps/l_rounds-69336377b790965f)
+test result: ok. 82 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.74s
+     Running tests/groups/misc.rs (target/debug/deps/misc-0dff29147bd0ba75)
+test result: ok. 428 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.14s
+     Running tests/groups/nc08.rs (target/debug/deps/nc08-3d4e2ce1583a3d9d)
+test result: ok. 142 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.66s
+     Running tests/groups/nc08_upstream_a_k.rs (target/debug/deps/nc08_upstream_a_k-8f7ea47e9d7fbfc9)
+test result: ok. 141 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+     Running tests/groups/nc08_upstream_l_z.rs (target/debug/deps/nc08_upstream_l_z-0292182c79304f92)
+test result: ok. 209 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+     Running tests/groups/nc_rounds.rs (target/debug/deps/nc_rounds-183aac6a7faffceb)
+test result: ok. 311 passed; 0 failed; 5 ignored; 0 measured; 0 filtered out; finished in 40.09s
+     Running tests/groups/swd.rs (target/debug/deps/swd-470ebedddc6d1ffe)
+test result: ok. 135 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
+     Running tests/groups/test_registry.rs (target/debug/deps/test_registry-720eedb1c7154bb8)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running unittests src/lib.rs (target/debug/deps/engine_native_content-51121d20058afcf8)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running unittests src/lib.rs (target/debug/deps/engine_native_kernel-8fc8978c9790874c)
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+exit=0

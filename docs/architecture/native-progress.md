@@ -9,6 +9,26 @@
 
 ## 当前交付与带日期核验记录
 
+**状态扫描（2026-11-18 12:31–13:40，Claude Code 核对；HEAD `e0178e265`，已与远端 `native-convergence` 一致；工作区另有其他 agent 于 2026-11-14 04:05 写下、未提交的 5 个文档记录（即本条下方 11-14 各条），之后 4 天无人写入；规则 333／NGSA 107／content schema 5／ABI 759／WS8）**：实跑三 crate **2447/0/6**、workspace **7843/0/8**、行数门禁通过，与下方自报一致。**确实做到的**：队列第 0 项完成（`FzLiegong` 选序、过期断言、`dddanzhi` 两处偏差均已修，发布并 CI 首跑通过）；队列第 1 项部分完成（U06、L29、U07、L10、U08、L28 各 3 个交互技能在上游实际运行比对，修了 `juxian`、`jiushi`）；实际运行后把已复核等价从 851 撤回到 **625**（简化近似 3,799），撤回是对的。**未做**：L27、L19、L20、L25 共 12 个候选未运行，L22 自动钩子未处理；实际运行发现的几十处规则差异只登记、未修；队列第 2 项起（L11、U05 等）、界面、Spine 验证、八项签署（**0/37**）、真机与签名、第六阶段均未开始。**新问题**：证据体量失控——6 个提交约 1,800 行代码、约 1,480 万行证据，`2026-11-14-queue1-runtime/` 一个目录约 560 MB、4,584 个文件（含 1,973 个 `.ngsa`、单个 26 MB 的会话日志），已推送远端，本地 `.git` 1.5 GB。是否改写历史清除需用户决定。详见[2026-11-18 扫描证据](../operations/evidence/2026-11-18-progress-scan/README.md)。
+
+## 2026-11-14T04:05:48.382493+08:00 队列1继续四来源交互补课（尚未提交／发布）
+
+HEAD `e0178e2651e66512153f3d85ff39432eeecb5c01` + 前轮终态文档/新证据dirty；规则333／NGSA107／schema5／ABI759／WS8。队列0完成、队列1部分、队列2未开始；当前625／3799／0、新增等价0、八项0/37。本轮开始L27／L19／L20／L25各3交互候选的真实运行与不同agent复核，不把历史候选当已实跑。[本批工作区与逐案入口](../operations/evidence/2026-11-14-queue1-next-sources/README.md)。原有5份未提交终态/CI证据、672原未跟踪路径、8旧工作树与共享target继续保留；目前无产品改动。
+
+## 2026-11-14T04:01:39+08:00 代码与文档首次精确SHA CI均通过，队列1仍部分
+
+当前HEAD `e0178e2651e66512153f3d85ff39432eeecb5c01` + 提交后状态/CI证据dirty；规则333／NGSA107／schema5／ABI759／WS8不变。酒诗代码 `5c73d1d9158145e33f98f2018013914667d13964` 与其后纯文档提交均已按裁决25正常推送 `native-convergence`；两次精确SHA的push事件attempt1各10成功／0失败／0取消，agent补跑0，两平台性能内部第一次均exit0。[代码CI原始证据](../operations/evidence/2026-11-14-queue1-runtime/publication/code-exact-ci-first/README.md)／[文档CI原始证据与实际查询命令](../operations/evidence/2026-11-14-queue1-runtime/publication/documentation-exact-ci-first/README.md)。文档CI原始ZIP的148份解包逐字节相同、CRC通过；三平台安装器上传不代表安装、签名、公证或真机验收。
+
+产品/测试字节与已通过完整本地门禁的代码提交相同：无过滤三crate2447通过／0失败／6忽略、workspace7843／0／8，前端489／0／0，完整文档preflight21项通过／0失败。[实际本地命令与首失败](../operations/evidence/2026-11-14-queue1-runtime/restore-fix/final-local-gates.md)／[纯文档preflight](../operations/evidence/2026-11-14-queue1-runtime/documentation-local-checks.md)。CI实际rustc1.100.0，本机原生1.99.1与WASM1.95.0分列，不把不同作业的重复测试相加。
+
+队列0完成、队列1部分，未开始队列2。当前已复核等价625／简化近似3799／缺失0、本运行补课目录累计撤回9旧等价、新增等价0；[37来源日期计数与逐案表](../operations/evidence/2026-11-14-queue1-runtime/source-counts-runtime-04.md)。L10／U08／L28均有退回项，旧保留等价不是本轮重新签署。四来源12交互候选、L22自动钩子、已知规则与自动选择差异仍待；UI并排截图、Spine逐特性/净室/用户验证、整包八项0/37、真机签名及第六阶段见[剩余范围](../operations/evidence/2026-11-14-queue1-runtime/remaining-scope.md)。本段、提交后CI终态及新发布元数据均为本机未提交记录，不在上述已发布提交内；index保持空。
+
+## 2026-11-14T03:32:43.652782+08:00 L10／U08／L28文档已发布，精确文档CI进行中
+
+文档HEAD `e0178e2651e66512153f3d85ff39432eeecb5c01` 已正常推送native-convergence，父提交为酒诗代码5c73d1d9158145e33f98f2018013914667d13964；产品/测试字节相同，规则333／NGSA107／schema5／ABI759／WS8不变。提交2553路径，仅冻结证据/公共文档/清单；完整本地文档preflight21项通过、末次2149文件坏链0，26份Windows CI文本仅既有CRLF归一、原始ZIP保留，六冻结目录与index字节全符。[提交/推送/审计](../operations/evidence/2026-11-14-queue1-runtime/publication/documentation-exact-ci-first/README.md)。提交后tracked clean；本条及新CI终态材料为本地未提交记录，不冒充已在该提交内。
+
+精确文档SHA的[run43493001793](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/43493001793) push事件attempt1、10作业正在运行；agent未补跑，终态另增记录。代码SHA首次CI已10/10成功，不替代这次文档CI。当前625／3799／0、新签0；L10为8／9／0、U08为143／7／0、L28为50／6／0，[37来源及逐案表](../operations/evidence/2026-11-14-queue1-runtime/source-counts-runtime-04.md)。队列1仍部分，四来源12候选、L22自动钩子与全部已知差异修复待；UI并排截图、Spine逐特性/净室/用户验证、八项0/37、真机签名和第六阶段保持待。
+
 ## 2026-11-14T03:29:13.975149+08:00 后三来源文档preflight通过，待提交／发布
 
 源码HEAD `5c73d1d9158145e33f98f2018013914667d13964` + 文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8。L10/U08/L28纯文档批完整 `python3 -B scripts/preflight.py` 无过滤执行，21项通过／0失败；[实际命令/输出与边界](../operations/evidence/2026-11-14-queue1-runtime/documentation-local-checks.md)。产品沿用已发布且首次精确代码CI10/10成功的相同字节，本批没有新产品/测试更改。当前625／3799／0、新签0、八项0/37，队列1仍部分；[37来源与逐案表](../operations/evidence/2026-11-14-queue1-runtime/source-counts-runtime-04.md)。最后明确路径stage/字节审计及本地链接复核后才提交、正常推送并另登记文档SHA CI；此刻尚未提交/发布。

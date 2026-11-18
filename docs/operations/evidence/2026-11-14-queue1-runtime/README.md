@@ -45,3 +45,15 @@ HEAD `5c73d1d9158145e33f98f2018013914667d13964` + 文档/证据dirty；规则333
 ## 2026-11-14T03:29:13.975149+08:00 本批完整文档preflight通过，尚未提交／发布
 
 HEAD `5c73d1d9158145e33f98f2018013914667d13964` + 文档/证据dirty；333／107／5／759／WS8。完整preflight21项通过／0失败，[命令、原始输出及未验范围](documentation-local-checks.md)。当前625／3799／0、新签0、队列1部分、八项0/37；酒诗代码首次精确CI10/10成功。最后明确stage/字节/链接审计、提交及正常发布随后分别记录，不以准备状态冒称已发布。
+
+## 2026-11-14T03:32:43.652782+08:00 纯文档批已正常发布，首次文档CI进行中
+
+文档 `e0178e2651e66512153f3d85ff39432eeecb5c01` 已正常推送native-convergence，父代码5c73d1d9158145e33f98f2018013914667d13964；333／107／5／759／WS8，产品/测试无变化。2553路径只含明确自有文档/冻结证据，完整preflight21项、末次2149文件坏链0、原672未跟踪路径/8旧工作树及21211门禁输入保护通过。当前625／3799／0、新签0、队列1部分、八项0/37。
+
+[实际提交/推送与首次CI](publication/documentation-exact-ci-first/README.md)，run43493001793 attempt1已登记10作业，尚未终态、agent补跑0。提交后tracked clean；本段和提交后新元数据/CI材料仅为本地未提交记录，后续终态另增，不预称CI成功。
+
+## 2026-11-14T04:01:39+08:00 两次发布的首次精确SHA CI均通过
+
+HEAD `e0178e2651e66512153f3d85ff39432eeecb5c01` + 提交后状态/CI证据dirty，规则333／NGSA107／schema5／ABI759／WS8。代码5c73d1d与文档e0178e26均已正常发布到native-convergence；各自push事件attempt1为10成功／0失败／0取消，agent补跑0，两平台性能内部第一次均exit0。[代码CI](publication/code-exact-ci-first/README.md)／[文档CI及实际查询命令](publication/documentation-exact-ci-first/README.md)。文档CI原始ZIP为1867737B、SHA256 `2af1131b27b90afa28b1ace1059b73432b4b6851a400847bed9c9827e3ee6c44`，148份解包/10135889B逐字节相同，CRC通过；[完整校验](publication/documentation-exact-ci-first/raw-log-integrity.json)。CI实际rustc1.100.0，作业间计数重叠，不相加。
+
+无过滤本地三crate2447通过／0失败／6忽略、workspace7843／0／8、前端489／0／0与其余产品门禁通过，完整文档preflight21项通过／0失败；[本地门禁/原始失败](restore-fix/final-local-gates.md)／[文档命令输出](documentation-local-checks.md)。当前[625／3799／0及37来源逐案入口](source-counts-runtime-04.md)，本目录累计撤回9旧等价、新签0；L10/U08/L28均有退回项。队列0完成、队列1部分、队列2未开始，八项0/37；[其余规则、UI/Spine/外部条件与第六阶段](remaining-scope.md)仍待。该终态段与提交后新元数据/CI材料仅为本机未提交记录，非已发布e0178e26内容；index空，保留历史日期记录。

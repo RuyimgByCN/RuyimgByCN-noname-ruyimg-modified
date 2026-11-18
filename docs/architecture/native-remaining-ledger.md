@@ -1,5 +1,17 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+## 2026-11-14T04:05:48.382493+08:00 队列1继续四来源交互补课（尚未提交／发布）
+
+HEAD `e0178e2651e66512153f3d85ff39432eeecb5c01` + 前轮终态文档/新证据dirty；规则333／NGSA107／schema5／ABI759／WS8。队列0完成、队列1部分、队列2未开始；当前625／3799／0、新增等价0、八项0/37。本轮开始L27／L19／L20／L25各3交互候选的真实运行与不同agent复核，不把历史候选当已实跑。[本批工作区与逐案入口](../operations/evidence/2026-11-14-queue1-next-sources/README.md)。原有5份未提交终态/CI证据、672原未跟踪路径、8旧工作树与共享target继续保留；目前无产品改动。
+
+## 2026-11-14T04:01:39+08:00 本轮两次发布首次CI通过，队列1仍部分
+
+HEAD `e0178e2651e66512153f3d85ff39432eeecb5c01` + 提交后文档/CI证据dirty；规则333／NGSA107／schema5／ABI759／WS8。代码5c73d1d与文档e0178e26均已正常发布，精确SHA首次CI各10成功／0失败／0取消，agent补跑0，性能内部首试均exit0；完整本地三crate2447／0／6、workspace7843／0／8及文档preflight21项通过。查询命令、首失败和原始日志见[主进度的终态入口](native-progress.md)。当前625／3799／0、新增等价0，八项0/37；队列0完成、队列1部分，不开始队列2。[剩余12候选、自动选择与规则差异、UI/Spine/真机签名/第六阶段](../operations/evidence/2026-11-14-queue1-runtime/remaining-scope.md)继续待。本段与提交后终态材料仅本地未提交，未把这部分写成已发布。
+
+## 2026-11-14T03:32:43.652782+08:00 纯文档批已发布，队列1继续部分
+
+HEAD `e0178e2651e66512153f3d85ff39432eeecb5c01`，规则333／NGSA107／schema5／ABI759／WS8；新增本条后仅文档/证据dirty。L10/U08/L28证据与625／3799／0清单已正常发布，精确文档CI run43493001793 attempt1已登记10作业、待终态；首次代码CI10/10成功，[当前发布与未验范围](native-progress.md)。本地文档preflight21项/末次链接均通过；新增等价0，八项0/37，不开始队列2。四来源12交互候选及L22自动钩子、规则反例修复、UI/Spine/真机签名与第六阶段保持待。
+
 ## 2026-11-14T03:16:45.676673+08:00 队列1后三来源运行复核仍有差异
 
 源码HEAD `5c73d1d9158145e33f98f2018013914667d13964` + 文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8。酒诗代码已发布且精确CI首次10/10成功；本次仅L10/U08/L28证据与清单待提交/发布，状态见[进度主稿](native-progress.md)。不把恢复成功/限定投影相同当等价：L10蛊惑/让节/党锢及正式常侍自动触发，U08慧眼主/辅助，L28补叙/整经/业炎仍有具体差异。[自动或固定选择清单增量](../operations/evidence/2026-11-14-queue1-runtime/known-automatic-choice-gaps-01.json)与[剩余范围](../operations/evidence/2026-11-14-queue1-runtime/remaining-scope.md)。未证明必须升号的新项仍0，不代表所有剩余交互已可表达。队列1仍部分，L27/L19/L20/L25各3候选及L22自动钩子待；后续规则、UI/Spine、八项0/37、真机签名和第六阶段不变。
@@ -86,6 +98,8 @@ HEAD `bd58ef06d` + 文档／证据dirty，版本333／107／5／759／WS8。独�
 2026-11-12 Step 1 交互通道打样与 `U06 欢乐卡牌` 整源 11/11 独立复核等价：复用既有 `HostBehavior + HostStage + ChoiceKind` 挂起选择通道（零升号：`333 / 107 / 5 / 759 / 8` 与 14 场 golden 哈希不变），完成 ① Step 1 打样 `boss_chuanyun`、`boss_tianyun`、`dddxiaxing` 3 个代表技能（经 `step1-verifier` 独立复核通过，见[Step 1 交互通道打样与迁移指南](../operations/evidence/2026-11-12-step1-choice-channel-prototype/README.md)），以及 ② **`U06 欢乐卡牌` 全部 11 项（6 卡牌 `monkey`/`mianju`/`shoulijian`/`kuwu`/`xuelunyang`/`jiuwei` + 5 技能 `monkey`/`mianju`/`kuwu`/`xuelunyang`/`jiuwei`）按上游 `card/{card,skill,list}.js` 100% 逐行对齐与 6 维真实对局测试**，经独立复核员 `u06-verifier` 逐行核对通过后更新 `inventory_status.json`（全仓 **`已复核等价 14 / 简化近似 4,410 / 缺失 0`**，其中 `U06` 达 **11/11（100% 已复核等价）**；见[`U06` 独立复核报告](../operations/evidence/2026-11-12-u06-huanle-review/README.md)）。因移动端真机未接入，整包八项签署仍为 **0/37**。
 
 2026-11-11 Step 0 工作区整理与口径纠偏：按下方夜间扫描勘正执行整改——`inventory_status.json` 中 4 项缺玩家选择的技能（`dddxiaxing`、`boss_chuanyun`、`boss_lingfeng`、`boss_tianyun`）已退回「简化近似」（全仓 `已复核等价 0 / 简化近似 4,424 / 缺失 0`）；修复 `choice_routing.rs` 暗身份泄漏并如实标注其为自动回退选择器（不调用 `open_choice`，裁决 40 未实现）；删除绑定清单计数/文档字符串的 E2E 测试；将根目录截图与 Spine 指引移入 [`2026-11-11-tabletop-and-spine40`](../operations/evidence/2026-11-11-tabletop-and-spine40/)；恢复 `apps/web-client/dist/` 与 HEAD 一致；恢复签署表 `2026-11-10` 历史快照。NC12 维持「部分」，第六阶段未开始，整包八项签署 **0/37**。
+
+2026-11-18导航（Claude Code 核对）：HEAD `e0178e265`（已发布），333／107／759／WS8，三 crate 2447/0/6。队列第 0 项完成、第 1 项部分；实际运行后已复核等价撤回到 625／简化近似 3,799，新增等价 0；实际运行发现的规则差异尚未修复，L11、U05 未开始，八项签署 0/37。证据体量失控（约 560 MB 已推送），存放规则待定。详见[2026-11-18 扫描证据](../operations/evidence/2026-11-18-progress-scan/README.md)。
 
 2026-11-13导航（Claude Code 核对）：HEAD `afa72d46b`，333／107／759／WS8。队列第 0、1 项与第 2 项的 13 个来源已提交，清单为已复核等价 851／简化近似 3,573；抽查 6 个技能 5 个与上游一致。当前三 crate 门禁为红（2420/2/6：`FzLiegong` 未登记选序，`87b64c732` 引入），全工作区 7815/3/8（另有 `game-server` 一条过期断言），15 个提交未发布、无 CI。剩余：L11、U05 及其余含规则项来源，界面、Spine 验证、八项签署（0/37）、真机与签名、第六阶段。详见[2026-11-13 扫描证据](../operations/evidence/2026-11-13-progress-scan/README.md)。
 
