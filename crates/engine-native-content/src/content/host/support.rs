@@ -362,7 +362,7 @@ pub(crate) fn niepan_effect(ctx: &mut Ctx<'_>, owner: PlayerId) {
     }
     // 解除横置 + 翻回正面
     ctx.core.player_mut(owner).linked = false;
-    ctx.core.player_mut(owner).face_down = false;
+    ctx.turn_face_up(owner);
     // 摸 3 + 回复至 3
     ctx.start_draw(owner, 3);
     let hp = ctx.core.player(owner).hp;

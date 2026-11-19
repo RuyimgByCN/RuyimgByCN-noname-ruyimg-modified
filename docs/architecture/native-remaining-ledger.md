@@ -1,5 +1,13 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+## 2026-11-19 Batch 1.1（U06 欢乐卡牌 ＋ L06 wuxing）规则修复、独立复核与本地收口（待提交／发布）
+
+基线 HEAD `352236724b5e173cc1ff74c0fb706509129ab7a1` ＋ Batch 1.1 代码/清单/文档修改；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。队列第 1 项 Batch 1.1 修复 `U06`（`monkey` 桃消费与 `filterInD`、`xuelunyang` 第二步取消/禁用临时技清理/`is_charlotte`、`kuwu`/`mianju`/`shoulijian`）与 `L06`（`_shengke`、`wuxingpan_skill`）；独立复核 `602b9dd3-b8e7-4e3c-81fe-b57137a6f312`（13 通过 / `wuxingpan` 卡牌依 S2 `1/3` vs `0.3` 保留简化近似）。清单更新为 **已复核等价 632／简化近似 3,792／缺失 0**（`U06` 11/0/0、`L06` 2/1/0），整包八项 `0/37`。第五节全量门禁与全量 `preflight.py` 通过，详见 [Batch 1.1 证据摘要](../operations/evidence/2026-11-19-batch1-1-u06-l06/README.md) 与 [进度主稿](native-progress.md)；队列第 1 项剩余 `L28`/`L29`/`U07`/`L10`/`U08`/`U01` 与自动选择条目、队列第 2–11 项继续待做，提交发布后接续 `L28`。
+
+## 2026-11-18T15:09+08:00 队列第 0 项 `352236724` 已发布、CI 首跑 10/10 通过（CI 登记待随下批入库）
+
+HEAD `352236724b5e173cc1ff74c0fb706509129ab7a1` + 本地 CI 登记更新；规则 333／NGSA 107／content schema 5／ABI 759／WS 8 不变。`publish_decision25.py` 已将 `352236724` 非 force 推送至 `refs/heads/native-convergence`，exact-head CI Run `44246666161`（Attempt 1）`10/10 success`（`logs-first.zip` sha256 `663fe7631a7bd3e6a379c896310fb1f637af0bf3f18610597f468f295831b441` 存 `evidence-raw`），已在 [CI 运行台账](../operations/evidence/ci-runs.md) 与[进度主稿](native-progress.md)登记并执行 `preflight.py` 验证；队列第 0 项已完成并进入待命接收 `@verifier-rules` 复核通过的 Batch 1.1–1.6 合入请求，当前修复 0 项、清单 `625／3,799／0`、八项 `0/37`。
+
 ## 2026-11-18T13:23+08:00 队列第 0 项证据存放改造（待提交／发布）
 
 基线 HEAD `21266d00c0583b692d3c7c7090678c487f211843` + 本批第 0 项规则与工具改动，规则 333／NGSA 107／content schema 5／ABI 759／WS 8 不变。完成 `.gitignore` 忽略 `/docs/operations/evidence-raw/`、`check_local_links.py` / `check_doc_line_refs.py` 跳过原始目录、`check_evidence_budget.py`（基线 `21266d00c`、200 KB／2 MB 硬限与后缀禁用）接入 `preflight.py`、`publish_decision25.py` 及 [CI 运行台账](../operations/evidence/ci-runs.md)，详见[队列第 0 项摘要](../operations/evidence/2026-11-18-queue0-evidence-cap/README.md)与[进度主稿](native-progress.md)。本地 `unittest discover -s scripts`（207 项：206 通过／1 既有跳过）、`check-source-lines.py`（9,368 文件）及 `preflight.py`（22 项）通过；本批未合入规则修复（修复 0 项），清单保持 `625／3,799／0`，八项签署 `0/37`，待提交发布并等待 rule-fix 分支复核合入。

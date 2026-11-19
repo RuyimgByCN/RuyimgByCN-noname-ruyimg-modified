@@ -9,6 +9,17 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-19 Batch 1.1（U06 欢乐卡牌 ＋ L06 wuxing）规则修复、独立复核与本地收口（待提交／发布）
+
+- 基线 HEAD `352236724b5e173cc1ff74c0fb706509129ab7a1`（含提交后 CI 登记与 Batch 1.1 全部改动，本地待提交/发布）；版本门禁零变更（规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`），14 标准 golden 不变。
+- **队列第 1 项 Batch 1.1（U06 ＋ L06）**：修复 `monkey`（出牌/濒死桃统一 `EventData::CardUsed` 消费与 `filterInD`）、`xuelunyang`（第二步取消、被禁用临时技回合末过期与 `is_charlotte` 状态戳排除）、`kuwu`、`mianju`、`shoulijian` 及 `_shengke`（联机禁用、直装区分、`Tianfuzhen`/`Niaoxiangzhen`/`use_as=Wuzhong` 与 `Wuzhong`/`Jiguan` 原主）；`wuxingpan_skill` 确认强制选属性通过；`wuxingpan` 卡牌依 S2 固定 `1/3` vs 默认 `0.3` 差异下调为 `简化近似`（需用户配置边界见[规则基准](native-rules-baseline.md)）。
+- 独立复核（`602b9dd3-b8e7-4e3c-81fe-b57137a6f312`，上游 16 探针 0 阻塞）：14 项审查 **13 通过／1 维持简化近似**；全仓清单自 `625 / 3,799 / 0` 更新为 **已复核等价 632／简化近似 3,792／缺失 0**（净 +7：`U06` 5/6→11/0，`L06` 1/2→2/1），八项签署 `0/37`。
+- 本地第五节未过滤门禁：`test_check_source_lines.py`（2 OK）、`check-source-lines.py`（9,371 文件）、`check-native-layering.py`（0）、`check_doc_line_refs.py --strict`（0 越界）、`recount_g0.py`（37/0）；三 crate **2462/0/6**、独立目录 `-D warnings` 零警告、`wasm32` check exit 0；`workspace --no-fail-fast` **7858/0/8**、`conformance` 19/19、`desktop-client` **20/0/1**；`web-client` `test` 489/0、`typecheck`、`build:native`、`smoke:native` 83/0、`check-native-wasm-cross-target.py`、`cross-target-hash.sh`、`build` 及全量 `preflight.py` 全过。详见 [Batch 1.1 证据摘要](../operations/evidence/2026-11-19-batch1-1-u06-l06/README.md)；下一步提交发布 `main` 并续做 `L28`（Batch 1.2）。
+
+### 2026-11-18T15:09+08:00 队列第 0 项 `352236724` 已发布且 exact-head CI 10/10 通过（CI 登记待随下批入库）
+
+HEAD `352236724b5e173cc1ff74c0fb706509129ab7a1` + 本发布后 CI 登记（`ci-runs.md` 与本条待随首批规则修复合入一并提交）；版本保持规则 333／NGSA 107／content schema 5／ABI 759／WS 8。按裁决 25 非 force 推送 `refs/heads/native-convergence`，exact-head CI Run `44246666161`（Attempt 1，0 补跑）`10/10 success`（`gates-ubuntu` 7843/0/8、`native-web` 2584/0/6、`build-*` 各 872/0/0、`perf-*` 首次 exit 0、`desktop-*` 3 平台通过），原始推送与 CI ZIP 归档于 `docs/operations/evidence-raw/ci/352236724b5e173cc1ff74c0fb706509129ab7a1/`（`logs-first.zip` sha256 `663fe7631a7bd3e6a379c896310fb1f637af0bf3f18610597f468f295831b441`），已在 [CI 运行台账](../operations/evidence/ci-runs.md) 登记单行；本地执行 `python3 -B scripts/preflight.py` 验证门禁全绿。队列第 0 项已完成，第 1 项规则修复尚未合入（修复 0 项），清单 `625／3,799／0`，八项签署 `0/37`。
+
 ### 2026-11-18T13:23+08:00 队列第 0 项：证据存放改造与体量/类型门禁（待提交／发布）
 
 - 基线 HEAD `21266d00c0583b692d3c7c7090678c487f211843` + 本批第 0 项规则与门禁工具改动（未改任何业务规则或产品代码，规则 333／NGSA 107／content schema 5／ABI 759／WS 8 不变）。

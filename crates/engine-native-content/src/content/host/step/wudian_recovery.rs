@@ -227,22 +227,18 @@ impl HostMachine {
                 _ => Flow::Done,
             },
             HostBehavior::WudianJidong => match self.stage {
-                // 急冻（U05 ow 美，规则 v127）：翻面+回复 2+冰封。登记
-                // 差异：翻面内联（风雪刃 v95 先例，不经 turnOverBefore
-                // 窗口）；冰封解除=翻回时点（commit_turn_over_before 翻
-                // 至正面清位，上游 turnOverAfter 到期同口径）。
+                // 急冻（U05 ow 美，规则 v127）：翻面经 TurnOverBefore + 回复 2；若翻至背面则冰封。
                 HostStage::Act => {
-                    let flipped = {
-                        let p = ctx.core.player_mut(self.owner);
-                        p.face_down = !p.face_down;
-                        p.face_down
-                    };
-                    ctx.emit(EventData::TurnOvered {
+                    ctx.emit(EventData::TurnOverBefore {
                         player: self.owner,
-                        face_down: flipped,
+                        cancelled: false,
                     });
                     ctx.recover(self.owner, 2, None);
-                    if flipped {
+                    self.stage = HostStage::DrawSettle;
+                    Flow::Yield
+                }
+                HostStage::DrawSettle => {
+                    if ctx.core.player(self.owner).face_down {
                         ctx.core.player_mut(self.owner).jidong_active = true;
                     }
                     Flow::Done
@@ -250,18 +246,11 @@ impl HostMachine {
                 _ => Flow::Done,
             },
             HostBehavior::WudianXiyang => match self.stage {
-                // 吸阳（U05 ow 路霸，规则 v128）：确认后翻面+回复 2。
-                // 登记差异：翻面内联（风雪刃 v95 先例，不经窗口——与
-                // 急冻同口径）。
+                // 吸阳（U05 ow 路霸，规则 v128）：确认后翻面经 TurnOverBefore + 回复 2。
                 HostStage::Act => {
-                    let flipped = {
-                        let p = ctx.core.player_mut(self.owner);
-                        p.face_down = !p.face_down;
-                        p.face_down
-                    };
-                    ctx.emit(EventData::TurnOvered {
+                    ctx.emit(EventData::TurnOverBefore {
                         player: self.owner,
-                        face_down: flipped,
+                        cancelled: false,
                     });
                     ctx.recover(self.owner, 2, None);
                     Flow::Done

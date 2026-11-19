@@ -48,10 +48,55 @@ pub(super) fn commit_linked(ctx: &mut Ctx<'_>, frame_id: EventId, player: Player
     });
 }
 
-/// 出牌提交：牌离开手牌区。杀置桌面等待结算；桃立即回复。
-/// 猴子偷桃（E03）取消的使用的牌已在确认机器中移走，跳过结算。
+fn tao_extra_flags_len(core: &crate::state::GameStateCore, user: PlayerId, frame_id: EventId) -> u32 {
+    core.vm_aux
+        .flags
+        .get(&(user, format!("tao_extra_len:{frame_id}")))
+        .copied()
+        .unwrap_or(0)
+}
+
+/// 读取当前 `CardUsed` 帧记下的额外消耗实体载体列表（仅供只读过滤/询问使用）。
+pub fn peek_tao_extra_carriers(
+    core: &crate::state::GameStateCore,
+    user: PlayerId,
+    frame_id: EventId,
+) -> Vec<crate::ids::CardId> {
+    let n = tao_extra_flags_len(core, user, frame_id);
+    (0..n)
+        .filter_map(|i| core.vm_aux.flags.get(&(user, format!("tao_extra:{frame_id}:{i}"))).copied())
+        .collect()
+}
+
+/// 取出并清理当前 `CardUsed` 帧记下的额外消耗实体载体列表。
+pub fn take_tao_extra_carriers(
+    core: &mut crate::state::GameStateCore,
+    user: PlayerId,
+    frame_id: EventId,
+) -> Vec<crate::ids::CardId> {
+    let Some(n) = core.vm_aux.flags.remove(&(user, format!("tao_extra_len:{frame_id}"))) else {
+        return Vec::new();
+    };
+    (0..n)
+        .filter_map(|i| core.vm_aux.flags.remove(&(user, format!("tao_extra:{frame_id}:{i}"))))
+        .collect()
+}
+
+/// 出牌提交：牌离开手牌区。杀/桃/酒等置桌面等待结算。
+/// 猴子偷桃（E03）使用前取消写回发生在 AfterTriggers 窗。
 pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseData) {
     let frame_id = ctx.current_frame_id();
+    let is_dying_save = ctx
+        .core
+        .vm_aux
+        .flags
+        .contains_key(&(u.player, format!("dying_save_frame:{frame_id}")));
+    let pre_counted = ctx
+        .core
+        .vm_aux
+        .flags
+        .remove(&(u.player, "monkey_pre_counted".to_string()))
+        .is_some();
     // 奇佐副本载体槽（Boss 郭嘉，规则 v259）：任一非载体卡牌提交即清
     //（副本用牌自身的提交保留槽位，供其 AfterTriggers 过滤拒递归）
     if ctx.core.turn.qizuo_copy != u.card {
@@ -64,32 +109,72 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
     if let Some(card) = u.card {
         let effective_kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
         let in_hand = ctx.core.player(u.player).hand.contains(&card);
-        if u.use_as.is_some_and(|k| k != ctx.catalog.card_kind(card)) || !in_hand {
+        if !ctx.core.table.contains(&card)
+            && (u.use_as.is_some_and(|k| k != ctx.catalog.card_kind(card)) || !in_hand)
+        {
             if let Some(spec) = ctx
                 .catalog
-                .find_player_vm_view_as(ctx.core, u.player, card, true, Some(effective_kind))
+                .find_player_vm_view_as(
+                    ctx.core,
+                    u.player,
+                    card,
+                    !is_dying_save,
+                    Some(effective_kind),
+                )
                 .cloned()
             {
                 let extra = spec.consume_and_record(ctx.core, ctx.catalog, u.player, card);
-                for c2 in extra {
-                    ctx.to_discard(Some(c2));
+                if spec.cost == Some(crate::rvm_bridge::VmViewAsCost::TurnOver) {
+                    ctx.emit(EventData::TurnOverBefore {
+                        player: u.player,
+                        cancelled: false,
+                    });
+                }
+                if effective_kind == CardKind::Tao || is_dying_save {
+                    if !extra.is_empty() {
+                        ctx.core.vm_aux.flags.insert(
+                            (u.player, format!("tao_extra_len:{frame_id}")),
+                            extra.len() as u32,
+                        );
+                        for (i, c2) in extra.into_iter().enumerate() {
+                            if !ctx.core.table.contains(&c2) {
+                                ctx.core.table.push(c2);
+                            }
+                            ctx.core.vm_aux.flags.insert(
+                                (u.player, format!("tao_extra:{frame_id}:{i}")),
+                                c2,
+                            );
+                        }
+                    }
+                } else {
+                    for c2 in extra {
+                        ctx.to_discard(Some(c2));
+                    }
                 }
                 if spec.zone == crate::rvm_bridge::VmViewAsZone::None {
                     u.card = None;
                     u.use_as = Some(effective_kind);
+                    let fu = ctx
+                        .res
+                        .frame_mut(frame_id)
+                        .expect("card_use frame")
+                        .card_use_mut();
+                    fu.card = None;
+                    fu.use_as = Some(effective_kind);
                 }
             }
         }
     }
-    let nullified = matches!(
-        u.effective_kind(ctx.catalog),
-        CardKind::Tao
-            | CardKind::Jiu
-            | CardKind::Tianxianjiu
-            | CardKind::Zhufangshenshi
-            | CardKind::Caoyao
-            | CardKind::Xuejibingbao
-    )
+    let effective_kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
+    let nullified = !is_dying_save
+        && matches!(
+            effective_kind,
+            CardKind::Jiu
+                | CardKind::Tianxianjiu
+                | CardKind::Zhufangshenshi
+                | CardKind::Caoyao
+                | CardKind::Xuejibingbao
+        )
         && dddanzhi_remove_targets(ctx, frame_id, &mut u);
     if let Some(card) = u.card {
         if ctx.core.player(u.player).hand.contains(&card) {
@@ -137,11 +222,13 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
         }
     }
     // 全局用牌计数（U05 xianjian 小蛮，规则 v163 灵泉门控；上游
-    // getHistory("useCard") 同口径——未被取消的使用全计）
-    ctx.core.player_mut(u.player).total_used += 1;
-    // 沐风（swd 桓远之，批㉑）：本回合已使用基本牌（TurnState 旗，换回合清）
-    if u.effective_kind(ctx.catalog).is_basic_kind() {
-        ctx.core.turn.mufeng_used_basic = true;
+    // getHistory("useCard") 同口径——未被取消的使用全计；猴子前置放行路径已记则跳过）
+    if !pre_counted {
+        ctx.core.player_mut(u.player).total_used += 1;
+        // 沐风（swd 桓远之，批㉑）：本回合已使用基本牌（TurnState 旗，换回合清）
+        if u.effective_kind(ctx.catalog).is_basic_kind() {
+            ctx.core.turn.mufeng_used_basic = true;
+        }
     }
     // 邪酬（Boss 相柳，规则 v223）：激活态下其他角色使用【桃】/【酒】
     // → 相柳获 1 蛇毒标记（上游 boss_echou global useCard 同口径）
@@ -272,35 +359,28 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
     if let (Some(card), Some(as_kind)) = (u.card, u.use_as) {
         ctx.core.declared_kinds.insert(card, as_kind);
     }
-    if let Some(card) = u.card {
-        ctx.log(LogEvent::CardPlayed {
-            card,
-            player: u.player,
-            targets: u.targets.clone(),
-            presentation: None,
-        });
-    } else {
-        ctx.log(LogEvent::VirtualCardPlayed {
-            kind: u.effective_kind(ctx.catalog),
-            player: u.player,
-            targets: u.targets.clone(),
-            presentation: None,
-        });
+    if !pre_counted {
+        if let Some(card) = u.card {
+            ctx.log(LogEvent::CardPlayed {
+                card,
+                player: u.player,
+                targets: u.targets.clone(),
+                presentation: None,
+            });
+        } else {
+            ctx.log(LogEvent::VirtualCardPlayed {
+                kind: u.effective_kind(ctx.catalog),
+                player: u.player,
+                targets: u.targets.clone(),
+                presentation: None,
+            });
+        }
     }
     // view-as 转化（武圣/龙胆）：以声明牌种结算，而非目录牌种
     let effective = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
     match effective {
         CardKind::Tao => {
-            ctx.to_discard(u.card);
-            let bonus = ctx
-                .core
-                .vm_aux
-                .flags
-                .remove(&(u.player, "vm_va_recover_bonus".to_string()))
-                .unwrap_or(0);
-            if !nullified {
-                ctx.recover(u.player, 1u32.saturating_add(bonus), u.card);
-            }
+            ctx.core.table.extend(u.card);
         }
         CardKind::Zhufangshenshi => {
             // 贴房绅视（U05 swd 第十批，规则 v94）：本回合无视距离指定
@@ -436,13 +516,17 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
             ctx.core.table.extend(u.card);
         }
         CardKind::Jiu | CardKind::Tianxianjiu => {
-            // 酒/天仙酒：命令边界已校验每回合一次——置本回合已用 + 待
-            // 消耗效果（天仙酒为酒的 swd 变体，规则 v89；登记差异：与酒
-            // 共享每回合一次计数）
-            ctx.to_discard(u.card);
-            ctx.core.turn.jiu_used = true;
-            if !nullified {
-                ctx.core.turn.jiu_active = true;
+            if is_dying_save {
+                ctx.core.table.extend(u.card);
+            } else {
+                // 酒/天仙酒：命令边界已校验每回合一次——置本回合已用 + 待
+                // 消耗效果（天仙酒为酒的 swd 变体，规则 v89；登记差异：与酒
+                // 共享每回合一次计数）
+                ctx.to_discard(u.card);
+                ctx.core.turn.jiu_used = true;
+                if !nullified {
+                    ctx.core.turn.jiu_active = true;
+                }
             }
         }
         CardKind::Shenmiguo => {
@@ -457,16 +541,16 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
             ctx.core.table.extend(u.card);
         }
     }
-    // 突击计数（U07 ow，规则 v118）：出牌阶段使用任意牌 +1（取消不计；
-    // 等值牌种分支已各自置 table，此处只累计）
-    ctx.core.turn.cards_used_play_phase += 1;
-    // 本回合已用牌数（swd 灵武批 120，规则 v307；上游 `countUsed()` 无参
-    // 口径=本回合全部使用，含出牌阶段外）
-    ctx.core.turn.cards_used_turn += 1;
-    // 基本/锦囊/装备三类计数（T8 增量 14）：按结算牌种判类（view-as 转
-    // 化后），地/机关牌异类不计
-    if effective.is_basic_trick_or_equip() {
-        ctx.core.turn.bte_used_play_phase += 1;
+    // 突击计数 / 回合已用牌数 / 三类计数（猴子前置放行路径已记则跳过）
+    if !pre_counted {
+        ctx.core.turn.cards_used_turn += 1;
+        if !is_dying_save || (ctx.core.turn.phase == Phase::Play && u.player == ctx.core.turn.current)
+        {
+            ctx.core.turn.cards_used_play_phase += 1;
+            if effective.is_basic_trick_or_equip() {
+                ctx.core.turn.bte_used_play_phase += 1;
+            }
+        }
     }
     if nullified {
         if let Some(card) = u.card {
@@ -834,14 +918,25 @@ pub(super) fn zhp_def(ctx: &Ctx<'_>) -> crate::ids::SkillDefId {
 
 /// 回合收束：到期技能移除，然后交给下一位存活玩家并开启判定阶段。
 pub(super) fn record_vm_history(ctx: &mut Ctx<'_>, data: &EventData) {
+    let pre_counted = matches!(
+        data,
+        EventData::CardUsed(u)
+            if ctx
+                .core
+                .vm_aux
+                .flags
+                .contains_key(&(u.player, "monkey_pre_counted".to_string()))
+    );
     // 暗织读全局末牌历史，即使当时未持有/被封禁；不依赖 VM 牌史开关。
-    let card = match data {
-        EventData::CardUsed(u) if !u.cancelled => Some(u.card),
-        EventData::CardResponded { card, .. } => Some(Some(*card)),
-        _ => None,
-    };
-    if let Some(card) = card {
-        record_dddanzhi_card(ctx.core, ctx.catalog, card);
+    if !pre_counted {
+        let card = match data {
+            EventData::CardUsed(u) if !u.cancelled => Some(u.card),
+            EventData::CardResponded { card, .. } => Some(Some(*card)),
+            _ => None,
+        };
+        if let Some(card) = card {
+            record_dddanzhi_card(ctx.core, ctx.catalog, card);
+        }
     }
     // 标准局面没有 VM 技能时不记。空 VmAux 不写摘要，v295 golden 保持。
     if !ctx.catalog.vm_card_history {
@@ -905,7 +1000,10 @@ pub(super) fn record_vm_history(ctx: &mut Ctx<'_>, data: &EventData) {
                     .entry((u.player, "sha_played_this_turn".to_string()))
                     .or_insert(0) += 1;
             }
-            if ctx.core.turn.phase == Phase::Play && u.player == ctx.core.turn.current {
+            if !pre_counted
+                && ctx.core.turn.phase == Phase::Play
+                && u.player == ctx.core.turn.current
+            {
                 let bit = if effective.is_basic_kind() {
                     1u32
                 } else if effective.equip_slot().is_some() {

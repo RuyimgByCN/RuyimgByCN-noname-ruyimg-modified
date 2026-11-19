@@ -462,14 +462,9 @@ fn step_new_guixin(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                     });
                 }
             }
-            let flipped = {
-                let p = ctx.core.player_mut(owner);
-                p.face_down = !p.face_down;
-                p.face_down
-            };
-            ctx.emit(EventData::TurnOvered {
+            ctx.emit(EventData::TurnOverBefore {
                 player: owner,
-                face_down: flipped,
+                cancelled: false,
             });
             let cnt = flag(ctx.core, owner, "l25_new_guixin_count") + 1;
             set_flag(ctx.core, owner, "l25_new_guixin_count", cnt);

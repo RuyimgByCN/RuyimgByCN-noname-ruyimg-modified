@@ -165,37 +165,48 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                 self.responders.remove(0);
                 let answer = ctx.answer().clone();
                 if let Some(ChoiceOption::Card(tao)) = answer.first().copied() {
-                    discard_dying_card(ctx, responder, self.dying, tao);
-                    // 救援（孙权主公技，锁定；v202 对齐上游 filter）：主公
-                    // 资格 + 用桃者为吴势力 + 非濒死者本人——桃回复 +1
-                    let jiuyuan = ctx
-                        .catalog
-                        .skill_by_name(crate::vocabulary::names::JIU_YUAN)
-                        .map(|d| {
-                            ctx.core.has_skill(self.dying, d)
-                                && responder != self.dying
-                                && ctx.core.is_lord(self.dying)
-                                && ctx.core.effective_faction(ctx.catalog, responder)
-                                    == Some(crate::catalog::Faction::Wu)
-                        })
-                        .unwrap_or(false);
-                    let amount = if jiuyuan { 2 } else { 1 }
-                        + ctx
-                            .core
-                            .vm_aux
-                            .flags
-                            .remove(&(responder, "vm_va_recover_bonus".to_string()))
-                            .unwrap_or(0);
-                    ctx.recover(self.dying, amount, Some(tao));
-                    ctx.emit(EventData::CardResponded {
-                        card: tao,
-                        player: responder,
-                    });
-                    ctx.log(LogEvent::DyingSaved {
-                        player: self.dying,
-                        by_card: tao,
-                    });
+                    let raw_kind = ctx.catalog.card_kind(tao);
+                    let in_hand = ctx.core.player(responder).hand.contains(&tao);
+                    let eff_kind = if matches!(
+                        raw_kind,
+                        CardKind::Tao
+                            | CardKind::Jiu
+                            | CardKind::Hufu
+                            | CardKind::Tianxianjiu
+                            | CardKind::Dinvxuanshuang
+                    ) && (raw_kind != CardKind::Jiu || responder == self.dying)
+                    {
+                        raw_kind
+                    } else if responder == self.dying
+                        && ctx
+                            .catalog
+                            .find_player_vm_view_as(
+                                ctx.core,
+                                responder,
+                                tao,
+                                false,
+                                Some(CardKind::Jiu),
+                            )
+                            .is_some()
+                    {
+                        CardKind::Jiu
+                    } else {
+                        CardKind::Tao
+                    };
+                    let use_as = (eff_kind != raw_kind || !in_hand).then_some(eff_kind);
                     self.round_used = true;
+                    ctx.emit(EventData::CardUsed(crate::machine::card_use_as(
+                        tao,
+                        responder,
+                        vec![self.dying],
+                        use_as,
+                    )));
+                    let fid = ctx.top_frame_id();
+                    ctx.core.vm_aux.flags.insert(
+                        (responder, format!("dying_save_frame:{fid}")),
+                        (u32::from(self.dying) + 1) | ((tao as u32) << 8),
+                    );
+                    return Flow::Yield;
                 }
                 continue; // 无论用桃或放弃，继续处理队列（轮转见队首过滤）
             }
@@ -259,5 +270,40 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                 },
             };
         }
+    }
+}
+
+impl DyingSaveMachine {
+    pub(crate) fn apply_tao_save(
+        &self,
+        ctx: &mut Ctx<'_>,
+        responder: PlayerId,
+        tao: crate::ids::CardId,
+    ) {
+        // 救援（孙权主公技，锁定；v202 对齐上游 filter）：主公
+        // 资格 + 用桃者为吴势力 + 非濒死者本人——桃回复 +1
+        let jiuyuan = ctx
+            .catalog
+            .skill_by_name(crate::vocabulary::names::JIU_YUAN)
+            .map(|d| {
+                ctx.core.has_skill(self.dying, d)
+                    && responder != self.dying
+                    && ctx.core.is_lord(self.dying)
+                    && ctx.core.effective_faction(ctx.catalog, responder)
+                        == Some(crate::catalog::Faction::Wu)
+            })
+            .unwrap_or(false);
+        let amount = if jiuyuan { 2 } else { 1 }
+            + ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(responder, "vm_va_recover_bonus".to_string()))
+                .unwrap_or(0);
+        ctx.recover(self.dying, amount, Some(tao));
+        ctx.log(LogEvent::DyingSaved {
+            player: self.dying,
+            by_card: tao,
+        });
     }
 }

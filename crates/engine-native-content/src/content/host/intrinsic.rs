@@ -8,6 +8,9 @@ use crate::kernel::*;
 
 #[path = "intrinsic_named_ext.rs"]
 mod intrinsic_named_ext;
+pub(in crate::content::host) use intrinsic_named_ext::{
+    is_named_jiguan_unwrapped, is_named_wuzhong_unwrapped,
+};
 
 /// 内容牌种的固有结算机器；`None` = 不是内容牌种，由内核继续分派。
 pub(crate) fn card_intrinsic(

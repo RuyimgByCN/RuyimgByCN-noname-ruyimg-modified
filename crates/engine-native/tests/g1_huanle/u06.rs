@@ -1340,3 +1340,461 @@ fn u06_jiuwei_six_dimension_real_match_equivalence() {
     assert_eq!(e.debug_hp(0), 4, "满血保持 4 点体力");
     assert_eq!(e.debug_hand(0).len(), 1, "未受伤时发动九尾摸 1 张牌");
 }
+
+#[test]
+fn u06_monkey_cancel_discards_tao_and_filter_in_d() {
+    use engine_native::archive::{decode_archive, encode_archive};
+    let base_huanle = huanle_pack_from_repo();
+    let vm_src = r#"
+skill test_va_none_tao(99060001) {
+    view_as tao any any from none cost lose_max_hp_1 uses_per_turn 1;
+}
+skill test_va_two_tao(99060002) {
+    view_as tao play_phase any exactly 2 from hand;
+}
+"#;
+    let mut vm_pack = engine_native::content::extension::ExtensionPack {
+        def: engine_native::content::extension::ExtensionDef {
+            name: "u06-monkey-test-ext",
+            version: 1,
+            description: "monkey test helpers",
+        },
+        generals: Vec::new(),
+        cards: vec![engine_native::catalog::CardDef::basic(
+            "test_hufu",
+            CardKind::Hufu,
+        )],
+        host_skills: Vec::new(),
+        vm_skills: Vec::new(),
+        init_hook: engine_native::content::extension::InitHook::None,
+        enabled: true,
+    };
+    let compiled = content_compiler::compile_source_named("u06_monkey_vm", vm_src).expect("compile");
+    let bridged = content_native_loader::bridge_vm_skill_decls(&compiled).expect("bridge");
+    vm_pack.vm_skills = bridged.decls;
+    let packs: Vec<&ExtensionPack> = vec![&base_huanle, &vm_pack];
+
+    // 1. 取消猴子偷桃：原【桃】必须离开手牌进入弃牌堆（含挂起存档恢复一致性）
+    {
+        let mut e = Engine::new_with_extensions(3691, 3, &packs).expect("建局");
+        advance_to_play(&mut e, 0);
+        for p in 0..3 {
+            e.debug_clear_hand(p);
+        }
+        let monkey = e.debug_place(0, "hnl_monkey_3");
+        assert!(matches!(
+            submit(&mut e, 0, GameAction::PlayCard { card: monkey, targets: vec![] }),
+            CommandOutcome::Accepted { .. }
+        ));
+        advance_to_play(&mut e, 1);
+        e.debug_clear_hand(1);
+        e.debug_set_hp(1, 2);
+        let tao = e.debug_place(1, "tao");
+        let out = submit(&mut e, 1, GameAction::PlayCard { card: tao, targets: vec![] });
+        assert!(matches!(out, CommandOutcome::Pending { .. }));
+        let gate = e.open_choice().expect("huanle_monkey_confirm").clone();
+        assert_eq!(gate.spec.prompt, "huanle_monkey_confirm");
+
+        let bytes = encode_archive(&e.save());
+        let mut e_restored =
+            Engine::restore_with_extensions(&decode_archive(&bytes).unwrap(), &packs).unwrap();
+        let log_before = e.log().len();
+        let ans = GameAction::Answer {
+            choice_id: gate.id,
+            selection: vec![ChoiceOption::Pass],
+        };
+        let out1 = submit(&mut e, 0, ans.clone());
+        let out2 = submit(&mut e_restored, 0, ans);
+        let (
+            CommandOutcome::Accepted { state_hash: h1 },
+            CommandOutcome::Accepted { state_hash: h2 },
+        ) = (&out1, &out2)
+        else {
+            panic!("取消后应 Accepted: out1={out1:?} out2={out2:?}");
+        };
+        assert_eq!(h1, h2);
+        assert_eq!(&e.log()[log_before..], e_restored.log());
+        assert_eq!(e.debug_hp(1), 3, "取消后正常回血");
+        assert!(
+            !e.debug_hand(1).contains(&tao),
+            "取消后原【桃】不得留在 1 号手牌中"
+        );
+        assert!(
+            e.save().core.discard.contains(&tao),
+            "取消后原【桃】必须进入弃牌堆"
+        );
+        assert!(!e.save().core.table.contains(&tao), "结算完毕不得残留于处理区");
+    }
+
+    // 2. CardKind::Hufu 与 VmViewAsZone::None（0 实体载体）不得触发猴子偷桃
+    {
+        let mut e = Engine::new_with_extensions(3692, 3, &packs).expect("建局");
+        advance_to_play(&mut e, 0);
+        for p in 0..3 {
+            e.debug_clear_hand(p);
+        }
+        let monkey = e.debug_place(0, "hnl_monkey_3");
+        assert!(matches!(
+            submit(&mut e, 0, GameAction::PlayCard { card: monkey, targets: vec![] }),
+            CommandOutcome::Accepted { .. }
+        ));
+        advance_to_play(&mut e, 1);
+        e.debug_clear_hand(1);
+        e.debug_grant(1, "test_va_none_tao");
+        e.debug_set_hp(1, 2);
+        let virtual_tao = e
+            .legal_actions(1)
+            .into_iter()
+            .find(|a| matches!(a, GameAction::PlayCard { card, targets } if targets.is_empty() && !e.debug_hand(1).contains(card)))
+            .expect("from none 视为桃动作应可用");
+        let out_va = submit(&mut e, 1, virtual_tao);
+        assert!(
+            matches!(out_va, CommandOutcome::Accepted { .. }) && e.open_choice().is_none(),
+            "0 实体载体视为【桃】不得触发猴子偷桃: {out_va:?}"
+        );
+        assert_eq!(e.debug_hp(1), 3);
+
+        // 护符（濒死回复牌，非桃）不得触发猴子偷桃
+        let hufu = e.debug_place(1, "test_hufu");
+        e.state_core_mut().players[1].hp = 0;
+        e.state_core_mut().players[1].dying = true;
+        let out_hufu = submit(&mut e, 1, GameAction::PlayCard { card: hufu, targets: vec![] });
+        assert!(
+            matches!(out_hufu, CommandOutcome::Accepted { .. }) && e.open_choice().is_none(),
+            "护符不是桃，不得触发猴子偷桃: {out_hufu:?}"
+        );
+        assert!(!e.debug_hand(0).contains(&hufu));
+        assert!(e.debug_equips(0).contains(&monkey));
+    }
+
+    // 3. 多载体（2 张牌视为【桃】）均进入处理区（filterInD），取消全弃 / 确认全偷 + 存档恢复一致
+    {
+        let mut e = Engine::new_with_extensions(3693, 3, &packs).expect("建局");
+        advance_to_play(&mut e, 0);
+        for p in 0..3 {
+            e.debug_clear_hand(p);
+        }
+        let monkey = e.debug_place(0, "hnl_monkey_3");
+        assert!(matches!(
+            submit(&mut e, 0, GameAction::PlayCard { card: monkey, targets: vec![] }),
+            CommandOutcome::Accepted { .. }
+        ));
+        advance_to_play(&mut e, 1);
+        e.debug_clear_hand(1);
+        e.debug_grant(1, "test_va_two_tao");
+        e.debug_set_hp(1, 2);
+        let c1 = e.debug_place(1, "sha");
+        let c2 = e.debug_place(1, "shan");
+        let out = submit(&mut e, 1, GameAction::PlayCard { card: c1, targets: vec![] });
+        assert!(matches!(out, CommandOutcome::Pending { .. }));
+        let gate = e.open_choice().expect("huanle_monkey_confirm").clone();
+        assert_eq!(gate.spec.prompt, "huanle_monkey_confirm");
+        assert!(
+            e.save().core.table.contains(&c1) && e.save().core.table.contains(&c2),
+            "挂起时双载体均须进入处理区"
+        );
+        let bytes = encode_archive(&e.save());
+
+        // 3a Pass: 双载体皆进弃牌堆，1 号回血
+        let mut e_pass =
+            Engine::restore_with_extensions(&decode_archive(&bytes).unwrap(), &packs).unwrap();
+        let out_pass = submit(
+            &mut e_pass,
+            0,
+            GameAction::Answer {
+                choice_id: gate.id,
+                selection: vec![ChoiceOption::Pass],
+            },
+        );
+        assert!(matches!(out_pass, CommandOutcome::Accepted { .. }));
+        assert_eq!(e_pass.debug_hp(1), 3);
+        assert!(e_pass.save().core.discard.contains(&c1) && e_pass.save().core.discard.contains(&c2));
+
+        // 3b Confirm: 0 号从处理区获得双载体并弃猴子，1 号不回血
+        let mut e_take =
+            Engine::restore_with_extensions(&decode_archive(&bytes).unwrap(), &packs).unwrap();
+        let out_take = submit(
+            &mut e_take,
+            0,
+            GameAction::Answer {
+                choice_id: gate.id,
+                selection: vec![ChoiceOption::Confirm],
+            },
+        );
+        assert!(matches!(out_take, CommandOutcome::Accepted { .. }));
+        assert_eq!(e_take.debug_hp(1), 2);
+        assert!(e_take.debug_hand(0).contains(&c1) && e_take.debug_hand(0).contains(&c2));
+        assert!(!e_take.debug_equips(0).contains(&monkey));
+    }
+}
+
+#[test]
+fn u06_xuelunyang_cancel_filter_and_temp_expiry() {
+    use engine_native::archive::{decode_archive, encode_archive};
+    let huanle_pack = huanle_pack_from_repo();
+    let wuxing_json = std::fs::read_to_string(
+        repo_extensions_root().join("wuxing-upstream-liuli/assets/cards.json"),
+    )
+    .expect("read wuxing");
+    let wuxing_pack = bridge("wuxing-upstream-liuli", &wuxing_json).expect("bridge wuxing");
+    let packs: Vec<&ExtensionPack> = vec![&huanle_pack, &wuxing_pack];
+
+    // 1. 第二步技能选择窗必须允许取消（allow_cancel: true），空选正常结束且不获技（含挂起存档恢复一致）
+    {
+        let mut e = Engine::new_with_extensions(3694, 3, &packs).expect("建局");
+        advance_to_play(&mut e, 0);
+        for p in 0..3 {
+            e.debug_clear_hand(p);
+        }
+        let xl = e.debug_place(0, "hnl_xuelunyang_4");
+        assert!(matches!(
+            submit(&mut e, 0, GameAction::PlayCard { card: xl, targets: vec![] }),
+            CommandOutcome::Accepted { .. }
+        ));
+        e.debug_grant(1, "马术");
+        advance_to_play(&mut e, 1);
+        for _ in 0..32 {
+            if e.open_choice()
+                .is_some_and(|c| c.spec.prompt == "huanle_xuelunyang_target")
+            {
+                break;
+            }
+            let actor = e.turn().current;
+            submit(&mut e, actor, GameAction::NextPhase);
+        }
+        let c1 = e.open_choice().expect("huanle_xuelunyang_target").clone();
+        assert!(matches!(
+            submit(
+                &mut e,
+                0,
+                GameAction::Answer {
+                    choice_id: c1.id,
+                    selection: vec![ChoiceOption::Player(1)],
+                }
+            ),
+            CommandOutcome::Pending { .. }
+        ));
+        let c2 = e.open_choice().expect("huanle_xuelunyang_skill").clone();
+        assert!(
+            c2.spec.allow_cancel,
+            "写轮眼第二步 chooseButton 必须允许取消 (allow_cancel: true)"
+        );
+        let bytes = encode_archive(&e.save());
+        let mut e_restored =
+            Engine::restore_with_extensions(&decode_archive(&bytes).unwrap(), &packs).unwrap();
+        let log_before = e.log().len();
+        let out1 = submit(
+            &mut e,
+            0,
+            GameAction::Answer {
+                choice_id: c2.id,
+                selection: vec![],
+            },
+        );
+        let out2 = submit(
+            &mut e_restored,
+            0,
+            GameAction::Answer {
+                choice_id: c2.id,
+                selection: vec![],
+            },
+        );
+        let (
+            CommandOutcome::Accepted { state_hash: h1 },
+            CommandOutcome::Accepted { state_hash: h2 },
+        ) = (&out1, &out2)
+        else {
+            panic!("第二步空选取消应 Accepted: out1={out1:?} out2={out2:?}");
+        };
+        assert_eq!(h1, h2);
+        assert_eq!(&e.log()[log_before..], e_restored.log());
+        assert!(!e.debug_has_skill(0, "马术"), "第二步取消不得获得目标技能");
+    }
+
+    // 2. 候选过滤（skill.js:107 `target.getSkills(null, false, false)`）：
+    //    (a) 仅含装备技（huanle_monkey）与 charlotte/全局规则技（wuxing_shengke）时写轮眼不触发；
+    //    (b) 已拥有技能（马术）与已禁用技能（咆哮 enabled=false）同样可被窃取（仅排除装备技与 charlotte）；
+    //    (c) 窃取自己已永久持有的「马术」后回合末不得清除自身「马术」；
+    //    (d) 窃取对方「huanle_jiuwei」在 phaseEnd 触发、phaseAfter 移除（非仅置 enabled=false），第 2 轮可再次窃取！
+    {
+        let mut e = Engine::new_with_extensions(3695, 3, &packs).expect("建局");
+        advance_to_play(&mut e, 0);
+        for p in 0..3 {
+            e.debug_clear_hand(p);
+        }
+        let xl = e.debug_place(0, "hnl_xuelunyang_4");
+        assert!(matches!(
+            submit(&mut e, 0, GameAction::PlayCard { card: xl, targets: vec![] }),
+            CommandOutcome::Accepted { .. }
+        ));
+        advance_to_play(&mut e, 1);
+        let mk = e.debug_place(1, "hnl_monkey_3");
+        let mk_out = submit(&mut e, 1, GameAction::PlayCard { card: mk, targets: vec![] });
+        assert!(matches!(mk_out, CommandOutcome::Accepted { .. }));
+
+        for _ in 0..32 {
+            if e.turn().current == 0 && e.turn().phase == Phase::Play {
+                break;
+            }
+            if let Some(c) = e.open_choice() {
+                assert_ne!(
+                    c.spec.prompt, "huanle_xuelunyang_target",
+                    "仅含装备技与 charlotte 技时写轮眼不得触发"
+                );
+                let (cid, obs) = (c.id, c.observer);
+                let sel = c.spec.options.iter().take(c.spec.min.max(1)).copied().collect();
+                submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+            } else {
+                let actor = e.turn().current;
+                submit(&mut e, actor, GameAction::NextPhase);
+            }
+        }
+
+        // (b) 0 号已永久持「武圣」「马术」，1 号持重合「马术」+ 禁用「咆哮」+ 装备技 `huanle_monkey` + charlotte `wuxing_shengke` + `huanle_jiuwei`
+        e.debug_grant(0, "武圣");
+        e.debug_grant(0, "马术");
+        e.debug_grant(1, "马术");
+        e.debug_grant(1, "咆哮");
+        let paoxiao_def = e.catalog().skill_by_name("咆哮").unwrap();
+        e.state_core_mut()
+            .skills
+            .get_mut(&(1, paoxiao_def))
+            .unwrap()
+            .enabled = false;
+        e.debug_grant(1, "huanle_jiuwei");
+        let jiuwei_def = e.catalog().skill_by_name("huanle_jiuwei").unwrap();
+        let mashu_def = e.catalog().skill_by_name("马术").unwrap();
+
+        advance_to_play(&mut e, 1);
+        for _ in 0..32 {
+            if e.open_choice()
+                .is_some_and(|c| c.spec.prompt == "huanle_xuelunyang_target")
+            {
+                break;
+            }
+            if let Some(c) = e.open_choice().cloned() {
+                let sel = if c.spec.allow_cancel {
+                    Vec::new()
+                } else {
+                    c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+                };
+                submit(&mut e, c.observer, GameAction::Answer { choice_id: c.id, selection: sel });
+            } else {
+                let actor = e.turn().current;
+                submit(&mut e, actor, GameAction::NextPhase);
+            }
+        }
+        let c1 = e.open_choice().expect("huanle_xuelunyang_target").clone();
+        assert_eq!(c1.spec.options, vec![ChoiceOption::Player(1)]);
+        submit(
+            &mut e,
+            0,
+            GameAction::Answer {
+                choice_id: c1.id,
+                selection: vec![ChoiceOption::Player(1)],
+            },
+        );
+        let c2 = e.open_choice().expect("huanle_xuelunyang_skill").clone();
+        let stealable_ordered: Vec<u16> = e
+            .state_core()
+            .skills
+            .range((1, 0)..(1, u16::MAX))
+            .filter(|((_, def), _)| {
+                let name = e.catalog().skill_name(*def);
+                name == "马术" || name == "咆哮" || name == "huanle_jiuwei"
+            })
+            .map(|((_, def), _)| *def)
+            .collect();
+        assert_eq!(
+            c2.spec.options.len(),
+            3,
+            "可窃取列表必须精确包含 马术 / 咆哮(disabled) / huanle_jiuwei，不含装备技与 charlotte: {:?}",
+            stealable_ordered
+        );
+        let jiuwei_idx = stealable_ordered
+            .iter()
+            .position(|d| *d == jiuwei_def)
+            .expect("huanle_jiuwei idx") as u8;
+        submit(
+            &mut e,
+            0,
+            GameAction::Answer {
+                choice_id: c2.id,
+                selection: vec![ChoiceOption::Tag(jiuwei_idx)],
+            },
+        );
+        assert!(e.debug_has_skill(0, "huanle_jiuwei"), "应临时窃得 huanle_jiuwei");
+
+        // 推进至 0 号回合结束：窃得的 phaseEnd 技 `huanle_jiuwei` 必须在 phaseEnd 触发（摸 1 牌），
+        // 随后在 phaseAfter / 下一回合前彻底移除，同时 0 号原有永久技「武圣」「马术」仍保持可用。
+        advance_to_play(&mut e, 0);
+        e.debug_clear_hand(0);
+        let mut saw_jiuwei_trigger = false;
+        for _ in 0..16 {
+            if e.turn().current == 1 {
+                break;
+            }
+            if let Some(c) = e.open_choice().cloned() {
+                if c.spec.prompt == "trigger_confirm" && c.observer == 0 {
+                    saw_jiuwei_trigger = true;
+                    submit(
+                        &mut e,
+                        0,
+                        GameAction::Answer {
+                            choice_id: c.id,
+                            selection: vec![ChoiceOption::Confirm],
+                        },
+                    );
+                    continue;
+                }
+                let sel = if c.spec.allow_cancel {
+                    Vec::new()
+                } else {
+                    c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+                };
+                submit(&mut e, c.observer, GameAction::Answer { choice_id: c.id, selection: sel });
+            } else {
+                let actor = e.turn().current;
+                submit(&mut e, actor, GameAction::NextPhase);
+            }
+        }
+        assert!(
+            saw_jiuwei_trigger && e.debug_hand(0).len() == 1,
+            "窃得的 phaseEnd 技须在整回合结束窗正常触发后再到期"
+        );
+        assert!(!e.debug_has_skill(0, "huanle_jiuwei"), "phaseAfter 后临时技应到期");
+        assert!(
+            !e.state_core().skills.contains_key(&(0, jiuwei_def)),
+            "phaseAfter 后临时技必须从 skills 表移除（不可残留 disabled 实例锁死后续回合再窃）"
+        );
+        assert!(e.debug_has_skill(0, "武圣") && e.debug_has_skill(0, "马术"), "自身原有永久技能保持不变");
+        let _ = mashu_def;
+
+        // (d) 下一轮写轮眼再次触发时仍可再次窃取 huanle_jiuwei（也可选择已拥有的马术且回合末不消除永久马术）
+        advance_to_play(&mut e, 1);
+        for _ in 0..32 {
+            if e.open_choice()
+                .is_some_and(|c| c.spec.prompt == "huanle_xuelunyang_target")
+            {
+                break;
+            }
+            if let Some(c) = e.open_choice().cloned() {
+                let sel = if c.spec.allow_cancel {
+                    Vec::new()
+                } else {
+                    c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+                };
+                submit(&mut e, c.observer, GameAction::Answer { choice_id: c.id, selection: sel });
+            } else {
+                let actor = e.turn().current;
+                submit(&mut e, actor, GameAction::NextPhase);
+            }
+        }
+        let r2_t = e.open_choice().expect("第 2 轮 huanle_xuelunyang_target").clone();
+        submit(&mut e, 0, GameAction::Answer { choice_id: r2_t.id, selection: vec![ChoiceOption::Player(1)] });
+        let r2_s = e.open_choice().expect("第 2 轮 huanle_xuelunyang_skill").clone();
+        assert_eq!(r2_s.spec.options.len(), 3, "第 2 轮仍应列出含 huanle_jiuwei 在内的全部 3 项可窃技能");
+        submit(&mut e, 0, GameAction::Answer { choice_id: r2_s.id, selection: vec![ChoiceOption::Tag(jiuwei_idx)] });
+        assert!(e.debug_has_skill(0, "huanle_jiuwei"), "第 2 轮必须可重新窃取同一技能");
+    }
+}

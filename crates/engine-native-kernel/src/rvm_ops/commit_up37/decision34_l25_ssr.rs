@@ -184,7 +184,7 @@ pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pla
                 set_flag(ctx.core, owner, "l25_kuangbao_marks", kb.saturating_sub(6));
                 set_flag(ctx.core, owner, "l25_shenfen_awakened", 1);
                 if other != owner {
-                    ctx.core.player_mut(other).face_down = !ctx.core.player(other).face_down;
+                    ctx.turn_over(other);
                     ctx.core.player_mut(other).linked = true;
                 }
             }
@@ -339,7 +339,7 @@ pub fn try_resolve_l25_ssr_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pla
             ctx.emit(EventData::LoseHp { player: owner, amount: 1 });
             let _ = steal_one_card(ctx, owner, other);
             if other != owner { ctx.emit(EventData::Damage(crate::machine::damage_data(Some(owner), other, 1))); }
-            ctx.core.player_mut(owner).face_down = !ctx.core.player(owner).face_down;
+            ctx.turn_over(owner);
             set_flag(ctx.core, owner, "l25_skill:ssr_guimou", 1);
         }
         "ssr_newluanwu" => {

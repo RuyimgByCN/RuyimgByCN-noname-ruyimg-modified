@@ -89,6 +89,11 @@ impl HostSkillBehavior {
             },
             HostBehavior::ShengkeCheck => match event {
                 EventData::CardUsed(u) => (None, u.card),
+                EventData::Equipped { card, .. } => (None, Some(*card)),
+                _ => (None, None),
+            },
+            HostBehavior::HuanleMonkeyCard => match event {
+                EventData::CardUsed(u) => (Some(u.player), u.card),
                 _ => (None, None),
             },
             HostBehavior::MaxRangeWeaponDamage => match event {

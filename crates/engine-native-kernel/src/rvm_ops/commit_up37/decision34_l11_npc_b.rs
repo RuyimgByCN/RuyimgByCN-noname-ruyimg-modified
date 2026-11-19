@@ -299,7 +299,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "twliancai" => {
             // `tw/skill.js:28937`: at PhaseEnd turn over, steal 1 equip from target, and draw hand up to hp
-            ctx.core.player_mut(owner).face_down = !ctx.core.player(owner).face_down;
+            ctx.turn_over(owner);
             if let Some(t) = hostile_target(ctx, owner) {
                 if let Some(eq) = choose_enemy_card(ctx, owner, t) {
                     ctx.take_owned_card(t, eq);
@@ -477,7 +477,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         "twyingjia" => {
             // `tw/skill.js:28283`: at PhaseEnd after using 2+ same-name tricks -> discard 1 hand card & grant extra turn / draw 2
             let _ = discard_up_to_he(ctx, owner, 1);
-            ctx.core.player_mut(owner).face_down = false;
+            ctx.turn_face_up(owner);
             set_flag(ctx.core, owner, "l11_mod:txhj_oldhuxiao", 1);
             ctx.start_draw(owner, 2);
         }
@@ -683,7 +683,7 @@ pub(super) fn try_resolve_l11_npc_skill_b(
         }
         "xinjushou" => {
             // `shenhua/skill.js:2627`: at PhaseEnd turn over, draw 4 cards, and discard 1 hand card (or equip it if equip)
-            ctx.core.player_mut(owner).face_down = !ctx.core.player(owner).face_down;
+            ctx.turn_over(owner);
             draw_cards_sync(ctx, owner, 4);
             if let Some(cid) = choose_own_card(ctx, owner, false) {
                 ctx.take_hand_card(owner, cid);

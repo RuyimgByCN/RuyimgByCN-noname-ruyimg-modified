@@ -4,6 +4,7 @@ mod boss;
 mod gujian;
 mod gwent;
 mod hearth;
+pub(super) mod huanle;
 mod jiguan;
 mod mtg;
 mod skills_card_use;
@@ -13,7 +14,7 @@ mod skills_discard_costs;
 mod skills_damage;
 mod skills_recovery;
 mod skills_status;
-mod skills_targets;
+pub(super) mod skills_targets;
 mod swd_card_contests;
 mod swd_card_effects;
 mod swd_jiguan_cards;
@@ -814,9 +815,9 @@ impl HostMachine {
             HostBehavior::GwentPoxiaoCard => self.step_gwent(ctx),
             HostBehavior::GwentFengyinState => self.step_gwent(ctx),
             HostBehavior::GwentZumoCard => self.step_gwent(ctx),
-            HostBehavior::HuanleMonkeyCard => self.step_skills_status(ctx),
+            HostBehavior::HuanleMonkeyCard => self.step_huanle(ctx),
             HostBehavior::HuanleXuelunyangCard => self.step_skills_targets(ctx),
-            HostBehavior::HuanleMianjuCard => self.step_skills_status(ctx),
+            HostBehavior::HuanleMianjuCard => self.step_huanle(ctx),
             HostBehavior::ZhangbaSha => self.step_skills_card_use(ctx),
             HostBehavior::SwdLiuxinghuoyuCard => self.step_swd_card_effects(ctx),
             HostBehavior::SwdShentouEquipSkill => self.step_swd_equipment_skills(ctx),

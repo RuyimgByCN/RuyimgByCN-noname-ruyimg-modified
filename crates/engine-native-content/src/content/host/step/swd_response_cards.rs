@@ -288,14 +288,9 @@ impl HostMachine {
                         });
                     } else if ctx.core.player(t).linked {
                         // 已横置：翻面（不摸牌）
-                        let flipped = {
-                            let p = ctx.core.player_mut(t);
-                            p.face_down = !p.face_down;
-                            p.face_down
-                        };
-                        ctx.emit(EventData::TurnOvered {
+                        ctx.emit(EventData::TurnOverBefore {
                             player: t,
-                            face_down: flipped,
+                            cancelled: false,
                         });
                     } else {
                         // 横置（仅此支自己摸 1，上游代码原样）

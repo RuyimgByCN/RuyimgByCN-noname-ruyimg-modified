@@ -125,6 +125,163 @@ fn base_card_key(raw: &str) -> &str {
     s
 }
 
+/// Shared predicate: custom `CardKind::Jiguan` keys that resolve without `wrap_nullify_window`.
+pub(in crate::content::host) fn is_named_jiguan_unwrapped(raw_name: &str) -> bool {
+    let key = base_card_key(raw_name);
+    let key = key
+        .strip_prefix("gj_")
+        .or_else(|| key.strip_prefix("swd_"))
+        .unwrap_or(key);
+    matches!(
+        key,
+        "yanjiadan_heart"
+            | "yanjiadan_diamond"
+            | "yanjiadan_club"
+            | "yanjiadan_spade"
+            | "lingjiandai"
+    )
+}
+
+/// Shared predicate: custom `CardKind::Wuzhong` keys handled by `try_named_ext_card`
+/// (resolved directly without `wrap_nullify_window`).
+pub(in crate::content::host) fn is_named_wuzhong_unwrapped(
+    catalog: &crate::catalog::Catalog,
+    card: CardId,
+) -> bool {
+    let Some(raw_name) = catalog.cards.get(card as usize).map(|c| c.name) else {
+        return false;
+    };
+    if raw_name == "无中生有" || raw_name == "wuzhong" || raw_name.starts_with("wuzhong_") {
+        return false;
+    }
+    matches!(
+        base_card_key(raw_name),
+        "yiyi"
+            | "txhj_yiyi"
+            | "diaobingqianjiang"
+            | "zhengsu_leijin"
+            | "zhengsu_mingzhi"
+            | "zhengsu_bianzhen"
+            | "th_taipingyaoshu"
+            | "ssr_newsance_xicheng"
+            | "ssr_newsance_weicheng"
+            | "ssr_newsance_shoucheng"
+            | "ssr_jinfan"
+            | "txhj_zhijizhibi"
+            | "txhj_yuanjiao"
+            | "txhj_diaohu"
+            | "txhj_shengdong"
+            | "txzhaoshu_skill"
+            | "txzhaoshu_global"
+            | "huogong"
+            | "mtg_duzhao"
+            | "mtg_cangbaohaiwan"
+            | "fengyangzhen"
+            | "zf_fengyangzhen"
+            | "yunchuizhen"
+            | "zf_yunchuizhen"
+            | "shepanzhen"
+            | "zf_shepanzhen"
+            | "longfeizhen"
+            | "zf_longfeizhen"
+            | "huyizhen"
+            | "zf_huyizhen"
+            | "gw_hudiewu"
+            | "gw_xinsheng"
+            | "gw_huangjiashenpan"
+            | "gw_chongci"
+            | "gw_butianshu"
+            | "gw_shizizhaohuan"
+            | "gw_zuihouyuanwang"
+            | "gw_zirankuizeng"
+            | "gwmaoxian_falanxisika"
+            | "gwmaoxian_huoge"
+            | "gw_fuyuan"
+            | "gwmaoxian_telisi"
+            | "gwmaoxian_aisinie"
+            | "gw_xianzumaijiu"
+            | "gwjinli_jiu"
+            | "gw_leizhoushu"
+            | "gwmaoxian_yenaifa"
+            | "gw_yigeniyin"
+            | "gw_zhuoshao"
+            | "gw_zhongmozhizhan"
+            | "gw_ansha"
+            | "gw_ganhan"
+            | "gwmaoxian_yioufeisi"
+            | "gwmaoxian_luoqi"
+            | "gwmaoxian_jieluote"
+            | "gwmaoxian_kuite"
+            | "gwmaoxian_haluo"
+            | "gwmaoxian_airuiting"
+            | "gw_wuyao"
+            | "gw_aerdeyin"
+            | "gwmaoxian_laduoweide"
+            | "gw_tunshi"
+            | "gw_niuquzhijing"
+            | "gw_youer"
+            | "gw_tongdi"
+            | "gwmaoxian_enxier"
+            | "gwmaoxian_fulisi"
+            | "gwmaoxian_kaerweite"
+            | "gwmaoxian_gaier"
+            | "gw_nuhaifengbao"
+            | "gw_baishuang"
+            | "gw_baobaoshu"
+            | "gwmaoxian_dagong"
+            | "gw_guaiwuchaoxue"
+            | "gwmaoxian_hengsaite"
+            | "gwmaoxian_fuertaisite"
+            | "gwmaoxian_bulanwang"
+            | "gw_lang"
+            | "gw_dudayuanshuai1"
+            | "gw_dudayuanshuai2"
+            | "shandianjian"
+            | "ht_shandianjian"
+            | "hsqingyu_shandian"
+            | "hsqizhou_huo"
+            | "hsdusu_huoyanhua"
+            | "hsjixie_zhadan"
+            | "hsmengjing_feicuiyoulong"
+            | "hsshenqi_kongbusangzhong"
+            | "hsmengjing_suxing"
+            | "hsqizhou_shui"
+            | "hsmengjing_huanxiaojiemei"
+            | "tuteng3"
+            | "hsqizhou_tu"
+            | "hsqingyu_hufu"
+            | "tuteng2"
+            | "tuteng6"
+            | "hsqingyu_zhanfang"
+            | "hsshenqi_nengliangzhiguang"
+            | "hsqingyu_feibiao"
+            | "hsdusu_xueji"
+            | "hsmengjing_mengjing"
+            | "hszuzhou_nvwudeganguo"
+            | "hszuzhou_wushushike"
+            | "hszuzhou_guhuo"
+            | "shenenshu"
+            | "ht_shenenshu"
+            | "hsfashu_anyingjingxiang"
+            | "hsfashu_buwendingyibian"
+            | "hsqizhou_feng"
+            | "hsdusu_kuyecao"
+            | "hsdusu_huangxuecao"
+            | "hsdusu_shinancao"
+            | "hsbaowu_cangbaotu"
+            | "hsbaowu_huangjinyuanhou"
+            | "hsshenqi_morijingxiang"
+            | "hsmengjing_mengye"
+            | "hszuzhou_nvwudepingguo"
+            | "hszuzhou_nvwudexuetu"
+            | "tuteng1"
+            | "tuteng4"
+            | "tuteng5"
+            | "tuteng7"
+            | "tuteng8"
+    )
+}
+
 /// Intercepts `yanjiadan_*` (`character/gujian/card.js:4-198`) and `lingjiandai`
 /// (`card/swd/card.js:1062-1098`) before `CardKind::Jiguan`'s SWD fallback.
 pub(super) fn try_named_jiguan_card(
@@ -292,8 +449,7 @@ pub(super) fn try_named_ext_card(
         }
         "txhj_diaohu" => {
             if let Some(t) = first_target_or_other(ctx, u) {
-                let fd = !ctx.core.player(t).face_down;
-                ctx.core.player_mut(t).face_down = fd;
+                ctx.turn_over(t);
             }
             ctx.start_draw(owner, 1);
         }
@@ -399,8 +555,7 @@ pub(super) fn try_named_ext_card(
         "gw_aerdeyin" | "gwmaoxian_laduoweide" => {
             set_flag(ctx, owner, &format!("u05_card_used:{key}"), 1);
             if let Some(t) = first_target_or_other(ctx, u) {
-                let fd = !ctx.core.player(t).face_down;
-                ctx.core.player_mut(t).face_down = fd;
+                ctx.turn_over(t);
             }
         }
         "gw_tunshi" => {

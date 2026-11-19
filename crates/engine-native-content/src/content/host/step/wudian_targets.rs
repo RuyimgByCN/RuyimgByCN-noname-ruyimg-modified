@@ -101,30 +101,18 @@ impl HostMachine {
                                 cards: vec![c],
                             });
                         }
-                        let flipped = {
-                            let p = ctx.core.player_mut(t);
-                            let f = !p.face_down;
-                            p.face_down = true;
-                            f
-                        };
-                        if flipped {
-                            ctx.emit(EventData::TurnOvered {
+                        if !ctx.core.player(t).face_down {
+                            ctx.emit(EventData::TurnOverBefore {
                                 player: t,
-                                face_down: true,
+                                cancelled: false,
                             });
                         }
                     }
-                    // contentAfter：自己翻至背面（幂等）
-                    let flipped = {
-                        let p = ctx.core.player_mut(self.owner);
-                        let f = !p.face_down;
-                        p.face_down = true;
-                        f
-                    };
-                    if flipped {
-                        ctx.emit(EventData::TurnOvered {
+                    // contentAfter：自己翻至背面（经 TurnOverBefore）
+                    if !ctx.core.player(self.owner).face_down {
+                        ctx.emit(EventData::TurnOverBefore {
                             player: self.owner,
-                            face_down: true,
+                            cancelled: false,
                         });
                     }
                     Flow::Done

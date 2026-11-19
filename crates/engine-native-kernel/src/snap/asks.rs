@@ -70,6 +70,7 @@ pub fn active_ask(
             hujia_holder,
             asking_qinglong,
             asking_fuchou,
+            asking_fengxueren,
             fuchou_card,
             ..
         } => {
@@ -110,6 +111,7 @@ pub fn active_ask(
                 *hujia_holder,
                 *asking_qinglong,
                 *asking_fuchou,
+                *asking_fengxueren,
                 *fuchou_card,
                 core,
                 catalog,

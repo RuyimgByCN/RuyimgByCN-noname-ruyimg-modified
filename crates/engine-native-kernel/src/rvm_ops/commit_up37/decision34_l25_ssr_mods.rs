@@ -253,7 +253,7 @@ pub(super) fn try_resolve_l25_ssr_mod_or_tactical(
         }
         "ssr_jushou" => {
             // `extension.js:24390`: `phaseJieshu` turns over, gains 1 hujia, draws 3, records `defend`
-            ctx.core.player_mut(owner).face_down = !ctx.core.player(owner).face_down;
+            ctx.turn_over(owner);
             ctx.core.player_mut(owner).hujia = ctx.core.player(owner).hujia.saturating_add(1);
             ctx.start_draw(owner, 3);
             let def = flag(ctx.core, owner, "l25_jushou_defend") + 1;

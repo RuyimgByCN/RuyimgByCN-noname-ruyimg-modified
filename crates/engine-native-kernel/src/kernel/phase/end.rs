@@ -114,14 +114,9 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
             let seats = ctx.core.players.len() as PlayerId;
             if let Some(t) = (0..seats).find(|&t| t != player && ctx.core.player(t).alive) {
                 if !ctx.core.player(t).face_down {
-                    let flipped = {
-                        let p = ctx.core.player_mut(t);
-                        p.face_down = true;
-                        p.face_down
-                    };
-                    ctx.emit(EventData::TurnOvered {
+                    ctx.emit(EventData::TurnOverBefore {
                         player: t,
-                        face_down: flipped,
+                        cancelled: false,
                     });
                 }
             }

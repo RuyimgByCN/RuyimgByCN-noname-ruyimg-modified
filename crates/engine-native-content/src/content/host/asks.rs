@@ -231,7 +231,7 @@ pub(crate) fn active_ask_host(
                 (0..=4).map(ChoiceOption::Tag).collect(),
                 1,
                 1,
-                true,
+                false,
             )),
             _ => None,
         },
@@ -273,54 +273,14 @@ pub(crate) fn active_ask_host(
         // 五行生克（L06 wuxing/extension.js:62-133）：被克目标弃置一张 he 牌（强制）
         HostBehavior::ShengkeCheck => {
             if stage != HostStage::SelectCard { return None; }
-            let p = core.player(owner);
-            let options: Vec<ChoiceOption> = p.hand.iter().chain(p.equips.iter()).copied().map(ChoiceOption::Card).collect();
+            let options = crate::content::host::filtering::shengke_discard_options(core, catalog, owner, card);
             if options.is_empty() { return None; }
             Some(ask(owner, "shengke_discard", ChoiceKind::SelectCards, options, 1, 1, false))
         }
-        // 写轮眼（U06 欢乐卡牌 skill.js:70-128）：阶段一选目标（可取消），阶段二选技能（不可取消）
-        HostBehavior::HuanleXuelunyangCard => match stage {
-            HostStage::CompareTargetPick => {
-                let candidates: Vec<ChoiceOption> = (0..core.players.len())
-                    .filter(|&i| {
-                        i as PlayerId != owner
-                            && core.player(i as PlayerId).alive
-                            && core.skills.keys().any(|(o, _)| *o == i as PlayerId)
-                    })
-                    .map(|i| ChoiceOption::Player(i as PlayerId))
-                    .collect();
-                if candidates.is_empty() {
-                    return None;
-                }
-                Some(ask(
-                    owner,
-                    "huanle_xuelunyang_target",
-                    ChoiceKind::SelectPlayers,
-                    candidates,
-                    1,
-                    1,
-                    true,
-                ))
-            }
-            HostStage::ComparePlayerPick => {
-                let t = target?;
-                let count = core.skills.range((t, 0)..(t, u16::MAX)).count();
-                if count == 0 {
-                    return None;
-                }
-                let tags: Vec<ChoiceOption> = (0..count).map(|i| ChoiceOption::Tag(i as u8)).collect();
-                Some(ask(
-                    owner,
-                    "huanle_xuelunyang_skill",
-                    ChoiceKind::PickTag,
-                    tags,
-                    1,
-                    1,
-                    false,
-                ))
-            }
-            _ => None,
-        },
+        // 猴子偷桃 / 写轮眼（U06 欢乐卡牌 skill.js:5-31, 70-128）
+        HostBehavior::HuanleMonkeyCard | HostBehavior::HuanleXuelunyangCard => {
+            super::step::huanle::huanle_active_ask(behavior, stage, owner, target, core, catalog)
+        }
         // 潜偷（swd 第三批 v92）：代价牌选择询问（owner）
         HostBehavior::SwdShentouEquipSkill => {
             if stage != HostStage::Act {

@@ -248,6 +248,12 @@ pub(super) fn discard_response_card(
             .cloned()
         {
             let extra = spec.consume_and_record(ctx.core, ctx.catalog, player, card);
+            if spec.cost == Some(crate::rvm_bridge::VmViewAsCost::TurnOver) {
+                ctx.emit(EventData::TurnOverBefore {
+                    player,
+                    cancelled: false,
+                });
+            }
             for c2 in extra {
                 ctx.to_discard(c2);
             }
@@ -295,87 +301,6 @@ pub(super) fn discard_response_card(
         ctx.to_discard(card);
         ctx.log(LogEvent::CardDiscarded {
             player,
-            cards: vec![card],
-        });
-    } else {
-        ctx.to_discard(card);
-    }
-}
-
-pub(super) fn discard_dying_card(
-    ctx: &mut Ctx<'_>,
-    responder: PlayerId,
-    dying: PlayerId,
-    card: crate::ids::CardId,
-) {
-    let in_hand = ctx.core.player(responder).hand.contains(&card);
-    let mut from_none = false;
-    if !matches!(
-        ctx.catalog.card_kind(card),
-        CardKind::Tao | CardKind::Jiu | CardKind::Hufu | CardKind::Tianxianjiu | CardKind::Dinvxuanshuang
-    ) || !in_hand
-    {
-        let spec = ctx
-            .catalog
-            .find_player_vm_view_as(ctx.core, responder, card, false, Some(CardKind::Tao))
-            .or_else(|| {
-                (responder == dying)
-                    .then(|| {
-                        ctx.catalog.find_player_vm_view_as(
-                            ctx.core,
-                            responder,
-                            card,
-                            false,
-                            Some(CardKind::Jiu),
-                        )
-                    })
-                    .flatten()
-            })
-            .cloned();
-        if let Some(s) = spec {
-            let extra = s.consume_and_record(ctx.core, ctx.catalog, responder, card);
-            for c2 in extra {
-                ctx.to_discard(c2);
-            }
-            if s.zone == crate::rvm_bridge::VmViewAsZone::None {
-                from_none = true;
-            }
-        }
-    }
-    if from_none {
-        return;
-    }
-    if ctx.core.player(responder).hand.contains(&card) {
-        ctx.discard_from_hand(responder, card);
-    } else if ctx.core.player(responder).equips.contains(&card) {
-        ctx.core.player_mut(responder).equips.retain(|x| *x != card);
-        ctx.core.declared_slots.remove(&card);
-        revoke_equip_skills(ctx.core, ctx.catalog, responder, card);
-        ctx.to_discard(card);
-        ctx.log(LogEvent::CardDiscarded {
-            player: responder,
-            cards: vec![card],
-        });
-        ctx.emit(EventData::CardsLost {
-            player: responder,
-            cards: vec![card],
-            origins: vec![crate::event::LostOrigin::Equip],
-        });
-    } else if ctx
-        .core
-        .vm_aux
-        .piles
-        .iter_mut()
-        .filter(|((owner, _), _)| *owner == responder)
-        .any(|(_, pile)| {
-            let len_before = pile.len();
-            pile.retain(|&x| x != card);
-            pile.len() != len_before
-        })
-    {
-        ctx.to_discard(card);
-        ctx.log(LogEvent::CardDiscarded {
-            player: responder,
             cards: vec![card],
         });
     } else {

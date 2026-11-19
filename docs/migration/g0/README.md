@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-19 Batch 1.1（U06 欢乐卡牌 ＋ L06 wuxing）更新（待提交／发布）
+
+基线 HEAD `352236724b5e173cc1ff74c0fb706509129ab7a1` ＋ Batch 1.1 修改；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经独立复核 agent `602b9dd3-b8e7-4e3c-81fe-b57137a6f312` 对 14 项逐行核对与上游实际探针审查，清单更新为 **已复核等价 632／简化近似 3,792／缺失 0／上游未定义 0**（合计 4,424）：`U06` **11 / 0 / 0**（+6），`L06` **2 / 1 / 0**（`_shengke`、`wuxingpan_skill` 升为已复核等价，`wuxingpan` 卡牌依 S2 固定 `1/3` vs 默认 `0.3` 差异下调为简化近似）。队列第 1 项 U06/L06 修复完成本地验收流程收口，整包八项仍 `0/37`。详见 [Batch 1.1 证据摘要](../../operations/evidence/2026-11-19-batch1-1-u06-l06/README.md) 与 [inventory_status.json](inventory_status.json)；下方 2026-11-14 及更早记录保留为历史快照。
+
 ## 2026-11-14T03:16:45.676673+08:00 三来源运行复核日期表（文档批待提交／发布）
 
 源码HEAD `5c73d1d9158145e33f98f2018013914667d13964` + 文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8。酒诗代码已正常发布且首次精确CI10/10成功，本纯文档批尚未提交/发布。当前逐来源按[37来源新日期表](../../operations/evidence/2026-11-14-queue1-runtime/source-counts-runtime-04.md)；本批明确撤回慧眼2/3与业炎3旧等价、新签0，不从局部投影或恢复通过上调签署。[逐案与原始证据](../../operations/evidence/2026-11-14-queue1-runtime/README.md)、[变更前后原文](../../operations/evidence/2026-11-14-queue1-runtime/inventory-runtime-update-05.json)。第①项只计已复核等价，第⑧项保留各来源全部尚存差异；八项整包仍0/37，队列1仍部分、队列2未开始。原表/日期记录保持历史快照。

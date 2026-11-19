@@ -191,8 +191,7 @@ pub(super) fn u05_change_max_hp(ctx: &mut Ctx<'_>, seat: PlayerId, delta: i32) {
 }
 
 pub(super) fn u05_turn_over(ctx: &mut Ctx<'_>, seat: PlayerId) {
-    let fd = !ctx.core.player(seat).face_down;
-    ctx.core.player_mut(seat).face_down = fd;
+    ctx.turn_over(seat);
 }
 
 pub(super) fn u05_toggle_link(ctx: &mut Ctx<'_>, seat: PlayerId) {

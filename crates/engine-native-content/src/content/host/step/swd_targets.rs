@@ -368,16 +368,11 @@ impl HostMachine {
                         // 取消：双方都不翻
                         return Flow::Done;
                     };
-                    for p in [self.owner, t] {
+                    for p in [t, self.owner] {
                         if ctx.core.player(p).alive {
-                            let flipped = {
-                                let pl = ctx.core.player_mut(p);
-                                pl.face_down = !pl.face_down;
-                                pl.face_down
-                            };
-                            ctx.emit(EventData::TurnOvered {
+                            ctx.emit(EventData::TurnOverBefore {
                                 player: p,
-                                face_down: flipped,
+                                cancelled: false,
                             });
                         }
                     }

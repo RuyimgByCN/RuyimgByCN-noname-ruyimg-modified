@@ -282,7 +282,12 @@ pub(super) fn step_th_caiyi(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                     0 => {}
                     1 => ctx.start_draw(t, x),
                     _ => {
-                        ctx.core.player_mut(t).face_down = false;
+                        if ctx.core.player(t).face_down {
+                            ctx.emit(EventData::TurnOverBefore {
+                                player: t,
+                                cancelled: false,
+                            });
+                        }
                         ctx.core.player_mut(t).linked = false;
                     }
                 }
@@ -309,7 +314,12 @@ pub(super) fn step_th_caiyi(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                         discard_cards(ctx, t, &to_disc);
                     }
                     _ if ctx.core.player(t).alive => {
-                        ctx.core.player_mut(t).face_down = true;
+                        if !ctx.core.player(t).face_down {
+                            ctx.emit(EventData::TurnOverBefore {
+                                player: t,
+                                cancelled: false,
+                            });
+                        }
                         ctx.core.player_mut(t).linked = true;
                     }
                     _ => {}

@@ -10,10 +10,22 @@ pub(super) fn active_sha_ask(
     hujia_holder: Option<PlayerId>,
     asking_qinglong: bool,
     asking_fuchou: bool,
+    asking_fengxueren: bool,
     fuchou_card: Option<u32>,
     core: &GameStateCore,
     catalog: &Catalog,
 ) -> Option<ExpectedAsk> {
+    if asking_fengxueren {
+        return Some(ask(
+            source,
+            "fengxueren_flip_confirm",
+            ChoiceKind::Confirm,
+            vec![ChoiceOption::Confirm],
+            0,
+            1,
+            true,
+        ));
+    }
     if asking_fuchou {
         let mut options: Vec<ChoiceOption> = core
             .player(target)

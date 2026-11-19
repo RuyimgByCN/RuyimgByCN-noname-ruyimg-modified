@@ -30,10 +30,15 @@ impl HostMachine {
                     }
                 }
                 HostStage::SelectNature => {
-                    self.card = match ctx.answer().first() {
-                        Some(ChoiceOption::Card(c)) => Some(*c),
-                        _ => return Flow::Done, // 弃权
+                    let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() else {
+                        if let Some(def) = ctx.catalog.skill_by_name("wuxingpan_skill") {
+                            if let Some(inst) = ctx.core.skills.get_mut(&(self.owner, def)) {
+                                inst.once_used = false;
+                            }
+                        }
+                        return Flow::Done;
                     };
+                    self.card = Some(c);
                     self.stage = HostStage::Act;
                     Flow::WaitChoice {
                         observer: self.owner,
@@ -43,7 +48,7 @@ impl HostMachine {
                             options: (0..=4).map(ChoiceOption::Tag).collect(),
                             min: 1,
                             max: 1,
-                            allow_cancel: true,
+                            allow_cancel: false,
                         },
                     }
                 }

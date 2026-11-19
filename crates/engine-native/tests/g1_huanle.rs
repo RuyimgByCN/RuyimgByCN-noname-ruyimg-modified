@@ -142,5 +142,7 @@ mod host;
 mod huanle;
 #[path = "g1_huanle/u06.rs"]
 mod u06;
+#[path = "g1_huanle/u06_fixes.rs"]
+mod u06_fixes;
 #[path = "g1_huanle/xly.rs"]
 mod xly;

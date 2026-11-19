@@ -661,8 +661,8 @@ fn enter_k_mowang_rest(ctx: &mut Ctx<'_>, owner: PlayerId, from_dying: bool) {
         p.hp = 1;
         p.dying = false;
         p.linked = false;
-        p.face_down = false;
     }
+    ctx.turn_face_up(owner);
     revoke_k_danggu_companions(ctx, owner);
     let all_cards: Vec<CardId> = ctx
         .core

@@ -1,5 +1,9 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+## 2026-11-19 Batch 1.1（U06 欢乐卡牌 ＋ L06 五行）语义对齐与 S2 留差边界（待提交／发布）
+
+基线 HEAD `352236724b5e173cc1ff74c0fb706509129ab7a1` ＋ Batch 1.1；版本号零变更（规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`），14 项标准 golden 哈希全部保持不变。语义调整：1）`U06 monkey` 统一出牌区与濒死救治路径为 `EventData::CardUsed` ＋ `HostBehavior::HuanleMonkeyCard`（`dying.rs`/`events.rs`/`step/huanle.rs:10-143`），桃无论被拿取或拒绝均于结算后正确消耗入弃牌堆，并校验 `filterInD` 与座位序；2）`U06 xuelunyang` 修复第二步取消、被禁用临时技能在回合末正常清理（`machine.rs:921-955`）及 `is_charlotte` 内部状态戳排除（`content/host.rs:180-200`）；3）`L06 _shengke`（`filtering/wuxing.rs:1-249`、`skills_status.rs:677-713`）补齐联机禁用、装备直装排除、`Tianfuzhen`/`Niaoxiangzhen`/`use_as=Wuzhong` 与 `Wuzhong`/`Jiguan` 原主过滤；按冻结 `NGSA 107` 保持桃园/五谷单批事件结构，并按 `wuxingpan_skill` 保持第二步强制 `SelectNature`；4）**S2 留差**：`L06 wuxingpan` 卡牌依 `wuxing.json:5`／`construction.rs:479-503` 固定按 `1/3` 随机注入牌库五行属性，未读取上游 `wuxing_num_playpackconfig`（默认 `0.3`），由独立复核下调为 `简化近似`。见 [Batch 1.1 复核摘要](../operations/evidence/2026-11-19-batch1-1-u06-l06/README.md)。
+
 ## 2026-11-14T03:16:45.676673+08:00 L10／U08／L28实际反例与规则边界
 
 源码HEAD `5c73d1d9158145e33f98f2018013914667d13964` + 文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8。本批不改产品/版本/NGSA格式或校验，仅记录实际差异与撤回旧等价；酒诗代码精确CI首次10/10成功。L10蛊惑质疑/响应、让节搜索方向/取消、党锢方向冲突及已授常侍技能自动阶段触发；U08慧眼受控过滤/真实取消用次、逐目标/事件族和两辅助源码组合；L28补叙类别搜索、整经数量/分配与业炎费用时点/伤害逆序/默认配置/两火表达仍待修。上游受UI依赖阻塞的党锢/整经不写成已动态完成；21个非原牌表元组与初始弃牌/闪电性质差别保留，不称完整原牌堆或全状态/RNG等价。实际来源链、源码/实跑等级和未验分支分别见[L10](../operations/evidence/2026-11-14-queue1-runtime/independent/l10/README.md)、[U08](../operations/evidence/2026-11-14-queue1-runtime/independent/u08/README.md)、[两辅助裁定](../operations/evidence/2026-11-14-queue1-runtime/independent/u08-auxiliary-adjudication.md)、[L28](../operations/evidence/2026-11-14-queue1-runtime/independent/l28/README.md)。当前数量与队列状态只以[进度主稿](native-progress.md)/[清单](../migration/g0/inventory_status.json)为准，本文不另立规则版本。

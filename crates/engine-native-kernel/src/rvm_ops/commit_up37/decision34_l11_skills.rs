@@ -174,7 +174,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         "txhj_diaohu" => {
             // `extension_card.js:951`: target turns over (`face_down`), then target draws 1 and owner draws 1
             if let Some(t) = hostile_target(ctx, owner) {
-                ctx.core.player_mut(t).face_down = !ctx.core.player(t).face_down;
+                ctx.turn_over(t);
                 draw_cards_sync(ctx, t, 1);
             }
             draw_cards_sync(ctx, owner, 1);

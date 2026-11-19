@@ -177,11 +177,11 @@ fn resolve_mbcmjiushi(ctx: &mut Ctx<'_>, owner: PlayerId) {
         return;
     }
     if !ctx.core.player(owner).face_down {
-        ctx.core.player_mut(owner).face_down = true;
+        ctx.turn_over(owner);
         ctx.core.turn.jiu_active = true;
         set_flag(ctx.core, owner, "mbcmjiushi_jiu_used", 1);
     } else {
-        ctx.core.player_mut(owner).face_down = false;
+        ctx.turn_face_up(owner);
         let trick = ctx
             .core
             .deck
@@ -233,8 +233,7 @@ fn resolve_mbcmfangzhu(ctx: &mut Ctx<'_>, owner: PlayerId) {
     } else if opt == 2 {
         set_flag(ctx.core, target, "mbcmfangzhu_jin", 1);
     } else {
-        let next_face_down = !ctx.core.player(target).face_down;
-        ctx.core.player_mut(target).face_down = next_face_down;
+        ctx.turn_over(target);
     }
     set_flag(ctx.core, owner, "mbcmfangzhu_last_target", u32::from(target));
     set_flag(ctx.core, owner, "mbcmfangzhu_drawn", lost_hp);

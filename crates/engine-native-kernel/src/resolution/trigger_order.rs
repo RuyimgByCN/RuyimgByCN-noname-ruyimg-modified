@@ -61,10 +61,11 @@ fn subscribes(catalog: &Catalog, def: SkillDefId, frame: &Frame) -> bool {
     let Some(def) = catalog.skills.get(def as usize) else {
         return false;
     };
-    let Some(meta) = &def.trigger else {
+    let kind = event_kind(frame);
+    let kind_meta = def.behavior.kind_trigger_meta(kind);
+    let Some(meta) = kind_meta.as_ref().or(def.trigger.as_ref()) else {
         return false;
     };
-    let kind = event_kind(frame);
     (meta.event == kind || meta.extra_events.contains(&kind))
         && (kind != EventKind::PhaseBegin
             || def.behavior.is_vm_skill() == (frame.stage == Stage::BeforeTriggers))
@@ -106,7 +107,8 @@ pub(super) fn eligible(
     let Some(def) = catalog.skills.get(q.def as usize) else {
         return false;
     };
-    let Some(meta) = &def.trigger else {
+    let kind_meta = def.behavior.kind_trigger_meta(kind);
+    let Some(meta) = kind_meta.as_ref().or(def.trigger.as_ref()) else {
         return false;
     };
     if catalog.is_tieji_sealed(core, q.owner)
@@ -119,6 +121,9 @@ pub(super) fn eligible(
         .native_damage_effect(kind)
         .is_some_and(|e| e.helper_name() == Some(def.name));
     (helper || inst.is_some_and(|i| i.enabled && (!def.limits.once_per_turn || !i.once_used)))
+        && !(kind == EventKind::TurnPhaseAfter
+            && core.turn.extra_phases.is_empty()
+            && inst.is_some_and(|i| i.expires_end_of_turn))
         && core.player(q.owner).alive
         && (meta.event == kind || meta.extra_events.contains(&kind))
         && if let (Some(effect), EventData::Damage(d)) =
@@ -153,11 +158,13 @@ pub(super) fn eligible(
                     root.and_then(|root| crate::event::damage_card_kind(frames, root, catalog)),
                 )
         } else {
-            def.behavior.filter_in_window(
+            def.behavior.filter_in_window_with_frames(
                 &QueryCtx {
                     state: core,
                     catalog,
                 },
+                frames,
+                frame,
                 q.owner,
                 event,
                 kind,

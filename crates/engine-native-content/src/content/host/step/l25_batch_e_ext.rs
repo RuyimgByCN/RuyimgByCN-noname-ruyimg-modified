@@ -150,17 +150,11 @@ fn step_ssr_qicai(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     }
 }
 
-fn flip_player_face(ctx: &mut Ctx<'_>, p: PlayerId) -> bool {
-    let flipped = {
-        let pl = ctx.core.player_mut(p);
-        pl.face_down = !pl.face_down;
-        pl.face_down
-    };
-    ctx.emit(EventData::TurnOvered {
+fn flip_player_face(ctx: &mut Ctx<'_>, p: PlayerId) {
+    ctx.emit(EventData::TurnOverBefore {
         player: p,
-        face_down: flipped,
+        cancelled: false,
     });
-    flipped
 }
 
 fn step_ssr_newweimu(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
@@ -215,10 +209,14 @@ fn step_ssr_guimou(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                 set_flag(ctx.core, owner, "l25_batch_e_ask_id", 0);
                 return Flow::Done;
             }
-            let flipped = flip_player_face(ctx, owner);
-            let active = if flipped { 1 } else { 0 };
-            set_flag(ctx.core, owner, "l25_weimu_active", active);
+            flip_player_face(ctx, owner);
             set_flag(ctx.core, owner, "l25_guimou_triggered", 1);
+            m.stage = HostStage::DrawSettle;
+            Flow::Yield
+        }
+        HostStage::DrawSettle => {
+            let active = if ctx.core.player(owner).face_down { 1 } else { 0 };
+            set_flag(ctx.core, owner, "l25_weimu_active", active);
             wait_ask(m, ctx, HostStage::TargetChoice, ASK_GUIMOU_TARGETS)
         }
         HostStage::TargetChoice => {
@@ -312,11 +310,7 @@ fn step_ssr_newluanwu(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             };
             let cur_p = m.target.unwrap_or(owner);
             m.targets.retain(|&p| p != cur_p);
-            let flipped = flip_player_face(ctx, cur_p);
-            if cur_p == owner {
-                let active = if flipped { 1 } else { 0 };
-                set_flag(ctx.core, owner, "l25_weimu_active", active);
-            }
+            flip_player_face(ctx, cur_p);
             if mode == 0 {
                 ctx.start_draw(cur_p, 2);
             } else {
@@ -331,6 +325,8 @@ fn step_ssr_newluanwu(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             Flow::Yield
         }
         HostStage::DrawSettle => {
+            let active = if ctx.core.player(owner).face_down { 1 } else { 0 };
+            set_flag(ctx.core, owner, "l25_weimu_active", active);
             m.targets.retain(|&p| ctx.core.player(p).alive);
             if let Some(&next_p) = m.targets.first() {
                 m.target = Some(next_p);

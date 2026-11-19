@@ -179,7 +179,7 @@ pub(super) fn try_resolve_l11_npc_skill_a(
         }
         "dualside" => {
             // `game.js:34262`: dual-sided character flips to back/front form on turnOver or dying, restoring HP & drawing 2
-            ctx.core.player_mut(owner).face_down = !ctx.core.player(owner).face_down;
+            ctx.turn_over(owner);
             let mhp = ctx.core.player(owner).max_hp as i32;
             ctx.core.player_mut(owner).hp = mhp;
             ctx.core.player_mut(owner).dying = false;
@@ -389,7 +389,7 @@ pub(super) fn try_resolve_l11_npc_skill_a(
         "lihun" => {
             // `sp.js:22495`: discard 1 card, turn over (`face_down`), and take all hand cards from male target
             let _ = discard_up_to_he(ctx, owner, 1);
-            ctx.core.player_mut(owner).face_down = !ctx.core.player(owner).face_down;
+            ctx.turn_over(owner);
             if let Some(t) = hostile_target(ctx, owner) {
                 let thand = ctx.core.player(t).hand.clone();
                 for c in thand {
@@ -562,7 +562,7 @@ pub(super) fn try_resolve_l11_npc_skill_a(
             if flag(ctx.core, owner, "l11_olniepan_used") == 0 {
                 set_flag(ctx.core, owner, "l11_olniepan_used", 1);
                 let _ = discard_up_to_he(ctx, owner, 16);
-                ctx.core.player_mut(owner).face_down = false;
+                ctx.turn_face_up(owner);
                 ctx.core.player_mut(owner).linked = false;
                 ctx.core.player_mut(owner).dying = false;
                 let target_hp = 3.min(ctx.core.player(owner).max_hp as i32).max(1);
@@ -696,7 +696,7 @@ pub(super) fn try_resolve_l11_npc_skill_a(
             // `refresh.js:7455`: discard X hand cards -> target turns over & draws X cards (or discards X and loses 1 HP)
             let x = discard_up_to_he(ctx, owner, 1).len().max(1) as u32;
             if let Some(t) = hostile_target(ctx, owner) {
-                ctx.core.player_mut(t).face_down = !ctx.core.player(t).face_down;
+                ctx.turn_over(t);
                 ctx.start_draw(t, x);
             }
         }

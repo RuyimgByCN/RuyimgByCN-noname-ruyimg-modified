@@ -749,14 +749,9 @@ pub(super) fn handle_u08_batch_c_impl(m: &mut HostMachine, ctx: &mut Ctx<'_>) ->
                 m.stage = HostStage::Act;
                 if answered_confirm(ctx) {
                     draw_direct(ctx, owner, 3);
-                    let flipped = {
-                        let p = ctx.core.player_mut(owner);
-                        p.face_down = !p.face_down;
-                        p.face_down
-                    };
-                    ctx.emit(EventData::TurnOvered {
+                    ctx.emit(EventData::TurnOverBefore {
                         player: owner,
-                        face_down: flipped,
+                        cancelled: false,
                     });
                 }
                 Flow::Done

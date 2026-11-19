@@ -593,11 +593,13 @@ pub(super) fn sixiang_reset_challengers(ctx: &mut Ctx<'_>, draws: &mut Vec<(Play
             continue;
         }
         sixiang_discard_zone(ctx, t);
-        let p = ctx.core.player_mut(t);
-        p.hp = p.max_hp as i32;
-        p.hujia = 0;
-        p.face_down = false;
-        p.linked = false;
+        {
+            let p = ctx.core.player_mut(t);
+            p.hp = p.max_hp as i32;
+            p.hujia = 0;
+            p.linked = false;
+        }
+        ctx.turn_face_up(t);
         if draw_n > 0 {
             draws.push((t, draw_n));
         }

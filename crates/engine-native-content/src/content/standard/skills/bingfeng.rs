@@ -37,14 +37,9 @@ impl SkillMachine for BingfengMachine {
         // 来源=死亡事件的 killer（behavior.start 时捕获）
         if let Some(src) = self.killer {
             if src != self.owner && ctx.core.player(src).alive && !ctx.core.player(src).face_down {
-                let flipped = {
-                    let p = ctx.core.player_mut(src);
-                    p.face_down = true;
-                    p.face_down
-                };
-                ctx.emit(EventData::TurnOvered {
+                ctx.emit(EventData::TurnOverBefore {
                     player: src,
-                    face_down: flipped,
+                    cancelled: false,
                 });
             }
         }

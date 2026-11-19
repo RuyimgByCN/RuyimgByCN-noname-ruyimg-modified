@@ -232,14 +232,9 @@ impl ShaResolveMachine {
             self.asking_fengxueren = false;
             let confirmed = matches!(ctx.answer().first(), Some(ChoiceOption::Confirm));
             if confirmed {
-                let flipped = {
-                    let t = ctx.core.player_mut(self.target);
-                    t.face_down = !t.face_down;
-                    t.face_down
-                };
-                ctx.emit(EventData::TurnOvered {
+                ctx.emit(EventData::TurnOverBefore {
                     player: self.target,
-                    face_down: flipped,
+                    cancelled: false,
                 });
                 ctx.start_draw(self.target, 1);
                 return Some(self.advance_target(ctx));

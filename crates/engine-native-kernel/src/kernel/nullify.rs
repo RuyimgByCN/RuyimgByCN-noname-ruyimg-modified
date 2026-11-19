@@ -268,6 +268,9 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                     return Flow::Done;
                 }
                 self.window_open = false;
+                if maybe_spawn_post_nullify_shengke(ctx, self.card, self.effect.as_deref()) {
+                    return Flow::Yield;
+                }
                 return self.step(ctx); // 未抵消：委托效果机器
             };
             if self.asked {
@@ -408,4 +411,148 @@ impl crate::catalog::SkillMachine for NoopMachine {
     fn step(&mut self, _ctx: &mut Ctx<'_>) -> Flow {
         Flow::Done
     }
+}
+
+/// 在无懈窗口关闭且未抵消时补发 `wuxing_shengke`：确保 `_wuxie`（priority 5）先于 `_shengke`
+/// （priority 0），且被无懈抵消的锦囊/目标永不触发 `_shengke`。
+fn maybe_spawn_post_nullify_shengke(
+    ctx: &mut Ctx<'_>,
+    card: crate::ids::CardId,
+    effect: Option<&dyn crate::catalog::SkillMachine>,
+) -> bool {
+    if ctx
+        .core
+        .vm_aux
+        .flags
+        .get(&(0, "connect_mode".to_string()))
+        .copied()
+        .unwrap_or(0)
+        != 0
+        || !ctx.core.card_natures.contains_key(&card)
+    {
+        return false;
+    }
+    let Some(sk_def) = ctx.catalog.skill_by_name("wuxing_shengke") else {
+        return false;
+    };
+    let Some((frame_depth, frame_id, card_use)) =
+        ctx.res
+            .stack
+            .iter()
+            .enumerate()
+            .rev()
+            .find_map(|(idx, f)| match &f.data {
+                EventData::CardUsed(u) if !u.cancelled && u.card == Some(card) => {
+                    Some((idx + 1, f.id, u.clone()))
+                }
+                _ => None,
+            })
+    else {
+        return false;
+    };
+    let snap_kind = effect.map(|m| m.snapshot());
+    let order = ctx.core.seat_order_from(ctx.core.turn.current);
+    let targets: Vec<PlayerId> = match snap_kind {
+        Some(crate::snap::MachineSnapshot::AoeTarget { target, .. }) => vec![target],
+        Some(crate::snap::MachineSnapshot::Chain {
+            targets,
+            dispatcher: false,
+            ..
+        }) => targets,
+        Some(crate::snap::MachineSnapshot::PlaceDelayed { target, .. }) => vec![target],
+        _ => {
+            let eff = card_use
+                .use_as
+                .unwrap_or_else(|| card_use.effective_kind(ctx.catalog));
+            match eff {
+                CardKind::Taoyuan => order
+                    .iter()
+                    .copied()
+                    .filter(|&p| {
+                        ctx.core.player(p).alive
+                            && ctx.core.player(p).hp < ctx.core.player(p).max_hp as i32
+                    })
+                    .collect(),
+                CardKind::Wugu => order
+                    .iter()
+                    .copied()
+                    .filter(|&p| ctx.core.player(p).alive)
+                    .collect(),
+                CardKind::Dizaizhen => order
+                    .iter()
+                    .copied()
+                    .filter(|&p| {
+                        ctx.core.player(p).alive && !ctx.core.is_major_faction(ctx.catalog, p)
+                    })
+                    .collect(),
+                CardKind::Shezhanqunru => order
+                    .iter()
+                    .copied()
+                    .filter(|&p| {
+                        ctx.core.player(p).alive
+                            && p != card_use.player
+                            && !ctx.core.player(p).hand.is_empty()
+                    })
+                    .collect(),
+                CardKind::Yuansuhuimie => order
+                    .iter()
+                    .copied()
+                    .filter(|&p| ctx.core.player(p).alive && p != card_use.player)
+                    .collect(),
+                CardKind::Jiedao => card_use.targets.first().copied().into_iter().collect(),
+                _ if !card_use.targets.is_empty() => order
+                    .iter()
+                    .copied()
+                    .filter(|p| card_use.targets.contains(p))
+                    .collect(),
+                _ => match snap_kind {
+                    Some(crate::snap::MachineSnapshot::Host {
+                        target,
+                        targets: h_targets,
+                        ..
+                    }) => {
+                        if !h_targets.is_empty() {
+                            order
+                                .iter()
+                                .copied()
+                                .filter(|p| h_targets.contains(p))
+                                .collect()
+                        } else if let Some(t) = target {
+                            vec![t]
+                        } else {
+                            vec![card_use.player]
+                        }
+                    }
+                    _ => vec![card_use.player],
+                },
+            }
+        }
+    };
+    let ev = EventData::CardUsed(card_use);
+    let resume_depth = frame_depth;
+    let mut pushed = false;
+    for t in targets {
+        if !ctx.core.player(t).alive
+            || !ctx.core.has_skill(t, sk_def)
+            || ctx.core.player(t).wunature.is_none()
+        {
+            continue;
+        }
+        let guard = (t, format!("shengke_nw:{frame_id}:{t}"));
+        if ctx.core.vm_aux.flags.contains_key(&guard) {
+            continue;
+        }
+        ctx.core.vm_aux.flags.insert(guard, 1);
+        let machine = ctx.catalog.skills[sk_def as usize]
+            .behavior
+            .start_in_window(&ctx.query(), t, &ev, crate::event::EventKind::CardUsed);
+        ctx.res.parks.push(crate::resolution::Park {
+            resume_depth,
+            slot: crate::resolution::Slot::Trigger { frame: frame_id },
+            machine,
+            awaiting_answer: false,
+        });
+        pushed = true;
+    }
+    pushed
 }

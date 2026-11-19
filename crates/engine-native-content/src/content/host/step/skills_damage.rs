@@ -573,8 +573,9 @@ impl HostMachine {
                         return Flow::Done;
                     };
                     let spec = Self::target_choice_spec(ctx, t);
-                    // card.js:41-44：目标 he 区无装备牌时，直接受到使用者造成的 1 点普通伤害（不弹窗口）
-                    if spec.options.len() <= 1 {
+                    // card.js:48：`if (target.countCards("he"))`——仅当 `he` 全空时直接受 1 伤；
+                    // 仅含非装备手牌时仍开选择窗（避免泄露手牌无装备），放弃/取消受 1 伤。
+                    if ctx.core.player(t).hand.is_empty() && ctx.core.player(t).equips.is_empty() {
                         ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                             Some(self.owner),
                             t,
@@ -601,12 +602,9 @@ impl HostMachine {
                                 && ctx.catalog.card_slot_of(ctx.core, equip).is_some()
                             {
                                 ctx.discard_from_hand(t, equip);
-                                ctx.log(LogEvent::CardDiscarded {
-                                    player: t,
-                                    cards: vec![equip],
-                                });
                             } else if ctx.core.player(t).equips.contains(&equip) {
                                 ctx.core.player_mut(t).equips.retain(|x| *x != equip);
+                                ctx.core.declared_slots.remove(&equip);
                                 crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, equip);
                                 ctx.to_discard(equip);
                                 ctx.log(LogEvent::CardDiscarded {

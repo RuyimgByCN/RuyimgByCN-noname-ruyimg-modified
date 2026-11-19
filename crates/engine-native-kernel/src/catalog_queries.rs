@@ -201,4 +201,27 @@ impl Catalog {
             })
             .unwrap_or(false)
     }
+
+    /// Whether a skill has `charlotte: true` (global `_` / runtime helper / trait):
+    /// excluded from `xuelunyang` theft and `mbcmfangzhu` skill-disable.
+    pub fn is_charlotte_skill(&self, def: crate::ids::SkillDefId) -> bool {
+        let Some(skill) = self.skills.get(def as usize) else {
+            return false;
+        };
+        skill.behavior.is_charlotte()
+            || skill.name.starts_with('_')
+            || skill.name.contains("#r05:")
+            || matches!(
+                skill.name,
+                crate::vocabulary::names::WANG_ZUN_MARK | "wuxing_shengke" | "diaohulishan"
+            )
+    }
+
+    /// Whether a skill has `persevereSkill / forever: true` (`持恒技`):
+    /// exempt from skill-disable effects such as `mbcmfangzhu`.
+    pub fn is_forever_skill(&self, def: crate::ids::SkillDefId) -> bool {
+        self.skills
+            .get(def as usize)
+            .is_some_and(|skill| skill.behavior.is_forever())
+    }
 }

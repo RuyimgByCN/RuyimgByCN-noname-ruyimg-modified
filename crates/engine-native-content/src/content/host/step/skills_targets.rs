@@ -1,5 +1,49 @@
 use super::super::*;
 
+/// 写轮眼（欢乐卡牌/card/skill.js:107）可窃技能过滤：对齐 `target.getSkills(null, false, false)`，
+/// 仅排除装备技（`equip_skills`）、`charlotte`/全局规则技，及非窃技残余的失效 `异殇` 印记；
+/// 目标的禁用技能（`enabled == false`）与使用者已拥有的技能均允许列出与窃取。
+pub(in crate::content::host) fn xuelunyang_stealable_skills(
+    state: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    _owner: PlayerId,
+    target: PlayerId,
+) -> Vec<crate::ids::SkillDefId> {
+    let equips = &state.player(target).equips;
+    state
+        .skills
+        .range((target, 0)..(target, u16::MAX))
+        .filter(|((_, def), inst)| {
+            if !inst.enabled && catalog.skill_name(*def) == crate::vocabulary::names::YI_SHANG {
+                return false;
+            }
+            if catalog.is_charlotte_skill(*def) {
+                return false;
+            }
+            let skill_name = catalog.skills[*def as usize].name;
+            !equips
+                .iter()
+                .any(|c| catalog.cards[*c as usize].equip_skills.contains(&skill_name))
+        })
+        .map(|((_, def), _)| *def)
+        .collect()
+}
+
+pub(in crate::content::host) fn xuelunyang_targets(
+    state: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    owner: PlayerId,
+) -> Vec<PlayerId> {
+    (0..state.players.len())
+        .map(|i| i as PlayerId)
+        .filter(|&i| {
+            i != owner
+                && state.player(i).alive
+                && !xuelunyang_stealable_skills(state, catalog, owner, i).is_empty()
+        })
+        .collect()
+}
+
 impl HostMachine {
     pub(super) fn step_skills_targets(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         match self.behavior {
@@ -210,19 +254,16 @@ impl HostMachine {
                 _ => Flow::Done,
             },
             HostBehavior::HuanleXuelunyangCard => {
-                // 写轮眼（E03）多步：确认后 ① 选目标（其他有技能者）→
-                // ② 选其一个技能（Tag=列表下标，answer 时重枚举映射）→
-                // 临时授予至回合结束。
+                // 写轮眼（欢乐卡牌/card/skill.js:107）多步：确认后 ① 选目标（其他有可窃技能者）→
+                // ② 选其一个技能（Tag=列表下标，可取消，answer 时重枚举映射）→
+                // 临时授予至回合结束/phaseAfter 前。
                 match self.stage {
                     HostStage::Act => {
-                        let candidates: Vec<ChoiceOption> = (0..ctx.core.players.len())
-                            .filter(|&i| {
-                                i as PlayerId != self.owner
-                                    && ctx.core.player(i as PlayerId).alive
-                                    && ctx.core.skills.keys().any(|(o, _)| *o == i as PlayerId)
-                            })
-                            .map(|i| ChoiceOption::Player(i as PlayerId))
-                            .collect();
+                        let candidates: Vec<ChoiceOption> =
+                            xuelunyang_targets(ctx.core, ctx.catalog, self.owner)
+                                .into_iter()
+                                .map(ChoiceOption::Player)
+                                .collect();
                         if candidates.is_empty() {
                             return Flow::Done;
                         }
@@ -247,14 +288,12 @@ impl HostMachine {
                             return Flow::Done;
                         };
                         self.target = Some(target);
-                        // 目标的可窃技能（目录注册且非本窃取技能自身），
-                        // 按目录序确定性枚举。
-                        let owned: Vec<&str> = ctx
-                            .core
-                            .skills
-                            .range((target, 0)..(target, u16::MAX))
-                            .map(|((_, d), _)| ctx.catalog.skills[*d as usize].name)
-                            .collect();
+                        let owned = xuelunyang_stealable_skills(
+                            ctx.core,
+                            ctx.catalog,
+                            self.owner,
+                            target,
+                        );
                         let tags: Vec<ChoiceOption> = (0..owned.len())
                             .map(|i| ChoiceOption::Tag(i as u8))
                             .collect();
@@ -273,7 +312,7 @@ impl HostMachine {
                                 options: tags,
                                 min: 1,
                                 max: 1,
-                                allow_cancel: false,
+                                allow_cancel: true,
                             },
                         }
                     }
@@ -284,15 +323,23 @@ impl HostMachine {
                         let Some(target) = self.target else {
                             return Flow::Done;
                         };
-                        let owned: Vec<crate::ids::SkillDefId> = ctx
-                            .core
-                            .skills
-                            .range((target, 0)..(target, u16::MAX))
-                            .map(|((_, d), _)| *d)
-                            .collect();
+                        let owned = xuelunyang_stealable_skills(
+                            ctx.core,
+                            ctx.catalog,
+                            self.owner,
+                            target,
+                        );
                         let Some(def) = owned.get(idx as usize).copied() else {
                             return Flow::Done;
                         };
+                        if ctx.catalog.skill_name(def) == crate::vocabulary::names::YI_SHANG
+                            && !ctx.core.skills.contains_key(&(self.owner, def))
+                        {
+                            ctx.core.vm_aux.flags.insert(
+                                (self.owner, format!("xuelunyang_temp:{def}")),
+                                1,
+                            );
+                        }
                         ctx.add_skill_until_turn_end(self.owner, def);
                         Flow::Done
                     }
@@ -442,7 +489,6 @@ impl HostMachine {
                     if ctx.core.player(self.owner).face_down || ctx.core.turn.jiu_used {
                         return Flow::Done;
                     }
-                    ctx.core.player_mut(self.owner).face_down = true;
                     ctx.core.turn.jiu_used = true;
                     ctx.core.turn.jiu_active = true;
                     ctx.core
@@ -458,9 +504,9 @@ impl HostMachine {
                         owner: self.owner,
                         presentation: None,
                     });
-                    ctx.emit(EventData::TurnOvered {
+                    ctx.emit(EventData::TurnOverBefore {
                         player: self.owner,
-                        face_down: true,
+                        cancelled: false,
                     });
                     Flow::Done
                 }
@@ -479,16 +525,14 @@ impl HostMachine {
                     if matches!(ctx.answer().first().copied(), Some(ChoiceOption::Confirm))
                         && ctx.core.player(self.owner).face_down
                     {
-                        ctx.core.player_mut(self.owner).face_down = false;
-                        ctx.core.player_mut(self.owner).jidong_active = false;
                         ctx.log(LogEvent::SkillTriggered {
                             skill: "mbcmjiushi",
                             owner: self.owner,
                             presentation: None,
                         });
-                        ctx.emit(EventData::TurnOvered {
+                        ctx.emit(EventData::TurnOverBefore {
                             player: self.owner,
-                            face_down: false,
+                            cancelled: false,
                         });
                     }
                     Flow::Done

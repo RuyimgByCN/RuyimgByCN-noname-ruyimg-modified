@@ -163,6 +163,124 @@ impl SkillBehavior for HostSkillBehavior {
         }
         self.filter(ctx, owner, event)
     }
+    fn filter_in_window_with_frames(
+        &self,
+        ctx: &QueryCtx<'_>,
+        frames: &[crate::event::Frame],
+        frame: &crate::event::Frame,
+        owner: PlayerId,
+        event: &EventData,
+        kind: crate::event::EventKind,
+    ) -> bool {
+        if self.native_damage_effect(kind).is_some() {
+            return self.filter_in_window(ctx, owner, event, kind);
+        }
+        self.filter_with_frames(ctx, frames, frame, owner, event)
+    }
+    fn is_charlotte(&self) -> bool {
+        matches!(
+            self.behavior,
+            HostBehavior::ShengkeCheck
+                | HostBehavior::GwentFengyinState
+                | HostBehavior::SwdFengyinState
+                | HostBehavior::GujianFoodShihuifenBan
+                | HostBehavior::SwdQinglongzhiguiHeld
+                | HostBehavior::SwdZhuquezhizhangHeld
+                | HostBehavior::SwdBaishouzhihuHeld
+                | HostBehavior::SwdXuanwuzhihuangHeld
+                | HostBehavior::SwdHuanglinzhicongHeld
+                | HostBehavior::SwdCangchizhibiHeld
+                | HostBehavior::SwdShencaojieGuard
+                | HostBehavior::SwdYuchanSwap
+                | HostBehavior::SwdShenmiguoWindow
+                | HostBehavior::MtgYixialanRecast
+                | HostBehavior::MtgLinzhongjiantaStrike
+                | HostBehavior::MtgYoulinDiscard
+        )
+    }
+    fn window_trigger_meta(
+        &self,
+        ctx: &QueryCtx<'_>,
+        owner: PlayerId,
+        _event: &EventData,
+        kind: crate::event::EventKind,
+    ) -> Option<crate::catalog::TriggerMeta> {
+        if kind == crate::event::EventKind::CardUsed
+            && matches!(
+                self.behavior,
+                HostBehavior::ShengkeCheck | HostBehavior::HuanleMonkeyCard
+            )
+        {
+            // 上游 `useCardToBegin` 按 `(current_player 顺座位序, priority)` 统一排队（如
+            // `useCardToBegin` 窗口中 `_shengke` priority 0、同一座次的 `monkey` priority -25
+            // 先于下家 `_shengke`）；内核用 `seat_steps_from` 编码进 `Timing::Last` 优先级。
+            let seat_steps = i32::from(ctx.state.seat_steps_from(ctx.state.turn.current, owner));
+            let base: i32 = if self.behavior == HostBehavior::ShengkeCheck {
+                0
+            } else {
+                -25
+            };
+            return Some(crate::catalog::TriggerMeta {
+                event: crate::event::EventKind::CardUsed,
+                timing: crate::event::Timing::Last,
+                priority: (32 - seat_steps) * 100 + base,
+                order_selectable: self.behavior == HostBehavior::HuanleMonkeyCard,
+                optional: false,
+                extra_events: Vec::new(),
+            });
+        }
+        self.kind_trigger_meta(kind)
+    }
+    fn kind_trigger_meta(
+        &self,
+        kind: crate::event::EventKind,
+    ) -> Option<crate::catalog::TriggerMeta> {
+        match self.behavior {
+            // 苦无（欢乐卡牌/card/skill.js:55）：source: "damageSource"（Dying 后伤害来源窗，保留静态声明锁）
+            HostBehavior::ShaDamageForceDiscard => Some(crate::catalog::TriggerMeta {
+                event: crate::event::EventKind::DamageSource,
+                timing: crate::event::Timing::Normal,
+                priority: -25,
+                order_selectable: true,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
+            // 五行生克（wuxing/extension.js:64）：useCardToBegin 于 Timing::Last 结算，保证追加/移除目标先完成；
+            // 装备牌使用通过 `EventKind::Equipped`（`AfterTriggers`）同步进入 `_shengke`。
+            HostBehavior::ShengkeCheck if kind == crate::event::EventKind::CardUsed => {
+                Some(crate::catalog::TriggerMeta {
+                    event: crate::event::EventKind::CardUsed,
+                    timing: crate::event::Timing::Last,
+                    priority: 0,
+                    order_selectable: false,
+                    optional: false,
+                    extra_events: Vec::new(),
+                })
+            }
+            HostBehavior::ShengkeCheck if kind == crate::event::EventKind::Equipped => {
+                Some(crate::catalog::TriggerMeta {
+                    event: crate::event::EventKind::Equipped,
+                    timing: crate::event::Timing::Normal,
+                    priority: 0,
+                    order_selectable: false,
+                    optional: false,
+                    extra_events: Vec::new(),
+                })
+            }
+            // 猴子偷桃（欢乐卡牌/card/skill.js:5）：useCardToBegin（`optional: false` + 内部 RespondCard 确认）
+            HostBehavior::HuanleMonkeyCard if kind == crate::event::EventKind::CardUsed => {
+                Some(crate::catalog::TriggerMeta {
+                    event: crate::event::EventKind::CardUsed,
+                    timing: crate::event::Timing::Last,
+                    priority: -25,
+                    order_selectable: true,
+                    optional: false,
+                    extra_events: Vec::new(),
+                })
+            }
+            _ => None,
+        }
+    }
     fn start_in_window(
         &self,
         ctx: &QueryCtx<'_>,

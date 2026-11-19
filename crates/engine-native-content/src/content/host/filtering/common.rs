@@ -595,6 +595,7 @@ impl HostSkillBehavior {
                     && !d.prevented
                     && d.amount > 0
                     && !d.from_chain
+                    && !d.settlement.notrigger
                     && d.card.is_some_and(|c| ctx.catalog.card_kind(c).is_sha_like())
                     && ctx.state.player(d.target).alive
                     && (!ctx.state.player(d.target).hand.is_empty()
@@ -603,11 +604,7 @@ impl HostSkillBehavior {
                 // A2 H50：整回合结束窗 phaseEnd 段（上游 player phaseEnd）。
                 EventData::TurnEndWindow { player, after: false } if *player == owner),
             HostBehavior::TargetDiscardEquipOrDamage => false,
-            HostBehavior::ShengkeCheck => matches!(event,
-                EventData::CardUsed(u)
-                if u.targets.contains(&owner)
-                    && u.card.is_some_and(|c|ctx.state.card_natures.contains_key(&c))
-                    && ctx.state.player(owner).wunature.is_some()),
+            HostBehavior::ShengkeCheck => super::wuxing::shengke_matches(ctx, owner, event),
             HostBehavior::ChangeCardNature => false,
             HostBehavior::WangmeiZhikeCard => false,
             HostBehavior::ShuigongCard => false,
@@ -718,35 +715,22 @@ impl HostSkillBehavior {
             HostBehavior::GwentQinpenState => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::Discard, begin: false }
                 if *player == owner),
-            HostBehavior::HuanleMonkeyCard => matches!(event,
-            EventData::CardUsed(u)
-            if u.player != owner
-                && !u.cancelled
-                && u.card.is_some()
-                && u.effective_kind(ctx.catalog) == crate::catalog::CardKind::Tao
-                && ctx.state.player(owner).equips.iter().any(|c| {
-                    ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Monkey
-                })),
+            HostBehavior::HuanleMonkeyCard => false,
             // 雪轮羊（A2 H24）：上游 player phaseBegin＝自己回合开始且
             // 装备雪轮羊＋场上有其他持技角色（原锚自己判定阶段开始）
             HostBehavior::HuanleXuelunyangCard => {
-                let armed_and_targets = matches!(event,
+                matches!(event,
                 EventData::TurnBegin { player }
                 if *player == owner
                     && ctx.state.player(owner).equips.iter().any(|c| {
                         ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Xuelunyang
                     }))
-                    && ctx.state.players.iter().enumerate().any(|(i, p)| {
-                        i as PlayerId != owner
-                            && p.alive
-                            && ctx
-                                .state
-                                .skills
-                                .range((i as PlayerId, 0)..(i as PlayerId, u16::MAX))
-                                .next()
-                                .is_some()
-                    });
-                armed_and_targets
+                    && !super::super::step::skills_targets::xuelunyang_targets(
+                        ctx.state,
+                        ctx.catalog,
+                        owner,
+                    )
+                    .is_empty()
             }
             // 双刃·殁：自己死亡帧,
             // 阻魔手铐·封印（A2 H60）：本人整回合结束后到期（原「任意

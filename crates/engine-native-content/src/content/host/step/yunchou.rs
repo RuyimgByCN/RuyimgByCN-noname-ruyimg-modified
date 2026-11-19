@@ -115,14 +115,9 @@ impl HostMachine {
                         }
                         crate::catalog::Suit::Spade => {
                             if ctx.core.player(src).alive {
-                                let flipped = {
-                                    let p = ctx.core.player_mut(src);
-                                    p.face_down = !p.face_down;
-                                    p.face_down
-                                };
-                                ctx.emit(EventData::TurnOvered {
+                                ctx.emit(EventData::TurnOverBefore {
                                     player: src,
-                                    face_down: flipped,
+                                    cancelled: false,
                                 });
                             }
                         }

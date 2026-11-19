@@ -782,11 +782,13 @@ pub(super) fn handle_mbmowang(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                 ctx.to_discard(c);
             }
             set_flag(ctx.core, owner, "mbmowang_resting", 1);
-            let p = ctx.core.player_mut(owner);
-            p.linked = false;
-            p.face_down = false;
-            p.dying = false;
-            p.hp = 0;
+            {
+                let p = ctx.core.player_mut(owner);
+                p.linked = false;
+                p.dying = false;
+                p.hp = 0;
+            }
+            ctx.turn_face_up(owner);
             if ctx
                 .res
                 .stack

@@ -32,6 +32,13 @@ pub(super) fn play_card(
                 .flags
                 .insert((player, format!("dddanzhi_equip_use:{frame}")), 1);
         }
+        if state.core.card_natures.contains_key(&card) {
+            state
+                .core
+                .vm_aux
+                .flags
+                .insert((player, format!("wuxing_equip_use:{frame}")), 1);
+        }
         return Ok(());
     }
     check_play_use_restrictions(core, catalog, card, kind, &targets)?;
@@ -701,44 +708,6 @@ pub(super) fn play_card(
                     if p.hp >= p.max_hp as i32 {
                         return Err(RejectReason::HpFull);
                     }
-                    // E03 猴子偷桃：他人装备猴子时开「使用前取消窗口」
-                    // （命令层挂起机器，ActivateSkill 槽模式）——确认者弃
-                    // 猴子把桃收为手牌（使用不发生，无 CardUsed 帧）；
-                    // 全部放弃则按普通桃结算。
-                    let mut holders: Vec<u8> = Vec::new();
-                    for key in [crate::content::host::HUANLE_MONKEY_KEY, "monkey"] {
-                        if let Some(d) = catalog.skill_by_name(key) {
-                            for ((o, idef), inst) in core.skills.range(..) {
-                                if *idef == d
-                                    && inst.enabled
-                                    && core.player(*o).alive
-                                    && *o != user
-                                    && core
-                                        .player(*o)
-                                        .equips
-                                        .iter()
-                                        .any(|c| catalog.card_kind(*c) == CardKind::Monkey)
-                                    && !holders.contains(o)
-                                {
-                                    holders.push(*o);
-                                }
-                            }
-                        }
-                    }
-                    holders.sort_unstable();
-                    if !holders.is_empty() {
-                        state.resolution.parks.push(crate::resolution::Park {
-                            resume_depth: state.resolution.stack.len(),
-                            slot: crate::resolution::Slot::Intrinsic {
-                                frame: crate::resolution::NO_FRAME,
-                            },
-                            machine: Box::new(crate::kernel::MonkeyStealMachine::new(
-                                card, user, holders,
-                            )),
-                            awaiting_answer: false,
-                        });
-                        return Ok(());
-                    }
                 }
                 CardKind::Jiu | CardKind::Tianxianjiu => {
                     // 酒/天仙酒（swd 变体，规则 v89；登记差异：与酒共享
@@ -1111,10 +1080,10 @@ pub(super) fn play_card(
                 | CardKind::Luyugeng
                 | CardKind::Yunvyuanshen => validate_gujian_food_targets(core, catalog, kind, &targets)?,
             }
-    let player = core.turn.current;
+    let player = state.core.turn.current;
     // view-as 声明（蜜链藕红桃当桃等）：转化后按声明牌种结算
     let use_as = if kind != catalog.card_kind(card)
-        || !core.player(player).hand.contains(&card)
+        || !state.core.player(player).hand.contains(&card)
     {
         Some(kind)
     } else {

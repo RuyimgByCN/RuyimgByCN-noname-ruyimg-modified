@@ -56,22 +56,80 @@ pub fn intrinsic_machine(
             guihan_asked: false,
         })),
         EventData::CardUsed(mut u) => {
-            // 筑城守卫（U07 批三，规则 v113）等 AfterTriggers 机器写回的
-            // 取消：跳过结算（杀已由守卫归还手牌）
+            let dying_save = ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(u.player, format!("dying_save_frame:{frame_id}")))
+                .and_then(|packed| {
+                    let dying = ((packed & 0xff).checked_sub(1)?) as PlayerId;
+                    let raw_tao = packed >> 8;
+                    Some((dying, raw_tao))
+                });
+            let extra_carriers = crate::kernel::take_tao_extra_carriers(ctx.core, u.player, frame_id);
+            let used_card = u.card;
+            let discard_remaining_carriers = |ctx: &mut Ctx<'_>| {
+                for c in used_card.into_iter().chain(extra_carriers.iter().copied()) {
+                    if ctx.core.table.contains(&c) {
+                        ctx.core.table.retain(|&x| x != c);
+                        ctx.to_discard(c);
+                    }
+                }
+            };
+            // 筑城守卫（U07 批三，规则 v113）与猴子偷桃（U06 E03）等 AfterTriggers 机器写回的
+            // 取消：跳过结算（清除待消费恢复加成并弃置处理区中残留载体）
             if u.cancelled {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(u.player, "vm_va_recover_bonus".to_string()));
+                discard_remaining_carriers(ctx);
                 return None;
             }
             // 追加/移除目标的 after 窗口已完成，按最终目标消费一次免疫。
             if dddanzhi_remove_targets(ctx, frame_id, &mut u) {
-                if let Some(card) = u.card {
-                    if ctx.core.table.contains(&card) {
-                        ctx.core.table.retain(|&c| c != card);
-                        ctx.to_discard(card);
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(u.player, "vm_va_recover_bonus".to_string()));
+                discard_remaining_carriers(ctx);
+                return None;
+            }
+            if let Some((dying, raw_tao)) = dying_save {
+                discard_remaining_carriers(ctx);
+                crate::kernel::dying::DyingSaveMachine::new(
+                    dying,
+                    None,
+                    Vec::new(),
+                    false,
+                    false,
+                )
+                .apply_tao_save(ctx, u.player, raw_tao);
+                return None;
+            }
+            let effective_kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
+            if effective_kind == CardKind::Tao {
+                let bonus = ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .remove(&(u.player, "vm_va_recover_bonus".to_string()))
+                    .unwrap_or(0);
+                discard_remaining_carriers(ctx);
+                let amount = 1u32.saturating_add(bonus);
+                if u.targets.is_empty() {
+                    if ctx.core.player(u.player).alive {
+                        ctx.recover(u.player, amount, u.card);
+                    }
+                } else {
+                    for &t in &u.targets {
+                        if ctx.core.player(t).alive {
+                            ctx.recover(t, amount, u.card);
+                        }
                     }
                 }
                 return None;
             }
-            let effective_kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
             // 目标被结算窗全部移出（贞烈等「移出目标」类，swd 批 139）：
             // 需要「恰一名目标」的牌种在目标清空后不结算（避免机器对
             // 空目标越界）；无目标/群体牌种照常（其机器自行处理空列表）
@@ -97,13 +155,6 @@ pub fn intrinsic_machine(
             }
             let Some(card) = u.card else {
                 match effective_kind {
-                    CardKind::Tao => {
-                        for &t in &u.targets {
-                            if ctx.core.player(t).alive {
-                                ctx.recover(t, 1, None);
-                            }
-                        }
-                    }
                     CardKind::Jiu => {
                         ctx.core.turn.jiu_active = true;
                     }

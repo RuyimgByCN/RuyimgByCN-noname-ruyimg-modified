@@ -492,7 +492,7 @@ pub fn try_resolve_l25_rule_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: Pl
                     gained += 1;
                 }
             }
-            ctx.core.player_mut(owner).face_down = !ctx.core.player(owner).face_down;
+            ctx.turn_over(owner);
             set_flag(ctx.core, owner, "l25_new_guixin_gained", gained);
             set_flag(ctx.core, owner, "l25_skill:new_guixin", 1);
         }

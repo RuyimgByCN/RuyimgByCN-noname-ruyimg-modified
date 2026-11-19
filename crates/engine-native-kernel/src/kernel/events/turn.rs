@@ -368,9 +368,6 @@ pub(in crate::kernel) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) 
         player,
         after: false,
     });
-    if ctx.core.turn.extra_phases.is_empty() {
-        ctx.expire_temporary_skills(player);
-    }
     for state in &mut ctx.core.players {
         state.zlfanshi_terra = false;
     }

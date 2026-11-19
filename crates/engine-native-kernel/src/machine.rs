@@ -314,6 +314,24 @@ impl<'a> Ctx<'a> {
             .turn_over_before_mut()
     }
 
+    /// 发射 `TurnOverBefore` 翻面前置帧（经 `mianju` 等取消防守提交翻面）。
+    pub fn turn_over(&mut self, player: PlayerId) {
+        self.emit(crate::event::EventData::TurnOverBefore {
+            player,
+            cancelled: false,
+        });
+    }
+
+    /// 仅在背面朝上时经 `TurnOverBefore` 翻回正面（受面具等翻面前置取消约束）。
+    pub fn turn_face_up(&mut self, player: PlayerId) {
+        if self.core.player(player).face_down {
+            self.emit(crate::event::EventData::TurnOverBefore {
+                player,
+                cancelled: false,
+            });
+        }
+    }
+
     /// Damage handlers read their checked root payload while their queue retains the child frame.
     pub fn current_event_frame_id(&self) -> crate::ids::EventId {
         let id = self.current_frame_id();
@@ -864,8 +882,14 @@ impl<'a> Ctx<'a> {
 
     /// 动态获得技能，至拥有者回合结束移除。
     pub fn add_skill_until_turn_end(&mut self, owner: PlayerId, def: SkillDefId) {
+        let name = self.catalog.skill_name(def);
         let key = (owner, def);
         if let Some(inst) = self.core.skills.get_mut(&key) {
+            // 永久拥有（含已觉醒/禁用）技能不可被临时授技覆写或重新启用（上游 player.js:11267,11288）；
+            // 仅已到期的 `异殇` 墓碑或已为回合末临时技实例允许刷新至回合结束。
+            if !inst.expires_end_of_turn && name != crate::vocabulary::names::YI_SHANG {
+                return;
+            }
             inst.enabled = true;
             inst.expires_end_of_turn = true;
         } else {
@@ -880,7 +904,6 @@ impl<'a> Ctx<'a> {
                 },
             );
         }
-        let name = self.catalog.skill_name(def);
         self.emit(EventData::SkillToggled {
             player: owner,
             skill: def,
@@ -894,32 +917,42 @@ impl<'a> Ctx<'a> {
         });
     }
 
-    /// 移除到期临时技能（回合结束提交时调用）。
+    /// 移除到期临时技能（回合结束提交时调用；即使回合内被忘魂/封印禁用也须过期清理）。
     pub fn expire_temporary_skills(&mut self, owner: PlayerId) {
-        let expired: Vec<SkillDefId> = self
+        let expired: Vec<(SkillDefId, bool)> = self
             .core
             .skills
             .iter()
-            .filter(|((o, _), i)| *o == owner && i.enabled && i.expires_end_of_turn)
-            .map(|((_, d), _)| *d)
+            .filter(|((o, _), i)| *o == owner && i.expires_end_of_turn)
+            .map(|((_, d), i)| (*d, i.enabled))
             .collect();
-        for def in expired {
-            if let Some(inst) = self.core.skills.get_mut(&(owner, def)) {
+        for (def, was_enabled) in expired {
+            let name = self.catalog.skill_name(def);
+            let force_remove = self
+                .core
+                .vm_aux
+                .flags
+                .remove(&(owner, format!("xuelunyang_temp:{def}")))
+                .is_some();
+            if force_remove || name != crate::vocabulary::names::YI_SHANG {
+                self.core.skills.remove(&(owner, def));
+            } else if let Some(inst) = self.core.skills.get_mut(&(owner, def)) {
                 inst.enabled = false;
                 inst.expires_end_of_turn = false;
             }
-            let name = self.catalog.skill_name(def);
-            self.emit(EventData::SkillToggled {
-                player: owner,
-                skill: def,
-                enabled: false,
-                temporary: true,
-            });
-            self.out.push(LogEvent::SkillToggled {
-                player: owner,
-                skill: name,
-                enabled: false,
-            });
+            if was_enabled {
+                self.emit(EventData::SkillToggled {
+                    player: owner,
+                    skill: def,
+                    enabled: false,
+                    temporary: true,
+                });
+                self.out.push(LogEvent::SkillToggled {
+                    player: owner,
+                    skill: name,
+                    enabled: false,
+                });
+            }
         }
     }
 

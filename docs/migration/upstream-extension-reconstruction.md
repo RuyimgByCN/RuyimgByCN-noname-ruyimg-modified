@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-19 Batch 1.1（U06 欢乐卡牌 ＋ L06 wuxing）规则修复与独立复核（待提交／发布）
+
+基线 HEAD `352236724b5e173cc1ff74c0fb706509129ab7a1` ＋ Batch 1.1 代码/文档工作区修改；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`。经红转绿回归与未参与实现的独立复核 agent（`602b9dd3-b8e7-4e3c-81fe-b57137a6f312`）逐行核对与上游实际运行比对，Batch 1.1 14 项审查结果 **13 通过／1 项维持简化近似**：`U06 欢乐卡牌` 升为 **已复核等价 11／简化近似 0／缺失 0**（修复 `monkey` 出牌/濒死桃统一 `EventData::CardUsed` 消费与 `filterInD`、`xuelunyang` 第二步取消/被禁用临时技回合末过期/`is_charlotte` 状态戳排除，完成 `kuwu`/`mianju`/`shoulijian`/`jiuwei` 复核）；`L06 wuxing` 调整为 **已复核等价 2／简化近似 1／缺失 0**（`_shengke` 修复 `Tianfuzhen`/`Niaoxiangzhen`/`use_as=Wuzhong` 及 `Wuzhong`/`Jiguan` 原主判定、`wuxingpan_skill` 确认第二步强制选择并通过复核，而 `L06:cards:wuxingpan` 依 S2 实际核对下调为 `简化近似`，原因系 `wuxing.json:5` / `construction.rs:479,498` 固定 `1/3` 概率注入五行属性，未读取上游 `wuxing_num_playpackconfig` 默认 `0.3`）。全仓清单更新为 **已复核等价 632／简化近似 3,792／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch 1.1 复核摘要](../operations/evidence/2026-11-19-batch1-1-u06-l06/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。下方 2026-11-14 及更早表格与段落保留为历史快照。
+
 ## 2026-11-14T03:16:45.676673+08:00 三来源运行复核日期表（文档批待提交／发布）
 
 源码HEAD `5c73d1d9158145e33f98f2018013914667d13964` + 文档/证据dirty；规则333／NGSA107／schema5／ABI759／WS8。酒诗代码已正常发布且首次精确CI10/10成功，本纯文档批尚未提交/发布。当前逐来源按[37来源新日期表](../operations/evidence/2026-11-14-queue1-runtime/source-counts-runtime-04.md)；本批明确撤回慧眼2/3与业炎3旧等价、新签0，不从局部投影或恢复通过上调签署。[逐案与原始证据](../operations/evidence/2026-11-14-queue1-runtime/README.md)、[变更前后原文](../operations/evidence/2026-11-14-queue1-runtime/inventory-runtime-update-05.json)。第①项只计已复核等价，第⑧项保留各来源全部尚存差异；八项整包仍0/37，队列1仍部分、队列2未开始。原表/日期记录保持历史快照。

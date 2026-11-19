@@ -2,9 +2,55 @@ use super::*;
 
 mod common;
 mod swd;
+mod wuxing;
 mod xianjian;
+pub(in crate::content::host) use wuxing::shengke_discard_options;
 
 impl HostSkillBehavior {
+    pub(super) fn filter_with_frames(
+        &self,
+        ctx: &QueryCtx<'_>,
+        frames: &[crate::event::Frame],
+        frame: &crate::event::Frame,
+        owner: PlayerId,
+        event: &EventData,
+    ) -> bool {
+        if self.behavior == HostBehavior::ShaDamageForceDiscard {
+            return match event {
+                EventData::Damage(d) => {
+                    let root = match frame.data {
+                        EventData::DamageWindow { root, .. } => {
+                            frames.iter().find(|f| f.id == root)
+                        }
+                        EventData::Damage(_) => Some(frame),
+                        _ => None,
+                    };
+                    let sha_like = root
+                        .and_then(|r| crate::event::damage_card_kind(frames, r, ctx.catalog))
+                        .or_else(|| d.card.map(|c| ctx.catalog.card_kind(c)))
+                        .is_some_and(|k| k.is_sha_like());
+                    d.source == Some(owner)
+                        && !d.prevented
+                        && d.amount > 0
+                        && !d.from_chain
+                        && !d.settlement.notrigger
+                        && sha_like
+                        && ctx.state.player(d.target).alive
+                        && (!ctx.state.player(d.target).hand.is_empty()
+                            || !ctx.state.player(d.target).equips.is_empty())
+                }
+                _ => false,
+            };
+        }
+        if self.behavior == HostBehavior::ShengkeCheck {
+            return wuxing::shengke_matches_in_frame(ctx, frame.id, owner, event);
+        }
+        if self.behavior == HostBehavior::HuanleMonkeyCard {
+            return wuxing::monkey_matches_in_frame(ctx, frame.id, owner, event);
+        }
+        self.filter_behavior(ctx, owner, event)
+    }
+
     pub(super) fn filter_behavior(
         &self,
         ctx: &QueryCtx<'_>,

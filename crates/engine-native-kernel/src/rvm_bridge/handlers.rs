@@ -633,8 +633,7 @@ impl VmViewAsSpec {
         if let Some(cost) = self.cost {
             match cost {
                 VmViewAsCost::TurnOver => {
-                    let fd = core.player(owner).face_down;
-                    core.player_mut(owner).face_down = !fd;
+                    // TurnOverBefore 由具备 Resolution/Ctx 的调用方发射，以便漩涡面具等前置取消生效。
                 }
                 VmViewAsCost::GainMaxHp1 => {
                     core.player_mut(owner).max_hp = core.player(owner).max_hp.saturating_add(1);

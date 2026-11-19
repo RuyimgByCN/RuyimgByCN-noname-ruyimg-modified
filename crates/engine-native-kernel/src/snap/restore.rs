@@ -12,6 +12,11 @@ impl MachineSnapshot {
             return m;
         }
         match self {
+            MachineSnapshot::Wuzhong { owner } => Ok(Box::new(crate::kernel::WuzhongMachine {
+                owner: *owner,
+                card: None,
+                draw_done: false,
+            })),
             MachineSnapshot::Taoyuan { owner } => Ok(Box::new(crate::kernel::TaoyuanMachine {
                 owner: *owner,
                 card: None,

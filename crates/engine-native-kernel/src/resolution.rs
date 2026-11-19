@@ -739,11 +739,26 @@ pub fn run(
                         core.vm_aux
                             .flags
                             .remove(&(*player, format!("dddanzhi_equip_use:{}", popped.id)));
+                        core.vm_aux
+                            .flags
+                            .remove(&(*player, format!("wuxing_equip_use:{}", popped.id)));
                     }
                     if let EventData::CardUsed(u) = &popped.data {
                         core.vm_aux
                             .flags
                             .remove(&(u.player, format!("dddanzhi_targets:{}", popped.id)));
+                        core.vm_aux
+                            .flags
+                            .remove(&(u.player, format!("dying_save_frame:{}", popped.id)));
+                        let _ = crate::kernel::take_tao_extra_carriers(core, u.player, popped.id);
+                        for p in 0..core.players.len() as PlayerId {
+                            core.vm_aux
+                                .flags
+                                .remove(&(p, format!("shengke_nw:{}:{p}", popped.id)));
+                            core.vm_aux
+                                .flags
+                                .remove(&(p, format!("monkey_asked:{}", popped.id)));
+                        }
                         for p in 0..core.players.len() as PlayerId {
                             core.vm_aux
                                 .flags
@@ -868,7 +883,7 @@ fn start_queued_trigger(
             inst.once_used = true;
         }
         let native = def.behavior.native_damage_effect(kind);
-        if !matches!(
+        let skip_pre_log = matches!(
             native,
             Some(
                 crate::event::NativeDamageEffect::Qinglong
@@ -877,7 +892,11 @@ fn start_queued_trigger(
                     | crate::event::NativeDamageEffect::Jidian
                     | crate::event::NativeDamageEffect::JidingRecover
             )
-        ) {
+        ) || matches!(
+            def.name,
+            crate::vocabulary::host::HUANLE_MONKEY_KEY | "monkey" | "huanle_monkey"
+        );
+        if !skip_pre_log {
             let mut log_ev = LogEvent::SkillTriggered {
                 skill: def.name,
                 owner: qt.owner,

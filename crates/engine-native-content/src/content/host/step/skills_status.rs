@@ -680,7 +680,27 @@ impl HostMachine {
                     let Some(cnat) = ctx.core.card_natures.get(&card).copied() else { return Flow::Done; };
                     let Some(onat) = ctx.core.player(self.owner).wunature.map(|n| n as usize) else { return Flow::Done; };
                     if KE[cnat as usize] == onat as u8 {
-                        step_force_he_discard(self, ctx, self.owner, "shengke_discard")
+                        let options = crate::content::host::filtering::shengke_discard_options(
+                            ctx.core,
+                            ctx.catalog,
+                            self.owner,
+                            self.card,
+                        );
+                        if options.is_empty() {
+                            return Flow::Done;
+                        }
+                        self.stage = HostStage::SelectCard;
+                        Flow::WaitChoice {
+                            observer: self.owner,
+                            spec: ChoiceSpec {
+                                kind: ChoiceKind::SelectCards,
+                                prompt: "shengke_discard",
+                                options,
+                                min: 1,
+                                max: 1,
+                                allow_cancel: false,
+                            },
+                        }
                     } else {
                         if SHENG[cnat as usize] == onat as u8 {
                             ctx.start_draw(self.owner, 1);
@@ -936,64 +956,6 @@ impl HostMachine {
                 }
                 _ => Flow::Done,
             },
-            HostBehavior::HuanleMonkeyCard => {
-                // 确认后（OptionalGate 通过，skill.js:5-31）：取消桃的结算——
-                // ① 弃掉自己的猴子（装备区 → 弃牌堆 + 离场撤销装备技）；
-                // ② 获得使用者使用的【桃】（兼容使用者手牌或处理区 table，不 panic）；
-                // ③ 写回取消位，提交阶段跳过结算。
-                let Some((used_card, user)) = ({
-                    let u = ctx.current_card_use_mut();
-                    u.card.map(|c| (c, u.player))
-                }) else {
-                    return Flow::Done;
-                };
-                let Some(pos) = ctx.core.players[self.owner as usize]
-                    .equips
-                    .iter()
-                    .position(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Monkey)
-                else {
-                    return Flow::Done;
-                };
-                let monkey = ctx.core.players[self.owner as usize].equips.remove(pos);
-                crate::kernel::revoke_equip_skills(
-                    &mut ctx.core,
-                    ctx.catalog,
-                    self.owner,
-                    monkey,
-                );
-                ctx.core.discard.push(monkey);
-                ctx.log(LogEvent::CardDiscarded {
-                    player: self.owner,
-                    cards: vec![monkey],
-                });
-                let taken = if let Some(hpos) = ctx.core.players[user as usize]
-                    .hand
-                    .iter()
-                    .position(|c| *c == used_card)
-                {
-                    Some(ctx.core.players[user as usize].hand.remove(hpos))
-                } else if let Some(tpos) = ctx.core.table.iter().position(|c| *c == used_card) {
-                    Some(ctx.core.table.remove(tpos))
-                } else {
-                    None
-                };
-                if let Some(peach) = taken {
-                    ctx.core.players[self.owner as usize].hand.push(peach);
-                    ctx.log(LogEvent::CardsGiven {
-                        from: user,
-                        to: self.owner,
-                        cards: vec![peach],
-                    });
-                }
-                ctx.current_card_use_mut().cancelled = true;
-                Flow::Done
-            }
-            HostBehavior::HuanleMianjuCard => {
-                // 强制锁定：写回翻面取消位，提交阶段跳过翻转。
-                let (_p, c) = ctx.current_turn_over_before_mut();
-                *c = true;
-                Flow::Done
-            }
             _ => unreachable!("behavior routed to the wrong step module"),
         }
     }
@@ -1024,9 +986,9 @@ fn finish_force_he_discard(ctx: &mut Ctx<'_>, actor: PlayerId) -> Flow {
     let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() else { return Flow::Done; };
     if ctx.core.player(actor).hand.contains(&c) {
         ctx.discard_from_hand(actor, c);
-        ctx.log(LogEvent::CardDiscarded { player: actor, cards: vec![c] });
     } else if ctx.core.player(actor).equips.contains(&c) {
         ctx.core.player_mut(actor).equips.retain(|x| *x != c);
+        ctx.core.declared_slots.remove(&c);
         crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, actor, c);
         ctx.to_discard(c);
         ctx.log(LogEvent::CardDiscarded { player: actor, cards: vec![c] });

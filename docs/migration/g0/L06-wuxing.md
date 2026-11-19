@@ -1,5 +1,9 @@
 # G0 · L06 wuxing
 
+## 2026-11-19 Batch 1.1 规则修复与独立复核（待提交／发布）
+
+基线 HEAD `352236724b5e173cc1ff74c0fb706509129ab7a1` ＋ Batch 1.1 修改；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经先红后绿测试（`crates/engine-native/tests/l06_wuxing_eight.rs`）及独立复核 agent `602b9dd3-b8e7-4e3c-81fe-b57137a6f312` 源码与上游 10 案例探针复核，`L06` 状态更新为 **已复核等价 2／简化近似 1／缺失 0**：`_shengke`（补齐联机禁用、装备使用与直装区分、`Tianfuzhen`/`Niaoxiangzhen`/`use_as=Wuzhong` 过滤及 `Wuzhong`/`Jiguan` 原主判断，按冻结 `NGSA 107` 基线保持桃园/五谷单批结构）与 `wuxingpan_skill`（第一步可取消返还次数，第二步强制属性选择）通过复核；`wuxingpan` 卡牌因 `wuxing.json:5`／`construction.rs:479-503` 固定按 `1/3` 注入属性而非读取上游 `wuxing_num_playpackconfig`（默认 `0.3`），依 S2 下调为 **简化近似**。详见 [Batch 1.1 复核摘要](../../operations/evidence/2026-11-19-batch1-1-u06-l06/README.md)。
+
 ## 2026-11-14T00:30:42+08:00 队列1复核补课增量（尚未提交／发布）
 
 源码HEAD `bd58ef06d59940baed8d7f93e61ce571b152fb81` + tracked dirty；规则333／NGSA107／schema5／ABI759／WS8。当前清单634／3790／0，旧等价215项按确定源码差异撤回；新增等价签署0。仅静态未找到消费链、键改名或缺字段的建议保持待核，已纠正11条误/过度确认。保留的原等价不是本轮重新签署。

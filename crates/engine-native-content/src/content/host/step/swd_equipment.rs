@@ -115,14 +115,9 @@ impl HostMachine {
                         return Flow::Done;
                     };
                     if ctx.core.player(t).alive {
-                        let flipped = {
-                            let pl = ctx.core.player_mut(t);
-                            pl.face_down = !pl.face_down;
-                            pl.face_down
-                        };
-                        ctx.emit(EventData::TurnOvered {
+                        ctx.emit(EventData::TurnOverBefore {
                             player: t,
-                            face_down: flipped,
+                            cancelled: false,
                         });
                     }
                     ctx.core.turn.wangchen_discard_basic = false;

@@ -759,6 +759,18 @@ pub trait SkillBehavior: Send + Sync {
     ) -> bool {
         self.filter(ctx, owner, event)
     }
+    fn filter_in_window_with_frames(
+        &self,
+        ctx: &QueryCtx<'_>,
+        frames: &[crate::event::Frame],
+        frame: &crate::event::Frame,
+        owner: crate::ids::PlayerId,
+        event: &crate::event::EventData,
+        kind: crate::event::EventKind,
+    ) -> bool {
+        let _ = (frames, frame);
+        self.filter_in_window(ctx, owner, event, kind)
+    }
     fn start_in_window(
         &self,
         ctx: &QueryCtx<'_>,
@@ -903,6 +915,16 @@ pub trait SkillBehavior: Send + Sync {
     /// 本技能的具名 filter / 查询需要本回合弃置与摸牌史。
     /// 标准宿主技为 false，标准局面不写 VmAux，v295 摘要保持不变。
     fn needs_vm_card_history(&self) -> bool {
+        false
+    }
+
+    /// Whether this skill has upstream `charlotte: true` trait (not copyable/stealable or disabled).
+    fn is_charlotte(&self) -> bool {
+        false
+    }
+
+    /// Whether this skill has upstream `persevereSkill / forever: true` trait (cannot be disabled).
+    fn is_forever(&self) -> bool {
         false
     }
 }

@@ -154,28 +154,42 @@ impl HostMachine {
             // 紧急冷冻（灵剑，规则 v198）：目标≠使用者且未翻面——+2 护甲、
             // 翻面；仍翻面则冻结（不能使用牌也不能成为目标，翻回解除，
             // kernel TurnOvered 钩）；本体入弃堆。
-            HostBehavior::SwdJinjilengdongCard => {
-                if let Some(t) = self.target {
-                    if ctx.core.player(t).alive && !ctx.core.player(t).face_down {
-                        // 护甲直写字段（灵雪同口径，无日志原语）
-                        ctx.core.player_mut(t).hujia += 2;
-                        ctx.core.player_mut(t).face_down = true;
-                        ctx.emit(EventData::TurnOvered {
-                            player: t,
-                            face_down: true,
-                        });
+            HostBehavior::SwdJinjilengdongCard => match self.stage {
+                HostStage::Act => {
+                    if let Some(t) = self.target {
+                        if ctx.core.player(t).alive && !ctx.core.player(t).face_down {
+                            // 护甲直写字段（灵雪同口径，无日志原语），翻面经 TurnOverBefore
+                            ctx.core.player_mut(t).hujia += 2;
+                            ctx.emit(EventData::TurnOverBefore {
+                                player: t,
+                                cancelled: false,
+                            });
+                            self.stage = HostStage::DrawSettle;
+                            return Flow::Yield;
+                        }
+                    }
+                    if let Some(c) = self.card {
+                        ctx.to_discard(c);
+                        ctx.core.table.retain(|x| *x != c);
+                        self.card = None;
+                    }
+                    Flow::Done
+                }
+                HostStage::DrawSettle => {
+                    if let Some(t) = self.target {
                         if ctx.core.player(t).face_down {
                             ctx.core.player_mut(t).jileng_active = true;
                         }
                     }
+                    if let Some(c) = self.card {
+                        ctx.to_discard(c);
+                        ctx.core.table.retain(|x| *x != c);
+                        self.card = None;
+                    }
+                    Flow::Done
                 }
-                if let Some(c) = self.card {
-                    ctx.to_discard(c);
-                    ctx.core.table.retain(|x| *x != c);
-                    self.card = None;
-                }
-                Flow::Done
-            }
+                _ => Flow::Done,
+            },
             // 圣休号角（灵剑，规则 v198）：目标获嘲讽（相邻角色只能以其为
             // 杀目标；其下一阶段开始解除，kernel 相位钩）；本体入弃堆。
             HostBehavior::SwdShengxiuhaojiaoCard => {
