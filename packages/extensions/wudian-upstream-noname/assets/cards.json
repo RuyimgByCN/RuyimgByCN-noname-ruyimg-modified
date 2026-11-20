@@ -96,15 +96,21 @@
       "kind": "tiesuo",
       "suit": "spade",
       "rank": 4
-    }
-  ],
-  "deferred": [
+    },
     {
       "name": "diaobingqianjiang",
-      "count": 2,
-      "reason": "多人方向选择多步结算"
+      "kind": "wuzhong",
+      "suit": "heart",
+      "rank": 4
+    },
+    {
+      "name": "diaobingqianjiang",
+      "kind": "wuzhong",
+      "suit": "diamond",
+      "rank": 4
     }
   ],
+  "deferred": [],
   "skills": [
     {
       "name": "wd_wangmeizhike",

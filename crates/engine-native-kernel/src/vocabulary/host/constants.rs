@@ -873,4 +873,5 @@ pub const K_DANGGU_PARTNER: &str = "k_danggu_partner";
 pub const WUDIAN_LIDUAN_GIVE: &str = "wudian_liduan_give";
 
 pub const WUDIAN_YOUDISHENRU_SHA: &str = "wudian_youdishenru_sha";
+pub const WUDIAN_YOUDISHENRU_USE: &str = "wudian_youdishenru_use";
 

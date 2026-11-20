@@ -338,6 +338,17 @@ impl SkillBehavior for HostSkillBehavior {
                     extra_events: vec![crate::event::EventKind::TurnEnded],
                 })
             }
+            // U07 筑城护卫（玩点论杀）：运行时可选触发，保留静态内容锁
+            HostBehavior::WudianZhuchengGuard if kind == crate::event::EventKind::CardUsed => {
+                Some(crate::catalog::TriggerMeta {
+                    event: crate::event::EventKind::CardUsed,
+                    timing: crate::event::Timing::Normal,
+                    priority: 0,
+                    order_selectable: true,
+                    optional: true,
+                    extra_events: Vec::new(),
+                })
+            }
             _ => None,
         }
     }
@@ -556,7 +567,6 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         | HostBehavior::MtgYoulinDiscard
         | HostBehavior::ChangeCardNature
         | HostBehavior::WudianKangyin
-        | HostBehavior::WudianChoudu
         | HostBehavior::WudianLiangou
         | HostBehavior::WudianQianggu
         | HostBehavior::WudianYinbo

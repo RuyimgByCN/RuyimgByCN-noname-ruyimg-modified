@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-21 Batch 1.4（U07 玩点论杀）规则修复与独立复核（待提交／发布）
+
+基线 HEAD `08ad0b37a447a21f515da955204923bdaf3e6aa8` 合入 `swarm/author-u07-l10` `63c0411ddf3f0189395f224cb571a050c5d8588e`；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`。经先红后绿回归与未参与实现的独立复核 agent（`5a16b8ee-86c7-497d-97bf-3ba0a35aa54b`）三轮逐行核对与上游实跑探针比对，Batch 1.4 14 项审查结果 **14 PASS / 0 FAIL / `APPROVE`**：`U07 玩点论杀` 更新为 **已复核等价 36／简化近似 0／缺失 0**（修复并签署 `choudu`、`diaobingqianjiang`、`fuchou`、`fuchou2`、`youzhan`、`youdishenru` 牌/技、`zhucheng2`、`jinyan`，抽样重审通过 `g_youdishenru`、`wdb_xizhenxihong`、`diyjuntun`、`zhucheng`、`kangyin2`；同步将两张实体【调兵遣将】补入 `wudian-upstream-noname` 14 -> 16 张并更新前端 blake3 哈希）。全仓清单更新为 **已复核等价 652／简化近似 3,772／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch 1.4 复核摘要](../operations/evidence/2026-11-21-batch1-4-u07/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。
+
 ## 2026-11-20 Batch 1.3（U08 英雄杀）规则修复与独立复核（待提交／发布）
 
 基线 HEAD `748e2974e6f63067e7770278f1f90b5138a60009` 合入 `swarm/author-u08-l28` `00c6c7412cc7e54484f11176649dc57dd62409f5`；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`。经先红后绿回归与未参与实现的独立复核 agent（`080e0e55-1095-4fc2-961b-cf5bb2bca2e5`）三轮逐行核对与上游实跑探针比对，Batch 1.3 23 项审查结果 **23 PASS / 0 FAIL / `APPROVE`**：`U08 英雄杀` 更新为 **已复核等价 150／简化近似 0／缺失 0**（修复并签署 `yxsdili`、`heqin2`、`xumou`、`bolehuiyan`、`bolehuiyan2`、`bolehuiyan3`、`nvquan3`，并重审修复通过 `cike`、`nichang`/`nichang2`、`wange`/`wange2`、`ducai2`/`ducai3`、`tongyu`/`lguiyin`、`qiandu`、`xiadao`、`jieyong`/`feigong`、`lzhangyi`、`heqin` 及 4 将抽样）。全仓清单更新为 **已复核等价 643／简化近似 3,781／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch 1.3 复核摘要](../operations/evidence/2026-11-20-batch1-3-u08/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。

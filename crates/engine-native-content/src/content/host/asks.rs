@@ -956,6 +956,7 @@ pub(crate) fn active_ask_host(
         | HostBehavior::WudianYouzhan
         | HostBehavior::WudianChoudu
         | HostBehavior::WudianDiaobingCard
+        | HostBehavior::WudianFuchou2
         | HostBehavior::MbcmJiushi
         | HostBehavior::MbcmFangzhu
         | HostBehavior::KDanggu | HostBehavior::KMowang | HostBehavior::Reguhuo | HostBehavior::Rangjie

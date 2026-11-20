@@ -2,12 +2,12 @@
 //!
 //! 覆盖八维：
 //! ① 生命周期：真实 `discover_extensions` + `import_extensions` 安装、激活、停用与卸载；
-//! ② 包数据桥接：14 张实体牌（含望梅止渴×2、诱敌深入×3、三尖两刃刀×1、铁索连环×1）+ 9 名武将（费诗/韩龙/刘馥/刘焉/留赞/田豫/西真夕红/造之仁君/杨仪）+ 17 项已映射宿主技能；
+//! ② 包数据桥接：16 张实体牌（含望梅止渴×2、诱敌深入×3、三尖两刃刀×1、铁索连环×1、调兵遣将×2）+ 9 名武将（费诗/韩龙/刘馥/刘焉/留赞/田豫/西真夕红/造之仁君/杨仪）+ 19 项已映射宿主技能；
 //! ③ 组合共存：与 `d3-upstream-noname`、`hero-kill-upstream-noname` 同局共存；
 //! ④ 保存恢复：对局中含望梅止渴与扩展武将技能状态下 `save` / `restore_with_extensions` 字节级一致；
 //! ⑤ 功能执行：望梅止渴与韩龙「刺酋」/留赞「亢音」等技能真实结算，全区实体牌守恒；
 //! ⑦ 异常拒装：非法装备技引用、未知牌种与损坏 JSON 返回明确 `BridgeError`；
-//! ⑧ 边界登记：调兵遣将（`diaobingqianjiang`）与 `duoqi`/`youzhan`/`choudu` 在 `cards.json` 显式登记暂缓原因。
+//! ⑧ 边界登记：`duoqi`/`youzhan`/`choudu` 与调兵遣将（`diaobingqianjiang`）已转正，`cards.json` 无暂缓项。
 
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -62,15 +62,15 @@ fn u07_wudian_eight_dimension_acceptance() {
     )
     .expect("读取 wudian cards.json");
 
-    // ② 包数据核对：14 张牌、9 名武将、17 项宿主技能、1 项暂缓牌（调兵遣将）
+    // ② 包数据核对：16 张牌、9 名武将、19 项宿主技能、无暂缓牌（调兵遣将×2 已补齐）
     let out = bridge_pack(&json).expect("bridge wudian");
     let gen_out = bridge_generals(&json).expect("bridge wudian generals");
     assert_eq!(out.pack.def.name, "wudian-upstream-noname");
     assert_eq!(out.pack.def.version, 2);
-    assert_eq!(out.pack.card_count(), 14);
+    assert_eq!(out.pack.card_count(), 16);
     assert_eq!(out.pack.general_count(), 9);
     assert_eq!(out.pack.host_skills.len(), 19);
-    assert_eq!(out.deferred, vec!["diaobingqianjiang".to_string()]);
+    assert!(out.deferred.is_empty());
     assert_eq!(gen_out.generals.len(), 9);
     assert_eq!(gen_out.unmapped_skills, 4, "duoqi/youzhan/jianbi(造之仁君)/choudu 暂缓");
 

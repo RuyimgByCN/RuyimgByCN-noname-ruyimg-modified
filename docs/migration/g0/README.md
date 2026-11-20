@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-21 Batch 1.4（U07 玩点论杀）更新（待提交／发布）
+
+基线 HEAD `08ad0b37a447a21f515da955204923bdaf3e6aa8` 合入 `swarm/author-u07-l10` `63c0411ddf3f0189395f224cb571a050c5d8588e`；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经独立复核 agent `5a16b8ee-86c7-497d-97bf-3ba0a35aa54b` 三轮逐行对照与上游实跑探针审查（`14 PASS / 0 FAIL / APPROVE`），清单更新为 **已复核等价 652／简化近似 3,772／缺失 0／上游未定义 0**（合计 4,424）：`U07 玩点论杀` 更新为 **36 / 0 / 0**（+9：`choudu`、`diaobingqianjiang`、`fuchou`、`fuchou2`、`youzhan`、`youdishenru` 牌与技、`zhucheng2`、`jinyan` 升为已复核等价，另有 `g_youdishenru`、`wdb_xizhenxihong`、`diyjuntun`、`zhucheng`、`kangyin2` 抽样复审通过）。队列第 1 项 U07 完成本地收口，整包八项仍 `0/37`。详见 [Batch 1.4 证据摘要](../../operations/evidence/2026-11-21-batch1-4-u07/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-20 Batch 1.3（U08 英雄杀）更新（待提交／发布）
 
 基线 HEAD `748e2974e6f63067e7770278f1f90b5138a60009` 合入 `swarm/author-u08-l28` `00c6c7412cc7e54484f11176649dc57dd62409f5`；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经独立复核 agent `080e0e55-1095-4fc2-961b-cf5bb2bca2e5` 三轮逐行对照与上游实跑探针审查（`23 PASS / 0 FAIL / APPROVE`），清单更新为 **已复核等价 643／简化近似 3,781／缺失 0／上游未定义 0**（合计 4,424）：`U08 英雄杀` 更新为 **150 / 0 / 0**（+7：`yxsdili`、`heqin2`、`xumou`、`bolehuiyan`、`bolehuiyan2`、`bolehuiyan3`、`nvquan3` 升为已复核等价，另有 `cike`、`nichang*`、`wange*`、`ducai*`、`tongyu`/`lguiyin`、`qiandu`、`xiadao`、`jieyong`/`feigong` 等重审通过）。队列第 1 项 U08 完成本地收口，整包八项仍 `0/37`。详见 [Batch 1.3 证据摘要](../../operations/evidence/2026-11-20-batch1-3-u08/README.md) 与 [inventory_status.json](inventory_status.json)。

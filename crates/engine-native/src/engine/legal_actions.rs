@@ -91,9 +91,7 @@ impl Engine {
                 .state_core()
                 .skills
                 .iter()
-                .filter(|((owner, _), inst)| {
-                    *owner == seat && inst.enabled && !(inst.once_used)
-                })
+                .filter(|((owner, _), inst)| *owner == seat && inst.enabled && !inst.once_used)
                 .map(|((_, def), _)| *def)
                 .collect();
             for def in defs {

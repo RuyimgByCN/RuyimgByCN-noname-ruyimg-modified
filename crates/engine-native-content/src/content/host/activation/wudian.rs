@@ -318,8 +318,18 @@ impl HostSkillBehavior {
                 }))
             }
             HostBehavior::WudianChoudu => {
+                if ctx.state.vm_aux.once_count(
+                    owner,
+                    4,
+                    crate::content::host::WUDIAN_CHOUDU_KEY,
+                ) > 0
+                {
+                    return None;
+                }
                 let p = ctx.state.player(owner);
-                if p.hand.is_empty() && p.equips.is_empty() {
+                if (p.hand.is_empty() && p.equips.is_empty())
+                    || step::wudian_choudu_targets(ctx.state, ctx.catalog).is_empty()
+                {
                     return None;
                 }
                 Some(Box::new(HostMachine {

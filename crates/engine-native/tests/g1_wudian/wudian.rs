@@ -23,16 +23,16 @@ fn wudian_real_host_full_lifecycle() {
         "激活集"
     );
 
-    // ② 安装包 → 原生建局（14 卡 + 费诗墨守接线后目录元数据）
+    // ② 安装包 → 原生建局（16 卡 + 费诗墨守接线后目录元数据）
     let json = std::fs::read_to_string(
         PathBuf::from(meta.extension_root.as_ref().unwrap()).join("assets/cards.json"),
     )
     .unwrap();
     let pack = bridge(&json);
-    assert_eq!(pack.card_count(), 14);
+    assert_eq!(pack.card_count(), 16);
     let base_cards = Engine::new(1, 3).catalog().cards.len();
     let mut e = Engine::new_with_extensions(6005, 3, &[&pack]).expect("建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 14);
+    assert_eq!(e.catalog().cards.len(), base_cards + 16);
     let mut feishi_skills = None;
     let gen_base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
     for idx in gen_base..(gen_base + 8) {
@@ -73,7 +73,7 @@ fn wudian_real_host_full_lifecycle() {
     .expect("对局中卸载后恢复");
     assert_eq!(
         resumed.catalog().cards.len(),
-        base_cards + 14,
+        base_cards + 16,
         "锁定副本仍可用"
     );
     let out = submit(&mut resumed, 0, GameAction::NextPhase);
@@ -195,20 +195,41 @@ fn wudian_generals_batch10_diyjuntun_recast_and_jinyan() {
         !e.state_core().players[0].equips.contains(&z0),
         "屯田：原装备被弃"
     );
+    let _ = equip_pool_before;
     let gained = hand_len_w(&e, 0) - h0;
-    if equip_pool_before > 0 {
-        assert_eq!(
-            gained, 1,
-            "屯田：牌堆获得 1 张装备（池 {equip_pool_before}）"
-        );
-    }
+    assert_eq!(
+        gained, 1,
+        "屯田：player.recast 弃置装备后从牌堆顶摸 1 张牌"
+    );
 
-    // 禁言：p1（持禁言）体力 2 → 黑锦囊使用被拒；体力 3 → 放行
+    // 禁言：p1（持禁言）体力 2 → 无目标黑锦囊被拒 CardLimit，有目标黑锦囊可作【杀】使用；体力 3 → 放行作真乐
     e.debug_grant(1, "jinyan");
     advance_to_play(&mut e, 1);
     e.debug_set_hp(1, 2);
-    let le = e.debug_place(1, "le");
+    let le_a = e.debug_place(1, "le");
+    let le_b = e.debug_place(1, "le");
+    let (le, le2) = if matches!(
+        e.catalog().cards[le_a as usize].suit,
+        engine_native::catalog::Suit::Spade | engine_native::catalog::Suit::Club
+    ) {
+        (le_a, le_b)
+    } else {
+        (le_b, le_a)
+    };
     let out = submit(
+        &mut e,
+        1,
+        GameAction::PlayCard {
+            card: le,
+            targets: vec![],
+        },
+    );
+    assert!(
+        matches!(out, CommandOutcome::Rejected(RejectReason::CardLimit)),
+        "禁言：体力 ≤2 无目标黑锦囊被拒: {out:?}"
+    );
+    let hp0_before = e.debug_hp(0);
+    let out_sha = submit(
         &mut e,
         1,
         GameAction::PlayCard {
@@ -217,15 +238,30 @@ fn wudian_generals_batch10_diyjuntun_recast_and_jinyan() {
         },
     );
     assert!(
-        matches!(out, CommandOutcome::Rejected(RejectReason::CardLimit)),
-        "禁言：体力 ≤2 黑锦囊被拒: {out:?}"
+        matches!(
+            out_sha,
+            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+        ),
+        "禁言：体力 ≤2 有目标黑锦囊可作【杀】使用: {out_sha:?}"
     );
+    if e.open_choice().is_some_and(|c| c.spec.prompt == "respond_shan") {
+        let cid = e.open_choice().unwrap().id;
+        submit(
+            &mut e,
+            0,
+            GameAction::Answer {
+                choice_id: cid,
+                selection: vec![ChoiceOption::Pass],
+            },
+        );
+    }
+    assert_eq!(e.debug_hp(0), hp0_before - 1);
     e.debug_set_hp(1, 3);
     let out = submit(
         &mut e,
         1,
         GameAction::PlayCard {
-            card: le,
+            card: le2,
             targets: vec![0],
         },
     );
@@ -353,8 +389,8 @@ fn wudian_generals_batch13_jianbi_aoe_exclude() {
     assert_eq!(m.0, "西真夕红");
     assert_eq!(
         m.2,
-        vec!["jinyan", "fuchou", "fuchou2", "jianbi"],
-        "西真夕红整将（批 14 复仇双技转正）"
+        vec!["jinyan", "fuchou", "fuchou2"],
+        "西真夕红整将（批 14 复仇双技转正，不含坚壁）"
     );
 
     // 南蛮：p0 对全体——p1（持坚壁）被跳过（不询问不掉血），p2/p3 受伤
@@ -475,7 +511,8 @@ fn wudian_generals_batch14_fuchou_cancel_and_settle() {
         },
     );
     assert_eq!(e.debug_hp(1), 8, "复仇：杀被取消不受伤");
-    assert!(e.debug_hand(0).contains(&sha), "复仇：杀回来源手");
+    assert!(!e.debug_hand(0).contains(&sha), "复仇：原杀不得退回来源手");
+    assert!(e.save().core.discard.contains(&sha), "复仇：原杀入弃牌堆");
     assert!(e.debug_hand(0).contains(&pay), "复仇：所选牌归来源");
     assert!(
         e.state_core().players[1].fuchou_marked.contains(&0),
@@ -503,39 +540,35 @@ fn wudian_generals_batch14_fuchou_cancel_and_settle() {
             .open_choice()
             .map(|ch| (ch.id, ch.observer, ch.spec.min.max(1)));
         if let Some((cid2, obs2, min)) = pending {
-            let card_sel: Vec<ChoiceOption> = {
-                let ch = e.open_choice().expect("still open");
-                ch.spec
-                    .options
-                    .iter()
-                    .filter(|o| matches!(o, ChoiceOption::Card(_)))
-                    .copied()
-                    .take(min)
-                    .collect()
-            };
-            if !card_sel.is_empty() {
-                submit(
-                    &mut e,
-                    obs2,
-                    GameAction::Answer {
-                        choice_id: cid2,
-                        selection: card_sel,
-                    },
-                );
+            let prompt = e.open_choice().expect("still open").spec.prompt;
+            let sel: Vec<ChoiceOption> = if prompt == "wudian_fuchou2_sha" {
+                Vec::new()
             } else {
-                let first = {
+                let card_sel: Vec<ChoiceOption> = {
+                    let ch = e.open_choice().expect("still open");
+                    ch.spec
+                        .options
+                        .iter()
+                        .filter(|o| matches!(o, ChoiceOption::Card(_)))
+                        .copied()
+                        .take(min)
+                        .collect()
+                };
+                if !card_sel.is_empty() {
+                    card_sel
+                } else {
                     let ch = e.open_choice().expect("still open");
                     vec![ch.spec.options[0].clone()]
-                };
-                submit(
-                    &mut e,
-                    obs2,
-                    GameAction::Answer {
-                        choice_id: cid2,
-                        selection: first,
-                    },
-                );
-            }
+                }
+            };
+            submit(
+                &mut e,
+                obs2,
+                GameAction::Answer {
+                    choice_id: cid2,
+                    selection: sel,
+                },
+            );
         }
     }
     let h1 = h_before_settle;

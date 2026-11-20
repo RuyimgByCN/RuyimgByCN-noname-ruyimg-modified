@@ -84,7 +84,11 @@ fn t13_generals_package_loads_via_native_path() {
 
     let loaded = content.load("wudian").expect("装载武将包");
     assert_eq!(loaded.pack.generals.len(), 9, "九名武将与 G1 装载口径一致");
-    assert_eq!(loaded.pack.card_count(), 14, "14 张实体牌与 G1 口径一致");
+    assert_eq!(
+        loaded.pack.card_count(),
+        16,
+        "16 张实体牌与 G1 及上游 card/list.js 口径一致"
+    );
 
     let req = NativeGameRequest {
         packages: vec!["wudian".into()],
@@ -105,8 +109,8 @@ fn t13_generals_package_loads_via_native_path() {
     );
     assert_eq!(
         summary.catalog_cards,
-        summary.base_catalog_cards + 14,
-        "武将包 14 张实体牌并入目录"
+        summary.base_catalog_cards + 16,
+        "武将包 16 张实体牌并入目录"
     );
 }
 

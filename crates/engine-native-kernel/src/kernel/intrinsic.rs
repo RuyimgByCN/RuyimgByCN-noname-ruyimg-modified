@@ -209,6 +209,21 @@ pub fn intrinsic_machine(
                 return sha_intrinsic(ctx, &u);
             }
             let Some(card) = u.card else {
+                if effective_kind == CardKind::Youdishenru
+                    || (effective_kind == CardKind::Wuzhong
+                        && ctx
+                            .core
+                            .vm_aux
+                            .flags
+                            .remove(&(u.player, "virtual_diaobing_use".to_string()))
+                            .is_some())
+                {
+                    if let Some(machine) =
+                        (ctx.catalog.hooks.card_intrinsic)(ctx, &u, effective_kind)
+                    {
+                        return machine;
+                    }
+                }
                 match effective_kind {
                     CardKind::Jiu => {
                         ctx.core.turn.jiu_active = true;

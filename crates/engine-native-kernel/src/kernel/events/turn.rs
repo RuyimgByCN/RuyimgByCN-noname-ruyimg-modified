@@ -660,6 +660,8 @@ pub(in crate::kernel) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: P
     ctx.core.turn.yanyu_count = 0;
     ctx.core.turn.txianqu_used = false;
     ctx.core.turn.jtjubao_used = false;
+    ctx.core.turn.kangyin2 = None;
+    ctx.core.turn.ciqiu_dying.clear();
     reset_new_turn_state(ctx, next);
     ctx.emit(EventData::TurnBegin { player: next });
 }

@@ -37,6 +37,25 @@ mod swd_recovery;
 mod swd_status;
 mod swd_targets;
 mod wudian_cards;
+mod wudian_diaobing;
+pub(in crate::content::host) use wudian_cards::wudian_zhucheng_he_options;
+pub(in crate::content::host) use wudian_diaobing::wudian_choudu_targets;
+
+pub(super) fn sha_card_use_data(
+    ctx: &Ctx<'_>,
+    actor: PlayerId,
+    card: CardId,
+    targets: Vec<PlayerId>,
+    use_as: Option<CardKind>,
+) -> crate::event::CardUseData {
+    let eff_kind = use_as.unwrap_or_else(|| ctx.catalog.card_kind(card));
+    let nature = match eff_kind {
+        CardKind::FireSha => crate::event::DamageNature::Fire,
+        CardKind::LeiSha => crate::event::DamageNature::Thunder,
+        _ => crate::event::DamageNature::Normal,
+    };
+    crate::machine::card_use_with_nature(card, actor, targets, nature, use_as)
+}
 mod wudian_ow_cards;
 mod wudian_damage;
 mod wudian_recovery;
@@ -1094,10 +1113,10 @@ impl HostMachine {
             HostBehavior::D3Moyan => self.step_skills_damage(ctx),
             // 机关妖术防重标记：纯状态无触发面（补偿触发暂缓）
             HostBehavior::SwdJiguanyaoState => self.step_swd_status(ctx),
-            HostBehavior::WudianDuoqi
-            | HostBehavior::WudianYouzhan
-            | HostBehavior::WudianChoudu
-            | HostBehavior::WudianDiaobingCard => self.step_wudian_cards(ctx),
+            HostBehavior::WudianDuoqi | HostBehavior::WudianYouzhan => self.step_wudian_cards(ctx),
+            HostBehavior::WudianChoudu | HostBehavior::WudianDiaobingCard => {
+                self.step_wudian_diaobing(ctx)
+            }
             HostBehavior::KDanggu | HostBehavior::KMowang => self.step_skills_recovery(ctx),
             HostBehavior::U01DddBatchA => u01_batch_a::step_u01_batch_a(self, ctx),
             HostBehavior::U01DddBatchB => u01_batch_b::step_u01_batch_b(self, ctx),

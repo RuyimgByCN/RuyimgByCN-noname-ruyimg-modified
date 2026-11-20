@@ -94,8 +94,8 @@ fn youdishenru_cancels_sha_with_reprisal() {
         ),
         "{out:?}"
     );
-    let c = e.open_choice().expect("响应询问挂起");
-    assert_eq!(c.spec.prompt, "respond_shan");
+    let c = e.open_choice().expect("shaBefore 诱敌深入询问挂起");
+    assert_eq!(c.spec.prompt, "wudian_youdishenru_use");
     assert!(
         c.spec.options.contains(&ChoiceOption::Card(yd)),
         "响应选项应含诱敌深入"

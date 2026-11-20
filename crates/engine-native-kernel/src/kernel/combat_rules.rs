@@ -1,4 +1,5 @@
 use super::*;
+use crate::catalog::Catalog;
 
 /// 杀的结算：询问目标闪，未闪则造成伤害子事件。
 /// 裸衣伤害加成：来源本回合已发动裸衣（`once_used` 旗标，判定阶段
@@ -75,6 +76,9 @@ pub(super) fn is_tao_like(
     card: crate::ids::CardId,
     dying: PlayerId,
 ) -> bool {
+    if jinyan_blocks_black_trick(ctx.core, ctx.catalog, responder, card) {
+        return false;
+    }
     if crate::rvm_bridge::modifiers::eval_dying_peach_target_canceled(
         ctx.core,
         ctx.catalog,
@@ -192,60 +196,68 @@ pub(super) fn dying_tao_cards(
     out
 }
 
-pub(super) fn response_kind_cards(
-    ctx: &Ctx<'_>,
+/// 通用响应/打出候选项（kernel 与 snap/asks 共用，含禁言 `jinyan` 禁用与黑锦囊转【杀】）。
+pub(crate) fn response_kind_cards_core(
+    core: &crate::state::GameStateCore,
+    catalog: &Catalog,
     responder: PlayerId,
     need: CardKind,
 ) -> Vec<crate::ids::CardId> {
     let hand_banned = (need.is_basic_kind() || need.is_equip())
-        && ctx
-            .core
+        && core
             .vm_aux
             .flags
             .get(&(responder, "mbcmfangzhu_ban".to_string()))
             .copied()
             .unwrap_or(0)
             > 0;
-    let p = ctx.core.player(responder);
-    let mut out: Vec<crate::ids::CardId> = if hand_banned {
-        Vec::new()
-    } else {
-        let rw_lanyin = need == CardKind::Shan
-            && crate::rvm_bridge::modifiers::d34_l28_mods::has_rewritten_lanyinjia(
-                ctx.core,
-                ctx.catalog,
-                responder,
-            );
-        p.hand
-            .iter()
-            .copied()
-            .filter(|&c| {
-                rw_lanyin
-                    || ctx.catalog.card_kind(c) == need
-                    || ctx
-                        .catalog
-                        .find_player_vm_view_as(ctx.core, responder, c, false, Some(need))
-                        .is_some()
-            })
-            .collect()
-    };
-    for c in ctx
-        .catalog
-        .player_vm_view_as_extra_cards(ctx.core, responder, false, Some(need))
-    {
-        if !out.contains(&c) {
+    let sealed = catalog.is_tieji_sealed(core, responder);
+    let rw_lanyin = !hand_banned
+        && need == CardKind::Shan
+        && crate::rvm_bridge::modifiers::d34_l28_mods::has_rewritten_lanyinjia(
+            core, catalog, responder,
+        );
+    let p = core.player(responder);
+    let mut out: Vec<crate::ids::CardId> = p
+        .hand
+        .iter()
+        .copied()
+        .filter(|&c| {
+            if jinyan_blocks_black_trick(core, catalog, responder, c) {
+                return need == CardKind::Sha && !hand_banned && !sealed;
+            }
+            if hand_banned {
+                return false;
+            }
+            rw_lanyin
+                || catalog.card_kind(c) == need
+                || catalog
+                    .find_player_vm_view_as(core, responder, c, false, Some(need))
+                    .is_some()
+        })
+        .collect();
+    for c in catalog.player_vm_view_as_extra_cards(core, responder, false, Some(need)) {
+        if !jinyan_blocks_black_trick(core, catalog, responder, c) && !out.contains(&c) {
             out.push(c);
         }
     }
     out.retain(|&c| {
         !crate::rvm_bridge::modifiers::d34_flags::is_ducai3_forbidden(
-            ctx.core,
-            ctx.catalog,
+            core,
+            catalog,
             responder,
             c,
         )
     });
     out
+}
+
+pub(super) fn response_kind_cards(
+    ctx: &Ctx<'_>,
+    responder: PlayerId,
+    need: CardKind,
+) -> Vec<crate::ids::CardId> {
+    response_kind_cards_core(ctx.core, ctx.catalog, responder, need)
 }
 
 pub(super) fn discard_response_card(
@@ -321,4 +333,203 @@ pub(super) fn discard_response_card(
     } else {
         ctx.to_discard(card);
     }
+}
+
+/// 黑锦囊判定（禁言/反击【杀】可用性检查共用）。
+pub fn is_black_trick_card(
+    core: &crate::state::GameStateCore,
+    catalog: &Catalog,
+    owner: PlayerId,
+    card: crate::ids::CardId,
+) -> bool {
+    let kind = catalog.card_kind(card);
+    !kind.is_basic_kind()
+        && kind.equip_slot().is_none()
+        && kind.is_basic_trick_or_equip()
+        && matches!(
+            catalog.effective_card_suit(core, owner, card),
+            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+        )
+}
+
+/// 玩点论杀 `jinyan`（character/skill.js:448-507）：体力 <= 2 时禁用黑色锦囊（含延时锦囊；非锁定技，被铁骑封印时失效）。
+pub fn jinyan_blocks_black_trick(
+    core: &crate::state::GameStateCore,
+    catalog: &Catalog,
+    player: PlayerId,
+    card: crate::ids::CardId,
+) -> bool {
+    core.player(player).hp <= 2
+        && !catalog.is_tieji_sealed(core, player)
+        && catalog
+            .skill_by_name(crate::vocabulary::host::WUDIAN_JINYAN_KEY)
+            .is_some_and(|d| core.has_skill(player, d))
+        && is_black_trick_card(core, catalog, player, card)
+}
+
+/// 判定一张牌能否在主动出杀询问中作为真实【杀】使用（含转化技），返回 `Some((use_as, is_mutou))`。
+pub fn sha_card_use_as(
+    core: &crate::state::GameStateCore,
+    catalog: &Catalog,
+    owner: PlayerId,
+    card: crate::ids::CardId,
+) -> Option<(Option<CardKind>, bool)> {
+    let in_hand = core.player(owner).hand.contains(&card);
+    if in_hand && core.player(owner).fengyin_active {
+        return None;
+    }
+    let kind = catalog.card_kind(card);
+    if in_hand && kind.is_sha_like() && !core.player(owner).wangshi_ban {
+        return Some((None, false));
+    }
+    let sealed = catalog.is_tieji_sealed(core, owner);
+    if !sealed && in_hand {
+        let suit = catalog.effective_card_suit(core, owner, card);
+        let red = matches!(suit, crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond);
+        let has_skill = |k: &str| catalog.skill_by_name(k).is_some_and(|d| core.has_skill(owner, d));
+        if core.player(owner).hp <= 2
+            && has_skill(crate::vocabulary::host::WUDIAN_JINYAN_KEY)
+            && is_black_trick_card(core, catalog, owner, card)
+        {
+            return Some((Some(CardKind::Sha), false));
+        }
+        if (has_skill(crate::vocabulary::names::WU_SHENG) && red)
+            || (has_skill(crate::vocabulary::names::LONG_DAN) && kind == CardKind::Shan)
+            || (has_skill("huanxia") && red)
+            || (has_skill("yaotong") && core.player(owner).hand.len() % 2 == 1)
+        {
+            return Some((Some(CardKind::Sha), false));
+        }
+        let muto = catalog
+            .skill_by_name(crate::vocabulary::host::GJ_MUTOU_SKILL_KEY)
+            .is_some_and(|d| {
+                core.skills
+                    .get(&(owner, d))
+                    .is_some_and(|i| i.enabled && !i.once_used)
+            });
+        if muto {
+            return Some((Some(CardKind::Sha), true));
+        }
+    }
+    if (!in_hand || !sealed)
+        && catalog
+            .find_player_vm_view_as(core, owner, card, true, Some(CardKind::Sha))
+            .is_some()
+    {
+        return Some((Some(CardKind::Sha), false));
+    }
+    if !in_hand
+        && !sealed
+        && core.player(owner).equips.contains(&card)
+        && catalog
+            .skill_by_name("poxiao")
+            .is_some_and(|d| core.has_skill(owner, d))
+    {
+        return Some((Some(CardKind::Sha), false));
+    }
+    None
+}
+
+fn sha_user_or_target_blocked(
+    core: &crate::state::GameStateCore,
+    catalog: &Catalog,
+    owner: PlayerId,
+    target: PlayerId,
+) -> bool {
+    if !core.player(owner).alive || !core.player(target).alive || owner == target {
+        return true;
+    }
+    let has = |p: PlayerId, k: &str| catalog.skill_by_name(k).is_some_and(|d| core.has_skill(p, d));
+    if catalog.blocks_all_cards(core, owner)
+        || has(owner, crate::vocabulary::host::WUDIAN_SHOUHU_KEY)
+        || has(owner, crate::vocabulary::host::GW_BIRIN_STATE_KEY)
+        || has(owner, crate::vocabulary::host::GJ_FOOD_SHIHUIFEN_BAN_KEY)
+    {
+        return true;
+    }
+    if core.turn.current == owner
+        && has(owner, crate::vocabulary::names::BOSS_QINGZHU)
+        && !has(owner, crate::vocabulary::names::BOSS_JIDING)
+    {
+        return true;
+    }
+    if has(owner, crate::vocabulary::names::BOSS_MINWAN)
+        && !core.turn.minwan_targets.is_empty()
+        && !core.turn.minwan_targets.contains(&target)
+    {
+        return true;
+    }
+    if (has(target, crate::vocabulary::names::KONG_CHENG) && core.player(target).hand.is_empty())
+        || core.player(target).jidong_active
+        || core.player(target).yinshen_active
+        || core.player(target).jileng_active
+        || core.player(target).yinmi_active
+    {
+        return true;
+    }
+    let seats = core.players.len() as u8;
+    let adj_chaofeng = (0..seats).find(|&p| {
+        p != owner && core.player(p).alive && core.player(p).chaofeng_active && {
+            let d = (u16::from(p) + u16::from(seats) - u16::from(owner)) % u16::from(seats);
+            d == 1 || d == u16::from(seats) - 1
+        }
+    });
+    adj_chaofeng.is_some_and(|h| target != h)
+}
+
+/// 询问使用真实【杀】（复仇 2 / 诱敌深入 / 诱战 共用；Step 与 Asks 同源）：忽略距离与出牌阶段次数限制。
+pub fn usable_sha_options(
+    core: &crate::state::GameStateCore,
+    catalog: &Catalog,
+    owner: PlayerId,
+    target: PlayerId,
+) -> Vec<ChoiceOption> {
+    if sha_user_or_target_blocked(core, catalog, owner, target) {
+        return Vec::new();
+    }
+    let molicha_target = catalog
+        .skill_by_name(crate::vocabulary::host::GJ_FOOD_MOLICHA_KEY)
+        .is_some_and(|d| core.skills.contains_key(&(target, d)));
+    let mut candidates: Vec<crate::ids::CardId> = core.player(owner).hand.clone();
+    for c in catalog.player_vm_view_as_extra_cards(core, owner, true, Some(CardKind::Sha)) {
+        if !candidates.contains(&c) {
+            candidates.push(c);
+        }
+    }
+    if catalog
+        .skill_by_name("poxiao")
+        .is_some_and(|d| core.has_skill(owner, d))
+    {
+        for &c in &core.player(owner).equips {
+            if !candidates.contains(&c) {
+                candidates.push(c);
+            }
+        }
+    }
+    candidates
+        .into_iter()
+        .filter(|&c| {
+            let Some((use_as, _)) = sha_card_use_as(core, catalog, owner, c) else {
+                return false;
+            };
+            let kind = use_as.unwrap_or_else(|| catalog.card_kind(c));
+            let nature = match kind {
+                CardKind::FireSha => crate::event::DamageNature::Fire,
+                CardKind::LeiSha => crate::event::DamageNature::Thunder,
+                _ => crate::event::DamageNature::Normal,
+            };
+            let black = matches!(
+                catalog.cards[c as usize].suit,
+                crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+            );
+            !(molicha_target && black)
+                && !crate::rvm_bridge::modifiers::eval_card_use_canceled(
+                    core, catalog, owner, c, kind, nature,
+                )
+                && !crate::rvm_bridge::modifiers::eval_card_target_canceled(
+                    core, catalog, owner, target, c, kind, nature,
+                )
+        })
+        .map(ChoiceOption::Card)
+        .collect()
 }

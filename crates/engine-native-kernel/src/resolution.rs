@@ -777,6 +777,22 @@ pub fn run(
                         core.vm_aux
                             .flags
                             .remove(&(u.player, format!("sha_pending_end:{}", popped.id)));
+                        let eff_kind = u.use_as.or_else(|| u.card.map(|c| catalog.card_kind(c)));
+                        if eff_kind == Some(crate::catalog::CardKind::Youdishenru) {
+                            core.vm_aux
+                                .flags
+                                .remove(&(u.player, "yd_pending_source".to_string()));
+                            core.vm_aux
+                                .flags
+                                .remove(&(u.player, "yd_pending_sha_frame".to_string()));
+                        }
+                        if u.card.is_none()
+                            && u.use_as == Some(crate::catalog::CardKind::Wuzhong)
+                        {
+                            core.vm_aux
+                                .flags
+                                .remove(&(u.player, "virtual_diaobing_use".to_string()));
+                        }
                         for p in 0..core.players.len() as PlayerId {
                             core.vm_aux
                                 .flags

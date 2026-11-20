@@ -5,8 +5,8 @@ use super::super::*;
 impl HostMachine {
     pub(super) fn step_wudian_cards(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         match self.behavior {
-            // 屯田·DIY：自选一张装备牌（手/场）弃之，牌堆随机获得一张
-            // 装备牌（实体发现模式；deck+discard 无装备则仅弃置）
+            // 屯田·DIY（玩点论杀/character/skill.js:776-811）：自选一张装备牌（手/场）
+            // 弃置并摸一张牌（上游 player.recast(cards) 同口径）。
             HostBehavior::WudianDiyjuntun => match self.stage {
                 HostStage::SelectCard => {
                     let p = ctx.core.player(self.owner);
@@ -41,40 +41,16 @@ impl HostMachine {
                         _ => None,
                     });
                     let Some(c) = picked else { return Flow::Done };
-                    // 弃置（装备栏走 revoke）
-                    if ctx.core.player(self.owner).equips.contains(&c) {
-                        ctx.core.player_mut(self.owner).equips.retain(|x| *x != c);
-                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, c);
-                        ctx.to_discard(c);
-                    } else {
-                        ctx.discard_from_hand(self.owner, c);
+                    if !discard_owned_card_once(ctx, self.owner, c) {
+                        return Flow::Done;
                     }
-                    ctx.log(LogEvent::CardDiscarded {
-                        player: self.owner,
-                        cards: vec![c],
-                    });
-                    // 实体发现：牌堆随机一张装备牌入手（弃堆兜底）
-                    let mut pool: Vec<CardId> = ctx
-                        .core
-                        .deck
-                        .iter()
-                        .chain(ctx.core.discard.iter())
-                        .copied()
-                        .filter(|x| ctx.catalog.card_slot_of(ctx.core, *x).is_some())
-                        .collect();
-                    if !pool.is_empty() {
-                        let idx = ctx.core.rng.gen_range(pool.len() as u32) as usize;
-                        let got = pool.swap_remove(idx);
-                        if let Some(pos) = ctx.core.deck.iter().position(|x| *x == got) {
-                            ctx.core.deck.remove(pos);
-                        } else if let Some(pos) = ctx.core.discard.iter().position(|x| *x == got) {
-                            ctx.core.discard.remove(pos);
-                        }
-                        ctx.core.player_mut(self.owner).hand.push(got);
-                        ctx.log(LogEvent::CardsDrawn {
-                            player: self.owner,
-                            cards: vec![got],
-                        });
+                    // 上游 `player.recast`（player.js:1641-1657）：先结算 CardsLost，再从牌堆顶摸 1 张牌
+                    self.stage = HostStage::DrawSettle;
+                    Flow::Yield
+                }
+                HostStage::DrawSettle => {
+                    if ctx.core.player(self.owner).alive {
+                        ctx.start_draw(self.owner, 1);
                     }
                     Flow::Done
                 }
@@ -165,24 +141,20 @@ impl HostMachine {
                 }
                 _ => Flow::Done,
             },
+            // 筑城守卫（玩点论杀/character/skill.js:218-251）：trigger { target: "shaBefore" }
+            // 目标有筑牌时，来源可自选弃置 num=zhucheng.len() 张 "he" 牌（手牌+装备）；
+            // 若不足 num 张或取消则仅取消对当前筑城持有者目标的杀（若目标清空则杀入弃牌堆，不回手）。
             HostBehavior::WudianZhuchengGuard => match self.stage {
-                // 筑城守卫（U07 批三 v113）：Act 问使用者——选一张=弃
-                // 筑城张数张（登记差异：上游一次性选 n 张，原生首张自选
-                // +其余随机代抽）；Pass=杀无效（帧 cancelled + 杀归还手
-                // 牌，Intrinsic 阶段按 cancelled 跳过结算）。
                 HostStage::Act => {
                     let Some(attacker) = self.target else {
                         return Flow::Done;
                     };
-                    let mut options = vec![ChoiceOption::Pass];
-                    options.extend(
-                        ctx.core
-                            .player(attacker)
-                            .hand
-                            .iter()
-                            .copied()
-                            .map(ChoiceOption::Card),
-                    );
+                    let num = ctx.core.player(self.owner).zhucheng.len();
+                    let options = wudian_zhucheng_he_options(ctx.core, attacker);
+                    if num == 0 || options.len() < num {
+                        cancel_active_sha_target(ctx, attacker, self.owner);
+                        return Flow::Done;
+                    }
                     self.stage = HostStage::SelectCard;
                     Flow::WaitChoice {
                         observer: attacker,
@@ -190,9 +162,9 @@ impl HostMachine {
                             kind: ChoiceKind::SelectCards,
                             prompt: WUDIAN_ZHUCHENG_GUARD_ASK,
                             options,
-                            min: 0,
-                            max: 1,
-                            allow_cancel: false,
+                            min: num,
+                            max: num,
+                            allow_cancel: true,
                         },
                     }
                 }
@@ -200,50 +172,35 @@ impl HostMachine {
                     let Some(attacker) = self.target else {
                         return Flow::Done;
                     };
-                    let answered = ctx.answer().first().copied();
-                    match answered {
-                        Some(ChoiceOption::Card(c)) => {
-                            let n = ctx.core.player(self.owner).zhucheng.len();
-                            if ctx.core.player(attacker).hand.contains(&c) {
-                                ctx.discard_from_hand(attacker, c);
-                                ctx.log(LogEvent::CardDiscarded {
-                                    player: attacker,
-                                    cards: vec![c],
-                                });
+                    let num = ctx.core.player(self.owner).zhucheng.len();
+                    let mut picks: Vec<CardId> = Vec::new();
+                    for o in ctx.answer() {
+                        if let ChoiceOption::Card(c) = o {
+                            if !picks.contains(c)
+                                && (ctx.core.player(attacker).hand.contains(c)
+                                    || ctx.core.player(attacker).equips.contains(c))
+                            {
+                                picks.push(*c);
                             }
-                            let mut extra = n.saturating_sub(1);
-                            while extra > 0 && !ctx.core.player(attacker).hand.is_empty() {
-                                let idx = ctx
-                                    .core
-                                    .rng
-                                    .gen_range(ctx.core.player(attacker).hand.len() as u32)
-                                    as usize;
-                                let c = ctx.core.player(attacker).hand[idx];
-                                ctx.discard_from_hand(attacker, c);
-                                ctx.log(LogEvent::CardDiscarded {
-                                    player: attacker,
-                                    cards: vec![c],
-                                });
-                                extra -= 1;
-                            }
-                            Flow::Done
-                        }
-                        _ => {
-                            // 杀无效：帧 cancelled + 杀归还手牌（Intrinsic
-                            // 阶段按 cancelled 跳过建 ShaResolve）
-                            if let Some(c) = self.card {
-                                ctx.core.table.retain(|x| *x != c);
-                                ctx.core.player_mut(attacker).hand.push(c);
-                            }
-                            let fid = ctx.current_event_frame_id();
-                            if let Some(f) = ctx.res.frame_mut(fid) {
-                                if let EventData::CardUsed(u) = &mut f.data {
-                                    u.cancelled = true;
-                                }
-                            }
-                            Flow::Done
                         }
                     }
+                    if num == 0 || picks.len() != num {
+                        cancel_active_sha_target(ctx, attacker, self.owner);
+                        return Flow::Done;
+                    }
+                    let mut discarded = Vec::with_capacity(picks.len());
+                    for c in picks {
+                        if discard_owned_card_once(ctx, attacker, c) {
+                            discarded.push(c);
+                        }
+                    }
+                    if !discarded.is_empty() {
+                        ctx.emit(EventData::CardsDiscarded {
+                            player: attacker,
+                            cards: discarded,
+                        });
+                    }
+                    Flow::Done
                 }
                 _ => Flow::Done,
             },
@@ -436,338 +393,363 @@ impl HostMachine {
                 }
                 _ => Flow::Done,
             },
-            HostBehavior::WudianYouzhan => match self.stage {
-                HostStage::Act => {
-                    let p = ctx.core.player(self.owner);
-                    let mut options: Vec<ChoiceOption> = p
-                        .hand
-                        .iter()
-                        .copied()
-                        .filter(|c| ctx.catalog.card_kind(*c).is_equip())
-                        .chain(p.equips.iter().copied())
-                        .map(ChoiceOption::Card)
-                        .collect();
-                    options.dedup();
-                    if options.is_empty() {
-                        return Flow::Done;
-                    }
-                    self.stage = HostStage::SelectCard;
-                    Flow::WaitChoice {
-                        observer: self.owner,
-                        spec: ChoiceSpec {
-                            kind: ChoiceKind::SelectCards,
-                            prompt: WUDIAN_YOUZHAN_DISCARD,
-                            options,
-                            min: 1,
-                            max: 1,
-                            allow_cancel: true,
-                        },
-                    }
-                }
-                HostStage::SelectCard => {
-                    let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() else {
-                        return Flow::Done;
-                    };
-                    if ctx.core.player(self.owner).equips.contains(&c) {
-                        ctx.core.player_mut(self.owner).equips.retain(|x| *x != c);
-                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, c);
-                        ctx.to_discard(c);
-                    } else if ctx.core.player(self.owner).hand.contains(&c) {
-                        ctx.discard_from_hand(self.owner, c);
-                    } else {
-                        return Flow::Done;
-                    }
-                    ctx.log(LogEvent::CardDiscarded {
-                        player: self.owner,
-                        cards: vec![c],
-                    });
-                    ctx.emit(EventData::CardsDiscarded {
-                        player: self.owner,
-                        cards: vec![c],
-                    });
-                    if let Some(sha_c) = self.card.take() {
-                        ctx.core.table.retain(|x| *x != sha_c);
-                        ctx.to_discard(sha_c);
-                    }
-                    let fid = ctx.current_event_frame_id();
-                    if let Some(f) = ctx.res.frame_mut(fid) {
-                        if let EventData::CardUsed(u) = &mut f.data {
-                            u.cancelled = true;
-                        }
-                    }
-                    let Some(attacker) = self.target else {
-                        return Flow::Done;
-                    };
-                    let defender = self.targets.first().copied().unwrap_or(self.owner);
-                    if ctx.core.player(attacker).alive {
-                        let hand_shas: Vec<ChoiceOption> = ctx
-                            .core
-                            .player(attacker)
-                            .hand
-                            .iter()
-                            .filter(|x| ctx.catalog.card_kind(**x).is_sha_like())
-                            .copied()
-                            .map(ChoiceOption::Card)
-                            .collect();
-                        if !hand_shas.is_empty() {
-                            self.stage = HostStage::CardsAsk;
-                            return Flow::WaitChoice {
-                                observer: attacker,
-                                spec: ChoiceSpec {
-                                    kind: ChoiceKind::SelectCards,
-                                    prompt: WUDIAN_YOUDISHENRU_SHA,
-                                    options: hand_shas,
-                                    min: 1,
-                                    max: 1,
-                                    allow_cancel: true,
-                                },
-                            };
-                        }
-                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                            Some(defender),
-                            attacker,
-                            1,
-                            crate::event::DamageNature::Normal,
-                            None,
-                        )));
-                    }
-                    Flow::Done
-                }
-                HostStage::CardsAsk => {
-                    let Some(attacker) = self.target else {
-                        return Flow::Done;
-                    };
-                    let defender = self.targets.first().copied().unwrap_or(self.owner);
-                    if let Some(ChoiceOption::Card(new_sha)) = ctx.answer().first().copied() {
-                        if ctx.core.player(attacker).hand.contains(&new_sha) {
-                            ctx.core.player_mut(attacker).hand.retain(|x| *x != new_sha);
-                            ctx.core.table.push(new_sha);
-                            ctx.log(LogEvent::CardPlayed {
-                                player: attacker,
-                                card: new_sha,
-                                targets: vec![defender],
-                                presentation: None,
-                            });
-                            ctx.emit(EventData::CardUsed(crate::machine::card_use(
-                                new_sha,
-                                attacker,
-                                vec![defender],
-                            )));
+            // 诱战（玩点论杀/character/skill.js:422-447）：逐目标 shaBefore 独立检查距离<=1，
+            // 取消仅该目标；真实取消原杀不造成额外伤害；反击杀循环直到 shaDamage 方结束（被闪且停止则受1伤）；去重日志。
+            HostBehavior::WudianYouzhan => loop {
+                match self.stage {
+                    HostStage::Act => {
+                        let Some(attacker) = self.target else {
+                            return Flow::Done;
+                        };
+                        if !ctx.core.player(self.owner).alive
+                            || !ctx.core.player(attacker).alive
+                            || self.targets.is_empty()
+                        {
                             return Flow::Done;
                         }
-                    }
-                    if ctx.core.player(attacker).alive {
-                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                            Some(defender),
-                            attacker,
-                            1,
-                            crate::event::DamageNature::Normal,
-                            None,
-                        )));
-                    }
-                    Flow::Done
-                }
-                _ => Flow::Done,
-            },
-            HostBehavior::WudianChoudu => match self.stage {
-                HostStage::Act => {
-                    let p = ctx.core.player(self.owner);
-                    let mut options: Vec<ChoiceOption> = p
-                        .hand
-                        .iter()
-                        .chain(p.equips.iter())
-                        .copied()
-                        .map(ChoiceOption::Card)
-                        .collect();
-                    options.dedup();
-                    if options.is_empty() {
-                        return Flow::Done;
-                    }
-                    self.stage = HostStage::SelectCard;
-                    Flow::WaitChoice {
-                        observer: self.owner,
-                        spec: ChoiceSpec {
-                            kind: ChoiceKind::SelectCards,
-                            prompt: WUDIAN_CHOUDU_CARD,
-                            options,
-                            min: 1,
-                            max: 1,
-                            allow_cancel: true,
-                        },
-                    }
-                }
-                HostStage::SelectCard => {
-                    let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() else {
-                        return Flow::Done;
-                    };
-                    self.card = Some(c);
-                    let options: Vec<ChoiceOption> =
-                        ctx.core.alive_players().map(ChoiceOption::Player).collect();
-                    if options.is_empty() {
-                        return Flow::Done;
-                    }
-                    self.stage = HostStage::TargetChoice;
-                    Flow::WaitChoice {
-                        observer: self.owner,
-                        spec: ChoiceSpec {
-                            kind: ChoiceKind::SelectPlayers,
-                            prompt: WUDIAN_CHOUDU_TARGET,
-                            options,
-                            min: 1,
-                            max: 1,
-                            allow_cancel: true,
-                        },
-                    }
-                }
-                HostStage::TargetChoice => {
-                    let Some(ChoiceOption::Player(t)) = ctx.answer().first().copied() else {
-                        return Flow::Done;
-                    };
-                    let Some(c) = self.card.take() else {
-                        return Flow::Done;
-                    };
-                    if ctx.core.player(self.owner).equips.contains(&c) {
-                        ctx.core.player_mut(self.owner).equips.retain(|x| *x != c);
-                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, c);
-                        ctx.to_discard(c);
-                    } else if ctx.core.player(self.owner).hand.contains(&c) {
-                        ctx.discard_from_hand(self.owner, c);
-                    } else {
-                        return Flow::Done;
-                    }
-                    ctx.log(LogEvent::CardDiscarded {
-                        player: self.owner,
-                        cards: vec![c],
-                    });
-                    ctx.emit(EventData::CardsDiscarded {
-                        player: self.owner,
-                        cards: vec![c],
-                    });
-                    self.owner = t;
-                    self.targets = vec![t];
-                    self.def_key = crate::content::host::WUDIAN_DIAOBING_KEY.to_string();
-                    self.behavior = HostBehavior::WudianDiaobingCard;
-                    self.stage = HostStage::Act;
-                    Flow::Yield
-                }
-                _ => Flow::Done,
-            },
-            HostBehavior::WudianDiaobingCard => match self.stage {
-                HostStage::Act => {
-                    ctx.start_draw(self.owner, 1);
-                    self.stage = HostStage::DrawSettle;
-                    Flow::Yield
-                }
-                HostStage::DrawSettle => {
-                    let reveal_n = ctx.core.alive_players().count().div_ceil(2).max(1);
-                    self.cards.clear();
-                    for _ in 0..reveal_n {
-                        if let Some(cid) = ctx.core.deck.pop() {
-                            self.cards.push(cid);
+                        let defender = self.targets[0];
+                        let in_dist = defender == self.owner
+                            || ctx.core.computed_distance(ctx.catalog, self.owner, defender) <= 1;
+                        if !ctx.core.player(defender).alive
+                            || !in_dist
+                            || find_active_sha_frame_id(ctx, attacker, defender).is_none()
+                        {
+                            self.targets.remove(0);
+                            continue;
                         }
-                    }
-                    ctx.core.vm_aux.flags.insert(
-                        (self.owner, "u07_diaobing_resolved".to_string()),
-                        reveal_n as u32,
-                    );
-                    ctx.core.vm_aux.flags.insert(
-                        (self.owner, "diaobingqianjiang_resolved".to_string()),
-                        1,
-                    );
-                    self.targets.retain(|p| ctx.core.player(*p).alive);
-                    if self.targets.is_empty() && ctx.core.player(self.owner).alive {
-                        self.targets.push(self.owner);
-                    }
-                    while !self.targets.is_empty() && !self.cards.is_empty() {
-                        let t = self.targets.remove(0);
-                        if ctx.core.player(t).alive && !ctx.core.player(t).hand.is_empty() {
-                            self.target = Some(t);
-                            self.stage = HostStage::CardsAsk;
-                            let options: Vec<ChoiceOption> = ctx
-                                .core
-                                .player(t)
-                                .hand
-                                .iter()
-                                .copied()
-                                .map(ChoiceOption::Card)
-                                .collect();
-                            return Flow::WaitChoice {
-                                observer: t,
-                                spec: ChoiceSpec {
-                                    kind: ChoiceKind::SelectCards,
-                                    prompt: WUDIAN_DIAOBING_SWAP,
-                                    options,
-                                    min: 1,
-                                    max: 1,
-                                    allow_cancel: true,
-                                },
-                            };
+                        let p = ctx.core.player(self.owner);
+                        let mut options: Vec<ChoiceOption> = p
+                            .hand
+                            .iter()
+                            .copied()
+                            .filter(|c| ctx.catalog.card_kind(*c).is_equip())
+                            .chain(p.equips.iter().copied())
+                            .map(ChoiceOption::Card)
+                            .collect();
+                        options.dedup();
+                        if options.is_empty() {
+                            return Flow::Done;
                         }
+                        self.stage = HostStage::SelectCard;
+                        return Flow::WaitChoice {
+                            observer: self.owner,
+                            spec: ChoiceSpec {
+                                kind: ChoiceKind::SelectCards,
+                                prompt: WUDIAN_YOUZHAN_DISCARD,
+                                options,
+                                min: 1,
+                                max: 1,
+                                allow_cancel: true,
+                            },
+                        };
                     }
-                    for rem in self.cards.drain(..) {
-                        ctx.to_discard(rem);
-                    }
-                    if let Some(c) = self.card.take() {
-                        if ctx.core.table.contains(&c) {
-                            ctx.core.table.retain(|&x| x != c);
-                            ctx.to_discard(c);
+                    HostStage::SelectCard => {
+                        let Some(attacker) = self.target else {
+                            return Flow::Done;
+                        };
+                        let Some(defender) = self.targets.first().copied() else {
+                            return Flow::Done;
+                        };
+                        let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() else {
+                            self.targets.remove(0);
+                            self.stage = HostStage::Act;
+                            continue;
+                        };
+                        if find_active_sha_frame_id(ctx, attacker, defender).is_none() {
+                            self.targets.remove(0);
+                            self.stage = HostStage::Act;
+                            continue;
                         }
+                        if !discard_owned_card_once(ctx, self.owner, c) {
+                            self.targets.remove(0);
+                            self.stage = HostStage::Act;
+                            continue;
+                        }
+                        ctx.emit(EventData::CardsDiscarded {
+                            player: self.owner,
+                            cards: vec![c],
+                        });
+                        // 上游 `character/skill.js:428-445`: cost 弃置及 CardsDiscarded/CardsLost 结算完成后，
+                        // 再于 TargetChoice 发出虚拟【诱敌深入】（经无懈窗口，未无懈时在 HuanrenPick 取消原杀）。
+                        self.stage = HostStage::TargetChoice;
+                        return Flow::Yield;
                     }
-                    Flow::Done
-                }
-                HostStage::CardsAsk => {
-                    if let Some(t) = self.target.take() {
-                        if let Some(ChoiceOption::Card(hand_c)) = ctx.answer().first().copied() {
-                            if ctx.core.player(t).hand.contains(&hand_c) && !self.cards.is_empty() {
-                                let market_c = self.cards.remove(0);
-                                ctx.core.player_mut(t).hand.retain(|&x| x != hand_c);
-                                ctx.core.player_mut(t).hand.push(market_c);
-                                self.cards.push(hand_c);
+                    HostStage::TargetChoice => {
+                        let Some(attacker) = self.target else {
+                            return Flow::Done;
+                        };
+                        if self.targets.is_empty() {
+                            self.stage = HostStage::Act;
+                            continue;
+                        }
+                        let defender = self.targets.remove(0);
+                        self.stage = HostStage::Act;
+                        if !ctx.core.player(attacker).alive || !ctx.core.player(defender).alive {
+                            continue;
+                        }
+                        let Some(sha_fid) = find_active_sha_frame_id(ctx, attacker, defender) else {
+                            continue;
+                        };
+                        ctx.core.vm_aux.flags.insert(
+                            (defender, "yd_pending_source".to_string()),
+                            u32::from(attacker) + 1,
+                        );
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((defender, "yd_pending_sha_frame".to_string()), sha_fid);
+                        ctx.emit(EventData::CardUsed(crate::event::CardUseData {
+                            card: None,
+                            player: defender,
+                            targets: Vec::new(),
+                            nature: crate::event::DamageNature::Normal,
+                            use_as: Some(CardKind::Youdishenru),
+                            cancelled: false,
+                        }));
+                        return Flow::Yield;
+                    }
+                    HostStage::HuanrenPick => {
+                        let Some(attacker) = self.target else {
+                            return Flow::Done;
+                        };
+                        let Some(defender) = self.targets.first().copied() else {
+                            return Flow::Done;
+                        };
+                        if let Some(sha_fid) = ctx
+                            .core
+                            .vm_aux
+                            .flags
+                            .remove(&(defender, "yd_pending_sha_frame".to_string()))
+                        {
+                            cancel_active_sha_target(ctx, attacker, defender);
+                            if self.card.is_some() {
+                                ctx.core
+                                    .vm_aux
+                                    .flags
+                                    .insert((defender, format!("yd_cancelled:{sha_fid}")), 1);
                             }
                         }
+                        if let Some(yd) = self.card {
+                            if ctx.core.table.contains(&yd) {
+                                ctx.core.table.retain(|&x| x != yd);
+                                ctx.to_discard(yd);
+                            }
+                        }
+                        if ctx.core.player(attacker).alive && ctx.core.player(defender).alive {
+                            return self.prompt_youdishenru_sha_or_backlash(
+                                ctx, attacker, defender, self.card,
+                            );
+                        }
+                        self.targets.remove(0);
+                        self.stage = HostStage::Act;
                     }
-                    while !self.targets.is_empty() && !self.cards.is_empty() {
-                        let next_t = self.targets.remove(0);
-                        if ctx.core.player(next_t).alive
-                            && !ctx.core.player(next_t).hand.is_empty()
+                    HostStage::CardsAsk => {
+                        let Some(attacker) = self.target else {
+                            return Flow::Done;
+                        };
+                        let Some(defender) = self.targets.first().copied() else {
+                            return Flow::Done;
+                        };
+                        if let Some(ChoiceOption::Card(new_sha)) = ctx.answer().first().copied() {
+                            if ctx.core.player(attacker).alive && ctx.core.player(defender).alive {
+                                if let Some((use_as, is_mutou)) = crate::kernel::sha_card_use_as(
+                                    ctx.core,
+                                    ctx.catalog,
+                                    attacker,
+                                    new_sha,
+                                ) {
+                                    if is_mutou {
+                                        if let Some(def) = ctx.catalog.skill_by_name(
+                                            crate::vocabulary::host::GJ_MUTOU_SKILL_KEY,
+                                        ) {
+                                            if let Some(inst) =
+                                                ctx.core.skills.get_mut(&(attacker, def))
+                                            {
+                                                inst.once_used = true;
+                                            }
+                                        }
+                                    }
+                                    ctx.core
+                                        .vm_aux
+                                        .flags
+                                        .insert((attacker, "vm_va_sha_no_count".to_string()), 1);
+                                    ctx.core.vm_aux.flags.insert(
+                                        (
+                                            attacker,
+                                            format!("youdishenru_sha:{defender}:{new_sha}"),
+                                        ),
+                                        1,
+                                    );
+                                    self.cards = vec![new_sha];
+                                    self.stage = HostStage::DrawSettle;
+                                    ctx.emit(EventData::CardUsed(super::sha_card_use_data(
+                                        ctx,
+                                        attacker,
+                                        new_sha,
+                                        vec![defender],
+                                        use_as,
+                                    )));
+                                    return Flow::Yield;
+                                }
+                            }
+                        }
+                        self.targets.remove(0);
+                        self.stage = HostStage::Act;
+                        if ctx.core.player(attacker).alive {
+                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                                Some(defender),
+                                attacker,
+                                1,
+                                crate::event::DamageNature::Normal,
+                                self.card,
+                            )));
+                            return Flow::Yield;
+                        }
+                    }
+                    HostStage::DrawSettle => {
+                        let Some(attacker) = self.target else {
+                            return Flow::Done;
+                        };
+                        let Some(defender) = self.targets.first().copied() else {
+                            return Flow::Done;
+                        };
+                        let last_sha = self.cards.pop();
+                        let loop_continues = last_sha.is_some_and(|s| {
+                            ctx.core
+                                .vm_aux
+                                .flags
+                                .remove(&(attacker, format!("youdishenru_sha:{defender}:{s}")))
+                                .is_some()
+                        });
+                        if loop_continues
+                            && ctx.core.player(attacker).alive
+                            && ctx.core.player(defender).alive
                         {
-                            self.target = Some(next_t);
-                            self.stage = HostStage::CardsAsk;
-                            let options: Vec<ChoiceOption> = ctx
-                                .core
-                                .player(next_t)
-                                .hand
-                                .iter()
-                                .copied()
-                                .map(ChoiceOption::Card)
-                                .collect();
-                            return Flow::WaitChoice {
-                                observer: next_t,
-                                spec: ChoiceSpec {
-                                    kind: ChoiceKind::SelectCards,
-                                    prompt: WUDIAN_DIAOBING_SWAP,
-                                    options,
-                                    min: 1,
-                                    max: 1,
-                                    allow_cancel: true,
-                                },
-                            };
+                            return self.prompt_youdishenru_sha_or_backlash(
+                                ctx, attacker, defender, self.card,
+                            );
                         }
+                        self.targets.remove(0);
+                        self.stage = HostStage::Act;
                     }
-                    for rem in self.cards.drain(..) {
-                        ctx.to_discard(rem);
-                    }
-                    if let Some(c) = self.card.take() {
-                        if ctx.core.table.contains(&c) {
-                            ctx.core.table.retain(|&x| x != c);
-                            ctx.to_discard(c);
-                        }
-                    }
-                    Flow::Done
+                    _ => return Flow::Done,
                 }
-                _ => Flow::Done,
             },
             _ => unreachable!("behavior routed to the wrong step module"),
         }
     }
+
+    fn prompt_youdishenru_sha_or_backlash(
+        &mut self,
+        ctx: &mut Ctx<'_>,
+        attacker: PlayerId,
+        defender: PlayerId,
+        damage_card: Option<CardId>,
+    ) -> Flow {
+        let shas = crate::kernel::usable_sha_options(ctx.core, ctx.catalog, attacker, defender);
+        if !shas.is_empty() {
+            self.stage = HostStage::CardsAsk;
+            return Flow::WaitChoice {
+                observer: attacker,
+                spec: ChoiceSpec {
+                    kind: ChoiceKind::SelectCards,
+                    prompt: WUDIAN_YOUDISHENRU_SHA,
+                    options: shas,
+                    min: 1,
+                    max: 1,
+                    allow_cancel: true,
+                },
+            };
+        }
+        self.targets.remove(0);
+        self.stage = HostStage::Act;
+        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+            Some(defender),
+            attacker,
+            1,
+            crate::event::DamageNature::Normal,
+            damage_card,
+        )));
+        Flow::Yield
+    }
+}
+
+/// 筑城2 `he` 候选（Step 与 Asks 同源）：手牌 + 装备区去重。
+pub(in crate::content::host) fn wudian_zhucheng_he_options(
+    core: &crate::state::GameStateCore,
+    player: PlayerId,
+) -> Vec<ChoiceOption> {
+    let p = core.player(player);
+    let mut options: Vec<ChoiceOption> = p
+        .hand
+        .iter()
+        .chain(p.equips.iter())
+        .copied()
+        .map(ChoiceOption::Card)
+        .collect();
+    options.dedup();
+    options
+}
+
+pub(super) fn discard_owned_card_once(ctx: &mut Ctx<'_>, owner: PlayerId, c: CardId) -> bool {
+    if ctx.core.player(owner).equips.contains(&c) {
+        ctx.core.player_mut(owner).equips.retain(|x| *x != c);
+        ctx.core.declared_slots.remove(&c);
+        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, owner, c);
+        ctx.to_discard(c);
+        ctx.note_cards_lost(owner, &[c]);
+        ctx.emit(EventData::CardsLost {
+            player: owner,
+            cards: vec![c],
+            origins: vec![crate::event::LostOrigin::Equip],
+        });
+        ctx.log(LogEvent::CardDiscarded {
+            player: owner,
+            cards: vec![c],
+        });
+        true
+    } else if ctx.core.player(owner).hand.contains(&c) {
+        // discard_from_hand 已发射 CardsLost 与 LogEvent::CardDiscarded
+        ctx.discard_from_hand(owner, c);
+        true
+    } else {
+        false
+    }
+}
+
+fn cancel_active_sha_target(ctx: &mut Ctx<'_>, attacker: PlayerId, defender: PlayerId) {
+    if let Some(fid) = find_active_sha_frame_id(ctx, attacker, defender) {
+        let mut discard_sha = None;
+        if let Some(f) = ctx.res.frame_mut(fid) {
+            if let EventData::CardUsed(u) = &mut f.data {
+                u.targets.retain(|&x| x != defender);
+                if u.targets.is_empty() {
+                    u.cancelled = true;
+                    discard_sha = u.card;
+                }
+            }
+        }
+        if let Some(sha_c) = discard_sha {
+            ctx.core.table.retain(|x| *x != sha_c);
+            ctx.to_discard(sha_c);
+        }
+    }
+}
+
+fn find_active_sha_frame_id(
+    ctx: &Ctx<'_>,
+    attacker: PlayerId,
+    defender: PlayerId,
+) -> Option<crate::ids::EventId> {
+    ctx.res.stack.iter().rev().find_map(|f| match &f.data {
+        EventData::CardUsed(u)
+            if !u.cancelled
+                && u.player == attacker
+                && u.targets.contains(&defender)
+                && u.effective_kind(ctx.catalog).is_sha_like() =>
+        {
+            Some(f.id)
+        }
+        _ => None,
+    })
 }

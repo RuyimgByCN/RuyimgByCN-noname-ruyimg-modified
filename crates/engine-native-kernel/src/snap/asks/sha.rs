@@ -12,7 +12,7 @@ pub(super) fn active_sha_ask(
     asking_qinglong: bool,
     asking_fuchou: bool,
     asking_fengxueren: bool,
-    fuchou_card: Option<u32>,
+    _fuchou_card: Option<u32>,
     core: &GameStateCore,
     catalog: &Catalog,
 ) -> Option<ExpectedAsk> {
@@ -52,26 +52,22 @@ pub(super) fn active_sha_ask(
             true,
         ));
     }
-    if asking_qinglong {
-        if fuchou_card.filter(|c| *c != u32::MAX).is_some() {
-            let hand_shas: Vec<ChoiceOption> = core
-                .player(source)
-                .hand
-                .iter()
-                .filter(|c| catalog.card_kind(**c).is_sha_like())
-                .copied()
-                .map(ChoiceOption::Card)
-                .collect();
-            return Some(ask(
-                source,
-                crate::vocabulary::host::WUDIAN_YOUDISHENRU_SHA,
-                ChoiceKind::SelectCards,
-                hand_shas,
-                1,
-                1,
-                true,
-            ));
+    if liuli_stage == 3 {
+        let opts = crate::kernel::ShaResolveMachine::youdishenru_use_options(core, catalog, target);
+        if opts.is_empty() {
+            return None;
         }
+        return Some(ask(
+            target,
+            crate::vocabulary::host::WUDIAN_YOUDISHENRU_USE,
+            ChoiceKind::SelectCards,
+            opts,
+            1,
+            1,
+            true,
+        ));
+    }
+    if asking_qinglong {
         let hand_shas: Vec<ChoiceOption> = core
             .player(source)
             .hand
@@ -220,12 +216,6 @@ pub(super) fn active_sha_ask(
             let kind = catalog.card_kind(c);
             if !tieji_blocks && (kind == CardKind::Shan || (longdan && kind == CardKind::Sha)) {
                 options.push(ChoiceOption::Card(c));
-            }
-        }
-        for c in core.player(target).hand.iter().copied() {
-            if catalog.card_kind(c) == CardKind::Youdishenru {
-                options.push(ChoiceOption::Card(c));
-                break;
             }
         }
         if qingguo && !tieji_blocks {

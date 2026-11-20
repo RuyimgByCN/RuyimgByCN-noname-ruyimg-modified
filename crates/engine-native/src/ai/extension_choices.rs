@@ -11,6 +11,12 @@ pub(super) fn public_attitude(view: &crate::view::PlayerView, seat: u8, target: 
     if target == seat {
         return 10;
     }
+    if let (Some(my_team), Some(target_team)) = (
+        view.players.get(seat as usize).and_then(|p| p.team),
+        view.players.get(target as usize).and_then(|p| p.team),
+    ) {
+        return if my_team == target_team { 6 } else { -5 };
+    }
     let my_role = view.players.get(seat as usize).and_then(|p| p.role);
     let target_role = view.players.get(target as usize).and_then(|p| p.role);
     match my_role {
@@ -213,6 +219,18 @@ pub(super) fn plan_extension_choice_action(
                 choice_id: id,
                 selection: vec![ChoiceOption::Confirm],
             }),
+            Some("zhucheng2") => {
+                let confirm = public_attitude(&input.view, seat, input.view.turn) <= 0;
+                let selection = if confirm {
+                    vec![ChoiceOption::Confirm]
+                } else {
+                    vec![ChoiceOption::Pass]
+                };
+                Some(GameAction::Answer {
+                    choice_id: id,
+                    selection,
+                })
+            }
             _ => None,
         },
         // U06 欢乐卡牌·手里剑（card.js:47-59）：背面朝上且装备旋涡面具时宁可受 1 伤保留面具，否则弃置最低价值装备
@@ -333,6 +351,54 @@ pub(super) fn plan_extension_choice_action(
                 selection,
             })
         }
+        "wudian_diaobing_pick" => {
+            let selection = options
+                .iter()
+                .find(|o| matches!(o, ChoiceOption::Card(_)))
+                .copied()
+                .into_iter()
+                .collect();
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
+        "wudian_diaobing_top" => {
+            let next_seat = ((seat as usize + 1) % input.view.players.len().max(1)) as u8;
+            let selection = if public_attitude(&input.view, seat, next_seat) > 0 {
+                options
+                    .iter()
+                    .find(|o| matches!(o, ChoiceOption::Card(_)))
+                    .copied()
+                    .into_iter()
+                    .collect()
+            } else {
+                Vec::new()
+            };
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
+        "wudian_zhucheng_guard" => {
+            let mut ranked: Vec<(i64, ChoiceOption)> = options
+                .iter()
+                .filter_map(|o| match o {
+                    ChoiceOption::Card(c) => Some((extension_card_value(catalog, input, *c), *o)),
+                    _ => None,
+                })
+                .collect();
+            ranked.sort_by_key(|(v, _)| *v);
+            let selection: Vec<ChoiceOption> = if min > 0 && ranked.len() >= min {
+                ranked.into_iter().take(min).map(|(_, o)| o).collect()
+            } else {
+                Vec::new()
+            };
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
         "wudian_youzhan_discard" | "wudian_choudu_card" | "wudian_diaobing_swap" => {
             let best = options
                 .iter()
@@ -372,6 +438,28 @@ pub(super) fn plan_extension_choice_action(
                 selection,
             })
         }
+        "wudian_diaobing_dir" => {
+            // 玩点论杀 card/card.js:19-24：下家友方选逆时针 (Tag(1))，否则选顺时针 (Tag(0))
+            let n = input.view.players.len() as u8;
+            let next_alive = (1..n)
+                .map(|off| (seat + off) % n)
+                .find(|&p| input.view.players.get(p as usize).is_some_and(|s| s.alive))
+                .unwrap_or(seat);
+            let tag = if public_attitude(&input.view, seat, next_alive) > 0 {
+                1
+            } else {
+                0
+            };
+            let pick = if options.contains(&ChoiceOption::Tag(tag)) {
+                ChoiceOption::Tag(tag)
+            } else {
+                options.first().copied().unwrap_or(ChoiceOption::Tag(0))
+            };
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection: vec![pick],
+            })
+        }
         "wudian_liduan_give" => {
             if allow_cancel {
                 return Some(GameAction::Answer {
@@ -395,13 +483,35 @@ pub(super) fn plan_extension_choice_action(
                 selection,
             })
         }
-        "wudian_youdishenru_sha" => {
-            let selection = options
+        "wudian_youdishenru_use" => {
+            let att = public_attitude(&input.view, seat, input.view.turn);
+            let selection = if att <= 0 {
+                options
+                    .iter()
+                    .find(|o| matches!(o, ChoiceOption::Card(_)))
+                    .copied()
+                    .into_iter()
+                    .collect()
+            } else {
+                Vec::new()
+            };
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
+        "wudian_youdishenru_sha" | "wudian_fuchou2_sha" => {
+            let best = options
                 .iter()
-                .find(|o| matches!(o, ChoiceOption::Card(_)))
-                .copied()
-                .into_iter()
-                .collect();
+                .filter_map(|o| match o {
+                    ChoiceOption::Card(c) => Some(*c),
+                    _ => None,
+                })
+                .min_by_key(|&c| extension_card_value(catalog, input, c));
+            let selection = match best {
+                Some(c) => vec![ChoiceOption::Card(c)],
+                None => Vec::new(),
+            };
             Some(GameAction::Answer {
                 choice_id: id,
                 selection,

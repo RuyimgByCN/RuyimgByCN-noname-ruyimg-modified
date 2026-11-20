@@ -346,7 +346,7 @@ const bundledRaw: Record<
   },
   "wudian-upstream-noname": {
     packageJson: package13_raw,
-    contentHash: "0be5dc96a54db0a36893835a791cd49cf55e65740269d108b3632846215e845e",
+    contentHash: "50f279c395f6206136b74c2d3dbca89efdb2a04a4d0e533f8fd63c207db33692",
     assets: { "assets/cards.json": data13_cards_raw },
   },
   "wuxing-upstream-liuli": {

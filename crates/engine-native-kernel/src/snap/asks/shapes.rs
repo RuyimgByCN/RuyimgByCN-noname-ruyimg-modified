@@ -178,12 +178,15 @@ pub(in crate::snap) fn dying_save_options(
     let mut options = vec![ChoiceOption::Pass];
     let p = core.player(responder);
     for &c in &p.hand {
-        if is_tao_like(core, catalog, responder, c, dying) {
+        if !crate::kernel::jinyan_blocks_black_trick(core, catalog, responder, c)
+            && is_tao_like(core, catalog, responder, c, dying)
+        {
             options.push(ChoiceOption::Card(c));
         }
     }
     for c in catalog.player_vm_view_as_extra_cards(core, responder, false, None) {
-        if is_tao_like(core, catalog, responder, c, dying)
+        if !crate::kernel::jinyan_blocks_black_trick(core, catalog, responder, c)
+            && is_tao_like(core, catalog, responder, c, dying)
             && !options.contains(&ChoiceOption::Card(c))
         {
             options.push(ChoiceOption::Card(c));
@@ -198,38 +201,12 @@ pub(in crate::snap) fn response_kind_options(
     responder: PlayerId,
     need: CardKind,
 ) -> Vec<ChoiceOption> {
-    let hand_banned = (need.is_basic_kind() || need.is_equip())
-        && core
-            .vm_aux
-            .flags
-            .get(&(responder, "mbcmfangzhu_ban".to_string()))
-            .copied()
-            .unwrap_or(0)
-            > 0;
     let mut options = vec![ChoiceOption::Pass];
-    let p = core.player(responder);
-    if !hand_banned {
-        for &c in &p.hand {
-            if catalog.card_kind(c) == need
-                || catalog
-                    .find_player_vm_view_as(core, responder, c, false, Some(need))
-                    .is_some()
-            {
-                options.push(ChoiceOption::Card(c));
-            }
-        }
-    }
-    for c in catalog.player_vm_view_as_extra_cards(core, responder, false, Some(need)) {
-        if !options.contains(&ChoiceOption::Card(c)) {
-            options.push(ChoiceOption::Card(c));
-        }
-    }
-    options.retain(|o| {
-        !matches!(o, ChoiceOption::Card(c)
-            if crate::rvm_bridge::modifiers::d34_flags::is_ducai3_forbidden(
-                core, catalog, responder, *c
-            ))
-    });
+    options.extend(
+        crate::kernel::response_kind_cards_core(core, catalog, responder, need)
+            .into_iter()
+            .map(ChoiceOption::Card),
+    );
     options
 }
 

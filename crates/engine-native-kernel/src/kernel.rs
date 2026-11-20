@@ -80,7 +80,10 @@ pub use equipment::{grant_equip_skills, revoke_equip_skills};
 mod intrinsic;
 pub use intrinsic::*;
 mod combat_rules;
-pub use combat_rules::tao_futai2_banned;
+pub use combat_rules::{
+    is_black_trick_card, jinyan_blocks_black_trick, sha_card_use_as, tao_futai2_banned,
+    usable_sha_options,
+};
 pub(crate) use combat_rules::*;
 mod sha;
 pub use sha::*;

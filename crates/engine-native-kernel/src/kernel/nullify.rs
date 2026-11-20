@@ -171,7 +171,7 @@ pub struct NullifyWindowMachine {
 
 impl NullifyWindowMachine {
     #[allow(clippy::too_many_arguments)]
-    pub(crate) fn new(
+    pub fn new(
         card: crate::ids::CardId,
         source: PlayerId,
         nullified: bool,
@@ -261,6 +261,16 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                         ctx.to_discard(card);
                         ctx.core.table.retain(|c| *c != card);
                     }
+                    if self.effect.is_none() {
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .remove(&(self.source, "diaobing_wuxie_active".to_string()));
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((self.source, "diaobing_wuxie_nullified".to_string()), 1);
+                    }
                     ctx.log(LogEvent::CardNullified {
                         card: self.card,
                         player: self.source,
@@ -317,6 +327,14 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
             }
             return flow;
         }
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(self.source, "diaobing_wuxie_active".to_string()));
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(self.source, "diaobing_wuxie_nullified".to_string()));
         Flow::Done
     }
 }

@@ -3,8 +3,17 @@
 use super::*;
 
 impl ShaResolveMachine {
-    /// 杀结算的挂起应答恢复（复仇、霰弹、掠影与各武器/防具询问）：有待恢复的询问时返回本步结果。
+    /// 杀结算的挂起应答恢复（复仇、诱敌深入 shaBefore、霰弹、掠影与各武器/防具询问）：有待恢复的询问时返回本步结果。
     pub(super) fn resume_pending_answer(&mut self, ctx: &mut Ctx<'_>) -> Option<Flow> {
+        if self.has_sha_trigger_park(ctx) {
+            return Some(Flow::Yield);
+        }
+        if self.take_sha_end_settled(ctx) {
+            return Some(self.advance_target(ctx));
+        }
+        if let Some(is_damage) = self.take_sha_pending_end(ctx) {
+            return Some(self.finish_target_sha_end(ctx, is_damage));
+        }
         // 复仇（玩点论杀批 14，规则 v279）：成为杀目标时交出 1 张牌（"he"）取消
         // 该杀（上游 target shaBefore direct chooseCard("he") 同面；所选牌归来
         // 源+标记来源供 fuchou2 回合末结算；杀回来源手=上游 cancel 回手
@@ -55,25 +64,120 @@ impl ShaResolveMachine {
                 _ => None,
             });
             if let Some(c) = picked {
+                // 复仇（玩点论杀/character/skill.js:534-544）：取消该目标的杀并交出所选牌，
+                // 原【杀】不退回来源手牌（全部目标结算/取消后由 advance_target 弃置）；
+                // fuchou2 标记集按 `.add()` 去重。
                 self.fuchou_card = Some(c);
-                ctx.core.table.retain(|x| Some(*x) != self.card);
-                ctx.core.player_mut(self.source).hand.extend(self.card);
                 if ctx.core.player(t).equips.contains(&c) {
                     ctx.core.player_mut(t).equips.retain(|x| *x != c);
+                    ctx.core.declared_slots.remove(&c);
                     crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+                    ctx.note_cards_lost(t, &[c]);
+                    ctx.emit(EventData::CardsLost {
+                        player: t,
+                        cards: vec![c],
+                        origins: vec![crate::event::LostOrigin::Equip],
+                    });
+                    ctx.core.player_mut(self.source).hand.push(c);
+                    ctx.emit(EventData::CardsMoved {
+                        cards: vec![c],
+                        from: t,
+                        to: self.source,
+                    });
+                    ctx.emit(EventData::CardsGiven {
+                        giver: t,
+                        recipient: self.source,
+                        cards: vec![c],
+                    });
+                    ctx.log(LogEvent::CardsGiven {
+                        from: t,
+                        to: self.source,
+                        cards: vec![c],
+                    });
                 } else {
-                    ctx.core.player_mut(t).hand.retain(|x| *x != c);
+                    ctx.give_hand_card(t, self.source, c);
                 }
-                ctx.core.player_mut(self.source).hand.push(c);
-                ctx.core.player_mut(t).fuchou_marked.push(self.source);
-                ctx.log(LogEvent::CardsGiven {
-                    from: t,
-                    to: self.source,
-                    cards: vec![c],
-                });
-                return Some(Flow::Done); // 杀整体取消
+                if !ctx.core.player(t).fuchou_marked.contains(&self.source) {
+                    ctx.core.player_mut(t).fuchou_marked.push(self.source);
+                }
+                return Some(self.advance_target(ctx));
             } else {
                 self.fuchou_card = Some(u32::MAX);
+            }
+        }
+        // g_youdishenru（玩点论杀 card/card.js:169-202, card/skill.js:16-36）：
+        // `shaBefore` 时点（早于铁骑/仁王盾/八卦/雌雄/霰弹/狩猎）：询问是否使用【诱敌深入】，
+        // 以正式 `CardUsed` 入栈并开启 `_wuxie`（NullifyWindow）；若被无懈则原杀继续结算。
+        if !self.asked && !self.armor_judged {
+            let sha_fid = self
+                .current_sha_frame_id(ctx)
+                .unwrap_or_else(|| ctx.current_frame_id());
+            if self.liuli_stage == 3 {
+                self.liuli_stage = 0;
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((self.target, format!("yd_tried:{sha_fid}")), 1);
+                if let Some(ChoiceOption::Card(yd)) = ctx.answer().first().copied() {
+                    if ctx.core.player(self.target).hand.contains(&yd)
+                        && ctx.catalog.card_kind(yd) == CardKind::Youdishenru
+                        && !crate::kernel::jinyan_blocks_black_trick(
+                            ctx.core,
+                            ctx.catalog,
+                            self.target,
+                            yd,
+                        )
+                    {
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((self.target, "yd_pending_source".to_string()), u32::from(self.source) + 1);
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((self.target, "yd_pending_sha_frame".to_string()), sha_fid);
+                        ctx.emit(EventData::CardUsed(crate::machine::card_use_as(
+                            yd,
+                            self.target,
+                            Vec::new(),
+                            Some(CardKind::Youdishenru),
+                        )));
+                        return Some(Flow::Yield);
+                    }
+                }
+            } else if ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(self.target, format!("yd_cancelled:{sha_fid}")))
+                .is_some()
+            {
+                return Some(self.advance_target(ctx));
+            } else if !ctx
+                .core
+                .vm_aux
+                .flags
+                .contains_key(&(self.target, format!("yd_tried:{sha_fid}")))
+                && ctx.core.player(self.target).alive
+                && !self.is_sha_direct_hit(ctx)
+                && !ctx.catalog.blocks_all_cards(ctx.core, self.target)
+                && !ctx.core.player(self.target).fengyin_active
+            {
+                let yd_opts = Self::youdishenru_use_options(ctx.core, ctx.catalog, self.target);
+                if !yd_opts.is_empty() {
+                    self.liuli_stage = 3;
+                    return Some(Flow::WaitChoice {
+                        observer: self.target,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: crate::vocabulary::host::WUDIAN_YOUDISHENRU_USE,
+                            options: yd_opts,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    });
+                }
             }
         }
         // 寒冰剑（逐技对照批一，规则 v75）：目标自选弃牌恢复——上游
@@ -305,46 +409,6 @@ impl ShaResolveMachine {
         // 以其重启对同一目标的杀结算（防/闪/贯石斧/麒麟弓流程全部重走）。
         if self.asking_qinglong {
             self.asking_qinglong = false;
-            if let Some(yd) = self.fuchou_card.take().filter(|c| *c != u32::MAX) {
-                let outer_fid = self.current_sha_frame_id(ctx);
-                if let Some(ChoiceOption::Card(new_sha)) = ctx.answer().first().copied() {
-                    if ctx.core.player(self.source).hand.contains(&new_sha) {
-                        ctx.core
-                            .player_mut(self.source)
-                            .hand
-                            .retain(|c| *c != new_sha);
-                        ctx.core.table.push(new_sha);
-                        ctx.log(LogEvent::CardPlayed {
-                            player: self.source,
-                            card: new_sha,
-                            targets: vec![self.target],
-                            presentation: None,
-                        });
-                        ctx.emit(EventData::CardUsed(crate::machine::card_use(
-                            new_sha,
-                            self.source,
-                            vec![self.target],
-                        )));
-                        if Self::has_active_bolehuiyan_pred(ctx) {
-                            return Some(self.defer_sha_end(ctx, outer_fid, false));
-                        }
-                        return Some(Flow::Done);
-                    }
-                }
-                if ctx.core.player(self.source).alive {
-                    ctx.emit(EventData::Damage(damage_data_with(
-                        Some(self.target),
-                        self.source,
-                        1,
-                        crate::event::DamageNature::Normal,
-                        Some(yd),
-                    )));
-                    if Self::has_active_bolehuiyan_pred(ctx) {
-                        return Some(self.defer_sha_end(ctx, outer_fid, false));
-                    }
-                }
-                return Some(Flow::Done);
-            }
             if let Some(ChoiceOption::Card(new_sha)) = ctx.answer().first().copied() {
                 if ctx.core.player(self.source).hand.contains(&new_sha) {
                     ctx.discard_from_hand(self.source, new_sha);
@@ -365,6 +429,14 @@ impl ShaResolveMachine {
                             .vm_aux
                             .flags
                             .remove(&(self.source, format!("sha_pending_end:{fid}")));
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .remove(&(self.target, format!("yd_tried:{fid}")));
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .remove(&(self.target, format!("yd_cancelled:{fid}")));
                     }
                     self.shoulie_direct = false;
                     self.card = Some(new_sha);
@@ -375,6 +447,8 @@ impl ShaResolveMachine {
                     self.liuli_done = false;
                     self.liuli_stage = 0;
                     self.liuli_card = None;
+                    self.asking_fuchou = false;
+                    self.fuchou_card = None;
                     return Some(Flow::Yield);
                 }
             }

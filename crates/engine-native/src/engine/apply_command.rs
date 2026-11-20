@@ -88,7 +88,11 @@ pub(super) fn apply_command(
             {
                 return Err(RejectReason::SkillDisabled);
             }
-            if inst.once_used {
+            if inst.once_used
+                || (def.behavior.as_host_behavior()
+                    == Some(crate::content::host::HostBehavior::WudianChoudu)
+                    && state.core.vm_aux.once_count(actor, 4, def.name) > 0)
+            {
                 return Err(RejectReason::SkillAlreadyUsed);
             }
             let qctx = crate::catalog::QueryCtx {

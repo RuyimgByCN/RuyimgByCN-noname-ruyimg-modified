@@ -401,6 +401,8 @@ impl ShaResolveMachine {
             self.asking_qilin = false;
             self.asking_guanshi = false;
             self.asking_fengxueren = false;
+            self.asking_fuchou = false;
+            self.fuchou_card = None;
             self.hanbing_pending = 0;
             return Flow::Yield;
         }
@@ -580,9 +582,81 @@ impl ShaResolveMachine {
 }
 
 impl ShaResolveMachine {
+    /// 诱敌深入（玩点论杀 card/skill.js:16-36）：`shaBefore` 阶段可用的实体【诱敌深入】候选（受 `jinyan` 黑锦囊禁用制约）。
+    pub(crate) fn youdishenru_use_options(
+        core: &crate::state::GameStateCore,
+        catalog: &crate::catalog::Catalog,
+        target: PlayerId,
+    ) -> Vec<ChoiceOption> {
+        core.player(target)
+            .hand
+            .iter()
+            .copied()
+            .filter(|&c| {
+                catalog.card_kind(c) == CardKind::Youdishenru
+                    && !crate::kernel::jinyan_blocks_black_trick(core, catalog, target, c)
+            })
+            .map(ChoiceOption::Card)
+            .collect()
+    }
+
+    pub(super) fn is_sha_direct_hit(&self, ctx: &Ctx<'_>) -> bool {
+        if self.shoulie_direct || self.baolei_sentinel(ctx) {
+            return true;
+        }
+        let red = self.card.is_some_and(|c| {
+            matches!(
+                ctx.catalog.cards[c as usize].suit,
+                crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+            )
+        });
+        let red_direct = red
+            && (ctx
+                .catalog
+                .skill_by_name(crate::vocabulary::names::BOSS_FENTIAN)
+                .is_some_and(|def| ctx.core.has_skill(self.source, def))
+                || ctx
+                    .catalog
+                    .skill_by_name(crate::vocabulary::host::U08_YXS_FANJI2_KEY)
+                    .is_some_and(|def| ctx.core.has_skill(self.source, def))
+                || ctx
+                    .catalog
+                    .skill_by_name("poyue")
+                    .is_some_and(|def| ctx.core.has_skill(self.source, def))
+                || ctx
+                    .catalog
+                    .skill_by_name("lianwu")
+                    .is_some_and(|def| ctx.core.has_skill(self.source, def)));
+        if red_direct {
+            return true;
+        }
+        let sbzhaxiang = ctx
+            .catalog
+            .skill_by_name(crate::vocabulary::host::L27_SBZHAXIANG_KEY)
+            .is_some_and(|def| ctx.core.has_skill(self.source, def))
+            && {
+                let lost = (ctx.core.player(self.source).max_hp as i64
+                    - ctx.core.player(self.source).hp as i64)
+                    .max(0) as u32;
+                ctx.core.turn.cards_used_play_phase <= lost
+            };
+        let lingshi = ctx
+            .catalog
+            .skill_by_name("lingshi")
+            .is_some_and(|def| ctx.core.has_skill(self.source, def))
+            && ctx.core.player(self.source).equips.iter().any(|c| {
+                matches!(
+                    ctx.catalog.card_slot_of(ctx.core, *c),
+                    Some(crate::catalog::EquipSlot::Weapon)
+                        | Some(crate::catalog::EquipSlot::Armor)
+                )
+            });
+        sbzhaxiang || lingshi
+    }
+
     /// 堡垒哨卫（U05 ow，规则 v125）：来源持 bshaowei 且哨卫模式——
     /// 杀无视距离/防具、无次数限制、不可闪避。
-    fn baolei_sentinel(&self, ctx: &Ctx<'_>) -> bool {
+    pub(super) fn baolei_sentinel(&self, ctx: &Ctx<'_>) -> bool {
         ctx.catalog
             .skill_by_name(crate::vocabulary::host::WUDIAN_BAOLEI_KEY)
             .map(|def| {

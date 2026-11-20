@@ -226,6 +226,21 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
         amount: d.amount.max(0) as u32,
         redirected_from: d.redirect_chain.clone(),
         card: d.card, presentation: None });
+    if let (Some(src), Some(sha_c)) = (d.source, d.card) {
+        let is_sha = ctx
+            .core
+            .declared_kinds
+            .get(&sha_c)
+            .copied()
+            .unwrap_or_else(|| ctx.catalog.card_kind(sha_c))
+            .is_sha_like();
+        if is_sha {
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(src, format!("youdishenru_sha:{}:{sha_c}", d.target)));
+        }
+    }
     if d.nature != crate::event::DamageNature::Normal && ctx.core.player(d.target).linked {
         ctx.core.player_mut(d.target).linked = false;
         ctx.log(LogEvent::Linked {

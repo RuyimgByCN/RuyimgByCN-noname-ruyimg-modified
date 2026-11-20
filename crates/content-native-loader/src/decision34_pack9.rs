@@ -159,6 +159,8 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
                         interned.push("fuchou2");
                     }
                 }
+                // 保留静态共存内容锁（`u01-dddanzhi-pending-v107.ngsa`）；正式包在
+                // `lib.rs` / `attach_formal_package_upstream_rules` 处保持 `wdb_xizhenxihong` 不含 `jianbi`。
                 if sym == "wdb_xizhenxihong" && !interned.contains(&"jianbi") {
                     interned.push("jianbi");
                 }
@@ -485,9 +487,6 @@ pub fn attach_formal_package_upstream_rules(
                         interned.push("fuchou2");
                     }
                 }
-                if sym == "wdb_xizhenxihong" && !interned.contains(&"jianbi") {
-                    interned.push("jianbi");
-                }
                 extra_generals.push(ExtensionGeneral {
                     name: names::intern(sym.to_string()),
                     faction,
@@ -546,8 +545,10 @@ pub fn attach_formal_package_upstream_rules(
             }
         }
         ("upstream-noname", "wudian") => {
-            if !had_cards {
-                push_card("diaobingqianjiang", CardKind::Wuzhong, Suit::Spade, 3);
+            if !pack.cards.iter().any(|c| c.name.contains("diaobingqianjiang")) {
+                // 玩点论杀 card/list.js:25-26：红桃 4、方片 4 两张实体【调兵遣将】
+                push_card("wd_diaobingqianjiang_1", CardKind::Wuzhong, Suit::Heart, 4);
+                push_card("wd_diaobingqianjiang_2", CardKind::Wuzhong, Suit::Diamond, 4);
             }
             push_skill("diaobingqianjiang", super::DIAOBINGQIANJIANG_ID);
             push_skill("duoqi", super::DUOQI_ID);

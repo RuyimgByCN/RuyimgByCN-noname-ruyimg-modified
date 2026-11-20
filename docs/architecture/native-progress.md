@@ -9,6 +9,14 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-21 Batch 1.4（U07 玩点论杀）规则修复、独立复核与本地收口（待提交／发布）
+
+- **基线与版本**：HEAD `08ad0b37a447a21f515da955204923bdaf3e6aa8`（Batch 1.3 CI Run `44735674711` Attempt 1 仅 `perf-macos-latest` `start-hash-p50` 宿主噪声失败、Attempt 2 `10/10 success`，两行已并入 [CI 运行台账](../operations/evidence/ci-runs.md)）合入 `swarm/author-u07-l10` `63c0411ddf3f0189395f224cb571a050c5d8588e`；版本与锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 项标准 golden 哈希与 `u01-dddanzhi-pending-v107.ngsa` 静态内容锁不变；`packages/extensions/wudian-upstream-noname/assets/cards.json` 补入两张实体【调兵遣将】（`14 -> 16` 张）并同步 `package.npack.json` 与 `bundledNativePackages.ts` blake3 哈希 `50f279c395f6206136b74c2d3dbca89efdb2a04a4d0e533f8fd63c207db33692`。
+- **修复与复核**：完成 `U07` 全部 9 项已知差异修复及三轮独立核验，未参与实现的复核 agent `5a16b8ee-86c7-497d-97bf-3ba0a35aa54b` 审查结果 **14 PASS / 0 FAIL / `APPROVE`**（9 项升级 + 5 项抽样重审；其余 22 项沿用 `2026-11-12` `已复核等价`）。
+- **清单计数与整包签署**：[inventory_status.json](../migration/g0/inventory_status.json) 更新为 **已复核等价 652／简化近似 3,772／缺失 0**（合计 4,424）：`U07` **`36 / 0 / 0`**（`+9`）；**整包八项签署仍 `0/37`**。
+- **本地验证实测**：`python3 -B scripts/check-source-lines.py`（9,384 文件）／`check-native-layering.py`（0 上行引用）／`check_doc_line_refs.py --strict`（10,889 引用 0 越界）／`recount_g0.py`（37 来源 0 缺失）均 exit 0；3 crate `2,509/0/6`（含 `u07_` `26` passed、`u01_dddanzhi_regression` `20` passed、14 golden 全通过）、5 crate `-D warnings` 零警告、`wasm32` exit 0；修复 `apps/game-server/tests/native_product_path.rs:87,108-109` 旧值 `14 -> 16`（10/0）后独立复跑 `--workspace --no-fail-fast` **`7,905/0/8`**、`conformance` **`19/19`**、`desktop-client` **`20/0/1`**；`web-client` `typecheck`＋`test`（**489/0**）＋`build:native`＋`smoke:native`（**83/0**）＋`check-native-wasm-cross-target.py`＋`cross-target-hash.sh`＋`build` 均通过，全量 `preflight.py` **22/22** 通过，详见 [Batch 1.4 复核摘要](../operations/evidence/2026-11-21-batch1-4-u07/README.md)。
+- **剩余范围**：队列第 1 项续做 `L29`/`L10`/`U01` 修复与余源实际运行对照及自动选择条目；队列第 2–11 项待做。
+
 ### 2026-11-20 Batch 1.3（U08 英雄杀）规则修复、独立复核与本地收口（待提交／发布）
 
 - 基线 HEAD `748e2974e6f63067e7770278f1f90b5138a60009`（Batch 1.2 `L28` 已按裁决 25 发布，exact-head CI Run `44700016882` Attempt 1 10/10 `success`，其 [CI 台账](../operations/evidence/ci-runs.md) 登记随本批一并入库）合入 `swarm/author-u08-l28` `00c6c7412cc7e54484f11176649dc57dd62409f5`；版本门禁零变更（规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`），14 项标准 golden 哈希与 `u01-dddanzhi-pending-v107.ngsa` 静态内容锁 `9_097_112_637_251_845_257` 不变。

@@ -64,6 +64,8 @@ pub struct PlayerCellView {
     /// 上游 `dieAfter`）成员可见；其余存活非主公成员的他人身份为 `None`
     /// （信息隔离）。非身份局恒 `None`。
     pub role: Option<Role>,
+    /// 对决 2v2 阵营下标（仅 `GameMode::Versus` 有值；公开信息；非对决模式为 `None`）。
+    pub team: Option<u8>,
 }
 
 /// R05-H（§8）单逻辑身份的四角色语义分项：`None`=槽不存在，

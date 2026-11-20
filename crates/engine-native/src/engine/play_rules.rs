@@ -54,25 +54,10 @@ pub(super) fn common_play_validation(
             return Err(RejectReason::CardLimit);
         }
     }
-    // 禁言（玩点论杀西真夕红，玩点论杀续批）：体力 ≤2 时黑色锦囊
-    // 禁用（查询面，往事封禁先例同位；登记差异：上游四面
-    // cardEnabled/Usable/Respondable/Savable，原生仅使用面）
-    if core.player(actor).hp <= 2 {
-        let jinyan = catalog
-            .skill_by_name(crate::content::host::WUDIAN_JINYAN_KEY)
-            .map(|d| core.has_skill(actor, d))
-            .unwrap_or(false);
-        let kind = catalog.card_kind(card);
-        let black_trick = !kind.is_basic_kind()
-            && kind.equip_slot().is_none()
-            && kind.is_basic_trick_or_equip()
-            && matches!(
-                catalog.cards[card as usize].suit,
-                crate::catalog::Suit::Spade | crate::catalog::Suit::Club
-            );
-        if jinyan && black_trick {
-            return Err(RejectReason::CardLimit);
-        }
+    // 禁言（玩点论杀/character/skill.js:448-507）：体力 <= 2 且未封技时禁用黑色锦囊（含延锦囊），
+    // 可通过 jinyan 将手中黑色锦囊当作【杀】使用（无目标则不能作杀也禁作锦囊 -> CardLimit）。
+    if crate::kernel::jinyan_blocks_black_trick(core, catalog, actor, card) && targets.is_empty() {
+        return Err(RejectReason::CardLimit);
     }
     let actor_p = core.player(core.turn.current);
     let in_hand = actor_p.hand.contains(&card);
@@ -146,6 +131,10 @@ pub(super) fn play_kind(
         .unwrap_or(false);
     if liangce_hit && kind.is_basic_kind() {
         kind = CardKind::Wugu;
+    }
+    // 禁言（玩点论杀/character/skill.js:471-487）：体力 <= 2 时，手牌黑色锦囊（含黑乐不思蜀）可当作【杀】使用
+    if !targets.is_empty() && crate::kernel::jinyan_blocks_black_trick(core, catalog, actor, card) {
+        kind = CardKind::Sha;
     }
     let mut mark_mutoumianju = false;
     // view-as 转化（N08 官方迁移）：

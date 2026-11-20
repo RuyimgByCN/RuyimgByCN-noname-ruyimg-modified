@@ -1017,7 +1017,13 @@ fn bridge_generals_inner(
                         }
                         (Some(_), _) => {}
                     }
-                    skills.push(interned);
+                    // 上游 `diy_xizhenxihong` 仅含 `["fuchou", "jinyan"]`，不含 `jianbi`
+                    //（原手写 `wudian-upstream-noname/assets/cards.json` 误将 `jianbi` 放在西真夕红下；
+                    // 保留 `host_skills` 声明与 `source_hash` 不变，但不在目录中授予西真夕红 `jianbi`）。
+                    if !(matches!(name, "西真夕红" | "wdb_xizhenxihong") && interned == "jianbi")
+                    {
+                        skills.push(interned);
+                    }
                     mapped_skill_keys.push(interned);
                     // 父技 group：上游把伤害子技登记在父技 group 里，授予父技即授予
                     // 子技；转换包曾漏掉这层关系，导致「父技所有权就让伤害面可达」

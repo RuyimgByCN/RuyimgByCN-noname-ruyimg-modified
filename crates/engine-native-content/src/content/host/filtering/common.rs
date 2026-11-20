@@ -845,7 +845,7 @@ impl HostSkillBehavior {
                 if !u.cancelled
                     && {
                         let k = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
-                        k == CardKind::Sha
+                        k.is_sha_like()
                     }
                     && u.targets.contains(&owner)
                     && !ctx.state.player(owner).zhucheng.is_empty()),
@@ -1010,12 +1010,6 @@ impl HostSkillBehavior {
                     {
                         return false;
                     }
-                    let t0 = u.targets[0];
-                    if !ctx.state.player(t0).alive {
-                        return false;
-                    }
-                    let in_range =
-                        t0 == owner || ctx.state.computed_distance(ctx.catalog, owner, t0) <= 1;
                     let has_equip = !ctx.state.player(owner).equips.is_empty()
                         || ctx
                             .state
@@ -1023,7 +1017,12 @@ impl HostSkillBehavior {
                             .hand
                             .iter()
                             .any(|c| ctx.catalog.card_kind(*c).is_equip());
-                    in_range && has_equip
+                    has_equip
+                        && u.targets.iter().any(|&t| {
+                            ctx.state.player(t).alive
+                                && (t == owner
+                                    || ctx.state.computed_distance(ctx.catalog, owner, t) <= 1)
+                        })
                 }
                 _ => false,
             },

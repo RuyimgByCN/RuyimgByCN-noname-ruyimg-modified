@@ -424,7 +424,8 @@ fn u08_r2_bolehuiyan_hanbing_fengxueren_damage_order_youdishenru_nested() {
         "bolehuiyan3 (shaDamage) must settle AFTER DamageDealt ({dmg_pos} < {bhy_pos})"
     );
 
-    // 2d) `youdishenru` settles `bolehuiyan2` (`skill.js:2477-2494`), and nested `Sha#2` settles `bolehuiyan` (`1h`):
+    // 2d-1) Upstream `g_youdishenru` (`玩点论杀/card/skill.js:16-36`) triggers at `shaBefore` BEFORE `bolehuiyan` (`shaBegin`):
+    // canceling `sha_a` at `shaBefore` skips `shaBegin`/`shaEnd`; counter-`sha_b` enters its own `shaBegin` (`bolehuiyan`):
     let wd_pack = load_pack("wudian-upstream-noname");
     let mut e_yd = new_u08_engine_with_extra(890006, 4, &wd_pack);
     for p in 0..4 {
@@ -434,6 +435,7 @@ fn u08_r2_bolehuiyan_hanbing_fengxueren_damage_order_youdishenru_nested() {
     let sha_a = give_card_matching(&mut e_yd, 1, |_, m| m.kind == CardKind::Sha);
     let sha_b = give_card_matching(&mut e_yd, 1, |_, m| m.kind == CardKind::Sha);
     let yd = give_card_matching(&mut e_yd, 2, |_, m| m.kind == CardKind::Youdishenru);
+    let _keep_2 = give_card_matching(&mut e_yd, 2, |_, m| m.kind == CardKind::Tao);
     e_yd.debug_set_turn(1, Phase::Play, 1);
     let _ = submit(
         &mut e_yd,
@@ -443,36 +445,80 @@ fn u08_r2_bolehuiyan_hanbing_fengxueren_damage_order_youdishenru_nested() {
             targets: vec![2],
         },
     );
-    let _ = answer(&mut e_yd, 0, vec![ChoiceOption::Tag(2)]);
-    assert_eq!(e_yd.open_choice().map(|c| c.spec.prompt), Some("respond_shan"));
+    assert_eq!(
+        e_yd.open_choice().map(|c| c.spec.prompt),
+        Some("wudian_youdishenru_use")
+    );
     let _ = answer(&mut e_yd, 2, vec![ChoiceOption::Card(yd)]);
     assert_eq!(
         e_yd.open_choice().map(|c| c.spec.prompt),
         Some("wudian_youdishenru_sha")
     );
-    // Case A: cancel `wudian_youdishenru_sha` -> seat 1 takes 1 dmg -> `bolehuiyan2` (Miss) settles & seat 0 draws 1!
+    // Case A: cancel `wudian_youdishenru_sha` -> seat 1 takes 1 dmg -> cancelled `sha_a` never fired `bolehuiyan`:
     let mut e_yd_play =
         assert_mid_choice_roundtrip_extra(&e_yd, "wudian_youdishenru_sha", Some(&wd_pack));
     let _ = answer(&mut e_yd, 1, Vec::new());
     drain_pass(&mut e_yd);
     assert_eq!(e_yd.state_core().player(1).hp, 3, "youdishenru counter-damaged source");
-    assert_eq!(
-        e_yd.state_core().player(0).hand.len(),
-        1,
-        "youdishenru cancel settles bolehuiyan2 -> miss prediction draws 1"
-    );
+    assert_eq!(e_yd.state_core().player(0).hand.len(), 0);
     assert_eq!(flag(&e_yd, 0, "bolehuiyan_pred"), 0);
 
-    // Case B: nested `Sha#2` resolves inside `youdishenru` -> `Sha#2` hits -> `bolehuiyan3` settles (miss pred -> no draw, cleared pred=0)!
+    // Case B: counter-`sha_b` enters `shaBegin` -> `bolehuiyan` predicts Hit (Tag(1)) -> `sha_b` hits -> `bolehuiyan3` draws 1!
     let _ = answer(&mut e_yd_play, 1, vec![ChoiceOption::Card(sha_b)]);
+    assert_eq!(
+        e_yd_play.open_choice().map(|c| c.spec.prompt),
+        Some("bolehuiyan:predict")
+    );
+    let _ = answer(&mut e_yd_play, 0, vec![ChoiceOption::Tag(1)]);
     drain_pass(&mut e_yd_play);
-    assert_eq!(e_yd_play.state_core().player(2).hp, 3, "nested Sha#2 hit target");
+    assert_eq!(e_yd_play.state_core().player(2).hp, 3, "counter-Sha#2 hit target");
     assert_eq!(
         e_yd_play.state_core().player(0).hand.len(),
-        0,
-        "nested Sha#2 settles bolehuiyan3 per CDP 1h (miss pred draws 0)"
+        1,
+        "counter-Sha#2 settles bolehuiyan3 (hit pred draws 1)"
     );
     assert_eq!(flag(&e_yd_play, 0, "bolehuiyan_pred"), 0);
+
+    // 2d-2) Post-`shaBegin` nested `Sha#2` (via `yxs_fanji` during `Sha#1` Damage) settles `bolehuiyan2` before `Sha#1` ends (CDP 1h):
+    let mut e_nest = new_u08_engine(890008, 4);
+    for p in 0..4 {
+        e_nest.debug_clear_hand(p);
+    }
+    e_nest.debug_grant(0, "bolehuiyan");
+    e_nest.debug_grant(2, "yxs_fanji");
+    let sha_outer = give_card_matching(&mut e_nest, 1, |_, m| m.kind == CardKind::Sha);
+    let shan_p1 = give_card_matching(&mut e_nest, 1, |_, m| m.kind == CardKind::Shan);
+    let sha_inner = give_card_matching(&mut e_nest, 2, |_, m| m.kind == CardKind::Sha);
+    e_nest.debug_set_turn(1, Phase::Play, 1);
+    let _ = submit(
+        &mut e_nest,
+        1,
+        GameAction::PlayCard {
+            card: sha_outer,
+            targets: vec![2],
+        },
+    );
+    assert_eq!(
+        e_nest.open_choice().map(|c| c.spec.prompt),
+        Some("bolehuiyan:predict")
+    );
+    let _ = answer(&mut e_nest, 0, vec![ChoiceOption::Tag(2)]); // Miss prediction on Sha#1; seat 2 holds no Shan -> straight to Damage -> yxs_fanji
+    assert_eq!(
+        e_nest.open_choice().map(|c| c.spec.prompt),
+        Some("trigger_confirm")
+    );
+    let _ = answer(&mut e_nest, 2, vec![ChoiceOption::Confirm]);
+    assert_eq!(e_nest.open_choice().map(|c| c.spec.prompt), Some("yxs_fanji_sha"));
+    let _ = answer(&mut e_nest, 2, vec![ChoiceOption::Card(sha_inner)]);
+    assert_eq!(e_nest.open_choice().map(|c| c.spec.prompt), Some("respond_shan"));
+    let _ = answer(&mut e_nest, 1, vec![ChoiceOption::Card(shan_p1)]);
+    drain_pass(&mut e_nest);
+    assert_eq!(
+        e_nest.state_core().player(0).hand.len(),
+        1,
+        "nested Sha#2 dodged -> settles bolehuiyan2 per CDP 1h (miss pred draws 1 BEFORE Sha#1 shaDamage)"
+    );
+    assert_eq!(flag(&e_nest, 0, "bolehuiyan_pred"), 0);
 }
 
 #[test]

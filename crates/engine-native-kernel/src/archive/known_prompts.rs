@@ -173,7 +173,7 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
     "zhenjiu_target", "zhuhai_sha", "zhuyu_discard",
     "boss_chuanyun_target", "boss_tianyun_target", "dddxiaxing_card", "kuwu_discard", "shengke_discard",
     "wudian_duoqi_card", "wudian_youzhan_discard", "wudian_choudu_card", "wudian_choudu_target",
-    "wudian_diaobing_swap", "wudian_liduan_give", "wudian_youdishenru_sha",
+    "wudian_diaobing_pick", "wudian_diaobing_swap", "wudian_diaobing_top", "wudian_fuchou2_sha", "wudian_liduan_give", "wudian_youdishenru_sha",
     "mbcmjiushi_gain_confirm", "mbcmjiushi_turnback_confirm", "mbcmfangzhu_target", "mbcmfangzhu_option",
     "k_danggu_partner",
     "dddyuanzhen_discard", "dddzhishu_card", "dddzhishu_target", "dddjuxian_mode", "dddjuxian_card",
@@ -618,4 +618,6 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
     "ssr_qingji:confirm",
     "ssr_qingji:choose_card",
     "dddjuxian_gain",
+    "wudian_youdishenru_use",
+    "wudian_diaobing_dir",
 ];

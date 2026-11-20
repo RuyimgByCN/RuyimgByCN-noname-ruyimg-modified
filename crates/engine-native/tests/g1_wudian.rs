@@ -76,10 +76,14 @@ fn setup() -> (Engine, ExtensionPack) {
         ("wudian-upstream-noname", 2),
         "包元数据来自 cards.json"
     );
-    assert_eq!(pack.card_count(), 14, "切片 14 张实体牌（+诱敌深入 3）");
+    assert!(
+        json.contains("diaobingqianjiang"),
+        "cards.json 须包含调兵遣将×2"
+    );
+    assert_eq!(pack.card_count(), 16, "切片 16 张实体牌（含调兵遣将×2）");
     let mut e = Engine::new_with_extensions(3501, 3, &[&pack]).expect("建局");
     let base_cards = Engine::new(1, 3).catalog().cards.len();
-    assert_eq!(e.catalog().cards.len(), base_cards + 14);
+    assert_eq!(e.catalog().cards.len(), base_cards + 16);
     for _ in 0..64 {
         if e.turn().current == 0 && e.turn().phase == Phase::Play && e.open_choice().is_none() {
             break;
@@ -437,6 +441,10 @@ mod tianyu;
 mod tuobiang;
 #[path = "g1_wudian/u07.rs"]
 mod u07;
+#[path = "g1_wudian/u07_equivalence.rs"]
+mod u07_equivalence;
+#[path = "g1_wudian/u07_round2_fixes.rs"]
+mod u07_round2_fixes;
 #[path = "g1_wudian/wangmeizhike.rs"]
 mod wangmeizhike;
 #[path = "g1_wudian/wangpengxu.rs"]

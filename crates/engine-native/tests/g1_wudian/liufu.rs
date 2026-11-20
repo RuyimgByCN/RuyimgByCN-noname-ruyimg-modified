@@ -36,15 +36,17 @@ fn liufu_zhucheng_filter_recheck_and_sha_guard() {
     }
     assert_eq!(e.state_core().player(0).zhucheng.len(), 2, "筑城标记 2 张");
 
-    // ② 他人（1 号回合）杀 0 号 → 使用者被问：Pass=杀无效+杀回手
+    // ② 他人（1 号回合）杀 0 号：手/装不足 num=2 时直接取消，杀进弃牌堆不回手；
+    // 足够 num=2 时弹出 wudian_zhucheng_guard（允许取消，杀同样进弃牌堆不回手）
     advance_loop(&mut e, 1);
-    e.debug_grant(1, "咆哮"); // 两次出杀驱动
-    let sha = e.debug_place(1, "sha");
+    e.debug_clear_hand(1);
+    e.debug_grant(1, "咆哮"); // 多次出杀驱动
+    let sha_less = e.debug_place(1, "sha");
     let out = submit(
         &mut e,
         1,
         GameAction::PlayCard {
-            card: sha,
+            card: sha_less,
             targets: vec![0],
         },
     );
@@ -54,11 +56,57 @@ fn liufu_zhucheng_filter_recheck_and_sha_guard() {
             CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
         ),
         "{out:?}"
+    );
+    let confirm_less = e.open_choice().expect("zhucheng2 trigger_confirm");
+    assert_eq!(confirm_less.spec.prompt, "trigger_confirm");
+    assert_eq!(confirm_less.observer, 0);
+    let cid_less = confirm_less.id;
+    submit(
+        &mut e,
+        0,
+        GameAction::Answer {
+            choice_id: cid_less,
+            selection: vec![ChoiceOption::Confirm],
+        },
+    );
+    assert!(e.open_choice().is_none(), "确认发动筑城且 he 不足筑城张数 2 时直接取消不弹窗");
+    assert_eq!(e.debug_hp(0), 2, "杀无效不掉血");
+    assert!(!e.debug_hand(1).contains(&sha_less), "杀取消不得退回使用者手牌");
+    assert!(e.save().core.discard.contains(&sha_less), "被取消的杀应进弃牌堆");
+
+    // 足够 num=2 张时，主动取消（空选）同样令杀无效且入弃牌堆不回手
+    let sha_cancel = e.debug_place(1, "sha");
+    let wz_keep = e.debug_place(1, "wuzhong");
+    let dl_keep = e.debug_place(1, "duel");
+    submit(
+        &mut e,
+        1,
+        GameAction::PlayCard {
+            card: sha_cancel,
+            targets: vec![0],
+        },
+    );
+    let confirm_ask = e.open_choice().expect("zhucheng2 trigger_confirm②");
+    assert_eq!(confirm_ask.spec.prompt, "trigger_confirm");
+    let cid_ask = confirm_ask.id;
+    submit(
+        &mut e,
+        0,
+        GameAction::Answer {
+            choice_id: cid_ask,
+            selection: vec![ChoiceOption::Confirm],
+        },
     );
     let c = e.open_choice().expect("筑城守卫询问挂起");
     assert_eq!(
-        (c.spec.prompt, c.observer),
-        (engine_native::content::host::WUDIAN_ZHUCHENG_GUARD_ASK, 1)
+        (c.spec.prompt, c.observer, c.spec.min, c.spec.max, c.spec.allow_cancel),
+        (
+            engine_native::content::host::WUDIAN_ZHUCHENG_GUARD_ASK,
+            1,
+            2,
+            2,
+            true,
+        )
     );
     let (cid, obs) = (c.id, c.observer);
     submit(
@@ -66,16 +114,17 @@ fn liufu_zhucheng_filter_recheck_and_sha_guard() {
         obs,
         GameAction::Answer {
             choice_id: cid,
-            selection: vec![ChoiceOption::Pass],
+            selection: vec![],
         },
     );
-    assert_eq!(e.debug_hp(0), 2, "杀无效不掉血");
-    assert!(e.debug_hand(1).contains(&sha), "杀归还使用者手牌");
+    assert_eq!(e.debug_hp(0), 2, "取消筑城弃牌时杀无效不掉血");
+    assert!(!e.debug_hand(1).contains(&sha_cancel), "取消后原杀不得退回手牌");
+    assert!(e.save().core.discard.contains(&sha_cancel));
+    assert!(e.debug_hand(1).contains(&wz_keep) && e.debug_hand(1).contains(&dl_keep));
 
-    // ③ 再杀 → 使用者弃 2 张（首张自选+余代抽）→ 杀照常结算
+    // ③ 再杀 → 使用者自选任意 2 张弃置（无随机补弃）→ 杀照常结算
     let sha = e.debug_place(1, "sha");
-    let _ = e.debug_place(1, "wuzhong");
-    let _ = e.debug_place(1, "duel");
+    let keep_extra = e.debug_place(1, "tao");
     let out = submit(
         &mut e,
         1,
@@ -91,22 +140,25 @@ fn liufu_zhucheng_filter_recheck_and_sha_guard() {
         ),
         "{out:?}"
     );
+    let confirm_ask2 = e.open_choice().expect("zhucheng2 trigger_confirm③");
+    assert_eq!(confirm_ask2.spec.prompt, "trigger_confirm");
+    let cid_ask2 = confirm_ask2.id;
+    submit(
+        &mut e,
+        0,
+        GameAction::Answer {
+            choice_id: cid_ask2,
+            selection: vec![ChoiceOption::Confirm],
+        },
+    );
     let c = e.open_choice().expect("筑城守卫询问挂起②");
     let (cid, obs) = (c.id, c.observer);
-    // 选非杀候选（避免守卫弃掉正在结算的杀）
-    let pick = c
-        .spec
-        .options
-        .iter()
-        .find(|o| matches!(o, ChoiceOption::Card(cc) if *cc != sha))
-        .copied()
-        .expect("有非杀可选");
     submit(
         &mut e,
         obs,
         GameAction::Answer {
             choice_id: cid,
-            selection: vec![pick],
+            selection: vec![ChoiceOption::Card(wz_keep), ChoiceOption::Card(dl_keep)],
         },
     );
     while let Some(c) = e.open_choice() {
@@ -121,8 +173,11 @@ fn liufu_zhucheng_filter_recheck_and_sha_guard() {
         );
     }
     assert_eq!(e.debug_hp(0), 1, "弃 2 放行：杀照常（2→1）");
-    // 手牌 6 张：守卫弃 2（首张自选+随机代抽）+ 杀结算离手 → 剩 3
-    assert_eq!(e.debug_hand(1).len(), 3, "弃 2（首张+代抽 1）+杀离手");
+    assert_eq!(
+        e.debug_hand(1),
+        vec![keep_extra],
+        "仅自选弃置 [wz_keep, dl_keep]，keep_extra 保留且无随机补弃"
+    );
 
     // ④ 开关收回：0 号回合结束阶段确认 → 标记收回入手
     let round0 = e.turn().round;

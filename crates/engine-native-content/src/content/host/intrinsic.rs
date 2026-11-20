@@ -18,7 +18,9 @@ pub(crate) fn card_intrinsic(
     u: &CardUseData,
     effective_kind: CardKind,
 ) -> Option<Option<Box<dyn SkillMachine>>> {
-    let card = u.card?;
+    let Some(card) = u.card else {
+        return intrinsic_named_ext::try_named_ext_card(ctx, u, u32::MAX, effective_kind);
+    };
     Some(match effective_kind {
         CardKind::Shuigong => {
             // 水攻（G1 运筹帷幄，锦囊）：无懈窗口 + 多目标强制弃装备

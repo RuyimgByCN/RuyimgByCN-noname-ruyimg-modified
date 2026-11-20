@@ -113,38 +113,114 @@ impl HostMachine {
                 }
                 _ => Flow::Done,
             },
-            // 复仇·清算：标记来源逐个摸 1+虚拟杀强制指定（死亡移除）。
-            // R05-C2 续行位改写：①全部摸 1 先按标记序（逆序压 R 帧＝标记
-            // 序执行/取牌）异步交付；②R 弹栈后统一发虚拟杀（同步序＝杀帧
-            // 按标记序压栈、LIFO 解算＝逆标记序，两路径一致）；③牌堆空守
-            // 卫：use_virtual_card 取 deck.first() 空堆 panic——同步路径同
-            // 样 panic（无既定行为），异步续行段改为跳过该次虚拟杀（上游
-            // 玩点论杀 skill.js:548-578 player.draw() 后才 chooseToUse，无
-            // 凭空造牌语义），不 panic 不造牌、标记照常消耗。
-            HostBehavior::WudianFuchou2 => match self.stage {
-                HostStage::Act => {
-                    let mut marked = std::mem::take(&mut ctx.core.player_mut(self.owner).fuchou_marked);
-                    marked.retain(|src| ctx.core.player(*src).alive);
-                    self.targets = marked.clone();
-                    for _ in marked.iter().rev() {
-                        ctx.start_draw(self.owner, 1);
-                    }
-                    self.stage = HostStage::DrawSettle;
-                    Flow::Yield
-                }
-                HostStage::DrawSettle => {
-                    for src in std::mem::take(&mut self.targets) {
-                        if !ctx.core.deck.is_empty() {
-                            ctx.use_virtual_card(
-                                self.owner,
-                                crate::catalog::CardKind::Sha,
-                                vec![src],
-                            );
+            // 复仇·清算（玩点论杀/character/skill.js:548-584）：
+            // 上游 global: "phaseAfter" 按标记序逐一移除来源：
+            // 若来源已死跳过；若存活令持有者先摸 1 张牌，在当前步判定
+            // `canUse("sha", target, false) && hasSha()`（忽略距离与阶段次数），
+            // 合法则通过 ChoiceKind 询问使用真实【杀】（allow_cancel: true），
+            // 取消或无可用【杀】则持有者 loseHp(1)。
+            HostBehavior::WudianFuchou2 => loop {
+                match self.stage {
+                    HostStage::Act => {
+                        if !ctx.core.player(self.owner).alive
+                            || ctx.core.player(self.owner).fuchou_marked.is_empty()
+                        {
+                            self.target = None;
+                            return Flow::Done;
                         }
+                        let src = ctx.core.player_mut(self.owner).fuchou_marked.remove(0);
+                        if !ctx.core.player(src).alive {
+                            continue;
+                        }
+                        self.target = Some(src);
+                        self.stage = HostStage::DrawSettle;
+                        ctx.start_draw(self.owner, 1);
+                        return Flow::Yield;
                     }
-                    Flow::Done
+                    HostStage::DrawSettle => {
+                        let Some(t) = self.target else {
+                            self.stage = HostStage::Act;
+                            continue;
+                        };
+                        if !ctx.core.player(self.owner).alive || !ctx.core.player(t).alive {
+                            self.target = None;
+                            self.stage = HostStage::Act;
+                            continue;
+                        }
+                        let options =
+                            crate::kernel::usable_sha_options(ctx.core, ctx.catalog, self.owner, t);
+                        if options.is_empty() {
+                            self.target = None;
+                            self.stage = HostStage::Act;
+                            ctx.emit(EventData::LoseHp {
+                                player: self.owner,
+                                amount: 1,
+                            });
+                            return Flow::Yield;
+                        }
+                        self.stage = HostStage::SelectCard;
+                        return Flow::WaitChoice {
+                            observer: self.owner,
+                            spec: ChoiceSpec {
+                                kind: ChoiceKind::SelectCards,
+                                prompt: "wudian_fuchou2_sha",
+                                options,
+                                min: 1,
+                                max: 1,
+                                allow_cancel: true,
+                            },
+                        };
+                    }
+                    HostStage::SelectCard => {
+                        let Some(t) = self.target.take() else {
+                            self.stage = HostStage::Act;
+                            continue;
+                        };
+                        if !ctx.core.player(self.owner).alive {
+                            return Flow::Done;
+                        }
+                        if let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() {
+                            if ctx.core.player(t).alive {
+                                if let Some((use_as, is_mutou)) =
+                                    crate::kernel::sha_card_use_as(ctx.core, ctx.catalog, self.owner, c)
+                                {
+                                    if is_mutou {
+                                        if let Some(def) = ctx
+                                            .catalog
+                                            .skill_by_name(crate::vocabulary::host::GJ_MUTOU_SKILL_KEY)
+                                        {
+                                            if let Some(inst) =
+                                                ctx.core.skills.get_mut(&(self.owner, def))
+                                            {
+                                                inst.once_used = true;
+                                            }
+                                        }
+                                    }
+                                    ctx.core
+                                        .vm_aux
+                                        .flags
+                                        .insert((self.owner, "vm_va_sha_no_count".to_string()), 1);
+                                    self.stage = HostStage::Act;
+                                    ctx.emit(EventData::CardUsed(super::sha_card_use_data(
+                                        ctx,
+                                        self.owner,
+                                        c,
+                                        vec![t],
+                                        use_as,
+                                    )));
+                                    return Flow::Yield;
+                                }
+                            }
+                        }
+                        self.stage = HostStage::Act;
+                        ctx.emit(EventData::LoseHp {
+                            player: self.owner,
+                            amount: 1,
+                        });
+                        return Flow::Yield;
+                    }
+                    _ => return Flow::Done,
                 }
-                _ => Flow::Done,
             },
             // 良策·余获：锁定查询面（五谷机器内联查询），无独立效果步
             HostBehavior::WudianLiangceRemain => Flow::Done,

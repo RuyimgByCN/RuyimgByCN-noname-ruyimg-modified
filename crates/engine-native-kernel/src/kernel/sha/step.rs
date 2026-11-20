@@ -695,16 +695,6 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 .copied()
                 .map(ChoiceOption::Card)
                 .collect();
-            // 诱敌深入（G1 玩点论杀）：打出后杀无效，来源受 1 点反噬
-            //（登记差异：上游为强制来源连用杀，原生简化为单次反噬）
-            if target_can_play {
-                for c in ctx.core.player(self.target).hand.iter().copied() {
-                    if ctx.catalog.card_kind(c) == CardKind::Youdishenru {
-                        shans.push(ChoiceOption::Card(c));
-                        break;
-                    }
-                }
-            }
             if qingguo && target_can_play {
                 for c in ctx.core.player(self.target).hand.iter().copied() {
                     let kind = ctx.catalog.card_kind(c);
@@ -872,60 +862,6 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         }
         // 已恢复：读取应答
         let answer = ctx.answer_first();
-        // 诱敌深入应答：杀无效（弃置），来源对目标使用一张杀否则受 1 点反噬伤害
-        if let ChoiceOption::Card(yd) = answer {
-            if ctx.catalog.card_kind(yd) == CardKind::Youdishenru {
-                let in_hand = ctx.core.player(self.target).hand.contains(&yd);
-                if in_hand {
-                    ctx.discard_from_hand(self.target, yd);
-                }
-                ctx.emit(EventData::CardResponded {
-                    card: yd,
-                    player: self.target,
-                });
-                let card = self.card.take();
-                ctx.to_discard(card);
-                ctx.core.table.retain(|c| Some(*c) != card);
-                if ctx.core.player(self.source).alive {
-                    let hand_shas: Vec<ChoiceOption> = ctx
-                        .core
-                        .player(self.source)
-                        .hand
-                        .iter()
-                        .filter(|c| ctx.catalog.card_kind(**c).is_sha_like())
-                        .copied()
-                        .map(ChoiceOption::Card)
-                        .collect();
-                    if !hand_shas.is_empty() {
-                        self.asking_qinglong = true;
-                        self.fuchou_card = Some(yd);
-                        return Flow::WaitChoice {
-                            observer: self.source,
-                            spec: ChoiceSpec {
-                                kind: ChoiceKind::SelectCards,
-                                prompt: crate::vocabulary::host::WUDIAN_YOUDISHENRU_SHA,
-                                options: hand_shas,
-                                min: 1,
-                                max: 1,
-                                allow_cancel: true,
-                            },
-                        };
-                    }
-                    let outer_fid = self.current_sha_frame_id(ctx);
-                    ctx.emit(EventData::Damage(damage_data_with(
-                        Some(self.target),
-                        self.source,
-                        1,
-                        crate::event::DamageNature::Normal,
-                        Some(yd),
-                    )));
-                    if Self::has_active_bolehuiyan_pred(ctx) {
-                        return self.defer_sha_end(ctx, outer_fid, false);
-                    }
-                }
-                return Flow::Done;
-            }
-        }
         if let ChoiceOption::Card(shan) = answer {
             // 倾国或 view_as 应答可能来自手牌或装备区：按实际所在区移除
             if ctx.core.player(self.target).hand.contains(&shan)

@@ -10,7 +10,7 @@
 use super::*;
 use engine_native::ai::BoundedPlanner;
 use engine_native::archive::{decode_archive, encode_archive};
-use engine_native::catalog::{CardDef, EquipSlot, Faction};
+use engine_native::catalog::{EquipSlot, Faction};
 use engine_native::machine::LogEvent;
 use engine_native::state::{GameMode, Role};
 
@@ -37,10 +37,6 @@ fn wudian_full_pack() -> ExtensionPack {
         &mut pack,
         &[],
     );
-    if !pack.cards.iter().any(|c| c.name == "diaobingqianjiang") {
-        pack.cards
-            .push(CardDef::basic("diaobingqianjiang", CardKind::Wuzhong));
-    }
     pack
 }
 
@@ -520,7 +516,8 @@ fn u07_youzhan_and_youdishenru_six_dimension_real_match() {
                 targets: vec![1],
             },
         );
-        let cr = e_yd.open_choice().expect("respond_shan with youdishenru");
+        let cr = e_yd.open_choice().expect("wudian_youdishenru_use at shaBefore");
+        assert_eq!(cr.spec.prompt, "wudian_youdishenru_use");
         assert!(cr.spec.options.contains(&ChoiceOption::Card(yd)));
         assert_archive_roundtrip_and_answer(&mut e_yd, &pack, vec![ChoiceOption::Card(yd)]);
 
@@ -626,8 +623,8 @@ fn u07_choudu_and_diaobingqianjiang_six_dimension_real_match() {
     {
         let mut e_t2 = Engine::restore_with_extensions(&e.save(), &[&pack]).unwrap();
         answer_open(&mut e_t2, vec![ChoiceOption::Player(2)]);
-        let cs = e_t2.open_choice().expect("wudian_diaobing_swap for seat 2");
-        assert_eq!(cs.spec.prompt, "wudian_diaobing_swap");
+        let cs = e_t2.open_choice().expect("wudian_diaobing_pick for seat 2");
+        assert_eq!(cs.spec.prompt, "wudian_diaobing_pick");
         assert_eq!(cs.observer, 2);
     }
 
@@ -650,39 +647,69 @@ fn u07_choudu_and_diaobingqianjiang_six_dimension_real_match() {
         "② 亮出牌堆顶 ceil(alive/2)=2 张牌"
     );
 
-    // Stage 3: wudian_diaobing_swap（observer == 1）
-    let c3 = e.open_choice().expect("wudian_diaobing_swap");
-    assert_eq!(c3.spec.prompt, "wudian_diaobing_swap");
+    // Stage 3a: wudian_diaobing_pick（observer == 1）
+    let c3 = e.open_choice().expect("wudian_diaobing_pick");
+    assert_eq!(c3.spec.prompt, "wudian_diaobing_pick");
     assert_eq!(c3.observer, 1);
     assert!(c3.spec.allow_cancel);
-    assert_eq!(c3.spec.options.len(), 3);
+    assert_eq!(c3.spec.options.len(), 2);
     let _ = assert_ai_pending_choice_no_leak(&e, &pack, 2);
 
-    // ③ Stage 3 取消换牌分支（vec![]）：手牌不变，亮出牌全部进弃牌堆
+    // ③ Stage 3a 取消换牌分支（vec![]）：1 号手牌不变，进入下一目标 2 号
     {
         let mut e_no_swap = Engine::restore_with_extensions(&e.save(), &[&pack]).unwrap();
         let hand_before = e_no_swap.state_core().player(1).hand.clone();
         answer_open(&mut e_no_swap, vec![]);
-        assert!(e_no_swap.open_choice().is_none());
         assert_eq!(e_no_swap.state_core().player(1).hand, hand_before);
+        assert_eq!(e_no_swap.open_choice().unwrap().observer, 2);
     }
 
-    // ③ Stage 3 选牌分支 Y（换 p1_h2）vs 选牌分支 X（换 p1_h1）
+    // ⑤ Stage 3a 存档恢复 + 选择第一张市场牌，随后进入强制手牌替换 Stage 3b
+    let m_pick1 = c3.spec.options[0];
+    assert_archive_roundtrip_and_answer(&mut e, &pack, vec![m_pick1]);
+    let c3_swap = e.open_choice().expect("wudian_diaobing_swap");
+    assert_eq!(c3_swap.spec.prompt, "wudian_diaobing_swap");
+    assert_eq!(c3_swap.observer, 1);
+    assert!(!c3_swap.spec.allow_cancel);
+    assert_eq!(c3_swap.spec.options.len(), 3);
+
+    // ③ Stage 3b 选牌分支 Y（换 p1_h2）vs 选牌分支 X（换 p1_h1）
     {
         let mut e_swap_y = Engine::restore_with_extensions(&e.save(), &[&pack]).unwrap();
         answer_open(&mut e_swap_y, vec![ChoiceOption::Card(p1_h2)]);
         assert!(!e_swap_y.state_core().player(1).hand.contains(&p1_h2));
-        assert!(e_swap_y.state_core().discard.contains(&p1_h2));
     }
 
-    // ⑤ Stage 3 存档恢复 + 选择换出 p1_h1
+    // ⑤ Stage 3b 存档恢复 + 选择换出 p1_h1，随后 2/0 号放弃（若此前 1 号摸/换得无懈则先 Pass）、1 号放弃置顶，剩余市场牌（含 p1_h1）进弃牌堆
     assert_archive_roundtrip_and_answer(&mut e, &pack, vec![ChoiceOption::Card(p1_h1)]);
+    while e
+        .open_choice()
+        .is_some_and(|c| c.spec.prompt == "nullify_window")
+    {
+        answer_open(&mut e, vec![ChoiceOption::Pass]);
+    }
+    let c_p2 = e.open_choice().expect("target 2 pick");
+    assert_eq!(c_p2.observer, 2);
+    answer_open(&mut e, vec![]);
+    while e
+        .open_choice()
+        .is_some_and(|c| c.spec.prompt == "nullify_window")
+    {
+        answer_open(&mut e, vec![ChoiceOption::Pass]);
+    }
+    let c_p0 = e.open_choice().expect("target 0 pick");
+    assert_eq!(c_p0.observer, 0);
+    answer_open(&mut e, vec![]);
+    let c_top = e.open_choice().expect("wudian_diaobing_top");
+    assert_eq!(c_top.observer, 1);
+    assert_eq!(c_top.spec.prompt, "wudian_diaobing_top");
+    answer_open(&mut e, vec![]);
     assert!(e.open_choice().is_none());
     assert!(!e.state_core().player(1).hand.contains(&p1_h1));
     assert!(e.state_core().discard.contains(&p1_h1));
     assert_eq!(e.state_core().player(1).hand.len(), 3);
 
-    // ① 否定条件 B：同回合再次发动筹度（usable: 1）被拒绝
+    // ① 否定条件 B：同阶段再次发动筹度（usable: 1）被拒绝
     assert!(matches!(
         submit(&mut e, 0, GameAction::ActivateSkill { skill: choudu_def }),
         CommandOutcome::Rejected(RejectReason::SkillAlreadyUsed)
@@ -716,7 +743,7 @@ fn u07_choudu_and_diaobingqianjiang_six_dimension_real_match() {
         0,
         GameAction::PlayCard {
             card: diaobing_card,
-            targets: vec![1, 2],
+            targets: vec![0, 1, 2],
         },
     );
     while e
@@ -725,16 +752,43 @@ fn u07_choudu_and_diaobingqianjiang_six_dimension_real_match() {
     {
         pass_nullify(&mut e);
     }
-    // 使用者 0 号先摸 1 张牌（打出 1 张摸 1 张，手牌数不变），依次向目标 1、2 打开换牌窗口
+    // 使用者 0 号先摸 1 张牌（打出 1 张摸 1 张，手牌数不变），依次向目标 0、1、2 打开市场选牌与换牌窗口
     assert_eq!(e.state_core().player(0).hand.len(), p0_hand_before);
-    let c_t1 = e.open_choice().expect("swap for target 1");
-    assert_eq!(c_t1.observer, 1);
-    let pick_t1 = c_t1.spec.options[0];
-    assert_archive_roundtrip_and_answer(&mut e, &pack, vec![pick_t1]);
+    let c_t0_pick = e.open_choice().expect("market pick for target 0");
+    assert_eq!(c_t0_pick.observer, 0);
+    answer_open(&mut e, Vec::new());
+    while e
+        .open_choice()
+        .is_some_and(|c| c.spec.prompt == "nullify_window")
+    {
+        pass_nullify(&mut e);
+    }
+    let c_t1_pick = e.open_choice().expect("market pick for target 1");
+    assert_eq!(c_t1_pick.observer, 1);
+    let pick_t1_m = c_t1_pick.spec.options[0];
+    assert_archive_roundtrip_and_answer(&mut e, &pack, vec![pick_t1_m]);
+    let c_t1_swap = e.open_choice().expect("swap for target 1");
+    assert_eq!(c_t1_swap.observer, 1);
+    let swap_t1_h = c_t1_swap.spec.options[0];
+    assert_archive_roundtrip_and_answer(&mut e, &pack, vec![swap_t1_h]);
 
-    let c_t2 = e.open_choice().expect("swap for target 2");
-    assert_eq!(c_t2.observer, 2);
+    while e
+        .open_choice()
+        .is_some_and(|c| c.spec.prompt == "nullify_window")
+    {
+        pass_nullify(&mut e);
+    }
+    let c_t2_pick = e.open_choice().expect("market pick for target 2");
+    assert_eq!(c_t2_pick.observer, 2);
+    let pick_t2_m = c_t2_pick.spec.options[0];
+    answer_open(&mut e, vec![pick_t2_m]);
+    let c_t2_swap = e.open_choice().expect("swap for target 2");
+    assert_eq!(c_t2_swap.observer, 2);
     assert_archive_roundtrip_and_answer(&mut e, &pack, vec![ChoiceOption::Card(p2_h1)]);
+
+    let c_after_top = e.open_choice().expect("contentAfter top for owner 0");
+    assert_eq!(c_after_top.observer, 0);
+    answer_open(&mut e, vec![]);
     assert!(e.open_choice().is_none());
 }
 
@@ -1139,23 +1193,29 @@ fn u07_fuchou_liduan_liangce_jianbi_diyjuntun_six_dimension_real_match() {
     assert!(e.state_core().player(1).equips.is_empty());
     assert!(!e.state_core().has_skill(1, sanjian_skill));
     assert!(e.state_core().player(0).hand.contains(&p1_eq));
-    assert!(e.state_core().player(0).hand.contains(&sha_c));
+    assert!(!e.state_core().player(0).hand.contains(&sha_c));
+    assert!(e.save().core.discard.contains(&sha_c));
     assert_eq!(e.state_core().player(1).fuchou_marked, vec![0]);
 
     // 推进至回合结束窗口（Play -> Discard -> End -> TurnEndWindow），触发 fuchou2
     let p1_hand_before_settle = e.state_core().player(1).hand.len();
+    let p1_hp_before_settle = e.state_core().player(1).hp;
     submit(&mut e, 0, GameAction::NextPhase);
     submit(&mut e, 0, GameAction::NextPhase);
     submit(&mut e, 0, GameAction::NextPhase);
-    let c_counter = e.open_choice().expect("virtual sha from fuchou2");
-    assert_eq!(c_counter.spec.prompt, "respond_shan");
-    assert_eq!(c_counter.observer, 0);
     assert_eq!(
         e.state_core().player(1).hand.len(),
         p1_hand_before_settle + 1,
-        "④ fuchou2 结算令 1 号摸 1 张牌并对 0 号视为出杀"
+        "④ fuchou2 结算令 1 号先摸 1 张牌"
     );
     assert!(e.state_core().player(1).fuchou_marked.is_empty());
+    if let Some(c_counter) = e.open_choice().cloned() {
+        assert_eq!(c_counter.spec.prompt, "wudian_fuchou2_sha");
+        assert_eq!(c_counter.observer, 1);
+        assert!(c_counter.spec.allow_cancel);
+        answer_open(&mut e, vec![]);
+    }
+    assert_eq!(e.state_core().player(1).hp, p1_hp_before_settle - 1);
 
     // -----------------------------------------------------------------------
     // 6B. 立断（liduan）：其他角色于其回合外获得装备牌进入手牌时，可选交出 1 张手牌或取消并装备之
@@ -1318,10 +1378,10 @@ fn u07_fuchou_liduan_liangce_jianbi_diyjuntun_six_dimension_real_match() {
     // 6D. 坚壁（jianbi）与 屯军（diyjuntun）
     // -----------------------------------------------------------------------
     let (mut ej, pack_j) = setup_u07(3);
-    // 验证西真夕红（base+6）与造之仁君（base+7）武将目录已绑定 jianbi 与 diyjuntun
+    // 验证西真夕红（base+6，仅 fuchou/jinyan 不含 jianbi）与造之仁君（base+7）武将目录
     let gen_base = engine_native::content::standard::STANDARD_GENERALS.len() as u16;
     let xizhen = ej.catalog().general_meta(gen_base + 6).expect("西真夕红");
-    assert!(xizhen.2.contains(&"jianbi"));
+    assert!(!xizhen.2.contains(&"jianbi"), "西真夕红不应带坚壁: {:?}", xizhen.2);
     let zaozhi = ej.catalog().general_meta(gen_base + 7).expect("造之仁君");
     assert!(zaozhi.2.contains(&"liangce"));
     assert!(zaozhi.2.contains(&"diyjuntun"));
@@ -1388,7 +1448,7 @@ fn u07_fuchou_liduan_liangce_jianbi_diyjuntun_six_dimension_real_match() {
         assert_eq!(ej_cancel.state_core().player(0).equips, vec![eq_worn]);
     }
 
-    // ⑤ 存档恢复 + 重铸装备区武器 eq_worn：卸载装备技并从牌堆获得 1 张装备牌
+    // ⑤ 存档恢复 + 重铸装备区武器 eq_worn：卸载装备技并从牌堆顶摸 1 张牌（recast 任意牌种）
     assert_archive_roundtrip_and_answer(&mut ej, &pack_j, vec![ChoiceOption::Card(eq_worn)]);
     assert!(ej.state_core().player(0).equips.is_empty());
     assert!(!ej.state_core().has_skill(0, sanjian_skill));
@@ -1396,15 +1456,7 @@ fn u07_fuchou_liduan_liangce_jianbi_diyjuntun_six_dimension_real_match() {
     assert_eq!(
         ej.state_core().player(0).hand.len(),
         2,
-        "手牌由 1 张（eq_hand）增加 1 张新获得的装备牌变为 2 张"
-    );
-    assert!(
-        ej.state_core()
-            .player(0)
-            .hand
-            .iter()
-            .all(|c| ej.catalog().card_kind(*c).is_equip()),
-        "新获得的牌必须为装备牌"
+        "手牌由 1 张（eq_hand）正常摸 1 张变为 2 张（recast）"
     );
     // ① 负向边界：手牌与装备区均无装备牌时，发动屯军被拒
     ej.debug_clear_hand(0);
@@ -1450,8 +1502,25 @@ fn u07_existing_skills_and_cards_six_dimension_complement() {
     snap.core.player_mut(1).hand = vec![sha_c];
     e = Engine::restore_with_extensions(&snap, &[&pack]).unwrap();
 
-    // 7A. 禁言（jinyan）：体力 ≤ 2 时黑色锦囊牌被拒 CardLimit，基本牌不受限；体力 > 2 放行
-    let le = e.debug_place(0, "le");
+    // 7A. 禁言（jinyan）：体力 ≤ 2 时黑色锦囊牌不可直接用作锦囊（无目标拒 CardLimit），但有目标时可当作【杀】使用；基本牌与体力 > 2 正常放行
+    let le = *e
+        .state_core()
+        .deck
+        .iter()
+        .find(|&&c| {
+            e.catalog().card_kind(c) == CardKind::Le
+                && matches!(
+                    e.catalog().cards[c as usize].suit,
+                    engine_native::catalog::Suit::Spade | engine_native::catalog::Suit::Club
+                )
+        })
+        .expect("black le in deck");
+    {
+        let mut sle = e.save();
+        sle.core.deck.retain(|&c| c != le);
+        sle.core.player_mut(0).hand.push(le);
+        e = Engine::restore_with_extensions(&sle, &[&pack]).unwrap();
+    }
     let tao_jy = e.debug_place(0, "tao");
     assert!(matches!(
         submit(
@@ -1459,11 +1528,24 @@ fn u07_existing_skills_and_cards_six_dimension_complement() {
             0,
             GameAction::PlayCard {
                 card: le,
-                targets: vec![1],
+                targets: vec![],
             }
         ),
         CommandOutcome::Rejected(RejectReason::CardLimit)
     ));
+    {
+        let mut e_conv = Engine::restore_with_extensions(&e.save(), &[&pack]).unwrap();
+        let hp1_conv = e_conv.debug_hp(1);
+        submit(
+            &mut e_conv,
+            0,
+            GameAction::PlayCard {
+                card: le,
+                targets: vec![1],
+            },
+        );
+        assert_eq!(e_conv.debug_hp(1), hp1_conv - 1, "jinyan 黑乐在体力<=2时有目标可作杀打出");
+    }
     submit(
         &mut e,
         0,
@@ -1538,10 +1620,13 @@ fn u07_existing_skills_and_cards_six_dimension_complement() {
     assert_archive_roundtrip_and_answer(&mut e, &pack, vec![ChoiceOption::Player(1)]);
 
     // 7E. 筑城2（wudian_zhucheng_guard_ask）：1 号对有筑牌的 0 号出杀，测试挂起窗口存档恢复 + AI 决策
+    let guard_filler = find_deck_card_by_kind(&e, CardKind::Tao, 0);
     let mut snap2 = e.save();
     snap2.core.turn.current = 1;
     snap2.core.turn.phase = Phase::Play;
     snap2.core.turn.sha_used_play_phase = false;
+    snap2.core.deck.retain(|c| *c != guard_filler);
+    snap2.core.player_mut(1).hand.push(guard_filler);
     // 先验证 0 号处于决刀横置状态时，无武器 1 号距离 0 号为 2，出杀被拒
     e = Engine::restore_with_extensions(&snap2, &[&pack]).unwrap();
     assert!(matches!(
@@ -1566,12 +1651,17 @@ fn u07_existing_skills_and_cards_six_dimension_complement() {
             targets: vec![0],
         },
     );
+    let confirm_z = e.open_choice().expect("zhucheng2 trigger_confirm");
+    assert_eq!(confirm_z.spec.prompt, "trigger_confirm");
+    assert_eq!(confirm_z.observer, 0);
+    answer_open(&mut e, vec![ChoiceOption::Confirm]);
     let cz2 = e.open_choice().expect("wudian_zhucheng_guard_ask");
     assert_eq!(
         cz2.spec.prompt,
         engine_native::content::host::WUDIAN_ZHUCHENG_GUARD_ASK
     );
     let _ = assert_ai_pending_choice_no_leak(&e, &pack, 2);
-    assert_archive_roundtrip_and_answer(&mut e, &pack, vec![ChoiceOption::Pass]);
-    assert!(e.state_core().player(1).hand.contains(&sha_c));
+    assert_archive_roundtrip_and_answer(&mut e, &pack, vec![]);
+    assert!(!e.state_core().player(1).hand.contains(&sha_c));
+    assert!(e.save().core.discard.contains(&sha_c));
 }

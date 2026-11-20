@@ -20,6 +20,10 @@ impl Engine {
     fn build_view(&self, seat: Option<PlayerId>, full_info: bool) -> crate::view::PlayerView {
         let core = &self.state.core;
         let roles = core.identity_roles();
+        let versus_teams = match &core.mode {
+            crate::state::GameMode::Versus { teams, .. } => Some(teams),
+            _ => None,
+        };
         let players = core
             .players
             .iter()
@@ -91,6 +95,9 @@ impl Engine {
                     generals,
                     revealed_generals: p.revealed_generals,
                     role,
+                    team: versus_teams.and_then(|teams| {
+                        teams.iter().position(|m| m.contains(&i)).map(|idx| idx as u8)
+                    }),
                 }
             })
             .collect();

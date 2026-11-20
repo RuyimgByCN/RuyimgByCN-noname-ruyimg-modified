@@ -365,14 +365,63 @@ pub(super) fn try_named_ext_card(
     card: CardId,
     effective_kind: CardKind,
 ) -> Option<Option<Box<dyn SkillMachine>>> {
+    if effective_kind == CardKind::Youdishenru {
+        let opt_card = (card != u32::MAX).then_some(card);
+        let defender = u.player;
+        let attacker = ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(defender, "yd_pending_source".to_string()))
+            .and_then(|v| v.checked_sub(1))
+            .map(|v| v as PlayerId);
+        let Some(attacker) = attacker else {
+            if let Some(cid) = opt_card {
+                finish_table_card(ctx, cid);
+            }
+            return Some(None);
+        };
+        let wuxie_cid = opt_card.unwrap_or_else(|| {
+            ctx.catalog
+                .cards
+                .iter()
+                .position(|c| c.kind == CardKind::Youdishenru)
+                .unwrap_or(0) as CardId
+        });
+        let effect = Box::new(crate::content::host::HostMachine {
+            def_key: "youdishenru".to_string(),
+            behavior: crate::content::host::HostBehavior::WudianYouzhan,
+            owner: defender,
+            target: Some(attacker),
+            card: opt_card,
+            cards: Vec::new(),
+            targets: vec![defender],
+            stage: crate::content::host::HostStage::HuanrenPick,
+        });
+        return Some(Some(Box::new(crate::kernel::NullifyWindowMachine::new(
+            wuxie_cid,
+            defender,
+            false,
+            ctx.core.seat_order_from(defender),
+            false,
+            true,
+            opt_card.is_some(),
+            Some(effect),
+        ))));
+    }
     if effective_kind != CardKind::Wuzhong {
         return None;
     }
-    let raw_name = ctx.catalog.cards.get(card as usize)?.name;
-    if raw_name == "无中生有" || raw_name == "wuzhong" || raw_name.starts_with("wuzhong_") {
-        return None;
-    }
-    let key = base_card_key(raw_name);
+    let key = if card == u32::MAX {
+        "diaobingqianjiang"
+    } else {
+        let raw_name = ctx.catalog.cards.get(card as usize)?.name;
+        if raw_name == "无中生有" || raw_name == "wuzhong" || raw_name.starts_with("wuzhong_") {
+            return None;
+        }
+        let k = base_card_key(raw_name);
+        k.strip_prefix("wd_").unwrap_or(k)
+    };
     let owner = u.player;
 
     match key {
@@ -382,19 +431,31 @@ pub(super) fn try_named_ext_card(
             ctx.start_draw(owner, 2);
             let _ = discard_up_to(ctx, owner, 2);
         }
-        // U07 玩点论杀/card/card.js:4-142: 调兵遣将 — 使用者摸 1，亮出牌堆顶 ceil(alive/2) 张，各目标可选换牌
+        // U07 玩点论杀/card/card.js:4-142: 调兵遣将 — 使用者摸 1，亮出牌堆顶 ceil(alive/2) 张，按座次构建完整合法目标队列，各目标可选换牌
         "diaobingqianjiang" => {
-            let targets = if u.targets.is_empty() {
-                vec![owner]
+            let opt_card = (card != u32::MAX).then_some(card);
+            let targets: Vec<PlayerId> = if u.targets.is_empty() {
+                ctx.core
+                    .seat_order_from(owner)
+                    .into_iter()
+                    .filter(|&p| {
+                        ctx.core.player(p).alive
+                            && (p == owner || !ctx.core.player(p).hand.is_empty())
+                    })
+                    .collect()
             } else {
-                u.targets.clone()
+                ctx.core
+                    .seat_order_from(owner)
+                    .into_iter()
+                    .filter(|p| u.targets.contains(p) && ctx.core.player(*p).alive)
+                    .collect()
             };
             return Some(Some(Box::new(crate::content::host::HostMachine {
                 def_key: crate::vocabulary::host::WUDIAN_DIAOBING_KEY.to_string(),
                 behavior: crate::vocabulary::host::HostBehavior::WudianDiaobingCard,
                 owner,
                 target: None,
-                card: Some(card),
+                card: opt_card,
                 cards: Vec::new(),
                 targets,
                 stage: crate::content::host::HostStage::Act,

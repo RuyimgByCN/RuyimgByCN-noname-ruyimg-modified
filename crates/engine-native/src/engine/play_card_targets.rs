@@ -129,7 +129,15 @@ pub(super) fn validate_wuzhong_targets(
         let cname = catalog.cards.get(card as usize).map(|c| c.name).unwrap_or("");
         if cname != "无中生有" && cname != "wuzhong" && !cname.starts_with("wuzhong_") {
             if cname.contains("diaobingqianjiang") {
-                if targets.iter().all(|t| core.player(*t).alive) {
+                let actor = core.turn.current;
+                let expected: std::collections::BTreeSet<PlayerId> = (0..core.players.len()
+                    as PlayerId)
+                    .filter(|&p| {
+                        core.player(p).alive && (p == actor || !core.player(p).hand.is_empty())
+                    })
+                    .collect();
+                let given: std::collections::BTreeSet<PlayerId> = targets.iter().copied().collect();
+                if targets.is_empty() || (given.len() == targets.len() && given == expected) {
                     return Ok(());
                 }
                 return Err(RejectReason::IllegalTargets);

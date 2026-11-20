@@ -11,7 +11,7 @@ pub(super) fn active_ask_wudian(
     stage: HostStage,
     owner: PlayerId,
     target: Option<PlayerId>,
-    _targets: &[PlayerId],
+    targets: &[PlayerId],
     cards: &[CardId],
     core: &GameStateCore,
     catalog: &Catalog,
@@ -163,22 +163,19 @@ pub(super) fn active_ask_wudian(
         HostBehavior::WudianZhuchengGuard => match stage {
             HostStage::SelectCard => {
                 let attacker = target?;
-                let mut options = vec![ChoiceOption::Pass];
-                options.extend(
-                    core.player(attacker)
-                        .hand
-                        .iter()
-                        .copied()
-                        .map(ChoiceOption::Card),
-                );
+                let num = core.player(owner).zhucheng.len();
+                let options = super::step::wudian_zhucheng_he_options(core, attacker);
+                if num == 0 || options.len() < num {
+                    return None;
+                }
                 Some(ask(
                     attacker,
                     WUDIAN_ZHUCHENG_GUARD_ASK,
                     ChoiceKind::SelectCards,
                     options,
-                    0,
-                    1,
-                    false,
+                    num,
+                    num,
+                    true,
                 ))
             }
             _ => None,
@@ -603,14 +600,8 @@ pub(super) fn active_ask_wudian(
             }
             HostStage::CardsAsk => {
                 let attacker = target?;
-                let options: Vec<ChoiceOption> = core
-                    .player(attacker)
-                    .hand
-                    .iter()
-                    .copied()
-                    .filter(|c| catalog.card_kind(*c).is_sha_like())
-                    .map(ChoiceOption::Card)
-                    .collect();
+                let defender = *targets.first()?;
+                let options = crate::kernel::usable_sha_options(core, catalog, attacker, defender);
                 if options.is_empty() {
                     return None;
                 }
@@ -654,14 +645,61 @@ pub(super) fn active_ask_wudian(
                 owner,
                 crate::content::host::WUDIAN_CHOUDU_TARGET,
                 ChoiceKind::SelectPlayers,
-                core.alive_players().map(ChoiceOption::Player).collect(),
+                super::step::wudian_choudu_targets(core, catalog)
+                    .into_iter()
+                    .map(ChoiceOption::Player)
+                    .collect(),
                 1,
                 1,
                 true,
             )),
             _ => None,
         },
+        HostBehavior::WudianFuchou2 => match stage {
+            HostStage::SelectCard => {
+                let t = target?;
+                let options =
+                    crate::kernel::usable_sha_options(core, catalog, owner, t);
+                if options.is_empty() {
+                    return None;
+                }
+                Some(ask(
+                    owner,
+                    "wudian_fuchou2_sha",
+                    ChoiceKind::SelectCards,
+                    options,
+                    1,
+                    1,
+                    true,
+                ))
+            }
+            _ => None,
+        },
         HostBehavior::WudianDiaobingCard => match stage {
+            HostStage::SelectNature => Some(ask(
+                owner,
+                "wudian_diaobing_dir",
+                ChoiceKind::PickTag,
+                vec![ChoiceOption::Tag(0), ChoiceOption::Tag(1)],
+                1,
+                1,
+                false,
+            )),
+            HostStage::SelectCard => {
+                let t = target?;
+                if cards.is_empty() {
+                    return None;
+                }
+                Some(ask(
+                    t,
+                    "wudian_diaobing_pick",
+                    ChoiceKind::SelectCards,
+                    hand_card_options(cards),
+                    1,
+                    1,
+                    true,
+                ))
+            }
             HostStage::CardsAsk => {
                 let t = target?;
                 let options = hand_card_options(&core.player(t).hand);
@@ -675,6 +713,20 @@ pub(super) fn active_ask_wudian(
                     options,
                     1,
                     1,
+                    false,
+                ))
+            }
+            HostStage::TargetChoice => {
+                if cards.is_empty() {
+                    return None;
+                }
+                Some(ask(
+                    owner,
+                    "wudian_diaobing_top",
+                    ChoiceKind::SelectCards,
+                    hand_card_options(cards),
+                    1,
+                    cards.len(),
                     true,
                 ))
             }
