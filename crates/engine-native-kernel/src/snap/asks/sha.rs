@@ -8,6 +8,7 @@ pub(super) fn active_sha_ask(
     tieji_red: Option<bool>,
     liuli_stage: u8,
     hujia_holder: Option<PlayerId>,
+    asking_qilin: bool,
     asking_qinglong: bool,
     asking_fuchou: bool,
     asking_fengxueren: bool,
@@ -159,12 +160,13 @@ pub(super) fn active_sha_ask(
             .copied()
             .filter(|c| {
                 let kind = catalog.card_kind(*c);
-                kind == CardKind::Shan
-                    || (qingguo_h
-                        && matches!(
-                            catalog.cards[*c as usize].suit,
-                            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
-                        ))
+                !crate::rvm_bridge::modifiers::d34_flags::is_ducai3_forbidden(core, catalog, h, *c)
+                    && (kind == CardKind::Shan
+                        || (qingguo_h
+                            && matches!(
+                                catalog.cards[*c as usize].suit,
+                                crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                            )))
             })
             .map(ChoiceOption::Card)
             .collect();
@@ -176,6 +178,30 @@ pub(super) fn active_sha_ask(
             0,
             1,
             false,
+        ));
+    }
+    if asking_qilin {
+        let options: Vec<ChoiceOption> = core
+            .player(target)
+            .equips
+            .iter()
+            .filter(|c| {
+                matches!(
+                    catalog.card_kind(**c),
+                    CardKind::HorsePlus | CardKind::HorseMinus
+                )
+            })
+            .copied()
+            .map(ChoiceOption::Card)
+            .collect();
+        return Some(ask(
+            source,
+            "qilin_discard_horse",
+            ChoiceKind::SelectCards,
+            options,
+            0,
+            1,
+            true,
         ));
     }
     if asked {
@@ -218,6 +244,12 @@ pub(super) fn active_sha_ask(
         if !tieji_blocks {
             append_vm_shan_options(core, catalog, target, &mut options);
         }
+        options.retain(|o| {
+            !matches!(o, ChoiceOption::Card(c)
+                if crate::rvm_bridge::modifiers::d34_flags::is_ducai3_forbidden(
+                    core, catalog, target, *c
+                ))
+        });
         return Some(ask(
             target,
             "respond_shan",

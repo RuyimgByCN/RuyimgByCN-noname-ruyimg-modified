@@ -527,14 +527,13 @@ pub fn apply_card_target_canceled(
     {
         canceled = true;
     }
+    // 英雄杀/character/skill.js:2709-2717 (`nvquan3`: `player.sex === "male"`)
     if kind == CardKind::Duel
         && actor != target
         && (has_ext_skill(state, catalog, target, "nvquan3")
             || has_ext_skill(state, catalog, target, "nvquan")
             || flag_val(state, target, "nvquan3_active") > 0)
-        && state.player(actor).general_slots[0]
-            .and_then(|def| catalog.general_meta(def).map(|(_, _, _, _, gender)| gender))
-            .unwrap_or_else(|| state.effective_gender(actor))
+        && state.effective_gender_in(catalog, actor)
             == crate::vocabulary::generals::Gender::Male
     {
         canceled = true;
@@ -600,6 +599,27 @@ pub fn apply_card_target_canceled(
     d34_l11_mods::apply_card_target_canceled(state, catalog, actor, target, kind, canceled)
 }
 
+#[inline]
+pub fn is_ducai3_forbidden(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    actor: PlayerId,
+    card: CardId,
+) -> bool {
+    if (card as usize) >= catalog.cards.len()
+        || has_ext_skill(state, catalog, actor, "ducai2")
+        || flag_val(state, actor, "ducai2_active") > 0
+    {
+        return false;
+    }
+    let sc = suit_code(catalog.effective_card_suit(state, actor, card));
+    state.alive_players().any(|p| {
+        p != actor
+            && (flag_val(state, p, "yxs_ducai_forbidden_suit") == sc
+                || flag_val(state, p, "ducai_suit") == sc)
+    })
+}
+
 pub fn apply_card_use_canceled(
     state: &GameStateCore,
     catalog: &Catalog,
@@ -655,19 +675,8 @@ pub fn apply_card_use_canceled(
             canceled = true;
         }
     }
-    if let Some(s) = suit {
-        let sc = suit_code(s);
-        for p in state.alive_players() {
-            if p != actor
-                && (flag_val(state, p, "yxs_ducai_forbidden_suit") == sc
-                    || flag_val(state, p, "ducai_suit") == sc)
-                && !has_ext_skill(state, catalog, actor, "ducai2")
-                && flag_val(state, actor, "ducai2_active") == 0
-            {
-                canceled = true;
-                break;
-            }
-        }
+    if is_ducai3_forbidden(state, catalog, actor, card) {
+        canceled = true;
     }
     let cur_turn = state.turn.current;
     if in_hand
@@ -712,19 +721,8 @@ pub fn apply_dying_peach_target_canceled(
             }
         }
     }
-    if let Some(s) = card_suit(catalog, Some(card)) {
-        let sc = suit_code(s);
-        for p in state.alive_players() {
-            if p != actor
-                && (flag_val(state, p, "yxs_ducai_forbidden_suit") == sc
-                    || flag_val(state, p, "ducai_suit") == sc)
-                && !has_ext_skill(state, catalog, actor, "ducai2")
-                && flag_val(state, actor, "ducai2_active") == 0
-            {
-                canceled = true;
-                break;
-            }
-        }
+    if is_ducai3_forbidden(state, catalog, actor, card) {
+        canceled = true;
     }
     d34_u05_mods::apply_dying_peach_target_canceled(state, actor, dying_target, canceled)
 }

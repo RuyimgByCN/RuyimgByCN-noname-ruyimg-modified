@@ -279,12 +279,7 @@ pub(super) fn handle_u08_batch_b_ext(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> 
                 Flow::Done
             }
             HostStage::Act => {
-                if m.card == Some(1) {
-                    if let Some(p) = m.target {
-                        draw_direct(ctx, p, 1);
-                    }
-                    Flow::Done
-                } else if m.card == Some(2) {
+                if m.card == Some(2) {
                     clear_heqin_pair(ctx, owner);
                     Flow::Done
                 } else {
@@ -293,10 +288,7 @@ pub(super) fn handle_u08_batch_b_ext(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> 
             }
             _ => Flow::Done,
         },
-        "heqin2" => {
-            draw_direct(ctx, owner, 1);
-            Flow::Done
-        }
+        "heqin2" => Flow::Done,
         "heqin3" => {
             clear_heqin_pair(ctx, owner);
             Flow::Done

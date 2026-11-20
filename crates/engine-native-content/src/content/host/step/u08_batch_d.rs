@@ -20,6 +20,8 @@ use crate::vocabulary::generals::Gender;
 
 #[path = "u08_batch_d_asks.rs"]
 mod u08_batch_d_asks;
+#[path = "u08_batch_d_hooks.rs"]
+mod u08_batch_d_hooks;
 
 pub(in crate::content::host) use u08_batch_d_asks::ask_u08_batch_d;
 use u08_batch_d_asks::*;
@@ -118,6 +120,14 @@ pub(super) fn refund_once_used(ctx: &mut Ctx<'_>, p: PlayerId, name: &str) {
     }
 }
 
+pub(super) fn qiandu_targets(core: &GameStateCore, owner: PlayerId) -> Vec<PlayerId> {
+    let next = core.next_alive(owner);
+    alive_others(core, owner)
+        .into_iter()
+        .filter(|&p| p != next)
+        .collect()
+}
+
 pub(super) fn alive_others(core: &GameStateCore, owner: PlayerId) -> Vec<PlayerId> {
     core.seat_order_from(owner)
         .into_iter()
@@ -197,9 +207,7 @@ pub(super) fn is_basic_or_normal_trick_kind(kind: CardKind) -> bool {
 }
 
 pub(super) fn player_gender(core: &GameStateCore, catalog: &Catalog, p: PlayerId) -> Gender {
-    core.player(p).general_slots[0]
-        .and_then(|def| catalog.general_meta(def).map(|(_, _, _, _, gender)| gender))
-        .unwrap_or_else(|| core.effective_gender(p))
+    core.effective_gender_in(catalog, p)
 }
 
 pub(super) fn is_male(core: &GameStateCore, catalog: &Catalog, p: PlayerId) -> bool {
@@ -564,6 +572,7 @@ pub(in crate::content::host) fn trigger_meta_u08_batch_d(name: &str) -> Option<T
             Some(meta(EventKind::CardUsed, Vec::new()))
         }
         "jianai" => Some(meta(EventKind::Recover, Vec::new())),
+        // 静态声明锁保留历史窗口；`jieyong` 实际派发窗口由 `content/host.rs::kind_trigger_meta` 覆盖。
         "jieyong" | "zhulu" => Some(meta(
             EventKind::CardUsed,
             vec![EventKind::TurnBegin, EventKind::TurnEnded],
@@ -604,50 +613,10 @@ pub(in crate::content::host) fn filter_u08_batch_d(
         return false;
     }
     match skill.name.as_str() {
-        "bolehuiyan" => match event {
-            EventData::CardUsed(u) => {
-                flag(ctx.state, owner, "bolehuiyan_used_turn") == 0
-                    && u.player != owner
-                    && is_sha_use(ctx.catalog, u)
-                    && !u.targets.contains(&owner)
-                    && u.targets
-                        .first()
-                        .is_some_and(|&t| !ctx.state.player(t).hand.is_empty())
-            }
-            EventData::Damage(d) => {
-                let pred = flag(ctx.state, owner, "bolehuiyan_pred");
-                let atk = flag(ctx.state, owner, "bolehuiyan_attacker");
-                let tgt = flag(ctx.state, owner, "bolehuiyan_target");
-                pred > 0
-                    && !d.prevented
-                    && d.amount > 0
-                    && (atk == 0 || d.source == Some((atk - 1) as PlayerId))
-                    && (tgt == 0 || u32::from(d.target) + 1 == tgt)
-            }
-            EventData::ShaDodged { source, target, .. } => {
-                let pred = flag(ctx.state, owner, "bolehuiyan_pred");
-                let atk = flag(ctx.state, owner, "bolehuiyan_attacker");
-                let tgt = flag(ctx.state, owner, "bolehuiyan_target");
-                pred > 0
-                    && (atk == 0 || u32::from(*source) + 1 == atk)
-                    && (tgt == 0 || u32::from(*target) + 1 == tgt)
-            }
-            EventData::TurnBegin { .. } | EventData::TurnEnded { .. } => {
-                flag(ctx.state, owner, "bolehuiyan_used_turn") > 0
-                    || flag(ctx.state, owner, "bolehuiyan_pred") > 0
-            }
-            _ => false,
-        },
-        "bolehuiyan2" => match event {
-            EventData::ShaDodged { .. } | EventData::TurnEnded { .. } => {
-                flag(ctx.state, owner, "bolehuiyan_pred") > 0
-            }
-            _ => false,
-        },
-        "bolehuiyan3" => matches!(
+        "bolehuiyan" => matches!(
             event,
-            EventData::Damage(d)
-                if !d.prevented && d.amount > 0 && flag(ctx.state, owner, "bolehuiyan_pred") > 0
+            EventData::TurnBegin { .. } | EventData::TurnEnded { .. }
+                if flag(ctx.state, owner, "bolehuiyan_used_turn") > 0
         ),
         "oldbolehuiyan" => match event {
             EventData::Phase {
@@ -745,27 +714,7 @@ pub(in crate::content::host) fn filter_u08_batch_d(
                         .into_iter()
                         .any(|p| ctx.state.player(p).hp < ctx.state.player(p).max_hp as i32)
         ),
-        "jieyong" => match event {
-            EventData::CardUsed(u) => {
-                let Some(cid) = u.card else {
-                    return false;
-                };
-                u.player == owner
-                    && flag(ctx.state, owner, "jieyong2_used") == 0
-                    && !has_skill_named(ctx.state, ctx.catalog, owner, "jieyong2")
-                    && is_basic_or_normal_trick_kind(ctx.catalog.card_kind(cid))
-                    && (ctx.state.discard.contains(&cid) || ctx.state.table.contains(&cid))
-                    && hand_and_equips(ctx.state, owner)
-                        .into_iter()
-                        .any(|c| c != cid && is_black_card(ctx.state, ctx.catalog, owner, c))
-            }
-            EventData::TurnBegin { .. } | EventData::TurnEnded { .. } => {
-                flag(ctx.state, owner, "jieyong2_used") > 0
-                    || has_skill_named(ctx.state, ctx.catalog, owner, "jieyong2")
-            }
-            _ => false,
-        },
-        "jieyong2" | "jieyong3" => matches!(
+        "jieyong" | "jieyong2" | "jieyong3" => matches!(
             event,
             EventData::TurnBegin { .. } | EventData::TurnEnded { .. }
                 if flag(ctx.state, owner, "jieyong2_used") > 0
@@ -819,13 +768,8 @@ pub(in crate::content::host) fn filter_u08_batch_d(
                         .first()
                         .map_or(true, |&c| flag(ctx.state, owner, "qiangyun_declined_cid") != c + 1)
             }
-            _ => false,
+        _ => false,
         },
-        "cike" => matches!(
-            event,
-            EventData::CardUsed(u)
-                if u.player == owner && is_sha_use(ctx.catalog, u) && !u.targets.is_empty()
-        ),
         "zhexian" => match event {
             EventData::CardsLost { player, cards, .. }
             | EventData::CardsDiscarded { player, cards } => {
@@ -864,7 +808,7 @@ pub(in crate::content::host) fn activate_u08_batch_d(
                 .hand
                 .iter()
                 .any(|&c| is_black_card(state, catalog, owner, c))
-                && !alive_others(state, owner).is_empty()
+                && !qiandu_targets(state, owner).is_empty()
         }
         "xieling" => {
             state.player(owner).hand.len() >= 2
@@ -910,18 +854,7 @@ pub(in crate::content::host) fn machine_u08_batch_d(
     let mut cards = Vec::new();
     let mut targets = Vec::new();
     match (skill.name.as_str(), event) {
-        ("bolehuiyan", EventData::CardUsed(u)) => {
-            card = Some(1);
-            target = u.targets.first().copied();
-            targets = vec![u.player];
-        }
-        ("bolehuiyan" | "bolehuiyan3", EventData::Damage(_)) => {
-            card = Some(2);
-        }
-        ("bolehuiyan" | "bolehuiyan2", EventData::ShaDodged { .. }) => {
-            card = Some(3);
-        }
-        ("bolehuiyan" | "bolehuiyan2", EventData::TurnBegin { .. } | EventData::TurnEnded { .. }) => {
+        ("bolehuiyan", EventData::TurnBegin { .. } | EventData::TurnEnded { .. }) => {
             card = Some(4);
         }
         ("oldbolehuiyan", EventData::Phase { player, .. }) => {
@@ -955,10 +888,6 @@ pub(in crate::content::host) fn machine_u08_batch_d(
             target = Some(u.player);
             cards = u.card.into_iter().collect();
         }
-        ("jieyong", EventData::CardUsed(u)) => {
-            card = Some(1);
-            cards = u.card.into_iter().collect();
-        }
         (
             "jieyong" | "jieyong2" | "jieyong3",
             EventData::TurnBegin { .. } | EventData::TurnEnded { .. },
@@ -976,10 +905,6 @@ pub(in crate::content::host) fn machine_u08_batch_d(
         ("qiangyun", EventData::CardsLost { cards: lost, .. })
         | ("qiangyun", EventData::CardsDiscarded { cards: lost, .. }) => {
             cards = lost.clone();
-        }
-        ("cike", EventData::CardUsed(u)) => {
-            target = u.targets.first().copied();
-            cards = vec![u.card.unwrap_or(0)];
         }
         ("zhexian", EventData::CardsLost { cards: lost, .. })
         | ("zhexian", EventData::CardsDiscarded { cards: lost, .. }) => {
@@ -1008,4 +933,44 @@ pub(in crate::content::host) fn handle_u08_batch_d(
     ctx: &mut Ctx<'_>,
 ) -> Flow {
     handle_u08_batch_d_impl(m, ctx)
+}
+
+pub(crate) fn host_sha_begin_step(
+    ctx: &mut Ctx<'_>,
+    sha_frame_id: crate::ids::EventId,
+    source: PlayerId,
+    target: PlayerId,
+    sha_card: Option<CardId>,
+    priority_ge_6: bool,
+) -> bool {
+    u08_batch_d_hooks::host_sha_begin_step_impl(
+        ctx,
+        sha_frame_id,
+        source,
+        target,
+        sha_card,
+        priority_ge_6,
+    )
+}
+
+pub(crate) fn host_sha_end_step(
+    ctx: &mut Ctx<'_>,
+    sha_frame_id: crate::ids::EventId,
+    source: PlayerId,
+    target: PlayerId,
+    sha_card: Option<CardId>,
+    is_damage: bool,
+) -> bool {
+    u08_batch_d_hooks::host_sha_end_step_impl(
+        ctx,
+        sha_frame_id,
+        source,
+        target,
+        sha_card,
+        is_damage,
+    )
+}
+
+pub(crate) fn host_card_use_after(ctx: &mut Ctx<'_>, u: &CardUseData) {
+    u08_batch_d_hooks::host_card_use_after_impl(ctx, u);
 }

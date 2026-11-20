@@ -53,6 +53,9 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         if let Some(flow) = self.resume_pending_answer(ctx) {
             return flow;
         }
+        if self.has_sha_trigger_park(ctx) {
+            return Flow::Yield;
+        }
         // 青釭剑（P2/N08 批③-b）：锁定——无视目标防具（来源装备青釭时
         // 八卦阵判定与仁王盾免疫均不生效）。铡刀（Boss 阎罗王，规则
         // v271）：上游 inherit qinggang_skill——来源持有者即穿透。
@@ -89,6 +92,29 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             }
             self.asked = false;
             return Flow::Yield;
+        }
+        if self.take_sha_end_settled(ctx) {
+            return self.advance_target(ctx);
+        }
+        if let Some(is_damage) = self.take_sha_pending_end(ctx) {
+            return self.finish_target_sha_end(ctx, is_damage);
+        }
+        if !self.asked && !self.armor_judged && self.hujia_queue.is_none() {
+            if let Some(flow) = self.check_sha_begin_hook(ctx, true) {
+                return flow;
+            }
+            if ctx
+                .catalog
+                .skill_by_name("cike")
+                .is_some_and(|d| ctx.core.has_skill(self.source, d))
+            {
+                if self.renwang_blocks(ctx, qinggang_pierce) {
+                    return self.advance_target(ctx);
+                }
+                if let Some(flow) = self.check_sha_begin_hook(ctx, false) {
+                    return flow;
+                }
+            }
         }
         // 狩猎（swd deferred 消解批 95）：弃牌确认后本杀不可闪避（整杀
         // 有效=机器旗标）
@@ -190,12 +216,9 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         let needed: u8 =
             if self.source_has_wushuang(ctx) { 2 } else { 1 } + ctx.core.turn.liaoyuan_count;
         if self.dodges_used >= needed {
-            let card = self.card;
-            ctx.to_discard(card);
-            ctx.core.table.retain(|c| Some(*c) != card);
             // 燎原结束清零（上游 liaoyuan3 shaEnd 同口径）
             ctx.core.turn.liaoyuan_count = 0;
-            return Flow::Done;
+            return self.finish_target_sha_end(ctx, false);
         }
         if self.hujia_active(ctx) {
             // 本响应窗口首次进入：构建逐人询问队列
@@ -216,10 +239,13 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                         });
                         self.dodges_used += 1;
                         if self.dodges_used >= needed {
-                            let card = self.card;
-                            ctx.to_discard(card);
-                            ctx.core.table.retain(|c| Some(*c) != card);
-                            return Flow::Done;
+                            ctx.core.turn.liaoyuan_count = 0;
+                            ctx.emit(EventData::ShaDodged {
+                                card: self.card,
+                                source: self.source,
+                                target: self.target,
+                            });
+                            return self.finish_or_defer_sha_end(ctx, false);
                         }
                         // 无双还需第二张：新响应窗口——重开逐人询问
                         //（含目标本人的再次询问）
@@ -254,13 +280,18 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     .copied()
                     .filter(|c| {
                         let kind = ctx.catalog.card_kind(*c);
-                        rw_lanyin_next
+                        !crate::rvm_bridge::modifiers::d34_flags::is_ducai3_forbidden(
+                            ctx.core,
+                            ctx.catalog,
+                            next,
+                            *c,
+                        ) && (rw_lanyin_next
                             || kind == CardKind::Shan
                             || (qingguo_next
                                 && matches!(
                                     ctx.catalog.cards[*c as usize].suit,
                                     crate::catalog::Suit::Spade | crate::catalog::Suit::Club
-                                ))
+                                )))
                     })
                     .map(|c| ChoiceOption::Card(c))
                     .collect();
@@ -324,12 +355,8 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             // 铁面（Boss 阎罗王，规则 v271）：防具区没有牌时视为装备
             // 仁王盾（防具槽空=不被青釭/铡刀外的牌区分；青釭穿透已在
             // !qinggang_pierce 门内天然覆盖铁面）。
-            let renwang_blocks = self.renwang_blocks(ctx, qinggang_pierce);
-            if renwang_blocks {
-                let card = self.card;
-                ctx.to_discard(card);
-                ctx.core.table.retain(|c| Some(*c) != card);
-                return Flow::Done;
+            if self.renwang_blocks(ctx, qinggang_pierce) {
+                return self.advance_target(ctx);
             }
             // 堡垒哨卫（U05 ow，规则 v125）：哨卫模式的杀不可闪避/无视
             // 防具——直接结算伤害（上游 bshaowei_sha directHit 同口径）
@@ -721,10 +748,33 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 }
             }
 
+            shans.retain(|o| {
+                !matches!(o, ChoiceOption::Card(c)
+                    if crate::rvm_bridge::modifiers::d34_flags::is_ducai3_forbidden(
+                        ctx.core,
+                        ctx.catalog,
+                        self.target,
+                        *c,
+                    ))
+            });
+            let guilong_direct_hit =
+                crate::rvm_bridge::modifiers::d34_l28_mods::is_guilong_red_sha(
+                    ctx.core,
+                    ctx.catalog,
+                    self.source,
+                    self.card,
+                );
+            let direct_hit = poyue_direct_hit
+                || shoulie_hit
+                || lingshi_direct_hit
+                || sbzhaxiang_direct_hit
+                || yxs_fanji2_direct_hit
+                || guilong_direct_hit;
             // 神弓（swd 批 148）：借用他人防具也视为「可响应」——须在
             // 「无闪直接命中」判定之前纳入
             let shengong_borrow = (ctx.catalog.hooks.borrow_options)(ctx, self.target, true);
-            if (shans.is_empty() && shengong_borrow.is_empty())
+            if direct_hit
+                || (shans.is_empty() && shengong_borrow.is_empty())
                 || !ctx.core.player(self.target).alive
             {
                 // 风雪刃（U05 swd 第十一批，规则 v95）：命中后可选择——
@@ -787,24 +837,6 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 }
                 return self.emit_sha_damage(ctx);
             }
-            // 破月 poyue2（拓跋玉儿，swd 武将面批 28）：红杀 directHit
-            // ——整段跳过闪询问直接结算伤害
-            let guilong_direct_hit =
-                crate::rvm_bridge::modifiers::d34_l28_mods::is_guilong_red_sha(
-                    ctx.core,
-                    ctx.catalog,
-                    self.source,
-                    self.card,
-                );
-            if poyue_direct_hit
-                || shoulie_hit
-                || lingshi_direct_hit
-                || sbzhaxiang_direct_hit
-                || yxs_fanji2_direct_hit
-                || guilong_direct_hit
-            {
-                return self.emit_sha_damage(ctx);
-            }
             // 司圃（Boss 应昭，规则 v232）：应昭出牌阶段已用牌数≤2 期间
             // 其他人无法打出牌（上游 cardRespondable 同口径）——出闪选项
             // 仅保留 Pass（目标必受伤害）
@@ -820,9 +852,6 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             let mut options = vec![ChoiceOption::Pass];
             // 冰封·封（swd 批 134）：出牌封锁者不能打出闪（选项为空=必中）
             if !sipu_ban_respond
-                && !poyue_direct_hit
-                && !shoulie_hit
-                && !lingshi_direct_hit
                 && !ctx.catalog.blocks_all_cards(ctx.core, self.target)
             {
                 options.extend(shans);
@@ -882,6 +911,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                             },
                         };
                     }
+                    let outer_fid = self.current_sha_frame_id(ctx);
                     ctx.emit(EventData::Damage(damage_data_with(
                         Some(self.target),
                         self.source,
@@ -889,6 +919,9 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                         crate::event::DamageNature::Normal,
                         Some(yd),
                     )));
+                    if Self::has_active_bolehuiyan_pred(ctx) {
+                        return self.defer_sha_end(ctx, outer_fid, false);
+                    }
                 }
                 return Flow::Done;
             }
@@ -1077,8 +1110,8 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             source: self.source,
             target: self.target,
         });
-        // 目标已死等无伤害路径：推进队列/弃置杀本体。
-        return self.advance_target(ctx);
+        // 目标已死等无伤害路径：触发 shaEnd 后推进队列/弃置杀本体。
+        return self.finish_or_defer_sha_end(ctx, false);
     }
 }
 

@@ -367,12 +367,46 @@ impl GameStateCore {
         cw.min(ccw)
     }
 
-    /// 有效性别（批③-b 第八把 雌雄）：主将槽有武将时取武将性别，
-    /// 无武将默认男性（「性别有槽时筛选、无槽默认」惯例）。
+    /// 有效性别（批③-b 第八把 雌雄）：优先读取运行时性别覆写旗，
+    /// 否则主将槽有武将时取武将性别，无武将默认男性。
     pub fn effective_gender(&self, p: PlayerId) -> crate::vocabulary::generals::Gender {
+        if let Some(&ov) = self
+            .vm_aux
+            .flags
+            .get(&(p, "effective_gender_override".to_string()))
+        {
+            match ov {
+                1 => return crate::vocabulary::generals::Gender::Male,
+                2 => return crate::vocabulary::generals::Gender::Female,
+                _ => {}
+            }
+        }
         self.player(p).general_slots[0]
             .and_then(crate::vocabulary::generals::general_gender)
             .unwrap_or(crate::vocabulary::generals::Gender::Male)
+    }
+
+    /// 目录感知的当前有效性别：先查运行时性别覆写旗，再查目录主将定义
+    /// （支持扩展武将），无定义时回退 `effective_gender`（无槽默认男）。
+    pub fn effective_gender_in(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        p: PlayerId,
+    ) -> crate::vocabulary::generals::Gender {
+        if let Some(&ov) = self
+            .vm_aux
+            .flags
+            .get(&(p, "effective_gender_override".to_string()))
+        {
+            match ov {
+                1 => return crate::vocabulary::generals::Gender::Male,
+                2 => return crate::vocabulary::generals::Gender::Female,
+                _ => {}
+            }
+        }
+        self.player(p).general_slots[0]
+            .and_then(|def| catalog.general_meta(def).map(|(_, _, _, _, gender)| gender))
+            .unwrap_or_else(|| self.effective_gender(p))
     }
 
     pub fn hand_limit(&self, catalog: &crate::catalog::Catalog, p: PlayerId) -> usize {

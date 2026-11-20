@@ -198,7 +198,7 @@ pub(super) fn build_spec(
             ))
         }
         ASK_QIANDU_TARGET => {
-            let options: Vec<ChoiceOption> = alive_others(core, owner)
+            let options: Vec<ChoiceOption> = qiandu_targets(core, owner)
                 .into_iter()
                 .map(ChoiceOption::Player)
                 .collect();
@@ -446,7 +446,7 @@ pub(super) fn build_spec(
                     options,
                     min: 1,
                     max: 1,
-                    allow_cancel: false,
+                    allow_cancel: true,
                 },
             ))
         }
@@ -772,6 +772,7 @@ pub(super) fn resolve_bolehuiyan_outcome(
     set_flag(ctx.core, owner, "bolehuiyan_pred", 0);
     set_flag(ctx.core, owner, "bolehuiyan_attacker", 0);
     set_flag(ctx.core, owner, "bolehuiyan_target", 0);
+    set_flag(ctx.core, owner, "bolehuiyan_card_frame", 0);
     remove_skill_named(ctx, owner, "bolehuiyan2");
     remove_skill_named(ctx, owner, "bolehuiyan3");
     if pred == 0 {
@@ -836,31 +837,41 @@ pub(super) fn handle_u08_batch_d_impl(m: &mut HostMachine, ctx: &mut Ctx<'_>) ->
                 Some(3) => resolve_bolehuiyan_outcome(m, ctx, false),
                 Some(4) => {
                     set_flag(ctx.core, owner, "bolehuiyan_used_turn", 0);
-                    if flag(ctx.core, owner, "bolehuiyan_pred") > 0 {
-                        return resolve_bolehuiyan_outcome(m, ctx, false);
-                    }
                     Flow::Done
                 }
                 _ => Flow::Done,
             },
             HostStage::SelectNature => {
                 m.stage = HostStage::Act;
+                m.card = None;
+                // 英雄杀/character/skill.js:2465-2470 + Chrome DOM `ui.click.cancel` 实证：
+                // cancel 点击返回 `{confirm:"cancel",bool:false}` 无 `.control`，
+                // `result.control !== "cancel"` 仍执行 `addTempSkill("bolehuiyan4")` 消耗本回合次数。
+                set_flag(ctx.core, owner, "bolehuiyan_used_turn", 1);
                 let Some(tag) = answered_tag(ctx) else {
                     return Flow::Done;
                 };
                 let pred = if tag == 2 { 2 } else { 1 };
                 let attacker = m.targets.first().copied().unwrap_or(owner);
                 let target = m.target.unwrap_or(owner);
-                set_flag(ctx.core, owner, "bolehuiyan_used_turn", 1);
+                let card_frame = ctx
+                    .res
+                    .stack
+                    .iter()
+                    .rev()
+                    .find(|f| matches!(f.data, EventData::CardUsed(_)))
+                    .map_or(0, |f| f.id);
                 set_flag(ctx.core, owner, "bolehuiyan_pred", pred);
                 set_flag(ctx.core, owner, "bolehuiyan_attacker", u32::from(attacker) + 1);
                 set_flag(ctx.core, owner, "bolehuiyan_target", u32::from(target) + 1);
+                set_flag(ctx.core, owner, "bolehuiyan_card_frame", card_frame);
                 grant_skill_named(ctx, owner, "bolehuiyan2");
                 grant_skill_named(ctx, owner, "bolehuiyan3");
                 Flow::Done
             }
             HostStage::SelectCard => {
                 m.stage = HostStage::Act;
+                m.card = None;
                 if let Some(cid) = answered_cards(ctx).into_iter().next() {
                     discard_cards(ctx, owner, &[cid]);
                 }
@@ -872,6 +883,7 @@ pub(super) fn handle_u08_batch_d_impl(m: &mut HostMachine, ctx: &mut Ctx<'_>) ->
             HostStage::Act => resolve_bolehuiyan_outcome(m, ctx, false),
             HostStage::SelectCard => {
                 m.stage = HostStage::Act;
+                m.card = None;
                 if let Some(cid) = answered_cards(ctx).into_iter().next() {
                     discard_cards(ctx, owner, &[cid]);
                 }
@@ -883,6 +895,7 @@ pub(super) fn handle_u08_batch_d_impl(m: &mut HostMachine, ctx: &mut Ctx<'_>) ->
             HostStage::Act => resolve_bolehuiyan_outcome(m, ctx, true),
             HostStage::SelectCard => {
                 m.stage = HostStage::Act;
+                m.card = None;
                 if let Some(cid) = answered_cards(ctx).into_iter().next() {
                     discard_cards(ctx, owner, &[cid]);
                 }

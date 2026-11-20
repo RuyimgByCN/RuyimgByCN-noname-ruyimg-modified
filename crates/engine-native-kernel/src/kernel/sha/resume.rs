@@ -103,7 +103,7 @@ impl ShaResolveMachine {
                     if ctx.core.player(self.target).alive {
                         return Some(self.emit_sha_damage(ctx));
                     }
-                    return Some(self.advance_target(ctx));
+                    return Some(self.finish_target_sha_end(ctx, false));
                 }
                 self.xiandan_bonus = true;
             }
@@ -223,7 +223,7 @@ impl ShaResolveMachine {
                 return Some(self.open_hanbing_target_ask(ctx));
             }
             self.hanbing_pending = 0;
-            return Some(self.advance_target(ctx));
+            return Some(self.finish_or_defer_sha_end(ctx, true));
         }
         // 寒冰剑（批③-b 第三把）：来源防止伤害确认恢复——确认后转入
         // 目标自选弃牌（两次；逐技对照批一消除「自动依次」差异）。
@@ -232,12 +232,16 @@ impl ShaResolveMachine {
             self.asking_fengxueren = false;
             let confirmed = matches!(ctx.answer().first(), Some(ChoiceOption::Confirm));
             if confirmed {
+                let fid = self.current_sha_frame_id(ctx);
                 ctx.emit(EventData::TurnOverBefore {
                     player: self.target,
                     cancelled: false,
                 });
                 ctx.start_draw(self.target, 1);
-                return Some(self.advance_target(ctx));
+                if Self::has_active_bolehuiyan_pred(ctx) {
+                    return Some(self.defer_sha_end(ctx, fid, false));
+                }
+                return Some(self.finish_target_sha_end(ctx, false));
             }
             return Some(self.emit_sha_damage(ctx));
         }
@@ -250,7 +254,7 @@ impl ShaResolveMachine {
                     return Some(self.open_hanbing_target_ask(ctx));
                 }
                 self.hanbing_pending = 0;
-                return Some(self.advance_target(ctx));
+                return Some(self.finish_target_sha_end(ctx, true));
             }
             // 放弃：照常进入麒麟弓/伤害结算（单武器互斥，实际直接伤害）。
             return Some(self.emit_sha_damage(ctx));
@@ -282,6 +286,7 @@ impl ShaResolveMachine {
             self.guanshi_cards.clear();
             // 恰弃两张 → 强制伤害（被闪仍命中）；放弃 → 无伤。
             if fired && ctx.core.player(self.target).alive {
+                let fid = self.current_sha_frame_id(ctx);
                 ctx.emit(EventData::Damage(damage_data_with(
                     Some(self.source),
                     self.target,
@@ -289,14 +294,19 @@ impl ShaResolveMachine {
                     self.nature,
                     self.card,
                 )));
+                if Self::has_active_bolehuiyan_pred(ctx) {
+                    return Some(self.defer_sha_end(ctx, fid, true));
+                }
+                return Some(self.finish_target_sha_end(ctx, true));
             }
-            return Some(self.advance_target(ctx));
+            return Some(self.finish_target_sha_end(ctx, false));
         }
         // 青龙偃月刀（批③-b 第六把）：再杀询问恢复——弃置选中的杀并
         // 以其重启对同一目标的杀结算（防/闪/贯石斧/麒麟弓流程全部重走）。
         if self.asking_qinglong {
             self.asking_qinglong = false;
             if let Some(yd) = self.fuchou_card.take().filter(|c| *c != u32::MAX) {
+                let outer_fid = self.current_sha_frame_id(ctx);
                 if let Some(ChoiceOption::Card(new_sha)) = ctx.answer().first().copied() {
                     if ctx.core.player(self.source).hand.contains(&new_sha) {
                         ctx.core
@@ -315,6 +325,9 @@ impl ShaResolveMachine {
                             self.source,
                             vec![self.target],
                         )));
+                        if Self::has_active_bolehuiyan_pred(ctx) {
+                            return Some(self.defer_sha_end(ctx, outer_fid, false));
+                        }
                         return Some(Flow::Done);
                     }
                 }
@@ -326,6 +339,9 @@ impl ShaResolveMachine {
                         crate::event::DamageNature::Normal,
                         Some(yd),
                     )));
+                    if Self::has_active_bolehuiyan_pred(ctx) {
+                        return Some(self.defer_sha_end(ctx, outer_fid, false));
+                    }
                 }
                 return Some(Flow::Done);
             }
@@ -336,6 +352,21 @@ impl ShaResolveMachine {
                         card: new_sha,
                         player: self.source,
                     });
+                    if let Some(fid) = self.current_sha_frame_id(ctx) {
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .remove(&(self.source, format!("sha_cike_done:{fid}")));
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .remove(&(self.source, format!("sha_end_settled:{fid}")));
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .remove(&(self.source, format!("sha_pending_end:{fid}")));
+                    }
+                    self.shoulie_direct = false;
                     self.card = Some(new_sha);
                     self.asked = false;
                     self.armor_judged = false;
@@ -347,8 +378,8 @@ impl ShaResolveMachine {
                     return Some(Flow::Yield);
                 }
             }
-            // 放弃：当前目标按被闪结算（无伤）→ 推进队列/结束。
-            return Some(self.advance_target(ctx));
+            // 放弃：当前目标按被闪结算（无伤）→ shaEnd + 推进队列/结束。
+            return Some(self.finish_target_sha_end(ctx, false));
         }
         // 萨登荆环（swd 卡牌面窗口机批）：被闪后判定确认恢复——确定性判
         // 定（内联口径同铁骑，登记差异：无鬼道改判窗）；红色→目标额外
@@ -417,8 +448,8 @@ impl ShaResolveMachine {
                     return Some(self.sadeng_continue_to_damage(ctx));
                 }
             }
-            // 未确认/判定黑/目标已死：被闪结算维持 → 推进
-            return Some(self.advance_target(ctx));
+            // 未确认/判定黑/目标已死：被闪结算维持 → shaEnd + 推进
+            return Some(self.finish_target_sha_end(ctx, false));
         }
         // 萨登荆环：额外出闪恢复——打出则本杀仍被闪避；未打出则改为
         // 命中（照常走寒冰/麒麟窗）。
@@ -431,13 +462,13 @@ impl ShaResolveMachine {
                         card: shan,
                         player: self.target,
                     });
-                    return Some(self.advance_target(ctx));
+                    return Some(self.finish_or_defer_sha_end(ctx, false));
                 }
             }
             if ctx.core.player(self.target).alive {
                 return Some(self.sadeng_continue_to_damage(ctx));
             }
-            return Some(self.advance_target(ctx));
+            return Some(self.finish_target_sha_end(ctx, false));
         }
         // 雌雄双股剑（批③-b 第八把；逐技对照批一 v75 消除首张差异）：
         // 弃牌/令摸恢复——上游 chooseToDiscard 一张手牌、可取消（取消=
@@ -474,8 +505,7 @@ impl ShaResolveMachine {
                 }
             }
             self.qilin_horse = None;
-            self.emit_sha_damage(ctx);
-            return Some(Flow::Done);
+            return Some(self.emit_sha_damage(ctx));
         }
         None
     }

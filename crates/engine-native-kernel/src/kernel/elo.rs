@@ -529,7 +529,7 @@ pub fn elo_on_judge_begin(
 }
 
 #[inline]
-fn elo_is_under_control(core: &GameStateCore, player: PlayerId) -> bool {
+pub fn elo_is_under_control(core: &GameStateCore, player: PlayerId) -> bool {
     elo_get_player_scalar(core, player, "elo_under_control").unwrap_or(0) != 0
 }
 

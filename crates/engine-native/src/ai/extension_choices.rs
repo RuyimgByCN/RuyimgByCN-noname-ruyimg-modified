@@ -465,6 +465,71 @@ pub(super) fn plan_extension_choice_action(
                 selection,
             })
         }
+        "xumou:confirm" => {
+            let me = input.view.players.get(seat as usize);
+            let want = me.is_some_and(|p| p.hp + p.hand_count as i32 <= 3);
+            let selection = if want {
+                options
+                    .iter()
+                    .find(|o| matches!(o, ChoiceOption::Confirm))
+                    .copied()
+                    .into_iter()
+                    .collect()
+            } else {
+                Vec::new()
+            };
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
+        "bolehuiyan:predict" => {
+            let attacker = input.view.players.get(input.view.turn as usize);
+            let direct_hit_attacker = attacker.is_some_and(|a| {
+                a.skills.iter().any(|&s| {
+                    matches!(
+                        s,
+                        "无双" | "wushuang" | "烈弓" | "liegong" | "铁骑" | "tieji" | "juji" | "retieji"
+                    )
+                })
+            });
+            let likely_hit = direct_hit_attacker
+                || input.view.players.iter().any(|p| {
+                    p.alive
+                        && p.seat != seat
+                        && p.seat != input.view.turn
+                        && p.hand_count > 0
+                        && (p.skills.iter().any(|&s| matches!(s, "yijue2" | "shanguang2"))
+                            || (p.hand_count < 2 && p.equips.is_empty()))
+                });
+            let tag = if likely_hit { 1 } else { 2 };
+            let selection = options
+                .iter()
+                .find(|o| matches!(o, ChoiceOption::Tag(t) if *t == tag))
+                .copied()
+                .into_iter()
+                .collect();
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
+        "cike:confirm" => Some(GameAction::Answer {
+            choice_id: id,
+            selection: vec![ChoiceOption::Confirm],
+        }),
+        "cike:discard_card" | "wange:choose_card" => {
+            let selection = options
+                .iter()
+                .find(|o| matches!(o, ChoiceOption::Card(_)))
+                .copied()
+                .into_iter()
+                .collect();
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
         _ => extension_choices_l28::plan_l28_choice_action(
             catalog,
             input,

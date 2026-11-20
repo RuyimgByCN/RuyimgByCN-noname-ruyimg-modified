@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-20 Batch 1.3（U08 英雄杀）规则修复与独立复核（待提交／发布）
+
+基线 HEAD `748e2974e6f63067e7770278f1f90b5138a60009` 合入 `swarm/author-u08-l28` `00c6c7412cc7e54484f11176649dc57dd62409f5`；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`。经先红后绿回归与未参与实现的独立复核 agent（`080e0e55-1095-4fc2-961b-cf5bb2bca2e5`）三轮逐行核对与上游实跑探针比对，Batch 1.3 23 项审查结果 **23 PASS / 0 FAIL / `APPROVE`**：`U08 英雄杀` 更新为 **已复核等价 150／简化近似 0／缺失 0**（修复并签署 `yxsdili`、`heqin2`、`xumou`、`bolehuiyan`、`bolehuiyan2`、`bolehuiyan3`、`nvquan3`，并重审修复通过 `cike`、`nichang`/`nichang2`、`wange`/`wange2`、`ducai2`/`ducai3`、`tongyu`/`lguiyin`、`qiandu`、`xiadao`、`jieyong`/`feigong`、`lzhangyi`、`heqin` 及 4 将抽样）。全仓清单更新为 **已复核等价 643／简化近似 3,781／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch 1.3 复核摘要](../operations/evidence/2026-11-20-batch1-3-u08/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。
+
 ## 2026-11-20 Batch 1.2（L28 雷霆万钧）规则修复与独立复核（待提交／发布）
 
 基线 HEAD `c119a64408e9556f58c415ddd0c5eceb1f11fdf0` 合入 `swarm/author-l28` `d50723fe23c05edfbe5fe43e6bd874c4b553a565`；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`。经先红后绿回归与未参与实现的独立复核 agent（`571d828a-de8d-4c1a-b9cc-e06219f5006b`）三轮逐行核对与上游 19 步真实事件探针比对，Batch 1.2 21 项审查结果 **19 通过／2 维持简化近似／0 失败**：`L28 雷霆万钧` 更新为 **已复核等价 54／简化近似 2／缺失 0**（修复并签署 `th_buxu`、`th_tianshu`、`th_yeyan`、`cards:th_taipingyaoshu`；复审通过 `th_chengye`、`th_shen_zhouyu` `pro_qinyin`、`th_bushi`、`th_caohua`、`th_jingxie`、`th_shengong` 18 件专属装备、`th_tiansuan*`、`th_gushe`、`th_zhengjing2`、`hidePack`；`th_zhengjing` 实时小游戏计数抽象与纯 CSS `thunder.css` 维持 `简化近似`）。全仓清单更新为 **已复核等价 636／简化近似 3,788／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch 1.2 复核摘要](../operations/evidence/2026-11-20-batch1-2-l28/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。

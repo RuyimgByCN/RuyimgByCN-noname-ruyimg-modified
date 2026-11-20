@@ -61,54 +61,62 @@ impl crate::catalog::SkillMachine for DrawPhaseMachine {
                 }
             }
             DP::Begin => {
-                // pending 修正窗（§3）：宿主 phaseDrawBegin num± 表——与旧
-                // begin_draw 同口径逐项相加（有符号），执行入口统一 max(0)。
-                pending += host_pending_adjust(ctx, player);
-                pending = crate::rvm_bridge::modifiers::eval_draw_count(
-                    ctx.core,
-                    ctx.catalog,
-                    player,
-                    pending,
-                );
-                if let Some(bonus) = ctx
-                    .core
-                    .vm_aux
-                    .flags
-                    .remove(&(player, "draw_phase_bonus".to_string()))
-                {
-                    pending += bonus as i32;
-                }
-                // 玉如意（swd b44）：摸牌前把牌堆末 20 张窗口内最大点数牌
-                // 移至摸牌位（pop 位）——与旧 begin_draw 同口径。
-                if ctx
-                    .core
-                    .player(player)
-                    .equips
-                    .iter()
-                    .any(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Yuruyi)
-                    && ctx.core.deck.len() > 1
-                {
-                    let len = ctx.core.deck.len();
-                    let window = len.min(20);
-                    let mut best = len - 1;
-                    for i in (len - window)..len {
-                        if ctx.catalog.cards[ctx.core.deck[i] as usize].rank
-                            > ctx.catalog.cards[ctx.core.deck[best] as usize].rank
-                        {
-                            best = i;
+                if outcome != O::Running {
+                    progress = DP::Done;
+                    child = Some(win(self.root, W::After));
+                } else {
+                    // pending 修正窗（§3）：宿主 phaseDrawBegin num± 表——与旧
+                    // begin_draw 同口径逐项相加（有符号），执行入口统一 max(0)。
+                    pending += host_pending_adjust(ctx, player);
+                    pending = crate::rvm_bridge::modifiers::eval_draw_count(
+                        ctx.core,
+                        ctx.catalog,
+                        player,
+                        pending,
+                    );
+                    if let Some(bonus) = ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .remove(&(player, "draw_phase_bonus".to_string()))
+                    {
+                        pending += bonus as i32;
+                    }
+                    if !num_fixed {
+                        (ctx.catalog.hooks.draw_begin_step)(ctx, player, &mut pending);
+                    }
+                    // 玉如意（swd b44）：摸牌前把牌堆末 20 张窗口内最大点数牌
+                    // 移至摸牌位（pop 位）——与旧 begin_draw 同口径。
+                    if ctx
+                        .core
+                        .player(player)
+                        .equips
+                        .iter()
+                        .any(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Yuruyi)
+                        && ctx.core.deck.len() > 1
+                    {
+                        let len = ctx.core.deck.len();
+                        let window = len.min(20);
+                        let mut best = len - 1;
+                        for i in (len - window)..len {
+                            if ctx.catalog.cards[ctx.core.deck[i] as usize].rank
+                                > ctx.catalog.cards[ctx.core.deck[best] as usize].rank
+                            {
+                                best = i;
+                            }
+                        }
+                        if best != len - 1 {
+                            let card = ctx.core.deck.remove(best);
+                            ctx.core.deck.push(card);
                         }
                     }
-                    if best != len - 1 {
-                        let card = ctx.core.deck.remove(best);
-                        ctx.core.deck.push(card);
+                    // 雪霁冰雹：应用 +1 后计数递减（旧 begin_draw 同步同口径）。
+                    if ctx.core.player(player).xuejibingbao > 0 {
+                        ctx.core.player_mut(player).xuejibingbao -= 1;
                     }
+                    progress = DP::Begin1;
+                    child = Some(win(self.root, W::Begin));
                 }
-                // 雪霁冰雹：应用 +1 后计数递减（旧 begin_draw 同步同口径）。
-                if ctx.core.player(player).xuejibingbao > 0 {
-                    ctx.core.player_mut(player).xuejibingbao -= 1;
-                }
-                progress = DP::Begin1;
-                child = Some(win(self.root, W::Begin));
             }
             DP::Begin1 => {
                 progress = DP::Begin2;

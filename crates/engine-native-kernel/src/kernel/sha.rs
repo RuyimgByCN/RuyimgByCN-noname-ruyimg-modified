@@ -189,10 +189,187 @@ impl ShaResolveMachine {
             <= ctx.core.attack_range(ctx.catalog, self.target)
     }
 
+    fn current_sha_frame_id(&self, ctx: &Ctx<'_>) -> Option<crate::ids::EventId> {
+        ctx.res
+            .stack
+            .iter()
+            .rev()
+            .find(|f| matches!(f.data, EventData::CardUsed(_)))
+            .map(|f| f.id)
+    }
+
+    pub(super) fn has_sha_trigger_park(&self, ctx: &Ctx<'_>) -> bool {
+        let Some(fid) = self.current_sha_frame_id(ctx) else {
+            return false;
+        };
+        let depth = ctx.res.stack.len();
+        ctx.res.parks.iter().any(|p| {
+            p.slot == crate::resolution::Slot::Trigger { frame: fid }
+                && p.resume_depth == depth
+                && p.machine.trigger_order().is_none()
+        })
+    }
+
+    pub(super) fn take_sha_end_settled(&self, ctx: &mut Ctx<'_>) -> bool {
+        let Some(fid) = self.current_sha_frame_id(ctx) else {
+            return false;
+        };
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(self.source, format!("sha_end_settled:{fid}")))
+            .is_some()
+    }
+
+    pub(super) fn has_active_bolehuiyan_pred(ctx: &Ctx<'_>) -> bool {
+        ctx.core
+            .vm_aux
+            .flags
+            .iter()
+            .any(|((_, k), &v)| k == "bolehuiyan_pred" && v > 0)
+    }
+
+    pub(super) fn take_sha_pending_end(&self, ctx: &mut Ctx<'_>) -> Option<bool> {
+        let fid = self.current_sha_frame_id(ctx)?;
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(self.source, format!("sha_pending_end:{fid}")))
+            .map(|v| v == 2)
+    }
+
+    pub(super) fn defer_sha_end(
+        &mut self,
+        ctx: &mut Ctx<'_>,
+        fid: Option<crate::ids::EventId>,
+        is_damage: bool,
+    ) -> Flow {
+        self.asked = false;
+        self.hujia_holder = None;
+        self.liuli_stage = 0;
+        self.asking_qilin = false;
+        self.asking_hanbing = false;
+        self.asking_fengxueren = false;
+        self.asking_guanshi = false;
+        self.asking_qinglong = false;
+        if let Some(fid) = fid {
+            ctx.core.vm_aux.flags.insert(
+                (self.source, format!("sha_pending_end:{fid}")),
+                if is_damage { 2 } else { 1 },
+            );
+            return Flow::Yield;
+        }
+        self.finish_target_sha_end(ctx, is_damage)
+    }
+
+    pub(super) fn finish_or_defer_sha_end(&mut self, ctx: &mut Ctx<'_>, is_damage: bool) -> Flow {
+        if Self::has_active_bolehuiyan_pred(ctx) {
+            let fid = self.current_sha_frame_id(ctx);
+            return self.defer_sha_end(ctx, fid, is_damage);
+        }
+        self.finish_target_sha_end(ctx, is_damage)
+    }
+
+    pub(super) fn check_sha_begin_hook(
+        &mut self,
+        ctx: &mut Ctx<'_>,
+        priority_ge_6: bool,
+    ) -> Option<Flow> {
+        let fid = self.current_sha_frame_id(ctx)?;
+        if priority_ge_6 {
+            if (ctx.catalog.hooks.sha_begin_step)(
+                ctx,
+                fid,
+                self.source,
+                self.target,
+                self.card,
+                true,
+            ) {
+                return Some(Flow::Yield);
+            }
+        } else {
+            let cike_ran = ctx
+                .core
+                .vm_aux
+                .flags
+                .contains_key(&(self.source, format!("sha_cike_done:{fid}")));
+            if !cike_ran
+                && (ctx.catalog.hooks.sha_begin_step)(
+                    ctx,
+                    fid,
+                    self.source,
+                    self.target,
+                    self.card,
+                    false,
+                )
+            {
+                return Some(Flow::Yield);
+            }
+            if ctx
+                .core
+                .vm_aux
+                .flags
+                .contains_key(&(self.source, format!("sha_cike_done:{fid}")))
+                && !self.shoulie_direct
+            {
+                let cid = self.card.unwrap_or(0);
+                if ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.source, format!("sha_unrespondable:{cid}:{}", self.target)))
+                    .is_some()
+                {
+                    self.shoulie_direct = true;
+                }
+            }
+        }
+        None
+    }
+
+    pub(super) fn finish_target_sha_end(&mut self, ctx: &mut Ctx<'_>, is_damage: bool) -> Flow {
+        if let Some(fid) = self.current_sha_frame_id(ctx) {
+            if (ctx.catalog.hooks.sha_end_step)(
+                ctx,
+                fid,
+                self.source,
+                self.target,
+                self.card,
+                is_damage,
+            ) {
+                // 出闪/武器窗已结束，进入 `bolehuiyan2`/`bolehuiyan3` 挂起前清除
+                // `asked`/`hujia_holder`/`liuli_stage` 避免恢复校验误把 Sha 机认作仍待选。
+                self.asked = false;
+                self.hujia_holder = None;
+                self.liuli_stage = 0;
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((self.source, format!("sha_end_settled:{fid}")), 1);
+                return Flow::Yield;
+            }
+        }
+        self.advance_target(ctx)
+    }
+
     /// 方天画戟（批③-b 第九把）：当前目标结算完毕 → 队列取下一目标
     ///（逐目标状态复位，重开该目标的防具/出闪询问）；队列空 → 弃置杀
     /// 本体结束。
     fn advance_target(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        if let Some(fid) = self.current_sha_frame_id(ctx) {
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(self.source, format!("sha_cike_done:{fid}")));
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(self.source, format!("sha_end_settled:{fid}")));
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(self.source, format!("sha_pending_end:{fid}")));
+        }
         if let Some(next) = self.extra_targets.first().copied() {
             self.extra_targets.remove(0);
             self.target = next;
@@ -321,7 +498,9 @@ impl ShaResolveMachine {
             } else {
                 0
             };
-        if ctx.core.player(self.target).alive {
+        let fid = self.current_sha_frame_id(ctx);
+        let dealt_damage = ctx.core.player(self.target).alive;
+        if dealt_damage {
             if self.card.is_none() && ctx.catalog.skills.len() > 24 {
                 ctx.core
                     .vm_aux
@@ -343,7 +522,10 @@ impl ShaResolveMachine {
             )));
         }
         self.xiandan_bonus = false;
-        self.advance_target(ctx)
+        if dealt_damage && Self::has_active_bolehuiyan_pred(ctx) {
+            return self.defer_sha_end(ctx, fid, true);
+        }
+        self.finish_target_sha_end(ctx, dealt_damage)
     }
 
     /// 来源是否持有无双（需要连续两张闪）。

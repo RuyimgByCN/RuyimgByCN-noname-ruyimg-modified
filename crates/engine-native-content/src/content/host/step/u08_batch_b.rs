@@ -174,9 +174,7 @@ pub(super) fn is_delayed_trick_use(catalog: &Catalog, u: &CardUseData) -> bool {
 }
 
 pub(super) fn player_gender(state: &GameStateCore, catalog: &Catalog, p: PlayerId) -> Gender {
-    state.player(p).general_slots[0]
-        .and_then(|def| catalog.general_meta(def).map(|(_, _, _, _, gender)| gender))
-        .unwrap_or_else(|| state.effective_gender(p))
+    state.effective_gender_in(catalog, p)
 }
 
 pub(super) fn count_distinct_alive_factions(state: &GameStateCore, catalog: &Catalog) -> usize {
@@ -588,16 +586,6 @@ pub(in crate::content::host) fn filter_u08_batch_b(
                 if d.target == owner && !d.prevented && d.amount > 0
         ),
         "heqin" => match event {
-            EventData::Phase {
-                player,
-                phase: Phase::Draw,
-                begin: true,
-            } => {
-                !has_skill_named(ctx.state, ctx.catalog, *player, "heqin2")
-                    && flag(ctx.state, *player, "heqin2_active") > 0
-                    && (*player == owner
-                        || flag(ctx.state, owner, "heqin_partner") == u32::from(*player) + 1)
-            }
             EventData::Death { player, .. } => {
                 flag(ctx.state, owner, "heqin_partner") > 0
                     && (*player == owner
@@ -605,14 +593,7 @@ pub(in crate::content::host) fn filter_u08_batch_b(
             }
             _ => false,
         },
-        "heqin2" => matches!(
-            event,
-            EventData::Phase {
-                player,
-                phase: Phase::Draw,
-                begin: true,
-            } if *player == owner
-        ),
+        "heqin2" => false,
         "heqin3" => matches!(
             event,
             EventData::Death { player, .. }
@@ -777,10 +758,6 @@ pub(in crate::content::host) fn machine_u08_batch_b(
         ("biaoqi", EventData::CardUsed(u)) => {
             target = u.targets.first().copied();
             card = u.card.map(u32::from);
-        }
-        ("heqin", EventData::Phase { player, .. }) => {
-            target = Some(*player);
-            card = Some(1);
         }
         ("heqin", EventData::Death { .. }) => {
             card = Some(2);

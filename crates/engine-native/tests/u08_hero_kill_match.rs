@@ -801,3 +801,207 @@ fn u08_batch_b_all_28_skills_6d_real_match() {
     assert!(e.state_core().player(1).hp < 3, "sanbanfu + yxsciqiu deal boosted Sha damage");
     assert!(!e.state_core().player(1).hand.is_empty(), "ysheshen distributes deck cards on damage");
 }
+
+#[test]
+fn u08_batch_a_b_yxsdili_heqin2_draw_phase_num_6d_real_match() {
+    use engine_native::{LogEvent, RejectReason};
+
+    // 1. `yxsdili` (`英雄杀/character/skill.js:761-769`):
+    // `phaseDrawBegin`: modifies `DrawPhase.pending` by `min(2, ceil((maxHp - hp) / 2))`
+    // rather than issuing a separate `draw_direct` before DrawPhase.
+    let mut e = new_u08_engine(810090, 3);
+    for p in 0..3 {
+        e.debug_clear_hand(p);
+    }
+    e.debug_grant(0, "yxsdili");
+
+    let count_draws = |e: &Engine, from_log: usize, seat: u8| -> Vec<usize> {
+        e.log()[from_log..]
+            .iter()
+            .filter_map(|ev| match ev {
+                LogEvent::CardsDrawn { player, cards } if *player == seat => Some(cards.len()),
+                _ => None,
+            })
+            .collect()
+    };
+
+    // Full HP (4/4): only base 2 cards in one `CardsDrawn`.
+    e.state_core_mut().player_mut(0).max_hp = 4;
+    e.state_core_mut().player_mut(0).hp = 4;
+    e.debug_set_turn(0, Phase::Judge, 1);
+    let mark = e.log().len();
+    let _ = submit(&mut e, 0, GameAction::NextPhase);
+    drain_pass(&mut e);
+    assert_eq!(count_draws(&e, mark, 0), vec![2], "yxsdili full HP draws 2");
+
+    // Lost 1 HP (3/4): single `CardsDrawn` of 3 (NOT 1 + 2 split).
+    e.debug_clear_hand(0);
+    e.state_core_mut().player_mut(0).hp = 3;
+    e.debug_set_turn(0, Phase::Judge, 2);
+    let mark = e.log().len();
+    let _ = submit(&mut e, 0, GameAction::NextPhase);
+    drain_pass(&mut e);
+    assert_eq!(count_draws(&e, mark, 0), vec![3], "yxsdili lost 1 HP draws 3 in one DrawPhase");
+
+    // Lost 2 HP (2/4): single `CardsDrawn` of 3.
+    e.debug_clear_hand(0);
+    e.state_core_mut().player_mut(0).hp = 2;
+    e.debug_set_turn(0, Phase::Judge, 3);
+    let mark = e.log().len();
+    let _ = submit(&mut e, 0, GameAction::NextPhase);
+    drain_pass(&mut e);
+    assert_eq!(count_draws(&e, mark, 0), vec![3], "yxsdili lost 2 HP draws 3 in one DrawPhase");
+
+    // Lost 3 HP (1/4): single `CardsDrawn` of 4.
+    e.debug_clear_hand(0);
+    e.state_core_mut().player_mut(0).hp = 1;
+    e.debug_set_turn(0, Phase::Judge, 4);
+    let mark = e.log().len();
+    let _ = submit(&mut e, 0, GameAction::NextPhase);
+    drain_pass(&mut e);
+    assert_eq!(count_draws(&e, mark, 0), vec![4], "yxsdili lost 3 HP draws 4 in one DrawPhase");
+
+    // Lost 4 HP (2/6): capped at +2 -> single `CardsDrawn` of 4.
+    e.debug_clear_hand(0);
+    e.state_core_mut().player_mut(0).max_hp = 6;
+    e.state_core_mut().player_mut(0).hp = 2;
+    e.debug_set_turn(0, Phase::Judge, 5);
+    let mark = e.log().len();
+    let _ = submit(&mut e, 0, GameAction::NextPhase);
+    drain_pass(&mut e);
+    assert_eq!(count_draws(&e, mark, 0), vec![4], "yxsdili lost 4 HP caps at +2 -> 4");
+
+    // Skipped DrawPhase (`skip_next_draw = true`): damaged `yxsdili` draws 0 cards.
+    e.debug_clear_hand(0);
+    e.state_core_mut().player_mut(0).skip_next_draw = true;
+    e.debug_set_turn(0, Phase::Judge, 6);
+    let mark = e.log().len();
+    let _ = submit(&mut e, 0, GameAction::NextPhase);
+    drain_pass(&mut e);
+    assert_eq!(count_draws(&e, mark, 0), Vec::<usize>::new(), "yxsdili skipped DrawPhase draws 0");
+
+    // Fixed draw count (`num_fixed = true`, fixed to 0 or 1): `yxsdili` respects `num_fixed`.
+    e.debug_clear_hand(0);
+    let mark = e.log().len();
+    let _ = e.debug_start_draw_phase_fixed(0, 0);
+    assert_eq!(count_draws(&e, mark, 0), Vec::<usize>::new(), "yxsdili fixed 0 draws 0");
+    let mark = e.log().len();
+    let _ = e.debug_start_draw_phase_fixed(0, 1);
+    assert_eq!(count_draws(&e, mark, 0), vec![1], "yxsdili fixed 1 draws 1");
+
+    // Combined with `BOSS_NIANRUI` (+2 in DrawPhase): `yxsdili` (+2) + `BOSS_NIANRUI` (+2) -> single `CardsDrawn` of 6,
+    // and delayed trick `Bing` (non-Club judge skips DrawPhase) draws 0 cards.
+    use engine_native::vocabulary::names::BOSS_NIANRUI;
+    e.debug_clear_hand(0);
+    e.debug_grant(0, BOSS_NIANRUI);
+    e.debug_set_turn(0, Phase::Judge, 7);
+    let mark = e.log().len();
+    let _ = submit(&mut e, 0, GameAction::NextPhase);
+    drain_pass(&mut e);
+    assert_eq!(
+        count_draws(&e, mark, 0),
+        vec![6],
+        "yxsdili +2 combined with BOSS_NIANRUI +2 emits one CardsDrawn of 6"
+    );
+
+    let bing_c = find_card_matching(&e, |_, m| m.kind == CardKind::Bing);
+    e.state_core_mut().deck.retain(|&c| c != bing_c);
+    e.state_core_mut().discard.retain(|&c| c != bing_c);
+    e.state_core_mut().player_mut(0).judge.push(bing_c);
+    let spade_top = find_card_matching(&e, |_, m| m.suit == Suit::Spade);
+    e.state_core_mut().deck.retain(|&c| c != spade_top);
+    e.state_core_mut().discard.retain(|&c| c != spade_top);
+    e.state_core_mut().deck.push(spade_top);
+    e.debug_clear_hand(0);
+    e.debug_set_turn(0, Phase::Prepare, 8);
+    let mark = e.log().len();
+    let _ = submit(&mut e, 0, GameAction::NextPhase); // Prepare -> Judge (Bing triggers!)
+    drain_pass(&mut e);
+    let _ = submit(&mut e, 0, GameAction::NextPhase); // Judge -> Draw (skipped!)
+    drain_pass(&mut e);
+    assert_eq!(
+        count_draws(&e, mark, 0),
+        Vec::<usize>::new(),
+        "Bingliang skip_draw_phase causes damaged yxsdili to draw 0"
+    );
+
+    // 2. `heqin` / `heqin2` (`英雄杀/character/skill.js:1491-1542`):
+    let mut e = new_u08_engine(810091, 3);
+    for p in 0..3 {
+        e.debug_clear_hand(p);
+    }
+    set_general(&mut e, 0, "yxs_wuzetian"); // female
+    set_general(&mut e, 1, "yxs_xiangyu");  // male
+    set_general(&mut e, 2, "yxs_yangyuhuan"); // female
+    e.debug_grant(0, "heqin");
+    e.debug_set_turn(0, Phase::Play, 1);
+
+    // Cancel `heqin` refunds once_per_turn/limited; illegal female target is rejected.
+    let _ = activate(&mut e, 0, "heqin");
+    let restored = assert_mid_choice_roundtrip(&e, "heqin:choose_target");
+    let _ = answer(&mut restored.clone(), 0, vec![ChoiceOption::Pass]);
+    let mut r2 = restored;
+    let _ = answer(&mut r2, 0, vec![ChoiceOption::Pass]);
+    assert!(
+        matches!(activate(&mut r2, 0, "heqin"), CommandOutcome::Pending { .. }),
+        "Pass on heqin:choose_target refunds usage"
+    );
+    let bad = answer(&mut e, 0, vec![ChoiceOption::Player(2)]);
+    assert!(matches!(bad, CommandOutcome::Rejected(RejectReason::InvalidChoice)));
+
+    // Confirm male seat 1 -> pairs both with `heqin2` & `heqin3`.
+    let _ = answer(&mut e, 0, vec![ChoiceOption::Player(1)]);
+    assert_eq!(flag(&e, 0, "heqin_used"), 1);
+
+    // Seat 0 DrawPhase: single `CardsDrawn` of 3 (NOT 1 + 2 split).
+    e.debug_clear_hand(0);
+    e.debug_set_turn(0, Phase::Judge, 2);
+    let mark = e.log().len();
+    let _ = submit(&mut e, 0, GameAction::NextPhase);
+    drain_pass(&mut e);
+    assert_eq!(count_draws(&e, mark, 0), vec![3], "heqin2 on owner draws 3 in one CardsDrawn");
+
+    // Seat 1 DrawPhase: single `CardsDrawn` of 3 (NOT 1 + 2 split).
+    e.debug_clear_hand(1);
+    e.debug_set_turn(1, Phase::Judge, 3);
+    let mark = e.log().len();
+    let _ = submit(&mut e, 1, GameAction::NextPhase);
+    drain_pass(&mut e);
+    assert_eq!(count_draws(&e, mark, 1), vec![3], "heqin2 on male partner draws 3 in one CardsDrawn");
+
+    // Skipped DrawPhase on seat 1: `heqin2` draws 0 cards.
+    e.debug_clear_hand(1);
+    e.state_core_mut().player_mut(1).skip_next_draw = true;
+    e.debug_set_turn(1, Phase::Judge, 4);
+    let mark = e.log().len();
+    let _ = submit(&mut e, 1, GameAction::NextPhase);
+    drain_pass(&mut e);
+    assert_eq!(count_draws(&e, mark, 1), Vec::<usize>::new(), "heqin2 skipped DrawPhase draws 0");
+
+    // Fixed draw count 0: `heqin2` draws 0 cards.
+    let mark = e.log().len();
+    let _ = e.debug_start_draw_phase_fixed(1, 0);
+    assert_eq!(count_draws(&e, mark, 1), Vec::<usize>::new(), "heqin2 fixed 0 draws 0");
+
+    // Combined `yxsdili` (lost 3 HP -> +2) + `heqin2` (+1) -> single `CardsDrawn` of 5!
+    e.debug_clear_hand(0);
+    e.debug_grant(0, "yxsdili");
+    e.state_core_mut().player_mut(0).max_hp = 4;
+    e.state_core_mut().player_mut(0).hp = 1;
+    e.debug_set_turn(0, Phase::Judge, 5);
+    let mark = e.log().len();
+    let _ = submit(&mut e, 0, GameAction::NextPhase);
+    drain_pass(&mut e);
+    assert_eq!(count_draws(&e, mark, 0), vec![5], "yxsdili +2 and heqin2 +1 combine into one DrawPhase of 5");
+
+    // Stripping `heqin2` skill while `heqin2_active` flag stays must NOT modify DrawPhase (draws standard 2).
+    let hq2_id = e.catalog().skill_by_name("heqin2").expect("heqin2");
+    e.state_core_mut().skills.remove(&(1, hq2_id));
+    e.debug_clear_hand(1);
+    e.debug_set_turn(1, Phase::Judge, 6);
+    let mark = e.log().len();
+    let _ = submit(&mut e, 1, GameAction::NextPhase);
+    drain_pass(&mut e);
+    assert_eq!(count_draws(&e, mark, 1), vec![2], "stripped heqin2 draws standard 2 without fallback");
+}
+

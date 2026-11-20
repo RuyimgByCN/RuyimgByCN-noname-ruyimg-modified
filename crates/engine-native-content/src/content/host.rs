@@ -33,6 +33,7 @@ pub use support::{
     shengong_borrowed_owner, yangpijuan_class,
 };
 pub(crate) use step::{
+    host_card_use_after, host_draw_begin_step, host_sha_begin_step, host_sha_end_step,
     on_cards_to_discard_chengye, on_outer_settled_taipingyaoshu, on_skill_removed_l28,
     play_begin_tianshu,
 };
@@ -297,6 +298,44 @@ impl SkillBehavior for HostSkillBehavior {
                     order_selectable: true,
                     optional: false,
                     extra_events: Vec::new(),
+                })
+            }
+            // U08 霓裳/挽歌/藉用：无条件覆盖运行期触发窗（保留静态内容锁同时避免旧 PhaseBegin/CardUsed 回落）
+            HostBehavior::U08YxsBatchC => match self.name.as_str() {
+                "nichang" => Some(crate::catalog::TriggerMeta {
+                    event: crate::event::EventKind::DrawPhaseBefore,
+                    timing: crate::event::Timing::Normal,
+                    priority: 1,
+                    order_selectable: false,
+                    optional: false,
+                    extra_events: Vec::new(),
+                }),
+                "wange" => Some(crate::catalog::TriggerMeta {
+                    event: crate::event::EventKind::DrawPhaseBegin,
+                    timing: crate::event::Timing::Normal,
+                    priority: 1,
+                    order_selectable: false,
+                    optional: false,
+                    extra_events: Vec::new(),
+                }),
+                "nichang2" | "wange2" => Some(crate::catalog::TriggerMeta {
+                    event: crate::event::EventKind::TurnPhaseEnd,
+                    timing: crate::event::Timing::Normal,
+                    priority: 1,
+                    order_selectable: false,
+                    optional: false,
+                    extra_events: Vec::new(),
+                }),
+                _ => None,
+            },
+            HostBehavior::U08YxsBatchD if self.name == "jieyong" => {
+                Some(crate::catalog::TriggerMeta {
+                    event: crate::event::EventKind::TurnBegin,
+                    timing: crate::event::Timing::Normal,
+                    priority: 1,
+                    order_selectable: false,
+                    optional: false,
+                    extra_events: vec![crate::event::EventKind::TurnEnded],
                 })
             }
             _ => None,

@@ -768,6 +768,15 @@ pub fn run(
                             .flags
                             .remove(&(u.player, format!("dying_save_frame:{}", popped.id)));
                         let _ = crate::kernel::take_tao_extra_carriers(core, u.player, popped.id);
+                        core.vm_aux
+                            .flags
+                            .remove(&(u.player, format!("sha_cike_done:{}", popped.id)));
+                        core.vm_aux
+                            .flags
+                            .remove(&(u.player, format!("sha_end_settled:{}", popped.id)));
+                        core.vm_aux
+                            .flags
+                            .remove(&(u.player, format!("sha_pending_end:{}", popped.id)));
                         for p in 0..core.players.len() as PlayerId {
                             core.vm_aux
                                 .flags
@@ -840,6 +849,15 @@ pub fn run(
                                 };
                                 (catalog.hooks.on_cards_to_discard)(&mut ctx, u.player, &[c], true);
                             }
+                        }
+                        {
+                            let mut ctx = Ctx {
+                                core,
+                                res,
+                                catalog,
+                                out,
+                            };
+                            (catalog.hooks.on_card_use_after)(&mut ctx, u);
                         }
                     }
                     let outer_busy = res.stack.iter().any(|f| {

@@ -29,7 +29,7 @@ use crate::choice::ChoiceOption;
 use crate::content::standard::Gender;
 use crate::event::{CardUseData, DamageNature, EventData, EventKind, LostOrigin, Phase, Timing};
 use crate::ids::{CardId, PlayerId};
-use crate::machine::{Ctx, Flow};
+use crate::machine::{Ctx, Flow, LogEvent};
 use crate::state::GameStateCore;
 
 pub(in crate::content::host) use super::u08_batch_a_asks::ask_u08_batch_a;
@@ -200,15 +200,7 @@ pub(super) fn taiji_targets(
 
 pub(super) fn count_alive_females(core: &GameStateCore, catalog: &Catalog) -> u32 {
     (0..core.players.len() as PlayerId)
-        .filter(|&p| {
-            if !core.player(p).alive {
-                return false;
-            }
-            let g = core.player(p).general_slots[0]
-                .and_then(|def| catalog.general_meta(def).map(|(_, _, _, _, gender)| gender))
-                .unwrap_or_else(|| core.effective_gender(p));
-            g == Gender::Female
-        })
+        .filter(|&p| core.player(p).alive && core.effective_gender_in(catalog, p) == Gender::Female)
         .count() as u32
 }
 
@@ -569,15 +561,7 @@ pub(in crate::content::host) fn filter_u08_batch_a(
                     && (has_slot_equipped(ctx.state, ctx.catalog, owner, EquipSlot::HorsePlus)
                         || has_slot_equipped(ctx.state, ctx.catalog, owner, EquipSlot::HorseMinus))
         ),
-        "yxsdili" => matches!(
-            event,
-            EventData::Phase {
-                player,
-                phase: Phase::Draw,
-                begin: true,
-            } if *player == owner
-                && ctx.state.player(owner).hp < ctx.state.player(owner).max_hp as i32
-        ),
+        "yxsdili" => false,
         "kuangchan" => {
             let is_lord = ctx
                 .state
@@ -857,5 +841,42 @@ pub(in crate::content::host) fn handle_u08_batch_a(
             _ => Flow::Done,
         },
         _ => handle_u08_batch_a_ext(m, ctx),
+    }
+}
+
+/// 摸牌阶段 `DP::Begin` 钩子（`yxsdili` `skill.js:761-769`、`heqin2` `skill.js:1522-1529`）：
+/// 保持 `decision34_pack9` `content_lock_id` 不变的同时，在真实 `DrawPhase` 内部
+/// 直接修正 `pending`（跳过与 `num_fixed=true` 均自动不触发/不加算，且合并成单次 `CardsDrawn`）。
+pub(crate) fn host_draw_begin_step(ctx: &mut Ctx<'_>, player: PlayerId, pending: &mut i32) {
+    let yd_def = ctx.catalog.skill_by_name("yxsdili");
+    let hq2_def = ctx.catalog.skill_by_name("heqin2");
+    if yd_def.is_none() && hq2_def.is_none() {
+        return;
+    }
+    if !ctx.core.player(player).alive {
+        return;
+    }
+    if let Some(def) = yd_def.filter(|&d| ctx.core.has_skill(player, d)) {
+        let p = ctx.core.player(player);
+        if p.hp < p.max_hp as i32 {
+            let lost = (p.max_hp as i32 - p.hp).max(0) as u32;
+            let n = ((lost + 1) / 2).min(2);
+            if n > 0 {
+                ctx.out.push(LogEvent::SkillTriggered {
+                    skill: ctx.catalog.skills[def as usize].name,
+                    owner: player,
+                    presentation: None,
+                });
+                *pending += n as i32;
+            }
+        }
+    }
+    if let Some(def) = hq2_def.filter(|&d| ctx.core.has_skill(player, d)) {
+        ctx.out.push(LogEvent::SkillTriggered {
+            skill: ctx.catalog.skills[def as usize].name,
+            owner: player,
+            presentation: None,
+        });
+        *pending += 1;
     }
 }

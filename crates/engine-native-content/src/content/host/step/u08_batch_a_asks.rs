@@ -323,15 +323,7 @@ pub(super) fn handle_u08_batch_a_ext(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> 
             }
             Flow::Done
         }
-        "yxsdili" => {
-            let lost =
-                (ctx.core.player(owner).max_hp as i32 - ctx.core.player(owner).hp).max(0) as u32;
-            let n = ((lost + 1) / 2).min(2);
-            if n > 0 {
-                draw_direct(ctx, owner, n);
-            }
-            Flow::Done
-        }
+        "yxsdili" => Flow::Done,
         "kuangchan" => {
             set_flag(ctx.core, owner, "kuangchan_init_done", 1);
             let p = ctx.core.player_mut(owner);

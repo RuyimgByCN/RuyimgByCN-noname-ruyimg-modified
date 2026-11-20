@@ -1054,6 +1054,31 @@ pub struct ContentHooks {
         crate::ids::PlayerId,
         &str,
     ) -> Vec<crate::ids::CardId>,
+    /// 杀目标结算前触发窗钩子（优先序 `priority >= 6` 先于仁王盾与八卦，
+    /// `priority < 6` 仅次仁王盾且先于八卦/闪询问；返回 true 表示已挂入
+    /// `HostMachine`，杀机 Yield 等待）。
+    pub sha_begin_step: fn(
+        &mut crate::machine::Ctx<'_>,
+        crate::ids::EventId,
+        crate::ids::PlayerId,
+        crate::ids::PlayerId,
+        Option<crate::ids::CardId>,
+        bool,
+    ) -> bool,
+    /// 杀单目标结算出口钩子（`is_damage=true` 为所预测杀自身 `shaDamage`，
+    /// `false` 为经防具/闪避/预防后正常 `shaEnd`；不涵盖 `shaBegin` 取消）。
+    pub sha_end_step: fn(
+        &mut crate::machine::Ctx<'_>,
+        crate::ids::EventId,
+        crate::ids::PlayerId,
+        crate::ids::PlayerId,
+        Option<crate::ids::CardId>,
+        bool,
+    ) -> bool,
+    /// 摸牌阶段 `DP::Begin`（非跳过且 `!num_fixed`）摸牌数修改钩子。
+    pub draw_begin_step: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId, &mut i32),
+    /// 用牌结算完成弹出时（`useCardAfter`）宿主触发钩子（如 `jieyong`）。
+    pub on_card_use_after: fn(&mut crate::machine::Ctx<'_>, &crate::event::CardUseData),
 }
 
 impl ContentHooks {
@@ -1072,6 +1097,10 @@ impl ContentHooks {
         on_outer_settled: |_| {},
         on_cards_to_discard: |_, _, _, _| {},
         on_skill_removed: |_, _, _, _| Vec::new(),
+        sha_begin_step: |_, _, _, _, _, _| false,
+        sha_end_step: |_, _, _, _, _, _| false,
+        draw_begin_step: |_, _, _| {},
+        on_card_use_after: |_, _| {},
     };
 }
 

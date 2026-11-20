@@ -9,3 +9,4 @@
 | --- | --- | --- | --- | --- |
 | 2026-11-18 | `352236724b5e173cc1ff74c0fb706509129ab7a1` | `44246666161` (Attempt 1) | `success`（10/10 作业通过；rustc 1.100.0；`gates-ubuntu` 7843/0/8；`native-web` 2584/0/6；`build-*` 各 872/0/0；`perf-*` 首次 exit 0） | `docs/operations/evidence-raw/ci/352236724b5e173cc1ff74c0fb706509129ab7a1/logs-first.zip` (`sha256: 663fe7631a7bd3e6a379c896310fb1f637af0bf3f18610597f468f295831b441`) |
 | 2026-11-19 | `c119a64408e9556f58c415ddd0c5eceb1f11fdf0` | `44441007755` (Attempt 1) | `success`（10/10 作业通过） | `docs/operations/evidence-raw/ci/c119a64408e9556f58c415ddd0c5eceb1f11fdf0/logs-first.zip` (`sha256: 9597314618ece0db1a088ec1bbda4f22e57bd7f102ddd4ce9409fd5503f482e2`) |
+| 2026-11-20 | `748e2974e6f63067e7770278f1f90b5138a60009` | `44700016882` (Attempt 1) | `success`（10/10 作业通过） | `docs/operations/evidence-raw/ci/748e2974e6f63067e7770278f1f90b5138a60009/logs-first.zip` (`sha256: 5d81c8e9808fa0611d1117dc26e466969fb0a423aebea198c7db5d523085489a`) |

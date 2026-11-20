@@ -169,25 +169,6 @@ fn build_spec(
                 true,
             )
         }
-        ASK_XIADAO_CARD => {
-            let t = target?;
-            let opts = core
-                .player(t)
-                .hand
-                .iter()
-                .copied()
-                .map(ChoiceOption::Card)
-                .collect();
-            build(
-                owner,
-                "xiadao:choose_card",
-                ChoiceKind::SelectCards,
-                opts,
-                1,
-                1,
-                false,
-            )
-        }
         ASK_TONGYU_CARD => {
             let opts = he_cards(core, owner)
                 .into_iter()
@@ -412,6 +393,25 @@ fn build_spec(
                 true,
             )
         }
+        ASK_WANGE2_CARD => {
+            let t = targets.first().copied()?;
+            let opts = core
+                .player(t)
+                .hand
+                .iter()
+                .copied()
+                .map(ChoiceOption::Card)
+                .collect();
+            build(
+                owner,
+                "wange:choose_card",
+                ChoiceKind::SelectCards,
+                opts,
+                1,
+                1,
+                false,
+            )
+        }
         ASK_SEYOU_TARGET => {
             let opts = alive_all(core, owner)
                 .into_iter()
@@ -573,39 +573,24 @@ pub(super) fn handle_u08_batch_c_impl(m: &mut HostMachine, ctx: &mut Ctx<'_>) ->
         "xiadao" => match m.stage {
             HostStage::Act => wait_ask(m, ctx, HostStage::TargetChoice, ASK_XIADAO_TARGET),
             HostStage::TargetChoice => {
+                m.stage = HostStage::Act;
                 let Some(recipient) = answered_players(ctx).into_iter().next() else {
-                    m.stage = HostStage::Act;
                     return Flow::Done;
                 };
                 let Some(victim) = m.target else {
-                    m.stage = HostStage::Act;
                     return Flow::Done;
                 };
-                m.targets = vec![recipient];
-                let hand = ctx.core.player(victim).hand.clone();
-                if hand.is_empty() {
-                    m.stage = HostStage::Act;
+                let hand_len = ctx.core.player(victim).hand.len();
+                if hand_len == 0 {
                     return Flow::Done;
                 }
-                if hand.len() == 1 {
-                    move_cards_to_hand(ctx, victim, recipient, &[hand[0]]);
-                    m.stage = HostStage::Act;
-                    return Flow::Done;
-                }
-                wait_ask(m, ctx, HostStage::SelectCard, ASK_XIADAO_CARD)
-            }
-            HostStage::SelectCard => {
-                m.stage = HostStage::Act;
-                let (Some(victim), Some(&recipient)) = (m.target, m.targets.first()) else {
-                    return Flow::Done;
+                let idx = if hand_len == 1 {
+                    0
+                } else {
+                    ctx.core.rng.gen_range(hand_len as u32) as usize
                 };
-                if let Some(cid) = answered_cards(ctx)
-                    .into_iter()
-                    .next()
-                    .or_else(|| ctx.core.player(victim).hand.first().copied())
-                {
-                    move_cards_to_hand(ctx, victim, recipient, &[cid]);
-                }
+                let cid = ctx.core.player(victim).hand[idx];
+                move_cards_to_hand(ctx, victim, recipient, &[cid]);
                 Flow::Done
             }
             _ => Flow::Done,
@@ -746,14 +731,22 @@ pub(super) fn handle_u08_batch_c_impl(m: &mut HostMachine, ctx: &mut Ctx<'_>) ->
         "xumou" => match m.stage {
             HostStage::Act => wait_ask(m, ctx, HostStage::SelectNature, ASK_XUMOU_CONFIRM),
             HostStage::SelectNature => {
-                m.stage = HostStage::Act;
+                // 英雄杀/character/skill.js:1916-1925: `await player.draw(3); await player.turnOver();`
+                m.card = None;
                 if answered_confirm(ctx) {
-                    draw_direct(ctx, owner, 3);
-                    ctx.emit(EventData::TurnOverBefore {
-                        player: owner,
-                        cancelled: false,
-                    });
+                    m.stage = HostStage::DrawSettle;
+                    ctx.start_draw(owner, 3);
+                    return Flow::Yield;
                 }
+                m.stage = HostStage::Act;
+                Flow::Done
+            }
+            HostStage::DrawSettle => {
+                m.stage = HostStage::Act;
+                ctx.emit(EventData::TurnOverBefore {
+                    player: owner,
+                    cancelled: false,
+                });
                 Flow::Done
             }
             _ => Flow::Done,

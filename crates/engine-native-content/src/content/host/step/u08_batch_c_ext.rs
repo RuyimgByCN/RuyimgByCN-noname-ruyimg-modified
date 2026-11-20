@@ -35,6 +35,23 @@ fn trigger_nichang2_draw(ctx: &mut Ctx<'_>, owner: PlayerId) -> Flow {
     Flow::Done
 }
 
+fn advance_wange2_gain(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
+    let owner = m.owner;
+    while let Some(&t) = m.targets.first() {
+        if !ctx.core.player(owner).alive
+            || !ctx.core.player(t).alive
+            || ctx.core.player(t).hand.is_empty()
+        {
+            m.targets.remove(0);
+            continue;
+        }
+        return wait_ask(m, ctx, HostStage::SelectCard, ASK_WANGE2_CARD);
+    }
+    m.stage = HostStage::Act;
+    m.card = None;
+    Flow::Done
+}
+
 fn handle_wange2(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     let owner = m.owner;
     match m.stage {
@@ -47,14 +64,32 @@ fn handle_wange2(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             wait_ask(m, ctx, HostStage::TargetChoice, ASK_WANGE2_TARGETS)
         }
         HostStage::TargetChoice => {
-            m.stage = HostStage::Act;
-            let chosen = answered_players(ctx);
-            for t in chosen {
-                if let Some(&cid) = ctx.core.player(t).hand.first() {
-                    move_cards_to_hand(ctx, t, owner, &[cid]);
+            let mut chosen = answered_players(ctx);
+            if chosen.is_empty() {
+                m.stage = HostStage::Act;
+                m.card = None;
+                m.targets.clear();
+                return Flow::Done;
+            }
+            let order = ctx.core.seat_order_from(ctx.core.turn.current);
+            chosen.sort_by_key(|p| order.iter().position(|&x| x == *p).unwrap_or(usize::MAX));
+            chosen.dedup();
+            chosen.retain(|&t| {
+                t != owner && ctx.core.player(t).alive && !ctx.core.player(t).hand.is_empty()
+            });
+            m.targets = chosen;
+            advance_wange2_gain(m, ctx)
+        }
+        HostStage::SelectCard => {
+            if !m.targets.is_empty() {
+                let t = m.targets.remove(0);
+                if let Some(cid) = answered_cards(ctx).into_iter().next() {
+                    if ctx.core.player(t).hand.contains(&cid) {
+                        move_cards_to_hand(ctx, t, owner, &[cid]);
+                    }
                 }
             }
-            Flow::Done
+            advance_wange2_gain(m, ctx)
         }
         _ => Flow::Done,
     }
@@ -193,16 +228,11 @@ pub(super) fn handle_u08_batch_c_ext(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> 
             _ => Flow::Done,
         },
         "nichang" => match m.stage {
-            HostStage::Act => {
-                if m.card == Some(2) {
-                    return trigger_nichang2_draw(ctx, owner);
-                }
-                wait_ask(m, ctx, HostStage::SelectNature, ASK_NICHANG_CONFIRM)
-            }
+            HostStage::Act => wait_ask(m, ctx, HostStage::SelectNature, ASK_NICHANG_CONFIRM),
             HostStage::SelectNature => {
                 m.stage = HostStage::Act;
+                m.card = None;
                 if answered_confirm(ctx) {
-                    ctx.core.turn.skip_draw_phase = true;
                     for frame in ctx.res.stack.iter_mut().rev() {
                         if let EventData::DrawPhase {
                             player,
@@ -213,7 +243,7 @@ pub(super) fn handle_u08_batch_c_ext(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> 
                         {
                             if *player == owner {
                                 *pending = 0;
-                                *outcome = DrawOutcome::Skipped;
+                                *outcome = DrawOutcome::Cancelled;
                                 break;
                             }
                         }
@@ -271,31 +301,11 @@ pub(super) fn handle_u08_batch_c_ext(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> 
             _ => Flow::Done,
         },
         "wange" => match m.stage {
-            HostStage::Act => {
-                if m.card == Some(2) {
-                    set_flag(ctx.core, owner, "wange_draw_minus_1", 0);
-                    for frame in ctx.res.stack.iter_mut().rev() {
-                        if let EventData::DrawPhase {
-                            player, pending, ..
-                        } = &mut frame.data
-                        {
-                            if *player == owner {
-                                *pending = (*pending - 1).max(0);
-                                break;
-                            }
-                        }
-                    }
-                    return Flow::Done;
-                }
-                if m.card == Some(3) {
-                    return handle_wange2(m, ctx);
-                }
-                wait_ask(m, ctx, HostStage::SelectNature, ASK_WANGE_CONFIRM)
-            }
+            HostStage::Act => wait_ask(m, ctx, HostStage::SelectNature, ASK_WANGE_CONFIRM),
             HostStage::SelectNature => {
                 m.stage = HostStage::Act;
+                m.card = None;
                 if answered_confirm(ctx) {
-                    let mut applied = false;
                     for frame in ctx.res.stack.iter_mut().rev() {
                         if let EventData::DrawPhase {
                             player, pending, ..
@@ -303,20 +313,15 @@ pub(super) fn handle_u08_batch_c_ext(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> 
                         {
                             if *player == owner {
                                 *pending = (*pending - 1).max(0);
-                                applied = true;
                                 break;
                             }
                         }
-                    }
-                    if !applied {
-                        set_flag(ctx.core, owner, "wange_draw_minus_1", 1);
                     }
                     set_flag(ctx.core, owner, "wange2_active", 1);
                     grant_skill_named(ctx, owner, "wange2");
                 }
                 Flow::Done
             }
-            HostStage::TargetChoice => handle_wange2(m, ctx),
             _ => Flow::Done,
         },
         "wange2" => handle_wange2(m, ctx),

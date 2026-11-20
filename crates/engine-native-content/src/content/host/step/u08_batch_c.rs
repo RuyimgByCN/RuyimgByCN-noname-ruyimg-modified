@@ -7,7 +7,7 @@ use super::{HostBehavior, HostMachine, HostSkillBehavior, HostStage};
 use crate::catalog::{CardKind, Catalog, QueryCtx, SkillLimits, Suit, TriggerMeta};
 use crate::content::standard::Gender;
 use crate::event::{
-    CardUseData, DamageNature, DrawWindowKind, EventData, EventKind, LostOrigin, Phase, Timing,
+    CardUseData, DamageNature, DrawOutcome, EventData, EventKind, LostOrigin, Phase, Timing,
 };
 use crate::ids::{CardId, PlayerId};
 use crate::machine::{Ctx, Flow};
@@ -24,8 +24,8 @@ use u08_batch_c_asks::{ask_u08_batch_c_impl, handle_u08_batch_c_impl};
 pub(super) const ASK_QIANGLUE_CONFIRM: u32 = 1;
 pub(super) const ASK_QIANGLUE_CARD: u32 = 2;
 pub(super) const ASK_XIADAO_TARGET: u32 = 3;
-pub(super) const ASK_XIADAO_CARD: u32 = 4;
 pub(super) const ASK_TONGYU_CARD: u32 = 5;
+pub(super) const ASK_WANGE2_CARD: u32 = 25;
 pub(super) const ASK_LZHANGYI_TARGET: u32 = 6;
 pub(super) const ASK_YIZHUANG_CARD: u32 = 7;
 pub(super) const ASK_YIZHUANG_TARGET: u32 = 8;
@@ -143,9 +143,7 @@ pub(super) fn alive_all(core: &GameStateCore, owner: PlayerId) -> Vec<PlayerId> 
 }
 
 pub(super) fn player_gender(core: &GameStateCore, catalog: &Catalog, p: PlayerId) -> Gender {
-    core.player(p).general_slots[0]
-        .and_then(|def| catalog.general_meta(def).map(|(_, _, _, _, gender)| gender))
-        .unwrap_or_else(|| core.effective_gender(p))
+    core.effective_gender_in(catalog, p)
 }
 
 pub(super) fn is_friendly(
@@ -447,6 +445,7 @@ pub(crate) fn trigger_meta_u08_batch_c(name: &str) -> Option<TriggerMeta> {
         "lzhangyi" => Some(meta(EventKind::CardsDiscarded, Vec::new())),
         "yizhuang" => Some(meta(EventKind::PhaseBegin, vec![EventKind::Damage])),
         "tuqiang" => Some(meta(EventKind::CardUsed, vec![EventKind::CardResponded])),
+        // 静态声明锁保留历史窗口；实际派发窗口由 `content/host.rs::kind_trigger_meta` 覆盖。
         "xumou" | "nichang" | "nichang2" | "wange2" => {
             Some(meta(EventKind::PhaseBegin, Vec::new()))
         }
@@ -603,29 +602,19 @@ pub(in crate::content::host) fn filter_u08_batch_c(
                     && d.source
                         .is_some_and(|src| is_friendly(ctx.state, ctx.catalog, owner, src))
         ),
-        "nichang" => match event {
-            EventData::Phase {
+        "nichang" => matches!(
+            event,
+            EventData::DrawPhase {
                 player,
-                phase: Phase::Draw,
-                begin: true,
-            } => *player == owner,
-            EventData::Phase {
-                player,
-                phase: Phase::End,
-                begin: true,
-            } => {
-                *player == owner
-                    && !has_skill_named(ctx.state, ctx.catalog, owner, "nichang2")
-                    && flag(ctx.state, owner, "nichang2_active") > 0
-            }
-            _ => false,
-        },
+                outcome: DrawOutcome::Running,
+                ..
+            } if *player == owner
+        ),
         "nichang2" => matches!(
             event,
-            EventData::Phase {
+            EventData::TurnEndWindow {
                 player,
-                phase: Phase::End,
-                begin: true,
+                after: false,
             } if *player == owner
         ),
         "fengyan" => matches!(
@@ -639,36 +628,19 @@ pub(in crate::content::host) fn filter_u08_batch_c(
                 && player_gender(ctx.state, ctx.catalog, *j_owner) == Gender::Male
                 && is_red_card(ctx.state, ctx.catalog, *j_owner, *invocation)
         ),
-        "wange" => match event {
-            EventData::Phase {
+        "wange" => matches!(
+            event,
+            EventData::DrawPhase {
                 player,
-                phase: Phase::Draw,
-                begin: true,
-            } => *player == owner,
-            EventData::DrawWindow {
-                window: DrawWindowKind::Begin,
+                outcome: DrawOutcome::Running,
                 ..
-            } => {
-                ctx.state.turn.current == owner
-                    && flag(ctx.state, owner, "wange_draw_minus_1") > 0
-            }
-            EventData::Phase {
-                player,
-                phase: Phase::End,
-                begin: true,
-            } => {
-                *player == owner
-                    && !has_skill_named(ctx.state, ctx.catalog, owner, "wange2")
-                    && flag(ctx.state, owner, "wange2_active") > 0
-            }
-            _ => false,
-        },
+            } if *player == owner
+        ),
         "wange2" => matches!(
             event,
-            EventData::Phase {
+            EventData::TurnEndWindow {
                 player,
-                phase: Phase::End,
-                begin: true,
+                after: false,
             } if *player == owner
         ),
         "sheshi" => matches!(
@@ -681,6 +653,14 @@ pub(in crate::content::host) fn filter_u08_batch_c(
         ),
         _ => false,
     }
+}
+
+fn is_luobinhan_seat(core: &GameStateCore, catalog: &Catalog, owner: PlayerId) -> bool {
+    core.player(owner)
+        .general_slots
+        .iter()
+        .flatten()
+        .any(|&g| catalog.general_meta(g).is_some_and(|(name, ..)| name == "yxs_luobinhan"))
 }
 
 pub(in crate::content::host) fn activate_u08_batch_c(
@@ -703,11 +683,13 @@ pub(in crate::content::host) fn activate_u08_batch_c(
                 && flag(state, owner, "skill_turn:tongyu_guiyin_used") == 0
                 && state.player(owner).turn_damage == 0
                 && flag(state, owner, "turn_damage_dealt") == 0
+                && is_luobinhan_seat(state, catalog, owner)
         }
         "tongyu" => {
             flag(state, owner, "tongyu_guiyin_used") == 0
                 && flag(state, owner, "skill_turn:tongyu_guiyin_used") == 0
                 && !he_cards(state, owner).is_empty()
+                && is_luobinhan_seat(state, catalog, owner)
         }
         "ducai" => !he_cards(state, owner).is_empty(),
         "fanpu" => {
@@ -775,14 +757,6 @@ pub(in crate::content::host) fn machine_u08_batch_c(
             card = Some(2);
         }
         (
-            "nichang",
-            EventData::Phase {
-                phase: Phase::End, ..
-            },
-        ) => {
-            card = Some(2);
-        }
-        (
             "fengyan",
             EventData::OrdinaryJudge {
                 owner: j_owner,
@@ -792,23 +766,6 @@ pub(in crate::content::host) fn machine_u08_batch_c(
             target = Some(*j_owner);
             card = Some(*invocation);
             cards = vec![*invocation];
-        }
-        (
-            "wange",
-            EventData::DrawWindow {
-                window: DrawWindowKind::Begin,
-                ..
-            },
-        ) => {
-            card = Some(2);
-        }
-        (
-            "wange",
-            EventData::Phase {
-                phase: Phase::End, ..
-            },
-        ) => {
-            card = Some(3);
         }
         _ => {}
     }

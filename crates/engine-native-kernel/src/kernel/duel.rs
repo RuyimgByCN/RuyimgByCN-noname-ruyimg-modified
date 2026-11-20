@@ -278,6 +278,9 @@ pub(crate) fn jijiang_shu_helper(
                 shas.push(c);
             }
         }
+        shas.retain(|&c| {
+            !crate::rvm_bridge::modifiers::d34_flags::is_ducai3_forbidden(core, catalog, p, c)
+        });
         if !shas.is_empty() {
             return Some((p, shas));
         }

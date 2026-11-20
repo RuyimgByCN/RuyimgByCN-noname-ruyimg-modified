@@ -299,10 +299,10 @@ pub(super) fn handle_u08_batch_d_ext(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> 
             HostStage::SelectCard => {
                 m.stage = HostStage::Act;
                 if let Some(sha_cid) = answered_cards(ctx).into_iter().next() {
-                    discard_cards(ctx, owner, &[sha_cid]);
                     if ctx.current_card_use().is_ok() {
                         ctx.current_card_use_mut().cancelled = true;
                     }
+                    discard_cards(ctx, owner, &[sha_cid]);
                     if let Some(&used_sha) = m.cards.first() {
                         ctx.to_discard(Some(used_sha));
                         ctx.core.table.retain(|&x| x != used_sha);
@@ -339,12 +339,28 @@ pub(super) fn handle_u08_batch_d_ext(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> 
             }
             HostStage::SelectCard => {
                 m.stage = HostStage::Act;
+                m.card = None;
                 if let Some(black_cid) = answered_cards(ctx).into_iter().next() {
+                    if let Some(def) = ctx.catalog.skill_by_name("jieyong") {
+                        ctx.out.push(LogEvent::SkillTriggered {
+                            skill: ctx.catalog.skills[def as usize].name,
+                            owner,
+                            presentation: None,
+                        });
+                    }
                     discard_cards(ctx, owner, &[black_cid]);
                     if let Some(&used_cid) = m.cards.first() {
-                        regain_card_to_hand(ctx, owner, used_cid);
+                        if ctx.core.discard.contains(&used_cid) {
+                            ctx.core.discard.retain(|&x| x != used_cid);
+                            if !ctx.core.player(owner).hand.contains(&used_cid) {
+                                ctx.core.player_mut(owner).hand.push(used_cid);
+                            }
+                        }
                     }
                     set_flag(ctx.core, owner, "jieyong2_used", 1);
+                    // 上游 `jieyong2: { filterCard: { suit: "heart" }, popname: true }` (`skill.js:2826-2829`)
+                    // 无 `enable`/`viewAs`/`trigger`，在 `skill.js:2819` 仅作回合级临时标记技能；
+                    // `jieyong3` (`2830-2841`) 在上游全仓亦无调用者。
                     grant_skill_named(ctx, owner, "jieyong2");
                 }
                 Flow::Done
@@ -446,37 +462,35 @@ pub(super) fn handle_u08_batch_d_ext(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> 
             _ => Flow::Done,
         },
         "cike" => match m.stage {
-            HostStage::Act => {
-                if m.card == Some(99) {
-                    let suit_val = flag(ctx.core, owner, "last_judge_suit");
-                    let is_red = is_red_suit_code(suit_val);
-                    let t = m.target.unwrap_or(owner);
-                    let sha_cid = m.cards.first().copied();
-                    if is_red {
-                        mark_sha_unrespondable(ctx, owner, t, sha_cid);
-                        set_flag(ctx.core, owner, "cike_direct_hit", 1);
-                        set_flag(ctx.core, t, "cike_direct_hit", 1);
-                        return Flow::Done;
-                    }
-                    let he = hand_and_equips(ctx.core, t);
-                    if he.is_empty() || !ctx.core.player(t).alive {
-                        return Flow::Done;
-                    }
-                    if he.len() == 1 {
-                        discard_cards(ctx, t, &[he[0]]);
-                        return Flow::Done;
-                    }
-                    return wait_ask(m, ctx, HostStage::SelectCard, ASK_CIKE_DISCARD_CARD);
+            HostStage::Act => wait_ask(m, ctx, HostStage::SelectNature, ASK_CIKE_CONFIRM),
+            HostStage::DrawSettle => {
+                m.stage = HostStage::Act;
+                let suit_val = flag(ctx.core, owner, "last_judge_suit");
+                set_flag(ctx.core, owner, "last_judge_suit", 0);
+                if suit_val == 0 {
+                    return Flow::Done;
                 }
-                wait_ask(m, ctx, HostStage::SelectNature, ASK_CIKE_CONFIRM)
+                let is_red = is_red_suit_code(suit_val);
+                let t = m.target.unwrap_or(owner);
+                let sha_cid = m.cards.first().copied();
+                if is_red {
+                    mark_sha_unrespondable(ctx, owner, t, sha_cid);
+                    return Flow::Done;
+                }
+                let he = hand_and_equips(ctx.core, t);
+                if he.is_empty() || !ctx.core.player(t).alive {
+                    return Flow::Done;
+                }
+                wait_ask(m, ctx, HostStage::SelectCard, ASK_CIKE_DISCARD_CARD)
             }
             HostStage::SelectNature => {
+                m.card = None;
                 if !answered_confirm(ctx) {
                     m.stage = HostStage::Act;
                     return Flow::Done;
                 }
-                m.stage = HostStage::Act;
-                m.card = Some(99);
+                set_flag(ctx.core, owner, "last_judge_suit", 0);
+                m.stage = HostStage::DrawSettle;
                 ctx.emit(EventData::OrdinaryJudge {
                     owner,
                     invocation: u32::MAX,
@@ -485,6 +499,7 @@ pub(super) fn handle_u08_batch_d_ext(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> 
             }
             HostStage::SelectCard => {
                 m.stage = HostStage::Act;
+                m.card = None;
                 if let (Some(t), Some(cid)) = (m.target, answered_cards(ctx).into_iter().next()) {
                     discard_cards(ctx, t, &[cid]);
                 }

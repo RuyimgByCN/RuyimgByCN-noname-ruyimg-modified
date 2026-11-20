@@ -61,7 +61,7 @@ impl ShaResolveMachine {
                 source: self.source,
                 target: self.target,
             });
-            return Some(self.advance_target(ctx));
+            return Some(self.finish_or_defer_sha_end(ctx, false));
         }
         None
     }

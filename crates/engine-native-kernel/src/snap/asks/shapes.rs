@@ -224,6 +224,12 @@ pub(in crate::snap) fn response_kind_options(
             options.push(ChoiceOption::Card(c));
         }
     }
+    options.retain(|o| {
+        !matches!(o, ChoiceOption::Card(c)
+            if crate::rvm_bridge::modifiers::d34_flags::is_ducai3_forbidden(
+                core, catalog, responder, *c
+            ))
+    });
     options
 }
 

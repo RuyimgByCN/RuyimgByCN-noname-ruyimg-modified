@@ -61,6 +61,9 @@ mod u08_hero_kill_match;
 #[path = "../u08_hero_kill_match_b.rs"]
 mod u08_hero_kill_match_b;
 
+#[path = "../u08_hero_kill_review_fixes.rs"]
+mod u08_hero_kill_review_fixes;
+
 #[path = "../l25_zuan_match.rs"]
 mod l25_zuan_match;
 
