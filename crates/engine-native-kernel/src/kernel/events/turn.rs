@@ -477,10 +477,96 @@ pub(in crate::kernel) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: P
             .flags
             .retain(|(_, k), _| k != "sha_played_this_turn" && k != "damaged_this_turn");
     }
+    let queued_extra = (0..ctx.core.players.len() as PlayerId).find(|&s| {
+        ctx.core.player(s).alive
+            && ctx
+                .core
+                .vm_aux
+                .flags
+                .get(&(s, "extra_turn_insert_queued".to_string()))
+                .copied()
+                .unwrap_or(0)
+                > 0
+    });
+    let (next, suppress_round_bump) = if let Some(es) = queued_extra {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(es, "extra_turn_insert_queued".to_string()));
+        if !ctx
+            .core
+            .vm_aux
+            .flags
+            .contains_key(&(0, "extra_turn_resume_next".to_string()))
+        {
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((0, "extra_turn_resume_next".to_string()), u32::from(next) + 1);
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((0, "extra_turn_resume_prev".to_string()), u32::from(prev) + 1);
+        }
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((0, "extra_turn_in_progress".to_string()), 1);
+        (es, true)
+    } else if ctx
+        .core
+        .vm_aux
+        .flags
+        .remove(&(0, "extra_turn_in_progress".to_string()))
+        .is_some()
+    {
+        let saved_next = ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(0, "extra_turn_resume_next".to_string()))
+            .unwrap_or(0);
+        let saved_prev = ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(0, "extra_turn_resume_prev".to_string()))
+            .unwrap_or(0);
+        let resume_p = saved_prev.saturating_sub(1) as PlayerId;
+        let candidate_n = saved_next.saturating_sub(1) as PlayerId;
+        let actual_n = if (candidate_n as usize) < ctx.core.players.len()
+            && ctx.core.player(candidate_n).alive
+        {
+            candidate_n
+        } else {
+            ctx.core.next_alive(resume_p)
+        };
+        if actual_n <= resume_p {
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((0, "extra_turn_force_round_bump".to_string()), 1);
+        }
+        (actual_n, actual_n > resume_p)
+    } else {
+        (next, false)
+    };
+    let force_round_bump = ctx
+        .core
+        .vm_aux
+        .flags
+        .remove(&(0, "extra_turn_force_round_bump".to_string()))
+        .is_some();
     // R05（K10）：翻面整回合跳过在回合开始窗之前（上游 phaseBefore 检测）
     // ——翻面者不发 TurnBegin／不进任何阶段（含准备阶段）；翻回序列与
     // TurnEnded 同 E03/U05 原口径，TurnEnded 的窗→handoff 链继续交接。
     if ctx.core.player(next).face_down {
+        if force_round_bump {
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((0, "extra_turn_force_round_bump".to_string()), 1);
+        }
         ctx.core.player_mut(next).jileng_active = false;
         ctx.emit(EventData::TurnOverBefore {
             player: next,
@@ -490,7 +576,7 @@ pub(in crate::kernel) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: P
         ctx.emit(EventData::TurnEnded { player: next });
         return;
     }
-    if next <= prev {
+    if !suppress_round_bump && (force_round_bump || next <= prev) {
         if ctx.catalog.vm_card_history {
             let seats = ctx.core.players.len() as PlayerId;
             for p in 0..seats {

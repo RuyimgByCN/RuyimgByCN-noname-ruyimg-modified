@@ -265,7 +265,11 @@ impl GameStateCore {
             .iter()
             .filter_map(|c| {
                 let def = &catalog.cards[*c as usize];
-                if def.kind == CardKind::Weapon {
+                if let Some(r) =
+                    crate::rvm_bridge::modifiers::d34_l28_mods::rewrite_zhuge_range(self, catalog, *c)
+                {
+                    Some(r)
+                } else if def.kind == CardKind::Weapon {
                     Some(def.range)
                 } else {
                     def.kind.named_weapon_range()

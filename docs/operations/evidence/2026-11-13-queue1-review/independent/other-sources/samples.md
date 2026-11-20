@@ -772,7 +772,7 @@
 
 待执行：防具被一次多步技能弃置，比较其他步骤完成后才摸2失血；再带unequip2失防具不得触发。
 
-源码：`archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8968`；`crates/content-native-loader/src/decision34_pack9.rs:730`；`crates/engine-native-content/src/content/host/step/l28_batch_a_asks.rs:830`。
+源码：`archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8968`；`crates/content-native-loader/src/decision34_pack9.rs:730`；`crates/engine-native-content/src/content/host/step/l28_batch_a_ext.rs:487`（原 `l28_batch_a_asks.rs:830` 已拆分迁入）。
 
 ### configs:timeTheme
 
@@ -828,7 +828,7 @@
 
 待执行：牌堆顶杀、堆内无懈，选礼应取无懈而非杀；堆内无目标类则技能次数不增长。l28_thunder_eight_match.rs:615。
 
-源码：`archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6372`；`crates/engine-native-content/src/content/host/step/l28_batch_a_asks.rs:702`。
+源码：`archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6372`；`crates/engine-native-content/src/content/host/step/l28_batch_a_asks.rs:185`（原 `l28_batch_a_asks.rs:702` 因拆分前移）。
 
 ### skills:th_jieshu
 
@@ -856,7 +856,7 @@
 
 待执行：要术实体在弃牌堆/被移出而全场无持有者，发动后不得凭目录复制同id；初步取消不耗牌，目标不能装备时核实际选择。
 
-源码：`archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6914`；`crates/engine-native-content/src/content/host/step/l28_batch_a_asks.rs:800`；`crates/engine-native-content/src/content/host/step/l28_batch_a.rs:503`。
+源码：`archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6914`；`crates/engine-native-content/src/content/host/step/l28_batch_a_asks.rs:206`（原 `l28_batch_a_asks.rs:800` 因拆分前移）；`crates/engine-native-content/src/content/host/step/l28_batch_a.rs:503`。
 
 ### skills:th_tiansuan2_3
 

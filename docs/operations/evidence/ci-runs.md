@@ -8,3 +8,4 @@
 | 日期 | 提交 SHA | Run ID | 结果 | 原始日志与 sha256 |
 | --- | --- | --- | --- | --- |
 | 2026-11-18 | `352236724b5e173cc1ff74c0fb706509129ab7a1` | `44246666161` (Attempt 1) | `success`（10/10 作业通过；rustc 1.100.0；`gates-ubuntu` 7843/0/8；`native-web` 2584/0/6；`build-*` 各 872/0/0；`perf-*` 首次 exit 0） | `docs/operations/evidence-raw/ci/352236724b5e173cc1ff74c0fb706509129ab7a1/logs-first.zip` (`sha256: 663fe7631a7bd3e6a379c896310fb1f637af0bf3f18610597f468f295831b441`) |
+| 2026-11-19 | `c119a64408e9556f58c415ddd0c5eceb1f11fdf0` | `44441007755` (Attempt 1) | `success`（10/10 作业通过） | `docs/operations/evidence-raw/ci/c119a64408e9556f58c415ddd0c5eceb1f11fdf0/logs-first.zip` (`sha256: 9597314618ece0db1a088ec1bbda4f22e57bd7f102ddd4ce9409fd5503f482e2`) |

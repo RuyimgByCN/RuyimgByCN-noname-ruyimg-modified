@@ -557,6 +557,9 @@ pub fn eval_damage_amount(
             }
         });
     }
+    cur = super::d34_l28_mods::apply_damage_begin3(
+        state, catalog, source, target, card, nature, cur,
+    );
     for_each_player_vm_modifier(state, catalog, target, |def, rule| {
         if !matches_sel(target, rule.selector) {
             return;

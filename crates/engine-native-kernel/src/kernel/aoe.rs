@@ -18,6 +18,9 @@ pub(super) fn dushiwang_remen_blocks(ctx: &Ctx<'_>, target: PlayerId) -> bool {
 /// targetEnabled 同族；AOE 面在窗口前跳过——万箭为红/无指向锦囊天然不
 /// 触发）。
 pub(super) fn weimu_blocks_aoe(ctx: &Ctx<'_>, card: crate::ids::CardId, target: PlayerId) -> bool {
+    if !ctx.core.table.contains(&card) {
+        return false;
+    }
     let black = matches!(
         ctx.catalog.cards[card as usize].suit,
         crate::catalog::Suit::Spade | crate::catalog::Suit::Club
@@ -64,6 +67,33 @@ impl AoeTargetMachine {
             nature,
         }
     }
+    fn emit_aoe_damage(&mut self, ctx: &mut Ctx<'_>) {
+        let vm_card_bonus = ctx
+            .core
+            .vm_aux
+            .flags
+            .get(&(self.source, format!("card_damage_bonus:{}", self.card)))
+            .copied()
+            .unwrap_or(0);
+        let dcard = ctx.core.table.contains(&self.card).then_some(self.card);
+        if dcard.is_none()
+            && ctx.catalog.skills.len() > 24
+            && self.nature == crate::event::DamageNature::Normal
+        {
+            let vkind = if self.need == CardKind::Sha { 2 } else { 3 };
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((self.target, "l28_vdmg_kind".to_string()), vkind);
+        }
+        ctx.emit(EventData::Damage(damage_data_with(
+            Some(self.source),
+            self.target,
+            (1 + vm_card_bonus) as i32,
+            self.nature,
+            dcard,
+        )));
+    }
 }
 
 impl crate::catalog::SkillMachine for AoeTargetMachine {
@@ -100,40 +130,14 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
                 }
             } else {
                 // 放弃 → 1 点伤害（完整结算）
-                let vm_card_bonus = ctx
-                    .core
-                    .vm_aux
-                    .flags
-                    .get(&(self.source, format!("card_damage_bonus:{}", self.card)))
-                    .copied()
-                    .unwrap_or(0);
-                ctx.emit(EventData::Damage(damage_data_with(
-                    Some(self.source),
-                    self.target,
-                    (1 + vm_card_bonus) as i32,
-                    self.nature,
-                    Some(self.card),
-                )));
+                self.emit_aoe_damage(ctx);
             }
             return Flow::Done;
         }
         let holders: Vec<crate::ids::CardId> = response_kind_cards(ctx, self.target, self.need);
         if holders.is_empty() {
             // 无响应牌：不询问，直接受伤（跳过语义挂账见清单）
-            let vm_card_bonus = ctx
-                .core
-                .vm_aux
-                .flags
-                .get(&(self.source, format!("card_damage_bonus:{}", self.card)))
-                .copied()
-                .unwrap_or(0);
-            ctx.emit(EventData::Damage(damage_data_with(
-                Some(self.source),
-                self.target,
-                (1 + vm_card_bonus) as i32,
-                self.nature,
-                Some(self.card),
-            )));
+            self.emit_aoe_damage(ctx);
             return Flow::Done;
         }
         self.asked = true;
@@ -279,14 +283,16 @@ impl crate::catalog::SkillMachine for AoeResolveMachine {
                 self.idx += 1;
             }
             if self.idx >= self.targets.len() {
-                // 收尾：AOE 牌离桌入弃牌堆（唯一弃置点）
+                // 收尾：AOE 牌离桌入弃牌堆（唯一弃置点）；虚构 AOE（如照骨镜）不在桌面，不触碰卡 0。
                 let card = self.card;
                 ctx.core
                     .vm_aux
                     .flags
                     .remove(&(self.source, format!("card_damage_bonus:{card}")));
-                ctx.to_discard(card);
-                ctx.core.table.retain(|c| *c != card);
+                if ctx.core.table.contains(&card) {
+                    ctx.to_discard(card);
+                    ctx.core.table.retain(|c| *c != card);
+                }
                 return Flow::Done;
             }
             if self.inner.is_none() {

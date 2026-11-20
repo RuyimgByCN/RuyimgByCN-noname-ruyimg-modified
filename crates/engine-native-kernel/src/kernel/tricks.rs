@@ -304,7 +304,10 @@ impl crate::catalog::SkillMachine for JiedaoMachine {
                     .player(self.holder)
                     .equips
                     .iter()
-                    .any(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Weapon);
+                    .any(|c| {
+                        ctx.catalog.card_slot_of(ctx.core, *c)
+                            == Some(crate::catalog::EquipSlot::Weapon)
+                    });
                 if !ctx.core.player(self.holder).alive || !has_weapon {
                     return self.finish_jiedao(ctx);
                 }
@@ -341,7 +344,8 @@ impl crate::catalog::SkillMachine for JiedaoMachine {
                                 .iter()
                                 .copied()
                                 .find(|c| {
-                                    ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Weapon
+                                    ctx.catalog.card_slot_of(ctx.core, *c)
+                                        == Some(crate::catalog::EquipSlot::Weapon)
                                 });
                         if let Some(w) = weapon {
                             ctx.core.player_mut(self.holder).equips.retain(|c| *c != w);
@@ -354,13 +358,13 @@ impl crate::catalog::SkillMachine for JiedaoMachine {
                             let victim = self.victim;
                             let old =
                                 ctx.core
-                                    .player_mut(victim)
+                                    .player(victim)
                                     .equips
                                     .iter()
                                     .copied()
                                     .find(|c| {
-                                        ctx.catalog.card_kind(*c)
-                                            == crate::catalog::CardKind::Weapon
+                                        ctx.catalog.card_slot_of(ctx.core, *c)
+                                            == Some(crate::catalog::EquipSlot::Weapon)
                                     });
                             if let Some(old_w) = old {
                                 ctx.core.player_mut(victim).equips.retain(|c| *c != old_w);
@@ -371,6 +375,12 @@ impl crate::catalog::SkillMachine for JiedaoMachine {
                                     old_w,
                                 );
                                 ctx.to_discard(old_w);
+                                (ctx.catalog.hooks.on_cards_to_discard)(
+                                    ctx,
+                                    victim,
+                                    &[old_w],
+                                    false,
+                                );
                             }
                             ctx.core.player_mut(victim).equips.push(w);
                         }
@@ -469,13 +479,16 @@ impl crate::catalog::SkillMachine for DismantleMachine {
                         player: self.target,
                         cards: vec![c],
                     });
-                } else if from_judge && ctx.catalog.vm_card_history {
-                    ctx.note_cards_lost(self.target, &[c]);
-                    ctx.emit(EventData::CardsLost {
-                        player: self.target,
-                        cards: vec![c],
-                        origins: vec![crate::event::LostOrigin::Judge],
-                    });
+                } else {
+                    (ctx.catalog.hooks.on_cards_to_discard)(ctx, self.target, &[c], false);
+                    if from_judge && ctx.catalog.vm_card_history {
+                        ctx.note_cards_lost(self.target, &[c]);
+                        ctx.emit(EventData::CardsLost {
+                            player: self.target,
+                            cards: vec![c],
+                            origins: vec![crate::event::LostOrigin::Judge],
+                        });
+                    }
                 }
             }
             let card = self.card;

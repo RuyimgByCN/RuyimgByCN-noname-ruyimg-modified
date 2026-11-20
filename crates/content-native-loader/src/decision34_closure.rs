@@ -5,7 +5,7 @@
 //! `L20` (14 HUD marks), and `L28` (`雷霆万钧/extension.js:3657-3670,3783-8968` 14 `th_*`
 //! generals, skills, and `th_taipingyaoshu` card).
 
-use engine_native::catalog::{CardDef, Catalog, Faction, Suit};
+use engine_native::catalog::{CardDef, CardKind, Catalog, Faction, Suit};
 use engine_native::content::extension::{
     ExtensionDef, ExtensionGeneral, ExtensionPack, InitHook, VmSkillDecl,
 };
@@ -221,11 +221,11 @@ pub const L28_THUNDER_GENERALS: [(&str, Faction, Gender, u32, &[&str]); 14] = [
     ("th_zhouqun", Faction::Shu, Gender::Male, 3, &["th_tiansuan"]),
     ("th_wanglang", Faction::Wei, Gender::Male, 3, &["th_gushe", "rejici"]),
     ("th_liuhui", Faction::Qun, Gender::Male, 4, &["th_geyuan", "th_jieshu", "th_gusuan"]),
-    ("th_shen_zhouyu", Faction::Wu, Gender::Male, 4, &["th_yeyan", "qinyin"]),
+    ("th_shen_zhouyu", Faction::Wu, Gender::Male, 4, &["th_yeyan", "pro_qinyin"]),
 ];
 
 /// Authentic `L28` (`雷霆万钧/extension.js:3660-3670, 4203-8614`) additional general and sub-skills.
-pub const L28_THUNDER_EXTRA_SKILLS: [&str; 39] = [
+pub const L28_THUNDER_EXTRA_SKILLS: [&str; 59] = [
     "th_bushi",
     "th_zhongzhuang",
     "th_caiyi",
@@ -265,7 +265,113 @@ pub const L28_THUNDER_EXTRA_SKILLS: [&str; 39] = [
     "th_jieshu",
     "th_gusuan",
     "qinyin",
+    "pro_qinyin",
+    "wushuangfangtianji_skill",
+    "guilongzhanyuedao",
+    "chixueqingfeng",
+    "bintieshuangji_skill",
+    "wutiesuolian_skill",
+    "wuxinghelingshan_skill",
+    "linglongshimandai_skill",
+    "hongmianbaihuapao_skill",
+    "qimenbagua",
+    "guofengyupao",
+    "huxinjing",
+    "heiguangkai_skill",
+    "shufazijinguan_skill",
+    "xuwangzhimian",
+    "tianjitu_skill",
+    "taigongyinfu_skill",
+    "taigongyinfu_link",
+    "sanlve_skill",
+    "zhaogujing_skill",
 ];
+
+/// Authentic `L28` off-deck equip cards (`th_taipingyaoshu` `list: []`, `extension.js:8968`;
+/// `th_shengong` 18-card `card_map`, `extension.js:5396-5400`, `character/sp.js:7437-7461`).
+pub(crate) fn l28_thunder_cards() -> Vec<CardDef> {
+    vec![
+        CardDef::armor("th_taipingyaoshu")
+            .with_suit_rank(Suit::Heart, 3)
+            .with_equip_skills(&["th_taipingyaoshu"])
+            .with_off_deck(),
+        // `th_shengong` equip1 (6 weapons)
+        CardDef::weapon("wushuangfangtianji", 4)
+            .with_suit_rank(Suit::Diamond, 12)
+            .with_equip_skills(&["wushuangfangtianji_skill"])
+            .with_off_deck(),
+        CardDef::weapon("guilongzhanyuedao", 3)
+            .with_suit_rank(Suit::Spade, 5)
+            .with_equip_skills(&["guilongzhanyuedao"])
+            .with_off_deck(),
+        CardDef::weapon("chixueqingfeng", 2)
+            .with_suit_rank(Suit::Spade, 6)
+            .with_equip_skills(&["chixueqingfeng"])
+            .with_off_deck(),
+        CardDef::weapon("bintieshuangji", 3)
+            .with_suit_rank(Suit::Diamond, 13)
+            .with_equip_skills(&["bintieshuangji_skill"])
+            .with_off_deck(),
+        CardDef::weapon("wutiesuolian", 3)
+            .with_suit_rank(Suit::Spade, 13)
+            .with_equip_skills(&["wutiesuolian_skill"])
+            .with_off_deck(),
+        CardDef::weapon("wuxinghelingshan", 4)
+            .with_suit_rank(Suit::Diamond, 1)
+            .with_equip_skills(&["wuxinghelingshan_skill"])
+            .with_off_deck(),
+        // `th_shengong` equip2 (6 armors)
+        CardDef::armor("linglongshimandai")
+            .with_suit_rank(Suit::Spade, 2)
+            .with_equip_skills(&["linglongshimandai_skill"])
+            .with_off_deck(),
+        CardDef::armor("hongmianbaihuapao")
+            .with_suit_rank(Suit::Club, 1)
+            .with_equip_skills(&["hongmianbaihuapao_skill"])
+            .with_off_deck(),
+        CardDef::armor("qimenbagua")
+            .with_suit_rank(Suit::Spade, 2)
+            .with_equip_skills(&["qimenbagua"])
+            .with_off_deck(),
+        CardDef::armor("guofengyupao")
+            .with_suit_rank(Suit::Spade, 9)
+            .with_equip_skills(&["guofengyupao"])
+            .with_off_deck(),
+        CardDef::armor("huxinjing")
+            .with_suit_rank(Suit::Club, 1)
+            .with_equip_skills(&["huxinjing"])
+            .with_off_deck(),
+        CardDef::armor("heiguangkai")
+            .with_suit_rank(Suit::Club, 2)
+            .with_equip_skills(&["heiguangkai_skill"])
+            .with_off_deck(),
+        // `th_shengong` others / equip5 (6 treasures)
+        CardDef::basic("shufazijinguan", CardKind::WuxingPan)
+            .with_suit_rank(Suit::Diamond, 1)
+            .with_equip_skills(&["shufazijinguan_skill"])
+            .with_off_deck(),
+        CardDef::basic("xuwangzhimian", CardKind::WuxingPan)
+            .with_suit_rank(Suit::Club, 4)
+            .with_equip_skills(&["xuwangzhimian"])
+            .with_off_deck(),
+        CardDef::basic("tianjitu", CardKind::WuxingPan)
+            .with_suit_rank(Suit::Club, 12)
+            .with_equip_skills(&["tianjitu_skill"])
+            .with_off_deck(),
+        CardDef::basic("taigongyinfu", CardKind::WuxingPan)
+            .with_suit_rank(Suit::Spade, 2)
+            .with_equip_skills(&["taigongyinfu_skill", "taigongyinfu_link"])
+            .with_off_deck(),
+        CardDef::basic("sanlve", CardKind::WuxingPan)
+            .with_suit_rank(Suit::Spade, 5)
+            .with_equip_skills(&["sanlve_skill"])
+            .with_off_deck(),
+        CardDef::basic("zhaogujing", CardKind::WuxingPan)
+            .with_suit_rank(Suit::Diamond, 1)
+            .with_equip_skills(&["zhaogujing_skill"])
+            .with_off_deck(),
+    ]
+}
 
 fn build_d34_vm_decl(
     idx: usize,
@@ -400,12 +506,8 @@ pub fn decision34_closure_extension_pack() -> ExtensionPack {
         });
     }
 
-    // Authentic `L28` card: `th_taipingyaoshu` (`雷霆万钧/extension.js:8968`)
-    let cards = vec![
-        CardDef::armor("th_taipingyaoshu")
-            .with_suit_rank(Suit::Heart, 3)
-            .with_equip_skills(&["th_taipingyaoshu"]),
-    ];
+    // Authentic `L28` off-deck cards (`th_taipingyaoshu` + 18 `th_shengong` equips)
+    let cards = l28_thunder_cards();
 
     ExtensionPack {
         def: ExtensionDef {

@@ -95,6 +95,60 @@ pub fn intrinsic_machine(
                 discard_remaining_carriers(ctx);
                 return None;
             }
+            if dying_save.is_none() {
+                let excl_kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
+                let excl_targets = match excl_kind {
+                    CardKind::Wugu if u.targets.is_empty() => ctx.core.alive_players().collect(),
+                    CardKind::Taoyuan if u.targets.is_empty() => {
+                        ctx.core.alive_players().filter(|&p| p != u.player).collect()
+                    }
+                    _ => u.targets.clone(),
+                };
+                let total = excl_targets.len();
+                if total > 0 {
+                    let filtered: Vec<PlayerId> = excl_targets
+                        .into_iter()
+                        .filter(|&t| {
+                            !crate::rvm_bridge::modifiers::d34_l28_mods::shengong_excludes_target(
+                                ctx.core,
+                                ctx.catalog,
+                                u.player,
+                                t,
+                                u.card,
+                                excl_kind,
+                                u.nature,
+                                total,
+                            )
+                        })
+                        .collect();
+                    if filtered.len() != total {
+                        u.targets = filtered;
+                        ctx.res
+                            .frame_mut(frame_id)
+                            .expect("card use frame")
+                            .card_use_mut()
+                            .targets = u.targets.clone();
+                        if !u.targets.is_empty()
+                            && matches!(excl_kind, CardKind::Wugu | CardKind::Taoyuan)
+                        {
+                            ctx.core
+                                .vm_aux
+                                .flags
+                                .insert((u.player, format!("dddanzhi_targets:{frame_id}")), 1);
+                        }
+                        if u.targets.is_empty()
+                            || (excl_kind == CardKind::Jiedao && u.targets.len() < 2)
+                        {
+                            ctx.core
+                                .vm_aux
+                                .flags
+                                .remove(&(u.player, "vm_va_recover_bonus".to_string()));
+                            discard_remaining_carriers(ctx);
+                            return None;
+                        }
+                    }
+                }
+            }
             if let Some((dying, raw_tao)) = dying_save {
                 discard_remaining_carriers(ctx);
                 crate::kernel::dying::DyingSaveMachine::new(
@@ -148,6 +202,7 @@ pub fn intrinsic_machine(
                         | CardKind::Chain
                 )
             {
+                discard_remaining_carriers(ctx);
                 return None;
             }
             if effective_kind.is_sha_like() {
@@ -221,6 +276,30 @@ pub fn intrinsic_machine(
                                 second_pending: false,
                             }));
                         }
+                    }
+                    CardKind::Jiedao => {
+                        if let (Some(&holder), Some(&victim)) =
+                            (u.targets.first(), u.targets.get(1))
+                        {
+                            return Some(Box::new(JiedaoMachine {
+                                owner: u.player,
+                                holder,
+                                victim,
+                                card: None,
+                                stage: JiedaoStage::Ask,
+                            }));
+                        }
+                    }
+                    kind if kind.aoe_need().is_some() => {
+                        return Some(Box::new(AoeResolveMachine {
+                            card: 0,
+                            source: u.player,
+                            need: kind.aoe_need().expect("checked"),
+                            targets: u.targets,
+                            idx: 0,
+                            inner: None,
+                            nature: kind.aoe_nature(),
+                        }));
                     }
                     _ => {}
                 }

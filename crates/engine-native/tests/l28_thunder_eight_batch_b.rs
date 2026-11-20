@@ -104,7 +104,7 @@ fn l28_thunder_eight_batch_b_skills() {
         "④ once per turn"
     );
 
-    // ---- th_tiansuan 天算（`extension.js:7806-8216`）：命运签效果持续到下回合开始 ----
+    // ---- th_tiansuan 天算（`extension.js:7806-8216`）：加权随机抽签，命运签效果持续到下回合开始 ----
     let mut e = fresh(&p, 2844, "th_zhouqun");
     activate(&mut e, 0, "th_tiansuan");
     answer(&mut e, "th_tiansuan:choose_lot", Vec::new());
@@ -113,10 +113,27 @@ fn l28_thunder_eight_batch_b_skills() {
         "② cancel lot selection"
     );
     activate(&mut e, 0, "th_tiansuan");
-    assert!(rejected(&mut e, vec![tag(5)]), "③ five lots 0..=4");
-    answer(&mut e, "th_tiansuan:choose_lot", vec![tag(3)]);
-    snapshot_roundtrip(&e, &p, vec![pl(1)]);
-    answer(&mut e, "th_tiansuan:choose_target", vec![pl(1)]);
+    assert!(rejected(&mut e, vec![tag(6)]), "③ 6 weight choices 0..=5");
+    let roll_tiansuan_lot = |base_seed: u64, want_lot: u32| -> Engine {
+        for off in 0..200u64 {
+            let mut eng = fresh(&p, base_seed + off, "th_zhouqun");
+            activate(&mut eng, 0, "th_tiansuan");
+            answer(&mut eng, "th_tiansuan:choose_lot", vec![tag(want_lot as u8)]);
+            if off == 0 && want_lot == 3 {
+                snapshot_roundtrip(&eng, &p, vec![pl(1)]);
+            }
+            answer(&mut eng, "th_tiansuan:choose_target", vec![pl(1)]);
+            if flag(&eng, 0, "th_tiansuan_lot") == want_lot + 1 {
+                if want_lot < 2 {
+                    let gain_opt = open(&eng, "th_tiansuan:gain_card").spec.options[0];
+                    answer(&mut eng, "th_tiansuan:gain_card", vec![gain_opt]);
+                }
+                return eng;
+            }
+        }
+        panic!("no seed in {base_seed}..+200 rolled lot {want_lot}");
+    };
+    let mut e = roll_tiansuan_lot(3100, 3);
     assert!(has_skill(&e, 0, "th_tiansuan2") && flag(&e, 1, "th_tiansuan2_3_extra_damage") == 1);
     let (hp1, sha) = (hp(&e, 1), card_by(&e, |c| c.kind == CardKind::Sha));
     give(&mut e, 0, sha);
@@ -137,17 +154,8 @@ fn l28_thunder_eight_batch_b_skills() {
         "① th_tiansuan2 clears lots at turn begin"
     );
     // 上上签（lot 0）：获得目标区域一张牌 + 防止受到的伤害
-    let (h0, h1) = (hand(&e, 0), hand(&e, 1));
-    activate(&mut e, 0, "th_tiansuan");
-    answer(&mut e, "th_tiansuan:choose_lot", vec![tag(0)]);
-    answer(&mut e, "th_tiansuan:choose_target", vec![pl(1)]);
-    let gain_opt = open(&e, "th_tiansuan:gain_card").spec.options[0];
-    answer(&mut e, "th_tiansuan:gain_card", vec![gain_opt]);
-    assert_eq!(
-        (hand(&e, 0), hand(&e, 1)),
-        (h0 + 1, h1 - 1),
-        "① 上上签: gain a card from target"
-    );
+    let mut e = roll_tiansuan_lot(3300, 0);
+    assert!(has_skill(&e, 1, "th_tiansuan2_0") && flag(&e, 1, "th_tiansuan2_0_prevent_damage") == 1);
     let (hp1, sha) = (hp(&e, 1), card_by(&e, |c| c.kind == CardKind::Sha));
     give(&mut e, 0, sha);
     play(&mut e, 0, sha, vec![1]);
@@ -155,14 +163,7 @@ fn l28_thunder_eight_batch_b_skills() {
     assert_eq!(hp(&e, 1), hp1, "⑤ 上上签 prevents damage");
 
     // 上签（lot 1）：获得目标区域一张牌 + 伤害封顶 1 + 受伤后摸 1（th_tiansuan2_1 + th_tiansuan2_damage）
-    let mut e = fresh(&p, 2849, "th_zhouqun");
-    let (h0, h1_init) = (hand(&e, 0), hand(&e, 1));
-    activate(&mut e, 0, "th_tiansuan");
-    answer(&mut e, "th_tiansuan:choose_lot", vec![tag(1)]);
-    answer(&mut e, "th_tiansuan:choose_target", vec![pl(1)]);
-    let gain_opt = open(&e, "th_tiansuan:gain_card").spec.options[0];
-    answer(&mut e, "th_tiansuan:gain_card", vec![gain_opt]);
-    assert_eq!((hand(&e, 0), hand(&e, 1)), (h0 + 1, h1_init - 1));
+    let mut e = roll_tiansuan_lot(3500, 1);
     assert!(has_skill(&e, 1, "th_tiansuan2_1") && has_skill(&e, 1, "th_tiansuan2_damage"));
     let (jiu, sha) = (
         card_by(&e, |c| c.kind == CardKind::Jiu),
@@ -181,10 +182,7 @@ fn l28_thunder_eight_batch_b_skills() {
     );
 
     // 中签（lot 2）：th_tiansuan2_fire 将非火伤害改为火属性（配合太平要术防止火伤）
-    next_turn(&mut e, 1);
-    activate(&mut e, 0, "th_tiansuan");
-    answer(&mut e, "th_tiansuan:choose_lot", vec![tag(2)]);
-    answer(&mut e, "th_tiansuan:choose_target", vec![pl(1)]);
+    let mut e = roll_tiansuan_lot(3700, 2);
     assert!(
         has_skill(&e, 1, "th_tiansuan2_2")
             && has_skill(&e, 1, "th_tiansuan2_fire")
@@ -205,15 +203,12 @@ fn l28_thunder_eight_batch_b_skills() {
     );
 
     // 下下签（lot 4）：不能使用【桃】/【酒】。对照：无签角色可正常使用。
-    next_turn(&mut e, 2);
-    activate(&mut e, 0, "th_tiansuan");
-    answer(&mut e, "th_tiansuan:choose_lot", vec![tag(4)]);
-    answer(&mut e, "th_tiansuan:choose_target", vec![pl(1)]);
+    let mut e = roll_tiansuan_lot(3900, 4);
     for (seat, banned) in [(2u8, false), (1, true)] {
         e.debug_set_hp(seat, 2);
         let tao = card_by(&e, |c| c.kind == CardKind::Tao);
         give(&mut e, seat, tao);
-        e.debug_set_turn(seat, Phase::Play, 3);
+        e.debug_set_turn(seat, Phase::Play, 2);
         let out = submit(
             &mut e,
             seat,
@@ -266,11 +261,11 @@ fn l28_thunder_eight_batch_b_skills() {
     answer(&mut e, "th_gushe:owner_discard", Vec::new());
     assert_eq!(flag(&e, 0, "th_gushe_raosuo"), 1, "① lost pindian -> +1 raosuo");
 
-    // 激词①：设有 4 枚饶舌标记，拼点牌点数 3 <= 4，点数 +4 变为 7 > 5，反败为胜并获得拼点牌 c1。
+    // 激词①：设有 4 枚 regushe 标记，拼点牌点数 3 <= 4，点数 +4 变为 7 > 5，反败为胜并获得拼点牌 c1。
     e.state_core_mut()
         .vm_aux
         .flags
-        .insert((0, "th_gushe_raosuo".into()), 4);
+        .insert((0, "regushe".into()), 4);
     e.state_core_mut()
         .vm_aux
         .flags
@@ -321,7 +316,7 @@ fn l28_thunder_eight_batch_b_skills() {
     e.state_core_mut()
         .vm_aux
         .flags
-        .insert((0, "th_gushe_raosuo".into()), 5);
+        .insert((0, "regushe".into()), 5);
     e.debug_set_hp(0, 1);
     for s in 0..4 {
         clear_hand(&mut e, s);
@@ -447,18 +442,32 @@ fn l28_thunder_eight_batch_b_skills() {
         0,
         "④ qinyin must not trigger when < 2 cards discarded in Discard phase"
     );
-    // ① 琴音正向触发：弃牌阶段弃置 >= 2 张牌，阶段结束时触发选择全体回复或失去 1 点体力
+    // ① pro_qinyin 正向触发：红黑牌均入弃牌堆时，结束阶段选择全体回复或失去 1 点体力
     next_turn(&mut e, 2);
+    clear_hand(&mut e, 0);
     e.debug_set_hp(0, 2);
     e.debug_set_hp(1, 2);
-    for r in 1..=6 {
-        let c = card_by(&e, |d| d.rank == r);
+    let red_c = card_by(&e, |d| matches!(d.suit, Suit::Heart | Suit::Diamond));
+    let blk_c = card_by(&e, |d| matches!(d.suit, Suit::Spade | Suit::Club));
+    let keep_c = card_by(&e, |d| d.rank == 7 && d.suit == Suit::Heart);
+    let extra_c = card_by(&e, |d| d.rank == 8 && d.suit == Suit::Spade);
+    for c in [red_c, blk_c, keep_c, extra_c] {
         give(&mut e, 0, c);
     }
     e.debug_set_turn(0, Phase::Play, 2);
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let disc_c = open(&e, "discard_to_limit");
-    let sel: Vec<_> = disc_c.spec.options.iter().take(disc_c.spec.min).copied().collect();
+    let mut sel = vec![cd(red_c), cd(blk_c)];
+    if disc_c.spec.min > sel.len() {
+        for o in &disc_c.spec.options {
+            if !sel.contains(o) {
+                sel.push(*o);
+                if sel.len() == disc_c.spec.min {
+                    break;
+                }
+            }
+        }
+    }
     let _ = submit(
         &mut e,
         0,
@@ -468,14 +477,14 @@ fn l28_thunder_eight_batch_b_skills() {
         },
     );
     let _ = submit(&mut e, 0, GameAction::NextPhase);
-    assert!(rejected(&mut e, vec![tag(2)]), "③ qinyin mode 0..=1");
+    assert!(rejected(&mut e, vec![tag(2)]), "③ pro_qinyin mode 0..=1 before yeyan used");
     snapshot_roundtrip(&e, &p, vec![tag(1)]);
-    answer(&mut e, "qinyin:choose_mode", vec![tag(0)]);
+    answer(&mut e, "pro_qinyin:choose_mode", vec![tag(0)]);
     drain(&mut e);
     assert_eq!(
         (flag(&e, 0, "qinyin_triggered"), hp(&e, 0), hp(&e, 1)),
         (1, 3, 3),
-        "① qinyin mode 0 recovers 1 HP for wounded players"
+        "① pro_qinyin mode 0 recovers 1 HP for wounded players"
     );
 
     // 业炎：取消退还 -> 小业炎（1~3 名目标各 1 点火伤）-> 限定技不可再发动
@@ -520,16 +529,18 @@ fn l28_thunder_eight_batch_b_skills() {
         give(&mut e, 0, c);
         four_suits.push(cd(c));
     }
+    e.set_strengthen_skill_forbid(true);
     activate(&mut e, 0, "th_yeyan");
     answer(&mut e, "th_yeyan:choose_mode", vec![tag(1)]);
     let hp1 = hp(&e, 1);
     answer(&mut e, "th_yeyan:choose_targets", vec![pl(1)]);
+    answer(&mut e, "th_yeyan:choose_damage", vec![tag(3)]);
     answer(&mut e, "th_yeyan:discard_cards", four_suits);
     drain(&mut e);
     assert_eq!(
         (hp(&e, 0), hp(&e, 1)),
         (1, hp1 - 3),
-        "① great yeyan loses 3 HP and deals 3 Fire damage"
+        "① forbid-strengthen great yeyan loses 3 HP and deals 3 Fire damage"
     );
 }
 
@@ -578,7 +589,9 @@ fn l28_thunder_eight_equip_and_interactions() {
     e.state_core_mut().player_mut(3).alive = false;
     assert_eq!(e.hand_limit_for_debug(0), base_limit + 2, "shu gone → +2");
     e.state_core_mut().player_mut(3).alive = true;
-    // 属性伤害（火/雷）被防止，普通伤害照常。
+    // 属性伤害（火/雷）被防止，普通伤害照常（仅清手牌，保留已装备的太平要术）。
+    let h0_c: Vec<u32> = e.state_core_mut().player_mut(0).hand.drain(..).collect();
+    e.state_core_mut().discard.extend(h0_c);
     for kind in [CardKind::FireSha, CardKind::LeiSha, CardKind::Sha] {
         let c = card_by(&e, |d| d.kind == kind);
         give(&mut e, 1, c);
@@ -625,6 +638,111 @@ fn l28_thunder_eight_equip_and_interactions() {
     let h0 = hand(&e, 0);
     equip(&mut e, 0, armor);
     assert_eq!((hand(&e, 0), hp(&e, 0)), (h0 + 2, 1), "hp 1: draw only");
+
+    // Batch 1.6 L28：th_yeyan 费用配置、按 getStrength 扣 3 血与先血后伤座次、大业炎单目标 2 火
+    let mut e = fresh(&p, 2865, "th_shen_zhouyu");
+    clear_hand(&mut e, 0);
+    let mut four_suits = Vec::new();
+    for suit in [Suit::Spade, Suit::Heart, Suit::Club, Suit::Diamond] {
+        let c = card_by(&e, |d| d.suit == suit);
+        give(&mut e, 0, c);
+        four_suits.push(cd(c));
+    }
+    // ① 默认配置（strengthen_skill 开启）：大业炎选 1 目标 2 火（取消 refund + 快照往返 + AI 选敌）
+    activate(&mut e, 0, "th_yeyan");
+    answer(&mut e, "th_yeyan:choose_mode", vec![tag(1)]);
+    let ai_yeyan = e.plan_action(0, &engine_native::ai::BoundedPlanner::new(4));
+    assert!(
+        matches!(ai_yeyan.action, GameAction::Answer { ref selection, .. } if !selection.contains(&pl(0))),
+        "AI th_yeyan targets must exclude self: {ai_yeyan:?}"
+    );
+    answer(&mut e, "th_yeyan:choose_targets", vec![pl(1)]);
+    answer(&mut e, "th_yeyan:choose_damage", Vec::new());
+    assert!(
+        !once_used(&e, 0, "th_yeyan") && hand(&e, 0) == 4 && hp(&e, 0) == 4,
+        "cancel at th_yeyan:choose_damage must refund and lose neither cards nor HP"
+    );
+    activate(&mut e, 0, "th_yeyan");
+    answer(&mut e, "th_yeyan:choose_mode", vec![tag(1)]);
+    let hp1 = hp(&e, 1);
+    answer(&mut e, "th_yeyan:choose_targets", vec![pl(1)]);
+    snapshot_roundtrip(&e, &p, vec![tag(2)]);
+    answer(&mut e, "th_yeyan:choose_damage", vec![tag(2)]);
+    answer(&mut e, "th_yeyan:discard_cards", four_suits.clone());
+    drain(&mut e);
+    assert_eq!(
+        (hp(&e, 0), hp(&e, 1)),
+        (4, hp1 - 2),
+        "default strengthened yeyan deals 2 fire without losing 3 HP"
+    );
+
+    // ③ forceDie：forbid 模式下自身 3 血发动大业炎因 loseHp(3) 阵亡，仍须对其余目标结算火伤
+    let mut e = fresh(&p, 2867, "th_shen_zhouyu");
+    e.set_strengthen_skill_forbid(true);
+    e.debug_set_hp(0, 3);
+    clear_hand(&mut e, 0);
+    let mut four_suits_d = Vec::new();
+    for suit in [Suit::Spade, Suit::Heart, Suit::Club, Suit::Diamond] {
+        let c = card_by(&e, |d| d.suit == suit);
+        give(&mut e, 0, c);
+        four_suits_d.push(cd(c));
+    }
+    activate(&mut e, 0, "th_yeyan");
+    answer(&mut e, "th_yeyan:choose_mode", vec![tag(1)]);
+    answer(&mut e, "th_yeyan:choose_targets", vec![pl(1), pl(2)]);
+    let hp1_fd = hp(&e, 1);
+    let hp2_fd = hp(&e, 2);
+    answer(&mut e, "th_yeyan:discard_cards", four_suits_d);
+    drain(&mut e);
+    assert!(
+        !e.state_core().player(0).alive
+            && hp(&e, 1) == hp1_fd - 2
+            && hp(&e, 2) == hp2_fd - 1,
+        "forceDie great yeyan kills owner during loseHp(3) and still deals 2+1 fire damage"
+    );
+
+    // ② strengthen_skill_forbid = 1（等同上游 localStorage.strengthen_skill = 'forbid'）：
+    //    先弃 4 花色，再失去 3 体力，最后按座次（从自己起：1 先于 2）造成火焰伤害
+    let mut e = fresh(&p, 2866, "th_shen_zhouyu");
+    set_flag(&mut e, 0, "strengthen_skill_forbid", 1);
+    clear_hand(&mut e, 0);
+    let mut four_suits = Vec::new();
+    for suit in [Suit::Spade, Suit::Heart, Suit::Club, Suit::Diamond] {
+        let c = card_by(&e, |d| d.suit == suit);
+        give(&mut e, 0, c);
+        four_suits.push(cd(c));
+    }
+    let log_start = e.log().len();
+    activate(&mut e, 0, "th_yeyan");
+    answer(&mut e, "th_yeyan:choose_mode", vec![tag(1)]);
+    // 选 [2, 1]（2 给2点、1 给1点），但执行顺序必须按座次（1 在 2 前），且均在失 3 血之后
+    answer(&mut e, "th_yeyan:choose_targets", vec![pl(2), pl(1)]);
+    let hp1 = hp(&e, 1);
+    let hp2 = hp(&e, 2);
+    answer(&mut e, "th_yeyan:discard_cards", four_suits);
+    drain(&mut e);
+    assert_eq!((hp(&e, 0), hp(&e, 1), hp(&e, 2)), (1, hp1 - 1, hp2 - 2));
+    let tail = &e.log()[log_start..];
+    let pos_disc = tail
+        .iter()
+        .position(|ev| matches!(ev, engine_native::LogEvent::CardDiscarded { player: 0, .. }))
+        .expect("discard log");
+    let pos_lose = tail
+        .iter()
+        .position(|ev| matches!(ev, engine_native::LogEvent::HpLost { player: 0, amount: 3 }))
+        .expect("loseHp 3 log");
+    let pos_d1 = tail
+        .iter()
+        .position(|ev| matches!(ev, engine_native::LogEvent::DamageDealt { target: 1, amount: 1, .. }))
+        .expect("damage seat 1");
+    let pos_d2 = tail
+        .iter()
+        .position(|ev| matches!(ev, engine_native::LogEvent::DamageDealt { target: 2, amount: 2, .. }))
+        .expect("damage seat 2");
+    assert!(
+        pos_disc < pos_lose && pos_lose < pos_d1 && pos_d1 < pos_d2,
+        "yeyan execution order must be: discard4 ({pos_disc}) -> loseHp3 ({pos_lose}) -> damage@1 ({pos_d1}) -> damage@2 ({pos_d2})"
+    );
 
     // th_zhongzhuang 忠壮（`extension.js:4388`）：攻击范围 < 3 伤害 +1；> 3 只能造成 1 点。
     let mut e = fresh(&p, 2853, "th_lukai");

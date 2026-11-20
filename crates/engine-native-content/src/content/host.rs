@@ -32,6 +32,10 @@ pub use support::{
     jifeng_single_target_trick, sbzhaxiang_active, shengong_borrow_options,
     shengong_borrowed_owner, yangpijuan_class,
 };
+pub(crate) use step::{
+    on_cards_to_discard_chengye, on_outer_settled_taipingyaoshu, on_skill_removed_l28,
+    play_begin_tianshu,
+};
 pub(crate) use support::{niepan_effect, sync_land_skill};
 
 /// 机关牌名目标规则（按上游 filterTarget 与引擎 PlayCard 校验同口径）。
@@ -196,6 +200,23 @@ impl SkillBehavior for HostSkillBehavior {
                 | HostBehavior::MtgYixialanRecast
                 | HostBehavior::MtgLinzhongjiantaStrike
                 | HostBehavior::MtgYoulinDiscard
+        ) || matches!(
+            self.name.as_str(),
+            "th_zhengjing2"
+                | "th_tiansuan2"
+                | "th_tiansuan2_0"
+                | "th_tiansuan2_1"
+                | "th_tiansuan2_2"
+                | "th_tiansuan2_3"
+                | "th_tiansuan2_4"
+                | "th_tiansuan2_damage"
+                | "th_tiansuan2_ai"
+                | "th_tiansuan2_fire"
+                | "th_gushe2"
+                | "th_taipingyaoshu"
+                | "th_g_taipingyaoshu_ai"
+                | "th_pcaudio_shuijing_card"
+                | "th_pcaudio_xuanjian_card"
         )
     }
     fn window_trigger_meta(

@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-20 Batch 1.2（L28 雷霆万钧）规则修复与独立复核（待提交／发布）
+
+基线 HEAD `c119a64408e9556f58c415ddd0c5eceb1f11fdf0` 合入 `swarm/author-l28` `d50723fe23c05edfbe5fe43e6bd874c4b553a565`；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`。经先红后绿回归与未参与实现的独立复核 agent（`571d828a-de8d-4c1a-b9cc-e06219f5006b`）三轮逐行核对与上游 19 步真实事件探针比对，Batch 1.2 21 项审查结果 **19 通过／2 维持简化近似／0 失败**：`L28 雷霆万钧` 更新为 **已复核等价 54／简化近似 2／缺失 0**（修复并签署 `th_buxu`、`th_tianshu`、`th_yeyan`、`cards:th_taipingyaoshu`；复审通过 `th_chengye`、`th_shen_zhouyu` `pro_qinyin`、`th_bushi`、`th_caohua`、`th_jingxie`、`th_shengong` 18 件专属装备、`th_tiansuan*`、`th_gushe`、`th_zhengjing2`、`hidePack`；`th_zhengjing` 实时小游戏计数抽象与纯 CSS `thunder.css` 维持 `简化近似`）。全仓清单更新为 **已复核等价 636／简化近似 3,788／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch 1.2 复核摘要](../operations/evidence/2026-11-20-batch1-2-l28/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。
+
 ## 2026-11-19 Batch 1.1（U06 欢乐卡牌 ＋ L06 wuxing）规则修复与独立复核（待提交／发布）
 
 基线 HEAD `352236724b5e173cc1ff74c0fb706509129ab7a1` ＋ Batch 1.1 代码/文档工作区修改；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`。经红转绿回归与未参与实现的独立复核 agent（`602b9dd3-b8e7-4e3c-81fe-b57137a6f312`）逐行核对与上游实际运行比对，Batch 1.1 14 项审查结果 **13 通过／1 项维持简化近似**：`U06 欢乐卡牌` 升为 **已复核等价 11／简化近似 0／缺失 0**（修复 `monkey` 出牌/濒死桃统一 `EventData::CardUsed` 消费与 `filterInD`、`xuelunyang` 第二步取消/被禁用临时技回合末过期/`is_charlotte` 状态戳排除，完成 `kuwu`/`mianju`/`shoulijian`/`jiuwei` 复核）；`L06 wuxing` 调整为 **已复核等价 2／简化近似 1／缺失 0**（`_shengke` 修复 `Tianfuzhen`/`Niaoxiangzhen`/`use_as=Wuzhong` 及 `Wuzhong`/`Jiguan` 原主判定、`wuxingpan_skill` 确认第二步强制选择并通过复核，而 `L06:cards:wuxingpan` 依 S2 实际核对下调为 `简化近似`，原因系 `wuxing.json:5` / `construction.rs:479,498` 固定 `1/3` 概率注入五行属性，未读取上游 `wuxing_num_playpackconfig` 默认 `0.3`）。全仓清单更新为 **已复核等价 632／简化近似 3,792／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch 1.1 复核摘要](../operations/evidence/2026-11-19-batch1-1-u06-l06/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。下方 2026-11-14 及更早表格与段落保留为历史快照。

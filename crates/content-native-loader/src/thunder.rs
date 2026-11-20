@@ -82,6 +82,8 @@ pub struct ThunderConfig {
     pub time_theme: String,
     /// 立绘存放目录（`standPath`，两项上游目录之一）。
     pub stand_path: String,
+    /// 强化技策略（`strengthen_skill`：`"none"`/`"forbid"` 等，默认关闭禁强化，见 `game.js:249`）。
+    pub strengthen_skill: String,
 }
 
 /// `gameSpeed` 档位文案（`extension.js:9068-9079`）。
@@ -163,6 +165,15 @@ pub fn parse_thunder_config(json: &str) -> Result<ThunderConfig, ThunderError> {
         yuqi_theme: opt_item(&v, "yuqiTheme", &YUQI_THEME_ITEMS, "follow")?,
         time_theme: opt_item(&v, "timeTheme", &TIME_THEME_ITEMS, "follow")?,
         stand_path: opt_item(&v, "standPath", &STAND_PATH_ITEMS, STAND_PATH_ITEMS[0])?,
+        strengthen_skill: match v.get("strengthen_skill") {
+            None => "none".to_string(),
+            Some(x) => match x.as_str() {
+                Some(s) if s == "none" || s == "default" || s == "forbid" || s.contains("&off_strength") => {
+                    s.to_string()
+                }
+                _ => return Err(ThunderError::BadField("strengthen_skill".into())),
+            },
+        },
     })
 }
 
@@ -218,6 +229,11 @@ impl ThunderConfig {
     /// 立绘文件路径（`standPath` + 皮肤同名文件）。
     pub fn stand_image_path(&self, skin: &str) -> String {
         format!("{}{}.png", self.stand_path, skin)
+    }
+
+    /// 是否禁用强化技减负（`window.getStrength(true, false)` 同口径）。
+    pub fn forbids_strength(&self) -> bool {
+        self.strengthen_skill == "forbid" || self.strengthen_skill.contains("&off_strength")
     }
 }
 

@@ -629,6 +629,11 @@ impl<'a> Ctx<'a> {
             return;
         }
         self.core.discard.push(card);
+        crate::rvm_bridge::modifiers::d34_l28_mods::note_pro_qinyin_discard(
+            self.core,
+            self.catalog,
+            card,
+        );
     }
 
     pub fn discard_from_hand(&mut self, player: PlayerId, card: CardId) {
@@ -847,12 +852,28 @@ impl<'a> Ctx<'a> {
     }
 
     /// R05-J（§6）：移除座位技能实例，若为 R05 helper 则一并清理对应 mark。
+    fn finish_removed_skill(&mut self, owner: PlayerId, name: &str) {
+        let returned =
+            (self.catalog.hooks.on_skill_removed)(self.core, self.catalog, owner, name);
+        if !returned.is_empty() {
+            for &c in &returned {
+                self.to_discard(c);
+            }
+            (self.catalog.hooks.on_cards_to_discard)(self, owner, &returned, false);
+        }
+    }
+
     pub fn remove_skill(
         &mut self,
         owner: PlayerId,
         def: SkillDefId,
     ) -> Option<crate::state::SkillInstance> {
-        self.core.remove_skill_and_r05_mark(self.catalog, owner, def)
+        let old = self.core.remove_skill_and_r05_mark(self.catalog, owner, def);
+        if old.is_some() {
+            let name = self.catalog.skill_name(def);
+            self.finish_removed_skill(owner, name);
+        }
+        old
     }
 
     pub fn skill_enabled(&self, owner: PlayerId, def: SkillDefId) -> bool {
@@ -935,7 +956,9 @@ impl<'a> Ctx<'a> {
                 .remove(&(owner, format!("xuelunyang_temp:{def}")))
                 .is_some();
             if force_remove || name != crate::vocabulary::names::YI_SHANG {
-                self.core.skills.remove(&(owner, def));
+                if self.core.skills.remove(&(owner, def)).is_some() {
+                    self.finish_removed_skill(owner, name);
+                }
             } else if let Some(inst) = self.core.skills.get_mut(&(owner, def)) {
                 inst.enabled = false;
                 inst.expires_end_of_turn = false;

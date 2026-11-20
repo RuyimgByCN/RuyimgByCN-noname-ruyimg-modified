@@ -103,6 +103,7 @@ pub(crate) fn take_out(e: &mut Engine, card: u32) {
     let core = e.state_core_mut();
     core.deck.retain(|&c| c != card);
     core.discard.retain(|&c| c != card);
+    core.detached_cards.retain(|&(c, _)| c != card);
     for p in 0..core.players.len() as u8 {
         core.player_mut(p).hand.retain(|&c| c != card);
         core.player_mut(p).equips.retain(|&c| c != card);
@@ -403,24 +404,26 @@ pub(crate) fn next_turn(e: &mut Engine, round: u32) {
 #[test]
 fn l28_thunder_eight_batch_a_active_skills() {
     let p = pack();
-    // ---- th_caiyi 彩翼（`extension.js:4420`）：目标选阳/阴未移除项（X=剩余项数），移去所选项并转阴阳 ----
+    // ---- th_caiyi 彩翼（`extension.js:4420`）：仅结束阶段开始触发，目标选阳/阴未移除项（X=剩余项数），移去所选项并转阴阳 ----
     let mut e = fresh(&p, 2821, "th_caohua");
     e.debug_set_hp(1, 1);
     let (h0, h1) = (hand(&e, 0), hand(&e, 1));
-    activate(&mut e, 0, "th_caiyi");
-    assert!(once_used(&e, 0, "th_caiyi"));
+    assert!(
+        matches!(activate(&mut e, 0, "th_caiyi"), CommandOutcome::Rejected(_)),
+        "④ th_caiyi has no enable:'phaseUse'"
+    );
+    e.debug_set_turn(0, Phase::Discard, 1);
+    let _ = submit(&mut e, 0, GameAction::NextPhase);
     assert!(
         rejected(&mut e, vec![pl(9)]),
         "③ seat 9 is not a legal target"
     );
     answer(&mut e, "th_caiyi:choose_target", Vec::new());
-    assert!(
-        !once_used(&e, 0, "th_caiyi"),
-        "② cancel refunds once_per_turn"
-    );
+    drain(&mut e);
     assert_eq!((hand(&e, 0), hand(&e, 1), hp(&e, 1)), (h0, h1, 1));
     assert_eq!(flag(&e, 0, "th_caiyi_state"), 0);
-    activate(&mut e, 0, "th_caiyi");
+    e.debug_set_turn(0, Phase::Discard, 2);
+    let _ = submit(&mut e, 0, GameAction::NextPhase);
     answer(&mut e, "th_caiyi:choose_target", vec![pl(1)]);
     let c = open(&e, "th_caiyi:choose_option");
     assert_eq!(c.observer, 1, "① target seat 1 chooses the caiyi option");
@@ -438,27 +441,38 @@ fn l28_thunder_eight_batch_a_active_skills() {
         (0b0010, 1),
         "① opt 1 removed and state flipped to Yin"
     );
+    e.debug_set_turn(0, Phase::Play, 2);
     assert!(
         matches!(activate(&mut e, 0, "th_caiyi"), CommandOutcome::Rejected(_)),
-        "④ once_per_turn"
+        "④ th_caiyi cannot be activated manually"
     );
-    next_turn(&mut e, 1);
     let h1 = hand(&e, 1);
-    activate(&mut e, 0, "th_caiyi");
+    e.debug_set_turn(0, Phase::Discard, 3);
+    let _ = submit(&mut e, 0, GameAction::NextPhase);
     answer(&mut e, "th_caiyi:choose_target", vec![pl(1)]);
     answer(&mut e, "th_caiyi:choose_option", vec![tag(1)]);
+    let disc4: Vec<_> = open(&e, "th_caiyi:discard_cards")
+        .spec
+        .options
+        .iter()
+        .take(4)
+        .copied()
+        .collect();
+    assert_eq!(disc4.len(), 4);
+    answer(&mut e, "th_caiyi:discard_cards", disc4);
+    drain(&mut e);
     assert_eq!(
         hand(&e, 1),
         h1 - 4,
-        "① yin opt 1 with X=4 remaining options discards 4 cards"
+        "① yin opt 1 with X=4 remaining options discards 4 chosen cards"
     );
     assert_eq!(
         (flag(&e, 0, "th_caiyi_yin_removed"), flag(&e, 0, "th_caiyi_state")),
         (0b0010, 0),
         "① yin opt 1 removed and state flipped back to Yang"
     );
-    next_turn(&mut e, 2);
-    activate(&mut e, 0, "th_caiyi");
+    e.debug_set_turn(0, Phase::Discard, 4);
+    let _ = submit(&mut e, 0, GameAction::NextPhase);
     answer(&mut e, "th_caiyi:choose_target", vec![pl(1)]);
     assert!(
         rejected(&mut e, vec![tag(1)]),
@@ -520,7 +534,7 @@ fn l28_thunder_eight_batch_a_active_skills() {
         ),
         "④ shengong requires at least 1 equipment card in he"
     );
-    let eq_own = card_by(&e, |c| c.kind.equip_slot() == Some(EquipSlot::Armor));
+    let eq_own = card_by(&e, |c| c.kind.equip_slot() == Some(EquipSlot::Weapon) && !c.off_deck);
     give(&mut e, 0, eq_own);
     let foreign = e.state_core().player(1).hand[0];
     activate(&mut e, 0, "th_shengong");
@@ -536,12 +550,16 @@ fn l28_thunder_eight_batch_a_active_skills() {
     assert!(!once_used(&e, 0, "th_shengong"), "② cancel refunds shengong");
     activate(&mut e, 0, "th_shengong");
     answer(&mut e, "th_shengong:discard_card", vec![cd(eq_own)]);
-    assert!(
-        rejected(&mut e, Vec::new()) && rejected(&mut e, vec![tag(3)]),
-        "③ forge category 0..=2 mandatory"
-    );
-    snapshot_roundtrip(&e, &p, vec![tag(0)]);
-    answer(&mut e, "th_shengong:choose_forge", vec![tag(0)]);
+    while e
+        .open_choice()
+        .is_some_and(|c| c.spec.prompt == "th_shengong:assist")
+    {
+        answer(&mut e, "th_shengong:assist", Vec::new());
+    }
+    let forged = open(&e, "th_shengong:choose_card").spec.options[0];
+    assert!(rejected(&mut e, Vec::new()), "③ choose_card mandatory");
+    snapshot_roundtrip(&e, &p, vec![forged]);
+    answer(&mut e, "th_shengong:choose_card", vec![forged]);
     assert!(rejected(&mut e, Vec::new()), "③ target prompt mandatory");
     snapshot_roundtrip(&e, &p, vec![pl(2)]);
     answer(&mut e, "th_shengong:choose_target", vec![pl(2)]);
@@ -580,14 +598,17 @@ fn l28_thunder_eight_batch_a_active_skills() {
     activate(&mut e, 0, "th_zhengjing");
     assert!(rejected(&mut e, vec![tag(6)]), "③ count 0..=5");
     answer(&mut e, "th_zhengjing:choose_count", vec![tag(3)]);
+    let shown = e.state_core().table.clone();
     assert_eq!(
-        e.state_core().table.len(),
+        shown.len(),
         3,
         "excavated classics wait in the processing area"
     );
     snapshot_roundtrip(&e, &p, vec![pl(0)]);
     let h0 = hand(&e, 0);
     answer(&mut e, "th_zhengjing:choose_target", vec![pl(0)]);
+    snapshot_roundtrip(&e, &p, vec![cd(shown[0])]);
+    answer(&mut e, "th_zhengjing:choose_cards", vec![cd(shown[0])]);
     let jing = e
         .state_core()
         .vm_aux
@@ -598,7 +619,7 @@ fn l28_thunder_eight_batch_a_active_skills() {
     assert_eq!(
         (jing.len(), hand(&e, 0)),
         (1, h0 + 2),
-        "① one classic on target, rest gained"
+        "① chosen classic on target, rest gained"
     );
     assert!(has_skill(&e, 0, "th_zhengjing2") && e.state_core().table.is_empty());
     next_turn(&mut e, 1);
@@ -619,7 +640,7 @@ fn l28_thunder_eight_batch_a_active_skills() {
             activate(&mut e, 0, "th_chengye"),
             CommandOutcome::Rejected(_)
         ),
-        "④ chengye needs six classics"
+        "④ chengye is passive/phaseUseBegin (no active phaseUse)"
     );
     let own0 = e.state_core().player(0).hand[0];
     activate(&mut e, 0, "th_buxu");
@@ -661,17 +682,35 @@ fn l28_thunder_eight_batch_a_active_skills() {
         matches!(activate(&mut e, 0, "th_buxu"), CommandOutcome::Rejected(_)),
         "④ 3rd buxu needs 3 cards, rejected when only 1 card remains"
     );
-    set_flag(&mut e, 0, "th_chengye_mask", 0x3F);
+    let mut e = fresh(&p, 2829, "th_mamidi");
+    for (idx, c) in [
+        card_by(&e, |c| c.kind == engine_native::catalog::CardKind::Duel),
+        card_by(&e, |c| c.kind == engine_native::catalog::CardKind::Sha),
+        card_by(&e, |c| c.kind == engine_native::catalog::CardKind::Nullify),
+        card_by(&e, |c| c.kind == engine_native::catalog::CardKind::Wuzhong),
+        card_by(&e, |c| c.kind == engine_native::catalog::CardKind::Le),
+        card_by(&e, |c| c.kind.equip_slot().is_some()),
+    ]
+    .into_iter()
+    .enumerate()
+    {
+        take_out(&mut e, c);
+        e.state_core_mut()
+            .vm_aux
+            .piles
+            .entry((0, "th_liujing".to_string()))
+            .or_default()
+            .push(c);
+        let next_mask = flag(&e, 0, "th_chengye_mask") | (1 << idx);
+        set_flag(&mut e, 0, "th_chengye_mask", next_mask);
+    }
     set_flag(&mut e, 0, "th_chengye_liujing_count", 6);
+    e.debug_set_turn(0, Phase::Draw, 2);
     let h0 = hand(&e, 0);
-    activate(&mut e, 0, "th_chengye");
-    let hp2 = hp(&e, 2);
-    answer(&mut e, "th_chengye:choose_target", vec![pl(2)]);
-    assert_eq!(
-        (hand(&e, 0), hp(&e, 2)),
-        (h0 + 6, hp2 - 1),
-        "① claim all 6 classics + 1 damage"
-    );
+    let _ = submit(&mut e, 0, GameAction::NextPhase);
+    drain(&mut e);
+    assert_eq!(hand(&e, 0), h0 + 6, "① phaseUseBegin th_chengye_gain gains all 6 classics");
+    assert_eq!(flag(&e, 0, "th_chengye_mask"), 0);
     assert_eq!(flag(&e, 0, "th_chengye_completed"), 1);
 
     // ---- th_yufeng 御风 / th_tianshu 天书（`extension.js:6515-6973`）----
@@ -700,14 +739,13 @@ fn l28_thunder_eight_batch_a_active_skills() {
     });
     give(&mut e, 0, spade);
     give(&mut e, 0, red);
-    activate(&mut e, 0, "th_tianshu");
-    assert!(
-        rejected(&mut e, vec![cd(spade)]),
-        "③ tianshu requires a non-Spade card"
-    );
-    answer(&mut e, "th_tianshu:discard_card", vec![cd(red)]);
+    e.debug_set_turn(0, Phase::Draw, 1);
+    let _ = submit(&mut e, 0, GameAction::NextPhase);
     snapshot_roundtrip(&e, &p, vec![pl(2)]);
     answer(&mut e, "th_tianshu:choose_target", vec![pl(2)]);
+    snapshot_roundtrip(&e, &p, vec![cd(spade)]);
+    answer(&mut e, "th_tianshu:discard_card", vec![cd(spade)]);
+    drain(&mut e);
     let tp = card_named(&e, "th_taipingyaoshu");
     assert!(
         e.state_core().player(2).equips.contains(&tp),
@@ -719,7 +757,7 @@ fn l28_thunder_eight_batch_a_active_skills() {
             activate(&mut e, 0, "th_tianshu"),
             CommandOutcome::Rejected(_)
         ),
-        "④ once_per_turn and taipingyaoshu in play"
+        "④ th_tianshu has no enable:'phaseUse'"
     );
     // ⑤ 被御风锁定的座位 1 进入准备阶段时触发判定，跳过相应阶段并解除锁定
     let _ = hand_turn_to(&mut e, 1, 1);
@@ -734,15 +772,20 @@ fn l28_thunder_eight_batch_a_active_skills() {
             || flag(&e, 1, "th_yufeng_skipped_draw") == 1,
         "⑤ yufeng Prepare judge skips Play+Discard (black) or Draw (red)"
     );
-    // ④ 即使到下一轮，只要【太平要术】仍在场上装备区，天书不可发动
+    // ④ 即使到下一轮，只要【太平要术】仍在场上装备区，天书进入出牌阶段也不触发
     next_turn(&mut e, 2);
     give(&mut e, 0, red);
+    e.debug_set_turn(0, Phase::Draw, 3);
+    let _ = submit(&mut e, 0, GameAction::NextPhase);
     assert!(
-        matches!(
+        !matches!(
             activate(&mut e, 0, "th_tianshu"),
-            CommandOutcome::Rejected(_)
-        ),
-        "④ tianshu rejected while th_taipingyaoshu is already in play"
+            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+        ) && e
+            .open_choice()
+            .as_ref()
+            .is_none_or(|c| c.spec.prompt != "th_tianshu:choose_target"),
+        "④ tianshu must not trigger at phaseUseBegin while th_taipingyaoshu is already in play"
     );
 
     // ---- th_dunshi 遁世（`extension.js:3783`）：视为使用未移除基本牌 1/回合 ----
@@ -794,4 +837,584 @@ pub(crate) fn play(e: &mut Engine, p: u8, card: u32, targets: Vec<u8>) -> Comman
         "play rejected: {out:?}"
     );
     out
+}
+
+/// Batch 1.6 L28 真实对局回归：补叙 / 整经 / 天书 / 太平要术。
+#[test]
+fn l28_batch16_buxu_zhengjing_tianshu_taipingyaoshu_real_match() {
+    let p = pack();
+
+    // ---- 1. th_buxu：按所选六经类别先后搜牌堆/弃牌堆，均无时退还次数 ----
+    let mut e = fresh(&p, 2861, "th_mamidi");
+    // 牌堆清空“无懈可击”，仅弃牌堆放 1 张 wuxie（槽 2 `礼`）
+    let wuxies: Vec<u32> = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .filter(|(_, c)| c.kind == engine_native::catalog::CardKind::Nullify)
+        .map(|(i, _)| i as u32)
+        .collect();
+    for &c in &wuxies[1..] {
+        give(&mut e, 3, c);
+    }
+    take_out(&mut e, wuxies[0]);
+    e.state_core_mut().discard.push(wuxies[0]);
+    let cost0 = e.state_core().player(0).hand[0];
+    activate(&mut e, 0, "th_buxu");
+    assert!(
+        matches!(
+            e.plan_action(0, &BoundedPlanner::new(4)).action,
+            GameAction::Answer { .. }
+        ),
+        "AI must plan th_buxu:discard_cards"
+    );
+    answer(&mut e, "th_buxu:discard_cards", vec![cd(cost0)]);
+    answer(&mut e, "th_buxu:choose_chamber", vec![tag(2)]);
+    let liujing = e.state_core().vm_aux.piles[&(0, "th_liujing".to_string())].clone();
+    assert!(
+        liujing.len() == 1
+            && e.catalog().card_kind(liujing[0]) == engine_native::catalog::CardKind::Nullify,
+        "th_buxu(2) must find Nullify from discard pile when deck has none"
+    );
+
+    // 清空“无中生有”（槽 3 `易`）：牌堆与弃牌堆均无时不得添经、不得置 mask[3]、且退还使用次数
+    let wuzhongs: Vec<u32> = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .filter(|(_, c)| c.kind == engine_native::catalog::CardKind::Wuzhong)
+        .map(|(i, _)| i as u32)
+        .collect();
+    for &c in &wuzhongs {
+        give(&mut e, 3, c);
+    }
+    let mask_before = flag(&e, 0, "th_chengye_mask");
+    let used_before = flag(&e, 0, "th_buxu_used_turn");
+    let (c1, c2) = (
+        e.state_core().player(0).hand[0],
+        e.state_core().player(0).hand[1],
+    );
+    activate(&mut e, 0, "th_buxu");
+    answer(&mut e, "th_buxu:discard_cards", vec![cd(c1), cd(c2)]);
+    answer(&mut e, "th_buxu:choose_chamber", vec![tag(3)]);
+    assert_eq!(
+        (
+            e.state_core().vm_aux.piles[&(0, "th_liujing".to_string())].len(),
+            flag(&e, 0, "th_chengye_mask"),
+            flag(&e, 0, "th_buxu_used_turn"),
+        ),
+        (1, mask_before, used_before),
+        "missing matching card in both deck & discard must refund buxu stat and add no classic"
+    );
+    // 退还后再次发动补叙，费用仍为 2（而非 3），并选槽 5（装备）验证先牌堆后弃牌堆
+    let extra_eq = card_by(&e, |c| c.kind.equip_slot().is_some());
+    let deck_eq = card_by(&e, |c| c.kind == engine_native::catalog::CardKind::Qilin);
+    let extra_cost = card_by(&e, |c| c.kind == engine_native::catalog::CardKind::Sha && c.suit == engine_native::catalog::Suit::Heart);
+    give(&mut e, 0, extra_cost);
+    take_out(&mut e, extra_eq);
+    take_out(&mut e, deck_eq);
+    e.state_core_mut().discard.push(extra_eq);
+    e.state_core_mut().deck.push(deck_eq);
+    let need_two: Vec<u32> = e.state_core().player(0).hand.iter().take(2).copied().collect();
+    activate(&mut e, 0, "th_buxu");
+    assert_eq!(open(&e, "th_buxu:discard_cards").spec.min, 2);
+    answer(
+        &mut e,
+        "th_buxu:discard_cards",
+        need_two.into_iter().map(cd).collect(),
+    );
+    snapshot_roundtrip(&e, &p, vec![tag(5)]);
+    answer(&mut e, "th_buxu:choose_chamber", vec![tag(5)]);
+    assert_eq!(
+        e.state_core().vm_aux.piles[&(0, "th_liujing".to_string())].last().copied(),
+        Some(deck_eq),
+        "th_buxu(5) must search deck before discard pile and pick equip"
+    );
+
+    // ---- 2. th_zhengjing：0 张不添经不摸牌；>1 张自选任意非空子集作经 ----
+    let mut e = fresh(&p, 2862, "th_zhengxuan");
+    let h0 = hand(&e, 0);
+    let deck0 = e.state_core().deck.len();
+    activate(&mut e, 0, "th_zhengjing");
+    answer(&mut e, "th_zhengjing:choose_count", vec![tag(0)]);
+    assert_eq!(
+        (
+            hand(&e, 0),
+            e.state_core().deck.len(),
+            e.state_core()
+                .vm_aux
+                .piles
+                .get(&(0, "th_jing".to_string()))
+                .map_or(0, |v| v.len()),
+            has_skill(&e, 0, "th_zhengjing2"),
+        ),
+        (h0, deck0, 0, false),
+        "zhengjing count=0 must neither add jing nor draw nor grant th_zhengjing2"
+    );
+    // 亮出 3 张牌：验证非重名、AI 选敌作 target 并仅选 1 张给敌留 2 张给自己，且支持自选子集与快照往返
+    next_turn(&mut e, 1);
+    advance_to(&mut e, Phase::Play);
+    let h0 = hand(&e, 0);
+    activate(&mut e, 0, "th_zhengjing");
+    assert_eq!(
+        e.plan_action(0, &BoundedPlanner::new(4)).action,
+        GameAction::Answer {
+            choice_id: open(&e, "th_zhengjing:choose_count").id,
+            selection: vec![tag(5)],
+        },
+        "AI should cut max classics"
+    );
+    answer(&mut e, "th_zhengjing:choose_count", vec![tag(3)]);
+    let shown = e.state_core().table.clone();
+    assert_eq!(shown.len(), 3);
+    let names: std::collections::BTreeSet<&str> =
+        shown.iter().map(|&c| e.catalog().cards[c as usize].name).collect();
+    assert_eq!(names.len(), 3, "th_zhengjing shown cards must have distinct names");
+    let ai_tgt = e.plan_action(0, &BoundedPlanner::new(4));
+    assert!(
+        matches!(ai_tgt.action, GameAction::Answer { ref selection, .. } if selection != &[pl(0)]),
+        "AI should target an enemy rather than self for th_zhengjing2 draw/judge skip: {ai_tgt:?}"
+    );
+    answer(&mut e, "th_zhengjing:choose_target", vec![pl(0)]);
+    let alloc = open(&e, "th_zhengjing:choose_cards");
+    assert_eq!((alloc.spec.min, alloc.spec.max), (1, 3));
+    assert_eq!(
+        e.plan_action(0, &BoundedPlanner::new(4)).action,
+        GameAction::Answer {
+            choice_id: alloc.id,
+            selection: vec![cd(shown[0])],
+        },
+        "AI puts exactly 1 card into th_jing and keeps the rest"
+    );
+    snapshot_roundtrip(&e, &p, vec![cd(shown[1]), cd(shown[2])]);
+    answer(&mut e, "th_zhengjing:choose_cards", vec![cd(shown[1]), cd(shown[2])]);
+    assert_eq!(
+        e.state_core().vm_aux.piles[&(0, "th_jing".to_string())],
+        vec![shown[1], shown[2]],
+        "owner can put chosen non-empty subset (2 of 3) onto target as jing"
+    );
+    assert!(e.state_core().player(0).hand.contains(&shown[0]));
+    assert_eq!(hand(&e, 0), h0 + 1);
+    // 单张牌直接置作经，不开 allocate 选牌窗
+    next_turn(&mut e, 2);
+    advance_to(&mut e, Phase::Play);
+    activate(&mut e, 0, "th_zhengjing");
+    answer(&mut e, "th_zhengjing:choose_count", vec![tag(1)]);
+    answer(&mut e, "th_zhengjing:choose_target", vec![pl(1)]);
+    assert!(
+        e.open_choice().is_none(),
+        "single-card th_zhengjing must not open th_zhengjing:choose_cards"
+    );
+    assert_eq!(e.state_core().vm_aux.piles[&(1, "th_jing".to_string())].len(), 1);
+
+    // ---- 3. th_tianshu：phaseUseBegin 触发 + 先选目标后扣任意 he 成本 + 实体牌路径 + 禁用防具栏降级入手 ----
+    let mut e = fresh(&p, 2863, "th_nanhualaoxian");
+    let tp = card_named(&e, "th_taipingyaoshu");
+    take_out(&mut e, tp);
+    // 太平要术不在牌堆/弃牌堆（游离在桌面）：消耗成本后不得强行把虚牌或桌面牌装进装备区/授技
+    e.state_core_mut().table.push(tp);
+    let spade = card_by(&e, |c| c.suit == engine_native::catalog::Suit::Spade && c.kind == engine_native::catalog::CardKind::Sha);
+    give(&mut e, 0, spade);
+    let enter_seat0_play = |e: &mut Engine, round: u32| {
+        let _ = hand_turn_to(e, 0, round);
+        drain(e);
+        while (e.state_core().turn.current, e.state_core().turn.phase) != (0, Phase::Draw) {
+            let cur = e.state_core().turn.current;
+            let _ = submit(e, cur, GameAction::NextPhase);
+            drain(e);
+        }
+        let _ = submit(e, 0, GameAction::NextPhase);
+    };
+    enter_seat0_play(&mut e, 2);
+    // phaseUseBegin 应先询问 th_tianshu:choose_target（支持 AI、可取消、快照往返）
+    let ask_t = open(&e, "th_tianshu:choose_target");
+    assert_eq!(ask_t.observer, 0);
+    let ai_ts = e.plan_action(0, &BoundedPlanner::new(4));
+    assert!(matches!(ai_ts.action, GameAction::Answer { .. }), "AI handles th_tianshu:choose_target");
+    snapshot_roundtrip(&e, &p, vec![pl(2)]);
+    answer(&mut e, "th_tianshu:choose_target", vec![pl(2)]);
+    // 第二个询问可取消且接受黑桃牌，取消不弃牌
+    let h0_before = hand(&e, 0);
+    snapshot_roundtrip(&e, &p, vec![cd(spade)]);
+    answer(&mut e, "th_tianshu:discard_card", Vec::new());
+    assert_eq!(hand(&e, 0), h0_before, "cancel discard refunds without losing cost");
+    // 再走一次：选目标取消也无损；接受黑桃后因实体牌缺失不授技
+    enter_seat0_play(&mut e, 3);
+    let h0_round3 = hand(&e, 0);
+    answer(&mut e, "th_tianshu:choose_target", Vec::new());
+    assert_eq!(hand(&e, 0), h0_round3, "cancel choose_target at phaseUseBegin loses no card");
+    enter_seat0_play(&mut e, 4);
+    answer(&mut e, "th_tianshu:choose_target", vec![pl(2)]);
+    answer(&mut e, "th_tianshu:discard_card", vec![cd(spade)]);
+    drain(&mut e);
+    assert!(
+        !has_skill(&e, 2, "th_taipingyaoshu") && !e.state_core().player(2).equips.contains(&tp),
+        "missing physical th_taipingyaoshu must not fake-grant skill"
+    );
+
+    // ---- 4. th_taipingyaoshu：禁用防具栏留在手牌 / 青釭剑穿透 / Equipped 日志序 / Snatch & Dismantle 外层结算 + unequip2 ----
+    let mut e = fresh(&p, 2864, "th_nanhualaoxian");
+    let tp = card_named(&e, "th_taipingyaoshu");
+    take_out(&mut e, tp);
+    e.state_core_mut().discard.push(tp);
+    // 防具栏禁用时：天书使目标获得实体牌到手牌但不强行装备
+    set_flag(&mut e, 2, "equip_slot_disabled:2", 1);
+    let cost_c0 = e.state_core().player(0).hand[0];
+    e.debug_set_turn(0, Phase::Draw, 1);
+    let _ = submit(&mut e, 0, GameAction::NextPhase);
+    answer(&mut e, "th_tianshu:choose_target", vec![pl(2)]);
+    answer(&mut e, "th_tianshu:discard_card", vec![cd(cost_c0)]);
+    drain(&mut e);
+    assert!(
+        e.state_core().player(2).hand.contains(&tp) && !e.state_core().player(2).equips.contains(&tp),
+        "disabled armor slot keeps th_taipingyaoshu in target hand"
+    );
+    set_flag(&mut e, 2, "equip_slot_disabled:2", 0);
+    // 从弃牌堆重放天书正常装备至 seat 1
+    take_out(&mut e, tp);
+    e.state_core_mut().discard.push(tp);
+    enter_seat0_play(&mut e, 2);
+    let cost_c = e.state_core().player(0).hand[0];
+    answer(&mut e, "th_tianshu:choose_target", vec![pl(1)]);
+    answer(&mut e, "th_tianshu:discard_card", vec![cd(cost_c)]);
+    drain(&mut e);
+    assert!(e.state_core().player(1).equips.contains(&tp) && has_skill(&e, 1, "th_taipingyaoshu"));
+    // 无 unequip2 时，青釭剑 + 火杀（source unequip）穿透太平要术防属性伤保护
+    let qinggang = card_by(&e, |c| c.kind == engine_native::catalog::CardKind::Qinggang);
+    give(&mut e, 0, qinggang);
+    play(&mut e, 0, qinggang, Vec::new());
+    drain(&mut e);
+    let fire_sha = card_by(&e, |c| c.kind == engine_native::catalog::CardKind::FireSha);
+    give(&mut e, 0, fire_sha);
+    let hp1_qg = hp(&e, 1);
+    play(&mut e, 0, fire_sha, vec![1]);
+    drain(&mut e);
+    assert_eq!(hp(&e, 1), hp1_qg - 1, "Qinggang FireSha bypasses th_taipingyaoshu elemental guard");
+    e.state_core_mut().player_mut(0).equips.retain(|&c| c != qinggang);
+    e.state_core_mut().discard.push(qinggang);
+    e.state_core_mut().turn.sha_used_play_phase = false;
+    // unequip2（l25_hubu_unequip2）在场：火伤害不被防止
+    set_flag(&mut e, 1, "l25_hubu_unequip2", 1);
+    give(&mut e, 0, fire_sha);
+    let hp1 = hp(&e, 1);
+    play(&mut e, 0, fire_sha, vec![1]);
+    drain(&mut e);
+    assert_eq!(hp(&e, 1), hp1 - 1, "unequip2 suppresses th_taipingyaoshu elemental guard");
+    // unequip2 在场时拆走太平要术：撤销技能但不摸2/不失1血
+    let dismantle = card_by(&e, |c| c.kind == engine_native::catalog::CardKind::Dismantle);
+    give(&mut e, 0, dismantle);
+    let dropped1 = std::mem::take(&mut e.state_core_mut().player_mut(1).hand);
+    e.state_core_mut().discard.extend(dropped1);
+    e.debug_set_hp(1, 3);
+    let h1 = hand(&e, 1);
+    play(&mut e, 0, dismantle, vec![1]);
+    drain(&mut e);
+    assert_eq!(
+        (hand(&e, 1), hp(&e, 1), has_skill(&e, 1, "th_taipingyaoshu")),
+        (h1, 3, false),
+        "unequip2 suppresses th_taipingyaoshu onLose draw2/loseHp1"
+    );
+    // 顺手牵羊夺走太平要术：外层顺手完全结算后，再触发摸2后失1血（seat 3 距离 1）
+    e.state_core_mut().discard.retain(|&c| c != tp);
+    e.state_core_mut().player_mut(3).equips.push(tp);
+    let tp_def = e.catalog().skill_by_name("th_taipingyaoshu").unwrap();
+    e.state_core_mut().skills.insert(
+        (3, tp_def),
+        engine_native::state::SkillInstance {
+            owner: 3,
+            enabled: true,
+            once_used: false,
+            expires_end_of_turn: false,
+            rounds: 0,
+        },
+    );
+    let dropped3 = std::mem::take(&mut e.state_core_mut().player_mut(3).hand);
+    e.state_core_mut().discard.extend(dropped3);
+    e.debug_set_hp(3, 3);
+    let snatch = card_by(&e, |c| c.kind == engine_native::catalog::CardKind::Snatch);
+    give(&mut e, 0, snatch);
+    e.state_core_mut().turn.sha_used_play_phase = false;
+    play(&mut e, 0, snatch, vec![3]);
+    drain(&mut e);
+    assert_eq!(
+        (hand(&e, 3), hp(&e, 3), e.state_core().player(0).hand.contains(&tp)),
+        (2, 2, true),
+        "snatching th_taipingyaoshu triggers onLose after snatch: draw 2 then lose 1 HP"
+    );
+    // 装备其他防具顶替太平要术：日志严格满足 Equipped -> CardsDrawn -> HpLost
+    let other_armor = card_by(&e, |c| c.kind.equip_slot() == Some(EquipSlot::Armor) && c.name != "th_taipingyaoshu");
+    give(&mut e, 0, other_armor);
+    e.debug_set_hp(0, 3);
+    play(&mut e, 0, tp, Vec::new());
+    drain(&mut e);
+    let log_start = e.log().len();
+    play(&mut e, 0, other_armor, Vec::new());
+    drain(&mut e);
+    let tail = &e.log()[log_start..];
+    let p_eq = tail.iter().position(|ev| matches!(ev, engine_native::LogEvent::Equipped { player: 0, card, .. } if *card == other_armor)).expect("Equipped log");
+    let p_dr = tail.iter().position(|ev| matches!(ev, engine_native::LogEvent::CardsDrawn { player: 0, cards } if cards.len() == 2)).expect("CardsDrawn 2 log");
+    let p_hp = tail.iter().position(|ev| matches!(ev, engine_native::LogEvent::HpLost { player: 0, amount: 1 })).expect("HpLost 1 log");
+    assert!(p_eq < p_dr && p_dr < p_hp, "armor replace onLose order: Equipped({p_eq}) -> Draw2({p_dr}) -> LoseHp1({p_hp})");
+}
+
+/// 承业六经规则对齐、L28 AI 策略与太平要术 unequip2 手牌上限真实对局回归。
+#[test]
+fn l28_chengye_liujing_ai_and_tpys_unequip2_hand_limit_real_match() {
+    use engine_native::catalog::{CardKind, Suit};
+
+    let clear_hand = |e: &mut Engine, s: u8| {
+        let dropped = std::mem::take(&mut e.state_core_mut().player_mut(s).hand);
+        e.state_core_mut().discard.extend(dropped);
+    };
+
+    let cards_matching = |e: &Engine, f: fn(&engine_native::catalog::CardDef) -> bool| -> Vec<u32> {
+        e.catalog()
+            .cards
+            .iter()
+            .enumerate()
+            .filter(|(_, c)| f(c))
+            .map(|(i, _)| i as u32)
+            .collect()
+    };
+
+    let p = pack();
+
+    // ---- 1. th_chengye（`雷霆万钧/extension.js:6186-6328`）----
+    // 1a) 他人弃牌阶段弃基本牌不触发承业；他人使用牌结算进弃牌堆（useCardAfter）才按六经收录，且不含非伤害普通锦囊（拆）
+    let mut e = fresh(&p, 2871, "th_mamidi");
+    e.debug_set_turn(1, Phase::Play, 1);
+    clear_hand(&mut e, 1);
+    let shas = cards_matching(&e, |c| c.kind == CardKind::Sha);
+    let sha_a = shas[0];
+    let sha_b = shas[1];
+    let dismantle = card_by(&e, |c| c.kind == CardKind::Dismantle);
+    let duel = card_by(&e, |c| c.kind == CardKind::Duel);
+    let wuzhong = card_by(&e, |c| c.kind == CardKind::Wuzhong);
+    let wuxie = card_by(&e, |c| c.kind == CardKind::Nullify);
+    let lebu = card_by(&e, |c| c.kind == CardKind::Le);
+    let horse = card_by(&e, |c| c.kind == CardKind::HorsePlus);
+    // 座位 1 弃牌阶段弃置两张 Sha：upstream loseAfter 只收 delay/equip，基本牌不得触发承业
+    for &c in &shas[2..7] {
+        give(&mut e, 1, c);
+    }
+    give(&mut e, 1, sha_a);
+    let _ = submit(&mut e, 1, GameAction::NextPhase);
+    let disc_ask = open(&e, "discard_to_limit");
+    let drop_cards: Vec<_> = e
+        .state_core()
+        .player(1)
+        .hand
+        .iter()
+        .take(disc_ask.spec.min)
+        .copied()
+        .map(cd)
+        .collect();
+    answer(&mut e, "discard_to_limit", drop_cards);
+    drain(&mut e);
+    assert_eq!(
+        flag(&e, 0, "th_chengye_mask"),
+        0,
+        "discarding basic Sha in phaseDiscard must not trigger th_chengye (extension.js:6212-6219)"
+    );
+
+    // 1b) 他人使用非伤害非六经锦囊（Dismantle）不入六经；使用 Wuzhong（无中 3）、拆装备触发 loseAfter（5）
+    e.debug_set_turn(1, Phase::Play, 2);
+    give(&mut e, 1, horse);
+    play(&mut e, 1, horse, Vec::new());
+    drain(&mut e);
+    give(&mut e, 1, dismantle);
+    // 让 seat 2 仅持装备供 dismantle 消耗进入弃牌堆（清手牌避免无懈或随机抽中手牌）
+    clear_hand(&mut e, 2);
+    let target_eq = card_by(&e, |c| c.kind == CardKind::HorseMinus);
+    take_out(&mut e, target_eq);
+    e.state_core_mut().player_mut(2).equips.push(target_eq);
+    play(&mut e, 1, dismantle, vec![2]);
+    drain(&mut e);
+    // 场上 seat 2 弃装备入弃牌堆：loseAfter 收入 5(equip)，但 dismantle 本身不在六经 0..=5
+    assert_eq!(
+        flag(&e, 0, "th_chengye_mask"),
+        1 << 5,
+        "only equip in discard triggers loseAfter chamber 5; Dismantle matches no chamber"
+    );
+
+    give(&mut e, 1, wuzhong);
+    play(&mut e, 1, wuzhong, Vec::new());
+    drain(&mut e);
+    assert_eq!(
+        flag(&e, 0, "th_chengye_mask") & (1 << 3),
+        1 << 3,
+        "useCardAfter Wuzhong fills chamber 3"
+    );
+
+    // 1c) th_chengye 与 th_buxu 共享六经槽：槽 3/5 已满，补续不得再选 3/5；激活 th_chengye 被拒绝（无主动伤害）
+    e.debug_set_turn(0, Phase::Play, 3);
+    assert!(
+        matches!(activate(&mut e, 0, "th_chengye"), CommandOutcome::Rejected(_)),
+        "th_chengye has no active phaseUse ability (extension.js:6182-6370)"
+    );
+    let c0 = e.state_core().player(0).hand[0];
+    activate(&mut e, 0, "th_buxu");
+    answer(&mut e, "th_buxu:discard_cards", vec![cd(c0)]);
+    assert!(
+        rejected(&mut e, vec![tag(3)]) && rejected(&mut e, vec![tag(5)]),
+        "shared th_chengye_mask forbids th_buxu from picking chambers already filled by th_chengye"
+    );
+    answer(&mut e, "th_buxu:choose_chamber", vec![tag(1)]); // 补基本牌
+
+    // 1d) 集齐六经（补入 0 伤害锦囊、2 无懈、4 乐不思蜀），于自己出牌阶段开始自动收入手牌且清零
+    let mut e = fresh(&p, 2872, "th_mamidi");
+    for (idx, c) in [duel, sha_b, wuxie, wuzhong, lebu, horse].into_iter().enumerate() {
+        take_out(&mut e, c);
+        e.state_core_mut()
+            .vm_aux
+            .piles
+            .entry((0, "th_liujing".to_string()))
+            .or_default()
+            .push(c);
+        let mask = flag(&e, 0, "th_chengye_mask") | (1 << idx);
+        set_flag(&mut e, 0, "th_chengye_mask", mask);
+    }
+    set_flag(&mut e, 0, "th_chengye_liujing_count", 6);
+    e.debug_set_turn(0, Phase::Draw, 2);
+    let hp1_before = hp(&e, 1);
+    let h0_before = hand(&e, 0);
+    let _ = submit(&mut e, 0, GameAction::NextPhase);
+    drain(&mut e);
+    assert_eq!(
+        (hand(&e, 0), flag(&e, 0, "th_chengye_mask"), hp(&e, 1)),
+        (h0_before + 6, 0, hp1_before),
+        "th_chengye_gain at phaseUseBegin moves all 6 classics to hand and deals no damage"
+    );
+
+    // ---- 2. L28 AI（`extension.js:6113, 6142-6147, 8646-8663`）----
+    // 2a) th_zhengjing:choose_target 避开持 xinfu_pdgyingshi 的敌人（AI return 0），选无该技的敌人
+    let mut e = fresh(&p, 2873, "th_zhengxuan");
+    e.assign_general_named(1, "th_pangdegong").expect("pangdegong has xinfu_pdgyingshi");
+    activate(&mut e, 0, "th_zhengjing");
+    answer(&mut e, "th_zhengjing:choose_count", vec![tag(2)]);
+    let ai_target = e.plan_action(0, &BoundedPlanner::new(4));
+    assert!(
+        matches!(ai_target.action, GameAction::Answer { ref selection, .. } if selection != &[pl(1)] && selection != &[pl(0)]),
+        "th_zhengjing AI should score xinfu_pdgyingshi=0 and pick another enemy: {ai_target:?}"
+    );
+    answer(&mut e, "th_zhengjing:choose_target", vec![pl(2)]);
+    // 2b) th_zhengjing:choose_cards 排序取最低价值 1 张置经（若首张为桃、次张为杀，须选杀置经而自留桃）
+    let mut e = fresh(&p, 2874, "th_zhengxuan");
+    clear_hand(&mut e, 0);
+    let tao = card_by(&e, |c| c.kind == CardKind::Tao);
+    let sha_c = card_by(&e, |c| c.kind == CardKind::Sha);
+    take_out(&mut e, tao);
+    take_out(&mut e, sha_c);
+    e.state_core_mut().deck.push(sha_c);
+    e.state_core_mut().deck.push(tao);
+    activate(&mut e, 0, "th_zhengjing");
+    answer(&mut e, "th_zhengjing:choose_count", vec![tag(2)]);
+    assert_eq!(e.state_core().table, vec![tao, sha_c]);
+    answer(&mut e, "th_zhengjing:choose_target", vec![pl(1)]);
+    let ai_cards = e.plan_action(0, &BoundedPlanner::new(4));
+    assert_eq!(
+        ai_cards.action,
+        GameAction::Answer {
+            choice_id: open(&e, "th_zhengjing:choose_cards").id,
+            selection: vec![cd(sha_c)],
+        },
+        "th_zhengjing processAI must pick lowest-value card (Sha) for target expansion and keep Tao"
+    );
+
+    // 2c) th_yeyan:discard_cards AI 面对两张黑桃排前的 5 张手牌时，必须选出 4 张不同花色而非重复黑桃
+    let mut e = fresh(&p, 2875, "th_shen_zhouyu");
+    clear_hand(&mut e, 0);
+    let spades = cards_matching(&e, |c| c.suit == Suit::Spade);
+    let s1 = spades[0];
+    let s2 = spades[1];
+    let h1 = card_by(&e, |c| c.suit == Suit::Heart);
+    let c1 = card_by(&e, |c| c.suit == Suit::Club);
+    let d1 = card_by(&e, |c| c.suit == Suit::Diamond);
+    for c in [s1, s2, h1, c1, d1] {
+        give(&mut e, 0, c);
+    }
+    activate(&mut e, 0, "th_yeyan");
+    answer(&mut e, "th_yeyan:choose_mode", vec![tag(1)]);
+    answer(&mut e, "th_yeyan:choose_targets", vec![pl(1)]);
+    answer(&mut e, "th_yeyan:choose_damage", vec![tag(2)]);
+    let ai_disc = e.plan_action(0, &BoundedPlanner::new(4));
+    let GameAction::Answer { selection, .. } = &ai_disc.action else {
+        panic!("expected Answer for th_yeyan:discard_cards: {ai_disc:?}");
+    };
+    assert_eq!(selection.len(), 4, "AI must provide 4 distinct-suit cards when available: {ai_disc:?}");
+    let mut suits = Vec::new();
+    for o in selection {
+        if let ChoiceOption::Card(cid) = o {
+            let s = e.catalog().cards[*cid as usize].suit;
+            if !suits.contains(&s) {
+                suits.push(s);
+            }
+        }
+    }
+    assert_eq!(suits.len(), 4, "th_yeyan AI discard must contain all 4 distinct suits");
+
+    // ---- 3. 太平要术 unequip2 屏蔽手牌上限加成（`extension.js:8968`）----
+    let mut e = fresh(&p, 2876, "th_nanhualaoxian");
+    let tp = card_named(&e, "th_taipingyaoshu");
+    give(&mut e, 1, tp);
+    e.debug_set_turn(1, Phase::Play, 1);
+    play(&mut e, 1, tp, Vec::new());
+    drain(&mut e);
+    let limit_with = e.state_core().hand_limit(e.catalog(), 1);
+    let base_hp = hp(&e, 1);
+    assert!(limit_with > base_hp as usize, "th_taipingyaoshu raises hand limit by factions - 1");
+    set_flag(&mut e, 1, "l25_hubu_unequip2", 1);
+    let limit_suppressed = e.state_core().hand_limit(e.catalog(), 1);
+    assert_eq!(
+        limit_suppressed, base_hp as usize,
+        "unequip2 must suppress th_taipingyaoshu hand limit bonus"
+    );
+
+    // ---- 4. charlotte 与死亡 onremove 清回 th_jing / th_liujing 至弃牌堆（`extension.js:6165-6170, 6273-6276`）----
+    let zj2_def = e.catalog().skill_by_name("th_zhengjing2").unwrap();
+    assert!(
+        e.catalog().is_charlotte_skill(zj2_def),
+        "th_zhengjing2 must be marked charlotte (extension.js:6165)"
+    );
+    let mut e = fresh(&p, 2877, "th_mamidi");
+    e.debug_grant(0, "th_zhengjing2");
+    let c_jing = sha_b;
+    let c_liu = wuzhong;
+    take_out(&mut e, c_jing);
+    take_out(&mut e, c_liu);
+    e.state_core_mut()
+        .vm_aux
+        .piles
+        .entry((0, "th_jing".to_string()))
+        .or_default()
+        .push(c_jing);
+    e.state_core_mut()
+        .vm_aux
+        .piles
+        .entry((0, "th_liujing".to_string()))
+        .or_default()
+        .push(c_liu);
+    set_flag(&mut e, 0, "th_chengye_mask", 1 << 3);
+    e.debug_set_hp(0, 1);
+    let kill_sha = shas[3];
+    e.debug_set_turn(1, Phase::Play, 2);
+    clear_hand(&mut e, 0);
+    clear_hand(&mut e, 2);
+    clear_hand(&mut e, 3);
+    give(&mut e, 1, kill_sha);
+    play(&mut e, 1, kill_sha, vec![0]);
+    drain(&mut e);
+    assert!(!e.state_core().player(0).alive);
+    assert!(
+        e.state_core().discard.contains(&c_jing) && e.state_core().discard.contains(&c_liu),
+        "holder death must return th_jing & th_liujing cards to discard pile"
+    );
+    assert!(
+        !e.state_core().vm_aux.piles.contains_key(&(0, "th_jing".to_string()))
+            && !e.state_core().vm_aux.piles.contains_key(&(0, "th_liujing".to_string())),
+        "holder death must clear th_jing & th_liujing piles"
+    );
+    assert_eq!(flag(&e, 0, "th_chengye_mask"), 0);
 }

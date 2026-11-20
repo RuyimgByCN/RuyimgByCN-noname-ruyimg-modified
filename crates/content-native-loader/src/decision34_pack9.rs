@@ -727,12 +727,10 @@ pub fn attach_formal_package_upstream_rules(
             push_skill("_chooseCharacterTwo", L27_SELECT_SKILL_ID);
         }
         ("upstream-liuli", "thunder") => {
-            if seen_cards.insert("th_taipingyaoshu".to_string()) {
-                extra_cards.push(
-                    CardDef::armor("th_taipingyaoshu")
-                        .with_suit_rank(Suit::Heart, 3)
-                        .with_equip_skills(&["th_taipingyaoshu"]),
-                );
+            for card in super::l28_thunder_cards() {
+                if seen_cards.insert(card.name.to_string()) {
+                    extra_cards.push(card);
+                }
             }
             push_skill("th_dunshi", super::TH_DUNSHI_ID);
             push_skill("th_jingxie", super::TH_JINGXIE_ID);

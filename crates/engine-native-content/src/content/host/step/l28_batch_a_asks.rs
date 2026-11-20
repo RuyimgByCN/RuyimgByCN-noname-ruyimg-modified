@@ -60,7 +60,7 @@ fn card_ask(
 }
 
 /// 主动/可选技能的首问：玩家可取消（不发动），取消时退还次数。
-const FIRST_CANCELLABLE_ASKS: [u32; 10] = [
+const FIRST_CANCELLABLE_ASKS: [u32; 11] = [
     ASK_DUNSHI_BASIC,
     ASK_CAIYI_TARGET,
     ASK_CHONGXU_ACTION,
@@ -70,6 +70,7 @@ const FIRST_CANCELLABLE_ASKS: [u32; 10] = [
     ASK_ZHENGJING_COUNT,
     ASK_BUXU_DISCARD,
     ASK_YUFENG_SCORE,
+    ASK_TIANSHU_TARGET,
     ASK_TIANSHU_DISCARD,
 ];
 
@@ -81,11 +82,14 @@ fn build_ask(
     ask_id: u32,
     owner: PlayerId,
     target: Option<PlayerId>,
+    card: Option<CardId>,
+    cards: &[CardId],
     core: &GameStateCore,
     catalog: &Catalog,
 ) -> Option<(PlayerId, ChoiceSpec)> {
-    let mut built = build_ask_spec(ask_id, owner, target, core, catalog)?;
-    built.1.allow_cancel = is_first_cancellable(ask_id);
+    let mut built = build_ask_spec(ask_id, owner, target, card, cards, core, catalog)?;
+    built.1.allow_cancel =
+        built.1.allow_cancel || is_first_cancellable(ask_id) || ask_id == ASK_SHENGONG_ASSIST;
     Some(built)
 }
 
@@ -93,6 +97,8 @@ fn build_ask_spec(
     ask_id: u32,
     owner: PlayerId,
     target: Option<PlayerId>,
+    card: Option<CardId>,
+    cards: &[CardId],
     core: &GameStateCore,
     catalog: &Catalog,
 ) -> Option<(PlayerId, ChoiceSpec)> {
@@ -120,7 +126,7 @@ fn build_ask_spec(
             )
         }
         ASK_DUNSHI_SKILL => tag_ask(owner, "th_dunshi:choose_skill", 0..6),
-        ASK_BUSHI_POSTURE => tag_ask(owner, "th_bushi:choose_posture", 0..4),
+        ASK_BUSHI_POSTURE => tag_ask(owner, "th_bushi:choose_posture", 0..24),
         ASK_CAIYI_TARGET => player_ask(owner, "th_caiyi:choose_target", alive_all(core, owner)),
         ASK_CAIYI_OPTION => {
             let chooser = target.unwrap_or(owner);
@@ -133,8 +139,16 @@ fn build_ask_spec(
             tag_ask(
                 chooser,
                 "th_caiyi:choose_option",
-                (0..4u8).filter(|&i| (rem & (1 << i)) == 0),
+                (0..4u8).filter(|&i| (rem & (1 << i)) == 0 && (i != 3 || (rem & 0b0111) != 0)),
             )
+        }
+        ASK_CAIYI_DISCARD => {
+            let chooser = target.unwrap_or(owner);
+            let he = hand_and_equips(core, chooser);
+            let x = flag(core, owner, "th_caiyi_pending_discard").max(1) as usize;
+            let cnt = x.min(he.len());
+            let opts = he.into_iter().map(ChoiceOption::Card).collect();
+            spec_ask(chooser, ChoiceKind::SelectCards, "th_caiyi:discard_cards", opts, cnt, cnt)
         }
         ASK_GUILI_TARGET => {
             player_ask(owner, "th_guili:choose_target", alive_others(core, owner))
@@ -143,17 +157,18 @@ fn build_ask_spec(
         ASK_MIAOJIAN_TARGET => {
             player_ask(owner, "miaojian:choose_target", alive_others(core, owner))
         }
-        ASK_SHENGONG_DISCARD => {
-            let eqs: Vec<CardId> = hand_and_equips(core, owner)
-                .into_iter()
-                .filter(|&c| catalog.card_kind(c).equip_slot().is_some())
-                .collect();
-            card_ask(owner, "th_shengong:discard_card", eqs)
-        }
-        ASK_SHENGONG_FORGE => tag_ask(owner, "th_shengong:choose_forge", 0..=2),
-        ASK_SHENGONG_TARGET => {
-            player_ask(owner, "th_shengong:choose_target", alive_all(core, owner))
-        }
+        ASK_SHENGONG_DISCARD => card_ask(
+            owner,
+            "th_shengong:discard_card",
+            super::l28_batch_a_shengong::shengong_discardable_equips(core, catalog, owner),
+        ),
+        ASK_SHENGONG_CARD => card_ask(owner, "th_shengong:choose_card", cards.to_vec()),
+        ASK_SHENGONG_ASSIST => tag_ask(target.unwrap_or(owner), "th_shengong:assist", 0..=1),
+        ASK_SHENGONG_TARGET => player_ask(
+            owner,
+            "th_shengong:choose_target",
+            super::l28_batch_a_shengong::shengong_targets_for(core, catalog, owner, card),
+        ),
         ASK_OLQISI_SLOT => tag_ask(owner, "olqisi:choose_slot", 0..4),
         ASK_PINGCAI_RELIC => tag_ask(owner, "th_pingcai:choose_relic", 0..4),
         ASK_PINGCAI_TARGET => {
@@ -163,8 +178,9 @@ fn build_ask_spec(
         ASK_ZHENGJING_TARGET => {
             player_ask(owner, "th_zhengjing:choose_target", alive_all(core, owner))
         }
-        ASK_CHENGYE_TARGET => {
-            player_ask(owner, "th_chengye:choose_target", alive_others(core, owner))
+        ASK_ZHENGJING_CARDS => {
+            let opts = cards.iter().copied().map(ChoiceOption::Card).collect();
+            spec_ask(owner, ChoiceKind::SelectCards, "th_zhengjing:choose_cards", opts, 1, cards.len())
         }
         ASK_BUXU_DISCARD => {
             let cost = buxu_cost(core, owner);
@@ -188,14 +204,13 @@ fn build_ask_spec(
             spec_ask(owner, ChoiceKind::SelectPlayers, "th_yufeng:choose_target", opts, 1, max)
         }
         ASK_TIANSHU_DISCARD => {
-            let cards: Vec<CardId> = hand_and_equips(core, owner)
-                .into_iter()
-                .filter(|&c| catalog.cards[c as usize].suit != Suit::Spade)
-                .collect();
-            card_ask(owner, "th_tianshu:discard_card", cards)
+            card_ask(owner, "th_tianshu:discard_card", hand_and_equips(core, owner))
         }
         ASK_TIANSHU_TARGET => {
             player_ask(owner, "th_tianshu:choose_target", alive_all(core, owner))
+        }
+        id if id >= 100 => {
+            super::l28_shengong_equips::build_equip_ask(id, owner, target, card, cards, core, catalog)
         }
         _ => None,
     }
@@ -208,7 +223,9 @@ pub(super) fn wait_ask(
     ask_id: u32,
 ) -> Flow {
     set_flag(ctx.core, m.owner, "l28_ask_id", ask_id);
-    if let Some((observer, spec)) = build_ask(ask_id, m.owner, m.target, ctx.core, ctx.catalog) {
+    if let Some((observer, spec)) =
+        build_ask(ask_id, m.owner, m.target, m.card, &m.cards, ctx.core, ctx.catalog)
+    {
         m.stage = stage;
         Flow::WaitChoice { observer, spec }
     } else {
@@ -221,13 +238,13 @@ pub(in crate::content::host) fn ask_l28_batch_a(
     owner: PlayerId,
     target: Option<PlayerId>,
     _targets: &[PlayerId],
-    _card: Option<CardId>,
-    _cards: &[CardId],
+    card: Option<CardId>,
+    cards: &[CardId],
     core: &GameStateCore,
     catalog: &Catalog,
 ) -> Option<ExpectedAsk> {
     let ask_id = flag(core, owner, "l28_ask_id");
-    let (observer, spec) = build_ask(ask_id, owner, target, core, catalog)?;
+    let (observer, spec) = build_ask(ask_id, owner, target, card, cards, core, catalog)?;
     Some(crate::snap::ask(
         observer,
         spec.prompt,
@@ -264,12 +281,16 @@ pub(super) fn step_th_caiyi(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             };
             let removed = flag(ctx.core, owner, rem_key) & 0b1111;
             let x = (4 - removed.count_ones()).max(1);
-            set_flag(ctx.core, owner, rem_key, removed | (1 << opt));
             let eff = if opt == 3 {
-                (0..3u8).find(|&i| (removed & (1 << i)) != 0).unwrap_or(0)
+                let rem_list: Vec<u8> = (0..3u8).filter(|&i| (removed & (1 << i)) != 0).collect();
+                if rem_list.is_empty() {
+                    return Flow::Done;
+                }
+                rem_list[ctx.core.rng.gen_range(rem_list.len() as u32) as usize]
             } else {
                 opt
             };
+            set_flag(ctx.core, owner, rem_key, removed | (1 << opt));
             if !is_yin {
                 set_flag(ctx.core, owner, "th_caiyi_state", 1);
                 set_flag(ctx.core, owner, "th_caiyi_yin", 1);
@@ -296,24 +317,19 @@ pub(super) fn step_th_caiyi(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                 set_flag(ctx.core, owner, "th_caiyi_yin", 0);
                 set_flag(ctx.core, owner, "th_caiyi_yang", 0);
                 set_flag(ctx.core, owner, "th_caiyi_yin_used_turn", 1);
-                if opt == 3 {
-                    set_flag(ctx.core, t, "th_caiyi_forbid_cards", 1);
-                }
                 match eff {
                     0 if ctx.core.player(t).alive => {
-                        ctx.emit(EventData::LoseHp {
-                            player: t,
-                            amount: x,
-                        });
+                        ctx.emit(EventData::Damage(crate::machine::damage_data(
+                            Some(owner),
+                            t,
+                            x as i32,
+                        )));
                     }
-                    1 => {
-                        let to_disc: Vec<CardId> = hand_and_equips(ctx.core, t)
-                            .into_iter()
-                            .take(x as usize)
-                            .collect();
-                        discard_cards(ctx, t, &to_disc);
+                    1 if ctx.core.player(t).alive && !hand_and_equips(ctx.core, t).is_empty() => {
+                        set_flag(ctx.core, owner, "th_caiyi_pending_discard", x);
+                        return wait_ask(m, ctx, HostStage::SelectCard, ASK_CAIYI_DISCARD);
                     }
-                    _ if ctx.core.player(t).alive => {
+                    _ if ctx.core.player(t).alive && eff >= 2 => {
                         if !ctx.core.player(t).face_down {
                             ctx.emit(EventData::TurnOverBefore {
                                 player: t,
@@ -325,6 +341,21 @@ pub(super) fn step_th_caiyi(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                     _ => {}
                 }
             }
+            Flow::Done
+        }
+        HostStage::SelectCard => {
+            let t = m.target.unwrap_or(owner);
+            let cards: Vec<CardId> = ctx
+                .answer()
+                .iter()
+                .filter_map(|o| match *o {
+                    ChoiceOption::Card(c) => Some(c),
+                    _ => None,
+                })
+                .collect();
+            set_flag(ctx.core, owner, "th_caiyi_pending_discard", 0);
+            set_flag(ctx.core, owner, "l28_ask_id", 0);
+            discard_cards(ctx, t, &cards);
             Flow::Done
         }
         _ => Flow::Done,
@@ -353,20 +384,11 @@ pub(super) fn step_th_guili(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                 Flow::Done
             }
             _ => {
-                let gt = flag(ctx.core, owner, "th_guili_target");
-                if m.target != Some(owner) && m.target.is_some_and(|p| u32::from(p) + 1 == gt) {
-                    set_flag(ctx.core, owner, "th_guili_acted_round", ctx.core.turn.round.max(1));
-                    set_flag(ctx.core, owner, "th_guili_target_first_turn", 0);
-                    set_flag(ctx.core, owner, "th_guili_extra_turn", 1);
-                    set_flag(ctx.core, owner, "th_guili_pending_extra", 1);
-                } else {
-                    set_flag(ctx.core, owner, "th_caiyi_yang_used_turn", 0);
-                    set_flag(ctx.core, owner, "th_caiyi_yin_used_turn", 0);
-                    set_flag(ctx.core, owner, "th_guili_pending_extra", 0);
-                    set_flag(ctx.core, owner, "th_guili_extra_turn", 1);
-                    ctx.core.turn.extra_phases.push(0);
-                    ctx.core.turn.extra_phases.push(2);
-                }
+                let r = ctx.core.turn.round.max(1);
+                set_flag(ctx.core, owner, "th_guili_acted_round", r);
+                set_flag(ctx.core, owner, "th_guili_target_first_turn", 0);
+                set_flag(ctx.core, owner, "th_guili_extra_turn", 1);
+                set_flag(ctx.core, owner, "extra_turn_insert_queued", 1);
                 Flow::Done
             }
         },
@@ -431,54 +453,6 @@ pub(super) fn step_miaojian(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             set_flag(ctx.core, owner, "th_miaojian_pierce", 1);
             ctx.emit(EventData::Damage(crate::machine::damage_data(Some(owner), t, 1)));
             ctx.start_draw(owner, 2);
-            Flow::Done
-        }
-        _ => Flow::Done,
-    }
-}
-
-pub(super) fn step_th_shengong(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
-    let owner = m.owner;
-    match m.stage {
-        HostStage::Act => wait_ask(m, ctx, HostStage::SelectCard, ASK_SHENGONG_DISCARD),
-        HostStage::SelectCard => {
-            let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() else {
-                return Flow::Done;
-            };
-            discard_cards(ctx, owner, &[c]);
-            wait_ask(m, ctx, HostStage::SelectNature, ASK_SHENGONG_FORGE)
-        }
-        HostStage::SelectNature => {
-            let cat = match ctx.answer().first().copied() {
-                Some(ChoiceOption::Tag(t)) => u32::from(t).min(2),
-                _ => 0,
-            };
-            set_flag(ctx.core, owner, "th_shengong_category", cat + 1);
-            set_flag(ctx.core, owner, "th_shengong_quality", cat + 1);
-            wait_ask(m, ctx, HostStage::TargetChoice, ASK_SHENGONG_TARGET)
-        }
-        HostStage::TargetChoice => {
-            let Some(ChoiceOption::Player(t)) = ctx.answer().first().copied() else {
-                return Flow::Done;
-            };
-            let cat = flag(ctx.core, owner, "th_shengong_category").saturating_sub(1);
-            set_flag(ctx.core, owner, "th_shengong_forged", 1);
-            let matches_cat = |slot: EquipSlot| match cat {
-                0 => slot == EquipSlot::Weapon,
-                1 => slot == EquipSlot::Armor,
-                _ => !matches!(slot, EquipSlot::Weapon | EquipSlot::Armor),
-            };
-            let pool: Vec<CardId> = ctx.core.deck.iter().chain(&ctx.core.discard).copied().collect();
-            let eq = pool
-                .iter()
-                .copied()
-                .find(|&c| ctx.catalog.card_kind(c).equip_slot().is_some_and(matches_cat))
-                .or_else(|| pool.into_iter().find(|&c| ctx.catalog.card_kind(c).equip_slot().is_some()));
-            if let Some(eq_card) = eq {
-                equip_card_onto(ctx, t, eq_card);
-            } else {
-                ctx.start_draw(t, 1);
-            }
             Flow::Done
         }
         _ => Flow::Done,
@@ -588,53 +562,6 @@ pub(super) fn step_xinfu_pdgyingshi(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> F
     Flow::Done
 }
 
-pub(super) fn step_th_zhengjing(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
-    let owner = m.owner;
-    match m.stage {
-        HostStage::Act => wait_ask(m, ctx, HostStage::SelectNature, ASK_ZHENGJING_COUNT),
-        HostStage::SelectNature => {
-            let count = match ctx.answer().first().copied() {
-                Some(ChoiceOption::Tag(n)) => u32::from(n),
-                _ => 1,
-            };
-            set_flag(ctx.core, owner, "th_zhengjing_sorted", 1);
-            if count == 0 || flag(ctx.core, owner, "th_zhengjing_force_boom") > 0 {
-                set_flag(ctx.core, owner, "th_zhengjing_boom", 1);
-                if let Some(c) = ctx.core.deck.pop() {
-                    ctx.core.vm_aux.piles.entry((owner, "th_jing".to_string())).or_default().push(c);
-                    grant_skill_named(ctx, owner, "th_zhengjing2");
-                }
-                ctx.start_draw(owner, 1);
-                return Flow::Done;
-            }
-            let mut excavated = Vec::new();
-            for _ in 0..count.clamp(1, 5) {
-                if let Some(c) = ctx.core.deck.pop() {
-                    excavated.push(c);
-                }
-            }
-            ctx.core.table.extend(excavated.iter().copied());
-            m.cards = excavated;
-            wait_ask(m, ctx, HostStage::TargetChoice, ASK_ZHENGJING_TARGET)
-        }
-        HostStage::TargetChoice => {
-            let t = match ctx.answer().first().copied() {
-                Some(ChoiceOption::Player(p)) => p,
-                _ => owner,
-            };
-            let shown = m.cards.clone();
-            ctx.core.table.retain(|c| !shown.contains(c));
-            if let Some((&first, rest)) = shown.split_first() {
-                ctx.core.vm_aux.piles.entry((t, "th_jing".to_string())).or_default().push(first);
-                grant_skill_named(ctx, t, "th_zhengjing2");
-                ctx.core.player_mut(owner).hand.extend(rest.iter().copied());
-            }
-            Flow::Done
-        }
-        _ => Flow::Done,
-    }
-}
-
 pub(super) fn step_th_zhengjing2(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     let owner = m.owner;
     if let Some(cards) = ctx.core.vm_aux.piles.remove(&(owner, "th_jing".to_string())) {
@@ -652,42 +579,15 @@ pub(super) fn step_th_zhengjing2(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow
 
 pub(super) fn step_th_chengye(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     let owner = m.owner;
-    match m.stage {
-        HostStage::Act => {
-            if !m.cards.is_empty() {
-                let mut mask = flag(ctx.core, owner, "th_chengye_mask");
-                for &c in &m.cards {
-                    let ch = chamber_of_card(ctx.catalog, c);
-                    if (mask & (1 << ch)) == 0 {
-                        mask |= 1 << ch;
-                        ctx.core.discard.retain(|&x| x != c);
-                        ctx.core
-                            .vm_aux
-                            .piles
-                            .entry((owner, "th_liujing".to_string()))
-                            .or_default()
-                            .push(c);
-                    }
-                }
-                let cnt = mask.count_ones();
-                set_flag(ctx.core, owner, "th_chengye_mask", mask);
-                set_flag(ctx.core, owner, "th_chengye_liujing_count", cnt);
-                return Flow::Done;
-            }
-            claim_all_liujing(ctx, owner);
-            if m.target == Some(3) {
-                return Flow::Done;
-            }
-            wait_ask(m, ctx, HostStage::TargetChoice, ASK_CHENGYE_TARGET)
-        }
-        HostStage::TargetChoice => {
-            if let Some(ChoiceOption::Player(t)) = ctx.answer().first().copied() {
-                ctx.emit(EventData::Damage(crate::machine::damage_data(Some(owner), t, 1)));
-            }
-            Flow::Done
-        }
-        _ => Flow::Done,
+    if m.target == Some(3) && m.cards.is_empty() {
+        claim_all_liujing(ctx, owner);
+        return Flow::Done;
     }
+    if !m.cards.is_empty() {
+        let actor = m.target.unwrap_or(PlayerId::MAX);
+        super::l28_batch_a_ext::on_cards_to_discard_chengye(ctx, actor, &m.cards, false);
+    }
+    Flow::Done
 }
 
 fn claim_all_liujing(ctx: &mut Ctx<'_>, owner: PlayerId) {
@@ -697,67 +597,12 @@ fn claim_all_liujing(ctx: &mut Ctx<'_>, owner: PlayerId) {
         .piles
         .remove(&(owner, "th_liujing".to_string()))
         .unwrap_or_default();
-    let gained_len = cards.len() as u32;
     if !cards.is_empty() {
         ctx.core.player_mut(owner).hand.extend(cards);
-    }
-    if gained_len < 6 {
-        ctx.start_draw(owner, 6 - gained_len);
     }
     set_flag(ctx.core, owner, "th_chengye_mask", 0);
     set_flag(ctx.core, owner, "th_chengye_liujing_count", 0);
     set_flag(ctx.core, owner, "th_chengye_completed", 1);
-}
-
-pub(super) fn step_th_buxu(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
-    let owner = m.owner;
-    match m.stage {
-        HostStage::Act => wait_ask(m, ctx, HostStage::SelectCard, ASK_BUXU_DISCARD),
-        HostStage::SelectCard => {
-            let cards: Vec<CardId> = ctx
-                .answer()
-                .iter()
-                .filter_map(|o| match *o {
-                    ChoiceOption::Card(c) => Some(c),
-                    _ => None,
-                })
-                .collect();
-            if cards.is_empty() {
-                return Flow::Done;
-            }
-            discard_cards(ctx, owner, &cards);
-            wait_ask(m, ctx, HostStage::SelectNature, ASK_BUXU_CHAMBER)
-        }
-        HostStage::SelectNature => {
-            let ch = match ctx.answer().first().copied() {
-                Some(ChoiceOption::Tag(t)) => u32::from(t) % 6,
-                _ => 0,
-            };
-            let stamp = turn_stamp(ctx.core);
-            let used = if flag(ctx.core, owner, "th_buxu_turn_stamp") == stamp {
-                flag(ctx.core, owner, "th_buxu_used_turn")
-            } else {
-                0
-            };
-            set_flag(ctx.core, owner, "th_buxu_turn_stamp", stamp);
-            set_flag(ctx.core, owner, "th_buxu_used_turn", used + 1);
-            let mask = flag(ctx.core, owner, "th_chengye_mask") | (1 << ch);
-            if let Some(c) = ctx.core.deck.pop() {
-                ctx.core
-                    .vm_aux
-                    .piles
-                    .entry((owner, "th_liujing".to_string()))
-                    .or_default()
-                    .push(c);
-            }
-            let cnt = mask.count_ones();
-            set_flag(ctx.core, owner, "th_chengye_mask", mask);
-            set_flag(ctx.core, owner, "th_chengye_liujing_count", cnt);
-            set_flag(ctx.core, owner, "th_buxu_added_classic", 1);
-            Flow::Done
-        }
-        _ => Flow::Done,
-    }
 }
 
 pub(super) fn step_th_yufeng(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
@@ -805,53 +650,4 @@ pub(super) fn step_th_yufeng(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
         }
         _ => Flow::Done,
     }
-}
-
-pub(super) fn step_th_tianshu(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
-    let owner = m.owner;
-    match m.stage {
-        HostStage::Act => wait_ask(m, ctx, HostStage::SelectCard, ASK_TIANSHU_DISCARD),
-        HostStage::SelectCard => {
-            let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() else {
-                return Flow::Done;
-            };
-            discard_cards(ctx, owner, &[c]);
-            wait_ask(m, ctx, HostStage::TargetChoice, ASK_TIANSHU_TARGET)
-        }
-        HostStage::TargetChoice => {
-            let t = match ctx.answer().first().copied() {
-                Some(ChoiceOption::Player(p)) => p,
-                _ => owner,
-            };
-            set_flag(ctx.core, owner, "th_tianshu_granted_yaoshu", 1);
-            set_flag(ctx.core, t, "l28_taipingyaoshu_equipped", 1);
-            set_flag(ctx.core, t, "l28_taipingyaoshu_revoke_after_lost", 0);
-            if let Some(cid) = (0..ctx.catalog.cards.len() as CardId).find(|&c| is_taipingyaoshu(ctx.catalog, c)) {
-                equip_card_onto(ctx, t, cid);
-            } else {
-                grant_skill_named(ctx, t, "th_taipingyaoshu");
-            }
-            Flow::Done
-        }
-        _ => Flow::Done,
-    }
-}
-
-pub(super) fn step_th_taipingyaoshu(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
-    let owner = m.owner;
-    set_flag(ctx.core, owner, "l28_taipingyaoshu_equipped", 0);
-    if flag(ctx.core, owner, "l28_taipingyaoshu_revoke_after_lost") > 0 {
-        set_flag(ctx.core, owner, "l28_taipingyaoshu_revoke_after_lost", 0);
-        if let Some(def) = ctx.catalog.skill_by_name("th_taipingyaoshu") {
-            if !ctx.core.player(owner).equips.iter().any(|&c| is_taipingyaoshu(ctx.catalog, c)) {
-                ctx.core.skills.remove(&(owner, def));
-            }
-        }
-    }
-    set_flag(ctx.core, owner, "th_taipingyaoshu_lost_effect", 1);
-    ctx.start_draw(owner, 2);
-    if ctx.core.player(owner).hp > 1 {
-        ctx.emit(EventData::LoseHp { player: owner, amount: 1 });
-    }
-    Flow::Done
 }

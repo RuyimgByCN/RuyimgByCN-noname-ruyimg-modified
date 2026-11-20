@@ -169,7 +169,15 @@ impl Catalog {
         core: &crate::state::GameStateCore,
         p: crate::ids::PlayerId,
     ) -> bool {
-        if self.has_diaohulishan(core, p) {
+        if self.has_diaohulishan(core, p)
+            || core
+                .vm_aux
+                .flags
+                .get(&(p, "chixueqingfeng2_count".to_string()))
+                .copied()
+                .unwrap_or(0)
+                > 0
+        {
             return true;
         }
         core.skills.iter().any(|((o, def), inst)| {

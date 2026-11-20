@@ -210,11 +210,18 @@ pub(super) fn response_kind_cards(
     let mut out: Vec<crate::ids::CardId> = if hand_banned {
         Vec::new()
     } else {
+        let rw_lanyin = need == CardKind::Shan
+            && crate::rvm_bridge::modifiers::d34_l28_mods::has_rewritten_lanyinjia(
+                ctx.core,
+                ctx.catalog,
+                responder,
+            );
         p.hand
             .iter()
             .copied()
             .filter(|&c| {
-                ctx.catalog.card_kind(c) == need
+                rw_lanyin
+                    || ctx.catalog.card_kind(c) == need
                     || ctx
                         .catalog
                         .find_player_vm_view_as(ctx.core, responder, c, false, Some(need))

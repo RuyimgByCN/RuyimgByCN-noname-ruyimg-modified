@@ -121,6 +121,13 @@ impl crate::catalog::SkillMachine for DrawPhaseMachine {
                 // num_fixed 侧跳过整窗）。窗口先派发（触发面可见消费前值），
                 // 消费在发窗的同一步完成（§5「pending 加全部正值→移除同量」）。
                 if !num_fixed {
+                    if ctx
+                        .catalog
+                        .skill_by_name("xuwangzhimian")
+                        .is_some_and(|d| ctx.core.has_skill(player, d))
+                    {
+                        pending += 2;
+                    }
                     for def in (ctx.catalog.hooks.r05_role_defs)(ctx.catalog, "combs") {
                         let key = (player, def as u32);
                         let stored = ctx.core.vm_aux.marks.get(&key).copied().unwrap_or(0);

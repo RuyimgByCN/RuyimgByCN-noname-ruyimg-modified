@@ -139,11 +139,11 @@ pub fn apply_hand_limit(
             .get(c as usize)
             .is_some_and(|cd| cd.name == "th_taipingyaoshu")
     });
-    if flag_val(state, player, "th_taipingyaoshu_prevent_elemental") > 0
-        || flag_val(state, player, "l28_taipingyaoshu_equipped") > 0
-        || has_tpys_card
-        || (has_ext_skill(state, catalog, player, "th_taipingyaoshu")
-            && flag_val(state, player, "l28_taipingyaoshu_revoke_after_lost") == 0)
+    if !is_target_unequip2(state, player)
+        && (flag_val(state, player, "th_taipingyaoshu_prevent_elemental") > 0
+            || flag_val(state, player, "l28_taipingyaoshu_equipped") > 0
+            || has_tpys_card
+            || has_ext_skill(state, catalog, player, "th_taipingyaoshu"))
     {
         let mut faction_mask = 0u16;
         for (pid, p) in state.players.iter().enumerate() {
@@ -210,6 +210,7 @@ pub fn apply_hand_limit(
         limit -= 1;
     }
     limit += flag_val(state, player, "u05_mod:tanlin3") as i32;
+    let limit = super::d34_l28_mods::apply_shengong_hand_limit(state, catalog, player, limit);
     let limit = d34_u05_mods::apply_hand_limit(state, player, limit);
     d34_l11_mods::apply_hand_limit(state, catalog, player, limit)
 }
@@ -242,6 +243,7 @@ pub fn apply_attack_range(
     if flag_val(state, player, "u05_mod:mailun5") > 0 {
         cur += 1;
     }
+    let cur = super::d34_l28_mods::apply_shengong_attack_range(state, catalog, player, cur);
     let cur = d34_u05_mods::apply_attack_range(state, player, cur);
     d34_l11_mods::apply_attack_range(state, catalog, player, cur)
 }
@@ -369,11 +371,7 @@ pub fn apply_sha_use_limit(
     if suit == Some(Suit::Diamond) && flag_val(state, player, "l20_wusheng_diamond_unlimited") > 0 {
         unlimited = true;
     }
-    if has_ext_skill(state, catalog, player, "th_bushi")
-        && suit.is_some_and(|s| {
-            suit_code(s) == flag_val(state, player, "th_bushi_unlimited_suit").max(1)
-        })
-    {
+    if super::d34_l28_mods::bushi_unlimited_card(state, catalog, player, card) {
         unlimited = true;
     }
     if has_ext_skill(state, catalog, player, "ssr_jijiang")
@@ -400,6 +398,7 @@ pub fn apply_sha_use_limit(
             cur += 1;
         }
     }
+    cur = super::d34_l28_mods::apply_shengong_sha_limit(state, catalog, player, cur);
     let (cur, unlimited) = d34_u05_mods::apply_sha_use_limit(state, player, cur, unlimited);
     d34_l11_mods::apply_sha_use_limit(state, catalog, player, cur, unlimited)
 }
@@ -593,6 +592,10 @@ pub fn apply_card_target_canceled(
     {
         canceled = true;
     }
+    if super::d34_l28_mods::guofengyupao_cancels_target(state, catalog, actor, target, card, kind)
+    {
+        canceled = true;
+    }
     let canceled = d34_u05_mods::apply_card_target_canceled(state, actor, target, kind, canceled);
     d34_l11_mods::apply_card_target_canceled(state, catalog, actor, target, kind, canceled)
 }
@@ -609,7 +612,6 @@ pub fn apply_card_use_canceled(
     if flag_val(state, actor, "l11_xingtian_card_locked") > 0
         || flag_val(state, actor, "l25_yijue_locked") > 0
         || flag_val(state, actor, "u05_mod:shihuifen") > 0
-        || flag_val(state, actor, "th_caiyi_forbid_cards") > 0
     {
         canceled = true;
     }
@@ -828,12 +830,9 @@ pub fn apply_damage_amount(
     {
         cur = 1;
     }
-    if flag_val(state, target, "th_tiansuan2_3_extra_damage") > 0
-        || flag_val(state, target, "th_tiansuan2_4_extra_damage") > 0
-        || (nature == DamageNature::Fire && flag_val(state, target, "th_tiansuan2_fire_nature") > 0)
-    {
-        cur += 1;
-    }
+    cur = super::d34_l28_mods::rewrite_armor_damage_mod(
+        state, catalog, source, target, card, nature, cur,
+    );
     if nature == DamageNature::Fire
         && (flag_val(state, target, "l11_buff_fire_shield") > 0
             || flag_val(state, target, "l11_armor_guard:txminguangkai") > 0
@@ -847,19 +846,7 @@ pub fn apply_damage_amount(
     {
         return 0;
     }
-    let target_has_tpys_card = state.player(target).equips.iter().any(|&c| {
-        catalog
-            .cards
-            .get(c as usize)
-            .is_some_and(|cd| cd.name == "th_taipingyaoshu")
-    });
-    if matches!(nature, DamageNature::Fire | DamageNature::Thunder)
-        && (flag_val(state, target, "th_taipingyaoshu_prevent_elemental") > 0
-            || flag_val(state, target, "l28_taipingyaoshu_equipped") > 0
-            || target_has_tpys_card
-            || (has_ext_skill(state, catalog, target, "th_taipingyaoshu")
-                && flag_val(state, target, "l28_taipingyaoshu_revoke_after_lost") == 0))
-    {
+    if d34_l11_mods::tpys_damage_prevented(state, catalog, source, target, card, nature) {
         return 0;
     }
     if flag_val(state, target, "u05_cross_mod:xinwuyan") > 0 {
@@ -906,6 +893,14 @@ pub fn apply_damage_amount(
     d34_l11_mods::apply_damage_amount(state, catalog, source, target, card, nature, cur)
 }
 
+pub fn is_target_unequip2(state: &GameStateCore, target: PlayerId) -> bool {
+    flag_val(state, target, "l11_xingtian_armor_null") > 0
+        || flag_val(state, target, "l25_yijue_locked") > 0
+        || flag_val(state, target, "l25_pojia_broken") > 0
+        || flag_val(state, target, "l25_hubu_unequip2") > 0
+        || flag_val(state, target, "chixueqingfeng2_count") > 0
+}
+
 pub fn apply_ignore_armor(
     state: &GameStateCore,
     catalog: &Catalog,
@@ -913,10 +908,7 @@ pub fn apply_ignore_armor(
     target: PlayerId,
     mut ignore: bool,
 ) -> bool {
-    if flag_val(state, target, "l11_xingtian_armor_null") > 0
-        || flag_val(state, target, "l25_yijue_locked") > 0
-        || flag_val(state, target, "l25_pojia_broken") > 0
-        || flag_val(state, target, "l25_hubu_unequip2") > 0
+    if is_target_unequip2(state, target)
         || has_ext_skill(state, catalog, source, "ssr_pojia")
         || has_ext_skill(state, catalog, source, "ssr_hubu")
         || flag_val(state, source, "l25_pojia_ignore_armor") > 0
@@ -934,7 +926,8 @@ pub fn apply_ignore_armor(
         ignore = true;
     }
     let ignore = d34_u05_mods::apply_ignore_armor(state, source, ignore);
-    d34_l11_mods::apply_ignore_armor(state, source, ignore)
+    let ignore = d34_l11_mods::apply_ignore_armor(state, source, ignore);
+    super::d34_l28_mods::apply_ignore_armor(state, catalog, target, ignore)
 }
 
 pub fn apply_card_unrespondable(

@@ -37,6 +37,12 @@ mod l28_thunder_eight_triggers;
 #[path = "../l28_thunder_eight_batch_b.rs"]
 mod l28_thunder_eight_batch_b;
 
+#[path = "../l28_reviewer_regressions.rs"]
+mod l28_reviewer_regressions;
+
+#[path = "../l28_shengong_equips_regressions.rs"]
+mod l28_shengong_equips_regressions;
+
 #[path = "../l27_beautify_match.rs"]
 mod l27_beautify_match;
 

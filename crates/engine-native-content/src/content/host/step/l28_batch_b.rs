@@ -25,7 +25,9 @@ use crate::state::GameStateCore;
 #[path = "l28_batch_b_asks.rs"]
 mod l28_batch_b_asks;
 pub(in crate::content::host) use l28_batch_b_asks::ask_l28_batch_b;
-use l28_batch_b_asks::{step_qinyin, step_th_yeyan, wait_ask};
+use l28_batch_b_asks::{
+    step_pro_qinyin, step_qinyin, step_th_yeyan, wait_ask, yeyan_forbid_strengthen,
+};
 
 #[path = "l28_batch_b_gushe.rs"]
 mod l28_batch_b_gushe;
@@ -55,19 +57,23 @@ pub(super) const ASK_GEYUAN_MAGICA_DISCARD: u32 = 243;
 pub(super) const ASK_YEYAN_MODE: u32 = 250;
 pub(super) const ASK_YEYAN_DISCARD: u32 = 251;
 pub(super) const ASK_YEYAN_TARGETS: u32 = 252;
+pub(super) const ASK_YEYAN_DAMAGE: u32 = 253;
 pub(super) const ASK_QINYIN_MODE: u32 = 260;
+pub(super) const ASK_PRO_QINYIN_MODE: u32 = 261;
 
 /// 取消即放弃整个技能（尚未产生任何效果）：结束并退还本回合次数。
 /// 其余可取消询问（鼓舌「弃一张或令其摸牌」）由各技能自行把取消解释为另一选项。
-const ABORT_ON_CANCEL_ASKS: [u32; 8] = [
+const ABORT_ON_CANCEL_ASKS: [u32; 10] = [
     ASK_JINGXIE_CARD,
     ASK_QIAOSI_COUNT,
     ASK_TIANSUAN_LOT,
     ASK_GUSHE_TARGETS,
     ASK_YEYAN_MODE,
     ASK_YEYAN_TARGETS,
+    ASK_YEYAN_DAMAGE,
     ASK_YEYAN_DISCARD,
     ASK_QINYIN_MODE,
+    ASK_PRO_QINYIN_MODE,
 ];
 
 pub(super) fn has_skill(core: &GameStateCore, catalog: &Catalog, p: PlayerId, name: &str) -> bool {
@@ -75,12 +81,6 @@ pub(super) fn has_skill(core: &GameStateCore, catalog: &Catalog, p: PlayerId, na
         .skill_by_name(name)
         .and_then(|def| core.skills.get(&(p, def)))
         .is_some_and(|inst| inst.enabled)
-}
-
-pub(super) fn revoke_skill_named(ctx: &mut Ctx<'_>, p: PlayerId, name: &str) {
-    if let Some(def) = ctx.catalog.skill_by_name(name) {
-        ctx.core.skills.remove(&(p, def));
-    }
 }
 
 /// 本回合唯一戳（轮次 × 8 + 当前回合角色 + 1）：按回合计数的标记据此判断是否过期。
@@ -96,10 +96,14 @@ pub(super) fn card_rank(catalog: &Catalog, c: CardId) -> u32 {
         .unwrap_or(0)
 }
 
-/// 防具牌或【诸葛连弩】（`extension.js:7429` 精械可展示的牌）。
+/// 精械白名单（`extension.js:7439`）：仅【八卦阵】【白银狮子】【烂银甲】【仁王盾】【藤甲】【诸葛连弩】。
 fn jingxie_upgradable(catalog: &Catalog, c: CardId) -> bool {
-    let kind = catalog.card_kind(c);
-    kind.equip_slot() == Some(EquipSlot::Armor) || kind == CardKind::Zhuge
+    catalog.cards.get(c as usize).is_some_and(|d| {
+        matches!(
+            d.name,
+            "armor" | "bagua" | "baiyin" | "lanyinjia" | "renwang" | "tengjia" | "zhuge"
+        )
+    })
 }
 
 /// 精械候选：出牌阶段为未升级过的防具/诸葛连弩；濒死时为可重铸的防具牌。
@@ -116,7 +120,7 @@ pub(super) fn jingxie_candidates(
                 catalog.card_kind(c).equip_slot() == Some(EquipSlot::Armor)
             } else {
                 jingxie_upgradable(catalog, c)
-                    && flag(core, owner, &format!("th_jingxie_upgraded:{c}")) == 0
+                    && !crate::rvm_bridge::modifiers::d34_l28_mods::is_jingxie_rewritten(core, c)
             }
         })
         .collect()
@@ -156,8 +160,8 @@ pub(in crate::content::host) fn trigger_meta_l28_batch_b(name: &str) -> Option<T
             extra_events: vec![EventKind::CardResponded],
         }),
         "th_gusuan" => Some(meta(EventKind::TurnPhaseEnd, Vec::new())),
-        "qinyin" | "th_qinyin" => {
-            Some(meta(EventKind::PhaseEnd, vec![EventKind::CardsDiscarded]))
+        "qinyin" | "th_qinyin" | "pro_qinyin" => {
+            Some(meta(EventKind::PhaseBegin, vec![EventKind::PhaseEnd, EventKind::CardsDiscarded]))
         }
         "th_tianming" => Some(meta(EventKind::CardUsed, Vec::new())),
         _ => None,
@@ -181,6 +185,25 @@ fn discard_phase_count(core: &GameStateCore, owner: PlayerId) -> u32 {
     } else {
         0
     }
+}
+
+fn pro_qinyin_has_red_and_black(core: &GameStateCore, catalog: &Catalog) -> bool {
+    let stamp = super::l28_batch_a::turn_stamp(core);
+    let (mut has_red, mut has_black) = (false, false);
+    for &c in &core.discard {
+        if flag(core, 0, &format!("pro_qinyin_d:{c}")) != stamp {
+            continue;
+        }
+        match catalog.cards.get(c as usize).map(|cd| cd.suit) {
+            Some(crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond) => has_red = true,
+            Some(crate::catalog::Suit::Spade | crate::catalog::Suit::Club) => has_black = true,
+            None => {}
+        }
+        if has_red && has_black {
+            return true;
+        }
+    }
+    false
 }
 
 pub(in crate::content::host) fn filter_l28_batch_b(
@@ -248,6 +271,33 @@ pub(in crate::content::host) fn filter_l28_batch_b(
             } => *player == owner && discard_phase_count(ctx.state, owner) >= 2,
             _ => false,
         },
+        "pro_qinyin" => {
+            if yeyan_forbid_strengthen(ctx.state) {
+                match event {
+                    EventData::CardsDiscarded { player, cards } => {
+                        *player == owner
+                            && !cards.is_empty()
+                            && ctx.state.turn.current == owner
+                            && ctx.state.turn.phase == Phase::Discard
+                    }
+                    EventData::Phase {
+                        player,
+                        phase: Phase::Discard,
+                        begin: false,
+                    } => *player == owner && discard_phase_count(ctx.state, owner) >= 2,
+                    _ => false,
+                }
+            } else {
+                matches!(
+                    event,
+                    EventData::Phase {
+                        player,
+                        phase: Phase::End,
+                        begin: true,
+                    } if *player == owner && pro_qinyin_has_red_and_black(ctx.state, ctx.catalog)
+                )
+            }
+        }
         "th_tianming" => matches!(
             event,
             EventData::CardUsed(u)
@@ -343,8 +393,8 @@ pub(in crate::content::host) fn machine_l28_batch_b(
 pub(in crate::content::host) fn handle_l28_batch_b(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     let owner = m.owner;
     if m.stage != HostStage::Act
-        && ctx.answer().is_empty()
         && ABORT_ON_CANCEL_ASKS.contains(&flag(ctx.core, owner, "l28_ask_id"))
+        && ctx.answer().is_empty()
     {
         // 放弃发动：退还次数，不产生任何效果。
         refund_once_used(ctx, owner, &m.def_key);
@@ -384,6 +434,7 @@ pub(in crate::content::host) fn handle_l28_batch_b(m: &mut HostMachine, ctx: &mu
         "th_gusuan" => step_th_gusuan(m, ctx),
         "th_yeyan" => step_th_yeyan(m, ctx),
         "qinyin" | "th_qinyin" => step_qinyin(m, ctx),
+        "pro_qinyin" => step_pro_qinyin(m, ctx),
         "th_tianming" => {
             let to_disc: Vec<CardId> = hand_and_equips(ctx.core, owner).into_iter().take(2).collect();
             discard_cards(ctx, owner, &to_disc);
@@ -394,29 +445,40 @@ pub(in crate::content::host) fn handle_l28_batch_b(m: &mut HostMachine, ctx: &mu
     }
 }
 
-/// 精械（`extension.js:7429`）：①出牌阶段展示一张防具或【诸葛连弩】升级之（每张一次）；
-/// ②进入濒死时可重铸一张防具牌，然后体力回复至 1 点。
+/// 精械（`extension.js:7429`）：①出牌阶段展示白名单防具或【诸葛连弩】升级之；
+/// ②进入濒死时可重铸一张防具牌（`loseToDiscardpile` + 摸 1 牌 + 体力回复至 1）。
 fn step_th_jingxie(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     let owner = m.owner;
     match m.stage {
         HostStage::Act => wait_ask(m, ctx, HostStage::SelectCard, ASK_JINGXIE_CARD),
         HostStage::SelectCard => {
             let ans = ctx.answer().clone();
+            set_flag(ctx.core, owner, "l28_ask_id", 0);
             let Some(ChoiceOption::Card(c)) = ans.first().copied() else {
                 return Flow::Done;
             };
             if m.target == Some(owner) {
-                discard_cards(ctx, owner, &[c]);
+                ctx.take_owned_card(owner, c);
+                ctx.to_discard(c);
+                (ctx.catalog.hooks.on_cards_to_discard)(ctx, owner, &[c], false);
                 ctx.start_draw(owner, 1);
+                m.stage = HostStage::DrawSettle;
+                Flow::Yield
+            } else {
+                set_flag(ctx.core, 0, &format!("th_jingxie_rewritten:{c}"), 1);
+                set_flag(ctx.core, owner, &format!("th_jingxie_upgraded:{c}"), 1);
+                let upg = flag(ctx.core, owner, "th_jingxie_upgraded") + 1;
+                set_flag(ctx.core, owner, "th_jingxie_upgraded", upg);
+                Flow::Done
+            }
+        }
+        HostStage::DrawSettle => {
+            if ctx.core.player(owner).alive {
                 let hp = ctx.core.player(owner).hp;
                 if hp < 1 {
                     ctx.recover(owner, (1 - hp) as u32, None);
                 }
                 set_flag(ctx.core, owner, "th_jingxie_saved_to_1hp", 1);
-            } else {
-                set_flag(ctx.core, owner, &format!("th_jingxie_upgraded:{c}"), 1);
-                let upg = flag(ctx.core, owner, "th_jingxie_upgraded") + 1;
-                set_flag(ctx.core, owner, "th_jingxie_upgraded", upg);
             }
             Flow::Done
         }
@@ -513,25 +575,37 @@ const TIANSUAN_LOT_FLAGS: [&str; 6] = [
     "th_tiansuan2_4_forbid_tao_jiu",
 ];
 
-/// `th_tiansuan2.onremove`（`extension.js:8027`）：周群下个回合开始时移除目标的命运签。
-fn clear_tiansuan_lots(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    let prev_t_raw = flag(ctx.core, owner, "th_tiansuan_target");
-    if prev_t_raw > 0 && (prev_t_raw as usize - 1) < ctx.core.players.len() {
+/// `th_tiansuan2.onremove`（`extension.js:8027`）：周群下个回合开始或失去/阵亡时清除目标的命运签。
+pub(super) fn clear_tiansuan_lots_core(
+    core: &mut GameStateCore,
+    catalog: &Catalog,
+    owner: PlayerId,
+) {
+    let prev_t_raw = flag(core, owner, "th_tiansuan_target");
+    if prev_t_raw > 0 && (prev_t_raw as usize - 1) < core.players.len() {
         let pt = (prev_t_raw - 1) as PlayerId;
         for k in TIANSUAN_LOT_FLAGS {
-            set_flag(ctx.core, pt, k, 0);
+            set_flag(core, pt, k, 0);
         }
         for sk in TIANSUAN_LOT_SKILLS
             .iter()
             .chain(["th_tiansuan2_damage", "th_tiansuan2_fire", "th_tiansuan2_ai"].iter())
         {
-            revoke_skill_named(ctx, pt, sk);
+            if let Some(def) = catalog.skill_by_name(sk) {
+                core.skills.remove(&(pt, def));
+            }
         }
     }
-    set_flag(ctx.core, owner, "th_tiansuan2_active", 0);
-    set_flag(ctx.core, owner, "th_tiansuan_lot", 0);
-    set_flag(ctx.core, owner, "th_tiansuan_target", 0);
-    revoke_skill_named(ctx, owner, "th_tiansuan2");
+    set_flag(core, owner, "th_tiansuan2_active", 0);
+    set_flag(core, owner, "th_tiansuan_lot", 0);
+    set_flag(core, owner, "th_tiansuan_target", 0);
+    if let Some(def) = catalog.skill_by_name("th_tiansuan2") {
+        core.skills.remove(&(owner, def));
+    }
+}
+
+fn clear_tiansuan_lots(ctx: &mut Ctx<'_>, owner: PlayerId) {
+    clear_tiansuan_lots_core(ctx.core, ctx.catalog, owner);
 }
 
 /// 天算获得牌的范围：目标为自己时只取装备区（`target == player ? 'e' : 'he'`）。
@@ -543,8 +617,7 @@ pub(super) fn tiansuan_gain_pool(core: &GameStateCore, owner: PlayerId, t: Playe
     }
 }
 
-/// 天算（`extension.js:7806-8026`）：抽取命运签（玩家直接选择签）→ 选择一名角色获得签，
-/// 直到周群下个回合开始；上上签/上签时周群从其区域获得一张牌。
+/// 天算（`extension.js:7806-8026`）：可选复制一签（1..=4 加权）或直接按 `[0,1,1,2,2,2,3,3,4]` 随机抽取命运签。
 fn step_th_tiansuan(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     let owner = m.owner;
     match m.stage {
@@ -554,7 +627,12 @@ fn step_th_tiansuan(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             let Some(ChoiceOption::Tag(lot)) = ans.first().copied() else {
                 return Flow::Done;
             };
-            set_flag(ctx.core, owner, "th_tiansuan_pending_lot", u32::from(lot % 5) + 1);
+            let mut list = vec![0u32, 1, 1, 2, 2, 2, 3, 3, 4];
+            if (1..=4).contains(&lot) {
+                list.push(u32::from(lot));
+            }
+            let idx = list[ctx.core.rng.gen_range(list.len() as u32) as usize];
+            set_flag(ctx.core, owner, "th_tiansuan_pending_lot", idx + 1);
             wait_ask(m, ctx, HostStage::TargetChoice, ASK_TIANSUAN_TARGET)
         }
         HostStage::TargetChoice => {

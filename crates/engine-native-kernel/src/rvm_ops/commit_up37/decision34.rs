@@ -638,10 +638,14 @@ fn resolve_th_yeyan(ctx: &mut Ctx<'_>, owner: PlayerId) {
         if !discarded.is_empty() {
             discard_some(ctx, owner, discarded);
         }
-        ctx.emit(EventData::LoseHp {
-            player: owner,
-            amount: 3,
-        });
+        if (0..ctx.core.players.len() as PlayerId)
+            .any(|p| flag(ctx.core, p, "strengthen_skill_forbid") > 0)
+        {
+            ctx.emit(EventData::LoseHp {
+                player: owner,
+                amount: 3,
+            });
+        }
         flag(ctx.core, owner, "th_yeyan_damage").clamp(2, 3) as i32
     } else {
         1

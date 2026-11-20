@@ -127,7 +127,7 @@ fn build_ask(
             1,
             false,
         ),
-        ASK_TIANSUAN_LOT => tag_ask(owner, "th_tiansuan:choose_lot", 0..=4, true),
+        ASK_TIANSUAN_LOT => tag_ask(owner, "th_tiansuan:choose_lot", 0..=5, true),
         ASK_TIANSUAN_TARGET => player_ask(
             owner,
             "th_tiansuan:choose_target",
@@ -226,6 +226,7 @@ fn build_ask(
                 true,
             )
         }
+        ASK_YEYAN_DAMAGE => tag_ask(owner, "th_yeyan:choose_damage", 2..=3, true),
         ASK_YEYAN_DISCARD => card_ask(
             owner,
             "th_yeyan:discard_cards",
@@ -235,6 +236,10 @@ fn build_ask(
             true,
         ),
         ASK_QINYIN_MODE => tag_ask(owner, "qinyin:choose_mode", 0..=1, true),
+        ASK_PRO_QINYIN_MODE => {
+            let max = if flag(core, owner, "th_yeyan_used") > 0 { 2 } else { 1 };
+            tag_ask(owner, "pro_qinyin:choose_mode", 0..=max, true)
+        }
         _ => None,
     }
 }
@@ -277,6 +282,23 @@ pub(in crate::content::host) fn ask_l28_batch_b(
     ))
 }
 
+fn apply_qinyin_mode(ctx: &mut Ctx<'_>, owner: PlayerId, mode: u8) {
+    set_flag(ctx.core, owner, "qinyin_triggered", 1);
+    set_flag(ctx.core, owner, "qinyin_mode", u32::from(mode) + 1);
+    for p in alive_all(ctx.core, owner) {
+        if mode == 0 {
+            if ctx.core.player(p).hp < ctx.core.player(p).max_hp as i32 {
+                ctx.recover(p, 1, None);
+            }
+        } else {
+            ctx.emit(EventData::LoseHp {
+                player: p,
+                amount: 1,
+            });
+        }
+    }
+}
+
 /// 琴音：弃牌阶段内弃牌只计数；阶段结束且本阶段弃置 ≥2 张时选择全体回复或失去 1 点体力。
 pub(super) fn step_qinyin(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     let owner = m.owner;
@@ -301,29 +323,48 @@ pub(super) fn step_qinyin(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             let Some(ChoiceOption::Tag(mode)) = ans.first().copied() else {
                 return Flow::Done;
             };
-            set_flag(ctx.core, owner, "qinyin_triggered", 1);
-            set_flag(ctx.core, owner, "qinyin_mode", u32::from(mode) + 1);
-            for p in alive_all(ctx.core, owner) {
-                if mode == 0 {
-                    if ctx.core.player(p).hp < ctx.core.player(p).max_hp as i32 {
-                        ctx.recover(p, 1, None);
-                    }
-                } else {
-                    ctx.emit(EventData::LoseHp {
-                        player: p,
-                        amount: 1,
-                    });
-                }
-            }
+            apply_qinyin_mode(ctx, owner, mode);
             Flow::Done
         }
         _ => Flow::Done,
     }
 }
 
-/// 业炎（限定技，`extension.js:8636-8935`）：对至多三名角色分配共计至多 3 点火焰伤害；
-/// 若有角色分配到 ≥2 点，须先弃置四张花色各不相同的手牌并失去 3 点体力。
-/// 小业炎（mode 0）：1~3 名角色各 1 点；大业炎（mode 1）：1 名 3 点，或首选 2 点、次选 1 点。
+pub(super) fn yeyan_forbid_strengthen(core: &GameStateCore) -> bool {
+    (0..core.players.len() as PlayerId).any(|p| flag(core, p, "strengthen_skill_forbid") > 0)
+}
+
+/// 专业琴音（`extra.js:8728-8815`）：结束阶段当红黑牌均于本回合进入弃牌堆时，可选令全员回1/失1体力，或当已发动【业炎】时失去 1 点体力上限重置【业炎】。
+/// 禁用强化技配置开启时退化为经典 `step_qinyin`。
+pub(super) fn step_pro_qinyin(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
+    if yeyan_forbid_strengthen(ctx.core) {
+        return step_qinyin(m, ctx);
+    }
+    let owner = m.owner;
+    match m.stage {
+        HostStage::Act => wait_ask(m, ctx, HostStage::SelectNature, ASK_PRO_QINYIN_MODE),
+        HostStage::SelectNature => {
+            let ans = ctx.answer().clone();
+            let Some(ChoiceOption::Tag(mode)) = ans.first().copied() else {
+                return Flow::Done;
+            };
+            if mode == 2 {
+                set_flag(ctx.core, owner, "qinyin_triggered", 1);
+                set_flag(ctx.core, owner, "th_yeyan_used", 0);
+                refund_once_used(ctx, owner, "th_yeyan");
+                ctx.lose_max_hp(owner, 1);
+                return Flow::Done;
+            }
+            apply_qinyin_mode(ctx, owner, mode);
+            Flow::Done
+        }
+        _ => Flow::Done,
+    }
+}
+
+/// 业炎（限定技，`extension.js:8636-8926`、`game.js:249-268`）：对至多三名角色分配共计至多 3 点火焰伤害；
+/// 大业炎（单目标 2 或 3 点，或两目标 2+1 点）须先弃置四张花色各不相同的手牌；
+/// 仅当禁用强化技配置开启（`strengthen_skill == "forbid"`）时才先失去 3 点体力，再按座次依次结算火焰伤害（`forceDie`）。
 pub(super) fn step_th_yeyan(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     let owner = m.owner;
     match m.stage {
@@ -338,7 +379,9 @@ pub(super) fn step_th_yeyan(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             let Some(ChoiceOption::Tag(mode)) = ans.first().copied() else {
                 return Flow::Done;
             };
+            set_flag(ctx.core, owner, "l28_ask_id", 0);
             set_flag(ctx.core, owner, "th_yeyan_mode", u32::from(mode));
+            set_flag(ctx.core, owner, "th_yeyan_first_dmg", 0);
             wait_ask(m, ctx, HostStage::TargetChoice, ASK_YEYAN_TARGETS)
         }
         HostStage::TargetChoice => {
@@ -350,10 +393,31 @@ pub(super) fn step_th_yeyan(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                     _ => None,
                 })
                 .collect();
+            if m.targets.is_empty() {
+                return Flow::Done;
+            }
+            set_flag(ctx.core, owner, "l28_ask_id", 0);
             if flag(ctx.core, owner, "th_yeyan_mode") == 1 {
+                if m.targets.len() == 1 {
+                    return wait_ask(m, ctx, HostStage::HuanrenPick, ASK_YEYAN_DAMAGE);
+                }
+                set_flag(ctx.core, owner, "th_yeyan_first_dmg", 2);
                 return wait_ask(m, ctx, HostStage::SelectCard, ASK_YEYAN_DISCARD);
             }
-            resolve_yeyan(m, ctx, &[])
+            start_yeyan_resolution(m, ctx, &[])
+        }
+        HostStage::HuanrenPick => {
+            let Some(ChoiceOption::Tag(dmg)) = ctx.answer().first().copied() else {
+                return Flow::Done;
+            };
+            set_flag(ctx.core, owner, "l28_ask_id", 0);
+            set_flag(
+                ctx.core,
+                owner,
+                "th_yeyan_first_dmg",
+                u32::from(dmg).clamp(2, 3),
+            );
+            wait_ask(m, ctx, HostStage::SelectCard, ASK_YEYAN_DISCARD)
         }
         HostStage::SelectCard => {
             let cards: Vec<CardId> = ctx
@@ -371,42 +435,87 @@ pub(super) fn step_th_yeyan(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                 // 花色不各不相同：重新选择（不产生任何效果）。
                 return wait_ask(m, ctx, HostStage::SelectCard, ASK_YEYAN_DISCARD);
             }
-            resolve_yeyan(m, ctx, &cards)
+            start_yeyan_resolution(m, ctx, &cards)
         }
+        HostStage::DrawSettle => {
+            if flag(ctx.core, owner, "th_yeyan_pending_lose_hp") > 0 {
+                set_flag(ctx.core, owner, "th_yeyan_pending_lose_hp", 0);
+                m.stage = HostStage::ShuchuiTargetLoop;
+                ctx.emit(EventData::LoseHp {
+                    player: owner,
+                    amount: 3,
+                });
+                return Flow::Yield;
+            }
+            m.stage = HostStage::ShuchuiTargetLoop;
+            step_yeyan_damage_loop(m, ctx)
+        }
+        HostStage::ShuchuiTargetLoop => step_yeyan_damage_loop(m, ctx),
         _ => Flow::Done,
     }
 }
 
-fn resolve_yeyan(m: &mut HostMachine, ctx: &mut Ctx<'_>, discard: &[CardId]) -> Flow {
+fn start_yeyan_resolution(m: &mut HostMachine, ctx: &mut Ctx<'_>, discard: &[CardId]) -> Flow {
     let owner = m.owner;
     let great = !discard.is_empty();
-    let flames: Vec<(PlayerId, i32)> = m
-        .targets
-        .iter()
-        .enumerate()
-        .map(|(i, &t)| {
-            let n = match (great, m.targets.len(), i) {
-                (false, _, _) => 1,
-                (true, 1, _) => 3,
-                (true, _, 0) => 2,
-                _ => 1,
-            };
-            (t, n)
-        })
-        .collect();
-    if great {
-        discard_cards(ctx, owner, discard);
-        ctx.emit(EventData::LoseHp {
-            player: owner,
-            amount: 3,
-        });
+    let single_dmg = if great {
+        let chosen = flag(ctx.core, owner, "th_yeyan_first_dmg");
+        if chosen == 0 {
+            3
+        } else {
+            chosen.clamp(2, 3)
+        }
+    } else {
+        1
+    };
+    for (i, &t) in m.targets.iter().enumerate() {
+        let n = match (great, m.targets.len(), i) {
+            (false, _, _) => 1,
+            (true, 1, _) => single_dmg,
+            (true, _, 0) => 2,
+            _ => 1,
+        };
+        set_flag(ctx.core, owner, &format!("th_yeyan_dmg:{t}"), n);
     }
+    let ordered: Vec<PlayerId> = ctx
+        .core
+        .seat_order_from(owner)
+        .into_iter()
+        .filter(|p| m.targets.contains(p))
+        .collect();
+    m.targets = ordered;
+    set_flag(ctx.core, owner, "l28_ask_id", 0);
     set_flag(ctx.core, owner, "th_yeyan_used", 1);
     set_flag(ctx.core, owner, "th_yeyan_triggered", 1);
-    set_flag(ctx.core, owner, "th_yeyan_fire_damage", if great { 3 } else { 1 });
-    // `targets.sortBySeat()`：按座次（自业炎角色起）依次结算。
-    for p in ctx.core.seat_order_from(owner) {
-        if let Some(&(t, n)) = flames.iter().find(|(t, _)| *t == p) {
+    set_flag(
+        ctx.core,
+        owner,
+        "th_yeyan_fire_damage",
+        if great { single_dmg } else { 1 },
+    );
+    set_flag(
+        ctx.core,
+        owner,
+        "th_yeyan_pending_lose_hp",
+        u32::from(great && yeyan_forbid_strengthen(ctx.core)),
+    );
+    if great {
+        discard_cards(ctx, owner, discard);
+        m.stage = HostStage::DrawSettle;
+        return Flow::Yield;
+    }
+    m.stage = HostStage::ShuchuiTargetLoop;
+    step_yeyan_damage_loop(m, ctx)
+}
+
+fn step_yeyan_damage_loop(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
+    let owner = m.owner;
+    while !m.targets.is_empty() {
+        let t = m.targets.remove(0);
+        let key = format!("th_yeyan_dmg:{t}");
+        let n = flag(ctx.core, owner, &key).max(1) as i32;
+        set_flag(ctx.core, owner, &key, 0);
+        if ctx.core.player(t).alive {
             ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                 Some(owner),
                 t,
@@ -414,6 +523,7 @@ fn resolve_yeyan(m: &mut HostMachine, ctx: &mut Ctx<'_>, discard: &[CardId]) -> 
                 DamageNature::Fire,
                 None,
             )));
+            return Flow::Yield;
         }
     }
     Flow::Done

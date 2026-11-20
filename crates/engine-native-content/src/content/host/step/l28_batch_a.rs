@@ -12,7 +12,7 @@
 //! 9. `th_nanhualaoxian`（南华老仙）：`th_yufeng`、`th_tianshu`、`th_taipingyaoshu`、`th_g_taipingyaoshu_ai`
 
 use super::super::*;
-use crate::catalog::{CardKind, Catalog, QueryCtx, SkillLimits, Suit, TriggerMeta};
+use crate::catalog::{Catalog, QueryCtx, SkillLimits, Suit, TriggerMeta};
 use crate::choice::ChoiceOption;
 use crate::event::{EventData, EventKind, LostOrigin, Phase, Timing};
 use crate::ids::{CardId, PlayerId};
@@ -21,6 +21,16 @@ use crate::state::GameStateCore;
 
 #[path = "l28_batch_a_asks.rs"]
 mod l28_batch_a_asks;
+#[path = "l28_batch_a_ext.rs"]
+mod l28_batch_a_ext;
+#[path = "l28_batch_a_shengong.rs"]
+mod l28_batch_a_shengong;
+#[path = "l28_shengong_equips.rs"]
+mod l28_shengong_equips;
+pub(crate) use l28_batch_a_ext::{
+    on_cards_to_discard_chengye, on_outer_settled_taipingyaoshu, on_skill_removed_l28,
+    play_begin_tianshu,
+};
 pub(in crate::content::host) use l28_batch_a_asks::ask_l28_batch_a;
 use l28_batch_a_asks::wait_ask;
 
@@ -33,17 +43,19 @@ pub(super) const ASK_BUSHI_POSTURE: u32 = 20;
 pub(super) const ASK_CAIYI_TARGET: u32 = 30;
 pub(super) const ASK_CAIYI_OPTION: u32 = 31;
 pub(super) const ASK_GUILI_TARGET: u32 = 32;
+pub(super) const ASK_CAIYI_DISCARD: u32 = 33;
 pub(super) const ASK_CHONGXU_ACTION: u32 = 40;
 pub(super) const ASK_MIAOJIAN_TARGET: u32 = 41;
 pub(super) const ASK_SHENGONG_DISCARD: u32 = 50;
 pub(super) const ASK_SHENGONG_TARGET: u32 = 51;
 pub(super) const ASK_OLQISI_SLOT: u32 = 52;
-pub(super) const ASK_SHENGONG_FORGE: u32 = 53;
+pub(super) const ASK_SHENGONG_CARD: u32 = 54;
+pub(super) const ASK_SHENGONG_ASSIST: u32 = 55;
 pub(super) const ASK_PINGCAI_RELIC: u32 = 60;
 pub(super) const ASK_PINGCAI_TARGET: u32 = 61;
 pub(super) const ASK_ZHENGJING_COUNT: u32 = 70;
 pub(super) const ASK_ZHENGJING_TARGET: u32 = 71;
-pub(super) const ASK_CHENGYE_TARGET: u32 = 80;
+pub(super) const ASK_ZHENGJING_CARDS: u32 = 72;
 pub(super) const ASK_BUXU_DISCARD: u32 = 81;
 pub(super) const ASK_BUXU_CHAMBER: u32 = 82;
 pub(super) const ASK_YUFENG_SCORE: u32 = 90;
@@ -182,18 +194,6 @@ pub(super) fn is_taipingyaoshu(catalog: &Catalog, c: CardId) -> bool {
         .is_some_and(|cd| cd.name == "th_taipingyaoshu")
 }
 
-pub(super) fn taipingyaoshu_in_play(core: &GameStateCore, catalog: &Catalog) -> bool {
-    core.players
-        .iter()
-        .any(|p| p.alive && p.equips.iter().any(|&c| is_taipingyaoshu(catalog, c)))
-}
-
-pub(super) fn has_non_spade_card(core: &GameStateCore, catalog: &Catalog, p: PlayerId) -> bool {
-    hand_and_equips(core, p)
-        .into_iter()
-        .any(|c| catalog.cards[c as usize].suit != Suit::Spade)
-}
-
 pub(super) fn turn_stamp(core: &GameStateCore) -> u32 {
     (core.turn.round.max(1) << 8) | u32::from(core.turn.current)
 }
@@ -216,7 +216,7 @@ pub(super) fn bushi_suits(core: &GameStateCore, owner: PlayerId) -> (u32, u32, u
             flag(core, owner, "th_bushi_s3") % 4,
         )
     } else {
-        (0, 1, 2, 3)
+        (0, 3, 2, 1)
     }
 }
 
@@ -247,26 +247,10 @@ pub(super) fn suit_index(suit: Suit) -> u32 {
     }
 }
 
-pub(super) fn chamber_of_card(catalog: &Catalog, c: CardId) -> u32 {
-    let kind = catalog.card_kind(c);
-    if kind.is_sha_like() {
-        0
-    } else if kind == CardKind::Shan {
-        1
-    } else if kind == CardKind::Tao {
-        2
-    } else if kind == CardKind::Jiu {
-        3
-    } else if kind.equip_slot().is_some() {
-        4
-    } else {
-        5
-    }
-}
-
 pub(super) fn equip_card_onto(ctx: &mut Ctx<'_>, target: PlayerId, card: CardId) {
     ctx.core.deck.retain(|&c| c != card);
     ctx.core.discard.retain(|&c| c != card);
+    ctx.core.detached_cards.retain(|&(c, _)| c != card);
     for p in 0..ctx.core.players.len() as PlayerId {
         ctx.core.player_mut(p).hand.retain(|&c| c != card);
         if ctx.core.player(p).equips.contains(&card) {
@@ -286,6 +270,7 @@ pub(super) fn equip_card_onto(ctx: &mut Ctx<'_>, target: PlayerId, card: CardId)
             ctx.core.player_mut(target).equips.retain(|&c| c != old);
             crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, target, old);
             ctx.to_discard(old);
+            on_cards_to_discard_chengye(ctx, target, &[old], false);
         }
         ctx.core.player_mut(target).equips.push(card);
         crate::kernel::grant_equip_skills(ctx, target, card);
@@ -318,32 +303,29 @@ pub(in crate::content::host) fn trigger_meta_l28_batch_a(name: &str) -> Option<T
             ],
         )),
         "th_zhongzhuang" => Some(meta(EventKind::Damage, Vec::new())),
-        "th_caiyi" | "xinfu_pdgyingshi" | "th_zhengjing2" | "th_yufeng" => {
+        "th_caiyi" | "xinfu_pdgyingshi" | "th_zhengjing2" | "th_yufeng" | "th_shengong" => {
             Some(meta(EventKind::PhaseBegin, Vec::new()))
         }
         "th_guili" => Some(meta(
             EventKind::TurnPhaseEnd,
-            vec![
-                EventKind::TurnBegin,
-                EventKind::Damage,
-                EventKind::TurnEnded,
-                EventKind::PhaseEnd,
-            ],
+            vec![EventKind::TurnBegin, EventKind::Damage],
         )),
         "shhlianhua" => Some(meta(EventKind::CardUsed, vec![EventKind::Damage])),
         "olqisi" => Some(meta(EventKind::PhaseBegin, vec![EventKind::TurnBegin])),
-        "th_chengye" => Some(meta(EventKind::CardsDiscarded, vec![EventKind::PhaseBegin])),
+        "th_chengye" => Some(meta(
+            EventKind::CardsDiscarded,
+            vec![EventKind::CardsLost, EventKind::PhaseBegin],
+        )),
         "th_taipingyaoshu" => Some(meta(EventKind::CardsLost, vec![EventKind::CardsMoved])),
-        _ => None,
+        other => l28_shengong_equips::trigger_meta_shengong_equip(other),
     }
 }
 
 pub(in crate::content::host) fn limits_l28_batch_a(name: &str) -> SkillLimits {
     match name {
         // th_dunshi / th_yufeng 的出牌阶段每回合限一次由各自回合戳记，不走 once_per_turn（避免吞后续触发）；
-        // th_buxu 为同回合递增弃牌张数（1, 2, 3...），不设 once_per_turn。
-        "th_caiyi" | "th_chongxu" | "miaojian" | "th_shengong" | "th_pingcai" | "th_zhengjing"
-        | "th_chengye" | "th_tianshu" => SkillLimits {
+        // th_buxu 为同回合递增弃牌张数（1, 2, 3...），th_shengong 依三类别各限一次，不设 once_per_turn。
+        "th_chongxu" | "miaojian" | "th_pingcai" | "th_zhengjing" => SkillLimits {
             once_per_turn: true,
             ..Default::default()
         },
@@ -387,14 +369,17 @@ pub(in crate::content::host) fn filter_l28_batch_a(
             } => *player == owner,
             EventData::CardUsed(u) => {
                 let (_, s1, s2, _) = bushi_suits(ctx.state, owner);
-                let c_suit = u.card.map(|c| suit_index(ctx.catalog.cards[c as usize].suit));
+                let c_suit = u
+                    .card
+                    .map(|c| suit_index(ctx.catalog.effective_card_suit(ctx.state, u.player, c)));
                 (u.player == owner && c_suit == Some(s1))
                     || (u.targets.contains(&owner) && c_suit == Some(s2))
             }
             EventData::CardResponded { card, player }
             | EventData::Equipped { card, player, .. } => {
                 let (_, s1, _, _) = bushi_suits(ctx.state, owner);
-                *player == owner && suit_index(ctx.catalog.cards[*card as usize].suit) == s1
+                *player == owner
+                    && suit_index(ctx.catalog.effective_card_suit(ctx.state, *player, *card)) == s1
             }
             _ => false,
         },
@@ -423,28 +408,25 @@ pub(in crate::content::host) fn filter_l28_batch_a(
             EventData::TurnEndWindow {
                 player,
                 after: false,
-            }
-            | EventData::TurnEnded { player }
-            | EventData::Phase {
-                player,
-                phase: Phase::End,
-                begin: false,
             } => {
                 let gt = flag(ctx.state, owner, "th_guili_target");
                 let r = ctx.state.turn.round.max(1);
-                let target_no_dmg = u32::from(*player) + 1 == gt
+                u32::from(*player) + 1 == gt
                     && flag(ctx.state, owner, "th_guili_target_first_turn") > 0
                     && flag(ctx.state, owner, "th_guili_target_dealt_damage") == 0
-                    && flag(ctx.state, owner, "th_guili_acted_round") != r;
-                let owner_extra = *player == owner
-                    && ((flag(ctx.state, owner, "th_caiyi_yang_used_turn") > 0
-                        && flag(ctx.state, owner, "th_caiyi_yin_used_turn") > 0)
-                        || flag(ctx.state, owner, "th_guili_pending_extra") > 0
-                        || flag(ctx.state, owner, "th_guili_force") > 0);
-                target_no_dmg || owner_extra
+                    && flag(ctx.state, owner, "th_guili_acted_round") != r
             }
             _ => false,
         },
+        "th_shengong" => matches!(
+            event,
+            EventData::Phase {
+                phase: Phase::End,
+                begin: true,
+                ..
+            } if flag(ctx.state, owner, "th_shengong_draw_stamp") == turn_stamp(ctx.state)
+                && flag(ctx.state, owner, "th_shengong_draw_marks") > 0
+        ),
         "shhlianhua" => match event {
             EventData::CardUsed(u) => {
                 u.targets.contains(&owner) && u.effective_kind(ctx.catalog).is_sha_like()
@@ -478,10 +460,17 @@ pub(in crate::content::host) fn filter_l28_batch_a(
                     || flag(ctx.state, owner, "th_zhengjing_boom") > 0)
         ),
         "th_chengye" => match event {
-            EventData::CardsDiscarded { player, cards } => {
+            EventData::CardsDiscarded { player, cards }
+            | EventData::CardsLost { player, cards, .. } => {
                 *player != owner
-                    && !cards.is_empty()
                     && (flag(ctx.state, owner, "th_chengye_mask") & 0x3F) != 0x3F
+                    && cards.iter().any(|&c| {
+                        ctx.state.discard.contains(&c)
+                            && ctx.catalog.cards.get(c as usize).is_some_and(|d| {
+                                l28_batch_a_ext::is_delayed_trick_kind(d.kind)
+                                    || d.kind.equip_slot().is_some()
+                            })
+                    })
             }
             EventData::Phase {
                 player,
@@ -489,7 +478,12 @@ pub(in crate::content::host) fn filter_l28_batch_a(
                 begin: true,
             } => {
                 *player == owner
-                    && (flag(ctx.state, owner, "th_chengye_liujing_count") >= 6
+                    && (ctx
+                        .state
+                        .vm_aux
+                        .piles
+                        .get(&(owner, "th_liujing".to_string()))
+                        .is_some_and(|v| v.len() >= 6)
                         || (flag(ctx.state, owner, "th_chengye_mask") & 0x3F) == 0x3F)
             }
             _ => false,
@@ -500,37 +494,11 @@ pub(in crate::content::host) fn filter_l28_batch_a(
                 if flag(ctx.state, *player, "th_yufeng_locked") > 0
                     || (*player == owner && flag(ctx.state, owner, "th_yufeng_locked_target") > 0)
         ),
-        "th_tianshu" => matches!(
-            event,
-            EventData::Phase { player, phase: Phase::Play, begin: true }
-                if *player == owner
-                    && !taipingyaoshu_in_play(ctx.state, ctx.catalog)
-                    && has_non_spade_card(ctx.state, ctx.catalog, owner)
-        ),
-        // 仅当【太平要术】本身离开装备区时触发（`extension.js:8968` `onLose`）：
-        // 失去其他装备或手牌被转移不触发失去效果。
-        "th_taipingyaoshu" => match event {
-            EventData::CardsLost {
-                player,
-                cards,
-                origins,
-            } => {
-                *player == owner
-                    && cards.iter().zip(origins.iter()).any(|(&c, o)| {
-                        *o == LostOrigin::Equip && is_taipingyaoshu(ctx.catalog, c)
-                    })
-            }
-            EventData::CardsMoved { from, to, cards } => {
-                *from == owner
-                    && from != to
-                    && cards.iter().any(|&c| {
-                        is_taipingyaoshu(ctx.catalog, c)
-                            && !ctx.state.player(owner).equips.contains(&c)
-                    })
-                    && flag(ctx.state, owner, "l28_taipingyaoshu_revoke_after_lost") > 0
-            }
-            _ => false,
-        },
+        // 【天书】由 `play_begin_tianshu` 钩子唯一驱动，不在此重复入队。
+        "th_tianshu" | "th_taipingyaoshu" => false,
+        other if l28_shengong_equips::handles_skill(other) => {
+            l28_shengong_equips::filter_shengong_equip(skill, ctx, owner, event)
+        }
         _ => false,
     }
 }
@@ -548,24 +516,17 @@ pub(in crate::content::host) fn activate_l28_batch_a(
             flag(ctx.state, owner, "th_dunshi_used_this_turn") == 0
                 && (flag(ctx.state, owner, "th_dunshi_removed_mask") & 0b1111) != 0b1111
         }
-        "th_caiyi" => caiyi_has_options(ctx.state, owner),
+        "th_caiyi" | "th_tianshu" | "th_chengye" => false,
         "th_chongxu" | "th_pingcai" | "th_zhengjing" => true,
         "th_yufeng" => flag(ctx.state, owner, "th_yufeng_turn_stamp") != turn_stamp(ctx.state),
         "miaojian" => !alive_others(ctx.state, owner).is_empty(),
-        "th_shengong" => hand_and_equips(ctx.state, owner)
-            .into_iter()
-            .any(|c| ctx.catalog.card_kind(c).equip_slot().is_some()),
+        "th_shengong" => {
+            !l28_batch_a_shengong::shengong_discardable_equips(ctx.state, ctx.catalog, owner)
+                .is_empty()
+        }
         "th_buxu" => {
             (flag(ctx.state, owner, "th_chengye_mask") & 0x3F) != 0x3F
                 && hand_and_equips(ctx.state, owner).len() >= buxu_cost(ctx.state, owner)
-        }
-        "th_tianshu" => {
-            !taipingyaoshu_in_play(ctx.state, ctx.catalog)
-                && has_non_spade_card(ctx.state, ctx.catalog, owner)
-        }
-        "th_chengye" => {
-            flag(ctx.state, owner, "th_chengye_liujing_count") >= 6
-                || (flag(ctx.state, owner, "th_chengye_mask") & 0x3F) == 0x3F
         }
         _ => false,
     };
@@ -626,31 +587,37 @@ pub(in crate::content::host) fn machine_l28_batch_a(
             phase: Phase::Play, ..
         } => target = Some(3),
         EventData::Phase {
-            player,
-            phase: Phase::End,
-            begin: false,
-        } if skill.name == "th_guili" => {
-            target = Some(*player);
-            targets.push(2);
-        }
-        EventData::Phase {
             phase: Phase::End,
             ..
         } => target = Some(5),
-        EventData::TurnEndWindow { player, .. } | EventData::TurnEnded { player }
-            if skill.name == "th_guili" =>
-        {
+        EventData::TurnEndWindow { player, .. } if skill.name == "th_guili" => {
             target = Some(*player);
             targets.push(2);
         }
         EventData::CardUsed(u) => {
             target = if skill.name == "shhlianhua" || skill.name == "th_dunshi" {
                 Some(u.player)
+            } else if skill.name == "th_bushi" {
+                u.targets.contains(&owner).then_some(owner)
+            } else if skill.name == "chixueqingfeng" || skill.name == "wutiesuolian_skill" {
+                targets = u.targets.clone();
+                Some(u.player)
             } else {
                 u.targets.first().copied()
             };
             card = u.card;
-            targets.push(u.player);
+            if targets.is_empty() {
+                targets.push(u.player);
+            }
+        }
+        EventData::ShaDodged {
+            card: c,
+            source,
+            target: t,
+        } => {
+            card = *c;
+            target = Some(*t);
+            targets.push(*source);
         }
         EventData::CardResponded { card: c, player }
         | EventData::Equipped { card: c, player, .. } => {
@@ -672,7 +639,15 @@ pub(in crate::content::host) fn machine_l28_batch_a(
             target = Some(*player);
             cards = disc.clone();
         }
-        EventData::CardsLost { cards: lost, .. } | EventData::CardsMoved { cards: lost, .. } => {
+        EventData::CardsLost {
+            player,
+            cards: lost,
+            ..
+        } => {
+            target = Some(*player);
+            cards = lost.clone();
+        }
+        EventData::CardsMoved { cards: lost, .. } => {
             cards = lost.clone();
         }
         _ => {}
@@ -691,7 +666,11 @@ pub(in crate::content::host) fn machine_l28_batch_a(
 
 pub(in crate::content::host) fn handle_l28_batch_a(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     let owner = m.owner;
-    if m.stage != HostStage::Act && ctx.answer().is_empty() {
+    if m.stage != HostStage::Act
+        && flag(ctx.core, owner, "l28_ask_id") > 0
+        && flag(ctx.core, owner, "l28_ask_id") != ASK_SHENGONG_ASSIST
+        && ctx.answer().is_empty()
+    {
         // 可取消询问被放弃：首问取消退还次数，其余阶段直接结束。
         if l28_batch_a_asks::is_first_cancellable(flag(ctx.core, owner, "l28_ask_id")) {
             refund_once_used(ctx, owner, &m.def_key);
@@ -702,7 +681,7 @@ pub(in crate::content::host) fn handle_l28_batch_a(m: &mut HostMachine, ctx: &mu
     set_flag(ctx.core, owner, &format!("th_skill:{}", m.def_key), 1);
     match m.def_key.as_str() {
         "th_dunshi" => step_th_dunshi(m, ctx),
-        "th_bushi" => step_th_bushi(m, ctx),
+        "th_bushi" => l28_batch_a_shengong::step_th_bushi(m, ctx),
         "th_zhongzhuang" => {
             set_flag(ctx.core, owner, "th_zhongzhuang_mounted", 1);
             Flow::Done
@@ -723,7 +702,7 @@ pub(in crate::content::host) fn handle_l28_batch_a(m: &mut HostMachine, ctx: &mu
             }
             Flow::Done
         }
-        "th_shengong" => l28_batch_a_asks::step_th_shengong(m, ctx),
+        "th_shengong" => l28_batch_a_shengong::step_th_shengong(m, ctx),
         "olqisi" => l28_batch_a_asks::step_olqisi(m, ctx),
         "th_pingcai" => l28_batch_a_asks::step_th_pingcai(m, ctx),
         "xinfu_pdgyingshi" => l28_batch_a_asks::step_xinfu_pdgyingshi(m, ctx),
@@ -734,17 +713,22 @@ pub(in crate::content::host) fn handle_l28_batch_a(m: &mut HostMachine, ctx: &mu
             set_flag(ctx.core, owner, &format!("th_pcaudio:{}", m.def_key), 1);
             Flow::Done
         }
-        "th_zhengjing" => l28_batch_a_asks::step_th_zhengjing(m, ctx),
+        "th_zhengjing" => l28_batch_a_ext::step_th_zhengjing(m, ctx),
         "th_zhengjing2" => l28_batch_a_asks::step_th_zhengjing2(m, ctx),
         "th_chengye" => l28_batch_a_asks::step_th_chengye(m, ctx),
-        "th_buxu" => l28_batch_a_asks::step_th_buxu(m, ctx),
+        "th_buxu" => l28_batch_a_ext::step_th_buxu(m, ctx),
         "th_yufeng" => l28_batch_a_asks::step_th_yufeng(m, ctx),
-        "th_tianshu" => l28_batch_a_asks::step_th_tianshu(m, ctx),
+        "th_tianshu" => l28_batch_a_ext::step_th_tianshu(m, ctx),
         "th_g_taipingyaoshu_ai" => {
             set_flag(ctx.core, owner, "th_g_taipingyaoshu_ai_checked", 1);
             Flow::Done
         }
-        "th_taipingyaoshu" => l28_batch_a_asks::step_th_taipingyaoshu(m, ctx),
+        "th_taipingyaoshu" => l28_batch_a_ext::step_th_taipingyaoshu(m, ctx),
+        "l28_rw_baiyin_lose" => l28_batch_a_ext::step_rw_baiyin_lose(m, ctx),
+        "l28_tianjitu_lose" => l28_shengong_equips::step_tianjitu_lose(m, ctx),
+        other if l28_shengong_equips::handles_skill(other) => {
+            l28_shengong_equips::step_shengong_equip(m, ctx)
+        }
         _ => Flow::Done,
     }
 }
@@ -871,75 +855,6 @@ fn step_th_dunshi(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             } else {
                 Flow::Done
             }
-        }
-        _ => Flow::Done,
-    }
-}
-
-fn gain_suit_card(ctx: &mut Ctx<'_>, owner: PlayerId, suit_idx: u32) {
-    if let Some(pos) = ctx
-        .core
-        .deck
-        .iter()
-        .position(|&c| suit_index(ctx.catalog.cards[c as usize].suit) == suit_idx)
-    {
-        let c = ctx.core.deck.remove(pos);
-        ctx.core.player_mut(owner).hand.push(c);
-    } else if let Some(pos) = ctx
-        .core
-        .discard
-        .iter()
-        .position(|&c| suit_index(ctx.catalog.cards[c as usize].suit) == suit_idx)
-    {
-        let c = ctx.core.discard.remove(pos);
-        ctx.core.player_mut(owner).hand.push(c);
-    } else {
-        ctx.start_draw(owner, 1);
-    }
-}
-
-fn step_th_bushi(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
-    let owner = m.owner;
-    match m.stage {
-        HostStage::Act => match m.target {
-            Some(0) if m.card.is_none() => {
-                wait_ask(m, ctx, HostStage::SelectNature, ASK_BUSHI_POSTURE)
-            }
-            Some(5) if m.card.is_none() => {
-                let (_, _, _, s3) = bushi_suits(ctx.core, owner);
-                gain_suit_card(ctx, owner, s3);
-                Flow::Done
-            }
-            _ => {
-                let (_, s1, s2, s3) = bushi_suits(ctx.core, owner);
-                let c_suit = m.card.map(|c| suit_index(ctx.catalog.cards[c as usize].suit));
-                if m.targets.first().copied() == Some(owner) && c_suit == Some(s1) {
-                    ctx.start_draw(owner, 2);
-                }
-                if m.target == Some(owner) && c_suit == Some(s2) {
-                    gain_suit_card(ctx, owner, s3);
-                }
-                Flow::Done
-            }
-        },
-        HostStage::SelectNature => {
-            let ans = ctx.answer().clone();
-            let s0 = match ans.first().copied() {
-                Some(ChoiceOption::Tag(t)) => u32::from(t) % 4,
-                _ => 0,
-            };
-            let (s1, s2, s3) = ((s0 + 1) % 4, (s0 + 2) % 4, (s0 + 3) % 4);
-            set_flag(ctx.core, owner, "th_bushi_s0", s0);
-            set_flag(ctx.core, owner, "th_bushi_s1", s1);
-            set_flag(ctx.core, owner, "th_bushi_s2", s2);
-            set_flag(ctx.core, owner, "th_bushi_s3", s3);
-            set_flag(ctx.core, owner, "th_bushi_tao", s0);
-            set_flag(ctx.core, owner, "th_bushi_sha", s1);
-            set_flag(ctx.core, owner, "th_bushi_ying", s2);
-            set_flag(ctx.core, owner, "th_bushi_zhi", s3);
-            set_flag(ctx.core, owner, "th_bushi_unlimited_suit", s0 + 1);
-            set_flag(ctx.core, owner, "th_bushi_suits_assigned", 1);
-            Flow::Done
         }
         _ => Flow::Done,
     }

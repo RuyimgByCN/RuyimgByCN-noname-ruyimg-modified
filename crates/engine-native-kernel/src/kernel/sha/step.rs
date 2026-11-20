@@ -56,20 +56,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         // 青釭剑（P2/N08 批③-b）：锁定——无视目标防具（来源装备青釭时
         // 八卦阵判定与仁王盾免疫均不生效）。铡刀（Boss 阎罗王，规则
         // v271）：上游 inherit qinggang_skill——来源持有者即穿透。
-        let qinggang_pierce = ctx
-            .core
-            .player(self.source)
-            .equips
-            .iter()
-            .any(|c| ctx.catalog.card_kind(*c) == CardKind::Qinggang)
-            || ctx
-                .catalog
-                .skill_by_name(crate::vocabulary::names::BOSS_ZHADAO)
-                .map(|def| ctx.core.has_skill(self.source, def))
-                .unwrap_or(false)
-            || ctx
-                .core
-                .ignores_target_armor(ctx.catalog, self.source, self.target, self.card, self.nature);
+        let qinggang_pierce = self.qinggang_pierces(ctx);
         // 八卦阵：受击者装备防具时，出闪询问前先做防具判定（每杀至多一次）
         // ——红桃视为已出闪（伤害免除），否则照常进入出闪询问。
         // 焚天（Boss 朱雀，规则 v236）：红色杀 directHit 无视防具
@@ -172,39 +159,23 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         };
         if !self.armor_judged {
             self.armor_judged = true;
-            let has_armor = !qinggang_pierce
+            let guilong_direct_hit =
+                crate::rvm_bridge::modifiers::d34_l28_mods::is_guilong_red_sha(
+                    ctx.core,
+                    ctx.catalog,
+                    self.source,
+                    self.card,
+                );
+            let can_bagua = !qinggang_pierce
                 && !fentian_direct_hit
                 && !yxs_fanji2_direct_hit
                 && !sbzhaxiang_direct_hit
                 && !poyue_direct_hit
                 && !shoulie_hit
                 && !lingshi_direct_hit
-                && ctx.core.player(self.target).alive
-                && ctx
-                    .core
-                    .player(self.target)
-                    .equips
-                    .iter()
-                    .any(|c| ctx.catalog.card_kind(*c) == CardKind::Armor);
-            if has_armor {
-                let judged = ctx.draw_judge_card();
-                let success = matches!(
-                    ctx.catalog.cards[judged as usize].suit,
-                    crate::catalog::Suit::Heart
-                );
-                ctx.log(LogEvent::ArmorJudged {
-                    player: self.target,
-                    card: judged,
-                    success,
-                });
-                // 判定牌判定后即弃置（八卦阵判定无获得路径）
-                ctx.to_discard(judged);
-                if success {
-                    let card = self.card;
-                    ctx.to_discard(card);
-                    ctx.core.table.retain(|c| Some(*c) != card);
-                    return Flow::Done;
-                }
+                && !guilong_direct_hit;
+            if let Some(flow) = self.try_bagua_dodge(ctx, can_bagua) {
+                return flow;
             }
         }
         if let Some(flow) = self.step_liuli(ctx) {
@@ -270,6 +241,11 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     .skill_by_name(crate::vocabulary::names::QING_GUO)
                     .map(|d| ctx.core.has_skill(next, d))
                     .unwrap_or(false);
+                let rw_lanyin_next = crate::rvm_bridge::modifiers::d34_l28_mods::has_rewritten_lanyinjia(
+                    ctx.core,
+                    ctx.catalog,
+                    next,
+                );
                 let options: Vec<ChoiceOption> = ctx
                     .core
                     .player(next)
@@ -278,7 +254,8 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     .copied()
                     .filter(|c| {
                         let kind = ctx.catalog.card_kind(*c);
-                        kind == CardKind::Shan
+                        rw_lanyin_next
+                            || kind == CardKind::Shan
                             || (qingguo_next
                                 && matches!(
                                     ctx.catalog.cards[*c as usize].suit,
@@ -347,30 +324,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             // 铁面（Boss 阎罗王，规则 v271）：防具区没有牌时视为装备
             // 仁王盾（防具槽空=不被青釭/铡刀外的牌区分；青釭穿透已在
             // !qinggang_pierce 门内天然覆盖铁面）。
-            let renwang_blocks = !qinggang_pierce && {
-                let black = self.card.is_some_and(|c| {
-                    matches!(
-                        ctx.catalog.effective_card_suit(ctx.core, self.source, c),
-                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
-                    )
-                });
-                black && {
-                    let equips = &ctx.core.player(self.target).equips;
-                    let has_renwang = equips
-                        .iter()
-                        .any(|c| ctx.catalog.card_kind(*c) == CardKind::Renwang);
-                    let tiemian_active = ctx
-                        .catalog
-                        .skill_by_name(crate::vocabulary::names::BOSS_TIEMIAN)
-                        .map(|def| ctx.core.has_skill(self.target, def))
-                        .unwrap_or(false)
-                        && !equips.iter().any(|c| {
-                            ctx.catalog.card_slot_of(ctx.core, *c)
-                                == Some(crate::catalog::EquipSlot::Armor)
-                        });
-                    has_renwang || tiemian_active
-                }
-            };
+            let renwang_blocks = self.renwang_blocks(ctx, qinggang_pierce);
             if renwang_blocks {
                 let card = self.card;
                 ctx.to_discard(card);
@@ -691,15 +645,24 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                         && ctx.core.player(self.target).baolei_mode == 1
                 })
                 .unwrap_or(false);
+            let target_can_play = !tieji_blocks
+                && !target_sentinel
+                && !ctx.catalog.blocks_all_cards(ctx.core, self.target);
+            let rw_lanyin = target_can_play
+                && crate::rvm_bridge::modifiers::d34_l28_mods::has_rewritten_lanyinjia(
+                    ctx.core,
+                    ctx.catalog,
+                    self.target,
+                );
             let mut shans: Vec<ChoiceOption> = ctx
                 .core
                 .player(self.target)
                 .hand
                 .iter()
                 .filter(|c| {
-                    !tieji_blocks && !target_sentinel && {
+                    target_can_play && {
                         let kind = ctx.catalog.card_kind(**c);
-                        kind == CardKind::Shan || (longdan && kind == CardKind::Sha)
+                        rw_lanyin || kind == CardKind::Shan || (longdan && kind == CardKind::Sha)
                     }
                 })
                 .copied()
@@ -707,16 +670,19 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 .collect();
             // 诱敌深入（G1 玩点论杀）：打出后杀无效，来源受 1 点反噬
             //（登记差异：上游为强制来源连用杀，原生简化为单次反噬）
-            for c in ctx.core.player(self.target).hand.iter().copied() {
-                if ctx.catalog.card_kind(c) == CardKind::Youdishenru {
-                    shans.push(ChoiceOption::Card(c));
-                    break;
+            if target_can_play {
+                for c in ctx.core.player(self.target).hand.iter().copied() {
+                    if ctx.catalog.card_kind(c) == CardKind::Youdishenru {
+                        shans.push(ChoiceOption::Card(c));
+                        break;
+                    }
                 }
             }
-            if qingguo && !tieji_blocks {
+            if qingguo && target_can_play {
                 for c in ctx.core.player(self.target).hand.iter().copied() {
                     let kind = ctx.catalog.card_kind(c);
-                    let already = kind == CardKind::Shan || (longdan && kind == CardKind::Sha);
+                    let already =
+                        rw_lanyin || kind == CardKind::Shan || (longdan && kind == CardKind::Sha);
                     let black = matches!(
                         ctx.catalog.effective_card_suit(ctx.core, self.target, c),
                         crate::catalog::Suit::Spade | crate::catalog::Suit::Club
@@ -726,7 +692,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     }
                 }
             }
-            if !tieji_blocks && !target_sentinel {
+            if target_can_play {
                 for &c in &ctx.core.player(self.target).hand {
                     if ctx
                         .catalog
@@ -823,11 +789,19 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             }
             // 破月 poyue2（拓跋玉儿，swd 武将面批 28）：红杀 directHit
             // ——整段跳过闪询问直接结算伤害
+            let guilong_direct_hit =
+                crate::rvm_bridge::modifiers::d34_l28_mods::is_guilong_red_sha(
+                    ctx.core,
+                    ctx.catalog,
+                    self.source,
+                    self.card,
+                );
             if poyue_direct_hit
                 || shoulie_hit
                 || lingshi_direct_hit
                 || sbzhaxiang_direct_hit
                 || yxs_fanji2_direct_hit
+                || guilong_direct_hit
             {
                 return self.emit_sha_damage(ctx);
             }

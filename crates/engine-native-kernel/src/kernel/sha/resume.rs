@@ -375,6 +375,11 @@ impl ShaResolveMachine {
                         .skill_by_name(crate::vocabulary::names::QING_GUO)
                         .map(|d| ctx.core.has_skill(self.target, d))
                         .unwrap_or(false);
+                    let rw_lanyin = crate::rvm_bridge::modifiers::d34_l28_mods::has_rewritten_lanyinjia(
+                        ctx.core,
+                        ctx.catalog,
+                        self.target,
+                    );
                     let options: Vec<ChoiceOption> = ctx
                         .core
                         .player(self.target)
@@ -387,6 +392,7 @@ impl ShaResolveMachine {
                                 crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                             );
                             kind == CardKind::Shan
+                                || rw_lanyin
                                 || (longdan && kind.is_sha_like())
                                 || (qingguo && black)
                         })

@@ -731,7 +731,13 @@ pub(super) fn play_card(
                                 .map(|def| core.has_skill(core.turn.current, def))
                                 .unwrap_or(false)
                     };
-                    if core.turn.jiu_used && !fentian_red_jiu {
+                    let bushi_unlimited = crate::rvm_bridge::modifiers::d34_l28_mods::bushi_unlimited_card(
+                        core,
+                        catalog,
+                        core.turn.current,
+                        Some(card),
+                    );
+                    if core.turn.jiu_used && !fentian_red_jiu && !bushi_unlimited {
                         return Err(RejectReason::CardLimit);
                     }
                 }

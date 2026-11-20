@@ -60,8 +60,23 @@ impl Engine {
                 });
             if !still_provided {
                 let catalog = self.catalog().clone();
-                self.state_core_mut()
-                    .remove_skill_and_r05_mark(&catalog, seat, def);
+                if self
+                    .state_core_mut()
+                    .remove_skill_and_r05_mark(&catalog, seat, def)
+                    .is_some()
+                {
+                    let returned = (catalog.hooks.on_skill_removed)(
+                        self.state_core_mut(),
+                        &catalog,
+                        seat,
+                        name,
+                    );
+                    for c in returned {
+                        if !self.state_core().discard.contains(&c) {
+                            self.state_core_mut().discard.push(c);
+                        }
+                    }
+                }
             }
         }
         let catalog = self.catalog().clone();

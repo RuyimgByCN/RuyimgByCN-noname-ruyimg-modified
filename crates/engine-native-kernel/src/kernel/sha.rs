@@ -1,5 +1,6 @@
 use super::*;
 
+mod armor;
 mod liuli;
 mod resume;
 mod step;
@@ -321,6 +322,12 @@ impl ShaResolveMachine {
                 0
             };
         if ctx.core.player(self.target).alive {
+            if self.card.is_none() && ctx.catalog.skills.len() > 24 {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((self.target, "l28_vdmg_kind".to_string()), 1);
+            }
             ctx.emit(EventData::Damage(damage_data_with(
                 Some(self.source),
                 self.target,

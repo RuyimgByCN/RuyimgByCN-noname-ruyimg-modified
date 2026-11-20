@@ -573,7 +573,8 @@ impl Engine {
         let public_action = match session.choice() {
             Some(choice @ ChoiceView::Own { .. }) => {
                 let input = session.input();
-                plan_extension_choice_action(&input).or_else(|| projected_choice_action(choice))
+                plan_extension_choice_action(self.catalog(), &input)
+                    .or_else(|| projected_choice_action(choice))
             }
             // Non-owner advice is idle; do not inspect another seat's private continuation.
             Some(ChoiceView::Other { .. }) => Some(GameAction::NextPhase),

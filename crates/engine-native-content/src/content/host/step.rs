@@ -54,6 +54,10 @@ pub(super) mod u01_batch_b;
 pub(super) mod u01_batch_c;
 pub(super) mod u01_batch_d;
 pub(super) mod l28_batch_a;
+pub(crate) use l28_batch_a::{
+    on_cards_to_discard_chengye, on_outer_settled_taipingyaoshu, on_skill_removed_l28,
+    play_begin_tianshu,
+};
 pub(super) mod l28_batch_b;
 pub(super) mod l27_batch_a;
 pub(super) mod l27_batch_b;

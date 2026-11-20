@@ -417,8 +417,15 @@ detached_cards: Vec::new(),
                 _ => 4,
             })
             .collect();
-        // 牌库 = 目录牌序，开局用规则随机流洗牌。
-        core.deck = (0..catalog.cards.len() as CardId).collect();
+        // 牌库 = 目录非虚无牌序，开局用规则随机流洗牌；off_deck 牌置入 detached_cards。
+        for cid in 0..catalog.cards.len() as CardId {
+            if catalog.cards[cid as usize].off_deck {
+                core.detached_cards
+                    .push((cid, crate::event::DetachedKind::Unclaimed));
+            } else {
+                core.deck.push(cid);
+            }
+        }
         core.rng.shuffle(&mut core.deck);
         let mut state = GameState {
             core,

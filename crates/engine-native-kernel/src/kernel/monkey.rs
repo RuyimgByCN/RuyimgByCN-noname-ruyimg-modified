@@ -354,6 +354,11 @@ impl crate::catalog::SkillMachine for MonkeyStealMachine {
                         let monkey = ctx.core.players[holder as usize].equips.remove(pos);
                         revoke_equip_skills(&mut ctx.core, ctx.catalog, holder, monkey);
                         ctx.core.discard.push(monkey);
+                        crate::rvm_bridge::modifiers::d34_l28_mods::note_pro_qinyin_discard(
+                            ctx.core,
+                            ctx.catalog,
+                            monkey,
+                        );
                         ctx.log(LogEvent::CardDiscarded {
                             player: holder,
                             cards: vec![monkey],

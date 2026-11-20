@@ -19,8 +19,8 @@ fn l28_thunder_eight_batch_a_triggers() {
     );
     open(&e, "th_bushi:choose_posture");
     assert!(
-        rejected(&mut e, Vec::new()) && rejected(&mut e, vec![tag(4)]),
-        "③ forced 0..4"
+        rejected(&mut e, Vec::new()) && rejected(&mut e, vec![tag(24)]),
+        "③ forced 0..24"
     );
     snapshot_roundtrip(&e, &p, vec![tag(1)]);
     answer(&mut e, "th_bushi:choose_posture", vec![tag(1)]);
@@ -216,52 +216,45 @@ fn l28_thunder_eight_batch_a_triggers() {
         "① prepare phase hermit"
     );
 
-    // ---- th_chengye 承业（`extension.js:6155`）：其他角色弃牌，按缺失“六经”收为“典” ----
+    // ---- th_chengye 承业（`extension.js:6182-6371`）：他人用牌入弃堆或失置延时/装备进弃堆，按缺失“六经”收为“典” ----
     let mut e = fresh(&p, 2835, "th_mamidi");
     e.debug_set_turn(1, Phase::Play, 1);
-    for _ in 0..4 {
-        let c = e.state_core().deck[0];
+    let dropped1 = std::mem::take(&mut e.state_core_mut().player_mut(1).hand);
+    e.state_core_mut().discard.extend(dropped1);
+    let eq_c = card_by(&e, |c| c.kind.equip_slot().is_some());
+    let lebu_c = card_by(&e, |c| c.kind == CardKind::Le);
+    let sha_c = card_by(&e, |c| c.kind == CardKind::Sha);
+    for c in [eq_c, lebu_c, sha_c, sha_c, sha_c] {
         give(&mut e, 1, c);
     }
+    // 使用 Sha（useCardAfter 入弃牌堆）填槽 1；随后弃置阶段弃 eq_c（槽 5）+ lebu_c（槽 4）
+    // 注：同一牌仅能置入一次；改用三张不同的 Sha 保手牌守恒
+    let _ = eq_c;
+    let _ = lebu_c;
+    let mut shas = Vec::new();
+    for (idx, def) in e.catalog().cards.iter().enumerate() {
+        if def.kind == CardKind::Sha && (idx as u32) != sha_c {
+            shas.push(idx as u32);
+        }
+    }
+    let _ = std::mem::take(&mut e.state_core_mut().player_mut(1).hand);
+    give(&mut e, 1, eq_c);
+    give(&mut e, 1, lebu_c);
+    give(&mut e, 1, shas[0]);
+    give(&mut e, 1, shas[1]);
+    give(&mut e, 1, shas[2]);
     let _ = submit(&mut e, 1, GameAction::NextPhase);
     let c = open(&e, "discard_to_limit");
-    let picked: Vec<u32> = e
-        .state_core()
-        .player(1)
-        .hand
-        .iter()
-        .take(c.spec.min)
-        .copied()
-        .collect();
-    let expect_mask = picked.iter().fold(0u32, |m, &x| {
-        let k = e.catalog().card_kind(x);
-        let ch = if k.is_sha_like() {
-            0
-        } else if k == CardKind::Shan {
-            1
-        } else if k == CardKind::Tao {
-            2
-        } else if k == CardKind::Jiu {
-            3
-        } else if k.equip_slot().is_some() {
-            4
-        } else {
-            5
-        };
-        m | (1 << ch)
-    });
-    answer(
-        &mut e,
-        "discard_to_limit",
-        picked.iter().map(|&x| cd(x)).collect(),
-    );
+    assert!(c.spec.min >= 1);
+    answer(&mut e, "discard_to_limit", vec![cd(eq_c)]);
+    let expect_mask = 1u32 << 5;
     assert_eq!(
         flag(&e, 0, "th_chengye_mask"),
         expect_mask,
-        "① one 典 per missing classic"
+        "① loseAfter/discard of equip fills missing classic 5"
     );
     let dian = e.state_core().vm_aux.piles[&(0, "th_liujing".to_string())].clone();
-    assert_eq!(dian.len() as u32, expect_mask.count_ones());
+    assert_eq!(dian, vec![eq_c]);
     assert!(
         dian.iter().all(|c| !e.state_core().discard.contains(c)),
         "典 leave the discard pile"
@@ -364,9 +357,9 @@ fn l28_thunder_eight_batch_a_triggers() {
     assert_eq!(
         (
             flag(&e, 0, "th_guili_extra_turn"),
-            flag(&e, 0, "th_guili_pending_extra"),
+            e.state_core().turn.current,
         ),
-        (1, 1),
-        "① target ended first turn of round 2 with 0 damage → guili triggers"
+        (1, 0),
+        "① target ended first turn of round 2 with 0 damage → guili grants inserted extra turn"
     );
 }

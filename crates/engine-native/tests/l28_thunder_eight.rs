@@ -137,7 +137,21 @@ fn l28_thunder_eight_dimension_acceptance() {
         .iter()
         .any(|(slot, _)| slot.ends_with("upstream-liuli/thunder")));
 
-    // ⑦ 越界速度与损坏配置拒绝
+    // ⑦ 越界速度、强化配置检验与损坏配置拒绝
+    assert!(!cfg.forbids_strength());
+    let forbid_cfg = parse_thunder_config(
+        &cfg_text.replace("\"guanning\": false", "\"guanning\": false,\n  \"strengthen_skill\": \"forbid\""),
+    )
+    .expect("parse strengthen_skill forbid");
+    assert!(forbid_cfg.forbids_strength());
+    let bad_strength = cfg_text.replace(
+        "\"guanning\": false",
+        "\"guanning\": false,\n  \"strengthen_skill\": \"unknown\"",
+    );
+    assert_eq!(
+        parse_thunder_config(&bad_strength),
+        Err(ThunderError::BadField("strengthen_skill".into()))
+    );
     let bad_speed = cfg_text.replace("\"gameSpeed\": 4", "\"gameSpeed\": 99");
     assert_eq!(
         parse_thunder_config(&bad_speed),

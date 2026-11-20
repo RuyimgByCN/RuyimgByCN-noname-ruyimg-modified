@@ -4,7 +4,10 @@ use super::*;
 use crate::choice::ChoiceOption;
 use crate::view::ChoiceView;
 
-fn public_attitude(view: &crate::view::PlayerView, seat: u8, target: u8) -> i32 {
+#[path = "extension_choices_l28.rs"]
+mod extension_choices_l28;
+
+pub(super) fn public_attitude(view: &crate::view::PlayerView, seat: u8, target: u8) -> i32 {
     if target == seat {
         return 10;
     }
@@ -24,12 +27,17 @@ fn public_attitude(view: &crate::view::PlayerView, seat: u8, target: u8) -> i32 
     }
 }
 
-fn extension_card_value(input: &crate::view::PolicyInput, card: crate::ids::CardId) -> i64 {
+pub(super) fn extension_card_value(
+    catalog: &crate::catalog::Catalog,
+    input: &crate::view::PolicyInput,
+    card: crate::ids::CardId,
+) -> i64 {
     let kind = input
         .own_hand_kinds
         .iter()
         .find(|(c, _)| *c == card)
-        .map(|(_, k)| *k);
+        .map(|(_, k)| *k)
+        .or_else(|| catalog.cards.get(card as usize).map(|d| d.kind));
     match kind {
         Some(crate::catalog::CardKind::Tao) => 80,
         Some(crate::catalog::CardKind::Jiu) | Some(crate::catalog::CardKind::Wuzhong) => 70,
@@ -40,12 +48,17 @@ fn extension_card_value(input: &crate::view::PolicyInput, card: crate::ids::Card
     }
 }
 
-pub(super) fn plan_extension_choice_action(input: &crate::view::PolicyInput) -> Option<GameAction> {
+pub(super) fn plan_extension_choice_action(
+    catalog: &crate::catalog::Catalog,
+    input: &crate::view::PolicyInput,
+) -> Option<GameAction> {
     let seat = input.view.seat;
     let Some(ChoiceView::Own {
         id,
         prompt,
         ref options,
+        min,
+        max,
         allow_cancel,
         ..
     }) = input.choice
@@ -141,7 +154,7 @@ pub(super) fn plan_extension_choice_action(input: &crate::view::PolicyInput) -> 
                     ChoiceOption::Card(c) => Some(*c),
                     _ => None,
                 })
-                .min_by_key(|&c| extension_card_value(input, c));
+                .min_by_key(|&c| extension_card_value(catalog, input, c));
             let selection = match best {
                 Some(c) => vec![ChoiceOption::Card(c)],
                 None => Vec::new(),
@@ -228,7 +241,7 @@ pub(super) fn plan_extension_choice_action(input: &crate::view::PolicyInput) -> 
                     ChoiceOption::Card(c) => Some(*c),
                     _ => None,
                 })
-                .min_by_key(|&c| extension_card_value(input, c));
+                .min_by_key(|&c| extension_card_value(catalog, input, c));
             let selection = match best {
                 Some(c) => vec![ChoiceOption::Card(c)],
                 None if options.contains(&ChoiceOption::Pass) => vec![ChoiceOption::Pass],
@@ -247,7 +260,7 @@ pub(super) fn plan_extension_choice_action(input: &crate::view::PolicyInput) -> 
                     ChoiceOption::Card(c) => Some(*c),
                     _ => None,
                 })
-                .min_by_key(|&c| extension_card_value(input, c));
+                .min_by_key(|&c| extension_card_value(catalog, input, c));
             let selection = match best {
                 Some(c) => vec![ChoiceOption::Card(c)],
                 None => options.iter().take(1).copied().collect(),
@@ -327,7 +340,7 @@ pub(super) fn plan_extension_choice_action(input: &crate::view::PolicyInput) -> 
                     ChoiceOption::Card(c) => Some(*c),
                     _ => None,
                 })
-                .min_by_key(|&c| extension_card_value(input, c));
+                .min_by_key(|&c| extension_card_value(catalog, input, c));
             let selection = match best {
                 Some(c) => vec![ChoiceOption::Card(c)],
                 None => Vec::new(),
@@ -372,7 +385,7 @@ pub(super) fn plan_extension_choice_action(input: &crate::view::PolicyInput) -> 
                     ChoiceOption::Card(c) => Some(*c),
                     _ => None,
                 })
-                .min_by_key(|&c| extension_card_value(input, c));
+                .min_by_key(|&c| extension_card_value(catalog, input, c));
             let selection = match best {
                 Some(c) => vec![ChoiceOption::Card(c)],
                 None => options.iter().take(1).copied().collect(),
@@ -452,6 +465,15 @@ pub(super) fn plan_extension_choice_action(input: &crate::view::PolicyInput) -> 
                 selection,
             })
         }
-        _ => None,
+        _ => extension_choices_l28::plan_l28_choice_action(
+            catalog,
+            input,
+            id,
+            prompt,
+            options,
+            min,
+            max,
+            allow_cancel,
+        ),
     }
 }

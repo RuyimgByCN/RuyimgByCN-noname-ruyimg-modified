@@ -508,13 +508,20 @@ pub fn lookup_upstream_host_behavior(skill_name: &str) -> Option<HostBehavior> {
         | "th_pcaudio_wolong_card" | "th_pcaudio_fengchu_card" | "th_pcaudio_shuijing_card"
         | "th_pcaudio_xuanjian_card" | "xinfu_pdgyingshi" | "th_zhengjing" | "th_zhengjing2"
         | "th_chengye" | "th_buxu" | "th_yufeng" | "th_tianshu" | "th_g_taipingyaoshu_ai"
-        | "th_taipingyaoshu" => Some(HostBehavior::L28ThunderBatchA),
+        | "th_taipingyaoshu"
+        | "wushuangfangtianji_skill" | "guilongzhanyuedao" | "chixueqingfeng"
+        | "bintieshuangji_skill" | "wutiesuolian_skill" | "wuxinghelingshan_skill"
+        | "linglongshimandai_skill" | "hongmianbaihuapao_skill" | "qimenbagua"
+        | "guofengyupao" | "huxinjing" | "heiguangkai_skill"
+        | "shufazijinguan_skill" | "xuwangzhimian" | "tianjitu_skill"
+        | "taigongyinfu_skill" | "taigongyinfu_link" | "sanlve_skill"
+        | "zhaogujing_skill" => Some(HostBehavior::L28ThunderBatchA),
         // L28 雷霆万钧 Batch B（武将 10–14）
         "th_jingxie" | "th_qiaosi" | "th_tiansuan" | "th_tiansuan2" | "th_tiansuan2_0"
         | "th_tiansuan2_1" | "th_tiansuan2_damage" | "th_tiansuan2_2" | "th_tiansuan2_ai"
         | "th_tiansuan2_fire" | "th_tiansuan2_3" | "th_tiansuan2_4" | "th_gushe" | "th_gushe2"
         | "rejici" | "th_geyuan" | "th_jieshu" | "th_gusuan" | "th_yeyan" | "th_qinyin"
-        | "th_tianming" => Some(HostBehavior::L28ThunderBatchB),
+        | "pro_qinyin" | "th_tianming" => Some(HostBehavior::L28ThunderBatchB),
         // L27 选将美化 Batch A（16 核心技能 + 3 标记/死代码桩）
         "regushe" | "kuangcai" | "sbtongye" | "baonvezhi" | "baonvezhi_mark" | "clandianzhan"
         | "rehuashen" | "rehuashen_mark" | "rexinsheng" | "taoluan" | "shouxi" | "dinghan"

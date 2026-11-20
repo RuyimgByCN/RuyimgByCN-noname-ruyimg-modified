@@ -796,6 +796,43 @@ pub(super) fn apply_damage_amount(
     d34_l25_mods::apply_damage_amount(state, catalog, source, target, card, nature, cur)
 }
 
+pub(super) fn tpys_damage_prevented(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    source: Option<PlayerId>,
+    target: PlayerId,
+    card: Option<CardId>,
+    nature: DamageNature,
+) -> bool {
+    if !matches!(nature, DamageNature::Fire | DamageNature::Thunder) {
+        return false;
+    }
+    let has_tpys = flag_val(state, target, "th_taipingyaoshu_prevent_elemental") > 0
+        || flag_val(state, target, "l28_taipingyaoshu_equipped") > 0
+        || has_ext_skill(state, catalog, target, "th_taipingyaoshu")
+        || state
+            .player(target)
+            .equips
+            .iter()
+            .any(|&c| catalog.cards.get(c as usize).is_some_and(|d| d.name == "th_taipingyaoshu"));
+    if !has_tpys || super::is_target_unequip2(state, target) {
+        return false;
+    }
+    let src_unequip = source.is_some_and(|src| {
+        super::super::eval_ignore_armor(state, catalog, src, target, card, nature)
+            || (card.is_some_and(|c| catalog.card_kind(c).is_sha_like())
+                && (state
+                    .player(src)
+                    .equips
+                    .iter()
+                    .any(|&c| catalog.card_kind(c) == CardKind::Qinggang)
+                    || catalog
+                        .skill_by_name(crate::vocabulary::names::BOSS_ZHADAO)
+                        .is_some_and(|def| state.has_skill(src, def))))
+    });
+    !src_unequip
+}
+
 pub(super) fn apply_ignore_armor(
     state: &GameStateCore,
     source: PlayerId,

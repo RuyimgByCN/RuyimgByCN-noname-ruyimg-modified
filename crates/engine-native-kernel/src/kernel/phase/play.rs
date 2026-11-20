@@ -128,4 +128,5 @@ pub(super) fn begin_play(ctx: &mut Ctx<'_>, player: PlayerId) {
             }
         }
     }
+    (ctx.catalog.hooks.play_begin_step)(ctx, player);
 }

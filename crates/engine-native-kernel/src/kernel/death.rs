@@ -95,9 +95,13 @@ impl crate::catalog::SkillMachine for DeathMachine {
                         .map(|(_, d)| *d)
                         .collect();
                     for def in removed {
+                        let name = ctx.catalog.skill_name(def);
                         ctx.core.remove_skill_and_r05_mark(ctx.catalog, self.player, def);
+                        let mut extra =
+                            (ctx.catalog.hooks.on_skill_removed)(ctx.core, ctx.catalog, self.player, name);
+                        flush_discard_with_hook(ctx, self.player, &mut extra);
                     }
-                    let leftover = {
+                    let mut leftover = {
                         let p = ctx.core.player_mut(self.player);
                         let mut leftover = std::mem::take(&mut p.hand);
                         leftover.extend(std::mem::take(&mut p.equips));
@@ -108,9 +112,7 @@ impl crate::catalog::SkillMachine for DeathMachine {
                         p.general_slots = [Some(g), None];
                         leftover
                     };
-                    for c in leftover {
-                        ctx.to_discard(c);
-                    }
+                    flush_discard_with_hook(ctx, self.player, &mut leftover);
                     crate::state::apply_general_assembly(ctx.core, ctx.catalog, self.player, 0);
                     let p = ctx.core.player_mut(self.player);
                     p.hp = p.max_hp as i32;
@@ -126,16 +128,17 @@ impl crate::catalog::SkillMachine for DeathMachine {
             .skill_by_name(crate::vocabulary::names::BOSS_HUIHUO)
             .map(|d| ctx.core.skills.contains_key(&(self.player, d)))
             .unwrap_or(false);
-        let p = ctx.core.player_mut(self.player);
-        p.alive = false;
-        p.dying = false;
-        p.hp = 0;
-        let mut leftover = std::mem::take(&mut p.hand);
-        leftover.extend(std::mem::take(&mut p.equips));
-        leftover.extend(std::mem::take(&mut p.judge));
-        for c in leftover {
-            ctx.to_discard(c);
-        }
+        let mut leftover = {
+            let p = ctx.core.player_mut(self.player);
+            p.alive = false;
+            p.dying = false;
+            p.hp = 0;
+            let mut l = std::mem::take(&mut p.hand);
+            l.extend(std::mem::take(&mut p.equips));
+            l.extend(std::mem::take(&mut p.judge));
+            l
+        };
+        flush_discard_with_hook(ctx, self.player, &mut leftover);
         // R05-F/J（§6 普通死亡四角色表）：清死者 Limit/Combs/Current 语义槽
         // 与 helper 实例；**Next 条目/值/实例/enabled 原样保留**（仅 alive
         // 门使入队/执行失效；revive 不改 enabled）。
@@ -154,10 +157,14 @@ impl crate::catalog::SkillMachine for DeathMachine {
             .map(|(_, d)| *d)
             .collect();
         for def in removed {
+            let name = ctx.catalog.skill_name(def);
             ctx.core.skills.remove(&(self.player, def));
+            let mut extra =
+                (ctx.catalog.hooks.on_skill_removed)(ctx.core, ctx.catalog, self.player, name);
+            flush_discard_with_hook(ctx, self.player, &mut extra);
             ctx.log(LogEvent::SkillToggled {
                 player: self.player,
-                skill: ctx.catalog.skill_name(def),
+                skill: name,
                 enabled: false,
             });
         }
@@ -272,7 +279,11 @@ impl crate::catalog::SkillMachine for DeathMachine {
                             cards.extend(lord_equips);
                             ctx.core.discard.extend(cards.clone());
                             if !cards.is_empty() {
-                                ctx.log(LogEvent::CardDiscarded { player: k, cards });
+                                ctx.log(LogEvent::CardDiscarded {
+                                    player: k,
+                                    cards: cards.clone(),
+                                });
+                                (ctx.catalog.hooks.on_cards_to_discard)(ctx, k, &cards, false);
                             }
                         }
                         _ => {}
@@ -302,7 +313,11 @@ impl crate::catalog::SkillMachine for DeathMachine {
                             cards.extend(killer_equips);
                             ctx.core.discard.extend(cards.clone());
                             if !cards.is_empty() {
-                                ctx.log(LogEvent::CardDiscarded { player: k, cards });
+                                ctx.log(LogEvent::CardDiscarded {
+                                    player: k,
+                                    cards: cards.clone(),
+                                });
+                                (ctx.catalog.hooks.on_cards_to_discard)(ctx, k, &cards, false);
                             }
                         }
                     }
@@ -455,5 +470,19 @@ impl crate::catalog::SkillMachine for DeathMachine {
             }
         }
         Flow::Done
+    }
+}
+
+/// 将遗留手牌/装备/判定牌（及 `onremove` 武将牌上标记牌）移入弃牌堆并触发入堆回调。
+fn flush_discard_with_hook(
+    ctx: &mut Ctx<'_>,
+    player: PlayerId,
+    cards: &mut Vec<crate::ids::CardId>,
+) {
+    for &c in cards.iter() {
+        ctx.to_discard(c);
+    }
+    if !cards.is_empty() {
+        (ctx.catalog.hooks.on_cards_to_discard)(ctx, player, cards, false);
     }
 }

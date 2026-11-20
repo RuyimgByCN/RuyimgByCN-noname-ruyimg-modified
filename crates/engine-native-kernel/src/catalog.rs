@@ -591,6 +591,8 @@ pub struct CardDef {
     pub original_source: Option<crate::vocabulary::generals::BuiltinOriginalKey>,
     /// 不可变已验证展示/语音绑定。
     pub presentation_binding: Option<std::sync::Arc<engine_api::DefinitionPresentationBinding>>,
+    /// 虚无牌标志（如【太平要术】`list: []` / 神工专属装备）：开局不洗入 `core.deck`，置于 `detached_cards`。
+    pub off_deck: bool,
 }
 
 impl CardDef {
@@ -605,6 +607,7 @@ impl CardDef {
             link_on_equip: false,
             original_source: None,
             presentation_binding: None,
+            off_deck: false,
         }
     }
 
@@ -623,7 +626,13 @@ impl CardDef {
             link_on_equip: false,
             original_source: None,
             presentation_binding: None,
+            off_deck: false,
         }
+    }
+
+    pub fn with_off_deck(mut self) -> Self {
+        self.off_deck = true;
+        self
     }
 
     pub fn with_original_source(
@@ -1027,6 +1036,24 @@ pub struct ContentHooks {
     /// 中全部 R05 helper 定义号（装载器按 `#r05:{role}` 模板派生）。内核
     /// 到期/死亡/上限回调经此识别语义槽；未装（标准目录）返回空。
     pub r05_role_defs: fn(&Catalog, &'static str) -> Vec<crate::ids::SkillDefId>,
+    /// 出牌阶段开始时钩子（phaseUseBegin 对应宿主时点，例如 `th_tianshu`）。
+    pub play_begin_step: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId),
+    /// 外层事件结算完毕回调（对应 upstream `.after` 钩子，例如 `th_taipingyaoshu`）。
+    pub on_outer_settled: fn(&mut crate::machine::Ctx<'_>),
+    /// 他人卡牌进入弃牌堆回调（例如 `th_chengye` `useCardAfter`/`loseAfter`/`phaseJudge`）。
+    pub on_cards_to_discard: fn(
+        &mut crate::machine::Ctx<'_>,
+        crate::ids::PlayerId,
+        &[crate::ids::CardId],
+        bool,
+    ),
+    /// 技能被移除/过期回调（例如 `th_chengye`/`th_zhengjing2`/`th_tiansuan2` `onremove`）。
+    pub on_skill_removed: fn(
+        &mut crate::state::GameStateCore,
+        &Catalog,
+        crate::ids::PlayerId,
+        &str,
+    ) -> Vec<crate::ids::CardId>,
 }
 
 impl ContentHooks {
@@ -1041,6 +1068,10 @@ impl ContentHooks {
         borrow_options: |_, _, _| Vec::new(),
         borrowed_owner: |_, _, _| None,
         r05_role_defs: |_, _| Vec::new(),
+        play_begin_step: |_, _| {},
+        on_outer_settled: |_| {},
+        on_cards_to_discard: |_, _, _, _| {},
+        on_skill_removed: |_, _, _, _| Vec::new(),
     };
 }
 

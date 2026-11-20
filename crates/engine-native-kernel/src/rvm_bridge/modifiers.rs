@@ -629,6 +629,8 @@ impl VmModifierRule {
 }
 
 pub mod d34_flags;
+pub mod d34_l28_mods;
+pub use d34_flags::is_target_unequip2;
 mod eval;
 pub use eval::*;
 

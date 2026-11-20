@@ -40,12 +40,35 @@ pub fn revoke_equip_skills(
             .iter()
             .any(|c| catalog.cards[*c as usize].equip_skills.contains(&name));
         if !still_provided {
+            core.skills.remove(&(player, def));
+            if name == "baiyin"
+                && crate::rvm_bridge::modifiers::d34_l28_mods::has_rewritten_baiyin_on_lose(
+                    core, catalog, player, card,
+                )
+            {
+                core.vm_aux
+                    .flags
+                    .insert((player, "l28_rw_baiyin_pending_lose".to_string()), 1);
+            }
             if name == "th_taipingyaoshu" {
                 core.vm_aux
                     .flags
-                    .insert((player, "l28_taipingyaoshu_revoke_after_lost".to_string()), 1);
-            } else {
-                core.skills.remove(&(player, def));
+                    .remove(&(player, "l28_taipingyaoshu_equipped".to_string()));
+                core.vm_aux
+                    .flags
+                    .remove(&(player, "l28_taipingyaoshu_revoke_after_lost".to_string()));
+                if core.player(player).alive
+                    && !crate::rvm_bridge::modifiers::is_target_unequip2(core, player)
+                {
+                    core.vm_aux
+                        .flags
+                        .insert((player, "l28_taipingyaoshu_pending_lose".to_string()), 1);
+                }
+            }
+            if name == "tianjitu_skill" && core.player(player).alive {
+                core.vm_aux
+                    .flags
+                    .insert((player, "l28_tianjitu_pending_lose".to_string()), 1);
             }
         }
     }
@@ -99,18 +122,7 @@ pub(super) fn commit_equip(
         revoke_equip_skills(ctx.core, ctx.catalog, player, old);
         ctx.note_cards_lost(player, &[old]);
         ctx.to_discard(old);
-        if ctx
-            .catalog
-            .cards
-            .get(old as usize)
-            .is_some_and(|cd| cd.name == "th_taipingyaoshu")
-        {
-            ctx.emit(EventData::CardsLost {
-                player,
-                cards: vec![old],
-                origins: vec![crate::event::LostOrigin::Equip],
-            });
-        }
+        (ctx.catalog.hooks.on_cards_to_discard)(ctx, player, &[old], false);
     }
     ctx.core.player_mut(player).equips.push(card);
     grant_equip_skills(ctx, player, card);

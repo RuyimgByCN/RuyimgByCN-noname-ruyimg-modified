@@ -9,6 +9,13 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-20 Batch 1.2（L28 雷霆万钧）规则修复、独立复核与本地收口（待提交／发布）
+
+- 基线 HEAD `c119a64408e9556f58c415ddd0c5eceb1f11fdf0`（已按裁决 25 发布且 exact-head CI Run `44441007755` Attempt 1 10/10 `success`，其 [CI 台账](../operations/evidence/ci-runs.md) 登记随本批一并入库）合入 `swarm/author-l28` `d50723fe23c05edfbe5fe43e6bd874c4b553a565`；版本门禁零变更（规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`），14 标准 golden 不变。
+- **队列第 1 项 Batch 1.2（L28 雷霆万钧）**：修复 `th_buxu`（按所选缺失六经类别先后搜牌堆/弃牌堆，无牌时退还发动次数）、`th_chengye`（仅他人实体牌使用与延时/装备弃牌入弃牌堆、`onremove` 退堆、`resolution.rs:831-833` 识别物理火/雷杀）、`th_tianshu`（`phaseUseBegin` 钩子、先目标后弃牌可取消、`off_deck` 取【太平要术】替装）、`th_taipingyaoshu`（`unequip2` 手限与离场门控、外层结算串行先摸 2 再 `hp>1` 失 1 血、排除八卦判定）、`th_yeyan`（仅 `strengthen_skill==forbid` 先失 3 血、先弃四花色、两目标 2+1 / 单目标 2/3 火按座次结算）、`th_shen_zhouyu`（技能表改为 `[th_yeyan, pro_qinyin]`，经 `Ctx::to_discard`/`monkey.rs`/`l28_batch_a_ext.rs` 全路径追踪同回合进弃牌堆红黑牌）、`th_bushi`（24 排列、`effective_card_suit`、多目标 `s2` 逐目标触发）、`th_caohua`（`th_caiyi`/`th_guili`）、`th_tiansuan*`/`th_gushe`、`th_jingxie`（6 牌白名单、跨席禁再强化、`rewrite_lanyinjia` 手牌当闪、青釭穿防具限杀类、按目标键存 `l28_vdmg_kind` 使强化藤甲识别虚拟杀/AOE）及 `th_shengong`（助锻 1/2/3 备选、全部 18 件 `off_deck` 专属装备技能、八卦 `ShaDodged`、黑光铠全伤害锦囊、照骨镜 `Jiedao`/`huogong`、太公阴符重铸不发弃牌、五行鹤翎扇保留物理杀）。三项低风险内核边界见[规则基准](native-rules-baseline.md)。
+- 独立复核（`571d828a-de8d-4c1a-b9cc-e06219f5006b`，三轮复审 0 FAIL，上游 `noname-liuli` 19 步真实事件探针）：21 项复查 **19 通过／2 维持简化近似**（`th_zhengjing` DOM 切水果小游戏计数抽象、`thunder.css` 纯 CSS 渲染面）；全仓清单自 `632 / 3,792 / 0` 更新为 **已复核等价 636／简化近似 3,788／缺失 0**（净 +4：`L28` `50/6/0 → 54/2/0`），整包八项签署 `0/37`。
+- 本地第五节未过滤门禁：`test_check_source_lines.py`（2 OK）、`check-source-lines.py`（9,379 文件）、`check-native-layering.py`（0）、`check_doc_line_refs.py --strict`（0 越界）、`recount_g0.py`（37/0）；三 crate **2477/0/6**、独立目录 `-D warnings` 零警告、`wasm32` check exit 0；`workspace --no-fail-fast` **7873/0/8**、`conformance` 19/19、`desktop-client` **20/0/1**；`web-client` `test` 489/0、`typecheck`、`build:native`、`smoke:native` 83/0、`check-native-wasm-cross-target.py`、`cross-target-hash.sh`、`build` 及全量 `preflight.py` 全过。详见 [Batch 1.2 证据摘要](../operations/evidence/2026-11-20-batch1-2-l28/README.md)；提交发布并登记 exact-head CI 后按队列第 1 项续做 `L29`/`U07`/`L10`/`U08`/`U01` 与自动选择条目。
+
 ### 2026-11-19 Batch 1.1（U06 欢乐卡牌 ＋ L06 wuxing）规则修复、独立复核与本地收口（待提交／发布）
 
 - 基线 HEAD `352236724b5e173cc1ff74c0fb706509129ab7a1`（含提交后 CI 登记与 Batch 1.1 全部改动，本地待提交/发布）；版本门禁零变更（规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`），14 标准 golden 不变。

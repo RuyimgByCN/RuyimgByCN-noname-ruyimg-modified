@@ -931,12 +931,16 @@ impl JudgePhaseMachine {
         ]
         .iter()
         .any(|k| ctx.catalog.skill_by_name(k).is_some_and(|def| ctx.core.has_skill(owner, def)));
+        let discard_trick = |ctx: &mut Ctx<'_>, owner: PlayerId, card: crate::ids::CardId| {
+            ctx.to_discard(card);
+            (ctx.catalog.hooks.on_cards_to_discard)(ctx, owner, &[card], false);
+        };
         match trick_kind {
             CardKind::Le => {
                 if !shenyi_voids && !suit.is_heart() {
                     ctx.core.turn.skip_play_phase = true;
                 }
-                ctx.to_discard(trick);
+                discard_trick(ctx, owner, trick);
                 if !machine_holds {
                     ctx.to_discard(judge_card);
                 }
@@ -945,14 +949,14 @@ impl JudgePhaseMachine {
                 if !shenyi_voids && !suit.is_club() {
                     ctx.core.turn.skip_draw_phase = true;
                 }
-                ctx.to_discard(trick);
+                discard_trick(ctx, owner, trick);
                 if !machine_holds {
                     ctx.to_discard(judge_card);
                 }
             }
             CardKind::HongShui => {
                 // 洪水：梅花 2–9 → 3 点雷伤（登记差异：上游未标注属性）
-                ctx.to_discard(trick);
+                discard_trick(ctx, owner, trick);
                 if !shenyi_voids && suit.is_club() && (2..=9).contains(&rank) {
                     if !machine_holds {
                         ctx.to_discard(judge_card);
@@ -976,7 +980,7 @@ impl JudgePhaseMachine {
                         crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                     )
                 {
-                    ctx.to_discard(trick);
+                    discard_trick(ctx, owner, trick);
                     ctx.emit(EventData::LoseHp {
                         player: owner,
                         amount: 1,

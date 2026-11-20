@@ -84,6 +84,29 @@ impl Engine {
     pub fn state_core(&self) -> &GameStateCore {
         &self.state.core
     }
+
+    /// 配置是否禁用强化技减负（对应上游 `localStorage.strengthen_skill == "forbid"`）。
+    pub fn set_strengthen_skill_forbid(&mut self, forbid: bool) {
+        let key = (0u8, "strengthen_skill_forbid".to_string());
+        if forbid {
+            self.state.core.vm_aux.flags.insert(key, 1);
+        } else {
+            self.state.core.vm_aux.flags.remove(&key);
+        }
+    }
+
+    pub fn strengthen_skill_forbid(&self) -> bool {
+        (0..self.state.core.players.len() as u8).any(|p| {
+            self.state
+                .core
+                .vm_aux
+                .flags
+                .get(&(p, "strengthen_skill_forbid".to_string()))
+                .copied()
+                .unwrap_or(0)
+                > 0
+        })
+    }
 }
 
 impl Engine {

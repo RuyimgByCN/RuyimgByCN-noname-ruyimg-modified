@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-20 Batch 1.2（L28 雷霆万钧）更新（待提交／发布）
+
+基线 HEAD `c119a64408e9556f58c415ddd0c5eceb1f11fdf0` 合入 `swarm/author-l28` `d50723fe23c05edfbe5fe43e6bd874c4b553a565`；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经独立复核 agent `571d828a-de8d-4c1a-b9cc-e06219f5006b` 三轮逐行对照与上游 19 步探针审查，清单更新为 **已复核等价 636／简化近似 3,788／缺失 0／上游未定义 0**（合计 4,424）：`L28 雷霆万钧` 更新为 **54 / 2 / 0**（+4：`th_buxu`、`th_tianshu`、`th_yeyan`、`cards:th_taipingyaoshu` 升为已复核等价；`th_zhengjing` 与 `thunder.css` 维持简化近似；同步完成 `th_shen_zhouyu`/`pro_qinyin`、`th_bushi`、`th_jingxie`、`th_shengong` 18 专属装备等 15 项重审通过）。队列第 1 项 L28 完成本地收口，整包八项仍 `0/37`。详见 [Batch 1.2 证据摘要](../../operations/evidence/2026-11-20-batch1-2-l28/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-19 Batch 1.1（U06 欢乐卡牌 ＋ L06 wuxing）更新（待提交／发布）
 
 基线 HEAD `352236724b5e173cc1ff74c0fb706509129ab7a1` ＋ Batch 1.1 修改；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经独立复核 agent `602b9dd3-b8e7-4e3c-81fe-b57137a6f312` 对 14 项逐行核对与上游实际探针审查，清单更新为 **已复核等价 632／简化近似 3,792／缺失 0／上游未定义 0**（合计 4,424）：`U06` **11 / 0 / 0**（+6），`L06` **2 / 1 / 0**（`_shengke`、`wuxingpan_skill` 升为已复核等价，`wuxingpan` 卡牌依 S2 固定 `1/3` vs 默认 `0.3` 差异下调为简化近似）。队列第 1 项 U06/L06 修复完成本地验收流程收口，整包八项仍 `0/37`。详见 [Batch 1.1 证据摘要](../../operations/evidence/2026-11-19-batch1-1-u06-l06/README.md) 与 [inventory_status.json](inventory_status.json)；下方 2026-11-14 及更早记录保留为历史快照。

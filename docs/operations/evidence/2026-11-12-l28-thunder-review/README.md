@@ -10,13 +10,13 @@
   - 武将特殊初始体力上限组装：`crates/engine-native-kernel/src/state/general_assembly.rs:8-65`（`th_guanning` 初始体力 `3/7`，其余 13 名 `th_*` 武将 3/3 或 4/4）
   - 宿主行为标签与元数据：`HostBehavior::L28ThunderBatchA = 555` (`"l28_thunder_batch_a"`)、`HostBehavior::L28ThunderBatchB = 556` (`"l28_thunder_batch_b"`)，见 `crates/engine-native-kernel/src/vocabulary/host/{behavior,behavior_list,keys,metadata,tag_decode,tags}.rs` 与 `crates/engine-native-kernel/src/archive/resolution.rs`
   - 技能执行与中断挂起恢复：
-    - Batch A（管宁、陆凯、曹华、孙寒华、蒲元、庞德公、郑玄、马日磾、南华老仙、太平要术）：`crates/engine-native-content/src/content/host/step/l28_batch_a.rs:1-946` + `crates/engine-native-content/src/content/host/step/l28_batch_a_asks.rs:1-847`
+    - Batch A（管宁、陆凯、曹华、孙寒华、蒲元、庞德公、郑玄、马日磾、南华老仙、太平要术）：`crates/engine-native-content/src/content/host/step/l28_batch_a.rs:1-861` + `crates/engine-native-content/src/content/host/step/l28_batch_a_asks.rs:1-653`（后续 Batch 1.2 另拆出 `step/l28_batch_a_ext.rs`、`step/l28_batch_a_shengong.rs`、`step/l28_shengong_equips.rs`）
     - Batch B（马钧、周群、王朗、刘徽、神周瑜）：`crates/engine-native-content/src/content/host/step/l28_batch_b.rs:1-613` + `crates/engine-native-content/src/content/host/step/l28_batch_b_asks.rs:1-420` + `crates/engine-native-content/src/content/host/step/l28_batch_b_gushe.rs:1-260` + `crates/engine-native-content/src/content/host/step/l28_batch_b_geyuan.rs:1-288`
   - 内核修饰器钩子（伤害修正、花色使用次数/目标无效、手牌上限与弃牌豁免、天算五签禁桃/禁酒与伤害改写、太平要术防属性伤害与势力数上限加值）：`crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_flags.rs:51-162,791-968`
   - 7 项扩展配置解析与快照恢复：`crates/content-native-loader/src/thunder.rs:1-247`（`ThunderConfig`、`ThunderTheme`、`parse_thunder_config`、`step_delay_ms`、`snapshot`/`restore`）
 - **验证测试文件**：
   - `crates/engine-native/tests/l28_thunder_eight_match.rs:1-797`
-  - `crates/engine-native/tests/l28_thunder_eight_triggers.rs:1-372`
+  - `crates/engine-native/tests/l28_thunder_eight_triggers.rs:1-365`
   - `crates/engine-native/tests/l28_thunder_eight_batch_b.rs:1-653`
   - `crates/engine-native/tests/l28_thunder_eight.rs`（`l_rounds` 8 维全生命周期验收测试）
 - **冻结版本号核对**：`ENGINE_PROTOCOL_VERSION = 333` · `RULESET_VERSION = 107` · ` STATE_SCHEMA_VERSION = 5` · `EVENT_CATALOG_VERSION = 759` · `AI_DECISION_CONTRACT_VERSION = 8`（零破坏）

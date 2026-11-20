@@ -35,7 +35,7 @@ pub(super) fn gushe_can_activate(core: &GameStateCore, owner: PlayerId) -> bool 
 }
 
 fn raosuo_marks(core: &GameStateCore, p: PlayerId) -> u32 {
-    flag(core, p, REGUSHE).max(flag(core, p, RAOSUO))
+    flag(core, p, REGUSHE)
 }
 
 pub(super) fn rejici_discard_count(core: &GameStateCore, owner: PlayerId) -> u32 {

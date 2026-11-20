@@ -630,6 +630,18 @@ pub fn run(
 
         // B) 栈顶帧推进
         let Some(top) = res.stack.last().map(|f| f.id) else {
+            if res.open_choice.is_none() && res.answer.is_none() && res.parks.is_empty() {
+                let mut ctx = Ctx {
+                    core,
+                    res,
+                    catalog,
+                    out,
+                };
+                (catalog.hooks.on_outer_settled)(&mut ctx);
+                if !res.stack.is_empty() || !res.parks.is_empty() {
+                    continue;
+                }
+            }
             return StepOutcome::Done;
         };
         let (stage, queue_len, planned, intrinsic_done) = {
@@ -735,6 +747,11 @@ pub fn run(
             }
             Stage::Done => {
                 if let Some(popped) = res.stack.pop() {
+                    if let EventData::Damage(d) = &popped.data {
+                        core.vm_aux
+                            .flags
+                            .remove(&(d.target, "l28_vdmg_kind".to_string()));
+                    }
                     if let EventData::Equipped { player, .. } = &popped.data {
                         core.vm_aux
                             .flags
@@ -760,6 +777,7 @@ pub fn run(
                                 .remove(&(p, format!("monkey_asked:{}", popped.id)));
                         }
                         for p in 0..core.players.len() as PlayerId {
+                            core.vm_aux.flags.remove(&(p, "l28_vdmg_kind".to_string()));
                             core.vm_aux
                                 .flags
                                 .remove(&(p, "xinfu_lingren_vuln_from".to_string()));
@@ -787,7 +805,68 @@ pub fn run(
                                     }
                                 }
                             }
+                            if core
+                                .vm_aux
+                                .flags
+                                .remove(&(p, format!("chixueqingfeng2_frame:{}", popped.id)))
+                                .is_some()
+                            {
+                                let prev = core
+                                    .vm_aux
+                                    .flags
+                                    .get(&(p, "chixueqingfeng2_count".to_string()))
+                                    .copied()
+                                    .unwrap_or(0);
+                                if prev <= 1 {
+                                    core.vm_aux
+                                        .flags
+                                        .remove(&(p, "chixueqingfeng2_count".to_string()));
+                                } else {
+                                    core.vm_aux
+                                        .flags
+                                        .insert((p, "chixueqingfeng2_count".to_string()), prev - 1);
+                                }
+                            }
                         }
+                        if u.use_as.is_none()
+                            || u.card.is_some_and(|c| u.use_as == Some(catalog.card_kind(c)))
+                        {
+                            if let Some(c) = u.card.filter(|id| core.discard.contains(id)) {
+                                let mut ctx = Ctx {
+                                    core,
+                                    res,
+                                    catalog,
+                                    out,
+                                };
+                                (catalog.hooks.on_cards_to_discard)(&mut ctx, u.player, &[c], true);
+                            }
+                        }
+                    }
+                    let outer_busy = res.stack.iter().any(|f| {
+                        matches!(
+                            f.kind,
+                            EventKind::Equipped
+                                | EventKind::CardUsed
+                                | EventKind::CardsLost
+                                | EventKind::CardsMoved
+                                | EventKind::CardsDiscarded
+                                | EventKind::SkillInvocation
+                                | EventKind::Damage
+                                | EventKind::LoseHp
+                        )
+                    });
+                    if !outer_busy
+                        && res.open_choice.is_none()
+                        && res.answer.is_none()
+                        && !res.parks.iter().any(|p| p.resume_depth > res.stack.len())
+                    {
+                        let mut ctx = Ctx {
+                            core,
+                            res,
+                            catalog,
+                            out,
+                        };
+                        (catalog.hooks.on_outer_settled)(&mut ctx);
                     }
                 }
             }

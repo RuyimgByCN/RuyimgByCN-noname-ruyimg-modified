@@ -1,5 +1,9 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+## 2026-11-20 Batch 1.2（L28 雷霆万钧）规则修复、独立复核与本地收口（待提交／发布）
+
+基线 HEAD `c119a64408e9556f58c415ddd0c5eceb1f11fdf0`（`44441007755` CI 10/10 `success`）合入 `swarm/author-l28` `d50723fe23c05edfbe5fe43e6bd874c4b553a565`；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。队列第 1 项 Batch 1.2 完成 `L28` 全部已知规则差异修复（`th_buxu`、`th_chengye`、`th_tianshu`、`th_taipingyaoshu`、`th_yeyan`、`th_shen_zhouyu` `pro_qinyin`、`th_bushi`、`th_caohua`、`th_tiansuan*`、`th_gushe`、`th_jingxie`、`th_shengong` + 18 件专属装备）；独立复核 `571d828a-de8d-4c1a-b9cc-e06219f5006b` 三轮核验 **19 通过／2 维持简化近似（`th_zhengjing`、`thunder.css`）／0 失败**。清单更新为 **已复核等价 636／简化近似 3,788／缺失 0**（`L28` `54/2/0`），整包八项 `0/37`。见 [Batch 1.2 证据摘要](../operations/evidence/2026-11-20-batch1-2-l28/README.md) 与 [进度主稿](native-progress.md)；队列第 1 项剩余 `L29`/`U07`/`L10`/`U08`/`U01` 与自动选择条目、队列第 2–11 项继续待做，提交发布后接续后续来源。
+
 ## 2026-11-19 Batch 1.1（U06 欢乐卡牌 ＋ L06 wuxing）规则修复、独立复核与本地收口（待提交／发布）
 
 基线 HEAD `352236724b5e173cc1ff74c0fb706509129ab7a1` ＋ Batch 1.1 代码/清单/文档修改；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。队列第 1 项 Batch 1.1 修复 `U06`（`monkey` 桃消费与 `filterInD`、`xuelunyang` 第二步取消/禁用临时技清理/`is_charlotte`、`kuwu`/`mianju`/`shoulijian`）与 `L06`（`_shengke`、`wuxingpan_skill`）；独立复核 `602b9dd3-b8e7-4e3c-81fe-b57137a6f312`（13 通过 / `wuxingpan` 卡牌依 S2 `1/3` vs `0.3` 保留简化近似）。清单更新为 **已复核等价 632／简化近似 3,792／缺失 0**（`U06` 11/0/0、`L06` 2/1/0），整包八项 `0/37`。第五节全量门禁与全量 `preflight.py` 通过，详见 [Batch 1.1 证据摘要](../operations/evidence/2026-11-19-batch1-1-u06-l06/README.md) 与 [进度主稿](native-progress.md)；队列第 1 项剩余 `L28`/`L29`/`U07`/`L10`/`U08`/`U01` 与自动选择条目、队列第 2–11 项继续待做，提交发布后接续 `L28`。

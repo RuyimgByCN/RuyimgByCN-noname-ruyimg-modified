@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "updated_at": "2026-11-19",
+  "updated_at": "2026-11-20",
   "total_items": 4424,
   "counts": {
-    "已复核等价": 632,
-    "简化近似": 3792,
+    "已复核等价": 636,
+    "简化近似": 3788,
     "缺失": 0,
     "上游未定义": 0
   },
@@ -68490,7 +68490,7 @@
       "difference": "无语义差异（群势力男将、初始体力 3/7、挂载 th_dunshi，已通过独立复核与 6 维真实事件路径测试）",
       "note": null,
       "reason": null,
-      "native": "crates/content-native-loader/src/decision34_closure.rs:243-275 + crates/engine-native-kernel/src/state/general_assembly.rs:8-39 (hp 3/max_hp 7, skill [th_dunshi])",
+      "native": "crates/content-native-loader/src/decision34_closure.rs:210-225 + crates/engine-native-kernel/src/state/general_assembly.rs:8-39 (hp 3/max_hp 7, skill [th_dunshi])",
       "diff": "无语义差异（群势力男将、初始体力 3/7、挂载 th_dunshi，已通过独立复核与 6 维真实事件路径测试）"
     },
     "L28:generals:th_lukai@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3658": {
@@ -68507,7 +68507,7 @@
       "difference": "无语义差异（吴势力男将、体力 4/4、挂载 th_bushi/th_zhongzhuang，已通过独立复核与 6 维真实事件路径测试）",
       "note": null,
       "reason": null,
-      "native": "crates/content-native-loader/src/decision34_closure.rs:243-275 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 4/4, skills [th_bushi, th_zhongzhuang])",
+      "native": "crates/content-native-loader/src/decision34_closure.rs:210-225 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 4/4, skills [th_bushi, th_zhongzhuang])",
       "diff": "无语义差异（吴势力男将、体力 4/4、挂载 th_bushi/th_zhongzhuang，已通过独立复核与 6 维真实事件路径测试）"
     },
     "L28:generals:th_caohua@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3659": {
@@ -68517,15 +68517,15 @@
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3659",
       "target": "原生规则 / `rule-vm` 包",
       "status": "已复核等价",
-      "reviewer": "l28-signoff",
-      "review_date": "2026-11-12",
+      "reviewer": "571d828a-de8d-4c1a-b9cc-e06219f5006b",
+      "review_date": "2026-11-20",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3659",
-      "test_name": "l28_thunder_eight_roster_card_and_configs + l28_thunder_eight_batch_a_triggers",
-      "difference": "已登记抽象：归离额外回合在冻结内核回合模型中以 turn.extra_phases（Prepare+Play）及 th_guili_extra_turn 表达",
-      "note": "已登记抽象：归离额外回合在冻结内核回合模型中以 turn.extra_phases（Prepare+Play）及 th_guili_extra_turn 表达",
+      "test_name": "l28_thunder_eight_roster_card_and_configs, l28_thunder_eight_batch_a_triggers, l28_reviewer_reg_caohua_shen_zhouyu",
+      "difference": "无",
+      "note": "2026-11-20 独立复核（571d828a-de8d-4c1a-b9cc-e06219f5006b，Batch 1.2 PASS）：曹华 3/3 [th_caiyi, th_guili]；th_caiyi 仅结束阶段触发及 [1,1,1,2] 选项池与强制弃牌，th_guili 由 turn_handoff 插入完整额外回合后无缝回原目标下家。",
       "reason": null,
-      "native": "crates/content-native-loader/src/decision34_closure.rs:243-275 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 3/3, skills [th_caiyi, th_guili])",
-      "diff": "已登记抽象：归离额外回合在冻结内核回合模型中以 turn.extra_phases（Prepare+Play）及 th_guili_extra_turn 表达"
+      "native": "crates/content-native-loader/src/decision34_closure.rs:210-225 + step/l28_batch_a.rs:390-419,689-690 + step/l28_batch_a_asks.rs:130-155,259-403 + crates/engine-native-kernel/src/kernel/events/turn.rs",
+      "diff": "无"
     },
     "L28:generals:th_sunhanhua@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3660": {
       "source_id": "L28",
@@ -68541,7 +68541,7 @@
       "difference": "已登记抽象：冲虚集灵接莲花 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 交互（th_chongxu:choose_action）",
       "note": "已登记抽象：冲虚集灵接莲花 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 交互（th_chongxu:choose_action）",
       "reason": null,
-      "native": "crates/content-native-loader/src/decision34_closure.rs:243-275 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 3/3, skills [th_chongxu, miaojian, shhlianhua])",
+      "native": "crates/content-native-loader/src/decision34_closure.rs:210-225 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 3/3, skills [th_chongxu, miaojian, shhlianhua])",
       "diff": "已登记抽象：冲虚集灵接莲花 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 交互（th_chongxu:choose_action）"
     },
     "L28:generals:th_puyuan@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3661": {
@@ -68558,7 +68558,7 @@
       "difference": "已登记抽象：神工打铁锻造 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 交互（th_shengong:choose_forge）",
       "note": "已登记抽象：神工打铁锻造 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 交互（th_shengong:choose_forge）",
       "reason": null,
-      "native": "crates/content-native-loader/src/decision34_closure.rs:243-275 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 4/4, skills [th_shengong, olqisi])",
+      "native": "crates/content-native-loader/src/decision34_closure.rs:210-225 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 4/4, skills [th_shengong, olqisi])",
       "diff": "已登记抽象：神工打铁锻造 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 交互（th_shengong:choose_forge）"
     },
     "L28:generals:th_pangdegong@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3662": {
@@ -68575,7 +68575,7 @@
       "difference": "已登记抽象：评才擦拭宝物 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 四宝物选择交互（th_pingcai:choose_relic）",
       "note": "已登记抽象：评才擦拭宝物 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 四宝物选择交互（th_pingcai:choose_relic）",
       "reason": null,
-      "native": "crates/content-native-loader/src/decision34_closure.rs:243-275 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 3/3, skills [th_pingcai, xinfu_pdgyingshi])",
+      "native": "crates/content-native-loader/src/decision34_closure.rs:210-225 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 3/3, skills [th_pingcai, xinfu_pdgyingshi])",
       "diff": "已登记抽象：评才擦拭宝物 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 四宝物选择交互（th_pingcai:choose_relic）"
     },
     "L28:generals:th_zhengxuan@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3663": {
@@ -68592,7 +68592,7 @@
       "difference": "已登记抽象：整经整理经典防炸弹 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 数量选择交互（th_zhengjing:choose_count）",
       "note": "已登记抽象：整经整理经典防炸弹 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 数量选择交互（th_zhengjing:choose_count）",
       "reason": null,
-      "native": "crates/content-native-loader/src/decision34_closure.rs:243-275 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 3/3, skills [th_zhengjing])",
+      "native": "crates/content-native-loader/src/decision34_closure.rs:210-225 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 3/3, skills [th_zhengjing])",
       "diff": "已登记抽象：整经整理经典防炸弹 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 数量选择交互（th_zhengjing:choose_count）"
     },
     "L28:generals:th_mamidi@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3664": {
@@ -68602,15 +68602,15 @@
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3664",
       "target": "原生规则 / `rule-vm` 包",
       "status": "已复核等价",
-      "reviewer": "l28-signoff",
-      "review_date": "2026-11-12",
+      "reviewer": "571d828a-de8d-4c1a-b9cc-e06219f5006b",
+      "review_date": "2026-11-20",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3664",
-      "test_name": "l28_thunder_eight_roster_card_and_configs + l28_thunder_eight_batch_a_active_skills + l28_thunder_eight_batch_a_triggers",
-      "difference": "无语义差异（群势力男将、体力 3/3、挂载 th_chengye/th_buxu，已通过独立复核与 6 维真实事件路径测试）",
-      "note": null,
+      "test_name": "l28_thunder_eight_roster_card_and_configs, l28_thunder_eight_batch_a_active_skills, l28_batch16_buxu_zhengjing_tianshu_taipingyaoshu_real_match, l28_reviewer_reg_tianshu_chengye_tpys, l28_chengye_liujing_ai_and_tpys_unequip2_hand_limit_real_match",
+      "difference": "无",
+      "note": "2026-11-20 独立复核（571d828a-de8d-4c1a-b9cc-e06219f5006b，Batch 1.2 PASS）：马日磾 3/3 [th_chengye, th_buxu]；补齐 th_chengye 六经类过滤（仅他人实体牌使用与延时/装备弃牌入弃牌堆，resolution.rs:831-833 识别实体火/雷杀 use_as 排除转化牌）、onremove 退堆与满六典 Phase::Play 全收。",
       "reason": null,
-      "native": "crates/content-native-loader/src/decision34_closure.rs:243-275 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 3/3, skills [th_chengye, th_buxu])",
-      "diff": "无语义差异（群势力男将、体力 3/3、挂载 th_chengye/th_buxu，已通过独立复核与 6 维真实事件路径测试）"
+      "native": "crates/content-native-loader/src/decision34_closure.rs:210-225 + crates/engine-native-kernel/src/resolution.rs:831-833 + step/l28_batch_a.rs:462-489,718 + step/l28_batch_a_asks.rs:580-606 + step/l28_batch_a_ext.rs:26-237",
+      "diff": "无"
     },
     "L28:generals:th_nanhualaoxian@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3665": {
       "source_id": "L28",
@@ -68626,7 +68626,7 @@
       "difference": "已登记抽象：御风飞行躲避障碍 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 分数选择交互（th_yufeng:choose_score）",
       "note": "已登记抽象：御风飞行躲避障碍 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 分数选择交互（th_yufeng:choose_score）",
       "reason": null,
-      "native": "crates/content-native-loader/src/decision34_closure.rs:243-275 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 3/3, skills [th_yufeng, th_tianshu])",
+      "native": "crates/content-native-loader/src/decision34_closure.rs:210-225 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 3/3, skills [th_yufeng, th_tianshu])",
       "diff": "已登记抽象：御风飞行躲避障碍 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 分数选择交互（th_yufeng:choose_score）"
     },
     "L28:generals:th_majun@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3666": {
@@ -68643,7 +68643,7 @@
       "difference": "已登记抽象：巧思水转百戏图 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 数量与处置选择交互（th_qiaosi:choose_count/choose_mode）",
       "note": "已登记抽象：巧思水转百戏图 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 数量与处置选择交互（th_qiaosi:choose_count/choose_mode）",
       "reason": null,
-      "native": "crates/content-native-loader/src/decision34_closure.rs:243-275 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 3/3, skills [th_jingxie, th_qiaosi])",
+      "native": "crates/content-native-loader/src/decision34_closure.rs:210-225 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 3/3, skills [th_jingxie, th_qiaosi])",
       "diff": "已登记抽象：巧思水转百戏图 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 数量与处置选择交互（th_qiaosi:choose_count/choose_mode）"
     },
     "L28:generals:th_zhouqun@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3667": {
@@ -68660,7 +68660,7 @@
       "difference": "已登记抽象：天算摇签抽签 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 五签选择交互（th_tiansuan:choose_lot）",
       "note": "已登记抽象：天算摇签抽签 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 五签选择交互（th_tiansuan:choose_lot）",
       "reason": null,
-      "native": "crates/content-native-loader/src/decision34_closure.rs:243-275 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 3/3, skills [th_tiansuan])",
+      "native": "crates/content-native-loader/src/decision34_closure.rs:210-225 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 3/3, skills [th_tiansuan])",
       "diff": "已登记抽象：天算摇签抽签 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 五签选择交互（th_tiansuan:choose_lot）"
     },
     "L28:generals:th_wanglang@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3668": {
@@ -68677,7 +68677,7 @@
       "difference": "无语义差异（魏势力男将、体力 3/3、挂载 th_gushe/rejici，已通过独立复核与 6 维真实事件路径测试）",
       "note": null,
       "reason": null,
-      "native": "crates/content-native-loader/src/decision34_closure.rs:243-275 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 3/3, skills [th_gushe, rejici])",
+      "native": "crates/content-native-loader/src/decision34_closure.rs:210-225 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 3/3, skills [th_gushe, rejici])",
       "diff": "无语义差异（魏势力男将、体力 3/3、挂载 th_gushe/rejici，已通过独立复核与 6 维真实事件路径测试）"
     },
     "L28:generals:th_liuhui@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3669": {
@@ -68694,7 +68694,7 @@
       "difference": "无语义差异（群势力男将、体力 4/4、挂载 th_geyuan/th_jieshu/th_gusuan，已通过独立复核与 6 维真实事件路径测试）",
       "note": null,
       "reason": null,
-      "native": "crates/content-native-loader/src/decision34_closure.rs:243-275 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 4/4, skills [th_geyuan, th_jieshu, th_gusuan])",
+      "native": "crates/content-native-loader/src/decision34_closure.rs:210-225 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 4/4, skills [th_geyuan, th_jieshu, th_gusuan])",
       "diff": "无语义差异（群势力男将、体力 4/4、挂载 th_geyuan/th_jieshu/th_gusuan，已通过独立复核与 6 维真实事件路径测试）"
     },
     "L28:generals:th_shen_zhouyu@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3670": {
@@ -68704,15 +68704,15 @@
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3670",
       "target": "原生规则 / `rule-vm` 包",
       "status": "已复核等价",
-      "reviewer": "l28-signoff",
-      "review_date": "2026-11-12",
+      "reviewer": "571d828a-de8d-4c1a-b9cc-e06219f5006b",
+      "review_date": "2026-11-20",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3670",
-      "test_name": "l28_thunder_eight_roster_card_and_configs + l28_thunder_eight_batch_b_skills",
-      "difference": "已登记抽象：业炎拖拽火焰分配 DOM 交互按裁决 40 抽象为有界 ChoiceSpec 模式与目标选择交互（th_yeyan:choose_mode/choose_target）",
-      "note": "已登记抽象：业炎拖拽火焰分配 DOM 交互按裁决 40 抽象为有界 ChoiceSpec 模式与目标选择交互（th_yeyan:choose_mode/choose_target）",
+      "test_name": "l28_thunder_eight_roster_card_and_configs, l28_thunder_eight_batch_b_skills, l28_reviewer_reg_caohua_shen_zhouyu, l28_reg_pro_qinyin_all_discard_paths, l28_reg_reviewer_round2_fixes",
+      "difference": "无",
+      "note": "2026-11-20 独立复核（571d828a-de8d-4c1a-b9cc-e06219f5006b，Batch 1.2 PASS）：技能已对齐 [th_yeyan, pro_qinyin]；经 Ctx::to_discard / monkey.rs / on_cards_to_discard_chengye 全路径追踪同回合进弃牌堆红黑牌（含转化牌/响应牌/判定牌），支持全员回/失1血及减1上限重置业炎（禁用强化时退化经典 qinyin）。",
       "reason": null,
-      "native": "crates/content-native-loader/src/decision34_closure.rs:243-275 + crates/engine-native-kernel/src/state/general_assembly.rs:8-65 (hp 4/4, skills [th_yeyan, qinyin])",
-      "diff": "已登记抽象：业炎拖拽火焰分配 DOM 交互按裁决 40 抽象为有界 ChoiceSpec 模式与目标选择交互（th_yeyan:choose_mode/choose_target）"
+      "native": "crates/content-native-loader/src/decision34_closure.rs:224 + crates/engine-native-kernel/src/machine.rs + kernel/monkey.rs + modifiers/d34_l28_mods.rs:272-296 + step/l28_batch_b_asks.rs:333-530 + crates/engine-native/src/ai/extension_choices_l28.rs",
+      "diff": "无"
     },
     "L28:skills:th_dunshi@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3783": {
       "source_id": "L28",
@@ -68738,15 +68738,15 @@
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:4203",
       "target": "原生规则 / `rule-vm` 包",
       "status": "已复核等价",
-      "reviewer": "l28-signoff",
-      "review_date": "2026-11-12",
+      "reviewer": "571d828a-de8d-4c1a-b9cc-e06219f5006b",
+      "review_date": "2026-11-20",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:4203-4387",
-      "test_name": "l28_thunder_eight_batch_a_triggers + l28_thunder_eight_dimension_acceptance",
-      "difference": "无语义差异（锁定技四花色映射：用无次数限制/用或打出摸1牌/成为目标弃1牌无效/结束阶段获1张该花色牌，准备阶段重新分配四花色，已通过独立复核与 6 维真实事件路径测试）",
-      "note": null,
+      "test_name": "l28_thunder_eight_batch_a_triggers, l28_reviewer_reg_bushi_gushe, l28_reg_th_bushi_multitarget_s2_and_effective_suit",
+      "difference": "无",
+      "note": "2026-11-20 独立复核（571d828a-de8d-4c1a-b9cc-e06219f5006b，Batch 1.2 PASS）：修复默认花色序 (0,3,2,1)、24 排列、s0 无限酒杀、effective_card_suit 判断及成为多目标 s2 牌非首位目标时按目标逐个触发获得 s3 牌。",
       "reason": null,
-      "native": "crates/engine-native-content/src/content/host/step/l28_batch_a.rs:346-400,534-558 + step/l28_batch_a_asks.rs:193-253 + crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_flags.rs:76-85,843-907",
-      "diff": "无语义差异（锁定技四花色映射：用无次数限制/用或打出摸1牌/成为目标弃1牌无效/结束阶段获1张该花色牌，准备阶段重新分配四花色，已通过独立复核与 6 维真实事件路径测试）"
+      "native": "crates/engine-native-content/src/content/host/step/l28_batch_a.rs:210-221,364-385,597-612,684 + step/l28_batch_a_asks.rs:129 + step/l28_batch_a_shengong.rs:19-118 + modifiers/d34_l28_mods.rs:109-136",
+      "diff": "无"
     },
     "L28:skills:th_zhongzhuang@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:4388": {
       "source_id": "L28",
@@ -68823,15 +68823,15 @@
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:5163",
       "target": "原生规则 / `rule-vm` 包",
       "status": "已复核等价",
-      "reviewer": "l28-signoff",
-      "review_date": "2026-11-12",
+      "reviewer": "571d828a-de8d-4c1a-b9cc-e06219f5006b",
+      "review_date": "2026-11-20",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:5163-5525",
-      "test_name": "l28_thunder_eight_batch_a_active_skills + l28_thunder_eight_dimension_acceptance",
-      "difference": "已登记抽象：神工打铁锻造 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 锻造交互（弃武器/防具/坐骑或宝物，选择完美红缎仁王盾/诸葛连弩/藤甲与置入目标，并同步触发奇思摸牌），支持中断存档恢复与 AI 决策",
-      "note": "已登记抽象：神工打铁锻造 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 锻造交互（弃武器/防具/坐骑或宝物，选择完美红缎仁王盾/诸葛连弩/藤甲与置入目标，并同步触发奇思摸牌），支持中断存档恢复与 AI 决策",
+      "test_name": "l28_thunder_eight_batch_a_active_skills, l28_reviewer_reg_jingxie_shengong, l28_reg_th_shengong_assist_1_2_3_and_roundtrip, l28_reg_th_shengong_weapons_all_6, l28_reg_th_shengong_armors_all_6, l28_reg_th_shengong_treasures_all_6, l28_reg_reviewer_round2_fixes",
+      "difference": "无",
+      "note": "2026-11-20 独立复核（571d828a-de8d-4c1a-b9cc-e06219f5006b，Batch 1.2 PASS）：补齐助锻 1/2/3 备选、全部 18 件 off-deck 专属装备技能（with_equip_skills）、八卦 ShaDodged 事件、黑光铠全伤害锦囊、照骨镜 Jiedao/huogong（虚拟 huogong 受无 CardKind 约束不开无懈窗，play_card.rs:507 物理手牌借刀预检另见基准）与太公阴符重铸不发 CardsDiscarded。",
       "reason": null,
-      "native": "crates/engine-native-content/src/content/host/step/l28_batch_a.rs:77-105 + step/l28_batch_a_asks.rs:468-595",
-      "diff": "已登记抽象：神工打铁锻造 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 锻造交互（弃武器/防具/坐骑或宝物，选择完美红缎仁王盾/诸葛连弩/藤甲与置入目标，并同步触发奇思摸牌），支持中断存档恢复与 AI 决策"
+      "native": "crates/content-native-loader/src/decision34_closure.rs:298-430 + step/l28_batch_a_shengong.rs:120-373 + step/l28_shengong_equips.rs:1-1026 + step/l28_batch_a_asks.rs:160-171 + modifiers/d34_l28_mods.rs + kernel/sha/armor.rs + kernel/tricks.rs + crates/engine-native/src/ai/extension_choices_l28.rs",
+      "diff": "无"
     },
     "L28:skills:th_pcaudio_shuijing_card@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6009": {
       "source_id": "L28",
@@ -68847,7 +68847,7 @@
       "difference": "无语义差异（评才水镜宝物子技：移动场上装备区一张牌至另一角色对应空装备栏，已通过独立复核与 6 维真实事件路径测试）",
       "note": null,
       "reason": null,
-      "native": "crates/engine-native-content/src/content/host/step/l28_batch_a.rs:107-146 + step/l28_batch_a_asks.rs:596-705",
+      "native": "crates/engine-native-content/src/content/host/step/l28_batch_a.rs:709-715 + step/l28_batch_a_asks.rs:512-563",
       "diff": "无语义差异（评才水镜宝物子技：移动场上装备区一张牌至另一角色对应空装备栏，已通过独立复核与 6 维真实事件路径测试）"
     },
     "L28:skills:th_pcaudio_xuanjian_card@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6012": {
@@ -68864,7 +68864,7 @@
       "difference": "无语义差异（评才玄剑宝物子技：令一名角色摸一张牌并回复1点体力，已通过独立复核与 6 维真实事件路径测试）",
       "note": null,
       "reason": null,
-      "native": "crates/engine-native-content/src/content/host/step/l28_batch_a.rs:107-146 + step/l28_batch_a_asks.rs:596-705",
+      "native": "crates/engine-native-content/src/content/host/step/l28_batch_a.rs:709-715 + step/l28_batch_a_asks.rs:512-563",
       "diff": "无语义差异（评才玄剑宝物子技：令一名角色摸一张牌并回复1点体力，已通过独立复核与 6 维真实事件路径测试）"
     },
     "L28:skills:th_zhengjing@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6018": {
@@ -68874,15 +68874,15 @@
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6018",
       "target": "原生规则 / `rule-vm` 包",
       "status": "简化近似",
-      "reviewer": "/root/fix_dddanzhi",
-      "review_date": "2026-11-14",
+      "reviewer": "571d828a-de8d-4c1a-b9cc-e06219f5006b",
+      "review_date": "2026-11-20",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6018-6161",
-      "test_name": "l28_thunder_eight_batch_a_active_skills + l28_thunder_eight_batch_a_triggers + l28_thunder_eight_dimension_acceptance",
-      "difference": "原生以人工0..5数量替代小游戏，固定首张作经，其余归自己；0仍添经并摸牌，不能表达任意非空子集分配。上游4案在真实filter因dcdAnim缺失阻塞，未stub或加载Spine，小游戏成功/失败/取消仅源码对照。关联th_zhengjing2未被本轮运行裁定。",
-      "note": "已登记抽象：整经整理经典防炸弹 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 整理数量与置“经”目标选择交互（th_zhengjing:choose_count/choose_target），支持中断存档恢复与 AI 决策\n2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14T03:15:48.287535+08:00 实际运行补课及独立复核：原生以人工0..5数量替代小游戏，固定首张作经，其余归自己；0仍添经并摸牌，不能表达任意非空子集分配。上游4案在真实filter因dcdAnim缺失阻塞，未stub或加载Spine，小游戏成功/失败/取消仅源码对照。关联th_zhengjing2未被本轮运行裁定。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/independent/l28/README.md。新增等价0；保留的旧等价不表示本轮全分支重新签署。",
+      "test_name": "l28_thunder_eight_batch_a_active_skills, l28_thunder_eight_batch_a_triggers, l28_batch16_buxu_zhengjing_tianshu_taipingyaoshu_real_match, l28_thunder_eight_dimension_acceptance",
+      "difference": "已修复 count=0 不添经不摸牌、亮出不重复非毒牌与先选目标后自选任意非空子集置“经”/剩余归己；切水果实时 DOM 小游戏碰撞得分及斗地主 3 张上限/概率早停在无头内核按裁决 40 抽象为 0..=5 ChoiceSpec 计数询问，维持简化近似。",
+      "note": "2026-11-20 独立复核（571d828a-de8d-4c1a-b9cc-e06219f5006b，Batch 1.2 KEEP_APPROX）：除实时 DOM 小游戏得分与斗地主概率早停按裁决 40 维持有界 ChoiceSpec 抽象外，其余分配与 0 张失败分支已对齐上游并通回归。",
       "reason": null,
-      "native": "crates/engine-native-content/src/content/host/step/l28_batch_a.rs:148-159 + step/l28_batch_a_asks.rs:706-768",
-      "diff": "原生以人工0..5数量替代小游戏，固定首张作经，其余归自己；0仍添经并摸牌，不能表达任意非空子集分配。上游4案在真实filter因dcdAnim缺失阻塞，未stub或加载Spine，小游戏成功/失败/取消仅源码对照。关联th_zhengjing2未被本轮运行裁定。"
+      "native": "crates/engine-native-content/src/content/host/step/l28_batch_a.rs:520,716 + step/l28_batch_a_asks.rs:177-184 + step/l28_batch_a_ext.rs:298-397 + crates/engine-native/src/ai/extension_choices_l28.rs",
+      "diff": "已修复 count=0 不添经不摸牌、亮出不重复非毒牌与先选目标后自选任意非空子集置“经”/剩余归己；切水果实时 DOM 小游戏碰撞得分及斗地主 3 张上限/概率早停在无头内核按裁决 40 抽象为 0..=5 ChoiceSpec 计数询问，维持简化近似。"
     },
     "L28:skills:th_zhengjing2@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6162": {
       "source_id": "L28",
@@ -68891,15 +68891,15 @@
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6162",
       "target": "原生规则 / `rule-vm` 包",
       "status": "已复核等价",
-      "reviewer": "l28-signoff",
-      "review_date": "2026-11-12",
+      "reviewer": "571d828a-de8d-4c1a-b9cc-e06219f5006b",
+      "review_date": "2026-11-20",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6162-6176",
-      "test_name": "l28_thunder_eight_batch_a_active_skills + l28_thunder_eight_batch_a_triggers + l28_thunder_eight_dimension_acceptance",
-      "difference": "无语义差异（整经准备阶段触发子技：有“经”角色在准备阶段获得所有“经”并跳过判定与摸牌阶段，已通过独立复核与 6 维真实事件路径测试）",
-      "note": null,
+      "test_name": "l28_thunder_eight_batch_a_active_skills, l28_thunder_eight_batch_a_triggers, l28_batch16_buxu_zhengjing_tianshu_taipingyaoshu_real_match, l28_thunder_eight_dimension_acceptance",
+      "difference": "无",
+      "note": "2026-11-20 独立复核（571d828a-de8d-4c1a-b9cc-e06219f5006b，Batch 1.2 PASS）：准备阶段获得武将牌上全部“经”、跳过判定与摸牌阶段并移除自身，on_skill_removed_l28 在失去技能/阵亡/换将时将剩余“经”牌置入弃牌堆。",
       "reason": null,
-      "native": "crates/engine-native-content/src/content/host/step/l28_batch_a.rs:647-663",
-      "diff": "无语义差异（整经准备阶段触发子技：有“经”角色在准备阶段获得所有“经”并跳过判定与摸牌阶段，已通过独立复核与 6 维真实事件路径测试）"
+      "native": "crates/engine-native-content/src/content/host/step/l28_batch_a.rs:456-461,717 + step/l28_batch_a_asks.rs:565-578 + step/l28_batch_a_ext.rs:41-47 + kernel/intrinsic.rs",
+      "diff": "无"
     },
     "L28:skills:th_buxu@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6372": {
       "source_id": "L28",
@@ -68907,16 +68907,16 @@
       "id": "th_buxu",
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6372",
       "target": "原生规则 / `rule-vm` 包",
-      "status": "简化近似",
-      "reviewer": "/root/fix_dddanzhi",
-      "review_date": "2026-11-14",
+      "status": "已复核等价",
+      "reviewer": "571d828a-de8d-4c1a-b9cc-e06219f5006b",
+      "review_date": "2026-11-20",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6372-6514",
-      "test_name": "l28_thunder_eight_batch_a_active_skills + l28_thunder_eight_batch_a_triggers + l28_thunder_eight_dimension_acceptance",
-      "difference": "分类按钮没有决定原生取牌类别，原生固定deck.pop并置所选类别mask，未按经类先搜牌堆再弃牌堆、搜不到退使用统计。无懈分支已用真实原牌表元组确认差异；装备/twice取得79及full初态89受非官方原牌元组夹具限制。",
-      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。\n2026-11-14T03:15:48.287535+08:00 实际运行补课及独立复核：分类按钮没有决定原生取牌类别，原生固定deck.pop并置所选类别mask，未按经类先搜牌堆再弃牌堆、搜不到退使用统计。无懈分支已用真实原牌表元组确认差异；装备/twice取得79及full初态89受非官方原牌元组夹具限制。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/independent/l28/README.md。新增等价0；保留的旧等价不表示本轮全分支重新签署。",
+      "test_name": "l28_thunder_eight_batch_a_active_skills, l28_thunder_eight_batch_a_triggers, l28_batch16_buxu_zhengjing_tianshu_taipingyaoshu_real_match, l28_thunder_eight_dimension_acceptance",
+      "difference": "无",
+      "note": "2026-11-20 独立复核（571d828a-de8d-4c1a-b9cc-e06219f5006b，Batch 1.2 PASS）：按所选缺失六经类别先牌堆后弃牌堆取牌入典，均无时不添典并退还本次发动次数（代价不退），上游DOM实时选经命中/未中回退探针及真实对局回归通过。",
       "reason": null,
-      "native": "crates/engine-native-content/src/content/host/step/l28_batch_a.rs:161-194,619-646 + step/l28_batch_a_asks.rs:769-782",
-      "diff": "分类按钮没有决定原生取牌类别，原生固定deck.pop并置所选类别mask，未按经类先搜牌堆再弃牌堆、搜不到退使用统计。无懈分支已用真实原牌表元组确认差异；装备/twice取得79及full初态89受非官方原牌元组夹具限制。"
+      "native": "crates/engine-native-content/src/content/host/step/l28_batch_a.rs:201-209,527-530,719 + step/l28_batch_a_asks.rs:185-197 + step/l28_batch_a_ext.rs:130-296 + crates/engine-native/src/ai/extension_choices_l28.rs",
+      "diff": "无"
     },
     "L28:skills:th_yufeng@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6515": {
       "source_id": "L28",
@@ -68932,7 +68932,7 @@
       "difference": "已登记抽象：御风飞行躲避障碍 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 分数与目标选择交互（0分摸1牌；1..3分令其他角色下个准备阶段判定黑跳出牌弃牌、红跳摸牌阶段，平局再判），支持中断存档恢复与 AI 决策",
       "note": "已登记抽象：御风飞行躲避障碍 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 分数与目标选择交互（0分摸1牌；1..3分令其他角色下个准备阶段判定黑跳出牌弃牌、红跳摸牌阶段，平局再判），支持中断存档恢复与 AI 决策",
       "reason": null,
-      "native": "crates/engine-native-content/src/content/host/step/l28_batch_a.rs:196-207,664-707 + step/l28_batch_a_asks.rs:783-829",
+      "native": "crates/engine-native-content/src/content/host/step/l28_batch_a.rs:491-496,521,720 + step/l28_batch_a_asks.rs:198-205,608-653",
       "diff": "已登记抽象：御风飞行躲避障碍 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 分数与目标选择交互（0分摸1牌；1..3分令其他角色下个准备阶段判定黑跳出牌弃牌、红跳摸牌阶段，平局再判），支持中断存档恢复与 AI 决策"
     },
     "L28:skills:th_tianshu@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6914": {
@@ -68941,16 +68941,16 @@
       "id": "th_tianshu",
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6914",
       "target": "原生规则 / `rule-vm` 包",
-      "status": "简化近似",
-      "reviewer": "/root/fix_dddanzhi",
-      "review_date": "2026-11-14",
+      "status": "已复核等价",
+      "reviewer": "571d828a-de8d-4c1a-b9cc-e06219f5006b",
+      "review_date": "2026-11-20",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6914-6973",
-      "test_name": "l28_thunder_eight_batch_a_triggers + l28_thunder_eight_dimension_acceptance",
-      "difference": "先扣成本再选目标改变取消边界；目录里存在定义不代表实体仍可取，直接装备跳过获得/合法用牌路径，缺牌时仅授技也非上游。",
-      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+      "test_name": "l28_thunder_eight_batch_a_triggers, l28_batch16_buxu_zhengjing_tianshu_taipingyaoshu_real_match, l28_reviewer_reg_tianshu_chengye_tpys, l28_thunder_eight_dimension_acceptance",
+      "difference": "无",
+      "note": "2026-11-20 独立复核（571d828a-de8d-4c1a-b9cc-e06219f5006b，Batch 1.2 PASS）：改为 phaseUseBegin 钩子触发（非主动技），全场 hejsx 无太平要术且自身有 he 可弃时先选目标再选弃牌（皆可无损取消），从牌堆/弃牌堆或 detached_cards 取实体交目标并在未废除栏位装备替换旧防具。",
       "reason": null,
-      "native": "crates/engine-native-content/src/content/host/step/l28_batch_a.rs:708-799",
-      "diff": "先扣成本再选目标改变取消边界；目录里存在定义不代表实体仍可取，直接装备跳过获得/合法用牌路径，缺牌时仅授技也非上游。"
+      "native": "crates/content-native-loader/src/decision34_closure.rs:294-297 + crates/engine-native-content/src/content/hooks.rs + step/l28_batch_a_ext.rs:399-485 + step/l28_batch_a_asks.rs:206-218",
+      "diff": "无"
     },
     "L28:skills:th_taipingyaoshu@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6974": {
       "source_id": "L28",
@@ -68959,15 +68959,15 @@
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6974",
       "target": "原生规则 / `rule-vm` 包",
       "status": "已复核等价",
-      "reviewer": "l28-signoff",
-      "review_date": "2026-11-12",
+      "reviewer": "571d828a-de8d-4c1a-b9cc-e06219f5006b",
+      "review_date": "2026-11-20",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6974-7028",
-      "test_name": "l28_thunder_eight_equip_and_interactions + l28_thunder_eight_dimension_acceptance",
-      "difference": "无语义差异（太平要术装备技能：防止属性伤害、手牌上限+存活势力数-1、失去装备区太平要术摸2牌且体力>1时失1体力，已通过独立复核与 6 维真实事件路径测试）",
-      "note": null,
+      "test_name": "l28_thunder_eight_equip_and_interactions, l28_batch16_buxu_zhengjing_tianshu_taipingyaoshu_real_match, l28_reviewer_reg_tianshu_chengye_tpys, l28_chengye_liujing_ai_and_tpys_unequip2_hand_limit_real_match",
+      "difference": "无",
+      "note": "2026-11-20 独立复核（571d828a-de8d-4c1a-b9cc-e06219f5006b，Batch 1.2 PASS）：装备防具技能阻止属性伤害（校验 unequip2/source unequip）、手牌上限+(存活武将势力数-1)受 unequip2 门控，离场外层结束先摸2再判 hp>1 失1血。",
       "reason": null,
-      "native": "crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_flags.rs:135-162,813-827 + crates/engine-native-content/src/content/host/step/l28_batch_a.rs:512-533 + step/l28_batch_a_asks.rs:830-847",
-      "diff": "无语义差异（太平要术装备技能：防止属性伤害、手牌上限+存活势力数-1、失去装备区太平要术摸2牌且体力>1时失1体力，已通过独立复核与 6 维真实事件路径测试）"
+      "native": "crates/engine-native-kernel/src/kernel/equipment.rs + modifiers/d34_flags.rs:136-163 + modifiers/d34_l11_mods.rs:800-834 + step/l28_batch_a_ext.rs:487-562",
+      "diff": "无"
     },
     "L28:skills:th_qiaosi@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:7030": {
       "source_id": "L28",
@@ -68993,15 +68993,15 @@
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:7429",
       "target": "原生规则 / `rule-vm` 包",
       "status": "已复核等价",
-      "reviewer": "l28-signoff",
-      "review_date": "2026-11-12",
+      "reviewer": "571d828a-de8d-4c1a-b9cc-e06219f5006b",
+      "review_date": "2026-11-20",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:7429-7805",
-      "test_name": "l28_thunder_eight_batch_b_skills + l28_thunder_eight_dimension_acceptance",
-      "difference": "无语义差异（出牌阶段强化防具/诸葛连弩并赋能巧思满额6牌，濒死时重铸防具牌将体力回复至1点，已通过独立复核与 6 维真实事件路径测试）",
-      "note": null,
+      "test_name": "l28_thunder_eight_batch_b_skills, l28_reviewer_reg_jingxie_shengong, l28_reg_th_jingxie_rewrite_lanyinjia_and_cross_seat_guard, l28_reg_reviewer_round2_fixes",
+      "difference": "无",
+      "note": "2026-11-20 独立复核（571d828a-de8d-4c1a-b9cc-e06219f5006b，Batch 1.2 PASS）：6 牌白名单、!is_jingxie_rewritten 跨席禁再强化、rewrite_lanyinjia 手牌当闪使用/打出、青釭剑穿防具限杀类与按目标键存 l28_vdmg_kind 使强化藤甲识别虚拟杀/AOE 全通过。",
       "reason": null,
-      "native": "crates/engine-native-content/src/content/host/step/l28_batch_b.rs:45-87,258-295",
-      "diff": "无语义差异（出牌阶段强化防具/诸葛连弩并赋能巧思满额6牌，濒死时重铸防具牌将体力回复至1点，已通过独立复核与 6 维真实事件路径测试）"
+      "native": "crates/engine-native-content/src/content/host/step/l28_batch_b.rs:91-127,450-487 + modifiers/d34_l28_mods.rs:40-260,297-301 + kernel/sha.rs + kernel/aoe.rs + resolution.rs",
+      "diff": "无"
     },
     "L28:skills:th_tiansuan@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:7806": {
       "source_id": "L28",
@@ -69010,15 +69010,15 @@
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:7806",
       "target": "原生规则 / `rule-vm` 包",
       "status": "已复核等价",
-      "reviewer": "l28-signoff",
-      "review_date": "2026-11-12",
+      "reviewer": "571d828a-de8d-4c1a-b9cc-e06219f5006b",
+      "review_date": "2026-11-20",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:7806-8026",
-      "test_name": "l28_thunder_eight_batch_b_skills + l28_thunder_eight_dimension_acceptance",
-      "difference": "已登记抽象：天算摇签抽签 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 五签（上上/上/中/下/下下签）与目标选择交互，下轮回合开始清除命运签，支持中断存档恢复与 AI 决策",
-      "note": "已登记抽象：天算摇签抽签 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 五签（上上/上/中/下/下下签）与目标选择交互，下轮回合开始清除命运签，支持中断存档恢复与 AI 决策",
+      "test_name": "l28_thunder_eight_batch_b_skills, l28_reviewer_reg_tiansuan",
+      "difference": "无",
+      "note": "2026-11-20 独立复核（571d828a-de8d-4c1a-b9cc-e06219f5006b，Batch 1.2 PASS）：基础签池加权复制 [0,1,1,2,2,2,3,3,4]、上上/上签取牌区规则（自己仅装备/他人手或装备）及 AI 对齐上游。",
       "reason": null,
-      "native": "crates/engine-native-content/src/content/host/step/l28_batch_b.rs:89-99,224-256 + step/l28_batch_b_asks.rs:130-264",
-      "diff": "已登记抽象：天算摇签抽签 DOM 小游戏按裁决 40 抽象为有界 ChoiceSpec 五签（上上/上/中/下/下下签）与目标选择交互，下轮回合开始清除命运签，支持中断存档恢复与 AI 决策"
+      "native": "crates/engine-native-content/src/content/host/step/l28_batch_b.rs:579-691 + step/l28_batch_b_asks.rs:148-188 + crates/engine-native/src/ai/extension_choices_l28.rs",
+      "diff": "无"
     },
     "L28:skills:th_tiansuan2@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8027": {
       "source_id": "L28",
@@ -69027,15 +69027,15 @@
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8027",
       "target": "原生规则 / `rule-vm` 包",
       "status": "已复核等价",
-      "reviewer": "l28-signoff",
-      "review_date": "2026-11-12",
+      "reviewer": "571d828a-de8d-4c1a-b9cc-e06219f5006b",
+      "review_date": "2026-11-20",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8027-8034",
-      "test_name": "l28_thunder_eight_batch_b_skills + l28_thunder_eight_dimension_acceptance",
-      "difference": "无语义差异（天算命运签主调度与标记生命周期，已通过独立复核与 6 维真实事件路径测试）",
-      "note": null,
+      "test_name": "l28_thunder_eight_batch_b_skills, l28_reviewer_reg_tiansuan",
+      "difference": "无",
+      "note": "2026-11-20 独立复核（571d828a-de8d-4c1a-b9cc-e06219f5006b，Batch 1.2 PASS）：周群下个 TurnBegin 或离场/换将/失技触发 on_skill_removed_l28 清除目标命运签及标记。",
       "reason": null,
-      "native": "crates/engine-native-content/src/content/host/step/l28_batch_b_asks.rs:172-264 + crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_flags.rs:86-114",
-      "diff": "无语义差异（天算命运签主调度与标记生命周期，已通过独立复核与 6 维真实事件路径测试）"
+      "native": "crates/engine-native-content/src/content/host/step/l28_batch_a_ext.rs:48-51 + step/l28_batch_b.rs:579-609 + kernel/death.rs + kernel/machine.rs + modifiers/d34_flags.rs",
+      "diff": "无"
     },
     "L28:skills:th_tiansuan2_0@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8035": {
       "source_id": "L28",
@@ -69044,15 +69044,15 @@
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8035",
       "target": "原生规则 / `rule-vm` 包",
       "status": "已复核等价",
-      "reviewer": "l28-signoff",
-      "review_date": "2026-11-12",
+      "reviewer": "571d828a-de8d-4c1a-b9cc-e06219f5006b",
+      "review_date": "2026-11-20",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8035-8063",
-      "test_name": "l28_thunder_eight_batch_b_skills + l28_thunder_eight_dimension_acceptance",
-      "difference": "无语义差异（天算上上签：防止受到的伤害，周群立即获得目标区域内一张牌，已通过独立复核与 6 维真实事件路径测试）",
-      "note": null,
+      "test_name": "l28_thunder_eight_batch_b_skills, l28_reviewer_reg_tiansuan",
+      "difference": "无",
+      "note": "2026-11-20 独立复核（571d828a-de8d-4c1a-b9cc-e06219f5006b，Batch 1.2 PASS）：上上签在 damageBegin4 防止所有伤害。",
       "reason": null,
-      "native": "crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_flags.rs:88-91 + crates/engine-native-content/src/content/host/step/l28_batch_b_asks.rs:212-230",
-      "diff": "无语义差异（天算上上签：防止受到的伤害，周群立即获得目标区域内一张牌，已通过独立复核与 6 维真实事件路径测试）"
+      "native": "crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_flags.rs:823-825 + step/l28_batch_b.rs:648-670",
+      "diff": "无"
     },
     "L28:skills:th_tiansuan2_1@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8064": {
       "source_id": "L28",
@@ -69061,15 +69061,15 @@
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8064",
       "target": "原生规则 / `rule-vm` 包",
       "status": "已复核等价",
-      "reviewer": "l28-signoff",
-      "review_date": "2026-11-12",
+      "reviewer": "571d828a-de8d-4c1a-b9cc-e06219f5006b",
+      "review_date": "2026-11-20",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8064-8103",
-      "test_name": "l28_thunder_eight_batch_b_skills + l28_thunder_eight_dimension_acceptance",
-      "difference": "无语义差异（天算上签：受到伤害至多为1，受到伤害后周群摸等同于伤害值的牌，已通过独立复核与 6 维真实事件路径测试）",
-      "note": null,
+      "test_name": "l28_thunder_eight_batch_b_skills, l28_reviewer_reg_tiansuan",
+      "difference": "无",
+      "note": "2026-11-20 独立复核（571d828a-de8d-4c1a-b9cc-e06219f5006b，Batch 1.2 PASS）：上签在 apply_damage_begin3 之后将 >1 伤害封顶为 1 并由 th_tiansuan2_damage 摸等量牌。",
       "reason": null,
-      "native": "crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_flags.rs:92-97 + crates/engine-native-content/src/content/host/step/l28_batch_b.rs:297-318",
-      "diff": "无语义差异（天算上签：受到伤害至多为1，受到伤害后周群摸等同于伤害值的牌，已通过独立复核与 6 维真实事件路径测试）"
+      "native": "crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_flags.rs:826-833 + step/l28_batch_b.rs:237-240,414-419",
+      "diff": "无"
     },
     "L28:skills:th_tiansuan2_damage@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8104": {
       "source_id": "L28",
@@ -69146,15 +69146,15 @@
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8157",
       "target": "原生规则 / `rule-vm` 包",
       "status": "已复核等价",
-      "reviewer": "l28-signoff",
-      "review_date": "2026-11-12",
+      "reviewer": "571d828a-de8d-4c1a-b9cc-e06219f5006b",
+      "review_date": "2026-11-20",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8157-8182",
-      "test_name": "l28_thunder_eight_batch_b_skills + l28_thunder_eight_dimension_acceptance",
-      "difference": "无语义差异（天算下签：受到的伤害+1且不能使用【桃】，已通过独立复核与 6 维真实事件路径测试）",
-      "note": null,
+      "test_name": "l28_thunder_eight_batch_b_skills, l28_reviewer_reg_tiansuan",
+      "difference": "无",
+      "note": "2026-11-20 独立复核（571d828a-de8d-4c1a-b9cc-e06219f5006b，Batch 1.2 PASS）：下签在 damageBegin3 +1 伤害（先于 damageBegin4 封顶/防止，且无额外火伤）并禁桃。",
       "reason": null,
-      "native": "crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_flags.rs:105-109,908-935",
-      "diff": "无语义差异（天算下签：受到的伤害+1且不能使用【桃】，已通过独立复核与 6 维真实事件路径测试）"
+      "native": "crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_l28_mods.rs:83-107 + modifiers/d34_flags.rs:640-650",
+      "diff": "无"
     },
     "L28:skills:th_tiansuan2_4@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8183": {
       "source_id": "L28",
@@ -69180,15 +69180,15 @@
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8219",
       "target": "原生规则 / `rule-vm` 包",
       "status": "已复核等价",
-      "reviewer": "l28-signoff",
-      "review_date": "2026-11-12",
+      "reviewer": "571d828a-de8d-4c1a-b9cc-e06219f5006b",
+      "review_date": "2026-11-20",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8219-8377",
-      "test_name": "l28_thunder_eight_batch_b_skills + l28_thunder_eight_dimension_acceptance",
-      "difference": "无语义差异（鼓舌：饶舌标记<7时与至多3名角色拼点，没赢角色选弃1牌或令王朗摸1牌，王朗没赢获1饶舌且满7个阵亡，连带激词拼点牌点数+X与额外发动，已通过独立复核与 6 维真实事件路径测试）",
-      "note": null,
+      "test_name": "l28_thunder_eight_batch_b_skills, l28_reviewer_reg_bushi_gushe",
+      "difference": "无",
+      "note": "2026-11-20 独立复核（571d828a-de8d-4c1a-b9cc-e06219f5006b，Batch 1.2 PASS）：饶舌标记与 rejici 严格隔离、拼点目标上限 3、座次排序及 >=7 阵亡均与上游一致。",
       "reason": null,
       "native": "crates/engine-native-content/src/content/host/step/l28_batch_b_gushe.rs:9-260",
-      "diff": "无语义差异（鼓舌：饶舌标记<7时与至多3名角色拼点，没赢角色选弃1牌或令王朗摸1牌，王朗没赢获1饶舌且满7个阵亡，连带激词拼点牌点数+X与额外发动，已通过独立复核与 6 维真实事件路径测试）"
+      "diff": "无"
     },
     "L28:skills:th_gushe2@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8378": {
       "source_id": "L28",
@@ -69264,16 +69264,16 @@
       "id": "th_yeyan",
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8636",
       "target": "原生规则 / `rule-vm` 包",
-      "status": "简化近似",
-      "reviewer": "/root/fix_dddanzhi",
-      "review_date": "2026-11-14",
+      "status": "已复核等价",
+      "reviewer": "571d828a-de8d-4c1a-b9cc-e06219f5006b",
+      "review_date": "2026-11-20",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8636-8926",
-      "test_name": "l28_thunder_eight_batch_b_skills + l28_thunder_eight_dimension_acceptance",
-      "difference": "实际伤害顺序倒转，大业炎3血费用在原生晚于伤害；上游默认getStrength配置不付3血，原生无对应配置且总付。上游实际可只分配两火，原生单目标大模式固定3火而无同命令。业炎四费用0/7/21/24均有真实原牌表元组；未推断濒死/连环等组合已验收。",
-      "note": "已登记抽象：业炎拖拽火焰分配 DOM 交互按裁决 40 抽象为有界 ChoiceSpec 模式与目标选择（1点直伤或弃4花色手牌并失3体力造成2/3点火焰伤害，連带琴音弃牌阶段弃>=2牌令全场回1血或失1血），支持中断存档恢复与 AI 决策\n2026-11-14T03:15:48.287535+08:00 实际运行补课及独立复核：实际伤害顺序倒转，大业炎3血费用在原生晚于伤害；上游默认getStrength配置不付3血，原生无对应配置且总付。上游实际可只分配两火，原生单目标大模式固定3火而无同命令。业炎四费用0/7/21/24均有真实原牌表元组；未推断濒死/连环等组合已验收。 证据 docs/operations/evidence/2026-11-14-queue1-runtime/independent/l28/README.md。新增等价0；保留的旧等价不表示本轮全分支重新签署。",
+      "test_name": "l28_thunder_eight_batch_b_skills, l28_reviewer_reg_caohua_shen_zhouyu, l28_thunder_eight_dimension_acceptance",
+      "difference": "无",
+      "note": "2026-11-20 独立复核（571d828a-de8d-4c1a-b9cc-e06219f5006b，Batch 1.2 PASS）：拖拽分配界面抽象为多步有界询问（小业炎/大业炎单目标2或3火/两目标2+1），仅在 strengthen_skill==forbid 时于弃4不同花色手牌后先失3体力，再按座次依次结算火焰伤害。",
       "reason": "实际伤害顺序倒转，大业炎3血费用在原生晚于伤害；上游默认getStrength配置不付3血，原生无对应配置且总付。上游实际可只分配两火，原生单目标大模式固定3火而无同命令。业炎四费用0/7/21/24均有真实原牌表元组；未推断濒死/连环等组合已验收。",
-      "native": "crates/engine-native-content/src/content/host/step/l28_batch_b.rs:116-143 + step/l28_batch_b_asks.rs:266-420",
-      "diff": "实际伤害顺序倒转，大业炎3血费用在原生晚于伤害；上游默认getStrength配置不付3血，原生无对应配置且总付。上游实际可只分配两火，原生单目标大模式固定3火而无同命令。业炎四费用0/7/21/24均有真实原牌表元组；未推断濒死/连环等组合已验收。"
+      "native": "crates/engine-native-content/src/content/host/step/l28_batch_b.rs:174,323,435 + step/l28_batch_b_asks.rs:86-102,210-237,333-335,368-530 + crates/engine-native/src/ai/extension_choices_l28.rs",
+      "diff": "无"
     },
     "L28:cards:th_taipingyaoshu@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8968": {
       "source_id": "L28",
@@ -69281,16 +69281,16 @@
       "id": "th_taipingyaoshu",
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8968",
       "target": "原生规则 / `rule-vm` 包",
-      "status": "简化近似",
-      "reviewer": "/root/fix_dddanzhi",
-      "review_date": "2026-11-14",
+      "status": "已复核等价",
+      "reviewer": "571d828a-de8d-4c1a-b9cc-e06219f5006b",
+      "review_date": "2026-11-20",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8968-9016",
-      "test_name": "l28_thunder_eight_roster_card_and_configs + l28_thunder_eight_equip_and_interactions + l28_thunder_eight_dimension_acceptance",
-      "difference": "上游在外层事件after结算，原生按失牌事件直接推进；unequip2免离场效果的条件本次未在过滤中见到。",
-      "note": "2026-11-14 队列1补课：/root/fix_dddanzhi独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。已确认差异，撤回/维持简化近似；尚未修复的分支继续待做。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+      "test_name": "l28_thunder_eight_roster_card_and_configs, l28_thunder_eight_equip_and_interactions, l28_batch16_buxu_zhengjing_tianshu_taipingyaoshu_real_match, l28_reviewer_reg_tianshu_chengye_tpys, l28_chengye_liujing_ai_and_tpys_unequip2_hand_limit_real_match",
+      "difference": "无",
+      "note": "2026-11-20 独立复核（571d828a-de8d-4c1a-b9cc-e06219f5006b，Batch 1.2 PASS）：红桃3 off-deck 防具；已补齐 unequip2 免手限/免离场门控、外层结算完毕串行先摸2再判 hp>1 失1血及排除八卦判定（is_bagua_armor），上游探针与回归全通过。",
       "reason": null,
-      "native": "crates/content-native-loader/src/decision34_closure.rs:277-301 + crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_flags.rs:135-162,813-827 + crates/engine-native-content/src/content/host/step/l28_batch_a.rs:512-533 + step/l28_batch_a_asks.rs:830-847",
-      "diff": "上游在外层事件after结算，原生按失牌事件直接推进；unequip2免离场效果的条件本次未在过滤中见到。"
+      "native": "crates/content-native-loader/src/decision34_closure.rs:290-297 + crates/engine-native-kernel/src/kernel/equipment.rs + modifiers/d34_flags.rs:136-163 + modifiers/d34_l11_mods.rs:800-834 + step/l28_batch_a_ext.rs:487-562",
+      "diff": "无"
     },
     "L28:configs:gameSpeed@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9068": {
       "source_id": "L28",
@@ -69333,15 +69333,15 @@
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9085",
       "target": "原生规则（`crates/content-native-loader/src/thunder.rs`）",
       "status": "已复核等价",
-      "reviewer": "l28-signoff",
-      "review_date": "2026-11-12",
+      "reviewer": "571d828a-de8d-4c1a-b9cc-e06219f5006b",
+      "review_date": "2026-11-20",
       "upstream_file_line": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9085-9088",
-      "test_name": "l28_thunder_eight_roster_card_and_configs + l28_thunder_eight_dimension_acceptance",
-      "difference": "上游条目语义：删除/隐藏扩展角色包的选择列表，同时保留角色技能供其他场景使用。 待核验消费链建议，单凭静态未找到调用不据此下调：属于目录可见性，不是无规则技能；开关未消费，包隐藏行为未接通。",
-      "note": "2026-11-14 队列1补课：/root/repair_doc_refs独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。保留历史状态及原复核人/日期，不是本轮新增等价签署。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+      "test_name": "l28_thunder_eight_roster_card_and_configs, l28_thunder_eight_dimension_acceptance",
+      "difference": "无",
+      "note": "2026-11-20 独立复核（571d828a-de8d-4c1a-b9cc-e06219f5006b，Batch 1.2 PASS）：默认 true、配置解析与 hides_exclusive_pack() 完整（UI 武将包过滤消费归界面层，无对局规则影响）。",
       "reason": null,
-      "native": "crates/content-native-loader/src/thunder.rs:35-246 (ThunderConfig::hide_pack)",
-      "diff": "上游条目语义：删除/隐藏扩展角色包的选择列表，同时保留角色技能供其他场景使用。 待核验消费链建议，单凭静态未找到调用不据此下调：属于目录可见性，不是无规则技能；开关未消费，包隐藏行为未接通。"
+      "native": "crates/content-native-loader/src/thunder.rs:62,156,201-204 (ThunderConfig::hide_pack)",
+      "diff": "无"
     },
     "L28:configs:UIItroduc@archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:9091": {
       "source_id": "L28",
@@ -69418,12 +69418,12 @@
       "upstream_ref": "archive/upstream/noname-liuli/noname/extension/雷霆万钧/thunder.css:1-1522",
       "target": "原生前端组件",
       "status": "简化近似",
-      "reviewer": null,
-      "review_date": null,
+      "reviewer": "571d828a-de8d-4c1a-b9cc-e06219f5006b",
+      "review_date": "2026-11-20",
       "upstream_file_line": null,
       "test_name": null,
       "difference": "上游条目语义：小游戏、选牌/立绘对话框、进度条与 th-* 动画样式。 无规则效果；当前仅状态示意，小游戏与主题外观尚未对照。",
-      "note": "2026-11-14 队列1补课：/root/repair_doc_refs独立源码审查；具体记录 docs/operations/evidence/2026-11-13-queue1-review/。保留历史状态及原复核人/日期，不是本轮新增等价签署。静态审查与主agent的运行对照分列；本批新增等价签署0。",
+      "note": "2026-11-20 独立复核（571d828a-de8d-4c1a-b9cc-e06219f5006b，Batch 1.2 KEEP_APPROX）：纯前端小游戏、选牌对话框、进度条与 th-* 动画样式表，无对局规则逻辑，维持简化近似并归属执行队列第 5 项界面阶段。",
       "reason": null,
       "diff": "上游条目语义：小游戏、选牌/立绘对话框、进度条与 th-* 动画样式。 无规则效果；当前仅状态示意，小游戏与主题外观尚未对照。"
     },
