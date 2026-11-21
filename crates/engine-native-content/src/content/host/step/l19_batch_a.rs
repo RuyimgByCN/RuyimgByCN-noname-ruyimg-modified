@@ -24,6 +24,8 @@ pub(in crate::content::host) use l19_batch_a_asks::ask_l19_batch_a;
 pub(super) const ASK_GANRAN2_EQUIP: u32 = 10;
 pub(super) const ASK_HUZHU_DISCARD_TAO: u32 = 20;
 pub(super) const ASK_HUZHU_TARGET: u32 = 21;
+pub(super) const ASK_WUJIN_RE1_CONFIRM: u32 = 22;
+pub(super) const ASK_WUJIN_RE2_SKILL: u32 = 23;
 
 pub(super) fn flag(core: &GameStateCore, p: PlayerId, key: &str) -> u32 {
     core.vm_aux
@@ -41,8 +43,10 @@ pub(super) fn set_flag(core: &mut GameStateCore, p: PlayerId, key: &str, val: u3
     }
 }
 
-pub(super) fn turn_stamp(core: &GameStateCore) -> u32 {
-    (core.turn.round.max(1) << 8) | u32::from(core.turn.current)
+pub(super) fn huzhu_play_stamp(core: &GameStateCore, owner: PlayerId) -> u32 {
+    ((core.turn.round.max(1) & 0xFFFF) << 16)
+        | (u32::from(owner) << 8)
+        | (flag(core, owner, "_huzhu_play_seq") & 0xFF)
 }
 
 pub(super) fn player_role(core: &GameStateCore, p: PlayerId) -> Option<Role> {
@@ -78,12 +82,6 @@ pub(super) fn grant_skill_named(ctx: &mut Ctx<'_>, p: PlayerId, name: &str) -> O
         return Some(def);
     }
     None
-}
-
-pub(super) fn remove_skill_named(ctx: &mut Ctx<'_>, p: PlayerId, name: &str) {
-    if let Some(def) = ctx.catalog.skill_by_name(name) {
-        ctx.core.skills.remove(&(p, def));
-    }
 }
 
 pub(super) fn grant_zombie_skills(ctx: &mut Ctx<'_>, p: PlayerId, is_fz: bool) {
@@ -161,6 +159,11 @@ pub(super) fn tao_hand_cards(
         .collect()
 }
 
+pub(super) fn is_huzhu_human(core: &GameStateCore, p: PlayerId) -> bool {
+    matches!(player_role(core, p), Some(Role::Lord | Role::Loyalist))
+        && flag(core, p, "zombie_role") == 0
+}
+
 pub(super) fn huzhu_allies(
     core: &GameStateCore,
     catalog: &Catalog,
@@ -172,21 +175,59 @@ pub(super) fn huzhu_allies(
             p != owner
                 && core.player(p).alive
                 && core.player(p).hp < core.player(p).max_hp as i32
-                && flag(core, p, "zombie_role") == 0
-                && !matches!(player_role(core, p), Some(Role::Rebel | Role::Traitor))
+                && is_huzhu_human(core, p)
                 && core.computed_distance(catalog, owner, p) <= 1
         })
         .collect()
 }
 
+fn find_lord_seat(core: &GameStateCore) -> Option<PlayerId> {
+    (0..core.players.len() as PlayerId).find(|&p| {
+        core.player(p).alive
+            && (player_role(core, p) == Some(Role::Lord) || flag(core, p, "is_zhu") == 1)
+    })
+}
+
+fn tuizhi_of(core: &GameStateCore, p: PlayerId) -> u32 {
+    flag(core, p, "_tuizhi").max(flag(core, p, "l19_tuizhi_turns"))
+}
+
+fn jiangshi2_prob_num_den(core: &GameStateCore, owner: PlayerId) -> Option<(PlayerId, i64, i64)> {
+    if !core.player(owner).alive
+        || flag(core, owner, "_jiangshi2_transformed") != 0
+        || tuizhi_of(core, owner) != 0
+    {
+        return None;
+    }
+    let zhu = find_lord_seat(core)?;
+    if owner == zhu || tuizhi_of(core, zhu) != 2 {
+        return None;
+    }
+    let alive = core.alive_players().count() as i64;
+    if !(2..=18).contains(&alive) {
+        return None;
+    }
+    let mult = if alive <= 6 {
+        1i64
+    } else if alive <= 12 {
+        2
+    } else {
+        3
+    };
+    let prob_base = flag(core, zhu, "jisuangailv").max(flag(core, zhu, "l19_jisuangailv")) as i64;
+    let fzjs_cnt = flag(core, zhu, "fzjsNumber").max(flag(core, zhu, "fzjs_number")) as i64;
+    let den = alive - 1;
+    let num = prob_base * mult - fzjs_cnt * den;
+    (num > 0).then_some((zhu, num, den))
+}
+
 fn current_tuizhi(core: &GameStateCore, owner: PlayerId) -> u32 {
-    let direct = flag(core, owner, "_tuizhi").max(flag(core, owner, "l19_tuizhi_turns"));
+    let direct = tuizhi_of(core, owner);
     if direct > 0 {
         return direct;
     }
-    (0..core.players.len() as PlayerId)
-        .find(|&p| player_role(core, p) == Some(Role::Lord))
-        .map(|z| flag(core, z, "_tuizhi").max(flag(core, z, "l19_tuizhi_turns")))
+    find_lord_seat(core)
+        .map(|z| tuizhi_of(core, z))
         .unwrap_or(0)
 }
 
@@ -223,14 +264,8 @@ pub(in crate::content::host) fn trigger_meta_l19_batch_a(name: &str) -> Option<T
     }
 }
 
-pub(in crate::content::host) fn limits_l19_batch_a(name: &str) -> SkillLimits {
-    match name {
-        "_huzhu" => SkillLimits {
-            once_per_turn: true,
-            ..Default::default()
-        },
-        _ => SkillLimits::default(),
-    }
+pub(in crate::content::host) fn limits_l19_batch_a(_name: &str) -> SkillLimits {
+    SkillLimits::default()
 }
 
 pub(in crate::content::host) fn filter_l19_batch_a(
@@ -257,25 +292,7 @@ pub(in crate::content::host) fn filter_l19_batch_a(
             } => *player == owner,
             _ => false,
         },
-        "ganran2" => matches!(
-            event,
-            EventData::Phase {
-                player,
-                phase: Phase::Play,
-                begin: true,
-            } if *player == owner && !equip_hand_cards(ctx.state, ctx.catalog, owner).is_empty()
-        ),
-        "_huzhu" => matches!(
-            event,
-            EventData::Phase {
-                player,
-                phase: Phase::Play,
-                begin: true,
-            } if *player == owner
-                && flag(ctx.state, owner, "_huzhu_used_stamp") != turn_stamp(ctx.state)
-                && !tao_hand_cards(ctx.state, ctx.catalog, owner).is_empty()
-                && !huzhu_allies(ctx.state, ctx.catalog, owner).is_empty()
-        ),
+        "ganran2" | "_huzhu" => false,
         "_jisuangailv" => matches!(
             event,
             EventData::TurnBegin { .. } if flag(ctx.state, owner, "_jisuangailv_init") == 0
@@ -298,14 +315,8 @@ pub(in crate::content::host) fn filter_l19_batch_a(
         ),
         "_jiangshi2" => matches!(
             event,
-            EventData::Phase {
-                player,
-                phase: Phase::Prepare,
-                begin: true,
-            } if *player == owner
-                && flag(ctx.state, owner, "_jiangshi2_transformed") == 0
-                && flag(ctx.state, owner, "zombie_role") == 0
-                && current_tuizhi(ctx.state, owner) == 2
+            EventData::TurnBegin { player }
+                if *player == owner && jiangshi2_prob_num_den(ctx.state, owner).is_some()
         ),
         "_jiangshi4" => match event {
             EventData::Dying { player, .. } | EventData::Death { player, .. } => {
@@ -319,9 +330,15 @@ pub(in crate::content::host) fn filter_l19_batch_a(
             _ => false,
         },
         "_jiangshi" => match event {
-            EventData::Dying { player, .. } | EventData::Death { player, .. } => {
+            EventData::Dying { player, .. } => {
                 *player == owner
                     && ctx.state.player(owner).hp <= 0
+                    && flag(ctx.state, owner, "_jiangshi_infected") == 0
+                    && flag(ctx.state, owner, "_jiangshi_transformed") == 0
+                    && flag(ctx.state, owner, "zombie_role") == 0
+            }
+            EventData::Death { player, .. } => {
+                *player == owner
                     && flag(ctx.state, owner, "_jiangshi_infected") == 0
                     && flag(ctx.state, owner, "_jiangshi_transformed") == 0
                     && flag(ctx.state, owner, "zombie_role") == 0
@@ -345,16 +362,19 @@ pub(in crate::content::host) fn filter_l19_batch_a(
                 killer: Some(k),
             } if *k == owner && *player != owner
         ),
-        "_wujinmoshiRE" | "wujinmoshiRE1" | "wujinmoshiRE2" => matches!(
-            event,
-            EventData::Dying { player, .. }
-                if *player == owner
-                    && ctx.state.player(owner).hp <= 0
-                    && (has_skill_named(ctx.state, ctx.catalog, owner, "wujinmoshiRE1")
-                        || flag(ctx.state, owner, "wujinmoshiRE1") > 0
-                        || has_skill_named(ctx.state, ctx.catalog, owner, "wujinmoshiRE2")
-                        || flag(ctx.state, owner, "wujinmoshiRE2") > 0)
-        ),
+        "_wujinmoshiRE" => match event {
+            EventData::Death { player: victim, .. } => {
+                let victim = *victim;
+                if victim == owner {
+                    true
+                } else {
+                    owner == 0
+                        && !has_skill_named(ctx.state, ctx.catalog, victim, "_wujinmoshiRE")
+                }
+            }
+            _ => false,
+        },
+        "wujinmoshiRE1" | "wujinmoshiRE2" => false,
         "_wujinmoshiDamage" | "_wujinmoshiDamageE" => matches!(
             event,
             EventData::Damage(d) if !d.prevented && d.amount > 0 && d.source == Some(owner)
@@ -367,15 +387,7 @@ pub(in crate::content::host) fn filter_l19_batch_a(
                 begin: true,
             } if *player == owner
         ),
-        "_wujinmoshiRecover" | "_wujinmoshiRecoverE" => matches!(
-            event,
-            EventData::Phase {
-                player,
-                phase: Phase::End,
-                begin: true,
-            } if *player == owner
-                && ctx.state.player(owner).hp < ctx.state.player(owner).max_hp as i32
-        ),
+        "_wujinmoshiRecover" | "_wujinmoshiRecoverE" => false,
         _ => false,
     }
 }
@@ -389,9 +401,9 @@ pub(in crate::content::host) fn activate_l19_batch_a(
         return None;
     }
     let can_activate = match skill.name.as_str() {
-        "ganran2" => !equip_hand_cards(ctx.state, ctx.catalog, owner).is_empty(),
         "_huzhu" => {
-            flag(ctx.state, owner, "_huzhu_used_stamp") != turn_stamp(ctx.state)
+            is_huzhu_human(ctx.state, owner)
+                && flag(ctx.state, owner, "_huzhu_used_stamp") != huzhu_play_stamp(ctx.state, owner)
                 && !tao_hand_cards(ctx.state, ctx.catalog, owner).is_empty()
                 && !huzhu_allies(ctx.state, ctx.catalog, owner).is_empty()
         }
@@ -452,6 +464,9 @@ pub(in crate::content::host) fn handle_l19_batch_a(
     let owner = m.owner;
     let ask_id = flag(ctx.core, owner, "l19_ask_id");
     if m.stage != HostStage::Act && ctx.answer().is_empty() {
+        if m.def_key == "_wujinmoshiRE" && ask_id == ASK_WUJIN_RE1_CONFIRM {
+            set_flag(ctx.core, 0, "_wujinmoshiRE1_declined", 1);
+        }
         if l19_batch_a_asks::is_first_cancellable(ask_id) {
             refund_once_used(ctx, owner, &m.def_key);
         }
@@ -496,22 +511,40 @@ pub(in crate::content::host) fn handle_l19_batch_a(
             Flow::Done
         }
         "_jiangshi" => {
-            if ctx.core.player(owner).hp <= 0 && flag(ctx.core, owner, "_jiangshi_infected") == 0 {
+            let on_death = ctx
+                .res
+                .stack
+                .last()
+                .is_some_and(|f| matches!(f.data, EventData::Death { .. }));
+            if (ctx.core.player(owner).hp <= 0 || on_death)
+                && flag(ctx.core, owner, "_jiangshi_infected") == 0
+            {
                 l19_batch_a_asks::transform_player_into_zombie(ctx, owner, m.target);
             }
             Flow::Done
         }
         "_jiangshi2" => {
-            if flag(ctx.core, owner, "_jiangshi2_transformed") == 0
-                && current_tuizhi(ctx.core, owner) == 2
-            {
-                ctx.core.player_mut(owner).max_hp += 5;
-                ctx.recover(owner, 3, None);
-                set_player_role(ctx.core, owner, Role::Rebel);
-                grant_zombie_skills(ctx, owner, true);
-                set_flag(ctx.core, owner, "_jiangshi2_transformed", 1);
-                set_flag(ctx.core, owner, "_jiangshi_infected", 1);
-                set_flag(ctx.core, owner, "zombie_role", 1);
+            if let Some((zhu, num, den)) = jiangshi2_prob_num_den(ctx.core, owner) {
+                let pass = if num >= den {
+                    true
+                } else {
+                    (ctx.core.rng.gen_range(den as u32) as i64) < num
+                };
+                if pass {
+                    set_player_role(ctx.core, owner, Role::Loyalist);
+                    set_flag(ctx.core, owner, "_jiangshi_force_nj", 0);
+                    set_flag(ctx.core, owner, "_jiangshi_force_fz", 1);
+                    let next_cnt = flag(ctx.core, zhu, "fzjsNumber")
+                        .max(flag(ctx.core, zhu, "fzjs_number"))
+                        + 1;
+                    set_flag(ctx.core, zhu, "fzjs_number", next_cnt);
+                    set_flag(ctx.core, zhu, "fzjsNumber", next_cnt);
+                    set_flag(ctx.core, owner, "_jiangshi2_transformed", 1);
+                    ctx.emit(EventData::Death {
+                        player: owner,
+                        killer: None,
+                    });
+                }
             }
             Flow::Done
         }
@@ -583,14 +616,9 @@ pub(in crate::content::host) fn handle_l19_batch_a(
             set_flag(ctx.core, owner, "_wujinmoshiDraw_drawn", bonus);
             Flow::Done
         }
-        "_wujinmoshiRecover" | "_wujinmoshiRecoverE" => {
-            if ctx.core.player(owner).hp < ctx.core.player(owner).max_hp as i32 {
-                let bonus = flag(ctx.core, owner, "wujin_recover_bonus")
-                    .max(flag(ctx.core, owner, "l19_wujin_recover_bonus"))
-                    .max(1);
-                ctx.recover(owner, bonus, None);
-                set_flag(ctx.core, owner, "_wujinmoshiRecover_healed", bonus);
-            }
+        "_wujinmoshiRecover" | "_wujinmoshiRecoverE" => Flow::Done,
+        s if super::l19_fixes::chance_identity_step(s).is_some() => {
+            super::l19_fixes::execute_chance_identity(ctx.core, owner, s);
             Flow::Done
         }
         _ => Flow::Done,

@@ -128,15 +128,16 @@ impl crate::catalog::SkillMachine for DeathMachine {
             .skill_by_name(crate::vocabulary::names::BOSS_HUIHUO)
             .map(|d| ctx.core.skills.contains_key(&(self.player, d)))
             .unwrap_or(false);
-        let mut leftover = {
+        let (mut leftover, taken_equips) = {
             let p = ctx.core.player_mut(self.player);
             p.alive = false;
             p.dying = false;
             p.hp = 0;
             let mut l = std::mem::take(&mut p.hand);
-            l.extend(std::mem::take(&mut p.equips));
+            let taken_equips = std::mem::take(&mut p.equips);
+            l.extend(taken_equips.iter().copied());
             l.extend(std::mem::take(&mut p.judge));
-            l
+            (l, taken_equips)
         };
         flush_discard_with_hook(ctx, self.player, &mut leftover);
         // R05-F/J（§6 普通死亡四角色表）：清死者 Limit/Combs/Current 语义槽
@@ -148,25 +149,31 @@ impl crate::catalog::SkillMachine for DeathMachine {
                 ctx.core.skills.remove(&(self.player, def));
             }
         }
-        let next_defs = (ctx.catalog.hooks.r05_role_defs)(ctx.catalog, "next");
-        let removed: Vec<crate::ids::SkillDefId> = ctx
-            .core
-            .skills
-            .keys()
-            .filter(|(o, d)| *o == self.player && !next_defs.contains(d))
-            .map(|(_, d)| *d)
-            .collect();
-        for def in removed {
-            let name = ctx.catalog.skill_name(def);
-            ctx.core.skills.remove(&(self.player, def));
-            let mut extra =
-                (ctx.catalog.hooks.on_skill_removed)(ctx.core, ctx.catalog, self.player, name);
-            flush_discard_with_hook(ctx, self.player, &mut extra);
-            ctx.log(LogEvent::SkillToggled {
-                player: self.player,
-                skill: name,
-                enabled: false,
-            });
+        if !(ctx.catalog.hooks.preserves_skills_on_death)(ctx.core, ctx.catalog, self.player) {
+            let next_defs = (ctx.catalog.hooks.r05_role_defs)(ctx.catalog, "next");
+            let removed: Vec<crate::ids::SkillDefId> = ctx
+                .core
+                .skills
+                .keys()
+                .filter(|(o, d)| *o == self.player && !next_defs.contains(d))
+                .map(|(_, d)| *d)
+                .collect();
+            for def in removed {
+                let name = ctx.catalog.skill_name(def);
+                ctx.core.skills.remove(&(self.player, def));
+                let mut extra =
+                    (ctx.catalog.hooks.on_skill_removed)(ctx.core, ctx.catalog, self.player, name);
+                flush_discard_with_hook(ctx, self.player, &mut extra);
+                ctx.log(LogEvent::SkillToggled {
+                    player: self.player,
+                    skill: name,
+                    enabled: false,
+                });
+            }
+        } else {
+            for eq in taken_equips {
+                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.player, eq);
+            }
         }
         ctx.log(LogEvent::PlayerDied {
             player: self.player,

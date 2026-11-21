@@ -2,7 +2,7 @@
 //! - ① 正常跑通：经真实 `Engine::submit` + `GameAction::{PlayCard, ActivateSkill, Answer, NextPhase}` 覆盖全部 69 项；
 //! - ② 可取消选择点选取消/跳过：`ganran2`、`_huzhu`、`_yuanqiskill` 首步空选取消不消耗次数/状态；
 //! - ③ 非法目标/非法牌/数量不足拒绝：`ganran2` 非装备牌、`_huzhu` 非【桃】/满血/超距/僵尸目标、`_yuanqiskill` 越界下标均返回 `Rejected` 且状态哈希不变；
-//! - ④ 条件不满足/每回合限一次达上限：`_huzhu` 与 `_yuanqiskill` 同回合二次发动被拒、经验不足 100 禁选模式 0、`zhu` 体力上限 `<= 3` 时 `_zhongzhubuff` 不触发、`human - zombie + 2 <= 0` 时 `zaibian` 摸 0 张；
+//! - ④ 条件不满足/每阶段·每回合限一次达上限：`_huzhu`（每出牌阶段限一次）与 `_yuanqiskill`（每回合限一次）达上限二次发动被拒、经验不足 100 禁选模式 0、`zhu` 体力上限 `<= 3` 时 `_zhongzhubuff` 不触发、`human - zombie + 2 <= 0` 时 `zaibian` 摸 0 张；
 //! - ⑤ 多技能同场联动与被动修正：`baozou` 无限出【杀】、`ganran` 手牌装备锁视作【铁索连环】、`_wujinmoshiDamage`/`_wujinmoshiMaxHandCard` 增伤与手牌上限、`_tamodeskill` 防指定、`_guanmodeskill` 免翻面与免延时锦囊；
 //! - ⑥ 中途询问存档恢复：`ganran2`、`_huzhu`（两阶段）、`_yuanqiskill`（三分支）在 `WaitingForChoice` 窗口下 `encode_archive` + `decode_archive` 恢复后续跑状态哈希完全一致。
 
@@ -23,7 +23,7 @@ use engine_native::content::host::{HostBehavior, HostSkillDecl};
 use engine_native::content::standard::Gender;
 use engine_native::event::{DamageNature, Phase};
 use engine_native::rvm_bridge::modifiers::eval_sha_use_limit;
-use engine_native::state::{GameMode, Role};
+use engine_native::state::{GameMode, KingdomIdentity, Role};
 use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, OpenChoice};
 
 static DEDUP: AtomicU64 = AtomicU64::new(1_900_000);
@@ -307,17 +307,36 @@ fn l19_generals_config_and_66_skills_catalog_inventory() {
     assert!(JIANGSHINJ_SKILLS.iter().all(|sk| has_skill(&e, 1, sk)));
 
     let stubs = [
-        "chanceIdentity", "chanceIdentity0", "chanceIdentity2", "chanceIdentity3",
-        "chanceIdentity4", "chanceIdentity5", "chanceIdentity6", "chanceIdentity7",
-        "chanceIdentity8", "chanceIdentity9", "chanceIdentity10", "chanceIdentity11",
-        "chanceIdentity12", "chanceIdentity13", "chanceIdentity14", "chanceIdentity15",
-        "_jiangshiTx", "_jiangshiTx2", "_jiangshiTx3", "_keepideskill",
+        "_jiangshiTx",
+        "_jiangshiTx2",
+        "_jiangshiTx3",
+        "_keepideskill",
+        "chanceIdentity",
+        "chanceIdentity0",
+        "chanceIdentity2",
+        "chanceIdentity3",
+        "chanceIdentity4",
+        "chanceIdentity5",
+        "chanceIdentity6",
+        "chanceIdentity7",
+        "chanceIdentity8",
+        "chanceIdentity9",
+        "chanceIdentity10",
+        "chanceIdentity11",
+        "chanceIdentity12",
+        "chanceIdentity13",
+        "chanceIdentity14",
+        "chanceIdentity15",
     ];
     assert_eq!(stubs.len(), 20);
+    e.state_core_mut().mode = GameMode::Kingdoms;
     for st in stubs {
         e.debug_grant(0, st);
-        assert!(is_rejected(&activate(&mut e, 0, st)));
+        assert!(is_rejected(&activate(&mut e, 0, st)), "{st} must reject Play-phase ActivateSkill");
     }
+    drain(&mut e);
+    assert_eq!(e.state_core().player(0).kingdom_identity, KingdomIdentity::Unknown);
+    assert_eq!(e.state_core().player(1).kingdom_identity, KingdomIdentity::Unknown);
 }
 
 #[test]
@@ -369,9 +388,8 @@ fn l19_dedicated_zaibian_shishi_xunmeng_six_dimensions() {
 fn l19_batch_a_interactive_ganran2_and_huzhu_six_dimensions() {
     let p = pack();
 
-    // A. ganran2 + ganran + baozou across dimensions ①②③④⑤⑥
+    // A. ganran2 (commented enable / no trigger) + ganran + baozou
     let mut e = fresh(&p, 1904, &[&["baozou", "ganran", "ganran2"], &[], &[], &[]]);
-    // ④ Condition not met: no equip card in hand -> ActivateSkill rejected
     let sha1 = give_kind(&mut e, 0, CardKind::Sha);
     assert!(is_rejected(&activate(&mut e, 0, "ganran2")));
 
@@ -380,26 +398,13 @@ fn l19_batch_a_interactive_ganran2_and_huzhu_six_dimensions() {
     give(&mut e, 0, eq1);
     give(&mut e, 0, eq2);
 
-    // ② Cancel/Pass on "ganran2:choose_equip" leaves state & cards unconsumed
-    let _ = activate(&mut e, 0, "ganran2");
-    assert!(open(&e, "ganran2:choose_equip").spec.allow_cancel);
-    answer(&mut e, "ganran2:choose_equip", Vec::new());
-    assert!(flag(&e, 0, "ganran2_recast") == 0 && e.state_core().player(0).hand.contains(&eq1));
-
-    // ③ Illegal card / count rejection on "ganran2:choose_equip"
-    let _ = activate(&mut e, 0, "ganran2");
-    let _ = open(&e, "ganran2:choose_equip");
-    assert!(rejected(&mut e, vec![ChoiceOption::Card(sha1)]));
-    assert!(rejected(&mut e, vec![ChoiceOption::Card(999)]));
-    assert!(rejected(&mut e, vec![ChoiceOption::Card(eq1), ChoiceOption::Card(eq2)]));
-
-    // ⑥ Mid-choice snapshot/restore + ① Normal execution
-    snapshot_roundtrip(&e, &p, vec![ChoiceOption::Card(eq1)]);
-    answer(&mut e, "ganran2:choose_equip", vec![ChoiceOption::Card(eq1)]);
-    drain(&mut e);
-    let g_flags = (flag(&e, 0, "ganran2_recast"), flag(&e, 0, "ganran_active"), flag(&e, 0, "doomsday_mutated"));
-    assert_eq!(g_flags, (1, 1, 1));
-    assert!(!e.state_core().player(0).hand.contains(&eq1));
+    // Entering Phase::Play must not open ganran2:choose_equip and ActivateSkill remains rejected
+    e.debug_set_turn(0, Phase::Draw, 1);
+    next_phase(&mut e, 0);
+    assert!(e.open_choice().is_none());
+    assert!(is_rejected(&activate(&mut e, 0, "ganran2")));
+    assert_eq!((flag(&e, 0, "ganran2_recast"), flag(&e, 0, "ganran_active")), (0, 1));
+    assert!(e.state_core().player(0).hand.contains(&eq1));
 
     // ⑤ Multi-skill / passive modifier interaction:
     // - `ganran` locks hand equip `eq2` as `CardKind::Chain` (`Tiesuo`): equipping (`[]`) is rejected; playing on `[1, 2]` chains both!
@@ -416,6 +421,9 @@ fn l19_batch_a_interactive_ganran2_and_huzhu_six_dimensions() {
 
     // B. _huzhu across dimensions ①②③④⑥
     let mut e = fresh(&p, 1905, &[&["_huzhu"], &[], &[], &[]]);
+    e.state_core_mut().mode = GameMode::Identity {
+        roles: vec![Role::Lord, Role::Loyalist, Role::Rebel, Role::Traitor],
+    };
     let tao1 = give_kind(&mut e, 0, CardKind::Tao);
     let tao2 = give_kind(&mut e, 0, CardKind::Tao);
     let sha = give_kind(&mut e, 0, CardKind::Sha);
@@ -446,15 +454,14 @@ fn l19_batch_a_interactive_ganran2_and_huzhu_six_dimensions() {
     snapshot_roundtrip(&e, &p, vec![ChoiceOption::Card(tao1)]);
     answer(&mut e, "_huzhu:discard_tao", vec![ChoiceOption::Card(tao1)]);
 
-    // ③ Illegal target / empty selection rejection on "_huzhu:choose_target" + ⑥ Mid-choice snapshot/restore (stage 2)
-    assert!(!open(&e, "_huzhu:choose_target").spec.allow_cancel);
-    assert!(rejected(&mut e, Vec::new()));
+    // ③ Illegal target rejection on "_huzhu:choose_target" + ⑥ Mid-choice snapshot/restore (stage 2, cancelable)
+    assert!(open(&e, "_huzhu:choose_target").spec.allow_cancel);
     for bad_target in [0u8, 2, 3] {
         assert!(rejected(&mut e, vec![ChoiceOption::Player(bad_target)]));
     }
     snapshot_roundtrip(&e, &p, vec![ChoiceOption::Player(1)]);
 
-    // ① Complete normal execution + ④ Once-per-turn limit reached
+    // ① Complete normal execution + ④ Once-per-Play-phase limit reached
     answer(&mut e, "_huzhu:choose_target", vec![ChoiceOption::Player(1)]);
     drain(&mut e);
     assert_eq!((hp(&e, 1), flag(&e, 0, "_huzhu_healed"), flag(&e, 1, "_huzhu_recovered")), (4, 1, 1));
@@ -468,14 +475,18 @@ fn l19_batch_a_modes_1_to_3_zombie_annex_and_wujin_six_dimensions() {
 
     // 1. Mode 1 Zombie triggers: `_jisuangailv`, `_tuizhi`, `_tuizhi2`, `_tuizhi3`, `_jiangshi2`, `_jiangshi4`, `_jiangshi`, `_jiangshi3`
     let s0: &[&str] = &["_jisuangailv", "_tuizhi", "_tuizhi2", "_tuizhi3", "_jiangshi4"];
-    let mut e = fresh(&p, 1906, &[s0, &["_jiangshi2"], &["_jiangshi"], &["_jiangshi", "_jiangshi3"]]);
+    let mut e = fresh(&p, 1906, &[s0, &["_jiangshi2", "_jiangshi"], &["_jiangshi"], &["_jiangshi", "_jiangshi3"]]);
     let roles = vec![Role::Lord, Role::Loyalist, Role::Loyalist, Role::Loyalist];
     e.state_core_mut().mode = GameMode::Identity { roles };
     set_flag(&mut e, 0, "_tuizhi", 2);
-    // Seat 1 Prepare phase at _tuizhi == 2 triggers `_jiangshi2` -> transforms into jiangshifz (Rebel, max_hp + 5)
+    set_flag(&mut e, 0, "jisuangailv", 3); // 3 / (4 - 1) = 1.0
+    // Seat 1 TurnBegin phase at _tuizhi == 2 triggers `_jiangshi2` -> die() intercepted by `_jiangshi` -> jiangshifz (Rebel, max_hp = 5)
     e.debug_set_turn(0, Phase::End, 1);
     next_phase(&mut e, 0);
-    assert_eq!((flag(&e, 1, "_jiangshi2_transformed"), flag(&e, 1, "zombie_role"), max_hp(&e, 1)), (1, 1, 10));
+    assert_eq!(
+        (flag(&e, 1, "_jiangshi2_transformed"), flag(&e, 1, "zombie_role"), flag(&e, 0, "fzjs_number"), max_hp(&e, 1)),
+        (1, 1, 1, 5)
+    );
     assert!(has_skill(&e, 1, "zaibian") && has_skill(&e, 1, "xunmeng"));
 
     // Seat 0 (`zhu`) killed by seat 1 -> `_jiangshi4` transfers `Role::Lord` & `_tuizhi - 1` to seat 2 (`zhong`)
@@ -512,11 +523,12 @@ fn l19_batch_a_modes_1_to_3_zombie_annex_and_wujin_six_dimensions() {
 
     // 2. Mode 2 (`_gainSkill`) & Mode 3 (`_wujinmoshi*` 11 skills) across dimensions ①④⑤
     let wj0: &[&str] = &[
-        "_gainSkill", "_wujinmoshiDamage", "_wujinmoshiDamageE", "_wujinmoshiMaxHandCard",
+        "_gainSkill", "_wujinmoshiRE", "wujinmoshiRE1", "wujinmoshiRE2",
+        "_wujinmoshiDamage", "_wujinmoshiDamageE", "_wujinmoshiMaxHandCard",
         "_wujinmoshiMaxHandCardE", "_wujinmoshiDraw", "_wujinmoshiDrawE", "_wujinmoshiRecover",
         "_wujinmoshiRecoverE", "baozou",
     ];
-    let wj1: &[&str] = &["_wujinmoshiRE", "wujinmoshiRE1", "wujinmoshiRE2"];
+    let wj1: &[&str] = &["马术"];
     let mut e = fresh(&p, 1907, &[wj0, wj1, &["英姿"], &[]]);
     for (k, v) in [("wujin_damage_bonus", 2), ("wujin_hand_bonus", 3), ("wujin_draw_bonus", 2), ("wujin_recover_bonus", 2)] {
         set_flag(&mut e, 0, k, v);
@@ -533,26 +545,29 @@ fn l19_batch_a_modes_1_to_3_zombie_annex_and_wujin_six_dimensions() {
     next_phase(&mut e, 0); // Draw -> Play
     clear_zone(&mut e, 0);
 
-    // ⑤ `_wujinmoshiDamage` +2 damage -> 1 Sha deals 3 damage -> triggers `wujinmoshiRE1` (revives to 5 HP)
+    // ⑤ `_wujinmoshiDamage` +2 damage -> kill seat 1 -> `_wujinmoshiRE` prompts `wujinmoshiRE1:confirm` -> Confirm -> `wujinmoshiRE2:choose_skill`
     e.debug_set_hp(1, 3);
-    play_sha(&mut e, 0, 1);
-    assert_eq!((flag(&e, 0, "_wujinmoshiDamage_triggered"), flag(&e, 1, "_wujinmoshiRE_used"), hp(&e, 1)), (2, 1, 5));
-    assert!(!has_skill(&e, 1, "wujinmoshiRE1"));
+    let sha1 = give_kind(&mut e, 0, CardKind::Sha);
+    let _ = submit(&mut e, 0, GameAction::PlayCard { card: sha1, targets: vec![1] });
+    answer(&mut e, "wujinmoshiRE1:confirm", vec![ChoiceOption::Confirm]);
+    answer(&mut e, "wujinmoshiRE2:choose_skill", vec![ChoiceOption::Tag(0)]);
+    drain(&mut e);
+    assert_eq!((flag(&e, 0, "_wujinmoshiDamage_triggered"), flag(&e, 0, "_wujinmoshiRE_used")), (2, 1));
+    assert!(!e.state_core().player(1).alive && has_skill(&e, 0, "马术"));
 
-    // Second lethal hit on seat 1 -> triggers `wujinmoshiRE2` (revives to 3 HP)
-    e.debug_set_hp(1, 3);
-    play_sha(&mut e, 0, 1);
-    assert_eq!((flag(&e, 1, "_wujinmoshiRE_used"), hp(&e, 1)), (2, 3));
-    assert!(!has_skill(&e, 1, "wujinmoshiRE2"));
+    // ④ Kill seat 2 -> `_gainSkill` steals `"英姿"` and increments `_gainSkill_count` (2 kills total)
+    e.debug_set_hp(2, 3);
+    play_sha(&mut e, 0, 2);
+    assert!(!e.state_core().player(2).alive && flag(&e, 0, "_gainSkill_count") == 2 && has_skill(&e, 0, "英姿"));
 
-    // ④ Third lethal hit on seat 1 (both RE1 & RE2 exhausted) -> seat 1 dies and `_gainSkill` triggers on seat 0!
-    play_sha(&mut e, 0, 1);
-    assert!(!e.state_core().player(1).alive && flag(&e, 0, "_gainSkill_count") == 1);
-
-    // `_wujinmoshiRecover`: at Phase::End when damaged, recovers `wujin_recover_bonus`
+    // `_wujinmoshiRecover`: does NOT auto-heal at Phase::End; triggers on Recover (Tao: 1 + 2 = 3)
     e.debug_set_hp(0, 2);
     next_phase(&mut e, 0); // Play -> Discard
     next_phase(&mut e, 0); // Discard -> End
+    assert_eq!((flag(&e, 0, "_wujinmoshiRecover_healed"), hp(&e, 0)), (0, 2));
+    e.debug_set_turn(0, Phase::Play, 2);
+    let tao0 = give_kind(&mut e, 0, CardKind::Tao);
+    play(&mut e, 0, tao0, Vec::new());
     assert_eq!((flag(&e, 0, "_wujinmoshiRecover_healed"), hp(&e, 0)), (2, 5));
 }
 
@@ -561,26 +576,33 @@ fn l19_batch_b_rpg_and_yuanqiskill_six_dimensions() {
     let p = pack();
 
     // 1. Shared RPG 6 skills (`_levelskill`, `_expskill`, `_exp2skill`, `_useskill`, `_killskill`, `_relifeskill`)
-    let rpg0: &[&str] = &["_levelskill", "_expskill", "_exp2skill", "_useskill", "_killskill", "baozou"];
-    let mut e = fresh(&p, 1908, &[rpg0, &["_relifeskill"], &[], &[]]);
+    let rpg0: &[&str] = &["_levelskill", "_expskill", "_exp2skill", "_useskill", "_killskill", "_relifeskill", "baozou"];
+    let mut e = fresh(&p, 1908, &[rpg0, &[], &[], &[]]);
+    e.state_core_mut().mode = GameMode::Identity {
+        roles: vec![Role::Lord, Role::Loyalist, Role::Rebel, Role::Traitor],
+    };
     set_flag(&mut e, 1, "zuan_relife", 1);
     set_flag(&mut e, 0, "zuan_exp", 75);
     e.debug_set_hp(0, 3);
     e.debug_set_hp(1, 1);
     play_sha(&mut e, 0, 1);
-    assert_eq!((flag(&e, 0, "zuan_level"), flag(&e, 0, "zuan_exp"), flag(&e, 0, "zuan_score"), flag(&e, 0, "_levelskill_granted")), (2, 0, 15, 1));
-    assert_eq!((flag(&e, 1, "zuan_relife"), flag(&e, 1, "_relifeskill_revived"), hp(&e, 1)), (0, 1, 4));
-
-    // ④ Now seat 1 has `zuan_relife == 0`: killing seat 1 triggers `_killskill` (+100 exp, +100 score, draw 3 -> Lv3)
-    e.debug_set_hp(1, 1);
-    play_sha(&mut e, 0, 1);
+    // Seat 1 dies cleanly (_relifeskill runs on roundStart) -> _useskill (+5/+5) + _expskill (+20/+10 -> Lv2) + _killskill (+100/+100 -> Lv3)
     assert!(!e.state_core().player(1).alive);
-    assert_eq!((flag(&e, 0, "zuan_level"), flag(&e, 0, "zuan_score")), (3, 130));
+    assert_eq!(
+        (flag(&e, 0, "zuan_level"), flag(&e, 0, "zuan_exp"), flag(&e, 0, "zuan_score"), flag(&e, 0, "_levelskill_granted")),
+        (3, 0, 115, 1)
+    );
 
     clear_zone(&mut e, 0);
     next_phase(&mut e, 0); // Play -> Discard
     next_phase(&mut e, 0); // Discard -> End (`_exp2skill`: +10 exp, +5 score)
-    assert_eq!(flag(&e, 0, "zuan_score"), 135);
+    assert_eq!(flag(&e, 0, "zuan_score"), 120);
+
+    // Advance round 1 -> round 2: alive Lord Seat 0 `_relifeskill` ticks `zuan_relife` 1 -> 0, revives Seat 1, and resets ceil(1*0.4+0.1)=1
+    e.debug_set_turn(3, Phase::End, 1);
+    next_phase(&mut e, 3);
+    assert_eq!((flag(&e, 1, "zuan_relife"), flag(&e, 1, "_relifeskill_revived"), hp(&e, 1)), (1, 1, 5));
+    assert!(e.state_core().player(1).alive);
 
     // 2. `_yuanqiskill` across dimensions ①②③④⑥
     let mut e = fresh(&p, 1909, &[&["_yuanqiskill"], &[], &[], &[]]);
@@ -707,15 +729,32 @@ fn l19_batch_b_modes_5_to_10_jingcheng_zhengba_taofa_guixin_huanhai_ansha_six_di
     let le = give_kind(&mut e, 1, CardKind::Le);
     assert!(play_rejected(&mut e, 1, le, vec![0]));
 
-    // ① `_guandieskill`: Phase 1 -> Phase 2 -> Phase 3 -> `taofa_fan_win`
-    for expected in [2u32, 3u32] {
-        e.debug_set_hp(0, 1);
-        play_sha(&mut e, 1, 0);
-        assert_eq!(flag(&e, 0, "guan_phase"), expected);
-    }
+    // ① `_guandieskill`: first lethal hit on Lord (zuan_panjun < 8) cancels death (jingcheng + tamaxhp + zuan_panjun += 2); 2nd hit kills
+    e.state_core_mut().mode = GameMode::Identity {
+        roles: vec![Role::Lord, Role::Rebel, Role::Loyalist, Role::Traitor],
+    };
+    set_flag(&mut e, 0, "zuan_tamaxhp", 6);
+    set_flag(&mut e, 0, "zuan_tahp", 5);
     e.debug_set_hp(0, 1);
     play_sha(&mut e, 1, 0);
-    assert_eq!(flag(&e, 0, "taofa_fan_win"), 1);
+    assert!(e.state_core().player(0).alive);
+    assert_eq!((max_hp(&e, 0), hp(&e, 0)), (6, 5));
+    assert_eq!((flag(&e, 0, "_guandieskill_jingcheng"), flag(&e, 0, "zuan_panjun"), flag(&e, 0, "taofa_fan_win")), (1, 2, 0));
+    e.debug_set_hp(0, 1);
+    play_sha(&mut e, 1, 0);
+    assert!(!e.state_core().player(0).alive);
+
+    // Separate Lord with zuan_panjun=8: lethal hit reaches 10 -> taofa_fan_win=1 & Lord dies (lethal_fan)
+    let mut e_fan = fresh(&p, 1913, &[&["_guandieskill"], &["baozou"], &[], &[]]);
+    e_fan.state_core_mut().mode = GameMode::Identity {
+        roles: vec![Role::Lord, Role::Rebel, Role::Loyalist, Role::Traitor],
+    };
+    set_flag(&mut e_fan, 0, "zuan_panjun", 8);
+    e_fan.debug_set_hp(0, 1);
+    e_fan.debug_set_turn(1, Phase::Play, 1);
+    play_sha(&mut e_fan, 1, 0);
+    assert_eq!((flag(&e_fan, 0, "zuan_panjun"), flag(&e_fan, 0, "taofa_fan_win")), (10, 1));
+    assert!(!e_fan.state_core().player(0).alive);
 
     // 3. Mode 8 (`_guixinmodeskill`), Mode 9 (`_huanhaiskill`, `_seadreammodeskill`), Mode 10 (`_dietime`, `_anshaskill`)
     let m80: &[&str] = &["_guixinmodeskill", "_huanhaiskill", "baozou"];

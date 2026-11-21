@@ -18,6 +18,7 @@ use content_native_loader::{
     DOOMSDAY_ZOMBIE_GENERALS, IDENTITY_NAMES, JIANGSHIFZ_SKILLS, JIANGSHINJ_SKILLS,
 };
 use content_runtime::{discover_extensions, import_extensions, InstallOptions, PackageStore};
+use engine_native::state::{GameMode, Role};
 use engine_native::{
     ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase,
 };
@@ -220,27 +221,17 @@ fn l19_doomsday_batch_a_modes_1_to_3_generals_config_and_save_restore() {
 
     let ganran2_id = e.catalog().skill_by_name("ganran2").unwrap();
     let out = submit(&mut e, 0, GameAction::ActivateSkill { skill: ganran2_id });
-    let choice = match out {
-        CommandOutcome::Pending { choice, .. } => choice,
-        other => panic!("expected ganran2:choose_equip pending, got {other:?}"),
-    };
-    assert_eq!(choice.spec.prompt, "ganran2:choose_equip");
-    let snap_mid = e.save();
-    let restored_mid =
-        Engine::restore_with_extensions(&snap_mid, &packs).expect("restore mid ganran2");
-    assert_eq!(restored_mid.state_hash(), e.state_hash());
-    let _ = submit(
-        &mut e,
-        0,
-        GameAction::Answer {
-            choice_id: choice.id,
-            selection: vec![ChoiceOption::Card(equip_cid)],
-        },
+    assert!(
+        matches!(out, CommandOutcome::Rejected(_)),
+        "ganran2 enable:'phaseUse' is commented out upstream and must reject activation, got {out:?}"
     );
-    assert_eq!(flag(&e, 0, "ganran2_recast"), 1);
-    assert_eq!(flag(&e, 0, "ganran_active"), 1);
+    assert_eq!(flag(&e, 0, "ganran2_recast"), 0);
+    assert!(e.state_core().player(0).hand.contains(&equip_cid));
 
     // Mode 1: _huzhu ("_huzhu:discard_tao" -> "_huzhu:choose_target")
+    e.state_core_mut().mode = GameMode::Identity {
+        roles: vec![Role::Lord, Role::Loyalist, Role::Rebel, Role::Traitor],
+    };
     e.debug_grant(0, "_huzhu");
     let tao_cid = e.debug_place(0, "tao");
     e.debug_give_hand_card(0, 0, tao_cid);
@@ -293,8 +284,9 @@ fn l19_doomsday_batch_a_modes_1_to_3_generals_config_and_save_restore() {
         e.debug_clear_hand(p);
     }
     e.debug_grant(0, "_gainSkill");
-    e.debug_grant(1, "_wujinmoshiRE");
-    e.debug_grant(1, "wujinmoshiRE1");
+    e.debug_grant(0, "_wujinmoshiRE");
+    e.debug_grant(0, "wujinmoshiRE1");
+    e.debug_grant(1, "马术");
     e.debug_set_hp(1, 1);
     let sha1 = e.debug_place(0, "sha");
     e.debug_give_hand_card(0, 0, sha1);
@@ -306,12 +298,35 @@ fn l19_doomsday_batch_a_modes_1_to_3_generals_config_and_save_restore() {
             targets: vec![1],
         },
     );
+    if let Some(c) = e.open_choice().cloned() {
+        if c.spec.prompt == "wujinmoshiRE1:confirm" {
+            let _ = submit(
+                &mut e,
+                c.observer,
+                GameAction::Answer {
+                    choice_id: c.id,
+                    selection: vec![ChoiceOption::Confirm],
+                },
+            );
+        }
+    }
+    if let Some(c) = e.open_choice().cloned() {
+        if c.spec.prompt == "wujinmoshiRE2:choose_skill" {
+            let _ = submit(
+                &mut e,
+                c.observer,
+                GameAction::Answer {
+                    choice_id: c.id,
+                    selection: vec![ChoiceOption::Tag(0)],
+                },
+            );
+        }
+    }
     drain(&mut e);
-    assert_eq!(flag(&e, 1, "_wujinmoshiRE_used"), 1);
-    assert_eq!(
-        e.state_core().player(1).hp,
-        e.state_core().player(1).max_hp as i32
-    );
+    assert!(!e.state_core().player(1).alive);
+    assert_eq!(flag(&e, 0, "_wujinmoshiRE_used"), 1);
+    let ms = e.catalog().skill_by_name("马术").unwrap();
+    assert!(e.state_core().skills.get(&(0, ms)).is_some_and(|i| i.enabled));
 
     e.debug_grant(3, "英姿");
     set_flag(&mut e, 0, "drlt_duorui_sealed_slots_mask", 0b111);
@@ -327,7 +342,7 @@ fn l19_doomsday_batch_a_modes_1_to_3_generals_config_and_save_restore() {
         },
     );
     drain(&mut e);
-    assert_eq!(flag(&e, 0, "_gainSkill_count"), 1);
+    assert_eq!(flag(&e, 0, "_gainSkill_count"), 2);
     assert_eq!(flag(&e, 0, "drlt_duorui_sealed_slots_mask"), 0);
 }
 
@@ -338,12 +353,15 @@ fn l19_doomsday_batch_b_modes_4_to_7_rpg_yuanqi_jingcheng_zhengba() {
     let mut e = Engine::new_with_extensions(191903, 4, &packs).expect("L19 Batch B engine 1");
 
     // 1. Shared RPG progression: _levelskill, _expskill, _exp2skill, _useskill, _killskill, _relifeskill
+    e.state_core_mut().mode = GameMode::Identity {
+        roles: vec![Role::Lord, Role::Loyalist, Role::Rebel, Role::Traitor],
+    };
     e.debug_grant(0, "_levelskill");
     e.debug_grant(0, "_expskill");
     e.debug_grant(0, "_exp2skill");
     e.debug_grant(0, "_useskill");
     e.debug_grant(0, "_killskill");
-    e.debug_grant(1, "_relifeskill");
+    e.debug_grant(0, "_relifeskill");
     set_flag(&mut e, 1, "zuan_relife", 1);
 
     e.debug_set_turn(0, Phase::Play, 1);
@@ -364,14 +382,12 @@ fn l19_doomsday_batch_b_modes_4_to_7_rpg_yuanqi_jingcheng_zhengba() {
         },
     );
     drain(&mut e);
-    // CardUsed (+5 exp, +5 score) + Damage 1 (+20 exp, +10 score) -> 100 exp -> Lv2 (+1 maxHp, +1 recover, draw 2, grant skill)
-    assert_eq!(flag(&e, 0, "zuan_level"), 2);
-    assert_eq!(flag(&e, 0, "zuan_score"), 15);
+    // CardUsed (+5 exp, +5 score) + Damage 1 (+20 exp, +10 score) -> Lv2 (+15 score);
+    // Seat 1 dies cleanly (_relifeskill is roundStart, not Dying), so _killskill fires (+100 exp, +100 score -> Lv3)
+    assert_eq!(flag(&e, 0, "zuan_level"), 3);
+    assert_eq!(flag(&e, 0, "zuan_score"), 115);
     assert_eq!(flag(&e, 0, "_levelskill_granted"), 1);
-    // Seat 1 triggered _relifeskill on Dying: zuan_relife -> 0, hp -> 4, hand -> 4
-    assert_eq!(flag(&e, 1, "zuan_relife"), 0);
-    assert_eq!(flag(&e, 1, "_relifeskill_revived"), 1);
-    assert_eq!(e.state_core().player(1).hp, 4);
+    assert!(!e.state_core().player(1).alive);
 
     // _exp2skill at Phase::End
     let _ = submit(&mut e, 0, GameAction::NextPhase); // Play -> Discard
@@ -379,7 +395,16 @@ fn l19_doomsday_batch_b_modes_4_to_7_rpg_yuanqi_jingcheng_zhengba() {
     let _ = submit(&mut e, 0, GameAction::NextPhase); // Discard -> End (_exp2skill: +10 exp, +5 score)
     drain(&mut e);
     assert_eq!(flag(&e, 0, "zuan_exp"), 10);
-    assert_eq!(flag(&e, 0, "zuan_score"), 20);
+    assert_eq!(flag(&e, 0, "zuan_score"), 120);
+
+    // Advance to round 2 -> alive Lord Seat 0's _relifeskill ticks zuan_relife 1->0, revives Seat 1, and resets ceil(1*0.4+0.1)=1
+    e.debug_set_turn(3, Phase::End, 1);
+    let _ = submit(&mut e, 3, GameAction::NextPhase);
+    drain(&mut e);
+    assert_eq!(flag(&e, 1, "zuan_relife"), 1);
+    assert_eq!(flag(&e, 1, "_relifeskill_revived"), 1);
+    assert!(e.state_core().player(1).alive);
+    assert_eq!(e.state_core().player(1).hp, 4);
 
     // 2. _yuanqiskill: Mode 0 (spend 100 exp -> choose skill) & Mode 1 (remove skill -> draw 2 + recover 1)
     e.debug_set_turn(0, Phase::Play, 2);
@@ -527,42 +552,74 @@ fn l19_doomsday_batch_b_modes_8_to_10_taofa_guixin_huanhai_ansha() {
     let packs = [&p9];
     let mut e = Engine::new_with_extensions(191905, 4, &packs).expect("L19 Batch B engine 3");
 
-    // 5. zuan_taofa: _guanmodeskill & _guandieskill (Phase 1 -> Phase 2 -> Phase 3 -> fan win)
+    // 5. zuan_taofa: _guanmodeskill & _guandieskill (1st hit cancels death + jingcheng + tamaxhp + zuan_panjun += 2; 2nd hit kills; panjun=8->10 triggers fan win)
+    e.state_core_mut().mode = GameMode::Identity {
+        roles: vec![Role::Lord, Role::Rebel, Role::Loyalist, Role::Traitor],
+    };
     e.debug_grant(0, "_guanmodeskill");
     e.debug_grant(0, "_guandieskill");
     e.debug_grant(1, "baozou");
+    set_flag(&mut e, 0, "zuan_tamaxhp", 6);
+    set_flag(&mut e, 0, "zuan_tahp", 5);
     e.debug_set_turn(1, Phase::Play, 1);
     for p in 0..4 {
         e.debug_clear_hand(p);
     }
-    for expected_phase in [2u32, 3u32] {
-        e.debug_set_hp(0, 1);
-        let s = e.debug_place(1, "sha");
-        e.debug_give_hand_card(1, 1, s);
-        let _ = submit(
-            &mut e,
-            1,
-            GameAction::PlayCard {
-                card: s,
-                targets: vec![0],
-            },
-        );
-        drain(&mut e);
-        assert_eq!(flag(&e, 0, "guan_phase"), expected_phase);
-    }
     e.debug_set_hp(0, 1);
-    let s3 = e.debug_place(1, "sha");
-    e.debug_give_hand_card(1, 1, s3);
+    let s1 = e.debug_place(1, "sha");
+    e.debug_give_hand_card(1, 1, s1);
     let _ = submit(
         &mut e,
         1,
         GameAction::PlayCard {
-            card: s3,
+            card: s1,
             targets: vec![0],
         },
     );
     drain(&mut e);
-    assert_eq!(flag(&e, 0, "taofa_fan_win"), 1);
+    assert!(e.state_core().player(0).alive);
+    assert_eq!(e.state_core().player(0).max_hp, 6);
+    assert_eq!(e.state_core().player(0).hp, 5);
+    assert_eq!(flag(&e, 0, "_guandieskill_jingcheng"), 1);
+    assert_eq!(flag(&e, 0, "zuan_panjun"), 2);
+
+    // Second lethal hit after jingcheng kills Lord Seat 0 normally
+    e.debug_set_hp(0, 1);
+    let s2 = e.debug_place(1, "sha");
+    e.debug_give_hand_card(1, 1, s2);
+    let _ = submit(
+        &mut e,
+        1,
+        GameAction::PlayCard {
+            card: s2,
+            targets: vec![0],
+        },
+    );
+    drain(&mut e);
+    assert!(!e.state_core().player(0).alive);
+
+    // Fresh Lord with zuan_panjun=8: lethal hit pushes zuan_panjun to 10 -> taofa_fan_win=1
+    let mut e_fan = Engine::new_with_extensions(191907, 4, &packs).expect("L19 fan win");
+    e_fan.state_core_mut().mode = GameMode::Identity {
+        roles: vec![Role::Lord, Role::Rebel, Role::Loyalist, Role::Traitor],
+    };
+    e_fan.debug_grant(0, "_guandieskill");
+    set_flag(&mut e_fan, 0, "zuan_panjun", 8);
+    e_fan.debug_set_hp(0, 1);
+    e_fan.debug_set_turn(1, Phase::Play, 1);
+    let sf = e_fan.debug_place(1, "sha");
+    e_fan.debug_give_hand_card(1, 1, sf);
+    let _ = submit(
+        &mut e_fan,
+        1,
+        GameAction::PlayCard {
+            card: sf,
+            targets: vec![0],
+        },
+    );
+    drain(&mut e_fan);
+    assert_eq!(flag(&e_fan, 0, "zuan_panjun"), 10);
+    assert_eq!(flag(&e_fan, 0, "taofa_fan_win"), 1);
 
     // 6. zuan_guixin (_guixinmodeskill) & 7. zuan_huanhai (_huanhaiskill + _seadreammodeskill) & 8. zuan_ansha (_dietime + _anshaskill)
     let mut e2 = Engine::new_with_extensions(191906, 4, &packs).expect("L19 Batch B engine 4");

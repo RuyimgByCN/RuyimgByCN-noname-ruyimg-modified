@@ -9,6 +9,13 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-22 Batch Q2-L19（L19 末日乱斗终 9 项→69/69 全等价）合入（待提交／发布）
+
+- **基线、发布与版本**：HEAD `8a879f8e479406e3788011885eba2a16f0d96613`（Batch UI-5 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `44944693459` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。
+- **Batch Q2-L19 集成与复核**：合入 `swarm/conv-q2-l19` `3686468ca..1b8098236`（`verifier-rules-2` #83 **`APPROVE`**）：顺序复合 `step::host_on_round_start` 保留 L27 清理与 L19 `_relifeskill`（含 `revoke_equip_skills`），关闭 `ganran2`/`_jiangshi2`/`_huzhu`/`chanceIdentity0`/`chanceIdentity10`/`wujinmoshiRE1`/`_wujinmoshiRecover`/`_relifeskill`/`_guandieskill`。
+- **清单计数与整包签署**：按 #83 升格 **9 项**（`L19` → **`69／0／0`**，100% 单项等价）；全仓更新为 **已复核等价 1,313／简化近似 3,111／缺失 0**，整包八项签署仍 `0/37`。
+- **主线实测**：5 crate `-D warnings`、`wasm32`、4 crate **`2,612/0/6`**、`--workspace --no-fail-fast` **`7,960/0/8`**、`conformance` **`19/19`**、`desktop-client` **`20/0/1`**、跨端校验、`web-client` `typecheck`＋`test`（**514/0**）＋`build:native`＋`smoke:native`（**83/0**）＋`build` 与 `preflight.py` 全过，见 [Batch Q2-L19 证据](../operations/evidence/2026-11-21-batch2-2-l19/README.md)。
+
 ### 2026-11-22 Batch UI-5（L14 终 33 项→141/141、L20 +27、L09 +58 共 +118）合入（待提交／发布）
 
 - **基线、发布与版本**：HEAD `586b51cdc8124ab37c92f1015ce562157f911df9`（Batch 1.6a 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `44938308161` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。

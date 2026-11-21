@@ -650,4 +650,6 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
     "scsanruo_steal_confirm",
     "scsanruo_steal_target",
     "scsanruo_steal_card",
+    "wujinmoshiRE1:confirm",
+    "wujinmoshiRE2:choose_skill",
 ];

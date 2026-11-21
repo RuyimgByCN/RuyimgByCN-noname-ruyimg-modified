@@ -413,14 +413,7 @@ pub(in crate::content::host) fn filter_l19_batch_b(
                 ..
             } if *k == owner
         ),
-        "_relifeskill" => match event {
-            EventData::Dying { player, .. } | EventData::Death { player, .. } => {
-                *player == owner
-                    && ctx.state.player(owner).hp <= 0
-                    && flag(ctx.state, owner, "zuan_relife") > 0
-            }
-            _ => false,
-        },
+        "_relifeskill" => false,
         "_yuanqiskill" => matches!(
             event,
             EventData::Phase {
@@ -495,12 +488,14 @@ pub(in crate::content::host) fn filter_l19_batch_b(
             }
             _ => false,
         },
-        "_guandieskill" => match event {
-            EventData::Dying { player, .. } | EventData::Death { player, .. } => {
-                *player == owner && ctx.state.player(owner).hp <= 0
-            }
-            _ => false,
-        },
+        "_guandieskill" => matches!(
+            event,
+            EventData::Death { player, .. }
+                if *player == owner
+                    && !has_skill_named(ctx.state, ctx.catalog, owner, "jingcheng")
+                    && flag(ctx.state, owner, "_guandieskill_jingcheng") == 0
+                    && player_role(ctx.state, owner) == Some(Role::Lord)
+        ),
         "_guixinmodeskill" => match event {
             EventData::Dying {
                 player,
@@ -674,7 +669,7 @@ pub(in crate::content::host) fn handle_l19_batch_b(
             check_and_apply_level_up(ctx, owner);
             Flow::Done
         }
-        "_relifeskill" => l19_batch_b_asks::step_relifeskill(owner, ctx),
+        "_relifeskill" => Flow::Done,
         "_yuanqiskill" => l19_batch_b_asks::step_yuanqiskill(m, ctx),
         "_zhongzhubuff" => {
             if ctx.core.player(owner).hp <= 0 {
@@ -847,7 +842,7 @@ pub(in crate::content::host) fn handle_l19_batch_b(
             }
             Flow::Done
         }
-        "_guandieskill" => l19_batch_b_asks::step_guandieskill(owner, ctx),
+        "_guandieskill" => l19_batch_b_asks::step_guandieskill(m, ctx),
         "_guixinmodeskill" => l19_batch_b_asks::step_guixinmodeskill(m, ctx),
         "_huanhaiskill" => {
             set_flag(ctx.core, owner, "_huanhaiskill_stamp", turn_stamp(ctx.core));

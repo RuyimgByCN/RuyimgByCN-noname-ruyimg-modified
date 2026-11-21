@@ -7,10 +7,10 @@
 
 use super::super::*;
 use super::{
-    check_and_apply_level_up, discard_cards, flag, grant_rpg_pool_skill, grant_skill_named,
-    has_skill_named, player_role, refund_once_used, removable_skills, remove_skill_def,
-    revive_player_to, set_flag, set_player_role, turn_stamp, ASK_YUANQI_MODE, ASK_YUANQI_REMOVE,
-    ASK_YUANQI_SKILL, RPG_SKILL_POOL,
+    flag, grant_rpg_pool_skill, grant_skill_named, has_skill_named, player_role,
+    refund_once_used, removable_skills, remove_skill_def, revive_player_to, set_flag,
+    set_player_role, turn_stamp, ASK_YUANQI_MODE, ASK_YUANQI_REMOVE, ASK_YUANQI_SKILL,
+    RPG_SKILL_POOL,
 };
 use crate::catalog::Catalog;
 use crate::choice::{ChoiceKind, ChoiceOption, ChoiceSpec};
@@ -216,43 +216,158 @@ pub(super) fn step_yuanqiskill(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     }
 }
 
-pub(super) fn step_relifeskill(owner: PlayerId, ctx: &mut Ctx<'_>) -> Flow {
-    let relife = flag(ctx.core, owner, "zuan_relife");
-    if ctx.core.player(owner).hp <= 0 && relife > 0 {
-        set_flag(ctx.core, owner, "zuan_relife", relife - 1);
-        set_flag(ctx.core, owner, "zuan_level", 1);
-        set_flag(ctx.core, owner, "_levelskill", 1);
-        let hand = ctx.core.player(owner).hand.clone();
-        discard_cards(ctx, owner, &hand);
-        revive_player_to(ctx, owner, 4, 4);
-        ctx.start_draw(owner, 4);
-        let cnt = flag(ctx.core, owner, "_relifeskill_revived") + 1;
-        set_flag(ctx.core, owner, "_relifeskill_revived", cnt);
+fn apply_guandie_zuan_exp(ctx: &mut Ctx<'_>, src: PlayerId, base_exp: u32) {
+    let up = flag(ctx.core, src, "zuan_upspeed");
+    let adds = if up > 0 {
+        (base_exp.saturating_mul(up) + 9) / 10
+    } else {
+        base_exp
+    };
+    let mut level = flag(ctx.core, src, "_levelskill")
+        .max(flag(ctx.core, src, "zuan_level"))
+        .max(1);
+    let mut exp = flag(ctx.core, src, "_expskill")
+        .max(flag(ctx.core, src, "zuan_exp"))
+        .saturating_add(adds);
+    let maxexp = 20 + 2 * level;
+    if exp >= maxexp && level < 10 {
+        exp -= maxexp;
+        level += 1;
+        if flag(ctx.core, src, "zuan_balance") == 0 {
+            ctx.start_draw(src, 1);
+        }
+        if level == 8 {
+            ctx.core.player_mut(src).max_hp = ctx.core.player(src).max_hp.saturating_add(1);
+        }
+        let relife = (level * 4 + 1 + 9) / 10;
+        set_flag(ctx.core, src, "zuan_relife", relife);
     }
-    Flow::Done
+    set_flag(ctx.core, src, "zuan_exp", exp);
+    set_flag(ctx.core, src, "_expskill", exp);
+    set_flag(ctx.core, src, "zuan_level", level);
+    set_flag(ctx.core, src, "_levelskill", level);
 }
 
-pub(super) fn step_guandieskill(owner: PlayerId, ctx: &mut Ctx<'_>) -> Flow {
-    if ctx.core.player(owner).hp > 0 {
+pub(super) fn step_guandieskill(m: &HostMachine, ctx: &mut Ctx<'_>) -> Flow {
+    let owner = m.owner;
+    if has_skill_named(ctx.core, ctx.catalog, owner, "jingcheng")
+        || flag(ctx.core, owner, "_guandieskill_jingcheng") > 0
+        || player_role(ctx.core, owner) != Some(Role::Lord)
+    {
         return Flow::Done;
     }
-    let phase = flag(ctx.core, owner, "guan_phase").max(1);
-    if phase <= 1 {
-        set_flag(ctx.core, owner, "guan_phase", 2);
-        revive_player_to(ctx, owner, 8, 8);
-        let _ = grant_skill_named(ctx, owner, "wushuang");
-        let _ = grant_skill_named(ctx, owner, "paoxiao");
-        ctx.start_draw(owner, 4);
-    } else if phase == 2 {
-        set_flag(ctx.core, owner, "guan_phase", 3);
-        revive_player_to(ctx, owner, 6, 6);
-        let _ = grant_skill_named(ctx, owner, "wansha");
-        let _ = grant_skill_named(ctx, owner, "jianxiong");
-        let _ = grant_skill_named(ctx, owner, "zhiheng");
-        ctx.start_draw(owner, 6);
-    } else {
+    if let Some(src) = m.target {
+        if src != owner && ctx.core.player(src).alive {
+            apply_guandie_zuan_exp(ctx, src, 25);
+        }
+    }
+    let skill_defs: Vec<u16> = ctx
+        .core
+        .skills
+        .keys()
+        .filter_map(|&(p, d)| (p == owner).then_some(d))
+        .collect();
+    for def in skill_defs {
+        let name = ctx
+            .catalog
+            .skills
+            .get(def as usize)
+            .map(|s| s.name)
+            .unwrap_or("");
+        if !matches!(
+            name,
+            "thundershow" | "jingcheng" | "bazhu" | "guanfu" | "notarget"
+        ) && !ctx.catalog.is_charlotte_skill(def)
+        {
+            if let Some(inst) = ctx.core.skills.get_mut(&(owner, def)) {
+                inst.enabled = false;
+            }
+        }
+    }
+    let pj = flag(ctx.core, owner, "zuan_panjun") + 2;
+    set_flag(ctx.core, owner, "zuan_panjun", pj);
+    if let Some(def) = ctx.catalog.skill_by_name("zuan_panjun") {
+        let entry = ctx
+            .core
+            .vm_aux
+            .marks
+            .entry((owner, u32::from(def)))
+            .or_insert(0);
+        *entry += 2;
+    }
+    let gb = flag(ctx.core, owner, "zuan_guanbing");
+    let mut lethal_fan = false;
+    if gb >= 10 {
+        set_flag(ctx.core, owner, "taofa_guan_win", 1);
+        set_flag(ctx.core, 0, "taofa_guan_win", 1);
+        for p in 0..ctx.core.players.len() as PlayerId {
+            if p != owner
+                && ctx.core.player(p).alive
+                && !matches!(player_role(ctx.core, p), Some(Role::Lord | Role::Loyalist))
+            {
+                ctx.core.player_mut(p).hp = 0;
+                ctx.emit(EventData::Death {
+                    player: p,
+                    killer: None,
+                });
+            }
+        }
+    } else if pj >= 10 {
         set_flag(ctx.core, owner, "taofa_fan_win", 1);
         set_flag(ctx.core, 0, "taofa_fan_win", 1);
+        lethal_fan = true;
+    }
+    let old_max = ctx.core.player(owner).max_hp;
+    set_flag(ctx.core, owner, "zuan_zhumaxhp", old_max);
+    let tamax = flag(ctx.core, owner, "zuan_tamaxhp");
+    let new_max = if tamax > 0 {
+        tamax
+    } else {
+        crate::state::INFINITE_HP
+    };
+    let tahp = flag(ctx.core, owner, "zuan_tahp");
+    let new_hp = if tahp > 0 {
+        tahp as i32
+    } else if new_max == crate::state::INFINITE_HP {
+        crate::state::INFINITE_HP as i32
+    } else {
+        new_max as i32
+    };
+    {
+        let p = ctx.core.player_mut(owner);
+        p.max_hp = new_max;
+        p.hp = new_hp;
+        p.linked = false;
+        p.face_down = false;
+        if !lethal_fan {
+            p.death_cancelled = true;
+            p.alive = true;
+            p.dying = false;
+        }
+    }
+    let _ = grant_skill_named(ctx, owner, "jingcheng");
+    set_flag(ctx.core, owner, "_guandieskill_jingcheng", 1);
+    set_flag(ctx.core, owner, "has_jingcheng", 1);
+    let _ = grant_skill_named(ctx, owner, "notarget");
+    set_flag(ctx.core, owner, "notarget_active", 1);
+    set_player_role(ctx.core, owner, Role::Lord);
+    set_flag(ctx.core, owner, "zuan_identity_wang", 1);
+    let mut hej: Vec<CardId> = ctx.core.player(owner).hand.clone();
+    hej.extend(ctx.core.player(owner).equips.iter().copied());
+    hej.extend(ctx.core.player(owner).judge.iter().copied());
+    for &c in &hej {
+        ctx.take_owned_card(owner, c);
+        ctx.to_discard(c);
+    }
+    if !hej.is_empty() {
+        ctx.log(LogEvent::CardDiscarded {
+            player: owner,
+            cards: hej.clone(),
+        });
+        ctx.emit(EventData::CardsDiscarded {
+            player: owner,
+            cards: hej,
+        });
     }
     Flow::Done
 }
@@ -367,6 +482,5 @@ pub(super) fn step_anshaskill(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             set_flag(ctx.core, owner, "_anshaskill_fan_respawned", 1);
         }
     }
-    let _ = check_and_apply_level_up;
     Flow::Done
 }

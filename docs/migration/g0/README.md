@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-22 Batch Q2-L19（L19 末日乱斗终 9 项→69/69）更新（待提交／发布）
+
+基线 HEAD `8a879f8e479406e3788011885eba2a16f0d96613`（Batch UI-5 已发布，CI Run `44944693459` 10/10）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-rules-2` 三轮独立审查（#83 **`APPROVE`**）与主线全量门禁复测，清单更新为 **已复核等价 1,313／简化近似 3,111／缺失 0／上游未定义 0**（合计 4,424）：`L19 末日乱斗` 由 `60 / 9 / 0` 升为 **69 / 0 / 0**（+9，`ganran2`/`_jiangshi2`/`_huzhu`/`chanceIdentity10`/`chanceIdentity0`/`wujinmoshiRE1`/`_wujinmoshiRecover`/`_relifeskill`/`_guandieskill`，全源 100% 单项等价）。详见 [Batch Q2-L19 证据摘要](../../operations/evidence/2026-11-21-batch2-2-l19/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-22 Batch UI-5（L14 终 33 项、L20 27 项与 L09 58 项共 +118）更新（待提交／发布）
 
 基线 HEAD `586b51cdc8124ab37c92f1015ce562157f911df9`（Batch 1.6a 已发布，CI Run `44938308161` 10/10）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-ui` 独立审查（#77 **`APPROVE`**）与主线 7 套 Chrome CDP 及全量门禁复测，清单更新为 **已复核等价 1,304／简化近似 3,120／缺失 0／上游未定义 0**（合计 4,424）：`L14 手杀ui` 由 `108 / 33 / 0` 升为 **141 / 0 / 0**（+33）；`L20 标记补充` 由 `55 / 40 / 0` 升为 **82 / 13 / 0**（+27：3 表面＋24 `ui_hooks` 升为 `已复核等价`，10 无 DOM 消费 `ui_hooks`＋3 技能维持 `简化近似`）；`L09 千幻聆音` 由 `0 / 102 / 0` 升为 **58 / 44 / 0**（+58：12 表面＋8 `ui_hooks`＋38 配置升为 `已复核等价`，44 未消费配置维持 `简化近似`）。详见 [Batch UI-5 证据摘要](../../operations/evidence/2026-11-21-ui-l14-l20-l09/README.md) 与 [inventory_status.json](inventory_status.json)。

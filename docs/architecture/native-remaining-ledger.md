@@ -1,5 +1,9 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+## 2026-11-22 Batch Q2-L19（L19 末日乱斗 9 项→69/69）合入（待提交／发布）
+
+基线 HEAD `8a879f8e479406e3788011885eba2a16f0d96613`（Batch UI-5 CI Run `44944693459` Attempt 1 `10/10 success` 已并入 `ci-runs.md`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `verifier-rules-2` 三轮核验通过（#83 **`APPROVE`**）的 `swarm/conv-q2-l19` `3686468ca..1b8098236` 并与 Q2-L27/Batch 1.6a 协调 `ContentHooks` 与复合 `host_on_round_start`：关闭 `L19` 全部 9 项剩余技能（`ganran2`、`_jiangshi2`、`_huzhu`、`chanceIdentity10`、`chanceIdentity0`、`wujinmoshiRE1`、`_wujinmoshiRecover`、`_relifeskill`、`_guandieskill`），在 `main` 全量通过 `--workspace`（`7,960/0/8`）、4 crate（`2,612/0/6`）、`conformance` `19/19`、`web-client` `514/0` 及 `smoke:native` `83/0`。`L19` 升为 **69／0／0**（100% 单项等价），全仓清单更新为 **已复核等价 1,313／简化近似 3,111／缺失 0**（整包八项 `0/37`）。见 [Batch Q2-L19 证据](../operations/evidence/2026-11-21-batch2-2-l19/README.md) 与 [进度主稿](native-progress.md)。
+
 ## 2026-11-22 Batch UI-5（L14 终 33 项、L20 27 项与 L09 58 项共 +118）合入（待提交／发布）
 
 基线 HEAD `586b51cdc8124ab37c92f1015ce562157f911df9`（Batch 1.6a CI Run `44938308161` Attempt 1 `10/10 success` 已并入 `ci-runs.md`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `verifier-ui` 复核通过（#77 **`APPROVE`**）的 `swarm/conv-ui` `77fd897113caa394c2f5cfdde82d51d4ece75c00`：补齐 `L14` 终 33 项（`qiDongYe`、`ZLLT`、`XPJ`、托管及 23 变体表面）与 `L20`/`L09` 洁净室消费，在 `main` 全量通过 `--workspace`（`7,948/0/8`）、4 crate（`2,600/0/6`）、514 前端单测、83/83 烟测及 7 套 Chrome CDP 验证。按 #77 升级 **118 项**：`L14` 升为 **141／0／0**（100% 单项等价）；`L20` 升级 27 项（3 表面＋24 `ui_hooks`）并保留 10 无 DOM 消费 `ui_hooks` 与 3 技能为 `简化近似`（**82／13／0**）；`L09` 升级 58 项（12 表面＋8 钩子＋38 配置）并保留 44 未消费配置为 `简化近似`（**58／44／0**），全仓清单更新为 **已复核等价 1,304／简化近似 3,120／缺失 0**（整包八项 `0/37`）。见 [Batch UI-5 证据](../operations/evidence/2026-11-21-ui-l14-l20-l09/README.md) 与 [进度主稿](native-progress.md)。

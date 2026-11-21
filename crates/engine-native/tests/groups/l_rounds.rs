@@ -138,3 +138,6 @@ mod l29_longxue_eight;
 
 #[path = "../l29_longxue_fixes.rs"]
 mod l29_longxue_fixes;
+
+#[path = "../l19_doomsday_fixes.rs"]
+mod l19_doomsday_fixes;

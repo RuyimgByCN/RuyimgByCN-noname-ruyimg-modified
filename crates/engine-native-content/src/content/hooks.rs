@@ -18,7 +18,7 @@ pub(crate) const CONTENT_HOOKS: ContentHooks = ContentHooks {
     borrow_options: crate::content::host::shengong_borrow_options,
     borrowed_owner: crate::content::host::shengong_borrowed_owner,
     r05_role_defs,
-    play_begin_step: crate::content::host::play_begin_tianshu,
+    play_begin_step: crate::content::host::host_play_begin_step,
     on_outer_settled: crate::content::host::on_outer_settled_taipingyaoshu,
     on_cards_to_discard: crate::content::host::on_cards_to_discard_chengye,
     on_skill_removed: crate::content::host::on_skill_removed_all,
@@ -38,6 +38,8 @@ pub(crate) const CONTENT_HOOKS: ContentHooks = ContentHooks {
     reguhuo_has_pending_final: crate::content::host::reguhuo_has_pending_final,
     reguhuo_spawn_final: crate::content::host::reguhuo_spawn_final,
     on_phase_end: crate::content::host::on_phase_end_l10_scs,
+    on_recover_before: crate::content::host::host_on_recover_before,
+    preserves_skills_on_death: crate::content::host::host_preserves_skills_on_death,
 };
 
 /// R05-F：目录名含 `#r05:{role}` 的全部定义号（装载器派生模板独占 `#`）。

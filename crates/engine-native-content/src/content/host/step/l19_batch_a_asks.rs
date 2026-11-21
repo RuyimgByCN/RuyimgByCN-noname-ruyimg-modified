@@ -7,11 +7,13 @@
 
 use super::super::*;
 use super::{
-    discard_cards, equip_hand_cards, flag, grant_zombie_skills, has_skill_named, huzhu_allies,
-    player_role, refund_once_used, remove_skill_named, set_flag, set_player_role, tao_hand_cards,
-    turn_stamp, ASK_GANRAN2_EQUIP, ASK_HUZHU_DISCARD_TAO, ASK_HUZHU_TARGET,
+    discard_cards, equip_hand_cards, flag, grant_skill_named, grant_zombie_skills, huzhu_allies,
+    huzhu_play_stamp, is_huzhu_human, player_role, refund_once_used, set_flag, set_player_role,
+    tao_hand_cards, ASK_GANRAN2_EQUIP, ASK_HUZHU_DISCARD_TAO, ASK_HUZHU_TARGET,
+    ASK_WUJIN_RE1_CONFIRM, ASK_WUJIN_RE2_SKILL,
 };
-use crate::catalog::Catalog;
+use super::super::l19_fixes::collect_wujin_stealable_skills;
+use crate::catalog::{CardKind, Catalog};
 use crate::choice::{ChoiceKind, ChoiceOption, ChoiceSpec};
 use crate::ids::{CardId, PlayerId};
 use crate::machine::{Ctx, Flow};
@@ -19,12 +21,16 @@ use crate::snap::ExpectedAsk;
 use crate::state::{GameStateCore, Role};
 
 pub(super) fn is_first_cancellable(ask_id: u32) -> bool {
-    matches!(ask_id, ASK_GANRAN2_EQUIP | ASK_HUZHU_DISCARD_TAO)
+    matches!(
+        ask_id,
+        ASK_GANRAN2_EQUIP | ASK_HUZHU_DISCARD_TAO | ASK_HUZHU_TARGET | ASK_WUJIN_RE1_CONFIRM
+    )
 }
 
 fn build_ask(
     ask_id: u32,
     owner: PlayerId,
+    target: Option<PlayerId>,
     core: &GameStateCore,
     catalog: &Catalog,
 ) -> Option<(PlayerId, ChoiceSpec)> {
@@ -85,6 +91,36 @@ fn build_ask(
                     options: opts,
                     min: 1,
                     max: 1,
+                    allow_cancel: true,
+                },
+            ))
+        }
+        ASK_WUJIN_RE1_CONFIRM => Some((
+            0,
+            ChoiceSpec {
+                kind: ChoiceKind::Confirm,
+                prompt: "wujinmoshiRE1:confirm",
+                options: vec![ChoiceOption::Confirm, ChoiceOption::Pass],
+                min: 1,
+                max: 1,
+                allow_cancel: true,
+            },
+        )),
+        ASK_WUJIN_RE2_SKILL => {
+            let victim = target?;
+            let pool = collect_wujin_stealable_skills(core, catalog, 0, victim);
+            if pool.is_empty() {
+                return None;
+            }
+            let opts: Vec<ChoiceOption> = (0..pool.len()).map(|i| ChoiceOption::Tag(i as u8)).collect();
+            Some((
+                0,
+                ChoiceSpec {
+                    kind: ChoiceKind::PickTag,
+                    prompt: "wujinmoshiRE2:choose_skill",
+                    options: opts,
+                    min: 1,
+                    max: 1,
                     allow_cancel: false,
                 },
             ))
@@ -100,7 +136,9 @@ pub(super) fn wait_ask(
     ask_id: u32,
 ) -> Flow {
     set_flag(ctx.core, m.owner, "l19_ask_id", ask_id);
-    if let Some((observer, spec)) = build_ask(ask_id, m.owner, ctx.core, ctx.catalog) {
+    if let Some((observer, spec)) =
+        build_ask(ask_id, m.owner, m.targets.first().copied(), ctx.core, ctx.catalog)
+    {
         m.stage = next_stage;
         Flow::WaitChoice { observer, spec }
     } else {
@@ -114,7 +152,7 @@ pub(in crate::content::host) fn ask_l19_batch_a(
     stage: HostStage,
     owner: PlayerId,
     _target: Option<PlayerId>,
-    _targets: &[PlayerId],
+    targets: &[PlayerId],
     _card: Option<CardId>,
     _cards: &[CardId],
     core: &GameStateCore,
@@ -124,7 +162,7 @@ pub(in crate::content::host) fn ask_l19_batch_a(
         return None;
     }
     let ask_id = flag(core, owner, "l19_ask_id");
-    let (observer, spec) = build_ask(ask_id, owner, core, catalog)?;
+    let (observer, spec) = build_ask(ask_id, owner, targets.first().copied(), core, catalog)?;
     Some(crate::snap::ask(
         observer,
         spec.prompt,
@@ -173,7 +211,8 @@ pub(super) fn step_huzhu(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     let owner = m.owner;
     match m.stage {
         HostStage::Act => {
-            if flag(ctx.core, owner, "_huzhu_used_stamp") == turn_stamp(ctx.core)
+            if !is_huzhu_human(ctx.core, owner)
+                || flag(ctx.core, owner, "_huzhu_used_stamp") == huzhu_play_stamp(ctx.core, owner)
                 || tao_hand_cards(ctx.core, ctx.catalog, owner).is_empty()
                 || huzhu_allies(ctx.core, ctx.catalog, owner).is_empty()
             {
@@ -192,7 +231,9 @@ pub(super) fn step_huzhu(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                 refund_once_used(ctx, owner, "_huzhu");
                 return Flow::Done;
             };
-            if !ctx.core.player(owner).hand.contains(&tao_id) {
+            if !ctx.core.player(owner).hand.contains(&tao_id)
+                || ctx.catalog.card_kind(tao_id) != CardKind::Tao
+            {
                 refund_once_used(ctx, owner, "_huzhu");
                 return Flow::Done;
             }
@@ -205,26 +246,29 @@ pub(super) fn step_huzhu(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
         }
         HostStage::TargetChoice => {
             set_flag(ctx.core, owner, "l19_ask_id", 0);
-            let ally = ctx
-                .answer()
-                .iter()
-                .find_map(|o| match *o {
-                    ChoiceOption::Player(p) => Some(p),
-                    _ => None,
-                })
-                .or_else(|| huzhu_allies(ctx.core, ctx.catalog, owner).first().copied());
+            let allies = huzhu_allies(ctx.core, ctx.catalog, owner);
+            let ally = ctx.answer().iter().find_map(|o| match *o {
+                ChoiceOption::Player(p) if allies.contains(&p) => Some(p),
+                _ => None,
+            });
             let Some(target) = ally else {
                 refund_once_used(ctx, owner, "_huzhu");
                 return Flow::Done;
             };
-            if let Some(tao_id) = m.card {
-                discard_cards(ctx, owner, &[tao_id]);
-            }
-            ctx.recover(target, 1, None);
-            set_flag(ctx.core, owner, "_huzhu_used_stamp", turn_stamp(ctx.core));
+            let Some(tao_id) = m.card.filter(|id| ctx.core.player(owner).hand.contains(id)) else {
+                refund_once_used(ctx, owner, "_huzhu");
+                return Flow::Done;
+            };
+            set_flag(ctx.core, owner, "_huzhu_used_stamp", huzhu_play_stamp(ctx.core, owner));
             set_flag(ctx.core, owner, "_huzhu_healed", 1);
             set_flag(ctx.core, owner, "l19_huzhu_healed", 1);
             set_flag(ctx.core, target, "_huzhu_recovered", 1);
+            // LIFO 解析栈：先压入虚拟【桃】CardUsed（target），再弃手桃，保证弃牌后立刻走真实 CardUsed(Tao) 链路
+            let mut virtual_tao =
+                crate::machine::card_use_as(0, owner, vec![target], Some(CardKind::Tao));
+            virtual_tao.card = None;
+            ctx.emit(EventData::CardUsed(virtual_tao));
+            discard_cards(ctx, owner, &[tao_id]);
             Flow::Done
         }
         _ => Flow::Done,
@@ -267,6 +311,14 @@ pub(super) fn transform_player_into_zombie(
         p.hp = new_max as i32;
         p.dying = false;
         p.alive = true;
+    }
+    if ctx
+        .res
+        .stack
+        .iter()
+        .any(|f| matches!(f.data, EventData::Death { player, .. } if player == victim))
+    {
+        ctx.core.player_mut(victim).death_cancelled = true;
     }
     if is_fz {
         set_player_role(ctx.core, victim, Role::Rebel);
@@ -324,41 +376,56 @@ pub(super) fn step_jiangshi4(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
 }
 
 pub(super) fn step_wujin_re(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
-    let owner = m.owner;
-    if ctx.core.player(owner).hp > 0 {
+    let Some(&victim) = m.targets.first() else {
         return Flow::Done;
+    };
+    match m.stage {
+        HostStage::Act => {
+            let fid = ctx.current_event_frame_id();
+            let guard = format!("_wujin_re_frame:{fid}");
+            if flag(ctx.core, 0, &guard) > 0 {
+                return Flow::Done;
+            }
+            set_flag(ctx.core, 0, &guard, 1);
+            if victim == 0 {
+                set_flag(ctx.core, 0, "_wujinmoshiRE_reset", 1);
+                return Flow::Done;
+            }
+            if !ctx.core.player(0).alive {
+                return Flow::Done;
+            }
+            set_flag(ctx.core, 0, "wujinmoshiESkillE", 0);
+            let dxb = flag(ctx.core, 0, "wujinmoshiDXB") + 1;
+            let ds = flag(ctx.core, 0, "wujinmoshiDS") + 1;
+            set_flag(ctx.core, 0, "wujinmoshiDXB", dxb);
+            set_flag(ctx.core, 0, "wujinmoshiDS", ds);
+            wait_ask(m, ctx, HostStage::SelectNature, ASK_WUJIN_RE1_CONFIRM)
+        }
+        HostStage::SelectNature => {
+            set_flag(ctx.core, m.owner, "l19_ask_id", 0);
+            if ctx.answer().first().copied() != Some(ChoiceOption::Confirm) {
+                set_flag(ctx.core, 0, "_wujinmoshiRE1_declined", 1);
+                return Flow::Done;
+            }
+            if collect_wujin_stealable_skills(ctx.core, ctx.catalog, 0, victim).is_empty() {
+                return Flow::Done;
+            }
+            wait_ask(m, ctx, HostStage::SelectCard, ASK_WUJIN_RE2_SKILL)
+        }
+        HostStage::SelectCard => {
+            set_flag(ctx.core, m.owner, "l19_ask_id", 0);
+            let Some(ChoiceOption::Tag(idx)) =
+                ctx.answer().iter().find(|o| matches!(o, ChoiceOption::Tag(_))).copied()
+            else {
+                return Flow::Done;
+            };
+            let pool = collect_wujin_stealable_skills(ctx.core, ctx.catalog, 0, victim);
+            if let Some(&chosen) = pool.get(idx as usize) {
+                let _ = grant_skill_named(ctx, 0, chosen);
+                set_flag(ctx.core, 0, "_wujinmoshiRE_used", 1);
+            }
+            Flow::Done
+        }
+        _ => Flow::Done,
     }
-    let has_re1 = has_skill_named(ctx.core, ctx.catalog, owner, "wujinmoshiRE1")
-        || flag(ctx.core, owner, "wujinmoshiRE1") > 0;
-    let has_re2 = has_skill_named(ctx.core, ctx.catalog, owner, "wujinmoshiRE2")
-        || flag(ctx.core, owner, "wujinmoshiRE2") > 0;
-
-    if m.def_key != "wujinmoshiRE2" && has_re1 {
-        remove_skill_named(ctx, owner, "wujinmoshiRE1");
-        set_flag(ctx.core, owner, "wujinmoshiRE1", 0);
-        let max_hp = ctx.core.player(owner).max_hp as i32;
-        let cur_hp = ctx.core.player(owner).hp;
-        if max_hp > cur_hp {
-            ctx.recover(owner, (max_hp - cur_hp) as u32, None);
-        }
-        ctx.core.player_mut(owner).hp = max_hp;
-        ctx.core.player_mut(owner).dying = false;
-        ctx.start_draw(owner, 3);
-        set_flag(ctx.core, owner, "_wujinmoshiRE_used", 1);
-    } else if m.def_key != "wujinmoshiRE1" && has_re2 {
-        remove_skill_named(ctx, owner, "wujinmoshiRE2");
-        set_flag(ctx.core, owner, "wujinmoshiRE2", 0);
-        if ctx.core.player(owner).max_hp < 3 {
-            ctx.core.player_mut(owner).max_hp = 3;
-        }
-        let cur_hp = ctx.core.player(owner).hp;
-        if 3 > cur_hp {
-            ctx.recover(owner, (3 - cur_hp) as u32, None);
-        }
-        ctx.core.player_mut(owner).hp = 3;
-        ctx.core.player_mut(owner).dying = false;
-        ctx.start_draw(owner, 5);
-        set_flag(ctx.core, owner, "_wujinmoshiRE_used", 2);
-    }
-    Flow::Done
 }

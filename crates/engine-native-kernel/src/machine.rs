@@ -821,6 +821,8 @@ impl<'a> Ctx<'a> {
         if self.catalog.has_diaohulishan(self.core, player) {
             return 0;
         }
+        let mut amount = amount;
+        (self.catalog.hooks.on_recover_before)(self, player, &mut amount);
         let p = self.core.player_mut(player);
         if !p.alive {
             return 0;

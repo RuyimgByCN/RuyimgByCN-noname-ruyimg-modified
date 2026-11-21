@@ -149,12 +149,47 @@ pub fn resolve_l19_doomsday_remaining(ctx: &mut Ctx<'_>, skill_name: &str, owner
         }
         // chanceIdentity..chanceIdentity15 & chanceIdentity0 (`末日乱斗/extension.js:843-1032`):
         s if s.starts_with("chanceIdentity") => {
-            let slot: u32 = s
-                .trim_start_matches("chanceIdentity")
-                .parse::<u32>()
-                .unwrap_or(1)
-                .max(1);
-            set_flag(ctx.core, owner, "l19_chance_identity_assigned", slot);
+            let n = ctx.core.alive_players().count();
+            let mut cur_seat = owner;
+            let mut cur_name: &str = s;
+            for _ in 0..18 {
+                let (idx, label, gate, next_sk): (u32, &str, Option<usize>, Option<&str>) =
+                    match cur_name {
+                        "chanceIdentity0" => (0, "yi", None, Some("chanceIdentity")),
+                        "chanceIdentity" => (1, "er", Some(2), Some("chanceIdentity2")),
+                        "chanceIdentity2" => (2, "san", Some(3), Some("chanceIdentity3")),
+                        "chanceIdentity3" => (3, "si", Some(4), Some("chanceIdentity4")),
+                        "chanceIdentity4" => (4, "wu1", Some(5), Some("chanceIdentity5")),
+                        "chanceIdentity5" => (5, "liu", Some(6), Some("chanceIdentity6")),
+                        "chanceIdentity6" => (6, "qi", Some(7), Some("chanceIdentity7")),
+                        "chanceIdentity7" => (7, "ba", Some(8), Some("chanceIdentity8")),
+                        "chanceIdentity8" => (8, "jiu1", Some(9), Some("chanceIdentity9")),
+                        "chanceIdentity9" => (9, "shi", Some(10), Some("chanceIdentity10")),
+                        "chanceIdentity10" => (10, "shiyi", Some(11), Some("chanceIdentity11")),
+                        "chanceIdentity11" => (11, "shier", Some(12), Some("chanceIdentity12")),
+                        "chanceIdentity12" => (12, "shisan", Some(13), Some("chanceIdentity13")),
+                        "chanceIdentity13" => (13, "shisi", Some(14), Some("chanceIdentity14")),
+                        "chanceIdentity14" => (14, "shiwu", Some(15), Some("chanceIdentity15")),
+                        "chanceIdentity15" => (15, "shiliu", Some(16), None),
+                        _ => break,
+                    };
+                let next = ctx.core.next_alive(cur_seat);
+                ctx.core.player_mut(next).kingdom_identity =
+                    crate::state::KingdomIdentity::Declared(label.to_string());
+                set_flag(ctx.core, next, "l19_chance_identity_slot", idx + 1);
+                set_flag(ctx.core, cur_seat, "l19_chance_identity_assigned", idx + 1);
+                match (gate, next_sk) {
+                    (None, Some(ns)) => {
+                        cur_seat = next;
+                        cur_name = ns;
+                    }
+                    (Some(g), Some(ns)) if n > g => {
+                        cur_seat = next;
+                        cur_name = ns;
+                    }
+                    _ => break,
+                }
+            }
         }
         // _gainSkill (`末日乱斗/extension.js:1033-1155`): inherits fallen character skill on kill.
         "_gainSkill" => {

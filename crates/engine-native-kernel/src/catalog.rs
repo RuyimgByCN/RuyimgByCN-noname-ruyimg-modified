@@ -1085,7 +1085,7 @@ pub struct ContentHooks {
     pub on_player_died: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId),
     /// 出牌阶段结束（`phaseUseEnd`）宿主临时技清理钩子（如 `new_zhixi`/`new_meibu_range`/`bolan`）。
     pub on_phase_use_end: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId),
-    /// 轮次开始（`roundStart`）宿主轮标与展示清除钩子（如 `xingchong`/`clandianzhan`）。
+    /// 轮次开始（`roundStart`）宿主轮标、展示清理与 `_relifeskill` 倒数复活钩子。
     pub on_round_start: fn(&mut crate::machine::Ctx<'_>),
     /// 手牌移除钩子（如 `xingchong` 在使用/打出/装备/弃置离手时立即摸 2 而不依赖额外事件表）。
     pub on_hand_card_removed:
@@ -1122,6 +1122,10 @@ pub struct ContentHooks {
     pub reguhuo_spawn_final: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId, usize),
     /// 回合结束（`Phase::End { begin: false }`）宿主清理/归还回调（如 `scschiyan_get`）。
     pub on_phase_end: fn(&mut crate::machine::Ctx<'_>),
+    /// 回复前置（`recoverBefore`）宿主数值修正钩子（如 `L19 _wujinmoshiRecover`）。
+    pub on_recover_before: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId, &mut u32),
+    /// 死亡结算是否保留死者技能表（如存在存活 `Role::Lord` 持有 `L19 _relifeskill`）。
+    pub preserves_skills_on_death: fn(&crate::state::GameStateCore, &Catalog, crate::ids::PlayerId) -> bool,
 }
 
 impl ContentHooks {
@@ -1156,6 +1160,8 @@ impl ContentHooks {
         reguhuo_has_pending_final: |_, _| false,
         reguhuo_spawn_final: |_, _, _| {},
         on_phase_end: |_| {},
+        on_recover_before: |_, _, _| {},
+        preserves_skills_on_death: |_, _, _| false,
     };
 }
 

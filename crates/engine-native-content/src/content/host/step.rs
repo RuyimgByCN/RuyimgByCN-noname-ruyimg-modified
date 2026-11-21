@@ -91,10 +91,21 @@ pub(super) mod l27_fixes;
 pub(super) mod l27_fixes_b;
 pub(crate) use l27_fixes::{
     host_on_game_start, host_on_hand_card_removed, host_on_phase_use_end, host_on_player_died,
-    host_on_round_start, on_skill_removed_all,
+    host_on_round_start as host_on_round_start_l27, on_skill_removed_all,
 };
 pub(super) mod l19_batch_a;
 pub(super) mod l19_batch_b;
+pub(super) mod l19_fixes;
+pub(crate) use l19_fixes::{
+    host_on_recover_before, host_on_round_start as host_on_round_start_l19,
+    host_preserves_skills_on_death, play_begin_l19,
+};
+
+/// 轮次开始复合宿主钩子：依次执行 L27 轮标/展示清理与 L19 `_relifeskill` 倒数复活。
+pub(crate) fn host_on_round_start(ctx: &mut Ctx<'_>) {
+    host_on_round_start_l27(ctx);
+    host_on_round_start_l19(ctx);
+}
 pub(super) mod l20_batch_a;
 pub(super) mod l20_batch_b;
 pub(super) mod u08_batch_a;
