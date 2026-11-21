@@ -132,7 +132,15 @@ impl Engine {
                         use crate::snap::PhysicalCardZone::*;
                         full_info
                             || match card.zone {
-                                Hand => seat.is_some() && card.owner == seat,
+                                Hand => {
+                                    (seat.is_some() && card.owner == seat)
+                                        || card.owner.is_some_and(|owner| {
+                                            core.vm_aux
+                                                .flags
+                                                .get(&(owner, format!("xingchong_card:{}", card.id)))
+                                                == Some(&1)
+                                        })
+                                }
                                 Equip | Judge | DiscardPile | Processing => true,
                                 // R05：R 帧 held 与 detached 实体区对席位/
                                 // 观战隐藏牌面（Referee 经全信息路径另行可见）。

@@ -81,7 +81,9 @@ impl HostBehavior {
             // 涅槃：自己濒死（可选；出牌阶段面走 activate）
             HostBehavior::Niepan => self.trigger_meta_common(),
             // 清正：出牌阶段开始（可选）
-            HostBehavior::MbcmQingzheng => self.trigger_meta_common(),
+            HostBehavior::MbcmQingzheng | HostBehavior::L27MbcmQingzheng => {
+                self.trigger_meta_common()
+            }
             // 酒诗 / 放逐 / 决进（L29 龙血玄黄）：酒诗含受伤翻回+翻面得锦囊触发；放逐/决进为出牌阶段主动
             HostBehavior::MbcmJiushi
             | HostBehavior::MbcmFangzhu

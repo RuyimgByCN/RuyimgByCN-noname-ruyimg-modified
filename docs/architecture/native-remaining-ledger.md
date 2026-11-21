@@ -1,5 +1,9 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+## 2026-11-21 Batch Q2-L27（L27 选将美化 12 项）合入（待提交／发布）
+
+基线 HEAD `d9e1c9a1fcea4f19f1555bedb416aee8b51fc9b8`（Batch UI-2 CI Run `44899269373` Attempt 1 `10/10 success` 已并入 `ci-runs.md`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `verifier-rules` 三轮核验通过（#47 **`APPROVE`**）的 `swarm/conv-q2` `af6ef4899..f3b59ecf6` 并协调 `skills_damage.rs`/`asks_mtg.rs`/`combat_rules.rs` 与 L29 共存：关闭 `L27` 全部 12 项规则与带规 UI 钩子（`xiefang`、`new_meibu`、`new_zhixi`、`clandianzhan`、`reqimou`、`bolan`、`mbcmqingzheng`、`sbqingzheng`、`xingchong`、`dcxiaoxi`、`twfengji`、`twzhouzu`），在 `main` 全量通过 `--workspace`（7,934/0/8）及 4 crate（2,586/0/6）。`L27` 更新为 **53／1／0**（仅 `e.css` 留 `简化近似` 归 UI 线），全仓清单更新为 **已复核等价 689／简化近似 3,735／缺失 0**（整包八项 `0/37`）。见 [Batch Q2-L27 证据](../operations/evidence/2026-11-21-batch2-1-l27/README.md) 与 [进度主稿](native-progress.md)。
+
 ## 2026-11-21 Batch UI-2（L08 十周年UI 44 配置与 43 表面）合入（待提交／发布）
 
 基线 HEAD `3686468ca8e05a04440fce62dd0e14cfe3517547`（Batch UI-1 CI Run `44894025555` Attempt 1 `10/10 success` 已并入 `ci-runs.md`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `verifier-ui` 复核通过（#39 **`APPROVE`**）的 `swarm/conv-ui` `aa8ac1adf` + `3a7fa305d`：洁净室实现 `L08` 44 `configs`（Schema、互斥联动、`data-*` 投影、牌桌与弹窗交互）及 43 `surfaces`（10 JS + 33 CSS）前端运行时与样式选择符（无 `spine.js` 读取与商业资源打包），在 `main` 全量通过 `--workspace`（7,914/0/8）、3 crate（2,518/0/6）、498 前端单测及 Chrome CDP 验证（注：`tabletop-responsive-cdp.mjs` 首次 9s 冷启动超时后重跑通过）。按 #39 仅升级已核验的 21 项 `L08:configs:*` 为 `已复核等价`（其余 23 项配置与 43 项表面维持 `简化近似`），`L08` 变为 **21／385／0**，全仓清单更新为 **已复核等价 677／简化近似 3,747／缺失 0**（整包八项 `0/37`）。见 [Batch UI-2 证据](../operations/evidence/2026-11-21-ui-l08-configs-surfaces/README.md) 与 [进度主稿](native-progress.md)。

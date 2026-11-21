@@ -198,24 +198,27 @@ fn l27_batch_b_active_and_duorui_skills() {
 
         clear_hand(&mut e, 0);
         clear_hand(&mut e, 1);
-        set_flag(&mut e, 1, "sbjianxiong", 1); // need = 3 - 1 = 2 suits, or min(need, suits.len())
+        // 选将美化/extension.js:4828 需持有 sbjianxiong 技能才判治世增标
+        e.debug_grant(1, "sbjianxiong");
+        set_flag(&mut e, 1, "sbjianxiong", 1); // need = 3 - 1 = 2 suits (extension.js:4287,4391)
         let sp1 = card_by(&e, |_, c| c.suit == Suit::Spade);
-        let sp2 = card_by(&e, |id, c| c.suit == Suit::Spade && id != sp1);
+        let c1 = card_by(&e, |_, c| c.suit == Suit::Club);
         let h1 = card_by(&e, |_, c| c.suit == Suit::Heart);
         give(&mut e, 1, sp1);
-        give(&mut e, 1, sp2);
+        give(&mut e, 1, c1);
         give(&mut e, 0, h1);
         let hp0 = hp(&e, 0);
         e.debug_set_turn(1, Phase::Draw, 1);
         let _ = submit(&mut e, 1, GameAction::NextPhase);
-        snapshot_roundtrip(&e, &p, vec![tag(0)]);
-        answer(&mut e, "sbqingzheng:choose_suits", vec![tag(0)]); // Spade (2 cards)
+        snapshot_roundtrip(&e, &p, vec![tag(0), tag(2)]);
+        answer(&mut e, "sbqingzheng:choose_suits", vec![tag(0), tag(2)]); // Spade + Club (2 suits)
         answer(&mut e, "sbqingzheng:choose_target", vec![pl(0)]);
         answer(&mut e, "sbqingzheng:choose_target_suit", vec![tag(1)]); // Heart (1 card)
         snapshot_roundtrip(&e, &p, vec![tag(1)]);
         answer(&mut e, "sbqingzheng:gain_mark", vec![tag(1)]);
         drain(&mut e);
-        assert_eq!(hp(&e, 0), hp0 - 1);
+        // 选将美化/extension.js:4825 (event.discardMeCards > event.discardHimCards && event.discardHimCards > 0) 在 DOM 数组比较下恒 false（无伤害）；step 5 仍判 sbjianxiong 获治世
+        assert_eq!(hp(&e, 0), hp0);
         assert_eq!(flag(&e, 1, "sbjianxiong"), 2);
     }
 }
@@ -255,8 +258,8 @@ fn l27_batch_b_tw_and_companion_skills() {
         while let Some(c) = e.open_choice().cloned() {
             match c.spec.prompt {
                 "twxiafeng:choose_count" => {
-                    snapshot_roundtrip(&e, &p, vec![tag(1)]);
-                    answer(&mut e, "twxiafeng:choose_count", vec![tag(1)]);
+                    snapshot_roundtrip(&e, &p, vec![tag(2)]);
+                    answer(&mut e, "twxiafeng:choose_count", vec![tag(2)]);
                 }
                 "dcxiaoxi:choose_count" => {
                     snapshot_roundtrip(&e, &p, vec![tag(1)]);
@@ -266,7 +269,7 @@ fn l27_batch_b_tw_and_companion_skills() {
                     answer(&mut e, "dcxiaoxi:choose_target", vec![pl(1)]);
                 }
                 "dcxiaoxi:choose_mode" => {
-                    answer(&mut e, "dcxiaoxi:choose_mode", vec![tag(1)]); // deal 1 damage
+                    answer(&mut e, "dcxiaoxi:choose_mode", vec![tag(1)]); // real useCard(sha) (extension.js:6855)
                 }
                 _ => {
                     drain(&mut e);
@@ -274,8 +277,8 @@ fn l27_batch_b_tw_and_companion_skills() {
                 }
             }
         }
-        assert_eq!(flag(&e, 0, "twxiafeng_x"), 1);
-        assert_eq!(flag(&e, 0, "baonvezhi"), 1);
+        assert_eq!(flag(&e, 0, "twxiafeng_x"), 2);
+        assert_eq!(flag(&e, 0, "baonvezhi"), 0);
         assert_eq!(e.state_core().player(0).max_hp, 4);
         assert!(
             eval_sha_use_limit(

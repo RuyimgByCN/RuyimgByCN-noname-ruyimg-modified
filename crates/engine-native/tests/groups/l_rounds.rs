@@ -115,6 +115,9 @@ mod l27_sbzhaxiang_batch4;
 #[path = "../l27_select_beautify_eight.rs"]
 mod l27_select_beautify_eight;
 
+#[path = "../l27_beautify_fixes.rs"]
+mod l27_beautify_fixes;
+
 #[path = "../l27_xiefang_batch1.rs"]
 mod l27_xiefang_batch1;
 

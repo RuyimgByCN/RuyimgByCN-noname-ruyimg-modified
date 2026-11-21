@@ -21,11 +21,16 @@ pub(crate) const CONTENT_HOOKS: ContentHooks = ContentHooks {
     play_begin_step: crate::content::host::play_begin_tianshu,
     on_outer_settled: crate::content::host::on_outer_settled_taipingyaoshu,
     on_cards_to_discard: crate::content::host::on_cards_to_discard_chengye,
-    on_skill_removed: crate::content::host::on_skill_removed_l28,
+    on_skill_removed: crate::content::host::on_skill_removed_all,
     sha_begin_step: crate::content::host::host_sha_begin_step,
     sha_end_step: crate::content::host::host_sha_end_step,
     draw_begin_step: crate::content::host::host_draw_begin_step,
     on_card_use_after: crate::content::host::host_card_use_after,
+    on_game_start: crate::content::host::host_on_game_start,
+    on_player_died: crate::content::host::host_on_player_died,
+    on_phase_use_end: crate::content::host::host_on_phase_use_end,
+    on_round_start: crate::content::host::host_on_round_start,
+    on_hand_card_removed: crate::content::host::host_on_hand_card_removed,
 };
 
 /// R05-F：目录名含 `#r05:{role}` 的全部定义号（装载器派生模板独占 `#`）。

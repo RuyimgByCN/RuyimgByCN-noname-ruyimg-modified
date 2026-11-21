@@ -435,7 +435,7 @@ pub(super) fn active_ask_batches(
                 true,
             ))
         }
-        HostBehavior::MbcmQingzheng => {
+        HostBehavior::MbcmQingzheng | HostBehavior::L27MbcmQingzheng => {
             let suit_opts = |p: PlayerId| -> Vec<ChoiceOption> {
                 let mut suits: Vec<u8> = Vec::new();
                 for c in core.player(p).hand.iter().copied() {

@@ -24,8 +24,9 @@ mod l27_batch_b_asks;
 mod l27_batch_b_tw;
 
 pub(in crate::content::host) use l27_batch_b_asks::ask_l27_batch_b;
-use l27_batch_b_asks::{target_skills_list, wait_ask};
+pub(super) use l27_batch_b_asks::{target_skills_list, wait_ask};
 
+pub(super) const ASK_BOLAN_G_TARGET: u32 = 200;
 pub(super) const ASK_BOLAN_SKILL: u32 = 201;
 pub(super) const ASK_BOLAN_G_SKILL: u32 = 202;
 pub(super) const ASK_DUORUI_SLOT: u32 = 210;
@@ -49,6 +50,7 @@ pub(super) const ASK_XINGCHONG_SHOW: u32 = 281;
 pub(super) const ASK_DCXIAOXI_COUNT: u32 = 290;
 pub(super) const ASK_DCXIAOXI_TARGET: u32 = 291;
 pub(super) const ASK_DCXIAOXI_MODE: u32 = 292;
+pub(super) const ASK_DCXIAOXI_GAIN_CARD: u32 = 293;
 pub(super) const ASK_TWFENGJI_CARD: u32 = 300;
 pub(super) const ASK_TWFENGJI_TURNS: u32 = 301;
 pub(super) const ASK_TWHARVESTINORI_CARD: u32 = 310;
@@ -59,6 +61,7 @@ pub(super) const ASK_TWZUHUO_CARD: u32 = 330;
 pub(super) const ASK_TWZUHUO_TURNS: u32 = 331;
 pub(super) const ASK_TWZHOUZU_TARGET: u32 = 340;
 pub(super) const ASK_TWZHOUZU_TURNS: u32 = 341;
+pub(super) const ASK_TWZHOUZU_TARGET_DISCARD: u32 = 342;
 
 pub(super) const BOLAN_SKILL_POOL: [&str; 3] = ["zhiheng", "qiangxi", "quhu"];
 
@@ -311,11 +314,6 @@ pub(in crate::content::host) fn filter_l27_batch_b(
                 phase: Phase::Play,
                 begin: true,
             } => *player == owner,
-            EventData::Phase {
-                player,
-                phase: Phase::Play,
-                begin: false,
-            } => flag(ctx.state, *player, "bolan_temp_skill") > 0,
             _ => false,
         },
         "drlt_duorui" | "pro_drlt_duorui" => match event {
@@ -405,14 +403,13 @@ pub(in crate::content::host) fn filter_l27_batch_b(
             } if flag(ctx.state, owner, "twxingzhui_rem") > 0
         ),
         "xingchong" => match event {
-            EventData::TurnBegin { player }
+            EventData::TurnBegin { .. }
             | EventData::Phase {
-                player,
                 phase: Phase::Prepare,
                 begin: true,
+                ..
             } => {
-                *player == owner
-                    && ctx.state.player(owner).max_hp > 0
+                ctx.state.player(owner).max_hp > 0
                     && flag(ctx.state, owner, "xingchong_round_used")
                         != ctx.state.turn.round.max(1)
             }
@@ -446,10 +443,10 @@ pub(in crate::content::host) fn filter_l27_batch_b(
                     && !hand_and_equips(ctx.state, owner).is_empty()
             }
             EventData::Phase {
-                player,
                 phase: Phase::Prepare,
                 begin: true,
-            } => *player == owner && flag(ctx.state, owner, "twfengji_rem") > 0,
+                ..
+            } => flag(ctx.state, owner, "twfengji_rem") > 0,
             _ => false,
         },
         "twharvestinori" => matches!(
@@ -505,7 +502,13 @@ pub(in crate::content::host) fn activate_l27_batch_b(
         return None;
     }
     let can_activate = match skill.name.as_str() {
-        "bolan" | "bolan_g" => ctx.state.player(owner).hp > 0,
+        "bolan" => false,
+        "bolan_g" => {
+            ctx.state.player(owner).hp > 0
+                && alive_others(ctx.state, owner)
+                    .into_iter()
+                    .any(|p| super::l27_fixes::has_skill_named(ctx.state, ctx.catalog, p, "bolan"))
+        }
         "xinfu_xionghuo" => {
             (flag(ctx.state, owner, "xinfu_xionghuo_init") == 0
                 || flag(ctx.state, owner, "xinfu_xionghuo_marks") > 0)
@@ -633,7 +636,9 @@ pub(in crate::content::host) fn handle_l27_batch_b(
 ) -> Flow {
     let owner = m.owner;
     let ask_id = flag(ctx.core, owner, "l27_b_ask_id");
-    if m.stage != HostStage::Act
+    if ask_id != 0
+        && m.stage != HostStage::Act
+        && m.stage != HostStage::DrawSettle
         && ctx.answer().is_empty()
         && !l27_batch_b_asks::has_custom_cancel(ask_id)
     {
@@ -644,71 +649,23 @@ pub(in crate::content::host) fn handle_l27_batch_b(
         return Flow::Done;
     }
     match m.def_key.as_str() {
-        "bolan" | "bolan_g" => step_bolan(m, ctx),
+        "bolan" | "bolan_g" => super::l27_fixes::step_bolan_fix(m, ctx),
         "drlt_duorui" | "pro_drlt_duorui" => step_drlt_duorui(m, ctx),
         "xinfu_xionghuo" => l27_batch_b_tw::step_xinfu_xionghuo(m, ctx),
         "mbwuling" => l27_batch_b_tw::step_mbwuling(m, ctx),
-        "sbqingzheng" => l27_batch_b_tw::step_sbqingzheng(m, ctx),
+        "sbqingzheng" => super::l27_fixes_b::step_sbqingzheng_fix(m, ctx),
         "spyanjiao" => l27_batch_b_tw::step_spyanjiao(m, ctx),
         "twxiafeng" => l27_batch_b_tw::step_twxiafeng(m, ctx),
         "twxingzhui" => l27_batch_b_tw::step_twxingzhui(m, ctx),
-        "xingchong" => l27_batch_b_tw::step_xingchong(m, ctx),
-        "dcxiaoxi" => l27_batch_b_tw::step_dcxiaoxi(m, ctx),
-        "twfengji" => l27_batch_b_tw::step_twfengji(m, ctx),
+        "xingchong" => super::l27_fixes_b::step_xingchong_fix(m, ctx),
+        "dcxiaoxi" => super::l27_fixes_b::step_dcxiaoxi_fix(m, ctx),
+        "twfengji" => super::l27_fixes_b::step_twfengji_fix(m, ctx),
         "twharvestinori" => l27_batch_b_tw::step_twharvestinori(m, ctx),
         "twzhouhu" => l27_batch_b_tw::step_twzhouhu(m, ctx),
         "twzuhuo" => l27_batch_b_tw::step_twzuhuo(m, ctx),
-        "twzhouzu" => l27_batch_b_tw::step_twzhouzu(m, ctx),
+        "twzhouzu" => super::l27_fixes_b::step_twzhouzu_fix(m, ctx),
         "jishe2" => l27_batch_b_tw::step_jishe2(m, ctx),
         "new_zhixi_recover" => l27_batch_b_tw::step_new_zhixi_recover(m, ctx),
-        _ => Flow::Done,
-    }
-}
-
-fn step_bolan(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
-    let owner = m.owner;
-    match m.stage {
-        HostStage::Act => {
-            if m.card == Some(14) {
-                let p = m.target.unwrap_or(owner);
-                let g_def = flag(ctx.core, p, "bolan_granted_def");
-                if g_def > 0 {
-                    ctx.core.skills.remove(&(p, (g_def - 1) as u16));
-                    set_flag(ctx.core, p, "bolan_granted_def", 0);
-                }
-                set_flag(ctx.core, p, "bolan_temp_skill", 0);
-                return Flow::Done;
-            }
-            if m.def_key == "bolan_g" || (m.card.is_none() && ctx.core.turn.current != owner) {
-                let beneficiary = if m.def_key == "bolan_g" {
-                    owner
-                } else {
-                    ctx.core.turn.current
-                };
-                m.target = Some(beneficiary);
-                ctx.emit(EventData::LoseHp {
-                    player: beneficiary,
-                    amount: 1,
-                });
-                return wait_ask(m, ctx, HostStage::SelectNature, ASK_BOLAN_G_SKILL);
-            }
-            m.target = Some(owner);
-            wait_ask(m, ctx, HostStage::SelectNature, ASK_BOLAN_SKILL)
-        }
-        HostStage::SelectNature => {
-            let idx = match ctx.answer().first().copied() {
-                Some(ChoiceOption::Tag(n)) => (n as usize) % BOLAN_SKILL_POOL.len(),
-                _ => return Flow::Done,
-            };
-            let beneficiary = m.target.unwrap_or(owner);
-            if let Some(def) = grant_skill_named(ctx, beneficiary, BOLAN_SKILL_POOL[idx]) {
-                set_flag(ctx.core, beneficiary, "bolan_granted_def", u32::from(def) + 1);
-            }
-            set_flag(ctx.core, beneficiary, "bolan_temp_skill", (idx as u32) + 1);
-            set_flag(ctx.core, owner, "bolan_temp_skill", (idx as u32) + 1);
-            set_flag(ctx.core, owner, "l27_b_ask_id", 0);
-            Flow::Done
-        }
         _ => Flow::Done,
     }
 }

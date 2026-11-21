@@ -9,6 +9,13 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-21 Batch Q2-L27（L27 选将美化 12 项）合入与主线全绿收口（待提交／发布）
+
+- **基线、发布与版本**：HEAD `d9e1c9a1fcea4f19f1555bedb416aee8b51fc9b8`（Batch UI-2 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `44899269373` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。
+- **集成与冲突协调**：合入 `swarm/conv-q2` `af6ef4899..f3b59ecf6`（`verifier-rules` #47 **`APPROVE`**）：并行保留 L29 `MbcmQingzheng` 与 L27 `L27MbcmQingzheng`（tag `654`、`CardsDiscarded`、`:4259` 无伤），修复偏移导致 `asks_mtg.rs` `mbcmqingzheng_target_suit` `allow_cancel` 回归，并在 `combat_rules.rs` `dying_tao_cards`/`response_kind_cards_core` 合入 `blocks_all_cards`。
+- **清单计数与整包签署**：按 #47 将 `xiefang`、`new_meibu`、`new_zhixi`、`clandianzhan`、`reqimou`、`bolan`、`mbcmqingzheng`、`sbqingzheng`、`xingchong`、`dcxiaoxi`、`twfengji`、`twzhouzu` 共 12 项升为 `已复核等价`（`L27:surfaces:e.css` 留 `简化近似`）；`L27` 升为 **53／1／0**，全仓更新为 **已复核等价 689／简化近似 3,735／缺失 0**，整包八项签署仍 `0/37`。
+- **主线实测**：5 crate `-D warnings`、`wasm32`、4 crate `2,586/0/6`（3 crate `2,538/0/6`，`l_rounds` `116/0/0`）、`--workspace --no-fail-fast` **`7,934/0/8`**、`conformance` `19/19`、`desktop-client` `20/0/1`、跨端校验及 `web-client` `typecheck`＋`test`（`498/0`）全过，见 [Batch Q2-L27 证据](../operations/evidence/2026-11-21-batch2-1-l27/README.md)。
+
 ### 2026-11-21 Batch UI-2（L08 十周年UI 44 配置与 43 表面洁净室消费）合入收口（待提交／发布）
 
 - **基线、发布与版本**：HEAD `3686468ca8e05a04440fce62dd0e14cfe3517547`（Batch UI-1 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `44894025555` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。

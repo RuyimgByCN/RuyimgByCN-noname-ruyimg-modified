@@ -171,6 +171,7 @@ impl crate::catalog::SkillMachine for DeathMachine {
         ctx.log(LogEvent::PlayerDied {
             player: self.player,
             killer: self.killer, presentation: None });
+        (ctx.catalog.hooks.on_player_died)(ctx, self.player);
         // 造异（Boss 颛顼，规则 v246）：玄冥/共工死亡且场上无存活同名
         // 将 → 造异持有者摸 4 并获「造异异变」（运行时授予；技能实例已
         // 移除，故以死亡者武将名判定）

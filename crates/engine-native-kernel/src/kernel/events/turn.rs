@@ -217,7 +217,7 @@ pub(in crate::kernel) fn commit_turn_begin(ctx: &mut Ctx<'_>, player: PlayerId) 
                 if let Some(v) = victim {
                     let c = ctx.core.player(v).hand[0];
                     let kind = ctx.catalog.card_kind(c);
-                    ctx.core.player_mut(v).hand.retain(|x| *x != c);
+                    ctx.take_hand_card(v, c);
                     if let Some(slot) = kind.equip_slot() {
                         // 装备牌自动使用：同栏替换（旧装备入弃
                         // 堆并撤销技能——931 区 play 装备先例）
@@ -635,6 +635,7 @@ pub(in crate::kernel) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: P
         }
         ctx.core.turn.round += 1;
         ctx.core.vm_aux.clear_round();
+        (ctx.catalog.hooks.on_round_start)(ctx);
     }
     ctx.core.turn.current = next;
     ctx.core.turn.phase = Phase::Judge;

@@ -449,8 +449,8 @@ impl HostMachine {
                 }
                 _ => Flow::Done,
             },
-            // 清正：选花色(direct可取消) → 选目标 → log+己方先弃(yield清失去牌窗) → 选目标花色 → 弃目标(yield) → 少弃者受伤(source=Some(owner))
-            HostBehavior::MbcmQingzheng => match self.stage {
+            // 清正：选花色(direct可取消) → 选目标 → log+己方先弃(yield清失去牌窗) → 选目标花色 → 弃目标(yield) → 少弃者受伤(source=Some(owner)；L27 UI 钩子版 :4259 无伤且附加 CardsDiscarded)
+            HostBehavior::MbcmQingzheng | HostBehavior::L27MbcmQingzheng => match self.stage {
                 HostStage::Act => {
                     let suits = mbcm_qingzheng_suits(ctx, self.owner);
                     if suits.is_empty() {
@@ -539,6 +539,12 @@ impl HostMachine {
                             origins: vec![crate::event::LostOrigin::Hand; mine.len()],
                             cards: mine.clone(),
                         });
+                        if self.behavior == HostBehavior::L27MbcmQingzheng {
+                            ctx.emit(EventData::CardsDiscarded {
+                                player: self.owner,
+                                cards: mine.clone(),
+                            });
+                        }
                     }
                     self.cards = std::mem::take(&mut mine);
                     self.stage = HostStage::JiefenTargetDiscard;
@@ -553,7 +559,12 @@ impl HostMachine {
                     }
                     let suits = mbcm_qingzheng_suits(ctx, target);
                     if suits.is_empty() {
-                        if !self.cards.is_empty() {
+                        if self.behavior == HostBehavior::L27MbcmQingzheng {
+                            ctx.core
+                                .vm_aux
+                                .flags
+                                .insert((self.owner, "l27_mbcmqingzheng_resolved".to_string()), 1);
+                        } else if !self.cards.is_empty() {
                             ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                                 Some(self.owner),
                                 target,
@@ -607,8 +618,22 @@ impl HostMachine {
                         ctx.emit(EventData::CardsLost {
                             player: target,
                             origins: vec![crate::event::LostOrigin::Hand; theirs.len()],
-                            cards: theirs,
+                            cards: theirs.clone(),
                         });
+                        if self.behavior == HostBehavior::L27MbcmQingzheng {
+                            ctx.emit(EventData::CardsDiscarded {
+                                player: target,
+                                cards: theirs,
+                            });
+                        }
+                    }
+                    if self.behavior == HostBehavior::L27MbcmQingzheng {
+                        // L27 选将美化/extension.js:4259 `(event.discardMeCards > event.discardHimCards && event.discardHimCards > 0)` 在真实数组比较下恒 false
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((self.owner, "l27_mbcmqingzheng_resolved".to_string()), 1);
+                        return Flow::Done;
                     }
                     self.cards.clear();
                     self.card = Some(u32::from(theirs_n < mine_n));
@@ -619,7 +644,10 @@ impl HostMachine {
                     let Some(target) = self.target else {
                         return Flow::Done;
                     };
-                    if self.card == Some(1) && ctx.core.player(target).alive {
+                    if self.behavior != HostBehavior::L27MbcmQingzheng
+                        && self.card == Some(1)
+                        && ctx.core.player(target).alive
+                    {
                         ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                             Some(self.owner),
                             target,

@@ -151,7 +151,21 @@ fn new_meibu_locks_target_for_play_phase() {
     drain(&mut e);
     assert!(triggered, "每步触发（确认 + 弃牌窗）");
     assert!(!e.debug_hand(0).contains(&card), "弃牌已离手");
-    // 1 号现在不能使用【杀】
+    // 选将美化/extension.js:1735：新得 `new_zhixi` 初始计数=0（hp=4 时首张非锦囊【杀】可使用，随后计数=1；若使用锦囊或达体力上限则封锁）
+    let trick = e.debug_place(1, "wuzhong");
+    e.debug_give_hand_card(1, 1, trick);
+    let out_trick = e.submit(GameCommand {
+        actor: 1,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::PlayCard { card: trick, targets: vec![] },
+    });
+    assert!(
+        matches!(out_trick, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "初始 count=0 允许使用首张牌：{out_trick:?}"
+    );
+    drain(&mut e);
+    // 使用锦囊后 1 号不能再使用【杀】
     let out = e.submit(GameCommand {
         actor: 1,
         expected_revision: e.revision(),

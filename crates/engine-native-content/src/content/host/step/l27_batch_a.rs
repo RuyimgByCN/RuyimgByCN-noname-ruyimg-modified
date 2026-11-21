@@ -31,7 +31,7 @@ use crate::state::GameStateCore;
 #[path = "l27_batch_a_asks.rs"]
 mod l27_batch_a_asks;
 pub(in crate::content::host) use l27_batch_a_asks::ask_l27_batch_a;
-use l27_batch_a_asks::wait_ask;
+pub(super) use l27_batch_a_asks::wait_ask;
 
 pub(super) const ASK_REGUSHE_TARGETS: u32 = 10;
 pub(super) const ASK_REGUSHE_PINDIAN_CARD: u32 = 11;
@@ -55,6 +55,7 @@ pub(super) const ASK_POTZHUANGSHI_DISCARD: u32 = 80;
 pub(super) const ASK_POTZHUANGSHI_LOSE_HP: u32 = 81;
 pub(super) const ASK_QIMOU_HP: u32 = 90;
 pub(super) const ASK_REQIMOU_HP: u32 = 91;
+pub(super) const ASK_REQIMOU_CONFIRM: u32 = 92;
 pub(super) const ASK_SBJIANXIONG_INIT: u32 = 100;
 pub(super) const ASK_SBJIANXIONG_CONFIRM: u32 = 101;
 pub(super) const ASK_SBJIANXIONG_REMOVE_MARK: u32 = 102;
@@ -395,17 +396,8 @@ pub(in crate::content::host) fn filter_l27_batch_a(
                     && (d.target == owner || d.source == Some(owner))
                     && flag(ctx.state, owner, "baonvezhi") < 5
         ),
-        "clandianzhan" => match event {
-            EventData::CardUsed(u) if u.player == owner && !u.cancelled => {
-                if let Some(cid) = u.card {
-                    let s_bit = suit_bit(ctx.catalog.cards[cid as usize].suit);
-                    (flag(ctx.state, owner, "clandianzhan_suit_mask") & s_bit) == 0
-                } else {
-                    false
-                }
-            }
-            _ => false,
-        },
+        // clandianzhan 迁至 useCardAfter 弹出钩子（host_card_use_after_clandianzhan）
+        "clandianzhan" => false,
         "rehuashen" => match event {
             EventData::TurnBegin { .. } => flag(ctx.state, owner, "rehuashen_init") == 0,
             EventData::Phase {
@@ -636,7 +628,9 @@ pub(in crate::content::host) fn machine_l27_batch_a(
 pub(in crate::content::host) fn handle_l27_batch_a(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     let owner = m.owner;
     let ask_id = flag(ctx.core, owner, "l27_ask_id");
-    if m.stage != HostStage::Act
+    if ask_id != 0
+        && m.stage != HostStage::Act
+        && m.stage != HostStage::DrawSettle
         && ctx.answer().is_empty()
         && !l27_batch_a_asks::has_custom_cancel(ask_id)
     {
@@ -651,7 +645,7 @@ pub(in crate::content::host) fn handle_l27_batch_a(m: &mut HostMachine, ctx: &mu
         "kuangcai" => step_kuangcai(m, ctx),
         "sbtongye" => step_sbtongye(m, ctx),
         "baonvezhi" => step_baonvezhi(m, ctx),
-        "clandianzhan" => step_clandianzhan(m, ctx),
+        "clandianzhan" => super::l27_fixes::step_clandianzhan_fix(m, ctx),
         "rehuashen" => step_rehuashen(m, ctx),
         "rexinsheng" => step_rexinsheng(m, ctx),
         "taoluan" => step_taoluan(m, ctx),
@@ -660,7 +654,7 @@ pub(in crate::content::host) fn handle_l27_batch_a(m: &mut HostMachine, ctx: &mu
         "quanji" => l27_batch_a_asks::step_quanji(m, ctx),
         "potzhuangshi" => l27_batch_a_asks::step_potzhuangshi(m, ctx),
         "qimou" => l27_batch_a_asks::step_qimou(m, ctx),
-        "reqimou" => l27_batch_a_asks::step_reqimou(m, ctx),
+        "reqimou" => super::l27_fixes::step_reqimou_fix(m, ctx),
         "sbjianxiong" => l27_batch_a_asks::step_sbjianxiong(m, ctx),
         "jinghe" => l27_batch_a_asks::step_jinghe(m, ctx),
         "baonvezhi_mark" | "rehuashen_mark" | "huamu" => Flow::Done,
@@ -882,31 +876,6 @@ fn step_baonvezhi(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     let cur = (flag(ctx.core, owner, "baonvezhi") + dmg).min(5);
     set_flag(ctx.core, owner, "baonvezhi", cur);
     set_flag(ctx.core, owner, "baonvezhi_marks", cur);
-    Flow::Done
-}
-
-fn step_clandianzhan(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
-    let owner = m.owner;
-    let Some(cid) = m.card else {
-        return Flow::Done;
-    };
-    let s_bit = suit_bit(ctx.catalog.cards[cid as usize].suit);
-    let mut mask = flag(ctx.core, owner, "clandianzhan_suit_mask") | s_bit;
-    if m.targets.len() == 1 {
-        let t = m.targets[0];
-        if ctx.core.player(t).alive && !ctx.core.player(t).linked {
-            ctx.emit(EventData::Linked {
-                player: t,
-                linked: true,
-            });
-        }
-    }
-    ctx.start_draw(owner, 1);
-    if (mask & 0xF) == 0xF {
-        mask = 0;
-        set_flag(ctx.core, owner, "clandianzhan_reset_count", flag(ctx.core, owner, "clandianzhan_reset_count") + 1);
-    }
-    set_flag(ctx.core, owner, "clandianzhan_suit_mask", mask);
     Flow::Done
 }
 

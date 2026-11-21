@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-21 Batch Q2-L27（L27 选将美化 12 项）合入与清单上调（待提交／发布）
+
+基线 HEAD `d9e1c9a1fcea4f19f1555bedb416aee8b51fc9b8`（Batch UI-2 已发布，CI Run `44899269373` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-q2` `af6ef4899..f3b59ecf6`（`verifier-rules` #47 **`APPROVE`**）并与 L29 共存对齐：`L27 选将美化` 全部 12 项剩余规则/钩子项（`xiefang`、`new_meibu`、`new_zhixi`、`clandianzhan`、`reqimou`、`bolan`、`mbcmqingzheng`、`sbqingzheng`、`xingchong`、`dcxiaoxi`、`twfengji`、`twzhouzu`）升为 `已复核等价`（`L27:surfaces:e.css` 保留 `简化近似` 归 UI 线）；`L27` 更新为 **已复核等价 53／简化近似 1／缺失 0**，全仓清单更新为 **已复核等价 689／简化近似 3,735／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch Q2-L27 复核摘要](../operations/evidence/2026-11-21-batch2-1-l27/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。
+
 ## 2026-11-21 Batch UI-2（L08 十周年UI 44 配置与 43 表面）合入与清单上调（待提交／发布）
 
 基线 HEAD `3686468ca8e05a04440fce62dd0e14cfe3517547`（Batch UI-1 已发布，CI Run `44894025555` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-ui` `aa8ac1adf` + `3a7fa305d`（`verifier-ui` #39 **`APPROVE`**）：洁净室实现 `L08 十周年UI` 全部 44 项 `configs` 与 43 项 `surfaces`（10 JS + 33 CSS）前端 Schema、配置面板、牌桌 `data-*` 投影与严格 JSON 导入守卫，经主线全量第七节门禁及 Chrome CDP 实测验证。按 #39 复核口径将 21 项已核验 `L08:configs:*` 升为 `已复核等价`（其余 23 项配置与 43 项表面维持 `简化近似`），`L08` 更新为 **已复核等价 21／简化近似 385／缺失 0**，全仓清单更新为 **已复核等价 677／简化近似 3,747／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch UI-2 复核摘要](../operations/evidence/2026-11-21-ui-l08-configs-surfaces/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。

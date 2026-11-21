@@ -207,9 +207,14 @@ impl HostSkillBehavior {
                     && !d.from_chain
                     && d.card.is_some_and(|c| ctx.catalog.card_kind(c).is_sha_like())),
             HostBehavior::Jishe => false,
-            // 止息：自己使用牌
-            HostBehavior::NewZhixi => matches!(event,
-                EventData::CardUsed(u) if u.player == owner),
+            // 止息：自己出牌阶段内使用牌（extension.js:1744 isPhaseUsing）
+            HostBehavior::NewZhixi => matches!(
+                event,
+                EventData::CardUsed(u)
+                    if u.player == owner
+                        && ctx.state.turn.current == owner
+                        && ctx.state.turn.phase == crate::event::Phase::Play
+            ),
             // 撷芳：死亡事件（任意角色）或**自己的**摸牌阶段结束
             HostBehavior::Xiefang => match event {
                 EventData::Death { .. } => true,
@@ -218,6 +223,19 @@ impl HostSkillBehavior {
                     phase: crate::event::Phase::Draw,
                     begin: false,
                 } => *player == owner,
+                EventData::Phase {
+                    phase: crate::event::Phase::Prepare,
+                    begin: false,
+                    ..
+                } => {
+                    ctx.state
+                        .vm_aux
+                        .flags
+                        .get(&(owner, "xiefang_game_draw_done".to_string()))
+                        .copied()
+                        .unwrap_or(0)
+                        == 0
+                }
                 _ => false,
             },
             // 让节：自己为该伤害承受者且未防止
@@ -415,8 +433,11 @@ impl HostSkillBehavior {
             HostBehavior::Tianxiang2 => matches!(event,
                 EventData::Damage(d) if d.target == owner && !d.prevented),
             HostBehavior::Songci => false,
-            // 清正：自己出牌阶段开始且手牌非空
+            // 清正：自己出牌阶段开始且手牌非空（独立拆臂以保留两者的相位过滤登记）
             HostBehavior::MbcmQingzheng => matches!(event,
+                EventData::Phase { player, phase: crate::event::Phase::Play, begin: true }
+                if *player == owner && !ctx.state.player(owner).hand.is_empty()),
+            HostBehavior::L27MbcmQingzheng => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::Play, begin: true }
                 if *player == owner && !ctx.state.player(owner).hand.is_empty()),
             // 酒诗：伤害/翻面分窗由 filter_in_window_with_frames 分派

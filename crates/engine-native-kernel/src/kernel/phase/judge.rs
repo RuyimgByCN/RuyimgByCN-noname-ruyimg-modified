@@ -399,7 +399,7 @@ pub(super) fn begin_prepare(ctx: &mut Ctx<'_>, player: PlayerId) {        // 绝
                         // 获得其首张手牌（若有）
                         let taken = ctx.core.player(t).hand.first().copied();
                         if let Some(c) = taken {
-                            ctx.core.player_mut(t).hand.retain(|&x| x != c);
+                            ctx.take_hand_card(t, c);
                             ctx.core.player_mut(*holder).hand.push(c);
                             ctx.log(LogEvent::CardsGiven {
                                 from: t,

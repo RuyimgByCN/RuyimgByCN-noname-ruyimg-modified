@@ -175,6 +175,7 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
                 });
             }
         }
+        (ctx.catalog.hooks.on_phase_use_end)(ctx, player);
     }
     // 护天（swd 批 131，规则 v314）：寄存只跨一个阶段边界（上游 `hutian4`
     // 临时技在下一阶段边界移除 → `hutian3` 于下一次阶段收束归还）。原生

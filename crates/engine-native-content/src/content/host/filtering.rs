@@ -222,6 +222,7 @@ impl HostSkillBehavior {
             HostBehavior::SwdLingwu => self.filter_swd(ctx, owner, event),
             // 清正：自己出牌阶段开始且手牌非空
             HostBehavior::MbcmQingzheng
+            | HostBehavior::L27MbcmQingzheng
             | HostBehavior::MbcmJiushi
             | HostBehavior::MbcmFangzhu
             | HostBehavior::MbJuejin => self.filter_common(ctx, owner, event),

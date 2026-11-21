@@ -723,9 +723,17 @@ pub fn attach_formal_package_upstream_rules(
         }
         ("upstream-liuli", "select-beautify") => {
             for &s in &L27_SELECT_BEAUTIFY_SKILLS {
-                push_skill(s, L27_SELECT_SKILL_ID);
+                if s != "mbcmqingzheng" {
+                    push_skill(s, L27_SELECT_SKILL_ID);
+                }
             }
             push_skill("_chooseCharacterTwo", L27_SELECT_SKILL_ID);
+            super::push_host_skill_if_unseen(
+                "mbcmqingzheng",
+                engine_native::content::host::HostBehavior::L27MbcmQingzheng,
+                &mut extra_host_skills,
+                &mut seen_skills,
+            );
         }
         ("upstream-liuli", "thunder") => {
             for card in super::l28_thunder_cards() {

@@ -43,7 +43,14 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
                 (ctx.catalog.hooks.on_cards_to_discard)(ctx, player, &cards, false);
             }
         }
-        EventData::CardsMoved { to, .. } => commit_cards_moved(ctx, to),
+        EventData::CardsMoved { cards, from, to } => {
+            commit_cards_moved(ctx, to);
+            for &c in &cards {
+                if from != to || !ctx.core.player(from).hand.contains(&c) {
+                    (ctx.catalog.hooks.on_hand_card_removed)(ctx, from, c);
+                }
+            }
+        }
         EventData::Recover { player, .. } => commit_recover_skills(ctx, player),
         // CardsDrawn/Recover/CardsMoved/CardResponded 等在构造或 emit 时已完成日志/区移动作。
         _ => {

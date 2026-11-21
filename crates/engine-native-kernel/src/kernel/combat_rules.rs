@@ -225,6 +225,9 @@ pub(super) fn dying_tao_cards(
     responder: PlayerId,
     dying: PlayerId,
 ) -> Vec<crate::ids::CardId> {
+    if ctx.catalog.blocks_all_cards(ctx.core, responder) {
+        return Vec::new();
+    }
     let p = ctx.core.player(responder);
     let mut out: Vec<crate::ids::CardId> = p
         .hand
@@ -250,6 +253,9 @@ pub(crate) fn response_kind_cards_core(
     responder: PlayerId,
     need: CardKind,
 ) -> Vec<crate::ids::CardId> {
+    if catalog.blocks_all_cards(core, responder) {
+        return Vec::new();
+    }
     let sealed = catalog.is_tieji_sealed(core, responder);
     let rw_lanyin = need == CardKind::Shan
         && crate::rvm_bridge::modifiers::d34_l28_mods::has_rewritten_lanyinjia(

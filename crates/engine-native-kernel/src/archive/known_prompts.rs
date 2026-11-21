@@ -620,4 +620,7 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
     "dddjuxian_gain",
     "wudian_youdishenru_use",
     "wudian_diaobing_dir",
+    "reqimou:confirm",
+    "dcxiaoxi:gain_card",
+    "bolan_g:choose_target",
 ];

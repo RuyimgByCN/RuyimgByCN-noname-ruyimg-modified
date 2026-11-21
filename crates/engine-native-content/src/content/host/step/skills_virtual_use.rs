@@ -173,8 +173,39 @@ impl HostMachine {
                                 rounds: 0,
                             },
                         );
-                        let hp = ctx.core.player(target).hp.max(1);
-                        ctx.core.vm_aux.marks.insert((target, u32::from(def)), hp);
+                        // 止息初始使用计数为 0，清理挂于出牌阶段结束（extension.js:1735-1748）
+                        ctx.core.vm_aux.marks.remove(&(target, u32::from(def)));
+                        if let Some(m2) = ctx.catalog.skill_by_name(L27_NEW_ZHIXI_MARK2_KEY) {
+                            ctx.core.vm_aux.marks.remove(&(target, u32::from(m2)));
+                        }
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .remove(&(target, "new_zhixi".to_string()));
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .remove(&(target, "new_zhixi_mark2".to_string()));
+                        ctx.core.vm_aux.flags.insert(
+                            (target, "l27_temp_phase_use:new_zhixi".to_string()),
+                            1,
+                        );
+                    }
+                    if let Some(rec_def) = ctx.catalog.skill_by_name("new_zhixi_recover") {
+                        ctx.insert_skill(
+                            (target, rec_def),
+                            crate::state::SkillInstance {
+                                owner: target,
+                                enabled: true,
+                                once_used: false,
+                                expires_end_of_turn: true,
+                                rounds: 0,
+                            },
+                        );
+                        ctx.core.vm_aux.flags.insert(
+                            (target, "l27_temp_phase_use:new_zhixi_recover".to_string()),
+                            1,
+                        );
                     }
                     if !is_sha && !is_trick && !is_black {
                         if let Some(def) = ctx.catalog.skill_by_name(L27_NEW_MEIBU_RANGE_KEY) {
@@ -192,6 +223,10 @@ impl HostMachine {
                                 .vm_aux
                                 .marks
                                 .insert((target, u32::from(def)), i32::from(self.owner));
+                            ctx.core.vm_aux.flags.insert(
+                                (target, "l27_temp_phase_use:new_meibu_range".to_string()),
+                                1,
+                            );
                         }
                     }
                     Flow::Done

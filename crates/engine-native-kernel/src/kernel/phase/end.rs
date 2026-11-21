@@ -23,7 +23,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
                     continue;
                 }
                 let c = ctx.core.player(t).hand[0];
-                ctx.core.player_mut(t).hand.retain(|x| *x != c);
+                ctx.take_hand_card(t, c);
                 ctx.core.player_mut(player).hand.push(c);
                 ctx.log(LogEvent::CardsGiven {
                     from: t,
@@ -457,7 +457,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
             let pl = ctx.core.player(player);
             if pl.alive && pl.turn_damage == 0 && !pl.hand.is_empty() {
                 let c = pl.hand[0];
-                ctx.core.player_mut(player).hand.retain(|x| *x != c);
+                ctx.take_hand_card(player, c);
                 ctx.core.player_mut(holder).hand.push(c);
                 ctx.log(LogEvent::CardsGiven {
                     from: player,

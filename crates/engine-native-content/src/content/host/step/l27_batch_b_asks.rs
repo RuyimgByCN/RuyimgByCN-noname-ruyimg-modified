@@ -76,13 +76,15 @@ fn card_ask(
     )
 }
 
-const CANCELLABLE_ASKS: [u32; 17] = [
+const CANCELLABLE_ASKS: [u32; 19] = [
+    ASK_BOLAN_G_TARGET,
     ASK_BOLAN_SKILL,
     ASK_DUORUI_SLOT,
     ASK_PRO_DUORUI_SLOT,
     ASK_XIONGHUO_TARGET,
     ASK_MBWULING_TARGET,
     ASK_SBQINGZHENG_SUITS,
+    ASK_SBQINGZHENG_TARGET,
     ASK_SBQINGZHENG_GAIN_MARK,
     ASK_SPYANJIAO_SUIT,
     ASK_TWXIAFENG_COUNT,
@@ -97,6 +99,7 @@ const CANCELLABLE_ASKS: [u32; 17] = [
 ];
 
 const FIRST_CANCELLABLE_ASKS: [u32; 15] = [
+    ASK_BOLAN_G_TARGET,
     ASK_BOLAN_SKILL,
     ASK_DUORUI_SLOT,
     ASK_PRO_DUORUI_SLOT,
@@ -106,7 +109,6 @@ const FIRST_CANCELLABLE_ASKS: [u32; 15] = [
     ASK_SPYANJIAO_SUIT,
     ASK_TWXIAFENG_COUNT,
     ASK_TWXINGZHUI_TURNS,
-    ASK_XINGCHONG_DRAW,
     ASK_TWFENGJI_CARD,
     ASK_TWHARVESTINORI_CARD,
     ASK_TWZHOUHU_CARD,
@@ -123,7 +125,10 @@ pub(super) fn is_first_cancellable(ask_id: u32) -> bool {
 }
 
 pub(super) fn has_custom_cancel(ask_id: u32) -> bool {
-    matches!(ask_id, ASK_SBQINGZHENG_GAIN_MARK | ASK_XINGCHONG_SHOW)
+    matches!(
+        ask_id,
+        ASK_SBQINGZHENG_GAIN_MARK | ASK_XINGCHONG_DRAW | ASK_XINGCHONG_SHOW
+    )
 }
 
 pub(super) fn hand_suit_tags(core: &GameStateCore, catalog: &Catalog, p: PlayerId) -> Vec<u8> {
@@ -147,7 +152,7 @@ pub(super) fn hand_suit_tags(core: &GameStateCore, catalog: &Catalog, p: PlayerI
     }
 }
 
-pub(super) fn target_skills_list(core: &GameStateCore, target: PlayerId) -> Vec<u16> {
+pub(in crate::content::host::step) fn target_skills_list(core: &GameStateCore, target: PlayerId) -> Vec<u16> {
     let mut defs: Vec<u16> = core
         .skills
         .iter()
@@ -179,13 +184,26 @@ fn build_ask_spec(
     catalog: &Catalog,
 ) -> Option<(PlayerId, ChoiceSpec)> {
     match ask_id {
+        ASK_BOLAN_G_TARGET => {
+            let cands: Vec<PlayerId> = alive_others(core, owner)
+                .into_iter()
+                .filter(|&p| {
+                    catalog
+                        .skill_by_name("bolan")
+                        .is_some_and(|def| core.has_skill(p, def))
+                })
+                .collect();
+            player_ask(owner, "bolan_g:choose_target", cands, 1, 1)
+        }
         ASK_BOLAN_SKILL | ASK_BOLAN_G_SKILL => {
             let chooser = if ask_id == ASK_BOLAN_G_SKILL {
                 target.unwrap_or(owner)
             } else {
                 owner
             };
-            tag_ask(chooser, "bolan:choose_skill", 0..3)
+            let cnt = flag(core, owner, "bolan_opt_count");
+            let n = if cnt == 0 { 3 } else { cnt.min(3) as u8 };
+            tag_ask(chooser, "bolan:choose_skill", 0..n)
         }
         ASK_DUORUI_SLOT | ASK_PRO_DUORUI_SLOT => {
             let mask = flag(core, owner, "drlt_duorui_sealed_slots_mask");
@@ -230,15 +248,19 @@ fn build_ask_spec(
             let marks = flag(core, owner, "sbjianxiong_marks")
                 .max(flag(core, owner, "sbjianxiong"))
                 .min(2);
-            let need = ((3 - marks).clamp(1, 3) as usize).min(suits.len());
-            spec_ask(
+            // 上游 `extension.js:4287, 4391`：必须恰选 `3 - marks` 种花色，不可按当前花色数缩水；手牌花色不足时仅可取消。
+            let need = (3 - marks).clamp(1, 3) as usize;
+            Some((
                 owner,
-                ChoiceKind::PickTag,
-                "sbqingzheng:choose_suits",
-                suits.into_iter().map(ChoiceOption::Tag).collect(),
-                need,
-                need,
-            )
+                ChoiceSpec {
+                    kind: ChoiceKind::PickTag,
+                    prompt: "sbqingzheng:choose_suits",
+                    options: suits.into_iter().map(ChoiceOption::Tag).collect(),
+                    min: need,
+                    max: need,
+                    allow_cancel: true,
+                },
+            ))
         }
         ASK_SBQINGZHENG_TARGET => {
             let cands: Vec<PlayerId> = alive_others(core, owner)
@@ -247,7 +269,11 @@ fn build_ask_spec(
                 .collect();
             player_ask(owner, "sbqingzheng:choose_target", cands, 1, 1)
         }
-        ASK_SBQINGZHENG_TARGET_SUIT => tag_ask(owner, "sbqingzheng:choose_target_suit", 0..4),
+        ASK_SBQINGZHENG_TARGET_SUIT => {
+            let t = target?;
+            let suits = hand_suit_tags(core, catalog, t);
+            tag_ask(owner, "sbqingzheng:choose_target_suit", suits)
+        }
         ASK_SBQINGZHENG_GAIN_MARK => tag_ask(owner, "sbqingzheng:gain_mark", 0..=1),
         ASK_SPYANJIAO_SUIT => {
             let suits = hand_suit_tags(core, catalog, owner);
@@ -288,17 +314,22 @@ fn build_ask_spec(
             tag_ask(owner, "dcxiaoxi:choose_count", 1..=max_lose)
         }
         ASK_DCXIAOXI_TARGET => {
-            let others = alive_others(core, owner);
-            let range = core.attack_range(catalog, owner);
-            let in_range: Vec<PlayerId> = others
-                .iter()
-                .copied()
-                .filter(|&p| core.computed_distance(catalog, owner, p) <= range)
-                .collect();
-            let cands = if in_range.is_empty() { others } else { in_range };
+            let cands = super::super::l27_fixes_b::dcxiaoxi_in_range_targets(core, catalog, owner);
             player_ask(owner, "dcxiaoxi:choose_target", cands, 1, 1)
         }
         ASK_DCXIAOXI_MODE => tag_ask(owner, "dcxiaoxi:choose_mode", 0..=1),
+        ASK_DCXIAOXI_GAIN_CARD => {
+            let t = target.unwrap_or(owner);
+            let tp = core.player(t);
+            let total = tp.hand.len() + tp.equips.len();
+            if total == 0 {
+                return None;
+            }
+            let x = flag(core, owner, "dcxiaoxi_x").clamp(1, 2) as usize;
+            let need = x.min(total);
+            let opts = crate::event::qinglong_options(owner, t, &tp.hand, &tp.equips);
+            spec_ask(owner, ChoiceKind::SelectCards, "dcxiaoxi:gain_card", opts, need, need)
+        }
         ASK_TWFENGJI_CARD => {
             card_ask(owner, "twfengji:choose_card", hand_and_equips(core, owner), 1, 1)
         }
@@ -347,11 +378,21 @@ fn build_ask_spec(
             player_ask(owner, "twzhouzu:choose_target", alive_others(core, owner), 1, 1)
         }
         ASK_TWZHOUZU_TURNS => tag_ask(owner, "twzhouzu:choose_turns", 1..=3),
+        ASK_TWZHOUZU_TARGET_DISCARD => {
+            let t = target.unwrap_or(owner);
+            let hand = core.player(t).hand.clone();
+            if hand.is_empty() {
+                return None;
+            }
+            let x = flag(core, owner, "twzhouzu_x").clamp(1, 3) as usize;
+            let need = x.min(hand.len());
+            card_ask(t, "twzhouzu:target_discard", hand, need, need)
+        }
         _ => None,
     }
 }
 
-pub(super) fn wait_ask(
+pub(in crate::content::host::step) fn wait_ask(
     m: &mut HostMachine,
     ctx: &mut Ctx<'_>,
     stage: HostStage,

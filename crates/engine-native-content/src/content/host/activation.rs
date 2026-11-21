@@ -273,3 +273,314 @@ impl HostSkillBehavior {
         }
     }
 }
+
+pub(in crate::content::host) fn has_phase_use_activation(
+    behavior: HostBehavior,
+    name: &str,
+) -> bool {
+    match behavior {
+        HostBehavior::Xuanyuan => false,
+        HostBehavior::SwdZhenjiu
+        | HostBehavior::SwdLmazui
+        | HostBehavior::SwdJianji
+        | HostBehavior::SwdAojian
+        | HostBehavior::SwdHuajin
+        | HostBehavior::SwdNlianji
+        | HostBehavior::SwdShehun
+        | HostBehavior::SwdJuxi
+        | HostBehavior::SwdPozhou2
+        | HostBehavior::SwdSxianjing
+        | HostBehavior::SwdJinlin
+        | HostBehavior::Kurou
+        | HostBehavior::Jishe
+        | HostBehavior::Reguhuo
+        | HostBehavior::Gongxin
+        | HostBehavior::Moyan
+        | HostBehavior::SwdTianshu
+        | HostBehavior::Jilve
+        | HostBehavior::Gxianyin
+        | HostBehavior::Bingfeng
+        | HostBehavior::Hxunzhi
+        | HostBehavior::Songci
+        | HostBehavior::SwdLinyun
+        | HostBehavior::Niepan
+        | HostBehavior::SwdGuxing
+        | HostBehavior::SwdXuanzhou
+        | HostBehavior::SwdFuniao
+        | HostBehavior::SwdHeihuo
+        | HostBehavior::SwdToudan
+        | HostBehavior::SwdXuanying
+        | HostBehavior::SwdMingfu
+        | HostBehavior::SwdYijue
+        | HostBehavior::SwdHuodan
+        | HostBehavior::SwdYudun
+        | HostBehavior::SwdZhanxing
+        | HostBehavior::SwdLuanji
+        | HostBehavior::SwdYunchou
+        | HostBehavior::SwdTianhuo
+        | HostBehavior::SwdHuangyu
+        | HostBehavior::SwdXianyin
+        | HostBehavior::SwdXingzhui
+        | HostBehavior::SwdBingjian
+        | HostBehavior::SwdShending
+        | HostBehavior::SwdGuiyan
+        | HostBehavior::SwdFengming
+        | HostBehavior::SwdDuanyi
+        | HostBehavior::SwdSenluo
+        | HostBehavior::SwdZhanlu
+        | HostBehavior::SwdXianghui
+        | HostBehavior::SwdDuishi
+        | HostBehavior::SwdShuchuiUse
+        | HostBehavior::SwdJiefen
+        | HostBehavior::ChangeCardNature
+        | HostBehavior::GujianFoodLuyugeng
+        | HostBehavior::GujianYuhengEquipSkill
+        | HostBehavior::SwdLangeguaiyiEquipSkill
+        | HostBehavior::SwdYufuluEquipSkill
+        | HostBehavior::SwdShentouEquipSkill
+        | HostBehavior::SwdDuanyue
+        | HostBehavior::SwdXingdian
+        | HostBehavior::SwdXuehuang
+        | HostBehavior::SwdLianyaohuShouna
+        | HostBehavior::SwdLianyaohuLianhua
+        | HostBehavior::SwdKunlunjingcCard
+        | HostBehavior::SwdSifeizhenmianCard
+        | HostBehavior::SwdNigongStrike
+        | HostBehavior::SwdShennongdingCard
+        | HostBehavior::SwdTiebi
+        | HostBehavior::SwdDatong
+        | HostBehavior::YunchouBeige
+        | HostBehavior::WudianDiyjuntun
+        | HostBehavior::YunchouJieyan
+        | HostBehavior::YunchouYiesheng
+        | HostBehavior::ZhangbaSha
+        | HostBehavior::WudianPaotai
+        | HostBehavior::WudianShouhu
+        | HostBehavior::WudianBaoleiSwitch
+        | HostBehavior::XianjianXtanxi
+        | HostBehavior::XianjianHuahu
+        | HostBehavior::XianjianLuanjian
+        | HostBehavior::XianjianCtianfu
+        | HostBehavior::XianjianTianjian
+        | HostBehavior::XianjianSajin
+        | HostBehavior::XianjianMinsha
+        | HostBehavior::XianjianZhuyue
+        | HostBehavior::XianjianGuanri
+        | HostBehavior::XianjianDiewu
+        | HostBehavior::XianjianGuiyuan
+        | HostBehavior::XianjianGuijin
+        | HostBehavior::XianjianXuanmo
+        | HostBehavior::XianjianYuexing
+        | HostBehavior::WudianKangyin
+        | HostBehavior::WudianJuedao
+        | HostBehavior::WudianMujing
+        | HostBehavior::WudianGuangshu
+        | HostBehavior::WudianZiyu
+        | HostBehavior::WudianKuoyin
+        | HostBehavior::WudianHuhuan
+        | HostBehavior::WudianBaoxue
+        | HostBehavior::WudianLiangou
+        | HostBehavior::WudianYinbo
+        | HostBehavior::WudianQianggu
+        | HostBehavior::WudianFeitiao
+        | HostBehavior::WudianChoudu
+        | HostBehavior::MtgYixialanRecast
+        | HostBehavior::MtgYoulinDiscard
+        | HostBehavior::MtgLinzhongjiantaStrike
+        | HostBehavior::DddXiaxing
+        | HostBehavior::MbcmJiushi
+        | HostBehavior::MbcmFangzhu
+        | HostBehavior::MbJuejin => true,
+        HostBehavior::U01DddBatchA => matches!(
+            name,
+            "dddjuxian" | "dddshilie" | "ddddiedang" | "dddbingjian" | "dddtongyu"
+        ),
+        HostBehavior::U01DddBatchB => matches!(
+            name,
+            "dddjijian" | "dddjijian_old" | "dddquche" | "dddzhijie" | "ddd_jian"
+        ),
+        HostBehavior::U01DddBatchC => {
+            matches!(name, "dddfusi_global" | "dddfengzheng" | "dddfenye")
+        }
+        HostBehavior::U01DddBatchD => matches!(name, "dddchengjing" | "dddduanbing"),
+        HostBehavior::L28ThunderBatchA => matches!(
+            name,
+            "th_dunshi"
+                | "th_chongxu"
+                | "miaojian"
+                | "th_pingcai"
+                | "th_zhengjing"
+                | "th_shengong"
+                | "th_buxu"
+        ),
+        HostBehavior::L28ThunderBatchB => matches!(
+            name,
+            "th_jingxie" | "th_qiaosi" | "th_tiansuan" | "th_gushe" | "th_yeyan"
+        ),
+        HostBehavior::L27BeautifyBatchA => {
+            matches!(name, "regushe" | "taoluan" | "qimou" | "reqimou" | "jinghe")
+        }
+        HostBehavior::L27BeautifyBatchB => matches!(
+            name,
+            "bolan_g"
+                | "xinfu_xionghuo"
+                | "mbwuling"
+                | "spyanjiao"
+                | "twxingzhui"
+                | "twharvestinori"
+                | "twzhouhu"
+                | "twzuhuo"
+                | "twzhouzu"
+                | "jishe2"
+                | "new_zhixi_recover"
+        ),
+        HostBehavior::L19DoomsdayBatchA => matches!(name, "ganran2" | "_huzhu"),
+        HostBehavior::L19DoomsdayBatchB => matches!(name, "_yuanqiskill"),
+        HostBehavior::L20MarkBatchA => matches!(name, "wengua" | "wengua5"),
+        HostBehavior::L20MarkBatchB => matches!(name, "rechuhai" | "sbduanliang" | "_chongzhu"),
+        HostBehavior::U08YxsBatchA => {
+            matches!(name, "liebo" | "zhuxin" | "huli" | "yixin" | "zhijie" | "chujia")
+        }
+        HostBehavior::U08YxsBatchB => {
+            matches!(name, "baihe" | "yinyang" | "yanyi" | "bingsheng" | "shentan")
+        }
+        HostBehavior::U08YxsBatchC => matches!(
+            name,
+            "lguiyin" | "tongyu" | "ducai" | "fanpu" | "fenghuo" | "fengyi" | "seyou"
+        ),
+        HostBehavior::U08YxsBatchD => matches!(
+            name,
+            "qiandu" | "xieling" | "qiangxi" | "miaobi" | "miaobix" | "guifu" | "lshengong"
+        ),
+        HostBehavior::L25ZuanBatchA => matches!(name, "ssr_yongsi_yuxi" | "_yongjinskill"),
+        HostBehavior::L25ZuanBatchB => {
+            matches!(name, "ssr_newfanjian" | "ssr_newrende" | "ssr_qiangxi" | "ssr_qingji")
+        }
+        HostBehavior::L25ZuanBatchC => matches!(
+            name,
+            "ssr_zhujiu"
+                | "ssr_jiwu"
+                | "ssr_chuli"
+                | "ssr_newzhenjun"
+                | "ssr_shendao"
+                | "ssr_miedi"
+                | "ssr_newkurou"
+        ),
+        HostBehavior::L25ZuanBatchD => matches!(
+            name,
+            "ssr_newlihun"
+                | "ssr_yongsi"
+                | "ssr_yijue"
+                | "ssr_newbaiyi"
+                | "ssr_liecheng"
+                | "ssr_newyucong"
+                | "ssr_newguose"
+                | "ssr_newtianxiang"
+        ),
+        HostBehavior::L25ZuanBatchE => matches!(
+            name,
+            "ssr_jieyin"
+                | "ssr_newjijie"
+                | "ssr_jiqiao"
+                | "ssr_nianlei"
+                | "ssr_zaiqi"
+                | "ssr_lieren"
+                | "ssr_weilong"
+                | "ssr_newzhiba"
+                | "ssr_newluanwu"
+                | "ssr_newduanxian"
+        ),
+        HostBehavior::L25ZuanBatchF => matches!(
+            name,
+            "ssr_jushou"
+                | "ssr_tuntian"
+                | "ssr_newmizhou"
+                | "ssr_newluanji"
+                | "ssr_zhuhai"
+                | "ssr_xuanhuo"
+        ),
+        HostBehavior::L25ZuanBatchG => matches!(
+            name,
+            "ssr_lianhuan"
+                | "ssr_newsance"
+                | "ssr_zhijian"
+                | "ssr_newguidao"
+                | "ssr_guifu"
+                | "ssr_fangtong"
+        ),
+        _ => false,
+    }
+}
+
+pub(in crate::content::host) fn is_host_skill_bolan_eligible(
+    behavior: HostBehavior,
+    name: &str,
+) -> bool {
+    if !has_phase_use_activation(behavior, name) {
+        return false;
+    }
+    if name.starts_with('_') || name.ends_with("_card") || name.ends_with("_global") {
+        return false;
+    }
+    !matches!(
+        behavior,
+        HostBehavior::Niepan
+            | HostBehavior::Bingfeng
+            | HostBehavior::Hxunzhi
+            | HostBehavior::SwdJinlin
+            | HostBehavior::SwdTianshu
+            | HostBehavior::SwdXuehuang
+            | HostBehavior::WudianShouhu
+            | HostBehavior::WudianDiyjuntun
+            | HostBehavior::SwdShentouEquipSkill
+            | HostBehavior::SwdYufuluEquipSkill
+            | HostBehavior::SwdLangeguaiyiEquipSkill
+            | HostBehavior::SwdLianyaohuShouna
+            | HostBehavior::SwdLianyaohuLianhua
+            | HostBehavior::SwdKunlunjingcCard
+            | HostBehavior::SwdSifeizhenmianCard
+            | HostBehavior::SwdShennongdingCard
+            | HostBehavior::SwdShuchuiUse
+            | HostBehavior::ChangeCardNature
+            | HostBehavior::GujianFoodLuyugeng
+            | HostBehavior::GujianYuhengEquipSkill
+            | HostBehavior::ZhangbaSha
+            | HostBehavior::MtgYixialanRecast
+            | HostBehavior::MtgYoulinDiscard
+            | HostBehavior::MtgLinzhongjiantaStrike
+    ) && !matches!(
+        name,
+        "rechuhai"
+            | "th_yeyan"
+            | "qimou"
+            | "reqimou"
+            | "taoluan"
+            | "dddchengjing"
+            | "dddduanbing"
+            | "dddzhijie"
+            | "dddfengzheng"
+            | "dddfenye"
+            | "dddshilie"
+            | "dddjijian_old"
+            | "th_chongxu"
+            | "th_tiansuan"
+            | "wengua5"
+            | "ssr_newzhiba"
+            | "ssr_newluanwu"
+            | "ssr_newduanxian"
+            | "ssr_jiwu"
+            | "ssr_yongsi_yuxi"
+            | "xinfu_lingren"
+            | "shouye"
+            | "yixin"
+            | "fengyi"
+            | "qiandu"
+            | "xieling"
+            | "miaobix"
+            | "lguiyin"
+            | "tongyu"
+            | "bolan"
+            | "bolan_g"
+            | "kotomi_chuanxiang"
+    )
+}

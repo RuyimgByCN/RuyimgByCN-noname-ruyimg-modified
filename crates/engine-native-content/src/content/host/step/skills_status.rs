@@ -267,23 +267,16 @@ impl HostMachine {
             }
             // 撷芳：刷新「存活女性数」标记（0 时清除）
             HostBehavior::Xiefang => {
-                let count = (0..ctx.core.players.len() as PlayerId)
-                    .filter(|p| {
-                        ctx.core.player(*p).alive
-                            && ctx.core.effective_gender(*p)
-                                == crate::content::standard::Gender::Female
-                    })
-                    .count() as i32;
-                let def = ctx
-                    .catalog
-                    .skill_by_name(L27_XIEFANG_KEY)
-                    .map(u32::from)
-                    .unwrap_or_default();
-                if count > 0 {
-                    ctx.core.vm_aux.marks.insert((self.owner, def), count);
-                } else {
-                    ctx.core.vm_aux.marks.remove(&(self.owner, def));
-                }
+                let has_sub = self.target.is_some_and(|d| {
+                    ctx.core
+                        .versus_team_of(d)
+                        .and_then(|ti| ctx.core.versus_substitutes().and_then(|pools| pools.get(ti)))
+                        .is_some_and(|pool| !pool.is_empty())
+                });
+                let ex = self
+                    .target
+                    .filter(|d| !ctx.core.player(*d).death_cancelled && !has_sub);
+                super::l27_fixes::refresh_xiefang_mark(ctx.core, ctx.catalog, self.owner, ex);
                 Flow::Done
             }
             // 疾风：多目标使用 → 按概率整牌取消（上游 `trigger.cancel()`）

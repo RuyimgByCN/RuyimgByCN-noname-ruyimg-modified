@@ -33,9 +33,10 @@ pub use support::{
     shengong_borrowed_owner, yangpijuan_class,
 };
 pub(crate) use step::{
-    host_card_use_after, host_draw_begin_step, host_sha_begin_step, host_sha_end_step,
-    on_cards_to_discard_chengye, on_outer_settled_taipingyaoshu, on_skill_removed_l28,
-    play_begin_tianshu,
+    host_card_use_after, host_draw_begin_step, host_on_game_start, host_on_hand_card_removed,
+    host_on_phase_use_end, host_on_player_died, host_on_round_start, host_sha_begin_step,
+    host_sha_end_step, on_cards_to_discard_chengye, on_outer_settled_taipingyaoshu,
+    on_skill_removed_all, play_begin_tianshu,
 };
 pub(crate) use support::{niepan_effect, sync_land_skill};
 
@@ -561,6 +562,9 @@ impl SkillBehavior for HostSkillBehavior {
         if self.behavior != HostBehavior::NewZhixi {
             return self.blocks_all_cards();
         }
+        if core.turn.current != p || core.turn.phase != crate::event::Phase::Play {
+            return false;
+        }
         let mark_of = |name: &str| -> i32 {
             catalog
                 .skill_by_name(name)
@@ -569,7 +573,7 @@ impl SkillBehavior for HostSkillBehavior {
         };
         let count = mark_of(L27_NEW_ZHIXI_KEY);
         let trick = mark_of(L27_NEW_ZHIXI_MARK2_KEY) > 0;
-        trick || count >= core.player(p).hp.max(1)
+        trick || count >= core.player(p).hp
     }
 }
 

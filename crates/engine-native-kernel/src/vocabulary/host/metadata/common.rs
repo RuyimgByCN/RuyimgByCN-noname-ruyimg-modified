@@ -137,13 +137,22 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
-            // 清正：出牌阶段开始（可选）
+            // 清正（L29 龙血玄黄）：出牌阶段开始（可选）
             HostBehavior::MbcmQingzheng => Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
                 optional: true,
+                extra_events: Vec::new(),
+            }),
+            // 清正（L27 选将美化 `extension.js:3705`）：`direct: true`，直接弹出花色框（可于框内取消）
+            HostBehavior::L27MbcmQingzheng => Some(TriggerMeta {
+                event: EventKind::PhaseBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                order_selectable: true,
+                optional: false,
                 extra_events: Vec::new(),
             }),
             // 酒诗：受伤翻回 + 翻面获得锦囊（两面均在机器步内弹窗确认）

@@ -501,7 +501,8 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
                     if from_hand {
                         let n = ctx.core.player(u.player).hand.len() as u32;
                         let j = ctx.core.rng.gen_range(n) as usize;
-                        let c = ctx.core.player_mut(u.player).hand.remove(j);
+                        let c = ctx.core.player(u.player).hand[j];
+                        ctx.take_hand_card(u.player, c);
                         ctx.to_discard(c);
                         ctx.log(LogEvent::CardDiscarded {
                             player: u.player,

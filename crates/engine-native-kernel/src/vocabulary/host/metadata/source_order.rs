@@ -99,8 +99,8 @@ impl HostBehavior {
             Self::HlssYueyin => (Timing::First, 1, false),
             // noname-liuli/noname/character/extra.js:263
             Self::HlssYueyin2 => (Timing::Normal, 2000, true),
-            // noname-liuli/noname/character/mobile.js:17117
-            Self::MbcmQingzheng => (Timing::Normal, 0, true),
+            // noname-liuli/noname/character/mobile.js:17117 + 选将美化/extension.js:3697
+            Self::MbcmQingzheng | Self::L27MbcmQingzheng => (Timing::Normal, 0, true),
             // noname/apps/core/character/mobile/skill.js:14399
             Self::MbcmJiushi => (Timing::Normal, 0, true),
             // noname-liuli/noname/extension/史诗卡牌/extension.js:2276

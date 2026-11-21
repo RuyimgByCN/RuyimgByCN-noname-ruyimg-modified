@@ -1670,4 +1670,7 @@ pub enum HostBehavior {
     L25ZuanBatchF,
     /// L25 祖安武将 Batch G（tag 573，祖安武将/extension.js 武将 51–60 共 22 技能）。
     L25ZuanBatchG,
+    /// L27 选将美化 UI 钩子版「清正」（tag 654，`选将美化/extension.js:3697-4261`）：
+    /// 与 L29 龙血玄黄 `MbcmQingzheng` (tag 474) 隔离；对齐 `:4259` 数组比较语义。
+    L27MbcmQingzheng,
 }

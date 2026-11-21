@@ -27,8 +27,8 @@ class EnumerationTests(unittest.TestCase):
         cls.rows = cls.mod.arms()
 
     def test_counts_every_phase_pinned_arm(self):
-        # R05-A2 迁移后：原 45 个相位钉死臂中有 17 个已迁移至 TurnBegin / TurnEnd / Prepare，剩余 28 个
-        self.assertEqual(len(self.rows), 28)
+        # R05-A2 迁移后余 28 个；Batch Q2-L27 拆分 MbcmQingzheng 与 L27MbcmQingzheng 为独立匹配臂后共 29 个
+        self.assertEqual(len(self.rows), 29)
 
     def test_every_row_has_a_behavior(self):
         for behavior, *_ in self.rows:
@@ -86,11 +86,11 @@ class ClassificationTests(unittest.TestCase):
 
 class CliTests(unittest.TestCase):
     def test_check_passes_when_every_row_is_classified(self):
-        # R05-A2 迁移后：28 条全部有判定 ⇒ --check 归零
+        # R05-A2 迁移 + Batch Q2-L27 拆分 MbcmQingzheng / L27MbcmQingzheng 后：29 条全部有判定 ⇒ --check 归零
         proc = subprocess.run([sys.executable, "-B", str(SCRIPT), "--check"],
                               capture_output=True, text=True, cwd=ROOT)
         self.assertEqual(proc.returncode, 0, proc.stderr)
-        self.assertIn("共 28 个相位钉死臂", proc.stderr)
+        self.assertIn("共 29 个相位钉死臂", proc.stderr)
 
 
 if __name__ == "__main__":

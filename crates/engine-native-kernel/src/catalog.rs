@@ -1079,6 +1079,17 @@ pub struct ContentHooks {
     pub draw_begin_step: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId, &mut i32),
     /// 用牌结算完成弹出时（`useCardAfter`）宿主触发钩子（如 `jieyong`）。
     pub on_card_use_after: fn(&mut crate::machine::Ctx<'_>, &crate::event::CardUseData),
+    /// 建局开局发牌后（`gameDrawEnd`）宿主初始化钩子（如 `xiefang`）。
+    pub on_game_start: fn(&mut crate::state::GameStateCore, &Catalog),
+    /// 角色死亡结算（`alive=false` 后、`dieEnd`）宿主刷新钩子（如 `xiefang`）。
+    pub on_player_died: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId),
+    /// 出牌阶段结束（`phaseUseEnd`）宿主临时技清理钩子（如 `new_zhixi`/`new_meibu_range`/`bolan`）。
+    pub on_phase_use_end: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId),
+    /// 轮次开始（`roundStart`）宿主轮标与展示清除钩子（如 `xingchong`/`clandianzhan`）。
+    pub on_round_start: fn(&mut crate::machine::Ctx<'_>),
+    /// 手牌移除钩子（如 `xingchong` 在使用/打出/装备/弃置离手时立即摸 2 而不依赖额外事件表）。
+    pub on_hand_card_removed:
+        fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId, crate::ids::CardId),
 }
 
 impl ContentHooks {
@@ -1101,6 +1112,11 @@ impl ContentHooks {
         sha_end_step: |_, _, _, _, _, _| false,
         draw_begin_step: |_, _, _| {},
         on_card_use_after: |_, _| {},
+        on_game_start: |_, _| {},
+        on_player_died: |_, _| {},
+        on_phase_use_end: |_, _| {},
+        on_round_start: |_| {},
+        on_hand_card_removed: |_, _, _| {},
     };
 }
 

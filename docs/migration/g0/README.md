@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-21 Batch Q2-L27（L27 选将美化 12 项）更新（待提交／发布）
+
+基线 HEAD `d9e1c9a1fcea4f19f1555bedb416aee8b51fc9b8`（Batch UI-2 已发布，CI Run `44899269373` 10/10）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-rules` 三轮独立审查（#47 **`APPROVE`**，Chrome CDP 零异常）与主线全量门禁复测，清单更新为 **已复核等价 689／简化近似 3,735／缺失 0／上游未定义 0**（合计 4,424）：`L27 选将美化` 由 `41 / 13 / 0` 更新为 **53 / 1 / 0**（+12：`xiefang`、`new_meibu`、`new_zhixi`、`clandianzhan`、`reqimou`、`bolan`、`mbcmqingzheng`、`sbqingzheng`、`xingchong`、`dcxiaoxi`、`twfengji`、`twzhouzu` 全部规则/钩子项闭环；仅 `L27:surfaces:e.css` 保留 `简化近似` 归 UI 线）。详见 [Batch Q2-L27 证据摘要](../../operations/evidence/2026-11-21-batch2-1-l27/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-21 Batch UI-2（L08 十周年UI 44 配置与 43 表面）更新（待提交／发布）
 
 基线 HEAD `3686468ca8e05a04440fce62dd0e14cfe3517547`（Batch UI-1 已发布，CI Run `44894025555` 10/10）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-ui` 独立审查（#39 **`APPROVE`**）与主线 Chrome CDP 及全量门禁复测，清单更新为 **已复核等价 677／简化近似 3,747／缺失 0／上游未定义 0**（合计 4,424）：`L08 十周年UI` 由 `0 / 406 / 0` 更新为 **21 / 385 / 0**（+21：仅升格 #39 核验通过的 21 项 `L08:configs:*`，其余 23 项配置及 43 项 `surfaces` 保留 `简化近似` 待 UI-3/后续消费闭环）。详见 [Batch UI-2 证据摘要](../../operations/evidence/2026-11-21-ui-l08-configs-surfaces/README.md) 与 [inventory_status.json](inventory_status.json)。

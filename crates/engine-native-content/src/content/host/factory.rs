@@ -359,7 +359,7 @@ impl HostSkillBehavior {
             HostBehavior::Niepan => (None, None),
             HostBehavior::Yuhuo => (None, None),
             HostBehavior::Shenwei => (None, None),
-            HostBehavior::MbcmQingzheng => (None, None),
+            HostBehavior::MbcmQingzheng | HostBehavior::L27MbcmQingzheng => (None, None),
             HostBehavior::MbcmJiushi => match event {
                 EventData::Damage(_) => (None, Some(1)),
                 EventData::TurnOvered { .. } => (None, Some(2)),
@@ -407,7 +407,10 @@ impl HostSkillBehavior {
             HostBehavior::Gongxin => (None, None),
             HostBehavior::Reguhuo => (None, None),
             HostBehavior::Rangjie => (None, None),
-            HostBehavior::Xiefang => (None, None),
+            HostBehavior::Xiefang => match event {
+                EventData::Death { player, .. } => (Some(*player), None),
+                _ => (None, None),
+            },
             HostBehavior::NewZhixi => (None, None),
             HostBehavior::NewMeibuRange => (None, None),
             HostBehavior::SbZhaXiang => (None, None),

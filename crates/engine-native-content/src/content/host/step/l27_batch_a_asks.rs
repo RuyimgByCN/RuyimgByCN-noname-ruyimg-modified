@@ -87,7 +87,7 @@ fn card_ask(
     )
 }
 
-const CANCELLABLE_ASKS: [u32; 16] = [
+const CANCELLABLE_ASKS: [u32; 18] = [
     ASK_REGUSHE_TARGETS,
     ASK_REGUSHE_TARGET_DISCARD,
     ASK_REGUSHE_CONFIRM_DRAW,
@@ -102,28 +102,32 @@ const CANCELLABLE_ASKS: [u32; 16] = [
     ASK_QUANJI_CONFIRM,
     ASK_POTZHUANGSHI_DISCARD,
     ASK_POTZHUANGSHI_LOSE_HP,
+    ASK_REQIMOU_HP,
+    ASK_REQIMOU_CONFIRM,
     ASK_SBJIANXIONG_CONFIRM,
     ASK_JINGHE_SHOW,
 ];
 
-const FIRST_CANCELLABLE_ASKS: [u32; 8] = [
+const FIRST_CANCELLABLE_ASKS: [u32; 9] = [
     ASK_REGUSHE_TARGETS,
     ASK_REHUASHEN_ACTION,
     ASK_TAOLUAN_CARD,
     ASK_SHOUXI_DECLARE,
     ASK_DINGHAN_ADJUST,
     ASK_QUANJI_CONFIRM,
+    ASK_REQIMOU_HP,
     ASK_SBJIANXIONG_CONFIRM,
     ASK_JINGHE_SHOW,
 ];
 
-const CUSTOM_CANCEL_ASKS: [u32; 6] = [
+const CUSTOM_CANCEL_ASKS: [u32; 7] = [
     ASK_REGUSHE_TARGET_DISCARD,
     ASK_REGUSHE_CONFIRM_DRAW,
     ASK_TAOLUAN_HELPER_GIVE,
     ASK_SHOUXI_ATTACKER_DISCARD,
     ASK_POTZHUANGSHI_DISCARD,
     ASK_POTZHUANGSHI_LOSE_HP,
+    ASK_REQIMOU_CONFIRM,
 ];
 
 pub(super) fn is_cancellable(ask_id: u32) -> bool {
@@ -298,6 +302,14 @@ fn build_ask_spec(
             let hp = core.player(owner).hp.max(1) as u8;
             tag_ask(owner, "reqimou:choose_hp", 1..=hp)
         }
+        ASK_REQIMOU_CONFIRM => spec_ask(
+            owner,
+            ChoiceKind::Confirm,
+            "reqimou:confirm",
+            vec![ChoiceOption::Confirm, ChoiceOption::Pass],
+            1,
+            1,
+        ),
         ASK_SBJIANXIONG_INIT => tag_ask(owner, "sbjianxiong:init_marks", 0..=2),
         ASK_SBJIANXIONG_CONFIRM => tag_ask(owner, "sbjianxiong:confirm", 0..=1),
         ASK_SBJIANXIONG_REMOVE_MARK => tag_ask(owner, "sbjianxiong:remove_mark", 0..=1),
@@ -317,7 +329,7 @@ fn build_ask_spec(
     }
 }
 
-pub(super) fn wait_ask(
+pub(in crate::content::host::step) fn wait_ask(
     m: &mut HostMachine,
     ctx: &mut Ctx<'_>,
     stage: HostStage,
@@ -631,37 +643,6 @@ pub(super) fn step_qimou(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                 player: owner,
                 amount: x,
             });
-            set_flag(ctx.core, owner, "l27_ask_id", 0);
-            Flow::Done
-        }
-        _ => Flow::Done,
-    }
-}
-
-pub(super) fn step_reqimou(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
-    let owner = m.owner;
-    match m.stage {
-        HostStage::Act => {
-            if m.card == Some(16) {
-                set_flag(ctx.core, owner, "reqimou_x", 0);
-                set_flag(ctx.core, owner, "l27_qimou_range_bonus", 0);
-                return Flow::Done;
-            }
-            wait_ask(m, ctx, HostStage::SelectNature, ASK_REQIMOU_HP)
-        }
-        HostStage::SelectNature => {
-            let x = match ctx.answer().first().copied() {
-                Some(ChoiceOption::Tag(n)) => u32::from(n).max(1),
-                _ => 1,
-            };
-            set_flag(ctx.core, owner, "reqimou_used", 1);
-            set_flag(ctx.core, owner, "reqimou_x", x);
-            set_flag(ctx.core, owner, "l27_qimou_range_bonus", x);
-            ctx.emit(EventData::LoseHp {
-                player: owner,
-                amount: x,
-            });
-            ctx.start_draw(owner, x);
             set_flag(ctx.core, owner, "l27_ask_id", 0);
             Flow::Done
         }

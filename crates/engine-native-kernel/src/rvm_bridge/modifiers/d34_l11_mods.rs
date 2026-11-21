@@ -301,9 +301,12 @@ pub(super) fn apply_sha_use_limit(
         cur += 1;
     }
     // L27 选将美化 (`qimou`, `reqimou`, `kuangcai`, `potzhuangshi`)
-    if flag_val(state, player, "l27_qimou_range_bonus") == 0 {
+    let qimou_bonus = flag_val(state, player, "l27_qimou_range_bonus");
+    if qimou_bonus == 0 {
         cur += flag_val(state, player, "qimou_x")
             .max(flag_val(state, player, "reqimou_x")) as i32;
+    } else {
+        cur += flag_val(state, player, "reqimou_x").saturating_sub(qimou_bonus) as i32;
     }
     if has_ext_skill(state, catalog, player, "kuangcai") {
         unlimited = true;

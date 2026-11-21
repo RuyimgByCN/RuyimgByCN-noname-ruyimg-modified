@@ -465,6 +465,7 @@ fn l27_dedicated_six_skills_six_dimensions() {
         // Advance to next round Seat 1 Draw -> Play begin -> triggers new_meibu on Seat 0
         let mut e2 = fresh(&p, 27031, &[&["new_meibu"], &[]]);
         give(&mut e2, 0, red_basic);
+        give(&mut e2, 1, wuzhong);
         give(&mut e2, 1, sha);
         e2.debug_set_turn(1, Phase::Draw, 1);
         let _ = submit(&mut e2, 1, GameAction::NextPhase);
@@ -474,6 +475,9 @@ fn l27_dedicated_six_skills_six_dimensions() {
         assert!(rejected(&mut e2, vec![cd(999)]));
         snapshot_roundtrip(&e2, &p, vec![cd(red_basic)]);
         answer(&mut e2, "new_meibu_discard", vec![cd(red_basic)]);
+        drain(&mut e2);
+        // 选将美化/extension.js:1735：初始计数=0，先用锦囊【无中】后再出【杀】才触发止息封锁
+        play(&mut e2, 1, wuzhong, vec![]);
         drain(&mut e2);
         assert!(is_rejected(submit(
             &mut e2,
@@ -593,6 +597,8 @@ fn l27_batch_a_active_and_pindian_skills() {
         activate(&mut e, 0, "reqimou");
         snapshot_roundtrip(&e, &p, vec![tag(2)]);
         answer(&mut e, "reqimou:choose_hp", vec![tag(2)]);
+        // 选将美化/extension.js:6155：选数后需经过可取消的 confirm（chooseBool）
+        answer(&mut e, "reqimou:confirm", vec![ChoiceOption::Confirm]);
         assert_eq!(hp(&e, 0), 2);
         assert_eq!(hand(&e, 0), 2);
         assert_eq!(e.state_core().computed_distance(e.catalog(), 0, 2), 1);
@@ -666,6 +672,9 @@ fn l27_batch_a_trigger_and_modifier_skills() {
         assert!(e.state_core().player(1).linked);
         assert_eq!(flag(&e, 0, "clandianzhan_suit_mask") & 1, 1);
         assert_eq!(flag(&e, 0, "baonvezhi"), 1);
+        // 选将美化/extension.js:1867-1927：sha1 useCardAfter 重铸了手中剩余黑桃 sha2 并摸牌
+        assert!(!e.debug_hand(0).contains(&sha2));
+        give(&mut e, 0, sha2);
         let h_after_1 = hand(&e, 0);
         // ④ 2nd Spade Sha does not re-trigger clandianzhan
         play(&mut e, 0, sha2, vec![1]);

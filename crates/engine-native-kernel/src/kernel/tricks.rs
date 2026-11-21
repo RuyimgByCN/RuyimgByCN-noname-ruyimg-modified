@@ -458,10 +458,11 @@ impl crate::catalog::SkillMachine for DismantleMachine {
                 // 从所在区移除
                 let from_hand = t.hand.contains(&c);
                 let from_judge = t.judge.contains(&c);
-                {
+                if from_hand {
+                    ctx.take_hand_card(self.target, c);
+                } else {
                     let was_equip = ctx.catalog.card_kind(c).is_equip();
                     let p = ctx.core.player_mut(self.target);
-                    p.hand.retain(|x| *x != c);
                     p.equips.retain(|x| *x != c);
                     p.judge.retain(|x| *x != c);
                     if was_equip {
@@ -546,11 +547,13 @@ impl crate::catalog::SkillMachine for SnatchMachine {
             };
             let pick = hand_pick.or_else(|| t.equips.first().copied());
             if let Some(c) = pick {
+                let from_hand = ctx.core.player(self.target).hand.contains(&c);
                 let public_material = ctx.core.player(self.target).equips.contains(&c);
-                {
+                if from_hand {
+                    ctx.take_hand_card(self.target, c);
+                } else {
                     let was_equip = ctx.catalog.card_kind(c).is_equip();
                     let p = ctx.core.player_mut(self.target);
-                    p.hand.retain(|x| *x != c);
                     p.equips.retain(|x| *x != c);
                     if was_equip {
                         revoke_equip_skills(ctx.core, ctx.catalog, self.target, c);

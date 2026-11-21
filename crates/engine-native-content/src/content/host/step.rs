@@ -80,6 +80,12 @@ pub(crate) use l28_batch_a::{
 pub(super) mod l28_batch_b;
 pub(super) mod l27_batch_a;
 pub(super) mod l27_batch_b;
+pub(super) mod l27_fixes;
+pub(super) mod l27_fixes_b;
+pub(crate) use l27_fixes::{
+    host_on_game_start, host_on_hand_card_removed, host_on_phase_use_end, host_on_player_died,
+    host_on_round_start, on_skill_removed_all,
+};
 pub(super) mod l19_batch_a;
 pub(super) mod l19_batch_b;
 pub(super) mod l20_batch_a;
@@ -730,7 +736,9 @@ impl HostMachine {
             HostBehavior::SwdShenyan => self.step_swd_damage_reactions(ctx),
             HostBehavior::SwdLingwu => self.step_swd_status(ctx),
             // 清正：选花色 → 选目标 → 选目标花色 → 双向弃牌 → 少弃者受伤
-            HostBehavior::MbcmQingzheng => self.step_skills_damage(ctx),
+            HostBehavior::MbcmQingzheng | HostBehavior::L27MbcmQingzheng => {
+                self.step_skills_damage(ctx)
+            }
             // 卫统：登记面（实际加成由潜龙内容按同条件判定）
             HostBehavior::MbWeitong => self.step_skills_status(ctx),
             // 隐月·判：取消翻面（写回前置帧取消位）

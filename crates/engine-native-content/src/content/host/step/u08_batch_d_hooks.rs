@@ -166,6 +166,7 @@ pub(super) fn host_sha_end_step_impl(
 /// 在 `CardUsed` 完整结算完成并弹出后触发，不限卡牌类别，仅检实体牌仍在弃牌堆
 /// (`event.cards.filterInD().length > 0`)、未持 `jieyong2`、且手牌/装备区另有黑色牌可弃。
 pub(super) fn host_card_use_after_impl(ctx: &mut Ctx<'_>, u: &CardUseData) {
+    crate::content::host::step::l27_fixes::host_card_use_after_clandianzhan(ctx, u);
     if u.cancelled {
         return;
     }

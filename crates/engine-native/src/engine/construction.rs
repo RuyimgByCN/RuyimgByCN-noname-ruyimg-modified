@@ -524,6 +524,7 @@ detached_cards: Vec::new(),
             }
         }
         crate::kernel::elo_on_game_start(&mut e.state.core, &e.catalog);
+        (e.catalog.hooks.on_game_start)(&mut e.state.core, &e.catalog);
         Ok(e)
     }
 }

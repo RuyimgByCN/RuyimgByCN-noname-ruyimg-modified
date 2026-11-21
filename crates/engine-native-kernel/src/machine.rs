@@ -530,8 +530,8 @@ impl<'a> Ctx<'a> {
             .hand
             .iter()
             .position(|c| *c == card);
-        if let Some(pos) = in_hand {
-            self.core.player_mut(player).hand.remove(pos);
+        if let Some(_pos) = in_hand {
+            self.take_hand_card(player, card);
             self.note_cards_lost(player, &[card]);
             self.emit(EventData::CardsLost {
                 player,
@@ -586,6 +586,7 @@ impl<'a> Ctx<'a> {
             .position(|c| *c == card)
             .unwrap_or_else(|| panic!("card {card} not in hand of {player}"));
         hand.remove(pos);
+        (self.catalog.hooks.on_hand_card_removed)(self, player, card);
     }
 
     /// 入弃牌堆（**牌区唯一性**：同一张牌不得同时属于两个区域）。

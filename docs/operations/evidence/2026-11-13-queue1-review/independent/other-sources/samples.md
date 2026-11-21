@@ -1014,7 +1014,7 @@
 
 待执行：自己红/黑两组与目标两组牌，选不同花色产生不同弃数/伤害；在首DOM取消不耗牌，后续挂起恢复；截图花色列表。
 
-源码：`archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:4263`；`crates/engine-native-content/src/content/host/step/l27_batch_b_tw.rs:580`；`crates/engine-native-content/src/content/host/step/l27_batch_b_asks.rs:237`。
+源码：`archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:4263`；`crates/engine-native-content/src/content/host/step/l27_batch_b_tw.rs`（原旧版行 580，2026-11-21 Q2-L27 已迁移至 `l27_fixes_b.rs:22`）；`crates/engine-native-content/src/content/host/step/l27_batch_b_asks.rs:237`。
 
 ### ui_hooks:twxiafeng
 
@@ -1042,7 +1042,7 @@
 
 待执行：目标2手牌+装备，咒诅2到期应由目标自选两手牌；另手牌不足而有装备，上游默认h不应自动拿装备补。
 
-源码：`archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:7441`；`crates/engine-native-content/src/content/host/step/l27_batch_b_tw.rs:496`。
+源码：`archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:7441`；`crates/engine-native-content/src/content/host/step/l27_batch_b_tw.rs`（原旧版行 496，2026-11-21 Q2-L27 已迁移至 `l27_fixes_b.rs:553`）。
 
 ### skills:new_meibu
 
