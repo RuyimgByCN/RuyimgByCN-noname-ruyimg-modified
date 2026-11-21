@@ -77,8 +77,11 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
     }
     // 诚信免伤清除（U05 xianjian 明绣，规则 v164）：本人 End 阶段结束
     //（登记差异：上游 chengxin2 存活至最近阶段结束）
-    if !begin && phase == Phase::End && ctx.core.player(player).chengxin_active {
-        ctx.core.player_mut(player).chengxin_active = false;
+    if !begin && phase == Phase::End {
+        if ctx.core.player(player).chengxin_active {
+            ctx.core.player_mut(player).chengxin_active = false;
+        }
+        (ctx.catalog.hooks.on_phase_end)(ctx);
     }
     // 屏障标志转计数（U05 ow 查莉娅，规则 v138）：自己回合判定阶段开
     // 始——上回合两标志各计一次并清除（上游 pingzhang_count phaseBegin

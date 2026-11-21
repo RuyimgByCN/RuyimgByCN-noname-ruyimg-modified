@@ -136,6 +136,11 @@ fn installed_pack(item: &Value) -> Result<ExtensionPack, String> {
     if item.get("config").is_some() && !has_config {
         return Err(format!("{namespace}:{package_id} config 载荷必须为非空对象"));
     }
+    if pack.init_hook.wuxing_natures_bps().is_some() {
+        if let Some(config) = item.get("config") {
+            content_native_loader::apply_wuxing_config(&mut pack, &json(config))?;
+        }
+    }
     if !["cards", "characters", "pile"]
         .iter()
         .any(|key| item.get(*key).is_some())

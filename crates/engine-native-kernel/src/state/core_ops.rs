@@ -252,6 +252,18 @@ impl GameStateCore {
     /// 通用目标规则（swd 批 136 极略）：按牌种给出 (min, max, 合法目标)。
     /// 与 PlayCard 校验同口径的**近似镜像**（忽略逐技豁免/范围豁免等；
     /// 登记差异：仅供机器发起「非手牌用牌」时选目标，命令路径仍走原校验）。
+    /// 借刀杀人第二目标（被杀者）：除武器持有者外的其他在其攻击范围内的存活角色。
+    pub fn legal_jiedao_victims(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        holder: PlayerId,
+    ) -> Vec<PlayerId> {
+        let range = self.attack_range(catalog, holder);
+        self.alive_players()
+            .filter(|&v| v != holder && self.computed_distance(catalog, holder, v) <= range)
+            .collect()
+    }
+
     pub fn legal_targets(
         &self,
         catalog: &crate::catalog::Catalog,
@@ -261,22 +273,61 @@ impl GameStateCore {
         use crate::catalog::CardKind as K;
         let alive: Vec<PlayerId> = self.alive_players().collect();
         let others: Vec<PlayerId> = alive.iter().copied().filter(|p| *p != player).collect();
+        let aoe_from_next: Vec<PlayerId> = self
+            .seat_order_from(self.next_alive(player))
+            .into_iter()
+            .filter(|p| *p != player)
+            .collect();
         let range = self.attack_range(catalog, player);
         let in_range = |t: PlayerId| self.computed_distance(catalog, player, t) <= range;
         match kind {
             K::Sha | K::FireSha | K::LeiSha => {
                 let v: Vec<PlayerId> = others.iter().copied().filter(|t| in_range(*t)).collect();
-                (if v.is_empty() { 1 } else { 1 }, 1, v)
+                (1, 1, v)
             }
-            K::Tao => {
+            K::Tao | K::Dinvxuanshuang => {
                 let wounded = self.player(player).hp < self.player(player).max_hp as i32;
                 (1, 1, if wounded { vec![player] } else { Vec::new() })
             }
-            K::Jiu => (1, 1, vec![player]),
-            K::Wuzhong => (0, 0, Vec::new()),
-            K::Wugu => (0, 0, alive.clone()),
-            K::Taoyuan => (0, 0, alive.clone()),
-            K::SavageAttack | K::ArcheryAttack => (0, 0, others.clone()),
+            K::Jiu | K::Tianxianjiu => (1, 1, vec![player]),
+            K::Wuzhong
+            | K::Jihuocard
+            | K::Heilonglinpian
+            | K::Dunpaigedang
+            | K::Xingjiegoutong
+            | K::Chuansongmen
+            | K::Tanshezhiren
+            | K::Yuansuhuimie
+            | K::Shijieshu
+            | K::Kunenfayin
+            | K::Shanbengshu
+            | K::Poxiao
+            | K::Dizaizhen
+            | K::Tianfuzhen
+            | K::Qixingzhen
+            | K::Niaoxiangzhen
+            | K::Changshezhen
+            | K::Pozhenjue
+            | K::Shezhanqunru
+            | K::Fengyinzhidan => (0, 0, Vec::new()),
+            K::Wugu | K::Taoyuan => (0, 0, alive.clone()),
+            K::SavageAttack | K::ArcheryAttack => (0, 0, aoe_from_next),
+            K::Jingleishan | K::Chiyuxi => {
+                let mut v = aoe_from_next;
+                v.reverse();
+                (0, 0, v)
+            }
+            K::Xianluhui => {
+                let mut v: Vec<PlayerId> = aoe_from_next
+                    .into_iter()
+                    .filter(|p| self.player(*p).hp < self.player(*p).max_hp as i32)
+                    .collect();
+                if self.player(player).hp < self.player(player).max_hp as i32 {
+                    v.push(player);
+                }
+                v.reverse();
+                (0, 0, v)
+            }
             K::Duel => (1, 1, others.clone()),
             K::Snatch | K::Dismantle => {
                 let v: Vec<PlayerId> = others
@@ -305,7 +356,21 @@ impl GameStateCore {
                     .collect();
                 (1, 1, v)
             }
-            K::ShanDian => (1, 1, vec![player]),
+            K::ShanDian | K::HongShui => (1, 1, vec![player]),
+            K::Guiyoujie => {
+                let v: Vec<PlayerId> = others
+                    .iter()
+                    .copied()
+                    .filter(|t| {
+                        !self
+                            .player(*t)
+                            .judge
+                            .iter()
+                            .any(|c| catalog.card_kind(*c) == kind)
+                    })
+                    .collect();
+                (1, 1, v)
+            }
             K::Jiedao => {
                 let v: Vec<PlayerId> = others
                     .iter()
@@ -314,10 +379,159 @@ impl GameStateCore {
                         self.player(*t).equips.iter().any(|c| {
                             catalog.card_slot_of(self, *c)
                                 == Some(crate::catalog::EquipSlot::Weapon)
-                        })
+                        }) && !self.legal_jiedao_victims(catalog, *t).is_empty()
                     })
                     .collect();
                 (1, 1, v)
+            }
+            K::ShouLiJian => {
+                let v: Vec<PlayerId> = others
+                    .iter()
+                    .copied()
+                    .filter(|t| self.computed_distance(catalog, player, *t) > 1)
+                    .collect();
+                (1, 1, v)
+            }
+            K::Caoyao => {
+                let v: Vec<PlayerId> = alive
+                    .iter()
+                    .copied()
+                    .filter(|t| {
+                        self.player(*t).hp < self.player(*t).max_hp as i32
+                            && self.computed_distance(catalog, player, *t) <= 1
+                    })
+                    .collect();
+                (1, 1, v)
+            }
+            K::Fudichouxin | K::Toulianghuanzhu => {
+                if self.player(player).hand.is_empty() {
+                    (1, 1, Vec::new())
+                } else {
+                    let v: Vec<PlayerId> = others
+                        .iter()
+                        .copied()
+                        .filter(|t| !self.player(*t).hand.is_empty())
+                        .collect();
+                    (1, 1, v)
+                }
+            }
+            K::Chenhuodajie | K::Zhaomingdan | K::Caochuanjiejian => {
+                let v: Vec<PlayerId> = others
+                    .iter()
+                    .copied()
+                    .filter(|t| !self.player(*t).hand.is_empty())
+                    .collect();
+                (1, 1, v)
+            }
+            K::Geanguanhuo => {
+                let v: Vec<PlayerId> = others
+                    .iter()
+                    .copied()
+                    .filter(|t| !self.player(*t).hand.is_empty())
+                    .collect();
+                (2, 2, v)
+            }
+            K::Linghunzhihuo
+            | K::WangmeiZhike
+            | K::Ziyangdan
+            | K::Shatang
+            | K::Liutouge
+            | K::Yanziyaoshui
+            | K::Aozuzhilei
+            | K::Wenyi
+            | K::Zhihuanjun
+            | K::Baoxueyaoshui
+            | K::Liuxinghuoyu
+            | K::Guisheqi
+            | K::Tanhuadong
+            | K::Yougeng
+            | K::Qingtuan
+            | K::Yuanbaorou
+            | K::Gudonggeng
+            | K::Mapodoufu
+            | K::Chunbing
+            | K::Liyutang
+            | K::Molicha
+            | K::Xiajiao
+            | K::Mizhilianou
+            | K::Luyugeng
+            | K::Yunvyuanshen => (1, 1, alive),
+            K::Zhiliaobo => {
+                let v: Vec<PlayerId> = alive
+                    .iter()
+                    .copied()
+                    .filter(|t| self.player(*t).hp < self.player(*t).max_hp as i32)
+                    .collect();
+                (1, 1, v)
+            }
+            K::Feibiao
+            | K::Shihuifen
+            | K::Liufengsan
+            | K::Zhufangshenshi
+            | K::Zumoshoukao
+            | K::Qinpendayu
+            | K::Birinongwu
+            | K::Ciguhanshuang
+            | K::Shenhuofeiya => (1, 1, others),
+            K::Shujinsan => {
+                let v: Vec<PlayerId> = alive
+                    .iter()
+                    .copied()
+                    .filter(|t| !self.player(*t).hand.is_empty())
+                    .collect();
+                (1, 1, v)
+            }
+            K::Mianlijinzhen => {
+                let my_hp = self.player(player).hp;
+                let v: Vec<PlayerId> = alive
+                    .iter()
+                    .copied()
+                    .filter(|t| self.player(*t).hp >= my_hp)
+                    .collect();
+                (1, 1, v)
+            }
+            K::Qiankunbiao => {
+                let v: Vec<PlayerId> = others
+                    .iter()
+                    .copied()
+                    .filter(|t| {
+                        !self.player(*t).hand.is_empty() || !self.player(*t).equips.is_empty()
+                    })
+                    .collect();
+                (1, 1, v)
+            }
+            K::Longxugou => {
+                let v: Vec<PlayerId> = others
+                    .iter()
+                    .copied()
+                    .filter(|t| !self.player(*t).equips.is_empty())
+                    .collect();
+                (1, 1, v)
+            }
+            K::Bingpotong => {
+                let v: Vec<PlayerId> = others
+                    .iter()
+                    .copied()
+                    .filter(|t| !self.player(*t).hand.is_empty())
+                    .collect();
+                (1, 3, v)
+            }
+            K::Xuejibingbao => {
+                let v: Vec<PlayerId> = alive
+                    .iter()
+                    .copied()
+                    .filter(|t| self.player(*t).xuejibingbao == 0)
+                    .collect();
+                (1, 1, v)
+            }
+            K::Shuigong => {
+                let v: Vec<PlayerId> = alive
+                    .iter()
+                    .copied()
+                    .filter(|t| !self.player(*t).equips.is_empty())
+                    .collect();
+                let max = v.len().max(1).min(u8::MAX as usize) as u8;
+                (1, max, v)
             }
             _ => (0, 0, Vec::new()),
         }

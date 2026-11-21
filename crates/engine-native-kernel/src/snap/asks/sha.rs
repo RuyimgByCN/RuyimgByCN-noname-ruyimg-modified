@@ -203,27 +203,38 @@ pub(super) fn active_sha_ask(
     if asked {
         let tieji_blocks = tieji_red == Some(true)
             || core.vm_aux.flags.get(&(target, "mbcmfangzhu_ban".to_string())).copied().unwrap_or(0) > 0;
-        let longdan = catalog
-            .skill_by_name(LONG_DAN)
-            .map(|d| core.has_skill(target, d))
-            .unwrap_or(false);
-        let qingguo = catalog
-            .skill_by_name(QING_GUO)
-            .map(|d| core.has_skill(target, d))
-            .unwrap_or(false);
+        let sealed = catalog.is_tieji_sealed(core, target);
+        let longdan = !sealed
+            && !catalog.is_rechanyuan_sealed_name(core, target, LONG_DAN)
+            && catalog
+                .skill_by_name(LONG_DAN)
+                .map(|d| core.has_skill(target, d))
+                .unwrap_or(false);
+        let qingguo = !sealed
+            && !catalog.is_rechanyuan_sealed_name(core, target, QING_GUO)
+            && catalog
+                .skill_by_name(QING_GUO)
+                .map(|d| core.has_skill(target, d))
+                .unwrap_or(false);
+        let target_sentinel = catalog
+            .skill_by_name(crate::vocabulary::host::WUDIAN_BAOLEI_KEY)
+            .is_some_and(|def| core.has_skill(target, def) && core.player(target).baolei_mode == 1);
+        let target_can_play = !tieji_blocks
+            && !target_sentinel
+            && !catalog.blocks_all_cards(core, target);
         let mut options: Vec<ChoiceOption> = vec![ChoiceOption::Pass];
         for c in core.player(target).hand.iter().copied() {
             let kind = catalog.card_kind(c);
-            if !tieji_blocks && (kind == CardKind::Shan || (longdan && kind == CardKind::Sha)) {
+            if target_can_play && (kind == CardKind::Shan || (longdan && kind == CardKind::Sha)) {
                 options.push(ChoiceOption::Card(c));
             }
         }
-        if qingguo && !tieji_blocks {
+        if qingguo && target_can_play {
             for c in core.player(target).hand.iter().copied() {
                 let kind = catalog.card_kind(c);
                 let already = kind == CardKind::Shan || (longdan && kind == CardKind::Sha);
                 let black = matches!(
-                    catalog.cards[c as usize].suit,
+                    catalog.effective_card_suit(core, target, c),
                     crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                 );
                 if black && !already {
@@ -231,7 +242,7 @@ pub(super) fn active_sha_ask(
                 }
             }
         }
-        if !tieji_blocks {
+        if target_can_play {
             append_vm_shan_options(core, catalog, target, &mut options);
         }
         options.retain(|o| {
@@ -240,6 +251,31 @@ pub(super) fn active_sha_ask(
                     core, catalog, target, *c
                 ))
         });
+        let chihe_block_mask = core
+            .vm_aux
+            .flags
+            .get(&(target, "l10_scschihe_block_suits".to_string()))
+            .copied()
+            .unwrap_or(0);
+        if chihe_block_mask != 0 {
+            options.retain(|o| match o {
+                ChoiceOption::Card(c) => {
+                    let bit = match catalog.effective_card_suit(core, target, *c) {
+                        crate::catalog::Suit::Spade => 1 << 0,
+                        crate::catalog::Suit::Heart => 1 << 1,
+                        crate::catalog::Suit::Club => 1 << 2,
+                        crate::catalog::Suit::Diamond => 1 << 3,
+                    };
+                    (chihe_block_mask & bit) == 0
+                }
+                _ => true,
+            });
+        }
+        if target_can_play {
+            for rdef in crate::kernel::host_response_skills(core, catalog, target, 1) {
+                options.push(ChoiceOption::Skill(rdef));
+            }
+        }
         return Some(ask(
             target,
             "respond_shan",

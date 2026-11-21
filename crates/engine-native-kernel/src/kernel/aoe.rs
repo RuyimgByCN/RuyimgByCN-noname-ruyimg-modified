@@ -113,9 +113,52 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
     }
 
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        let resp_ctx = if self.need == CardKind::Shan { 1 } else { 2 };
+        if ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(self.target, "l10_reguhuo_aoe_resume".to_string()))
+            .is_some()
+        {
+            if let Some(c) = (ctx.catalog.hooks.reguhuo_consume_resp)(ctx.core, self.target) {
+                discard_response_card(ctx, self.target, c, self.need);
+                let base_depth = ctx.res.stack.len();
+                ctx.emit(EventData::CardResponded {
+                    card: c,
+                    player: self.target,
+                });
+                if self.need == CardKind::Shan || ctx.catalog.card_kind(c) == CardKind::Shan {
+                    releiji_on_shan(ctx, self.target);
+                }
+                if (ctx.catalog.hooks.reguhuo_has_pending_final)(ctx.core, self.target) {
+                    (ctx.catalog.hooks.reguhuo_spawn_final)(ctx, self.target, base_depth);
+                }
+                return Flow::Done;
+            }
+        }
         if self.asked {
             self.asked = false;
             let answer = ctx.answer().clone();
+            if let Some(ChoiceOption::Skill(rdef)) = answer.first().copied() {
+                if host_response_skills(ctx.core, ctx.catalog, self.target, resp_ctx)
+                    .contains(&rdef)
+                {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .insert((self.target, "l10_reguhuo_aoe_resume".to_string()), 1);
+                    (ctx.catalog.hooks.reguhuo_spawn_response)(
+                        ctx,
+                        self.target,
+                        resp_ctx,
+                        0,
+                        rdef,
+                        self.source,
+                    );
+                    return Flow::Yield;
+                }
+            }
             if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
                 // 出响应牌免伤
                 discard_response_card(ctx, self.target, c, self.need);
@@ -135,7 +178,8 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
             return Flow::Done;
         }
         let holders: Vec<crate::ids::CardId> = response_kind_cards(ctx, self.target, self.need);
-        if holders.is_empty() {
+        let resp_skills = host_response_skills(ctx.core, ctx.catalog, self.target, resp_ctx);
+        if holders.is_empty() && resp_skills.is_empty() {
             // 无响应牌：不询问，直接受伤（跳过语义挂账见清单）
             self.emit_aoe_damage(ctx);
             return Flow::Done;
@@ -150,6 +194,9 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
                 self.target,
                 self.need == CardKind::Shan,
             ));
+            for rdef in resp_skills {
+                options.push(ChoiceOption::Skill(rdef));
+            }
         }
         Flow::WaitChoice {
             observer: self.target,

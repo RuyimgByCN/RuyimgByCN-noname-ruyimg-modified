@@ -24,6 +24,15 @@ pub(super) fn host_sha_begin_step_impl(
         return false;
     }
     if priority_ge_6 {
+        if crate::content::host::step::l10_scs::sha_begin_l10_scs(
+            ctx,
+            sha_frame_id,
+            source,
+            target,
+            sha_card,
+        ) {
+            return true;
+        }
         let Some(bhy_def) = ctx.catalog.skill_by_name("bolehuiyan") else {
             return false;
         };

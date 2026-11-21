@@ -280,9 +280,12 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
         if seen_skills.contains(name) {
             return;
         }
-        if let Some(behavior) = super::lookup_upstream_host_behavior(name) {
-            super::push_host_skill_if_unseen(name, behavior, &mut host_skills, &mut seen_skills);
-            return;
+        // 保留静态共存内容锁（`u01-dddanzhi-pending-v107.ngsa`）；真实宿主 `L10ScsCompanion` 绑定在 `lib.rs` / `attach_formal_package_upstream_rules` 生效。
+        if !super::L10_SCS_COMPANION_SKILLS.contains(&name) {
+            if let Some(behavior) = super::lookup_upstream_host_behavior(name) {
+                super::push_host_skill_if_unseen(name, behavior, &mut host_skills, &mut seen_skills);
+                return;
+            }
         }
         if seen_skills.insert(name.to_string()) {
             if let Some(decl) = make_vm_skill_decl(name, dispatch_id, idx) {

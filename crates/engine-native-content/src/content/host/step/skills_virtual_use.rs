@@ -233,134 +233,16 @@ impl HostMachine {
                 }
                 _ => Flow::Done,
             },
-            // 蛊惑：弃一张手牌 → 声明基本/锦囊牌名 → 选目标 → 转化使用
+            // 蛊惑：选牌 → 声明基本/锦囊牌名 → (可选)选目标 → 质疑 → 结算/后效
             HostBehavior::Reguhuo => match self.stage {
-                HostStage::Act => {
-                    // 蛊惑：每回合一次（第 942 轮）——进入执行即记账，turn 结束清
-                    // 蛊惑：每回合一次（第 942 轮）——进入执行即记账，turn 结束清
-                    ctx.core
-                        .vm_aux
-                        .once
-                        .insert((self.owner, self.def_key.clone(), 1));
-                    let options: Vec<ChoiceOption> = ctx
-                        .core
-                        .player(self.owner)
-                        .hand
-                        .iter()
-                        .copied()
-                        .map(ChoiceOption::Card)
-                        .collect();
-                    if options.is_empty() {
-                        return Flow::Done;
-                    }
-                    self.stage = HostStage::SelectCard;
-                    Flow::WaitChoice {
-                        observer: self.owner,
-                        spec: ChoiceSpec {
-                            kind: ChoiceKind::SelectCards,
-                            prompt: "reguhuo_card",
-                            options,
-                            min: 1,
-                            max: 1,
-                            allow_cancel: true,
-                        },
-                    }
-                }
-                HostStage::SelectCard => {
-                    let Some(ChoiceOption::Card(card)) = ctx.answer().first().copied() else {
-                        return Flow::Done;
-                    };
-                    if !ctx.core.player(self.owner).hand.contains(&card) {
-                        return Flow::Done;
-                    }
-                    self.card = Some(card);
-                    self.stage = HostStage::SelectNature;
-                    Flow::WaitChoice {
-                        observer: self.owner,
-                        spec: ChoiceSpec {
-                            kind: ChoiceKind::PickTag,
-                            prompt: "reguhuo_name",
-                            options: reguhuo_kind_options(),
-                            min: 1,
-                            max: 1,
-                            allow_cancel: true,
-                        },
-                    }
-                }
-                HostStage::SelectNature => {
-                    let Some(ChoiceOption::Tag(idx)) = ctx.answer().first().copied() else {
-                        return Flow::Done;
-                    };
-                    let Some(card) = self.card else {
-                        return Flow::Done;
-                    };
-                    let Some(kind) = reguhuo_kind_at(idx) else {
-                        return Flow::Done;
-                    };
-                    let (min, max, targets) = ctx.core.legal_targets(ctx.catalog, kind, self.owner);
-                    self.card = Some(card);
-                    // 存**下标**（非 CardKind 判别值）——TargetChoice 按同表映射
-                    self.cards = vec![u32::from(idx)];
-                    if min == 0 && max == 0 {
-                        ctx.log(LogEvent::SkillTriggered {
-                            skill: "蛊惑",
-                            owner: self.owner, presentation: None });
-                        ctx.emit(EventData::CardUsed(crate::machine::card_use_as(
-                            card,
-                            self.owner,
-                            Vec::new(),
-                            Some(kind),
-                        )));
-                        self.stage = HostStage::ShuchuiTargetLoop;
-                        return Flow::Yield;
-                    }
-                    if targets.is_empty() {
-                        return Flow::Done;
-                    }
-                    self.stage = HostStage::TargetChoice;
-                    Flow::WaitChoice {
-                        observer: self.owner,
-                        spec: ChoiceSpec {
-                            kind: ChoiceKind::SelectPlayers,
-                            prompt: "reguhuo_targets",
-                            options: targets.into_iter().map(ChoiceOption::Player).collect(),
-                            min: min as usize,
-                            max: max as usize,
-                            allow_cancel: false,
-                        },
-                    }
-                }
-                HostStage::TargetChoice => {
-                    let Some(card) = self.card else {
-                        return Flow::Done;
-                    };
-                    let Some(kind) = self.cards.first().and_then(|k| reguhuo_kind_at(*k as u8))
-                    else {
-                        return Flow::Done;
-                    };
-                    let targets: Vec<PlayerId> = ctx
-                        .answer()
-                        .iter()
-                        .filter_map(|o| match o {
-                            ChoiceOption::Player(p) => Some(*p),
-                            _ => None,
-                        })
-                        .collect();
-                    if targets.is_empty() {
-                        return Flow::Done;
-                    }
-                    ctx.log(LogEvent::SkillTriggered {
-                        skill: "蛊惑",
-                        owner: self.owner, presentation: None });
-                    ctx.emit(EventData::CardUsed(crate::machine::card_use_as(
-                        card,
-                        self.owner,
-                        targets,
-                        Some(kind),
-                    )));
-                    self.stage = HostStage::ShuchuiTargetLoop;
-                    Flow::Yield
-                }
+                // `reguhuo_phase`: 仅进入质疑时写入 `vm_aux.once`（取消不消耗）
+                HostStage::Act => super::l10_reguhuo::step_act(self, ctx),
+                HostStage::SelectCard => super::l10_reguhuo::step_select_card(self, ctx),
+                HostStage::SelectNature => super::l10_reguhuo::step_select_nature(self, ctx),
+                HostStage::TargetChoice => super::l10_reguhuo::step_target_choice(self, ctx),
+                HostStage::ReguhuoGuessPick => super::l10_reguhuo::step_guess_pick(self, ctx),
+                HostStage::DrawSettle => super::l10_reguhuo::step_draw_settle(self, ctx),
+                HostStage::ReguhuoFinalPick => super::l10_reguhuo::step_final_pick(self, ctx),
                 _ => Flow::Done,
             },
             // 极略：看牌堆顶 3 张 → 选一张基本/锦囊牌 → 选目标 → 使用

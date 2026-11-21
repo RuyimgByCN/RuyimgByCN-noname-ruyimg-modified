@@ -12,6 +12,7 @@ pub(super) fn active_ask_wudian(
     owner: PlayerId,
     target: Option<PlayerId>,
     targets: &[PlayerId],
+    card: Option<CardId>,
     cards: &[CardId],
     core: &GameStateCore,
     catalog: &Catalog,
@@ -851,69 +852,15 @@ pub(super) fn active_ask_wudian(
             }
             _ => None,
         },
-        HostBehavior::Reguhuo => match stage {
-            HostStage::SelectCard => {
-                let options: Vec<ChoiceOption> = core
-                    .player(owner)
-                    .hand
-                    .iter()
-                    .copied()
-                    .map(ChoiceOption::Card)
-                    .collect();
-                if options.is_empty() {
-                    return None;
-                }
-                Some(ask(
-                    owner,
-                    "reguhuo_card",
-                    ChoiceKind::SelectCards,
-                    options,
-                    1,
-                    1,
-                    true,
-                ))
-            }
-            HostStage::SelectNature => Some(ask(
-                owner,
-                "reguhuo_name",
-                ChoiceKind::PickTag,
-                crate::content::host::support::reguhuo_kind_options(),
-                1,
-                1,
-                true,
-            )),
-            HostStage::TargetChoice => {
-                let kind = cards
-                    .first()
-                    .and_then(|k| crate::content::host::support::reguhuo_kind_at(*k as u8))?;
-                let (min, max, tgts) = core.legal_targets(catalog, kind, owner);
-                if tgts.is_empty() {
-                    return None;
-                }
-                Some(ask(
-                    owner,
-                    "reguhuo_targets",
-                    ChoiceKind::SelectPlayers,
-                    tgts.into_iter().map(ChoiceOption::Player).collect(),
-                    min as usize,
-                    max as usize,
-                    false,
-                ))
-            }
-            _ => None,
-        },
         HostBehavior::Rangjie => match stage {
             HostStage::SelectNature => {
-                let movable = core
-                    .players
-                    .iter()
-                    .any(|p| !p.equips.is_empty() || !p.judge.is_empty());
+                let movable = !super::step::skills_cards::rangjie_movable_cards(core, catalog).is_empty();
                 let options = if movable {
                     vec![ChoiceOption::Tag(0), ChoiceOption::Tag(1), ChoiceOption::Tag(2)]
                 } else {
                     vec![ChoiceOption::Tag(0), ChoiceOption::Tag(2)]
                 };
-                Some(ask(owner, "rangjie_choice", ChoiceKind::PickTag, options, 1, 1, false))
+                Some(ask(owner, "rangjie_choice", ChoiceKind::PickTag, options, 1, 1, true))
             }
             HostStage::SelectCard => Some(ask(
                 owner,
@@ -922,23 +869,30 @@ pub(super) fn active_ask_wudian(
                 vec![ChoiceOption::Tag(0), ChoiceOption::Tag(1), ChoiceOption::Tag(2)],
                 1,
                 1,
-                false,
+                true,
             )),
             HostStage::TargetChoice => {
-                let mut options = Vec::new();
-                for p in 0..core.players.len() as PlayerId {
-                    for c in core.player(p).equips.iter().chain(core.player(p).judge.iter()).copied() {
-                        options.push(ChoiceOption::Card(c));
-                    }
-                }
+                let options: Vec<ChoiceOption> =
+                    super::step::skills_cards::rangjie_movable_cards(core, catalog)
+                        .into_iter()
+                        .map(ChoiceOption::Card)
+                        .collect();
                 if options.is_empty() {
                     return None;
                 }
                 Some(ask(owner, "rangjie_move_card", ChoiceKind::SelectCards, options, 1, 1, false))
             }
             HostStage::ShuchuiTargetLoop => {
+                let card = card?;
+                let from = target?;
                 let options: Vec<ChoiceOption> =
-                    core.alive_players().map(ChoiceOption::Player).collect();
+                    super::step::skills_cards::rangjie_move_targets(core, catalog, from, card)
+                        .into_iter()
+                        .map(ChoiceOption::Player)
+                        .collect();
+                if options.is_empty() {
+                    return None;
+                }
                 Some(ask(owner, "rangjie_move_target", ChoiceKind::SelectPlayers, options, 1, 1, false))
             }
             _ => None,

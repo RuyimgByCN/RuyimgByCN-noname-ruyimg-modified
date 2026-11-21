@@ -1,5 +1,13 @@
 # G0 · L06 wuxing
 
+## 2026-11-22 Batch 1.6a 规则修复与独立复核（待提交／发布）
+
+基线 HEAD `e119f5518b32911ed45c3559881d97751966eddb`；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经独立复核 `verifier-rules-2` 三轮源码比对与上游 headless Chrome CDP 实跑（#70 **`APPROVE`**），`L06:cards:wuxingpan`（`wuxing.json` `0.3` 默认倍率、`WuxingNaturesRate` 锁隔离且排除自身赋属性）升为 `已复核等价`，全源 **`3 / 0 / 0`**（100% 单项等价）。详见 [Batch 1.6a 证据摘要](../../operations/evidence/2026-11-21-batch1-6a-l10-l06/README.md) 与 [inventory_status.json](inventory_status.json)。整包八项签署仍 `0/37`。
+
+| 日期来源快照 | 已复核等价 | 简化近似 | 缺失 |
+| --- | ---: | ---: | ---: |
+| 2026-11-22 Batch 1.6a L06 | 3 | 0 | 0 |
+
 ## 2026-11-19 Batch 1.1 规则修复与独立复核（待提交／发布）
 
 基线 HEAD `352236724b5e173cc1ff74c0fb706509129ab7a1` ＋ Batch 1.1 修改；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经先红后绿测试（`crates/engine-native/tests/l06_wuxing_eight.rs`）及独立复核 agent `602b9dd3-b8e7-4e3c-81fe-b57137a6f312` 源码与上游 10 案例探针复核，`L06` 状态更新为 **已复核等价 2／简化近似 1／缺失 0**：`_shengke`（补齐联机禁用、装备使用与直装区分、`Tianfuzhen`/`Niaoxiangzhen`/`use_as=Wuzhong` 过滤及 `Wuzhong`/`Jiguan` 原主判断，按冻结 `NGSA 107` 基线保持桃园/五谷单批结构）与 `wuxingpan_skill`（第一步可取消返还次数，第二步强制属性选择）通过复核；`wuxingpan` 卡牌因 `wuxing.json:5`／`construction.rs:479-503` 固定按 `1/3` 注入属性而非读取上游 `wuxing_num_playpackconfig`（默认 `0.3`），依 S2 下调为 **简化近似**。详见 [Batch 1.1 复核摘要](../../operations/evidence/2026-11-19-batch1-1-u06-l06/README.md)。

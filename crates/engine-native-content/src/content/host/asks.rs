@@ -937,6 +937,9 @@ pub(crate) fn active_ask_host(
                 false,
             ))
         }
+        HostBehavior::Reguhuo => super::step::l10_reguhuo::ask_reguhuo(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
         HostBehavior::WudianPingzhang
         | HostBehavior::WudianFeitiao
         | HostBehavior::WudianQianggu
@@ -959,10 +962,10 @@ pub(crate) fn active_ask_host(
         | HostBehavior::WudianFuchou2
         | HostBehavior::MbcmJiushi
         | HostBehavior::MbcmFangzhu
-        | HostBehavior::KDanggu | HostBehavior::KMowang | HostBehavior::Reguhuo | HostBehavior::Rangjie
+        | HostBehavior::KDanggu | HostBehavior::KMowang | HostBehavior::Rangjie
         | HostBehavior::WudianZhuchengGuard
         | HostBehavior::WudianDiyjuntun => {
-            active_ask_wudian(behavior, stage, owner, target, targets, cards, core, catalog)
+            active_ask_wudian(behavior, stage, owner, target, targets, card, cards, core, catalog)
         }
         HostBehavior::MtgLongshanfengLand
         | HostBehavior::MtgHaidaoLand

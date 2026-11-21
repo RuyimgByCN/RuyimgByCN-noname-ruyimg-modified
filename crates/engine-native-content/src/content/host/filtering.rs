@@ -48,6 +48,11 @@ impl HostSkillBehavior {
         if self.behavior == HostBehavior::HuanleMonkeyCard {
             return wuxing::monkey_matches_in_frame(ctx, frame.id, owner, event);
         }
+        if self.behavior == HostBehavior::L10ScsCompanion {
+            return super::step::l10_scs::filter_l10_scs_with_frames(
+                self, ctx, frames, frame, owner, event,
+            );
+        }
         self.filter_behavior(ctx, owner, event)
     }
 
@@ -800,6 +805,9 @@ impl HostSkillBehavior {
             }
             HostBehavior::L25ZuanBatchG => {
                 super::step::l25_batch_g::filter_l25_batch_g(self, ctx, owner, event)
+            }
+            HostBehavior::L10ScsCompanion => {
+                super::step::l10_scs::filter_l10_scs(self, ctx, owner, event)
             }
             _ => false,
         }

@@ -351,7 +351,7 @@ const bundledRaw: Record<
   },
   "wuxing-upstream-liuli": {
     packageJson: package14_raw,
-    contentHash: "ddd6043ed24ad8e18e4e57e16f311c792c803cc07b0f573296aadaa77b99d6c9",
+    contentHash: "6d83750d208ea67fa91bd0a66f8a64b694d86b3ae06988ccd9cf8ba7b07a06d5",
     assets: {
       "assets/cards.json": data14_cards_raw,
       "assets/wuxing.json": data14_wuxing_raw,

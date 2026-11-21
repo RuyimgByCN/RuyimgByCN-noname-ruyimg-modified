@@ -317,13 +317,13 @@ impl HostBehavior {
                 optional: false,
                 extra_events: vec![EventKind::Death],
             }),
-            // 让节：自己受到伤害后（可选）
+            // 让节：自己受到伤害后（direct: true，选择分支可取消）
             HostBehavior::Rangjie => Some(TriggerMeta {
                 event: EventKind::Damage,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
-                optional: true,
+                optional: false,
                 extra_events: Vec::new(),
             }),
             // 蛊惑：出牌阶段主动（activate 分支；无触发时机）

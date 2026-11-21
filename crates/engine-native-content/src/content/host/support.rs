@@ -16,18 +16,6 @@ pub fn sbzhaxiang_active(core: &crate::state::GameStateCore, p: PlayerId) -> boo
     core.turn.cards_used_play_phase < lost
 }
 
-/// 蛊惑声明选项（Tag=下标）。
-pub(super) fn reguhuo_kind_options() -> Vec<ChoiceOption> {
-    (0..REGUHUO_KINDS.len())
-        .map(|i| ChoiceOption::Tag(i as u8))
-        .collect()
-}
-
-/// 蛊惑下标 → 牌种。
-pub(super) fn reguhuo_kind_at(idx: u8) -> Option<crate::catalog::CardKind> {
-    REGUHUO_KINDS.get(idx as usize).copied()
-}
-
 /// 疾风范围扩展适用牌种（上游：`card.name=='sha'` 或 `selectTarget` 为
 /// [1,1] 的锦囊——原生按「恰一名目标」的既有牌种集合判定）。
 pub fn jifeng_single_target_trick(kind: crate::catalog::CardKind) -> bool {

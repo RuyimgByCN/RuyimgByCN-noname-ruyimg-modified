@@ -86,18 +86,9 @@ fn upstream_rangjie_triggers_after_damage_and_cancel_draws_nothing() {
     e.debug_grant(0, "rangjie");
     let hand_before = e.debug_hand(0).len();
     e.debug_deal_damage(Some(1), 0, 1, engine_native::event::DamageNature::Normal);
-    // 询问 0：触发确认（可选技门）
-    let c0 = e.open_choice().cloned().expect("让节触发确认");
-    assert_eq!(c0.spec.prompt, "trigger_confirm", "先经过触发确认门");
-    let _ = e.submit(GameCommand {
-        actor: c0.observer,
-        expected_revision: e.revision(),
-        dedup_id: next_dedup(),
-        action: GameAction::Answer { choice_id: c0.id, selection: vec![ChoiceOption::Confirm] },
-    });
-    // 询问 1：选项面
+    // 直接开启选项面（上游 direct: true，无 trigger_confirm）
     let c = e.open_choice().cloned().expect("让节选项询问");
-    assert_eq!(c.spec.prompt, "rangjie_choice", "确认后应为选项");
+    assert_eq!(c.spec.prompt, "rangjie_choice", "direct: true 应直出选项");
     assert!(
         c.spec.options.contains(&ChoiceOption::Tag(0)),
         "应含「获得牌」：{:?}",
@@ -108,17 +99,13 @@ fn upstream_rangjie_triggers_after_damage_and_cancel_draws_nothing() {
         "应含「取消」：{:?}",
         c.spec.options
     );
-    // 选「取消」→ 不摸牌（原生以 Tag(2) 或 Pass 表达 cancel2）
-    let cancel = if c.spec.options.contains(&ChoiceOption::Tag(2)) {
-        ChoiceOption::Tag(2)
-    } else {
-        ChoiceOption::Pass
-    };
+    // 选真正取消（cancel2 -> Vec::new()）→ 不摸牌（史诗卡牌/extension.js:449-453；字面 Tag(2) 在上游仍走抽牌流程）
+    assert!(c.spec.allow_cancel, "rangjie_choice 必须允许 cancel2 空选取消");
     let _ = e.submit(GameCommand {
         actor: c.observer,
         expected_revision: e.revision(),
         dedup_id: next_dedup(),
-        action: GameAction::Answer { choice_id: c.id, selection: vec![cancel] },
+        action: GameAction::Answer { choice_id: c.id, selection: Vec::new() },
     });
     drain(&mut e);
     assert_eq!(
@@ -135,13 +122,6 @@ fn upstream_rangjie_gain_branch_draws_then_takes_card() {
     e.debug_grant(0, "rangjie");
     let hand_before = e.debug_hand(0).len();
     e.debug_deal_damage(Some(1), 0, 1, engine_native::event::DamageNature::Normal);
-    let c0 = e.open_choice().cloned().expect("让节触发确认");
-    let _ = e.submit(GameCommand {
-        actor: c0.observer,
-        expected_revision: e.revision(),
-        dedup_id: next_dedup(),
-        action: GameAction::Answer { choice_id: c0.id, selection: vec![ChoiceOption::Confirm] },
-    });
     let c = e.open_choice().cloned().expect("让节选项询问");
     let _ = e.submit(GameCommand {
         actor: c.observer,
@@ -187,17 +167,6 @@ fn upstream_rangjie_move_branch_must_draw_one() {
 
     let hand_before = e.debug_hand(0).len();
     e.debug_deal_damage(Some(1), 0, 1, engine_native::event::DamageNature::Normal);
-    let c0 = e.open_choice().cloned().expect("让节触发确认");
-    assert_eq!(c0.spec.prompt, "trigger_confirm");
-    let _ = e.submit(GameCommand {
-        actor: c0.observer,
-        expected_revision: e.revision(),
-        dedup_id: next_dedup(),
-        action: GameAction::Answer {
-            choice_id: c0.id,
-            selection: vec![ChoiceOption::Confirm],
-        },
-    });
     let c = e.open_choice().cloned().expect("场上有牌应提供移动牌分支");
     assert_eq!(c.spec.prompt, "rangjie_choice");
     assert!(

@@ -54,6 +54,7 @@ mod skin_switch;
 pub mod taixu;
 mod thunder;
 mod update_guard;
+mod wuxing;
 pub mod zuan;
 pub use ai_tuning::*;
 pub use boss_playpack::{
@@ -145,6 +146,7 @@ pub use sj_settings::{
 pub use skin_switch::*;
 pub use taixu::*;
 pub use thunder::*;
+pub use wuxing::{apply_wuxing_config, parse_wuxing_config, WuxingConfig, WuxingConfigError};
 pub use update_guard::{
     apply_update_guard_line, boot_link, can_update, classify_body, compare_update, dedup_broken,
     extension_urls, forced_enables, format_catch, join_changelog, next_error_count, on_remove_link,
@@ -872,6 +874,16 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
     for d in opt_array(&parsed, "deferred", "deferred")? {
         deferred.push(req_str(d, "name", "deferred[].name")?.to_string());
     }
+    if host_skills.iter().any(|d| d.name == "reguhuo") {
+        let interned = names::intern("rechanyuan".to_string());
+        if !host_skills.iter().any(|d| d.name == interned) {
+            host_skills.push(HostSkillDecl {
+                name: interned,
+                behavior: HostBehavior::Rechanyuan,
+                presentation_binding: None,
+            });
+        }
+    }
     if deferred.iter().any(|name| name == "shichangshi") {
         for &(sk_name, behavior) in &[
             ("k_danggu", HostBehavior::KDanggu),
@@ -882,6 +894,16 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
                 host_skills.push(HostSkillDecl {
                     name: interned,
                     behavior,
+                    presentation_binding: None,
+                });
+            }
+        }
+        for &sk_name in &decision34_closure::L10_SCS_COMPANION_SKILLS {
+            let interned = names::intern(sk_name.to_string());
+            if !host_skills.iter().any(|d| d.name == interned) {
+                host_skills.push(HostSkillDecl {
+                    name: interned,
+                    behavior: HostBehavior::L10ScsCompanion,
                     presentation_binding: None,
                 });
             }
@@ -918,6 +940,17 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
         deferred,
         definition_ids,
     })
+}
+
+/// 桥接扩展牌库并应用 `assets/wuxing.json` 概率配置。
+pub fn bridge_pack_with_wuxing_config(
+    cards_json: &str,
+    wuxing_json: &str,
+) -> Result<BridgedPack, BridgeError> {
+    let mut bridged = bridge_pack(cards_json)?;
+    wuxing::apply_wuxing_config(&mut bridged.pack, wuxing_json)
+        .map_err(|msg| BridgeError::InvalidField { field: "assets/wuxing.json", reason: msg })?;
+    Ok(bridged)
 }
 
 /// 武将装载（角色包管线）：generals 数组 → `ExtensionGeneral` + 命中宿主

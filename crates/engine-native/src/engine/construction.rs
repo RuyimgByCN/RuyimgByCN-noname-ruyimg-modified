@@ -483,10 +483,11 @@ detached_cards: Vec::new(),
         let catalog: SharedCatalog = std::sync::Arc::new(catalog);
         let mut e = Self::new_with_catalog(seed, seats, mode, catalog, OpeningPlan::Standard);
         // G1 wuxing 初始化钩子：每名角色随机五行属性 + 含初始手牌在内的
-        // 牌库按 1/3 比例随机获得属性（排除 `wuxingpan` 本身，extension.js:45）。
-        if packs
+        // 牌库按 `wuxing_num_playpackconfig`（默认 0.3）随机获得属性（排除 `wuxingpan` 本身，extension.js:45）。
+        if let Some(rate_bps) = packs
             .iter()
-            .any(|p| p.enabled && p.init_hook == crate::content::extension::InitHook::WuxingNatures)
+            .filter(|p| p.enabled)
+            .find_map(|p| p.init_hook.wuxing_natures_bps())
         {
             let core = &mut e.state.core;
             for pl in core.players.iter_mut() {
@@ -502,7 +503,7 @@ detached_cards: Vec::new(),
                 if e.catalog.card_kind(card) == crate::catalog::CardKind::WuxingPan {
                     continue;
                 }
-                if core.rng.gen_range(3) == 0 {
+                if rate_bps > 0 && core.rng.gen_range(10_000) < u32::from(rate_bps) {
                     let nature = core.rng.gen_range(5) as u8;
                     core.card_natures.insert(card, nature);
                 }

@@ -161,7 +161,11 @@ pub(super) fn is_tao_like(
     }
     // 急救（v202 对齐上游 viewAsFilter）：限持有者回合外——自己是当前
     // 回合角色时不可发动
-    let jijiu = ctx
+    let jijiu = !ctx.catalog.is_rechanyuan_sealed_name(
+        ctx.core,
+        responder,
+        crate::vocabulary::names::JI_JIU,
+    ) && ctx
         .catalog
         .skill_by_name(crate::vocabulary::names::JI_JIU)
         .map(|d| ctx.core.has_skill(responder, d) && ctx.core.turn.current != responder)
@@ -256,7 +260,8 @@ pub(crate) fn response_kind_cards_core(
     if catalog.blocks_all_cards(core, responder) {
         return Vec::new();
     }
-    let sealed = catalog.is_tieji_sealed(core, responder);
+    let sealed = catalog.is_tieji_sealed(core, responder)
+        || (core.player(responder).hp <= 1 && catalog.has_rechanyuan(core, responder));
     let rw_lanyin = need == CardKind::Shan
         && crate::rvm_bridge::modifiers::d34_l28_mods::has_rewritten_lanyinjia(
             core, catalog, responder,
@@ -372,6 +377,7 @@ pub(super) fn discard_response_card(
             cards: vec![card],
         });
     } else {
+        ctx.core.table.retain(|x| *x != card);
         ctx.to_discard(card);
     }
 }
@@ -402,6 +408,11 @@ pub fn jinyan_blocks_black_trick(
 ) -> bool {
     core.player(player).hp <= 2
         && !catalog.is_tieji_sealed(core, player)
+        && !catalog.is_rechanyuan_sealed_name(
+            core,
+            player,
+            crate::vocabulary::host::WUDIAN_JINYAN_KEY,
+        )
         && catalog
             .skill_by_name(crate::vocabulary::host::WUDIAN_JINYAN_KEY)
             .is_some_and(|d| core.has_skill(player, d))
@@ -423,7 +434,8 @@ pub fn sha_card_use_as(
     if in_hand && kind.is_sha_like() && !core.player(owner).wangshi_ban {
         return Some((None, false));
     }
-    let sealed = catalog.is_tieji_sealed(core, owner);
+    let sealed = catalog.is_tieji_sealed(core, owner)
+        || (core.player(owner).hp <= 1 && catalog.has_rechanyuan(core, owner));
     if !sealed && in_hand {
         let suit = catalog.effective_card_suit(core, owner, card);
         let red = matches!(suit, crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond);
@@ -573,4 +585,26 @@ pub fn usable_sha_options(
         })
         .map(ChoiceOption::Card)
         .collect()
+}
+
+/// 响应窗（1=闪, 2=杀, 3=无懈, 4=濒死桃, 5=自救桃/酒）可用宿主转化技能列表。
+pub(crate) fn host_response_skills(
+    core: &crate::state::GameStateCore,
+    catalog: &Catalog,
+    responder: PlayerId,
+    resp_ctx: u8,
+) -> Vec<crate::ids::SkillDefId> {
+    let mut out = Vec::new();
+    if catalog.blocks_all_cards(core, responder) {
+        return out;
+    }
+    if let Some(def) = (catalog.hooks.reguhuo_response_skill)(core, catalog, responder, resp_ctx) {
+        out.push(def);
+    }
+    if let Some(def) = (catalog.hooks.scsanruo_response_skill)(core, catalog, responder, resp_ctx) {
+        if !out.contains(&def) {
+            out.push(def);
+        }
+    }
+    out
 }

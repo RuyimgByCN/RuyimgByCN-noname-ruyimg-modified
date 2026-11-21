@@ -151,7 +151,7 @@ pub fn active_ask(
                 return None;
             }
             let responder = if *on_target { *target } else { *source };
-            let options = response_kind_options(core, catalog, responder, CardKind::Sha);
+            let mut options = response_kind_options(core, catalog, responder, CardKind::Sha);
             if options.len() == 1 {
                 if let Some((helper, helper_shas)) =
                     crate::kernel::jijiang_shu_helper(core, catalog, responder)
@@ -168,6 +168,9 @@ pub fn active_ask(
                         false,
                     ));
                 }
+            }
+            for rdef in crate::kernel::host_response_skills(core, catalog, responder, 2) {
+                options.push(ChoiceOption::Skill(rdef));
             }
             Some(ask(
                 responder,
@@ -191,7 +194,11 @@ pub fn active_ask(
                     return None;
                 }
                 let responder = *queue.first()?;
-                let options = response_kind_options(core, catalog, responder, CardKind::Nullify);
+                let mut options =
+                    response_kind_options(core, catalog, responder, CardKind::Nullify);
+                for rdef in crate::kernel::host_response_skills(core, catalog, responder, 3) {
+                    options.push(ChoiceOption::Skill(rdef));
+                }
                 Some(ask(
                     responder,
                     "nullify_window",
@@ -239,7 +246,11 @@ pub fn active_ask(
             if !*asked {
                 return None;
             }
-            let options = response_kind_options(core, catalog, *target, *need);
+            let mut options = response_kind_options(core, catalog, *target, *need);
+            let resp_ctx = if *need == CardKind::Shan { 1 } else { 2 };
+            for rdef in crate::kernel::host_response_skills(core, catalog, *target, resp_ctx) {
+                options.push(ChoiceOption::Skill(rdef));
+            }
             Some(ask(
                 *target,
                 "aoe_response",

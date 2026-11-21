@@ -80,6 +80,9 @@ impl HostSkillBehavior {
             HostBehavior::L25ZuanBatchG => {
                 return super::step::l25_batch_g::machine_l25_batch_g(self, owner, event);
             }
+            HostBehavior::L10ScsCompanion => {
+                return super::step::l10_scs::machine_l10_scs(self, owner, event);
+            }
             _ => {}
         }
         let (target, card) = match self.behavior {

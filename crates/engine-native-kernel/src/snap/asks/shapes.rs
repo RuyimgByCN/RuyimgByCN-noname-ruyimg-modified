@@ -110,6 +110,7 @@ pub(in crate::snap) fn is_tao_like(
             suit,
             crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
         )
+        && !catalog.is_rechanyuan_sealed_name(core, responder, JI_JIU)
     {
         return true;
     }
@@ -196,6 +197,9 @@ pub(in crate::snap) fn dying_save_options(
         if let Some(def) = crate::kernel::mbcmjiushi_dying_skill(core, catalog, responder, dying) {
             options.push(ChoiceOption::Skill(def));
         }
+    }
+    for rdef in crate::kernel::dying_response_skills(core, catalog, responder, dying) {
+        options.push(ChoiceOption::Skill(rdef));
     }
     options
 }

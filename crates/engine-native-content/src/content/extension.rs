@@ -43,8 +43,10 @@ pub use crate::vocabulary::generals::ExtensionGeneral;
 pub enum InitHook {
     #[default]
     None,
-    /// wuxing：开局为每名角色随机五行属性，牌堆按比例随机获得属性。
+    /// wuxing：开局为每名角色随机五行属性，牌堆按默认配置 `0.3`（3000 bps）随机获得属性。
     WuxingNatures,
+    /// wuxing：显式万分比配置 `wuxing_num_playpackconfig`（`0..=10_000`）。
+    WuxingNaturesRate(u16),
     /// swd 器族（卡牌面补切批⑩）：开局为每名角色授予四象五件手持触发技
     /// 实例（效果由手持 filter 门控）。
     SwdJiqiHeld,
@@ -53,11 +55,31 @@ pub enum InitHook {
 impl InitHook {
     /// 扩展包数据 `init_hook` 键（宿主 ABI，只增不改）。
     pub const SWD_JIQI_HELD_KEY: &str = "swd_jiqi_held";
+    /// L06 `wuxing_num_playpackconfig` 默认万分比（`0.3`）。
+    pub const DEFAULT_WUXING_RATE_BPS: u16 = 3000;
+
     pub const fn key(self) -> &'static str {
         match self {
             InitHook::None => "none",
-            InitHook::WuxingNatures => "wuxing_natures",
+            InitHook::WuxingNatures | InitHook::WuxingNaturesRate(_) => "wuxing_natures",
             InitHook::SwdJiqiHeld => Self::SWD_JIQI_HELD_KEY,
+        }
+    }
+
+    pub const fn wuxing_natures_bps(self) -> Option<u16> {
+        match self {
+            InitHook::WuxingNatures => Some(Self::DEFAULT_WUXING_RATE_BPS),
+            InitHook::WuxingNaturesRate(bps) => Some(if bps > 10_000 { 10_000 } else { bps }),
+            _ => None,
+        }
+    }
+
+    pub const fn from_wuxing_bps(bps: u16) -> Self {
+        let clamped = if bps > 10_000 { 10_000 } else { bps };
+        if clamped == Self::DEFAULT_WUXING_RATE_BPS {
+            InitHook::WuxingNatures
+        } else {
+            InitHook::WuxingNaturesRate(clamped)
         }
     }
 
@@ -65,7 +87,9 @@ impl InitHook {
         use crate::content::host::HostBehavior;
         match self {
             Self::None => false,
-            Self::WuxingNatures => behavior == HostBehavior::ShengkeCheck,
+            Self::WuxingNatures | Self::WuxingNaturesRate(_) => {
+                behavior == HostBehavior::ShengkeCheck
+            }
             Self::SwdJiqiHeld => matches!(behavior,
                 HostBehavior::SwdQinglongzhiguiHeld
                     | HostBehavior::SwdZhuquezhizhangHeld
@@ -216,6 +240,9 @@ pub fn content_lock_id(packs: &[&ExtensionPack]) -> u64 {
         value(&mut h, pack.def.name.as_bytes());
         value(&mut h, &pack.def.version.to_le_bytes());
         value(&mut h, pack.init_hook.key().as_bytes());
+        if let InitHook::WuxingNaturesRate(bps) = pack.init_hook {
+            h.update(&bps.to_le_bytes());
+        }
         h.update(&(pack.cards.len() as u64).to_le_bytes());
         for card in &pack.cards {
             value(&mut h, card.name.as_bytes());

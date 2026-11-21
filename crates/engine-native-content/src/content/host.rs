@@ -36,7 +36,9 @@ pub(crate) use step::{
     host_card_use_after, host_draw_begin_step, host_on_game_start, host_on_hand_card_removed,
     host_on_phase_use_end, host_on_player_died, host_on_round_start, host_sha_begin_step,
     host_sha_end_step, on_cards_to_discard_chengye, on_outer_settled_taipingyaoshu,
-    on_skill_removed_all, play_begin_tianshu,
+    on_phase_end_l10_scs, on_skill_removed_all, play_begin_tianshu, reguhuo_consume_resp,
+    reguhuo_has_pending_final, reguhuo_response_skill, reguhuo_spawn_final,
+    reguhuo_spawn_response, scsanruo_response_skill,
 };
 pub(crate) use support::{niepan_effect, sync_land_skill};
 
@@ -99,6 +101,10 @@ pub enum HostStage {
     /// 阶段恢复执行该行为的「摸后尾段」（每个行为各自的尾段，同一行为
     /// 同时至多一张在飞 R 帧——阶段语义由 behavior 唯一确定）。
     DrawSettle,
+    /// L10 蛊惑：询问场上未带 rechanyuan 的其他角色是否质疑。
+    ReguhuoGuessPick,
+    /// L10 蛊惑：真牌结算后质疑者二选一（弃置手牌或失 1 点体力）。
+    ReguhuoFinalPick,
 }
 
 impl HostStage {
@@ -119,6 +125,8 @@ impl HostStage {
             HostStage::ShuchuiTarget => 12,
             HostStage::HuanrenPick => 13,
             HostStage::DrawSettle => 14,
+            HostStage::ReguhuoGuessPick => 15,
+            HostStage::ReguhuoFinalPick => 16,
         }
     }
     pub fn from_tag(t: u8) -> Option<Self> {
@@ -138,6 +146,8 @@ impl HostStage {
             12 => HostStage::ShuchuiTarget,
             13 => HostStage::HuanrenPick,
             14 => HostStage::DrawSettle,
+            15 => HostStage::ReguhuoGuessPick,
+            16 => HostStage::ReguhuoFinalPick,
             _ => return None,
         })
     }
@@ -267,6 +277,7 @@ impl SkillBehavior for HostSkillBehavior {
                 | HostBehavior::MtgYixialanRecast
                 | HostBehavior::MtgLinzhongjiantaStrike
                 | HostBehavior::MtgYoulinDiscard
+                | HostBehavior::Rechanyuan
         ) || matches!(
             self.name.as_str(),
             "th_zhengjing2"
@@ -629,6 +640,7 @@ pub fn host_skill_trigger_meta(
         HostBehavior::L25ZuanBatchE => step::l25_batch_e::trigger_meta_l25_batch_e(name),
         HostBehavior::L25ZuanBatchF => step::l25_batch_f::trigger_meta_l25_batch_f(name),
         HostBehavior::L25ZuanBatchG => step::l25_batch_g::trigger_meta_l25_batch_g(name),
+        HostBehavior::L10ScsCompanion => step::l10_scs::trigger_meta_l10_scs(name),
         _ => crate::event::NativeDamageEffect::from_host(behavior)
             .map(|e| e.meta())
             .or_else(|| behavior.trigger_meta()),
@@ -661,6 +673,7 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         HostBehavior::L25ZuanBatchE => step::l25_batch_e::limits_l25_batch_e(name),
         HostBehavior::L25ZuanBatchF => step::l25_batch_f::limits_l25_batch_f(name),
         HostBehavior::L25ZuanBatchG => step::l25_batch_g::limits_l25_batch_g(name),
+        HostBehavior::L10ScsCompanion => step::l10_scs::limits_l10_scs(name),
         HostBehavior::GujianFoodQingtuan | HostBehavior::GujianFoodLuyugeng => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,

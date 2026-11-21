@@ -276,7 +276,7 @@
 
 待执行：诱敌后首杀未命中、第二杀命中指定者，再进行第三次杀；应命中即停止且移除临时追杀标记，不能触发换牌。
 
-源码：`archive/upstream/noname/apps/core/extension/玩点论杀/card/skill.js:5`；`crates/content-native-loader/src/host_skill_bindings.rs:51`；`crates/engine-native-content/src/content/host/filtering/common.rs:973`（原第 1046 行前移）；`crates/engine-native-kernel/src/kernel/sha/step.rs:874`；`crates/engine-native-kernel/src/kernel/sha/resume.rs:302`。
+源码：`archive/upstream/noname/apps/core/extension/玩点论杀/card/skill.js:5`；`crates/content-native-loader/src/host_skill_bindings.rs:51`；`crates/engine-native-content/src/content/host/filtering/common.rs:973`（原第 1046 行前移）；`crates/engine-native-kernel/src/kernel/sha/step.rs`（原旧版行 874，已由 Batch 1.4/1.6a 拆分迁入 `crates/engine-native-content/src/content/host/step/wudian_cards.rs:506` 与 `crates/engine-native-kernel/src/kernel/sha/respond.rs`）；`crates/engine-native-kernel/src/kernel/sha/resume.rs:302`。
 
 ### skills:youzhan
 

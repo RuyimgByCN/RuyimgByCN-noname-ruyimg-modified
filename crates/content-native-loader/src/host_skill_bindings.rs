@@ -254,6 +254,7 @@ pub fn lookup_upstream_host_behavior(skill_name: &str) -> Option<HostBehavior> {
         "qianggu" => Some(HostBehavior::WudianQianggu),
         "qianggu2" => Some(HostBehavior::WudianQiangguGuard),
         "rangjie" => Some(HostBehavior::Rangjie),
+        "rechanyuan" => Some(HostBehavior::Rechanyuan),
         "reguhuo" => Some(HostBehavior::Reguhuo),
         "rexue" => Some(HostBehavior::SwdRexue),
         "reyingzi" => Some(HostBehavior::SwdReyingzi),
@@ -262,6 +263,16 @@ pub fn lookup_upstream_host_behavior(skill_name: &str) -> Option<HostBehavior> {
         "sajin" => Some(HostBehavior::XianjianSajin),
         "sanjian" => Some(HostBehavior::SanjianWeaponDamage),
         "sbzhaxiang" => Some(HostBehavior::SbZhaXiang),
+        "scsanruo"
+        | "scschihe"
+        | "scschiyan"
+        | "scskuiji"
+        | "scsniqu"
+        | "scspicai"
+        | "scstaoluan"
+        | "scsxiaolu"
+        | "scsyaozhuo"
+        | "scszimou" => Some(HostBehavior::L10ScsCompanion),
         "senluo" => Some(HostBehavior::SwdSenluo),
         "shangxi" => Some(HostBehavior::SwdShangxi),
         "shaoying" => Some(HostBehavior::YunchouShaoying),

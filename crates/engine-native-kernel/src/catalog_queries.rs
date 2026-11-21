@@ -22,6 +22,60 @@ impl Catalog {
         }
     }
 
+    /// L10 `rechanyuan` 缠怨状态查询（`refresh.js:10760-10783`）。
+    pub fn has_rechanyuan(
+        &self,
+        core: &crate::state::GameStateCore,
+        p: crate::ids::PlayerId,
+    ) -> bool {
+        core.vm_aux
+            .flags
+            .get(&(p, "l10_rechanyuan".to_string()))
+            .copied()
+            .unwrap_or(0)
+            > 0
+            || self
+                .skill_by_name("rechanyuan")
+                .is_some_and(|def| core.has_skill(p, def))
+    }
+
+    /// L10 `rechanyuan` 封技门控（`refresh.js:10770`）：`hp <= 1` 时除
+    /// `chanyuan`/`rechanyuan` 与 `charlotte` 外所有技能（含锁定技）均失效。
+    pub fn is_rechanyuan_sealed_def(
+        &self,
+        core: &crate::state::GameStateCore,
+        p: crate::ids::PlayerId,
+        def: SkillDefId,
+    ) -> bool {
+        if core.player(p).hp > 1 || !self.has_rechanyuan(core, p) {
+            return false;
+        }
+        let Some(skill) = self.skills.get(def as usize) else {
+            return false;
+        };
+        !matches!(skill.name, "chanyuan" | "rechanyuan") && !self.is_charlotte_skill(def)
+    }
+
+    /// 按技能名查询是否被 `rechanyuan`（或 `tieji` 非锁定技）封印。
+    pub fn is_rechanyuan_sealed_name(
+        &self,
+        core: &crate::state::GameStateCore,
+        p: crate::ids::PlayerId,
+        name: &str,
+    ) -> bool {
+        if core.player(p).hp > 1 || !self.has_rechanyuan(core, p) {
+            return false;
+        }
+        if matches!(name, "chanyuan" | "rechanyuan") {
+            return false;
+        }
+        if let Some(def) = self.skill_by_name(name) {
+            !self.is_charlotte_skill(def)
+        } else {
+            !name.starts_with('_')
+        }
+    }
+
     /// L20 标记补充 (`fz_new_tieji` / `sbtieji`): whether `p`'s non-locked skills are sealed this turn.
     pub fn is_tieji_sealed(
         &self,

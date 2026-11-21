@@ -118,6 +118,9 @@ fn bridge_single_frozen(
         &mut pack,
         prior_packs,
     );
+    if let Some(cfg_json) = copy.text_asset("assets/wuxing.json")? {
+        crate::wuxing::apply_wuxing_config(&mut pack, &cfg_json)?;
+    }
     pack.def.name = names::intern(format!(
         "installed:{}",
         serde_json::to_string(&copy.binding).map_err(|e| e.to_string())?

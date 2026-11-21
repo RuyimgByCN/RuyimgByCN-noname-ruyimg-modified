@@ -269,6 +269,9 @@ impl HostSkillBehavior {
             HostBehavior::L25ZuanBatchG => {
                 super::step::l25_batch_g::activate_l25_batch_g(self, ctx, owner)
             }
+            HostBehavior::L10ScsCompanion => {
+                super::step::l10_scs::activate_l10_scs(self, ctx, owner)
+            }
             _ => None,
         }
     }

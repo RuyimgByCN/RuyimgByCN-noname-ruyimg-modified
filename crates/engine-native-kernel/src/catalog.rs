@@ -1090,6 +1090,38 @@ pub struct ContentHooks {
     /// 手牌移除钩子（如 `xingchong` 在使用/打出/装备/弃置离手时立即摸 2 而不依赖额外事件表）。
     pub on_hand_card_removed:
         fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId, crate::ids::CardId),
+    /// 响应窗（杀/决斗/AOE/濒死/无懈）查询玩家是否可发动【蛊惑】响应。
+    pub reguhuo_response_skill: fn(
+        &crate::state::GameStateCore,
+        &Catalog,
+        crate::ids::PlayerId,
+        u8,
+    ) -> Option<crate::ids::SkillDefId>,
+    /// 响应窗（杀/决斗/AOE/濒死/无懈）查询玩家是否可发动【安弱】响应。
+    pub scsanruo_response_skill: fn(
+        &crate::state::GameStateCore,
+        &Catalog,
+        crate::ids::PlayerId,
+        u8,
+    ) -> Option<crate::ids::SkillDefId>,
+    /// 响应窗内挂入宿主转化响应机器（【蛊惑】/【安弱】，NO_FRAME Trigger 挂起槽）。
+    pub reguhuo_spawn_response: fn(
+        &mut crate::machine::Ctx<'_>,
+        crate::ids::PlayerId,
+        u8,
+        crate::ids::PlayerId,
+        crate::ids::SkillDefId,
+        crate::ids::PlayerId,
+    ),
+    /// 响应窗恢复后消费【蛊惑】真/未质疑产出的卡牌实体；取消或被识破作废返回 `None`。
+    pub reguhuo_consume_resp:
+        fn(&mut crate::state::GameStateCore, crate::ids::PlayerId) -> Option<crate::ids::CardId>,
+    /// 响应牌生效后是否仍存在待询问的 `reguhuo_final`（真质疑者弃手牌或失体力）。
+    pub reguhuo_has_pending_final: fn(&crate::state::GameStateCore, crate::ids::PlayerId) -> bool,
+    /// 在指定挂起深度挂入 `reguhuo_final` 阶段机器，逐一处理质疑者后效。
+    pub reguhuo_spawn_final: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId, usize),
+    /// 回合结束（`Phase::End { begin: false }`）宿主清理/归还回调（如 `scschiyan_get`）。
+    pub on_phase_end: fn(&mut crate::machine::Ctx<'_>),
 }
 
 impl ContentHooks {
@@ -1117,6 +1149,13 @@ impl ContentHooks {
         on_phase_use_end: |_, _| {},
         on_round_start: |_| {},
         on_hand_card_removed: |_, _, _| {},
+        reguhuo_response_skill: |_, _, _, _| None,
+        scsanruo_response_skill: |_, _, _, _| None,
+        reguhuo_spawn_response: |_, _, _, _, _, _| {},
+        reguhuo_consume_resp: |_, _| None,
+        reguhuo_has_pending_final: |_, _| false,
+        reguhuo_spawn_final: |_, _, _| {},
+        on_phase_end: |_| {},
     };
 }
 
@@ -1404,7 +1443,9 @@ impl Catalog {
             .filter(|((_, _), inst)| inst.enabled)
             .find_map(|((_, def), _)| {
                 let s = self.skills.get(*def as usize)?;
-                if sealed && !Self::is_locked_skill_name(s.name, s.trigger.as_ref()) {
+                if (sealed && !Self::is_locked_skill_name(s.name, s.trigger.as_ref()))
+                    || self.is_rechanyuan_sealed_def(core, player, *def)
+                {
                     return None;
                 }
                 s.behavior.vm_view_as().iter().find(|spec| {

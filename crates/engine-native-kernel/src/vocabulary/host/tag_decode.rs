@@ -574,6 +574,8 @@ impl HostBehavior {
             571 => HostBehavior::L25ZuanBatchE,
             572 => HostBehavior::L25ZuanBatchF,
             573 => HostBehavior::L25ZuanBatchG,
+            574 => HostBehavior::L10ScsCompanion,
+            575 => HostBehavior::Rechanyuan,
             654 => HostBehavior::L27MbcmQingzheng,
             _ => return None,
         })

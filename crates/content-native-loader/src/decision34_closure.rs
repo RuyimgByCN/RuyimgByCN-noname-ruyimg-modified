@@ -468,16 +468,9 @@ pub fn decision34_closure_extension_pack() -> ExtensionPack {
             crate::push_host_skill_if_unseen(sk_name, behavior, &mut host_skills, &mut seen_skills);
         }
     }
-    for &sk_name in &L10_SCS_COMPANION_SKILLS {
-        vm_skills.push(build_d34_vm_decl(
-            vm_skills.len(),
-            sk_name,
-            L10_SCS_SKILL_ID,
-            EventKind::PhaseBegin,
-            &[],
-            engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
-        ));
-    }
+    // Note: `L10_SCS_COMPANION_SKILLS` are attached on `epic-cards` in `lib.rs` (when deferred
+    // `shichangshi` is declared) and via `decision34_pack9::attach_formal_package_upstream_rules`,
+    // avoiding `DuplicateSkill` when `[&epic_pack, &d34_pack]` coexist.
 
     let mut generals = Vec::with_capacity(L28_THUNDER_GENERALS.len() + 1);
     generals.push(ExtensionGeneral {

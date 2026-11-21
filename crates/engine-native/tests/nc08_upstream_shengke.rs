@@ -267,7 +267,7 @@ fn upstream_shengke_is_global_and_natures_initialized() {
     let cfg = std::fs::read_to_string(root.join("wuxing-upstream-liuli/assets/wuxing.json"))
         .expect("读五行配置");
     assert!(
-        cfg.contains("\"denominator\": 3"),
+        cfg.contains("\"wuxing_num_playpackconfig\": 0.3"),
         "原生默认比例来自包数据：{cfg}"
     );
 }

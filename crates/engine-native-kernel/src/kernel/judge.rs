@@ -1,3 +1,7 @@
+#[path = "judge_rewrite.rs"]
+mod judge_rewrite;
+pub use judge_rewrite::{judge_provider_cards, judge_rewrite_cards, judge_rewrite_providers};
+
 use super::*;
 
 /// 判定阶段机器：对判定区延时锦囊逐张判定。
@@ -706,6 +710,10 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                                 .vm_aux
                                 .flags
                                 .insert((self.owner, "last_judge_rank".to_string()), u32::from(rank));
+                            ctx.core
+                                .vm_aux
+                                .flags
+                                .insert((self.owner, "last_judge_card".to_string()), judge_card);
                         }
                         if !machine_holds {
                             ctx.to_discard(judge_card);
@@ -1056,70 +1064,4 @@ impl JudgePhaseMachine {
             }
         }
     }
-}
-
-/// Source GuiCai is hs outside guozhan, hes inside; GuiDao is black he, Tiandao is any he.
-pub fn judge_rewrite_cards(
-    core: &crate::state::GameStateCore,
-    catalog: &crate::catalog::Catalog,
-    player: PlayerId,
-) -> Vec<crate::ids::CardId> {
-    let mut cards = Vec::new();
-    for def in judge_rewrite_providers(core, catalog, player, &[]) {
-        for card in judge_provider_cards(core, catalog, player, def) {
-            if !cards.contains(&card) {
-                cards.push(card);
-            }
-        }
-    }
-    cards
-}
-pub fn judge_rewrite_providers(
-    core: &crate::state::GameStateCore,
-    catalog: &crate::catalog::Catalog,
-    player: PlayerId,
-    used: &[(PlayerId, crate::ids::SkillDefId)],
-) -> Vec<crate::ids::SkillDefId> {
-    [
-        crate::vocabulary::names::GUI_CAI,
-        crate::vocabulary::names::GUI_DAO,
-        crate::vocabulary::names::BOSS_TIANDAO,
-        "gtiandao",
-        crate::vocabulary::host::SWD_TIANLUN_KEY,
-    ]
-    .into_iter()
-    .filter_map(|name| catalog.skill_by_name(name))
-    .filter(|d| {
-        core.has_skill(player, *d)
-            && !used.contains(&(player, *d))
-            && (catalog.skill_name(*d) == crate::vocabulary::host::SWD_TIANLUN_KEY
-                || !judge_provider_cards(core, catalog, player, *d).is_empty())
-    })
-    .collect()
-}
-pub fn judge_provider_cards(
-    core: &crate::state::GameStateCore,
-    catalog: &crate::catalog::Catalog,
-    player: PlayerId,
-    provider: crate::ids::SkillDefId,
-) -> Vec<crate::ids::CardId> {
-    let name = catalog.skill_name(provider);
-    let cai = name == crate::vocabulary::names::GUI_CAI;
-    let dao = name == crate::vocabulary::names::GUI_DAO;
-    let any = name == crate::vocabulary::names::BOSS_TIANDAO || name == "gtiandao";
-    let black = |c: &crate::ids::CardId| {
-        matches!(
-            catalog.cards[*c as usize].suit,
-            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
-        )
-    };
-    let p = core.player(player);
-    p.hand
-        .iter()
-        .filter(|c| any || cai || dao && black(c))
-        .chain(p.equips.iter().filter(|c| {
-            any || cai && matches!(core.mode, crate::state::GameMode::Kingdoms) || dao && black(c)
-        }))
-        .copied()
-        .collect()
 }

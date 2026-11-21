@@ -85,6 +85,7 @@ pub(super) fn apply_command(
                         def.name,
                         def.trigger.as_ref(),
                     ))
+                || catalog.is_rechanyuan_sealed_def(&state.core, actor, skill)
             {
                 return Err(RejectReason::SkillDisabled);
             }
@@ -150,6 +151,11 @@ pub(super) fn apply_command(
             if !open.spec.accepts(&selection) {
                 return Err(RejectReason::InvalidChoice);
             }
+            if open.spec.prompt == "scskuiji_cards"
+                && !kuiji_suits_valid(&state.core, catalog, open.observer, &selection)
+            {
+                return Err(RejectReason::InvalidChoice);
+            }
             let open = state.resolution.open_choice.take().expect("checked");
             log.push(LogEvent::ChoiceAnswered {
                 id: open.id,
@@ -178,4 +184,39 @@ pub(super) fn apply_command(
             Ok(())
         }
     }
+}
+
+/// 窥骥四牌花色必须两两不同（`mobile.js:5041-5046`）；空选视为取消放行。
+pub(super) fn kuiji_suits_valid(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    observer: PlayerId,
+    selection: &[ChoiceOption],
+) -> bool {
+    if selection.is_empty() {
+        return true;
+    }
+    if selection.len() != 4 {
+        return false;
+    }
+    let mut suits = 0u8;
+    for opt in selection {
+        let ChoiceOption::Card(cid) = opt else {
+            return false;
+        };
+        let holder = core
+            .players
+            .iter()
+            .position(|p| p.hand.contains(cid))
+            .map(|i| i as PlayerId)
+            .unwrap_or(observer);
+        let bit = match catalog.effective_card_suit(core, holder, *cid) {
+            crate::catalog::Suit::Spade => 1 << 0,
+            crate::catalog::Suit::Heart => 1 << 1,
+            crate::catalog::Suit::Club => 1 << 2,
+            crate::catalog::Suit::Diamond => 1 << 3,
+        };
+        suits |= bit;
+    }
+    suits == 0b1111
 }

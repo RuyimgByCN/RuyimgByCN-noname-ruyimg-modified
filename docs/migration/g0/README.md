@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-22 Batch 1.6a（L06 wuxing ＋ L10 史诗卡牌 4 项规则收口）更新（待提交／发布）
+
+基线 HEAD `e119f5518b32911ed45c3559881d97751966eddb`（Batch UI-4 已发布，CI Run `44929144693` 10/10）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-rules-2` 三轮独立审查（#70 **`APPROVE`**）与主线全量门禁复测，清单更新为 **已复核等价 1,186／简化近似 3,238／缺失 0／上游未定义 0**（合计 4,424）：`L06 wuxing` 由 `2 / 1 / 0` 升为 **3 / 0 / 0**（+1，`wuxingpan`）；`L10 史诗卡牌` 由 `8 / 9 / 0` 升为 **11 / 6 / 0**（+3，`reguhuo`/`rangjie`/`k_danggu`，4 技能 100% 单项等价，3 UI 配置＋`_emojiRebate1`＋2 CSS 保持 `简化近似`）。详见 [Batch 1.6a 证据摘要](../../operations/evidence/2026-11-21-batch1-6a-l10-l06/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-22 Batch UI-4（L08 终 14 项与 L14 108 项共 +122）更新（待提交／发布）
 
 基线 HEAD `bd43569e164a7692bd18a88d96d1f196a1fa2ad1`（Batch UI-3 已发布，CI Run `44922862013` 10/10）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-ui` 独立审查（#65 **`APPROVE`**）与主线 Chrome CDP 及全量门禁复测，清单更新为 **已复核等价 1,182／简化近似 3,242／缺失 0／上游未定义 0**（合计 4,424）：`L08 十周年UI` 由 `392 / 14 / 0` 升为 **406 / 0 / 0**（+14）；`L14 手杀ui` 由 `0 / 141 / 0` 升为 **108 / 33 / 0**（+108：`39` 配置＋`52` 钩子＋`17` 表面升为 `已复核等价`，其余 #65 指出的 33 项维持 `简化近似` 待 UI-5 闭环）。详见 [Batch UI-4 证据摘要](../../operations/evidence/2026-11-21-ui-l14-shousha/README.md) 与 [inventory_status.json](inventory_status.json)。

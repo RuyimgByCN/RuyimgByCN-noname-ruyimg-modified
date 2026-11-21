@@ -124,6 +124,53 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                 }
                 return Flow::Done; // 已被救回或进入殁亡修整
             }
+            if !self.asked {
+                if let Some(responder) = self.responders.first().copied() {
+                    if ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .remove(&(responder, "l10_reguhuo_dying_resume".to_string()))
+                        .is_some()
+                    {
+                        if let Some(tao) =
+                            (ctx.catalog.hooks.reguhuo_consume_resp)(ctx.core, responder)
+                        {
+                            self.responders.remove(0);
+                            let eff_kind = match ctx
+                                .core
+                                .vm_aux
+                                .flags
+                                .remove(&(responder, "l10_reguhuo_resp_kind".to_string()))
+                            {
+                                Some(5) => CardKind::Jiu,
+                                _ => CardKind::Tao,
+                            };
+                            self.round_used = true;
+                            let base_depth = ctx.res.stack.len();
+                            ctx.emit(EventData::CardUsed(crate::machine::card_use_as(
+                                tao,
+                                responder,
+                                vec![self.dying],
+                                Some(eff_kind),
+                            )));
+                            let fid = ctx.top_frame_id();
+                            ctx.core.vm_aux.flags.insert(
+                                (responder, format!("dying_save_frame:{fid}")),
+                                (u32::from(self.dying) + 1) | ((tao as u32) << 8),
+                            );
+                            if (ctx.catalog.hooks.reguhuo_has_pending_final)(ctx.core, responder) {
+                                (ctx.catalog.hooks.reguhuo_spawn_final)(
+                                    ctx,
+                                    responder,
+                                    base_depth,
+                                );
+                            }
+                            return Flow::Yield;
+                        }
+                    }
+                }
+            }
             // 跳过已死亡或无桃的应答者；队列耗尽即一轮问完——
             // 本轮有人用桃且场上仍有桃 → 开新一轮（负体力可由同一
             // 持桃者跨轮连续多张救回）；否则无人愿救，落至死亡。
@@ -138,7 +185,9 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                                 *r,
                                 self.dying,
                             )
-                            .is_some());
+                            .is_some()
+                            || !dying_response_skills(ctx.core, ctx.catalog, *r, self.dying)
+                                .is_empty());
                     if !has_tao {
                         self.responders.remove(0);
                     } else {
@@ -149,15 +198,18 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                     break;
                 }
                 let any_tao = ctx.core.players.iter().enumerate().any(|(i, p)| {
+                    let pid = i as PlayerId;
                     p.alive
-                        && (!dying_tao_cards(ctx, i as PlayerId, self.dying).is_empty()
+                        && (!dying_tao_cards(ctx, pid, self.dying).is_empty()
                             || crate::kernel::mbcmjiushi_dying_skill(
                                 ctx.core,
                                 ctx.catalog,
-                                i as PlayerId,
+                                pid,
                                 self.dying,
                             )
-                            .is_some())
+                            .is_some()
+                            || !dying_response_skills(ctx.core, ctx.catalog, pid, self.dying)
+                                .is_empty())
                 });
                 if !any_tao {
                     break;
@@ -178,8 +230,28 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
             };
             if self.asked {
                 self.asked = false;
-                self.responders.remove(0);
                 let answer = ctx.answer().clone();
+                if let Some(ChoiceOption::Skill(rdef)) = answer.first().copied() {
+                    if dying_response_skills(ctx.core, ctx.catalog, responder, self.dying)
+                        .contains(&rdef)
+                    {
+                        let need_ctx = if responder == self.dying { 5 } else { 4 };
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((responder, "l10_reguhuo_dying_resume".to_string()), 1);
+                        (ctx.catalog.hooks.reguhuo_spawn_response)(
+                            ctx,
+                            responder,
+                            need_ctx,
+                            self.dying,
+                            rdef,
+                            responder,
+                        );
+                        return Flow::Yield;
+                    }
+                }
+                self.responders.remove(0);
                 if let Some(ChoiceOption::Card(tao)) = answer.first().copied() {
                     let raw_kind = ctx.catalog.card_kind(tao);
                     let in_hand = ctx.core.player(responder).hand.contains(&tao);
@@ -310,6 +382,11 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
             ) {
                 options.push(ChoiceOption::Skill(def));
             }
+            for rdef in dying_response_skills(ctx.core, ctx.catalog, responder, self.dying) {
+                if !options.contains(&ChoiceOption::Skill(rdef)) {
+                    options.push(ChoiceOption::Skill(rdef));
+                }
+            }
             // 冰封·封（swd 批 134）：封锁者不能求桃/自救
             let options = if ctx.catalog.blocks_all_cards(ctx.core, responder) {
                 Vec::new()
@@ -364,4 +441,37 @@ impl DyingSaveMachine {
             by_card: tao,
         });
     }
+}
+
+pub(crate) fn dying_response_skills(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    responder: PlayerId,
+    dying: PlayerId,
+) -> Vec<crate::ids::SkillDefId> {
+    if catalog.blocks_all_cards(core, responder) {
+        return Vec::new();
+    }
+    let sipu_ban_save = catalog
+        .skill_by_name(crate::vocabulary::names::BOSS_SIPU)
+        .is_some_and(|def| {
+            core.has_skill(dying, def)
+                && core.turn.current == dying
+                && core.turn.cards_used_play_phase < 3
+        });
+    if sipu_ban_save && responder != dying {
+        return Vec::new();
+    }
+    let zonghai_ban_save = core
+        .vm_aux
+        .flags
+        .get(&(dying, format!("jsrgzonghai_forbid:{dying}")))
+        .copied()
+        .unwrap_or(0)
+        != 0;
+    if zonghai_ban_save && responder != dying {
+        return Vec::new();
+    }
+    let need_ctx = if responder == dying { 5 } else { 4 };
+    crate::kernel::host_response_skills(core, catalog, responder, need_ctx)
 }

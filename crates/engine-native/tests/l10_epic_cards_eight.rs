@@ -185,10 +185,6 @@ fn l10_eight_dimension_from_fresh_install() {
         "{out:?}"
     );
     assert!(
-        answer(&mut e2, "trigger_confirm", vec![ChoiceOption::Confirm]),
-        "让节确认门"
-    );
-    assert!(
         answer(&mut e2, "rangjie_choice", vec![ChoiceOption::Tag(0)]),
         "让节选择窗"
     );
@@ -540,7 +536,8 @@ fn l10_reguhuo_six_dimension_real_match() {
     let c_name = e.open_choice().cloned().expect("reguhuo_name");
     assert_eq!(c_name.spec.prompt, "reguhuo_name");
     assert!(c_name.spec.options.contains(&ChoiceOption::Tag(0))); // 杀
-    assert!(c_name.spec.options.contains(&ChoiceOption::Tag(4))); // 桃
+    assert!(!c_name.spec.options.contains(&ChoiceOption::Tag(4)), "满体力动态 filterCard 隐藏桃");
+    assert!(c_name.spec.options.contains(&ChoiceOption::Tag(5))); // 酒
     let _ = assert_ai_pending_choice_no_leak(&e);
     // 伪装声明【杀】（Tag(0)，载体实为【桃】）
     assert_archive_roundtrip_and_answer(&mut e, vec![ChoiceOption::Tag(0)]);
@@ -579,6 +576,20 @@ fn l10_reguhuo_six_dimension_real_match() {
             selection: vec![ChoiceOption::Player(1)],
         },
     );
+    while let Some(q) = e_dodge.open_choice().cloned() {
+        if q.spec.prompt == "reguhuo_guess_pick" {
+            let _ = submit_cmd(
+                &mut e_dodge,
+                q.observer,
+                GameAction::Answer {
+                    choice_id: q.id,
+                    selection: vec![ChoiceOption::Tag(0)],
+                },
+            );
+        } else {
+            break;
+        }
+    }
     let c_shan = e_dodge.open_choice().cloned().expect("目标闪响应窗");
     assert_eq!(c_shan.observer, 1);
     let _ = submit_cmd(
@@ -619,17 +630,16 @@ fn l10_rangjie_six_dimension_real_match() {
     let _ = e.debug_deal_damage(Some(1), 0, 0, DamageNature::Normal);
     assert!(e.open_choice().is_none(), "0点伤害不触发让节");
 
-    // 确认门选择取消（Vec::new()）放弃发动：不进入 rangjie_choice
+    // direct: true 跳过 trigger_confirm，直接打开 rangjie_choice；空选（cancel2）直接结束不摸牌
     let _ = e.debug_deal_damage(Some(1), 0, 1, DamageNature::Normal);
-    assert_eq!(e.open_choice().unwrap().spec.prompt, "trigger_confirm");
-    assert!(answer(&mut e, "trigger_confirm", Vec::new()));
-    assert!(e.open_choice().is_none(), "放弃确认后不打开让节选择窗");
+    assert_eq!(e.open_choice().unwrap().spec.prompt, "rangjie_choice");
+    assert!(answer(&mut e, "rangjie_choice", Vec::new()));
+    assert!(e.open_choice().is_none(), "cancel2 空选取消后结束");
     assert!(e.debug_hand(0).is_empty());
 
     // ② 筛选与上限（场上无装备/判定牌时 Tag(1) 移动分支被过滤，仅 Tag(0)/Tag(2)）
     e.debug_set_hp(0, 4);
     let _ = e.debug_deal_damage(Some(1), 0, 1, DamageNature::Normal);
-    assert!(answer(&mut e, "trigger_confirm", vec![ChoiceOption::Confirm]));
     let c_no_eq = e.open_choice().cloned().expect("rangjie_choice without field cards");
     assert_eq!(c_no_eq.spec.prompt, "rangjie_choice");
     assert_eq!(
@@ -637,11 +647,11 @@ fn l10_rangjie_six_dimension_real_match() {
         vec![ChoiceOption::Tag(0), ChoiceOption::Tag(2)],
         "场上无装备/判定牌时仅提供 Tag(0) 获得牌与 Tag(2) 取消"
     );
-    // ③ 分支 Tag(2)（取消）：不摸牌、不移动
+    // ③ 分支 cancel2（Vec::new() 空选取消）：不摸牌、不移动
     let _ = assert_ai_pending_choice_no_leak(&e);
-    assert_archive_roundtrip_and_answer(&mut e, vec![ChoiceOption::Tag(2)]);
+    assert_archive_roundtrip_and_answer(&mut e, Vec::new());
     assert!(e.open_choice().is_none());
-    assert!(e.debug_hand(0).is_empty(), "Tag(2) 取消分支不获得牌");
+    assert!(e.debug_hand(0).is_empty(), "cancel2 空选取消分支不获得牌");
 
     // ④ 2点伤害触发连续 2 次让节 + ②③⑤⑥ 移动场上装备分支（Tag(1)）与获得锦囊牌分支（Tag(0)->Tag(1)）
     let mut e2 = engine(140202);
@@ -665,7 +675,6 @@ fn l10_rangjie_six_dimension_real_match() {
 
     e2.debug_set_hp(0, 4);
     let _ = e2.debug_deal_damage(Some(1), 0, 2, DamageNature::Normal);
-    assert!(answer(&mut e2, "trigger_confirm", vec![ChoiceOption::Confirm]));
 
     // 第 1 次让节：场上已有 1号位装备，options 含 Tag(0), Tag(1), Tag(2)
     let c1 = e2.open_choice().cloned().expect("第1次 rangjie_choice");
@@ -686,7 +695,8 @@ fn l10_rangjie_six_dimension_real_match() {
 
     let c_dest = e2.open_choice().cloned().expect("rangjie_move_target");
     assert_eq!(c_dest.spec.prompt, "rangjie_move_target");
-    assert_eq!(c_dest.spec.options.len(), 4);
+    assert_eq!(c_dest.spec.options.len(), 3, "排除原持有者 1 号位后应有 3 个目标");
+    assert!(!c_dest.spec.options.contains(&ChoiceOption::Player(1)));
     let _ = assert_ai_pending_choice_no_leak(&e2);
     assert_archive_roundtrip_and_answer(&mut e2, vec![ChoiceOption::Player(0)]);
     assert!(!e2.state_core().player(1).equips.contains(&weapon), "1号位武器已移走");
@@ -754,9 +764,14 @@ fn l10_kdanggu_kmowang_and_ten_configs_six_dimension_real_match() {
             next_phase(&mut ec);
             let c = ec.open_choice().cloned().expect("k_danggu_partner");
             let first = ec.state_core().vm_aux.flags[&(0, "k_danggu_first".into())];
-            if first != 0 {
-                // {3,5,9} 与 {7,8,9} 内部两两冲突，唯一不冲突候选必为 Tag(0)
+            if first == 9 {
+                // 9 的 conflictMap = [3,5,7,8]，故仅剩 Tag(0)
                 assert_eq!(c.spec.options, vec![ChoiceOption::Tag(0)]);
+            } else if first != 0 {
+                // 3<->5 / 7<->8 单向冲突，3/5/7/8 均不与 9 冲突，故剩 {Tag(0), Tag(9)}（经洗牌）
+                assert_eq!(c.spec.options.len(), 2);
+                assert!(c.spec.options.contains(&ChoiceOption::Tag(0)));
+                assert!(c.spec.options.contains(&ChoiceOption::Tag(9)));
             }
         }
     }

@@ -1,5 +1,9 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+## 2026-11-22 Batch 1.6a（L06 wuxing ＋ L10 史诗卡牌 4 项规则收口）合入（待提交／发布）
+
+基线 HEAD `e119f5518b32911ed45c3559881d97751966eddb`（Batch UI-4 CI Run `44929144693` Attempt 1 `10/10 success` 已并入 `ci-runs.md`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `verifier-rules-2` 三轮核验通过（#70 **`APPROVE`**）的 `swarm/conv-q1-l10` `af6ef4899..b0a09c8a9` 并协调 `combat_rules.rs`/`dying.rs`/`sha/respond.rs`/`extension_choices.rs` 与 L29/Q2-L27 共存：关闭 `L06:cards:wuxingpan` 与 `L10` 全部 `reguhuo`/`rangjie`/`k_danggu`（含全 10 项 `scs*` 常侍伴生技），在 `main` 全量通过 `--workspace`（`7,948/0/8`）、4 crate（`2,600/0/6`）、`conformance` `19/19`、`web-client` `510/0` 及 `smoke:native` `83/0`。按 #70 升级 **4 项**：`L06` 升为 **3／0／0**（100% 单项等价）；`L10` 升为 **11／6／0**（4 项技能 100% 单项等价，3 项 UI 配置＋`_emojiRebate1`＋2 项 CSS 保留 `简化近似`），全仓清单更新为 **已复核等价 1,186／简化近似 3,238／缺失 0**（整包八项 `0/37`）。见 [Batch 1.6a 证据](../operations/evidence/2026-11-21-batch1-6a-l10-l06/README.md) 与 [进度主稿](native-progress.md)。
+
 ## 2026-11-22 Batch UI-4（L08 终 14 项与 L14 手杀ui 108 项共 +122）合入（待提交／发布）
 
 基线 HEAD `bd43569e164a7692bd18a88d96d1f196a1fa2ad1`（Batch UI-3 CI Run `44922862013` Attempt 1 `10/10 success` 已并入 `ci-runs.md`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `verifier-ui` 复核通过（#65 **`APPROVE`**）的 `swarm/conv-ui` `2c9f51d4c5da4b1d6487c10165610dfdfdf21965`：补齐 `L08` 终 14 项（`dynamicBackground` Canvas2D、`JBDDZ`+`doudizhu/junba.css`、真实 2p 终局 `SanGuoShaGameOver`、`player1..3[_PC].css` 7 变体、`animation1.css`、`content` 观星与 `pause` 行动日志/猜身份）并洁净室实现 `L14` 配置/钩子/渲染面消费，在 `main` 全量通过 `--workspace`（7,934/0/8）、4 crate（2,586/0/6）、510 前端单测、83/83 烟测及 6 套 Chrome CDP 验证。按 #65 升级 **122 项**：`L08` 升为 **406／0／0**（100% 单项等价，整包仍 `0/37`）；`L14` 升级 `108` 项（`39` 配置+`52` 钩子+`17` 表面）并保留 #65 指出的 `33` 项（`XPJ`/`qiDongYe`/9 配置+1 钩子+23 变体表面）为 `简化近似`（**108／33／0**），全仓清单更新为 **已复核等价 1,182／简化近似 3,242／缺失 0**。见 [Batch UI-4 证据](../operations/evidence/2026-11-21-ui-l14-shousha/README.md) 与 [进度主稿](native-progress.md)。

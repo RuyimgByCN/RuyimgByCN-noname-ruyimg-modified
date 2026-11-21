@@ -62,7 +62,7 @@ fn install_and_bridge() -> ExtensionPack {
     )
     .expect("配置可读");
     assert!(
-        cfg.contains("\"wuxingpan\"") && cfg.contains("\"denominator\": 3"),
+        cfg.contains("\"wuxingpan\"") && cfg.contains("\"wuxing_num_playpackconfig\": 0.3"),
         "配置数据核对"
     );
     // 桥接统一走 C0 装载器（ADR 0777/0778）：五行盘、生克/盘属性改写
@@ -371,8 +371,8 @@ fn l06_eight_dimension_from_fresh_install() {
     let cards_text = std::fs::read_to_string(&cards_path).expect("读 cards.json");
     let cfg_text = std::fs::read_to_string(source_root.join("assets/wuxing.json")).expect("配置");
     assert!(
-        cfg_text.contains("\"denominator\": 3"),
-        "配置正例：牌堆属性比例分母为 3"
+        cfg_text.contains("\"wuxing_num_playpackconfig\": 0.3"),
+        "配置正例：牌堆属性默认概率为 0.3"
     );
 
     let dir = tempfile::tempdir().unwrap();

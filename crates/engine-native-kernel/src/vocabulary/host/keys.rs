@@ -602,6 +602,8 @@ impl HostBehavior {
             HostBehavior::L25ZuanBatchF => "host:l25_zuan_batch_f",
             HostBehavior::L25ZuanBatchG => "host:l25_zuan_batch_g",
             HostBehavior::L27MbcmQingzheng => "host:l27_mbcmqingzheng",
+            HostBehavior::L10ScsCompanion => "host:l10_scs_companion",
+            HostBehavior::Rechanyuan => "host:rechanyuan",
         }
     }
 }

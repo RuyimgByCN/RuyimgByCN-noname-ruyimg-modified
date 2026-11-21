@@ -98,10 +98,6 @@ fn rangjie_gains_basic_card() {
         "{out:?}"
     );
     assert!(
-        answer(&mut e, "trigger_confirm", vec![ChoiceOption::Confirm]),
-        "让节确认门"
-    );
-    assert!(
         answer(&mut e, "rangjie_choice", vec![ChoiceOption::Tag(0)]),
         "让节选择窗（获得牌）"
     );
@@ -147,10 +143,6 @@ fn rangjie_moves_card_between_players() {
         "{out:?}"
     );
     assert!(
-        answer(&mut e, "trigger_confirm", vec![ChoiceOption::Confirm]),
-        "确认门"
-    );
-    assert!(
         answer(&mut e, "rangjie_choice", vec![ChoiceOption::Tag(1)]),
         "选择窗（移动牌）"
     );
@@ -184,8 +176,8 @@ fn rangjie_decline_and_absent() {
         "{out:?}"
     );
     assert!(
-        answer(&mut e, "trigger_confirm", Vec::new()),
-        "确认门（放弃）"
+        answer(&mut e, "rangjie_choice", Vec::new()),
+        "让节选择窗（cancel2 放弃）"
     );
     drain(&mut e);
     assert_eq!(e.debug_hand(0).len(), 0, "放弃：无所得");

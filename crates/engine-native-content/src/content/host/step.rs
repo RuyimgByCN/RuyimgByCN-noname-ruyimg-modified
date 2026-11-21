@@ -8,7 +8,14 @@ pub(super) mod huanle;
 mod jiguan;
 mod mtg;
 mod skills_card_use;
-mod skills_cards;
+pub(super) mod skills_cards;
+pub(in crate::content::host) mod l10_reguhuo;
+pub(in crate::content::host) mod l10_scs;
+pub(crate) use l10_reguhuo::{
+    reguhuo_consume_resp, reguhuo_has_pending_final, reguhuo_response_skill, reguhuo_spawn_final,
+    reguhuo_spawn_response,
+};
+pub(crate) use l10_scs::{on_phase_end_l10_scs, scsanruo_response_skill};
 mod skills_virtual_use;
 mod skills_discard_costs;
 mod skills_damage;
@@ -1149,6 +1156,8 @@ impl HostMachine {
             HostBehavior::L25ZuanBatchE => l25_batch_e::handle_l25_batch_e(self, ctx),
             HostBehavior::L25ZuanBatchF => l25_batch_f::handle_l25_batch_f(self, ctx),
             HostBehavior::L25ZuanBatchG => l25_batch_g::handle_l25_batch_g(self, ctx),
+            HostBehavior::L10ScsCompanion => l10_scs::handle_l10_scs(self, ctx),
+            HostBehavior::Rechanyuan => Flow::Done,
         }
     }
 }

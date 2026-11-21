@@ -1673,4 +1673,8 @@ pub enum HostBehavior {
     /// L27 选将美化 UI 钩子版「清正」（tag 654，`选将美化/extension.js:3697-4261`）：
     /// 与 L29 龙血玄黄 `MbcmQingzheng` (tag 474) 隔离；对齐 `:4259` 数组比较语义。
     L27MbcmQingzheng,
+    /// L10 史诗卡牌十常侍伴生技宿主实现（tag 574：scsniqu/scstaoluan/scschiyan 等 10 技能）。
+    L10ScsCompanion,
+    /// L10 史诗卡牌缠怨负效应（tag 575：reguhuo 被真质疑后获此 locked charlotte 技，hp<=1 失效非 charlotte 技）。
+    Rechanyuan,
 }

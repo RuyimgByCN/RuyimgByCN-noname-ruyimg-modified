@@ -65,6 +65,58 @@ impl crate::catalog::SkillMachine for DuelMachine {
             };
             let shas: Vec<crate::ids::CardId> =
                 response_kind_cards(ctx, responder, CardKind::Sha);
+            let resp_skills = host_response_skills(ctx.core, ctx.catalog, responder, 2);
+            if ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(responder, "l10_reguhuo_duel_resume".to_string()))
+                .is_some()
+            {
+                self.asked = false;
+                if let Some(c) = (ctx.catalog.hooks.reguhuo_consume_resp)(ctx.core, responder) {
+                    discard_response_card(ctx, responder, c, CardKind::Sha);
+                    let base_depth = ctx.res.stack.len();
+                    ctx.emit(EventData::CardResponded {
+                        card: c,
+                        player: responder,
+                    });
+                    let wushuang_holder = if self.on_target {
+                        self.source
+                    } else {
+                        self.target
+                    };
+                    let opponent_has_wushuang = !ctx.catalog.is_rechanyuan_sealed_name(
+                        ctx.core,
+                        wushuang_holder,
+                        crate::vocabulary::names::WU_SHUANG,
+                    ) && ctx
+                        .catalog
+                        .skill_by_name(crate::vocabulary::names::WU_SHUANG)
+                        .map(|d| ctx.core.has_skill(wushuang_holder, d))
+                        .unwrap_or(false);
+                    if opponent_has_wushuang && !self.second_pending {
+                        self.second_pending = true;
+                    } else {
+                        self.second_pending = false;
+                        self.on_target = !self.on_target;
+                    }
+                    let has_final =
+                        (ctx.catalog.hooks.reguhuo_has_pending_final)(ctx.core, responder);
+                    let has_anruo = ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .contains_key(&(responder, format!("l10_scsanruo_effect:{c}")));
+                    if has_final || has_anruo {
+                        if has_final {
+                            (ctx.catalog.hooks.reguhuo_spawn_final)(ctx, responder, base_depth);
+                        }
+                        return Flow::Yield;
+                    }
+                    continue;
+                }
+            }
             if !self.asked {
                 if shas.is_empty() && ctx.core.player(responder).alive {
                     if let Some((helper, helper_shas)) =
@@ -86,7 +138,8 @@ impl crate::catalog::SkillMachine for DuelMachine {
                         };
                     }
                 }
-                if shas.is_empty() || !ctx.core.player(responder).alive {
+                if (shas.is_empty() && resp_skills.is_empty()) || !ctx.core.player(responder).alive
+                {
                     // 轮到方无杀：不询问，直接受伤，决斗结束
                     let vm_card_bonus = ctx
                         .core
@@ -110,6 +163,9 @@ impl crate::catalog::SkillMachine for DuelMachine {
                     options.extend((ctx.catalog.hooks.borrow_options)(
                         ctx, responder, false,
                     ));
+                    for rdef in resp_skills {
+                        options.push(ChoiceOption::Skill(rdef));
+                    }
                 }
                 return Flow::WaitChoice {
                     observer: responder,
@@ -126,6 +182,23 @@ impl crate::catalog::SkillMachine for DuelMachine {
             // 应答消费
             self.asked = false;
             let answer = ctx.answer().clone();
+            if let Some(ChoiceOption::Skill(rdef)) = answer.first().copied() {
+                if resp_skills.contains(&rdef) {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .insert((responder, "l10_reguhuo_duel_resume".to_string()), 1);
+                    (ctx.catalog.hooks.reguhuo_spawn_response)(
+                        ctx,
+                        responder,
+                        2,
+                        0,
+                        rdef,
+                        opponent,
+                    );
+                    return Flow::Yield;
+                }
+            }
             if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
                 let jijiang_helper = if shas.is_empty() {
                     jijiang_shu_helper(ctx.core, ctx.catalog, responder).map(|(h, _)| h)
@@ -162,7 +235,11 @@ impl crate::catalog::SkillMachine for DuelMachine {
                 } else {
                     self.target
                 };
-                let opponent_has_wushuang = ctx
+                let opponent_has_wushuang = !ctx.catalog.is_rechanyuan_sealed_name(
+                    ctx.core,
+                    wushuang_holder,
+                    crate::vocabulary::names::WU_SHUANG,
+                ) && ctx
                     .catalog
                     .skill_by_name(crate::vocabulary::names::WU_SHUANG)
                     .map(|d| ctx.core.has_skill(wushuang_holder, d))

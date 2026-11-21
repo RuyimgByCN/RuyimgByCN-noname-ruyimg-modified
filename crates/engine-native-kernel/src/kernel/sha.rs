@@ -2,6 +2,7 @@ use super::*;
 
 mod armor;
 mod liuli;
+mod respond;
 mod resume;
 mod step;
 
@@ -356,6 +357,10 @@ impl ShaResolveMachine {
     ///（逐目标状态复位，重开该目标的防具/出闪询问）；队列空 → 弃置杀
     /// 本体结束。
     fn advance_target(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(self.target, "l10_scschihe_block_suits".to_string()));
         if let Some(fid) = self.current_sha_frame_id(ctx) {
             ctx.core
                 .vm_aux
@@ -369,6 +374,10 @@ impl ShaResolveMachine {
                 .vm_aux
                 .flags
                 .remove(&(self.source, format!("sha_pending_end:{fid}")));
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(self.source, format!("sha_frame_damage_bonus:{fid}")));
         }
         if let Some(next) = self.extra_targets.first().copied() {
             self.extra_targets.remove(0);
@@ -501,6 +510,15 @@ impl ShaResolveMachine {
                 0
             };
         let fid = self.current_sha_frame_id(ctx);
+        let vm_frame_bonus = fid
+            .and_then(|fid| {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .get(&(self.source, format!("sha_frame_damage_bonus:{fid}")))
+                    .copied()
+            })
+            .unwrap_or(0);
         let dealt_damage = ctx.core.player(self.target).alive;
         if dealt_damage {
             if self.card.is_none() && ctx.catalog.skills.len() > 24 {
@@ -518,6 +536,7 @@ impl ShaResolveMachine {
                     + u32::from(self.xiandan_bonus)
                     + liaoyuan
                     + vm_card_bonus
+                    + vm_frame_bonus
                     + vm_target_bonus) as i32,
                 self.nature,
                 self.card,

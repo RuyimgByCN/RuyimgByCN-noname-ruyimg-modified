@@ -109,7 +109,8 @@ pub(super) fn play_kind(
     targets: &[PlayerId],
 ) -> (CardKind, bool) {
     let actor = core.turn.current;
-    let sealed = catalog.is_tieji_sealed(core, actor);
+    let sealed = catalog.is_tieji_sealed(core, actor)
+        || (core.player(actor).hp <= 1 && catalog.has_rechanyuan(core, actor));
     if !core.player(actor).hand.contains(&card) {
         if let Some(spec) = catalog.find_player_vm_view_as(core, actor, card, true, None) {
             return (spec.as_kind, false);

@@ -192,6 +192,27 @@ impl NullifyWindowMachine {
             effect,
         }
     }
+
+    fn current_stateplayer(&self, core: &crate::state::GameStateCore) -> PlayerId {
+        core.vm_aux
+            .flags
+            .get(&(self.source, format!("nullify_stateplayer:{}", self.card)))
+            .and_then(|&v| u8::try_from(v.checked_sub(1)?).ok())
+            .unwrap_or(self.source)
+    }
+
+    fn set_stateplayer(&self, core: &mut crate::state::GameStateCore, player: PlayerId) {
+        core.vm_aux.flags.insert(
+            (self.source, format!("nullify_stateplayer:{}", self.card)),
+            u32::from(player) + 1,
+        );
+    }
+
+    fn clear_stateplayer(&self, core: &mut crate::state::GameStateCore) {
+        core.vm_aux
+            .flags
+            .remove(&(self.source, format!("nullify_stateplayer:{}", self.card)));
+    }
 }
 
 impl crate::catalog::SkillMachine for NullifyWindowMachine {
@@ -233,15 +254,54 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                 .map(|def| ctx.core.has_skill(self.source, def))
                 .unwrap_or(false)
         {
+            self.clear_stateplayer(ctx.core);
             self.window_open = false;
             return self.step(ctx);
         }
         // 窗口阶段
         if self.window_open {
+            if let Some(resp) = self.queue.first().copied() {
+                if ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .remove(&(resp, "l10_reguhuo_nullify_resume".to_string()))
+                    .is_some()
+                {
+                    if let Some(c) = (ctx.catalog.hooks.reguhuo_consume_resp)(ctx.core, resp) {
+                        self.queue.remove(0);
+                        discard_response_card(ctx, resp, c, CardKind::Nullify);
+                        let base_depth = ctx.res.stack.len();
+                        ctx.emit(EventData::CardResponded {
+                            card: c,
+                            player: resp,
+                        });
+                        self.nullified = !self.nullified;
+                        self.set_stateplayer(ctx.core, resp);
+                        self.queue = ctx.core.seat_order_from(ctx.core.next_alive(resp));
+                        let has_final =
+                            (ctx.catalog.hooks.reguhuo_has_pending_final)(ctx.core, resp);
+                        let has_anruo = ctx
+                            .core
+                            .vm_aux
+                            .flags
+                            .contains_key(&(resp, format!("l10_scsanruo_effect:{c}")));
+                        if has_final || has_anruo {
+                            if has_final {
+                                (ctx.catalog.hooks.reguhuo_spawn_final)(ctx, resp, base_depth);
+                            }
+                            return Flow::Yield;
+                        }
+                        return self.step(ctx);
+                    }
+                }
+            }
             // 询问队列清理：跳过死亡/无无懈持有者
             while let Some(p) = self.queue.first().copied() {
+                let has_host_resp =
+                    !host_response_skills(ctx.core, ctx.catalog, p, 3).is_empty();
                 let has_nullify = ctx.core.player(p).alive
-                    && !response_kind_cards(ctx, p, CardKind::Nullify).is_empty();
+                    && (!response_kind_cards(ctx, p, CardKind::Nullify).is_empty() || has_host_resp);
                 if !has_nullify {
                     self.queue.remove(0);
                 } else {
@@ -253,6 +313,7 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                 // 由窗口弃置锦囊；未抵消时效果机器（决斗 finish / AOE 收尾 /
                 // 铁索机器）结算结束弃置——旧实现在此无条件弃牌，叠加效果
                 // 机器的弃置使非抵消路径同一牌进弃牌堆两次。
+                self.clear_stateplayer(ctx.core);
                 if self.nullified {
                     // 弃置责任唯一化（ADR 0705/0706）：owns_disposal 的窗口
                     // 抵消时弃置；AOE 逐目标窗口不弃置（外层收尾统一弃置）。
@@ -285,27 +346,51 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
             };
             if self.asked {
                 self.asked = false;
-                self.queue.remove(0);
                 let answer = ctx.answer().clone();
+                if let Some(ChoiceOption::Skill(rdef)) = answer.first().copied() {
+                    if host_response_skills(ctx.core, ctx.catalog, responder, 3).contains(&rdef) {
+                        let stateplayer = self.current_stateplayer(ctx.core);
+                        ctx.core.vm_aux.flags.insert(
+                            (responder, "l10_reguhuo_nullify_resume".to_string()),
+                            1,
+                        );
+                        (ctx.catalog.hooks.reguhuo_spawn_response)(
+                            ctx,
+                            responder,
+                            3,
+                            0,
+                            rdef,
+                            stateplayer,
+                        );
+                        return Flow::Yield;
+                    }
+                }
+                self.queue.remove(0);
                 if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
-                    // 出无懈：弃牌、反转抵消状态、自其下家重新询问
+                    // 出无懈：弃牌、反转抵消状态、更新 stateplayer、自其下家重新询问
                     discard_response_card(ctx, responder, c, CardKind::Nullify);
                     ctx.emit(EventData::CardResponded {
                         card: c,
                         player: responder,
                     });
                     self.nullified = !self.nullified;
+                    self.set_stateplayer(ctx.core, responder);
                     self.queue = ctx.core.seat_order_from(ctx.core.next_alive(responder));
                 }
                 return self.step(ctx);
             }
             self.asked = true;
             let mut options = vec![ChoiceOption::Pass];
-            options.extend(
-                response_kind_cards(ctx, responder, CardKind::Nullify)
-                    .into_iter()
-                    .map(ChoiceOption::Card),
-            );
+            if !ctx.catalog.blocks_all_cards(ctx.core, responder) {
+                options.extend(
+                    response_kind_cards(ctx, responder, CardKind::Nullify)
+                        .into_iter()
+                        .map(ChoiceOption::Card),
+                );
+                for rdef in host_response_skills(ctx.core, ctx.catalog, responder, 3) {
+                    options.push(ChoiceOption::Skill(rdef));
+                }
+            }
             return Flow::WaitChoice {
                 observer: responder,
                 spec: ChoiceSpec {

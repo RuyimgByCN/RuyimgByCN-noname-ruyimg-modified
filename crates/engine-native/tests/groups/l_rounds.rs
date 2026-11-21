@@ -16,6 +16,9 @@ mod l05_coin_eight;
 #[path = "../l06_wuxing_eight.rs"]
 mod l06_wuxing_eight;
 
+#[path = "../l06_wuxingpan_fixes.rs"]
+mod l06_wuxingpan_fixes;
+
 #[path = "../l07_omnisearch.rs"]
 mod l07_omnisearch;
 
@@ -27,6 +30,12 @@ mod l09_qhly_eight;
 
 #[path = "../l10_epic_cards_eight.rs"]
 mod l10_epic_cards_eight;
+
+#[path = "../l10_epic_cards_fixes.rs"]
+mod l10_epic_cards_fixes;
+
+#[path = "../l10_epic_cards_round2_fixes.rs"]
+mod l10_epic_cards_round2_fixes;
 
 #[path = "../l11_taixu_eight.rs"]
 mod l11_taixu_eight;

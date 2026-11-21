@@ -507,19 +507,9 @@ fn planner_is_invariant_under_multi_frame_non_quiescent_continuations() {
     host_vm_a.debug_set_turn(0, engine_native::Phase::Play, 1);
     host_vm_a.debug_grant(1, "rangjie");
     host_vm_a.debug_grant(1, "nc10_nested_draw_choice");
-    // 1 号受到 2 点伤害 → 确认【让节】→ 选择分支 0（摸 1 张牌，此时 HostState.cards 仍剩 1 项非空）
+    // 1 号受到 2 点伤害 → 直接开启 `rangjie_choice`（direct: true，上游 `extension.js:427`）→ 选择分支 0（摸 1 张牌，此时 HostState.cards 仍剩 1 项非空）
     // → 内层 Draw 帧触发 `nc10_nested_draw_choice` 挂起于 `rvm_choice`
     host_vm_a.debug_deal_damage(Some(0), 1, 2, engine_native::event::DamageNature::Normal);
-    let c_confirm = host_vm_a.open_choice().cloned().expect("让节确认门");
-    let _ = host_vm_a.submit(GameCommand {
-        actor: c_confirm.observer,
-        expected_revision: host_vm_a.revision(),
-        dedup_id: 10,
-        action: GameAction::Answer {
-            choice_id: c_confirm.id,
-            selection: vec![engine_native::ChoiceOption::Confirm],
-        },
-    });
     let c_branch = host_vm_a.open_choice().cloned().expect("让节分支选择");
     assert_eq!(c_branch.spec.prompt, "rangjie_choice");
     let _ = host_vm_a.submit(GameCommand {

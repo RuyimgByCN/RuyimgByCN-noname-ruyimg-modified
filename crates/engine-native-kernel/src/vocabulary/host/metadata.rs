@@ -868,7 +868,9 @@ impl HostBehavior {
             | HostBehavior::L25ZuanBatchD
             | HostBehavior::L25ZuanBatchE
             | HostBehavior::L25ZuanBatchF
-            | HostBehavior::L25ZuanBatchG => None,
+            | HostBehavior::L25ZuanBatchG
+            | HostBehavior::L10ScsCompanion
+            | HostBehavior::Rechanyuan => None,
         };
         if let (Some(meta), Some((timing, priority, selectable))) = (&mut meta, self.source_order()) {
             meta.timing = timing;

@@ -4,6 +4,8 @@ use super::*;
 use crate::choice::ChoiceOption;
 use crate::view::ChoiceView;
 
+#[path = "extension_choices_l10.rs"]
+mod extension_choices_l10;
 #[path = "extension_choices_l28.rs"]
 mod extension_choices_l28;
 
@@ -685,6 +687,69 @@ pub(super) fn plan_extension_choice_action(
                 selection,
             })
         }
+        "reguhuo_guess_pick" => {
+            let me_hp = input.view.players.get(seat as usize).map(|p| p.hp).unwrap_or(0);
+            let ally_turn = public_attitude(&input.view, seat, input.view.turn) >= 0;
+            let want = if me_hp <= 1 || ally_turn { 0 } else { 1 };
+            let selection = options
+                .iter()
+                .find(|o| matches!(o, ChoiceOption::Tag(t) if *t == want))
+                .or_else(|| options.first())
+                .copied()
+                .into_iter()
+                .collect();
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
+        "reguhuo_final" => {
+            let selection = options
+                .iter()
+                .filter_map(|o| match o {
+                    ChoiceOption::Card(c) => Some((*c, extension_card_value(catalog, input, *c))),
+                    _ => None,
+                })
+                .min_by_key(|&(_, v)| v)
+                .map(|(c, _)| ChoiceOption::Card(c))
+                .into_iter()
+                .collect();
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
+        "rangjie_choice" => extension_choices_l10::plan_l10_choice_action(
+            catalog,
+            input,
+            id,
+            prompt,
+            options,
+            min,
+            max,
+            allow_cancel,
+        ),
+        "rangjie_type" => {
+            let me = input.view.players.get(seat as usize);
+            let want = if me.is_some_and(|p| p.hp <= 3) {
+                0
+            } else if me.is_some_and(|p| p.equips.len() < 2) {
+                2
+            } else {
+                1
+            };
+            let selection = options
+                .iter()
+                .find(|o| matches!(o, ChoiceOption::Tag(t) if *t == want))
+                .or_else(|| options.first())
+                .copied()
+                .into_iter()
+                .collect();
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
         "xumou:confirm" => {
             let me = input.view.players.get(seat as usize);
             let want = me.is_some_and(|p| p.hp + p.hand_count as i32 <= 3);
@@ -895,7 +960,7 @@ pub(super) fn plan_extension_choice_action(
                 selection,
             })
         }
-        _ => extension_choices_l28::plan_l28_choice_action(
+        _ => extension_choices_l10::plan_l10_choice_action(
             catalog,
             input,
             id,
@@ -904,6 +969,18 @@ pub(super) fn plan_extension_choice_action(
             min,
             max,
             allow_cancel,
-        ),
+        )
+        .or_else(|| {
+            extension_choices_l28::plan_l28_choice_action(
+                catalog,
+                input,
+                id,
+                prompt,
+                options,
+                min,
+                max,
+                allow_cancel,
+            )
+        }),
     }
 }

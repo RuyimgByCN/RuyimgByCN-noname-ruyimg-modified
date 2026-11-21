@@ -469,16 +469,29 @@ impl HostMachine {
         set_scs_flag(ctx.core, self.owner, "k_danggu_active_eunuch", first + 1);
         set_scs_flag(ctx.core, self.owner, "k_danggu_triggered", 1);
 
-        let mut rem: Vec<u32> = (0..10u32)
-            .filter(|&i| (roster & (1u32 << i)) != 0)
-            .collect();
-        let mut others = Vec::with_capacity(rem.len().min(4));
-        while others.len() < 4 && !rem.is_empty() {
-            let j = ctx.core.rng.gen_range(rem.len() as u32) as usize;
-            others.push(rem.remove(j));
-        }
-        if (roster & (1u32 << 9)) != 0 && others.len() == 4 && !others.contains(&9) {
-            others[3] = 9;
+        let mut others: Vec<u32> = Vec::with_capacity(4);
+        if (roster & (1u32 << 9)) != 0 {
+            let mut non9: Vec<u32> = (0..9u32)
+                .filter(|&i| (roster & (1u32 << i)) != 0)
+                .collect();
+            while others.len() < 3 && !non9.is_empty() {
+                let j = ctx.core.rng.gen_range(non9.len() as u32) as usize;
+                others.push(non9.remove(j));
+            }
+            others.push(9);
+            // Fisher-Yates shuffle matching upstream `others.randomSort()` (`extension.js:2484`)
+            for i in (1..others.len()).rev() {
+                let j = ctx.core.rng.gen_range((i + 1) as u32) as usize;
+                others.swap(i, j);
+            }
+        } else {
+            let mut rem: Vec<u32> = (0..10u32)
+                .filter(|&i| (roster & (1u32 << i)) != 0)
+                .collect();
+            while others.len() < 4 && !rem.is_empty() {
+                let j = ctx.core.rng.gen_range(rem.len() as u32) as usize;
+                others.push(rem.remove(j));
+            }
         }
         let mut selectable: Vec<u32> = others
             .iter()
@@ -558,11 +571,17 @@ fn set_scs_flag(core: &mut crate::state::GameStateCore, owner: PlayerId, key: &s
     core.vm_aux.flags.insert((owner, key.to_string()), val);
 }
 
-fn k_danggu_conflicts(a: u32, b: u32) -> bool {
-    matches!(
-        (a.min(b), a.max(b)),
-        (3, 5) | (7, 8) | (3, 9) | (5, 9) | (7, 9) | (8, 9)
-    )
+/// 有向常侍冲突表（`史诗卡牌/extension.js:2370-2381`）：
+/// `3->[5]`, `5->[3]`, `7->[8]`, `8->[7]`, `9->[3,5,7,8]`（单向，`3/5/7/8` 均不冲突 `9`）。
+fn k_danggu_conflicts(first: u32, candidate: u32) -> bool {
+    match first {
+        3 => candidate == 5,
+        5 => candidate == 3,
+        7 => candidate == 8,
+        8 => candidate == 7,
+        9 => matches!(candidate, 3 | 5 | 7 | 8),
+        _ => false,
+    }
 }
 
 fn revoke_k_danggu_companions(ctx: &mut Ctx<'_>, owner: PlayerId) {
@@ -600,9 +619,6 @@ fn grant_k_danggu_companion(ctx: &mut Ctx<'_>, owner: PlayerId, idx: u32) {
         return;
     };
     set_scs_flag(ctx.core, owner, &format!("l10_scs_skill:{sk}"), 1);
-    if sk == "scschihe" {
-        set_scs_flag(ctx.core, owner, "l10_scschihe_sha_boost", 1);
-    }
     if let Some(def) = ctx.catalog.skill_by_name(sk) {
         if !ctx.core.skills.contains_key(&(owner, def)) {
             ctx.insert_skill(

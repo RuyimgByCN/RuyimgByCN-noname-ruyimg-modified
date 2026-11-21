@@ -2,6 +2,71 @@
 
 use super::super::*;
 
+pub(in crate::content::host) fn rangjie_can_move_to(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    from: PlayerId,
+    card: CardId,
+    to: PlayerId,
+) -> bool {
+    if to == from || !core.player(to).alive {
+        return false;
+    }
+    if core.player(from).equips.contains(&card) {
+        let Some(slot) = catalog.card_slot_of(core, card) else {
+            return false;
+        };
+        return !core
+            .player(to)
+            .equips
+            .iter()
+            .any(|&c| catalog.card_slot_of(core, c) == Some(slot));
+    }
+    if core.player(from).judge.contains(&card) {
+        let kind = catalog.card_kind(card);
+        return !core
+            .player(to)
+            .judge
+            .iter()
+            .any(|&c| catalog.card_kind(c) == kind);
+    }
+    false
+}
+
+pub(in crate::content::host) fn rangjie_movable_cards(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+) -> Vec<CardId> {
+    let mut out = Vec::new();
+    for from in 0..core.players.len() as PlayerId {
+        for &c in core
+            .player(from)
+            .equips
+            .iter()
+            .chain(core.player(from).judge.iter())
+        {
+            if core
+                .alive_players()
+                .any(|to| rangjie_can_move_to(core, catalog, from, c, to))
+            {
+                out.push(c);
+            }
+        }
+    }
+    out
+}
+
+pub(in crate::content::host) fn rangjie_move_targets(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    from: PlayerId,
+    card: CardId,
+) -> Vec<PlayerId> {
+    core.alive_players()
+        .filter(|&to| rangjie_can_move_to(core, catalog, from, card, to))
+        .collect()
+}
+
 impl HostMachine {
     pub(super) fn step_skills_cards(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         match self.behavior {
@@ -16,18 +81,14 @@ impl HostMachine {
                         }
                         self.cards = (0..count).map(|_| 0u32).collect();
                     }
-                    let movable = ctx
-                        .core
-                        .players
-                        .iter()
-                        .any(|p| !p.equips.is_empty() || !p.judge.is_empty());
+                    let movable = !rangjie_movable_cards(ctx.core, ctx.catalog).is_empty();
                     self.stage = HostStage::SelectNature;
                     Flow::WaitChoice {
                         observer: self.owner,
                         spec: ChoiceSpec {
                             kind: ChoiceKind::PickTag,
                             prompt: "rangjie_choice",
-                            // 0=获得牌 1=移动牌 2=取消
+                            // 0=获得牌 1=移动牌 2=取消（按上游仍摸1并尝试移牌，cancel2=空取消才直接结束）
                             options: if movable {
                                 vec![
                                     ChoiceOption::Tag(0),
@@ -39,55 +100,49 @@ impl HostMachine {
                             },
                             min: 1,
                             max: 1,
-                            allow_cancel: false,
+                            allow_cancel: true,
                         },
                     }
                 }
                 HostStage::SelectNature => {
+                    if ctx.answer().is_empty() {
+                        // cancel2：直接结束不摸牌（史诗卡牌/extension.js:450）
+                        self.cards.clear();
+                        return Flow::Done;
+                    }
                     let Some(ChoiceOption::Tag(choice)) = ctx.answer().first().copied() else {
+                        self.cards.clear();
                         return Flow::Done;
                     };
                     self.cards.pop();
                     match choice {
                         0 => {
-                            // 获得牌：摸 1 → 选类型 → 牌堆取一张。R05-C2：
-                            // 摸 1 走 R 帧，类型询问在续行段开（同步序＝
-                            // 先摸走牌堆顶、再扫描；WaitChoice 期间 R 帧不
-                            // 泵，若同步内开询问则恢复步扫到未摸走的顶牌）。
+                            // 获得牌：摸 1 → 选类型 → 牌堆顶起取一张。
                             self.target = None;
                             ctx.start_draw(self.owner, 1);
                             self.stage = HostStage::DrawSettle;
                             Flow::Yield
                         }
-                        1 => {
-                            // 移动牌：先摸 1 → 续行段选场上可见区一张牌
+                        // `extension.js:450-483`：非 cancel2（含字面「取消」2 与「移动牌」1）均摸 1 并进移牌
+                        _ => {
                             self.target = Some(1);
                             ctx.start_draw(self.owner, 1);
                             self.stage = HostStage::DrawSettle;
                             Flow::Yield
                         }
-                        _ => Flow::Done,
                     }
                 }
                 // R05-C2 续行位：让节摸 1 交付后按分支开类型询问或移动牌询问。
                 HostStage::DrawSettle => {
                     if self.target == Some(1) {
                         self.target = None;
-                        let mut options: Vec<ChoiceOption> = Vec::new();
-                        for p in 0..ctx.core.players.len() as PlayerId {
-                            for c in ctx
-                                .core
-                                .player(p)
-                                .equips
-                                .iter()
-                                .chain(ctx.core.player(p).judge.iter())
-                                .copied()
-                            {
-                                options.push(ChoiceOption::Card(c));
+                        let cards = rangjie_movable_cards(ctx.core, ctx.catalog);
+                        if cards.is_empty() {
+                            if self.cards.is_empty() {
+                                return Flow::Done;
                             }
-                        }
-                        if options.is_empty() {
-                            return Flow::Done;
+                            self.stage = HostStage::Act;
+                            return Flow::Yield;
                         }
                         self.stage = HostStage::TargetChoice;
                         return Flow::WaitChoice {
@@ -95,7 +150,7 @@ impl HostMachine {
                             spec: ChoiceSpec {
                                 kind: ChoiceKind::SelectCards,
                                 prompt: "rangjie_move_card",
-                                options,
+                                options: cards.into_iter().map(ChoiceOption::Card).collect(),
                                 min: 1,
                                 max: 1,
                                 allow_cancel: false,
@@ -108,7 +163,7 @@ impl HostMachine {
                         spec: ChoiceSpec {
                             kind: ChoiceKind::PickTag,
                             prompt: "rangjie_type",
-                            // 0=基本 1=锦囊 2=装备
+                            // 0=基本 1=锦囊 2=装备（可取消跳过取牌并继续下一循环）
                             options: vec![
                                 ChoiceOption::Tag(0),
                                 ChoiceOption::Tag(1),
@@ -116,37 +171,35 @@ impl HostMachine {
                             ],
                             min: 1,
                             max: 1,
-                            allow_cancel: false,
+                            allow_cancel: true,
                         },
                     }
                 }
                 HostStage::SelectCard => {
-                    let Some(ChoiceOption::Tag(t)) = ctx.answer().first().copied() else {
-                        return Flow::Done;
-                    };
-                    let want = match t {
-                        0 => 0u8, // 基本
-                        1 => 1,   // 锦囊
-                        _ => 2,   // 装备
-                    };
-                    // 实体发现：牌堆中首张该类型牌入手（登记差异：上游
-                    // get.cardPile2 随机/搜索面）
-                    let found = ctx.core.deck.iter().copied().find(|c| {
-                        let kind = ctx.catalog.card_kind(*c);
-                        match want {
-                            0 => kind.is_basic_kind(),
-                            1 => !kind.is_basic_kind() && !kind.is_equip(),
-                            _ => kind.is_equip(),
-                        }
-                    });
-                    if let Some(card) = found {
-                        ctx.core.deck.retain(|c| *c != card);
-                        ctx.core.player_mut(self.owner).hand.push(card);
-                        ctx.log(LogEvent::CardsGiven {
-                            from: self.owner,
-                            to: self.owner,
-                            cards: vec![card],
+                    if let Some(ChoiceOption::Tag(t)) = ctx.answer().first().copied() {
+                        let want = match t {
+                            0 => 0u8, // 基本
+                            1 => 1,   // 锦囊
+                            _ => 2,   // 装备
+                        };
+                        // 实体发现：从牌堆顶（deck 尾部）起扫描首张该类型牌入手（game.js:63187）
+                        let found = ctx.core.deck.iter().rev().copied().find(|c| {
+                            let kind = ctx.catalog.card_kind(*c);
+                            match want {
+                                0 => kind.is_basic_kind(),
+                                1 => !kind.is_basic_kind() && !kind.is_equip(),
+                                _ => kind.is_equip(),
+                            }
                         });
+                        if let Some(card) = found {
+                            ctx.core.deck.retain(|c| *c != card);
+                            ctx.core.player_mut(self.owner).hand.push(card);
+                            ctx.log(LogEvent::CardsGiven {
+                                from: self.owner,
+                                to: self.owner,
+                                cards: vec![card],
+                            });
+                        }
                     }
                     if self.cards.is_empty() {
                         return Flow::Done;
@@ -170,9 +223,14 @@ impl HostMachine {
                     let Some(from) = owner_seat else {
                         return Flow::Done;
                     };
-                    // 目的地：其他存活角色（含自己）
-                    let options: Vec<ChoiceOption> =
-                        ctx.core.alive_players().map(ChoiceOption::Player).collect();
+                    let targets = rangjie_move_targets(ctx.core, ctx.catalog, from, card);
+                    if targets.is_empty() {
+                        if self.cards.is_empty() {
+                            return Flow::Done;
+                        }
+                        self.stage = HostStage::Act;
+                        return Flow::Yield;
+                    }
                     self.card = Some(card);
                     self.target = Some(from);
                     self.stage = HostStage::ShuchuiTargetLoop;
@@ -181,7 +239,7 @@ impl HostMachine {
                         spec: ChoiceSpec {
                             kind: ChoiceKind::SelectPlayers,
                             prompt: "rangjie_move_target",
-                            options,
+                            options: targets.into_iter().map(ChoiceOption::Player).collect(),
                             min: 1,
                             max: 1,
                             allow_cancel: false,
@@ -198,30 +256,19 @@ impl HostMachine {
                     let Some(ChoiceOption::Player(to)) = ctx.answer().first().copied() else {
                         return Flow::Done;
                     };
-                    if !ctx.core.player(to).alive {
+                    if !rangjie_can_move_to(ctx.core, ctx.catalog, from, card, to) {
                         return Flow::Done;
                     }
                     let was_equip = ctx.core.player(from).equips.contains(&card);
                     if was_equip {
                         ctx.core.player_mut(from).equips.retain(|c| *c != card);
                         crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, from, card);
-                    } else {
-                        ctx.core.player_mut(from).judge.retain(|c| *c != card);
-                        ctx.note_cards_lost(from, &[card]);
-                    }
-                    let slot = ctx.catalog.card_slot_of(ctx.core, card);
-                    let free = slot.is_some_and(|s| {
-                        !ctx.core
-                            .player(to)
-                            .equips
-                            .iter()
-                            .any(|c| ctx.catalog.card_slot_of(ctx.core, *c) == Some(s))
-                    });
-                    if was_equip && free {
                         ctx.core.player_mut(to).equips.push(card);
                         crate::kernel::grant_equip_skills(ctx, to, card);
                     } else {
-                        ctx.core.player_mut(to).hand.push(card);
+                        ctx.core.player_mut(from).judge.retain(|c| *c != card);
+                        ctx.note_cards_lost(from, &[card]);
+                        ctx.core.player_mut(to).judge.push(card);
                     }
                     ctx.log(LogEvent::CardsGiven {
                         from,

@@ -45,7 +45,11 @@ pub(super) fn play_sha(
             .map(|def| core.has_skill(player_id, def))
             .unwrap_or(false)
     };
-    let paoxiao = catalog
+    let paoxiao = !catalog.is_rechanyuan_sealed_name(
+        core,
+        core.turn.current,
+        crate::content::standard::PAO_XIAO,
+    ) && catalog
         .skill_by_name(crate::content::standard::PAO_XIAO)
         .map(|d| core.has_skill(core.turn.current, d))
         .unwrap_or(false);

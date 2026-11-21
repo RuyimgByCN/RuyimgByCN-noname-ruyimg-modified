@@ -44,7 +44,47 @@ impl Engine {
                         &mut dedup,
                     );
                 }
-                if choice.spec.min >= 2 {
+                if choice.spec.prompt == "scskuiji_cards" {
+                    let mut by_suit = [None::<crate::choice::ChoiceOption>; 4];
+                    for &opt in &choice.spec.options {
+                        if let crate::choice::ChoiceOption::Card(cid) = opt {
+                            let holder = self
+                                .state_core()
+                                .players
+                                .iter()
+                                .position(|p| p.hand.contains(&cid))
+                                .map(|i| i as crate::ids::PlayerId)
+                                .unwrap_or(seat);
+                            let idx = match self.catalog().effective_card_suit(
+                                self.state_core(),
+                                holder,
+                                cid,
+                            ) {
+                                crate::catalog::Suit::Spade => 0,
+                                crate::catalog::Suit::Heart => 1,
+                                crate::catalog::Suit::Club => 2,
+                                crate::catalog::Suit::Diamond => 3,
+                            };
+                            if by_suit[idx].is_none() {
+                                by_suit[idx] = Some(opt);
+                            }
+                        }
+                    }
+                    let sel: Vec<crate::choice::ChoiceOption> =
+                        by_suit.into_iter().flatten().collect();
+                    if sel.len() == 4 {
+                        push_action(
+                            self,
+                            seat,
+                            GameAction::Answer {
+                                choice_id: choice.id,
+                                selection: sel,
+                            },
+                            &mut out,
+                            &mut dedup,
+                        );
+                    }
+                } else if choice.spec.min >= 2 {
                     let sel: Vec<crate::choice::ChoiceOption> = choice
                         .spec
                         .options
@@ -207,6 +247,7 @@ fn certainly_illegal(engine: &Engine, seat: crate::ids::PlayerId, action: &GameA
                         def.name,
                         def.trigger.as_ref(),
                     ))
+                || catalog.is_rechanyuan_sealed_def(core, seat, *skill)
             {
                 return true;
             }
@@ -292,9 +333,17 @@ fn certainly_illegal(engine: &Engine, seat: crate::ids::PlayerId, action: &GameA
         } => match engine.open_choice() {
             None => true,
             Some(open) => {
+                let kuiji_invalid = open.spec.prompt == "scskuiji_cards"
+                    && !super::apply_command::kuiji_suits_valid(
+                        engine.state_core(),
+                        engine.catalog(),
+                        open.observer,
+                        selection,
+                    );
                 open.id != *choice_id
                     || open.observer != seat
                     || !open.spec.accepts(selection)
+                    || kuiji_invalid
             }
         },
     }

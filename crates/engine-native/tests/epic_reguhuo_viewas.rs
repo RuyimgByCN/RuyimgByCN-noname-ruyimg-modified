@@ -246,11 +246,11 @@ fn reguhuo_is_once_per_turn() {
         matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
         "首次发动应可用：{out:?}"
     );
-    // 选牌窗出现即说明机器已启动（此时已记账）
+    // 选牌窗出现，此时尚未提交使用（取消不可消耗回合限一次，refresh.js:10653）
     let pick = e.open_choice().cloned().expect("蛊惑选牌窗");
     assert_eq!(pick.spec.prompt, "reguhuo_card");
 
-    // 放弃（取消选择）后再次发动应被拒绝
+    // 放弃（取消选择）后可再次发动；真正完成发动后同回合第二次发动才被拒绝
     let _ = e.submit(GameCommand {
         actor: pick.observer,
         expected_revision: e.revision(),
@@ -270,7 +270,40 @@ fn reguhuo_is_once_per_turn() {
         action: GameAction::ActivateSkill { skill: def },
     });
     assert!(
-        matches!(out, CommandOutcome::Rejected(_)),
-        "同回合第二次发动应被拒绝：{out:?}"
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "取消选牌后同回合仍可再次发动：{out:?}"
+    );
+    let pick2 = e.open_choice().cloned().expect("第二次蛊惑选牌窗");
+    let _ = e.submit(GameCommand {
+        actor: pick2.observer,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: pick2.id,
+            selection: vec![ChoiceOption::Card(c2)],
+        },
+    });
+    let name2 = e.open_choice().cloned().expect("蛊惑声明窗");
+    let _ = e.submit(GameCommand {
+        actor: name2.observer,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: name2.id,
+            selection: vec![ChoiceOption::Tag(4)],
+        },
+    });
+    drain(&mut e);
+    let c3 = e.debug_place(0, "sha");
+    e.debug_give_hand_card(0, 0, c3);
+    let out_after_use = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::ActivateSkill { skill: def },
+    });
+    assert!(
+        matches!(out_after_use, CommandOutcome::Rejected(_)),
+        "完整发动后同回合第二次发动应被拒绝：{out_after_use:?}"
     );
 }

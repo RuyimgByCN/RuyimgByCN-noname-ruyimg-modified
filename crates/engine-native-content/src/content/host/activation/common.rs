@@ -48,11 +48,12 @@ impl HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
-            // 蛊惑（史诗卡牌批 1）：出牌阶段主动（每回合一次；手牌非空）
+            // 蛊惑（史诗卡牌批 1）：出牌阶段主动（每回合一次；手牌非空且未被禁牌）
             HostBehavior::Reguhuo => {
                 if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
                     || ctx.state.turn.current != owner
                     || ctx.state.player(owner).hand.is_empty()
+                    || ctx.catalog.blocks_all_cards(ctx.state, owner)
                 {
                     return None;
                 }
@@ -62,6 +63,13 @@ impl HostSkillBehavior {
                     .vm_aux
                     .once
                     .contains(&(owner, self.name.clone(), 1))
+                    || super::super::step::l10_reguhuo::reguhuo_name_options(
+                        ctx.state,
+                        ctx.catalog,
+                        owner,
+                        0,
+                    )
+                    .is_empty()
                 {
                     return None;
                 }

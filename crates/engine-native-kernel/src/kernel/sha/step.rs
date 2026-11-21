@@ -99,6 +99,27 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         if let Some(is_damage) = self.take_sha_pending_end(ctx) {
             return self.finish_target_sha_end(ctx, is_damage);
         }
+        if ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(self.target, "l10_reguhuo_sha_post_dodge".to_string()))
+            .is_some()
+        {
+            return self.post_dodge_step(ctx);
+        }
+        if ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(self.target, "l10_reguhuo_sha_resume".to_string()))
+            .is_some()
+        {
+            if let Some(shan) = (ctx.catalog.hooks.reguhuo_consume_resp)(ctx.core, self.target) {
+                return self.resolve_shan_card(ctx, shan);
+            }
+            return self.ask_respond_shan_or_hit(ctx, false);
+        }
         if !self.asked && !self.armor_judged && self.hujia_queue.is_none() {
             if let Some(flow) = self.check_sha_begin_hook(ctx, true) {
                 return flow;
@@ -232,7 +253,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 if let Some(ChoiceOption::Card(shan)) = ctx.answer().first().copied() {
                     if ctx.core.player(holder).hand.contains(&shan) {
                         ctx.discard_from_hand(holder, shan);
-                        note_longdan_sha_source(ctx, holder, self.source);
+                        super::respond::note_longdan_sha_source(ctx, holder, self.source);
                         ctx.emit(EventData::CardResponded {
                             card: shan,
                             player: holder,
@@ -647,362 +668,39 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     }
                 }
             }
-            // 龙胆：杀可当闪打出——响应选项并入目标手牌中的杀
-            let target_sealed = ctx.catalog.is_tieji_sealed(ctx.core, self.target);
-            let longdan = !target_sealed
-                && ctx
-                    .catalog
-                    .skill_by_name(crate::vocabulary::names::LONG_DAN)
-                    .map(|d| ctx.core.has_skill(self.target, d))
-                    .unwrap_or(false);
-            let tieji_blocks = self.tieji_red == Some(true)
-                || ctx.core.vm_aux.flags.get(&(self.target, "mbcmfangzhu_ban".to_string())).copied().unwrap_or(0) > 0;
-            // 倾国（甄姬，v202 对齐上游 position "hs"）：黑色手牌可当闪打出——并入响应选项
-            let qingguo = !target_sealed
-                && ctx
-                    .catalog
-                    .skill_by_name(crate::vocabulary::names::QING_GUO)
-                    .map(|d| ctx.core.has_skill(self.target, d))
-                    .unwrap_or(false);
-            // 堡垒哨卫（U05 ow，规则 v125）目标侧：持有者不能闪避杀
-            let target_sentinel = ctx
-                .catalog
-                .skill_by_name(crate::vocabulary::host::WUDIAN_BAOLEI_KEY)
-                .map(|def| {
-                    ctx.core.has_skill(self.target, def)
-                        && ctx.core.player(self.target).baolei_mode == 1
-                })
-                .unwrap_or(false);
-            let target_can_play = !tieji_blocks
-                && !target_sentinel
-                && !ctx.catalog.blocks_all_cards(ctx.core, self.target);
-            let rw_lanyin = target_can_play
-                && crate::rvm_bridge::modifiers::d34_l28_mods::has_rewritten_lanyinjia(
-                    ctx.core,
-                    ctx.catalog,
-                    self.target,
-                );
-            let mut shans: Vec<ChoiceOption> = ctx
-                .core
-                .player(self.target)
-                .hand
-                .iter()
-                .filter(|c| {
-                    target_can_play && {
-                        let kind = ctx.catalog.card_kind(**c);
-                        rw_lanyin || kind == CardKind::Shan || (longdan && kind == CardKind::Sha)
-                    }
-                })
-                .copied()
-                .map(ChoiceOption::Card)
-                .collect();
-            if qingguo && target_can_play {
-                for c in ctx.core.player(self.target).hand.iter().copied() {
-                    let kind = ctx.catalog.card_kind(c);
-                    let already =
-                        rw_lanyin || kind == CardKind::Shan || (longdan && kind == CardKind::Sha);
-                    let black = matches!(
-                        ctx.catalog.effective_card_suit(ctx.core, self.target, c),
-                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
-                    );
-                    if black && !already {
-                        shans.push(ChoiceOption::Card(c));
-                    }
-                }
-            }
-            if target_can_play {
-                for &c in &ctx.core.player(self.target).hand {
-                    if ctx
-                        .catalog
-                        .find_player_vm_view_as(
-                            ctx.core,
-                            self.target,
-                            c,
-                            false,
-                            Some(CardKind::Shan),
-                        )
-                        .is_some()
-                        && !shans.contains(&ChoiceOption::Card(c))
-                    {
-                        shans.push(ChoiceOption::Card(c));
-                    }
-                }
-                for c in ctx.catalog.player_vm_view_as_extra_cards(
-                    ctx.core,
-                    self.target,
-                    false,
-                    Some(CardKind::Shan),
-                ) {
-                    if !shans.contains(&ChoiceOption::Card(c)) {
-                        shans.push(ChoiceOption::Card(c));
-                    }
-                }
-            }
-
-            shans.retain(|o| {
-                !matches!(o, ChoiceOption::Card(c)
-                    if crate::rvm_bridge::modifiers::d34_flags::is_ducai3_forbidden(
-                        ctx.core,
-                        ctx.catalog,
-                        self.target,
-                        *c,
-                    ))
-            });
-            let guilong_direct_hit =
-                crate::rvm_bridge::modifiers::d34_l28_mods::is_guilong_red_sha(
-                    ctx.core,
-                    ctx.catalog,
-                    self.source,
-                    self.card,
-                );
-            let direct_hit = poyue_direct_hit
-                || shoulie_hit
-                || lingshi_direct_hit
-                || sbzhaxiang_direct_hit
-                || yxs_fanji2_direct_hit
-                || guilong_direct_hit;
-            // 神弓（swd 批 148）：借用他人防具也视为「可响应」——须在
-            // 「无闪直接命中」判定之前纳入
-            let shengong_borrow = (ctx.catalog.hooks.borrow_options)(ctx, self.target, true);
-            if direct_hit
-                || (shans.is_empty() && shengong_borrow.is_empty())
-                || !ctx.core.player(self.target).alive
-            {
-                // 风雪刃（U05 swd 第十一批，规则 v95）：命中后可选择——
-                // 防止伤害，目标翻面并摸一张牌（上游 shaHit → unhurt +
-                // turnOver + draw；Confirm 可放弃则照常伤害）
-                if !self.asking_fengxueren
-                    && ctx.core.player(self.target).alive
-                    && !ctx.core.player(self.target).face_down
-                    && ctx
-                        .core
-                        .player(self.source)
-                        .equips
-                        .iter()
-                        .any(|c| ctx.catalog.card_kind(*c) == CardKind::Fengxueren)
-                {
-                    self.asking_fengxueren = true;
-                    return Flow::WaitChoice {
-                        observer: self.source,
-                        spec: ChoiceSpec {
-                            kind: ChoiceKind::Confirm,
-                            prompt: "fengxueren_flip_confirm",
-                            options: vec![ChoiceOption::Confirm],
-                            min: 0,
-                            max: 1,
-                            allow_cancel: true,
-                        },
-                    };
-                }
-                // 寒冰剑：目标有牌时来源可防止伤害，改为目标自选弃两张
-                //（逐技对照批一 v75 对齐上游 discardPlayerCard）。
-                if self.hanbing_can_fire(ctx) {
-                    self.asking_hanbing = true;
-                    return Flow::WaitChoice {
-                        observer: self.source,
-                        spec: ChoiceSpec {
-                            kind: ChoiceKind::Confirm,
-                            prompt: "hanbing_prevent_confirm",
-                            options: vec![ChoiceOption::Confirm],
-                            min: 0,
-                            max: 1,
-                            allow_cancel: true,
-                        },
-                    };
-                }
-                // 麒麟弓：伤害结算前来源可弃目标一匹坐骑。
-                let horses = self.qilin_horses(ctx);
-                if !horses.is_empty() && ctx.core.player(self.target).alive {
-                    self.asking_qilin = true;
-                    return Flow::WaitChoice {
-                        observer: self.source,
-                        spec: ChoiceSpec {
-                            kind: ChoiceKind::SelectCards,
-                            prompt: "qilin_discard_horse",
-                            options: horses,
-                            min: 0,
-                            max: 1,
-                            allow_cancel: true,
-                        },
-                    };
-                }
-                return self.emit_sha_damage(ctx);
-            }
-            // 司圃（Boss 应昭，规则 v232）：应昭出牌阶段已用牌数≤2 期间
-            // 其他人无法打出牌（上游 cardRespondable 同口径）——出闪选项
-            // 仅保留 Pass（目标必受伤害）
-            let sipu_ban_respond = ctx
-                .catalog
-                .skill_by_name(crate::vocabulary::names::BOSS_SIPU)
-                .map(|def| {
-                    ctx.core.has_skill(self.source, def)
-                        && ctx.core.turn.current == self.source
-                        && ctx.core.turn.cards_used_play_phase < 3
-                })
-                .unwrap_or(false);
-            let mut options = vec![ChoiceOption::Pass];
-            // 冰封·封（swd 批 134）：出牌封锁者不能打出闪（选项为空=必中）
-            if !sipu_ban_respond
-                && !ctx.catalog.blocks_all_cards(ctx.core, self.target)
-            {
-                options.extend(shans);
-                // 神弓（swd 批 148）：借用他人防具作为闪
-                options.extend(shengong_borrow);
-            }
-            return Flow::WaitChoice {
-                observer: self.target,
-                spec: ChoiceSpec {
-                    kind: ChoiceKind::RespondCard,
-                    prompt: "respond_shan",
-                    options,
-                    min: 1,
-                    max: 1,
-                    allow_cancel: false,
-                },
-            };
+            return self.ask_respond_shan_or_hit(
+                ctx,
+                poyue_direct_hit
+                    || shoulie_hit
+                    || lingshi_direct_hit
+                    || sbzhaxiang_direct_hit
+                    || yxs_fanji2_direct_hit,
+            );
         }
         // 已恢复：读取应答
         let answer = ctx.answer_first();
-        if let ChoiceOption::Card(shan) = answer {
-            // 倾国或 view_as 应答可能来自手牌或装备区：按实际所在区移除
-            if ctx.core.player(self.target).hand.contains(&shan)
-                || ctx.core.player(self.target).equips.contains(&shan)
+        if let ChoiceOption::Skill(rdef) = answer {
+            if super::super::host_response_skills(ctx.core, ctx.catalog, self.target, 1)
+                .contains(&rdef)
             {
-                discard_response_card(ctx, self.target, shan, CardKind::Shan);
-            } else if let Some(owner) = (ctx.catalog.hooks.borrowed_owner)(ctx, self.target, shan) {
-                // 神弓借用（swd 批 148）：从所有者装备区取走并撤技
-                ctx.core.player_mut(owner).equips.retain(|x| *x != shan);
-                revoke_equip_skills(ctx.core, ctx.catalog, owner, shan);
-                ctx.to_discard(shan);
-                ctx.log(LogEvent::SkillTriggered {
-                    skill: "神弓",
-                    owner: self.target, presentation: None });
-            } else {
-                ctx.to_discard(shan);
-            }
-            note_longdan_sha_source(ctx, self.target, self.source);
-            ctx.emit(EventData::CardResponded {
-                card: shan,
-                player: self.target,
-            });
-            // 雷击（Boss 青龙，规则 v234）：响应闪后判定雷击（无双第二
-            // 闪重入本臂=每张闪各触发一次，上游同口径）
-            releiji_on_shan(ctx, self.target);
-            self.dodges_used += 1;
-            // 无双：还需第二张闪 → 新响应窗口（重开护驾逐人询问 +
-            // 目标本人询问；不弃杀、不受伤）
-            let needed: u8 =
-                if self.source_has_wushuang(ctx) { 2 } else { 1 } + ctx.core.turn.liaoyuan_count;
-            if self.dodges_used < needed {
-                self.hujia_queue = None;
-                self.hujia_holder = None;
                 self.asked = false;
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((self.target, "l10_reguhuo_sha_resume".to_string()), 1);
+                (ctx.catalog.hooks.reguhuo_spawn_response)(
+                    ctx,
+                    self.target,
+                    1,
+                    0,
+                    rdef,
+                    self.source,
+                );
                 return Flow::Yield;
             }
-            // 青龙偃月刀（批③-b 第六把）：杀被闪后，来源可立即对相同
-            // 目标再使用一张【杀】（从手牌选择；放弃则不再追问——每杀
-            // 至多追问一次，防止连环杀循环）。
-            let has_qinglong = !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.source)
-                && !crate::kernel::mbcmfangzhu_banned(ctx.core, self.source)
-                && ctx
-                    .core
-                    .player(self.source)
-                    .equips
-                    .iter()
-                    .any(|c| ctx.catalog.card_kind(*c) == CardKind::Qinglong);
-            let hand_shas: Vec<ChoiceOption> = ctx
-                .core
-                .player(self.source)
-                .hand
-                .iter()
-                .filter(|c| {
-                    matches!(
-                        ctx.catalog.card_kind(**c),
-                        CardKind::Sha | CardKind::FireSha | CardKind::LeiSha
-                    )
-                })
-                .copied()
-                .map(ChoiceOption::Card)
-                .collect();
-            if has_qinglong && !hand_shas.is_empty() && !self.asking_qinglong {
-                self.asking_qinglong = true;
-                return Flow::WaitChoice {
-                    observer: self.source,
-                    spec: ChoiceSpec {
-                        kind: ChoiceKind::SelectCards,
-                        prompt: "qinglong_replay_sha",
-                        options: hand_shas,
-                        min: 0,
-                        max: 1,
-                        allow_cancel: true,
-                    },
-                };
-            }
-            // 贯石斧（批③-b 第五把）：杀被闪后，来源可弃两张牌强制伤害
-            //（登记差异：可弃牌池不含贯石斧本体；不足两张则无法发动）。
-            let has_guanshi = !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.source)
-                && ctx
-                    .core
-                    .player(self.source)
-                    .equips
-                    .iter()
-                    .any(|c| ctx.catalog.card_kind(*c) == CardKind::Guanshi);
-            if has_guanshi && ctx.core.player(self.source).alive {
-                let mut pool: Vec<ChoiceOption> = ctx
-                    .core
-                    .player(self.source)
-                    .hand
-                    .iter()
-                    .copied()
-                    .map(ChoiceOption::Card)
-                    .collect();
-                pool.extend(
-                    ctx.core
-                        .player(self.source)
-                        .equips
-                        .iter()
-                        .filter(|c| ctx.catalog.card_kind(**c) != CardKind::Guanshi)
-                        .copied()
-                        .map(ChoiceOption::Card),
-                );
-                if pool.len() >= 2 {
-                    self.asking_guanshi = true;
-                    return Flow::WaitChoice {
-                        observer: self.source,
-                        spec: ChoiceSpec {
-                            kind: ChoiceKind::SelectCards,
-                            prompt: "guanshi_force_damage",
-                            options: pool,
-                            min: 2,
-                            max: 2,
-                            allow_cancel: true,
-                        },
-                    };
-                }
-            }
-            // 萨登荆环（swd 卡牌面窗口机批）：被闪后可选判定窗（青龙
-            // →贯石斧→荆环确定性次序，登记差异：上游同点触发技按
-            // 目标序）。三窗并发时青龙先改杀重启、贯石斧先强伤。
-            let has_sadeng = ctx
-                .core
-                .player(self.source)
-                .equips
-                .iter()
-                .any(|c| ctx.catalog.card_kind(*c) == CardKind::Sadengjinhuan);
-            if has_sadeng && ctx.core.player(self.source).alive && !self.asking_sadeng {
-                self.asking_sadeng = true;
-                return Flow::WaitChoice {
-                    observer: self.source,
-                    spec: ChoiceSpec {
-                        kind: ChoiceKind::Confirm,
-                        prompt: "sadengjinhuan_judge_confirm",
-                        options: vec![ChoiceOption::Confirm],
-                        min: 0,
-                        max: 1,
-                        allow_cancel: true,
-                    },
-                };
-            }
+        }
+        if let ChoiceOption::Card(shan) = answer {
+            return self.resolve_shan_card(ctx, shan);
         } else if ctx.core.player(self.target).alive {
             if self.hanbing_can_fire(ctx) {
                 self.asking_hanbing = true;
@@ -1052,20 +750,5 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         });
         // 目标已死等无伤害路径：触发 shaEnd 后推进队列/弃置杀本体。
         return self.finish_or_defer_sha_end(ctx, false);
-    }
-}
-
-/// 龙胆（L20 `fz_new_longdan`，`extension.js:4860-5087`）需要知道「为哪名角色的【杀】打出【闪】」；
-/// 只给持有该技能的响应者写入，避免无关对局的状态摘要出现残留标记。
-fn note_longdan_sha_source(ctx: &mut Ctx<'_>, responder: PlayerId, source: PlayerId) {
-    if ctx
-        .catalog
-        .skill_by_name("fz_new_longdan")
-        .is_some_and(|d| ctx.core.has_skill(responder, d))
-    {
-        ctx.core
-            .vm_aux
-            .flags
-            .insert((responder, "responding_to_sha_from".to_string()), u32::from(source) + 1);
     }
 }

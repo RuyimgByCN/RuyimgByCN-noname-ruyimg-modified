@@ -324,6 +324,9 @@ impl NativeContent {
             &mut pack,
             prior_packs,
         );
+        if let Some(cfg_json) = frozen.text_asset("assets/wuxing.json")? {
+            content_native_loader::apply_wuxing_config(&mut pack, &cfg_json)?;
+        }
         // 原生目录锁也绑定安装包的命名空间、完整版本与内容指纹。
         pack.def.name = engine_native::content::names::intern(format!(
             "installed:{}",

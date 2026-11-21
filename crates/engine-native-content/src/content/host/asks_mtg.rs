@@ -405,6 +405,9 @@ pub(super) fn active_ask_batches(
         HostBehavior::L25ZuanBatchG => super::step::l25_batch_g::ask_l25_batch_g(
             stage, owner, target, targets, card, cards, core, catalog,
         ),
+        HostBehavior::L10ScsCompanion => super::step::l10_scs::ask_l10_scs(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
         HostBehavior::NewMeibu => {
             if stage != HostStage::SelectCard {
                 return None;
