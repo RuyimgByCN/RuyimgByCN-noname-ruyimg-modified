@@ -3,7 +3,13 @@ import { computed } from "vue";
 import type { ObserverSnapshot } from "../../types/engine";
 import type { ExtensionSurfacesSnapshot } from "../../engine/extensionSurfaceRuntime";
 
-export type BattleModalId = "qhly" | "skinswitch" | "mvp" | "omnisearch" | "taixu";
+export type BattleModalId =
+  | "qhly"
+  | "skinswitch"
+  | "mvp"
+  | "omnisearch"
+  | "taixu"
+  | "decade-menu";
 
 const props = defineProps<{
   view: ObserverSnapshot | null;
@@ -133,6 +139,14 @@ const rzshCrest = computed(() => {
         @click="emit('openModal', 'taixu')"
       >
         太虚战役图
+      </button>
+      <button
+        type="button"
+        class="hud-btn"
+        data-testid="btn-open-decade-menu-modal"
+        @click="emit('openModal', 'decade-menu')"
+      >
+        十周年配置
       </button>
     </nav>
   </section>
@@ -318,9 +332,17 @@ const rzshCrest = computed(() => {
   .hud-timebar {
     display: none;
   }
+  .hud-modal-actions {
+    flex-wrap: wrap;
+    max-width: 100%;
+    gap: 0.22rem;
+    overflow: visible;
+  }
   .hud-btn {
-    padding: 0.14rem 0.4rem;
-    font-size: 0.68rem;
+    flex-shrink: 0;
+    padding: 0.1rem 0.34rem;
+    font-size: 0.64rem;
+    line-height: 1.2;
   }
 }
 </style>

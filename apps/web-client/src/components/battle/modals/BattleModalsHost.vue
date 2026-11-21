@@ -1,12 +1,21 @@
 <script setup lang="ts">
+import { ref, watch } from "vue";
 import type { ObserverSnapshot } from "../../../types/engine";
-import type { ExtensionSurfacesSnapshot } from "../../../engine/extensionSurfaceRuntime";
+import {
+  createDefaultDecadeConfig,
+  type DecadeUiConfig,
+} from "../../../engine/surfaces/decadeConfigSchema";
+import {
+  updateExtensionDecadeConfig,
+  type ExtensionSurfacesSnapshot,
+} from "../../../engine/extensionSurfaceRuntime";
 import type { BattleModalId } from "../BattleShoushaHud.vue";
 import QhlyDetailModal from "./QhlyDetailModal.vue";
 import SkinSwitchModal from "./SkinSwitchModal.vue";
 import MvpSettlementModal from "./MvpSettlementModal.vue";
 import OmnisearchModal from "./OmnisearchModal.vue";
 import TaixuCampaignModal from "./TaixuCampaignModal.vue";
+import DecadeConfigModal from "../surfaces/DecadeConfigModal.vue";
 
 const props = defineProps<{
   activeModal: BattleModalId | null;
@@ -18,6 +27,24 @@ const emit = defineEmits<{
   close: [];
   "update:surfaces": [next: ExtensionSurfacesSnapshot];
 }>();
+
+const latestSurfaces = ref<ExtensionSurfacesSnapshot>(props.surfaces);
+watch(
+  () => props.surfaces,
+  (next) => {
+    latestSurfaces.value = next;
+  },
+);
+
+function onUpdateDecadeConfig(patch: Partial<DecadeUiConfig>) {
+  const next = updateExtensionDecadeConfig(latestSurfaces.value, patch);
+  latestSurfaces.value = next;
+  emit("update:surfaces", next);
+}
+
+function onResetDecadeConfig() {
+  onUpdateDecadeConfig(createDefaultDecadeConfig());
+}
 </script>
 
 <template>
@@ -71,5 +98,12 @@ const emit = defineEmits<{
           uiSuites: { ...props.surfaces.uiSuites, taixuUi },
         })
     "
+  />
+  <DecadeConfigModal
+    v-else-if="activeModal === 'decade-menu'"
+    :state="surfaces.uiSuites?.decadeUi"
+    @close="emit('close')"
+    @update-config="onUpdateDecadeConfig"
+    @reset-config="onResetDecadeConfig"
   />
 </template>

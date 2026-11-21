@@ -164,6 +164,13 @@ try {
         topbarRect && getComputedStyle(document.querySelector('.topbar')).position === 'sticky' &&
         hud && topbarRect.bottom > hud.top + 2
       );
+      const hudBtns = [...document.querySelectorAll('[data-testid^="btn-open-"]')];
+      const hudButtonsClipped = hudBtns
+        .filter((b) => {
+          const r = b.getBoundingClientRect();
+          return r.width < 10 || r.height < 10 || r.left < -1 || r.right > window.innerWidth + 1;
+        })
+        .map((b) => b.getAttribute('data-testid'));
       return {
         players: seats.length,
         stamps: document.querySelectorAll('[data-testid="seat-identity-stamp"]').length,
@@ -173,6 +180,8 @@ try {
         hudTop,
         handBottom,
         topbarClipped,
+        hudBtnCount: hudBtns.length,
+        hudButtonsClipped,
         overlaps,
       };
     })()`);
@@ -184,6 +193,8 @@ try {
       check.overflowX ||
       check.hudTop < 0 ||
       check.topbarClipped ||
+      check.hudBtnCount !== 6 ||
+      check.hudButtonsClipped.length > 0 ||
       (checkMobileFit && check.handBottom > height)
     ) {
       throw new Error(`Layout verification failed for ${players}p ${width}x${height}: ${JSON.stringify(check)}`);

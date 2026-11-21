@@ -12,8 +12,14 @@ import SeatCard from "./SeatCard.vue";
 import HandStrip from "./HandStrip.vue";
 import TriggerOrderChoice from "./TriggerOrderChoice.vue";
 import BattleShoushaHud, { type BattleModalId } from "./BattleShoushaHud.vue";
+import DecadeTabletopOverlays from "./surfaces/DecadeTabletopOverlays.vue";
 import type { ExtensionSurfacesSnapshot } from "../../engine/extensionSurfaceRuntime";
 import { renderCoinCanvasParticles } from "../../engine/extensionSurfaceRuntime";
+import {
+  createDefaultDecadeConfig,
+  decadeArenaDatasetAttrs,
+} from "../../engine/surfaces/decadeConfigSchema";
+import type { DecadeUiRuntimeState } from "../../engine/surfaces/decadeUiSurface";
 import { skillDisplayName } from "../../engine/appearanceStore";
 import { choiceKindLabel, choicePromptLabel } from "../../engine/observerMetadata";
 import {
@@ -40,12 +46,14 @@ const props = defineProps<{
   isSpectator?: boolean;
   isOnline?: boolean;
   roomStarted?: boolean;
+  autoRunning?: boolean;
 }>();
 
 const emit = defineEmits<{
   playCard: [cardId: number, targets: number[]];
   activateSkill: [skillId: number, targets: number[], cardTargets: number[]];
   openModal: [modal: BattleModalId];
+  "update:decadeUi": [next: DecadeUiRuntimeState];
   sortHand: [sortedIds: number[]];
   endPhase: [];
   resolveChoice: [action: ResolveChoiceAction];
@@ -110,7 +118,39 @@ const dragCardId = ref<number | null>(null);
 // Drop zone highlight state.
 const dropTargetId = ref<number | null>(null);
 
-const selfOnRight = computed(() => props.surfaces?.theme?.shoushaLayout === "left");
+const decadeUiState = computed(() => props.surfaces?.uiSuites?.decadeUi);
+const decadeConfig = computed(() => decadeUiState.value?.config ?? createDefaultDecadeConfig());
+const decadeDatasetAttrs = computed(() => decadeArenaDatasetAttrs(decadeConfig.value));
+const selfOnRight = computed(
+  () => props.surfaces?.theme?.shoushaLayout === "left" || decadeConfig.value.rightLayout === false,
+);
+const selfAlive = computed(() => seats().find((s) => s.player === props.selfId)?.alive ?? true);
+const startBannerDismissed = ref(
+  typeof window !== "undefined" && new URLSearchParams(window.location.search).get("skipAnims") === "1",
+);
+
+function onUpdateDecadeUi(next: DecadeUiRuntimeState) {
+  emit("update:decadeUi", next);
+}
+
+function onToggleChat() {
+  if (!decadeUiState.value) return;
+  emit("update:decadeUi", {
+    ...decadeUiState.value,
+    chatBox: {
+      ...decadeUiState.value.chatBox,
+      folded: !decadeUiState.value.chatBox.folded,
+    },
+  });
+}
+
+function onTogglePauseHistory() {
+  if (!decadeUiState.value) return;
+  emit("update:decadeUi", {
+    ...decadeUiState.value,
+    pauseHistoryOpen: !decadeUiState.value.pauseHistoryOpen,
+  });
+}
 
 function seats(): SeatView[] {
   return props.view?.seats ?? [];
@@ -119,11 +159,17 @@ function seats(): SeatView[] {
 const orderedSeats = computed(() => computeRelativeSeatOrder(seats(), props.selfId));
 
 function seatAnchorStyle(position: number, total: number): Record<string, string> {
-  return computeDecadeSeatAnchor(position, total, { selfOnRight: selfOnRight.value }).cssVars;
+  return computeDecadeSeatAnchor(position, total, {
+    selfOnRight: selfOnRight.value,
+    decadeLayout: decadeConfig.value.decadeLayout,
+  }).cssVars;
 }
 
 function seatAnchorZone(position: number, total: number): string {
-  return computeDecadeSeatAnchor(position, total, { selfOnRight: selfOnRight.value }).zone;
+  return computeDecadeSeatAnchor(position, total, {
+    selfOnRight: selfOnRight.value,
+    decadeLayout: decadeConfig.value.decadeLayout,
+  }).zone;
 }
 
 function myHand(): CardView[] {
@@ -504,6 +550,7 @@ const endPhaseDisabled = computed(
 
 <template>
   <div
+    v-bind="decadeDatasetAttrs"
     class="board battle-table battle-felt-surface"
     :class="[
       `theme-decade-${surfaces?.theme?.decadeSkinStyle ?? 'shizhounian'}`,
@@ -540,15 +587,28 @@ const endPhaseDisabled = computed(
     <!-- Upstream Ten-Year UI #arena stage: perimeter seats + central play/prompt zone + bottom hand dock -->
     <div
       class="arena-stage"
-      data-decade-layout="on"
+      :data-decade-layout="decadeConfig.decadeLayout"
       :data-player-count="orderedSeats.length"
       :data-right-layout="selfOnRight ? 'on' : 'off'"
     >
+      <DecadeTabletopOverlays
+        zone="stage"
+        :decade-ui="decadeUiState"
+        :view="view"
+        :ordered-seats="orderedSeats"
+        :self-on-right="selfOnRight"
+        :finished="finished"
+        :self-alive="selfAlive"
+        :start-banner-dismissed="startBannerDismissed"
+        @update-decade-ui="onUpdateDecadeUi"
+        @dismiss-start-banner="startBannerDismissed = true"
+      />
       <div class="seats" role="list" aria-label="座位列表">
         <div
           v-for="slot in orderedSeats"
           :key="slot.seat.player"
           class="seat-wrapper"
+          :data-seat-player-id="slot.seat.player"
           :data-position="slot.position"
           :data-zone="seatAnchorZone(slot.position, slot.total)"
           :style="seatAnchorStyle(slot.position, slot.total)"
@@ -568,6 +628,7 @@ const endPhaseDisabled = computed(
             :judge-cards="judgmentCardsFor(slot.seat.player)"
             :current-turn="view?.current_player === slot.seat.player"
             :decade-ui="surfaces?.uiSuites?.decadeUi"
+            :decade-config="decadeConfig"
             :skin-switch="surfaces?.uiSuites?.skinSwitch"
             :decade-style="surfaces?.theme?.decadeSkinStyle"
             :l20-marks="surfaces?.theme?.l20Marks"
@@ -579,6 +640,16 @@ const endPhaseDisabled = computed(
       <!-- Central Tabletop Area: kill/broadcast banner + played/discard pile + central prompt & action buttons above hand -->
       <div class="tabletop-center-zone" data-testid="tabletop-center-zone">
         <div class="center-table-cards">
+          <DecadeTabletopOverlays
+            zone="banners"
+            :decade-ui="decadeUiState"
+            :view="view"
+            :finished="finished"
+            :self-alive="selfAlive"
+            :start-banner-dismissed="startBannerDismissed"
+            @update-decade-ui="onUpdateDecadeUi"
+            @dismiss-start-banner="startBannerDismissed = true"
+          />
           <transition name="banner-fade">
             <div
               v-if="surfaces?.theme?.shoushaKillBanner"
@@ -716,6 +787,7 @@ const endPhaseDisabled = computed(
 
           <!-- DecadeUI .hand-tip & #dui-controls end-phase row -->
           <div class="hand-tip-bar" data-testid="tabletop-hand-tip-bar">
+            <span v-if="autoRunning" class="tuoguan-badge" data-testid="tuoguan-badge">🤖 托管中</span>
             <span class="hand-tip-text">{{ tabletopTipText }}</span>
             <button
               v-if="view && connected !== false"
@@ -727,15 +799,47 @@ const endPhaseDisabled = computed(
             >
               结束阶段
             </button>
+            <button
+              v-if="decadeUiState"
+              type="button"
+              class="decade-mini-pill"
+              data-testid="btn-tabletop-chat"
+              title="牌桌聊天"
+              @click="onToggleChat"
+            >
+              💬
+            </button>
+            <button
+              v-if="decadeUiState"
+              type="button"
+              class="decade-mini-pill"
+              data-testid="btn-tabletop-pause"
+              title="暂停历史"
+              @click="onTogglePauseHistory"
+            >
+              ⏸
+            </button>
           </div>
         </div>
       </div>
 
       <!-- Bottom Hand Card Strip aligned alongside Self seat -->
       <div class="hand-dock" :class="{ 'dock-left': selfOnRight }">
+        <div
+          v-if="decadeConfig.newDecadeStyle === 'on' && decadeConfig.aloneEquip && equipCardsFor(selfId).length > 0"
+          class="alone-equip-dock"
+          data-testid="alone-equip-dock"
+        >
+          <span class="alone-equip-label">装备栏</span>
+          <span v-for="eq in equipCardsFor(selfId)" :key="eq.id" class="alone-equip-item">
+            {{ cardKindLabel(eq.kind, eq.def) }}
+          </span>
+        </div>
         <HandStrip
           :cards="myHand()"
           :actionable-ids="actionableCardIds"
+          :decade-config="decadeConfig"
+          :decade-ui="decadeUiState"
           @select="onCardSelect"
           @drag-start="onCardDragStart"
           @sort-hand="(ids) => emit('sortHand', ids)"
@@ -848,7 +952,8 @@ const endPhaseDisabled = computed(
     right: 16px;
     z-index: 7;
     display: flex;
-    align-items: flex-end;
+    flex-direction: column;
+    align-items: stretch;
   }
   .hand-dock.dock-left {
     left: 16px;
@@ -1067,6 +1172,21 @@ const endPhaseDisabled = computed(
   background: linear-gradient(180deg, #7c4a19, #4e2d0d);
   border-color: rgba(232, 165, 75, 0.72);
 }
+.decade-mini-pill {
+  padding: 0.16rem 0.42rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  background: rgba(24, 28, 36, 0.88);
+  border: 1px solid rgba(232, 165, 75, 0.45);
+  color: #fde68a;
+  cursor: pointer;
+}
+.alone-equip-item {
+  padding: 0.05rem 0.35rem;
+  border-radius: 4px;
+  background: rgba(232, 165, 75, 0.14);
+  border: 1px solid rgba(232, 165, 75, 0.35);
+}
 
 /* Mobile / narrow viewport wrap-around perimeter grid */
 @media (max-width: 767px) {
@@ -1109,6 +1229,9 @@ const endPhaseDisabled = computed(
   .hand-dock {
     grid-column: 1 / -1;
     order: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
   }
 }
 </style>

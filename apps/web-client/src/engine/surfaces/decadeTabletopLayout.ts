@@ -23,6 +23,8 @@ export interface DecadeSeatAnchor {
   zone: SeatPerimeterZone;
   /** CSS variables used by desktop absolute perimeter layout */
   cssVars: Record<string, string>;
+  /** Normalized stage center coordinates (0..100%) for target arc overlays */
+  centerPct: { x: number; y: number };
 }
 
 export interface IdentityBadgeInfo {
@@ -51,16 +53,17 @@ export function computeRelativeSeatOrder(
 }
 
 /**
- * 按上游 `decadeLayout.css:241-377` (`data-decade-layout='on'`) 返回 2–8 人环绕式座位锚点，
+ * 按上游 `decadeLayout.css:241-534` (`data-decade-layout='on' | 'off'`) 返回 2–8 人环绕式座位锚点，
  * 并保证 `768px` 及以上桌面视口中顶排与左右侧席位不重叠。
  */
 export function computeDecadeSeatAnchor(
   position: number,
   total: number,
-  opts?: { selfOnRight?: boolean },
+  opts?: { selfOnRight?: boolean; decadeLayout?: "on" | "off" },
 ): DecadeSeatAnchor {
   const n = Math.max(2, Math.min(8, Math.round(total)));
   const pos = ((position % n) + n) % n;
+  const shoushaArch = opts?.decadeLayout === "off";
 
   if (pos === 0) {
     const selfOnRight = Boolean(opts?.selfOnRight);
@@ -72,9 +75,10 @@ export function computeDecadeSeatAnchor(
         "--seat-left": selfOnRight ? "auto" : "16px",
         "--seat-right": selfOnRight ? "16px" : "auto",
         "--seat-top": "auto",
-        "--seat-bottom": "10px",
+        "--seat-bottom": shoushaArch ? "16px" : "10px",
         "--seat-tx": "0%",
       },
+      centerPct: { x: selfOnRight ? 92 : 8, y: 85 },
     };
   }
 
@@ -89,9 +93,11 @@ export function computeDecadeSeatAnchor(
       "--seat-bottom": "auto",
       "--seat-tx": "-50%",
     },
+    centerPct: { x: leftPct, y: Math.round(((topPx + 92) / 780) * 100) },
   });
 
-  const makeRight = (topPct: number, rightPx = 14): DecadeSeatAnchor => ({
+  const sidePad = shoushaArch ? 22 : 14;
+  const makeRight = (topPct: number, rightPx = sidePad): DecadeSeatAnchor => ({
     position: pos,
     total: n,
     zone: "right",
@@ -102,9 +108,10 @@ export function computeDecadeSeatAnchor(
       "--seat-bottom": "auto",
       "--seat-tx": "0%",
     },
+    centerPct: { x: 92, y: topPct + 12 },
   });
 
-  const makeLeft = (topPct: number, leftPx = 14): DecadeSeatAnchor => ({
+  const makeLeft = (topPct: number, leftPx = sidePad): DecadeSeatAnchor => ({
     position: pos,
     total: n,
     zone: "left",
@@ -115,44 +122,47 @@ export function computeDecadeSeatAnchor(
       "--seat-bottom": "auto",
       "--seat-tx": "0%",
     },
+    centerPct: { x: 8, y: topPct + 12 },
   });
 
   switch (n) {
     case 2:
-      return makeTop(50, 10);
+      return makeTop(50, shoushaArch ? 16 : 10);
     case 3:
-      return pos === 1 ? makeTop(68, 12) : makeTop(32, 12);
+      return pos === 1
+        ? makeTop(shoushaArch ? 64 : 68, shoushaArch ? 16 : 12)
+        : makeTop(shoushaArch ? 36 : 32, shoushaArch ? 16 : 12);
     case 4:
-      if (pos === 1) return makeRight(36);
-      if (pos === 2) return makeTop(50, 10);
-      return makeLeft(36);
+      if (pos === 1) return makeRight(shoushaArch ? 29 : 36);
+      if (pos === 2) return makeTop(50, shoushaArch ? 14 : 10);
+      return makeLeft(shoushaArch ? 29 : 36);
     case 5:
-      if (pos === 1) return makeRight(36);
-      if (pos === 2) return makeTop(67, 12);
-      if (pos === 3) return makeTop(33, 12);
-      return makeLeft(36);
+      if (pos === 1) return makeRight(shoushaArch ? 29 : 36);
+      if (pos === 2) return makeTop(shoushaArch ? 64 : 67, shoushaArch ? 14 : 12);
+      if (pos === 3) return makeTop(shoushaArch ? 36 : 33, shoushaArch ? 14 : 12);
+      return makeLeft(shoushaArch ? 29 : 36);
     case 6:
-      if (pos === 1) return makeRight(36);
-      if (pos === 2) return makeTop(76, 12);
+      if (pos === 1) return makeRight(shoushaArch ? 31 : 36);
+      if (pos === 2) return makeTop(76, shoushaArch ? 44 : 12);
       if (pos === 3) return makeTop(50, 10);
-      if (pos === 4) return makeTop(24, 12);
-      return makeLeft(36);
+      if (pos === 4) return makeTop(24, shoushaArch ? 44 : 12);
+      return makeLeft(shoushaArch ? 31 : 36);
     case 7:
-      if (pos === 1) return makeRight(38);
-      if (pos === 2) return makeTop(83, 12);
+      if (pos === 1) return makeRight(shoushaArch ? 32 : 38);
+      if (pos === 2) return makeTop(83, shoushaArch ? 44 : 12);
       if (pos === 3) return makeTop(61, 10);
       if (pos === 4) return makeTop(39, 10);
-      if (pos === 5) return makeTop(17, 12);
-      return makeLeft(38);
+      if (pos === 5) return makeTop(17, shoushaArch ? 44 : 12);
+      return makeLeft(shoushaArch ? 32 : 38);
     case 8:
     default:
-      if (pos === 1) return makeRight(38);
-      if (pos === 2) return makeTop(86, 12);
-      if (pos === 3) return makeTop(68, 10);
+      if (pos === 1) return makeRight(shoushaArch ? 32 : 38);
+      if (pos === 2) return makeTop(86, shoushaArch ? 40 : 12);
+      if (pos === 3) return makeTop(68, shoushaArch ? 8 : 10);
       if (pos === 4) return makeTop(50, 8);
-      if (pos === 5) return makeTop(32, 10);
-      if (pos === 6) return makeTop(14, 12);
-      return makeLeft(38);
+      if (pos === 5) return makeTop(32, shoushaArch ? 8 : 10);
+      if (pos === 6) return makeTop(14, shoushaArch ? 40 : 12);
+      return makeLeft(shoushaArch ? 32 : 38);
   }
 }
 

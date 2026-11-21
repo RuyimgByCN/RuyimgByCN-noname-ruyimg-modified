@@ -10,6 +10,23 @@
  */
 
 import { DECADE_MARKSKILL_SPECS, type DecadeMarkSkillSpec } from "./decadeMarkSkillsData";
+import {
+  applyDecadeConfigUpdate,
+  createDefaultDecadeConfig,
+  loadPersistedDecadeConfig,
+  persistDecadeConfig,
+  type DecadeUiConfig,
+} from "./decadeConfigSchema";
+import {
+  createInitialChatBoxState,
+  resolveActiveDecadeCssSurfaces,
+  resolveGameStartBanner,
+  type DecadeChatBoxState,
+  type DecadeCompareEffectState,
+  type DecadeGuanXingState,
+  type DecadeLineArcState,
+  type DecadeSkillPopupState,
+} from "./decadeSurfacesRuntime";
 
 export const DECADE_CORE_HOOK_IDS = [
   // animation.js & animation_new.js (11)
@@ -179,13 +196,32 @@ export interface DecadeUiRuntimeState {
   splashMode: "standard" | "guozhan_hidden" | "shousha_dual" | "decade_dual";
   lastEffectCue: string | null;
   activeMarkBadgesBySeat: Record<number, DecadeMarkBadgeView[]>;
+  config: DecadeUiConfig;
+  activeCssSurfaces: ReadonlyArray<string>;
+  chatBox: DecadeChatBoxState;
+  guanXing: DecadeGuanXingState | null;
+  compareEffect: DecadeCompareEffectState | null;
+  lineArc: DecadeLineArcState | null;
+  skillPopup: DecadeSkillPopupState | null;
+  killOverlay: { killerName: string; victimName: string } | null;
+  startBanner: string | null;
+  healAuraSeats: number[];
+  cardUseCueBySeat: Record<number, string>;
+  recastCountBySeat: Record<number, number>;
+  sliderSpeedPct: number;
+  importedCardPackName: string | null;
 }
 
-export function createInitialDecadeUiRuntimeState(): DecadeUiRuntimeState {
+export function createInitialDecadeUiRuntimeState(
+  opts?: { usePersistedConfig?: boolean },
+): DecadeUiRuntimeState {
   const initialMark = formatDecadeSkillMarkBadge("nzry_chenglve", { yang: false, suits: ["spade", "heart"] });
+  const config = opts?.usePersistedConfig
+    ? loadPersistedDecadeConfig()
+    : createDefaultDecadeConfig();
   return {
-    layoutVariant: "decadeLayout.css",
-    playerCssVariant: "player_new.css",
+    layoutVariant: config.decadeLayout === "on" ? "decadeLayout.css" : "layout_new.css",
+    playerCssVariant: config.newDecadeStyle === "on" ? "player_new.css" : "player1_PC.css",
     pauseHistoryOpen: false,
     poxiModalTargetSeat: null,
     jiuBuffSeats: [],
@@ -197,6 +233,40 @@ export function createInitialDecadeUiRuntimeState(): DecadeUiRuntimeState {
     splashMode: "standard",
     lastEffectCue: null,
     activeMarkBadgesBySeat: initialMark ? { 0: [initialMark] } : {},
+    config,
+    activeCssSurfaces: resolveActiveDecadeCssSurfaces(config),
+    chatBox: createInitialChatBoxState(),
+    guanXing: null,
+    compareEffect: null,
+    lineArc: null,
+    skillPopup: null,
+    killOverlay: null,
+    startBanner: resolveGameStartBanner(config.SanGuoShaGameStart),
+    healAuraSeats: [],
+    cardUseCueBySeat: {},
+    recastCountBySeat: {},
+    sliderSpeedPct: 50,
+    importedCardPackName: null,
+  };
+}
+
+export function updateDecadeConfigInState(
+  state: DecadeUiRuntimeState,
+  patch: Partial<DecadeUiConfig>,
+  opts?: { persist?: boolean; mobileViewport?: boolean },
+): DecadeUiRuntimeState {
+  const nextCfg = applyDecadeConfigUpdate(state.config, patch);
+  if (opts?.persist !== false) persistDecadeConfig(nextCfg);
+  return {
+    ...state,
+    config: nextCfg,
+    layoutVariant: nextCfg.decadeLayout === "on" ? "decadeLayout.css" : "layout_new.css",
+    playerCssVariant: nextCfg.newDecadeStyle === "on" ? "player_new.css" : "player1_PC.css",
+    activeCssSurfaces: resolveActiveDecadeCssSurfaces(nextCfg, { mobileViewport: opts?.mobileViewport }),
+    startBanner:
+      patch.SanGuoShaGameStart !== undefined
+        ? resolveGameStartBanner(nextCfg.SanGuoShaGameStart)
+        : state.startBanner,
   };
 }
 
@@ -210,6 +280,10 @@ export function dispatchDecadeUiHook(
     suits?: ReadonlyArray<string>;
     equipName?: string;
     handCount?: number;
+    skillName?: string;
+    generalName?: string;
+    killerName?: string;
+    victimName?: string;
   },
 ): DecadeUiRuntimeState {
   const seat = opts?.seat ?? 0;
@@ -238,18 +312,63 @@ export function dispatchDecadeUiHook(
         jiuBuffSeats: state.jiuBuffSeats.filter((s) => s !== seat),
       };
     case "_dyjinengtx":
+      return {
+        ...state,
+        skillPopup:
+          state.config.gameAnimationEffect && state.config.JNTX
+            ? {
+                seat,
+                generalName: opts?.generalName ?? `P${seat}`,
+                skillName: opts?.skillName ?? opts?.equipName ?? "技能发动",
+                tier: "standard",
+              }
+            : state.skillPopup,
+        lastEffectCue: `${hookId}@P${seat}`,
+      };
+    case "_HpRecover":
+      return {
+        ...state,
+        healAuraSeats: state.config.EffectWood
+          ? [...new Set([...state.healAuraSeats, seat])]
+          : state.healAuraSeats,
+        lastEffectCue: `${hookId}@P${seat}`,
+      };
+    case "_usecard":
+    case "_decadeUI_usecardBegin":
+      return {
+        ...state,
+        cardUseCueBySeat: state.config.cardUseEffect
+          ? { ...state.cardUseCueBySeat, [seat]: opts?.equipName ?? "出牌光效" }
+          : state.cardUseCueBySeat,
+        lastEffectCue: `${hookId}@P${seat}`,
+      };
+    case "_decadeUI_dieKillEffect":
+      return {
+        ...state,
+        killOverlay: state.config.playerKillEffect
+          ? {
+              killerName: opts?.killerName ?? `P${seat}`,
+              victimName: opts?.victimName ?? "敌将",
+            }
+          : state.killOverlay,
+        lastEffectCue: `${hookId}@P${seat}`,
+      };
+    case "_recasting":
+      return {
+        ...state,
+        recastCountBySeat: {
+          ...state.recastCountBySeat,
+          [seat]: (state.recastCountBySeat[seat] ?? 0) + 1,
+        },
+        lastEffectCue: `${hookId}@P${seat}`,
+      };
     case "_losetl_":
     case "_jinnangpai_":
     case "_player_hp":
-    case "_HpRecover":
     case "_Hplose":
     case "_killFire":
     case "_kill_framebg":
-    case "_usecard":
-    case "_decadeUI_usecardBegin":
     case "_discard":
-    case "_decadeUI_dieKillEffect":
-    case "_recasting":
       return {
         ...state,
         lastEffectCue: `${hookId}@P${seat}`,

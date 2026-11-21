@@ -4,6 +4,11 @@ import {
   DECADE_MARKSKILL_SPECS,
 } from "../../../engine/surfaces/decadeMarkSkillsData";
 import {
+  DECADE_CSS_SURFACE_SPECS,
+  DECADE_JS_SURFACE_IDS,
+  createGuanXingState,
+} from "../../../engine/surfaces/decadeSurfacesRuntime";
+import {
   DECADE_ALL_UI_HOOK_IDS,
   DECADE_SURFACE_MODULES,
   createInitialDecadeUiRuntimeState,
@@ -207,6 +212,50 @@ function onAddDecadeMarkBadge() {
   );
 }
 
+function onTriggerDecadeEffectsDemo() {
+  let next = dispatchDecadeUiHook(decadeState.value, "_dyjinengtx", {
+    seat: 0,
+    skillName: "武圣",
+    generalName: "关羽",
+  });
+  next = dispatchDecadeUiHook(next, "_decadeUI_dieKillEffect", {
+    seat: 1,
+    killerName: "关羽",
+    victimName: "华雄",
+  });
+  next = dispatchDecadeUiHook(next, "_HpRecover", { seat: 0 });
+  next = {
+    ...next,
+    compareEffect: {
+      sourceName: "我方",
+      targetName: "敌方",
+      sourceCardLabel: "♥Q 过河拆桥",
+      targetCardLabel: "♠7 杀",
+      winner: "source",
+    },
+    lineArc: { fromSeat: 1, toSeat: 0, style: next.config.CPZS },
+  };
+  commitSuites(
+    { decadeUi: next },
+    `十周年 UI (L08)：已触发技能/击杀/拼点/连线与治愈特效 (激活 ${next.activeCssSurfaces.length}/${DECADE_CSS_SURFACE_SPECS.length} CSS)`,
+  );
+}
+
+function onToggleDecadeGuanXingDemo() {
+  const open = Boolean(decadeState.value.guanXing?.open);
+  const next: DecadeUiRuntimeState = {
+    ...decadeState.value,
+    guanXing: open
+      ? null
+      : createGuanXingState([
+          { id: 901, suit: "♥", rank: "A", label: "桃" },
+          { id: 902, suit: "♠", rank: "K", label: "决斗" },
+          { id: 903, suit: "♦", rank: "Q", label: "闪" },
+        ]),
+  };
+  commitSuites({ decadeUi: next }, `十周年 UI (L08)：content.chooseGuanXing ${open ? "已关闭" : "已打开"}`);
+}
+
 function onRunTaixuConsoleStep() {
   const nextWidth = taixuState.value.viewportMode === "pc" ? 720 : 1280;
   let next = switchTaixuViewport(taixuState.value, nextWidth);
@@ -231,7 +280,7 @@ function onRunTaixuConsoleStep() {
     >
       <div class="suite-head">
         <strong>十周年 UI (L08 · {{ DECADE_ALL_UI_HOOK_IDS.length }}钩子 / {{ DECADE_SURFACE_MODULES.length }}表面)</strong>
-        <span class="suite-pill">{{ decadeState.layoutVariant }} · {{ decadeState.splashMode }}</span>
+        <span class="suite-pill">{{ decadeState.activeCssSurfaces.length }}/{{ DECADE_CSS_SURFACE_SPECS.length }} CSS · {{ decadeState.layoutVariant }}</span>
       </div>
       <div class="decade-mark-bar" data-testid="l08-decade-mark-bar">
         <span
@@ -247,12 +296,18 @@ function onRunTaixuConsoleStep() {
       </div>
       <div class="suite-actions">
         <select v-model="selectedMarkId" aria-label="十周年标记选择" data-testid="select-l08-markskill">
-          <option v-for="spec in DECADE_MARKSKILL_SPECS.slice(0, 24)" :key="spec.id" :value="spec.id">
+          <option v-for="spec in DECADE_MARKSKILL_SPECS" :key="spec.id" :value="spec.id">
             {{ spec.label }} ({{ spec.id }})
           </option>
         </select>
         <button type="button" data-testid="btn-l08-apply-mark" @click="onAddDecadeMarkBadge">
           挂载十周年标记角标
+        </button>
+        <button type="button" data-testid="btn-l08-demo-effects" @click="onTriggerDecadeEffectsDemo">
+          演示拼点/击杀/连线特效
+        </button>
+        <button type="button" data-testid="btn-l08-demo-guanxing" @click="onToggleDecadeGuanXingDemo">
+          演示观星排序(content.js)
         </button>
       </div>
     </div>

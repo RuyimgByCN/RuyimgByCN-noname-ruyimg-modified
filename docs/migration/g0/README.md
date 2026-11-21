@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-21 Batch UI-2（L08 十周年UI 44 配置与 43 表面）更新（待提交／发布）
+
+基线 HEAD `3686468ca8e05a04440fce62dd0e14cfe3517547`（Batch UI-1 已发布，CI Run `44894025555` 10/10）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-ui` 独立审查（#39 **`APPROVE`**）与主线 Chrome CDP 及全量门禁复测，清单更新为 **已复核等价 677／简化近似 3,747／缺失 0／上游未定义 0**（合计 4,424）：`L08 十周年UI` 由 `0 / 406 / 0` 更新为 **21 / 385 / 0**（+21：仅升格 #39 核验通过的 21 项 `L08:configs:*`，其余 23 项配置及 43 项 `surfaces` 保留 `简化近似` 待 UI-3/后续消费闭环）。详见 [Batch UI-2 证据摘要](../../operations/evidence/2026-11-21-ui-l08-configs-surfaces/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-21 Batch 1.5（L29 龙血玄黄）更新（待提交／发布）
 
 基线 HEAD `af6ef4899052ad1258f38a242960f8f0ea0fd066`（Batch 1.4 `U07` 已发布，CI Run `44785367168` 10/10）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经独立复核 agent `3488fd64-4fea-4218-be3f-f5fb6d38add2` 两轮逐行对照与 Chrome CDP 实跑探针审查（Round 2 **`APPROVE`**），清单更新为 **已复核等价 656／简化近似 3,768／缺失 0／上游未定义 0**（合计 4,424）：`L29 龙血玄黄` 更新为 **5 / 4 / 0**（净 +4：`mbqianlong`、`mbcmqingzheng`、`mbcmjiushi`、`mbcmfangzhu`、`mbjuejin` 5 项技能升为已复核等价，`L29:configs:shengjian` 依复核建议由历史已复核等价下调为简化近似归队列第 5 项界面阶段，`_CMeffects`、`main1`、`main1.css` 维持简化近似）。队列第 1 项 L29 完成本地收口，整包八项仍 `0/37`。详见 [Batch 1.5 证据摘要](../../operations/evidence/2026-11-21-batch1-5-l29/README.md) 与 [inventory_status.json](inventory_status.json)。

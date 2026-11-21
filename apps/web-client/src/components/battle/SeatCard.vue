@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import GeneralPortrait from "./GeneralPortrait.vue";
 import type { CardView, SeatView } from "../../types/engine";
+import type { DecadeUiConfig } from "../../engine/surfaces/decadeConfigSchema";
 import type { DecadeUiRuntimeState } from "../../engine/surfaces/decadeUiSurface";
 import type { SkinSwitchRuntimeState } from "../../engine/surfaces/skinSwitchSurface";
 import {
@@ -21,6 +22,7 @@ const props = defineProps<{
   relativePosition?: number;
   currentTurn?: boolean;
   decadeUi?: DecadeUiRuntimeState;
+  decadeConfig?: DecadeUiConfig;
   skinSwitch?: SkinSwitchRuntimeState;
   decadeStyle?: string;
   l20Marks?: Record<string, number>;
@@ -47,6 +49,43 @@ const isChained = computed(() => Boolean(props.seat.linked));
 const chukuangOverlay = computed(() => {
   const act = props.skinSwitch?.lastChukuangAction;
   return act && act.seat === props.seat.player ? act : null;
+});
+const effectiveConfig = computed(() => props.decadeConfig ?? props.decadeUi?.config);
+const campTextMode = computed(() => effectiveConfig.value?.campIdentityImageMode === false);
+const rarityLongMode = computed<"on" | "off" | "xinon" | null>(() => {
+  if (effectiveConfig.value?.newDecadeStyle !== "off") return null;
+  const r = effectiveConfig.value?.rarityLong;
+  if (r === "on" || r === "off" || r === "xinon") return r;
+  return null;
+});
+const noDieGrayscale = computed(() => effectiveConfig.value?.playerDieEffect === false);
+const hasHealAura = computed(
+  () =>
+    Boolean(effectiveConfig.value?.EffectWood) &&
+    Boolean(props.decadeUi?.healAuraSeats?.includes(props.seat.player)),
+);
+const cardUseCue = computed(() =>
+  effectiveConfig.value?.cardUseEffect
+    ? props.decadeUi?.cardUseCueBySeat?.[props.seat.player]
+    : undefined,
+);
+const detachSelfEquips = computed(
+  () =>
+    props.self &&
+    effectiveConfig.value?.newDecadeStyle === "on" &&
+    Boolean(effectiveConfig.value?.aloneEquip),
+);
+const visibleEquips = computed(() => (detachSelfEquips.value ? [] : props.equipCards));
+const extraGainedSkills = computed(() => {
+  if (!effectiveConfig.value?.gainSkillsShown) return [];
+  return props.seat.skills.slice(2).filter((s) => Boolean(s.name)).slice(0, 3);
+});
+const gainStickerSkill = computed(() => {
+  const mode = effectiveConfig.value?.gainSkillsVisible ?? "off";
+  if (mode === "off") return null;
+  if (mode === "othersOn" && props.self) return null;
+  const candidate = extraGainedSkills.value[0] ?? props.seat.skills.find((s) => Boolean(s.name));
+  return candidate?.name ?? null;
 });
 
 const L20_METAS: Record<string, { label: string; icon: string }> = {
@@ -129,6 +168,9 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
       'current-turn': Boolean(currentTurn),
       'has-jiu-buff': hasJiuBuff,
       'is-chained': isChained,
+      'has-heal-aura': hasHealAura,
+      'has-card-use-cue': Boolean(cardUseCue),
+      'no-die-gray': noDieGrayscale,
     }"
     :data-decade-style="decadeStyle ?? decadeUi?.layoutVariant ?? 'shizhounian'"
     :data-position="relativePosition ?? (self ? 0 : seat.seat)"
@@ -138,10 +180,12 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
     @click="isTargetMode && isSelectableTarget && emit('select', seat.player)"
     @keydown.enter="isTargetMode && isSelectableTarget && emit('select', seat.player)"
   >
-    <!-- Top-right DecadeUI identity corner stamp (主/忠/反/内/猜) -->
+    <!-- Top-right DecadeUI identity corner stamp (主/忠/反/内/猜, respects campIdentityImageMode) -->
     <div
       class="seat-identity-stamp"
+      :class="{ 'camp-text-only': campTextMode }"
       :data-identity-tone="identityBadge.tone"
+      :data-camp-mode="campTextMode ? 'text' : 'image'"
       :title="identityLabel"
       data-testid="seat-identity-stamp"
     >
@@ -194,6 +238,16 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
             <span v-if="seat.turned_over" class="tag" aria-label="武将牌背面">翻面</span>
             <span v-if="isChained" class="tag chain-tag" data-testid="seat-chain-badge">🔗横置</span>
             <span v-if="hasJiuBuff" class="tag jiu-tag" data-testid="seat-jiu-badge">🍶酒态</span>
+            <span
+              v-if="rarityLongMode"
+              class="tag dragon-crest"
+              :class="`dragon-${rarityLongMode}`"
+              :data-rarity-long="rarityLongMode"
+              :title="`龙头美化 (${rarityLongMode})`"
+              data-testid="seat-dragon-crest"
+            >{{ rarityLongMode === 'xinon' ? '✨🐉' : rarityLongMode === 'off' ? '🐲' : '🐉' }}</span>
+            <span v-if="cardUseCue" class="tag cue-tag" data-testid="seat-card-cue">{{ cardUseCue }}</span>
+            <span v-if="gainStickerSkill" class="tag seat-gain-skill-sticker" data-testid="seat-gain-skill-sticker">✦{{ gainStickerSkill }}</span>
           </div>
           <span
             v-if="chukuangOverlay"
@@ -221,10 +275,10 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
           </span>
         </div>
 
-        <!-- Equip strips overlaid cleanly at bottom of portrait -->
-        <div v-if="equipCards.length > 0" class="equip-zone" aria-label="装备区">
+        <!-- Equip strips overlaid cleanly at bottom of portrait (detached to dock when aloneEquip + newDecadeStyle) -->
+        <div v-if="visibleEquips.length > 0" class="equip-zone" aria-label="装备区">
           <div
-            v-for="card in equipCards"
+            v-for="card in visibleEquips"
             :key="card.id"
             class="equip-card"
             :title="`${cardKindLabel(card.kind, card.def)} #${card.id}${card.def != null ? ' (def:' + card.def + ')' : ''}`"
@@ -270,8 +324,18 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
         <span>{{ identityLabel }}</span>
       </div>
 
-      <!-- L08 Decade mark badges -->
-      <div v-if="decadeBadges.length > 0" class="decade-seat-marks" data-testid="seat-decade-marks">
+      <!-- L08 Decade mark & gained skill badges -->
+      <div
+        v-if="decadeBadges.length > 0 || extraGainedSkills.length > 0"
+        class="decade-seat-marks"
+        data-testid="seat-decade-marks"
+      >
+        <span
+          v-for="sk in extraGainedSkills"
+          :key="`gain-${sk.id}`"
+          class="seat-mark-chip seat-gain-skill-badge"
+          data-testid="seat-gain-skill-badge"
+        >{{ sk.name }}</span>
         <span
           v-for="mk in decadeBadges"
           :key="mk.skillId"
@@ -333,6 +397,37 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
 .seat.dead {
   opacity: 0.62;
   filter: grayscale(0.75);
+}
+.seat.dead.no-die-gray {
+  filter: none;
+}
+.seat-identity-stamp.camp-text-only {
+  width: auto;
+  height: auto;
+  padding: 0.08rem 0.28rem;
+  border-radius: 3px;
+  font-size: 0.72rem;
+  background: rgba(15, 18, 22, 0.92) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border-style: dashed;
+}
+.dragon-crest {
+  background: rgba(120, 53, 15, 0.88);
+  color: #fde68a;
+}
+.dragon-crest.dragon-off {
+  background: rgba(55, 65, 81, 0.88);
+  color: #d1d5db;
+}
+.dragon-crest.dragon-xinon {
+  background: linear-gradient(135deg, #b45309, #7c2d12);
+  border: 1px solid #fde047;
+  color: #fef08a;
+}
+.cue-tag {
+  background: rgba(161, 98, 7, 0.9);
+  color: #fef08a;
 }
 .seat.dying {
   border-color: var(--color-warning);

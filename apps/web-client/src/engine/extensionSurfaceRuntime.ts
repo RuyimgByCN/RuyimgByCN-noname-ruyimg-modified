@@ -1,5 +1,10 @@
 import type { EngineEnvelope, ObserverSnapshot } from "../types/engine";
-import { createInitialDecadeUiRuntimeState, dispatchDecadeUiHook } from "./surfaces/decadeUiSurface";
+import {
+  createInitialDecadeUiRuntimeState,
+  dispatchDecadeUiHook,
+  updateDecadeConfigInState,
+} from "./surfaces/decadeUiSurface";
+import { normalizeDecadeConfig, type DecadeUiConfig } from "./surfaces/decadeConfigSchema";
 import { createInitialQhlyRuntimeState, dispatchQhlyUiHook } from "./surfaces/qhlySurface";
 import { createInitialShoushaUiRuntimeState, dispatchShoushaUiHook } from "./surfaces/shoushaUiSurface";
 import { createInitialSkinSwitchRuntimeState, dispatchSkinSwitchHook } from "./surfaces/skinSwitchSurface";
@@ -1197,7 +1202,48 @@ export function deserializeExtensionSurfacesSnapshot(raw: string): ExtensionSurf
   if (!valid) {
     throw new Error("invalid extension surfaces snapshot");
   }
-  return parsed as ExtensionSurfacesSnapshot;
+  const snap = parsed as ExtensionSurfacesSnapshot;
+  if (snap.uiSuites?.decadeUi) {
+    const baseDecade = createInitialDecadeUiRuntimeState();
+    const rawDecade = snap.uiSuites.decadeUi;
+    snap.uiSuites = {
+      ...snap.uiSuites,
+      decadeUi: {
+        ...baseDecade,
+        ...rawDecade,
+        config: normalizeDecadeConfig(rawDecade.config),
+      },
+    };
+  }
+  return snap;
+}
+
+/** 原子更新 L08 十周年UI 全部 44 项配置并联动 `theme` 字段 */
+export function updateExtensionDecadeConfig(
+  state: ExtensionSurfacesSnapshot,
+  patch: Partial<DecadeUiConfig>,
+  opts?: { persist?: boolean; mobileViewport?: boolean },
+): ExtensionSurfacesSnapshot {
+  const prevDecade = state.uiSuites?.decadeUi ?? createInitialDecadeUiRuntimeState();
+  const nextDecade = updateDecadeConfigInState(prevDecade, patch, opts);
+  const nextTheme = { ...state.theme };
+  if (patch.rightLayout !== undefined) {
+    nextTheme.shoushaLayout = nextDecade.config.rightLayout ? "right" : "left";
+  }
+  if (patch.newDecadeStyle !== undefined) {
+    nextTheme.decadeSkinStyle = nextDecade.config.newDecadeStyle === "on" ? "shizhounian" : "shousha";
+  }
+  if (patch.playerMarkStyle !== undefined) {
+    nextTheme.markStyle = nextDecade.config.playerMarkStyle === "decade" ? "decade" : "shousha";
+  }
+  return {
+    ...state,
+    theme: nextTheme,
+    uiSuites: {
+      ...state.uiSuites,
+      decadeUi: nextDecade,
+    },
+  };
 }
 
 /**
@@ -1526,7 +1572,9 @@ export function triggerLongxueHolySwordEffect(
   };
 }
 
+export * from "./surfaces/decadeConfigSchema";
 export * from "./surfaces/decadeMarkSkillsData";
+export * from "./surfaces/decadeSurfacesRuntime";
 export * from "./surfaces/decadeUiSurface";
 export * from "./surfaces/qhlySurface";
 export * from "./surfaces/shoushaUiSurface";

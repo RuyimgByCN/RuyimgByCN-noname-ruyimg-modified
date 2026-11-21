@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-21 Batch UI-2（L08 十周年UI 44 配置与 43 表面）合入与清单上调（待提交／发布）
+
+基线 HEAD `3686468ca8e05a04440fce62dd0e14cfe3517547`（Batch UI-1 已发布，CI Run `44894025555` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-ui` `aa8ac1adf` + `3a7fa305d`（`verifier-ui` #39 **`APPROVE`**）：洁净室实现 `L08 十周年UI` 全部 44 项 `configs` 与 43 项 `surfaces`（10 JS + 33 CSS）前端 Schema、配置面板、牌桌 `data-*` 投影与严格 JSON 导入守卫，经主线全量第七节门禁及 Chrome CDP 实测验证。按 #39 复核口径将 21 项已核验 `L08:configs:*` 升为 `已复核等价`（其余 23 项配置与 43 项表面维持 `简化近似`），`L08` 更新为 **已复核等价 21／简化近似 385／缺失 0**，全仓清单更新为 **已复核等价 677／简化近似 3,747／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch UI-2 复核摘要](../operations/evidence/2026-11-21-ui-l08-configs-surfaces/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。
+
 ## 2026-11-21 Batch 1.5（L29 龙血玄黄）规则修复与独立复核（待提交／发布）
 
 基线 HEAD `af6ef4899052ad1258f38a242960f8f0ea0fd066`（Batch 1.4 `U07` 已发布，CI Run `44785367168` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`。经先红后绿回归与未参与实现的独立复核 agent（`3488fd64-4fea-4218-be3f-f5fb6d38add2`）结合 Chrome CDP 上游实跑探针的两轮逐行审查，Batch 1.5 Round 2 获 **`APPROVE`**：`L29 龙血玄黄` 更新为 **已复核等价 5／简化近似 4／缺失 0**（修复并签署 `mbqianlong`＋`mbweitong`、`mbcmqingzheng`、`mbcmjiushi`、`mbcmfangzhu`、`mbjuejin`＋`mbcmxscw`，并补齐 `CardKind::is_trick_kind` 与后装/标准装备封技及响应放行；`L29:configs:shengjian` 依复核建议下调为 `简化近似` 归队列第 5 项界面 `_CMeffects` 渲染，连同 `_CMeffects`、`main1`、`main1.css` 共 4 项界面/显示项待队列 5 处理）。全仓清单更新为 **已复核等价 656／简化近似 3,768／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch 1.5 复核摘要](../operations/evidence/2026-11-21-batch1-5-l29/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。

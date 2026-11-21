@@ -26,6 +26,7 @@ import {
   triggerShoushaHudBanner,
   triggerSpineSkinClip,
   unlockLongxueSkills,
+  updateExtensionDecadeConfig,
   validateSafeExportFilename,
   type ExtensionSurfacesSnapshot,
   type ExtensionUiSuitesState,
@@ -245,7 +246,10 @@ function onCycleDecade() {
     const idx = order.indexOf(prev.theme.decadeSkinStyle);
     const decadeSkinStyle = order[(idx + 1) % order.length]!;
     surfaceNotice.value = `十周年 UI：风格切换为 ${decadeSkinStyle}`;
-    return { ...prev, theme: { ...prev.theme, decadeSkinStyle } };
+    const synced = updateExtensionDecadeConfig(prev, {
+      newDecadeStyle: decadeSkinStyle === "shousha" ? "off" : "on",
+    });
+    return { ...synced, theme: { ...synced.theme, decadeSkinStyle } };
   });
 }
 
@@ -253,7 +257,10 @@ function onCycleShoushaLayout() {
   update((prev) => {
     const shoushaLayout = prev.theme.shoushaLayout === "right" ? "left" : "right";
     surfaceNotice.value = `手杀 UI：布局切换为 ${shoushaLayout}`;
-    return { ...prev, theme: { ...prev.theme, shoushaLayout } };
+    const synced = updateExtensionDecadeConfig(prev, {
+      rightLayout: shoushaLayout === "right",
+    });
+    return { ...synced, theme: { ...synced.theme, shoushaLayout } };
   });
 }
 

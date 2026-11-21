@@ -9,6 +9,13 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-21 Batch UI-2（L08 十周年UI 44 配置与 43 表面洁净室消费）合入收口（待提交／发布）
+
+- **基线、发布与版本**：HEAD `3686468ca8e05a04440fce62dd0e14cfe3517547`（Batch UI-1 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `44894025555` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。
+- **Batch UI-2 集成与复核**：合入 `swarm/conv-ui` `aa8ac1adf` + `3a7fa305d`（`verifier-ui` #39 **`APPROVE`**）：完成 `L08` 44 项 `configs` Schema、互斥联动、`data-*` 投影及交互面板（`DecadeConfigModal.vue`、`DecadeTabletopOverlays.vue`、`decadeTabletopLayout.ts` 等），与 43 项 `surfaces`（10 JS + 33 CSS）洁净室消费运行时（不读取 `spine.js`、不打包商业资源）。
+- **清单计数与整包签署**：按 #39 仅将经实际验证的 21 项 `L08:configs:*` 升为 `已复核等价`（其余 23 项 `configs` 与 43 项 `surfaces` 保留 `简化近似`）；`L08` 更新为 **21／385／0**，全仓更新为 **已复核等价 677／简化近似 3,747／缺失 0**，整包八项签署仍 `0/37`。
+- **本地第七节实测**：`test_check_source_lines.py`（2 OK）、`check-source-lines.py`（9,396 文件 `<= 2,000` / Rust 有效行 `<= 1,000`）、`check-native-layering.py`（0）、`recount_g0.py`（37/0）、3 crate `2,518/0/6`、5 crate `-D warnings`、`wasm32`、`--workspace --no-fail-fast` `7,914/0/8`、`conformance` `19/19`、`desktop-client` `20/0/1`、`web-client` `typecheck`＋`test`（**498/0**）＋`build:native`＋`smoke:native`（**83/0**）、跨端 `check-native-wasm-cross-target.py`＋`cross-target-hash.sh`、`decade-configs-cdp.mjs`、`tabletop-responsive-cdp.mjs`（首次 9s 冷启动超时后重跑全矩阵通过）、`tabletop-comparison-cdp.mjs`（60 fps）、`decision34-browser-surfaces.mjs`（60 fps）及 `build` 通过，见 [Batch UI-2 证据](../operations/evidence/2026-11-21-ui-l08-configs-surfaces/README.md)。
+
 ### 2026-11-21 队列 0 发布登记与 Batch UI-1（L08 十周年UI 真实牌桌布局）合入收口（待提交／发布）
 
 - **基线、发布与版本**：HEAD `1792d36ca1b21c91d8e8857a4f65ddf65f0c862a` + Batch UI-1 改动；队列 0 两笔已发布且首跑全绿并入 [CI 运行台账](../operations/evidence/ci-runs.md)——Batch 1.5 `4172d5948` CI Run `44883049675`（Attempt 1 `10/10 success`）、纯文档提示词 `1792d36ca` CI Run `44886931442`（Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。

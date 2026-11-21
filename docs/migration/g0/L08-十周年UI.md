@@ -3,6 +3,11 @@
 > 核验日期：2026-11-11 · 来源仓：`noname-liuli` · 入口：`archive/upstream/noname-liuli/noname/extension/十周年UI`  
 > 本页为 E01/G0 深度清单与**裁决 34 逐项上游清单**（武将 / 技能 / 卡牌 / 模式与战役节点 / 配置项 / 界面钩子 / 渲染面 / 现有 `decision34*` 归类）。非整包验收证明。
 
+### 2026-11-21 Batch UI-2（44 配置与 43 表面洁净室消费）合入补充（待提交／发布）
+
+- 合入 `swarm/conv-ui` Batch UI-2（`aa8ac1adf` + `3a7fa305d`，`verifier-ui` #39 **`APPROVE`**）：实现全 44 项 `L08:configs:*` Schema、互斥联动、`data-*` 投影与弹窗/牌桌交互，及 43 项 `L08:surfaces:*`（10 JS + 33 CSS）洁净室前端运行时与样式规则（零 `spine.js` 读取与商业资源打包）。
+- 按 #39 独立复核口径，本次在 [inventory_status.json](./inventory_status.json) 仅将已实测闭环的 **21 项** `L08:configs:*`（`_connectMode`、`asyncMode`、`eruda`、`rightLayout`、`game_cardSet`、`cardHelasisy`、`game_cardSet2`、`cardHelasisy2`、`cardPrettify`、`cardBorder`、`gold_suitnum`、`campIdentityImageMode`、`tuoguan_hide`、`outcropSkin`、`gainSkillsShown`、`gainSkillsVisible`、`newDecadeStyle`、`rarityLong`、`decadeLayout`、`aloneEquip`、`shoushaNewEquip`）升为 `已复核等价`；其余 `23` 项配置及 `43` 项渲染面保留 `简化近似`（`L08` 计为 **21／385／0**，非整包签署）。详见 [Batch UI-2 证据摘要](../../operations/evidence/2026-11-21-ui-l08-configs-surfaces/README.md)。
+
 ## 1. 功能清单
 
 ### 入口与形态

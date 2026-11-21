@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import type { CardView } from "../../types/engine";
+import type { DecadeUiConfig } from "../../engine/surfaces/decadeConfigSchema";
+import type { DecadeUiRuntimeState } from "../../engine/surfaces/decadeUiSurface";
 import { sortShoushaHandCards, type ShoushaSortableCard } from "../../engine/surfaces/shoushaUiSurface";
 import {
   cardCategoryLabel,
@@ -8,7 +10,21 @@ import {
   cardKindLabel,
 } from "../../engine/surfaces/decadeTabletopLayout";
 
-const props = defineProps<{ cards: CardView[]; actionableIds: number[] }>();
+const props = defineProps<{
+  cards: CardView[];
+  actionableIds: number[];
+  decadeConfig?: DecadeUiConfig;
+  decadeUi?: DecadeUiRuntimeState;
+}>();
+const effectiveCfg = computed(() => props.decadeConfig ?? props.decadeUi?.config);
+const specialHelTag = computed(() => {
+  const cfg = effectiveCfg.value;
+  if (!cfg) return null;
+  const preset = cfg._connectMode ? cfg.cardHelasisy2 : cfg.cardHelasisy;
+  if (!preset || preset === "off") return null;
+  return preset;
+});
+const animDisabled = computed(() => effectiveCfg.value?.gameAnimationEffect === false);
 const emit = defineEmits<{
   select: [id: number];
   dragStart: [id: number];
@@ -141,6 +157,7 @@ function onDragEnd() {
 
     <div
       class="strip"
+      :class="{ 'no-card-anims': animDisabled }"
       role="listbox"
       aria-label="手牌列表"
       :style="{ '--card-overlap': overlapPx }"
@@ -152,7 +169,11 @@ function onDragEnd() {
         class="card"
         :class="[
           `card-cat-${cardCategory(c)}`,
-          { selected: c.id === selectedId, dragging: c.id === draggingId },
+          {
+            selected: c.id === selectedId,
+            dragging: c.id === draggingId,
+            'is-virtual': c.def == null && c.suit != null,
+          },
         ]"
         :disabled="!actionableIds.includes(c.id)"
         :data-kind="c.kind"
@@ -177,6 +198,7 @@ function onDragEnd() {
           >{{ cardDisplayName(c) }}</span>
           <span v-else-if="c.def != null" class="card-known">▸</span>
           <span class="card-cat-label">{{ cardCategoryLabel(c.kind, c.def) }}</span>
+          <span v-if="specialHelTag" class="card-hel-tag" data-testid="card-helasisy-tag">{{ specialHelTag }}</span>
           <span class="id muted">#{{ c.id }}</span>
         </div>
 
@@ -297,6 +319,16 @@ function onDragEnd() {
 .card.dragging {
   opacity: 0.5;
   transform: scale(0.95);
+}
+.strip.no-card-anims .card {
+  transition: none !important;
+}
+.card-hel-tag {
+  font-size: 0.56rem;
+  padding: 0 0.22rem;
+  border-radius: 3px;
+  background: rgba(147, 51, 234, 0.16);
+  color: #7e22ce;
 }
 .card:disabled {
   cursor: not-allowed;

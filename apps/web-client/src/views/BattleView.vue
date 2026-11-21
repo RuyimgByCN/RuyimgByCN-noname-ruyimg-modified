@@ -50,10 +50,13 @@ import ExtensionSurfacePanel from "../components/battle/ExtensionSurfacePanel.vu
 import {
   createInitialExtensionSurfacesState,
   ingestBattleEnvelopeIntoSurfaces,
+  loadPersistedDecadeConfig,
   restoreExtensionSurfacesForLoad,
   serializeExtensionSurfacesSnapshot,
+  updateExtensionDecadeConfig,
   type ExtensionSurfacesSnapshot,
 } from "../engine/extensionSurfaceRuntime";
+import type { DecadeUiRuntimeState } from "../engine/surfaces/decadeUiSurface";
 import { createInitialShoushaUiRuntimeState } from "../engine/surfaces/shoushaUiSurface";
 import type { EngineEnvelope, LegalAction } from "../types/engine";
 import { matchOutcomePresentation, nativeCommandError } from "../engine/outcome";
@@ -101,11 +104,34 @@ const generalSelect = ref(initialGeneralSelectState(selfId.value));
 const showGeneralSelect = computed(
   () => !isOnline.value && store.connected && localClient.isNative(),
 );
-const extensionSurfaces = ref<ExtensionSurfacesSnapshot>(createInitialExtensionSurfacesState());
+function createInitialSurfacesWithPersistedDecade(): ExtensionSurfacesSnapshot {
+  return updateExtensionDecadeConfig(
+    createInitialExtensionSurfacesState(),
+    { ...loadPersistedDecadeConfig(), _connectMode: isOnline.value },
+    { persist: false },
+  );
+}
+const extensionSurfaces = ref<ExtensionSurfacesSnapshot>(createInitialSurfacesWithPersistedDecade());
 const activeBattleModal = ref<BattleModalId | null>(null);
 function onUpdateExtensionSurfaces(next: ExtensionSurfacesSnapshot) {
   extensionSurfaces.value = next;
 }
+function onUpdateDecadeUiFromBoard(nextDecade: DecadeUiRuntimeState) {
+  extensionSurfaces.value = {
+    ...extensionSurfaces.value,
+    uiSuites: {
+      ...extensionSurfaces.value.uiSuites,
+      decadeUi: nextDecade,
+    },
+  };
+}
+watch(isOnline, (online) => {
+  extensionSurfaces.value = updateExtensionDecadeConfig(
+    extensionSurfaces.value,
+    { _connectMode: online },
+    { persist: false },
+  );
+});
 function onSortHandFromBoard(sortedIds: number[]) {
   const prevShousha =
     extensionSurfaces.value.uiSuites?.shoushaUi ?? createInitialShoushaUiRuntimeState();
@@ -290,7 +316,7 @@ async function chooseGeneralCandidate(name: string) {
 async function connectAndStart() {
   await withBusy(async () => {
     try {
-      extensionSurfaces.value = createInitialExtensionSurfacesState();
+      extensionSurfaces.value = createInitialSurfacesWithPersistedDecade();
       audioOwner.resetGeneration("new-match", 0);
       audioOwner.setFrozenPackages(undefined);
       syncAudioUiState();
@@ -683,7 +709,8 @@ function toggleAuto() {
     }
     await autoStep();
     if (autoRunning.value && !store.finished) {
-      const wait = store.skipAnims || store.reduceMotion ? 30 : 280 / store.speed;
+      const asyncFactor = extensionSurfaces.value.uiSuites?.decadeUi?.config?.asyncMode ? 0.45 : 1;
+      const wait = (store.skipAnims || store.reduceMotion ? 30 : 280 / store.speed) * asyncFactor;
       autoTimer.value = window.setTimeout(tick, wait);
     } else {
       stopAuto();
@@ -995,9 +1022,11 @@ const turnInfo = computed(() => {
         :is-spectator="isSpectator"
         :is-online="isOnline"
         :room-started="roomStarted"
+        :auto-running="autoRunning"
         @play-card="playCard"
         @activate-skill="activateSkill"
         @open-modal="(m) => (activeBattleModal = m)"
+        @update:decade-ui="onUpdateDecadeUiFromBoard"
         @sort-hand="onSortHandFromBoard"
         @end-phase="endPhase"
         @resolve-choice="resolveLegalChoice"
@@ -1028,6 +1057,15 @@ const turnInfo = computed(() => {
           <span class="effect-text">{{ fx.text }}</span>
           <span v-if="fx.player != null" class="effect-player">P{{ fx.player }}</span>
         </div>
+      </div>
+      <div
+        v-if="extensionSurfaces.uiSuites?.decadeUi?.config?.eruda"
+        class="panel"
+        data-testid="decade-eruda-bar"
+      >
+        <span class="mono tiny">
+          [eruda 调试] rev={{ store.revision }} · mode={{ isOnline ? "online" : "local" }} · CSS={{ extensionSurfaces.uiSuites?.decadeUi?.activeCssSurfaces?.length ?? 0 }}/33
+        </span>
       </div>
     </section>
 
