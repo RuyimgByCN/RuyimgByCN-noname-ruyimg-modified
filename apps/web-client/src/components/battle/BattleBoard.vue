@@ -13,6 +13,7 @@ import HandStrip from "./HandStrip.vue";
 import TriggerOrderChoice from "./TriggerOrderChoice.vue";
 import BattleShoushaHud, { type BattleModalId } from "./BattleShoushaHud.vue";
 import DecadeTabletopOverlays from "./surfaces/DecadeTabletopOverlays.vue";
+import ShoushaCharDetailModal from "./surfaces/ShoushaCharDetailModal.vue";
 import type { ExtensionSurfacesSnapshot } from "../../engine/extensionSurfaceRuntime";
 import { renderCoinCanvasParticles } from "../../engine/extensionSurfaceRuntime";
 import {
@@ -23,11 +24,26 @@ import {
   createDefaultShoushaConfig,
   shoushaArenaDatasetAttrs,
 } from "../../engine/surfaces/shoushaConfigSchema";
-import { SHOUSHA_SAY_WORDS } from "../../engine/surfaces/shoushaSurfacesRuntime";
+import {
+  SHOUSHA_SAY_WORDS,
+  resolveActiveShoushaSurfaces,
+} from "../../engine/surfaces/shoushaSurfacesRuntime";
 import {
   dispatchShoushaUiHook,
   type ShoushaUiRuntimeState,
 } from "../../engine/surfaces/shoushaUiSurface";
+import {
+  createInitialL20RuntimeState,
+  l20ArenaDatasetAttrs,
+} from "../../engine/surfaces/l20MarkSupplementRuntime";
+import {
+  createDefaultQhlyConfig,
+  qhlyArenaDatasetAttrs,
+} from "../../engine/surfaces/qhlyConfigSchema";
+import {
+  dispatchQhlyUiHook,
+  type QhlyRuntimeState,
+} from "../../engine/surfaces/qhlySurface";
 import { DECADE_NOSKILL_CONTROL_IDS } from "../../engine/surfaces/decadeMarkSkillsData";
 import type { DecadeUiRuntimeState } from "../../engine/surfaces/decadeUiSurface";
 import { skillDisplayName } from "../../engine/appearanceStore";
@@ -65,6 +81,7 @@ const emit = defineEmits<{
   openModal: [modal: BattleModalId];
   "update:decadeUi": [next: DecadeUiRuntimeState];
   "update:shoushaUi": [next: ShoushaUiRuntimeState];
+  "update:qhlyUi": [next: QhlyRuntimeState];
   sortHand: [sortedIds: number[]];
   endPhase: [];
   resolveChoice: [action: ResolveChoiceAction];
@@ -157,7 +174,13 @@ function stopBgAnimation() {
   }
 }
 
+const isMobileViewport = ref(typeof window !== "undefined" && window.innerWidth < 768);
+function onWindowResize() {
+  isMobileViewport.value = typeof window !== "undefined" && window.innerWidth < 768;
+}
+
 onMounted(() => {
+  if (typeof window !== "undefined") window.addEventListener("resize", onWindowResize);
   if (props.surfaces?.coin?.snowFall || (props.surfaces?.coin?.activeEffects?.length ?? 0) > 0) {
     startWeatherAnimation();
   }
@@ -167,6 +190,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+  if (typeof window !== "undefined") window.removeEventListener("resize", onWindowResize);
   stopWeatherAnimation();
   stopBgAnimation();
 });
@@ -197,6 +221,16 @@ const decadeUiState = computed(() => props.surfaces?.uiSuites?.decadeUi);
 const decadeConfig = computed(() => decadeUiState.value?.config ?? createDefaultDecadeConfig());
 const shoushaUiState = computed(() => props.surfaces?.uiSuites?.shoushaUi);
 const shoushaConfig = computed(() => shoushaUiState.value?.config ?? createDefaultShoushaConfig());
+const l20UiState = computed(() => props.surfaces?.uiSuites?.l20Ui ?? createInitialL20RuntimeState());
+const qhlyUiState = computed(() => props.surfaces?.uiSuites?.qhly);
+const qhlyConfig = computed(() => qhlyUiState.value?.config ?? createDefaultQhlyConfig());
+const inspectedShoushaSeat = ref<SeatView | null>(null);
+const activeShoushaSurfacesList = computed(() =>
+  resolveActiveShoushaSurfaces(shoushaConfig.value, {
+    mobileViewport: isMobileViewport.value,
+    bossMode: Boolean(props.surfaces?.boss?.mode && props.surfaces.boss.stages.length > 0 && props.surfaces.theme?.rzshTheme === "illusion"),
+  }),
+);
 watch(
   () => decadeConfig.value.dynamicBackground,
   (mode) => {
@@ -215,9 +249,12 @@ const decadeModeCss = computed(() => {
 const decadeDatasetAttrs = computed(() => ({
   ...decadeArenaDatasetAttrs(decadeConfig.value),
   ...shoushaArenaDatasetAttrs(shoushaConfig.value),
+  ...qhlyArenaDatasetAttrs(qhlyConfig.value),
+  ...l20ArenaDatasetAttrs(l20UiState.value),
   "data-prestart": !props.view || props.view.round < 1 ? "on" : "off",
   "data-player-css": decadeUiState.value?.playerCssVariant ?? "player_new.css",
   "data-active-surfaces": (decadeUiState.value?.activeCssSurfaces ?? []).join(" "),
+  "data-shousha-active-surfaces": activeShoushaSurfacesList.value.join(" "),
   "data-jbddz": decadeConfig.value.JBDDZ ? "on" : "off",
   "data-decade-mode-css": decadeModeCss.value,
 }));
@@ -273,6 +310,23 @@ function onTriggerQuickSay() {
       sayText: word,
     }),
   );
+}
+
+function onCycleSeatQhlySkin(seat: SeatView) {
+  if (!qhlyUiState.value) return;
+  const gen = seat.generals?.[0]?.name ?? `seat_${seat.player}`;
+  let next = dispatchQhlyUiHook(qhlyUiState.value, {
+    hook: "_qhly_autoc",
+    seat: seat.player,
+    generalId: gen,
+  });
+  next = dispatchQhlyUiHook(next, {
+    hook: "_qhly_addButton",
+    seat: seat.player,
+    generalId: gen,
+    dragOffset: { leftPx: 8 + ((next.autoRotateCount * 4) % 24), topPx: 8 },
+  });
+  emit("update:qhlyUi", next);
 }
 
 function seats(): SeatView[] {
@@ -770,10 +824,14 @@ const endPhaseDisabled = computed(
             :decade-ui="surfaces?.uiSuites?.decadeUi"
             :decade-config="decadeConfig"
             :shousha-ui="shoushaUiState"
+            :l20-ui="l20UiState"
+            :qhly-ui="qhlyUiState"
             :skin-switch="surfaces?.uiSuites?.skinSwitch"
             :decade-style="surfaces?.theme?.decadeSkinStyle"
             :l20-marks="surfaces?.theme?.l20Marks"
             @select="onTargetSelect"
+            @open-detail="(s) => (inspectedShoushaSeat = s)"
+            @cycle-qhly-skin="onCycleSeatQhlySkin"
           />
         </div>
       </div>
@@ -804,6 +862,15 @@ const endPhaseDisabled = computed(
               <span class="banner-wing right">⚔</span>
             </div>
           </transition>
+
+          <div
+            v-if="l20UiState.activeBanner"
+            class="l20-kill-streak-banner"
+            :data-tier="l20UiState.activeBanner.tier"
+            data-testid="l20-active-banner"
+          >
+            ✦ {{ l20UiState.activeBanner.title }}
+          </div>
 
           <section v-if="discardCards().length > 0" class="discard-pile" aria-label="弃牌堆">
             <span class="muted discard-title">弃牌堆 · {{ discardCards().length }}</span>
@@ -933,6 +1000,13 @@ const endPhaseDisabled = computed(
             <span v-if="decadeConfig.JBDDZ" class="jbddz-mode-tag" data-testid="jbddz-mode-tag">
               {{ orderedSeats.length <= 3 ? "斗地主 (doudizhu.css)" : `军八 · ${orderedSeats.length}人场 (junba.css)` }}
             </span>
+            <span
+              v-if="shoushaConfig.yangshi === 'off'"
+              class="shousha-xpj-badge"
+              data-testid="shousha-xpj-badge"
+            >
+              配件·{{ shoushaConfig.XPJ === "on" ? "原版" : "新版" }}
+            </span>
             <span v-if="autoRunning" class="tuoguan-badge" data-testid="tuoguan-badge">🤖 托管中</span>
             <span class="hand-tip-text">{{ tabletopTipText }}</span>
             <button
@@ -1002,6 +1076,14 @@ const endPhaseDisabled = computed(
         />
       </div>
     </div>
+
+    <ShoushaCharDetailModal
+      v-if="inspectedShoushaSeat && shoushaUiState"
+      :seat="inspectedShoushaSeat"
+      :shousha-ui="shoushaUiState"
+      @close="inspectedShoushaSeat = null"
+      @update-shousha-ui="(next) => emit('update:shoushaUi', next)"
+    />
   </div>
 </template>
 

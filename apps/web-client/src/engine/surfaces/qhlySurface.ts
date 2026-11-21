@@ -7,6 +7,14 @@
  * - `archive/upstream/noname-liuli/noname/extension/千幻聆音/theme/newui*.css` (10 套主题样式表)
  */
 
+import {
+  createDefaultQhlyConfig,
+  loadPersistedQhlyConfig,
+  persistQhlyConfig,
+  validateQhlyConfigPatch,
+  type QhlyUiConfig,
+} from "./qhlyConfigSchema";
+
 export type QhlyUiHookId =
   | "_qhcreateYH"
   | "_qhlyChangeSkin"
@@ -200,9 +208,10 @@ export const QHLY_SKIN_SHARE_MAP: Readonly<
 };
 
 export interface QhlyRuntimeState {
+  config: QhlyUiConfig;
   activeStylesheet: QhlyStylesheetSurfaceId;
   detailModalOpen: boolean;
-  detailTab: "bio" | "skill" | "voice" | "winrate";
+  detailTab: "bio" | "skill" | "voice" | "winrate" | "config";
   inspectGeneralId: string;
   bgmFlag: boolean;
   activeBgmTrack: string | null;
@@ -216,11 +225,35 @@ export interface QhlyRuntimeState {
   replaceSkinByGeneral: Record<string, string>;
   autoRotateCount: number;
   randSkinSkipSelf: boolean;
+  notbbLastPlayedAtMs: Record<string, number>;
+  activePlugins: ReadonlyArray<string>;
+  lastOperationNotice: string | null;
 }
 
-export function createInitialQhlyRuntimeState(): QhlyRuntimeState {
+const VIEW_SKIN_TO_SHEET: Readonly<Record<string, QhlyStylesheetSurfaceId>> = {
+  shousha: "newui_ss.css",
+  decade: "newui_dc.css",
+  shuimo: "newui_shuimo.css",
+  lolbig: "newui_lolbig.css",
+  sanguo: "newui_sanguo.css",
+  sanguo2: "newui_sanguo2.css",
+  rq: "newui_rq.css",
+  sksn: "newui_sksn.css",
+  wz: "newui_wz.css",
+  newui: "newui.css",
+};
+
+export function createInitialQhlyRuntimeState(
+  opts?: { usePersistedConfig?: boolean },
+): QhlyRuntimeState {
+  const config = opts?.usePersistedConfig
+    ? loadPersistedQhlyConfig()
+    : createDefaultQhlyConfig();
   return {
-    activeStylesheet: "newui_dc.css",
+    config,
+    activeStylesheet: opts?.usePersistedConfig
+      ? (VIEW_SKIN_TO_SHEET[config.qhly_currentViewSkin] ?? "newui_dc.css")
+      : "newui_dc.css",
     detailModalOpen: false,
     detailTab: "voice",
     inspectGeneralId: "sb_caopi",
@@ -236,7 +269,149 @@ export function createInitialQhlyRuntimeState(): QhlyRuntimeState {
     replaceSkinByGeneral: { caocao: "origin", sb_caopi: "origin" },
     autoRotateCount: 0,
     randSkinSkipSelf: true,
+    notbbLastPlayedAtMs: {},
+    activePlugins: ["skinShare.js", "如真似幻兼容桥"],
+    lastOperationNotice: null,
   };
+}
+
+export function updateQhlyConfigInState(
+  state: QhlyRuntimeState,
+  patch: Partial<QhlyUiConfig>,
+  opts?: { persist?: boolean },
+): QhlyRuntimeState {
+  const { patch: validPatch } = validateQhlyConfigPatch(patch as Record<string, unknown>, {
+    strict: false,
+  });
+  const nextCfg: QhlyUiConfig = { ...state.config, ...validPatch };
+  if (opts?.persist !== false) persistQhlyConfig(nextCfg);
+  const mappedSheet =
+    patch.qhly_currentViewSkin !== undefined
+      ? (VIEW_SKIN_TO_SHEET[nextCfg.qhly_currentViewSkin] ?? state.activeStylesheet)
+      : state.activeStylesheet;
+  return {
+    ...state,
+    config: nextCfg,
+    activeStylesheet: mappedSheet,
+    enableCharacterMusic:
+      patch.qhly_enableCharacterMusic !== undefined
+        ? nextCfg.qhly_enableCharacterMusic
+        : state.enableCharacterMusic,
+    skinButtonEnabled:
+      patch.qhly_skinButton !== undefined
+        ? nextCfg.qhly_skinButton
+        : state.skinButtonEnabled,
+    dragSyncMode:
+      patch.qhly_dragButtonPosition !== undefined
+        ? (nextCfg.qhly_dragButtonPosition === "no" ? "no" : "sync")
+        : state.dragSyncMode,
+    randSkinSkipSelf:
+      patch.qhly_randskin_me !== undefined ? nextCfg.qhly_randskin_me : state.randSkinSkipSelf,
+  };
+}
+
+export function clearQhlySkinSettings(state: QhlyRuntimeState): QhlyRuntimeState {
+  const nextCfg: QhlyUiConfig = {
+    ...state.config,
+    skinAudioList: "{}",
+    audioReplace: "{}",
+    qhly_clear: true,
+  };
+  persistQhlyConfig(nextCfg);
+  return {
+    ...state,
+    config: nextCfg,
+    replaceSkinByGeneral: {},
+    notbbLastPlayedAtMs: {},
+    lastOperationNotice: "已清空本地千幻皮肤与语音覆盖设置",
+  };
+}
+
+export function restoreOfficialSkins(state: QhlyRuntimeState): QhlyRuntimeState {
+  const nextCfg: QhlyUiConfig = {
+    ...state.config,
+    qhly_restore: true,
+  };
+  persistQhlyConfig(nextCfg);
+  return {
+    ...state,
+    config: nextCfg,
+    replaceSkinByGeneral: { caocao: "origin", sb_caopi: "origin" },
+    lastOperationNotice: "已恢复官方默认皮肤映射",
+  };
+}
+
+export function canTriggerQhlyVoiceWithNotbb(
+  state: QhlyRuntimeState,
+  skillId: string,
+  generalId: string,
+  nowMs: number,
+): { allowed: boolean; nextState: QhlyRuntimeState } {
+  if (state.config.qhly_closeVoice) return { allowed: false, nextState: state };
+  const sec = Number.parseInt(state.config.qhly_notbb, 10);
+  if (!Number.isFinite(sec) || sec <= 0) {
+    return { allowed: true, nextState: state };
+  }
+  const bucketKey =
+    state.config.qhly_notbb_range === "all"
+      ? "__all__"
+      : state.config.qhly_notbb_range === "character"
+        ? `char:${generalId}`
+        : `skill:${generalId}:${skillId}`;
+  const prevMs = state.notbbLastPlayedAtMs[bucketKey] ?? -Infinity;
+  if (nowMs - prevMs < sec * 1000) {
+    return { allowed: false, nextState: state };
+  }
+  return {
+    allowed: true,
+    nextState: {
+      ...state,
+      notbbLastPlayedAtMs: { ...state.notbbLastPlayedAtMs, [bucketKey]: nowMs },
+    },
+  };
+}
+
+export function highlightSkillKeywords(
+  text: string,
+  enabled: boolean,
+): Array<{ text: string; color: string | null }> {
+  if (!enabled || !text) return [{ text, color: null }];
+  const rules: Array<[RegExp, string]> = [
+    [/锁定技|出牌阶段/g, "#60a5fa"],
+    [/限定技/g, "#fb923c"],
+    [/觉醒技/g, "#f87171"],
+    [/使命技/g, "#facc15"],
+  ];
+  const segments: Array<{ text: string; color: string | null }> = [{ text, color: null }];
+  let out = segments;
+  for (const [re, color] of rules) {
+    const next: Array<{ text: string; color: string | null }> = [];
+    for (const seg of out) {
+      if (seg.color) {
+        next.push(seg);
+        continue;
+      }
+      let lastIdx = 0;
+      for (const m of seg.text.matchAll(re)) {
+        const idx = m.index ?? 0;
+        if (idx > lastIdx) next.push({ text: seg.text.slice(lastIdx, idx), color: null });
+        next.push({ text: m[0], color });
+        lastIdx = idx + m[0].length;
+      }
+      if (lastIdx < seg.text.length) next.push({ text: seg.text.slice(lastIdx), color: null });
+    }
+    out = next;
+  }
+  return out;
+}
+
+export function resolveQhlyCharacterSubtitle(
+  cfg: Pick<QhlyUiConfig, "qhly_titlereplace">,
+  meta: { title: string; skinName: string; pkgName: string },
+): string {
+  if (cfg.qhly_titlereplace === "skin") return meta.skinName;
+  if (cfg.qhly_titlereplace === "pkg") return meta.pkgName;
+  return meta.title;
 }
 
 /**

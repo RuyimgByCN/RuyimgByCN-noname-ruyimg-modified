@@ -10,7 +10,18 @@ import {
   type ShoushaUiConfig,
 } from "./surfaces/shoushaConfigSchema";
 import { syncShoushaUiFromEnvelope } from "./surfaces/shoushaSurfacesRuntime";
-import { createInitialQhlyRuntimeState, dispatchQhlyUiHook } from "./surfaces/qhlySurface";
+import {
+  createInitialQhlyRuntimeState,
+  dispatchQhlyUiHook,
+  updateQhlyConfigInState,
+} from "./surfaces/qhlySurface";
+import { normalizeQhlyConfig, type QhlyUiConfig } from "./surfaces/qhlyConfigSchema";
+import {
+  createInitialL20RuntimeState,
+  syncL20MarkEffectsFromEnvelope,
+  type L20RuntimeState,
+  type L20UiConfig,
+} from "./surfaces/l20MarkSupplementRuntime";
 import {
   createInitialShoushaUiRuntimeState,
   dispatchShoushaUiHook,
@@ -210,6 +221,7 @@ export interface ExtensionUiSuitesState {
   decadeUi?: import("./surfaces/decadeUiSurface").DecadeUiRuntimeState;
   taixuUi?: import("./surfaces/taixuSurface").TaixuUiRuntimeState;
   zuanUi?: ZuanUiRuntimeState;
+  l20Ui?: L20RuntimeState;
 }
 
 export interface ExtensionSurfacesSnapshot {
@@ -959,6 +971,7 @@ export function createInitialExtensionSurfacesState(
       decadeUi: createInitialDecadeUiRuntimeState(),
       taixuUi: createInitialTaixuUiRuntimeState(),
       zuanUi: createInitialZuanUiRuntimeState(),
+      l20Ui: createInitialL20RuntimeState(),
     },
   };
 }
@@ -974,6 +987,7 @@ export function ingestBattleEnvelopeIntoSurfaces(
   let decadeUi = state.uiSuites?.decadeUi ?? createInitialDecadeUiRuntimeState();
   const taixuUi = state.uiSuites?.taixuUi ?? createInitialTaixuUiRuntimeState();
   let zuanUi = state.uiSuites?.zuanUi ?? createInitialZuanUiRuntimeState();
+  let l20Ui = state.uiSuites?.l20Ui ?? createInitialL20RuntimeState();
 
   let next: ExtensionSurfacesSnapshot = {
     ...state,
@@ -1093,6 +1107,7 @@ export function ingestBattleEnvelopeIntoSurfaces(
   decadeUi = syncDecadeUiFromEnvelope(decadeUi, env);
   decadeUi = syncGuanXingChoice(decadeUi, env);
   shoushaUi = syncShoushaUiFromEnvelope(shoushaUi, env);
+  l20Ui = syncL20MarkEffectsFromEnvelope(l20Ui, env);
 
   next = {
     ...next,
@@ -1103,6 +1118,7 @@ export function ingestBattleEnvelopeIntoSurfaces(
       decadeUi,
       taixuUi,
       zuanUi,
+      l20Ui,
     },
   };
 
@@ -1245,7 +1261,75 @@ export function deserializeExtensionSurfacesSnapshot(raw: string): ExtensionSurf
       },
     };
   }
+  if (snap.uiSuites?.qhly) {
+    const baseQhly = createInitialQhlyRuntimeState();
+    const rawQhly = snap.uiSuites.qhly;
+    snap.uiSuites = {
+      ...snap.uiSuites,
+      qhly: {
+        ...baseQhly,
+        ...rawQhly,
+        config: normalizeQhlyConfig(rawQhly.config),
+      },
+    };
+  }
+  if (snap.uiSuites?.l20Ui) {
+    const baseL20 = createInitialL20RuntimeState();
+    snap.uiSuites = {
+      ...snap.uiSuites,
+      l20Ui: {
+        ...baseL20,
+        ...snap.uiSuites.l20Ui,
+        configs: { ...baseL20.configs, ...(snap.uiSuites.l20Ui.configs ?? {}) },
+      },
+    };
+  }
   return snap;
+}
+
+/** 原子更新 L09 千幻聆音 全部 82 项配置 */
+export function updateExtensionQhlyConfig(
+  state: ExtensionSurfacesSnapshot,
+  patch: Partial<QhlyUiConfig>,
+  opts?: { persist?: boolean; syncTheme?: boolean },
+): ExtensionSurfacesSnapshot {
+  const prevQhly = state.uiSuites?.qhly ?? createInitialQhlyRuntimeState();
+  const nextQhly = updateQhlyConfigInState(prevQhly, patch, opts);
+  const nextTheme = { ...state.theme };
+  if (opts?.syncTheme !== false && patch.qhly_currentViewSkin !== undefined) {
+    nextTheme.qhlyTheme =
+      nextQhly.config.qhly_currentViewSkin === "decade"
+        ? "decade"
+        : nextQhly.config.qhly_currentViewSkin === "shousha"
+          ? "shousha"
+          : "classic";
+  }
+  return {
+    ...state,
+    theme: nextTheme,
+    uiSuites: {
+      ...state.uiSuites,
+      qhly: nextQhly,
+    },
+  };
+}
+
+/** 原子更新 L20 标记补充 15 项配置 */
+export function updateExtensionL20Config(
+  state: ExtensionSurfacesSnapshot,
+  patch: Partial<L20UiConfig>,
+): ExtensionSurfacesSnapshot {
+  const prevL20 = state.uiSuites?.l20Ui ?? createInitialL20RuntimeState();
+  return {
+    ...state,
+    uiSuites: {
+      ...state.uiSuites,
+      l20Ui: {
+        ...prevL20,
+        configs: { ...prevL20.configs, ...patch },
+      },
+    },
+  };
 }
 
 /** 原子更新 L14 手杀ui 全部 48 项配置并联动 `theme` 字段 */
@@ -1629,6 +1713,8 @@ export * from "./surfaces/decadeHooksRuntime";
 export * from "./surfaces/decadeMarkSkillsData";
 export * from "./surfaces/decadeSurfacesRuntime";
 export * from "./surfaces/decadeUiSurface";
+export * from "./surfaces/l20MarkSupplementRuntime";
+export * from "./surfaces/qhlyConfigSchema";
 export * from "./surfaces/qhlySurface";
 export * from "./surfaces/shoushaConfigSchema";
 export * from "./surfaces/shoushaSurfacesRuntime";

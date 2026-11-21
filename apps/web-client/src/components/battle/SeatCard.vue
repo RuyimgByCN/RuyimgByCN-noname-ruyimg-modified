@@ -13,6 +13,8 @@ import {
   resolveDecadeSeatBorderTier,
 } from "../../engine/surfaces/decadeHooksRuntime";
 import type { DecadeUiRuntimeState } from "../../engine/surfaces/decadeUiSurface";
+import type { L20RuntimeState } from "../../engine/surfaces/l20MarkSupplementRuntime";
+import type { QhlyRuntimeState } from "../../engine/surfaces/qhlySurface";
 import { resolveShoushaGuanjie } from "../../engine/surfaces/shoushaSurfacesRuntime";
 import type { ShoushaUiRuntimeState } from "../../engine/surfaces/shoushaUiSurface";
 import type { SkinSwitchRuntimeState } from "../../engine/surfaces/skinSwitchSurface";
@@ -35,6 +37,8 @@ const props = defineProps<{
   decadeUi?: DecadeUiRuntimeState;
   decadeConfig?: DecadeUiConfig;
   shoushaUi?: ShoushaUiRuntimeState;
+  l20Ui?: L20RuntimeState;
+  qhlyUi?: QhlyRuntimeState;
   skinSwitch?: SkinSwitchRuntimeState;
   decadeStyle?: string;
   l20Marks?: Record<string, number>;
@@ -42,6 +46,8 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   select: [playerId: number];
+  openDetail: [seat: SeatView];
+  cycleQhlySkin: [seat: SeatView];
 }>();
 
 const slots = computed(() => props.seat.generals ?? [null, null]);
@@ -71,6 +77,26 @@ const seatSayBubble = computed(
 const seatPauseGuess = computed(() =>
   !props.seat.identity ? (props.decadeUi?.pauseGuessBySeat?.[props.seat.player] ?? null) : null,
 );
+const isL20PlayerJiu = computed(() => props.l20Ui?.jiuAuraSeats?.includes(props.seat.player) ?? false);
+const l20GroupHalo = computed(() => props.l20Ui?.guozhanFormationsBySeat?.[props.seat.player] ?? null);
+const l20WeaponStrike = computed(() => props.l20Ui?.weaponStrikeBySeat?.[props.seat.player] ?? null);
+const l20BaojiLabel = computed(() => props.l20Ui?.baojiPopupBySeat?.[props.seat.player] ?? null);
+const l20CardFx = computed(() => props.l20Ui?.cardFxCueBySeat?.[props.seat.player] ?? null);
+const l20RankSweep = computed(() => (props.l20Ui?.rankSweepBySeat?.[props.seat.player] ?? 0) > 0);
+const qhlySkinBtnVisible = computed(() => Boolean(props.qhlyUi?.config?.qhly_skinButton));
+const qhlySkinBtnPos = computed(() => {
+  const gen = props.seat.generals?.[0]?.name ?? `seat_${props.seat.player}`;
+  const skin = props.qhlyUi?.replaceSkinByGeneral?.[gen] ?? "origin";
+  const key = `qhly_dragButtonPositionOf_${gen}_${skin}`;
+  const pos =
+    props.qhlyUi?.config?.qhly_dragButtonPosition === "no"
+      ? (props.qhlyUi?.dragButtonPositionByKey?.[key] ?? props.qhlyUi?.dragButtonPositionAll)
+      : props.qhlyUi?.dragButtonPositionAll;
+  return {
+    left: `${pos?.leftPx ?? 6}px`,
+    top: `${pos?.topPx ?? 6}px`,
+  };
+});
 const decadeBadges = computed(() => props.decadeUi?.activeMarkBadgesBySeat[props.seat.player] ?? []);
 const hasJiuBuff = computed(() => props.decadeUi?.jiuBuffSeats.includes(props.seat.player) ?? false);
 const isChained = computed(() => Boolean(props.seat.linked));
@@ -242,7 +268,11 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
       'has-faction-glow': Boolean(factionGlow),
       'is-hidden-veil': isHiddenVeil,
       'equip-muted': isEquipMuted,
+      'has-l20-playerjiu': isL20PlayerJiu,
+      'has-l20-guozhan-halo': Boolean(l20GroupHalo),
+      'has-l20-rank-sweep': l20RankSweep,
     }"
+    :data-l20-group="l20GroupHalo ?? undefined"
     :data-decade-style="decadeStyle ?? decadeUi?.layoutVariant ?? 'shizhounian'"
     :data-position="relativePosition ?? (self ? 0 : seat.seat)"
     :data-border-level="seatBorderTier"
@@ -348,7 +378,18 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
           <div class="seat-tags">
             <span v-if="self" class="tag self-tag">你</span>
             <span v-if="effectiveConfig?.JBDDZ" class="tag jbddz-seat-num" data-testid="seat-jbddz-num">[{{ seat.seat + 1 }}号]</span>
-            <span class="shousha-guanjie-badge" data-testid="seat-guanjie-badge">{{ seatGuanjie.label }}</span>
+            <button
+              type="button"
+              class="shousha-guanjie-badge"
+              data-testid="seat-guanjie-badge"
+              title="点击查看手杀武将详情与ZLLT露头"
+              @click.stop="emit('openDetail', seat)"
+            >
+              {{ seatGuanjie.label }}
+            </button>
+            <span v-if="l20BaojiLabel" class="seat-l20-baoji-popup" data-testid="seat-l20-baoji">{{ l20BaojiLabel }}</span>
+            <span v-if="l20WeaponStrike && l20WeaponStrike !== 'no'" class="seat-l20-weapon-badge" data-testid="seat-l20-weapon">⚔{{ l20WeaponStrike }}</span>
+            <span v-if="l20CardFx" class="seat-l20-card-fx" data-testid="seat-l20-card-fx">{{ l20CardFx }}</span>
             <span v-if="seatPauseGuess" class="seat-pause-guess-pill" data-testid="seat-pause-guess-pill">猜:{{ seatPauseGuess }}</span>
             <span v-if="seatPromptText" class="seat-prompt-pill" data-testid="seat-prompt-pill">{{ seatPromptText }}</span>
             <span v-if="currentTurn" class="tag turn-tag">回合</span>
@@ -432,6 +473,16 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
         </div>
         <span v-else v-show="isNodeEnabled('equips')" class="seat-node-anchor" data-node-key="equips" aria-hidden="true"></span>
 
+        <button
+          v-if="qhlySkinBtnVisible"
+          type="button"
+          class="seat-qhly-skin-btn"
+          :style="qhlySkinBtnPos"
+          data-testid="btn-seat-qhly-skin"
+          @click.stop="emit('cycleQhlySkin', seat)"
+        >
+          换肤
+        </button>
         <div v-if="seatSayBubble" class="seat-say-bubble" data-testid="seat-say-bubble">
           💬 {{ seatSayBubble }}
         </div>

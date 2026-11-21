@@ -61,6 +61,15 @@ function onUpdateShoushaConfig(patch: Partial<ShoushaUiConfig>) {
 function onResetShoushaConfig() {
   onUpdateShoushaConfig(createDefaultShoushaConfig());
 }
+
+function onUpdateQhlyState(qhly: NonNullable<NonNullable<ExtensionSurfacesSnapshot["uiSuites"]>["qhly"]>) {
+  const next: ExtensionSurfacesSnapshot = {
+    ...latestSurfaces.value,
+    uiSuites: { ...latestSurfaces.value.uiSuites, qhly },
+  };
+  latestSurfaces.value = next;
+  emit("update:surfaces", next);
+}
 </script>
 
 <template>
@@ -68,13 +77,7 @@ function onResetShoushaConfig() {
     v-if="activeModal === 'qhly'"
     :state="surfaces.uiSuites?.qhly"
     @close="emit('close')"
-    @update="
-      (qhly) =>
-        emit('update:surfaces', {
-          ...props.surfaces,
-          uiSuites: { ...props.surfaces.uiSuites, qhly },
-        })
-    "
+    @update="onUpdateQhlyState"
   />
   <SkinSwitchModal
     v-else-if="activeModal === 'skinswitch'"

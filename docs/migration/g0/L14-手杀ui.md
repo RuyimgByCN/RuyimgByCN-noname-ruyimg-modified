@@ -1,5 +1,13 @@
 # G0 · L14 手杀ui
 
+### 2026-11-22 Batch UI-5（终 33 项升级 → 141/141）合入补充（待提交／发布）
+
+- 基线 HEAD `586b51cdc8124ab37c92f1015ce562157f911df9`；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。合入 `swarm/conv-ui` Batch UI-5（`77fd897113caa394c2f5cfdde82d51d4ece75c00`，`verifier-ui` #77 **`APPROVE`**）：闭环剩余 **33 项**（`9` 配置 `GTBBTime`/`XPJ`/`ZLLT`/`charactermenu`/`jindutiaoST`/`jindutiaotuoguan`/`qiDongYe`/`xindchoose_type`/`xindmenu` + `1` 钩子 `ZLLT` + `23` 变体表面），全源达 **`141 / 0 / 0`**（100% 单项等价；非整包签署）。详见 [Batch UI-5 证据摘要](../../operations/evidence/2026-11-21-ui-l14-l20-l09/README.md) 与 [inventory_status.json](inventory_status.json)。
+
+| 日期来源快照 | 已复核等价 | 简化近似 | 缺失 |
+| --- | ---: | ---: | ---: |
+| 2026-11-22 Batch UI-5 L14 | 141 | 0 | 0 |
+
 > 核验日期：2026-11-11 · 来源仓：`noname-liuli` · 入口：`archive/upstream/noname-liuli/noname/extension/手杀ui`  
 > 本页为 E01/G0 深度清单与**裁决 34 逐项上游清单**（武将 / 技能 / 卡牌 / 模式与战役节点 / 配置项 / 界面钩子 / 渲染面 / 现有 `decision34*` 归类）。非整包验收证明。
 

@@ -65,15 +65,128 @@
 }
 
 /* card/main*.css & lbtn/main*.css: 手杀样式(yangshi=on) vs 十周年样式(yangshi=off) */
-.battle-table[data-shousha-yangshi="on"] .hand-card {
+.battle-table[data-shousha-yangshi="on"] .hand-card,
+.battle-table[data-shousha-yangshi="on"] .strip .card,
+.battle-table[data-shousha-active-surfaces~="card/main1.css"] .strip .card {
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.55), inset 0 0 0 1px rgba(245, 158, 11, 0.35);
 }
-.battle-table[data-shousha-yangshi="off"] .hand-card {
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.55), inset 0 0 0 1px rgba(52, 211, 153, 0.42);
+.battle-table[data-shousha-yangshi="off"] .hand-card,
+.battle-table[data-shousha-yangshi="off"] .strip .card,
+.battle-table[data-shousha-active-surfaces~="card/main2.css"] .strip .card {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.55), inset 0 0 0 1px rgba(52, 211, 153, 0.46);
+}
+.battle-table[data-shousha-active-surfaces~="card/main1_pc.css"] .strip .card {
+  border-radius: 8px;
+}
+.battle-table[data-shousha-active-surfaces~="card/main1_mobile.css"] .strip .card {
+  border-radius: 6px;
+}
+
+.shousha-xpj-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.08rem 0.38rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid #38bdf8;
+  color: #bae6fd;
 }
 .battle-table[data-shousha-xpj="on"] .shousha-xpj-badge {
   border-color: #fbbf24;
+  background: rgba(120, 53, 15, 0.85);
   color: #fef08a;
+}
+
+/* xindmenu & menu: xindmenu=shizhounian|shousha|off */
+.battle-table[data-shousha-xindmenu="shizhounian"] .battle-shousha-hud {
+  border-color: rgba(52, 211, 153, 0.52);
+}
+.battle-table[data-shousha-xindmenu="shousha"] .battle-shousha-hud {
+  border-color: rgba(245, 158, 11, 0.52);
+}
+.battle-table[data-shousha-xindmenu="off"] .battle-shousha-hud {
+  border-color: rgba(148, 163, 184, 0.35);
+}
+
+/* skill/main1*.css & skill/main2*.css */
+.battle-table[data-shousha-active-surfaces~="skill/main1_window.css"] .decade-skill-btn {
+  border-color: rgba(251, 191, 36, 0.62);
+}
+.battle-table[data-shousha-active-surfaces~="skill/main2.css"] .decade-skill-btn,
+.battle-table[data-shousha-active-surfaces~="skill/main2_window.css"] .decade-skill-btn {
+  border-color: rgba(52, 211, 153, 0.62);
+  background: rgba(6, 78, 59, 0.55);
+}
+
+/* lbtn/main1_boss.css, main1_window.css, main2.css, main2_window.css */
+.battle-table[data-shousha-active-surfaces~="lbtn/main1_boss.css"] .end-phase-btn,
+.battle-table[data-shousha-active-surfaces~="style_boss.css"] .end-phase-btn {
+  border-color: #f87171;
+  background: linear-gradient(180deg, #991b1b, #450a0a);
+}
+.battle-table[data-shousha-active-surfaces~="lbtn/main1_window.css"] .hand-tip-bar {
+  border: 1px solid rgba(251, 191, 36, 0.22);
+}
+.battle-table[data-shousha-active-surfaces~="lbtn/main2.css"] .hand-tip-bar,
+.battle-table[data-shousha-active-surfaces~="lbtn/main2_window.css"] .hand-tip-bar {
+  border: 1px solid rgba(52, 211, 153, 0.35);
+}
+
+/* qidongye/layout_old.css, layout_new.css, layout_xbig.css */
+.battle-table[data-shousha-qidongye="on"] .tabletop-center-zone,
+.battle-table[data-shousha-active-surfaces~="qidongye/layout_old.css"] .tabletop-center-zone {
+  box-shadow: inset 0 0 24px rgba(245, 158, 11, 0.14);
+}
+.battle-table[data-shousha-qidongye="othersOn"] .tabletop-center-zone,
+.battle-table[data-shousha-active-surfaces~="qidongye/layout_new.css"] .tabletop-center-zone {
+  border-radius: 16px;
+}
+.battle-table[data-shousha-qidongye="othersTwo"] .tabletop-center-zone,
+.battle-table[data-shousha-active-surfaces~="qidongye/layout_xbig.css"] .tabletop-center-zone {
+  box-shadow: inset 0 0 32px rgba(56, 189, 248, 0.18);
+}
+
+/* character/main1_new.css, main1_old.css, main2.css & charactermenu */
+.battle-table[data-shousha-active-surfaces~="character/main1_new.css"] .shousha-guanjie-badge,
+.shousha-char-detail-card[data-charactermenu="new"] {
+  border-color: #fbbf24;
+}
+.battle-table[data-shousha-active-surfaces~="character/main1_old.css"] .shousha-guanjie-badge,
+.shousha-char-detail-card[data-charactermenu="old"] {
+  border-color: #cbd5e1;
+  background: linear-gradient(135deg, #27221c, #14110e);
+}
+.battle-table[data-shousha-active-surfaces~="character/main2.css"] .shousha-guanjie-badge {
+  border-color: #34d399;
+  background: rgba(6, 78, 59, 0.85);
+}
+
+.shousha-char-detail-card[data-zllt-outcrop="on"] .shousha-detail-portrait-img {
+  object-position: 50% 10%;
+  transform: scale(1.14);
+}
+.shousha-char-detail-card[data-zllt-outcrop="off"] .shousha-detail-portrait-img {
+  object-position: 50% 50%;
+  transform: scale(1);
+}
+
+.shousha-tuoguan-indicator {
+  padding: 0.08rem 0.36rem;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: rgba(153, 27, 27, 0.9);
+  border: 1px solid #f87171;
+  color: #fee2e2;
+}
+
+@media (max-width: 767px) {
+  .shousha-xpj-badge,
+  .shousha-tuoguan-indicator {
+    display: none;
+  }
 }
 
 /* KGMH/kaiguan.css & kaiguan_new.css: 开关美化样式 */
@@ -112,7 +225,7 @@
   border-color: #f59e0b;
 }
 
-/* style*.css & dialog/main1.css: xindchoose / xindsingle / xinddraw 选将美化 */
+/* style*.css & dialog/main1.css: xindchoose / xindchoose_type / xindsingle / xinddraw 选将美化 */
 .general-select[data-shousha-choose="shousha"] {
   border-color: rgba(245, 158, 11, 0.72);
   box-shadow: 0 10px 30px rgba(120, 53, 15, 0.45);
@@ -120,6 +233,18 @@
 .general-select[data-shousha-choose="shizhounian"] {
   border-color: rgba(52, 211, 153, 0.72);
   box-shadow: 0 10px 30px rgba(6, 78, 59, 0.45);
+}
+.general-select[data-shousha-choose="off"] {
+  border-color: rgba(148, 163, 184, 0.4);
+  box-shadow: none;
+}
+.general-select[data-shousha-choose-type="old"] {
+  border-radius: 4px;
+  border-style: double;
+  border-width: 3px;
+}
+.general-select[data-shousha-choose-type="new"] {
+  border-radius: 12px;
 }
 .general-select[data-shousha-single-row="on"] .gs-grid {
   display: flex;
@@ -150,9 +275,12 @@
   border-radius: 3px;
   font-size: 0.62rem;
   font-weight: 700;
+  font-family: inherit;
+  line-height: 1.1;
   background: rgba(120, 53, 15, 0.78);
   border: 1px solid rgba(251, 191, 36, 0.52);
   color: #fde68a;
+  cursor: pointer;
 }
 
 .seat-say-bubble {

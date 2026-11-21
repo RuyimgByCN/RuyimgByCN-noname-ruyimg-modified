@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, onUnmounted, ref, watch } from "vue";
 import type { ObserverSnapshot } from "../../types/engine";
 import type { ExtensionSurfacesSnapshot } from "../../engine/extensionSurfaceRuntime";
 import { createDefaultShoushaConfig } from "../../engine/surfaces/shoushaConfigSchema";
@@ -27,8 +27,55 @@ const shoushaConfig = computed(
   () => props.surfaces?.uiSuites?.shoushaUi?.config ?? createDefaultShoushaConfig(),
 );
 
+const gtbbIndexOffset = ref(0);
+const liveTickShift = ref(0);
+let stTimer: number | null = null;
+let gtbbTimer: number | null = null;
+
+function stopTimers() {
+  if (stTimer != null) {
+    clearInterval(stTimer);
+    stTimer = null;
+  }
+  if (gtbbTimer != null) {
+    clearInterval(gtbbTimer);
+    gtbbTimer = null;
+  }
+}
+
+function syncTimers() {
+  stopTimers();
+  if (shoushaConfig.value.jindutiao && shoushaConfig.value.jindutiaotuoguan) {
+    const rawMs = Number.parseInt(shoushaConfig.value.jindutiaoST || "200", 10) || 200;
+    const ms = Math.max(80, Math.min(2000, rawMs));
+    stTimer = window.setInterval(() => {
+      if (liveTickShift.value < 100) liveTickShift.value += 2;
+    }, ms);
+  }
+  if (shoushaConfig.value.GTBB) {
+    const rawGtbb = Number.parseInt(shoushaConfig.value.GTBBTime || "60000", 10);
+    const ms = Number.isFinite(rawGtbb) ? Math.max(5000, rawGtbb) : 45000;
+    gtbbTimer = window.setInterval(() => {
+      gtbbIndexOffset.value++;
+    }, ms);
+  }
+}
+
+watch(
+  () => [props.view?.revision, props.view?.phase],
+  () => {
+    liveTickShift.value = 0;
+  },
+);
+watch(
+  () => [shoushaConfig.value.jindutiao, shoushaConfig.value.jindutiaotuoguan, shoushaConfig.value.jindutiaoST, shoushaConfig.value.GTBB, shoushaConfig.value.GTBBTime],
+  () => syncTimers(),
+  { immediate: true },
+);
+onUnmounted(() => stopTimers());
+
 const gtbbBannerText = computed(() =>
-  resolveShoushaGtbbBanner(shoushaConfig.value, props.view?.round ?? 0),
+  resolveShoushaGtbbBanner(shoushaConfig.value, (props.view?.round ?? 0) + gtbbIndexOffset.value),
 );
 
 const jindutiaoTrackHeightPx = computed(() => {
@@ -58,9 +105,14 @@ const phaseZh = computed(() => {
 });
 
 const countdownPct = computed(() => {
-  const raw = props.surfaces?.theme?.shoushaCountdownPct ?? 78;
+  const base = props.surfaces?.theme?.shoushaCountdownPct ?? 78;
+  const raw = shoushaConfig.value.jindutiaotuoguan ? base - liveTickShift.value : base;
   return Math.max(0, Math.min(100, Math.round(raw)));
 });
+
+const tuoguanTriggered = computed(
+  () => shoushaConfig.value.jindutiaotuoguan && countdownPct.value === 0,
+);
 
 const jiangdengTier = computed(() => {
   const alive = props.view?.seats.filter((s) => s.alive).length ?? 0;
@@ -106,9 +158,17 @@ const rzshCrest = computed(() => {
       <span
         v-if="gtbbBannerText"
         class="shousha-gtbb-banner"
+        :data-gtbb-interval="shoushaConfig.GTBBTime"
         data-testid="shousha-gtbb-banner"
       >
         📢 {{ gtbbBannerText }}
+      </span>
+      <span
+        v-if="tuoguanTriggered"
+        class="shousha-tuoguan-indicator"
+        data-testid="shousha-tuoguan-indicator"
+      >
+        ⏱ 读秒托管触发
       </span>
     </div>
 

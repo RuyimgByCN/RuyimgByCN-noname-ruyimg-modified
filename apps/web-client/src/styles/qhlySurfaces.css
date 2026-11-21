@@ -1,0 +1,115 @@
+/**
+ * L09 千幻聆音 12 套渲染面与 82 项配置实时 CSS 样式表
+ * 对照 `archive/upstream/noname-liuli/noname/extension/千幻聆音/{extension.css, theme/newui*.css}`
+ */
+
+.qhly-modal-card {
+  font-size: calc(13px * var(--qhly-font-scale, 1));
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.qhly-modal-card[data-qhly-fontsize="1"] { --qhly-font-scale: 0.78; }
+.qhly-modal-card[data-qhly-fontsize="2"] { --qhly-font-scale: 0.84; }
+.qhly-modal-card[data-qhly-fontsize="3"] { --qhly-font-scale: 0.9; }
+.qhly-modal-card[data-qhly-fontsize="4"] { --qhly-font-scale: 0.95; }
+.qhly-modal-card[data-qhly-fontsize="5"] { --qhly-font-scale: 1; }
+.qhly-modal-card[data-qhly-fontsize="6"] { --qhly-font-scale: 1.06; }
+.qhly-modal-card[data-qhly-fontsize="7"] { --qhly-font-scale: 1.12; }
+.qhly-modal-card[data-qhly-fontsize="8"] { --qhly-font-scale: 1.18; }
+.qhly-modal-card[data-qhly-fontsize="9"] { --qhly-font-scale: 1.25; }
+
+.qhly-modal-card[data-qhly-fit-x="on"] {
+  width: min(1040px, 98vw);
+}
+.qhly-modal-card[data-qhly-fit-y="on"] {
+  min-height: 76vh;
+}
+.qhly-modal-card[data-qhly-v-middle="on"][data-qhly-sheet="newui_shuimo.css"] .qhly-detail-bio,
+.qhly-modal-card[data-qhly-v-middle="on"][data-qhly-sheet="newui_lolbig.css"] .qhly-detail-bio {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+/* 全部 12 份 L09 表面样式差异化消费 */
+.qhly-modal-card[data-qhly-sheet="skinShare"] {
+  background: linear-gradient(135deg, #1b2434, #101723);
+  border-color: #60a5fa;
+}
+.qhly-modal-card[data-qhly-sheet="extension.css"] {
+  background: linear-gradient(135deg, #231f1a, #141210);
+  border-color: #e2b86b;
+}
+.qhly-modal-card[data-qhly-sheet="newui.css"] {
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  border-color: #38bdf8;
+}
+.qhly-modal-card[data-qhly-sheet="newui_dc.css"] {
+  background: linear-gradient(135deg, #2d2115, #17100a);
+  border-color: #f59e0b;
+}
+.qhly-modal-card[data-qhly-sheet="newui_lolbig.css"] {
+  background: linear-gradient(135deg, #0a2229, #06131a);
+  border-color: #2dd4bf;
+  line-height: calc(var(--qhly-lol-lh, 250) * 0.58%);
+}
+.qhly-modal-card[data-qhly-sheet="newui_rq.css"] {
+  background: linear-gradient(135deg, #321616, #190a0a);
+  border-color: #f87171;
+}
+.qhly-modal-card[data-qhly-sheet="newui_sanguo.css"] {
+  background: linear-gradient(135deg, #2b261d, #18150f);
+  border-color: #d6b981;
+}
+.qhly-modal-card[data-qhly-sheet="newui_sanguo2.css"] {
+  background: linear-gradient(135deg, #26231f, #141210);
+  border-color: #eab308;
+}
+.qhly-modal-card[data-qhly-sheet="newui_shuimo.css"] {
+  background: linear-gradient(135deg, #27272a, #111113);
+  border-color: #e4e4e7;
+  line-height: calc(var(--qhly-shuimo-lh, 250) * 0.58%);
+}
+.qhly-modal-card[data-qhly-sheet="newui_sksn.css"] {
+  background: linear-gradient(135deg, #2e1936, #160b1c);
+  border-color: #e879f9;
+}
+.qhly-modal-card[data-qhly-sheet="newui_ss.css"] {
+  background: linear-gradient(135deg, #291d14, #140e09);
+  border-color: #fbbf24;
+}
+.qhly-modal-card[data-qhly-sheet="newui_wz.css"] {
+  background: linear-gradient(135deg, #172554, #0b1120);
+  border-color: #60a5fa;
+}
+
+.qhly-modal-card[data-qhly-shuimo-cover="hidden"] .qhly-ink-veil {
+  display: none;
+}
+
+.qhly-preview-box[data-qhly-lvjing="on"] .qhly-preview-avatar {
+  filter: blur(0.35px) saturate(1.1);
+}
+.qhly-preview-box[data-qhly-lutou="on"] .qhly-preview-avatar {
+  object-position: 50% 10%;
+  transform: scale(1.12);
+}
+
+/* 牌桌千幻头像浮动换肤按钮 (`_qhly_addButton` & `qhly_skinButton`) */
+.seat-qhly-skin-btn {
+  position: absolute;
+  z-index: 19;
+  padding: 0.08rem 0.28rem;
+  border-radius: 999px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(56, 189, 248, 0.72);
+  color: #e0f2fe;
+  cursor: pointer;
+}
+.seat-qhly-skin-btn:hover {
+  background: rgba(30, 58, 138, 0.95);
+  border-color: #fde047;
+}

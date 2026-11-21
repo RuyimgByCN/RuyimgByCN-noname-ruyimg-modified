@@ -79,12 +79,16 @@ export function resolveActiveShoushaSurfaces(
   if (isShousha) {
     active.add("lbtn/main1.js");
     active.add("skill/main1.js");
-    active.add(
-      cfg.charactermenu === "old" ? "character/main1.js" : "character/main1_new.js",
-    );
-    active.add(
-      cfg.charactermenu === "old" ? "character/main1_old.css" : "character/main1_new.css",
-    );
+    if (cfg.charactermenu !== "none") {
+      active.add(
+        cfg.charactermenu === "old" ? "character/main1.js" : "character/main1_new.js",
+      );
+      active.add(
+        cfg.charactermenu === "old" ? "character/main1_old.css" : "character/main1_new.css",
+      );
+    } else {
+      active.add("character/main1.js");
+    }
     active.add("character/main1.css");
     active.add(opts?.bossMode ? "lbtn/main1_boss.css" : mobile ? "lbtn/main1.css" : "lbtn/main1_window.css");
     active.add(mobile ? "skill/main1.css" : "skill/main1_window.css");
@@ -105,9 +109,15 @@ export function resolveActiveShoushaSurfaces(
   else if (cfg.yangshi_bg === "2" || cfg.yangshi_bg === "3") active.add("menu3.css");
   else active.add("menu.css");
 
-  if (cfg.qiDongYe === "on") active.add("qidongye/layout_new.css");
-  else if (cfg.qiDongYe === "othersTwo") active.add("qidongye/layout_old.css");
-  else active.add("qidongye/layout_xbig.css");
+  // extension.js:168-177 exact qiDongYe mapping: on->layout_old, othersOn->layout_new, othersTwo->layout_new+layout_xbig
+  if (cfg.qiDongYe === "on") {
+    active.add("qidongye/layout_old.css");
+  } else if (cfg.qiDongYe === "othersOn") {
+    active.add("qidongye/layout_new.css");
+  } else if (cfg.qiDongYe === "othersTwo") {
+    active.add("qidongye/layout_new.css");
+    active.add("qidongye/layout_xbig.css");
+  }
 
   if (opts?.bossMode) active.add("style_boss.css");
   else if (cfg.xindchoose === "shizhounian") active.add("style2.css");

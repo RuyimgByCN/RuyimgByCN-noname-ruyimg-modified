@@ -1,5 +1,9 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+## 2026-11-22 Batch UI-5（L14 终 33 项、L20 27 项与 L09 58 项共 +118）合入（待提交／发布）
+
+基线 HEAD `586b51cdc8124ab37c92f1015ce562157f911df9`（Batch 1.6a CI Run `44938308161` Attempt 1 `10/10 success` 已并入 `ci-runs.md`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `verifier-ui` 复核通过（#77 **`APPROVE`**）的 `swarm/conv-ui` `77fd897113caa394c2f5cfdde82d51d4ece75c00`：补齐 `L14` 终 33 项（`qiDongYe`、`ZLLT`、`XPJ`、托管及 23 变体表面）与 `L20`/`L09` 洁净室消费，在 `main` 全量通过 `--workspace`（`7,948/0/8`）、4 crate（`2,600/0/6`）、514 前端单测、83/83 烟测及 7 套 Chrome CDP 验证。按 #77 升级 **118 项**：`L14` 升为 **141／0／0**（100% 单项等价）；`L20` 升级 27 项（3 表面＋24 `ui_hooks`）并保留 10 无 DOM 消费 `ui_hooks` 与 3 技能为 `简化近似`（**82／13／0**）；`L09` 升级 58 项（12 表面＋8 钩子＋38 配置）并保留 44 未消费配置为 `简化近似`（**58／44／0**），全仓清单更新为 **已复核等价 1,304／简化近似 3,120／缺失 0**（整包八项 `0/37`）。见 [Batch UI-5 证据](../operations/evidence/2026-11-21-ui-l14-l20-l09/README.md) 与 [进度主稿](native-progress.md)。
+
 ## 2026-11-22 Batch 1.6a（L06 wuxing ＋ L10 史诗卡牌 4 项规则收口）合入（待提交／发布）
 
 基线 HEAD `e119f5518b32911ed45c3559881d97751966eddb`（Batch UI-4 CI Run `44929144693` Attempt 1 `10/10 success` 已并入 `ci-runs.md`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `verifier-rules-2` 三轮核验通过（#70 **`APPROVE`**）的 `swarm/conv-q1-l10` `af6ef4899..b0a09c8a9` 并协调 `combat_rules.rs`/`dying.rs`/`sha/respond.rs`/`extension_choices.rs` 与 L29/Q2-L27 共存：关闭 `L06:cards:wuxingpan` 与 `L10` 全部 `reguhuo`/`rangjie`/`k_danggu`（含全 10 项 `scs*` 常侍伴生技），在 `main` 全量通过 `--workspace`（`7,948/0/8`）、4 crate（`2,600/0/6`）、`conformance` `19/19`、`web-client` `510/0` 及 `smoke:native` `83/0`。按 #70 升级 **4 项**：`L06` 升为 **3／0／0**（100% 单项等价）；`L10` 升为 **11／6／0**（4 项技能 100% 单项等价，3 项 UI 配置＋`_emojiRebate1`＋2 项 CSS 保留 `简化近似`），全仓清单更新为 **已复核等价 1,186／简化近似 3,238／缺失 0**（整包八项 `0/37`）。见 [Batch 1.6a 证据](../operations/evidence/2026-11-21-batch1-6a-l10-l06/README.md) 与 [进度主稿](native-progress.md)。

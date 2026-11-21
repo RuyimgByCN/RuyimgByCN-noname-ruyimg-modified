@@ -3,12 +3,16 @@ import { computed, ref } from "vue";
 import {
   QHLY_GROUP_COLORS,
   QHLY_SURFACE_PRESETS,
+  canTriggerQhlyVoiceWithNotbb,
   createInitialQhlyRuntimeState,
   dispatchQhlyUiHook,
+  highlightSkillKeywords,
+  resolveQhlyCharacterSubtitle,
   resolveQhlySkinShare,
   type QhlyRuntimeState,
   type QhlyStylesheetSurfaceId,
 } from "../../../engine/surfaces/qhlySurface";
+import QhlyConfigPanel from "../surfaces/QhlyConfigPanel.vue";
 
 const props = defineProps<{
   state?: QhlyRuntimeState;
@@ -21,12 +25,28 @@ const emit = defineEmits<{
 
 const generalInput = ref(props.state?.inspectGeneralId ?? "sb_caopi");
 const skillInput = ref("sbxingshang");
+const activeViewTab = ref<"inspect" | "configs">("inspect");
+const voiceGuardMsg = ref("");
 
 const current = computed(() => props.state ?? createInitialQhlyRuntimeState());
+const cfg = computed(() => current.value.config);
 const presetEntries = computed(
   () => Object.entries(QHLY_SURFACE_PRESETS) as Array<[QhlyStylesheetSurfaceId, (typeof QHLY_SURFACE_PRESETS)[QhlyStylesheetSurfaceId]]>,
 );
 const shareInfo = computed(() => resolveQhlySkinShare(generalInput.value, skillInput.value));
+const subtitleText = computed(() =>
+  resolveQhlyCharacterSubtitle(cfg.value, {
+    title: "魏文帝",
+    skinName: current.value.replaceSkinByGeneral[generalInput.value] ?? "origin",
+    pkgName: "谋攻篇",
+  }),
+);
+const highlightedSkillSegs = computed(() =>
+  highlightSkillKeywords(
+    "锁定技/限定技 · 出牌阶段开始时，若目标受伤，共享台词并触发专属语音。",
+    cfg.value.qhly_keymarkopen,
+  ),
+);
 
 function selectStylesheet(sheetId: QhlyStylesheetSurfaceId) {
   emit("update", {
@@ -46,22 +66,59 @@ function triggerKillSkinAndBgm() {
     hook: "_qhly_bgm",
     generalId: generalInput.value,
   });
-  emit("update", { ...next, inspectGeneralId: generalInput.value });
+  const res = canTriggerQhlyVoiceWithNotbb(next, skillInput.value, generalInput.value, Date.now());
+  voiceGuardMsg.value = res.allowed ? "台词触发成功" : "防啰嗦(qhly_notbb)或静音冷却拦截";
+  emit("update", { ...res.nextState, inspectGeneralId: generalInput.value });
 }
 </script>
 
 <template>
   <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="千幻聆音武将详情与皮肤窗口" data-testid="modal-qhly-detail">
-    <div class="modal-card">
+    <div
+      class="modal-card qhly-modal-card"
+      :data-qhly-sheet="current.activeStylesheet"
+      :data-qhly-fontsize="cfg.qhly_fontsize1"
+      :data-qhly-fit-x="cfg.qhly_layoutFitX ? 'on' : 'off'"
+      :data-qhly-fit-y="cfg.qhly_layoutFitY ? 'on' : 'off'"
+      :data-qhly-v-middle="cfg.qhly_vMiddle ? 'on' : 'off'"
+      :data-qhly-shuimo-cover="cfg.qhly_hideShuimoCover ? 'hidden' : 'visible'"
+      :style="{
+        '--qhly-shuimo-lh': cfg.qhly_hanggaoxiufu,
+        '--qhly-lol-lh': cfg.qhly_lolhanggaoxiufu,
+      }"
+      data-testid="qhly-modal-card"
+    >
       <header class="modal-head">
         <div>
-          <h3>千幻聆音 · 武将详情与皮肤台 (L09)</h3>
-          <p class="muted tiny">上游基准：千幻聆音/extension.js · skinShare.js (12 套样式表)</p>
+          <h3>千幻聆音 · 武将详情与皮肤台 (L09 · 82配置 / 12样式)</h3>
+          <p class="muted tiny">
+            副标题：<code>{{ subtitleText }}</code> · 小窗：{{ cfg.qhly_smallwindowstyle }}({{ cfg.qhly_dragonsize }}×)
+          </p>
         </div>
-        <button type="button" data-testid="btn-close-qhly-modal" @click="emit('close')">关闭 ✕</button>
+        <div class="head-tabs">
+          <button
+            type="button"
+            class="mode-tab-btn"
+            :class="{ active: activeViewTab === 'inspect' }"
+            data-testid="btn-qhly-tab-inspect"
+            @click="activeViewTab = 'inspect'"
+          >
+            套装与资料 (12)
+          </button>
+          <button
+            type="button"
+            class="mode-tab-btn"
+            :class="{ active: activeViewTab === 'configs' }"
+            data-testid="btn-qhly-tab-configs"
+            @click="activeViewTab = 'configs'"
+          >
+            全部 82 项配置
+          </button>
+          <button type="button" data-testid="btn-close-qhly-modal" @click="emit('close')">关闭 ✕</button>
+        </div>
       </header>
 
-      <div class="qhly-grid">
+      <div v-if="activeViewTab === 'inspect'" class="qhly-grid">
         <div class="qhly-presets" role="listbox" aria-label="千幻主题套装">
           <button
             v-for="[id, spec] in presetEntries"
@@ -89,10 +146,24 @@ function triggerKillSkinAndBgm() {
             </label>
           </div>
 
-          <div class="share-box" data-testid="qhly-modal-share-result">
+          <div
+            class="share-box qhly-detail-bio qhly-preview-box"
+            :data-qhly-lutou="cfg.qhly_lutou ? 'on' : 'off'"
+            :data-qhly-lvjing="cfg.lvjingFixx ? 'on' : 'off'"
+            data-testid="qhly-modal-share-result"
+          >
+            <div class="qhly-ink-veil">墨迹装饰层 (hideShuimoCover={{ cfg.qhly_hideShuimoCover ? "隐藏" : "显示" }})</div>
             <div>皮肤共享决议：<code>{{ shareInfo.resolvedGeneral }}</code> / <code>{{ shareInfo.resolvedSkill }}</code> ({{ shareInfo.shared ? "已共享" : "独立原皮" }})</div>
             <div>当前激活皮肤：<strong>{{ current.replaceSkinByGeneral[generalInput] ?? "origin" }}</strong></div>
             <div>专属 BGM：<code>{{ current.activeBgmTrack ?? "未播放" }}</code></div>
+            <div class="skill-preview-line" data-testid="qhly-skill-highlight-line">
+              <span
+                v-for="(seg, idx) in highlightedSkillSegs"
+                :key="idx"
+                :style="seg.color ? { color: seg.color, fontWeight: 700 } : undefined"
+              >{{ seg.text }}</span>
+            </div>
+            <div v-if="voiceGuardMsg" class="tiny muted" data-testid="qhly-voice-guard-msg">{{ voiceGuardMsg }}</div>
           </div>
 
           <div class="faction-swatches">
@@ -100,7 +171,7 @@ function triggerKillSkinAndBgm() {
               v-for="(hex, fac) in QHLY_GROUP_COLORS"
               :key="fac"
               class="swatch"
-              :style="{ borderColor: hex, color: hex }"
+              :style="{ borderColor: hex, color: hex, fontSize: `${Number(cfg.qhly_shilizihao) * 0.18}px` }"
             >{{ fac }} {{ hex }}</span>
           </div>
 
@@ -111,6 +182,12 @@ function triggerKillSkinAndBgm() {
           </div>
         </div>
       </div>
+
+      <QhlyConfigPanel
+        v-else
+        :state="current"
+        @update="(next) => emit('update', next)"
+      />
     </div>
   </div>
 </template>
@@ -207,6 +284,31 @@ function triggerKillSkinAndBgm() {
   border-radius: 999px;
   font-size: 0.72rem;
   font-family: var(--mono);
+}
+.qhly-ink-veil {
+  font-size: 0.68rem;
+  color: #a1a1aa;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.16);
+  padding-bottom: 0.2rem;
+}
+.head-tabs {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+}
+.mode-tab-btn {
+  padding: 0.25rem 0.55rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  color: #e2e8f0;
+  font-size: 0.76rem;
+  cursor: pointer;
+}
+.mode-tab-btn.active {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.2);
+  color: #fde68a;
 }
 .tiny { font-size: 0.75rem; margin: 0.15rem 0 0; }
 </style>

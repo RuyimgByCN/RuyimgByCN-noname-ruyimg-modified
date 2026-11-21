@@ -51,14 +51,17 @@ import {
   createInitialExtensionSurfacesState,
   ingestBattleEnvelopeIntoSurfaces,
   loadPersistedDecadeConfig,
+  loadPersistedQhlyConfig,
   loadPersistedShoushaConfig,
   restoreExtensionSurfacesForLoad,
   serializeExtensionSurfacesSnapshot,
   updateExtensionDecadeConfig,
+  updateExtensionQhlyConfig,
   updateExtensionShoushaConfig,
   type ExtensionSurfacesSnapshot,
 } from "../engine/extensionSurfaceRuntime";
 import type { DecadeUiRuntimeState } from "../engine/surfaces/decadeUiSurface";
+import type { QhlyRuntimeState } from "../engine/surfaces/qhlySurface";
 import {
   createInitialShoushaUiRuntimeState,
   type ShoushaUiRuntimeState,
@@ -115,9 +118,14 @@ function createInitialSurfacesWithPersistedDecade(): ExtensionSurfacesSnapshot {
     { ...loadPersistedDecadeConfig(), _connectMode: isOnline.value },
     { persist: false },
   );
-  return updateExtensionShoushaConfig(
+  const withShousha = updateExtensionShoushaConfig(
     withDecade,
     loadPersistedShoushaConfig(),
+    { persist: false, syncTheme: false },
+  );
+  return updateExtensionQhlyConfig(
+    withShousha,
+    loadPersistedQhlyConfig(),
     { persist: false, syncTheme: false },
   );
 }
@@ -141,6 +149,15 @@ function onUpdateShoushaUiFromBoard(nextShousha: ShoushaUiRuntimeState) {
     uiSuites: {
       ...extensionSurfaces.value.uiSuites,
       shoushaUi: nextShousha,
+    },
+  };
+}
+function onUpdateQhlyUiFromBoard(nextQhly: QhlyRuntimeState) {
+  extensionSurfaces.value = {
+    ...extensionSurfaces.value,
+    uiSuites: {
+      ...extensionSurfaces.value.uiSuites,
+      qhly: nextQhly,
     },
   };
 }
@@ -1057,6 +1074,7 @@ const turnInfo = computed(() => {
         @open-modal="(m) => (activeBattleModal = m)"
         @update:decade-ui="onUpdateDecadeUiFromBoard"
         @update:shousha-ui="onUpdateShoushaUiFromBoard"
+        @update:qhly-ui="onUpdateQhlyUiFromBoard"
         @sort-hand="onSortHandFromBoard"
         @end-phase="endPhase"
         @resolve-choice="resolveLegalChoice"

@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-22 Batch UI-5（L14 终 33 项、L20 27 项与 L09 58 项共 +118）合入与清单上调（待提交／发布）
+
+基线 HEAD `586b51cdc8124ab37c92f1015ce562157f911df9`（Batch 1.6a 已发布，CI Run `44938308161` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-ui` `77fd897113caa394c2f5cfdde82d51d4ece75c00`（`verifier-ui` #77 **`APPROVE`**）：闭环 `L14` 终 33 项并完成 `L20`/`L09` 洁净室前端消费，经主线全量第七节门禁及 7 套 Chrome CDP 验证。按 #77 复核口径升级 **118 项**：`L14 手杀ui` 升为 **141/141 单项已复核等价（简化近似 0／缺失 0）**；`L20 标记补充` 升 `27` 项（3 表面＋24 `ui_hooks`）并保留 10 无 DOM 消费 `ui_hooks`＋3 技能为 `简化近似`（**已复核等价 82／简化近似 13／缺失 0**）；`L09 千幻聆音` 升 `58` 项（12 表面＋8 `ui_hooks`＋38 配置）并保留 44 未消费配置为 `简化近似`（**已复核等价 58／简化近似 44／缺失 0**），全仓清单更新为 **已复核等价 1,304／简化近似 3,120／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch UI-5 复核摘要](../operations/evidence/2026-11-21-ui-l14-l20-l09/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。
+
 ## 2026-11-22 Batch 1.6a（L06 wuxing ＋ L10 史诗卡牌 4 项规则收口）合入与清单上调（待提交／发布）
 
 基线 HEAD `e119f5518b32911ed45c3559881d97751966eddb`（Batch UI-4 已发布，CI Run `44929144693` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-q1-l10` `af6ef4899..b0a09c8a9`（`verifier-rules-2` #70 **`APPROVE`**）并与 L29/Q2-L27 共存对齐：按 #70 复核口径升级 **4 项**（`L06:cards:wuxingpan`、`L10:skills:reguhuo`、`L10:skills:rangjie`、`L10:skills:k_danggu`），`L06 wuxing` 升为 **3/3 单项已复核等价（简化近似 0／缺失 0）**，`L10 史诗卡牌` 升为 **已复核等价 11／简化近似 6／缺失 0**（4 项技能 100% 单项等价；3 项 UI 配置＋`_emojiRebate1`＋2 项 CSS 保留 `简化近似`），全仓清单更新为 **已复核等价 1,186／简化近似 3,238／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch 1.6a 复核摘要](../operations/evidence/2026-11-21-batch1-6a-l10-l06/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。

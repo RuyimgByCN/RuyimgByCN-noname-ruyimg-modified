@@ -9,6 +9,13 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-22 Batch UI-5（L14 终 33 项→141/141、L20 +27、L09 +58 共 +118）合入（待提交／发布）
+
+- **基线、发布与版本**：HEAD `586b51cdc8124ab37c92f1015ce562157f911df9`（Batch 1.6a 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `44938308161` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。
+- **Batch UI-5 集成与复核**：合入 `swarm/conv-ui` `77fd897113caa394c2f5cfdde82d51d4ece75c00`（`verifier-ui` #77 **`APPROVE`**）：闭环 `L14` 终 33 项（`qiDongYe`/`ZLLT`/`XPJ`/托管及 23 变体表面）并洁净室实现 `L20` 标记特效（46 钩子/3 CSS）与 `L09` 千幻聆音 82 配置/12 主题/8 钩子及桌面弹窗消费。
+- **清单计数与整包签署**：按 #77 升格 **118 项**（`L14` `33` 项 → **`141／0／0`**；`L20` 升 `27` 项并保留 10 无 DOM 钩子＋3 技能 → **`82／13／0`**；`L09` 升 `58` 项并保留 44 未消费配置 → **`58／44／0`**）；全仓更新为 **已复核等价 1,304／简化近似 3,120／缺失 0**，整包八项签署仍 `0/37`。
+- **主线实测**：5 crate `-D warnings`、`wasm32`、4 crate `2,600/0/6`、`--workspace --no-fail-fast` `7,948/0/8`、`conformance` `19/19`、`desktop-client` `20/0/1`、跨端校验、`web-client` `typecheck`＋`test`（**514/0**）＋`build:native`＋`smoke:native`（**83/0**）＋`build`、7 套 Chrome CDP（`60 fps`、`consoleErrors=[]`）与 `preflight.py` 全过，见 [Batch UI-5 证据](../operations/evidence/2026-11-21-ui-l14-l20-l09/README.md)。
+
 ### 2026-11-22 Batch 1.6a（L06 wuxing ＋ L10 史诗卡牌 4 项规则收口）合入（待提交／发布）
 
 - **基线、发布与版本**：HEAD `e119f5518b32911ed45c3559881d97751966eddb`（Batch UI-4 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `44929144693` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。
