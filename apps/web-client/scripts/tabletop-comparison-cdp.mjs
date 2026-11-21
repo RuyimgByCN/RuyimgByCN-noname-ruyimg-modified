@@ -295,25 +295,43 @@ try {
 
   await send(ws, "Page.navigate", { url: upstreamUrl });
 
-  // Dismiss changelog and character selection dialogs
-  for (let i = 0; i < 40; i++) {
+  // Dismiss changelog, character selection, and luck-card ("是否使用手气卡？") prompts into real play
+  for (let i = 0; i < 65; i++) {
     await sleep(300);
     await evalJs(
       ws,
       `(() => {
-        const ok = Array.from(document.querySelectorAll('.control, button, div')).find(
-          el => (el.innerText || '').trim() === '确定' && el.classList.contains('control')
-        );
-        if (ok) ok.click();
+        const bodyText = document.body.innerText || '';
+        const clickEl = (el) => {
+          if (!el) return;
+          el.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+          el.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+          el.click();
+        };
+        const controlChildren = Array.from(document.querySelectorAll('.control > div, .control'));
+        if (bodyText.includes('手气卡')) {
+          const cancel = controlChildren.find(el => (el.innerText || '').trim() === '取消')
+            || Array.from(document.querySelectorAll('div, button')).find(el => (el.innerText || '').trim() === '取消');
+          if (cancel) {
+            clickEl(cancel);
+          } else if (window._status?.event?.custom?.replace?.confirm) {
+            window._status.event.custom.replace.confirm(false);
+          }
+          return;
+        }
 
         const charBtn = document.querySelector('.dialog.character .button, .dialog .buttons .button');
         if (charBtn && document.querySelector('#arena.choose-character')) {
-          charBtn.click();
-          const conf = Array.from(document.querySelectorAll('.control')).find(
-            el => (el.innerText || '').includes('确定') || (el.innerText || '').includes('OK')
+          clickEl(charBtn);
+          const conf = controlChildren.find(
+            el => (el.innerText || '').trim() === '确定' || (el.innerText || '').includes('OK')
           );
-          if (conf) conf.click();
+          clickEl(conf);
+          return;
         }
+
+        const ok = controlChildren.find(el => (el.innerText || '').trim() === '确定');
+        if (ok) clickEl(ok);
       })()`
     );
 
@@ -323,22 +341,33 @@ try {
         const arena = document.querySelector('#arena');
         const players = document.querySelectorAll('#arena .player, .player');
         const cards = document.querySelectorAll('.card');
+        const bodyText = document.body.innerText || '';
+        const inChooseChar = Boolean(document.querySelector('#arena.choose-character'));
+        const inLuckPrompt = bodyText.includes('手气卡');
         return {
           hasArena: Boolean(arena),
           playerCount: players.length,
-          cardCount: cards.length
+          cardCount: cards.length,
+          inChooseChar,
+          inLuckPrompt
         };
       })()`
     );
 
-    if (arenaStatus.hasArena && arenaStatus.playerCount >= 4 && arenaStatus.cardCount >= 4) {
-      console.log(`Upstream match ready at tick ${i}: ${arenaStatus.playerCount} players, ${arenaStatus.cardCount} cards`);
+    if (
+      arenaStatus.hasArena &&
+      arenaStatus.playerCount >= 5 &&
+      arenaStatus.cardCount >= 4 &&
+      !arenaStatus.inChooseChar &&
+      !arenaStatus.inLuckPrompt
+    ) {
+      console.log(`Upstream match ready in active play at tick ${i}: ${arenaStatus.playerCount} players, ${arenaStatus.cardCount} cards`);
       break;
     }
   }
 
-  // Allow animations to settle and cards to be fully dealt
-  await sleep(4000);
+  // Allow turn 1 phase & card settling without startup modal
+  await sleep(3000);
 
   // Ensure exact 1440x1080 device metrics before screenshot
   await send(ws, "Emulation.setDeviceMetricsOverride", {
@@ -377,12 +406,22 @@ try {
   await evalJs(
     ws,
     `(() => {
+      const playersSelect = document.querySelector('select[aria-label="玩家人数"]');
+      if (playersSelect) {
+        playersSelect.value = '5';
+        playersSelect.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      const modeSelect = document.querySelector('select[aria-label="对局模式"]');
+      if (modeSelect) {
+        modeSelect.value = 'identity';
+        modeSelect.dispatchEvent(new Event('change', { bubbles: true }));
+      }
       const btn = Array.from(document.querySelectorAll('button, a')).find(el => (el.innerText || '').includes('本地开局'));
       if (btn) btn.click();
     })()`
   );
 
-  // Wait for BattleBoard & HUD & at least 4 seats
+  // Wait for BattleBoard & HUD & 5 seats
   for (let i = 0; i < 60; i++) {
     await sleep(200);
     const ready = await evalJs(
@@ -390,7 +429,7 @@ try {
       `Boolean(
         document.querySelector('.battle-table') &&
         document.querySelector('[data-testid="battle-shousha-table-hud"]') &&
-        document.querySelectorAll('.seat').length >= 4
+        document.querySelectorAll('.seat').length >= 5
       )`
     );
     if (ready) {
@@ -409,7 +448,29 @@ try {
       if (caocao) caocao.click();
     })()`
   );
-  await sleep(600);
+  await sleep(400);
+
+  // Advance via real autoStep until self seat (P1) has an enabled playable hand card
+  for (let i = 0; i < 40; i++) {
+    const actionable = await evalJs(
+      ws,
+      `Boolean(document.querySelector('.strip .card:not(:disabled)'))`
+    );
+    if (actionable) break;
+    await evalJs(
+      ws,
+      `(() => {
+        const choiceBtn = document.querySelector('.choice button:not(:disabled)');
+        if (choiceBtn) {
+          choiceBtn.click();
+          return;
+        }
+        const autoBtn = Array.from(document.querySelectorAll('.toolbar button')).find(b => (b.innerText || '').trim() === '自动一步');
+        if (autoBtn && !autoBtn.disabled) autoBtn.click();
+      })()`
+    );
+    await sleep(140);
+  }
 
   // Inject framing CSS override to completely hide debug panels and frame BattleBoard at exact 1440x1080
   console.log("Injecting framing CSS override for full 1440x1080 tabletop presentation...");
@@ -428,7 +489,6 @@ try {
         .general-select-host,
         .roster,
         .online-roster,
-        .choice,
         .match-stats,
         .seat-status,
         .log,
@@ -455,7 +515,7 @@ try {
         .main {
           max-width: 1440px !important;
           width: 1440px !important;
-          padding: 12px 16px !important;
+          padding: 58px 16px 48px !important;
           margin: 0 auto !important;
           box-sizing: border-box !important;
         }
@@ -468,12 +528,11 @@ try {
           background: transparent !important;
         }
         .battle-table {
-          min-height: 1040px !important;
-          height: 1040px !important;
+          min-height: 974px !important;
+          height: 974px !important;
           box-sizing: border-box !important;
           display: flex !important;
           flex-direction: column !important;
-          justify-content: space-between !important;
         }
       \`;
       document.head.appendChild(style);
@@ -513,13 +572,13 @@ try {
 
   await sleep(300);
 
-  // Activate card animation (select card & trigger hand card sorting transition)
-  console.log("Activating hand card animation and sorting transition...");
+  // Activate genuine card selection & hand card sorting transition (never inject fake classes)
+  console.log("Activating hand card selection and sorting transition...");
   await evalJs(
     ws,
     `(() => {
-      const firstCard = document.querySelector('.strip .card');
-      if (firstCard) firstCard.click();
+      const enabledCard = document.querySelector('.strip .card:not(:disabled)');
+      if (enabledCard) enabledCard.click();
       const lipaiBtn = document.querySelector('[data-testid="btn-handstrip-lipai"]');
       if (lipaiBtn) lipaiBtn.click();
     })()`
@@ -530,7 +589,7 @@ try {
   // ==========================================
   // PHASE 3: 120-frame Tabletop FPS Measurement
   // ==========================================
-  console.log("\n[PHASE 3] Measuring 120-frame tabletop FPS with active dynamic particles and card animations...");
+  console.log("\n[PHASE 3] Measuring 120-frame tabletop FPS with active dynamic particles and card selection...");
   const fpsMetrics = await evalJs(
     ws,
     `(async () => {
@@ -542,15 +601,6 @@ try {
           const delta = now - last;
           deltas.push(Math.round(delta * 100) / 100);
           last = now;
-
-          // Dynamically cycle card hover/pulse during frame sampling
-          if (deltas.length % 25 === 0) {
-            const cards = document.querySelectorAll('.strip .card');
-            if (cards.length > 0) {
-              const idx = (deltas.length / 25) % cards.length;
-              cards[idx]?.classList.add('card-animating');
-            }
-          }
 
           if (deltas.length >= 120) {
             resolve();
@@ -593,7 +643,7 @@ try {
           hand_card_count: document.querySelectorAll('.card').length,
           has_shousha_hud: Boolean(document.querySelector('[data-testid="battle-shousha-table-hud"]')),
           has_kill_banner: Boolean(document.querySelector('[data-testid="l14-shousha-banner-text"]')),
-          has_card_animation: Boolean(document.querySelector('.card.selected') || document.querySelector('.card-animating')),
+          has_card_selection: Boolean(document.querySelector('.strip .card.selected')),
           battleboard_fully_visible: isBoardVisible
         }
       };
@@ -601,6 +651,9 @@ try {
   );
 
   console.log("FPS Metrics:", JSON.stringify(fpsMetrics, null, 2));
+  if (!fpsMetrics.active_elements.has_card_selection) {
+    throw new Error("Expected at least one genuine .strip .card.selected during comparison capture");
+  }
   const fpsReportPath = join(docsEvidenceDir, "tabletop-fps-report.json");
   writeFileSync(fpsReportPath, JSON.stringify(fpsMetrics, null, 2));
 
@@ -726,6 +779,36 @@ try {
   const compositePngPath = join(docsEvidenceDir, "tabletop-comparison.png");
   writeFileSync(compositePngPath, compositePng);
   console.log(`Saved composite comparison screenshot to ${compositePngPath} (${compositePng.length} bytes)`);
+
+  if (process.env.TABLETOP_THUMBNAIL_PATH) {
+    const thumbPath = resolve(repoRoot, process.env.TABLETOP_THUMBNAIL_PATH);
+    mkdirSync(dirname(thumbPath), { recursive: true });
+    const thumbBase64 = await evalJs(
+      ws,
+      `(async () => {
+        const img = new Image();
+        await new Promise((res, rej) => {
+          img.onload = res;
+          img.onerror = rej;
+          img.src = 'data:image/png;base64,' + ${JSON.stringify(compositeBase64)};
+        });
+        const thumb = document.createElement('canvas');
+        thumb.width = 1440;
+        thumb.height = 540;
+        const tctx = thumb.getContext('2d');
+        tctx.drawImage(img, 0, 0, 1440, 540);
+        for (const q of [0.85, 0.78, 0.7]) {
+          const url = thumb.toDataURL('image/jpeg', q);
+          const b64 = url.split(',')[1];
+          if (b64.length * 0.75 <= 195 * 1024) return b64;
+        }
+        return thumb.toDataURL('image/jpeg', 0.65).split(',')[1];
+      })()`
+    );
+    const thumbBuf = Buffer.from(thumbBase64, "base64");
+    writeFileSync(thumbPath, thumbBuf);
+    console.log(`Saved side-by-side thumbnail to ${thumbPath} (${thumbBuf.length} bytes)`);
+  }
 
   // Node-level verification of PNG output dimensions
   function assertPngSize(buf, expW, expH, label) {

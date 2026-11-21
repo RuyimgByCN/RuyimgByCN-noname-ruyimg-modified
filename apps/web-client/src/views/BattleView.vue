@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { choiceKindLabel, choicePromptLabel } from "../engine/observerMetadata";
 import { EngineClient } from "../engine/client";
 import {
   configureLocalAppearanceCatalog,
@@ -46,7 +45,6 @@ import {
 import BattleBoard from "../components/battle/BattleBoard.vue";
 import type { BattleModalId } from "../components/battle/BattleShoushaHud.vue";
 import BattleModalsHost from "../components/battle/modals/BattleModalsHost.vue";
-import TriggerOrderChoice from "../components/battle/TriggerOrderChoice.vue";
 import GeneralSelectPanel from "../components/battle/GeneralSelectPanel.vue";
 import ExtensionSurfacePanel from "../components/battle/ExtensionSurfacePanel.vue";
 import {
@@ -960,31 +958,6 @@ const turnInfo = computed(() => {
       </div>
     </section>
 
-    <section v-if="store.choice" class="panel choice" aria-label="待选择">
-      <h2>{{ choicePromptLabel(store.choice) }}</h2>
-      <p v-if="store.choice.deadline_unix_ms != null" role="timer">{{ choiceSecondsLeft === null ? "正在校准服务器时间…" : `剩余 ${choiceSecondsLeft} 秒 · 到时托管` }}</p>
-      <p class="muted">
-        choice #{{ store.choice.choice_id }} · 玩家
-        {{ store.choice.observer }} · {{ choiceKindLabel(store.choice) }}
-      </p>
-      <TriggerOrderChoice v-if="store.choice.prompt === 'trigger_order'"
-        :choice="store.choice" :busy="store.busy"
-        :enabled="store.connected && !isSpectator && store.choice.observer === selfId"
-        @select="resolveTriggerOrder" />
-      <div v-else-if="choiceActions.length" class="row">
-        <button
-          v-for="(action, index) in choiceActions"
-          :key="index"
-          type="button"
-          :disabled="store.busy || !store.connected || isSpectator"
-          @click="resolveLegalChoice(action)"
-        >
-          {{ action.ResolveChoice.cancelled ? "取消" : `选择 ${action.ResolveChoice.selections.join(", ") || "空"}` }}
-        </button>
-      </div>
-      <p v-else class="muted">当前观察者无权处理此选择。</p>
-    </section>
-
     <!-- Player overview roster -->
     <section v-if="store.view" class="panel roster" aria-label="玩家概况">
       <h2>玩家概况</h2>
@@ -1012,10 +985,23 @@ const turnInfo = computed(() => {
         :self-id="selfId"
         :legal-actions="store.connected && !store.busy ? store.legalActions : []"
         :surfaces="extensionSurfaces"
+        :choice="store.choice"
+        :choice-actions="choiceActions"
+        :choice-seconds-left="choiceSecondsLeft"
+        :can-end-phase="canEndPhase"
+        :busy="store.busy"
+        :connected="store.connected"
+        :finished="store.finished"
+        :is-spectator="isSpectator"
+        :is-online="isOnline"
+        :room-started="roomStarted"
         @play-card="playCard"
         @activate-skill="activateSkill"
         @open-modal="(m) => (activeBattleModal = m)"
         @sort-hand="onSortHandFromBoard"
+        @end-phase="endPhase"
+        @resolve-choice="resolveLegalChoice"
+        @resolve-trigger-order="resolveTriggerOrder"
       />
       <BattleModalsHost
         :active-modal="activeBattleModal"

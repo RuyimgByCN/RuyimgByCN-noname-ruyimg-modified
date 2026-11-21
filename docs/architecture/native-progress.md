@@ -9,6 +9,13 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-21 队列 0 发布登记与 Batch UI-1（L08 十周年UI 真实牌桌布局）合入收口（待提交／发布）
+
+- **基线、发布与版本**：HEAD `1792d36ca1b21c91d8e8857a4f65ddf65f0c862a` + Batch UI-1 改动；队列 0 两笔已发布且首跑全绿并入 [CI 运行台账](../operations/evidence/ci-runs.md)——Batch 1.5 `4172d5948` CI Run `44883049675`（Attempt 1 `10/10 success`）、纯文档提示词 `1792d36ca` CI Run `44886931442`（Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。
+- **Batch UI-1 集成与复核**：合入 `swarm/conv-ui` `c4248c6e072cb9d08a58dc0045caa839d6556f39`（`verifier-ui` **`APPROVE`**）：完成 L08 `2–8` 人环绕席位、角标身份印记、全 175 种 `CardKind` `def` 映射（`cardCatalogLabels.ts`）、雪花粒子全画布散点与不透明禁用牌、桌面/平板（`1440x1080`、`768x1024`、`1024x768`）及移动端（`390x844`）零重叠适配，以及真实出牌阶段上游并排对比（`60 fps`）。
+- **清单计数与整包签署**：队列第 0 项已完成，第 5 项 Batch UI-1 落地牌桌核心布局（本批未上调清单条目，`L08` 保留 `简化近似` 待 UI-2/UI-3 全部配置/钩子/显示面完成后核验）；全仓维持 **已复核等价 656／简化近似 3,768／缺失 0**，整包八项签署 `0/37`。
+- **本地第七节实测**：`test_check_source_lines.py`（2 OK）、`check-source-lines.py`（9,389 文件 `<= 2,000` / Rust 有效行 `<= 1,000`）、`check-native-layering.py`（0）、`recount_g0.py`（37/0）、3 crate `2,518/0/6`、5 crate `-D warnings`、`wasm32`、`--workspace --no-fail-fast` `7,914/0/8`、`conformance` `19/19`、`desktop-client` `20/0/1`、`web-client` `typecheck`＋`test`（**493/0**）＋`build:native`＋`smoke:native`（**83/0**）、跨端 `check-native-wasm-cross-target.py`＋`cross-target-hash.sh`、`tabletop-responsive-cdp.mjs`（全矩阵 0 重叠）、`tabletop-comparison-cdp.mjs`（60 fps）、`build` 及 `preflight.py`（22/22）全过，见 [Batch UI-1 证据](../operations/evidence/2026-11-21-ui-l08-tabletop/README.md)。
+
 ### 2026-11-21 Batch 1.5（L29 龙血玄黄）规则修复、独立复核与本地收口（待提交／发布）
 
 - **基线与版本**：HEAD `af6ef4899052ad1258f38a242960f8f0ea0fd066`（Batch 1.4 `U07` 已发布，CI Run `44785367168` Attempt 1 `10/10 success`，已记入 [CI 运行台账](../operations/evidence/ci-runs.md)）；版本与内容锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 项标准 golden 哈希与 `u01-dddanzhi-pending-v107.ngsa` 静态内容锁不变。

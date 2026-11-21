@@ -1240,13 +1240,18 @@ export function renderCoinCanvasParticles(
   let count = 0;
 
   if (modes.has("snow")) {
-    const rBase = coin.snowSize === "large" ? 3 : 2;
-    ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+    const rBase = coin.snowSize === "large" ? 2.6 : 1.8;
+    ctx.fillStyle = "rgba(255, 255, 255, 0.48)";
     for (let i = 0; i < 12; i++) {
-      const x = ((i * 23 + frame * 2) % width);
-      const y = ((i * 11 + frame * 3) % height);
+      // Deterministic golden-ratio scatter across the full [0, width) x [0, height) tabletop
+      const h1 = ((Math.imul(i + 1, 2654435761) >>> 0) % 10000) / 10000;
+      const h2 = ((Math.imul(i + 7, 2246822519) >>> 0) % 10000) / 10000;
+      const driftX = frame * (0.55 + (i % 3) * 0.2) + Math.sin((frame + i * 19) * 0.04) * 16;
+      const fallY = frame * (0.85 + (i % 4) * 0.25);
+      const x = (((h1 * width + driftX) % width) + width) % width;
+      const y = (((h2 * height + fallY) % height) + height) % height;
       ctx.beginPath();
-      ctx.arc(x, y, rBase, 0, Math.PI * 2);
+      ctx.arc(x, y, rBase + (i % 2) * 0.5, 0, Math.PI * 2);
       ctx.fill();
       count++;
     }

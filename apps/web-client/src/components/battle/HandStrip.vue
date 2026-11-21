@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import type { CardView } from "../../types/engine";
+import { sortShoushaHandCards, type ShoushaSortableCard } from "../../engine/surfaces/shoushaUiSurface";
 import {
-  sortShoushaHandCards,
-  type ShoushaSortableCard,
-} from "../../engine/surfaces/shoushaUiSurface";
+  cardCategoryLabel,
+  cardCategoryOf,
+  cardKindLabel,
+} from "../../engine/surfaces/decadeTabletopLayout";
 
 const props = defineProps<{ cards: CardView[]; actionableIds: number[] }>();
 const emit = defineEmits<{
@@ -17,8 +19,19 @@ const selectedId = ref<number | null>(null);
 const draggingId = ref<number | null>(null);
 const handSorted = ref(false);
 
+watch(
+  () => props.cards,
+  (nextCards) => {
+    if (selectedId.value != null && !nextCards.some((c) => c.id === selectedId.value)) {
+      selectedId.value = null;
+    }
+  },
+);
+
 function cardDisplayName(c: CardView): string {
-  return ((c as any).name as string | undefined) ?? c.kind ?? (c.def != null ? `#${c.def}` : "");
+  const custom = (c as { name?: string }).name;
+  if (custom) return custom;
+  return cardKindLabel(c.kind, c.def);
 }
 
 const displayCards = computed(() => {
@@ -26,13 +39,19 @@ const displayCards = computed(() => {
   const sortables: ShoushaSortableCard[] = props.cards.map((c) => ({
     id: c.id,
     name: cardDisplayName(c),
-    suit: (c.suit ? c.suit.toLowerCase() : "none") as any,
+    suit: (c.suit ? c.suit.toLowerCase() : "none") as ShoushaSortableCard["suit"],
     number: c.rank ?? 99,
-    muniu: Boolean((c as any).muniu),
+    muniu: Boolean((c as { muniu?: boolean }).muniu),
   }));
   const sorted = sortShoushaHandCards(sortables);
   const orderMap = new Map(sorted.map((s, idx) => [s.id, idx]));
   return [...props.cards].sort((a, b) => (orderMap.get(a.id) ?? 0) - (orderMap.get(b.id) ?? 0));
+});
+
+const overlapPx = computed(() => {
+  if (displayCards.value.length <= 5) return "-8px";
+  if (displayCards.value.length <= 8) return "-18px";
+  return "-28px";
 });
 
 function toggleHandSort() {
@@ -44,19 +63,21 @@ function toggleHandSort() {
 }
 
 function cardCategory(c: CardView): "basic" | "trick" | "equip" {
-  const k = c.kind?.toLowerCase() ?? "";
-  if (k.includes("equip")) return "equip";
-  if (k.includes("trick")) return "trick";
-  return "basic";
+  return cardCategoryOf(c.kind, c.def);
 }
 
 function suitGlyph(s: CardView["suit"]) {
   switch (s) {
-    case "Spade": return "♠";
-    case "Heart": return "♥";
-    case "Club": return "♣";
-    case "Diamond": return "♦";
-    default: return "?";
+    case "Spade":
+      return "♠";
+    case "Heart":
+      return "♥";
+    case "Club":
+      return "♣";
+    case "Diamond":
+      return "♦";
+    default:
+      return "?";
   }
 }
 
@@ -71,7 +92,7 @@ function rankLabel(r: number | null) {
 
 function onSelect(id: number) {
   if (!props.actionableIds.includes(id)) return;
-  selectedId.value = id;
+  selectedId.value = selectedId.value === id ? null : id;
   emit("select", id);
 }
 
@@ -94,11 +115,20 @@ function onDragEnd() {
 </script>
 
 <template>
-  <section class="hand" aria-label="手牌">
+  <section class="hand decade-hand-wrap" aria-label="手牌">
     <div class="hand-header">
-      <h2 class="muted title">
-        手牌（{{ cards.length }} 张{{ selectedId != null ? " · 已选中 #" + selectedId : " · 点击或拖拽" }}{{ handSorted ? " · 已理牌" : "" }}）
-      </h2>
+      <div class="hand-meta">
+        <span class="title">
+          手牌 <strong>{{ cards.length }}</strong> 张
+        </span>
+        <span v-if="selectedId != null" class="hint-chip">
+          ✓ 已选中 #{{ selectedId }}（选目标或直接打出）
+        </span>
+        <span v-else-if="draggingId != null" class="hint-chip drag-hint">
+          🂠 拖拽 #{{ draggingId }} 到目标座位释放
+        </span>
+        <span v-else class="muted subtle-tip">点击或拖拽出牌</span>
+      </div>
       <button
         type="button"
         class="lipai-btn"
@@ -108,7 +138,13 @@ function onDragEnd() {
         {{ handSorted ? "✓ 手杀已理牌" : "⇄ 理牌" }}
       </button>
     </div>
-    <div class="strip" role="listbox" aria-label="手牌列表">
+
+    <div
+      class="strip"
+      role="listbox"
+      aria-label="手牌列表"
+      :style="{ '--card-overlap': overlapPx }"
+    >
       <button
         v-for="c in displayCards"
         :key="c.id"
@@ -119,28 +155,31 @@ function onDragEnd() {
           { selected: c.id === selectedId, dragging: c.id === draggingId },
         ]"
         :disabled="!actionableIds.includes(c.id)"
+        :data-kind="c.kind"
         role="option"
         :aria-selected="c.id === selectedId"
-        :aria-label="`卡牌 ${c.id}${c.def != null ? ' 已知' : ' 未知'}`"
+        :aria-label="`卡牌 ${cardDisplayName(c)} #${c.id}${c.def != null ? ' 已知' : ' 未知'}`"
         draggable="true"
         @click="onSelect(c.id)"
         @dragstart="onDragStart($event, c.id)"
         @dragend="onDragEnd"
       >
-        <!-- Top-left corner suit & rank -->
         <div class="card-corner top-left">
           <span class="suit" :data-suit="c.suit">{{ suitGlyph(c.suit) }}</span>
           <span class="rank">{{ rankLabel(c.rank) }}</span>
         </div>
 
         <div class="card-body">
-          <span class="id muted">#{{ c.id }}</span>
-          <span v-if="cardDisplayName(c)" class="card-name">{{ cardDisplayName(c) }}</span>
+          <span
+            v-if="cardDisplayName(c)"
+            class="card-name"
+            :class="{ 'card-name-ascii': cardDisplayName(c).startsWith('#') }"
+          >{{ cardDisplayName(c) }}</span>
           <span v-else-if="c.def != null" class="card-known">▸</span>
-          <span class="card-cat-label">{{ cardCategory(c) === "equip" ? "装备" : cardCategory(c) === "trick" ? "锦囊" : "基本" }}</span>
+          <span class="card-cat-label">{{ cardCategoryLabel(c.kind, c.def) }}</span>
+          <span class="id muted">#{{ c.id }}</span>
         </div>
 
-        <!-- Bottom-right corner suit & rank (inverted) -->
         <div class="card-corner bottom-right">
           <span class="suit" :data-suit="c.suit">{{ suitGlyph(c.suit) }}</span>
           <span class="rank">{{ rankLabel(c.rank) }}</span>
@@ -148,70 +187,110 @@ function onDragEnd() {
       </button>
       <p v-if="!cards.length" class="muted empty">无可见手牌</p>
     </div>
-    <p v-if="selectedId != null" class="hint">
-      ✓ 已选中 #{{ selectedId }} — 在棋盘上选择目标，或点击「结束阶段」直接打出
-    </p>
-    <p v-if="draggingId != null" class="hint drag-hint">
-      🂠 拖拽中 #{{ draggingId }} — 拖到目标玩家释放出牌
-    </p>
   </section>
 </template>
 
 <style scoped>
+.decade-hand-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-width: 0;
+  width: 100%;
+  padding: 0.4rem 0.65rem 0.45rem;
+  border-radius: 10px;
+  border: 1px solid rgba(232, 165, 75, 0.22);
+  background: linear-gradient(180deg, rgba(16, 18, 20, 0.42) 0%, rgba(10, 11, 13, 0.78) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 224, 150, 0.08);
+}
 .hand-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.15rem;
 }
-.title { font-size: 0.9rem; margin: 0; font-weight: 500; }
+.hand-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  min-width: 0;
+}
+.title {
+  font-size: 0.8rem;
+  color: #e6dac0;
+  font-weight: 600;
+}
+.title strong {
+  color: #f3d27a;
+  font-family: var(--mono);
+}
+.subtle-tip {
+  font-size: 0.72rem;
+}
+.hint-chip {
+  font-size: 0.72rem;
+  color: #86efac;
+  font-weight: 600;
+}
+.drag-hint {
+  color: #93c5fd;
+}
 .lipai-btn {
-  padding: 0.18rem 0.55rem;
-  font-size: 0.76rem;
+  padding: 0.22rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   border-radius: 6px;
-  border: 1px solid rgba(232, 165, 75, 0.45);
-  background: var(--bg-elevated);
-  color: var(--accent);
+  border: 1px solid rgba(232, 165, 75, 0.55);
+  background: linear-gradient(180deg, rgba(46, 34, 22, 0.92), rgba(28, 20, 13, 0.92));
+  color: #f3d27a;
   cursor: pointer;
+  white-space: nowrap;
 }
 .lipai-btn:hover {
-  border-color: var(--accent-2);
+  border-color: #fde68a;
+  background: linear-gradient(180deg, rgba(66, 48, 30, 0.96), rgba(40, 28, 18, 0.96));
 }
 .strip {
   display: flex;
   align-items: flex-end;
-  padding: 1.2rem 0.5rem 0.5rem;
+  padding: 26px 0.9rem 6px 0.25rem;
   overflow-x: auto;
-  min-height: 120px;
+  overflow-y: hidden;
+  min-height: 162px;
 }
 .card {
   position: relative;
-  width: 76px;
-  height: 108px;
-  margin-right: -18px; /* Cascading fan overlap */
-  border-radius: 6px;
-  padding: 0.35rem;
+  width: 92px;
+  height: 128px;
+  margin-right: var(--card-overlap, -12px);
+  border-radius: 7px;
+  padding: 0.32rem 0.35rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   background: #fdfbf7;
   color: #1a1a1a;
   border: 1.5px solid #c8baa6;
-  box-shadow: -3px 0 8px rgba(0, 0, 0, 0.45);
+  box-shadow: -3px 2px 10px rgba(0, 0, 0, 0.55);
   cursor: pointer;
-  transition: transform 0.15s ease, margin 0.15s ease, z-index 0.15s;
+  transition: transform 0.15s ease, margin 0.15s ease, z-index 0.15s, box-shadow 0.15s ease;
   user-select: none;
   flex-shrink: 0;
 }
+.card:last-of-type {
+  margin-right: 0;
+}
 .card:hover:not(:disabled) {
-  transform: translateY(-16px) scale(1.05);
+  transform: translateY(-16px) scale(1.04);
   z-index: 10;
-  margin-right: -8px;
+  margin-right: 4px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.65);
 }
 .card.selected {
-  transform: translateY(-24px) scale(1.08);
-  box-shadow: 0 0 14px rgba(232, 165, 75, 0.9), -3px 0 10px rgba(0, 0, 0, 0.6);
+  transform: translateY(-22px) scale(1.06);
+  box-shadow: 0 0 16px rgba(232, 165, 75, 0.95), -3px 2px 12px rgba(0, 0, 0, 0.7);
   border-color: #e8a54b;
   z-index: 15;
 }
@@ -220,28 +299,27 @@ function onDragEnd() {
   transform: scale(0.95);
 }
 .card:disabled {
-  opacity: 0.45;
   cursor: not-allowed;
-  filter: grayscale(0.5);
+  filter: brightness(0.68) saturate(0.72) grayscale(0.28);
+  box-shadow: -2px 1px 6px rgba(0, 0, 0, 0.45);
 }
-/* Category frames: basic, trick, equip */
 .card-cat-basic {
   border-color: #b89370;
-  background: linear-gradient(180deg, #fffcf8 0%, #f4ede2 100%);
+  background: linear-gradient(180deg, #fffcf6 0%, #f1e6d5 100%);
 }
 .card-cat-trick {
   border-color: #4a8f63;
-  background: linear-gradient(180deg, #f7fdf9 0%, #e5f3eb 100%);
+  background: linear-gradient(180deg, #f7fdf9 0%, #dff0e6 100%);
 }
 .card-cat-equip {
-  border-color: #687998;
-  background: linear-gradient(180deg, #f7f9fd 0%, #e6edf7 100%);
+  border-color: #5b7398;
+  background: linear-gradient(180deg, #f7f9fd 0%, #e1eaf6 100%);
 }
 .card-corner {
   display: flex;
   flex-direction: column;
   align-items: center;
-  line-height: 1;
+  line-height: 0.95;
 }
 .card-corner.top-left {
   align-self: flex-start;
@@ -251,7 +329,7 @@ function onDragEnd() {
   transform: rotate(180deg);
 }
 .suit {
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 700;
 }
 .suit[data-suit="Heart"],
@@ -264,7 +342,7 @@ function onDragEnd() {
 }
 .rank {
   font-family: var(--mono);
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   font-weight: 800;
 }
 .card-body {
@@ -272,39 +350,77 @@ function onDragEnd() {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.15rem;
+  gap: 0.14rem;
   flex: 1;
 }
 .card-name {
-  font-size: 0.82rem;
-  font-weight: 700;
+  font-size: 0.88rem;
+  font-weight: 800;
   writing-mode: vertical-rl;
-  letter-spacing: 0.1em;
-  color: #2b1f14;
+  text-orientation: upright;
+  letter-spacing: 0.08em;
+  color: #24190f;
+  line-height: 1.05;
+  max-height: 76px;
+}
+.card-name.card-name-ascii {
+  writing-mode: horizontal-tb;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
 }
 .card-cat-label {
-  font-size: 0.62rem;
-  font-weight: 600;
-  padding: 0.05rem 0.25rem;
+  font-size: 0.58rem;
+  font-weight: 700;
+  padding: 0.04rem 0.24rem;
   border-radius: 3px;
   background: rgba(0, 0, 0, 0.08);
-  color: #555;
+  color: #4a4238;
 }
-.id { font-size: 0.65rem; }
+.id {
+  font-size: 0.58rem;
+  opacity: 0.72;
+}
 .card-known {
   font-size: 0.75rem;
   color: var(--accent);
 }
-.empty { padding: 1rem 0; }
-.hint {
-  font-size: 0.78rem;
-  color: var(--color-positive);
-  margin-top: 0.4rem;
+.empty {
+  padding: 1rem 0;
+  font-size: 0.82rem;
 }
-.drag-hint {
-  color: var(--accent-2);
+
+@media (max-width: 767px) {
+  .decade-hand-wrap {
+    padding: 0.3rem 0.42rem;
+  }
+  .strip {
+    min-height: 118px;
+    padding: 18px 0.45rem 4px 0.12rem;
+    overflow-y: hidden;
+  }
+  .card {
+    width: 68px;
+    height: 94px;
+    padding: 0.22rem 0.26rem;
+    margin-right: -12px;
+  }
+  .card-name {
+    font-size: 0.68rem;
+    max-height: 48px;
+    letter-spacing: 0.03em;
+  }
+  .id,
+  .subtle-tip {
+    display: none;
+  }
 }
+
 @media (prefers-reduced-motion: reduce) {
-  .card:hover, .card.selected, .card.dragging { transform: none; }
+  .card:hover,
+  .card.selected,
+  .card.dragging {
+    transform: none;
+  }
 }
 </style>

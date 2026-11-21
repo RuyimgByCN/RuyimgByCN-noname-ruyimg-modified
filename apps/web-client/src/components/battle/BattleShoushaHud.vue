@@ -300,4 +300,27 @@ const rzshCrest = computed(() => {
   border-color: var(--accent);
   background: rgba(232, 165, 75, 0.18);
 }
+@media (max-width: 767px) {
+  .battle-shousha-hud {
+    padding: 0.34rem 0.48rem;
+    gap: 0.28rem 0.45rem;
+  }
+  .phase-ribbon {
+    padding: 0.14rem 0.55rem;
+    font-size: 0.74rem;
+  }
+  .round-pill,
+  .lantern-badge,
+  .rzsh-crest {
+    font-size: 0.68rem;
+    padding: 0.08rem 0.36rem;
+  }
+  .hud-timebar {
+    display: none;
+  }
+  .hud-btn {
+    padding: 0.14rem 0.4rem;
+    font-size: 0.68rem;
+  }
+}
 </style>
