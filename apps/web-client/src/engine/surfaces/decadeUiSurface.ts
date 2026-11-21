@@ -221,8 +221,18 @@ export interface DecadePoxiDialogState {
 
 export interface DecadeUiRuntimeState {
   layoutVariant: "decadeLayout.css" | "layout_new.css" | "junba.css" | "doudizhu.css";
-  playerCssVariant: "player_new.css" | "player1_PC.css" | "player2_PC.css" | "player3_PC.css";
+  playerCssVariant:
+    | "player_new.css"
+    | "player1.css"
+    | "player1_PC.css"
+    | "player2.css"
+    | "player2_PC.css"
+    | "player3.css"
+    | "player3_PC.css";
   pauseHistoryOpen: boolean;
+  turnActionLogs: ReadonlyArray<{ seq: number; seat: number; text: string }>;
+  pauseGuessBySeat: Record<number, string>;
+  selectedPauseFilterSeat: number | null;
   poxiModalTargetSeat: number | null;
   poxiDialog: DecadePoxiDialogState | null;
   jiuBuffSeats: number[];
@@ -278,6 +288,9 @@ export function createInitialDecadeUiRuntimeState(
     layoutVariant: config.decadeLayout === "on" ? "decadeLayout.css" : "layout_new.css",
     playerCssVariant: config.newDecadeStyle === "on" ? "player_new.css" : "player1_PC.css",
     pauseHistoryOpen: false,
+    turnActionLogs: [],
+    pauseGuessBySeat: {},
+    selectedPauseFilterSeat: null,
     poxiModalTargetSeat: null,
     poxiDialog: null,
     jiuBuffSeats: [],
@@ -330,17 +343,58 @@ export function updateDecadeConfigInState(
 ): DecadeUiRuntimeState {
   const nextCfg = applyDecadeConfigUpdate(state.config, patch);
   if (opts?.persist !== false) persistDecadeConfig(nextCfg);
+  const nextPlayerCssVariant: DecadeUiRuntimeState["playerCssVariant"] =
+    patch.newDecadeStyle !== undefined
+      ? nextCfg.newDecadeStyle === "on"
+        ? "player_new.css"
+        : opts?.mobileViewport
+          ? "player1.css"
+          : "player1_PC.css"
+      : state.playerCssVariant;
   return {
     ...state,
     config: nextCfg,
     layoutVariant: nextCfg.decadeLayout === "on" ? "decadeLayout.css" : "layout_new.css",
-    playerCssVariant: nextCfg.newDecadeStyle === "on" ? "player_new.css" : "player1_PC.css",
-    activeCssSurfaces: resolveActiveDecadeCssSurfaces(nextCfg, { mobileViewport: opts?.mobileViewport }),
+    playerCssVariant: nextPlayerCssVariant,
+    activeCssSurfaces: resolveActiveDecadeCssSurfaces(nextCfg, {
+      mobileViewport: opts?.mobileViewport,
+      playerCssVariant: nextPlayerCssVariant,
+    }),
     startBanner:
       patch.SanGuoShaGameStart !== undefined
         ? resolveGameStartBanner(nextCfg.SanGuoShaGameStart)
         : state.startBanner,
   };
+}
+
+export function updateDecadePlayerCssVariant(
+  state: DecadeUiRuntimeState,
+  variant: DecadeUiRuntimeState["playerCssVariant"],
+  opts?: { mobileViewport?: boolean },
+): DecadeUiRuntimeState {
+  return {
+    ...state,
+    playerCssVariant: variant,
+    activeCssSurfaces: resolveActiveDecadeCssSurfaces(state.config, {
+      mobileViewport: opts?.mobileViewport,
+      playerCssVariant: variant,
+    }),
+  };
+}
+
+export function assignPauseGuessInState(
+  state: DecadeUiRuntimeState,
+  seat: number,
+  guess: string,
+): DecadeUiRuntimeState {
+  const nextMap = { ...state.pauseGuessBySeat };
+  const clean = guess.trim().slice(0, 8);
+  if (!clean) {
+    delete nextMap[seat];
+  } else {
+    nextMap[seat] = clean;
+  }
+  return { ...state, pauseGuessBySeat: nextMap };
 }
 
 export function dispatchDecadeUiHook(

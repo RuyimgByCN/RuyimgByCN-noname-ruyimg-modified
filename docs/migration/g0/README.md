@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-22 Batch UI-4（L08 终 14 项与 L14 108 项共 +122）更新（待提交／发布）
+
+基线 HEAD `bd43569e164a7692bd18a88d96d1f196a1fa2ad1`（Batch UI-3 已发布，CI Run `44922862013` 10/10）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-ui` 独立审查（#65 **`APPROVE`**）与主线 Chrome CDP 及全量门禁复测，清单更新为 **已复核等价 1,182／简化近似 3,242／缺失 0／上游未定义 0**（合计 4,424）：`L08 十周年UI` 由 `392 / 14 / 0` 升为 **406 / 0 / 0**（+14）；`L14 手杀ui` 由 `0 / 141 / 0` 升为 **108 / 33 / 0**（+108：`39` 配置＋`52` 钩子＋`17` 表面升为 `已复核等价`，其余 #65 指出的 33 项维持 `简化近似` 待 UI-5 闭环）。详见 [Batch UI-4 证据摘要](../../operations/evidence/2026-11-21-ui-l14-shousha/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-21 Batch UI-3（L08 十周年UI 371 项）更新（待提交／发布）
 
 基线 HEAD `1906e7f151848f2852edb90e75803e2ed3ff93f9`（Batch Q2-L27 已发布，CI Run `44916917571` 10/10）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-ui` 独立审查（#51 **`APPROVE`**）与主线 Chrome CDP 及全量门禁复测，清单更新为 **已复核等价 1,060／简化近似 3,364／缺失 0／上游未定义 0**（合计 4,424）：`L08 十周年UI` 由 `21 / 385 / 0` 更新为 **392 / 14 / 0**（+371：`20` 项 `configs`、`32` 项 `surfaces`、`319` 项 `ui_hooks` 升为 `已复核等价`；仅 `3` 项配置 `dynamicBackground`/`JBDDZ`/`SanGuoShaGameOver` 与 `11` 项表面保留 `简化近似` 待 UI-4 闭环）。详见 [Batch UI-3 证据摘要](../../operations/evidence/2026-11-21-ui-l08-hooks/README.md) 与 [inventory_status.json](inventory_status.json)。

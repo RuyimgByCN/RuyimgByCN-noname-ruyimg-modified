@@ -3,6 +3,11 @@
 > 核验日期：2026-11-11 · 来源仓：`noname-liuli` · 入口：`archive/upstream/noname-liuli/noname/extension/手杀ui`  
 > 本页为 E01/G0 深度清单与**裁决 34 逐项上游清单**（武将 / 技能 / 卡牌 / 模式与战役节点 / 配置项 / 界面钩子 / 渲染面 / 现有 `decision34*` 归类）。非整包验收证明。
 
+### 2026-11-22 Batch UI-4（108 项升级 / 33 项待 UI-5 闭环）合入补充（待提交／发布）
+
+- 合入 `swarm/conv-ui` Batch UI-4（`2c9f51d4c5da4b1d6487c10165610dfdfdf21965`，`verifier-ui` #65 **`APPROVE`**）：按裁决 35/37/38 完成 48 配置 Schema/弹窗/严格 JSON 守卫、53 项 UI 钩子与 40 项渲染面映射，在主线通过 510 前端单测、83/83 烟测及 `shousha-ui-cdp.mjs` 实测。
+- 按 #65 独立复核口径仅升级已形成真实消费的 **108 项**（`39` 配置＋`52` 钩子＋`17` 表面）为 `已复核等价`；严格保留 **33 项**（`XPJ`/`qiDongYe`/9 配置 + `ZLLT` 钩子 + 23 变体表面）为 `简化近似`，`L14` 计为 **108／33／0**（非整包签署）。详见 [Batch UI-4 证据摘要](../../operations/evidence/2026-11-21-ui-l14-shousha/README.md)。
+
 ## 1. 功能清单
 
 ### 入口与形态

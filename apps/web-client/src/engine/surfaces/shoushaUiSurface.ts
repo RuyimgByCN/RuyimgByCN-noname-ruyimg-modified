@@ -7,6 +7,18 @@
  * - `character/main1*.js`, `lbtn/main*.js`, `skill/main*.js`, `menu.js` 及 32 份 CSS 样式表
  */
 
+import {
+  createDefaultShoushaConfig,
+  loadPersistedShoushaConfig,
+  persistShoushaConfig,
+  validateShoushaConfigPatch,
+  type ShoushaUiConfig,
+} from "./shoushaConfigSchema";
+import {
+  resolveActiveShoushaSurfaces,
+  resolveShoushaGtbbBanner,
+} from "./shoushaSurfacesRuntime";
+
 export const SHOUSHA_UI_HOOK_IDS = [
   "_dieNoTuoguan",
   "_menuCheat",
@@ -151,17 +163,27 @@ export interface ShoushaUiRuntimeState {
   playPromptText: string | null;
   skillTipOpen: boolean;
   waitingSeats: Record<number, string>;
+  seatPromptBySeat: Record<number, string>;
   wuxiePromptActive: boolean;
   skillControlRev: number;
   zlltOutcropEnabled: boolean;
   chatBubbleBySeat: Record<number, string>;
   sortedHandCardIds: number[];
   cheatConsoleOpen: boolean;
+  config: ShoushaUiConfig;
+  activeSurfaces: ReadonlyArray<string>;
+  lastGtbbText: string | null;
+  handLuckScore: number | null;
 }
 
-export function createInitialShoushaUiRuntimeState(): ShoushaUiRuntimeState {
+export function createInitialShoushaUiRuntimeState(
+  opts?: { usePersistedConfig?: boolean; mobileViewport?: boolean; bossMode?: boolean },
+): ShoushaUiRuntimeState {
+  const config = opts?.usePersistedConfig
+    ? loadPersistedShoushaConfig()
+    : createDefaultShoushaConfig();
   return {
-    styleVariant: "shousha",
+    styleVariant: config.yangshi === "on" ? "shousha" : "decade",
     tuoguanActive: false,
     progressVisible: true,
     progressPct: 85,
@@ -171,12 +193,41 @@ export function createInitialShoushaUiRuntimeState(): ShoushaUiRuntimeState {
     playPromptText: "出牌阶段，请选择一张牌",
     skillTipOpen: false,
     waitingSeats: {},
+    seatPromptBySeat: {},
     wuxiePromptActive: false,
     skillControlRev: 1,
     zlltOutcropEnabled: false,
     chatBubbleBySeat: {},
     sortedHandCardIds: [],
     cheatConsoleOpen: false,
+    config,
+    activeSurfaces: resolveActiveShoushaSurfaces(config, opts),
+    lastGtbbText: null,
+    handLuckScore: null,
+  };
+}
+
+export function updateShoushaConfigInState(
+  state: ShoushaUiRuntimeState,
+  patch: Partial<ShoushaUiConfig>,
+  opts?: { persist?: boolean; mobileViewport?: boolean; bossMode?: boolean },
+): ShoushaUiRuntimeState {
+  const { patch: cleanPatch } = validateShoushaConfigPatch(patch as Record<string, unknown>, {
+    strict: false,
+  });
+  const nextCfg: ShoushaUiConfig = { ...state.config, ...cleanPatch };
+  if (opts?.persist !== false) persistShoushaConfig(nextCfg);
+  return {
+    ...state,
+    config: nextCfg,
+    styleVariant: nextCfg.yangshi === "on" ? "shousha" : "decade",
+    activeSurfaces: resolveActiveShoushaSurfaces(nextCfg, opts),
+    zlltOutcropEnabled: patch.ZLLT !== undefined ? nextCfg.ZLLT : state.zlltOutcropEnabled,
+    lastGtbbText: !nextCfg.GTBB
+      ? null
+      : patch.GTBB !== undefined || patch.GTBBYangshi !== undefined
+        ? resolveShoushaGtbbBanner(nextCfg, 1)
+        : state.lastGtbbText,
   };
 }
 
@@ -250,7 +301,12 @@ export function dispatchShoushaUiHook(
           : hook === "_chupaiK"
             ? "阶段结算中..."
             : "请使用或打出一张牌响应";
-    return { ...state, playPromptText: prompt, skillTipOpen: true };
+    return {
+      ...state,
+      playPromptText: prompt,
+      skillTipOpen: true,
+      seatPromptBySeat: { ...state.seatPromptBySeat, [seat]: prompt },
+    };
   }
   if (
     hook === "_chupaiB" ||
@@ -264,7 +320,9 @@ export function dispatchShoushaUiHook(
     hook === "_chupaiNX" ||
     hook === "_skilltip_closeB"
   ) {
-    return { ...state, playPromptText: null, skillTipOpen: false };
+    const nextSeatPrompt = { ...state.seatPromptBySeat };
+    delete nextSeatPrompt[seat];
+    return { ...state, playPromptText: null, skillTipOpen: false, seatPromptBySeat: nextSeatPrompt };
   }
   if (
     hook === "_jd_ddxyA" ||

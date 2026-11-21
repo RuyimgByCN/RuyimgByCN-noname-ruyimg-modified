@@ -2,6 +2,8 @@
 import { computed } from "vue";
 import type { ObserverSnapshot } from "../../types/engine";
 import type { ExtensionSurfacesSnapshot } from "../../engine/extensionSurfaceRuntime";
+import { createDefaultShoushaConfig } from "../../engine/surfaces/shoushaConfigSchema";
+import { resolveShoushaGtbbBanner } from "../../engine/surfaces/shoushaSurfacesRuntime";
 
 export type BattleModalId =
   | "qhly"
@@ -9,7 +11,8 @@ export type BattleModalId =
   | "mvp"
   | "omnisearch"
   | "taixu"
-  | "decade-menu";
+  | "decade-menu"
+  | "shousha-menu";
 
 const props = defineProps<{
   view: ObserverSnapshot | null;
@@ -19,6 +22,19 @@ const props = defineProps<{
 const emit = defineEmits<{
   openModal: [modal: BattleModalId];
 }>();
+
+const shoushaConfig = computed(
+  () => props.surfaces?.uiSuites?.shoushaUi?.config ?? createDefaultShoushaConfig(),
+);
+
+const gtbbBannerText = computed(() =>
+  resolveShoushaGtbbBanner(shoushaConfig.value, props.view?.round ?? 0),
+);
+
+const jindutiaoTrackHeightPx = computed(() => {
+  const pct = Number.parseInt(shoushaConfig.value.jindutiaoSet || "28", 10) || 28;
+  return `${Math.max(6, Math.min(18, Math.round(pct * 0.42)))}px`;
+});
 
 const phaseZh = computed(() => {
   const shoushaRibbon = props.surfaces?.uiSuites?.shoushaUi?.phaseRibbonLabel;
@@ -67,25 +83,53 @@ const rzshCrest = computed(() => {
     data-testid="battle-shousha-table-hud"
   >
     <div class="hud-left">
-      <span class="phase-ribbon" data-testid="battle-hud-phase-ribbon">
+      <span
+        v-if="shoushaConfig.JDTS"
+        class="phase-ribbon hud-phase-pill"
+        data-testid="battle-hud-phase-ribbon"
+      >
         ⚑ {{ phaseZh }}
       </span>
       <span v-if="view" class="round-pill" data-testid="battle-hud-round">
         第 {{ view.round }} 轮 · P{{ view.current_player }}
       </span>
-      <span class="lantern-badge" data-testid="battle-hud-jiangdeng">
+      <span
+        v-if="shoushaConfig.jiangdeng"
+        class="lantern-badge"
+        data-testid="battle-hud-jiangdeng"
+      >
         <span class="candle-flame">🏮</span> {{ jiangdengTier }}
       </span>
       <span class="rzsh-crest" data-testid="battle-hud-rzsh-crest">
         ✦ {{ rzshCrest }}
       </span>
+      <span
+        v-if="gtbbBannerText"
+        class="shousha-gtbb-banner"
+        data-testid="shousha-gtbb-banner"
+      >
+        📢 {{ gtbbBannerText }}
+      </span>
     </div>
 
-    <div class="hud-timebar" role="progressbar" :aria-valuenow="countdownPct" aria-valuemin="0" aria-valuemax="100">
+    <div
+      v-if="shoushaConfig.jindutiao"
+      class="hud-timebar"
+      role="progressbar"
+      :aria-valuenow="countdownPct"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      data-testid="battle-hud-jindutiao"
+    >
       <span class="timebar-label">读秒 {{ Math.ceil(countdownPct * 0.15) }}s</span>
-      <div class="timebar-track" :class="{ 'is-urgent': countdownPct < 25 }">
+      <div
+        class="timebar-track"
+        :class="{ 'is-urgent': countdownPct < 25 }"
+        :style="{ height: jindutiaoTrackHeightPx }"
+        data-testid="battle-hud-timebar-track"
+      >
         <div
-          class="timebar-fill"
+          class="timebar-fill shousha-hud-progress-fill"
           data-testid="battle-hud-countdown-fill"
           :class="{
             'fill-safe': countdownPct >= 50,
@@ -147,6 +191,14 @@ const rzshCrest = computed(() => {
         @click="emit('openModal', 'decade-menu')"
       >
         十周年配置
+      </button>
+      <button
+        type="button"
+        class="hud-btn"
+        data-testid="btn-open-shousha-menu-modal"
+        @click="emit('openModal', 'shousha-menu')"
+      >
+        手杀配置
       </button>
     </nav>
   </section>
@@ -330,6 +382,9 @@ const rzshCrest = computed(() => {
     padding: 0.08rem 0.36rem;
   }
   .hud-timebar {
+    display: none;
+  }
+  .shousha-gtbb-banner {
     display: none;
   }
   .hud-modal-actions {

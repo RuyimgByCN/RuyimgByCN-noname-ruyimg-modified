@@ -184,7 +184,7 @@ export interface DecadePauseHistoryRow {
 /** 根据当前 44 项配置解析应激活的 CSS 渲染面模块列表 (`33` 份 CSS 子集精确映射) */
 export function resolveActiveDecadeCssSurfaces(
   cfg: DecadeUiConfig,
-  opts?: { mobileViewport?: boolean },
+  opts?: { mobileViewport?: boolean; playerCssVariant?: string },
 ): ReadonlyArray<string> {
   const active = new Set<string>([
     "animation.css",
@@ -222,6 +222,9 @@ export function resolveActiveDecadeCssSurfaces(
       active.add("player2_PC.css");
       active.add("player3_PC.css");
     }
+  }
+  if (opts?.playerCssVariant && opts.playerCssVariant.startsWith("player") && opts.playerCssVariant.endsWith(".css")) {
+    active.add(opts.playerCssVariant);
   }
   if (cfg.shoushaNewNewMark || cfg.shoushaNewMark) {
     active.add("player_mark_fix.css");

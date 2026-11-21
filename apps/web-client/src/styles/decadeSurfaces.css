@@ -351,6 +351,84 @@
   color: #fde68a;
 }
 
+/* doudizhu.css (<=3p) vs junba.css (>=4p) */
+.battle-table[data-decade-mode-css="doudizhu.css"] {
+  box-shadow: inset 0 0 88px rgba(217, 119, 6, 0.18);
+}
+.battle-table[data-decade-mode-css="doudizhu.css"] .jbddz-mode-tag {
+  background: linear-gradient(90deg, rgba(146, 64, 14, 0.92), rgba(180, 83, 9, 0.88));
+  border-color: #fbbf24;
+  color: #fef08a;
+}
+.battle-table[data-decade-mode-css="junba.css"] {
+  box-shadow: inset 0 0 88px rgba(153, 27, 27, 0.22);
+}
+.battle-table[data-decade-mode-css="junba.css"] .jbddz-mode-tag {
+  background: linear-gradient(90deg, rgba(127, 29, 29, 0.92), rgba(69, 10, 10, 0.92));
+  border-color: #f87171;
+  color: #fee2e2;
+}
+
+/* animation1.css: openDialog / portrait-pop & dead shake */
+@keyframes decade-open-dialog {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.battle-table[data-active-surfaces~="animation1.css"] .decade-skill-popup,
+.battle-table[data-active-surfaces~="animation1.css"] .decade-effect-toast.skill,
+.battle-table[data-active-surfaces~="animation1.css"] [data-testid="decade-guanxing-dialog"] .overlay-card,
+.battle-table[data-active-surfaces~="animation1.css"] .pause-overlay-card {
+  animation: decade-open-dialog 0.22s ease-out;
+}
+
+/* player1..3[_PC].css + player_new.css: 7-variant player frame styling */
+.battle-table[data-player-css="player_new.css"] .seat.decade-seat-frame {
+  border-radius: 10px;
+}
+.battle-table[data-player-css="player1.css"] .seat.decade-seat-frame,
+.battle-table[data-player-css="player1_PC.css"] .seat.decade-seat-frame {
+  border-radius: 6px;
+  border-color: rgba(217, 169, 85, 0.72);
+  box-shadow: inset 0 0 0 1px rgba(245, 196, 102, 0.28), 0 4px 12px rgba(0, 0, 0, 0.65);
+}
+.battle-table[data-player-css="player2.css"] .seat.decade-seat-frame,
+.battle-table[data-player-css="player2_PC.css"] .seat.decade-seat-frame {
+  border-radius: 12px;
+  border-color: rgba(56, 189, 248, 0.72);
+  box-shadow: inset 0 0 0 1px rgba(125, 211, 252, 0.28), 0 4px 12px rgba(8, 47, 73, 0.65);
+}
+.battle-table[data-player-css="player3.css"] .seat.decade-seat-frame,
+.battle-table[data-player-css="player3_PC.css"] .seat.decade-seat-frame {
+  border-radius: 2px;
+  border-color: rgba(248, 113, 113, 0.72);
+  box-shadow: inset 0 0 0 1px rgba(252, 165, 165, 0.25), 0 4px 14px rgba(69, 10, 10, 0.65);
+}
+
+.decade-dynamic-bg-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.82;
+}
+
+.decade-gameover-overlay[data-preset="shizhounian"] .gameover-card {
+  border-color: #34d399;
+  background: linear-gradient(155deg, rgba(6, 40, 28, 0.96), rgba(9, 16, 22, 0.96));
+}
+.decade-gameover-overlay[data-preset="shousha"] .gameover-card {
+  border-color: #fbbf24;
+  background: linear-gradient(155deg, rgba(68, 28, 7, 0.96), rgba(18, 13, 10, 0.96));
+}
+
 @media (prefers-reduced-motion: reduce) {
   .battle-table * {
     animation-duration: 0.01ms !important;

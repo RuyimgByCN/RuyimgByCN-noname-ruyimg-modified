@@ -7,6 +7,7 @@ import type { CardView, EngineEnvelope, SeatView } from "../../types/engine";
 import { lookupCardKindByDef } from "./cardCatalogLabels";
 import type { DecadeUiConfig } from "./decadeConfigSchema";
 import { DECADE_MARKSKILL_SPECS } from "./decadeMarkSkillsData";
+import { cardsToGuanXingItems, createGuanXingState } from "./decadeSurfacesRuntime";
 import {
   dispatchDecadeUiHook,
   formatDecadeSkillMarkBadge,
@@ -327,7 +328,19 @@ export function syncDecadeUiFromEnvelope(
   const curName = curSeat?.generals?.[0]?.name ?? `P${curPlayer}`;
   const curFaction = curSeat?.generals?.[0]?.faction ?? "qun";
 
-  for (const rawEv of env.events ?? []) {
+  const logs = [...(next.turnActionLogs ?? [])];
+  const seenSeq = new Set(logs.map((l) => l.seq));
+  const pushLog = (seq: number, seat: number, text: string) => {
+    if (seenSeq.has(seq)) return;
+    seenSeq.add(seq);
+    logs.push({ seq, seat, text });
+  };
+  if (turnOrPhaseChanged) {
+    pushLog(env.revision * 1000, curPlayer, `R${view.round} ${curName} · ${view.phase}`);
+  }
+
+  (env.events ?? []).forEach((rawEv, evIdx) => {
+    const logSeq = env.revision * 1000 + evIdx + 1;
     const pubCode = (rawEv as { PublicEvent?: { code?: number } })?.PublicEvent?.code;
     const evType = (rawEv as { type?: string })?.type;
     const cardKind = (rawEv as { card?: string; kind?: string })?.card ?? (rawEv as { kind?: string })?.kind;
@@ -344,6 +357,7 @@ export function syncDecadeUiFromEnvelope(
           ? Math.abs(next.hpDeltaBySeat[t]?.delta ?? 1)
           : 1;
         next = dispatchDecadeUiHook(next, "_Hplose", { seat: t, delta: preservedDelta });
+        pushLog(logSeq + t * 0.01, t, `R${view.round} P${t} 受到 ${preservedDelta} 点伤害`);
       }
     } else if (pubCode === 5 || evType === "HpRecovered") {
       const targets =
@@ -355,9 +369,11 @@ export function syncDecadeUiFromEnvelope(
           ? Math.abs(next.hpDeltaBySeat[t]?.delta ?? 1)
           : 1;
         next = dispatchDecadeUiHook(next, "_HpRecover", { seat: t, delta: preservedDelta });
+        pushLog(logSeq + t * 0.01, t, `R${view.round} P${t} 回复 ${preservedDelta} 点体力`);
       }
     } else if (pubCode === 2 || pubCode === 3 || evType === "CardPlayed") {
       const actor = explicitSource ?? explicitTarget ?? curPlayer;
+      pushLog(logSeq, actor, `R${view.round} P${actor} 使用/打出 ${cardKind ?? "卡牌"}`);
       next = dispatchDecadeUiHook(next, "_decadeUI_usecardBegin", { seat: actor });
       next = dispatchDecadeUiHook(next, "_usecard", { seat: actor });
       if (cardKind === "Jiu") {
@@ -379,6 +395,7 @@ export function syncDecadeUiFromEnvelope(
         const killerId = explicitSource ?? curPlayer;
         const killerSeat = view.seats.find((s) => s.player === killerId);
         const killerName = killerSeat?.generals?.[0]?.name ?? curName;
+        pushLog(logSeq, victimId, `R${view.round} ${victimName} 阵亡 (来源 ${killerName})`);
         next = dispatchDecadeUiHook(next, "_decadeUI_dieKillEffect", {
           seat: victimId,
           killerName,
@@ -391,6 +408,7 @@ export function syncDecadeUiFromEnvelope(
       const actor = explicitSource ?? explicitTarget ?? curPlayer;
       const actorSeat = view.seats.find((s) => s.player === actor);
       const sName = (rawEv as { skill?: string })?.skill ?? "技能发动";
+      pushLog(logSeq, actor, `R${view.round} ${actorSeat?.generals?.[0]?.name ?? `P${actor}`} 发动 ${sName}`);
       next = dispatchDecadeUiHook(next, "_dyjinengtx", {
         seat: actor,
         generalName: actorSeat?.generals?.[0]?.name ?? curName,
@@ -401,6 +419,40 @@ export function syncDecadeUiFromEnvelope(
       next = dispatchDecadeUiHook(next, "_jiubuff_xiaoshi_", { seat: curPlayer });
       next = dispatchDecadeUiHook(next, "_killFire", { seat: curPlayer, clear: true });
     }
+  });
+  if (logs.length !== (next.turnActionLogs?.length ?? 0)) {
+    next = { ...next, turnActionLogs: logs.slice(-60) };
   }
   return next;
+}
+
+/** 上游 `content.js` 真实观星选择请求投影（不主动覆盖手动演示观星状态） */
+export function syncGuanXingChoice(
+  prev: DecadeUiRuntimeState,
+  env: EngineEnvelope,
+): DecadeUiRuntimeState {
+  const ch = env.choice;
+  if (!ch) return prev;
+  const tag = `${ch.source_skill ?? ""} ${ch.kind ?? ""} ${ch.prompt ?? ""}`.toLowerCase();
+  const isGuanXing =
+    tag.includes("guanxing") ||
+    tag.includes("观星") ||
+    tag.includes("牌堆顶");
+  if (!isGuanXing) return prev;
+
+  const drawCards = (env.view?.known_cards ?? []).filter((c) => c.zone === "DrawPile");
+  const topItems =
+    drawCards.length > 0
+      ? cardsToGuanXingItems(drawCards, (k, d) => lookupCardKindByDef(d)?.label ?? k)
+      : (ch.options ?? []).slice(0, 5).map((opt, idx) => ({
+          id: opt.token || idx + 1,
+          label: opt.label_key || "牌堆牌",
+          suit: "♠",
+          rank: String(idx + 1),
+        }));
+  if (topItems.length === 0) return prev;
+  return {
+    ...prev,
+    guanXing: createGuanXingState(topItems, []),
+  };
 }

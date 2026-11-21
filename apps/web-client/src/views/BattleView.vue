@@ -51,13 +51,18 @@ import {
   createInitialExtensionSurfacesState,
   ingestBattleEnvelopeIntoSurfaces,
   loadPersistedDecadeConfig,
+  loadPersistedShoushaConfig,
   restoreExtensionSurfacesForLoad,
   serializeExtensionSurfacesSnapshot,
   updateExtensionDecadeConfig,
+  updateExtensionShoushaConfig,
   type ExtensionSurfacesSnapshot,
 } from "../engine/extensionSurfaceRuntime";
 import type { DecadeUiRuntimeState } from "../engine/surfaces/decadeUiSurface";
-import { createInitialShoushaUiRuntimeState } from "../engine/surfaces/shoushaUiSurface";
+import {
+  createInitialShoushaUiRuntimeState,
+  type ShoushaUiRuntimeState,
+} from "../engine/surfaces/shoushaUiSurface";
 import type { EngineEnvelope, LegalAction } from "../types/engine";
 import { matchOutcomePresentation, nativeCommandError } from "../engine/outcome";
 import { nextTick } from "vue";
@@ -105,10 +110,15 @@ const showGeneralSelect = computed(
   () => !isOnline.value && store.connected && localClient.isNative(),
 );
 function createInitialSurfacesWithPersistedDecade(): ExtensionSurfacesSnapshot {
-  return updateExtensionDecadeConfig(
+  const withDecade = updateExtensionDecadeConfig(
     createInitialExtensionSurfacesState(),
     { ...loadPersistedDecadeConfig(), _connectMode: isOnline.value },
     { persist: false },
+  );
+  return updateExtensionShoushaConfig(
+    withDecade,
+    loadPersistedShoushaConfig(),
+    { persist: false, syncTheme: false },
   );
 }
 const extensionSurfaces = ref<ExtensionSurfacesSnapshot>(createInitialSurfacesWithPersistedDecade());
@@ -122,6 +132,15 @@ function onUpdateDecadeUiFromBoard(nextDecade: DecadeUiRuntimeState) {
     uiSuites: {
       ...extensionSurfaces.value.uiSuites,
       decadeUi: nextDecade,
+    },
+  };
+}
+function onUpdateShoushaUiFromBoard(nextShousha: ShoushaUiRuntimeState) {
+  extensionSurfaces.value = {
+    ...extensionSurfaces.value,
+    uiSuites: {
+      ...extensionSurfaces.value.uiSuites,
+      shoushaUi: nextShousha,
     },
   };
 }
@@ -965,6 +984,11 @@ const turnInfo = computed(() => {
       :state="generalSelect"
       :busy="store.busy"
       :change-wujiang-tx="extensionSurfaces.uiSuites?.decadeUi?.config?.changeWujiangTX ?? 'off'"
+      :shousha-choose="extensionSurfaces.uiSuites?.shoushaUi?.config?.xindchoose ?? 'shousha'"
+      :shousha-choose-type="extensionSurfaces.uiSuites?.shoushaUi?.config?.xindchoose_type ?? 'new'"
+      :shousha-single-row="Boolean(extensionSurfaces.uiSuites?.shoushaUi?.config?.xindsingle)"
+      :shousha-draw-luck="Boolean(extensionSurfaces.uiSuites?.shoushaUi?.config?.xinddraw)"
+      :shousha-infinity-draw="Boolean(extensionSurfaces.uiSuites?.shoushaUi?.config?.infinitydraw)"
       @choose="chooseGeneralCandidate"
       @reload="loadGeneralCandidates"
     />
@@ -1032,6 +1056,7 @@ const turnInfo = computed(() => {
         @activate-skill="activateSkill"
         @open-modal="(m) => (activeBattleModal = m)"
         @update:decade-ui="onUpdateDecadeUiFromBoard"
+        @update:shousha-ui="onUpdateShoushaUiFromBoard"
         @sort-hand="onSortHandFromBoard"
         @end-phase="endPhase"
         @resolve-choice="resolveLegalChoice"

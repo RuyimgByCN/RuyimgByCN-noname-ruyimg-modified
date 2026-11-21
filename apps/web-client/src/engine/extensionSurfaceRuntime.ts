@@ -3,10 +3,19 @@ import {
   createInitialDecadeUiRuntimeState,
   updateDecadeConfigInState,
 } from "./surfaces/decadeUiSurface";
-import { syncDecadeUiFromEnvelope } from "./surfaces/decadeHooksRuntime";
+import { syncDecadeUiFromEnvelope, syncGuanXingChoice } from "./surfaces/decadeHooksRuntime";
 import { normalizeDecadeConfig, type DecadeUiConfig } from "./surfaces/decadeConfigSchema";
+import {
+  normalizeShoushaConfig,
+  type ShoushaUiConfig,
+} from "./surfaces/shoushaConfigSchema";
+import { syncShoushaUiFromEnvelope } from "./surfaces/shoushaSurfacesRuntime";
 import { createInitialQhlyRuntimeState, dispatchQhlyUiHook } from "./surfaces/qhlySurface";
-import { createInitialShoushaUiRuntimeState, dispatchShoushaUiHook } from "./surfaces/shoushaUiSurface";
+import {
+  createInitialShoushaUiRuntimeState,
+  dispatchShoushaUiHook,
+  updateShoushaConfigInState,
+} from "./surfaces/shoushaUiSurface";
 import { createInitialSkinSwitchRuntimeState, dispatchSkinSwitchHook } from "./surfaces/skinSwitchSurface";
 import { createInitialTaixuUiRuntimeState } from "./surfaces/taixuSurface";
 import {
@@ -1082,6 +1091,8 @@ export function ingestBattleEnvelopeIntoSurfaces(
   });
 
   decadeUi = syncDecadeUiFromEnvelope(decadeUi, env);
+  decadeUi = syncGuanXingChoice(decadeUi, env);
+  shoushaUi = syncShoushaUiFromEnvelope(shoushaUi, env);
 
   next = {
     ...next,
@@ -1206,10 +1217,57 @@ export function deserializeExtensionSurfacesSnapshot(raw: string): ExtensionSurf
         ...baseDecade,
         ...rawDecade,
         config: normalizeDecadeConfig(rawDecade.config),
+        turnActionLogs: Array.isArray(rawDecade.turnActionLogs) ? rawDecade.turnActionLogs : [],
+        pauseGuessBySeat:
+          rawDecade.pauseGuessBySeat && typeof rawDecade.pauseGuessBySeat === "object"
+            ? rawDecade.pauseGuessBySeat
+            : {},
+        selectedPauseFilterSeat:
+          typeof rawDecade.selectedPauseFilterSeat === "number"
+            ? rawDecade.selectedPauseFilterSeat
+            : null,
+      },
+    };
+  }
+  if (snap.uiSuites?.shoushaUi) {
+    const baseShousha = createInitialShoushaUiRuntimeState();
+    const rawShousha = snap.uiSuites.shoushaUi;
+    snap.uiSuites = {
+      ...snap.uiSuites,
+      shoushaUi: {
+        ...baseShousha,
+        ...rawShousha,
+        config: normalizeShoushaConfig(rawShousha.config),
+        seatPromptBySeat:
+          rawShousha.seatPromptBySeat && typeof rawShousha.seatPromptBySeat === "object"
+            ? rawShousha.seatPromptBySeat
+            : {},
       },
     };
   }
   return snap;
+}
+
+/** 原子更新 L14 手杀ui 全部 48 项配置并联动 `theme` 字段 */
+export function updateExtensionShoushaConfig(
+  state: ExtensionSurfacesSnapshot,
+  patch: Partial<ShoushaUiConfig>,
+  opts?: { persist?: boolean; mobileViewport?: boolean; bossMode?: boolean; syncTheme?: boolean },
+): ExtensionSurfacesSnapshot {
+  const prevShousha = state.uiSuites?.shoushaUi ?? createInitialShoushaUiRuntimeState();
+  const nextShousha = updateShoushaConfigInState(prevShousha, patch, opts);
+  const nextTheme = { ...state.theme };
+  if (opts?.syncTheme !== false && patch.yangshi !== undefined) {
+    nextTheme.decadeSkinStyle = nextShousha.config.yangshi === "on" ? "shousha" : "shizhounian";
+  }
+  return {
+    ...state,
+    theme: nextTheme,
+    uiSuites: {
+      ...state.uiSuites,
+      shoushaUi: nextShousha,
+    },
+  };
 }
 
 /** 原子更新 L08 十周年UI 全部 44 项配置并联动 `theme` 字段 */
@@ -1572,6 +1630,8 @@ export * from "./surfaces/decadeMarkSkillsData";
 export * from "./surfaces/decadeSurfacesRuntime";
 export * from "./surfaces/decadeUiSurface";
 export * from "./surfaces/qhlySurface";
+export * from "./surfaces/shoushaConfigSchema";
+export * from "./surfaces/shoushaSurfacesRuntime";
 export * from "./surfaces/shoushaUiSurface";
 export * from "./surfaces/skinSwitchSurface";
 export * from "./surfaces/taixuSurface";

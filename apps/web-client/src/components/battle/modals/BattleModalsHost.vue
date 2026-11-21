@@ -6,7 +6,12 @@ import {
   type DecadeUiConfig,
 } from "../../../engine/surfaces/decadeConfigSchema";
 import {
+  createDefaultShoushaConfig,
+  type ShoushaUiConfig,
+} from "../../../engine/surfaces/shoushaConfigSchema";
+import {
   updateExtensionDecadeConfig,
+  updateExtensionShoushaConfig,
   type ExtensionSurfacesSnapshot,
 } from "../../../engine/extensionSurfaceRuntime";
 import type { BattleModalId } from "../BattleShoushaHud.vue";
@@ -16,6 +21,7 @@ import MvpSettlementModal from "./MvpSettlementModal.vue";
 import OmnisearchModal from "./OmnisearchModal.vue";
 import TaixuCampaignModal from "./TaixuCampaignModal.vue";
 import DecadeConfigModal from "../surfaces/DecadeConfigModal.vue";
+import ShoushaConfigModal from "../surfaces/ShoushaConfigModal.vue";
 
 const props = defineProps<{
   activeModal: BattleModalId | null;
@@ -44,6 +50,16 @@ function onUpdateDecadeConfig(patch: Partial<DecadeUiConfig>) {
 
 function onResetDecadeConfig() {
   onUpdateDecadeConfig(createDefaultDecadeConfig());
+}
+
+function onUpdateShoushaConfig(patch: Partial<ShoushaUiConfig>) {
+  const next = updateExtensionShoushaConfig(latestSurfaces.value, patch);
+  latestSurfaces.value = next;
+  emit("update:surfaces", next);
+}
+
+function onResetShoushaConfig() {
+  onUpdateShoushaConfig(createDefaultShoushaConfig());
 }
 </script>
 
@@ -105,5 +121,19 @@ function onResetDecadeConfig() {
     @close="emit('close')"
     @update-config="onUpdateDecadeConfig"
     @reset-config="onResetDecadeConfig"
+    @update-decade-ui="
+      (decadeUi) =>
+        emit('update:surfaces', {
+          ...props.surfaces,
+          uiSuites: { ...props.surfaces.uiSuites, decadeUi },
+        })
+    "
+  />
+  <ShoushaConfigModal
+    v-else-if="activeModal === 'shousha-menu'"
+    :state="surfaces.uiSuites?.shoushaUi"
+    @close="emit('close')"
+    @update-config="onUpdateShoushaConfig"
+    @reset-config="onResetShoushaConfig"
   />
 </template>

@@ -12,7 +12,20 @@ import {
   DECADE_JS_SURFACE_IDS,
   parseDecadeConfigImportJson,
 } from "../../../engine/surfaces/decadeSurfacesRuntime";
-import type { DecadeUiRuntimeState } from "../../../engine/surfaces/decadeUiSurface";
+import {
+  updateDecadePlayerCssVariant,
+  type DecadeUiRuntimeState,
+} from "../../../engine/surfaces/decadeUiSurface";
+
+const PLAYER_CSS_VARIANTS: ReadonlyArray<DecadeUiRuntimeState["playerCssVariant"]> = [
+  "player_new.css",
+  "player1_PC.css",
+  "player1.css",
+  "player2_PC.css",
+  "player2.css",
+  "player3_PC.css",
+  "player3.css",
+];
 
 const props = defineProps<{
   state?: DecadeUiRuntimeState;
@@ -22,7 +35,13 @@ const emit = defineEmits<{
   close: [];
   updateConfig: [patch: Partial<DecadeUiConfig>];
   resetConfig: [];
+  updateDecadeUi: [next: DecadeUiRuntimeState];
 }>();
+
+function onSelectPlayerCssVariant(variant: DecadeUiRuntimeState["playerCssVariant"]) {
+  if (!props.state) return;
+  emit("updateDecadeUi", updateDecadePlayerCssVariant(props.state, variant));
+}
 
 const activeTab = ref<DecadeConfigCategory | "surfaces">("layout");
 const importText = ref("");
@@ -165,6 +184,20 @@ function onImportJson() {
       </div>
 
       <div v-else class="surfaces-view" data-testid="decade-43-surfaces-list">
+        <div class="player-css-switcher">
+          <span class="tiny muted">座位边框 CSS (<code>player1..3[_PC].css</code>)：</span>
+          <select
+            :value="props.state?.playerCssVariant ?? 'player_new.css'"
+            data-testid="decade-player-css-select"
+            @change="
+              onSelectPlayerCssVariant(
+                ($event.target as HTMLSelectElement).value as DecadeUiRuntimeState['playerCssVariant'],
+              )
+            "
+          >
+            <option v-for="v in PLAYER_CSS_VARIANTS" :key="v" :value="v">{{ v }}</option>
+          </select>
+        </div>
         <p class="tiny muted">
           JS 模块（{{ DECADE_JS_SURFACE_IDS.length }}）：{{ DECADE_JS_SURFACE_IDS.join("、") }}
         </p>

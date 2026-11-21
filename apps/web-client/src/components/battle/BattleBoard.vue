@@ -19,6 +19,15 @@ import {
   createDefaultDecadeConfig,
   decadeArenaDatasetAttrs,
 } from "../../engine/surfaces/decadeConfigSchema";
+import {
+  createDefaultShoushaConfig,
+  shoushaArenaDatasetAttrs,
+} from "../../engine/surfaces/shoushaConfigSchema";
+import { SHOUSHA_SAY_WORDS } from "../../engine/surfaces/shoushaSurfacesRuntime";
+import {
+  dispatchShoushaUiHook,
+  type ShoushaUiRuntimeState,
+} from "../../engine/surfaces/shoushaUiSurface";
 import { DECADE_NOSKILL_CONTROL_IDS } from "../../engine/surfaces/decadeMarkSkillsData";
 import type { DecadeUiRuntimeState } from "../../engine/surfaces/decadeUiSurface";
 import { skillDisplayName } from "../../engine/appearanceStore";
@@ -55,16 +64,21 @@ const emit = defineEmits<{
   activateSkill: [skillId: number, targets: number[], cardTargets: number[]];
   openModal: [modal: BattleModalId];
   "update:decadeUi": [next: DecadeUiRuntimeState];
+  "update:shoushaUi": [next: ShoushaUiRuntimeState];
   sortHand: [sortedIds: number[]];
   endPhase: [];
   resolveChoice: [action: ResolveChoiceAction];
   resolveTriggerOrder: [token: number];
 }>();
 
-// Weather particle canvas & animation loop on the real tabletop
+// Weather particle canvas & Decade dynamic background canvas loops on the real tabletop
 const tableWeatherCanvasRef = ref<HTMLCanvasElement | null>(null);
+const dynamicBgCanvasRef = ref<HTMLCanvasElement | null>(null);
 let weatherRafId: number | null = null;
 let weatherFrame = 0;
+let bgRafId: number | null = null;
+let bgFrame = 0;
+let sayWordIndex = 0;
 
 function startWeatherAnimation() {
   if (weatherRafId != null) return;
@@ -87,14 +101,74 @@ function stopWeatherAnimation() {
   }
 }
 
+function drawDynamicBackgroundFrame(mode: string, frame: number) {
+  const canvas = dynamicBgCanvasRef.value;
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+  const w = canvas.width;
+  const h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
+
+  const effectiveMode =
+    mode === "random"
+      ? Math.floor(frame / 90) % 2 === 0
+        ? "decade_jade"
+        : "shousha_amber"
+      : mode;
+
+  const isAmber = effectiveMode === "shousha_amber";
+  const grad = ctx.createRadialGradient(w * 0.5, h * 0.45, 30, w * 0.5, h * 0.45, w * 0.65);
+  grad.addColorStop(0, isAmber ? "rgba(217, 119, 6, 0.24)" : "rgba(16, 185, 129, 0.24)");
+  grad.addColorStop(1, "rgba(0, 0, 0, 0)");
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, w, h);
+
+  for (let i = 0; i < 14; i++) {
+    const px = ((i * 73 + frame * (isAmber ? 1.4 : 0.9)) % (w + 40)) - 20;
+    const py = ((i * 47 + Math.sin(frame * 0.04 + i) * 32 + h) % h);
+    const radius = 3 + (i % 4) * 1.8;
+    ctx.beginPath();
+    ctx.arc(px, py, radius, 0, Math.PI * 2);
+    ctx.fillStyle = isAmber
+      ? `rgba(251, 191, 36, ${0.28 + (i % 3) * 0.14})`
+      : `rgba(52, 211, 153, ${0.25 + (i % 3) * 0.14})`;
+    ctx.fill();
+  }
+}
+
+function startBgAnimation() {
+  if (bgRafId != null) return;
+  const loop = () => {
+    const mode = decadeConfig.value.dynamicBackground;
+    if (mode !== "off") {
+      drawDynamicBackgroundFrame(mode, bgFrame++);
+    }
+    bgRafId = requestAnimationFrame(loop);
+  };
+  drawDynamicBackgroundFrame(decadeConfig.value.dynamicBackground, bgFrame++);
+  bgRafId = requestAnimationFrame(loop);
+}
+
+function stopBgAnimation() {
+  if (bgRafId != null) {
+    cancelAnimationFrame(bgRafId);
+    bgRafId = null;
+  }
+}
+
 onMounted(() => {
   if (props.surfaces?.coin?.snowFall || (props.surfaces?.coin?.activeEffects?.length ?? 0) > 0) {
     startWeatherAnimation();
+  }
+  if (decadeConfig.value.dynamicBackground !== "off") {
+    startBgAnimation();
   }
 });
 
 onUnmounted(() => {
   stopWeatherAnimation();
+  stopBgAnimation();
 });
 
 watch(
@@ -121,9 +195,31 @@ const dropTargetId = ref<number | null>(null);
 
 const decadeUiState = computed(() => props.surfaces?.uiSuites?.decadeUi);
 const decadeConfig = computed(() => decadeUiState.value?.config ?? createDefaultDecadeConfig());
+const shoushaUiState = computed(() => props.surfaces?.uiSuites?.shoushaUi);
+const shoushaConfig = computed(() => shoushaUiState.value?.config ?? createDefaultShoushaConfig());
+watch(
+  () => decadeConfig.value.dynamicBackground,
+  (mode) => {
+    if (mode !== "off") {
+      drawDynamicBackgroundFrame(mode, bgFrame++);
+      startBgAnimation();
+    } else {
+      stopBgAnimation();
+    }
+  },
+);
+const decadeModeCss = computed(() => {
+  if (!decadeConfig.value.JBDDZ) return "none";
+  return orderedSeats.value.length <= 3 ? "doudizhu.css" : "junba.css";
+});
 const decadeDatasetAttrs = computed(() => ({
   ...decadeArenaDatasetAttrs(decadeConfig.value),
+  ...shoushaArenaDatasetAttrs(shoushaConfig.value),
   "data-prestart": !props.view || props.view.round < 1 ? "on" : "off",
+  "data-player-css": decadeUiState.value?.playerCssVariant ?? "player_new.css",
+  "data-active-surfaces": (decadeUiState.value?.activeCssSurfaces ?? []).join(" "),
+  "data-jbddz": decadeConfig.value.JBDDZ ? "on" : "off",
+  "data-decade-mode-css": decadeModeCss.value,
 }));
 const liveTargetArc = computed(() => {
   if (!targetMode.value || selectedTargets.value.length === 0 || decadeConfig.value.CPZS === "off") {
@@ -164,6 +260,19 @@ function onTogglePauseHistory() {
     ...decadeUiState.value,
     pauseHistoryOpen: !decadeUiState.value.pauseHistoryOpen,
   });
+}
+
+function onTriggerQuickSay() {
+  if (!shoushaUiState.value) return;
+  const word = SHOUSHA_SAY_WORDS[sayWordIndex % SHOUSHA_SAY_WORDS.length]!;
+  sayWordIndex++;
+  emit(
+    "update:shoushaUi",
+    dispatchShoushaUiHook(shoushaUiState.value, "_wmkzSayChange", {
+      seat: props.selfId,
+      sayText: word,
+    }),
+  );
 }
 
 function seats(): SeatView[] {
@@ -579,6 +688,17 @@ const endPhaseDisabled = computed(
     role="region"
     aria-label="三国杀真实牌桌战场"
   >
+    <!-- Dynamic background canvas behind tabletop seats (`dynamicBackground`) -->
+    <canvas
+      v-if="decadeConfig.dynamicBackground !== 'off'"
+      ref="dynamicBgCanvasRef"
+      class="decade-dynamic-bg-canvas"
+      width="960"
+      height="540"
+      data-testid="decade-dynamic-bg-canvas"
+      aria-hidden="true"
+    ></canvas>
+
     <!-- Tabletop weather / particles canvas layer -->
     <div
       v-if="surfaces?.coin?.snowFall || (surfaces?.coin?.activeEffects?.length ?? 0) > 0"
@@ -611,6 +731,7 @@ const endPhaseDisabled = computed(
       <DecadeTabletopOverlays
         zone="stage"
         :decade-ui="decadeUiState"
+        :shousha-ui="shoushaUiState"
         :live-line-arc="liveTargetArc"
         :view="view"
         :self-id="selfId"
@@ -648,6 +769,7 @@ const endPhaseDisabled = computed(
             :current-turn="view?.current_player === slot.seat.player"
             :decade-ui="surfaces?.uiSuites?.decadeUi"
             :decade-config="decadeConfig"
+            :shousha-ui="shoushaUiState"
             :skin-switch="surfaces?.uiSuites?.skinSwitch"
             :decade-style="surfaces?.theme?.decadeSkinStyle"
             :l20-marks="surfaces?.theme?.l20Marks"
@@ -662,6 +784,7 @@ const endPhaseDisabled = computed(
           <DecadeTabletopOverlays
             zone="banners"
             :decade-ui="decadeUiState"
+            :shousha-ui="shoushaUiState"
             :view="view"
             :self-id="selfId"
             :finished="finished"
@@ -807,7 +930,9 @@ const endPhaseDisabled = computed(
 
           <!-- DecadeUI .hand-tip & #dui-controls end-phase row -->
           <div class="hand-tip-bar" data-testid="tabletop-hand-tip-bar">
-            <span v-if="decadeConfig.JBDDZ" class="jbddz-mode-tag" data-testid="jbddz-mode-tag">军八·斗地主</span>
+            <span v-if="decadeConfig.JBDDZ" class="jbddz-mode-tag" data-testid="jbddz-mode-tag">
+              {{ orderedSeats.length <= 3 ? "斗地主 (doudizhu.css)" : `军八 · ${orderedSeats.length}人场 (junba.css)` }}
+            </span>
             <span v-if="autoRunning" class="tuoguan-badge" data-testid="tuoguan-badge">🤖 托管中</span>
             <span class="hand-tip-text">{{ tabletopTipText }}</span>
             <button
@@ -819,6 +944,16 @@ const endPhaseDisabled = computed(
               @click="emit('endPhase')"
             >
               结束阶段
+            </button>
+            <button
+              v-if="shoushaUiState && shoushaConfig.sayplay !== 'off'"
+              type="button"
+              class="decade-mini-pill"
+              data-testid="btn-tabletop-say"
+              title="发送手杀快捷说话"
+              @click="onTriggerQuickSay"
+            >
+              🗨
             </button>
             <button
               v-if="decadeUiState"
@@ -935,8 +1070,13 @@ const endPhaseDisabled = computed(
   color: #f3d27a;
 }
 
+.battle-shousha-hud {
+  position: relative;
+  z-index: 2;
+}
 .arena-stage {
   position: relative;
+  z-index: 2;
   flex: 1;
   min-height: 780px;
   width: 100%;

@@ -1,17 +1,35 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import type { GeneralSelectState } from "../../engine/generalSelectModel";
 
 const props = defineProps<{
   state: GeneralSelectState;
   busy: boolean;
   changeWujiangTx?: "off" | "blur" | "shine";
+  shoushaChoose?: "shizhounian" | "shousha" | "off";
+  shoushaChooseType?: "old" | "new";
+  shoushaSingleRow?: boolean;
+  shoushaDrawLuck?: boolean;
+  shoushaInfinityDraw?: boolean;
 }>();
 
 const emit = defineEmits<{
   choose: [name: string];
   reload: [];
 }>();
+
+const luckUsesCount = ref(0);
+const candidateLuckScore = computed(() => {
+  if (!props.state.candidates.length) return 0;
+  const seed = props.state.candidates.reduce((acc, c, i) => acc + c.def * (i + 3), 0);
+  return 58 + (seed % 41);
+});
+
+function onReloadClick() {
+  if (!props.shoushaInfinityDraw && props.shoushaDrawLuck && luckUsesCount.value >= 7) return;
+  luckUsesCount.value++;
+  emit("reload");
+}
 
 const locked = computed(
   () => props.busy || props.state.selectionStatus === "pending",
@@ -40,7 +58,11 @@ const loadLabel = computed(() => {
   <section
     class="panel general-select"
     :data-change-wujiang-tx="changeWujiangTx ?? 'shine'"
+    :data-shousha-choose="shoushaChoose ?? 'shousha'"
+    :data-shousha-choose-type="shoushaChooseType ?? 'new'"
+    :data-shousha-single-row="shoushaSingleRow ? 'on' : 'off'"
     aria-label="选将面板"
+    data-testid="general-select-panel"
   >
     <div class="gs-head">
       <div>
@@ -52,12 +74,19 @@ const loadLabel = computed(() => {
       </div>
       <button
         type="button"
-        :disabled="locked || state.loadStatus === 'loading'"
+        :disabled="locked || state.loadStatus === 'loading' || (!shoushaInfinityDraw && shoushaDrawLuck && luckUsesCount >= 7)"
         aria-label="刷新选将候选"
-        @click="emit('reload')"
+        data-testid="btn-general-reload"
+        @click="onReloadClick"
       >
-        刷新候选
+        {{ shoushaDrawLuck ? (shoushaInfinityDraw ? '无限换将(∞)' : `手气卡刷新(${Math.max(0, 7 - luckUsesCount)}/7)`) : '刷新候选' }}
       </button>
+    </div>
+
+    <div v-if="shoushaDrawLuck && state.candidates.length > 0" class="shousha-luck-bar" data-testid="shousha-choose-luck-bar">
+      <span>手气评价：<strong>{{ candidateLuckScore }} 分</strong></span>
+      <span>样式：{{ shoushaChoose ?? 'shousha' }} / {{ shoushaChooseType ?? 'new' }}</span>
+      <span>排列：{{ shoushaSingleRow ? '单行卷轴' : '多行网格' }}</span>
     </div>
 
     <p

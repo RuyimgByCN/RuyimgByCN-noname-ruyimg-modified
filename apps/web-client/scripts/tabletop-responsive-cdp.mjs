@@ -193,7 +193,7 @@ try {
       check.overflowX ||
       check.hudTop < 0 ||
       check.topbarClipped ||
-      check.hudBtnCount !== 6 ||
+      check.hudBtnCount !== 7 ||
       check.hudButtonsClipped.length > 0 ||
       (checkMobileFit && check.handBottom > height)
     ) {

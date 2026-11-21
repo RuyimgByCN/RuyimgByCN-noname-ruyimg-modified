@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import type { ObserverSnapshot } from "../../../types/engine";
 import {
   buildPauseHistoryRows,
@@ -16,11 +16,16 @@ import {
   computeDecadeSeatAnchor,
   type RelativeSeatSlot,
 } from "../../../engine/surfaces/decadeTabletopLayout";
-import type { DecadeUiRuntimeState } from "../../../engine/surfaces/decadeUiSurface";
+import {
+  assignPauseGuessInState,
+  type DecadeUiRuntimeState,
+} from "../../../engine/surfaces/decadeUiSurface";
+import type { ShoushaUiRuntimeState } from "../../../engine/surfaces/shoushaUiSurface";
 
 const props = withDefaults(
   defineProps<{
     decadeUi?: DecadeUiRuntimeState;
+    shoushaUi?: ShoushaUiRuntimeState;
     liveLineArc?: DecadeLineArcState | null;
     view: ObserverSnapshot | null;
     selfId?: number;
@@ -43,9 +48,27 @@ const emit = defineEmits<{
 }>();
 
 const chatDraft = ref("");
+const gameOverHidden = ref(false);
+const latestDecadeUi = ref<DecadeUiRuntimeState | undefined>(props.decadeUi);
+watch(
+  () => props.decadeUi,
+  (next) => {
+    latestDecadeUi.value = next;
+  },
+);
 
 const cfg = computed(() => props.decadeUi?.config);
 const animAllowed = computed(() => cfg.value?.gameAnimationEffect !== false);
+const jsanEnabled = computed(() => Boolean(props.shoushaUi?.config?.JSAN));
+const pauseGuessChoices = ["主", "忠", "反", "奸", "清"] as const;
+
+const filteredPauseLogs = computed(() => {
+  const all = props.decadeUi?.turnActionLogs ?? [];
+  const filterSeat = props.decadeUi?.selectedPauseFilterSeat;
+  const rows =
+    filterSeat == null ? all : all.filter((item) => item.seat === filterSeat);
+  return rows.slice(-12).reverse();
+});
 
 const startBannerText = computed(() => {
   if (props.startBannerDismissed || !cfg.value || cfg.value.SanGuoShaGameStart === "off") {
@@ -192,12 +215,33 @@ function togglePoxiMode() {
 }
 
 function updateState(partial: Partial<DecadeUiRuntimeState>) {
-  if (!props.decadeUi) return;
-  emit("updateDecadeUi", { ...props.decadeUi, ...partial });
+  const base = latestDecadeUi.value ?? props.decadeUi;
+  if (!base) return;
+  const next = { ...base, ...partial };
+  latestDecadeUi.value = next;
+  emit("updateDecadeUi", next);
 }
 
 function togglePauseHistory() {
-  updateState({ pauseHistoryOpen: !props.decadeUi?.pauseHistoryOpen });
+  const base = latestDecadeUi.value ?? props.decadeUi;
+  updateState({ pauseHistoryOpen: !base?.pauseHistoryOpen });
+}
+
+function togglePauseSeatFilter(seat: number) {
+  const base = latestDecadeUi.value ?? props.decadeUi;
+  if (!base) return;
+  const nextSeat = base.selectedPauseFilterSeat === seat ? null : seat;
+  updateState({ selectedPauseFilterSeat: nextSeat });
+}
+
+function setPauseGuess(seat: number, role: string) {
+  const base = latestDecadeUi.value ?? props.decadeUi;
+  if (!base) return;
+  const current = base.pauseGuessBySeat?.[seat] ?? "";
+  const nextVal = current === role || role === "清" ? "" : role;
+  const next = assignPauseGuessInState(base, seat, nextVal);
+  latestDecadeUi.value = next;
+  emit("updateDecadeUi", next);
 }
 
 function toggleChatFold() {
@@ -455,25 +499,102 @@ function onGuanXingCardClick(state: DecadeGuanXingState, cardId: number) {
       </div>
     </div>
 
-    <!-- `pause.js`: pause history drawer -->
+    <!-- `pause.js`: pause history drawer with seat filter, identity guesses & turn action logs -->
     <div
       v-if="decadeUi?.pauseHistoryOpen"
       class="decade-overlay-modal"
       data-testid="decade-pause-history"
     >
-      <div class="overlay-card">
+      <div class="overlay-card pause-overlay-card">
         <header class="overlay-head">
           <strong>对局暂停历史 (pause.js)</strong>
-          <button type="button" class="mini-close" @click="togglePauseHistory">恢复牌局</button>
+          <button type="button" class="mini-close" data-testid="btn-pause-close" @click="togglePauseHistory">恢复牌局</button>
         </header>
         <ul class="pause-list">
-          <li v-for="row in pauseRows" :key="row.seat" :class="{ dead: !row.alive }">
-            <span>#{{ row.seat + 1 }} {{ row.name }}</span>
-            <span>体力 {{ row.hpText }} · 手牌 {{ row.handCount }}</span>
+          <li
+            v-for="row in pauseRows"
+            :key="row.seat"
+            :class="{ dead: !row.alive, 'is-filter-selected': decadeUi.selectedPauseFilterSeat === row.seat }"
+            :data-testid="`pause-seat-row-${row.seat}`"
+            @click="togglePauseSeatFilter(row.seat)"
+          >
+            <div class="pause-seat-main">
+              <span>#{{ row.seat + 1 }} {{ row.name }}</span>
+              <span>体力 {{ row.hpText }} · 手牌 {{ row.handCount }}</span>
+            </div>
+            <div class="pause-guess-bar" @click.stop>
+              <button
+                v-for="g in pauseGuessChoices"
+                :key="g"
+                type="button"
+                class="guess-chip"
+                :class="{ active: decadeUi.pauseGuessBySeat?.[row.seat] === g }"
+                :data-testid="`btn-pause-guess-${row.seat}-${g}`"
+                @click="setPauseGuess(row.seat, g)"
+              >
+                {{ g }}
+              </button>
+            </div>
           </li>
         </ul>
+        <div class="pause-logs-box" data-testid="pause-turn-logs">
+          <div class="pause-logs-head">
+            <span class="tiny muted">
+              回合行动记录 {{ decadeUi.selectedPauseFilterSeat != null ? `(P${decadeUi.selectedPauseFilterSeat})` : "(全部)" }}
+            </span>
+            <button
+              v-if="decadeUi.selectedPauseFilterSeat != null"
+              type="button"
+              class="mini-close"
+              @click="updateState({ selectedPauseFilterSeat: null })"
+            >
+              显示全部
+            </button>
+          </div>
+          <ul v-if="filteredPauseLogs.length" class="pause-log-entries">
+            <li v-for="entry in filteredPauseLogs" :key="entry.seq" class="tiny">
+              {{ entry.text }}
+            </li>
+          </ul>
+          <p v-else class="tiny muted" style="margin: 0">暂无筛选记录</p>
+        </div>
       </div>
     </div>
+
+    <!-- `SanGuoShaGameOver` settlement overlay (`splash.js` / `JSAN`) -->
+    <div
+      v-if="gameOverBannerText && !gameOverHidden"
+      class="decade-overlay-modal decade-gameover-overlay"
+      :data-preset="cfg?.SanGuoShaGameOver ?? 'shousha'"
+      data-testid="decade-gameover-overlay"
+    >
+      <div class="overlay-card gameover-card">
+        <header class="overlay-head">
+          <strong>{{ gameOverBannerText }}</strong>
+          <button
+            v-if="jsanEnabled"
+            type="button"
+            class="mini-close"
+            data-testid="btn-shousha-hide-gameover"
+            @click="gameOverHidden = true"
+          >
+            隐藏结算
+          </button>
+        </header>
+        <p class="tiny muted">
+          模式Preset：{{ cfg?.SanGuoShaGameOver }} · 结算提示已触发（净室只读展示，不改变胜负规则）。
+        </p>
+      </div>
+    </div>
+    <button
+      v-else-if="gameOverBannerText && gameOverHidden"
+      type="button"
+      class="mini-close restore-gameover-btn"
+      data-testid="btn-shousha-restore-gameover"
+      @click="gameOverHidden = false"
+    >
+      点击恢复结算画面
+    </button>
 
     <!-- `component.js`: compact collapsible tabletop chatBox & pacing slider -->
     <div
@@ -646,11 +767,70 @@ function onGuanXingCardClick(state: DecadeGuanXingState, cardId: number) {
 }
 .pause-list li {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 0.22rem;
   font-size: 0.78rem;
-  padding: 0.24rem 0.45rem;
+  padding: 0.28rem 0.45rem;
   border-radius: 5px;
   background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+}
+.pause-list li.is-filter-selected {
+  border: 1px solid #fbbf24;
+  background: rgba(251, 191, 36, 0.14);
+}
+.pause-seat-main {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+.pause-guess-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.22rem;
+}
+.guess-chip {
+  padding: 0.05rem 0.28rem;
+  font-size: 0.68rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: #cbd5e1;
+  cursor: pointer;
+}
+.guess-chip.active {
+  border-color: #60a5fa;
+  background: rgba(59, 130, 246, 0.28);
+  color: #eff6ff;
+}
+.pause-logs-box {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 0.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.pause-logs-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.pause-log-entries {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 110px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.16rem;
+}
+.restore-gameover-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 26;
 }
 .pause-list li.dead {
   opacity: 0.55;

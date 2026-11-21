@@ -13,6 +13,8 @@ import {
   resolveDecadeSeatBorderTier,
 } from "../../engine/surfaces/decadeHooksRuntime";
 import type { DecadeUiRuntimeState } from "../../engine/surfaces/decadeUiSurface";
+import { resolveShoushaGuanjie } from "../../engine/surfaces/shoushaSurfacesRuntime";
+import type { ShoushaUiRuntimeState } from "../../engine/surfaces/shoushaUiSurface";
 import type { SkinSwitchRuntimeState } from "../../engine/surfaces/skinSwitchSurface";
 import {
   cardKindLabel,
@@ -32,6 +34,7 @@ const props = defineProps<{
   currentTurn?: boolean;
   decadeUi?: DecadeUiRuntimeState;
   decadeConfig?: DecadeUiConfig;
+  shoushaUi?: ShoushaUiRuntimeState;
   skinSwitch?: SkinSwitchRuntimeState;
   decadeStyle?: string;
   l20Marks?: Record<string, number>;
@@ -52,6 +55,22 @@ const displayName = computed(() =>
 );
 
 const identityBadge = computed(() => identityBadgeInfo(props.seat.identity));
+const seatGuanjie = computed(() => {
+  const totalSeats = Math.max(2, Object.keys(props.decadeUi?.handCountBadgeBySeat ?? {}).length || 4);
+  return resolveShoushaGuanjie(props.seat, totalSeats);
+});
+const seatPromptText = computed(
+  () =>
+    props.shoushaUi?.seatPromptBySeat?.[props.seat.player] ??
+    props.shoushaUi?.waitingSeats?.[props.seat.player] ??
+    null,
+);
+const seatSayBubble = computed(
+  () => props.shoushaUi?.chatBubbleBySeat?.[props.seat.player] ?? null,
+);
+const seatPauseGuess = computed(() =>
+  !props.seat.identity ? (props.decadeUi?.pauseGuessBySeat?.[props.seat.player] ?? null) : null,
+);
 const decadeBadges = computed(() => props.decadeUi?.activeMarkBadgesBySeat[props.seat.player] ?? []);
 const hasJiuBuff = computed(() => props.decadeUi?.jiuBuffSeats.includes(props.seat.player) ?? false);
 const isChained = computed(() => Boolean(props.seat.linked));
@@ -328,6 +347,10 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
         <header class="seat-overlay-header">
           <div class="seat-tags">
             <span v-if="self" class="tag self-tag">你</span>
+            <span v-if="effectiveConfig?.JBDDZ" class="tag jbddz-seat-num" data-testid="seat-jbddz-num">[{{ seat.seat + 1 }}号]</span>
+            <span class="shousha-guanjie-badge" data-testid="seat-guanjie-badge">{{ seatGuanjie.label }}</span>
+            <span v-if="seatPauseGuess" class="seat-pause-guess-pill" data-testid="seat-pause-guess-pill">猜:{{ seatPauseGuess }}</span>
+            <span v-if="seatPromptText" class="seat-prompt-pill" data-testid="seat-prompt-pill">{{ seatPromptText }}</span>
             <span v-if="currentTurn" class="tag turn-tag">回合</span>
             <span v-if="seat.turned_over" class="tag" aria-label="武将牌背面">翻面</span>
             <span v-if="isChained" class="tag chain-tag" data-testid="seat-chain-badge">🔗横置</span>
@@ -409,6 +432,9 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
         </div>
         <span v-else v-show="isNodeEnabled('equips')" class="seat-node-anchor" data-node-key="equips" aria-hidden="true"></span>
 
+        <div v-if="seatSayBubble" class="seat-say-bubble" data-testid="seat-say-bubble">
+          💬 {{ seatSayBubble }}
+        </div>
         <div v-if="!seat.alive" class="dead-badge">✗ 阵亡 · {{ identityBadge.glyph }}</div>
         <div v-else-if="seat.hp <= 0" class="dying-badge">⚠ 濒死</div>
       </div>

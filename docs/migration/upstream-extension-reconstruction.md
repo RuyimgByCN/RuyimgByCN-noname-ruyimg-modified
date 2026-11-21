@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-22 Batch UI-4（L08 终 14 项与 L14 108 项共 +122）合入与清单上调（待提交／发布）
+
+基线 HEAD `bd43569e164a7692bd18a88d96d1f196a1fa2ad1`（Batch UI-3 已发布，CI Run `44922862013` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-ui` `2c9f51d4c5da4b1d6487c10165610dfdfdf21965`（`verifier-ui` #65 **`APPROVE`**）：闭环 `L08` 终 14 项并完成 `L14 手杀ui` 洁净室前端消费，经主线全量第七节门禁及 6 套 Chrome CDP 验证。按 #65 复核口径升级 **122 项**：`L08 十周年UI` 升为 **406/406 单项已复核等价（简化近似 0／缺失 0）**；`L14 手杀ui` 升 `108` 项并保留 33 项（`XPJ`/`qiDongYe`/23 变体表面等）为 `简化近似`（**已复核等价 108／简化近似 33／缺失 0**），全仓清单更新为 **已复核等价 1,182／简化近似 3,242／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch UI-4 复核摘要](../operations/evidence/2026-11-21-ui-l14-shousha/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。
+
 ## 2026-11-21 Batch UI-3（L08 十周年UI 371 项）合入与清单上调（待提交／发布）
 
 基线 HEAD `1906e7f151848f2852edb90e75803e2ed3ff93f9`（Batch Q2-L27 已发布，CI Run `44916917571` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-ui` `185c03e9c` + `aa742ff78`（`verifier-ui` #51 **`APPROVE`**）：洁净室实现 `L08 十周年UI` 全部 319 项 `ui_hooks`、Canvas2D 动皮、`drlt_poxi`、`node` 20 节点键及 `loadingStyle` 作用域隔离，经主线全量第七节门禁及 5 套 Chrome CDP 验证。按 #51 复核口径升级 **371 项**（`20` 配置 + `32` 表面 + `319` 钩子；保留 `dynamicBackground`/`JBDDZ`/`SanGuoShaGameOver` 与 11 项表面为 `简化近似`），`L08` 更新为 **已复核等价 392／简化近似 14／缺失 0**，全仓清单更新为 **已复核等价 1,060／简化近似 3,364／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch UI-3 复核摘要](../operations/evidence/2026-11-21-ui-l08-hooks/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。

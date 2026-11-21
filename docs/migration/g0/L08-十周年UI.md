@@ -3,6 +3,10 @@
 > 核验日期：2026-11-11 · 来源仓：`noname-liuli` · 入口：`archive/upstream/noname-liuli/noname/extension/十周年UI`  
 > 本页为 E01/G0 深度清单与**裁决 34 逐项上游清单**（武将 / 技能 / 卡牌 / 模式与战役节点 / 配置项 / 界面钩子 / 渲染面 / 现有 `decision34*` 归类）。非整包验收证明。
 
+### 2026-11-22 Batch UI-4（终 14 项→406/406）合入补充（待提交／发布）
+
+- 合入 `swarm/conv-ui` Batch UI-4（`2c9f51d4c5da4b1d6487c10165610dfdfdf21965`，`verifier-ui` #65 **`APPROVE`**）：闭环 `L08` 终 `3` 项 `configs`（`dynamicBackground`、`JBDDZ`、`SanGuoShaGameOver`）与 `11` 项 `surfaces`（`doudizhu.css`、`junba.css`、`player1..3[_PC].css`、`animation1.css`、`content`、`pause`）。`L08` 单项台账更新为 **406／0／0**（仍非整包八项签署，且 Spine 4.0 真实商业皮肤待用户本机比对）。详见 [Batch UI-4 证据摘要](../../operations/evidence/2026-11-21-ui-l14-shousha/README.md)。
+
 ### 2026-11-21 Batch UI-3（319 钩子＋20 配置＋32 表面共 371 项）合入补充（待提交／发布）
 
 - 合入 `swarm/conv-ui` Batch UI-3（`185c03e9c` + `aa742ff78`，`verifier-ui` #51 **`APPROVE`**）：按裁决 35/37/38 洁净室实现全部 319 项 `L08:ui_hooks`（33 核心钩子 + 286 `markskill`）及诚实未知牌背 `drlt_poxi`/`pro_drlt_poxi`，补齐 Canvas2D 动皮、`node` 20 子节点键、`loadingStyle` 隔离及事件归因/过时提示清理。

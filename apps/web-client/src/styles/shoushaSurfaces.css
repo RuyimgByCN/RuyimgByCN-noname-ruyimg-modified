@@ -1,0 +1,194 @@
+/**
+ * L14 手杀ui 32 份 CSS 渲染面（clean-room 原生 CSS 规则映射）
+ * 对照 `archive/upstream/noname-liuli/noname/extension/手杀ui/`
+ */
+
+/* extension.css: 阶段提示(JDTS)、狗托播报(GTBB)与手杀倒计时进度条(1/2/3) */
+.shousha-gtbb-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.14rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: min(360px, 88vw);
+  background: linear-gradient(90deg, rgba(120, 53, 15, 0.9), rgba(21, 94, 117, 0.85));
+  border: 1px solid rgba(250, 204, 21, 0.55);
+  color: #fef3c7;
+}
+.battle-table[data-shousha-gtbb-style="off"] .shousha-gtbb-banner {
+  background: linear-gradient(90deg, rgba(20, 48, 36, 0.92), rgba(15, 23, 42, 0.92));
+  border-color: #34d399;
+  color: #d1fae5;
+}
+.battle-table[data-shousha-gtbb-font="on"] .shousha-gtbb-banner {
+  font-family: "STKaiti", "KaiTi", "Kaiti SC", Georgia, serif;
+}
+.battle-table[data-shousha-gtbb-font="off"] .shousha-gtbb-banner {
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+.battle-table[data-shousha-jdts-style="2"] .hud-phase-pill {
+  border-color: #38bdf8;
+  color: #bae6fd;
+  background: rgba(8, 47, 73, 0.84);
+}
+.battle-table[data-shousha-jdts-style="1"] .hud-phase-pill {
+  border-color: #f59e0b;
+  color: #fde68a;
+  background: rgba(69, 26, 3, 0.8);
+}
+
+.battle-table[data-shousha-jindutiao-style="1"] .shousha-hud-progress-fill {
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+}
+.battle-table[data-shousha-jindutiao-style="2"] .shousha-hud-progress-fill {
+  background: linear-gradient(90deg, #10b981, #38bdf8);
+}
+.battle-table[data-shousha-jindutiao-style="3"] .shousha-hud-progress-fill {
+  background: linear-gradient(90deg, #eab308, #fbbf24, #b45309);
+}
+
+/* LTAN: 聊天按钮隐藏 */
+.battle-table[data-shousha-ltan="hide"] [data-testid="btn-tabletop-chat"] {
+  display: none !important;
+}
+
+/* skill/main1.css & main2.css & xiandingskill_ss: 手杀限定技/主技能栏美化 */
+.battle-table[data-shousha-xianding="on"] .action-skill-btn {
+  border-color: rgba(250, 204, 21, 0.72);
+  box-shadow: inset 0 0 8px rgba(245, 158, 11, 0.25);
+}
+
+/* card/main*.css & lbtn/main*.css: 手杀样式(yangshi=on) vs 十周年样式(yangshi=off) */
+.battle-table[data-shousha-yangshi="on"] .hand-card {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.55), inset 0 0 0 1px rgba(245, 158, 11, 0.35);
+}
+.battle-table[data-shousha-yangshi="off"] .hand-card {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.55), inset 0 0 0 1px rgba(52, 211, 153, 0.42);
+}
+.battle-table[data-shousha-xpj="on"] .shousha-xpj-badge {
+  border-color: #fbbf24;
+  color: #fef08a;
+}
+
+/* KGMH/kaiguan.css & kaiguan_new.css: 开关美化样式 */
+.shousha-modal-card[data-kgmh="1"] .shousha-switch-label input[type="checkbox"] {
+  accent-color: #f59e0b;
+}
+.shousha-modal-card[data-kgmh="2"] .shousha-switch-label input[type="checkbox"] {
+  accent-color: #34d399;
+}
+
+/* menu.css / menu2.css / menu3.css: yangshi_bg 0..8 菜单壁纸渐变 */
+.shousha-modal-card[data-bg="0"] {
+  background: linear-gradient(155deg, #1b1712 0%, #11161f 100%);
+}
+.shousha-modal-card[data-bg="1"] {
+  background: linear-gradient(155deg, #1c2422 0%, #0f1715 100%);
+  border-color: #2dd4bf;
+}
+.shousha-modal-card[data-bg="2"] {
+  background: linear-gradient(155deg, #14192d 0%, #0a0f1c 100%);
+  border-color: #60a5fa;
+}
+.shousha-modal-card[data-bg="3"] {
+  background: linear-gradient(155deg, #16281c 0%, #101b14 100%);
+  border-color: #86efac;
+}
+.shousha-modal-card[data-bg="4"] {
+  background: linear-gradient(155deg, #2b1822 0%, #150e14 100%);
+  border-color: #f472b6;
+}
+.shousha-modal-card[data-bg="5"],
+.shousha-modal-card[data-bg="6"],
+.shousha-modal-card[data-bg="7"],
+.shousha-modal-card[data-bg="8"] {
+  background: linear-gradient(155deg, #292014 0%, #17120c 100%);
+  border-color: #f59e0b;
+}
+
+/* style*.css & dialog/main1.css: xindchoose / xindsingle / xinddraw 选将美化 */
+.general-select[data-shousha-choose="shousha"] {
+  border-color: rgba(245, 158, 11, 0.72);
+  box-shadow: 0 10px 30px rgba(120, 53, 15, 0.45);
+}
+.general-select[data-shousha-choose="shizhounian"] {
+  border-color: rgba(52, 211, 153, 0.72);
+  box-shadow: 0 10px 30px rgba(6, 78, 59, 0.45);
+}
+.general-select[data-shousha-single-row="on"] .gs-grid {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 0.45rem;
+}
+.general-select[data-shousha-single-row="on"] .gs-grid > li {
+  flex: 0 0 156px;
+}
+.shousha-luck-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(120, 53, 15, 0.26);
+  border: 1px solid rgba(251, 191, 36, 0.36);
+  color: #fde68a;
+}
+
+/* character/main1*.css: 手杀官阶徽标、说话气泡与等待/出牌提示胶囊 */
+.shousha-guanjie-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.03rem 0.28rem;
+  border-radius: 3px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  background: rgba(120, 53, 15, 0.78);
+  border: 1px solid rgba(251, 191, 36, 0.52);
+  color: #fde68a;
+}
+
+.seat-say-bubble {
+  position: absolute;
+  bottom: 24px;
+  left: 6px;
+  right: 6px;
+  z-index: 16;
+  padding: 0.16rem 0.36rem;
+  border-radius: 8px;
+  background: rgba(255, 250, 235, 0.94);
+  border: 1px solid #d97706;
+  color: #451a03;
+  font-size: 0.65rem;
+  font-weight: 600;
+  line-height: 1.25;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+
+.seat-prompt-pill {
+  font-size: 0.63rem;
+  padding: 0.04rem 0.28rem;
+  border-radius: 4px;
+  background: rgba(146, 64, 14, 0.85);
+  border: 1px solid rgba(253, 224, 71, 0.6);
+  color: #fef08a;
+  font-weight: 600;
+}
+
+.seat-pause-guess-pill {
+  font-size: 0.62rem;
+  padding: 0.03rem 0.26rem;
+  border-radius: 3px;
+  background: rgba(30, 58, 138, 0.86);
+  border: 1px solid rgba(147, 197, 253, 0.65);
+  color: #dbeafe;
+  font-weight: 700;
+}
