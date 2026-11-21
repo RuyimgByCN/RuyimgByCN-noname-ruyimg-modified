@@ -405,7 +405,7 @@ pub(super) fn post_damage(
                     && !ctx.core.has_skill_any_state(d.target, zd)
                 {
                     for skdef in [zd] {
-                        ctx.core.skills.insert(
+                        ctx.insert_skill(
                             (d.target, skdef),
                             crate::state::SkillInstance {
                                 owner: d.target,

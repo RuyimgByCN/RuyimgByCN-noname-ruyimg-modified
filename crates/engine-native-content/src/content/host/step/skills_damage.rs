@@ -449,7 +449,7 @@ impl HostMachine {
                 }
                 _ => Flow::Done,
             },
-            // 清正：选花色 → 选目标 → 选目标花色 → 双向弃牌 → 少弃者受伤
+            // 清正：选花色(direct可取消) → 选目标 → log+己方先弃(yield清失去牌窗) → 选目标花色 → 弃目标(yield) → 少弃者受伤(source=Some(owner))
             HostBehavior::MbcmQingzheng => match self.stage {
                 HostStage::Act => {
                     let suits = mbcm_qingzheng_suits(ctx, self.owner);
@@ -465,7 +465,7 @@ impl HostMachine {
                             options: suits.into_iter().map(ChoiceOption::Tag).collect(),
                             min: 1,
                             max: 1,
-                            allow_cancel: false,
+                            allow_cancel: true,
                         },
                     }
                 }
@@ -475,14 +475,14 @@ impl HostMachine {
                     };
                     let mut chosen: Vec<CardId> = Vec::new();
                     for c in ctx.core.player(self.owner).hand.iter().copied() {
-                        if mbcm_suit_of(ctx, c) == Some(suit) {
+                        if mbcm_effective_suit_of(ctx, self.owner, c) == Some(suit) {
                             chosen.push(c);
                         }
                     }
                     if chosen.is_empty() {
                         return Flow::Done;
                     }
-                    self.cards = chosen.iter().map(|c| u32::from(*c)).collect();
+                    self.cards = chosen;
                     let options: Vec<ChoiceOption> = ctx
                         .core
                         .alive_players()
@@ -509,9 +509,59 @@ impl HostMachine {
                     let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied() else {
                         return Flow::Done;
                     };
+                    if !ctx.core.player(target).alive || target == self.owner {
+                        return Flow::Done;
+                    }
                     self.target = Some(target);
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "清正",
+                        owner: self.owner,
+                        presentation: None,
+                    });
+                    let mut mine: Vec<CardId> = self
+                        .cards
+                        .iter()
+                        .copied()
+                        .filter(|c| ctx.core.player(self.owner).hand.contains(c))
+                        .collect();
+                    for &c in &mine {
+                        ctx.take_hand_card(self.owner, c);
+                        ctx.to_discard(c);
+                    }
+                    if !mine.is_empty() {
+                        ctx.note_cards_lost(self.owner, &mine);
+                        ctx.log(LogEvent::CardDiscarded {
+                            player: self.owner,
+                            cards: mine.clone(),
+                        });
+                        ctx.emit(EventData::CardsLost {
+                            player: self.owner,
+                            origins: vec![crate::event::LostOrigin::Hand; mine.len()],
+                            cards: mine.clone(),
+                        });
+                    }
+                    self.cards = std::mem::take(&mut mine);
+                    self.stage = HostStage::JiefenTargetDiscard;
+                    Flow::Yield
+                }
+                HostStage::JiefenTargetDiscard => {
+                    let Some(target) = self.target else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(target).alive {
+                        return Flow::Done;
+                    }
                     let suits = mbcm_qingzheng_suits(ctx, target);
                     if suits.is_empty() {
+                        if !self.cards.is_empty() {
+                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                                Some(self.owner),
+                                target,
+                                1,
+                                crate::event::DamageNature::Normal,
+                                None,
+                            )));
+                        }
                         return Flow::Done;
                     }
                     self.stage = HostStage::CompareTargetPick;
@@ -534,29 +584,44 @@ impl HostMachine {
                     let Some(target) = self.target else {
                         return Flow::Done;
                     };
-                    let mine: Vec<CardId> = self.cards.iter().map(|c| *c as CardId).collect();
+                    let mine_n = self.cards.len();
                     let theirs: Vec<CardId> = ctx
                         .core
                         .player(target)
                         .hand
                         .iter()
                         .copied()
-                        .filter(|c| mbcm_suit_of(ctx, *c) == Some(suit))
+                        .filter(|c| mbcm_effective_suit_of(ctx, target, *c) == Some(suit))
                         .collect();
-                    let mine_n = mine.len();
                     let theirs_n = theirs.len();
-                    for c in mine {
-                        ctx.discard_from_hand(self.owner, c);
+                    for &c in &theirs {
+                        ctx.take_hand_card(target, c);
+                        ctx.to_discard(c);
                     }
-                    for c in theirs {
-                        ctx.discard_from_hand(target, c);
+                    if !theirs.is_empty() {
+                        ctx.note_cards_lost(target, &theirs);
+                        ctx.log(LogEvent::CardDiscarded {
+                            player: target,
+                            cards: theirs.clone(),
+                        });
+                        ctx.emit(EventData::CardsLost {
+                            player: target,
+                            origins: vec![crate::event::LostOrigin::Hand; theirs.len()],
+                            cards: theirs,
+                        });
                     }
-                    ctx.log(LogEvent::SkillTriggered {
-                        skill: "清正",
-                        owner: self.owner, presentation: None });
-                    if theirs_n < mine_n {
+                    self.cards.clear();
+                    self.card = Some(u32::from(theirs_n < mine_n));
+                    self.stage = HostStage::SelectCard;
+                    Flow::Yield
+                }
+                HostStage::SelectCard => {
+                    let Some(target) = self.target else {
+                        return Flow::Done;
+                    };
+                    if self.card == Some(1) && ctx.core.player(target).alive {
                         ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                            None,
+                            Some(self.owner),
                             target,
                             1,
                             crate::event::DamageNature::Normal,

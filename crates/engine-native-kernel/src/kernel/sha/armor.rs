@@ -9,12 +9,13 @@ impl ShaResolveMachine {
             ctx.catalog,
             self.target,
             "lanyinjia",
-        ) && (ctx
-            .core
-            .player(self.source)
-            .equips
-            .iter()
-            .any(|c| ctx.catalog.card_kind(*c) == CardKind::Qinggang)
+        ) && ((!crate::kernel::mbcmfangzhu_baiban(ctx.core, self.source)
+            && ctx
+                .core
+                .player(self.source)
+                .equips
+                .iter()
+                .any(|c| ctx.catalog.card_kind(*c) == CardKind::Qinggang))
             || ctx
                 .catalog
                 .skill_by_name(crate::vocabulary::names::BOSS_ZHADAO)
@@ -29,6 +30,7 @@ impl ShaResolveMachine {
     /// if the judge succeeds.
     pub(super) fn try_bagua_dodge(&mut self, ctx: &mut Ctx<'_>, can_bagua: bool) -> Option<Flow> {
         let has_armor = can_bagua
+            && !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.target)
             && ctx.core.player(self.target).alive
             && ctx
                 .core
@@ -87,9 +89,10 @@ impl ShaResolveMachine {
         rw_blocks
             || (black && {
                 let equips = &ctx.core.player(self.target).equips;
-                let has_renwang = equips
-                    .iter()
-                    .any(|c| ctx.catalog.card_kind(*c) == CardKind::Renwang);
+                let has_renwang = !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.target)
+                    && equips
+                        .iter()
+                        .any(|c| ctx.catalog.card_kind(*c) == CardKind::Renwang);
                 let tiemian_active = ctx
                     .catalog
                     .skill_by_name(crate::vocabulary::names::BOSS_TIEMIAN)

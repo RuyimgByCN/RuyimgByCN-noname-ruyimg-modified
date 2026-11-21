@@ -648,10 +648,7 @@ pub fn apply_card_use_canceled(
     {
         canceled = true;
     }
-    if in_hand
-        && flag_val(state, actor, "mbcmfangzhu_ban") > 0
-        && (kind.is_basic_kind() || kind.is_equip())
-    {
+    if flag_val(state, actor, "mbcmfangzhu_ban") > 0 && !kind.is_trick_kind() {
         canceled = true;
     }
     let zhixi_cap = flag_val(state, actor, "l27_new_zhixi_cap");

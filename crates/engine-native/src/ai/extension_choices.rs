@@ -517,10 +517,120 @@ pub(super) fn plan_extension_choice_action(
                 selection,
             })
         }
-        "mbcmjiushi_gain_confirm" | "mbcmjiushi_turnback_confirm" => Some(GameAction::Answer {
+        "mbcmjiushi_gain_confirm" => Some(GameAction::Answer {
             choice_id: id,
             selection: vec![ChoiceOption::Confirm],
         }),
+        "mbcmjiushi_turnback_confirm" => {
+            let face_down = input
+                .view
+                .players
+                .get(seat as usize)
+                .is_some_and(|p| p.turned_over);
+            let selection = if face_down || !allow_cancel {
+                vec![ChoiceOption::Confirm]
+            } else {
+                Vec::new()
+            };
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
+        "mbcmqingzheng_suit" => {
+            let has_enemy_hand = input
+                .view
+                .players
+                .iter()
+                .any(|p| p.alive && p.seat != seat && p.hand_count > 0 && public_attitude(&input.view, seat, p.seat) < 0);
+            if !has_enemy_hand && allow_cancel {
+                return Some(GameAction::Answer {
+                    choice_id: id,
+                    selection: Vec::new(),
+                });
+            }
+            let best = options
+                .iter()
+                .filter_map(|o| match o {
+                    ChoiceOption::Tag(tag) => Some(*tag),
+                    _ => None,
+                })
+                .min_by_key(|&tag| {
+                    input
+                        .own_hand_kinds
+                        .iter()
+                        .filter(|&(cid, _)| {
+                            catalog.cards.get(*cid as usize).is_some_and(|d| match d.suit {
+                                crate::catalog::Suit::Spade => tag == 0,
+                                crate::catalog::Suit::Heart => tag == 1,
+                                crate::catalog::Suit::Club => tag == 2,
+                                crate::catalog::Suit::Diamond => tag == 3,
+                            })
+                        })
+                        .map(|&(cid, _)| extension_card_value(catalog, input, cid))
+                        .sum::<i64>()
+                });
+            let selection = match best {
+                Some(t) => vec![ChoiceOption::Tag(t)],
+                None if allow_cancel => Vec::new(),
+                None => options.iter().take(1).copied().collect(),
+            };
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
+        "mbcmqingzheng_target" => {
+            let best = options
+                .iter()
+                .filter_map(|o| match o {
+                    ChoiceOption::Player(t) => Some(*t),
+                    _ => None,
+                })
+                .filter(|&t| {
+                    public_attitude(&input.view, seat, t) < 0
+                        && input
+                            .view
+                            .players
+                            .get(t as usize)
+                            .is_some_and(|p| p.hand_count > 0)
+                })
+                .min_by_key(|&t| {
+                    input
+                        .view
+                        .players
+                        .get(t as usize)
+                        .map(|p| p.hand_count as i64)
+                        .unwrap_or(99)
+                });
+            let selection = match best {
+                Some(t) => vec![ChoiceOption::Player(t)],
+                None if allow_cancel => Vec::new(),
+                None => options.iter().take(1).copied().collect(),
+            };
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
+        "mbcmqingzheng_target_suit" => Some(GameAction::Answer {
+            choice_id: id,
+            selection: options.iter().take(1).copied().collect(),
+        }),
+        "dying_save" => {
+            let has_card = options.iter().any(|o| matches!(o, ChoiceOption::Card(_)));
+            if !has_card {
+                if let Some(def) = catalog.skill_by_name("mbcmjiushi") {
+                    if options.contains(&ChoiceOption::Skill(def)) {
+                        return Some(GameAction::Answer {
+                            choice_id: id,
+                            selection: vec![ChoiceOption::Skill(def)],
+                        });
+                    }
+                }
+            }
+            None
+        }
         "mbcmfangzhu_target" => {
             let best = options
                 .iter()

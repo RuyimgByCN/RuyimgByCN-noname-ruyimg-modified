@@ -112,11 +112,12 @@ pub(super) fn play_sha(
     }
     // 诸葛连弩（批③-b 第四把）：装备时出杀不限次数（与
     // 咆哮同口径的锁定豁免，按装备牌种判断）。
-    let has_zhuge = core
-        .player(player_id)
-        .equips
-        .iter()
-        .any(|c| catalog.card_kind(*c) == CardKind::Zhuge);
+    let has_zhuge = !crate::kernel::mbcmfangzhu_baiban(core, player_id)
+        && core
+            .player(player_id)
+            .equips
+            .iter()
+            .any(|c| catalog.card_kind(*c) == CardKind::Zhuge);
     // 龙颅山峰（mtg 首切片，规则 v100）：地图效果全局
     // 出杀上限 +1（上游 addGlobalSkill cardUsable 同口径）
     let land_sha_bonus =
@@ -269,7 +270,8 @@ pub(super) fn play_sha(
     }
     // 方天画戟（批③-b 第九把）：该杀为最后手牌且装备方天
     // 时可指定至多 3 个目标（逐个独立合法性检查，去重）。
-    let fangtian = core.player(player_id).hand.len() == 1
+    let fangtian = !crate::kernel::mbcmfangzhu_baiban(core, player_id)
+        && core.player(player_id).hand.len() == 1
         && core
             .player(player_id)
             .equips

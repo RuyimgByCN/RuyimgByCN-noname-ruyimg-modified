@@ -26,7 +26,7 @@ impl SkillBehavior for JijiangBehavior {
         // 资格（ADR 0776 对齐上游 zhuSkill + filter）：主公资格
         // （身份局须主公身份）+ 存在蜀势力角色。**不以暗手牌预筛**——
         // 有无杀由被询问者逐人应答时才知道。
-        if !ctx.state.is_lord(owner) {
+        if crate::kernel::mbcmfangzhu_banned(ctx.state, owner) || !ctx.state.is_lord(owner) {
             return None;
         }
         let has_shu = ctx.state.alive_players().any(|p| {

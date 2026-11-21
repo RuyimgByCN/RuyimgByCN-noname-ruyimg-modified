@@ -176,20 +176,25 @@ pub(in crate::snap) fn dying_save_options(
     dying: PlayerId,
 ) -> Vec<ChoiceOption> {
     let mut options = vec![ChoiceOption::Pass];
-    let p = core.player(responder);
-    for &c in &p.hand {
-        if !crate::kernel::jinyan_blocks_black_trick(core, catalog, responder, c)
-            && is_tao_like(core, catalog, responder, c, dying)
-        {
-            options.push(ChoiceOption::Card(c));
+    if !crate::kernel::mbcmfangzhu_banned(core, responder) {
+        let p = core.player(responder);
+        for &c in &p.hand {
+            if !crate::kernel::jinyan_blocks_black_trick(core, catalog, responder, c)
+                && is_tao_like(core, catalog, responder, c, dying)
+            {
+                options.push(ChoiceOption::Card(c));
+            }
         }
-    }
-    for c in catalog.player_vm_view_as_extra_cards(core, responder, false, None) {
-        if !crate::kernel::jinyan_blocks_black_trick(core, catalog, responder, c)
-            && is_tao_like(core, catalog, responder, c, dying)
-            && !options.contains(&ChoiceOption::Card(c))
-        {
-            options.push(ChoiceOption::Card(c));
+        for c in catalog.player_vm_view_as_extra_cards(core, responder, false, None) {
+            if !crate::kernel::jinyan_blocks_black_trick(core, catalog, responder, c)
+                && is_tao_like(core, catalog, responder, c, dying)
+                && !options.contains(&ChoiceOption::Card(c))
+            {
+                options.push(ChoiceOption::Card(c));
+            }
+        }
+        if let Some(def) = crate::kernel::mbcmjiushi_dying_skill(core, catalog, responder, dying) {
+            options.push(ChoiceOption::Skill(def));
         }
     }
     options

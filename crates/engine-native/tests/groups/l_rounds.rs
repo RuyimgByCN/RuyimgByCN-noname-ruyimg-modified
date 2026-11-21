@@ -123,3 +123,6 @@ mod l28_thunder_eight;
 
 #[path = "../l29_longxue_eight.rs"]
 mod l29_longxue_eight;
+
+#[path = "../l29_longxue_fixes.rs"]
+mod l29_longxue_fixes;

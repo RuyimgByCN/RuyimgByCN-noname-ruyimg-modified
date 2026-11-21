@@ -668,12 +668,13 @@ impl ShaResolveMachine {
 
     /// 寒冰剑可发动（来源装备寒冰剑且目标有手牌/装备）。
     fn hanbing_can_fire(&self, ctx: &Ctx<'_>) -> bool {
-        let has_hanbing = ctx
-            .core
-            .player(self.source)
-            .equips
-            .iter()
-            .any(|c| ctx.catalog.card_kind(*c) == CardKind::Hanbing);
+        let has_hanbing = !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.source)
+            && ctx
+                .core
+                .player(self.source)
+                .equips
+                .iter()
+                .any(|c| ctx.catalog.card_kind(*c) == CardKind::Hanbing);
         has_hanbing
             && ctx.core.player(self.target).alive
             && (!ctx.core.player(self.target).hand.is_empty()
@@ -719,12 +720,13 @@ impl ShaResolveMachine {
 
     /// 麒麟弓可弃目标坐骑列表（来源装备麒麟弓且目标有马）。
     fn qilin_horses(&self, ctx: &Ctx<'_>) -> Vec<ChoiceOption> {
-        let has_qilin = ctx
-            .core
-            .player(self.source)
-            .equips
-            .iter()
-            .any(|c| ctx.catalog.card_kind(*c) == CardKind::Qilin);
+        let has_qilin = !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.source)
+            && ctx
+                .core
+                .player(self.source)
+                .equips
+                .iter()
+                .any(|c| ctx.catalog.card_kind(*c) == CardKind::Qilin);
         if !has_qilin {
             return Vec::new();
         }

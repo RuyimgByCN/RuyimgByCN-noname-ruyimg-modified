@@ -1,5 +1,9 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+## 2026-11-21 Batch 1.5（L29 龙血玄黄）规则修复、独立复核与本地收口（待提交／发布）
+
+基线 HEAD `af6ef4899052ad1258f38a242960f8f0ea0fd066`（Batch 1.4 CI Run `44785367168` Attempt 1 `10/10 success` 已记入 `ci-runs.md`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。队列第 1 项 Batch 1.5 完成 `L29` 全部 5 项技能已知差异修复并两轮重审通过（`mbqianlong`＋`mbweitong`、`mbcmqingzheng`、`mbcmjiushi`、`mbcmfangzhu`、`mbjuejin`＋`mbcmxscw`，并补齐 `CardKind::is_trick_kind` 与后装/标准装备 `baiban`/`jin` 门控）；独立复核 `3488fd64-4fea-4218-be3f-f5fb6d38add2` 两轮核验 **`APPROVE`**（建议将 `L29:configs:shengjian` 下调为 `简化近似` 待队列 5 UI `_CMeffects`）。清单更新为 **已复核等价 656／简化近似 3,768／缺失 0**（`L29` `5/4/0`），整包八项 `0/37`。见 [Batch 1.5 证据摘要](../operations/evidence/2026-11-21-batch1-5-l29/README.md) 与 [进度主稿](native-progress.md)；队列第 1 项剩余 `L10`/`U01` 与自动选择条目、队列第 2–11 项继续待做，提交发布后接续 `L10`。
+
 ## 2026-11-21 Batch 1.4（U07 玩点论杀）规则修复、独立复核与本地收口（待提交／发布）
 
 基线 HEAD `08ad0b37a447a21f515da955204923bdaf3e6aa8`（Batch 1.3 CI Run `44735674711` Attempt 2 `10/10 success` 已补记 `ci-runs.md`）合入 `swarm/author-u07-l10` `63c0411ddf3f0189395f224cb571a050c5d8588e`；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。队列第 1 项 Batch 1.4 完成 `U07` 全部 9 项已知规则与运行差异修复并重审通过（`choudu`、`diaobingqianjiang`、`fuchou`、`fuchou2`、`youzhan`、`youdishenru` 牌/技、`zhucheng2`、`jinyan`，同步对齐 `diyjuntun` 装备/非装备重铸与时序）；独立复核 `5a16b8ee-86c7-497d-97bf-3ba0a35aa54b` 三轮核验 **14 PASS / 0 FAIL / `APPROVE`**。清单更新为 **已复核等价 652／简化近似 3,772／缺失 0**（`U07` `36/0/0`），整包八项 `0/37`。见 [Batch 1.4 证据摘要](../operations/evidence/2026-11-21-batch1-4-u07/README.md) 与 [进度主稿](native-progress.md)；队列第 1 项剩余 `L29`/`L10`/`U01` 与自动选择条目、队列第 2–11 项继续待做，提交发布后接续 `L29`。

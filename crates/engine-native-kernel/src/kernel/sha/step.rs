@@ -490,6 +490,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             // 无手牌则仅可令摸（上游同：!hasCards("h") 直接 draw）。
             if !self.cixiong_done
                 && !self.asking_cixiong
+                && !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.source)
                 && ctx
                     .core
                     .player(self.source)
@@ -901,12 +902,14 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             // 青龙偃月刀（批③-b 第六把）：杀被闪后，来源可立即对相同
             // 目标再使用一张【杀】（从手牌选择；放弃则不再追问——每杀
             // 至多追问一次，防止连环杀循环）。
-            let has_qinglong = ctx
-                .core
-                .player(self.source)
-                .equips
-                .iter()
-                .any(|c| ctx.catalog.card_kind(*c) == CardKind::Qinglong);
+            let has_qinglong = !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.source)
+                && !crate::kernel::mbcmfangzhu_banned(ctx.core, self.source)
+                && ctx
+                    .core
+                    .player(self.source)
+                    .equips
+                    .iter()
+                    .any(|c| ctx.catalog.card_kind(*c) == CardKind::Qinglong);
             let hand_shas: Vec<ChoiceOption> = ctx
                 .core
                 .player(self.source)
@@ -937,12 +940,13 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             }
             // 贯石斧（批③-b 第五把）：杀被闪后，来源可弃两张牌强制伤害
             //（登记差异：可弃牌池不含贯石斧本体；不足两张则无法发动）。
-            let has_guanshi = ctx
-                .core
-                .player(self.source)
-                .equips
-                .iter()
-                .any(|c| ctx.catalog.card_kind(*c) == CardKind::Guanshi);
+            let has_guanshi = !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.source)
+                && ctx
+                    .core
+                    .player(self.source)
+                    .equips
+                    .iter()
+                    .any(|c| ctx.catalog.card_kind(*c) == CardKind::Guanshi);
             if has_guanshi && ctx.core.player(self.source).alive {
                 let mut pool: Vec<ChoiceOption> = ctx
                     .core

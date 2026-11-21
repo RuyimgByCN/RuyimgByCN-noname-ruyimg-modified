@@ -751,6 +751,11 @@ pub fn run(
                         core.vm_aux
                             .flags
                             .remove(&(d.target, "l28_vdmg_kind".to_string()));
+                        for p in 0..core.players.len() as PlayerId {
+                            core.vm_aux
+                                .flags
+                                .remove(&(p, format!("mbcmjiushi_dmg:{}", popped.id)));
+                        }
                     }
                     if let EventData::Equipped { player, .. } = &popped.data {
                         core.vm_aux
@@ -1007,7 +1012,11 @@ fn start_queued_trigger(
             )
         ) || matches!(
             def.name,
-            crate::vocabulary::host::HUANLE_MONKEY_KEY | "monkey" | "huanle_monkey"
+            crate::vocabulary::host::HUANLE_MONKEY_KEY
+                | "monkey"
+                | "huanle_monkey"
+                | crate::vocabulary::host::HLSS_MBCMJIUSHI_KEY
+                | "mbcmqingzheng"
         );
         if !skip_pre_log {
             let mut log_ev = LogEvent::SkillTriggered {

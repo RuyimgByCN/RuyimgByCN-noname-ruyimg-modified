@@ -21,7 +21,10 @@ impl SkillBehavior for ZhangbaBehavior {
 
     fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn SkillMachine>> {
         // 资格：两张手牌 + 攻击范围内有其他角色。
-        if !ctx.state.player(owner).alive || ctx.state.player(owner).hand.len() < 2 {
+        if crate::kernel::mbcmfangzhu_banned(ctx.state, owner)
+            || !ctx.state.player(owner).alive
+            || ctx.state.player(owner).hand.len() < 2
+        {
             return None;
         }
         let in_range = ctx.state.alive_players().any(|p| {

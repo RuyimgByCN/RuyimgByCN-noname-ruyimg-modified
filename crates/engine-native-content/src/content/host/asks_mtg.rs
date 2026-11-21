@@ -439,7 +439,7 @@ pub(super) fn active_ask_batches(
             let suit_opts = |p: PlayerId| -> Vec<ChoiceOption> {
                 let mut suits: Vec<u8> = Vec::new();
                 for c in core.player(p).hand.iter().copied() {
-                    let s = match catalog.cards[c as usize].suit {
+                    let s = match catalog.effective_card_suit(core, p, c) {
                         crate::catalog::Suit::Spade => 0,
                         crate::catalog::Suit::Heart => 1,
                         crate::catalog::Suit::Club => 2,
@@ -463,7 +463,7 @@ pub(super) fn active_ask_batches(
                             options,
                             1,
                             1,
-                            false,
+                            true,
                         )
                     })
                 }

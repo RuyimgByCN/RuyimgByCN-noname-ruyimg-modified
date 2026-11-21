@@ -288,7 +288,7 @@ fn longxue_weitong_registration_only() {
 }
 
 /// 清正（道心值 25 阈值解锁的手杀包技能）：弃自己一种花色全部手牌 → 令目标
-/// 弃其一种花色全部手牌 → 其弃牌数少于自己时受 1 点伤害（无来源）。
+/// 弃其一种花色全部手牌 → 其弃牌数少于自己时受 1 点伤害（来源为发动者）。
 #[test]
 fn qingzheng_discards_both_sides_and_punishes_fewer() {
     let pack = bridge_pack("longxue-upstream-liuli");
@@ -313,12 +313,9 @@ fn qingzheng_discards_both_sides_and_punishes_fewer() {
     assert_eq!(e.debug_hand(0).len(), 3);
     assert_eq!(e.debug_hand(1).len(), 1);
     assert!(
-        advance_to_prompt(&mut e, "trigger_confirm"),
-        "清正确认门（出牌阶段开始）"
+        advance_to_prompt(&mut e, "mbcmqingzheng_suit"),
+        "清正直发花色选择窗（出牌阶段开始，direct: true）"
     );
-    let gate = e.open_choice().cloned().expect("清正确认门");
-    assert_eq!(gate.spec.prompt, "trigger_confirm");
-    submit_answer(&mut e, gate.id, vec![engine_native::ChoiceOption::Confirm]);
     let suit = e.open_choice().cloned().expect("花色选择窗");
     assert_eq!(suit.spec.prompt, "mbcmqingzheng_suit");
     submit_answer(&mut e, suit.id, vec![engine_native::ChoiceOption::Tag(0)]);
@@ -352,11 +349,9 @@ fn qingzheng_no_damage_when_target_discards_enough() {
     e.debug_place_suit(1, engine_native::catalog::Suit::Club);
     e.debug_place_suit(1, engine_native::catalog::Suit::Club);
     assert!(
-        advance_to_prompt(&mut e, "trigger_confirm"),
-        "清正确认门（出牌阶段开始）"
+        advance_to_prompt(&mut e, "mbcmqingzheng_suit"),
+        "清正直发花色选择窗（出牌阶段开始，direct: true）"
     );
-    let gate = e.open_choice().cloned().expect("清正确认门");
-    submit_answer(&mut e, gate.id, vec![engine_native::ChoiceOption::Confirm]);
     let suit = e.open_choice().cloned().expect("花色选择窗");
     submit_answer(&mut e, suit.id, vec![engine_native::ChoiceOption::Tag(0)]);
     let tgt = e.open_choice().cloned().expect("目标选择窗");

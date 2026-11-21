@@ -145,6 +145,7 @@ pub(super) fn check_event_data(data: &EventData, b: &RestoreBounds) -> Result<()
                             k,
                             crate::catalog::CardKind::Youdishenru
                                 | crate::catalog::CardKind::Wuzhong
+                                | crate::catalog::CardKind::Jiu
                         )
                 })
             {

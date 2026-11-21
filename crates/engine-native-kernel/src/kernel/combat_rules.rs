@@ -69,6 +69,51 @@ pub fn tao_futai2_banned(
     }
 }
 
+/// `L29` 放逐禁非锦囊牌旗标（`cardEnabled` + `cardSavable`，不含 `cardRespondable`）。
+pub fn mbcmfangzhu_banned(
+    core: &crate::state::GameStateCore,
+    player: PlayerId,
+) -> bool {
+    core.vm_aux
+        .flags
+        .get(&(player, "mbcmfangzhu_ban".to_string()))
+        .copied()
+        .unwrap_or(0)
+        > 0
+}
+
+/// `L29` 放逐白板旗标（`skillBlocker`：非持恒非夏洛特技全部失效）。
+pub fn mbcmfangzhu_baiban(
+    core: &crate::state::GameStateCore,
+    player: PlayerId,
+) -> bool {
+    core.vm_aux
+        .flags
+        .get(&(player, "mbcmfangzhu_baiban".to_string()))
+        .copied()
+        .unwrap_or(0)
+        > 0
+}
+
+/// `L29` 酒诗（`mbcmjiushi_1` `chooseToUse`）：正面向上濒死本人可用虚拟【酒】自救。
+pub(crate) fn mbcmjiushi_dying_skill(
+    core: &crate::state::GameStateCore,
+    catalog: &Catalog,
+    responder: PlayerId,
+    dying: PlayerId,
+) -> Option<crate::ids::SkillDefId> {
+    if responder != dying
+        || !core.player(responder).alive
+        || core.player(responder).face_down
+        || mbcmfangzhu_banned(core, responder)
+        || catalog.blocks_all_cards(core, responder)
+    {
+        return None;
+    }
+    let def = catalog.skill_by_name(crate::vocabulary::host::HLSS_MBCMJIUSHI_KEY)?;
+    core.has_skill(responder, def).then_some(def)
+}
+
 /// P1/N08 急救（华佗）：持有者濒死结算时红色手牌可当【桃】使用。
 pub(super) fn is_tao_like(
     ctx: &Ctx<'_>,
@@ -76,7 +121,9 @@ pub(super) fn is_tao_like(
     card: crate::ids::CardId,
     dying: PlayerId,
 ) -> bool {
-    if jinyan_blocks_black_trick(ctx.core, ctx.catalog, responder, card) {
+    if mbcmfangzhu_banned(ctx.core, responder)
+        || jinyan_blocks_black_trick(ctx.core, ctx.catalog, responder, card)
+    {
         return false;
     }
     if crate::rvm_bridge::modifiers::eval_dying_peach_target_canceled(
@@ -203,17 +250,8 @@ pub(crate) fn response_kind_cards_core(
     responder: PlayerId,
     need: CardKind,
 ) -> Vec<crate::ids::CardId> {
-    let hand_banned = (need.is_basic_kind() || need.is_equip())
-        && core
-            .vm_aux
-            .flags
-            .get(&(responder, "mbcmfangzhu_ban".to_string()))
-            .copied()
-            .unwrap_or(0)
-            > 0;
     let sealed = catalog.is_tieji_sealed(core, responder);
-    let rw_lanyin = !hand_banned
-        && need == CardKind::Shan
+    let rw_lanyin = need == CardKind::Shan
         && crate::rvm_bridge::modifiers::d34_l28_mods::has_rewritten_lanyinjia(
             core, catalog, responder,
         );
@@ -224,10 +262,7 @@ pub(crate) fn response_kind_cards_core(
         .copied()
         .filter(|&c| {
             if jinyan_blocks_black_trick(core, catalog, responder, c) {
-                return need == CardKind::Sha && !hand_banned && !sealed;
-            }
-            if hand_banned {
-                return false;
+                return need == CardKind::Sha && !sealed;
             }
             rw_lanyin
                 || catalog.card_kind(c) == need

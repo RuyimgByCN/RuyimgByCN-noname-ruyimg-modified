@@ -193,40 +193,33 @@ impl HostMachine {
             HostBehavior::HlssGaiming => Flow::Done,
             // 潜龙：按触发面累加道心值（上限 99），随后按阈值刷新解锁
             HostBehavior::MbQianlong => {
-                let is_phase = matches!(
-                    ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data),
-                    Some(crate::event::EventData::Phase { begin: true, .. })
-                );
-                let inc: u32 = if is_phase {
-                    // 开局面：另有魏势力持「卫统」者 → 60，否则 20
-                    let boost = ctx.core.alive_players().any(|p| {
-                        p != self.owner
-                            && ctx.core.effective_faction(ctx.catalog, p)
-                                == Some(crate::catalog::Faction::Wei)
-                            && ctx
-                                .catalog
-                                .skill_by_name(HLSS_MBWEITONG_KEY)
-                                .map(|d| ctx.core.has_skill(p, d))
-                                .unwrap_or(false)
-                    });
-                    if boost {
-                        60
-                    } else {
-                        20
-                    }
-                } else {
-                    match ctx.current_damage() {
-                        Ok(d) if d.target == self.owner => {
-                            (d.amount.max(0) as u32).saturating_mul(10)
+                let inc: u32 = match self.card {
+                    Some(0) => {
+                        if mbweitong_boost_active(ctx.core, ctx.catalog, self.owner) {
+                            60
+                        } else {
+                            20
                         }
-                        Ok(d) => (d.amount.max(0) as u32).saturating_mul(15),
-                        Err(_) => 5,
                     }
+                    Some(2) | Some(3) => {
+                        let mult = if self.card == Some(3) { 15u32 } else { 10u32 };
+                        let frame = ctx
+                            .res
+                            .frame(ctx.current_event_frame_id())
+                            .expect("damage window frame");
+                        match crate::event::damage_event(&ctx.res.stack, frame) {
+                            EventData::Damage(d) => (d.amount.max(0) as u32).saturating_mul(mult),
+                            _ => 0,
+                        }
+                    }
+                    _ => 5,
                 };
-                let cur = u32::from(ctx.core.player(self.owner).mbqianlong_marks);
-                let next = (cur + inc).min(99);
-                ctx.core.player_mut(self.owner).mbqianlong_marks = next as u8;
-                mbqianlong_refresh(ctx, self.owner);
+                if inc > 0 {
+                    let cur = u32::from(ctx.core.player(self.owner).mbqianlong_marks);
+                    let next = (cur + inc).min(99);
+                    ctx.core.player_mut(self.owner).mbqianlong_marks = next as u8;
+                    mbqianlong_refresh(ctx, self.owner);
+                }
                 Flow::Done
             }
             // 涅槃：弃全部牌 + 解除横置 + 翻回正面 + 摸 3 + 回复至 3；

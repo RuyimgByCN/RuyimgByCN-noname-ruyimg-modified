@@ -149,7 +149,7 @@ fn l29_longxue_mbqianlong_unlocks_and_executes_all_four_skills_with_save_restore
     );
 
     // 1. Execute mbcmjiushi via native HostBehavior::MbcmJiushi:
-    //    Part A (Phase::Play active): face-up -> turns over, sets jiu_active, asks mbcmjiushi_gain_confirm -> gains trick
+    //    Part A (Phase::Play active): turns over first (asks mbcmjiushi_gain_confirm), then virtual jiu commits after turnOver completes
     e.debug_set_turn(0, engine_native::event::Phase::Play, 1);
     assert!(!e.state_core().player(0).face_down);
     let hand0_before = e.debug_hand(0).len();
@@ -165,7 +165,7 @@ fn l29_longxue_mbqianlong_unlocks_and_executes_all_four_skills_with_save_restore
     };
     assert_eq!(c.spec.prompt, "mbcmjiushi_gain_confirm");
     assert!(e.state_core().player(0).face_down);
-    assert!(e.state_core().turn.jiu_active);
+    assert!(!e.state_core().turn.jiu_active);
     let _ = e.submit(GameCommand {
         actor: 0,
         expected_revision: e.revision(),
@@ -175,6 +175,7 @@ fn l29_longxue_mbqianlong_unlocks_and_executes_all_four_skills_with_save_restore
             selection: vec![engine_native::ChoiceOption::Confirm],
         },
     });
+    assert!(e.state_core().turn.jiu_active);
     assert_eq!(e.debug_hand(0).len(), hand0_before + 1);
 
     //    Part B (Damage while face_down): triggers mbcmjiushi -> turnback confirm -> flips face-up -> gain confirm -> gains trick

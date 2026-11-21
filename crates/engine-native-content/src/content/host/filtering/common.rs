@@ -66,12 +66,6 @@ impl HostSkillBehavior {
                         && *to == owner
                         && ctx.state.player(owner).mbqianlong_marks < 99
                 }
-                EventData::Damage(d) => {
-                    ctx.state.player(owner).mbqianlong_marks < 99
-                        && !d.prevented
-                        && d.amount > 0
-                        && (d.target == owner || d.source == Some(owner))
-                }
                 _ => false,
             },
             // 涅槃：自己濒死且未发动
@@ -425,71 +419,21 @@ impl HostSkillBehavior {
             HostBehavior::MbcmQingzheng => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::Play, begin: true }
                 if *player == owner && !ctx.state.player(owner).hand.is_empty()),
-            // 酒诗：背面朝上受非本技能强化【杀】伤害后翻回 + 翻面时获得锦囊
+            // 酒诗：伤害/翻面分窗由 filter_in_window_with_frames 分派
             HostBehavior::MbcmJiushi => match event {
-                EventData::Damage(d) => {
-                    !d.prevented
-                        && d.amount > 0
-                        && d.target == owner
-                        && ctx.state.player(owner).face_down
-                        && ctx
-                            .state
-                            .vm_aux
-                            .flags
-                            .get(&(owner, "mbcmjiushi_check_jiushi".to_string()))
-                            .copied()
-                            .unwrap_or(0)
-                            == 0
-                        && !d.card.is_some_and(|cid| {
-                            d.source.is_some_and(|src| {
-                                ctx.state
-                                    .vm_aux
-                                    .flags
-                                    .get(&(src, format!("mbcmjiushi_boosted_card:{cid}")))
-                                    .copied()
-                                    .unwrap_or(0)
-                                    > 0
-                            })
-                        })
-                        && !(d.from_chain
-                            && d.source == Some(owner)
-                            && ctx
-                                .state
-                                .vm_aux
-                                .flags
-                                .get(&(owner, "mbcmjiushi_used_turn".to_string()))
-                                .copied()
-                                .unwrap_or(0)
-                                > 0)
-                }
                 EventData::TurnOvered { player, .. } => *player == owner,
                 _ => false,
             },
             HostBehavior::MbcmFangzhu | HostBehavior::MbJuejin => false,
-            // 卫统：开局首阶段 + 自己持潜龙 + 另有魏势力持本技者
+            // 卫统（主公技 `hasZhuSkill`）：开局首阶段 + 自己持潜龙 + 自己为主公（非内斗友方）+ 另有存活魏势力角色
             HostBehavior::MbWeitong => match event {
                 EventData::Phase { begin: true, .. } => {
                     ctx.state.turn.phase_number == 1
-                        && ctx
-                            .catalog
-                            .skill_by_name(HLSS_MBQIANLONG_KEY)
-                            .map(|d| ctx.state.has_skill(owner, d))
-                            .unwrap_or(false)
-                        && ctx.state.alive_players().any(|p| {
-                            p != owner
-                                && ctx.state.player(p).general_slots.iter().any(|g| {
-                                    g.map(|g| {
-                                        ctx.catalog.general_meta(g).map(|m| m.1)
-                                            == Some(crate::catalog::Faction::Wei)
-                                    })
-                                    .unwrap_or(false)
-                                })
-                                && ctx
-                                    .catalog
-                                    .skill_by_name(HLSS_MBWEITONG_KEY)
-                                    .map(|d| ctx.state.has_skill(p, d))
-                                    .unwrap_or(false)
-                        })
+                        && crate::content::host::support::mbweitong_boost_active(
+                            ctx.state,
+                            ctx.catalog,
+                            owner,
+                        )
                 }
                 _ => false,
             },

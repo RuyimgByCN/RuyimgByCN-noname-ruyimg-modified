@@ -88,6 +88,70 @@ impl CardKind {
         )
     }
 
+    /// Upstream `get.type2(card) == 'trick'` (`type == 'trick' || type == 'delay'`, 49 kinds):
+    /// excludes basics (including extension basics such as `Caoyao`/`Hufu`/`Ziyangdan`/
+    /// `Yunvyuanshen`/`Dinvxuanshuang`), equips, `food`, `jiguan`, `spell`, `land`,
+    /// `hslingjian`, `jiqi`, and `zhenfa`.
+    pub fn is_trick_kind(self) -> bool {
+        matches!(
+            self,
+            // Standard / Extra
+            CardKind::Chain
+                | CardKind::SavageAttack
+                | CardKind::ArcheryAttack
+                | CardKind::Duel
+                | CardKind::Nullify
+                | CardKind::Le
+                | CardKind::Bing
+                | CardKind::ShanDian
+                | CardKind::Dismantle
+                | CardKind::Snatch
+                | CardKind::Wuzhong
+                | CardKind::Taoyuan
+                | CardKind::Wugu
+                | CardKind::Jiedao
+                // Yunchou
+                | CardKind::WangmeiZhike
+                | CardKind::Shuigong
+                | CardKind::Fudichouxin
+                | CardKind::Chenhuodajie
+                | CardKind::HongShui
+                | CardKind::Toulianghuanzhu
+                | CardKind::Youdishenru
+                | CardKind::Geanguanhuo
+                | CardKind::Caochuanjiejian
+                | CardKind::Shezhanqunru
+                // Hearth
+                | CardKind::Linghunzhihuo
+                | CardKind::Zhaomingdan
+                | CardKind::Jihuocard
+                | CardKind::Dunpaigedang
+                | CardKind::Zhiliaobo
+                | CardKind::Yuansuhuimie
+                | CardKind::Xingjiegoutong
+                | CardKind::Chuansongmen
+                | CardKind::Tanshezhiren
+                | CardKind::Shijieshu
+                // Gujian
+                | CardKind::Shujinsan
+                | CardKind::Jinlianzhu
+                | CardKind::Shihuifen
+                | CardKind::Liufengsan
+                | CardKind::Shatang
+                | CardKind::Heilonglinpian
+                // SWD
+                | CardKind::Liuxinghuoyu
+                | CardKind::Guiyoujie
+                | CardKind::Zhufangshenshi
+                | CardKind::Yangpijuan
+                | CardKind::Jingleishan
+                | CardKind::Chiyuxi
+                | CardKind::Guisheqi
+                | CardKind::Xianluhui
+                | CardKind::Shencaojie
+        )
+    }
+
     /// 装备牌 → 装备栏；非装备牌返回 None。
     pub fn equip_slot(self) -> Option<EquipSlot> {
         Some(match self {

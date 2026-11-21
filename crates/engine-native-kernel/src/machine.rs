@@ -611,22 +611,45 @@ impl<'a> Ctx<'a> {
         {
             return;
         }
-        if matches!(
-            self.catalog.card_kind(card),
-            crate::catalog::CardKind::Shan
-                | crate::catalog::CardKind::Tao
-                | crate::catalog::CardKind::Jiu
-        ) && self
+        let is_stj = |c: CardId| {
+            matches!(
+                self.catalog.card_kind(c),
+                crate::catalog::CardKind::Shan
+                    | crate::catalog::CardKind::Tao
+                    | crate::catalog::CardKind::Jiu
+            )
+        };
+        let xiangsicunwei = self
             .core
             .vm_aux
             .flags
             .iter()
-            .any(|((_, k), &v)| k == "mbjuejin_xiangsicunwei" && v > 0)
-        {
-            self.core
-                .detached_cards
-                .push((card, crate::event::DetachedKind::Destroyed));
-            return;
+            .any(|((_, k), &v)| k == "mbjuejin_xiangsicunwei" && v > 0);
+        if xiangsicunwei {
+            let mut swept: Vec<CardId> = Vec::new();
+            self.core.discard.retain(|&c| {
+                if is_stj(c) {
+                    swept.push(c);
+                    false
+                } else {
+                    true
+                }
+            });
+            for c in swept {
+                if !self.core.detached_cards.iter().any(|(dc, _)| *dc == c) {
+                    self.core
+                        .detached_cards
+                        .push((c, crate::event::DetachedKind::Destroyed));
+                }
+            }
+            if is_stj(card) {
+                if !self.core.detached_cards.iter().any(|(dc, _)| *dc == card) {
+                    self.core
+                        .detached_cards
+                        .push((card, crate::event::DetachedKind::Destroyed));
+                }
+                return;
+            }
         }
         self.core.discard.push(card);
         crate::rvm_bridge::modifiers::d34_l28_mods::note_pro_qinyin_discard(
@@ -831,9 +854,22 @@ impl<'a> Ctx<'a> {
     pub fn insert_skill(
         &mut self,
         key: (PlayerId, crate::ids::SkillDefId),
-        instance: crate::state::SkillInstance,
+        mut instance: crate::state::SkillInstance,
     ) -> Option<crate::state::SkillInstance> {
+        let baiban_block = instance.enabled
+            && crate::kernel::mbcmfangzhu_baiban(self.core, key.0)
+            && !self.catalog.is_forever_skill(key.1)
+            && !self.catalog.is_charlotte_skill(key.1);
+        if baiban_block {
+            instance.enabled = false;
+        }
         let old = self.core.skills.insert(key, instance);
+        if baiban_block {
+            self.core
+                .vm_aux
+                .flags
+                .insert((key.0, format!("mbcmfangzhu_disabled:{}", key.1)), 1);
+        }
         if old.is_none() {
             crate::resolution::register_added(self.core, self.res, self.catalog, key.0, key.1);
         }
@@ -869,6 +905,10 @@ impl<'a> Ctx<'a> {
         def: SkillDefId,
     ) -> Option<crate::state::SkillInstance> {
         let old = self.core.remove_skill_and_r05_mark(self.catalog, owner, def);
+        self.core
+            .vm_aux
+            .flags
+            .remove(&(owner, format!("mbcmfangzhu_disabled:{def}")));
         if old.is_some() {
             let name = self.catalog.skill_name(def);
             self.finish_removed_skill(owner, name);
@@ -905,14 +945,23 @@ impl<'a> Ctx<'a> {
     pub fn add_skill_until_turn_end(&mut self, owner: PlayerId, def: SkillDefId) {
         let name = self.catalog.skill_name(def);
         let key = (owner, def);
+        let baiban_block = crate::kernel::mbcmfangzhu_baiban(self.core, owner)
+            && !self.catalog.is_forever_skill(def)
+            && !self.catalog.is_charlotte_skill(def);
         if let Some(inst) = self.core.skills.get_mut(&key) {
             // 永久拥有（含已觉醒/禁用）技能不可被临时授技覆写或重新启用（上游 player.js:11267,11288）；
             // 仅已到期的 `异殇` 墓碑或已为回合末临时技实例允许刷新至回合结束。
             if !inst.expires_end_of_turn && name != crate::vocabulary::names::YI_SHANG {
                 return;
             }
-            inst.enabled = true;
+            inst.enabled = !baiban_block;
             inst.expires_end_of_turn = true;
+            if baiban_block {
+                self.core
+                    .vm_aux
+                    .flags
+                    .insert((owner, format!("mbcmfangzhu_disabled:{def}")), 1);
+            }
         } else {
             self.insert_skill(
                 key,

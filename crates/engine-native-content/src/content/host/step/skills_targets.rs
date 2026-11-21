@@ -482,37 +482,65 @@ impl HostMachine {
                     }
                 }
             }
-            // 酒诗（L29 龙血玄黄·mobile/skill.js:14399，`mbcmjiushi`）
+            // 酒诗（L29 龙血玄黄·mobile.js:17251-17409，`mbcmjiushi`）
             HostBehavior::MbcmJiushi => match (self.card, self.stage) {
-                // Part A: 出牌阶段主动发动（翻面视为使用【酒】，触发 TurnOvered 再询问得锦囊）
+                // Part A: 出牌阶段主动发动（先 turnOver 再用虚拟【酒】）
                 (Some(0), HostStage::Act) => {
-                    if ctx.core.player(self.owner).face_down || ctx.core.turn.jiu_used {
+                    let banned = ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .get(&(self.owner, "mbcmfangzhu_ban".to_string()))
+                        .copied()
+                        .unwrap_or(0)
+                        > 0;
+                    if ctx.core.player(self.owner).face_down || ctx.core.turn.jiu_used || banned {
                         return Flow::Done;
                     }
-                    ctx.core.turn.jiu_used = true;
-                    ctx.core.turn.jiu_active = true;
-                    ctx.core
-                        .vm_aux
-                        .flags
-                        .insert((self.owner, "mbcmjiushi_jiu_active".to_string()), 1);
-                    ctx.core
-                        .vm_aux
-                        .flags
-                        .insert((self.owner, "mbcmjiushi_used_turn".to_string()), 1);
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "mbcmjiushi",
                         owner: self.owner,
                         presentation: None,
                     });
+                    // LIFO：先压虚拟【酒】CardUsed，再压 TurnOverBefore，确保翻面及获牌先完成
+                    ctx.emit(EventData::CardUsed(crate::event::CardUseData {
+                        card: None,
+                        player: self.owner,
+                        targets: vec![self.owner],
+                        nature: crate::event::DamageNature::Normal,
+                        use_as: Some(CardKind::Jiu),
+                        cancelled: false,
+                    }));
                     ctx.emit(EventData::TurnOverBefore {
                         player: self.owner,
                         cancelled: false,
                     });
                     Flow::Done
                 }
-                // Part B1: 背面朝上受到非本技能强化【杀】伤害后询问翻回正面
+                // Part B0: DamageBegin3 静默记录受伤前是否背面朝上
+                (Some(3), HostStage::Act) => {
+                    if ctx.current_damage().is_ok() && ctx.core.player(self.owner).face_down {
+                        let root = ctx.current_event_frame_id();
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((self.owner, format!("mbcmjiushi_dmg:{root}")), 1);
+                    }
+                    Flow::Done
+                }
+                // Part B1: DamageEnd 消费 DamageBegin3 记录后询问翻面
                 (Some(1), HostStage::Act) => {
-                    if !ctx.core.player(self.owner).face_down {
+                    if ctx.current_damage().is_err() {
+                        return Flow::Done;
+                    }
+                    let root = ctx.current_event_frame_id();
+                    if ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .remove(&(self.owner, format!("mbcmjiushi_dmg:{root}")))
+                        .is_none()
+                    {
                         return Flow::Done;
                     }
                     self.stage = HostStage::TargetChoice;
@@ -522,9 +550,7 @@ impl HostMachine {
                     }
                 }
                 (Some(1), HostStage::TargetChoice) => {
-                    if matches!(ctx.answer().first().copied(), Some(ChoiceOption::Confirm))
-                        && ctx.core.player(self.owner).face_down
-                    {
+                    if matches!(ctx.answer().first().copied(), Some(ChoiceOption::Confirm)) {
                         ctx.log(LogEvent::SkillTriggered {
                             skill: "mbcmjiushi",
                             owner: self.owner,
@@ -537,7 +563,7 @@ impl HostMachine {
                     }
                     Flow::Done
                 }
-                // Part B2: 翻面时（含主动翻面与受伤翻回）询问随机获得一张锦囊牌
+                // Part B2: 翻面后询问从牌堆（不含弃牌堆，`get.cardPile2`）获一张锦囊牌
                 (Some(2), HostStage::Act) => {
                     self.stage = HostStage::SelectCard;
                     Flow::WaitChoice {
@@ -547,28 +573,26 @@ impl HostMachine {
                 }
                 (Some(2), HostStage::SelectCard) => {
                     if matches!(ctx.answer().first().copied(), Some(ChoiceOption::Confirm)) {
-                        let is_trick = |c: CardId, cat: &crate::catalog::Catalog| {
-                            let k = cat.card_kind(c);
-                            !k.is_basic_kind() && !k.is_equip()
-                        };
-                        let gained = if let Some(pos) =
-                            ctx.core.deck.iter().rposition(|&c| is_trick(c, ctx.catalog))
-                        {
-                            Some(ctx.core.deck.remove(pos))
-                        } else if let Some(pos) = ctx
+                        ctx.log(LogEvent::SkillTriggered {
+                            skill: "mbcmjiushi",
+                            owner: self.owner,
+                            presentation: None,
+                        });
+                        if let Some(pos) = ctx
                             .core
-                            .discard
+                            .deck
                             .iter()
-                            .rposition(|&c| is_trick(c, ctx.catalog))
+                            .rposition(|&c| ctx.catalog.card_kind(c).is_trick_kind())
                         {
-                            Some(ctx.core.discard.remove(pos))
-                        } else {
-                            None
-                        };
-                        if let Some(c) = gained {
+                            let c = ctx.core.deck.remove(pos);
                             ctx.core.player_mut(self.owner).hand.push(c);
                             ctx.log(LogEvent::CardsDrawn {
                                 player: self.owner,
+                                cards: vec![c],
+                            });
+                            ctx.emit(EventData::CardsMoved {
+                                from: self.owner,
+                                to: self.owner,
                                 cards: vec![c],
                             });
                         }
@@ -674,21 +698,9 @@ impl HostMachine {
                             .skills
                             .iter()
                             .filter_map(|(&(p, def), inst)| {
-                                let sname = ctx.catalog.skills[def as usize].name;
-                                let locked_or_charlotte = matches!(
-                                    sname,
-                                    "马术"
-                                        | "咆哮"
-                                        | "谦逊"
-                                        | "奇才"
-                                        | "无双"
-                                        | "帷幕"
-                                        | "救援"
-                                        | "空城"
-                                        | "mbqianlong"
-                                        | "mbweitong"
-                                );
-                                (p == target && inst.enabled && !locked_or_charlotte).then_some(def)
+                                let exempt = ctx.catalog.is_forever_skill(def)
+                                    || ctx.catalog.is_charlotte_skill(def);
+                                (p == target && inst.enabled && !exempt).then_some(def)
                             })
                             .collect();
                         for def in defs_to_disable {
@@ -735,45 +747,31 @@ impl HostMachine {
                     .vm_aux
                     .flags
                     .insert((self.owner, "mbjuejin_xiangsicunwei".to_string()), 1);
-                let alive: Vec<PlayerId> = ctx.core.alive_players().collect();
-                for p in alive {
+                for p in ctx.core.seat_order_from(self.owner) {
                     let old_hp = ctx.core.player(p).hp;
+                    let plus = if p == self.owner { 2u8 } else { 0u8 };
                     if old_hp > 1 {
                         let delt = (old_hp - 1) as u8;
                         ctx.core.player_mut(p).hp = 1;
                         ctx.core.player_mut(p).hujia =
-                            ctx.core.player(p).hujia.saturating_add(delt);
+                            ctx.core.player(p).hujia.saturating_add(delt + plus);
                     } else if old_hp < 1 {
+                        let delt = (1 - old_hp) as u8;
                         ctx.core.player_mut(p).hp = 1;
+                        ctx.core.player_mut(p).hujia =
+                            ctx.core.player(p).hujia.saturating_add(delt + plus);
+                    } else if plus > 0 {
+                        ctx.core.player_mut(p).hujia =
+                            ctx.core.player(p).hujia.saturating_add(plus);
                     }
                 }
-                ctx.core.player_mut(self.owner).hujia =
-                    ctx.core.player(self.owner).hujia.saturating_add(2);
                 let is_stj = |c: CardId, cat: &crate::catalog::Catalog| {
                     matches!(
                         cat.card_kind(c),
                         CardKind::Shan | CardKind::Tao | CardKind::Jiu
                     )
                 };
-                let mut exiled: Vec<CardId> = Vec::new();
-                ctx.core.deck.retain(|&c| {
-                    if is_stj(c, ctx.catalog) {
-                        exiled.push(c);
-                        false
-                    } else {
-                        true
-                    }
-                });
-                ctx.core.discard.retain(|&c| {
-                    if is_stj(c, ctx.catalog) {
-                        exiled.push(c);
-                        false
-                    } else {
-                        true
-                    }
-                });
-                let seats = ctx.core.players.len() as PlayerId;
-                for p in 0..seats {
+                for p in ctx.core.seat_order_from(self.owner) {
                     let hand_stj: Vec<CardId> = ctx
                         .core
                         .player(p)
@@ -782,44 +780,23 @@ impl HostMachine {
                         .copied()
                         .filter(|&c| is_stj(c, ctx.catalog))
                         .collect();
-                    for c in hand_stj {
+                    if hand_stj.is_empty() {
+                        continue;
+                    }
+                    for &c in &hand_stj {
                         ctx.take_hand_card(p, c);
-                        exiled.push(c);
+                        if !ctx.core.detached_cards.iter().any(|(dc, _)| *dc == c) {
+                            ctx.core
+                                .detached_cards
+                                .push((c, crate::event::DetachedKind::Destroyed));
+                        }
                     }
-                    let eq_stj: Vec<CardId> = ctx
-                        .core
-                        .player(p)
-                        .equips
-                        .iter()
-                        .copied()
-                        .filter(|&c| is_stj(c, ctx.catalog))
-                        .collect();
-                    for c in eq_stj {
-                        ctx.core.player_mut(p).equips.retain(|&x| x != c);
-                        ctx.core.declared_slots.remove(&c);
-                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, p, c);
-                        exiled.push(c);
-                    }
-                    let jg_stj: Vec<CardId> = ctx
-                        .core
-                        .player(p)
-                        .judge
-                        .iter()
-                        .copied()
-                        .filter(|&c| is_stj(c, ctx.catalog))
-                        .collect();
-                    for c in jg_stj {
-                        ctx.core.player_mut(p).judge.retain(|&x| x != c);
-                        ctx.core.declared_kinds.remove(&c);
-                        exiled.push(c);
-                    }
-                }
-                for c in exiled {
-                    if !ctx.core.detached_cards.iter().any(|(dc, _)| *dc == c) {
-                        ctx.core
-                            .detached_cards
-                            .push((c, crate::event::DetachedKind::Destroyed));
-                    }
+                    ctx.note_cards_lost(p, &hand_stj);
+                    ctx.emit(EventData::CardsLost {
+                        player: p,
+                        origins: vec![crate::event::LostOrigin::Hand; hand_stj.len()],
+                        cards: hand_stj,
+                    });
                 }
                 ctx.log(LogEvent::SkillTriggered {
                     skill: "mbjuejin",

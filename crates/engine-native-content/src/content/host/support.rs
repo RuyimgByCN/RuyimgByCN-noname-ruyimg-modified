@@ -319,7 +319,7 @@ pub(super) fn yishan_take(ctx: &mut Ctx<'_>, owner: PlayerId, card: CardId) -> b
 pub(super) fn mbcm_qingzheng_suits(ctx: &Ctx<'_>, player: PlayerId) -> Vec<u8> {
     let mut suits: Vec<u8> = Vec::new();
     for c in ctx.core.player(player).hand.iter().copied() {
-        if let Some(s) = mbcm_suit_of(ctx, c) {
+        if let Some(s) = mbcm_effective_suit_of(ctx, player, c) {
             if !suits.contains(&s) {
                 suits.push(s);
             }
@@ -329,14 +329,22 @@ pub(super) fn mbcm_qingzheng_suits(ctx: &Ctx<'_>, player: PlayerId) -> Vec<u8> {
     suits
 }
 
-/// 牌花色编码（0 黑桃 / 1 红桃 / 2 梅花 / 3 方块；与选择项 Tag 同口径）。
-pub(super) fn mbcm_suit_of(ctx: &Ctx<'_>, card: CardId) -> Option<u8> {
-    Some(match ctx.catalog.cards[card as usize].suit {
+const fn suit_tag(suit: crate::catalog::Suit) -> u8 {
+    match suit {
         crate::catalog::Suit::Spade => 0,
         crate::catalog::Suit::Heart => 1,
         crate::catalog::Suit::Club => 2,
         crate::catalog::Suit::Diamond => 3,
-    })
+    }
+}
+
+pub(super) fn mbcm_effective_suit_of(ctx: &Ctx<'_>, player: PlayerId, card: CardId) -> Option<u8> {
+    Some(suit_tag(ctx.catalog.effective_card_suit(ctx.core, player, card)))
+}
+
+/// 牌花色编码（0 黑桃 / 1 红桃 / 2 梅花 / 3 方块；与选择项 Tag 同口径）。
+pub(super) fn mbcm_suit_of(ctx: &Ctx<'_>, card: CardId) -> Option<u8> {
+    Some(suit_tag(ctx.catalog.cards[card as usize].suit))
 }
 
 /// 涅槃（T11 Boss 庞统族批 118，规则 v306）：限定技收束——置已发动、
@@ -452,11 +460,39 @@ pub(super) fn mbqianlong_refresh(ctx: &mut Ctx<'_>, owner: PlayerId) {
             });
         }
     }
-    if marks >= 99 {
-        if let Some(wt_def) = ctx.catalog.skill_by_name(HLSS_MBWEITONG_KEY) {
-            ctx.core.remove_skill_and_r05_mark(ctx.catalog, owner, wt_def);
+}
+
+/// 卫统主公联动判断（`mobile.js:17642` + `game.js:29451`）：
+/// 自己持 `mbqianlong` 与 `mbweitong`，具有主公资格（身份局为主公；其余模式不生效，
+/// 原型局按全仓库 `is_lord` 惯例保留），且存在另一名存活魏势力角色。
+pub(super) fn mbweitong_boost_active(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    owner: PlayerId,
+) -> bool {
+    let is_zhu = match &core.mode {
+        crate::state::GameMode::Identity { roles } => {
+            roles.get(owner as usize) == Some(&crate::state::Role::Lord)
         }
-    }
+        crate::state::GameMode::Prototype => true,
+        crate::state::GameMode::Versus { .. }
+        | crate::state::GameMode::Doudizhu { .. }
+        | crate::state::GameMode::Boss { .. }
+        | crate::state::GameMode::Kof { .. }
+        | crate::state::GameMode::Kingdoms => false,
+    };
+    let has_ql = catalog
+        .skill_by_name(HLSS_MBQIANLONG_KEY)
+        .is_some_and(|d| core.has_skill(owner, d));
+    let has_wt = catalog
+        .skill_by_name(HLSS_MBWEITONG_KEY)
+        .is_some_and(|d| core.has_skill(owner, d));
+    has_ql
+        && has_wt
+        && is_zhu
+        && core.alive_players().any(|p| {
+            p != owner && core.effective_faction(catalog, p) == Some(crate::catalog::Faction::Wei)
+        })
 }
 
 /// 起风候选：可用**非延时锦囊**牌种（未用过、有合法目标）。

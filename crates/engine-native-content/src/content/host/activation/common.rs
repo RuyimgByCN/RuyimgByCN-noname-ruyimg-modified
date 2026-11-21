@@ -491,7 +491,8 @@ impl HostSkillBehavior {
                     .copied()
                     .unwrap_or(0)
                     > 0;
-                if !has_xia
+                if crate::kernel::mbcmfangzhu_banned(ctx.state, owner)
+                    || !has_xia
                     || ctx.state.turn.sha_used_play_phase
                     || !ctx.state.alive_players().any(|p| p != owner)
                 {
@@ -509,7 +510,17 @@ impl HostSkillBehavior {
                 }))
             }
             HostBehavior::MbcmJiushi => {
-                if ctx.state.player(owner).face_down || ctx.state.turn.jiu_used {
+                if ctx.state.player(owner).face_down
+                    || ctx.state.turn.jiu_used
+                    || ctx
+                        .state
+                        .vm_aux
+                        .flags
+                        .get(&(owner, "mbcmfangzhu_ban".to_string()))
+                        .copied()
+                        .unwrap_or(0)
+                        > 0
+                {
                     return None;
                 }
                 Some(Box::new(HostMachine {

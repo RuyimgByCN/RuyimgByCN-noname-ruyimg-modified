@@ -151,14 +151,18 @@ pub fn intrinsic_machine(
             }
             if let Some((dying, raw_tao)) = dying_save {
                 discard_remaining_carriers(ctx);
-                crate::kernel::dying::DyingSaveMachine::new(
-                    dying,
-                    None,
-                    Vec::new(),
-                    false,
-                    false,
-                )
-                .apply_tao_save(ctx, u.player, raw_tao);
+                if u.card.is_some() {
+                    crate::kernel::dying::DyingSaveMachine::new(
+                        dying,
+                        None,
+                        Vec::new(),
+                        false,
+                        false,
+                    )
+                    .apply_tao_save(ctx, u.player, raw_tao);
+                } else if ctx.core.player(dying).alive {
+                    ctx.recover(dying, 1, None);
+                }
                 return None;
             }
             let effective_kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
@@ -846,25 +850,6 @@ fn sha_intrinsic(
         hujia_queue: None,
         hujia_holder: None,
         // 酒效果在杀派发（=使用）时捕获并消耗——「下一张杀」
-        jiu_bonus: {
-            let jb = std::mem::take(&mut ctx.core.turn.jiu_active);
-            if jb
-                && ctx
-                    .core
-                    .vm_aux
-                    .flags
-                    .remove(&(u.player, "mbcmjiushi_jiu_active".to_string()))
-                    .unwrap_or(0)
-                    > 0
-            {
-                if let Some(cid) = u.card {
-                    ctx.core
-                        .vm_aux
-                        .flags
-                        .insert((u.player, format!("mbcmjiushi_boosted_card:{cid}")), 1);
-                }
-            }
-            jb
-        },
+        jiu_bonus: std::mem::take(&mut ctx.core.turn.jiu_active),
     }))
 }

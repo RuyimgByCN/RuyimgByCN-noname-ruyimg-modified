@@ -171,7 +171,7 @@ impl SkillBehavior for HostSkillBehavior {
     fn filter_in_window_with_frames(
         &self,
         ctx: &QueryCtx<'_>,
-        frames: &[crate::event::Frame],
+        _frames: &[crate::event::Frame],
         frame: &crate::event::Frame,
         owner: PlayerId,
         event: &EventData,
@@ -180,7 +180,72 @@ impl SkillBehavior for HostSkillBehavior {
         if self.native_damage_effect(kind).is_some() {
             return self.filter_in_window(ctx, owner, event, kind);
         }
-        self.filter_with_frames(ctx, frames, frame, owner, event)
+        match self.behavior {
+            HostBehavior::MbQianlong => match kind {
+                crate::event::EventKind::Damage => false,
+                crate::event::EventKind::DamageSource => matches!(
+                    event,
+                    EventData::Damage(d)
+                        if !d.prevented
+                            && d.amount > 0
+                            && d.source == Some(owner)
+                            && ctx.state.player(owner).mbqianlong_marks < 99
+                ),
+                crate::event::EventKind::DamageEnd => matches!(
+                    event,
+                    EventData::Damage(d)
+                        if !d.prevented
+                            && d.amount > 0
+                            && d.target == owner
+                            && ctx.state.player(owner).mbqianlong_marks < 99
+                ),
+                _ => self.filter(ctx, owner, event),
+            },
+            HostBehavior::MbcmJiushi => match kind {
+                crate::event::EventKind::Damage => false,
+                crate::event::EventKind::DamageBegin3 => matches!(
+                    event,
+                    EventData::Damage(d)
+                        if !d.prevented
+                            && d.amount > 0
+                            && d.target == owner
+                            && ctx.state.player(owner).face_down
+                ),
+                crate::event::EventKind::DamageEnd => {
+                    let EventData::DamageWindow { root, .. } = frame.data else {
+                        return false;
+                    };
+                    matches!(
+                        event,
+                        EventData::Damage(d)
+                            if !d.prevented
+                                && d.amount > 0
+                                && d.target == owner
+                                && ctx
+                                    .state
+                                    .vm_aux
+                                    .flags
+                                    .get(&(owner, format!("mbcmjiushi_dmg:{root}")))
+                                    .copied()
+                                    .unwrap_or(0)
+                                    > 0
+                    )
+                }
+                _ => self.filter(ctx, owner, event),
+            },
+            _ => self.filter_with_frames(ctx, _frames, frame, owner, event),
+        }
+    }
+    fn is_forever(&self) -> bool {
+        matches!(
+            self.behavior,
+            HostBehavior::MbQianlong
+                | HostBehavior::MbWeitong
+                | HostBehavior::MbcmQingzheng
+                | HostBehavior::MbcmJiushi
+                | HostBehavior::MbcmFangzhu
+                | HostBehavior::MbJuejin
+        )
     }
     fn is_charlotte(&self) -> bool {
         matches!(
@@ -349,6 +414,75 @@ impl SkillBehavior for HostSkillBehavior {
                     extra_events: Vec::new(),
                 })
             }
+            // L29 龙血玄黄：潜龙拆分 damageSource / damageEnd；清正 direct:true；
+            // 酒诗改为 damageBegin3 (silent firstDo) + damageEnd + TurnOvered
+            HostBehavior::MbQianlong => match kind {
+                crate::event::EventKind::CardsDrawn
+                | crate::event::EventKind::CardsMoved
+                | crate::event::EventKind::DamageSource
+                | crate::event::EventKind::DamageEnd => Some(crate::catalog::TriggerMeta {
+                    event: kind,
+                    timing: crate::event::Timing::Normal,
+                    priority: 0,
+                    order_selectable: true,
+                    optional: false,
+                    extra_events: Vec::new(),
+                }),
+                crate::event::EventKind::Damage => Some(crate::catalog::TriggerMeta {
+                    event: crate::event::EventKind::PhaseBegin,
+                    timing: crate::event::Timing::First,
+                    priority: 6,
+                    order_selectable: false,
+                    optional: false,
+                    extra_events: Vec::new(),
+                }),
+                _ => None,
+            },
+            HostBehavior::MbcmQingzheng if kind == crate::event::EventKind::PhaseBegin => {
+                Some(crate::catalog::TriggerMeta {
+                    event: crate::event::EventKind::PhaseBegin,
+                    timing: crate::event::Timing::Normal,
+                    priority: 0,
+                    order_selectable: true,
+                    optional: false,
+                    extra_events: Vec::new(),
+                })
+            }
+            HostBehavior::MbcmJiushi => match kind {
+                crate::event::EventKind::DamageBegin3 => Some(crate::catalog::TriggerMeta {
+                    event: crate::event::EventKind::DamageBegin3,
+                    timing: crate::event::Timing::First,
+                    priority: 0,
+                    order_selectable: false,
+                    optional: false,
+                    extra_events: Vec::new(),
+                }),
+                crate::event::EventKind::DamageEnd => Some(crate::catalog::TriggerMeta {
+                    event: crate::event::EventKind::DamageEnd,
+                    timing: crate::event::Timing::Normal,
+                    priority: 0,
+                    order_selectable: true,
+                    optional: false,
+                    extra_events: Vec::new(),
+                }),
+                crate::event::EventKind::TurnOvered => Some(crate::catalog::TriggerMeta {
+                    event: crate::event::EventKind::TurnOvered,
+                    timing: crate::event::Timing::Normal,
+                    priority: 0,
+                    order_selectable: true,
+                    optional: false,
+                    extra_events: Vec::new(),
+                }),
+                crate::event::EventKind::Damage => Some(crate::catalog::TriggerMeta {
+                    event: crate::event::EventKind::TurnOvered,
+                    timing: crate::event::Timing::Normal,
+                    priority: 0,
+                    order_selectable: false,
+                    optional: false,
+                    extra_events: Vec::new(),
+                }),
+                _ => None,
+            },
             _ => None,
         }
     }
@@ -369,7 +503,28 @@ impl SkillBehavior for HostSkillBehavior {
                 window: effect.window(),
             });
         }
-        self.start(owner, event)
+        let mut machine = self.machine(owner, event);
+        match self.behavior {
+            HostBehavior::MbQianlong => {
+                machine.card = Some(match kind {
+                    crate::event::EventKind::PhaseBegin => 0,
+                    crate::event::EventKind::CardsDrawn | crate::event::EventKind::CardsMoved => 1,
+                    crate::event::EventKind::DamageEnd => 2,
+                    crate::event::EventKind::DamageSource => 3,
+                    _ => 0,
+                });
+            }
+            HostBehavior::MbcmJiushi => {
+                machine.card = Some(match kind {
+                    crate::event::EventKind::DamageEnd => 1,
+                    crate::event::EventKind::TurnOvered => 2,
+                    crate::event::EventKind::DamageBegin3 => 3,
+                    _ => 1,
+                });
+            }
+            _ => {}
+        }
+        Box::new(machine)
     }
 
     fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {

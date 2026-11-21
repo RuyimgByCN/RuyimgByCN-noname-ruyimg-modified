@@ -7,16 +7,16 @@ pub fn grant_equip_skills(ctx: &mut Ctx<'_>, player: PlayerId, card: crate::ids:
     let names: Vec<&'static str> = ctx.catalog.cards[card as usize].equip_skills.clone();
     for name in names {
         if let Some(def) = ctx.catalog.skill_by_name(name) {
-            ctx.core
-                .skills
-                .entry((player, def))
-                .or_insert(crate::state::SkillInstance {
+            ctx.ensure_skill(
+                (player, def),
+                crate::state::SkillInstance {
                     owner: player,
                     enabled: true,
                     once_used: false,
                     expires_end_of_turn: false,
                     rounds: 0,
-                });
+                },
+            );
         }
     }
 }

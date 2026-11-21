@@ -9,6 +9,14 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-21 Batch 1.5（L29 龙血玄黄）规则修复、独立复核与本地收口（待提交／发布）
+
+- **基线与版本**：HEAD `af6ef4899052ad1258f38a242960f8f0ea0fd066`（Batch 1.4 `U07` 已发布，CI Run `44785367168` Attempt 1 `10/10 success`，已记入 [CI 运行台账](../operations/evidence/ci-runs.md)）；版本与内容锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 项标准 golden 哈希与 `u01-dddanzhi-pending-v107.ngsa` 静态内容锁不变。
+- **修复与复核**：完成 `L29` 全部 5 项核心技能两轮规则对齐（`mbqianlong`/`mbweitong` `forever` 与 `CardsDrawn`/`CardsMoved` `Timing::Normal pri 0` 及 `hasZhuSkill` 模式门控、`mbcmqingzheng` `direct:true` 可取消＋先弃 `CardsLost`＋`source=owner`＋`effective_card_suit`、`mbcmjiushi` LIFO `TurnOverBefore` 先于虚构 `Jiu`＋0 牌/已饮酒濒死自救＋`DamageBegin3` 帧追踪＋`get.cardPile2` 仅牌堆真锦囊、`mbcmfangzhu` `!forever && !charlotte` 含后装与标准装备封技＋`!is_trick_kind` 禁牌/转化/追杀且放行响应、`mbjuejin`/`mbcmxscw` 负血护甲＋仅手牌移除＋后续弃牌清扫），新增 `CardKind::is_trick_kind()`（精确 49 种上游 `type2 == 'trick'`）；未参与实现的复核 agent `3488fd64-4fea-4218-be3f-f5fb6d38add2` 经 Chrome CDP 上游实跑对照与两轮核对后给出 **`APPROVE`**（5 项技能升为 `已复核等价`，`L29:configs:shengjian` 依复核建议由 `已复核等价` 下调为 `简化近似` 归队列第 5 项界面阶段）。
+- **清单计数与整包签署**：[inventory_status.json](../migration/g0/inventory_status.json) 更新为 **已复核等价 656／简化近似 3,768／缺失 0**（合计 4,424）：`L29` **`5 / 4 / 0`**（净 `+4`）；**整包八项签署仍 `0/37`**。
+- **本地验证实测**：`test_check_source_lines.py`（2 OK）、`check-source-lines.py`（9,385 文件 `<= 2,000` / Rust 有效行 `<= 1,000`）、`check-native-layering.py`（0 上行引用）、`recount_g0.py`（37/0）均 exit 0；3 crate **`2,518/0/6`**（含 15 项 `l29_` 回归与 14 golden 全通过）、5 crate `-D warnings` 零警告、`wasm32` exit 0；`--workspace --no-fail-fast` **`7,914/0/8`**、`conformance` **`19/19`**、`desktop-client` **`20/0/1`**；`web-client` `typecheck`＋`test`（**489/0**）＋`build:native`＋`smoke:native`（**83/0**）＋`check-native-wasm-cross-target.py`＋`cross-target-hash.sh`＋`build` 及 `preflight.py`（22/22）均通过，详见 [Batch 1.5 复核摘要](../operations/evidence/2026-11-21-batch1-5-l29/README.md)。
+- **剩余范围**：队列第 1 项续做 `L10`/`U01` 修复与 `known-automatic-choice-gaps-01.json` 梳理；队列第 2–11 项待做。
+
 ### 2026-11-21 Batch 1.4（U07 玩点论杀）规则修复、独立复核与本地收口（待提交／发布）
 
 - **基线与版本**：HEAD `08ad0b37a447a21f515da955204923bdaf3e6aa8`（Batch 1.3 CI Run `44735674711` Attempt 1 仅 `perf-macos-latest` `start-hash-p50` 宿主噪声失败、Attempt 2 `10/10 success`，两行已并入 [CI 运行台账](../operations/evidence/ci-runs.md)）合入 `swarm/author-u07-l10` `63c0411ddf3f0189395f224cb571a050c5d8588e`；版本与锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 项标准 golden 哈希与 `u01-dddanzhi-pending-v107.ngsa` 静态内容锁不变；`packages/extensions/wudian-upstream-noname/assets/cards.json` 补入两张实体【调兵遣将】（`14 -> 16` 张）并同步 `package.npack.json` 与 `bundledNativePackages.ts` blake3 哈希 `50f279c395f6206136b74c2d3dbca89efdb2a04a4d0e533f8fd63c207db33692`。

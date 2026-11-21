@@ -48,7 +48,7 @@
 
 待执行：装备/移除面具各触发一次真实翻面；装备时保持原朝向，移除后可翻。
 
-源码：`archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:16`；`packages/extensions/huanle-upstream-noname/assets/cards.json:47`；`crates/engine-native-content/src/content/host/step/skills_status.rs:991`。
+源码：`archive/upstream/noname/apps/core/extension/欢乐卡牌/card/card.js:16`；`packages/extensions/huanle-upstream-noname/assets/cards.json:47`；`crates/engine-native-content/src/content/host/step/huanle.rs:144`（原 `skills_status.rs` 第 991 行已拆分迁入）。
 
 ### cards:monkey
 
@@ -118,7 +118,7 @@
 
 待执行：面具持有者发动 U08 蓄谋，预期摸3仍保持正面；再用正常翻面事件作阳性对照。
 
-源码：`archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:32`；`crates/engine-native-content/src/content/host/filtering/common.rs:756`；`crates/engine-native-content/src/content/host/step/skills_status.rs:991`。
+源码：`archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:32`；`crates/engine-native-content/src/content/host/filtering/common.rs:756`；`crates/engine-native-content/src/content/host/step/huanle.rs:144`（原 `skills_status.rs` 第 991 行已拆分迁入）。
 
 ### skills:monkey
 
@@ -276,7 +276,7 @@
 
 待执行：诱敌后首杀未命中、第二杀命中指定者，再进行第三次杀；应命中即停止且移除临时追杀标记，不能触发换牌。
 
-源码：`archive/upstream/noname/apps/core/extension/玩点论杀/card/skill.js:5`；`crates/content-native-loader/src/host_skill_bindings.rs:51`；`crates/engine-native-content/src/content/host/filtering/common.rs:1046`；`crates/engine-native-kernel/src/kernel/sha/step.rs:874`；`crates/engine-native-kernel/src/kernel/sha/resume.rs:302`。
+源码：`archive/upstream/noname/apps/core/extension/玩点论杀/card/skill.js:5`；`crates/content-native-loader/src/host_skill_bindings.rs:51`；`crates/engine-native-content/src/content/host/filtering/common.rs:973`（原第 1046 行前移）；`crates/engine-native-kernel/src/kernel/sha/step.rs:874`；`crates/engine-native-kernel/src/kernel/sha/resume.rs:302`。
 
 ### skills:youzhan
 

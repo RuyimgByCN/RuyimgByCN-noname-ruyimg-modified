@@ -130,7 +130,15 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
             loop {
                 while let Some(r) = self.responders.first() {
                     let alive = ctx.core.player(*r).alive;
-                    let has_tao = alive && !dying_tao_cards(ctx, *r, self.dying).is_empty();
+                    let has_tao = alive
+                        && (!dying_tao_cards(ctx, *r, self.dying).is_empty()
+                            || crate::kernel::mbcmjiushi_dying_skill(
+                                ctx.core,
+                                ctx.catalog,
+                                *r,
+                                self.dying,
+                            )
+                            .is_some());
                     if !has_tao {
                         self.responders.remove(0);
                     } else {
@@ -141,7 +149,15 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                     break;
                 }
                 let any_tao = ctx.core.players.iter().enumerate().any(|(i, p)| {
-                    p.alive && !dying_tao_cards(ctx, i as PlayerId, self.dying).is_empty()
+                    p.alive
+                        && (!dying_tao_cards(ctx, i as PlayerId, self.dying).is_empty()
+                            || crate::kernel::mbcmjiushi_dying_skill(
+                                ctx.core,
+                                ctx.catalog,
+                                i as PlayerId,
+                                self.dying,
+                            )
+                            .is_some())
                 });
                 if !any_tao {
                     break;
@@ -207,6 +223,40 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                         (u32::from(self.dying) + 1) | ((tao as u32) << 8),
                     );
                     return Flow::Yield;
+                } else if let Some(ChoiceOption::Skill(def)) = answer.first().copied() {
+                    if crate::kernel::mbcmjiushi_dying_skill(
+                        ctx.core,
+                        ctx.catalog,
+                        responder,
+                        self.dying,
+                    ) == Some(def)
+                    {
+                        self.round_used = true;
+                        ctx.log(LogEvent::SkillTriggered {
+                            skill: crate::vocabulary::host::HLSS_MBCMJIUSHI_KEY,
+                            owner: responder,
+                            presentation: None,
+                        });
+                        // LIFO: push virtual Jiu first so TurnOverBefore resolves before recovery.
+                        ctx.emit(EventData::CardUsed(crate::event::CardUseData {
+                            card: None,
+                            player: responder,
+                            targets: vec![self.dying],
+                            nature: crate::event::DamageNature::Normal,
+                            use_as: Some(CardKind::Jiu),
+                            cancelled: false,
+                        }));
+                        let fid = ctx.top_frame_id();
+                        ctx.core.vm_aux.flags.insert(
+                            (responder, format!("dying_save_frame:{fid}")),
+                            u32::from(self.dying) + 1,
+                        );
+                        ctx.emit(EventData::TurnOverBefore {
+                            player: responder,
+                            cancelled: false,
+                        });
+                        return Flow::Yield;
+                    }
                 }
                 continue; // 无论用桃或放弃，继续处理队列（轮转见队首过滤）
             }
@@ -252,6 +302,14 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                     })
                     .map(ChoiceOption::Card),
             );
+            if let Some(def) = crate::kernel::mbcmjiushi_dying_skill(
+                ctx.core,
+                ctx.catalog,
+                responder,
+                self.dying,
+            ) {
+                options.push(ChoiceOption::Skill(def));
+            }
             // 冰封·封（swd 批 134）：封锁者不能求桃/自救
             let options = if ctx.catalog.blocks_all_cards(ctx.core, responder) {
                 Vec::new()
