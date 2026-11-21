@@ -12,6 +12,151 @@ export interface DecadeMarkSkillSpec {
   readonly kind: DecadeMarkBadgeKind;
 }
 
+export interface DecadeMarkBehaviorMeta {
+  readonly nonumberMark: boolean;
+  readonly noskillControl: boolean;
+  readonly usesSuitSort: boolean;
+  readonly usesTypeSort: boolean;
+  readonly tooltipSummary: string;
+}
+
+/** `markskill.js:3` 不显示数量数字的 32 项状态标记清单 */
+export const DECADE_NONUMBER_MARK_IDS: ReadonlyArray<string> = [
+  "xinzhoufu2",
+  "zhaxiang2",
+  "jiaoying2",
+  "juguan_draw",
+  "new_zhixi_mark2",
+  "dshj_lingren_Debuff",
+  "zhente2",
+  "drlt_zhenggu_mark",
+  "yufeng2",
+  "xinzhaofu_effect",
+  "dulie",
+  "zlshoufu2",
+  "spshanxi",
+  "taomie",
+  "drlt_jieying_mark",
+  "bifa2",
+  "zongkui_mark",
+  "xingbu_effect1",
+  "xingbu_effect2",
+  "xingbu_effect3",
+  "xionghuo_disable",
+  "xionghuo_low",
+  "fyjianyux",
+  "biaozhao",
+  "rebiaozhao",
+  "residi2",
+  "shencai_loseHp",
+  "shencai_weapon",
+  "shencai_respond",
+  "shencai_distance",
+  "dcsilve_self",
+  "dcsilve_target",
+];
+
+/** `markskill.js:5` 仅挂载角标不生成额外技能控件按钮的 4 项标记 */
+export const DECADE_NOSKILL_CONTROL_IDS: ReadonlyArray<string> = [
+  "twjichou_give",
+  "lianhuan2",
+  "ollianhuan5",
+  "lianhuan5",
+];
+
+/** `markskill.js:2466, 4858` 使用 `Array.prototype.sortByType` 的类别角标集合 */
+export const DECADE_TYPE_SORT_MARK_IDS: ReadonlySet<string> = new Set([
+  "rejingce_add",
+  "rejingce2",
+  "nzry_shicai",
+  "nzry_shicai_2",
+]);
+
+const NONUMBER_SET: ReadonlySet<string> = new Set(DECADE_NONUMBER_MARK_IDS);
+const NOSKILL_CONTROL_SET: ReadonlySet<string> = new Set(DECADE_NOSKILL_CONTROL_IDS);
+
+/** 上游 `markskill.js:36-49` `Array.prototype.sortByType` (`基 / 锦 / 装`) */
+export function sortCardTypesDecadeSymbols(types: ReadonlyArray<string>): string {
+  const normalized = new Set(types.map((t) => t.trim().toLowerCase()));
+  const out: string[] = [];
+  if (normalized.has("basic") || normalized.has("基本") || normalized.has("基")) out.push("基");
+  if (normalized.has("trick") || normalized.has("锦囊") || normalized.has("锦")) out.push("锦");
+  if (normalized.has("equip") || normalized.has("装备") || normalized.has("装")) out.push("装");
+  return out.join("") || "基";
+}
+
+export function getDecadeMarkBehaviorMeta(spec: DecadeMarkSkillSpec): DecadeMarkBehaviorMeta {
+  const nonumberMark = NONUMBER_SET.has(spec.id);
+  const noskillControl = NOSKILL_CONTROL_SET.has(spec.id);
+  const usesSuitSort = spec.kind === "suit";
+  const usesTypeSort = DECADE_TYPE_SORT_MARK_IDS.has(spec.id);
+  const modeDesc =
+    spec.kind === "zhuanhuan"
+      ? "转换技阴/阳双态指示"
+      : spec.kind === "limited"
+        ? "限定/使命技使用态指示"
+        : usesTypeSort && usesSuitSort
+          ? "花色(♥♦♠♣)与牌类别(基锦装)双序列追踪"
+          : usesTypeSort
+            ? "已记录牌类别(基锦装)追踪"
+            : usesSuitSort
+              ? "已记录花色(♥♦♠♣)排序追踪"
+              : nonumberMark
+                ? "无数字状态提示角标 (nonumberMark)"
+                : "层数/计数角标指示";
+  const ctrlNote = noskillControl ? " · 隐藏额外技能控钮" : "";
+  return {
+    nonumberMark,
+    noskillControl,
+    usesSuitSort,
+    usesTypeSort,
+    tooltipSummary: `${spec.label} (${spec.id})：${modeDesc}${ctrlNote} [markskill.js:${spec.line}]`,
+  };
+}
+
+/** 25 `nonumberMark` + 4 `noskillControl` 子标记的回退说明表（不计入 286 主条目） */
+const DECADE_SUBMARK_LABELS: Readonly<Record<string, string>> = {
+  xinzhoufu2: "逐北",
+  jiaoying2: "椒影",
+  juguan_draw: "聚观摸牌",
+  new_zhixi_mark2: "止息",
+  dshj_lingren_Debuff: "凌人",
+  zhente2: "贞特",
+  yufeng2: "御风",
+  xinzhaofu_effect: "招福",
+  dulie: "笃烈",
+  zlshoufu2: "授符",
+  spshanxi: "闪袭",
+  taomie: "讨灭",
+  drlt_jieying_mark: "结营",
+  zongkui_mark: "纵傀",
+  xingbu_effect1: "星卜吉",
+  xingbu_effect2: "星卜平",
+  xingbu_effect3: "星卜凶",
+  fyjianyux: "监狱",
+  residi2: "似地",
+  shencai_loseHp: "神裁体",
+  shencai_weapon: "神裁兵",
+  shencai_respond: "神裁应",
+  shencai_distance: "神裁距",
+  dcsilve_self: "思略己",
+  dcsilve_target: "思略敌",
+  twjichou_give: "急筹",
+  lianhuan2: "连环",
+  ollianhuan5: "连环",
+  lianhuan5: "连环",
+};
+
+export function resolveDecadeSubMarkSpec(skillId: string): DecadeMarkSkillSpec | null {
+  if (NONUMBER_SET.has(skillId)) {
+    return { id: skillId, line: 3, label: DECADE_SUBMARK_LABELS[skillId] ?? skillId, kind: "counter" };
+  }
+  if (NOSKILL_CONTROL_SET.has(skillId)) {
+    return { id: skillId, line: 5, label: DECADE_SUBMARK_LABELS[skillId] ?? skillId, kind: "counter" };
+  }
+  return null;
+}
+
 export const DECADE_MARKSKILL_SPECS: ReadonlyArray<DecadeMarkSkillSpec> = [
   { id: "_removeXieli", line: 186, label: "移除协力", kind: "suit" },
   { id: "nzry_chenglve", line: 539, label: "成略", kind: "zhuanhuan" },
@@ -139,7 +284,7 @@ export const DECADE_MARKSKILL_SPECS: ReadonlyArray<DecadeMarkSkillSpec> = [
   { id: "gxlianhua", line: 9623, label: "丹血", kind: "counter" },
   { id: "zhafu", line: 9699, label: "扎符", kind: "limited" },
   { id: "yechou2", line: 9750, label: "业仇", kind: "counter" },
-  { id: "huamu", line: 9764, label: "\\0", kind: "counter" },
+  { id: "huamu", line: 9764, label: "灵杉&玉树", kind: "counter" },
   { id: "biaozhao", line: 9856, label: "表召", kind: "suit" },
   { id: "rebiaozhao", line: 9895, label: "表召", kind: "suit" },
   { id: "liezhi", line: 9934, label: "烈直 失效", kind: "counter" },

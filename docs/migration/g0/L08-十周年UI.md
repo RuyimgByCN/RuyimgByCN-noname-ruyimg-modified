@@ -3,6 +3,11 @@
 > 核验日期：2026-11-11 · 来源仓：`noname-liuli` · 入口：`archive/upstream/noname-liuli/noname/extension/十周年UI`  
 > 本页为 E01/G0 深度清单与**裁决 34 逐项上游清单**（武将 / 技能 / 卡牌 / 模式与战役节点 / 配置项 / 界面钩子 / 渲染面 / 现有 `decision34*` 归类）。非整包验收证明。
 
+### 2026-11-21 Batch UI-3（319 钩子＋20 配置＋32 表面共 371 项）合入补充（待提交／发布）
+
+- 合入 `swarm/conv-ui` Batch UI-3（`185c03e9c` + `aa742ff78`，`verifier-ui` #51 **`APPROVE`**）：按裁决 35/37/38 洁净室实现全部 319 项 `L08:ui_hooks`（33 核心钩子 + 286 `markskill`）及诚实未知牌背 `drlt_poxi`/`pro_drlt_poxi`，补齐 Canvas2D 动皮、`node` 20 子节点键、`loadingStyle` 隔离及事件归因/过时提示清理。
+- 按 #51 复核口径升级 **371 项**（`20` 配置、`32` 表面、`319` 钩子；保留 `dynamicBackground`/`JBDDZ`/`SanGuoShaGameOver` 与 `player1..3[_PC].css`/`doudizhu.css`/`junba.css`/`animation1.css`/`content`/`pause` 共 14 项为 `简化近似`），`L08` 计为 **392／14／0**（非整包签署，且任意 `markskill` 战斗自动触发与 `ChoiceKind` 联动依归未来技能规则绑定）。详见 [Batch UI-3 证据摘要](../../operations/evidence/2026-11-21-ui-l08-hooks/README.md)。
+
 ### 2026-11-21 Batch UI-2（44 配置与 43 表面洁净室消费）合入补充（待提交／发布）
 
 - 合入 `swarm/conv-ui` Batch UI-2（`aa8ac1adf` + `3a7fa305d`，`verifier-ui` #39 **`APPROVE`**）：实现全 44 项 `L08:configs:*` Schema、互斥联动、`data-*` 投影与弹窗/牌桌交互，及 43 项 `L08:surfaces:*`（10 JS + 33 CSS）洁净室前端运行时与样式规则（零 `spine.js` 读取与商业资源打包）。

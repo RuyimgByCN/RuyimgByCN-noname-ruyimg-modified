@@ -1,9 +1,9 @@
 import type { EngineEnvelope, ObserverSnapshot } from "../types/engine";
 import {
   createInitialDecadeUiRuntimeState,
-  dispatchDecadeUiHook,
   updateDecadeConfigInState,
 } from "./surfaces/decadeUiSurface";
+import { syncDecadeUiFromEnvelope } from "./surfaces/decadeHooksRuntime";
 import { normalizeDecadeConfig, type DecadeUiConfig } from "./surfaces/decadeConfigSchema";
 import { createInitialQhlyRuntimeState, dispatchQhlyUiHook } from "./surfaces/qhlySurface";
 import { createInitialShoushaUiRuntimeState, dispatchShoushaUiHook } from "./surfaces/shoushaUiSurface";
@@ -986,10 +986,6 @@ export function ingestBattleEnvelopeIntoSurfaces(
   };
 
   for (const seat of seats) {
-    decadeUi = dispatchDecadeUiHook(decadeUi, "_gshoupai", {
-      seat: seat.player,
-      handCount: seat.hand_count,
-    });
     if (!seat.alive) {
       qhly = dispatchQhlyUiHook(qhly, {
         hook: "_qhcreateYH",
@@ -1036,7 +1032,6 @@ export function ingestBattleEnvelopeIntoSurfaces(
     const pubCode = (rawEv as { PublicEvent?: { code?: number } })?.PublicEvent?.code;
     const evType = (rawEv as { type?: string })?.type;
     if (pubCode === 4 || evType === "DamageDealt") {
-      decadeUi = dispatchDecadeUiHook(decadeUi, "_Hplose", { seat: woundedSeat });
       qhly = dispatchQhlyUiHook(qhly, { hook: "_qhlyChangeSkin", generalId: woundedGen, hpDelta: -1 });
       skinSwitch = dispatchSkinSwitchHook(skinSwitch, {
         hook: "_pfqh_check_damage",
@@ -1052,7 +1047,6 @@ export function ingestBattleEnvelopeIntoSurfaces(
         theme: { ...next.theme, lastSkinTrigger: `damage@rev${env.revision}` },
       };
     } else if (pubCode === 5 || evType === "HpRecovered") {
-      decadeUi = dispatchDecadeUiHook(decadeUi, "_HpRecover", { seat: curPlayer });
       qhly = dispatchQhlyUiHook(qhly, { hook: "_qhlyChangeSkin", generalId: curGen, hpDelta: 1 });
       zuanUi = dispatchZuanUiHook(zuanUi, "_saveskill", { seat: curPlayer });
       next = {
@@ -1060,7 +1054,6 @@ export function ingestBattleEnvelopeIntoSurfaces(
         mvp: recordMvpEventFact(next.mvp, { seq, seat: curPlayer, kind: "recover", amount: 1 }),
       };
     } else if (pubCode === 2 || evType === "CardPlayed") {
-      decadeUi = dispatchDecadeUiHook(decadeUi, "_usecard", { seat: curPlayer });
       skinSwitch = dispatchSkinSwitchHook(skinSwitch, {
         hook: "_playAudioToQueue",
         seat: curPlayer,
@@ -1077,7 +1070,6 @@ export function ingestBattleEnvelopeIntoSurfaces(
         longxue: advanceLongxueDaoxin(next.longxue, "gain_card", 1),
       };
     } else if (pubCode === 7 || evType === "PlayerDied") {
-      decadeUi = dispatchDecadeUiHook(decadeUi, "_decadeUI_dieKillEffect", { seat: woundedSeat });
       qhly = dispatchQhlyUiHook(qhly, { hook: "_qhlyChageKillingSkin", killerGeneralId: curGen });
       skinSwitch = dispatchSkinSwitchHook(skinSwitch, {
         hook: "_pfqh_check_jisha",
@@ -1088,6 +1080,8 @@ export function ingestBattleEnvelopeIntoSurfaces(
       zuanUi = dispatchZuanUiHook(zuanUi, "_dieskill", { seat: woundedSeat });
     }
   });
+
+  decadeUi = syncDecadeUiFromEnvelope(decadeUi, env);
 
   next = {
     ...next,
@@ -1573,6 +1567,7 @@ export function triggerLongxueHolySwordEffect(
 }
 
 export * from "./surfaces/decadeConfigSchema";
+export * from "./surfaces/decadeHooksRuntime";
 export * from "./surfaces/decadeMarkSkillsData";
 export * from "./surfaces/decadeSurfacesRuntime";
 export * from "./surfaces/decadeUiSurface";

@@ -19,6 +19,7 @@ import {
   createDefaultDecadeConfig,
   decadeArenaDatasetAttrs,
 } from "../../engine/surfaces/decadeConfigSchema";
+import { DECADE_NOSKILL_CONTROL_IDS } from "../../engine/surfaces/decadeMarkSkillsData";
 import type { DecadeUiRuntimeState } from "../../engine/surfaces/decadeUiSurface";
 import { skillDisplayName } from "../../engine/appearanceStore";
 import { choiceKindLabel, choicePromptLabel } from "../../engine/observerMetadata";
@@ -120,7 +121,20 @@ const dropTargetId = ref<number | null>(null);
 
 const decadeUiState = computed(() => props.surfaces?.uiSuites?.decadeUi);
 const decadeConfig = computed(() => decadeUiState.value?.config ?? createDefaultDecadeConfig());
-const decadeDatasetAttrs = computed(() => decadeArenaDatasetAttrs(decadeConfig.value));
+const decadeDatasetAttrs = computed(() => ({
+  ...decadeArenaDatasetAttrs(decadeConfig.value),
+  "data-prestart": !props.view || props.view.round < 1 ? "on" : "off",
+}));
+const liveTargetArc = computed(() => {
+  if (!targetMode.value || selectedTargets.value.length === 0 || decadeConfig.value.CPZS === "off") {
+    return null;
+  }
+  return {
+    fromSeat: props.selfId,
+    toSeat: selectedTargets.value[0],
+    style: decadeConfig.value.CPZS,
+  };
+});
 const selfOnRight = computed(
   () => props.surfaces?.theme?.shoushaLayout === "left" || decadeConfig.value.rightLayout === false,
 );
@@ -179,6 +193,8 @@ function myHand(): CardView[] {
   );
 }
 
+const NOSKILL_CONTROL_SET: ReadonlySet<string> = new Set(DECADE_NOSKILL_CONTROL_IDS);
+
 function mySkills(): SkillView[] {
   const legalSkillIds = new Set(
     props.legalActions.flatMap((action) =>
@@ -192,7 +208,8 @@ function mySkills(): SkillView[] {
       (skill) =>
         skill.enabled &&
         (skill.active || skill.view_as) &&
-        legalSkillIds.has(skill.id)
+        legalSkillIds.has(skill.id) &&
+        !NOSKILL_CONTROL_SET.has(skill.name ?? "")
     ) ?? [];
 }
 
@@ -594,7 +611,9 @@ const endPhaseDisabled = computed(
       <DecadeTabletopOverlays
         zone="stage"
         :decade-ui="decadeUiState"
+        :live-line-arc="liveTargetArc"
         :view="view"
+        :self-id="selfId"
         :ordered-seats="orderedSeats"
         :self-on-right="selfOnRight"
         :finished="finished"
@@ -644,6 +663,7 @@ const endPhaseDisabled = computed(
             zone="banners"
             :decade-ui="decadeUiState"
             :view="view"
+            :self-id="selfId"
             :finished="finished"
             :self-alive="selfAlive"
             :start-banner-dismissed="startBannerDismissed"
@@ -787,6 +807,7 @@ const endPhaseDisabled = computed(
 
           <!-- DecadeUI .hand-tip & #dui-controls end-phase row -->
           <div class="hand-tip-bar" data-testid="tabletop-hand-tip-bar">
+            <span v-if="decadeConfig.JBDDZ" class="jbddz-mode-tag" data-testid="jbddz-mode-tag">军八·斗地主</span>
             <span v-if="autoRunning" class="tuoguan-badge" data-testid="tuoguan-badge">🤖 托管中</span>
             <span class="hand-tip-text">{{ tabletopTipText }}</span>
             <button

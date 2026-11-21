@@ -9,7 +9,13 @@
  * - 43 项渲染面 (`animation`, `animation_new`, `animationlist`, `component`, `content`, `effect`, `meihua`, `menu`, `pause`, `splash` 及 33 份 CSS)
  */
 
-import { DECADE_MARKSKILL_SPECS, type DecadeMarkSkillSpec } from "./decadeMarkSkillsData";
+import {
+  DECADE_MARKSKILL_SPECS,
+  getDecadeMarkBehaviorMeta,
+  resolveDecadeSubMarkSpec,
+  sortCardTypesDecadeSymbols,
+  type DecadeMarkSkillSpec,
+} from "./decadeMarkSkillsData";
 import {
   applyDecadeConfigUpdate,
   createDefaultDecadeConfig,
@@ -154,22 +160,35 @@ export interface DecadeMarkBadgeView {
   badgeText: string;
   tooltip: string;
   upstreamRef: string;
+  nonumberMark?: boolean;
+  noskillControl?: boolean;
 }
 
 /**
- * 按 `markskill.js` 格式化十周年角色标记角标与悬浮说明 (`markskill.js:500-20741`)
+ * 按 `markskill.js` 格式化十周年角色标记角标与悬浮说明 (`markskill.js:18-20741`)
  */
 export function formatDecadeSkillMarkBadge(
   skillId: string,
-  opts?: { count?: number; yang?: boolean; suits?: ReadonlyArray<string>; usedLimited?: boolean },
+  opts?: {
+    count?: number;
+    yang?: boolean;
+    suits?: ReadonlyArray<string>;
+    cardTypes?: ReadonlyArray<string>;
+    usedLimited?: boolean;
+  },
 ): DecadeMarkBadgeView | null {
-  const spec = MARKSKILL_INDEX[skillId];
+  const spec = MARKSKILL_INDEX[skillId] ?? resolveDecadeSubMarkSpec(skillId);
   if (!spec) return null;
-  let badgeText = String(opts?.count ?? 1);
+  const meta = getDecadeMarkBehaviorMeta(spec);
+  let badgeText = meta.nonumberMark ? "态" : String(opts?.count ?? 1);
   if (spec.kind === "zhuanhuan") {
     badgeText = opts?.yang ? "阳" : "阴";
   } else if (spec.kind === "limited") {
     badgeText = opts?.usedLimited ? "✕" : "限";
+  } else if (meta.usesTypeSort && opts?.cardTypes && opts.cardTypes.length > 0) {
+    const typeText = sortCardTypesDecadeSymbols(opts.cardTypes);
+    const suitText = opts?.suits?.length ? sortSuitsDecadeSymbols(opts.suits) : "";
+    badgeText = `${typeText}${suitText}`;
   } else if (spec.kind === "suit" && opts?.suits && opts.suits.length > 0) {
     badgeText = sortSuitsDecadeSymbols(opts.suits);
   }
@@ -177,9 +196,27 @@ export function formatDecadeSkillMarkBadge(
     skillId: spec.id,
     label: spec.label,
     badgeText,
-    tooltip: `${spec.label} (${ badgeText })`,
+    tooltip: meta.tooltipSummary,
     upstreamRef: `archive/upstream/noname-liuli/noname/extension/十周年UI/markskill.js:${spec.line}`,
+    nonumberMark: meta.nonumberMark,
+    noskillControl: meta.noskillControl,
   };
+}
+
+export interface DecadeTrickEffectBanner {
+  readonly card: "taoyuan" | "nanman" | "wanjian";
+  readonly title: string;
+}
+
+export interface DecadeHpDeltaView {
+  readonly delta: number;
+  readonly kind: "damage" | "recover";
+}
+
+export interface DecadePoxiDialogState {
+  readonly mode: "drlt_poxi" | "pro_drlt_poxi";
+  readonly targetSeat: number;
+  readonly selectedIds: ReadonlyArray<number>;
 }
 
 export interface DecadeUiRuntimeState {
@@ -187,9 +224,27 @@ export interface DecadeUiRuntimeState {
   playerCssVariant: "player_new.css" | "player1_PC.css" | "player2_PC.css" | "player3_PC.css";
   pauseHistoryOpen: boolean;
   poxiModalTargetSeat: number | null;
+  poxiDialog: DecadePoxiDialogState | null;
   jiuBuffSeats: number[];
   jiuwoDyingSeats: number[];
   tiesuoSeats: number[];
+  loseHpSeats: number[];
+  damageFlashSeats: number[];
+  killFireSeats: number[];
+  hiddenSeats: number[];
+  publicHandSeats: number[];
+  factionGlowBySeat: Record<number, string>;
+  hpDeltaBySeat: Record<number, DecadeHpDeltaView>;
+  equipHiddenBySeat: Record<number, boolean>;
+  trickEffectBanner: DecadeTrickEffectBanner | null;
+  autoCheatNotice: string | null;
+  prevHpBySeat: Record<number, number>;
+  prevSeatMaxHpBySeat: Record<number, number>;
+  prevSeatHadGeneralBySeat: Record<number, boolean>;
+  lastSyncedRevision?: number;
+  lastSyncedRound?: number;
+  lastSyncedPhase?: string;
+  lastSyncedPlayer?: number;
   virtualEquipsBySeat: Record<number, string[]>;
   handCountBadgeBySeat: Record<number, number>;
   rarityTierBySeat: Record<number, "junk" | "common" | "rare" | "epic" | "legend">;
@@ -224,9 +279,27 @@ export function createInitialDecadeUiRuntimeState(
     playerCssVariant: config.newDecadeStyle === "on" ? "player_new.css" : "player1_PC.css",
     pauseHistoryOpen: false,
     poxiModalTargetSeat: null,
+    poxiDialog: null,
     jiuBuffSeats: [],
     jiuwoDyingSeats: [],
     tiesuoSeats: [],
+    loseHpSeats: [],
+    damageFlashSeats: [],
+    killFireSeats: [],
+    hiddenSeats: [],
+    publicHandSeats: [],
+    factionGlowBySeat: {},
+    hpDeltaBySeat: {},
+    equipHiddenBySeat: {},
+    trickEffectBanner: null,
+    autoCheatNotice: null,
+    prevHpBySeat: {},
+    prevSeatMaxHpBySeat: {},
+    prevSeatHadGeneralBySeat: {},
+    lastSyncedRevision: undefined,
+    lastSyncedRound: undefined,
+    lastSyncedPhase: undefined,
+    lastSyncedPlayer: undefined,
     virtualEquipsBySeat: {},
     handCountBadgeBySeat: { 0: 4, 1: 4 },
     rarityTierBySeat: { 0: "legend", 1: "epic" },
@@ -278,12 +351,23 @@ export function dispatchDecadeUiHook(
     count?: number;
     yang?: boolean;
     suits?: ReadonlyArray<string>;
+    cardTypes?: ReadonlyArray<string>;
+    usedLimited?: boolean;
     equipName?: string;
     handCount?: number;
     skillName?: string;
     generalName?: string;
     killerName?: string;
     victimName?: string;
+    faction?: string;
+    cardName?: "taoyuan" | "nanman" | "wanjian";
+    delta?: number;
+    hpKind?: "damage" | "recover";
+    rarity?: "junk" | "common" | "rare" | "epic" | "legend";
+    hideEquips?: boolean;
+    publicVisible?: boolean;
+    revealed?: boolean;
+    clear?: boolean;
   },
 ): DecadeUiRuntimeState {
   const seat = opts?.seat ?? 0;
@@ -292,7 +376,10 @@ export function dispatchDecadeUiHook(
     case "_jiuwo_":
       return {
         ...state,
-        jiuwoDyingSeats: [...new Set([...state.jiuwoDyingSeats, seat])],
+        jiuwoDyingSeats:
+          state.config.JNTX && state.config.gameAnimationEffect
+            ? [...new Set([...state.jiuwoDyingSeats, seat])]
+            : state.jiuwoDyingSeats,
         lastEffectCue: "SZN_jiuwo",
       };
     case "_delete_jiuwo_":
@@ -314,6 +401,10 @@ export function dispatchDecadeUiHook(
     case "_dyjinengtx":
       return {
         ...state,
+        factionGlowBySeat:
+          state.config.gameAnimationEffect && state.config.JNTX
+            ? { ...state.factionGlowBySeat, [seat]: opts?.faction ?? "qun" }
+            : state.factionGlowBySeat,
         skillPopup:
           state.config.gameAnimationEffect && state.config.JNTX
             ? {
@@ -325,16 +416,92 @@ export function dispatchDecadeUiHook(
             : state.skillPopup,
         lastEffectCue: `${hookId}@P${seat}`,
       };
-    case "_HpRecover":
+    case "_HpRecover": {
+      const mag = Math.abs(opts?.delta ?? opts?.count ?? 1);
       return {
         ...state,
         healAuraSeats: state.config.EffectWood
           ? [...new Set([...state.healAuraSeats, seat])]
           : state.healAuraSeats,
+        hpDeltaBySeat: {
+          ...state.hpDeltaBySeat,
+          [seat]: { delta: mag, kind: "recover" },
+        },
+        lastEffectCue: `${hookId}@P${seat}`,
+      };
+    }
+    case "_Hplose": {
+      const mag = Math.abs(opts?.delta ?? opts?.count ?? 1);
+      return {
+        ...state,
+        damageFlashSeats: [...new Set([...state.damageFlashSeats, seat])],
+        hpDeltaBySeat: {
+          ...state.hpDeltaBySeat,
+          [seat]: { delta: -mag, kind: "damage" },
+        },
+        lastEffectCue: `${hookId}@P${seat}`,
+      };
+    }
+    case "_losetl_": {
+      const mag = Math.abs(opts?.delta ?? opts?.count ?? 1);
+      return {
+        ...state,
+        loseHpSeats: [...new Set([...state.loseHpSeats, seat])],
+        hpDeltaBySeat: {
+          ...state.hpDeltaBySeat,
+          [seat]: { delta: -mag, kind: "damage" },
+        },
+        lastEffectCue: `${hookId}@P${seat}`,
+      };
+    }
+    case "_jinnangpai_": {
+      const card = opts?.cardName ?? "nanman";
+      const title =
+        card === "taoyuan"
+          ? "桃园结义 · 群雄共愈"
+          : card === "wanjian"
+            ? "万箭齐发 · 箭雨蔽日"
+            : "南蛮入侵 · 战鼓齐鸣";
+      return {
+        ...state,
+        trickEffectBanner:
+          state.config.JNTX && state.config.gameAnimationEffect
+            ? { card, title }
+            : state.trickEffectBanner,
+        lastEffectCue: `${hookId}:${card}`,
+      };
+    }
+    case "_player_hp": {
+      const raw = opts?.delta ?? opts?.count ?? 1;
+      const hpKind = opts?.hpKind ?? (raw > 0 ? "recover" : "damage");
+      const signedDelta = hpKind === "damage" ? -Math.abs(raw) : Math.abs(raw);
+      return {
+        ...state,
+        hpDeltaBySeat: {
+          ...state.hpDeltaBySeat,
+          [seat]: {
+            delta: signedDelta,
+            kind: hpKind,
+          },
+        },
+        lastEffectCue: `${hookId}@P${seat}`,
+      };
+    }
+    case "_killFire":
+      return {
+        ...state,
+        killFireSeats: opts?.clear
+          ? state.killFireSeats.filter((s) => s !== seat)
+          : [...new Set([...state.killFireSeats, seat])],
         lastEffectCue: `${hookId}@P${seat}`,
       };
     case "_usecard":
-    case "_decadeUI_usecardBegin":
+    case "_decadeUI_usecardBegin": {
+      if (opts?.clear) {
+        const nextCues = { ...state.cardUseCueBySeat };
+        delete nextCues[seat];
+        return { ...state, cardUseCueBySeat: nextCues, lastEffectCue: `${hookId}@P${seat}` };
+      }
       return {
         ...state,
         cardUseCueBySeat: state.config.cardUseEffect
@@ -342,15 +509,30 @@ export function dispatchDecadeUiHook(
           : state.cardUseCueBySeat,
         lastEffectCue: `${hookId}@P${seat}`,
       };
+    }
+    case "_discard": {
+      const nextCues = { ...state.cardUseCueBySeat };
+      delete nextCues[seat];
+      return {
+        ...state,
+        cardUseCueBySeat: nextCues,
+        damageFlashSeats: state.damageFlashSeats.filter((s) => s !== seat),
+        loseHpSeats: state.loseHpSeats.filter((s) => s !== seat),
+        lastEffectCue: `${hookId}@P${seat}`,
+      };
+    }
     case "_decadeUI_dieKillEffect":
       return {
         ...state,
-        killOverlay: state.config.playerKillEffect
-          ? {
-              killerName: opts?.killerName ?? `P${seat}`,
-              victimName: opts?.victimName ?? "敌将",
-            }
-          : state.killOverlay,
+        jiuBuffSeats: state.jiuBuffSeats.filter((s) => s !== seat),
+        jiuwoDyingSeats: state.jiuwoDyingSeats.filter((s) => s !== seat),
+        killOverlay:
+          state.config.playerKillEffect && state.config.gameAnimationEffect
+            ? {
+                killerName: opts?.killerName ?? `P${seat}`,
+                victimName: opts?.victimName ?? "敌将",
+              }
+            : state.killOverlay,
         lastEffectCue: `${hookId}@P${seat}`,
       };
     case "_recasting":
@@ -362,18 +544,15 @@ export function dispatchDecadeUiHook(
         },
         lastEffectCue: `${hookId}@P${seat}`,
       };
-    case "_losetl_":
-    case "_jinnangpai_":
-    case "_player_hp":
-    case "_Hplose":
-    case "_killFire":
-    case "_kill_framebg":
-    case "_discard":
+    case "_changeEquipExt":
       return {
         ...state,
+        equipHiddenBySeat: {
+          ...state.equipHiddenBySeat,
+          [seat]: opts?.hideEquips ?? !state.equipHiddenBySeat[seat],
+        },
         lastEffectCue: `${hookId}@P${seat}`,
       };
-    case "_changeEquipExt":
     case "_xunizhuangbei_gua_gua": {
       const eq = opts?.equipName ?? "bagua";
       const prev = state.virtualEquipsBySeat[seat] ?? [];
@@ -387,16 +566,30 @@ export function dispatchDecadeUiHook(
       };
     }
     case "_ui_auto_cheat":
-      return { ...state, lastEffectCue: "decade_inspect_overlay" };
+      return {
+        ...state,
+        autoCheatNotice: state.config._connectMode
+          ? null
+          : "单机调试 · _ui_auto_cheat 即时指令就绪",
+        lastEffectCue: "decade_inspect_overlay",
+      };
+    case "_kill_framebg":
+      return {
+        ...state,
+        rarityTierBySeat: { ...state.rarityTierBySeat, [seat]: opts?.rarity ?? "epic" },
+        lastEffectCue: `${hookId}@P${seat}`,
+      };
     case "_rarity":
       return {
         ...state,
-        rarityTierBySeat: { ...state.rarityTierBySeat, [seat]: "legend" },
+        rarityTierBySeat: { ...state.rarityTierBySeat, [seat]: opts?.rarity ?? "legend" },
       };
     case "_tiesuo_ying":
       return {
         ...state,
-        tiesuoSeats: [...new Set([...state.tiesuoSeats, seat])],
+        tiesuoSeats: opts?.clear
+          ? state.tiesuoSeats.filter((s) => s !== seat)
+          : [...new Set([...state.tiesuoSeats, seat])],
         lastEffectCue: "tiesuo_chain",
       };
     case "_gshoupai":
@@ -406,16 +599,32 @@ export function dispatchDecadeUiHook(
           ...state.handCountBadgeBySeat,
           [seat]: opts?.handCount ?? (state.handCountBadgeBySeat[seat] ?? 4),
         },
+        publicHandSeats:
+          opts?.publicVisible === false
+            ? state.publicHandSeats.filter((s) => s !== seat)
+            : [...new Set([...state.publicHandSeats, seat])],
       };
     case "drlt_poxi":
     case "pro_drlt_poxi":
-      return { ...state, poxiModalTargetSeat: seat, lastEffectCue: hookId };
+      return {
+        ...state,
+        poxiModalTargetSeat: seat,
+        poxiDialog: { mode: hookId, targetSeat: seat, selectedIds: [] },
+        lastEffectCue: hookId,
+      };
     case "_gzyinni":
     case "_guozhan":
     case "_gzyinniszn":
     case "_guozhanszn":
     case "_yinni":
-      return { ...state, splashMode: "guozhan_hidden", lastEffectCue: hookId };
+      return {
+        ...state,
+        splashMode: "guozhan_hidden",
+        hiddenSeats: opts?.revealed
+          ? state.hiddenSeats.filter((s) => s !== seat)
+          : [...new Set([...state.hiddenSeats, seat])],
+        lastEffectCue: hookId,
+      };
     case "_shousha_shuangjiang":
       return { ...state, splashMode: "shousha_dual", lastEffectCue: hookId };
     case "_shizhounian_shuangjiang":
@@ -426,6 +635,8 @@ export function dispatchDecadeUiHook(
         count: opts?.count,
         yang: opts?.yang,
         suits: opts?.suits,
+        cardTypes: opts?.cardTypes,
+        usedLimited: opts?.usedLimited,
       });
       if (!badge) return state;
       const existing = (state.activeMarkBadgesBySeat[seat] ?? []).filter((b) => b.skillId !== hookId);

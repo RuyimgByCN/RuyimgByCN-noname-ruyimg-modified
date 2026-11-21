@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import {
   characterDisplayName,
   characterImageUrl,
@@ -12,9 +12,33 @@ import {
   skinsForCharacter,
   substituteImageUrl,
 } from "../../engine/appearanceStore";
+import {
+  CleanRoomAnimationState,
+  HANDCRAFTED_SPINE40_ATLAS_TEXT,
+  HANDCRAFTED_SPINE40_SKELETON_JSON,
+  buildBatchGeometry,
+  createSkeletonInstance,
+  parseSpine40Json,
+  parseTextureAtlas,
+  renderSpineBatchesToCanvas2D,
+} from "../../engine/spine40/index";
 import type { GeneralSlotView } from "../../types/engine";
 
-const props = defineProps<{ general: GeneralSlotView | null; legacyDef?: number; alive: boolean; slot: number; self?: boolean }>();
+const props = defineProps<{
+  general: GeneralSlotView | null;
+  legacyDef?: number;
+  alive: boolean;
+  slot: number;
+  self?: boolean;
+  dynamicSkinEnabled?: boolean;
+  dynamicSkinOutcrop?: boolean;
+  outcropSkin?: string;
+}>();
+const dynamicCanvasRef = ref<HTMLCanvasElement | null>(null);
+const cleanroomAtlas = parseTextureAtlas(HANDCRAFTED_SPINE40_ATLAS_TEXT);
+const cleanroomSkeleton = parseSpine40Json(HANDCRAFTED_SPINE40_SKELETON_JSON);
+let dynamicRafId: number | null = null;
+let dynamicStartMs = 0;
 const characterDef = computed(() => props.general?.def ?? props.legacyDef ?? 0);
 const visible = computed(() => props.general !== null || props.legacyDef !== undefined);
 const displayName = computed(() => visible.value
@@ -79,20 +103,126 @@ function onSkinChange(event: Event): void {
   const value = (event.target as HTMLSelectElement).value;
   selectSkin(characterDef.value, value === "" ? null : Number(value));
 }
+
+const FACTION_GLOW_RGBA: Readonly<Record<string, string>> = {
+  wei: "56, 189, 248",
+  shu: "248, 113, 113",
+  wu: "74, 222, 128",
+  qun: "250, 204, 21",
+  jin: "192, 132, 252",
+  shen: "253, 224, 71",
+};
+
+function drawDynamicSkinFrame(phaseSec: number): void {
+  const canvas = dynamicCanvasRef.value;
+  if (!canvas || !props.dynamicSkinEnabled || !visible.value) return;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  const w = canvas.width;
+  const h = canvas.height;
+  // Run cleanroom Spine 4.0 skeleton pose solver onto 2D surface
+  try {
+    const skelInst = createSkeletonInstance(
+      cleanroomSkeleton,
+      cleanroomSkeleton.skins[0]?.name ?? "default",
+    );
+    const animState = new CleanRoomAnimationState();
+    const animName = cleanroomSkeleton.animations.daiji ? "daiji" : Object.keys(cleanroomSkeleton.animations)[0];
+    if (animName) {
+      animState.setAnimation(0, animName, true, 1, "replace");
+      animState.update(phaseSec % 2);
+      animState.apply(skelInst);
+    }
+    const batches = buildBatchGeometry(skelInst, cleanroomAtlas, true);
+    ctx.save();
+    ctx.globalAlpha = 0.22;
+    renderSpineBatchesToCanvas2D(ctx, skelInst, batches);
+    ctx.restore();
+  } catch {
+    ctx.clearRect(0, 0, w, h);
+  }
+
+  // Layer faction-tinted dynamic skin aura, outcrop rim & diagonal gleam
+  const rgb = FACTION_GLOW_RGBA[factionTone.value] ?? "250, 204, 21";
+  const rimGrad = ctx.createRadialGradient(w * 0.5, props.dynamicSkinOutcrop ? h * 0.28 : h * 0.45, 10, w * 0.5, h * 0.5, w * 0.72);
+  rimGrad.addColorStop(0, `rgba(${rgb}, 0.04)`);
+  rimGrad.addColorStop(0.7, `rgba(${rgb}, 0.14)`);
+  rimGrad.addColorStop(1, `rgba(${rgb}, 0.36)`);
+  ctx.fillStyle = rimGrad;
+  ctx.fillRect(0, 0, w, h);
+
+  const bandX = ((phaseSec * 48) % (w + 80)) - 40;
+  const gleam = ctx.createLinearGradient(bandX - 24, 0, bandX + 24, h);
+  gleam.addColorStop(0, "rgba(255, 255, 255, 0)");
+  gleam.addColorStop(0.5, `rgba(${rgb}, 0.24)`);
+  gleam.addColorStop(1, "rgba(255, 255, 255, 0)");
+  ctx.fillStyle = gleam;
+  ctx.fillRect(0, 0, w, h);
+
+  ctx.strokeStyle = `rgba(${rgb}, 0.75)`;
+  ctx.lineWidth = 2;
+  ctx.strokeRect(2, 2, w - 4, h - 4);
+}
+
+function stopDynamicLoop(): void {
+  if (dynamicRafId != null) {
+    cancelAnimationFrame(dynamicRafId);
+    dynamicRafId = null;
+  }
+}
+
+function syncDynamicLoop(): void {
+  stopDynamicLoop();
+  if (!props.dynamicSkinEnabled || !visible.value) return;
+  drawDynamicSkinFrame(0.35);
+  const reduced = typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+  if (reduced || typeof requestAnimationFrame !== "function") return;
+  dynamicStartMs = performance.now();
+  const tick = (now: number) => {
+    if (!props.dynamicSkinEnabled || !visible.value) {
+      dynamicRafId = null;
+      return;
+    }
+    drawDynamicSkinFrame(0.35 + (now - dynamicStartMs) / 1000);
+    dynamicRafId = requestAnimationFrame(tick);
+  };
+  dynamicRafId = requestAnimationFrame(tick);
+}
+
+onMounted(() => syncDynamicLoop());
+onBeforeUnmount(() => stopDynamicLoop());
+watch(
+  [() => props.dynamicSkinEnabled, visible, () => props.dynamicSkinOutcrop, () => props.outcropSkin, factionTone],
+  () => syncDynamicLoop(),
+  { immediate: true, flush: "post" },
+);
 </script>
 
 <template>
   <div
     class="general-slot"
-    :class="{ 'is-unassigned': !visible }"
+    :class="{ 'is-unassigned': !visible, 'has-dynamic-skin': Boolean(dynamicSkinEnabled && visible) }"
     :data-slot="slot"
     :data-faction="factionTone"
+    :data-dynamic-skin="dynamicSkinEnabled ? 'on' : 'off'"
+    :data-dynamic-skin-outcrop="dynamicSkinOutcrop ? 'on' : 'off'"
     :aria-label="`${slot === 0 ? '主将' : '副将'} ${displayName}`"
   >
     <img v-if="visible && portraitSrc" class="portrait" :src="portraitSrc" :alt="`${displayName}武将头像`" @error="onPortraitError" />
     <div v-else class="portrait no-image" role="img" :aria-label="`${displayName}暂无头像`">
       <span class="no-image-glyph">{{ visible ? "无图" : "未知" }}</span>
     </div>
+    <canvas
+      v-if="dynamicSkinEnabled && visible"
+      ref="dynamicCanvasRef"
+      class="dynamic-skin-canvas"
+      :class="{ 'outcrop-crop': Boolean(dynamicSkinOutcrop) }"
+      width="120"
+      height="140"
+      aria-hidden="true"
+      data-testid="portrait-dynamic-canvas"
+    ></canvas>
     <div class="portrait-caption">
       <span class="name">{{ displayName }}</span>
       <span
@@ -135,6 +265,19 @@ function onSkinChange(event: Event): void {
   object-fit: cover;
   object-position: top center;
   border-radius: 6px;
+}
+.dynamic-skin-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  border-radius: 6px;
+  box-shadow: inset 0 0 12px rgba(250, 204, 21, 0.25);
+}
+.dynamic-skin-canvas.outcrop-crop {
+  transform: scale(1.08) translateY(-4%);
 }
 .no-image {
   display: grid;

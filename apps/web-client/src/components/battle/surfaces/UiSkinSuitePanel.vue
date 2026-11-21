@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
+import type { ObserverSnapshot } from "../../../types/engine";
 import {
   DECADE_MARKSKILL_SPECS,
+  getDecadeMarkBehaviorMeta,
 } from "../../../engine/surfaces/decadeMarkSkillsData";
 import {
   DECADE_CSS_SURFACE_SPECS,
@@ -56,6 +58,8 @@ const props = defineProps<{
   shoushaUi?: ShoushaUiRuntimeState;
   decadeUi?: DecadeUiRuntimeState;
   taixuUi?: TaixuUiRuntimeState;
+  view?: ObserverSnapshot | null;
+  selfId?: number;
 }>();
 
 const emit = defineEmits<{
@@ -99,6 +103,10 @@ const qhlyState = computed(() => localSuites.value.qhly);
 const skinState = computed(() => localSuites.value.skinSwitch);
 const shoushaState = computed(() => localSuites.value.shoushaUi);
 const decadeState = computed(() => localSuites.value.decadeUi);
+const selectedMarkMeta = computed(() => {
+  const spec = DECADE_MARKSKILL_SPECS.find((s) => s.id === selectedMarkId.value);
+  return spec ? { spec, meta: getDecadeMarkBehaviorMeta(spec) } : null;
+});
 const taixuState = computed(() => localSuites.value.taixuUi);
 
 const qhlyPreset = computed(() => QHLY_SURFACE_PRESETS[qhlyState.value.activeStylesheet]);
@@ -204,11 +212,32 @@ function onAddDecadeMarkBadge() {
     count: 2,
     yang: true,
     suits: ["diamond", "spade", "heart"],
+    cardTypes: ["basic", "trick", "equip"],
   });
   next = dispatchDecadeUiHook(next, "_jiubuff_", { seat: 0 });
   commitSuites(
     { decadeUi: next },
     `十周年 UI (L08)：已挂载标记 ${selectedMarkId.value}（共支持 ${DECADE_ALL_UI_HOOK_IDS.length} 项钩子 / ${DECADE_SURFACE_MODULES.length} 项渲染面）`,
+  );
+}
+
+function onDemoDecadeCoreHooks() {
+  const selfSeat = props.selfId ?? 0;
+  const oppSeat =
+    props.view?.seats.find((s) => s.player !== selfSeat && s.alive)?.player ??
+    (selfSeat === 0 ? 1 : 0);
+  let next = dispatchDecadeUiHook(decadeState.value, "_jiuwo_", { seat: oppSeat });
+  next = dispatchDecadeUiHook(next, "_jinnangpai_", { cardName: "nanman" });
+  next = dispatchDecadeUiHook(next, "_player_hp", { seat: oppSeat, delta: 1, hpKind: "damage" });
+  next = dispatchDecadeUiHook(next, "_tiesuo_ying", { seat: selfSeat });
+  next = dispatchDecadeUiHook(next, "_xunizhuangbei_gua_gua", { seat: oppSeat, equipName: "虚拟八卦阵" });
+  next = dispatchDecadeUiHook(next, "_kill_framebg", { seat: oppSeat, rarity: "legend" });
+  next = dispatchDecadeUiHook(next, "_recasting", { seat: oppSeat });
+  next = dispatchDecadeUiHook(next, "_ui_auto_cheat", {});
+  next = dispatchDecadeUiHook(next, "drlt_poxi", { seat: oppSeat });
+  commitSuites(
+    { decadeUi: next },
+    `十周年 UI (L08)：已演示核心钩子 (_jiuwo_/_jinnangpai_/_player_hp/_tiesuo_ying/_xunizhuangbei_gua_gua/_kill_framebg/drlt_poxi -> P${oppSeat})`,
   );
 }
 
@@ -287,13 +316,20 @@ function onRunTaixuConsoleStep() {
           v-for="badge in decadeState.activeMarkBadgesBySeat[0] ?? []"
           :key="badge.skillId"
           class="decade-mark-chip"
-          :title="badge.upstreamRef"
+          :data-nonumber="badge.nonumberMark ? 'on' : 'off'"
+          :data-noskill-control="badge.noskillControl ? 'on' : 'off'"
+          :title="badge.tooltip"
           :data-mark-id="badge.skillId"
         >
           {{ badge.label }}[{{ badge.badgeText }}]
         </span>
         <span v-if="decadeState.jiuBuffSeats.includes(0)" class="decade-jiu-badge">🍶酒态</span>
       </div>
+      <p v-if="selectedMarkMeta" class="tiny muted" data-testid="l08-selected-mark-meta">
+        {{ selectedMarkMeta.meta.tooltipSummary }}
+        <template v-if="selectedMarkMeta.meta.nonumberMark"> · 无数字状态态</template>
+        <template v-if="selectedMarkMeta.meta.noskillControl"> · 禁选控牌标</template>
+      </p>
       <div class="suite-actions">
         <select v-model="selectedMarkId" aria-label="十周年标记选择" data-testid="select-l08-markskill">
           <option v-for="spec in DECADE_MARKSKILL_SPECS" :key="spec.id" :value="spec.id">
@@ -308,6 +344,9 @@ function onRunTaixuConsoleStep() {
         </button>
         <button type="button" data-testid="btn-l08-demo-guanxing" @click="onToggleDecadeGuanXingDemo">
           演示观星排序(content.js)
+        </button>
+        <button type="button" data-testid="btn-l08-demo-core-hooks" @click="onDemoDecadeCoreHooks">
+          演示全套核心UI钩子
         </button>
       </div>
     </div>

@@ -1,5 +1,9 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+## 2026-11-21 Batch UI-3（L08 十周年UI 319 钩子与配置/表面补全 371 项）合入（待提交／发布）
+
+基线 HEAD `1906e7f151848f2852edb90e75803e2ed3ff93f9`（Batch Q2-L27 CI Run `44916917571` Attempt 1 `10/10 success` 与 `4e37d810e` `2/10` 首提交记录已并入 `ci-runs.md`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `verifier-ui` 两轮复核通过（#51 **`APPROVE`**）的 `swarm/conv-ui` `185c03e9c` + `aa742ff78`：洁净室实现 `L08` 全 319 项 `ui_hooks`（33 核心钩子 + 286 `markskill`）与诚实未知牌背 `drlt_poxi`/`pro_drlt_poxi`，补齐 Canvas2D 动皮画布、`node` 20 子节点键、`loadingStyle` 弹窗边距隔离、初始选将零误报差值及回合/阶段过时提示清理（无 `spine.js` 读取或商业资源打包）；在 `main` 全量通过 `--workspace`（7,934/0/8）、4 crate（2,586/0/6）、504 前端单测、83/83 烟测及 5 套 Chrome CDP 验证。按 #51 升级 **371 项**（`20` 配置 + `32` 表面 + `319` 钩子；保留 `dynamicBackground`/`JBDDZ`/`SanGuoShaGameOver` 与 `player1..3[_PC].css`/`doudizhu.css`/`junba.css`/`animation1.css`/`content`/`pause` 共 14 项为 `简化近似`），`L08` 变为 **392／14／0**，全仓清单更新为 **已复核等价 1,060／简化近似 3,364／缺失 0**（整包八项 `0/37`）。见 [Batch UI-3 证据](../operations/evidence/2026-11-21-ui-l08-hooks/README.md) 与 [进度主稿](native-progress.md)。
+
 ## 2026-11-21 Batch Q2-L27（L27 选将美化 12 项）合入（待提交／发布）
 
 基线 HEAD `d9e1c9a1fcea4f19f1555bedb416aee8b51fc9b8`（Batch UI-2 CI Run `44899269373` Attempt 1 `10/10 success` 已并入 `ci-runs.md`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `verifier-rules` 三轮核验通过（#47 **`APPROVE`**）的 `swarm/conv-q2` `af6ef4899..f3b59ecf6` 并协调 `skills_damage.rs`/`asks_mtg.rs`/`combat_rules.rs` 与 L29 共存：关闭 `L27` 全部 12 项规则与带规 UI 钩子（`xiefang`、`new_meibu`、`new_zhixi`、`clandianzhan`、`reqimou`、`bolan`、`mbcmqingzheng`、`sbqingzheng`、`xingchong`、`dcxiaoxi`、`twfengji`、`twzhouzu`），在 `main` 全量通过 `--workspace`（7,934/0/8）及 4 crate（2,586/0/6）。`L27` 更新为 **53／1／0**（仅 `e.css` 留 `简化近似` 归 UI 线），全仓清单更新为 **已复核等价 689／简化近似 3,735／缺失 0**（整包八项 `0/37`）。见 [Batch Q2-L27 证据](../operations/evidence/2026-11-21-batch2-1-l27/README.md) 与 [进度主稿](native-progress.md)。

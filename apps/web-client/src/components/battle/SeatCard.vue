@@ -1,8 +1,17 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import GeneralPortrait from "./GeneralPortrait.vue";
 import type { CardView, SeatView } from "../../types/engine";
-import type { DecadeUiConfig } from "../../engine/surfaces/decadeConfigSchema";
+import {
+  DECADE_PLAYER_NODE_KEYS,
+  type DecadePlayerNodeKey,
+  type DecadeUiConfig,
+} from "../../engine/surfaces/decadeConfigSchema";
+import { DECADE_NOSKILL_CONTROL_IDS } from "../../engine/surfaces/decadeMarkSkillsData";
+import {
+  deriveGeneralRarityTier,
+  resolveDecadeSeatBorderTier,
+} from "../../engine/surfaces/decadeHooksRuntime";
 import type { DecadeUiRuntimeState } from "../../engine/surfaces/decadeUiSurface";
 import type { SkinSwitchRuntimeState } from "../../engine/surfaces/skinSwitchSurface";
 import {
@@ -76,10 +85,20 @@ const detachSelfEquips = computed(
     Boolean(effectiveConfig.value?.aloneEquip),
 );
 const visibleEquips = computed(() => (detachSelfEquips.value ? [] : props.equipCards));
+const NOSKILL_CONTROL_SET: ReadonlySet<string> = new Set(DECADE_NOSKILL_CONTROL_IDS);
 const extraGainedSkills = computed(() => {
   if (!effectiveConfig.value?.gainSkillsShown) return [];
-  return props.seat.skills.slice(2).filter((s) => Boolean(s.name)).slice(0, 3);
+  return props.seat.skills
+    .slice(2)
+    .filter((s) => Boolean(s.name) && !NOSKILL_CONTROL_SET.has(s.name ?? ""))
+    .slice(0, 3);
 });
+const enabledNodeKeys = computed(
+  () => new Set<DecadePlayerNodeKey>(effectiveConfig.value?.node ?? DECADE_PLAYER_NODE_KEYS),
+);
+function isNodeEnabled(key: DecadePlayerNodeKey): boolean {
+  return enabledNodeKeys.value.has(key);
+}
 const gainStickerSkill = computed(() => {
   const mode = effectiveConfig.value?.gainSkillsVisible ?? "off";
   if (mode === "off") return null;
@@ -87,6 +106,32 @@ const gainStickerSkill = computed(() => {
   const candidate = extraGainedSkills.value[0] ?? props.seat.skills.find((s) => Boolean(s.name));
   return candidate?.name ?? null;
 });
+
+const seatBorderTier = computed(() => {
+  if (!effectiveConfig.value) return undefined;
+  const rarity = props.decadeUi?.rarityTierBySeat?.[props.seat.player] ?? deriveGeneralRarityTier(props.seat);
+  return resolveDecadeSeatBorderTier(effectiveConfig.value, rarity);
+});
+const hasJiuwo = computed(() => props.decadeUi?.jiuwoDyingSeats?.includes(props.seat.player) ?? false);
+const hasLoseHp = computed(() => props.decadeUi?.loseHpSeats?.includes(props.seat.player) ?? false);
+const hasDamageFlash = computed(() => props.decadeUi?.damageFlashSeats?.includes(props.seat.player) ?? false);
+const hasKillFire = computed(() => props.decadeUi?.killFireSeats?.includes(props.seat.player) ?? false);
+const hasTiesuoYing = computed(() => props.decadeUi?.tiesuoSeats?.includes(props.seat.player) ?? false);
+const isHiddenVeil = computed(() => props.decadeUi?.hiddenSeats?.includes(props.seat.player) ?? false);
+const isPublicHand = computed(() => props.decadeUi?.publicHandSeats?.includes(props.seat.player) ?? false);
+const isEquipMuted = computed(() => Boolean(props.decadeUi?.equipHiddenBySeat?.[props.seat.player]));
+const factionGlow = computed(() => props.decadeUi?.factionGlowBySeat?.[props.seat.player] ?? null);
+const hpDelta = computed(() => props.decadeUi?.hpDeltaBySeat?.[props.seat.player] ?? null);
+const virtualEquips = computed(() => props.decadeUi?.virtualEquipsBySeat?.[props.seat.player] ?? []);
+const recastCount = computed(() => props.decadeUi?.recastCountBySeat?.[props.seat.player] ?? 0);
+const publicHandDisplay = computed(() => props.decadeUi?.handCountBadgeBySeat?.[props.seat.player] ?? props.seat.hand_count);
+const selectedMarkId = ref<string | null>(null);
+const selectedMarkDetail = computed(
+  () => decadeBadges.value.find((m) => m.skillId === selectedMarkId.value) ?? null,
+);
+function toggleMarkTooltip(skillId: string): void {
+  selectedMarkId.value = selectedMarkId.value === skillId ? null : skillId;
+}
 
 const L20_METAS: Record<string, { label: string; icon: string }> = {
   longmark: { label: "龙印", icon: "🐉" },
@@ -171,62 +216,111 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
       'has-heal-aura': hasHealAura,
       'has-card-use-cue': Boolean(cardUseCue),
       'no-die-gray': noDieGrayscale,
+      'has-jiuwo-sos': hasJiuwo,
+      'has-lose-hp': hasLoseHp,
+      'has-damage-flash': hasDamageFlash,
+      'has-kill-fire': hasKillFire,
+      'has-faction-glow': Boolean(factionGlow),
+      'is-hidden-veil': isHiddenVeil,
+      'equip-muted': isEquipMuted,
     }"
     :data-decade-style="decadeStyle ?? decadeUi?.layoutVariant ?? 'shizhounian'"
     :data-position="relativePosition ?? (self ? 0 : seat.seat)"
+    :data-border-level="seatBorderTier"
+    :data-glow-faction="factionGlow ?? undefined"
+    :data-decade-node-keys="enabledNodeKeys.size"
     role="listitem"
     :aria-label="`座位 ${seat.seat} 玩家 ${seat.player} 武将 ${displayName} ${identityLabel}`"
     :tabindex="isTargetMode && isSelectableTarget ? 0 : -1"
     @click="isTargetMode && isSelectableTarget && emit('select', seat.player)"
     @keydown.enter="isTargetMode && isSelectableTarget && emit('select', seat.player)"
   >
+    <div
+      class="seat-framebg-layer"
+      data-node-key="framebg"
+      :data-node-enabled="isNodeEnabled('framebg') ? 'on' : 'off'"
+      v-show="isNodeEnabled('framebg')"
+      aria-hidden="true"
+    ></div>
+
     <!-- Top-right DecadeUI identity corner stamp (主/忠/反/内/猜, respects campIdentityImageMode) -->
     <div
+      v-show="isNodeEnabled('identity')"
       class="seat-identity-stamp"
       :class="{ 'camp-text-only': campTextMode }"
       :data-identity-tone="identityBadge.tone"
       :data-camp-mode="campTextMode ? 'text' : 'image'"
       :title="identityLabel"
+      data-node-key="identity"
       data-testid="seat-identity-stamp"
     >
       {{ identityBadge.glyph }}
     </div>
 
     <!-- Diagonal chain bar when linked -->
-    <div v-if="isChained" class="seat-chain-bar" aria-hidden="true">
+    <div v-if="isChained && isNodeEnabled('chain')" class="seat-chain-bar" data-node-key="chain" aria-hidden="true">
       <span class="chain-link">⛓</span>
       <span class="chain-link">⛓</span>
       <span class="chain-link">⛓</span>
     </div>
+    <span v-else v-show="isNodeEnabled('chain')" class="seat-node-anchor" data-node-key="chain" aria-hidden="true"></span>
 
-    <!-- Turned-over face-down veil -->
-    <div v-if="seat.turned_over" class="seat-turned-veil" aria-hidden="true"></div>
+    <!-- Turned-over or guozhan hidden veil (`_gzyinni`) -->
+    <div
+      v-if="(seat.turned_over || isHiddenVeil) && isNodeEnabled('turnedover')"
+      class="seat-turned-veil"
+      :class="{ 'is-guozhan-hidden': isHiddenVeil }"
+      data-node-key="turnedover"
+      aria-hidden="true"
+    ></div>
+    <span v-else v-show="isNodeEnabled('turnedover')" class="seat-node-anchor" data-node-key="turnedover" aria-hidden="true"></span>
 
     <div class="seat-portrait-outer">
-      <!-- Bottom-left hand count plaque anchored to portrait frame corner -->
+      <!-- Bottom-left hand count plaque anchored to portrait frame corner (`_gshoupai`) -->
       <div
+        v-show="isNodeEnabled('count')"
         class="seat-card-count"
-        :title="`手牌 ${seat.hand_count} 张`"
+        :data-public-hand="isPublicHand ? 'on' : 'off'"
+        data-node-key="count"
+        :title="`手牌 ${publicHandDisplay} 张`"
         data-testid="seat-card-count"
       >
-        {{ seat.hand_count }}
+        {{ publicHandDisplay }}
       </div>
+
+      <!-- `_player_hp` floating delta popup (anchored absolutely, zero flow impact) -->
+      <span
+        v-if="hpDelta"
+        class="hp-delta-pop"
+        :class="hpDelta.kind === 'recover' ? 'is-recover' : 'is-damage'"
+        data-testid="seat-hp-delta"
+      >{{ hpDelta.delta > 0 ? `+${hpDelta.delta}` : String(hpDelta.delta) }}</span>
 
       <div class="seat-portrait-stage">
         <div class="generals" :class="{ 'has-deputy': hasDeputy }" aria-label="双将">
           <GeneralPortrait
+            v-show="isNodeEnabled('avatar')"
+            data-node-key="avatar"
             :general="slots[0]"
             :slot="0"
             :legacy-def="legacyDef"
             :alive="seat.alive"
             :self="self"
+            :dynamic-skin-enabled="Boolean(effectiveConfig?.dynamicSkin)"
+            :dynamic-skin-outcrop="Boolean(effectiveConfig?.dynamicSkinOutcrop)"
+            :outcrop-skin="effectiveConfig?.outcropSkin"
           />
           <GeneralPortrait
+            v-show="isNodeEnabled('avatar2')"
+            data-node-key="avatar2"
             :class="{ 'deputy-hidden-slot': !hasDeputy }"
             :general="slots[1]"
             :slot="1"
             :alive="seat.alive"
             :self="self"
+            :dynamic-skin-enabled="Boolean(effectiveConfig?.dynamicSkin)"
+            :dynamic-skin-outcrop="Boolean(effectiveConfig?.dynamicSkinOutcrop)"
+            :outcrop-skin="effectiveConfig?.outcropSkin"
           />
         </div>
 
@@ -238,14 +332,22 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
             <span v-if="seat.turned_over" class="tag" aria-label="武将牌背面">翻面</span>
             <span v-if="isChained" class="tag chain-tag" data-testid="seat-chain-badge">🔗横置</span>
             <span v-if="hasJiuBuff" class="tag jiu-tag" data-testid="seat-jiu-badge">🍶酒态</span>
+            <span v-if="hasJiuwo" class="tag jiuwo-tag" data-testid="seat-jiuwo-badge">🆘救我</span>
+            <span v-if="hasKillFire" class="tag killfire-tag" data-testid="seat-killfire-badge">🔥破敌</span>
+            <span v-if="hasTiesuoYing" class="tag tiesuo-tag" data-testid="seat-tiesuo-badge">⛓结营</span>
+            <span v-if="recastCount > 0" class="tag recast-tag" data-testid="seat-recast-badge">♻重铸×{{ recastCount }}</span>
+            <span v-if="isHiddenVeil" class="tag yinni-tag" data-testid="seat-yinni-badge">暗置</span>
+            <span v-if="isPublicHand" class="tag pubhand-tag" data-testid="seat-pubhand-badge">明牌{{ publicHandDisplay }}</span>
             <span
-              v-if="rarityLongMode"
+              v-if="rarityLongMode && isNodeEnabled('long')"
               class="tag dragon-crest"
               :class="`dragon-${rarityLongMode}`"
               :data-rarity-long="rarityLongMode"
               :title="`龙头美化 (${rarityLongMode})`"
+              data-node-key="long"
               data-testid="seat-dragon-crest"
             >{{ rarityLongMode === 'xinon' ? '✨🐉' : rarityLongMode === 'off' ? '🐲' : '🐉' }}</span>
+            <span v-else v-show="isNodeEnabled('long')" class="seat-node-anchor" data-node-key="long" aria-hidden="true"></span>
             <span v-if="cardUseCue" class="tag cue-tag" data-testid="seat-card-cue">{{ cardUseCue }}</span>
             <span v-if="gainStickerSkill" class="tag seat-gain-skill-sticker" data-testid="seat-gain-skill-sticker">✦{{ gainStickerSkill }}</span>
           </div>
@@ -260,8 +362,9 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
 
         <!-- Per-seat delayed tricks / judgment diamonds -->
         <div
-          v-if="judgeCards && judgeCards.length > 0"
+          v-if="judgeCards && judgeCards.length > 0 && isNodeEnabled('judges')"
           class="seat-judge-marks"
+          data-node-key="judges"
           data-testid="seat-judge-marks"
           aria-label="判定区"
         >
@@ -274,9 +377,16 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
             <span class="judge-glyph">{{ judgeGlyph(jc) }}</span>
           </span>
         </div>
+        <span v-else v-show="isNodeEnabled('judges')" class="seat-node-anchor" data-node-key="judges" aria-hidden="true"></span>
 
-        <!-- Equip strips overlaid cleanly at bottom of portrait (detached to dock when aloneEquip + newDecadeStyle) -->
-        <div v-if="visibleEquips.length > 0" class="equip-zone" aria-label="装备区">
+        <!-- Equip strips + `_xunizhuangbei_gua_gua` virtual equips + `_changeEquipExt` dim state -->
+        <div
+          v-if="(visibleEquips.length > 0 || virtualEquips.length > 0) && isNodeEnabled('equips')"
+          class="equip-zone"
+          :class="{ 'is-equip-muted': isEquipMuted }"
+          data-node-key="equips"
+          aria-label="装备区"
+        >
           <div
             v-for="card in visibleEquips"
             :key="card.id"
@@ -286,7 +396,18 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
             <span class="equip-suit" :data-suit="card.suit">{{ suitGlyph(card.suit) }}</span>
             <span class="equip-name">{{ cardKindLabel(card.kind, card.def) }}</span>
           </div>
+          <div
+            v-for="ve in virtualEquips"
+            :key="`ve-${ve}`"
+            class="equip-card is-virtual-equip"
+            data-virtual-equip="true"
+            data-testid="seat-virtual-equip"
+            :title="`虚拟防具 ${ve}`"
+          >
+            <span class="equip-name">☯ {{ ve }}</span>
+          </div>
         </div>
+        <span v-else v-show="isNodeEnabled('equips')" class="seat-node-anchor" data-node-key="equips" aria-hidden="true"></span>
 
         <div v-if="!seat.alive" class="dead-badge">✗ 阵亡 · {{ identityBadge.glyph }}</div>
         <div v-else-if="seat.hp <= 0" class="dying-badge">⚠ 濒死</div>
@@ -295,7 +416,7 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
 
     <!-- Bottom DecadeUI HP & meta footer -->
     <div class="seat-footer">
-      <div class="hp-row">
+      <div v-show="isNodeEnabled('hp')" class="hp-row" data-node-key="hp">
         <span
           class="state-icon"
           :style="{ color: hpColor(seat.hp, seat.max_hp, seat.alive) }"
@@ -320,14 +441,16 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
       </div>
 
       <div class="meta muted">
-        <span>P{{ seat.player }} · 手牌 {{ seat.hand_count }}</span>
-        <span>{{ identityLabel }}</span>
+        <span data-node-key="name" v-show="isNodeEnabled('name')">P{{ seat.player }} · 手牌 {{ seat.hand_count }}</span>
+        <span v-show="hasDeputy && isNodeEnabled('name2')" data-node-key="name2">{{ slots[1]?.name ?? "" }}</span>
+        <span data-node-key="nameol" v-show="isNodeEnabled('nameol')">{{ identityLabel }}</span>
       </div>
 
-      <!-- L08 Decade mark & gained skill badges -->
+      <!-- L08 Decade mark & gained skill badges (with clickable markskill intro popover) -->
       <div
-        v-if="decadeBadges.length > 0 || extraGainedSkills.length > 0"
+        v-if="(decadeBadges.length > 0 || extraGainedSkills.length > 0) && isNodeEnabled('marks')"
         class="decade-seat-marks"
+        data-node-key="marks"
         data-testid="seat-decade-marks"
       >
         <span
@@ -339,15 +462,35 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
         <span
           v-for="mk in decadeBadges"
           :key="mk.skillId"
-          class="seat-mark-chip"
+          class="seat-mark-chip is-clickable"
           :class="{
             'mark-yinyang-yang': mk.badgeText.includes('阳'),
             'mark-yinyang-yin': mk.badgeText.includes('阴'),
             'mark-limited': mk.badgeText.includes('限') || mk.badgeText.includes('✕'),
+            'is-selected': selectedMarkId === mk.skillId,
           }"
-          :title="mk.upstreamRef"
+          :data-nonumber="mk.nonumberMark ? 'on' : 'off'"
+          :data-noskill-control="mk.noskillControl ? 'on' : 'off'"
+          :title="mk.tooltip"
+          data-testid="seat-mark-badge"
+          @click.stop="toggleMarkTooltip(mk.skillId)"
         >{{ mk.label }}[{{ mk.badgeText }}]</span>
       </div>
+      <span v-else v-show="isNodeEnabled('marks')" class="seat-node-anchor" data-node-key="marks" aria-hidden="true"></span>
+      <div
+        v-if="selectedMarkDetail && isNodeEnabled('intro')"
+        class="seat-mark-intro-popover"
+        data-node-key="intro"
+        data-testid="seat-mark-intro-popover"
+        @click.stop="selectedMarkId = null"
+      >
+        <strong>{{ selectedMarkDetail.label }}</strong> · {{ selectedMarkDetail.tooltip }}
+      </div>
+      <span v-else v-show="isNodeEnabled('intro')" class="seat-node-anchor" data-node-key="intro" aria-hidden="true"></span>
+      <span class="seat-node-anchor" data-node-key="wei" :data-faction="slots[0]?.faction ?? 'unknown'" v-show="isNodeEnabled('wei')" aria-hidden="true"></span>
+      <span class="seat-node-anchor" data-node-key="handcards1" v-show="isNodeEnabled('handcards1')" aria-hidden="true"></span>
+      <span class="seat-node-anchor" data-node-key="handcards2" v-show="isNodeEnabled('handcards2')" aria-hidden="true"></span>
+      <span class="seat-node-anchor" data-node-key="expansions" v-show="isNodeEnabled('expansions')" aria-hidden="true"></span>
 
       <!-- L20 14 Mark badges -->
       <div v-if="activeL20Marks.length > 0" class="seat-l20-marks" data-testid="seat-l20-mark-badges">
@@ -385,6 +528,20 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.65), inset 0 0 0 1px rgba(255, 224, 150, 0.08);
   transition: border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
   overflow: visible;
+}
+.seat-framebg-layer {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+}
+.seat-node-anchor {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
 }
 .seat.self {
   border-color: rgba(232, 165, 75, 0.9);
@@ -602,6 +759,52 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
   background: #b93829;
   color: #fff;
 }
+.jiuwo-tag {
+  background: #dc2626;
+  color: #fff;
+}
+.killfire-tag {
+  background: #ea580c;
+  color: #fff7ed;
+}
+.tiesuo-tag {
+  background: #854d0e;
+  color: #fef08a;
+}
+.recast-tag {
+  background: #0369a1;
+  color: #e0f2fe;
+}
+.yinni-tag {
+  background: #334155;
+  color: #e2e8f0;
+}
+.pubhand-tag {
+  background: #0f766e;
+  color: #ccfbf1;
+}
+.is-virtual-equip {
+  border-style: dashed !important;
+  border-color: rgba(56, 189, 248, 0.72) !important;
+  color: #bae6fd !important;
+}
+.equip-zone.is-equip-muted {
+  opacity: 0.48;
+}
+.seat-mark-chip.is-clickable {
+  cursor: pointer;
+}
+.seat-mark-intro-popover {
+  margin-top: 0.16rem;
+  padding: 0.2rem 0.34rem;
+  border-radius: 5px;
+  font-size: 0.62rem;
+  line-height: 1.3;
+  background: rgba(12, 16, 22, 0.96);
+  border: 1px solid rgba(232, 165, 75, 0.6);
+  color: #f3ead3;
+  cursor: pointer;
+}
 .seat.has-jiu-buff {
   border-color: #d93829 !important;
   animation: jiu-glow 1.4s ease-in-out infinite alternate;
@@ -697,7 +900,7 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
 
 .equip-zone {
   position: absolute;
-  left: 3px;
+  left: 24px;
   right: 3px;
   bottom: 3px;
   display: flex;

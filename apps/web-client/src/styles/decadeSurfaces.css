@@ -92,8 +92,18 @@
 }
 
 /* 3. Card auxiliary name (`cardAlternateNameVisible`) & virtual highlight (`gold_suitnum`) */
-.battle-table[data-card-alternate-name-visible="off"] .card .id {
+.battle-table[data-card-alternate-name-visible="off"] .card-aux-overlay {
   display: none;
+}
+.card-aux-overlay {
+  display: block;
+  font-size: 0.54rem;
+  line-height: 1.05;
+  color: #475569;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .battle-table[data-gold-suitnum="gold"] .card.is-virtual .card-corner {
   color: #f59e0b;
@@ -104,25 +114,30 @@
   text-shadow: 0 0 4px rgba(56, 189, 248, 0.6);
 }
 
-/* 4. Border tiers (`borderLevel`), dragon crest (`rarityLong`), shadow & skill gold (`skill_control_gold`) */
-.battle-table[data-border-level="one"] .seat.decade-seat-frame {
+/* 4. Border tiers (`borderLevel` + per-seat `_kill_framebg`), dragon crest, shadow & skill gold */
+.battle-table[data-border-level="one"] .seat.decade-seat-frame,
+.battle-table .seat.decade-seat-frame[data-border-level="one"] {
   border-color: #94a3b8;
 }
-.battle-table[data-border-level="two"] .seat.decade-seat-frame {
+.battle-table[data-border-level="two"] .seat.decade-seat-frame,
+.battle-table .seat.decade-seat-frame[data-border-level="two"] {
   border-color: #60a5fa;
 }
-.battle-table[data-border-level="three"] .seat.decade-seat-frame {
+.battle-table[data-border-level="three"] .seat.decade-seat-frame,
+.battle-table .seat.decade-seat-frame[data-border-level="three"] {
   border-color: #c084fc;
 }
-.battle-table[data-border-level="four"] .seat.decade-seat-frame {
+.battle-table[data-border-level="four"] .seat.decade-seat-frame,
+.battle-table .seat.decade-seat-frame[data-border-level="four"] {
   border-color: #f59e0b;
 }
-.battle-table[data-border-level="five"] .seat.decade-seat-frame {
+.battle-table[data-border-level="five"] .seat.decade-seat-frame,
+.battle-table .seat.decade-seat-frame[data-border-level="five"] {
   border-color: #f43f5e;
   box-shadow: 0 0 12px rgba(244, 63, 94, 0.35), 0 6px 16px rgba(0, 0, 0, 0.65);
 }
 
-.battle-table[data-skill-gold="onstart"] .decade-skill-btn,
+.battle-table[data-skill-gold="onstart"][data-prestart="on"] .decade-skill-btn,
 .battle-table[data-skill-gold="forever"] .decade-skill-btn,
 .battle-table[data-skill-gold="forever"] .decade-ctrl-btn {
   color: #fde047;
@@ -131,8 +146,11 @@
 }
 
 .battle-table[data-shadow-style="on"] .seat .name,
-.battle-table[data-shadow-style="on"] .prompt-banner {
+.battle-table[data-shadow-style="on"] .prompt-banner,
+.battle-table[data-shadow-style="on"] .hp-delta-pop,
+.battle-section[data-shadow-style="on"] .effect-popup {
   text-shadow: 0 2px 0 #000, 0 0 8px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.78);
 }
 
 /* 5. Player mark themes (`playerMarkStyle`, `shoushaNewNewMark`, `shoushaNewMark`) */
@@ -158,19 +176,35 @@
 
 /* 6. Dialog / Loading style (`loadingStyle`) & Outcrop (`outcropSkin`) & Style (`newDecadeStyle`) */
 .battle-table[data-loading-style="on"] .tabletop-prompt-box {
-  border: 1px solid rgba(52, 211, 153, 0.45);
+  border: 1px solid rgba(52, 211, 153, 0.55);
   border-radius: 10px;
   padding: 0.32rem 0.55rem;
 }
+.battle-section[data-loading-style="on"] .overlay-card,
+.battle-section[data-loading-style="on"] .modal-card {
+  border-color: rgba(52, 211, 153, 0.55);
+}
 .battle-table[data-loading-style="On"] .tabletop-prompt-box {
-  border: 1px solid rgba(250, 204, 21, 0.55);
+  border: 1px solid rgba(250, 204, 21, 0.65);
   border-radius: 10px;
   padding: 0.32rem 0.55rem;
+}
+.battle-section[data-loading-style="On"] .overlay-card,
+.battle-section[data-loading-style="On"] .modal-card {
+  border-color: rgba(250, 204, 21, 0.65);
 }
 .battle-table[data-loading-style="othersOn"] .tabletop-prompt-box {
   border: 1px solid rgba(94, 184, 134, 0.35);
   border-radius: 10px;
   padding: 0.25rem 0.5rem;
+}
+.battle-section[data-loading-style="othersOn"] .overlay-card,
+.battle-section[data-loading-style="othersOn"] .modal-card {
+  border-color: rgba(94, 184, 134, 0.42);
+}
+.battle-table[data-loading-style="on"] .decade-ctrl-btn,
+.battle-table[data-loading-style="On"] .decade-ctrl-btn {
+  cursor: pointer;
 }
 
 .battle-table[data-decade-layout="off"] .arena-stage {
@@ -222,10 +256,12 @@
 }
 .battle-table[data-dynamic-background="decade_jade"] {
   background: radial-gradient(ellipse at 50% 42%, #194435 0%, #0e281f 58%, #07130e 100%) !important;
+  box-shadow: inset 0 0 64px rgba(52, 211, 153, 0.14);
 }
 .battle-table[data-dynamic-background="shousha_amber"],
 .battle-table[data-dynamic-background="random"] {
   background: radial-gradient(ellipse at 50% 44%, #3c2918 0%, #20150c 60%, #0e0905 100%) !important;
+  box-shadow: inset 0 0 64px rgba(245, 158, 11, 0.16);
 }
 
 .alone-equip-dock {
@@ -247,6 +283,72 @@
 }
 .seat.decade-seat-frame.has-card-use-cue {
   box-shadow: 0 0 14px rgba(250, 204, 21, 0.55);
+}
+.seat.decade-seat-frame.has-jiuwo-sos {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 18px rgba(239, 68, 68, 0.65), inset 0 0 12px rgba(239, 68, 68, 0.35);
+}
+.seat.decade-seat-frame.has-damage-flash {
+  box-shadow: 0 0 16px rgba(248, 113, 113, 0.7), inset 0 0 14px rgba(220, 38, 38, 0.45);
+}
+.seat.decade-seat-frame.has-kill-fire {
+  border-color: #f97316 !important;
+  box-shadow: 0 0 18px rgba(249, 115, 22, 0.65), inset 0 0 12px rgba(234, 88, 12, 0.32);
+}
+.seat.decade-seat-frame.has-lose-hp {
+  border-color: #a855f7;
+}
+.seat.decade-seat-frame[data-glow-faction="wei"] { box-shadow: 0 0 14px rgba(59, 130, 246, 0.6); }
+.seat.decade-seat-frame[data-glow-faction="shu"] { box-shadow: 0 0 14px rgba(239, 68, 68, 0.6); }
+.seat.decade-seat-frame[data-glow-faction="wu"] { box-shadow: 0 0 14px rgba(34, 197, 94, 0.6); }
+.seat.decade-seat-frame[data-glow-faction="qun"] { box-shadow: 0 0 14px rgba(168, 162, 158, 0.6); }
+.seat.decade-seat-frame[data-glow-faction="shen"] { box-shadow: 0 0 16px rgba(250, 204, 21, 0.72); }
+
+.hp-delta-pop {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15;
+  padding: 0.08rem 0.38rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  font-family: var(--mono);
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.78);
+}
+.hp-delta-pop.is-damage {
+  background: rgba(153, 27, 27, 0.92);
+  border: 1px solid #f87171;
+  color: #fee2e2;
+}
+.hp-delta-pop.is-recover {
+  background: rgba(20, 83, 45, 0.92);
+  border: 1px solid #4ade80;
+  color: #dcfce7;
+}
+
+.decade-trick-banner {
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, rgba(120, 53, 15, 0.94), rgba(67, 20, 7, 0.94));
+  border: 1.5px solid #f59e0b;
+  color: #fef3c7;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
+}
+.jbddz-mode-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.06rem 0.34rem;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: rgba(120, 53, 15, 0.85);
+  border: 1px solid rgba(250, 204, 21, 0.6);
+  color: #fde68a;
 }
 
 @media (prefers-reduced-motion: reduce) {

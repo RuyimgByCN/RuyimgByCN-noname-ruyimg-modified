@@ -964,6 +964,7 @@ const turnInfo = computed(() => {
       v-if="showGeneralSelect"
       :state="generalSelect"
       :busy="store.busy"
+      :change-wujiang-tx="extensionSurfaces.uiSuites?.decadeUi?.config?.changeWujiangTX ?? 'off'"
       @choose="chooseGeneralCandidate"
       @reload="loadGeneralCandidates"
     />
@@ -1006,7 +1007,11 @@ const turnInfo = computed(() => {
       </div>
     </section>
 
-    <section class="panel battle-section">
+    <section
+      class="panel battle-section"
+      :data-shadow-style="extensionSurfaces.uiSuites?.decadeUi?.config?.shadowStyle ?? 'off'"
+      :data-loading-style="extensionSurfaces.uiSuites?.decadeUi?.config?.loadingStyle ?? 'othersOn'"
+    >
       <BattleBoard
         :view="store.view"
         :self-id="selfId"
@@ -1059,12 +1064,15 @@ const turnInfo = computed(() => {
         </div>
       </div>
       <div
-        v-if="extensionSurfaces.uiSuites?.decadeUi?.config?.eruda"
+        v-if="extensionSurfaces.uiSuites?.decadeUi?.config?.eruda || extensionSurfaces.uiSuites?.decadeUi?.autoCheatNotice"
         class="panel"
         data-testid="decade-eruda-bar"
       >
         <span class="mono tiny">
           [eruda 调试] rev={{ store.revision }} · mode={{ isOnline ? "online" : "local" }} · CSS={{ extensionSurfaces.uiSuites?.decadeUi?.activeCssSurfaces?.length ?? 0 }}/33
+          <template v-if="extensionSurfaces.uiSuites?.decadeUi?.autoCheatNotice">
+            · {{ extensionSurfaces.uiSuites.decadeUi.autoCheatNotice }}
+          </template>
         </span>
       </div>
     </section>

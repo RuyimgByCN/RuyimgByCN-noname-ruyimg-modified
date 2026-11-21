@@ -9,7 +9,9 @@ import {
   resolveGameStartBanner,
   swapGuanXingCards,
   type DecadeGuanXingState,
+  type DecadeLineArcState,
 } from "../../../engine/surfaces/decadeSurfacesRuntime";
+import { validatePoxiSelection } from "../../../engine/surfaces/decadeHooksRuntime";
 import {
   computeDecadeSeatAnchor,
   type RelativeSeatSlot,
@@ -19,7 +21,9 @@ import type { DecadeUiRuntimeState } from "../../../engine/surfaces/decadeUiSurf
 const props = withDefaults(
   defineProps<{
     decadeUi?: DecadeUiRuntimeState;
+    liveLineArc?: DecadeLineArcState | null;
     view: ObserverSnapshot | null;
+    selfId?: number;
     orderedSeats?: ReadonlyArray<RelativeSeatSlot>;
     selfOnRight?: boolean;
     finished?: boolean;
@@ -73,8 +77,10 @@ function findSeatCenterPct(seatOrPlayerId: number): { x: number; y: number } {
   }).centerPct;
 }
 
+const activeLineArc = computed(() => props.liveLineArc ?? props.decadeUi?.lineArc ?? null);
+
 const lineArcGeom = computed(() => {
-  const arc = props.decadeUi?.lineArc;
+  const arc = activeLineArc.value;
   if (!arc) return { x1: 50, y1: 50, x2: 50, y2: 50, stroke: "#fde047" };
   const from = findSeatCenterPct(arc.fromSeat);
   const to = findSeatCenterPct(arc.toSeat);
@@ -89,6 +95,101 @@ const lineArcGeom = computed(() => {
           : "#fde047";
   return { x1: from.x, y1: from.y, x2: to.x, y2: to.y, stroke };
 });
+
+interface PoxiPreviewCard {
+  id: number;
+  suit: string | null;
+  label: string;
+  revealed: boolean;
+  side: "self" | "target";
+}
+
+const P_SUIT_GLYPH: Record<string, string> = { Spade: "♠", Heart: "♥", Club: "♣", Diamond: "♦" };
+
+const poxiCards = computed<{ selfCards: PoxiPreviewCard[]; targetCards: PoxiPreviewCard[]; selfTargeted: boolean }>(() => {
+  const dlg = props.decadeUi?.poxiDialog;
+  if (!dlg) return { selfCards: [], targetCards: [], selfTargeted: false };
+  const selfOwnerId =
+    props.selfId ??
+    props.orderedSeats?.find((s) => s.position === 0)?.seat.player ??
+    0;
+  const selfTargeted = dlg.targetSeat === selfOwnerId;
+  const known = props.view?.known_cards ?? [];
+  const selfHand = known.filter(
+    (c) => c.owner === selfOwnerId && c.zone === "Hand" && c.def != null,
+  );
+  const selfCards: PoxiPreviewCard[] = selfHand.map((c) => {
+    const suit = c.suit ?? "Spade";
+    return {
+      id: c.id,
+      suit,
+      label: `${P_SUIT_GLYPH[suit] ?? "?"}${c.rank ?? "?"} #${c.id}`,
+      revealed: true,
+      side: "self",
+    };
+  });
+
+  if (selfTargeted) {
+    return { selfCards, targetCards: [], selfTargeted: true };
+  }
+
+  const targetSeat = props.view?.seats.find((s) => s.player === dlg.targetSeat);
+  const revealedTarget = known.filter(
+    (c) => c.owner === dlg.targetSeat && c.zone === "Hand" && c.def != null,
+  );
+  const targetCards: PoxiPreviewCard[] = revealedTarget.map((c) => {
+    const suit = c.suit ?? "Spade";
+    return {
+      id: c.id,
+      suit,
+      label: `${P_SUIT_GLYPH[suit] ?? "?"}${c.rank ?? "?"} #${c.id}`,
+      revealed: true,
+      side: "target",
+    };
+  });
+  const hiddenCount = Math.max(0, (targetSeat?.hand_count ?? 0) - targetCards.length);
+  for (let i = 0; i < hiddenCount; i++) {
+    targetCards.push({
+      id: -(i + 1),
+      suit: null,
+      label: `未知手牌 ${i + 1}`,
+      revealed: false,
+      side: "target",
+    });
+  }
+  return { selfCards, targetCards, selfTargeted: false };
+});
+
+const poxiValidation = computed(() => {
+  const dlg = props.decadeUi?.poxiDialog;
+  if (!dlg) return null;
+  if (poxiCards.value.selfTargeted) {
+    return { valid: false, reason: "目标不能为自身（请选择其他角色）" };
+  }
+  const all = [...poxiCards.value.selfCards, ...poxiCards.value.targetCards];
+  const selected = dlg.selectedIds
+    .map((id) => all.find((c) => c.id === id))
+    .filter((c): c is PoxiPreviewCard & { suit: string } => Boolean(c && c.revealed && c.suit));
+  return validatePoxiSelection(dlg.mode, selected);
+});
+
+function togglePoxiCard(card: PoxiPreviewCard) {
+  if (!card.revealed || !card.suit) return;
+  const dlg = props.decadeUi?.poxiDialog;
+  if (!dlg) return;
+  const exists = dlg.selectedIds.includes(card.id);
+  const selectedIds = exists
+    ? dlg.selectedIds.filter((id) => id !== card.id)
+    : [...dlg.selectedIds, card.id];
+  updateState({ poxiDialog: { ...dlg, selectedIds } });
+}
+
+function togglePoxiMode() {
+  const dlg = props.decadeUi?.poxiDialog;
+  if (!dlg) return;
+  const nextMode = dlg.mode === "drlt_poxi" ? "pro_drlt_poxi" : "drlt_poxi";
+  updateState({ poxiDialog: { ...dlg, mode: nextMode, selectedIds: [] } });
+}
 
 function updateState(partial: Partial<DecadeUiRuntimeState>) {
   if (!props.decadeUi) return;
@@ -167,6 +268,17 @@ function onGuanXingCardClick(state: DecadeGuanXingState, cardId: number) {
       {{ gameOverBannerText }}
     </div>
 
+    <!-- `_jinnangpai_` (`animation.js:1614`): AOE trick fullscreen ribbon inside center banner zone -->
+    <div
+      v-if="decadeUi?.trickEffectBanner && animAllowed"
+      class="decade-trick-banner"
+      :data-trick-card="decadeUi.trickEffectBanner.card"
+      data-testid="decade-trick-banner"
+      @click="updateState({ trickEffectBanner: null })"
+    >
+      ✨ {{ decadeUi.trickEffectBanner.title }}
+    </div>
+
     <!-- `effect.js`: kill overlay, compare face-off, skill activation popup -->
     <div
       v-if="decadeUi?.killOverlay && animAllowed"
@@ -207,9 +319,9 @@ function onGuanXingCardClick(state: DecadeGuanXingState, cardId: number) {
 
   <!-- Stage-level layers (`effect.line` SVG, `content.chooseGuanXing`, `pause.js`, `component.chatBox`) -->
   <template v-if="showStage">
-    <!-- SVG target arc line (`effect.line`, styled by `CPZS`) -->
+    <!-- SVG target arc line (`effect.line` + live target selection, styled by `CPZS`) -->
     <svg
-      v-if="decadeUi?.lineArc && cfg?.CPZS !== 'off' && animAllowed"
+      v-if="activeLineArc && cfg?.CPZS !== 'off' && animAllowed"
       class="decade-line-svg"
       viewBox="0 0 100 100"
       preserveAspectRatio="none"
@@ -228,6 +340,75 @@ function onGuanXingCardClick(state: DecadeGuanXingState, cardId: number) {
       <circle :cx="lineArcGeom.x1" :cy="lineArcGeom.y1" r="1.2" :fill="lineArcGeom.stroke" />
       <circle :cx="lineArcGeom.x2" :cy="lineArcGeom.y2" r="1.4" :fill="lineArcGeom.stroke" />
     </svg>
+
+    <!-- `drlt_poxi` / `pro_drlt_poxi` (`meihua.js:6770-6935`): honest 4-suit dual hand inspection modal -->
+    <div
+      v-if="decadeUi?.poxiDialog"
+      class="decade-overlay-modal"
+      data-testid="decade-poxi-dialog"
+    >
+      <div class="overlay-card poxi-card">
+        <header class="overlay-head">
+          <strong>{{ decadeUi.poxiDialog.mode === 'pro_drlt_poxi' ? '界·魄袭（1~4异花色）' : '魄袭（4异花色）' }}</strong>
+          <div class="poxi-head-actions">
+            <button
+              type="button"
+              class="mini-close"
+              data-testid="btn-poxi-switch-mode"
+              @click="togglePoxiMode"
+            >
+              切换{{ decadeUi.poxiDialog.mode === 'pro_drlt_poxi' ? '标准魄袭' : '界魄袭' }}
+            </button>
+            <button type="button" class="mini-close" data-testid="btn-poxi-close" @click="updateState({ poxiDialog: null })">关闭</button>
+          </div>
+        </header>
+        <div class="poxi-pane">
+          <span class="tiny muted">己方手牌 ({{ poxiCards.selfCards.length }})</span>
+          <div class="gx-cards">
+            <button
+              v-for="c in poxiCards.selfCards"
+              :key="`ps-${c.id}`"
+              type="button"
+              class="gx-card"
+              :class="{ selected: decadeUi.poxiDialog.selectedIds.includes(c.id) }"
+              :data-suit="c.suit ?? ''"
+              :data-revealed="String(c.revealed)"
+              data-testid="poxi-card-btn"
+              @click="togglePoxiCard(c)"
+            >
+              {{ c.label }}
+            </button>
+          </div>
+        </div>
+        <div class="poxi-pane">
+          <span class="tiny muted">目标 P{{ decadeUi.poxiDialog.targetSeat }} 手牌 ({{ poxiCards.targetCards.length }})</span>
+          <div class="gx-cards">
+            <button
+              v-for="c in poxiCards.targetCards"
+              :key="`pt-${c.id}`"
+              type="button"
+              class="gx-card"
+              :class="{ selected: decadeUi.poxiDialog.selectedIds.includes(c.id), 'is-hidden-card': !c.revealed }"
+              :disabled="!c.revealed"
+              :data-suit="c.suit ?? ''"
+              :data-revealed="String(c.revealed)"
+              :data-testid="c.revealed ? 'poxi-card-btn' : 'poxi-hidden-card-btn'"
+              @click="togglePoxiCard(c)"
+            >
+              {{ c.label }}
+            </button>
+          </div>
+        </div>
+        <div
+          v-if="poxiValidation"
+          class="poxi-validation-bar"
+          :class="poxiValidation.valid ? 'is-valid' : 'is-invalid'"
+          data-testid="poxi-validation"
+        >
+          {{ poxiValidation.reason }}
+        </div>
+      </div>
+    </div>
 
     <!-- `content.js`: chooseGuanXing top/bottom card sorter -->
     <div
@@ -539,5 +720,39 @@ function onGuanXingCardClick(state: DecadeGuanXingState, cardId: number) {
 }
 .tiny {
   font-size: 0.7rem;
+}
+.poxi-card {
+  gap: 0.45rem;
+}
+.poxi-head-actions {
+  display: inline-flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+.poxi-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.gx-card.is-hidden-card {
+  opacity: 0.55;
+  border-style: dashed;
+  cursor: not-allowed;
+}
+.poxi-validation-bar {
+  padding: 0.22rem 0.45rem;
+  border-radius: 5px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.poxi-validation-bar.is-valid {
+  background: rgba(20, 83, 45, 0.45);
+  border: 1px solid #4ade80;
+  color: #dcfce7;
+}
+.poxi-validation-bar.is-invalid {
+  background: rgba(127, 29, 29, 0.45);
+  border: 1px solid #f87171;
+  color: #fecaca;
 }
 </style>

@@ -5,6 +5,7 @@ import type { GeneralSelectState } from "../../engine/generalSelectModel";
 const props = defineProps<{
   state: GeneralSelectState;
   busy: boolean;
+  changeWujiangTx?: "off" | "blur" | "shine";
 }>();
 
 const emit = defineEmits<{
@@ -36,7 +37,11 @@ const loadLabel = computed(() => {
 </script>
 
 <template>
-  <section class="panel general-select" aria-label="选将面板">
+  <section
+    class="panel general-select"
+    :data-change-wujiang-tx="changeWujiangTx ?? 'shine'"
+    aria-label="选将面板"
+  >
     <div class="gs-head">
       <div>
         <h2>选将</h2>
@@ -142,6 +147,17 @@ const loadLabel = computed(() => {
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: 6px;
+  transition: transform 0.22s ease, filter 0.22s ease, box-shadow 0.22s ease;
+}
+.general-select[data-change-wujiang-tx="shine"] .candidate:hover:not(:disabled),
+.general-select[data-change-wujiang-tx="shine"] .candidate.selected {
+  box-shadow: 0 0 12px rgba(250, 204, 21, 0.45);
+}
+.general-select[data-change-wujiang-tx="blur"] .candidate:not(.selected):hover:not(:disabled) {
+  filter: blur(0.4px) brightness(1.08);
+}
+.general-select[data-change-wujiang-tx="off"] .candidate {
+  transition: none;
 }
 .candidate:hover:not(:disabled) {
   border-color: var(--accent);

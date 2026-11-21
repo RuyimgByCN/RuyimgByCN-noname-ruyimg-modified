@@ -3,6 +3,7 @@ import { computed, ref, watch } from "vue";
 import type { CardView } from "../../types/engine";
 import type { DecadeUiConfig } from "../../engine/surfaces/decadeConfigSchema";
 import type { DecadeUiRuntimeState } from "../../engine/surfaces/decadeUiSurface";
+import { buildCardAuxOverlay } from "../../engine/surfaces/decadeHooksRuntime";
 import { sortShoushaHandCards, type ShoushaSortableCard } from "../../engine/surfaces/shoushaUiSurface";
 import {
   cardCategoryLabel,
@@ -198,6 +199,11 @@ function onDragEnd() {
           >{{ cardDisplayName(c) }}</span>
           <span v-else-if="c.def != null" class="card-known">▸</span>
           <span class="card-cat-label">{{ cardCategoryLabel(c.kind, c.def) }}</span>
+          <span
+            v-if="effectiveCfg?.cardAlternateNameVisible"
+            class="card-aux-overlay"
+            data-testid="card-aux-overlay"
+          >{{ buildCardAuxOverlay(c.kind, c.def) }}</span>
           <span v-if="specialHelTag" class="card-hel-tag" data-testid="card-helasisy-tag">{{ specialHelTag }}</span>
           <span class="id muted">#{{ c.id }}</span>
         </div>
@@ -329,6 +335,14 @@ function onDragEnd() {
   border-radius: 3px;
   background: rgba(147, 51, 234, 0.16);
   color: #7e22ce;
+}
+.card-aux-overlay {
+  font-size: 0.55rem;
+  font-weight: 700;
+  padding: 0 0.22rem;
+  border-radius: 3px;
+  background: rgba(180, 83, 9, 0.16);
+  color: #78350f;
 }
 .card:disabled {
   cursor: not-allowed;

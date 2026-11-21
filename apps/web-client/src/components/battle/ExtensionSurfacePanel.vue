@@ -620,6 +620,8 @@ function onSurfacePointerMove(ev: MouseEvent) {
         :shousha-ui="surfaces.uiSuites?.shoushaUi"
         :decade-ui="surfaces.uiSuites?.decadeUi"
         :taixu-ui="surfaces.uiSuites?.taixuUi"
+        :view="view"
+        :self-id="selfId"
         @update-suites="onUpdateUiSuites"
       />
     </div>
