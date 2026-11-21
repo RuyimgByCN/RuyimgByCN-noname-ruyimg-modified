@@ -993,3 +993,9 @@ pub fn apply_card_unrespondable(
         d34_u05_mods::apply_card_unrespondable(state, source, target, kind, unrespondable);
     d34_l11_mods::apply_card_unrespondable(state, catalog, source, kind, unrespondable)
 }
+
+/// 仝御（U01 `dddtongyu`）本回合手牌禁用标记：处于生效回合内时不可使用或打出手牌。
+pub fn is_dddtongyu_hand_locked(state: &GameStateCore, player: PlayerId) -> bool {
+    let cur = super::d34_l28_mods::l28_turn_stamp(state);
+    cur != 0 && flag_val(state, player, "dddtongyu_hand_locked_stamp") == cur
+}

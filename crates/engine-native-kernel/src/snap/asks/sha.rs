@@ -204,6 +204,8 @@ pub(super) fn active_sha_ask(
         let tieji_blocks = tieji_red == Some(true)
             || core.vm_aux.flags.get(&(target, "mbcmfangzhu_ban".to_string())).copied().unwrap_or(0) > 0;
         let sealed = catalog.is_tieji_sealed(core, target);
+        let hand_locked =
+            crate::rvm_bridge::modifiers::d34_flags::is_dddtongyu_hand_locked(core, target);
         let longdan = !sealed
             && !catalog.is_rechanyuan_sealed_name(core, target, LONG_DAN)
             && catalog
@@ -223,13 +225,16 @@ pub(super) fn active_sha_ask(
             && !target_sentinel
             && !catalog.blocks_all_cards(core, target);
         let mut options: Vec<ChoiceOption> = vec![ChoiceOption::Pass];
-        for c in core.player(target).hand.iter().copied() {
-            let kind = catalog.card_kind(c);
-            if target_can_play && (kind == CardKind::Shan || (longdan && kind == CardKind::Sha)) {
-                options.push(ChoiceOption::Card(c));
+        if !hand_locked {
+            for c in core.player(target).hand.iter().copied() {
+                let kind = catalog.card_kind(c);
+                if target_can_play && (kind == CardKind::Shan || (longdan && kind == CardKind::Sha))
+                {
+                    options.push(ChoiceOption::Card(c));
+                }
             }
         }
-        if qingguo && target_can_play {
+        if qingguo && target_can_play && !hand_locked {
             for c in core.player(target).hand.iter().copied() {
                 let kind = catalog.card_kind(c);
                 let already = kind == CardKind::Shan || (longdan && kind == CardKind::Sha);
@@ -274,6 +279,17 @@ pub(super) fn active_sha_ask(
         if target_can_play {
             for rdef in crate::kernel::host_response_skills(core, catalog, target, 1) {
                 options.push(ChoiceOption::Skill(rdef));
+            }
+            for opt in (catalog.hooks.respond_skill_options)(
+                core,
+                catalog,
+                target,
+                CardKind::Shan,
+                true,
+            ) {
+                if !options.contains(&opt) {
+                    options.push(opt);
+                }
             }
         }
         return Some(ask(

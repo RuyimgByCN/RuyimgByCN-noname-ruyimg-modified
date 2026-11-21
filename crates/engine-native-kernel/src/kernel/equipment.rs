@@ -103,11 +103,24 @@ pub(super) fn commit_equip(
         .remove(&(player, format!("dddanzhi_equip_use:{frame_id}")))
         .is_some();
     if played && consume_dddanzhi_ward(ctx, player, card) {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(player, format!("zhilian_equip_use:{frame_id}")));
         ctx.to_discard(card);
         ctx.log(LogEvent::CardNullified { player, card });
         // 未执行装备效果，不得再派发 equipAfter（如劫行重置）。
         ctx.res.frame_mut(frame_id).expect("equip frame").stage = crate::event::Stage::Done;
         return;
+    }
+    if ctx
+        .core
+        .vm_aux
+        .flags
+        .remove(&(player, format!("zhilian_equip_use:{frame_id}")))
+        .is_some()
+    {
+        super::record_turn_use_resp(ctx, player);
     }
     // 同**栏位**替换（改造后同栏位不同牌种亦替换）
     let replaced = ctx

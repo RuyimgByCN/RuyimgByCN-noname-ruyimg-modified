@@ -22,6 +22,9 @@ mod g1_wuxing;
 #[path = "../u01_ddd_eight.rs"]
 mod u01_ddd_eight;
 
+#[path = "../u01_ddd_fixes_1.rs"]
+mod u01_ddd_fixes_1;
+
 #[path = "../u01_dddanzhi_regression.rs"]
 mod u01_dddanzhi_regression;
 

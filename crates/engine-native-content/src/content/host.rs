@@ -40,6 +40,8 @@ pub(crate) use step::{
     on_skill_removed_all, play_begin_l19, play_begin_tianshu, reguhuo_consume_resp,
     reguhuo_has_pending_final, reguhuo_response_skill, reguhuo_spawn_final,
     reguhuo_spawn_response, scsanruo_response_skill,
+    u01_respond_skill_options as u01_respond_skill_options_hook,
+    u01_try_activate_respond_skill as u01_try_activate_respond_skill_hook,
 };
 
 pub(crate) fn host_play_begin_step(ctx: &mut Ctx<'_>, player: PlayerId) {
@@ -537,6 +539,19 @@ impl SkillBehavior for HostSkillBehavior {
                 }
                 _ => None,
             },
+            // U01 `dddmoyan` (`roundStart` = TurnBegin) 与 U01 Sub-batch 1：运行期覆盖触发窗，保留静态内容锁
+            HostBehavior::D3Moyan => Some(crate::catalog::TriggerMeta {
+                event: crate::event::EventKind::TurnBegin,
+                timing: crate::event::Timing::Normal,
+                priority: 0,
+                order_selectable: true,
+                optional: true,
+                extra_events: vec![crate::event::EventKind::DamageBefore],
+            }),
+            HostBehavior::U01DddBatchA
+            | HostBehavior::U01DddBatchB
+            | HostBehavior::U01DddBatchC
+            | HostBehavior::U01DddBatchD => step::u01_fixes_1::trigger_meta_u01_fix(&self.name),
             _ => None,
         }
     }
@@ -692,10 +707,22 @@ pub fn host_skill_trigger_meta(
 /// 按技能名与宿主行为解析发动限制（含 U01 3D精选分批技能）。
 pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::SkillLimits {
     match behavior {
-        HostBehavior::U01DddBatchA => step::u01_batch_a::limits_u01_batch_a(name),
-        HostBehavior::U01DddBatchB => step::u01_batch_b::limits_u01_batch_b(name),
-        HostBehavior::U01DddBatchC => step::u01_batch_c::limits_u01_batch_c(name),
-        HostBehavior::U01DddBatchD => step::u01_batch_d::limits_u01_batch_d(name),
+        HostBehavior::U01DddBatchA => {
+            step::u01_fixes_1::limits_u01_fix(name)
+                .unwrap_or_else(|| step::u01_batch_a::limits_u01_batch_a(name))
+        }
+        HostBehavior::U01DddBatchB => {
+            step::u01_fixes_1::limits_u01_fix(name)
+                .unwrap_or_else(|| step::u01_batch_b::limits_u01_batch_b(name))
+        }
+        HostBehavior::U01DddBatchC => {
+            step::u01_fixes_1::limits_u01_fix(name)
+                .unwrap_or_else(|| step::u01_batch_c::limits_u01_batch_c(name))
+        }
+        HostBehavior::U01DddBatchD => {
+            step::u01_fixes_1::limits_u01_fix(name)
+                .unwrap_or_else(|| step::u01_batch_d::limits_u01_batch_d(name))
+        }
         HostBehavior::L28ThunderBatchA => step::l28_batch_a::limits_l28_batch_a(name),
         HostBehavior::L28ThunderBatchB => step::l28_batch_b::limits_l28_batch_b(name),
         HostBehavior::L27BeautifyBatchA => step::l27_batch_a::limits_l27_batch_a(name),

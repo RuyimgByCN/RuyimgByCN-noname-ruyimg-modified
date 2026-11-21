@@ -216,6 +216,16 @@ fn u01_d3_select_eight_dimension_acceptance() {
         coex.debug_clear_hand(p);
     }
     let _ = submit(&mut coex, 2, GameAction::NextPhase);
+    let moyan_confirm = coex.open_choice().cloned().expect("末焱可选触发应挂起确认");
+    assert_eq!(moyan_confirm.spec.prompt, "trigger_confirm");
+    let _ = submit(
+        &mut coex,
+        moyan_confirm.observer,
+        GameAction::Answer {
+            choice_id: moyan_confirm.id,
+            selection: vec![engine_native::ChoiceOption::Confirm],
+        },
+    );
     let moyan_target = coex.open_choice().cloned().expect("末焱应挂起选人");
     assert_eq!(moyan_target.spec.prompt, "d3_moyan_target");
     let _ = submit(

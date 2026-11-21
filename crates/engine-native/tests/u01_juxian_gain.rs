@@ -94,7 +94,7 @@ fn open_gain(e: &mut Engine, paid: u32) {
     submit(e, GameAction::ActivateSkill { skill });
     answer(e, vec![O::Tag(0)]);
     answer(e, vec![O::Card(paid)]);
-    answer(e, vec![O::Player(2)]);
+    // Upstream skill.js:322-327 (J02): exactly 1 target with `he` auto-selects without `dddjuxian_target`.
     assert_eq!(
         e.open_choice()
             .expect("gainPlayerCard must ask the owner")
@@ -179,12 +179,12 @@ fn juxian_gain_selects_each_hidden_card_or_public_equipment_and_resumes_archive(
         assert!(!e.state_core().player(2).hand.contains(&chosen));
         assert!(!e.state_core().player(2).equips.contains(&chosen));
         assert_eq!(flag(&e, "dddjuxian_ban"), u32::from(chosen == red));
-        assert_eq!(flag(&e, "dddjuxian_used"), 1);
+        assert!(e.state_core().vm_aux.once.contains(&(0, "dddjuxian_top".to_string(), 4)));
     }
 }
 
 #[test]
-fn juxian_top_mode_requires_other_he_and_mode_cancel_keeps_payment() {
+fn juxian_top_mode_allows_zero_other_he_and_mode_cancel_keeps_payment() {
     let (d3, p9) = packs();
     let (mut e, [paid, ..]) = fixture(&[&d3, &p9]);
     e.debug_clear_hand(2);
@@ -193,21 +193,20 @@ fn juxian_top_mode_requires_other_he_and_mode_cancel_keeps_payment() {
     let skill = e.catalog().skill_by_name("dddjuxian").unwrap();
     submit(&mut e, GameAction::ActivateSkill { skill });
     let c = e.open_choice().unwrap().clone();
-    assert_eq!(c.spec.options, vec![O::Tag(1)]);
-    assert!(matches!(
-        command(
-            &mut e,
-            GameAction::Answer {
-                choice_id: c.id,
-                selection: vec![O::Tag(0)]
-            }
-        ),
-        CommandOutcome::Rejected(_)
-    ));
+    // Upstream skill.js:304 (J02): Tag(0) stays available even when no other seat holds `he` cards.
+    assert_eq!(c.spec.options, vec![O::Tag(0), O::Tag(1)]);
+    let mut paid_top =
+        Engine::restore_with_extensions(&e.save(), &[&d3, &p9]).unwrap();
     answer(&mut e, vec![]);
     assert_eq!(e.state_core().player(0).hand, vec![paid]);
-    assert_eq!(flag(&e, "dddjuxian_used"), 0);
+    assert!(e.state_core().vm_aux.once.is_empty());
     assert!(e.open_choice().is_none());
+
+    answer(&mut paid_top, vec![O::Tag(0)]);
+    answer(&mut paid_top, vec![O::Card(paid)]);
+    assert_eq!(paid_top.state_core().deck.last().copied(), Some(paid));
+    assert!(paid_top.state_core().vm_aux.once.contains(&(0, "dddjuxian_top".to_string(), 4)));
+    assert!(paid_top.open_choice().is_none());
 }
 
 #[test]

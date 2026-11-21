@@ -101,6 +101,10 @@ fn open_moyan(engine: &mut Engine) -> Vec<u32> {
     arm_boundary(engine);
     let shown = top_cards(engine, 3);
     accept(engine, 2, GameAction::NextPhase);
+    let gate = engine.open_choice().expect("末焱应先询问是否发动");
+    assert_eq!(gate.spec.prompt, "trigger_confirm");
+    assert_eq!(gate.observer, 0);
+    answer(engine, vec![ChoiceOption::Confirm]);
     let choice = engine.open_choice().expect("末焱应挂起选人");
     assert_eq!(choice.spec.prompt, "d3_moyan_target");
     assert_eq!(choice.observer, 0);
@@ -259,6 +263,11 @@ fn u01_moyan_from_real_install() {
     accept(&mut expired, 2, GameAction::NextPhase);
     assert_eq!(expired.turn().round, 3);
     assert_eq!(
+        expired.open_choice().expect("新一轮先询问发动").spec.prompt,
+        "trigger_confirm"
+    );
+    answer(&mut expired, vec![ChoiceOption::Confirm]);
+    assert_eq!(
         expired.open_choice().expect("新一轮再次发动").spec.prompt,
         "d3_moyan_target"
     );
@@ -267,6 +276,16 @@ fn u01_moyan_from_real_install() {
     let hp = expired.debug_hp(0);
     accept_damage(&mut expired);
     assert_eq!(expired.debug_hp(0), hp - 1, "新一轮取消后旧增幅已清除");
+
+    // Declining optional trigger_confirm leaves top 3 deck cards untouched!
+    let mut declined = engine_with(&pack, 17107, true);
+    arm_boundary(&mut declined);
+    let deck_before = declined.save().core.deck.clone();
+    accept(&mut declined, 2, GameAction::NextPhase);
+    assert_eq!(declined.open_choice().expect("trigger_confirm").spec.prompt, "trigger_confirm");
+    answer(&mut declined, vec![]);
+    assert!(declined.open_choice().is_none());
+    assert_eq!(declined.save().core.deck, deck_before, "取消触发确认不应动牌堆顶三张");
 
     let mut cancelled = engine_with(&pack, 17103, true);
     let shown = open_moyan(&mut cancelled);
@@ -316,6 +335,7 @@ fn u01_moyan_from_real_install() {
     };
     one.debug_set_turn(2, Phase::End, 1);
     accept(&mut one, 2, GameAction::NextPhase);
+    answer(&mut one, vec![ChoiceOption::Confirm]);
     answer(&mut one, vec![ChoiceOption::Player(0)]);
     let picking = one.open_choice().expect("只剩一张仍要选择");
     assert_eq!(picking.spec.max, 1);

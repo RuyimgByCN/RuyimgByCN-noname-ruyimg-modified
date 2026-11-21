@@ -328,6 +328,16 @@ fn real_moyan_public_machine_held_cards_survive_both_windows() {
         a.debug_grant(0, "dddmoyan");
         a.debug_set_turn(3, Phase::End, 1);
         submit(&mut a, 3, GameAction::NextPhase);
+        assert_eq!(a.open_choice().unwrap().spec.prompt, "trigger_confirm");
+        let gate_id = a.open_choice().unwrap().id;
+        submit(
+            &mut a,
+            0,
+            GameAction::Answer {
+                choice_id: gate_id,
+                selection: vec![engine_native::ChoiceOption::Confirm],
+            },
+        );
         assert_eq!(a.open_choice().unwrap().spec.prompt, "d3_moyan_target");
         if gain_window {
             let id = a.open_choice().unwrap().id;
@@ -342,14 +352,28 @@ fn real_moyan_public_machine_held_cards_survive_both_windows() {
             assert_eq!(a.open_choice().unwrap().spec.prompt, "d3_moyan_gain");
         }
         let observer = a.open_choice().unwrap().observer;
-        let shown = match &a.save().resolution.parks.iter().find(|park| matches!(park.machine, engine_native::MachineSnapshot::Host { .. })).expect("host owner machine").machine {
-            engine_native::MachineSnapshot::Host {
-                behavior, cards, ..
-            } if *behavior == engine_native::content::host::HostBehavior::D3Moyan.tag() => {
-                cards.clone()
-            }
-            other => panic!("real public held cards: {other:?}"),
-        };
+        let shown = a
+            .save()
+            .resolution
+            .parks
+            .iter()
+            .find_map(|park| match &park.machine {
+                engine_native::MachineSnapshot::Host { behavior, cards, .. }
+                    if *behavior == engine_native::content::host::HostBehavior::D3Moyan.tag() =>
+                {
+                    Some(cards.clone())
+                }
+                engine_native::MachineSnapshot::OptionalGate { inner: Some(m), .. } => match m.as_ref() {
+                    engine_native::MachineSnapshot::Host { behavior, cards, .. }
+                        if *behavior == engine_native::content::host::HostBehavior::D3Moyan.tag() =>
+                    {
+                        Some(cards.clone())
+                    }
+                    _ => None,
+                },
+                _ => None,
+            })
+            .expect("host owner machine");
         assert_eq!(shown.len(), 3);
         let mut b = a.clone();
         let core = b.state_core_mut();

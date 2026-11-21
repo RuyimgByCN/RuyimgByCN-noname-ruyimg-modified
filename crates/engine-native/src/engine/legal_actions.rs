@@ -342,7 +342,7 @@ fn certainly_illegal(engine: &Engine, seat: crate::ids::PlayerId, action: &GameA
                     );
                 open.id != *choice_id
                     || open.observer != seat
-                    || !open.spec.accepts(selection)
+                    || !validate_choice_selection(core, catalog, seat, &open.spec, selection)
                     || kuiji_invalid
             }
         },
@@ -431,5 +431,72 @@ fn push_action(
     if legal {
         dedup.insert(action.clone());
         out.push(action);
+    }
+}
+
+/// 公共应答合法性校验（`apply_command` 与 `legal_actions::certainly_illegal` 共用）：
+/// 在 `ChoiceSpec::accepts` 静态子集校验外，额外执行多牌互斥/求和/同色约束。
+pub(super) fn validate_choice_selection(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    actor: crate::ids::PlayerId,
+    spec: &crate::choice::ChoiceSpec,
+    selection: &[crate::choice::ChoiceOption],
+) -> bool {
+    if !spec.accepts(selection) {
+        return false;
+    }
+    if selection.is_empty() {
+        return true;
+    }
+    match spec.prompt {
+        "dddtongyu_cards" | "dddjungui_discard" => {
+            let mut suits = Vec::with_capacity(selection.len());
+            for opt in selection {
+                let crate::choice::ChoiceOption::Card(c) = opt else {
+                    return false;
+                };
+                let suit = catalog.effective_card_suit(core, actor, *c);
+                if suits.contains(&suit) {
+                    return false;
+                }
+                suits.push(suit);
+            }
+            true
+        }
+        "dddshilie_cards" => {
+            let sum: i32 = selection
+                .iter()
+                .filter_map(|o| match o {
+                    crate::choice::ChoiceOption::Card(c) => {
+                        Some(i32::from(catalog.cards[*c as usize].rank))
+                    }
+                    _ => None,
+                })
+                .sum();
+            let threshold = core.player(actor).hp + core.player(core.turn.current).hp;
+            sum >= threshold
+        }
+        "dddjijian_show" => {
+            let mut red_opt: Option<bool> = None;
+            for opt in selection {
+                let crate::choice::ChoiceOption::Card(c) = opt else {
+                    return false;
+                };
+                let is_red = matches!(
+                    catalog.effective_card_suit(core, actor, *c),
+                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                );
+                if let Some(prev) = red_opt {
+                    if prev != is_red {
+                        return false;
+                    }
+                } else {
+                    red_opt = Some(is_red);
+                }
+            }
+            true
+        }
+        _ => true,
     }
 }

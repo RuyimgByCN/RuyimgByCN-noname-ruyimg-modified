@@ -587,6 +587,16 @@ impl<'a> Ctx<'a> {
             .unwrap_or_else(|| panic!("card {card} not in hand of {player}"));
         hand.remove(pos);
         (self.catalog.hooks.on_hand_card_removed)(self, player, card);
+        if self
+            .catalog
+            .skill_by_name("dddshilie")
+            .is_some_and(|def| self.core.has_skill(player, def))
+        {
+            self.core
+                .vm_aux
+                .flags
+                .remove(&(player, format!("dddshilie_shown_card:{card}")));
+        }
     }
 
     /// 入弃牌堆（**牌区唯一性**：同一张牌不得同时属于两个区域）。

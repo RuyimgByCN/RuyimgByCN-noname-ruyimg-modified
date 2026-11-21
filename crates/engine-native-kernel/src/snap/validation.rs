@@ -138,17 +138,7 @@ pub(super) fn check_event_data(data: &EventData, b: &RestoreBounds) -> Result<()
             check_pid(*to, b)?;
         }
         EventData::CardUsed(u) => {
-            if u.card.is_none()
-                && !u.use_as.is_some_and(|k| {
-                    k.is_sha_like()
-                        || matches!(
-                            k,
-                            crate::catalog::CardKind::Youdishenru
-                                | crate::catalog::CardKind::Wuzhong
-                                | crate::catalog::CardKind::Jiu
-                        )
-                })
-            {
+            if u.card.is_none() && u.use_as.is_none() {
                 return Err(oob("virtual_card_use_kind", 0));
             }
             check_opt_card(u.card, b)?;

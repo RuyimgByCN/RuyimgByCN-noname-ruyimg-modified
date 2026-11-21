@@ -8,6 +8,8 @@ use crate::view::ChoiceView;
 mod extension_choices_l10;
 #[path = "extension_choices_l28.rs"]
 mod extension_choices_l28;
+#[path = "extension_choices_u01.rs"]
+mod extension_choices_u01;
 
 pub(super) fn public_attitude(view: &crate::view::PlayerView, seat: u8, target: u8) -> i32 {
     if target == seat {
@@ -217,7 +219,7 @@ pub(super) fn plan_extension_choice_action(
                     selection,
                 })
             }
-            Some("huanle_jiuwei" | "jiuwei") => Some(GameAction::Answer {
+            Some("huanle_jiuwei" | "jiuwei" | "dddmoyan") => Some(GameAction::Answer {
                 choice_id: id,
                 selection: vec![ChoiceOption::Confirm],
             }),
@@ -972,6 +974,18 @@ pub(super) fn plan_extension_choice_action(
         )
         .or_else(|| {
             extension_choices_l28::plan_l28_choice_action(
+                catalog,
+                input,
+                id,
+                prompt,
+                options,
+                min,
+                max,
+                allow_cancel,
+            )
+        })
+        .or_else(|| {
+            extension_choices_u01::plan_u01_choice_action(
                 catalog,
                 input,
                 id,

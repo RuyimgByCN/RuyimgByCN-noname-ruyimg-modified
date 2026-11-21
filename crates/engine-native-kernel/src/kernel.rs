@@ -18,6 +18,13 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
         (f.kind, f.data.clone())
     };
     record_vm_history(ctx, &data);
+    match &data {
+        EventData::CardUsed(u) if !u.cancelled => record_turn_use_resp(ctx, u.player),
+        EventData::CardResponded { player, .. } => record_turn_use_resp(ctx, *player),
+        EventData::CardsLost { player, cards, .. } => clear_shilie_shown_on_leave(ctx, *player, cards),
+        EventData::CardsMoved { from, cards, .. } => clear_shilie_shown_on_leave(ctx, *from, cards),
+        _ => {}
+    }
     match data {
         EventData::DamageWindow { .. } => {}
         EventData::LoseHp { player, amount } => commit_lose_hp(ctx, player, amount),
@@ -57,6 +64,92 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
             let _ = kind;
         }
     }
+}
+
+fn clear_shilie_shown_on_leave(
+    ctx: &mut Ctx<'_>,
+    player: PlayerId,
+    cards: &[crate::ids::CardId],
+) {
+    if ctx
+        .catalog
+        .skill_by_name("dddshilie")
+        .is_some_and(|def| ctx.core.has_skill(player, def))
+    {
+        for c in cards {
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(player, format!("dddshilie_shown_card:{c}")));
+        }
+    }
+}
+
+pub(super) fn emit_card_responded_as(
+    ctx: &mut Ctx<'_>,
+    player: PlayerId,
+    card: crate::ids::CardId,
+    eff_kind: CardKind,
+) {
+    if ctx
+        .catalog
+        .skill_by_name("dddfushi")
+        .is_some_and(|def| ctx.core.has_skill(player, def))
+    {
+        ctx.core.vm_aux.flags.insert(
+            (player, "dddfushi_resp_eff_kind".to_string()),
+            (eff_kind as u32) + 1,
+        );
+    }
+    ctx.emit(EventData::CardResponded { card, player });
+}
+
+pub(super) fn record_virtual_respond(ctx: &mut Ctx<'_>, player: PlayerId, kind: CardKind) {
+    record_turn_use_resp(ctx, player);
+    record_dddanzhi_card(ctx.core, ctx.catalog, None);
+    ctx.log(LogEvent::VirtualCardPlayed {
+        kind,
+        player,
+        targets: Vec::new(),
+        presentation: None,
+    });
+}
+
+pub(super) fn record_turn_use_resp(ctx: &mut Ctx<'_>, actor: PlayerId) {
+    let has_zhilian = ctx
+        .catalog
+        .skill_by_name("dddzhilian")
+        .is_some_and(|def| ctx.core.alive_players().any(|p| ctx.core.has_skill(p, def)));
+    if !has_zhilian {
+        return;
+    }
+    let stamp = crate::rvm_bridge::modifiers::d34_l28_mods::l28_turn_stamp(ctx.core);
+    let prev = if ctx
+        .core
+        .vm_aux
+        .flags
+        .get(&(0, "turn_use_resp_stamp".to_string()))
+        .copied()
+        .unwrap_or(0)
+        == stamp
+    {
+        ctx.core
+            .vm_aux
+            .flags
+            .get(&(0, "turn_use_resp_mask".to_string()))
+            .copied()
+            .unwrap_or(0)
+    } else {
+        0
+    };
+    ctx.core
+        .vm_aux
+        .flags
+        .insert((0, "turn_use_resp_stamp".to_string()), stamp);
+    ctx.core
+        .vm_aux
+        .flags
+        .insert((0, "turn_use_resp_mask".to_string()), prev | (1u32 << actor));
 }
 
 mod damage;

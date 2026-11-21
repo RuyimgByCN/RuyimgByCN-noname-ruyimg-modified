@@ -495,6 +495,18 @@ fn u08_batch_c_and_d_remaining_skills_6d_real_match() {
     let tao_as_shan = give_card_matching(&mut e, 0, |_, m| m.kind == CardKind::Tao);
     e.debug_set_turn(1, Phase::Play, 1);
     let sha_c = give_card_matching(&mut e, 1, |_, m| m.kind == CardKind::Sha);
+    // Upstream chronological order settles `CardResponded` (`tuqiang` draws 1) before
+    // `ShaDodged` (`qianglue` judges). Pin a deterministic draw + red judge card on top of
+    // deck so `qianglue` performs a red judge (gained by `fengyan`) instead of stealing on an
+    // unpinned black judge card.
+    let judge_red = find_card_matching(&e, |_, m| matches!(m.suit, Suit::Heart | Suit::Diamond));
+    e.state_core_mut().deck.retain(|&c| c != judge_red);
+    e.state_core_mut().discard.retain(|&c| c != judge_red);
+    let tuqiang_draw = find_card_matching(&e, |cid, _| cid != judge_red);
+    e.state_core_mut().deck.retain(|&c| c != tuqiang_draw);
+    e.state_core_mut().discard.retain(|&c| c != tuqiang_draw);
+    e.state_core_mut().deck.push(judge_red);
+    e.state_core_mut().deck.push(tuqiang_draw);
     let _ = submit(
         &mut e,
         1,

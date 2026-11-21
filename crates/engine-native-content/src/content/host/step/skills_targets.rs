@@ -357,7 +357,14 @@ impl HostMachine {
                             let options: Vec<ChoiceOption> = ctx
                                 .core
                                 .alive_players()
-                                .filter(|&p| p != self.owner)
+                                .filter(|&p| {
+                                    super::u01_fixes_1::is_sha_legal_play_target(
+                                        ctx.core,
+                                        ctx.catalog,
+                                        self.owner,
+                                        p,
+                                    )
+                                })
                                 .map(ChoiceOption::Player)
                                 .collect();
                             if options.is_empty() {
@@ -381,14 +388,23 @@ impl HostMachine {
                             else {
                                 return Flow::Done;
                             };
-                            if target == self.owner || !ctx.core.player(target).alive {
+                            if !super::u01_fixes_1::is_sha_legal_play_target(
+                                ctx.core,
+                                ctx.catalog,
+                                self.owner,
+                                target,
+                            ) {
                                 return Flow::Done;
                             };
                             ctx.core
                                 .vm_aux
                                 .flags
                                 .remove(&(self.owner, "dddxiaxing_xia".to_string()));
-                            ctx.core.turn.sha_used_play_phase = true;
+                            super::u01_fixes_1::consume_sha_play_phase(
+                                ctx.core,
+                                ctx.catalog,
+                                self.owner,
+                            );
                             ctx.log(LogEvent::SkillTriggered {
                                 skill: "侠行",
                                 owner: self.owner,
@@ -419,7 +435,11 @@ impl HostMachine {
                                 .map(ChoiceOption::Card)
                                 .collect();
                             if options.is_empty() {
-                                return Flow::Done;
+                                return if self.card == Some(1) {
+                                    super::u01_fixes_1::finish_respond_park_pub(ctx, self.owner, false)
+                                } else {
+                                    Flow::Done
+                                };
                             }
                             self.stage = HostStage::SelectCard;
                             Flow::WaitChoice {
@@ -437,12 +457,20 @@ impl HostMachine {
                         HostStage::SelectCard => {
                             let Some(ChoiceOption::Card(picked)) = ctx.answer().first().copied()
                             else {
-                                return Flow::Done;
+                                return if self.card == Some(1) {
+                                    super::u01_fixes_1::finish_respond_park_pub(ctx, self.owner, false)
+                                } else {
+                                    Flow::Done
+                                };
                             };
                             if !ctx.core.player(self.owner).hand.contains(&picked)
                                 && !ctx.core.player(self.owner).equips.contains(&picked)
                             {
-                                return Flow::Done;
+                                return if self.card == Some(1) {
+                                    super::u01_fixes_1::finish_respond_park_pub(ctx, self.owner, false)
+                                } else {
+                                    Flow::Done
+                                };
                             }
                             ctx.take_owned_card(self.owner, picked);
                             ctx.core.deck.push(picked);
@@ -460,19 +488,23 @@ impl HostMachine {
                                 owner: self.owner,
                                 presentation: None,
                             });
+                            self.stage = HostStage::DrawSettle;
+                            Flow::Yield
+                        }
+                        HostStage::DrawSettle => {
+                            if self.card == Some(1) {
+                                return super::u01_fixes_1::finish_respond_park_pub(
+                                    ctx, self.owner, true,
+                                );
+                            }
                             let beneficiary = self.target.unwrap_or(self.owner);
                             if ctx.core.player(beneficiary).alive {
-                                let as_kind = if self.card == Some(1) {
-                                    CardKind::Tao
-                                } else {
-                                    CardKind::Jiu
-                                };
                                 ctx.emit(EventData::CardUsed(crate::event::CardUseData {
                                     card: None,
                                     player: beneficiary,
                                     targets: vec![beneficiary],
                                     nature: crate::event::DamageNature::Normal,
-                                    use_as: Some(as_kind),
+                                    use_as: Some(CardKind::Jiu),
                                     cancelled: false,
                                 }));
                             }

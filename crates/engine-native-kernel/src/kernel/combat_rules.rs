@@ -232,18 +232,26 @@ pub(super) fn dying_tao_cards(
     if ctx.catalog.blocks_all_cards(ctx.core, responder) {
         return Vec::new();
     }
+    let hand_locked =
+        crate::rvm_bridge::modifiers::d34_flags::is_dddtongyu_hand_locked(ctx.core, responder);
     let p = ctx.core.player(responder);
-    let mut out: Vec<crate::ids::CardId> = p
-        .hand
-        .iter()
-        .copied()
-        .filter(|&c| is_tao_like(ctx, responder, c, dying))
-        .collect();
+    let mut out: Vec<crate::ids::CardId> = if hand_locked {
+        Vec::new()
+    } else {
+        p.hand
+            .iter()
+            .copied()
+            .filter(|&c| is_tao_like(ctx, responder, c, dying))
+            .collect()
+    };
     for c in ctx
         .catalog
         .player_vm_view_as_extra_cards(ctx.core, responder, false, None)
     {
-        if is_tao_like(ctx, responder, c, dying) && !out.contains(&c) {
+        if (!hand_locked || !p.hand.contains(&c))
+            && is_tao_like(ctx, responder, c, dying)
+            && !out.contains(&c)
+        {
             out.push(c);
         }
     }
@@ -260,30 +268,39 @@ pub(crate) fn response_kind_cards_core(
     if catalog.blocks_all_cards(core, responder) {
         return Vec::new();
     }
+    let hand_locked =
+        crate::rvm_bridge::modifiers::d34_flags::is_dddtongyu_hand_locked(core, responder);
     let sealed = catalog.is_tieji_sealed(core, responder)
         || (core.player(responder).hp <= 1 && catalog.has_rechanyuan(core, responder));
-    let rw_lanyin = need == CardKind::Shan
+    let rw_lanyin = !hand_locked
+        && need == CardKind::Shan
         && crate::rvm_bridge::modifiers::d34_l28_mods::has_rewritten_lanyinjia(
             core, catalog, responder,
         );
     let p = core.player(responder);
-    let mut out: Vec<crate::ids::CardId> = p
-        .hand
-        .iter()
-        .copied()
-        .filter(|&c| {
-            if jinyan_blocks_black_trick(core, catalog, responder, c) {
-                return need == CardKind::Sha && !sealed;
-            }
-            rw_lanyin
-                || catalog.card_kind(c) == need
-                || catalog
-                    .find_player_vm_view_as(core, responder, c, false, Some(need))
-                    .is_some()
-        })
-        .collect();
+    let mut out: Vec<crate::ids::CardId> = if hand_locked {
+        Vec::new()
+    } else {
+        p.hand
+            .iter()
+            .copied()
+            .filter(|&c| {
+                if jinyan_blocks_black_trick(core, catalog, responder, c) {
+                    return need == CardKind::Sha && !sealed;
+                }
+                rw_lanyin
+                    || catalog.card_kind(c) == need
+                    || catalog
+                        .find_player_vm_view_as(core, responder, c, false, Some(need))
+                        .is_some()
+            })
+            .collect()
+    };
     for c in catalog.player_vm_view_as_extra_cards(core, responder, false, Some(need)) {
-        if !jinyan_blocks_black_trick(core, catalog, responder, c) && !out.contains(&c) {
+        if (!hand_locked || !p.hand.contains(&c))
+            && !jinyan_blocks_black_trick(core, catalog, responder, c)
+            && !out.contains(&c)
+        {
             out.push(c);
         }
     }
@@ -296,6 +313,27 @@ pub(crate) fn response_kind_cards_core(
         )
     });
     out
+}
+
+pub(super) fn has_u01_respond_park(ctx: &Ctx<'_>) -> bool {
+    let Some(fid) = ctx.res.stack.last().map(|f| f.id) else {
+        return false;
+    };
+    let depth = ctx.res.stack.len();
+    ctx.res.parks.iter().any(|p| {
+        p.slot == crate::resolution::Slot::Trigger { frame: fid }
+            && p.resume_depth == depth
+            && p.machine.trigger_order().is_none()
+    })
+}
+
+pub(super) fn take_u01_respond_result(ctx: &mut Ctx<'_>, player: PlayerId) -> Option<bool> {
+    let fid = ctx.res.stack.last().map(|f| f.id)?;
+    ctx.core
+        .vm_aux
+        .flags
+        .remove(&(player, format!("u01_respond_result:{fid}")))
+        .map(|v| v > 0)
 }
 
 pub(super) fn response_kind_cards(

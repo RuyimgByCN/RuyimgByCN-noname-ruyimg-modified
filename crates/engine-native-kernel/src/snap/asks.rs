@@ -152,7 +152,19 @@ pub fn active_ask(
             }
             let responder = if *on_target { *target } else { *source };
             let mut options = response_kind_options(core, catalog, responder, CardKind::Sha);
-            if options.len() == 1 {
+            let host_skills = crate::kernel::host_response_skills(core, catalog, responder, 2);
+            let skill_opts = if !catalog.blocks_all_cards(core, responder) {
+                (catalog.hooks.respond_skill_options)(
+                    core,
+                    catalog,
+                    responder,
+                    CardKind::Sha,
+                    false,
+                )
+            } else {
+                Vec::new()
+            };
+            if options.len() == 1 && host_skills.is_empty() && skill_opts.is_empty() {
                 if let Some((helper, helper_shas)) =
                     crate::kernel::jijiang_shu_helper(core, catalog, responder)
                 {
@@ -169,8 +181,13 @@ pub fn active_ask(
                     ));
                 }
             }
-            for rdef in crate::kernel::host_response_skills(core, catalog, responder, 2) {
+            for rdef in host_skills {
                 options.push(ChoiceOption::Skill(rdef));
+            }
+            for opt in skill_opts {
+                if !options.contains(&opt) {
+                    options.push(opt);
+                }
             }
             Some(ask(
                 responder,
@@ -250,6 +267,19 @@ pub fn active_ask(
             let resp_ctx = if *need == CardKind::Shan { 1 } else { 2 };
             for rdef in crate::kernel::host_response_skills(core, catalog, *target, resp_ctx) {
                 options.push(ChoiceOption::Skill(rdef));
+            }
+            if !catalog.blocks_all_cards(core, *target) {
+                for opt in (catalog.hooks.respond_skill_options)(
+                    core,
+                    catalog,
+                    *target,
+                    *need,
+                    false,
+                ) {
+                    if !options.contains(&opt) {
+                        options.push(opt);
+                    }
+                }
             }
             Some(ask(
                 *target,

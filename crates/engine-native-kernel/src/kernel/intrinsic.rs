@@ -792,6 +792,28 @@ fn sha_intrinsic(
     let mut it = u.targets.iter().copied();
     let first = it.next().expect("sha has one target");
     let extra: Vec<PlayerId> = it.collect();
+    let fid = ctx.current_frame_id();
+    let jiu_stacks = if u.player == ctx.core.turn.current {
+        u32::from(std::mem::take(&mut ctx.core.turn.jiu_active))
+            + ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(u.player, "jiu_extra_stacks".to_string()))
+                .unwrap_or(0)
+    } else {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(u.player, "jiu_active_offturn".to_string()))
+            .unwrap_or(0)
+    };
+    if jiu_stacks > 1 {
+        ctx.core.vm_aux.flags.insert(
+            (u.player, format!("sha_jiu_extra:{fid}")),
+            jiu_stacks - 1,
+        );
+    }
     let cid = u.card.unwrap_or(0);
     let shoulie_direct = ctx
         .core
@@ -850,6 +872,6 @@ fn sha_intrinsic(
         hujia_queue: None,
         hujia_holder: None,
         // 酒效果在杀派发（=使用）时捕获并消耗——「下一张杀」
-        jiu_bonus: std::mem::take(&mut ctx.core.turn.jiu_active),
+        jiu_bonus: jiu_stacks > 0,
     }))
 }

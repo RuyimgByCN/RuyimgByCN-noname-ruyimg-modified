@@ -161,17 +161,52 @@ impl crate::catalog::SkillMachine for WuguMachine {
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         match self.stage {
             WuguStage::Init => {
-                let alive: Vec<PlayerId> = ctx.core.alive_players().collect();
-                let take = alive.len().min(ctx.core.deck.len());
-                if take == 0 || self.cards.is_empty() == false {
+                let frame = ctx.current_frame_id();
+                let ccw = ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.owner, format!("dddtongyu_wugu_ccw:{frame}")))
+                    .is_some();
+                let extra = ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.owner, format!("dddtongyu_wugu_extra:{frame}")))
+                    .unwrap_or(0) as usize;
+                let is_tongyu = ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .contains_key(&(self.owner, format!("dddtongyu_wugu_rem_owner:{frame}")));
+                let mut alive: Vec<PlayerId> = ctx.core.seat_order_from(self.owner);
+                let take = (alive.len() + extra).min(ctx.core.deck.len());
+                if ccw && alive.len() > 2 {
+                    alive[1..].reverse();
+                }
+                alive.retain(|&p| {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(self.owner, format!("dddtongyu_wugu_exclude:{frame}:{p}")))
+                        .is_none()
+                });
+                if take == 0 || !self.cards.is_empty() {
                     return Flow::Done;
                 }
                 let new_len = ctx.core.deck.len() - take;
                 self.cards = ctx.core.deck.split_off(new_len);
-                self.pickers = alive;
-                if let Some(targets) = take_dddanzhi_targets(ctx, self.owner) {
-                    self.pickers.retain(|p| targets.contains(p));
+                if is_tongyu {
+                    ctx.log(LogEvent::CardsRevealed {
+                        cards: self.cards.clone(),
+                        to: ctx.core.alive_players().collect(),
+                    });
                 }
+                let mut pickers = alive;
+                if let Some(targets) = take_dddanzhi_targets(ctx, self.owner) {
+                    pickers.retain(|p| targets.contains(p));
+                }
+                self.pickers = pickers;
                 self.stage = WuguStage::Pick;
                 self.open_pick(ctx)
             }
@@ -230,6 +265,13 @@ impl WuguMachine {
         }
     }
     fn finish_wugu(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        let frame = ctx.current_frame_id();
+        let rem_tongyu = ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(self.owner, format!("dddtongyu_wugu_rem_owner:{frame}")))
+            .is_some();
         // 良策·余获（玩点论杀批 15）：剩余亮出牌交予良策持有者（无持有者则进弃牌堆）。
         if let Some(beneficiary) = ctx
             .catalog
@@ -248,6 +290,19 @@ impl WuguMachine {
                     cards: rem,
                 });
             }
+        } else if rem_tongyu && !self.cards.is_empty() {
+            let rem: Vec<crate::ids::CardId> = self.cards.drain(..).collect();
+            for c in &rem {
+                ctx.core.table.push(*c);
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((self.owner, format!("dddtongyu_rem_card:{frame}:{c}")), 1);
+            }
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((self.owner, "dddtongyu_rem_cards_frame".to_string()), frame);
         } else {
             for c in self.cards.drain(..) {
                 ctx.to_discard(c);

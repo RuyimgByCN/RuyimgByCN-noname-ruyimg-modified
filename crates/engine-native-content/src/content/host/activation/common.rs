@@ -501,8 +501,14 @@ impl HostSkillBehavior {
                     > 0;
                 if crate::kernel::mbcmfangzhu_banned(ctx.state, owner)
                     || !has_xia
-                    || ctx.state.turn.sha_used_play_phase
-                    || !ctx.state.alive_players().any(|p| p != owner)
+                    || !super::super::step::u01_fixes_1::can_use_sha_play_phase(
+                        ctx.state, ctx.catalog, owner,
+                    )
+                    || !ctx.state.alive_players().any(|p| {
+                        super::super::step::u01_fixes_1::is_sha_legal_play_target(
+                            ctx.state, ctx.catalog, owner, p,
+                        )
+                    })
                 {
                     return None;
                 }

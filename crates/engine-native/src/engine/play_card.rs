@@ -25,6 +25,26 @@ pub(super) fn play_card(
                 replaced: None,
             },
         );
+        if catalog
+            .skill_by_name("dddjinggou")
+            .is_some_and(|def| state.core.has_skill(player, def))
+        {
+            state
+                .core
+                .vm_aux
+                .flags
+                .insert((player, format!("play_equip_use:{frame}")), 1);
+        }
+        if catalog
+            .skill_by_name("dddzhilian")
+            .is_some_and(|def| state.core.alive_players().any(|p| state.core.has_skill(p, def)))
+        {
+            state
+                .core
+                .vm_aux
+                .flags
+                .insert((player, format!("zhilian_equip_use:{frame}")), 1);
+        }
         if catalog.skill_by_name("dddanzhi").is_some() {
             state
                 .core

@@ -524,16 +524,35 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
             ctx.core.table.extend(u.card);
         }
         CardKind::Jiu | CardKind::Tianxianjiu => {
+            let jiu_no_count = ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(u.player, "vm_va_jiu_no_count".to_string()))
+                .is_some();
             if is_dying_save {
                 ctx.core.table.extend(u.card);
             } else {
-                // 酒/天仙酒：命令边界已校验每回合一次——置本回合已用 + 待
-                // 消耗效果（天仙酒为酒的 swd 变体，规则 v89；登记差异：与酒
-                // 共享每回合一次计数）
+                // 酒/天仙酒：命令边界已校验每回合一次（addCount: false 时置 vm_va_jiu_no_count 不占位）——
+                // 上游 target.storage.jiu += baseDamage 可跨多次使用叠加；回合外印记同理按次数累加。
                 ctx.to_discard(u.card);
-                ctx.core.turn.jiu_used = true;
-                if !nullified {
-                    ctx.core.turn.jiu_active = true;
+                if u.player == ctx.core.turn.current {
+                    if !jiu_no_count {
+                        ctx.core.turn.jiu_used = true;
+                    }
+                    if !nullified {
+                        if !ctx.core.turn.jiu_active {
+                            ctx.core.turn.jiu_active = true;
+                        } else {
+                            let key = (u.player, "jiu_extra_stacks".to_string());
+                            let prev = ctx.core.vm_aux.flags.get(&key).copied().unwrap_or(0);
+                            ctx.core.vm_aux.flags.insert(key, prev + 1);
+                        }
+                    }
+                } else if !nullified {
+                    let key = (u.player, "jiu_active_offturn".to_string());
+                    let prev = ctx.core.vm_aux.flags.get(&key).copied().unwrap_or(0);
+                    ctx.core.vm_aux.flags.insert(key, prev + 1);
                 }
             }
         }

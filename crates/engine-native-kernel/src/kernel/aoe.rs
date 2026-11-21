@@ -137,6 +137,19 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
                 return Flow::Done;
             }
         }
+        if has_u01_respond_park(ctx) {
+            return Flow::Yield;
+        }
+        if let Some(ok) = take_u01_respond_result(ctx, self.target) {
+            if ok {
+                super::record_virtual_respond(ctx, self.target, self.need);
+                if self.need == CardKind::Shan {
+                    releiji_on_shan(ctx, self.target);
+                }
+                return Flow::Done;
+            }
+            self.asked = false;
+        }
         if self.asked {
             self.asked = false;
             let answer = ctx.answer().clone();
@@ -158,14 +171,28 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
                     );
                     return Flow::Yield;
                 }
+                let fid = ctx.res.stack.last().map(|f| f.id).unwrap_or(0);
+                if let Some(immediate) = (ctx.catalog.hooks.try_activate_respond_skill)(
+                    ctx,
+                    self.target,
+                    rdef,
+                    self.need,
+                    fid,
+                ) {
+                    if immediate {
+                        super::record_virtual_respond(ctx, self.target, self.need);
+                        if self.need == CardKind::Shan {
+                            releiji_on_shan(ctx, self.target);
+                        }
+                        return Flow::Done;
+                    }
+                    return Flow::Yield;
+                }
             }
             if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
                 // 出响应牌免伤
                 discard_response_card(ctx, self.target, c, self.need);
-                ctx.emit(EventData::CardResponded {
-                    card: c,
-                    player: self.target,
-                });
+                super::emit_card_responded_as(ctx, self.target, c, self.need);
                 // 雷击（Boss 青龙，规则 v234）：万箭闪响应后判定雷击
                 // （南蛮响应为杀，不触发）
                 if self.need == CardKind::Shan || ctx.catalog.card_kind(c) == CardKind::Shan {
@@ -179,7 +206,18 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
         }
         let holders: Vec<crate::ids::CardId> = response_kind_cards(ctx, self.target, self.need);
         let resp_skills = host_response_skills(ctx.core, ctx.catalog, self.target, resp_ctx);
-        if holders.is_empty() && resp_skills.is_empty() {
+        let skill_opts = if !ctx.catalog.blocks_all_cards(ctx.core, self.target) {
+            (ctx.catalog.hooks.respond_skill_options)(
+                ctx.core,
+                ctx.catalog,
+                self.target,
+                self.need,
+                false,
+            )
+        } else {
+            Vec::new()
+        };
+        if holders.is_empty() && resp_skills.is_empty() && skill_opts.is_empty() {
             // 无响应牌：不询问，直接受伤（跳过语义挂账见清单）
             self.emit_aoe_damage(ctx);
             return Flow::Done;
@@ -196,6 +234,11 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
             ));
             for rdef in resp_skills {
                 options.push(ChoiceOption::Skill(rdef));
+            }
+            for opt in skill_opts {
+                if !options.contains(&opt) {
+                    options.push(opt);
+                }
             }
         }
         Flow::WaitChoice {

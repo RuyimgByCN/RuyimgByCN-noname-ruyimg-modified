@@ -279,16 +279,26 @@ pub fn note_pro_qinyin_discard(core: &mut GameStateCore, catalog: &Catalog, card
     if catalog.skills.len() <= 24 || !core.discard.contains(&card) {
         return;
     }
-    let Some(pq) = catalog.skill_by_name("pro_qinyin") else {
-        return;
-    };
-    let any_alive = (0..core.players.len() as PlayerId)
-        .any(|p| core.player(p).alive && core.has_skill(p, pq));
-    if any_alive {
-        let stamp = l28_turn_stamp(core);
-        core.vm_aux
-            .flags
-            .insert((0, format!("pro_qinyin_d:{card}")), stamp);
+    let stamp = l28_turn_stamp(core);
+    if let Some(pq) = catalog.skill_by_name("pro_qinyin") {
+        let any_alive = (0..core.players.len() as PlayerId)
+            .any(|p| core.player(p).alive && core.has_skill(p, pq));
+        if any_alive {
+            core.vm_aux
+                .flags
+                .insert((0, format!("pro_qinyin_d:{card}")), stamp);
+        }
+    }
+    if catalog.card_kind(card).is_sha_like() {
+        if let Some(zl) = catalog.skill_by_name("dddzhilian") {
+            let any_alive = (0..core.players.len() as PlayerId)
+                .any(|p| core.player(p).alive && core.has_skill(p, zl));
+            if any_alive {
+                core.vm_aux
+                    .flags
+                    .insert((0, format!("dddzhilian_sha_d:{card}")), stamp);
+            }
+        }
     }
 }
 

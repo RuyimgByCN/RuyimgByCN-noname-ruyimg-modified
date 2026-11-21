@@ -53,6 +53,9 @@ impl crate::catalog::SkillMachine for DuelMachine {
 
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         loop {
+            if has_u01_respond_park(ctx) {
+                return Flow::Yield;
+            }
             let responder = if self.on_target {
                 self.target
             } else {
@@ -63,6 +66,29 @@ impl crate::catalog::SkillMachine for DuelMachine {
             } else {
                 self.target
             };
+            if let Some(ok) = take_u01_respond_result(ctx, responder) {
+                if ok {
+                    super::record_virtual_respond(ctx, responder, CardKind::Sha);
+                    let wushuang_holder = if self.on_target {
+                        self.source
+                    } else {
+                        self.target
+                    };
+                    let opponent_has_wushuang = ctx
+                        .catalog
+                        .skill_by_name(crate::vocabulary::names::WU_SHUANG)
+                        .map(|d| ctx.core.has_skill(wushuang_holder, d))
+                        .unwrap_or(false);
+                    if opponent_has_wushuang && !self.second_pending {
+                        self.second_pending = true;
+                        continue;
+                    }
+                    self.second_pending = false;
+                    self.on_target = !self.on_target;
+                    continue;
+                }
+                self.asked = false;
+            }
             let shas: Vec<crate::ids::CardId> =
                 response_kind_cards(ctx, responder, CardKind::Sha);
             let resp_skills = host_response_skills(ctx.core, ctx.catalog, responder, 2);
@@ -117,8 +143,23 @@ impl crate::catalog::SkillMachine for DuelMachine {
                     continue;
                 }
             }
+            let skill_opts = if !ctx.catalog.blocks_all_cards(ctx.core, responder) {
+                (ctx.catalog.hooks.respond_skill_options)(
+                    ctx.core,
+                    ctx.catalog,
+                    responder,
+                    CardKind::Sha,
+                    false,
+                )
+            } else {
+                Vec::new()
+            };
             if !self.asked {
-                if shas.is_empty() && ctx.core.player(responder).alive {
+                if shas.is_empty()
+                    && resp_skills.is_empty()
+                    && skill_opts.is_empty()
+                    && ctx.core.player(responder).alive
+                {
                     if let Some((helper, helper_shas)) =
                         jijiang_shu_helper(ctx.core, ctx.catalog, responder)
                     {
@@ -138,7 +179,8 @@ impl crate::catalog::SkillMachine for DuelMachine {
                         };
                     }
                 }
-                if (shas.is_empty() && resp_skills.is_empty()) || !ctx.core.player(responder).alive
+                if (shas.is_empty() && resp_skills.is_empty() && skill_opts.is_empty())
+                    || !ctx.core.player(responder).alive
                 {
                     // 轮到方无杀：不询问，直接受伤，决斗结束
                     let vm_card_bonus = ctx
@@ -163,8 +205,13 @@ impl crate::catalog::SkillMachine for DuelMachine {
                     options.extend((ctx.catalog.hooks.borrow_options)(
                         ctx, responder, false,
                     ));
-                    for rdef in resp_skills {
+                    for rdef in resp_skills.iter().copied() {
                         options.push(ChoiceOption::Skill(rdef));
+                    }
+                    for opt in skill_opts {
+                        if !options.contains(&opt) {
+                            options.push(opt);
+                        }
                     }
                 }
                 return Flow::WaitChoice {
@@ -198,6 +245,40 @@ impl crate::catalog::SkillMachine for DuelMachine {
                     );
                     return Flow::Yield;
                 }
+                let fid = ctx.res.stack.last().map(|f| f.id).unwrap_or(0);
+                if let Some(immediate) = (ctx.catalog.hooks.try_activate_respond_skill)(
+                    ctx,
+                    responder,
+                    rdef,
+                    CardKind::Sha,
+                    fid,
+                ) {
+                    if immediate {
+                        super::record_virtual_respond(ctx, responder, CardKind::Sha);
+                        let wushuang_holder = if self.on_target {
+                            self.source
+                        } else {
+                            self.target
+                        };
+                        let opponent_has_wushuang = !ctx.catalog.is_rechanyuan_sealed_name(
+                            ctx.core,
+                            wushuang_holder,
+                            crate::vocabulary::names::WU_SHUANG,
+                        ) && ctx
+                            .catalog
+                            .skill_by_name(crate::vocabulary::names::WU_SHUANG)
+                            .map(|d| ctx.core.has_skill(wushuang_holder, d))
+                            .unwrap_or(false);
+                        if opponent_has_wushuang && !self.second_pending {
+                            self.second_pending = true;
+                            continue;
+                        }
+                        self.second_pending = false;
+                        self.on_target = !self.on_target;
+                        continue;
+                    }
+                    return Flow::Yield;
+                }
             }
             if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
                 let jijiang_helper = if shas.is_empty() {
@@ -224,10 +305,7 @@ impl crate::catalog::SkillMachine for DuelMachine {
                     }
                 });
                 discard_response_card(ctx, actual_holder, c, CardKind::Sha);
-                ctx.emit(EventData::CardResponded {
-                    card: c,
-                    player: responder,
-                });
+                super::emit_card_responded_as(ctx, responder, c, CardKind::Sha);
                 // 无双：与无双持有者决斗的角色每次需连续打出两张杀——
                 // 第一张后不轮转，同一响应者再次询问（second_pending）
                 let wushuang_holder = if self.on_target {

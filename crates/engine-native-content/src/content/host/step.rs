@@ -79,6 +79,8 @@ pub(super) mod u01_batch_a;
 pub(super) mod u01_batch_b;
 pub(super) mod u01_batch_c;
 pub(super) mod u01_batch_d;
+pub(super) mod u01_fixes_1;
+pub(crate) use u01_fixes_1::{u01_respond_skill_options, u01_try_activate_respond_skill};
 pub(super) mod l28_batch_a;
 pub(crate) use l28_batch_a::{
     on_cards_to_discard_chengye, on_outer_settled_taipingyaoshu, on_skill_removed_l28,
@@ -1144,10 +1146,18 @@ impl HostMachine {
                 self.step_wudian_diaobing(ctx)
             }
             HostBehavior::KDanggu | HostBehavior::KMowang => self.step_skills_recovery(ctx),
-            HostBehavior::U01DddBatchA => u01_batch_a::step_u01_batch_a(self, ctx),
-            HostBehavior::U01DddBatchB => u01_batch_b::step_u01_batch_b(self, ctx),
-            HostBehavior::U01DddBatchC => u01_batch_c::step_u01_batch_c(self, ctx),
-            HostBehavior::U01DddBatchD => u01_batch_d::step_u01_batch_d(self, ctx),
+            HostBehavior::U01DddBatchA => {
+                u01_fixes_1::step_u01_fix(self, ctx).unwrap_or_else(|| u01_batch_a::step_u01_batch_a(self, ctx))
+            }
+            HostBehavior::U01DddBatchB => {
+                u01_fixes_1::step_u01_fix(self, ctx).unwrap_or_else(|| u01_batch_b::step_u01_batch_b(self, ctx))
+            }
+            HostBehavior::U01DddBatchC => {
+                u01_fixes_1::step_u01_fix(self, ctx).unwrap_or_else(|| u01_batch_c::step_u01_batch_c(self, ctx))
+            }
+            HostBehavior::U01DddBatchD => {
+                u01_fixes_1::step_u01_fix(self, ctx).unwrap_or_else(|| u01_batch_d::step_u01_batch_d(self, ctx))
+            }
             HostBehavior::L28ThunderBatchA => l28_batch_a::handle_l28_batch_a(self, ctx),
             HostBehavior::L28ThunderBatchB => l28_batch_b::handle_l28_batch_b(self, ctx),
             HostBehavior::L27BeautifyBatchA => l27_batch_a::handle_l27_batch_a(self, ctx),

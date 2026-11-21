@@ -422,7 +422,7 @@ fn u01_batch_a_real_match_6d_verification() {
         },
     );
     assert!(e.state_core().player(0).hand.contains(&red_c1));
-    assert_eq!(flag(&e, 0, "dddjuxian_top_used"), 1);
+    assert!(e.state_core().vm_aux.once.contains(&(0, "dddjuxian_top".to_string(), 4)));
     assert_eq!(flag(&e, 0, "dddjuxian_ban"), 0);
 
     // Branch Tag(1): give `red_c1` to seat 1 and draw `blk_deck` from deck (color mismatch -> sets `dddjuxian_ban = 1`).

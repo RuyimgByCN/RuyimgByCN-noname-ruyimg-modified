@@ -747,6 +747,11 @@ pub fn run(
             }
             Stage::Done => {
                 if let Some(popped) = res.stack.pop() {
+                    if let EventData::CardResponded { player, .. } = &popped.data {
+                        core.vm_aux
+                            .flags
+                            .remove(&(*player, "dddfushi_resp_eff_kind".to_string()));
+                    }
                     if let EventData::Damage(d) = &popped.data {
                         core.vm_aux
                             .flags
@@ -758,6 +763,9 @@ pub fn run(
                         }
                     }
                     if let EventData::Equipped { player, .. } = &popped.data {
+                        core.vm_aux
+                            .flags
+                            .remove(&(*player, format!("play_equip_use:{}", popped.id)));
                         core.vm_aux
                             .flags
                             .remove(&(*player, format!("dddanzhi_equip_use:{}", popped.id)));
@@ -782,6 +790,9 @@ pub fn run(
                         core.vm_aux
                             .flags
                             .remove(&(u.player, format!("sha_pending_end:{}", popped.id)));
+                        core.vm_aux
+                            .flags
+                            .remove(&(u.player, format!("sha_jiu_extra:{}", popped.id)));
                         let eff_kind = u.use_as.or_else(|| u.card.map(|c| catalog.card_kind(c)));
                         if eff_kind == Some(crate::catalog::CardKind::Youdishenru) {
                             core.vm_aux
@@ -805,6 +816,12 @@ pub fn run(
                             core.vm_aux
                                 .flags
                                 .remove(&(p, format!("monkey_asked:{}", popped.id)));
+                            core.vm_aux
+                                .flags
+                                .remove(&(p, format!("sha_u01_shan_pending:{}", popped.id)));
+                            core.vm_aux
+                                .flags
+                                .remove(&(p, format!("sha_u01_hujia_dodged:{}", popped.id)));
                         }
                         for p in 0..core.players.len() as PlayerId {
                             core.vm_aux.flags.remove(&(p, "l28_vdmg_kind".to_string()));
@@ -979,7 +996,8 @@ fn start_queued_trigger(
         .or(vm_meta.as_ref())
         .or(def.trigger.as_ref())
         .expect("eligible meta");
-    let machine: Box<dyn SkillMachine> = if meta.optional {
+    let skip_optional_gate = def.name == "dddmoyan" && kind == EventKind::DamageBefore;
+    let machine: Box<dyn SkillMachine> = if meta.optional && !skip_optional_gate {
         let ev = if def.behavior.confirmation_actor(qt.owner, &actual_event, kind) != qt.owner {
             actual_event
         } else {

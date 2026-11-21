@@ -369,10 +369,7 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                 if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
                     // 出无懈：弃牌、反转抵消状态、更新 stateplayer、自其下家重新询问
                     discard_response_card(ctx, responder, c, CardKind::Nullify);
-                    ctx.emit(EventData::CardResponded {
-                        card: c,
-                        player: responder,
-                    });
+                    super::emit_card_responded_as(ctx, responder, c, CardKind::Nullify);
                     self.nullified = !self.nullified;
                     self.set_stateplayer(ctx.core, responder);
                     self.queue = ctx.core.seat_order_from(ctx.core.next_alive(responder));

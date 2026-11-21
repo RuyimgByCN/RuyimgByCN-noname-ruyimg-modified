@@ -753,6 +753,11 @@ impl HostMachine {
                 HostStage::Act => {
                     if let Some(ChoiceOption::Player(t)) = ctx.answer().first().copied() {
                         if ctx.core.player(t).alive {
+                            ctx.log(LogEvent::SkillTriggered {
+                                skill: "dddjinggou",
+                                owner: self.owner,
+                                presentation: None,
+                            });
                             ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                                 Some(self.owner),
                                 t,

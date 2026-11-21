@@ -952,9 +952,6 @@ impl HostSkillBehavior {
                         phase: crate::event::Phase::Prepare,
                         begin: true,
                     } => ctx.state.player(*player).alive,
-                    EventData::Dying { player, .. } => {
-                        ctx.state.player(*player).alive && ctx.state.player(*player).hp <= 0
-                    }
                     _ => false,
                 }
             }

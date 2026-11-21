@@ -3,6 +3,7 @@ use super::*;
 mod armor;
 mod liuli;
 mod respond;
+mod respond_skill;
 mod resume;
 mod step;
 
@@ -415,6 +416,12 @@ impl ShaResolveMachine {
             self.hanbing_pending = 0;
             return Flow::Yield;
         }
+        if let Some(fid) = self.current_sha_frame_id(ctx) {
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(self.source, format!("sha_jiu_extra:{fid}")));
+        }
         let card = self.card;
         let cid = card.unwrap_or(0);
         ctx.core
@@ -532,7 +539,7 @@ impl ShaResolveMachine {
                 self.target,
                 (1 + luoyi_bonus(ctx, Some(self.source))
                     + xiongshou_bonus(ctx, self.source, self.target)
-                    + self.jiu_damage_bonus()
+                    + self.jiu_damage_bonus(ctx, fid)
                     + u32::from(self.xiandan_bonus)
                     + liaoyuan
                     + vm_card_bonus
@@ -566,12 +573,20 @@ impl ShaResolveMachine {
     }
 
     /// 酒伤害加成（派发时已捕获）。
-    fn jiu_damage_bonus(&self) -> u32 {
-        if self.jiu_bonus {
-            1
-        } else {
-            0
+    fn jiu_damage_bonus(&self, ctx: &Ctx<'_>, fid: Option<crate::ids::EventId>) -> u32 {
+        if !self.jiu_bonus {
+            return 0;
         }
+        let extra = fid
+            .and_then(|id| {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .get(&(self.source, format!("sha_jiu_extra:{id}")))
+                    .copied()
+            })
+            .unwrap_or(0);
+        1 + extra
     }
 
     /// 护驾是否可发动：目标持技 + 主公资格（身份局须主公）。

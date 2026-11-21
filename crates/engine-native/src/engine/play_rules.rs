@@ -25,6 +25,11 @@ pub(super) fn common_play_validation(
     if catalog.blocks_all_cards(core, actor) {
         return Err(RejectReason::CardBlocked);
     }
+    if crate::rvm_bridge::modifiers::d34_flags::is_dddtongyu_hand_locked(core, actor)
+        && core.player(actor).hand.contains(&card)
+    {
+        return Err(RejectReason::CardLimit);
+    }
     // 蛊舞·缚（U05 xianjian 阿奴，规则 v154）：蛊舞生效中每回合
     // 最多使用 3 张牌（上游 anwugu2 mod cardEnabled countUsed>=
     // storage 同口径；countUsed=本出牌阶段已用数——登记差异：

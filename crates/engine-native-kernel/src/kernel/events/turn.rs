@@ -676,6 +676,17 @@ pub(in crate::kernel) fn reset_new_turn_state(ctx: &mut Ctx<'_>, player: PlayerI
         return;
     }
     ctx.core.turn.turn_opened = true;
+    ctx.core.vm_aux.flags.retain(|(_, k), _| {
+        !k.starts_with("dddzhilian_sha_d:")
+            && k != "dddtongyu_hand_locked_stamp"
+            && k != "turn_use_resp_mask"
+            && k != "turn_use_resp_stamp"
+            && k != "jiu_active_offturn"
+            && k != "jiu_extra_stacks"
+            && k != "dddjijian_jiu_used"
+            && k != "dddfushi_resp_eff_kind"
+    });
+    ctx.core.vm_aux.once.retain(|(_, _, scope)| *scope != 4);
     ctx.reset_turn_limits(player);
     // 本回合已用牌数（swd 灵武批 120，规则 v307）：回合开始清零
     ctx.core.turn.cards_used_turn = 0;

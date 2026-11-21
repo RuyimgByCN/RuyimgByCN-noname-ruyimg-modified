@@ -46,10 +46,13 @@ impl ShaResolveMachine {
                     && ctx.core.player(self.target).baolei_mode == 1
             })
             .unwrap_or(false);
+        let hand_locked =
+            crate::rvm_bridge::modifiers::d34_flags::is_dddtongyu_hand_locked(ctx.core, self.target);
         let target_can_play = !tieji_blocks
             && !target_sentinel
             && !ctx.catalog.blocks_all_cards(ctx.core, self.target);
-        let rw_lanyin = target_can_play
+        let target_can_play_hand = target_can_play && !hand_locked;
+        let rw_lanyin = target_can_play_hand
             && crate::rvm_bridge::modifiers::d34_l28_mods::has_rewritten_lanyinjia(
                 ctx.core,
                 ctx.catalog,
@@ -61,7 +64,7 @@ impl ShaResolveMachine {
             .hand
             .iter()
             .filter(|c| {
-                target_can_play && {
+                target_can_play_hand && {
                     let kind = ctx.catalog.card_kind(**c);
                     rw_lanyin || kind == CardKind::Shan || (longdan && kind == CardKind::Sha)
                 }
@@ -69,7 +72,7 @@ impl ShaResolveMachine {
             .copied()
             .map(ChoiceOption::Card)
             .collect();
-        if qingguo && target_can_play {
+        if qingguo && target_can_play_hand {
             for c in ctx.core.player(self.target).hand.iter().copied() {
                 let kind = ctx.catalog.card_kind(c);
                 let already =
@@ -85,16 +88,17 @@ impl ShaResolveMachine {
         }
         if target_can_play {
             for &c in &ctx.core.player(self.target).hand {
-                if ctx
-                    .catalog
-                    .find_player_vm_view_as(
-                        ctx.core,
-                        self.target,
-                        c,
-                        false,
-                        Some(CardKind::Shan),
-                    )
-                    .is_some()
+                if !hand_locked
+                    && ctx
+                        .catalog
+                        .find_player_vm_view_as(
+                            ctx.core,
+                            self.target,
+                            c,
+                            false,
+                            Some(CardKind::Shan),
+                        )
+                        .is_some()
                     && !shans.contains(&ChoiceOption::Card(c))
                 {
                     shans.push(ChoiceOption::Card(c));
@@ -106,7 +110,9 @@ impl ShaResolveMachine {
                 false,
                 Some(CardKind::Shan),
             ) {
-                if !shans.contains(&ChoiceOption::Card(c)) {
+                if (!hand_locked || !ctx.core.player(self.target).hand.contains(&c))
+                    && !shans.contains(&ChoiceOption::Card(c))
+                {
                     shans.push(ChoiceOption::Card(c));
                 }
             }
@@ -159,13 +165,18 @@ impl ShaResolveMachine {
                     && ctx.core.turn.cards_used_play_phase < 3
             })
             .unwrap_or(false);
+        let skill_shans =
+            self.collect_u01_respond_skill_options(ctx, target_can_play && !sipu_ban_respond);
         let resp_skills = if target_can_play && !sipu_ban_respond && !direct_hit {
             super::super::host_response_skills(ctx.core, ctx.catalog, self.target, 1)
         } else {
             Vec::new()
         };
         if direct_hit
-            || (shans.is_empty() && shengong_borrow.is_empty() && resp_skills.is_empty())
+            || (shans.is_empty()
+                && shengong_borrow.is_empty()
+                && resp_skills.is_empty()
+                && skill_shans.is_empty())
             || !ctx.core.player(self.target).alive
         {
             return self.sha_hit_pre_damage(ctx);
@@ -176,6 +187,11 @@ impl ShaResolveMachine {
             options.extend(shengong_borrow);
             for rdef in resp_skills {
                 options.push(ChoiceOption::Skill(rdef));
+            }
+            for opt in skill_shans {
+                if !options.contains(&opt) {
+                    options.push(opt);
+                }
             }
         }
         self.asked = true;
@@ -268,27 +284,31 @@ impl ShaResolveMachine {
         }
         note_longdan_sha_source(ctx, self.target, self.source);
         let base_depth = ctx.res.stack.len();
-        ctx.emit(EventData::CardResponded {
-            card: shan,
-            player: self.target,
-        });
+        crate::kernel::emit_card_responded_as(ctx, self.target, shan, CardKind::Shan);
+        let has_final = (ctx.catalog.hooks.reguhuo_has_pending_final)(ctx.core, self.target);
+        if has_final {
+            (ctx.catalog.hooks.reguhuo_spawn_final)(ctx, self.target, base_depth);
+        }
+        self.asked = false;
+        if let Some(fid) = self.current_sha_frame_id(ctx) {
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((self.target, format!("sha_u01_shan_pending:{fid}")), 1);
+            return Flow::Yield;
+        }
         releiji_on_shan(ctx, self.target);
         self.dodges_used += 1;
-        let has_final = (ctx.catalog.hooks.reguhuo_has_pending_final)(ctx.core, self.target);
         let has_anruo = ctx
             .core
             .vm_aux
             .flags
             .contains_key(&(self.target, format!("l10_scsanruo_effect:{shan}")));
         if has_final || has_anruo {
-            self.asked = false;
             ctx.core
                 .vm_aux
                 .flags
                 .insert((self.target, "l10_reguhuo_sha_post_dodge".to_string()), 1);
-            if has_final {
-                (ctx.catalog.hooks.reguhuo_spawn_final)(ctx, self.target, base_depth);
-            }
             return Flow::Yield;
         }
         self.post_dodge_step(ctx)
@@ -402,6 +422,7 @@ impl ShaResolveMachine {
         if self.dodges_used < ctx.core.turn.liaoyuan_count {
             return self.emit_sha_damage(ctx);
         }
+        ctx.core.turn.liaoyuan_count = 0;
         ctx.emit(EventData::ShaDodged {
             card: self.card,
             source: self.source,

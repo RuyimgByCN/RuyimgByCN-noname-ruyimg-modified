@@ -10,16 +10,20 @@ impl HostSkillBehavior {
     pub(super) fn machine(&self, owner: PlayerId, event: &EventData) -> HostMachine {
         match self.behavior {
             HostBehavior::U01DddBatchA => {
-                return super::step::u01_batch_a::machine_u01_batch_a(self, owner, event);
+                return super::step::u01_fixes_1::machine_u01_fix(self, owner, event)
+                    .unwrap_or_else(|| super::step::u01_batch_a::machine_u01_batch_a(self, owner, event));
             }
             HostBehavior::U01DddBatchB => {
-                return super::step::u01_batch_b::machine_u01_batch_b(self, owner, event);
+                return super::step::u01_fixes_1::machine_u01_fix(self, owner, event)
+                    .unwrap_or_else(|| super::step::u01_batch_b::machine_u01_batch_b(self, owner, event));
             }
             HostBehavior::U01DddBatchC => {
-                return super::step::u01_batch_c::machine_u01_batch_c(self, owner, event);
+                return super::step::u01_fixes_1::machine_u01_fix(self, owner, event)
+                    .unwrap_or_else(|| super::step::u01_batch_c::machine_u01_batch_c(self, owner, event));
             }
             HostBehavior::U01DddBatchD => {
-                return super::step::u01_batch_d::machine_u01_batch_d(self, owner, event);
+                return super::step::u01_fixes_1::machine_u01_fix(self, owner, event)
+                    .unwrap_or_else(|| super::step::u01_batch_d::machine_u01_batch_d(self, owner, event));
             }
             HostBehavior::L28ThunderBatchA => {
                 return super::step::l28_batch_a::machine_l28_batch_a(self, owner, event);

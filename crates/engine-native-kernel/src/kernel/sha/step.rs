@@ -50,11 +50,17 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         }
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        if self.has_sha_trigger_park(ctx) {
+            return Flow::Yield;
+        }
+        if let Some(flow) = self.consume_u01_pending_dodge(ctx) {
+            return flow;
+        }
         if let Some(flow) = self.resume_pending_answer(ctx) {
             return flow;
         }
-        if self.has_sha_trigger_park(ctx) {
-            return Flow::Yield;
+        if let Some(flow) = self.handle_u01_respond_park(ctx) {
+            return flow;
         }
         // 青釭剑（P2/N08 批③-b）：锁定——无视目标防具（来源装备青釭时
         // 八卦阵判定与仁王盾免疫均不生效）。铡刀（Boss 阎罗王，规则
@@ -254,12 +260,19 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     if ctx.core.player(holder).hand.contains(&shan) {
                         ctx.discard_from_hand(holder, shan);
                         super::respond::note_longdan_sha_source(ctx, holder, self.source);
-                        ctx.emit(EventData::CardResponded {
-                            card: shan,
-                            player: holder,
-                        });
+                        crate::kernel::emit_card_responded_as(ctx, holder, shan, CardKind::Shan);
                         self.dodges_used += 1;
                         if self.dodges_used >= needed {
+                            // Upstream `hujia` (`standard/skill.js:287-305`): helper's
+                            // `CardResponded` triggers (`dddfushi`, `tuqiang`, etc.) must settle
+                            // before `ShaDodged` (`qianglue`, `shaEnd`).
+                            if let Some(fid) = self.current_sha_frame_id(ctx) {
+                                ctx.core.vm_aux.flags.insert(
+                                    (self.target, format!("sha_u01_hujia_dodged:{fid}")),
+                                    1,
+                                );
+                                return Flow::Yield;
+                            }
                             ctx.core.turn.liaoyuan_count = 0;
                             ctx.emit(EventData::ShaDodged {
                                 card: self.card,
@@ -698,6 +711,9 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 );
                 return Flow::Yield;
             }
+            if let Some(flow) = self.try_handle_u01_respond_skill(ctx, rdef) {
+                return flow;
+            }
         }
         if let ChoiceOption::Card(shan) = answer {
             return self.resolve_shan_card(ctx, shan);
@@ -733,16 +749,11 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             }
             return self.emit_sha_damage(ctx);
         }
-        // 燎原（swd 批 145，规则 v319）：仍有未满足的额外闪需求 → 未闪避
-        // 部分视为命中（上游 `trigger.untrigger(); directHit=true` 同口径；
-        // 加伤=燎原计数，上游 liaoyuan2 damageBegin `trigger.num += storage`
-        // 同口径）
+        // 燎原（swd 批 145）：仍有未满足的额外闪需求 → 未闪避部分视为命中
         if self.dodges_used < ctx.core.turn.liaoyuan_count {
-            // 加伤与清零由 emit_sha_damage 统一承担
             return self.emit_sha_damage(ctx);
         }
-        // 杀被闪避（swd 批 141，规则 v316 同批）：发射 ShaDodged（上游
-        // shaMiss 触发窗；青龙/贯石斧等窗口之后——登记差异：窗口次序）
+        // 目标已死等无伤害路径（Pass 路径）。
         ctx.emit(EventData::ShaDodged {
             card: self.card,
             source: self.source,

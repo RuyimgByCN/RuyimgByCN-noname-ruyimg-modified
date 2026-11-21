@@ -148,7 +148,13 @@ pub(super) fn apply_command(
             if actor != open.observer {
                 return Err(RejectReason::WrongPlayer);
             }
-            if !open.spec.accepts(&selection) {
+            if !crate::engine::legal_actions::validate_choice_selection(
+                &state.core,
+                catalog,
+                actor,
+                &open.spec,
+                &selection,
+            ) {
                 return Err(RejectReason::InvalidChoice);
             }
             if open.spec.prompt == "scskuiji_cards"

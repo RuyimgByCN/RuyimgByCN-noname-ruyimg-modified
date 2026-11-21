@@ -126,7 +126,13 @@ pub(crate) fn active_ask_host(
                 ))
             }
             HostStage::TargetChoice => {
-                let options = other_player_options(core, owner);
+                let options: Vec<ChoiceOption> = core
+                    .alive_players()
+                    .filter(|&p| {
+                        super::step::u01_fixes_1::is_sha_legal_play_target(core, catalog, owner, p)
+                    })
+                    .map(ChoiceOption::Player)
+                    .collect();
                 if options.is_empty() {
                     return None;
                 }

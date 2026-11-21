@@ -334,18 +334,54 @@ pub(super) fn active_ask_batches(
     catalog: &Catalog,
 ) -> Option<ExpectedAsk> {
     match behavior {
-        HostBehavior::U01DddBatchA => super::step::u01_batch_a::active_ask_u01_batch_a(
-            stage, owner, target, targets, card, cards, core, catalog,
-        ),
-        HostBehavior::U01DddBatchB => super::step::u01_batch_b::active_ask_u01_batch_b(
-            stage, owner, target, targets, card, cards, core, catalog,
-        ),
-        HostBehavior::U01DddBatchC => super::step::u01_batch_c::active_ask_u01_batch_c(
-            stage, owner, target, targets, card, cards, core, catalog,
-        ),
-        HostBehavior::U01DddBatchD => super::step::u01_batch_d::active_ask_u01_batch_d(
-            stage, owner, target, targets, card, cards, core, catalog,
-        ),
+        HostBehavior::U01DddBatchA => {
+            let ask_id = super::step::u01_batch_a::flag(core, owner, super::step::u01_batch_a::ASK_KEY);
+            if (1001..=1099).contains(&ask_id) {
+                super::step::u01_fixes_1::active_ask_u01_fix(
+                    ask_id, stage, owner, target, targets, card, cards, core, catalog,
+                )
+            } else {
+                super::step::u01_batch_a::active_ask_u01_batch_a(
+                    stage, owner, target, targets, card, cards, core, catalog,
+                )
+            }
+        }
+        HostBehavior::U01DddBatchB => {
+            let ask_id = super::step::u01_batch_a::flag(core, owner, super::step::u01_batch_a::ASK_KEY);
+            if (1001..=1099).contains(&ask_id) {
+                super::step::u01_fixes_1::active_ask_u01_fix(
+                    ask_id, stage, owner, target, targets, card, cards, core, catalog,
+                )
+            } else {
+                super::step::u01_batch_b::active_ask_u01_batch_b(
+                    stage, owner, target, targets, card, cards, core, catalog,
+                )
+            }
+        }
+        HostBehavior::U01DddBatchC => {
+            let ask_id = super::step::u01_batch_a::flag(core, owner, super::step::u01_batch_a::ASK_KEY);
+            if (1001..=1099).contains(&ask_id) {
+                super::step::u01_fixes_1::active_ask_u01_fix(
+                    ask_id, stage, owner, target, targets, card, cards, core, catalog,
+                )
+            } else {
+                super::step::u01_batch_c::active_ask_u01_batch_c(
+                    stage, owner, target, targets, card, cards, core, catalog,
+                )
+            }
+        }
+        HostBehavior::U01DddBatchD => {
+            let ask_id = super::step::u01_batch_a::flag(core, owner, super::step::u01_batch_a::ASK_KEY);
+            if (1001..=1099).contains(&ask_id) {
+                super::step::u01_fixes_1::active_ask_u01_fix(
+                    ask_id, stage, owner, target, targets, card, cards, core, catalog,
+                )
+            } else {
+                super::step::u01_batch_d::active_ask_u01_batch_d(
+                    stage, owner, target, targets, card, cards, core, catalog,
+                )
+            }
+        }
         HostBehavior::L28ThunderBatchA => super::step::l28_batch_a::ask_l28_batch_a(
             stage, owner, target, targets, card, cards, core, catalog,
         ),

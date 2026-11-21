@@ -53,6 +53,20 @@ impl HostSkillBehavior {
                 self, ctx, frames, frame, owner, event,
             );
         }
+        if self.behavior == HostBehavior::MaxRangeWeaponDamage {
+            return matches!(event,
+                EventData::Equipped { player, card, .. }
+                if *player == owner
+                    && ctx.state.vm_aux.flags.contains_key(&(*player, format!("play_equip_use:{}", frame.id)))
+                    && (ctx.catalog.card_slot_of(ctx.state, *card) == Some(crate::catalog::EquipSlot::Weapon)
+                        || ctx.catalog.cards.get(*card as usize).is_some_and(|d| d.kind.equip_slot() == Some(crate::catalog::EquipSlot::Weapon)))
+                    && {
+                        let my = ctx.state.attack_range(ctx.catalog, owner);
+                        ctx.state.alive_players().filter(|p| *p != owner).all(|p| {
+                            ctx.state.attack_range(ctx.catalog, p) <= my
+                        })
+                    });
+        }
         self.filter_behavior(ctx, owner, event)
     }
 
@@ -737,18 +751,14 @@ impl HostSkillBehavior {
             | HostBehavior::WudianDiaobingCard
             | HostBehavior::KDanggu
             | HostBehavior::KMowang => self.filter_common(ctx, owner, event),
-            HostBehavior::U01DddBatchA => {
-                super::step::u01_batch_a::filter_u01_batch_a(self, ctx, owner, event)
-            }
-            HostBehavior::U01DddBatchB => {
-                super::step::u01_batch_b::filter_u01_batch_b(self, ctx, owner, event)
-            }
-            HostBehavior::U01DddBatchC => {
-                super::step::u01_batch_c::filter_u01_batch_c(self, ctx, owner, event)
-            }
-            HostBehavior::U01DddBatchD => {
-                super::step::u01_batch_d::filter_u01_batch_d(self, ctx, owner, event)
-            }
+            HostBehavior::U01DddBatchA => super::step::u01_fixes_1::filter_u01_fix(self, ctx, owner, event)
+                .unwrap_or_else(|| super::step::u01_batch_a::filter_u01_batch_a(self, ctx, owner, event)),
+            HostBehavior::U01DddBatchB => super::step::u01_fixes_1::filter_u01_fix(self, ctx, owner, event)
+                .unwrap_or_else(|| super::step::u01_batch_b::filter_u01_batch_b(self, ctx, owner, event)),
+            HostBehavior::U01DddBatchC => super::step::u01_fixes_1::filter_u01_fix(self, ctx, owner, event)
+                .unwrap_or_else(|| super::step::u01_batch_c::filter_u01_batch_c(self, ctx, owner, event)),
+            HostBehavior::U01DddBatchD => super::step::u01_fixes_1::filter_u01_fix(self, ctx, owner, event)
+                .unwrap_or_else(|| super::step::u01_batch_d::filter_u01_batch_d(self, ctx, owner, event)),
             HostBehavior::L28ThunderBatchA => {
                 super::step::l28_batch_a::filter_l28_batch_a(self, ctx, owner, event)
             }

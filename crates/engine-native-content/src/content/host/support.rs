@@ -794,11 +794,7 @@ pub(super) fn moyan_filter(ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventDat
         return false;
     }
     match event {
-        EventData::Phase {
-            phase: crate::event::Phase::Judge,
-            begin: true,
-            ..
-        } => {
+        EventData::TurnBegin { .. } => {
             moyan_flag(ctx, owner, MOYAN_ROUND) != Some(ctx.state.turn.round)
                 && (!ctx.state.deck.is_empty() || !ctx.state.discard.is_empty())
         }

@@ -150,7 +150,8 @@ pub(in crate::snap) fn append_vm_shan_options(
         .get(&(target, "mbcmfangzhu_ban".to_string()))
         .copied()
         .unwrap_or(0)
-        > 0;
+        > 0
+        || crate::rvm_bridge::modifiers::d34_flags::is_dddtongyu_hand_locked(core, target);
     let p = core.player(target);
     if !hand_banned {
         for &c in &p.hand {
@@ -164,7 +165,10 @@ pub(in crate::snap) fn append_vm_shan_options(
         }
     }
     for c in catalog.player_vm_view_as_extra_cards(core, target, false, Some(CardKind::Shan)) {
-        if !options.contains(&ChoiceOption::Card(c)) {
+        if (!crate::rvm_bridge::modifiers::d34_flags::is_dddtongyu_hand_locked(core, target)
+            || !p.hand.contains(&c))
+            && !options.contains(&ChoiceOption::Card(c))
+        {
             options.push(ChoiceOption::Card(c));
         }
     }
@@ -176,18 +180,23 @@ pub(in crate::snap) fn dying_save_options(
     responder: PlayerId,
     dying: PlayerId,
 ) -> Vec<ChoiceOption> {
+    let hand_locked =
+        crate::rvm_bridge::modifiers::d34_flags::is_dddtongyu_hand_locked(core, responder);
     let mut options = vec![ChoiceOption::Pass];
     if !crate::kernel::mbcmfangzhu_banned(core, responder) {
         let p = core.player(responder);
-        for &c in &p.hand {
-            if !crate::kernel::jinyan_blocks_black_trick(core, catalog, responder, c)
-                && is_tao_like(core, catalog, responder, c, dying)
-            {
-                options.push(ChoiceOption::Card(c));
+        if !hand_locked {
+            for &c in &p.hand {
+                if !crate::kernel::jinyan_blocks_black_trick(core, catalog, responder, c)
+                    && is_tao_like(core, catalog, responder, c, dying)
+                {
+                    options.push(ChoiceOption::Card(c));
+                }
             }
         }
         for c in catalog.player_vm_view_as_extra_cards(core, responder, false, None) {
-            if !crate::kernel::jinyan_blocks_black_trick(core, catalog, responder, c)
+            if (!hand_locked || !p.hand.contains(&c))
+                && !crate::kernel::jinyan_blocks_black_trick(core, catalog, responder, c)
                 && is_tao_like(core, catalog, responder, c, dying)
                 && !options.contains(&ChoiceOption::Card(c))
             {
@@ -200,6 +209,11 @@ pub(in crate::snap) fn dying_save_options(
     }
     for rdef in crate::kernel::dying_response_skills(core, catalog, responder, dying) {
         options.push(ChoiceOption::Skill(rdef));
+    }
+    for opt in crate::kernel::dying_save_skill_options(core, catalog, responder, dying) {
+        if !options.contains(&opt) {
+            options.push(opt);
+        }
     }
     options
 }

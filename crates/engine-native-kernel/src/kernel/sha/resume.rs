@@ -412,10 +412,7 @@ impl ShaResolveMachine {
             if let Some(ChoiceOption::Card(new_sha)) = ctx.answer().first().copied() {
                 if ctx.core.player(self.source).hand.contains(&new_sha) {
                     ctx.discard_from_hand(self.source, new_sha);
-                    ctx.emit(EventData::CardResponded {
-                        card: new_sha,
-                        player: self.source,
-                    });
+                    crate::kernel::emit_card_responded_as(ctx, self.source, new_sha, CardKind::Sha);
                     if let Some(fid) = self.current_sha_frame_id(ctx) {
                         ctx.core
                             .vm_aux
@@ -532,10 +529,7 @@ impl ShaResolveMachine {
             if let Some(ChoiceOption::Card(shan)) = ctx.answer().first().copied() {
                 if ctx.core.player(self.target).hand.contains(&shan) {
                     ctx.discard_from_hand(self.target, shan);
-                    ctx.emit(EventData::CardResponded {
-                        card: shan,
-                        player: self.target,
-                    });
+                    crate::kernel::emit_card_responded_as(ctx, self.target, shan, CardKind::Shan);
                     return Some(self.finish_or_defer_sha_end(ctx, false));
                 }
             }
