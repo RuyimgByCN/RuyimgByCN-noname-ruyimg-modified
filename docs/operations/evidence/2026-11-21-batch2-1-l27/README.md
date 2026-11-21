@@ -60,3 +60,5 @@
    - `build:native` / `smoke:native`（`{"total":83,"failed":0}`、`sources=37/37 packages=46/46`） / `build`（含 `git checkout -- apps/web-client/dist/`）：exit `0`
 3. **脚本与全仓门禁**：
    - `python3 -B scripts/recount_g0.py`、`test_report_phase*.py`（`22 OK`）及 `python3 -B scripts/preflight.py`（全部 22 项，含 `test_check_source_lines.py`、`check-source-lines.py`、`check-native-layering.py`、`check_doc_line_refs.py --strict`、`check_evidence_budget.py`）全过。
+4. **发布前向补全说明**：
+   - 首轮提交 `4e37d810e676627d53ad1c5a56c1dbc2286cb3ce` 的 CI Run `44914629985`（`2/10`）因遗漏暂存新建模块 `l27_fixes.rs` 与 `l27_fixes_b.rs` 导致远端 `E0583` 编译失败；已留痕入 [ci-runs.md](../ci-runs.md) 并通过前向提交补入这两个文件后重跑 `preflight.py` 发布精确头验证。
