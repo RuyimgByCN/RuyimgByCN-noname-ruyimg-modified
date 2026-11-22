@@ -24,6 +24,11 @@ impl Engine {
             crate::state::GameMode::Versus { teams, .. } => Some(teams),
             _ => None,
         };
+        let has_kapaikeshi = seat.is_some_and(|v| {
+            self.catalog
+                .skill_by_name("txhj_kapaikeshi")
+                .is_some_and(|d| core.has_skill(v, d))
+        });
         let players = core
             .players
             .iter()
@@ -69,7 +74,16 @@ impl Engine {
                     alive: p.alive,
                     hp: p.hp,
                     max_hp: p.max_hp,
-                    hand: if full_info || own {
+                    hand: if full_info
+                        || own
+                        || seat.is_some_and(|v| {
+                            v != i
+                                && self
+                                    .catalog
+                                    .skill_by_name("txhj_kapaikeshi")
+                                    .is_some_and(|d| core.has_skill(v, d))
+                        })
+                    {
                         crate::view::HandView::Own(p.hand.clone())
                     } else {
                         crate::view::HandView::Hidden
@@ -141,7 +155,7 @@ impl Engine {
                         full_info
                             || match card.zone {
                                 Hand => {
-                                    (seat.is_some() && card.owner == seat)
+                                    (seat.is_some() && (card.owner == seat || has_kapaikeshi))
                                         || card.owner.is_some_and(|owner| {
                                             core.vm_aux
                                                 .flags

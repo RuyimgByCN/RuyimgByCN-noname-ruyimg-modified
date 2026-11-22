@@ -286,6 +286,14 @@ impl ShaResolveMachine {
             ctx.to_discard(shan);
         }
         note_longdan_sha_source(ctx, self.target, self.source);
+        if ctx.catalog.vm_card_history {
+            if let Some(fid) = self.current_sha_frame_id(ctx) {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((self.target, format!("l11_sha_dodge_ok:{fid}:{shan}")), 1);
+            }
+        }
         let base_depth = ctx.res.stack.len();
         crate::kernel::emit_card_responded_as(ctx, self.target, shan, CardKind::Shan);
         let has_final = (ctx.catalog.hooks.reguhuo_has_pending_final)(ctx.core, self.target);

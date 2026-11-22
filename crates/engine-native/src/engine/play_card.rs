@@ -458,6 +458,20 @@ pub(super) fn play_card(
                         }
                     }
                     let player = core.turn.current;
+                    if matches!(kind, CardKind::ShanDian | CardKind::HongShui)
+                        && (catalog.blocks_delayed_trick(core, player)
+                            || crate::rvm_bridge::modifiers::eval_card_target_canceled(
+                                core,
+                                catalog,
+                                player,
+                                player,
+                                card,
+                                kind,
+                                crate::event::DamageNature::Normal,
+                            ))
+                    {
+                        return Err(RejectReason::IllegalTargets);
+                    }
                     if core
                         .player(player)
                         .judge
@@ -607,11 +621,24 @@ pub(super) fn play_card(
                         return Err(RejectReason::IllegalTargets);
                     }
                     let player = core.turn.current;
+                    let aoe_nature = match kind {
+                        CardKind::Chiyuxi => crate::event::DamageNature::Fire,
+                        CardKind::Jingleishan => crate::event::DamageNature::Thunder,
+                        _ => crate::event::DamageNature::Normal,
+                    };
                     let mut aoe_targets: Vec<PlayerId> = core
                         .seat_order_from(core.next_alive(player))
                         .into_iter()
-                        .filter(|p| *p != player)
+                        .filter(|p| {
+                            *p != player
+                                && !crate::rvm_bridge::modifiers::eval_card_target_canceled(
+                                    core, catalog, player, *p, card, kind, aoe_nature,
+                                )
+                        })
                         .collect();
+                    if aoe_targets.is_empty() {
+                        return Err(RejectReason::IllegalTargets);
+                    }
                     if matches!(kind, CardKind::Jingleishan | CardKind::Chiyuxi)
                         || (kind == catalog.card_kind(card) && cname == "txhj_jiuchiroulin")
                     {
@@ -708,10 +735,20 @@ pub(super) fn play_card(
                 }
                 CardKind::Guiyoujie => {
                     // 归有界（U05 swd，规则 v91）：他人延时锦囊——恰 1 名
-                    // 其他存活目标，且其判定区无同名延时
+                    // 其他存活目标，且未免疫延时锦囊、判定区无同名延时
                     if targets.len() != 1
                         || !core.player(targets[0]).alive
                         || targets[0] == core.turn.current
+                        || catalog.blocks_delayed_trick(core, targets[0])
+                        || crate::rvm_bridge::modifiers::eval_card_target_canceled(
+                            core,
+                            catalog,
+                            core.turn.current,
+                            targets[0],
+                            card,
+                            kind,
+                            crate::event::DamageNature::Normal,
+                        )
                         || core.player(targets[0])
                             .judge
                             .iter()
@@ -849,162 +886,21 @@ pub(super) fn play_card(
                 }
                 // 闪/无懈可击：仅在响应窗口打出，不可主动使用
                 CardKind::Shan | CardKind::Nullify => return Err(RejectReason::WrongPhase),
-                CardKind::Shuigong => {
-                    let is_tx_shuiyan = kind == catalog.card_kind(card)
-                        && catalog
-                            .cards
-                            .get(card as usize)
-                            .is_some_and(|cd| cd.name == "txhj_shuiyan");
-                    if is_tx_shuiyan {
-                        if targets.len() != 1
-                            || targets[0] == core.turn.current
-                            || !core.player(targets[0]).alive
-                        {
-                            return Err(RejectReason::IllegalTargets);
-                        }
-                    } else {
-                        // 水攻：所有有装备的存活角色（多目标）
-                        for t in &targets {
-                            if !core.player(*t).alive || core.player(*t).equips.is_empty() {
-                                return Err(RejectReason::IllegalTargets);
-                            }
-                        }
-                    }
-                }
-                CardKind::Fudichouxin => {
-                    // 釜底抽薪：恰 1 名其他存活目标，双方均有手牌（可拼点）
-                    if targets.len() != 1 {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                    let target = targets[0];
-                    if target == core.turn.current
-                        || !core.player(target).alive
-                        || core.player(target).hand.is_empty()
-                        || core.player(core.turn.current).hand.is_empty()
-                    {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                }
-                CardKind::Chenhuodajie => {
-                    // 趁火打劫（G1 运筹帷幄）：恰 1 名其他存活且有手牌的目标
-                    if targets.len() != 1 {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                    let target = targets[0];
-                    if target == core.turn.current
-                        || !core.player(target).alive
-                        || core.player(target).hand.is_empty()
-                    {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                }
-                CardKind::Linghunzhihuo => {
-                    // 灵魂之火：恰 1 名存活目标（可含自己）
-                    if targets.len() != 1 || !core.player(targets[0]).alive {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                }
-                CardKind::Zhaomingdan => {
-                    // 照明弹：恰 1 名其他存活且有手牌的目标
-                    if targets.len() != 1 {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                    let target = targets[0];
-                    if target == core.turn.current
-                        || !core.player(target).alive
-                        || core.player(target).hand.is_empty()
-                    {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                }
-                CardKind::Jihuocard => {
-                    // 急耗卡：自-target
-                    if !targets.is_empty() {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                }
-                CardKind::Youdishenru => {
-                    // 诱敌深入：仅作为杀的响应打出（响应窗口内），不可主动使用
-                    return Err(RejectReason::WrongPhase);
-                }
-                CardKind::Caochuanjiejian => {
-                    // 草船借箭：恰 1 名其他存活且有手牌的目标
-                    if targets.len() != 1 {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                    let target = targets[0];
-                    if target == core.turn.current
-                        || !core.player(target).alive
-                        || core.player(target).hand.is_empty()
-                    {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                }
-                CardKind::Shezhanqunru => {
-                    // 舌战群儒：自-target；目标=所有有手牌的其他角色
-                    if !targets.is_empty() {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                }
-                CardKind::Geanguanhuo => {
-                    // 隔岸观火：恰 2 名其他存活且有手牌的目标
-                    if targets.len() != 2 {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                    for t in &targets {
-                        if *t == core.turn.current
-                            || !core.player(*t).alive
-                            || core.player(*t).hand.is_empty()
-                        {
-                            return Err(RejectReason::IllegalTargets);
-                        }
-                    }
-                }
-                CardKind::Toulianghuanzhu => {
-                    // 偷梁换柱（G1 运筹帷幄）：恰 1 名其他存活且有手牌的目标；
-                    // 己方也需有手牌（各选一张交换）
-                    if targets.len() != 1 {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                    let target = targets[0];
-                    if target == core.turn.current
-                        || !core.player(target).alive
-                        || core.player(target).hand.is_empty()
-                        || core.player(core.turn.current).hand.is_empty()
-                    {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                }
-                CardKind::WangmeiZhike => {
-                    // 望梅止渴（G1 玩点论杀）：恰 1 名存活目标（可含自己）
-                    if targets.len() != 1 {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                    if !core.player(targets[0]).alive {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                }
-                CardKind::Shujinsan => {
-                    // 舒筋散（G1 古剑）：恰 1 名存活且有手牌的目标（可含自己；
-                    // 登记差异：上游含装备区，原生仅手牌）
-                    if targets.len() != 1
-                        || !core.player(targets[0]).alive
-                        || core.player(targets[0]).hand.is_empty()
-                    {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                }
-                CardKind::Mianlijinzhen => {
-                    // 面里金针（G1 古剑）：恰 1 名体力值不小于使用者的存活目标
-                    //（可含自己）
-                    if targets.len() != 1
-                        || !core.player(targets[0]).alive
-                        || core.player(targets[0]).hp < core.player(core.turn.current).hp
-                    {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                }
-                CardKind::Feibiao
+                CardKind::Shuigong
+                | CardKind::Fudichouxin
+                | CardKind::Chenhuodajie
+                | CardKind::Linghunzhihuo
+                | CardKind::Zhaomingdan
+                | CardKind::Jihuocard
+                | CardKind::Youdishenru
+                | CardKind::Caochuanjiejian
+                | CardKind::Shezhanqunru
+                | CardKind::Geanguanhuo
+                | CardKind::Toulianghuanzhu
+                | CardKind::WangmeiZhike
+                | CardKind::Shujinsan
+                | CardKind::Mianlijinzhen
+                | CardKind::Feibiao
                 | CardKind::Jinlianzhu
                 | CardKind::Ziyangdan
                 | CardKind::Shihuifen

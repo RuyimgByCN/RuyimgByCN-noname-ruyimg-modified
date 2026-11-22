@@ -502,6 +502,105 @@ pub(super) fn validate_tail_ext_targets(
                 return Err(RejectReason::IllegalTargets);
             }
         }
+        CardKind::Shuigong => {
+            let is_tx_shuiyan = kind == catalog.card_kind(card)
+                && catalog
+                    .cards
+                    .get(card as usize)
+                    .is_some_and(|cd| cd.name == "txhj_shuiyan");
+            if is_tx_shuiyan {
+                if targets.len() != 1
+                    || targets[0] == core.turn.current
+                    || !core.player(targets[0]).alive
+                {
+                    return Err(RejectReason::IllegalTargets);
+                }
+            } else {
+                for t in targets {
+                    if !core.player(*t).alive || core.player(*t).equips.is_empty() {
+                        return Err(RejectReason::IllegalTargets);
+                    }
+                }
+            }
+        }
+        CardKind::Fudichouxin => {
+            if targets.len() != 1 {
+                return Err(RejectReason::IllegalTargets);
+            }
+            let target = targets[0];
+            if target == core.turn.current
+                || !core.player(target).alive
+                || core.player(target).hand.is_empty()
+                || core.player(core.turn.current).hand.is_empty()
+            {
+                return Err(RejectReason::IllegalTargets);
+            }
+        }
+        CardKind::Chenhuodajie | CardKind::Zhaomingdan | CardKind::Caochuanjiejian => {
+            if targets.len() != 1 {
+                return Err(RejectReason::IllegalTargets);
+            }
+            let target = targets[0];
+            if target == core.turn.current
+                || !core.player(target).alive
+                || core.player(target).hand.is_empty()
+            {
+                return Err(RejectReason::IllegalTargets);
+            }
+        }
+        CardKind::Linghunzhihuo | CardKind::WangmeiZhike => {
+            if targets.len() != 1 || !core.player(targets[0]).alive {
+                return Err(RejectReason::IllegalTargets);
+            }
+        }
+        CardKind::Jihuocard | CardKind::Shezhanqunru => {
+            if !targets.is_empty() {
+                return Err(RejectReason::IllegalTargets);
+            }
+        }
+        CardKind::Youdishenru => return Err(RejectReason::WrongPhase),
+        CardKind::Geanguanhuo => {
+            if targets.len() != 2 {
+                return Err(RejectReason::IllegalTargets);
+            }
+            for t in targets {
+                if *t == core.turn.current
+                    || !core.player(*t).alive
+                    || core.player(*t).hand.is_empty()
+                {
+                    return Err(RejectReason::IllegalTargets);
+                }
+            }
+        }
+        CardKind::Toulianghuanzhu => {
+            if targets.len() != 1 {
+                return Err(RejectReason::IllegalTargets);
+            }
+            let target = targets[0];
+            if target == core.turn.current
+                || !core.player(target).alive
+                || core.player(target).hand.is_empty()
+                || core.player(core.turn.current).hand.is_empty()
+            {
+                return Err(RejectReason::IllegalTargets);
+            }
+        }
+        CardKind::Shujinsan => {
+            if targets.len() != 1
+                || !core.player(targets[0]).alive
+                || core.player(targets[0]).hand.is_empty()
+            {
+                return Err(RejectReason::IllegalTargets);
+            }
+        }
+        CardKind::Mianlijinzhen => {
+            if targets.len() != 1
+                || !core.player(targets[0]).alive
+                || core.player(targets[0]).hp < core.player(core.turn.current).hp
+            {
+                return Err(RejectReason::IllegalTargets);
+            }
+        }
         CardKind::Tanhuadong
         | CardKind::Yougeng
         | CardKind::Qingtuan

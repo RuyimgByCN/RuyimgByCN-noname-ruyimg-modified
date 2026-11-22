@@ -15,7 +15,7 @@ mod d34_view_as;
 #[path = "d34_u05_mods.rs"]
 mod d34_u05_mods;
 #[path = "d34_l11_mods.rs"]
-mod d34_l11_mods;
+pub(super) mod d34_l11_mods;
 #[path = "d34_u01_mods.rs"]
 mod d34_u01_mods;
 #[path = "d34_unrespondable.rs"]
@@ -27,7 +27,7 @@ pub use d34_l11_mods::{
 pub use d34_u01_mods::{
     is_dddfusi_hand_locked, is_dddtongyu_hand_locked, is_u01_hand_locked, is_u01_shown_card,
 };
-pub use d34_unrespondable::apply_card_unrespondable;
+pub use d34_unrespondable::{apply_card_unrespondable, apply_card_unrespondable_with_nature};
 pub use d34_view_as::find_d34_flag_view_as;
 
 #[inline]
@@ -132,15 +132,13 @@ pub fn apply_hand_limit(
     {
         limit -= 1;
     }
-    if flag_val(state, player, "l11_buff_handlimit_maxhp") > 0
-        || has_ext_skill(state, catalog, player, "buff_txhj_xiongziyingfa")
-    {
-        limit = limit.max(state.player(player).max_hp as i32);
-    }
     let l11_plus3 = flag_val(state, player, "l11_buff_handlimit_plus3");
     if l11_plus3 > 0 {
         limit += l11_plus3 as i32;
-    } else if has_ext_skill(state, catalog, player, "buff_txhj_wuxiangdexinxue") {
+    } else if has_ext_skill(state, catalog, player, "buff_txhj_wuxiangdexinxue")
+        || has_ext_skill(state, catalog, player, "_buff_txhj_wuxiangdexinxue")
+        || has_ext_skill(state, catalog, player, "txhj_wuxiangdexinxue")
+    {
         limit += 3;
     }
     limit += if has_ext_skill(state, catalog, player, "txhj_aHaoSkill3") {
@@ -250,7 +248,10 @@ pub fn apply_attack_range(
     let l11_range = flag_val(state, player, "l11_buff_attack_range_plus3");
     if l11_range > 0 {
         cur += l11_range as i32;
-    } else if has_ext_skill(state, catalog, player, "buff_txhj_changbingguangren") {
+    } else if has_ext_skill(state, catalog, player, "buff_txhj_changbingguangren")
+        || has_ext_skill(state, catalog, player, "_buff_txhj_changbingguangren")
+        || has_ext_skill(state, catalog, player, "txhj_changbingguangren")
+    {
         cur += 3;
     }
     if (has_ext_skill(state, catalog, player, "hanqiang")
@@ -365,18 +366,6 @@ pub fn apply_sha_use_limit(
     {
         cur += 1;
     }
-    if has_weapon(state, catalog, player) {
-        if flag_val(state, player, "l11_weapon_yanrenzhinu") > 0
-            || has_ext_skill(state, catalog, player, "buff_txhj_yanrenzhinu")
-        {
-            unlimited = true;
-        }
-        if flag_val(state, player, "l11_weapon_ziyideyongzhan") > 0
-            || has_ext_skill(state, catalog, player, "buff_txhj_ziyideyongzhan")
-        {
-            cur += 1;
-        }
-    }
     if has_ext_skill(state, catalog, player, "ssr_paoxiao")
         || flag_val(state, player, "l25_paoxiao_unlimited") > 0
         || flag_val(state, player, "l19_baozou_sha_unlimited") > 0
@@ -448,12 +437,6 @@ pub fn apply_sha_extra_targets(
         }
         extra += flag_val(state, player, "kangyin2_bonus_applied") as i32;
         extra += flag_val(state, player, "ddd_xianxi_target_added") as i32;
-        if has_weapon(state, catalog, player)
-            && (flag_val(state, player, "l11_weapon_ziyideyongzhan") > 0
-                || has_ext_skill(state, catalog, player, "buff_txhj_ziyideyongzhan"))
-        {
-            extra += 1;
-        }
         if flag_val(state, player, "u05_mod:gwchuanxin") > 0
             || flag_val(state, player, "u05_mod:shewu") > 0
         {
@@ -488,7 +471,9 @@ pub fn apply_card_distance_unlimited_to(
     if is_trick
         && (has_ext_skill(state, catalog, player, "ssr_qicai")
             || flag_val(state, player, "l11_buff_trick_no_distance") > 0
-            || has_ext_skill(state, catalog, player, "buff_txhj_yueyingdezhihui"))
+            || has_ext_skill(state, catalog, player, "buff_txhj_yueyingdezhihui")
+            || has_ext_skill(state, catalog, player, "_buff_txhj_yueyingdezhihui")
+            || has_ext_skill(state, catalog, player, "txhj_yueyingdezhihui"))
     {
         unlimited = true;
     }
@@ -501,12 +486,6 @@ pub fn apply_card_distance_unlimited_to(
         if flag_val(state, player, "ddd_dddduanbing_range_mod") > 0
             || has_ext_skill(state, catalog, player, "sheshu")
             || flag_val(state, player, "yxs_sheshu_pierce") > 0
-        {
-            unlimited = true;
-        }
-        if has_weapon(state, catalog, player)
-            && (flag_val(state, player, "l11_weapon_pozhenzhifeng") > 0
-                || has_ext_skill(state, catalog, player, "buff_txhj_pozhenzhifeng"))
         {
             unlimited = true;
         }
@@ -607,9 +586,11 @@ pub fn apply_card_target_canceled(
     }
     if matches!(
         kind,
-        CardKind::Le | CardKind::Bing | CardKind::ShanDian | CardKind::HongShui
+        CardKind::Le | CardKind::Bing | CardKind::ShanDian | CardKind::HongShui | CardKind::Guiyoujie
     ) && (flag_val(state, target, "l11_buff_no_delayed_trick") > 0
         || has_ext_skill(state, catalog, target, "buff_txhj_wenhejibei")
+        || has_ext_skill(state, catalog, target, "_buff_txhj_wenhejibei")
+        || has_ext_skill(state, catalog, target, "txhj_wenhejibei")
         || has_ext_skill(state, catalog, target, "xinfu_pdgyingshi"))
     {
         canceled = true;
@@ -841,32 +822,6 @@ pub fn apply_damage_amount(
                 cur += 1;
             }
         }
-        if nature == DamageNature::Fire {
-            if flag_val(state, src, "l11_buff_fire_dmg_plus") > 0
-                || has_ext_skill(state, catalog, src, "buff_txhj_yanhuo")
-            {
-                cur += 1;
-            }
-            if has_weapon(state, catalog, src)
-                && (flag_val(state, src, "l11_weapon_yanhuozhiren") > 0
-                    || has_ext_skill(state, catalog, src, "buff_txhj_yanhuozhiren"))
-            {
-                cur += 1;
-            }
-        }
-        if nature == DamageNature::Thunder {
-            if flag_val(state, src, "l11_buff_thunder_dmg_plus") > 0
-                || has_ext_skill(state, catalog, src, "buff_txhj_jinglei")
-            {
-                cur += 1;
-            }
-            if has_weapon(state, catalog, src)
-                && (flag_val(state, src, "l11_weapon_jingleizhiren") > 0
-                    || has_ext_skill(state, catalog, src, "buff_txhj_jingleizhiren"))
-            {
-                cur += 1;
-            }
-        }
     }
 
     if has_ext_skill(state, catalog, target, "ssr_manjia") {
@@ -895,18 +850,14 @@ pub fn apply_damage_amount(
     cur = super::d34_l28_mods::rewrite_armor_damage_mod(
         state, catalog, source, target, card, nature, cur,
     );
-    if nature == DamageNature::Fire
-        && (flag_val(state, target, "l11_buff_fire_shield") > 0
-            || flag_val(state, target, "l11_armor_guard:txminguangkai") > 0
-            || has_ext_skill(state, catalog, target, "buff_txhj_xihuo"))
-    {
+    if nature == DamageNature::Fire && flag_val(state, target, "l11_armor_guard:txminguangkai") > 0 {
         return 0;
     }
-    if nature == DamageNature::Thunder
-        && (flag_val(state, target, "l11_buff_thunder_shield") > 0
-            || has_ext_skill(state, catalog, target, "buff_txhj_dinglei"))
-    {
-        return 0;
+    if nature == DamageNature::Fire && flag_val(state, target, "l11_buff_fire_shield") > 0 {
+        cur = (cur - 1).max(0);
+    }
+    if nature == DamageNature::Thunder && flag_val(state, target, "l11_buff_thunder_shield") > 0 {
+        cur = (cur - 1).max(0);
     }
     if d34_l11_mods::tpys_damage_prevented(state, catalog, source, target, card, nature) {
         return 0;
@@ -992,9 +943,15 @@ pub fn apply_ignore_armor_with_card(
     {
         ignore = true;
     }
-    if has_weapon(state, catalog, source)
+    if state.turn.current == source
+        && state.turn.phase == crate::event::Phase::Play
+        && !state.is_friend_of(catalog, source, target)
+        && (has_weapon(state, catalog, source)
+            || d34_l11_mods::has_equipped_named(state, catalog, source, "txhj_feilong"))
         && (flag_val(state, source, "l11_weapon_pozhenzhifeng") > 0
-            || has_ext_skill(state, catalog, source, "buff_txhj_pozhenzhifeng"))
+            || has_ext_skill(state, catalog, source, "txhj_pozhenzhifeng")
+            || has_ext_skill(state, catalog, source, "buff_txhj_pozhenzhifeng")
+            || has_ext_skill(state, catalog, source, "_buff_txhj_pozhenzhifeng"))
     {
         ignore = true;
     }

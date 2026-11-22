@@ -884,7 +884,10 @@ impl HostBehavior {
             | HostBehavior::L11ServantSkillsB
             | HostBehavior::L11GeneralSkillsD
             | HostBehavior::L11GeneralSkillsE
-            | HostBehavior::L11GeneralSkillsF => None,
+            | HostBehavior::L11GeneralSkillsF
+            | HostBehavior::L11BuffsA
+            | HostBehavior::L11BuffsB
+            | HostBehavior::L11BuffHelpersA => None,
             HostBehavior::L01YiyiCard
             | HostBehavior::L01FirstKs
             | HostBehavior::L01NeiKey

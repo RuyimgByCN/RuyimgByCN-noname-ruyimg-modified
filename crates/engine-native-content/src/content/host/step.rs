@@ -180,6 +180,12 @@ pub(super) mod l11_skills_e;
 pub(super) mod l11_skills_e_asks;
 pub(super) mod l11_skills_f;
 pub(super) mod l11_skills_f_asks;
+pub(crate) mod l11_common_b3;
+pub(crate) use l11_common_b3::host_judge_settled;
+pub(super) mod l11_buffs_a;
+pub(super) mod l11_buffs_b;
+pub(super) mod l11_buffs_b_asks;
+pub(super) mod l11_buff_helpers_a;
 pub(super) mod l01_attitude;
 pub(super) mod l01_rules;
 pub(super) mod l01_yiyi;
@@ -1252,6 +1258,9 @@ impl HostMachine {
             HostBehavior::L11GeneralSkillsD => l11_skills_d::handle_l11_skills_d(self, ctx),
             HostBehavior::L11GeneralSkillsE => l11_skills_e::handle_l11_skills_e(self, ctx),
             HostBehavior::L11GeneralSkillsF => l11_skills_f::handle_l11_skills_f(self, ctx),
+            HostBehavior::L11BuffsA => l11_buffs_a::handle_l11_buffs_a(self, ctx),
+            HostBehavior::L11BuffsB => l11_buffs_b::handle_l11_buffs_b(self, ctx),
+            HostBehavior::L11BuffHelpersA => l11_buff_helpers_a::handle_l11_buff_helpers_a(self, ctx),
             HostBehavior::L01YiyiCard
             | HostBehavior::L01FirstKs
             | HostBehavior::L01NeiKey

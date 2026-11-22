@@ -138,6 +138,8 @@ impl Catalog {
                 | "potzhuangshi"
                 | "twxiafeng"
                 | "twzuhuo"
+                | "_buff_txhj_wuweizhile"
+                | "_buff_txhj_jiezizhidao"
         ) {
             return false;
         }
@@ -254,6 +256,14 @@ impl Catalog {
                 | "wansha"
                 | "benghuai"
                 | "kuangcai"
+                | "txhj_kapaikeshi"
+                | "txhj_wenhejibei"
+                | "txhj_yueyingdezhihui"
+                | "txhj_changbingguangren"
+                | "txhj_xiongziyingfa"
+                | "txhj_wuxiangdexinxue"
+                | "txhj_wuweizhile"
+                | "txhj_yuanduandilue"
         ) {
             return true;
         }

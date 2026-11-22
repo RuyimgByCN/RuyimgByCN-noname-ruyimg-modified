@@ -916,6 +916,73 @@ pub fn active_ask(
             core,
             catalog,
         ),
+        MachineSnapshot::Dismantle {
+            source,
+            target,
+            asked,
+            ..
+        } => {
+            if !*asked
+                || !catalog
+                    .skill_by_name("txhj_kapaikeshi")
+                    .is_some_and(|d| core.has_skill(*source, d))
+            {
+                return None;
+            }
+            let t = core.player(*target);
+            let options: Vec<ChoiceOption> = t
+                .hand
+                .iter()
+                .chain(t.equips.iter())
+                .chain(t.judge.iter())
+                .copied()
+                .map(ChoiceOption::Card)
+                .collect();
+            (!options.is_empty()).then(|| {
+                ask(
+                    *source,
+                    "txhj_kapaikeshi:choose_card",
+                    ChoiceKind::SelectCards,
+                    options,
+                    1,
+                    1,
+                    false,
+                )
+            })
+        }
+        MachineSnapshot::Snatch {
+            source,
+            target,
+            asked,
+            ..
+        } => {
+            if !*asked
+                || !catalog
+                    .skill_by_name("txhj_kapaikeshi")
+                    .is_some_and(|d| core.has_skill(*source, d))
+            {
+                return None;
+            }
+            let t = core.player(*target);
+            let options: Vec<ChoiceOption> = t
+                .hand
+                .iter()
+                .chain(t.equips.iter())
+                .copied()
+                .map(ChoiceOption::Card)
+                .collect();
+            (!options.is_empty()).then(|| {
+                ask(
+                    *source,
+                    "txhj_kapaikeshi:choose_card",
+                    ChoiceKind::SelectCards,
+                    options,
+                    1,
+                    1,
+                    false,
+                )
+            })
+        }
         // ---- 无询问机器 ----
         _ => None,
     }

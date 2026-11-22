@@ -138,6 +138,7 @@ pub(super) fn commit_equip(
         .flags
         .remove(&(player, format!("u01_equip_from_table:{frame_id}")))
         .is_some();
+    let from_hand = !from_table && ctx.core.player(player).hand.contains(&card);
     if from_table {
         ctx.core.table.retain(|&c| c != card);
     } else {
@@ -147,6 +148,12 @@ pub(super) fn commit_equip(
         ctx.to_discard(card);
         (ctx.catalog.hooks.on_cards_to_discard)(ctx, player, &[card], false);
         return;
+    }
+    if from_hand && ctx.catalog.vm_card_history {
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((player, format!("l11_equip_from_hand:{card}")), 1);
     }
     let played = ctx
         .core

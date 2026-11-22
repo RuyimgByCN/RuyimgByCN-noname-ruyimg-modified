@@ -1703,6 +1703,12 @@ pub enum HostBehavior {
     L11GeneralSkillsE,
     /// L11 太虚幻境 武将技 Group F（tag 732：`txhj_suoming`..`txhj_oldhuxiao` 共 18 技能）。
     L11GeneralSkillsF,
+    /// L11 太虚幻境 祝福与触发 Group A（tag 733：前 20 条祝福定义及 18 个 `_buff_txhj_*` 触发）。
+    L11BuffsA,
+    /// L11 太虚幻境 祝福与触发 Group B（tag 734：第 21–40 条祝福定义及 20 个 `_buff_txhj_*` 触发）。
+    L11BuffsB,
+    /// L11 太虚幻境 祝福配套衍生辅助技（tag 735：`txhj_kapaikeshi`..`txhj_huangtiannizhuan` 共 10 技能）。
+    L11BuffHelpersA,
     /// L01 AI优化「以逸待劳」（tag 860，`AI优化/extension.js:9205-9262`）：
     /// 国战/对决默认指定己方全员，其余模式指定 1–3 名角色；各目标依次摸 2 张再弃 2 张。
     L01YiyiCard,

@@ -4,6 +4,7 @@ use super::{
     card_suit, d34_l11_mods, d34_u05_mods, flag_val, has_ext_skill, has_slot_equipped, has_weapon,
 };
 use crate::catalog::{CardKind, Catalog, EquipSlot, Suit};
+use crate::event::DamageNature;
 use crate::ids::{CardId, PlayerId};
 use crate::state::GameStateCore;
 
@@ -14,6 +15,29 @@ pub fn apply_card_unrespondable(
     target: PlayerId,
     card: CardId,
     kind: CardKind,
+    unrespondable: bool,
+) -> bool {
+    apply_card_unrespondable_with_nature(
+        state,
+        catalog,
+        source,
+        target,
+        card,
+        kind,
+        DamageNature::Normal,
+        unrespondable,
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+pub fn apply_card_unrespondable_with_nature(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    source: PlayerId,
+    target: PlayerId,
+    card: CardId,
+    kind: CardKind,
+    nature: DamageNature,
     mut unrespondable: bool,
 ) -> bool {
     if kind.is_sha_like() {
@@ -30,8 +54,11 @@ pub fn apply_card_unrespondable(
             unrespondable = true;
         }
         if has_weapon(state, catalog, source)
+            && (nature != DamageNature::Normal
+                || matches!(kind, CardKind::FireSha | CardKind::LeiSha))
             && (flag_val(state, source, "l11_weapon_dunjiazhoufa") > 0
-                || has_ext_skill(state, catalog, source, "buff_txhj_dunjiazhoufa"))
+                || has_ext_skill(state, catalog, source, "buff_txhj_dunjiazhoufa")
+                || has_ext_skill(state, catalog, source, "_buff_txhj_dunjiazhoufa"))
         {
             unrespondable = true;
         }
@@ -64,10 +91,10 @@ pub fn apply_card_unrespondable(
     {
         unrespondable = true;
     }
-    if !kind.is_basic_kind()
-        && !kind.is_equip()
+    if d34_l11_mods::is_ordinary_trick_kind(kind)
         && (flag_val(state, source, "l11_buff_trick_unwuxie") > 0
-            || has_ext_skill(state, catalog, source, "buff_txhj_wenhezhenlue"))
+            || has_ext_skill(state, catalog, source, "buff_txhj_wenhezhenlue")
+            || has_ext_skill(state, catalog, source, "_buff_txhj_wenhezhenlue"))
     {
         unrespondable = true;
     }

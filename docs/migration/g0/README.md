@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-22 Batch L11-3（L11 太虚幻境 40 祝福＋38 触发＋10 衍生技共 +88→280/936）更新（待提交／发布）
+
+基线 HEAD `9c29b98996558302cadebec39c59ba8787cab86b`（Batch L01-Rules 已发布，CI Run `45017015012` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-rules-2` 首轮审查（#188，含 Chrome CDP）与 `verifier-ui` 次轮独立复核（#201 **`APPROVE`**）及主线全量门禁复测，清单更新为 **已复核等价 2,027／简化近似 2,397／缺失 0／上游未定义 0**（合计 4,424）：`L11 太虚幻境` 由 `192 / 744 / 0` 升为 **280 / 656 / 0**（+88：40 项 `buff_txhj_*`、38 项 `_buff_txhj_*` 触发与 10 项衍生辅助技 `txhj_kapaikeshi`..`txhj_huangtiannizhuan`；整包八项仍 `0/37`）。详见 [Batch L11-3 证据摘要](../../operations/evidence/2026-11-22-batch3-3-l11-3/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-22 Batch L01-Rules（L01 AI优化 69 技能＋1 卡牌 `yiyi`＋27 规则配置共 +97→133/133）更新（待提交／发布）
 
 基线 HEAD `042f5b811927476b1bf056bc73e462194eee34ce`（Batch L11-2 已发布，CI Run `45008789520` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-rules-2` 首轮（#180，含 Chrome CDP）与 `verifier-ui` 第三轮独立审查（#196 **`APPROVE`**）及主线全量门禁复测，清单更新为 **已复核等价 1,939／简化近似 2,485／缺失 0／上游未定义 0**（合计 4,424）：`L01 AI优化` 由 `36 / 97 / 0` 升为 **133 / 0 / 0**（+97：69 技能、`yiyi`、27 `ruleCoupled` 配置，达 100% 单项等价；整包八项仍 `0/37`）。详见 [Batch L01-Rules 证据摘要](../../operations/evidence/2026-11-22-batch4-1-l01-rules/README.md) 与 [inventory_status.json](inventory_status.json)。

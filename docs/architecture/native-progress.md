@@ -9,6 +9,13 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-22 Batch L11-3（L11 太虚幻境 40 祝福＋38 触发＋10 衍生技共 +88→280/936）合入（待提交／发布）
+
+- **基线、发布与版本**：HEAD `9c29b98996558302cadebec39c59ba8787cab86b`（Batch L01-Rules 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `45017015012` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。
+- **Batch L11-3 集成与复核**：合入 `swarm/conv-l11-b3` `ea623f255..91c68342c`（`verifier-rules-2` #188 + `verifier-ui` #201 **`APPROVE`**）：协同标签 `733..=735`（`HostBehavior::ALL: 593`）、`catalog/hooks.rs`、`d34_unrespondable.rs`、`judge_apply.rs`、`frame_hooks.rs`、`views.rs` 与 `tricks.rs`（保 `take_hand_card` 修 `recheck_12_dddshilie` 且保 `l11_discard_non_hand`）；关闭 `L11` 88 项祝福及触发/衍生技。
+- **清单计数与整包签署**：按 #201 升格 **88 项**（`L11` → **`280／656／0`**）；全仓更新为 **已复核等价 2,027／简化近似 2,397／缺失 0**，整包八项签署仍 `0/37`。
+- **主线实测**：`-D warnings` native/`wasm32`、4 crate **`2,819/0/6`**（`l_rounds` **`235/235`**、`g1` **`374/0/1`**）、`--workspace --no-fail-fast` **`8,126/0/8`**、`conformance` **`19/19`**、`desktop-client` **`20/0/1`**、`build:native` 后跨端校验、`web-client` **`540/0`**、`smoke:native` **`83/0`** 与 `preflight.py` 全过，见 [Batch L11-3 证据](../operations/evidence/2026-11-22-batch3-3-l11-3/README.md)。
+
 ### 2026-11-22 Batch L01-Rules（L01 AI优化 69 技能＋`yiyi`＋27 规则配置共 +97→133/133；100% 单项等价）合入（待提交／发布）
 
 - **基线、发布与版本**：HEAD `042f5b811927476b1bf056bc73e462194eee34ce`（Batch L11-2 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `45008789520` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。

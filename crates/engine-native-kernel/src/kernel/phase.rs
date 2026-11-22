@@ -60,6 +60,10 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
     // 逐月（U05 xianjian 云天河，规则 v161）：出牌阶段结束清白名单
     //（上游 zhuyue2 phaseUseEnd silent 同口径）
     if !begin && phase == Phase::Play {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(player, "l11_phase_sha_count".to_string()));
         ctx.core.turn.zhuyue_targets.clear();
         if ctx
             .core

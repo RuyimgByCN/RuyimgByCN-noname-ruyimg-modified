@@ -485,7 +485,43 @@ impl crate::catalog::SkillMachine for DismantleMachine {
         }
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        let selected: Option<crate::ids::CardId>;
         if !self.asked {
+            crate::kernel::elo_on_choice_before(
+                ctx.core,
+                ctx.catalog,
+                self.source,
+                "choose_player_card",
+            );
+            let kapaikeshi = ctx
+                .catalog
+                .skill_by_name("txhj_kapaikeshi")
+                .is_some_and(|d| ctx.core.has_skill(self.source, d));
+            if kapaikeshi {
+                let t = ctx.core.player(self.target);
+                let options: Vec<ChoiceOption> = t
+                    .hand
+                    .iter()
+                    .chain(t.equips.iter())
+                    .chain(t.judge.iter())
+                    .copied()
+                    .map(ChoiceOption::Card)
+                    .collect();
+                if !options.is_empty() {
+                    self.asked = true;
+                    return Flow::WaitChoice {
+                        observer: self.source,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "txhj_kapaikeshi:choose_card",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    };
+                }
+            }
             self.asked = true;
             let hand_visible = crate::kernel::elo_on_extract_player_card_begin(
                 ctx.core,
@@ -500,69 +536,97 @@ impl crate::catalog::SkillMachine for DismantleMachine {
             } else {
                 t.hand.first().copied()
             };
-            let pick = hand_pick
+            selected = hand_pick
                 .or_else(|| t.equips.first().copied())
                 .or_else(|| t.judge.first().copied());
-            if let Some(c) = pick {
-                // 从所在区移除
-                let from_hand = t.hand.contains(&c);
-                let from_judge = t.judge.contains(&c);
-                let from_equip = t.equips.contains(&c);
-                if from_hand {
-                    ctx.take_hand_card(self.target, c);
-                } else {
-                    let was_equip = ctx.catalog.card_kind(c).is_equip();
-                    let p = ctx.core.player_mut(self.target);
-                    p.equips.retain(|x| *x != c);
-                    p.judge.retain(|x| *x != c);
-                    if was_equip {
-                        revoke_equip_skills(ctx.core, ctx.catalog, self.target, c);
+        } else {
+            let t = ctx.core.player(self.target);
+            selected = ctx
+                .answer()
+                .first()
+                .and_then(|o| match o {
+                    ChoiceOption::Card(c)
+                        if t.hand.contains(c) || t.equips.contains(c) || t.judge.contains(c) =>
+                    {
+                        Some(*c)
                     }
-                }
-                ctx.to_discard(c);
-                ctx.log(LogEvent::CardDiscarded {
-                    player: self.target,
-                    cards: vec![c],
-                });
-                if from_hand {
-                    // 弃置事件：连营类「失去手牌」触发依赖此事件（ADR 0763）
-                    ctx.emit(EventData::CardsDiscarded {
-                        player: self.target,
-                        cards: vec![c],
-                    });
-                } else {
-                    (ctx.catalog.hooks.on_cards_to_discard)(ctx, self.target, &[c], false);
-                    if from_equip && ctx.catalog.vm_card_history {
-                        ctx.core.vm_aux.flags.insert(
-                            (self.target, format!("l11_discard_non_hand:{c}")),
-                            1,
-                        );
-                        ctx.emit(EventData::CardsDiscarded {
-                            player: self.target,
-                            cards: vec![c],
-                        });
-                    }
-                    if (from_judge || from_equip) && ctx.catalog.vm_card_history {
-                        ctx.note_cards_lost(self.target, &[c]);
-                        ctx.emit(EventData::CardsLost {
-                            player: self.target,
-                            cards: vec![c],
-                            origins: vec![if from_judge {
-                                crate::event::LostOrigin::Judge
-                            } else {
-                                crate::event::LostOrigin::Equip
-                            }],
-                        });
-                    }
-                }
-            }
-            let card = self.card;
-            if card != 0 {
-                ctx.to_discard(card);
-                ctx.core.table.retain(|x| *x != card);
-            }
+                    _ => None,
+                })
+                .or_else(|| t.hand.first().copied())
+                .or_else(|| t.equips.first().copied())
+                .or_else(|| t.judge.first().copied());
+        }
+        if let Some(c) = selected {
+            Self::apply_dismantle_card(ctx, self.target, c);
+        }
+        let card = self.card;
+        if card != 0 {
+            ctx.to_discard(card);
+            ctx.core.table.retain(|x| *x != card);
         }
         Flow::Done
+    }
+}
+
+impl DismantleMachine {
+    fn apply_dismantle_card(ctx: &mut Ctx<'_>, target: PlayerId, c: crate::ids::CardId) {
+        let t = ctx.core.player(target);
+        let from_hand = t.hand.contains(&c);
+        let from_judge = t.judge.contains(&c);
+        let from_equip = t.equips.contains(&c);
+        if from_hand {
+            ctx.take_hand_card(target, c);
+        } else {
+            let was_equip = ctx.catalog.card_kind(c).is_equip();
+            let p = ctx.core.player_mut(target);
+            p.equips.retain(|x| *x != c);
+            p.judge.retain(|x| *x != c);
+            if was_equip {
+                revoke_equip_skills(ctx.core, ctx.catalog, target, c);
+            }
+        }
+        ctx.to_discard(c);
+        ctx.log(LogEvent::CardDiscarded {
+            player: target,
+            cards: vec![c],
+        });
+        if from_hand {
+            if ctx.catalog.vm_card_history {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((target, format!("l11_hand_dismantle_card:{c}")), 1);
+            }
+            // 弃置事件：连营类「失去手牌」触发依赖此事件（ADR 0763）
+            ctx.emit(EventData::CardsDiscarded {
+                player: target,
+                cards: vec![c],
+            });
+        } else {
+            (ctx.catalog.hooks.on_cards_to_discard)(ctx, target, &[c], false);
+            if from_equip && ctx.catalog.vm_card_history {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((target, format!("l11_discard_non_hand:{c}")), 1);
+                ctx.emit(EventData::CardsDiscarded {
+                    player: target,
+                    cards: vec![c],
+                });
+            }
+            if (from_judge || from_equip) && ctx.catalog.vm_card_history {
+                ctx.note_cards_lost(target, &[c]);
+                ctx.emit(EventData::CardsLost {
+                    player: target,
+                    cards: vec![c],
+                    origins: vec![if from_judge {
+                        crate::event::LostOrigin::Judge
+                    } else {
+                        crate::event::LostOrigin::Equip
+                    }],
+                });
+            }
+        }
     }
 }
 
@@ -589,7 +653,42 @@ impl crate::catalog::SkillMachine for SnatchMachine {
         }
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        let selected: Option<crate::ids::CardId>;
         if !self.asked {
+            crate::kernel::elo_on_choice_before(
+                ctx.core,
+                ctx.catalog,
+                self.source,
+                "choose_player_card",
+            );
+            let kapaikeshi = ctx
+                .catalog
+                .skill_by_name("txhj_kapaikeshi")
+                .is_some_and(|d| ctx.core.has_skill(self.source, d));
+            if kapaikeshi {
+                let t = ctx.core.player(self.target);
+                let options: Vec<ChoiceOption> = t
+                    .hand
+                    .iter()
+                    .chain(t.equips.iter())
+                    .copied()
+                    .map(ChoiceOption::Card)
+                    .collect();
+                if !options.is_empty() {
+                    self.asked = true;
+                    return Flow::WaitChoice {
+                        observer: self.source,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "txhj_kapaikeshi:choose_card",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    };
+                }
+            }
             self.asked = true;
             let hand_visible = crate::kernel::elo_on_extract_player_card_begin(
                 ctx.core,
@@ -603,39 +702,75 @@ impl crate::catalog::SkillMachine for SnatchMachine {
             } else {
                 t.hand.first().copied()
             };
-            let pick = hand_pick.or_else(|| t.equips.first().copied());
-            if let Some(c) = pick {
-                let from_hand = ctx.core.player(self.target).hand.contains(&c);
-                let public_material = ctx.core.player(self.target).equips.contains(&c);
-                if from_hand {
-                    ctx.take_hand_card(self.target, c);
-                } else {
-                    let was_equip = ctx.catalog.card_kind(c).is_equip();
-                    let p = ctx.core.player_mut(self.target);
-                    p.equips.retain(|x| *x != c);
-                    if was_equip {
-                        revoke_equip_skills(ctx.core, ctx.catalog, self.target, c);
-                    }
-                }
-                ctx.core.player_mut(self.source).hand.push(c);
-                ctx.emit(EventData::CardsMoved {
-                    cards: vec![c],
-                    from: self.target,
-                    to: self.source,
-                });
-                ctx.log(LogEvent::CardsTaken {
-                    from: self.target,
-                    to: self.source,
-                    cards: vec![c],
-                    public: public_material,
-                });
-            }
-            let card = self.card;
-            if card != 0 {
-                ctx.to_discard(card);
-                ctx.core.table.retain(|x| *x != card);
-            }
+            selected = hand_pick.or_else(|| t.equips.first().copied());
+        } else {
+            let t = ctx.core.player(self.target);
+            selected = ctx
+                .answer()
+                .first()
+                .and_then(|o| match o {
+                    ChoiceOption::Card(c) if t.hand.contains(c) || t.equips.contains(c) => Some(*c),
+                    _ => None,
+                })
+                .or_else(|| t.hand.first().copied())
+                .or_else(|| t.equips.first().copied());
+        }
+        if let Some(c) = selected {
+            Self::apply_snatch_card(ctx, self.source, self.target, c);
+        }
+        let card = self.card;
+        if card != 0 {
+            ctx.to_discard(card);
+            ctx.core.table.retain(|x| *x != card);
         }
         Flow::Done
+    }
+}
+
+impl SnatchMachine {
+    fn apply_snatch_card(
+        ctx: &mut Ctx<'_>,
+        source: PlayerId,
+        target: PlayerId,
+        c: crate::ids::CardId,
+    ) {
+        let from_hand = ctx.core.player(target).hand.contains(&c);
+        let public_material = ctx.core.player(target).equips.contains(&c);
+        if from_hand {
+            ctx.take_hand_card(target, c);
+        } else {
+            let was_equip = ctx.catalog.card_kind(c).is_equip();
+            let p = ctx.core.player_mut(target);
+            p.equips.retain(|x| *x != c);
+            if was_equip {
+                revoke_equip_skills(ctx.core, ctx.catalog, target, c);
+            }
+        }
+        ctx.core.player_mut(source).hand.push(c);
+        if !public_material && ctx.catalog.vm_card_history {
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((target, format!("l11_hand_snatch_card:{c}")), 1);
+        }
+        ctx.emit(EventData::CardsMoved {
+            cards: vec![c],
+            from: target,
+            to: source,
+        });
+        if public_material && ctx.catalog.vm_card_history {
+            ctx.note_cards_lost(target, &[c]);
+            ctx.emit(EventData::CardsLost {
+                player: target,
+                cards: vec![c],
+                origins: vec![crate::event::LostOrigin::Equip],
+            });
+        }
+        ctx.log(LogEvent::CardsTaken {
+            from: target,
+            to: source,
+            cards: vec![c],
+            public: public_material,
+        });
     }
 }

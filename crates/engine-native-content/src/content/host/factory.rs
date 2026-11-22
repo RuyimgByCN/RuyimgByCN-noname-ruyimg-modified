@@ -123,6 +123,17 @@ impl HostSkillBehavior {
             HostBehavior::L11GeneralSkillsF => {
                 return super::step::l11_skills_f::machine_l11_skills_f(self, owner, event);
             }
+            HostBehavior::L11BuffsA => {
+                return super::step::l11_buffs_a::machine_l11_buffs_a(self, owner, event);
+            }
+            HostBehavior::L11BuffsB => {
+                return super::step::l11_buffs_b::machine_l11_buffs_b(self, owner, event);
+            }
+            HostBehavior::L11BuffHelpersA => {
+                return super::step::l11_buff_helpers_a::machine_l11_buff_helpers_a(
+                    self, owner, event,
+                );
+            }
             _ => {}
         }
         let (target, card) = match self.behavior {

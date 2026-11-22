@@ -193,6 +193,14 @@ pub struct ContentHooks {
         crate::ids::PlayerId,
         &[crate::ids::CardId],
     ) -> Vec<crate::ids::CardId>,
+    /// 判定结算完成钩子（`judgeEnd`，含天妒归属确定后）：返回 `true` 时通知判定机 `Yield` 以便推动派生摸牌/子机。
+    pub on_judge_settled: fn(
+        &mut crate::machine::Ctx<'_>,
+        crate::ids::PlayerId,
+        Option<CardKind>,
+        super::Suit,
+        crate::ids::CardId,
+    ) -> bool,
 }
 
 impl ContentHooks {
@@ -236,5 +244,6 @@ impl ContentHooks {
         on_host_event: |_, _| {},
         before_recover: |_, _| true,
         on_before_gain_hand: |_, _, _, cards| cards.to_vec(),
+        on_judge_settled: |_, _, _, _, _| false,
     };
 }

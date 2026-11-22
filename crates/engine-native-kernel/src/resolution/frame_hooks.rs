@@ -17,6 +17,22 @@ pub(super) fn on_frame_popped(
                     .remove(&(*player, format!("l11_discard_non_hand:{c}")));
             }
         }
+        if catalog.vm_card_history {
+            for &c in cards {
+                core.vm_aux
+                    .flags
+                    .remove(&(*player, format!("l11_hand_dismantle_card:{c}")));
+            }
+        }
+    }
+    if let EventData::CardsMoved { from, cards, .. } = &popped.data {
+        if catalog.vm_card_history {
+            for &c in cards {
+                core.vm_aux
+                    .flags
+                    .remove(&(*from, format!("l11_hand_snatch_card:{c}")));
+            }
+        }
     }
     if matches!(popped.data, EventData::TurnEnded { .. })
         && catalog.skill_by_name("txyinli").is_some()
@@ -65,6 +81,9 @@ pub(super) fn on_frame_popped(
         core.vm_aux
             .flags
             .remove(&(*player, format!("wuxing_equip_use:{}", popped.id)));
+        core.vm_aux
+            .flags
+            .remove(&(*player, format!("l11_equip_from_hand:{card}")));
         if let Some(fusi_owner) = core
             .vm_aux
             .flags
@@ -286,4 +305,8 @@ fn on_card_use_popped(
     core.vm_aux
         .flags
         .remove(&(u.player, format!("dddfusi_used_owner:{popped_id}")));
+    let dodge_prefix = format!("l11_sha_dodge_ok:{popped_id}:");
+    core.vm_aux
+        .flags
+        .retain(|(_, k), _| !k.starts_with(&dodge_prefix));
 }

@@ -302,6 +302,15 @@ impl HostSkillBehavior {
             HostBehavior::L11GeneralSkillsF => {
                 super::step::l11_skills_f::activate_l11_skills_f(self, ctx, owner)
             }
+            HostBehavior::L11BuffsA => {
+                super::step::l11_buffs_a::activate_l11_buffs_a(self, ctx, owner)
+            }
+            HostBehavior::L11BuffsB => {
+                super::step::l11_buffs_b::activate_l11_buffs_b(self, ctx, owner)
+            }
+            HostBehavior::L11BuffHelpersA => {
+                super::step::l11_buff_helpers_a::activate_l11_buff_helpers_a(self, ctx, owner)
+            }
             HostBehavior::L01NeiKey | HostBehavior::L01AiRuleHooks => {
                 super::step::l01_rules::activate_l01_skill(&self.name, self.behavior, ctx, owner)
             }

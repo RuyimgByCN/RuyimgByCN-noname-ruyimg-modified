@@ -666,13 +666,14 @@ pub fn eval_card_unrespondable(
             _ => {}
         }
     });
-    super::d34_flags::apply_card_unrespondable(
+    super::d34_flags::apply_card_unrespondable_with_nature(
         state,
         catalog,
         source,
         target,
         card,
         kind,
+        nature,
         unrespondable,
     )
 }

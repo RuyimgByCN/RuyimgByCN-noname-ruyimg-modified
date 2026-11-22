@@ -16,6 +16,8 @@ mod extension_choices_l11;
 mod extension_choices_misc;
 #[path = "extension_choices_l11_b2.rs"]
 mod extension_choices_l11_b2;
+#[path = "extension_choices_l11_b3.rs"]
+mod extension_choices_l11_b3;
 
 pub(super) fn public_attitude(view: &crate::view::PlayerView, seat: u8, target: u8) -> i32 {
     if target == seat {
@@ -241,7 +243,16 @@ pub(super) fn plan_extension_choice_action(
                     selection,
                 })
             }
-            _ => None,
+            _ => extension_choices_l11_b3::plan_l11_b3_choice_action(
+                catalog,
+                input,
+                id,
+                prompt,
+                options,
+                min,
+                max,
+                allow_cancel,
+            ),
         },
         // U06 欢乐卡牌·手里剑（card.js:47-59）：背面朝上且装备旋涡面具时宁可受 1 伤保留面具，否则弃置最低价值装备
         "host_target_discard_equip" => {
@@ -866,6 +877,18 @@ pub(super) fn plan_extension_choice_action(
         })
         .or_else(|| {
             extension_choices_l11_b2::plan_l11_b2_choice_action(
+                catalog,
+                input,
+                id,
+                prompt,
+                options,
+                min,
+                max,
+                allow_cancel,
+            )
+        })
+        .or_else(|| {
+            extension_choices_l11_b3::plan_l11_b3_choice_action(
                 catalog,
                 input,
                 id,

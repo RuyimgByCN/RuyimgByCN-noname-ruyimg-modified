@@ -22,7 +22,7 @@ fn has_armor(state: &GameStateCore, catalog: &Catalog, seat: PlayerId) -> bool {
         .any(|&cid| catalog.card_slot_of(state, cid) == Some(EquipSlot::Armor))
 }
 
-fn has_equipped_named(state: &GameStateCore, catalog: &Catalog, seat: PlayerId, name: &str) -> bool {
+pub(super) fn has_equipped_named(state: &GameStateCore, catalog: &Catalog, seat: PlayerId, name: &str) -> bool {
     state
         .player(seat)
         .equips
@@ -30,7 +30,7 @@ fn has_equipped_named(state: &GameStateCore, catalog: &Catalog, seat: PlayerId, 
         .any(|&cid| catalog.cards.get(cid as usize).is_some_and(|cd| cd.name == name))
 }
 
-fn is_ordinary_trick_kind(kind: CardKind) -> bool {
+pub(in crate::rvm_bridge::modifiers) fn is_ordinary_trick_kind(kind: CardKind) -> bool {
     !kind.is_basic_kind()
         && kind.equip_slot().is_none()
         && !matches!(
@@ -146,7 +146,6 @@ pub(super) fn apply_hand_limit(
     limit -= flag_val(state, player, "l11_wuweizhile_minus1") as i32;
     // extension.js:5044 (`txyingyang`: pindian/hand bonus)
     if flag_val(state, player, "l11_yingyang_pindian_mod") > 0
-        || flag_val(state, player, "l11_buff_aozhan_no_post_heal") > 0
         || flag_val(state, player, "l11_quiz_hint_exclude_wrong") > 0
     {
         limit += 1;
@@ -514,6 +513,7 @@ pub(super) fn apply_card_distance_unlimited_to(
     if kind == CardKind::Bing
         && (flag_val(state, player, "l11_yuanduandilue_bing_no_dist") > 0
             || has_ext_skill(state, catalog, player, "buff_txhj_yuanduandilue")
+            || has_ext_skill(state, catalog, player, "_buff_txhj_yuanduandilue")
             || has_ext_skill(state, catalog, player, "txhj_yuanduandilue"))
     {
         unlimited = true;
@@ -909,7 +909,6 @@ pub(super) fn apply_damage_amount(
             || flag_val(state, src, "l11_mod:sbliegong_dmg") > 0
             || flag_val(state, src, "l11_mod:xinfu_zengdao_dao") > 0
             || has_ext_skill(state, catalog, src, "txhj_shiyuan")
-            || (flag_val(state, src, "l11_buff_juguzhidao") > 0 && state.player(target).hujia > 0)
         {
             cur += 1;
         }
@@ -929,8 +928,7 @@ pub(super) fn apply_damage_amount(
             && (matches!(nature, DamageNature::Fire | DamageNature::Thunder)
                 || flag_val(state, src, "l11_chiyan_all_fire") > 0)
             && (flag_val(state, src, "l11_taipingzhoufa") > 0
-                || flag_val(state, src, "l11_chiyan_all_fire") > 0
-                || has_ext_skill(state, catalog, src, "buff_txhj_taipingzhoufa"))
+                || flag_val(state, src, "l11_chiyan_all_fire") > 0)
         {
             cur += 1;
         }
@@ -977,16 +975,10 @@ pub(super) fn apply_damage_amount(
     }
     // extension_buff.js:288, 299, 651 (`xihuozhikai`, `dingleizhikai`, `cebeibuyu` with armor)
     if has_armor(state, catalog, target) {
-        if nature == DamageNature::Fire
-            && (flag_val(state, target, "l11_xihuozhikai") > 0
-                || has_ext_skill(state, catalog, target, "buff_txhj_xihuozhikai"))
-        {
+        if nature == DamageNature::Fire && flag_val(state, target, "l11_xihuozhikai") > 0 {
             cur = (cur - 1).max(0);
         }
-        if nature == DamageNature::Thunder
-            && (flag_val(state, target, "l11_dingleizhikai") > 0
-                || has_ext_skill(state, catalog, target, "buff_txhj_dingleizhikai"))
-        {
+        if nature == DamageNature::Thunder && flag_val(state, target, "l11_dingleizhikai") > 0 {
             cur = (cur - 1).max(0);
         }
         if is_trick

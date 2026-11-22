@@ -35,13 +35,13 @@ pub use support::{
 pub use step::step_l01_on_game_start;
 pub(crate) use step::{
     host_before_gain_hand, host_before_recover, host_card_use_after, host_draw_begin_step,
-    host_on_game_start, host_on_hand_card_removed, host_on_phase_use_end, host_on_player_died,
-    host_on_recover_before, host_on_round_start, host_preserves_skills_on_death,
-    host_sha_begin_step, host_sha_end_step, on_cards_to_discard_chengye, on_l25_host_event,
-    on_outer_settled_taipingyaoshu, on_phase_end_l10_scs, on_skill_removed_all, play_begin_l19,
-    play_begin_tianshu, play_end_rui_skill1, reguhuo_consume_resp, reguhuo_has_pending_final,
-    reguhuo_response_skill, reguhuo_spawn_final, reguhuo_spawn_response,
-    scsanruo_response_skill, u01_phase_skipped_hook,
+    host_judge_settled, host_on_game_start, host_on_hand_card_removed, host_on_phase_use_end,
+    host_on_player_died, host_on_recover_before, host_on_round_start,
+    host_preserves_skills_on_death, host_sha_begin_step, host_sha_end_step,
+    on_cards_to_discard_chengye, on_l25_host_event, on_outer_settled_taipingyaoshu,
+    on_phase_end_l10_scs, on_skill_removed_all, play_begin_l19, play_begin_tianshu,
+    play_end_rui_skill1, reguhuo_consume_resp, reguhuo_has_pending_final, reguhuo_response_skill,
+    reguhuo_spawn_final, reguhuo_spawn_response, scsanruo_response_skill, u01_phase_skipped_hook,
     u01_respond_skill_options as u01_respond_skill_options_hook,
     u01_try_activate_respond_skill as u01_try_activate_respond_skill_hook,
 };
@@ -308,7 +308,16 @@ impl SkillBehavior for HostSkillBehavior {
                 | "th_g_taipingyaoshu_ai"
                 | "th_pcaudio_shuijing_card"
                 | "th_pcaudio_xuanjian_card"
+                | "txhj_kapaikeshi"
+                | "txhj_huangtiannizhuan"
         )
+    }
+    fn hand_limit_base(
+        &self,
+        core: &crate::state::GameStateCore,
+        owner: PlayerId,
+    ) -> Option<usize> {
+        (self.name == "txhj_xiongziyingfa").then(|| core.player(owner).max_hp as usize)
     }
     fn window_trigger_meta(
         &self,
@@ -802,6 +811,11 @@ pub fn host_skill_trigger_meta(
         HostBehavior::L11GeneralSkillsD => step::l11_skills_d::trigger_meta_l11_skills_d(name),
         HostBehavior::L11GeneralSkillsE => step::l11_skills_e::trigger_meta_l11_skills_e(name),
         HostBehavior::L11GeneralSkillsF => step::l11_skills_f::trigger_meta_l11_skills_f(name),
+        HostBehavior::L11BuffsA => step::l11_buffs_a::trigger_meta_l11_buffs_a(name),
+        HostBehavior::L11BuffsB => step::l11_buffs_b::trigger_meta_l11_buffs_b(name),
+        HostBehavior::L11BuffHelpersA => {
+            step::l11_buff_helpers_a::trigger_meta_l11_buff_helpers_a(name)
+        }
         _ => crate::event::NativeDamageEffect::from_host(behavior)
             .map(|e| e.meta())
             .or_else(|| behavior.trigger_meta()),
@@ -879,6 +893,9 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         HostBehavior::L11GeneralSkillsD => step::l11_skills_d::limits_l11_skills_d(name),
         HostBehavior::L11GeneralSkillsE => step::l11_skills_e::limits_l11_skills_e(name),
         HostBehavior::L11GeneralSkillsF => step::l11_skills_f::limits_l11_skills_f(name),
+        HostBehavior::L11BuffsA => step::l11_buffs_a::limits_l11_buffs_a(name),
+        HostBehavior::L11BuffsB => step::l11_buffs_b::limits_l11_buffs_b(name),
+        HostBehavior::L11BuffHelpersA => step::l11_buff_helpers_a::limits_l11_buff_helpers_a(name),
         HostBehavior::GujianFoodQingtuan | HostBehavior::GujianFoodLuyugeng => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,

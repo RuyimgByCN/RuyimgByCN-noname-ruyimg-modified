@@ -248,11 +248,17 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
         // `mod.wuxieRespondable = false` 同口径）：窗口不询问、不抵消，
         // 直接委托效果机器。
         if self.window_open
-            && ctx
+            && (ctx
                 .catalog
                 .skill_by_name(crate::vocabulary::host::HLSS_FENGQI2_KEY)
                 .map(|def| ctx.core.has_skill(self.source, def))
                 .unwrap_or(false)
+                || crate::rvm_bridge::modifiers::is_trick_unwuxie_for_nullify_window(
+                    ctx.core,
+                    ctx.catalog,
+                    self.source,
+                    self.card,
+                ))
         {
             self.clear_stateplayer(ctx.core);
             self.window_open = false;

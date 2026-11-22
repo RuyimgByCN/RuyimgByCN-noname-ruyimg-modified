@@ -532,6 +532,14 @@ impl ShaResolveMachine {
             if let Some(ChoiceOption::Card(shan)) = ctx.answer().first().copied() {
                 if ctx.core.player(self.target).hand.contains(&shan) {
                     ctx.discard_from_hand(self.target, shan);
+                    if ctx.catalog.vm_card_history {
+                        if let Some(fid) = self.current_sha_frame_id(ctx) {
+                            ctx.core
+                                .vm_aux
+                                .flags
+                                .insert((self.target, format!("l11_sha_dodge_ok:{fid}:{shan}")), 1);
+                        }
+                    }
                     crate::kernel::emit_card_responded_as(ctx, self.target, shan, CardKind::Shan);
                     return Some(self.finish_or_defer_sha_end(ctx, false));
                 }

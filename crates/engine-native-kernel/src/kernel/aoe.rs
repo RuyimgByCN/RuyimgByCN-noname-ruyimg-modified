@@ -2,36 +2,53 @@ use super::*;
 
 /// 热闷（Boss 都市王，规则 v273）：防具槽空时南蛮/万箭对其无效
 ///（上游 useCardToBefore cancel 同口径；防具槽=equip_slot()==Armor 全族）。
-pub(super) fn dushiwang_remen_blocks(ctx: &Ctx<'_>, target: PlayerId) -> bool {
-    ctx.catalog
+pub fn dushiwang_remen_blocks_core(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    target: PlayerId,
+) -> bool {
+    catalog
         .skill_by_name(crate::vocabulary::names::BOSS_REMEN)
         .map(|def| {
-            ctx.core.has_skill(target, def)
-                && !ctx.core.player(target).equips.iter().any(|c| {
-                    ctx.catalog.card_slot_of(ctx.core, *c) == Some(crate::catalog::EquipSlot::Armor)
+            core.has_skill(target, def)
+                && !core.player(target).equips.iter().any(|c| {
+                    catalog.card_slot_of(core, *c) == Some(crate::catalog::EquipSlot::Armor)
                 })
         })
         .unwrap_or(false)
 }
 
+pub(super) fn dushiwang_remen_blocks(ctx: &Ctx<'_>, target: PlayerId) -> bool {
+    dushiwang_remen_blocks_core(ctx.core, ctx.catalog, target)
+}
+
 /// 帷幕（楚江王，规则 v275）：黑色锦囊牌对持有者无效（上游 mod
 /// targetEnabled 同族；AOE 面在窗口前跳过——万箭为红/无指向锦囊天然不
 /// 触发）。
-pub(super) fn weimu_blocks_aoe(ctx: &Ctx<'_>, card: crate::ids::CardId, target: PlayerId) -> bool {
-    if !ctx.core.table.contains(&card) {
+pub fn weimu_blocks_aoe_core(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    card: crate::ids::CardId,
+    target: PlayerId,
+) -> bool {
+    if !core.table.contains(&card) {
         return false;
     }
     let black = matches!(
-        ctx.catalog.cards[card as usize].suit,
+        catalog.cards[card as usize].suit,
         crate::catalog::Suit::Spade | crate::catalog::Suit::Club
     );
     if !black {
         return false;
     }
-    ctx.catalog
+    catalog
         .skill_by_name(crate::vocabulary::names::BOSS_WEIMU)
-        .map(|def| ctx.core.has_skill(target, def))
+        .map(|def| core.has_skill(target, def))
         .unwrap_or(false)
+}
+
+pub(super) fn weimu_blocks_aoe(ctx: &Ctx<'_>, card: crate::ids::CardId, target: PlayerId) -> bool {
+    weimu_blocks_aoe_core(ctx.core, ctx.catalog, card, target)
 }
 
 /// AOE 单目标段（南蛮入侵/万箭齐发）：询问响应牌（杀/闪），Pass 或无牌
@@ -230,6 +247,16 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
             }
             return Flow::Done;
         }
+        if ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(self.target, format!("aoe_direct_hit:{}", self.card)))
+            .is_some()
+        {
+            self.emit_aoe_damage(ctx);
+            return Flow::Done;
+        }
         let holders: Vec<crate::ids::CardId> = response_kind_cards(ctx, self.target, self.need);
         let resp_skills = host_response_skills(ctx.core, ctx.catalog, self.target, resp_ctx);
         let skill_opts = if !ctx.catalog.blocks_all_cards(ctx.core, self.target) {
@@ -394,7 +421,31 @@ impl crate::catalog::SkillMachine for AoeResolveMachine {
                     || weimu_blocks_aoe(ctx, self.card, self.targets[self.idx])
                     || ctx
                         .catalog
-                        .aoe_excludes_target(ctx.core, self.targets[self.idx]))
+                        .aoe_excludes_target(ctx.core, self.targets[self.idx])
+                    || crate::rvm_bridge::modifiers::eval_card_target_canceled(
+                        ctx.core,
+                        ctx.catalog,
+                        self.source,
+                        self.targets[self.idx],
+                        self.card,
+                        {
+                            let raw_kind = ctx.catalog.card_kind(self.card);
+                            if matches!(
+                                raw_kind,
+                                CardKind::SavageAttack
+                                    | CardKind::ArcheryAttack
+                                    | CardKind::Jingleishan
+                                    | CardKind::Chiyuxi
+                            ) {
+                                raw_kind
+                            } else if self.need == CardKind::Shan {
+                                CardKind::ArcheryAttack
+                            } else {
+                                CardKind::SavageAttack
+                            }
+                        },
+                        self.nature,
+                    ))
             {
                 self.idx += 1;
             }
@@ -405,6 +456,12 @@ impl crate::catalog::SkillMachine for AoeResolveMachine {
                     .vm_aux
                     .flags
                     .remove(&(self.source, format!("card_damage_bonus:{card}")));
+                for p in 0..ctx.core.players.len() as PlayerId {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(p, format!("aoe_direct_hit:{card}")));
+                }
                 if ctx.core.table.contains(&card) {
                     ctx.to_discard(card);
                     ctx.core.table.retain(|c| *c != card);

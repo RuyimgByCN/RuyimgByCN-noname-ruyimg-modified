@@ -1,0 +1,267 @@
+use super::super::*;
+use super::JudgePhaseMachine;
+
+impl JudgePhaseMachine {
+    pub(super) fn effective_judge_suit_rank(
+        core: &mut crate::state::GameStateCore,
+        catalog: &crate::catalog::Catalog,
+        owner: PlayerId,
+        judge_card: crate::ids::CardId,
+    ) -> (crate::catalog::Suit, u8) {
+        let suit_from_code = |c: u32| match c {
+            1 => crate::catalog::Suit::Spade,
+            2 => crate::catalog::Suit::Heart,
+            3 => crate::catalog::Suit::Club,
+            _ => crate::catalog::Suit::Diamond,
+        };
+        let def = &catalog.cards[judge_card as usize];
+        let (mut suit, mut rank) = (def.suit, def.rank);
+        let override_suit = core.vm_aux.flags.remove(&(owner, "zhenyi_judge_suit".to_string())).unwrap_or(0);
+        let override_num = core.vm_aux.flags.remove(&(owner, "zhenyi_judge_number".to_string())).unwrap_or(0);
+        if override_suit > 0 {
+            suit = suit_from_code(override_suit);
+            rank = if override_num > 0 { override_num as u8 } else { 5 };
+        } else if suit == crate::catalog::Suit::Spade
+            && catalog.skill_by_name("xinhongyan").is_some_and(|d| core.has_skill(owner, d))
+        {
+            suit = crate::catalog::Suit::Heart;
+        }
+        let xhy_suit = core.vm_aux.flags.remove(&(owner, "xinhongyan_judge_suit".to_string())).unwrap_or(0);
+        if xhy_suit > 0 {
+            suit = suit_from_code(xhy_suit);
+        }
+        (suit, rank)
+    }
+
+    pub(super) fn notify_judge_settled(
+        ctx: &mut Ctx<'_>,
+        owner: PlayerId,
+        judge_card: crate::ids::CardId,
+    ) -> bool {
+        if !ctx.catalog.vm_card_history {
+            return false;
+        }
+        let kind_code = ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(owner, format!("l11_judge_kind:{judge_card}")))
+            .unwrap_or(0);
+        let suit_code = ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(owner, format!("l11_judge_suit:{judge_card}")))
+            .unwrap_or(0);
+        let trick_kind = match kind_code {
+            1 => Some(CardKind::Le),
+            2 => Some(CardKind::Bing),
+            3 => Some(CardKind::ShanDian),
+            4 => Some(CardKind::HongShui),
+            5 => Some(CardKind::Guiyoujie),
+            _ => None,
+        };
+        let eff_suit = match suit_code {
+            1 => crate::catalog::Suit::Spade,
+            2 => crate::catalog::Suit::Heart,
+            3 => crate::catalog::Suit::Club,
+            4 => crate::catalog::Suit::Diamond,
+            _ => ctx.catalog.cards[judge_card as usize].suit,
+        };
+        (ctx.catalog.hooks.on_judge_settled)(ctx, owner, trick_kind, eff_suit, judge_card)
+    }
+
+    /// 判定牌生效：按锦囊种类套用效果（`machine_holds` 为真时判定牌仍由
+    /// 机器持有——天妒未决——不随效果弃置）。
+    pub(super) fn apply_judgement(
+        owner: PlayerId,
+        ctx: &mut Ctx<'_>,
+        trick: crate::ids::CardId,
+        judge_card: crate::ids::CardId,
+        machine_holds: bool,
+    ) -> (CardKind, crate::catalog::Suit) {
+        // 国色等 view-as 转化：声明牌种优先于目录牌种（N08 迁移）
+        let trick_kind = ctx
+            .core
+            .declared_kinds
+            .get(&trick)
+            .copied()
+            .unwrap_or_else(|| ctx.catalog.card_kind(trick));
+        // 声明消费后移除（牌已结算，残留条目会在后续洗回场景误判）
+        ctx.core.declared_kinds.remove(&trick);
+        let (suit, rank) = Self::effective_judge_suit_rank(ctx.core, ctx.catalog, owner, judge_card);
+        // 神裔（Boss 青龙共有技，规则 v233）/ 隐月·判（T11 Boss 诸葛亮族批 115，规则 v303）：
+        // 判定阶段的延时锦囊判定对持有者恒不生效（牌去向不变：锦囊照常弃置、闪电照常传下家）。
+        let shenyi_voids = [
+            crate::vocabulary::names::BOSS_SHENYI,
+            crate::vocabulary::host::HLSS_YUEYIN2_KEY,
+        ]
+        .iter()
+        .any(|k| ctx.catalog.skill_by_name(k).is_some_and(|def| ctx.core.has_skill(owner, def)));
+        let discard_trick = |ctx: &mut Ctx<'_>, owner: PlayerId, card: crate::ids::CardId| {
+            ctx.to_discard(card);
+            (ctx.catalog.hooks.on_cards_to_discard)(ctx, owner, &[card], false);
+        };
+        match trick_kind {
+            CardKind::Le => {
+                if !shenyi_voids && !suit.is_heart() {
+                    ctx.core.turn.skip_play_phase = true;
+                }
+                discard_trick(ctx, owner, trick);
+                if !machine_holds {
+                    ctx.to_discard(judge_card);
+                }
+            }
+            CardKind::Bing => {
+                if !shenyi_voids && !suit.is_club() {
+                    ctx.core.turn.skip_draw_phase = true;
+                }
+                discard_trick(ctx, owner, trick);
+                if !machine_holds {
+                    ctx.to_discard(judge_card);
+                }
+            }
+            CardKind::HongShui => {
+                // 洪水：梅花 2–9 → 3 点雷伤（登记差异：上游未标注属性）
+                discard_trick(ctx, owner, trick);
+                if !shenyi_voids && suit.is_club() && (2..=9).contains(&rank) {
+                    if !machine_holds {
+                        ctx.to_discard(judge_card);
+                    }
+                    ctx.emit(EventData::Damage(damage_data_with(
+                        None,
+                        owner,
+                        3,
+                        crate::event::DamageNature::Thunder,
+                        None,
+                    )));
+                } else if !machine_holds {
+                    ctx.to_discard(judge_card);
+                }
+            }
+            CardKind::Guiyoujie => {
+                // 归有界判定（上游 judge 黑色 -3 / effect loseHp+randomDiscard）
+                if !shenyi_voids
+                    && matches!(
+                        suit,
+                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                    )
+                {
+                    discard_trick(ctx, owner, trick);
+                    ctx.emit(EventData::LoseHp {
+                        player: owner,
+                        amount: 1,
+                    });
+                    // 随机弃一张牌（手牌+装备均匀抽取；逐技对照批四口径）
+                    let he_len =
+                        ctx.core.player(owner).hand.len() + ctx.core.player(owner).equips.len();
+                    if he_len > 0 {
+                        let pick = ctx.core.rng.gen_range(he_len as u32) as usize;
+                        let hand_n = ctx.core.player(owner).hand.len();
+                        let c = if pick < hand_n {
+                            ctx.core.player(owner).hand[pick]
+                        } else {
+                            ctx.core.player(owner).equips[pick - hand_n]
+                        };
+                        let in_hand = ctx.core.player(owner).hand.contains(&c);
+                        if in_hand {
+                            ctx.discard_from_hand(owner, c);
+                        } else {
+                            ctx.core.player_mut(owner).equips.retain(|x| *x != c);
+                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, owner, c);
+                            ctx.to_discard(c);
+                        }
+                        ctx.log(LogEvent::CardDiscarded {
+                            player: owner,
+                            cards: vec![c],
+                        });
+                    }
+                }
+                ctx.to_discard(trick);
+                if !machine_holds {
+                    ctx.to_discard(judge_card);
+                }
+            }
+            CardKind::ShanDian => {
+                let mut hit = suit.is_spade() && (2..=9).contains(&rank);
+                if crate::rvm_bridge::modifiers::shandian_reversed(ctx.core, ctx.catalog, owner) {
+                    hit = !hit;
+                }
+                if !shenyi_voids && hit {
+                    ctx.to_discard(trick);
+                    if !machine_holds {
+                        ctx.to_discard(judge_card);
+                    }
+                    ctx.emit(EventData::Damage(damage_data_with(
+                        None,
+                        owner,
+                        3,
+                        crate::event::DamageNature::Thunder,
+                        None,
+                    )));
+                    return (trick_kind, suit);
+                }
+                // 未命中：传给下一位可放置闪电的存活玩家；无人可放则直接弃置
+                // （对齐旧线 addJudgeNext + pass_lightning + wenhejibei canAddJudge）。
+                let pass_to = if ctx.catalog.vm_card_history {
+                    let mut cand = ctx.core.next_alive(owner);
+                    let mut chosen = None;
+                    for _ in 0..ctx.core.players.len() {
+                        let has_shandian = ctx
+                            .core
+                            .player(cand)
+                            .judge
+                            .iter()
+                            .any(|c| ctx.catalog.card_kind(*c) == CardKind::ShanDian);
+                        let blocked = crate::rvm_bridge::modifiers::eval_card_target_canceled(
+                            ctx.core,
+                            ctx.catalog,
+                            owner,
+                            cand,
+                            trick,
+                            CardKind::ShanDian,
+                            crate::event::DamageNature::Thunder,
+                        );
+                        if ctx.core.player(cand).alive && !has_shandian && !blocked {
+                            chosen = Some(cand);
+                            break;
+                        }
+                        let next_cand = ctx.core.next_alive(cand);
+                        if next_cand == cand {
+                            break;
+                        }
+                        cand = next_cand;
+                    }
+                    chosen
+                } else {
+                    let next = ctx.core.next_alive(owner);
+                    let next_has_shandian = ctx
+                        .core
+                        .player(next)
+                        .judge
+                        .iter()
+                        .any(|c| ctx.catalog.card_kind(*c) == CardKind::ShanDian);
+                    (!next_has_shandian).then_some(next)
+                };
+                if let Some(dest) = pass_to {
+                    ctx.core.player_mut(dest).judge.push(trick);
+                    if dest != owner {
+                        crate::kernel::trigger_qiaoqiao_add_judge(ctx, dest);
+                    }
+                } else {
+                    ctx.to_discard(trick);
+                }
+                if !machine_holds {
+                    ctx.to_discard(judge_card);
+                }
+            }
+            _ => {
+                ctx.to_discard(trick);
+                if !machine_holds {
+                    ctx.to_discard(judge_card);
+                }
+            }
+        }
+        (trick_kind, suit)
+    }
+}

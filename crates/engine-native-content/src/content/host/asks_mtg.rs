@@ -484,6 +484,9 @@ pub(super) fn active_ask_batches(
         HostBehavior::L11GeneralSkillsF => super::step::l11_skills_f_asks::ask_l11_skills_f(
             stage, owner, target, targets, card, cards, core, catalog,
         ),
+        HostBehavior::L11BuffsB => super::step::l11_buffs_b_asks::ask_l11_buffs_b(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
         HostBehavior::NewMeibu => {
             if stage != HostStage::SelectCard {
                 return None;

@@ -97,6 +97,11 @@ impl HostSkillBehavior {
                 self, ctx, frames, Some(frame), owner, event,
             );
         }
+        if self.behavior == HostBehavior::L11BuffsB {
+            return super::step::l11_buffs_b::filter_l11_buffs_b_with_frames(
+                self, ctx, frames, Some(frame), owner, event,
+            );
+        }
         self.filter_behavior(ctx, owner, event)
     }
 
@@ -889,6 +894,15 @@ impl HostSkillBehavior {
                 super::step::l11_skills_f::filter_l11_skills_f_with_frames(
                     self, ctx, &[], None, owner, event,
                 )
+            }
+            HostBehavior::L11BuffsA => {
+                super::step::l11_buffs_a::filter_l11_buffs_a(self, ctx, owner, event)
+            }
+            HostBehavior::L11BuffsB => super::step::l11_buffs_b::filter_l11_buffs_b_with_frames(
+                self, ctx, &[], None, owner, event,
+            ),
+            HostBehavior::L11BuffHelpersA => {
+                super::step::l11_buff_helpers_a::filter_l11_buff_helpers_a(self, ctx, owner, event)
             }
             HostBehavior::L01FirstKs => super::step::l01_rules::filter_l01_first_ks(ctx, owner, event),
             HostBehavior::L01AttitudeTracker => {

@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-22 Batch L11-3（L11 太虚幻境 40 祝福＋38 触发＋10 衍生技共 +88→280/936）合入与清单上调（待提交／发布）
+
+基线 HEAD `9c29b98996558302cadebec39c59ba8787cab86b`（Batch L01-Rules 已发布，CI Run `45017015012` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-l11-b3` `ea623f255..91c68342c`（`verifier-rules-2` #188 + `verifier-ui` #201 **`APPROVE`**）并与 `L01`/`U01`/`L11-2` 共存对齐（保留 `tricks.rs::take_hand_card` 清除手牌标记并合入 `frame_hooks.rs`、`catalog/hooks.rs`、`d34_unrespondable.rs` 与 `judge_apply.rs`）：`L11 太虚幻境` 40 项祝福（`buff_txhj_aozhan`..`buff_txhj_juxiangzhifeng`）、38 项触发（`_buff_txhj_yanhuo`..`_buff_txhj_juxiangzhifeng`）与 10 项衍生辅助技（`txhj_kapaikeshi`..`txhj_huangtiannizhuan`）共 **88 项**升为 `已复核等价`（剩余 656 项归后续 `L11-4..L11-6b` 批次），`L11` 升为 **已复核等价 280／简化近似 656／缺失 0**（合计 936），全仓清单更新为 **已复核等价 2,027／简化近似 2,397／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch L11-3 复核摘要](../operations/evidence/2026-11-22-batch3-3-l11-3/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。
+
 ## 2026-11-22 Batch L01-Rules（L01 AI优化 69 技能＋1 卡牌 `yiyi`＋27 规则配置共 +97→133/133；100% 单项等价）合入与清单上调（待提交／发布）
 
 基线 HEAD `042f5b811927476b1bf056bc73e462194eee34ce`（Batch L11-2 已发布，CI Run `45008789520` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-l01-rules` `1906e7f15..f5875e668`（`verifier-rules-2` #180 + `verifier-ui` #196 **`APPROVE`**）并与 L11/L25/U01 共存对齐及修复空包 `l01_on_game_start` 零写入：`L01 AI优化` 全部 **97 项**规则耦合条目（69 技能、`yiyi`、27 `ruleCoupled` 配置）升为 `已复核等价`，与 Batch UI-7 36 项纯 UI 配置会师使 `L01` 达 **133/133 单项已复核等价（简化近似 0／缺失 0）**，全仓清单更新为 **已复核等价 1,939／简化近似 2,485／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch L01-Rules 复核摘要](../operations/evidence/2026-11-22-batch4-1-l01-rules/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。

@@ -447,7 +447,8 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
             }
         }
         CardKind::Sha | CardKind::FireSha | CardKind::LeiSha => {
-            if ctx.catalog.skill_by_name("txhj_fangtianhuaji").is_some()
+            if (ctx.catalog.vm_card_history
+                || ctx.catalog.skill_by_name("txhj_fangtianhuaji").is_some())
                 && ctx.core.turn.phase == Phase::Play
                 && u.player == ctx.core.turn.current
             {
