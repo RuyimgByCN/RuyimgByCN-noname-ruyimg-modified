@@ -214,6 +214,10 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
             if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
                 // 出响应牌免伤
                 discard_response_card(ctx, self.target, c, self.need);
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.target, "responding_to_sha_from".to_string()));
                 super::emit_card_responded_as(ctx, self.target, c, self.need);
                 // 雷击（Boss 青龙，规则 v234）：万箭闪响应后判定雷击
                 // （南蛮响应为杀，不触发）

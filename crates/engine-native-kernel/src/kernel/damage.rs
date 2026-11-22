@@ -333,6 +333,16 @@ pub(super) fn post_damage(
             .copied()
             .collect();
         let selected = pool[ctx.core.rng.gen_range(pool.len() as u32) as usize];
+        let from_equip = ctx.core.player(source).equips.contains(&selected);
+        if from_equip
+            && (ctx.catalog.vm_card_history
+                || ctx.catalog.skill_by_name("txhj_xuanwuSkill2").is_some())
+        {
+            ctx.core.vm_aux.flags.insert(
+                (source, format!("l11_discard_non_hand:{selected}")),
+                1,
+            );
+        }
         ctx.take_owned_card(source, selected);
         ctx.to_discard(selected);
         ctx.log(LogEvent::CardDiscarded {

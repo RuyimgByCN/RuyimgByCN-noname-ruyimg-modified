@@ -971,6 +971,10 @@ pub(crate) fn host_sha_end_step(
     )
 }
 
-pub(crate) fn host_card_use_after(ctx: &mut Ctx<'_>, u: &CardUseData) {
-    u08_batch_d_hooks::host_card_use_after_impl(ctx, u);
+pub(crate) fn host_card_use_after(
+    ctx: &mut Ctx<'_>,
+    fid: crate::ids::EventId,
+    u: &CardUseData,
+) {
+    u08_batch_d_hooks::host_card_use_after_impl(ctx, fid, u);
 }

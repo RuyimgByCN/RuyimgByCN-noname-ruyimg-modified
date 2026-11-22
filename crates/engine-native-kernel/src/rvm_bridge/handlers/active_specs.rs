@@ -335,6 +335,7 @@ pub struct VmTargetFilter {
     pub other_only: bool,
     pub wounded_only: bool,
     pub hand_nonempty: bool,
+    pub can_compare: bool,
     pub equip_nonempty: bool,
     pub hand_equip_nonempty: bool,
     pub hand_equip_judge_nonempty: bool,
@@ -390,6 +391,12 @@ impl VmTargetFilter {
             return false;
         }
         if self.hand_nonempty && tp.hand.is_empty() {
+            return false;
+        }
+        if self.can_compare
+            && tp.hand.is_empty()
+            && !has_txyonglve_ready_kernel(state, catalog, target)
+        {
             return false;
         }
         if (self.equip_nonempty
@@ -543,6 +550,22 @@ impl VmTargetFilter {
         }
         true
     }
+}
+
+pub(super) fn has_txyonglve_ready_kernel(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    player: PlayerId,
+) -> bool {
+    state.player(player).alive
+        && (!state.deck.is_empty() || !state.discard.is_empty())
+        && !catalog.is_tieji_sealed(state, player)
+        && !catalog
+            .skill_by_name("txhj_feilong_skill_blank")
+            .is_some_and(|def| state.has_skill(player, def))
+        && catalog
+            .skill_by_name("txyonglve")
+            .is_some_and(|def| state.has_skill(player, def))
 }
 
 /// 主动技选目标规格（对齐 `content-schema::PackageTargetSpec`）。

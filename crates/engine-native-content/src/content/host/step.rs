@@ -157,6 +157,8 @@ pub(super) mod l25_batch_e;
 pub(super) mod l25_batch_f;
 pub(super) mod l25_batch_g;
 pub(super) mod l11_common;
+pub(crate) mod l11_common_b2;
+pub(crate) use l11_common_b2::{host_before_gain_hand, host_before_recover};
 pub(super) mod l11_cards;
 pub(super) mod l11_cards_asks;
 pub(super) mod l11_equips;
@@ -164,12 +166,20 @@ pub(super) mod l11_equips_asks;
 pub(super) mod l11_servants;
 pub(crate) use l11_servants::play_end_rui_skill1;
 pub(super) mod l11_servants_asks;
+pub(super) mod l11_servants_b;
+pub(super) mod l11_servants_b_asks;
 pub(super) mod l11_skills_a;
 pub(super) mod l11_skills_a_asks;
 pub(super) mod l11_skills_b;
 pub(super) mod l11_skills_b_asks;
 pub(super) mod l11_skills_c;
 pub(super) mod l11_skills_c_asks;
+pub(super) mod l11_skills_d;
+pub(super) mod l11_skills_d_asks;
+pub(super) mod l11_skills_e;
+pub(super) mod l11_skills_e_asks;
+pub(super) mod l11_skills_f;
+pub(super) mod l11_skills_f_asks;
 
 impl HostMachine {
     pub(super) fn step_behavior(&mut self, ctx: &mut Ctx<'_>) -> Flow {
@@ -1233,6 +1243,11 @@ impl HostMachine {
             HostBehavior::L11GeneralSkillsA => l11_skills_a::handle_l11_skills_a(self, ctx),
             HostBehavior::L11GeneralSkillsB => l11_skills_b::handle_l11_skills_b(self, ctx),
             HostBehavior::L11GeneralSkillsC => l11_skills_c::handle_l11_skills_c(self, ctx),
+            HostBehavior::L11ServantHooks => l11_servants_b::handle_l11_servant_hooks(self, ctx),
+            HostBehavior::L11ServantSkillsB => l11_servants_b::handle_l11_servants_b(self, ctx),
+            HostBehavior::L11GeneralSkillsD => l11_skills_d::handle_l11_skills_d(self, ctx),
+            HostBehavior::L11GeneralSkillsE => l11_skills_e::handle_l11_skills_e(self, ctx),
+            HostBehavior::L11GeneralSkillsF => l11_skills_f::handle_l11_skills_f(self, ctx),
         }
     }
 }

@@ -120,7 +120,8 @@ fn map_target_spec(
     let filter = VmTargetFilter {
         other_only: !targets.allow_self,
         wounded_only: targets.wounded,
-        hand_nonempty: targets.hand_nonempty || targets.can_compare,
+        hand_nonempty: targets.hand_nonempty,
+        can_compare: targets.can_compare,
         equip_nonempty: targets.has_equip,
         hand_equip_nonempty: targets.hand_equip_nonempty,
         hand_equip_judge_nonempty: false,
@@ -348,6 +349,7 @@ pub(super) fn bridge_active_entries(
             require_hand_missing_gaintag: active.hand_missing_gaintag.unwrap_or(0),
             target_other,
             target_max_hp_gt,
+            can_compare: active.targets.as_ref().is_some_and(|t| t.can_compare),
             selection,
             targets,
         };

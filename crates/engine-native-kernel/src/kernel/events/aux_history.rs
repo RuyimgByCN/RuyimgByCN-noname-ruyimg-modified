@@ -216,9 +216,36 @@ pub(in crate::kernel) fn record_l11_turn_card_used(
     suit: Option<crate::catalog::Suit>,
     effective: CardKind,
 ) {
-    if player != core.turn.current
-        || (catalog.skill_by_name("txmouduan").is_none()
-            && catalog.skill_by_name("txhj_ditingSkill3").is_none())
+    if player != core.turn.current {
+        return;
+    }
+    if effective.equip_slot().is_some() {
+        if let Some(s) = suit {
+            let color_bit = if matches!(s, crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond) {
+                1u32
+            } else {
+                2u32
+            };
+            if core.turn.phase == crate::event::Phase::Play
+                && catalog.skill_by_name("txkeji").is_some()
+            {
+                *core
+                    .vm_aux
+                    .flags
+                    .entry((player, "skill_turn:l11_play_color_mask".to_string()))
+                    .or_insert(0) |= color_bit;
+            }
+            if catalog.skill_by_name("txchengyuan").is_some() {
+                *core
+                    .vm_aux
+                    .flags
+                    .entry((player, "skill_turn:l11_chengyuan_used".to_string()))
+                    .or_insert(0) |= color_bit;
+            }
+        }
+    }
+    if catalog.skill_by_name("txmouduan").is_none()
+        && catalog.skill_by_name("txhj_ditingSkill3").is_none()
     {
         return;
     }

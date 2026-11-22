@@ -49,6 +49,9 @@ mod l11_taixu_boss_events;
 #[path = "../l11_taixu_b1_fixes.rs"]
 mod l11_taixu_b1_fixes;
 
+#[path = "../l11_taixu_b2_fixes.rs"]
+mod l11_taixu_b2_fixes;
+
 #[path = "../l12_rzsh_eight.rs"]
 mod l12_rzsh_eight;
 

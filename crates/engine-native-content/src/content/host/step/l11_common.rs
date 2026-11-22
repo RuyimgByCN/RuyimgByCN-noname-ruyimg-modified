@@ -147,6 +147,16 @@ pub(super) fn is_unblocked_l11_owner(
         && !has_named_skill(state, catalog, owner, "txhj_feilong_skill_blank")
 }
 
+/// 锁定技 / `forced: true` 仅受存活与 `txhj_feilong_skill_blank` 影响，不受 `is_tieji_sealed` 封印。
+pub(super) fn is_locked_unblocked_l11_owner(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    owner: PlayerId,
+) -> bool {
+    state.player(owner).alive
+        && !has_named_skill(state, catalog, owner, "txhj_feilong_skill_blank")
+}
+
 pub(super) fn discard_player_cards(ctx: &mut Ctx<'_>, p: PlayerId, cards: &[CardId]) {
     let mut from_hand_discarded = Vec::new();
     let mut non_hand_discarded = Vec::new();
@@ -164,6 +174,14 @@ pub(super) fn discard_player_cards(ctx: &mut Ctx<'_>, p: PlayerId, cards: &[Card
             ctx.take_owned_card(p, c);
             ctx.to_discard(c);
             non_hand_discarded.push(c);
+        }
+    }
+    if !non_hand_discarded.is_empty()
+        && (ctx.catalog.vm_card_history
+            || ctx.catalog.skill_by_name("txhj_xuanwuSkill2").is_some())
+    {
+        for &c in &non_hand_discarded {
+            set_flag(ctx.core, p, &format!("l11_discard_non_hand:{c}"), 1);
         }
     }
     let mut all_discarded = from_hand_discarded;
@@ -198,21 +216,24 @@ pub(super) fn move_cards_to_hand(
             continue;
         }
         ctx.take_owned_card(from, c);
-        ctx.core.player_mut(to).hand.push(c);
         moved.push(c);
     }
     if !moved.is_empty() {
-        ctx.out.push(LogEvent::CardsGiven {
-            from,
-            to,
-            cards: moved.clone(),
-        });
         ctx.note_cards_lost(from, &moved);
-        ctx.emit(EventData::CardsMoved {
-            from,
-            to,
-            cards: moved,
-        });
+        let delivered = (ctx.catalog.hooks.on_before_gain_hand)(ctx, Some(from), to, &moved);
+        ctx.core.player_mut(to).hand.extend(delivered.iter().copied());
+        if !delivered.is_empty() {
+            ctx.out.push(LogEvent::CardsGiven {
+                from,
+                to,
+                cards: delivered.clone(),
+            });
+            ctx.emit(EventData::CardsMoved {
+                from,
+                to,
+                cards: delivered,
+            });
+        }
     }
 }
 

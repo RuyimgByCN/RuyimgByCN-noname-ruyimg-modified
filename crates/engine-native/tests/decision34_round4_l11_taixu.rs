@@ -646,6 +646,25 @@ fn l11_taixu_playcard_intrinsics_and_d34_l11_mods() {
         0
     );
     invoke_l11(&mut e, 1, "txmanjia");
+    // While `l11_xingtian_armor_null` (set by `txhj_xingtianpojunfu` above) is active on seat 1,
+    // `txmanjia1` armor prevention is nullified (`eval_damage_amount == 1`).
+    assert_eq!(
+        eval_damage_amount(
+            e.state_core(),
+            e.catalog(),
+            Some(0),
+            1,
+            Some(sha_card),
+            DamageNature::Normal,
+            1,
+        ),
+        1
+    );
+    // Clear `txhj_xingtianpojunfu`'s turn-scoped armor nullification to verify un-nullified `txmanjia`:
+    e.state_core_mut()
+        .vm_aux
+        .flags
+        .remove(&(1, "l11_xingtian_armor_null".to_string()));
     assert_eq!(
         eval_damage_amount(
             e.state_core(),

@@ -466,6 +466,98 @@ pub fn lookup_l11_b1_host_behavior(
         | "cxyYaoWu"
         | "cxyYingHun"
         | "cxyPoLu" => Some(HostBehavior::L11GeneralSkillsC),
+        _ => lookup_l11_b2_host_behavior(clean),
+    }
+}
+
+/// Look up native `HostBehavior` for L11 Batch 2 (4 `_sl*` hooks, 26 servant skills, and 53 general skills).
+pub fn lookup_l11_b2_host_behavior(
+    clean: &str,
+) -> Option<engine_native::content::host::HostBehavior> {
+    use engine_native::content::host::HostBehavior;
+    match clean {
+        "_slEnterGame" | "_slDamage" | "_slUseCard" | "_slHurt" => {
+            Some(HostBehavior::L11ServantHooks)
+        }
+        "txhj_dundunSkill1"
+        | "txhj_datongSkill1"
+        | "txhj_luluSkill1"
+        | "txhj_luluSkill2"
+        | "txhj_aleSkill1"
+        | "txhj_aleSkill2"
+        | "txhj_ruiSkill2"
+        | "txhj_ruiSkill3"
+        | "txhj_yueerSkill1"
+        | "txhj_yueerSkill2"
+        | "txhj_yanSkill1"
+        | "txhj_yanSkill2"
+        | "txhj_yanSkill3"
+        | "txhj_liuliSkill1"
+        | "txhj_liuliSkill2"
+        | "txhj_manmanSkill1"
+        | "txhj_manmanSkill2"
+        | "txhj_xiaoxiaoSkill1"
+        | "txhj_xiaoxiaoSkill2"
+        | "txhj_xuerenSkill1"
+        | "txhj_xuanwuSkill1"
+        | "txhj_xuanwuSkill2"
+        | "txhj_xuanwuSkill3"
+        | "txhj_aHaoSkill1"
+        | "txhj_aHaoSkill2"
+        | "txhj_aHaoSkill3" => Some(HostBehavior::L11ServantSkillsB),
+        "oldfuman"
+        | "oldfuman2"
+        | "txhuao"
+        | "hgkurou"
+        | "hgkurou_effect"
+        | "gdsanchen"
+        | "txlveming"
+        | "txdaoxi"
+        | "txlangxi"
+        | "txkuangyi"
+        | "txtanbei"
+        | "txtanbei_effect3"
+        | "txtanbei_effect1"
+        | "txtanbei_effect2"
+        | "ljxuechi"
+        | "txzhuxin"
+        | "txyicheng"
+        | "txnianrui" => Some(HostBehavior::L11GeneralSkillsD),
+        "txmengtai"
+        | "txshouyi"
+        | "txrenxing"
+        | "txyinli"
+        | "txzhulian"
+        | "txkeji"
+        | "txkeji_add"
+        | "txnangce"
+        | "txduanzui"
+        | "txyingyang"
+        | "mdqianxi7"
+        | "mdqianxi72"
+        | "mdqianxi"
+        | "zylongdan"
+        | "zglkongcheng"
+        | "txjuxiang"
+        | "txdaoji" => Some(HostBehavior::L11GeneralSkillsE),
+        "txhj_suoming"
+        | "txhj_huangmen"
+        | "txhj_mouqiang"
+        | "txhj_suzhi"
+        | "txmanjia"
+        | "txmanjia1"
+        | "txmanjia2"
+        | "txmanzhen"
+        | "txfusha"
+        | "txleizhou"
+        | "txzhennu"
+        | "txyongguan"
+        | "txyongguan_fate"
+        | "txchengyuan"
+        | "txbenji"
+        | "txyonglve"
+        | "txjiang"
+        | "txhj_oldhuxiao" => Some(HostBehavior::L11GeneralSkillsF),
         _ => None,
     }
 }

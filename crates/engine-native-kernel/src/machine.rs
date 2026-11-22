@@ -834,6 +834,13 @@ impl<'a> Ctx<'a> {
                 cards: vec![card],
                 origins: vec![crate::event::LostOrigin::Hand],
             });
+        }
+        let delivered = if from != to {
+            (self.catalog.hooks.on_before_gain_hand)(self, Some(from), to, cards)
+        } else {
+            cards.to_vec()
+        };
+        for &card in &delivered {
             self.core.player_mut(to).hand.push(card);
             self.emit(EventData::CardsMoved {
                 cards: vec![card],
@@ -841,16 +848,18 @@ impl<'a> Ctx<'a> {
                 to,
             });
         }
-        self.emit(EventData::CardsGiven {
-            giver: from,
-            recipient: to,
-            cards: cards.to_vec(),
-        });
-        self.out.push(LogEvent::CardsGiven {
-            from,
-            to,
-            cards: cards.to_vec(),
-        });
+        if !delivered.is_empty() {
+            self.emit(EventData::CardsGiven {
+                giver: from,
+                recipient: to,
+                cards: delivered.clone(),
+            });
+            self.out.push(LogEvent::CardsGiven {
+                from,
+                to,
+                cards: delivered,
+            });
+        }
     }
 
     // ---- 生命周期 ----
@@ -902,6 +911,9 @@ impl<'a> Ctx<'a> {
         if self.catalog.has_diaohulishan(self.core, player)
             || crate::rvm_bridge::modifiers::has_yaya_protected(self.core, self.catalog, player)
         {
+            return 0;
+        }
+        if !(self.catalog.hooks.before_recover)(self, player) {
             return 0;
         }
         let mut amount = amount;

@@ -95,6 +95,16 @@ impl NativeInvocation {
         for &card in cards {
             let p = ctx.core.player(player);
             if p.hand.contains(&card) || p.equips.contains(&card) {
+                let from_equip = !p.hand.contains(&card);
+                if from_equip
+                    && (ctx.catalog.vm_card_history
+                        || ctx.catalog.skill_by_name("txhj_xuanwuSkill2").is_some())
+                {
+                    ctx.core.vm_aux.flags.insert(
+                        (player, format!("l11_discard_non_hand:{card}")),
+                        1,
+                    );
+                }
                 ctx.take_owned_card(player, card);
                 ctx.to_discard(card);
                 discarded.push(card);

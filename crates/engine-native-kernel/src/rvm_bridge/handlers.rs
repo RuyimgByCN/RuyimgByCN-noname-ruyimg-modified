@@ -62,6 +62,7 @@ pub struct VmActiveLimits {
     pub require_hand_missing_gaintag: u32,
     pub target_other: bool,
     pub target_max_hp_gt: Option<u8>,
+    pub can_compare: bool,
     pub selection: Option<VmActiveSelection>,
     pub targets: Option<VmActiveTargets>,
 }
@@ -724,8 +725,7 @@ impl VmViewAsSpec {
             .insert((owner, "event_view_as_skill".to_string()), self.skill_def_id);
         if self.uses_per_turn.is_some() {
             core.vm_aux
-                .once
-                .insert((owner, format!("view_as:{}", self.skill_name), 1));
+                .inc_once(owner, 1, &format!("view_as:{}", self.skill_name));
         }
         if self.post_draw > 0 {
             for _ in 0..self.post_draw {
@@ -849,8 +849,14 @@ impl VmHandlerSet {
             .limits
             .selection
             .map(|sel| sel.candidate_cards(ctx.state, ctx.catalog, owner, name));
+        let yonglve_hand_exempt = self.limits.can_compare
+            && self
+                .limits
+                .selection
+                .is_some_and(|sel| sel.zone == VmSelectionZone::Hand && sel.min_cards <= 1)
+            && active_specs::has_txyonglve_ready_kernel(ctx.state, ctx.catalog, owner);
         if let (Some(sel), Some(cards)) = (self.limits.selection, &cand_cards) {
-            if cards.len() < sel.min_cards as usize {
+            if cards.len() < sel.min_cards as usize && !yonglve_hand_exempt {
                 return false;
             }
         }

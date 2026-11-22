@@ -9,6 +9,25 @@ pub(super) fn on_frame_popped(
     catalog: &crate::catalog::Catalog,
     out: &mut Vec<LogEvent>,
 ) {
+    if let EventData::CardsDiscarded { player, cards } = &popped.data {
+        if catalog.vm_card_history || catalog.skill_by_name("txhj_xuanwuSkill2").is_some() {
+            for &c in cards {
+                core.vm_aux
+                    .flags
+                    .remove(&(*player, format!("l11_discard_non_hand:{c}")));
+            }
+        }
+    }
+    if matches!(popped.data, EventData::TurnEnded { .. })
+        && catalog.skill_by_name("txyinli").is_some()
+    {
+        for p in 0..core.players.len() as PlayerId {
+            core.vm_aux.flags.remove(&(p, "l11_yinli_ts".to_string()));
+            core.vm_aux
+                .flags
+                .retain(|(owner, k), _| !(*owner == p && k.starts_with("l11_yinli_eq:")));
+        }
+    }
     if let EventData::CardResponded { player, .. } = &popped.data {
         core.vm_aux
             .flags
@@ -73,7 +92,7 @@ pub(super) fn on_frame_popped(
                 catalog,
                 out,
             };
-            (catalog.hooks.on_card_use_after)(&mut ctx, &synth);
+            (catalog.hooks.on_card_use_after)(&mut ctx, popped.id, &synth);
             core.vm_aux
                 .flags
                 .remove(&(*player, "last_popped_card_use_fid".to_string()));
@@ -241,7 +260,7 @@ fn on_card_use_popped(
             catalog,
             out,
         };
-        (catalog.hooks.on_card_use_after)(&mut ctx, u);
+        (catalog.hooks.on_card_use_after)(&mut ctx, popped_id, u);
     }
     core.vm_aux
         .flags

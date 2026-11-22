@@ -735,6 +735,23 @@ fn d34_view_as_table() -> &'static Vec<D34ViewAsRule> {
                     false,
                 ),
             },
+            // `txdaoxi` (`太虚幻境/extension.js:4613`): usable:3 Red card in hand/equip -> Snatch (`shunshou`)
+            D34ViewAsRule {
+                activation: D34ViewAsActivation::SkillOrFlag("txdaoxi", "l11_viewas:txdaoxi"),
+                spec: {
+                    let mut spec = make_spec(
+                        1_926_900_310,
+                        "txdaoxi",
+                        CardKind::Snatch,
+                        VmViewAsWindow::PlayPhase,
+                        VmViewAsZone::HandEquip,
+                        VmViewAsFilter::Red,
+                        false,
+                    );
+                    spec.uses_per_turn = Some(3);
+                    spec
+                },
+            },
         ];
 
         let u05_flag_map: &[(&str, CardKind)] = &[

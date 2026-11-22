@@ -632,7 +632,7 @@ pub mod d34_flags;
 pub mod d34_l28_mods;
 pub use d34_flags::{
     has_yaya_protected, is_card_ignored_in_discard_phase, is_target_unequip2,
-    txlianbi_blocks_unlink, txminguangkai_blocks_link,
+    tanbei_unlimited_target, txlianbi_blocks_unlink, txminguangkai_blocks_link,
 };
 mod eval;
 pub use eval::*;

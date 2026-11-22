@@ -34,30 +34,6 @@ fn matches_card_kind(native: NativeCardKind, filter: u8) -> bool {
     }
 }
 
-fn pindian_targets(
-    core: &GameStateCore,
-    owner: u8,
-    fixed_target: rule_api::PlayerId,
-) -> Vec<ChoiceOption> {
-    if core.player(owner).hand.is_empty() {
-        return Vec::new();
-    }
-    if fixed_target.is_some() {
-        let Some(t) = seat(fixed_target, core) else {
-            return Vec::new();
-        };
-        if t != owner && core.player(t).alive && !core.player(t).hand.is_empty() {
-            return vec![ChoiceOption::Player(t)];
-        }
-        return Vec::new();
-    }
-    seats_from(core, owner)
-        .into_iter()
-        .filter(|&p| p != owner && core.player(p).alive && !core.player(p).hand.is_empty())
-        .map(ChoiceOption::Player)
-        .collect()
-}
-
 fn hand_options(core: &GameStateCore, owner: u8) -> Vec<ChoiceOption> {
     core.player(owner)
         .hand
@@ -148,37 +124,25 @@ pub(super) fn active_ask(
     catalog: &Catalog,
 ) -> Option<ExpectedAsk> {
     match effect {
-        EffectRequest::ChooseCompareSelectedHandCard { player, target, .. } if state == [1] => {
-            let owner = seat(*player, core)?;
-            let options = pindian_targets(core, owner, *target);
-            if options.is_empty() {
-                return None;
-            }
-            Some(ask(
-                owner,
-                "rvm_choice",
-                ChoiceKind::SelectPlayers,
-                options,
-                1,
-                1,
+        EffectRequest::ChooseCompareSelectedHandCard { player, target, .. } => {
+            crate::content::host::step::l11_common_b2::vm_pindian_active_ask(
+                seat(*player, core)?,
+                *target,
                 true,
-            ))
+                state,
+                core,
+                catalog,
+            )
         }
-        EffectRequest::ChooseHandCompare { player, .. } if state == [1] => {
-            let owner = seat(*player, core)?;
-            let options = pindian_targets(core, owner, rule_api::PlayerId::NONE);
-            if options.is_empty() {
-                return None;
-            }
-            Some(ask(
-                owner,
-                "rvm_choice",
-                ChoiceKind::SelectPlayers,
-                options,
-                1,
-                1,
+        EffectRequest::ChooseHandCompare { player, .. } => {
+            crate::content::host::step::l11_common_b2::vm_pindian_active_ask(
+                seat(*player, core)?,
+                rule_api::PlayerId::NONE,
                 false,
-            ))
+                state,
+                core,
+                catalog,
+            )
         }
         EffectRequest::DrawThenGiveOne { player, target, .. } if state == [2] => {
             let owner = seat(*player, core)?;
@@ -440,14 +404,17 @@ pub(super) fn step(
             ..
         } => {
             let owner = seat(*player, ctx.core)?;
-            Some(step_hand_compare(
-                ctx,
-                owner,
-                *target,
-                *card,
-                *win_skill_def,
-                *lose_skill_def,
-            ))
+            Some(
+                crate::content::host::step::l11_common_b2::vm_step_hand_compare(
+                    ctx,
+                    owner,
+                    *target,
+                    *card,
+                    *win_skill_def,
+                    *lose_skill_def,
+                    state,
+                ),
+            )
         }
         EffectRequest::ChooseHandCompare {
             player,
@@ -456,14 +423,17 @@ pub(super) fn step(
             ..
         } => {
             let owner = seat(*player, ctx.core)?;
-            Some(step_hand_compare(
-                ctx,
-                owner,
-                rule_api::PlayerId::NONE,
-                rule_api::CardId::NONE,
-                *win_skill_def,
-                *lose_skill_def,
-            ))
+            Some(
+                crate::content::host::step::l11_common_b2::vm_step_hand_compare(
+                    ctx,
+                    owner,
+                    rule_api::PlayerId::NONE,
+                    rule_api::CardId::NONE,
+                    *win_skill_def,
+                    *lose_skill_def,
+                    state,
+                ),
+            )
         }
         EffectRequest::ChooseOneFromSkillPileDiscard {
             player, pile_def, ..
@@ -524,72 +494,6 @@ pub(super) fn step(
         }
         _ => None,
     }
-}
-
-fn step_hand_compare(
-    ctx: &mut Ctx<'_>,
-    owner: u8,
-    fixed_target: rule_api::PlayerId,
-    selected_card: rule_api::CardId,
-    win_skill_def: rule_api::SkillDefId,
-    lose_skill_def: rule_api::SkillDefId,
-) -> Flow {
-    let valid = pindian_targets(ctx.core, owner, fixed_target);
-    if let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied() {
-        if valid.contains(&ChoiceOption::Player(target)) {
-            let pc = if selected_card.is_some()
-                && ctx.core.player(owner).hand.contains(&selected_card.raw())
-            {
-                Some(selected_card.raw())
-            } else {
-                ctx.core.player(owner).hand.first().copied()
-            };
-            let Some(pc) = pc else {
-                return Flow::Done;
-            };
-            let Some(tc) = ctx.core.player(target).hand.first().copied() else {
-                return Flow::Done;
-            };
-            let my_rank = ctx
-                .catalog
-                .cards
-                .get(pc as usize)
-                .map(|cd| cd.rank)
-                .unwrap_or(0);
-            let their_rank = ctx
-                .catalog
-                .cards
-                .get(tc as usize)
-                .map(|cd| cd.rank)
-                .unwrap_or(0);
-            ctx.discard_from_hand(owner, pc);
-            ctx.discard_from_hand(target, tc);
-            let grant = if my_rank > their_rank {
-                ctx.core
-                    .vm_aux
-                    .flags
-                    .insert((owner, "compare_win_turn".to_string()), 1);
-                win_skill_def
-            } else {
-                lose_skill_def
-            };
-            if grant.is_some() {
-                if let Some(def) = crate::rvm_ops::resolve_skill_def(ctx.catalog, grant.raw()) {
-                    ctx.ensure_skill(
-                        (owner, def),
-                        crate::state::SkillInstance {
-                            owner,
-                            enabled: true,
-                            once_used: false,
-                            expires_end_of_turn: false,
-                            rounds: 0,
-                        },
-                    );
-                }
-            }
-        }
-    }
-    Flow::Done
 }
 
 fn step_draw_then_give_one(
@@ -930,8 +834,21 @@ pub(super) fn validate(
                 && state == [1]
         }
         EffectRequest::ChooseCompareSelectedHandCard { player, .. }
-        | EffectRequest::ChooseHandCompare { player, .. }
-        | EffectRequest::ChooseOneFromSkillPileDiscard { player, .. }
+        | EffectRequest::ChooseHandCompare { player, .. } => {
+            player.raw() > 0
+                && (player.raw() as usize) <= seats
+                && (state == [1]
+                    || (state.len() == 8
+                        && (2..=5).contains(&state[0])
+                        && (state[1] as usize) < seats
+                        && (state[2] as usize) <= card_count
+                        && state[3] <= 1
+                        && (state[4] as usize) <= card_count
+                        && state[5] <= 1
+                        && state[6] <= 3
+                        && state[7] <= 3))
+        }
+        EffectRequest::ChooseOneFromSkillPileDiscard { player, .. }
         | EffectRequest::ChooseDiscardHandRange { player, .. }
         | EffectRequest::ChooseDiscardHandEquipThenRemoveSelfSkill { player, .. }
         | EffectRequest::ChooseHandCardsToSkillPile { player, .. }

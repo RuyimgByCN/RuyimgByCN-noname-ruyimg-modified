@@ -21,7 +21,7 @@ mod boss;
 mod constants;
 mod factory;
 mod filtering;
-mod step;
+pub(in crate::content) mod step;
 mod support;
 
 pub use crate::vocabulary::host::*;
@@ -33,12 +33,12 @@ pub use support::{
     shengong_borrowed_owner, yangpijuan_class,
 };
 pub(crate) use step::{
-    host_card_use_after, host_draw_begin_step, host_on_game_start, host_on_hand_card_removed,
-    host_on_phase_use_end, host_on_player_died, host_on_recover_before, host_on_round_start,
-    host_preserves_skills_on_death, host_sha_begin_step, host_sha_end_step,
-    on_cards_to_discard_chengye, on_l25_host_event, on_outer_settled_taipingyaoshu,
-    on_phase_end_l10_scs, on_skill_removed_all, play_begin_l19, play_begin_tianshu,
-    play_end_rui_skill1, reguhuo_consume_resp, reguhuo_has_pending_final,
+    host_before_gain_hand, host_before_recover, host_card_use_after, host_draw_begin_step,
+    host_on_game_start, host_on_hand_card_removed, host_on_phase_use_end, host_on_player_died,
+    host_on_recover_before, host_on_round_start, host_preserves_skills_on_death,
+    host_sha_begin_step, host_sha_end_step, on_cards_to_discard_chengye, on_l25_host_event,
+    on_outer_settled_taipingyaoshu, on_phase_end_l10_scs, on_skill_removed_all, play_begin_l19,
+    play_begin_tianshu, play_end_rui_skill1, reguhuo_consume_resp, reguhuo_has_pending_final,
     reguhuo_response_skill, reguhuo_spawn_final, reguhuo_spawn_response,
     scsanruo_response_skill, u01_phase_skipped_hook,
     u01_respond_skill_options as u01_respond_skill_options_hook,
@@ -794,6 +794,13 @@ pub fn host_skill_trigger_meta(
         HostBehavior::L11GeneralSkillsA => step::l11_skills_a::trigger_meta_l11_skills_a(name),
         HostBehavior::L11GeneralSkillsB => step::l11_skills_b::trigger_meta_l11_skills_b(name),
         HostBehavior::L11GeneralSkillsC => step::l11_skills_c::trigger_meta_l11_skills_c(name),
+        HostBehavior::L11ServantHooks => {
+            step::l11_servants_b::trigger_meta_l11_servant_hooks(name)
+        }
+        HostBehavior::L11ServantSkillsB => step::l11_servants_b::trigger_meta_l11_servants_b(name),
+        HostBehavior::L11GeneralSkillsD => step::l11_skills_d::trigger_meta_l11_skills_d(name),
+        HostBehavior::L11GeneralSkillsE => step::l11_skills_e::trigger_meta_l11_skills_e(name),
+        HostBehavior::L11GeneralSkillsF => step::l11_skills_f::trigger_meta_l11_skills_f(name),
         _ => crate::event::NativeDamageEffect::from_host(behavior)
             .map(|e| e.meta())
             .or_else(|| behavior.trigger_meta()),
@@ -866,6 +873,11 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         HostBehavior::L11GeneralSkillsA => step::l11_skills_a::limits_l11_skills_a(name),
         HostBehavior::L11GeneralSkillsB => step::l11_skills_b::limits_l11_skills_b(name),
         HostBehavior::L11GeneralSkillsC => step::l11_skills_c::limits_l11_skills_c(name),
+        HostBehavior::L11ServantHooks => crate::catalog::SkillLimits::default(),
+        HostBehavior::L11ServantSkillsB => step::l11_servants_b::limits_l11_servants_b(name),
+        HostBehavior::L11GeneralSkillsD => step::l11_skills_d::limits_l11_skills_d(name),
+        HostBehavior::L11GeneralSkillsE => step::l11_skills_e::limits_l11_skills_e(name),
+        HostBehavior::L11GeneralSkillsF => step::l11_skills_f::limits_l11_skills_f(name),
         HostBehavior::GujianFoodQingtuan | HostBehavior::GujianFoodLuyugeng => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,

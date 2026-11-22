@@ -9,6 +9,13 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-22 Batch L11-2（L11 太虚幻境 4 侍从钩子＋26 侍从技 B＋53 武将技 D/E/F 共 +83→192/936）合入（待提交／发布）
+
+- **基线、发布与版本**：HEAD `5bcd6b619ebfbe9bd5b414eeb5bbd7d2d1341443`（Batch Q2-L25 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `45001901211` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。
+- **Batch L11-2 集成与复核**：合入 `swarm/conv-l11-b2` `445ed1bd2..ea623f255`（`verifier-rules-2` #174 **`APPROVE`**）：协同标签 `728..=732`（`HostBehavior::ALL: 585`）、`catalog/hooks.rs`、`machine.rs`、`tricks.rs`、`d34_flags.rs` 与 `l11_discard_non_hand:{c}` 非手牌弃置标记隔离（修复 `dddzhengjun`/`lian_ying` 在 `Dismantle` 装备时不误触发手牌分支并保 `txyinli`/`txhj_suzhi`）；关闭 4 侍从全局钩子、26 侍从技 B 与 53 武将技 D/E/F 共 83 项。
+- **清单计数与整包签署**：按 #174 升格 **83 项**（`L11` → **`192／744／0`**）；全仓更新为 **已复核等价 1,842／简化近似 2,582／缺失 0**，整包八项签署仍 `0/37`。
+- **主线实测**：`-D warnings` native/`wasm32`、4 crate **`2,760/0/6`**（`l_rounds` **`217/217`**、`g1` **`374/0/1`**）、`--workspace --no-fail-fast` **`8,108/0/8`**、`conformance` **`19/19`**、`desktop-client` **`20/0/1`**、跨端校验、`web-client` **`540/0`**、`smoke:native` **`83/0`** 与 `preflight.py` 全过，见 [Batch L11-2 证据](../operations/evidence/2026-11-22-batch3-2-l11-2/README.md)。
+
 ### 2026-11-22 Batch Q2-L25（L25 祖安武将 终 18 项→257/257；Queue Item 2 全量收官）合入（待提交／发布）
 
 - **基线、发布与版本**：HEAD `89406fe50c5d33c349b4456b05a0b7724c439a5e`（Batch U01-2 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `44995724474` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。

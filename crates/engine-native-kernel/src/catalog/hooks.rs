@@ -116,7 +116,7 @@ pub struct ContentHooks {
     /// 摸牌阶段 `DP::Begin`（非跳过且 `!num_fixed`）摸牌数修改钩子。
     pub draw_begin_step: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId, &mut i32),
     /// 用牌结算完成弹出时（`useCardAfter`）宿主触发钩子（如 `jieyong`）。
-    pub on_card_use_after: fn(&mut crate::machine::Ctx<'_>, &crate::event::CardUseData),
+    pub on_card_use_after: fn(&mut crate::machine::Ctx<'_>, crate::ids::EventId, &crate::event::CardUseData),
     /// 建局开局发牌后（`gameDrawEnd`）宿主初始化钩子（如 `xiefang`）。
     pub on_game_start: fn(&mut crate::state::GameStateCore, &Catalog),
     /// 角色死亡结算（`alive=false` 后、`dieEnd`）宿主刷新钩子（如 `xiefang`）。
@@ -184,6 +184,15 @@ pub struct ContentHooks {
     pub on_phase_skipped: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId),
     /// 事件前窗/弹出后宿主钩子（用于保持历史内容锁不变下的阶段/语音/封红到期与判定区清理）。
     pub on_host_event: fn(&mut crate::machine::Ctx<'_>, &crate::event::EventData),
+    /// 回复体力前钩子（如 `ljxuechi`）：返回 `false` 时取消本次回复。
+    pub before_recover: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId) -> bool,
+    /// 从其他角色处获得牌入手前钩子（如 `zglkongcheng`）：返回实际入入手牌的牌，拦截的牌已入扩展区。
+    pub on_before_gain_hand: fn(
+        &mut crate::machine::Ctx<'_>,
+        Option<crate::ids::PlayerId>,
+        crate::ids::PlayerId,
+        &[crate::ids::CardId],
+    ) -> Vec<crate::ids::CardId>,
 }
 
 impl ContentHooks {
@@ -206,7 +215,7 @@ impl ContentHooks {
         sha_begin_step: |_, _, _, _, _, _| false,
         sha_end_step: |_, _, _, _, _, _| false,
         draw_begin_step: |_, _, _| {},
-        on_card_use_after: |_, _| {},
+        on_card_use_after: |_, _, _| {},
         on_game_start: |_, _| {},
         on_player_died: |_, _| {},
         on_phase_use_end: |_, _| {},
@@ -225,5 +234,7 @@ impl ContentHooks {
         try_activate_respond_skill: |_, _, _, _, _| None,
         on_phase_skipped: |_, _| {},
         on_host_event: |_, _| {},
+        before_recover: |_, _| true,
+        on_before_gain_hand: |_, _, _, cards| cards.to_vec(),
     };
 }

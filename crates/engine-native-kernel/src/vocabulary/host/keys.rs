@@ -612,6 +612,11 @@ impl HostBehavior {
             HostBehavior::L11GeneralSkillsB => "host:l11_general_skills_b",
             HostBehavior::L11GeneralSkillsC => "host:l11_general_skills_c",
             HostBehavior::L11SubStates => "host:l11_sub_states",
+            HostBehavior::L11ServantHooks => "host:l11_servant_hooks",
+            HostBehavior::L11ServantSkillsB => "host:l11_servant_skills_b",
+            HostBehavior::L11GeneralSkillsD => "host:l11_general_skills_d",
+            HostBehavior::L11GeneralSkillsE => "host:l11_general_skills_e",
+            HostBehavior::L11GeneralSkillsF => "host:l11_general_skills_f",
         }
     }
 }

@@ -258,6 +258,9 @@ pub(super) fn play_card(
                         && !fentian_red_free
                         && !shenen_boss_free
                         && !shouyi_free
+                        && !crate::rvm_bridge::modifiers::tanbei_unlimited_target(
+                            core, catalog, from, target,
+                        )
                         && !crate::rvm_bridge::modifiers::eval_card_distance_unlimited_to(
                             core,
                             catalog,
@@ -735,7 +738,9 @@ pub(super) fn play_card(
                         return Err(RejectReason::IllegalTargets);
                     }
                     let user = core.turn.current;
-                    if !crate::rvm_bridge::modifiers::eval_card_distance_unlimited_to(
+                    if !crate::rvm_bridge::modifiers::tanbei_unlimited_target(
+                        core, catalog, user, t,
+                    ) && !crate::rvm_bridge::modifiers::eval_card_distance_unlimited_to(
                         core,
                         catalog,
                         user,

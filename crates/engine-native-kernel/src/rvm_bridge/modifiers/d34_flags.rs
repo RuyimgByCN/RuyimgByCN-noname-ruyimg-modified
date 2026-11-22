@@ -22,7 +22,7 @@ mod d34_u01_mods;
 mod d34_unrespondable;
 pub use d34_l11_mods::{
     apply_draw_count, has_yaya_protected, is_card_ignored_in_discard_phase,
-    txlianbi_blocks_unlink, txminguangkai_blocks_link,
+    tanbei_unlimited_target, txlianbi_blocks_unlink, txminguangkai_blocks_link,
 };
 pub use d34_u01_mods::{
     is_dddfusi_hand_locked, is_dddtongyu_hand_locked, is_u01_hand_locked, is_u01_shown_card,
@@ -143,7 +143,11 @@ pub fn apply_hand_limit(
     } else if has_ext_skill(state, catalog, player, "buff_txhj_wuxiangdexinxue") {
         limit += 3;
     }
-    limit += flag_val(state, player, "l11_ahao_equip_bonus") as i32;
+    limit += if has_ext_skill(state, catalog, player, "txhj_aHaoSkill3") {
+        state.player(player).equips.len() as i32
+    } else {
+        flag_val(state, player, "l11_ahao_equip_bonus") as i32
+    };
     if flag_val(state, player, "l25_yuxi_treasure_active") > 0 {
         limit += 1;
     }
@@ -341,8 +345,16 @@ pub fn apply_sha_use_limit(
     } else if has_ext_skill(state, catalog, player, "txhj_zhuge") {
         cur += 3;
     }
-    cur += flag_val(state, player, "l11_hgkurou_sha_plus1") as i32;
-    cur += flag_val(state, player, "l11_ahao_equip_bonus") as i32;
+    cur += if has_ext_skill(state, catalog, player, "hgkurou_effect") {
+        1
+    } else {
+        flag_val(state, player, "l11_hgkurou_sha_plus1") as i32
+    };
+    cur += if has_ext_skill(state, catalog, player, "txhj_aHaoSkill3") {
+        state.player(player).equips.len() as i32
+    } else {
+        flag_val(state, player, "l11_ahao_equip_bonus") as i32
+    };
     cur += flag_val(state, player, "yxs_guimian_sha_limit_bonus") as i32;
     cur += flag_val(state, player, "dddfuyi_qun_sha_bonus") as i32;
     cur += flag_val(state, player, "l27_qimou_range_bonus") as i32;
@@ -646,8 +658,22 @@ pub fn is_ducai3_forbidden(
     {
         return true;
     }
-    if (card as usize) >= catalog.cards.len()
-        || has_ext_skill(state, catalog, actor, "ducai2")
+    if (card as usize) >= catalog.cards.len() {
+        return false;
+    }
+    if state.player(actor).hand.contains(&card)
+        && has_ext_skill(state, catalog, actor, "mdqianxi72")
+    {
+        let color_flag = flag_val(state, actor, "l11_mdqianxi72_color");
+        let is_red = matches!(
+            catalog.effective_card_suit(state, actor, card),
+            Suit::Heart | Suit::Diamond
+        );
+        if (color_flag == 1 && is_red) || (color_flag == 2 && !is_red) {
+            return true;
+        }
+    }
+    if has_ext_skill(state, catalog, actor, "ducai2")
         || flag_val(state, actor, "ducai2_active") > 0
     {
         return false;

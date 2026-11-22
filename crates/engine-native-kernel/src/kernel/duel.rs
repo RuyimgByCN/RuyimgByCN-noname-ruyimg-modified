@@ -316,6 +316,10 @@ impl crate::catalog::SkillMachine for DuelMachine {
                     }
                 });
                 discard_response_card(ctx, actual_holder, c, CardKind::Sha);
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(responder, "responding_to_sha_from".to_string()));
                 super::emit_card_responded_as(ctx, responder, c, CardKind::Sha);
                 // 无双 / L25 `ssr_luoyi`：与持有者决斗的另一方每次出杀需求 +1
                 let wushuang_holder = if self.on_target {

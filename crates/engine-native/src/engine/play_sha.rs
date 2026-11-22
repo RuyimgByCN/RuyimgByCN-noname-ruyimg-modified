@@ -157,6 +157,10 @@ pub(super) fn play_sha(
     let vm_va_no_count = vm_va_sha
         .as_ref()
         .is_some_and(|s| s.no_use_count || (s.black_no_use_count && is_black));
+    let tanbei_free = !targets.is_empty()
+        && targets
+            .iter()
+            .all(|&t| crate::rvm_bridge::modifiers::tanbei_unlimited_target(core, catalog, player_id, t));
     if !paoxiao
         && !has_zhuge
         && !baolei_sentinel
@@ -164,6 +168,7 @@ pub(super) fn play_sha(
         && !poyue_red_free
         && !vm_va_no_count
         && !vm_sha_unlimited
+        && !tanbei_free
         && (core.turn.sha_used_play_phase || vm_sha_limit == 0)
         && !land_sha_bonus
     {
@@ -537,11 +542,14 @@ pub(super) fn play_sha(
                 && core.player(target).hp <= core.player(core.turn.current).hp
         })
         .unwrap_or(false);
+    let tanbei_tgt_free =
+        crate::rvm_bridge::modifiers::tanbei_unlimited_target(core, catalog, from, target);
     if !zfs_free
         && !baolei_range_free
         && !feiren_range_free_for(target)
         && !zhuyue_free
         && !sliufeng_free
+        && !tanbei_tgt_free
         && !core.in_attack_range(catalog, from, target)
     {
         return Err(RejectReason::IllegalTargets);
@@ -558,7 +566,10 @@ pub(super) fn play_sha(
         if kc && core.player(*t).hand.is_empty() {
             return Err(RejectReason::IllegalTargets);
         }
-        if !feiren_range_free_for(*t) && !core.in_attack_range(catalog, from, *t) {
+        if !feiren_range_free_for(*t)
+            && !crate::rvm_bridge::modifiers::tanbei_unlimited_target(core, catalog, from, *t)
+            && !core.in_attack_range(catalog, from, *t)
+        {
             return Err(RejectReason::IllegalTargets);
         }
     }

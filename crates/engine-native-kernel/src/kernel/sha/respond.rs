@@ -439,11 +439,12 @@ impl ShaResolveMachine {
 }
 
 pub(super) fn note_longdan_sha_source(ctx: &mut Ctx<'_>, responder: PlayerId, source: PlayerId) {
-    if ctx
-        .catalog
-        .skill_by_name("fz_new_longdan")
-        .is_some_and(|d| ctx.core.has_skill(responder, d))
-    {
+    let has_longdan = ["fz_new_longdan", "zylongdan"].iter().any(|name| {
+        ctx.catalog
+            .skill_by_name(name)
+            .is_some_and(|d| ctx.core.has_skill(responder, d))
+    });
+    if has_longdan {
         ctx.core
             .vm_aux
             .flags

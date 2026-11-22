@@ -505,6 +505,15 @@ pub(super) fn apply_card_distance_unlimited_to(
     {
         unlimited = true;
     }
+    // extension.js:5592 (`txhj_suzhi`: forced/locked, tricks unlimited range during own turn while marks < 3)
+    if !kind.is_basic_kind()
+        && kind.equip_slot().is_none()
+        && state.turn.current == player
+        && has_ext_skill(state, catalog, player, "txhj_suzhi")
+        && flag_val(state, player, "skill_turn:l11_suzhi_marks") < 3
+    {
+        unlimited = true;
+    }
     // extension_buff.js:376 (`buff_txhj_yuanduandilue`: Bingliang unlimited distance)
     if kind == CardKind::Bing
         && (flag_val(state, player, "l11_yuanduandilue_bing_no_dist") > 0
@@ -658,11 +667,36 @@ pub(super) fn apply_card_target_canceled(
     {
         canceled = true;
     }
-    // extension.js:5704 (`txmanzhen`) & `shiji/skill.js:4520` (`spxiangzhen`: immune to SavageAttack)
+    // extension.js:5704 (`txmanzhen`), `extension.js:5388` (`txjuxiang`), & `shiji/skill.js:4520` (`spxiangzhen`): immune to SavageAttack
     if kind == CardKind::SavageAttack
         && (flag_val(state, target, "l11_mod:txmanzhen") > 0
             || has_ext_skill(state, catalog, target, "txmanzhen")
+            || flag_val(state, target, "l11_mod:txjuxiang") > 0
+            || has_ext_skill(state, catalog, target, "txjuxiang")
             || has_ext_skill(state, catalog, target, "spxiangzhen"))
+    {
+        canceled = true;
+    }
+    // extension.js:5660 (`txmanjia` / `txmanjia1`): unarmored Vine Armor immunity to Nanman / Wanjian / normal Sha
+    let has_txmanjia_armor = flag_val(state, target, "l11_mod:txmanjia") > 0
+        || has_ext_skill(state, catalog, target, "txmanjia")
+        || has_ext_skill(state, catalog, target, "txmanjia1");
+    if has_txmanjia_armor
+        && !has_armor(state, catalog, target)
+        && !super::is_target_unequip2(state, target)
+        && !super::super::d34_l28_mods::source_ignores_armor(
+            state,
+            catalog,
+            actor,
+            target,
+            card,
+            Some(kind),
+            DamageNature::Normal,
+        )
+        && matches!(
+            kind,
+            CardKind::SavageAttack | CardKind::ArcheryAttack | CardKind::Sha
+        )
     {
         canceled = true;
     }
@@ -842,18 +876,28 @@ pub(super) fn apply_damage_amount(
     if is_trick && flag_val(state, target, "l27_dinghan_negated") > 0 {
         return 0;
     }
-    // extension.js:5657-5681 (`txmanjia` / `txmanjia1` / `txmanjia2`: unarmored Vine Armor)
-    let has_txmanjia = flag_val(state, target, "l11_mod:txmanjia") > 0
+    // extension.js:5657-5681 (`txmanjia` = `txmanjia1` + `txmanjia2`: unarmored Vine Armor)
+    let has_txmanjia1 = flag_val(state, target, "l11_mod:txmanjia") > 0
         || has_ext_skill(state, catalog, target, "txmanjia")
-        || has_ext_skill(state, catalog, target, "txmanjia1")
+        || has_ext_skill(state, catalog, target, "txmanjia1");
+    let has_txmanjia2 = flag_val(state, target, "l11_mod:txmanjia") > 0
+        || has_ext_skill(state, catalog, target, "txmanjia")
         || has_ext_skill(state, catalog, target, "txmanjia2");
-    if has_txmanjia && !has_armor(state, catalog, target) {
-        if matches!(ckind, Some(CardKind::SavageAttack | CardKind::ArcheryAttack))
-            || (matches!(ckind, Some(CardKind::Sha)) && nature == DamageNature::Normal)
+    if !has_armor(state, catalog, target) {
+        let armor_ignored = super::is_target_unequip2(state, target)
+            || source.is_some_and(|src| {
+                super::super::d34_l28_mods::source_ignores_armor(
+                    state, catalog, src, target, card, ckind, nature,
+                )
+            });
+        if has_txmanjia1
+            && !armor_ignored
+            && (matches!(ckind, Some(CardKind::SavageAttack | CardKind::ArcheryAttack))
+                || (matches!(ckind, Some(CardKind::Sha)) && nature == DamageNature::Normal))
         {
             return 0;
         }
-        if nature == DamageNature::Fire {
+        if has_txmanjia2 && nature == DamageNature::Fire {
             cur += 1;
         }
     }
@@ -878,7 +922,6 @@ pub(super) fn apply_damage_amount(
         }
         if is_sha
             && (flag_val(state, src, "l11_mod:txfusha") > 0
-                || has_ext_skill(state, catalog, src, "txfusha")
                 || has_ext_skill(state, catalog, src, "txhj_zuijiu")
                 || flag_val(state, src, "l11_mowang_jiu_persist") > 0
                 || flag_val(state, src, "l11_leijimu_thunder_sha") > 0)
@@ -1046,4 +1089,16 @@ pub(super) fn apply_card_unrespondable(
         unrespondable = true;
     }
     d34_l25_mods::apply_card_unrespondable(state, catalog, source, kind, unrespondable)
+}
+
+/// `txtanbei_effect3` + `txtanbei_effect1` (`extension.js:4729-4739`):
+/// `actor` 对携带 `txtanbei_effect1` 的 `target` 使用牌没有次数与距离限制。
+pub fn tanbei_unlimited_target(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    actor: PlayerId,
+    target: PlayerId,
+) -> bool {
+    has_ext_skill(state, catalog, actor, "txtanbei_effect3")
+        && has_ext_skill(state, catalog, target, "txtanbei_effect1")
 }

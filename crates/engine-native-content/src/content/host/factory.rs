@@ -106,6 +106,18 @@ impl HostSkillBehavior {
             HostBehavior::L11GeneralSkillsC => {
                 return super::step::l11_skills_c::machine_l11_skills_c(self, owner, event);
             }
+            HostBehavior::L11ServantHooks | HostBehavior::L11ServantSkillsB => {
+                return super::step::l11_servants_b::machine_l11_servants_b(self, owner, event);
+            }
+            HostBehavior::L11GeneralSkillsD => {
+                return super::step::l11_skills_d::machine_l11_skills_d(self, owner, event);
+            }
+            HostBehavior::L11GeneralSkillsE => {
+                return super::step::l11_skills_e::machine_l11_skills_e(self, owner, event);
+            }
+            HostBehavior::L11GeneralSkillsF => {
+                return super::step::l11_skills_f::machine_l11_skills_f(self, owner, event);
+            }
             _ => {}
         }
         let (target, card) = match self.behavior {

@@ -585,6 +585,11 @@ impl HostBehavior {
             725 => HostBehavior::L11GeneralSkillsB,
             726 => HostBehavior::L11GeneralSkillsC,
             727 => HostBehavior::L11SubStates,
+            728 => HostBehavior::L11ServantHooks,
+            729 => HostBehavior::L11ServantSkillsB,
+            730 => HostBehavior::L11GeneralSkillsD,
+            731 => HostBehavior::L11GeneralSkillsE,
+            732 => HostBehavior::L11GeneralSkillsF,
             _ => return None,
         })
     }

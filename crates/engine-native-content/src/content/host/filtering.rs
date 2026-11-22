@@ -87,6 +87,16 @@ impl HostSkillBehavior {
                 }
             }
         }
+        if self.behavior == HostBehavior::L11ServantSkillsB {
+            return super::step::l11_servants_b::filter_l11_servants_b_with_frames(
+                self, ctx, frames, Some(frame), owner, event,
+            );
+        }
+        if self.behavior == HostBehavior::L11GeneralSkillsF {
+            return super::step::l11_skills_f::filter_l11_skills_f_with_frames(
+                self, ctx, frames, Some(frame), owner, event,
+            );
+        }
         self.filter_behavior(ctx, owner, event)
     }
 
@@ -860,6 +870,25 @@ impl HostSkillBehavior {
             }
             HostBehavior::L11GeneralSkillsC => {
                 super::step::l11_skills_c::filter_l11_skills_c(self, ctx, owner, event)
+            }
+            HostBehavior::L11ServantHooks => {
+                super::step::l11_servants_b::filter_l11_servant_hooks(self, ctx, owner, event)
+            }
+            HostBehavior::L11ServantSkillsB => {
+                super::step::l11_servants_b::filter_l11_servants_b_with_frames(
+                    self, ctx, &[], None, owner, event,
+                )
+            }
+            HostBehavior::L11GeneralSkillsD => {
+                super::step::l11_skills_d::filter_l11_skills_d(self, ctx, owner, event)
+            }
+            HostBehavior::L11GeneralSkillsE => {
+                super::step::l11_skills_e::filter_l11_skills_e(self, ctx, owner, event)
+            }
+            HostBehavior::L11GeneralSkillsF => {
+                super::step::l11_skills_f::filter_l11_skills_f_with_frames(
+                    self, ctx, &[], None, owner, event,
+                )
             }
             _ => false,
         }

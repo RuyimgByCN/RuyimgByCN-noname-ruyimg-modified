@@ -99,7 +99,11 @@ pub(crate) fn filter_u01_fix2(
                         && !dddzhengjun_match_targets(ctx.state, owner, *player, &[], 2)
                             .is_empty()
                 }
-                EventData::CardsDiscarded { player, cards } if !cards.is_empty() => {
+                EventData::CardsDiscarded { player, cards }
+                    if cards.iter().any(|&c| {
+                        flag(ctx.state, *player, &format!("l11_discard_non_hand:{c}")) == 0
+                    }) =>
+                {
                     flag(ctx.state, owner, "dddzhengjun_used_b2") != seq
                         && !dddzhengjun_match_targets(ctx.state, owner, *player, &[], 2)
                             .is_empty()

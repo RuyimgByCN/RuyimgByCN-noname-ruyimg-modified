@@ -1693,4 +1693,14 @@ pub enum HostBehavior {
     L11GeneralSkillsC,
     /// L11 太虚幻境 运行时派生子技与状态光环（tag 727：`txhj_noda_axe2` / `txhj_feilong_skill_blank` / `cxyJingQi_buff` 等）。
     L11SubStates,
+    /// L11 太虚幻境 侍从全局钩子（tag 728：`_slEnterGame` / `_slDamage` / `_slUseCard` / `_slHurt`）。
+    L11ServantHooks,
+    /// L11 太虚幻境 侍从实战技 Group B（tag 729：`txhj_dundunSkill1` / `txhj_datongSkill1`..`txhj_aHaoSkill3` 共 26 技能）。
+    L11ServantSkillsB,
+    /// L11 太虚幻境 武将技 Group D（tag 730：`oldfuman`..`txnianrui` 共 18 技能）。
+    L11GeneralSkillsD,
+    /// L11 太虚幻境 武将技 Group E（tag 731：`txmengtai`..`txdaoji` 共 17 技能）。
+    L11GeneralSkillsE,
+    /// L11 太虚幻境 武将技 Group F（tag 732：`txhj_suoming`..`txhj_oldhuxiao` 共 18 技能）。
+    L11GeneralSkillsF,
 }

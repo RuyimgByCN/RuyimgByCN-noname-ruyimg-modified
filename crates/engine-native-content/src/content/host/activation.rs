@@ -290,6 +290,18 @@ impl HostSkillBehavior {
             HostBehavior::L11GeneralSkillsC => {
                 super::step::l11_skills_c::activate_l11_skills_c(self, ctx, owner)
             }
+            HostBehavior::L11ServantSkillsB => {
+                super::step::l11_servants_b::activate_l11_servants_b(self, ctx, owner)
+            }
+            HostBehavior::L11GeneralSkillsD => {
+                super::step::l11_skills_d::activate_l11_skills_d(self, ctx, owner)
+            }
+            HostBehavior::L11GeneralSkillsE => {
+                super::step::l11_skills_e::activate_l11_skills_e(self, ctx, owner)
+            }
+            HostBehavior::L11GeneralSkillsF => {
+                super::step::l11_skills_f::activate_l11_skills_f(self, ctx, owner)
+            }
             _ => None,
         }
     }

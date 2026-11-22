@@ -878,7 +878,12 @@ impl HostBehavior {
             | HostBehavior::L11GeneralSkillsA
             | HostBehavior::L11GeneralSkillsB
             | HostBehavior::L11GeneralSkillsC
-            | HostBehavior::L11SubStates => None,
+            | HostBehavior::L11SubStates
+            | HostBehavior::L11ServantHooks
+            | HostBehavior::L11ServantSkillsB
+            | HostBehavior::L11GeneralSkillsD
+            | HostBehavior::L11GeneralSkillsE
+            | HostBehavior::L11GeneralSkillsF => None,
         };
         if let (Some(meta), Some((timing, priority, selectable))) = (&mut meta, self.source_order()) {
             meta.timing = timing;

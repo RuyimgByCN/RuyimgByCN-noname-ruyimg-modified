@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-22 Batch L11-2（L11 太虚幻境 4 侍从钩子＋26 侍从技 B＋53 武将技 D/E/F 共 +83→192/936）合入与清单上调（待提交／发布）
+
+基线 HEAD `5bcd6b619ebfbe9bd5b414eeb5bbd7d2d1341443`（Batch Q2-L25 已发布，CI Run `45001901211` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-l11-b2` `445ed1bd2..ea623f255`（`verifier-rules-2` #174 **`APPROVE`**）并与 L25/U01/L10/L20/L22/L27 共存对齐（协同 `l11_discard_non_hand:{c}` 与 `dddzhengjun`/`lian_ying` 非手牌过滤）：`L11 太虚幻境` 4 项侍从全局钩子（`_slEnterGame`..`_slHurt`）、26 项侍从技 B 组（`txhj_dundunSkill1`..`txhj_aHaoSkill3`）与 53 项武将技 D/E/F 组（`oldfuman`..`txhj_oldhuxiao`）共 **83 项**升为 `已复核等价`（剩余 744 项归后续 `L11-3..L11-6b` 批次），`L11` 升为 **已复核等价 192／简化近似 744／缺失 0**（合计 936），全仓清单更新为 **已复核等价 1,842／简化近似 2,582／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch L11-2 复核摘要](../operations/evidence/2026-11-22-batch3-2-l11-2/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。
+
 ## 2026-11-22 Batch Q2-L25（L25 祖安武将 终 18 项→257/257；Queue Item 2 收官）合入与清单上调（待提交／发布）
 
 基线 HEAD `89406fe50c5d33c349b4456b05a0b7724c439a5e`（Batch U01-2 已发布，CI Run `44995724474` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-q2-l25` `d9e1c9a1f..f36e73640`（`verifier-rules` #167 **`APPROVE`**）并与 L11/U01/L19/L20/L22/L10 共存对齐（隔离 L19/L25 `_relifeskill`、拆出 `d34_unrespondable.rs`）：`L25 祖安武将` 终 18 项（`ssr_jinfan`、`ssr_luoyi`、`ssr_lieren`、4 `ui_hooks`、11 `skills`）升为 `已复核等价`，`L25` 达 **257/257 单项已复核等价（简化近似 0／缺失 0）**，Queue Item 2 全量规则/配置收官；全仓清单更新为 **已复核等价 1,759／简化近似 2,665／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch Q2-L25 复核摘要](../operations/evidence/2026-11-22-batch2-4-l25/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。

@@ -231,12 +231,20 @@ pub(super) fn commit_equip(
         })
         .collect();
     let replaced = to_replace.first().copied();
-    for old in to_replace {
+    for &old in &to_replace {
         ctx.core.player_mut(player).equips.retain(|c| *c != old);
         revoke_equip_skills(ctx.core, ctx.catalog, player, old);
         ctx.note_cards_lost(player, &[old]);
         ctx.to_discard(old);
         (ctx.catalog.hooks.on_cards_to_discard)(ctx, player, &[old], false);
+    }
+    if !to_replace.is_empty() && ctx.catalog.vm_card_history {
+        let origins = vec![crate::event::LostOrigin::Equip; to_replace.len()];
+        ctx.emit(EventData::CardsLost {
+            player,
+            cards: to_replace,
+            origins,
+        });
     }
     ctx.core.player_mut(player).equips.push(card);
     grant_equip_skills(ctx, player, card);

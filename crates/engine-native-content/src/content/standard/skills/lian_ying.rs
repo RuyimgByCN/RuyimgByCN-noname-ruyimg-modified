@@ -15,7 +15,18 @@ impl SkillBehavior for LianYingBehavior {
             EventData::CardUsed(u) => u.player == owner,
             EventData::CardResponded { player, .. } => *player == owner,
             EventData::CardsMoved { from, .. } => *from == owner,
-            EventData::CardsDiscarded { player, .. } => *player == owner,
+            EventData::CardsDiscarded { player, cards } => {
+                *player == owner
+                    && cards.iter().any(|&c| {
+                        ctx.state
+                            .vm_aux
+                            .flags
+                            .get(&(*player, format!("l11_discard_non_hand:{c}")))
+                            .copied()
+                            .unwrap_or(0)
+                            == 0
+                    })
+            }
             _ => false,
         }
     }

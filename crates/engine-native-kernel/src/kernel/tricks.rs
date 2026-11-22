@@ -507,6 +507,7 @@ impl crate::catalog::SkillMachine for DismantleMachine {
                 // 从所在区移除
                 let from_hand = t.hand.contains(&c);
                 let from_judge = t.judge.contains(&c);
+                let from_equip = t.equips.contains(&c);
                 if from_hand {
                     ctx.take_hand_card(self.target, c);
                 } else {
@@ -531,7 +532,17 @@ impl crate::catalog::SkillMachine for DismantleMachine {
                     });
                 } else {
                     (ctx.catalog.hooks.on_cards_to_discard)(ctx, self.target, &[c], false);
-                    if ctx.catalog.vm_card_history {
+                    if from_equip && ctx.catalog.vm_card_history {
+                        ctx.core.vm_aux.flags.insert(
+                            (self.target, format!("l11_discard_non_hand:{c}")),
+                            1,
+                        );
+                        ctx.emit(EventData::CardsDiscarded {
+                            player: self.target,
+                            cards: vec![c],
+                        });
+                    }
+                    if (from_judge || from_equip) && ctx.catalog.vm_card_history {
                         ctx.note_cards_lost(self.target, &[c]);
                         ctx.emit(EventData::CardsLost {
                             player: self.target,
