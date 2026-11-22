@@ -279,13 +279,14 @@ impl HostMachine {
             // 神鼎·麦星面：确定性判定——红桃回 1/方块摸 1/梅花随机敌弃 1/
             // 黑桃无（内联口径同铁骑）
             HostBehavior::SwdShending => {
-                let judged = ctx.draw_judge_card_with_elo(
-                    self.owner,
-                    engine_native_kernel::kernel::EloJudgePref::Shending,
-                );
-                let suit = ctx.catalog.cards[judged as usize].suit;
-                ctx.to_discard(judged);
-                match suit {
+                if !ctx.core.deck.is_empty() || !ctx.core.discard.is_empty() {
+                    let judged = ctx.draw_judge_card_with_elo(
+                        self.owner,
+                        engine_native_kernel::kernel::EloJudgePref::Shending,
+                    );
+                    let (suit, _) = ctx.inline_judge_suit_rank(self.owner, judged);
+                    let _ = ctx.settle_inline_judge_card(self.owner, suit, judged);
+                    match suit {
                     crate::catalog::Suit::Heart => {
                         let pl = ctx.core.player(self.owner);
                         if pl.hp < pl.max_hp as i32 {
@@ -330,6 +331,7 @@ impl HostMachine {
                         }
                     }
                     crate::catalog::Suit::Spade => {}
+                }
                 }
                 Flow::Done
             }
@@ -466,11 +468,12 @@ impl HostMachine {
                         dp,
                         engine_native_kernel::kernel::EloJudgePref::RedPositive,
                     );
+                    let (suit, _) = ctx.inline_judge_suit_rank(self.owner, judged);
                     let red = matches!(
-                        ctx.catalog.cards[judged as usize].suit,
+                        suit,
                         crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
                     );
-                    ctx.to_discard(judged);
+                    let _ = ctx.settle_inline_judge_card(self.owner, suit, judged);
                     if red {
                         if ctx.core.player(dp).alive || ctx.core.player(dp).hp <= 0 {
                             ctx.recover(dp, 1, None);
@@ -494,23 +497,23 @@ impl HostMachine {
             // 死亡）；非黑桃体力回至 1+翻面（TurnOverBefore 帧经 commit
             // 含凶兽守卫/急冻解除）；unique 一次后移除实例
             HostBehavior::SwdBusi => {
-                let judged = ctx.draw_judge_card_with_elo(
-                    self.owner,
-                    engine_native_kernel::kernel::EloJudgePref::NonSpadePositive,
-                );
-                let spade = matches!(
-                    ctx.catalog.cards[judged as usize].suit,
-                    crate::catalog::Suit::Spade
-                );
-                ctx.to_discard(judged);
-                if !spade {
-                    let hp = ctx.core.player(self.owner).hp;
-                    let need = (1 - hp).max(1) as u32;
-                    ctx.recover(self.owner, need, None);
-                    ctx.emit(EventData::TurnOverBefore {
-                        player: self.owner,
-                        cancelled: false,
-                    });
+                if !ctx.core.deck.is_empty() || !ctx.core.discard.is_empty() {
+                    let judged = ctx.draw_judge_card_with_elo(
+                        self.owner,
+                        engine_native_kernel::kernel::EloJudgePref::NonSpadePositive,
+                    );
+                    let (suit, _) = ctx.inline_judge_suit_rank(self.owner, judged);
+                    let spade = matches!(suit, crate::catalog::Suit::Spade);
+                    let _ = ctx.settle_inline_judge_card(self.owner, suit, judged);
+                    if !spade {
+                        let hp = ctx.core.player(self.owner).hp;
+                        let need = (1 - hp).max(1) as u32;
+                        ctx.recover(self.owner, need, None);
+                        ctx.emit(EventData::TurnOverBefore {
+                            player: self.owner,
+                            cancelled: false,
+                        });
+                    }
                 }
                 if let Some(d) = ctx.catalog.skill_by_name("busi") {
                     ctx.core.skills.remove(&(self.owner, d));

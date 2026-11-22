@@ -523,3 +523,57 @@ impl TaixuCampaignRun {
         })
     }
 }
+
+/// `buff_txhj_bowenqiangzhi` (`太虚幻境/extension_framework.js:5989`, `extension_buff.js:529`):
+/// 答题奇遇节点中若玩家持有「博闻强识」，从错误选项 `1..option_count` 中确定性排除 1 个干扰项
+/// （始终保留索引 `0` 的正确选项）。未持有或选项不足 2 个时返回 `None`。
+pub fn exam_excluded_wrong_option(
+    state: &TaixuRunState,
+    option_count: usize,
+    rng_seed: u64,
+) -> Option<usize> {
+    if option_count <= 1 || !state.buffs.iter().any(|b| b == "buff_txhj_bowenqiangzhi") {
+        return None;
+    }
+    Some(1 + (rng_seed as usize % (option_count - 1)))
+}
+
+/// `buff_txhj_majundegaizao` (`太虚幻境/extension_framework.js:3487-3627`, `extension_buff.js:542`):
+/// 拥有「马钧的改造」时，战役出战装备栏的【诸葛连弩】/【烂银甲】/【藤甲】/【白银狮子】/
+/// 【八卦阵】/【仁王盾】改造为对应 `rewrite_*` 版本；其余装备或未持有时保持原名。
+pub fn upgrade_taixu_equip_majun<'a>(state: &TaixuRunState, equip_name: &'a str) -> &'a str {
+    if !state.buffs.iter().any(|b| b == "buff_txhj_majundegaizao") {
+        return equip_name;
+    }
+    match equip_name {
+        "zhuge" => "rewrite_zhuge",
+        "lanyinjia" => "rewrite_lanyinjia",
+        "tengjia" => "rewrite_tengjia",
+        "baiyin" => "rewrite_baiyin",
+        "bagua" => "rewrite_bagua",
+        "renwang" => "rewrite_renwang",
+        _ => equip_name,
+    }
+}
+
+/// `buff_txhj_xianhujiqu` (`太虚幻境/extension_framework.js:8898-8904`, `extension_buff.js:555`):
+/// 战斗胜利结算时：若持有「仙狐汲取」且战局结束时体力上限高于战前已存上限（且未持 `buff_txhj_aozhan`），
+/// 则把额外增长的体力上限继承到战役持久状态（否则维持 `stored_max_hp`）。
+pub fn carryover_max_hp_after_battle(
+    state: &TaixuRunState,
+    battle_max_hp: u32,
+    stored_max_hp: u32,
+    battle_won: bool,
+) -> u32 {
+    let has_aozhan = state.buffs.iter().any(|b| b == "buff_txhj_aozhan");
+    if has_aozhan {
+        return battle_max_hp.max(1);
+    }
+    if battle_won
+        && state.buffs.iter().any(|b| b == "buff_txhj_xianhujiqu")
+        && battle_max_hp > stored_max_hp
+    {
+        return battle_max_hp;
+    }
+    stored_max_hp
+}

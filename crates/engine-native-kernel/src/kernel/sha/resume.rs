@@ -2,6 +2,49 @@
 
 use super::*;
 
+pub(super) fn sha_judge_suit(
+    ctx: &Ctx<'_>,
+    actor: PlayerId,
+    judged: crate::ids::CardId,
+) -> crate::catalog::Suit {
+    ctx.inline_judge_suit_rank(actor, judged).0
+}
+
+pub(super) fn cixiong_need(ctx: &Ctx<'_>, source: PlayerId) -> usize {
+    if ctx.catalog.vm_card_history
+        && crate::rvm_bridge::modifiers::has_fuchendangmo(ctx.core, ctx.catalog, source)
+    {
+        2
+    } else {
+        1
+    }
+}
+
+pub(super) fn guanshi_need(ctx: &Ctx<'_>, source: PlayerId) -> usize {
+    if ctx.catalog.vm_card_history
+        && crate::rvm_bridge::modifiers::has_shangjiangdelvli(ctx.core, ctx.catalog, source)
+    {
+        1
+    } else {
+        2
+    }
+}
+
+fn gain_if_shenhanxueyin(ctx: &mut Ctx<'_>, source: PlayerId, c: crate::ids::CardId) {
+    if ctx.catalog.vm_card_history
+        && crate::rvm_bridge::modifiers::has_shenhanxueyin(ctx.core, ctx.catalog, source)
+        && ctx.core.player(source).alive
+        && ctx.core.discard.contains(&c)
+    {
+        ctx.core.discard.retain(|x| *x != c);
+        ctx.core.player_mut(source).hand.push(c);
+        ctx.out.push(LogEvent::CardsDrawn {
+            player: source,
+            cards: vec![c],
+        });
+    }
+}
+
 impl ShaResolveMachine {
     /// 杀结算的挂起应答恢复（复仇、诱敌深入 shaBefore、霰弹、掠影与各武器/防具询问）：有待恢复的询问时返回本步结果。
     pub(super) fn resume_pending_answer(&mut self, ctx: &mut Ctx<'_>) -> Option<Flow> {
@@ -317,10 +360,12 @@ impl ShaResolveMachine {
             if let Some(c) = pick {
                 if ctx.core.player(self.target).hand.contains(&c) {
                     ctx.discard_from_hand(self.target, c);
+                    gain_if_shenhanxueyin(ctx, self.source, c);
                 } else if ctx.core.player(self.target).equips.contains(&c) {
                     ctx.core.player_mut(self.target).equips.retain(|x| *x != c);
                     crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.target, c);
                     ctx.to_discard(c);
+                    gain_if_shenhanxueyin(ctx, self.source, c);
                 }
             }
             if self.hanbing_pending > 0 && self.target_has_he(ctx) {
@@ -353,7 +398,13 @@ impl ShaResolveMachine {
             self.asking_hanbing = false;
             let confirmed = matches!(ctx.answer().first(), Some(ChoiceOption::Confirm));
             if confirmed {
-                self.hanbing_pending = 2;
+                let extra = ctx.catalog.vm_card_history
+                    && crate::rvm_bridge::modifiers::has_fuchendangmo(
+                        ctx.core,
+                        ctx.catalog,
+                        self.source,
+                    );
+                self.hanbing_pending = if extra { 3 } else { 2 };
                 if self.target_has_he(ctx) {
                     return Some(self.open_hanbing_target_ask(ctx));
                 }
@@ -363,9 +414,10 @@ impl ShaResolveMachine {
             // 放弃：照常进入麒麟弓/伤害结算（单武器互斥，实际直接伤害）。
             return Some(self.emit_sha_damage(ctx));
         }
-        // 贯石斧（批③-b 第五把）：弃二询问恢复——按应答弃牌，强制伤害。
+        // 贯石斧（批③-b 第五把）：弃二（上将的膂力时弃一）询问恢复——按应答弃牌，强制伤害。
         if self.asking_guanshi {
             self.asking_guanshi = false;
+            let need = guanshi_need(ctx, self.source);
             let picks: Vec<crate::ids::CardId> = ctx
                 .answer()
                 .iter()
@@ -374,7 +426,7 @@ impl ShaResolveMachine {
                     _ => None,
                 })
                 .collect();
-            let fired = picks.len() == 2;
+            let fired = picks.len() == need;
             for card in picks {
                 let in_hand = ctx.core.player(self.source).hand.contains(&card);
                 if in_hand {
@@ -421,6 +473,10 @@ impl ShaResolveMachine {
                         ctx.core
                             .vm_aux
                             .flags
+                            .remove(&(self.source, format!("sha_tianxian_done:{fid}")));
+                        ctx.core
+                            .vm_aux
+                            .flags
                             .remove(&(self.source, format!("sha_end_settled:{fid}")));
                         ctx.core
                             .vm_aux
@@ -464,11 +520,12 @@ impl ShaResolveMachine {
                     self.source,
                     crate::kernel::EloJudgePref::RedPositive,
                 );
+                let suit = sha_judge_suit(ctx, self.source, judged);
                 let red = matches!(
-                    ctx.catalog.cards[judged as usize].suit,
+                    suit,
                     crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
                 );
-                ctx.to_discard(judged);
+                let _ = ctx.settle_inline_judge_card(self.source, suit, judged);
                 if red {
                     let longdan = ctx
                         .catalog
@@ -555,12 +612,20 @@ impl ShaResolveMachine {
         if self.asking_cixiong {
             self.asking_cixiong = false;
             self.asked = false;
-            let pick = ctx.answer().first().and_then(|o| match o {
-                ChoiceOption::Card(c) => Some(*c),
-                _ => None,
-            });
-            if let Some(c) = pick.filter(|c| ctx.core.player(self.target).hand.contains(c)) {
-                ctx.discard_from_hand(self.target, c);
+            let need = cixiong_need(ctx, self.source);
+            let picks: Vec<crate::ids::CardId> = ctx
+                .answer()
+                .iter()
+                .filter_map(|o| match o {
+                    ChoiceOption::Card(c) if ctx.core.player(self.target).hand.contains(c) => Some(*c),
+                    _ => None,
+                })
+                .collect();
+            if picks.len() == need {
+                for c in picks {
+                    ctx.discard_from_hand(self.target, c);
+                    gain_if_shenhanxueyin(ctx, self.source, c);
+                }
             } else if ctx.core.player(self.source).alive {
                 // R05：取消=摸 1 走真实 R 帧——先 Yield 让调度器完成 R 子树
                 //（开放询问会暂停调度），再由 !asked 分支重开出闪询问。
@@ -570,10 +635,12 @@ impl ShaResolveMachine {
             // 落入下方 !asked 分支重开出闪询问（防具判定已由
             // armor_judged 标记幂等）。
         }
-        // 麒麟弓（批③-b 第二把）：弃马询问恢复——按应答弃马，随后结算伤害。
+        // 麒麟弓（批③-b 第二把）：弃马询问恢复——按应答弃马，随后结算伤害（拂尘荡魔可再弃一匹）。
         if self.asking_qilin {
             self.asking_qilin = false;
+            let cid = self.card.unwrap_or(0);
             // 空应答 = 来源放弃弃马。
+            let mut discarded_one = false;
             if let Some(ChoiceOption::Card(horse)) = ctx.answer().first().copied() {
                 if ctx.core.player(self.target).equips.contains(&horse) {
                     ctx.core
@@ -581,8 +648,50 @@ impl ShaResolveMachine {
                         .equips
                         .retain(|x| *x != horse);
                     ctx.to_discard(horse);
+                    gain_if_shenhanxueyin(ctx, self.source, horse);
+                    discarded_one = true;
                 }
             }
+            if discarded_one
+                && ctx.catalog.vm_card_history
+                && crate::rvm_bridge::modifiers::has_fuchendangmo(
+                    ctx.core,
+                    ctx.catalog,
+                    self.source,
+                )
+                && ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .get(&(self.source, format!("qilin_fuchen_used:{cid}")))
+                    .copied()
+                    .unwrap_or(0)
+                    == 0
+            {
+                let rem_horses = self.qilin_horses(ctx);
+                if !rem_horses.is_empty() && ctx.core.player(self.target).alive {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .insert((self.source, format!("qilin_fuchen_used:{cid}")), 1);
+                    self.asking_qilin = true;
+                    return Some(Flow::WaitChoice {
+                        observer: self.source,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "qilin_discard_horse",
+                            options: rem_horses,
+                            min: 0,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    });
+                }
+            }
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(self.source, format!("qilin_fuchen_used:{cid}")));
             self.qilin_horse = None;
             return Some(self.emit_sha_damage(ctx));
         }

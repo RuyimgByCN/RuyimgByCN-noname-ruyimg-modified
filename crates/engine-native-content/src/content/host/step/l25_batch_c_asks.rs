@@ -438,7 +438,7 @@ fn step_ssr_bailun(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                 m.owner,
                 engine_native_kernel::kernel::EloJudgePref::NonSpadePositive,
             );
-            let suit = card_suit(ctx.catalog, jc);
+            let (suit, _) = ctx.inline_judge_suit_rank(m.owner, jc);
             ctx.out.push(LogEvent::Judged {
                 player: m.owner,
                 card: jc,
@@ -457,9 +457,9 @@ fn step_ssr_bailun(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                 m.stage = HostStage::CardsAsk;
                 return Flow::Yield;
             } else {
-                ctx.to_discard(jc);
                 set_flag(ctx.core, m.owner, "l25_bailun_trick_boost", 1);
                 set_flag(ctx.core, m.owner, "ssr_bailun_direct", 1);
+                let _ = ctx.settle_inline_judge_card(m.owner, suit, jc);
             }
             Flow::Done
         }

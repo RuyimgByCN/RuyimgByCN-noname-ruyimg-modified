@@ -394,7 +394,8 @@ impl ShaResolveMachine {
                     .copied()
                     .map(ChoiceOption::Card),
             );
-            if pool.len() >= 2 {
+            let need = crate::kernel::sha::resume::guanshi_need(ctx, self.source);
+            if pool.len() >= need {
                 self.asking_guanshi = true;
                 return Flow::WaitChoice {
                     observer: self.source,
@@ -402,8 +403,8 @@ impl ShaResolveMachine {
                         kind: ChoiceKind::SelectCards,
                         prompt: "guanshi_force_damage",
                         options: pool,
-                        min: 2,
-                        max: 2,
+                        min: need,
+                        max: need,
                         allow_cancel: true,
                     },
                 };

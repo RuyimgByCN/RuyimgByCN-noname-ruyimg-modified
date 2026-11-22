@@ -56,11 +56,12 @@ impl HostMachine {
                     t,
                     engine_native_kernel::kernel::EloJudgePref::RedPositive,
                 );
+                let (suit, _) = ctx.inline_judge_suit_rank(t, judged);
                 let red = matches!(
-                    ctx.catalog.cards[judged as usize].suit,
+                    suit,
                     crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
                 );
-                ctx.to_discard(judged);
+                let _ = ctx.settle_inline_judge_card(t, suit, judged);
                 if red {
                     ctx.recover(t, 1, None);
                 } else {

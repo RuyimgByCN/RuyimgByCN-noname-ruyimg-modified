@@ -635,7 +635,12 @@ pub use d34_flags::{
     has_yaya_protected, is_card_ignored_in_discard_phase, is_target_unequip2,
     tanbei_unlimited_target, txlianbi_blocks_unlink, txminguangkai_blocks_link,
 };
-pub use d34_l11_buff_mods::{is_trick_unwuxie_for_nullify_window, shandian_reversed};
+pub use d34_l11_buff_mods::{
+    apply_huangtian_suit_rank, has_duocejiyong, has_fenchengluetu, has_fuchendangmo,
+    has_shangjiangdelvli, has_shenhanxueyin, has_wolongmice, huangtian_judge_override,
+    is_trick_like_kind, is_trick_unwuxie_for_nullify_window, shandian_reversed,
+    shierqicejin_excludes, shierqicetui_excludes, taoyuan_recover_bonus,
+};
 mod eval;
 pub use eval::*;
 

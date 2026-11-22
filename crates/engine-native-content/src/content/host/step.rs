@@ -19,6 +19,7 @@ pub(crate) use l10_scs::{on_phase_end_l10_scs, scsanruo_response_skill};
 mod skills_virtual_use;
 mod skills_discard_costs;
 mod skills_damage;
+mod skills_damage_extra;
 mod skills_recovery;
 mod skills_status;
 pub(super) mod skills_targets;
@@ -191,6 +192,11 @@ pub(super) mod l11_buffs_a;
 pub(super) mod l11_buffs_b;
 pub(super) mod l11_buffs_b_asks;
 pub(super) mod l11_buff_helpers_a;
+pub(super) mod l11_common_b4;
+pub(super) mod l11_buffs_b4_asks;
+pub(super) mod l11_buffs_c;
+pub(super) mod l11_buffs_d;
+pub(super) mod l11_buff_helpers_b;
 pub(super) mod l01_attitude;
 pub(super) mod l01_rules;
 pub(super) mod l01_yiyi;
@@ -1268,6 +1274,9 @@ impl HostMachine {
             HostBehavior::L11BuffsA => l11_buffs_a::handle_l11_buffs_a(self, ctx),
             HostBehavior::L11BuffsB => l11_buffs_b::handle_l11_buffs_b(self, ctx),
             HostBehavior::L11BuffHelpersA => l11_buff_helpers_a::handle_l11_buff_helpers_a(self, ctx),
+            HostBehavior::L11BuffsC => l11_buffs_c::handle_l11_buffs_c(self, ctx),
+            HostBehavior::L11BuffsD => l11_buffs_d::handle_l11_buffs_d(self, ctx),
+            HostBehavior::L11BuffHelpersB => l11_buff_helpers_b::handle_l11_buff_helpers_b(self, ctx),
             HostBehavior::L01YiyiCard
             | HostBehavior::L01FirstKs
             | HostBehavior::L01NeiKey

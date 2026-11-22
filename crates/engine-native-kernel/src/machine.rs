@@ -962,6 +962,9 @@ impl<'a> Ctx<'a> {
                     .vm_aux
                     .flags
                     .insert((0, format!("u01_recover_preapplied:{fid}")), gained);
+                if self.catalog.vm_card_history {
+                    crate::resolution::note_recover_source(self.core, self.res, player, fid);
+                }
             }
         }
         gained

@@ -253,12 +253,12 @@ impl HostMachine {
                         })
                         .unwrap_or(engine_native_kernel::kernel::EloJudgePref::CardValue);
                     let judged = ctx.draw_judge_card_with_elo(t, pref);
-                    let suit = ctx.catalog.cards[judged as usize].suit;
+                    let (suit, _) = ctx.inline_judge_suit_rank(t, judged);
                     ctx.log(LogEvent::Judged {
                         player: t,
                         card: judged,
                     });
-                    ctx.to_discard(judged);
+                    let _ = ctx.settle_inline_judge_card(t, suit, judged);
                     if let Some(c) = self.cards.first().copied() {
                         let is_red = |su: crate::catalog::Suit| {
                             matches!(

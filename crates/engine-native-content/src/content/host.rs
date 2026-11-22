@@ -718,6 +718,17 @@ impl SkillBehavior for HostSkillBehavior {
     fn blocks_all_cards(&self) -> bool {
         matches!(self.behavior, HostBehavior::Bingfeng2)
     }
+    fn needs_vm_card_history(&self) -> bool {
+        matches!(
+            self.behavior,
+            HostBehavior::L11BuffsA
+                | HostBehavior::L11BuffsB
+                | HostBehavior::L11BuffHelpersA
+                | HostBehavior::L11BuffsC
+                | HostBehavior::L11BuffsD
+                | HostBehavior::L11BuffHelpersB
+        )
+    }
     /// 止息（L27 批 2）：**计数标记 ≥ 体力** 或 **已使用过锦囊**（记录标记
     /// 非零）→ 封锁出牌/响应。两个标记分别以 `new_zhixi` 与
     /// `new_zhixi_mark2` 的技能定义为键存于 `vm_aux.marks`。
@@ -746,6 +757,9 @@ impl SkillBehavior for HostSkillBehavior {
 }
 
 impl crate::catalog::SkillMachine for HostMachine {
+    fn actor_owner(&self) -> Option<crate::ids::PlayerId> {
+        Some(self.owner)
+    }
     fn fork(&self) -> Box<dyn crate::catalog::SkillMachine> {
         Box::new(self.clone())
     }
@@ -817,6 +831,11 @@ pub fn host_skill_trigger_meta(
         HostBehavior::L11BuffsB => step::l11_buffs_b::trigger_meta_l11_buffs_b(name),
         HostBehavior::L11BuffHelpersA => {
             step::l11_buff_helpers_a::trigger_meta_l11_buff_helpers_a(name)
+        }
+        HostBehavior::L11BuffsC => step::l11_buffs_c::trigger_meta_l11_buffs_c(name),
+        HostBehavior::L11BuffsD => step::l11_buffs_d::trigger_meta_l11_buffs_d(name),
+        HostBehavior::L11BuffHelpersB => {
+            step::l11_buff_helpers_b::trigger_meta_l11_buff_helpers_b(name)
         }
         _ => crate::event::NativeDamageEffect::from_host(behavior)
             .map(|e| e.meta())
@@ -902,6 +921,9 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         HostBehavior::L11BuffsA => step::l11_buffs_a::limits_l11_buffs_a(name),
         HostBehavior::L11BuffsB => step::l11_buffs_b::limits_l11_buffs_b(name),
         HostBehavior::L11BuffHelpersA => step::l11_buff_helpers_a::limits_l11_buff_helpers_a(name),
+        HostBehavior::L11BuffsC => step::l11_buffs_c::limits_l11_buffs_c(name),
+        HostBehavior::L11BuffsD => step::l11_buffs_d::limits_l11_buffs_d(name),
+        HostBehavior::L11BuffHelpersB => step::l11_buff_helpers_b::limits_l11_buff_helpers_b(name),
         HostBehavior::GujianFoodQingtuan | HostBehavior::GujianFoodLuyugeng => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,

@@ -138,6 +138,8 @@ impl Catalog {
                 | "potzhuangshi"
                 | "twxiafeng"
                 | "twzuhuo"
+                | "buff_txhj_gusoejueyan"
+                | "_buff_txhj_guosejueyan"
                 | "_buff_txhj_wuweizhile"
                 | "_buff_txhj_jiezizhidao"
         ) {

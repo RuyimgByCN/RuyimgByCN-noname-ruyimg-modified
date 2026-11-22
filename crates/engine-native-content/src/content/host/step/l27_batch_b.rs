@@ -25,6 +25,9 @@ mod l27_batch_b_tw;
 
 pub(in crate::content::host) use l27_batch_b_asks::ask_l27_batch_b;
 pub(super) use l27_batch_b_asks::{target_skills_list, wait_ask};
+pub(super) use l27_batch_b_tw::{
+    finish_mahou_cast, finish_mahou_cast_stage, finish_renigong_draw, mahou_max_x,
+};
 
 pub(super) const ASK_BOLAN_G_TARGET: u32 = 200;
 pub(super) const ASK_BOLAN_SKILL: u32 = 201;
@@ -62,6 +65,7 @@ pub(super) const ASK_TWZUHUO_TURNS: u32 = 331;
 pub(super) const ASK_TWZHOUZU_TARGET: u32 = 340;
 pub(super) const ASK_TWZHOUZU_TURNS: u32 = 341;
 pub(super) const ASK_TWZHOUZU_TARGET_DISCARD: u32 = 342;
+pub(super) const ASK_TWMAHOU_RENIGONG_CONFIRM: u32 = 343;
 
 pub(super) const BOLAN_SKILL_POOL: [&str; 3] = ["zhiheng", "qiangxi", "quhu"];
 

@@ -17,6 +17,7 @@ mod dispatch;
 mod frame_hooks;
 mod trigger_order;
 use dispatch::{finish_slot, native_machine, notify_new_skills, start_queued_trigger};
+pub(crate) use frame_hooks::note_recover_source;
 pub(crate) use trigger_order::event_kind as trigger_window_kind;
 pub use trigger_order::{
     refresh_order_choice, register_added, sync_trigger_owners, validate_trigger_bindings,
@@ -91,6 +92,8 @@ pub struct Resolution {
     pub budget: u32,
     /// VM 执行故障（NC04，瞬态：命令结束时清空，不入快照/哈希）。
     pub fault: Option<crate::machine::VmFault>,
+    /// 当前推进机器对应的行为者（瞬态，不入快照/哈希，仅供 `Ctx::recover` 溯源）。
+    pub active_actor: Option<PlayerId>,
 }
 
 impl Resolution {
@@ -104,6 +107,7 @@ impl Resolution {
             answer: None,
             budget,
             fault: None,
+            active_actor: None,
         }
     }
 
@@ -281,6 +285,9 @@ impl OptionalGate {
 }
 
 impl SkillMachine for OptionalGate {
+    fn actor_owner(&self) -> Option<PlayerId> {
+        Some(self.owner)
+    }
     fn fork(&self) -> Box<dyn SkillMachine> {
         Box::new(Self {
             owner: self.owner,
@@ -591,6 +598,8 @@ pub fn run(
                 park.awaiting_answer = false;
                 let prior_skills: std::collections::BTreeSet<_> =
                     core.skills.keys().copied().collect();
+                let prior_actor = res.active_actor;
+                res.active_actor = park.machine.actor_owner();
                 let flow = {
                     let mut ctx = Ctx {
                         core,
@@ -600,6 +609,7 @@ pub fn run(
                     };
                     park.machine.step(&mut ctx)
                 };
+                res.active_actor = prior_actor;
                 notify_new_skills(core, res, catalog, &prior_skills, out);
                 res.answer = None; // 应答只消费一次
                 match flow {

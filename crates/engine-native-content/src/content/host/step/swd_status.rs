@@ -478,20 +478,22 @@ impl HostMachine {
             }
             // 幻音：判定——黑桃取消该牌、红桃摸 1、其余无事
             HostBehavior::SwdHuanyin => {
-                let judged = ctx.draw_judge_card_with_elo(
-                    self.owner,
-                    engine_native_kernel::kernel::EloJudgePref::Huanyin,
-                );
-                let suit = ctx.catalog.cards[judged as usize].suit;
-                ctx.to_discard(judged);
-                match suit {
-                    crate::catalog::Suit::Spade => {
-                        ctx.current_card_use_mut().cancelled = true;
+                if !ctx.core.deck.is_empty() || !ctx.core.discard.is_empty() {
+                    let judged = ctx.draw_judge_card_with_elo(
+                        self.owner,
+                        engine_native_kernel::kernel::EloJudgePref::Huanyin,
+                    );
+                    let (suit, _) = ctx.inline_judge_suit_rank(self.owner, judged);
+                    match suit {
+                        crate::catalog::Suit::Spade => {
+                            ctx.current_card_use_mut().cancelled = true;
+                        }
+                        crate::catalog::Suit::Heart => {
+                            ctx.start_draw(self.owner, 1);
+                        }
+                        _ => {}
                     }
-                    crate::catalog::Suit::Heart => {
-                        ctx.start_draw(self.owner, 1);
-                    }
-                    _ => {}
+                    let _ = ctx.settle_inline_judge_card(self.owner, suit, judged);
                 }
                 Flow::Done
             }

@@ -887,7 +887,10 @@ impl HostBehavior {
             | HostBehavior::L11GeneralSkillsF
             | HostBehavior::L11BuffsA
             | HostBehavior::L11BuffsB
-            | HostBehavior::L11BuffHelpersA => None,
+            | HostBehavior::L11BuffHelpersA
+            | HostBehavior::L11BuffsC
+            | HostBehavior::L11BuffsD
+            | HostBehavior::L11BuffHelpersB => None,
             HostBehavior::L01YiyiCard
             | HostBehavior::L01FirstKs
             | HostBehavior::L01NeiKey

@@ -435,8 +435,10 @@ impl DuelMachine {
             .flags
             .remove(&(self.target, "dddfusi_window_refused".to_string()));
         if card != 0 {
-            ctx.to_discard(card);
-            ctx.core.table.retain(|c| *c != card);
+            if let Some(pos) = ctx.core.table.iter().position(|c| *c == card) {
+                ctx.core.table.remove(pos);
+                ctx.to_discard(card);
+            }
         }
         Flow::Done
     }

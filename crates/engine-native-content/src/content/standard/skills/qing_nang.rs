@@ -56,6 +56,9 @@ pub(in super::super) struct QingNangMachine {
 }
 
 impl SkillMachine for QingNangMachine {
+    fn actor_owner(&self) -> Option<PlayerId> {
+        Some(self.owner)
+    }
     fn fork(&self) -> Box<dyn SkillMachine> {
         Box::new(self.clone())
     }

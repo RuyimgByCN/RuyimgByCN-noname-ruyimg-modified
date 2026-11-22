@@ -57,6 +57,9 @@ pub(in super::super) struct JieYinMachine {
 }
 
 impl SkillMachine for JieYinMachine {
+    fn actor_owner(&self) -> Option<PlayerId> {
+        Some(self.owner)
+    }
     fn fork(&self) -> Box<dyn SkillMachine> {
         Box::new(self.clone())
     }

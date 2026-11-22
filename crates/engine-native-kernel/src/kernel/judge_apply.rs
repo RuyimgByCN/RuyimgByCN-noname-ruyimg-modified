@@ -30,7 +30,7 @@ impl JudgePhaseMachine {
         if xhy_suit > 0 {
             suit = suit_from_code(xhy_suit);
         }
-        (suit, rank)
+        crate::rvm_bridge::modifiers::apply_huangtian_suit_rank(core, catalog, owner, suit, rank)
     }
 
     pub(super) fn notify_judge_settled(
@@ -263,5 +263,44 @@ impl JudgePhaseMachine {
             }
         }
         (trick_kind, suit)
+    }
+}
+
+impl crate::machine::Ctx<'_> {
+    /// Returns the effective `(Suit, u8)` of an inline judge card, applying
+    /// Huangtian judge overrides when `vm_card_history` is active.
+    pub fn inline_judge_suit_rank(
+        &self,
+        owner: PlayerId,
+        card: crate::ids::CardId,
+    ) -> (crate::catalog::Suit, u8) {
+        let raw = &self.catalog.cards[card as usize];
+        if self.catalog.vm_card_history {
+            crate::rvm_bridge::modifiers::apply_huangtian_suit_rank(
+                self.core,
+                self.catalog,
+                owner,
+                raw.suit,
+                raw.rank,
+            )
+        } else {
+            (raw.suit, raw.rank)
+        }
+    }
+
+    /// Discards an inline judge card and invokes `on_judge_settled` (`judgeEnd`)
+    /// when `vm_card_history` is active; returns whether a follow-up frame spawned.
+    pub fn settle_inline_judge_card(
+        &mut self,
+        owner: PlayerId,
+        suit: crate::catalog::Suit,
+        card: crate::ids::CardId,
+    ) -> bool {
+        self.to_discard(card);
+        if self.catalog.vm_card_history {
+            (self.catalog.hooks.on_judge_settled)(self, owner, None, suit, card)
+        } else {
+            false
+        }
     }
 }

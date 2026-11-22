@@ -4,7 +4,7 @@
 //! `extension.js:2053-3195`).
 
 use super::*;
-use crate::catalog::{CardKind, EquipSlot};
+use crate::catalog::CardKind;
 
 fn gain_card_by_kind_from_deck_or_discard(
     ctx: &mut Ctx<'_>,
@@ -37,13 +37,6 @@ fn gain_card_by_kind_from_deck_or_discard(
 fn discard_one_from_target(ctx: &mut Ctx<'_>, owner: PlayerId, target: PlayerId) -> bool { discard_target_he(ctx, owner, target).is_some() }
 
 fn steal_one_from_target(ctx: &mut Ctx<'_>, owner: PlayerId, target: PlayerId) -> bool { steal_target_he(ctx, owner, target) }
-
-fn has_weapon_equipped(ctx: &Ctx<'_>, owner: PlayerId) -> bool {
-    ctx.core.player(owner).equips.iter().any(|&cid| {
-        ctx.catalog.cards[cid as usize].kind.equip_slot() == Some(EquipSlot::Weapon)
-            || ctx.catalog.cards[cid as usize].kind == CardKind::Weapon
-    })
-}
 
 /// Resolve an `L11` (`太虚幻境`) blessing (`buff_txhj_*` / `_buff_txhj_*`) or servant skill (`txhj_*Skill*` / `_sl*`).
 /// Returns `true` if handled, `false` to pass to `decision34_l11_skills`.
@@ -519,185 +512,89 @@ pub(super) fn try_resolve_l11_buff_or_servant_skill(
         | "txhj_pozhenzhifeng"
         | "txhj_wuweizhile"
         | "txhj_yuanduandilue"
-        | "txhj_huangtiannizhuan" => {}
-
-        // === Batch L11-4+ `extension_buff.js` blessings ===
-        "buff_txhj_taoyuanyishi"
+        | "txhj_huangtiannizhuan"
+        // === Batch L11-4 host-handled skills (`HostBehavior::L11BuffsC`/`D`/`HelpersB`): ===
+        | "buff_txhj_luanjifengshi"
+        | "_buff_txhj_luanjifengshi"
+        | "buff_txhj_taoyuanyishi"
         | "_buff_txhj_taoyuanyishi"
-        | "txhj_taoyuanyishi"
-        | "taoyuanyishiX"
-        | "buff_txhj_shenyizhidao"
-        | "_buff_txhj_shenyizhidao" => {
-            // `extension_buff.js:453, 717`: +1 HP recovery on Tao / Taoyuan
-            if ctx.core.player(owner).hp < ctx.core.player(owner).max_hp as i32 {
-                let _ = ctx.recover(owner, 1, None);
-            }
-        }
-        "buff_txhj_xianhujiqu" => {
-            // `extension_buff.js:541`: retain gained maxHp (+1 maxHp on trigger)
-            ctx.core.player_mut(owner).max_hp += 1;
-        }
-        "buff_txhj_haoshidebaochao"
+        | "buff_txhj_haoshidebaochao"
         | "_buff_txhj_haoshidebaochang"
-        | "buff_txhj_jijianchangge"
-        | "_buff_txhj_jijianchangge"
-        | "buff_txhj_gusoejueyan"
-        | "_buff_txhj_guosejueyan"
-        | "buff_txhj_hengxingwuji"
-        | "_buff_txhj_hengxingwuji"
-        | "buff_txhj_huangtianzhimin"
-        | "_buff_txhj_huangtianzhimin"
-        | "buff_txhj_ximengzhili"
-        | "_buff_txhj_ximengzhili"
-        | "buff_txhj_pofuchenzhou"
-        | "_buff_txhj_pofuchenzhou"
-        | "txhj_pofuchenzhou"
-        | "buff_txhj_renigongdeyouhu"
-        | "txhj_jufuxionghao"
-        | "_buff_txhj_jufuxionghao" => {
-            // `extension_buff.js:387, 464, 684, 750, 772, 783, 816, 849, 882`: draw 1 on specific trick/judge/cast
-            ctx.start_draw(owner, 1);
-        }
-        "buff_txhj_luoshenjuezhang"
-        | "_buff_txhj_luoshenjuezhang"
-        | "txhj_luoshenjuezhang"
-        | "txhj_luoshen" => {
-            // `extension_buff.js:706`: 1/round after Shan -> draw 1
-            if flag(ctx.core, owner, "l11_luoshenjuezhang_used") == 0 {
-                set_flag(ctx.core, owner, "l11_luoshenjuezhang_used", 1);
-                ctx.start_draw(owner, 1);
-            }
-        }
-        "buff_txhj_yiguzuoqi" | "_buff_txhj_yiguzuoqi" | "buff_txhj_xiuluodebeimin" | "_buff_txhj_xiuluodelianmin" => {
-            // `extension_buff.js:607, 640`: if weapon equipped -> draw 1
-            if has_weapon_equipped(ctx, owner) {
-                ctx.start_draw(owner, 1);
-            }
-        }
-        "buff_txhj_gongtaizhizhi" | "_buff_txhj_gongtaizhizhi" => {
-            // `extension_buff.js:662`: if armor equipped -> draw 1
-            if ctx.core.player(owner).equips.iter().any(|&cid| {
-                ctx.catalog.cards[cid as usize].kind.equip_slot() == Some(EquipSlot::Armor)
-            }) {
-                ctx.start_draw(owner, 1);
-            }
-        }
-        "buff_txhj_gongzhibaowu" | "_buff_txhj_gongzhibaowu" | "buff_txhj_hannu" | "_buff_txhj_hannu" => {
-            // `extension_buff.js:574, 739`: gain Sha from deck/discard
-            let _ = gain_card_by_kind_from_deck_or_discard(ctx, owner, CardKind::is_sha_like);
-        }
-        "buff_txhj_fangzhibaowu" | "_buff_txhj_fangzhibaowu" => {
-            // `extension_buff.js:585`: gain Shan from deck/discard
-            let _ = gain_card_by_kind_from_deck_or_discard(ctx, owner, |k| k == CardKind::Shan);
-        }
-        "buff_txhj_duocejiyong"
+        | "buff_txhj_duocejiyong"
         | "_buff_txhj_duocejiyong"
+        | "buff_txhj_wolongmice"
+        | "buff_txhj_fenchengluetu"
+        | "_buff_txhj_jufuxionghao"
+        | "buff_txhj_bowenqiangzhi"
+        | "buff_txhj_majundegaizao"
+        | "buff_txhj_xianhujiqu"
+        | "buff_txhj_fuchendangmo"
         | "buff_txhj_shenfuhuaxie"
         | "_buff_txhj_shenfuhuaxie"
-        | "buff_txhj_fenchengluetu"
-        | "buff_txhj_shenhanxueyin" => {
-            // `extension_buff.js:475, 497, 563, 629`: steal/gain 1 card from target or discard
-            if let Some(t) = hostile_target(ctx, owner) {
-                if !steal_one_from_target(ctx, owner, t) {
-                    if let Some(cid) = ctx.core.discard.pop() {
-                        ctx.core.player_mut(owner).hand.push(cid);
-                    }
-                }
-            }
-        }
-        "buff_txhj_luanjifengshi"
-        | "_buff_txhj_luanjifengshi"
+        | "buff_txhj_gongzhibaowu"
+        | "_buff_txhj_gongzhibaowu"
+        | "buff_txhj_fangzhibaowu"
+        | "_buff_txhj_fangzhibaowu"
         | "buff_txhj_suikuiliejia"
         | "_buff_txhj_suikuiliejia"
-        | "buff_txhj_fuchendangmo"
+        | "buff_txhj_yiguzuoqi"
+        | "_buff_txhj_yiguzuoqi"
+        | "buff_txhj_shangjiangdelvli"
+        | "buff_txhj_shenhanxueyin"
+        | "buff_txhj_xiuluodebeimin"
+        | "_buff_txhj_xiuluodelianmin"
+        | "buff_txhj_cebeibuyu"
+        | "_buff_txhj_cebeibuyu"
+        | "buff_txhj_gongtaizhizhi"
+        | "_buff_txhj_gongtaizhizhi"
+        | "buff_txhj_tianxiawushuang"
+        | "_buff_txhj_tianxiawushuang"
+        | "buff_txhj_jijianchangge"
+        | "_buff_txhj_jijianchangge"
         | "buff_txhj_huangtianzhinu"
-        | "_buff_txhj_huangtianzhinu" => {
-            // `extension_buff.js:431, 442, 552, 596, 695`: target discards 1 card
-            if let Some(t) = hostile_target(ctx, owner) {
-                let _ = discard_one_from_target(ctx, owner, t);
-            }
-        }
-        "buff_txhj_cebeibuyu" | "_buff_txhj_cebeibuyu" => {
-            // `extension_buff.js:651`: if armor equipped, trick damage -1 (wired in `d34_l11_mods.rs`)
-            set_flag(ctx.core, owner, "l11_cebeibuyu_trick_shield", 1);
-        }
-        "buff_txhj_tianxiawushuang" | "_buff_txhj_tianxiawushuang" => {
-            // `extension_buff.js:673`: normal Sha +1 damage (wired in `d34_l11_mods.rs`)
-            set_flag(ctx.core, owner, "l11_tianxiawushuang_normal_sha_plus1", 1);
-        }
-        "buff_txhj_mowangdejianiang" | "_buff_txhj_mowangdejianiang" | "txhj_mowangdejianiang" => {
-            // `extension_buff.js:728`: Jiu damage persists all turn (wired in `d34_l11_mods.rs`)
-            set_flag(ctx.core, owner, "l11_mowang_jiu_persist", 1);
-        }
-        "txhj_jianiang_clear" => {
-            set_flag(ctx.core, owner, "l11_mowang_jiu_persist", 0);
-        }
-        "buff_txhj_mingyundezhiyi" | "_buff_txhj_mingyundezhiyi" => {
-            // `extension_buff.js:761`: link all enemy players
-            for p in 0..ctx.core.players.len() as u8 {
-                if p != owner && ctx.core.player(p).alive {
-                    ctx.core.player_mut(p).linked = true;
-                }
-            }
-        }
-        "buff_txhj_bowenqiangzhi" => {
-            // `extension_buff.js:508`: exclude 1 wrong quiz option in `execute_taixu_campaign_node`
-            set_flag(ctx.core, owner, "l11_quiz_hint_exclude_wrong", 1);
-        }
-        "buff_txhj_wolongmice" => {
-            // `extension_buff.js:340`: Huogong +1 damage (`l11_mod:damage_plus1`) and draw 1
-            set_flag(ctx.core, owner, "l11_mod:damage_plus1", 1);
-            ctx.start_draw(owner, 1);
-        }
-        "buff_txhj_majundegaizao" => {
-            // `extension_buff.js:518`: equip upgrade -> draw 1 card and gain 1 hujia
-            ctx.core.player_mut(owner).hujia = ctx.core.player(owner).hujia.saturating_add(1);
-            ctx.start_draw(owner, 1);
-        }
-        "buff_txhj_shangjiangdelvli" => {
-            // `extension_buff.js:535`: +1 Sha use limit (`l11_mod:txhj_oldhuxiao`)
-            set_flag(ctx.core, owner, "l11_mod:txhj_oldhuxiao", 1);
-        }
-        "buff_txhj_shierqicejin" | "_buff_txhj_shierqicejin" | "txhj_shierqicejin" => {
-            // `extension_buff.js:415`: ally AOE immunity (`l11_mod:txmanzhen`) and 1 damage to enemy
-            set_flag(ctx.core, owner, "l11_mod:txmanzhen", 1);
-            if let Some(t) = hostile_target(ctx, owner) {
-                ctx.emit(EventData::Damage(crate::machine::damage_data(Some(owner), t, 1)));
-            }
-        }
-        "buff_txhj_shierqicetui" | "_buff_txhj_shierqicetui" | "txhj_shierqicetui" => {
-            // `extension_buff.js:445`: Taoyuan/Wugu enemy exclusion -> recover 1 HP and draw 1
-            let _ = ctx.recover(owner, 1, None);
-            ctx.start_draw(owner, 1);
-        }
-        "buff_txhj_huangtianyili" | "_buff_txhj_huangtianyili" => {
-            // `extension_buff.js:385`: judge treated as Spade 5 -> 3 thunder damage to enemy
-            if let Some(t) = hostile_target(ctx, owner) {
-                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                    Some(owner),
-                    t,
-                    3,
-                    DamageNature::Thunder,
-                    None,
-                )));
-            }
-        }
-        "buff_txhj_huangtianzhizu" | "_buff_txhj_huangtianzhizu" => {
-            // `extension_buff.js:405`: before judge, enemy loses 1 HP
-            if let Some(t) = hostile_target(ctx, owner) {
-                ctx.emit(EventData::LoseHp { player: t, amount: 1 });
-            }
-        }
-        "buff_txhj_tiangongdeyouhu" => {
-            // `extension_buff.js:550`: thunder immunity (`l11_mod:txhuangfu`) and draw 1
-            set_flag(ctx.core, owner, "l11_mod:txhuangfu", 1);
-            ctx.start_draw(owner, 1);
-        }
-        "buff_txhj_digongdeyouhu" => {
-            // `extension_buff.js:565`: heavy damage -1 (`l11_mod:txxiebi`) and +1 hujia
-            set_flag(ctx.core, owner, "l11_mod:txxiebi", 1);
-            ctx.core.player_mut(owner).hujia = ctx.core.player(owner).hujia.saturating_add(1);
-        }
+        | "_buff_txhj_huangtianzhinu"
+        | "buff_txhj_luoshenjuezhang"
+        | "_buff_txhj_luoshenjuezhang"
+        | "buff_txhj_shenyizhidao"
+        | "_buff_txhj_shenyizhidao"
+        | "buff_txhj_mowangdejianiang"
+        | "_buff_txhj_mowangdejianiang"
+        | "buff_txhj_hannu"
+        | "_buff_txhj_hannu"
+        | "buff_txhj_gusoejueyan"
+        | "_buff_txhj_guosejueyan"
+        | "buff_txhj_mingyundezhiyi"
+        | "_buff_txhj_mingyundezhiyi"
+        | "buff_txhj_ximengzhili"
+        | "_buff_txhj_ximengzhili"
+        | "buff_txhj_hengxingwuji"
+        | "_buff_txhj_hengxingwuji"
+        | "buff_txhj_shierqicejin"
+        | "_buff_txhj_shierqicejin"
+        | "buff_txhj_shierqicetui"
+        | "_buff_txhj_shierqicetui"
+        | "buff_txhj_pofuchenzhou"
+        | "_buff_txhj_pofuchenzhou"
+        | "buff_txhj_huangtianyili"
+        | "_buff_txhj_huangtianyili"
+        | "buff_txhj_huangtianzhizu"
+        | "_buff_txhj_huangtianzhizu"
+        | "buff_txhj_huangtianzhimin"
+        | "_buff_txhj_huangtianzhimin"
+        | "buff_txhj_tiangongdeyouhu"
+        | "buff_txhj_digongdeyouhu"
+        | "buff_txhj_renigongdeyouhu"
+        | "txhj_taoyuanyishi"
+        | "taoyuanyishiX"
+        | "txhj_jufuxionghao"
+        | "txhj_luoshenjuezhang"
+        | "txhj_luoshen"
+        | "txhj_mowangdejianiang"
+        | "txhj_jianiang_clear"
+        | "txhj_shierqicejin"
+        | "txhj_shierqicetui"
+        | "txhj_pofuchenzhou" => {}
+
         _ => return false,
     }
     true

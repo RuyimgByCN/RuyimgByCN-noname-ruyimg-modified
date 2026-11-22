@@ -375,13 +375,48 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                 // 铁索机器）结算结束弃置——旧实现在此无条件弃牌，叠加效果
                 // 机器的弃置使非抵消路径同一牌进弃牌堆两次。
                 self.clear_stateplayer(ctx.core);
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.source, format!("nullify_last:{}", self.card)));
+                let winner = ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.source, format!("nullify_winner:{}", self.card)))
+                    .and_then(|v| u8::try_from(v.saturating_sub(1)).ok());
                 if self.nullified {
+                    let card = self.card;
+                    if let Some(w) = winner.filter(|&p| {
+                        card != 0
+                            && ctx.core.player(p).alive
+                            && crate::rvm_bridge::modifiers::has_duocejiyong(
+                                ctx.core,
+                                ctx.catalog,
+                                p,
+                            )
+                            && (ctx.core.table.contains(&card) || ctx.core.discard.contains(&card))
+                    }) {
+                        ctx.core.table.retain(|c| *c != card);
+                        ctx.core.discard.retain(|c| *c != card);
+                        ctx.core.player_mut(w).hand.push(card);
+                        ctx.out.push(LogEvent::CardsDrawn {
+                            player: w,
+                            cards: vec![card],
+                        });
+                        ctx.emit(EventData::CardsDrawn {
+                            player: w,
+                            cards: vec![card],
+                        });
+                        return Flow::Yield;
+                    }
                     // 弃置责任唯一化（ADR 0705/0706）：owns_disposal 的窗口
                     // 抵消时弃置；AOE 逐目标窗口不弃置（外层收尾统一弃置）。
                     if self.owns_disposal {
-                        let card = self.card;
-                        ctx.to_discard(card);
-                        ctx.core.table.retain(|c| *c != card);
+                        if let Some(pos) = ctx.core.table.iter().position(|c| *c == card) {
+                            ctx.core.table.remove(pos);
+                            ctx.to_discard(card);
+                        }
                     }
                     if self.effect.is_none() {
                         ctx.core
@@ -470,12 +505,57 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                 }
                 self.queue.remove(0);
                 if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
+                    let prev_wuxie = ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .get(&(self.source, format!("nullify_last:{}", self.card)))
+                        .copied()
+                        .and_then(|v| v.checked_sub(1));
                     // 出无懈：弃牌、反转抵消状态、更新 stateplayer、自其下家重新询问
                     discard_response_card(ctx, responder, c, CardKind::Nullify);
                     super::emit_card_responded_as(ctx, responder, c, CardKind::Nullify);
                     self.nullified = !self.nullified;
                     self.set_stateplayer(ctx.core, responder);
                     self.queue = ctx.core.seat_order_from(ctx.core.next_alive(responder));
+                    if ctx.catalog.vm_card_history {
+                        ctx.core.vm_aux.flags.insert(
+                            (self.source, format!("nullify_last:{}", self.card)),
+                            c + 1,
+                        );
+                        if self.nullified {
+                            ctx.core.vm_aux.flags.insert(
+                                (self.source, format!("nullify_winner:{}", self.card)),
+                                u32::from(responder) + 1,
+                            );
+                        } else {
+                            ctx.core
+                                .vm_aux
+                                .flags
+                                .remove(&(self.source, format!("nullify_winner:{}", self.card)));
+                            if let Some(pw) = prev_wuxie.filter(|pc| {
+                                ctx.core.player(responder).alive
+                                    && ctx.core.discard.contains(pc)
+                                    && crate::rvm_bridge::modifiers::has_duocejiyong(
+                                        ctx.core,
+                                        ctx.catalog,
+                                        responder,
+                                    )
+                            }) {
+                                ctx.core.discard.retain(|x| *x != pw);
+                                ctx.core.player_mut(responder).hand.push(pw);
+                                ctx.out.push(LogEvent::CardsDrawn {
+                                    player: responder,
+                                    cards: vec![pw],
+                                });
+                                ctx.emit(EventData::CardsDrawn {
+                                    player: responder,
+                                    cards: vec![pw],
+                                });
+                                return Flow::Yield;
+                            }
+                        }
+                    }
                 }
                 return self.step(ctx);
             }

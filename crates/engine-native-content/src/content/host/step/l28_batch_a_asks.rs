@@ -676,8 +676,9 @@ pub(super) fn step_th_yufeng(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                     p,
                     engine_native_kernel::kernel::EloJudgePref::CardValue,
                 );
-                let is_black = matches!(ctx.catalog.cards[jc as usize].suit, Suit::Spade | Suit::Club);
-                ctx.to_discard(jc);
+                let (suit, _) = ctx.inline_judge_suit_rank(p, jc);
+                let is_black = matches!(suit, Suit::Spade | Suit::Club);
+                let _ = ctx.settle_inline_judge_card(p, suit, jc);
                 if is_black {
                     ctx.core.turn.skip_play_phase = true;
                     ctx.core.player_mut(p).skip_discard_phase = true;

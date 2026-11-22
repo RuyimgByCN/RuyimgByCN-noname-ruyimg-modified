@@ -594,7 +594,8 @@ fn resolve_stardangchen(ctx: &mut Ctx<'_>, owner: PlayerId) {
                     owner,
                     crate::kernel::EloJudgePref::RedPositive,
                 );
-                ctx.to_discard(c);
+                let (suit, _) = ctx.inline_judge_suit_rank(owner, c);
+                let _ = ctx.settle_inline_judge_card(owner, suit, c);
                 c
             })
     };

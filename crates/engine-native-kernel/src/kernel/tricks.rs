@@ -55,6 +55,9 @@ pub struct TaoyuanMachine {
 }
 
 impl crate::catalog::SkillMachine for TaoyuanMachine {
+    fn actor_owner(&self) -> Option<PlayerId> {
+        Some(self.owner)
+    }
     fn fork(&self) -> Box<dyn crate::catalog::SkillMachine> {
         Box::new(self.clone())
     }
@@ -72,12 +75,26 @@ impl crate::catalog::SkillMachine for TaoyuanMachine {
             others.retain(|p| targets.contains(p));
         }
         for p in others {
+            if crate::rvm_bridge::modifiers::shierqicetui_excludes(
+                ctx.core,
+                ctx.catalog,
+                self.owner,
+                p,
+            ) {
+                continue;
+            }
+            let extra = crate::rvm_bridge::modifiers::taoyuan_recover_bonus(
+                ctx.core,
+                ctx.catalog,
+                self.owner,
+                p,
+            );
             let (hp, max) = {
                 let pl = ctx.core.player(p);
                 (pl.hp, pl.max_hp)
             };
             if hp < max as i32 {
-                ctx.recover(p, 1, None);
+                ctx.recover(p, 1 + extra, None);
             }
         }
         if let Some(card) = card {
@@ -203,6 +220,14 @@ impl crate::catalog::SkillMachine for WuguMachine {
                     });
                 }
                 let mut pickers = alive;
+                pickers.retain(|&p| {
+                    !crate::rvm_bridge::modifiers::shierqicetui_excludes(
+                        ctx.core,
+                        ctx.catalog,
+                        self.owner,
+                        p,
+                    )
+                });
                 if let Some(targets) = take_dddanzhi_targets(ctx, self.owner) {
                     pickers.retain(|p| targets.contains(p));
                 }
@@ -561,8 +586,10 @@ impl crate::catalog::SkillMachine for DismantleMachine {
         }
         let card = self.card;
         if card != 0 {
-            ctx.to_discard(card);
-            ctx.core.table.retain(|x| *x != card);
+            if let Some(pos) = ctx.core.table.iter().position(|x| *x == card) {
+                ctx.core.table.remove(pos);
+                ctx.to_discard(card);
+            }
         }
         Flow::Done
     }
@@ -720,8 +747,10 @@ impl crate::catalog::SkillMachine for SnatchMachine {
         }
         let card = self.card;
         if card != 0 {
-            ctx.to_discard(card);
-            ctx.core.table.retain(|x| *x != card);
+            if let Some(pos) = ctx.core.table.iter().position(|x| *x == card) {
+                ctx.core.table.remove(pos);
+                ctx.to_discard(card);
+            }
         }
         Flow::Done
     }

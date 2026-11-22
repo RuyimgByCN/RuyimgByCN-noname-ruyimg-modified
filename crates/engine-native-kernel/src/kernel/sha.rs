@@ -230,6 +230,20 @@ impl ShaResolveMachine {
             .any(|((_, k), &v)| k == "bolehuiyan_pred" && v > 0)
     }
 
+    pub(super) fn target_has_shenfuhuaxie(&self, ctx: &Ctx<'_>) -> bool {
+        ctx.catalog.vm_card_history
+            && self.card.is_some()
+            && ctx.core.player(self.target).alive
+            && (ctx
+                .catalog
+                .skill_by_name("buff_txhj_shenfuhuaxie")
+                .is_some_and(|d| ctx.core.has_skill(self.target, d))
+                || ctx
+                    .catalog
+                    .skill_by_name("_buff_txhj_shenfuhuaxie")
+                    .is_some_and(|d| ctx.core.has_skill(self.target, d)))
+    }
+
     pub(super) fn take_sha_pending_end(&self, ctx: &mut Ctx<'_>) -> Option<bool> {
         let fid = self.current_sha_frame_id(ctx)?;
         ctx.core
@@ -369,6 +383,10 @@ impl ShaResolveMachine {
             ctx.core
                 .vm_aux
                 .flags
+                .remove(&(self.source, format!("sha_tianxian_done:{fid}")));
+            ctx.core
+                .vm_aux
+                .flags
                 .remove(&(self.source, format!("sha_end_settled:{fid}")));
             ctx.core
                 .vm_aux
@@ -436,8 +454,12 @@ impl ShaResolveMachine {
         {
             ctx.core.turn.sha_used_play_phase = false;
         }
-        ctx.to_discard(card);
-        ctx.core.table.retain(|c| Some(*c) != card);
+        if let Some(cid) = card {
+            if let Some(pos) = ctx.core.table.iter().position(|c| *c == cid) {
+                ctx.core.table.remove(pos);
+                ctx.to_discard(cid);
+            }
+        }
         Flow::Done
     }
 
@@ -531,6 +553,14 @@ impl ShaResolveMachine {
             .unwrap_or(0);
         let dealt_damage = ctx.core.player(self.target).alive;
         if dealt_damage {
+            if self.jiu_bonus && ctx.catalog.vm_card_history {
+                if let Some(fid) = fid {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .insert((self.source, format!("sha_used_jiu:{fid}")), 1);
+                }
+            }
             if self.card.is_none() && ctx.catalog.skills.len() > 24 {
                 ctx.core
                     .vm_aux
@@ -553,7 +583,9 @@ impl ShaResolveMachine {
             )));
         }
         self.xiandan_bonus = false;
-        if dealt_damage && Self::has_active_bolehuiyan_pred(ctx) {
+        if dealt_damage
+            && (Self::has_active_bolehuiyan_pred(ctx) || self.target_has_shenfuhuaxie(ctx))
+        {
             return self.defer_sha_end(ctx, fid, true);
         }
         self.finish_target_sha_end(ctx, dealt_damage)

@@ -494,13 +494,15 @@ pub(super) fn begin_prepare(ctx: &mut Ctx<'_>, player: PlayerId) {
             .catalog
             .skill_by_name(crate::vocabulary::names::BOSS_ZHONGDU)
         {
-            if ctx.core.has_skill(player, zd) {
+            if ctx.core.has_skill(player, zd)
+                && (!ctx.core.deck.is_empty() || !ctx.core.discard.is_empty())
+            {
                 let judged = ctx.draw_judge_card_with_elo(
                     player,
                     crate::kernel::EloJudgePref::Zhongdu,
                 );
-                let suit = ctx.catalog.cards[judged as usize].suit;
-                ctx.to_discard(judged);
+                let (suit, _) = ctx.inline_judge_suit_rank(player, judged);
+                let _ = ctx.settle_inline_judge_card(player, suit, judged);
                 match suit {
                     crate::catalog::Suit::Heart => {}
                     crate::catalog::Suit::Spade => {

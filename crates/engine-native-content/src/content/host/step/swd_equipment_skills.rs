@@ -253,15 +253,13 @@ impl HostMachine {
                         self.owner,
                         engine_native_kernel::kernel::EloJudgePref::NonClubPositive,
                     );
-                    let club = matches!(
-                        ctx.catalog.cards[judged as usize].suit,
-                        crate::catalog::Suit::Club
-                    );
+                    let (suit, _) = ctx.inline_judge_suit_rank(self.owner, judged);
+                    let club = matches!(suit, crate::catalog::Suit::Club);
                     ctx.log(LogEvent::Judged {
                         player: self.owner,
                         card: judged,
                     });
-                    ctx.to_discard(judged);
+                    let _ = ctx.settle_inline_judge_card(self.owner, suit, judged);
                     if club {
                         return Flow::Done;
                     }
@@ -439,12 +437,12 @@ impl HostMachine {
                         self.owner,
                         engine_native_kernel::kernel::EloJudgePref::Shending,
                     );
-                    let suit = ctx.catalog.cards[judged as usize].suit;
+                    let (suit, _) = ctx.inline_judge_suit_rank(self.owner, judged);
                     ctx.log(LogEvent::Judged {
                         player: self.owner,
                         card: judged,
                     });
-                    ctx.to_discard(judged);
+                    let _ = ctx.settle_inline_judge_card(self.owner, suit, judged);
                     use crate::catalog::Suit;
                     match suit {
                         Suit::Heart => {

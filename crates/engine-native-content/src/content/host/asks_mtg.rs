@@ -495,6 +495,9 @@ pub(super) fn active_ask_batches(
         HostBehavior::L11BuffsB => super::step::l11_buffs_b_asks::ask_l11_buffs_b(
             stage, owner, target, targets, card, cards, core, catalog,
         ),
+        HostBehavior::L11BuffsC => super::step::l11_buffs_b4_asks::ask_l11_buffs_c(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
         HostBehavior::NewMeibu => {
             if stage != HostStage::SelectCard {
                 return None;

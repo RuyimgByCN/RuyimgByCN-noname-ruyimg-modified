@@ -776,11 +776,12 @@ fn step_judge_sha_unrespondable(
                 owner,
                 engine_native_kernel::kernel::EloJudgePref::RedPositive,
             );
+            let (suit, _) = ctx.inline_judge_suit_rank(owner, jc);
             let is_red = matches!(
-                ctx.catalog.cards.get(jc as usize).map(|cd| cd.suit),
-                Some(crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond)
+                suit,
+                crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
             );
-            ctx.to_discard(jc);
+            let _ = ctx.settle_inline_judge_card(owner, suit, jc);
             unrespondable = retieji || is_red;
         }
         if unrespondable {

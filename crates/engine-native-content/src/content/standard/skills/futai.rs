@@ -22,6 +22,9 @@ pub(in super::super) struct FutaiMachine {
 }
 
 impl SkillMachine for FutaiMachine {
+    fn actor_owner(&self) -> Option<PlayerId> {
+        Some(self.owner)
+    }
     fn fork(&self) -> Box<dyn SkillMachine> {
         Box::new(self.clone())
     }

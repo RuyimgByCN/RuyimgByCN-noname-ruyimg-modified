@@ -35,12 +35,16 @@ impl SkillMachine for LuoShenMachine {
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         // 单次判定：黑桃/梅花 → 获得此牌并再次判定（Yield 续行）；
         // 红桃/方块 → 判定牌弃置，循环结束。
+        if ctx.core.deck.is_empty() && ctx.core.discard.is_empty() {
+            return Flow::Done;
+        }
         let card = ctx.draw_judge_card_with_elo(
             self.owner,
             engine_native_kernel::kernel::EloJudgePref::BlackPositive,
         );
+        let (eff_suit, _) = ctx.inline_judge_suit_rank(self.owner, card);
         let black = matches!(
-            ctx.catalog.cards[card as usize].suit,
+            eff_suit,
             crate::catalog::Suit::Spade | crate::catalog::Suit::Club
         );
         if black {
@@ -51,7 +55,7 @@ impl SkillMachine for LuoShenMachine {
             });
             Flow::Yield
         } else {
-            ctx.to_discard(card);
+            let _ = ctx.settle_inline_judge_card(self.owner, eff_suit, card);
             Flow::Done
         }
     }

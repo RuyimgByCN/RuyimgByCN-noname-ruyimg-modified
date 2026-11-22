@@ -786,11 +786,12 @@ fn resolve_new_wuhun_death(m: &mut HostMachine, ctx: &mut Ctx<'_>, tgt: PlayerId
         tgt,
         engine_native_kernel::kernel::EloJudgePref::TaoOrTaoyuanPositive,
     );
-    ctx.to_discard(jc);
+    let (suit, _) = ctx.inline_judge_suit_rank(tgt, jc);
     let safe = matches!(ctx.catalog.card_kind(jc), CardKind::Tao | CardKind::Taoyuan);
     set_flag(ctx.core, owner, "l25_new_wuhun_target", u32::from(tgt) + 1);
     set_flag(ctx.core, owner, "l25_new_wuhun_judge_card", u32::from(jc) + 1);
     if !safe && ctx.core.player(tgt).alive {
+        ctx.to_discard(jc);
         ctx.core.player_mut(tgt).hp = 0;
         ctx.core.player_mut(tgt).alive = false;
         ctx.emit(EventData::Death {
@@ -805,6 +806,7 @@ fn resolve_new_wuhun_death(m: &mut HostMachine, ctx: &mut Ctx<'_>, tgt: PlayerId
         m.stage = HostStage::CardsAsk;
         return Flow::Yield;
     }
+    let _ = ctx.settle_inline_judge_card(tgt, suit, jc);
     Flow::Done
 }
 

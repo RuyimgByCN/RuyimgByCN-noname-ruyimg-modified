@@ -102,6 +102,21 @@ impl HostSkillBehavior {
                 self, ctx, frames, Some(frame), owner, event,
             );
         }
+        if self.behavior == HostBehavior::L11BuffsC {
+            return super::step::l11_buffs_c::filter_l11_buffs_c_with_frames(
+                self, ctx, frames, Some(frame), owner, event,
+            );
+        }
+        if self.behavior == HostBehavior::L11BuffsD {
+            return super::step::l11_buffs_d::filter_l11_buffs_d_with_frames(
+                self, ctx, frames, Some(frame), owner, event,
+            );
+        }
+        if self.behavior == HostBehavior::L11BuffHelpersB {
+            return super::step::l11_buff_helpers_b::filter_l11_buff_helpers_b_with_frames(
+                self, ctx, frames, Some(frame), owner, event,
+            );
+        }
         if let Some(v) = super::step::u01_fixes_3::filter_u01_fix3_with_frames(
             self, ctx, frames, frame, owner, event,
         ) {
@@ -911,6 +926,17 @@ impl HostSkillBehavior {
             ),
             HostBehavior::L11BuffHelpersA => {
                 super::step::l11_buff_helpers_a::filter_l11_buff_helpers_a(self, ctx, owner, event)
+            }
+            HostBehavior::L11BuffsC => super::step::l11_buffs_c::filter_l11_buffs_c_with_frames(
+                self, ctx, &[], None, owner, event,
+            ),
+            HostBehavior::L11BuffsD => super::step::l11_buffs_d::filter_l11_buffs_d_with_frames(
+                self, ctx, &[], None, owner, event,
+            ),
+            HostBehavior::L11BuffHelpersB => {
+                super::step::l11_buff_helpers_b::filter_l11_buff_helpers_b_with_frames(
+                    self, ctx, &[], None, owner, event,
+                )
             }
             HostBehavior::L01FirstKs => super::step::l01_rules::filter_l01_first_ks(ctx, owner, event),
             HostBehavior::L01AttitudeTracker => {

@@ -2,6 +2,29 @@
 
 use super::*;
 
+/// 记录本次 `Recover` 事件的施救/引发来源（瞬态 `l11_recover_source:{fid}`，仅供 L11 修罗的怜悯消费）。
+pub(crate) fn note_recover_source(
+    core: &mut GameStateCore,
+    res: &Resolution,
+    player: PlayerId,
+    recover_fid: crate::ids::EventId,
+) {
+    let src = res.active_actor.or_else(|| {
+        res.stack.iter().rev().skip(1).find_map(|f| match &f.data {
+            EventData::SkillInvocation(inv) => Some(inv.owner),
+            EventData::CardUsed(u) => Some(u.player),
+            EventData::Damage(d) => d.source,
+            _ => None,
+        })
+    });
+    if let Some(s) = src {
+        core.vm_aux.flags.insert(
+            (player, format!("l11_recover_source:{recover_fid}")),
+            u32::from(s) + 1,
+        );
+    }
+}
+
 pub(super) fn on_frame_popped(
     popped: &Frame,
     core: &mut GameStateCore,
@@ -34,14 +57,26 @@ pub(super) fn on_frame_popped(
             }
         }
     }
-    if matches!(popped.data, EventData::TurnEnded { .. })
-        && catalog.skill_by_name("txyinli").is_some()
-    {
-        for p in 0..core.players.len() as PlayerId {
-            core.vm_aux.flags.remove(&(p, "l11_yinli_ts".to_string()));
+    if let EventData::TurnEnded { player } = &popped.data {
+        if catalog.vm_card_history {
             core.vm_aux
                 .flags
-                .retain(|(owner, k), _| !(*owner == p && k.starts_with("l11_yinli_eq:")));
+                .remove(&(*player, "l11_jianiang_stacks".to_string()));
+        }
+        if catalog.skill_by_name("txyinli").is_some() {
+            for p in 0..core.players.len() as PlayerId {
+                core.vm_aux.flags.remove(&(p, "l11_yinli_ts".to_string()));
+                core.vm_aux
+                    .flags
+                    .retain(|(owner, k), _| !(*owner == p && k.starts_with("l11_yinli_eq:")));
+            }
+        }
+    }
+    if let EventData::Recover { player, .. } = &popped.data {
+        if catalog.vm_card_history {
+            core.vm_aux
+                .flags
+                .remove(&(*player, format!("l11_recover_source:{}", popped.id)));
         }
     }
     if let EventData::CardResponded { player, .. } = &popped.data {
@@ -169,7 +204,18 @@ fn on_card_use_popped(
     let _ = crate::kernel::take_tao_extra_carriers(core, u.player, popped_id);
     core.vm_aux
         .flags
+        .remove(&(u.player, format!("sha_used_jiu:{popped_id}")));
+    core.vm_aux
+        .flags
         .remove(&(u.player, format!("sha_cike_done:{popped_id}")));
+    let cid = u.card.unwrap_or(0);
+    core.vm_aux
+        .flags
+        .remove(&(u.player, format!("qilin_fuchen_used:{cid}")));
+    let taiji_prefix = format!("txhj_taiji_rem:{popped_id}:");
+    core.vm_aux
+        .flags
+        .retain(|(_, k), _| !k.starts_with(&taiji_prefix));
     core.vm_aux
         .flags
         .remove(&(u.player, format!("sha_end_settled:{popped_id}")));
@@ -180,6 +226,11 @@ fn on_card_use_popped(
         .flags
         .remove(&(u.player, format!("sha_jiu_extra:{popped_id}")));
     let eff_kind = u.use_as.or_else(|| u.card.map(|c| catalog.card_kind(c)));
+    if eff_kind == Some(crate::catalog::CardKind::Tao) {
+        core.vm_aux
+            .flags
+            .remove(&(u.player, "vm_va_recover_bonus".to_string()));
+    }
     if eff_kind == Some(crate::catalog::CardKind::Youdishenru) {
         core.vm_aux
             .flags

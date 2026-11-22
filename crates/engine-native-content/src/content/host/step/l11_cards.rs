@@ -17,7 +17,7 @@
 use super::l11_cards_asks::*;
 use super::l11_common::*;
 use super::*;
-use crate::catalog::{CardKind, QueryCtx, SkillLimits, SkillMachine, TriggerMeta};
+use crate::catalog::{CardKind, QueryCtx, SkillLimits, SkillMachine, Suit, TriggerMeta};
 use crate::choice::ChoiceOption;
 use crate::event::{CardUseData, DamageNature, EventData, EventKind, Phase, Timing};
 use crate::ids::{CardId, PlayerId};
@@ -426,7 +426,8 @@ pub(in crate::content::host) fn handle_l11_trick_card(
             }
             HostStage::TargetChoice => {
                 m.stage = HostStage::DrawSettle;
-                ctx.start_draw(owner, 3);
+                let extra = super::l11_common_b4::yuanjiao_draw_bonus(ctx.core, ctx.catalog, owner);
+                ctx.start_draw(owner, 3 + extra);
                 Flow::Yield
             }
             _ => cleanup_and_done(m, ctx),
@@ -700,12 +701,20 @@ pub(in crate::content::host) fn handle_l11_trick_card(
                         m.cards[1] = show_c;
                     }
                     let show_suit = ctx.catalog.effective_card_suit(ctx.core, t, show_c);
-                    let has_match = ctx
-                        .core
-                        .player(owner)
-                        .hand
-                        .iter()
-                        .any(|&c| ctx.catalog.effective_card_suit(ctx.core, owner, c) == show_suit);
+                    let use_color = crate::rvm_bridge::modifiers::has_wolongmice(
+                        ctx.core,
+                        ctx.catalog,
+                        owner,
+                    );
+                    let show_red = matches!(show_suit, Suit::Heart | Suit::Diamond);
+                    let has_match = ctx.core.player(owner).hand.iter().any(|&c| {
+                        let s = ctx.catalog.effective_card_suit(ctx.core, owner, c);
+                        if use_color {
+                            matches!(s, Suit::Heart | Suit::Diamond) == show_red
+                        } else {
+                            s == show_suit
+                        }
+                    });
                     if !has_match {
                         return cleanup_and_done(m, ctx);
                     }
@@ -713,7 +722,19 @@ pub(in crate::content::host) fn handle_l11_trick_card(
                 }
                 HostStage::SelectCard => {
                     if let Some(disc_c) = answered_cards(ctx).into_iter().next() {
+                        let show_c = m.cards.get(1).copied();
                         discard_player_cards(ctx, owner, &[disc_c]);
+                        if crate::rvm_bridge::modifiers::has_fenchengluetu(
+                            ctx.core,
+                            ctx.catalog,
+                            owner,
+                        ) {
+                            if let Some(sc) = show_c.filter(|c| {
+                                ctx.core.player(t).hand.contains(c) && ctx.core.player(owner).alive
+                            }) {
+                                move_cards_to_hand(ctx, t, owner, &[sc]);
+                            }
+                        }
                         m.stage = HostStage::DrawSettle;
                         emit_damage(ctx, Some(owner), t, 1, DamageNature::Fire, orig_card(m));
                         return Flow::Yield;

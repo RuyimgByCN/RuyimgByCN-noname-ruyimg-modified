@@ -108,12 +108,22 @@ pub(super) fn build_l11_card_ask(
         ASK_HUOGONG_DISCARD => {
             let show_card = cards.get(1).or(cards.first()).copied()?;
             let show_suit = catalog.effective_card_suit(core, tgt, show_card);
+            let use_color = crate::rvm_bridge::modifiers::has_wolongmice(core, catalog, owner);
+            let show_red = matches!(show_suit, crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond);
             let matching: Vec<CardId> = core
                 .player(owner)
                 .hand
                 .iter()
                 .copied()
-                .filter(|&c| catalog.effective_card_suit(core, owner, c) == show_suit)
+                .filter(|&c| {
+                    let s = catalog.effective_card_suit(core, owner, c);
+                    if use_color {
+                        matches!(s, crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond)
+                            == show_red
+                    } else {
+                        s == show_suit
+                    }
+                })
                 .collect();
             card_ask(owner, "huogong:discard_card", matching, 1, 1, true)
         }

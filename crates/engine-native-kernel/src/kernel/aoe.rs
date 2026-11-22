@@ -422,6 +422,12 @@ impl crate::catalog::SkillMachine for AoeResolveMachine {
                     || ctx
                         .catalog
                         .aoe_excludes_target(ctx.core, self.targets[self.idx])
+                    || crate::rvm_bridge::modifiers::shierqicejin_excludes(
+                        ctx.core,
+                        ctx.catalog,
+                        self.source,
+                        self.targets[self.idx],
+                    )
                     || crate::rvm_bridge::modifiers::eval_card_target_canceled(
                         ctx.core,
                         ctx.catalog,

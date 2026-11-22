@@ -508,11 +508,44 @@ pub(in crate::content::host) fn handle_l11_equips(
                 };
                 wait_eq_ask(m, ctx, HostStage::TargetChoice, ask)
             }
-            HostStage::TargetChoice => {
+            HostStage::TargetChoice | HostStage::SelectCard => {
                 if is_confirmed(ctx) {
                     if let Some(t) = m.target.filter(|&p| ctx.core.player(p).alive) {
-                        if let Some(tr) = equip_slot_card(ctx.core, ctx.catalog, t, EquipSlot::Treasure) {
+                        let treasures: Vec<CardId> = ctx
+                            .core
+                            .player(t)
+                            .equips
+                            .iter()
+                            .copied()
+                            .filter(|&c| {
+                                ctx.catalog.card_slot_of(ctx.core, c) == Some(EquipSlot::Treasure)
+                            })
+                            .collect();
+                        let second_eligible = m.stage == HostStage::TargetChoice
+                            && treasures.len() > 1
+                            && crate::rvm_bridge::modifiers::has_fuchendangmo(
+                                ctx.core,
+                                ctx.catalog,
+                                owner,
+                            );
+                        if let Some(tr) = treasures.first().copied() {
                             discard_player_cards(ctx, t, &[tr]);
+                            if crate::rvm_bridge::modifiers::has_shenhanxueyin(
+                                ctx.core,
+                                ctx.catalog,
+                                owner,
+                            ) && ctx.core.discard.contains(&tr)
+                            {
+                                gain_card_from_deck_or_discard(ctx, owner, tr);
+                            }
+                            if second_eligible && ctx.core.player(t).alive {
+                                let ask = if m.def_key == "txhj_qilingong" {
+                                    ASK_QILIN_CONFIRM
+                                } else {
+                                    ASK_QILIN_SKILL_CONFIRM
+                                };
+                                return wait_eq_ask(m, ctx, HostStage::SelectCard, ask);
+                            }
                         }
                     }
                 }
@@ -732,53 +765,104 @@ pub(in crate::content::host) fn handle_l11_equips(
             }
             Flow::Done
         }
-        "txhj_taijifuchen" | "gx_taijifuchen" => match m.stage {
-            HostStage::Act => {
-                if let Some(next_t) = m.targets.first().copied() {
-                    m.targets.remove(0);
-                    let still_targeted = ctx
-                        .res
-                        .frame(ctx.current_event_frame_id())
-                        .and_then(|f| match &f.data {
-                            EventData::CardUsed(u) => (!u.cancelled && u.targets.contains(&next_t)).then_some(()),
-                            _ => None,
-                        })
-                        .is_some();
-                    if !still_targeted || !ctx.core.player(next_t).alive {
-                        return handle_l11_equips(m, ctx);
-                    }
-                    let sha_cid = m.cards.first().copied();
-                    if he_cards(ctx.core, next_t).is_empty() {
+        "txhj_taijifuchen" | "gx_taijifuchen" => {
+            let fid = ctx.current_event_frame_id();
+            match m.stage {
+                HostStage::Act => {
+                    if let Some(next_t) = m.targets.first().copied() {
+                        m.targets.remove(0);
+                        let still_targeted = ctx
+                            .res
+                            .frame(fid)
+                            .and_then(|f| match &f.data {
+                                EventData::CardUsed(u) => {
+                                    (!u.cancelled && u.targets.contains(&next_t)).then_some(())
+                                }
+                                _ => None,
+                            })
+                            .is_some();
+                        if !still_targeted || !ctx.core.player(next_t).alive {
+                            return handle_l11_equips(m, ctx);
+                        }
+                        let sha_cid = m.cards.first().copied();
+                        let need = if crate::rvm_bridge::modifiers::has_fuchendangmo(
+                            ctx.core,
+                            ctx.catalog,
+                            owner,
+                        ) {
+                            2
+                        } else {
+                            1
+                        };
+                        if he_cards(ctx.core, next_t).is_empty() {
+                            set_flag(
+                                ctx.core,
+                                owner,
+                                &format!("sha_unrespondable:{}:{next_t}", sha_cid.unwrap_or(0)),
+                                1,
+                            );
+                            return handle_l11_equips(m, ctx);
+                        }
                         set_flag(
                             ctx.core,
                             owner,
-                            &format!("sha_unrespondable:{}:{next_t}", sha_cid.unwrap_or(0)),
-                            1,
+                            &format!("txhj_taiji_rem:{fid}:{next_t}"),
+                            need,
                         );
-                        return handle_l11_equips(m, ctx);
+                        m.target = Some(next_t);
+                        let ask = if m.def_key == "txhj_taijifuchen" {
+                            ASK_TAIJI_DISCARD
+                        } else {
+                            ASK_GX_TAIJI_DISCARD
+                        };
+                        return wait_eq_ask(m, ctx, HostStage::SelectCard, ask);
                     }
-                    m.target = Some(next_t);
-                    let ask = if m.def_key == "txhj_taijifuchen" {
-                        ASK_TAIJI_DISCARD
-                    } else {
-                        ASK_GX_TAIJI_DISCARD
-                    };
-                    return wait_eq_ask(m, ctx, HostStage::SelectCard, ask);
+                    Flow::Done
                 }
-                Flow::Done
-            }
-            HostStage::SelectCard => {
-                let sha_cid = m.cards.first().copied();
-                if let Some(t) = m.target {
-                    if let Some(ChoiceOption::Card(disc)) = ctx.answer().first().copied() {
-                        if he_cards(ctx.core, t).contains(&disc) {
-                            let same_suit = sha_cid.is_some_and(|sc| {
-                                ctx.catalog.effective_card_suit(ctx.core, owner, sc)
-                                    == ctx.catalog.effective_card_suit(ctx.core, t, disc)
-                            });
-                            discard_player_cards(ctx, t, &[disc]);
-                            if same_suit && ctx.core.discard.contains(&disc) {
-                                gain_card_from_deck_or_discard(ctx, owner, disc);
+                HostStage::SelectCard => {
+                    let sha_cid = m.cards.first().copied();
+                    if let Some(t) = m.target {
+                        let rem_key = format!("txhj_taiji_rem:{fid}:{t}");
+                        let rem = flag(ctx.core, owner, &rem_key);
+                        if let Some(ChoiceOption::Card(disc)) = ctx.answer().first().copied() {
+                            if he_cards(ctx.core, t).contains(&disc) {
+                                let same_suit = sha_cid.is_some_and(|sc| {
+                                    ctx.catalog.effective_card_suit(ctx.core, owner, sc)
+                                        == ctx.catalog.effective_card_suit(ctx.core, t, disc)
+                                });
+                                let xueyin = crate::rvm_bridge::modifiers::has_shenhanxueyin(
+                                    ctx.core,
+                                    ctx.catalog,
+                                    owner,
+                                );
+                                discard_player_cards(ctx, t, &[disc]);
+                                if (same_suit || xueyin) && ctx.core.discard.contains(&disc) {
+                                    gain_card_from_deck_or_discard(ctx, owner, disc);
+                                }
+                                if rem > 1 {
+                                    set_flag(ctx.core, owner, &rem_key, rem - 1);
+                                    if !he_cards(ctx.core, t).is_empty() {
+                                        let ask = if m.def_key == "txhj_taijifuchen" {
+                                            ASK_TAIJI_DISCARD
+                                        } else {
+                                            ASK_GX_TAIJI_DISCARD
+                                        };
+                                        return wait_eq_ask(m, ctx, HostStage::SelectCard, ask);
+                                    }
+                                    set_flag(
+                                        ctx.core,
+                                        owner,
+                                        &format!("sha_unrespondable:{}:{t}", sha_cid.unwrap_or(0)),
+                                        1,
+                                    );
+                                }
+                            } else {
+                                set_flag(
+                                    ctx.core,
+                                    owner,
+                                    &format!("sha_unrespondable:{}:{t}", sha_cid.unwrap_or(0)),
+                                    1,
+                                );
                             }
                         } else {
                             set_flag(
@@ -788,21 +872,15 @@ pub(in crate::content::host) fn handle_l11_equips(
                                 1,
                             );
                         }
-                    } else {
-                        set_flag(
-                            ctx.core,
-                            owner,
-                            &format!("sha_unrespondable:{}:{t}", sha_cid.unwrap_or(0)),
-                            1,
-                        );
+                        set_flag(ctx.core, owner, &rem_key, 0);
                     }
+                    m.stage = HostStage::Act;
+                    m.target = None;
+                    handle_l11_equips(m, ctx)
                 }
-                m.stage = HostStage::Act;
-                m.target = None;
-                handle_l11_equips(m, ctx)
+                _ => Flow::Done,
             }
-            _ => Flow::Done,
-        },
+        }
         _ => Flow::Done,
     }
 }

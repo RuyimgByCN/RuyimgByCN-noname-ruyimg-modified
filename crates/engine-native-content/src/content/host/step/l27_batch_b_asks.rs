@@ -76,7 +76,7 @@ fn card_ask(
     )
 }
 
-const CANCELLABLE_ASKS: [u32; 19] = [
+const CANCELLABLE_ASKS: [u32; 20] = [
     ASK_BOLAN_G_TARGET,
     ASK_BOLAN_SKILL,
     ASK_DUORUI_SLOT,
@@ -96,6 +96,7 @@ const CANCELLABLE_ASKS: [u32; 19] = [
     ASK_TWZHOUHU_CARD,
     ASK_TWZUHUO_CARD,
     ASK_TWZHOUZU_TARGET,
+    ASK_TWMAHOU_RENIGONG_CONFIRM,
 ];
 
 const FIRST_CANCELLABLE_ASKS: [u32; 15] = [
@@ -174,6 +175,14 @@ fn build_ask(
     let mut built = build_ask_spec(ask_id, owner, target, core, catalog)?;
     built.1.allow_cancel = is_cancellable(ask_id);
     Some(built)
+}
+
+fn mahou_turns_upper(core: &GameStateCore, catalog: &Catalog, owner: PlayerId) -> u8 {
+    let has_digong = catalog
+        .skill_by_name("buff_txhj_digongdeyouhu")
+        .is_some_and(|d| core.has_skill(owner, d))
+        && flag(core, owner, "mbcmfangzhu_ban") == 0;
+    if has_digong { 4 } else { 3 }
 }
 
 fn build_ask_spec(
@@ -289,7 +298,11 @@ fn build_ask_spec(
             }
             tag_ask(owner, "twxiafeng:choose_count", 1..=marks)
         }
-        ASK_TWXINGZHUI_TURNS => tag_ask(owner, "twxingzhui:choose_turns", 1..=3),
+        ASK_TWXINGZHUI_TURNS => tag_ask(
+            owner,
+            "twxingzhui:choose_turns",
+            1..=mahou_turns_upper(core, catalog, owner),
+        ),
         ASK_TWXINGZHUI_TARGET => {
             player_ask(owner, "twxingzhui:choose_target", alive_others(core, owner), 1, 1)
         }
@@ -333,7 +346,11 @@ fn build_ask_spec(
         ASK_TWFENGJI_CARD => {
             card_ask(owner, "twfengji:choose_card", hand_and_equips(core, owner), 1, 1)
         }
-        ASK_TWFENGJI_TURNS => tag_ask(owner, "twfengji:choose_turns", 1..=3),
+        ASK_TWFENGJI_TURNS => tag_ask(
+            owner,
+            "twfengji:choose_turns",
+            1..=mahou_turns_upper(core, catalog, owner),
+        ),
         ASK_TWHARVESTINORI_CARD => {
             let blacks: Vec<CardId> = core
                 .player(owner)
@@ -349,7 +366,11 @@ fn build_ask_spec(
                 .collect();
             card_ask(owner, "twharvestinori:discard_black", blacks, 1, 1)
         }
-        ASK_TWHARVESTINORI_TURNS => tag_ask(owner, "twharvestinori:choose_turns", 1..=3),
+        ASK_TWHARVESTINORI_TURNS => tag_ask(
+            owner,
+            "twharvestinori:choose_turns",
+            1..=mahou_turns_upper(core, catalog, owner),
+        ),
         ASK_TWZHOUHU_CARD => {
             let reds: Vec<CardId> = core
                 .player(owner)
@@ -365,7 +386,11 @@ fn build_ask_spec(
                 .collect();
             card_ask(owner, "twzhouhu:discard_red", reds, 1, 1)
         }
-        ASK_TWZHOUHU_TURNS => tag_ask(owner, "twzhouhu:choose_turns", 1..=3),
+        ASK_TWZHOUHU_TURNS => tag_ask(
+            owner,
+            "twzhouhu:choose_turns",
+            1..=mahou_turns_upper(core, catalog, owner),
+        ),
         ASK_TWZUHUO_CARD => {
             let nonbasics: Vec<CardId> = hand_and_equips(core, owner)
                 .into_iter()
@@ -373,11 +398,19 @@ fn build_ask_spec(
                 .collect();
             card_ask(owner, "twzuhuo:discard_nonbasic", nonbasics, 1, 1)
         }
-        ASK_TWZUHUO_TURNS => tag_ask(owner, "twzuhuo:choose_turns", 1..=3),
+        ASK_TWZUHUO_TURNS => tag_ask(
+            owner,
+            "twzuhuo:choose_turns",
+            1..=mahou_turns_upper(core, catalog, owner),
+        ),
         ASK_TWZHOUZU_TARGET => {
             player_ask(owner, "twzhouzu:choose_target", alive_others(core, owner), 1, 1)
         }
-        ASK_TWZHOUZU_TURNS => tag_ask(owner, "twzhouzu:choose_turns", 1..=3),
+        ASK_TWZHOUZU_TURNS => tag_ask(
+            owner,
+            "twzhouzu:choose_turns",
+            1..=mahou_turns_upper(core, catalog, owner),
+        ),
         ASK_TWZHOUZU_TARGET_DISCARD => {
             let t = target.unwrap_or(owner);
             let hand = core.player(t).hand.clone();
@@ -388,6 +421,14 @@ fn build_ask_spec(
             let need = x.min(hand.len());
             card_ask(t, "twzhouzu:target_discard", hand, need, need)
         }
+        ASK_TWMAHOU_RENIGONG_CONFIRM => spec_ask(
+            owner,
+            ChoiceKind::Confirm,
+            "txhj_renigongdeyouhu:confirm",
+            vec![ChoiceOption::Confirm],
+            0,
+            1,
+        ),
         _ => None,
     }
 }

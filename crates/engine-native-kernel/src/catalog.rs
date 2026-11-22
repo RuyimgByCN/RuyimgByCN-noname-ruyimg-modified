@@ -966,6 +966,10 @@ pub trait SkillMachine: Send + Sync {
     fn trigger_order(&self) -> Option<&crate::resolution::TriggerOrder> {
         None
     }
+    /// 若本机器代表具体技能持有者（宿主技等）推进，返回其行动座位供全局恢复来源追踪。
+    fn actor_owner(&self) -> Option<crate::ids::PlayerId> {
+        None
+    }
     fn trigger_order_mut(&mut self) -> Option<&mut crate::resolution::TriggerOrder> {
         None
     }

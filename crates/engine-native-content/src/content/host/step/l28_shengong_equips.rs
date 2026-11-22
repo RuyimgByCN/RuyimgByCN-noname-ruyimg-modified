@@ -564,11 +564,17 @@ fn step_wushuangfangtianji(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                 _ => Flow::Done,
             }
         }
-        HostStage::SelectCard => {
+        HostStage::SelectCard | HostStage::TargetChoice => {
             let ans = ctx.answer().first().copied();
             set_flag(ctx.core, owner, "l28_ask_id", 0);
             if let (Some(t), Some(ChoiceOption::Card(c))) = (m.target, ans) {
+                let first_pass = m.stage == HostStage::SelectCard;
                 discard_cards(ctx, t, &[c]);
+                if super::step::l11_common_b4::post_wushuang_discard_l11_b4(
+                    ctx, owner, t, c, first_pass,
+                ) {
+                    return wait_ask(m, ctx, HostStage::TargetChoice, ASK_SG_WUSHUANG_DISCARD);
+                }
             }
             Flow::Done
         }
@@ -739,13 +745,15 @@ fn step_linglongshimandai(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             set_flag(ctx.core, owner, "l28_ask_id", 0);
             let frame_id = flag(ctx.core, owner, "l28_linglong_frame");
             set_flag(ctx.core, owner, "l28_linglong_frame", 0);
-            if confirmed && frame_id > 0 {
+            if confirmed && frame_id > 0 && (!ctx.core.deck.is_empty() || !ctx.core.discard.is_empty())
+            {
                 let judged = ctx.draw_judge_card_with_elo(
                     owner,
                     engine_native_kernel::kernel::EloJudgePref::HeartPositive,
                 );
-                let is_heart = ctx.catalog.cards[judged as usize].suit.is_heart();
-                ctx.to_discard(judged);
+                let (suit, _) = ctx.inline_judge_suit_rank(owner, judged);
+                let is_heart = suit.is_heart();
+                let _ = ctx.settle_inline_judge_card(owner, suit, judged);
                 if is_heart {
                     if let Some(f) = ctx.res.frame_mut(frame_id) {
                         if let EventData::CardUsed(u) = &mut f.data {

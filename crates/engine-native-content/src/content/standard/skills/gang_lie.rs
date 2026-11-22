@@ -45,12 +45,35 @@ impl SkillMachine for GangLieMachine {
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         if !self.asked {
-            let card = ctx.draw_judge_card_with_elo(
-                self.owner,
-                engine_native_kernel::kernel::EloJudgePref::NonHeartPositive,
-            );
-            let heart = ctx.catalog.cards[card as usize].suit.is_heart();
-            ctx.to_discard(card);
+            let fid = ctx.res.stack.last().map(|f| f.id).unwrap_or(0);
+            let heart = if let Some(code) = ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(self.owner, format!("ganglie_post_judge:{fid}")))
+            {
+                code == 1
+            } else {
+                if ctx.core.deck.is_empty() && ctx.core.discard.is_empty() {
+                    self.asked = true;
+                    return Flow::Done;
+                }
+                let card = ctx.draw_judge_card_with_elo(
+                    self.owner,
+                    engine_native_kernel::kernel::EloJudgePref::NonHeartPositive,
+                );
+                let (eff_suit, _) = ctx.inline_judge_suit_rank(self.owner, card);
+                let heart = eff_suit.is_heart();
+                let settled_spawned = ctx.settle_inline_judge_card(self.owner, eff_suit, card);
+                if settled_spawned && !heart && ctx.core.player(self.source).alive {
+                    ctx.core.vm_aux.flags.insert(
+                        (self.owner, format!("ganglie_post_judge:{fid}")),
+                        2,
+                    );
+                    return Flow::Yield;
+                }
+                heart
+            };
             if !heart && ctx.core.player(self.source).alive {
                 let hand = ctx.core.player(self.source).hand.clone();
                 if hand.len() >= 2 {

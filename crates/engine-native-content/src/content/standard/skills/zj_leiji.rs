@@ -42,15 +42,18 @@ impl SkillMachine for ZjLeijiMachine {
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         let seats = ctx.core.players.len() as PlayerId;
         if let Some(t) = (0..seats).find(|&t| t != self.owner && ctx.core.player(t).alive) {
+            if ctx.core.deck.is_empty() && ctx.core.discard.is_empty() {
+                return Flow::Done;
+            }
             let judged = ctx.draw_judge_card_with_elo(
                 self.owner,
                 engine_native_kernel::kernel::EloJudgePref::BlackPositive,
             );
+            let (eff_suit, _) = ctx.inline_judge_suit_rank(t, judged);
             let black = matches!(
-                ctx.catalog.cards[judged as usize].suit,
+                eff_suit,
                 crate::catalog::Suit::Spade | crate::catalog::Suit::Club
             );
-            ctx.to_discard(judged);
             if black {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                     Some(self.owner),
@@ -61,6 +64,7 @@ impl SkillMachine for ZjLeijiMachine {
                 )));
                 ctx.start_draw(self.owner, 1);
             }
+            let _ = ctx.settle_inline_judge_card(t, eff_suit, judged);
         }
         Flow::Done
     }

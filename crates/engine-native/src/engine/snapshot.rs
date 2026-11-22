@@ -568,6 +568,7 @@ impl Engine {
                     answer: snapshot.resolution.answer.clone(),
                     fault: None,
                     budget: snapshot.resolution.budget,
+                    active_actor: None,
                 },
             },
             log: Vec::new(),

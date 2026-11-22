@@ -446,12 +446,12 @@ impl HostMachine {
                         self.owner,
                         engine_native_kernel::kernel::EloJudgePref::NonHeartPositive,
                     );
-                    let suit = ctx.catalog.cards[judged as usize].suit;
+                    let (suit, _) = ctx.inline_judge_suit_rank(self.owner, judged);
                     ctx.log(LogEvent::Judged {
                         player: self.owner,
                         card: judged,
                     });
-                    ctx.to_discard(judged);
+                    let _ = ctx.settle_inline_judge_card(self.owner, suit, judged);
                     if suit != crate::catalog::Suit::Heart {
                         ctx.core.turn.liangou_hook = Some(t);
                         ctx.core.turn.liangou_bonus_used = false;

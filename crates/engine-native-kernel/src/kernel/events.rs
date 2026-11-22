@@ -767,9 +767,12 @@ pub(super) fn releiji_on_shan(ctx: &mut Ctx<'_>, holder: PlayerId) {
     if tgt == holder || !ctx.core.player(tgt).alive {
         return;
     }
+    if ctx.core.deck.is_empty() && ctx.core.discard.is_empty() {
+        return;
+    }
     let judged = ctx.draw_judge_card_with_elo(holder, crate::kernel::EloJudgePref::Releiji);
-    let suit = ctx.catalog.cards[judged as usize].suit;
-    ctx.to_discard(judged);
+    let (suit, _) = ctx.inline_judge_suit_rank(holder, judged);
+    let _ = ctx.settle_inline_judge_card(holder, suit, judged);
     match suit {
         crate::catalog::Suit::Spade => {
             ctx.emit(EventData::Damage(crate::machine::damage_data_with(
@@ -901,12 +904,16 @@ pub(super) fn commit_cards_discarded(ctx: &mut Ctx<'_>, player: PlayerId) {
         if p.hp >= p.max_hp as i32 {
             continue;
         }
+        if ctx.core.deck.is_empty() && ctx.core.discard.is_empty() {
+            break;
+        }
         let judged = ctx.draw_judge_card_with_elo(player, crate::kernel::EloJudgePref::RedPositive);
+        let (suit, _) = ctx.inline_judge_suit_rank(player, judged);
         let red = matches!(
-            ctx.catalog.cards[judged as usize].suit,
+            suit,
             crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
         );
-        ctx.to_discard(judged);
+        let _ = ctx.settle_inline_judge_card(player, suit, judged);
         if red {
             ctx.recover(player, 1, None);
         }
@@ -928,27 +935,30 @@ pub(super) fn commit_cards_discarded(ctx: &mut Ctx<'_>, player: PlayerId) {
             .filter(|o| ctx.core.player(*o).alive && ctx.core.turn.current != *o)
             .collect();
         if let Some(holder) = holders.first() {
-            let judged =
-                ctx.draw_judge_card_with_elo(*holder, crate::kernel::EloJudgePref::RedPositive);
-            let red = matches!(
-                ctx.catalog.cards[judged as usize].suit,
-                crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
-            );
-            ctx.to_discard(judged);
-            if red {
-                let seats = ctx.core.players.len() as PlayerId;
-                if let Some(t) = (0..seats).find(|&t| {
-                    t != *holder
-                        && ctx.core.player(t).alive
-                        && ctx.core.is_boss_side(t) != ctx.core.is_boss_side(*holder)
-                }) {
-                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                        Some(*holder),
-                        t,
-                        2,
-                        crate::event::DamageNature::Fire,
-                        None,
-                    )));
+            if !ctx.core.deck.is_empty() || !ctx.core.discard.is_empty() {
+                let judged =
+                    ctx.draw_judge_card_with_elo(*holder, crate::kernel::EloJudgePref::RedPositive);
+                let (suit, _) = ctx.inline_judge_suit_rank(*holder, judged);
+                let red = matches!(
+                    suit,
+                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                );
+                let _ = ctx.settle_inline_judge_card(*holder, suit, judged);
+                if red {
+                    let seats = ctx.core.players.len() as PlayerId;
+                    if let Some(t) = (0..seats).find(|&t| {
+                        t != *holder
+                            && ctx.core.player(t).alive
+                            && ctx.core.is_boss_side(t) != ctx.core.is_boss_side(*holder)
+                    }) {
+                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                            Some(*holder),
+                            t,
+                            2,
+                            crate::event::DamageNature::Fire,
+                            None,
+                        )));
+                    }
                 }
             }
         }
@@ -996,20 +1006,23 @@ pub(super) fn commit_cards_discarded(ctx: &mut Ctx<'_>, player: PlayerId) {
             .filter(|o| ctx.core.player(*o).alive && ctx.core.turn.current != *o)
             .collect();
         if let Some(holder) = holders.first() {
-            let judged =
-                ctx.draw_judge_card_with_elo(*holder, crate::kernel::EloJudgePref::RedPositive);
-            let red = matches!(
-                ctx.catalog.cards[judged as usize].suit,
-                crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
-            );
-            ctx.to_discard(judged);
-            if red {
-                let seats = ctx.core.players.len() as PlayerId;
-                if let Some(t) = (0..seats).find(|&t| t != *holder && ctx.core.player(t).alive) {
-                    ctx.emit(EventData::LoseHp {
-                        player: t,
-                        amount: 1,
-                    });
+            if !ctx.core.deck.is_empty() || !ctx.core.discard.is_empty() {
+                let judged =
+                    ctx.draw_judge_card_with_elo(*holder, crate::kernel::EloJudgePref::RedPositive);
+                let (suit, _) = ctx.inline_judge_suit_rank(*holder, judged);
+                let red = matches!(
+                    suit,
+                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                );
+                let _ = ctx.settle_inline_judge_card(*holder, suit, judged);
+                if red {
+                    let seats = ctx.core.players.len() as PlayerId;
+                    if let Some(t) = (0..seats).find(|&t| t != *holder && ctx.core.player(t).alive) {
+                        ctx.emit(EventData::LoseHp {
+                            player: t,
+                            amount: 1,
+                        });
+                    }
                 }
             }
         }

@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-23 Batch L11-4（L11 太虚幻境 33 `L11BuffsC`＋37 `L11BuffsD`＋10 衍生技共 +80→360/936）更新（待提交／发布）
+
+基线 HEAD `0f514af299519ba8325711136b49e447df2608d2`（Batch U01-3 已发布，CI Run `45048457551` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-l11` 独立复核（#22 **`APPROVE`**，含 Round 3 inline judge/yield 校验与 Headless Chrome CDP）及主线全量门禁复测，清单更新为 **已复核等价 2,127／简化近似 2,297／缺失 0／上游未定义 0**（合计 4,424）：`L11 太虚幻境` 由 `280 / 656 / 0` 升为 **360 / 576 / 0**（+80：33 项 `L11BuffsC`、37 项 `L11BuffsD` 与 10 项 `L11BuffHelpersB`；整包八项仍 `0/37`）。详见 [Batch L11-4 证据摘要](../../operations/evidence/2026-11-23-batch3-4-l11-4/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-22 Batch U01-3（U01 3D精选 20 项→94/95；`dddanzhi` 保留冻结锁边界）更新（待提交／发布）
 
 基线 HEAD `820aaddd64450d03c4cf66fdac808480872778ca`（Batch L11-3 已发布，CI Run `45022962559` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-rules` 首轮（#187，含 Chrome CDP）与 `verifier-rules-2` 次轮独立复核（#205 **`APPROVE`**）及主线全量门禁复测，清单更新为 **已复核等价 2,047／简化近似 2,377／缺失 0／上游未定义 0**（合计 4,424）：`U01 3D精选` 由 `74 / 21 / 0` 升为 **94 / 1 / 0**（+20，`dddxiaheng`..`dddbailei`；`dddanzhi` 按 Section 3 Item 3① 保持 `简化近似` 护冻结归档 `u01-dddanzhi-pending-v107.ngsa`；整包八项仍 `0/37`）。详见 [Batch U01-3 证据摘要](../../operations/evidence/2026-11-22-batch1-6d-u01-3/README.md) 与 [inventory_status.json](inventory_status.json)。

@@ -323,15 +323,19 @@ pub(in crate::kernel) fn commit_turn_begin(ctx: &mut Ctx<'_>, player: PlayerId) 
                 .collect();
             if ctx.core.turn.yanyu_count < 3 {
                 for holder in holders {
+                    if ctx.core.deck.is_empty() && ctx.core.discard.is_empty() {
+                        break;
+                    }
                     let judged = ctx.draw_judge_card_with_elo(
                         player,
                         crate::kernel::EloJudgePref::BlackPositive,
                     );
+                    let (suit, _) = ctx.inline_judge_suit_rank(holder, judged);
                     let red = matches!(
-                        ctx.catalog.cards[judged as usize].suit,
+                        suit,
                         crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
                     );
-                    ctx.to_discard(judged);
+                    let _ = ctx.settle_inline_judge_card(holder, suit, judged);
                     if red {
                         ctx.core.turn.yanyu_count += 1;
                         ctx.emit(EventData::Damage(crate::machine::damage_data_with(

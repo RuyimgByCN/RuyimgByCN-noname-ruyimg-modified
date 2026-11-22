@@ -129,23 +129,23 @@ impl HostMachine {
                         player: self.owner,
                         cards: vec![picked],
                     });
-                    let judged = ctx.draw_judge_card_with_elo(
-                        self.owner,
-                        engine_native_kernel::kernel::EloJudgePref::HeartPositive,
-                    );
-                    let heart = matches!(
-                        ctx.catalog.cards[judged as usize].suit,
-                        crate::catalog::Suit::Heart
-                    );
-                    ctx.to_discard(judged);
-                    if !heart {
-                        let (used, user) = {
-                            let u = ctx.current_card_use_mut();
-                            (u.card, u.player)
-                        };
-                        ctx.current_card_use_mut().cancelled = true;
-                        ctx.core.table.retain(|x| Some(*x) != used);
-                        ctx.core.player_mut(user).hand.extend(used);
+                    if !ctx.core.deck.is_empty() || !ctx.core.discard.is_empty() {
+                        let judged = ctx.draw_judge_card_with_elo(
+                            self.owner,
+                            engine_native_kernel::kernel::EloJudgePref::HeartPositive,
+                        );
+                        let (suit, _) = ctx.inline_judge_suit_rank(self.owner, judged);
+                        let heart = matches!(suit, crate::catalog::Suit::Heart);
+                        if !heart {
+                            let (used, user) = {
+                                let u = ctx.current_card_use_mut();
+                                (u.card, u.player)
+                            };
+                            ctx.current_card_use_mut().cancelled = true;
+                            ctx.core.table.retain(|x| Some(*x) != used);
+                            ctx.core.player_mut(user).hand.extend(used);
+                        }
+                        let _ = ctx.settle_inline_judge_card(self.owner, suit, judged);
                     }
                     Flow::Done
                 }

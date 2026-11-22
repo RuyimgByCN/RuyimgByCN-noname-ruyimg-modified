@@ -145,9 +145,7 @@ pub(super) fn apply_hand_limit(
     // extension_buff.js:365 (`buff_txhj_wuweizhile` & `wangzun`: target hand limit -1)
     limit -= flag_val(state, player, "l11_wuweizhile_minus1") as i32;
     // extension.js:5044 (`txyingyang`: pindian/hand bonus)
-    if flag_val(state, player, "l11_yingyang_pindian_mod") > 0
-        || flag_val(state, player, "l11_quiz_hint_exclude_wrong") > 0
-    {
+    if flag_val(state, player, "l11_yingyang_pindian_mod") > 0 {
         limit += 1;
     }
     // L27 选将美化 Batch A (`kuangcai`, `sbtongye`, `quanji`, `sbjianxiong`)
@@ -918,7 +916,6 @@ pub(super) fn apply_damage_amount(
         if is_sha
             && (flag_val(state, src, "l11_mod:txfusha") > 0
                 || has_ext_skill(state, catalog, src, "txhj_zuijiu")
-                || flag_val(state, src, "l11_mowang_jiu_persist") > 0
                 || flag_val(state, src, "l11_leijimu_thunder_sha") > 0)
         {
             cur += 1;
@@ -929,14 +926,6 @@ pub(super) fn apply_damage_amount(
                 || flag_val(state, src, "l11_chiyan_all_fire") > 0)
             && (flag_val(state, src, "l11_taipingzhoufa") > 0
                 || flag_val(state, src, "l11_chiyan_all_fire") > 0)
-        {
-            cur += 1;
-        }
-        // extension_buff.js:673 (`buff_txhj_tianxiawushuang`: normal Sha +1 damage)
-        if is_sha
-            && nature == DamageNature::Normal
-            && (flag_val(state, src, "l11_tianxiawushuang_normal_sha_plus1") > 0
-                || has_ext_skill(state, catalog, src, "buff_txhj_tianxiawushuang"))
         {
             cur += 1;
         }
@@ -973,18 +962,12 @@ pub(super) fn apply_damage_amount(
     if cur > 1 && flag_val(state, target, "l11_mod:txxiebi") > 0 {
         cur = 1;
     }
-    // extension_buff.js:288, 299, 651 (`xihuozhikai`, `dingleizhikai`, `cebeibuyu` with armor)
+    // extension_buff.js:288, 299 (`xihuozhikai`, `dingleizhikai`)
     if has_armor(state, catalog, target) {
         if nature == DamageNature::Fire && flag_val(state, target, "l11_xihuozhikai") > 0 {
             cur = (cur - 1).max(0);
         }
         if nature == DamageNature::Thunder && flag_val(state, target, "l11_dingleizhikai") > 0 {
-            cur = (cur - 1).max(0);
-        }
-        if is_trick
-            && (flag_val(state, target, "l11_cebeibuyu_trick_shield") > 0
-                || has_ext_skill(state, catalog, target, "buff_txhj_cebeibuyu"))
-        {
             cur = (cur - 1).max(0);
         }
     }

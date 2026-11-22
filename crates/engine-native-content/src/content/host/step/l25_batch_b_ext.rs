@@ -722,8 +722,21 @@ fn step_shichou(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                 owner,
                 engine_native_kernel::kernel::EloJudgePref::CardValue,
             );
-            ctx.to_discard(jc);
-            let sc = suit_code(ctx.catalog.effective_card_suit(ctx.core, owner, jc));
+            let raw_suit = ctx.catalog.effective_card_suit(ctx.core, owner, jc);
+            let eff_suit = if ctx.catalog.vm_card_history {
+                crate::rvm_bridge::modifiers::apply_huangtian_suit_rank(
+                    ctx.core,
+                    ctx.catalog,
+                    owner,
+                    raw_suit,
+                    0,
+                )
+                .0
+            } else {
+                raw_suit
+            };
+            let _ = ctx.settle_inline_judge_card(owner, eff_suit, jc);
+            let sc = suit_code(eff_suit);
             for &tgt in &m.targets {
                 set_flag(ctx.core, tgt, "l25_shichou_forbid_suit", sc);
             }

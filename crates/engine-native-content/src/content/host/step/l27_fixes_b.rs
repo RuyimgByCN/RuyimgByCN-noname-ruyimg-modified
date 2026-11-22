@@ -2,7 +2,8 @@
 //! 覆盖 `sbqingzheng`、`xingchong`、`dcxiaoxi`、`twfengji`、`twzhouzu`。
 
 use super::l27_batch_b::{
-    alive_others, discard_cards, emit_damage, flag, hand_and_equips, move_cards_to_hand, set_flag,
+    alive_others, discard_cards, emit_damage, finish_mahou_cast, finish_mahou_cast_stage,
+    finish_renigong_draw, flag, hand_and_equips, mahou_max_x, move_cards_to_hand, set_flag,
     wait_ask as wait_ask_b, ASK_DCXIAOXI_COUNT, ASK_DCXIAOXI_GAIN_CARD, ASK_DCXIAOXI_MODE,
     ASK_DCXIAOXI_TARGET, ASK_SBQINGZHENG_GAIN_MARK, ASK_SBQINGZHENG_SUITS,
     ASK_SBQINGZHENG_TARGET, ASK_SBQINGZHENG_TARGET_SUIT, ASK_TWFENGJI_CARD, ASK_TWFENGJI_TURNS,
@@ -459,8 +460,9 @@ pub(super) fn step_twfengji_fix(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow 
             wait_ask_b(m, ctx, HostStage::SelectNature, ASK_TWFENGJI_TURNS)
         }
         HostStage::SelectNature => {
+            let max_x = mahou_max_x(ctx.core, ctx.catalog, owner);
             let x = match ctx.answer().first().copied() {
-                Some(ChoiceOption::Tag(n)) => u32::from(n).clamp(1, 3),
+                Some(ChoiceOption::Tag(n)) => u32::from(n).clamp(1, max_x),
                 _ => 1,
             };
             if let Some(c) = m.card {
@@ -478,11 +480,9 @@ pub(super) fn step_twfengji_fix(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow 
                     (ctx.catalog.card_kind(c) as u32) + 1,
                 );
             }
-            set_flag(ctx.core, owner, "twfengji_rem", x);
-            set_flag(ctx.core, owner, "twfengji_x", x);
-            set_flag(ctx.core, owner, "l27_b_ask_id", 0);
-            Flow::Done
+            finish_mahou_cast(m, ctx, "twfengji", x)
         }
+        HostStage::DrawSettle => finish_renigong_draw(ctx, owner),
         _ => Flow::Done,
     }
 }
@@ -502,7 +502,8 @@ fn resolve_twfengji_mahou(ctx: &mut Ctx<'_>, owner: PlayerId) {
         return;
     }
     set_flag(ctx.core, owner, "twfengji_rem", 0);
-    let x = flag(ctx.core, owner, "twfengji_x").clamp(1, 3) as usize;
+    let max_x = mahou_max_x(ctx.core, ctx.catalog, owner);
+    let x = flag(ctx.core, owner, "twfengji_x").clamp(1, max_x) as usize;
     set_flag(ctx.core, owner, "twfengji_x", 0);
     set_flag(ctx.core, owner, "twfengji_kind", 0);
     let exp = ctx
@@ -561,7 +562,8 @@ pub(super) fn step_twzhouzu_fix(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow 
                     return Flow::Done;
                 }
                 set_flag(ctx.core, owner, "twzhouzu_rem", 0);
-                let x = flag(ctx.core, owner, "twzhouzu_x").clamp(1, 3);
+                let max_x = mahou_max_x(ctx.core, ctx.catalog, owner);
+                let x = flag(ctx.core, owner, "twzhouzu_x").clamp(1, max_x);
                 let t_enc = flag(ctx.core, owner, "twzhouzu_target");
                 if t_enc == 0 {
                     set_flag(ctx.core, owner, "twzhouzu_x", 0);
@@ -594,18 +596,17 @@ pub(super) fn step_twzhouzu_fix(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow 
             wait_ask_b(m, ctx, HostStage::SelectNature, ASK_TWZHOUZU_TURNS)
         }
         HostStage::SelectNature => {
+            let max_x = mahou_max_x(ctx.core, ctx.catalog, owner);
             let x = match ctx.answer().first().copied() {
-                Some(ChoiceOption::Tag(n)) => u32::from(n).clamp(1, 3),
+                Some(ChoiceOption::Tag(n)) => u32::from(n).clamp(1, max_x),
                 _ => 1,
             };
             if let Some(t) = m.target {
                 set_flag(ctx.core, owner, "twzhouzu_target", u32::from(t) + 1);
             }
-            set_flag(ctx.core, owner, "twzhouzu_rem", x);
-            set_flag(ctx.core, owner, "twzhouzu_x", x);
-            set_flag(ctx.core, owner, "l27_b_ask_id", 0);
-            Flow::Done
+            finish_mahou_cast_stage(m, ctx, "twzhouzu", x, HostStage::SelectCard)
         }
+        HostStage::SelectCard => finish_renigong_draw(ctx, owner),
         HostStage::CardsAsk => {
             let t = m.target.unwrap_or(owner);
             let chosen: Vec<CardId> = ctx

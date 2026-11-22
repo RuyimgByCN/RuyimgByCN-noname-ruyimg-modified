@@ -898,28 +898,28 @@ fn step_thunder_judge_mode(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     if m.stage != HostStage::Act {
         return Flow::Done;
     }
-    let jc = ctx.draw_judge_card_with_elo(
-        owner,
-        engine_native_kernel::kernel::EloJudgePref::Trick(CardKind::ShanDian),
-    );
-    let hit = ctx
-        .catalog
-        .cards
-        .get(jc as usize)
-        .is_some_and(|d| d.suit == Suit::Spade && (2..=9).contains(&d.rank));
-    ctx.to_discard(jc);
-    set_flag(ctx.core, owner, "l25_thunder_judge_card", u32::from(jc) + 1);
-    if hit {
-        set_flag(ctx.core, owner, "l25_thunder_judge_hit", 1);
-        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-            None,
+    if !ctx.core.deck.is_empty() || !ctx.core.discard.is_empty() {
+        let jc = ctx.draw_judge_card_with_elo(
             owner,
-            3,
-            DamageNature::Thunder,
-            Some(jc),
-        )));
-        m.stage = HostStage::CardsAsk;
-        return Flow::Yield;
+            engine_native_kernel::kernel::EloJudgePref::Trick(CardKind::ShanDian),
+        );
+        let (suit, rank) = ctx.inline_judge_suit_rank(owner, jc);
+        let hit = suit == Suit::Spade && (2..=9).contains(&rank);
+        set_flag(ctx.core, owner, "l25_thunder_judge_card", u32::from(jc) + 1);
+        if hit {
+            set_flag(ctx.core, owner, "l25_thunder_judge_hit", 1);
+            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                None,
+                owner,
+                3,
+                DamageNature::Thunder,
+                Some(jc),
+            )));
+            let _ = ctx.settle_inline_judge_card(owner, suit, jc);
+            m.stage = HostStage::CardsAsk;
+            return Flow::Yield;
+        }
+        let _ = ctx.settle_inline_judge_card(owner, suit, jc);
     }
     Flow::Done
 }

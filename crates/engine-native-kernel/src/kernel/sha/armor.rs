@@ -54,7 +54,7 @@ impl ShaResolveMachine {
             crate::kernel::EloJudgePref::HeartPositive
         };
         let judged = ctx.draw_judge_card_with_elo(self.target, pref);
-        let j_suit = ctx.catalog.cards[judged as usize].suit;
+        let (j_suit, _) = ctx.inline_judge_suit_rank(self.target, judged);
         let success = crate::rvm_bridge::modifiers::d34_l28_mods::rewrite_bagua_judge_ok(
             ctx.core,
             ctx.catalog,
@@ -68,7 +68,7 @@ impl ShaResolveMachine {
             success,
         });
         // 判定牌判定后即弃置（八卦阵判定无获得路径）
-        ctx.to_discard(judged);
+        let settled_spawned = ctx.settle_inline_judge_card(self.target, j_suit, judged);
         if success {
             ctx.emit(EventData::ShaDodged {
                 card: self.card,
@@ -76,6 +76,9 @@ impl ShaResolveMachine {
                 target: self.target,
             });
             return Some(self.finish_or_defer_sha_end(ctx, false));
+        }
+        if settled_spawned {
+            return Some(Flow::Yield);
         }
         None
     }

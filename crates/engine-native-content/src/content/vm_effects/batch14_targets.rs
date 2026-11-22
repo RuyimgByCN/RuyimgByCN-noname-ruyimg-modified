@@ -933,11 +933,12 @@ fn step_max_mark_other_judge(
                     target,
                     engine_native_kernel::kernel::EloJudgePref::TaoOrTaoyuanPositive,
                 );
+                let (suit, _) = ctx.inline_judge_suit_rank(target, jc);
                 saved = matches!(
                     ctx.catalog.card_kind(jc),
                     crate::catalog::CardKind::Tao | crate::catalog::CardKind::Taoyuan
                 );
-                ctx.to_discard(jc);
+                let _ = ctx.settle_inline_judge_card(target, suit, jc);
             }
             if !saved {
                 ctx.emit(EventData::Death {

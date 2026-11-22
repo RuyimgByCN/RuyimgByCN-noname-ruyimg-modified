@@ -200,6 +200,14 @@ pub(crate) fn host_judge_settled(
         }
     }
 
+    spawned |= super::l11_common_b4::on_judge_settled_l11_b4(
+        ctx,
+        judge_owner,
+        trick_kind,
+        suit,
+        judge_card,
+    );
+
     let _ = is_ordinary_trick_kind;
     spawned
 }

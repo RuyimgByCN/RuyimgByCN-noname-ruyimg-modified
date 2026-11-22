@@ -36,12 +36,17 @@ impl HostMachine {
             HostBehavior::YunchouBeige => match self.stage {
                 HostStage::Act => {
                     // 受伤者=targets[1]，来源=targets[0]
-                    let judged = ctx.draw_judge_card_with_elo(
-                        self.owner,
-                        engine_native_kernel::kernel::EloJudgePref::Beige,
-                    );
-                    ctx.to_discard(judged);
-                    self.cards = vec![judged];
+                    if self.cards.is_empty() {
+                        let judged = ctx.draw_judge_card_with_elo(
+                            self.owner,
+                            engine_native_kernel::kernel::EloJudgePref::Beige,
+                        );
+                        let (suit, _) = ctx.inline_judge_suit_rank(self.targets[1], judged);
+                        self.cards = vec![judged];
+                        if ctx.settle_inline_judge_card(self.targets[1], suit, judged) {
+                            return Flow::Yield;
+                        }
+                    }
                     self.stage = HostStage::SelectCard;
                     let options: Vec<ChoiceOption> = ctx
                         .core
@@ -70,7 +75,7 @@ impl HostMachine {
                 HostStage::SelectCard => {
                     let [src, target] = [self.targets[0], self.targets[1]];
                     let judged = self.cards[0];
-                    let judged_suit = ctx.catalog.cards[judged as usize].suit;
+                    let (judged_suit, _) = ctx.inline_judge_suit_rank(target, judged);
                     let picked: Option<CardId> = ctx.answer().iter().find_map(|o| match o {
                         ChoiceOption::Card(c) => Some(*c),
                         _ => None,

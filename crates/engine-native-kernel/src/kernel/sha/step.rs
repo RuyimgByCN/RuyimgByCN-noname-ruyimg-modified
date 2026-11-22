@@ -351,23 +351,36 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             // 目标一次=asked 每目标复位）。**登记差异**：同铁骑内联判定
             // 口径=确定性判定，无鬼道/天妒改判窗。
             {
-                let tianxian = ctx
-                    .catalog
-                    .skill_by_name(crate::vocabulary::host::WUDIAN_XJ_TIANXIAN_KEY)
-                    .map(|d| ctx.core.has_skill(self.source, d))
-                    .unwrap_or(false);
-                if tianxian {
+                let fid = self.current_sha_frame_id(ctx).unwrap_or(0);
+                let tianxian_done = ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .contains_key(&(self.source, format!("sha_tianxian_done:{fid}")));
+                let tianxian = !tianxian_done
+                    && ctx
+                        .catalog
+                        .skill_by_name(crate::vocabulary::host::WUDIAN_XJ_TIANXIAN_KEY)
+                        .map(|d| ctx.core.has_skill(self.source, d))
+                        .unwrap_or(false);
+                if tianxian && (!ctx.core.deck.is_empty() || !ctx.core.discard.is_empty()) {
                     let judged = ctx.draw_judge_card_with_elo(
                         self.source,
                         crate::kernel::EloJudgePref::RedPositive,
                     );
-                    let black = matches!(
-                        ctx.catalog.cards[judged as usize].suit,
-                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
-                    );
-                    ctx.to_discard(judged);
+                    let suit = crate::kernel::sha::resume::sha_judge_suit(ctx, self.target, judged);
+                    let black = matches!(suit, crate::catalog::Suit::Spade | crate::catalog::Suit::Club);
+                    let settled_spawned = ctx.settle_inline_judge_card(self.target, suit, judged);
                     if black {
                         return self.advance_target(ctx);
+                    }
+                    if settled_spawned {
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((self.source, format!("sha_tianxian_done:{fid}")), 1);
+                        self.asked = false;
+                        return Flow::Yield;
                     }
                 }
             }
@@ -377,17 +390,22 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 .skill_by_name(crate::vocabulary::names::TIE_JI)
                 .map(|d| ctx.core.has_skill(self.source, d))
                 .unwrap_or(false);
-            if tieji && self.tieji_red.is_none() {
+            if tieji
+                && self.tieji_red.is_none()
+                && (!ctx.core.deck.is_empty() || !ctx.core.discard.is_empty())
+            {
                 let judged = ctx.draw_judge_card_with_elo(
                     self.source,
                     crate::kernel::EloJudgePref::RedPositive,
                 );
-                let red = matches!(
-                    ctx.catalog.cards[judged as usize].suit,
-                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
-                );
-                ctx.to_discard(judged);
+                let suit = crate::kernel::sha::resume::sha_judge_suit(ctx, self.source, judged);
+                let red = matches!(suit, crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond);
+                let settled_spawned = ctx.settle_inline_judge_card(self.source, suit, judged);
                 self.tieji_red = Some(red);
+                if settled_spawned {
+                    self.asked = false;
+                    return Flow::Yield;
+                }
             }
             // 仁王盾（P2/N08 批③-a）：锁定——黑色【杀】对装备者无效
             //（先于八卦阵判定；红杀/无盾照常进入判定与出闪询问）。
@@ -540,11 +558,11 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 && ctx.core.effective_gender(self.source) != ctx.core.effective_gender(self.target)
             {
                 self.cixiong_done = true;
-                let has_hand = !ctx.core.player(self.target).hand.is_empty();
-                if has_hand {
+                let need = crate::kernel::sha::resume::cixiong_need(ctx, self.source);
+                if ctx.core.player(self.target).hand.len() >= need {
                     self.asking_cixiong = true;
-                    // 上游 chooseToDiscard：目标自选一张手牌，空应答（取消）
-                    // = 令使用者摸 1（逐技对照批一 v75）。
+                    // 上游 chooseToDiscard：目标自选（拂尘荡魔时需 2 张）手牌，
+                    // 空应答（取消）= 令使用者摸 1（逐技对照批一 v75）。
                     let options: Vec<ChoiceOption> = ctx
                         .core
                         .player(self.target)
@@ -559,8 +577,8 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                             kind: ChoiceKind::SelectCards,
                             prompt: "cixiong_discard_choose",
                             options,
-                            min: 0,
-                            max: 1,
+                            min: if need > 1 { need } else { 0 },
+                            max: need,
                             allow_cancel: true,
                         },
                     };
@@ -612,16 +630,20 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     .skill_by_name("yueren")
                     .map(|d| ctx.core.has_skill(self.source, d))
                     .unwrap_or(false);
-                if has_yueren && ctx.core.player(self.target).alive {
+                if has_yueren
+                    && ctx.core.player(self.target).alive
+                    && (!ctx.core.deck.is_empty() || !ctx.core.discard.is_empty())
+                {
                     let judged = ctx.draw_judge_card_with_elo(
                         self.source,
                         crate::kernel::EloJudgePref::Yueren,
                     );
+                    let suit = crate::kernel::sha::resume::sha_judge_suit(ctx, self.source, judged);
                     let black = matches!(
-                        ctx.catalog.cards[judged as usize].suit,
+                        suit,
                         crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                     );
-                    ctx.to_discard(judged);
+                    let _ = ctx.settle_inline_judge_card(self.source, suit, judged);
                     if black {
                         let mut pool: Vec<crate::ids::CardId> =
                             ctx.core.player(self.target).hand.iter().copied().collect();

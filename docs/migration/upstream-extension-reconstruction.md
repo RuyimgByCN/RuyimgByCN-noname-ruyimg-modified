@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-23 Batch L11-4（L11 太虚幻境 33 `L11BuffsC`＋37 `L11BuffsD`＋10 衍生技共 +80→360/936）合入与清单上调（待提交／发布）
+
+基线 HEAD `0f514af299519ba8325711136b49e447df2608d2`（Batch U01-3 已发布，CI Run `45048457551` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-l11-b4` `swarm/conv-l11-b3..c3248c456`（`verifier-l11` #22 **`APPROVE`**）并与 `L01`/`U01-3`/`L11-3`/`L25`/`L27` 共存对齐（将 `frame_retire.rs` 收尾键并入 `frame_hooks.rs`、`ASK_TWMAHOU_RENIGONG_CONFIRM = 343` 避碰、拆出 `skills_damage_extra.rs` 保 Rust 有效行 `<=1,000`）：`L11 太虚幻境` 33 项 `L11BuffsC`、37 项 `L11BuffsD` 与 10 项 `L11BuffHelpersB` 衍生辅助技共 **80 项**升为 `已复核等价`（剩余 576 项归后续 `L11-5..L11-6b` 批次），`L11` 升为 **已复核等价 360／简化近似 576／缺失 0**（合计 936），全仓清单更新为 **已复核等价 2,127／简化近似 2,297／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch L11-4 复核摘要](../operations/evidence/2026-11-23-batch3-4-l11-4/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。
+
 ## 2026-11-22 Batch U01-3（U01 3D精选 20 项→94/95；`dddanzhi` 冻结锁边界保留）合入与清单上调（待提交／发布）
 
 基线 HEAD `820aaddd64450d03c4cf66fdac808480872778ca`（Batch L11-3 已发布，CI Run `45022962559` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-u01-3` `622387115..26412405d`（`verifier-rules` #187 + `verifier-rules-2` #205 **`APPROVE`**）并与 `L01`/`L11`/`L25` 共存对齐（迁入 `events/aux_history.rs` 并拆出 `machine/skills.rs`）：`U01 3D精选` 20 项技能（`dddxiaheng`..`dddbailei`，含字面 `(!n)<2` `dddfuyi`）升为 `已复核等价`，`U01:skills:dddanzhi` 按 Section 3 Item 3① 保持 `简化近似`（`Phase::Prepare` vs `phaseBegin` 以保冻结锁 `u01-dddanzhi-pending-v107.ngsa`），`U01` 升为 **已复核等价 94／简化近似 1／缺失 0**（合计 95），全仓清单更新为 **已复核等价 2,047／简化近似 2,377／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch U01-3 复核摘要](../operations/evidence/2026-11-22-batch1-6d-u01-3/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。

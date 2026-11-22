@@ -300,9 +300,25 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
                 )));
             }
         }
-        "tx_danshu" | "boss_danshu" | "diychunxiao" | "dz_gs_yinfu" | "yitianjian" => {
-            // `extension.js:3273, 3508`, `extension_skill.js:1041, 3880, 4052`: recover HP skills
+        "tx_danshu" | "boss_danshu" | "diychunxiao" | "dz_gs_yinfu" => {
+            // `extension.js:3273, 3508`, `extension_skill.js:3880, 4052`: recover HP skills
             let _ = ctx.recover(owner, 1, None);
+        }
+        "yitianjian" => {
+            // `extension_skill.js:1049`: `player.isDamaged() && player.countCards('h') > 0` 即使持【上将的膂力】仍须先决条件满足
+            if ctx.core.player(owner).hp < ctx.core.player(owner).max_hp as i32
+                && !ctx.core.player(owner).hand.is_empty()
+            {
+                if !crate::rvm_bridge::modifiers::has_shangjiangdelvli(
+                    ctx.core,
+                    ctx.catalog,
+                    owner,
+                ) {
+                    let c = ctx.core.player(owner).hand[0];
+                    ctx.discard_from_hand(owner, c);
+                }
+                let _ = ctx.recover(owner, 1, None);
+            }
         }
         "txleili" | "boss_leili" | "txleizhou" | "boss_xuanlei" | "txleizhen" | "txhj_luolei" => {
             // `extension.js:901, 3742, 3859, 5820, 6240`, `extension_skill.js:3735, 3899`: thunder damage skills
@@ -629,11 +645,29 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
             set_flag(ctx.core, owner, "l11_mod:txhj_oldhuxiao", 1);
             ctx.start_draw(owner, 1);
         }
-        "txayboji" | "txdaoji" | "guanshi_skill" => {
-            // `extension.js:3331, 3440`, `extension_skill.js:1280`: discard 1 from target/self and deal 1 damage
+        "txayboji" | "txdaoji" => {
+            // `extension.js:3331, 3440`: discard 1 from target/self and deal 1 damage
             if let Some(t) = hostile_target(ctx, owner) {
                 let _ = discard_up_to_hand_or_equip(ctx, t, 1);
                 ctx.emit(EventData::Damage(crate::machine::damage_data(Some(owner), t, 1)));
+            }
+        }
+        "guanshi_skill" => {
+            // `extension_skill.js:911`: discard 2 (上将的膂力时弃 1) and force 1 damage
+            let need = if crate::rvm_bridge::modifiers::has_shangjiangdelvli(
+                ctx.core,
+                ctx.catalog,
+                owner,
+            ) {
+                1
+            } else {
+                2
+            };
+            let discarded = discard_up_to_hand_or_equip(ctx, owner, need);
+            if discarded == need {
+                if let Some(t) = hostile_target(ctx, owner) {
+                    ctx.emit(EventData::Damage(crate::machine::damage_data(Some(owner), t, 1)));
+                }
             }
         }
         "txdaoxi" | "txtanbei" | "txtanbei_effect1" | "txtanbei_effect2" | "txtanbei_effect3"
@@ -653,18 +687,73 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
             let lost = (ctx.core.player(owner).max_hp as i32 - ctx.core.player(owner).hp).max(1) as u32;
             ctx.start_draw(owner, lost);
         }
-        "txmouduan" | "txhj_mouduan" | "txhj_xuanlve" | "cixiong_skill" => {
-            // `extension.js:5472`, `extension_skill.js:860, 900, 1250`: target discards 1 or owner draws 1
+        "txmouduan" | "txhj_mouduan" | "txhj_xuanlve" => {
+            // `extension.js:5472`, `extension_skill.js:860, 900`: target discards 1 or owner draws 1
             if let Some(t) = hostile_target(ctx, owner) {
                 if discard_up_to_hand_or_equip(ctx, t, 1) == 0 {
                     ctx.start_draw(owner, 1);
                 }
             }
         }
-        "hanbing_skill" => {
-            // `extension_skill.js:1220`: discard up to 2 cards from target instead of dealing damage
+        "cixiong_skill" => {
+            // `extension_skill.js:750`: 拂尘荡魔弃 2、深寒雪饮改获得
+            let need = if crate::rvm_bridge::modifiers::has_fuchendangmo(
+                ctx.core,
+                ctx.catalog,
+                owner,
+            ) {
+                2
+            } else {
+                1
+            };
             if let Some(t) = hostile_target(ctx, owner) {
-                let _ = discard_up_to_hand_or_equip(ctx, t, 2);
+                let mut gained = 0usize;
+                for _ in 0..need {
+                    if let Some(c) = choose_enemy_card(ctx, owner, t) {
+                        ctx.take_owned_card(t, c);
+                        if crate::rvm_bridge::modifiers::has_shenhanxueyin(
+                            ctx.core,
+                            ctx.catalog,
+                            owner,
+                        ) {
+                            ctx.core.player_mut(owner).hand.push(c);
+                        } else {
+                            discard_some(ctx, t, vec![c]);
+                        }
+                        gained += 1;
+                    }
+                }
+                if gained == 0 {
+                    ctx.start_draw(owner, 1);
+                }
+            }
+        }
+        "hanbing_skill" => {
+            // `extension_skill.js:664`: discard up to 2 (拂尘荡魔 3, 深寒雪饮改为获得)
+            let need = if crate::rvm_bridge::modifiers::has_fuchendangmo(
+                ctx.core,
+                ctx.catalog,
+                owner,
+            ) {
+                3
+            } else {
+                2
+            };
+            if let Some(t) = hostile_target(ctx, owner) {
+                for _ in 0..need {
+                    if let Some(c) = choose_enemy_card(ctx, owner, t) {
+                        ctx.take_owned_card(t, c);
+                        if crate::rvm_bridge::modifiers::has_shenhanxueyin(
+                            ctx.core,
+                            ctx.catalog,
+                            owner,
+                        ) {
+                            ctx.core.player_mut(owner).hand.push(c);
+                        } else {
+                            discard_some(ctx, t, vec![c]);
+                        }
+                    }
+                }
             }
         }
 
@@ -938,6 +1027,14 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
                     None,
                 )));
             }
+            if ctx
+                .catalog
+                .skill_by_name("buff_txhj_renigongdeyouhu")
+                .is_some_and(|d| ctx.core.has_skill(owner, d))
+                && flag(ctx.core, owner, "mbcmfangzhu_ban") == 0
+            {
+                ctx.start_draw(owner, 1);
+            }
         }
         "txhj_xiefeng" => {
             // `extension.js:1946`: phaseAfter discard up to 3 cards and draw 1
@@ -945,7 +1042,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
             ctx.start_draw(owner, 1);
         }
         "txhj_yaoshu" | "txhj_zhoufa" | "txhj_zhouzu" => {
-            // `extension.js:971, 1146, 1248`: `mahouSkill` curse on target -> 1 thunder damage & draw 1
+            // `extension.js:971, 1146, 1248`: `mahouSkill` curse on target -> 1 thunder damage & renigong draw
             if let Some(t) = hostile_target(ctx, owner) {
                 set_flag(ctx.core, t, &format!("l11_mahou:{skill_name}"), 1);
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
@@ -955,6 +1052,14 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
                     DamageNature::Thunder,
                     None,
                 )));
+            }
+            if ctx
+                .catalog
+                .skill_by_name("buff_txhj_renigongdeyouhu")
+                .is_some_and(|d| ctx.core.has_skill(owner, d))
+                && flag(ctx.core, owner, "mbcmfangzhu_ban") == 0
+            {
+                ctx.start_draw(owner, 1);
             }
         }
         _ => {

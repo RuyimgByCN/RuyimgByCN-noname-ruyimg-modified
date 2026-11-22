@@ -594,7 +594,12 @@ impl HostSkillBehavior {
                 EventData::Damage(d)
                 if d.source == Some(owner) && !d.prevented && d.amount > 0
                     && d.card.map(|c| ctx.catalog.card_kind(c).is_sha_like()).unwrap_or(false)
-                    && !ctx.state.player(owner).hand.is_empty()),
+                    && (!ctx.state.player(owner).hand.is_empty()
+                        || crate::rvm_bridge::modifiers::has_shangjiangdelvli(
+                            ctx.state,
+                            ctx.catalog,
+                            owner,
+                        ))),
             HostBehavior::SijiDiscardDraw => matches!(event,
                 EventData::CardsDiscarded { player, cards }
                 if *player == owner
