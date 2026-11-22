@@ -616,6 +616,48 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
             effective,
         );
     }
+    if ctx.catalog.vm_card_history
+        && !is_dying_save
+        && ctx.core.turn.phase == Phase::Play
+        && u.player == ctx.core.turn.current
+    {
+        let mut seq = ctx
+            .core
+            .vm_aux
+            .flags
+            .get(&(0, "play_phase_seq".to_string()))
+            .copied()
+            .unwrap_or(0);
+        if seq == 0 {
+            seq = 1;
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((0, "play_phase_seq".to_string()), seq);
+        }
+        if seq > 0 {
+            let next_idx = ctx
+                .core
+                .vm_aux
+                .flags
+                .get(&(0, "play_phase_uses".to_string()))
+                .copied()
+                .unwrap_or(0)
+                + 1;
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((0, "play_phase_uses".to_string()), next_idx);
+            ctx.core.vm_aux.flags.insert(
+                (u.player, format!("card_use_play_seq:{frame_id}")),
+                seq,
+            );
+            ctx.core.vm_aux.flags.insert(
+                (u.player, format!("card_use_play_idx:{frame_id}")),
+                next_idx,
+            );
+        }
+    }
     if nullified {
         if let Some(card) = u.card {
             ctx.core.table.retain(|&c| c != card);

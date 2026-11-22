@@ -142,7 +142,25 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
         }
         if let Some(ok) = take_u01_respond_result(ctx, self.target) {
             if ok {
-                super::record_virtual_respond(ctx, self.target, self.need);
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.target, "dddfusi_window_refused".to_string()));
+                let card_ovr = ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.target, "u01_respond_card_override".to_string()))
+                    .and_then(|v| v.checked_sub(1));
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.target, "u01_respond_fusi_owner".to_string()));
+                if let Some(c) = card_ovr {
+                    super::emit_card_responded_as(ctx, self.target, c, self.need);
+                } else {
+                    super::record_virtual_respond(ctx, self.target, self.need);
+                }
                 if self.need == CardKind::Shan {
                     releiji_on_shan(ctx, self.target);
                 }
@@ -152,6 +170,10 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
         }
         if self.asked {
             self.asked = false;
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(self.target, "dddfusi_window_refused".to_string()));
             let answer = ctx.answer().clone();
             if let Some(ChoiceOption::Skill(rdef)) = answer.first().copied() {
                 if host_response_skills(ctx.core, ctx.catalog, self.target, resp_ctx)

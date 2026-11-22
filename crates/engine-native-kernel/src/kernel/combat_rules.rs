@@ -232,8 +232,11 @@ pub(super) fn dying_tao_cards(
     if ctx.catalog.blocks_all_cards(ctx.core, responder) {
         return Vec::new();
     }
-    let hand_locked =
-        crate::rvm_bridge::modifiers::d34_flags::is_dddtongyu_hand_locked(ctx.core, responder);
+    let hand_locked = crate::rvm_bridge::modifiers::d34_flags::is_u01_hand_locked(
+        ctx.core,
+        ctx.catalog,
+        responder,
+    );
     let p = ctx.core.player(responder);
     let mut out: Vec<crate::ids::CardId> = if hand_locked {
         Vec::new()
@@ -269,7 +272,7 @@ pub(crate) fn response_kind_cards_core(
         return Vec::new();
     }
     let hand_locked =
-        crate::rvm_bridge::modifiers::d34_flags::is_dddtongyu_hand_locked(core, responder);
+        crate::rvm_bridge::modifiers::d34_flags::is_u01_hand_locked(core, catalog, responder);
     let sealed = catalog.is_tieji_sealed(core, responder)
         || (core.player(responder).hp <= 1 && catalog.has_rechanyuan(core, responder));
     let rw_lanyin = !hand_locked

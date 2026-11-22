@@ -27,7 +27,15 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
     }
     match data {
         EventData::DamageWindow { .. } => {}
-        EventData::LoseHp { player, amount } => commit_lose_hp(ctx, player, amount),
+        EventData::LoseHp { player, amount } => {
+            if ctx.catalog.vm_card_history && amount > 0 {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((player, "turn_change_hp".to_string()), 1);
+            }
+            commit_lose_hp(ctx, player, amount)
+        }
         EventData::CardUsed(u) => commit_card_used(ctx, u),
         EventData::Equipped { player, card, .. } => commit_equip(ctx, frame_id, player, card),
         EventData::Linked { player, .. } => commit_linked(ctx, frame_id, player),
@@ -71,17 +79,21 @@ fn clear_shilie_shown_on_leave(
     player: PlayerId,
     cards: &[crate::ids::CardId],
 ) {
-    if ctx
+    let has_shilie = ctx
         .catalog
         .skill_by_name("dddshilie")
-        .is_some_and(|def| ctx.core.has_skill(player, def))
-    {
-        for c in cards {
+        .is_some_and(|def| ctx.core.has_skill(player, def));
+    for c in cards {
+        if has_shilie {
             ctx.core
                 .vm_aux
                 .flags
                 .remove(&(player, format!("dddshilie_shown_card:{c}")));
         }
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(player, format!("u01_shown_card:{c}")));
     }
 }
 

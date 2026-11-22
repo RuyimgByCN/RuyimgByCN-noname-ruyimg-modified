@@ -180,6 +180,8 @@ pub struct ContentHooks {
         CardKind,
         crate::ids::EventId,
     ) -> Option<bool>,
+    /// 阶段被跳过或取消时的宿主触发钩子（如 `dddlingyong` `phase*Skipped`/`Cancelled`）。
+    pub on_phase_skipped: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId),
 }
 
 impl ContentHooks {
@@ -219,5 +221,6 @@ impl ContentHooks {
         preserves_skills_on_death: |_, _, _| false,
         respond_skill_options: |_, _, _, _, _| Vec::new(),
         try_activate_respond_skill: |_, _, _, _, _| None,
+        on_phase_skipped: |_, _| {},
     };
 }

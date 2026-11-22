@@ -513,6 +513,37 @@ pub(in crate::kernel) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: P
         return;
     }
     ctx.expire_temporary_skills(prev);
+    if ctx
+        .core
+        .vm_aux
+        .flags
+        .remove(&(prev, "dddqiahua_temp_xunxun".to_string()))
+        .is_some()
+    {
+        if let Some(xdef) = ctx.catalog.skill_by_name("dddxunxun") {
+            ctx.core.skills.remove(&(prev, xdef));
+        }
+    }
+    ctx.core.vm_aux.flags.retain(|(_, k), _| {
+        !k.starts_with("turn_discard_card:")
+            && k != "turn_change_hp"
+            && k != "turn_dmg_sources_mask"
+            && k != "play_phase_seq"
+            && k != "play_phase_uses"
+            && k != "dddxuyu_pending_fid"
+            && k != "dddshijian_extra_target"
+            && k != "dddquche_effect_marks"
+            && k != "dddfusi_allowed"
+            && k != "dddfusi_refused"
+            && k != "dddfusi_window_refused"
+            && k != "ddddongcha_active_turn"
+            && k != "dddchashi_armed"
+            && k != "dddchashi_target"
+            && k != "dddchashi_suit"
+            && k != "dddchashi_kind"
+            && !k.starts_with("dddxuyu_old_armed:")
+            && !k.starts_with("dddshijian_old_armed:")
+    });
     if ctx.catalog.vm_card_history {
         ctx.core
             .vm_aux

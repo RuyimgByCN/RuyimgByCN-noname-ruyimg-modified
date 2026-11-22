@@ -1,6 +1,24 @@
 use super::super::*;
 
 pub(super) fn begin_play(ctx: &mut Ctx<'_>, player: PlayerId) {
+    if ctx.catalog.vm_card_history {
+        let next_seq = ctx
+            .core
+            .vm_aux
+            .flags
+            .get(&(0, "play_phase_seq".to_string()))
+            .copied()
+            .unwrap_or(0)
+            + 1;
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((0, "play_phase_seq".to_string()), next_seq);
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((0, "play_phase_uses".to_string()), 0);
+    }
     crate::kernel::elo_on_choice_before(ctx.core, ctx.catalog, player, "phase_use_choose_to_use");
     // 往生（十殿阎罗转轮王，规则 v269）：出牌阶段开始——视为
     // 随机使用一张【南蛮入侵】/【万箭齐发】（上游 boss_wangsheng

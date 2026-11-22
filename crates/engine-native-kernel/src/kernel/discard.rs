@@ -41,6 +41,10 @@ impl crate::catalog::SkillMachine for DiscardToLimitMachine {
                 .skill_by_name(crate::vocabulary::names::BOSS_HONGLIANX)
                 .map(|def| ctx.core.has_skill(self.player, def))
                 .unwrap_or(false);
+            let fusi = ctx
+                .catalog
+                .skill_by_name("dddfusi")
+                .is_some_and(|def| ctx.core.has_skill(self.player, def));
             let options: Vec<ChoiceOption> = ctx
                 .core
                 .player(self.player)
@@ -48,6 +52,26 @@ impl crate::catalog::SkillMachine for DiscardToLimitMachine {
                 .iter()
                 .copied()
                 .filter(|c| {
+                    if fusi
+                        && (ctx
+                            .core
+                            .vm_aux
+                            .flags
+                            .get(&(self.player, format!("u01_shown_card:{c}")))
+                            .copied()
+                            .unwrap_or(0)
+                            > 0
+                            || ctx
+                                .core
+                                .vm_aux
+                                .flags
+                                .get(&(self.player, format!("dddshilie_shown_card:{c}")))
+                                .copied()
+                                .unwrap_or(0)
+                                > 0)
+                    {
+                        return false;
+                    }
                     if honglianx
                         && matches!(
                             ctx.catalog.cards[*c as usize].suit,
@@ -85,6 +109,10 @@ impl crate::catalog::SkillMachine for DiscardToLimitMachine {
         }
         let answer = ctx.answer().clone();
         let mut discarded: Vec<crate::ids::CardId> = Vec::new();
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((self.player, "in_discard_to_limit".to_string()), 1);
         for opt in answer {
             if let ChoiceOption::Card(c) = opt {
                 // 望尘（swd 古月圣，批㉑）：弃牌阶段弃置基本牌置旗
@@ -95,6 +123,10 @@ impl crate::catalog::SkillMachine for DiscardToLimitMachine {
                 discarded.push(c);
             }
         }
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(self.player, "in_discard_to_limit".to_string()));
         if !discarded.is_empty() {
             // 水没墓穴计数（mtg 第三批，规则 v102）：弃牌阶段内弃牌
             ctx.core.turn.discard_phase_discarded += discarded.len() as u32;

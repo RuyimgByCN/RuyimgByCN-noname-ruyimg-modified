@@ -140,6 +140,7 @@ impl Engine {
             }
         }
         crate::kernel::elo_try_init_cards(&mut self.state.core, &self.catalog, pid, false);
+        crate::state::sync_dddfusi_global(&mut self.state.core, &self.catalog);
         crate::resolution::sync_trigger_owners(&self.state.core, &mut self.state.resolution);
         Some(pid)
     }

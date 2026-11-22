@@ -204,7 +204,7 @@ pub(super) fn active_sha_ask(
             || core.vm_aux.flags.get(&(target, "mbcmfangzhu_ban".to_string())).copied().unwrap_or(0) > 0;
         let sealed = catalog.is_tieji_sealed(core, target);
         let hand_locked =
-            crate::rvm_bridge::modifiers::d34_flags::is_dddtongyu_hand_locked(core, target);
+            crate::rvm_bridge::modifiers::d34_flags::is_u01_hand_locked(core, catalog, target);
         let longdan = !sealed
             && !catalog.is_rechanyuan_sealed_name(core, target, LONG_DAN)
             && catalog

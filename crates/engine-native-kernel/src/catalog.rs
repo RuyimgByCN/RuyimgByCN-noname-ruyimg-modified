@@ -895,6 +895,10 @@ pub trait SkillBehavior: Send + Sync {
         false
     }
 
+    fn runs_before_phase_begin(&self) -> bool {
+        self.is_vm_skill()
+    }
+
     /// G1 规则宿主：宿主原语行为标识（非宿主行为返回 None）。
     /// 供恢复期校验快照中的扩展机器定义键与行为标签。
     fn as_host_behavior(&self) -> Option<crate::vocabulary::host::HostBehavior> {

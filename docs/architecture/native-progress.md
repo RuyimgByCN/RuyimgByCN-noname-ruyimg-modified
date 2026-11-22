@@ -9,6 +9,13 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-22 Batch U01-2（U01 3D精选 21 项→74/95）合入（待提交／发布）
+
+- **基线、发布与版本**：HEAD `9842e555d9fc336ffb5c37a09d0b815da1a0ae32`（Batch Spine-Tests 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `44990992457` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。
+- **Batch U01-2 集成与复核**：合入 `swarm/conv-u01-2` `44c3ae911..622387115`（`verifier-rules` #157 **`APPROVE`**）：协同 `catalog/hooks.rs::on_phase_skipped`、`events/aux_history.rs`、`resolution/frame_hooks.rs`、`nullify.rs`/`snap/asks.rs`（合并 `host_response_skills`＋`respond_skill_options`）与 `play_equip.rs`；关闭 `dddzhengjun`..`dddfenji` 21 项技能。
+- **清单计数与整包签署**：按 #157 升格 **21 项**（`U01` → **`74／21／0`**）；全仓更新为 **已复核等价 1,741／简化近似 2,683／缺失 0**，整包八项签署仍 `0/37`。
+- **主线实测**：5 crate `-D warnings`、`wasm32`、4 crate **`2,733/0/6`**、`--workspace --no-fail-fast` **`8,081/0/8`**、`conformance` **`19/19`**、`desktop-client` **`20/0/1`**、跨端校验、`web-client` `typecheck`＋`test`（**540/0**）＋`build:native`＋`smoke:native`（**83/0**）＋`build` 与 `preflight.py` 全过，见 [Batch U01-2 证据](../operations/evidence/2026-11-22-batch1-6c-u01-2/README.md)。
+
 ### 2026-11-22 Batch Spine-Tests（裁决 35 Spine 4.0 净室全特性审计 ＋ 6 项解算/混合/编解码修复）合入（待提交／发布）
 
 - **基线、发布与版本**：HEAD `aca0cc0a5ed2ac30fb3f50647e396d4cabe2dc76`（Batch L11-1 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `44986813858` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。

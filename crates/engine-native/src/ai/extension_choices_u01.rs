@@ -3,7 +3,10 @@
 use super::*;
 use crate::choice::ChoiceOption;
 
-fn pick_hostile_or_first(
+#[path = "extension_choices_u01_2.rs"]
+mod extension_choices_u01_2;
+
+pub(super) fn pick_hostile_or_first(
     input: &crate::view::PolicyInput,
     options: &[ChoiceOption],
     allow_cancel: bool,
@@ -33,7 +36,7 @@ fn pick_hostile_or_first(
     }
 }
 
-fn pick_ally_or_first(
+pub(super) fn pick_ally_or_first(
     input: &crate::view::PolicyInput,
     options: &[ChoiceOption],
     allow_cancel: bool,
@@ -54,7 +57,7 @@ fn pick_ally_or_first(
     }
 }
 
-fn pick_lowest_cards(
+pub(super) fn pick_lowest_cards(
     catalog: &crate::catalog::Catalog,
     input: &crate::view::PolicyInput,
     options: &[ChoiceOption],
@@ -218,7 +221,18 @@ pub(super) fn plan_u01_choice_action(
         "dddjijian_use_target" | "dddjijian_old_use_target" => {
             pick_hostile_or_first(input, options, allow_cancel)
         }
-        _ => return None,
+        _ => {
+            return extension_choices_u01_2::plan_u01_2_choice_action(
+                catalog,
+                input,
+                id,
+                prompt,
+                options,
+                min,
+                max,
+                allow_cancel,
+            );
+        }
     };
     Some(GameAction::Answer {
         choice_id: id,

@@ -154,6 +154,12 @@ pub fn record_dddanzhi_card(
 /// 者摸 2；否则持有者与回复者各摸 1（上游 boss_jicai recoverAfter 同
 /// 口径；仅实际回复量>0 的 Recover 事件进入）。
 pub(in crate::kernel) fn commit_recover_skills(ctx: &mut Ctx<'_>, recovered: PlayerId) {
+    if ctx.catalog.vm_card_history {
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((recovered, "turn_change_hp".to_string()), 1);
+    }
     // 忍性（年兽形态，规则 v249）：global recoverEnd——持有者非当前回
     // 合角色时，任意角色回复后其摸 1（上游 boss_renxing recoverEnd 同口
     // 径；damageEnd 半面见 commit_damage 忍性臂）

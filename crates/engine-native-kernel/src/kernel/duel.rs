@@ -68,7 +68,25 @@ impl crate::catalog::SkillMachine for DuelMachine {
             };
             if let Some(ok) = take_u01_respond_result(ctx, responder) {
                 if ok {
-                    super::record_virtual_respond(ctx, responder, CardKind::Sha);
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(responder, "dddfusi_window_refused".to_string()));
+                    let card_ovr = ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .remove(&(responder, "u01_respond_card_override".to_string()))
+                        .and_then(|v| v.checked_sub(1));
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(responder, "u01_respond_fusi_owner".to_string()));
+                    if let Some(c) = card_ovr {
+                        super::emit_card_responded_as(ctx, responder, c, CardKind::Sha);
+                    } else {
+                        super::record_virtual_respond(ctx, responder, CardKind::Sha);
+                    }
                     let wushuang_holder = if self.on_target {
                         self.source
                     } else {
@@ -270,6 +288,10 @@ impl crate::catalog::SkillMachine for DuelMachine {
                 }
             }
             if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(responder, "dddfusi_window_refused".to_string()));
                 let jijiang_helper = if shas.is_empty() {
                     jijiang_shu_helper(ctx.core, ctx.catalog, responder).map(|(h, _)| h)
                 } else {
@@ -375,6 +397,14 @@ impl DuelMachine {
             .vm_aux
             .flags
             .remove(&(self.target, "duel_jijiang_skip".to_string()));
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(self.source, "dddfusi_window_refused".to_string()));
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(self.target, "dddfusi_window_refused".to_string()));
         if card != 0 {
             ctx.to_discard(card);
             ctx.core.table.retain(|c| *c != card);

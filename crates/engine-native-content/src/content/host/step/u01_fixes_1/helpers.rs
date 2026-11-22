@@ -90,19 +90,26 @@ pub(super) fn card_zh_name_len(catalog: &Catalog, card: CardId) -> usize {
     }
 }
 
-pub(super) fn is_target_kongcheng(core: &GameStateCore, catalog: &Catalog, t: PlayerId) -> bool {
+pub(in crate::content::host::step) fn is_target_kongcheng(
+    core: &GameStateCore,
+    catalog: &Catalog,
+    t: PlayerId,
+) -> bool {
     catalog
         .skill_by_name(crate::vocabulary::names::KONG_CHENG)
         .is_some_and(|d| core.has_skill(t, d))
         && core.player(t).hand.is_empty()
 }
 
-pub(super) fn is_target_protected(core: &GameStateCore, t: PlayerId) -> bool {
+pub(in crate::content::host::step) fn is_target_protected(
+    core: &GameStateCore,
+    t: PlayerId,
+) -> bool {
     let p = core.player(t);
     p.jidong_active || p.yinshen_active || p.jileng_active || p.yinmi_active
 }
 
-pub(super) fn is_sha_target_blocked(
+pub(in crate::content::host::step) fn is_sha_target_blocked(
     core: &GameStateCore,
     catalog: &Catalog,
     user: PlayerId,
@@ -315,7 +322,7 @@ pub(crate) fn consume_sha_play_phase(
     set_flag(core, player, "vm_sha_extra_used", vm_used + 1);
 }
 
-pub(super) fn jiedao_victims_for(
+pub(in crate::content::host::step) fn jiedao_victims_for(
     core: &GameStateCore,
     catalog: &Catalog,
     holder: PlayerId,
@@ -355,7 +362,7 @@ pub(super) fn canonical_jijian_key(kind: CardKind) -> u32 {
     }
 }
 
-pub(super) fn virtual_legal_targets(
+pub(in crate::content::host::step) fn virtual_legal_targets(
     core: &GameStateCore,
     catalog: &Catalog,
     user: PlayerId,
@@ -487,7 +494,7 @@ pub(super) fn virtual_legal_targets(
     }
 }
 
-pub(super) fn virtual_kind_can_use_play(
+pub(in crate::content::host::step) fn virtual_kind_can_use_play(
     core: &GameStateCore,
     catalog: &Catalog,
     user: PlayerId,
@@ -515,14 +522,14 @@ pub(super) fn virtual_kind_can_use_play(
     !virtual_legal_targets(core, catalog, user, kind).is_empty()
 }
 
-pub(super) fn is_delayed(kind: CardKind) -> bool {
+pub(in crate::content::host::step) fn is_delayed(kind: CardKind) -> bool {
     matches!(
         kind,
         CardKind::Le | CardKind::Bing | CardKind::ShanDian | CardKind::HongShui | CardKind::Guiyoujie
     )
 }
 
-pub(super) fn virtual_kind_needs_target_prompt(kind: CardKind) -> bool {
+pub(in crate::content::host::step) fn virtual_kind_needs_target_prompt(kind: CardKind) -> bool {
     kind.is_sha_like()
         || matches!(
             kind,

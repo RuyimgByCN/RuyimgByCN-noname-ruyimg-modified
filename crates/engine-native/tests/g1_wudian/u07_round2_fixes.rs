@@ -832,6 +832,10 @@ fn u07_r3_diaobing_cards_lost_settles_before_gain_next_nullify_and_content_after
         give_card_with_pack(&mut e, &packs, 1, wx1);
 
         submit(&mut e, 0, GameAction::PlayCard { card: db, targets: Vec::new() });
+        // 0 号摸 1 牌：上游 dddzhengjun 允许自身相等，先取消这次摸牌触发（不消耗 hs 次数）再进无懈窗
+        if e.open_choice().is_some_and(|c| c.spec.prompt == "dddzhengjun_hs_choice") {
+            answer_open(&mut e, Vec::new());
+        }
         // 0 号摸 1 牌后对 0 号开无懈窗（1 号 Pass）
         assert_eq!(e.open_choice().unwrap().spec.prompt, "nullify_window");
         answer_open(&mut e, vec![ChoiceOption::Pass]);
@@ -883,6 +887,9 @@ fn u07_r3_diaobing_cards_lost_settles_before_gain_next_nullify_and_content_after
 
         // 1 号/2 号均 0 手牌，0 号为唯一也是末位目标
         submit(&mut e, 0, GameAction::PlayCard { card: db, targets: Vec::new() });
+        if e.open_choice().is_some_and(|c| c.spec.prompt == "dddzhengjun_hs_choice") {
+            answer_open(&mut e, Vec::new());
+        }
         let pick0 = e.open_choice().unwrap();
         let market_0 = pick0.spec.options[0];
         answer_open(&mut e, vec![market_0]);
@@ -956,13 +963,13 @@ fn u07_r3_diyjuntun_equip_recast_emits_cards_lost_and_single_discard_log() {
         e.debug_clear_hand(p);
     }
     e.debug_grant(0, "diyjuntun");
-    e.debug_grant(0, "dddzhengjun");
     let diyjuntun_def = e.catalog().skill_by_name("diyjuntun").unwrap();
 
     // 1) 装备区重铸：清空 declared_slots、触发 Equip CardsLost（先于摸牌）、且仅记 1 条 CardDiscarded 日志
     let eq_worn = find_deck_kind_w(&e, CardKind::Zhuge);
     give_card_with_pack(&mut e, &packs, 0, eq_worn);
     submit(&mut e, 0, GameAction::PlayCard { card: eq_worn, targets: Vec::new() });
+    e.debug_grant(0, "dddzhengjun");
     let top_tao = e.debug_set_deck_top("tao");
     assert!(e.state_core().player(0).equips.contains(&eq_worn));
 
@@ -992,6 +999,12 @@ fn u07_r3_diyjuntun_equip_recast_emits_cards_lost_and_single_discard_log() {
         .filter(|ev| matches!(ev, LogEvent::CardDiscarded { player: 0, cards } if cards == &vec![eq_worn]))
         .count();
     assert_eq!(worn_discard_logs, 1, "装备区重铸不得缺失或重复记 CardDiscarded");
+    if e.open_choice().is_some_and(|c| c.spec.prompt == "dddzhengjun_hs_choice") {
+        answer_open(&mut e, Vec::new());
+    }
+    if let Some(zj_def) = e.catalog().skill_by_name("dddzhengjun") {
+        e.state_core_mut().skills.remove(&(0, zj_def));
+    }
 
     // 2) 手牌区装备重铸：仅记 1 条 CardDiscarded（修复重复 log）
     let eq_hand = deck_card_by_name(&e, "sanjian", 0);

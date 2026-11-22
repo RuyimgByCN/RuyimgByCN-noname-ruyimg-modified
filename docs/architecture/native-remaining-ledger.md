@@ -1,5 +1,9 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+## 2026-11-22 Batch U01-2（U01 3D精选 第二批 21 项→74/95）合入（待提交／发布）
+
+基线 HEAD `9842e555d9fc336ffb5c37a09d0b815da1a0ae32`（Batch Spine-Tests CI Run `44990992457` Attempt 1 `10/10 success` 已并入 `ci-runs.md`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `verifier-rules` 三轮核验通过（#157 **`APPROVE`**，含 4 轮 Chrome CDP 实跑探针）的 `swarm/conv-u01-2` `44c3ae911..622387115` 并协同 `catalog/hooks.rs`/`aux_history.rs`/`resolution/frame_hooks.rs`/`nullify.rs`/`play_equip.rs`/`d34_flags.rs`：关闭 `U01 3D精选` 21 项技能（`dddzhengjun`..`dddfenji`），在 `main` 全量通过 `--workspace`（`8,081/0/8`）、4 crate（`2,733/0/6`）、`conformance` `19/19`、`web-client` `540/0` 及 `smoke:native` `83/0`。`U01` 升为 **74／21／0**，全仓清单更新为 **已复核等价 1,741／简化近似 2,683／缺失 0**（整包八项 `0/37`）。见 [Batch U01-2 证据](../operations/evidence/2026-11-22-batch1-6c-u01-2/README.md) 与 [进度主稿](native-progress.md)。
+
 ## 2026-11-22 Batch Spine-Tests（裁决 35 Spine 4.0 净室全特性审计 24/24 ＋ 6 项修复；无清单变更）合入（待提交／发布）
 
 基线 HEAD `aca0cc0a5ed2ac30fb3f50647e396d4cabe2dc76`（Batch L11-1 CI Run `44986813858` Attempt 1 `10/10 success` 已并入 `ci-runs.md`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入未经官方/上游 Spine 源码污染的 `verifier-spine-cleanroom` 审计通过（#143 **`APPROVE`**）的 `swarm/conv-spine-tests` `a34f19a95..6913a167e`：补齐裁决 35 12 项特性的 24 组纯 Web API 净室单测（0 `@esotericsoftware/*`/`pixi-spine`/商用 `.skel`）与 #140 全部 6 项解算/混合/往返修复，并在 `main` 通过 `web-client` **`540/0`**、`smoke:native` `83/0`、Chrome CDP（`SPINE_40_LOADED:4.0.64`、`60 fps`）、`--workspace` **`8,052/0/8`**、4 crate **`2,704/0/6`** 及 `preflight.py`。本批零清单变更（全仓保持 **1,720 / 2,704 / 0**，整包 `0/37`）；涉及动皮的 `L08/L09/L10/L11/L12/L24/L28` 视觉呈现维依裁决 35 §5 / 37 仍记 `部分`，待用户本地对照（见 [玩家指引](../operations/evidence/2026-11-11-tabletop-and-spine40/spine40-user-guide.md)）。详见 [Spine 4.0 净室审计证据](../operations/evidence/2026-11-21-spine40-cleanroom-audit/README.md) 与 [进度主稿](native-progress.md)。

@@ -112,6 +112,12 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                 > 0;
             if (p.hp > 0 && !p.dying) || mbmowang_rest {
                 ctx.core.player_mut(self.dying).dying = false;
+                for pid in 0..ctx.core.players.len() as PlayerId {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(pid, "dddfusi_window_refused".to_string()));
+                }
                 ctx.core
                     .vm_aux
                     .flags
@@ -174,17 +180,60 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                     }
                     if let Some(ok) = super::take_u01_respond_result(ctx, responder) {
                         if ok {
+                            let card_ovr = ctx
+                                .core
+                                .vm_aux
+                                .flags
+                                .remove(&(responder, "u01_respond_card_override".to_string()))
+                                .and_then(|v| v.checked_sub(1));
+                            let fusi_owner = ctx
+                                .core
+                                .vm_aux
+                                .flags
+                                .remove(&(responder, "u01_respond_fusi_owner".to_string()))
+                                .unwrap_or(0);
+                            ctx.core
+                                .vm_aux
+                                .flags
+                                .remove(&(responder, "dddfusi_window_refused".to_string()));
                             self.responders.remove(0);
                             self.round_used = true;
                             if ctx.core.player(self.dying).alive {
-                                ctx.emit(EventData::CardUsed(crate::event::CardUseData {
-                                    card: None,
-                                    player: self.dying,
-                                    targets: vec![self.dying],
-                                    nature: crate::event::DamageNature::Normal,
-                                    use_as: Some(crate::catalog::CardKind::Tao),
-                                    cancelled: false,
-                                }));
+                                let new_fid = ctx.res.next_event_id;
+                                if let Some(card) = card_ovr {
+                                    let eff_kind = if ctx.catalog.card_kind(card) == crate::catalog::CardKind::Jiu
+                                        && responder == self.dying
+                                    {
+                                        crate::catalog::CardKind::Jiu
+                                    } else {
+                                        crate::catalog::CardKind::Tao
+                                    };
+                                    ctx.emit(EventData::CardUsed(crate::machine::card_use_as(
+                                        card,
+                                        responder,
+                                        vec![self.dying],
+                                        Some(eff_kind),
+                                    )));
+                                    ctx.core.vm_aux.flags.insert(
+                                        (responder, format!("dying_save_frame:{new_fid}")),
+                                        (u32::from(self.dying) + 1) | ((card as u32) << 8),
+                                    );
+                                } else {
+                                    ctx.emit(EventData::CardUsed(crate::event::CardUseData {
+                                        card: None,
+                                        player: self.dying,
+                                        targets: vec![self.dying],
+                                        nature: crate::event::DamageNature::Normal,
+                                        use_as: Some(crate::catalog::CardKind::Tao),
+                                        cancelled: false,
+                                    }));
+                                }
+                                if fusi_owner > 0 {
+                                    ctx.core.vm_aux.flags.insert(
+                                        (responder, format!("dddfusi_used_owner:{new_fid}")),
+                                        fusi_owner,
+                                    );
+                                }
                             }
                             return Flow::Yield;
                         }
@@ -242,6 +291,12 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                 self.round_used = false;
             }
             let Some(responder) = self.responders.first().copied() else {
+                for pid in 0..ctx.core.players.len() as PlayerId {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(pid, "dddfusi_window_refused".to_string()));
+                }
                 ctx.core
                     .vm_aux
                     .flags
@@ -283,22 +338,69 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                         fid,
                     ) {
                         if immediate {
+                            let card_ovr = ctx
+                                .core
+                                .vm_aux
+                                .flags
+                                .remove(&(responder, "u01_respond_card_override".to_string()))
+                                .and_then(|v| v.checked_sub(1));
+                            let fusi_owner = ctx
+                                .core
+                                .vm_aux
+                                .flags
+                                .remove(&(responder, "u01_respond_fusi_owner".to_string()))
+                                .unwrap_or(0);
+                            ctx.core
+                                .vm_aux
+                                .flags
+                                .remove(&(responder, "dddfusi_window_refused".to_string()));
                             self.responders.remove(0);
                             self.round_used = true;
                             if ctx.core.player(self.dying).alive {
-                                ctx.emit(EventData::CardUsed(crate::event::CardUseData {
-                                    card: None,
-                                    player: self.dying,
-                                    targets: vec![self.dying],
-                                    nature: crate::event::DamageNature::Normal,
-                                    use_as: Some(crate::catalog::CardKind::Tao),
-                                    cancelled: false,
-                                }));
+                                let new_fid = ctx.res.next_event_id;
+                                if let Some(card) = card_ovr {
+                                    let eff_kind = if ctx.catalog.card_kind(card) == crate::catalog::CardKind::Jiu
+                                        && responder == self.dying
+                                    {
+                                        crate::catalog::CardKind::Jiu
+                                    } else {
+                                        crate::catalog::CardKind::Tao
+                                    };
+                                    ctx.emit(EventData::CardUsed(crate::machine::card_use_as(
+                                        card,
+                                        responder,
+                                        vec![self.dying],
+                                        Some(eff_kind),
+                                    )));
+                                    ctx.core.vm_aux.flags.insert(
+                                        (responder, format!("dying_save_frame:{new_fid}")),
+                                        (u32::from(self.dying) + 1) | ((card as u32) << 8),
+                                    );
+                                } else {
+                                    ctx.emit(EventData::CardUsed(crate::event::CardUseData {
+                                        card: None,
+                                        player: self.dying,
+                                        targets: vec![self.dying],
+                                        nature: crate::event::DamageNature::Normal,
+                                        use_as: Some(crate::catalog::CardKind::Tao),
+                                        cancelled: false,
+                                    }));
+                                }
+                                if fusi_owner > 0 {
+                                    ctx.core.vm_aux.flags.insert(
+                                        (responder, format!("dddfusi_used_owner:{new_fid}")),
+                                        fusi_owner,
+                                    );
+                                }
                             }
                         }
                         return Flow::Yield;
                     }
                 }
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(responder, "dddfusi_window_refused".to_string()));
                 self.responders.remove(0);
                 if let Some(ChoiceOption::Card(tao)) = answer.first().copied() {
                     let raw_kind = ctx.catalog.card_kind(tao);

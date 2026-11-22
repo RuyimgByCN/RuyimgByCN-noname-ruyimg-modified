@@ -178,6 +178,7 @@ pub(super) fn host_card_use_after_impl(ctx: &mut Ctx<'_>, u: &CardUseData) {
     crate::content::host::step::l27_fixes::host_card_use_after_clandianzhan(ctx, u);
     crate::content::host::step::u01_fixes_1::u01_card_use_after_hook(ctx, u);
     crate::content::host::step::l11_common::on_card_use_after_l11(ctx, u);
+    crate::content::host::step::u01_fixes_2::u01_card_use_after_hook_2(ctx, u);
     if u.cancelled {
         return;
     }

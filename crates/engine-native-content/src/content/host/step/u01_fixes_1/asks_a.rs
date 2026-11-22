@@ -24,7 +24,7 @@ pub(super) fn dddshilie_max_unshown_sum(
         .sum()
 }
 
-pub(super) fn card_slot_of_or_kind(
+pub(in crate::content::host::step) fn card_slot_of_or_kind(
     core: &GameStateCore,
     catalog: &Catalog,
     c: CardId,
@@ -34,7 +34,7 @@ pub(super) fn card_slot_of_or_kind(
         .or_else(|| catalog.cards[c as usize].kind.equip_slot())
 }
 
-pub(super) fn zhishu_valid_dests(
+pub(in crate::content::host::step) fn zhishu_valid_dests(
     core: &GameStateCore,
     catalog: &Catalog,
     card: CardId,

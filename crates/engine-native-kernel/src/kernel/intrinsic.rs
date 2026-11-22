@@ -614,6 +614,7 @@ pub fn intrinsic_machine(
                     .skill_by_name(crate::vocabulary::names::BOSS_MENGTAI)
                 {
                     if ctx.core.has_skill(player, mtdef) {
+                        ctx.record_phase_skipped(player);
                         skip_discard = true;
                     }
                 }

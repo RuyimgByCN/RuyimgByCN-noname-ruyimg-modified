@@ -482,6 +482,10 @@ impl ShaResolveMachine {
         // `trigger.num += storage.liaoyuan` 同口径；计入后清零
         let liaoyuan = u32::from(ctx.core.turn.liaoyuan_count);
         ctx.core.turn.liaoyuan_count = 0;
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(self.target, "dddfusi_window_refused".to_string()));
         let cid = self.card.unwrap_or(0);
         ctx.core
             .vm_aux

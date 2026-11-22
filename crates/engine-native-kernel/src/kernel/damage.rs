@@ -118,6 +118,51 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
         }
     }
     if ctx.catalog.vm_card_history {
+        if submitted > 0 {
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((d.target, "turn_change_hp".to_string()), 1);
+            if let Some(src) = d.source {
+                let entry = ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .entry((d.target, "turn_dmg_sources_mask".to_string()))
+                    .or_default();
+                *entry |= 1u32 << src;
+            }
+            if !d.from_chain {
+                if let Some((card_fid, user, duel_backfire)) =
+                    ctx.res.stack.iter().rev().find_map(|f| {
+                        if let EventData::CardUsed(u) = &f.data {
+                            let duel_back = u.effective_kind(ctx.catalog)
+                                == crate::catalog::CardKind::Duel
+                                && d.source
+                                    .is_some_and(|s| d.target == u.player && u.targets.contains(&s));
+                            Some((f.id, u.player, duel_back))
+                        } else {
+                            None
+                        }
+                    })
+                {
+                    let xianxi_entry = ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .entry((user, format!("dddxianxi_dmg:{card_fid}")))
+                        .or_default();
+                    *xianxi_entry |= 1u32 << d.target;
+                    if d.source == Some(user) || duel_backfire {
+                        *ctx.core
+                            .vm_aux
+                            .flags
+                            .entry((user, format!("dddfenji_dmg:{card_fid}")))
+                            .or_default() += submitted;
+                    }
+                }
+            }
+        }
         if ctx
             .catalog
             .skill_by_name("potcuifeng")

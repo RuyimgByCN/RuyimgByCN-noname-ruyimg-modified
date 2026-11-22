@@ -74,6 +74,12 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
                 .flags
                 .remove(&(player, "mbcmfangzhu_last_target".to_string()));
         }
+        ctx.core.vm_aux.flags.retain(|(_, k), _| {
+            !matches!(
+                k.as_str(),
+                "dddchashi_armed" | "dddchashi_target" | "dddchashi_suit" | "dddchashi_kind"
+            )
+        });
     }
     // 诚信免伤清除（U05 xianjian 明绣，规则 v164）：本人 End 阶段结束
     //（登记差异：上游 chengxin2 存活至最近阶段结束）

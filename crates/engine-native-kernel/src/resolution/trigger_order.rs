@@ -68,7 +68,7 @@ fn subscribes(catalog: &Catalog, def: SkillDefId, frame: &Frame) -> bool {
     };
     (meta.event == kind || meta.extra_events.contains(&kind))
         && (kind != EventKind::PhaseBegin
-            || def.behavior.is_vm_skill() == (frame.stage == Stage::BeforeTriggers))
+            || def.behavior.runs_before_phase_begin() == (frame.stage == Stage::BeforeTriggers))
 }
 pub(super) fn eligible(
     core: &GameStateCore,

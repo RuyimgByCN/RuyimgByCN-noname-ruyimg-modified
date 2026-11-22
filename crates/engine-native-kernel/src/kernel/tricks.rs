@@ -531,12 +531,16 @@ impl crate::catalog::SkillMachine for DismantleMachine {
                     });
                 } else {
                     (ctx.catalog.hooks.on_cards_to_discard)(ctx, self.target, &[c], false);
-                    if from_judge && ctx.catalog.vm_card_history {
+                    if ctx.catalog.vm_card_history {
                         ctx.note_cards_lost(self.target, &[c]);
                         ctx.emit(EventData::CardsLost {
                             player: self.target,
                             cards: vec![c],
-                            origins: vec![crate::event::LostOrigin::Judge],
+                            origins: vec![if from_judge {
+                                crate::event::LostOrigin::Judge
+                            } else {
+                                crate::event::LostOrigin::Equip
+                            }],
                         });
                     }
                 }

@@ -12,63 +12,7 @@ pub(super) fn play_card(
     let (kind, mark_mutoumianju) = play_kind(core, catalog, card, &targets);
     check_play_target_restrictions(core, catalog, card, &targets)?;
     if kind.is_equip() {
-        if !targets.is_empty() {
-            return Err(RejectReason::IllegalTargets);
-        }
-        let player = core.turn.current;
-        crate::kernel::record_dddanzhi_card(&mut state.core, catalog, Some(card));
-        let frame = crate::resolution::push_frame(
-            &mut state.resolution,
-            EventData::Equipped {
-                player,
-                card,
-                replaced: None,
-            },
-        );
-        if catalog
-            .skill_by_name("dddjinggou")
-            .is_some_and(|def| state.core.has_skill(player, def))
-        {
-            state
-                .core
-                .vm_aux
-                .flags
-                .insert((player, format!("play_equip_use:{frame}")), 1);
-        }
-        if catalog
-            .skill_by_name("dddzhilian")
-            .is_some_and(|def| state.core.alive_players().any(|p| state.core.has_skill(p, def)))
-        {
-            state
-                .core
-                .vm_aux
-                .flags
-                .insert((player, format!("zhilian_equip_use:{frame}")), 1);
-        }
-        if catalog.skill_by_name("dddanzhi").is_some() {
-            state
-                .core
-                .vm_aux
-                .flags
-                .insert((player, format!("dddanzhi_equip_use:{frame}")), 1);
-        }
-        if catalog.skill_by_name("txmouduan").is_some()
-            || catalog.skill_by_name("txhj_ditingSkill3").is_some()
-        {
-            state
-                .core
-                .vm_aux
-                .flags
-                .insert((player, format!("l11_equip_use:{frame}")), 1);
-        }
-        if state.core.card_natures.contains_key(&card) {
-            state
-                .core
-                .vm_aux
-                .flags
-                .insert((player, format!("wuxing_equip_use:{frame}")), 1);
-        }
-        return Ok(());
+        return play_equip(state, catalog, card, &targets);
     }
     check_play_use_restrictions(core, catalog, card, kind, &targets)?;
     match kind {

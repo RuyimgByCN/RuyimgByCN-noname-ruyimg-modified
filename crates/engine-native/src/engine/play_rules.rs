@@ -25,7 +25,7 @@ pub(super) fn common_play_validation(
     if catalog.blocks_all_cards(core, actor) {
         return Err(RejectReason::CardBlocked);
     }
-    if crate::rvm_bridge::modifiers::d34_flags::is_dddtongyu_hand_locked(core, actor)
+    if crate::rvm_bridge::modifiers::d34_flags::is_u01_hand_locked(core, catalog, actor)
         && core.player(actor).hand.contains(&card)
     {
         return Err(RejectReason::CardLimit);

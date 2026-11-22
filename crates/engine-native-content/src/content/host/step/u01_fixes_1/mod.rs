@@ -23,6 +23,7 @@ mod step_a2;
 mod step_bcd;
 
 pub(crate) use helpers::{can_use_sha_play_phase, consume_sha_play_phase, is_sha_legal_play_target};
+pub(super) use asks_a::zhishu_valid_dests;
 pub(super) use helpers::*;
 pub(crate) use routing::*;
 pub(crate) use step_a1::*;

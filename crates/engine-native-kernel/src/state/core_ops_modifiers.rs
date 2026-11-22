@@ -250,7 +250,13 @@ impl GameStateCore {
         } else {
             0
         };
-        let minus = minus + xiefang_minus;
+        let quche_minus = self
+            .vm_aux
+            .flags
+            .get(&(a, "dddquche_effect_marks".to_string()))
+            .copied()
+            .unwrap_or(0);
+        let minus = minus + xiefang_minus + quche_minus;
         let total = (base + plus).saturating_sub(minus) as i32 + mailun_delta;
         crate::rvm_bridge::modifiers::eval_distance_total(self, catalog, a, b, total)
     }

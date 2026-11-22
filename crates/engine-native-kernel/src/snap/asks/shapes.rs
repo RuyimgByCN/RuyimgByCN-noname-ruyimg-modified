@@ -151,7 +151,7 @@ pub(in crate::snap) fn append_vm_shan_options(
         .copied()
         .unwrap_or(0)
         > 0
-        || crate::rvm_bridge::modifiers::d34_flags::is_dddtongyu_hand_locked(core, target);
+        || crate::rvm_bridge::modifiers::d34_flags::is_u01_hand_locked(core, catalog, target);
     let p = core.player(target);
     if !hand_banned {
         for &c in &p.hand {
@@ -165,7 +165,7 @@ pub(in crate::snap) fn append_vm_shan_options(
         }
     }
     for c in catalog.player_vm_view_as_extra_cards(core, target, false, Some(CardKind::Shan)) {
-        if (!crate::rvm_bridge::modifiers::d34_flags::is_dddtongyu_hand_locked(core, target)
+        if (!crate::rvm_bridge::modifiers::d34_flags::is_u01_hand_locked(core, catalog, target)
             || !p.hand.contains(&c))
             && !options.contains(&ChoiceOption::Card(c))
         {
@@ -181,7 +181,7 @@ pub(in crate::snap) fn dying_save_options(
     dying: PlayerId,
 ) -> Vec<ChoiceOption> {
     let hand_locked =
-        crate::rvm_bridge::modifiers::d34_flags::is_dddtongyu_hand_locked(core, responder);
+        crate::rvm_bridge::modifiers::d34_flags::is_u01_hand_locked(core, catalog, responder);
     let mut options = vec![ChoiceOption::Pass];
     if !crate::kernel::mbcmfangzhu_banned(core, responder) {
         let p = core.player(responder);

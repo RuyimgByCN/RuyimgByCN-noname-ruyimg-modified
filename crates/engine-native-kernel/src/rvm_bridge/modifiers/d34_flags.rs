@@ -16,9 +16,14 @@ mod d34_view_as;
 mod d34_u05_mods;
 #[path = "d34_l11_mods.rs"]
 mod d34_l11_mods;
+#[path = "d34_u01_mods.rs"]
+mod d34_u01_mods;
 pub use d34_l11_mods::{
     apply_draw_count, has_yaya_protected, is_card_ignored_in_discard_phase,
     txlianbi_blocks_unlink, txminguangkai_blocks_link,
+};
+pub use d34_u01_mods::{
+    is_dddfusi_hand_locked, is_dddtongyu_hand_locked, is_u01_hand_locked, is_u01_shown_card,
 };
 pub use d34_view_as::find_d34_flag_view_as;
 
@@ -94,6 +99,13 @@ pub fn is_card_ignored_hand_limit(
     kind: CardKind,
 ) -> bool {
     if flag_val(state, player, "dddfusi_active") > 0 {
+        return true;
+    }
+    if catalog
+        .skill_by_name("dddfusi")
+        .is_some_and(|def| state.has_skill(player, def))
+        && is_u01_shown_card(state, player, card)
+    {
         return true;
     }
     if flag_val(state, player, "u05_mod:qingzun") > 0 && kind == CardKind::Jiu {
@@ -679,10 +691,11 @@ pub fn apply_card_use_canceled(
     }
     let cur_turn = state.turn.current;
     if in_hand
-        && cur_turn != actor
-        && state.player(cur_turn).alive
-        && !state.player(cur_turn).hand.is_empty()
-        && flag_val(state, cur_turn, "dddfusi_all_shown") > 0
+        && ((cur_turn != actor
+            && state.player(cur_turn).alive
+            && !state.player(cur_turn).hand.is_empty()
+            && flag_val(state, cur_turn, "dddfusi_all_shown") > 0)
+            || is_dddfusi_hand_locked(state, catalog, actor))
     {
         canceled = true;
     }
@@ -994,10 +1007,4 @@ pub fn apply_card_unrespondable(
     let unrespondable =
         d34_u05_mods::apply_card_unrespondable(state, source, target, kind, unrespondable);
     d34_l11_mods::apply_card_unrespondable(state, catalog, source, kind, unrespondable)
-}
-
-/// 仝御（U01 `dddtongyu`）本回合手牌禁用标记：处于生效回合内时不可使用或打出手牌。
-pub fn is_dddtongyu_hand_locked(state: &GameStateCore, player: PlayerId) -> bool {
-    let cur = super::d34_l28_mods::l28_turn_stamp(state);
-    cur != 0 && flag_val(state, player, "dddtongyu_hand_locked_stamp") == cur
 }

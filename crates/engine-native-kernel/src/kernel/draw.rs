@@ -62,6 +62,9 @@ impl crate::catalog::SkillMachine for DrawPhaseMachine {
             }
             DP::Begin => {
                 if outcome != O::Running {
+                    if outcome == O::Cancelled {
+                        ctx.record_phase_skipped(player);
+                    }
                     progress = DP::Done;
                     child = Some(win(self.root, W::After));
                 } else {

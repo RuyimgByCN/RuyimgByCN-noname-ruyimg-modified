@@ -490,5 +490,7 @@ mod play_card_targets;
 use play_card_targets::*;
 mod play_sha;
 use play_sha::*;
+mod play_equip;
+use play_equip::*;
 
 mod choice_source;

@@ -418,6 +418,7 @@ impl<'a> Ctx<'a> {
                 .entry((player, "vm_skipped_phase_count".to_string()))
                 .or_default() += 1;
         }
+        (self.catalog.hooks.on_phase_skipped)(self, player);
     }
 
     /// 压入子事件帧；调用方随后应返回 `Flow::Yield`。
@@ -633,6 +634,10 @@ impl<'a> Ctx<'a> {
                 .flags
                 .remove(&(player, format!("dddshilie_shown_card:{card}")));
         }
+        self.core
+            .vm_aux
+            .flags
+            .remove(&(player, format!("u01_shown_card:{card}")));
     }
 
     /// 入弃牌堆（**牌区唯一性**：同一张牌不得同时属于两个区域）。
@@ -712,6 +717,12 @@ impl<'a> Ctx<'a> {
             return;
         }
         self.core.discard.push(card);
+        if self.catalog.vm_card_history {
+            self.core
+                .vm_aux
+                .flags
+                .insert((0, format!("turn_discard_card:{card}")), 1);
+        }
         crate::rvm_bridge::modifiers::d34_l28_mods::note_pro_qinyin_discard(
             self.core,
             self.catalog,
@@ -723,6 +734,18 @@ impl<'a> Ctx<'a> {
         self.take_hand_card(player, card);
         self.to_discard(card);
         self.note_cards_lost(player, &[card]);
+        if self.catalog.vm_card_history
+            && !self
+                .core
+                .vm_aux
+                .flags
+                .contains_key(&(player, "in_discard_to_limit".to_string()))
+        {
+            self.core
+                .vm_aux
+                .flags
+                .insert((player, format!("u01_discard_reason:{card}")), 1);
+        }
         self.emit(EventData::CardsLost {
             player,
             cards: vec![card],

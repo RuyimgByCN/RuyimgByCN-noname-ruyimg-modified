@@ -538,6 +538,34 @@ pub(super) fn validate_choice_selection(
             }
             true
         }
+        "dddzhijie_cards" => {
+            if selection.len() != 2 {
+                return false;
+            }
+            let (crate::choice::ChoiceOption::Card(a), crate::choice::ChoiceOption::Card(b)) =
+                (selection[0], selection[1])
+            else {
+                return false;
+            };
+            let is_red = |c| {
+                matches!(
+                    catalog.effective_card_suit(core, actor, c),
+                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                )
+            };
+            let want_diff = core
+                .vm_aux
+                .flags
+                .get(&(actor, "dddzhijie_need_diff_color".to_string()))
+                .copied()
+                .unwrap_or(0)
+                != 0;
+            if want_diff {
+                is_red(a) != is_red(b)
+            } else {
+                is_red(a) == is_red(b)
+            }
+        }
         _ => true,
     }
 }

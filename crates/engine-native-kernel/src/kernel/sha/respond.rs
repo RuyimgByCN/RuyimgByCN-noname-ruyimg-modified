@@ -46,8 +46,11 @@ impl ShaResolveMachine {
                     && ctx.core.player(self.target).baolei_mode == 1
             })
             .unwrap_or(false);
-        let hand_locked =
-            crate::rvm_bridge::modifiers::d34_flags::is_dddtongyu_hand_locked(ctx.core, self.target);
+        let hand_locked = crate::rvm_bridge::modifiers::d34_flags::is_u01_hand_locked(
+            ctx.core,
+            ctx.catalog,
+            self.target,
+        );
         let target_can_play = !tieji_blocks
             && !target_sentinel
             && !ctx.catalog.blocks_all_cards(ctx.core, self.target);
@@ -422,6 +425,10 @@ impl ShaResolveMachine {
         if self.dodges_used < ctx.core.turn.liaoyuan_count {
             return self.emit_sha_damage(ctx);
         }
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(self.target, "dddfusi_window_refused".to_string()));
         ctx.core.turn.liaoyuan_count = 0;
         ctx.emit(EventData::ShaDodged {
             card: self.card,

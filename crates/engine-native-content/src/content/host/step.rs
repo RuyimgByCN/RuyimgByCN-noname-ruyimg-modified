@@ -80,7 +80,38 @@ pub(super) mod u01_batch_b;
 pub(super) mod u01_batch_c;
 pub(super) mod u01_batch_d;
 pub(super) mod u01_fixes_1;
-pub(crate) use u01_fixes_1::{u01_respond_skill_options, u01_try_activate_respond_skill};
+pub(super) mod u01_fixes_2;
+pub(crate) use u01_fixes_2::u01_phase_skipped_hook;
+
+pub(crate) fn u01_respond_skill_options(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    player: crate::ids::PlayerId,
+    need: CardKind,
+    is_use: bool,
+) -> Vec<crate::choice::ChoiceOption> {
+    let mut out = u01_fixes_1::u01_respond_skill_options(core, catalog, player, need, is_use);
+    u01_fixes_2::u01_respond_skill_options_2(core, catalog, player, need, is_use, &mut out);
+    out
+}
+
+pub(crate) fn u01_try_activate_respond_skill(
+    ctx: &mut Ctx<'_>,
+    player: crate::ids::PlayerId,
+    def: crate::ids::SkillDefId,
+    need: CardKind,
+    fid: crate::ids::EventId,
+) -> Option<bool> {
+    if let Some(res) = u01_fixes_1::u01_try_activate_respond_skill(ctx, player, def, need, fid) {
+        return Some(res);
+    }
+    let vs_sha = ctx.res.stack.last().is_some_and(|f| {
+        matches!(&f.data, crate::event::EventData::CardUsed(u) if u.effective_kind(ctx.catalog).is_sha_like())
+    });
+    let is_use = matches!(need, CardKind::Tao | CardKind::Nullify)
+        || (need == CardKind::Shan && vs_sha);
+    u01_fixes_2::u01_try_activate_respond_skill_2(ctx, player, def, need, fid, is_use)
+}
 pub(super) mod l28_batch_a;
 pub(crate) use l28_batch_a::{
     on_cards_to_discard_chengye, on_outer_settled_taipingyaoshu, on_skill_removed_l28,
@@ -1163,12 +1194,12 @@ impl HostMachine {
             HostBehavior::U01DddBatchA => {
                 u01_fixes_1::step_u01_fix(self, ctx).unwrap_or_else(|| u01_batch_a::step_u01_batch_a(self, ctx))
             }
-            HostBehavior::U01DddBatchB => {
-                u01_fixes_1::step_u01_fix(self, ctx).unwrap_or_else(|| u01_batch_b::step_u01_batch_b(self, ctx))
-            }
-            HostBehavior::U01DddBatchC => {
-                u01_fixes_1::step_u01_fix(self, ctx).unwrap_or_else(|| u01_batch_c::step_u01_batch_c(self, ctx))
-            }
+            HostBehavior::U01DddBatchB => u01_fixes_1::step_u01_fix(self, ctx)
+                .or_else(|| u01_fixes_2::step_u01_fix2(self, ctx))
+                .unwrap_or_else(|| u01_batch_b::step_u01_batch_b(self, ctx)),
+            HostBehavior::U01DddBatchC => u01_fixes_1::step_u01_fix(self, ctx)
+                .or_else(|| u01_fixes_2::step_u01_fix2(self, ctx))
+                .unwrap_or_else(|| u01_batch_c::step_u01_batch_c(self, ctx)),
             HostBehavior::U01DddBatchD => {
                 u01_fixes_1::step_u01_fix(self, ctx).unwrap_or_else(|| u01_batch_d::step_u01_batch_d(self, ctx))
             }

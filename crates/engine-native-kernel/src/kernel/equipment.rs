@@ -108,7 +108,17 @@ pub(super) fn commit_equip(
     let Some(slot) = ctx.catalog.card_slot_of(ctx.core, card) else {
         panic!("commit_equip on non-equip card");
     };
-    ctx.take_hand_card(player, card);
+    let from_table = ctx
+        .core
+        .vm_aux
+        .flags
+        .remove(&(player, format!("u01_equip_from_table:{frame_id}")))
+        .is_some();
+    if from_table {
+        ctx.core.table.retain(|&c| c != card);
+    } else {
+        ctx.take_hand_card(player, card);
+    }
     let played = ctx
         .core
         .vm_aux

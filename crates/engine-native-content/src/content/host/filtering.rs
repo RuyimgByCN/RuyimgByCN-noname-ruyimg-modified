@@ -75,6 +75,18 @@ impl HostSkillBehavior {
                 self, ctx, frames, owner, event,
             );
         }
+        if self.name == "dddchashi" {
+            if let EventData::Equipped { player, .. } = event {
+                if !ctx
+                    .state
+                    .vm_aux
+                    .flags
+                    .contains_key(&(*player, format!("chashi_equip_use:{}", frame.id)))
+                {
+                    return false;
+                }
+            }
+        }
         self.filter_behavior(ctx, owner, event)
     }
 
@@ -762,8 +774,10 @@ impl HostSkillBehavior {
             HostBehavior::U01DddBatchA => super::step::u01_fixes_1::filter_u01_fix(self, ctx, owner, event)
                 .unwrap_or_else(|| super::step::u01_batch_a::filter_u01_batch_a(self, ctx, owner, event)),
             HostBehavior::U01DddBatchB => super::step::u01_fixes_1::filter_u01_fix(self, ctx, owner, event)
+                .or_else(|| super::step::u01_fixes_2::filter_u01_fix2(self, ctx, owner, event))
                 .unwrap_or_else(|| super::step::u01_batch_b::filter_u01_batch_b(self, ctx, owner, event)),
             HostBehavior::U01DddBatchC => super::step::u01_fixes_1::filter_u01_fix(self, ctx, owner, event)
+                .or_else(|| super::step::u01_fixes_2::filter_u01_fix2(self, ctx, owner, event))
                 .unwrap_or_else(|| super::step::u01_batch_c::filter_u01_batch_c(self, ctx, owner, event)),
             HostBehavior::U01DddBatchD => super::step::u01_fixes_1::filter_u01_fix(self, ctx, owner, event)
                 .unwrap_or_else(|| super::step::u01_batch_d::filter_u01_batch_d(self, ctx, owner, event)),

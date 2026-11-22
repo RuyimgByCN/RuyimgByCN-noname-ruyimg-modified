@@ -438,6 +438,10 @@ impl Engine {
                 }
             }
         }
+        if name == "dddfusi" {
+            crate::state::sync_dddfusi_global(&mut self.state.core, &self.catalog);
+            crate::resolution::sync_trigger_owners(&self.state.core, &mut self.state.resolution);
+        }
     }
 
     /// 测试/工具：按武将名授予完整技能集（N08 完整武将授予）。
@@ -549,7 +553,12 @@ impl Engine {
         let Some(g) = p.general_slots[0].take() else {
             return;
         };
-        for skill in content::standard::general_skills(g) {
+        let skills: Vec<&'static str> = self
+            .catalog
+            .general_meta(g)
+            .map(|(_, _, sks, _, _)| sks)
+            .unwrap_or_else(|| content::standard::general_skills(g).to_vec());
+        for skill in skills {
             let def = self
                 .catalog
                 .skill_by_name(skill)
@@ -561,6 +570,8 @@ impl Engine {
         self.state
             .core
             .clear_r05_helpers_on_seat(&self.catalog, player);
+        crate::state::sync_dddfusi_global(&mut self.state.core, &self.catalog);
+        crate::resolution::sync_trigger_owners(&self.state.core, &mut self.state.resolution);
     }
 
     /// 测试/工具：切换已授予技能的启停（N08 动态技能资格）。

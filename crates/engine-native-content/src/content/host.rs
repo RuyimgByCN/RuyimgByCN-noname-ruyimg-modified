@@ -40,6 +40,7 @@ pub(crate) use step::{
     on_skill_removed_all, play_begin_l19, play_begin_tianshu, play_end_rui_skill1,
     reguhuo_consume_resp, reguhuo_has_pending_final, reguhuo_response_skill,
     reguhuo_spawn_final, reguhuo_spawn_response, scsanruo_response_skill,
+    u01_phase_skipped_hook,
     u01_respond_skill_options as u01_respond_skill_options_hook,
     u01_try_activate_respond_skill as u01_try_activate_respond_skill_hook,
 };
@@ -625,12 +626,19 @@ impl SkillBehavior for HostSkillBehavior {
                 optional: true,
                 extra_events: vec![crate::event::EventKind::DamageBefore],
             }),
-            HostBehavior::U01DddBatchA
-            | HostBehavior::U01DddBatchB
-            | HostBehavior::U01DddBatchC
-            | HostBehavior::U01DddBatchD => step::u01_fixes_1::trigger_meta_u01_fix(&self.name),
+            HostBehavior::U01DddBatchA | HostBehavior::U01DddBatchD => {
+                step::u01_fixes_1::trigger_meta_u01_fix(&self.name)
+            }
+            HostBehavior::U01DddBatchB | HostBehavior::U01DddBatchC => {
+                step::u01_fixes_1::trigger_meta_u01_fix(&self.name)
+                    .or_else(|| step::u01_fixes_2::trigger_meta_u01_fix2(&self.name))
+            }
             _ => None,
         }
+    }
+
+    fn runs_before_phase_begin(&self) -> bool {
+        step::u01_fixes_2::runs_before_phase_begin_2(&self.name)
     }
     fn start_in_window(
         &self,
@@ -789,6 +797,23 @@ pub fn host_skill_trigger_meta(
     }
 }
 
+fn runtime_host_skill_trigger_meta(
+    name: &str,
+    behavior: HostBehavior,
+) -> Option<crate::catalog::TriggerMeta> {
+    match behavior {
+        HostBehavior::U01DddBatchA | HostBehavior::U01DddBatchD => {
+            step::u01_fixes_1::trigger_meta_u01_fix(name)
+        }
+        HostBehavior::U01DddBatchB | HostBehavior::U01DddBatchC => {
+            step::u01_fixes_1::trigger_meta_u01_fix(name)
+                .or_else(|| step::u01_fixes_2::trigger_meta_u01_fix2(name))
+        }
+        _ => None,
+    }
+    .or_else(|| host_skill_trigger_meta(name, behavior))
+}
+
 /// 按技能名与宿主行为解析发动限制（含 U01 3D精选分批技能）。
 pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::SkillLimits {
     match behavior {
@@ -798,10 +823,12 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         }
         HostBehavior::U01DddBatchB => {
             step::u01_fixes_1::limits_u01_fix(name)
+                .or_else(|| step::u01_fixes_2::limits_u01_fix2(name))
                 .unwrap_or_else(|| step::u01_batch_b::limits_u01_batch_b(name))
         }
         HostBehavior::U01DddBatchC => {
             step::u01_fixes_1::limits_u01_fix(name)
+                .or_else(|| step::u01_fixes_2::limits_u01_fix2(name))
                 .unwrap_or_else(|| step::u01_batch_c::limits_u01_batch_c(name))
         }
         HostBehavior::U01DddBatchD => {
@@ -928,7 +955,7 @@ pub fn host_skill_def(name: String, behavior: HostBehavior) -> crate::catalog::S
     let limits = host_skill_limits(name, behavior);
     crate::catalog::SkillDef {
         name,
-        trigger: host_skill_trigger_meta(name, behavior),
+        trigger: runtime_host_skill_trigger_meta(name, behavior),
         limits,
         behavior: Box::new(HostSkillBehavior {
             name: name.to_string(),

@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-22 Batch U01-2（U01 3D精选 第二批 21 项→74/95）合入与清单上调（待提交／发布）
+
+基线 HEAD `9842e555d9fc336ffb5c37a09d0b815da1a0ae32`（Batch Spine-Tests 已发布，CI Run `44990992457` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-u01-2` `44c3ae911..622387115`（`verifier-rules` #157 **`APPROVE`**）并与既有批次共存对齐：`U01 3D精选` 第二批 21 项技能（`dddzhengjun`、`dddxianxi`、`dddlingyong`、`dddxuxiao`、`dddxuyu`、`dddshijian`、`dddxuyu_old`、`dddshijian_old`、`dddtaisi`、`dddquche`、`dddqianlong`、`ddddongcha`、`dddzhijie`、`dddqiahua`、`dddxunxun`、`dddfusi`、`dddfusi_global`、`dddtuoji`、`dddchashi`、`dddmiaoxing`、`dddfenji`）升为 `已复核等价`，`U01` 升为 **已复核等价 74／简化近似 21／缺失 0**（合计 95），全仓清单更新为 **已复核等价 1,741／简化近似 2,683／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch U01-2 复核摘要](../operations/evidence/2026-11-22-batch1-6c-u01-2/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。
+
 ## 2026-11-22 Batch L11-1（L11 太虚幻境 32 卡牌＋首批 71 技能共 103 项→109/936）合入与清单上调（待提交／发布）
 
 基线 HEAD `a47f8b0e110cb217f54cb4f40f111a223dab649a`（Batch UI-7 已发布，CI Run `44981761423` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-l11-b1` `d9e1c9a1f..445ed1bd2`（`verifier-rules-2` #135 **`APPROVE`**）并与 L10/L20/L22/L27/U01 共存对齐：`L11 太虚幻境` 全部 32 项卡牌与首批 71 项侍从/武将技能共 **103 项**升为 `已复核等价`（剩余 827 项归后续 `L11-2..L11-6b` 批次），`L11` 升为 **已复核等价 109／简化近似 827／缺失 0**（合计 936），全仓清单更新为 **已复核等价 1,720／简化近似 2,704／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch L11-1 复核摘要](../operations/evidence/2026-11-21-batch3-1-l11-1/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。

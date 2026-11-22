@@ -215,6 +215,15 @@ pub fn active_ask(
                 for rdef in crate::kernel::host_response_skills(core, catalog, responder, 3) {
                     options.push(ChoiceOption::Skill(rdef));
                 }
+                if !catalog.blocks_all_cards(core, responder) {
+                    options.extend((catalog.hooks.respond_skill_options)(
+                        core,
+                        catalog,
+                        responder,
+                        CardKind::Nullify,
+                        true,
+                    ));
+                }
                 Some(ask(
                     responder,
                     "nullify_window",

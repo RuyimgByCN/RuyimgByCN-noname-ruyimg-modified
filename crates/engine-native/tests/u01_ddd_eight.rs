@@ -634,7 +634,7 @@ fn u01_batch_b_real_match_6d_verification() {
         },
     );
     assert_eq!(e_xy_pass.state_core().player(0).hand.len(), h_before);
-    assert_eq!(flag(&e_xy_pass, 0, "dddxuyu_must_discard"), 0);
+    assert_eq!(flag(&e_xy_pass, 0, "dddxuyu_pending_fid"), 0);
 
     let _ = submit(
         &mut e,
@@ -645,10 +645,10 @@ fn u01_batch_b_real_match_6d_verification() {
         },
     );
     assert_eq!(e.state_core().player(0).hand.len(), h_before + 1);
-    assert_eq!(flag(&e, 0, "dddxuyu_must_discard"), 1);
+    assert_ne!(flag(&e, 0, "dddxuyu_pending_fid"), 0);
 
     // Second card used in same turn forces `"dddxuyu_discard"` (`allow_cancel == false`).
-    let out_xy2 = submit(
+    let _ = submit(
         &mut e,
         0,
         GameAction::PlayCard {
@@ -656,10 +656,33 @@ fn u01_batch_b_real_match_6d_verification() {
             targets: vec![2],
         },
     );
-    let c_xy2 = match out_xy2 {
-        CommandOutcome::Pending { choice, .. } => choice,
-        other => panic!("expected Pending dddxuyu_discard, got {other:?}"),
-    };
+    for _ in 0..16 {
+        let Some(c) = e.open_choice().cloned() else {
+            break;
+        };
+        if c.spec.prompt != "nullify_window" && c.spec.prompt != "dddxuyu_confirm" {
+            break;
+        }
+        let sel = if c.spec.allow_cancel {
+            Vec::new()
+        } else {
+            vec![ChoiceOption::Pass]
+        };
+        let out = submit(
+            &mut e,
+            c.observer,
+            GameAction::Answer {
+                choice_id: c.id,
+                selection: sel,
+            },
+        );
+        assert!(
+            !matches!(out, CommandOutcome::Rejected(_)),
+            "unexpected reject on {}: {out:?}",
+            c.spec.prompt
+        );
+    }
+    let c_xy2 = e.open_choice().expect("expected Pending dddxuyu_discard").clone();
     assert_eq!(c_xy2.spec.prompt, "dddxuyu_discard");
     assert!(!c_xy2.spec.allow_cancel);
     let to_disc = e.state_core().player(0).hand[0];
@@ -671,7 +694,7 @@ fn u01_batch_b_real_match_6d_verification() {
             selection: vec![ChoiceOption::Card(to_disc)],
         },
     );
-    assert_eq!(flag(&e, 0, "dddxuyu_must_discard"), 0);
+    assert_eq!(flag(&e, 0, "dddxuyu_pending_fid"), 0);
 
     // ---- (B2) `dddxuxiao` 谑啸 (`archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:2333-2406`) ----
     let wuzhi = find_general(&e, "ddd_wuzhi");
@@ -833,17 +856,24 @@ fn u01_batch_b_real_match_6d_verification() {
         CommandOutcome::Rejected(_)
     ));
 
-    // ① `ddddongcha` triggers on seat 1's `Phase::Prepare`: both seat 0 and seat 1 put 1 card into `"ddd_jian"`.
+    // ① `ddddongcha` triggers on seat 1's `Phase::Prepare`: confirm, then both seat 0 and seat 1 put 1 card into `"ddd_jian"`.
     clear_hand(&mut e, 0);
     clear_hand(&mut e, 1);
     put_in_hand(&mut e, 0, red_tao);
     put_in_hand(&mut e, 1, blk_sha);
     e.debug_set_turn(0, Phase::End, 4);
-    let out_dc = submit(&mut e, 0, GameAction::NextPhase);
-    let c_dc_own = match out_dc {
-        CommandOutcome::Pending { choice, .. } => choice,
-        other => panic!("expected Pending ddddongcha_owner_put, got {other:?}"),
-    };
+    let _ = submit(&mut e, 0, GameAction::NextPhase);
+    let c_dc_cfg = e.open_choice().expect("ddddongcha_confirm").clone();
+    assert_eq!(c_dc_cfg.spec.prompt, "ddddongcha_confirm");
+    let _ = submit(
+        &mut e,
+        0,
+        GameAction::Answer {
+            choice_id: c_dc_cfg.id,
+            selection: vec![ChoiceOption::Confirm],
+        },
+    );
+    let c_dc_own = e.open_choice().expect("ddddongcha_owner_put").clone();
     assert_eq!(c_dc_own.spec.prompt, "ddddongcha_owner_put");
     let _ = submit(
         &mut e,
@@ -873,13 +903,30 @@ fn u01_batch_b_real_match_6d_verification() {
         Some(2)
     );
 
-    // ③ Activate `dddzhijie` in seat 0's `Phase::Play`: discarding different-color pair sets `dddzhijie_viewas = 2` and draws 2.
-    e.debug_set_turn(0, Phase::Play, 5);
-    let out_zj = submit(&mut e, 0, GameAction::ActivateSkill { skill: zhijie_def });
-    let c_zj = match out_zj {
-        CommandOutcome::Pending { choice, .. } => choice,
-        other => panic!("expected Pending dddzhijie_cards, got {other:?}"),
-    };
+    // ③ Use `dddzhijie` passively on `nullify_window`: removing a different-color pair cancels `Wuzhong` and draws 2.
+    let wuzhong_dc = find_card_by(&e, |_, d| d.kind == CardKind::Wuzhong);
+    put_in_hand(&mut e, 1, wuzhong_dc);
+    e.debug_set_turn(1, Phase::Play, 5);
+    let _ = submit(
+        &mut e,
+        1,
+        GameAction::PlayCard {
+            card: wuzhong_dc,
+            targets: Vec::new(),
+        },
+    );
+    let c_nw = e.open_choice().expect("nullify_window offering dddzhijie").clone();
+    assert_eq!(c_nw.spec.prompt, "nullify_window");
+    assert!(c_nw.spec.options.contains(&ChoiceOption::Skill(zhijie_def)));
+    let _ = submit(
+        &mut e,
+        0,
+        GameAction::Answer {
+            choice_id: c_nw.id,
+            selection: vec![ChoiceOption::Skill(zhijie_def)],
+        },
+    );
+    let c_zj = e.open_choice().expect("dddzhijie_cards").clone();
     assert_eq!(c_zj.spec.prompt, "dddzhijie_cards");
     assert_mid_choice_archive_and_ai(&e, &packs, vec![ChoiceOption::Card(red_tao), ChoiceOption::Card(blk_sha)]);
     let _ = submit(
@@ -890,7 +937,7 @@ fn u01_batch_b_real_match_6d_verification() {
             selection: vec![ChoiceOption::Card(red_tao), ChoiceOption::Card(blk_sha)],
         },
     );
-    assert_eq!(flag(&e, 0, "dddzhijie_viewas"), 2);
+    drain(&mut e);
     assert_eq!(e.state_core().player(0).hand.len(), 2);
 }
 
@@ -973,10 +1020,10 @@ fn u01_batch_c_and_d_real_match_6d_verification() {
         other => panic!("expected Pending dddfenji_trick, got {other:?}"),
     };
     assert_eq!(c_fj_trick.spec.prompt, "dddfenji_trick");
-    assert_eq!(
-        c_fj_trick.spec.options,
-        vec![ChoiceOption::Tag(0), ChoiceOption::Tag(1), ChoiceOption::Tag(2)]
-    );
+    assert!(c_fj_trick.spec.options.contains(&ChoiceOption::Tag(0)));
+    assert!(c_fj_trick.spec.options.contains(&ChoiceOption::Tag(1)));
+    assert!(c_fj_trick.spec.options.contains(&ChoiceOption::Tag(2)));
+    assert!(c_fj_trick.spec.options.len() >= 9);
     assert_mid_choice_archive_and_ai(&e, &packs, vec![ChoiceOption::Tag(0)]);
 
     let hp1_before_fj = e.state_core().player(1).hp;
@@ -1006,10 +1053,9 @@ fn u01_batch_c_and_d_real_match_6d_verification() {
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let c_fj2 = e.open_choice().expect("dddfenji_trick on Discard").clone();
     assert_eq!(c_fj2.spec.prompt, "dddfenji_trick");
-    assert_eq!(
-        c_fj2.spec.options,
-        vec![ChoiceOption::Tag(1), ChoiceOption::Tag(2)]
-    );
+    assert!(!c_fj2.spec.options.contains(&ChoiceOption::Tag(0)));
+    assert!(c_fj2.spec.options.contains(&ChoiceOption::Tag(1)));
+    assert!(c_fj2.spec.options.contains(&ChoiceOption::Tag(2)));
     let _ = submit(
         &mut e,
         0,

@@ -266,35 +266,52 @@ impl crate::catalog::SkillMachine for DeathMachine {
             }
         }
         // 身份局奖惩：先于胜负判定
-        if let Some(roles) = ctx.core.identity_roles() {
+        if let Some(roles) = ctx.core.identity_roles().map(|r| r.to_vec()) {
             let dead_role = roles[self.player as usize];
             if let Some(k) = self.killer {
                 if k != self.player && ctx.core.player(k).alive {
-                    match dead_role {
-                        crate::state::Role::Rebel => {
-                            ctx.start_draw(k, 3);
-                        }
-                        crate::state::Role::Loyalist
-                            if roles[k as usize] == crate::state::Role::Lord =>
-                        {
-                            // 主公杀忠臣：弃掉全部手牌与装备
-                            let lord = ctx.core.player_mut(k);
-                            let mut cards = std::mem::take(&mut lord.hand);
-                            let lord_equips = std::mem::take(&mut lord.equips);
-                            for c in &lord_equips {
-                                revoke_equip_skills(ctx.core, ctx.catalog, k, *c);
+                    let qianlong_lord = roles[k as usize] == crate::state::Role::Lord
+                        && ctx
+                            .catalog
+                            .skill_by_name("dddqianlong")
+                            .is_some_and(|d| {
+                                ctx.core.has_skill(k, d)
+                                    && !ctx.catalog.is_tieji_sealed(ctx.core, k)
+                            });
+                    if !qianlong_lord {
+                        match dead_role {
+                            crate::state::Role::Rebel => {
+                                ctx.start_draw(k, 3);
                             }
-                            cards.extend(lord_equips);
-                            ctx.core.discard.extend(cards.clone());
-                            if !cards.is_empty() {
-                                ctx.log(LogEvent::CardDiscarded {
-                                    player: k,
-                                    cards: cards.clone(),
-                                });
-                                (ctx.catalog.hooks.on_cards_to_discard)(ctx, k, &cards, false);
+                            crate::state::Role::Loyalist
+                                if roles[k as usize] == crate::state::Role::Lord =>
+                            {
+                                // 主公杀忠臣：弃掉全部手牌与装备
+                                let lord = ctx.core.player_mut(k);
+                                let mut cards = std::mem::take(&mut lord.hand);
+                                let lord_equips = std::mem::take(&mut lord.equips);
+                                for c in &lord_equips {
+                                    revoke_equip_skills(ctx.core, ctx.catalog, k, *c);
+                                }
+                                cards.extend(lord_equips);
+                                ctx.core.discard.extend(cards.clone());
+                                if !cards.is_empty() {
+                                    ctx.log(LogEvent::CardDiscarded {
+                                        player: k,
+                                        cards: cards.clone(),
+                                    });
+                                    (ctx.catalog.hooks.on_cards_to_discard)(ctx, k, &cards, false);
+                                }
                             }
+                            _ => {}
                         }
-                        _ => {}
+                    } else {
+                        ctx.log(LogEvent::SkillTriggered {
+                            skill: "dddqianlong",
+                            owner: k,
+                            presentation: None,
+                        });
+                        ctx.start_draw(k, 3);
                     }
                 }
             }

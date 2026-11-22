@@ -296,10 +296,59 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                     }
                 }
             }
+            if super::has_u01_respond_park(ctx) {
+                return Flow::Yield;
+            }
+            if let Some(responder) = self.queue.first().copied() {
+                if let Some(ok) = super::take_u01_respond_result(ctx, responder) {
+                    self.asked = false;
+                    if ok {
+                        let card_ovr = ctx
+                            .core
+                            .vm_aux
+                            .flags
+                            .remove(&(responder, "u01_respond_card_override".to_string()))
+                            .and_then(|v| v.checked_sub(1));
+                        let fusi_owner = ctx
+                            .core
+                            .vm_aux
+                            .flags
+                            .remove(&(responder, "u01_respond_fusi_owner".to_string()))
+                            .unwrap_or(0);
+                        self.queue.remove(0);
+                        self.nullified = !self.nullified;
+                        self.queue = ctx.core.seat_order_from(ctx.core.next_alive(responder));
+                        let new_fid = ctx.res.next_event_id;
+                        ctx.emit(EventData::CardUsed(crate::event::CardUseData {
+                            card: card_ovr,
+                            player: responder,
+                            targets: Vec::new(),
+                            nature: crate::event::DamageNature::Normal,
+                            use_as: Some(CardKind::Nullify),
+                            cancelled: false,
+                        }));
+                        if fusi_owner > 0 {
+                            ctx.core.vm_aux.flags.insert(
+                                (responder, format!("dddfusi_used_owner:{new_fid}")),
+                                fusi_owner,
+                            );
+                        }
+                        return Flow::Yield;
+                    }
+                }
+            }
             // 询问队列清理：跳过死亡/无无懈持有者
             while let Some(p) = self.queue.first().copied() {
-                let has_host_resp =
-                    !host_response_skills(ctx.core, ctx.catalog, p, 3).is_empty();
+                let has_host_resp = !host_response_skills(ctx.core, ctx.catalog, p, 3).is_empty()
+                    || (!ctx.catalog.blocks_all_cards(ctx.core, p)
+                        && !(ctx.catalog.hooks.respond_skill_options)(
+                            ctx.core,
+                            ctx.catalog,
+                            p,
+                            CardKind::Nullify,
+                            true,
+                        )
+                        .is_empty());
                 let has_nullify = ctx.core.player(p).alive
                     && (!response_kind_cards(ctx, p, CardKind::Nullify).is_empty() || has_host_resp);
                 if !has_nullify {
@@ -309,6 +358,12 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                 }
             }
             let Some(responder) = self.queue.first().copied() else {
+                for p in 0..ctx.core.players.len() as PlayerId {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(p, "dddfusi_window_refused".to_string()));
+                }
                 // 队列耗尽：窗口关闭。弃牌责任唯一化（ADR 0705 修复）：抵消时
                 // 由窗口弃置锦囊；未抵消时效果机器（决斗 finish / AOE 收尾 /
                 // 铁索机器）结算结束弃置——旧实现在此无条件弃牌，叠加效果
@@ -364,6 +419,48 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                         );
                         return Flow::Yield;
                     }
+                    let fid = ctx.top_frame_id();
+                    if let Some(immediate) = (ctx.catalog.hooks.try_activate_respond_skill)(
+                        ctx,
+                        responder,
+                        rdef,
+                        CardKind::Nullify,
+                        fid,
+                    ) {
+                        if immediate {
+                            let card_ovr = ctx
+                                .core
+                                .vm_aux
+                                .flags
+                                .remove(&(responder, "u01_respond_card_override".to_string()))
+                                .and_then(|v| v.checked_sub(1));
+                            let fusi_owner = ctx
+                                .core
+                                .vm_aux
+                                .flags
+                                .remove(&(responder, "u01_respond_fusi_owner".to_string()))
+                                .unwrap_or(0);
+                            self.queue.remove(0);
+                            self.nullified = !self.nullified;
+                            self.queue = ctx.core.seat_order_from(ctx.core.next_alive(responder));
+                            let new_fid = ctx.res.next_event_id;
+                            ctx.emit(EventData::CardUsed(crate::event::CardUseData {
+                                card: card_ovr,
+                                player: responder,
+                                targets: Vec::new(),
+                                nature: crate::event::DamageNature::Normal,
+                                use_as: Some(CardKind::Nullify),
+                                cancelled: false,
+                            }));
+                            if fusi_owner > 0 {
+                                ctx.core.vm_aux.flags.insert(
+                                    (responder, format!("dddfusi_used_owner:{new_fid}")),
+                                    fusi_owner,
+                                );
+                            }
+                        }
+                        return Flow::Yield;
+                    }
                 }
                 self.queue.remove(0);
                 if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
@@ -387,6 +484,13 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                 for rdef in host_response_skills(ctx.core, ctx.catalog, responder, 3) {
                     options.push(ChoiceOption::Skill(rdef));
                 }
+                options.extend((ctx.catalog.hooks.respond_skill_options)(
+                    ctx.core,
+                    ctx.catalog,
+                    responder,
+                    CardKind::Nullify,
+                    true,
+                ));
             }
             return Flow::WaitChoice {
                 observer: responder,

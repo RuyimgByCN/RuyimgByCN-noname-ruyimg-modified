@@ -95,24 +95,35 @@ fn u01_fix_01_dddjuxian_j01_to_j05() {
     let equip_pay = find_card_by(&e, |id, d| {
         id != red_equip && d.kind.is_equip() && matches!(d.suit, Suit::Spade | Suit::Club)
     });
+    let pay_slot = e.catalog().card_slot_of(e.state_core(), equip_pay);
     let equip_move = find_card_by(&e, |id, d| {
-        id != red_equip && id != equip_pay && d.kind.is_equip()
+        id != red_equip
+            && id != equip_pay
+            && d.kind.is_equip()
+            && d.kind.equip_slot() != pay_slot
     });
     e.debug_grant(0, "dddzhengjun");
     put_in_equip(&mut e, 0, equip_pay);
+    put_in_equip(&mut e, 0, equip_move);
     put_in_hand(&mut e, 2, blk_c1);
-    put_in_equip(&mut e, 3, equip_move);
     clear_hand(&mut e, 1);
     clear_equips(&mut e, 1);
+    clear_equips(&mut e, 2);
+    clear_equips(&mut e, 3);
     let _ = submit(&mut e, 0, GameAction::ActivateSkill { skill: juxian });
     answer(&mut e, 0, vec![ChoiceOption::Tag(0)]);
     answer(&mut e, 0, vec![ChoiceOption::Card(equip_pay)]);
-    // `dddzhengjun` (`CardsLost(Equip)`) triggers BEFORE `dddjuxian_gain`! Confirm it and see `equip_move` leave seat 3 BEFORE gain!
+    // `dddzhengjun` (`CardsLost(Equip)` on es_target=0) triggers BEFORE `dddjuxian_gain`! Confirm + move `equip_move` 0 -> 2 BEFORE gain!
     let zj = e.open_choice().expect("J04: dddzhengjun CardsLost sub-trigger before gainPlayerCard").clone();
     assert_eq!(zj.spec.prompt, "dddzhengjun_es_confirm");
     answer(&mut e, 0, vec![ChoiceOption::Confirm]);
+    assert_eq!(e.open_choice().expect("dddzhengjun_es_card").spec.prompt, "dddzhengjun_es_card");
+    answer(&mut e, 0, vec![ChoiceOption::Card(equip_move)]);
+    assert_eq!(e.open_choice().expect("dddzhengjun_es_dest").spec.prompt, "dddzhengjun_es_dest");
+    answer(&mut e, 0, vec![ChoiceOption::Player(2)]);
     assert!(
-        e.state_core().player(3).equips.is_empty(),
+        e.state_core().player(0).equips.is_empty()
+            && e.state_core().player(2).equips.contains(&equip_move),
         "J04: CardsLost sub-trigger (dddzhengjun) must settle BEFORE gainPlayerCard"
     );
     // 1 target (seat 2 has blk_c1; seat 0/1/3 wait: put equip_move -> wait seat 0/1 got equip_move in `equips`, NOT affecting `other` except `he_cards`! Clear seat 1 equips only? No, seat 1 has 0 cards, wait seat 0 gained `equip_move`!)
