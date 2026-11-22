@@ -178,6 +178,15 @@ function onUpdateBatch6FromBoard(nextBatch6: Batch6PatchUiState) {
     },
   };
 }
+function onUpdateBatch7FromBoard(nextBatch7: import("../engine/surfaces/batch7ClosureState").Batch7UiSuiteState) {
+  extensionSurfaces.value = {
+    ...extensionSurfaces.value,
+    uiSuites: {
+      ...extensionSurfaces.value.uiSuites,
+      batch7: nextBatch7,
+    },
+  };
+}
 watch(isOnline, (online) => {
   extensionSurfaces.value = updateExtensionDecadeConfig(
     extensionSurfaces.value,
@@ -1026,6 +1035,7 @@ const turnInfo = computed(() => {
       :e-css-enabled="extensionSurfaces.uiSuites?.batch6Patch?.eCssEnabled !== false"
       :qhly-choose-origin="Boolean(extensionSurfaces.uiSuites?.qhly?.config?.qhly_chooseButtonOrigin)"
       :qhly-choose-origin-guozhan="Boolean(extensionSurfaces.uiSuites?.qhly?.config?.qhly_chooseButtonOrigin_guozhan)"
+      :ban-qh="Boolean(extensionSurfaces.uiSuites?.batch7?.l01?.config?.banQh)"
       @choose="chooseGeneralCandidate"
       @reload="loadGeneralCandidates"
     />
@@ -1096,6 +1106,7 @@ const turnInfo = computed(() => {
         @update:shousha-ui="onUpdateShoushaUiFromBoard"
         @update:qhly-ui="onUpdateQhlyUiFromBoard"
         @update:batch6-patch="onUpdateBatch6FromBoard"
+        @update:batch7="onUpdateBatch7FromBoard"
         @sort-hand="onSortHandFromBoard"
         @end-phase="endPhase"
         @resolve-choice="resolveLegalChoice"
@@ -1105,8 +1116,10 @@ const turnInfo = computed(() => {
         :active-modal="activeBattleModal"
         :surfaces="extensionSurfaces"
         :view="store.view"
+        :finished="store.finished"
         @close="activeBattleModal = null"
         @update:surfaces="onUpdateExtensionSurfaces"
+        @restart-match="connectAndStart"
       />
       <!-- Effect overlay -->
       <div v-if="store.effects.length" class="effect-overlay" aria-hidden="true">

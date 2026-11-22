@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import type { ObserverSnapshot } from "../../../types/engine";
 import {
   createDefaultDecadeConfig,
@@ -10,8 +10,11 @@ import {
   type ShoushaUiConfig,
 } from "../../../engine/surfaces/shoushaConfigSchema";
 import {
+  createInitialBatch7UiSuiteState,
+  triggerQyChongzhuHook,
   updateExtensionDecadeConfig,
   updateExtensionShoushaConfig,
+  type Batch7UiSuiteState,
   type ExtensionSurfacesSnapshot,
 } from "../../../engine/extensionSurfaceRuntime";
 import type { BattleModalId } from "../BattleShoushaHud.vue";
@@ -23,17 +26,40 @@ import TaixuCampaignModal from "./TaixuCampaignModal.vue";
 import DecadeConfigModal from "../surfaces/DecadeConfigModal.vue";
 import ShoushaConfigModal from "../surfaces/ShoushaConfigModal.vue";
 import ZuanConfigPanel from "../surfaces/ZuanConfigPanel.vue";
+import Batch7WorkbenchModal from "../surfaces/Batch7WorkbenchModal.vue";
 
 const props = defineProps<{
   activeModal: BattleModalId | null;
   surfaces: ExtensionSurfacesSnapshot;
   view: ObserverSnapshot | null;
+  finished?: boolean;
 }>();
 
 const emit = defineEmits<{
   close: [];
   "update:surfaces": [next: ExtensionSurfacesSnapshot];
+  restartMatch: [];
 }>();
+
+const selfEquipsCount = computed(() => {
+  if (!props.view) return 0;
+  return props.view.known_cards.filter(
+    (c) => c.owner === props.view?.observer && c.zone === "Equip",
+  ).length;
+});
+
+function updateBatch7(nextBatch7: Batch7UiSuiteState) {
+  const next: ExtensionSurfacesSnapshot = {
+    ...latestSurfaces.value,
+    uiSuites: { ...latestSurfaces.value.uiSuites, batch7: nextBatch7 },
+  };
+  latestSurfaces.value = next;
+  emit("update:surfaces", next);
+}
+
+const batch7OrDefault = computed(
+  () => props.surfaces.uiSuites?.batch7 ?? createInitialBatch7UiSuiteState(),
+);
 
 const latestSurfaces = ref<ExtensionSurfacesSnapshot>(props.surfaces);
 watch(
@@ -98,15 +124,35 @@ function onUpdateQhlyState(qhly: NonNullable<NonNullable<ExtensionSurfacesSnapsh
   <MvpSettlementModal
     v-else-if="activeModal === 'mvp'"
     :mvp="surfaces.mvp"
+    :l13="batch7OrDefault.l13"
     :view="view"
     @close="emit('close')"
+    @update:l13="(l13) => updateBatch7({ ...batch7OrDefault, l13 })"
+    @recast-cue="
+      (seat) => {
+        const res = triggerQyChongzhuHook(batch7OrDefault.l13, latestSurfaces.mvp, seat);
+        const next: ExtensionSurfacesSnapshot = {
+          ...latestSurfaces,
+          mvp: res.mvp,
+          uiSuites: {
+            ...latestSurfaces.uiSuites,
+            batch7: { ...batch7OrDefault, l13: res.l13 },
+          },
+        };
+        latestSurfaces = next;
+        emit('update:surfaces', next);
+      }
+    "
+    @one-more="() => { if (finished) emit('restartMatch'); }"
   />
   <OmnisearchModal
     v-else-if="activeModal === 'omnisearch'"
     :state="surfaces.omnisearch"
+    :l07="batch7OrDefault.l07"
     :view="view"
     @close="emit('close')"
     @update="(omnisearch) => emit('update:surfaces', { ...props.surfaces, omnisearch })"
+    @update:l07="(l07) => updateBatch7({ ...batch7OrDefault, l07 })"
   />
   <TaixuCampaignModal
     v-else-if="activeModal === 'taixu'"
@@ -164,6 +210,21 @@ function onUpdateQhlyState(qhly: NonNullable<NonNullable<ExtensionSurfacesSnapsh
           ...latestSurfaces,
           uiSuites: { ...latestSurfaces.uiSuites, batch6Patch },
         };
+        latestSurfaces = next;
+        emit('update:surfaces', next);
+      }
+    "
+  />
+  <Batch7WorkbenchModal
+    v-else-if="activeModal === 'batch7-workbench'"
+    :batch7="batch7OrDefault"
+    :coin="surfaces.coin"
+    :self-equips-count="selfEquipsCount"
+    @close="emit('close')"
+    @update:batch7="updateBatch7"
+    @update:coin="
+      (coin) => {
+        const next: ExtensionSurfacesSnapshot = { ...latestSurfaces, coin };
         latestSurfaces = next;
         emit('update:surfaces', next);
       }

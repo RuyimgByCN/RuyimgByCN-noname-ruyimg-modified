@@ -13,7 +13,8 @@ export type BattleModalId =
   | "taixu"
   | "decade-menu"
   | "shousha-menu"
-  | "zuan-panel";
+  | "zuan-panel"
+  | "batch7-workbench";
 
 const props = defineProps<{
   view: ObserverSnapshot | null;

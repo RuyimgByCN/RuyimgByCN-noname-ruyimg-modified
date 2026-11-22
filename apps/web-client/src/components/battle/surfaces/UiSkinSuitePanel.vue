@@ -42,6 +42,12 @@ import {
   type SkinSwitchRuntimeState,
 } from "../../../engine/surfaces/skinSwitchSurface";
 import {
+  L12_SURFACE_IDS,
+  createInitialBatch7UiSuiteState,
+  type Batch7UiSuiteState,
+  type L12SurfaceId,
+} from "../../../engine/extensionSurfaceRuntime";
+import {
   TAIXU_DLC_SEASONS,
   TAIXU_SERVANT_SPECS,
   TAIXU_SURFACE_STYLESHEETS,
@@ -58,6 +64,7 @@ const props = defineProps<{
   shoushaUi?: ShoushaUiRuntimeState;
   decadeUi?: DecadeUiRuntimeState;
   taixuUi?: TaixuUiRuntimeState;
+  batch7?: Batch7UiSuiteState;
   view?: ObserverSnapshot | null;
   selfId?: number;
 }>();
@@ -74,7 +81,16 @@ const emit = defineEmits<{
       notice: string;
     },
   ): void;
+  (e: "update-batch7", payload: Batch7UiSuiteState): void;
 }>();
+
+const batch7State = computed(() => props.batch7 ?? createInitialBatch7UiSuiteState());
+function onSelectL12Surface(surface: L12SurfaceId) {
+  emit("update-batch7", {
+    ...batch7State.value,
+    l12: { ...batch7State.value.l12, activeSurface: surface },
+  });
+}
 
 const selectedMarkId = ref<string>("xionghuo");
 
@@ -436,6 +452,36 @@ function onRunTaixuConsoleStep() {
       <div class="suite-actions">
         <button type="button" data-testid="btn-l11-taixu-console" @click="onRunTaixuConsoleStep">
           切换太虚 PC/触屏样式+九尾商铺
+        </button>
+      </div>
+    </div>
+
+    <!-- L12 如真似幻 6 表面 (`dynamicSkin`/`rzsh`/`font.css`/`offline.css`/`offline_old.css`/`rzsh.css`，净室静态立绘回退) -->
+    <div
+      class="suite-card rzsh-preview-stage"
+      :data-l12-surface="batch7State.l12.activeSurface"
+      data-testid="l12-rzsh-full-surface"
+    >
+      <div class="suite-head">
+        <strong class="splashtexthela">如真似幻 (L12 · {{ L12_SURFACE_IDS.length }}表面)</strong>
+        <span class="suite-pill">{{ batch7State.l12.activeSurface }} · 阶位{{ batch7State.l12.tierRoman }}</span>
+      </div>
+      <p class="tiny">
+        焦距 ({{ batch7State.l12.backgroundX }}, {{ batch7State.l12.backgroundY }}) ·
+        缩放 {{ batch7State.l12.standeeScale }} ·
+        回退: <code>{{ batch7State.l12.assetFallbackStatus }}</code>
+      </p>
+      <div class="suite-actions" style="display:flex;gap:0.25rem;flex-wrap:wrap;">
+        <button
+          v-for="sid in L12_SURFACE_IDS"
+          :key="sid"
+          type="button"
+          class="tiny"
+          :class="{ primary: batch7State.l12.activeSurface === sid }"
+          :data-testid="`btn-l12-surface-${sid}`"
+          @click="onSelectL12Surface(sid)"
+        >
+          {{ sid }}
         </button>
       </div>
     </div>

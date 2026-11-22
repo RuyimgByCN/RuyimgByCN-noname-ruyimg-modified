@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import {
+  L11_SURFACE_IDS,
   TAIXU_DLC_SEASONS,
   TAIXU_SERVANT_SPECS,
   createInitialTaixuUiRuntimeState,
@@ -8,7 +9,7 @@ import {
   selectTaixuServantSurface,
   switchTaixuViewport,
   type TaixuUiRuntimeState,
-} from "../../../engine/surfaces/taixuSurface";
+} from "../../../engine/extensionSurfaceRuntime";
 import type { TaixuSurfaceState } from "../../../engine/extensionSurfaceRuntime";
 
 const props = defineProps<{
@@ -77,25 +78,57 @@ function bindServant(servantId: string) {
 
 function toggleViewport() {
   const nextW = uiState.value.viewportMode === "pc" ? 720 : 1280;
+  const nextUi = switchTaixuViewport(uiState.value, nextW);
+  activeSurfaceCss.value = nextUi.responsive.activeStylesheet;
   emit("update", {
     taixu: props.taixu,
-    taixuUi: switchTaixuViewport(uiState.value, nextW),
+    taixuUi: nextUi,
   });
+}
+
+const activeSurfaceCss = ref<(typeof L11_SURFACE_IDS)[number]>(uiState.value.responsive.activeStylesheet);
+
+function selectSurfaceStylesheet(stylesheet: (typeof L11_SURFACE_IDS)[number]) {
+  activeSurfaceCss.value = stylesheet;
+  if (stylesheet === "extension_MobileStyle.css" || stylesheet === "extension_PcStyle.css") {
+    const nextUi = switchTaixuViewport(
+      uiState.value,
+      stylesheet === "extension_MobileStyle.css" ? 720 : 1280,
+    );
+    emit("update", {
+      taixu: props.taixu,
+      taixuUi: nextUi,
+    });
+  }
 }
 </script>
 
 <template>
   <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="太虚幻境赛季节点图与侍灵商铺" data-testid="modal-taixu-campaign">
-    <div class="modal-card">
+    <div class="modal-card taixu-modal-card" :data-l11-surface="activeSurfaceCss">
       <header class="modal-head">
         <div>
-          <h3>太虚幻境 · 赛季战役路线图与侍灵商铺 (L11)</h3>
+          <h3 class="taixuhuanjing_HomeBodyText">太虚幻境 · 赛季战役路线图与侍灵商铺 (L11 · {{ L11_SURFACE_IDS.length }}样式)</h3>
           <p class="muted tiny">
             上游基准：dlc/*/extension_season.js · extension_buff.js · extension_servant.js
           </p>
         </div>
         <button type="button" data-testid="btn-close-taixu-modal" @click="emit('close')">关闭 ✕</button>
       </header>
+
+      <div class="l11-surface-tabs" data-testid="l11-surface-tabs">
+        <button
+          v-for="cssId in L11_SURFACE_IDS"
+          :key="cssId"
+          type="button"
+          class="tiny"
+          :class="{ active: activeSurfaceCss === cssId }"
+          :data-testid="`btn-l11-surface-${cssId}`"
+          @click="selectSurfaceStylesheet(cssId)"
+        >
+          {{ cssId }}
+        </button>
+      </div>
 
       <div class="taixu-top-bar">
         <label>

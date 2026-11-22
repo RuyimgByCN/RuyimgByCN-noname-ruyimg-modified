@@ -620,9 +620,17 @@ function onSurfacePointerMove(ev: MouseEvent) {
         :shousha-ui="surfaces.uiSuites?.shoushaUi"
         :decade-ui="surfaces.uiSuites?.decadeUi"
         :taixu-ui="surfaces.uiSuites?.taixuUi"
+        :batch7="surfaces.uiSuites?.batch7"
         :view="view"
         :self-id="selfId"
         @update-suites="onUpdateUiSuites"
+        @update-batch7="
+          (batch7) =>
+            update((prev) => {
+              surfaceNotice = `如真似幻 (L12)：切换表面 → ${batch7.l12.activeSurface}`;
+              return { ...prev, uiSuites: { ...prev.uiSuites, batch7 } };
+            })
+        "
       />
     </div>
 

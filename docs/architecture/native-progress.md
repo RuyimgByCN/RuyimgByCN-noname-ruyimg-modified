@@ -9,6 +9,13 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-22 Batch UI-7（16 来源 121 项纯 UI/配置/表面收口；50 项规则耦合留待规则线）合入（待提交／发布）
+
+- **基线、发布与版本**：HEAD `f6cd6acb9228d8ca2ab490d61c26f1d856f6c502`（Batch Q2-L20+L22 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `44976347997` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。
+- **Batch UI-7 集成与复核**：合入 `swarm/conv-ui` `5eb822daa..a34f19a95`（`verifier-ui` #126 **`APPROVE`**）：洁净室覆盖 `L01`/`L02`/`L05`/`L07`/`L11`/`L12`/`L13`/`L15`/`L16`/`L17`/`L18`/`L21`/`L23`/`L26`/`U04`/`U05` 全部 171 项表面/配置/钩子与 `sharedSurfaceHelpers.ts`（`eval` 替换为严格 JSON 校验、0 商用 Spine 资源），并微调 `batch7-ui-closure.test.mjs` 适配清单升级后全量 171 覆盖断言。
+- **清单计数与整包签署**：按 #126 仅升格 **121 项**纯 UI 条目（`L02` **5/0/0**、`L05` **4/0/0**、`L07` **13/0/0**、`L12` **6/0/0**、`L13` **10/0/0**、`L16` **3/0/0**、`L18` **13/0/0**、`L23` **1/0/0**；`L01` **36/97/0**、`L11` **6/930/0**、`L15` **3/11/0**、`L17` **10/1/0**、`L21` **2/7/0**、`L26` **5/2/0**、`U04` **5/2/0**、`U05` **1/1620/0**；严格保留 50 项 `ruleCoupled` 配置为 `简化近似`）；全仓更新为 **已复核等价 1,617／简化近似 2,807／缺失 0**，整包八项签署仍 `0/37`。
+- **主线实测**：5 crate `-D warnings`、`wasm32`、4 crate **`2,670/0/6`**、`--workspace --no-fail-fast` **`8,018/0/8`**、`conformance` **`19/19`**、`desktop-client` **`20/0/1`**、跨端校验、`web-client` `typecheck`＋`test`（**527/0**）＋`build:native`＋`smoke:native`（**83/0**）＋`build`、9 套 Chrome CDP（`60 fps`、`consoleErrors=[]`）与 `preflight.py` 全过，见 [Batch UI-7 证据](../operations/evidence/2026-11-21-ui-batch7-closure/README.md)。
+
 ### 2026-11-22 Batch Q2-L20+L22（L20 终 3 技→95/95 ＋ L22 终 2 技→8/8）合入（待提交／发布）
 
 - **基线、发布与版本**：HEAD `41b7e4dedeada725ecd08b3e4b3400285bd44470`（Batch UI-6 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `44969821746` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。

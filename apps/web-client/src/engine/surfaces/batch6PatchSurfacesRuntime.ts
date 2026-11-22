@@ -28,6 +28,7 @@ export interface Batch6PatchUiState {
     kind: "praise" | "humiliation";
     icon: string;
     label: string;
+    rotationDeg?: number;
   } | null;
   activeBatch6Surfaces: ReadonlyArray<
     "e.css" | "thunder.css" | "main1" | "main1.css" | "card.css" | "extension.css"

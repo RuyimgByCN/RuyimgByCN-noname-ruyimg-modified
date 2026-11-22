@@ -14,6 +14,7 @@ const props = defineProps<{
   eCssEnabled?: boolean;
   qhlyChooseOrigin?: boolean;
   qhlyChooseOriginGuozhan?: boolean;
+  banQh?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -67,6 +68,7 @@ const loadLabel = computed(() => {
     :data-shousha-single-row="shoushaSingleRow ? 'on' : 'off'"
     :data-qhly-choose-origin="qhlyChooseOrigin ? 'on' : 'off'"
     :data-qhly-choose-origin-gz="qhlyChooseOriginGuozhan ? 'on' : 'off'"
+    :data-ban-qh="banQh ? 'on' : 'off'"
     aria-label="选将面板"
     data-testid="general-select-panel"
   >
@@ -87,12 +89,12 @@ const loadLabel = computed(() => {
       </div>
       <button
         type="button"
-        :disabled="locked || state.loadStatus === 'loading' || (!shoushaInfinityDraw && shoushaDrawLuck && luckUsesCount >= 7)"
+        :disabled="Boolean(banQh) || locked || state.loadStatus === 'loading' || (!shoushaInfinityDraw && shoushaDrawLuck && luckUsesCount >= 7)"
         aria-label="刷新选将候选"
         data-testid="btn-general-reload"
         @click="onReloadClick"
       >
-        {{ shoushaDrawLuck ? (shoushaInfinityDraw ? '无限换将(∞)' : `手气卡刷新(${Math.max(0, 7 - luckUsesCount)}/7)`) : '刷新候选' }}
+        {{ banQh ? '已屏蔽换将 (banQh)' : shoushaDrawLuck ? (shoushaInfinityDraw ? '无限换将(∞)' : `手气卡刷新(${Math.max(0, 7 - luckUsesCount)}/7)`) : '刷新候选' }}
       </button>
     </div>
 

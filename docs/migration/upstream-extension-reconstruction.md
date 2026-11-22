@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-22 Batch UI-7（16 来源 121 项纯 UI 收口；50 项规则耦合留归规则线）合入与清单上调（待提交／发布）
+
+基线 HEAD `f6cd6acb9228d8ca2ab490d61c26f1d856f6c502`（Batch Q2-L20+L22 已发布，CI Run `44976347997` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-ui` `5eb822daa..a34f19a95`（`verifier-ui` #126 **`APPROVE`**）并完成 527 前端单测、83/83 烟测与全 9 套 Chrome CDP 验证：按 #126 复核口径仅升级 **121 项**纯 UI 条目（`L02` **5/5**、`L05` **4/4**、`L07` **13/13**、`L12` **6/6**、`L13` **10/10**、`L16` **3/3**、`L18` **13/13**、`L23` **1/1** 达 100% 单项等价；`L01` **36/97/0**、`L11` **6/930/0**、`L15` **3/11/0**、`L17` **10/1/0**、`L21` **2/7/0**、`L26` **5/2/0**、`U04` **5/2/0**、`U05` **1/1620/0**），严格保留 `50` 项 `ruleCoupled: true` 配置为 `简化近似`，全仓清单更新为 **已复核等价 1,617／简化近似 2,807／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch UI-7 复核摘要](../operations/evidence/2026-11-21-ui-batch7-closure/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。
+
 ## 2026-11-22 Batch Q2-L20+L22（L20 终 3 技→95/95 ＋ L22 终 2 技→8/8）合入与清单上调（待提交／发布）
 
 基线 HEAD `41b7e4dedeada725ecd08b3e4b3400285bd44470`（Batch UI-6 已发布，CI Run `44969821746` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-q2-l20-l22` `d9e1c9a1f..94f42d34e`（`verifier-rules-2` #115 **`APPROVE`**）并与 L19/U01 共存对齐：`L20 标记补充` 终 3 技（`mibei`、`fz_liegong`、`wengua`）与 `L22 段位制裁` 终 2 技（`_eloDraw`、`_timeKiller`）共 **5 项**升为 `已复核等价`（同时刷新 `tspowei`/`kuanshi`/`kuanshi2`/`wengua5` 4 项重验笔记），`L20` 达 **95/95 单项已复核等价（简化近似 0／缺失 0）**、`L22` 达 **8/8 单项已复核等价（简化近似 0／缺失 0）**，全仓清单更新为 **已复核等价 1,496／简化近似 2,928／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch Q2-L20+L22 复核摘要](../operations/evidence/2026-11-21-batch2-3-l20-l22/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。

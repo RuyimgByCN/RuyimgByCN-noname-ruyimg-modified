@@ -47,6 +47,20 @@ import {
   dispatchLongxueCmEffects,
   type Batch6PatchUiState,
 } from "./surfaces/batch6PatchSurfacesRuntime";
+import {
+  classifyDesktopPointer,
+  incrementMvpRecastCount,
+  numToRoma,
+  validateSafeExportFilename,
+  type CoinSurfaceState,
+  type MvpScoreRow,
+  type MvpSurfaceState,
+} from "./surfaces/sharedSurfaceHelpers";
+import {
+  createInitialBatch7UiSuiteState,
+  normalizeBatch7UiSuiteState,
+  type Batch7UiSuiteState,
+} from "./surfaces/batch7ClosureState";
 
 export type BossHpNormalized =
   | { kind: "finite"; hp: number; maxHp: number; label: string }
@@ -78,18 +92,13 @@ export interface BossSurfaceState {
   shichangshiAliveCount?: number;
 }
 
-export interface CoinSurfaceState {
-  variant: "noname" | "liuli";
-  balance: number;
-  betPlaced: number;
-  phaseStarted: boolean;
-  alwaysSnow: boolean;
-  snowFall: boolean;
-  snowSize: "small" | "large";
-  activeEffects: string[];
-  lastSettlement: { payout: number; netDelta: number; video: boolean; mode: string } | null;
-  honorTitle?: string;
-}
+export type { CoinSurfaceState, MvpScoreRow, MvpSurfaceState };
+export {
+  classifyDesktopPointer,
+  incrementMvpRecastCount,
+  numToRoma,
+  validateSafeExportFilename,
+};
 
 export interface TaixuNode {
   id: string;
@@ -127,25 +136,6 @@ export interface DoomsdaySurfaceState {
   wave: number;
   identities: string[];
   infectedSeats: number[];
-}
-
-export interface MvpScoreRow {
-  seat: number;
-  attack: number;
-  heal: number;
-  assist: number;
-  base: number;
-  penalty: number;
-  total: number;
-  kills: number;
-  damageDealt: number;
-}
-
-export interface MvpSurfaceState {
-  enabled: boolean;
-  seenSeqs: number[];
-  scores: Record<number, MvpScoreRow>;
-  mvpSeat: number | null;
 }
 
 export interface ThemeAndSkinSurfaceState {
@@ -236,6 +226,7 @@ export interface ExtensionUiSuitesState {
   zuanUi?: ZuanUiRuntimeState;
   l20Ui?: L20RuntimeState;
   batch6Patch?: Batch6PatchUiState;
+  batch7?: Batch7UiSuiteState;
 }
 
 export interface ExtensionSurfacesSnapshot {
@@ -298,12 +289,6 @@ export function normalizeBossHp(raw: number | string, isChallenge = true): BossH
 }
 
 /** L12: 上游 `numtoroma` 罗马数字转换（1..=10）。 */
-export function numToRoma(n: number): string {
-  const table = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
-  if (!Number.isInteger(n) || n < 1 || n >= table.length) return String(n);
-  return table[n]!;
-}
-
 /** L02 / L12 / L18: 上游版本号比较（`1.2` vs `1.10` -> `-1`）。 */
 export function compareExtensionVersion(left: string, right: string): -1 | 0 | 1 {
   if (left === "无" || right === "无") return 1;
@@ -339,24 +324,6 @@ export function foolFangtongAllows(selectedNumbers: number[], candidateNumber: n
 }
 
 /** L23: 电脑适配指针分类（鼠标模式位移 < 10px 为 tap，>= 10px 为 drag；触屏模式为 touch）。 */
-export function classifyDesktopPointer(
-  layout: "mouse" | "touch",
-  dx: number,
-  dy: number,
-): "tap" | "drag" | "touch" {
-  if (layout === "touch") return "touch";
-  return Math.hypot(dx, dy) < 10 ? "tap" : "drag";
-}
-
-/** L23: 电脑适配安全导出文件名校验（拒绝空名、`.`、`..` 及路径分隔符）。 */
-export function validateSafeExportFilename(name: string): string {
-  const trimmed = name.trim();
-  if (!trimmed || trimmed === "." || trimmed === ".." || /[\\/]/.test(trimmed)) {
-    throw new Error("unsafe export filename");
-  }
-  return trimmed;
-}
-
 /** L22: 段位制裁难度与偏向计算。 */
 export function resolveEloDifficulty(
   online: boolean,
@@ -987,6 +954,7 @@ export function createInitialExtensionSurfacesState(
       zuanUi: createInitialZuanUiRuntimeState(),
       l20Ui: createInitialL20RuntimeState(),
       batch6Patch: createInitialBatch6PatchUiState(),
+      batch7: createInitialBatch7UiSuiteState(),
     },
   };
 }
@@ -1004,6 +972,14 @@ export function ingestBattleEnvelopeIntoSurfaces(
   let zuanUi = state.uiSuites?.zuanUi ?? createInitialZuanUiRuntimeState();
   let l20Ui = state.uiSuites?.l20Ui ?? createInitialL20RuntimeState();
   let batch6Patch = state.uiSuites?.batch6Patch ?? createInitialBatch6PatchUiState();
+  const baseBatch7 = state.uiSuites?.batch7 ?? createInitialBatch7UiSuiteState();
+  const batch7: Batch7UiSuiteState = {
+    ...baseBatch7,
+    l12: {
+      ...baseBatch7.l12,
+      tierRoman: numToRoma(Math.max(1, Math.min(10, env.view?.round ?? 1))),
+    },
+  };
 
   let next: ExtensionSurfacesSnapshot = {
     ...state,
@@ -1158,6 +1134,7 @@ export function ingestBattleEnvelopeIntoSurfaces(
       zuanUi,
       l20Ui,
       batch6Patch,
+      batch7,
     },
   };
 
@@ -1352,6 +1329,12 @@ export function deserializeExtensionSurfacesSnapshot(raw: string): ExtensionSurf
         ...createInitialBatch6PatchUiState(),
         ...snap.uiSuites.batch6Patch,
       },
+    };
+  }
+  if (snap.uiSuites?.batch7) {
+    snap.uiSuites = {
+      ...snap.uiSuites,
+      batch7: normalizeBatch7UiSuiteState(snap.uiSuites.batch7),
     };
   }
   return snap;
@@ -1708,48 +1691,6 @@ export function applyRzshDynamicSkinLighting(
 }
 
 /**
- * L13 (`archive/upstream/noname-liuli/noname/extension/手杀MVP/extension.js:244`):
- * Implements `_qy_chongzhu` recast counter and assist score bonus.
- */
-export function incrementMvpRecastCount(
-  mvp: MvpSurfaceState,
-  seat: number,
-  count = 1,
-): MvpSurfaceState {
-  const prevRow = mvp.scores[seat] ?? {
-    seat,
-    attack: 0,
-    heal: 0,
-    assist: 0,
-    base: 100,
-    penalty: 0,
-    total: 100,
-    kills: 0,
-    damageDealt: 0,
-  };
-  const bonus = Math.max(0, Math.floor(count)) * 3;
-  const updatedRow: MvpScoreRow = {
-    ...prevRow,
-    assist: prevRow.assist + bonus,
-    total: prevRow.total + bonus,
-  };
-  const nextScores = { ...mvp.scores, [seat]: updatedRow };
-  let bestSeat = mvp.mvpSeat ?? seat;
-  let bestTotal = -Infinity;
-  for (const row of Object.values(nextScores)) {
-    if (row.total > bestTotal) {
-      bestTotal = row.total;
-      bestSeat = row.seat;
-    }
-  }
-  return {
-    ...mvp,
-    scores: nextScores,
-    mvpSeat: bestSeat,
-  };
-}
-
-/**
  * L20 (`archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:40-90`):
  * Switches HUD mark CSS stylesheet (`decade` / `shousha` / `classic`).
  */
@@ -1841,3 +1782,9 @@ export * from "./surfaces/taixuSurface";
 export * from "./surfaces/zuanConfigSchema";
 export * from "./surfaces/zuanSurface";
 export * from "./surfaces/batch6PatchSurfacesRuntime";
+export * from "./surfaces/aiOptimizeConfigSchema";
+export * from "./surfaces/aiOptimizeSurface";
+export * from "./surfaces/toolsAndPoolSchema";
+export * from "./surfaces/toolsAndPoolSurface";
+export * from "./surfaces/visualEffectsBatch7Runtime";
+export * from "./surfaces/batch7ClosureState";

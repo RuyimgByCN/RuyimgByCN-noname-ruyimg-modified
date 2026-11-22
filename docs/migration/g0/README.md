@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-22 Batch UI-7（16 来源 121 项纯 UI 收口；50 项 `ruleCoupled` 留待规则线）更新（待提交／发布）
+
+基线 HEAD `f6cd6acb9228d8ca2ab490d61c26f1d856f6c502`（Batch Q2-L20+L22 已发布，CI Run `44976347997` 10/10）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-ui` 独立审查（#126 **`APPROVE`**）与主线全 9 套 Chrome CDP 及全量门禁复测，清单更新为 **已复核等价 1,617／简化近似 2,807／缺失 0／上游未定义 0**（合计 4,424）：按 #126 升级 **121 项**纯 UI 条目（`L02` **5/0/0**、`L05` **4/0/0**、`L07` **13/0/0**、`L12` **6/0/0**、`L13` **10/0/0**、`L16` **3/0/0**、`L18` **13/0/0**、`L23` **1/0/0** 均达 100% 单项等价；`L01` **36/97/0**、`L11` **6/930/0**、`L15` **3/11/0**、`L17` **10/1/0**、`L21` **2/7/0**、`L26` **5/2/0**、`U04` **5/2/0**、`U05` **1/1620/0**），严格保留 `50` 项 `ruleCoupled: true` 配置为 `简化近似`（整包八项仍 `0/37`）。详见 [Batch UI-7 证据摘要](../../operations/evidence/2026-11-21-ui-batch7-closure/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-22 Batch Q2-L20+L22（L20 终 3 技→95/95 ＋ L22 终 2 技→8/8）更新（待提交／发布）
 
 基线 HEAD `41b7e4dedeada725ecd08b3e4b3400285bd44470`（Batch UI-6 已发布，CI Run `44969821746` 10/10）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-rules-2` 独立审查（#115 **`APPROVE`**，含 6 项 Chrome CDP 实跑探针）与主线全量门禁复测，清单更新为 **已复核等价 1,496／简化近似 2,928／缺失 0／上游未定义 0**（合计 4,424）：`L20 标记补充` 由 `92 / 3 / 0` 升为 **95 / 0 / 0**（+3，`mibei`/`fz_liegong`/`wengua`，另重验 `tspowei`/`kuanshi`/`kuanshi2`/`wengua5`）；`L22 段位制裁` 由 `6 / 2 / 0` 升为 **8 / 0 / 0**（+2，`_eloDraw`/`_timeKiller`），双源达 100% 单项等价（整包八项仍 `0/37`）。详见 [Batch Q2-L20+L22 证据摘要](../../operations/evidence/2026-11-21-batch2-3-l20-l22/README.md) 与 [inventory_status.json](inventory_status.json)。

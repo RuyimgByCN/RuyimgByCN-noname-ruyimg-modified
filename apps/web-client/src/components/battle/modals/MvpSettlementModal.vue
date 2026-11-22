@@ -1,18 +1,34 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import type { ObserverSnapshot } from "../../../types/engine";
-import type { MvpScoreRow, MvpSurfaceState } from "../../../engine/extensionSurfaceRuntime";
+import {
+  L13_CONFIG_SPECS,
+  L13_SURFACE_IDS,
+  createInitialL13UiState,
+  type L13MvpConfig,
+  type L13MvpUiState,
+  type MvpScoreRow,
+  type MvpSurfaceState,
+} from "../../../engine/extensionSurfaceRuntime";
 
 const props = defineProps<{
   mvp: MvpSurfaceState;
+  l13?: L13MvpUiState;
   view: ObserverSnapshot | null;
 }>();
 
 const emit = defineEmits<{
   close: [];
+  "update:l13": [next: L13MvpUiState];
+  recastCue: [seat: number];
+  oneMore: [];
 }>();
 
 const praiseCountBySeat = ref<Record<number, number>>({});
+const l13State = computed(() => props.l13 ?? createInitialL13UiState());
+const activeSurfaceCss = computed(() =>
+  l13State.value.config.yangshi === "on" ? "extension_new.css" : "extension.css",
+);
 
 const rankedRows = computed<MvpScoreRow[]>(() => {
   const existing = Object.values(props.mvp.scores);
@@ -49,24 +65,93 @@ function praiseSeat(seat: number) {
     [seat]: (praiseCountBySeat.value[seat] ?? 0) + 1,
   };
 }
+
+function patchL13Config<K extends keyof L13MvpConfig>(key: K, value: L13MvpConfig[K]) {
+  emit("update:l13", {
+    ...l13State.value,
+    config: { ...l13State.value.config, [key]: value },
+  });
+}
+
+function onTriggerRecastCue() {
+  emit("recastCue", topSeat.value);
+}
+
+function onClickOneMore() {
+  emit("update:l13", {
+    ...l13State.value,
+    oneMoreClicks: l13State.value.oneMoreClicks + 1,
+  });
+  emit("oneMore");
+}
 </script>
 
 <template>
   <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="手杀MVP战功结算榜" data-testid="modal-mvp-settlement">
-    <div class="modal-card">
+    <div
+      class="modal-card mvp-modal-card"
+      :data-l13-surface="activeSurfaceCss"
+      :data-l13-lutou="l13State.config.mvplutou"
+    >
       <header class="modal-head">
         <div>
-          <h3>手杀 MVP · 全场战功结算 (L13)</h3>
-          <p class="muted tiny">上游基准：手杀MVP/extension.js · 攻击/治疗/辅助综合积分与点赞互动</p>
+          <h3>手杀 MVP · 全场战功结算 (L13 · {{ L13_CONFIG_SPECS.length }}配置/{{ L13_SURFACE_IDS.length }}样式)</h3>
+          <p class="muted tiny">上游基准：手杀MVP/extension.js · 样式({{ activeSurfaceCss }}) / 露头({{ l13State.config.mvplutou }}) / _qy_chongzhu</p>
         </div>
         <button type="button" data-testid="btn-close-mvp-modal" @click="emit('close')">关闭 ✕</button>
       </header>
+
+      <div class="l13-config-strip" data-testid="l13-config-strip">
+        <label class="tiny">
+          样式:
+          <select
+            :value="l13State.config.yangshi"
+            data-testid="l13-select-yangshi"
+            @change="patchL13Config('yangshi', ($event.target as HTMLSelectElement).value as 'on' | 'off')"
+          >
+            <option value="on">样式1 (extension_new.css)</option>
+            <option value="off">样式2 (extension.css)</option>
+          </select>
+        </label>
+        <label class="tiny">
+          露头:
+          <select
+            :value="l13State.config.mvplutou"
+            data-testid="l13-select-mvplutou"
+            @change="patchL13Config('mvplutou', ($event.target as HTMLSelectElement).value as 'shousha' | 'shizhounian' | 'off')"
+          >
+            <option value="shousha">手杀</option>
+            <option value="shizhounian">十周年</option>
+            <option value="off">无</option>
+          </select>
+        </label>
+        <label class="tiny"><input type="checkbox" :checked="l13State.config.qingyao_shoushaMVP" @change="patchL13Config('qingyao_shoushaMVP', ($event.target as HTMLInputElement).checked)" /> MVP动画</label>
+        <label class="tiny"><input type="checkbox" :checked="l13State.config.qingyao_shoushapeiyin" @change="patchL13Config('qingyao_shoushapeiyin', ($event.target as HTMLInputElement).checked)" /> 手杀配音</label>
+        <label class="tiny"><input type="checkbox" :checked="l13State.config.shoushajiesuan" @change="patchL13Config('shoushajiesuan', ($event.target as HTMLInputElement).checked)" /> 结算面板</label>
+        <label class="tiny"><input type="checkbox" :checked="l13State.config.jiesuanfix" @change="patchL13Config('jiesuanfix', ($event.target as HTMLInputElement).checked)" /> 罕见胜负优化</label>
+        <label class="tiny"><input type="checkbox" :checked="l13State.config.oneMore" @change="patchL13Config('oneMore', ($event.target as HTMLInputElement).checked)" /> 再来一局</label>
+        <button type="button" data-testid="btn-mvp-qy-chongzhu" @click="onTriggerRecastCue">
+          触发 _qy_chongzhu
+        </button>
+      </div>
+
+      <div v-if="l13State.config.yangshi === 'on'" class="qy-mvp-container" data-testid="l13-qy-mvp-container">
+        <div class="qy-mvp-avatarbox">
+          <strong>P{{ topSeat }} · {{ l13State.config.mvplutou }}露头</strong>
+        </div>
+        <div>
+          <div class="qy-mvp-xing">
+            <span class="item on">★</span><span class="item on">★</span><span class="item on">★</span><span class="item on">★</span><span class="item off">★</span>
+          </div>
+          <p class="tiny muted">{{ l13State.lastRecastCue ? `重铸音效: ${l13State.lastRecastCue}` : "新版倾斜战功框 (extension_new.css)" }}</p>
+        </div>
+      </div>
 
       <div class="mvp-crown-banner" data-testid="mvp-modal-crown-seat">
         👑 本局全场最佳：<strong>P{{ topSeat }}</strong>
       </div>
 
-      <table class="mvp-table">
+      <table v-if="l13State.config.shoushajiesuan" class="mvp-table">
         <thead>
           <tr>
             <th>排名</th>
@@ -99,6 +184,21 @@ function praiseSeat(seat: number) {
           </tr>
         </tbody>
       </table>
+
+      <div class="mvp-footer-actions">
+        <span class="tiny muted" data-testid="l13-recast-status">
+          {{ l13State.lastRecastCue ?? "重铸待机" }} · 再来一局点击 {{ l13State.oneMoreClicks }} 次
+        </span>
+        <button
+          v-if="l13State.config.oneMore"
+          type="button"
+          class="primary"
+          data-testid="btn-mvp-one-more"
+          @click="onClickOneMore"
+        >
+          再来一局
+        </button>
+      </div>
     </div>
   </div>
 </template>

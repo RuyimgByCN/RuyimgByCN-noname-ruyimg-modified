@@ -1,0 +1,422 @@
+/**
+ * Batch UI-7 原生 CSS 渲染面（严格对照上游扩展 CSS，无商用二进制资源）：
+ * L02 SJ Settings / U04 & L05 coin / L07 全能搜索 / L11 太虚幻境 / L12 如真似幻
+ * L13 手杀MVP / L16 拖拽读取 / L17 斗转星移 / L18 更新保护 / L21 武皇争霸 / L23 / L26 笨蛋插件
+ */
+
+/* L02 SJ Settings */
+.sj-checkbox {
+  vertical-align: middle;
+}
+.sj-console-drawer {
+  margin-top: 0.45rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 8px;
+  border: 1px dashed #38bdf8;
+  background: rgba(10, 16, 28, 0.92);
+  color: #bae6fd;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+
+/* L05 & U04 coin canvas layer */
+.coin-fun-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 4;
+}
+.battle-table[data-u04-canvas-top="on"] .coin-fun-canvas {
+  z-index: 6;
+}
+
+/* L07 全能搜索 6 代码高亮主题 + Searcher 新旧样式 + SimplePagination */
+.l07-code-preview {
+  margin: 0.45rem 0;
+  padding: 0.55rem 0.7rem;
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  overflow-x: auto;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+[data-l07-highlight="a11y-dark.min.css"] .l07-code-preview .hljs { background: #2b2b2b; color: #f8f8f2; }
+[data-l07-highlight="a11y-dark.min.css"] .l07-code-preview .hljs-keyword { color: #dcc6e0; }
+[data-l07-highlight="a11y-dark.min.css"] .l07-code-preview .hljs-string { color: #abe338; }
+
+[data-l07-highlight="an-old-hope.min.css"] .l07-code-preview .hljs { background: #1c1d21; color: #c0c5ce; }
+[data-l07-highlight="an-old-hope.min.css"] .l07-code-preview .hljs-keyword { color: #b45ea4; }
+[data-l07-highlight="an-old-hope.min.css"] .l07-code-preview .hljs-string { color: #4fb4d7; }
+
+[data-l07-highlight="atom-one-dark.min.css"] .l07-code-preview .hljs { background: #282c34; color: #abb2bf; }
+[data-l07-highlight="atom-one-dark.min.css"] .l07-code-preview .hljs-keyword { color: #c678dd; }
+[data-l07-highlight="atom-one-dark.min.css"] .l07-code-preview .hljs-string { color: #98c379; }
+
+[data-l07-highlight="felipec.min.css"] .l07-code-preview .hljs { background: #1e1e22; color: #dddde1; }
+[data-l07-highlight="felipec.min.css"] .l07-code-preview .hljs-keyword { color: #8fbfef; }
+[data-l07-highlight="felipec.min.css"] .l07-code-preview .hljs-string { color: #8fef8f; }
+
+[data-l07-highlight="gml.min.css"] .l07-code-preview .hljs { background: #222222; color: silver; }
+[data-l07-highlight="gml.min.css"] .l07-code-preview .hljs-keyword { color: #ffb871; font-weight: 700; }
+[data-l07-highlight="gml.min.css"] .l07-code-preview .hljs-string { color: #ffff00; }
+
+[data-l07-highlight="vs2015.min.css"] .l07-code-preview .hljs { background: #1e1e1e; color: #dcdcdc; }
+[data-l07-highlight="vs2015.min.css"] .l07-code-preview .hljs-keyword { color: #569cd6; }
+[data-l07-highlight="vs2015.min.css"] .l07-code-preview .hljs-string { color: #d69d85; }
+
+.Searcher[data-l07-searcher-style="extension.css"] {
+  border-color: #e8a54b;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.65);
+}
+.Searcher[data-l07-searcher-style="extension_old.css"] {
+  border-color: #94a3b8;
+  background: linear-gradient(180deg, rgba(16, 20, 28, 0.96), rgba(10, 12, 18, 0.96));
+}
+.Searcher[data-l07-bg="none"] {
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.65);
+}
+.Searcher[data-l07-bg="相爱相杀"] {
+  background: radial-gradient(circle at top right, rgba(190, 18, 60, 0.34), rgba(18, 16, 28, 0.96) 65%) !important;
+  border-color: #fb7185 !important;
+}
+.Searcher[data-l07-bg="才颜双绝"] {
+  background: radial-gradient(circle at top right, rgba(45, 212, 191, 0.28), rgba(24, 16, 36, 0.96) 65%) !important;
+  border-color: #5eead4 !important;
+}
+.Searcher[data-l07-bg="新杀春日"] {
+  background: radial-gradient(circle at top left, rgba(163, 230, 53, 0.24), rgba(32, 20, 26, 0.96) 65%) !important;
+  border-color: #bef264 !important;
+}
+.Searcher[data-l07-bg="青铜龙纹"] {
+  background: radial-gradient(circle at center, rgba(180, 83, 9, 0.32), rgba(20, 16, 12, 0.96) 72%) !important;
+  border-color: #f59e0b !important;
+}
+.Searcher[data-l07-bg="随机"] {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.24), rgba(168, 85, 247, 0.22), rgba(16, 18, 26, 0.96)) !important;
+  border-color: #c084fc !important;
+}
+
+.simple-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.55rem;
+}
+.simple-pagination .page-li {
+  padding: 0.16rem 0.5rem;
+  border-radius: 5px;
+  font-size: 0.74rem;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+}
+.simple-pagination .page-li.page-active {
+  background: rgba(232, 165, 75, 0.24);
+  border-color: #e8a54b;
+  color: #fde68a;
+  font-weight: 700;
+}
+
+/* L11 太虚幻境 4 份 CSS 表面 */
+.taixu-modal-card[data-l11-surface="extension_MobileStyle.css"] .taixuhuanjing_HomeBodyText {
+  font-size: 1.05rem;
+  letter-spacing: 3px;
+}
+.taixu-modal-card[data-l11-surface="extension_PcStyle.css"] .taixuhuanjing_HomeBodyText {
+  font-size: 0.92rem;
+  letter-spacing: 1px;
+}
+.taixu-modal-card[data-l11-surface="extension_servant.css"] .servant-box {
+  border-color: rgba(56, 189, 248, 0.55);
+  box-shadow: inset 0 0 14px rgba(56, 189, 248, 0.12);
+}
+.taixu-modal-card[data-l11-surface="extension_style.css"] {
+  border-color: #fbbf24;
+  background: linear-gradient(165deg, #211a11 0%, #14100b 100%);
+}
+
+/* L12 如真似幻 6 份表面 (`font.css` / `offline.css` / `offline_old.css` / `rzsh.css` / `dynamicSkin` / `rzsh`) */
+.rzsh-preview-stage {
+  padding: 0.5rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid rgba(168, 85, 247, 0.45);
+  background: linear-gradient(145deg, #1b132b, #0e0b16);
+}
+.rzsh-preview-stage[data-l12-surface="dynamicSkin"] {
+  border-color: #38bdf8;
+  background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.28), #0c1424 70%);
+}
+.rzsh-preview-stage[data-l12-surface="rzsh"] {
+  border-color: #c084fc;
+  background: linear-gradient(145deg, #2a143d, #130b1e);
+  box-shadow: inset 0 0 18px rgba(192, 132, 252, 0.16);
+}
+.rzsh-preview-stage[data-l12-surface="font.css"] {
+  border-color: #fde68a;
+  font-family: "KaiTi", "STKaiti", serif;
+}
+.rzsh-preview-stage[data-l12-surface="font.css"] .splashtexthela {
+  font-size: 1.04rem;
+  letter-spacing: 0.08em;
+}
+.rzsh-preview-stage[data-l12-surface="offline.css"] {
+  border-color: #34d399;
+  background: linear-gradient(155deg, #102a22, #0b1411);
+}
+.rzsh-preview-stage[data-l12-surface="offline_old.css"] {
+  border-color: #94a3b8;
+  border-style: dashed;
+}
+.rzsh-preview-stage[data-l12-surface="rzsh.css"] {
+  border-color: #f59e0b;
+  background: linear-gradient(145deg, #291d0e, #120e09);
+}
+.rzsh-preview-stage .splashtexthela {
+  background-image: linear-gradient(180deg, #f0d775 30%, #ab8c31 57%, #b0a04d 67%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: #f0d775;
+  font-weight: 800;
+}
+
+/* L13 手杀MVP (`extension.css` vs `extension_new.css`) */
+.mvp-modal-card[data-l13-surface="extension.css"] .mvp-crown-banner {
+  background: linear-gradient(90deg, rgba(165, 36, 36, 0.42), rgba(232, 165, 75, 0.14));
+  border-color: #d4a64a;
+}
+.mvp-modal-card[data-l13-surface="extension_new.css"] .qy-mvp-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.55rem 0.8rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(58, 38, 16, 0.72), rgba(22, 16, 12, 0.88));
+  border: 1px solid #d9b46c;
+  margin-bottom: 0.65rem;
+}
+.qy-mvp-avatarbox {
+  padding: 0.35rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid #f0d775;
+  transform: rotate(-3deg);
+  background: rgba(14, 11, 8, 0.85);
+}
+.qy-mvp-xing {
+  display: inline-flex;
+  gap: 0.16rem;
+}
+.qy-mvp-xing > .item.on {
+  color: #fbbf24;
+}
+.qy-mvp-xing > .item.off {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+/* L16 拖拽读取 */
+.drag-read-updateContent {
+  margin-top: 0.4rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(10, 12, 16, 0.92);
+  border: 1px solid #818cf8;
+  color: #e2e8f0;
+  font-size: 0.75rem;
+}
+.drag-read-importZip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.65rem;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #4338ca, #6d28d9);
+  color: #fff;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+/* L17 斗转星移 `base.css` */
+.dz-bigBg2 {
+  padding: 0.55rem;
+  border-radius: 8px;
+  border: 1px solid #84cc16;
+  background: linear-gradient(160deg, rgba(20, 32, 24, 0.92), rgba(12, 18, 16, 0.95));
+}
+.banPlanBtn.active,
+.fy-btn.active {
+  background: linear-gradient(180deg, #15803d, #14532d);
+  border-color: #a3dec5;
+  color: #ecfdf5;
+}
+.dz-bigBg2[data-qnss-bg="on"] {
+  box-shadow: inset 0 0 24px rgba(132, 204, 22, 0.2);
+  background: radial-gradient(circle at top right, rgba(34, 197, 94, 0.22), rgba(12, 18, 16, 0.96) 65%);
+}
+.dz-bigBg2[data-jj-enabled="off"] {
+  opacity: 0.72;
+  border-style: dashed;
+  border-color: #94a3b8;
+}
+.dz-ban-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.14rem 0.42rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.7rem;
+}
+.dz-group-wei { background: rgba(89, 101, 172, 0.45); }
+.dz-group-shu { background: rgba(210, 28, 28, 0.45); }
+.dz-group-wu { background: rgba(88, 153, 52, 0.5); }
+.dz-group-qun { background: rgba(237, 224, 61, 0.35); color: #fef08a; }
+.l01-attitude-drawer {
+  width: min(560px, 95%);
+  padding: 0.45rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid #fbbf24;
+  background: rgba(15, 23, 42, 0.94);
+  font-size: 0.72rem;
+  color: #f8fafc;
+}
+.l01-att-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+.l01-att-cell {
+  padding: 0.14rem 0.32rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(30, 41, 59, 0.78);
+}
+
+/* L18 更新保护 `extension.css` */
+progress.zxgxProgress {
+  width: 100%;
+  max-width: 280px;
+  height: 10px;
+  border: 1px solid rgba(56, 189, 248, 0.65);
+  border-radius: 999px;
+  vertical-align: middle;
+}
+progress.zxgxProgress::-webkit-progress-bar {
+  background: #1e293b;
+  border-radius: 999px;
+}
+progress.zxgxProgress::-webkit-progress-value {
+  border-radius: 999px;
+  background: #0ea5e9;
+}
+
+/* L21 武皇争霸 `hiddenAvatar.css` */
+.seat.has-l21-hidden-avatar .general-slot .portrait {
+  filter: brightness(0.28) contrast(1.1);
+}
+.seat.has-l21-hidden-avatar .hiddenAvatar::after {
+  content: "暗";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.36);
+  display: grid;
+  place-items: center;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: rgba(248, 250, 252, 0.72);
+  pointer-events: none;
+}
+
+/* L23 电脑适配 `_fixCAILANZI` */
+.cailanzi_click_player {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  cursor: crosshair;
+}
+.cailanzi_click_player:hover {
+  box-shadow: inset 0 0 0 1px rgba(251, 191, 36, 0.45);
+}
+
+/* L26 笨蛋插件 `extension.css` */
+.Fool_liegone_shousha {
+  background: rgba(120, 40, 10, 0.9);
+  border: 1px solid #fcfc91;
+  color: #fcfc91;
+  font-weight: 800;
+  padding: 0.04rem 0.28rem;
+  border-radius: 4px;
+  font-size: 0.6rem;
+}
+.Fool_liegone_olten {
+  background: linear-gradient(90deg, rgba(100, 0, 0, 0.75), rgba(140, 10, 10, 0.85));
+  border: 1px solid #fff700;
+  color: #fff700;
+  font-weight: 700;
+  padding: 0.04rem 0.28rem;
+  border-radius: 4px;
+  font-size: 0.6rem;
+}
+.Fool-skilltip {
+  background: rgba(36, 29, 19, 0.92);
+  border: 1px solid #523a24;
+  color: #ccad76;
+  padding: 0.16rem 0.42rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+}
+.fool-equip-mirror-pill {
+  padding: 0.08rem 0.35rem;
+  border-radius: 999px;
+  border: 1px solid #fcfc91;
+  background: rgba(82, 58, 36, 0.9);
+  color: #fcfc91;
+  font-size: 0.66rem;
+}
+.seat-cailanzi-picker {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  gap: 0.2rem;
+  padding: 0.16rem 0.25rem;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.94);
+  border: 1px solid #fbbf24;
+}
+.seat-cailanzi-picker button {
+  padding: 0.05rem 0.28rem;
+  font-size: 0.7rem;
+  line-height: 1.2;
+}
+.l13-config-strip,
+.l07-config-strip,
+.l11-surface-tabs,
+.mvp-footer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+.mvp-footer-actions {
+  margin-top: 0.65rem;
+  margin-bottom: 0;
+  justify-content: space-between;
+}
+.l07-changelog-box {
+  margin-bottom: 0.5rem;
+  padding: 0.4rem 0.55rem;
+  border-radius: 6px;
+  border: 1px solid rgba(232, 165, 75, 0.4);
+  background: rgba(24, 28, 36, 0.85);
+}
+.l11-surface-tabs button.active {
+  border-color: #e8a54b;
+  color: #fde68a;
+  background: rgba(232, 165, 75, 0.18);
+}

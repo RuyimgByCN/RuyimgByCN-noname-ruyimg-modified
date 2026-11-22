@@ -1,5 +1,13 @@
 # G0 · L01 AI优化
 
+## 2026-11-22 Batch UI-7（36 项纯 UI 配置收口→36/133；27 项规则耦合留归规则线）合入更新（待提交／发布）
+
+基线 HEAD `f6cd6acb9228d8ca2ab490d61c26f1d856f6c502`；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-ui` 独立审查（#126 **`APPROVE`**）与主线 `batch7-ui-cdp.mjs` 实测，本源仅将 `36` 项纯 UI 配置（`kzjs`＋`28` 动作＋界面/校验配置，已以结构化 JSON 替代 `eval`）升为 `已复核等价`；严格保留 `27` 项 `ruleCoupled: true` AI/伪禁/权重规则开关与待核规则条目为 `简化近似`，本源现 **`36 / 97 / 0`**（整包八项仍 `0/37`）。详见 [Batch UI-7 证据摘要](../../operations/evidence/2026-11-21-ui-batch7-closure/README.md) 与 [inventory_status.json](inventory_status.json)。
+
+| 日期来源快照 | 已复核等价 | 简化近似 | 缺失 |
+| --- | ---: | ---: | ---: |
+| 2026-11-22 Batch UI-7 L01 | 36 | 97 | 0 |
+
 > 核验日期：2026-11-11 · 来源仓：`noname-liuli` · 入口：`archive/upstream/noname-liuli/noname/extension/AI优化`  
 > 本页为 E01/G0 深度清单与**裁决 34 逐项上游清单**（武将 / 技能 / 卡牌 / 模式与战役节点 / 配置项 / 界面钩子 / 渲染面 / 现有 `decision34*` 归类）。非整包验收证明。
 

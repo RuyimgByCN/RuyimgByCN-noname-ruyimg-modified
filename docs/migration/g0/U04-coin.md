@@ -1,5 +1,13 @@
 # G0 · U04 coin
 
+## 2026-11-22 Batch UI-7（4 表面＋1 钩子→5/7；其余 2 项待核）合入更新（待提交／发布）
+
+基线 HEAD `f6cd6acb9228d8ca2ab490d61c26f1d856f6c502`；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-ui` 独立审查（#126 **`APPROVE`**）与主线 `batch7-ui-cdp.mjs` 实测，本源 `4` 项表面（`haveFun.{firework,snow,star,blink}`）＋`1` 项钩子（`coin_arenaReady`）共 **5 项**升为 `已复核等价`，本源现 **`5 / 2 / 0`**（整包八项仍 `0/37`）。详见 [Batch UI-7 证据摘要](../../operations/evidence/2026-11-21-ui-batch7-closure/README.md) 与 [inventory_status.json](inventory_status.json)。
+
+| 日期来源快照 | 已复核等价 | 简化近似 | 缺失 |
+| --- | ---: | ---: | ---: |
+| 2026-11-22 Batch UI-7 U04 | 5 | 2 | 0 |
+
 > 核验日期：2026-11-11 · 来源仓：`noname` · 入口：`archive/upstream/noname/apps/core/extension/coin`  
 > 本页为 E01/G0 深度清单与**裁决 34 逐项上游清单**（武将 / 技能 / 卡牌 / 模式与战役节点 / 配置项 / 界面钩子 / 渲染面 / 现有 `decision34*` 归类）。非整包验收证明。
 

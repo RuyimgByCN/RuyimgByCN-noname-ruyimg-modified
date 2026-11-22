@@ -58,6 +58,16 @@ import {
   dispatchL10EmojiRebate,
   type Batch6PatchUiState,
 } from "../../engine/surfaces/batch6PatchSurfacesRuntime";
+import {
+  batch7ArenaDatasetAttrs,
+  createInitialBatch7UiSuiteState,
+  type Batch7UiSuiteState,
+} from "../../engine/surfaces/batch7ClosureState";
+import {
+  computeFoolEquipMirrorCards,
+  computeFoolThrowRotation,
+  dispatchFixCaiLanZiTap,
+} from "../../engine/surfaces/visualEffectsBatch7Runtime";
 import { DECADE_NOSKILL_CONTROL_IDS } from "../../engine/surfaces/decadeMarkSkillsData";
 import type { DecadeUiRuntimeState } from "../../engine/surfaces/decadeUiSurface";
 import { skillDisplayName } from "../../engine/appearanceStore";
@@ -97,6 +107,7 @@ const emit = defineEmits<{
   "update:shoushaUi": [next: ShoushaUiRuntimeState];
   "update:qhlyUi": [next: QhlyRuntimeState];
   "update:batch6Patch": [next: Batch6PatchUiState];
+  "update:batch7": [next: Batch7UiSuiteState];
   sortHand: [sortedIds: number[]];
   endPhase: [];
   resolveChoice: [action: ResolveChoiceAction];
@@ -248,6 +259,16 @@ const zuanUiState = computed(
 const batch6PatchState = computed(
   () => props.surfaces?.uiSuites?.batch6Patch ?? createInitialBatch6PatchUiState(),
 );
+const batch7State = computed<Batch7UiSuiteState>(
+  () => props.surfaces?.uiSuites?.batch7 ?? createInitialBatch7UiSuiteState(),
+);
+const foolMirrorEquipIds = computed(
+  () =>
+    computeFoolEquipMirrorCards(batch7State.value.l26, props.view?.known_cards ?? [], props.selfId, {
+      positionAllowsEquip: true,
+      inPhaseDiscard: props.view?.phase === "Discard",
+    }).mirroredEquipCardIds,
+);
 const inspectedShoushaSeat = ref<SeatView | null>(null);
 const activeShoushaSurfacesList = computed(() =>
   resolveActiveShoushaSurfaces(shoushaConfig.value, {
@@ -278,6 +299,7 @@ const decadeDatasetAttrs = computed(() => ({
   ...skinSwitchArenaDatasetAttrs(skinSwitchState.value),
   ...zuanArenaDatasetAttrs(zuanUiState.value),
   ...batch6PatchDatasetAttrs(batch6PatchState.value),
+  ...batch7ArenaDatasetAttrs(batch7State.value, props.surfaces?.coin),
   "data-prestart": !props.view || props.view.round < 1 ? "on" : "off",
   "data-player-css": decadeUiState.value?.playerCssVariant ?? "player_new.css",
   "data-active-surfaces": (decadeUiState.value?.activeCssSurfaces ?? []).join(" "),
@@ -382,6 +404,72 @@ function onTriggerL10EmojiRebate() {
       isEnemy: true,
     }),
   );
+}
+
+function onSeatCaiLanZiTap(ev: { seat: number; dx: number; dy: number }) {
+  const nextL23 = dispatchFixCaiLanZiTap(batch7State.value.l23, {
+    seat: ev.seat,
+    dx: ev.dx,
+    dy: ev.dy,
+    isSelf: ev.seat === props.selfId,
+    isDead: !(seats().find((s) => s.player === ev.seat)?.alive ?? false),
+    isOver: Boolean(props.finished),
+  });
+  emit("update:batch7", { ...batch7State.value, l23: nextL23 });
+}
+
+function onSeatCaiLanZiThrow(ev: { seat: number; emoji: string }) {
+  emit("update:batch7", {
+    ...batch7State.value,
+    l23: { ...batch7State.value.l23, emojiPickerSeat: null },
+  });
+  const nextRebate = dispatchL10EmojiRebate(batch6PatchState.value, {
+    trigger: ev.emoji === "egg" ? "dying" : "recover",
+    fromSeat: props.selfId,
+    toSeat: ev.seat,
+    isEnemy: ev.emoji === "egg",
+  });
+  const rotationDeg = computeFoolThrowRotation(
+    ev.seat,
+    props.selfId,
+    batch7State.value.l26.config.Fool_throwEmotion,
+  );
+  emit("update:batch6Patch", {
+    ...nextRebate,
+    activeEmojiRebate: nextRebate.activeEmojiRebate
+      ? { ...nextRebate.activeEmojiRebate, rotationDeg }
+      : null,
+  });
+}
+
+const viewAttOpen = ref(false);
+const selfSeatView = computed(() => seats().find((s) => s.player === props.selfId) ?? null);
+const selectedCardView = computed(() =>
+  selectedCard.value == null ? null : myHand().find((c) => c.id === selectedCard.value) ?? null,
+);
+function seatDistanceFor(position: number, total: number): number {
+  return position === 0 ? 0 : Math.max(1, Math.min(position, total - position));
+}
+const l01AttitudeEntries = computed(() => {
+  const me = selfSeatView.value;
+  return seats().map((s) => {
+    let attText = "未知(?)";
+    if (s.player === props.selfId) attText = "己方 (+5)";
+    else if (me?.identity && s.identity) {
+      const sameCamp =
+        (me.identity === "Lord" || me.identity === "Loyalist") &&
+        (s.identity === "Lord" || s.identity === "Loyalist");
+      attText = me.identity === s.identity || sameCamp ? "友军 (+4)" : "敌对 (-4)";
+    }
+    return { seat: s.player, alive: s.alive, identity: identityLabel(s.identity), attText };
+  });
+});
+
+function onSeatCaiLanZiClose() {
+  emit("update:batch7", {
+    ...batch7State.value,
+    l23: { ...batch7State.value.l23, emojiPickerSeat: null },
+  });
 }
 
 function seats(): SeatView[] {
@@ -817,7 +905,7 @@ const endPhaseDisabled = computed(
     >
       <canvas
         ref="tableWeatherCanvasRef"
-        class="tabletop-weather-canvas"
+        class="tabletop-weather-canvas coin-fun-canvas"
         width="1200"
         height="680"
         data-testid="tabletop-weather-canvas"
@@ -884,6 +972,12 @@ const endPhaseDisabled = computed(
             :qhly-ui="qhlyUiState"
             :skin-switch="surfaces?.uiSuites?.skinSwitch"
             :zuan-ui="zuanUiState"
+            :batch7="batch7State"
+            :selected-card-view="selectedCardView"
+            :self-seat-view="selfSeatView"
+            :self-hand-count="myHand().length"
+            :self-equips-count="equipCardsFor(selfId).length"
+            :seat-distance="seatDistanceFor(slot.position, slot.total)"
             :decade-style="surfaces?.theme?.decadeSkinStyle"
             :l20-marks="surfaces?.theme?.l20Marks"
             @select="onTargetSelect"
@@ -891,6 +985,9 @@ const endPhaseDisabled = computed(
             @cycle-qhly-skin="onCycleSeatQhlySkin"
             @open-qhly-window="() => emit('openModal', 'qhly')"
             @open-skin-switch-window="() => emit('openModal', 'skinswitch')"
+            @cailanzi-tap="onSeatCaiLanZiTap"
+            @cailanzi-throw="onSeatCaiLanZiThrow"
+            @cailanzi-close="onSeatCaiLanZiClose"
           />
         </div>
       </div>
@@ -951,8 +1048,33 @@ const endPhaseDisabled = computed(
           <div v-if="batch6PatchState.thunderCssEnabled && batch6PatchState.thunderSkillTip" class="th-skilltip" data-testid="l28-thunder-tip">
             ⚡ {{ batch6PatchState.thunderSkillTip }}
           </div>
-          <div v-if="batch6PatchState.activeEmojiRebate" class="emojiTarget emojiEggFly" data-testid="l10-emoji-rebate">
+          <div
+            v-if="batch6PatchState.activeEmojiRebate"
+            class="emojiTarget emojiEggFly"
+            data-testid="l10-emoji-rebate"
+            :data-fool-throw-rotation="batch6PatchState.activeEmojiRebate.rotationDeg ?? 0"
+            :style="
+              batch6PatchState.activeEmojiRebate.rotationDeg
+                ? { transform: `rotate(${batch6PatchState.activeEmojiRebate.rotationDeg}deg)` }
+                : undefined
+            "
+          >
             {{ batch6PatchState.activeEmojiRebate.icon }} P{{ batch6PatchState.activeEmojiRebate.fromSeat }} → P{{ batch6PatchState.activeEmojiRebate.toSeat }} {{ batch6PatchState.activeEmojiRebate.label }}
+          </div>
+          <div
+            v-if="viewAttOpen && batch7State.l01.config.viewAtt && view"
+            class="l01-attitude-drawer"
+            data-testid="l01-attitude-drawer"
+          >
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <strong>👁 火眼金睛 · 牌桌态度面板 (P{{ selfId }} 视角 · 策略 {{ batch7State.l01.config.btAi }})</strong>
+              <button type="button" class="tiny" data-testid="btn-close-view-att" @click="viewAttOpen = false">✕</button>
+            </div>
+            <div class="l01-att-grid">
+              <div v-for="row in l01AttitudeEntries" :key="row.seat" class="l01-att-cell" :data-testid="`l01-att-seat-${row.seat}`">
+                P{{ row.seat }} ({{ row.identity }}): <strong>{{ row.attText }}</strong>
+              </div>
+            </div>
           </div>
 
           <section v-if="discardCards().length > 0" class="discard-pile" aria-label="弃牌堆">
@@ -1200,6 +1322,32 @@ const endPhaseDisabled = computed(
             >
               ⚙祖安
             </button>
+            <button
+              v-if="batch7State.l01.config.viewAtt && view"
+              type="button"
+              class="decade-mini-pill desktop-only-pill"
+              data-testid="btn-tabletop-view-att"
+              title="火眼金睛 · 查看牌桌态度矩阵"
+              @click="viewAttOpen = !viewAttOpen"
+            >
+              👁态度
+            </button>
+            <button
+              type="button"
+              class="decade-mini-pill desktop-only-pill"
+              data-testid="btn-tabletop-batch7-panel"
+              title="Batch UI-7 (L01/L02/L05/L07/L11-18/L21/L23/L26/U04-U05)"
+              @click="emit('openModal', 'batch7-workbench')"
+            >
+              ⚙全套7
+            </button>
+            <span
+              v-if="foolMirrorEquipIds.length > 0"
+              class="fool-equip-mirror-pill desktop-only-pill"
+              data-testid="l26-fool-equip-mirror-pill"
+            >
+              🃏装备映射{{ foolMirrorEquipIds.length }}
+            </span>
           </div>
         </div>
       </div>

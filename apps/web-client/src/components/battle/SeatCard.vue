@@ -19,6 +19,8 @@ import { resolveShoushaGuanjie } from "../../engine/surfaces/shoushaSurfacesRunt
 import type { ShoushaUiRuntimeState } from "../../engine/surfaces/shoushaUiSurface";
 import type { SkinSwitchRuntimeState } from "../../engine/surfaces/skinSwitchSurface";
 import type { ZuanUiRuntimeState } from "../../engine/surfaces/zuanSurface";
+import type { Batch7UiSuiteState } from "../../engine/surfaces/batch7ClosureState";
+import { evaluateFoolLiegongTag } from "../../engine/surfaces/visualEffectsBatch7Runtime";
 import {
   cardKindLabel,
   identityBadgeInfo,
@@ -42,6 +44,12 @@ const props = defineProps<{
   qhlyUi?: QhlyRuntimeState;
   skinSwitch?: SkinSwitchRuntimeState;
   zuanUi?: ZuanUiRuntimeState;
+  batch7?: Batch7UiSuiteState;
+  selectedCardView?: CardView | null;
+  selfSeatView?: SeatView | null;
+  selfHandCount?: number;
+  selfEquipsCount?: number;
+  seatDistance?: number;
   decadeStyle?: string;
   l20Marks?: Record<string, number>;
 }>();
@@ -52,6 +60,9 @@ const emit = defineEmits<{
   cycleQhlySkin: [seat: SeatView];
   openQhlyWindow: [seat: SeatView];
   openSkinSwitchWindow: [seat: SeatView];
+  cailanziTap: [payload: { seat: number; dx: number; dy: number }];
+  cailanziThrow: [payload: { seat: number; emoji: string }];
+  cailanziClose: [];
 }>();
 
 const slots = computed(() => props.seat.generals ?? [null, null]);
@@ -278,6 +289,52 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
   if (hp <= 0) return "var(--color-warning)";
   return "var(--color-positive)";
 }
+
+const isL21Hidden = computed(
+  () =>
+    Boolean(props.batch7?.l21?.hiddenPreviewActive) &&
+    (props.batch7?.l21?.hiddenIndices?.includes(props.seat.seat) ?? false),
+);
+const foolLiegongTag = computed(() =>
+  evaluateFoolLiegongTag({
+    mode: props.batch7?.l26?.config?.Fool_liegong ?? "close",
+    selectedCard: props.selectedCardView ?? null,
+    selfSeat: props.selfSeatView ?? null,
+    targetSeat: props.seat,
+    selfHandCount: props.selfHandCount ?? 0,
+    selfEquipsCount: props.selfEquipsCount ?? 0,
+    distance: props.seatDistance ?? 1,
+  }),
+);
+const showCaiLanZiLayer = computed(() =>
+  Boolean(
+    props.batch7?.l23?.enabled &&
+      !props.self &&
+      props.seat.alive &&
+      !props.isTargetMode &&
+      !props.skinSwitch?.config?.clickPlayerDynamic,
+  ),
+);
+const showCaiLanZiPicker = computed(
+  () => props.batch7?.l23?.emojiPickerSeat === props.seat.player && !props.isTargetMode,
+);
+let cailanziPressed = false;
+let cailanziDownX = 0;
+let cailanziDownY = 0;
+function onCaiLanZiMouseDown(e: MouseEvent) {
+  cailanziPressed = true;
+  cailanziDownX = e.clientX;
+  cailanziDownY = e.clientY;
+}
+function onCaiLanZiMouseUp(e: MouseEvent) {
+  if (!cailanziPressed) return;
+  cailanziPressed = false;
+  emit("cailanziTap", {
+    seat: props.seat.player,
+    dx: e.clientX - cailanziDownX,
+    dy: e.clientY - cailanziDownY,
+  });
+}
 </script>
 
 <template>
@@ -308,6 +365,7 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
       'has-l20-playerjiu': isL20PlayerJiu,
       'has-l20-guozhan-halo': Boolean(l20GroupHalo),
       'has-l20-rank-sweep': l20RankSweep,
+      'has-l21-hidden-avatar': isL21Hidden,
     }"
     :data-l20-group="l20GroupHalo ?? undefined"
     :data-decade-style="decadeStyle ?? decadeUi?.layoutVariant ?? 'shizhounian'"
@@ -410,6 +468,21 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
             :outcrop-skin="effectiveConfig?.outcropSkin"
           />
         </div>
+        <div
+          v-if="isL21Hidden"
+          class="hiddenAvatar"
+          data-testid="seat-l21-hidden-avatar"
+          aria-hidden="true"
+        ></div>
+        <div
+          v-if="showCaiLanZiLayer"
+          class="cailanzi_click_player"
+          data-testid="seat-cailanzi-overlay"
+          @mousedown="onCaiLanZiMouseDown"
+          @mouseup="onCaiLanZiMouseUp"
+          @mouseleave="cailanziPressed = false"
+          @click.stop
+        ></div>
 
         <!-- Portrait-native overlays & equips stacked cleanly without clipping -->
         <div class="seat-bottom-overlays">
@@ -495,6 +568,8 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
           :data-qhly-drag-button="qhlyDragButtonOn ? 'on' : 'off'"
           :style="qhlySkinBtnPos"
           data-testid="btn-seat-qhly-skin"
+          @mousedown.stop
+          @mouseup.stop
           @click.stop="emit('cycleQhlySkin', seat)"
         >
           换肤
@@ -504,10 +579,17 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
           class="seat-skinswitch-huanfu-btn seat-qhly-skin-btn"
           style="right: 4px; top: 25px"
           data-testid="btn-seat-skinswitch-huanfu"
+          @mousedown.stop
+          @mouseup.stop
           @click.stop="emit('openSkinSwitchWindow', seat)"
         >
           动皮
         </button>
+        <div v-if="showCaiLanZiPicker" class="seat-cailanzi-picker" data-testid="seat-cailanzi-picker" @click.stop>
+          <button type="button" data-testid="btn-cailanzi-throw-egg" @click.stop="emit('cailanziThrow', { seat: seat.player, emoji: 'egg' })">🥚</button>
+          <button type="button" data-testid="btn-cailanzi-throw-flower" @click.stop="emit('cailanziThrow', { seat: seat.player, emoji: 'flower' })">🌹</button>
+          <button type="button" data-testid="btn-cailanzi-close" @click.stop="emit('cailanziClose')">✕</button>
+        </div>
         <div v-if="seatSayBubble" class="seat-say-bubble" data-testid="seat-say-bubble">
           💬 {{ seatSayBubble }}
         </div>
@@ -588,6 +670,11 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
         >{{ rarityLongMode === 'xinon' ? '✨🐉' : rarityLongMode === 'off' ? '🐲' : '🐉' }}</span>
         <span v-if="cardUseCue" class="tag cue-tag" data-testid="seat-card-cue">{{ cardUseCue }}</span>
         <span v-if="gainStickerSkill" class="tag seat-gain-skill-sticker" data-testid="seat-gain-skill-sticker">✦{{ gainStickerSkill }}</span>
+        <span
+          v-if="foolLiegongTag"
+          :class="foolLiegongTag.cssClass"
+          data-testid="seat-fool-liegong"
+        >{{ foolLiegongTag.label }}</span>
       </div>
       <span v-if="!(rarityLongMode && isNodeEnabled('long'))" v-show="isNodeEnabled('long')" class="seat-node-anchor" data-node-key="long" aria-hidden="true"></span>
 

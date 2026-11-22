@@ -1,5 +1,13 @@
 # G0 · L02 SJ Settings
 
+## 2026-11-22 Batch UI-7（4 配置＋1 表面→5/5 全等价）合入更新（待提交／发布）
+
+基线 HEAD `f6cd6acb9228d8ca2ab490d61c26f1d856f6c502`；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-ui` 独立审查（#126 **`APPROVE`**）与主线 `batch7-ui-cdp.mjs` 实测，本源全 `4` 项配置（`tutorialapk`/`openTools`/`getExtensions`/`tutorial` 三抽屉真实渲染）与 `1` 项表面（`extension.css`）升为 `已复核等价`，达 **`5 / 0 / 0`**（100% 单项已复核等价；整包八项仍 `0/37`）。详见 [Batch UI-7 证据摘要](../../operations/evidence/2026-11-21-ui-batch7-closure/README.md) 与 [inventory_status.json](inventory_status.json)。
+
+| 日期来源快照 | 已复核等价 | 简化近似 | 缺失 |
+| --- | ---: | ---: | ---: |
+| 2026-11-22 Batch UI-7 L02 | 5 | 0 | 0 |
+
 > 核验日期：2026-11-11 · 来源仓：`noname-liuli` · 入口：`archive/upstream/noname-liuli/noname/extension/SJ Settings`  
 > 本页为 E01/G0 深度清单与**裁决 34 逐项上游清单**（武将 / 技能 / 卡牌 / 模式与战役节点 / 配置项 / 界面钩子 / 渲染面 / 现有 `decision34*` 归类）。非整包验收证明。
 
