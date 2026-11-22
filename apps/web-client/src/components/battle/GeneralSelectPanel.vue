@@ -11,6 +11,9 @@ const props = defineProps<{
   shoushaSingleRow?: boolean;
   shoushaDrawLuck?: boolean;
   shoushaInfinityDraw?: boolean;
+  eCssEnabled?: boolean;
+  qhlyChooseOrigin?: boolean;
+  qhlyChooseOriginGuozhan?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -57,20 +60,30 @@ const loadLabel = computed(() => {
 <template>
   <section
     class="panel general-select"
+    :class="{ 'l27-ecss-styled': eCssEnabled !== false }"
     :data-change-wujiang-tx="changeWujiangTx ?? 'shine'"
     :data-shousha-choose="shoushaChoose ?? 'shousha'"
     :data-shousha-choose-type="shoushaChooseType ?? 'new'"
     :data-shousha-single-row="shoushaSingleRow ? 'on' : 'off'"
+    :data-qhly-choose-origin="qhlyChooseOrigin ? 'on' : 'off'"
+    :data-qhly-choose-origin-gz="qhlyChooseOriginGuozhan ? 'on' : 'off'"
     aria-label="选将面板"
     data-testid="general-select-panel"
   >
     <div class="gs-head">
       <div>
-        <h2>选将</h2>
+        <h2>
+          选将
+          <span v-if="eCssEnabled !== false" class="l27-biaotixx" data-testid="l27-ecss-header">· 选将美化</span>
+          <span v-if="eCssEnabled !== false" class="l27-self-ribbon">主视点</span>
+        </h2>
         <p class="muted tiny">
           NC05 · 目标座位 P{{ state.seat }} · {{ loadLabel }} · 点击候选即按名装配
           （原生正式入口，非 debug）
         </p>
+        <div v-if="eCssEnabled !== false" class="l27-jindutiao-track" aria-hidden="true">
+          <div class="l27-jindutiao-fill"></div>
+        </div>
       </div>
       <button
         type="button"
@@ -141,6 +154,9 @@ const loadLabel = computed(() => {
 </template>
 
 <style scoped>
+.general-select {
+  scroll-margin-top: 72px;
+}
 .general-select h2 {
   font-size: 1.05rem;
   margin: 0;

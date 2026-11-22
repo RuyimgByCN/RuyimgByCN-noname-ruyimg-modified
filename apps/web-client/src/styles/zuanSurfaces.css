@@ -1,0 +1,73 @@
+/**
+ * L25 祖安武将 40 项 UI 钩子 & 68 项配置战场与座次视觉样式
+ */
+
+.battle-table[data-zuan-seadream="on"] {
+  box-shadow: inset 0 0 72px rgba(14, 165, 233, 0.35), 0 8px 32px rgba(0, 0, 0, 0.65);
+}
+
+.battle-table[data-zuan-qiankuang="on"] .seat.decade-seat-frame {
+  outline: 1px solid rgba(218, 165, 32, 0.42);
+  outline-offset: -3px;
+}
+
+.battle-table[data-zuan-perspective="on"] .seat.decade-seat-frame:hover {
+  transform: translateY(-2px);
+}
+
+.seat-zuan-relife-pill,
+.seat-zuan-ansha-cloak,
+.seat-zuan-cue-pill {
+  font-size: 0.6rem;
+  font-weight: 800;
+  padding: 0.03rem 0.28rem;
+  border-radius: 4px;
+}
+
+.seat-zuan-relife-pill {
+  background: rgba(15, 118, 110, 0.9);
+  border: 1px solid #2dd4bf;
+  color: #ccfbf1;
+}
+
+.seat-zuan-ansha-cloak {
+  background: rgba(30, 27, 75, 0.92);
+  border: 1px solid #a78bfa;
+  color: #ede9fe;
+}
+
+.seat-zuan-cue-pill {
+  background: rgba(68, 42, 16, 0.9);
+  border: 1px solid #f59e0b;
+  color: #fef3c7;
+}
+
+.zuan-bingle-big-screen,
+.zuan-boss-fall-banner,
+.zuan-lucky-shimmer {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.22rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.zuan-bingle-big-screen {
+  background: linear-gradient(135deg, rgba(127, 29, 29, 0.94), rgba(180, 83, 9, 0.92));
+  border: 1.5px solid #fbbf24;
+  color: #fef3c7;
+}
+
+.zuan-boss-fall-banner {
+  background: linear-gradient(135deg, rgba(88, 28, 135, 0.94), rgba(15, 23, 42, 0.94));
+  border: 1.5px solid #e879f9;
+  color: #fae8ff;
+}
+
+.zuan-lucky-shimmer {
+  background: linear-gradient(135deg, rgba(161, 98, 7, 0.92), rgba(202, 138, 4, 0.92));
+  border: 1px solid #fde047;
+  color: #fef9c3;
+}

@@ -1,7 +1,12 @@
 /**
- * L25 祖安武将原生前端 40 项 UI/音效/判定全屏特效钩子运行时
- * 上游对照: `archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:37514-48503`
+ * L25 祖安武将原生前端 40 项 UI/音效/判定全屏特效钩子 + 68 项配置运行时
+ * 上游对照: `archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:160-332, 37514-51435`
  */
+import {
+  createDefaultZuanConfig,
+  validateZuanConfigPatch,
+  type ZuanUiConfigMap,
+} from "./zuanConfigSchema";
 
 export const ZUAN_UI_HOOK_IDS = [
   "_zuanattacklinecheck",
@@ -49,6 +54,7 @@ export const ZUAN_UI_HOOK_IDS = [
 export type ZuanUiHookId = (typeof ZUAN_UI_HOOK_IDS)[number];
 
 export interface ZuanUiRuntimeState {
+  config: ZuanUiConfigMap;
   attackLineStyle: "guanjie" | "classic" | "laser";
   attackLineOpacity: number;
   mutePaperAudio: boolean;
@@ -66,12 +72,16 @@ export interface ZuanUiRuntimeState {
     | "lebusishu"
     | "bingliang";
   lastAudioCue: string | null;
+  lastControlHook: string | null;
+  zuanSeatCueBySeat: Record<number, string>;
   luckyDrawShimmer: boolean;
   bossDefeatedBanner: boolean;
 }
 
 export function createInitialZuanUiRuntimeState(): ZuanUiRuntimeState {
+  const config = createDefaultZuanConfig();
   return {
+    config,
     attackLineStyle: "guanjie",
     attackLineOpacity: 1.0,
     mutePaperAudio: false,
@@ -82,8 +92,42 @@ export function createInitialZuanUiRuntimeState(): ZuanUiRuntimeState {
     activeWallpaper: "shihai_default",
     judgmentOverlay: "none",
     lastAudioCue: null,
+    lastControlHook: null,
+    zuanSeatCueBySeat: {},
     luckyDrawShimmer: false,
     bossDefeatedBanner: false,
+  };
+}
+
+export function updateZuanConfigInState(
+  state: ZuanUiRuntimeState,
+  patch: Record<string, unknown>,
+): ZuanUiRuntimeState {
+  const { patch: valid } = validateZuanConfigPatch(patch, { strict: false });
+  const config: ZuanUiConfigMap = { ...state.config, ...valid };
+  const attackStyleRaw = String(config.zhishixian ?? "guanjie");
+  const attackLineStyle: ZuanUiRuntimeState["attackLineStyle"] =
+    attackStyleRaw === "classic" || attackStyleRaw === "laser" ? attackStyleRaw : "guanjie";
+  const opiNum = Number.parseFloat(String(config.zhishiopi ?? "100"));
+  return {
+    ...state,
+    config,
+    attackLineStyle,
+    attackLineOpacity: Number.isFinite(opiNum) ? Math.min(1, Math.max(0.1, opiNum / 100)) : 1.0,
+    mutePaperAudio: Boolean(config.audio_draw),
+    skipOpeningSplash: Boolean(config.helasisy),
+    activeWallpaper: String(config.wallpaper ?? state.activeWallpaper),
+  };
+}
+
+export function zuanArenaDatasetAttrs(state: ZuanUiRuntimeState): Record<string, string> {
+  return {
+    "data-zuan-seadream": state.seaDreamPhaseTint ? "on" : "off",
+    "data-zuan-attack-line": state.attackLineStyle,
+    "data-zuan-qiankuang": state.config.qiankuang ? "on" : "off",
+    "data-zuan-perspective": state.config.perspective ? "on" : "off",
+    "data-zuan-newui": state.config.newui ? "on" : "off",
+    "data-zuan-wallpaper": state.activeWallpaper,
   };
 }
 
@@ -96,18 +140,40 @@ export function dispatchZuanUiHook(
   opts?: { seat?: number; reviveTurns?: number; wallpaperId?: string },
 ): ZuanUiRuntimeState {
   const seat = opts?.seat ?? 0;
+  const withControl = (next: ZuanUiRuntimeState): ZuanUiRuntimeState => ({
+    ...next,
+    lastControlHook: hook,
+  });
 
   switch (hook) {
-    case "_zuanattacklinecheck":
+    case "_zuanattacklinecheck": {
       // extension.js:37514: syncs Decade attack-line preset & opacity
-      return { ...state, attackLineStyle: "guanjie" };
+      const resolvedStyle: ZuanUiRuntimeState["attackLineStyle"] =
+        state.config.zhishixian === "classic" || state.config.zhishixian === "laser"
+          ? state.config.zhishixian
+          : "guanjie";
+      return withControl({
+        ...state,
+        attackLineStyle: resolvedStyle,
+        zuanSeatCueBySeat: { ...state.zuanSeatCueBySeat, [seat]: `指示线:${resolvedStyle}` },
+      });
+    }
     case "_extragainskill":
     case "_extraloseCardskill":
     case "_extraloseskill":
     case "_extrauseskill":
       // extension.js:40597-40693: paper draw/discard/use audio gated by audio_draw mute config
-      if (state.mutePaperAudio) return state;
-      return { ...state, lastAudioCue: `paper:${hook}` };
+      if (state.mutePaperAudio) {
+        return withControl({
+          ...state,
+          zuanSeatCueBySeat: { ...state.zuanSeatCueBySeat, [seat]: "纸张静音" },
+        });
+      }
+      return withControl({
+        ...state,
+        lastAudioCue: `paper:${hook}`,
+        zuanSeatCueBySeat: { ...state.zuanSeatCueBySeat, [seat]: `牌效:${hook.replace("_extra", "")}` },
+      });
     case "_extraphaseskill":
     case "_extradieskill":
     case "_extraturnoverskill":
@@ -126,54 +192,66 @@ export function dispatchZuanUiHook(
     case "_phasebeginskill":
     case "_phaseendskill":
     case "_judgeskill":
-    case "_linkskill":
+    case "_linkskill": {
       // extension.js:40500-40925: event SFX & taunt voice cues
-      return { ...state, lastAudioCue: `sfx:${hook}@P${seat}` };
+      const shortTag = hook.replace(/^_/, "").replace(/skill$/, "");
+      return withControl({
+        ...state,
+        lastAudioCue: `sfx:${hook}@P${seat}`,
+        zuanSeatCueBySeat: { ...state.zuanSeatCueBySeat, [seat]: `语音:${shortTag}` },
+      });
+    }
     case "_newBackgroundUse":
       // extension.js:41318: dynamic background rotation on card target completion
-      return { ...state, activeWallpaper: opts?.wallpaperId ?? `shihai_seat_${seat}` };
+      return withControl({ ...state, activeWallpaper: opts?.wallpaperId ?? `shihai_seat_${seat}` });
     case "_zuanboss":
       // extension.js:41545: boss fall overlay banner
-      return { ...state, bossDefeatedBanner: true };
+      return withControl({ ...state, bossDefeatedBanner: true });
     case "_helasisyskill":
       // extension.js:41890: skips opening splash animation when helasisy === true
-      return { ...state, skipOpeningSplash: true, lastAudioCue: "dump_start" };
+      return withControl({ ...state, skipOpeningSplash: true, lastAudioCue: "dump_start" });
     case "_anshaskill":
       // extension.js:42659: removes assassination stealth mark at phaseEnd
-      return {
+      return withControl({
         ...state,
         anshaHiddenSeats: state.anshaHiddenSeats.filter((s) => s !== seat),
-      };
+        zuanSeatCueBySeat: { ...state.zuanSeatCueBySeat, [seat]: "暗杀显影" },
+      });
     case "_seadreammodeskill":
       // extension.js:42815: toggles 幻海 sea-dream phase ambient tint
-      return { ...state, seaDreamPhaseTint: !state.seaDreamPhaseTint };
+      return withControl({ ...state, seaDreamPhaseTint: !state.seaDreamPhaseTint });
     case "_relifeskill":
       // extension.js:43402: updates revive countdown HUD badge
-      return {
+      return withControl({
         ...state,
         reviveCountdownBySeat: {
           ...state.reviveCountdownBySeat,
           [seat]: Math.max(0, opts?.reviveTurns ?? 3),
         },
-      };
+      });
     case "_haoyunlai":
       // extension.js:47584: lucky-star drawBegin shimmer cue
-      return { ...state, luckyDrawShimmer: true, lastAudioCue: "haoyunlai" };
+      return withControl({
+        ...state,
+        luckyDrawShimmer: true,
+        lastAudioCue: "haoyunlai",
+        zuanSeatCueBySeat: { ...state.zuanSeatCueBySeat, [seat]: "✨好运来" },
+      });
     case "_bingleBigScreen":
     case "_bingletexiaoshandian":
     case "_thundertexiao":
     case "_thundertexiao2":
       // extension.js:47880, 47984, 48389, 48503: lightning judgment full-screen overlay
-      return { ...state, judgmentOverlay: "shandian", lastAudioCue: "judge:shandian" };
+      return withControl({ ...state, judgmentOverlay: "shandian", lastAudioCue: "judge:shandian" });
     case "_bingletexiaohuoshan":
-      return { ...state, judgmentOverlay: "huoshan", lastAudioCue: "judge:huoshan" };
+      return withControl({ ...state, judgmentOverlay: "huoshan", lastAudioCue: "judge:huoshan" });
     case "_bingletexiaohongshui":
-      return { ...state, judgmentOverlay: "hongshui", lastAudioCue: "judge:hongshui" };
+      return withControl({ ...state, judgmentOverlay: "hongshui", lastAudioCue: "judge:hongshui" });
     case "_bingletexiaofulei":
-      return { ...state, judgmentOverlay: "fulei", lastAudioCue: "judge:fulei" };
+      return withControl({ ...state, judgmentOverlay: "fulei", lastAudioCue: "judge:fulei" });
     case "_bingletexiaole":
-      return { ...state, judgmentOverlay: "lebusishu", lastAudioCue: "judge:lebusishu" };
+      return withControl({ ...state, judgmentOverlay: "lebusishu", lastAudioCue: "judge:lebusishu" });
     case "_bingletexiaobingliang":
-      return { ...state, judgmentOverlay: "bingliang", lastAudioCue: "judge:bingliang" };
+      return withControl({ ...state, judgmentOverlay: "bingliang", lastAudioCue: "judge:bingliang" });
   }
 }

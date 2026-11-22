@@ -44,6 +44,20 @@ import {
   dispatchQhlyUiHook,
   type QhlyRuntimeState,
 } from "../../engine/surfaces/qhlySurface";
+import {
+  createInitialSkinSwitchRuntimeState,
+  skinSwitchArenaDatasetAttrs,
+} from "../../engine/surfaces/skinSwitchSurface";
+import {
+  createInitialZuanUiRuntimeState,
+  zuanArenaDatasetAttrs,
+} from "../../engine/surfaces/zuanSurface";
+import {
+  batch6PatchDatasetAttrs,
+  createInitialBatch6PatchUiState,
+  dispatchL10EmojiRebate,
+  type Batch6PatchUiState,
+} from "../../engine/surfaces/batch6PatchSurfacesRuntime";
 import { DECADE_NOSKILL_CONTROL_IDS } from "../../engine/surfaces/decadeMarkSkillsData";
 import type { DecadeUiRuntimeState } from "../../engine/surfaces/decadeUiSurface";
 import { skillDisplayName } from "../../engine/appearanceStore";
@@ -82,6 +96,7 @@ const emit = defineEmits<{
   "update:decadeUi": [next: DecadeUiRuntimeState];
   "update:shoushaUi": [next: ShoushaUiRuntimeState];
   "update:qhlyUi": [next: QhlyRuntimeState];
+  "update:batch6Patch": [next: Batch6PatchUiState];
   sortHand: [sortedIds: number[]];
   endPhase: [];
   resolveChoice: [action: ResolveChoiceAction];
@@ -224,6 +239,15 @@ const shoushaConfig = computed(() => shoushaUiState.value?.config ?? createDefau
 const l20UiState = computed(() => props.surfaces?.uiSuites?.l20Ui ?? createInitialL20RuntimeState());
 const qhlyUiState = computed(() => props.surfaces?.uiSuites?.qhly);
 const qhlyConfig = computed(() => qhlyUiState.value?.config ?? createDefaultQhlyConfig());
+const skinSwitchState = computed(
+  () => props.surfaces?.uiSuites?.skinSwitch ?? createInitialSkinSwitchRuntimeState(),
+);
+const zuanUiState = computed(
+  () => props.surfaces?.uiSuites?.zuanUi ?? createInitialZuanUiRuntimeState(),
+);
+const batch6PatchState = computed(
+  () => props.surfaces?.uiSuites?.batch6Patch ?? createInitialBatch6PatchUiState(),
+);
 const inspectedShoushaSeat = ref<SeatView | null>(null);
 const activeShoushaSurfacesList = computed(() =>
   resolveActiveShoushaSurfaces(shoushaConfig.value, {
@@ -251,6 +275,9 @@ const decadeDatasetAttrs = computed(() => ({
   ...shoushaArenaDatasetAttrs(shoushaConfig.value),
   ...qhlyArenaDatasetAttrs(qhlyConfig.value),
   ...l20ArenaDatasetAttrs(l20UiState.value),
+  ...skinSwitchArenaDatasetAttrs(skinSwitchState.value),
+  ...zuanArenaDatasetAttrs(zuanUiState.value),
+  ...batch6PatchDatasetAttrs(batch6PatchState.value),
   "data-prestart": !props.view || props.view.round < 1 ? "on" : "off",
   "data-player-css": decadeUiState.value?.playerCssVariant ?? "player_new.css",
   "data-active-surfaces": (decadeUiState.value?.activeCssSurfaces ?? []).join(" "),
@@ -324,9 +351,37 @@ function onCycleSeatQhlySkin(seat: SeatView) {
     hook: "_qhly_addButton",
     seat: seat.player,
     generalId: gen,
-    dragOffset: { leftPx: 8 + ((next.autoRotateCount * 4) % 24), topPx: 8 },
+    dragOffset: { leftPx: 94 + ((next.autoRotateCount * 2) % 4), topPx: 48 },
   });
+  if (next.config.qhly_smallwiningame) {
+    next = { ...next, miniSkinWinOpen: true, miniSkinWinSeat: seat.player };
+  }
   emit("update:qhlyUi", next);
+}
+
+function onSelectMiniWinSkin(skinTag: string) {
+  if (!qhlyUiState.value) return;
+  const seatId = qhlyUiState.value.miniSkinWinSeat ?? props.selfId;
+  const targetSeat = seats().find((s) => s.player === seatId);
+  const gen = targetSeat?.generals?.[0]?.name ?? `seat_${seatId}`;
+  emit("update:qhlyUi", {
+    ...qhlyUiState.value,
+    replaceSkinByGeneral: { ...qhlyUiState.value.replaceSkinByGeneral, [gen]: skinTag },
+    miniSkinWinOpen: qhlyUiState.value.config.qhly_smallwinclosewhenchange ? false : true,
+  });
+}
+
+function onTriggerL10EmojiRebate() {
+  const target = seats().find((s) => s.player !== props.selfId)?.player ?? 1;
+  emit(
+    "update:batch6Patch",
+    dispatchL10EmojiRebate(batch6PatchState.value, {
+      trigger: "recover",
+      fromSeat: props.selfId,
+      toSeat: target,
+      isEnemy: true,
+    }),
+  );
 }
 
 function seats(): SeatView[] {
@@ -706,8 +761,8 @@ const tabletopTipText = computed(() => {
   }
   if (selectedCard.value != null) {
     return canPlayWithoutTarget.value
-      ? `已选中手牌 #${selectedCard.value}，点击「直接打出」或选择目标`
-      : `已选中手牌 #${selectedCard.value}，请在牌桌上选择目标角色`;
+      ? `已选 #${selectedCard.value}，可点「直接打出」或选目标`
+      : `已选 #${selectedCard.value}，请在牌桌选目标`;
   }
   if (props.view) {
     if (props.view.current_player === props.selfId && props.view.phase === "Play") {
@@ -786,6 +841,7 @@ const endPhaseDisabled = computed(
         zone="stage"
         :decade-ui="decadeUiState"
         :shousha-ui="shoushaUiState"
+        :zuan-ui="zuanUiState"
         :live-line-arc="liveTargetArc"
         :view="view"
         :self-id="selfId"
@@ -827,11 +883,14 @@ const endPhaseDisabled = computed(
             :l20-ui="l20UiState"
             :qhly-ui="qhlyUiState"
             :skin-switch="surfaces?.uiSuites?.skinSwitch"
+            :zuan-ui="zuanUiState"
             :decade-style="surfaces?.theme?.decadeSkinStyle"
             :l20-marks="surfaces?.theme?.l20Marks"
             @select="onTargetSelect"
             @open-detail="(s) => (inspectedShoushaSeat = s)"
             @cycle-qhly-skin="onCycleSeatQhlySkin"
+            @open-qhly-window="() => emit('openModal', 'qhly')"
+            @open-skin-switch-window="() => emit('openModal', 'skinswitch')"
           />
         </div>
       </div>
@@ -871,6 +930,30 @@ const endPhaseDisabled = computed(
           >
             ✦ {{ l20UiState.activeBanner.title }}
           </div>
+          <div v-if="l20UiState.binglinCrest" class="l20-binglin-crest" data-testid="l20-binglin-crest">
+            兵临 · {{ l20UiState.binglinCrest }}{{ l20UiState.binglinTeammateHint ? " (队友协同)" : "" }}
+          </div>
+          <div v-if="l20UiState.guozhanGlobalMarks.length > 0" class="l20-gold-caption l20-guozhan-marks-pill" data-testid="l20-guozhan-marks">
+            国战印记：{{ l20UiState.guozhanGlobalMarks.join(" / ") }}
+          </div>
+          <div v-if="zuanUiState.judgmentOverlay !== 'none'" class="zuan-bingle-big-screen" data-testid="zuan-bingle-big-screen">
+            ⚡ 祖安判定全屏 · {{ zuanUiState.judgmentOverlay }}
+          </div>
+          <div v-if="zuanUiState.bossDefeatedBanner && zuanUiState.config.showboss" class="zuan-boss-fall-banner" data-testid="zuan-boss-banner">
+            👑 首领落幕横幅
+          </div>
+          <div v-if="zuanUiState.luckyDrawShimmer" class="zuan-lucky-shimmer" data-testid="zuan-lucky-shimmer">
+            🌟 好运来 · 摸牌吉兆
+          </div>
+          <div v-if="batch6PatchState.longxueCmBurstLabel" class="longxue-cm-burst-pill" data-testid="longxue-cm-burst">
+            ⚔ {{ batch6PatchState.longxueCmBurstLabel }}
+          </div>
+          <div v-if="batch6PatchState.thunderCssEnabled && batch6PatchState.thunderSkillTip" class="th-skilltip" data-testid="l28-thunder-tip">
+            ⚡ {{ batch6PatchState.thunderSkillTip }}
+          </div>
+          <div v-if="batch6PatchState.activeEmojiRebate" class="emojiTarget emojiEggFly" data-testid="l10-emoji-rebate">
+            {{ batch6PatchState.activeEmojiRebate.icon }} P{{ batch6PatchState.activeEmojiRebate.fromSeat }} → P{{ batch6PatchState.activeEmojiRebate.toSeat }} {{ batch6PatchState.activeEmojiRebate.label }}
+          </div>
 
           <section v-if="discardCards().length > 0" class="discard-pile" aria-label="弃牌堆">
             <span class="muted discard-title">弃牌堆 · {{ discardCards().length }}</span>
@@ -891,17 +974,40 @@ const endPhaseDisabled = computed(
         </div>
 
         <div class="prompt-and-controls">
-          <section v-if="mySkills().length" class="skill-bar" aria-label="可发动技能">
+          <section
+            v-if="mySkills().length || (batch6PatchState.longxueMain1Enabled && surfaces?.longxue?.shengjian)"
+            class="skill-bar"
+            aria-label="可发动技能"
+          >
             <span class="skill-bar-label">技能</span>
             <button
               v-for="skill in mySkills()"
               :key="skill.id"
               type="button"
               class="decade-skill-btn"
-              :class="{ primary: selectedSkill?.id === skill.id }"
+              :class="{
+                primary: selectedSkill?.id === skill.id,
+                'is-longxue-special':
+                  batch6PatchState.longxueMain1Enabled &&
+                  /^(mbcm|mbjuejin|mbqianlong)/.test(skill.name ?? ''),
+              }"
               @click="onSkillSelect(skill)"
             >
               {{ skillLabel(skill) }}{{ skill.view_as ? " · 视为" : "" }}
+            </button>
+            <button
+              v-if="batch6PatchState.longxueMain1Enabled && surfaces?.longxue?.shengjian"
+              type="button"
+              class="decade-skill-btn is-longxue-special"
+              data-testid="btn-l29-main1-shengjian"
+              @click="
+                emit('update:batch6Patch', {
+                  ...batch6PatchState,
+                  longxueCmBurstLabel: `潜龙剑意 · 道心 ${surfaces?.longxue?.daoxin ?? 0}/99`,
+                })
+              "
+            >
+              ⚔ 潜龙 · main1
             </button>
           </section>
 
@@ -1049,7 +1155,69 @@ const endPhaseDisabled = computed(
             >
               ⏸
             </button>
+            <span v-if="l20UiState.recastCount > 0" class="l20-recast-badge desktop-only-pill" data-testid="l20-recast-pill">
+              ♻{{ l20UiState.recastCount }}
+            </span>
+            <span v-if="batch6PatchState.shichangshi" class="l10-shichangshi-badge desktop-only-pill" data-testid="l10-shichangshi-badge">
+              十常侍
+            </span>
+            <span v-if="batch6PatchState.thunderCssEnabled" class="th-yuqi-banner desktop-only-pill" data-testid="l28-thunder-yuqi">
+              ⚡雷
+            </span>
+            <button
+              v-if="skinSwitchState.config.showEditMenu"
+              type="button"
+              class="decade-mini-pill desktop-only-pill"
+              data-testid="btn-skinswitch-quick-edit"
+              @click="emit('openModal', 'skinswitch')"
+            >
+              动皮
+            </button>
+            <button
+              v-if="skinSwitchState.config.showPreviewDynamicMenu"
+              type="button"
+              class="decade-mini-pill desktop-only-pill"
+              data-testid="btn-skinswitch-quick-preview"
+              @click="emit('openModal', 'skinswitch')"
+            >
+              Spine
+            </button>
+            <button
+              type="button"
+              class="emojiBtn desktop-only-pill"
+              data-testid="btn-l10-emoji"
+              title="L10 史诗互动表情"
+              @click="onTriggerL10EmojiRebate"
+            >
+              🎭
+            </button>
+            <button
+              type="button"
+              class="decade-mini-pill desktop-only-pill"
+              data-testid="btn-tabletop-zuan-panel"
+              title="祖安68配置与L10/L27-L29开关"
+              @click="emit('openModal', 'zuan-panel')"
+            >
+              ⚙祖安
+            </button>
           </div>
+        </div>
+      </div>
+
+      <div
+        v-if="qhlyUiState?.miniSkinWinOpen && qhlyUiState.config.qhly_smallwiningame"
+        class="qhly-mini-skin-win"
+        :data-dragon-loc="qhlyUiState.config.qhly_dragonlocation"
+        :data-style="qhlyUiState.config.qhly_smallwindowstyle"
+        data-testid="qhly-mini-skin-win"
+      >
+        <div class="tiny" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.35rem;">
+          <strong>千幻快捷小窗 (P{{ qhlyUiState.miniSkinWinSeat ?? selfId }})</strong>
+          <button type="button" data-testid="btn-close-qhly-mini" @click="emit('update:qhlyUi', { ...qhlyUiState, miniSkinWinOpen: false })">✕</button>
+        </div>
+        <div style="display:flex;gap:0.3rem;flex-wrap:wrap;">
+          <button type="button" data-testid="btn-qhly-mini-pick-epic" @click="onSelectMiniWinSkin('epic_mythic')">传说冠绝</button>
+          <button type="button" data-testid="btn-qhly-mini-pick-origin" @click="onSelectMiniWinSkin('origin')">还原经典</button>
         </div>
       </div>
 
@@ -1070,6 +1238,9 @@ const endPhaseDisabled = computed(
           :actionable-ids="actionableCardIds"
           :decade-config="decadeConfig"
           :decade-ui="decadeUiState"
+          :card-fold-enabled="batch6PatchState.cardFold"
+          :card-fold-proportion="batch6PatchState.cardFoldProportion"
+          :card-phantom-enabled="batch6PatchState.cardPhantom"
           @select="onCardSelect"
           @drag-start="onCardDragStart"
           @sort-hand="(ids) => emit('sortHand', ids)"
@@ -1213,7 +1384,8 @@ const endPhaseDisabled = computed(
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    overflow-y: auto;
+    gap: 0.25rem;
+    overflow: hidden;
     pointer-events: none;
   }
   .tabletop-center-zone > * {
@@ -1223,22 +1395,29 @@ const endPhaseDisabled = computed(
 
 .center-table-cards {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
+  align-content: flex-start;
   justify-content: center;
-  margin: auto 0;
-  gap: 0.45rem;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0.08rem 0;
+  gap: 0.25rem 0.42rem;
   max-width: 100%;
 }
 .discard-pile {
-  padding: 0.4rem 0.7rem;
+  padding: 0.25rem 0.55rem;
   background: rgba(0, 0, 0, 0.36);
   border: 1px dashed rgba(232, 165, 75, 0.3);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.2rem;
 }
 .discard-title {
   font-size: 0.72rem;
@@ -1251,8 +1430,8 @@ const endPhaseDisabled = computed(
   justify-content: center;
 }
 .discard-card {
-  min-width: 44px;
-  height: 58px;
+  min-width: 40px;
+  height: 46px;
   padding: 0.18rem 0.25rem;
   display: flex;
   flex-direction: column;
@@ -1291,9 +1470,10 @@ const endPhaseDisabled = computed(
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.45rem;
+  flex-shrink: 0;
+  gap: 0.28rem;
   width: 100%;
-  max-width: 760px;
+  max-width: 100%;
 }
 
 .skill-bar {
@@ -1397,28 +1577,39 @@ const endPhaseDisabled = computed(
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 0.65rem;
-  padding: 0.28rem 0.9rem;
-  border-radius: 999px;
-  background: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.48) 15%, rgba(0, 0, 0, 0.48) 85%, transparent 100%);
+  gap: 0.22rem 0.32rem;
+  max-width: 100%;
+  padding: 0.18rem 0.55rem;
+  border-radius: 14px;
+  background: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.48) 10%, rgba(0, 0, 0, 0.48) 90%, transparent 100%);
+}
+.hand-tip-bar > * {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+@media (max-width: 1080px) {
+  .desktop-only-pill {
+    display: none;
+  }
 }
 .hand-tip-text {
-  font-size: 0.84rem;
+  font-size: 0.74rem;
   font-weight: 600;
   color: #f8f4d9;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.01em;
   text-shadow: 0 1px 3px #000;
 }
 .end-phase-btn {
-  padding: 0.28rem 0.9rem;
-  font-size: 0.8rem;
+  padding: 0.22rem 0.65rem;
+  font-size: 0.74rem;
+  min-width: 0;
   background: linear-gradient(180deg, #7c4a19, #4e2d0d);
   border-color: rgba(232, 165, 75, 0.72);
 }
 .decade-mini-pill {
-  padding: 0.16rem 0.42rem;
+  padding: 0.12rem 0.34rem;
   border-radius: 999px;
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   background: rgba(24, 28, 36, 0.88);
   border: 1px solid rgba(232, 165, 75, 0.45);
   color: #fde68a;
@@ -1434,19 +1625,19 @@ const endPhaseDisabled = computed(
 /* Mobile / narrow viewport wrap-around perimeter grid */
 @media (max-width: 767px) {
   .board {
-    gap: 0.35rem;
+    gap: 0.25rem;
   }
   .battle-table {
     min-height: 0;
     scroll-margin-top: 12px;
-    padding: 0.42rem;
+    padding: 0.3rem;
     border-width: 4px;
   }
   .arena-stage {
     min-height: 0;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.34rem;
+    gap: 0.24rem;
     align-items: start;
   }
   .seats {
@@ -1462,8 +1653,8 @@ const endPhaseDisabled = computed(
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.28rem;
-    padding: 0.14rem 0;
+    gap: 0.18rem;
+    padding: 0.06rem 0;
   }
   .seat-wrapper[data-position="0"] {
     grid-column: 1 / -1;
@@ -1475,6 +1666,9 @@ const endPhaseDisabled = computed(
     display: flex;
     flex-direction: column;
     align-items: stretch;
+  }
+  .desktop-only-pill {
+    display: none;
   }
 }
 </style>

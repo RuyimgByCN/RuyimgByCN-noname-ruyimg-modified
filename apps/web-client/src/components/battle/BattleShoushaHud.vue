@@ -12,7 +12,8 @@ export type BattleModalId =
   | "omnisearch"
   | "taixu"
   | "decade-menu"
-  | "shousha-menu";
+  | "shousha-menu"
+  | "zuan-panel";
 
 const props = defineProps<{
   view: ObserverSnapshot | null;

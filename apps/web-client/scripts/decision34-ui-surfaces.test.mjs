@@ -47,6 +47,7 @@ import {
   sortShoushaHandCards,
   sortSuitsDecadeSymbols,
   switchTaixuViewport,
+  updateSkinSwitchConfigInState,
 } from "../src/engine/extensionSurfaceRuntime.ts";
 
 test("L09 千幻聆音: implements all 8 UI hooks, 12 surface presets, and skinShare.js voice resolution", () => {
@@ -159,7 +160,9 @@ test("L24 皮肤切换: implements all 22 UI hooks, 10 CSS/animation surfaces, e
   assert.equal(state.audioPlayQueue[0]?.card, "sha_fire");
   assert.equal(state.audioPlayQueue[1]?.card, "shan");
 
-  // extension.js:337 & 11702: _gj flips X when seatScreenXPct < 50 and isAttackFlipX === true
+  // extension.js:337 & 11702: _gj flips X when seatScreenXPct < 50 and isAttackFlipX === true (default init is false)
+  assert.equal(state.isAttackFlipX, false);
+  state = updateSkinSwitchConfigInState(state, { isAttackFlipX: true }, { persist: false });
   state = dispatchSkinSwitchHook(state, { hook: "_gj", seat: 2, seatScreenXPct: 22 });
   assert.deepEqual(state.lastChukuangAction, { seat: 2, action: "GongJi", flipX: true });
   state = dispatchSkinSwitchHook(state, { hook: "_gj", seat: 1, seatScreenXPct: 75 });

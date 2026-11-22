@@ -476,10 +476,17 @@ export function qhlyArenaDatasetAttrs(cfg: QhlyUiConfig): Record<string, string>
     "data-qhly-newui": cfg.qhly_newui ? "on" : "off",
     "data-qhly-viewskin": cfg.qhly_currentViewSkin,
     "data-qhly-lutou": cfg.qhly_lutou ? cfg.qhly_lutouType : "off",
+    "data-qhly-lutou-fix": cfg.lutouFixx,
     "data-qhly-lvjing": cfg.lvjingFixx ? "on" : "off",
     "data-qhly-skin-btn": cfg.qhly_skinButton ? "on" : "off",
+    "data-qhly-drag-button": cfg.qhly_dragButton ? "on" : "off",
     "data-qhly-showrarity": cfg.qhly_showrarity ? "on" : "off",
     "data-qhly-smallwin": cfg.qhly_smallwindowstyle,
+    "data-qhly-dragon-loc": cfg.qhly_dragonlocation,
     "data-qhly-hide-shuimo-cover": cfg.qhly_hideShuimoCover ? "on" : "off",
+    "data-qhly-guozhan": cfg.qhly_guozhan ? "on" : "off",
+    "data-qhly-playerwindow": cfg.qhly_playerwindow ? "on" : "off",
+    "data-qhly-autoc": cfg.qhly_autoChangeSkin,
+    "data-qhly-preload": cfg.qhly_funcLoadInPrecontent ? "on" : "off",
   };
 }

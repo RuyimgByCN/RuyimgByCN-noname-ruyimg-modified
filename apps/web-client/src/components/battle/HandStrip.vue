@@ -16,6 +16,9 @@ const props = defineProps<{
   actionableIds: number[];
   decadeConfig?: DecadeUiConfig;
   decadeUi?: DecadeUiRuntimeState;
+  cardFoldEnabled?: boolean;
+  cardFoldProportion?: 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+  cardPhantomEnabled?: boolean;
 }>();
 const effectiveCfg = computed(() => props.decadeConfig ?? props.decadeUi?.config);
 const specialHelTag = computed(() => {
@@ -65,10 +68,20 @@ const displayCards = computed(() => {
   return [...props.cards].sort((a, b) => (orderMap.get(a.id) ?? 0) - (orderMap.get(b.id) ?? 0));
 });
 
+const selectedCardObj = computed(() =>
+  selectedId.value == null
+    ? null
+    : (displayCards.value.find((c) => c.id === selectedId.value) ?? null),
+);
+
 const overlapPx = computed(() => {
-  if (displayCards.value.length <= 5) return "-8px";
+  if (!props.cardFoldEnabled) {
+    const pct = (props.cardFoldProportion ?? 10) / 100;
+    return `-${Math.round(92 * pct * 0.22)}px`;
+  }
+  if (displayCards.value.length <= 5) return "-14px";
   if (displayCards.value.length <= 8) return "-18px";
-  return "-28px";
+  return "-24px";
 });
 
 function toggleHandSort() {
@@ -132,7 +145,12 @@ function onDragEnd() {
 </script>
 
 <template>
-  <section class="hand decade-hand-wrap" aria-label="手牌">
+  <section
+    class="hand decade-hand-wrap"
+    :data-l10-card-fold="cardFoldEnabled ? 'on' : 'off'"
+    :data-l10-fold-proportion="cardFoldProportion ?? 10"
+    aria-label="手牌"
+  >
     <div class="hand-header">
       <div class="hand-meta">
         <span class="title">
@@ -213,6 +231,23 @@ function onDragEnd() {
           <span class="rank">{{ rankLabel(c.rank) }}</span>
         </div>
       </button>
+      <div
+        v-if="cardPhantomEnabled && selectedCardObj"
+        class="card phantom l10-card-phantom"
+        :class="`card-cat-${cardCategory(selectedCardObj)}`"
+        style="margin-left: 14px; margin-right: 0"
+        data-testid="l10-card-phantom"
+        aria-hidden="true"
+      >
+        <div class="card-corner top-left">
+          <span class="suit" :data-suit="selectedCardObj.suit">{{ suitGlyph(selectedCardObj.suit) }}</span>
+          <span class="rank">{{ rankLabel(selectedCardObj.rank) }}</span>
+        </div>
+        <div class="card-body">
+          <span class="card-name">{{ cardDisplayName(selectedCardObj) }}</span>
+          <span class="l10-phantom-tag">幻影出牌 #{{ selectedCardObj.id }}</span>
+        </div>
+      </div>
       <p v-if="!cards.length" class="muted empty">无可见手牌</p>
     </div>
   </section>

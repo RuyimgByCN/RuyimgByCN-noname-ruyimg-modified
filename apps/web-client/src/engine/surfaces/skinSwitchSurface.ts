@@ -1,11 +1,17 @@
 /**
  * L24 皮肤切换原生前端渲染面与全部 22 项 UI 钩子运行时
  * 上游对照:
- * - `archive/upstream/noname-liuli/noname/extension/皮肤切换/extension.js:176-1680`
- * - `archive/upstream/noname-liuli/noname/extension/皮肤切换/_其他js/千幻1.5精简版_extension.js:770-810`
- * - `archive/upstream/noname-liuli/noname/extension/皮肤切换/animation.js:1-1321`
+ * - `archive/upstream/noname-liuli/noname/extension/皮肤切换/extension.js:176-1680, 11634-11744`
  * - `component/{iconfont,interactive-chukuang,message,skeletonEditor}.css` & `style/{base,cang-zhen-ge,dynamic,edit,light-modal}.css`
  */
+import {
+  createDefaultSkinSwitchConfig,
+  loadPersistedSkinSwitchConfig,
+  normalizeSkinSwitchConfig,
+  persistSkinSwitchConfig,
+  validateSkinSwitchConfigPatch,
+  type SkinSwitchUiConfig,
+} from "./skinSwitchConfigSchema";
 
 export type SkinSwitchUiHookId =
   | "_qhly_autoc"
@@ -98,7 +104,12 @@ export interface SavedDynamicParams {
 }
 
 export interface SkinSwitchRuntimeState {
-  activeModal: "none" | "cang-zhen-ge" | "skeletonEditor" | "edit" | "light-modal";
+  config: SkinSwitchUiConfig;
+  activeSurface: SkinSwitchSurfaceId;
+  activeModal: "none" | "cang-zhen-ge" | "skeletonEditor" | "edit" | "light-modal" | "interactive-chukuang";
+  gxnrDialogOpen: boolean;
+  generatedDynamicSnippet: string | null;
+  generatedTemplateSnippet: string | null;
   newDecadeStyleOn: boolean;
   isAttackFlipX: boolean;
   useDynamicChukuang: boolean;
@@ -112,7 +123,9 @@ export interface SkinSwitchRuntimeState {
   toastMessage: string | null;
 }
 
-export function createInitialSkinSwitchRuntimeState(): SkinSwitchRuntimeState {
+export function createInitialSkinSwitchRuntimeState(
+  opts?: { usePersistedConfig?: boolean },
+): SkinSwitchRuntimeState {
   const defaultParams: SavedDynamicParams = {
     x: 4,
     y: 0,
@@ -121,11 +134,19 @@ export function createInitialSkinSwitchRuntimeState(): SkinSwitchRuntimeState {
     speed: 1.0,
     clipDynamicBg: false,
   };
+  const config = opts?.usePersistedConfig
+    ? loadPersistedSkinSwitchConfig()
+    : createDefaultSkinSwitchConfig();
   return {
+    config,
+    activeSurface: "cang-zhen-ge.css",
     activeModal: "none",
+    gxnrDialogOpen: false,
+    generatedDynamicSnippet: null,
+    generatedTemplateSnippet: null,
     newDecadeStyleOn: false,
-    isAttackFlipX: true,
-    useDynamicChukuang: true,
+    isAttackFlipX: config.isAttackFlipX,
+    useDynamicChukuang: config.useDynamic,
     lastChukuangAction: null,
     audioPlayQueue: [],
     yuanhuGroupBySeat: { 0: "wei", 1: "shu" },
@@ -134,6 +155,96 @@ export function createInitialSkinSwitchRuntimeState(): SkinSwitchRuntimeState {
     specialFormBySeat: { 0: "base" },
     damageTimesBySeat: {},
     toastMessage: null,
+  };
+}
+
+export function updateSkinSwitchConfigInState(
+  state: SkinSwitchRuntimeState,
+  patch: Partial<SkinSwitchUiConfig>,
+  opts?: { persist?: boolean },
+): SkinSwitchRuntimeState {
+  const { patch: valid } = validateSkinSwitchConfigPatch(patch as Record<string, unknown>, {
+    strict: false,
+  });
+  const config = normalizeSkinSwitchConfig({ ...state.config, ...valid });
+  if (opts?.persist !== false) persistSkinSwitchConfig(config);
+  return {
+    ...state,
+    config,
+    isAttackFlipX: patch.isAttackFlipX !== undefined ? config.isAttackFlipX : state.isAttackFlipX,
+    useDynamicChukuang:
+      patch.useDynamic !== undefined ? config.useDynamic : state.useDynamicChukuang,
+    toastMessage: patch.GXNR !== undefined ? "已加载 L24 1.24 净室更新摘要" : state.toastMessage,
+  };
+}
+
+export function runSkinSwitchActionConfig(
+  state: SkinSwitchRuntimeState,
+  key: "previewDynamic" | "resetArchiveDynamicSkin" | "genDynamicSkin" | "genDyTempFile",
+): SkinSwitchRuntimeState {
+  if (key === "previewDynamic") {
+    return {
+      ...state,
+      activeSurface: "skeletonEditor.css",
+      activeModal: "skeletonEditor",
+      config: { ...state.config, previewDynamic: true },
+      toastMessage: "已打开自备 Spine 4.0 预览台",
+    };
+  }
+  if (key === "resetArchiveDynamicSkin") {
+    const resetParam: SavedDynamicParams = { x: 0, y: 0, scale: 1.0, angle: 0, speed: 1.0, clipDynamicBg: false };
+    return {
+      ...state,
+      config: { ...state.config, resetArchiveDynamicSkin: true },
+      savedParamsByGeneral: { caocao: resetParam },
+      appliedParamsBySeat: { 0: resetParam },
+      toastMessage: "已重置动皮坐标存档参数",
+    };
+  }
+  if (key === "genDynamicSkin") {
+    const snippet = JSON.stringify(
+      {
+        decadeDynamicParams: state.savedParamsByGeneral,
+        mode: "cleanroom-param-converter",
+        spineRequiredFromUser: true,
+      },
+      null,
+      2,
+    );
+    return {
+      ...state,
+      activeSurface: "edit.css",
+      config: { ...state.config, genDynamicSkin: true },
+      generatedDynamicSnippet: snippet,
+      toastMessage: "已生成十周年动态参数模板（零资产纯配置）",
+    };
+  }
+  const tpl = JSON.stringify(
+    {
+      folderLayout: "武将中文名或id/皮肤名称/骨骼.json|.skel",
+      template: { x: [0, 0], y: [0, 0], scale: 1, action: "DaiJi", version: "4.0" },
+    },
+    null,
+    2,
+  );
+  return {
+    ...state,
+    activeSurface: "interactive-chukuang.css",
+    config: { ...state.config, genDyTempFile: true },
+    generatedTemplateSnippet: tpl,
+    toastMessage: "已生成自备骨骼标准目录模板",
+  };
+}
+
+export function skinSwitchArenaDatasetAttrs(state: SkinSwitchRuntimeState): Record<string, string> {
+  return {
+    "data-skinswitch-surface": state.activeSurface,
+    "data-skinswitch-top-arc": state.config.showTopArc ? "on" : "off",
+    "data-skinswitch-hide-huanfu": state.config.hideHuanFu ? "on" : "off",
+    "data-skinswitch-cug-bg": state.config.cugDynamicBg ? "on" : "off",
+    "data-skinswitch-use-dynamic": state.useDynamicChukuang ? "on" : "off",
+    "data-skinswitch-click-player": state.config.clickPlayerDynamic ? "on" : "off",
+    "data-skinswitch-preview-dyn": state.config.previewSkinsDynamic ? "on" : "off",
   };
 }
 

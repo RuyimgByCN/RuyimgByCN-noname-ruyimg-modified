@@ -9,6 +9,13 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-22 Batch UI-6（L20/L09/L24/L27/L29/L10 界面闭环与 L25/L28 共 +158）合入（待提交／发布）
+
+- **基线、发布与版本**：HEAD `920f4fac0c5fa4b84da906f453e90e1d9f459483`（Batch U01-1 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `44963498759` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。
+- **Batch UI-6 集成与复核**：合入 `swarm/conv-ui` `77fd89711..5eb822daa`（`verifier-ui` #109 **`APPROVE`**）：依裁决 35/38 完成 `L20` 终 10 钩子、`L09` 终 44 配置（含 `qhly_listdefaultpage` 子页与本地回退）、`L24` 全 46 项（无商业 Spine）、`L25` 46 纯 UI 项、`L27` `e.css`、`L28` `thunder.css`、`L29` 4 UI 项与 `L10` 6 UI 项，补齐 `[动皮]`/`[换肤]` 边界与 `cugDynamicBg` 局部裁剪。
+- **清单计数与整包签署**：按 #109 升格 **158 项**（`L09` **102/0/0**、`L24` **46/0/0**、`L27` **54/0/0**、`L29` **9/0/0**、`L10` **17/0/0**、`L20` **92/3/0**、`L25` **239/18/0**、`L28` **55/1/0**）；全仓更新为 **已复核等价 1,491／简化近似 2,933／缺失 0**，整包八项签署仍 `0/37`。
+- **主线实测**：5 crate `-D warnings`、`wasm32`、4 crate **`2,656/0/6`**、`--workspace --no-fail-fast` **`8,004/0/8`**、`conformance` **`19/19`**、`desktop-client` **`20/0/1`**、跨端校验、`web-client` `typecheck`＋`test`（**520/0**）＋`build:native`＋`smoke:native`（**83/0**）＋`build`、8 套 Chrome CDP（`60 fps`、`consoleErrors=[]`）与 `preflight.py` 全过，见 [Batch UI-6 证据](../operations/evidence/2026-11-21-ui-l24-l25-l29-l10/README.md)。
+
 ### 2026-11-22 Batch U01-1（U01 3D精选 20 项→53/95）合入（待提交／发布）
 
 - **基线、发布与版本**：HEAD `b7ac33cb6d6164be6b4f3e124c24c668e666cac6`（Batch Q2-L19 前向修复已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `44954522303` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。

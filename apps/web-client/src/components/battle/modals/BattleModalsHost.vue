@@ -22,6 +22,7 @@ import OmnisearchModal from "./OmnisearchModal.vue";
 import TaixuCampaignModal from "./TaixuCampaignModal.vue";
 import DecadeConfigModal from "../surfaces/DecadeConfigModal.vue";
 import ShoushaConfigModal from "../surfaces/ShoushaConfigModal.vue";
+import ZuanConfigPanel from "../surfaces/ZuanConfigPanel.vue";
 
 const props = defineProps<{
   activeModal: BattleModalId | null;
@@ -84,11 +85,14 @@ function onUpdateQhlyState(qhly: NonNullable<NonNullable<ExtensionSurfacesSnapsh
     :state="surfaces.uiSuites?.skinSwitch"
     @close="emit('close')"
     @update="
-      (skinSwitch) =>
-        emit('update:surfaces', {
-          ...props.surfaces,
-          uiSuites: { ...props.surfaces.uiSuites, skinSwitch },
-        })
+      (skinSwitch) => {
+        const next: ExtensionSurfacesSnapshot = {
+          ...latestSurfaces,
+          uiSuites: { ...latestSurfaces.uiSuites, skinSwitch },
+        };
+        latestSurfaces = next;
+        emit('update:surfaces', next);
+      }
     "
   />
   <MvpSettlementModal
@@ -138,5 +142,31 @@ function onUpdateQhlyState(qhly: NonNullable<NonNullable<ExtensionSurfacesSnapsh
     @close="emit('close')"
     @update-config="onUpdateShoushaConfig"
     @reset-config="onResetShoushaConfig"
+  />
+  <ZuanConfigPanel
+    v-else-if="activeModal === 'zuan-panel'"
+    :zuan-ui="surfaces.uiSuites?.zuanUi"
+    :batch6="surfaces.uiSuites?.batch6Patch"
+    @close="emit('close')"
+    @update-zuan="
+      (zuanUi) => {
+        const next: ExtensionSurfacesSnapshot = {
+          ...latestSurfaces,
+          uiSuites: { ...latestSurfaces.uiSuites, zuanUi },
+        };
+        latestSurfaces = next;
+        emit('update:surfaces', next);
+      }
+    "
+    @update-batch6="
+      (batch6Patch) => {
+        const next: ExtensionSurfacesSnapshot = {
+          ...latestSurfaces,
+          uiSuites: { ...latestSurfaces.uiSuites, batch6Patch },
+        };
+        latestSurfaces = next;
+        emit('update:surfaces', next);
+      }
+    "
   />
 </template>

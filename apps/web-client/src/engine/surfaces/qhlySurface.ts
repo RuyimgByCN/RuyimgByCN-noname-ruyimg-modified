@@ -228,6 +228,11 @@ export interface QhlyRuntimeState {
   notbbLastPlayedAtMs: Record<string, number>;
   activePlugins: ReadonlyArray<string>;
   lastOperationNotice: string | null;
+  miniSkinWinOpen: boolean;
+  miniSkinWinSeat: number | null;
+  editedLinesByGeneral: Record<string, string>;
+  domSnapshotInfo: string | null;
+  winRecordByGeneral: Record<string, { wins: number; games: number }>;
 }
 
 const VIEW_SKIN_TO_SHEET: Readonly<Record<string, QhlyStylesheetSurfaceId>> = {
@@ -262,7 +267,7 @@ export function createInitialQhlyRuntimeState(
     enableCharacterMusic: true,
     skinButtonEnabled: true,
     dragSyncMode: "sync",
-    dragButtonPositionAll: { leftPx: 6, topPx: 6 },
+    dragButtonPositionAll: null,
     dragButtonPositionByKey: {},
     yuanhuSyncedSeats: { 0: "wei", 1: "shu" },
     dynamicStoppedSeats: [],
@@ -272,6 +277,11 @@ export function createInitialQhlyRuntimeState(
     notbbLastPlayedAtMs: {},
     activePlugins: ["skinShare.js", "如真似幻兼容桥"],
     lastOperationNotice: null,
+    miniSkinWinOpen: false,
+    miniSkinWinSeat: null,
+    editedLinesByGeneral: { caocao: "宁教我负天下人，休教天下人负我。" },
+    domSnapshotInfo: null,
+    winRecordByGeneral: { caocao: { wins: 12, games: 18 }, sb_caopi: { wins: 9, games: 14 } },
   };
 }
 
@@ -405,6 +415,73 @@ export function highlightSkillKeywords(
   return out;
 }
 
+export interface QhlyResolvedAssetView {
+  assetRoot: string;
+  dynamicPermitted: boolean;
+  dynamicSlotCount: number;
+  rarityMode: string;
+  autoIntervalSec: string;
+  fallbackPolicyLabel: string;
+  effectsSummary: string;
+}
+
+export function resolveQhlySkinAssetView(
+  cfg: QhlyUiConfig,
+  generalId: string,
+  skinId: string,
+  opts?: { isExtensionGeneral?: boolean; isGuozhan?: boolean; hasLocalAsset?: boolean },
+): QhlyResolvedAssetView {
+  const isExt = Boolean(opts?.isExtensionGeneral);
+  const root = isExt ? cfg.qhly_extSkinPath : cfg.qhly_originSkinPath;
+  const gzDynamicOk = !opts?.isGuozhan || cfg.qhly_guozhanDS;
+  const dynamicPermitted = !cfg.qhly_decadeCloseDynamic && gzDynamicOk;
+  const dynamicSlotCount =
+    cfg.qhly_decadeDynamic === "always"
+      ? 0
+      : cfg.qhly_decadeDynamic === "three"
+        ? 3
+        : 99;
+  const hasAsset = Boolean(opts?.hasLocalAsset);
+  const fallbackPolicyLabel = hasAsset
+    ? `${root}${generalId}/${skinId}`
+    : cfg.qhly_nolihuiOrigin || cfg.qhly_noSkin === "origin"
+      ? "净室回退：使用武将原皮立绘占位"
+      : "净室回退：无相应静皮资源（已启用自备包本地导入入口）";
+  const effectsSummary = [
+    cfg.qhly_decadeChangeEffect ? "切换特效:开" : "切换特效:关",
+    cfg.qhly_shoushaTexiao ? "手杀出框特效:开" : "手杀出框特效:关",
+    cfg.qhly_formatDS ? "自动格式参数" : "固定格式参数",
+    cfg.qhly_editDynamic ? "可调节待机/大图" : "锁定待机参数",
+    cfg.qhly_ignoreClips ? "忽略动作片段检查" : "校验动作片段",
+    cfg.qhly_extcompat ? "扩展配音兼容:开" : "扩展配音兼容:关",
+  ].join(" · ");
+  return {
+    assetRoot: root,
+    dynamicPermitted,
+    dynamicSlotCount,
+    rarityMode: cfg.qhly_decadeDengjie,
+    autoIntervalSec: cfg.qhly_decadeAuto,
+    fallbackPolicyLabel,
+    effectsSummary,
+  };
+}
+
+export function resolveQhlyVoiceRoute(
+  cfg: QhlyUiConfig,
+  context: "skill" | "mvp",
+): { allowed: boolean; trackLabel: string } {
+  if (cfg.qhly_closeVoice) return { allowed: false, trackLabel: "静音关闭" };
+  if (context === "mvp" && !cfg.qhly_mvp) {
+    return { allowed: false, trackLabel: "MVP语音未启用" };
+  }
+  const modePrefix = cfg.qhly_currentMusic === "default" ? cfg.qhly_modemusicconfig : cfg.qhly_currentMusic;
+  const extraTag = cfg.qhly_audioPlus ? "+AudioPlus" : "";
+  return {
+    allowed: true,
+    trackLabel: `${modePrefix}${extraTag}:${context}`,
+  };
+}
+
 export function resolveQhlyCharacterSubtitle(
   cfg: Pick<QhlyUiConfig, "qhly_titlereplace">,
   meta: { title: string; skinName: string; pkgName: string },
@@ -530,7 +607,8 @@ export function dispatchQhlyUiHook(state: QhlyRuntimeState, ev: QhlyHookEvent): 
       };
     }
     case "_qhly_randskin": {
-      // extension.js:14332: gameStart random skin; skips self when qhly_randskin_me is true
+      // extension.js:14332: gameStart random skin; skips when qhly_randskin=false or self when qhly_randskin_me=true
+      if (!state.config.qhly_randskin) return state;
       if (state.randSkinSkipSelf && seat === (ev.selfSeat ?? 0)) {
         return state;
       }
@@ -545,7 +623,7 @@ export function dispatchQhlyUiHook(state: QhlyRuntimeState, ev: QhlyHookEvent): 
     case "_qhly_addButton": {
       // extension.js:14465-14515: mounts .qhly_skinplayerbutton & syncs drag position globally or per general_skin
       if (!state.skinButtonEnabled) return state;
-      const pos = ev.dragOffset ?? state.dragButtonPositionAll ?? { leftPx: 6, topPx: 6 };
+      const pos = ev.dragOffset ?? state.dragButtonPositionAll ?? { leftPx: 94, topPx: 48 };
       if (state.dragSyncMode !== "no") {
         return {
           ...state,

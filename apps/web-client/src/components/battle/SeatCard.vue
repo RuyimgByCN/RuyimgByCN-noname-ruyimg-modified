@@ -18,6 +18,7 @@ import type { QhlyRuntimeState } from "../../engine/surfaces/qhlySurface";
 import { resolveShoushaGuanjie } from "../../engine/surfaces/shoushaSurfacesRuntime";
 import type { ShoushaUiRuntimeState } from "../../engine/surfaces/shoushaUiSurface";
 import type { SkinSwitchRuntimeState } from "../../engine/surfaces/skinSwitchSurface";
+import type { ZuanUiRuntimeState } from "../../engine/surfaces/zuanSurface";
 import {
   cardKindLabel,
   identityBadgeInfo,
@@ -40,6 +41,7 @@ const props = defineProps<{
   l20Ui?: L20RuntimeState;
   qhlyUi?: QhlyRuntimeState;
   skinSwitch?: SkinSwitchRuntimeState;
+  zuanUi?: ZuanUiRuntimeState;
   decadeStyle?: string;
   l20Marks?: Record<string, number>;
 }>();
@@ -48,6 +50,8 @@ const emit = defineEmits<{
   select: [playerId: number];
   openDetail: [seat: SeatView];
   cycleQhlySkin: [seat: SeatView];
+  openQhlyWindow: [seat: SeatView];
+  openSkinSwitchWindow: [seat: SeatView];
 }>();
 
 const slots = computed(() => props.seat.generals ?? [null, null]);
@@ -82,7 +86,34 @@ const l20GroupHalo = computed(() => props.l20Ui?.guozhanFormationsBySeat?.[props
 const l20WeaponStrike = computed(() => props.l20Ui?.weaponStrikeBySeat?.[props.seat.player] ?? null);
 const l20BaojiLabel = computed(() => props.l20Ui?.baojiPopupBySeat?.[props.seat.player] ?? null);
 const l20CardFx = computed(() => props.l20Ui?.cardFxCueBySeat?.[props.seat.player] ?? null);
+const l20PlayerHpCue = computed(() => props.l20Ui?.playerHpCueBySeat?.[props.seat.player] ?? null);
+const l20HalfHpCue = computed(() => props.l20Ui?.guozhanHalfHpBySeat?.[props.seat.player] ?? null);
+const zuanRelifeTurns = computed(() => props.zuanUi?.reviveCountdownBySeat?.[props.seat.player] ?? null);
+const zuanAnshaHidden = computed(() => props.zuanUi?.anshaHiddenSeats?.includes(props.seat.player) ?? false);
+const zuanSeatCue = computed(() => props.zuanUi?.zuanSeatCueBySeat?.[props.seat.player] ?? null);
+const qhlyIngameSkills = computed(() =>
+  props.qhlyUi?.config?.qhly_skillingame
+    ? props.seat.skills.map((s) => s.name ?? "").filter(Boolean).slice(0, 2)
+    : [],
+);
+const qhlyDragButtonOn = computed(() => Boolean(props.qhlyUi?.config?.qhly_dragButton));
 const l20RankSweep = computed(() => (props.l20Ui?.rankSweepBySeat?.[props.seat.player] ?? 0) > 0);
+function onSeatCardActivate() {
+  if (props.isTargetMode && props.isSelectableTarget) {
+    emit("select", props.seat.player);
+    return;
+  }
+  if (props.skinSwitch?.config?.clickPlayerDynamic) {
+    emit("openSkinSwitchWindow", props.seat);
+    return;
+  }
+  if (
+    props.qhlyUi?.config?.qhly_playerwindow &&
+    props.qhlyUi.config.qhly_replaceCharacterCard2 !== "nonereplace"
+  ) {
+    emit("openQhlyWindow", props.seat);
+  }
+}
 const qhlySkinBtnVisible = computed(() => Boolean(props.qhlyUi?.config?.qhly_skinButton));
 const qhlySkinBtnPos = computed(() => {
   const gen = props.seat.generals?.[0]?.name ?? `seat_${props.seat.player}`;
@@ -92,9 +123,15 @@ const qhlySkinBtnPos = computed(() => {
     props.qhlyUi?.config?.qhly_dragButtonPosition === "no"
       ? (props.qhlyUi?.dragButtonPositionByKey?.[key] ?? props.qhlyUi?.dragButtonPositionAll)
       : props.qhlyUi?.dragButtonPositionAll;
+  if (!pos) {
+    return {
+      right: "4px",
+      top: "48px",
+    };
+  }
   return {
-    left: `${pos?.leftPx ?? 6}px`,
-    top: `${pos?.topPx ?? 6}px`,
+    left: `min(${pos.leftPx}px, calc(100% - 34px))`,
+    top: `${pos.topPx}px`,
   };
 });
 const decadeBadges = computed(() => props.decadeUi?.activeMarkBadgesBySeat[props.seat.player] ?? []);
@@ -281,9 +318,10 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
     role="listitem"
     :aria-label="`座位 ${seat.seat} 玩家 ${seat.player} 武将 ${displayName} ${identityLabel}`"
     :tabindex="isTargetMode && isSelectableTarget ? 0 : -1"
-    @click="isTargetMode && isSelectableTarget && emit('select', seat.player)"
-    @keydown.enter="isTargetMode && isSelectableTarget && emit('select', seat.player)"
+    @click="onSeatCardActivate"
+    @keydown.enter="onSeatCardActivate"
   >
+    <div class="seat-skinswitch-top-arc" aria-hidden="true"></div>
     <div
       class="seat-framebg-layer"
       data-node-key="framebg"
@@ -373,56 +411,62 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
           />
         </div>
 
-        <!-- Status tags & chukuang overlay -->
-        <header class="seat-overlay-header">
-          <div class="seat-tags">
-            <span v-if="self" class="tag self-tag">你</span>
-            <span v-if="effectiveConfig?.JBDDZ" class="tag jbddz-seat-num" data-testid="seat-jbddz-num">[{{ seat.seat + 1 }}号]</span>
-            <button
-              type="button"
-              class="shousha-guanjie-badge"
-              data-testid="seat-guanjie-badge"
-              title="点击查看手杀武将详情与ZLLT露头"
-              @click.stop="emit('openDetail', seat)"
+        <!-- Portrait-native overlays & equips stacked cleanly without clipping -->
+        <div class="seat-bottom-overlays">
+          <header
+            v-if="currentTurn || seat.turned_over || isChained || isHiddenVeil || isPublicHand || chukuangOverlay"
+            class="seat-overlay-header"
+          >
+            <div
+              v-if="currentTurn || seat.turned_over || isChained || isHiddenVeil || isPublicHand"
+              class="seat-tags seat-portrait-tags"
+              data-testid="seat-portrait-tags"
             >
-              {{ seatGuanjie.label }}
-            </button>
-            <span v-if="l20BaojiLabel" class="seat-l20-baoji-popup" data-testid="seat-l20-baoji">{{ l20BaojiLabel }}</span>
-            <span v-if="l20WeaponStrike && l20WeaponStrike !== 'no'" class="seat-l20-weapon-badge" data-testid="seat-l20-weapon">⚔{{ l20WeaponStrike }}</span>
-            <span v-if="l20CardFx" class="seat-l20-card-fx" data-testid="seat-l20-card-fx">{{ l20CardFx }}</span>
-            <span v-if="seatPauseGuess" class="seat-pause-guess-pill" data-testid="seat-pause-guess-pill">猜:{{ seatPauseGuess }}</span>
-            <span v-if="seatPromptText" class="seat-prompt-pill" data-testid="seat-prompt-pill">{{ seatPromptText }}</span>
-            <span v-if="currentTurn" class="tag turn-tag">回合</span>
-            <span v-if="seat.turned_over" class="tag" aria-label="武将牌背面">翻面</span>
-            <span v-if="isChained" class="tag chain-tag" data-testid="seat-chain-badge">🔗横置</span>
-            <span v-if="hasJiuBuff" class="tag jiu-tag" data-testid="seat-jiu-badge">🍶酒态</span>
-            <span v-if="hasJiuwo" class="tag jiuwo-tag" data-testid="seat-jiuwo-badge">🆘救我</span>
-            <span v-if="hasKillFire" class="tag killfire-tag" data-testid="seat-killfire-badge">🔥破敌</span>
-            <span v-if="hasTiesuoYing" class="tag tiesuo-tag" data-testid="seat-tiesuo-badge">⛓结营</span>
-            <span v-if="recastCount > 0" class="tag recast-tag" data-testid="seat-recast-badge">♻重铸×{{ recastCount }}</span>
-            <span v-if="isHiddenVeil" class="tag yinni-tag" data-testid="seat-yinni-badge">暗置</span>
-            <span v-if="isPublicHand" class="tag pubhand-tag" data-testid="seat-pubhand-badge">明牌{{ publicHandDisplay }}</span>
+              <span v-if="currentTurn" class="tag turn-tag">回合</span>
+              <span v-if="seat.turned_over" class="tag" aria-label="武将牌背面">翻面</span>
+              <span v-if="isChained" class="tag chain-tag" data-testid="seat-chain-badge">🔗横置</span>
+              <span v-if="isHiddenVeil" class="tag yinni-tag" data-testid="seat-yinni-badge">暗置</span>
+              <span v-if="isPublicHand" class="tag pubhand-tag" data-testid="seat-pubhand-badge">明牌{{ publicHandDisplay }}</span>
+            </div>
             <span
-              v-if="rarityLongMode && isNodeEnabled('long')"
-              class="tag dragon-crest"
-              :class="`dragon-${rarityLongMode}`"
-              :data-rarity-long="rarityLongMode"
-              :title="`龙头美化 (${rarityLongMode})`"
-              data-node-key="long"
-              data-testid="seat-dragon-crest"
-            >{{ rarityLongMode === 'xinon' ? '✨🐉' : rarityLongMode === 'off' ? '🐲' : '🐉' }}</span>
-            <span v-else v-show="isNodeEnabled('long')" class="seat-node-anchor" data-node-key="long" aria-hidden="true"></span>
-            <span v-if="cardUseCue" class="tag cue-tag" data-testid="seat-card-cue">{{ cardUseCue }}</span>
-            <span v-if="gainStickerSkill" class="tag seat-gain-skill-sticker" data-testid="seat-gain-skill-sticker">✦{{ gainStickerSkill }}</span>
+              v-if="chukuangOverlay"
+              class="chukuang-badge"
+              data-testid="seat-chukuang-overlay"
+              :class="{ 'flip-x': chukuangOverlay.flipX }"
+              :style="{ transform: chukuangOverlay.flipX ? 'scaleX(-1) translateY(-6px)' : 'translateY(-6px)' }"
+            >⚡{{ chukuangOverlay.action }}</span>
+          </header>
+
+          <!-- Equip strips + `_xunizhuangbei_gua_gua` virtual equips + `_changeEquipExt` dim state -->
+          <div
+            v-if="(visibleEquips.length > 0 || virtualEquips.length > 0) && isNodeEnabled('equips')"
+            class="equip-zone"
+            :class="{ 'is-equip-muted': isEquipMuted }"
+            data-node-key="equips"
+            aria-label="装备区"
+          >
+            <div
+              v-for="card in visibleEquips"
+              :key="card.id"
+              class="equip-card"
+              :title="`${cardKindLabel(card.kind, card.def)} #${card.id}${card.def != null ? ' (def:' + card.def + ')' : ''}`"
+            >
+              <span class="equip-suit" :data-suit="card.suit">{{ suitGlyph(card.suit) }}</span>
+              <span class="equip-name">{{ cardKindLabel(card.kind, card.def) }}</span>
+            </div>
+            <div
+              v-for="ve in virtualEquips"
+              :key="`ve-${ve}`"
+              class="equip-card is-virtual-equip"
+              data-virtual-equip="true"
+              data-testid="seat-virtual-equip"
+              :title="`虚拟防具 ${ve}`"
+            >
+              <span class="equip-name">☯ {{ ve }}</span>
+            </div>
           </div>
-          <span
-            v-if="chukuangOverlay"
-            class="chukuang-badge"
-            data-testid="seat-chukuang-overlay"
-            :class="{ 'flip-x': chukuangOverlay.flipX }"
-            :style="{ transform: chukuangOverlay.flipX ? 'scaleX(-1) translateY(-6px)' : 'translateY(-6px)' }"
-          >⚡{{ chukuangOverlay.action }}</span>
-        </header>
+          <span v-else v-show="isNodeEnabled('equips')" class="seat-node-anchor" data-node-key="equips" aria-hidden="true"></span>
+        </div>
 
         <!-- Per-seat delayed tricks / judgment diamonds -->
         <div
@@ -443,45 +487,26 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
         </div>
         <span v-else v-show="isNodeEnabled('judges')" class="seat-node-anchor" data-node-key="judges" aria-hidden="true"></span>
 
-        <!-- Equip strips + `_xunizhuangbei_gua_gua` virtual equips + `_changeEquipExt` dim state -->
-        <div
-          v-if="(visibleEquips.length > 0 || virtualEquips.length > 0) && isNodeEnabled('equips')"
-          class="equip-zone"
-          :class="{ 'is-equip-muted': isEquipMuted }"
-          data-node-key="equips"
-          aria-label="装备区"
-        >
-          <div
-            v-for="card in visibleEquips"
-            :key="card.id"
-            class="equip-card"
-            :title="`${cardKindLabel(card.kind, card.def)} #${card.id}${card.def != null ? ' (def:' + card.def + ')' : ''}`"
-          >
-            <span class="equip-suit" :data-suit="card.suit">{{ suitGlyph(card.suit) }}</span>
-            <span class="equip-name">{{ cardKindLabel(card.kind, card.def) }}</span>
-          </div>
-          <div
-            v-for="ve in virtualEquips"
-            :key="`ve-${ve}`"
-            class="equip-card is-virtual-equip"
-            data-virtual-equip="true"
-            data-testid="seat-virtual-equip"
-            :title="`虚拟防具 ${ve}`"
-          >
-            <span class="equip-name">☯ {{ ve }}</span>
-          </div>
-        </div>
-        <span v-else v-show="isNodeEnabled('equips')" class="seat-node-anchor" data-node-key="equips" aria-hidden="true"></span>
-
         <button
           v-if="qhlySkinBtnVisible"
           type="button"
           class="seat-qhly-skin-btn"
+          :class="{ 'is-draggable': qhlyDragButtonOn }"
+          :data-qhly-drag-button="qhlyDragButtonOn ? 'on' : 'off'"
           :style="qhlySkinBtnPos"
           data-testid="btn-seat-qhly-skin"
           @click.stop="emit('cycleQhlySkin', seat)"
         >
           换肤
+        </button>
+        <button
+          type="button"
+          class="seat-skinswitch-huanfu-btn seat-qhly-skin-btn"
+          style="right: 4px; top: 25px"
+          data-testid="btn-seat-skinswitch-huanfu"
+          @click.stop="emit('openSkinSwitchWindow', seat)"
+        >
+          动皮
         </button>
         <div v-if="seatSayBubble" class="seat-say-bubble" data-testid="seat-say-bubble">
           💬 {{ seatSayBubble }}
@@ -522,6 +547,49 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
         <span v-show="hasDeputy && isNodeEnabled('name2')" data-node-key="name2">{{ slots[1]?.name ?? "" }}</span>
         <span data-node-key="nameol" v-show="isNodeEnabled('nameol')">{{ identityLabel }}</span>
       </div>
+
+      <!-- Status, guanjie & extension cue badges in footer (never clipped) -->
+      <div class="seat-tags seat-footer-tags" data-testid="seat-footer-tags">
+        <span v-if="self" class="tag self-tag">你</span>
+        <span v-if="effectiveConfig?.JBDDZ" class="tag jbddz-seat-num" data-testid="seat-jbddz-num">[{{ seat.seat + 1 }}号]</span>
+        <button
+          type="button"
+          class="shousha-guanjie-badge"
+          data-testid="seat-guanjie-badge"
+          title="点击查看手杀武将详情与ZLLT露头"
+          @click.stop="emit('openDetail', seat)"
+        >
+          {{ seatGuanjie.label }}
+        </button>
+        <span v-if="l20BaojiLabel" class="seat-l20-baoji-popup" data-testid="seat-l20-baoji">{{ l20BaojiLabel }}</span>
+        <span v-if="l20WeaponStrike && l20WeaponStrike !== 'no'" class="seat-l20-weapon-badge" data-testid="seat-l20-weapon">⚔{{ l20WeaponStrike }}</span>
+        <span v-if="l20CardFx" class="seat-l20-card-fx" data-testid="seat-l20-card-fx">{{ l20CardFx }}</span>
+        <span v-if="l20PlayerHpCue" class="seat-l20-hpcue" :data-cue="l20PlayerHpCue" data-testid="seat-l20-hpcue">{{ l20PlayerHpCue }}</span>
+        <span v-if="l20HalfHpCue" class="seat-l20-halfhp-tag" data-testid="seat-l20-halfhp">{{ l20HalfHpCue }}</span>
+        <span v-if="zuanRelifeTurns != null" class="seat-zuan-relife-pill" data-testid="seat-zuan-relife">⏳复活{{ zuanRelifeTurns }}</span>
+        <span v-if="zuanAnshaHidden" class="seat-zuan-ansha-cloak" data-testid="seat-zuan-ansha">🗡隐匿</span>
+        <span v-if="zuanSeatCue" class="seat-zuan-cue-pill" data-testid="seat-zuan-cue">{{ zuanSeatCue }}</span>
+        <span v-if="qhlyIngameSkills.length > 0" class="tag cue-tag" data-testid="seat-qhly-ingame-skills">千幻:{{ qhlyIngameSkills.join("/") }}</span>
+        <span v-if="seatPauseGuess" class="seat-pause-guess-pill" data-testid="seat-pause-guess-pill">猜:{{ seatPauseGuess }}</span>
+        <span v-if="seatPromptText" class="seat-prompt-pill" data-testid="seat-prompt-pill">{{ seatPromptText }}</span>
+        <span v-if="hasJiuBuff" class="tag jiu-tag" data-testid="seat-jiu-badge">🍶酒态</span>
+        <span v-if="hasJiuwo" class="tag jiuwo-tag" data-testid="seat-jiuwo-badge">🆘救我</span>
+        <span v-if="hasKillFire" class="tag killfire-tag" data-testid="seat-killfire-badge">🔥破敌</span>
+        <span v-if="hasTiesuoYing" class="tag tiesuo-tag" data-testid="seat-tiesuo-badge">⛓结营</span>
+        <span v-if="recastCount > 0" class="tag recast-tag" data-testid="seat-recast-badge">♻重铸×{{ recastCount }}</span>
+        <span
+          v-if="rarityLongMode && isNodeEnabled('long')"
+          class="tag dragon-crest"
+          :class="`dragon-${rarityLongMode}`"
+          :data-rarity-long="rarityLongMode"
+          :title="`龙头美化 (${rarityLongMode})`"
+          data-node-key="long"
+          data-testid="seat-dragon-crest"
+        >{{ rarityLongMode === 'xinon' ? '✨🐉' : rarityLongMode === 'off' ? '🐲' : '🐉' }}</span>
+        <span v-if="cardUseCue" class="tag cue-tag" data-testid="seat-card-cue">{{ cardUseCue }}</span>
+        <span v-if="gainStickerSkill" class="tag seat-gain-skill-sticker" data-testid="seat-gain-skill-sticker">✦{{ gainStickerSkill }}</span>
+      </div>
+      <span v-if="!(rarityLongMode && isNodeEnabled('long'))" v-show="isNodeEnabled('long')" class="seat-node-anchor" data-node-key="long" aria-hidden="true"></span>
 
       <!-- L08 Decade mark & gained skill badges (with clickable markskill intro popover) -->
       <div
@@ -797,12 +865,23 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
   pointer-events: none !important;
 }
 
-.seat-overlay-header {
+.seat-bottom-overlays {
   position: absolute;
-  bottom: 4px;
+  bottom: 3px;
   right: 4px;
-  left: 24px;
-  z-index: 4;
+  left: 26px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: stretch;
+  gap: 3px;
+  max-height: calc(100% - 46px);
+  overflow: hidden;
+  pointer-events: none;
+}
+.seat-overlay-header {
+  position: relative;
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
@@ -813,7 +892,17 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 0.18rem;
+  gap: 0.16rem;
+}
+.seat-footer-tags {
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.14rem;
+}
+.seat-footer-tags .shousha-guanjie-badge {
+  padding: 0.04rem 0.28rem;
+  font-size: 0.6rem;
+  line-height: 1.2;
 }
 .tag {
   font-size: 0.62rem;
@@ -976,14 +1065,10 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
 }
 
 .equip-zone {
-  position: absolute;
-  left: 24px;
-  right: 3px;
-  bottom: 3px;
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 2px;
-  z-index: 5;
   pointer-events: none;
 }
 .equip-card {
@@ -1158,20 +1243,29 @@ function hpColor(hp: number, _maxHp: number, alive: boolean): string {
 
 @media (max-width: 767px) {
   .seat.decade-seat-frame {
-    min-height: 102px;
-    padding: 3px;
+    min-height: 94px;
+    padding: 2px;
   }
   .seat-portrait-stage,
   .seat.self .seat-portrait-stage {
-    height: 72px;
+    height: 62px;
   }
   .seat-footer {
-    gap: 0.14rem;
-    padding: 0.16rem 0.14rem 0.06rem;
+    gap: 0.08rem;
+    padding: 0.1rem 0.12rem 0.02rem;
+  }
+  .seat-footer-tags {
+    gap: 0.1rem;
+  }
+  .seat-footer-tags .shousha-guanjie-badge,
+  .seat-footer-tags .tag {
+    font-size: 0.56rem;
+    padding: 0.01rem 0.22rem;
+    line-height: 1.15;
   }
   .meta {
-    font-size: 0.64rem;
-    gap: 0.25rem;
+    font-size: 0.62rem;
+    gap: 0.22rem;
   }
   .seat-identity-stamp {
     width: 22px;

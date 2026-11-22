@@ -27,13 +27,26 @@ import {
   dispatchShoushaUiHook,
   updateShoushaConfigInState,
 } from "./surfaces/shoushaUiSurface";
-import { createInitialSkinSwitchRuntimeState, dispatchSkinSwitchHook } from "./surfaces/skinSwitchSurface";
+import {
+  createInitialSkinSwitchRuntimeState,
+  dispatchSkinSwitchHook,
+  updateSkinSwitchConfigInState,
+} from "./surfaces/skinSwitchSurface";
+import { normalizeSkinSwitchConfig, type SkinSwitchUiConfig } from "./surfaces/skinSwitchConfigSchema";
 import { createInitialTaixuUiRuntimeState } from "./surfaces/taixuSurface";
 import {
   createInitialZuanUiRuntimeState,
   dispatchZuanUiHook,
+  updateZuanConfigInState,
   type ZuanUiRuntimeState,
 } from "./surfaces/zuanSurface";
+import { createDefaultZuanConfig } from "./surfaces/zuanConfigSchema";
+import {
+  createInitialBatch6PatchUiState,
+  dispatchL10EmojiRebate,
+  dispatchLongxueCmEffects,
+  type Batch6PatchUiState,
+} from "./surfaces/batch6PatchSurfacesRuntime";
 
 export type BossHpNormalized =
   | { kind: "finite"; hp: number; maxHp: number; label: string }
@@ -222,6 +235,7 @@ export interface ExtensionUiSuitesState {
   taixuUi?: import("./surfaces/taixuSurface").TaixuUiRuntimeState;
   zuanUi?: ZuanUiRuntimeState;
   l20Ui?: L20RuntimeState;
+  batch6Patch?: Batch6PatchUiState;
 }
 
 export interface ExtensionSurfacesSnapshot {
@@ -972,6 +986,7 @@ export function createInitialExtensionSurfacesState(
       taixuUi: createInitialTaixuUiRuntimeState(),
       zuanUi: createInitialZuanUiRuntimeState(),
       l20Ui: createInitialL20RuntimeState(),
+      batch6Patch: createInitialBatch6PatchUiState(),
     },
   };
 }
@@ -988,6 +1003,7 @@ export function ingestBattleEnvelopeIntoSurfaces(
   const taixuUi = state.uiSuites?.taixuUi ?? createInitialTaixuUiRuntimeState();
   let zuanUi = state.uiSuites?.zuanUi ?? createInitialZuanUiRuntimeState();
   let l20Ui = state.uiSuites?.l20Ui ?? createInitialL20RuntimeState();
+  let batch6Patch = state.uiSuites?.batch6Patch ?? createInitialBatch6PatchUiState();
 
   let next: ExtensionSurfacesSnapshot = {
     ...state,
@@ -1071,11 +1087,20 @@ export function ingestBattleEnvelopeIntoSurfaces(
       };
     } else if (pubCode === 5 || evType === "HpRecovered") {
       qhly = dispatchQhlyUiHook(qhly, { hook: "_qhlyChangeSkin", generalId: curGen, hpDelta: 1 });
-      zuanUi = dispatchZuanUiHook(zuanUi, "_saveskill", { seat: curPlayer });
+      batch6Patch = dispatchL10EmojiRebate(batch6Patch, {
+        trigger: "recover",
+        fromSeat: curPlayer,
+        toSeat: woundedSeat,
+        isEnemy: false,
+      });
       next = {
         ...next,
         mvp: recordMvpEventFact(next.mvp, { seq, seat: curPlayer, kind: "recover", amount: 1 }),
       };
+    } else if (evType === "EnteredDying" || "EnteredDying" in (rawEv as Record<string, unknown>)) {
+      const dyingBody = (rawEv as { EnteredDying?: { player?: number }; target?: number; player?: number });
+      const dyingSeat = dyingBody.EnteredDying?.player ?? dyingBody.player ?? dyingBody.target ?? woundedSeat;
+      zuanUi = dispatchZuanUiHook(zuanUi, "_saveskill", { seat: dyingSeat });
     } else if (pubCode === 2 || evType === "CardPlayed") {
       skinSwitch = dispatchSkinSwitchHook(skinSwitch, {
         hook: "_playAudioToQueue",
@@ -1087,6 +1112,9 @@ export function ingestBattleEnvelopeIntoSurfaces(
       });
       shoushaUi = dispatchShoushaUiHook(shoushaUi, "_chupaiA", { seat: curPlayer });
       zuanUi = dispatchZuanUiHook(zuanUi, "_extrauseskill", { seat: curPlayer });
+      if (batch6Patch.cardPhantom) {
+        batch6Patch = { ...batch6Patch, lastPhantomLabel: `P${curPlayer} 幻影出牌 · rev${env.revision}` };
+      }
       next = {
         ...next,
         mvp: recordMvpEventFact(next.mvp, { seq, seat: curPlayer, kind: "damage_card", amount: 1 }),
@@ -1101,6 +1129,16 @@ export function ingestBattleEnvelopeIntoSurfaces(
       });
       shoushaUi = dispatchShoushaUiHook(shoushaUi, "_jd_wjsw", { seat: woundedSeat });
       zuanUi = dispatchZuanUiHook(zuanUi, "_dieskill", { seat: woundedSeat });
+      batch6Patch = dispatchL10EmojiRebate(batch6Patch, {
+        trigger: "dying",
+        fromSeat: curPlayer,
+        toSeat: woundedSeat,
+        isEnemy: true,
+      });
+    } else if (pubCode === 4 || evType === "SkillTriggered") {
+      if (next.longxue.shengjian) {
+        batch6Patch = dispatchLongxueCmEffects(batch6Patch, { daoxin: next.longxue.daoxin });
+      }
     }
   });
 
@@ -1119,6 +1157,7 @@ export function ingestBattleEnvelopeIntoSurfaces(
       taixuUi,
       zuanUi,
       l20Ui,
+      batch6Patch,
     },
   };
 
@@ -1284,7 +1323,84 @@ export function deserializeExtensionSurfacesSnapshot(raw: string): ExtensionSurf
       },
     };
   }
+  if (snap.uiSuites?.skinSwitch) {
+    const baseSs = createInitialSkinSwitchRuntimeState();
+    snap.uiSuites = {
+      ...snap.uiSuites,
+      skinSwitch: {
+        ...baseSs,
+        ...snap.uiSuites.skinSwitch,
+        config: normalizeSkinSwitchConfig(snap.uiSuites.skinSwitch.config),
+      },
+    };
+  }
+  if (snap.uiSuites?.zuanUi) {
+    const baseZuan = createInitialZuanUiRuntimeState();
+    snap.uiSuites = {
+      ...snap.uiSuites,
+      zuanUi: {
+        ...baseZuan,
+        ...snap.uiSuites.zuanUi,
+        config: { ...createDefaultZuanConfig(), ...(snap.uiSuites.zuanUi.config ?? {}) },
+      },
+    };
+  }
+  if (snap.uiSuites?.batch6Patch) {
+    snap.uiSuites = {
+      ...snap.uiSuites,
+      batch6Patch: {
+        ...createInitialBatch6PatchUiState(),
+        ...snap.uiSuites.batch6Patch,
+      },
+    };
+  }
   return snap;
+}
+
+/** 原子更新 L24 皮肤切换 14 项配置 */
+export function updateExtensionSkinSwitchConfig(
+  state: ExtensionSurfacesSnapshot,
+  patch: Partial<SkinSwitchUiConfig>,
+  opts?: { persist?: boolean },
+): ExtensionSurfacesSnapshot {
+  const prev = state.uiSuites?.skinSwitch ?? createInitialSkinSwitchRuntimeState();
+  return {
+    ...state,
+    uiSuites: {
+      ...state.uiSuites,
+      skinSwitch: updateSkinSwitchConfigInState(prev, patch, opts),
+    },
+  };
+}
+
+/** 原子更新 L25 祖安武将 68 项配置 */
+export function updateExtensionZuanConfig(
+  state: ExtensionSurfacesSnapshot,
+  patch: Record<string, unknown>,
+): ExtensionSurfacesSnapshot {
+  const prev = state.uiSuites?.zuanUi ?? createInitialZuanUiRuntimeState();
+  return {
+    ...state,
+    uiSuites: {
+      ...state.uiSuites,
+      zuanUi: updateZuanConfigInState(prev, patch),
+    },
+  };
+}
+
+/** 原子更新 L27/L28/L29/L10 补齐状态 */
+export function updateExtensionBatch6Patch(
+  state: ExtensionSurfacesSnapshot,
+  patch: Partial<Batch6PatchUiState>,
+): ExtensionSurfacesSnapshot {
+  const prev = state.uiSuites?.batch6Patch ?? createInitialBatch6PatchUiState();
+  return {
+    ...state,
+    uiSuites: {
+      ...state.uiSuites,
+      batch6Patch: { ...prev, ...patch },
+    },
+  };
 }
 
 /** 原子更新 L09 千幻聆音 全部 82 项配置 */
@@ -1719,6 +1835,9 @@ export * from "./surfaces/qhlySurface";
 export * from "./surfaces/shoushaConfigSchema";
 export * from "./surfaces/shoushaSurfacesRuntime";
 export * from "./surfaces/shoushaUiSurface";
+export * from "./surfaces/skinSwitchConfigSchema";
 export * from "./surfaces/skinSwitchSurface";
 export * from "./surfaces/taixuSurface";
+export * from "./surfaces/zuanConfigSchema";
 export * from "./surfaces/zuanSurface";
+export * from "./surfaces/batch6PatchSurfacesRuntime";

@@ -288,10 +288,11 @@ watch(
   letter-spacing: 0.08em;
 }
 .no-image-glyph {
-  padding: 0.2rem 0.45rem;
+  padding: 0.12rem 0.34rem;
   border: 1px solid rgba(232, 165, 75, 0.22);
   border-radius: 4px;
   background: rgba(0, 0, 0, 0.35);
+  font-size: 0.7rem;
 }
 .portrait-caption {
   position: absolute;

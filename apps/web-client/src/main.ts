@@ -6,6 +6,9 @@ import "./styles/decadeSurfaces.css";
 import "./styles/shoushaSurfaces.css";
 import "./styles/l20MarkSurfaces.css";
 import "./styles/qhlySurfaces.css";
+import "./styles/skinSwitchSurfaces.css";
+import "./styles/zuanSurfaces.css";
+import "./styles/batch6PatchSurfaces.css";
 
 // NC09 重连：会话内保存过联机意图（房间/服务端/昵称）时，启动后**自动回到该房间**——
 // 令牌已在 BattleView 落 localStorage（`reconnectKey(roomId)`），故重连会命中原座位。

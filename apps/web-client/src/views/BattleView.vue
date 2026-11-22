@@ -53,11 +53,14 @@ import {
   loadPersistedDecadeConfig,
   loadPersistedQhlyConfig,
   loadPersistedShoushaConfig,
+  loadPersistedSkinSwitchConfig,
   restoreExtensionSurfacesForLoad,
   serializeExtensionSurfacesSnapshot,
   updateExtensionDecadeConfig,
   updateExtensionQhlyConfig,
   updateExtensionShoushaConfig,
+  updateExtensionSkinSwitchConfig,
+  type Batch6PatchUiState,
   type ExtensionSurfacesSnapshot,
 } from "../engine/extensionSurfaceRuntime";
 import type { DecadeUiRuntimeState } from "../engine/surfaces/decadeUiSurface";
@@ -123,10 +126,15 @@ function createInitialSurfacesWithPersistedDecade(): ExtensionSurfacesSnapshot {
     loadPersistedShoushaConfig(),
     { persist: false, syncTheme: false },
   );
-  return updateExtensionQhlyConfig(
+  const withQhly = updateExtensionQhlyConfig(
     withShousha,
     loadPersistedQhlyConfig(),
     { persist: false, syncTheme: false },
+  );
+  return updateExtensionSkinSwitchConfig(
+    withQhly,
+    loadPersistedSkinSwitchConfig(),
+    { persist: false },
   );
 }
 const extensionSurfaces = ref<ExtensionSurfacesSnapshot>(createInitialSurfacesWithPersistedDecade());
@@ -158,6 +166,15 @@ function onUpdateQhlyUiFromBoard(nextQhly: QhlyRuntimeState) {
     uiSuites: {
       ...extensionSurfaces.value.uiSuites,
       qhly: nextQhly,
+    },
+  };
+}
+function onUpdateBatch6FromBoard(nextBatch6: Batch6PatchUiState) {
+  extensionSurfaces.value = {
+    ...extensionSurfaces.value,
+    uiSuites: {
+      ...extensionSurfaces.value.uiSuites,
+      batch6Patch: nextBatch6,
     },
   };
 }
@@ -1006,6 +1023,9 @@ const turnInfo = computed(() => {
       :shousha-single-row="Boolean(extensionSurfaces.uiSuites?.shoushaUi?.config?.xindsingle)"
       :shousha-draw-luck="Boolean(extensionSurfaces.uiSuites?.shoushaUi?.config?.xinddraw)"
       :shousha-infinity-draw="Boolean(extensionSurfaces.uiSuites?.shoushaUi?.config?.infinitydraw)"
+      :e-css-enabled="extensionSurfaces.uiSuites?.batch6Patch?.eCssEnabled !== false"
+      :qhly-choose-origin="Boolean(extensionSurfaces.uiSuites?.qhly?.config?.qhly_chooseButtonOrigin)"
+      :qhly-choose-origin-guozhan="Boolean(extensionSurfaces.uiSuites?.qhly?.config?.qhly_chooseButtonOrigin_guozhan)"
       @choose="chooseGeneralCandidate"
       @reload="loadGeneralCandidates"
     />
@@ -1075,6 +1095,7 @@ const turnInfo = computed(() => {
         @update:decade-ui="onUpdateDecadeUiFromBoard"
         @update:shousha-ui="onUpdateShoushaUiFromBoard"
         @update:qhly-ui="onUpdateQhlyUiFromBoard"
+        @update:batch6-patch="onUpdateBatch6FromBoard"
         @sort-hand="onSortHandFromBoard"
         @end-phase="endPhase"
         @resolve-choice="resolveLegalChoice"

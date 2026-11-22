@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import {
   QHLY_GROUP_COLORS,
   QHLY_SURFACE_PRESETS,
@@ -8,7 +8,9 @@ import {
   dispatchQhlyUiHook,
   highlightSkillKeywords,
   resolveQhlyCharacterSubtitle,
+  resolveQhlySkinAssetView,
   resolveQhlySkinShare,
+  resolveQhlyVoiceRoute,
   type QhlyRuntimeState,
   type QhlyStylesheetSurfaceId,
 } from "../../../engine/surfaces/qhlySurface";
@@ -30,6 +32,30 @@ const voiceGuardMsg = ref("");
 
 const current = computed(() => props.state ?? createInitialQhlyRuntimeState());
 const cfg = computed(() => current.value.config);
+const detailSubPage = ref<"introduce" | "skill" | "skin" | "config">(
+  current.value.config.qhly_listdefaultpage,
+);
+watch(
+  () => current.value.config.qhly_listdefaultpage,
+  (next) => {
+    detailSubPage.value = next;
+  },
+);
+const quoteDraft = ref(
+  current.value.editedLinesByGeneral?.[generalInput.value] ?? "建安风骨，文武兼资。",
+);
+const resolvedAssetInfo = computed(() =>
+  resolveQhlySkinAssetView(
+    cfg.value,
+    generalInput.value,
+    current.value.replaceSkinByGeneral[generalInput.value] ?? "origin",
+    { isGuozhan: cfg.value.qhly_guozhan },
+  ),
+);
+const voiceRouteInfo = computed(() => resolveQhlyVoiceRoute(cfg.value, cfg.value.qhly_mvp ? "mvp" : "skill"));
+const winRecord = computed(
+  () => current.value.winRecordByGeneral?.[generalInput.value] ?? { wins: 5, games: 10 },
+);
 const presetEntries = computed(
   () => Object.entries(QHLY_SURFACE_PRESETS) as Array<[QhlyStylesheetSurfaceId, (typeof QHLY_SURFACE_PRESETS)[QhlyStylesheetSurfaceId]]>,
 );
@@ -70,6 +96,38 @@ function triggerKillSkinAndBgm() {
   voiceGuardMsg.value = res.allowed ? "台词触发成功" : "防啰嗦(qhly_notbb)或静音冷却拦截";
   emit("update", { ...res.nextState, inspectGeneralId: generalInput.value });
 }
+
+function captureCleanroomDomSnapshot() {
+  if (typeof document === "undefined") return;
+  const c = document.createElement("canvas");
+  c.width = 160;
+  c.height = 60;
+  const ctx = c.getContext("2d");
+  if (ctx) {
+    ctx.fillStyle = "#141922";
+    ctx.fillRect(0, 0, 160, 60);
+    ctx.fillStyle = "#fbbf24";
+    ctx.font = "12px sans-serif";
+    ctx.fillText(`${generalInput.value}静皮快照`, 10, 34);
+  }
+  const url = c.toDataURL("image/png");
+  emit("update", {
+    ...current.value,
+    domSnapshotInfo: url,
+    lastOperationNotice: `dom2image 已生成静皮快照 (${url.length} B)`,
+  });
+}
+
+function saveEditedLine() {
+  emit("update", {
+    ...current.value,
+    editedLinesByGeneral: {
+      ...current.value.editedLinesByGeneral,
+      [generalInput.value]: quoteDraft.value,
+    },
+    lastOperationNotice: `已保存 ${generalInput.value} 自定义台词`,
+  });
+}
 </script>
 
 <template>
@@ -82,9 +140,15 @@ function triggerKillSkinAndBgm() {
       :data-qhly-fit-y="cfg.qhly_layoutFitY ? 'on' : 'off'"
       :data-qhly-v-middle="cfg.qhly_vMiddle ? 'on' : 'off'"
       :data-qhly-shuimo-cover="cfg.qhly_hideShuimoCover ? 'hidden' : 'visible'"
+      :data-qhly-forbid-ext="cfg.qhly_forbidExtPage ? 'on' : 'off'"
+      :data-qhly-lihui="cfg.qhly_lihuiSupport ? 'on' : 'off'"
+      :data-qhly-preload="cfg.qhly_funcLoadInPrecontent ? 'on' : 'off'"
+      :data-qhly-replace-card="cfg.qhly_replaceCharacterCard2"
       :style="{
         '--qhly-shuimo-lh': cfg.qhly_hanggaoxiufu,
+        '--qhly-shuimo-lh2': cfg.qhly_hanggaoxiufu2,
         '--qhly-lol-lh': cfg.qhly_lolhanggaoxiufu,
+        '--qhly-lol-lh2': cfg.qhly_lolhanggaoxiufu2,
       }"
       data-testid="qhly-modal-card"
     >
@@ -149,6 +213,7 @@ function triggerKillSkinAndBgm() {
           <div
             class="share-box qhly-detail-bio qhly-preview-box"
             :data-qhly-lutou="cfg.qhly_lutou ? 'on' : 'off'"
+            :data-qhly-lutou-fix="cfg.lutouFixx"
             :data-qhly-lvjing="cfg.lvjingFixx ? 'on' : 'off'"
             data-testid="qhly-modal-share-result"
           >
@@ -166,12 +231,60 @@ function triggerKillSkinAndBgm() {
             <div v-if="voiceGuardMsg" class="tiny muted" data-testid="qhly-voice-guard-msg">{{ voiceGuardMsg }}</div>
           </div>
 
+          <div class="qhly-subpages-row" data-testid="qhly-detail-subpages">
+            <button type="button" class="mode-tab-btn" :class="{ active: detailSubPage === 'introduce' }" data-testid="btn-qhly-subpage-introduce" @click="detailSubPage = 'introduce'">简介</button>
+            <button type="button" class="mode-tab-btn" :class="{ active: detailSubPage === 'skill' }" data-testid="btn-qhly-subpage-skill" @click="detailSubPage = 'skill'">技能</button>
+            <button type="button" class="mode-tab-btn qhly-ext-only-tab" :class="{ active: detailSubPage === 'skin' }" data-testid="btn-qhly-subpage-skin" @click="detailSubPage = 'skin'">皮肤</button>
+            <button type="button" class="mode-tab-btn qhly-ext-only-tab" :class="{ active: detailSubPage === 'config' }" data-testid="btn-qhly-subpage-config" @click="detailSubPage = 'config'">配置</button>
+            <button type="button" class="mode-tab-btn" data-testid="btn-qhly-double-page" @dblclick="detailSubPage = cfg.qhly_doubledefaultpage">双击页:{{ cfg.qhly_doubledefaultpage }}</button>
+          </div>
+
+          <div class="share-box" :data-qhly-subpage="detailSubPage" data-testid="qhly-subpage-body">
+            <div v-if="detailSubPage === 'introduce'" class="tiny">
+              <strong>[简介页]</strong> 武将 <code>{{ generalInput }}</code> · {{ subtitleText }} · 自定义台词「{{ quoteDraft }}」
+            </div>
+            <div v-else-if="detailSubPage === 'skill'" class="tiny">
+              <strong>[技能页]</strong> 关联技能 <code>{{ skillInput }}</code> · {{ shareInfo.shared ? "已绑定跨将共享台词" : "原技能独立台词" }} · 音轨 {{ voiceRouteInfo.trackLabel }}
+            </div>
+            <div v-else-if="detailSubPage === 'skin'" class="tiny">
+              <strong>[皮肤页]</strong> 当前 {{ current.replaceSkinByGeneral[generalInput] ?? "origin" }} · {{ resolvedAssetInfo.fallbackPolicyLabel }} · 动皮槽={{ resolvedAssetInfo.dynamicSlotCount }}
+            </div>
+            <div v-else class="tiny">
+              <strong>[配置页]</strong> 行高={{ cfg.qhly_hanggaoxiufu }}/{{ cfg.qhly_hanggaoxiufu2 }} · 阵营字号={{ cfg.qhly_shilizihao }} · 拖拽按钮={{ cfg.qhly_dragButton ? "开" : "关" }}
+            </div>
+          </div>
+
+          <div class="share-box qhly-bio-secondary" data-testid="qhly-asset-resolver-box">
+            <div class="tiny">
+              资产根目录：<code>{{ resolvedAssetInfo.assetRoot }}</code> · {{ resolvedAssetInfo.fallbackPolicyLabel }}
+            </div>
+            <div class="tiny">
+              动皮槽位={{ resolvedAssetInfo.dynamicSlotCount }} (允许={{ resolvedAssetInfo.dynamicPermitted ? "开" : "关" }}) · 等阶={{ resolvedAssetInfo.rarityMode }} · 轮换={{ resolvedAssetInfo.autoIntervalSec }}s
+            </div>
+            <div class="tiny muted">{{ resolvedAssetInfo.effectsSummary }}</div>
+            <div class="tiny">音轨路由：<code>{{ voiceRouteInfo.trackLabel }}</code></div>
+            <div v-if="cfg.qhly_recordWin" class="tiny" data-testid="qhly-record-win-box">
+              战绩统计：{{ winRecord.wins }} 胜 / {{ winRecord.games }} 场 ({{ Math.round((winRecord.wins / Math.max(1, winRecord.games)) * 100) }}%)
+            </div>
+            <div v-if="cfg.qhly_skinconfig" class="tiny" data-testid="qhly-skinconfig-box">
+              高级配置模式：已开启皮肤层级参数锁定与独立槽位映射
+            </div>
+            <div v-if="cfg.qhly_editmode" class="editline-row" data-testid="qhly-editmode-box">
+              <input v-model="quoteDraft" type="text" data-testid="qhly-editmode-input" />
+              <button type="button" data-testid="btn-qhly-save-line" @click="saveEditedLine">保存台词</button>
+            </div>
+          </div>
+
           <div class="faction-swatches">
             <span
               v-for="(hex, fac) in QHLY_GROUP_COLORS"
               :key="fac"
               class="swatch"
-              :style="{ borderColor: hex, color: hex, fontSize: `${Number(cfg.qhly_shilizihao) * 0.18}px` }"
+              :style="{
+                borderColor: hex,
+                color: hex,
+                fontSize: `${Number(cfg.qhly_currentViewSkin === 'lolbig' ? cfg.qhly_lolshilizihao : cfg.qhly_shilizihao) * 0.18}px`,
+              }"
             >{{ fac }} {{ hex }}</span>
           </div>
 
@@ -179,6 +292,16 @@ function triggerKillSkinAndBgm() {
             <button type="button" class="primary" data-testid="btn-qhly-modal-apply-kill" @click="triggerKillSkinAndBgm">
               触发击杀换肤与专属 BGM
             </button>
+            <button
+              v-if="cfg.qhly_dom2image"
+              type="button"
+              class="mode-tab-btn"
+              data-testid="btn-qhly-dom2image"
+              @click="captureCleanroomDomSnapshot"
+            >
+              生成静皮快照
+            </button>
+            <span v-if="current.domSnapshotInfo" class="tiny" data-testid="qhly-dom2image-status">✓ 已生成静皮</span>
           </div>
         </div>
       </div>

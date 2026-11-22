@@ -130,6 +130,7 @@ export interface L20RuntimeState {
   cardFxCueBySeat: Record<number, string>;
   rankSweepBySeat: Record<number, number>;
   playerHpCueBySeat: Record<number, string>;
+  guozhanHalfHpBySeat: Record<number, string>;
   binglinCrest: string | null;
   binglinTeammateHint: boolean;
   activeBanner: { code: string; title: string; tier: "epic" | "heal" | "kill" } | null;
@@ -152,6 +153,7 @@ export function createInitialL20RuntimeState(): L20RuntimeState {
     cardFxCueBySeat: {},
     rankSweepBySeat: {},
     playerHpCueBySeat: {},
+    guozhanHalfHpBySeat: {},
     binglinCrest: null,
     binglinTeammateHint: false,
     activeBanner: null,
@@ -199,6 +201,7 @@ export interface L20HookOptions {
   stars?: number;
   weaponType?: "dao" | "jian" | "fuzi" | "no";
   binglinSkill?: "jiangling" | "xiangyang" | "fancheng" | "jianxi";
+  halfTag?: string;
 }
 
 export function dispatchL20UiHook(
@@ -347,6 +350,14 @@ export function dispatchL20UiHook(
   if (hook === "_chongzhu") {
     return { ...base, recastCount: state.recastCount + 1 };
   }
+  if (hook === "_guozhanhalfchghp") {
+    const tag = opts?.halfTag ?? "半血阴阳";
+    return {
+      ...base,
+      guozhanHalfHpBySeat: { ...state.guozhanHalfHpBySeat, [seat]: tag },
+      activeBanner: { code: hook, title: `半血阴阳 · P${seat} ${tag}`, tier: "epic" },
+    };
+  }
   return base;
 }
 
@@ -422,6 +433,8 @@ export function syncL20MarkEffectsFromEnvelope(
       if (amt === 0) next = dispatchL20UiHook(next, "_mianshang_", { seat: target });
     } else if (pubCode === 5 || evType === "HpRecovered") {
       next = dispatchL20UiHook(next, "_o_o_recovertrigger", { seat: target });
+    } else if (pubCode === 6 || evType === "HpLost") {
+      next = dispatchL20UiHook(next, "_losehp_", { seat: target });
     } else if (pubCode === 7 || evType === "PlayerDied") {
       next = dispatchL20UiHook(next, "_shoushajisha_", { seat: source });
       next = dispatchL20UiHook(next, "_guozhan_diebiaoji_", { seat: target });

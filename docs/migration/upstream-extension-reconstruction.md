@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-22 Batch UI-6（L20/L09/L24/L27/L29/L10 闭环与 L25/L28 共 +158）合入与清单上调（待提交／发布）
+
+基线 HEAD `920f4fac0c5fa4b84da906f453e90e1d9f459483`（Batch U01-1 已发布，CI Run `44963498759` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-ui` `77fd89711..5eb822daa`（`verifier-ui` #109 **`APPROVE`**）并完成 520 前端单测、83/83 烟测与 8 套 Chrome CDP 验证：按 #109 复核口径升级 **158 项**（`L09` **102/102** 100%、`L24` **46/46** 100%、`L27` **54/54** 100%、`L29` **9/9** 100%、`L10` **17/17** 100%、`L20` **92/3/0**、`L25` **239/18/0**〔纯 UI 配置＋钩子；规则耦合 18 项待 Q2-L25〕、`L28` **55/1/0**），全仓清单更新为 **已复核等价 1,491／简化近似 2,933／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch UI-6 复核摘要](../operations/evidence/2026-11-21-ui-l24-l25-l29-l10/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。
+
 ## 2026-11-22 Batch U01-1（U01 3D精选首批 20 项→53/95）合入与清单上调（待提交／发布）
 
 基线 HEAD `b7ac33cb6d6164be6b4f3e124c24c668e666cac6`（Batch Q2-L19 前向修复已发布，CI Run `44954522303` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-q1-u01` `af6ef4899..44c3ae911`（`verifier-rules` #93 **`APPROVE`**）并与 L29/Q2-L27/Batch 1.6a/Q2-L19 共存对齐：`U01 3D精选` 首批 20 项技能（`dddzhishu`、`dddxiaxing`、`dddjuxian`、`dddjungui`、`dddjinggou`、`dddmoyan`、`dddshilie`、`dddyeshen`、`dddqiaoduan`、`ddddiedang`、`dddanliu`、`dddguiying`、`dddbingjian`、`dddtongyu`、`dddzhilian`、`dddjijian`、`dddjijian_old`、`dddfushi`、`dddlangzhi`、`dddfuzong`）升为 `已复核等价`，`U01` 升为 **已复核等价 53／简化近似 42／缺失 0**（合计 95），全仓清单更新为 **已复核等价 1,333／简化近似 3,091／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch U01-1 复核摘要](../operations/evidence/2026-11-21-batch1-6b-u01-1/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。

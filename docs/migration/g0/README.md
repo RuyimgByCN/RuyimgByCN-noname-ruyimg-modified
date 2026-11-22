@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-22 Batch UI-6（L20/L09/L24/L27/L29/L10 UI 收口与 L25/L28 共 +158）更新（待提交／发布）
+
+基线 HEAD `920f4fac0c5fa4b84da906f453e90e1d9f459483`（Batch U01-1 已发布，CI Run `44963498759` 10/10）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-ui` 独立审查（#109 **`APPROVE`**）与主线 8 套 Chrome CDP 及全量门禁复测，清单更新为 **已复核等价 1,491／简化近似 2,933／缺失 0／上游未定义 0**（合计 4,424）：`L09 千幻聆音` +44→**102/0/0**、`L24 皮肤切换` +46→**46/0/0**、`L27 选将美化` +1→**54/0/0**、`L29 龙血玄黄` +4→**9/0/0**、`L10 史诗卡牌` +6→**17/0/0**、`L20 标记补充` +10→**92/3/0**、`L25 祖安武将` +46 纯 UI→**239/18/0**（保留 18 项规则/耦合项待 Q2-L25）、`L28 雷霆万钧` +1→**55/1/0**。详见 [Batch UI-6 证据摘要](../../operations/evidence/2026-11-21-ui-l24-l25-l29-l10/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-22 Batch U01-1（U01 3D精选首批 20 项→53/95）更新（待提交／发布）
 
 基线 HEAD `b7ac33cb6d6164be6b4f3e124c24c668e666cac6`（Batch Q2-L19 前向修复已发布，CI Run `44954522303` 10/10）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-rules` 三轮独立审查（#93 **`APPROVE`**）与主线全量门禁复测，清单更新为 **已复核等价 1,333／简化近似 3,091／缺失 0／上游未定义 0**（合计 4,424）：`U01 3D精选` 由 `33 / 62 / 0` 升为 **53 / 42 / 0**（+20，`dddzhishu`、`dddxiaxing`、`dddjuxian`、`dddjungui`、`dddjinggou`、`dddmoyan`、`dddshilie`、`dddyeshen`、`dddqiaoduan`、`ddddiedang`、`dddanliu`、`dddguiying`、`dddbingjian`、`dddtongyu`、`dddzhilian`、`dddjijian`、`dddjijian_old`、`dddfushi`、`dddlangzhi`、`dddfuzong`）。详见 [Batch U01-1 证据摘要](../../operations/evidence/2026-11-21-batch1-6b-u01-1/README.md) 与 [inventory_status.json](inventory_status.json)。

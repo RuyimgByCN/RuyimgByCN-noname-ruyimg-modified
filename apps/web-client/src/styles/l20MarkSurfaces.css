@@ -113,7 +113,53 @@
   font-weight: 700;
   padding: 0.08rem 0.4rem;
   border-radius: 999px;
-  background: rgba(127, 29, 29, 0.85);
-  border: 1px solid #f87171;
+  border: 1px solid #38bdf8;
+  background: rgba(14, 116, 144, 0.42);
+  color: #e0f2fe;
+}
+
+.seat-l20-hpcue,
+.seat-l20-halfhp-tag {
+  font-size: 0.6rem;
+  font-weight: 800;
+  padding: 0.03rem 0.25rem;
+  border-radius: 4px;
+}
+.seat-l20-hpcue {
+  background: rgba(20, 83, 45, 0.9);
+  border: 1px solid #4ade80;
+  color: #dcfce7;
+}
+.seat-l20-hpcue[data-cue="体力流失"] {
+  background: rgba(127, 29, 29, 0.9);
+  border-color: #f87171;
   color: #fee2e2;
+}
+.seat-l20-hpcue[data-cue="免疫伤害"] {
+  background: rgba(30, 58, 138, 0.9);
+  border-color: #60a5fa;
+  color: #dbeafe;
+}
+.seat-l20-halfhp-tag {
+  background: rgba(88, 28, 135, 0.88);
+  border: 1px solid #c084fc;
+  color: #f3e8ff;
+}
+
+.l20-guozhan-marks-pill,
+.l20-recast-badge {
+  font-size: 0.68rem;
+  padding: 0.06rem 0.36rem;
+  border-radius: 999px;
+  border: 1px solid rgba(251, 191, 36, 0.55);
+  background: rgba(24, 24, 27, 0.8);
+}
+.l20-recast-badge {
+  color: #a5f3fc;
+  border-color: #38bdf8;
+}
+
+.battle-table[data-l20-control-chg="on"] .hand-tip-bar {
+  border-color: rgba(251, 191, 36, 0.65);
+  box-shadow: inset 0 0 12px rgba(245, 158, 11, 0.22);
 }

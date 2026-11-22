@@ -1,0 +1,99 @@
+/**
+ * L24 皮肤切换 全部 10 份渲染面与 14 项配置 CSS 消费者
+ * 对照 `archive/upstream/noname-liuli/noname/extension/皮肤切换/{component,style}/*.css`
+ */
+
+/* showTopArc: 顶部圆弧势力光环 */
+.battle-table[data-skinswitch-top-arc="on"] .seat.decade-seat-frame .seat-skinswitch-top-arc {
+  display: block;
+  position: absolute;
+  top: -3px;
+  left: 12%;
+  right: 12%;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.9), transparent);
+  pointer-events: none;
+  z-index: 6;
+}
+.battle-table[data-skinswitch-top-arc="off"] .seat-skinswitch-top-arc {
+  display: none;
+}
+
+/* hideHuanFu: 隐藏/显示更换动皮入口按钮 */
+.battle-table[data-skinswitch-hide-huanfu="on"] .seat-skinswitch-huanfu-btn {
+  display: none;
+}
+
+/* cugDynamicBg: 裁剪待机立绘/动态皮肤画布以适配露头（绝不裁剪叠加角标或按钮） */
+.battle-table[data-skinswitch-cug-bg="on"] .seat.decade-seat-frame .general-slot .portrait,
+.battle-table[data-skinswitch-cug-bg="on"] .seat.decade-seat-frame .general-slot .dynamic-skin-canvas {
+  clip-path: inset(4% 4% 12% 4% round 8px);
+}
+
+/* clickPlayerDynamic: 可点击座位切换动皮指示 */
+.battle-table[data-skinswitch-click-player="on"] .seat.decade-seat-frame {
+  cursor: pointer;
+}
+.battle-table[data-skinswitch-click-player="on"] .seat.decade-seat-frame:hover {
+  outline: 1px dashed rgba(251, 191, 36, 0.65);
+}
+
+/* 全部 10 份 L24 渲染面差异化视觉表现 */
+.skin-switch-modal-card[data-skinswitch-surface="base.css"] {
+  border-color: #714a02;
+  background: linear-gradient(145deg, #271f14, #14100b);
+}
+.skin-switch-modal-card[data-skinswitch-surface="cang-zhen-ge.css"] {
+  border-color: #e8a54b;
+  background: linear-gradient(145deg, #251a10, #120d08);
+}
+.skin-switch-modal-card[data-skinswitch-surface="dynamic.css"] {
+  border-color: #38bdf8;
+  background: linear-gradient(145deg, #172033, #0b101b);
+}
+.skin-switch-modal-card[data-skinswitch-surface="edit.css"] {
+  border-color: #a16207;
+  background: linear-gradient(145deg, #2d2219, #1b140e);
+}
+.skin-switch-modal-card[data-skinswitch-surface="skeletonEditor.css"] {
+  border-color: #64748b;
+  background: rgba(12, 14, 18, 0.94);
+}
+.skin-switch-modal-card[data-skinswitch-surface="interactive-chukuang.css"] {
+  border-color: #818cf8;
+  background: linear-gradient(145deg, #1e1b4b, #0f172a);
+}
+.skin-switch-modal-card[data-skinswitch-surface="light-modal.css"] {
+  border-color: #ef4444;
+  background: linear-gradient(145deg, #2f2d32, #1b191d);
+}
+.skin-switch-modal-card[data-skinswitch-surface="message.css"] .skinswitch-toast {
+  background: #edf2fc;
+  color: #1e293b;
+  border-left: 4px solid #0482f8;
+}
+.skin-switch-modal-card[data-skinswitch-surface="iconfont.css"] .skinswitch-icon-glyph {
+  letter-spacing: 0.08em;
+  color: #fbbf24;
+}
+.skin-switch-modal-card[data-skinswitch-surface="animation"] .standee-box {
+  animation: skinswitch-standee-pulse 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes skinswitch-standee-pulse {
+  from {
+    box-shadow: 0 0 8px rgba(251, 191, 36, 0.35);
+  }
+  to {
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.72);
+  }
+}
+
+.skinswitch-toast {
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  font-size: 0.76rem;
+}

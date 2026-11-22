@@ -21,11 +21,13 @@ import {
   type DecadeUiRuntimeState,
 } from "../../../engine/surfaces/decadeUiSurface";
 import type { ShoushaUiRuntimeState } from "../../../engine/surfaces/shoushaUiSurface";
+import type { ZuanUiRuntimeState } from "../../../engine/surfaces/zuanSurface";
 
 const props = withDefaults(
   defineProps<{
     decadeUi?: DecadeUiRuntimeState;
     shoushaUi?: ShoushaUiRuntimeState;
+    zuanUi?: ZuanUiRuntimeState;
     liveLineArc?: DecadeLineArcState | null;
     view: ObserverSnapshot | null;
     selfId?: number;
@@ -104,7 +106,8 @@ const activeLineArc = computed(() => props.liveLineArc ?? props.decadeUi?.lineAr
 
 const lineArcGeom = computed(() => {
   const arc = activeLineArc.value;
-  if (!arc) return { x1: 50, y1: 50, x2: 50, y2: 50, stroke: "#fde047" };
+  const opacity = props.zuanUi?.attackLineOpacity ?? 1;
+  if (!arc) return { x1: 50, y1: 50, x2: 50, y2: 50, stroke: "#fde047", opacity };
   const from = findSeatCenterPct(arc.fromSeat);
   const to = findSeatCenterPct(arc.toSeat);
   const cpzs = cfg.value?.CPZS ?? "shoushaX";
@@ -116,7 +119,7 @@ const lineArcGeom = computed(() => {
         : cpzs === "jiangjun" || cpzs === "weijiangjun"
           ? "#38bdf8"
           : "#fde047";
-  return { x1: from.x, y1: from.y, x2: to.x, y2: to.y, stroke };
+  return { x1: from.x, y1: from.y, x2: to.x, y2: to.y, stroke, opacity };
 });
 
 interface PoxiPreviewCard {
@@ -370,6 +373,7 @@ function onGuanXingCardClick(state: DecadeGuanXingState, cardId: number) {
       viewBox="0 0 100 100"
       preserveAspectRatio="none"
       aria-hidden="true"
+      :data-attack-opacity="lineArcGeom.opacity"
       data-testid="decade-effect-line"
     >
       <line
@@ -378,11 +382,12 @@ function onGuanXingCardClick(state: DecadeGuanXingState, cardId: number) {
         :x2="lineArcGeom.x2"
         :y2="lineArcGeom.y2"
         :stroke="lineArcGeom.stroke"
+        :stroke-opacity="lineArcGeom.opacity"
         stroke-width="0.9"
         stroke-dasharray="2.5 1.5"
       />
-      <circle :cx="lineArcGeom.x1" :cy="lineArcGeom.y1" r="1.2" :fill="lineArcGeom.stroke" />
-      <circle :cx="lineArcGeom.x2" :cy="lineArcGeom.y2" r="1.4" :fill="lineArcGeom.stroke" />
+      <circle :cx="lineArcGeom.x1" :cy="lineArcGeom.y1" r="1.2" :fill="lineArcGeom.stroke" :fill-opacity="lineArcGeom.opacity" />
+      <circle :cx="lineArcGeom.x2" :cy="lineArcGeom.y2" r="1.4" :fill="lineArcGeom.stroke" :fill-opacity="lineArcGeom.opacity" />
     </svg>
 
     <!-- `drlt_poxi` / `pro_drlt_poxi` (`meihua.js:6770-6935`): honest 4-suit dual hand inspection modal -->
