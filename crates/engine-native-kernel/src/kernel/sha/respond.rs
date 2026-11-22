@@ -369,7 +369,12 @@ impl ShaResolveMachine {
                 },
             };
         }
-        let has_guanshi = !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.source)
+        let has_guanshi_override = ctx
+            .catalog
+            .skill_by_name("guanshi_skill")
+            .is_some_and(|d| ctx.core.has_skill(self.source, d));
+        let has_guanshi = !has_guanshi_override
+            && !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.source)
             && ctx
                 .core
                 .player(self.source)
@@ -438,12 +443,7 @@ impl ShaResolveMachine {
             .flags
             .remove(&(self.target, "dddfusi_window_refused".to_string()));
         ctx.core.turn.liaoyuan_count = 0;
-        ctx.emit(EventData::ShaDodged {
-            card: self.card,
-            source: self.source,
-            target: self.target,
-        });
-        self.finish_or_defer_sha_end(ctx, false)
+        self.after_sha_dodged(ctx)
     }
 }
 

@@ -605,6 +605,10 @@ impl HostBehavior {
             HostBehavior::L01NeiKey => 862,
             HostBehavior::L01AttitudeTracker => 863,
             HostBehavior::L01AiRuleHooks => 864,
+            HostBehavior::L11SystemHooks => 739,
+            HostBehavior::L11Weapons => 740,
+            HostBehavior::L11GeneralBossC => 741,
+            HostBehavior::L11BossLingfeng => 742,
         }
     }
 

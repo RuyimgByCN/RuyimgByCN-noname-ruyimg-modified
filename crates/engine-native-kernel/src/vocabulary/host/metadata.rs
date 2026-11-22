@@ -890,7 +890,11 @@ impl HostBehavior {
             | HostBehavior::L11BuffHelpersA
             | HostBehavior::L11BuffsC
             | HostBehavior::L11BuffsD
-            | HostBehavior::L11BuffHelpersB => None,
+            | HostBehavior::L11BuffHelpersB
+            | HostBehavior::L11SystemHooks
+            | HostBehavior::L11Weapons
+            | HostBehavior::L11GeneralBossC
+            | HostBehavior::L11BossLingfeng => None,
             HostBehavior::L01YiyiCard
             | HostBehavior::L01FirstKs
             | HostBehavior::L01NeiKey

@@ -267,40 +267,88 @@ impl JudgePhaseMachine {
 }
 
 impl crate::machine::Ctx<'_> {
-    /// Returns the effective `(Suit, u8)` of an inline judge card, applying
-    /// Huangtian judge overrides when `vm_card_history` is active.
+    /// 内联 `draw_judge_card` 判定牌的有效花色与点数（L11 皇天族改判）。
     pub fn inline_judge_suit_rank(
         &self,
         owner: PlayerId,
         card: crate::ids::CardId,
     ) -> (crate::catalog::Suit, u8) {
-        let raw = &self.catalog.cards[card as usize];
+        let raw_def = &self.catalog.cards[card as usize];
         if self.catalog.vm_card_history {
             crate::rvm_bridge::modifiers::apply_huangtian_suit_rank(
                 self.core,
                 self.catalog,
                 owner,
-                raw.suit,
-                raw.rank,
+                raw_def.suit,
+                raw_def.rank,
             )
         } else {
-            (raw.suit, raw.rank)
+            (raw_def.suit, raw_def.rank)
         }
     }
 
-    /// Discards an inline judge card and invokes `on_judge_settled` (`judgeEnd`)
-    /// when `vm_card_history` is active; returns whether a follow-up frame spawned.
+    /// 判定牌已进入弃牌堆时，若场上存在 `txhj_zhuwei` 等 `L11GeneralBossC`
+    /// `OrdinaryJudge` 监听技，则补发已结算 `OrdinaryJudge { owner, invocation: jc }`
+    /// 并标记 `l11_resolved_ordinary_judge:{jc}` 以免 `intrinsic` 误作前判定启动。
+    pub fn emit_zhuwei_ordinary_judge_if_needed(
+        &mut self,
+        owner: PlayerId,
+        judge_card: crate::ids::CardId,
+    ) -> bool {
+        if !self.catalog.vm_card_history || !self.core.discard.contains(&judge_card) {
+            return false;
+        }
+        let resolved = EventData::OrdinaryJudge {
+            owner,
+            invocation: judge_card,
+        };
+        let qctx = self.query();
+        let has_zhuwei = self.core.skills.iter().any(|((s_owner, sdef), inst)| {
+            let def_entry = &self.catalog.skills[*sdef as usize];
+            inst.enabled
+                && self.core.player(*s_owner).alive
+                && def_entry.behavior.as_host_behavior()
+                    == Some(crate::vocabulary::host::HostBehavior::L11GeneralBossC)
+                && def_entry.trigger.as_ref().is_some_and(|m| {
+                    m.event == crate::event::EventKind::OrdinaryJudge
+                        || m.extra_events
+                            .contains(&crate::event::EventKind::OrdinaryJudge)
+                })
+                && def_entry.behavior.filter_in_window(
+                    &qctx,
+                    *s_owner,
+                    &resolved,
+                    crate::event::EventKind::OrdinaryJudge,
+                )
+        });
+        if has_zhuwei {
+            self.core.vm_aux.flags.insert(
+                (owner, format!("l11_resolved_ordinary_judge:{judge_card}")),
+                1,
+            );
+            self.emit(resolved);
+            return true;
+        }
+        false
+    }
+
+    /// 内联 `draw_judge_card` + `to_discard` 结算后的通用收尾：
+    /// 触发 `on_judge_settled` 钩子并在判定牌入弃堆时派发 `txhj_zhuwei` 等后置窗口。
     pub fn settle_inline_judge_card(
         &mut self,
         owner: PlayerId,
         suit: crate::catalog::Suit,
-        card: crate::ids::CardId,
+        judge_card: crate::ids::CardId,
     ) -> bool {
-        self.to_discard(card);
-        if self.catalog.vm_card_history {
-            (self.catalog.hooks.on_judge_settled)(self, owner, None, suit, card)
-        } else {
-            false
+        if !self.core.discard.contains(&judge_card) {
+            self.to_discard(judge_card);
         }
+        if !self.catalog.vm_card_history {
+            return false;
+        }
+        let mut spawned =
+            (self.catalog.hooks.on_judge_settled)(self, owner, None, suit, judge_card);
+        spawned |= self.emit_zhuwei_ordinary_judge_if_needed(owner, judge_card);
+        spawned
     }
 }

@@ -546,11 +546,12 @@ pub fn machine_held_cards(m: &MachineSnapshot, out: &mut Vec<CardId>) {
         }
         MachineSnapshot::GuanXing { top, .. } => out.extend(top.iter().copied()),
         MachineSnapshot::Wugu { cards, .. } => out.extend(cards.iter().copied()),
-        // 末焱/调兵遣将展示牌已离开牌库，挂起期间只在宿主机器上。
+        // 末焱/调兵遣将/灵锋展示牌已离开牌库，挂起期间只在宿主机器上。
         MachineSnapshot::Host {
             behavior, cards, ..
         } if *behavior == HostBehavior::D3Moyan.tag()
-            || *behavior == HostBehavior::WudianDiaobingCard.tag() =>
+            || *behavior == HostBehavior::WudianDiaobingCard.tag()
+            || *behavior == HostBehavior::L11BossLingfeng.tag() =>
         {
             out.extend(cards.iter().copied());
         }

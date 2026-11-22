@@ -128,6 +128,20 @@ pub(super) fn commit_equip(
     player: PlayerId,
     card: crate::ids::CardId,
 ) {
+    if ctx
+        .core
+        .vm_aux
+        .flags
+        .remove(&(player, format!("l11_move_equip_evt:{card}")))
+        .is_some()
+    {
+        ctx.log(LogEvent::Equipped {
+            player,
+            card,
+            replaced: None,
+        });
+        return;
+    }
     // 实际装备栏（swd 批 143 改造：declared_slots 覆盖优先）
     let Some(slot) = ctx.catalog.card_slot_of(ctx.core, card) else {
         panic!("commit_equip on non-equip card");
@@ -229,34 +243,56 @@ pub(super) fn commit_equip(
         slot,
         crate::catalog::EquipSlot::HorsePlus | crate::catalog::EquipSlot::HorseMinus
     );
-    let to_replace: Vec<crate::ids::CardId> = ctx
-        .core
-        .player(player)
-        .equips
-        .iter()
-        .copied()
-        .filter(|&c| {
-            let c_slot = ctx.catalog.card_slot_of(ctx.core, c);
-            if is_liulong {
-                matches!(
-                    c_slot,
-                    Some(
-                        crate::catalog::EquipSlot::HorsePlus
-                            | crate::catalog::EquipSlot::HorseMinus
+    let has_txhj_equip5 = slot == crate::catalog::EquipSlot::Treasure
+        && ctx
+            .catalog
+            .skill_by_name("_txhj_equip5")
+            .is_some_and(|def| ctx.core.has_skill(player, def));
+    let to_replace: Vec<crate::ids::CardId> = if has_txhj_equip5 {
+        let existing_treasures: Vec<crate::ids::CardId> = ctx
+            .core
+            .player(player)
+            .equips
+            .iter()
+            .copied()
+            .filter(|&c| {
+                ctx.catalog.card_slot_of(ctx.core, c) == Some(crate::catalog::EquipSlot::Treasure)
+            })
+            .collect();
+        if existing_treasures.len() >= 2 {
+            vec![existing_treasures[0]]
+        } else {
+            Vec::new()
+        }
+    } else {
+        ctx.core
+            .player(player)
+            .equips
+            .iter()
+            .copied()
+            .filter(|&c| {
+                let c_slot = ctx.catalog.card_slot_of(ctx.core, c);
+                if is_liulong {
+                    matches!(
+                        c_slot,
+                        Some(
+                            crate::catalog::EquipSlot::HorsePlus
+                                | crate::catalog::EquipSlot::HorseMinus
+                        )
                     )
-                )
-            } else if is_mount {
-                c_slot == Some(slot)
-                    || ctx
-                        .catalog
-                        .cards
-                        .get(c as usize)
-                        .is_some_and(|cd| cd.name == "txhj_liulongcanjia")
-            } else {
-                c_slot == Some(slot)
-            }
-        })
-        .collect();
+                } else if is_mount {
+                    c_slot == Some(slot)
+                        || ctx
+                            .catalog
+                            .cards
+                            .get(c as usize)
+                            .is_some_and(|cd| cd.name == "txhj_liulongcanjia")
+                } else {
+                    c_slot == Some(slot)
+                }
+            })
+            .collect()
+    };
     let replaced = to_replace.first().copied();
     for &old in &to_replace {
         ctx.core.player_mut(player).equips.retain(|c| *c != old);

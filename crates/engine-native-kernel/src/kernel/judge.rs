@@ -751,7 +751,9 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                         let def_entry = &ctx.catalog.skills[*sdef as usize];
                         inst.enabled
                             && ctx.core.player(*owner).alive
-                            && def_entry.behavior.is_vm_skill()
+                            && (def_entry.behavior.is_vm_skill()
+                                || def_entry.behavior.as_host_behavior()
+                                    == Some(crate::vocabulary::host::HostBehavior::L11GeneralBossC))
                             && def_entry.trigger.as_ref().is_some_and(|m| {
                                 m.event == crate::event::EventKind::OrdinaryJudge
                                     || m.extra_events
@@ -783,6 +785,7 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                     cur.judge_held = false;
                     let jc = cur.judge_card;
                     let holder = cur.tian_du.remove(0);
+                    let mut zhuwei_spawned = false;
                     if let ChoiceOption::Confirm =
                         ctx.answer().first().copied().unwrap_or(ChoiceOption::Pass)
                     {
@@ -795,9 +798,11 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                     } else {
                         // 放弃获得：机器持有的判定牌弃置
                         ctx.to_discard(jc);
+                        zhuwei_spawned =
+                            ctx.emit_zhuwei_ordinary_judge_if_needed(self.owner, jc);
                     }
                     self.current = None;
-                    if Self::notify_judge_settled(ctx, self.owner, jc) {
+                    if Self::notify_judge_settled(ctx, self.owner, jc) || zhuwei_spawned {
                         return Flow::Yield;
                     }
                     continue;
@@ -805,12 +810,15 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                 if cur.tian_du.is_empty() || cur.gained || !cur.judge_held {
                     // 完结：机器仍持有的判定牌（天妒者死亡等防御路径）弃置
                     let jc = cur.judge_card;
+                    let mut zhuwei_spawned = false;
                     if cur.judge_held && !cur.gained {
                         cur.judge_held = false;
                         ctx.to_discard(jc);
+                        zhuwei_spawned =
+                            ctx.emit_zhuwei_ordinary_judge_if_needed(self.owner, jc);
                     }
                     self.current = None;
-                    if Self::notify_judge_settled(ctx, self.owner, jc) {
+                    if Self::notify_judge_settled(ctx, self.owner, jc) || zhuwei_spawned {
                         return Flow::Yield;
                     }
                     continue;

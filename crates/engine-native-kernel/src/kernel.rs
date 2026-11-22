@@ -17,7 +17,7 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
         let f = ctx.res.frame(frame_id).expect("commit frame");
         (f.kind, f.data.clone())
     };
-    record_vm_history(ctx, &data);
+    record_vm_history(ctx, frame_id, &data);
     match &data {
         EventData::CardUsed(u) if !u.cancelled => record_turn_use_resp(ctx, u.player),
         EventData::CardResponded { player, .. } => record_turn_use_resp(ctx, *player),

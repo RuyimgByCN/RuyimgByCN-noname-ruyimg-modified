@@ -58,6 +58,9 @@ mod l11_taixu_b3_fixes;
 #[path = "../l11_taixu_b4_fixes.rs"]
 mod l11_taixu_b4_fixes;
 
+#[path = "../l11_taixu_b5_fixes.rs"]
+mod l11_taixu_b5_fixes;
+
 #[path = "../l12_rzsh_eight.rs"]
 mod l12_rzsh_eight;
 

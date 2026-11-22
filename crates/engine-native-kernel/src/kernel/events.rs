@@ -193,6 +193,12 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
     if let Some(card) = u.card {
         if ctx.core.player(u.player).hand.contains(&card) {
             ctx.take_hand_card(u.player, card);
+            if ctx.catalog.vm_card_history {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((u.player, format!("l11_carduse_lost:{frame_id}")), 1);
+            }
         } else if ctx.core.player(u.player).equips.contains(&card) {
             ctx.core.player_mut(u.player).equips.retain(|c| *c != card);
             ctx.core.declared_slots.remove(&card);
@@ -230,9 +236,21 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
             (0..ctx.core.players.len() as PlayerId).find(|&p| ctx.core.player(p).hand.contains(&card))
         }) {
             ctx.take_hand_card(holder, card);
+            if ctx.catalog.vm_card_history {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((holder, format!("l11_carduse_lost:{frame_id}")), 1);
+            }
         } else {
             // 保持原 panic 语义（调用方先验证）。
             ctx.take_hand_card(u.player, card);
+            if ctx.catalog.vm_card_history {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((u.player, format!("l11_carduse_lost:{frame_id}")), 1);
+            }
         }
     }
     // 全局用牌计数（U05 xianjian 小蛮，规则 v163 灵泉门控；上游

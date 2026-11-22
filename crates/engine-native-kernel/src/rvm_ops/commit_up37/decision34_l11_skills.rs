@@ -40,6 +40,62 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
     if super::decision34_l11_buffs::try_resolve_l11_buff_or_servant_skill(ctx, skill_name, owner) {
         return;
     }
+    // Batch L11-5（739-742 + 已宿主化覆写技）已全部由宿主规则与修改器承载，不再走旧 VM 兜底分支。
+    if matches!(
+        skill_name,
+        "_txhj_skill_maxCards"
+            | "_txhj_skill_Timelimit"
+            | "_txhj_skill_addEffectStyle"
+            | "_txhj_skill_gaincard"
+            | "_txhj_skill_discard"
+            | "_txhj_skill_usecard"
+            | "_txhj_skill_damage"
+            | "_txhj_skills_kill"
+            | "_txhj_equip5"
+            | "twsidao"
+            | "twsidao_equip"
+            | "polu"
+            | "polu_damage"
+            | "guofengyupao"
+            | "gx_taijifuchen"
+            | "hanbing_skill"
+            | "cixiong_skill"
+            | "wushuangfangtianji_skill"
+            | "qilin_skill"
+            | "guanshi_skill"
+            | "sanjian_skill"
+            | "yitianjian"
+            | "pyzhuren_diamond"
+            | "twzhouhu"
+            | "twharvestinori"
+            | "twzuhuo"
+            | "_txhj_shenqi"
+            | "_txhj_XXXshenqi"
+            | "txhj_mouduan"
+            | "olshanjia"
+            | "boss_xuanlei"
+            | "txhj_xuanlve"
+            | "boss_baolian"
+            | "boss_lingfeng"
+            | "dz_gs_yinfu"
+            | "boss_leili"
+            | "boss_fengxing"
+            | "boss_yushou"
+            | "boss_xixing"
+            | "boss_moyany"
+            | "boss_danshu"
+            | "boss_modao"
+            | "boss_jueji"
+            | "boss_mojian"
+            | "boss_lianyu"
+            | "boss_skonghun"
+            | "txhj_zhuwei"
+            | "boss_zhennu"
+            | "txhj_chuhai"
+            | "txhj_chuhai2"
+    ) {
+        return;
+    }
 
     match skill_name {
         // === 1. All 32 `L11` Cards & Card-Backed Skills (`extension_card.js:8-2041`, `extension_skill.js:458`) ===

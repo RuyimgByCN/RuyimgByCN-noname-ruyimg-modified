@@ -22,12 +22,19 @@ pub(super) fn with_current_damage_mut(
 ) {
     let cur = ctx.current_event_frame_id();
     let root_id = match ctx.res.frame(cur).map(|fr| &fr.data) {
-        Some(EventData::DamageWindow { root, .. }) => *root,
-        _ => cur,
+        Some(EventData::DamageWindow { root, .. }) => Some(*root),
+        Some(EventData::Damage(_)) => Some(cur),
+        _ => ctx.res.stack.iter().rev().find_map(|fr| match &fr.data {
+            EventData::DamageWindow { root, .. } => Some(*root),
+            EventData::Damage(_) => Some(fr.id),
+            _ => None,
+        }),
     };
-    if let Some(frame) = ctx.res.frame_mut(root_id) {
-        if let EventData::Damage(dm) = &mut frame.data {
-            f(dm);
+    if let Some(root_id) = root_id {
+        if let Some(frame) = ctx.res.frame_mut(root_id) {
+            if let EventData::Damage(dm) = &mut frame.data {
+                f(dm);
+            }
         }
     }
 }

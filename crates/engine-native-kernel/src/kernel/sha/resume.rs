@@ -2,14 +2,6 @@
 
 use super::*;
 
-pub(super) fn sha_judge_suit(
-    ctx: &Ctx<'_>,
-    actor: PlayerId,
-    judged: crate::ids::CardId,
-) -> crate::catalog::Suit {
-    ctx.inline_judge_suit_rank(actor, judged).0
-}
-
 pub(super) fn cixiong_need(ctx: &Ctx<'_>, source: PlayerId) -> usize {
     if ctx.catalog.vm_card_history
         && crate::rvm_bridge::modifiers::has_fuchendangmo(ctx.core, ctx.catalog, source)
@@ -56,6 +48,26 @@ impl ShaResolveMachine {
         }
         if let Some(is_damage) = self.take_sha_pending_end(ctx) {
             return Some(self.finish_target_sha_end(ctx, is_damage));
+        }
+        if let Some(fid) = self.current_sha_frame_id(ctx) {
+            if ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(self.source, format!("l11_guanshi_dodged_pending:{fid}")))
+                .is_some()
+            {
+                let forced = ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.source, "l11_guanshi_force_hit".to_string()))
+                    .is_some();
+                if forced && ctx.core.player(self.target).alive {
+                    return Some(self.emit_sha_damage(ctx));
+                }
+                return Some(self.finish_or_defer_sha_end(ctx, false));
+            }
         }
         // 复仇（玩点论杀批 14，规则 v279）：成为杀目标时交出 1 张牌（"he"）取消
         // 该杀（上游 target shaBefore direct chooseCard("he") 同面；所选牌归来
@@ -465,23 +477,8 @@ impl ShaResolveMachine {
                 if ctx.core.player(self.source).hand.contains(&new_sha) {
                     ctx.discard_from_hand(self.source, new_sha);
                     crate::kernel::emit_card_responded_as(ctx, self.source, new_sha, CardKind::Sha);
+                    self.clear_sha_target_judge_flags(ctx);
                     if let Some(fid) = self.current_sha_frame_id(ctx) {
-                        ctx.core
-                            .vm_aux
-                            .flags
-                            .remove(&(self.source, format!("sha_cike_done:{fid}")));
-                        ctx.core
-                            .vm_aux
-                            .flags
-                            .remove(&(self.source, format!("sha_tianxian_done:{fid}")));
-                        ctx.core
-                            .vm_aux
-                            .flags
-                            .remove(&(self.source, format!("sha_end_settled:{fid}")));
-                        ctx.core
-                            .vm_aux
-                            .flags
-                            .remove(&(self.source, format!("sha_pending_end:{fid}")));
                         ctx.core
                             .vm_aux
                             .flags
@@ -515,12 +512,15 @@ impl ShaResolveMachine {
         if self.asking_sadeng {
             self.asking_sadeng = false;
             let confirmed = matches!(ctx.answer().first(), Some(ChoiceOption::Confirm));
-            if confirmed && ctx.core.player(self.target).alive {
+            if confirmed
+                && ctx.core.player(self.target).alive
+                && (!ctx.core.deck.is_empty() || !ctx.core.discard.is_empty())
+            {
                 let judged = ctx.draw_judge_card_with_elo(
                     self.source,
                     crate::kernel::EloJudgePref::RedPositive,
                 );
-                let suit = sha_judge_suit(ctx, self.source, judged);
+                let (suit, _) = ctx.inline_judge_suit_rank(self.source, judged);
                 let red = matches!(
                     suit,
                     crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
@@ -694,6 +694,134 @@ impl ShaResolveMachine {
                 .remove(&(self.source, format!("qilin_fuchen_used:{cid}")));
             self.qilin_horse = None;
             return Some(self.emit_sha_damage(ctx));
+        }
+        None
+    }
+
+    pub(super) fn clear_sha_target_judge_flags(&self, ctx: &mut Ctx<'_>) {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(self.target, "l10_scschihe_block_suits".to_string()));
+        if let Some(fid) = self.current_sha_frame_id(ctx) {
+            for key in [
+                "sha_cike_done",
+                "sha_end_settled",
+                "sha_pending_end",
+                "sha_frame_damage_bonus",
+                "l11_guanshi_dodged_pending",
+                "sha_tianxian_done",
+                "sha_longxiang_done",
+                "sha_yueren_done",
+            ] {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.source, format!("{key}:{fid}")));
+            }
+        }
+    }
+
+    pub(super) fn resolve_tianxian(&mut self, ctx: &mut Ctx<'_>) -> Option<Flow> {
+        let fid = self.current_sha_frame_id(ctx).unwrap_or(0);
+        let done_key = (self.source, format!("sha_tianxian_done:{fid}"));
+        if ctx.core.vm_aux.flags.contains_key(&done_key) {
+            return None;
+        }
+        let tianxian = ctx
+            .catalog
+            .skill_by_name(crate::vocabulary::host::WUDIAN_XJ_TIANXIAN_KEY)
+            .is_some_and(|d| ctx.core.has_skill(self.source, d));
+        if !tianxian || (ctx.core.deck.is_empty() && ctx.core.discard.is_empty()) {
+            return None;
+        }
+        ctx.core.vm_aux.flags.insert(done_key, 1);
+        let judged =
+            ctx.draw_judge_card_with_elo(self.source, crate::kernel::EloJudgePref::RedPositive);
+        let (suit, _) = ctx.inline_judge_suit_rank(self.target, judged);
+        let black = matches!(suit, crate::catalog::Suit::Spade | crate::catalog::Suit::Club);
+        let settled_spawned = ctx.settle_inline_judge_card(self.target, suit, judged);
+        if black {
+            return Some(self.advance_target(ctx));
+        }
+        if settled_spawned {
+            self.asked = false;
+            return Some(Flow::Yield);
+        }
+        None
+    }
+
+    pub(super) fn resolve_tieji(&mut self, ctx: &mut Ctx<'_>) -> Option<Flow> {
+        let tieji = ctx
+            .catalog
+            .skill_by_name(crate::vocabulary::names::TIE_JI)
+            .is_some_and(|d| ctx.core.has_skill(self.source, d));
+        if tieji
+            && self.tieji_red.is_none()
+            && (!ctx.core.deck.is_empty() || !ctx.core.discard.is_empty())
+        {
+            let judged = ctx.draw_judge_card_with_elo(
+                self.source,
+                crate::kernel::EloJudgePref::RedPositive,
+            );
+            let (suit, _) = ctx.inline_judge_suit_rank(self.source, judged);
+            let red = matches!(suit, crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond);
+            self.tieji_red = Some(red);
+            if ctx.settle_inline_judge_card(self.source, suit, judged) {
+                self.asked = false;
+                return Some(Flow::Yield);
+            }
+        }
+        None
+    }
+
+    pub(super) fn resolve_yueren(&mut self, ctx: &mut Ctx<'_>) -> Option<Flow> {
+        let fid = self.current_sha_frame_id(ctx).unwrap_or(0);
+        let done_key = (self.source, format!("sha_yueren_done:{fid}"));
+        if ctx.core.vm_aux.flags.contains_key(&done_key) {
+            return None;
+        }
+        let has_yueren = ctx
+            .catalog
+            .skill_by_name("yueren")
+            .is_some_and(|d| ctx.core.has_skill(self.source, d));
+        if !has_yueren
+            || !ctx.core.player(self.target).alive
+            || (ctx.core.deck.is_empty() && ctx.core.discard.is_empty())
+        {
+            return None;
+        }
+        ctx.core.vm_aux.flags.insert(done_key, 1);
+        let judged = ctx.draw_judge_card_with_elo(self.source, crate::kernel::EloJudgePref::Yueren);
+        let (suit, _) = ctx.inline_judge_suit_rank(self.source, judged);
+        let black = matches!(suit, crate::catalog::Suit::Spade | crate::catalog::Suit::Club);
+        if black {
+            let mut pool: Vec<crate::ids::CardId> =
+                ctx.core.player(self.target).hand.iter().copied().collect();
+            pool.extend(ctx.core.player(self.target).equips.iter().copied());
+            if !pool.is_empty() {
+                let j = ctx.core.rng.gen_range(pool.len() as u32) as usize;
+                let c = pool[j];
+                if ctx.core.player(self.target).hand.contains(&c) {
+                    ctx.take_hand_card(self.target, c);
+                } else {
+                    ctx.core.player_mut(self.target).equips.retain(|x| *x != c);
+                    if ctx.catalog.card_kind(c).is_equip() {
+                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.target, c);
+                    }
+                }
+                ctx.to_discard(c);
+                ctx.log(LogEvent::CardDiscarded {
+                    player: self.target,
+                    cards: vec![c],
+                });
+            }
+        } else if ctx.core.player(self.source).alive {
+            ctx.start_draw(self.source, 1);
+        }
+        if ctx.settle_inline_judge_card(self.source, suit, judged) {
+            self.asked = false;
+            return Some(Flow::Yield);
         }
         None
     }

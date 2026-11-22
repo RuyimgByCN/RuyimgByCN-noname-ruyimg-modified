@@ -277,6 +277,28 @@ impl ShaResolveMachine {
         self.finish_target_sha_end(ctx, is_damage)
     }
 
+    pub(super) fn after_sha_dodged(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        self.emit_sha_dodged(ctx);
+        let has_override = ctx.catalog.vm_card_history
+            && ctx
+                .catalog
+                .skill_by_name("guanshi_skill")
+                .is_some_and(|d| ctx.core.has_skill(self.source, d));
+        if has_override && ctx.core.player(self.source).alive {
+            if let Some(fid) = self.current_sha_frame_id(ctx) {
+                self.asked = false;
+                self.hujia_holder = None;
+                self.liuli_stage = 0;
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((self.source, format!("l11_guanshi_dodged_pending:{fid}")), 1);
+                return Flow::Yield;
+            }
+        }
+        self.finish_or_defer_sha_end(ctx, false)
+    }
+
     pub(super) fn finish_or_defer_sha_end(&mut self, ctx: &mut Ctx<'_>, is_damage: bool) -> Flow {
         if Self::has_active_bolehuiyan_pred(ctx) {
             let fid = self.current_sha_frame_id(ctx);
@@ -371,32 +393,7 @@ impl ShaResolveMachine {
     ///（逐目标状态复位，重开该目标的防具/出闪询问）；队列空 → 弃置杀
     /// 本体结束。
     fn advance_target(&mut self, ctx: &mut Ctx<'_>) -> Flow {
-        ctx.core
-            .vm_aux
-            .flags
-            .remove(&(self.target, "l10_scschihe_block_suits".to_string()));
-        if let Some(fid) = self.current_sha_frame_id(ctx) {
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(self.source, format!("sha_cike_done:{fid}")));
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(self.source, format!("sha_tianxian_done:{fid}")));
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(self.source, format!("sha_end_settled:{fid}")));
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(self.source, format!("sha_pending_end:{fid}")));
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(self.source, format!("sha_frame_damage_bonus:{fid}")));
-        }
+        self.clear_sha_target_judge_flags(ctx);
         if let Some(next) = self.extra_targets.first().copied() {
             self.extra_targets.remove(0);
             self.target = next;
@@ -676,6 +673,15 @@ impl ShaResolveMachine {
 }
 
 impl ShaResolveMachine {
+    /// 杀被闪避时发射 `ShaDodged`。
+    pub(super) fn emit_sha_dodged(&self, ctx: &mut Ctx<'_>) {
+        ctx.emit(EventData::ShaDodged {
+            card: self.card,
+            source: self.source,
+            target: self.target,
+        });
+    }
+
     /// 诱敌深入（玩点论杀 card/skill.js:16-36）：`shaBefore` 阶段可用的实体【诱敌深入】候选（受 `jinyan` 黑锦囊禁用制约）。
     pub(crate) fn youdishenru_use_options(
         core: &crate::state::GameStateCore,
@@ -760,9 +766,14 @@ impl ShaResolveMachine {
             .unwrap_or(false)
     }
 
-    /// 寒冰剑可发动（来源装备寒冰剑且目标有手牌/装备）。
+    /// 寒冰剑可发动（来源装备寒冰剑且目标有手牌/装备；若已持 L11 宿主覆盖技 `hanbing_skill` 则让位于宿主以免双触）。
     fn hanbing_can_fire(&self, ctx: &Ctx<'_>) -> bool {
-        let has_hanbing = !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.source)
+        let has_override = ctx
+            .catalog
+            .skill_by_name("hanbing_skill")
+            .is_some_and(|d| ctx.core.has_skill(self.source, d));
+        let has_hanbing = !has_override
+            && !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.source)
             && ctx
                 .core
                 .player(self.source)
@@ -812,8 +823,38 @@ impl ShaResolveMachine {
         }
     }
 
-    /// 麒麟弓可弃目标坐骑列表（来源装备麒麟弓且目标有马）。
+    pub(super) fn virtual_sha_canceled(&self, ctx: &Ctx<'_>) -> bool {
+        if self.card.is_some() {
+            return false;
+        }
+        if !ctx.core.player(self.target).alive {
+            return true;
+        }
+        let kind = match self.nature {
+            crate::event::DamageNature::Fire => CardKind::FireSha,
+            crate::event::DamageNature::Thunder => CardKind::LeiSha,
+            crate::event::DamageNature::Normal => CardKind::Sha,
+        };
+        crate::rvm_bridge::modifiers::eval_card_target_canceled(
+            ctx.core,
+            ctx.catalog,
+            self.source,
+            self.target,
+            0,
+            kind,
+            self.nature,
+        )
+    }
+
+    /// 麒麟弓可弃目标坐骑列表（来源装备麒麟弓且目标有马；`_txhj_equip5` 启用时改弃宝物栏）。
     fn qilin_horses(&self, ctx: &Ctx<'_>) -> Vec<ChoiceOption> {
+        let has_host_qilin_skill = ctx
+            .catalog
+            .skill_by_name("qilin_skill")
+            .is_some_and(|d| ctx.core.has_skill(self.source, d));
+        if has_host_qilin_skill {
+            return Vec::new();
+        }
         let has_qilin = !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.source)
             && ctx
                 .core
@@ -824,15 +865,21 @@ impl ShaResolveMachine {
         if !has_qilin {
             return Vec::new();
         }
+        let equip5_active = ctx.catalog.txhj_equip5_active(ctx.core);
         ctx.core
             .player(self.target)
             .equips
             .iter()
             .filter(|c| {
-                matches!(
-                    ctx.catalog.card_kind(**c),
-                    CardKind::HorsePlus | CardKind::HorseMinus
-                )
+                if equip5_active {
+                    ctx.catalog.card_slot_of(ctx.core, **c)
+                        == Some(crate::catalog::EquipSlot::Treasure)
+                } else {
+                    matches!(
+                        ctx.catalog.card_kind(**c),
+                        CardKind::HorsePlus | CardKind::HorseMinus
+                    )
+                }
             })
             .copied()
             .map(ChoiceOption::Card)

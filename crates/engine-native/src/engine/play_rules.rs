@@ -642,6 +642,14 @@ pub(super) fn check_play_target_restrictions(
                 return Err(RejectReason::IllegalTargets);
             }
         }
+        if kind.is_equip()
+            && targets.is_empty()
+            && crate::rvm_bridge::modifiers::eval_card_target_canceled(
+                core, catalog, user, user, card, kind, nature,
+            )
+        {
+            return Err(RejectReason::IllegalTargets);
+        }
     }
     Ok(())
 }

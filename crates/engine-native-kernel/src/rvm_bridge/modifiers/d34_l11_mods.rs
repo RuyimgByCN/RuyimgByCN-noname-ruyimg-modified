@@ -67,6 +67,14 @@ pub fn is_card_ignored_in_discard_phase(
     player: PlayerId,
     card: CardId,
 ) -> bool {
+    if flag_val(state, player, &format!("l11_gaintag_paiku:{card}")) > 0
+        && (has_ext_skill(state, catalog, player, "_txhj_skill_maxCards")
+            || state
+                .alive_players()
+                .any(|h| has_ext_skill(state, catalog, h, "_txhj_skill_maxCards")))
+    {
+        return true;
+    }
     let is_black = matches!(
         catalog.effective_card_suit(state, player, card),
         Suit::Spade | Suit::Club
@@ -193,6 +201,17 @@ pub(super) fn apply_hand_limit(
     if flag_val(state, player, "mark:ying") > 0 {
         limit += 1;
     }
+    // `extension_skill.js:17` (`_txhj_skill_maxCards`: maxHandcardBase += maxHs)
+    let max_cards_active = has_ext_skill(state, catalog, player, "_txhj_skill_maxCards")
+        || (player == 0
+            && state
+                .alive_players()
+                .any(|h| has_ext_skill(state, catalog, h, "_txhj_skill_maxCards")));
+    if max_cards_active {
+        limit += flag_val(state, player, "l11_txhj_max_hs") as i32;
+    }
+    // `extension_skill.js:4373` (`txhj_zhuwei_eff`: maxHandcard +X this turn)
+    limit += flag_val(state, player, "skill_turn:l11_zhuwei_eff") as i32;
     d34_l25_mods::apply_hand_limit(state, catalog, player, limit)
 }
 
@@ -450,6 +469,8 @@ pub(super) fn apply_sha_use_limit(
     if flag_val(state, player, "mark:ying") > 0 {
         cur += 1;
     }
+    // `extension_skill.js:4370` (`txhj_zhuwei_eff`: Sha cardUsable +X this turn)
+    cur += flag_val(state, player, "skill_turn:l11_zhuwei_eff") as i32;
     d34_l25_mods::apply_sha_use_limit(state, catalog, player, cur, unlimited)
 }
 
@@ -564,7 +585,10 @@ pub(super) fn apply_card_target_canceled(
 ) -> bool {
     let is_trick = !kind.is_basic_kind() && kind.equip_slot().is_none();
     // `extension_card.js:1737` (`txhj_liulongcanjia`): cannot target/equip other mounts while equipped
-    if matches!(kind, CardKind::HorsePlus | CardKind::HorseMinus)
+    let slot = card
+        .and_then(|c| catalog.card_slot_of(state, c))
+        .or_else(|| kind.equip_slot());
+    if matches!(slot, Some(EquipSlot::HorsePlus | EquipSlot::HorseMinus))
         && has_equipped_named(state, catalog, target, "txhj_liulongcanjia")
     {
         canceled = true;

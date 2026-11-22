@@ -117,6 +117,19 @@ impl HostSkillBehavior {
                 self, ctx, frames, Some(frame), owner, event,
             );
         }
+        if self.behavior == HostBehavior::L11Weapons {
+            return super::step::l11_weapons::filter_l11_weapons_with_frames(
+                self, ctx, frames, Some(frame), owner, event,
+            );
+        }
+        if matches!(
+            self.behavior,
+            HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng
+        ) {
+            return super::step::l11_boss_c::filter_l11_boss_c_with_frames(
+                self, ctx, frames, Some(frame), owner, event,
+            );
+        }
         if let Some(v) = super::step::u01_fixes_3::filter_u01_fix3_with_frames(
             self, ctx, frames, frame, owner, event,
         ) {
@@ -941,6 +954,17 @@ impl HostSkillBehavior {
             HostBehavior::L01FirstKs => super::step::l01_rules::filter_l01_first_ks(ctx, owner, event),
             HostBehavior::L01AttitudeTracker => {
                 super::step::l01_attitude::filter_l01_att(&self.name, ctx, owner, event)
+            }
+            HostBehavior::L11SystemHooks => {
+                super::step::l11_system_hooks::filter_l11_system_hooks(self, ctx, owner, event)
+            }
+            HostBehavior::L11Weapons => super::step::l11_weapons::filter_l11_weapons_with_frames(
+                self, ctx, &[], None, owner, event,
+            ),
+            HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng => {
+                super::step::l11_boss_c::filter_l11_boss_c_with_frames(
+                    self, ctx, &[], None, owner, event,
+                )
             }
             _ => false,
         }

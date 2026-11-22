@@ -727,6 +727,10 @@ impl SkillBehavior for HostSkillBehavior {
                 | HostBehavior::L11BuffsC
                 | HostBehavior::L11BuffsD
                 | HostBehavior::L11BuffHelpersB
+                | HostBehavior::L11SystemHooks
+                | HostBehavior::L11Weapons
+                | HostBehavior::L11GeneralBossC
+                | HostBehavior::L11BossLingfeng
         )
     }
     /// 止息（L27 批 2）：**计数标记 ≥ 体力** 或 **已使用过锦囊**（记录标记
@@ -837,6 +841,11 @@ pub fn host_skill_trigger_meta(
         HostBehavior::L11BuffHelpersB => {
             step::l11_buff_helpers_b::trigger_meta_l11_buff_helpers_b(name)
         }
+        HostBehavior::L11SystemHooks => step::l11_system_hooks::trigger_meta_l11_system_hooks(name),
+        HostBehavior::L11Weapons => step::l11_weapons::trigger_meta_l11_weapons(name),
+        HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng => {
+            step::l11_boss_c::trigger_meta_l11_boss_c(name)
+        }
         _ => crate::event::NativeDamageEffect::from_host(behavior)
             .map(|e| e.meta())
             .or_else(|| behavior.trigger_meta()),
@@ -924,6 +933,11 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         HostBehavior::L11BuffsC => step::l11_buffs_c::limits_l11_buffs_c(name),
         HostBehavior::L11BuffsD => step::l11_buffs_d::limits_l11_buffs_d(name),
         HostBehavior::L11BuffHelpersB => step::l11_buff_helpers_b::limits_l11_buff_helpers_b(name),
+        HostBehavior::L11SystemHooks => step::l11_system_hooks::limits_l11_system_hooks(name),
+        HostBehavior::L11Weapons => step::l11_weapons::limits_l11_weapons(name),
+        HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng => {
+            step::l11_boss_c::limits_l11_boss_c(name)
+        }
         HostBehavior::GujianFoodQingtuan | HostBehavior::GujianFoodLuyugeng => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,

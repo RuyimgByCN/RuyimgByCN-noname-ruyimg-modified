@@ -41,19 +41,27 @@ pub(super) fn on_frame_popped(
             }
         }
         if catalog.vm_card_history {
+            let fid = popped.id;
             for &c in cards {
                 core.vm_aux
                     .flags
                     .remove(&(*player, format!("l11_hand_dismantle_card:{c}")));
+                core.vm_aux
+                    .flags
+                    .remove(&(*player, format!("l11_loss_dedup:{fid}:{c}")));
             }
         }
     }
     if let EventData::CardsMoved { from, cards, .. } = &popped.data {
         if catalog.vm_card_history {
+            let fid = popped.id;
             for &c in cards {
                 core.vm_aux
                     .flags
                     .remove(&(*from, format!("l11_hand_snatch_card:{c}")));
+                core.vm_aux
+                    .flags
+                    .remove(&(*from, format!("l11_loss_dedup:{fid}:{c}")));
             }
         }
     }
@@ -122,6 +130,9 @@ pub(super) fn on_frame_popped(
         core.vm_aux
             .flags
             .remove(&(*player, format!("l11_equip_from_hand:{card}")));
+        core.vm_aux
+            .flags
+            .remove(&(*player, format!("l11_move_equip_evt:{card}")));
         if let Some(fusi_owner) = core
             .vm_aux
             .flags
@@ -157,6 +168,11 @@ pub(super) fn on_frame_popped(
                 .flags
                 .remove(&(*player, format!("dddfusi_used_owner:{}", popped.id)));
         }
+    }
+    if let EventData::OrdinaryJudge { owner, invocation } = &popped.data {
+        core.vm_aux
+            .flags
+            .remove(&(*owner, format!("l11_resolved_ordinary_judge:{invocation}")));
     }
     if let EventData::CardUsed(u) = &popped.data {
         on_card_use_popped(popped.id, u, core, res, catalog, out);
@@ -204,10 +220,22 @@ fn on_card_use_popped(
     let _ = crate::kernel::take_tao_extra_carriers(core, u.player, popped_id);
     core.vm_aux
         .flags
+        .remove(&(u.player, format!("l11_carduse_lost:{popped_id}")));
+    core.vm_aux
+        .flags
         .remove(&(u.player, format!("sha_used_jiu:{popped_id}")));
     core.vm_aux
         .flags
         .remove(&(u.player, format!("sha_cike_done:{popped_id}")));
+    core.vm_aux
+        .flags
+        .remove(&(u.player, format!("sha_tianxian_done:{popped_id}")));
+    core.vm_aux
+        .flags
+        .remove(&(u.player, format!("sha_longxiang_done:{popped_id}")));
+    core.vm_aux
+        .flags
+        .remove(&(u.player, format!("sha_yueren_done:{popped_id}")));
     let cid = u.card.unwrap_or(0);
     core.vm_aux
         .flags

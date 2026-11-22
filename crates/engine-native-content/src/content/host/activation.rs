@@ -326,6 +326,15 @@ impl HostSkillBehavior {
             HostBehavior::L01NeiKey | HostBehavior::L01AiRuleHooks => {
                 super::step::l01_rules::activate_l01_skill(&self.name, self.behavior, ctx, owner)
             }
+            HostBehavior::L11SystemHooks => {
+                super::step::l11_system_hooks::activate_l11_system_hooks(self, ctx, owner)
+            }
+            HostBehavior::L11Weapons => {
+                super::step::l11_weapons::activate_l11_weapons(self, ctx, owner)
+            }
+            HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng => {
+                super::step::l11_boss_c::activate_l11_boss_c(self, ctx, owner)
+            }
             _ => None,
         }
     }

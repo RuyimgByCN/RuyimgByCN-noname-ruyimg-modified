@@ -24,16 +24,25 @@ fn has_active_l11_buff(
     core: &GameStateCore,
     catalog: &Catalog,
     owner: PlayerId,
-    name: &str,
+    names: &[&str],
 ) -> bool {
-    catalog
-        .skill_by_name(name)
-        .is_some_and(|d| core.has_skill(owner, d))
+    names
+        .iter()
+        .any(|name| catalog.skill_by_name(name).is_some_and(|d| core.has_skill(owner, d)))
         && flag(core, owner, "mbcmfangzhu_ban") == 0
 }
 
-pub(in crate::content::host::step) fn mahou_max_x(core: &GameStateCore, catalog: &Catalog, owner: PlayerId) -> u32 {
-    if has_active_l11_buff(core, catalog, owner, "buff_txhj_digongdeyouhu") {
+pub(in crate::content::host::step) fn mahou_max_x(
+    core: &GameStateCore,
+    catalog: &Catalog,
+    owner: PlayerId,
+) -> u32 {
+    if has_active_l11_buff(
+        core,
+        catalog,
+        owner,
+        &["buff_txhj_digongdeyouhu", "buff_txhj_digongdebihu"],
+    ) {
         4
     } else {
         3
@@ -41,7 +50,14 @@ pub(in crate::content::host::step) fn mahou_max_x(core: &GameStateCore, catalog:
 }
 
 fn mahou_effective_rem(core: &GameStateCore, catalog: &Catalog, owner: PlayerId, x: u32) -> u32 {
-    if x > 1 && has_active_l11_buff(core, catalog, owner, "buff_txhj_tiangongdeyouhu") {
+    if x > 1
+        && has_active_l11_buff(
+            core,
+            catalog,
+            owner,
+            &["buff_txhj_tiangongdeyouhu", "buff_txhj_tiangongdebihu"],
+        )
+    {
         x - 1
     } else {
         x
@@ -59,7 +75,12 @@ pub(in crate::content::host::step) fn finish_mahou_cast_stage(
     let rem = mahou_effective_rem(ctx.core, ctx.catalog, owner, x);
     set_flag(ctx.core, owner, &format!("{prefix}_rem"), rem);
     set_flag(ctx.core, owner, &format!("{prefix}_x"), x);
-    if has_active_l11_buff(ctx.core, ctx.catalog, owner, "buff_txhj_renigongdeyouhu") {
+    if has_active_l11_buff(
+        ctx.core,
+        ctx.catalog,
+        owner,
+        &["buff_txhj_renigongdeyouhu", "buff_txhj_rengongdebihu"],
+    ) {
         return wait_ask(m, ctx, next_stage, ASK_TWMAHOU_RENIGONG_CONFIRM);
     }
     set_flag(ctx.core, owner, "l27_b_ask_id", 0);

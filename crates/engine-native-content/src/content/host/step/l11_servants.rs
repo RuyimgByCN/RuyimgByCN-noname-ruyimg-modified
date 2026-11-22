@@ -887,6 +887,7 @@ pub(in crate::content::host) fn handle_l11_servants(
 /// `phaseUseEnd` 钩子（`extension.js:2053`）：仅在真实出牌阶段收束压入下一阶段后、
 /// 弃牌/下阶段运行前（LIFO 栈顶 `Park`）触发 `txhj_ruiSkill1`，跳过出牌阶段不会触发。
 pub(crate) fn play_end_rui_skill1(ctx: &mut Ctx<'_>, player: PlayerId) {
+    super::l11_boss_c2::clear_chuhai2_on_play_end(ctx, player);
     let Some(def) = ctx.catalog.skill_by_name("txhj_ruiSkill1") else {
         return;
     };

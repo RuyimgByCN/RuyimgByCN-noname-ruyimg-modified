@@ -175,7 +175,19 @@ pub(super) fn build_l11_equip_ask(
             true,
         ),
         ASK_QILIN_CONFIRM => confirm_ask(owner, "txhj_qilingong:discard_horse"),
-        ASK_QILIN_SKILL_CONFIRM => confirm_ask(owner, "qilin_skill:discard_horse"),
+        ASK_QILIN_SKILL_CONFIRM => {
+            let treasures: Vec<CardId> = core
+                .player(tgt)
+                .equips
+                .iter()
+                .copied()
+                .filter(|&c| catalog.card_slot_of(core, c) == Some(EquipSlot::Treasure))
+                .collect();
+            if treasures.is_empty() {
+                return None;
+            }
+            card_ask(owner, "qilin_skill:discard_horse", treasures, 0, 1, true)
+        }
         ASK_FANGTIAN_TARGETS => {
             let sha_cid = cards.first().copied();
             let (sha_kind, sha_nature) = decode_fangtian_meta(core, catalog, owner, sha_cid);

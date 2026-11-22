@@ -148,6 +148,15 @@ impl HostSkillBehavior {
                     self, owner, event,
                 );
             }
+            HostBehavior::L11SystemHooks => {
+                return super::step::l11_system_hooks::machine_l11_system_hooks(self, owner, event);
+            }
+            HostBehavior::L11Weapons => {
+                return super::step::l11_weapons::machine_l11_weapons(self, owner, event);
+            }
+            HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng => {
+                return super::step::l11_boss_c::machine_l11_boss_c(self, owner, event);
+            }
             _ => {}
         }
         let (target, card) = match self.behavior {

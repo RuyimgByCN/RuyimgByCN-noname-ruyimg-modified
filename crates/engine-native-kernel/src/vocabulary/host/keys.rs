@@ -628,6 +628,10 @@ impl HostBehavior {
             HostBehavior::L01NeiKey => "host:l01_neikey",
             HostBehavior::L01AttitudeTracker => "host:l01_att_tracker",
             HostBehavior::L01AiRuleHooks => "host:l01_ai_rule_hooks",
+            HostBehavior::L11SystemHooks => "host:l11_system_hooks",
+            HostBehavior::L11Weapons => "host:l11_weapons",
+            HostBehavior::L11GeneralBossC => "host:l11_general_boss_c",
+            HostBehavior::L11BossLingfeng => "host:l11_boss_lingfeng",
         }
     }
 }

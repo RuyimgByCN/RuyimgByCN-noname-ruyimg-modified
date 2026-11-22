@@ -297,13 +297,35 @@ fn test_boss_lingfeng_authentic_lifecycle() {
     e.state_core_mut().deck.push(c_red);
     e.state_core_mut().deck.push(c_black);
 
-    // Advance to Draw phase
+    // Advance to Draw phase -> prompts boss_lingfeng:confirm -> boss_lingfeng:target
     e.debug_set_turn(0, Phase::Judge, 1);
     let _ = e.submit(GameCommand {
         actor: 0,
         expected_revision: e.revision(),
         dedup_id: next_dedup(),
         action: GameAction::NextPhase,
+    });
+    let c_confirm = e.open_choice().expect("boss_lingfeng:confirm").clone();
+    assert_eq!(c_confirm.spec.prompt, "boss_lingfeng:confirm");
+    let _ = e.submit(GameCommand {
+        actor: c_confirm.observer,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: c_confirm.id,
+            selection: vec![ChoiceOption::Confirm],
+        },
+    });
+    let c_tgt = e.open_choice().expect("boss_lingfeng:target").clone();
+    assert_eq!(c_tgt.spec.prompt, "boss_lingfeng:target");
+    let _ = e.submit(GameCommand {
+        actor: c_tgt.observer,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: c_tgt.id,
+            selection: vec![ChoiceOption::Player(1)],
+        },
     });
     drain(&mut e);
 
@@ -335,6 +357,17 @@ fn test_boss_lingfeng_authentic_lifecycle() {
         expected_revision: e2.revision(),
         dedup_id: next_dedup(),
         action: GameAction::NextPhase,
+    });
+    let c2_confirm = e2.open_choice().expect("boss_lingfeng:confirm").clone();
+    assert_eq!(c2_confirm.spec.prompt, "boss_lingfeng:confirm");
+    let _ = e2.submit(GameCommand {
+        actor: c2_confirm.observer,
+        expected_revision: e2.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: c2_confirm.id,
+            selection: vec![ChoiceOption::Confirm],
+        },
     });
     drain(&mut e2);
     assert_eq!(e2.state_core().player(1).hp, 4, "same color must not trigger HP loss");

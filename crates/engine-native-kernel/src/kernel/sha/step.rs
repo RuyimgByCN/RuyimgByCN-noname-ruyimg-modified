@@ -273,12 +273,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                                 return Flow::Yield;
                             }
                             ctx.core.turn.liaoyuan_count = 0;
-                            ctx.emit(EventData::ShaDodged {
-                                card: self.card,
-                                source: self.source,
-                                target: self.target,
-                            });
-                            return self.finish_or_defer_sha_end(ctx, false);
+                            return self.after_sha_dodged(ctx);
                         }
                         // 无双还需第二张：新响应窗口——重开逐人询问
                         //（含目标本人的再次询问）
@@ -345,66 +340,21 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         }
         if !self.asked {
             self.asked = true;
+            if self.virtual_sha_canceled(ctx) {
+                return self.advance_target(ctx);
+            }
             // 天弦（U05 xianjian 柳梦璃，规则 v184）：锁定——杀对每目标
             // 结算前目标判定（上游 useCardToBefore 同窗口，priority 5.5
             // 先于结算技），黑色则取消对该目标的结算（不进入闪询问；每
             // 目标一次=asked 每目标复位）。**登记差异**：同铁骑内联判定
             // 口径=确定性判定，无鬼道/天妒改判窗。
-            {
-                let fid = self.current_sha_frame_id(ctx).unwrap_or(0);
-                let tianxian_done = ctx
-                    .core
-                    .vm_aux
-                    .flags
-                    .contains_key(&(self.source, format!("sha_tianxian_done:{fid}")));
-                let tianxian = !tianxian_done
-                    && ctx
-                        .catalog
-                        .skill_by_name(crate::vocabulary::host::WUDIAN_XJ_TIANXIAN_KEY)
-                        .map(|d| ctx.core.has_skill(self.source, d))
-                        .unwrap_or(false);
-                if tianxian && (!ctx.core.deck.is_empty() || !ctx.core.discard.is_empty()) {
-                    let judged = ctx.draw_judge_card_with_elo(
-                        self.source,
-                        crate::kernel::EloJudgePref::RedPositive,
-                    );
-                    let suit = crate::kernel::sha::resume::sha_judge_suit(ctx, self.target, judged);
-                    let black = matches!(suit, crate::catalog::Suit::Spade | crate::catalog::Suit::Club);
-                    let settled_spawned = ctx.settle_inline_judge_card(self.target, suit, judged);
-                    if black {
-                        return self.advance_target(ctx);
-                    }
-                    if settled_spawned {
-                        ctx.core
-                            .vm_aux
-                            .flags
-                            .insert((self.source, format!("sha_tianxian_done:{fid}")), 1);
-                        self.asked = false;
-                        return Flow::Yield;
-                    }
-                }
+            if let Some(flow) = self.resolve_tianxian(ctx) {
+                return flow;
             }
             // 铁骑（马超）：锁定式判定——判定牌为红色则目标不能出闪响应
-            let tieji = ctx
-                .catalog
-                .skill_by_name(crate::vocabulary::names::TIE_JI)
-                .map(|d| ctx.core.has_skill(self.source, d))
-                .unwrap_or(false);
-            if tieji
-                && self.tieji_red.is_none()
-                && (!ctx.core.deck.is_empty() || !ctx.core.discard.is_empty())
-            {
-                let judged = ctx.draw_judge_card_with_elo(
-                    self.source,
-                    crate::kernel::EloJudgePref::RedPositive,
-                );
-                let suit = crate::kernel::sha::resume::sha_judge_suit(ctx, self.source, judged);
-                let red = matches!(suit, crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond);
-                let settled_spawned = ctx.settle_inline_judge_card(self.source, suit, judged);
-                self.tieji_red = Some(red);
-                if settled_spawned {
-                    self.asked = false;
-                    return Flow::Yield;
+            if self.tieji_red.is_none() {
+                if let Some(flow) = self.resolve_tieji(ctx) {
+                    return flow;
                 }
             }
             // 仁王盾（P2/N08 批③-a）：锁定——黑色【杀】对装备者无效
@@ -427,16 +377,20 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             // 目标手牌多于自己时随机弃差值张（上游 randomGets(diff) 同
             // 口径；无询问零字段）。
             {
-                let has_longxiang = ctx
-                    .catalog
-                    .skill_by_name(crate::vocabulary::host::WUDIAN_LONGXIANG_KEY)
-                    .map(|d| ctx.core.has_skill(self.source, d))
-                    .unwrap_or(false);
+                let fid = self.current_sha_frame_id(ctx).unwrap_or(0);
+                let lx_key = (self.source, format!("sha_longxiang_done:{fid}"));
+                let has_longxiang = !ctx.core.vm_aux.flags.contains_key(&lx_key)
+                    && ctx
+                        .catalog
+                        .skill_by_name(crate::vocabulary::host::WUDIAN_LONGXIANG_KEY)
+                        .map(|d| ctx.core.has_skill(self.source, d))
+                        .unwrap_or(false);
                 if has_longxiang
                     && ctx.core.player(self.target).alive
                     && ctx.core.player(self.target).hand.len()
                         > ctx.core.player(self.source).hand.len()
                 {
+                    ctx.core.vm_aux.flags.insert(lx_key, 1);
                     let diff = ctx.core.player(self.target).hand.len()
                         - ctx.core.player(self.source).hand.len();
                     let hs: Vec<crate::ids::CardId> =
@@ -545,8 +499,13 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             // 武将性别、无槽默认男），目标选择：弃一张手牌（自选，逐技
             // 对照批一 v75 对齐上游 chooseToDiscard）或取消令使用者摸 1；
             // 无手牌则仅可令摸（上游同：!hasCards("h") 直接 draw）。
+            let has_cixiong_override = ctx
+                .catalog
+                .skill_by_name("cixiong_skill")
+                .is_some_and(|d| ctx.core.has_skill(self.source, d));
             if !self.cixiong_done
                 && !self.asking_cixiong
+                && !has_cixiong_override
                 && !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.source)
                 && ctx
                     .core
@@ -624,57 +583,8 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             //（上游 discardPlayerCard forced random 同口径）；红→摸 1（登记
             // 差异：上游收回此杀实体——实体回流与在结机器持有冲突改摸 1）。
             // 每杀一次=!asked 门内。
-            {
-                let has_yueren = ctx
-                    .catalog
-                    .skill_by_name("yueren")
-                    .map(|d| ctx.core.has_skill(self.source, d))
-                    .unwrap_or(false);
-                if has_yueren
-                    && ctx.core.player(self.target).alive
-                    && (!ctx.core.deck.is_empty() || !ctx.core.discard.is_empty())
-                {
-                    let judged = ctx.draw_judge_card_with_elo(
-                        self.source,
-                        crate::kernel::EloJudgePref::Yueren,
-                    );
-                    let suit = crate::kernel::sha::resume::sha_judge_suit(ctx, self.source, judged);
-                    let black = matches!(
-                        suit,
-                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
-                    );
-                    let _ = ctx.settle_inline_judge_card(self.source, suit, judged);
-                    if black {
-                        let mut pool: Vec<crate::ids::CardId> =
-                            ctx.core.player(self.target).hand.iter().copied().collect();
-                        pool.extend(ctx.core.player(self.target).equips.iter().copied());
-                        if !pool.is_empty() {
-                            let j = ctx.core.rng.gen_range(pool.len() as u32) as usize;
-                            let c = pool[j];
-                            let in_hand = ctx.core.player(self.target).hand.contains(&c);
-                            if in_hand {
-                                ctx.take_hand_card(self.target, c);
-                            } else {
-                                ctx.core.player_mut(self.target).equips.retain(|x| *x != c);
-                                if ctx.catalog.card_kind(c).is_equip() {
-                                    crate::kernel::revoke_equip_skills(
-                                        ctx.core,
-                                        ctx.catalog,
-                                        self.target,
-                                        c,
-                                    );
-                                }
-                            }
-                            ctx.to_discard(c);
-                            ctx.log(LogEvent::CardDiscarded {
-                                player: self.target,
-                                cards: vec![c],
-                            });
-                        }
-                    } else if ctx.core.player(self.source).alive {
-                        ctx.start_draw(self.source, 1);
-                    }
-                }
+            if let Some(flow) = self.resolve_yueren(ctx) {
+                return flow;
             }
             // 玲月（司徒强，swd 武将面批㉗）：锁定——杀指定目标后目标弃
             // 置一张牌（he 确定性首张，登记差异上游目标自选 chooseToDiscard
@@ -783,13 +693,8 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         if self.dodges_used < ctx.core.turn.liaoyuan_count {
             return self.emit_sha_damage(ctx);
         }
-        // 目标已死等无伤害路径（Pass 路径）。
-        ctx.emit(EventData::ShaDodged {
-            card: self.card,
-            source: self.source,
-            target: self.target,
-        });
-        // 目标已死等无伤害路径：触发 shaEnd 后推进队列/弃置杀本体。
-        return self.finish_or_defer_sha_end(ctx, false);
+        // 杀被闪避（swd 批 141，规则 v316 同批）：发射 ShaDodged（上游
+        // shaMiss 触发窗；青龙/贯石斧等窗口之后——登记差异：窗口次序）
+        self.after_sha_dodged(ctx)
     }
 }

@@ -114,12 +114,23 @@ pub(super) fn can_receive_moved_card(
                     Some(EquipSlot::HorsePlus | EquipSlot::HorseMinus)
                 )
             });
-            return !has_horse;
+            if has_horse {
+                return false;
+            }
         }
         if matches!(slot, EquipSlot::HorsePlus | EquipSlot::HorseMinus)
             && has_equip_named(core, catalog, to, "txhj_liulongcanjia")
         {
             return false;
+        }
+        if slot == EquipSlot::Treasure && has_named_skill(core, catalog, to, "_txhj_equip5") {
+            let treasure_cnt = core
+                .player(to)
+                .equips
+                .iter()
+                .filter(|&&c| catalog.card_slot_of(core, c) == Some(EquipSlot::Treasure))
+                .count();
+            return treasure_cnt < 2;
         }
         return !core
             .player(to)

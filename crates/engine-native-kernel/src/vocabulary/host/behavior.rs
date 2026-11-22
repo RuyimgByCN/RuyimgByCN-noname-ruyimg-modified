@@ -1726,4 +1726,12 @@ pub enum HostBehavior {
     L01AttitudeTracker,
     /// L01 AI优化运行时调参与技能修正钩子（tag 864，`AI优化/extension.js:294-438, 1818-2383, 4034-9332`）。
     L01AiRuleHooks,
+    /// L11 太虚幻境 Batch L11-5 系统/计数/装备栏/司道/破橹/神器同步技（tag 739）。
+    L11SystemHooks,
+    /// L11 太虚幻境 Batch L11-5 武器覆写技（tag 740：`hanbing_skill`/`cixiong_skill`/`guanshi_skill`/`sanjian_skill`/`yitianjian`/`pyzhuren_diamond`）。
+    L11Weapons,
+    /// L11 太虚幻境 Batch L11-5 领主与通用武将技（tag 741：`txhj_mouduan`..`txhj_chuhai2` 共 21 技能）。
+    L11GeneralBossC,
+    /// L11 太虚幻境 Batch L11-5 灵锋（tag 742：`boss_lingfeng`，持留亮牌直至选择结束）。
+    L11BossLingfeng,
 }

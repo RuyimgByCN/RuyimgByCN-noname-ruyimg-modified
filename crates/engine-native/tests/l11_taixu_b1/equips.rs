@@ -85,11 +85,11 @@ fn l11_equips_axe_zhuge_and_qilingong() {
     // `qilin_skill` granted directly without weapon
     let mut e_qs = start_taixu(0x1205, 2);
     e_qs.debug_grant(0, "qilin_skill");
-    let _ = equip_named(&mut e_qs, 1, "txhj_xuwangzhimian");
+    let tr_qs = equip_named(&mut e_qs, 1, "txhj_xuwangzhimian");
     let s_qs = place_kind_suit(&mut e_qs, 0, CardKind::Sha, Suit::Diamond);
     let _ = play_card(&mut e_qs, 0, s_qs, vec![1]);
     let c_qs = answer_pass_until(&mut e_qs, "qilin_skill:discard_horse");
-    let _ = answer(&mut e_qs, &c_qs, vec![ChoiceOption::Confirm]);
+    let _ = answer(&mut e_qs, &c_qs, vec![ChoiceOption::Card(tr_qs)]);
     drain(&mut e_qs);
     assert!(e_qs.debug_equips(1).is_empty());
 }

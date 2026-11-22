@@ -717,6 +717,8 @@ fn l11_b4_sanjian_yitianjian_and_wushuangfangtianji_buffs() {
     let _y_disc = place_kind(&mut ey_plain, 0, CardKind::Tao);
     let y_sha2 = place_kind(&mut ey_plain, 0, CardKind::Sha);
     let _ = play_card(&mut ey_plain, 0, y_sha2, vec![1]);
+    let c_yt = expect_pending(&ey_plain, "yitianjian:discard");
+    let _ = answer(&mut ey_plain, &c_yt, vec![ChoiceOption::Card(_y_disc)]);
     drain(&mut ey_plain);
     assert_eq!(ey_plain.state_core().player(0).hp, 5);
     assert!(ey_plain.state_core().player(0).hand.is_empty(), "plain yitianjian discards 1 hand card");

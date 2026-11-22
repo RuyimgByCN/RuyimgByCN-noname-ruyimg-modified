@@ -9,8 +9,67 @@ pub(in crate::kernel) fn zhp_def(ctx: &Ctx<'_>) -> crate::ids::SkillDefId {
         .expect("造异异变入目录")
 }
 
+fn track_l11_loss_dedup(catalog: &crate::catalog::Catalog) -> bool {
+    catalog.skill_by_name("olshanjia").is_some()
+        || catalog.skill_by_name("boss_moyany").is_some()
+        || catalog.skill_by_name("boss_danshu").is_some()
+}
+
+fn loss_handled_by_cards_lost(
+    core: &crate::state::GameStateCore,
+    stack: &[crate::event::Frame],
+    frame_id: crate::ids::EventId,
+    player: PlayerId,
+    card: crate::ids::CardId,
+) -> bool {
+    core.vm_aux
+        .flags
+        .contains_key(&(player, format!("l11_loss_dedup:{frame_id}:{card}")))
+        || stack.iter().any(|f| {
+            f.id != frame_id
+                && f.stage == crate::event::Stage::Commit
+                && matches!(
+                    &f.data,
+                    EventData::CardsLost { player: p, cards, .. }
+                        if *p == player && cards.contains(&card)
+                )
+        })
+}
+
+fn mark_sibling_discard_or_move_dedup(
+    core: &mut crate::state::GameStateCore,
+    stack: &[crate::event::Frame],
+    frame_id: crate::ids::EventId,
+    player: PlayerId,
+    card: crate::ids::CardId,
+) {
+    for f in stack {
+        if f.id == frame_id || f.stage != crate::event::Stage::Commit {
+            continue;
+        }
+        let matches_sib = match &f.data {
+            EventData::CardsDiscarded { player: dp, cards } => {
+                *dp == player && cards.contains(&card)
+            }
+            EventData::CardsMoved { from, to, cards } => {
+                from != to && *from == player && cards.contains(&card)
+            }
+            _ => false,
+        };
+        if matches_sib {
+            core.vm_aux
+                .flags
+                .insert((player, format!("l11_loss_dedup:{}:{card}", f.id)), 1);
+        }
+    }
+}
+
 /// 回合收束：到期技能移除，然后交给下一位存活玩家并开启判定阶段。
-pub(in crate::kernel) fn record_vm_history(ctx: &mut Ctx<'_>, data: &EventData) {
+pub(in crate::kernel) fn record_vm_history(
+    ctx: &mut Ctx<'_>,
+    frame_id: crate::ids::EventId,
+    data: &EventData,
+) {
     let pre_counted = matches!(
         data,
         EventData::CardUsed(u)
@@ -87,12 +146,34 @@ pub(in crate::kernel) fn record_vm_history(ctx: &mut Ctx<'_>, data: &EventData) 
     if !ctx.catalog.vm_card_history {
         return;
     }
+    let track_olshanjia = ctx.catalog.skill_by_name("olshanjia").is_some();
+    let track_dedup = track_l11_loss_dedup(ctx.catalog);
     match data {
         EventData::CardsDiscarded { player, cards } => {
-            let entry = ctx.core.vm_aux.lost.entry(*player).or_default();
+            {
+                let entry = ctx.core.vm_aux.lost.entry(*player).or_default();
+                for &c in cards {
+                    if !entry.contains(&c) {
+                        entry.push(c);
+                    }
+                }
+            }
             for &c in cards {
-                if !entry.contains(&c) {
-                    entry.push(c);
+                if !ctx.core.player(*player).hand.contains(&c) {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(*player, format!("l11_gaintag_paiku:{c}")));
+                }
+                if track_olshanjia
+                    && ctx.catalog.card_kind(c).equip_slot().is_some()
+                    && !loss_handled_by_cards_lost(ctx.core, &ctx.res.stack, frame_id, *player, c)
+                {
+                    *ctx.core
+                        .vm_aux
+                        .flags
+                        .entry((*player, "l11_olshanjia_lost_equips".to_string()))
+                        .or_insert(0) += 1;
                 }
             }
         }
@@ -100,8 +181,30 @@ pub(in crate::kernel) fn record_vm_history(ctx: &mut Ctx<'_>, data: &EventData) 
             player,
             cards,
             origins,
-        } if origins.contains(&crate::event::LostOrigin::Judge) => {
+        } => {
             for (&c, &orig) in cards.iter().zip(origins.iter()) {
+                if !ctx.core.player(*player).hand.contains(&c) {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(*player, format!("l11_gaintag_paiku:{c}")));
+                }
+                if track_olshanjia && ctx.catalog.card_kind(c).equip_slot().is_some() {
+                    *ctx.core
+                        .vm_aux
+                        .flags
+                        .entry((*player, "l11_olshanjia_lost_equips".to_string()))
+                        .or_insert(0) += 1;
+                }
+                if track_dedup {
+                    mark_sibling_discard_or_move_dedup(
+                        ctx.core,
+                        &ctx.res.stack,
+                        frame_id,
+                        *player,
+                        c,
+                    );
+                }
                 if matches!(orig, crate::event::LostOrigin::Judge) {
                     let entry = ctx.core.vm_aux.lost.entry(*player).or_default();
                     if !entry.contains(&c) {
@@ -121,6 +224,24 @@ pub(in crate::kernel) fn record_vm_history(ctx: &mut Ctx<'_>, data: &EventData) 
             }
         }
         EventData::CardsMoved { cards, from, to } if from != to => {
+            for &c in cards {
+                if !ctx.core.player(*from).hand.contains(&c) {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(*from, format!("l11_gaintag_paiku:{c}")));
+                }
+                if track_olshanjia
+                    && ctx.catalog.card_kind(c).equip_slot().is_some()
+                    && !loss_handled_by_cards_lost(ctx.core, &ctx.res.stack, frame_id, *from, c)
+                {
+                    *ctx.core
+                        .vm_aux
+                        .flags
+                        .entry((*from, "l11_olshanjia_lost_equips".to_string()))
+                        .or_insert(0) += 1;
+                }
+            }
             ctx.core
                 .vm_aux
                 .lost
@@ -132,6 +253,14 @@ pub(in crate::kernel) fn record_vm_history(ctx: &mut Ctx<'_>, data: &EventData) 
             *ctx.core.vm_aux.drawn.entry(*player).or_default() += cards.len() as u32;
         }
         EventData::CardUsed(u) => {
+            if let Some(c) = u.card {
+                if !ctx.core.player(u.player).hand.contains(&c) {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(u.player, format!("l11_gaintag_paiku:{c}")));
+                }
+            }
             let effective = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
             if effective.is_sha_like()
                 && ctx
@@ -167,14 +296,28 @@ pub(in crate::kernel) fn record_vm_history(ctx: &mut Ctx<'_>, data: &EventData) 
                 }
             }
         }
-        EventData::Equipped { player, .. }
-            if ctx.core.turn.phase == Phase::Play && *player == ctx.core.turn.current =>
-        {
-            *ctx.core
-                .vm_aux
-                .flags
-                .entry((*player, "play_cat_mask".to_string()))
-                .or_insert(0) |= 4;
+        EventData::Equipped { player, card, .. } => {
+            if !ctx.core.player(*player).hand.contains(card) {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(*player, format!("l11_gaintag_paiku:{card}")));
+            }
+            if ctx.core.turn.phase == Phase::Play && *player == ctx.core.turn.current {
+                *ctx.core
+                    .vm_aux
+                    .flags
+                    .entry((*player, "play_cat_mask".to_string()))
+                    .or_insert(0) |= 4;
+            }
+        }
+        EventData::CardResponded { card, player } => {
+            if !ctx.core.player(*player).hand.contains(card) {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(*player, format!("l11_gaintag_paiku:{card}")));
+            }
         }
         _ => {}
     }
@@ -297,6 +440,7 @@ pub(in crate::kernel) fn record_l11_turn_card_used(
         }
     }
     if catalog.skill_by_name("txmouduan").is_none()
+        && catalog.skill_by_name("txhj_mouduan").is_none()
         && catalog.skill_by_name("txhj_ditingSkill3").is_none()
     {
         return;
@@ -329,6 +473,15 @@ pub(in crate::kernel) fn record_l11_turn_card_used(
         1
     } else if effective.equip_slot().is_some() {
         4
+    } else if matches!(
+        effective,
+        CardKind::Le
+            | CardKind::Bing
+            | CardKind::ShanDian
+            | CardKind::HongShui
+            | CardKind::Guiyoujie
+    ) {
+        8
     } else {
         2
     };

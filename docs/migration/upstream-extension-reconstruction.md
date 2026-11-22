@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-23 Batch L11-5（L11 太虚幻境系统/武器/领主与武将技共 +48→408/936）合入与清单上调（待提交／发布）
+
+基线 HEAD `6b8c847c6e5acbc878fd3fa4a333f53c5ed9298a`（Batch L11-4 已发布，CI Run `45056028805` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-l11-b5` `c8247fb03..3ca237e37`（`verifier-l11` #41 **`APPROVE`**）并与 `L01`/`U01-3`/`L11-4`/`L25`/`L27` 共存对齐（协同 `frame_hooks.rs`、`decision34_pack9.rs` `pyzhuren_diamond -> L25ZuanBatchE` 优先路由、`round2_fixes.rs` `3B-3` 对齐主线 `zj_leiji` 与 `sha/step.rs` `tieji_red.is_none()` 守卫）：`L11 太虚幻境` 15 项 `L11SystemHooks`、6 项 `L11Weapons`、21 项 `L11GeneralBossC`、1 项 `L11BossLingfeng` 与 5 项 L28/L27 复用防具/三工共 **48 项**升为 `已复核等价`（剩余 528 项归后续 `L11-6a`/`L11-6b` 批次），`L11` 升为 **408／528／0**（`已复核等价` 408／`简化近似` 528／`缺失` 0；合计 936），全仓清单更新为 **已复核等价 2,175／简化近似 2,249／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch L11-5 复核摘要](../operations/evidence/2026-11-23-batch3-5-l11-5/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。
+
 ## 2026-11-23 Batch L11-4（L11 太虚幻境 33 `L11BuffsC`＋37 `L11BuffsD`＋10 衍生技共 +80→360/936）合入与清单上调（待提交／发布）
 
 基线 HEAD `0f514af299519ba8325711136b49e447df2608d2`（Batch U01-3 已发布，CI Run `45048457551` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-l11-b4` `swarm/conv-l11-b3..c3248c456`（`verifier-l11` #22 **`APPROVE`**）并与 `L01`/`U01-3`/`L11-3`/`L25`/`L27` 共存对齐（将 `frame_retire.rs` 收尾键并入 `frame_hooks.rs`、`ASK_TWMAHOU_RENIGONG_CONFIRM = 343` 避碰、拆出 `skills_damage_extra.rs` 保 Rust 有效行 `<=1,000`）：`L11 太虚幻境` 33 项 `L11BuffsC`、37 项 `L11BuffsD` 与 10 项 `L11BuffHelpersB` 衍生辅助技共 **80 项**升为 `已复核等价`（剩余 576 项归后续 `L11-5..L11-6b` 批次），`L11` 升为 **已复核等价 360／简化近似 576／缺失 0**（合计 936），全仓清单更新为 **已复核等价 2,127／简化近似 2,297／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch L11-4 复核摘要](../operations/evidence/2026-11-23-batch3-4-l11-4/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。

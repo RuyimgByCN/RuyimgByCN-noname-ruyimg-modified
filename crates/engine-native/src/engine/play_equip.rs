@@ -73,6 +73,7 @@ pub(super) fn play_equip(
             .insert((player, format!("chashi_equip_use:{frame}")), 1);
     }
     if catalog.skill_by_name("txmouduan").is_some()
+        || catalog.skill_by_name("txhj_mouduan").is_some()
         || catalog.skill_by_name("txhj_ditingSkill3").is_some()
     {
         state

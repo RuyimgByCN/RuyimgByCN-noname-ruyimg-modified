@@ -498,6 +498,17 @@ pub(super) fn active_ask_batches(
         HostBehavior::L11BuffsC => super::step::l11_buffs_b4_asks::ask_l11_buffs_c(
             stage, owner, target, targets, card, cards, core, catalog,
         ),
+        HostBehavior::L11SystemHooks => super::step::l11_system_asks::ask_l11_system_hooks(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::L11Weapons => super::step::l11_weapons_asks::ask_l11_weapons(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng => {
+            super::step::l11_boss_c_asks::ask_l11_boss_c(
+                stage, owner, target, targets, card, cards, core, catalog,
+            )
+        }
         HostBehavior::NewMeibu => {
             if stage != HostStage::SelectCard {
                 return None;

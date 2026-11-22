@@ -178,9 +178,9 @@ fn build_ask(
 }
 
 fn mahou_turns_upper(core: &GameStateCore, catalog: &Catalog, owner: PlayerId) -> u8 {
-    let has_digong = catalog
-        .skill_by_name("buff_txhj_digongdeyouhu")
-        .is_some_and(|d| core.has_skill(owner, d))
+    let has_digong = ["buff_txhj_digongdeyouhu", "buff_txhj_digongdebihu"]
+        .iter()
+        .any(|name| catalog.skill_by_name(name).is_some_and(|d| core.has_skill(owner, d)))
         && flag(core, owner, "mbcmfangzhu_ban") == 0;
     if has_digong { 4 } else { 3 }
 }

@@ -509,43 +509,52 @@ pub(in crate::content::host) fn handle_l11_equips(
                 wait_eq_ask(m, ctx, HostStage::TargetChoice, ask)
             }
             HostStage::TargetChoice | HostStage::SelectCard => {
-                if is_confirmed(ctx) {
-                    if let Some(t) = m.target.filter(|&p| ctx.core.player(p).alive) {
-                        let treasures: Vec<CardId> = ctx
+                let picked_tr = if m.def_key == "qilin_skill" {
+                    answered_cards(ctx).into_iter().next()
+                } else if is_confirmed(ctx) {
+                    m.target
+                        .filter(|&p| ctx.core.player(p).alive)
+                        .and_then(|t| equip_slot_card(ctx.core, ctx.catalog, t, EquipSlot::Treasure))
+                } else {
+                    None
+                };
+                if let (Some(t), Some(tr)) = (m.target.filter(|&p| ctx.core.player(p).alive), picked_tr) {
+                    if ctx.catalog.card_slot_of(ctx.core, tr) == Some(EquipSlot::Treasure)
+                        && ctx.core.player(t).equips.contains(&tr)
+                    {
+                        let has_more_treasures = ctx
                             .core
                             .player(t)
                             .equips
                             .iter()
-                            .copied()
-                            .filter(|&c| {
-                                ctx.catalog.card_slot_of(ctx.core, c) == Some(EquipSlot::Treasure)
-                            })
-                            .collect();
+                            .any(|&c| {
+                                c != tr
+                                    && ctx.catalog.card_slot_of(ctx.core, c)
+                                        == Some(EquipSlot::Treasure)
+                            });
                         let second_eligible = m.stage == HostStage::TargetChoice
-                            && treasures.len() > 1
+                            && has_more_treasures
                             && crate::rvm_bridge::modifiers::has_fuchendangmo(
                                 ctx.core,
                                 ctx.catalog,
                                 owner,
                             );
-                        if let Some(tr) = treasures.first().copied() {
-                            discard_player_cards(ctx, t, &[tr]);
-                            if crate::rvm_bridge::modifiers::has_shenhanxueyin(
-                                ctx.core,
-                                ctx.catalog,
-                                owner,
-                            ) && ctx.core.discard.contains(&tr)
-                            {
-                                gain_card_from_deck_or_discard(ctx, owner, tr);
-                            }
-                            if second_eligible && ctx.core.player(t).alive {
-                                let ask = if m.def_key == "txhj_qilingong" {
-                                    ASK_QILIN_CONFIRM
-                                } else {
-                                    ASK_QILIN_SKILL_CONFIRM
-                                };
-                                return wait_eq_ask(m, ctx, HostStage::SelectCard, ask);
-                            }
+                        discard_player_cards(ctx, t, &[tr]);
+                        if crate::rvm_bridge::modifiers::has_shenhanxueyin(
+                            ctx.core,
+                            ctx.catalog,
+                            owner,
+                        ) && ctx.core.discard.contains(&tr)
+                        {
+                            gain_card_from_deck_or_discard(ctx, owner, tr);
+                        }
+                        if second_eligible && ctx.core.player(t).alive {
+                            let ask = if m.def_key == "txhj_qilingong" {
+                                ASK_QILIN_CONFIRM
+                            } else {
+                                ASK_QILIN_SKILL_CONFIRM
+                            };
+                            return wait_eq_ask(m, ctx, HostStage::SelectCard, ask);
                         }
                     }
                 }
@@ -785,11 +794,13 @@ pub(in crate::content::host) fn handle_l11_equips(
                             return handle_l11_equips(m, ctx);
                         }
                         let sha_cid = m.cards.first().copied();
-                        let need = if crate::rvm_bridge::modifiers::has_fuchendangmo(
-                            ctx.core,
-                            ctx.catalog,
-                            owner,
-                        ) {
+                        let need = if m.def_key == "gx_taijifuchen"
+                            || crate::rvm_bridge::modifiers::has_fuchendangmo(
+                                ctx.core,
+                                ctx.catalog,
+                                owner,
+                            )
+                        {
                             2
                         } else {
                             1

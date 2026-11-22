@@ -414,7 +414,9 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
             "guifu_fire",
             "guifu_dam",
         ] {
-            if let Some(beh) = super::lookup_upstream_host_behavior(s)
+            if let Some(beh) = (s == "pyzhuren_diamond")
+                .then_some(engine_native::content::host::HostBehavior::L25ZuanBatchE)
+                .or_else(|| super::lookup_upstream_host_behavior(s))
                 .or_else(|| super::lookup_l25_zuan_host_behavior(s))
                 .or_else(|| {
                     if s == "pyzhuren_diamond" {

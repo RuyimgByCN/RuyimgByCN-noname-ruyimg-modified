@@ -8,6 +8,15 @@ pub fn intrinsic_machine(
     let data = ctx.res.frame(frame_id).expect("frame").data.clone();
     match data {
         EventData::OrdinaryJudge { owner, invocation } => {
+            if ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(owner, format!("l11_resolved_ordinary_judge:{invocation}")))
+                .is_some()
+            {
+                return None;
+            }
             let is_host_judge = invocation == u32::MAX;
             if !is_host_judge
                 && (invocation == 0

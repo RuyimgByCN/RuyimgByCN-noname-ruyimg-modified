@@ -79,6 +79,12 @@ pub(super) fn plan_l11_choice_action(
         "txhj_qilingong:discard_horse" | "qilin_skill:discard_horse" => {
             if options.contains(&ChoiceOption::Confirm) {
                 answer(vec![ChoiceOption::Confirm])
+            } else if let Some(c) = options
+                .iter()
+                .find(|o| matches!(o, ChoiceOption::Card(_)))
+                .copied()
+            {
+                answer(vec![c])
             } else {
                 answer(Vec::new())
             }

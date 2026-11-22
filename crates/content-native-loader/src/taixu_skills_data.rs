@@ -726,6 +726,61 @@ pub fn lookup_l11_b2_host_behavior(
         | "txhj_shierqicejin"
         | "txhj_shierqicetui"
         | "txhj_pofuchenzhou" => Some(HostBehavior::L11BuffHelpersB),
+        _ => lookup_l11_b5_host_behavior(clean),
+    }
+}
+
+/// Look up native `HostBehavior` for L11 Batch 5 (final 50 system/artifact/weapon/boss/general skills).
+pub fn lookup_l11_b5_host_behavior(
+    clean: &str,
+) -> Option<engine_native::content::host::HostBehavior> {
+    use engine_native::content::host::HostBehavior;
+    match clean {
+        "_txhj_skill_maxCards"
+        | "_txhj_skill_Timelimit"
+        | "_txhj_skill_addEffectStyle"
+        | "_txhj_skill_gaincard"
+        | "_txhj_skill_discard"
+        | "_txhj_skill_usecard"
+        | "_txhj_skill_damage"
+        | "_txhj_skills_kill"
+        | "_txhj_equip5"
+        | "twsidao"
+        | "twsidao_equip"
+        | "polu"
+        | "polu_damage"
+        | "_txhj_shenqi"
+        | "_txhj_XXXshenqi" => Some(HostBehavior::L11SystemHooks),
+        "hanbing_skill"
+        | "cixiong_skill"
+        | "guanshi_skill"
+        | "sanjian_skill"
+        | "yitianjian"
+        | "pyzhuren_diamond" => Some(HostBehavior::L11Weapons),
+        "txhj_mouduan"
+        | "olshanjia"
+        | "boss_xuanlei"
+        | "txhj_xuanlve"
+        | "boss_baolian"
+        | "dz_gs_yinfu"
+        | "boss_leili"
+        | "boss_fengxing"
+        | "boss_yushou"
+        | "boss_xixing"
+        | "boss_moyany"
+        | "boss_danshu"
+        | "boss_modao"
+        | "boss_jueji"
+        | "boss_mojian"
+        | "boss_lianyu"
+        | "boss_skonghun"
+        | "txhj_zhuwei"
+        | "boss_zhennu"
+        | "txhj_chuhai"
+        | "txhj_chuhai2" => Some(HostBehavior::L11GeneralBossC),
+        "boss_lingfeng" => Some(HostBehavior::L11BossLingfeng),
+        "guofengyupao" | "wushuangfangtianji_skill" => Some(HostBehavior::L28ThunderBatchA),
+        "twzhouhu" | "twharvestinori" | "twzuhuo" => Some(HostBehavior::L27BeautifyBatchB),
         _ => None,
     }
 }
