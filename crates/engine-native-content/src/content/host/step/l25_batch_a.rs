@@ -12,10 +12,13 @@ use crate::state::GameStateCore;
 mod l25_batch_a_asks;
 #[path = "l25_batch_a_ext.rs"]
 mod l25_batch_a_ext;
+#[path = "l25_batch_a_modes.rs"]
+mod l25_batch_a_modes;
 
 pub(in crate::content::host) use self::l25_batch_a_asks::ask_l25_batch_a;
 use self::l25_batch_a_asks::handle_l25_batch_a_impl;
 use self::l25_batch_a_ext::{filter_ui_hook, is_l25_ui_hook, ui_hook_trigger_meta};
+pub(crate) use self::l25_batch_a_modes::on_l25_host_event;
 
 pub(super) const ASK_XICHENG_TARGET: u32 = 1;
 pub(super) const ASK_XICHENG_SHOW_CARD: u32 = 2;
@@ -40,6 +43,19 @@ pub(super) const ASK_DAWU_TARGETS: u32 = 20;
 pub(super) const ASK_QINYIN_MODE: u32 = 21;
 pub(super) const ASK_NEW_WUHUN_TARGET: u32 = 22;
 pub(super) const ASK_JIEYING_TARGET: u32 = 23;
+pub(super) const ASK_NEW_GUIXIN_ZONE: u32 = 24;
+pub(super) const ASK_L25_GONGXIN_TARGET: u32 = 25;
+pub(super) const ASK_L25_GONGXIN_CARD: u32 = 26;
+pub(super) const ASK_L25_GONGXIN_CHOICE: u32 = 27;
+pub(super) const ASK_L25_GUIFU_DAM_TARGET: u32 = 28;
+
+pub(in crate::content::host::step) fn on_draw_begin_l25(
+    ctx: &mut Ctx<'_>,
+    player: PlayerId,
+    pending: &mut i32,
+) {
+    l25_batch_a_modes::on_draw_begin_guifu_fire(ctx, player, pending);
+}
 
 pub(super) fn flag(core: &GameStateCore, p: PlayerId, key: &str) -> u32 {
     core.vm_aux
@@ -223,6 +239,9 @@ pub(in crate::content::host) fn trigger_meta_l25_batch_a(name: &str) -> Option<T
         // Upstream `extension.js:46503` is commented out (`/* ... */`); never bind as active or trigger.
         return None;
     }
+    if l25_batch_a_modes::is_l25_mode_skill(name) {
+        return l25_batch_a_modes::trigger_meta_mode_l25(name);
+    }
     if is_l25_ui_hook(name) {
         return ui_hook_trigger_meta(name);
     }
@@ -288,10 +307,12 @@ pub(in crate::content::host) fn trigger_meta_l25_batch_a(name: &str) -> Option<T
 
 pub(in crate::content::host) fn limits_l25_batch_a(name: &str) -> SkillLimits {
     match name {
-        "ssr_yongsi_yuxi_card" | "ssr_yongsi_yuxi" | "_yongjinskill" => SkillLimits {
-            once_per_turn: true,
-            ..Default::default()
-        },
+        "ssr_yongsi_yuxi_card" | "ssr_yongsi_yuxi" | "_yongjinskill" | "guifu_dam" => {
+            SkillLimits {
+                once_per_turn: true,
+                ..Default::default()
+            }
+        }
         _ => SkillLimits::default(),
     }
 }
@@ -318,6 +339,9 @@ pub(in crate::content::host) fn activate_l25_batch_a(
     let catalog = ctx.catalog;
     if !state.player(owner).alive {
         return None;
+    }
+    if l25_batch_a_modes::is_l25_mode_skill(name) {
+        return l25_batch_a_modes::activate_mode_l25(skill, ctx, owner);
     }
     let can_activate = match name {
         "ssr_newsance_xicheng" | "ssr_newsance_weicheng" => !alive_others(state, owner).is_empty(),
@@ -355,6 +379,9 @@ pub(in crate::content::host) fn filter_l25_batch_a(
     let name = skill.name.as_str();
     if name == "_zuansaidskill" {
         return false;
+    }
+    if l25_batch_a_modes::is_l25_mode_skill(name) {
+        return l25_batch_a_modes::filter_mode_l25(name, ctx, owner, event);
     }
     if is_l25_ui_hook(name) {
         return filter_ui_hook(name, ctx, owner, event);
@@ -480,7 +507,11 @@ pub(in crate::content::host) fn filter_l25_batch_a(
         "wumou" => matches!(
             event,
             EventData::CardUsed(u)
-                if u.player == owner && is_normal_trick_use(ctx.catalog, u)
+                if u.player == owner
+                    && ctx.state.turn.current == owner
+                    && ctx.state.turn.phase == Phase::Play
+                    && !ctx.state.turn.skip_play_phase
+                    && is_normal_trick_use(ctx.catalog, u)
         ),
         "ol_wuqian" => matches!(
             event,
@@ -670,6 +701,9 @@ pub(in crate::content::host) fn machine_l25_batch_a(
         ("ol_wuqian", EventData::CardUsed(u)) => {
             targets = u.targets.clone();
         }
+        ("wumou", EventData::CardUsed(_)) => {
+            card = Some(100);
+        }
         ("new_guixin", EventData::Damage(d)) => {
             cards = vec![d.amount.max(1) as u32];
         }
@@ -731,6 +765,12 @@ pub(in crate::content::host) fn machine_l25_batch_a(
         ("g_nzry_jieying", EventData::TurnEndWindow { player, .. }) => {
             card = Some(4);
             target = Some(*player);
+        }
+        ("guanfu" | "guifu_nei", EventData::Death { player, killer }) => {
+            target = Some(*player);
+            if let Some(k) = killer {
+                cards = vec![u32::from(*k)];
+            }
         }
         _ => {}
     }

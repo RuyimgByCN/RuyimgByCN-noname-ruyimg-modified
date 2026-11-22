@@ -73,20 +73,8 @@ fn eval_sha_use_limit(state: &GameStateCore, catalog: &Catalog, player: PlayerId
     )
 }
 
-fn eval_ignore_armor(
-    state: &GameStateCore,
-    catalog: &Catalog,
-    source: PlayerId,
-    target: PlayerId,
-) -> bool {
-    raw_eval_ignore_armor(
-        state,
-        catalog,
-        source,
-        target,
-        None,
-        DamageNature::Normal,
-    )
+fn eval_ignore_armor(state: &GameStateCore, catalog: &Catalog, source: PlayerId, target: PlayerId) -> bool {
+    raw_eval_ignore_armor(state, catalog, source, target, None, DamageNature::Normal)
 }
 
 fn eval_card_unrespondable(
@@ -363,7 +351,7 @@ fn l25_zuan_60_generals_assembly_stats_and_special_hujia() {
     assert_eq!(L25_SSR_GENERAL_SKILLS.len(), 130);
     assert_eq!(L25_ALL_RULE_SKILLS.len(), 84);
     assert_eq!(L25_ZUAN_CARD_ENTRIES.len(), 5);
-    assert_eq!(L25_ZUAN_FORMAL_CARDS.len(), 6);
+    assert_eq!(L25_ZUAN_FORMAL_CARDS.len(), 5);
     assert_eq!(L25_BATCH_A_EXTRA_SKILLS.len(), 17);
     assert_eq!(L25_ZUAN_SKILLS.len(), 122);
 
@@ -615,14 +603,14 @@ fn l25_zuan_formal_cards_xicheng_weicheng_shoucheng_yuxi_and_jinfan_6d() {
         assert!(e2.state_core().player(0).hand.contains(&spade_card));
     }
 
-    // 4. `ssr_yongsi_yuxi_card` & `ssr_yongsi` + `ssr_jinfan` card
+    // 4. `ssr_yongsi_yuxi_card` & `ssr_yongsi` (upstream `ssr_jinfan` is a general skill, NOT a card)
     {
         let mut e = new_l25_engine(0x1250_0106, 3);
         let yuxi = find_named_card(&e, "ssr_yongsi_yuxi_card");
-        let jinfan_card = find_named_card(&e, "ssr_jinfan");
+        assert!(!e.catalog().cards.iter().any(|c| c.name == "ssr_jinfan"));
         let c0 = find_kind_suit(&e, CardKind::Sha, Suit::Spade);
         let c1 = find_kind_suit(&e, CardKind::Shan, Suit::Diamond);
-        e.state_core_mut().player_mut(0).hand = vec![yuxi, jinfan_card, c0];
+        e.state_core_mut().player_mut(0).hand = vec![yuxi, c0];
         e.state_core_mut().player_mut(1).hand = vec![c1];
 
         // Equip `ssr_yongsi_yuxi_card` via PlayCard
@@ -638,18 +626,7 @@ fn l25_zuan_formal_cards_xicheng_weicheng_shoucheng_yuxi_and_jinfan_6d() {
         let yongsi_def = grant_skill(&mut e, 0, "ssr_yongsi");
         set_flag(&mut e, 0, "l25_yuxi_treasure_active", 1);
         assert_eq!(eval_hand_limit(e.state_core(), e.catalog(), 0), 5);
-
-        // Play `ssr_jinfan` card -> steals c1 from seat 1
-        let out = e.submit(next_cmd(&e,
-            0,
-            GameAction::PlayCard {
-                card: jinfan_card,
-                targets: vec![1],
-            },
-        ));
-        assert!(matches!(out, CommandOutcome::Accepted { .. }));
-        assert!(e.state_core().player(0).hand.contains(&c1));
-        e.state_core_mut().player_mut(1).hand.push(c1);
+        e.state_core_mut().player_mut(1).hand = vec![c1];
 
         // Activate `ssr_yongsi`: first test cancel refunds `once_used`
         let CommandOutcome::Pending { choice } = e.submit(next_cmd(&e,
@@ -720,6 +697,11 @@ fn l25_zuan_batch_a_23_global_mode_shen_skills_77_passive_hooks_and_inert_zuansa
                     && !matches!(
                         name,
                         "_zuansaidskill"
+                            | "_bingletexiao1"
+                            | "_bingletexiao2"
+                            | "_zuan_damageSendEgg"
+                            | "_zuanidentityshowskill"
+                            | "_zuanidentitydyingskill"
                             | "_yongjinskill"
                             | "_kongchengskill"
                             | "_anyeskill"
@@ -734,6 +716,12 @@ fn l25_zuan_batch_a_23_global_mode_shen_skills_77_passive_hooks_and_inert_zuansa
             .collect();
         assert!(passive_hooks.len() >= 77);
 
+        set_flag(&mut e, 0, "l25_config_applied", 1);
+        set_flag(&mut e, 0, "l25_zuantype_old", 1);
+        set_flag(&mut e, 0, "l25_zuantype_new", 1);
+        set_flag(&mut e, 0, "l25_newhuihe_new", 1);
+        set_flag(&mut e, 0, "l25_zuan_emotion", 1);
+        set_flag(&mut e, 0, "l25_ransay", 100);
         for &hook in &passive_hooks {
             let def = grant_skill(&mut e, 0, hook);
             let out = e.submit(next_cmd(&e, 0, GameAction::ActivateSkill { skill: def }));
@@ -742,15 +730,29 @@ fn l25_zuan_batch_a_23_global_mode_shen_skills_77_passive_hooks_and_inert_zuansa
                 "passive hook `{hook}` must reject ActivateSkill"
             );
         }
+        for &inert_or_ai in &["_bingletexiao1", "_bingletexiao2"] {
+            grant_skill(&mut e, 0, inert_or_ai);
+        }
+        grant_skill(&mut e, 1, "_zuan_damageSendEgg");
+        grant_skill(&mut e, 1, "_zuanidentityshowskill");
+        grant_skill(&mut e, 1, "_zuanidentitydyingskill");
+        set_flag(&mut e, 1, "l25_hidentity", 1);
+        set_flag(&mut e, 1, "l25_sidentity", 2);
 
         // Fire the real trigger events that cover every passive UI/VFX/speech hook
         let sample_card = find_kind_suit(&e, CardKind::Sha, Suit::Spade);
         let shan_card = find_kind_suit(&e, CardKind::Shan, Suit::Diamond);
         let equip_card = find_card(&e, |_, d| d.kind.equip_slot() == Some(EquipSlot::Weapon));
-        e.state_core_mut().player_mut(0).hand.clear();
+        for p in 0..e.state_core().players.len() {
+            let pl = e.state_core_mut().player_mut(p as PlayerId);
+            pl.hand.retain(|&c| c != equip_card);
+            pl.equips.retain(|&c| c != equip_card);
+        }
+        e.state_core_mut().player_mut(0).hand = vec![equip_card];
         for ev in [
             EventData::TurnBegin { player: 0 },
             EventData::Phase { player: 0, phase: Phase::Prepare, begin: true },
+            EventData::Phase { player: 1, phase: Phase::Prepare, begin: true },
             EventData::Phase { player: 0, phase: Phase::Judge, begin: true },
             EventData::Phase { player: 0, phase: Phase::Draw, begin: true },
             EventData::Phase { player: 0, phase: Phase::Play, begin: true },
@@ -773,6 +775,13 @@ fn l25_zuan_batch_a_23_global_mode_shen_skills_77_passive_hooks_and_inert_zuansa
             EventData::Damage(damage_data_with(
                 Some(1),
                 0,
+                1,
+                DamageNature::Normal,
+                Some(sample_card),
+            )),
+            EventData::Damage(damage_data_with(
+                Some(0),
+                1,
                 1,
                 DamageNature::Normal,
                 Some(sample_card),
@@ -802,7 +811,14 @@ fn l25_zuan_batch_a_23_global_mode_shen_skills_77_passive_hooks_and_inert_zuansa
                 player: 0,
                 cards: vec![sample_card],
             },
+            EventData::CardUsed(card_use_as(
+                sample_card,
+                1,
+                vec![0],
+                Some(CardKind::Sha),
+            )),
             EventData::Dying { player: 0, source: Some(1) },
+            EventData::Dying { player: 1, source: Some(0) },
             EventData::Death {
                 player: 1,
                 killer: Some(0),
@@ -871,13 +887,17 @@ fn l25_zuan_batch_a_23_global_mode_shen_skills_77_passive_hooks_and_inert_zuansa
                 ));
             }
         }
-
         for &hook in &passive_hooks {
             assert!(
                 flag(&e, 0, &format!("l25_vfx_fired:{hook}")) >= 1,
                 "passive hook `{hook}` must fire on its real trigger event"
             );
         }
+        assert_eq!(flag(&e, 0, "l25_vfx_fired:_bingletexiao1"), 0);
+        assert_eq!(flag(&e, 0, "l25_vfx_fired:_bingletexiao2"), 0);
+        assert!(flag(&e, 1, "l25_vfx_fired:_zuan_damageSendEgg") >= 1);
+        assert!(flag(&e, 1, "l25_vfx_fired:_zuanidentityshowskill") >= 1);
+        assert!(flag(&e, 1, "l25_vfx_fired:_zuanidentitydyingskill") >= 1);
     }
 
     // 3. Test the 23 Batch A Global/Mode/Shen skills
@@ -1036,11 +1056,14 @@ fn l25_zuan_batch_a_23_global_mode_shen_skills_77_passive_hooks_and_inert_zuansa
         assert_eq!(flag(&e, 0, "l25_ol_wuqian_unblockable"), 1);
         assert_eq!(flag(&e, 1, "qinggang_disable_armor"), 1);
 
-        // `wumou` triggers when using an ordinary trick card (`Wuzhong`)
+        // `wumou` records normal trick in PlayPhase (`Phase::Play`) and settles once at `Phase::End { begin: true }`
+        e.debug_set_turn(0, Phase::Play, 1);
         let wz = find_kind_suit(&e, CardKind::Wuzhong, Suit::Heart);
+        let _ = drive_event(&mut e, EventData::CardUsed(card_use(wz, 0, vec![0])));
+        assert_eq!(flag(&e, 0, "mark:baonu"), 3);
         let StepOutcome::WaitChoice { spec, .. } = drive_event(
             &mut e,
-            EventData::CardUsed(card_use(wz, 0, vec![0])),
+            EventData::Phase { player: 0, phase: Phase::End, begin: true },
         ) else {
             panic!("expected wumou:choose_mode");
         };
@@ -1050,13 +1073,15 @@ fn l25_zuan_batch_a_23_global_mode_shen_skills_77_passive_hooks_and_inert_zuansa
         assert_eq!(flag(&e, 0, "l25_wumou_triggered"), 1);
         assert_eq!(flag(&e, 0, "mark:baonu"), 2);
 
-        // `new_guixin` on Damage -> confirm steals 1 card from each other alive player and flips face_down
-        let mut e2 = new_l25_engine(0x1250_0207, 3);
+        // `new_guixin` on Damage -> confirm -> choose_zone -> gains <= 2 keeps face up, > 2 flips face_down
+        let mut e2 = new_l25_engine(0x1250_0207, 4);
         grant_skill(&mut e2, 0, "new_guixin");
         let c1 = find_kind_suit(&e2, CardKind::Sha, Suit::Spade);
         let c2 = find_kind_suit(&e2, CardKind::Shan, Suit::Diamond);
+        let c3 = find_kind_suit(&e2, CardKind::Tao, Suit::Heart);
         e2.state_core_mut().player_mut(1).hand = vec![c1];
         e2.state_core_mut().player_mut(2).hand = vec![c2];
+        e2.state_core_mut().player_mut(3).hand = vec![c3];
         let StepOutcome::WaitChoice { spec, .. } = drive_event(
             &mut e2,
             EventData::Damage(damage_data_with(
@@ -1076,6 +1101,16 @@ fn l25_zuan_batch_a_23_global_mode_shen_skills_77_passive_hooks_and_inert_zuansa
             GameAction::Answer {
                 choice_id: cid,
                 selection: vec![ChoiceOption::Tag(1)],
+            },
+        ));
+        let c2_open = e2.open_choice().cloned().expect("expected new_guixin:choose_zone");
+        assert_eq!(c2_open.spec.prompt, "new_guixin:choose_zone");
+        let cid2 = c2_open.id;
+        let _ = e2.submit(next_cmd(&e2,
+            0,
+            GameAction::Answer {
+                choice_id: cid2,
+                selection: vec![ChoiceOption::Tag(0)],
             },
         ));
         assert_eq!(flag(&e2, 0, "l25_new_guixin_count"), 1);
@@ -1580,7 +1615,14 @@ fn l25_zuan_batch_b_22_skills_6d() {
         };
         let _ = e.submit(next_cmd(&e, 0, GameAction::Answer { choice_id: choice.id, selection: vec![ChoiceOption::Card(black_sha)] }));
         assert!(flag(&e, 0, "l25_jinfan_ling") >= 1);
-        assert!(eval_ignore_armor(e.state_core(), e.catalog(), 0, 1));
+        assert!(raw_eval_ignore_armor(
+            e.state_core(),
+            e.catalog(),
+            0,
+            1,
+            Some(black_sha),
+            DamageNature::Normal
+        ));
 
         // `ssr_newfanjian` active
         e.state_core_mut().player_mut(0).hand = vec![red_tao];

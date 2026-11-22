@@ -9,6 +9,13 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-22 Batch Q2-L25（L25 祖安武将 终 18 项→257/257；Queue Item 2 全量收官）合入（待提交／发布）
+
+- **基线、发布与版本**：HEAD `89406fe50c5d33c349b4456b05a0b7724c439a5e`（Batch U01-2 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `44995724474` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。
+- **Batch Q2-L25 集成与复核**：合入 `swarm/conv-q2-l25` `d9e1c9a1f..f36e73640`（`verifier-rules` #167 **`APPROVE`**）：协同 `hooks.rs`/`resolution/{dispatch,frame_hooks}.rs`（`is_post_commit_host_event`、`dddmoyan` 保留）、`l19_fixes.rs::_relifeskill` 行为隔离与 `l20_l22_fixes.rs:567` 锁刷新，并拆出 `d34_unrespondable.rs` 保 `d34_flags.rs` `<=1,000` 有效行；关闭 `ssr_jinfan`/`ssr_luoyi`/`ssr_lieren`、4 `ui_hooks` 与 11 技能共 18 项。
+- **清单计数与整包签署**：按 #167 升格 **18 项**（`L25` → **`257／0／0`**，Queue Item 2 全部 8 源规则等价闭环）；全仓更新为 **已复核等价 1,759／简化近似 2,665／缺失 0**，整包八项签署仍 `0/37`。
+- **主线实测**：3 native crate `-D warnings`、`wasm32`、4 crate **`2,743/0/6`**、`--workspace --no-fail-fast` **`8,091/0/8`**、`conformance` **`19/19`**、`desktop-client` **`20/0/1`**、跨端校验、`web-client` `typecheck`＋`test`（**540/0**）＋`build:native`＋`smoke:native`（**83/0**）＋`build` 与 `preflight.py` 全过，见 [Batch Q2-L25 证据](../operations/evidence/2026-11-22-batch2-4-l25/README.md)。
+
 ### 2026-11-22 Batch U01-2（U01 3D精选 21 项→74/95）合入（待提交／发布）
 
 - **基线、发布与版本**：HEAD `9842e555d9fc336ffb5c37a09d0b815da1a0ae32`（Batch Spine-Tests 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `44990992457` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。

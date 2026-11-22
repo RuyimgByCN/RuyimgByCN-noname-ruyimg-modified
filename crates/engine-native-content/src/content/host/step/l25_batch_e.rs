@@ -67,6 +67,64 @@ pub(super) const ASK_HUNZI_TARGET: u32 = 35;
 pub(super) const ASK_HUNZI_PINDIAN: u32 = 36;
 pub(super) const ASK_HUNZI_TARGET_PINDIAN: u32 = 37;
 pub(super) const ASK_NEWZHIBA_DISCARD: u32 = 38;
+pub(super) const ASK_PYZHUREN_DISCARD: u32 = 39;
+
+pub(in crate::content::host) fn pyzhuren_discard_candidates(
+    core: &GameStateCore,
+    catalog: &Catalog,
+    owner: PlayerId,
+) -> Vec<CardId> {
+    let equipped_py = core
+        .player(owner)
+        .equips
+        .iter()
+        .copied()
+        .find(|&c| catalog.cards[c as usize].name == "pyzhuren_diamond");
+    core.player(owner)
+        .hand
+        .iter()
+        .chain(core.player(owner).equips.iter())
+        .copied()
+        .filter(|&c| Some(c) != equipped_py)
+        .collect()
+}
+
+pub(in crate::content::host) fn pyzhuren_diamond_filter(
+    ctx: &QueryCtx<'_>,
+    frames: &[crate::event::Frame],
+    frame: &crate::event::Frame,
+    owner: PlayerId,
+    event: &EventData,
+    kind: EventKind,
+) -> bool {
+    if kind != EventKind::DamageBegin1 {
+        return false;
+    }
+    let EventData::Damage(d) = event else {
+        return false;
+    };
+    if d.prevented || d.amount <= 0 || d.source != Some(owner) || d.from_chain {
+        return false;
+    }
+    if used_this_turn(ctx.state, owner, "pyzhuren_diamond") >= 2 {
+        return false;
+    }
+    if pyzhuren_discard_candidates(ctx.state, ctx.catalog, owner).is_empty() {
+        return false;
+    }
+    let root = match frame.data {
+        EventData::DamageWindow { root, .. } => frames.iter().find(|f| f.id == root),
+        EventData::Damage(_) => Some(frame),
+        _ => None,
+    };
+    let Some(parent_id) = root.and_then(|r| r.parent) else {
+        return false;
+    };
+    let Some(parent) = frames.iter().find(|f| f.id == parent_id) else {
+        return false;
+    };
+    matches!(&parent.data, EventData::CardUsed(u) if is_sha_use(ctx.catalog, u))
+}
 
 pub(super) fn flag(core: &GameStateCore, p: PlayerId, key: &str) -> u32 {
     core.vm_aux
@@ -188,15 +246,13 @@ pub(super) fn lieren_eligible_cards(
     catalog: &Catalog,
     owner: PlayerId,
 ) -> Vec<CardId> {
-    let weapons: Vec<CardId> = he_cards(core, owner)
+    he_cards(core, owner)
         .into_iter()
-        .filter(|&c| is_weapon_card(catalog, c))
-        .collect();
-    if !weapons.is_empty() {
-        weapons
-    } else {
-        he_cards(core, owner)
-    }
+        .filter(|&c| {
+            is_weapon_card(catalog, c)
+                && flag(core, owner, &format!("ssr_lieren_temp:{c}")) == 0
+        })
+        .collect()
 }
 
 pub(super) fn card_type_bit(catalog: &Catalog, c: CardId) -> u32 {
@@ -382,6 +438,14 @@ pub(in crate::content::host) fn trigger_meta_l25_batch_e(name: &str) -> Option<T
             ],
         )),
         "ssr_zhiji" => Some(meta(EventKind::PhaseBegin, vec![EventKind::Dying])),
+        "pyzhuren_diamond" => Some(TriggerMeta {
+            event: EventKind::DamageBegin1,
+            timing: Timing::Normal,
+            priority: 3,
+            order_selectable: false,
+            optional: false,
+            extra_events: Vec::new(),
+        }),
         _ => None,
     }
 }
@@ -389,7 +453,7 @@ pub(in crate::content::host) fn trigger_meta_l25_batch_e(name: &str) -> Option<T
 pub(in crate::content::host) fn limits_l25_batch_e(name: &str) -> SkillLimits {
     match name {
         "ssr_jieyin" | "ssr_newjijie" | "ssr_jiqiao" | "ssr_nianlei" | "ssr_zaiqi"
-        | "ssr_lieren" | "ssr_weilong" | "ssr_newzhiba" | "ssr_newluanwu"
+        | "ssr_weilong" | "ssr_newzhiba" | "ssr_newluanwu"
         | "ssr_newduanxian" => SkillLimits {
             once_per_turn: true,
             ..SkillLimits::default()
@@ -497,8 +561,7 @@ pub(in crate::content::host) fn activate_l25_batch_e(
             make_active_machine("ssr_zaiqi", owner)
         }
         "ssr_lieren" => {
-            if used_this_turn(state, owner, "ssr_lieren") >= 1
-                || lieren_eligible_cards(state, catalog, owner).is_empty()
+            if lieren_eligible_cards(state, catalog, owner).is_empty()
                 || !alive_others(state, owner)
                     .into_iter()
                     .any(|p| lieren_pile(state, p).is_empty())
@@ -713,17 +776,15 @@ pub(in crate::content::host) fn filter_l25_batch_e(
             _ => false,
         },
         "ssr_lieren" => match event {
-            EventData::TurnBegin { player } => {
-                *player == owner && flag(state, owner, "l25_lieren_init") == 0
-            }
+            EventData::TurnBegin { .. } => flag(state, owner, "l25_lieren_init") == 0,
             EventData::Phase {
                 player,
                 phase: Phase::Prepare,
                 begin: true,
             } => {
-                *player == owner
-                    && (flag(state, owner, "l25_lieren_init") == 0
-                        || alive_others(state, owner).into_iter().any(|p| {
+                flag(state, owner, "l25_lieren_init") == 0
+                    || (*player == owner
+                        && alive_others(state, owner).into_iter().any(|p| {
                             !lieren_pile(state, p).is_empty() || flag(state, p, "l25_lieren_en") > 0
                         }))
             }

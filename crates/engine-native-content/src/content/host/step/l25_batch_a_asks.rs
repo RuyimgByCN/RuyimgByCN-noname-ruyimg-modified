@@ -262,7 +262,7 @@ pub(super) fn build_ask(
             1,
             true,
         ),
-        _ => None,
+        _ => super::l25_batch_a_modes::ask_mode_l25(ask_id, core, catalog, owner, target),
     }
 }
 

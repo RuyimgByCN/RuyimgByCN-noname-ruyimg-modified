@@ -5,16 +5,15 @@
 //! 子事件全部弹栈后继续），通过返回 `Flow::WaitChoice` 请求选择
 //! （引擎校验应答后恢复，机器从 `ctx.answer` 读取）。
 
-use crate::catalog::{CardKind, Catalog, QueryCtx};
+use crate::catalog::{Catalog, QueryCtx};
 use crate::choice::{ChoiceOption, ChoiceSpec, Selection};
-use crate::event::{CardUseData, DamageData, DamageNature, EventData, Phase};
+use crate::event::{CardUseData, DamageData, EventData, Phase};
 use crate::ids::{CardId, PlayerId, SkillDefId};
 use crate::resolution::Resolution;
 use crate::state::GameStateCore;
 
-pub mod presentation;
 mod helpers;
-
+pub mod presentation;
 pub use helpers::{
     card_use, card_use_as, card_use_with_nature, damage_data, damage_data_with, note_cards_lost,
 };
@@ -907,6 +906,9 @@ impl<'a> Ctx<'a> {
         }
         let mut amount = amount;
         (self.catalog.hooks.on_recover_before)(self, player, &mut amount);
+        let Some(amount) = helpers::apply_guanfu_disrecover(self, player, amount) else {
+            return 0;
+        };
         let p = self.core.player_mut(player);
         if !p.alive {
             return 0;
@@ -958,6 +960,20 @@ impl<'a> Ctx<'a> {
                 .insert((key.0, format!("mbcmfangzhu_disabled:{}", key.1)), 1);
         }
         if old.is_none() {
+            if self.catalog.skill_name(key.1) == "ssr_luoyi" {
+                let discarded = crate::kernel::discard_armor_for_ssr_luoyi(
+                    self.core,
+                    self.catalog,
+                    key.0,
+                );
+                if !discarded.is_empty() {
+                    note_cards_lost(self.core, self.catalog, key.0, &discarded);
+                    self.log(LogEvent::CardDiscarded {
+                        player: key.0,
+                        cards: discarded,
+                    });
+                }
+            }
             crate::resolution::register_added(self.core, self.res, self.catalog, key.0, key.1);
         }
         old

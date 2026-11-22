@@ -145,19 +145,28 @@ pub(crate) fn play_begin_l19(ctx: &mut Ctx<'_>, player: PlayerId) {
     set_flag(ctx.core, player, "_huzhu_play_seq", next_seq);
 }
 
-/// 仅当存在存活 `Role::Lord` 持有 `_relifeskill` 时，死者技能表保留供复活后继续生效。
+/// 仅当 L19 `_relifeskill` 激活且存在存活 `Role::Lord` 持有时，死者技能表保留供复活后继续生效。
+/// 当启用 L25 `l25_zuan_mode` (2/4) 或目录将 `_relifeskill` 绑定为非 `Dying` 时点（L25 `TurnBegin`）时跳过。
 pub(crate) fn host_preserves_skills_on_death(
     core: &GameStateCore,
     catalog: &Catalog,
     _player: PlayerId,
 ) -> bool {
-    if catalog.skill_by_name("_relifeskill").is_none() {
+    let Some(def) = catalog.skill_by_name("_relifeskill") else {
+        return false;
+    };
+    if matches!(flag(core, 0, "l25_zuan_mode"), 2 | 4)
+        || catalog.skills[def as usize]
+            .trigger
+            .as_ref()
+            .is_none_or(|t| t.event != crate::event::EventKind::Dying)
+    {
         return false;
     }
     (0..core.players.len() as PlayerId).any(|p| {
         core.player(p).alive
             && player_role(core, p) == Some(Role::Lord)
-            && has_skill_named(core, catalog, p, "_relifeskill")
+            && core.has_skill(p, def)
     })
 }
 

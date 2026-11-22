@@ -1,5 +1,9 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+## 2026-11-22 Batch Q2-L25（L25 祖安武将 终 18 项→257/257；Queue Item 2 收官）合入（待提交／发布）
+
+基线 HEAD `89406fe50c5d33c349b4456b05a0b7724c439a5e`（Batch U01-2 CI Run `44995724474` Attempt 1 `10/10 success` 已并入 `ci-runs.md`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `verifier-rules` 独立复核通过（#167 **`APPROVE`**，含 Chrome CDP 实跑探针）的 `swarm/conv-q2-l25` `d9e1c9a1f..f36e73640` 并协同 `hooks.rs`/`resolution/{dispatch,frame_hooks}.rs`/`combat_rules.rs`/`duel.rs`/`equipment.rs`/`play_{equip,sha}.rs`/`l19_fixes.rs`（隔离 L19/L25 `_relifeskill`）与拆出 `d34_unrespondable.rs`（保 `d34_flags.rs` `<=1,000` 有效行）：关闭 `L25 祖安武将` 终 18 项（`ssr_jinfan`/`ssr_luoyi`/`ssr_lieren`、4 `ui_hooks`、11 `skills`），在 `main` 全量通过 `--workspace`（`8,091/0/8`）、4 crate（`2,743/0/6`）、`conformance` `19/19`、`web-client` `540/0` 及 `smoke:native` `83/0`。`L25` 升为 **257／0／0**（100% 单项等价，Queue Item 2 全部 8 源规则完成），全仓清单更新为 **已复核等价 1,759／简化近似 2,665／缺失 0**（整包八项 `0/37`）。见 [Batch Q2-L25 证据](../operations/evidence/2026-11-22-batch2-4-l25/README.md) 与 [进度主稿](native-progress.md)。
+
 ## 2026-11-22 Batch U01-2（U01 3D精选 第二批 21 项→74/95）合入（待提交／发布）
 
 基线 HEAD `9842e555d9fc336ffb5c37a09d0b815da1a0ae32`（Batch Spine-Tests CI Run `44990992457` Attempt 1 `10/10 success` 已并入 `ci-runs.md`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `verifier-rules` 三轮核验通过（#157 **`APPROVE`**，含 4 轮 Chrome CDP 实跑探针）的 `swarm/conv-u01-2` `44c3ae911..622387115` 并协同 `catalog/hooks.rs`/`aux_history.rs`/`resolution/frame_hooks.rs`/`nullify.rs`/`play_equip.rs`/`d34_flags.rs`：关闭 `U01 3D精选` 21 项技能（`dddzhengjun`..`dddfenji`），在 `main` 全量通过 `--workspace`（`8,081/0/8`）、4 crate（`2,733/0/6`）、`conformance` `19/19`、`web-client` `540/0` 及 `smoke:native` `83/0`。`U01` 升为 **74／21／0**，全仓清单更新为 **已复核等价 1,741／简化近似 2,683／缺失 0**（整包八项 `0/37`）。见 [Batch U01-2 证据](../operations/evidence/2026-11-22-batch1-6c-u01-2/README.md) 与 [进度主稿](native-progress.md)。

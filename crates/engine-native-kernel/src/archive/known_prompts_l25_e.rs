@@ -441,4 +441,5 @@ pub(super) const KNOWN_PROMPTS_L25_E: &[&str] = &[
     "ssr_newzhiba:target_discard",
     "ssr_newzhiba:target_give",
     "ssr_newzhiba:target_response",
+    "pyzhuren_diamond:discard_card",
 ];

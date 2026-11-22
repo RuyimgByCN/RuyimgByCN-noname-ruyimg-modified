@@ -350,13 +350,12 @@ pub const L25_ALL_RULE_SKILLS: [&str; 84] = [
     "g_chenhuodajie",
 ];
 
-/// Authentic `ssr_newsance_*`, `ssr_yongsi_yuxi_card`, `ssr_jinfan`, and `ssr_yongsi` cards from `祖安武将/extension.js:6535-28385`.
-pub const L25_ZUAN_FORMAL_CARDS: [(&str, CardKind, Suit, u8); 6] = [
+/// Authentic `ssr_newsance_*`, `ssr_yongsi_yuxi_card`, and `ssr_yongsi` cards from `祖安武将/extension.js:6535-28385`.
+pub const L25_ZUAN_FORMAL_CARDS: [(&str, CardKind, Suit, u8); 5] = [
     ("ssr_newsance_xicheng", CardKind::Wuzhong, Suit::Spade, 7),
     ("ssr_newsance_weicheng", CardKind::Wuzhong, Suit::Club, 8),
     ("ssr_newsance_shoucheng", CardKind::Wuzhong, Suit::Heart, 9),
     ("ssr_yongsi_yuxi_card", CardKind::WuxingPan, Suit::Heart, 1),
-    ("ssr_jinfan", CardKind::Wuzhong, Suit::Spade, 9),
     ("ssr_yongsi", CardKind::WuxingPan, Suit::Heart, 1),
 ];
 
@@ -587,7 +586,12 @@ pub fn lookup_l25_zuan_host_behavior(
         | "_basicturnoverskill"
         | "_basiclinkskill"
         | "_basicdraws2kill"
-        | "_basicdiscard2skill" => Some(HostBehavior::L25ZuanBatchA),
+        | "_basicdiscard2skill"
+        | "ansha_zhong"
+        | "ansha_nei"
+        | "huanhaicls"
+        | "guanfu"
+        | "guifu_nei" => Some(HostBehavior::L25ZuanBatchA),
         // Batch B: Generals 1–10 (22 skills)
         "ssr_qianxun" | "ssr_jueji" | "ssr_zhiheng" | "ssr_jianye" | "ssr_jiuyuan"
         | "ssr_newlongdan" | "ssr_newpozhen" | "ssr_jinnang" | "ssr_newbazhen" | "ssr_tuxi"

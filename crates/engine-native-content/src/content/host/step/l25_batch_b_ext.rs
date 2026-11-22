@@ -313,7 +313,6 @@ fn step_jinfan(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             .max(jinfan_pile(ctx.core, owner).len() as u32);
         for &tgt in &m.targets {
             if (ctx.core.player(tgt).hand.len() as u32) < ling {
-                set_flag(ctx.core, tgt, "qinggang_disable_armor", 1);
                 set_flag(ctx.core, owner, "l25_jinfan_triggered", u32::from(tgt) + 1);
             }
         }

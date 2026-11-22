@@ -553,6 +553,7 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
     "_lunjianskill:choose_target",
     "wumou:choose_mode",
     "new_guixin:confirm",
+    "new_guixin:choose_zone",
     "kuangfeng:choose_target",
     "dawu:choose_targets",
     "new_wuhun:choose_target",
@@ -697,4 +698,5 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
     "dddfenji_discard",
     "dddzhengjun_hp_target",
     "dddqiahua_target",
+    "guifu_dam_target",
 ];

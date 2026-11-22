@@ -521,7 +521,7 @@ fn l25_zuan_batch_d_22_skills_6d() {
         let (_, unlim) = eval_sha_use_limit(e.state_core(), e.catalog(), 0);
         assert!(unlim);
 
-        // `ssr_luoyi`: +1 damage on Sha/Duel
+        // `ssr_luoyi`: NO +1 damage on Sha/Duel; disables Armor equip slot instead
         assert_eq!(
             apply_damage_amount(
                 e.state_core(),
@@ -532,8 +532,13 @@ fn l25_zuan_batch_d_22_skills_6d() {
                 DamageNature::Normal,
                 1,
             ),
-            2
+            1
         );
+        assert!(!e.catalog().is_equip_slot_enabled(
+            e.state_core(),
+            0,
+            EquipSlot::Armor
+        ));
 
         // `ssr_newyucong` active: place card as `骢` on target -> `ssr_newyicong` reduces distance to mounted target
         let CommandOutcome::Pending { choice } = e.submit(next_cmd(&e,
@@ -905,14 +910,15 @@ fn l25_zuan_batch_e_22_skills_6d() {
         assert_eq!(flag(&e, 0, "l25_zaiqi_used"), 1);
 
         // `ssr_lieren` active & `ssr_weilong` active & `ssr_hunzi` active
-        e.state_core_mut().player_mut(0).hand = vec![club_sha, diamond_shan];
+        let weapon_card = find_card(&e, |_, d| d.kind.equip_slot() == Some(EquipSlot::Weapon));
+        e.state_core_mut().player_mut(0).hand = vec![weapon_card, diamond_shan];
         let CommandOutcome::Pending { choice } = e.submit(next_cmd(&e,
             0,
             GameAction::ActivateSkill { skill: lieren_def },
         )) else {
             panic!("expected ssr_lieren:choose_card");
         };
-        let CommandOutcome::Pending { choice } = e.submit(next_cmd(&e, 0, GameAction::Answer { choice_id: choice.id, selection: vec![ChoiceOption::Card(club_sha)] })) else {
+        let CommandOutcome::Pending { choice } = e.submit(next_cmd(&e, 0, GameAction::Answer { choice_id: choice.id, selection: vec![ChoiceOption::Card(weapon_card)] })) else {
             panic!("expected ssr_lieren:choose_target");
         };
         let _ = e.submit(next_cmd(&e, 0, GameAction::Answer { choice_id: choice.id, selection: vec![ChoiceOption::Player(1)] }));

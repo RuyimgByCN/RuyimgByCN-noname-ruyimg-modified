@@ -396,6 +396,7 @@ impl crate::catalog::SkillMachine for DrawMachine {
                         > 0;
                 if held_cards.is_empty() && !from_bottom {
                     crate::kernel::elo_on_draw_begin(ctx.core, ctx.catalog, player, requested);
+                    crate::kernel::l25_haoyunlai_on_draw_begin(ctx.core, ctx.catalog, player);
                 }
                 let card = if from_bottom {
                     ctx.core.deck.remove(0)

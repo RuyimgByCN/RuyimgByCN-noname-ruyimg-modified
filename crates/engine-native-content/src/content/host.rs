@@ -36,11 +36,11 @@ pub(crate) use step::{
     host_card_use_after, host_draw_begin_step, host_on_game_start, host_on_hand_card_removed,
     host_on_phase_use_end, host_on_player_died, host_on_recover_before, host_on_round_start,
     host_preserves_skills_on_death, host_sha_begin_step, host_sha_end_step,
-    on_cards_to_discard_chengye, on_outer_settled_taipingyaoshu, on_phase_end_l10_scs,
-    on_skill_removed_all, play_begin_l19, play_begin_tianshu, play_end_rui_skill1,
-    reguhuo_consume_resp, reguhuo_has_pending_final, reguhuo_response_skill,
-    reguhuo_spawn_final, reguhuo_spawn_response, scsanruo_response_skill,
-    u01_phase_skipped_hook,
+    on_cards_to_discard_chengye, on_l25_host_event, on_outer_settled_taipingyaoshu,
+    on_phase_end_l10_scs, on_skill_removed_all, play_begin_l19, play_begin_tianshu,
+    play_end_rui_skill1, reguhuo_consume_resp, reguhuo_has_pending_final,
+    reguhuo_response_skill, reguhuo_spawn_final, reguhuo_spawn_response,
+    scsanruo_response_skill, u01_phase_skipped_hook,
     u01_respond_skill_options as u01_respond_skill_options_hook,
     u01_try_activate_respond_skill as u01_try_activate_respond_skill_hook,
 };
@@ -253,6 +253,9 @@ impl SkillBehavior for HostSkillBehavior {
                 }
                 _ => self.filter(ctx, owner, event),
             },
+            HostBehavior::L25ZuanBatchE if self.name == "pyzhuren_diamond" => {
+                step::l25_batch_e::pyzhuren_diamond_filter(ctx, _frames, frame, owner, event, kind)
+            }
             _ => self.filter_with_frames(ctx, _frames, frame, owner, event),
         }
     }

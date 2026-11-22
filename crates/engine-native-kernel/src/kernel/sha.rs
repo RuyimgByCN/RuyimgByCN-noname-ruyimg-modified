@@ -575,6 +575,31 @@ impl ShaResolveMachine {
                 != 0
     }
 
+    /// 来源是否持有 L25 `configs:ssr_luoyi`（使用杀需要目标多出一张闪；不可闪避/`directHit` 时不生效）。
+    fn source_has_luoyi(&self, ctx: &Ctx<'_>) -> bool {
+        let guilong = crate::rvm_bridge::modifiers::d34_l28_mods::is_guilong_red_sha(
+            ctx.core,
+            ctx.catalog,
+            self.source,
+            self.card,
+        );
+        !self.is_sha_direct_hit(ctx)
+            && self.tieji_red != Some(true)
+            && !guilong
+            && ctx
+                .catalog
+                .skill_by_name("ssr_luoyi")
+                .map(|d| ctx.core.has_skill(self.source, d))
+                .unwrap_or(false)
+    }
+
+    /// 目标共需出闪总数。
+    fn needed_shan_count(&self, ctx: &Ctx<'_>) -> u8 {
+        (if self.source_has_wushuang(ctx) { 2 } else { 1 })
+            + u8::from(self.source_has_luoyi(ctx))
+            + ctx.core.turn.liaoyuan_count
+    }
+
     /// 酒伤害加成（派发时已捕获）。
     fn jiu_damage_bonus(&self, ctx: &Ctx<'_>, fid: Option<crate::ids::EventId>) -> u32 {
         if !self.jiu_bonus {

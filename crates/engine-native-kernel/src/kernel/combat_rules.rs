@@ -95,6 +95,22 @@ pub fn mbcmfangzhu_baiban(
         > 0
 }
 
+/// L25 `configs:ssr_luoyi` (`祖安武将/extension.js:15031-15108`): 持有者所有普通/延时锦囊均视为【决斗】。
+pub fn is_ssr_luoyi_trick_to_duel(
+    core: &crate::state::GameStateCore,
+    catalog: &Catalog,
+    player: PlayerId,
+    card: crate::ids::CardId,
+) -> bool {
+    let k = catalog.card_kind(card);
+    !k.is_basic_kind()
+        && k.equip_slot().is_none()
+        && k.is_basic_trick_or_equip()
+        && catalog
+            .skill_by_name("ssr_luoyi")
+            .is_some_and(|d| core.has_skill(player, d))
+}
+
 /// `L29` 酒诗（`mbcmjiushi_1` `chooseToUse`）：正面向上濒死本人可用虚拟【酒】自救。
 pub(crate) fn mbcmjiushi_dying_skill(
     core: &crate::state::GameStateCore,
@@ -288,6 +304,11 @@ pub(crate) fn response_kind_cards_core(
             .iter()
             .copied()
             .filter(|&c| {
+                if need == CardKind::Nullify
+                    && is_ssr_luoyi_trick_to_duel(core, catalog, responder, c)
+                {
+                    return false;
+                }
                 if jinyan_blocks_black_trick(core, catalog, responder, c) {
                     return need == CardKind::Sha && !sealed;
                 }

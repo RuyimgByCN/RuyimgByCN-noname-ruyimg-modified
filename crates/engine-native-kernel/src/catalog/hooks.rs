@@ -182,6 +182,8 @@ pub struct ContentHooks {
     ) -> Option<bool>,
     /// 阶段被跳过或取消时的宿主触发钩子（如 `dddlingyong` `phase*Skipped`/`Cancelled`）。
     pub on_phase_skipped: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId),
+    /// 事件前窗/弹出后宿主钩子（用于保持历史内容锁不变下的阶段/语音/封红到期与判定区清理）。
+    pub on_host_event: fn(&mut crate::machine::Ctx<'_>, &crate::event::EventData),
 }
 
 impl ContentHooks {
@@ -222,5 +224,6 @@ impl ContentHooks {
         respond_skill_options: |_, _, _, _, _| Vec::new(),
         try_activate_respond_skill: |_, _, _, _, _| None,
         on_phase_skipped: |_, _| {},
+        on_host_event: |_, _| {},
     };
 }

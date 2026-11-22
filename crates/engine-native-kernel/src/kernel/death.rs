@@ -281,7 +281,14 @@ impl crate::catalog::SkillMachine for DeathMachine {
                     if !qianlong_lord {
                         match dead_role {
                             crate::state::Role::Rebel => {
-                                ctx.start_draw(k, 3);
+                                let guanfu_blocks =
+                                    ctx.catalog.skill_by_name("guanfu").is_some_and(|d| {
+                                        (0..ctx.core.players.len() as PlayerId)
+                                            .any(|p| ctx.core.player(p).alive && ctx.core.has_skill(p, d))
+                                    });
+                                if !guanfu_blocks {
+                                    ctx.start_draw(k, 3);
+                                }
                             }
                             crate::state::Role::Loyalist
                                 if roles[k as usize] == crate::state::Role::Lord =>

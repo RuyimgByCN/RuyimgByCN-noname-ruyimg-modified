@@ -562,9 +562,11 @@ fn l20_fix_tspowei_dulie_stacking_move_achieve_and_options() {
 #[test]
 fn l20_fix_fz_liegong_runtime_order_selectable_and_lock_preserved() {
     let mut p = l20_pack();
-    // Verify static content_lock_id of `decision34_pack9_extension_pack()` stays frozen (`7_957_176_479_330_764_502`)!
+    // Verify static content_lock_id of `decision34_pack9_extension_pack()` reflects Batch Q2-L25's
+    // authentic `ssr_jinfan` card removal + `pyzhuren_diamond`/mode skill additions (`1_761_060_662_268_120_978`);
+    // frozen `u01-dddanzhi-pending-v107.ngsa` coexistence lock (`9_097_112_637_251_845_257`) remains untouched.
     let base_rest = decision34_pack9_extension_pack();
-    assert_eq!(content_lock_id(&[&base_rest]), 7_957_176_479_330_764_502);
+    assert_eq!(content_lock_id(&[&base_rest]), 1_761_060_662_268_120_978);
 
     // Add a dummy CardUsed (Normal, priority=0, order_selectable=true) VM skill to verify `trigger_order` prompt!
     let source = "skill l20_sha_peer(420090001) { trigger card_used owner_is_source { effect storage_set(self_skill, 1, 1); } }";

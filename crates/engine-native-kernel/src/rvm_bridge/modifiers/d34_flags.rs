@@ -18,6 +18,8 @@ mod d34_u05_mods;
 mod d34_l11_mods;
 #[path = "d34_u01_mods.rs"]
 mod d34_u01_mods;
+#[path = "d34_unrespondable.rs"]
+mod d34_unrespondable;
 pub use d34_l11_mods::{
     apply_draw_count, has_yaya_protected, is_card_ignored_in_discard_phase,
     txlianbi_blocks_unlink, txminguangkai_blocks_link,
@@ -25,6 +27,7 @@ pub use d34_l11_mods::{
 pub use d34_u01_mods::{
     is_dddfusi_hand_locked, is_dddtongyu_hand_locked, is_u01_hand_locked, is_u01_shown_card,
 };
+pub use d34_unrespondable::apply_card_unrespondable;
 pub use d34_view_as::find_d34_flag_view_as;
 
 #[inline]
@@ -56,7 +59,7 @@ pub(super) fn has_ext_skill(
 }
 
 #[inline]
-fn has_slot_equipped(
+pub(super) fn has_slot_equipped(
     state: &GameStateCore,
     catalog: &Catalog,
     player: PlayerId,
@@ -72,12 +75,12 @@ fn has_slot_equipped(
 }
 
 #[inline]
-fn has_weapon(state: &GameStateCore, catalog: &Catalog, player: PlayerId) -> bool {
+pub(super) fn has_weapon(state: &GameStateCore, catalog: &Catalog, player: PlayerId) -> bool {
     has_slot_equipped(state, catalog, player, |s| s == EquipSlot::Weapon)
 }
 
 #[inline]
-fn card_suit(catalog: &Catalog, card: Option<CardId>) -> Option<Suit> {
+pub(super) fn card_suit(catalog: &Catalog, card: Option<CardId>) -> Option<Suit> {
     card.and_then(|c| catalog.cards.get(c as usize).map(|d| d.suit))
 }
 
@@ -455,6 +458,18 @@ pub fn apply_card_distance_unlimited(
     player: PlayerId,
     card: CardId,
     kind: CardKind,
+    unlimited: bool,
+) -> bool {
+    apply_card_distance_unlimited_to(state, catalog, player, None, card, kind, unlimited)
+}
+
+pub fn apply_card_distance_unlimited_to(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    player: PlayerId,
+    target: Option<PlayerId>,
+    card: CardId,
+    kind: CardKind,
     mut unlimited: bool,
 ) -> bool {
     let is_trick = !kind.is_basic_kind() && !kind.is_equip();
@@ -499,7 +514,9 @@ pub fn apply_card_distance_unlimited(
         }
     }
     let unlimited = d34_u05_mods::apply_card_distance_unlimited(state, player, kind, unlimited);
-    d34_l11_mods::apply_card_distance_unlimited(state, catalog, player, card, kind, unlimited)
+    d34_l11_mods::apply_card_distance_unlimited_to(
+        state, catalog, player, target, card, kind, unlimited,
+    )
 }
 
 pub fn apply_card_target_canceled(
@@ -620,6 +637,15 @@ pub fn is_ducai3_forbidden(
     actor: PlayerId,
     card: CardId,
 ) -> bool {
+    if (card as usize) < catalog.cards.len()
+        && flag_val(state, actor, "l25_gongxin_red_sealed") > 0
+        && matches!(
+            catalog.effective_card_suit(state, actor, card),
+            Suit::Heart | Suit::Diamond
+        )
+    {
+        return true;
+    }
     if (card as usize) >= catalog.cards.len()
         || has_ext_skill(state, catalog, actor, "ducai2")
         || flag_val(state, actor, "ducai2_active") > 0
@@ -916,6 +942,17 @@ pub fn apply_ignore_armor(
     catalog: &Catalog,
     source: PlayerId,
     target: PlayerId,
+    ignore: bool,
+) -> bool {
+    apply_ignore_armor_with_card(state, catalog, source, target, None, ignore)
+}
+
+pub fn apply_ignore_armor_with_card(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    source: PlayerId,
+    target: PlayerId,
+    card: Option<CardId>,
     mut ignore: bool,
 ) -> bool {
     if is_target_unequip2(state, target)
@@ -936,75 +973,6 @@ pub fn apply_ignore_armor(
         ignore = true;
     }
     let ignore = d34_u05_mods::apply_ignore_armor(state, source, ignore);
-    let ignore = d34_l11_mods::apply_ignore_armor(state, source, ignore);
+    let ignore = d34_l11_mods::apply_ignore_armor(state, catalog, source, target, card, ignore);
     super::d34_l28_mods::apply_ignore_armor(state, catalog, target, ignore)
-}
-
-pub fn apply_card_unrespondable(
-    state: &GameStateCore,
-    catalog: &Catalog,
-    source: PlayerId,
-    target: PlayerId,
-    card: CardId,
-    kind: CardKind,
-    mut unrespondable: bool,
-) -> bool {
-    if kind.is_sha_like() {
-        if flag_val(state, source, "l11_taiji_unrespondable") > 0
-            || flag_val(state, source, "l11_lulu_huwei_boost") > 0
-            || has_ext_skill(state, catalog, source, "ssr_wushuang")
-            || flag_val(state, source, "l25_wushuang_unrespondable") > 0
-            || flag_val(state, source, "u05_cross_mod:wushuang") > 0
-            || flag_val(state, source, "yxs_nvquan_double_response") > 0
-            || flag_val(state, source, "l20_liegong_direct_hit") > 0
-            || flag_val(state, source, "l27_potzhuangshi_unblockable") > 0
-            || flag_val(state, source, "l27_twxiafeng_spent") > 0
-        {
-            unrespondable = true;
-        }
-        if has_weapon(state, catalog, source)
-            && (flag_val(state, source, "l11_weapon_dunjiazhoufa") > 0
-                || has_ext_skill(state, catalog, source, "buff_txhj_dunjiazhoufa"))
-        {
-            unrespondable = true;
-        }
-        if flag_val(state, source, "yxs_hanbei_unblockable") > 0
-            || (has_ext_skill(state, catalog, source, "hanbei")
-                && has_slot_equipped(state, catalog, source, |s| {
-                    matches!(s, EquipSlot::HorsePlus | EquipSlot::HorseMinus)
-                }))
-        {
-            unrespondable = true;
-        }
-        if (has_ext_skill(state, catalog, source, "sheshu")
-            || flag_val(state, source, "yxs_sheshu_pierce") > 0)
-            && state.player(target).hp >= 3
-        {
-            unrespondable = true;
-        }
-        if matches!(
-            card_suit(catalog, Some(card)),
-            Some(Suit::Heart | Suit::Diamond)
-        ) && flag_val(state, source, "l27_sbzhaxiang_red_sha") > 0
-        {
-            unrespondable = true;
-        }
-    }
-    if kind == CardKind::Duel
-        && (has_ext_skill(state, catalog, source, "ssr_wushuang")
-            || flag_val(state, source, "u05_cross_mod:wushuang") > 0
-            || flag_val(state, source, "yxs_nvquan_double_response") > 0)
-    {
-        unrespondable = true;
-    }
-    if !kind.is_basic_kind()
-        && !kind.is_equip()
-        && (flag_val(state, source, "l11_buff_trick_unwuxie") > 0
-            || has_ext_skill(state, catalog, source, "buff_txhj_wenhezhenlue"))
-    {
-        unrespondable = true;
-    }
-    let unrespondable =
-        d34_u05_mods::apply_card_unrespondable(state, source, target, kind, unrespondable);
-    d34_l11_mods::apply_card_unrespondable(state, catalog, source, kind, unrespondable)
 }

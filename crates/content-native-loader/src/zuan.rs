@@ -30,6 +30,59 @@ impl Default for ZuanConfig {
     }
 }
 
+/// L25 运行时模式与反馈配置（映射到 `GameStateCore.vm_aux.flags` 全局配置槽 `seat = 0`）。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ZuanModeConfig {
+    /// 模式编号（1=默认，2=复活 `_relifeskill`，4=官 `_guanmodeskill`，8=暗杀 `_anshaskill`，7=梦之海 `_seadreammodeskill`）。
+    pub mode: i32,
+    /// 平衡开关（如 `_seadreammodeskill` 开启走骰子、关闭走判定）。
+    pub balance: bool,
+    /// 好运来（`_haoyunlai` 仅对 `game.me` 生效的高价值牌置顶）。
+    pub goodluck: bool,
+    /// 新版回合特效开关。
+    pub zuantype_new: bool,
+    /// 旧版特效开关。
+    pub zuantype_old: bool,
+    /// 祖安表情/语音开关。
+    pub zuan_emotion: bool,
+    /// 语音概率（0..=100）。
+    pub ransay: i32,
+    /// 新回合特效开关。
+    pub newhuihe_new: bool,
+}
+
+impl Default for ZuanModeConfig {
+    fn default() -> Self {
+        Self {
+            mode: 1,
+            balance: false,
+            goodluck: false,
+            zuantype_new: true,
+            zuantype_old: false,
+            zuan_emotion: true,
+            ransay: 100,
+            newhuihe_new: true,
+        }
+    }
+}
+
+/// 将 L25 模式与反馈开关写入引擎 `vm_aux.flags`，保证纯标量存档/回放可还原。
+pub fn zuan_apply_engine_config(engine: &mut engine_native::Engine, cfg: &ZuanModeConfig) {
+    let flags = &mut engine.state_core_mut().vm_aux.flags;
+    flags.insert((0, "l25_config_applied".to_string()), 1);
+    flags.insert((0, "l25_zuan_mode".to_string()), cfg.mode.max(0) as u32);
+    flags.insert((0, "l25_balance".to_string()), u32::from(cfg.balance));
+    flags.insert(
+        (0, "l25_goodluck_enabled".to_string()),
+        u32::from(cfg.goodluck),
+    );
+    flags.insert((0, "l25_zuantype_new".to_string()), u32::from(cfg.zuantype_new));
+    flags.insert((0, "l25_zuantype_old".to_string()), u32::from(cfg.zuantype_old));
+    flags.insert((0, "l25_zuan_emotion".to_string()), u32::from(cfg.zuan_emotion));
+    flags.insert((0, "l25_ransay".to_string()), cfg.ransay.clamp(0, 100) as u32);
+    flags.insert((0, "l25_newhuihe_new".to_string()), u32::from(cfg.newhuihe_new));
+}
+
 /// L25 祖安武将错误类型。
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ZuanError {

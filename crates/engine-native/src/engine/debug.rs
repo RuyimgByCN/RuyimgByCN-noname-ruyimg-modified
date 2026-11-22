@@ -398,6 +398,25 @@ impl Engine {
                 rounds: 0,
             },
         );
+        if name == "ssr_luoyi" {
+            let discarded = crate::kernel::discard_armor_for_ssr_luoyi(
+                &mut self.state.core,
+                &self.catalog,
+                player,
+            );
+            if !discarded.is_empty() {
+                crate::machine::note_cards_lost(
+                    &mut self.state.core,
+                    &self.catalog,
+                    player,
+                    &discarded,
+                );
+                self.log.push(LogEvent::CardDiscarded {
+                    player,
+                    cards: discarded,
+                });
+            }
+        }
         if name == "kuangchan" {
             let is_lord = self
                 .state
@@ -441,6 +460,28 @@ impl Engine {
         if name == "dddfusi" {
             crate::state::sync_dddfusi_global(&mut self.state.core, &self.catalog);
             crate::resolution::sync_trigger_owners(&self.state.core, &mut self.state.resolution);
+        }
+    }
+
+    /// 测试/工具：移除指定座位技能并触发 `on_skill_removed`（同步清理衍生牌堆等）。
+    pub fn debug_remove_skill(&mut self, player: PlayerId, name: &str) {
+        let Some(def) = self.catalog.skill_by_name(name) else {
+            return;
+        };
+        let removed = self
+            .state
+            .core
+            .remove_skill_and_r05_mark(&self.catalog, player, def);
+        if removed.is_some() {
+            let returned = (self.catalog.hooks.on_skill_removed)(
+                &mut self.state.core,
+                &self.catalog,
+                player,
+                name,
+            );
+            if !returned.is_empty() {
+                self.state.core.discard.extend(returned);
+            }
         }
     }
 

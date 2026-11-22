@@ -478,10 +478,11 @@ pub(super) fn apply_sha_extra_targets(
     d34_l25_mods::apply_sha_extra_targets(state, catalog, player, kind, extra)
 }
 
-pub(super) fn apply_card_distance_unlimited(
+pub(super) fn apply_card_distance_unlimited_to(
     state: &GameStateCore,
     catalog: &Catalog,
     player: PlayerId,
+    target: Option<PlayerId>,
     card: CardId,
     kind: CardKind,
     mut unlimited: bool,
@@ -544,7 +545,9 @@ pub(super) fn apply_card_distance_unlimited(
     {
         unlimited = true;
     }
-    d34_l25_mods::apply_card_distance_unlimited(state, catalog, player, card, kind, unlimited)
+    d34_l25_mods::apply_card_distance_unlimited_to(
+        state, catalog, player, target, card, kind, unlimited,
+    )
 }
 
 pub(super) fn apply_card_target_canceled(
@@ -996,7 +999,10 @@ pub(super) fn tpys_damage_prevented(
 
 pub(super) fn apply_ignore_armor(
     state: &GameStateCore,
+    catalog: &Catalog,
     source: PlayerId,
+    target: PlayerId,
+    card: Option<CardId>,
     mut ignore: bool,
 ) -> bool {
     // `mobile.js:16944` (`gnsheque`) & `diy.js:3461` (`kyou_zhidian`)
@@ -1005,7 +1011,7 @@ pub(super) fn apply_ignore_armor(
     {
         ignore = true;
     }
-    d34_l25_mods::apply_ignore_armor(state, source, ignore)
+    d34_l25_mods::apply_ignore_armor(state, catalog, source, target, card, ignore)
 }
 
 pub(super) fn apply_card_unrespondable(

@@ -389,7 +389,9 @@ pub(super) fn play_kind(
         kind = CardKind::Tao;
     }
     if kind == catalog.card_kind(card) && !mark_mutoumianju {
-        if let Some(spec) = catalog.find_player_vm_view_as(core, actor, card, true, None) {
+        if crate::kernel::is_ssr_luoyi_trick_to_duel(core, catalog, actor, card) {
+            kind = CardKind::Duel;
+        } else if let Some(spec) = catalog.find_player_vm_view_as(core, actor, card, true, None) {
             if (kind != CardKind::Sha && kind != CardKind::Le && !(kind == CardKind::Tao && targets.is_empty()))
                 || spec.filter == crate::rvm_bridge::VmViewAsFilter::Sha
                 || (spec.as_kind.is_sha_like() && !targets.is_empty())

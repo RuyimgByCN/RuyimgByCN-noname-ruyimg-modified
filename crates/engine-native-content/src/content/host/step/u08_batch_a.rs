@@ -852,6 +852,7 @@ pub(crate) fn host_draw_begin_step(ctx: &mut Ctx<'_>, player: PlayerId, pending:
         return;
     }
     super::l11_common::on_draw_begin_l11(ctx, player, pending);
+    super::l25_batch_a::on_draw_begin_l25(ctx, player, pending);
     let yd_def = ctx.catalog.skill_by_name("yxsdili");
     let hq2_def = ctx.catalog.skill_by_name("heqin2");
     if yd_def.is_none() && hq2_def.is_none() {

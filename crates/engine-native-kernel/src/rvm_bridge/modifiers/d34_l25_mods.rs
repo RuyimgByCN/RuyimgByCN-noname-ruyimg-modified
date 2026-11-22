@@ -173,16 +173,20 @@ pub(super) fn apply_sha_extra_targets(
     extra
 }
 
-pub(super) fn apply_card_distance_unlimited(
+pub(super) fn apply_card_distance_unlimited_to(
     state: &GameStateCore,
     catalog: &Catalog,
     player: PlayerId,
+    target: Option<PlayerId>,
     _card: CardId,
     kind: CardKind,
     mut unlimited: bool,
 ) -> bool {
-    // `ssr_jinfan` (`extension.js:6535-6613`): Sha vs targets with hand.len() < `铃` count ignores distance
-    if kind.is_sha_like() {
+    // `ssr_jinfan` (`extension.js:6535-6613`): Sha vs target with hand.len() < `铃` count ignores distance
+    if kind.is_sha_like()
+        && !catalog.is_tieji_sealed(state, player)
+        && has_ext_skill(state, catalog, player, "ssr_jinfan")
+    {
         let ling = flag_val(state, player, "l25_jinfan_ling").max(
             state
                 .vm_aux
@@ -191,7 +195,7 @@ pub(super) fn apply_card_distance_unlimited(
                 .map_or(0, |p| p.len() as u32),
         );
         if ling > 0
-            && (0..state.players.len() as PlayerId).any(|p| {
+            && target.is_some_and(|p| {
                 p != player
                     && state.player(p).alive
                     && (state.player(p).hand.len() as u32) < ling
@@ -357,23 +361,31 @@ pub(super) fn apply_card_use_canceled(
 
 pub(super) fn apply_ignore_armor(
     state: &GameStateCore,
+    catalog: &Catalog,
     source: PlayerId,
+    target: PlayerId,
+    card: Option<CardId>,
     mut ignore: bool,
 ) -> bool {
-    // `ssr_jinfan` (`extension.js:6535-6613`): Sha vs targets with hand.len() < `铃` count ignores armor
-    let ling = flag_val(state, source, "l25_jinfan_ling").max(
-        state
-            .vm_aux
-            .piles
-            .get(&(source, "ssr_jinfan".to_string()))
-            .map_or(0, |p| p.len() as u32),
-    );
-    if ling > 0
-        && (0..state.players.len() as PlayerId).any(|p| {
-            p != source && state.player(p).alive && (state.player(p).hand.len() as u32) < ling
-        })
+    // `ssr_jinfan` (`extension.js:6535-6613`): Sha vs target with hand.len() < `铃` count ignores armor
+    if card.is_some_and(|c| catalog.card_kind(c).is_sha_like())
+        && !catalog.is_tieji_sealed(state, source)
+        && has_ext_skill(state, catalog, source, "ssr_jinfan")
     {
-        ignore = true;
+        let ling = flag_val(state, source, "l25_jinfan_ling").max(
+            state
+                .vm_aux
+                .piles
+                .get(&(source, "ssr_jinfan".to_string()))
+                .map_or(0, |p| p.len() as u32),
+        );
+        if ling > 0
+            && target != source
+            && state.player(target).alive
+            && (state.player(target).hand.len() as u32) < ling
+        {
+            ignore = true;
+        }
     }
     // `ssr_newzhenjun` (`extension.js:11641-11685`): ignore armor when target has `l25_zhenjun_sealed > 0`
     if flag_val(state, source, "l25_zhenjun_sealed") > 0
@@ -410,11 +422,9 @@ pub(super) fn apply_damage_amount(
     let is_sha_or_duel =
         ckind.is_some_and(|k| k.is_sha_like() || k == CardKind::Duel) || card.is_none();
     if let Some(src) = source {
-        // `ssr_luoyi` (`extension.js:15031-15065`): +1 damage on Sha/Duel
-        if is_sha_or_duel
-            && (has_ext_skill(state, catalog, src, "ssr_luoyi")
-                || flag_val(state, src, "l25_luoyi_active") > 0)
-        {
+        // `ssr_newluoyi`（active flag `l25_luoyi_active`）: +1 damage on Sha/Duel
+        //（注意：旧/配置 `ssr_luoyi` 为废防具+锦囊视作决斗+双闪双杀，不加伤）
+        if is_sha_or_duel && flag_val(state, src, "l25_luoyi_active") > 0 {
             cur += 1;
         }
         // `ssr_fenchuan` (`extension.js:15517-15577`): +1 damage on boosted Sha

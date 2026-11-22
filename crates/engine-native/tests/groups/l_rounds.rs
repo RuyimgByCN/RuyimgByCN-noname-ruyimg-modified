@@ -112,6 +112,9 @@ mod l25_zuan_eight;
 #[path = "../decision34_round4_l25_zuan.rs"]
 mod decision34_round4_l25_zuan;
 
+#[path = "../l25_zuan_fixes.rs"]
+mod l25_zuan_fixes;
+
 #[path = "../l26_fool_eight.rs"]
 mod l26_fool_eight;
 

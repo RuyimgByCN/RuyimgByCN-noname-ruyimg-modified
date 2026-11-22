@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-22 Batch Q2-L25（L25 祖安武将 终 18 项→257/257；Queue Item 2 收官）更新（待提交／发布）
+
+基线 HEAD `89406fe50c5d33c349b4456b05a0b7724c439a5e`（Batch U01-2 已发布，CI Run `44995724474` 10/10）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-rules` 独立审查（#167 **`APPROVE`**，含 Chrome CDP 实跑探针）与主线全量门禁复测，清单更新为 **已复核等价 1,759／简化近似 2,665／缺失 0／上游未定义 0**（合计 4,424）：`L25 祖安武将` 由 `239 / 18 / 0` 升为 **257 / 0 / 0**（+18：`ssr_jinfan`/`ssr_luoyi`/`ssr_lieren`、4 `ui_hooks`、11 `skills`，达 100% 单项等价，Queue Item 2 收官；整包八项仍 `0/37`）。详见 [Batch Q2-L25 证据摘要](../../operations/evidence/2026-11-22-batch2-4-l25/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-22 Batch U01-2（U01 3D精选 第二批 21 项→74/95）更新（待提交／发布）
 
 基线 HEAD `9842e555d9fc336ffb5c37a09d0b815da1a0ae32`（Batch Spine-Tests 已发布，CI Run `44990992457` 10/10）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-rules` 独立审查（#157 **`APPROVE`**，含 4 轮 Chrome CDP 实跑探针）与主线全量门禁复测，清单更新为 **已复核等价 1,741／简化近似 2,683／缺失 0／上游未定义 0**（合计 4,424）：`U01 3D精选` 由 `53 / 42 / 0` 升为 **74 / 21 / 0**（+21，`dddzhengjun`..`dddfenji`）。详见 [Batch U01-2 证据摘要](../../operations/evidence/2026-11-22-batch1-6c-u01-2/README.md) 与 [inventory_status.json](inventory_status.json)。

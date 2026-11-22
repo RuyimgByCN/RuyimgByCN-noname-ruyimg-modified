@@ -12,6 +12,13 @@ pub(super) fn play_equip(
         return Err(RejectReason::IllegalTargets);
     }
     let player = state.core.turn.current;
+    if catalog
+        .card_kind(card)
+        .equip_slot()
+        .is_some_and(|slot| !catalog.is_equip_slot_enabled(&state.core, player, slot))
+    {
+        return Err(RejectReason::CardLimit);
+    }
     crate::kernel::record_dddanzhi_card(&mut state.core, catalog, Some(card));
     let frame = crate::resolution::push_frame(
         &mut state.resolution,

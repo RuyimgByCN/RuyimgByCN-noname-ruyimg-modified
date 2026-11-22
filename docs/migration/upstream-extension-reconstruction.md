@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-22 Batch Q2-L25（L25 祖安武将 终 18 项→257/257；Queue Item 2 收官）合入与清单上调（待提交／发布）
+
+基线 HEAD `89406fe50c5d33c349b4456b05a0b7724c439a5e`（Batch U01-2 已发布，CI Run `44995724474` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-q2-l25` `d9e1c9a1f..f36e73640`（`verifier-rules` #167 **`APPROVE`**）并与 L11/U01/L19/L20/L22/L10 共存对齐（隔离 L19/L25 `_relifeskill`、拆出 `d34_unrespondable.rs`）：`L25 祖安武将` 终 18 项（`ssr_jinfan`、`ssr_luoyi`、`ssr_lieren`、4 `ui_hooks`、11 `skills`）升为 `已复核等价`，`L25` 达 **257/257 单项已复核等价（简化近似 0／缺失 0）**，Queue Item 2 全量规则/配置收官；全仓清单更新为 **已复核等价 1,759／简化近似 2,665／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch Q2-L25 复核摘要](../operations/evidence/2026-11-22-batch2-4-l25/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。
+
 ## 2026-11-22 Batch U01-2（U01 3D精选 第二批 21 项→74/95）合入与清单上调（待提交／发布）
 
 基线 HEAD `9842e555d9fc336ffb5c37a09d0b815da1a0ae32`（Batch Spine-Tests 已发布，CI Run `44990992457` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-u01-2` `44c3ae911..622387115`（`verifier-rules` #157 **`APPROVE`**）并与既有批次共存对齐：`U01 3D精选` 第二批 21 项技能（`dddzhengjun`、`dddxianxi`、`dddlingyong`、`dddxuxiao`、`dddxuyu`、`dddshijian`、`dddxuyu_old`、`dddshijian_old`、`dddtaisi`、`dddquche`、`dddqianlong`、`ddddongcha`、`dddzhijie`、`dddqiahua`、`dddxunxun`、`dddfusi`、`dddfusi_global`、`dddtuoji`、`dddchashi`、`dddmiaoxing`、`dddfenji`）升为 `已复核等价`，`U01` 升为 **已复核等价 74／简化近似 21／缺失 0**（合计 95），全仓清单更新为 **已复核等价 1,741／简化近似 2,683／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch U01-2 复核摘要](../operations/evidence/2026-11-22-batch1-6c-u01-2/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。

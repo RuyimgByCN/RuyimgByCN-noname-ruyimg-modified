@@ -914,7 +914,7 @@ fn rechuhai_six_dimensions() {
     }
     e6.debug_grant(0, "rechuhai");
     e6.debug_set_hp(0, 2);
-    let p0_card = give_deck_card(&mut e6, 0, |c| c.rank >= 6 && c.rank <= 8);
+    let p0_card = give_deck_card(&mut e6, 0, |c| c.rank >= 7 && c.rank <= 8);
     let p1_low = give_deck_card(&mut e6, 1, |c| c.rank >= 9 && c.rank <= 10);
     let _ = give_deck_card(&mut e6, 1, |c| c.kind == CardKind::Wuzhong);
     assert!(matches!(activate(&mut e6, 0, "rechuhai"), CommandOutcome::Pending { .. }));

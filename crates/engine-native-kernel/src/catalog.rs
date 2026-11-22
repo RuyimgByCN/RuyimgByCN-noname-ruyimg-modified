@@ -1242,6 +1242,20 @@ impl Catalog {
         )
     }
 
+    /// 判断座位 `player` 的装备栏 `slot` 当前是否未被禁用（含 `ssr_luoyi` 禁用防具栏）。
+    pub fn is_equip_slot_enabled(
+        &self,
+        core: &crate::state::GameStateCore,
+        player: crate::ids::PlayerId,
+        slot: EquipSlot,
+    ) -> bool {
+        crate::rvm_ops::has_enabled_equip_slot(core, player, slot)
+            && !(slot == EquipSlot::Armor
+                && self
+                    .skill_by_name("ssr_luoyi")
+                    .is_some_and(|d| core.has_skill(player, d)))
+    }
+
     /// PA12 批⑮：查找 `player` 当前启用的 VM 技能中首个匹配 `card` 的单牌转化规则。
     pub fn find_player_vm_view_as(
         &self,

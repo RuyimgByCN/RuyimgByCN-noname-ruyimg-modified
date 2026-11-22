@@ -83,6 +83,9 @@ pub fn apply_general_assembly(
                 rounds: 0,
             },
         );
+        if skill == "ssr_luoyi" {
+            let _ = crate::kernel::discard_armor_for_ssr_luoyi(state, catalog, player);
+        }
     }
     sync_dddfusi_global(state, catalog);
 }

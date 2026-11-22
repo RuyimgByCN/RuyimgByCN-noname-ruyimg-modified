@@ -318,8 +318,7 @@ impl ShaResolveMachine {
     }
 
     pub(super) fn post_dodge_step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
-        let needed: u8 =
-            if self.source_has_wushuang(ctx) { 2 } else { 1 } + ctx.core.turn.liaoyuan_count;
+        let needed = self.needed_shan_count(ctx);
         if self.dodges_used < needed {
             self.hujia_queue = None;
             self.hujia_holder = None;

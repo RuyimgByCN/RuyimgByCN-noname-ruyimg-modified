@@ -63,6 +63,14 @@ pub(crate) fn on_skill_removed_l28(
             );
             out
         }
+        "ssr_jinfan" => {
+            set_flag(core, owner, "l25_jinfan_ling", 0);
+            set_flag(core, owner, "mark:ssr_jinfan", 0);
+            core.vm_aux
+                .piles
+                .remove(&(owner, "ssr_jinfan".to_string()))
+                .unwrap_or_default()
+        }
         _ => Vec::new(),
     }
 }

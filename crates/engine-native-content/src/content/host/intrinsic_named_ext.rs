@@ -166,6 +166,13 @@ pub(in crate::content::host) fn is_named_wuzhong_unwrapped(
             | "ssr_newsance_weicheng"
             | "ssr_newsance_shoucheng"
             | "ssr_jinfan"
+            | "txhj_zhijizhibi"
+            | "txhj_yuanjiao"
+            | "txhj_diaohu"
+            | "txhj_shengdong"
+            | "txzhaoshu_skill"
+            | "txzhaoshu_global"
+            | "huogong"
             | "mtg_duzhao"
             | "mtg_cangbaohaiwan"
             | "fengyangzhen"
@@ -486,6 +493,48 @@ pub(super) fn try_named_ext_card(
             if let Some(t) = first_target_or_other(ctx, u) {
                 if !steal_one_to_hand(ctx, owner, t) {
                     ctx.start_draw(owner, 1);
+                }
+            }
+        }
+        // L11 太虚幻境/extension_card.js:233-2041
+        "txhj_zhijizhibi" => {
+            set_flag(ctx, owner, "l11_zhijizhibi_peeked", 1);
+            ctx.start_draw(owner, 1);
+        }
+        "txhj_yuanjiao" => {
+            if let Some(t) = first_target_or_other(ctx, u) {
+                ctx.start_draw(t, 1);
+            }
+            ctx.start_draw(owner, 3);
+        }
+        "txhj_diaohu" => {
+            if let Some(t) = first_target_or_other(ctx, u) {
+                ctx.turn_over(t);
+            }
+            ctx.start_draw(owner, 1);
+        }
+        "txhj_shengdong" => {
+            if let Some(t) = first_target_or_other(ctx, u) {
+                let _ = steal_one_to_hand(ctx, owner, t);
+            }
+            ctx.start_draw(owner, 1);
+        }
+        "txzhaoshu_skill" | "txzhaoshu_global" => {
+            let n = get_flag(ctx, owner, "l11_zhaoshu_suits") + 1;
+            set_flag(ctx, owner, "l11_zhaoshu_suits", n);
+            if n >= 2 {
+                if let Some(t) = first_target_or_other(ctx, u) {
+                    deal_damage(ctx, owner, t, 2, DamageNature::Thunder);
+                }
+                set_flag(ctx, owner, "l11_zhaoshu_suits", 0);
+            } else {
+                ctx.start_draw(owner, 1);
+            }
+        }
+        "huogong" => {
+            if let Some(t) = first_target_or_other(ctx, u) {
+                if discard_up_to(ctx, owner, 1) > 0 {
+                    deal_damage(ctx, owner, t, 1, DamageNature::Fire);
                 }
             }
         }

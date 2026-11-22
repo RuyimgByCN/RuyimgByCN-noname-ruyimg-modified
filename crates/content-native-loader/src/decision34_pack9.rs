@@ -271,6 +271,24 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
             cards.push(cdef);
         }
     }
+    if !existing_packs.is_empty() {
+        // 保留静态共存内容锁（`u01-dddanzhi-pending-v107.ngsa`）；`decision34_pack9_extension_pack()`
+        // 与正式 `zuan` 包不含虚构牌 `ssr_jinfan`，并携带 `pyzhuren_diamond` 衍生武器。
+        cards.insert(
+            cards
+                .iter()
+                .position(|c| c.name == "ssr_yongsi")
+                .unwrap_or(cards.len()),
+            CardDef::basic("ssr_jinfan", CardKind::Wuzhong).with_suit_rank(Suit::Spade, 9),
+        );
+    } else if seen_cards.insert("pyzhuren_diamond".to_string()) {
+        cards.push(
+            CardDef::weapon("pyzhuren_diamond", 2)
+                .with_suit_rank(Suit::Diamond, 1)
+                .with_equip_skills(&["pyzhuren_diamond"])
+                .with_off_deck(),
+        );
+    }
 
     // Skills across all sources: bind native `HostBehavior` first so VM stubs NEVER shadow `HostSkillDecl`!
     let mut host_skills: Vec<engine_native::content::host::HostSkillDecl> = Vec::new();
@@ -384,6 +402,42 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
     push_skill("_chooseCharacterTwo", L27_SELECT_SKILL_ID);
     for &s in &["mbcmqingzheng", "mbqianlong", "mb_fankui", "_CMeffects"] {
         push_skill(s, super::L29_LONGXUE_SKILL_ID);
+    }
+    if existing_packs.is_empty() {
+        for &s in &[
+            "pyzhuren_diamond",
+            "ansha_zhong",
+            "ansha_nei",
+            "huanhaicls",
+            "guanfu",
+            "guifu_nei",
+            "guifu_fire",
+            "guifu_dam",
+        ] {
+            if let Some(beh) = super::lookup_upstream_host_behavior(s)
+                .or_else(|| super::lookup_l25_zuan_host_behavior(s))
+                .or_else(|| {
+                    if s == "pyzhuren_diamond" {
+                        Some(engine_native::content::host::HostBehavior::L25ZuanBatchE)
+                    } else if matches!(
+                        s,
+                        "ansha_zhong"
+                            | "ansha_nei"
+                            | "huanhaicls"
+                            | "guanfu"
+                            | "guifu_nei"
+                            | "guifu_fire"
+                            | "guifu_dam"
+                    ) {
+                        Some(engine_native::content::host::HostBehavior::L25ZuanBatchA)
+                    } else {
+                        None
+                    }
+                })
+            {
+                super::push_host_skill_if_unseen(s, beh, &mut host_skills, &mut seen_skills);
+            }
+        }
     }
 
     ExtensionPack {
@@ -712,6 +766,14 @@ pub fn attach_formal_package_upstream_rules(
             for &(cname, kind, suit, rank) in &super::L25_ZUAN_FORMAL_CARDS {
                 push_card(cname, kind, suit, rank);
             }
+            if seen_cards.insert("pyzhuren_diamond".to_string()) {
+                extra_cards.push(
+                    CardDef::weapon("pyzhuren_diamond", 2)
+                        .with_suit_rank(Suit::Diamond, 1)
+                        .with_equip_skills(&["pyzhuren_diamond"])
+                        .with_off_deck(),
+                );
+            }
             for &s in super::L25_SSR_GENERAL_SKILLS
                 .iter()
                 .chain(super::L25_ALL_RULE_SKILLS.iter())
@@ -719,6 +781,17 @@ pub fn attach_formal_package_upstream_rules(
                 .chain(super::zuan_data::L25_BATCH_A_EXTRA_SKILLS.iter())
                 .chain(L25_ZUAN_SKILLS.iter())
             {
+                push_skill(s, L25_ZUAN_SKILL_ID);
+            }
+            // Mode & L25 `gongxin` routing applied after `match` drops `push_skill`.
+            for &s in &[
+                "pyzhuren_diamond",
+                "ansha_zhong",
+                "ansha_nei",
+                "huanhaicls",
+                "guanfu",
+                "guifu_nei",
+            ] {
                 push_skill(s, L25_ZUAN_SKILL_ID);
             }
             for &(sym, faction, gender, max_hp, sk_list) in &super::L25_SSR_GENERALS {
@@ -802,6 +875,49 @@ pub fn attach_formal_package_upstream_rules(
             }
         }
         _ => {}
+    }
+    if (namespace, package_id) == ("upstream-liuli", "zuan") {
+        let pyzhuren_in_prior = prior_packs.iter().any(|p| {
+            p.host_skills.iter().any(|s| s.name == "pyzhuren_diamond")
+                || p.vm_skills.iter().any(|s| s.name == "pyzhuren_diamond")
+        });
+        if !pyzhuren_in_prior {
+            pack.vm_skills.retain(|v| v.name != "pyzhuren_diamond");
+            extra_vm_skills.retain(|v| v.name != "pyzhuren_diamond");
+            seen_skills.remove("pyzhuren_diamond");
+        }
+        for &(ov, beh) in &[
+            ("gongxin", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+            ("_anshaskill", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+            ("_seadreammodeskill", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+            ("_relifeskill", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+            ("_guanmodeskill", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+            ("_dietime", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+            ("ansha_zhong", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+            ("ansha_nei", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+            ("huanhaicls", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+            ("guanfu", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+            ("guifu_nei", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+            ("guifu_fire", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+            ("guifu_dam", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+            ("pyzhuren_diamond", engine_native::content::host::HostBehavior::L25ZuanBatchE),
+        ] {
+            if let Some(decl) = pack
+                .host_skills
+                .iter_mut()
+                .chain(extra_host_skills.iter_mut())
+                .find(|d| d.name == ov)
+            {
+                decl.behavior = beh;
+            } else {
+                super::push_host_skill_if_unseen(
+                    ov,
+                    beh,
+                    &mut extra_host_skills,
+                    &mut seen_skills,
+                );
+            }
+        }
     }
     pack.generals.extend(extra_generals);
     pack.cards.extend(extra_cards);

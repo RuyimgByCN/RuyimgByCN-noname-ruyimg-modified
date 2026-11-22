@@ -240,8 +240,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         // 谁持闪）；拒绝继续问下一位，任一人确认即代出一张闪
         // （计入无双需求），全部拒绝后回到目标本人询问。
         // 燎原（swd 批 145，规则 v319）：额外闪需求并入总需求
-        let needed: u8 =
-            if self.source_has_wushuang(ctx) { 2 } else { 1 } + ctx.core.turn.liaoyuan_count;
+        let needed = self.needed_shan_count(ctx);
         if self.dodges_used >= needed {
             // 燎原结束清零（上游 liaoyuan3 shaEnd 同口径）
             ctx.core.turn.liaoyuan_count = 0;

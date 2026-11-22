@@ -308,7 +308,10 @@ fn certainly_illegal(engine: &Engine, seat: crate::ids::PlayerId, action: &GameA
                 return true;
             }
             if kind.is_equip() {
-                return !targets.is_empty();
+                return !targets.is_empty()
+                    || kind
+                        .equip_slot()
+                        .is_some_and(|slot| !catalog.is_equip_slot_enabled(core, seat, slot));
             }
             if crate::engine::check_play_use_restrictions(core, catalog, *card, kind, targets)
                 .is_err()

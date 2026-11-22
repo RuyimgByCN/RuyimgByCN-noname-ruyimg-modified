@@ -24,6 +24,15 @@ pub(super) fn on_frame_popped(
                 .remove(&(p, format!("mbcmjiushi_dmg:{}", popped.id)));
         }
     }
+    if super::is_post_commit_host_event(&popped.data) {
+        let mut ctx = Ctx {
+            core,
+            res,
+            catalog,
+            out,
+        };
+        (catalog.hooks.on_host_event)(&mut ctx, &popped.data);
+    }
     if let EventData::Equipped { player, card, .. } = &popped.data {
         core.vm_aux
             .flags

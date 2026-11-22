@@ -756,6 +756,29 @@ pub(super) fn plan_extension_choice_action(
                 selection,
             })
         }
+        "wumou:choose_mode" => {
+            let tag = if options.contains(&ChoiceOption::Tag(0)) {
+                0
+            } else {
+                1
+            };
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection: vec![ChoiceOption::Tag(tag)],
+            })
+        }
+        "new_guixin:choose_zone" => {
+            let selection = options
+                .iter()
+                .find(|o| matches!(o, ChoiceOption::Tag(_)))
+                .copied()
+                .into_iter()
+                .collect();
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
         "xumou:confirm" => {
             let me = input.view.players.get(seat as usize);
             let want = me.is_some_and(|p| p.hp + p.hand_count as i32 <= 3);

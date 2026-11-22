@@ -258,10 +258,11 @@ pub(super) fn play_card(
                         && !fentian_red_free
                         && !shenen_boss_free
                         && !shouyi_free
-                        && !crate::rvm_bridge::modifiers::eval_card_distance_unlimited(
+                        && !crate::rvm_bridge::modifiers::eval_card_distance_unlimited_to(
                             core,
                             catalog,
                             from,
+                            Some(target),
                             card,
                             CardKind::Snatch,
                             crate::event::DamageNature::Normal,
@@ -734,10 +735,11 @@ pub(super) fn play_card(
                         return Err(RejectReason::IllegalTargets);
                     }
                     let user = core.turn.current;
-                    if !crate::rvm_bridge::modifiers::eval_card_distance_unlimited(
+                    if !crate::rvm_bridge::modifiers::eval_card_distance_unlimited_to(
                         core,
                         catalog,
                         user,
+                        Some(t),
                         card,
                         CardKind::Caoyao,
                         crate::event::DamageNature::Normal,

@@ -188,13 +188,13 @@ pub use events::{peek_tao_extra_carriers, record_dddanzhi_card, take_tao_extra_c
 use events::*;
 mod equipment;
 use equipment::commit_equip;
-pub use equipment::{grant_equip_skills, revoke_equip_skills};
+pub use equipment::{discard_armor_for_ssr_luoyi, grant_equip_skills, revoke_equip_skills};
 mod intrinsic;
 pub use intrinsic::*;
 mod combat_rules;
 pub use combat_rules::{
-    is_black_trick_card, jinyan_blocks_black_trick, mbcmfangzhu_baiban, mbcmfangzhu_banned,
-    sha_card_use_as, tao_futai2_banned, usable_sha_options,
+    is_black_trick_card, is_ssr_luoyi_trick_to_duel, jinyan_blocks_black_trick,
+    mbcmfangzhu_baiban, mbcmfangzhu_banned, sha_card_use_as, tao_futai2_banned, usable_sha_options,
 };
 pub(crate) use combat_rules::*;
 mod sha;
@@ -221,3 +221,5 @@ mod phase;
 use phase::*;
 pub mod elo;
 pub use elo::*;
+mod l25_haoyunlai;
+pub use l25_haoyunlai::l25_haoyunlai_on_draw_begin;

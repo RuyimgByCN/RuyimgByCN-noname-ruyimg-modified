@@ -344,6 +344,19 @@ pub fn eval_card_distance_unlimited(
     kind: CardKind,
     nature: DamageNature,
 ) -> bool {
+    eval_card_distance_unlimited_to(state, catalog, player, None, card, kind, nature)
+}
+
+/// 评估使用卡牌对指定目标 `target` 是否忽略距离限制（如 `ssr_jinfan` 按目标手牌数判定）。
+pub fn eval_card_distance_unlimited_to(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    player: PlayerId,
+    target: Option<PlayerId>,
+    card: CardId,
+    kind: CardKind,
+    nature: DamageNature,
+) -> bool {
     let mut unlimited = false;
     for_each_player_vm_modifier(state, catalog, player, |def, rule| {
         if rule.target == VmModifierTarget::CardDistanceUnlimited
@@ -355,7 +368,9 @@ pub fn eval_card_distance_unlimited(
             unlimited = true;
         }
     });
-    super::d34_flags::apply_card_distance_unlimited(state, catalog, player, card, kind, unlimited)
+    super::d34_flags::apply_card_distance_unlimited_to(
+        state, catalog, player, target, card, kind, unlimited,
+    )
 }
 
 /// 评估目标是否免疫某张牌的指向（`CardTargetCancel` / `CardTargetEnabled`）。
@@ -619,7 +634,7 @@ pub fn eval_ignore_armor(
             }
         }
     });
-    super::d34_flags::apply_ignore_armor(state, catalog, source, target, ignore)
+    super::d34_flags::apply_ignore_armor_with_card(state, catalog, source, target, card, ignore)
 }
 
 /// 评估使用卡牌是否不可被响应（`CardUseUnrespondable` / `ShaUnrespondable` / `CardUnrespondable`）。

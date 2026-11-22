@@ -504,14 +504,6 @@ pub(super) fn play_sha(
                             .skill_by_name(crate::content::standard::BOSS_SHOUYI)
                             .map(|def| core.has_skill(core.turn.current, def))
                             .unwrap_or(false)
-                        || crate::rvm_bridge::modifiers::eval_card_distance_unlimited(
-                            core,
-                            catalog,
-                            player_id,
-                            card,
-                            kind,
-                            sha_nature,
-                        )
                         || vm_va_sha.as_ref().is_some_and(|s| s.ignore_distance);
     // 诈降（L27 批 4）：已用牌数 < 已损失体力 → 用牌无距离限制
     let sbzhaxiang_free = catalog
@@ -519,7 +511,19 @@ pub(super) fn play_sha(
         .map(|d| core.has_skill(player_id, d))
         .unwrap_or(false)
         && crate::content::host::sbzhaxiang_active(core, player_id);
-    let feiren_range_free = sha_range_free || sbzhaxiang_free;
+    let feiren_range_free_for = |tgt: PlayerId| {
+        sha_range_free
+            || sbzhaxiang_free
+            || crate::rvm_bridge::modifiers::eval_card_distance_unlimited_to(
+                core,
+                catalog,
+                player_id,
+                Some(tgt),
+                card,
+                kind,
+                sha_nature,
+            )
+    };
     let zfs_free = core.turn.zhufangshenshi_target == Some(target);
     // 逐月（U05 xianjian 云天河，规则 v161）：杀向逐月目标
     // 无距离限制（上游 mod targetInRange 同口径）
@@ -535,7 +539,7 @@ pub(super) fn play_sha(
         .unwrap_or(false);
     if !zfs_free
         && !baolei_range_free
-        && !feiren_range_free
+        && !feiren_range_free_for(target)
         && !zhuyue_free
         && !sliufeng_free
         && !core.in_attack_range(catalog, from, target)
@@ -554,7 +558,7 @@ pub(super) fn play_sha(
         if kc && core.player(*t).hand.is_empty() {
             return Err(RejectReason::IllegalTargets);
         }
-        if !feiren_range_free && !core.in_attack_range(catalog, from, *t) {
+        if !feiren_range_free_for(*t) && !core.in_attack_range(catalog, from, *t) {
             return Err(RejectReason::IllegalTargets);
         }
     }

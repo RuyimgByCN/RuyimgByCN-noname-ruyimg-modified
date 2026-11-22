@@ -317,8 +317,7 @@ impl crate::catalog::SkillMachine for DuelMachine {
                 });
                 discard_response_card(ctx, actual_holder, c, CardKind::Sha);
                 super::emit_card_responded_as(ctx, responder, c, CardKind::Sha);
-                // 无双：与无双持有者决斗的角色每次需连续打出两张杀——
-                // 第一张后不轮转，同一响应者再次询问（second_pending）
+                // 无双 / L25 `ssr_luoyi`：与持有者决斗的另一方每次出杀需求 +1
                 let wushuang_holder = if self.on_target {
                     self.source
                 } else {
@@ -333,10 +332,33 @@ impl crate::catalog::SkillMachine for DuelMachine {
                     .skill_by_name(crate::vocabulary::names::WU_SHUANG)
                     .map(|d| ctx.core.has_skill(wushuang_holder, d))
                     .unwrap_or(false);
-                if opponent_has_wushuang && !self.second_pending {
+                let opponent_has_luoyi = ctx
+                    .catalog
+                    .skill_by_name("ssr_luoyi")
+                    .map(|d| ctx.core.has_skill(wushuang_holder, d))
+                    .unwrap_or(false);
+                let needed_per_step =
+                    1u32 + u32::from(opponent_has_wushuang) + u32::from(opponent_has_luoyi);
+                let step_key = format!("duel_sha_step:{}", self.card);
+                let played_so_far = if needed_per_step <= 2 {
+                    if self.second_pending { 2 } else { 1 }
+                } else {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .get(&(responder, step_key.clone()))
+                        .copied()
+                        .unwrap_or(0)
+                        + 1
+                };
+                if played_so_far < needed_per_step {
                     self.second_pending = true;
-                    continue; // 同一响应者再次询问第二张杀
+                    if needed_per_step > 2 {
+                        ctx.core.vm_aux.flags.insert((responder, step_key), played_so_far);
+                    }
+                    continue; // 同一响应者再次询问第二张杀（含 L25 ssr_luoyi 叠加需求）
                 }
+                ctx.core.vm_aux.flags.remove(&(responder, step_key));
                 self.second_pending = false;
                 self.on_target = !self.on_target;
                 continue;
@@ -356,8 +378,11 @@ impl crate::catalog::SkillMachine for DuelMachine {
                     .flags
                     .remove(&(responder, "duel_jijiang_skip".to_string()));
             }
-            // 放弃 → 受伤，决斗结束（重置无双标记）
+            // 放弃 → 受伤，决斗结束（重置无双/步进标记）
             self.second_pending = false;
+            let step_key = format!("duel_sha_step:{}", self.card);
+            ctx.core.vm_aux.flags.remove(&(self.source, step_key.clone()));
+            ctx.core.vm_aux.flags.remove(&(self.target, step_key));
             self.emit_duel_damage(ctx, opponent, responder);
             return self.finish(ctx);
         }

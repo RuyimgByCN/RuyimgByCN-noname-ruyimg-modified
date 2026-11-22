@@ -142,9 +142,9 @@ fn l25_zuan_formal_package_generals_cards_skills_and_archive_roundtrip() {
     let dongzhuo = L25_SSR_GENERALS.iter().find(|g| g.0 == "ssr_dongzhuo").unwrap();
     assert_eq!((dongzhuo.1, dongzhuo.2, dongzhuo.3), (Faction::Qun, Gender::Male, 8));
 
-    // 2. Upstream cards (`extension.js:6535-28385`): all 6 authentic formal cards exist;
+    // 2. Upstream cards (`extension.js:6535-28385`): all 5 authentic formal cards exist;
     //    subSkill regex artifacts (`wuxie`, `equip`, `res`, `defend`, `zhou`) do NOT exist!
-    assert_eq!(L25_ZUAN_FORMAL_CARDS.len(), 6);
+    assert_eq!(L25_ZUAN_FORMAL_CARDS.len(), 5);
     assert_eq!(L25_ZUAN_CARD_ENTRIES.len(), 5);
     for &(cname, _, _, _) in &L25_ZUAN_FORMAL_CARDS {
         assert!(

@@ -539,7 +539,6 @@ fn step_ssr_newluoyi(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                 return Flow::Done;
             }
             set_flag(ctx.core, owner, "l25_luoyi_active", 1);
-            set_flag(ctx.core, owner, "l25_luoyi_dmg_boost", 1);
             set_flag(ctx.core, owner, "l25_newluoyi_triggered", 1);
             ctx.start_draw(owner, 1);
             m.stage = HostStage::CardsAsk;
@@ -556,7 +555,6 @@ fn step_ssr_luoyi(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     let owner = m.owner;
     set_flag(ctx.core, owner, "l25_luoyi_triggered", 1);
     set_flag(ctx.core, owner, "l25_luoyi_double_req", 1);
-    set_flag(ctx.core, owner, "l25_luoyi_dmg_boost", 1);
     Flow::Done
 }
 

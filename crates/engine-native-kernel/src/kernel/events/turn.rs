@@ -400,7 +400,21 @@ pub(in crate::kernel) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) 
                 inst.enabled = true;
             }
         }
+        ctx.core
+            .vm_aux
+            .flags
+            .retain(|(p, k), _| !(*p == player && k.starts_with("ssr_lieren_temp:")));
         ctx.core.vm_aux.clear_turn();
+    }
+    for p in 0..ctx.core.players.len() as PlayerId {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(p, "l25_wumou_trick_in_play".to_string()));
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(p, "l25_gongxin_temp".to_string()));
     }
     ctx.log(LogEvent::TurnEnded { player });
     // R05（K21）：先发整回合结束窗（phaseEnd 段 → phaseAfter 段 → 交接），

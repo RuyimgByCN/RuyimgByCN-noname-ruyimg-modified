@@ -352,15 +352,30 @@ pub(super) fn build_ask(
             player_ask(owner, "ssr_lieren:choose_target", cands, 1, 1, false)
         }
         ASK_LIEREN_RESPONSE => {
+            let blocked = catalog.blocks_all_cards(core, tgt);
             let shans: Vec<CardId> = core
                 .player(tgt)
                 .hand
                 .iter()
                 .copied()
-                .filter(|&c| catalog.card_kind(c) == CardKind::Shan)
+                .filter(|&c| {
+                    !blocked
+                        && catalog.card_kind(c) == CardKind::Shan
+                        && !crate::rvm_bridge::modifiers::d34_flags::is_ducai3_forbidden(
+                            core, catalog, tgt, c,
+                        )
+                })
                 .collect();
             card_ask(tgt, "ssr_lieren:target_response", shans, 1, 1, true)
         }
+        ASK_PYZHUREN_DISCARD => card_ask(
+            owner,
+            "pyzhuren_diamond:discard_card",
+            pyzhuren_discard_candidates(core, catalog, owner),
+            1,
+            1,
+            true,
+        ),
         ASK_ZHIJI_OPTION => {
             let mut opts = Vec::new();
             if flag(core, owner, "l25_zhiji_zhengnan") == 0 {

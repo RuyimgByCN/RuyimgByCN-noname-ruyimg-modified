@@ -25,6 +25,7 @@ pub(super) fn handle_l25_batch_e_ext(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> 
         "ssr_hunzi" => step_ssr_hunzi(m, ctx),
         "ssr_newjiang" => step_ssr_newjiang(m, ctx),
         "ssr_newzhiba" => step_ssr_newzhiba(m, ctx),
+        "pyzhuren_diamond" => step_pyzhuren_diamond(m, ctx),
         _ => Flow::Done,
     }
 }
@@ -523,12 +524,20 @@ fn step_ssr_zaiqi(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     }
 }
 
-fn reclaim_all_lieren(ctx: &mut Ctx<'_>, owner: PlayerId, holder: PlayerId) -> bool {
+fn reclaim_all_lieren(
+    ctx: &mut Ctx<'_>,
+    owner: PlayerId,
+    holder: PlayerId,
+    add_to_temp: bool,
+) -> bool {
     let key = (holder, "ssr_lieren".to_string());
     let mut reclaimed = Vec::new();
     if let Some(pile) = ctx.core.vm_aux.piles.remove(&key) {
         for cid in pile {
             ctx.core.player_mut(owner).hand.push(cid);
+            if add_to_temp {
+                set_flag(ctx.core, owner, &format!("ssr_lieren_temp:{cid}"), 1);
+            }
             reclaimed.push(cid);
         }
     }
@@ -556,12 +565,17 @@ fn advance_lieren_targets(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             m.targets.remove(0);
             continue;
         }
-        let has_shan = ctx
-            .core
-            .player(tgt)
-            .hand
-            .iter()
-            .any(|&c| ctx.catalog.card_kind(c) == CardKind::Shan);
+        let blocked = ctx.catalog.blocks_all_cards(ctx.core, tgt);
+        let has_shan = !blocked
+            && ctx.core.player(tgt).hand.iter().any(|&c| {
+                ctx.catalog.card_kind(c) == CardKind::Shan
+                    && !crate::rvm_bridge::modifiers::d34_flags::is_ducai3_forbidden(
+                        ctx.core,
+                        ctx.catalog,
+                        tgt,
+                        c,
+                    )
+            });
         if has_shan {
             m.target = Some(tgt);
             return wait_ask(m, ctx, HostStage::JiefenTargetDiscard, ASK_LIEREN_RESPONSE);
@@ -581,12 +595,53 @@ fn advance_lieren_targets(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     Flow::Done
 }
 
+fn step_pyzhuren_diamond(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
+    let owner = m.owner;
+    match m.stage {
+        HostStage::Act => {
+            if used_this_turn(ctx.core, owner, "pyzhuren_diamond") >= 2
+                || pyzhuren_discard_candidates(ctx.core, ctx.catalog, owner).is_empty()
+            {
+                return Flow::Done;
+            }
+            wait_ask(m, ctx, HostStage::SelectCard, ASK_PYZHUREN_DISCARD)
+        }
+        HostStage::SelectCard => {
+            set_flag(ctx.core, owner, "l25_batch_e_ask_id", 0);
+            let Some(ChoiceOption::Card(cid)) = ctx.answer().first().copied() else {
+                return Flow::Done;
+            };
+            let candidates = pyzhuren_discard_candidates(ctx.core, ctx.catalog, owner);
+            if !candidates.contains(&cid) || used_this_turn(ctx.core, owner, "pyzhuren_diamond") >= 2 {
+                return Flow::Done;
+            }
+            // Modify damage BEFORE `discard_he_cards` emits `CardsDiscarded` onto `res.stack`.
+            if !ctx.modify_damage_amount(1) {
+                return Flow::Done;
+            }
+            inc_used_this_turn(ctx.core, owner, "pyzhuren_diamond");
+            discard_he_cards(ctx, owner, &[cid]);
+            let cnt = flag(ctx.core, owner, "l25_pyzhuren_diamond_boosted") + 1;
+            set_flag(ctx.core, owner, "l25_pyzhuren_diamond_boosted", cnt);
+            Flow::Done
+        }
+        _ => Flow::Done,
+    }
+}
+
 fn step_ssr_lieren(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     let owner = m.owner;
-    if matches!(m.card, Some(110) | Some(114)) {
+    if matches!(m.card, Some(110) | Some(114) | Some(108)) && m.stage == HostStage::Act {
         if flag(ctx.core, owner, "l25_lieren_init") == 0 {
             set_flag(ctx.core, owner, "l25_lieren_init", 1);
-            let fetched = fetch_card_matching(ctx, |c, cat| is_weapon_card(cat, c))
+            let detached_py = ctx
+                .core
+                .detached_cards
+                .iter()
+                .position(|&(c, _)| ctx.catalog.cards[c as usize].name == "pyzhuren_diamond")
+                .map(|pos| ctx.core.detached_cards.remove(pos).0);
+            let fetched = detached_py
+                .or_else(|| fetch_card_matching(ctx, |c, cat| is_weapon_card(cat, c)))
                 .or_else(|| fetch_card_matching(ctx, |c, cat| cat.card_kind(c).is_equip()));
             if let Some(cid) = fetched {
                 ctx.core.player_mut(owner).hand.push(cid);
@@ -597,18 +652,20 @@ fn step_ssr_lieren(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                 set_flag(ctx.core, owner, "l25_lieren_fetched", cid + 1);
             }
         }
-        return Flow::Done;
+        if m.card != Some(108) || m.target != Some(owner) {
+            return Flow::Done;
+        }
     }
     if m.card == Some(112) {
         if let Some(dead_p) = m.target {
-            reclaim_all_lieren(ctx, owner, dead_p);
+            reclaim_all_lieren(ctx, owner, dead_p, false);
         }
         return Flow::Done;
     }
     if matches!(m.card, Some(108) | Some(105)) && m.stage == HostStage::Act {
         let mut affected = Vec::new();
         for p in alive_others(ctx.core, owner) {
-            if reclaim_all_lieren(ctx, owner, p) {
+            if reclaim_all_lieren(ctx, owner, p, true) {
                 affected.push(p);
             }
         }
@@ -655,6 +712,10 @@ fn step_ssr_lieren(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             if let Some(ChoiceOption::Card(shan_cid)) = ctx.answer().first().copied() {
                 if ctx.core.player(tgt).hand.contains(&shan_cid) {
                     ctx.discard_from_hand(tgt, shan_cid);
+                    ctx.emit(EventData::CardResponded {
+                        card: shan_cid,
+                        player: tgt,
+                    });
                 }
                 return advance_lieren_targets(m, ctx);
             }

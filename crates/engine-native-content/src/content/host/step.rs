@@ -149,6 +149,7 @@ pub(super) mod u08_batch_c;
 pub(super) mod u08_batch_d;
 pub(crate) use u08_batch_d::{host_card_use_after, host_sha_begin_step, host_sha_end_step};
 pub(super) mod l25_batch_a;
+pub(crate) use l25_batch_a::on_l25_host_event;
 pub(super) mod l25_batch_b;
 pub(super) mod l25_batch_c;
 pub(super) mod l25_batch_d;

@@ -107,6 +107,14 @@ pub(super) fn filter_ui_hook(
     owner: PlayerId,
     event: &EventData,
 ) -> bool {
+    // `_bingletexiao1`, `_bingletexiao2` (`extension.js:48747, 48768` inside `/* ... */ :47983-48948`)
+    // and `_zuanCHANGEHPsayskill` (dispatched once per event in `on_l25_host_event`) do not trigger here.
+    if matches!(
+        name,
+        "_bingletexiao1" | "_bingletexiao2" | "_zuanCHANGEHPsayskill"
+    ) {
+        return false;
+    }
     match name {
         "_kaishitexiao" | "_gameStart" | "_huihekaishitexiao" => {
             matches!(event, EventData::TurnBegin { player } if *player == owner)
@@ -204,6 +212,62 @@ pub(super) fn filter_ui_hook(
             EventData::LoseHp { player, .. } if *player == owner
         ),
         "_dying" => matches!(event, EventData::Dying { player, .. } if *player == owner),
+        "_zuanidentitydyingskill" => {
+            owner != 0 && matches!(event, EventData::Dying { player, .. } if *player == owner)
+        }
+        "_zuanidentityshowskill" => {
+            owner != 0
+                && flag(ctx.state, owner, "l25_hidentity") > 0
+                && matches!(
+                    event,
+                    EventData::Phase {
+                        player,
+                        phase: Phase::Prepare,
+                        begin: true,
+                    } if *player == owner
+                )
+        }
+        "_fromsay" => {
+            let ok = if flag(ctx.state, 0, "l25_config_applied") == 0 {
+                false
+            } else {
+                flag(ctx.state, 0, "l25_zuantype_old") > 0 && flag(ctx.state, 0, "l25_ransay") > 0
+            };
+            ok && matches!(event, EventData::CardUsed(u) if u.player != owner)
+        }
+        "_newZuanPhaseTX" => {
+            let config_on = flag(ctx.state, 0, "l25_config_applied") == 0
+                || flag(ctx.state, 0, "l25_newhuihe_new") > 0;
+            config_on
+                && matches!(
+                    event,
+                    EventData::Phase {
+                        player,
+                        phase: Phase::Prepare,
+                        begin: true,
+                    } if *player == owner
+                )
+        }
+        "_zuan_damageSendEgg" => {
+            let emotion_on = flag(ctx.state, 0, "l25_config_applied") == 0
+                || flag(ctx.state, 0, "l25_zuan_emotion") > 0;
+            owner != 0
+                && emotion_on
+                && !super::l25_batch_a_modes::has_maixie_tag(ctx.state, ctx.catalog, owner)
+                && matches!(
+                    event,
+                    EventData::Damage(d)
+                        if !d.prevented
+                            && d.amount > 0
+                            && d.target == owner
+                            && d.source.is_some_and(|s| {
+                                s != owner
+                                    && super::l25_batch_a_modes::zuan_attitude_positive(
+                                        ctx.state, owner, s,
+                                    )
+                            })
+                )
+        }
         "_turnover" => matches!(
             event,
             EventData::TurnOvered { player, .. } | EventData::TurnOverBefore { player, .. }
@@ -331,7 +395,19 @@ pub(super) fn filter_ui_hook(
 
 pub(super) fn handle_l25_batch_a_ext(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     let owner = m.owner;
+    if super::l25_batch_a_modes::is_l25_mode_skill(&m.def_key) {
+        return super::l25_batch_a_modes::handle_mode_l25(m, ctx);
+    }
     if is_l25_ui_hook(&m.def_key) {
+        match m.def_key.as_str() {
+            "_zuanidentityshowskill" => {
+                super::l25_batch_a_modes::update_zuan_identity_show(ctx.core, owner);
+            }
+            "_zuanidentitydyingskill" => {
+                super::l25_batch_a_modes::reveal_zuan_identity_on_dying(ctx.core, owner);
+            }
+            _ => {}
+        }
         let key = format!("l25_ui_hook:{}", m.def_key);
         let cnt = flag(ctx.core, owner, &key) + 1;
         set_flag(ctx.core, owner, &key, cnt);
@@ -372,6 +448,10 @@ pub(super) fn handle_l25_batch_a_ext(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> 
 
 fn step_wumou(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     let owner = m.owner;
+    if m.card == Some(100) {
+        set_flag(ctx.core, owner, "l25_wumou_trick_in_play", 1);
+        return Flow::Done;
+    }
     match m.stage {
         HostStage::Act => {
             set_flag(ctx.core, owner, "l25_wumou_triggered", 1);
@@ -449,10 +529,40 @@ fn step_new_guixin(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             if !ok {
                 return Flow::Done;
             }
+            wait_ask(m, ctx, HostStage::SelectCard, ASK_NEW_GUIXIN_ZONE)
+        }
+        HostStage::SelectCard => {
+            let zone_mode = match ctx.answer().first().copied() {
+                Some(ChoiceOption::Tag(t)) => t,
+                _ => 0,
+            };
+            set_flag(ctx.core, owner, "l25_ask_id", 0);
+            let order: [u8; 3] = match zone_mode {
+                1 => [1, 0, 2], // e, h, j
+                2 => [2, 0, 1], // j, h, e
+                _ => [0, 1, 2], // h, e, j
+            };
+            let mut gains = 0u32;
             for p in alive_others(ctx.core, owner) {
-                let cands = hej_cards(ctx.core, p);
-                if let Some(&c) = cands.first() {
+                let picked = order.iter().find_map(|&z| {
+                    let pl = ctx.core.player(p);
+                    let list: Vec<CardId> = match z {
+                        0 => pl.hand.clone(),
+                        1 => pl.equips.clone(),
+                        _ => pl.judge.clone(),
+                    };
+                    if list.is_empty() {
+                        None
+                    } else {
+                        let idx = ctx.core.rng.gen_range(list.len() as u32) as usize;
+                        Some((z, list[idx]))
+                    }
+                });
+                if let Some((z, c)) = picked {
                     ctx.take_owned_card(p, c);
+                    if z == 1 {
+                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, p, c);
+                    }
                     ctx.core.player_mut(owner).hand.push(c);
                     ctx.out.push(LogEvent::CardsTaken {
                         from: p,
@@ -460,15 +570,33 @@ fn step_new_guixin(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                         cards: vec![c],
                         public: false,
                     });
+                    gains += 1;
                 }
             }
-            ctx.emit(EventData::TurnOverBefore {
-                player: owner,
-                cancelled: false,
-            });
             let cnt = flag(ctx.core, owner, "l25_new_guixin_count") + 1;
             set_flag(ctx.core, owner, "l25_new_guixin_count", cnt);
             let rem = m.cards.first().copied().unwrap_or(1).saturating_sub(1);
+            if gains > 2 {
+                m.cards = vec![rem];
+                m.stage = HostStage::DrawSettle;
+                ctx.emit(EventData::TurnOverBefore {
+                    player: owner,
+                    cancelled: false,
+                });
+                return Flow::Yield;
+            }
+            if rem > 0
+                && alive_others(ctx.core, owner)
+                    .iter()
+                    .any(|&p| !hej_cards(ctx.core, p).is_empty())
+            {
+                m.cards = vec![rem];
+                return wait_ask(m, ctx, HostStage::SelectNature, ASK_NEW_GUIXIN_CONFIRM);
+            }
+            Flow::Done
+        }
+        HostStage::DrawSettle => {
+            let rem = m.cards.first().copied().unwrap_or(0);
             if rem > 0
                 && alive_others(ctx.core, owner)
                     .iter()

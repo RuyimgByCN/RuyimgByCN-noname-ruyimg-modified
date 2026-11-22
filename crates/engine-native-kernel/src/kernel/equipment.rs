@@ -98,6 +98,30 @@ pub fn revoke_equip_skills(
     }
 }
 
+/// L25 `ssr_luoyi` (`extension.js:15031-15037`): 禁用防具栏并弃置已有防具。
+pub fn discard_armor_for_ssr_luoyi(
+    core: &mut crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    player: PlayerId,
+) -> Vec<crate::ids::CardId> {
+    let armors: Vec<crate::ids::CardId> = core
+        .player(player)
+        .equips
+        .iter()
+        .copied()
+        .filter(|&c| catalog.card_slot_of(core, c) == Some(crate::catalog::EquipSlot::Armor))
+        .collect();
+    if armors.is_empty() {
+        return Vec::new();
+    }
+    for &c in &armors {
+        core.player_mut(player).equips.retain(|x| *x != c);
+        revoke_equip_skills(core, catalog, player, c);
+        core.discard.push(c);
+    }
+    armors
+}
+
 pub(super) fn commit_equip(
     ctx: &mut Ctx<'_>,
     frame_id: EventId,
@@ -118,6 +142,11 @@ pub(super) fn commit_equip(
         ctx.core.table.retain(|&c| c != card);
     } else {
         ctx.take_hand_card(player, card);
+    }
+    if !ctx.catalog.is_equip_slot_enabled(ctx.core, player, slot) {
+        ctx.to_discard(card);
+        (ctx.catalog.hooks.on_cards_to_discard)(ctx, player, &[card], false);
+        return;
     }
     let played = ctx
         .core
