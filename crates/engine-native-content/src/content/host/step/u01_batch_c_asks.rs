@@ -50,17 +50,26 @@ pub(crate) fn chashi_card_matches(
 }
 
 pub(crate) fn is_male_player(core: &GameStateCore, catalog: &Catalog, p: PlayerId) -> bool {
-    core.player(p)
-        .general_slots
-        .into_iter()
-        .flatten()
-        .any(|g| {
-            catalog
-                .general_meta(g)
-                .is_some_and(|(_, _, _, _, gender)| {
-                    gender == crate::vocabulary::generals::Gender::Male
-                })
-        })
+    let ov = core
+        .vm_aux
+        .flags
+        .get(&(p, "effective_gender_override".to_string()))
+        .copied()
+        .unwrap_or(0);
+    core.matches_gender(catalog, p, crate::vocabulary::generals::Gender::Male)
+        || (ov == 0
+            && core
+                .player(p)
+                .general_slots
+                .into_iter()
+                .flatten()
+                .any(|g| {
+                    catalog
+                        .general_meta(g)
+                        .is_some_and(|(_, _, _, _, gender)| {
+                            gender == crate::vocabulary::generals::Gender::Male
+                        })
+                }))
 }
 
 pub(crate) fn has_male_other(core: &GameStateCore, catalog: &Catalog, owner: PlayerId) -> bool {

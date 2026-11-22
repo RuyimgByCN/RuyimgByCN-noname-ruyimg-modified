@@ -527,7 +527,15 @@ impl crate::catalog::SkillMachine for DismantleMachine {
                 let options: Vec<ChoiceOption> = t
                     .hand
                     .iter()
-                    .chain(t.equips.iter())
+                    .chain(t.equips.iter().filter(|&&c| {
+                        !crate::rvm_bridge::modifiers::eval_card_discard_protected(
+                            ctx.core,
+                            ctx.catalog,
+                            self.source,
+                            self.target,
+                            c,
+                        )
+                    }))
                     .chain(t.judge.iter())
                     .copied()
                     .map(ChoiceOption::Card)
@@ -554,31 +562,65 @@ impl crate::catalog::SkillMachine for DismantleMachine {
                 self.source,
                 self.target,
             );
-            // 选牌：手牌优先，其次装备区，再次判定区
+            // 选牌：手牌优先，其次未被保护的装备区牌，再次判定区
             let t = ctx.core.player(self.target);
             let hand_pick = if hand_visible {
                 crate::kernel::elo_best_hand_card(ctx.core, ctx.catalog, self.target, &t.hand)
             } else {
                 t.hand.first().copied()
             };
+            let equip_pick = t
+                .equips
+                .iter()
+                .find(|&&c| {
+                    !crate::rvm_bridge::modifiers::eval_card_discard_protected(
+                        ctx.core,
+                        ctx.catalog,
+                        self.source,
+                        self.target,
+                        c,
+                    )
+                })
+                .copied();
             selected = hand_pick
-                .or_else(|| t.equips.first().copied())
+                .or(equip_pick)
                 .or_else(|| t.judge.first().copied());
         } else {
             let t = ctx.core.player(self.target);
+            let can_discard = |c: &crate::ids::CardId| {
+                t.hand.contains(c)
+                    || t.judge.contains(c)
+                    || (t.equips.contains(c)
+                        && !crate::rvm_bridge::modifiers::eval_card_discard_protected(
+                            ctx.core,
+                            ctx.catalog,
+                            self.source,
+                            self.target,
+                            *c,
+                        ))
+            };
+            let equip_pick = t
+                .equips
+                .iter()
+                .find(|&&c| {
+                    !crate::rvm_bridge::modifiers::eval_card_discard_protected(
+                        ctx.core,
+                        ctx.catalog,
+                        self.source,
+                        self.target,
+                        c,
+                    )
+                })
+                .copied();
             selected = ctx
                 .answer()
                 .first()
                 .and_then(|o| match o {
-                    ChoiceOption::Card(c)
-                        if t.hand.contains(c) || t.equips.contains(c) || t.judge.contains(c) =>
-                    {
-                        Some(*c)
-                    }
+                    ChoiceOption::Card(c) if can_discard(c) => Some(*c),
                     _ => None,
                 })
                 .or_else(|| t.hand.first().copied())
-                .or_else(|| t.equips.first().copied())
+                .or(equip_pick)
                 .or_else(|| t.judge.first().copied());
         }
         if let Some(c) = selected {

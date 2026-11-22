@@ -92,7 +92,10 @@ pub fn revoke_equip_skills(
             .equips
             .iter()
             .any(|c| catalog.cards[*c as usize].link_on_equip);
-        if !still {
+        if !still
+            && core.player(player).linked
+            && crate::rvm_bridge::modifiers::can_lose_link(core, catalog, player)
+        {
             core.player_mut(player).linked = false;
         }
     }
@@ -328,15 +331,15 @@ pub(super) fn commit_equip(
         }
     }
     // G1 索链甲：装备时横置
-    if ctx.catalog.cards[card as usize].link_on_equip {
-        let was = ctx.core.player(player).linked;
+    if ctx.catalog.cards[card as usize].link_on_equip
+        && !ctx.core.player(player).linked
+        && crate::rvm_bridge::modifiers::can_gain_link(ctx.core, ctx.catalog, player)
+    {
         ctx.core.player_mut(player).linked = true;
-        if !was {
-            ctx.log(LogEvent::Linked {
-                player,
-                linked: true,
-            });
-        }
+        ctx.log(LogEvent::Linked {
+            player,
+            linked: true,
+        });
     }
     if let Some(f) = ctx.res.frame_mut(frame_id) {
         if let EventData::Equipped { replaced: r, .. } = &mut f.data {

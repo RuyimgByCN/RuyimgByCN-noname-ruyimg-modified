@@ -327,7 +327,17 @@ pub(super) fn play_card(
                     // 上游无顺手牵羊，见覆盖清单）。
                     // G1 墨守宿主原语：延时锦囊目标免疫（乐/兵均免疫）
                     for t in &targets {
-                        if catalog.blocks_delayed_trick(core, *t) {
+                        if catalog.blocks_delayed_trick(core, *t)
+                            || crate::rvm_bridge::modifiers::eval_card_target_canceled(
+                                core,
+                                catalog,
+                                core.turn.current,
+                                *t,
+                                card,
+                                kind,
+                                crate::event::DamageNature::Normal,
+                            )
+                        {
                             return Err(RejectReason::IllegalTargets);
                         }
                     }

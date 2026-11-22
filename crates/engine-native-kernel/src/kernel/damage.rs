@@ -288,7 +288,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
     }
     if d.nature != crate::event::DamageNature::Normal
         && ctx.core.player(d.target).linked
-        && !crate::rvm_bridge::modifiers::txlianbi_blocks_unlink(ctx.core, ctx.catalog, d.target)
+        && crate::rvm_bridge::modifiers::can_lose_link(ctx.core, ctx.catalog, d.target)
     {
         ctx.core.player_mut(d.target).linked = false;
         ctx.log(LogEvent::Linked {

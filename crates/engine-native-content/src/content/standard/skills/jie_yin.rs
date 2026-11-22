@@ -26,7 +26,7 @@ impl SkillBehavior for JieYinBehavior {
         }
         if !ctx.state.alive_players().any(|t| {
             t != owner
-                && slots_is_male(&ctx.state.player(t).general_slots)
+                && seat_is_male_in(ctx.state, ctx.catalog, t)
                 && ctx.state.player(t).hp < ctx.state.player(t).max_hp as i32
         }) {
             return None;

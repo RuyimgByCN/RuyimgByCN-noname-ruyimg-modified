@@ -173,10 +173,6 @@ pub(super) fn is_delayed_trick_use(catalog: &Catalog, u: &CardUseData) -> bool {
     )
 }
 
-pub(super) fn player_gender(state: &GameStateCore, catalog: &Catalog, p: PlayerId) -> Gender {
-    state.effective_gender_in(catalog, p)
-}
-
 pub(super) fn count_distinct_alive_factions(state: &GameStateCore, catalog: &Catalog) -> usize {
     let mut mask = 0u32;
     for p in state.alive_players() {
@@ -694,7 +690,7 @@ pub(in crate::content::host) fn activate_u08_batch_b(
             flag(state, owner, "heqin_used") == 0
                 && alive_others(state, owner)
                     .iter()
-                    .any(|&p| player_gender(state, catalog, p) == Gender::Male)
+                    .any(|&p| state.matches_gender(catalog, p, Gender::Male))
         }
         _ => false,
     };

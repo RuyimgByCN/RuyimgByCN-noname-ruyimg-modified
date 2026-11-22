@@ -133,8 +133,7 @@ pub(in crate::content::host) fn filter_l11_weapons_with_frames(
                     && u.targets.iter().any(|&t| {
                         t != owner
                             && state.player(t).alive
-                            && state.effective_gender_in(ctx.catalog, owner)
-                                != state.effective_gender_in(ctx.catalog, t)
+                            && state.different_gender_from(ctx.catalog, owner, t)
                     })
         ),
         "guanshi_skill" => {
@@ -312,8 +311,7 @@ fn handle_cixiong(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                 m.targets.remove(0);
                 if next_t != owner
                     && ctx.core.player(next_t).alive
-                    && ctx.core.effective_gender_in(ctx.catalog, owner)
-                        != ctx.core.effective_gender_in(ctx.catalog, next_t)
+                    && ctx.core.different_gender_from(ctx.catalog, owner, next_t)
                 {
                     m.target = Some(next_t);
                     return wait_w_ask(m, ctx, HostStage::TargetChoice, ASK_CIXIONG_CONFIRM);

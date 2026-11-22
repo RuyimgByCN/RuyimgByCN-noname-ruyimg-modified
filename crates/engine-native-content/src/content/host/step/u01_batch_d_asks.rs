@@ -31,14 +31,22 @@ pub(crate) fn clear_once_used(
 pub(crate) fn compute_shixing_mode(core: &GameStateCore, catalog: &Catalog) -> u32 {
     let has_undamaged_female = core.alive_players().any(|p| {
         let pl = core.player(p);
+        let ov = core
+            .vm_aux
+            .flags
+            .get(&(p, "effective_gender_override".to_string()))
+            .copied()
+            .unwrap_or(0);
         pl.hp >= pl.max_hp as i32
-            && pl.general_slots.iter().flatten().any(|&g| {
-                catalog
-                    .general_meta(g)
-                    .is_some_and(|(_, _, _, _, gender)| {
-                        gender == crate::vocabulary::generals::Gender::Female
-                    })
-            })
+            && (core.matches_gender(catalog, p, crate::vocabulary::generals::Gender::Female)
+                || (ov == 0
+                    && pl.general_slots.iter().flatten().any(|&g| {
+                        catalog
+                            .general_meta(g)
+                            .is_some_and(|(_, _, _, _, gender)| {
+                                gender == crate::vocabulary::generals::Gender::Female
+                            })
+                    })))
     });
     if has_undamaged_female {
         1

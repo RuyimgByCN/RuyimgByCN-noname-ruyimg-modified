@@ -180,6 +180,20 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
                     .flags
                     .insert((p, "dcdichou_mark_removed_this_turn".to_string()), 1);
             }
+            if mark.raw() == 2 {
+                let now_has = ctx.core.vm_aux.marks.contains_key(&(p, 2));
+                if delta > 0 && now_has && !ctx.core.player(p).linked {
+                    ctx.emit(EventData::Linked {
+                        player: p,
+                        linked: true,
+                    });
+                } else if delta < 0 && prev > 0 && !now_has && ctx.core.player(p).linked {
+                    ctx.emit(EventData::Linked {
+                        player: p,
+                        linked: false,
+                    });
+                }
+            }
         }
         EffectRequest::RemoveMark {
             player,
@@ -204,6 +218,16 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
                     .vm_aux
                     .flags
                     .insert((p, "dcdichou_mark_removed_this_turn".to_string()), 1);
+            }
+            if mark.raw() == 2
+                && prev > 0
+                && !ctx.core.vm_aux.marks.contains_key(&key)
+                && ctx.core.player(p).linked
+            {
+                ctx.emit(EventData::Linked {
+                    player: p,
+                    linked: false,
+                });
             }
         }
         EffectRequest::DiscardFromHand { player, count } => {

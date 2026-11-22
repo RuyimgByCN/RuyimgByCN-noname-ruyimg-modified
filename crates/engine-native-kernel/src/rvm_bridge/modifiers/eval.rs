@@ -170,6 +170,8 @@ pub fn eval_distance_total(
     for_each_player_vm_modifier(state, catalog, b, |def, rule| {
         if rule.target == VmModifierTarget::DistanceFromOthers
             && rule.selector.map_or(true, |s| s.matches_owner(state, b))
+            && !(catalog.skills[def as usize].name == "feiying"
+                && catalog.is_tieji_sealed(state, b))
         {
             let val = rule.effective_value_for(state, catalog, b, Some(a), def);
             cur = rule.apply_to(cur, val);
@@ -676,4 +678,203 @@ pub fn eval_card_unrespondable(
         nature,
         unrespondable,
     )
+}
+
+/// 评估伤害来源是否触发「造成伤害视为体力流失」（`DamageAsHpLoss`）。
+pub fn eval_damage_as_hp_loss(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    source: PlayerId,
+    target: PlayerId,
+    card: Option<CardId>,
+    nature: DamageNature,
+) -> bool {
+    let mut replace = false;
+    for_each_player_vm_modifier(state, catalog, source, |def, rule| {
+        if rule.target != VmModifierTarget::DamageAsHpLoss {
+            return;
+        }
+        let sel_ok = match (rule.selector, card) {
+            (None, _) => true,
+            (Some(s), Some(c)) => s.matches_card(state, catalog, source, c, catalog.card_kind(c), nature),
+            (Some(s), None) => s.matches_nature(nature),
+        };
+        if sel_ok && rule.effective_value_for(state, catalog, source, Some(target), def) > 0 {
+            replace = true;
+        }
+    });
+    replace
+}
+
+/// 评估防具栏空置且未失效时是否视为装备【八卦阵】（`VirtualBaguaIfArmorSlotEmpty`）。
+pub fn eval_virtual_bagua_if_armor_slot_empty(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    player: PlayerId,
+) -> bool {
+    if !state.player(player).alive
+        || crate::kernel::mbcmfangzhu_baiban(state, player)
+        || super::d34_flags::is_target_unequip2(state, player)
+    {
+        return false;
+    }
+    let armor_disabled = !crate::rvm_ops::has_enabled_equip_slot(state, player, EquipSlot::Armor);
+    let has_armor_equip = state
+        .player(player)
+        .equips
+        .iter()
+        .any(|&c| catalog.card_slot_of(state, c) == Some(EquipSlot::Armor));
+    if armor_disabled || has_armor_equip {
+        return false;
+    }
+    let mut active = false;
+    for_each_player_vm_modifier(state, catalog, player, |def, rule| {
+        if rule.target == VmModifierTarget::VirtualBaguaIfArmorSlotEmpty
+            && rule.effective_value(state, catalog, player, def) > 0
+        {
+            active = true;
+        }
+    });
+    active
+}
+
+/// 评估【杀】目标或来源因「若对方为女性则多需闪」（`ShaResponseCountIfOtherFemale`）增加的额外【闪】需求。
+pub fn eval_sha_response_extra_count(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    source: PlayerId,
+    target: PlayerId,
+) -> u8 {
+    if source == target {
+        return 0;
+    }
+    let mut extra = 0i32;
+    if state.matches_gender(catalog, target, Gender::Female) {
+        for_each_player_vm_modifier(state, catalog, source, |def, rule| {
+            if rule.target == VmModifierTarget::ShaResponseCountIfOtherFemale {
+                let val = rule.effective_value_for(state, catalog, source, Some(target), def);
+                extra = rule.apply_to(extra, val);
+            }
+        });
+    }
+    if state.matches_gender(catalog, source, Gender::Female) {
+        for_each_player_vm_modifier(state, catalog, target, |def, rule| {
+            if rule.target == VmModifierTarget::ShaResponseCountIfOtherFemale {
+                let val = rule.effective_value_for(state, catalog, target, Some(source), def);
+                extra = rule.apply_to(extra, val);
+            }
+        });
+    }
+    extra.clamp(0, 8) as u8
+}
+
+/// 某技能定义是否声明「手牌及装备牌改判」（`JudgmentRewriteHandEquip`）。
+pub fn skill_has_judgment_rewrite_hand_equip(catalog: &Catalog, def: SkillDefId) -> bool {
+    catalog.skills.get(def as usize).is_some_and(|s| {
+        s.behavior
+            .vm_modifiers()
+            .iter()
+            .any(|r| r.target == VmModifierTarget::JudgmentRewriteHandEquip && r.value > 0)
+    })
+}
+
+/// 收集角色当前启用且未被铁骑封印的 `JudgmentRewriteHandEquip` 技能定义。
+pub fn player_judgment_rewrite_hand_equip_defs(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    player: PlayerId,
+) -> Vec<SkillDefId> {
+    let sealed = catalog.is_tieji_sealed(state, player);
+    let mut defs = Vec::new();
+    for_each_player_vm_modifier(state, catalog, player, |def, rule| {
+        if rule.target == VmModifierTarget::JudgmentRewriteHandEquip
+            && !(sealed && !Catalog::is_locked_skill_name(catalog.skill_name(def), None))
+            && rule.effective_value(state, catalog, player, def) > 0
+            && !defs.contains(&def)
+        {
+            defs.push(def);
+        }
+    });
+    defs
+}
+
+/// 评估未横置角色是否阻止横置（`ArmorLinkGainCancel`）。
+pub fn eval_armor_link_gain_canceled(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    player: PlayerId,
+) -> bool {
+    if state.player(player).linked {
+        return false;
+    }
+    let mut blocked = false;
+    for_each_player_vm_modifier(state, catalog, player, |def, rule| {
+        if rule.target == VmModifierTarget::ArmorLinkGainCancel
+            && rule.effective_value(state, catalog, player, def) > 0
+        {
+            blocked = true;
+        }
+    });
+    blocked
+}
+
+/// 评估已横置角色是否阻止重置（`LinkLossCancel`）。
+pub fn eval_link_loss_canceled(state: &GameStateCore, catalog: &Catalog, player: PlayerId) -> bool {
+    if !state.player(player).linked {
+        return false;
+    }
+    let mut blocked = false;
+    for_each_player_vm_modifier(state, catalog, player, |def, rule| {
+        if rule.target == VmModifierTarget::LinkLossCancel
+            && rule.effective_value(state, catalog, player, def) > 0
+        {
+            blocked = true;
+        }
+    });
+    blocked
+}
+
+/// 角色由未横置进入横置前统一门控。
+pub fn can_gain_link(state: &GameStateCore, catalog: &Catalog, player: PlayerId) -> bool {
+    !super::d34_l28_mods::rewrite_tengjia_blocks_link(state, catalog, player)
+        && !super::txminguangkai_blocks_link(state, catalog, player)
+        && !eval_armor_link_gain_canceled(state, catalog, player)
+}
+
+/// 角色由横置解除前统一门控。
+pub fn can_lose_link(state: &GameStateCore, catalog: &Catalog, player: PlayerId) -> bool {
+    !super::txlianbi_blocks_unlink(state, catalog, player)
+        && !eval_link_loss_canceled(state, catalog, player)
+}
+
+/// 评估他人是否禁止弃置目标装备区中的某张牌（`CardDiscardProtected`）。
+pub fn eval_card_discard_protected(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    source: PlayerId,
+    target: PlayerId,
+    card: CardId,
+) -> bool {
+    if source == target || !state.player(target).equips.contains(&card) {
+        return false;
+    }
+    let kind = catalog.card_kind(card);
+    let slot = catalog.card_slot_of(state, card);
+    let mut protected = false;
+    for_each_player_vm_modifier(state, catalog, target, |def, rule| {
+        if rule.target != VmModifierTarget::CardDiscardProtected {
+            return;
+        }
+        let sel_ok = match rule.selector {
+            None => true,
+            Some(VmModifierSelector::ArmorOrTreasure) => {
+                matches!(slot, Some(EquipSlot::Armor | EquipSlot::Treasure))
+            }
+            Some(s) => s.matches_card(state, catalog, target, card, kind, DamageNature::Normal),
+        };
+        if sel_ok && rule.effective_value_for(state, catalog, target, Some(source), def) > 0 {
+            protected = true;
+        }
+    });
+    protected
 }

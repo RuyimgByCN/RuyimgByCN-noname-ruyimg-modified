@@ -36,6 +36,8 @@ pub(super) const ASK_ZHUWEI_CONFIRM_BUFF: u32 = 23;
 pub(super) const ASK_CHUHAI_TARGET: u32 = 24;
 pub(super) const ASK_CHUHAI_PINDIAN_OWNER: u32 = 25;
 pub(super) const ASK_CHUHAI_PINDIAN_TARGET: u32 = 26;
+pub(super) const ASK_XUEJI_CARD: u32 = 27;
+pub(super) const ASK_XUEJI_TARGET: u32 = 28;
 
 pub(super) fn mouduan_from_cards(
     core: &GameStateCore,
@@ -129,6 +131,28 @@ pub(super) fn chuhai_targets(core: &GameStateCore, owner: PlayerId) -> Vec<Playe
         .into_iter()
         .filter(|&p| !core.player(p).hand.is_empty())
         .collect()
+}
+
+pub(super) fn xueji_red_cards(
+    core: &GameStateCore,
+    catalog: &Catalog,
+    owner: PlayerId,
+) -> Vec<CardId> {
+    he_cards(core, owner)
+        .into_iter()
+        .filter(|&c| {
+            matches!(
+                catalog.effective_card_suit(core, owner, c),
+                crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+            )
+        })
+        .collect()
+}
+
+pub(super) fn xueji_max_targets(core: &GameStateCore, owner: PlayerId) -> usize {
+    let p = core.player(owner);
+    let damaged = (p.max_hp as i32 - p.hp).max(1) as usize;
+    damaged.min(core.alive_players().count()).max(1)
 }
 
 pub(super) fn build_l11_boss_c_ask(
@@ -275,6 +299,18 @@ pub(super) fn build_l11_boss_c_ask(
                 return None;
             }
             card_ask(t, "txhj_chuhai:target_pindian_card", hand, 1, 1, false)
+        }
+        ASK_XUEJI_CARD => {
+            let pool = xueji_red_cards(core, catalog, owner);
+            if pool.is_empty() {
+                return None;
+            }
+            card_ask(owner, "xueji:card", pool, 1, 1, true)
+        }
+        ASK_XUEJI_TARGET => {
+            let tgts = alive_all(core, owner);
+            let max_t = xueji_max_targets(core, owner);
+            player_ask(owner, "xueji:target", tgts, 1, max_t, true)
         }
         _ => None,
     }

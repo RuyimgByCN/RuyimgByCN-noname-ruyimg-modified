@@ -44,7 +44,25 @@ impl crate::catalog::SkillMachine for DamageFlow {
         let mut child = None;
         match d.settlement.progress.clone() {
             P::Start => d.settlement.progress = P::Before,
-            P::Before => d.settlement.progress = P::Begin,
+            P::Before => {
+                if d.amount > 0
+                    && d.source.is_some_and(|src| {
+                        crate::rvm_bridge::modifiers::eval_damage_as_hp_loss(
+                            ctx.core, ctx.catalog, src, d.target, d.card, d.nature,
+                        )
+                    })
+                {
+                    let amount = d.amount as u32;
+                    let target = d.target;
+                    finish_damage(ctx, self.root, d, O::ReplacedByLoseHp);
+                    ctx.emit(EventData::LoseHp {
+                        player: target,
+                        amount,
+                    });
+                    return Flow::Done;
+                }
+                d.settlement.progress = P::Begin;
+            }
             P::Begin => d.settlement.progress = P::Begin1,
             P::Begin1 => d.settlement.progress = P::Begin2,
             P::Begin2 => d.settlement.progress = P::Begin3,
@@ -119,7 +137,7 @@ impl crate::catalog::SkillMachine for DamageFlow {
                         // 上游「先解链、后传导」：铁索传导的目标在吃传导伤害前先解除横置并记
                         // Linked 事件；随后伤害提交时它已非横置，不会再记一次（规则 v331 对齐）。
                         // 若目标持有「连璧」，不能被重置。
-                        if !crate::rvm_bridge::modifiers::txlianbi_blocks_unlink(
+                        if crate::rvm_bridge::modifiers::can_lose_link(
                             ctx.core,
                             ctx.catalog,
                             target,

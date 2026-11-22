@@ -105,23 +105,19 @@ impl Engine {
                 .insert((seat, "kuangchan_init_done".to_string()), 1);
         }
         let p = self.state_core_mut().player_mut(seat);
-        if lord && p.max_hp != crate::state::INFINITE_HP && !has_kuangchan {
+        let max_hp_bumped = lord && p.max_hp != crate::state::INFINITE_HP && !has_kuangchan;
+        if max_hp_bumped {
             p.max_hp += 1;
         }
-        p.hp = match gname {
-            "ddd_zhangkai" => (p.max_hp as i32).saturating_sub(1),
-            "th_guanning" => 3 + i32::from(lord),
-            "ssr_machao" | "ssr_taishici" => 2 + i32::from(lord),
-            "ssr_re_lidian" => 3 + i32::from(lord),
-            _ => p.max_hp as i32,
-        };
-        if matches!(gname, "ssr_machao" | "ssr_taishici") {
-            p.hujia = 2;
-        } else if gname == "ssr_re_lidian" {
-            p.hujia = 1;
+        p.hp = if gname == "ddd_zhangkai" {
+            (p.max_hp as i32).saturating_sub(1)
+        } else if crate::state::has_custom_starting_hp(gname) {
+            let base = crate::state::general_starting_hp(gname, p.max_hp);
+            (base + i32::from(max_hp_bumped)).min(p.max_hp as i32)
         } else {
-            p.hujia = 0;
-        }
+            p.max_hp as i32
+        };
+        p.hujia = crate::state::general_starting_hujia(gname);
         p.alive = true;
         p.dying = false;
         let has_miaoxing = self

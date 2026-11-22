@@ -83,7 +83,7 @@ pub(super) fn commit_batch14_effect(
                 return;
             };
             let want = usize::from(min_count.max(1).min(max_count));
-            let targets: Vec<PlayerId> = scope_candidates(ctx.core, p, scope)
+            let targets: Vec<PlayerId> = scope_candidates(ctx.core, ctx.catalog, p, scope)
                 .into_iter()
                 .take(want)
                 .collect();
@@ -175,7 +175,7 @@ pub(super) fn commit_batch14_effect(
                 return;
             };
             let want = usize::from(min_count.max(1).min(max_count));
-            let targets: Vec<PlayerId> = scope_candidates(ctx.core, p, scope)
+            let targets: Vec<PlayerId> = scope_candidates(ctx.core, ctx.catalog, p, scope)
                 .into_iter()
                 .take(want)
                 .collect();
@@ -194,7 +194,7 @@ pub(super) fn commit_batch14_effect(
                 return;
             };
             let want = usize::from(target_count);
-            let targets: Vec<PlayerId> = scope_candidates(ctx.core, p, scope)
+            let targets: Vec<PlayerId> = scope_candidates(ctx.core, ctx.catalog, p, scope)
                 .into_iter()
                 .take(want)
                 .collect();
@@ -226,14 +226,11 @@ pub(super) fn commit_batch14_effect(
             };
             let target = seats_from(ctx.core, p)
                 .into_iter()
-                .find(|&q| q != p && ctx.core.player(q).alive && !ctx.core.player(q).linked)
-                .or_else(|| first_other_alive(ctx.core, p));
+                .find(|&q| q != p && ctx.core.player(q).alive && !ctx.core.player(q).linked);
             if let Some(t) = target {
-                let next = !ctx.core.player(t).linked;
-                ctx.core.player_mut(t).linked = next;
                 ctx.emit(EventData::Linked {
                     player: t,
-                    linked: next,
+                    linked: true,
                 });
             }
         }
@@ -604,6 +601,7 @@ fn first_other_alive(core: &GameStateCore, p: PlayerId) -> Option<PlayerId> {
 
 fn scope_candidates(
     core: &GameStateCore,
+    catalog: &Catalog,
     p: PlayerId,
     scope: rule_api::DrawTargetScope,
 ) -> Vec<PlayerId> {
@@ -624,13 +622,19 @@ fn scope_candidates(
                     rule_api::DrawTargetScope::Other => q != p,
                     rule_api::DrawTargetScope::MaleOther => {
                         q != p
-                            && core.effective_gender(q)
-                                == crate::vocabulary::generals::Gender::Male
+                            && core.matches_gender(
+                                catalog,
+                                q,
+                                crate::vocabulary::generals::Gender::Male,
+                            )
                     }
                     rule_api::DrawTargetScope::FemaleOther => {
                         q != p
-                            && core.effective_gender(q)
-                                == crate::vocabulary::generals::Gender::Female
+                            && core.matches_gender(
+                                catalog,
+                                q,
+                                crate::vocabulary::generals::Gender::Female,
+                            )
                     }
                     rule_api::DrawTargetScope::HandLteChooser => {
                         q != p && core.player(q).hand.len() <= my_hand

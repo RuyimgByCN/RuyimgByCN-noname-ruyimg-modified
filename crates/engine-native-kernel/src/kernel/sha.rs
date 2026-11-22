@@ -624,9 +624,16 @@ impl ShaResolveMachine {
 
     /// 目标共需出闪总数。
     fn needed_shan_count(&self, ctx: &Ctx<'_>) -> u8 {
-        (if self.source_has_wushuang(ctx) { 2 } else { 1 })
-            + u8::from(self.source_has_luoyi(ctx))
-            + ctx.core.turn.liaoyuan_count
+        let extra = crate::rvm_bridge::modifiers::eval_sha_response_extra_count(
+            ctx.core,
+            ctx.catalog,
+            self.source,
+            self.target,
+        );
+        (if self.source_has_wushuang(ctx) { 2u8 } else { 1u8 })
+            .saturating_add(u8::from(self.source_has_luoyi(ctx)))
+            .saturating_add(extra)
+            .saturating_add(ctx.core.turn.liaoyuan_count)
     }
 
     /// 酒伤害加成（派发时已捕获）。
@@ -871,7 +878,7 @@ impl ShaResolveMachine {
             .equips
             .iter()
             .filter(|c| {
-                if equip5_active {
+                (if equip5_active {
                     ctx.catalog.card_slot_of(ctx.core, **c)
                         == Some(crate::catalog::EquipSlot::Treasure)
                 } else {
@@ -879,7 +886,13 @@ impl ShaResolveMachine {
                         ctx.catalog.card_kind(**c),
                         CardKind::HorsePlus | CardKind::HorseMinus
                     )
-                }
+                }) && !crate::rvm_bridge::modifiers::eval_card_discard_protected(
+                    ctx.core,
+                    ctx.catalog,
+                    self.source,
+                    self.target,
+                    **c,
+                )
             })
             .copied()
             .map(ChoiceOption::Card)

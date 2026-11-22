@@ -254,8 +254,11 @@ impl HostMachine {
                         .alive_players()
                         .filter(|p| {
                             *p != self.owner
-                                && ctx.core.effective_gender(*p)
-                                    == crate::content::standard::Gender::Male
+                                && ctx.core.matches_gender(
+                                    ctx.catalog,
+                                    *p,
+                                    crate::content::standard::Gender::Male,
+                                )
                         })
                         .map(ChoiceOption::Player)
                         .collect();

@@ -206,12 +206,8 @@ pub(super) fn is_basic_or_normal_trick_kind(kind: CardKind) -> bool {
     !kind.is_equip() && !is_delayed_trick_kind(kind)
 }
 
-pub(super) fn player_gender(core: &GameStateCore, catalog: &Catalog, p: PlayerId) -> Gender {
-    core.effective_gender_in(catalog, p)
-}
-
 pub(super) fn is_male(core: &GameStateCore, catalog: &Catalog, p: PlayerId) -> bool {
-    player_gender(core, catalog, p) == Gender::Male
+    core.matches_gender(catalog, p, Gender::Male)
 }
 
 pub(super) fn mark_sha_unrespondable(

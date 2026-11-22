@@ -65,6 +65,13 @@ pub enum VmModifierTarget {
     CardDistanceUnlimitedSkillOnOwner,
     CardUseUnrespondableSkillOnOwner,
     ShaUseUnlimitedTargetMark,
+    DamageAsHpLoss,
+    VirtualBaguaIfArmorSlotEmpty,
+    ShaResponseCountIfOtherFemale,
+    JudgmentRewriteHandEquip,
+    ArmorLinkGainCancel,
+    LinkLossCancel,
+    CardDiscardProtected,
     SkillConditionalModifier,
 }
 
@@ -356,11 +363,11 @@ impl VmModifierValueSource {
             }
             Self::OtherFemaleLivingCount => state
                 .alive_players()
-                .filter(|&q| q != owner && state.effective_gender(q) == Gender::Female)
+                .filter(|&q| q != owner && state.matches_gender(catalog, q, Gender::Female))
                 .count() as i32,
             Self::AliveFemaleCount => state
                 .alive_players()
-                .filter(|&q| state.effective_gender(q) == Gender::Female)
+                .filter(|&q| state.matches_gender(catalog, q, Gender::Female))
                 .count() as i32,
             Self::SameGroupCountNegated => {
                 let Some(my_f) = state.effective_faction(catalog, owner) else {

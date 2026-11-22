@@ -37,4 +37,6 @@ pub(super) const KNOWN_PROMPTS_L11_B5: &[&str] = &[
     "txhj_chuhai:target",
     "txhj_chuhai:pindian_card",
     "txhj_chuhai:target_pindian_card",
+    "xueji:card",
+    "xueji:target",
 ];

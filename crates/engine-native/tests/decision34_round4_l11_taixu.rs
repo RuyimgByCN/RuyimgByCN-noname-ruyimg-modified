@@ -804,7 +804,7 @@ fn l11_taixu_164_cross_package_npc_skills_and_9_inert_undefined_refs() {
         ("txhj_baohong", "twlinglu"),
         ("txhj_xiaoweijun", "kaikang"),
         ("txhj_chunyuqiong", "jiuchi"),
-        ("txhj_jinweijun", "longdan"),
+        ("txhj_jinweijun", "龙胆"),
         ("txhj_zhaorong", "txzhulian"),
         ("txhj_zhaozhong", "txhj_huangmen"),
         ("txhj_yuanshao", "zhanyi"),

@@ -154,7 +154,7 @@ pub(super) fn active_ask(
             ..
         } if state == [1] => {
             let owner = seat(*player, core)?;
-            let options = draw_target_options(core, owner, *scope);
+            let options = draw_target_options(core, catalog, owner, *scope);
             if options.is_empty() {
                 return None;
             }
@@ -178,7 +178,7 @@ pub(super) fn active_ask(
             ..
         } if state == [1] => {
             let owner = seat(*player, core)?;
-            let options = draw_target_options(core, owner, *scope);
+            let options = draw_target_options(core, catalog, owner, *scope);
             if options.is_empty() {
                 return None;
             }
@@ -201,7 +201,7 @@ pub(super) fn active_ask(
             ..
         } if state == [1] => {
             let owner = seat(*player, core)?;
-            let options = draw_target_options(core, owner, *scope);
+            let options = draw_target_options(core, catalog, owner, *scope);
             if options.is_empty() {
                 return None;
             }
@@ -216,10 +216,23 @@ pub(super) fn active_ask(
                 false,
             ))
         }
-        EffectRequest::ChooseLinkOther { player, .. }
-        | EffectRequest::ChooseOtherDrawOwnerLostHpTurnOver { player, .. }
-            if state == [1] =>
-        {
+        EffectRequest::ChooseLinkOther { player, .. } if state == [1] => {
+            let owner = seat(*player, core)?;
+            let options = unlinked_other_options(core, owner);
+            if options.is_empty() {
+                return None;
+            }
+            Some(ask(
+                owner,
+                "rvm_choice",
+                ChoiceKind::SelectPlayers,
+                options,
+                1,
+                1,
+                false,
+            ))
+        }
+        EffectRequest::ChooseOtherDrawOwnerLostHpTurnOver { player, .. } if state == [1] => {
             let owner = seat(*player, core)?;
             let options = other_alive_options(core, owner);
             if options.is_empty() {
@@ -593,7 +606,7 @@ fn step_targets_damage(
     if !ctx.core.player(owner).alive || amount == 0 {
         return Flow::Done;
     }
-    let valid = draw_target_options(ctx.core, owner, scope);
+    let valid = draw_target_options(ctx.core, ctx.catalog, owner, scope);
     if state.is_empty() {
         if valid.is_empty() {
             return Flow::Done;
@@ -645,7 +658,7 @@ fn step_targets_draw(
     if !ctx.core.player(owner).alive || count == 0 {
         return Flow::Done;
     }
-    let valid = draw_target_options(ctx.core, owner, scope);
+    let valid = draw_target_options(ctx.core, ctx.catalog, owner, scope);
     if state.is_empty() {
         if valid.is_empty() {
             return Flow::Done;
@@ -677,12 +690,19 @@ fn step_targets_draw(
     Flow::Done
 }
 
+fn unlinked_other_options(core: &GameStateCore, owner: u8) -> Vec<ChoiceOption> {
+    core.alive_players()
+        .filter(|&p| p != owner && !core.player(p).linked)
+        .map(ChoiceOption::Player)
+        .collect()
+}
+
 fn step_link_other(ctx: &mut Ctx<'_>, owner: u8, state: &mut Vec<u32>) -> Flow {
     if !ctx.core.player(owner).alive {
         return Flow::Done;
     }
     if state.is_empty() {
-        let options = other_alive_options(ctx.core, owner);
+        let options = unlinked_other_options(ctx.core, owner);
         if options.is_empty() {
             return Flow::Done;
         }
@@ -698,12 +718,10 @@ fn step_link_other(ctx: &mut Ctx<'_>, owner: u8, state: &mut Vec<u32>) -> Flow {
         ));
     }
     if let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied() {
-        if target != owner && ctx.core.player(target).alive {
-            let next_linked = !ctx.core.player(target).linked;
-            ctx.core.player_mut(target).linked = next_linked;
+        if target != owner && ctx.core.player(target).alive && !ctx.core.player(target).linked {
             ctx.emit(EventData::Linked {
                 player: target,
-                linked: next_linked,
+                linked: true,
             });
         }
     }

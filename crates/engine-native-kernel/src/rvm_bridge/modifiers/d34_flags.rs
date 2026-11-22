@@ -558,8 +558,11 @@ pub fn apply_card_target_canceled(
         && (has_ext_skill(state, catalog, target, "nvquan3")
             || has_ext_skill(state, catalog, target, "nvquan")
             || flag_val(state, target, "nvquan3_active") > 0)
-        && state.effective_gender_in(catalog, actor)
-            == crate::vocabulary::generals::Gender::Male
+        && state.matches_gender(
+            catalog,
+            actor,
+            crate::vocabulary::generals::Gender::Male,
+        )
     {
         canceled = true;
     }

@@ -53,7 +53,7 @@ pub(super) fn refresh_xiefang_mark(
         .filter(|p| {
             Some(*p) != excluding
                 && core.player(*p).alive
-                && core.effective_gender(*p) == crate::content::standard::Gender::Female
+                && core.matches_gender(catalog, *p, crate::content::standard::Gender::Female)
         })
         .count() as i32;
     if count > 0 {

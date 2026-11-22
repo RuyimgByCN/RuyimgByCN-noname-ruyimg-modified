@@ -5,13 +5,86 @@ use crate::ids::PlayerId;
 /// 装配授予（P2/N08）：按武将表配置体力上限（主将槽）并授予技能集。
 /// 国战明置（`RevealGeneral`，ADR 0769）与原型装配原语
 /// （`debug_assemble_general`）共用此逻辑，授予语义不得分叉。
+/// Whether `name` overrides starting HP to differ from `max_hp` (or uses `ddd_zhangkai` `max_hp - 1`).
+pub fn has_custom_starting_hp(name: &str) -> bool {
+    matches!(
+        name,
+        "ddd_zhangkai"
+            | "th_guanning"
+            | "ssr_machao"
+            | "ssr_taishici"
+            | "ssr_re_lidian"
+            | "txhj_molijue"
+            | "txhj_handiliuxie"
+            | "txhj_niufu"
+            | "txhj_dongxie"
+            | "txhj_xurongy"
+            | "txhj_mamidi"
+            | "txhj_beimihu"
+            | "txhj_resunjian"
+            | "txhj_caocaox"
+            | "txhj_yuanshaoyou"
+            | "txhj_shenganningx"
+            | "txhj_sunguan"
+            | "txhj_sunjian"
+            | "txhj_guanqiujian"
+            | "txhj_shensimayi"
+            | "txhj_baimaxiaoqi"
+            | "txhj_huanjingnantong"
+            | "txhj_lingjitongren"
+            | "txhj_fuguangtongren"
+            | "txhj_hanlingdi"
+            | "txhj_dongzhuo"
+            | "txhj_huanyanzhangliang"
+            | "txhj_huanyanzhangbao"
+            | "txhj_huanyanzhangjiaoshi"
+            | "txhj_huanyanzhangjiaolei"
+            | "txhj_huanyanzhangjiaohuo"
+            | "txhj_huanyanzhangjiaofeng"
+            | "txhj_zhaozhong"
+    )
+}
+
+/// Starting HP when assembling `name` with resolved `max_hp` (`L11` `hp/maxHp[/hujia]` + `U01`/`L28`/`L25`).
 pub fn general_starting_hp(name: &str, max_hp: u32) -> i32 {
-    match name {
+    let base = match name {
         "ddd_zhangkai" => 3,
         "th_guanning" => 3,
         "ssr_machao" | "ssr_taishici" => 2,
         "ssr_re_lidian" => 3,
-        _ => max_hp as i32,
+        "txhj_handiliuxie" | "txhj_xurongy" | "txhj_yuanshaoyou" | "txhj_huanjingnantong" => 2,
+        "txhj_mamidi" | "txhj_resunjian" | "txhj_shenganningx" | "txhj_baimaxiaoqi" => 3,
+        "txhj_dongxie"
+        | "txhj_sunguan"
+        | "txhj_sunjian"
+        | "txhj_guanqiujian"
+        | "txhj_shensimayi"
+        | "txhj_lingjitongren"
+        | "txhj_fuguangtongren"
+        | "txhj_hanlingdi" => 4,
+        "txhj_caocaox" => 5,
+        "txhj_niufu" | "txhj_dongzhuo" | "txhj_zhaozhong" => 6,
+        "txhj_huanyanzhangliang" => 7,
+        "txhj_huanyanzhangjiaoshi" => 8,
+        "txhj_huanyanzhangbao" | "txhj_huanyanzhangjiaolei" => 10,
+        "txhj_huanyanzhangjiaohuo" | "txhj_huanyanzhangjiaofeng" => 12,
+        "txhj_beimihu" => 15,
+        "txhj_molijue" => 17,
+        _ => return max_hp as i32,
+    };
+    base.min(max_hp as i32)
+}
+
+/// Starting Hujia (`护甲`) when assembling `name` (`L11` `hp/maxHp/hujia` + `L25`).
+pub fn general_starting_hujia(name: &str) -> u8 {
+    match name {
+        "ssr_machao" | "ssr_taishici" => 2,
+        "ssr_re_lidian" => 1,
+        "txhj_huangjinzhangyan" => 1,
+        "txhj_molijue" | "txhj_huangfusongxx" | "txhj_bossbocai" => 2,
+        "txhj_buji" => 3,
+        "txhj_digongzhangbaox" => 7,
+        _ => 0,
     }
 }
 
@@ -45,6 +118,10 @@ pub fn apply_general_assembly(
                 let start_hp = general_starting_hp(name, hp);
                 if p.hp > start_hp {
                     p.hp = start_hp;
+                }
+                let start_hujia = general_starting_hujia(name);
+                if start_hujia > 0 {
+                    p.hujia = start_hujia;
                 }
             }
         }

@@ -9,6 +9,13 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-23 Batch L11-6a（L11 太虚幻境 320 武将档案与净集 +111→519/936）合入（待提交／发布）
+
+- **基线、发布与版本**：HEAD `b27a0968b13355a35292c767a3d3635401f5d31d`（Batch L11-5 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `45065560795` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。
+- **Batch L11-6a 集成与复核**：合入 `swarm/conv-l11-b6a-generals` `ce6b9126b..5803787d9`（`verifier-l11` #57 **`APPROVE`**）：协同保留 `judge_apply` 内联 `OrdinaryJudge`/`txhj_zhuwei` 并合并 `judge_provider_discards_old`/`JudgmentRewriteHandEquip` 入 `judge_rewrite.rs`、`needed_shan_count` 合并 `eval_sha_response_extra_count`（保 `_txhj_equip5` 与 Qilin 护甲防护）、`u01_fixes_3/helpers.rs` 与 `l27_fixes.rs` 接入 `matches_gender` 并对齐 `round3_fixes.rs`（`dddshixing` `xiangle` 掩码）及拆出 `decision34_pack9_ui.rs`（有效行 `<=1,000`）。
+- **清单计数与整包签署**：按 #57 净集划分升级 **111 项** `L11:generals:*`（`103` 全定义＋`8` 纯未定义 no-op；`L11` → **`519／417／0`**，其余 `209` 项维持 `简化近似`）；全仓更新为 **已复核等价 2,286／简化近似 2,138／缺失 0**，整包八项签署仍 `0/37`。
+- **主线实测**：`-D warnings` native/`wasm32`、4 crate **`2,882/0/6`**（`l_rounds` **`277/0/0`**、`g1` **`395/0/1`**、`kernel` **`435/0/0`**）、`--workspace --no-fail-fast` **`8,189/0/8`**、`conformance` **`19/19`**、`desktop-client` **`20/0/1`**、跨端双检验、`web-client` **`540/0`**、`smoke:native` **`83/0`** 与 `preflight.py` 全过，见 [Batch L11-6a 证据](../operations/evidence/2026-11-23-batch3-6a-l11-6a/README.md)。
+
 ### 2026-11-23 Batch L11-5（L11 太虚幻境 15 `L11SystemHooks`＋6 `L11Weapons`＋22 领主武将技＋5 L28/L27 共 +48→408/936）合入（待提交／发布）
 
 - **基线、发布与版本**：HEAD `6b8c847c6e5acbc878fd3fa4a333f53c5ed9298a`（Batch L11-4 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `45056028805` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。

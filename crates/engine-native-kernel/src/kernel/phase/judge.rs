@@ -452,7 +452,11 @@ pub(super) fn begin_prepare(ctx: &mut Ctx<'_>, player: PlayerId) {
             {
                 let seats = ctx.core.players.len() as PlayerId;
                 for t in 0..seats {
-                    if t == player || !ctx.core.player(t).alive || ctx.core.player(t).linked {
+                    if t == player
+                        || !ctx.core.player(t).alive
+                        || ctx.core.player(t).linked
+                        || !crate::rvm_bridge::modifiers::can_gain_link(ctx.core, ctx.catalog, t)
+                    {
                         continue;
                     }
                     ctx.core.player_mut(t).linked = true;

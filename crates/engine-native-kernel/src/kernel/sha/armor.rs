@@ -32,12 +32,17 @@ impl ShaResolveMachine {
         let has_armor = can_bagua
             && !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.target)
             && ctx.core.player(self.target).alive
-            && ctx
+            && (ctx
                 .core
                 .player(self.target)
                 .equips
                 .iter()
-                .any(|c| crate::rvm_bridge::modifiers::d34_l28_mods::is_bagua_armor(ctx.catalog, *c));
+                .any(|c| crate::rvm_bridge::modifiers::d34_l28_mods::is_bagua_armor(ctx.catalog, *c))
+                || crate::rvm_bridge::modifiers::eval_virtual_bagua_if_armor_slot_empty(
+                    ctx.core,
+                    ctx.catalog,
+                    self.target,
+                ));
         if !has_armor {
             return None;
         }

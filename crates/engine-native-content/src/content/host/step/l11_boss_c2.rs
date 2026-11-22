@@ -281,6 +281,7 @@ pub(super) fn handle_l11_boss_c2(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow
         "boss_zhennu" => handle_zhennu(m, ctx),
         "txhj_chuhai" => handle_chuhai(m, ctx),
         "txhj_chuhai2" => handle_chuhai2(m, ctx),
+        "xueji" => handle_xueji(m, ctx),
         _ => Flow::Done,
     }
 }
@@ -718,4 +719,85 @@ fn handle_chuhai2(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
         }
     }
     Flow::Done
+}
+
+/// 关银屏 `xueji`（`sp.js:21742-21777`）：出牌阶段限一次，弃置一张红色牌，
+/// 选择 1..=max(1, 已损体力值) 名角色横置，然后对其中首名角色造成 1 点火焰伤害。
+fn handle_xueji(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
+    let owner = m.owner;
+    match m.stage {
+        HostStage::Act => wait_bc_ask(m, ctx, HostStage::SelectCard, ASK_XUEJI_CARD),
+        HostStage::SelectCard => {
+            m.card = None;
+            let reds = xueji_red_cards(ctx.core, ctx.catalog, owner);
+            let Some(cid) = answered_cards(ctx).into_iter().find(|c| reds.contains(c)) else {
+                refund_once_used(ctx, owner, "xueji");
+                return Flow::Done;
+            };
+            m.cards = vec![cid];
+            wait_bc_ask(m, ctx, HostStage::TargetChoice, ASK_XUEJI_TARGET)
+        }
+        HostStage::TargetChoice => {
+            m.card = None;
+            let max_t = xueji_max_targets(ctx.core, owner);
+            let mut chosen = Vec::new();
+            for t in answered_players(ctx) {
+                if ctx.core.player(t).alive && !chosen.contains(&t) {
+                    chosen.push(t);
+                    if chosen.len() >= max_t {
+                        break;
+                    }
+                }
+            }
+            if chosen.is_empty() {
+                m.cards.clear();
+                refund_once_used(ctx, owner, "xueji");
+                return Flow::Done;
+            }
+            let Some(cid) = m.cards.pop() else {
+                refund_once_used(ctx, owner, "xueji");
+                return Flow::Done;
+            };
+            if !he_cards(ctx.core, owner).contains(&cid) {
+                refund_once_used(ctx, owner, "xueji");
+                return Flow::Done;
+            }
+            m.targets = chosen;
+            discard_player_cards(ctx, owner, &[cid]);
+            m.stage = HostStage::DrawSettle;
+            Flow::Yield
+        }
+        HostStage::DrawSettle => {
+            let mut any_linked = false;
+            for &t in m.targets.iter().rev() {
+                if ctx.core.player(t).alive && !ctx.core.player(t).linked {
+                    ctx.emit(EventData::Linked {
+                        player: t,
+                        linked: true,
+                    });
+                    any_linked = true;
+                }
+            }
+            if any_linked {
+                m.stage = HostStage::SelectNature;
+                Flow::Yield
+            } else {
+                if let Some(&t0) = m.targets.first() {
+                    if ctx.core.player(t0).alive {
+                        emit_damage(ctx, Some(owner), t0, 1, DamageNature::Fire, None);
+                    }
+                }
+                Flow::Done
+            }
+        }
+        HostStage::SelectNature => {
+            if let Some(&t0) = m.targets.first() {
+                if ctx.core.player(t0).alive {
+                    emit_damage(ctx, Some(owner), t0, 1, DamageNature::Fire, None);
+                }
+            }
+            Flow::Done
+        }
+        _ => Flow::Done,
+    }
 }

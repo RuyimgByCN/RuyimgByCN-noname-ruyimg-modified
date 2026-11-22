@@ -126,9 +126,29 @@ pub(super) use zhi_heng::*;
 pub(super) use zhuxin::*;
 pub(super) use zj_leiji::*;
 
-/// 性别门控助手：指定座位的双将槽中任一武将为男性。
+/// 性别门控助手：指定座位的武将匹配男性（支持 `double` 性别及运行时覆写，无将槽默认 true）。
+fn seat_is_male_in(
+    state: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    p: PlayerId,
+) -> bool {
+    let slots = &state.player(p).general_slots;
+    if slots.iter().all(|s| s.is_none()) {
+        return true;
+    }
+    state.matches_gender(catalog, p, crate::content::standard::Gender::Male)
+        || (state
+            .vm_aux
+            .flags
+            .get(&(p, "effective_gender_override".to_string()))
+            .copied()
+            .unwrap_or(0)
+            == 0
+            && slots_is_male(slots))
+}
+
 fn seat_is_male(ctx: &Ctx<'_>, p: PlayerId) -> bool {
-    slots_is_male(&ctx.core.player(p).general_slots)
+    seat_is_male_in(ctx.core, ctx.catalog, p)
 }
 
 /// 将槽性别判定（非国战局无将槽 → 门控不适用，默认 true）。

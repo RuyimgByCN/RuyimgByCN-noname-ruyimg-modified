@@ -103,8 +103,7 @@ impl NativeInvocation {
                 if let Some(pay) = payment {
                     if pay.provider as usize >= catalog.skills.len()
                         || pay.discard_old
-                            != (catalog.skill_name(pay.provider)
-                                == crate::vocabulary::names::GUI_CAI)
+                            != crate::kernel::judge_provider_discards_old(catalog, pay.provider)
                         || current.as_ref().is_none_or(|c| {
                             !c.used_rewrite_providers
                                 .contains(&(pay.player, pay.provider))

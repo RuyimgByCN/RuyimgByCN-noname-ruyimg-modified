@@ -199,16 +199,22 @@ pub(super) fn commit_batch13_effect(
                     |&q| {
                         q != p
                             && ctx.core.player(q).alive
-                            && ctx.core.effective_gender(q)
-                                == crate::vocabulary::generals::Gender::Male
+                            && ctx.core.matches_gender(
+                                ctx.catalog,
+                                q,
+                                crate::vocabulary::generals::Gender::Male,
+                            )
                     },
                 ),
                 rule_api::DrawTargetScope::FemaleOther => {
                     seats_from(ctx.core, p).into_iter().find(|&q| {
                         q != p
                             && ctx.core.player(q).alive
-                            && ctx.core.effective_gender(q)
-                                == crate::vocabulary::generals::Gender::Female
+                            && ctx.core.matches_gender(
+                                ctx.catalog,
+                                q,
+                                crate::vocabulary::generals::Gender::Female,
+                            )
                     })
                 }
                 rule_api::DrawTargetScope::HandLteChooser => {

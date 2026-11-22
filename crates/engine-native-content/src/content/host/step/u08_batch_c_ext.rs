@@ -349,7 +349,7 @@ pub(super) fn handle_u08_batch_c_ext(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> 
                         p != owner
                             && p != t
                             && ctx.core.player(p).alive
-                            && player_gender(ctx.core, ctx.catalog, p) == Gender::Male
+                            && ctx.core.matches_gender(ctx.catalog, p, Gender::Male)
                     })
                     .collect();
                 advance_seyou_male(m, ctx)

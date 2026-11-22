@@ -200,7 +200,7 @@ pub(super) fn taiji_targets(
 
 pub(super) fn count_alive_females(core: &GameStateCore, catalog: &Catalog) -> u32 {
     (0..core.players.len() as PlayerId)
-        .filter(|&p| core.player(p).alive && core.effective_gender_in(catalog, p) == Gender::Female)
+        .filter(|&p| core.player(p).alive && core.matches_gender(catalog, p, Gender::Female))
         .count() as u32
 }
 

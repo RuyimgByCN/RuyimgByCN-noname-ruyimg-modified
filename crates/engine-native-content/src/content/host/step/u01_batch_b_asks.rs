@@ -1,17 +1,25 @@
 use super::*;
 
 pub(crate) fn is_male(core: &GameStateCore, catalog: &Catalog, p: PlayerId) -> bool {
-    match core
-        .player(p)
-        .general_slots
-        .iter()
-        .flatten()
-        .next()
-        .and_then(|&g| catalog.general_meta(g))
-    {
-        Some((_, _, _, _, gender)) => gender == crate::vocabulary::generals::Gender::Male,
-        None => true,
+    let slots = &core.player(p).general_slots;
+    if slots.iter().all(|s| s.is_none()) {
+        return core.matches_gender(catalog, p, crate::vocabulary::generals::Gender::Male);
     }
+    let ov = core
+        .vm_aux
+        .flags
+        .get(&(p, "effective_gender_override".to_string()))
+        .copied()
+        .unwrap_or(0);
+    core.matches_gender(catalog, p, crate::vocabulary::generals::Gender::Male)
+        || (ov == 0
+            && slots.iter().flatten().any(|&g| {
+                catalog
+                    .general_meta(g)
+                    .is_some_and(|(_, _, _, _, gender)| {
+                        gender == crate::vocabulary::generals::Gender::Male
+                    })
+            }))
 }
 
 pub(crate) fn is_black_basic(catalog: &Catalog, card: CardId) -> bool {

@@ -477,6 +477,13 @@ pub(super) fn compile_modifier_entry(
         "card_savable" => VmModifierTarget::CardSavable,
         "card_respondable" => VmModifierTarget::CardRespondable,
         "card_unrespondable" => VmModifierTarget::CardUnrespondable,
+        "damage_as_hp_loss" => VmModifierTarget::DamageAsHpLoss,
+        "virtual_bagua_if_armor_slot_empty" => VmModifierTarget::VirtualBaguaIfArmorSlotEmpty,
+        "sha_response_count_if_other_female" => VmModifierTarget::ShaResponseCountIfOtherFemale,
+        "judgment_rewrite_hand_equip" => VmModifierTarget::JudgmentRewriteHandEquip,
+        "armor_link_gain_cancel" => VmModifierTarget::ArmorLinkGainCancel,
+        "link_loss_cancel" => VmModifierTarget::LinkLossCancel,
+        "card_discard_protected" => VmModifierTarget::CardDiscardProtected,
         "view_as_card_count"
         | "view_as_card_zone"
         | "view_as_card_filter"
@@ -485,22 +492,17 @@ pub(super) fn compile_modifier_entry(
         | "active_skill_usable"
         | "judgment_rewrite"
         | "judgment_rewrite_hand"
-        | "judgment_rewrite_hand_equip"
         | "judgment_rewrite_hand_red"
         | "judgment_rewrite_hand_equip_spade_or_club"
         | "judgment_rewrite_red_hand_equip_expansion"
         | "judgment_rewrite_black_hand_equip"
         | "judgment_best_from_draw_pile"
         | "nanman_damage_source_as_owner"
-        | "card_discard_protected"
         | "card_gain_protected"
         | "observer_foreign_hand_faces_visible"
         | "observer_hidden_identities_visible"
-        | "armor_link_gain_cancel"
-        | "link_loss_cancel"
         | "response_count"
         | "duel_opponent_response_count"
-        | "sha_response_count_if_other_female"
         | "sha_response_count_if_source_owner_target_distance_le_one"
         | "skip_discard_if_no_sha"
         | "skip_discard_phase"
@@ -513,8 +515,6 @@ pub(super) fn compile_modifier_entry(
         | "prepare_scry_count"
         | "draw_phase_scry_four_split_two"
         | "skills_disabled_when_hp_one"
-        | "virtual_bagua_if_armor_slot_empty"
-        | "damage_as_hp_loss"
         | "damage_between_owner_and_other_as_hp_loss"
         | "damage_nature"
         | "damage_taken_nature"

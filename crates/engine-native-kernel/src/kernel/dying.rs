@@ -88,7 +88,11 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                 let male = (0..ctx.core.players.len() as u8).find(|&i| {
                     i != t
                         && ctx.core.player(i).alive
-                        && ctx.core.effective_gender(i) == crate::vocabulary::generals::Gender::Male
+                        && ctx.core.matches_gender(
+                            ctx.catalog,
+                            i,
+                            crate::vocabulary::generals::Gender::Male,
+                        )
                 });
                 if let Some(m) = male {
                     ctx.recover(m, 1, None);

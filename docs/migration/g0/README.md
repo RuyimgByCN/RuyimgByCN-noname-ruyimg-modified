@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-23 Batch L11-6a（L11 太虚幻境 320 武将档案与净集 +111→519/936）更新（待提交／发布）
+
+基线 HEAD `b27a0968b13355a35292c767a3d3635401f5d31d`（Batch L11-5 已发布，CI Run `45065560795` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-l11` 独立复核（#57 **`APPROVE`**，含 Round 3 与两轮 Headless Chrome CDP）及主线全量门禁复测，清单按 #57 净集划分更新为 **已复核等价 2,286／简化近似 2,138／缺失 0／上游未定义 0**（合计 4,424）：`L11 太虚幻境` 由 `408 / 528 / 0` 升为 **519 / 417 / 0**（+111 名纯已等价／无定义技能武将，其余 209 名依赖待闭合技能之武将维持 `简化近似`；整包八项仍 `0/37`）。详见 [Batch L11-6a 证据摘要](../../operations/evidence/2026-11-23-batch3-6a-l11-6a/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-23 Batch L11-5（L11 太虚幻境 15 `L11SystemHooks`＋6 `L11Weapons`＋21 `L11GeneralBossC`＋1 `L11BossLingfeng`＋5 L28/L27 共 +48→408/936）更新（待提交／发布）
 
 基线 HEAD `6b8c847c6e5acbc878fd3fa4a333f53c5ed9298a`（Batch L11-4 已发布，CI Run `45056028805` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-l11` 独立复核（#41 **`APPROVE`**，含 Round 2 校验与 Headless Chrome CDP）及主线全量门禁复测，清单更新为 **已复核等价 2,175／简化近似 2,249／缺失 0／上游未定义 0**（合计 4,424）：`L11 太虚幻境` 由 `360 / 576 / 0` 升为 **408 / 528 / 0**（+48：15 项 `L11SystemHooks`、6 项 `L11Weapons`、21 项 `L11GeneralBossC`、1 项 `L11BossLingfeng` 与 5 项 L28/L27 复用防具/三工；整包八项仍 `0/37`）。详见 [Batch L11-5 证据摘要](../../operations/evidence/2026-11-23-batch3-5-l11-5/README.md) 与 [inventory_status.json](inventory_status.json)。

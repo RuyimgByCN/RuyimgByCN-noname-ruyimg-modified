@@ -21,6 +21,7 @@ pub(super) fn other_alive_options(core: &GameStateCore, owner: u8) -> Vec<Choice
 
 pub(super) fn draw_target_options(
     core: &GameStateCore,
+    catalog: &Catalog,
     owner: u8,
     scope: rule_api::DrawTargetScope,
 ) -> Vec<ChoiceOption> {
@@ -31,8 +32,11 @@ pub(super) fn draw_target_options(
             .filter(|&p| {
                 p != owner
                     && core.player(p).alive
-                    && core.effective_gender(p)
-                        == engine_native_kernel::vocabulary::generals::Gender::Male
+                    && core.matches_gender(
+                        catalog,
+                        p,
+                        engine_native_kernel::vocabulary::generals::Gender::Male,
+                    )
             })
             .map(ChoiceOption::Player)
             .collect(),
@@ -41,8 +45,11 @@ pub(super) fn draw_target_options(
             .filter(|&p| {
                 p != owner
                     && core.player(p).alive
-                    && core.effective_gender(p)
-                        == engine_native_kernel::vocabulary::generals::Gender::Female
+                    && core.matches_gender(
+                        catalog,
+                        p,
+                        engine_native_kernel::vocabulary::generals::Gender::Female,
+                    )
             })
             .map(ChoiceOption::Player)
             .collect(),
@@ -126,6 +133,7 @@ pub(super) fn active_ask(
     effect: &EffectRequest,
     state: &[u32],
     core: &GameStateCore,
+    catalog: &Catalog,
 ) -> Option<ExpectedAsk> {
     if state != [1] {
         return None;
@@ -151,7 +159,7 @@ pub(super) fn active_ask(
         }
         EffectRequest::ChooseTargetDraw { player, scope, .. } => {
             let owner = seat(*player, core)?;
-            let options = draw_target_options(core, owner, *scope);
+            let options = draw_target_options(core, catalog, owner, *scope);
             if options.is_empty() {
                 return None;
             }
@@ -315,7 +323,7 @@ fn step_target_draw(
         return Flow::Done;
     }
     if state.is_empty() {
-        let options = draw_target_options(ctx.core, owner, scope);
+        let options = draw_target_options(ctx.core, ctx.catalog, owner, scope);
         if options.is_empty() {
             return Flow::Done;
         }
@@ -333,7 +341,7 @@ fn step_target_draw(
     let Some(ChoiceOption::Player(target)) = ctx.answer().first().copied() else {
         return Flow::Done;
     };
-    if draw_target_options(ctx.core, owner, scope).contains(&ChoiceOption::Player(target)) {
+    if draw_target_options(ctx.core, ctx.catalog, owner, scope).contains(&ChoiceOption::Player(target)) {
         ctx.start_draw(target, count);
     }
     Flow::Done

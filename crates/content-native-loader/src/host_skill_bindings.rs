@@ -815,6 +815,7 @@ pub fn lookup_standard_catalog_skill_zh(skill_name: &str) -> Option<&'static str
         "jijiu" => Some("急救"),
         "jiuyuan" => Some("救援"),
         "jizhi" => Some("集智"),
+        "jueqing" => Some("绝情"),
         "jushou" => Some("据守"),
         "keji" => Some("克己"),
         "kongcheng" => Some("空城"),

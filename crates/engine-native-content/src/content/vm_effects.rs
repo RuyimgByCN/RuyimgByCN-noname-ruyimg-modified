@@ -117,7 +117,7 @@ pub(crate) fn active_ask(
     core: &GameStateCore,
     catalog: &Catalog,
 ) -> Option<ExpectedAsk> {
-    if let Some(expected) = batch13_targets::active_ask(effect, state, core) {
+    if let Some(expected) = batch13_targets::active_ask(effect, state, core, catalog) {
         return Some(expected);
     }
     if let Some(expected) = batch13_cards::active_ask(effect, state, core, catalog) {

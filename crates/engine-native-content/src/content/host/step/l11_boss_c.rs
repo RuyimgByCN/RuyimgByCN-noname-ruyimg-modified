@@ -83,7 +83,7 @@ pub(in crate::content::host) fn trigger_meta_l11_boss_c(name: &str) -> Option<Tr
 }
 
 pub(in crate::content::host) fn limits_l11_boss_c(name: &str) -> SkillLimits {
-    if name == "txhj_chuhai" {
+    if matches!(name, "txhj_chuhai" | "xueji") {
         SkillLimits {
             once_per_turn: true,
             active_outside_play: false,
@@ -260,13 +260,25 @@ pub(in crate::content::host) fn activate_l11_boss_c(
     ctx: &QueryCtx<'_>,
     owner: PlayerId,
 ) -> Option<Box<dyn crate::catalog::SkillMachine>> {
-    if skill.name != "txhj_chuhai"
-        || !is_unblocked_l11_owner(ctx.state, ctx.catalog, owner)
-        || chuhai_targets(ctx.state, owner).is_empty()
-    {
-        return None;
+    match skill.name.as_str() {
+        "txhj_chuhai" => {
+            if !is_unblocked_l11_owner(ctx.state, ctx.catalog, owner)
+                || chuhai_targets(ctx.state, owner).is_empty()
+            {
+                return None;
+            }
+            active_skill_machine("txhj_chuhai", HostBehavior::L11GeneralBossC, owner)
+        }
+        "xueji" => {
+            if !is_unblocked_l11_owner(ctx.state, ctx.catalog, owner)
+                || xueji_red_cards(ctx.state, ctx.catalog, owner).is_empty()
+            {
+                return None;
+            }
+            active_skill_machine("xueji", HostBehavior::L11GeneralBossC, owner)
+        }
+        _ => None,
     }
-    active_skill_machine("txhj_chuhai", HostBehavior::L11GeneralBossC, owner)
 }
 
 pub(in crate::content::host) fn handle_l11_boss_c(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {

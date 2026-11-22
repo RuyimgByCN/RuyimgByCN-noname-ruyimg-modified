@@ -244,7 +244,11 @@ impl GameStateCore {
             (0..self.players.len() as u8)
                 .filter(|p| {
                     self.player(*p).alive
-                        && self.effective_gender(*p) == crate::vocabulary::generals::Gender::Female
+                        && self.matches_gender(
+                            catalog,
+                            *p,
+                            crate::vocabulary::generals::Gender::Female,
+                        )
                 })
                 .count() as u32
         } else {
@@ -440,6 +444,64 @@ impl GameStateCore {
         self.player(p).general_slots[0]
             .and_then(|def| catalog.general_meta(def).map(|(_, _, _, _, gender)| gender))
             .unwrap_or_else(|| self.effective_gender(p))
+    }
+
+    /// Whether `p` has upstream `"double"` gender (e.g. `txhj_niufudongxie` in
+    /// `太虚幻境/extension_character.js:175`), which matches both male and female
+    /// (`game.js:22243-22259`: `hasSex`, `sameSexAs`, `differentSexFrom`).
+    pub fn has_double_gender(&self, catalog: &crate::catalog::Catalog, p: PlayerId) -> bool {
+        if matches!(
+            self.vm_aux
+                .flags
+                .get(&(p, "effective_gender_override".to_string()))
+                .copied(),
+            Some(1 | 2)
+        ) {
+            return false;
+        }
+        self.player(p)
+            .general_slots
+            .iter()
+            .flatten()
+            .any(|&def| {
+                catalog
+                    .general_meta(def)
+                    .is_some_and(|(name, _, _, _, _)| name == "txhj_niufudongxie")
+            })
+    }
+
+    /// Upstream `player.hasSex(sex)` (`double` matches both `Male` and `Female`).
+    pub fn matches_gender(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        p: PlayerId,
+        expected: crate::vocabulary::generals::Gender,
+    ) -> bool {
+        self.has_double_gender(catalog, p) || self.effective_gender_in(catalog, p) == expected
+    }
+
+    /// Upstream `player.sameSexAs(target)` (`double` is same-sex with both).
+    pub fn same_gender_as(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        a: PlayerId,
+        b: PlayerId,
+    ) -> bool {
+        self.has_double_gender(catalog, a)
+            || self.has_double_gender(catalog, b)
+            || self.effective_gender_in(catalog, a) == self.effective_gender_in(catalog, b)
+    }
+
+    /// Upstream `player.differentSexFrom(target)` (`double` is different-sex from both).
+    pub fn different_gender_from(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        a: PlayerId,
+        b: PlayerId,
+    ) -> bool {
+        self.has_double_gender(catalog, a)
+            || self.has_double_gender(catalog, b)
+            || self.effective_gender_in(catalog, a) != self.effective_gender_in(catalog, b)
     }
 
     pub fn hand_limit(&self, catalog: &crate::catalog::Catalog, p: PlayerId) -> usize {

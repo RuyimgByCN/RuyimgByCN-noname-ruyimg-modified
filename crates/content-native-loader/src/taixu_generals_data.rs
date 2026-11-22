@@ -4,6 +4,10 @@
 use engine_native::catalog::{CardKind, Faction, Suit};
 use engine_native::content::standard::Gender;
 
+#[path = "taixu_general_profiles.rs"]
+pub mod taixu_general_profiles;
+pub use taixu_general_profiles::*;
+
 /// All 320 authentic `L11` (`太虚幻境/extension_character.js:6-1489`) generals: `(id, faction, gender, max_hp, skills)`.
 pub const L11_TAIXU_GENERALS: [(&str, Faction, Gender, u32, &[&str]); 320] = [
     ("txhj_reganning", Faction::Wu, Gender::Male, 4, &["qixi", "fenwei"]), // extension_character.js:6

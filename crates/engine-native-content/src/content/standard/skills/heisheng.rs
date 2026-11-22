@@ -31,7 +31,11 @@ impl SkillMachine for HeishengMachine {
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         let seats = ctx.core.players.len() as PlayerId;
         for t in 0..seats {
-            if t != self.owner && ctx.core.player(t).alive && !ctx.core.player(t).linked {
+            if t != self.owner
+                && ctx.core.player(t).alive
+                && !ctx.core.player(t).linked
+                && crate::rvm_bridge::modifiers::can_gain_link(ctx.core, ctx.catalog, t)
+            {
                 ctx.core.player_mut(t).linked = true;
                 ctx.log(LogEvent::Linked {
                     player: t,

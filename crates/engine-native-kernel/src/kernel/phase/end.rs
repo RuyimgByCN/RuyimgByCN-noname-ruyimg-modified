@@ -64,7 +64,11 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
         if ctx.core.has_skill(player, smdef) {
             let seats = ctx.core.players.len() as PlayerId;
             for t in 0..seats {
-                if t == player || !ctx.core.player(t).alive || ctx.core.player(t).linked {
+                if t == player
+                    || !ctx.core.player(t).alive
+                    || ctx.core.player(t).linked
+                    || !crate::rvm_bridge::modifiers::can_gain_link(ctx.core, ctx.catalog, t)
+                {
                     continue;
                 }
                 ctx.core.player_mut(t).linked = true;
@@ -83,7 +87,9 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
         .skill_by_name(crate::vocabulary::names::BOSS_TIANYU)
     {
         if ctx.core.has_skill(player, tydef) {
-            if ctx.core.player(player).linked {
+            if ctx.core.player(player).linked
+                && crate::rvm_bridge::modifiers::can_lose_link(ctx.core, ctx.catalog, player)
+            {
                 ctx.core.player_mut(player).linked = false;
                 ctx.log(LogEvent::Linked {
                     player,
@@ -92,7 +98,11 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
             }
             let seats = ctx.core.players.len() as PlayerId;
             for t in 0..seats {
-                if t == player || !ctx.core.player(t).alive || ctx.core.player(t).linked {
+                if t == player
+                    || !ctx.core.player(t).alive
+                    || ctx.core.player(t).linked
+                    || !crate::rvm_bridge::modifiers::can_gain_link(ctx.core, ctx.catalog, t)
+                {
                     continue;
                 }
                 ctx.core.player_mut(t).linked = true;

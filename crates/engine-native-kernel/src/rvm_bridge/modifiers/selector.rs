@@ -60,7 +60,11 @@ pub enum VmModifierSelector {
 pub(super) fn is_delayed_trick_kind(kind: CardKind) -> bool {
     matches!(
         kind,
-        CardKind::Le | CardKind::Bing | CardKind::ShanDian | CardKind::HongShui
+        CardKind::Le
+            | CardKind::Bing
+            | CardKind::ShanDian
+            | CardKind::HongShui
+            | CardKind::Guiyoujie
     )
 }
 

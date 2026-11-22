@@ -317,7 +317,7 @@ pub(super) fn apply_distance_total(
     // L25 祖安武将 Batch A (`_taohuaskill`, `extension.js:42450`: distance to opposite gender is 1)
     if (has_ext_skill(state, catalog, from, "_taohuaskill")
         || flag_val(state, from, "l25_taohua_active") > 0)
-        && state.effective_gender(from) != state.effective_gender(to)
+        && state.different_gender_from(catalog, from, to)
     {
         return 1;
     }

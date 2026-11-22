@@ -68,7 +68,7 @@ pub(super) fn plan_l11_b5_choice_action(
     prompt: &str,
     options: &[ChoiceOption],
     min: usize,
-    _max: usize,
+    max: usize,
     allow_cancel: bool,
 ) -> Option<GameAction> {
     let seat = input.view.seat;
@@ -284,6 +284,49 @@ pub(super) fn plan_l11_b5_choice_action(
                 })
                 .max_by_key(|&c| catalog.cards.get(c as usize).map_or(0, |cd| cd.rank));
             best.map(|c| vec![ChoiceOption::Card(c)]).and_then(answer)
+        }
+        "xueji:card" => {
+            let sel = pick_lowest_cards(catalog, input, options, 1);
+            let val = sel.first().and_then(|o| match *o {
+                ChoiceOption::Card(c) => Some(extension_card_value(catalog, input, c)),
+                _ => None,
+            });
+            if has_enemy && val.is_some_and(|v| v <= 70) {
+                answer(sel)
+            } else if allow_cancel {
+                answer(Vec::new())
+            } else {
+                answer(sel)
+            }
+        }
+        "xueji:target" => {
+            let mut enemies: Vec<u8> = options
+                .iter()
+                .filter_map(|o| match *o {
+                    ChoiceOption::Player(p) => Some(p),
+                    _ => None,
+                })
+                .filter(|&p| public_attitude(&input.view, seat, p) < 0)
+                .collect();
+            if enemies.is_empty() {
+                if allow_cancel {
+                    return answer(Vec::new());
+                }
+                return best_hostile_target(input, options, false)
+                    .map(|p| vec![ChoiceOption::Player(p)])
+                    .and_then(answer);
+            }
+            enemies.sort_by_key(|&p| {
+                let linked = input.view.players.get(p as usize).is_some_and(|pl| pl.linked);
+                let hp = input.view.players.get(p as usize).map_or(99, |pl| pl.hp);
+                (u8::from(linked), hp, p)
+            });
+            let sel: Vec<ChoiceOption> = enemies
+                .into_iter()
+                .take(max.max(1))
+                .map(ChoiceOption::Player)
+                .collect();
+            answer(sel)
         }
         _ => None,
     }

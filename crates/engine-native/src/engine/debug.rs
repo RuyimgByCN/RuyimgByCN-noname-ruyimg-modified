@@ -605,6 +605,7 @@ impl Engine {
             .unwrap_or("");
         let p = self.state.core.player_mut(player);
         p.hp = crate::state::general_starting_hp(gname, p.max_hp);
+        p.hujia = crate::state::general_starting_hujia(gname);
         p.alive = true;
         p.dying = false;
     }

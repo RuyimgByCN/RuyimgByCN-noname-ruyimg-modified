@@ -514,7 +514,9 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     .iter()
                     .any(|c| ctx.catalog.card_kind(*c) == CardKind::Cixiong)
                 && ctx.core.player(self.target).alive
-                && ctx.core.effective_gender(self.source) != ctx.core.effective_gender(self.target)
+                && ctx
+                    .core
+                    .different_gender_from(ctx.catalog, self.source, self.target)
             {
                 self.cixiong_done = true;
                 let need = crate::kernel::sha::resume::cixiong_need(ctx, self.source);

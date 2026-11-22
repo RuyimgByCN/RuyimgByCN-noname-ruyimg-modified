@@ -1,6 +1,8 @@
 #[path = "judge_rewrite.rs"]
 mod judge_rewrite;
-pub use judge_rewrite::{judge_provider_cards, judge_rewrite_cards, judge_rewrite_providers};
+pub use judge_rewrite::{
+    judge_provider_cards, judge_provider_discards_old, judge_rewrite_cards, judge_rewrite_providers,
+};
 
 use super::*;
 
@@ -148,8 +150,6 @@ impl JudgePhaseMachine {
                     });
                 }
             }
-            let gui_dao = ctx.catalog.skill_by_name(crate::vocabulary::names::GUI_DAO);
-            let gui_cai = ctx.catalog.skill_by_name(crate::vocabulary::names::GUI_CAI);
             let tian_du = ctx.catalog.skill_by_name(crate::vocabulary::names::TIAN_DU);
             // 天妒（owner_is_target，对齐旧线内容定义/标准包文本「你的判定牌」）：
             // 仅判定阶段拥有者本人持有时由本人询问。
@@ -161,27 +161,13 @@ impl JudgePhaseMachine {
             // judgment_rewriters(tx, owner)；同座位双技能只入队一次）。
             // 天道（Boss 张角，规则 v263）：hes 任意牌可改判——改判资格
             // 与鬼道/鬼才并列（座位序同队）
-            let tian_dao = ctx
-                .catalog
-                .skill_by_name(crate::vocabulary::names::BOSS_TIANDAO);
-            // 改天道（swd 孤月）：hes 任意牌改判——与天道/鬼道/鬼才并列入队
-            let g_tiandao = ctx.catalog.skill_by_name("gtiandao");
+            // 改判者：自判定阶段拥有者起按座位序（含本人），逐人一次——
+            // 鬼道/鬼才/天道/改天道/天伦/新鬼才（JudgmentRewriteHandEquip）持有者均入队。
             let rewriters: Vec<PlayerId> = ctx
                 .core
                 .seat_order_from(self.owner)
                 .into_iter()
-                .filter(|p| {
-                    let has = |d: Option<crate::ids::SkillDefId>| {
-                        d.map(|d| ctx.core.has_skill(*p, d)).unwrap_or(false)
-                    };
-                    has(gui_dao)
-                        || has(gui_cai)
-                        || has(tian_dao)
-                        || has(g_tiandao)
-                        || has(ctx
-                            .catalog
-                            .skill_by_name(crate::vocabulary::host::SWD_TIANLUN_KEY))
-                })
+                .filter(|p| !judge_rewrite_providers(ctx.core, ctx.catalog, *p, &[]).is_empty())
                 .collect();
             self.current = Some(JudgementProgress {
                 trick,
@@ -481,8 +467,7 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                             ctx.take_owned_card(rewriter, c);
                             let old = cur.judge_card;
                             cur.judge_card = c;
-                            let discard_old = ctx.catalog.skill_name(provider)
-                                == crate::vocabulary::names::GUI_CAI;
+                            let discard_old = judge_provider_discards_old(ctx.catalog, provider);
                             self.payment = Some(crate::snap::JudgeReplacementSnap {
                                 player: rewriter,
                                 old,

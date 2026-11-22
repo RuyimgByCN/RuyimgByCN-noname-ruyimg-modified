@@ -679,7 +679,7 @@ fn build_spec(
         ASK_HEQIN_TARGET => {
             let opts = alive_others(core, owner)
                 .into_iter()
-                .filter(|&p| player_gender(core, catalog, p) == Gender::Male)
+                .filter(|&p| core.matches_gender(catalog, p, Gender::Male))
                 .map(ChoiceOption::Player)
                 .collect();
             build(owner, "heqin:choose_target", ChoiceKind::SelectPlayers, opts, 1, 1, true)

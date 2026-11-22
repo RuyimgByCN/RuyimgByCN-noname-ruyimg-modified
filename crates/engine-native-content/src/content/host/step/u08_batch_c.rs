@@ -142,10 +142,6 @@ pub(super) fn alive_all(core: &GameStateCore, owner: PlayerId) -> Vec<PlayerId> 
         .collect()
 }
 
-pub(super) fn player_gender(core: &GameStateCore, catalog: &Catalog, p: PlayerId) -> Gender {
-    core.effective_gender_in(catalog, p)
-}
-
 pub(super) fn is_friendly(
     core: &GameStateCore,
     catalog: &Catalog,
@@ -207,7 +203,7 @@ pub(super) fn yizhuang_male_targets(
 ) -> Vec<PlayerId> {
     alive_others(core, owner)
         .into_iter()
-        .filter(|&p| player_gender(core, catalog, p) == Gender::Male)
+        .filter(|&p| core.matches_gender(catalog, p, Gender::Male))
         .collect()
 }
 
@@ -625,7 +621,7 @@ pub(in crate::content::host) fn filter_u08_batch_c(
             } if *invocation != u32::MAX
                 && (*invocation as usize) < ctx.catalog.cards.len()
                 && ctx.state.player(*j_owner).alive
-                && player_gender(ctx.state, ctx.catalog, *j_owner) == Gender::Male
+                && ctx.state.matches_gender(ctx.catalog, *j_owner, Gender::Male)
                 && is_red_card(ctx.state, ctx.catalog, *j_owner, *invocation)
         ),
         "wange" => matches!(

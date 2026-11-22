@@ -508,8 +508,8 @@ pub fn active_ask(
                     .alive_players()
                     .filter(|t| {
                         *t != *owner
-                            && !core.player(*t).equips.is_empty()
-                            && seat_is_male_core(core, *t)
+                            && seat_is_male_core(core, catalog, *t)
+                            && core.player(*t).hp < core.player(*t).max_hp as i32
                     })
                     .map(ChoiceOption::Player)
                     .collect();
@@ -768,7 +768,7 @@ pub fn active_ask(
                 LiJianStageSnap::Launch => {
                     let candidates: Vec<ChoiceOption> = core
                         .alive_players()
-                        .filter(|p| *p != *owner && seat_is_male_core(core, *p))
+                        .filter(|p| *p != *owner && seat_is_male_core(core, catalog, *p))
                         .map(ChoiceOption::Player)
                         .collect();
                     Some(ask(

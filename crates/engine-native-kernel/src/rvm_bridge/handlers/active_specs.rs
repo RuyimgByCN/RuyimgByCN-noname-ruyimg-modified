@@ -501,10 +501,10 @@ impl VmTargetFilter {
         {
             return false;
         }
-        if self.male_only && state.effective_gender(target) != Gender::Male {
+        if self.male_only && !state.matches_gender(catalog, target, Gender::Male) {
             return false;
         }
-        if self.female_only && state.effective_gender(target) != Gender::Female {
+        if self.female_only && !state.matches_gender(catalog, target, Gender::Female) {
             return false;
         }
         if self.linked_only && !tp.linked {

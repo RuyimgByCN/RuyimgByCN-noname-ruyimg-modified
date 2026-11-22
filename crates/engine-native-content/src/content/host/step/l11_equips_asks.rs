@@ -181,7 +181,12 @@ pub(super) fn build_l11_equip_ask(
                 .equips
                 .iter()
                 .copied()
-                .filter(|&c| catalog.card_slot_of(core, c) == Some(EquipSlot::Treasure))
+                .filter(|&c| {
+                    catalog.card_slot_of(core, c) == Some(EquipSlot::Treasure)
+                        && !crate::rvm_bridge::modifiers::eval_card_discard_protected(
+                            core, catalog, owner, tgt, c,
+                        )
+                })
                 .collect();
             if treasures.is_empty() {
                 return None;

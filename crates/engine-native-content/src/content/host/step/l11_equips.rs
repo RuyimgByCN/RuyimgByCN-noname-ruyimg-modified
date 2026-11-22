@@ -498,7 +498,17 @@ pub(in crate::content::host) fn handle_l11_equips(
                 let Some(t) = m.target.filter(|&p| ctx.core.player(p).alive) else {
                     return Flow::Done;
                 };
-                if equip_slot_card(ctx.core, ctx.catalog, t, EquipSlot::Treasure).is_none() {
+                let has_discardable_tr = ctx.core.player(t).equips.iter().any(|&c| {
+                    ctx.catalog.card_slot_of(ctx.core, c) == Some(EquipSlot::Treasure)
+                        && !crate::rvm_bridge::modifiers::eval_card_discard_protected(
+                            ctx.core,
+                            ctx.catalog,
+                            owner,
+                            t,
+                            c,
+                        )
+                });
+                if !has_discardable_tr {
                     return Flow::Done;
                 }
                 let ask = if m.def_key == "txhj_qilingong" {
@@ -512,15 +522,36 @@ pub(in crate::content::host) fn handle_l11_equips(
                 let picked_tr = if m.def_key == "qilin_skill" {
                     answered_cards(ctx).into_iter().next()
                 } else if is_confirmed(ctx) {
-                    m.target
-                        .filter(|&p| ctx.core.player(p).alive)
-                        .and_then(|t| equip_slot_card(ctx.core, ctx.catalog, t, EquipSlot::Treasure))
+                    m.target.filter(|&p| ctx.core.player(p).alive).and_then(|t| {
+                        ctx.core
+                            .player(t)
+                            .equips
+                            .iter()
+                            .copied()
+                            .find(|&c| {
+                                ctx.catalog.card_slot_of(ctx.core, c) == Some(EquipSlot::Treasure)
+                                    && !crate::rvm_bridge::modifiers::eval_card_discard_protected(
+                                        ctx.core,
+                                        ctx.catalog,
+                                        owner,
+                                        t,
+                                        c,
+                                    )
+                            })
+                    })
                 } else {
                     None
                 };
                 if let (Some(t), Some(tr)) = (m.target.filter(|&p| ctx.core.player(p).alive), picked_tr) {
                     if ctx.catalog.card_slot_of(ctx.core, tr) == Some(EquipSlot::Treasure)
                         && ctx.core.player(t).equips.contains(&tr)
+                        && !crate::rvm_bridge::modifiers::eval_card_discard_protected(
+                            ctx.core,
+                            ctx.catalog,
+                            owner,
+                            t,
+                            tr,
+                        )
                     {
                         let has_more_treasures = ctx
                             .core
@@ -531,6 +562,13 @@ pub(in crate::content::host) fn handle_l11_equips(
                                 c != tr
                                     && ctx.catalog.card_slot_of(ctx.core, c)
                                         == Some(EquipSlot::Treasure)
+                                    && !crate::rvm_bridge::modifiers::eval_card_discard_protected(
+                                        ctx.core,
+                                        ctx.catalog,
+                                        owner,
+                                        t,
+                                        c,
+                                    )
                             });
                         let second_eligible = m.stage == HostStage::TargetChoice
                             && has_more_treasures

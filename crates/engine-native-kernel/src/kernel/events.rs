@@ -40,16 +40,13 @@ pub(super) fn commit_cards_moved(ctx: &mut Ctx<'_>, to: PlayerId) {
 
 /// 连环切换提交：翻转横置状态并写回帧载荷。
 pub(super) fn commit_linked(ctx: &mut Ctx<'_>, frame_id: EventId, player: PlayerId) {
-    if crate::rvm_bridge::modifiers::d34_l28_mods::rewrite_tengjia_blocks_link(
-        ctx.core,
-        ctx.catalog,
-        player,
-    ) || crate::rvm_bridge::modifiers::txminguangkai_blocks_link(ctx.core, ctx.catalog, player)
-        || crate::rvm_bridge::modifiers::txlianbi_blocks_unlink(ctx.core, ctx.catalog, player)
+    let cur = ctx.core.player(player).linked;
+    if (!cur && !crate::rvm_bridge::modifiers::can_gain_link(ctx.core, ctx.catalog, player))
+        || (cur && !crate::rvm_bridge::modifiers::can_lose_link(ctx.core, ctx.catalog, player))
     {
         return;
     }
-    let next = !ctx.core.player(player).linked;
+    let next = !cur;
     ctx.core.player_mut(player).linked = next;
     if let Some(f) = ctx.res.frame_mut(frame_id) {
         if let EventData::Linked { linked, .. } = &mut f.data {

@@ -330,7 +330,7 @@ pub(in crate::content::host) fn filter_l11_servants_b_with_frames(
                 if !d.prevented
                     && d.amount > 0
                     && state.player(d.target).alive
-                    && state.effective_gender(d.target) == Gender::Male
+                    && state.matches_gender(ctx.catalog, d.target, Gender::Male)
                     && flag(state, owner, "skill_round:l11_yueer1_used") == 0
         ),
         "txhj_yueerSkill2" => matches!(

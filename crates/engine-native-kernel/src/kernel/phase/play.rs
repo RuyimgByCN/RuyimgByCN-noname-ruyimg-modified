@@ -73,7 +73,9 @@ pub(super) fn begin_play(ctx: &mut Ctx<'_>, player: PlayerId) {
                 {
                     continue;
                 }
-                if !ctx.core.player(t).linked {
+                if !ctx.core.player(t).linked
+                    && crate::rvm_bridge::modifiers::can_gain_link(ctx.core, ctx.catalog, t)
+                {
                     ctx.core.player_mut(t).linked = true;
                     ctx.log(LogEvent::Linked {
                         player: t,

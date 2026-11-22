@@ -214,10 +214,10 @@ pub(super) fn dddduanbing_can_use_play(core: &GameStateCore, catalog: &Catalog, 
     has_black_he && !has_bing
 }
 
-pub(super) fn dddshixing_eval_bools(core: &GameStateCore) -> (bool, bool) {
+pub(super) fn dddshixing_eval_bools(core: &GameStateCore, catalog: &Catalog) -> (bool, bool) {
     let bool1 = core.alive_players().any(|p| {
         let pl = core.player(p);
-        core.effective_gender(p) == crate::vocabulary::generals::Gender::Female
+        core.matches_gender(catalog, p, crate::vocabulary::generals::Gender::Female)
             && pl.hp >= pl.max_hp as i32
     });
     let bool2 = flag(core, 0, "u01_turn_trick_used_stamp") != turn_stamp_3(core);
@@ -228,7 +228,7 @@ pub(super) fn dddshixing_apply(ctx: &mut Ctx<'_>, owner: PlayerId) {
     if !ctx.core.player(owner).alive {
         return;
     }
-    let (bool1, bool2) = dddshixing_eval_bools(ctx.core);
+    let (bool1, bool2) = dddshixing_eval_bools(ctx.core, ctx.catalog);
     let want_xiangle = bool1;
     let want_jiushi = bool2;
     let want_rezhiheng = !bool1 && !bool2;

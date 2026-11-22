@@ -233,14 +233,26 @@ pub(in crate::snap) fn response_kind_options(
     options
 }
 
-/// 性别门控（与 standard.rs `seat_is_male` 一致）：双将槽全空 → 不适用。
-pub(in crate::snap) fn seat_is_male_core(core: &GameStateCore, p: PlayerId) -> bool {
+/// 性别门控（与 standard.rs `seat_is_male_in` 一致）：双将槽全空 → 不适用。
+pub(in crate::snap) fn seat_is_male_core(
+    core: &GameStateCore,
+    catalog: &Catalog,
+    p: PlayerId,
+) -> bool {
     let slots = core.player(p).general_slots;
     if slots.iter().all(|s| s.is_none()) {
         return true;
     }
-    slots
-        .iter()
-        .flatten()
-        .any(|g| general_gender(*g) == Some(Gender::Male))
+    core.matches_gender(catalog, p, Gender::Male)
+        || (core
+            .vm_aux
+            .flags
+            .get(&(p, "effective_gender_override".to_string()))
+            .copied()
+            .unwrap_or(0)
+            == 0
+            && slots
+                .iter()
+                .flatten()
+                .any(|g| general_gender(*g) == Some(Gender::Male)))
 }
