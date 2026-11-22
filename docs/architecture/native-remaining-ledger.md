@@ -1,5 +1,10 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+## 2026-11-23 Batch Q8/Q9（外部前提清单、Phase 6 收编范围与 `web-frame-external.mjs` `--host` 修复）合入
+
+- **本批变更与不变量**：合入 `swarm/conv-q8-q9-prereqs`（[2026-11-22-queue8-9-external-prereqs-and-phase6/README.md](../operations/evidence/2026-11-22-queue8-9-external-prereqs-and-phase6/README.md) 与 [web-frame-external.mjs](../../apps/web-client/scripts/web-frame-external.mjs) `--host` 支持及动态 `Host` 头注入），并提交 Batch L11-6b CI 记录至 [ci-runs.md](../operations/evidence/ci-runs.md)（`c21f105c93` / CI `45080540689`）。`inventory_status.json` 无变更（`2,321 / 2,103 / 0`，`L11` `554 / 382 / 0`，整包 8 维签字 `0/37`）；`333/107/5/759/8` 与 14 条 golden 不变。
+- **剩余待办与阻断**：macOS 公证签名与本机基准样本、iOS/Android 真机调试与签名打包、Spine 4.0 运行库外置配置及 Phase 6（`engine-core`/`game-server` 等退役或迁移范围，Section 3 第 3 项①–⑤）待用户决策与外部条件就绪后推进；已通过全套 Section 7 离线门禁与 `web-frame-external.mjs --host 0.0.0.0 --port 0 --app none` 实测。
+
 ## 2026-11-23 Batch L11-6b（L11 太虚幻境 206 模式节点/效果包与净集 +35→554/936）合入（待提交／发布）
 
 基线 HEAD `6ecddea03c8c2d5317da85780609de16f8306e70`（Batch L11-6a CI Run `45074648377` Attempt 1 `10/10 success` 已并入 `ci-runs.md`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `verifier-l11` 复核通过（#100 **`APPROVE`**，含 Round 4 与三轮 Chrome CDP）的 `swarm/conv-l11-b6b-modes` `8a974b73f..b76098616`，统一 `catalog_queries.rs` 缠怨门控（`l10_rechanyuan`＋`"chanyuan"`/`"rechanyuan"`＋`hp <= 1`）、保留 `sha/armor.rs` `_eloDraw` 与空牌堆守卫并叠加 `effective_card_suit`、协同 `u08_batch_d_hooks.rs`、`known_prompts_l11_b5.rs` 尾追加及保留 `6ecddea03` 全量 `b6a` 修复；接入 `taixu_mode/*`、`taixu_battle.rs` 与 `l11_effect_pack*`。按 `#100` 净集划分升级 **35 项**无阻塞 `L11:modes:*`（其余 `171` 项保持 `简化近似`），在 `main` 全量通过 `--workspace`（`8,204/0/8`）、4 crate（`2,897/0/6`，`l_rounds` `292/0/0`）、`conformance` `19/19`、`desktop-client` `20/0/1`、跨端、`web-client` `540/0` 及 `smoke:native` `83/0`。`L11` 升为 **554／382／0**（剩余 382 项归后续 Phase 3 闭合），全仓清单更新为 **已复核等价 2,321／简化近似 2,103／缺失 0**（整包八项 `0/37`）。见 [Batch L11-6b 证据](../operations/evidence/2026-11-23-batch3-6b-l11-6b/README.md) 与 [进度主稿](native-progress.md)。

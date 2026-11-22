@@ -1,5 +1,10 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-23 Batch Q8/Q9（外部前提与 Phase 6 范围文档 + `web-frame-external.mjs` `--host` 修复）合入
+
+- 合入 `swarm/conv-q8-q9-prereqs`（[证据报告](../operations/evidence/2026-11-22-queue8-9-external-prereqs-and-phase6/README.md) 与 [web-frame-external.mjs](../../apps/web-client/scripts/web-frame-external.mjs) `--host` 修复），并提交 `c21f105c93` / CI `45080540689` 记录于 [ci-runs.md](../operations/evidence/ci-runs.md)。
+- **清单计数零变化**：全局保持 **`2,321 / 2,103 / 0`**（`L11` 保持 `554 / 382 / 0`，整包 8 维签字 `0/37`）；37 来源范围与 `333/107/5/759/8` 协议不变量均不变。
+
 ## 2026-11-23 Batch L11-6b（L11 太虚幻境 206 模式节点/效果包与净集 +35→554/936）合入与清单上调（待提交／发布）
 
 基线 HEAD `6ecddea03c8c2d5317da85780609de16f8306e70`（Batch L11-6a 已发布，CI Run `45074648377` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8` 不变。合入 `swarm/conv-l11-b6b-modes` `8a974b73f..b76098616`（`verifier-l11` #100 **`APPROVE`**）并与 `L10`/`L11-6a`/`L22`/`U01-3` 共存对齐（`catalog_queries.rs` 统一缠怨封技门控、`sha/armor.rs` 保留 `_eloDraw` 叠加 `effective_card_suit`、`u08_batch_d_hooks.rs` 并行挂载与 `known_prompts_l11_b5.rs` 尾追加）：按 `#100` 净集划分将 `L11 太虚幻境` **35 项**无外部阻塞依赖 `L11:modes:*`（`2` `extension_servant.js`＋`18` `event_universal.js`＋`15` `extension_season.js`）升为 `已复核等价`（其余 `171` 项包括 `action` 保留 `简化近似`，待 Phase 3 收口），`L11` 升为 **554／382／0**（`已复核等价` 554／`简化近似` 382／`缺失` 0；合计 936），全仓清单更新为 **已复核等价 2,321／简化近似 2,103／缺失 0／上游未定义 0**（合计 4,424），整包八项签署维持 **0/37**。详见 [Batch L11-6b 复核摘要](../operations/evidence/2026-11-23-batch3-6b-l11-6b/README.md) 与 [inventory_status.json](./g0/inventory_status.json)。

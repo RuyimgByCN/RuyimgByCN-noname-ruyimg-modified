@@ -9,6 +9,12 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-23 Batch Q8/Q9（外部硬件/签名与 Phase 6 收编前置 + `web-frame-external.mjs` `--host` 修复）合入
+
+- **范围与不变量**：合入 `swarm/conv-q8-q9-prereqs`（[证据报告](../operations/evidence/2026-11-22-queue8-9-external-prereqs-and-phase6/README.md) 与 [web-frame-external.mjs](../../apps/web-client/scripts/web-frame-external.mjs) `--host` 绑定/动态 `Host` 修复），并登记 Batch L11-6b CI 记录至 [ci-runs.md](../operations/evidence/ci-runs.md)（`c21f105c93` / CI `45080540689` 首跑 `10/10` 通过）；**`0` Rust 内核改动、`0` 清单计数变动**（全局 `2,321 / 2,103 / 0`，`L11` `554 / 382 / 0`，整包 8 维签字 `0/37`，`333/107/5/759/8` 与 14 条 golden 哈希不变）。
+- **Section 7 / 脚本实测（2026-11-23）**：`check-source-lines.py`（`9627` 文件）、`check-native-layering.py`（`0` 上行引用）、`check_local_links.py --all`（`0` 坏链）、`check_doc_line_refs.py --strict`（`0` 越界）、`-D warnings`（5 原生 crate + `wasm32`）通过；`--offline` `4-crate` `2,897/0/6`、`content-native-loader` `48/0/0`、`conformance` `4/0/0`、`desktop-client` `20/0/1`、`--workspace` `180` 套件 `8,207/0/8`；`web-client` `typecheck`、`test` `540/0`、`build:native`、`smoke:native` `83/0`、`build`（`244` 模块）、`spine40-cleanroom + build-pipeline` `34/0`、`check-native-wasm-cross-target.py` & `cross-target-hash.sh` 通过；`web-frame-external.mjs --host 0.0.0.0 --port 0 --app none` 实测绑定 `0.0.0.0`、`Host` 头注入传播、`POST /report` HTTP `204` 落盘 `summary.json` 并退出 `0`。
+- **外部前提与用户决策待办**：macOS Developer ID 公证/实机性能采样、iOS/Android 真机验证与 Phase 6 收编（Section 3 第 3 项①–⑤）仍按[证据报告](../operations/evidence/2026-11-22-queue8-9-external-prereqs-and-phase6/README.md)保留待办。
+
 ### 2026-11-23 Batch L11-6b（L11 太虚幻境 206 模式节点/效果包与净集 +35→554/936）合入（待提交／发布）
 
 - **基线、发布与版本**：HEAD `6ecddea03c8c2d5317da85780609de16f8306e70`（Batch L11-6a 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `45074648377` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。

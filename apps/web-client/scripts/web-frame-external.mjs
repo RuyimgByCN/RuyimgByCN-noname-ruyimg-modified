@@ -8,7 +8,7 @@
 //   node --import ./scripts/ts-register.mjs scripts/web-frame-external.mjs \
 //     --dist <构建目录> --out <输出目录> [--players 4] [--seed 42] \
 //     [--driver click|auto|manual] [--steps 1500] [--gap 50] [--timeout 180000] \
-//     [--app chrome-headed|safari|firefox|tauri|none] [--binary <应用路径>] [--port 5173]
+//     [--app chrome-headed|safari|firefox|tauri|none] [--binary <应用路径>] [--host 127.0.0.1] [--port 5173]
 //
 // 说明：--driver click 为页面内合成点击（帧节奏/Worker 链路口径）；真实输入延迟用
 // --driver manual 配合系统级点击工具（perfProbe 捕获真实事件时间戳）。
@@ -54,6 +54,7 @@ const steps = Number(args.steps ?? 1500);
 const gapMs = Number(args.gap ?? 50);
 const timeoutMs = Number(args.timeout ?? 180_000);
 const app = String(args.app ?? "none");
+const host = String(args.host ?? "127.0.0.1");
 const port = Number(args.port ?? (app === "tauri" ? 5173 : 0));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 mkdirSync(outDir, { recursive: true });
@@ -166,8 +167,9 @@ const server = createServer((req, res) => {
   }
   res.writeHead(200, headers).end(readFileSync(file));
 });
-await new Promise((r) => server.listen(port, "127.0.0.1", r));
-const base = `http://127.0.0.1:${server.address().port}`;
+await new Promise((r) => server.listen(port, host, r));
+const publicHost = host === "0.0.0.0" ? "127.0.0.1" : host;
+const base = `http://${publicHost}:${server.address().port}`;
 // 相对路径（按页面源解析）：Tauri devUrl 是 localhost 而 server 绑 127.0.0.1，
 // 绝对地址会跨源被 WKWebView/CSP 拦截。
 if (packsFile) battleQuery.set("packsUrl", "/packs");
@@ -177,7 +179,11 @@ if (hexFile) battleQuery.set("hexUrl", "/hex");
 const battleRoute = app === "tauri" ? "/#/battle" : "/battle";
 const battleUrl = `${battleRoute}?${battleQuery}`;
 const entry = `${base}/`;
-console.error(`serving ${distDir} at ${entry}`);
+console.error(
+  host === "0.0.0.0"
+    ? `serving ${distDir} on 0.0.0.0:${server.address().port} (local ${entry}; LAN/iOS device use http://<mac-ip>:${server.address().port}/)`
+    : `serving ${distDir} at ${entry}`,
+);
 
 // ---- 拉起目标 ----
 let child = null;
