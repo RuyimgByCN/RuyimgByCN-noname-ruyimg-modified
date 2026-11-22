@@ -124,6 +124,20 @@ pub(super) mod l25_batch_d;
 pub(super) mod l25_batch_e;
 pub(super) mod l25_batch_f;
 pub(super) mod l25_batch_g;
+pub(super) mod l11_common;
+pub(super) mod l11_cards;
+pub(super) mod l11_cards_asks;
+pub(super) mod l11_equips;
+pub(super) mod l11_equips_asks;
+pub(super) mod l11_servants;
+pub(crate) use l11_servants::play_end_rui_skill1;
+pub(super) mod l11_servants_asks;
+pub(super) mod l11_skills_a;
+pub(super) mod l11_skills_a_asks;
+pub(super) mod l11_skills_b;
+pub(super) mod l11_skills_b_asks;
+pub(super) mod l11_skills_c;
+pub(super) mod l11_skills_c_asks;
 
 impl HostMachine {
     pub(super) fn step_behavior(&mut self, ctx: &mut Ctx<'_>) -> Flow {
@@ -1179,6 +1193,14 @@ impl HostMachine {
             HostBehavior::L25ZuanBatchG => l25_batch_g::handle_l25_batch_g(self, ctx),
             HostBehavior::L10ScsCompanion => l10_scs::handle_l10_scs(self, ctx),
             HostBehavior::Rechanyuan => Flow::Done,
+            HostBehavior::L11TrickCard => l11_cards::handle_l11_trick_card(self, ctx),
+            HostBehavior::L11EquipCards => l11_equips::handle_l11_equips(self, ctx),
+            HostBehavior::L11Daiyuan
+            | HostBehavior::L11ServantSkills
+            | HostBehavior::L11SubStates => l11_servants::handle_l11_servants(self, ctx),
+            HostBehavior::L11GeneralSkillsA => l11_skills_a::handle_l11_skills_a(self, ctx),
+            HostBehavior::L11GeneralSkillsB => l11_skills_b::handle_l11_skills_b(self, ctx),
+            HostBehavior::L11GeneralSkillsC => l11_skills_c::handle_l11_skills_c(self, ctx),
         }
     }
 }

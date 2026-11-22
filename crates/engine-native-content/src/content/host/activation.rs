@@ -268,6 +268,26 @@ impl HostSkillBehavior {
             HostBehavior::L10ScsCompanion => {
                 super::step::l10_scs::activate_l10_scs(self, ctx, owner)
             }
+            HostBehavior::L11TrickCard => {
+                super::step::l11_cards::activate_l11_zhaoshu(self, ctx, owner)
+            }
+            HostBehavior::L11EquipCards => {
+                super::step::l11_equips::activate_l11_equips(self, ctx, owner)
+            }
+            HostBehavior::L11Daiyuan
+            | HostBehavior::L11ServantSkills
+            | HostBehavior::L11SubStates => {
+                super::step::l11_servants::activate_l11_servants(self, ctx, owner)
+            }
+            HostBehavior::L11GeneralSkillsA => {
+                super::step::l11_skills_a::activate_l11_skills_a(self, ctx, owner)
+            }
+            HostBehavior::L11GeneralSkillsB => {
+                super::step::l11_skills_b::activate_l11_skills_b(self, ctx, owner)
+            }
+            HostBehavior::L11GeneralSkillsC => {
+                super::step::l11_skills_c::activate_l11_skills_c(self, ctx, owner)
+            }
             _ => None,
         }
     }

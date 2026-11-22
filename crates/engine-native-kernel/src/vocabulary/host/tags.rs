@@ -581,6 +581,14 @@ impl HostBehavior {
             HostBehavior::L27MbcmQingzheng => 654,
             HostBehavior::L10ScsCompanion => 574,
             HostBehavior::Rechanyuan => 575,
+            HostBehavior::L11TrickCard => 720,
+            HostBehavior::L11EquipCards => 721,
+            HostBehavior::L11Daiyuan => 722,
+            HostBehavior::L11ServantSkills => 723,
+            HostBehavior::L11GeneralSkillsA => 724,
+            HostBehavior::L11GeneralSkillsB => 725,
+            HostBehavior::L11GeneralSkillsC => 726,
+            HostBehavior::L11SubStates => 727,
         }
     }
 

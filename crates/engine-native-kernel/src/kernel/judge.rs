@@ -1035,6 +1035,9 @@ impl JudgePhaseMachine {
                     ctx.to_discard(trick);
                 } else {
                     ctx.core.player_mut(next).judge.push(trick);
+                    if next != owner {
+                        crate::kernel::trigger_qiaoqiao_add_judge(ctx, next);
+                    }
                 }
                 if !machine_holds {
                     ctx.to_discard(judge_card);

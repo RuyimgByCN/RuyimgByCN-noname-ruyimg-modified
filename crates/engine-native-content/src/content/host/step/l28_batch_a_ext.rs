@@ -49,6 +49,20 @@ pub(crate) fn on_skill_removed_l28(
             super::super::l28_batch_b::clear_tiansuan_lots_core(core, catalog, owner);
             Vec::new()
         }
+        "txzhaoshu_skill" => {
+            let mut out = core
+                .vm_aux
+                .piles
+                .remove(&(owner, "txzhaoshu_skill".to_string()))
+                .unwrap_or_default();
+            out.extend(
+                core.vm_aux
+                    .piles
+                    .remove(&(owner, "txzhaoshu_cards".to_string()))
+                    .unwrap_or_default(),
+            );
+            out
+        }
         _ => Vec::new(),
     }
 }

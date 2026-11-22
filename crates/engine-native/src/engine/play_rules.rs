@@ -532,9 +532,25 @@ pub(super) fn check_play_target_restrictions(
         ) {
             return Err(RejectReason::CardLimit);
         }
-        for &t in targets {
+        let is_txhj_jiedao = kind == CardKind::Duel
+            && kind == catalog.card_kind(card)
+            && catalog
+                .cards
+                .get(card as usize)
+                .is_some_and(|cd| cd.name == "txhj_jiedao");
+        for (idx, &t) in targets.iter().enumerate() {
+            let eff_k = if is_txhj_jiedao && idx == 1 {
+                CardKind::Sha
+            } else {
+                kind
+            };
+            let eff_nat = if is_txhj_jiedao && idx == 1 {
+                crate::event::DamageNature::Normal
+            } else {
+                nature
+            };
             if crate::rvm_bridge::modifiers::eval_card_target_canceled(
-                core, catalog, user, t, card, kind, nature,
+                core, catalog, user, t, card, eff_k, eff_nat,
             ) {
                 return Err(RejectReason::IllegalTargets);
             }

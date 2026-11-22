@@ -345,6 +345,131 @@ pub fn classify_l11_npc_skill_trigger(
 }
 
 
+/// Sub-skills introduced dynamically by L11 Batch 1 (`txhj_noda_axe2`, `txhj_feilong_skill_blank`, `txshixin_red`, etc.).
+pub const L11_TAIXU_B1_AUX_SUBSKILLS: [&str; 10] = [
+    "txhj_noda_axe",
+    "txhj_noda_axe2",
+    "txhj_piliche2",
+    "txhj_juechenjinge2",
+    "txhj_feilong_skill",
+    "txhj_feilong_skill_blank",
+    "txhj_chongyingshenfu_effect",
+    "txminguangkai_cancel",
+    "txminguangkai_link",
+    "txshixin_red",
+];
+
+/// Look up native `HostBehavior` for L11 Batch 1 (14 trick/zhaoshu cards, 18+ equip/companion skills, and S01-S71).
+pub fn lookup_l11_b1_host_behavior(
+    clean: &str,
+) -> Option<engine_native::content::host::HostBehavior> {
+    use engine_native::content::host::HostBehavior;
+    match clean {
+        "txzhaoshu_skill" | "txzhaoshu_global" => Some(HostBehavior::L11TrickCard),
+        "txhj_xingtianpojunfu"
+        | "txhj_noda_axe"
+        | "txhj_noda_axe2"
+        | "txhj_zhuge"
+        | "txhj_qilingong"
+        | "qilin_skill"
+        | "txhj_fangtianhuaji"
+        | "txhj_xuwangzhimian"
+        | "txhj_piliche"
+        | "txhj_piliche2"
+        | "txhj_liulongcanjia"
+        | "txhj_leijimu"
+        | "txhj_juechenjinge"
+        | "txhj_juechenjinge2"
+        | "txhj_guofengyupao"
+        | "txhj_feilong"
+        | "txhj_feilong_skill"
+        | "txhj_feilong_skill_blank"
+        | "txhj_dinglanyemingzhu"
+        | "txhj_chiyanzhenhunqin"
+        | "txhj_lingbaoxianhu"
+        | "txhj_chongyingshenfu"
+        | "txhj_chongyingshenfu_effect"
+        | "txminguangkai"
+        | "txminguangkai_cancel"
+        | "txminguangkai_link"
+        | "txhj_taijifuchen"
+        | "gx_taijifuchen"
+        | "txhj_baihu" => Some(HostBehavior::L11EquipCards),
+        "txhj_daiyuan" | "txhj_daiyuan2" | "txhj_daiyuanA" | "txhj_daiyuanB" => {
+            Some(HostBehavior::L11Daiyuan)
+        }
+        "txhj_yayaSkill2_protected" => Some(HostBehavior::L11SubStates),
+        "txhj_ruiSkill1"
+        | "txhj_dundunSkill2"
+        | "txhj_jiuweiSkill1"
+        | "txhj_jiuweiSkill1_disable"
+        | "txhj_jiuweiSkill2"
+        | "txhj_jiuweiSkill3"
+        | "txhj_tengsheSkill1"
+        | "txhj_tengsheSkill2"
+        | "txhj_tengsheSkill3"
+        | "txhj_yayaSkill1"
+        | "txhj_yayaSkill2"
+        | "txhj_youyouSkill1"
+        | "txhj_youyouSkill2"
+        | "txhj_qilinSkill1"
+        | "txhj_qilinSkill2"
+        | "txhj_qilinSkill3"
+        | "txhj_minminSkill1"
+        | "txhj_minminSkill2"
+        | "txhj_ditingSkill1"
+        | "txhj_ditingSkill2"
+        | "txhj_ditingSkill3"
+        | "txhj_qiaoqiaoSkill1"
+        | "txhj_qiaoqiaoSkill2" => Some(HostBehavior::L11ServantSkills),
+        "tx_mojian"
+        | "tx_yushou"
+        | "tx_moyany"
+        | "tx_danshu"
+        | "txyirang"
+        | "txayboji"
+        | "txayhanji"
+        | "tx_dqtianzi"
+        | "xinmingjian"
+        | "xinmingjian2"
+        | "txmazhan"
+        | "txlieji"
+        | "diycuidu"
+        | "diychunxiao"
+        | "diyzhongdu" => Some(HostBehavior::L11GeneralSkillsA),
+        "diyzhuiling"
+        | "diyfeihua"
+        | "txclanxieshu"
+        | "txshixin"
+        | "txshixin_red"
+        | "txmouduan"
+        | "txkaikang"
+        | "txhuangfu"
+        | "txleizhen"
+        | "txxiebi"
+        | "txlianbi"
+        | "txfeiyan"
+        | "txleili"
+        | "cxyMoJun"
+        | "cxyKuangXi"
+        | "txbaobian" => Some(HostBehavior::L11GeneralSkillsB),
+        "cxy_BaoYing"
+        | "cxyYangWu"
+        | "cxyJingQi"
+        | "cxyRuiQi"
+        | "cxyJiaoXia"
+        | "cxyTunJun"
+        | "cxyFengYing"
+        | "cxyFanGong"
+        | "cxyJieLve"
+        | "cxyMoQu"
+        | "cxyYaoWu"
+        | "cxyYingHun"
+        | "cxyPoLu" => Some(HostBehavior::L11GeneralSkillsC),
+        _ => None,
+    }
+}
+
 /// Map each of the 423 `L11` authentic Taixu skills/buffs/shop items to its authentic trigger.
 pub fn classify_l11_taixu_skill_trigger(
     name: &str,

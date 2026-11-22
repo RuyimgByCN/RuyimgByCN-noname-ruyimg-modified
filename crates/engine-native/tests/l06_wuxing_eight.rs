@@ -1502,7 +1502,7 @@ fn l06_wuxingpan_init_shengke_wuxie_order_and_direct_equip_guard() {
 /// 1. `CardKind::Tianfuzhen` / `CardKind::Niaoxiangzhen`（均由 `wrap_nullify_window` 包裹，且带显式 `u.targets`）
 ///    必须先问 `_wuxie` 再按未抵消结果仅触发 1 次 `_shengke`；
 /// 2. `use_as = Some(CardKind::Wuzhong)` 从非无中物理牌转化使用时，仍走无懈窗口并遵循先无懈后生克；
-/// 3. 不包无懈的自定义 `Wuzhong`/`Jiguan`（如 `txhj_zhijizhibi`、`lingjiandai`）空 `targets` 时对使用者触发 1 次 `_shengke`。
+/// 3. 不包无懈的自定义 Wuzhong/Jiguan（如 `mtg_cangbaohaiwan`、`lingjiandai`）空 `targets` 时对使用者触发 1 次 `_shengke`。
 #[test]
 fn l06_shengke_zhenfa_and_view_as_wuzhong_nullify_order() {
     let pack = wuxing_pack();
@@ -1638,7 +1638,7 @@ skill test_va_wuzhong(99060099) {
             },
             generals: Vec::new(),
             cards: vec![
-                engine_native::catalog::CardDef::basic("txhj_zhijizhibi", engine_native::CardKind::Wuzhong),
+                engine_native::catalog::CardDef::basic("mtg_cangbaohaiwan", engine_native::CardKind::Wuzhong),
                 engine_native::catalog::CardDef::basic("lingjiandai", engine_native::CardKind::Jiguan),
             ],
             host_skills: Vec::new(),
@@ -1683,7 +1683,7 @@ skill test_va_wuzhong(99060099) {
             }
         }
 
-        // 3. 不包无懈的自定义 Wuzhong (txhj_zhijizhibi) / Jiguan (lingjiandai) 触发 1 次 _shengke
+        // 3. 不包无懈的自定义 Wuzhong (mtg_cangbaohaiwan) / Jiguan (lingjiandai) 触发 1 次 _shengke
         {
             let mut e = Engine::new_with_extensions(6460, 3, &packs).expect("建局");
             for p in 0..3 {
@@ -1696,7 +1696,7 @@ skill test_va_wuzhong(99060099) {
             }
             e.state_core_mut().card_natures.clear();
             e.state_core_mut().players[0].wunature = Some(4); // 土
-            let zz = e.debug_move_named_card_to_hand(0, "txhj_zhijizhibi");
+            let zz = e.debug_move_named_card_to_hand(0, "mtg_cangbaohaiwan");
             e.state_core_mut().card_natures.insert(zz, 3); // 火生土
             submit(&mut e, 0, GameAction::PlayCard { card: zz, targets: vec![] });
             drain_choices(&mut e);

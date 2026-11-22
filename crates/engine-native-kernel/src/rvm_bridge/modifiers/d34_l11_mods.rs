@@ -22,6 +22,63 @@ fn has_armor(state: &GameStateCore, catalog: &Catalog, seat: PlayerId) -> bool {
         .any(|&cid| catalog.card_slot_of(state, cid) == Some(EquipSlot::Armor))
 }
 
+fn has_equipped_named(state: &GameStateCore, catalog: &Catalog, seat: PlayerId, name: &str) -> bool {
+    state
+        .player(seat)
+        .equips
+        .iter()
+        .any(|&cid| catalog.cards.get(cid as usize).is_some_and(|cd| cd.name == name))
+}
+
+fn is_ordinary_trick_kind(kind: CardKind) -> bool {
+    !kind.is_basic_kind()
+        && kind.equip_slot().is_none()
+        && !matches!(
+            kind,
+            CardKind::Le
+                | CardKind::Bing
+                | CardKind::ShanDian
+                | CardKind::HongShui
+                | CardKind::Guiyoujie
+        )
+}
+
+pub fn txminguangkai_blocks_link(state: &GameStateCore, catalog: &Catalog, player: PlayerId) -> bool {
+    !state.player(player).linked
+        && state.player(player).hp < state.player(player).max_hp as i32
+        && !super::is_target_unequip2(state, player)
+        && (has_equipped_named(state, catalog, player, "txminguangkai")
+            || has_ext_skill(state, catalog, player, "txminguangkai")
+            || has_ext_skill(state, catalog, player, "txminguangkai_link"))
+}
+
+pub fn txlianbi_blocks_unlink(state: &GameStateCore, catalog: &Catalog, player: PlayerId) -> bool {
+    state.player(player).linked && has_ext_skill(state, catalog, player, "txlianbi")
+}
+
+pub fn has_yaya_protected(state: &GameStateCore, catalog: &Catalog, player: PlayerId) -> bool {
+    flag_val(state, player, "l11_yaya_protected") > 0
+        || has_ext_skill(state, catalog, player, "txhj_yayaSkill2_protected")
+}
+
+pub fn is_card_ignored_in_discard_phase(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    player: PlayerId,
+    card: CardId,
+) -> bool {
+    let is_black = matches!(
+        catalog.effective_card_suit(state, player, card),
+        Suit::Spade | Suit::Club
+    );
+    is_black
+        && state.alive_players().any(|h| {
+            state.is_friend_of(catalog, player, h)
+                && (has_ext_skill(state, catalog, h, "cxyJiaoXia")
+                    || flag_val(state, h, "l11_mod:cxyJiaoXia") > 0)
+        })
+}
+
 pub(super) fn is_card_ignored_hand_limit(
     state: &GameStateCore,
     catalog: &Catalog,
@@ -29,6 +86,9 @@ pub(super) fn is_card_ignored_hand_limit(
     card: CardId,
     kind: CardKind,
 ) -> bool {
+    if is_card_ignored_in_discard_phase(state, catalog, player, card) {
+        return true;
+    }
     // `tw/skill.js:16171` (`twyuhua`: non-basic cards ignored for hand limit)
     if !kind.is_basic_kind()
         && (flag_val(state, player, "l11_mod:twyuhua") > 0
@@ -268,15 +328,54 @@ pub(super) fn apply_distance_total(
     dist -= flag_val(state, from, "qimou_x")
         .max(flag_val(state, from, "reqimou_x")) as i32;
     // extension_card.js:501, 642, 1263 (`txhj_liulongcanjia`, `txhj_juechenjinge`, `txhj_baihu`)
-    if flag_val(state, from, "l11_mount_active:txhj_liulongcanjia") > 0
-        || flag_val(state, from, "l11_mount_active:txhj_baihu") > 0
+    // `core_ops.rs` already adds +1 to `to` for every physical `CardKind::HorsePlus`.
+    let has_liulong_from = has_equipped_named(state, catalog, from, "txhj_liulongcanjia");
+    if has_liulong_from
+        || has_ext_skill(state, catalog, from, "txhj_liulongcanjia")
+        || flag_val(state, from, "l11_mount_active:txhj_liulongcanjia") > 0
     {
         dist -= 1;
     }
-    if flag_val(state, to, "l11_mount_active:txhj_liulongcanjia") > 0
-        || flag_val(state, to, "l11_mount_active:txhj_juechenjinge") > 0
+    if !has_equipped_named(state, catalog, to, "txhj_liulongcanjia")
+        && (has_ext_skill(state, catalog, to, "txhj_liulongcanjia")
+            || flag_val(state, to, "l11_mount_active:txhj_liulongcanjia") > 0)
     {
         dist += 1;
+    }
+    // `txhj_baihu` (`extension_card.js:1263`): globalTo +2 (NOT globalFrom -1)
+    if has_equipped_named(state, catalog, to, "txhj_baihu") {
+        dist += 1;
+    } else if has_ext_skill(state, catalog, to, "txhj_baihu")
+        || flag_val(state, to, "l11_mount_active:txhj_baihu") > 0
+    {
+        dist += 2;
+    }
+    // `txhj_juechenjinge` (`extension_card.js:642`): self globalTo +2; other alive friends +1
+    if has_equipped_named(state, catalog, to, "txhj_juechenjinge") {
+        dist += 1;
+    } else if has_ext_skill(state, catalog, to, "txhj_juechenjinge")
+        || flag_val(state, to, "l11_mount_active:txhj_juechenjinge") > 0
+    {
+        dist += 2;
+    }
+    for h in state.alive_players() {
+        if h != to
+            && state.is_friend_of(catalog, to, h)
+            && (has_equipped_named(state, catalog, h, "txhj_juechenjinge")
+                || has_ext_skill(state, catalog, h, "txhj_juechenjinge")
+                || has_ext_skill(state, catalog, h, "txhj_juechenjinge2")
+                || flag_val(state, h, "l11_mount_active:txhj_juechenjinge") > 0)
+        {
+            dist += 1;
+        }
+    }
+    // `cxyJingQi` (`extension.js:4082`): alive owner gives allies globalFrom -1
+    if state.alive_players().any(|h| {
+        state.is_friend_of(catalog, from, h)
+            && (has_ext_skill(state, catalog, h, "cxyJingQi")
+                || flag_val(state, h, "l11_mod:cxyJingQi") > 0)
+    }) {
+        dist -= 1;
     }
     d34_l25_mods::apply_distance_total(state, catalog, from, to, dist)
 }
@@ -453,11 +552,18 @@ pub(super) fn apply_card_target_canceled(
     catalog: &Catalog,
     actor: PlayerId,
     target: PlayerId,
+    card: Option<CardId>,
     kind: CardKind,
     mut canceled: bool,
 ) -> bool {
     let is_trick = !kind.is_basic_kind() && kind.equip_slot().is_none();
-    // extension.js:3593 (`txshixin`: immune to others' tricks/delayed tricks)
+    // `extension_card.js:1737` (`txhj_liulongcanjia`): cannot target/equip other mounts while equipped
+    if matches!(kind, CardKind::HorsePlus | CardKind::HorseMinus)
+        && has_equipped_named(state, catalog, target, "txhj_liulongcanjia")
+    {
+        canceled = true;
+    }
+    // extension.js:3593 (`txshixin` legacy flag only; real txshixin runs on CardUsed)
     // extension_card.js:821 (`txhj_guofengyupao`, `guofengyupao`) & extension_buff.js:1212 (`txhj_ruiSkill3`, `txhj_yanSkill1`, `txhj_xuanwuSkill3`)
     if actor != target
         && is_trick
@@ -466,10 +572,43 @@ pub(super) fn apply_card_target_canceled(
             || flag_val(state, target, "l11_armor_guard:guofengyupao") > 0
             || flag_val(state, target, "l11_trick_guard:txhj_ruiSkill3") > 0
             || flag_val(state, target, "l11_trick_guard:txhj_yanSkill1") > 0
-            || flag_val(state, target, "l11_trick_guard:txhj_xuanwuSkill3") > 0
-            || has_ext_skill(state, catalog, target, "txshixin"))
+            || flag_val(state, target, "l11_trick_guard:txhj_xuanwuSkill3") > 0)
     {
         canceled = true;
+    }
+    if actor != target
+        && is_ordinary_trick_kind(kind)
+        && (has_equipped_named(state, catalog, target, "txhj_guofengyupao")
+            || has_ext_skill(state, catalog, target, "txhj_guofengyupao"))
+        && !super::is_target_unequip2(state, target)
+        && !super::super::d34_l28_mods::source_ignores_armor(
+            state,
+            catalog,
+            actor,
+            target,
+            card,
+            Some(kind),
+            DamageNature::Normal,
+        )
+    {
+        canceled = true;
+    }
+    // `cxyFengYing` (`extension.js:4173`): ally `target` with strictly unique lowest HP cannot be targeted by an enemy
+    if actor != target && !state.is_friend_of(catalog, actor, target) {
+        let target_hp = state.player(target).hp;
+        let target_unique_min = state.player(target).alive
+            && state
+                .alive_players()
+                .all(|p| p == target || state.player(p).hp > target_hp);
+        if target_unique_min
+            && state.alive_players().any(|h| {
+                state.is_friend_of(catalog, target, h)
+                    && (has_ext_skill(state, catalog, h, "cxyFengYing")
+                        || flag_val(state, h, "l11_mod:cxyFengYing") > 0)
+            })
+        {
+            canceled = true;
+        }
     }
     // `sp2.js:9417` (`bmcanshi`: cancel card from `傀`-marked actor)
     if actor != target
@@ -790,12 +929,9 @@ pub(super) fn apply_damage_amount(
     if flag_val(state, target, "l11_mod:jieyuan_less") > 0 {
         cur = (cur - 1).max(0);
     }
-    // extension.js:3760 (`txxiebi`: damage > 1 -> -1)
-    if cur > 1
-        && (flag_val(state, target, "l11_mod:txxiebi") > 0
-            || has_ext_skill(state, catalog, target, "txxiebi"))
-    {
-        cur -= 1;
+    // extension.js:3760 (`txxiebi`: damage > 1 -> clamp to 1; real `txxiebi` runs at DamageBegin4)
+    if cur > 1 && flag_val(state, target, "l11_mod:txxiebi") > 0 {
+        cur = 1;
     }
     // extension_buff.js:288, 299, 651 (`xihuozhikai`, `dingleizhikai`, `cebeibuyu` with armor)
     if has_armor(state, catalog, target) {

@@ -46,6 +46,45 @@ pub(in crate::kernel) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: Playe
                 .vm_aux
                 .flags
                 .remove(&(seat, "rekuanshi_turn_dmg".to_string()));
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(seat, "l11_noda_axe2_turn".to_string()));
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(seat, "l11_phase_sha_count".to_string()));
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(seat, "l11_turn_used_suits_mask".to_string()));
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(seat, "l11_turn_used_ranks_mask".to_string()));
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(seat, "l11_turn_used_types_mask".to_string()));
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(seat, "l11_jiuwei1_holder".to_string()));
+            ctx.core
+                .vm_aux
+                .flags
+                .retain(|(s, k), _| !(*s == seat && k.starts_with("l11_jiuwei2_ts:")));
+            for tmp_sk in [
+                "txhj_noda_axe2",
+                "txhj_daiyuanA",
+                "txhj_daiyuanB",
+                "txshixin_red",
+                "txhj_jiuweiSkill1_disable",
+            ] {
+                if let Some(def) = ctx.catalog.skill_by_name(tmp_sk) {
+                    ctx.core.skills.remove(&(seat, def));
+                }
+            }
         }
         // K52：往事封禁清零（十殿阎罗孟婆）。
         for p in ctx.core.players.iter_mut() {

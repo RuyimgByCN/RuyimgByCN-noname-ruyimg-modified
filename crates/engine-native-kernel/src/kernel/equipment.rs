@@ -41,6 +41,19 @@ pub fn revoke_equip_skills(
             .any(|c| catalog.cards[*c as usize].equip_skills.contains(&name));
         if !still_provided {
             core.skills.remove(&(player, def));
+            if name == "txhj_chongyingshenfu"
+                || catalog
+                    .cards
+                    .get(card as usize)
+                    .is_some_and(|cd| cd.name == "txhj_chongyingshenfu")
+            {
+                if let Some(eff_def) = catalog.skill_by_name("txhj_chongyingshenfu_effect") {
+                    core.skills.remove(&(player, eff_def));
+                }
+                core.vm_aux
+                    .flags
+                    .retain(|(p, k), _| !(*p == player && k.starts_with("l11_chongying_rec:")));
+            }
             if name == "baiyin"
                 && crate::rvm_bridge::modifiers::d34_l28_mods::has_rewritten_baiyin_on_lose(
                     core, catalog, player, card,
@@ -102,6 +115,12 @@ pub(super) fn commit_equip(
         .flags
         .remove(&(player, format!("dddanzhi_equip_use:{frame_id}")))
         .is_some();
+    let l11_played = ctx
+        .core
+        .vm_aux
+        .flags
+        .remove(&(player, format!("l11_equip_use:{frame_id}")))
+        .is_some();
     if played && consume_dddanzhi_ward(ctx, player, card) {
         ctx.core
             .vm_aux
@@ -122,15 +141,58 @@ pub(super) fn commit_equip(
     {
         super::record_turn_use_resp(ctx, player);
     }
-    // 同**栏位**替换（改造后同栏位不同牌种亦替换）
-    let replaced = ctx
+    if played || l11_played {
+        let eff_kind = ctx.catalog.card_kind(card);
+        let suit = ctx.catalog.effective_card_suit(ctx.core, player, card);
+        super::events::record_l11_turn_card_used(
+            ctx.core,
+            ctx.catalog,
+            player,
+            Some(card),
+            Some(suit),
+            eff_kind,
+        );
+    }
+    // 同**栏位**替换（改造后同栏位不同牌种亦替换）；六龙骖驾占双坐骑栏（customSwap: equip3|equip4|equip6）
+    let is_liulong = ctx
+        .catalog
+        .cards
+        .get(card as usize)
+        .is_some_and(|cd| cd.name == "txhj_liulongcanjia");
+    let is_mount = matches!(
+        slot,
+        crate::catalog::EquipSlot::HorsePlus | crate::catalog::EquipSlot::HorseMinus
+    );
+    let to_replace: Vec<crate::ids::CardId> = ctx
         .core
         .player(player)
         .equips
         .iter()
         .copied()
-        .find(|c| ctx.catalog.card_slot_of(ctx.core, *c) == Some(slot));
-    if let Some(old) = replaced {
+        .filter(|&c| {
+            let c_slot = ctx.catalog.card_slot_of(ctx.core, c);
+            if is_liulong {
+                matches!(
+                    c_slot,
+                    Some(
+                        crate::catalog::EquipSlot::HorsePlus
+                            | crate::catalog::EquipSlot::HorseMinus
+                    )
+                )
+            } else if is_mount {
+                c_slot == Some(slot)
+                    || ctx
+                        .catalog
+                        .cards
+                        .get(c as usize)
+                        .is_some_and(|cd| cd.name == "txhj_liulongcanjia")
+            } else {
+                c_slot == Some(slot)
+            }
+        })
+        .collect();
+    let replaced = to_replace.first().copied();
+    for old in to_replace {
         ctx.core.player_mut(player).equips.retain(|c| *c != old);
         revoke_equip_skills(ctx.core, ctx.catalog, player, old);
         ctx.note_cards_lost(player, &[old]);

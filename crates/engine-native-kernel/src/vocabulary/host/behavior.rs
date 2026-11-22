@@ -1677,4 +1677,20 @@ pub enum HostBehavior {
     L10ScsCompanion,
     /// L10 史诗卡牌缠怨负效应（tag 575：reguhuo 被真质疑后获此 locked charlotte 技，hp<=1 失效非 charlotte 技）。
     Rechanyuan,
+    /// L11 太虚幻境 锦囊牌固有结算机器（tag 720：知己知彼/远交/以逸/借刀/火烧/调虎/草木/望梅/声东/水淹/酒池肉林/火攻/诏书）。
+    L11TrickCard,
+    /// L11 太虚幻境 装备牌与诏书技能（tag 721：刑天破军斧/诸葛/麒麟弓/方天画戟/虚妄之冕/霹雳车/六龙骖驾/雷击木/绝尘金戈/国风玉袍/飞龙/定澜夜明珠/赤焰镇魂琴/灵宝仙葫/冲应神符/明光铠/太极拂尘/白虎/诏书）。
+    L11EquipCards,
+    /// L11 太虚幻境 代援家族（tag 722：`txhj_daiyuan` / `txhj_daiyuan2` / `txhj_daiyuanA` / `txhj_daiyuanB`）。
+    L11Daiyuan,
+    /// L11 太虚幻境 侍从实战技 S05–S28（tag 723：`txhj_ruiSkill1`..`txhj_qiaoqiaoSkill2` 共 24 技能）。
+    L11ServantSkills,
+    /// L11 太虚幻境 武将技 Group A S29–S45（tag 724：`tx_mojian`..`diyfeihua` 共 17 技能）。
+    L11GeneralSkillsA,
+    /// L11 太虚幻境 武将技 Group B S46–S58（tag 725：`txclanxieshu`..`txbaobian` 共 13 技能）。
+    L11GeneralSkillsB,
+    /// L11 太虚幻境 武将技 Group C S59–S71（tag 726：`cxy_BaoYing`..`cxyPoLu` 共 13 技能）。
+    L11GeneralSkillsC,
+    /// L11 太虚幻境 运行时派生子技与状态光环（tag 727：`txhj_noda_axe2` / `txhj_feilong_skill_blank` / `cxyJingQi_buff` 等）。
+    L11SubStates,
 }

@@ -162,10 +162,31 @@ impl Engine {
                 .collect();
             'cards: for card in hand {
                 let mut combos: Vec<Vec<crate::ids::PlayerId>> = vec![Vec::new()];
+                let cname = self
+                    .catalog()
+                    .cards
+                    .get(card as usize)
+                    .map(|c| c.name)
+                    .unwrap_or("");
+                if matches!(cname, "huogong" | "txhj_yiyi" | "txzhaoshu_skill" | "txzhaoshu_global") {
+                    combos.push(vec![seat]);
+                }
                 for t in others.iter().take(MAX_TARGET_COMBOS) {
                     combos.push(vec![*t]);
                 }
-                if others.len() >= 2 {
+                if matches!(cname, "txhj_jiedao" | "txhj_shengdong") {
+                    let all_alive: Vec<crate::ids::PlayerId> = self
+                        .state_core()
+                        .alive_players()
+                        .collect();
+                    for &t1 in others.iter().take(MAX_TARGET_COMBOS) {
+                        for &t2 in all_alive.iter().take(MAX_TARGET_COMBOS) {
+                            if t2 != t1 {
+                                combos.push(vec![t1, t2]);
+                            }
+                        }
+                    }
+                } else if others.len() >= 2 {
                     combos.push(vec![others[0], others[1]]);
                 }
                 for targets in combos {
@@ -295,12 +316,32 @@ fn certainly_illegal(engine: &Engine, seat: crate::ids::PlayerId, action: &GameA
                 return true;
             }
             use crate::catalog::CardKind;
+            let cname = catalog.cards.get(*card as usize).map(|c| c.name).unwrap_or("");
             match kind {
                 CardKind::Shan
                 | CardKind::Nullify
                 | CardKind::Youdishenru
                 | CardKind::Jinlianzhu
                 | CardKind::Shenmiguo => true,
+                CardKind::Wuzhong if matches!(
+                    cname,
+                    "txhj_zhijizhibi"
+                        | "txhj_yuanjiao"
+                        | "txhj_yiyi"
+                        | "txhj_diaohu"
+                        | "txhj_shengdong"
+                        | "huogong"
+                        | "txzhaoshu_skill"
+                        | "txzhaoshu_global"
+                ) && kind == catalog.card_kind(*card) => false,
+                CardKind::Duel if cname == "txhj_jiedao" && kind == catalog.card_kind(*card) => {
+                    targets.len() != 2 || targets[0] == seat || targets[0] == targets[1]
+                }
+                CardKind::ArcheryAttack
+                    if cname == "txhj_huoshaolianying" && kind == catalog.card_kind(*card) =>
+                {
+                    targets.len() > 1
+                }
                 CardKind::Wuzhong
                 | CardKind::Wugu
                 | CardKind::Taoyuan

@@ -56,6 +56,14 @@ impl crate::catalog::SkillMachine for DiscardToLimitMachine {
                     {
                         return false;
                     }
+                    if crate::rvm_bridge::modifiers::is_card_ignored_in_discard_phase(
+                        ctx.core,
+                        ctx.catalog,
+                        self.player,
+                        *c,
+                    ) {
+                        return false;
+                    }
                     !shamolvzhou
                         || crate::vocabulary::card_skills::yangpijuan_class(
                             ctx.catalog.card_kind(*c),

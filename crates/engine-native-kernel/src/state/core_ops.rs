@@ -772,6 +772,11 @@ impl GameStateCore {
         if a == b {
             return true;
         }
+        if let GameMode::Versus { teams, .. } = &self.mode {
+            if teams.len() >= 2 && teams.iter().any(|t| t.contains(&a) || t.contains(&b)) {
+                return teams.iter().any(|t| t.contains(&a) && t.contains(&b));
+            }
+        }
         if matches!(self.mode, GameMode::Kingdoms) {
             if self.kingdom_friends(a, b) {
                 return true;

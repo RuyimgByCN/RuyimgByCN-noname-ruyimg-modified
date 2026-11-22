@@ -87,6 +87,23 @@ impl HostSkillBehavior {
             HostBehavior::L10ScsCompanion => {
                 return super::step::l10_scs::machine_l10_scs(self, owner, event);
             }
+            HostBehavior::L11EquipCards => {
+                return super::step::l11_equips::machine_l11_equips(self, owner, event);
+            }
+            HostBehavior::L11Daiyuan
+            | HostBehavior::L11ServantSkills
+            | HostBehavior::L11SubStates => {
+                return super::step::l11_servants::machine_l11_servants(self, owner, event);
+            }
+            HostBehavior::L11GeneralSkillsA => {
+                return super::step::l11_skills_a::machine_l11_skills_a(self, owner, event);
+            }
+            HostBehavior::L11GeneralSkillsB => {
+                return super::step::l11_skills_b::machine_l11_skills_b(self, owner, event);
+            }
+            HostBehavior::L11GeneralSkillsC => {
+                return super::step::l11_skills_c::machine_l11_skills_c(self, owner, event);
+            }
             _ => {}
         }
         let (target, card) = match self.behavior {

@@ -74,6 +74,8 @@ pub struct ContentHooks {
     pub r05_role_defs: fn(&Catalog, &'static str) -> Vec<crate::ids::SkillDefId>,
     /// 出牌阶段开始时钩子（phaseUseBegin 对应宿主时点，例如 `th_tianshu`）。
     pub play_begin_step: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId),
+    /// 出牌阶段结束时钩子（phaseUseEnd 对应宿主时点，压于下一阶段帧之后先于弃牌执行）。
+    pub play_end_step: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId),
     /// 外层事件结算完毕回调（对应 upstream `.after` 钩子，例如 `th_taipingyaoshu`）。
     pub on_outer_settled: fn(&mut crate::machine::Ctx<'_>),
     /// 他人卡牌进入弃牌堆回调（例如 `th_chengye` `useCardAfter`/`loseAfter`/`phaseJudge`）。
@@ -193,6 +195,7 @@ impl ContentHooks {
         borrowed_owner: |_, _, _| None,
         r05_role_defs: |_, _| Vec::new(),
         play_begin_step: |_, _| {},
+        play_end_step: |_, _| {},
         on_outer_settled: |_| {},
         on_cards_to_discard: |_, _, _, _| {},
         on_skill_removed: |_, _, _, _| Vec::new(),

@@ -604,6 +604,14 @@ impl HostBehavior {
             HostBehavior::L27MbcmQingzheng => "host:l27_mbcmqingzheng",
             HostBehavior::L10ScsCompanion => "host:l10_scs_companion",
             HostBehavior::Rechanyuan => "host:rechanyuan",
+            HostBehavior::L11TrickCard => "host:l11_trick_card",
+            HostBehavior::L11EquipCards => "host:l11_equip_cards",
+            HostBehavior::L11Daiyuan => "host:l11_daiyuan",
+            HostBehavior::L11ServantSkills => "host:l11_servant_skills",
+            HostBehavior::L11GeneralSkillsA => "host:l11_general_skills_a",
+            HostBehavior::L11GeneralSkillsB => "host:l11_general_skills_b",
+            HostBehavior::L11GeneralSkillsC => "host:l11_general_skills_c",
+            HostBehavior::L11SubStates => "host:l11_sub_states",
         }
     }
 }

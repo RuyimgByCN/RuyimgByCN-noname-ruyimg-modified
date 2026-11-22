@@ -118,11 +118,18 @@ impl crate::catalog::SkillMachine for DamageFlow {
                     if ctx.core.player(target).alive && ctx.core.player(target).linked {
                         // 上游「先解链、后传导」：铁索传导的目标在吃传导伤害前先解除横置并记
                         // Linked 事件；随后伤害提交时它已非横置，不会再记一次（规则 v331 对齐）。
-                        ctx.core.player_mut(target).linked = false;
-                        ctx.log(LogEvent::Linked {
-                            player: target,
-                            linked: false,
-                        });
+                        // 若目标持有「连璧」，不能被重置。
+                        if !crate::rvm_bridge::modifiers::txlianbi_blocks_unlink(
+                            ctx.core,
+                            ctx.catalog,
+                            target,
+                        ) {
+                            ctx.core.player_mut(target).linked = false;
+                            ctx.log(LogEvent::Linked {
+                                player: target,
+                                linked: false,
+                            });
+                        }
                         let mut chained =
                             damage_data_with(d.source, target, d.amount, d.nature, d.card);
                         chained.from_chain = true;

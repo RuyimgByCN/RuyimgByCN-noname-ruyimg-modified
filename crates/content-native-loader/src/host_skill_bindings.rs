@@ -12,6 +12,9 @@ pub fn lookup_upstream_host_behavior(skill_name: &str) -> Option<HostBehavior> {
         .rsplit_once("__ref_")
         .map(|(_, s)| s)
         .unwrap_or(skill_name);
+    if let Some(b) = super::taixu_skills_data::lookup_l11_b1_host_behavior(clean) {
+        return Some(b);
+    }
     match clean {
         "anlianying" => Some(HostBehavior::SwdAnlianying),
         "anwugu" => Some(HostBehavior::XianjianAnwugu),

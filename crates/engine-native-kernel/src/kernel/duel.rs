@@ -183,18 +183,7 @@ impl crate::catalog::SkillMachine for DuelMachine {
                     || !ctx.core.player(responder).alive
                 {
                     // 轮到方无杀：不询问，直接受伤，决斗结束
-                    let vm_card_bonus = ctx
-                        .core
-                        .vm_aux
-                        .flags
-                        .get(&(self.source, format!("card_damage_bonus:{}", self.card)))
-                        .copied()
-                        .unwrap_or(0);
-                    ctx.emit(EventData::Damage(damage_data(
-                        Some(opponent),
-                        responder,
-                        (1 + luoyi_bonus(ctx, Some(opponent)) + vm_card_bonus) as i32,
-                    )));
+                    self.emit_duel_damage(ctx, opponent, responder);
                     return self.finish(ctx);
                 }
                 self.asked = true;
@@ -347,24 +336,31 @@ impl crate::catalog::SkillMachine for DuelMachine {
             }
             // 放弃 → 受伤，决斗结束（重置无双标记）
             self.second_pending = false;
-            let vm_card_bonus = ctx
-                .core
-                .vm_aux
-                .flags
-                .get(&(self.source, format!("card_damage_bonus:{}", self.card)))
-                .copied()
-                .unwrap_or(0);
-            ctx.emit(EventData::Damage(damage_data(
-                Some(opponent),
-                responder,
-                (1 + luoyi_bonus(ctx, Some(opponent)) + vm_card_bonus) as i32,
-            )));
+            self.emit_duel_damage(ctx, opponent, responder);
             return self.finish(ctx);
         }
     }
 }
 
 impl DuelMachine {
+    fn emit_duel_damage(&self, ctx: &mut Ctx<'_>, opponent: PlayerId, responder: PlayerId) {
+        let vm_card_bonus = ctx
+            .core
+            .vm_aux
+            .flags
+            .get(&(self.source, format!("card_damage_bonus:{}", self.card)))
+            .copied()
+            .unwrap_or(0);
+        let dcard = (self.card != 0).then_some(self.card);
+        ctx.emit(EventData::Damage(damage_data_with(
+            Some(opponent),
+            responder,
+            (1 + luoyi_bonus(ctx, Some(opponent)) + vm_card_bonus) as i32,
+            crate::event::DamageNature::Normal,
+            dcard,
+        )));
+    }
+
     fn finish(&self, ctx: &mut Ctx<'_>) -> Flow {
         let card = self.card;
         ctx.core

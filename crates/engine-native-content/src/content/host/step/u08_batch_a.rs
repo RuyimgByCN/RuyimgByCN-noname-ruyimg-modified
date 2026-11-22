@@ -848,12 +848,13 @@ pub(in crate::content::host) fn handle_u08_batch_a(
 /// 保持 `decision34_pack9` `content_lock_id` 不变的同时，在真实 `DrawPhase` 内部
 /// 直接修正 `pending`（跳过与 `num_fixed=true` 均自动不触发/不加算，且合并成单次 `CardsDrawn`）。
 pub(crate) fn host_draw_begin_step(ctx: &mut Ctx<'_>, player: PlayerId, pending: &mut i32) {
+    if !ctx.core.player(player).alive {
+        return;
+    }
+    super::l11_common::on_draw_begin_l11(ctx, player, pending);
     let yd_def = ctx.catalog.skill_by_name("yxsdili");
     let hq2_def = ctx.catalog.skill_by_name("heqin2");
     if yd_def.is_none() && hq2_def.is_none() {
-        return;
-    }
-    if !ctx.core.player(player).alive {
         return;
     }
     if let Some(def) = yd_def.filter(|&d| ctx.core.has_skill(player, d)) {

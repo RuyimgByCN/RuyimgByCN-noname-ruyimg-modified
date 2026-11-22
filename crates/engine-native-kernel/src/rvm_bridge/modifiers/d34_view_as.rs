@@ -543,12 +543,10 @@ fn d34_view_as_table() -> &'static Vec<D34ViewAsRule> {
                     false,
                 ),
             },
-            // `txhj_leijimu` (`太虚幻境/extension_card.js:580`): Sha -> LeiSha
+            // `txhj_leijimu` (`太虚幻境/extension_card.js:580`): legacy `invoke_l11` flag viewAs;
+            // real equipped `txhj_leijimu` prompts `txhj_leijimu:confirm` on `CardUsed`.
             D34ViewAsRule {
-                activation: D34ViewAsActivation::SkillOrFlag(
-                    "txhj_leijimu",
-                    "l11_leijimu_thunder_sha",
-                ),
+                activation: D34ViewAsActivation::Flag("l11_leijimu_thunder_sha"),
                 spec: make_spec(
                     1_926_900_026,
                     "txhj_leijimu",

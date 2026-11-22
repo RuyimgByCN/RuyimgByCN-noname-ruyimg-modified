@@ -1,6 +1,15 @@
+//! VM 历史追踪与回复后触发辅助（自 `kernel/events.rs` 拆分，行为零变化）。
+
 use super::*;
 
-/// 记录规则 VM 历史（包含 `dddanzhi` 末牌追踪，不依赖 VM 牌史开关）。
+/// 造异异变 def 查询（运行时授予技）。
+pub(in crate::kernel) fn zhp_def(ctx: &Ctx<'_>) -> crate::ids::SkillDefId {
+    ctx.catalog
+        .skill_by_name(crate::vocabulary::names::BOSS_ZAOYI_HP)
+        .expect("造异异变入目录")
+}
+
+/// 回合收束：到期技能移除，然后交给下一位存活玩家并开启判定阶段。
 pub(in crate::kernel) fn record_vm_history(ctx: &mut Ctx<'_>, data: &EventData) {
     let pre_counted = matches!(
         data,
@@ -139,4 +148,108 @@ pub fn record_dddanzhi_card(
             .flags
             .insert((owner, "dddanzhi_last_black".to_string()), u32::from(black));
     }
+}
+
+/// 积财（Boss 饕餮，规则 v216）：回复结算后——回复者==持有者 → 持有
+/// 者摸 2；否则持有者与回复者各摸 1（上游 boss_jicai recoverAfter 同
+/// 口径；仅实际回复量>0 的 Recover 事件进入）。
+pub(in crate::kernel) fn commit_recover_skills(ctx: &mut Ctx<'_>, recovered: PlayerId) {
+    // 忍性（年兽形态，规则 v249）：global recoverEnd——持有者非当前回
+    // 合角色时，任意角色回复后其摸 1（上游 boss_renxing recoverEnd 同口
+    // 径；damageEnd 半面见 commit_damage 忍性臂）
+    if let Some(rxdef) = ctx
+        .catalog
+        .skill_by_name(crate::vocabulary::names::BOSS_RENXING)
+    {
+        let holders: Vec<PlayerId> = ctx
+            .core
+            .skills
+            .iter()
+            .filter(|((_, dd), i)| *dd == rxdef && i.enabled)
+            .map(|((o, _), _)| *o)
+            .filter(|o| ctx.core.player(*o).alive && ctx.core.turn.current != *o)
+            .collect();
+        for holder in holders {
+            ctx.start_draw(holder, 1);
+        }
+    }
+    let Some(jdef) = ctx
+        .catalog
+        .skill_by_name(crate::vocabulary::names::BOSS_JICAI)
+    else {
+        return;
+    };
+    let holders: Vec<PlayerId> = ctx
+        .core
+        .skills
+        .iter()
+        .filter(|((_, dd), i)| *dd == jdef && i.enabled)
+        .map(|((o, _), _)| *o)
+        .filter(|o| ctx.core.player(*o).alive)
+        .collect();
+    for holder in holders {
+        if recovered == holder {
+            ctx.start_draw(holder, 2);
+        } else {
+            ctx.start_draw(holder, 1);
+            if ctx.core.player(recovered).alive {
+                ctx.start_draw(recovered, 1);
+            }
+        }
+    }
+    // 伤逝（规则 v260）：体力变化（回复）后补牌
+    shangshix_draw(ctx, recovered);
+}
+
+/// 记录当前回合玩家实际使用的牌花色/点数/类别掩码（`txmouduan`、`txhj_ditingSkill3`）。
+pub(in crate::kernel) fn record_l11_turn_card_used(
+    core: &mut crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    player: PlayerId,
+    card: Option<crate::ids::CardId>,
+    suit: Option<crate::catalog::Suit>,
+    effective: CardKind,
+) {
+    if player != core.turn.current
+        || (catalog.skill_by_name("txmouduan").is_none()
+            && catalog.skill_by_name("txhj_ditingSkill3").is_none())
+    {
+        return;
+    }
+    if let Some(s) = suit {
+        let sbit = 1u32
+            << match s {
+                crate::catalog::Suit::Spade => 0,
+                crate::catalog::Suit::Heart => 1,
+                crate::catalog::Suit::Club => 2,
+                crate::catalog::Suit::Diamond => 3,
+            };
+        *core
+            .vm_aux
+            .flags
+            .entry((player, "l11_turn_used_suits_mask".to_string()))
+            .or_insert(0) |= sbit;
+    }
+    if let Some(c) = card {
+        let rank = catalog.cards.get(c as usize).map_or(0, |cd| cd.rank);
+        if (1..=13).contains(&rank) {
+            *core
+                .vm_aux
+                .flags
+                .entry((player, "l11_turn_used_ranks_mask".to_string()))
+                .or_insert(0) |= 1u32 << (rank - 1);
+        }
+    }
+    let tbit = if effective.is_basic_kind() {
+        1
+    } else if effective.equip_slot().is_some() {
+        4
+    } else {
+        2
+    };
+    *core
+        .vm_aux
+        .flags
+        .entry((player, "l11_turn_used_types_mask".to_string()))
+        .or_insert(0) |= tbit;
 }

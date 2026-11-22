@@ -87,7 +87,16 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
     // 始——上回合两标志各计一次并清除（上游 pingzhang_count phaseBegin
     // silent 同口径；应用技在随后摸牌阶段读计数）
     // 屏障转计数（K09）：已迁 reset_new_turn_state（phaseBegin silent）。
-    if begin && phase == Phase::Play && ctx.core.turn.skip_play_phase {
+    if begin
+        && phase == Phase::Play
+        && (ctx.core.turn.skip_play_phase
+            || ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(player, "l11_dqtianzi_skip_play_next".to_string()))
+                .is_some())
+    {
         ctx.core.turn.skip_play_phase = false;
         ctx.record_phase_skipped(player);
         ctx.core.turn.phase = Phase::Discard;
@@ -229,6 +238,7 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
     // 原「任意阶段收束」在准备阶段加入后每回合 6 次判定）。额外阶段仍以
     // 额外出牌阶段承载（上游 insertPhase=额外回合，既有登记差异保留）。
     // 额外阶段队列（insertPhase 原语）：非空则弹出为下一阶段
+    let mut pushed_next_phase = false;
     if !ctx.core.turn.extra_phases.is_empty() {
         let code = ctx.core.turn.extra_phases.remove(0);
         let next = match code {
@@ -244,24 +254,29 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
             phase: next,
             begin: true,
         });
-        return;
+        pushed_next_phase = true;
+    } else {
+        match phase.next() {
+            Some(next) => {
+                ctx.core.turn.phase = next;
+                ctx.emit(EventData::Phase {
+                    player,
+                    phase: next,
+                    begin: true,
+                });
+                pushed_next_phase = true;
+            }
+            None => {
+                // 混乱解除（Boss 郭嘉鬼谋，规则 v259）：混乱者回合收束解除
+                //（上游 addTempSkill "mad" {player:"phaseAfter"} 同口径）；
+                // 奇佐副本载体槽跨回合兜底清
+                ctx.core.player_mut(player).boss_mad = false;
+                ctx.core.turn.qizuo_copy = None;
+                ctx.emit(EventData::TurnEnded { player });
+            }
+        }
     }
-    match phase.next() {
-        Some(next) => {
-            ctx.core.turn.phase = next;
-            ctx.emit(EventData::Phase {
-                player,
-                phase: next,
-                begin: true,
-            });
-        }
-        None => {
-            // 混乱解除（Boss 郭嘉鬼谋，规则 v259）：混乱者回合收束解除
-            //（上游 addTempSkill "mad" {player:"phaseAfter"} 同口径）；
-            // 奇佐副本载体槽跨回合兜底清
-            ctx.core.player_mut(player).boss_mad = false;
-            ctx.core.turn.qizuo_copy = None;
-            ctx.emit(EventData::TurnEnded { player });
-        }
+    if pushed_next_phase && !begin && phase == Phase::Play {
+        (ctx.catalog.hooks.play_end_step)(ctx, player);
     }
 }

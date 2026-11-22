@@ -9,7 +9,7 @@ use crate::choice::{ChoiceKind, ChoiceOption, ChoiceSpec};
 use crate::event::{EventData, Phase};
 use crate::ids::EventId;
 use crate::ids::PlayerId;
-use crate::machine::{damage_data, damage_data_with, Ctx, Flow, LogEvent};
+use crate::machine::{damage_data_with, Ctx, Flow, LogEvent};
 
 /// 帧提交阶段的一次性内核动作。
 pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {

@@ -5,9 +5,11 @@ use super::*;
 // re-export 兼容既有 `use events::*` 路径。
 mod turn;
 pub(super) use turn::{commit_turn_begin, commit_turn_end_window, commit_turn_ended};
-mod vm_history;
-pub use vm_history::record_dddanzhi_card;
-pub(super) use vm_history::record_vm_history;
+mod aux_history;
+pub use aux_history::record_dddanzhi_card;
+pub(super) use aux_history::{
+    commit_recover_skills, record_l11_turn_card_used, record_vm_history, zhp_def,
+};
 
 /// 枳枉（十殿阎罗五官王，规则 v265）：其他角色获得牌结算后（CardsMoved
 /// 面——摸牌阶段摸牌走 CardsDrawn 天然隔离=上游排除 draw 同口径），其
@@ -42,7 +44,9 @@ pub(super) fn commit_linked(ctx: &mut Ctx<'_>, frame_id: EventId, player: Player
         ctx.core,
         ctx.catalog,
         player,
-    ) {
+    ) || crate::rvm_bridge::modifiers::txminguangkai_blocks_link(ctx.core, ctx.catalog, player)
+        || crate::rvm_bridge::modifiers::txlianbi_blocks_unlink(ctx.core, ctx.catalog, player)
+    {
         return;
     }
     let next = !ctx.core.player(player).linked;
@@ -443,6 +447,28 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
             }
         }
         CardKind::Sha | CardKind::FireSha | CardKind::LeiSha => {
+            if ctx.catalog.skill_by_name("txhj_fangtianhuaji").is_some()
+                && ctx.core.turn.phase == Phase::Play
+                && u.player == ctx.core.turn.current
+            {
+                let prev_cnt = ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .get(&(u.player, "l11_phase_sha_count".to_string()))
+                    .copied()
+                    .unwrap_or(0);
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((u.player, "l11_phase_sha_count".to_string()), prev_cnt + 1);
+                if prev_cnt == 0 {
+                    ctx.core.vm_aux.flags.insert(
+                        (u.player, format!("l11_first_sha_frame:{frame_id}")),
+                        1,
+                    );
+                }
+            }
             // 出牌阶段限用一次（普通/火/雷杀共享）；龙颅山峰地图效果
             //（mtg 首切片，规则 v100）下第二张杀走额外标记——若本次为
             // 加成额外杀则置 land_sha_used，否则置常规已用
@@ -581,6 +607,14 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
                 ctx.core.turn.bte_used_play_phase += 1;
             }
         }
+        record_l11_turn_card_used(
+            ctx.core,
+            ctx.catalog,
+            u.player,
+            u.card,
+            u.suit(ctx.catalog),
+            effective,
+        );
     }
     if nullified {
         if let Some(card) = u.card {
@@ -939,62 +973,4 @@ pub(super) fn commit_cards_discarded(ctx: &mut Ctx<'_>, player: PlayerId) {
     }
     // 伤逝（规则 v260）：失去牌后补牌
     shangshix_draw(ctx, player);
-}
-
-/// 造异异变 def 查询（运行时授予技）。
-pub(super) fn zhp_def(ctx: &Ctx<'_>) -> crate::ids::SkillDefId {
-    ctx.catalog
-        .skill_by_name(crate::vocabulary::names::BOSS_ZAOYI_HP)
-        .expect("造异异变入目录")
-}
-
-/// 积财（Boss 饕餮，规则 v216）：回复结算后——回复者==持有者 → 持有
-/// 者摸 2；否则持有者与回复者各摸 1（上游 boss_jicai recoverAfter 同
-/// 口径；仅实际回复量>0 的 Recover 事件进入）。
-pub(super) fn commit_recover_skills(ctx: &mut Ctx<'_>, recovered: PlayerId) {
-    // 忍性（年兽形态，规则 v249）：global recoverEnd——持有者非当前回
-    // 合角色时，任意角色回复后其摸 1（上游 boss_renxing recoverEnd 同口
-    // 径；damageEnd 半面见 commit_damage 忍性臂）
-    if let Some(rxdef) = ctx
-        .catalog
-        .skill_by_name(crate::vocabulary::names::BOSS_RENXING)
-    {
-        let holders: Vec<PlayerId> = ctx
-            .core
-            .skills
-            .iter()
-            .filter(|((_, dd), i)| *dd == rxdef && i.enabled)
-            .map(|((o, _), _)| *o)
-            .filter(|o| ctx.core.player(*o).alive && ctx.core.turn.current != *o)
-            .collect();
-        for holder in holders {
-            ctx.start_draw(holder, 1);
-        }
-    }
-    let Some(jdef) = ctx
-        .catalog
-        .skill_by_name(crate::vocabulary::names::BOSS_JICAI)
-    else {
-        return;
-    };
-    let holders: Vec<PlayerId> = ctx
-        .core
-        .skills
-        .iter()
-        .filter(|((_, dd), i)| *dd == jdef && i.enabled)
-        .map(|((o, _), _)| *o)
-        .filter(|o| ctx.core.player(*o).alive)
-        .collect();
-    for holder in holders {
-        if recovered == holder {
-            ctx.start_draw(holder, 2);
-        } else {
-            ctx.start_draw(holder, 1);
-            if ctx.core.player(recovered).alive {
-                ctx.start_draw(recovered, 1);
-            }
-        }
-    }
-    // 伤逝（规则 v260）：体力变化（回复）后补牌
-    shangshix_draw(ctx, recovered);
 }

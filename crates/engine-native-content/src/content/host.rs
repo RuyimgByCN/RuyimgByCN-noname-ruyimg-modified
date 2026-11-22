@@ -37,9 +37,9 @@ pub(crate) use step::{
     host_on_phase_use_end, host_on_player_died, host_on_recover_before, host_on_round_start,
     host_preserves_skills_on_death, host_sha_begin_step, host_sha_end_step,
     on_cards_to_discard_chengye, on_outer_settled_taipingyaoshu, on_phase_end_l10_scs,
-    on_skill_removed_all, play_begin_l19, play_begin_tianshu, reguhuo_consume_resp,
-    reguhuo_has_pending_final, reguhuo_response_skill, reguhuo_spawn_final,
-    reguhuo_spawn_response, scsanruo_response_skill,
+    on_skill_removed_all, play_begin_l19, play_begin_tianshu, play_end_rui_skill1,
+    reguhuo_consume_resp, reguhuo_has_pending_final, reguhuo_response_skill,
+    reguhuo_spawn_final, reguhuo_spawn_response, scsanruo_response_skill,
     u01_respond_skill_options as u01_respond_skill_options_hook,
     u01_try_activate_respond_skill as u01_try_activate_respond_skill_hook,
 };
@@ -775,6 +775,14 @@ pub fn host_skill_trigger_meta(
         HostBehavior::L25ZuanBatchF => step::l25_batch_f::trigger_meta_l25_batch_f(name),
         HostBehavior::L25ZuanBatchG => step::l25_batch_g::trigger_meta_l25_batch_g(name),
         HostBehavior::L10ScsCompanion => step::l10_scs::trigger_meta_l10_scs(name),
+        HostBehavior::L11TrickCard => step::l11_cards::trigger_meta_l11_trick(name),
+        HostBehavior::L11EquipCards => step::l11_equips::trigger_meta_l11_equips(name),
+        HostBehavior::L11Daiyuan
+        | HostBehavior::L11ServantSkills
+        | HostBehavior::L11SubStates => step::l11_servants::trigger_meta_l11_servants(name),
+        HostBehavior::L11GeneralSkillsA => step::l11_skills_a::trigger_meta_l11_skills_a(name),
+        HostBehavior::L11GeneralSkillsB => step::l11_skills_b::trigger_meta_l11_skills_b(name),
+        HostBehavior::L11GeneralSkillsC => step::l11_skills_c::trigger_meta_l11_skills_c(name),
         _ => crate::event::NativeDamageEffect::from_host(behavior)
             .map(|e| e.meta())
             .or_else(|| behavior.trigger_meta()),
@@ -820,6 +828,14 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         HostBehavior::L25ZuanBatchF => step::l25_batch_f::limits_l25_batch_f(name),
         HostBehavior::L25ZuanBatchG => step::l25_batch_g::limits_l25_batch_g(name),
         HostBehavior::L10ScsCompanion => step::l10_scs::limits_l10_scs(name),
+        HostBehavior::L11TrickCard => step::l11_cards::limits_l11_trick(name),
+        HostBehavior::L11EquipCards => step::l11_equips::limits_l11_equips(name),
+        HostBehavior::L11Daiyuan
+        | HostBehavior::L11ServantSkills
+        | HostBehavior::L11SubStates => step::l11_servants::limits_l11_servants(name),
+        HostBehavior::L11GeneralSkillsA => step::l11_skills_a::limits_l11_skills_a(name),
+        HostBehavior::L11GeneralSkillsB => step::l11_skills_b::limits_l11_skills_b(name),
+        HostBehavior::L11GeneralSkillsC => step::l11_skills_c::limits_l11_skills_c(name),
         HostBehavior::GujianFoodQingtuan | HostBehavior::GujianFoodLuyugeng => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,

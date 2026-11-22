@@ -870,7 +870,15 @@ impl HostBehavior {
             | HostBehavior::L25ZuanBatchF
             | HostBehavior::L25ZuanBatchG
             | HostBehavior::L10ScsCompanion
-            | HostBehavior::Rechanyuan => None,
+            | HostBehavior::Rechanyuan
+            | HostBehavior::L11TrickCard
+            | HostBehavior::L11EquipCards
+            | HostBehavior::L11Daiyuan
+            | HostBehavior::L11ServantSkills
+            | HostBehavior::L11GeneralSkillsA
+            | HostBehavior::L11GeneralSkillsB
+            | HostBehavior::L11GeneralSkillsC
+            | HostBehavior::L11SubStates => None,
         };
         if let (Some(meta), Some((timing, priority, selectable))) = (&mut meta, self.source_order()) {
             meta.timing = timing;

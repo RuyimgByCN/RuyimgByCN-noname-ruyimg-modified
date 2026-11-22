@@ -16,7 +16,10 @@ mod d34_view_as;
 mod d34_u05_mods;
 #[path = "d34_l11_mods.rs"]
 mod d34_l11_mods;
-pub use d34_l11_mods::apply_draw_count;
+pub use d34_l11_mods::{
+    apply_draw_count, has_yaya_protected, is_card_ignored_in_discard_phase,
+    txlianbi_blocks_unlink, txminguangkai_blocks_link,
+};
 pub use d34_view_as::find_d34_flag_view_as;
 
 #[inline]
@@ -290,9 +293,7 @@ pub fn apply_distance_total(
     {
         cur += 1;
     }
-    if flag_val(state, a, "l11_mount_active:txhj_liulongcanjia") > 0
-        || flag_val(state, a, "l11_mount_active:txhj_baihu") > 0
-        || flag_val(state, a, "th_zhongzhuang_mounted") > 0
+    if flag_val(state, a, "th_zhongzhuang_mounted") > 0
         || flag_val(state, a, "u05_cross_mod:mashu") > 0
         || flag_val(state, a, "u05_cross_mod:yicong") > 0
         || flag_val(state, a, "u05_mod:jifeng") > 0
@@ -300,9 +301,7 @@ pub fn apply_distance_total(
     {
         cur -= 1;
     }
-    if flag_val(state, b, "l11_mount_active:txhj_liulongcanjia") > 0
-        || flag_val(state, b, "l11_mount_active:txhj_juechenjinge") > 0
-        || flag_val(state, b, "th_zhongzhuang_mounted") > 0
+    if flag_val(state, b, "th_zhongzhuang_mounted") > 0
         || flag_val(state, b, "u05_cross_mod:feiying") > 0
         || flag_val(state, b, "u05_mod:heilonglinpian") > 0
         || flag_val(state, b, "u05_mod:sliufeng") > 0
@@ -414,7 +413,10 @@ pub fn apply_sha_extra_targets(
         let fangtian = flag_val(state, player, "l11_fangtian_extra_targets");
         if fangtian > 0 {
             extra += fangtian as i32;
-        } else if has_ext_skill(state, catalog, player, "txhj_fangtianhuaji") {
+        } else if has_ext_skill(state, catalog, player, "txhj_fangtianhuaji")
+            && state.turn.phase == crate::event::Phase::Play
+            && flag_val(state, player, "l11_phase_sha_count") == 0
+        {
             extra += 2;
         }
         extra += flag_val(state, player, "kangyin2_bonus_applied") as i32;
@@ -596,7 +598,7 @@ pub fn apply_card_target_canceled(
         canceled = true;
     }
     let canceled = d34_u05_mods::apply_card_target_canceled(state, actor, target, kind, canceled);
-    d34_l11_mods::apply_card_target_canceled(state, catalog, actor, target, kind, canceled)
+    d34_l11_mods::apply_card_target_canceled(state, catalog, actor, target, Some(card), kind, canceled)
 }
 
 #[inline]
@@ -875,7 +877,6 @@ pub fn apply_damage_amount(
     }
     if cur > 1
         && (flag_val(state, target, "l11_dundun_zhongzhi_reduce") > 0
-            || has_ext_skill(state, catalog, target, "txhj_dundunSkill2")
             || flag_val(state, target, "u05_buff:bingjia") > 0
             || flag_val(state, target, "u05_buff:bingjia2") > 0
             || flag_val(state, target, "u05_buff:cyxianjiang") > 0
@@ -890,6 +891,7 @@ pub fn apply_damage_amount(
 
 pub fn is_target_unequip2(state: &GameStateCore, target: PlayerId) -> bool {
     flag_val(state, target, "l11_xingtian_armor_null") > 0
+        || flag_val(state, target, "l11_noda_axe2_turn") > 0
         || flag_val(state, target, "l25_yijue_locked") > 0
         || flag_val(state, target, "l25_pojia_broken") > 0
         || flag_val(state, target, "l25_hubu_unequip2") > 0

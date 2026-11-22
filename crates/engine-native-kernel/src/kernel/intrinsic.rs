@@ -214,6 +214,22 @@ pub fn intrinsic_machine(
             }
             let Some(card) = u.card else {
                 if effective_kind == CardKind::Youdishenru
+                    || ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .get(&(u.player, "l11_virtual_huogong".to_string()))
+                        .copied()
+                        .unwrap_or(0)
+                        > 0
+                    || ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .get(&(u.player, "l11_virtual_trick_cid".to_string()))
+                        .copied()
+                        .unwrap_or(0)
+                        > 0
                     || (effective_kind == CardKind::Wuzhong
                         && ctx
                             .core

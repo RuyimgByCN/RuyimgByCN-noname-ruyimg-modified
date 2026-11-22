@@ -86,8 +86,12 @@ pub(super) fn is_recastable_card(
     cid: CardId,
 ) -> bool {
     // 上游 `_chongzhu.filterCard`（extension.js:6243-6251）：牌定义 `info.chongzhu`
-    // ——原生目录中仅【铁索连环】带重铸标记。
+    // ——包括【铁索连环】及太虚幻境【知己知彼】【声东击西】（`extension_card.js:238, 1360`）。
     catalog.card_kind(cid) == CardKind::Chain
+        || catalog
+            .cards
+            .get(cid as usize)
+            .is_some_and(|cd| matches!(cd.name, "txhj_zhijizhibi" | "txhj_shengdong"))
 }
 
 pub(super) fn flag(core: &GameStateCore, p: PlayerId, key: &str) -> u32 {

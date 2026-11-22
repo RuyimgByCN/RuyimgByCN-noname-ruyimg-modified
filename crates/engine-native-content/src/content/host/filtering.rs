@@ -67,6 +67,14 @@ impl HostSkillBehavior {
                         })
                     });
         }
+        if matches!(
+            self.behavior,
+            HostBehavior::L11Daiyuan | HostBehavior::L11ServantSkills | HostBehavior::L11SubStates
+        ) {
+            return super::step::l11_servants::filter_l11_servants_with_frames(
+                self, ctx, frames, owner, event,
+            );
+        }
         self.filter_behavior(ctx, owner, event)
     }
 
@@ -818,6 +826,26 @@ impl HostSkillBehavior {
             }
             HostBehavior::L10ScsCompanion => {
                 super::step::l10_scs::filter_l10_scs(self, ctx, owner, event)
+            }
+            HostBehavior::L11TrickCard => {
+                super::step::l11_cards::filter_l11_trick(self, ctx, owner, event)
+            }
+            HostBehavior::L11EquipCards => {
+                super::step::l11_equips::filter_l11_equips(self, ctx, owner, event)
+            }
+            HostBehavior::L11Daiyuan
+            | HostBehavior::L11ServantSkills
+            | HostBehavior::L11SubStates => {
+                super::step::l11_servants::filter_l11_servants(self, ctx, owner, event)
+            }
+            HostBehavior::L11GeneralSkillsA => {
+                super::step::l11_skills_a::filter_l11_skills_a(self, ctx, owner, event)
+            }
+            HostBehavior::L11GeneralSkillsB => {
+                super::step::l11_skills_b::filter_l11_skills_b(self, ctx, owner, event)
+            }
+            HostBehavior::L11GeneralSkillsC => {
+                super::step::l11_skills_c::filter_l11_skills_c(self, ctx, owner, event)
             }
             _ => false,
         }

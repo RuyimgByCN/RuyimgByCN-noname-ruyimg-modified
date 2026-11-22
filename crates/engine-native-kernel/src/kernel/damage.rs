@@ -241,7 +241,10 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
                 .remove(&(src, format!("youdishenru_sha:{}:{sha_c}", d.target)));
         }
     }
-    if d.nature != crate::event::DamageNature::Normal && ctx.core.player(d.target).linked {
+    if d.nature != crate::event::DamageNature::Normal
+        && ctx.core.player(d.target).linked
+        && !crate::rvm_bridge::modifiers::txlianbi_blocks_unlink(ctx.core, ctx.catalog, d.target)
+    {
         ctx.core.player_mut(d.target).linked = false;
         ctx.log(LogEvent::Linked {
             player: d.target,
@@ -491,7 +494,10 @@ pub(crate) fn hutian_return_deposit(ctx: &mut Ctx<'_>, owner: PlayerId) {
 /// 无伤害前置窗口/铁索传导/伤害来源触发技（LoseHp 是独立事件种）；
 /// 体力 ≤0 与伤害同口径进入濒死（上游 loseHp 语义）。
 pub(crate) fn commit_lose_hp(ctx: &mut Ctx<'_>, player: PlayerId, mut amount: u32) {
-    if amount == 0 || ctx.catalog.has_diaohulishan(ctx.core, player) {
+    if amount == 0
+        || ctx.catalog.has_diaohulishan(ctx.core, player)
+        || crate::rvm_bridge::modifiers::has_yaya_protected(ctx.core, ctx.catalog, player)
+    {
         return;
     }
     // 护天护体（swd 批 131，规则 v314）：失去体力同样以「体力降至寄存数」

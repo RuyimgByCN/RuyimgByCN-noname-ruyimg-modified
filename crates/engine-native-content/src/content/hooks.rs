@@ -19,6 +19,7 @@ pub(crate) const CONTENT_HOOKS: ContentHooks = ContentHooks {
     borrowed_owner: crate::content::host::shengong_borrowed_owner,
     r05_role_defs,
     play_begin_step: crate::content::host::host_play_begin_step,
+    play_end_step: crate::content::host::play_end_rui_skill1,
     on_outer_settled: crate::content::host::on_outer_settled_taipingyaoshu,
     on_cards_to_discard: crate::content::host::on_cards_to_discard_chengye,
     on_skill_removed: crate::content::host::on_skill_removed_all,

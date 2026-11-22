@@ -486,7 +486,59 @@ impl crate::catalog::SkillMachine for PlaceDelayedMachine {
             return Flow::Done;
         }
         ctx.core.player_mut(self.target).judge.push(card);
+        trigger_qiaoqiao_add_judge(ctx, self.target);
         Flow::Done
+    }
+}
+
+pub(in crate::kernel) fn trigger_qiaoqiao_add_judge(ctx: &mut Ctx<'_>, target: PlayerId) {
+    let Some(def) = ctx.catalog.skill_by_name("txhj_qiaoqiaoSkill1") else {
+        return;
+    };
+    let ts = ctx
+        .core
+        .turn
+        .round
+        .saturating_mul(64)
+        .saturating_add(u32::from(ctx.core.turn.current) + 1);
+    let owners = ctx.core.seat_order_from(ctx.core.turn.current);
+    for owner in owners {
+        if owner == target || !ctx.core.player(owner).alive {
+            continue;
+        }
+        let enabled = ctx
+            .core
+            .skills
+            .get(&(owner, def))
+            .is_some_and(|i| i.enabled);
+        let used_this_turn = ctx
+            .core
+            .vm_aux
+            .flags
+            .get(&(owner, "l11_qiaoqiao1_ts".to_string()))
+            .copied()
+            .unwrap_or(0)
+            == ts;
+        if !enabled || used_this_turn {
+            continue;
+        }
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((owner, "l11_qiaoqiao1_ts".to_string()), ts);
+        ctx.log_skill_triggered("txhj_qiaoqiaoSkill1", owner, def);
+        let enemies: Vec<PlayerId> = ctx
+            .core
+            .alive_players()
+            .filter(|&p| p != owner && !ctx.core.is_friend_of(ctx.catalog, owner, p))
+            .collect();
+        if !enemies.is_empty() {
+            let idx = ctx.core.rng.gen_range(enemies.len() as u32) as usize;
+            ctx.emit(EventData::LoseHp {
+                player: enemies[idx],
+                amount: 1,
+            });
+        }
     }
 }
 

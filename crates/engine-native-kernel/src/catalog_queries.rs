@@ -95,6 +95,9 @@ impl Catalog {
                 .copied()
                 .unwrap_or(0)
                 > 0
+            || self
+                .skill_by_name("txhj_feilong_skill_blank")
+                .is_some_and(|def| core.has_skill(p, def))
     }
 
     /// Whether a skill is a locked skill (`锁定技` / `forced: true` / `charlotte: true`) exempt from `tieji` seal.
@@ -153,6 +156,36 @@ impl Catalog {
                 | "txfusha"
                 | "txxiebi"
                 | "txshixin"
+                | "txmazhan"
+                | "txhuangfu"
+                | "txleizhen"
+                | "txlianbi"
+                | "txbaobian"
+                | "diychunxiao"
+                | "diyzhongdu"
+                | "cxyYangWu"
+                | "cxyJingQi"
+                | "cxyRuiQi"
+                | "cxyJiaoXia"
+                | "cxyTunJun"
+                | "cxyFengYing"
+                | "cxyPoLu"
+                | "txhj_ruiSkill1"
+                | "txhj_dundunSkill2"
+                | "txhj_jiuweiSkill1"
+                | "txhj_tengsheSkill1"
+                | "txhj_tengsheSkill3"
+                | "txhj_yayaSkill2"
+                | "txhj_qilinSkill3"
+                | "txhj_chiyanzhenhunqin"
+                | "txhj_lingbaoxianhu"
+                | "txhj_chongyingshenfu"
+                | "txminguangkai"
+                | "txminguangkai_cancel"
+                | "txminguangkai_link"
+                | "txhj_feilong_skill_blank"
+                | "txhj_guofengyupao"
+                | "txhj_xuwangzhimian"
                 | "twwushen"
                 | "shizhi"
                 | "paoxiao"
@@ -231,6 +264,16 @@ impl Catalog {
                 .copied()
                 .unwrap_or(0)
                 > 0
+            || core
+                .vm_aux
+                .flags
+                .get(&(p, "l11_noda_axe2_turn".to_string()))
+                .copied()
+                .unwrap_or(0)
+                > 0
+            || self
+                .skill_by_name("txhj_noda_axe2")
+                .is_some_and(|def| core.has_skill(p, def))
         {
             return true;
         }

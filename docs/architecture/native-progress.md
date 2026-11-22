@@ -9,6 +9,13 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-22 Batch L11-1（L11 太虚幻境 32 卡牌＋首批 71 技能共 103 项收口）合入（待提交／发布）
+
+- **基线、发布与版本**：HEAD `a47f8b0e110cb217f54cb4f40f111a223dab649a`（Batch UI-7 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `44981761423` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。
+- **Batch L11-1 集成与复核**：合入 `swarm/conv-l11-b1` `d9e1c9a1f..445ed1bd2`（`verifier-rules-2` #135 **`APPROVE`**）：协同标签 `720..=727`、`ContentHooks::play_end_step`、`events/aux_history.rs` 与 `kernel/equipment.rs`，并拆分 `machine/helpers.rs`、`ai/extension_choices_misc.rs`、`play_card_targets::push_play_card_frame` 保 `<=1,000` 有效行；关闭 12 项反例、32 卡牌与 71 侍从/将技能。
+- **清单计数与整包签署**：按 #135 升格 **103 项**（`L11` → **`109／827／0`**）；全仓更新为 **已复核等价 1,720／简化近似 2,704／缺失 0**，整包八项签署仍 `0/37`。
+- **主线实测**：5 crate `-D warnings`、`wasm32`、4 crate **`2,704/0/6`**、`--workspace --no-fail-fast` **`8,052/0/8`**、`conformance` **`19/19`**、`desktop-client` **`20/0/1`**、跨端校验、`web-client` `typecheck`＋`test`（**527/0**）＋`build:native`＋`smoke:native`（**83/0**）＋`build` 与 `preflight.py` 全过，见 [Batch L11-1 证据](../operations/evidence/2026-11-21-batch3-1-l11-1/README.md)。
+
 ### 2026-11-22 Batch UI-7（16 来源 121 项纯 UI/配置/表面收口；50 项规则耦合留待规则线）合入（待提交／发布）
 
 - **基线、发布与版本**：HEAD `f6cd6acb9228d8ca2ab490d61c26f1d856f6c502`（Batch Q2-L20+L22 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `44976347997` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。

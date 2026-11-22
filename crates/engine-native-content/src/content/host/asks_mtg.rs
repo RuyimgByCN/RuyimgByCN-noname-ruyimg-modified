@@ -444,6 +444,26 @@ pub(super) fn active_ask_batches(
         HostBehavior::L10ScsCompanion => super::step::l10_scs::ask_l10_scs(
             stage, owner, target, targets, card, cards, core, catalog,
         ),
+        HostBehavior::L11TrickCard => super::step::l11_cards_asks::ask_l11_trick_card(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::L11EquipCards => super::step::l11_equips_asks::ask_l11_equip_cards(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::L11Daiyuan
+        | HostBehavior::L11ServantSkills
+        | HostBehavior::L11SubStates => super::step::l11_servants_asks::ask_l11_servants(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::L11GeneralSkillsA => super::step::l11_skills_a_asks::ask_l11_skills_a(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::L11GeneralSkillsB => super::step::l11_skills_b_asks::ask_l11_skills_b(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::L11GeneralSkillsC => super::step::l11_skills_c_asks::ask_l11_skills_c(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
         HostBehavior::NewMeibu => {
             if stage != HostStage::SelectCard {
                 return None;

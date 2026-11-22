@@ -13,6 +13,11 @@ use crate::resolution::Resolution;
 use crate::state::GameStateCore;
 
 pub mod presentation;
+mod helpers;
+
+pub use helpers::{
+    card_use, card_use_as, card_use_with_nature, damage_data, damage_data_with, note_cards_lost,
+};
 
 /// 宿主展示/录像日志：引擎侧数据，不进状态、不进哈希。
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -693,6 +698,19 @@ impl<'a> Ctx<'a> {
                 return;
             }
         }
+        if self
+            .catalog
+            .cards
+            .get(card as usize)
+            .is_some_and(|cd| cd.name == "txhj_piliche")
+        {
+            if !self.core.detached_cards.iter().any(|(dc, _)| *dc == card) {
+                self.core
+                    .detached_cards
+                    .push((card, crate::event::DetachedKind::Destroyed));
+            }
+            return;
+        }
         self.core.discard.push(card);
         crate::rvm_bridge::modifiers::d34_l28_mods::note_pro_qinyin_discard(
             self.core,
@@ -859,7 +877,9 @@ impl<'a> Ctx<'a> {
     }
 
     pub fn recover(&mut self, player: PlayerId, amount: u32, by_card: Option<CardId>) -> u32 {
-        if self.catalog.has_diaohulishan(self.core, player) {
+        if self.catalog.has_diaohulishan(self.core, player)
+            || crate::rvm_bridge::modifiers::has_yaya_protected(self.core, self.catalog, player)
+        {
             return 0;
         }
         let mut amount = amount;
@@ -1107,93 +1127,5 @@ impl<'a> Ctx<'a> {
             &mut event,
         );
         self.out.push(event);
-    }
-}
-
-/// 便捷构造：普通伤害载荷。
-pub fn damage_data(source: Option<PlayerId>, target: PlayerId, amount: i32) -> DamageData {
-    damage_data_with(source, target, amount, DamageNature::Normal, None)
-}
-
-/// 便捷构造：显式属性伤害载荷。
-pub fn damage_data_with(
-    source: Option<PlayerId>,
-    target: PlayerId,
-    amount: i32,
-    nature: DamageNature,
-    card: Option<CardId>,
-) -> DamageData {
-    DamageData {
-        settlement: Default::default(),
-        source,
-        target,
-        amount,
-        nature,
-        prevented: false,
-        redirect_chain: Vec::new(),
-        card,
-        from_chain: false,
-    }
-}
-
-/// 卡牌使用载荷构造（普通属性）。
-pub fn card_use(card: CardId, player: PlayerId, targets: Vec<PlayerId>) -> CardUseData {
-    card_use_as(card, player, targets, None)
-}
-
-/// 带 view-as 声明的构造（转化使用时 `as_kind` = 声明牌种）。
-pub fn card_use_as(
-    card: CardId,
-    player: PlayerId,
-    targets: Vec<PlayerId>,
-    as_kind: Option<CardKind>,
-) -> CardUseData {
-    CardUseData {
-        card: Some(card),
-        player,
-        targets,
-        nature: DamageNature::Normal,
-        use_as: as_kind,
-        cancelled: false,
-    }
-}
-
-/// 卡牌使用载荷构造（显式属性，火杀用）。
-pub fn card_use_with_nature(
-    card: CardId,
-    player: PlayerId,
-    targets: Vec<PlayerId>,
-    nature: DamageNature,
-    use_as: Option<CardKind>,
-) -> CardUseData {
-    CardUseData {
-        card: Some(card),
-        player,
-        targets,
-        nature,
-        use_as,
-        cancelled: false,
-    }
-}
-
-/// 义山记录（swd 批 123，规则 v310）自由函数：Ctx 与测试工具共用。
-pub fn note_cards_lost(
-    core: &mut GameStateCore,
-    catalog: &crate::catalog::Catalog,
-    player: PlayerId,
-    cards: &[CardId],
-) {
-    let Some(def) = catalog.skill_by_name("yishan") else {
-        return;
-    };
-    if !core.has_skill(player, def) {
-        return;
-    }
-    let list = &mut core.player_mut(player).yishan_lost;
-    for c in cards {
-        list.insert(0, *c);
-    }
-    if list.len() > 16 {
-        list.truncate(16);
     }
 }

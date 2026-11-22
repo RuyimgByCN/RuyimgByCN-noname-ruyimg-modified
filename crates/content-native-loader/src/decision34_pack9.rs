@@ -677,6 +677,7 @@ pub fn attach_formal_package_upstream_rules(
                 .iter()
                 .chain(super::L11_TAIXU_OWN_NPC_SKILLS.iter())
                 .chain(super::L11_TAIXU_EQUIP_CARD_SKILLS.iter())
+                .chain(super::L11_TAIXU_B1_AUX_SUBSKILLS.iter())
                 .chain(super::L11_TAIXU_IMPLEMENTED_CROSS_SKILLS.iter())
             {
                 push_skill(s, L11_TAIXU_SKILL_ID);
