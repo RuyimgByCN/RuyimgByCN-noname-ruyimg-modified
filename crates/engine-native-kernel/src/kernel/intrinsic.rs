@@ -498,6 +498,16 @@ pub fn intrinsic_machine(
                     // 延时锦囊使用时即开无懈窗口（对齐旧线：牌先入桌面，
                     // 无懈后入判定区、被无懈则弃置），窗口未抵消由
                     // PlaceDelayedMachine 置入目标判定区。
+                    // 利木（`xinfu_limu`，L01/L11）：对己使用方块牌作【乐】时先触发回 1 血（onuse）。
+                    if effective_kind == CardKind::Le
+                        && u.targets.as_slice() == [u.player]
+                        && ctx
+                            .catalog
+                            .skill_by_name("xinfu_limu")
+                            .is_some_and(|d| ctx.core.has_skill(u.player, d))
+                    {
+                        let _ = ctx.recover(u.player, 1, Some(card));
+                    }
                     let target = *u.targets.first().expect("delayed trick has one target");
                     let effect = PlaceDelayedMachine {
                         card: card,

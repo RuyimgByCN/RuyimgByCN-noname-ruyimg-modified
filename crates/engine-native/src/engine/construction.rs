@@ -474,6 +474,15 @@ detached_cards: Vec::new(),
         Self::new_with_extensions_mode(seed, seats, packs, GameMode::Prototype)
     }
 
+    pub fn try_new_with_extensions_mode(
+        seed: u64,
+        seats: usize,
+        packs: &[&crate::content::extension::ExtensionPack],
+        mode: GameMode,
+    ) -> Result<Self, crate::content::extension::ExtensionError> {
+        Self::new_with_extensions_mode(seed, seats, packs, mode)
+    }
+
     fn new_with_extensions_mode(
         seed: u64,
         seats: usize,

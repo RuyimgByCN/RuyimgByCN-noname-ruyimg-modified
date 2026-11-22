@@ -38,7 +38,7 @@ impl GameStateCore {
         }
     }
 
-    fn faction_name(faction: crate::catalog::Faction) -> &'static str {
+    pub fn faction_name(faction: crate::catalog::Faction) -> &'static str {
         match faction {
             crate::catalog::Faction::Wei => "wei",
             crate::catalog::Faction::Shu => "shu",
@@ -798,6 +798,41 @@ impl GameStateCore {
             (Some(x), Some(y)) => x == y,
             _ => false,
         }
+    }
+
+    /// L01 `yiyi`（以逸待劳，`AI优化/extension.js:9211-9219`）友方目标判定：
+    /// 国战按 `is_friend_of`，对决模式按同队（`teams` 同组）；其余模式全部存活角色均为合法目标。
+    pub fn yiyi_target_candidates(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        actor: PlayerId,
+    ) -> (bool, Vec<PlayerId>) {
+        let auto_allies = matches!(
+            self.mode,
+            GameMode::Kingdoms | GameMode::Versus { .. }
+        );
+        let ordered = self.seat_order_from(actor);
+        let list = match &self.mode {
+            GameMode::Kingdoms => ordered
+                .into_iter()
+                .filter(|&p| self.player(p).alive && self.is_friend_of(catalog, actor, p))
+                .collect(),
+            GameMode::Versus { teams, .. } => {
+                let my_team = teams.iter().find(|t| t.contains(&actor));
+                ordered
+                    .into_iter()
+                    .filter(|&p| {
+                        self.player(p).alive
+                            && (p == actor || my_team.is_some_and(|t| t.contains(&p)))
+                    })
+                    .collect()
+            }
+            _ => ordered
+                .into_iter()
+                .filter(|&p| self.player(p).alive)
+                .collect(),
+        };
+        (auto_allies, list)
     }
 
     /// 存活左右邻居（座位环跳过死亡座位——登记差异：上游 getNext 含死

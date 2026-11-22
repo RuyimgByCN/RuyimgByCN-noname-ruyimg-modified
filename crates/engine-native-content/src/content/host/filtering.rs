@@ -890,6 +890,10 @@ impl HostSkillBehavior {
                     self, ctx, &[], None, owner, event,
                 )
             }
+            HostBehavior::L01FirstKs => super::step::l01_rules::filter_l01_first_ks(ctx, owner, event),
+            HostBehavior::L01AttitudeTracker => {
+                super::step::l01_attitude::filter_l01_att(&self.name, ctx, owner, event)
+            }
             _ => false,
         }
     }

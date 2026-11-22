@@ -278,7 +278,7 @@ pub(super) fn dying_tao_cards(
 }
 
 /// 通用响应/打出候选项（kernel 与 snap/asks 共用，含禁言 `jinyan` 禁用与黑锦囊转【杀】）。
-pub(crate) fn response_kind_cards_core(
+pub fn response_kind_cards_core(
     core: &crate::state::GameStateCore,
     catalog: &Catalog,
     responder: PlayerId,
@@ -368,7 +368,7 @@ pub(super) fn response_kind_cards(
     response_kind_cards_core(ctx.core, ctx.catalog, responder, need)
 }
 
-pub(super) fn discard_response_card(
+pub fn discard_response_card(
     ctx: &mut Ctx<'_>,
     player: PlayerId,
     card: crate::ids::CardId,

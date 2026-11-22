@@ -244,6 +244,9 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
         .flat_map(|i| e.state_core().players[*i].sxianjing_traps.iter().copied())
         .collect();
     let core = e.core_mut();
+    core.vm_aux
+        .flags
+        .retain(|(owner, k), _| *owner == seat || k != "l01_find_zhong_target_plus1");
     let mut cursor = 0usize;
     if redact_traps {
         for &owner in &trap_owners {

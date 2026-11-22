@@ -799,6 +799,13 @@ pub(super) fn plan_extension_choice_action(
                 selection,
             })
         }
+        "l01_yiyi_discard" | "l01_neikey_recover" => {
+            super::l01_policy::plan_l01_choice(
+                catalog,
+                input,
+                &super::l01_policy::L01AiOptions::default(),
+            )
+        }
         _ => extension_choices_misc::plan_misc_choice_action(
             catalog,
             input,

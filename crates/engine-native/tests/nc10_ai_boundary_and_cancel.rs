@@ -69,6 +69,7 @@ fn cancelled_planner_marks_plan_cancelled() {
         lookahead_depth: 1,
         policy_variant: 0,
         content_tuning: None,
+        l01_options: None,
     };
     planner.cancel();
     let plans = PlanPool::new(1).plan_seats(&e, &[0], &planner);
@@ -91,6 +92,7 @@ fn tiny_budget_marks_exhausted() {
         lookahead_depth: 2,
         policy_variant: 0,
         content_tuning: None,
+        l01_options: None,
     };
     let plans = PlanPool::new(1).plan_seats(&e, &[0], &planner);
     assert_eq!(plans.len(), 1);
@@ -121,6 +123,7 @@ fn pool_parallel_matches_sequential_and_records_tail() {
         lookahead_depth: 1,
         policy_variant: 0,
         content_tuning: None,
+        l01_options: None,
     };
 
     fn key(plans: &[engine_native::ai::Plan]) -> Vec<String> {
@@ -184,6 +187,7 @@ fn stale_plan_is_rejected() {
         lookahead_depth: 1,
         policy_variant: 0,
         content_tuning: None,
+        l01_options: None,
     };
     let plans = PlanPool::new(1).plan_seats(&e, &[0], &planner);
     let stale = plans.into_iter().next().expect("plan");
@@ -231,6 +235,7 @@ fn policy_variants_are_deterministic() {
             lookahead_depth: 1,
             policy_variant: variant,
             content_tuning: None,
+            l01_options: None,
         };
         let a = PlanPool::new(1).plan_seats(&e, &[0, 1, 2, 3], &planner);
         let b = PlanPool::new(4).plan_seats(&e, &[0, 1, 2, 3], &planner);

@@ -154,9 +154,14 @@ pub(in crate::content::host) fn is_named_wuzhong_unwrapped(
     if raw_name == "无中生有" || raw_name == "wuzhong" || raw_name.starts_with("wuzhong_") {
         return false;
     }
+    if base_card_key(raw_name) == "yiyi" {
+        return catalog
+            .skill_by_name(crate::content::host::L01_FIRST_KS_KEY)
+            .is_none();
+    }
     matches!(
         base_card_key(raw_name),
-        "yiyi"
+        "yiyi" | "txhj_yiyi"
             | "diaobingqianjiang"
             | "zhengsu_leijin"
             | "zhengsu_mingzhi"
@@ -424,8 +429,47 @@ pub(super) fn try_named_ext_card(
     let owner = u.player;
 
     match key {
-        // L01 AI优化/extension.js:9205: 以逸待劳 (draw 2, discard 2)
-        "yiyi" => {
+        // L01 AI优化/extension.js:9205-9262: 以逸待劳（guozhan/versus 全体友方，其余 1..=3 目标，各摸 2 再交互弃 2 he）；
+        // 当仅加载旧 decision34 共存包未加载 L01 ai-tuning 时保持旧版兼容路径
+        "yiyi" if ctx.catalog.skill_by_name(crate::content::host::L01_FIRST_KS_KEY).is_some() => {
+            let (auto_allies, candidates) =
+                ctx.core.yiyi_target_candidates(ctx.catalog, owner);
+            let mut targets: Vec<PlayerId> = if auto_allies || u.targets.is_empty() {
+                if auto_allies {
+                    candidates
+                } else {
+                    vec![owner]
+                }
+            } else {
+                let mut ordered = Vec::new();
+                for p in candidates {
+                    if u.targets.contains(&p) && !ordered.contains(&p) {
+                        ordered.push(p);
+                    }
+                }
+                if ordered.is_empty() {
+                    vec![owner]
+                } else {
+                    ordered
+                }
+            };
+            if targets.is_empty() {
+                targets.push(owner);
+            }
+            let opt_card = (card != u32::MAX).then_some(card);
+            return Some(Some(Box::new(crate::content::host::HostMachine {
+                def_key: "yiyi".to_string(),
+                behavior: crate::vocabulary::host::HostBehavior::L01YiyiCard,
+                owner,
+                target: None,
+                card: opt_card,
+                cards: Vec::new(),
+                targets,
+                stage: crate::content::host::HostStage::Act,
+            })));
+        }
+        // L01 兼容兜底 & L11 太虚幻境/extension_card.js:334: 以逸待劳 (draw 2, discard 2)
+        "yiyi" | "txhj_yiyi" => {
             set_flag(ctx, owner, "d34_card_used:yiyi", 1);
             ctx.start_draw(owner, 2);
             let _ = discard_up_to(ctx, owner, 2);

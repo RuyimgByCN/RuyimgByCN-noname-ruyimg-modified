@@ -10,6 +10,11 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::{Duration, Instant};
 mod redact;
 mod remap;
+pub mod l01_policy;
+pub use l01_policy::{
+    chaofeng_threat, l01_auto_skill_threat, l01_public_attitude, GeneralRarity, L01AiOptions,
+    L01StrategyMode, NhFriendsMode,
+};
 pub use redact::*;
 
 /// 单选候选枚举上限（防超大选项集撑爆候选向量；真实询问的选项数
@@ -34,6 +39,8 @@ pub struct BoundedPlanner {
     pub policy_variant: u8,
     /// 内容调参（L01 AI优化装载面）：`Some` 且变体 2 时参与评分。
     pub content_tuning: Option<ContentTuning>,
+    /// L01 `AI优化` 全量公开信息集策略配置；`None` 时仍保留基线行为，若设 `Some` 或变体 >=2 则融合评估。
+    pub l01_options: Option<L01AiOptions>,
 }
 
 /// L01 AI优化（noname-liuli）的参数消费面。
@@ -105,6 +112,7 @@ impl BoundedPlanner {
             lookahead_depth: 1,
             policy_variant: 0,
             content_tuning: None,
+            l01_options: None,
         }
     }
 
@@ -573,7 +581,15 @@ impl Engine {
         let public_action = match session.choice() {
             Some(choice @ ChoiceView::Own { .. }) => {
                 let input = session.input();
-                plan_extension_choice_action(self.catalog(), &input)
+                planner
+                    .l01_options
+                    .as_ref()
+                    .and_then(|opts| {
+                        let mut live = opts.clone();
+                        l01_policy::sync_l01_public_runtime(self, &mut live);
+                        l01_policy::plan_l01_choice(self.catalog(), &input, &live)
+                    })
+                    .or_else(|| plan_extension_choice_action(self.catalog(), &input))
                     .or_else(|| projected_choice_action(choice))
             }
             // Non-owner advice is idle; do not inspect another seat's private continuation.
@@ -730,6 +746,17 @@ impl Engine {
                 planner.policy_variant,
                 planner.content_tuning.as_ref(),
             );
+            if let Some(opts) = planner.l01_options.as_ref() {
+                score += l01_policy::score_l01_candidate(
+                    &baseline_view,
+                    &after,
+                    &sim,
+                    seat,
+                    &action,
+                    opts,
+                    planner.content_tuning.as_ref(),
+                );
+            }
             // 两层搜索（T13 更强候选）：再模拟对手最优应对，取最差结果
             //（对手最大化其收益）作为本候选得分。节点预算与时限仍受控。
             if planner.lookahead_depth >= 2

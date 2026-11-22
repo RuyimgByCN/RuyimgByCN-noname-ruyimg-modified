@@ -142,6 +142,12 @@ mod l27_beautify_fixes;
 #[path = "../l27_xiefang_batch1.rs"]
 mod l27_xiefang_batch1;
 
+#[path = "../l01_ai_optimize_fixes.rs"]
+mod l01_ai_optimize_fixes;
+
+#[path = "../l01_round2_regressions.rs"]
+mod l01_round2_regressions;
+
 #[path = "../l28_thunder_eight.rs"]
 mod l28_thunder_eight;
 

@@ -206,6 +206,33 @@ pub(super) fn validate_wuzhong_targets(
             }
         }
         if cname != "无中生有" && cname != "wuzhong" && !cname.starts_with("wuzhong_") {
+            if cname == "yiyi" || cname.ends_with("__ref_yiyi") {
+                let (auto_allies, candidates) =
+                    core.yiyi_target_candidates(catalog, core.turn.current);
+                let mut given = std::collections::BTreeSet::new();
+                for &t in targets {
+                    if !given.insert(t) || !candidates.contains(&t) {
+                        return Err(RejectReason::IllegalTargets);
+                    }
+                }
+                if auto_allies {
+                    let expected: std::collections::BTreeSet<PlayerId> =
+                        candidates.into_iter().collect();
+                    if targets.is_empty() || given == expected {
+                        return Ok(());
+                    }
+                    return Err(RejectReason::IllegalTargets);
+                }
+                if (1..=3).contains(&targets.len())
+                    || (targets.is_empty()
+                        && catalog
+                            .skill_by_name(crate::content::host::L01_FIRST_KS_KEY)
+                            .is_none())
+                {
+                    return Ok(());
+                }
+                return Err(RejectReason::IllegalTargets);
+            }
             if cname.contains("diaobingqianjiang") {
                 let actor = core.turn.current;
                 let expected: std::collections::BTreeSet<PlayerId> = (0..core.players.len()

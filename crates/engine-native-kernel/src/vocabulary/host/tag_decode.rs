@@ -590,6 +590,11 @@ impl HostBehavior {
             730 => HostBehavior::L11GeneralSkillsD,
             731 => HostBehavior::L11GeneralSkillsE,
             732 => HostBehavior::L11GeneralSkillsF,
+            860 => HostBehavior::L01YiyiCard,
+            861 => HostBehavior::L01FirstKs,
+            862 => HostBehavior::L01NeiKey,
+            863 => HostBehavior::L01AttitudeTracker,
+            864 => HostBehavior::L01AiRuleHooks,
             _ => return None,
         })
     }

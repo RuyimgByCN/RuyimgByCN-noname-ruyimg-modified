@@ -875,3 +875,19 @@ pub const WUDIAN_LIDUAN_GIVE: &str = "wudian_liduan_give";
 pub const WUDIAN_YOUDISHENRU_SHA: &str = "wudian_youdishenru_sha";
 pub const WUDIAN_YOUDISHENRU_USE: &str = "wudian_youdishenru_use";
 
+pub const L01_YIYI_DISCARD_PROMPT: &str = "l01_yiyi_discard";
+pub const L01_NEIKEY_RECOVER_PROMPT: &str = "l01_neikey_recover";
+pub const L01_FIX_QZ_TARGET_PROMPT: &str = "l01_fix_qz_target";
+pub const L01_FIX_QZ_DELTA_PROMPT: &str = "l01_fix_qz_delta";
+pub const L01_FIX_CF_SKILL_PROMPT: &str = "l01_fix_cf_skill";
+pub const L01_FIX_CF_DELTA_PROMPT: &str = "l01_fix_cf_delta";
+pub const L01_CHONGXU_ACTION_PROMPT: &str = "l01_chongxu_action";
+
+pub const L01_FIRST_KS_KEY: &str = "_aiyh_firstKs";
+pub const L01_NEIKEY_KEY: &str = "_aiyh_neiKey";
+pub const L01_FIND_ZHONG_KEY: &str = "_findZhong";
+pub const L01_FAKE_PROHIBITED_KEY: &str = "_aiyh_fake_prohibited";
+pub const L01_ATTZHI_KEY: &str = "_attzhi";
+pub const L01_FIX_EQZ_KEY: &str = "_aiyh_fixEQz";
+pub const L01_FIX_ECF_KEY: &str = "_aiyh_fixECf";
+

@@ -168,11 +168,25 @@ impl Engine {
                     .get(card as usize)
                     .map(|c| c.name)
                     .unwrap_or("");
-                if matches!(cname, "huogong" | "txhj_yiyi" | "txzhaoshu_skill" | "txzhaoshu_global") {
+                let is_yiyi = self
+                    .catalog()
+                    .cards
+                    .get(card as usize)
+                    .is_some_and(|c| c.name == "yiyi" || c.name.ends_with("__ref_yiyi"));
+                if is_yiyi
+                    || self.catalog().skill_by_name("xinfu_limu").is_some()
+                    || matches!(
+                        cname,
+                        "huogong" | "txhj_yiyi" | "txzhaoshu_skill" | "txzhaoshu_global"
+                    )
+                {
                     combos.push(vec![seat]);
                 }
                 for t in others.iter().take(MAX_TARGET_COMBOS) {
                     combos.push(vec![*t]);
+                    if is_yiyi {
+                        combos.push(vec![seat, *t]);
+                    }
                 }
                 if matches!(cname, "txhj_jiedao" | "txhj_shengdong") {
                     let all_alive: Vec<crate::ids::PlayerId> = self
@@ -188,6 +202,12 @@ impl Engine {
                     }
                 } else if others.len() >= 2 {
                     combos.push(vec![others[0], others[1]]);
+                    if is_yiyi {
+                        combos.push(vec![seat, others[0], others[1]]);
+                    }
+                }
+                if is_yiyi && others.len() >= 3 {
+                    combos.push(vec![others[0], others[1], others[2]]);
                 }
                 for targets in combos {
                     push_action(
@@ -309,6 +329,7 @@ fn certainly_illegal(engine: &Engine, seat: crate::ids::PlayerId, action: &GameA
             }
             if kind.is_equip() {
                 return !targets.is_empty()
+                    || !core.player(seat).hand.contains(card)
                     || kind
                         .equip_slot()
                         .is_some_and(|slot| !catalog.is_equip_slot_enabled(core, seat, slot));
@@ -345,15 +366,39 @@ fn certainly_illegal(engine: &Engine, seat: crate::ids::PlayerId, action: &GameA
                 {
                     targets.len() > 1
                 }
-                CardKind::Wuzhong
-                | CardKind::Wugu
+                CardKind::Wuzhong => {
+                    let is_yiyi = catalog
+                        .cards
+                        .get(*card as usize)
+                        .is_some_and(|c| c.name == "yiyi" || c.name.ends_with("__ref_yiyi"));
+                    if is_yiyi {
+                        crate::engine::play_card_targets::validate_wuzhong_targets(
+                            core, catalog, *card, kind, targets,
+                        )
+                        .is_err()
+                    } else {
+                        !targets.is_empty()
+                    }
+                }
+                CardKind::Wugu
                 | CardKind::Taoyuan
                 | CardKind::SavageAttack
                 | CardKind::ArcheryAttack => !targets.is_empty(),
+                CardKind::Le => {
+                    let limu_self = targets.as_slice() == [seat]
+                        && catalog
+                            .skill_by_name("xinfu_limu")
+                            .is_some_and(|d| core.has_skill(seat, d))
+                        && !catalog.is_tieji_sealed(core, seat)
+                        && catalog.effective_card_suit(core, seat, *card)
+                            == crate::catalog::Suit::Diamond;
+                    targets.len() != 1
+                        || (targets[0] == seat && !limu_self)
+                        || !core.player(targets[0]).alive
+                }
                 CardKind::Duel
                 | CardKind::Dismantle
                 | CardKind::Snatch
-                | CardKind::Le
                 | CardKind::Bing => {
                     targets.len() != 1 || targets[0] == seat || !core.player(targets[0]).alive
                 }

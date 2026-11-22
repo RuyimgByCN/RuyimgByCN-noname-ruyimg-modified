@@ -396,8 +396,6 @@ pub(super) fn apply_sha_use_limit(
         || flag_val(state, player, "l11_mod:xinfu_limu") > 0
         || has_ext_skill(state, catalog, player, "xinmingjian2")
         || has_ext_skill(state, catalog, player, "twwushen")
-        || (has_ext_skill(state, catalog, player, "xinfu_limu")
-            && !state.player(player).judge.is_empty())
     {
         unlimited = true;
     }
@@ -500,8 +498,6 @@ pub(super) fn apply_card_distance_unlimited_to(
         || has_ext_skill(state, catalog, player, "txshouyi")
         || has_ext_skill(state, catalog, player, "kyou_zhidian")
         || has_ext_skill(state, catalog, player, "twwushen")
-        || (has_ext_skill(state, catalog, player, "xinfu_limu")
-            && !state.player(player).judge.is_empty())
     {
         unlimited = true;
     }

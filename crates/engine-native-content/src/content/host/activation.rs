@@ -302,6 +302,9 @@ impl HostSkillBehavior {
             HostBehavior::L11GeneralSkillsF => {
                 super::step::l11_skills_f::activate_l11_skills_f(self, ctx, owner)
             }
+            HostBehavior::L01NeiKey | HostBehavior::L01AiRuleHooks => {
+                super::step::l01_rules::activate_l01_skill(&self.name, self.behavior, ctx, owner)
+            }
             _ => None,
         }
     }
@@ -540,6 +543,12 @@ pub(in crate::content::host) fn has_phase_use_activation(
                 | "ssr_newguidao"
                 | "ssr_guifu"
                 | "ssr_fangtong"
+        ),
+        HostBehavior::L01NeiKey => true,
+        HostBehavior::L01AiRuleHooks => matches!(
+            name,
+            crate::vocabulary::host::L01_FIX_EQZ_KEY
+                | crate::vocabulary::host::L01_FIX_ECF_KEY
         ),
         _ => false,
     }

@@ -617,6 +617,11 @@ impl HostBehavior {
             HostBehavior::L11GeneralSkillsD => "host:l11_general_skills_d",
             HostBehavior::L11GeneralSkillsE => "host:l11_general_skills_e",
             HostBehavior::L11GeneralSkillsF => "host:l11_general_skills_f",
+            HostBehavior::L01YiyiCard => "host:l01_yiyi_card",
+            HostBehavior::L01FirstKs => "host:l01_first_ks",
+            HostBehavior::L01NeiKey => "host:l01_neikey",
+            HostBehavior::L01AttitudeTracker => "host:l01_att_tracker",
+            HostBehavior::L01AiRuleHooks => "host:l01_ai_rule_hooks",
         }
     }
 }

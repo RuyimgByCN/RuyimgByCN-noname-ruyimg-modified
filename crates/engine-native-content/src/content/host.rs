@@ -32,6 +32,7 @@ pub use support::{
     jifeng_single_target_trick, sbzhaxiang_active, shengong_borrow_options,
     shengong_borrowed_owner, yangpijuan_class,
 };
+pub use step::step_l01_on_game_start;
 pub(crate) use step::{
     host_before_gain_hand, host_before_recover, host_card_use_after, host_draw_begin_step,
     host_on_game_start, host_on_hand_card_removed, host_on_phase_use_end, host_on_player_died,

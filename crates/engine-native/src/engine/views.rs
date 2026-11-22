@@ -32,11 +32,19 @@ impl Engine {
                 let i = i as PlayerId;
                 let own = seat == Some(i);
                 let kingdoms = matches!(core.mode, crate::state::GameMode::Kingdoms);
-                // 身份可见性（RULE-IDENTITY-VIEW-RESTORE）：本人、主公（公开）
-                // 与已死亡（遗言公开）可见；其余他人身份不可见。
+                // 身份可见性（RULE-IDENTITY-VIEW-RESTORE）：本人、主公（公开）、
+                // 已死亡（遗言公开）与显式亮明身份（`l01_role_shown`）可见；其余他人身份不可见。
                 let role = roles.and_then(|rs| {
                     let r = *rs.get(i as usize)?;
-                    (full_info || own || r == crate::state::Role::Lord || !p.alive).then_some(r)
+                    let shown = core
+                        .vm_aux
+                        .flags
+                        .get(&(i, "l01_role_shown".to_string()))
+                        .copied()
+                        .unwrap_or(0)
+                        > 0;
+                    (full_info || own || r == crate::state::Role::Lord || !p.alive || shown)
+                        .then_some(r)
                 });
                 // 国战门控（ADR 0757）：本座位双将可见；他人只见明置槽。
                 // 非国战模式（原型/身份/对决/斗地主/Boss）无暗置概念，

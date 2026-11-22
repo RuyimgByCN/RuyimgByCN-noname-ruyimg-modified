@@ -449,13 +449,22 @@ pub fn validate_core(core: &GameStateCore, b: &RestoreBounds) -> Result<(), Snap
         if !roles.contains(&crate::state::Role::Traitor) {
             return Err(oob("roles_composition", 0));
         }
-        // 人数表：4–6 人局 1 忠，7–8 人局 2 忠
+        // 人数表：4–6 人局 1 忠，7–8 人局 2 忠；L01 `fixFour` 规则开启后四人身份局可为 1 主 1 内 2 反（0 忠）。
         let loyalists = if (4..=6).contains(&b.seats) { 1 } else { 2 };
         let got = roles
             .iter()
             .filter(|r| **r == crate::state::Role::Loyalist)
             .count();
-        if got != loyalists {
+        let fix_four = b.seats == 4
+            && got == 0
+            && core
+                .vm_aux
+                .flags
+                .get(&(0, "l01_fix_four_applied".to_string()))
+                .copied()
+                .unwrap_or(0)
+                > 0;
+        if got != loyalists && !fix_four {
             return Err(oob("roles_loyalist_count", got as u64));
         }
     }

@@ -12,6 +12,9 @@ pub(super) fn play_equip(
         return Err(RejectReason::IllegalTargets);
     }
     let player = state.core.turn.current;
+    if !state.core.player(player).hand.contains(&card) {
+        return Err(RejectReason::CardNotInHand);
+    }
     if catalog
         .card_kind(card)
         .equip_slot()

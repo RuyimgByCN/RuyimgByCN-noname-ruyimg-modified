@@ -118,7 +118,9 @@ pub(super) fn play_kind(
         || (core.player(actor).hp <= 1 && catalog.has_rechanyuan(core, actor));
     if !core.player(actor).hand.contains(&card) {
         if let Some(spec) = catalog.find_player_vm_view_as(core, actor, card, true, None) {
-            return (spec.as_kind, false);
+            if spec.skill_name != "xinfu_limu" {
+                return (spec.as_kind, false);
+            }
         }
     }
     let mut kind = catalog.card_kind(card);
@@ -127,6 +129,28 @@ pub(super) fn play_kind(
             kind = spec.as_kind;
         }
         return (kind, false);
+    }
+    // 利木（`xinfu_limu`，L01/L11）：对己使用方块牌当作【乐不思蜀】置于己方判定区（无同名乐时；
+    // 原生允许自指的手牌如以逸待劳/羊皮卷/鬼蛇旗优先按本牌结算）。
+    let in_hand = core.player(actor).hand.contains(&card);
+    if targets == [actor]
+        && matches!(
+            catalog.effective_card_suit(core, actor, card),
+            crate::catalog::Suit::Diamond
+        )
+        && catalog
+            .skill_by_name("xinfu_limu")
+            .is_some_and(|d| core.has_skill(actor, d))
+        && !core.player(actor).judge.iter().any(|c| {
+            core.declared_kinds
+                .get(c)
+                .copied()
+                .unwrap_or_else(|| catalog.card_kind(*c))
+                == CardKind::Le
+        })
+        && (!in_hand || !card_accepts_explicit_self_target(catalog, card))
+    {
+        return (CardKind::Le, false);
     }
     // 良策（造之仁君，玩点论杀批 15）：基本手牌当【五谷丰登】
     //（viewAs 转化，独立于杀转化链——sha 牌可转化；登记差异：
@@ -392,17 +416,78 @@ pub(super) fn play_kind(
         if crate::kernel::is_ssr_luoyi_trick_to_duel(core, catalog, actor, card) {
             kind = CardKind::Duel;
         } else if let Some(spec) = catalog.find_player_vm_view_as(core, actor, card, true, None) {
-            if (kind != CardKind::Sha && kind != CardKind::Le && !(kind == CardKind::Tao && targets.is_empty()))
-                || spec.filter == crate::rvm_bridge::VmViewAsFilter::Sha
-                || (spec.as_kind.is_sha_like() && !targets.is_empty())
-                || (targets.is_empty() && kind != CardKind::Tao)
-                || (kind == CardKind::Sha && core.turn.sha_used_play_phase)
+            if spec.skill_name != "xinfu_limu"
+                && ((kind != CardKind::Sha
+                    && kind != CardKind::Le
+                    && !(kind == CardKind::Tao && targets.is_empty()))
+                    || spec.filter == crate::rvm_bridge::VmViewAsFilter::Sha
+                    || (spec.as_kind.is_sha_like() && !targets.is_empty())
+                    || (targets.is_empty() && kind != CardKind::Tao)
+                    || (kind == CardKind::Sha && core.turn.sha_used_play_phase))
             {
                 kind = spec.as_kind;
             }
         }
     }
     (kind, mark_mutoumianju)
+}
+
+/// 立牧（`xinfu_limu`，sp/skill.js:49243）：判定区有牌且未封技时，对攻击范围内的角色用牌无距离/次数限制。
+pub(super) fn xinfu_limu_in_range(
+    core: &GameStateCore,
+    catalog: &SharedCatalog,
+    from: PlayerId,
+    target: PlayerId,
+) -> bool {
+    !core.player(from).judge.is_empty()
+        && !catalog.is_tieji_sealed(core, from)
+        && catalog
+            .skill_by_name("xinfu_limu")
+            .is_some_and(|d| core.has_skill(from, d))
+        && core.players.get(target as usize).is_some_and(|p| p.alive)
+        && core.computed_distance(catalog, from, target) <= core.attack_range(catalog, from)
+}
+
+fn card_accepts_explicit_self_target(catalog: &SharedCatalog, card: CardId) -> bool {
+    let meta = &catalog.cards[card as usize];
+    let kind = meta.kind;
+    let name = meta.name;
+    (kind == CardKind::Wuzhong && (name == "yiyi" || name.ends_with("__ref_yiyi")))
+        || matches!(
+            kind,
+            CardKind::Yangpijuan
+                | CardKind::Qixingzhen
+                | CardKind::Guisheqi
+                | CardKind::Zhiliaobo
+                | CardKind::Caoyao
+                | CardKind::Yanziyaoshui
+                | CardKind::Aozuzhilei
+                | CardKind::Wenyi
+                | CardKind::Zhihuanjun
+                | CardKind::Baoxueyaoshui
+                | CardKind::Liuxinghuoyu
+                | CardKind::Tanhuadong
+                | CardKind::Yougeng
+                | CardKind::Qingtuan
+                | CardKind::Yuanbaorou
+                | CardKind::Gudonggeng
+                | CardKind::Mapodoufu
+                | CardKind::Chunbing
+                | CardKind::Liyutang
+                | CardKind::Molicha
+                | CardKind::Xiajiao
+                | CardKind::Mizhilianou
+                | CardKind::Luyugeng
+                | CardKind::Yunvyuanshen
+        )
+        || (kind == CardKind::Jiguan
+            && !name.contains("jiguantong")
+            && !name.contains("jiguanfeng")
+            && !name.contains("jiguanyuan"))
+        || (kind == CardKind::Hslingjian
+            && !name.contains("shijianhuisu")
+            && !name.contains("jinjilengdong")
+            && !name.contains("yinmilichang"))
 }
 
 /// 出牌目标禁指（装备分派之前）：持有者技能与状态使某些牌不能指定特定目标（纯只读）。

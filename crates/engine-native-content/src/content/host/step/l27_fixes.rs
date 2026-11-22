@@ -93,6 +93,7 @@ pub(crate) fn host_on_game_start(core: &mut GameStateCore, catalog: &Catalog) {
             refresh_xiefang_mark(core, catalog, owner, None);
         }
     }
+    super::l01_rules::l01_on_game_start(core, catalog);
 }
 
 /// `dieEnd` 死亡结算后钩子（`alive=false` 落账后）：刷新全场存活 `xiefang` 计数。

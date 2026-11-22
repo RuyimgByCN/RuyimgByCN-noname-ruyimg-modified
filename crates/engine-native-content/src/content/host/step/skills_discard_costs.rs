@@ -405,7 +405,32 @@ impl HostMachine {
                     ctx.current_card_use_mut()
                         .targets
                         .retain(|t| *t != self.owner);
-                    // ② 失去 1 点体力
+                    // ② 失去 1 点体力（仅 L01 启用时记录 zhenlie_lose 供 AI 濒死保护判断）
+                    let l01_active = ctx
+                        .catalog
+                        .skill_by_name("zhenlie_lose")
+                        .or_else(|| ctx.catalog.skill_by_name(crate::vocabulary::host::L01_FIRST_KS_KEY))
+                        .is_some_and(|d| {
+                            ctx.core
+                                .skills
+                                .iter()
+                                .any(|((_, dd), inst)| *dd == d && inst.enabled)
+                        })
+                        || ctx
+                            .core
+                            .vm_aux
+                            .flags
+                            .keys()
+                            .any(|(_, k)| k.starts_with("l01_cfg:"));
+                    let zhenlie_l01 = l01_active
+                        && (!ctx.core.player(user).hand.is_empty()
+                            || !ctx.core.player(user).equips.is_empty());
+                    if zhenlie_l01 {
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((self.owner, "l01_zhenlie_lose".to_string()), 1);
+                    }
                     let lose_hp = ctx.res.next_event_id;
                     ctx.emit(EventData::LoseHp {
                         player: self.owner,
@@ -431,6 +456,10 @@ impl HostMachine {
                         .copied()
                         .collect();
                     if cards.is_empty() {
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .remove(&(self.owner, "l01_zhenlie_lose".to_string()));
                         return Flow::Done;
                     }
                     self.target = Some(user);
@@ -449,6 +478,10 @@ impl HostMachine {
                     }
                 }
                 HostStage::SelectCard => {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(self.owner, "l01_zhenlie_lose".to_string()));
                     let Some(user) = self.target else {
                         return Flow::Done;
                     };

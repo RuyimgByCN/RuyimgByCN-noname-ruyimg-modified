@@ -404,36 +404,96 @@ pub(super) fn step_th_guili(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
 
 pub(super) fn step_th_chongxu(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     let owner = m.owner;
-    match m.stage {
-        HostStage::Act => wait_ask(m, ctx, HostStage::SelectNature, ASK_CHONGXU_ACTION),
-        HostStage::SelectNature => {
-            let action = match ctx.answer().first().copied() {
-                Some(ChoiceOption::Tag(t)) => t,
-                _ => 2,
-            };
-            let mut marks = flag(ctx.core, owner, "th_chongxu_marks") + 3;
-            match action {
-                0 if marks >= 2 && flag(ctx.core, owner, "th_miaojian_level") < 2 => {
-                    marks -= 2;
-                    let lv = flag(ctx.core, owner, "th_miaojian_level") + 1;
-                    set_flag(ctx.core, owner, "th_miaojian_level", lv);
-                    ctx.start_draw(owner, 1);
+    if flag(ctx.core, 0, "l01_cfg:xyyh") > 0 {
+        match m.stage {
+            HostStage::Act => {
+                // L01 `xyyh` (`AI优化/extension.js:5456-5505`): 随机档位 1..=5 跳过小游戏。
+                let roll = ctx.core.rng.gen_range(100);
+                let score = if roll >= 36 {
+                    5
+                } else if roll >= 18 {
+                    4
+                } else if roll >= 9 {
+                    3
+                } else if roll >= 4 {
+                    2
+                } else {
+                    1
+                };
+                set_flag(ctx.core, owner, "l01_xyyh_chongxu_score", score);
+                if score < 3 {
+                    if score >= 2 {
+                        ctx.start_draw(owner, 1);
+                    }
+                    return Flow::Done;
                 }
-                1 if marks >= 2 && flag(ctx.core, owner, "th_shhlianhua_level") < 2 => {
-                    marks -= 2;
-                    let lv = flag(ctx.core, owner, "th_shhlianhua_level") + 1;
-                    set_flag(ctx.core, owner, "th_shhlianhua_level", lv);
-                    ctx.start_draw(owner, 1);
+                let can_m = flag(ctx.core, owner, "th_miaojian_level") < 2;
+                let can_l = flag(ctx.core, owner, "th_shhlianhua_level") < 2;
+                if !can_m && !can_l {
+                    ctx.start_draw(owner, score / 2);
+                    return Flow::Done;
                 }
-                _ => {
-                    marks = marks.min(5);
-                    ctx.start_draw(owner, 2);
-                }
+                wait_ask(m, ctx, HostStage::SelectNature, ASK_CHONGXU_ACTION)
             }
-            set_flag(ctx.core, owner, "th_chongxu_marks", marks);
-            Flow::Done
+            HostStage::SelectNature => {
+                let score = flag(ctx.core, owner, "l01_xyyh_chongxu_score").max(3);
+                let action = match ctx.answer().first().copied() {
+                    Some(ChoiceOption::Tag(t)) => t,
+                    _ => 2,
+                };
+                match action {
+                    0 if flag(ctx.core, owner, "th_miaojian_level") < 2 => {
+                        let lv = flag(ctx.core, owner, "th_miaojian_level") + 1;
+                        set_flag(ctx.core, owner, "th_miaojian_level", lv);
+                        if score == 5 {
+                            ctx.start_draw(owner, 1);
+                        }
+                    }
+                    1 if flag(ctx.core, owner, "th_shhlianhua_level") < 2 => {
+                        let lv = flag(ctx.core, owner, "th_shhlianhua_level") + 1;
+                        set_flag(ctx.core, owner, "th_shhlianhua_level", lv);
+                        if score == 5 {
+                            ctx.start_draw(owner, 1);
+                        }
+                    }
+                    _ => ctx.start_draw(owner, score / 2),
+                }
+                Flow::Done
+            }
+            _ => Flow::Done,
         }
-        _ => Flow::Done,
+    } else {
+        match m.stage {
+            HostStage::Act => wait_ask(m, ctx, HostStage::SelectNature, ASK_CHONGXU_ACTION),
+            HostStage::SelectNature => {
+                let action = match ctx.answer().first().copied() {
+                    Some(ChoiceOption::Tag(t)) => t,
+                    _ => 2,
+                };
+                let mut marks = flag(ctx.core, owner, "th_chongxu_marks") + 3;
+                match action {
+                    0 if marks >= 2 && flag(ctx.core, owner, "th_miaojian_level") < 2 => {
+                        marks -= 2;
+                        let lv = flag(ctx.core, owner, "th_miaojian_level") + 1;
+                        set_flag(ctx.core, owner, "th_miaojian_level", lv);
+                        ctx.start_draw(owner, 1);
+                    }
+                    1 if marks >= 2 && flag(ctx.core, owner, "th_shhlianhua_level") < 2 => {
+                        marks -= 2;
+                        let lv = flag(ctx.core, owner, "th_shhlianhua_level") + 1;
+                        set_flag(ctx.core, owner, "th_shhlianhua_level", lv);
+                        ctx.start_draw(owner, 1);
+                    }
+                    _ => {
+                        marks = marks.min(5);
+                        ctx.start_draw(owner, 2);
+                    }
+                }
+                set_flag(ctx.core, owner, "th_chongxu_marks", marks);
+                Flow::Done
+            }
+            _ => Flow::Done,
+        }
     }
 }
 

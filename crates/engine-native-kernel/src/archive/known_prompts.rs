@@ -699,4 +699,11 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
     "dddzhengjun_hp_target",
     "dddqiahua_target",
     "guifu_dam_target",
+    "l01_yiyi_discard",
+    "l01_neikey_recover",
+    "l01_fix_qz_target",
+    "l01_fix_qz_delta",
+    "l01_fix_cf_skill",
+    "l01_fix_cf_delta",
+    "l01_chongxu_action",
 ];

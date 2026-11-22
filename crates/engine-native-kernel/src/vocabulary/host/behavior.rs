@@ -1703,4 +1703,15 @@ pub enum HostBehavior {
     L11GeneralSkillsE,
     /// L11 太虚幻境 武将技 Group F（tag 732：`txhj_suoming`..`txhj_oldhuxiao` 共 18 技能）。
     L11GeneralSkillsF,
+    /// L01 AI优化「以逸待劳」（tag 860，`AI优化/extension.js:9205-9262`）：
+    /// 国战/对决默认指定己方全员，其余模式指定 1–3 名角色；各目标依次摸 2 张再弃 2 张。
+    L01YiyiCard,
+    /// L01 AI优化开局/模式与伪禁规则集（tag 861，`AI优化/extension.js:8-221, 439-704, 3382-3502, 3973-4033`）。
+    L01FirstKs,
+    /// L01 AI优化「昭告 / 内奸亮明身份」（tag 862，`AI优化/extension.js:231-293`）。
+    L01NeiKey,
+    /// L01 AI优化公开态度追踪器（tag 863，`AI优化/extension.js:870-1817, 3503-3920`）。
+    L01AttitudeTracker,
+    /// L01 AI优化运行时调参与技能修正钩子（tag 864，`AI优化/extension.js:294-438, 1818-2383, 4034-9332`）。
+    L01AiRuleHooks,
 }

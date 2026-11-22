@@ -80,6 +80,11 @@ impl HostSkillBehavior {
             HostBehavior::L25ZuanBatchE => {
                 return super::step::l25_batch_e::machine_l25_batch_e(self, owner, event);
             }
+            HostBehavior::L01FirstKs
+            | HostBehavior::L01AttitudeTracker
+            | HostBehavior::L01AiRuleHooks => {
+                return super::step::l01_rules::machine_l01(self, owner, event);
+            }
             HostBehavior::L25ZuanBatchF => {
                 return super::step::l25_batch_f::machine_l25_batch_f(self, owner, event);
             }

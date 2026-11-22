@@ -9,6 +9,13 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-22 Batch L01-Rules（L01 AI优化 69 技能＋`yiyi`＋27 规则配置共 +97→133/133；100% 单项等价）合入（待提交／发布）
+
+- **基线、发布与版本**：HEAD `042f5b811927476b1bf056bc73e462194eee34ce`（Batch L11-2 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `45008789520` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。
+- **Batch L01-Rules 集成与复核**：合入 `swarm/conv-l01-rules` `1906e7f15..f5875e668`（`verifier-rules-2` #180 + `verifier-ui` #196 **`APPROVE`**）：协同标签 `860..=864`（`HostBehavior::ALL: 590`）、`play_equip`（`xinfu_limu` 手牌门控）、`xinfu_limu_in_range`/`tanbei_unlimited_target`/`is_ssr_luoyi_trick_to_duel`、`legal_actions` 与 `l01_on_game_start` 零写入门控（保 `installed_package_payload` `8/8`），关闭 `L01` 全部 97 项规则耦合条目。
+- **清单计数与整包签署**：按 #196 升格 **97 项**（`L01` → **`133／0／0`** 100% 单项等价）；全仓更新为 **已复核等价 1,939／简化近似 2,485／缺失 0**，整包八项签署仍 `0/37`。
+- **主线实测**：`-D warnings` native/`wasm32`、4 crate **`2,766/0/6`**（`l_rounds` **`223/223`**）、`--workspace --no-fail-fast` **`8,114/0/8`**、`conformance` **`19/19`**、`desktop-client` **`20/0/1`**、`build:native` 后跨端校验、`web-client` **`540/0`**、`smoke:native` **`83/0`** 与 `preflight.py` 全过，见 [Batch L01-Rules 证据](../operations/evidence/2026-11-22-batch4-1-l01-rules/README.md)。
+
 ### 2026-11-22 Batch L11-2（L11 太虚幻境 4 侍从钩子＋26 侍从技 B＋53 武将技 D/E/F 共 +83→192/936）合入（待提交／发布）
 
 - **基线、发布与版本**：HEAD `5bcd6b619ebfbe9bd5b414eeb5bbd7d2d1341443`（Batch Q2-L25 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `45001901211` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。

@@ -655,6 +655,9 @@ pub fn attach_formal_package_upstream_rules(
         ("upstream-liuli", "ai-tuning") => {
             push_card("yiyi", CardKind::Wuzhong, Suit::Heart, 4);
             push_skill("yiyi", super::L01_YIYI_ID);
+            for &s in &crate::L01_ALL_69_SKILLS {
+                push_skill(s, super::L01_YIYI_ID);
+            }
         }
         ("upstream-liuli", "wuxing") => {
             if !had_cards {

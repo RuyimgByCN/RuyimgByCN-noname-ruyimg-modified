@@ -35,6 +35,13 @@ fn parses_modes_and_tables() {
     assert!(parse_ai_tuning_config(&bad_value).is_err());
     let missing = CONFIG.replace("\"source\": \"noname-liuli\",", "");
     assert!(parse_ai_tuning_config(&missing).is_err());
+
+    // 上游默认：ckQz = "cf" (Threat), qzCf = true, neiKey = Off
+    let minimal = r#"{"source":"noname-liuli","upstream_path":"x","upstream_commit":"y","cf":{},"qz":{}}"#;
+    let def_cfg = parse_ai_tuning_config(minimal).expect("minimal defaults");
+    assert_eq!(def_cfg.ck_qz, QzMode::Threat);
+    assert!(def_cfg.qz_cf);
+    assert_eq!(def_cfg.nei_key, content_native_loader::NeiKeyMode::Off);
 }
 
 #[test]

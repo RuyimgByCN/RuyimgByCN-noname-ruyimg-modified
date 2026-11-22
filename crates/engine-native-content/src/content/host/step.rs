@@ -180,6 +180,10 @@ pub(super) mod l11_skills_e;
 pub(super) mod l11_skills_e_asks;
 pub(super) mod l11_skills_f;
 pub(super) mod l11_skills_f_asks;
+pub(super) mod l01_attitude;
+pub(super) mod l01_rules;
+pub(super) mod l01_yiyi;
+pub use l01_rules::l01_on_game_start as step_l01_on_game_start;
 
 impl HostMachine {
     pub(super) fn step_behavior(&mut self, ctx: &mut Ctx<'_>) -> Flow {
@@ -1248,6 +1252,11 @@ impl HostMachine {
             HostBehavior::L11GeneralSkillsD => l11_skills_d::handle_l11_skills_d(self, ctx),
             HostBehavior::L11GeneralSkillsE => l11_skills_e::handle_l11_skills_e(self, ctx),
             HostBehavior::L11GeneralSkillsF => l11_skills_f::handle_l11_skills_f(self, ctx),
+            HostBehavior::L01YiyiCard
+            | HostBehavior::L01FirstKs
+            | HostBehavior::L01NeiKey
+            | HostBehavior::L01AttitudeTracker
+            | HostBehavior::L01AiRuleHooks => l01_rules::step_l01_rule(self, ctx),
         }
     }
 }

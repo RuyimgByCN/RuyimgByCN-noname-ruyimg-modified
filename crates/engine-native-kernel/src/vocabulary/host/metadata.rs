@@ -4,6 +4,7 @@ mod common;
 mod wudian;
 mod swd;
 mod xianjian;
+mod l01;
 mod source_order;
 
 impl HostBehavior {
@@ -884,6 +885,11 @@ impl HostBehavior {
             | HostBehavior::L11GeneralSkillsD
             | HostBehavior::L11GeneralSkillsE
             | HostBehavior::L11GeneralSkillsF => None,
+            HostBehavior::L01YiyiCard
+            | HostBehavior::L01FirstKs
+            | HostBehavior::L01NeiKey
+            | HostBehavior::L01AttitudeTracker
+            | HostBehavior::L01AiRuleHooks => self.trigger_meta_l01(),
         };
         if let (Some(meta), Some((timing, priority, selectable))) = (&mut meta, self.source_order()) {
             meta.timing = timing;

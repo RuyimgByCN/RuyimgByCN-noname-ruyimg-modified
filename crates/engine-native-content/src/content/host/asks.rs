@@ -987,6 +987,9 @@ pub(crate) fn active_ask_host(
         | HostBehavior::MtgShuimomuxueLand => {
             active_ask_mtg(behavior, stage, owner, target, targets, cards, core, catalog)
         }
+        HostBehavior::L01YiyiCard | HostBehavior::L01NeiKey | HostBehavior::L01AiRuleHooks => {
+            super::step::l01_rules::active_ask_l01(behavior, stage, owner, target, core, catalog)
+        }
         _ => active_ask_batches(
             behavior, stage, owner, target, targets, card, cards, core, catalog,
         ),

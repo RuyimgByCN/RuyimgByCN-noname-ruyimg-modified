@@ -253,11 +253,13 @@ pub(super) fn play_card(
                             || catalog
                                 .find_player_vm_view_as(core, from, card, true, Some(CardKind::Snatch))
                                 .is_some_and(|s| s.ignore_distance));
+                    let limu_in_range_free = xinfu_limu_in_range(core, catalog, from, target);
                     if !qicai
                         && !tannang_free
                         && !fentian_red_free
                         && !shenen_boss_free
                         && !shouyi_free
+                        && !limu_in_range_free
                         && !crate::rvm_bridge::modifiers::tanbei_unlimited_target(
                             core, catalog, from, target,
                         )
@@ -290,24 +292,35 @@ pub(super) fn play_card(
                     return Ok(());
                 }
                 CardKind::Le | CardKind::Bing => {
-                    // 延时锦囊：置于 1 名其他存活玩家的判定区（不立即生效）；
-                    // 判定区不能有同名牌（本批接入的同名限制）。
+                    // 延时锦囊：置于 1 名其他存活玩家的判定区（不立即生效；`xinfu_limu` 方块牌可置自己）；
+                    // 判定区不能有同名牌（同时检查 `declared_kinds`）。
                     if targets.len() != 1 {
                         return Err(RejectReason::IllegalTargets);
                     }
                     let target = targets[0];
-                    if target == core.turn.current || !core.player(target).alive {
+                    let actor = core.turn.current;
+                    let limu_self_le = kind == CardKind::Le
+                        && target == actor
+                        && catalog
+                            .skill_by_name("xinfu_limu")
+                            .is_some_and(|d| core.has_skill(actor, d))
+                        && !catalog.is_tieji_sealed(core, actor)
+                        && catalog.effective_card_suit(core, actor, card)
+                            == crate::catalog::Suit::Diamond;
+                    if (target == actor && !limu_self_le) || !core.player(target).alive {
                         return Err(RejectReason::IllegalTargets);
                     }
                     // 无心（Boss 张春华，规则 v260）：锁定——你不能使用延时
                     // 锦囊指定其他角色为目标（上游 mod targetEnabled delay 同
                     // 口径；原生乐/兵路由本就只能置他人→等价持有者不可用乐/
                     // 兵；闪电自置不受限）
-                    if let Some(wxdef) = catalog
-                        .skill_by_name(crate::content::standard::BOSS_WUXIN)
-                    {
-                        if core.has_skill(core.turn.current, wxdef) {
-                            return Err(RejectReason::IllegalTargets);
+                    if !limu_self_le {
+                        if let Some(wxdef) = catalog
+                            .skill_by_name(crate::content::standard::BOSS_WUXIN)
+                        {
+                            if core.has_skill(core.turn.current, wxdef) {
+                                return Err(RejectReason::IllegalTargets);
+                            }
                         }
                     }
                     // 谦逊（陆逊）：不能成为乐不思蜀目标（锁定门控；
@@ -327,21 +340,23 @@ pub(super) fn play_card(
                             return Err(RejectReason::IllegalTargets);
                         }
                     }
-                    if core
-                        .player(target)
-                        .judge
-                        .iter()
-                        .any(|c| catalog.card_kind(*c) == kind)
-                    {
+                    if core.player(target).judge.iter().any(|c| {
+                        core.declared_kinds
+                            .get(c)
+                            .copied()
+                            .unwrap_or_else(|| catalog.card_kind(*c))
+                            == kind
+                    }) {
                         return Err(RejectReason::IllegalTargets);
                     }
+                    let use_as = (kind != catalog.card_kind(card) || limu_self_le).then_some(kind);
                     crate::resolution::push_frame(
                         &mut state.resolution,
                         EventData::CardUsed(crate::machine::card_use_as(
                             card,
-                            core.turn.current,
+                            actor,
                             targets,
-                            Some(kind),
+                            use_as,
                         )),
                     );
                     return Ok(());
@@ -738,17 +753,20 @@ pub(super) fn play_card(
                         return Err(RejectReason::IllegalTargets);
                     }
                     let user = core.turn.current;
-                    if !crate::rvm_bridge::modifiers::tanbei_unlimited_target(
-                        core, catalog, user, t,
-                    ) && !crate::rvm_bridge::modifiers::eval_card_distance_unlimited_to(
-                        core,
-                        catalog,
-                        user,
-                        Some(t),
-                        card,
-                        CardKind::Caoyao,
-                        crate::event::DamageNature::Normal,
-                    ) && core.computed_distance(catalog, user, t) > 1
+                    if !xinfu_limu_in_range(core, catalog, user, t)
+                        && !crate::rvm_bridge::modifiers::tanbei_unlimited_target(
+                            core, catalog, user, t,
+                        )
+                        && !crate::rvm_bridge::modifiers::eval_card_distance_unlimited_to(
+                            core,
+                            catalog,
+                            user,
+                            Some(t),
+                            card,
+                            CardKind::Caoyao,
+                            crate::event::DamageNature::Normal,
+                        )
+                        && core.computed_distance(catalog, user, t) > 1
                     {
                         return Err(RejectReason::IllegalTargets);
                     }

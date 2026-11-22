@@ -557,6 +557,9 @@ impl HostBehavior {
             Self::HuanleXuelunyangCard => (Timing::Normal, -25, true),
             // noname-liuli/noname/card/gujian.js:1088; Liuli game.js:32348-32365 (silent).
             Self::GujianFoodZiyangdan => (Timing::Normal, 1, false),
+            // noname-liuli/noname/extension/AI优化/extension.js:8, 870 (L01 AI优化, silent).
+            Self::L01FirstKs => (Timing::Normal, 100, false),
+            Self::L01AttitudeTracker => (Timing::Normal, -50, false),
             _ => return None,
         })
     }

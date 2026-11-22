@@ -516,6 +516,13 @@ impl Engine {
                                 .any(|c| c.name.contains("diaobingqianjiang"))
                                 || catalog.skill_by_name("choudu").is_some())
                     }
+                    "yiyi" => {
+                        *behavior == crate::content::host::HostBehavior::L01YiyiCard.tag()
+                            && catalog
+                                .cards
+                                .iter()
+                                .any(|c| c.name == "yiyi" || c.name.ends_with("__ref_yiyi"))
+                    }
                     _ => false,
                 };
                 if !skill_ok && !card_ok {

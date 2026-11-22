@@ -161,6 +161,12 @@ pub(super) fn play_sha(
         && targets
             .iter()
             .all(|&t| crate::rvm_bridge::modifiers::tanbei_unlimited_target(core, catalog, player_id, t));
+    // 立牧（`xinfu_limu`，sp/skill.js:49250）：判定区有牌时，仅对攻击范围内目标出杀不限次数。
+    let vm_sha_unlimited = vm_sha_unlimited
+        || (!targets.is_empty()
+            && targets
+                .iter()
+                .all(|&t| xinfu_limu_in_range(core, catalog, player_id, t)));
     if !paoxiao
         && !has_zhuge
         && !baolei_sentinel

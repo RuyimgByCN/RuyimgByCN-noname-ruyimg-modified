@@ -619,6 +619,27 @@ pub fn lookup_upstream_host_behavior(skill_name: &str) -> Option<HostBehavior> {
         | "feigong" | "jianai" | "jieyong" | "jieyong2" | "jieyong3" | "zhulu" | "xieling"
         | "qiangyun" | "cike" | "qiangxi" | "miaobix" | "miaobi" | "zhexian" | "guifu"
         | "lshengong" => Some(HostBehavior::U08YxsBatchD),
+        // L01 AI优化（68 项 L01 专属技能）
+        "_aiyh_firstKs" | "_findZhong" | "_aiyh_fake_prohibited" | "_aiyh_nhFriends"
+        | "_mjAiSkill" | "_fenghuyunlong" | "_tianxiayitong" | "jlnj" | "_wanjunpiyi" => {
+            Some(HostBehavior::L01FirstKs)
+        }
+        "_aiyh_neiKey" => Some(HostBehavior::L01NeiKey),
+        "_attzhi" | "attcard" | "attdamage" | "attlosehp" | "attrecover" | "attgain"
+        | "attlose" | "attturnover" | "attbo" | "attmingbian" | "attmingbian1"
+        | "attfanzhuang" | "attbaolu" | "atttiaofan" | "tfattzhu" | "tfattzhong" | "atttf"
+        | "_yingshilanggu" => Some(HostBehavior::L01AttitudeTracker),
+        "_aiyh_meks" | "_aiyh_fixEQz" | "_aiyh_fixECf" | "_aiyh_fixWj" | "aiMangju"
+        | "_shyg_qjAi" | "_aiyh_reserved_shan" | "aiyh_disabled_shan" | "_shyg_wuxie"
+        | "_shyg_wuxie_jiedao" | "_shyg_wuxie_lei" | "shyg_wuxie_fy" | "_shyg_wugu"
+        | "shyg_wugu_ss_pai" | "shyg_wugu_wss_pai" | "_shyg_Discard" | "shyg_Discard_key"
+        | "_shyg_Discard_du" | "shyg_Discard_du_useful" | "shyg_mz" | "shyg_smz" | "shyg_tz"
+        | "shyg_tf" | "chaofeng_common" | "chaofeng_rare" | "chaofeng_epic"
+        | "chaofeng_legend" | "_shyg" | "gjcx_zhuAi" | "gjcx_neiAi" | "gjcx_neiZhong"
+        | "gjcx_neiFan" | "gjcx_neiJiang" | "_aiyh_lianhe" | "_aiyh_wqjz" | "zhenlie_lose"
+        | "twzhian_ai" | "dcwumei_all" | "aiyh_gjcx_qj" | "_gjcx_correct" => {
+            Some(HostBehavior::L01AiRuleHooks)
+        }
         _ => super::zuan_data::lookup_l25_zuan_host_behavior(clean),
     }
 }

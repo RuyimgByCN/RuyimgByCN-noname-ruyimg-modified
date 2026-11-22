@@ -193,8 +193,9 @@ mod intrinsic;
 pub use intrinsic::*;
 mod combat_rules;
 pub use combat_rules::{
-    is_black_trick_card, is_ssr_luoyi_trick_to_duel, jinyan_blocks_black_trick,
-    mbcmfangzhu_baiban, mbcmfangzhu_banned, sha_card_use_as, tao_futai2_banned, usable_sha_options,
+    discard_response_card, is_black_trick_card, is_ssr_luoyi_trick_to_duel,
+    jinyan_blocks_black_trick, mbcmfangzhu_baiban, mbcmfangzhu_banned, response_kind_cards_core,
+    sha_card_use_as, tao_futai2_banned, usable_sha_options,
 };
 pub(crate) use combat_rules::*;
 mod sha;
