@@ -372,6 +372,10 @@ pub(super) fn active_ask_batches(
                 super::step::u01_fixes_2::active_ask_u01_fix2(
                     ask_id, stage, owner, target, targets, card, cards, core, catalog,
                 )
+            } else if (3001..=3099).contains(&ask_id) {
+                super::step::u01_fixes_3::active_ask_u01_fix3(
+                    ask_id, stage, owner, target, targets, card, cards, core, catalog,
+                )
             } else {
                 super::step::u01_batch_c::active_ask_u01_batch_c(
                     stage, owner, target, targets, card, cards, core, catalog,
@@ -382,6 +386,10 @@ pub(super) fn active_ask_batches(
             let ask_id = super::step::u01_batch_a::flag(core, owner, super::step::u01_batch_a::ASK_KEY);
             if (1001..=1099).contains(&ask_id) {
                 super::step::u01_fixes_1::active_ask_u01_fix(
+                    ask_id, stage, owner, target, targets, card, cards, core, catalog,
+                )
+            } else if (3001..=3099).contains(&ask_id) {
+                super::step::u01_fixes_3::active_ask_u01_fix3(
                     ask_id, stage, owner, target, targets, card, cards, core, catalog,
                 )
             } else {

@@ -25,7 +25,8 @@ pub use d34_l11_mods::{
     tanbei_unlimited_target, txlianbi_blocks_unlink, txminguangkai_blocks_link,
 };
 pub use d34_u01_mods::{
-    is_dddfusi_hand_locked, is_dddtongyu_hand_locked, is_u01_hand_locked, is_u01_shown_card,
+    has_ddddanggu_negative, is_dddfusi_hand_locked, is_dddtongyu_hand_locked, is_u01_hand_locked,
+    is_u01_real_lord, is_u01_shown_card,
 };
 pub use d34_unrespondable::{apply_card_unrespondable, apply_card_unrespondable_with_nature};
 pub use d34_view_as::find_d34_flag_view_as;
@@ -229,6 +230,7 @@ pub fn apply_hand_limit(
     if flag_val(state, player, "l10_scsyaozhuo_skip_draw") > 0 {
         limit -= 1;
     }
+    limit += d34_u01_mods::u01_xiaoxing_bonus(state, catalog, player);
     limit += flag_val(state, player, "u05_mod:tanlin3") as i32;
     let limit = super::d34_l28_mods::apply_shengong_hand_limit(state, catalog, player, limit);
     let limit = d34_u05_mods::apply_hand_limit(state, player, limit);
@@ -263,6 +265,7 @@ pub fn apply_attack_range(
     if flag_val(state, player, "u05_mod:shihuawuqi") > 0 {
         cur += 2;
     }
+    cur += d34_u01_mods::u01_xiaoxing_bonus(state, catalog, player);
     if flag_val(state, player, "u05_mod:mailun5") > 0 {
         cur += 1;
     }
@@ -358,6 +361,7 @@ pub fn apply_sha_use_limit(
     };
     cur += flag_val(state, player, "yxs_guimian_sha_limit_bonus") as i32;
     cur += flag_val(state, player, "dddfuyi_qun_sha_bonus") as i32;
+    cur += d34_u01_mods::u01_fuyi_sha_bonus(state, catalog, player);
     cur += flag_val(state, player, "l27_qimou_range_bonus") as i32;
     cur += flag_val(state, player, "l27_potzhuangshi_unblockable") as i32;
     if flag_val(state, player, "l27_jinghe_shared") > 0
@@ -483,8 +487,7 @@ pub fn apply_card_distance_unlimited_to(
         unlimited = true;
     }
     if kind.is_sha_like() {
-        if flag_val(state, player, "ddd_dddduanbing_range_mod") > 0
-            || has_ext_skill(state, catalog, player, "sheshu")
+        if has_ext_skill(state, catalog, player, "sheshu")
             || flag_val(state, player, "yxs_sheshu_pierce") > 0
         {
             unlimited = true;
@@ -630,6 +633,9 @@ pub fn is_ducai3_forbidden(
     actor: PlayerId,
     card: CardId,
 ) -> bool {
+    if d34_u01_mods::is_dddlianer_forbidden(state, catalog, actor, card) {
+        return true;
+    }
     if (card as usize) < catalog.cards.len()
         && flag_val(state, actor, "l25_gongxin_red_sealed") > 0
         && matches!(

@@ -457,9 +457,37 @@ impl Engine {
                 }
             }
         }
-        if name == "dddfusi" {
+        if matches!(name, "dddfusi" | "dddfengzheng") {
             crate::state::sync_dddfusi_global(&mut self.state.core, &self.catalog);
             crate::resolution::sync_trigger_owners(&self.state.core, &mut self.state.resolution);
+        }
+        if name == "dddxiaoxing"
+            && self
+                .state
+                .core
+                .vm_aux
+                .flags
+                .get(&(player, "dddxiaoxing_init_done".to_string()))
+                .copied()
+                .unwrap_or(0)
+                == 0
+        {
+            let mut drawn = Vec::with_capacity(3);
+            let core = &mut self.state.core;
+            for _ in 0..3 {
+                if core.deck.is_empty() && !core.discard.is_empty() {
+                    let mut reshuffled = std::mem::take(&mut core.discard);
+                    core.rng.shuffle(&mut reshuffled);
+                    core.deck.extend(reshuffled);
+                }
+                if let Some(c) = core.deck.pop() {
+                    drawn.push(c);
+                }
+            }
+            core.player_mut(player).hand.extend(drawn);
+            core.vm_aux
+                .flags
+                .insert((player, "dddxiaoxing_init_done".to_string()), 1);
         }
     }
 

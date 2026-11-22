@@ -102,6 +102,11 @@ impl HostSkillBehavior {
                 self, ctx, frames, Some(frame), owner, event,
             );
         }
+        if let Some(v) = super::step::u01_fixes_3::filter_u01_fix3_with_frames(
+            self, ctx, frames, frame, owner, event,
+        ) {
+            return v;
+        }
         self.filter_behavior(ctx, owner, event)
     }
 
@@ -793,8 +798,11 @@ impl HostSkillBehavior {
                 .unwrap_or_else(|| super::step::u01_batch_b::filter_u01_batch_b(self, ctx, owner, event)),
             HostBehavior::U01DddBatchC => super::step::u01_fixes_1::filter_u01_fix(self, ctx, owner, event)
                 .or_else(|| super::step::u01_fixes_2::filter_u01_fix2(self, ctx, owner, event))
+                .or_else(|| super::step::u01_fixes_3::filter_u01_fix3(self, ctx, owner, event))
                 .unwrap_or_else(|| super::step::u01_batch_c::filter_u01_batch_c(self, ctx, owner, event)),
             HostBehavior::U01DddBatchD => super::step::u01_fixes_1::filter_u01_fix(self, ctx, owner, event)
+                .or_else(|| super::step::u01_fixes_2::filter_u01_fix2(self, ctx, owner, event))
+                .or_else(|| super::step::u01_fixes_3::filter_u01_fix3(self, ctx, owner, event))
                 .unwrap_or_else(|| super::step::u01_batch_d::filter_u01_batch_d(self, ctx, owner, event)),
             HostBehavior::L28ThunderBatchA => {
                 super::step::l28_batch_a::filter_l28_batch_a(self, ctx, owner, event)

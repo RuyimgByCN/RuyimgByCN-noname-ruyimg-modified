@@ -9,6 +9,13 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-22 Batch U01-3（U01 3D精选 20 项收口→94/95；`dddanzhi` 冻结锁边界保留）合入（待提交／发布）
+
+- **基线、发布与版本**：HEAD `820aaddd64450d03c4cf66fdac808480872778ca`（Batch L11-3 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `45022962559` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。
+- **Batch U01-3 集成与复核**：合入 `swarm/conv-u01-3` `622387115..26412405d`（`verifier-rules` #187 + `verifier-rules-2` #205 **`APPROVE`**）：协同迁入 `aux_history.rs`、拆出 `machine/skills.rs`（保 `<=1,000` 有效行）并合并 `known_prompts.rs`、`d34_flags.rs`、`filtering.rs`、`equipment.rs`、`kernel.rs`；按 Section 3 Item 3① 保持 `dddanzhi` 为 `简化近似`（`Prepare` vs `phaseBegin` 冻结锁边界）。
+- **清单计数与整包签署**：按 #205 升格 **20 项**（`U01` → **`94／1／0`**）；全仓更新为 **已复核等价 2,047／简化近似 2,377／缺失 0**，整包八项签署仍 `0/37`。
+- **主线实测**：`-D warnings` native/`wasm32`、4 crate **`2,840/0/6`**（`g1` **`395/0/1`**、`l_rounds` **`235/0/0`**）、`--workspace --no-fail-fast` **`8,147/0/8`**、`conformance` **`19/19`**、`desktop-client` **`20/0/1`**、`build:native` 后跨端校验、`web-client` **`540/0`**、`smoke:native` **`83/0`** 与 `preflight.py` 全过，见 [Batch U01-3 证据](../operations/evidence/2026-11-22-batch1-6d-u01-3/README.md)。
+
 ### 2026-11-22 Batch L11-3（L11 太虚幻境 40 祝福＋38 触发＋10 衍生技共 +88→280/936）合入（待提交／发布）
 
 - **基线、发布与版本**：HEAD `9c29b98996558302cadebec39c59ba8787cab86b`（Batch L01-Rules 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `45017015012` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。

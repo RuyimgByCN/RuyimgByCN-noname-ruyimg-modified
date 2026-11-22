@@ -29,7 +29,7 @@ pub(crate) fn on_skill_removed_l28(
     owner: PlayerId,
     skill_name: &str,
 ) -> Vec<CardId> {
-    match skill_name {
+    let out = match skill_name {
         "th_chengye" => {
             set_flag(core, owner, "th_chengye_liujing_count", 0);
             set_flag(core, owner, "th_chengye_mask", 0);
@@ -72,7 +72,9 @@ pub(crate) fn on_skill_removed_l28(
                 .unwrap_or_default()
         }
         _ => Vec::new(),
-    }
+    };
+    super::super::u01_fixes_3::on_skill_removed_u01_3(core, catalog, owner, skill_name);
+    out
 }
 
 /// 收集他人在弃牌堆中的牌按六经缺失槽收入 `th_liujing`（`extension.js:6203-6272`），
@@ -83,6 +85,10 @@ pub(crate) fn on_cards_to_discard_chengye(
     cards: &[CardId],
     from_use_card: bool,
 ) {
+    super::super::u01_fixes_3::on_cards_to_discard_u01_3(ctx);
+    if cards.is_empty() {
+        return;
+    }
     super::l28_batch_a_shengong::intercept_shengong_destroy(ctx, cards);
     let seats = ctx.core.players.len() as PlayerId;
     if let Some(chengye_def) = ctx.catalog.skill_by_name("th_chengye") {
@@ -508,6 +514,7 @@ pub(crate) fn play_begin_tianshu(ctx: &mut Ctx<'_>, player: PlayerId) {
 
 /// 外层事件结算完毕钩子（`extension.js:8988-9016` `th_taipingyaoshu` 与 `mobile.js:502` `rewrite_baiyin`）。
 pub(crate) fn on_outer_settled_taipingyaoshu(ctx: &mut Ctx<'_>) {
+    super::super::u01_fixes_3::on_outer_settled_u01_3(ctx);
     let seats = ctx.core.players.len() as PlayerId;
     let mut push_pending = |p: PlayerId, key: &'static str, def_key: &'static str| {
         if ctx

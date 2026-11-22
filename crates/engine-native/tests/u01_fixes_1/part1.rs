@@ -459,6 +459,10 @@ fn u01_fix_05_dddlangzhi() {
     let (mut e, d3, p9) = new_clean_engine(91005, 4);
     let kebineng = find_general(&e, "ddd_kebineng");
     e.assign_general(0, kebineng).unwrap();
+    // 真实 Noname 的 ddd_kebineng 兼有 dddxiaoxing (+3 攻击范围)；此处验证 dddlangzhi 自身攻击范围过滤，先移除 dddxiaoxing。
+    if let Some(xx) = e.catalog().skill_by_name("dddxiaoxing") {
+        e.state_core_mut().skills.remove(&(0, xx));
+    }
 
     // Seat 0 has default attack range 1 -> seats 1 and 3 are in range (dist 1), seat 2 is OUT of range (dist 2).
     let c0 = find_card_by(&e, |_, _| true);

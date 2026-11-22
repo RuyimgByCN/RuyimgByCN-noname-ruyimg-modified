@@ -160,6 +160,41 @@ impl Engine {
                 .flags
                 .insert((seat, "dddmiaoxing_tripled_start".to_string()), 1);
         }
+        let has_xiaoxing = self
+            .catalog()
+            .skill_by_name("dddxiaoxing")
+            .is_some_and(|sid| self.state_core().has_skill(seat, sid));
+        let cur_hand_len2 = self.state_core().player(seat).hand.len();
+        if has_xiaoxing
+            && self.state_core().turn.round <= 1
+            && self.state_core().turn.phase_number == 0
+            && cur_hand_len2 > 0
+            && self
+                .state_core()
+                .vm_aux
+                .flags
+                .get(&(seat, "dddxiaoxing_init_done".to_string()))
+                .copied()
+                .unwrap_or(0)
+                == 0
+        {
+            let mut drawn = Vec::with_capacity(3);
+            let core = self.state_core_mut();
+            for _ in 0..3 {
+                if core.deck.is_empty() && !core.discard.is_empty() {
+                    let mut reshuffled = std::mem::take(&mut core.discard);
+                    core.rng.shuffle(&mut reshuffled);
+                    core.deck.extend(reshuffled);
+                }
+                if let Some(c) = core.deck.pop() {
+                    drawn.push(c);
+                }
+            }
+            core.player_mut(seat).hand.extend(drawn);
+            core.vm_aux
+                .flags
+                .insert((seat, "dddxiaoxing_init_done".to_string()), 1);
+        }
         Ok(())
     }
 

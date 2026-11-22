@@ -31,6 +31,58 @@ pub(in crate::kernel) fn record_vm_history(ctx: &mut Ctx<'_>, data: &EventData) 
             record_dddanzhi_card(ctx.core, ctx.catalog, card);
         }
     }
+    if !pre_counted {
+        if let EventData::CardUsed(u) = data {
+            if !u.cancelled {
+                let eff = u.effective_kind(ctx.catalog);
+                let is_trick = !eff.is_basic_kind() && eff.equip_slot().is_none();
+                let stamp = ctx.core.turn.round.saturating_mul(100)
+                    + u32::from(ctx.core.turn.current)
+                    + 1;
+                if is_trick && ctx.catalog.skill_by_name("dddshixing").is_some() {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .insert((0, "u01_turn_trick_used_stamp".to_string()), stamp);
+                }
+                if ctx.catalog.skill_by_name("dddzhuanshe").is_some() {
+                    let key_kind = if eff.is_sha_like() {
+                        crate::catalog::CardKind::Sha as u32
+                    } else {
+                        eff as u32
+                    };
+                    ctx.core.vm_aux.flags.insert(
+                        (
+                            u.player,
+                            format!("u01_zhuanshe_used:{stamp}:{key_kind}"),
+                        ),
+                        1,
+                    );
+                }
+                let is_delay = matches!(
+                    eff,
+                    CardKind::Le
+                        | CardKind::Bing
+                        | CardKind::ShanDian
+                        | CardKind::HongShui
+                        | CardKind::Guiyoujie
+                );
+                if (eff.is_basic_kind() || (is_trick && !is_delay))
+                    && ctx.catalog.skill_by_name("dddchengjing").is_some()
+                {
+                    if let Some(cid) = u.card.filter(|_| u.use_as.is_none()) {
+                        let len_key = (u.player, format!("u01_cj_len:{stamp}"));
+                        let idx = ctx.core.vm_aux.flags.get(&len_key).copied().unwrap_or(0);
+                        ctx.core.vm_aux.flags.insert(
+                            (u.player, format!("u01_cj_card:{stamp}:{idx}")),
+                            cid,
+                        );
+                        ctx.core.vm_aux.flags.insert(len_key, idx + 1);
+                    }
+                }
+            }
+        }
+    }
     // 标准局面没有 VM 技能时不记。空 VmAux 不写摘要，v295 golden 保持。
     if !ctx.catalog.vm_card_history {
         return;

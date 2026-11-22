@@ -131,7 +131,7 @@ impl crate::catalog::SkillMachine for DrawPhaseMachine {
                 // 量、归零清槽与 helper（≤0 不触发不消费不删除；fixed 由
                 // num_fixed 侧跳过整窗）。窗口先派发（触发面可见消费前值），
                 // 消费在发窗的同一步完成（§5「pending 加全部正值→移除同量」）。
-                if !num_fixed {
+                if !num_fixed && !matches!(outcome, O::Cancelled) {
                     if ctx
                         .catalog
                         .skill_by_name("xuwangzhimian")
@@ -204,7 +204,11 @@ impl crate::catalog::SkillMachine for DrawPhaseMachine {
         if let Some(child) = child {
             // 主 draw：R 子帧（fixed 路径与替代 draw 由后续批次接入）。
             if matches!(child, EventData::DrawWindow { window: W::End, .. }) {
-                let count = pending.max(0) as u32;
+                let count = if matches!(outcome, O::Cancelled) {
+                    0
+                } else {
+                    pending.max(0) as u32
+                };
                 if count > 0 {
                     let id = ctx.res.next_event_id;
                     ctx.res.stack.push(crate::event::Frame {

@@ -5,6 +5,8 @@ use crate::choice::ChoiceOption;
 
 #[path = "extension_choices_u01_2.rs"]
 mod extension_choices_u01_2;
+#[path = "extension_choices_u01_3.rs"]
+mod extension_choices_u01_3;
 
 pub(super) fn pick_hostile_or_first(
     input: &crate::view::PolicyInput,
@@ -231,7 +233,19 @@ pub(super) fn plan_u01_choice_action(
                 min,
                 max,
                 allow_cancel,
-            );
+            )
+            .or_else(|| {
+                extension_choices_u01_3::plan_u01_3_choice_action(
+                    catalog,
+                    input,
+                    id,
+                    prompt,
+                    options,
+                    min,
+                    max,
+                    allow_cancel,
+                )
+            });
         }
     };
     Some(GameAction::Answer {

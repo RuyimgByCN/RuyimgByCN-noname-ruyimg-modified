@@ -21,10 +21,13 @@ impl HostSkillBehavior {
             HostBehavior::U01DddBatchC => {
                 return super::step::u01_fixes_1::machine_u01_fix(self, owner, event)
                     .or_else(|| super::step::u01_fixes_2::machine_u01_fix2(self, owner, event))
+                    .or_else(|| super::step::u01_fixes_3::machine_u01_fix3(self, owner, event))
                     .unwrap_or_else(|| super::step::u01_batch_c::machine_u01_batch_c(self, owner, event));
             }
             HostBehavior::U01DddBatchD => {
                 return super::step::u01_fixes_1::machine_u01_fix(self, owner, event)
+                    .or_else(|| super::step::u01_fixes_2::machine_u01_fix2(self, owner, event))
+                    .or_else(|| super::step::u01_fixes_3::machine_u01_fix3(self, owner, event))
                     .unwrap_or_else(|| super::step::u01_batch_d::machine_u01_batch_d(self, owner, event));
             }
             HostBehavior::L28ThunderBatchA => {

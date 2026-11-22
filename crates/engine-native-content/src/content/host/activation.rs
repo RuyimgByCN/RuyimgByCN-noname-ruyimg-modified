@@ -207,8 +207,11 @@ impl HostSkillBehavior {
                 .unwrap_or_else(|| super::step::u01_batch_b::activate_u01_batch_b(self, ctx, owner)),
             HostBehavior::U01DddBatchC => super::step::u01_fixes_1::activate_u01_fix(self, ctx, owner)
                 .or_else(|| super::step::u01_fixes_2::activate_u01_fix2(self, ctx, owner))
+                .or_else(|| super::step::u01_fixes_3::activate_u01_fix3(self, ctx, owner))
                 .unwrap_or_else(|| super::step::u01_batch_c::activate_u01_batch_c(self, ctx, owner)),
             HostBehavior::U01DddBatchD => super::step::u01_fixes_1::activate_u01_fix(self, ctx, owner)
+                .or_else(|| super::step::u01_fixes_2::activate_u01_fix2(self, ctx, owner))
+                .or_else(|| super::step::u01_fixes_3::activate_u01_fix3(self, ctx, owner))
                 .unwrap_or_else(|| super::step::u01_batch_d::activate_u01_batch_d(self, ctx, owner)),
             HostBehavior::L28ThunderBatchA => {
                 super::step::l28_batch_a::activate_l28_batch_a(self, ctx, owner)

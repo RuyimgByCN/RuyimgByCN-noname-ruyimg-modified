@@ -66,12 +66,55 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
                 }
             }
         }
-        EventData::Recover { player, .. } => commit_recover_skills(ctx, player),
+        EventData::Recover { player, .. } => commit_recover(ctx, frame_id, player),
         // CardsDrawn/Recover/CardsMoved/CardResponded 等在构造或 emit 时已完成日志/区移动作。
         _ => {
             let _ = kind;
         }
     }
+}
+
+fn commit_recover(ctx: &mut Ctx<'_>, frame_id: EventId, player: PlayerId) {
+    let preapplied = ctx
+        .core
+        .vm_aux
+        .flags
+        .remove(&(0, format!("u01_recover_preapplied:{frame_id}")));
+    if ctx
+        .core
+        .vm_aux
+        .flags
+        .remove(&(0, format!("u01_recover_cancelled:{frame_id}")))
+        .is_some()
+    {
+        if let Some(gained) = preapplied {
+            let p = ctx.core.player_mut(player);
+            if p.alive && !p.infinite_hp() {
+                p.hp = p.hp.saturating_sub(gained as i32);
+                if p.hp <= 0 {
+                    p.dying = true;
+                }
+            }
+        }
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((player, "dying_recover_was_cancelled".to_string()), 1);
+        if let Some(f) = ctx.res.frame_mut(frame_id) {
+            if let EventData::Recover { amount: a, .. } = &mut f.data {
+                *a = 0;
+            }
+        }
+        return;
+    }
+    if let Some(gained) = preapplied {
+        ctx.log(LogEvent::HpRecovered {
+            player,
+            amount: gained,
+            presentation: None,
+        });
+    }
+    commit_recover_skills(ctx, player);
 }
 
 fn clear_shilie_shown_on_leave(

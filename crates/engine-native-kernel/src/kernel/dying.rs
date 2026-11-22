@@ -98,8 +98,33 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
             }
         }
         loop {
-            if super::has_u01_respond_park(ctx) {
+            if super::has_u01_respond_park(ctx)
+                || ctx
+                    .res
+                    .stack
+                    .iter()
+                    .any(|f| f.kind == crate::event::EventKind::Recover)
+            {
                 return Flow::Yield;
+            }
+            if let Some(tao_card) = ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(self.dying, "dying_pending_saved_card".to_string()))
+            {
+                let cancelled = ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.dying, "dying_recover_was_cancelled".to_string()))
+                    .is_some();
+                if !cancelled {
+                    ctx.log(LogEvent::DyingSaved {
+                        player: self.dying,
+                        by_card: tao_card,
+                    });
+                }
             }
             let p = ctx.core.player(self.dying);
             let mbmowang_rest = ctx
@@ -591,11 +616,13 @@ impl DyingSaveMachine {
                 .flags
                 .remove(&(responder, "vm_va_recover_bonus".to_string()))
                 .unwrap_or(0);
-        ctx.recover(self.dying, amount, Some(tao));
-        ctx.log(LogEvent::DyingSaved {
-            player: self.dying,
-            by_card: tao,
-        });
+        let gained = ctx.recover(self.dying, amount, Some(tao));
+        if gained > 0 {
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((self.dying, "dying_pending_saved_card".to_string()), tao);
+        }
     }
 }
 

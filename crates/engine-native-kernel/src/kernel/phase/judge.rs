@@ -11,7 +11,21 @@ pub(super) fn begin_judge(_ctx: &mut Ctx<'_>, _player: PlayerId) {    // R05（K
 /// R05（A2 审计 K26–K45 族）：准备阶段开始入场效果——原锚判定开始
 /// （`begin_judge` 的 `!turn_opened` 门内后半段），按上游 phaseZhunbeiBegin
 /// 语义迁至 Phase{Prepare, begin} 入场。
-pub(super) fn begin_prepare(ctx: &mut Ctx<'_>, player: PlayerId) {        // 绝红（Boss 共工，规则 v244）：准备阶段——敌方全
+pub(super) fn begin_prepare(ctx: &mut Ctx<'_>, player: PlayerId) {
+    // 失朝（3D精选，Round 2）：准备阶段开始未续设新护盾时清除上回合失朝记录。
+    if ctx
+        .core
+        .vm_aux
+        .flags
+        .remove(&(player, "dddshichao_just_armed".to_string()))
+        .is_none()
+    {
+        ctx.core
+            .vm_aux
+            .flags
+            .retain(|(o, k), _| !(*o == player && k.starts_with("dddshichao_guard:")));
+    }
+    // 绝红（Boss 共工，规则 v244）：准备阶段——敌方全
         // 体逐个：有牌者，有装备 → 装备全弃（撤技能+入弃堆）；
         // 无装备 → 随机弃一张手牌（随机→手牌首张确定性近似
         // 登记先例族）

@@ -160,6 +160,7 @@ pub fn push_frame(res: &mut Resolution, data: crate::event::EventData) -> EventI
             EventKind::TurnBegin => Stage::BeforeTriggers,
             // R05（K21）：整回合结束窗两段——BeforeTriggers 派发，after 段静默。
             EventKind::TurnPhaseEnd | EventKind::TurnPhaseAfter => Stage::BeforeTriggers,
+            EventKind::Recover => Stage::BeforeTriggers,
             _ => Stage::Commit,
         },
     };
@@ -206,6 +207,7 @@ fn next_stage(kind: EventKind, cur: Stage) -> Stage {
         (EventKind::TurnOverBefore, Stage::AfterTriggers) => Stage::Commit,
         (EventKind::TurnOverBefore, Stage::Commit) => Stage::Done,
         (EventKind::Equipped, Stage::BeforeTriggers) => Stage::Commit,
+        (EventKind::Recover, Stage::BeforeTriggers) => Stage::Commit,
         (EventKind::CardUsed, Stage::Commit) => Stage::AfterTriggers,
         (EventKind::CardUsed, Stage::AfterTriggers) => Stage::Intrinsic,
         (EventKind::CardUsed, Stage::Intrinsic) => Stage::Done,
@@ -422,6 +424,8 @@ fn plan_triggers(
                     EventKind::TurnPhaseEnd
                 }
             }
+            EventData::Recover { .. } => EventKind::Recover,
+            EventData::Equipped { .. } => EventKind::Equipped,
             _ => EventKind::DamageBefore,
         };
         if before {
@@ -494,6 +498,15 @@ fn plan_triggers(
         // 不过滤时 16 项失败）；after 段（before=false）：VM 技能已在前置
         // 窗跑过，跳过防重复入队，宿主技照常派发。
         if kind == EventKind::PhaseBegin && def.behavior.runs_before_phase_begin() != before {
+            continue;
+        }
+        if kind == EventKind::Recover && before && !matches!(def.name, "dddweiqiu" | "dddjiexing") {
+            continue;
+        }
+        if kind == EventKind::Equipped
+            && ((before && !matches!(def.name, "dddjiexing" | "gaizao"))
+                || (!before && def.name == "gaizao"))
+        {
             continue;
         }
         // NC01：触发结算顺序按**顺座次序**（不是最短距离）

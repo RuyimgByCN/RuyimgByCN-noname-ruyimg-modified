@@ -138,6 +138,26 @@ pub(super) fn commit_equip(
         .flags
         .remove(&(player, format!("u01_equip_from_table:{frame_id}")))
         .is_some();
+    if ctx
+        .core
+        .vm_aux
+        .flags
+        .remove(&(player, format!("u01_equip_cancelled:{frame_id}")))
+        .is_some()
+    {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(player, format!("dddanzhi_equip_use:{frame_id}")));
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(player, format!("zhilian_equip_use:{frame_id}")));
+        if let Some(f) = ctx.res.frame_mut(frame_id) {
+            f.stage = crate::event::Stage::Done;
+        }
+        return;
+    }
     let from_hand = !from_table && ctx.core.player(player).hand.contains(&card);
     if from_table {
         ctx.core.table.retain(|&c| c != card);

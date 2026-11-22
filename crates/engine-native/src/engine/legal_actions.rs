@@ -566,6 +566,16 @@ pub(super) fn validate_choice_selection(
             let threshold = core.player(actor).hp + core.player(core.turn.current).hp;
             sum >= threshold
         }
+        "dddfengzheng_cards" => {
+            let mut sum = 0u32;
+            for opt in selection {
+                let crate::choice::ChoiceOption::Card(c) = opt else {
+                    return false;
+                };
+                sum = sum.saturating_add(u32::from(catalog.cards[*c as usize].rank));
+            }
+            sum == 13
+        }
         "dddjijian_show" => {
             let mut red_opt: Option<bool> = None;
             for opt in selection {

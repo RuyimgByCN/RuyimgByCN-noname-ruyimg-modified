@@ -1070,9 +1070,10 @@ fn u01_batch_c_and_d_real_match_6d_verification() {
     let zhouchu = find_general(&e, "ddd_zhouchu");
     e.assign_general(0, zhouchu).expect("assign ddd_zhouchu");
     assert_eq!(e.state_core().player(0).max_hp, 5);
+    clear_hand(&mut e, 0);
     put_in_hand(&mut e, 1, wuzhong);
     e.state_core_mut().player_mut(1).hp = 3;
-    e.debug_set_turn(0, Phase::Draw, 4);
+    e.debug_set_turn(0, Phase::Discard, 4);
     let out_xh = submit(&mut e, 0, GameAction::NextPhase);
     let c_xh_t1 = match out_xh {
         CommandOutcome::Pending { choice, .. } => choice,
@@ -1252,8 +1253,8 @@ fn u01_batch_c_and_d_real_match_6d_verification() {
     assert_eq!(e.state_core().player(0).hand.len(), 4);
     assert_eq!(flag(&e, 0, "dddxuanlun_triggered"), 1);
 
-    // At `Phase::End`, `dddxuanlun` opens `"dddxuanlun_end_mode"`: choose `Tag(1)` to set `dddxuanlun_del = 1`.
-    e.debug_set_turn(1, Phase::Discard, 7);
+    // At `TurnPhaseEnd`, `dddxuanlun` opens `"dddxuanlun_end_mode"`: choose `Tag(1)` to set `dddxuanlun_del = 1`.
+    e.debug_set_turn(1, Phase::End, 7);
     clear_hand(&mut e, 1);
     let _ = submit(&mut e, 1, GameAction::NextPhase);
     let c_xl_end = e.open_choice().expect("dddxuanlun_end_mode").clone();
@@ -1294,6 +1295,12 @@ fn u01_batch_c_and_d_real_match_6d_verification() {
     e.assign_general(0, zhangkai).expect("assign ddd_zhangkai");
     e.state_core_mut().player_mut(1).hp = 1;
     e.state_core_mut().player_mut(2).hp = 2;
+    clear_equips(&mut e, 0);
+    clear_equips(&mut e, 1);
+    clear_equips(&mut e, 2);
+    let eq_bl = find_card_by(&e, |id, d| id != blk_basic && d.kind == CardKind::Weapon);
+    remove_card_from_all_zones(&mut e, eq_bl);
+    e.state_core_mut().player_mut(1).equips.push(eq_bl);
     put_in_hand(&mut e, 1, blk_basic);
     e.debug_set_turn(2, Phase::End, 8);
 
@@ -1311,19 +1318,19 @@ fn u01_batch_c_and_d_real_match_6d_verification() {
             selection: vec![ChoiceOption::Player(1)],
         },
     );
-    let c_bl_mode = e.open_choice().expect("dddbailei_mode").clone();
-    assert_eq!(c_bl_mode.spec.prompt, "dddbailei_mode");
-    assert_mid_choice_archive_and_ai(&e, &packs, vec![ChoiceOption::Tag(0)]);
+    let c_bl_pick = e.open_choice().expect("dddbailei_pick_card").clone();
+    assert_eq!(c_bl_pick.spec.prompt, "dddbailei_pick_card");
+    assert_mid_choice_archive_and_ai(&e, &packs, vec![ChoiceOption::Card(blk_basic)]);
 
-    // ③ Choice A (`Tag(0)`: gain 1 card, `dddbailei_lost == 0`) vs Choice B (`Tag(1)`: deal 1 damage to 1-HP target -> `dddbailei_lost = 1`).
+    // ③ Choice A (`Card(blk_basic)`: gain 1 card, `dddbailei_lost == 0`) vs Choice B (`[]`: deal 1 damage to 1-HP target -> `dddbailei_lost = 1`).
     let mut e_bl_gain =
         Engine::restore_with_extensions(&e.save(), &packs).expect("fork dddbailei gain");
     let _ = submit(
         &mut e_bl_gain,
         0,
         GameAction::Answer {
-            choice_id: c_bl_mode.id,
-            selection: vec![ChoiceOption::Tag(0)],
+            choice_id: c_bl_pick.id,
+            selection: vec![ChoiceOption::Card(blk_basic)],
         },
     );
     assert!(e_bl_gain.state_core().player(0).hand.contains(&blk_basic));
@@ -1333,8 +1340,8 @@ fn u01_batch_c_and_d_real_match_6d_verification() {
         &mut e,
         0,
         GameAction::Answer {
-            choice_id: c_bl_mode.id,
-            selection: vec![ChoiceOption::Tag(1)],
+            choice_id: c_bl_pick.id,
+            selection: vec![],
         },
     );
     drain(&mut e);

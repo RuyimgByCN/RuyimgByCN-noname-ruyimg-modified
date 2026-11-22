@@ -81,6 +81,7 @@ pub(super) mod u01_batch_c;
 pub(super) mod u01_batch_d;
 pub(super) mod u01_fixes_1;
 pub(super) mod u01_fixes_2;
+pub(super) mod u01_fixes_3;
 pub(crate) use u01_fixes_2::u01_phase_skipped_hook;
 
 pub(crate) fn u01_respond_skill_options(
@@ -92,6 +93,7 @@ pub(crate) fn u01_respond_skill_options(
 ) -> Vec<crate::choice::ChoiceOption> {
     let mut out = u01_fixes_1::u01_respond_skill_options(core, catalog, player, need, is_use);
     u01_fixes_2::u01_respond_skill_options_2(core, catalog, player, need, is_use, &mut out);
+    u01_fixes_3::u01_respond_skill_options_3(core, catalog, player, need, is_use, &mut out);
     out
 }
 
@@ -111,6 +113,9 @@ pub(crate) fn u01_try_activate_respond_skill(
     let is_use = matches!(need, CardKind::Tao | CardKind::Nullify)
         || (need == CardKind::Shan && vs_sha);
     u01_fixes_2::u01_try_activate_respond_skill_2(ctx, player, def, need, fid, is_use)
+        .or_else(|| {
+            u01_fixes_3::u01_try_activate_respond_skill_3(ctx, player, def, need, fid, is_use)
+        })
 }
 pub(super) mod l28_batch_a;
 pub(crate) use l28_batch_a::{
@@ -1220,10 +1225,12 @@ impl HostMachine {
                 .unwrap_or_else(|| u01_batch_b::step_u01_batch_b(self, ctx)),
             HostBehavior::U01DddBatchC => u01_fixes_1::step_u01_fix(self, ctx)
                 .or_else(|| u01_fixes_2::step_u01_fix2(self, ctx))
+                .or_else(|| u01_fixes_3::step_u01_fix3(self, ctx))
                 .unwrap_or_else(|| u01_batch_c::step_u01_batch_c(self, ctx)),
-            HostBehavior::U01DddBatchD => {
-                u01_fixes_1::step_u01_fix(self, ctx).unwrap_or_else(|| u01_batch_d::step_u01_batch_d(self, ctx))
-            }
+            HostBehavior::U01DddBatchD => u01_fixes_1::step_u01_fix(self, ctx)
+                .or_else(|| u01_fixes_2::step_u01_fix2(self, ctx))
+                .or_else(|| u01_fixes_3::step_u01_fix3(self, ctx))
+                .unwrap_or_else(|| u01_batch_d::step_u01_batch_d(self, ctx)),
             HostBehavior::L28ThunderBatchA => l28_batch_a::handle_l28_batch_a(self, ctx),
             HostBehavior::L28ThunderBatchB => l28_batch_b::handle_l28_batch_b(self, ctx),
             HostBehavior::L27BeautifyBatchA => l27_batch_a::handle_l27_batch_a(self, ctx),

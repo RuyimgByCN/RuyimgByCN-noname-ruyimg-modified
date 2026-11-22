@@ -85,7 +85,26 @@ pub(in crate::kernel) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: Playe
                     ctx.core.skills.remove(&(seat, def));
                 }
             }
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(seat, "dddlianer_rank_cap".to_string()));
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(seat, "dddyulv_turn_cnt".to_string()));
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(seat, "dddxuanlun_choose".to_string()));
         }
+        ctx.core.vm_aux.flags.retain(|(_, k), _| {
+            !k.starts_with("u01_zhuanshe_used:")
+                && !k.starts_with("u01_cj_len:")
+                && !k.starts_with("u01_cj_card:")
+                && !k.starts_with("dddzhuanshe_given:")
+                && k != "u01_turn_trick_used_stamp"
+        });
         // K52：往事封禁清零（十殿阎罗孟婆）。
         for p in ctx.core.players.iter_mut() {
             p.wangshi_ban = false;
@@ -772,6 +791,14 @@ pub(in crate::kernel) fn reset_new_turn_state(ctx: &mut Ctx<'_>, player: PlayerI
             && k != "jiu_extra_stacks"
             && k != "dddjijian_jiu_used"
             && k != "dddfushi_resp_eff_kind"
+            && k != "dddlianer_rank_cap"
+            && k != "dddyulv_turn_cnt"
+            && k != "dddxuanlun_choose"
+            && !k.starts_with("u01_zhuanshe_used:")
+            && !k.starts_with("u01_cj_len:")
+            && !k.starts_with("u01_cj_card:")
+            && !k.starts_with("dddzhuanshe_given:")
+            && k != "u01_turn_trick_used_stamp"
     });
     ctx.core.vm_aux.once.retain(|(_, _, scope)| *scope != 4);
     ctx.reset_turn_limits(player);

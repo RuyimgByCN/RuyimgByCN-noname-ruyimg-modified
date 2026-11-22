@@ -639,12 +639,13 @@ impl SkillBehavior for HostSkillBehavior {
                 optional: true,
                 extra_events: vec![crate::event::EventKind::DamageBefore],
             }),
-            HostBehavior::U01DddBatchA | HostBehavior::U01DddBatchD => {
+            HostBehavior::U01DddBatchA => {
                 step::u01_fixes_1::trigger_meta_u01_fix(&self.name)
             }
-            HostBehavior::U01DddBatchB | HostBehavior::U01DddBatchC => {
+            HostBehavior::U01DddBatchB | HostBehavior::U01DddBatchC | HostBehavior::U01DddBatchD => {
                 step::u01_fixes_1::trigger_meta_u01_fix(&self.name)
                     .or_else(|| step::u01_fixes_2::trigger_meta_u01_fix2(&self.name))
+                    .or_else(|| step::u01_fixes_3::trigger_meta_u01_fix3(&self.name))
             }
             _ => None,
         }
@@ -652,6 +653,7 @@ impl SkillBehavior for HostSkillBehavior {
 
     fn runs_before_phase_begin(&self) -> bool {
         step::u01_fixes_2::runs_before_phase_begin_2(&self.name)
+            || step::u01_fixes_3::runs_before_phase_begin_3(&self.name)
     }
     fn start_in_window(
         &self,
@@ -827,12 +829,13 @@ fn runtime_host_skill_trigger_meta(
     behavior: HostBehavior,
 ) -> Option<crate::catalog::TriggerMeta> {
     match behavior {
-        HostBehavior::U01DddBatchA | HostBehavior::U01DddBatchD => {
+        HostBehavior::U01DddBatchA => {
             step::u01_fixes_1::trigger_meta_u01_fix(name)
         }
-        HostBehavior::U01DddBatchB | HostBehavior::U01DddBatchC => {
+        HostBehavior::U01DddBatchB | HostBehavior::U01DddBatchC | HostBehavior::U01DddBatchD => {
             step::u01_fixes_1::trigger_meta_u01_fix(name)
                 .or_else(|| step::u01_fixes_2::trigger_meta_u01_fix2(name))
+                .or_else(|| step::u01_fixes_3::trigger_meta_u01_fix3(name))
         }
         _ => None,
     }
@@ -854,10 +857,13 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         HostBehavior::U01DddBatchC => {
             step::u01_fixes_1::limits_u01_fix(name)
                 .or_else(|| step::u01_fixes_2::limits_u01_fix2(name))
+                .or_else(|| step::u01_fixes_3::limits_u01_fix3(name))
                 .unwrap_or_else(|| step::u01_batch_c::limits_u01_batch_c(name))
         }
         HostBehavior::U01DddBatchD => {
             step::u01_fixes_1::limits_u01_fix(name)
+                .or_else(|| step::u01_fixes_2::limits_u01_fix2(name))
+                .or_else(|| step::u01_fixes_3::limits_u01_fix3(name))
                 .unwrap_or_else(|| step::u01_batch_d::limits_u01_batch_d(name))
         }
         HostBehavior::L28ThunderBatchA => step::l28_batch_a::limits_l28_batch_a(name),

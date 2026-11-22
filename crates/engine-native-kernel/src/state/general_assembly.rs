@@ -90,31 +90,34 @@ pub fn apply_general_assembly(
     sync_dddfusi_global(state, catalog);
 }
 
-/// Grants `dddfusi_global` to every seat iff at least one seat holds `dddfusi`.
+/// Grants global U01 companion skills (`dddfusi_global`, `dddfengzheng_global`) to every seat iff at least one seat holds their owner skill.
 pub fn sync_dddfusi_global(
     state: &mut crate::state::GameStateCore,
     catalog: &crate::catalog::Catalog,
 ) {
-    let (Some(fusi_def), Some(global_def)) = (
-        catalog.skill_by_name("dddfusi"),
-        catalog.skill_by_name("dddfusi_global"),
-    ) else {
-        return;
+    let sync_pair = |state: &mut crate::state::GameStateCore, src: &str, glob: &str| {
+        let (Some(src_def), Some(global_def)) =
+            (catalog.skill_by_name(src), catalog.skill_by_name(glob))
+        else {
+            return;
+        };
+        let n = state.players.len() as PlayerId;
+        if (0..n).any(|p| state.has_skill(p, src_def)) {
+            for p in 0..n {
+                state.skills.entry((p, global_def)).or_insert(crate::state::SkillInstance {
+                    owner: p,
+                    enabled: true,
+                    once_used: false,
+                    expires_end_of_turn: false,
+                    rounds: 0,
+                });
+            }
+        } else {
+            for p in 0..n {
+                state.skills.remove(&(p, global_def));
+            }
+        }
     };
-    let n = state.players.len() as PlayerId;
-    if (0..n).any(|p| state.has_skill(p, fusi_def)) {
-        for p in 0..n {
-            state.skills.entry((p, global_def)).or_insert(crate::state::SkillInstance {
-                owner: p,
-                enabled: true,
-                once_used: false,
-                expires_end_of_turn: false,
-                rounds: 0,
-            });
-        }
-    } else {
-        for p in 0..n {
-            state.skills.remove(&(p, global_def));
-        }
-    }
+    sync_pair(state, "dddfusi", "dddfusi_global");
+    sync_pair(state, "dddfengzheng", "dddfengzheng_global");
 }

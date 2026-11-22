@@ -45,14 +45,21 @@ impl crate::catalog::SkillMachine for DiscardToLimitMachine {
                 .catalog
                 .skill_by_name("dddfusi")
                 .is_some_and(|def| ctx.core.has_skill(self.player, def));
-            let options: Vec<ChoiceOption> = ctx
-                .core
-                .player(self.player)
-                .hand
-                .iter()
-                .copied()
+            let danggu_neg = crate::rvm_bridge::modifiers::d34_flags::has_ddddanggu_negative(
+                ctx.core,
+                ctx.catalog,
+                self.player,
+            );
+            let mut pool: Vec<crate::ids::CardId> = ctx.core.player(self.player).hand.clone();
+            if danggu_neg {
+                pool.extend_from_slice(&ctx.core.player(self.player).equips);
+            }
+            let options: Vec<ChoiceOption> = pool
+                .into_iter()
                 .filter(|c| {
+                    let is_hand = ctx.core.player(self.player).hand.contains(c);
                     if fusi
+                        && is_hand
                         && (ctx
                             .core
                             .vm_aux
@@ -73,6 +80,7 @@ impl crate::catalog::SkillMachine for DiscardToLimitMachine {
                         return false;
                     }
                     if honglianx
+                        && is_hand
                         && matches!(
                             ctx.catalog.cards[*c as usize].suit,
                             crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
@@ -119,7 +127,21 @@ impl crate::catalog::SkillMachine for DiscardToLimitMachine {
                 if ctx.catalog.card_kind(c).is_basic_kind() {
                     ctx.core.turn.wangchen_discard_basic = true;
                 }
-                ctx.discard_from_hand(self.player, c);
+                if ctx.core.player(self.player).hand.contains(&c) {
+                    ctx.discard_from_hand(self.player, c);
+                } else if ctx.core.player(self.player).equips.contains(&c) {
+                    ctx.core
+                        .player_mut(self.player)
+                        .equips
+                        .retain(|&x| x != c);
+                    crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.player, c);
+                    ctx.to_discard(c);
+                    ctx.note_cards_lost(self.player, &[c]);
+                    ctx.log(LogEvent::CardDiscarded {
+                        player: self.player,
+                        cards: vec![c],
+                    });
+                }
                 discarded.push(c);
             }
         }

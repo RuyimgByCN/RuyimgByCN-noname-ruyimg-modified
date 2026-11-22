@@ -274,6 +274,14 @@ pub(super) fn dying_tao_cards(
             out.push(c);
         }
     }
+    out.retain(|&c| {
+        !crate::rvm_bridge::modifiers::d34_flags::is_ducai3_forbidden(
+            ctx.core,
+            ctx.catalog,
+            responder,
+            c,
+        )
+    });
     out
 }
 

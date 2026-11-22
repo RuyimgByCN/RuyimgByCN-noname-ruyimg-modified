@@ -786,6 +786,14 @@ pub fn intrinsic_machine(
                                 )
                             })
                             .count()
+                    } else if crate::rvm_bridge::modifiers::d34_flags::has_ddddanggu_negative(
+                        ctx.core,
+                        ctx.catalog,
+                        player,
+                    ) {
+                        let p = ctx.core.player(player);
+                        (p.hand.len() + p.equips.len())
+                            .saturating_sub(ctx.core.ignored_hand_card_count(ctx.catalog, player))
                     } else {
                         ctx.core
                             .player(player)

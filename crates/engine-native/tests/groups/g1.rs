@@ -28,6 +28,9 @@ mod u01_ddd_fixes_1;
 #[path = "../u01_ddd_fixes_2.rs"]
 mod u01_ddd_fixes_2;
 
+#[path = "../u01_ddd_fixes_3.rs"]
+mod u01_ddd_fixes_3;
+
 #[path = "../u01_dddanzhi_regression.rs"]
 mod u01_dddanzhi_regression;
 

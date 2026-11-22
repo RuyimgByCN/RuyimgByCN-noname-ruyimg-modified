@@ -58,6 +58,13 @@ pub(super) fn play_equip(
             .flags
             .insert((player, format!("dddanzhi_equip_use:{frame}")), 1);
     }
+    if catalog.skill_by_name("dddjiexing").is_some() {
+        state
+            .core
+            .vm_aux
+            .flags
+            .insert((player, format!("u01_equip_played:{frame}")), 1);
+    }
     if catalog.skill_by_name("dddchashi").is_some() {
         state
             .core

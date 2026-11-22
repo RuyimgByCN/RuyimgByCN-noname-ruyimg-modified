@@ -185,6 +185,7 @@ pub(super) fn host_card_use_after_impl(
     crate::content::host::step::l11_common_b2::on_card_use_after_l11_b2(ctx, fid, u);
     crate::content::host::step::u01_fixes_2::u01_card_use_after_hook_2(ctx, u);
     crate::content::host::step::l11_common_b3::on_card_use_after_l11_b3(ctx, u);
+    crate::content::host::step::u01_fixes_3::u01_card_use_after_hook_3(ctx, u);
     if u.cancelled {
         return;
     }

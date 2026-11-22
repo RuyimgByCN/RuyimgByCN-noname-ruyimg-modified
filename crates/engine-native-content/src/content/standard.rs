@@ -565,6 +565,21 @@ pub fn standard_catalog_with_extensions(
     let ext_skill_len = ext_skills.len();
     skills.extend(ext_skills);
     native_damage::append_invocation_helpers(&mut skills);
+    if !packs.is_empty() {
+        let append_companion = |skills: &mut Vec<SkillDef>, name: &'static str, beh: super::host::HostBehavior| {
+            if !skills.iter().any(|s| s.name == name) {
+                skills.push(super::host::host_skill_def(name.to_string(), beh));
+            }
+        };
+        if skills.iter().any(|s| s.name == "dddfengzheng") {
+            append_companion(&mut skills, "dddfengzheng_global", super::host::HostBehavior::U01DddBatchC);
+        }
+        if skills.iter().any(|s| s.name == "dddshixing") {
+            append_companion(&mut skills, "xiangle", super::host::HostBehavior::U01DddBatchD);
+            append_companion(&mut skills, "jiushi", super::host::HostBehavior::U01DddBatchD);
+            append_companion(&mut skills, "rezhiheng", super::host::HostBehavior::U01DddBatchD);
+        }
+    }
     let mut catalog = Catalog::build(cards, skills);
     catalog.hooks = super::hooks::CONTENT_HOOKS;
     catalog.extension_skill_range = ext_skill_start..(ext_skill_start + ext_skill_len);

@@ -77,6 +77,9 @@ pub(super) fn on_frame_popped(
             .remove(&(*player, format!("dddanzhi_equip_use:{}", popped.id)));
         core.vm_aux
             .flags
+            .remove(&(*player, format!("u01_equip_played:{}", popped.id)));
+        core.vm_aux
+            .flags
             .remove(&(*player, format!("chashi_equip_use:{}", popped.id)));
         core.vm_aux
             .flags
@@ -122,6 +125,30 @@ pub(super) fn on_frame_popped(
     }
     if let EventData::CardUsed(u) = &popped.data {
         on_card_use_popped(popped.id, u, core, res, catalog, out);
+    }
+    if matches!(
+        popped.kind,
+        crate::event::EventKind::CardUsed
+            | crate::event::EventKind::CardsDiscarded
+            | crate::event::EventKind::CardResponded
+            | crate::event::EventKind::OrdinaryJudge
+            | crate::event::EventKind::Equipped
+    ) && core
+        .vm_aux
+        .flags
+        .get(&(0, "u01_yulv_q_len".to_string()))
+        .copied()
+        .unwrap_or(0)
+        > 0
+    {
+        let actor = core.turn.current;
+        let mut ctx = Ctx {
+            core,
+            res,
+            catalog,
+            out,
+        };
+        (catalog.hooks.on_cards_to_discard)(&mut ctx, actor, &[], false);
     }
 }
 
