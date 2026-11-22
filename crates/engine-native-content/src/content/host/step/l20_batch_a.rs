@@ -24,10 +24,9 @@ mod l20_batch_a_asks;
 pub(in crate::content::host) use l20_batch_a_asks::ask_l20_batch_a;
 use l20_batch_a_asks::*;
 
-pub(super) const ASK_WENGUA_CHOOSE_CARD: u32 = 10;
-pub(super) const ASK_WENGUA_CHOOSE_SIDE: u32 = 11;
 pub(super) const ASK_WENGUA5_GIVE_CARD: u32 = 20;
 pub(super) const ASK_WENGUA5_CHOOSE_SIDE: u32 = 21;
+pub(super) const ASK_WENGUA5_CHOOSE_TARGET: u32 = 22;
 pub(super) const ASK_GUOZHAN_CHOOSE_MARK: u32 = 40;
 pub(super) const ASK_XIANQU_CHOOSE_TARGET: u32 = 41;
 pub(super) const ASK_XIANQU_CHOOSE_OPTION: u32 = 42;
@@ -141,13 +140,8 @@ pub(in crate::content::host) fn trigger_meta_l20_batch_a(name: &str) -> Option<T
 }
 
 pub(in crate::content::host) fn limits_l20_batch_a(name: &str) -> SkillLimits {
-    match name {
-        "wengua" | "wengua5" => SkillLimits {
-            once_per_turn: true,
-            ..Default::default()
-        },
-        _ => SkillLimits::default(),
-    }
+    let _ = name;
+    SkillLimits::default()
 }
 
 pub(in crate::content::host) fn filter_l20_batch_a(
@@ -160,19 +154,55 @@ pub(in crate::content::host) fn filter_l20_batch_a(
         return false;
     }
     match skill.name.as_str() {
-        "wengua5" => match event {
+        "wengua" => match event {
             EventData::Phase {
-                player,
                 phase: Phase::Prepare,
                 begin: true,
-            } => *player != owner,
+                ..
+            } => true,
+            EventData::Phase {
+                player,
+                phase: Phase::Play,
+                begin: false,
+            } => flag(ctx.state, *player, "wengua3_used") > 0,
             EventData::TurnEnded { player }
             | EventData::TurnEndWindow {
                 player,
                 after: true,
-            } => flag(ctx.state, *player, "wengua2_active") > 0,
+            } => {
+                flag(ctx.state, *player, "wengua2_active") > 0
+                    || flag(ctx.state, *player, "wengua3_used") > 0
+            }
             _ => false,
         },
+        "wengua5" => {
+            let is_perm = ctx
+                .catalog
+                .skill_by_name("wengua5")
+                .and_then(|d| ctx.state.skills.get(&(owner, d)))
+                .is_some_and(|i| !i.expires_end_of_turn);
+            match event {
+                EventData::Phase {
+                    player,
+                    phase: Phase::Play,
+                    begin: false,
+                } => *player == owner && flag(ctx.state, *player, "wengua3_used") > 0,
+                EventData::Phase {
+                    phase: Phase::Prepare,
+                    begin: true,
+                    ..
+                } if is_perm => true,
+                EventData::TurnEnded { player }
+                | EventData::TurnEndWindow {
+                    player,
+                    after: true,
+                } if is_perm => {
+                    flag(ctx.state, *player, "wengua2_active") > 0
+                        || flag(ctx.state, *player, "wengua3_used") > 0
+                }
+                _ => false,
+            }
+        }
         "diaohulishan" => match event {
             EventData::Damage(d) => {
                 !d.prevented
@@ -423,10 +453,10 @@ pub(in crate::content::host) fn activate_l20_batch_a(
         return None;
     }
     let can_activate = match skill.name.as_str() {
-        "wengua" => !hand_and_equips(ctx.state, owner).is_empty(),
         "wengua5" => {
-            !ctx.state.player(owner).hand.is_empty()
-                && find_wengua_owner(ctx.state, ctx.catalog, owner).is_some()
+            flag(ctx.state, owner, "wengua3_used") == 0
+                && !hand_and_equips(ctx.state, owner).is_empty()
+                && !alive_wengua_holders(ctx.state, ctx.catalog, owner).is_empty()
         }
         "_guozhan_marks" => !guozhan_mark_options(ctx.state, ctx.catalog, owner).is_empty(),
         "xianqu_mark" => {
@@ -443,16 +473,11 @@ pub(in crate::content::host) fn activate_l20_batch_a(
     if !can_activate {
         return None;
     }
-    let target = if skill.name == "wengua5" {
-        find_wengua_owner(ctx.state, ctx.catalog, owner)
-    } else {
-        None
-    };
     Some(Box::new(HostMachine {
         def_key: skill.name.clone(),
         behavior: HostBehavior::L20MarkBatchA,
         owner,
-        target,
+        target: None,
         card: Some(100),
         cards: Vec::new(),
         targets: Vec::new(),
@@ -524,8 +549,7 @@ pub(in crate::content::host) fn machine_l20_batch_a(
 
 pub(in crate::content::host) fn handle_l20_batch_a(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     match m.def_key.as_str() {
-        "wengua" => step_wengua(m, ctx),
-        "wengua5" => step_wengua5(m, ctx),
+        "wengua" | "wengua5" => step_wengua5(m, ctx),
         "diaohulishan" => step_diaohulishan(m, ctx),
         "_guozhan_marks" => step_guozhan_marks(m, ctx),
         "xianqu_mark" => step_xianqu_mark(m, ctx),
@@ -547,98 +571,97 @@ pub(in crate::content::host) fn handle_l20_batch_a(m: &mut HostMachine, ctx: &mu
     }
 }
 
-fn step_wengua(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
-    let owner = m.owner;
-    if m.stage == HostStage::Act {
-        return wait_ask(m, ctx, ASK_WENGUA_CHOOSE_CARD);
-    }
-    match m.card {
-        Some(ASK_WENGUA_CHOOSE_CARD) => {
-            let Some(ChoiceOption::Card(cid)) = ctx.answer().first().copied() else {
-                refund_once_used(ctx, owner, "wengua");
-                return Flow::Done;
-            };
-            m.cards = vec![cid];
-            wait_ask(m, ctx, ASK_WENGUA_CHOOSE_SIDE)
-        }
-        Some(ASK_WENGUA_CHOOSE_SIDE) => {
-            let Some(ChoiceOption::Tag(side)) = ctx.answer().first().copied() else {
-                refund_once_used(ctx, owner, "wengua");
-                return Flow::Done;
-            };
-            let Some(&cid) = m.cards.first() else {
-                return Flow::Done;
-            };
-            if !take_card_from_player(ctx, owner, cid) {
-                return Flow::Done;
-            }
-            if side == 0 {
-                ctx.core.deck.push(cid);
-                let _ = draw_from_bottom(ctx, owner);
-                set_flag(ctx.core, owner, "wengua_side", 0);
-            } else {
-                ctx.core.deck.insert(0, cid);
-                let _ = draw_from_top_n(ctx, owner, 1);
-                set_flag(ctx.core, owner, "wengua_side", 1);
-            }
-            set_flag(ctx.core, owner, "wengua_resolved", 1);
-            Flow::Done
-        }
-        _ => Flow::Done,
-    }
-}
-
 fn step_wengua5(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     if m.stage == HostStage::Act && m.card != Some(100) {
         let turn_p = m.target.unwrap_or(ctx.core.turn.current);
-        if m.card == Some(90) || m.card == Some(16) {
+        if m.card == Some(14) {
+            // `yijiang.js:4489`: `wengua3` expires at `phaseUseEnd` (per Play phase)
+            set_flag(ctx.core, turn_p, "wengua3_used", 0);
+            refund_once_used(ctx, turn_p, "wengua5");
+        } else if m.card == Some(90) || m.card == Some(16) {
             set_flag(ctx.core, turn_p, "wengua2_active", 0);
+            set_flag(ctx.core, turn_p, "wengua3_used", 0);
             set_flag(ctx.core, turn_p, "wengua_owner_seat", 0);
-        } else if turn_p != m.owner {
-            set_flag(ctx.core, turn_p, "wengua2_active", 1);
-            set_flag(ctx.core, turn_p, "wengua_owner_seat", u32::from(m.owner) + 1);
-            if let Some(def) = ctx.catalog.skill_by_name("wengua5") {
-                ctx.core
-                    .skills
-                    .entry((turn_p, def))
-                    .or_insert(crate::state::SkillInstance {
-                        owner: turn_p,
-                        enabled: true,
-                        once_used: false,
-                        expires_end_of_turn: true,
-                        rounds: 0,
-                    });
+        } else {
+            let is_source_holder = m.def_key == "wengua"
+                || ctx.catalog.skill_by_name("wengua5").is_some_and(|d| {
+                    ctx.core
+                        .skills
+                        .get(&(m.owner, d))
+                        .is_some_and(|i| !i.expires_end_of_turn)
+                })
+                || flag(ctx.core, m.owner, "has_wengua") > 0;
+            if is_source_holder && ctx.core.player(turn_p).alive {
+                set_flag(ctx.core, turn_p, "wengua2_active", 1);
+                if flag(ctx.core, turn_p, "wengua_owner_seat") == 0 {
+                    set_flag(ctx.core, turn_p, "wengua_owner_seat", u32::from(m.owner) + 1);
+                }
+                if let Some(def) = ctx.catalog.skill_by_name("wengua5") {
+                    ctx.core
+                        .skills
+                        .entry((turn_p, def))
+                        .or_insert(crate::state::SkillInstance {
+                            owner: turn_p,
+                            enabled: true,
+                            once_used: false,
+                            expires_end_of_turn: true,
+                            rounds: 0,
+                        });
+                }
             }
         }
         return Flow::Done;
     }
     let giver = m.owner;
-    let Some(wg_owner) = m
-        .target
-        .or_else(|| find_wengua_owner(ctx.core, ctx.catalog, giver))
-    else {
-        refund_once_used(ctx, giver, "wengua5");
-        return Flow::Done;
-    };
-    m.target = Some(wg_owner);
     if m.stage == HostStage::Act {
+        if alive_wengua_holders(ctx.core, ctx.catalog, giver).is_empty() {
+            return Flow::Done;
+        }
         return wait_ask(m, ctx, ASK_WENGUA5_GIVE_CARD);
     }
-    match m.card {
-        Some(ASK_WENGUA5_GIVE_CARD) => {
-            let Some(ChoiceOption::Card(cid)) = ctx.answer().first().copied() else {
-                refund_once_used(ctx, giver, "wengua5");
-                return Flow::Done;
-            };
-            if !give_hand_card(ctx, giver, wg_owner, cid) {
-                refund_once_used(ctx, giver, "wengua5");
+    let enter_choose_side =
+        |m: &mut HostMachine, ctx: &mut Ctx<'_>, wg_owner: PlayerId, cid: CardId| -> Flow {
+            m.target = Some(wg_owner);
+            if !give_he_card(ctx, giver, wg_owner, cid) {
                 return Flow::Done;
             }
+            set_flag(ctx.core, giver, "wengua3_used", 1);
             m.cards = vec![cid];
             set_flag(ctx.core, giver, "wengua5_given_card", cid + 1);
             wait_ask(m, ctx, ASK_WENGUA5_CHOOSE_SIDE)
+        };
+    match m.card {
+        Some(ASK_WENGUA5_GIVE_CARD) => {
+            let Some(ChoiceOption::Card(cid)) = ctx.answer().first().copied() else {
+                return Flow::Done;
+            };
+            let holders = alive_wengua_holders(ctx.core, ctx.catalog, giver);
+            if holders.is_empty() {
+                return Flow::Done;
+            }
+            if holders.len() == 1 {
+                return enter_choose_side(m, ctx, holders[0], cid);
+            }
+            m.cards = vec![cid];
+            wait_ask(m, ctx, ASK_WENGUA5_CHOOSE_TARGET)
+        }
+        Some(ASK_WENGUA5_CHOOSE_TARGET) => {
+            let Some(ChoiceOption::Player(wg_owner)) = ctx.answer().first().copied() else {
+                return Flow::Done;
+            };
+            let holders = alive_wengua_holders(ctx.core, ctx.catalog, giver);
+            if !holders.contains(&wg_owner) {
+                return Flow::Done;
+            }
+            let Some(&cid) = m.cards.first() else {
+                return Flow::Done;
+            };
+            enter_choose_side(m, ctx, wg_owner, cid)
         }
         Some(ASK_WENGUA5_CHOOSE_SIDE) => {
+            let Some(wg_owner) = m.target else {
+                return Flow::Done;
+            };
             let side = match ctx.answer().first().copied() {
                 Some(ChoiceOption::Tag(tag)) => tag,
                 _ => 2,
@@ -651,8 +674,11 @@ fn step_wengua5(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                     if take_card_from_player(ctx, wg_owner, cid) {
                         ctx.core.deck.push(cid);
                     }
-                    let _ = draw_from_bottom(ctx, wg_owner);
+                    let single_card_pile = ctx.core.deck.len() == 1;
                     let _ = draw_from_bottom(ctx, giver);
+                    if giver != wg_owner && !single_card_pile {
+                        let _ = draw_from_bottom(ctx, wg_owner);
+                    }
                     set_flag(ctx.core, wg_owner, "wengua5_side", 0);
                     set_flag(ctx.core, giver, "wengua5_side", 0);
                 }
@@ -660,8 +686,11 @@ fn step_wengua5(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                     if take_card_from_player(ctx, wg_owner, cid) {
                         ctx.core.deck.insert(0, cid);
                     }
-                    let _ = draw_from_top_n(ctx, wg_owner, 1);
+                    let single_card_pile = ctx.core.deck.len() == 1;
                     let _ = draw_from_top_n(ctx, giver, 1);
+                    if giver != wg_owner && !single_card_pile {
+                        let _ = draw_from_top_n(ctx, wg_owner, 1);
+                    }
                     set_flag(ctx.core, wg_owner, "wengua5_side", 1);
                     set_flag(ctx.core, giver, "wengua5_side", 1);
                 }

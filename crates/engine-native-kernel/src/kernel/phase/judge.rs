@@ -481,7 +481,10 @@ pub(super) fn begin_prepare(ctx: &mut Ctx<'_>, player: PlayerId) {        // 绝
             .skill_by_name(crate::vocabulary::names::BOSS_ZHONGDU)
         {
             if ctx.core.has_skill(player, zd) {
-                let judged = ctx.draw_judge_card();
+                let judged = ctx.draw_judge_card_with_elo(
+                    player,
+                    crate::kernel::EloJudgePref::Zhongdu,
+                );
                 let suit = ctx.catalog.cards[judged as usize].suit;
                 ctx.to_discard(judged);
                 match suit {

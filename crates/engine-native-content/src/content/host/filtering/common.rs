@@ -91,8 +91,7 @@ impl HostSkillBehavior {
                         && ctx.state.player(*player).alive
                         && (!ctx.state.player(owner).hand.is_empty()
                             || !ctx.state.player(owner).equips.is_empty())
-                        && ctx.state.computed_distance(ctx.catalog, *player, owner)
-                            <= ctx.state.attack_range(ctx.catalog, *player)
+                        && ctx.state.in_attack_range(ctx.catalog, *player, owner)
                 }
                 _ => false,
             },

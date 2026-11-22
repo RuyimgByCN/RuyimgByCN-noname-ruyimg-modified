@@ -460,7 +460,10 @@ impl ShaResolveMachine {
             self.asking_sadeng = false;
             let confirmed = matches!(ctx.answer().first(), Some(ChoiceOption::Confirm));
             if confirmed && ctx.core.player(self.target).alive {
-                let judged = ctx.draw_judge_card();
+                let judged = ctx.draw_judge_card_with_elo(
+                    self.source,
+                    crate::kernel::EloJudgePref::RedPositive,
+                );
                 let red = matches!(
                     ctx.catalog.cards[judged as usize].suit,
                     crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond

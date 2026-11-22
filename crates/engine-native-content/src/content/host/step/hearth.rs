@@ -52,7 +52,10 @@ impl HostMachine {
                 let Some(t) = self.target else {
                     return Flow::Done;
                 };
-                let judged = ctx.draw_judge_card();
+                let judged = ctx.draw_judge_card_with_elo(
+                    t,
+                    engine_native_kernel::kernel::EloJudgePref::RedPositive,
+                );
                 let red = matches!(
                     ctx.catalog.cards[judged as usize].suit,
                     crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond

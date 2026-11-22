@@ -358,7 +358,10 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     .map(|d| ctx.core.has_skill(self.source, d))
                     .unwrap_or(false);
                 if tianxian {
-                    let judged = ctx.draw_judge_card();
+                    let judged = ctx.draw_judge_card_with_elo(
+                        self.source,
+                        crate::kernel::EloJudgePref::RedPositive,
+                    );
                     let black = matches!(
                         ctx.catalog.cards[judged as usize].suit,
                         crate::catalog::Suit::Spade | crate::catalog::Suit::Club
@@ -376,7 +379,10 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 .map(|d| ctx.core.has_skill(self.source, d))
                 .unwrap_or(false);
             if tieji && self.tieji_red.is_none() {
-                let judged = ctx.draw_judge_card();
+                let judged = ctx.draw_judge_card_with_elo(
+                    self.source,
+                    crate::kernel::EloJudgePref::RedPositive,
+                );
                 let red = matches!(
                     ctx.catalog.cards[judged as usize].suit,
                     crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
@@ -608,7 +614,10 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     .map(|d| ctx.core.has_skill(self.source, d))
                     .unwrap_or(false);
                 if has_yueren && ctx.core.player(self.target).alive {
-                    let judged = ctx.draw_judge_card();
+                    let judged = ctx.draw_judge_card_with_elo(
+                        self.source,
+                        crate::kernel::EloJudgePref::Yueren,
+                    );
                     let black = matches!(
                         ctx.catalog.cards[judged as usize].suit,
                         crate::catalog::Suit::Spade | crate::catalog::Suit::Club

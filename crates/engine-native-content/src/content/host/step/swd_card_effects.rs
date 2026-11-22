@@ -104,7 +104,10 @@ impl HostMachine {
                     let Some(t) = self.target else {
                         return Flow::Done;
                     };
-                    let judged = ctx.draw_judge_card();
+                    let judged = ctx.draw_judge_card_with_elo(
+                        self.owner,
+                        engine_native_kernel::kernel::EloJudgePref::NonHeartPositive,
+                    );
                     if matches!(
                         ctx.catalog.cards[judged as usize].suit,
                         crate::catalog::Suit::Heart

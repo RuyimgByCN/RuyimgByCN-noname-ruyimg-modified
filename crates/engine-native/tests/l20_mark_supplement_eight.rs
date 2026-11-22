@@ -301,12 +301,21 @@ fn l20_mark_supplement_batch_a_aliases_configs_cards_guozhan_and_ui_hooks_save_r
     let c0 = e.debug_place(0, "sha");
     e.debug_give_hand_card(0, 0, c0);
     let wengua_id = e.catalog().skill_by_name("wengua").unwrap();
-    let out_wg1 = submit(&mut e, 0, GameAction::ActivateSkill { skill: wengua_id });
+    let out_wg = submit(&mut e, 0, GameAction::ActivateSkill { skill: wengua_id });
+    assert!(matches!(out_wg, CommandOutcome::Rejected(_)), "wengua has no standalone active");
+    e.debug_set_turn(3, Phase::End, 1);
+    while (e.turn().current, e.turn().phase) != (0, Phase::Play) {
+        let actor = e.turn().current;
+        let _ = submit(&mut e, actor, GameAction::NextPhase);
+    }
+    assert_eq!((e.turn().current, e.turn().phase), (0, Phase::Play));
+    let wg5_self = e.catalog().skill_by_name("wengua5").unwrap();
+    let out_wg1 = submit(&mut e, 0, GameAction::ActivateSkill { skill: wg5_self });
     let ch_wg1 = match out_wg1 {
         CommandOutcome::Pending { choice, .. } => choice,
-        other => panic!("expected wengua:choose_card pending, got {other:?}"),
+        other => panic!("expected wengua5:give_card pending, got {other:?}"),
     };
-    assert_eq!(ch_wg1.spec.prompt, "wengua:choose_card");
+    assert_eq!(ch_wg1.spec.prompt, "wengua5:give_card");
 
     // Mid-choice save/restore verification
     let snap_mid = e.save();
@@ -324,9 +333,9 @@ fn l20_mark_supplement_batch_a_aliases_configs_cards_guozhan_and_ui_hooks_save_r
     );
     let ch_wg2 = match out_wg2 {
         CommandOutcome::Pending { choice, .. } => choice,
-        other => panic!("expected wengua:choose_side pending, got {other:?}"),
+        other => panic!("expected wengua5:choose_side pending, got {other:?}"),
     };
-    assert_eq!(ch_wg2.spec.prompt, "wengua:choose_side");
+    assert_eq!(ch_wg2.spec.prompt, "wengua5:choose_side");
     let bottom_before = e.state_core().deck[0];
     let _ = submit(
         &mut e,
@@ -339,13 +348,13 @@ fn l20_mark_supplement_batch_a_aliases_configs_cards_guozhan_and_ui_hooks_save_r
     assert_eq!(
         e.state_core().deck.last().copied(),
         Some(c0),
-        "wengua Tag(0) places card on top of deck"
+        "wengua5 Tag(0) places card on top of deck"
     );
     assert!(
         e.debug_hand(0).contains(&bottom_before),
-        "wengua Tag(0) draws 1 card from bottom of deck"
+        "wengua5 Tag(0) draws 1 card from bottom of deck"
     );
-    assert_eq!(flag(&e, 0, "wengua_resolved"), 1);
+    assert_eq!(flag(&e, 0, "wengua5_resolved"), 1);
 
     // wengua5 on seat 1's Play phase
     e.debug_set_turn(1, Phase::Play, 1);

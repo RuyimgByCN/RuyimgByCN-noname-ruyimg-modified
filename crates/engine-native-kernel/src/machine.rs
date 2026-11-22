@@ -520,6 +520,37 @@ impl<'a> Ctx<'a> {
             .expect("judge draw: deck or discard non-empty")
     }
 
+    /// 翻判定牌并按明确 `EloJudgePref` 触发 `_eloDraw`（存在偏好时才调序，绝不伪造默认牌种）。
+    pub fn draw_judge_card_with_opt_elo(
+        &mut self,
+        player: PlayerId,
+        pref: Option<crate::kernel::EloJudgePref>,
+    ) -> CardId {
+        if self.core.deck.is_empty() {
+            let mut cards = std::mem::take(&mut self.core.discard);
+            self.core.rng.shuffle(&mut cards);
+            crate::kernel::elo_on_wash_deck(self.core, &cards);
+            self.core.deck = cards;
+            self.out.push(LogEvent::DeckReshuffled);
+        }
+        if let Some(pref) = pref {
+            crate::kernel::elo_on_skill_judge_begin(self.core, self.catalog, player, pref);
+        }
+        self.core
+            .deck
+            .pop()
+            .expect("judge draw: deck or discard non-empty")
+    }
+
+    /// 翻判定牌并按指定 `EloJudgePref` 触发 `_eloDraw`。
+    pub fn draw_judge_card_with_elo(
+        &mut self,
+        player: PlayerId,
+        pref: crate::kernel::EloJudgePref,
+    ) -> CardId {
+        self.draw_judge_card_with_opt_elo(player, Some(pref))
+    }
+
     /// 从手牌或装备区移除一张（鬼道改判用：装备区黑牌可打出）。
     /// 不存在则 panic：调用方先验证。
     pub fn take_owned_card(&mut self, player: PlayerId, card: CardId) {

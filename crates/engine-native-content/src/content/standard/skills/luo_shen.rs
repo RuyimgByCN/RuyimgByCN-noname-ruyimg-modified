@@ -35,7 +35,10 @@ impl SkillMachine for LuoShenMachine {
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         // 单次判定：黑桃/梅花 → 获得此牌并再次判定（Yield 续行）；
         // 红桃/方块 → 判定牌弃置，循环结束。
-        let card = ctx.draw_judge_card();
+        let card = ctx.draw_judge_card_with_elo(
+            self.owner,
+            engine_native_kernel::kernel::EloJudgePref::BlackPositive,
+        );
         let black = matches!(
             ctx.catalog.cards[card as usize].suit,
             crate::catalog::Suit::Spade | crate::catalog::Suit::Club

@@ -898,7 +898,10 @@ fn step_thunder_judge_mode(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     if m.stage != HostStage::Act {
         return Flow::Done;
     }
-    let jc = ctx.draw_judge_card();
+    let jc = ctx.draw_judge_card_with_elo(
+        owner,
+        engine_native_kernel::kernel::EloJudgePref::Trick(CardKind::ShanDian),
+    );
     let hit = ctx
         .catalog
         .cards

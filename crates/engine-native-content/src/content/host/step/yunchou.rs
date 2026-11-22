@@ -36,7 +36,10 @@ impl HostMachine {
             HostBehavior::YunchouBeige => match self.stage {
                 HostStage::Act => {
                     // 受伤者=targets[1]，来源=targets[0]
-                    let judged = ctx.draw_judge_card();
+                    let judged = ctx.draw_judge_card_with_elo(
+                        self.owner,
+                        engine_native_kernel::kernel::EloJudgePref::Beige,
+                    );
                     ctx.to_discard(judged);
                     self.cards = vec![judged];
                     self.stage = HostStage::SelectCard;

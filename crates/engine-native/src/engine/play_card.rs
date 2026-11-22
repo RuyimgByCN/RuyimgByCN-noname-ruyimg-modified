@@ -525,8 +525,7 @@ pub(super) fn play_card(
                         .equips
                         .iter()
                         .any(|c| catalog.card_kind(*c) == CardKind::Weapon);
-                    let in_range = core.computed_distance(catalog, holder, victim)
-                        <= core.attack_range(catalog, holder);
+                    let in_range = core.in_attack_range(catalog, holder, victim);
                     if !has_weapon || !in_range {
                         return Err(RejectReason::IllegalTargets);
                     }

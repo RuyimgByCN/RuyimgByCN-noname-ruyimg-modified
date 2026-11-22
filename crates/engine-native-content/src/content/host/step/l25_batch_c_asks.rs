@@ -434,7 +434,10 @@ fn step_ssr_bailun(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                 set_flag(ctx.core, m.owner, "ssr_bailun_direct", 1);
                 return Flow::Done;
             }
-            let jc = ctx.draw_judge_card();
+            let jc = ctx.draw_judge_card_with_elo(
+                m.owner,
+                engine_native_kernel::kernel::EloJudgePref::NonSpadePositive,
+            );
             let suit = card_suit(ctx.catalog, jc);
             ctx.out.push(LogEvent::Judged {
                 player: m.owner,

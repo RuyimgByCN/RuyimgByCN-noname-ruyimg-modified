@@ -88,6 +88,9 @@ mod l20_liegong_batch3;
 #[path = "../l20_mark_supplement_eight.rs"]
 mod l20_mark_supplement_eight;
 
+#[path = "../l20_l22_fixes.rs"]
+mod l20_l22_fixes;
+
 #[path = "../l21_martial_eight.rs"]
 mod l21_martial_eight;
 

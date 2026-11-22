@@ -6,7 +6,7 @@
 use crate::catalog::{CardKind, Catalog, EquipSlot, Suit};
 use crate::event::DamageNature;
 use crate::ids::{CardId, PlayerId};
-use crate::state::GameStateCore;
+use crate::state::{GameMode, GameStateCore, Role};
 
 use super::flag_val;
 use super::has_ext_skill;
@@ -179,18 +179,44 @@ pub(super) fn apply_attack_range(
     } else if has_ext_skill(state, catalog, player, "twxiangyu") {
         cur += 1;
     }
-    // L20 标记补充 (`fz_liegong`, `extension.js:5181-5210`): +1 attack range when `shouyue` is active on the table
+    // L20 标记补充 (`fz_liegong`, `extension.js:5187`): +1 attack range iff `get.zhu(player, 'shouyue')`
     if (has_ext_skill(state, catalog, player, "fz_liegong")
         || flag_val(state, player, "fz_liegong_active") > 0)
-        && (0..state.players.len() as PlayerId).any(|p| {
-            state.player(p).alive
-                && (has_ext_skill(state, catalog, p, "shouyue")
-                    || flag_val(state, p, "shouyue_active") > 0)
-        })
+        && has_zhu_shouyue(state, catalog, player)
     {
         cur += 1;
     }
     cur
+}
+
+fn has_zhu_shouyue(state: &GameStateCore, catalog: &Catalog, player: PlayerId) -> bool {
+    let has_shouyue = |p: PlayerId| {
+        state.player(p).alive
+            && (has_ext_skill(state, catalog, p, "shouyue")
+                || flag_val(state, p, "shouyue_active") > 0)
+    };
+    match &state.mode {
+        GameMode::Identity { roles } => roles
+            .iter()
+            .enumerate()
+            .find_map(|(idx, r)| (*r == Role::Lord).then_some(idx as PlayerId))
+            .is_some_and(has_shouyue),
+        GameMode::Versus { teams, .. } => teams
+            .iter()
+            .find(|team| team.contains(&player))
+            .and_then(|team| team.first().copied())
+            .is_some_and(has_shouyue),
+        GameMode::Kingdoms => {
+            let pf = state.declared_faction(catalog, player);
+            pf.is_some()
+                && (0..state.players.len() as PlayerId).any(|q| {
+                    state.is_revealed_jun(catalog, q)
+                        && state.declared_faction(catalog, q) == pf
+                        && has_shouyue(q)
+                })
+        }
+        _ => false,
+    }
 }
 
 pub(super) fn apply_distance_total(
@@ -200,13 +226,9 @@ pub(super) fn apply_distance_total(
     to: PlayerId,
     mut dist: i32,
 ) -> i32 {
-    // `sp.js:15556` (`fenxun`) & `sp.js:11358` (`refenxun`) & L20 `tspowei` (`extension.js:4499`): distance between owner and target treated as 1 (`inRangeOf(from, to) { if (from == player || to == player) return true; }`)
-    if flag_val(state, from, "l11_mod:fenxun_dist1") > 0
-        || flag_val(state, from, "tspowei_in_range") == u32::from(to) + 1
-        || flag_val(state, to, "tspowei_in_range") == u32::from(from) + 1
-        || flag_val(state, from, &format!("tspowei_in_range:{to}")) > 0
-        || flag_val(state, to, &format!("tspowei_in_range:{from}")) > 0
-    {
+    // `sp.js:15556` (`fenxun`) & `sp.js:11358` (`refenxun`): distance to target treated as 1
+    // (`tspowei` `inRangeOf` is one-way attack range in `GameStateCore::in_attack_range`, NOT distance=1!)
+    if flag_val(state, from, "l11_mod:fenxun_dist1") > 0 {
         return 1;
     }
     // `sp.js:7210` (`olzhuiji`: distance to characters with hp <= owner.hp is 1)

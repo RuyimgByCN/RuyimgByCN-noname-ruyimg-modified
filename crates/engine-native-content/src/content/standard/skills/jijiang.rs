@@ -160,8 +160,7 @@ impl SkillMachine for JijiangMachine {
                             .alive_players()
                             .filter(|p| {
                                 *p != self.owner
-                                    && ctx.core.computed_distance(ctx.catalog, self.owner, *p)
-                                        <= ctx.core.attack_range(ctx.catalog, self.owner)
+                                    && ctx.core.in_attack_range(ctx.catalog, self.owner, *p)
                             })
                             .map(ChoiceOption::Player)
                             .collect();

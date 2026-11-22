@@ -590,7 +590,10 @@ fn resolve_stardangchen(ctx: &mut Ctx<'_>, owner: PlayerId) {
                 _ => None,
             })
             .unwrap_or_else(|| {
-                let c = ctx.draw_judge_card();
+                let c = ctx.draw_judge_card_with_elo(
+                    owner,
+                    crate::kernel::EloJudgePref::RedPositive,
+                );
                 ctx.to_discard(c);
                 c
             })

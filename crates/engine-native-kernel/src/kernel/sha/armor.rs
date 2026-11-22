@@ -41,7 +41,19 @@ impl ShaResolveMachine {
         if !has_armor {
             return None;
         }
-        let judged = ctx.draw_judge_card();
+        let pref = if crate::rvm_bridge::modifiers::d34_l28_mods::rewrite_bagua_judge_ok(
+            ctx.core,
+            ctx.catalog,
+            self.target,
+            crate::catalog::Suit::Heart,
+        )
+        .is_some()
+        {
+            crate::kernel::EloJudgePref::NonSpadePositive
+        } else {
+            crate::kernel::EloJudgePref::HeartPositive
+        };
+        let judged = ctx.draw_judge_card_with_elo(self.target, pref);
         let j_suit = ctx.catalog.cards[judged as usize].suit;
         let success = crate::rvm_bridge::modifiers::d34_l28_mods::rewrite_bagua_judge_ok(
             ctx.core,

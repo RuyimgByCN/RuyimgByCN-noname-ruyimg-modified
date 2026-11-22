@@ -929,7 +929,10 @@ fn step_max_mark_other_judge(
         if valid.contains(&ChoiceOption::Player(target)) && ctx.core.player(target).alive {
             let mut saved = false;
             if !ctx.core.deck.is_empty() || !ctx.core.discard.is_empty() {
-                let jc = ctx.draw_judge_card();
+                let jc = ctx.draw_judge_card_with_elo(
+                    target,
+                    engine_native_kernel::kernel::EloJudgePref::TaoOrTaoyuanPositive,
+                );
                 saved = matches!(
                     ctx.catalog.card_kind(jc),
                     crate::catalog::CardKind::Tao | crate::catalog::CardKind::Taoyuan

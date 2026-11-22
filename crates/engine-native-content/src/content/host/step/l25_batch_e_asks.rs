@@ -731,7 +731,10 @@ fn step_ssr_tianlang(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
                 }
                 4 => {
                     if !ctx.core.deck.is_empty() || !ctx.core.discard.is_empty() {
-                        let jc = ctx.draw_judge_card();
+                        let jc = ctx.draw_judge_card_with_elo(
+                            owner,
+                            engine_native_kernel::kernel::EloJudgePref::CardValue,
+                        );
                         ctx.out.push(LogEvent::Judged {
                             player: owner,
                             card: jc,

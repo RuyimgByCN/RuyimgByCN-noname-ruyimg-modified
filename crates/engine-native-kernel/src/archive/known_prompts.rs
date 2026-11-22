@@ -256,6 +256,7 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
     "wengua:choose_card",
     "wengua:choose_side",
     "wengua5:give_card",
+    "wengua5:choose_target",
     "wengua5:choose_side",
     "diaohulishan:choose_target",
     "diaohulishan:confirm",

@@ -612,7 +612,10 @@ pub(super) fn step_th_yufeng(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             if let Some(&p) = m.targets.first() {
                 set_flag(ctx.core, p, "th_yufeng_locked", 0);
                 set_flag(ctx.core, owner, "th_yufeng_locked_target", 0);
-                let jc = ctx.draw_judge_card();
+                let jc = ctx.draw_judge_card_with_elo(
+                    p,
+                    engine_native_kernel::kernel::EloJudgePref::CardValue,
+                );
                 let is_black = matches!(ctx.catalog.cards[jc as usize].suit, Suit::Spade | Suit::Club);
                 ctx.to_discard(jc);
                 if is_black {

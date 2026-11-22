@@ -164,36 +164,19 @@ pub(super) fn xianqu_valid_targets(core: &GameStateCore, owner: PlayerId) -> Vec
         .collect()
 }
 
-pub(super) fn find_wengua_owner(
+pub(super) fn alive_wengua_holders(
     core: &GameStateCore,
     catalog: &Catalog,
     giver: PlayerId,
-) -> Option<PlayerId> {
-    let explicit = flag(core, giver, "wengua_owner_seat");
-    if explicit > 0 {
-        let seat = (explicit - 1) as PlayerId;
-        if (seat as usize) < core.players.len() && seat != giver && core.player(seat).alive {
-            return Some(seat);
-        }
-    }
-    for sk in ["wengua", "wengua5"] {
-        if let Some(wg_def) = catalog.skill_by_name(sk) {
-            for p in core.seat_order_from(giver) {
-                if p != giver
-                    && core.player(p).alive
-                    && ((core
-                        .skills
-                        .get(&(p, wg_def))
-                        .is_some_and(|i| i.enabled && !i.expires_end_of_turn)
-                        && flag(core, p, "wengua2_active") == 0)
-                        || flag(core, p, "has_wengua") > 0)
-                {
-                    return Some(p);
-                }
-            }
-        }
-    }
-    None
+) -> Vec<PlayerId> {
+    let wg_def = catalog.skill_by_name("wengua");
+    core.seat_order_from(giver)
+        .into_iter()
+        .filter(|&p| {
+            core.player(p).alive
+                && (wg_def.is_some_and(|d| core.has_skill(p, d)) || flag(core, p, "has_wengua") > 0)
+        })
+        .collect()
 }
 
 pub(super) fn take_card_from_player(ctx: &mut Ctx<'_>, p: PlayerId, cid: CardId) -> bool {
@@ -262,6 +245,35 @@ pub(super) fn draw_from_top_n(ctx: &mut Ctx<'_>, p: PlayerId, count: u32) -> Vec
         });
     }
     drawn
+}
+
+pub(super) fn give_he_card(ctx: &mut Ctx<'_>, from: PlayerId, to: PlayerId, cid: CardId) -> bool {
+    if from == to {
+        return ctx.core.player(from).hand.contains(&cid)
+            || ctx.core.player(from).equips.contains(&cid);
+    }
+    if give_hand_card(ctx, from, to, cid) {
+        return true;
+    }
+    if let Some(pos) = ctx.core.player(from).equips.iter().position(|&c| c == cid) {
+        ctx.core.player_mut(from).equips.remove(pos);
+        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, from, cid);
+        ctx.note_cards_lost(from, &[cid]);
+        ctx.core.player_mut(to).hand.push(cid);
+        ctx.emit(EventData::CardsLost {
+            player: from,
+            cards: vec![cid],
+            origins: vec![LostOrigin::Equip],
+        });
+        ctx.emit(EventData::CardsMoved {
+            cards: vec![cid],
+            from,
+            to,
+        });
+        true
+    } else {
+        false
+    }
 }
 
 pub(super) fn give_hand_card(ctx: &mut Ctx<'_>, from: PlayerId, to: PlayerId, cid: CardId) -> bool {
@@ -366,43 +378,9 @@ fn build_spec(
     }
     let ask_code = card?;
     match ask_code {
-        ASK_WENGUA_CHOOSE_CARD => {
+        ASK_WENGUA5_GIVE_CARD => {
             let options: Vec<ChoiceOption> = hand_and_equips(core, owner)
                 .into_iter()
-                .map(ChoiceOption::Card)
-                .collect();
-            if options.is_empty() {
-                return None;
-            }
-            Some((
-                owner,
-                ChoiceSpec {
-                    kind: ChoiceKind::SelectCards,
-                    prompt: "wengua:choose_card",
-                    options,
-                    min: 1,
-                    max: 1,
-                    allow_cancel: true,
-                },
-            ))
-        }
-        ASK_WENGUA_CHOOSE_SIDE => Some((
-            owner,
-            ChoiceSpec {
-                kind: ChoiceKind::PickTag,
-                prompt: "wengua:choose_side",
-                options: vec![ChoiceOption::Tag(0), ChoiceOption::Tag(1)],
-                min: 1,
-                max: 1,
-                allow_cancel: true,
-            },
-        )),
-        ASK_WENGUA5_GIVE_CARD => {
-            let options: Vec<ChoiceOption> = core
-                .player(owner)
-                .hand
-                .iter()
-                .copied()
                 .map(ChoiceOption::Card)
                 .collect();
             if options.is_empty() {
@@ -420,6 +398,26 @@ fn build_spec(
                 },
             ))
         }
+        ASK_WENGUA5_CHOOSE_TARGET => {
+            let options: Vec<ChoiceOption> = alive_wengua_holders(core, catalog, owner)
+                .into_iter()
+                .map(ChoiceOption::Player)
+                .collect();
+            if options.is_empty() {
+                return None;
+            }
+            Some((
+                owner,
+                ChoiceSpec {
+                    kind: ChoiceKind::SelectPlayers,
+                    prompt: "wengua5:choose_target",
+                    options,
+                    min: 1,
+                    max: 1,
+                    allow_cancel: false,
+                },
+            ))
+        }
         ASK_WENGUA5_CHOOSE_SIDE => {
             let wg_owner = target.unwrap_or(owner);
             Some((
@@ -430,7 +428,7 @@ fn build_spec(
                     options: vec![ChoiceOption::Tag(0), ChoiceOption::Tag(1)],
                     min: 1,
                     max: 1,
-                    allow_cancel: true,
+                    allow_cancel: target != Some(owner),
                 },
             ))
         }

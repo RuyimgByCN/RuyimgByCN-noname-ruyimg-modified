@@ -234,7 +234,25 @@ impl HostMachine {
                     if !ctx.core.player(t).alive {
                         return Flow::Yield;
                     }
-                    let judged = ctx.draw_judge_card();
+                    let is_red_fn = |su: crate::catalog::Suit| {
+                        matches!(
+                            su,
+                            crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                        )
+                    };
+                    let pref = self
+                        .cards
+                        .first()
+                        .copied()
+                        .map(|c| {
+                            if is_red_fn(ctx.catalog.cards[c as usize].suit) {
+                                engine_native_kernel::kernel::EloJudgePref::RedPositive
+                            } else {
+                                engine_native_kernel::kernel::EloJudgePref::BlackPositive
+                            }
+                        })
+                        .unwrap_or(engine_native_kernel::kernel::EloJudgePref::CardValue);
+                    let judged = ctx.draw_judge_card_with_elo(t, pref);
                     let suit = ctx.catalog.cards[judged as usize].suit;
                     ctx.log(LogEvent::Judged {
                         player: t,

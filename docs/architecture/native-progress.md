@@ -9,6 +9,13 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-22 Batch Q2-L20+L22（L20 终 3 技→95/95 ＋ L22 终 2 技→8/8）合入（待提交／发布）
+
+- **基线、发布与版本**：HEAD `41b7e4dedeada725ecd08b3e4b3400285bd44470`（Batch UI-6 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `44969821746` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。
+- **Batch Q2-L20+L22 集成与复核**：合入 `swarm/conv-q2-l20-l22` `d9e1c9a1f..94f42d34e`（`verifier-rules-2` #115 **`APPROVE`**）：协同 `host.rs` 保留 L19/U01 触发窗、统一 `core_ops::in_attack_range` 并拆分 `events/vm_history.rs` 维持 Rust 非测试有效行 `<= 1,000`；闭环 `mibei`/`fz_liegong`/`wengua`/`_eloDraw`/`_timeKiller` 并重验 `tspowei`/`kuanshi`/`kuanshi2`/`wengua5`。
+- **清单计数与整包签署**：按 #115 升格 **5 项**并刷新 4 项复核笔记（`L20` → **`95/0/0`**、`L22` → **`8/0/0`**，均达 100% 单项等价）；全仓更新为 **已复核等价 1,496／简化近似 2,928／缺失 0**，整包八项签署仍 `0/37`。
+- **主线实测**：5 crate `-D warnings`、`wasm32`、4 crate **`2,670/0/6`**、`--workspace --no-fail-fast` **`8,018/0/8`**、`conformance` **`19/19`**、`desktop-client` **`20/0/1`**、跨端校验、`web-client` `typecheck`＋`test`（**520/0**）＋`build:native`＋`smoke:native`（**83/0**）＋`build` 与 `preflight.py` 全过，见 [Batch Q2-L20+L22 证据](../operations/evidence/2026-11-21-batch2-3-l20-l22/README.md)。
+
 ### 2026-11-22 Batch UI-6（L20/L09/L24/L27/L29/L10 界面闭环与 L25/L28 共 +158）合入（待提交／发布）
 
 - **基线、发布与版本**：HEAD `920f4fac0c5fa4b84da906f453e90e1d9f459483`（Batch U01-1 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `44963498759` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。

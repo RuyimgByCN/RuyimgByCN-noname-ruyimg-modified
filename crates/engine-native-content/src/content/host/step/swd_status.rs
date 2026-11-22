@@ -478,7 +478,10 @@ impl HostMachine {
             }
             // 幻音：判定——黑桃取消该牌、红桃摸 1、其余无事
             HostBehavior::SwdHuanyin => {
-                let judged = ctx.draw_judge_card();
+                let judged = ctx.draw_judge_card_with_elo(
+                    self.owner,
+                    engine_native_kernel::kernel::EloJudgePref::Huanyin,
+                );
                 let suit = ctx.catalog.cards[judged as usize].suit;
                 ctx.to_discard(judged);
                 match suit {

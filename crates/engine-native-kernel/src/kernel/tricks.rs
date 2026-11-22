@@ -487,12 +487,6 @@ impl crate::catalog::SkillMachine for DismantleMachine {
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         if !self.asked {
             self.asked = true;
-            crate::kernel::elo_on_choice_before(
-                ctx.core,
-                ctx.catalog,
-                self.source,
-                "choose_player_card",
-            );
             let hand_visible = crate::kernel::elo_on_extract_player_card_begin(
                 ctx.core,
                 ctx.catalog,
@@ -582,12 +576,6 @@ impl crate::catalog::SkillMachine for SnatchMachine {
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         if !self.asked {
             self.asked = true;
-            crate::kernel::elo_on_choice_before(
-                ctx.core,
-                ctx.catalog,
-                self.source,
-                "choose_player_card",
-            );
             let hand_visible = crate::kernel::elo_on_extract_player_card_begin(
                 ctx.core,
                 ctx.catalog,

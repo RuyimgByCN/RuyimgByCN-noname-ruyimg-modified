@@ -88,8 +88,7 @@ pub fn active_ask(
                                     .unwrap_or(false);
                                 !(kc && core.player(*p).hand.is_empty())
                             }
-                            && core.computed_distance(catalog, *target, *p)
-                                <= core.attack_range(catalog, *target)
+                            && core.in_attack_range(catalog, *target, *p)
                     })
                     .map(ChoiceOption::Player)
                     .collect();
@@ -466,8 +465,7 @@ pub fn active_ask(
                         .alive_players()
                         .filter(|p| {
                             *p != *owner
-                                && core.computed_distance(catalog, *owner, *p)
-                                    <= core.attack_range(catalog, *owner)
+                                && core.in_attack_range(catalog, *owner, *p)
                         })
                         .map(ChoiceOption::Player)
                         .collect();

@@ -654,7 +654,10 @@ fn resolve_new_wuhun_death(m: &mut HostMachine, ctx: &mut Ctx<'_>, tgt: PlayerId
     for p in 0..ctx.core.players.len() as PlayerId {
         set_flag(ctx.core, p, "mark:mengyan", 0);
     }
-    let jc = ctx.draw_judge_card();
+    let jc = ctx.draw_judge_card_with_elo(
+        tgt,
+        engine_native_kernel::kernel::EloJudgePref::TaoOrTaoyuanPositive,
+    );
     ctx.to_discard(jc);
     let safe = matches!(ctx.catalog.card_kind(jc), CardKind::Tao | CardKind::Taoyuan);
     set_flag(ctx.core, owner, "l25_new_wuhun_target", u32::from(tgt) + 1);

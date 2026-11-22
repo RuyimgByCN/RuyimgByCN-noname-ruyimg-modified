@@ -279,7 +279,10 @@ impl HostMachine {
             // 神鼎·麦星面：确定性判定——红桃回 1/方块摸 1/梅花随机敌弃 1/
             // 黑桃无（内联口径同铁骑）
             HostBehavior::SwdShending => {
-                let judged = ctx.draw_judge_card();
+                let judged = ctx.draw_judge_card_with_elo(
+                    self.owner,
+                    engine_native_kernel::kernel::EloJudgePref::Shending,
+                );
                 let suit = ctx.catalog.cards[judged as usize].suit;
                 ctx.to_discard(judged);
                 match suit {
@@ -459,7 +462,10 @@ impl HostMachine {
                         player: self.owner,
                         cards: vec![picked],
                     });
-                    let judged = ctx.draw_judge_card();
+                    let judged = ctx.draw_judge_card_with_elo(
+                        dp,
+                        engine_native_kernel::kernel::EloJudgePref::RedPositive,
+                    );
                     let red = matches!(
                         ctx.catalog.cards[judged as usize].suit,
                         crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
@@ -488,7 +494,10 @@ impl HostMachine {
             // 死亡）；非黑桃体力回至 1+翻面（TurnOverBefore 帧经 commit
             // 含凶兽守卫/急冻解除）；unique 一次后移除实例
             HostBehavior::SwdBusi => {
-                let judged = ctx.draw_judge_card();
+                let judged = ctx.draw_judge_card_with_elo(
+                    self.owner,
+                    engine_native_kernel::kernel::EloJudgePref::NonSpadePositive,
+                );
                 let spade = matches!(
                     ctx.catalog.cards[judged as usize].suit,
                     crate::catalog::Suit::Spade

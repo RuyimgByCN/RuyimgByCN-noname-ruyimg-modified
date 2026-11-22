@@ -719,7 +719,10 @@ fn step_shichou(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             if !ok {
                 return Flow::Done;
             }
-            let jc = ctx.draw_judge_card();
+            let jc = ctx.draw_judge_card_with_elo(
+                owner,
+                engine_native_kernel::kernel::EloJudgePref::CardValue,
+            );
             ctx.to_discard(jc);
             let sc = suit_code(ctx.catalog.effective_card_suit(ctx.core, owner, jc));
             for &tgt in &m.targets {

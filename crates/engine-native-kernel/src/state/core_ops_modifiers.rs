@@ -312,6 +312,33 @@ impl GameStateCore {
         )
     }
 
+    /// Upstream `from.inRange(to)`: true when `computed_distance(from, to) <= attack_range(from)`
+    /// or a one-way `inRangeOf` rule applies (e.g., `tspowei_in_range` stored on `to` for `from`).
+    pub fn in_attack_range(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        from: PlayerId,
+        to: PlayerId,
+    ) -> bool {
+        if self.computed_distance(catalog, from, to) <= self.attack_range(catalog, from) {
+            return true;
+        }
+        let f = u32::from(from) + 1;
+        self.vm_aux
+            .flags
+            .get(&(to, "tspowei_in_range".to_string()))
+            .copied()
+            .unwrap_or(0)
+            == f
+            || self
+                .vm_aux
+                .flags
+                .get(&(to, format!("tspowei_in_range:{from}")))
+                .copied()
+                .unwrap_or(0)
+                > 0
+    }
+
     /// 存活玩家间的座位最短距离（死亡玩家及调虎离山 `undist` 座位不计数）。
     pub fn seat_distance_alive(&self, a: PlayerId, b: PlayerId) -> u8 {
         if a == b {

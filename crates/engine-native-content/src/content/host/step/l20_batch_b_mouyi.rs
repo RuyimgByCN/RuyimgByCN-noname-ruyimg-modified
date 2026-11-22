@@ -36,7 +36,12 @@ pub(super) fn handle_l20_duty_three(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> F
                     let is_turn_begin = m.card == Some(0);
                     let turn_p = m.target.unwrap_or(owner);
                     if is_turn_begin {
+                        let done_stamp = ((u32::from(turn_p) + 1) << 28)
+                            ^ ((ctx.core.turn.round & 0x0fff) << 16)
+                            ^ ((ctx.core.turn.phase_number.saturating_add(1)) & 0xffff);
+                        set_flag(ctx.core, owner, "tspowei_begin_stamp", done_stamp);
                         set_flag(ctx.core, owner, "tspowei_in_range", 0);
+                        set_flag(ctx.core, owner, "tspowei_in_range_seat", 0);
                         set_flag(ctx.core, owner, "tspowei_turn_prompted", 0);
                     }
                     if flag(ctx.core, owner, "tspowei_init") == 0 {
@@ -67,22 +72,26 @@ pub(super) fn handle_l20_duty_three(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> F
                         }
                         if is_turn_begin {
                             let others = alive_others(ctx.core, owner);
-                            let marked: Vec<PlayerId> = others
+                            let marked: Vec<(PlayerId, u32)> = others
                                 .iter()
                                 .copied()
                                 .filter(|&p| flag(ctx.core, p, "tspowei_wei") > 0)
+                                .map(|p| (p, flag(ctx.core, p, "dulie").max(1)))
                                 .collect();
-                            for &p in &marked {
+                            for &(p, _) in &marked {
                                 set_flag(ctx.core, p, "tspowei_wei", 0);
                                 set_flag(ctx.core, p, "dulie", 0);
                             }
-                            if !others.is_empty() {
-                                for p in marked {
+                            if !others.is_empty() && !marked.is_empty() {
+                                for (p, cnt) in marked {
                                     let pos = others.iter().position(|&x| x == p).unwrap_or(0);
                                     let next = others[(pos + 1) % others.len()];
                                     set_flag(ctx.core, next, "tspowei_wei", 1);
-                                    set_flag(ctx.core, next, "dulie", 1);
+                                    let cur_dulie = flag(ctx.core, next, "dulie");
+                                    set_flag(ctx.core, next, "dulie", cur_dulie + cnt);
                                 }
+                            } else {
+                                let _ = check_tspowei_achieve(ctx, owner);
                             }
                         }
                         return Flow::Done;
@@ -106,6 +115,8 @@ pub(super) fn handle_l20_duty_three(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> F
                 }
                 Some(4) => {
                     set_flag(ctx.core, owner, "tspowei_in_range", 0);
+                    set_flag(ctx.core, owner, "tspowei_in_range_seat", 0);
+                    set_flag(ctx.core, owner, "tspowei_turn_prompted", 0);
                     Flow::Done
                 }
                 Some(3) => {
@@ -139,6 +150,7 @@ pub(super) fn handle_l20_duty_three(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> F
                         return Flow::Done;
                     };
                     set_flag(ctx.core, owner, "tspowei_in_range", u32::from(t) + 1);
+                    set_flag(ctx.core, owner, "tspowei_in_range_seat", u32::from(t) + 1);
                     if act == 0 {
                         if ctx.core.player(owner).hand.is_empty() {
                             return Flow::Done;
@@ -211,6 +223,98 @@ pub(super) fn handle_l20_duty_three(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> F
             _ => Flow::Done,
         },
         "mibei" => {
+            let is_delayed = |ck: crate::catalog::CardKind| {
+                matches!(
+                    ck,
+                    crate::catalog::CardKind::Le
+                        | crate::catalog::CardKind::Bing
+                        | crate::catalog::CardKind::ShanDian
+                        | crate::catalog::CardKind::HongShui
+                        | crate::catalog::CardKind::Guiyoujie
+                )
+            };
+            let record = |ctx: &mut Ctx<'_>,
+                          k: crate::catalog::CardKind,
+                          raw_cid: Option<CardId>,
+                          is_conv: bool| {
+                if is_delayed(k) {
+                    return;
+                }
+                let eff_name: &str = if matches!(
+                    k,
+                    crate::catalog::CardKind::Sha
+                        | crate::catalog::CardKind::FireSha
+                        | crate::catalog::CardKind::LeiSha
+                ) {
+                    "sha"
+                } else if is_conv {
+                    k.key()
+                } else if let Some(cd) = raw_cid.and_then(|id| ctx.catalog.cards.get(id as usize))
+                {
+                    cd.name
+                } else {
+                    k.key()
+                };
+                let key = format!("xingqi_card:{eff_name}");
+                if flag(ctx.core, owner, &key) > 0 {
+                    return;
+                }
+                set_flag(ctx.core, owner, &key, 1);
+                let xq = flag(ctx.core, owner, "xingqi_count") + 1;
+                set_flag(ctx.core, owner, "xingqi_count", xq);
+                if flag(ctx.core, owner, "mibei_resolved") > 0 {
+                    return;
+                }
+                let bucket = if k.is_basic_kind() {
+                    "mibei_basic_cnt"
+                } else if k.equip_slot().is_some() {
+                    "mibei_equip_cnt"
+                } else {
+                    "mibei_trick_cnt"
+                };
+                let cur = flag(ctx.core, owner, bucket) + 1;
+                set_flag(ctx.core, owner, bucket, cur);
+                if flag(ctx.core, owner, "mibei_basic_cnt") >= 2
+                    && flag(ctx.core, owner, "mibei_trick_cnt") >= 2
+                    && flag(ctx.core, owner, "mibei_equip_cnt") >= 2
+                {
+                    set_flag(ctx.core, owner, "mibei_resolved", 1);
+                    set_flag(ctx.core, owner, "mibei_succeeded", 1);
+                    let mut drawn = Vec::new();
+                    for want_type in [0u8, 1, 2] {
+                        let matches_type = |c: CardId, cat: &crate::catalog::Catalog| {
+                            let ck = cat.card_kind(c);
+                            match want_type {
+                                0 => ck.is_basic_kind(),
+                                1 => ck.equip_slot().is_some(),
+                                _ => {
+                                    !ck.is_basic_kind()
+                                        && ck.equip_slot().is_none()
+                                        && !is_delayed(ck)
+                                }
+                            }
+                        };
+                        if let Some(pos) = ctx
+                            .core
+                            .deck
+                            .iter()
+                            .rposition(|&c| matches_type(c, ctx.catalog))
+                        {
+                            let c = ctx.core.deck.remove(pos);
+                            ctx.core.player_mut(owner).hand.push(c);
+                            drawn.push(c);
+                        }
+                    }
+                    if !drawn.is_empty() {
+                        ctx.emit(EventData::CardsDrawn {
+                            player: owner,
+                            cards: drawn,
+                        });
+                    }
+                    grant_skill_named(ctx, owner, "xinmouli");
+                    set_flag(ctx.core, owner, "xinmouli_granted", 1);
+                }
+            };
             match m.card {
                 Some(0) => {
                     set_flag(ctx.core, owner, "mibei_used_this_play", 0);
@@ -222,79 +326,49 @@ pub(super) fn handle_l20_duty_three(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> F
                         set_flag(ctx.core, owner, "mibei_mark", 1);
                     }
                 }
+                Some(5) => {
+                    set_flag(ctx.core, owner, "mibei_used_this_play", 0);
+                }
                 Some(1) => {
                     let used = flag(ctx.core, owner, "mibei_used_this_play") + 1;
                     set_flag(ctx.core, owner, "mibei_used_this_play", used);
-                    let xq = flag(ctx.core, owner, "xingqi_count") + 1;
-                    set_flag(ctx.core, owner, "xingqi_count", xq);
-                    if let Some(&cid) = m.cards.first() {
-                        if let Some(cd) = ctx.catalog.cards.get(cid as usize) {
-                            set_flag(ctx.core, owner, &format!("xingqi_card:{}", cd.name), 1);
-                        }
-                    }
-                    let k = m
-                        .cards
-                        .first()
-                        .map(|&c| ctx.catalog.card_kind(c))
-                        .unwrap_or(CardKind::Sha);
-                    let key = if k.is_basic_kind() {
-                        "mibei_basic_cnt"
-                    } else if k.equip_slot().is_some() {
-                        "mibei_equip_cnt"
+                    let is_conv = m.cards.first().copied().unwrap_or(0) > 0;
+                    let kind_idx = m.cards.get(1).copied().unwrap_or(0) as usize;
+                    let raw_cid = m.cards.get(2).copied();
+                    let eff_k = if is_conv {
+                        crate::catalog::CardKind::ALL
+                            .get(kind_idx)
+                            .copied()
+                            .unwrap_or(crate::catalog::CardKind::Sha)
+                    } else if let Some(cid) = raw_cid {
+                        ctx.catalog.card_kind(cid)
                     } else {
-                        "mibei_trick_cnt"
+                        crate::catalog::CardKind::Sha
                     };
-                    let cur = flag(ctx.core, owner, key) + 1;
-                    set_flag(ctx.core, owner, key, cur);
-                    if flag(ctx.core, owner, "mibei_basic_cnt") >= 2
-                        && flag(ctx.core, owner, "mibei_trick_cnt") >= 2
-                        && flag(ctx.core, owner, "mibei_equip_cnt") >= 2
-                    {
-                        set_flag(ctx.core, owner, "mibei_resolved", 1);
-                        set_flag(ctx.core, owner, "mibei_succeeded", 1);
-                        let mut drawn = Vec::new();
-                        for want_type in [0u8, 1, 2] {
-                            let matches_type = |c: CardId, cat: &crate::catalog::Catalog| {
-                                let ck = cat.card_kind(c);
-                                match want_type {
-                                    0 => ck.is_basic_kind(),
-                                    1 => ck.equip_slot().is_some(),
-                                    _ => !ck.is_basic_kind() && ck.equip_slot().is_none(),
-                                }
-                            };
-                            if let Some(pos) = ctx
-                                .core
-                                .deck
-                                .iter()
-                                .rposition(|&c| matches_type(c, ctx.catalog))
-                            {
-                                let c = ctx.core.deck.remove(pos);
-                                ctx.core.player_mut(owner).hand.push(c);
-                                drawn.push(c);
-                            }
-                        }
-                        if !drawn.is_empty() {
-                            ctx.emit(EventData::CardsDrawn {
-                                player: owner,
-                                cards: drawn,
-                            });
-                        }
-                        grant_skill_named(ctx, owner, "xinmouli");
-                        set_flag(ctx.core, owner, "xinmouli_granted", 1);
+                    record(ctx, eff_k, raw_cid, is_conv);
+                }
+                Some(2) => {
+                    if let Some(&cid) = m.cards.first() {
+                        let k = ctx.catalog.card_kind(cid);
+                        record(ctx, k, Some(cid), false);
                     }
                 }
-                Some(4)
-                    if flag(ctx.core, owner, "mibei_mark") > 0
-                        && flag(ctx.core, owner, "mibei_basic_cnt") == 0
+                Some(4) if flag(ctx.core, owner, "mibei_mark") > 0 => {
+                    set_flag(ctx.core, owner, "mibei_mark", 0);
+                    if flag(ctx.core, owner, "mibei_basic_cnt") == 0
                         && flag(ctx.core, owner, "mibei_trick_cnt") == 0
                         && flag(ctx.core, owner, "mibei_equip_cnt") == 0
                         && flag(ctx.core, owner, "xingqi_count") == 0
-                        && flag(ctx.core, owner, "mibei_resolved") == 0 =>
-                {
-                    set_flag(ctx.core, owner, "mibei_resolved", 2);
-                    set_flag(ctx.core, owner, "mibei_failed", 1);
+                        && flag(ctx.core, owner, "mibei_resolved") == 0
+                    {
+                        set_flag(ctx.core, owner, "mibei_resolved", 2);
+                        set_flag(ctx.core, owner, "mibei_failed", 1);
+                        ctx.lose_max_hp(owner, 1);
+                    }
+                }
+                Some(6) => {
+                    // `mibei_mark` `addTempSkill` expires when turn ends even if `Phase::End` was skipped.
                     set_flag(ctx.core, owner, "mibei_mark", 0);
-                    ctx.lose_max_hp(owner, 1);
                 }
                 _ => {}
             }

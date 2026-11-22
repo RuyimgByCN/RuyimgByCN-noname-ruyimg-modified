@@ -333,12 +333,131 @@ pub fn elo_card_value(
     }
 }
 
+/// Upstream-faithful skill judge preference (`trigger.judge(card)` in `_eloDraw`, `extension.js:252-254`).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum EloJudgePref {
+    Trick(CardKind),
+    RedPositive,
+    BlackPositive,
+    HeartPositive,
+    NonHeartPositive,
+    SpadePositive,
+    NonSpadePositive,
+    ClubPositive,
+    NonClubPositive,
+    DiamondPositive,
+    Releiji,
+    Zhongdu,
+    Beige,
+    Yueren,
+    TaoOrTaoyuanPositive,
+    Shending,
+    Huanyin,
+    CardValue,
+}
+
+fn elo_has_card_val_overrides(core: &GameStateCore) -> bool {
+    core.vm_aux
+        .flags
+        .keys()
+        .any(|(_, k)| k.starts_with("elo_judge_val:"))
+}
+
+/// Maps documented judge-based skill names to their `EloJudgePref`.
+pub fn elo_skill_judge_pref(name: &str) -> Option<EloJudgePref> {
+    match name {
+        "洛神" | "luoshen" | "rezhangbao_zhoufu" | "xiansheying" => {
+            Some(EloJudgePref::BlackPositive)
+        }
+        "yueren" | "渔人" => Some(EloJudgePref::Yueren),
+        "刚烈" | "ganglie" | "reganglie" | "wudian_fuchou" => {
+            Some(EloJudgePref::NonHeartPositive)
+        }
+        "雷击" | "leiji" => Some(EloJudgePref::SpadePositive),
+        "雷击·张角" | "zj_leiji" | "boss_zjleiji" => Some(EloJudgePref::BlackPositive),
+        "八卦阵" | "bagua" | "armor" => Some(EloJudgePref::HeartPositive),
+        "护驾" | "hujia" | "天妒" | "tiandu" | "铁骑" | "tieji" | "极点" | "击电"
+        | "boss_jidian" | "萨登荆环" | "stardangchen" | "胆术" | "精觉" | "魔炎"
+        | "仙音" => Some(EloJudgePref::RedPositive),
+        "中毒" | "boss_zhongdu" => Some(EloJudgePref::Zhongdu),
+        "悲歌" | "beige" | "yunchou_beige" => Some(EloJudgePref::Beige),
+        "炎狱" | "boss_yanyu" => Some(EloJudgePref::BlackPositive),
+        _ => None,
+    }
+}
+
+/// Resolves the `EloJudgePref` for a `JudgePhaseMachine` judgement (delayed trick or mapped ordinary judge).
+/// Returns `None` for unmapped ordinary judges (unless `elo_judge_val:*` overrides are set).
+pub fn elo_judge_pref_for(
+    core: &GameStateCore,
+    res: &crate::resolution::Resolution,
+    catalog: &Catalog,
+    trick: Option<CardId>,
+    ordinary: Option<crate::ids::EventId>,
+) -> Option<EloJudgePref> {
+    if let Some(c) = trick {
+        let kind = core
+            .declared_kinds
+            .get(&c)
+            .copied()
+            .unwrap_or_else(|| catalog.card_kind(c));
+        return Some(EloJudgePref::Trick(kind));
+    }
+    if let Some(inv) = ordinary {
+        for park in &res.parks {
+            if let crate::resolution::Slot::Intrinsic { frame } = park.slot {
+                if frame == inv {
+                    if let crate::snap::MachineSnapshot::NativeInvocation {
+                        progress:
+                            crate::event::NativeInvocationProgress::AwaitJudge { purpose, .. },
+                        ..
+                    } = park.machine.snapshot()
+                    {
+                        return Some(match purpose {
+                            crate::event::JudgePurpose::Jidian
+                            | crate::event::JudgePurpose::Yuance(
+                                crate::event::YuanceOption::LoseHp,
+                            ) => EloJudgePref::RedPositive,
+                            crate::event::JudgePurpose::Yuance(
+                                crate::event::YuanceOption::Recover,
+                            ) => EloJudgePref::BlackPositive,
+                        });
+                    }
+                }
+            }
+        }
+        if let Some(f) = res.stack.iter().find(|f| f.id == inv) {
+            if let crate::event::EventData::SkillInvocation(d) = &f.data {
+                if let Some(pref) = elo_skill_judge_pref(catalog.skill_name(d.def)) {
+                    return Some(pref);
+                }
+            }
+        }
+    }
+    if elo_has_card_val_overrides(core) {
+        Some(EloJudgePref::CardValue)
+    } else {
+        None
+    }
+}
+
 /// Judge heuristic value matching `trigger.judge(card)` in `_eloDraw` (`extension.js:252-254`).
 pub fn elo_judge_score(
     core: &GameStateCore,
     catalog: &Catalog,
     player: PlayerId,
     trick: CardKind,
+    card: CardId,
+) -> i32 {
+    elo_pref_score(core, catalog, player, EloJudgePref::Trick(trick), card)
+}
+
+/// Evaluates heuristic score for `card` under `pref`, honoring scalar `elo_judge_val:{card}` first.
+pub fn elo_pref_score(
+    core: &GameStateCore,
+    catalog: &Catalog,
+    player: PlayerId,
+    pref: EloJudgePref,
     card: CardId,
 ) -> i32 {
     if let Some(v) = elo_get_player_scalar(core, player, &format!("elo_judge_val:{card}")) {
@@ -350,32 +469,93 @@ pub fn elo_judge_score(
     let Some(meta) = catalog.cards.get(card as usize) else {
         return 0;
     };
-    match trick {
-        // 乐不思蜀: Heart is favorable (+20), non-Heart skips Play phase (-20).
-        CardKind::Le => {
-            if meta.suit == Suit::Heart {
-                20
-            } else {
-                -20
-            }
+    let suit = meta.suit;
+    match pref {
+        EloJudgePref::Trick(CardKind::Le) => {
+            if suit == Suit::Heart { 20 } else { -20 }
         }
-        // 兵粮寸断: Club is favorable (+20), non-Club skips Draw phase (-20).
-        CardKind::Bing => {
-            if meta.suit == Suit::Club {
-                20
-            } else {
-                -20
-            }
+        EloJudgePref::Trick(CardKind::Bing) => {
+            if suit == Suit::Club { 20 } else { -20 }
         }
-        // 闪电: Spade 2..=9 deals 3 thunder damage (-50), anything else is safe (+20).
-        CardKind::ShanDian => {
-            if meta.suit == Suit::Spade && (2..=9).contains(&meta.rank) {
+        EloJudgePref::Trick(CardKind::ShanDian) => {
+            if suit == Suit::Spade && (2..=9).contains(&meta.rank) {
                 -50
             } else {
                 20
             }
         }
-        _ => elo_card_value(core, catalog, player, card),
+        EloJudgePref::Trick(CardKind::HongShui) => {
+            if suit == Suit::Club && (2..=9).contains(&meta.rank) {
+                -50
+            } else {
+                20
+            }
+        }
+        EloJudgePref::Trick(CardKind::Guiyoujie) => {
+            if matches!(suit, Suit::Spade | Suit::Club) {
+                -30
+            } else {
+                20
+            }
+        }
+        EloJudgePref::Trick(_) | EloJudgePref::CardValue => {
+            elo_card_value(core, catalog, player, card)
+        }
+        EloJudgePref::RedPositive => {
+            if matches!(suit, Suit::Heart | Suit::Diamond) { 20 } else { -20 }
+        }
+        EloJudgePref::BlackPositive => {
+            if matches!(suit, Suit::Spade | Suit::Club) { 20 } else { -20 }
+        }
+        EloJudgePref::HeartPositive => {
+            if suit == Suit::Heart { 20 } else { -20 }
+        }
+        EloJudgePref::NonHeartPositive => {
+            if suit == Suit::Heart { -20 } else { 20 }
+        }
+        EloJudgePref::SpadePositive => {
+            if suit == Suit::Spade { 20 } else { -20 }
+        }
+        EloJudgePref::NonSpadePositive => {
+            if suit == Suit::Spade { -20 } else { 20 }
+        }
+        EloJudgePref::ClubPositive => {
+            if suit == Suit::Club { 20 } else { -20 }
+        }
+        EloJudgePref::NonClubPositive => {
+            if suit == Suit::Club { -20 } else { 20 }
+        }
+        EloJudgePref::DiamondPositive => {
+            if suit == Suit::Diamond { 20 } else { -20 }
+        }
+        EloJudgePref::Releiji => match suit {
+            Suit::Spade => 30,
+            Suit::Club => 20,
+            _ => -20,
+        },
+        EloJudgePref::Zhongdu => match suit {
+            Suit::Heart => 20,
+            Suit::Spade => 0,
+            _ => -20,
+        },
+        EloJudgePref::Beige => {
+            if matches!(suit, Suit::Heart | Suit::Diamond) { 20 } else { 10 }
+        }
+        EloJudgePref::Yueren => {
+            if matches!(suit, Suit::Spade | Suit::Club) { 20 } else { 10 }
+        }
+        EloJudgePref::TaoOrTaoyuanPositive => {
+            if matches!(meta.kind, CardKind::Tao | CardKind::Taoyuan) { 20 } else { -20 }
+        }
+        EloJudgePref::Shending => match suit {
+            Suit::Heart => 20,
+            Suit::Diamond | Suit::Club => 10,
+            Suit::Spade => 0,
+        },
+        EloJudgePref::Huanyin => match suit {
+            Suit::Heart | Suit::Spade => 20,
+            Suit::Diamond | Suit::Club => 0,
+        },
     }
 }
 
@@ -492,6 +672,16 @@ pub fn elo_on_judge_begin(
     player: PlayerId,
     trick: CardKind,
 ) -> usize {
+    elo_on_skill_judge_begin(core, catalog, player, EloJudgePref::Trick(trick))
+}
+
+/// `_eloDraw` (`judgeBegin` branch) using any `EloJudgePref` (delayed tricks, skill judges, ordinary judges).
+pub fn elo_on_skill_judge_begin(
+    core: &mut GameStateCore,
+    catalog: &Catalog,
+    player: PlayerId,
+    pref: EloJudgePref,
+) -> usize {
     if core.deck.len() <= 1 {
         return 0;
     }
@@ -513,7 +703,7 @@ pub fn elo_on_judge_begin(
     let is_enemy = !elo_is_friends_of(core, player, me);
     let window = diff as usize;
     let sorted = elo_reorder_deck_top(core, window, is_enemy, eh, |st, c| {
-        elo_judge_score(st, catalog, player, trick, c)
+        elo_pref_score(st, catalog, player, pref, c)
     });
     if sorted > 0 {
         elo_set_player_scalar(core, player, "elo_judge_last_window", sorted as i32);
@@ -635,35 +825,118 @@ fn elo_time_killer_is_mine(core: &GameStateCore, player: PlayerId) -> bool {
     elo_is_under_control(core, player)
 }
 
+/// Strictly matches upstream `_timeKiller` (`chooseToUseBefore` / `chooseToRespondBefore` /
+/// `chooseToDiscardBefore`, `extension.js:307-458`). Never triggers for target/control/bool/
+/// card/player-card/trigger prompts (`choose_target`, `choose_player_card`, `trigger_confirm`, etc.).
 #[inline]
 fn elo_is_choice_before_prompt(prompt: &str) -> bool {
     matches!(
         prompt,
         "phase_use_choose_to_use"
             | "choose_to_use"
+            | "dying_save"
+            | "nullify_window"
+            | "qinglong_replay_sha"
+            | "jiedao_sha_or_give"
+            | "wudian_youdishenru_use"
+            | "xumou:use_card"
+            | "taiji:choose_sha"
             | "choose_to_respond"
-            | "choose_to_discard"
-            | "choose_card"
-            | "choose_target"
-            | "choose_card_target"
-            | "choose_control"
-            | "choose_bool"
-            | "choose_player_card"
+            | "respond_shan"
+            | "respond_sha"
+            | "aoe_response"
+            | "duel_sha"
+            | "jijiang_respond"
+            | "hujia_respond"
             | "respond_for_sha"
             | "respond_for_shan"
             | "respond_for_peach"
             | "respond_for_wuxie"
+            | "th_dunshi:respond_shan"
+            | "shouye:target_respond"
+            | "sadengjinhuan_extra_shan"
+            | "swd_jiguanfeng_shan"
+            | "swd_niaoxiangzhen_shan"
+            | "swd_qixingzhen_shan"
+            | "sanbanfu:target_shan"
+            | "nvquan2:target_shan"
+            | "ssr_lieren:target_response"
+            | "tongling:ally_sha"
+            | "wudian_fuchou2_sha"
+            | "wudian_youdishenru_sha"
+            | "yxs_fanji_sha"
+            | "zhuhai_sha"
+            | "choose_to_discard"
+            | "discard_to_limit"
             | "discard_cards"
-            | "dismantle_choose"
-            | "snatch_choose"
-    ) || prompt.starts_with("choose_")
-        || prompt.starts_with("respond_")
-        || prompt.starts_with("discard")
-        || prompt.starts_with("vm_")
+            | "zhenlie_discard"
+            | "yihua_discard"
+            | "host_target_discard_equip"
+            | "beige_discard"
+            | "cixiong_discard_choose"
+            | "lijian_discard"
+            | "liaoyuan_discard"
+            | "guanshi_force_damage"
+            | "xiandan_discard"
+            | "shoulie_discard"
+            | "rvm_discard_pick"
+            | "xiaoguo_discard_basic"
+            | "xingxia_discard"
+            | "tongji_transfer_discard"
+            | "qingyu:discard_two"
+            | "tspowei:choose_card"
+            | "fz_new_tieji:target_discard"
+            | "new_meibu_discard"
+            | "twfengji:discard_card"
+            | "twzhouzu:target_discard"
+            | "sbtieji:discard_card"
+            | "gongshen_discard"
+            | "lianda_discard"
+            | "suiyan_discard"
+            | "xuanyuan_discard"
+            | "huanhun_discard"
+            | "daixing_discard"
+            | "pozhen_discard"
+            | "pozhen_discard_source"
+            | "zhuyu_discard"
+            | "ningshuang_discard"
+            | "duishi_discard"
+            | "duishi_discard_same_suit"
+            | "susheng_discard"
+            | "rumeng_discard"
+            | "huajian_discard"
+            | "huajin_discard"
+            | "huangyu_discard"
+            | "huanxing_discard"
+            | "dunxing_discard"
+            | "fengming_discard"
+            | "guanhu_discard"
+            | "heihuo_discard"
+            | "yinguo_discard"
+            | "yulin_discard"
+            | "swd_jiguantong_discard"
+            | "swd_liuxing_discard"
+            | "swd_qixingzhen_discard"
+            | "swd_tianfuzhen_discard"
+            | "th_buxu:discard_cards"
+            | "th_yeyan:discard_cards"
+            | "th_caiyi:discard_cards"
+            | "th_gushe:target_discard"
+            | "th_gushe:owner_discard"
+            | "regushe:target_discard"
+            | "regushe:owner_discard"
+            | "th_tianshu:discard_card"
+            | "rejici:killer_discard"
+            | "feigong:discard_sha"
+            | "ssr_qianxun:discard_cards"
+            | "ssr_zhiheng:discard_cards"
+            | "ssr_zhiheng:target_discard"
+            | "ssr_newpozhen:target_discard"
+    )
 }
 
 #[inline]
-fn elo_is_female_general(core: &GameStateCore, player: PlayerId) -> bool {
+fn elo_is_female_general(core: &GameStateCore, catalog: &Catalog, player: PlayerId) -> bool {
     if let Some(sex) = elo_get_player_scalar(core, player, "elo_sex_female") {
         return sex != 0;
     }
@@ -671,10 +944,9 @@ fn elo_is_female_general(core: &GameStateCore, player: PlayerId) -> bool {
     if idx >= core.players.len() {
         return false;
     }
-    matches!(
-        core.players[idx].general_slots[0],
-        Some(7 | 12 | 19 | 21 | 22 | 25)
-    )
+    core.players[idx].general_slots[0]
+        .and_then(|g| catalog.general_meta(g))
+        .is_some_and(|meta| meta.4 == crate::vocabulary::generals::Gender::Female)
 }
 
 /// `_timeKiller` (`chooseToUseBefore` / `chooseToRespondBefore` / `chooseToDiscardBefore`, `extension.js:307-458`).
@@ -716,7 +988,7 @@ pub fn elo_on_choice_before(
         let chat_idx = elo_get_player_scalar(core, observer, "elo_time_killer_chat_idx")
             .unwrap_or_else(|| (core.rng.gen_range(3) as i32) + 1)
             .clamp(1, 3);
-        if elo_is_female_general(core, observer) {
+        if elo_is_female_general(core, catalog, observer) {
             elo_set_player_scalar(core, observer, "elo_time_killer_chat_female", chat_idx);
         } else {
             elo_set_player_scalar(core, observer, "elo_time_killer_chat_male", chat_idx);

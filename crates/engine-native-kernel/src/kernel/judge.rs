@@ -81,24 +81,8 @@ impl JudgePhaseMachine {
     /// 正常进行态、调用方继续本机循环（与提取前的落空语义逐字相同）。
     /// 改命取消分支在候选归还牌堆后复用本段，不重复询问改命。
     fn begin_judgement(&mut self, ctx: &mut crate::machine::Ctx<'_>, trick: Option<crate::ids::CardId>) -> Option<Flow> {
-        let trick_kind = trick
-            .map(|c| {
-                ctx.core
-                    .declared_kinds
-                    .get(&c)
-                    .copied()
-                    .unwrap_or_else(|| ctx.catalog.card_kind(c))
-            })
-            .unwrap_or(CardKind::Le);
-        if ctx.core.deck.is_empty() && !ctx.core.discard.is_empty() {
-            let mut cards = std::mem::take(&mut ctx.core.discard);
-            ctx.core.rng.shuffle(&mut cards);
-            crate::kernel::elo_on_wash_deck(ctx.core, &cards);
-            ctx.core.deck = cards;
-            ctx.log(LogEvent::DeckReshuffled);
-        }
-        crate::kernel::elo_on_judge_begin(ctx.core, ctx.catalog, self.owner, trick_kind);
-        let judge_card = ctx.draw_judge_card();
+        let pref = crate::kernel::elo_judge_pref_for(ctx.core, ctx.res, ctx.catalog, trick, self.ordinary);
+        let judge_card = ctx.draw_judge_card_with_opt_elo(self.owner, pref);
         ctx.log(LogEvent::Judged {
             player: self.owner,
             card: judge_card,

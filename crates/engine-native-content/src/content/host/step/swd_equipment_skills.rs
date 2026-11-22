@@ -249,7 +249,10 @@ impl HostMachine {
                             cards: vec![c],
                         });
                     }
-                    let judged = ctx.draw_judge_card();
+                    let judged = ctx.draw_judge_card_with_elo(
+                        self.owner,
+                        engine_native_kernel::kernel::EloJudgePref::NonClubPositive,
+                    );
                     let club = matches!(
                         ctx.catalog.cards[judged as usize].suit,
                         crate::catalog::Suit::Club
@@ -432,7 +435,10 @@ impl HostMachine {
                 // 一张、黑桃无事。上游 judge 的 suit 提示函数为 AI 排序
                 // （不迁移）；判定牌入弃堆（Shentou 同款）。
                 HostStage::Act => {
-                    let judged = ctx.draw_judge_card();
+                    let judged = ctx.draw_judge_card_with_elo(
+                        self.owner,
+                        engine_native_kernel::kernel::EloJudgePref::Shending,
+                    );
                     let suit = ctx.catalog.cards[judged as usize].suit;
                     ctx.log(LogEvent::Judged {
                         player: self.owner,

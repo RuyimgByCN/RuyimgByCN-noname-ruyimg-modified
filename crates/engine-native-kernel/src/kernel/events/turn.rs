@@ -265,7 +265,10 @@ pub(in crate::kernel) fn commit_turn_begin(ctx: &mut Ctx<'_>, player: PlayerId) 
                 .collect();
             if ctx.core.turn.yanyu_count < 3 {
                 for holder in holders {
-                    let judged = ctx.draw_judge_card();
+                    let judged = ctx.draw_judge_card_with_elo(
+                        player,
+                        crate::kernel::EloJudgePref::BlackPositive,
+                    );
                     let red = matches!(
                         ctx.catalog.cards[judged as usize].suit,
                         crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond

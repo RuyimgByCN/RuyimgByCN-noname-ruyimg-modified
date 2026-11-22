@@ -740,7 +740,10 @@ fn step_linglongshimandai(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             let frame_id = flag(ctx.core, owner, "l28_linglong_frame");
             set_flag(ctx.core, owner, "l28_linglong_frame", 0);
             if confirmed && frame_id > 0 {
-                let judged = ctx.draw_judge_card();
+                let judged = ctx.draw_judge_card_with_elo(
+                    owner,
+                    engine_native_kernel::kernel::EloJudgePref::HeartPositive,
+                );
                 let is_heart = ctx.catalog.cards[judged as usize].suit.is_heart();
                 ctx.to_discard(judged);
                 if is_heart {

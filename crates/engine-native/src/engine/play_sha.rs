@@ -533,13 +533,12 @@ pub(super) fn play_sha(
                 && core.player(target).hp <= core.player(core.turn.current).hp
         })
         .unwrap_or(false);
-    let dist = core.computed_distance(catalog, from, target);
     if !zfs_free
         && !baolei_range_free
         && !feiren_range_free
         && !zhuyue_free
         && !sliufeng_free
-        && dist > core.attack_range(catalog, from)
+        && !core.in_attack_range(catalog, from, target)
     {
         return Err(RejectReason::IllegalTargets);
     }
@@ -555,8 +554,7 @@ pub(super) fn play_sha(
         if kc && core.player(*t).hand.is_empty() {
             return Err(RejectReason::IllegalTargets);
         }
-        let d2 = core.computed_distance(catalog, from, *t);
-        if !feiren_range_free && d2 > core.attack_range(catalog, from) {
+        if !feiren_range_free && !core.in_attack_range(catalog, from, *t) {
             return Err(RejectReason::IllegalTargets);
         }
     }

@@ -868,7 +868,10 @@ fn step_judge_sha_unrespondable(
     if matches!(ctx.answer().first().copied(), Some(ChoiceOption::Confirm)) {
         let mut unrespondable = retieji;
         if !ctx.core.deck.is_empty() || !ctx.core.discard.is_empty() {
-            let jc = ctx.draw_judge_card();
+            let jc = ctx.draw_judge_card_with_elo(
+                owner,
+                engine_native_kernel::kernel::EloJudgePref::RedPositive,
+            );
             let is_red = matches!(
                 ctx.catalog.cards.get(jc as usize).map(|cd| cd.suit),
                 Some(crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond)

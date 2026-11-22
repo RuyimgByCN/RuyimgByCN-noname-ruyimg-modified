@@ -539,6 +539,83 @@ impl SkillBehavior for HostSkillBehavior {
                 }
                 _ => None,
             },
+            HostBehavior::FzLiegong if kind == crate::event::EventKind::CardUsed => {
+                Some(crate::catalog::TriggerMeta {
+                    event: crate::event::EventKind::CardUsed,
+                    timing: crate::event::Timing::Normal,
+                    priority: 0,
+                    order_selectable: true,
+                    optional: false,
+                    extra_events: Vec::new(),
+                })
+            }
+            HostBehavior::L20MarkBatchA if self.name == "wengua" || self.name == "wengua5" => {
+                Some(crate::catalog::TriggerMeta {
+                    event: crate::event::EventKind::PhaseBegin,
+                    timing: crate::event::Timing::Normal,
+                    priority: 1,
+                    order_selectable: false,
+                    optional: false,
+                    extra_events: vec![
+                        crate::event::EventKind::PhaseEnd,
+                        crate::event::EventKind::TurnEnded,
+                        crate::event::EventKind::TurnPhaseAfter,
+                    ],
+                })
+            }
+            HostBehavior::L20MarkBatchB => match (self.name.as_str(), kind) {
+                ("fz_liegong", crate::event::EventKind::CardUsed) => {
+                    Some(crate::catalog::TriggerMeta {
+                        event: crate::event::EventKind::CardUsed,
+                        timing: crate::event::Timing::Normal,
+                        priority: 0,
+                        order_selectable: true,
+                        optional: false,
+                        extra_events: Vec::new(),
+                    })
+                }
+                ("mibei", _) => Some(crate::catalog::TriggerMeta {
+                    event: crate::event::EventKind::CardUsed,
+                    timing: crate::event::Timing::Normal,
+                    priority: 1,
+                    order_selectable: false,
+                    optional: false,
+                    extra_events: vec![
+                        crate::event::EventKind::PhaseBegin,
+                        crate::event::EventKind::Equipped,
+                        crate::event::EventKind::TurnEnded,
+                        crate::event::EventKind::TurnPhaseAfter,
+                    ],
+                }),
+                ("kuanshi", crate::event::EventKind::DamageBefore) => {
+                    Some(crate::catalog::TriggerMeta {
+                        event: crate::event::EventKind::PhaseBegin,
+                        timing: crate::event::Timing::Normal,
+                        priority: 1,
+                        order_selectable: false,
+                        optional: false,
+                        extra_events: vec![
+                            crate::event::EventKind::TurnBegin,
+                            crate::event::EventKind::Death,
+                        ],
+                    })
+                }
+                ("kuanshi2", crate::event::EventKind::DamageBefore) => {
+                    Some(crate::catalog::TriggerMeta {
+                        event: crate::event::EventKind::DamageBefore,
+                        timing: crate::event::Timing::Last,
+                        priority: -100,
+                        order_selectable: false,
+                        optional: false,
+                        extra_events: vec![
+                            crate::event::EventKind::TurnBegin,
+                            crate::event::EventKind::PhaseBegin,
+                            crate::event::EventKind::Death,
+                        ],
+                    })
+                }
+                _ => None,
+            },
             // U01 `dddmoyan` (`roundStart` = TurnBegin) 与 U01 Sub-batch 1：运行期覆盖触发窗，保留静态内容锁
             HostBehavior::D3Moyan => Some(crate::catalog::TriggerMeta {
                 event: crate::event::EventKind::TurnBegin,

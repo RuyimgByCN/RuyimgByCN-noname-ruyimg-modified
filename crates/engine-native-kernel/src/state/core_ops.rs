@@ -99,7 +99,7 @@ impl GameStateCore {
         self.player_mut(player).yexinjia_friends = friends;
         Ok(())
     }
-    fn is_revealed_jun(&self, catalog: &crate::catalog::Catalog, q: PlayerId) -> bool {
+    pub(crate) fn is_revealed_jun(&self, catalog: &crate::catalog::Catalog, q: PlayerId) -> bool {
         let pl = self.player(q);
         pl.alive && pl.revealed_generals[0] && pl.general_slots[0].and_then(|g| catalog.general_meta(g)).is_some_and(|(n, ..)| Self::jun_group(n).is_some() || n.starts_with("jun_") || n.starts_with("gz_jun_"))
     }
@@ -282,8 +282,12 @@ impl GameStateCore {
         let in_range = |t: PlayerId| self.computed_distance(catalog, player, t) <= range;
         match kind {
             K::Sha | K::FireSha | K::LeiSha => {
-                let v: Vec<PlayerId> = others.iter().copied().filter(|t| in_range(*t)).collect();
-                (1, 1, v)
+                let v: Vec<PlayerId> = others
+                    .iter()
+                    .copied()
+                    .filter(|t| self.in_attack_range(catalog, player, *t))
+                    .collect();
+                (if v.is_empty() { 1 } else { 1 }, 1, v)
             }
             K::Tao | K::Dinvxuanshuang => {
                 let wounded = self.player(player).hp < self.player(player).max_hp as i32;

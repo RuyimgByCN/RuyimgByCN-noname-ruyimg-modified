@@ -97,7 +97,7 @@ pub fn run_query(
                 && card.raw() != 0
                 && catalog.cards.get(card.raw() as usize).is_some_and(|def| {
                     if def.kind.is_sha_like() {
-                        core.computed_distance(catalog, u, t) <= core.attack_range(catalog, u)
+                        core.in_attack_range(catalog, u, t)
                     } else {
                         true
                     }

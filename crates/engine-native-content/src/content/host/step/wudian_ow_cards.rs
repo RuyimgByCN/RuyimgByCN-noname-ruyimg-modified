@@ -442,7 +442,10 @@ impl HostMachine {
                         cards: sel,
                     });
                     // 判定：非红桃成功（上游 judge suit!=="heart"）
-                    let judged = ctx.draw_judge_card();
+                    let judged = ctx.draw_judge_card_with_elo(
+                        self.owner,
+                        engine_native_kernel::kernel::EloJudgePref::NonHeartPositive,
+                    );
                     let suit = ctx.catalog.cards[judged as usize].suit;
                     ctx.log(LogEvent::Judged {
                         player: self.owner,

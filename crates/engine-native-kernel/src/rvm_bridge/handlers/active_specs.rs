@@ -416,16 +416,12 @@ impl VmTargetFilter {
             return false;
         }
         if self.within_attack_range
-            && (target == owner
-                || state.computed_distance(catalog, owner, target)
-                    > state.attack_range(catalog, owner))
+            && (target == owner || !state.in_attack_range(catalog, owner, target))
         {
             return false;
         }
         if (self.owner_in_target_attack_range || self.can_use_sha_on_owner)
-            && (target == owner
-                || state.computed_distance(catalog, target, owner)
-                    > state.attack_range(catalog, target))
+            && (target == owner || !state.in_attack_range(catalog, target, owner))
         {
             return false;
         }

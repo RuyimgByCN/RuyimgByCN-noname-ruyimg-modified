@@ -424,28 +424,28 @@ fn l20_batch_a_guozhan_8_skills_and_37_ui_mark_stubs_six_dimensions() {
     // 2. `wengua` & `wengua5`: Dim ①/②/③/④/⑥
     e.debug_grant(0, "wengua");
     e.debug_grant(0, "wengua5");
+    // Upstream `wengua = { audio: 2, group: ["wengua5"] }` has no independent `phaseUse` entry.
+    assert!(matches!(activate(&mut e, 0, "wengua"), CommandOutcome::Rejected(_)));
     let c0 = e.debug_hand(0)[0];
-    assert!(matches!(activate(&mut e, 0, "wengua"), CommandOutcome::Pending { .. }));
-    assert_eq!(e.open_choice().unwrap().spec.prompt, "wengua:choose_card");
+    assert!(matches!(activate(&mut e, 0, "wengua5"), CommandOutcome::Pending { .. }));
+    assert_eq!(e.open_choice().unwrap().spec.prompt, "wengua5:give_card");
     e = assert_archive_roundtrip(&e);
     assert!(matches!(answer(&mut e, vec![ChoiceOption::Card(999)]), CommandOutcome::Rejected(_)));
     let _ = cancel(&mut e);
-    assert_eq!(flag(&e, 0, "wengua_resolved"), 0, "cancel refunds wengua once_per_turn");
+    assert_eq!(flag(&e, 0, "wengua5_resolved"), 0, "cancel refunds wengua5 once_per_turn");
 
-    let _ = activate(&mut e, 0, "wengua");
+    let _ = activate(&mut e, 0, "wengua5");
     let _ = answer(&mut e, vec![ChoiceOption::Card(c0)]);
-    assert_eq!(e.open_choice().unwrap().spec.prompt, "wengua:choose_side");
+    assert_eq!(e.open_choice().unwrap().spec.prompt, "wengua5:choose_side");
+    assert!(!e.open_choice().unwrap().spec.allow_cancel, "self-wengua choose_side is forced");
     e = assert_archive_roundtrip(&e);
     assert!(matches!(answer(&mut e, vec![ChoiceOption::Tag(9)]), CommandOutcome::Rejected(_)));
-    let _ = cancel(&mut e);
-    assert_eq!(flag(&e, 0, "wengua_resolved"), 0, "stage-2 cancel refunds wengua once_per_turn");
-
-    let _ = activate(&mut e, 0, "wengua");
-    let _ = answer(&mut e, vec![ChoiceOption::Card(c0)]);
+    let h0_before_self = e.debug_hand(0).len();
     let _ = answer(&mut e, vec![ChoiceOption::Tag(0)]);
-    assert_eq!(flag(&e, 0, "wengua_resolved"), 1);
+    assert_eq!(flag(&e, 0, "wengua5_resolved"), 1);
     assert_eq!(e.state_core().deck.last().copied(), Some(c0));
-    assert!(matches!(activate(&mut e, 0, "wengua"), CommandOutcome::Rejected(_)));
+    assert_eq!(e.debug_hand(0).len(), h0_before_self, "placed 1 & drew 1 from bottom");
+    assert!(matches!(activate(&mut e, 0, "wengua5"), CommandOutcome::Rejected(_)));
 
     // `wengua5` grants temporary `wengua2_active` to seat 1 at seat 1's Prepare phase
     advance_to(&mut e, 1, Phase::Play);

@@ -187,8 +187,7 @@ impl ShaResolveMachine {
         if kongcheng && ctx.core.player(p).hand.is_empty() {
             return false;
         }
-        ctx.core.computed_distance(ctx.catalog, self.target, p)
-            <= ctx.core.attack_range(ctx.catalog, self.target)
+        ctx.core.in_attack_range(ctx.catalog, self.target, p)
     }
 
     fn current_sha_frame_id(&self, ctx: &Ctx<'_>) -> Option<crate::ids::EventId> {

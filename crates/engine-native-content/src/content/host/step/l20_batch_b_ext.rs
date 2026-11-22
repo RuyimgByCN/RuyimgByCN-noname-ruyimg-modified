@@ -180,7 +180,7 @@ pub(super) fn filter_l20_batch_b_ext(
             } => *player == owner && !alive_all(ctx.state, owner).is_empty(),
             EventData::Phase {
                 player,
-                phase: Phase::Prepare | Phase::Judge,
+                phase: Phase::Prepare,
                 begin: true,
             } => {
                 *player == owner
@@ -190,21 +190,31 @@ pub(super) fn filter_l20_batch_b_ext(
             EventData::Death { player, .. } => {
                 *player == owner && flag(ctx.state, owner, "kuanshi_target") > 0
             }
-            EventData::Damage(d) => {
-                !d.prevented
-                    && d.amount > 1
-                    && d.settlement.committed_damage.is_none()
-                    && flag(ctx.state, owner, "kuanshi_target") == u32::from(d.target) + 1
-            }
             _ => false,
         },
         "kuanshi2" => match event {
             EventData::Damage(d) => {
                 d.target == owner
                     && !d.prevented
-                    && d.amount > 1
+                    && d.amount > 0
                     && d.settlement.committed_damage.is_none()
                     && flag(ctx.state, owner, "kuanshi_protected_by") > 0
+                    && !ctx.state.is_damage_taken_canceled(
+                        ctx.catalog,
+                        d.source,
+                        d.target,
+                        d.card,
+                        d.nature,
+                        d.amount as u32,
+                    )
+                    && ctx.state.effective_damage_amount(
+                        ctx.catalog,
+                        d.source,
+                        d.target,
+                        d.card,
+                        d.nature,
+                        d.amount as u32,
+                    ) > 1
             }
             EventData::Phase {
                 player,
@@ -682,13 +692,10 @@ pub(super) fn handle_rekuanshi(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
 }
 
 fn cleanup_kuanshi_protection(ctx: &mut Ctx<'_>, ks_owner: PlayerId) {
-    let t_enc = flag(ctx.core, ks_owner, "kuanshi_target");
     set_flag(ctx.core, ks_owner, "kuanshi_target", 0);
     let kuanshi2_def = ctx.catalog.skill_by_name("kuanshi2");
     for p in 0..ctx.core.players.len() as PlayerId {
-        if flag(ctx.core, p, "kuanshi_protected_by") == u32::from(ks_owner) + 1
-            || (t_enc > 0 && p == (t_enc - 1) as PlayerId)
-        {
+        if flag(ctx.core, p, "kuanshi_protected_by") == u32::from(ks_owner) + 1 {
             set_flag(ctx.core, p, "kuanshi_protected_by", 0);
             if let Some(def) = kuanshi2_def {
                 ctx.core.skills.remove(&(p, def));
@@ -712,16 +719,6 @@ pub(super) fn handle_kuanshi(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             Some(3) => {
                 cleanup_kuanshi_protection(ctx, owner);
                 set_flag(ctx.core, owner, "kuanshi_skip_draw", 0);
-                Flow::Done
-            }
-            Some(2) => {
-                let t = m.target.unwrap_or(owner);
-                ctx.current_damage_mut().prevented = true;
-                cleanup_kuanshi_protection(ctx, owner);
-                set_flag(ctx.core, owner, "kuanshi_prevented", 1);
-                set_flag(ctx.core, t, "kuanshi_prevented", 1);
-                set_flag(ctx.core, owner, "kuanshi_skip_draw", 1);
-                ctx.core.player_mut(owner).skip_next_draw = true;
                 Flow::Done
             }
             _ => wait_ask(m, ctx, ASK_KUANSHI_TARGET),

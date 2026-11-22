@@ -170,12 +170,11 @@ pub(super) fn mark_sha_unrespondable(
     target: PlayerId,
     cid: Option<CardId>,
 ) {
-    if let Some(c) = cid {
-        ctx.core
-            .vm_aux
-            .flags
-            .insert((owner, format!("sha_unrespondable:{c}:{target}")), 1);
-    }
+    let c = cid.unwrap_or(0);
+    ctx.core
+        .vm_aux
+        .flags
+        .insert((owner, format!("sha_unrespondable:{c}:{target}")), 1);
 }
 
 pub(super) fn draw_direct(ctx: &mut Ctx<'_>, p: PlayerId, n: u32) {
@@ -415,7 +414,12 @@ pub(in crate::content::host) fn filter_l20_batch_b(
             }
             match event {
                 EventData::TurnBegin { player } => {
-                    if flag(ctx.state, owner, "tspowei_init") == 0 || *player == owner {
+                    let cur_stamp = ((u32::from(*player) + 1) << 28)
+                        ^ ((ctx.state.turn.round & 0x0fff) << 16)
+                        ^ (ctx.state.turn.phase_number & 0xffff);
+                    if flag(ctx.state, owner, "tspowei_begin_stamp") == cur_stamp {
+                        false
+                    } else if flag(ctx.state, owner, "tspowei_init") == 0 || *player == owner {
                         true
                     } else if flag(ctx.state, *player, "tspowei_wei") > 0 {
                         !ctx.state.player(owner).hand.is_empty()
@@ -444,7 +448,9 @@ pub(in crate::content::host) fn filter_l20_batch_b(
                                     && !ctx.state.player(*player).hand.is_empty()))
                     }
                 }
-                EventData::TurnEnded { .. } => flag(ctx.state, owner, "tspowei_in_range") > 0,
+                EventData::TurnEnded { player } => {
+                    flag(ctx.state, owner, "tspowei_in_range_seat") == u32::from(*player) + 1
+                }
                 EventData::Damage(d) => {
                     !d.prevented
                         && d.amount > 0
@@ -498,15 +504,12 @@ pub(in crate::content::host) fn filter_l20_batch_b(
                 player,
                 phase: Phase::End,
                 begin: true,
-            } => {
-                *player == owner
-                    && flag(ctx.state, owner, "mibei_resolved") == 0
-                    && flag(ctx.state, owner, "mibei_mark") > 0
-                    && flag(ctx.state, owner, "mibei_basic_cnt") == 0
-                    && flag(ctx.state, owner, "mibei_trick_cnt") == 0
-                    && flag(ctx.state, owner, "mibei_equip_cnt") == 0
-                    && flag(ctx.state, owner, "xingqi_count") == 0
             }
+            | EventData::TurnEnded { player }
+            | EventData::TurnEndWindow {
+                player,
+                after: true,
+            } => *player == owner && flag(ctx.state, owner, "mibei_mark") > 0,
             _ => false,
         },
         other => filter_l20_batch_b_ext(other, ctx, owner, event),
@@ -614,16 +617,29 @@ pub(in crate::content::host) fn machine_l20_batch_b(
         ("qingyu", EventData::Damage(_)) => card = Some(0),
         ("qingyu", EventData::Phase { phase: Phase::Prepare, begin: true, .. }) => card = Some(1),
         ("qingyu", EventData::Dying { .. }) => card = Some(2),
-        ("mibei", EventData::Phase { phase: Phase::Prepare | Phase::Play, begin: true, .. }) => card = Some(0),
+        ("mibei", EventData::Phase { phase: Phase::Prepare, begin: true, .. }) => card = Some(0),
+        ("mibei", EventData::Phase { phase: Phase::Play, begin: true, .. }) => card = Some(5),
         ("mibei", EventData::CardUsed(u)) => {
             card = Some(1);
+            if let Some(conv_k) = u.use_as {
+                let kind_idx = crate::catalog::CardKind::ALL
+                    .iter()
+                    .position(|&k| k == conv_k)
+                    .unwrap_or(0) as u32;
+                cards.push(1);
+                cards.push(kind_idx);
+            } else {
+                cards.push(0);
+                cards.push(0);
+            }
             cards.extend(u.card);
         }
         ("mibei", EventData::Equipped { card: eq, .. }) => {
-            card = Some(1);
+            card = Some(2);
             cards.push(*eq);
         }
         ("mibei", EventData::Phase { phase: Phase::End, begin: true, .. }) => card = Some(4),
+        ("mibei", EventData::TurnEnded { .. } | EventData::TurnEndWindow { .. }) => card = Some(6),
         ("fz_new_longdan", EventData::CardResponded { card: cid, .. }) => {
             card = Some(1);
             cards.push(*cid);
@@ -672,16 +688,12 @@ pub(in crate::content::host) fn machine_l20_batch_b(
             card = Some(3);
             target = Some(*player);
         }
-        ("kuanshi", EventData::Phase { phase: Phase::Prepare | Phase::Judge, begin: true, .. }) => card = Some(1),
+        ("kuanshi", EventData::Phase { phase: Phase::Prepare, begin: true, .. }) => card = Some(1),
         ("kuanshi", EventData::Death { .. }) => card = Some(3),
         ("rekuanshi", EventData::Damage(d)) => {
             card = Some(2);
             target = Some(d.target);
             cards.push(d.amount.max(1) as u32);
-        }
-        ("kuanshi", EventData::Damage(d)) => {
-            card = Some(2);
-            target = Some(d.target);
         }
         ("kuanshi2", EventData::Damage(_)) => card = Some(2),
         ("kuanshi2", EventData::Phase { player, phase: Phase::Prepare, begin: true } | EventData::Death { player, .. }) => {

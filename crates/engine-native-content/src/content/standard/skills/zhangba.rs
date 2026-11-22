@@ -28,9 +28,7 @@ impl SkillBehavior for ZhangbaBehavior {
             return None;
         }
         let in_range = ctx.state.alive_players().any(|p| {
-            p != owner
-                && ctx.state.computed_distance(ctx.catalog, owner, p)
-                    <= ctx.state.attack_range(ctx.catalog, owner)
+            p != owner && ctx.state.in_attack_range(ctx.catalog, owner, p)
         });
         if !in_range {
             return None;
@@ -120,9 +118,7 @@ impl SkillMachine for ZhangbaMachine {
                     .core
                     .alive_players()
                     .filter(|p| {
-                        *p != self.owner
-                            && ctx.core.computed_distance(ctx.catalog, self.owner, *p)
-                                <= ctx.core.attack_range(ctx.catalog, self.owner)
+                        *p != self.owner && ctx.core.in_attack_range(ctx.catalog, self.owner, *p)
                     })
                     .map(ChoiceOption::Player)
                     .collect();

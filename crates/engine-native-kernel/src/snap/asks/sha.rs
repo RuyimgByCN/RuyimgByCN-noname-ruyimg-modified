@@ -129,8 +129,7 @@ pub(super) fn active_sha_ask(
                             .unwrap_or(false);
                         !(kc && core.player(*p).hand.is_empty())
                     }
-                    && core.computed_distance(catalog, target, *p)
-                        <= core.attack_range(catalog, target)
+                    && core.in_attack_range(catalog, target, *p)
             })
             .map(ChoiceOption::Player)
             .collect();

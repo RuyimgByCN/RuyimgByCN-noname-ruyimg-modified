@@ -326,7 +326,10 @@ impl HostMachine {
                 // 射影（U05 xianjian 苏媚，规则 v175）：判定黑色→获得伤
                 // 害牌（direct 无询问；每回合 1 次=TurnState.sheying_used）。
                 ctx.core.turn.sheying_used = true;
-                let judged = ctx.draw_judge_card();
+                let judged = ctx.draw_judge_card_with_elo(
+                    self.owner,
+                    engine_native_kernel::kernel::EloJudgePref::BlackPositive,
+                );
                 let suit = ctx.catalog.cards[judged as usize].suit;
                 ctx.log(LogEvent::Judged {
                     player: self.owner,

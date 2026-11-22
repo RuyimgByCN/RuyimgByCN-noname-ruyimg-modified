@@ -42,7 +42,10 @@ impl SkillMachine for ZjLeijiMachine {
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         let seats = ctx.core.players.len() as PlayerId;
         if let Some(t) = (0..seats).find(|&t| t != self.owner && ctx.core.player(t).alive) {
-            let judged = ctx.draw_judge_card();
+            let judged = ctx.draw_judge_card_with_elo(
+                self.owner,
+                engine_native_kernel::kernel::EloJudgePref::BlackPositive,
+            );
             let black = matches!(
                 ctx.catalog.cards[judged as usize].suit,
                 crate::catalog::Suit::Spade | crate::catalog::Suit::Club

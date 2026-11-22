@@ -45,7 +45,10 @@ impl SkillMachine for GangLieMachine {
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         if !self.asked {
-            let card = ctx.draw_judge_card();
+            let card = ctx.draw_judge_card_with_elo(
+                self.owner,
+                engine_native_kernel::kernel::EloJudgePref::NonHeartPositive,
+            );
             let heart = ctx.catalog.cards[card as usize].suit.is_heart();
             ctx.to_discard(card);
             if !heart && ctx.core.player(self.source).alive {
