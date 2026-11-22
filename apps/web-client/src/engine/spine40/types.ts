@@ -273,6 +273,26 @@ export interface DrawOrderKeyframe {
   offsets: Array<{ slot: string; offset: number }>;
 }
 
+export interface EventData {
+  name: string;
+  int: number;
+  float: number;
+  string: string;
+  audio?: string;
+  volume?: number;
+  balance?: number;
+}
+
+export interface EventKeyframe {
+  time: number;
+  name: string;
+  int?: number;
+  float?: number;
+  string?: string;
+  volume?: number;
+  balance?: number;
+}
+
 export interface BoneTimelineGroup {
   rotate?: ScalarKeyframe[];
   translate?: PairKeyframe[];
@@ -300,6 +320,7 @@ export interface AnimationData {
   path: Record<string, PathTimelineGroup>;
   deform: Record<string, Record<string, Record<string, DeformKeyframe[]>>>;
   drawOrder: DrawOrderKeyframe[];
+  events?: EventKeyframe[];
 }
 
 export interface SkeletonData {
@@ -310,6 +331,7 @@ export interface SkeletonData {
   ik: IkConstraintData[];
   transform: TransformConstraintData[];
   path: PathConstraintData[];
+  events?: EventData[];
   animations: Record<string, AnimationData>;
 }
 

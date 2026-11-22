@@ -14,6 +14,8 @@ import type {
   BoneData,
   BoneTimelineGroup,
   CurveDef,
+  EventData,
+  EventKeyframe,
   IkConstraintData,
   PathConstraintData,
   PositionMode,
@@ -324,6 +326,26 @@ export function parseSpine40Json(input: unknown): SkeletonData {
     mixY: asNumber(c.mixY, asNumber(c.mixX, 1)),
   }));
 
+  const events: EventData[] = [];
+  const eventsRaw = (obj.events ?? {}) as Record<string, Record<string, unknown>>;
+  for (const [evName, evVal] of Object.entries(eventsRaw)) {
+    const rec = evVal && typeof evVal === "object" ? evVal : {};
+    const audio = typeof rec.audio === "string" && rec.audio ? rec.audio : undefined;
+    events.push({
+      name: evName,
+      int: Math.trunc(asNumber(rec.int, 0)),
+      float: asNumber(rec.float, 0),
+      string: asString(rec.string, ""),
+      ...(audio
+        ? {
+            audio,
+            volume: asNumber(rec.volume, 1),
+            balance: asNumber(rec.balance, 0),
+          }
+        : {}),
+    });
+  }
+
   const animations: Record<string, AnimationData> = {};
   const animsRaw = (obj.animations ?? {}) as Record<string, Record<string, unknown>>;
   for (const [animName, animObj] of Object.entries(animsRaw)) {
@@ -475,6 +497,20 @@ export function parseSpine40Json(input: unknown): SkeletonData {
         : [],
     }));
 
+    const eventsTlRaw = Array.isArray(animObj.events) ? animObj.events : [];
+    const eventsTl: EventKeyframe[] = eventsTlRaw.map((kf: Record<string, unknown>) => {
+      const out: EventKeyframe = {
+        time: asNumber(kf.time, 0),
+        name: asString(kf.name),
+      };
+      if (typeof kf.int === "number") out.int = Math.trunc(kf.int);
+      if (typeof kf.float === "number") out.float = kf.float;
+      if (typeof kf.string === "string") out.string = kf.string;
+      if (typeof kf.volume === "number") out.volume = kf.volume;
+      if (typeof kf.balance === "number") out.balance = kf.balance;
+      return out;
+    });
+
     animations[animName] = {
       name: animName,
       bones: bonesTl,
@@ -484,6 +520,7 @@ export function parseSpine40Json(input: unknown): SkeletonData {
       path: pathTl,
       deform: deformTl,
       drawOrder,
+      events: eventsTl,
     };
   }
 
@@ -495,6 +532,7 @@ export function parseSpine40Json(input: unknown): SkeletonData {
     ik,
     transform,
     path,
+    events,
     animations,
   };
 }
@@ -527,8 +565,21 @@ export function parseTextureAtlas(atlasText: string): TextureAtlas {
   let currentPage: AtlasPage | null = null;
   let currentRegion: AtlasRegion | null = null;
 
-  for (const rawLine of lines) {
-    const line = rawLine.trim();
+  const isFollowingPageHeader = (idx: number, line: string): boolean => {
+    if (!currentPage || !currentRegion) return false;
+    if (/\.(png|webp|jpe?g|ktx2?|pkm)$/i.test(line)) return true;
+    for (let j = idx + 1; j < lines.length; j++) {
+      const nxt = lines[j].trim();
+      if (!nxt || nxt.indexOf(":") === -1) break;
+      const k = nxt.slice(0, nxt.indexOf(":")).trim();
+      if (k === "format" || k === "filter" || k === "repeat" || k === "pma") return true;
+      if (k === "bounds" || k === "offsets" || k === "xy" || k === "orig" || k === "offset") return false;
+    }
+    return false;
+  };
+
+  for (let lineIdx = 0; lineIdx < lines.length; lineIdx++) {
+    const line = lines[lineIdx].trim();
     if (!line) {
       currentPage = null;
       currentRegion = null;
@@ -537,7 +588,7 @@ export function parseTextureAtlas(atlasText: string): TextureAtlas {
 
     const colonIdx = line.indexOf(":");
     if (colonIdx === -1) {
-      if (!currentPage) {
+      if (!currentPage || isFollowingPageHeader(lineIdx, line)) {
         currentPage = {
           name: line,
           width: 256,

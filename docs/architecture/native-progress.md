@@ -9,6 +9,13 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-22 Batch Spine-Tests（裁决 35 Spine 4.0 净室全特性审计 ＋ 6 项解算/混合/编解码修复）合入（待提交／发布）
+
+- **基线、发布与版本**：HEAD `aca0cc0a5ed2ac30fb3f50647e396d4cabe2dc76`（Batch L11-1 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `44986813858` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。
+- **Spine 4.0 净室审计与修复**：合入 `swarm/conv-spine-tests` `a34f19a95..6913a167e`（独立洁净室审计员 `verifier-spine-cleanroom` #143 **`APPROVE`**）：补齐裁决 35 全部 12 项特性 `24/24` 测试，并闭环 #140 6 项缺陷（`noScale` 镜像矩阵、`drawOrder` 防误触与多偏移、`PathConstraint` 父旋转、`TransformConstraint` `shearY` 折叠、`multiply` `srcAlpha=GL_ONE`、`PathAttachment.lengths` `.skel` 无损往返）；零外部 Spine 库或商用资产。
+- **清单计数与视觉边界**：无清单项变更（全仓保持 **已复核等价 1,720／简化近似 2,704／缺失 0**，整包签署仍 `0/37`）；依裁决 35 §5 / 37，`L08/L09/L10/L11/L12/L24/L28` 动皮视觉维保持 `部分` 待用户本地依 [玩家指引](../operations/evidence/2026-11-11-tabletop-and-spine40/spine40-user-guide.md) 截图对照。
+- **主线实测**：`typecheck`＋`spine40-cleanroom.test.mjs`（**24/24**）＋`web-client`（**540/0**）＋`build:native`＋`smoke:native`（**83/0**）＋`build`＋Chrome CDP（`passed: true`、`SPINE_40_LOADED:4.0.64`、`60 fps`）、`-D warnings`、`--workspace` **`8,052/0/8`**、4 crate **`2,704/0/6`**、`conformance` **`19/19`**、`desktop-client` **`20/0/1`** 与 `preflight.py` 全过，见 [Spine 4.0 净室审计证据](../operations/evidence/2026-11-21-spine40-cleanroom-audit/README.md)。
+
 ### 2026-11-22 Batch L11-1（L11 太虚幻境 32 卡牌＋首批 71 技能共 103 项收口）合入（待提交／发布）
 
 - **基线、发布与版本**：HEAD `a47f8b0e110cb217f54cb4f40f111a223dab649a`（Batch UI-7 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `44981761423` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。

@@ -8,6 +8,7 @@ import type {
   BlendMode,
   BoneData,
   CurveDef,
+  EventData,
   IkConstraintData,
   MixBlend,
   PathAttachment,
@@ -97,10 +98,24 @@ export interface AnimationTrack {
   trackIndex: number;
   animationName: string;
   time: number;
+  lastTime: number;
   loop: boolean;
   alpha: number;
   mixBlend: MixBlend;
   timeScale: number;
+}
+
+export interface FiredSpineEvent {
+  trackIndex: number;
+  animationName: string;
+  time: number;
+  name: string;
+  int: number;
+  float: number;
+  string: string;
+  audio?: string;
+  volume?: number;
+  balance?: number;
 }
 
 export function parseHexColorRgba(hex: string): [number, number, number, number] {
@@ -314,7 +329,7 @@ export function computeBoneWorldTransform(bone: BoneState, parent: BoneState | n
         s = Math.abs(parent.a * parent.d - parent.b * parent.c) / s;
         const pa = parent.a / sx;
         const pc = parent.c / sy;
-        const pb = pc * s;
+        const pb = -pc * s;
         const pd = pa * s;
         prx = Math.atan2(pc, pa) * RAD_TO_DEG;
         bone.a = pa * la + pb * lc;
@@ -348,10 +363,12 @@ export function computeBoneWorldTransform(bone: BoneState, parent: BoneState | n
       const sin = Math.sin(parentAngle);
       const det = parent.a * parent.d - parent.b * parent.c;
       const reflect = bone.data.transform === "noScale" && det < 0 ? -1 : 1;
-      bone.a = (cos * la - sin * lc) * sx;
-      bone.b = (cos * lb - sin * ld) * sx * reflect;
-      bone.c = (sin * la + cos * lc) * sy;
-      bone.d = (sin * lb + cos * ld) * sy * reflect;
+      const pb = -sin * reflect;
+      const pd = cos * reflect;
+      bone.a = (cos * la + pb * lc) * sx;
+      bone.b = (cos * lb + pb * ld) * sx;
+      bone.c = (sin * la + pd * lc) * sy;
+      bone.d = (sin * lb + pd * ld) * sy;
       return;
     }
   }
@@ -362,6 +379,18 @@ function normalizeDeg(deg: number): number {
   if (d > 180) d -= 360;
   if (d < -180) d += 360;
   return d;
+}
+
+function recomputeDescendantTransforms(skel: SkeletonInstance, changedIndices: number[]): void {
+  if (changedIndices.length === 0) return;
+  const affected = new Set<number>(changedIndices);
+  for (let i = 0; i < skel.bones.length; i++) {
+    const b = skel.bones[i];
+    if (b.parentIndex >= 0 && affected.has(b.parentIndex) && !affected.has(i)) {
+      computeBoneWorldTransform(b, skel.bones[b.parentIndex], skel);
+      affected.add(i);
+    }
+  }
 }
 
 export function applyIkConstraint(skel: SkeletonInstance, ik: IkConstraintState): void {
@@ -388,6 +417,7 @@ export function applyIkConstraint(skel: SkeletonInstance, ik: IkConstraintState)
       bone.scaleX += (targetScale - bone.scaleX) * ik.mix;
     }
     computeBoneWorldTransform(bone, parent, skel);
+    recomputeDescendantTransforms(skel, [bIdx]);
     return;
   }
 
@@ -422,6 +452,7 @@ export function applyIkConstraint(skel: SkeletonInstance, ik: IkConstraintState)
     childBone.rotation += normalizeDeg(solvedChildDeg - childBone.rotation) * ik.mix;
     computeBoneWorldTransform(parentBone, grandParent, skel);
     computeBoneWorldTransform(childBone, parentBone, skel);
+    recomputeDescendantTransforms(skel, [pIdx, cIdx]);
   }
 }
 
@@ -429,39 +460,84 @@ export function applyTransformConstraint(skel: SkeletonInstance, tr: TransformCo
   const targetIdx = skel.boneIndexByName[tr.data.target];
   if (targetIdx === undefined) return;
   const target = skel.bones[targetIdx];
+  const updatedIndices: number[] = [];
 
   for (const bName of tr.data.bones) {
     const bIdx = skel.boneIndexByName[bName];
     if (bIdx === undefined) continue;
     const bone = skel.bones[bIdx];
     const parent = bone.parentIndex >= 0 ? skel.bones[bone.parentIndex] : null;
+    updatedIndices.push(bIdx);
 
-    if (tr.mixRotate > 0) {
-      const targetRot = target.rotation + tr.data.offsetRotation;
-      bone.rotation += normalizeDeg(targetRot - bone.rotation) * tr.mixRotate;
+    if (tr.data.local) {
+      if (tr.mixRotate > 0) {
+        const baseRot = tr.data.relative ? bone.rotation + target.rotation : target.rotation;
+        const targetRot = baseRot + tr.data.offsetRotation;
+        bone.rotation += normalizeDeg(targetRot - bone.rotation) * tr.mixRotate;
+      }
+      if (tr.mixX > 0) {
+        const tx = (tr.data.relative ? bone.x + target.x : target.x) + tr.data.offsetX;
+        bone.x += (tx - bone.x) * tr.mixX;
+      }
+      if (tr.mixY > 0) {
+        const ty = (tr.data.relative ? bone.y + target.y : target.y) + tr.data.offsetY;
+        bone.y += (ty - bone.y) * tr.mixY;
+      }
+      if (tr.mixScaleX > 0) {
+        const sx = (tr.data.relative ? bone.scaleX * target.scaleX : target.scaleX) + tr.data.offsetScaleX;
+        bone.scaleX += (sx - bone.scaleX) * tr.mixScaleX;
+      }
+      if (tr.mixScaleY > 0) {
+        const sy = (tr.data.relative ? bone.scaleY * target.scaleY : target.scaleY) + tr.data.offsetScaleY;
+        bone.scaleY += (sy - bone.scaleY) * tr.mixScaleY;
+      }
+      if (tr.mixShearY > 0) {
+        const shy = (tr.data.relative ? bone.shearY + target.shearY : target.shearY) + tr.data.offsetShearY;
+        bone.shearY += (shy - bone.shearY) * tr.mixShearY;
+      }
+      computeBoneWorldTransform(bone, parent, skel);
+    } else {
+      const targetWorldRot = Math.atan2(target.c, target.a) * RAD_TO_DEG;
+      const parentWorldRot = parent ? Math.atan2(parent.c, parent.a) * RAD_TO_DEG : 0;
+      const boneWorldRot = Math.atan2(bone.c, bone.a) * RAD_TO_DEG;
+      const targetScaleX = Math.hypot(target.a, target.c);
+      const targetScaleY = Math.hypot(target.b, target.d);
+      const boneScaleX = Math.hypot(bone.a, bone.c);
+      const boneScaleY = Math.hypot(bone.b, bone.d);
+      const targetShearY = normalizeDeg(Math.atan2(target.d, target.b) * RAD_TO_DEG - targetWorldRot - 90);
+
+      if (tr.mixRotate > 0) {
+        const desiredWorldRot =
+          (tr.data.relative ? boneWorldRot + targetWorldRot : targetWorldRot) + tr.data.offsetRotation;
+        const desiredLocalRot = desiredWorldRot - parentWorldRot;
+        bone.rotation += normalizeDeg(desiredLocalRot - bone.rotation) * tr.mixRotate;
+      }
+      if (tr.mixScaleX > 0 && boneScaleX > 1e-6) {
+        const desiredSx = (tr.data.relative ? boneScaleX * targetScaleX : targetScaleX) + tr.data.offsetScaleX;
+        const targetLocalSx = bone.scaleX * (desiredSx / boneScaleX);
+        bone.scaleX += (targetLocalSx - bone.scaleX) * tr.mixScaleX;
+      }
+      if (tr.mixScaleY > 0 && boneScaleY > 1e-6) {
+        const desiredSy = (tr.data.relative ? boneScaleY * targetScaleY : targetScaleY) + tr.data.offsetScaleY;
+        const targetLocalSy = bone.scaleY * (desiredSy / boneScaleY);
+        bone.scaleY += (targetLocalSy - bone.scaleY) * tr.mixScaleY;
+      }
+      if (tr.mixShearY > 0) {
+        const desiredShy = (tr.data.relative ? bone.shearY + targetShearY : targetShearY) + tr.data.offsetShearY;
+        bone.shearY += normalizeDeg(desiredShy - bone.shearY) * tr.mixShearY;
+      }
+      computeBoneWorldTransform(bone, parent, skel);
+      if (tr.mixX > 0) {
+        const desiredWx = (tr.data.relative ? bone.worldX + target.worldX : target.worldX) + tr.data.offsetX;
+        bone.worldX += (desiredWx - bone.worldX) * tr.mixX;
+      }
+      if (tr.mixY > 0) {
+        const desiredWy = (tr.data.relative ? bone.worldY + target.worldY : target.worldY) + tr.data.offsetY;
+        bone.worldY += (desiredWy - bone.worldY) * tr.mixY;
+      }
     }
-    if (tr.mixX > 0) {
-      const tx = (tr.data.relative ? bone.data.x + target.x : target.x) + tr.data.offsetX;
-      bone.x += (tx - bone.x) * tr.mixX;
-    }
-    if (tr.mixY > 0) {
-      const ty = (tr.data.relative ? bone.data.y + target.y : target.y) + tr.data.offsetY;
-      bone.y += (ty - bone.y) * tr.mixY;
-    }
-    if (tr.mixScaleX > 0) {
-      const sx = (tr.data.relative ? bone.data.scaleX * target.scaleX : target.scaleX) + tr.data.offsetScaleX;
-      bone.scaleX += (sx - bone.scaleX) * tr.mixScaleX;
-    }
-    if (tr.mixScaleY > 0) {
-      const sy = (tr.data.relative ? bone.data.scaleY * target.scaleY : target.scaleY) + tr.data.offsetScaleY;
-      bone.scaleY += (sy - bone.scaleY) * tr.mixScaleY;
-    }
-    if (tr.mixShearY > 0) {
-      const shy = (tr.data.relative ? bone.data.shearY + target.shearY : target.shearY) + tr.data.offsetShearY;
-      bone.shearY += (shy - bone.shearY) * tr.mixShearY;
-    }
-    computeBoneWorldTransform(bone, parent, skel);
   }
+  recomputeDescendantTransforms(skel, updatedIndices);
 }
 
 function samplePathPolyline(verts: number[], closed: boolean, ratio: number): { x: number; y: number; tangentDeg: number } {
@@ -527,12 +603,16 @@ export function applyPathConstraint(skel: SkeletonInstance, pc: PathConstraintSt
       bone.worldY += (sample.y - bone.worldY) * pc.mixY;
     }
     if (pc.mixRotate > 0) {
-      const desiredDeg = sample.tangentDeg + pc.data.offsetRotation;
+      const wx = bone.worldX;
+      const wy = bone.worldY;
+      const parentWorldRot = parent ? Math.atan2(parent.c, parent.a) * RAD_TO_DEG : 0;
+      const desiredDeg = sample.tangentDeg + pc.data.offsetRotation - parentWorldRot;
       bone.rotation += normalizeDeg(desiredDeg - bone.rotation) * pc.mixRotate;
       computeBoneWorldTransform(bone, parent, skel);
-      bone.worldX = sample.x;
-      bone.worldY = sample.y;
+      bone.worldX = wx;
+      bone.worldY = wy;
     }
+    recomputeDescendantTransforms(skel, [bIdx]);
 
     const step =
       pc.data.spacingMode === "percent"
@@ -699,11 +779,73 @@ export function getAnimationDuration(skelData: SkeletonData, animationName: stri
     }
   }
   checkArr(anim.drawOrder);
+  checkArr(anim.events);
   return maxTime;
+}
+
+function collectAnimationEvents(
+  track: AnimationTrack,
+  events: NonNullable<SkeletonInstance["data"]["animations"][string]["events"]>,
+  duration: number,
+  eventDefs: Map<string, EventData>,
+  out: FiredSpineEvent[],
+  onEvent?: (ev: FiredSpineEvent) => void,
+): void {
+  if (events.length === 0 || track.time < 0) return;
+  const prev = track.lastTime;
+  const curr = track.time;
+  const minBound = prev < 0 ? -1e-9 : prev;
+  if (curr <= minBound) return;
+
+  const emitOne = (kf: (typeof events)[number], absTime: number) => {
+    const def = eventDefs.get(kf.name);
+    const fired: FiredSpineEvent = {
+      trackIndex: track.trackIndex,
+      animationName: track.animationName,
+      time: absTime,
+      name: kf.name,
+      int: kf.int ?? def?.int ?? 0,
+      float: kf.float ?? def?.float ?? 0,
+      string: kf.string ?? def?.string ?? "",
+      ...(def?.audio
+        ? {
+            audio: def.audio,
+            volume: kf.volume ?? def.volume ?? 1,
+            balance: kf.balance ?? def.balance ?? 0,
+          }
+        : {}),
+    };
+    out.push(fired);
+    onEvent?.(fired);
+  };
+
+  if (!track.loop || duration <= 0) {
+    const cappedCurr = duration > 0 ? Math.min(curr, duration) : curr;
+    for (const kf of events) {
+      if (kf.time > minBound && kf.time <= cappedCurr) {
+        emitOne(kf, kf.time);
+      }
+    }
+    return;
+  }
+
+  const startLoop = Math.max(0, Math.floor(Math.max(0, prev) / duration));
+  const endLoop = Math.max(startLoop, Math.floor(curr / duration));
+  const cappedStart = Math.max(startLoop, endLoop - 16);
+  for (let loopIdx = cappedStart; loopIdx <= endLoop; loopIdx++) {
+    for (const kf of events) {
+      const absTime = loopIdx * duration + kf.time;
+      if (absTime > minBound && absTime <= curr) {
+        emitOne(kf, kf.time);
+      }
+    }
+  }
 }
 
 export class CleanRoomAnimationState {
   public readonly tracks: Map<number, AnimationTrack> = new Map();
+  public readonly firedEvents: FiredSpineEvent[] = [];
+  public onEvent?: (event: FiredSpineEvent) => void;
 
   public setAnimation(
     trackIndex: number,
@@ -716,6 +858,7 @@ export class CleanRoomAnimationState {
       trackIndex,
       animationName,
       time: 0,
+      lastTime: -1,
       loop,
       alpha: Math.max(0, Math.min(1, alpha)),
       mixBlend,
@@ -733,6 +876,8 @@ export class CleanRoomAnimationState {
   }
 
   public apply(skeleton: SkeletonInstance): void {
+    this.firedEvents.length = 0;
+    const eventDefs = new Map<string, EventData>((skeleton.data.events ?? []).map((ev) => [ev.name, ev]));
     const sortedTracks = [...this.tracks.values()].sort((a, b) => a.trackIndex - b.trackIndex);
     for (const track of sortedTracks) {
       const anim = skeleton.data.animations[track.animationName];
@@ -932,21 +1077,46 @@ export class CleanRoomAnimationState {
       }
 
       if (anim.drawOrder.length > 0) {
-        let activeOrder = anim.drawOrder[0];
+        let activeOrder: (typeof anim.drawOrder)[number] | null = null;
         for (const kf of anim.drawOrder) {
           if (sampleTime >= kf.time) activeOrder = kf;
         }
-        const baseOrder = skeleton.slots.map((_, idx) => idx);
-        for (const off of activeOrder.offsets) {
-          const origIdx = skeleton.slotIndexByName[off.slot];
-          if (origIdx !== undefined) {
-            const targetIdx = Math.max(0, Math.min(baseOrder.length - 1, origIdx + off.offset));
-            const removed = baseOrder.splice(baseOrder.indexOf(origIdx), 1)[0];
-            baseOrder.splice(targetIdx, 0, removed);
+        if (activeOrder) {
+          const n = skeleton.slots.length;
+          const result = new Array<number>(n).fill(-1);
+          const moved = new Set<number>();
+          for (const off of activeOrder.offsets) {
+            const origIdx = skeleton.slotIndexByName[off.slot];
+            if (origIdx === undefined) continue;
+            moved.add(origIdx);
+            let targetIdx = Math.max(0, Math.min(n - 1, origIdx + off.offset));
+            while (targetIdx < n && result[targetIdx] !== -1) targetIdx++;
+            if (targetIdx < n) {
+              result[targetIdx] = origIdx;
+            } else {
+              let rev = Math.max(0, Math.min(n - 1, origIdx + off.offset));
+              while (rev >= 0 && result[rev] !== -1) rev--;
+              if (rev >= 0) result[rev] = origIdx;
+            }
           }
+          const unchanged: number[] = [];
+          for (let i = 0; i < n; i++) {
+            if (!moved.has(i)) unchanged.push(i);
+          }
+          let ui = 0;
+          for (let i = 0; i < n; i++) {
+            if (result[i] === -1 && ui < unchanged.length) {
+              result[i] = unchanged[ui++];
+            }
+          }
+          skeleton.drawOrder = result;
         }
-        skeleton.drawOrder = baseOrder;
       }
+
+      if (anim.events && anim.events.length > 0) {
+        collectAnimationEvents(track, anim.events, duration, eventDefs, this.firedEvents, this.onEvent);
+      }
+      track.lastTime = track.time;
     }
 
     updateSkeletonWorldTransform(skeleton);

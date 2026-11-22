@@ -15,6 +15,8 @@ import type {
   BoneData,
   BoneTimelineGroup,
   CurveDef,
+  EventData,
+  EventKeyframe,
   IkConstraintData,
   PathConstraintData,
   PositionMode,
@@ -317,6 +319,22 @@ export function encodeStandardSpine40Skel(
       }
     }
   }
+  const eventList: EventData[] = [...(data.events ?? [])];
+  const eventMap = new Map<string, number>();
+  eventList.forEach((ev, idx) => {
+    eventMap.set(ev.name, idx);
+    intern(ev.name);
+  });
+  for (const anim of Object.values(data.animations)) {
+    for (const kf of anim.events ?? []) {
+      if (!eventMap.has(kf.name)) {
+        const idx = eventList.length;
+        eventMap.set(kf.name, idx);
+        eventList.push({ name: kf.name, int: kf.int ?? 0, float: kf.float ?? 0, string: kf.string ?? "" });
+        intern(kf.name);
+      }
+    }
+  }
 
   w.writeVarint(strPool.length);
   for (const s of strPool) w.writeString(s);
@@ -531,8 +549,19 @@ export function encodeStandardSpine40Skel(
     writeSkinAttachments(sk);
   }
 
-  // Events (0)
-  w.writeVarint(0);
+  // Events
+  w.writeVarint(eventList.length);
+  for (const ev of eventList) {
+    w.writeVarint(intern(ev.name));
+    w.writeVarint(ev.int ?? 0, false);
+    w.writeFloat(ev.float ?? 0);
+    w.writeString(ev.string ?? "");
+    w.writeString(ev.audio ?? null);
+    if (ev.audio) {
+      w.writeFloat(ev.volume ?? 1);
+      w.writeFloat(ev.balance ?? 0);
+    }
+  }
 
   // Animations
   const animEntries = Object.entries(data.animations);
@@ -725,8 +754,24 @@ export function encodeStandardSpine40Skel(
       }
     }
 
-    // Event timeline (0)
-    w.writeVarint(0);
+    // Event timeline
+    const evKfs = anim.events ?? [];
+    w.writeVarint(evKfs.length);
+    for (const kf of evKfs) {
+      const evIdx = eventMap.get(kf.name) ?? 0;
+      const evDef = eventList[evIdx];
+      w.writeFloat(kf.time);
+      w.writeVarint(evIdx);
+      w.writeVarint(kf.int ?? evDef?.int ?? 0, false);
+      w.writeFloat(kf.float ?? evDef?.float ?? 0);
+      const hasStr = kf.string !== undefined;
+      w.writeBool(hasStr);
+      if (hasStr) w.writeString(kf.string);
+      if (evDef?.audio) {
+        w.writeFloat(kf.volume ?? evDef.volume ?? 1);
+        w.writeFloat(kf.balance ?? evDef.balance ?? 0);
+      }
+    }
   }
 
   return new Uint8Array(w.bytes);
@@ -1126,18 +1171,22 @@ export function parseStandardSpine40Skel(bytes: Uint8Array): SkeletonData {
 
   // Events
   const eventCount = r.readVarint();
+  const events: EventData[] = [];
   const eventHasAudio: boolean[] = [];
   for (let i = 0; i < eventCount; i++) {
-    r.readStringRef();
-    r.readVarint(false);
-    r.readFloat();
-    r.readString();
+    const evName = r.readStringRef() ?? `event_${i}`;
+    const evInt = r.readVarint(false);
+    const evFloat = r.readFloat();
+    const evString = r.readString() ?? "";
     const audioPath = r.readString();
     const hasAudio = Boolean(audioPath);
     eventHasAudio.push(hasAudio);
-    if (hasAudio) {
-      r.readFloat();
-      r.readFloat();
+    if (hasAudio && audioPath) {
+      const volume = r.readFloat();
+      const balance = r.readFloat();
+      events.push({ name: evName, int: evInt, float: evFloat, string: evString, audio: audioPath, volume, balance });
+    } else {
+      events.push({ name: evName, int: evInt, float: evFloat, string: evString });
     }
   }
 
@@ -1311,16 +1360,26 @@ export function parseStandardSpine40Skel(bytes: Uint8Array): SkeletonData {
     }
 
     const evTlCount = r.readVarint();
+    const eventsTl: EventKeyframe[] = [];
     for (let j = 0; j < evTlCount; j++) {
-      r.readFloat();
+      const time = r.readFloat();
       const evIdx = r.readVarint();
-      r.readVarint(false);
-      r.readFloat();
-      if (r.readBool()) r.readString();
+      const evDef = events[evIdx];
+      const intVal = r.readVarint(false);
+      const floatVal = r.readFloat();
+      const strVal = r.readBool() ? (r.readString() ?? "") : undefined;
+      const kf: EventKeyframe = {
+        time,
+        name: evDef?.name ?? `event_${evIdx}`,
+        int: intVal,
+        float: floatVal,
+      };
+      if (strVal !== undefined) kf.string = strVal;
       if (eventHasAudio[evIdx]) {
-        r.readFloat();
-        r.readFloat();
+        kf.volume = r.readFloat();
+        kf.balance = r.readFloat();
       }
+      eventsTl.push(kf);
     }
 
     animations[animName] = {
@@ -1332,6 +1391,7 @@ export function parseStandardSpine40Skel(bytes: Uint8Array): SkeletonData {
       path: pathTl,
       deform: deformTl,
       drawOrder,
+      events: eventsTl,
     };
   }
 
@@ -1353,6 +1413,7 @@ export function parseStandardSpine40Skel(bytes: Uint8Array): SkeletonData {
     ik,
     transform,
     path,
+    events,
     animations,
   };
 }

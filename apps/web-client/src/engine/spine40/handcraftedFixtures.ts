@@ -184,9 +184,9 @@ export const HANDCRAFTED_SPINE40_SKELETON_JSON = {
             type: "path",
             closed: false,
             constantSpeed: true,
-            vertexCount: 3,
-            vertices: [-40, 10, 0, 40, 40, 10],
-            lengths: [50, 100],
+            vertexCount: 9,
+            vertices: [-40, 10, -40, 10, -40, 10, 0, 40, 0, 40, 0, 40, 40, 10, 40, 10, 40, 10],
+            lengths: [50, 100, 100],
           },
         },
         hit_bounds_slot: {

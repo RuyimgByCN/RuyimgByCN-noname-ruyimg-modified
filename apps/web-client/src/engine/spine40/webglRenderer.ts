@@ -60,7 +60,7 @@ export function resolvePremultipliedBlendFunc(
       return {
         srcRgb: GL_DST_COLOR,
         dstRgb: GL_ONE_MINUS_SRC_ALPHA,
-        srcAlpha: GL_ONE_MINUS_SRC_ALPHA,
+        srcAlpha: GL_ONE,
         dstAlpha: GL_ONE_MINUS_SRC_ALPHA,
       };
     case "screen":
@@ -416,12 +416,20 @@ export function buildBatchGeometry(
       const v0 = regionInfo?.v ?? 0;
       const u1 = regionInfo?.u2 ?? 1;
       const v1 = regionInfo?.v2 ?? 1;
-      const uvs: Array<[number, number]> = [
-        [u0, v1],
-        [u1, v1],
-        [u1, v0],
-        [u0, v0],
-      ];
+      const uvs: Array<[number, number]> =
+        regionInfo?.rotate === 90
+          ? [
+              [u1, v1],
+              [u1, v0],
+              [u0, v0],
+              [u0, v1],
+            ]
+          : [
+              [u0, v1],
+              [u1, v1],
+              [u1, v0],
+              [u0, v0],
+            ];
       const slotVerts: Vertex8[] = [];
       for (let i = 0; i < 4 && i * 2 + 1 < worldVerts.length; i++) {
         slotVerts.push([worldVerts[i * 2], worldVerts[i * 2 + 1], uvs[i][0], uvs[i][1], r, g, b, a]);
@@ -435,11 +443,14 @@ export function buildBatchGeometry(
       const v0 = regionInfo?.v ?? 0;
       const du = (regionInfo?.u2 ?? 1) - u0;
       const dv = (regionInfo?.v2 ?? 1) - v0;
+      const rotated = regionInfo?.rotate === 90;
       const vCount = worldVerts.length >> 1;
       const slotVerts: Vertex8[] = [];
       for (let i = 0; i < vCount; i++) {
-        const u = u0 + (mesh.uvs[i * 2] ?? 0) * du;
-        const v = v0 + (mesh.uvs[i * 2 + 1] ?? 0) * dv;
+        const mu = mesh.uvs[i * 2] ?? 0;
+        const mv = mesh.uvs[i * 2 + 1] ?? 0;
+        const u = rotated ? u0 + mv * du : u0 + mu * du;
+        const v = rotated ? v0 + (1 - mu) * dv : v0 + mv * dv;
         slotVerts.push([worldVerts[i * 2], worldVerts[i * 2 + 1], u, v, r, g, b, a]);
       }
       appendGeometry(slotVerts, mesh.triangles);
