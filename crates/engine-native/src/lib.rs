@@ -25,7 +25,10 @@ pub use catalog::{
     SkillMachine,
 };
 pub use choice::{ChoiceKind, ChoiceOption, ChoiceSpec, OpenChoice};
-pub use engine::{AuthToken, CommandOutcome, Engine, GameAction, GameCommand, RejectReason};
+pub use engine::{
+    AuthToken, CommandOutcome, Engine, GameAction, GameCommand, RejectReason, TaixuBattleNpc,
+    TaixuBattleSetup,
+};
 pub use event::{DamageData, EventData, EventKind, Phase, Stage, Timing};
 pub use ids::{CardId, EventId, PlayerId, SkillDefId};
 pub use machine::{Ctx, Flow, LogEvent};

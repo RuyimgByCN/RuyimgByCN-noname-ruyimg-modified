@@ -1048,6 +1048,26 @@ impl GameStateCore {
         a: PlayerId,
         b: PlayerId,
     ) -> u32 {
+        self.computed_distance_inner(catalog, a, b, false)
+    }
+
+    /// 计算距离（含已死亡端点，用于 `DamageEnd` 狂骨等时机计算到刚击杀目标的距离）。
+    pub fn computed_distance_including_dead(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        a: PlayerId,
+        b: PlayerId,
+    ) -> u32 {
+        self.computed_distance_inner(catalog, a, b, true)
+    }
+
+    fn computed_distance_inner(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        a: PlayerId,
+        b: PlayerId,
+        allow_dead_endpoints: bool,
+    ) -> u32 {
         use crate::catalog::CardKind;
         if a != b && (catalog.has_diaohulishan(self, a) || catalog.has_diaohulishan(self, b)) {
             return 999;
@@ -1058,9 +1078,16 @@ impl GameStateCore {
         if a == self.turn.current && self.turn.feitiao_target == Some(b) {
             return 1;
         }
+        let seat_dist = |from: PlayerId, to: PlayerId| -> u32 {
+            if allow_dead_endpoints {
+                self.seat_distance_with_dead_endpoints(catalog, from, to) as u32
+            } else {
+                self.seat_distance_alive_with_catalog(catalog, from, to) as u32
+            }
+        };
         let base = match self.player(a).yuexing_pair {
-            Some(p) if p != a => self.seat_distance_alive_with_catalog(catalog, p, b) as u32,
-            _ => self.seat_distance_alive_with_catalog(catalog, a, b) as u32,
+            Some(p) if p != a => seat_dist(p, b),
+            _ => seat_dist(a, b),
         };
         let plus = self
             .player(b)

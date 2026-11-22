@@ -9,6 +9,7 @@ use crate::snap::ExpectedAsk;
 use crate::state::GameStateCore;
 
 pub(super) const ASK_TWSIDAO_CHOOSE: u32 = 1;
+pub(super) const ASK_TXHJ_MULLIGAN: u32 = 2;
 
 pub(super) fn build_l11_system_ask(
     ask_id: u32,
@@ -25,6 +26,7 @@ pub(super) fn build_l11_system_ask(
     }
     match ask_id {
         ASK_TWSIDAO_CHOOSE => tag_ask(owner, "twsidao:choose_treasure", 0..=2, false),
+        ASK_TXHJ_MULLIGAN => confirm_ask(owner, "_txhj_skill_addEffectStyle:mulligan"),
         _ => None,
     }
 }

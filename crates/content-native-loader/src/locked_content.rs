@@ -238,6 +238,21 @@ pub fn start_locked_engine_with_original_presentation(
     Ok(engine)
 }
 
+/// Launch a [`crate::taixu_mode::TaixuModeSession`] battle via the controlled locked content factory (`R05 v5`).
+pub fn start_locked_taixu_battle(
+    session: &crate::taixu_mode::TaixuModeSession,
+    verified: &VerifiedLockedContent,
+) -> Result<Engine, String> {
+    let verified_orig = verify_original_presentation(&embedded_original_presentation_input())?;
+    let (packs, _) = bridge_verified_packs(verified)?;
+    let refs: Vec<&ExtensionPack> = packs.iter().collect();
+    let mut engine = session.launch_battle(&refs).map_err(|e| format!("{e}"))?;
+    engine.try_with_catalog_mutation(|cat| {
+        attach_original_presentation_bindings(cat, &verified_orig)
+    })?;
+    Ok(engine)
+}
+
 /// Controlled locked engine restore factory (`R05 v5 §1/§3`): accepts only [`VerifiedLockedContent`], never bare `packs`.
 pub fn restore_locked_engine(
     snapshot: &StateSnapshot,

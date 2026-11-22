@@ -783,7 +783,6 @@ fn d34_view_as_table() -> &'static Vec<D34ViewAsRule> {
             ("l11_viewas:dclbjiuxian", CardKind::Jiu),
             ("l11_viewas:reluanji", CardKind::ArcheryAttack),
             ("l11_mod:reshuangxiong_duel", CardKind::Duel),
-            ("l11_viewas:xinfu_sidao", CardKind::Snatch),
             ("l11_viewas:weijing", CardKind::Sha),
             ("l11_viewas:zhanyi_basic", CardKind::Sha),
             ("l11_viewas:mozhi", CardKind::Sha),
@@ -843,8 +842,13 @@ pub fn find_d34_flag_view_as(
         return None;
     }
     let sealed = catalog.is_tieji_sealed(core, player);
+    let chanyuan = catalog.is_chanyuan_sealed(core, player);
     for entry in d34_view_as_table() {
-        if sealed && !Catalog::is_locked_skill_name(&entry.spec.skill_name, None) {
+        if (sealed && !Catalog::is_locked_skill_name(&entry.spec.skill_name, None))
+            || (chanyuan
+                && !matches!(entry.spec.skill_name.as_str(), "chanyuan" | "rechanyuan")
+                && !entry.spec.skill_name.starts_with('_'))
+        {
             continue;
         }
         let active = match entry.activation {

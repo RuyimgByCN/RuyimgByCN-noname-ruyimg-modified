@@ -64,6 +64,15 @@ mod l11_taixu_b5_fixes;
 #[path = "../l11_taixu_b6a_generals.rs"]
 mod l11_taixu_b6a_generals;
 
+#[path = "../l11_taixu_b6b_modes.rs"]
+mod l11_taixu_b6b_modes;
+
+#[path = "../l11_taixu_b6b_round3.rs"]
+mod l11_taixu_b6b_round3;
+
+#[path = "../l11_taixu_b6b_round4.rs"]
+mod l11_taixu_b6b_round4;
+
 #[path = "../l12_rzsh_eight.rs"]
 mod l12_rzsh_eight;
 

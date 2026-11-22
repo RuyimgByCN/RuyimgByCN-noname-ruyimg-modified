@@ -56,7 +56,7 @@ pub(super) fn has_ext_skill(
     }
     catalog
         .skill_by_name(name)
-        .is_some_and(|def| state.has_skill(player, def))
+        .is_some_and(|def| state.has_skill(player, def) && !catalog.is_skill_chanyuan_blocked(state, player, def))
 }
 
 #[inline]

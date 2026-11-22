@@ -78,7 +78,7 @@ pub(in crate::content::host) fn trigger_meta_l11_boss_c(name: &str) -> Option<Tr
         "boss_leili" => Some(meta(EventKind::DamageEnd, Timing::Normal, 0)),
         "txhj_zhuwei" => Some(meta(EventKind::OrdinaryJudge, Timing::Normal, 0)),
         "txhj_chuhai2" => Some(meta(EventKind::DamageSource, Timing::Normal, 0)),
-        _ => None,
+        _ => super::l11_effect_pack::trigger_meta_l11_effect_pack(name),
     }
 }
 
@@ -89,7 +89,7 @@ pub(in crate::content::host) fn limits_l11_boss_c(name: &str) -> SkillLimits {
             active_outside_play: false,
         }
     } else {
-        SkillLimits::default()
+        super::l11_effect_pack::limits_l11_effect_pack(name)
     }
 }
 
@@ -222,7 +222,12 @@ pub(in crate::content::host) fn filter_l11_boss_c_with_frames(
                     .into_iter()
                     .any(|p| state.player(p).linked)
         }
-        _ => filter_l11_boss_c2_with_frames(skill, ctx, frames, frame, owner, event),
+        _ => {
+            filter_l11_boss_c2_with_frames(skill, ctx, frames, frame, owner, event)
+                || super::l11_effect_pack::filter_l11_effect_pack(
+                    skill, ctx, frames, frame, owner, event,
+                )
+        }
     }
 }
 
@@ -238,9 +243,12 @@ pub(in crate::content::host) fn machine_l11_boss_c(
     };
     let (target, card) = match event {
         EventData::Damage(d) => (Some(d.target), d.card),
-        EventData::DrawPhase { player, .. } => (Some(*player), None),
+        EventData::DrawPhase { player, .. } | EventData::Death { player, .. } => {
+            (Some(*player), None)
+        }
         EventData::DrawWindow { root, .. } => (None, Some(*root)),
         EventData::OrdinaryJudge { invocation, .. } => (None, Some(*invocation)),
+        EventData::CardUsed(u) => (None, u.card),
         _ => (None, None),
     };
     HostMachine {
@@ -277,7 +285,7 @@ pub(in crate::content::host) fn activate_l11_boss_c(
             }
             active_skill_machine("xueji", HostBehavior::L11GeneralBossC, owner)
         }
-        _ => None,
+        _ => super::l11_effect_pack::activate_l11_effect_pack(skill, ctx, owner),
     }
 }
 
@@ -354,6 +362,15 @@ pub(in crate::content::host) fn handle_l11_boss_c(m: &mut HostMachine, ctx: &mut
             }
             _ => Flow::Done,
         },
+        "kuanggu"
+        | "txhj_tanshi"
+        | "xingshang"
+        | "hengzheng"
+        | "xinfu_yisuan"
+        | "xinfu_lveming"
+        | "xinfu_tunjun"
+        | "xinfu_tanbei"
+        | "xinfu_sidao" => super::l11_effect_pack::handle_l11_effect_pack(m, ctx),
         _ => handle_l11_boss_c2(m, ctx),
     }
 }

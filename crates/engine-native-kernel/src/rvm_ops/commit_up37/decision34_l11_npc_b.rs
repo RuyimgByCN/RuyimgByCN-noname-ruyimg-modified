@@ -631,11 +631,8 @@ pub(super) fn try_resolve_l11_npc_skill_b(
             ctx.start_draw(owner, 1);
         }
         "xinfu_sidao" => {
-            // `sp2/skill.js:15876`: after 2 consecutive cards on same target -> view hand card as Snatch (`d34_view_as.rs`) & steal 1 card
-            set_flag(ctx.core, owner, "l11_viewas:xinfu_sidao", 1);
-            if let Some(t) = hostile_target(ctx, owner) {
-                let _ = move_one_hand_to(ctx, t, owner);
-            }
+            // Real gameplay runs via `HostBehavior::L11GeneralBossC` (`l11_effect_pack.rs`);
+            // kept as no-op here solely for legacy `decision34_round4_l11_taixu` dispatch smoke loop.
         }
         "xinfu_xingluan" => {
             // `sp2/skill.js:15660`: 1/turn after single-target card resolves -> gain a rank-6 card from deck
@@ -917,6 +914,22 @@ pub(super) fn try_resolve_l11_npc_skill_b(
                         Some(owner),
                         t,
                         1,
+                    )));
+                }
+            }
+        }
+        "txhj_tunshi" => {
+            // `extension.js:811-838`: `phaseBegin`（准备阶段）且敌方手牌数 > 自己手牌数时造成 1 点伤害
+            if ctx.core.turn.phase == crate::event::Phase::Prepare {
+                if let Some(t) = filtered_target(ctx, owner, true, |core, p| {
+                    core.player(p).hand.len() > core.player(owner).hand.len()
+                }) {
+                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                        Some(owner),
+                        t,
+                        1,
+                        DamageNature::Normal,
+                        None,
                     )));
                 }
             }

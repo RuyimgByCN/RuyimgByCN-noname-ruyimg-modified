@@ -751,7 +751,9 @@ pub fn attach_formal_package_upstream_rules(
                 .chain(super::L11_TAIXU_B1_AUX_SUBSKILLS.iter())
                 .chain(super::L11_TAIXU_IMPLEMENTED_CROSS_SKILLS.iter())
             {
-                push_skill(s, L11_TAIXU_SKILL_ID);
+                if s != "xinfu_sidao" {
+                    push_skill(s, L11_TAIXU_SKILL_ID);
+                }
             }
             // Bind genuine native HostSkillDecls and real U01/U05/U08/L19/L20/L27 resolvers;
             // precompiled ported rule-vm cross-skills are already bridged from
@@ -836,7 +838,52 @@ pub fn attach_formal_package_upstream_rules(
                 &mut extra_host_skills,
                 &mut seen_skills,
             );
+            for &ep_sk in &[
+                "kuanggu",
+                "hongyan",
+                "txhj_tanshi",
+                "chanyuan",
+                "xingshang",
+                "hengzheng",
+                "xinfu_yisuan",
+                "xinfu_lveming",
+                "xinfu_tunjun",
+                "xinfu_tanbei",
+                "xinfu_sidao",
+            ] {
+                super::push_host_skill_if_unseen(
+                    ep_sk,
+                    engine_native::content::host::HostBehavior::L11GeneralBossC,
+                    &mut extra_host_skills,
+                    &mut seen_skills,
+                );
+            }
             for &(sym, faction, gender, max_hp, sk_list) in &super::L11_TAIXU_GENERALS {
+                push_general(sym, faction, gender, max_hp, sk_list, &seen_skills);
+            }
+            for &(sym, faction, gender, max_hp, sk_list) in &[
+                (
+                    "lijue",
+                    Faction::Qun,
+                    Gender::Male,
+                    6u32,
+                    &["xinfu_langxi", "xinfu_yisuan"][..],
+                ),
+                (
+                    "guosi",
+                    Faction::Qun,
+                    Gender::Male,
+                    4u32,
+                    &["xinfu_tanbei", "xinfu_sidao"][..],
+                ),
+                (
+                    "zhangji",
+                    Faction::Qun,
+                    Gender::Male,
+                    4u32,
+                    &["xinfu_lveming", "xinfu_tunjun"][..],
+                ),
+            ] {
                 push_general(sym, faction, gender, max_hp, sk_list, &seen_skills);
             }
         }

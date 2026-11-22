@@ -3,7 +3,8 @@
 use super::{CardId, Catalog, EquipSlot, EventKind, SkillDefId, Suit, TriggerMeta};
 
 impl Catalog {
-    /// L20 标记补充 (`xinhongyan`, `extension.js:1105-1135`): `mod.suit` (`Spade -> Heart` when `owner` holds `xinhongyan`).
+    /// L20 标记补充 (`xinhongyan` / `hongyan`, `extension.js:1105-1135`, `shenhua.js:6887`):
+    /// `mod.suit` (`Spade -> Heart` when `owner` holds non-blocked `xinhongyan` or `hongyan`).
     pub fn effective_card_suit(
         &self,
         core: &crate::state::GameStateCore,
@@ -12,9 +13,10 @@ impl Catalog {
     ) -> Suit {
         let raw = self.cards.get(card as usize).map_or(Suit::Club, |c| c.suit);
         if raw == Suit::Spade
-            && self
-                .skill_by_name("xinhongyan")
-                .is_some_and(|def| core.has_skill(owner, def))
+            && !self.is_chanyuan_sealed(core, owner)
+            && ["xinhongyan", "hongyan", "红颜"]
+                .iter()
+                .any(|name| self.skill_by_name(name).is_some_and(|def| core.has_skill(owner, def)))
         {
             Suit::Heart
         } else {
@@ -22,7 +24,8 @@ impl Catalog {
         }
     }
 
-    /// L10 `rechanyuan` 缠怨状态查询（`refresh.js:10760-10783`）。
+    /// 缠怨（于吉 `chanyuan` / `rechanyuan`, `shenhua.js:7693-7724`, `refresh.js:10760-10783`）：
+    /// 查询玩家是否持有 `chanyuan` / `rechanyuan`（或对应旗标）。
     pub fn has_rechanyuan(
         &self,
         core: &crate::state::GameStateCore,
@@ -34,39 +37,54 @@ impl Catalog {
             .copied()
             .unwrap_or(0)
             > 0
-            || self
-                .skill_by_name("rechanyuan")
-                .is_some_and(|def| core.has_skill(p, def))
+            || ["chanyuan", "rechanyuan"]
+                .iter()
+                .any(|name| self.skill_by_name(name).is_some_and(|def| core.has_skill(p, def)))
     }
 
-    /// L10 `rechanyuan` 封技门控（`refresh.js:10770`）：`hp <= 1` 时除
-    /// `chanyuan`/`rechanyuan` 与 `charlotte` 外所有技能（含锁定技）均失效。
+    /// 缠怨生效门控：`hp <= 1` 时封锁自身所有其他非 `charlotte` 技能（含锁定技）。
+    pub fn is_chanyuan_sealed(
+        &self,
+        core: &crate::state::GameStateCore,
+        p: crate::ids::PlayerId,
+    ) -> bool {
+        core.player(p).hp <= 1 && self.has_rechanyuan(core, p)
+    }
+
+    /// L10/L11 `chanyuan` / `rechanyuan` 封技门控（`refresh.js:10770`, `shenhua.js:7693-7724`）：
+    /// `hp <= 1` 时除 `chanyuan`/`rechanyuan` 与 `charlotte` 外所有技能（含锁定技）均失效。
     pub fn is_rechanyuan_sealed_def(
         &self,
         core: &crate::state::GameStateCore,
         p: crate::ids::PlayerId,
         def: SkillDefId,
     ) -> bool {
-        if core.player(p).hp > 1 || !self.has_rechanyuan(core, p) {
-            return false;
-        }
         let Some(skill) = self.skills.get(def as usize) else {
             return false;
         };
-        !matches!(skill.name, "chanyuan" | "rechanyuan") && !self.is_charlotte_skill(def)
+        self.is_chanyuan_sealed(core, p)
+            && !matches!(skill.name, "chanyuan" | "rechanyuan")
+            && !self.is_charlotte_skill(def)
     }
 
-    /// 按技能名查询是否被 `rechanyuan`（或 `tieji` 非锁定技）封印。
+    /// [`Self::is_rechanyuan_sealed_def`] 的 `chanyuan` 别名。
+    pub fn is_skill_chanyuan_blocked(
+        &self,
+        core: &crate::state::GameStateCore,
+        p: crate::ids::PlayerId,
+        def: SkillDefId,
+    ) -> bool {
+        self.is_rechanyuan_sealed_def(core, p, def)
+    }
+
+    /// 按技能名查询是否被 `chanyuan` / `rechanyuan` 封印。
     pub fn is_rechanyuan_sealed_name(
         &self,
         core: &crate::state::GameStateCore,
         p: crate::ids::PlayerId,
         name: &str,
     ) -> bool {
-        if core.player(p).hp > 1 || !self.has_rechanyuan(core, p) {
-            return false;
-        }
-        if matches!(name, "chanyuan" | "rechanyuan") {
+        if !self.is_chanyuan_sealed(core, p) || matches!(name, "chanyuan" | "rechanyuan") {
             return false;
         }
         if let Some(def) = self.skill_by_name(name) {
@@ -433,7 +451,11 @@ impl Catalog {
             || skill.name.contains("#r05:")
             || matches!(
                 skill.name,
-                crate::vocabulary::names::WANG_ZUN_MARK | "wuxing_shengke" | "diaohulishan"
+                crate::vocabulary::names::WANG_ZUN_MARK
+                    | "wuxing_shengke"
+                    | "diaohulishan"
+                    | "chanyuan"
+                    | "rechanyuan"
             )
     }
 

@@ -52,6 +52,7 @@ pub mod mark_supplement;
 mod sj_settings;
 mod skin_switch;
 pub mod taixu;
+pub mod taixu_mode;
 mod thunder;
 mod update_guard;
 mod wuxing;
@@ -145,6 +146,7 @@ pub use sj_settings::{
 };
 pub use skin_switch::*;
 pub use taixu::*;
+pub use taixu_mode::*;
 pub use thunder::*;
 pub use wuxing::{apply_wuxing_config, parse_wuxing_config, WuxingConfig, WuxingConfigError};
 pub use update_guard::{
@@ -284,9 +286,10 @@ pub mod up37_closure;
 pub use locked_content::{
     deferred_cards_for_locked_content, prepare_locked_content, prepare_locked_content_with_bridge,
     restore_locked_engine, restore_locked_engine_with_original_presentation, start_locked_engine,
-    start_locked_engine_with_original_presentation, validate_and_freeze_raw_package,
-    validate_frozen_package, verify_locked_content, verify_locked_content_with_bridge, ContentLock,
-    FrozenPackage, LockedContentEnvelope, LockedPackage, LockedStartMode, VerifiedLockedContent,
+    start_locked_engine_with_original_presentation, start_locked_taixu_battle,
+    validate_and_freeze_raw_package, validate_frozen_package, verify_locked_content,
+    verify_locked_content_with_bridge, ContentLock, FrozenPackage, LockedContentEnvelope,
+    LockedPackage, LockedStartMode, VerifiedLockedContent,
 };
 pub use presentation_binding::{
     attach_embedded_original_presentation, attach_frozen_package_presentation_bindings,

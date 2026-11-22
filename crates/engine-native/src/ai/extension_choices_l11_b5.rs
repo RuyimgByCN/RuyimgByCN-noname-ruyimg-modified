@@ -94,6 +94,25 @@ pub(super) fn plan_l11_b5_choice_action(
                 options.first().copied().map(|o| vec![o]).and_then(answer)
             }
         }
+        "_txhj_skill_addEffectStyle:mulligan" => {
+            let has_key = input.view.cards.iter().any(|pc| {
+                pc.owner == Some(seat)
+                    && pc.zone == crate::snap::PhysicalCardZone::Hand
+                    && matches!(
+                        catalog.card_kind(pc.id),
+                        crate::catalog::CardKind::Sha
+                            | crate::catalog::CardKind::Tao
+                            | crate::catalog::CardKind::Wuzhong
+                            | crate::catalog::CardKind::SavageAttack
+                            | crate::catalog::CardKind::ArcheryAttack
+                    )
+            });
+            answer(vec![if !has_key && options.contains(&ChoiceOption::Confirm) {
+                ChoiceOption::Confirm
+            } else {
+                ChoiceOption::Pass
+            }])
+        }
         "hanbing_skill:confirm" => {
             let prefer = input.view.players.iter().enumerate().any(|(i, p)| {
                 i as u8 != seat

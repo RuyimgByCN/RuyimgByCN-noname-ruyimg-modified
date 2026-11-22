@@ -323,16 +323,53 @@ impl crate::catalog::SkillMachine for DeathMachine {
                 }
             }
         }
-        // 对决 2v2 奖惩（P2/N08 模式入口批一，规则 v80）：先于胜负判定——
-        // 杀死敌方摸三张；杀死友方弃掉自己全部手牌与装备（上游 versus
-        // 2v2 基线；替补机制未建模）。
+        let txhj_me = (0..ctx.core.players.len() as PlayerId).find(|&p| {
+            ctx.core
+                .vm_aux
+                .flags
+                .get(&(p, "l11_txhj_active_battle".to_string()))
+                .copied()
+                .unwrap_or(0)
+                > 0
+        });
+        // 对决 2v2 / 太虚战役模式奖惩：先于胜负判定——
+        // 标准对决：杀敌摸三张，杀友弃全部；
+        // 太虚幻境（extension_framework.js:9825-9852 `dieAfter2`）：有存活队友时，
+        // 击杀敌方玩家（rank<=1摸2、rank==2摸1、rank>=3摸0）或友方击杀摸2。
         if let Some(teams) = ctx.core.versus_teams().map(|t| t.to_vec()) {
             if let Some(k) = self.killer {
                 if k != self.player && ctx.core.player(k).alive {
                     let dead_team = teams.iter().position(|t| t.contains(&self.player));
                     let killer_team = ctx.core.versus_team_of(k);
                     if let (Some(dt), Some(kt)) = (dead_team, killer_team) {
-                        if dt != kt {
+                        if let Some(me) = txhj_me {
+                            let has_friend = teams[dt]
+                                .iter()
+                                .any(|&p| p != self.player && ctx.core.player(p).alive);
+                            if has_friend && dt != kt {
+                                let rank = ctx
+                                    .core
+                                    .vm_aux
+                                    .flags
+                                    .get(&(me, "l11_txhj_rank".to_string()))
+                                    .copied()
+                                    .unwrap_or(1);
+                                let draw_n = if k == me {
+                                    if rank <= 1 {
+                                        2
+                                    } else if rank == 2 {
+                                        1
+                                    } else {
+                                        0
+                                    }
+                                } else {
+                                    2
+                                };
+                                if draw_n > 0 {
+                                    ctx.start_draw(k, draw_n);
+                                }
+                            }
+                        } else if dt != kt {
                             ctx.start_draw(k, 3);
                         } else {
                             // 杀友方：弃掉自己全部手牌与装备
@@ -421,13 +458,47 @@ impl crate::catalog::SkillMachine for DeathMachine {
                 }
             }
             crate::state::GameMode::Versus { teams, .. } => {
+                // 太虚幻境战役裁定（extension_framework.js:9853-9899）：
+                // 玩家阵亡即败（即使友方 NPC 仍存活）；target='kill' 时击杀 Boss 即胜。
+                if let Some(me) = txhj_me {
+                    if let Some(my_team) = teams.iter().position(|t| t.contains(&me)) {
+                        if !ctx.core.player(me).alive {
+                            ctx.core.outcome = Some(crate::state::Outcome {
+                                winner: crate::state::Winner::Versus(1 - my_team),
+                            });
+                        } else if ctx
+                            .core
+                            .vm_aux
+                            .flags
+                            .get(&(me, "l11_timelimit_target_kill".to_string()))
+                            .copied()
+                            .unwrap_or(0)
+                            > 0
+                            && ctx
+                                .core
+                                .vm_aux
+                                .flags
+                                .get(&(self.player, "l11_npc_boss".to_string()))
+                                .copied()
+                                .unwrap_or(0)
+                                > 0
+                            && teams[1 - my_team].contains(&self.player)
+                        {
+                            ctx.core.outcome = Some(crate::state::Outcome {
+                                winner: crate::state::Winner::Versus(my_team),
+                            });
+                        }
+                    }
+                }
                 // 对决（P2/N08 模式入口批一）：任一队伍全灭 → 对方队伍胜
-                for (i, t) in teams.iter().enumerate() {
-                    if t.iter().all(|p| !ctx.core.player(*p).alive) {
-                        ctx.core.outcome = Some(crate::state::Outcome {
-                            winner: crate::state::Winner::Versus(1 - i),
-                        });
-                        break;
+                if ctx.core.outcome.is_none() {
+                    for (i, t) in teams.iter().enumerate() {
+                        if t.iter().all(|p| !ctx.core.player(*p).alive) {
+                            ctx.core.outcome = Some(crate::state::Outcome {
+                                winner: crate::state::Winner::Versus(1 - i),
+                            });
+                            break;
+                        }
                     }
                 }
             }

@@ -151,16 +151,18 @@ pub(super) fn is_unblocked_l11_owner(
 ) -> bool {
     state.player(owner).alive
         && !catalog.is_tieji_sealed(state, owner)
+        && !catalog.is_chanyuan_sealed(state, owner)
         && !has_named_skill(state, catalog, owner, "txhj_feilong_skill_blank")
 }
 
-/// 锁定技 / `forced: true` 仅受存活与 `txhj_feilong_skill_blank` 影响，不受 `is_tieji_sealed` 封印。
+/// 锁定技 / `forced: true` 仅受存活与 `txhj_feilong_skill_blank` / `chanyuan` 影响，不受 `is_tieji_sealed` 封印。
 pub(super) fn is_locked_unblocked_l11_owner(
     state: &GameStateCore,
     catalog: &Catalog,
     owner: PlayerId,
 ) -> bool {
     state.player(owner).alive
+        && !catalog.is_chanyuan_sealed(state, owner)
         && !has_named_skill(state, catalog, owner, "txhj_feilong_skill_blank")
 }
 

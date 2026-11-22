@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-23 Batch L11-6b（L11 太虚幻境 206 模式节点/效果包与净集 +35→554/936）更新（待提交／发布）
+
+基线 HEAD `6ecddea03c8c2d5317da85780609de16f8306e70`（Batch L11-6a 已发布，CI Run `45074648377` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-l11` 独立复核（#100 **`APPROVE`**，含 Round 4 与三轮 Headless Chrome CDP）及主线全量门禁复测，清单按 #100 净集划分更新为 **已复核等价 2,321／简化近似 2,103／缺失 0／上游未定义 0**（合计 4,424）：`L11 太虚幻境` 由 `519 / 417 / 0` 升为 **554 / 382 / 0**（+35 项无外部阻塞依赖节点：`2` `extension_servant.js`＋`18` `event_universal.js`＋`15` `extension_season.js`，其余 `171` 项〔含 `action` Spine 元数据〕维持 `简化近似`；整包八项仍 `0/37`）。详见 [Batch L11-6b 证据摘要](../../operations/evidence/2026-11-23-batch3-6b-l11-6b/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-23 Batch L11-6a（L11 太虚幻境 320 武将档案与净集 +111→519/936）更新（待提交／发布）
 
 基线 HEAD `b27a0968b13355a35292c767a3d3635401f5d31d`（Batch L11-5 已发布，CI Run `45065560795` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-l11` 独立复核（#57 **`APPROVE`**，含 Round 3 与两轮 Headless Chrome CDP）及主线全量门禁复测，清单按 #57 净集划分更新为 **已复核等价 2,286／简化近似 2,138／缺失 0／上游未定义 0**（合计 4,424）：`L11 太虚幻境` 由 `408 / 528 / 0` 升为 **519 / 417 / 0**（+111 名纯已等价／无定义技能武将，其余 209 名依赖待闭合技能之武将维持 `简化近似`；整包八项仍 `0/37`）。详见 [Batch L11-6a 证据摘要](../../operations/evidence/2026-11-23-batch3-6a-l11-6a/README.md) 与 [inventory_status.json](inventory_status.json)。

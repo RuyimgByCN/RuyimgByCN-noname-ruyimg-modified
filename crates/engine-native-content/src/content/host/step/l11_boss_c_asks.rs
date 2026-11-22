@@ -159,7 +159,7 @@ pub(super) fn build_l11_boss_c_ask(
     ask_id: u32,
     owner: PlayerId,
     target: Option<PlayerId>,
-    _targets: &[PlayerId],
+    targets: &[PlayerId],
     _card: Option<CardId>,
     cards: &[CardId],
     core: &GameStateCore,
@@ -312,7 +312,9 @@ pub(super) fn build_l11_boss_c_ask(
             let max_t = xueji_max_targets(core, owner);
             player_ask(owner, "xueji:target", tgts, 1, max_t, true)
         }
-        _ => None,
+        _ => super::l11_effect_pack_asks::build_l11_effect_pack_ask(
+            ask_id, owner, target, targets, cards, core, catalog,
+        ),
     }
 }
 

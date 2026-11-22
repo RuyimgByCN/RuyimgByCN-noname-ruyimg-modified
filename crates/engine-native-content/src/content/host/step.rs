@@ -208,6 +208,8 @@ pub(super) mod l11_weapons_asks;
 pub(super) mod l11_boss_c;
 pub(super) mod l11_boss_c2;
 pub(super) mod l11_boss_c_asks;
+pub(super) mod l11_effect_pack;
+pub(super) mod l11_effect_pack_asks;
 
 impl HostMachine {
     pub(super) fn step_behavior(&mut self, ctx: &mut Ctx<'_>) -> Flow {

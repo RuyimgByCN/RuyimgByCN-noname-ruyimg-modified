@@ -22,7 +22,10 @@ impl JudgePhaseMachine {
             suit = suit_from_code(override_suit);
             rank = if override_num > 0 { override_num as u8 } else { 5 };
         } else if suit == crate::catalog::Suit::Spade
-            && catalog.skill_by_name("xinhongyan").is_some_and(|d| core.has_skill(owner, d))
+            && !catalog.is_chanyuan_sealed(core, owner)
+            && ["xinhongyan", "hongyan", "红颜"]
+                .iter()
+                .any(|name| catalog.skill_by_name(name).is_some_and(|d| core.has_skill(owner, d)))
         {
             suit = crate::catalog::Suit::Heart;
         }
@@ -66,7 +69,7 @@ impl JudgePhaseMachine {
             2 => crate::catalog::Suit::Heart,
             3 => crate::catalog::Suit::Club,
             4 => crate::catalog::Suit::Diamond,
-            _ => ctx.catalog.cards[judge_card as usize].suit,
+            _ => ctx.catalog.effective_card_suit(ctx.core, owner, judge_card),
         };
         (ctx.catalog.hooks.on_judge_settled)(ctx, owner, trick_kind, eff_suit, judge_card)
     }

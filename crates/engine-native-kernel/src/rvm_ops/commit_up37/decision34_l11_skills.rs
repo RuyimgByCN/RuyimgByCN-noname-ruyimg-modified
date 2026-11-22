@@ -503,8 +503,7 @@ pub(super) fn resolve_l11_taixu_skill(ctx: &mut Ctx<'_>, executing: &str, owner:
         | "txlveming"
         | "txchengyuan"
         | "diyzhuiling"
-        | "sanjian_skill"
-        | "txhj_tunshi" => {
+        | "sanjian_skill" => {
             // `extension.js:811, 846, 3547, 4554, 4631, 5834, 5896, 6008`, `extension_skill.js:975, 3931`: targeted strike
             let amt = if matches!(skill_name, "txlangxi" | "txchengyuan") { 2 } else { 1 };
             if let Some(t) = hostile_target(ctx, owner) {

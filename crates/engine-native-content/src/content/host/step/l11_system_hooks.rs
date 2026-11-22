@@ -24,7 +24,7 @@ const TWSIDAO_CHOICES: [&str; 3] = [
 
 fn shenqi_buff_for_card_name(name: &str) -> Option<&'static str> {
     match name {
-        "txhj_feilong" => Some("buff_txhj_pozhenzhifeng"),
+        "txhj_feilong" | "txhj_feilongduofeng" => Some("buff_txhj_pozhenzhifeng"),
         "txhj_chiyanzhenhunqin" => Some("buff_txhj_yanhuozhiren"),
         "txhj_lingbaoxianhu" => Some("buff_txhj_xianhujiqu"),
         "txhj_taijifuchen" => Some("buff_txhj_fuchendangmo"),
@@ -223,8 +223,14 @@ pub(in crate::content::host) fn filter_l11_system_hooks(
                 && timelimit_outcome(state, ctx.catalog, owner).is_some()
         }
         "_txhj_skill_addEffectStyle" => {
-            flag(state, owner, "l11_effect_style_init") == 0
-                && matches!(event, EventData::TurnBegin { .. } | EventData::Phase { .. })
+            owner == 0
+                && flag(state, owner, "l11_effect_style_init") == 0
+                && matches!(
+                    event,
+                    EventData::TurnBegin { player }
+                        | EventData::Phase { player, begin: true, .. }
+                        if *player == 0
+                )
         }
         "_txhj_skill_gaincard" => match event {
             EventData::CardsDrawn { player, cards } => *player == owner && !cards.is_empty(),
@@ -381,12 +387,75 @@ pub(in crate::content::host) fn handle_l11_system_hooks(
         "_txhj_skill_Timelimit" => {
             if let Some(outcome) = timelimit_outcome(ctx.core, ctx.catalog, owner) {
                 set_flag(ctx.core, owner, "l11_timelimit_outcome", outcome);
+                if flag(ctx.core, owner, "l11_txhj_active_battle") > 0 {
+                    if let crate::state::GameMode::Versus { teams, .. } = &ctx.core.mode {
+                        if let Some(my_team) = teams.iter().position(|t| t.contains(&owner)) {
+                            ctx.core.outcome = Some(crate::state::Outcome {
+                                winner: crate::state::Winner::Versus(if outcome == 1 {
+                                    my_team
+                                } else {
+                                    1 - my_team
+                                }),
+                            });
+                        }
+                    }
+                }
             }
             Flow::Done
         }
-        "_txhj_skill_addEffectStyle" => {
-            set_flag(ctx.core, owner, "l11_effect_style_init", 1);
-            Flow::Done
+        "_txhj_skill_addEffectStyle" => match m.stage {
+            HostStage::Act => {
+                set_flag(ctx.core, owner, "l11_effect_style_init", 1);
+                let rem = flag(ctx.core, owner, "l11_txhj_adjust_rem");
+                let non_paiku_count = ctx
+                    .core
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .filter(|&&c| flag(ctx.core, owner, &format!("l11_gaintag_paiku:{c}")) == 0)
+                    .count();
+                if rem > 0 && non_paiku_count > 0 {
+                    return wait_sys_ask(m, ctx, HostStage::TargetChoice, ASK_TXHJ_MULLIGAN);
+                }
+                Flow::Done
+            }
+            HostStage::TargetChoice => {
+                m.card = None;
+                let confirmed = matches!(
+                    ctx.answer().first(),
+                    Some(ChoiceOption::Confirm | ChoiceOption::Tag(1))
+                );
+                if !confirmed {
+                    set_flag(ctx.core, owner, "l11_txhj_adjust_rem", 0);
+                    return Flow::Done;
+                }
+                let rem = flag(ctx.core, owner, "l11_txhj_adjust_rem");
+                set_flag(ctx.core, owner, "l11_txhj_adjust_rem", rem.saturating_sub(1));
+                let non_paiku: Vec<CardId> = ctx
+                    .core
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .copied()
+                    .filter(|&c| flag(ctx.core, owner, &format!("l11_gaintag_paiku:{c}")) == 0)
+                    .collect();
+                if non_paiku.is_empty() {
+                    set_flag(ctx.core, owner, "l11_txhj_adjust_rem", 0);
+                    return Flow::Done;
+                }
+                let redraw = non_paiku.len() as u32;
+                discard_player_cards(ctx, owner, &non_paiku);
+                m.stage = HostStage::DrawSettle;
+                ctx.start_draw(owner, redraw);
+                Flow::Yield
+            }
+            HostStage::DrawSettle => {
+                if flag(ctx.core, owner, "l11_txhj_adjust_rem") > 0 {
+                    return wait_sys_ask(m, ctx, HostStage::TargetChoice, ASK_TXHJ_MULLIGAN);
+                }
+                Flow::Done
+            }
+            _ => Flow::Done,
         }
         "_txhj_skill_gaincard" => {
             let n = flag(ctx.core, owner, "txhj_score_gaincard") + m.cards.len() as u32;

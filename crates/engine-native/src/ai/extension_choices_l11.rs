@@ -89,8 +89,17 @@ pub(super) fn plan_l11_choice_action(
                 answer(Vec::new())
             }
         }
-        "txkaikang:confirm" => {
+        "txkaikang:confirm"
+        | "xingshang:confirm"
+        | "hengzheng:confirm" => {
             if options.contains(&ChoiceOption::Confirm) {
+                answer(vec![ChoiceOption::Confirm])
+            } else {
+                answer(Vec::new())
+            }
+        }
+        "xinfu_yisuan:confirm" => {
+            if self_cell.is_some_and(|c| c.hp > 1) && options.contains(&ChoiceOption::Confirm) {
                 answer(vec![ChoiceOption::Confirm])
             } else {
                 answer(Vec::new())
@@ -120,7 +129,9 @@ pub(super) fn plan_l11_choice_action(
         "tx_moyany:choose_target"
         | "txleili:choose_target"
         | "cxyKuangXi:choose_target"
-        | "tx_dqtianzi:choose_target" => {
+        | "tx_dqtianzi:choose_target"
+        | "xinfu_lveming:choose_target"
+        | "xinfu_tanbei:choose_target" => {
             if let Some(p) = best_player(true) {
                 if allow_cancel
                     && prompt == "cxyKuangXi:choose_target"
@@ -139,7 +150,8 @@ pub(super) fn plan_l11_choice_action(
         "txhj_daiyuan:choose_target"
         | "txzhaoshu_global:choose_target"
         | "txyirang:choose_target"
-        | "xinmingjian:choose_target" => {
+        | "xinmingjian:choose_target"
+        | "xinfu_tunjun:choose_target" => {
             if let Some(p) = best_player(false) {
                 answer(vec![ChoiceOption::Player(p)])
             } else if allow_cancel {
@@ -290,7 +302,8 @@ pub(super) fn plan_l11_choice_action(
         | "txayboji:discard_card"
         | "txclanxieshu:discard_cards"
         | "cxyMoQu:discard_card"
-        | "cxyYingHun:discard_cards" => answer(best_cards_low(min.max(1))),
+        | "cxyYingHun:discard_cards"
+        | "txhj_tanshi:discard_card" => answer(best_cards_low(min.max(1))),
         "xinmingjian:choose_cards"
         | "tx_dqtianzi:choose_cards"
         | "txfeiyan:choose_sha"
@@ -299,9 +312,42 @@ pub(super) fn plan_l11_choice_action(
         | "cxyJieLve:choose_h"
         | "cxyJieLve:choose_e"
         | "cxyJieLve:choose_j"
-        | "txmouduan:move_card" => answer(options.iter().filter(|o| matches!(o, ChoiceOption::Card(_))).take(min.max(1)).copied().collect()),
-        "txmouduan:move_from" | "txmouduan:move_to" => {
+        | "txmouduan:move_card"
+        | "hengzheng:choose_card" => answer(options.iter().filter(|o| matches!(o, ChoiceOption::Card(_))).take(min.max(1)).copied().collect()),
+        "txmouduan:move_from"
+        | "txmouduan:move_to"
+        | "hengzheng:choose_zone"
+        | "xinfu_lveming:choose_rank" => {
             answer(options.iter().take(min.max(1)).copied().collect())
+        }
+        "xinfu_sidao:choose_card" => {
+            let has_enemy = input.view.players.iter().any(|p| {
+                p.seat != seat && p.alive && public_attitude(&input.view, seat, p.seat) < 0
+            });
+            if has_enemy {
+                answer(best_cards_low(1))
+            } else if allow_cancel {
+                answer(Vec::new())
+            } else {
+                answer(options.iter().take(min.max(1)).copied().collect())
+            }
+        }
+        "xinfu_sidao:choose_target" => {
+            if let Some(p) = best_player(true).filter(|&p| public_attitude(&input.view, seat, p) < 0)
+            {
+                answer(vec![ChoiceOption::Player(p)])
+            } else if allow_cancel {
+                answer(Vec::new())
+            } else {
+                answer(options.iter().take(min.max(1)).copied().collect())
+            }
+        }
+        "xinfu_tanbei:choose_mode" => {
+            if options.contains(&ChoiceOption::Tag(1)) {
+                answer(vec![ChoiceOption::Tag(1)])
+            } else {
+                answer(options.iter().take(min.max(1)).copied().collect())
+            }
         }
         _ => None,
     }

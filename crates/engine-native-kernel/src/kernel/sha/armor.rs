@@ -62,7 +62,19 @@ impl ShaResolveMachine {
             return None;
         }
         let judged = ctx.draw_judge_card_with_elo(self.target, pref);
-        let (j_suit, _) = ctx.inline_judge_suit_rank(self.target, judged);
+        let eff_suit = ctx.catalog.effective_card_suit(ctx.core, self.target, judged);
+        let raw_rank = ctx.catalog.cards[judged as usize].rank;
+        let (j_suit, _) = if ctx.catalog.vm_card_history {
+            crate::rvm_bridge::modifiers::apply_huangtian_suit_rank(
+                ctx.core,
+                ctx.catalog,
+                self.target,
+                eff_suit,
+                raw_rank,
+            )
+        } else {
+            (eff_suit, raw_rank)
+        };
         let success = crate::rvm_bridge::modifiers::d34_l28_mods::rewrite_bagua_judge_ok(
             ctx.core,
             ctx.catalog,

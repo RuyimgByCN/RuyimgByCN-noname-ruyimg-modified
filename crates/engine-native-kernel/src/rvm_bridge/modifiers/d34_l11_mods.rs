@@ -774,6 +774,10 @@ pub(super) fn apply_card_target_canceled(
     {
         canceled = true;
     }
+    // `sp2/skill.js:15853-15862` (`xinfu_tanbei` Mode 0 -> actor cannot target `target` with cards this turn)
+    if flag_val(state, actor, &format!("skill_turn:xinfu_tanbei_forbid:{target}")) > 0 {
+        canceled = true;
+    }
     d34_l25_mods::apply_card_target_canceled(state, catalog, actor, target, kind, canceled)
 }
 
@@ -1094,6 +1098,7 @@ pub fn tanbei_unlimited_target(
     actor: PlayerId,
     target: PlayerId,
 ) -> bool {
-    has_ext_skill(state, catalog, actor, "txtanbei_effect3")
-        && has_ext_skill(state, catalog, target, "txtanbei_effect1")
+    (has_ext_skill(state, catalog, actor, "txtanbei_effect3")
+        && has_ext_skill(state, catalog, target, "txtanbei_effect1"))
+        || flag_val(state, actor, &format!("skill_turn:xinfu_tanbei_unlimited:{target}")) > 0
 }

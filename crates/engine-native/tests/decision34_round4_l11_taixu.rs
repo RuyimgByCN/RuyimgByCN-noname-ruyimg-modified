@@ -385,8 +385,20 @@ fn l11_taixu_formal_package_320_generals_32_cards_374_skills_and_206_campaign_no
     for node in &L11_TAIXU_CAMPAIGN_NODES {
         let mut run = TaixuRunState::from_config(&cfg);
         run.gold = 1_000;
-        let out = execute_taixu_campaign_node(&cfg, &mut run, node.scope, node.id, 0)
-            .unwrap_or_else(|err| panic!("campaign node {}:{} failed: {err:?}", node.scope, node.id));
+        let out = content_native_loader::execute_taixu_campaign_node_at(
+            &cfg,
+            &mut run,
+            node.scope,
+            node.section,
+            node.id,
+            node.correct_choice_idx,
+        )
+        .unwrap_or_else(|err| {
+            panic!(
+                "campaign node {}:{}:{} failed: {err:?}",
+                node.scope, node.section, node.id
+            )
+        });
         assert_eq!(out.kind, node.kind);
         if let Some(ref b) = out.granted_buff {
             assert!(
@@ -396,11 +408,19 @@ fn l11_taixu_formal_package_320_generals_32_cards_374_skills_and_206_campaign_no
             assert!(e.catalog().skill_by_name(b).is_some());
         }
         if node.kind == TaixuNodeKind::ExamQuiz {
-            assert!(out.quiz_passed);
+            assert!(out.quiz_passed, "correct option must pass on {}", node.id);
+            let wrong_idx = (node.correct_choice_idx + 1) % node.option_count.max(2);
             let mut wrong_run = TaixuRunState::from_config(&cfg);
-            let wrong_out =
-                execute_taixu_campaign_node(&cfg, &mut wrong_run, node.scope, node.id, 1).unwrap();
-            assert!(!wrong_out.quiz_passed);
+            let wrong_out = content_native_loader::execute_taixu_campaign_node_at(
+                &cfg,
+                &mut wrong_run,
+                node.scope,
+                node.section,
+                node.id,
+                wrong_idx,
+            )
+            .unwrap();
+            assert!(!wrong_out.quiz_passed, "wrong option must fail on {}", node.id);
             assert!(out.gold_after >= wrong_out.gold_after);
         }
     }
@@ -411,9 +431,10 @@ fn l11_taixu_formal_package_320_generals_32_cards_374_skills_and_206_campaign_no
     assert_eq!(graph_run.available_next_nodes().len(), 3);
     let step1 = graph_run.advance_node(&cfg, 0, 0).expect("advance step 1");
     assert_eq!(step1.scope, "GFHuangJinZhiLuan");
+    assert_eq!(graph_run.state.node_index, 1);
     let step2 = graph_run.advance_node(&cfg, 1, 0).expect("advance step 2");
     assert_eq!(graph_run.visited_nodes.len(), 2);
-    assert!(step2.gold_after > 1_000);
+    assert_eq!(step2.kind, TaixuNodeKind::SeasonChapter);
     let camp_snap = graph_run.encode_snapshot();
     let camp_restored = TaixuCampaignRun::decode_snapshot(&camp_snap).expect("decode campaign run");
     assert_eq!(camp_restored, graph_run);

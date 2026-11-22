@@ -111,7 +111,8 @@ pub(super) fn eligible(
     let Some(meta) = kind_meta.as_ref().or(def.trigger.as_ref()) else {
         return false;
     };
-    if (catalog.is_tieji_sealed(core, q.owner) && !Catalog::is_locked_skill_name(def.name, Some(meta)))
+    if (catalog.is_tieji_sealed(core, q.owner)
+        && !Catalog::is_locked_skill_name(def.name, Some(meta)))
         || catalog.is_rechanyuan_sealed_def(core, q.owner, q.def)
     {
         return false;

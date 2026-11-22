@@ -12,7 +12,7 @@ pub fn for_each_player_vm_modifier<F>(
     F: FnMut(SkillDefId, &VmModifierRule),
 {
     for ((owner, def), inst) in &state.skills {
-        if *owner == player && inst.enabled {
+        if *owner == player && inst.enabled && !catalog.is_skill_chanyuan_blocked(state, player, *def) {
             let rules = catalog.skills[*def as usize].behavior.vm_modifiers();
             for rule in rules {
                 f(*def, rule);

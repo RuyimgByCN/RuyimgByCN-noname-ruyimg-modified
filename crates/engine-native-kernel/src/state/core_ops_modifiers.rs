@@ -404,6 +404,34 @@ impl GameStateCore {
         cw.min(ccw)
     }
 
+    /// 座位距离计算（端点 `a`/`b` 即使已死亡仍保留于座位环，`get/index.js:3688-3724` 同口径）。
+    pub fn seat_distance_with_dead_endpoints(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        a: PlayerId,
+        b: PlayerId,
+    ) -> u8 {
+        if a == b {
+            return 0;
+        }
+        let keep = |p: PlayerId| {
+            p == a || p == b || (self.player(p).alive && !catalog.has_diaohulishan(self, p))
+        };
+        let ring: Vec<PlayerId> = if self.seat_ring.len() == self.players.len() {
+            self.seat_ring.iter().copied().filter(|&p| keep(p)).collect()
+        } else {
+            (0..self.players.len() as PlayerId)
+                .filter(|&p| keep(p))
+                .collect()
+        };
+        let n = ring.len() as i16;
+        let ia = ring.iter().position(|p| *p == a).expect("a in players") as i16;
+        let ib = ring.iter().position(|p| *p == b).expect("b in players") as i16;
+        let cw = (ib - ia).rem_euclid(n) as u8;
+        let ccw = (ia - ib).rem_euclid(n) as u8;
+        cw.min(ccw)
+    }
+
     /// 有效性别（批③-b 第八把 雌雄）：优先读取运行时性别覆写旗，
     /// 否则主将槽有武将时取武将性别，无武将默认男性。
     pub fn effective_gender(&self, p: PlayerId) -> crate::vocabulary::generals::Gender {

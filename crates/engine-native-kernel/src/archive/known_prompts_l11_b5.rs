@@ -39,4 +39,5 @@ pub(super) const KNOWN_PROMPTS_L11_B5: &[&str] = &[
     "txhj_chuhai:target_pindian_card",
     "xueji:card",
     "xueji:target",
+    "_txhj_skill_addEffectStyle:mulligan",
 ];

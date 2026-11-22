@@ -9,6 +9,13 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-23 Batch L11-6b（L11 太虚幻境 206 模式节点/效果包与净集 +35→554/936）合入（待提交／发布）
+
+- **基线、发布与版本**：HEAD `6ecddea03c8c2d5317da85780609de16f8306e70`（Batch L11-6a 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `45074648377` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。
+- **Batch L11-6b 集成与复核**：合入 `swarm/conv-l11-b6b-modes` `8a974b73f..b76098616`（`verifier-l11` #100 **`APPROVE`**）：统一 `catalog_queries.rs` 缠怨门控（`l10_rechanyuan`＋`"chanyuan"`/`"rechanyuan"`＋`hp <= 1`）、保留 `sha/armor.rs` `_eloDraw`/空牌堆守卫＋叠加 `effective_card_suit`、协同 `u08_batch_d_hooks.rs`、`known_prompts_l11_b5.rs` 尾追加并保留 `6ecddea03` 全部 `b6a` 修复；接入 `taixu_mode/*`、`taixu_battle.rs` 与 `l11_effect_pack*`。
+- **清单计数与整包签署**：按 #100 净集划分升级 **35 项**无阻塞 `L11:modes:*`（`L11` → **`554／382／0`**，其余 `171` 项维持 `简化近似`）；全仓更新为 **已复核等价 2,321／简化近似 2,103／缺失 0**，整包八项签署仍 `0/37`。
+- **主线实测**：`-D warnings` native/`wasm32`、4 crate **`2,897/0/6`**（`l_rounds` **`292/0/0`**、`g1` **`395/0/1`**、`kernel` **`435/0/0`**）、`--workspace --no-fail-fast` **`8,204/0/8`**、`conformance` **`19/19`**、`desktop-client` **`20/0/1`**、跨端双检验、`web-client` **`540/0`**、`smoke:native` **`83/0`** 与 `preflight.py` 全过，见 [Batch L11-6b 证据](../operations/evidence/2026-11-23-batch3-6b-l11-6b/README.md)。
+
 ### 2026-11-23 Batch L11-6a（L11 太虚幻境 320 武将档案与净集 +111→519/936）合入（待提交／发布）
 
 - **基线、发布与版本**：HEAD `b27a0968b13355a35292c767a3d3635401f5d31d`（Batch L11-5 已发布并入 [CI 运行台账](../operations/evidence/ci-runs.md)，CI Run `45065560795` Attempt 1 `10/10 success`）；版本锁保持 **规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`**，14 标准 golden 与 `u01-dddanzhi-pending-v107.ngsa` 不变。
