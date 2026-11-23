@@ -11,19 +11,14 @@ impl HostSkillBehavior {
             HostBehavior::XianjianXiepan => matches!(event,
             EventData::CardsDiscarded { player, cards }
             if *player == owner
-                && cards.iter().any(|c| {
-                    matches!(
-                        ctx.catalog.card_kind(*c),
-                        CardKind::Sha | CardKind::Shan | CardKind::Tao
-                    )
-                })
+                && cards.iter().any(|c| ctx.catalog.card_kind(*c).is_basic_kind())
                 && !ctx.state.player(owner).hand.is_empty()
-                && !ctx.state.player(owner).hand.iter().any(|c| {
-                    matches!(
-                        ctx.catalog.card_kind(*c),
-                        CardKind::Sha | CardKind::Shan | CardKind::Tao
-                    )
-                })),
+                && !ctx
+                    .state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .any(|c| ctx.catalog.card_kind(*c).is_basic_kind())),
             HostBehavior::XianjianXjyingfeng => {
                 // 影锋（U05 xianjian 越今朝，规则 v185）：自己用杀+链挡
                 // 旗标未置+候选存在（其他角色-本杀目标，存活+距离内）
@@ -45,18 +40,38 @@ impl HostSkillBehavior {
                 }
             }
             HostBehavior::XianjianXjzhimeng2 => {
-                if let EventData::CardUsed(u) = event {
-                    u.player == owner && {
-                        let k = yangpijuan_class(u.effective_kind(ctx.catalog));
-                        ctx.state
-                            .player(owner)
-                            .off_court
-                            .iter()
-                            .any(|o| yangpijuan_class(ctx.catalog.card_kind(*o)) == k)
-                    }
-                } else {
-                    false
+                let EventData::CardUsed(u) = event else {
+                    return false;
+                };
+                if u.cancelled {
+                    return false;
                 }
+                let used_kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
+                let targeted = if !u.targets.is_empty() {
+                    u.targets.contains(&owner)
+                } else {
+                    match used_kind {
+                        CardKind::Taoyuan | CardKind::Wugu => true,
+                        CardKind::Yuansuhuimie => owner != u.player,
+                        _ => owner == u.player,
+                    }
+                };
+                if !targeted {
+                    return false;
+                }
+                let Some(k) = yangpijuan_class(used_kind) else {
+                    return false;
+                };
+                ctx.state
+                    .vm_aux
+                    .flags
+                    .get(&(owner, "xj_zhimeng_card".to_string()))
+                    .copied()
+                    .and_then(|v| v.checked_sub(1))
+                    .is_some_and(|stored| {
+                        ctx.state.player(owner).off_court.contains(&stored)
+                            && yangpijuan_class(ctx.catalog.card_kind(stored)) == Some(k)
+                    })
             }
             HostBehavior::XianjianSheling => {
                 let in_my_turn = ctx.state.turn.current == owner;
@@ -127,7 +142,12 @@ impl HostSkillBehavior {
                 EventData::Damage(d)
                 if d.source == Some(owner)
                     && !d.prevented
-                    && ctx.state.player(owner).ctianfu_source.is_some()),
+                    && ctx.state.player(owner).ctianfu_source.is_some()
+                    && !ctx
+                        .state
+                        .vm_aux
+                        .flags
+                        .contains_key(&(owner, "xj_ctianfu2_resolving".to_string()))),
             // 天符·清挂：挂附者死亡,
             HostBehavior::XianjianDuci => {
                 matches!(event,
@@ -178,7 +198,7 @@ impl HostSkillBehavior {
                 if u.player == owner
                     && ctx.state.turn.current == owner
                     && !u.cancelled
-                    && matches!(ctx.state.turn.cards_used_play_phase, 3 | 4)),
+                    && matches!(ctx.state.turn.cards_used_play_phase, 2 | 3 | 4)),
             HostBehavior::XianjianLiguang => {
                 matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::End, begin: false }
@@ -327,12 +347,10 @@ impl HostSkillBehavior {
             // 织梦·梦：暗牌持有者被使用同类型（三分类）牌（targets 含
             // 持有者+暗牌保留=上游 storage 不清除同口径）,
             HostBehavior::XianjianXshuangren => matches!(event,
-            EventData::CardsDiscarded { player, cards }
+            EventData::Equipped { player, replaced: Some(old), .. }
             if *player == owner
-                && cards.iter().any(|c| {
-                    ctx.catalog.card_slot_of(ctx.state, *c)
-                        == Some(crate::catalog::EquipSlot::Weapon)
-                })),
+                && ctx.catalog.card_slot_of(ctx.state, *old)
+                    == Some(crate::catalog::EquipSlot::Weapon)),
             // 双刃·殁：自己死亡帧,
             HostBehavior::XianjianXshuangren2 => matches!(event,
                 EventData::Death { player, .. } if *player == owner),

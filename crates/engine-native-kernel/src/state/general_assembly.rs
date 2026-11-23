@@ -163,8 +163,40 @@ pub fn apply_general_assembly(
         if skill == "ssr_luoyi" {
             let _ = crate::kernel::discard_armor_for_ssr_luoyi(state, catalog, player);
         }
+        for &sub in group_subskills(skill) {
+            if let Some(sub_def) = catalog.skill_by_name(sub) {
+                state.skills.entry((player, sub_def)).or_insert(crate::state::SkillInstance {
+                    owner: player,
+                    enabled,
+                    once_used: false,
+                    expires_end_of_turn: false,
+                    rounds: 0,
+                });
+            }
+        }
     }
     sync_dddfusi_global(state, catalog);
+}
+
+/// 上游技能声明的 `group:` 子技（主技随将装配时一并挂载）。
+fn group_subskills(skill: &str) -> &'static [&'static str] {
+    match skill {
+        "yanzhan" => &["yanzhan2"],
+        "xfenxin" => &["xfenxin2"],
+        "xuanyan" => &["xuanyan2", "xuanyan3"],
+        "tianshe" => &["tianshe2"],
+        "husha" => &["husha_count"],
+        "xshuangren" => &["xshuangren2"],
+        "shuiyun" => &["shuiyun5"],
+        "wangyou" => &["wangyou2"],
+        "luanjian" => &["luanjian2"],
+        "ctianfu" => &["ctianfu3"],
+        "leiyu" => &["leiyu2", "leiyu4"],
+        "danqing" => &["danqing_count"],
+        "zhuyue" => &["zhuyue2"],
+        "xjzhimeng" => &["xjzhimeng3"],
+        _ => &[],
+    }
 }
 
 /// Grants global U01 companion skills (`dddfusi_global`, `dddfengzheng_global`) to every seat iff at least one seat holds their owner skill.

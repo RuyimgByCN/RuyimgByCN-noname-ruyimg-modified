@@ -212,6 +212,49 @@ impl Catalog {
         )
     }
 
+    /// Whether `p` currently has Xianjian `fengyin` debuff active (disables non-locked skills until `phaseAfter`, without blocking hand-card plays).
+    pub fn is_xj_fengyin_sealed(
+        &self,
+        core: &crate::state::GameStateCore,
+        p: crate::ids::PlayerId,
+    ) -> bool {
+        core.vm_aux
+            .flags
+            .get(&(p, "xj_fengyin_sealed".to_string()))
+            .copied()
+            .unwrap_or(0)
+            > 0
+    }
+
+    /// Whether `def` is blocked when Xianjian `fengyin` debuff applies (`!charlotte && !persevereSkill && !locked && !equipSkill`).
+    pub fn is_xj_fengyin_blocked(&self, def: crate::ids::SkillDefId) -> bool {
+        let Some(skill) = self.skills.get(def as usize) else {
+            return false;
+        };
+        !self.is_charlotte_skill(def)
+            && !self.is_forever_skill(def)
+            && !Self::is_locked_skill_name(skill.name, skill.trigger.as_ref())
+            && !self.cards.iter().any(|c| c.equip_skills.contains(&skill.name))
+    }
+
+    /// Returns the active skill-blocker flag prefix if `def` should be inserted/retained disabled on `player`.
+    pub fn skill_disable_flag_for(
+        &self,
+        core: &crate::state::GameStateCore,
+        player: crate::ids::PlayerId,
+        def: crate::ids::SkillDefId,
+    ) -> Option<&'static str> {
+        if !self.is_charlotte_skill(def) && !self.is_forever_skill(def) {
+            if crate::kernel::mbcmfangzhu_baiban(core, player) {
+                return Some("mbcmfangzhu_disabled");
+            }
+            if self.is_xj_fengyin_sealed(core, player) && self.is_xj_fengyin_blocked(def) {
+                return Some("xj_fengyin_disabled");
+            }
+        }
+        None
+    }
+
     /// Whether a skill is a locked skill (`锁定技` / `forced: true` / `charlotte: true`) exempt from `tieji` seal.
     pub fn is_locked_skill_name(name: &str, eff_meta: Option<&TriggerMeta>) -> bool {
         if matches!(
@@ -272,6 +315,83 @@ impl Catalog {
                 | "xianji"
                 | "xueren"
                 | "xunbao2"
+                | "xunying"
+                | "liguang"
+                | "xiepan"
+                | "fenglue"
+                | "husha"
+                | "husha_count"
+                | "danqing"
+                | "danqing_count"
+                | "zhangmu"
+                | "zhangmu_ai"
+                | "leiyu"
+                | "leiyu2"
+                | "leiyu4"
+                | "shuiyun"
+                | "shuiyun5"
+                | "wangyou"
+                | "wangyou2"
+                | "changnian"
+                | "duci"
+                | "xshuangren"
+                | "xshuangren2"
+                | "qijian"
+                | "qianfang"
+                | "poyun"
+                | "zhuyue"
+                | "zhuyue2"
+                | "runxin"
+                | "xjzhimeng2"
+                | "xjzhimeng3"
+                | "qixia"
+                | "yanshi2"
+                | "tianwu"
+                | "tianwu2"
+                | "yujia"
+                | "qiongguang"
+                | "txianqu"
+                | "minsha"
+                | "lingdi"
+                | "huanlei"
+                | "anwugu"
+                | "anwugu2"
+                | "xtanxi"
+                | "linghuo"
+                | "guijin"
+                | "guijin2"
+                | "chengxin"
+                | "shiying"
+                | "xjzongyu"
+                | "dujiang"
+                | "sheying"
+                | "huahu"
+                | "binxin"
+                | "longhuo"
+                | "yanzhan"
+                | "feixia"
+                | "lueying"
+                | "tianjian"
+                | "huxi"
+                | "xuanmo"
+                | "sheling"
+                | "zhaoyao"
+                | "feizhua"
+                | "guijiang"
+                | "diewu"
+                | "lingyu"
+                | "duxinshu"
+                | "feixu"
+                | "luanjian"
+                | "ctianfu"
+                | "sajin"
+                | "jtjubao"
+                | "shenmu"
+                | "guanri"
+                | "tannang"
+                | "tuoqiao"
+                | "huimeng"
+                | "yuexing"
         ) {
             return false;
         }
@@ -403,6 +523,50 @@ impl Catalog {
                 | "ysjqisha_ao"
                 | "hsbaowu_huangjinyuanhou"
                 | "lieyang2"
+                | "xuanyan"
+                | "xjzhimeng"
+                | "xiaoyue2"
+                | "guijiang2"
+                | "guijiang3"
+                | "yanzhan2"
+                | "yanzhan3"
+                | "yanzhan4"
+                | "yuexing2"
+                | "liefeng"
+                | "xiaoyue"
+                | "yanshi"
+                | "tanhua"
+                | "ywuhun"
+                | "xfenxin"
+                | "xfenxin2"
+                | "xuanyan2"
+                | "xuanyan3"
+                | "tianshe"
+                | "tianshe2"
+                | "ctianfu2"
+                | "ctianfu3"
+                | "luanjian2"
+                | "changnian2"
+                | "chengxin2"
+                | "diesha"
+                | "lingxue"
+                | "lingquan"
+                | "shenwu"
+                | "fanling"
+                | "jianzhen"
+                | "fenshi"
+                | "feng"
+                | "ya"
+                | "song"
+                | "leiyu3"
+                | "fenxing"
+                | "ningbin"
+                | "poyun2"
+                | "qianfang2"
+                | "longxi"
+                | "tianxian"
+                | "xjyufeng"
+                | "xjyingfeng"
         ) {
             return true;
         }

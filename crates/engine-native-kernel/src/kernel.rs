@@ -64,7 +64,14 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
                 if from != to {
                     clear_yange_clone_card(ctx.core, c);
                 }
-                if from != to || !ctx.core.player(from).hand.contains(&c) {
+                if ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .remove(&(from, format!("xj_du_private_move:{c}")))
+                    .is_none()
+                    && (from != to || !ctx.core.player(from).hand.contains(&c))
+                {
                     (ctx.catalog.hooks.on_hand_card_removed)(ctx, from, c);
                 }
             }
@@ -231,6 +238,7 @@ pub use draw::{DrawMachine, DrawPhaseMachine, GainMachine};
 pub use damage_skill::NativeDamageSkill;
 pub(crate) mod events;
 pub use events::{peek_tao_extra_carriers, record_dddanzhi_card, take_tao_extra_carriers};
+pub(crate) use events::maybe_abort_ywuhun;
 use events::*;
 mod equipment;
 use equipment::commit_equip;

@@ -425,7 +425,10 @@ fn plan_triggers(
         // 原执行点——61 个宿主 PhaseBegin 技能与 golden 行为不变；全量实测
         // 不过滤时 16 项失败）；after 段（before=false）：VM 技能已在前置
         // 窗跑过，跳过防重复入队，宿主技照常派发。
-        if kind == EventKind::PhaseBegin && def.behavior.runs_before_phase_begin() != before {
+        let runs_before = def.behavior.runs_before_phase_begin()
+            || def.behavior.as_host_behavior()
+                == Some(crate::vocabulary::host::HostBehavior::XianjianFenglue);
+        if kind == EventKind::PhaseBegin && runs_before != before {
             continue;
         }
         if kind == EventKind::Recover && before && !matches!(def.name, "dddweiqiu" | "dddjiexing") {
@@ -483,6 +486,9 @@ pub fn run(
         }
         if res.budget == 0 {
             return StepOutcome::BudgetExhausted;
+        }
+        if crate::kernel::maybe_abort_ywuhun(core, res) {
+            continue;
         }
         if let Some(limit) = slice {
             if steps >= limit {
@@ -630,6 +636,14 @@ pub fn run(
                 f.planned = false;
             }
             Stage::Commit => {
+                let was_play_begin = matches!(
+                    res.frame(top).map(|f| &f.data),
+                    Some(EventData::Phase {
+                        phase: crate::event::Phase::Play,
+                        begin: true,
+                        ..
+                    })
+                );
                 let prior_skills: std::collections::BTreeSet<_> =
                     core.skills.keys().copied().collect();
                 {
@@ -642,10 +656,14 @@ pub fn run(
                     kernel::commit_frame(&mut ctx, top);
                 }
                 notify_new_skills(core, res, catalog, &prior_skills, out);
+                let skipped_play = was_play_begin
+                    && core.turn.phase == crate::event::Phase::Discard;
                 let kind = res.frame(top).expect("frame").kind;
                 let next = next_stage(kind, Stage::Commit);
                 let f = res.frame_mut(top).expect("frame");
-                if f.stage != Stage::Done {
+                if skipped_play {
+                    f.stage = Stage::Done;
+                } else if f.stage != Stage::Done {
                     f.stage = next;
                 }
                 f.planned = false;

@@ -589,6 +589,13 @@ pub fn standard_catalog_with_extensions(
             append_companion(&mut skills, "jiushi", super::host::HostBehavior::U01DddBatchD);
             append_companion(&mut skills, "rezhiheng", super::host::HostBehavior::U01DddBatchD);
         }
+        if skills.iter().any(|s| s.name == "tuoqiao") {
+            append_companion(
+                &mut skills,
+                crate::content::host::GJ_FOOD_SHIHUIFEN_BAN_KEY,
+                super::host::HostBehavior::GujianFoodShihuifenBan,
+            );
+        }
     }
     let mut catalog = Catalog::build(cards, skills);
     catalog.hooks = super::hooks::CONTENT_HOOKS;

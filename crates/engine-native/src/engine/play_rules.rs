@@ -101,6 +101,20 @@ pub(super) fn common_play_validation(
     if targets.iter().any(|t| *t as usize >= core.players.len()) {
         return Err(RejectReason::IllegalTargets);
     }
+    let is_poison = catalog
+        .cards
+        .get(card as usize)
+        .is_some_and(|d| d.name == "du" || d.name == "毒" || d.name.starts_with("xj_du_"))
+        || core
+            .vm_aux
+            .flags
+            .get(&(actor, format!("xj_du_holder:{card}")))
+            .copied()
+            .unwrap_or(0)
+            > 0;
+    if is_poison && play_kind(core, catalog, card, targets).0 == catalog.card_kind(card) {
+        return Err(RejectReason::CardBlocked);
+    }
     // 封印（Boss 应昭封冻，规则 v228）：被封印者本回合无法使用手
     // 牌（上游 fengyin mod cardEnabled2 position=h 同口径；装备区
     // 牌不受限）
@@ -134,12 +148,13 @@ pub(super) fn common_play_validation(
 ///（转化后的路由与校验按声明牌种执行）。
 pub(super) fn play_kind(
     core: &GameStateCore,
-    catalog: &SharedCatalog,
+    catalog: &crate::catalog::Catalog,
     card: CardId,
     targets: &[PlayerId],
 ) -> (CardKind, bool) {
     let actor = core.turn.current;
     let sealed = catalog.is_tieji_sealed(core, actor)
+        || catalog.is_xj_fengyin_sealed(core, actor)
         || (core.player(actor).hp <= 1 && catalog.has_rechanyuan(core, actor));
     if !core.player(actor).hand.contains(&card) {
         if let Some(spec) = catalog.find_player_vm_view_as(core, actor, card, true, None) {
@@ -486,7 +501,7 @@ pub(super) fn xinfu_limu_in_range(
         && core.computed_distance(catalog, from, target) <= core.attack_range(catalog, from)
 }
 
-fn card_accepts_explicit_self_target(catalog: &SharedCatalog, card: CardId) -> bool {
+fn card_accepts_explicit_self_target(catalog: &crate::catalog::Catalog, card: CardId) -> bool {
     let meta = &catalog.cards[card as usize];
     let kind = meta.kind;
     let name = meta.name;

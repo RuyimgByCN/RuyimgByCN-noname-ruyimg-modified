@@ -9,19 +9,19 @@ impl Ctx<'_> {
         key: (PlayerId, crate::ids::SkillDefId),
         mut instance: crate::state::SkillInstance,
     ) -> Option<crate::state::SkillInstance> {
-        let baiban_block = instance.enabled
-            && crate::kernel::mbcmfangzhu_baiban(self.core, key.0)
-            && !self.catalog.is_forever_skill(key.1)
-            && !self.catalog.is_charlotte_skill(key.1);
-        if baiban_block {
+        let block_prefix = instance
+            .enabled
+            .then(|| self.catalog.skill_disable_flag_for(self.core, key.0, key.1))
+            .flatten();
+        if block_prefix.is_some() {
             instance.enabled = false;
         }
         let old = self.core.skills.insert(key, instance);
-        if baiban_block {
+        if let Some(prefix) = block_prefix {
             self.core
                 .vm_aux
                 .flags
-                .insert((key.0, format!("mbcmfangzhu_disabled:{}", key.1)), 1);
+                .insert((key.0, format!("{prefix}:{}", key.1)), 1);
         }
         if old.is_none() {
             if self.catalog.skill_name(key.1) == "ssr_luoyi" {
@@ -76,6 +76,10 @@ impl Ctx<'_> {
             .vm_aux
             .flags
             .remove(&(owner, format!("mbcmfangzhu_disabled:{def}")));
+        self.core
+            .vm_aux
+            .flags
+            .remove(&(owner, format!("xj_fengyin_disabled:{def}")));
         if old.is_some() {
             let name = self.catalog.skill_name(def);
             self.finish_removed_skill(owner, name);
@@ -112,22 +116,20 @@ impl Ctx<'_> {
     pub fn add_skill_until_turn_end(&mut self, owner: PlayerId, def: SkillDefId) {
         let name = self.catalog.skill_name(def);
         let key = (owner, def);
-        let baiban_block = crate::kernel::mbcmfangzhu_baiban(self.core, owner)
-            && !self.catalog.is_forever_skill(def)
-            && !self.catalog.is_charlotte_skill(def);
+        let block_prefix = self.catalog.skill_disable_flag_for(self.core, owner, def);
         if let Some(inst) = self.core.skills.get_mut(&key) {
             // 永久拥有（含已觉醒/禁用）技能不可被临时授技覆写或重新启用（上游 player.js:11267,11288）；
             // 仅已到期的 `异殇` 墓碑或已为回合末临时技实例允许刷新至回合结束。
             if !inst.expires_end_of_turn && name != crate::vocabulary::names::YI_SHANG {
                 return;
             }
-            inst.enabled = !baiban_block;
+            inst.enabled = block_prefix.is_none();
             inst.expires_end_of_turn = true;
-            if baiban_block {
+            if let Some(prefix) = block_prefix {
                 self.core
                     .vm_aux
                     .flags
-                    .insert((owner, format!("mbcmfangzhu_disabled:{def}")), 1);
+                    .insert((owner, format!("{prefix}:{def}")), 1);
             }
         } else {
             self.insert_skill(

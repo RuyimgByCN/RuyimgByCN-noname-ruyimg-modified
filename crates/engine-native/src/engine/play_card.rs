@@ -879,10 +879,18 @@ pub(super) fn play_card(
                         }
                         let p = core.player(user);
                         if kind == CardKind::Tao
-                            && p.dying
-                            && crate::rvm_bridge::modifiers::eval_dying_peach_target_canceled(
-                                core, catalog, user, user, card,
-                            )
+                            && (crate::rvm_bridge::modifiers::eval_card_target_canceled(
+                                core,
+                                catalog,
+                                user,
+                                user,
+                                card,
+                                kind,
+                                crate::event::DamageNature::Normal,
+                            ) || (p.dying
+                                && crate::rvm_bridge::modifiers::eval_dying_peach_target_canceled(
+                                    core, catalog, user, user, card,
+                                )))
                         {
                             return Err(RejectReason::IllegalTargets);
                         }

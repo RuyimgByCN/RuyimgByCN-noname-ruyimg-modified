@@ -370,7 +370,8 @@ fn certainly_illegal(engine: &Engine, seat: crate::ids::PlayerId, action: &GameA
             };
             if !inst.enabled
                 || inst.once_used
-                || (catalog.is_tieji_sealed(core, seat)
+                || ((catalog.is_tieji_sealed(core, seat)
+                    || catalog.is_xj_fengyin_sealed(core, seat))
                     && !crate::catalog::Catalog::is_locked_skill_name(
                         def.name,
                         def.trigger.as_ref(),

@@ -261,6 +261,11 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
             self.emit_aoe_damage(ctx);
             return Flow::Done;
         }
+        crate::kernel::maybe_trigger_longxi(
+            ctx,
+            self.target,
+            if self.need == CardKind::Shan { 1 } else { 2 },
+        );
         let holders: Vec<crate::ids::CardId> = response_kind_cards(ctx, self.target, self.need);
         let resp_skills = host_response_skills(ctx.core, ctx.catalog, self.target, resp_ctx);
         let skill_opts = if !ctx.catalog.blocks_all_cards(ctx.core, self.target) {

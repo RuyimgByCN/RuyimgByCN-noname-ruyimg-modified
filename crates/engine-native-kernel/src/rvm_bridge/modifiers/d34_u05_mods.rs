@@ -450,8 +450,18 @@ pub(super) fn apply_card_target_canceled(
     {
         canceled = true;
     }
-    // character/xianjian/skill.js:2560-2582 (`guijiang2`: cannot be targeted by Tao)
-    if kind == CardKind::Tao && flag_val(state, target, "u05_mod:guijiang2") > 0 {
+    // character/xianjian/skill.js:2560-2582 (`guijiang2`: cannot be targeted by recover cards)
+    if matches!(
+        kind,
+        CardKind::Tao
+            | CardKind::Taoyuan
+            | CardKind::Zhiliaobo
+            | CardKind::Xianluhui
+            | CardKind::Dinvxuanshuang
+            | CardKind::Caoyao
+            | CardKind::Hufu
+    ) && flag_val(state, target, "u05_mod:guijiang2") > 0
+    {
         canceled = true;
     }
     // card/swd/skill.js:1677-1697 (`hslingjian_yinmilichang_equip5`: empty hand immune to Sha/Duel)

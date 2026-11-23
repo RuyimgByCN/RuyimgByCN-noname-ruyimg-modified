@@ -256,6 +256,7 @@ pub fn intrinsic_machine(
                 if matches!(
                     effective_kind,
                     CardKind::Youdishenru
+                        | CardKind::Feibiao
                         | CardKind::Xingjiegoutong
                         | CardKind::Jihuocard
                         | CardKind::Qinpendayu

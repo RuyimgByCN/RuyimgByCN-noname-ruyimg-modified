@@ -551,6 +551,8 @@ pub const WUDIAN_XJ_POYUN_CARDS: &str = "xj_poyun_cards";
 
 pub const WUDIAN_XJ_QIANFANG_CARDS: &str = "xj_qianfang_cards";
 
+pub const WUDIAN_XJ_QIANFANG_CONFIRM: &str = "xj_qianfang_confirm";
+
 pub const WUDIAN_XJ_RUNXIN_TARGET: &str = "xj_runxin_target";
 
 pub const WUDIAN_XJ_SAJIN_CARDS: &str = "xj_sajin_cards";

@@ -1,5 +1,9 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+## 2026-11-23 Batch U05-4（U05 仙剑 `xianjian` 36 武将与 120 技能 +156→1,083/1,621；余 538 项待后续 U05 批次）
+
+- 合入 `swarm/conv-u05-4-xianjian`（`505ed0704..8e14ff93ae948c37135b3a7e0982e1ce1e0a43d8`，`verifier-u05-a` `#109 APPROVE`），主线拆出 `kernel/events/turn_handoff.rs` 保 Rust 有效行 `<= 1,000`、在 `standard.rs` 按 `tuoqiao` 伴生绑定 `gj_food_shihuifen_ban` 并自 `shahai_attach.rs` 移除重复注入防作用域加载碰撞，同时适配 `U05-2` `off_deck`/`feibiao` 测试夹具，将 `xianjian` 全部 `36` 名武将（`character/xianjian/character.js`）+ `120` 项角色/衍生/全局技能（`character/xianjian/skill.js`）共 `156` 项全数升为 `已复核等价`（`0` 保留；全局 **`3,403 / 1,021 / 0`**，`U05` **`1,083 / 538 / 0`**，整包 8 维仍 `0/37`）。[inventory_status.json](../migration/g0/inventory_status.json) 余下 `U05:configs:gwent`、`U05-6b` 保留 8 项、`U05-1` 保留 7 项与 `swd` 等 `U05` 剩余 `538` 项待后续规则批次关闭；详见 [Batch U05-4 证据摘要](../operations/evidence/2026-11-23-u05-4-xianjian/README.md) 与 [native-rules-baseline.md](native-rules-baseline.md)。
+
 ## 2026-11-23 Batch U05-5b（U05 昆特牌 `gwent` 52 武将与 69 技能 +121→927/1,621；余 694 项待后续 U05 批次）
 
 - 合入 `swarm/conv-u05-5b-gwent-chars`（`4a145b5f7..0ec2caac8`，`verifier-u05-a` `#116 APPROVE`），协同 `has_active_equip_kind` 统一连弩校验、拆出 `host_skill_bindings_std.rs` 保 Rust 有效行 `<= 1,000` 并修复 `round3.rs` `gj_food_molicha` 授予时序，将 `gwent` 全部 `52` 名武将（`character/gwent/character.js`）+ `69` 项角色/衍生/全局技能（`character/gwent/skill.js`）共 `121` 项全数升为 `已复核等价`（`0` 保留；全局 **`3,247 / 1,177 / 0`**，`U05` **`927 / 694 / 0`**，整包 8 维仍 `0/37`）。[inventory_status.json](../migration/g0/inventory_status.json) 余下 `U05:configs:gwent`、`U05-6b` 保留 8 项、`U05-1` 保留 7 项与其余 `swd`/`xianjian` 等 `U05` 剩余 `694` 项待后续规则批次关闭；详见 [Batch U05-5b 证据摘要](../operations/evidence/2026-11-23-u05-5b-gwent-chars/README.md) 与 [native-rules-baseline.md](native-rules-baseline.md)。

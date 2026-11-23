@@ -274,6 +274,26 @@ pub(super) fn active_sha_ask(
                 _ => true,
             });
         }
+        let req_suit_tag = core
+            .vm_aux
+            .flags
+            .get(&(target, "xj_sha_req_suit".to_string()))
+            .copied()
+            .unwrap_or(0);
+        if req_suit_tag != 0 {
+            options.retain(|o| match o {
+                ChoiceOption::Card(c) => {
+                    let stag = match catalog.effective_card_suit(core, target, *c) {
+                        crate::catalog::Suit::Spade => 1,
+                        crate::catalog::Suit::Heart => 2,
+                        crate::catalog::Suit::Club => 3,
+                        crate::catalog::Suit::Diamond => 4,
+                    };
+                    stag == req_suit_tag
+                }
+                _ => true,
+            });
+        }
         if target_can_play {
             for rdef in crate::kernel::host_response_skills(core, catalog, target, 1) {
                 options.push(ChoiceOption::Skill(rdef));

@@ -117,7 +117,12 @@ impl crate::catalog::SkillMachine for DamageFlow {
             }
             P::DyingDone { chain_eligible } => d.settlement.progress = P::Source { chain_eligible },
             P::Source { chain_eligible } => d.settlement.progress = P::End { chain_eligible },
-            P::End { chain_eligible } => d.settlement.progress = P::After { chain_eligible },
+            P::End { chain_eligible } => {
+                if !d.prevented && d.amount > 0 && !d.settlement.notrigger {
+                    (ctx.catalog.hooks.on_damage_end_step)(ctx, &d);
+                }
+                d.settlement.progress = P::After { chain_eligible };
+            }
             P::After { chain_eligible } => {
                 let remaining = if chain_eligible {
                     ctx.core

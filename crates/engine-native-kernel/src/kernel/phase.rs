@@ -180,6 +180,21 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
     // 水没墓穴地图效果（mtg 第三批，规则 v102）：锁定——本弃牌阶段弃
     // 置过牌则阶段结束摸一（上游 phaseDiscardEnd forced 同口径）
     if phase == Phase::Discard {
+        let has_xj_discard_skill = ctx.catalog.skill_by_name("qiongguang").is_some()
+            || ctx.catalog.skill_by_name("qijian").is_some();
+        if has_xj_discard_skill {
+            if !begin {
+                ctx.core.vm_aux.flags.insert(
+                    (player, "xj_last_discard_count".to_string()),
+                    ctx.core.turn.discard_phase_discarded,
+                );
+            } else {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(player, "xj_last_discard_count".to_string()));
+            }
+        }
         if ctx.core.current_land == Some(crate::catalog::CardKind::Shuimomuxue)
             && ctx.core.turn.discard_phase_discarded > 0
         {

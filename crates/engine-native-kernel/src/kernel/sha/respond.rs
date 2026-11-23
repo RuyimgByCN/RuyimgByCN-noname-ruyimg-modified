@@ -63,6 +63,14 @@ impl ShaResolveMachine {
                 ctx.catalog,
                 self.target,
             );
+        if !direct_hit_in {
+            crate::kernel::maybe_trigger_longxi_guarded(
+                ctx,
+                self.target,
+                1,
+                "xj_longxi_sha_guard",
+            );
+        }
         let mut shans: Vec<ChoiceOption> = if !target_can_play_hand {
             Vec::new()
         } else {
@@ -150,6 +158,46 @@ impl ShaResolveMachine {
                         crate::catalog::Suit::Diamond => 1 << 3,
                     };
                     (chihe_block_mask & bit) == 0
+                }
+                _ => true,
+            });
+        }
+        let req_suit_tag = if let Some(cid) = self.card {
+            if ctx
+                .core
+                .vm_aux
+                .flags
+                .get(&(self.source, format!("xj_xiaoyue_card:{cid}")))
+                .copied()
+                .unwrap_or(0)
+                > 0
+            {
+                2 // Suit::Heart only (`xiaoyue2`)
+            } else {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .get(&(self.source, format!("xj_yanzhan_card:{cid}")))
+                    .copied()
+                    .unwrap_or(0)
+            }
+        } else {
+            0
+        };
+        if req_suit_tag != 0 {
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((self.target, "xj_sha_req_suit".to_string()), req_suit_tag);
+            shans.retain(|o| match o {
+                ChoiceOption::Card(c) => {
+                    let stag = match ctx.catalog.effective_card_suit(ctx.core, self.target, *c) {
+                        crate::catalog::Suit::Spade => 1,
+                        crate::catalog::Suit::Heart => 2,
+                        crate::catalog::Suit::Club => 3,
+                        crate::catalog::Suit::Diamond => 4,
+                    };
+                    stag == req_suit_tag
                 }
                 _ => true,
             });

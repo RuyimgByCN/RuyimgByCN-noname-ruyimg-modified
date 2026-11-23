@@ -382,6 +382,8 @@ impl HostSkillBehavior {
                 super::step::u05_b5b_gwent::activate_u05_gwent_char(self, ctx, owner)
                     .map(|m| Box::new(m) as Box<dyn crate::catalog::SkillMachine>)
             }
+            HostBehavior::U05XianjianBatchD => super::step::xianjian_batch::activate(self, ctx, owner)
+                .map(|m| Box::new(m) as Box<dyn crate::catalog::SkillMachine>),
             _ => None,
         }
     }
@@ -664,6 +666,9 @@ pub(in crate::content::host) fn has_phase_use_activation(
         | HostBehavior::U05GwentCharBatchC
         | HostBehavior::U05GwentCharBatchD => {
             super::step::u05_b5b_gwent::has_phase_use_u05_gwent_char(behavior, name)
+        }
+        HostBehavior::U05XianjianBatchD => {
+            super::step::xianjian_batch::has_phase_use_activation(behavior, name)
         }
         _ => false,
     }

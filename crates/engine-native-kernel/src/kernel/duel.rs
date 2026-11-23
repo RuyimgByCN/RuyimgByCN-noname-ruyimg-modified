@@ -107,6 +107,9 @@ impl crate::catalog::SkillMachine for DuelMachine {
                 }
                 self.asked = false;
             }
+            if !self.asked {
+                crate::kernel::maybe_trigger_longxi(ctx, responder, 2);
+            }
             let shas: Vec<crate::ids::CardId> =
                 response_kind_cards(ctx, responder, CardKind::Sha);
             let resp_skills = host_response_skills(ctx.core, ctx.catalog, responder, 2);

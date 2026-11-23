@@ -926,7 +926,12 @@ impl HostBehavior {
             | HostBehavior::U05GwentCharBatchA
             | HostBehavior::U05GwentCharBatchB
             | HostBehavior::U05GwentCharBatchC
-            | HostBehavior::U05GwentCharBatchD => None,
+            | HostBehavior::U05GwentCharBatchD
+            | HostBehavior::U05XianjianBatchA
+            | HostBehavior::U05XianjianBatchB
+            | HostBehavior::U05XianjianBatchC
+            | HostBehavior::U05XianjianBatchD
+            | HostBehavior::U05XianjianBatchE => None,
             HostBehavior::U05GwentCardSkill => self.trigger_meta_common(),
             HostBehavior::L01YiyiCard
             | HostBehavior::L01FirstKs

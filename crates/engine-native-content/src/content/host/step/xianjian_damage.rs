@@ -89,7 +89,6 @@ impl HostMachine {
                     if options.is_empty() {
                         return Flow::Done;
                     }
-                    let max = options.len();
                     self.stage = HostStage::Act;
                     Flow::WaitChoice {
                         observer: self.owner,
@@ -98,7 +97,7 @@ impl HostMachine {
                             prompt: WUDIAN_XJ_MINSHA_TARGET,
                             options,
                             min: 1,
-                            max,
+                            max: 1,
                             allow_cancel: false,
                         },
                     }
@@ -134,21 +133,31 @@ impl HostMachine {
                             if !ctx.core.player(x).alive {
                                 continue;
                             }
-                            if !ctx.core.player(x).hand.is_empty() {
-                                let n2 = ctx.core.player(x).hand.len();
-                                let i2 = ctx.core.rng.gen_range(n2 as u32) as usize;
-                                let c = ctx.core.player(x).hand[i2];
-                                ctx.discard_from_hand(x, c);
-                            } else if !ctx.core.player(x).equips.is_empty() {
-                                let n2 = ctx.core.player(x).equips.len();
-                                let j2 = ctx.core.rng.gen_range(n2 as u32) as usize;
-                                let c = ctx.core.player_mut(x).equips.remove(j2);
-                                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, x, c);
-                                ctx.to_discard(c);
-                                ctx.log(LogEvent::CardDiscarded {
-                                    player: x,
-                                    cards: vec![c],
-                                });
+                            let hand_n = ctx.core.player(x).hand.len();
+                            let eq_n = ctx.core.player(x).equips.len();
+                            let total = hand_n + eq_n;
+                            if total > 0 {
+                                let idx = ctx.core.rng.gen_range(total as u32) as usize;
+                                if idx < hand_n {
+                                    let c = ctx.core.player(x).hand[idx];
+                                    ctx.discard_from_hand(x, c);
+                                } else {
+                                    let j2 = idx - hand_n;
+                                    let c = ctx.core.player_mut(x).equips.remove(j2);
+                                    crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, x, c);
+                                    ctx.to_discard(c);
+                                    ctx.log(LogEvent::CardDiscarded {
+                                        player: x,
+                                        cards: vec![c],
+                                    });
+                                    ctx.note_cards_lost(x, &[c]);
+                                    ctx.emit(EventData::CardsLost {
+                                        player: x,
+                                        cards: vec![c],
+                                        origins: vec![crate::event::LostOrigin::Equip],
+                                    });
+                                    (ctx.catalog.hooks.on_cards_to_discard)(ctx, x, &[c], false);
+                                }
                             }
                         }
                     }
@@ -284,10 +293,6 @@ impl HostMachine {
                         if let Some(t) = t {
                             self.cards = vec![t as CardId];
                         }
-                        ctx.emit(EventData::LoseHp {
-                            player: self.owner,
-                            amount: 1,
-                        });
                         if let Some(t) = self.cards.first().map(|x| *x as PlayerId) {
                             if ctx.core.player(t).alive {
                                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
@@ -299,6 +304,10 @@ impl HostMachine {
                                 )));
                             }
                         }
+                        ctx.emit(EventData::LoseHp {
+                            player: self.owner,
+                            amount: 1,
+                        });
                         return Flow::Yield;
                     }
                     // 结算臂：目标存活则弃其装备区所有牌
@@ -314,6 +323,13 @@ impl HostMachine {
                                     player: t,
                                     cards: vec![c],
                                 });
+                                ctx.note_cards_lost(t, &[c]);
+                                ctx.emit(EventData::CardsLost {
+                                    player: t,
+                                    cards: vec![c],
+                                    origins: vec![crate::event::LostOrigin::Equip],
+                                });
+                                (ctx.catalog.hooks.on_cards_to_discard)(ctx, t, &[c], false);
                             }
                         }
                     }
@@ -432,53 +448,84 @@ impl HostMachine {
                 }
                 Flow::Done
             }
-            HostBehavior::XianjianCtianfu2 => {
+            HostBehavior::XianjianCtianfu2 => match self.stage {
                 // 天符·反噬（ctianfu2，规则 v188）：挂附者造成伤害后——
-                // 受来自挂附来源的 1 点雷伤（来源亡=无来源）+随机弃 he
-                // 一张+挂附闪入弃堆+清挂附（触发即清=链天然终止）。
-                let src = ctx.core.player(self.owner).ctianfu_source;
-                let Some(src) = src else { return Flow::Done };
-                let src_alive = src < ctx.core.players.len() as u8 && ctx.core.player(src).alive;
-                let nature = crate::event::DamageNature::Thunder;
-                let (sid, dmg_src) = if src_alive {
-                    (Some(src), Some(src))
-                } else {
-                    (None, None)
-                };
-                let _ = sid;
-                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                    dmg_src, self.owner, 1, nature, None,
-                )));
-                // 随机弃 he 一张（上游 he.randomGet 同 RNG）
-                let pool: Vec<CardId> = ctx
-                    .core
-                    .player(self.owner)
-                    .hand
-                    .iter()
-                    .chain(ctx.core.player(self.owner).equips.iter())
-                    .copied()
-                    .collect();
-                if let Some(x) = pool.get(ctx.core.rng.gen_range(pool.len() as u32) as usize) {
-                    let x = *x;
-                    if ctx.core.player(self.owner).hand.contains(&x) {
-                        ctx.discard_from_hand(self.owner, x);
-                    } else {
-                        ctx.core.player_mut(self.owner).equips.retain(|y| *y != x);
-                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, x);
-                        ctx.to_discard(x);
+                // step 0: 受来自挂附来源的 1 点雷伤（来源亡=无来源）；
+                // step 1/2 (Damage 结算完毕后): 随机弃 he 一张+挂附闪入弃堆+清挂附。
+                HostStage::Act => {
+                    let Some(src) = ctx.core.player(self.owner).ctianfu_source else {
+                        return Flow::Done;
+                    };
+                    let src_alive =
+                        src < ctx.core.players.len() as u8 && ctx.core.player(src).alive;
+                    let dmg_src = if src_alive { Some(src) } else { None };
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .insert((self.owner, "xj_ctianfu2_resolving".to_string()), 1);
+                    self.stage = HostStage::TargetChoice;
+                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                        dmg_src,
+                        self.owner,
+                        1,
+                        crate::event::DamageNature::Thunder,
+                        None,
+                    )));
+                    Flow::Yield
+                }
+                HostStage::TargetChoice => {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(self.owner, "xj_ctianfu2_resolving".to_string()));
+                    if ctx.core.player(self.owner).alive {
+                        // 随机弃 he 一张（上游 step 1: if (he.length) player.discard(he.randomGet())）
+                        let pool: Vec<CardId> = ctx
+                            .core
+                            .player(self.owner)
+                            .hand
+                            .iter()
+                            .chain(ctx.core.player(self.owner).equips.iter())
+                            .copied()
+                            .collect();
+                        if !pool.is_empty() {
+                            let idx = ctx.core.rng.gen_range(pool.len() as u32) as usize;
+                            let x = pool[idx];
+                            if ctx.core.player(self.owner).hand.contains(&x) {
+                                ctx.discard_from_hand(self.owner, x);
+                            } else {
+                                ctx.core.player_mut(self.owner).equips.retain(|y| *y != x);
+                                crate::kernel::revoke_equip_skills(
+                                    ctx.core,
+                                    ctx.catalog,
+                                    self.owner,
+                                    x,
+                                );
+                                ctx.to_discard(x);
+                                ctx.note_cards_lost(self.owner, &[x]);
+                                ctx.emit(EventData::CardsLost {
+                                    player: self.owner,
+                                    cards: vec![x],
+                                    origins: vec![crate::event::LostOrigin::Equip],
+                                });
+                                ctx.log(LogEvent::CardDiscarded {
+                                    player: self.owner,
+                                    cards: vec![x],
+                                });
+                            }
+                        }
                     }
-                    ctx.log(LogEvent::CardDiscarded {
-                        player: self.owner,
-                        cards: vec![x],
-                    });
+                    // step 2: 挂附闪入弃堆+清挂附+清实例（即使受伤死亡后亦兜底清理）
+                    ctianfu_clear(ctx, self.owner);
+                    for sub in ["ctianfu2", "ctianfu3"] {
+                        if let Some(def) = ctx.catalog.skill_by_name(sub) {
+                            ctx.core.skills.remove(&(self.owner, def));
+                        }
+                    }
+                    Flow::Done
                 }
-                // 挂附闪入弃堆+清挂附+清实例
-                ctianfu_clear(ctx, self.owner);
-                if let Some(def) = ctx.catalog.skill_by_name("ctianfu2") {
-                    ctx.core.skills.remove(&(self.owner, def));
-                }
-                Flow::Done
-            }
+                _ => Flow::Done,
+            },
             _ => unreachable!("behavior routed to the wrong step module"),
         }
     }

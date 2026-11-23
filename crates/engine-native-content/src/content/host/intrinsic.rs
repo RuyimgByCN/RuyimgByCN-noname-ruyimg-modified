@@ -897,20 +897,7 @@ pub(crate) fn card_intrinsic(
             });
             Some(effect)
         }
-        CardKind::Feibiao => {
-            // 飞镖（G1 古剑，机关）：目标弃一张黑色手牌或受 1 点伤害
-            let effect = Box::new(crate::content::host::HostMachine {
-                def_key: crate::content::host::GJ_FEIBIAO_KEY.to_string(),
-                behavior: crate::content::host::HostBehavior::GujianFeibiaoCard,
-                owner: u.player,
-                target: Some(*u.targets.first().expect("feibiao has one target")),
-                card: Some(card),
-                cards: Vec::new(),
-                targets: Vec::new(),
-                stage: crate::content::host::HostStage::SelectCard,
-            });
-            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
-        }
+        CardKind::Feibiao => return intrinsic_named_ext::feibiao_intrinsic(ctx, u, Some(card)),
         CardKind::Chenhuodajie => {
             // 趁火打劫（G1 运筹帷幄，锦囊）：获得目标一张手牌
             //（登记差异：上游为目标任选可见牌，原生取首张确定性获得）

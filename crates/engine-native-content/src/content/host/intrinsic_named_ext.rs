@@ -347,6 +347,63 @@ pub(super) fn try_named_jiguan_card(
     }
 }
 
+pub(in crate::content::host) fn feibiao_intrinsic(
+    ctx: &mut Ctx<'_>,
+    u: &CardUseData,
+    opt_card: Option<CardId>,
+) -> Option<Option<Box<dyn SkillMachine>>> {
+    let fallback_id = opt_card.unwrap_or_else(|| {
+        ctx.catalog
+            .cards
+            .iter()
+            .position(|c| c.kind == CardKind::Feibiao)
+            .unwrap_or(0) as CardId
+    });
+    let targets: Vec<PlayerId> = u
+        .targets
+        .iter()
+        .copied()
+        .filter(|&t| {
+            ctx.core.player(t).alive
+                && !crate::rvm_bridge::modifiers::eval_card_target_canceled(
+                    ctx.core,
+                    ctx.catalog,
+                    u.player,
+                    t,
+                    fallback_id,
+                    CardKind::Feibiao,
+                    u.nature,
+                )
+        })
+        .collect();
+    let Some(&first) = targets.first() else {
+        if let Some(cid) = opt_card {
+            finish_table_card(ctx, cid);
+        }
+        return Some(None);
+    };
+    let effect = Box::new(crate::content::host::HostMachine {
+        def_key: crate::content::host::GJ_FEIBIAO_KEY.to_string(),
+        behavior: crate::content::host::HostBehavior::GujianFeibiaoCard,
+        owner: u.player,
+        target: Some(first),
+        card: opt_card,
+        cards: Vec::new(),
+        targets: targets[1..].to_vec(),
+        stage: crate::content::host::HostStage::SelectCard,
+    });
+    Some(Some(Box::new(crate::kernel::NullifyWindowMachine::new(
+        fallback_id,
+        u.player,
+        false,
+        ctx.core.seat_order_from(u.player),
+        false,
+        true,
+        opt_card.is_some(),
+        Some(effect),
+    ))))
+}
+
 /// Intercepts custom named extension cards mapped to `CardKind::Wuzhong`.
 pub(super) fn try_named_ext_card(
     ctx: &mut Ctx<'_>,
@@ -397,6 +454,9 @@ pub(super) fn try_named_ext_card(
             opt_card.is_some(),
             Some(effect),
         ))));
+    }
+    if effective_kind == CardKind::Feibiao && card == u32::MAX {
+        return feibiao_intrinsic(ctx, u, None);
     }
     if effective_kind != CardKind::Wuzhong {
         return None;

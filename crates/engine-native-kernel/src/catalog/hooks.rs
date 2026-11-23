@@ -257,6 +257,13 @@ pub struct ContentHooks {
     pub on_hujia_changed: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId, i32),
     /// 摸牌阶段开始前前置替换/跳过钩子（`phaseDrawBefore`，如 U05-5b `gwjingtian`/`gwzhongmo`）。
     pub on_phase_draw_before: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId) -> bool,
+    /// 体力变化后（`changeHp`：伤血为负、失血为负、回复为正）宿主钩子（如 `U05 xfenxin`）。
+    pub on_hp_changed: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId, i32),
+    /// 回合外将开响应/救/使用询问前（`chooseToRespondBegin`/`chooseToUseBegin`）宿主钩子（如 `U05 longxi`）。
+    /// `need_tag`: `1=Shan`, `2=Sha`, `3=Nullify`, `4=Tao/Jiu(dying_save)`。
+    pub on_choose_respond_begin: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId, u8),
+    /// 伤害后窗（`DamageWindowKind::End`）宿主直通钩子（如 `U05 tianjian_discard` / `qianfang_draw` / `ywuhun_end`）。
+    pub on_damage_end_step: fn(&mut crate::machine::Ctx<'_>, &crate::event::DamageData),
 }
 
 impl ContentHooks {
@@ -318,5 +325,8 @@ impl ContentHooks {
         hearth_response_skill: |_, _, _, _| None,
         on_hujia_changed: |_, _, _| {},
         on_phase_draw_before: |_, _| false,
+        on_hp_changed: |_, _, _| {},
+        on_choose_respond_begin: |_, _, _| {},
+        on_damage_end_step: |_, _| {},
     };
 }

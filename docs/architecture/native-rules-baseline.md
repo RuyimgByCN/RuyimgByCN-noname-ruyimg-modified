@@ -1,5 +1,13 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+## 2026-11-23 Batch U05-4（U05 仙剑 `xianjian` 36 武将与 120 技能 156 项语义对齐、`turn_handoff.rs` 拆分与作用域伴生绑定）
+
+- **不变量保持**：`RULES_VERSION=333`、`NGSA=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。
+- **主线合入语义与生命周期对齐**：
+  - `HostBehavior` 新增 `1100..=1104`（`U05XianjianBatchA..=E`，`HostBehavior::ALL=638`），独立尾追加 [known_prompts.rs](../../crates/engine-native-kernel/src/archive/known_prompts.rs) `34` 条仙剑提示键（`xj_qianfang_cards`..`xj_u05_yujia_card`），接入 `content/host/step/xianjian_batch*.rs`（6 模块）及 Round 2–4 修复；[host.rs](../../crates/engine-native-content/src/content/host.rs) `host_card_use_after_all` 透传 `fid`、`host_on_phase_end_all` 顺序派发 `host_on_phase_end` 与 `host_on_phase_end_xianjian`。
+  - **主线协同与模块拆分**：将 `turn_handoff` 与 `maybe_abort_ywuhun` 自 [turn.rs](../../crates/engine-native-kernel/src/kernel/events/turn.rs)（`640` 有效行）拆出至 [turn_handoff.rs](../../crates/engine-native-kernel/src/kernel/events/turn_handoff.rs)（`426` 有效行），保留 `ow_shanxian_resume_target`/`on_turn_before_skip`/`before_facedown_turn_skip`/`extra_turn_force_round_bump`；协同合入 `catalog.rs`/`catalog_queries.rs`/`resolution.rs`/`frame_hooks.rs`（`u05_play_equip_frame:`）、`aoe.rs`/`duel.rs`/`intrinsic.rs`（`CardKind::Feibiao`）/`nullify.rs`/`sha.rs`/`sha/respond.rs`/`sha/resume.rs`/`combat_rules.rs`/`dying.rs`（`maybe_trigger_longxi*`、`is_guijiang_savable_blocked`、`du`/`xj_du_`）、`machine.rs` + `machine/skills.rs`（`skill_disable_flag_for`）、`play_card.rs` + `play_equip.rs` + [play_rules.rs](../../crates/engine-native/src/engine/play_rules.rs#L504)（统一 `&crate::catalog::Catalog`）。
+  - **作用域包去重与测试对齐**：移除 [shahai_attach.rs](../../crates/content-native-loader/src/shahai_attach.rs#L494) 的 `GJ_FOOD_SHIHUIFEN_BAN_KEY` 重复注入（消除 `nc08_install_matrix` 分包加载 `shaai-gujian` + `shaai-xianjian` 时的 `DuplicateSkill`），改在 [standard.rs](../../crates/engine-native-content/src/content/standard.rs#L592-L598) 按 `tuoqiao` 存在伴生注册 `HostBehavior::GujianFoodShihuifenBan`；同步适配 `U05-2` `off_deck` 机关卡（[part1_batch_a.rs](../../crates/engine-native/tests/u05_b4_xianjian/part1_batch_a.rs#L112-L158)）与 `feibiao` `outrange: { globalFrom: 2 }`（[part6_round4_fixes.rs](../../crates/engine-native/tests/u05_b4_xianjian/part6_round4_fixes.rs#L236-L248) 装备 `HorsePlus`）。
+
 ## 2026-11-23 Batch U05-5b（U05 昆特牌 `gwent` 52 武将与 69 技能 121 项语义对齐、全钩子协同与模块拆分）
 
 - **不变量保持**：`RULES_VERSION=333`、`NGSA=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。

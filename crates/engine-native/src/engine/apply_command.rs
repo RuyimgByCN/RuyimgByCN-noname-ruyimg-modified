@@ -80,7 +80,8 @@ pub(super) fn apply_command(
                 return Err(RejectReason::NoSuchSkill);
             };
             if !inst.enabled
-                || (catalog.is_tieji_sealed(&state.core, actor)
+                || ((catalog.is_tieji_sealed(&state.core, actor)
+                    || catalog.is_xj_fengyin_sealed(&state.core, actor))
                     && !crate::catalog::Catalog::is_locked_skill_name(
                         def.name,
                         def.trigger.as_ref(),

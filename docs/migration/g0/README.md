@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-23 Batch U05-4（U05 杀海拾遗 `xianjian` 武将/技能 +156→1,083/1,621，全局 3,403/1,021/0）更新
+
+- **核验与升级**：基线 `362b01f2fc94c4a74b165041e94212e95a506195`（Batch U05-5b CI Run `45167390472` Attempt 1 `10/10 success`）；三路合入 `swarm/conv-u05-4-xianjian`（`505ed0704..8e14ff93ae948c37135b3a7e0982e1ce1e0a43d8`，`verifier-u05-a` `#109 APPROVE`），完成 `turn_handoff.rs` 拆分、`standard.rs` `tuoqiao` 伴生绑定 `gj_food_shihuifen_ban` 与 `off_deck`/`feibiao` 测试夹具对齐后，将 U05 杀海拾遗 `xianjian` 获批 `36` 武将 + `120` 角色/衍生/全局技能共 **`156`** 项全数升为 `已复核等价`（`0` 保留）。`U05` 现 **`1,083 / 538 / 0`**，全局 **`3,403 / 1,021 / 0`**（缺失 `0`，整包 8 维签字仍 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变）。详见 [U05-杀海拾遗.md](U05-杀海拾遗.md)、[Batch U05-4 证据摘要](../../operations/evidence/2026-11-23-u05-4-xianjian/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-23 Batch U05-5b（U05 杀海拾遗 `gwent` 武将/技能 +121→927/1,621，全局 3,247/1,177/0）更新
 
 - **核验与升级**：基线 `2150f8511556c8f6b90275e6b140388bc5cf3196`（Batch U05-5a CI Run `45154024465` Attempt 1 `10/10 success`）；三路合入 `swarm/conv-u05-5b-gwent-chars`（`4a145b5f7..0ec2caac8`，`verifier-u05-a` `#116 APPROVE`），完成 `has_active_equip_kind` 协同、`host_skill_bindings_std.rs` 拆分及 `round3.rs` `gj_food_molicha` 授予时序修复后，将 U05 杀海拾遗 `gwent` 获批 `52` 武将 + `69` 角色/衍生/全局技能共 **`121`** 项全数升为 `已复核等价`（`0` 保留，仅 `U05:configs:gwent` 未动）。`U05` 现 **`927 / 694 / 0`**，全局 **`3,247 / 1,177 / 0`**（缺失 `0`，整包 8 维签字仍 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变）。详见 [U05-杀海拾遗.md](U05-杀海拾遗.md)、[Batch U05-5b 证据摘要](../../operations/evidence/2026-11-23-u05-5b-gwent-chars/README.md) 与 [inventory_status.json](inventory_status.json)。

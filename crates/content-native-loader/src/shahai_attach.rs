@@ -127,6 +127,23 @@ fn map_cross_subpack_skill(package_id: &str, sk: &str) -> String {
     }
 }
 
+fn lookup_xianjian_u05_4_behavior(name: &str) -> Option<engine_native::content::host::HostBehavior> {
+    use engine_native::content::host::HostBehavior;
+    match name {
+        "qiongguang" | "huanlei" | "tianwu" | "yujia" | "yanshi" | "tanhua" | "ywuhun"
+        | "qixia" | "jianzhen" => Some(HostBehavior::U05XianjianBatchA),
+        "feizhua" | "diesha" | "guijiang2" | "guijiang3" | "fenxing" | "xfenxin"
+        | "xfenxin2" | "qijian" | "qianfang2" | "poyun2" | "zhuyue2" | "longxi"
+        | "xjzhimeng3" => Some(HostBehavior::U05XianjianBatchB),
+        "xiaoyue" | "xiaoyue2" | "yanzhan2" | "yanzhan3" | "yanzhan4" | "danqing"
+        | "danqing_count" | "zhangmu_ai" | "leiyu" | "leiyu2" | "leiyu3" | "leiyu4"
+        | "guijin2" | "chengxin2" | "yuexing2" => Some(HostBehavior::U05XianjianBatchC),
+        "lingdi" | "xjzongyu" | "dujiang" | "yanzhan" | "feixia" | "huxi" | "guijiang"
+        | "duxinshu" | "tuoqiao" => Some(HostBehavior::U05XianjianBatchD),
+        _ => None,
+    }
+}
+
 fn resolve_and_register_u05_skill(
     package_id: &str,
     raw_sk: &str,
@@ -149,8 +166,12 @@ fn resolve_and_register_u05_skill(
     let hearth_beh = (package_id == "shahai-hearth")
         .then(|| crate::shahai_u05_hearth::lookup_shahai_hearth_host_behavior(clean))
         .flatten();
+    let xianjian_beh = (package_id == "shaai-xianjian")
+        .then(|| lookup_xianjian_u05_4_behavior(clean))
+        .flatten();
     if let Some(behavior) = ow_beh
         .or(hearth_beh)
+        .or(xianjian_beh)
         .or_else(|| crate::shahai_u05_b1::lookup_shahai_b1_host_behavior(clean))
         .or_else(|| lookup_upstream_host_behavior(&sk_owned))
         .or_else(|| lookup_upstream_host_behavior(clean))
@@ -471,6 +492,38 @@ pub fn try_attach_shahai_formal_package(
             true
         }
         "shaai-xianjian" => {
+            if seen_cards.insert("du".to_string()) {
+                pack.cards.push(
+                    CardDef::basic(names::intern("du".to_string()), CardKind::Caoyao)
+                        .with_suit_rank(Suit::Spade, 2)
+                        .with_off_deck(),
+                );
+            }
+            for idx in 2u8..=32 {
+                let cname = format!("xj_du_{idx}");
+                if seen_cards.insert(cname.clone()) {
+                    let rank = ((idx - 1) % 13) + 1;
+                    pack.cards.push(
+                        CardDef::basic(names::intern(cname), CardKind::Caoyao)
+                            .with_suit_rank(Suit::Spade, rank)
+                            .with_off_deck(),
+                    );
+                }
+            }
+            for (cname, suit, rank) in [
+                ("xj_mujiaren", Suit::Diamond, 12u8),
+                ("xj_zhiluxiaohu", Suit::Spade, 13),
+                ("xj_jiguantong", Suit::Heart, 9),
+                ("xj_jiguanyuan", Suit::Club, 9),
+            ] {
+                if seen_cards.insert(cname.to_string()) {
+                    pack.cards.push(
+                        CardDef::basic(names::intern(cname.to_string()), CardKind::Jiguan)
+                            .with_suit_rank(suit, rank)
+                            .with_off_deck(),
+                    );
+                }
+            }
             attach_skill_rows(
                 package_id,
                 &U05_XIANJIAN_ALL_SKILLS,

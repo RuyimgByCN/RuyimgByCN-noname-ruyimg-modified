@@ -629,13 +629,19 @@ impl<'a> Ctx<'a> {
 
     /// 从手牌移除一张（不存在则 panic：调用方先验证）。
     pub fn take_hand_card(&mut self, player: PlayerId, card: CardId) {
+        self.take_hand_card_inner(player, card, true);
+    }
+
+    fn take_hand_card_inner(&mut self, player: PlayerId, card: CardId, fire_removed: bool) {
         let hand = &mut self.core.player_mut(player).hand;
         let pos = hand
             .iter()
             .position(|c| *c == card)
             .unwrap_or_else(|| panic!("card {card} not in hand of {player}"));
         hand.remove(pos);
-        (self.catalog.hooks.on_hand_card_removed)(self, player, card);
+        if fire_removed {
+            (self.catalog.hooks.on_hand_card_removed)(self, player, card);
+        }
         if self
             .catalog
             .skill_by_name("dddshilie")
@@ -855,6 +861,21 @@ impl<'a> Ctx<'a> {
     /// amount=张数，与旧线 `give_cards` 单事件同口径。一次给出多张的技能
     /// （仁德、蝶舞）须调用本方法，而不是按张循环 `give_hand_card`。
     pub fn give_hand_cards(&mut self, from: PlayerId, to: PlayerId, cards: &[CardId]) {
+        self.give_hand_cards_inner(from, to, cards, true);
+    }
+
+    /// 私有交牌（如 `duxinshu` 非 visible 得失）：不触发 `on_hand_card_removed`。
+    pub fn give_hand_card_private(&mut self, from: PlayerId, to: PlayerId, card: CardId) {
+        self.give_hand_cards_inner(from, to, &[card], false);
+    }
+
+    fn give_hand_cards_inner(
+        &mut self,
+        from: PlayerId,
+        to: PlayerId,
+        cards: &[CardId],
+        fire_removed: bool,
+    ) {
         if from == to || cards.is_empty() {
             return;
         }
@@ -863,7 +884,13 @@ impl<'a> Ctx<'a> {
             self.core.player_mut(to).hand.push(card);
         }
         for &card in cards {
-            self.take_hand_card(from, card);
+            self.take_hand_card_inner(from, card, fire_removed);
+            if !fire_removed {
+                self.core
+                    .vm_aux
+                    .flags
+                    .insert((from, format!("xj_du_private_move:{card}")), 1);
+            }
             self.note_cards_lost(from, &[card]);
             self.emit(EventData::CardsLost {
                 player: from,
@@ -980,6 +1007,9 @@ impl<'a> Ctx<'a> {
                 if self.catalog.vm_card_history {
                     crate::resolution::note_recover_source(self.core, self.res, player, fid);
                 }
+            }
+            if let Ok(delta) = i32::try_from(gained) {
+                (self.catalog.hooks.on_hp_changed)(self, player, delta);
             }
         }
         gained

@@ -89,5 +89,12 @@ pub(super) fn play_equip(
             .flags
             .insert((player, format!("wuxing_equip_use:{frame}")), 1);
     }
+    if !catalog.cards[card as usize].off_deck && catalog.skill_by_name("yujia").is_some() {
+        state
+            .core
+            .vm_aux
+            .flags
+            .insert((player, format!("u05_play_equip_frame:{frame}")), 1);
+    }
     Ok(())
 }

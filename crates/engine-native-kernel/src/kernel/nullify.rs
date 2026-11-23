@@ -275,6 +275,10 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                     .is_some()
                 {
                     if let Some(c) = (ctx.catalog.hooks.reguhuo_consume_resp)(ctx.core, resp) {
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .remove(&(resp, format!("xj_longxi_wuxie:{}", self.card)));
                         self.queue.remove(0);
                         discard_response_card(ctx, resp, c, CardKind::Nullify);
                         let base_depth = ctx.res.stack.len();
@@ -344,7 +348,9 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                 }
             }
             // 询问队列清理：跳过死亡/无无懈或被 cardEnabled 封禁（含 yihun2）的持有者
+            let wuxie_guard = format!("xj_longxi_wuxie:{}", self.card);
             while let Some(p) = self.queue.first().copied() {
+                crate::kernel::maybe_trigger_longxi_guarded(ctx, p, 3, &wuxie_guard);
                 let can_use_nullify = !ctx.catalog.blocks_card_use_and_save(ctx.core, p);
                 let has_host_resp = can_use_nullify
                     && (!host_response_skills(ctx.core, ctx.catalog, p, 3).is_empty()
@@ -360,6 +366,10 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                     && can_use_nullify
                     && (!response_kind_cards(ctx, p, CardKind::Nullify).is_empty() || has_host_resp);
                 if !has_nullify {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(p, format!("xj_longxi_wuxie:{}", self.card)));
                     self.queue.remove(0);
                 } else {
                     break;
@@ -512,6 +522,10 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                         return Flow::Yield;
                     }
                 }
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(responder, format!("xj_longxi_wuxie:{}", self.card)));
                 self.queue.remove(0);
                 if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
                     let prev_wuxie = ctx

@@ -533,10 +533,10 @@ fn u05_all_9_formal_packages_assemble_333_generals_play_custom_cards_and_roundtr
         .filter(|s| s.behavior.package_skill_id().is_some())
         .map(|s| s.name.to_string())
         .collect();
-    // U05-6a/6b + U05-5a/5b promoted hearth & gwent skills from VM into native `HostBehavior`s.
+    // U05-6a/6b + U05-5a/5b + U05-4 promoted hearth, gwent & xianjian skills from VM into native `HostBehavior`s.
     assert!(
-        vm_skill_names.len() >= 240,
-        "expected >= 240 remaining verified U05 VM skills in Catalog (after ow + hearth + gwent_cards + gwent_chars native host migration), got {}",
+        vm_skill_names.len() >= 190,
+        "expected >= 190 remaining verified U05 VM skills in Catalog (after ow + hearth + gwent_cards + gwent_chars + xianjian native host migration), got {}",
         vm_skill_names.len()
     );
     for ow_sk in ["woliu", "zhongdun", "mujing", "shanxian"] {
@@ -556,12 +556,12 @@ fn u05_all_9_formal_packages_assemble_333_generals_play_custom_cards_and_roundtr
         .filter(|s| s.behavior.as_host_behavior().is_some())
         .count();
     assert!(
-        host_skill_count >= 200,
-        "expected >= 200 verified U05 Host skills in Catalog after U05-6a/6b, got {host_skill_count}"
+        host_skill_count >= 950,
+        "expected >= 950 verified U05 Host skills in Catalog after U05-4, got {host_skill_count}"
     );
     assert!(
-        e.catalog().skills.len() >= 900,
-        "expected >= 900 total U05 Host + VM skills in Catalog, got {}",
+        e.catalog().skills.len() >= 1350,
+        "expected >= 1350 total U05 Host + VM skills in Catalog, got {}",
         e.catalog().skills.len()
     );
     for sk in &vm_skill_names {

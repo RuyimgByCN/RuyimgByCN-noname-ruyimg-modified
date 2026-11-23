@@ -841,7 +841,7 @@ pub fn find_d34_flag_view_as(
     if core.vm_aux.flags.is_empty() && catalog.skills.len() <= 24 {
         return None;
     }
-    let sealed = catalog.is_tieji_sealed(core, player);
+    let sealed = catalog.is_tieji_sealed(core, player) || catalog.is_xj_fengyin_sealed(core, player);
     let chanyuan = catalog.is_chanyuan_sealed(core, player);
     for entry in d34_view_as_table() {
         if (sealed && !Catalog::is_locked_skill_name(&entry.spec.skill_name, None))

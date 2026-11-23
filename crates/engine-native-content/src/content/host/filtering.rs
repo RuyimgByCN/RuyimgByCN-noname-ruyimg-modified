@@ -156,6 +156,18 @@ impl HostSkillBehavior {
                 self, ctx, frames, frame, owner, event,
             );
         }
+        if matches!(
+            self.behavior,
+            HostBehavior::U05XianjianBatchA
+                | HostBehavior::U05XianjianBatchB
+                | HostBehavior::U05XianjianBatchC
+                | HostBehavior::U05XianjianBatchD
+                | HostBehavior::U05XianjianBatchE
+        ) {
+            return super::step::xianjian_batch::filter_with_frames(
+                self, ctx, frames, frame, owner, event,
+            );
+        }
         self.filter_behavior(ctx, owner, event)
     }
 

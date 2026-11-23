@@ -1801,4 +1801,14 @@ pub enum HostBehavior {
     U05GwentCharBatchC,
     /// U05-5b 杀海拾遗·gwent 角色技 Batch D（tag 1193：nuhou/shewu*/gwzhanjiang*/gwchuanxin/fengjian/huandie*/xuezhou*/fayin/gwbaquan/huihun/lanquan）。
     U05GwentCharBatchD,
+    /// U05 杀海拾遗仙剑 Batch A（tag 1100：穷光/唤雷/天舞/御甲/偃师/五魂/栖霞/剑阵等触发技）。
+    U05XianjianBatchA,
+    /// U05 杀海拾遗仙剑 Batch B（tag 1101：飞爪/蝶杀/鬼降2·3/焚心/七剑/破云2·3/龙息/织梦3 等触发/被动技）。
+    U05XianjianBatchB,
+    /// U05 杀海拾遗仙剑 Batch C（tag 1102：啸月1·2/炎斩2·3·4/丹青/张目AI/雷域1·2·3·4/归烬2/诚信2/月行2 等）。
+    U05XianjianBatchC,
+    /// U05 杀海拾遗仙剑 Batch D（tag 1103：灵笛/纵欲/毒降/炎斩/飞霞/虎袭/鬼降/读心术/脱壳 等主动/转化技）。
+    U05XianjianBatchD,
+    /// U05 杀海拾遗仙剑 Batch E（tag 1104：毒卡补偿结算等辅助宿主）。
+    U05XianjianBatchE,
 }

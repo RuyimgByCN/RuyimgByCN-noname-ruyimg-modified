@@ -112,6 +112,31 @@ pub fn is_ssr_luoyi_trick_to_duel(
 }
 
 /// `L29` 酒诗（`mbcmjiushi_1` `chooseToUse`）：正面向上濒死本人可用虚拟【酒】自救。
+/// 归降（U05 xianjian 龙葵）：`guijiang2` 目标或 `u05_mod:guijiang2` / `u05_mod:guijiang3`
+/// 在位时禁止任何求救/回复牌救治（`cardSavable`）。
+pub(crate) fn is_guijiang_savable_blocked(
+    core: &crate::state::GameStateCore,
+    catalog: &Catalog,
+    dying: PlayerId,
+) -> bool {
+    core.vm_aux
+        .flags
+        .get(&(dying, "u05_mod:guijiang2".to_string()))
+        .copied()
+        .unwrap_or(0)
+        > 0
+        || core
+            .vm_aux
+            .flags
+            .get(&(dying, "u05_mod:guijiang3".to_string()))
+            .copied()
+            .unwrap_or(0)
+            > 0
+        || catalog
+            .skill_by_name("guijiang2")
+            .is_some_and(|def| core.has_skill(dying, def))
+}
+
 pub(crate) fn mbcmjiushi_dying_skill(
     core: &crate::state::GameStateCore,
     catalog: &Catalog,
@@ -122,6 +147,7 @@ pub(crate) fn mbcmjiushi_dying_skill(
         || !core.player(responder).alive
         || core.player(responder).face_down
         || mbcmfangzhu_banned(core, responder)
+        || is_guijiang_savable_blocked(core, catalog, dying)
         || catalog.blocks_card_use_and_save(core, responder)
     {
         return None;
@@ -202,6 +228,7 @@ pub(super) fn is_tao_like(
     dying: PlayerId,
 ) -> bool {
     if mbcmfangzhu_banned(ctx.core, responder)
+        || is_guijiang_savable_blocked(ctx.core, ctx.catalog, dying)
         || jinyan_blocks_black_trick(ctx.core, ctx.catalog, responder, card)
     {
         return false;
@@ -222,6 +249,22 @@ pub(super) fn is_tao_like(
         raw_kind,
         crate::event::DamageNature::Normal,
     ) {
+        return false;
+    }
+    if ctx
+        .catalog
+        .cards
+        .get(card as usize)
+        .is_some_and(|d| d.name == "du" || d.name == "毒" || d.name.starts_with("xj_du_"))
+        || ctx
+            .core
+            .vm_aux
+            .flags
+            .get(&(responder, format!("xj_du_holder:{card}")))
+            .copied()
+            .unwrap_or(0)
+            > 0
+    {
         return false;
     }
     if raw_kind == CardKind::Tao {
@@ -425,6 +468,26 @@ pub fn response_kind_cards_core(
                 }
                 if need == CardKind::Nullify
                     && is_ssr_luoyi_trick_to_duel(core, catalog, responder, c)
+                {
+                    return false;
+                }
+                let is_poison = catalog
+                    .cards
+                    .get(c as usize)
+                    .is_some_and(|d| {
+                        d.name == "du" || d.name == "毒" || d.name.starts_with("xj_du_")
+                    })
+                    || core
+                        .vm_aux
+                        .flags
+                        .get(&(responder, format!("xj_du_holder:{c}")))
+                        .copied()
+                        .unwrap_or(0)
+                        > 0;
+                if is_poison
+                    && catalog
+                        .find_player_vm_view_as(core, responder, c, false, Some(need))
+                        .is_none()
                 {
                     return false;
                 }
@@ -911,4 +974,47 @@ pub(crate) fn host_response_skills(
         }
     }
     out
+}
+
+/// 回合外将开启响应/求桃/无懈询问前触发 `on_choose_respond_begin`（如 `U05 longxi` 龙息）。
+pub(crate) fn maybe_trigger_longxi(ctx: &mut Ctx<'_>, responder: PlayerId, need_tag: u8) {
+    if ctx.core.turn.current != responder
+        && ctx.core.player(responder).alive
+        && ctx
+            .catalog
+            .skill_by_name("longxi")
+            .is_some_and(|d| ctx.core.has_skill(responder, d))
+    {
+        (ctx.catalog.hooks.on_choose_respond_begin)(ctx, responder, need_tag);
+    }
+}
+
+/// 仅当应答者持有 `longxi` 时才写入防重旗标并触发，避免污染标准对局状态哈希。
+pub(crate) fn maybe_trigger_longxi_guarded(
+    ctx: &mut Ctx<'_>,
+    responder: PlayerId,
+    need_tag: u8,
+    guard_key: &str,
+) {
+    if ctx.core.turn.current != responder
+        && ctx.core.player(responder).alive
+        && ctx
+            .catalog
+            .skill_by_name("longxi")
+            .is_some_and(|d| ctx.core.has_skill(responder, d))
+        && ctx
+            .core
+            .vm_aux
+            .flags
+            .get(&(responder, guard_key.to_string()))
+            .copied()
+            .unwrap_or(0)
+            == 0
+    {
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((responder, guard_key.to_string()), 1);
+        (ctx.catalog.hooks.on_choose_respond_begin)(ctx, responder, need_tag);
+    }
 }

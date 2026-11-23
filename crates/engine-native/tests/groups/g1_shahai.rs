@@ -42,3 +42,6 @@ mod u05_b5a_gwent_cards_fixes;
 
 #[path = "../u05_b5b_gwent_chars_fixes.rs"]
 mod u05_b5b_gwent_chars_fixes;
+
+#[path = "../u05_b4_xianjian_fixes.rs"]
+mod u05_b4_xianjian_fixes;

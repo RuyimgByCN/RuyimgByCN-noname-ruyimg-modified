@@ -132,6 +132,9 @@ pub(super) fn on_frame_popped(
             .remove(&(*player, format!("wuxing_equip_use:{}", popped.id)));
         core.vm_aux
             .flags
+            .remove(&(*player, format!("u05_play_equip_frame:{}", popped.id)));
+        core.vm_aux
+            .flags
             .remove(&(*player, format!("l11_equip_from_hand:{card}")));
         core.vm_aux
             .flags

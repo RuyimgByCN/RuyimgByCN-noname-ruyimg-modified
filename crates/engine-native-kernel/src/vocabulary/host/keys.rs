@@ -681,6 +681,11 @@ impl HostBehavior {
             HostBehavior::U05GwentCharBatchB => "host:u05_gwent_char_batch_b",
             HostBehavior::U05GwentCharBatchC => "host:u05_gwent_char_batch_c",
             HostBehavior::U05GwentCharBatchD => "host:u05_gwent_char_batch_d",
+            HostBehavior::U05XianjianBatchA => "host:u05_xianjian_batch_a",
+            HostBehavior::U05XianjianBatchB => "host:u05_xianjian_batch_b",
+            HostBehavior::U05XianjianBatchC => "host:u05_xianjian_batch_c",
+            HostBehavior::U05XianjianBatchD => "host:u05_xianjian_batch_d",
+            HostBehavior::U05XianjianBatchE => "host:u05_xianjian_batch_e",
         }
     }
 }

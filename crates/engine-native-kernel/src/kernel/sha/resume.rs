@@ -709,6 +709,14 @@ impl ShaResolveMachine {
             .vm_aux
             .flags
             .remove(&(self.target, "l10_scschihe_block_suits".to_string()));
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(self.target, "xj_sha_req_suit".to_string()));
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(self.target, "xj_longxi_sha_guard".to_string()));
         if let Some(fid) = self.current_sha_frame_id(ctx) {
             for key in [
                 "sha_cike_done",

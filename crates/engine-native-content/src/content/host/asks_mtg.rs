@@ -576,6 +576,50 @@ pub(super) fn active_ask_batches(
         | HostBehavior::U05GwentCharBatchD => super::step::u05_b5b_gwent::ask_u05_gwent_char(
             behavior, stage, owner, target, targets, card, cards, core, catalog,
         ),
+        HostBehavior::U05XianjianBatchA
+        | HostBehavior::U05XianjianBatchB
+        | HostBehavior::U05XianjianBatchC
+        | HostBehavior::U05XianjianBatchD => super::step::xianjian_batch::ask(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
+        HostBehavior::XianjianQianfang => match stage {
+            HostStage::SelectNature => Some(ask(
+                owner,
+                WUDIAN_XJ_QIANFANG_CONFIRM,
+                ChoiceKind::Confirm,
+                vec![ChoiceOption::Confirm],
+                1,
+                1,
+                true,
+            )),
+            HostStage::SelectCard => {
+                let mark = core.player(owner).xuanning_mark;
+                let num = 3usize.saturating_sub(mark as usize);
+                if num == 0 {
+                    return None;
+                }
+                let p = core.player(owner);
+                let options: Vec<ChoiceOption> = p
+                    .hand
+                    .iter()
+                    .chain(p.equips.iter())
+                    .copied()
+                    .map(ChoiceOption::Card)
+                    .collect();
+                (options.len() >= num).then(|| {
+                    ask(
+                        owner,
+                        WUDIAN_XJ_QIANFANG_CARDS,
+                        ChoiceKind::SelectCards,
+                        options,
+                        num,
+                        num,
+                        true,
+                    )
+                })
+            }
+            _ => None,
+        },
         HostBehavior::NewMeibu => {
             if stage != HostStage::SelectCard {
                 return None;

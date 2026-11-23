@@ -268,7 +268,8 @@ impl Engine {
                     }
                     crate::content::host::GJ_FEIBIAO_KEY => {
                         *behavior == crate::content::host::HostBehavior::GujianFeibiaoCard.tag()
-                            && catalog.cards.iter().any(|c| c.kind == CardKind::Feibiao)
+                            && (catalog.cards.iter().any(|c| c.kind == CardKind::Feibiao)
+                                || catalog.skill_by_name("xjzongyu").is_some())
                     }
                     crate::content::host::GJ_TANHUADONG_CARD_KEY => {
                         *behavior == crate::content::host::HostBehavior::GujianFoodGrant.tag()
@@ -356,7 +357,8 @@ impl Engine {
                     }
                     crate::content::host::GJ_SHIHUIFEN_CARD_KEY => {
                         *behavior == crate::content::host::HostBehavior::GujianShihuifenCard.tag()
-                            && catalog.cards.iter().any(|c| c.kind == CardKind::Shihuifen)
+                            && (catalog.cards.iter().any(|c| c.kind == CardKind::Shihuifen)
+                                || catalog.skill_by_name("tuoqiao").is_some())
                     }
                     crate::content::host::GJ_LIUFENGSAN_CARD_KEY => {
                         *behavior == crate::content::host::HostBehavior::GujianLiufengsanCard.tag()

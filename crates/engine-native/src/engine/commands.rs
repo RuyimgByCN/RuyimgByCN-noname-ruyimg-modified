@@ -264,13 +264,14 @@ impl Engine {
             Some(v) => v,
             None => &mut self.log,
         };
-        match run(
+        let step_outcome = run(
             &mut self.state.core,
             &mut self.state.resolution,
             &self.catalog,
             log,
             self.time_slice,
-        ) {
+        );
+        match step_outcome {
             StepOutcome::BudgetExhausted => {
                 if !self.segment_open {
                     // 非开放段整段回滚；开放段（已分片提交过）保持当前进度待 `abort_segment()`。

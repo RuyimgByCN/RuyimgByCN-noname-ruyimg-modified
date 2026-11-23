@@ -637,6 +637,14 @@ pub(super) fn ctianfu_clear(ctx: &mut crate::machine::Ctx<'_>, owner: u8) {
     pl.ctianfu_card = None;
 }
 
+pub(super) fn xj_refund_once_used(ctx: &mut crate::machine::Ctx<'_>, p: PlayerId, name: &str) {
+    if let Some(def) = ctx.catalog.skill_by_name(name) {
+        if let Some(inst) = ctx.core.skills.get_mut(&(p, def)) {
+            inst.once_used = false;
+        }
+    }
+}
+
 impl HostMachine {
     /// 手里剑目标询问规格（机器与恢复派生共用同一形状来源）。
     pub(super) fn target_choice_spec(ctx: &Ctx<'_>, target: PlayerId) -> ChoiceSpec {

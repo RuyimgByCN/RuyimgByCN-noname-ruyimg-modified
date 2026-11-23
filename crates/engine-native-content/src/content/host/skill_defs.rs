@@ -100,6 +100,11 @@ pub fn host_skill_trigger_meta(
         | HostBehavior::U05GwentCharBatchB
         | HostBehavior::U05GwentCharBatchC
         | HostBehavior::U05GwentCharBatchD => step::u05_b5b_gwent::trigger_meta_u05_gwent_char(name),
+        HostBehavior::U05XianjianBatchA
+        | HostBehavior::U05XianjianBatchB
+        | HostBehavior::U05XianjianBatchC
+        | HostBehavior::U05XianjianBatchD
+        | HostBehavior::U05XianjianBatchE => step::xianjian_batch::trigger_meta(behavior, name),
         _ => crate::event::NativeDamageEffect::from_host(behavior)
             .map(|e| e.meta())
             .or_else(|| behavior.trigger_meta()),
@@ -225,6 +230,11 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         | HostBehavior::U05GwentCharBatchB
         | HostBehavior::U05GwentCharBatchC
         | HostBehavior::U05GwentCharBatchD => step::u05_b5b_gwent::limits_u05_gwent_char(name),
+        HostBehavior::U05XianjianBatchA
+        | HostBehavior::U05XianjianBatchB
+        | HostBehavior::U05XianjianBatchC
+        | HostBehavior::U05XianjianBatchD
+        | HostBehavior::U05XianjianBatchE => step::xianjian_batch::limits(behavior, name),
         HostBehavior::GujianFoodQingtuan | HostBehavior::GujianFoodLuyugeng => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,
@@ -294,6 +304,14 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         | HostBehavior::WudianQianggu
         | HostBehavior::WudianYinbo
         | HostBehavior::XianjianGuiyuan
+        | HostBehavior::XianjianSajin
+        | HostBehavior::XianjianXtanxi
+        | HostBehavior::XianjianCtianfu
+        | HostBehavior::XianjianMinsha
+        | HostBehavior::XianjianYuexing
+        | HostBehavior::XianjianTianjian
+        | HostBehavior::XianjianXuanmo
+        | HostBehavior::XianjianZhuyue
         | HostBehavior::SwdDuanyue
         | HostBehavior::SwdXingdian
         | HostBehavior::SwdLianyaohuShouna

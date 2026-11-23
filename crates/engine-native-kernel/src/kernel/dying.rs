@@ -280,7 +280,11 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                         if let Some(tao) =
                             (ctx.catalog.hooks.reguhuo_consume_resp)(ctx.core, responder)
                         {
-                            self.responders.remove(0);
+                            ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(responder, "xj_longxi_dying_guard".to_string()));
+                self.responders.remove(0);
                             let eff_kind = match ctx
                                 .core
                                 .vm_aux
@@ -379,36 +383,41 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
             // 本轮有人用桃且场上仍有桃/救援技能 → 开新一轮（负体力可由同一
             // 持桃者跨轮连续多张救回）；否则无人愿救，落至死亡。
             loop {
-                while let Some(r) = self.responders.first() {
-                    let alive = ctx.core.player(*r).alive;
+                while let Some(&r) = self.responders.first() {
+                    crate::kernel::maybe_trigger_longxi_guarded(ctx, r, 4, "xj_longxi_dying_guard");
+                    let alive = ctx.core.player(r).alive;
                     let has_tao = alive
-                        && (!dying_tao_cards(ctx, *r, self.dying).is_empty()
+                        && (!dying_tao_cards(ctx, r, self.dying).is_empty()
                             || crate::kernel::mbcmjiushi_dying_skill(
                                 ctx.core,
                                 ctx.catalog,
-                                *r,
+                                r,
                                 self.dying,
                             )
                             .is_some()
                             || crate::kernel::gwfusheng_dying_skill(
                                 ctx.core,
                                 ctx.catalog,
-                                *r,
+                                r,
                                 self.dying,
                             )
                             .is_some()
-                            || !dying_response_skills(ctx.core, ctx.catalog, *r, self.dying)
+                            || !dying_response_skills(ctx.core, ctx.catalog, r, self.dying)
                                 .is_empty()
-                            || !dying_save_skill_options(ctx.core, ctx.catalog, *r, self.dying)
+                            || !dying_save_skill_options(ctx.core, ctx.catalog, r, self.dying)
                                 .is_empty()
                             || !(ctx.catalog.hooks.hearth_dying_save_skills)(
                                 ctx.core,
                                 ctx.catalog,
-                                *r,
+                                r,
                                 self.dying,
                             )
                             .is_empty());
                     if !has_tao {
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .remove(&(r, "xj_longxi_dying_guard".to_string()));
                         self.responders.remove(0);
                     } else {
                         break;
@@ -567,6 +576,10 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                     .vm_aux
                     .flags
                     .remove(&(responder, "dddfusi_window_refused".to_string()));
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(responder, "xj_longxi_dying_guard".to_string()));
                 self.responders.remove(0);
                 if let Some(ChoiceOption::Card(tao)) = answer.first().copied() {
                     let raw_kind = ctx.catalog.resolved_card_kind(ctx.core, tao);
@@ -917,7 +930,9 @@ fn other_dying_save_banned(
     responder: PlayerId,
     dying: PlayerId,
 ) -> bool {
-    if catalog.blocks_card_use_and_save(core, responder) {
+    if catalog.blocks_card_use_and_save(core, responder)
+        || crate::kernel::is_guijiang_savable_blocked(core, catalog, dying)
+    {
         return true;
     }
     if responder == dying {

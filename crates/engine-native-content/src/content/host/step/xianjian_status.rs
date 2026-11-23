@@ -362,23 +362,21 @@ impl HostMachine {
                 // filter 兜底，此处仅授技）。
                 let n = ctx.core.turn.cards_used_play_phase;
                 let skill_name = match n {
+                    2 => Some("yanzhan"),
                     3 => Some("tianjian"),
                     4 => Some("xjyufeng"),
                     _ => None,
                 };
                 if let Some(name) = skill_name {
                     if let Some(def) = ctx.catalog.skill_by_name(name) {
-                        if !ctx.core.skills.contains_key(&(self.owner, def)) {
-                            ctx.insert_skill(
-                                (self.owner, def),
-                                crate::state::SkillInstance {
-                                    owner: self.owner,
-                                    enabled: true,
-                                    once_used: false,
-                                    expires_end_of_turn: false,
-                                    rounds: 0,
-                                },
-                            );
+                        ctx.add_skill_until_turn_end(self.owner, def);
+                        if name == "xjyufeng" {
+                            let nh = ctx.core.player(self.owner).hand.len();
+                            if nh < 2 {
+                                ctx.start_draw(self.owner, (2 - nh) as u32);
+                                ctx.core.turn.xjyufeng_used =
+                                    ctx.core.turn.xjyufeng_used.max(1);
+                            }
                         }
                     }
                 }
@@ -395,8 +393,36 @@ impl HostMachine {
                         continue;
                     };
                     if is_weapon {
+                        if let Some(old_plus1) = ctx
+                            .core
+                            .vm_aux
+                            .flags
+                            .remove(&(self.owner, "xj_xshuangren_weapon".to_string()))
+                        {
+                            let old = old_plus1 - 1;
+                            if ctx.core.player(self.owner).off_court.contains(&old) {
+                                ctx.core.player_mut(self.owner).off_court.retain(|x| *x != old);
+                                if !ctx.core.player(self.owner).equips.contains(&old) {
+                                    crate::kernel::revoke_equip_skills(
+                                        ctx.core,
+                                        ctx.catalog,
+                                        self.owner,
+                                        old,
+                                    );
+                                }
+                                ctx.to_discard(old);
+                                ctx.log(LogEvent::CardDiscarded {
+                                    player: self.owner,
+                                    cards: vec![old],
+                                });
+                            }
+                        }
                         ctx.core.discard.remove(pos);
                         ctx.core.player_mut(self.owner).off_court.push(c);
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((self.owner, "xj_xshuangren_weapon".to_string()), c + 1);
                         crate::kernel::grant_equip_skills(ctx, self.owner, c);
                     }
                 }

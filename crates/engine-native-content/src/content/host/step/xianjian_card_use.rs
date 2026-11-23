@@ -209,31 +209,11 @@ impl HostMachine {
                         .into_iter()
                         .filter(|p| *p != self.owner)
                         .collect();
-                    ctx.use_virtual_card(self.owner, CardKind::ArcheryAttack, targets.clone());
-                    // 伤害目标随机弃 he 一张（直连）
-                    for p in targets {
-                        if !ctx.core.player(p).alive {
-                            continue;
-                        }
-                        let mut he: Vec<CardId> = ctx.core.player(p).hand.iter().copied().collect();
-                        he.extend(ctx.core.player(p).equips.iter().copied());
-                        if he.is_empty() {
-                            continue;
-                        }
-                        let i = ctx.core.rng.gen_range(he.len() as u32) as usize;
-                        let dc = he[i];
-                        if ctx.core.player(p).hand.contains(&dc) {
-                            ctx.discard_from_hand(p, dc);
-                        } else {
-                            ctx.core.player_mut(p).equips.retain(|x| *x != dc);
-                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, p, dc);
-                            ctx.to_discard(dc);
-                            ctx.log(LogEvent::CardDiscarded {
-                                player: p,
-                                cards: vec![dc],
-                            });
-                        }
-                    }
+                    let carrier = ctx.use_virtual_card(self.owner, CardKind::ArcheryAttack, targets);
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .insert((self.owner, format!("xj_tianjian_card:{carrier}")), 1);
                     Flow::Done
                 }
                 _ => Flow::Done,
@@ -260,10 +240,12 @@ impl HostMachine {
                     self.targets = targets.clone();
                     self.cards = vec![CardId::from(num as u32)]; // num 暂存
                     if num == 0 {
-                        // 纯 AOE（chooseBool 确认=direct 无询问直接发动）
-                        ctx.core.player_mut(self.owner).xuanning_mark = 0;
-                        ctx.use_virtual_card(self.owner, CardKind::ArcheryAttack, targets);
-                        return Flow::Done;
+                        // 纯 AOE：询问是否确认消耗全部玄凝发动【千方】
+                        self.stage = HostStage::SelectNature;
+                        return Flow::WaitChoice {
+                            observer: self.owner,
+                            spec: ChoiceSpec::confirm(WUDIAN_XJ_QIANFANG_CONFIRM),
+                        };
                     }
                     let options: Vec<ChoiceOption> = ctx
                         .core
@@ -289,6 +271,19 @@ impl HostMachine {
                             allow_cancel: true,
                         },
                     }
+                }
+                HostStage::SelectNature => {
+                    if ctx.answer().first() == Some(&ChoiceOption::Confirm) {
+                        ctx.core.player_mut(self.owner).xuanning_mark = 0;
+                        let targets = self.targets.clone();
+                        let carrier =
+                            ctx.use_virtual_card(self.owner, CardKind::ArcheryAttack, targets);
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((self.owner, format!("xj_qianfang_card:{carrier}")), 1);
+                    }
+                    Flow::Done
                 }
                 HostStage::SelectCard => {
                     let picked: Vec<CardId> = ctx
@@ -320,17 +315,11 @@ impl HostMachine {
                     }
                     ctx.core.player_mut(self.owner).xuanning_mark = 0;
                     let targets = self.targets.clone();
-                    ctx.use_virtual_card(self.owner, CardKind::ArcheryAttack, targets.clone());
-                    // 被伤敌人每名紫英摸 1（qianfang_draw 直连=登记差异：
-                    // 上游 damageEnd 逐目标即时）
-                    let hurt: Vec<PlayerId> = targets
-                        .into_iter()
-                        .filter(|p| ctx.core.player(*p).alive)
-                        .collect();
-                    let n = hurt.len();
-                    // R05-C2：步末纯摸牌 → R 帧（杀帧在 R 帧之下、R 先解，
-                    // 与同步「摸牌先落、AOE 后结」次序一致）。
-                    ctx.start_draw(self.owner, n as u32);
+                    let carrier = ctx.use_virtual_card(self.owner, CardKind::ArcheryAttack, targets);
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .insert((self.owner, format!("xj_qianfang_card:{carrier}")), 1);
                     Flow::Done
                 }
                 _ => Flow::Done,

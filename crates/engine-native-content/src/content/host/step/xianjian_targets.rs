@@ -36,8 +36,14 @@ impl HostMachine {
                         if t != self.owner && ctx.core.player(t).alive {
                             ctx.core.player_mut(self.owner).yuexing_pair = Some(t);
                             ctx.core.player_mut(t).yuexing_pair = Some(self.owner);
+                            if let Some(def) = ctx.catalog.skill_by_name("yuexing2") {
+                                ctx.add_skill_until_turn_end(self.owner, def);
+                                ctx.add_skill_until_turn_end(t, def);
+                            }
+                            return Flow::Done;
                         }
                     }
+                    xj_refund_once_used(ctx, self.owner, "yuexing");
                     Flow::Done
                 }
                 _ => Flow::Done,
@@ -76,12 +82,28 @@ impl HostMachine {
                         if t != self.owner && ctx.core.player(t).alive {
                             if let Some(c) = ctx.core.deck.pop() {
                                 ctx.core.player_mut(t).off_court.push(c);
+                                ctx.core
+                                    .vm_aux
+                                    .flags
+                                    .insert((t, "xj_zhimeng_card".to_string()), c + 1);
                             }
                             if let Some(def) = ctx.catalog.skill_by_name("xjzhimeng2") {
                                 ctx.insert_skill(
                                     (t, def),
                                     crate::state::SkillInstance {
                                         owner: t,
+                                        enabled: true,
+                                        once_used: false,
+                                        expires_end_of_turn: false,
+                                        rounds: 0,
+                                    },
+                                );
+                            }
+                            if let Some(def3) = ctx.catalog.skill_by_name("xjzhimeng3") {
+                                ctx.ensure_skill(
+                                    (self.owner, def3),
+                                    crate::state::SkillInstance {
+                                        owner: self.owner,
                                         enabled: true,
                                         once_used: false,
                                         expires_end_of_turn: false,
@@ -223,21 +245,25 @@ impl HostMachine {
                     }
                     // 移交 hej 全部牌（上游 gain 全部入手同口径；装备撤
                     // 技后入手）
+                    let mut given = Vec::new();
                     let equips: Vec<CardId> = ctx.core.player(self.owner).equips.clone();
                     for c in equips {
                         ctx.core.player_mut(self.owner).equips.retain(|x| *x != c);
                         crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, c);
                         ctx.core.player_mut(t).hand.push(c);
+                        given.push(c);
                     }
                     let judge: Vec<CardId> = ctx.core.player(self.owner).judge.clone();
                     for c in judge {
                         ctx.core.player_mut(self.owner).judge.retain(|x| *x != c);
                         ctx.core.player_mut(t).hand.push(c);
+                        given.push(c);
                     }
                     let hand: Vec<CardId> = ctx.core.player(self.owner).hand.clone();
                     for c in hand {
                         ctx.take_hand_card(self.owner, c);
                         ctx.core.player_mut(t).hand.push(c);
+                        given.push(c);
                     }
                     if let Some(def) = ctx.catalog.skill_by_name("changnian2") {
                         ctx.insert_skill(
@@ -254,11 +280,7 @@ impl HostMachine {
                     ctx.log(LogEvent::CardsGiven {
                         from: self.owner,
                         to: t,
-                        cards: {
-                            let mut all = Vec::new();
-                            all.extend(ctx.core.player(t).hand.iter().copied());
-                            all
-                        },
+                        cards: given,
                     });
                     Flow::Done
                 }
@@ -303,8 +325,21 @@ impl HostMachine {
                         if self.target.is_none() {
                             return Flow::Done;
                         }
-                        // 收集可对其使用的杀（距离内）与决斗
+                        // 收集可对其使用的杀（距离内）与决斗，同时置位 phaseUse 跳过与 fenglue_draw 跟踪
                         let t = self.target.expect("checked");
+                        ctx.core.turn.skip_play_phase = true;
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((self.owner, "xj_fenglue_active".to_string()), 1);
+                        ctx.core.vm_aux.flags.insert(
+                            (self.owner, "xj_fenglue_target".to_string()),
+                            u32::from(t) + 1,
+                        );
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((self.owner, "xj_fenglue_draw_count".to_string()), 0);
                         let usable: Vec<CardId> = ctx
                             .core
                             .player(self.owner)
@@ -314,7 +349,7 @@ impl HostMachine {
                             .filter(|c| {
                                 let k = ctx.catalog.card_kind(*c);
                                 match k {
-                                    CardKind::Sha => {
+                                    CardKind::Sha | CardKind::FireSha | CardKind::LeiSha => {
                                         ctx.core.computed_distance(ctx.catalog, self.owner, t)
                                             <= ctx.core.attack_range(ctx.catalog, self.owner)
                                     }
@@ -325,21 +360,52 @@ impl HostMachine {
                             .collect();
                         self.cards = usable;
                     }
-                    // 逐张使用（emit CardUsed 由提交阶段 take 真实牌）
-                    let Some(c) = self.cards.first().copied() else {
-                        return Flow::Done;
-                    };
-                    self.cards.remove(0);
                     let t = self.target.expect("checked");
-                    ctx.emit(EventData::CardUsed(crate::event::CardUseData {
-                        card: Some(c),
-                        player: self.owner,
-                        targets: vec![t],
-                        nature: crate::event::DamageNature::Normal,
-                        use_as: None,
-                        cancelled: false,
-                    }));
-                    Flow::Yield
+                    if !ctx.core.player(self.owner).alive || !ctx.core.player(t).alive {
+                        self.cards.clear();
+                    }
+                    // 逐张使用（emit CardUsed 由提交阶段 take 真实牌）
+                    while let Some(c) = self.cards.first().copied() {
+                        self.cards.remove(0);
+                        if !ctx.core.player(self.owner).hand.contains(&c) {
+                            continue;
+                        }
+                        let kind = ctx.catalog.card_kind(c);
+                        let nature = match kind {
+                            CardKind::FireSha => crate::event::DamageNature::Fire,
+                            CardKind::LeiSha => crate::event::DamageNature::Thunder,
+                            _ => crate::event::DamageNature::Normal,
+                        };
+                        ctx.emit(EventData::CardUsed(crate::event::CardUseData {
+                            card: Some(c),
+                            player: self.owner,
+                            targets: vec![t],
+                            nature,
+                            use_as: None,
+                            cancelled: false,
+                        }));
+                        return Flow::Yield;
+                    }
+                    // 凤略末段（step 2）：清 fenglue_draw 跟踪，按 target damageEnd 次数摸牌；
+                    // BeforeTriggers 收束后 Commit 消费 turn.skip_play_phase 直入弃牌阶段
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(self.owner, "xj_fenglue_active".to_string()));
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(self.owner, "xj_fenglue_target".to_string()));
+                    let draw_cnt = ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .remove(&(self.owner, "xj_fenglue_draw_count".to_string()))
+                        .unwrap_or(0);
+                    if ctx.core.player(self.owner).alive && draw_cnt > 0 {
+                        ctx.start_draw(self.owner, draw_cnt);
+                    }
+                    Flow::Done
                 }
                 _ => Flow::Done,
             },

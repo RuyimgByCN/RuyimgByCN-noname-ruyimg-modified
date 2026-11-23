@@ -197,30 +197,22 @@ fn xuejian_xshuangren_offcourt_and_death_discard() {
     e.debug_grant(0, "xshuangren");
     e.debug_grant(0, "xshuangren2");
 
-    // 布阵：手牌武器 + 压 hp=1（手牌上限 1，弃牌阶段弃武器）
-    let weapon = e.debug_place(0, "zhuge");
+    // 布阵：两把武器 + 手牌保留（出牌阶段装 w1 后装 w2 顶替触发双刃）
+    let w1 = e.debug_place(0, "zhuge");
+    let w2 = e.debug_place(0, "qinggang");
     let extra = e.debug_place(0, "tao");
-    e.debug_set_hp(0, 1);
 
-    // 弃牌阶段弃武器 → CardsDiscarded 含武器 → 双刃收离场区+grant
-    let _ = submit(&mut e, 0, GameAction::NextPhase); // Play→Discard
-    let c = e.open_choice().expect("弃牌询问挂起");
-    let (cid, obs) = (c.id, c.observer);
-    submit(
-        &mut e,
-        obs,
-        GameAction::Answer {
-            choice_id: cid,
-            selection: vec![ChoiceOption::Card(weapon)],
-        },
-    );
-    // 断言：双刃收武器入离场区（非弃堆）+武器技能 grant
+    // 装备 w1 后再用 w2 顶替 w1 → Equipped { replaced: Some(w1) } → 双刃收 w1 入离场区
+    submit(&mut e, 0, GameAction::PlayCard { card: w1, targets: vec![] });
+    assert!(e.state_core().player(0).off_court.is_empty(), "首次装备无顶替不触发双刃");
+    submit(&mut e, 0, GameAction::PlayCard { card: w2, targets: vec![] });
+    // 断言：双刃收被顶替武器 w1 入离场区（非弃堆）+武器技能 grant
     assert!(
-        e.state_core().player(0).off_court.contains(&weapon),
-        "武器入离场区"
+        e.state_core().player(0).off_court.contains(&w1),
+        "被顶替武器入离场区"
     );
-    assert!(!e.state_core().discard.contains(&weapon), "未直接入弃堆");
-    assert!(e.debug_hand(0).contains(&extra), "超额牌保留");
+    assert!(!e.state_core().discard.contains(&w1), "未直接入弃堆");
+    assert!(e.debug_hand(0).contains(&extra), "其他手牌保留");
 
     // 压 1 血再伤 2 → 死亡 → 双刃·殁弃离场区全部 → 死亡照常
     e.debug_set_hp(0, 1);
@@ -245,5 +237,5 @@ fn xuejian_xshuangren_offcourt_and_death_discard() {
         e.state_core().player(0).off_court.is_empty(),
         "殁：离场区已清"
     );
-    assert!(e.state_core().discard.contains(&weapon), "殁：武器入弃堆");
+    assert!(e.state_core().discard.contains(&w1), "殁：武器入弃堆");
 }

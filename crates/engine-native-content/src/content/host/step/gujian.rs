@@ -160,84 +160,98 @@ impl HostMachine {
                 }
                 _ => Flow::Done,
             },
-            HostBehavior::GujianFeibiaoCard => match self.stage {
-                HostStage::SelectCard => {
-                    // 有黑色手牌 → 选一张弃置（可取消，取消则受伤）；
-                    // 否则直接受伤
-                    let Some(t) = self.target else {
-                        return Flow::Done;
-                    };
-                    let finish = |ctx: &mut Ctx<'_>, card: Option<CardId>| {
-                        if let Some(c) = card {
-                            ctx.to_discard(c);
-                            ctx.core.table.retain(|x| *x != c);
+            HostBehavior::GujianFeibiaoCard => {
+                let finish = |ctx: &mut Ctx<'_>, card: Option<CardId>| {
+                    if let Some(c) = card {
+                        ctx.to_discard(c);
+                        ctx.core.table.retain(|x| *x != c);
+                    }
+                };
+                match self.stage {
+                    HostStage::SelectCard => {
+                        let Some(t) = self.target else {
+                            finish(ctx, self.card);
+                            return Flow::Done;
+                        };
+                        if !ctx.core.player(t).alive {
+                            if !self.targets.is_empty() {
+                                self.target = Some(self.targets.remove(0));
+                                self.stage = HostStage::SelectCard;
+                                return Flow::Yield;
+                            }
+                            finish(ctx, self.card);
+                            return Flow::Done;
                         }
-                    };
-                    if !ctx.core.player(t).alive {
-                        finish(ctx, self.card);
-                        return Flow::Done;
-                    }
-                    let options: Vec<ChoiceOption> = ctx
-                        .core
-                        .player(t)
-                        .hand
-                        .iter()
-                        .copied()
-                        .filter(|c| {
-                            matches!(
-                                ctx.catalog.cards[*c as usize].suit,
-                                crate::catalog::Suit::Spade | crate::catalog::Suit::Club
-                            )
-                        })
-                        .map(ChoiceOption::Card)
-                        .collect();
-                    if options.is_empty() {
-                        ctx.emit(EventData::LoseHp {
-                            player: t,
-                            amount: 1,
-                        });
-                        finish(ctx, self.card);
-                        return Flow::Done;
-                    }
-                    self.stage = HostStage::Act;
-                    Flow::WaitChoice {
-                        observer: t,
-                        spec: ChoiceSpec {
-                            kind: ChoiceKind::SelectCards,
-                            prompt: GJ_FEIBIAO_DISCARD,
-                            options,
-                            min: 1,
-                            max: 1,
-                            allow_cancel: true,
-                        },
-                    }
-                }
-                HostStage::Act => {
-                    let Some(t) = self.target else {
-                        return Flow::Done;
-                    };
-                    // 空应答 = 取消（allow_cancel）→ 失去 1 点体力
-                    //（v77 原语对齐：上游 loseHp 同口径）
-                    let chosen = ctx.answer().first().copied();
-                    match chosen {
-                        Some(ChoiceOption::Card(c)) => {
-                            ctx.discard_from_hand(t, c);
-                        }
-                        _ => {
+                        let options: Vec<ChoiceOption> = ctx
+                            .core
+                            .player(t)
+                            .hand
+                            .iter()
+                            .copied()
+                            .filter(|c| {
+                                matches!(
+                                    ctx.catalog.effective_card_suit(ctx.core, t, *c),
+                                    crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                                )
+                            })
+                            .map(ChoiceOption::Card)
+                            .collect();
+                        if options.is_empty() {
                             ctx.emit(EventData::LoseHp {
                                 player: t,
                                 amount: 1,
                             });
+                            if !self.targets.is_empty() {
+                                self.target = Some(self.targets.remove(0));
+                                self.stage = HostStage::SelectCard;
+                                return Flow::Yield;
+                            }
+                            finish(ctx, self.card);
+                            return Flow::Done;
+                        }
+                        self.stage = HostStage::Act;
+                        Flow::WaitChoice {
+                            observer: t,
+                            spec: ChoiceSpec {
+                                kind: ChoiceKind::SelectCards,
+                                prompt: GJ_FEIBIAO_DISCARD,
+                                options,
+                                min: 1,
+                                max: 1,
+                                allow_cancel: true,
+                            },
                         }
                     }
-                    if let Some(c) = self.card {
-                        ctx.to_discard(c);
-                        ctx.core.table.retain(|x| *x != c);
+                    HostStage::Act => {
+                        let Some(t) = self.target else {
+                            finish(ctx, self.card);
+                            return Flow::Done;
+                        };
+                        let chosen = ctx.answer().first().copied();
+                        match chosen {
+                            Some(ChoiceOption::Card(c)) => {
+                                ctx.discard_from_hand(t, c);
+                            }
+                            _ => {
+                                if ctx.core.player(t).alive {
+                                    ctx.emit(EventData::LoseHp {
+                                        player: t,
+                                        amount: 1,
+                                    });
+                                }
+                            }
+                        }
+                        if !self.targets.is_empty() {
+                            self.target = Some(self.targets.remove(0));
+                            self.stage = HostStage::SelectCard;
+                            return Flow::Yield;
+                        }
+                        finish(ctx, self.card);
+                        Flow::Done
                     }
-                    Flow::Done
+                    _ => Flow::Done,
                 }
-                _ => Flow::Done,
-            },
+            }
             HostBehavior::GujianFoodTanhuadong => {
                 // `phaseUseEnd`（Phase::Play 收束，target == None）摸 1；
                 // `phaseEnd`（TurnEndWindow after:false，target == Some(owner)）扣减倒计时

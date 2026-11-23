@@ -192,6 +192,13 @@ impl HostSkillBehavior {
             | HostBehavior::U05GwentCharBatchD => {
                 return super::step::u05_b5b_gwent::machine_u05_gwent_char(self, owner, event);
             }
+            HostBehavior::U05XianjianBatchA
+            | HostBehavior::U05XianjianBatchB
+            | HostBehavior::U05XianjianBatchC
+            | HostBehavior::U05XianjianBatchD
+            | HostBehavior::U05XianjianBatchE => {
+                return super::step::xianjian_batch::machine(self, owner, event);
+            }
             _ => {}
         }
         let (target, card) = match self.behavior {
@@ -721,9 +728,9 @@ impl HostSkillBehavior {
                 EventData::CardsDiscarded { cards, .. } => cards.clone(),
                 _ => Vec::new(),
             },
-            // 双刃：本次弃入弃堆的牌（武器识别候选）
+            // 双刃：本次顶替旧武器入弃堆的牌
             HostBehavior::XianjianXshuangren => match event {
-                EventData::CardsDiscarded { cards, .. } => cards.clone(),
+                EventData::Equipped { replaced: Some(old), .. } => vec![*old],
                 _ => Vec::new(),
             },
             // 射影：伤害牌（判定黑回收目标）

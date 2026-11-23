@@ -42,6 +42,21 @@ impl CardKind {
         matches!(self, CardKind::Sha | CardKind::FireSha | CardKind::LeiSha)
     }
 
+    /// 机关牌判定：标准/仙剑机关与古剑 7 张 `type: "jiguan"` 牌。
+    pub fn is_jiguan_kind(self) -> bool {
+        matches!(
+            self,
+            CardKind::Jiguan
+                | CardKind::Bingpotong
+                | CardKind::Feibiao
+                | CardKind::Longxugou
+                | CardKind::Qiankunbiao
+                | CardKind::Shenhuofeiya
+                | CardKind::Mianlijinzhen
+                | CardKind::Liutouge
+        )
+    }
+
     /// 基础牌判定（往事封禁面，规则 v270）：杀族/闪/桃/酒族/手里剑。
     /// 扩展牌种未逐一归类（恒定基本牌近似下的保守集，登记差异）。
     pub fn is_basic_kind(self) -> bool {

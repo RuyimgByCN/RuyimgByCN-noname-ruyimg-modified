@@ -85,6 +85,18 @@ impl HostMachine {
                         if ctx.core.player(t).alive {
                             ctx.core.player_mut(t).hand.push(c);
                             ctx.core.player_mut(t).skip_next_draw = true;
+                            if let Some(gj2_def) = ctx.catalog.skill_by_name("guijin2") {
+                                ctx.ensure_skill(
+                                    (t, gj2_def),
+                                    crate::state::SkillInstance {
+                                        owner: t,
+                                        enabled: true,
+                                        once_used: false,
+                                        expires_end_of_turn: false,
+                                        rounds: 0,
+                                    },
+                                );
+                            }
                             ctx.log(LogEvent::CardsGiven {
                                 from: self.owner,
                                 to: t,
@@ -606,6 +618,7 @@ impl HostMachine {
                 }
                 HostStage::TargetChoice => {
                     let Some(ChoiceOption::Card(c)) = ctx.answer().first() else {
+                        xj_refund_once_used(ctx, self.owner, "xtanxi");
                         return Flow::Done; // 取消=放弃
                     };
                     let c = *c;
@@ -813,6 +826,7 @@ impl HostMachine {
                 }
                 HostStage::SelectCard => {
                     let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() else {
+                        xj_refund_once_used(ctx, self.owner, "ctianfu");
                         return Flow::Done; // 取消=放弃
                     };
                     self.cards = vec![c];
@@ -834,6 +848,7 @@ impl HostMachine {
                         .collect();
                     if options.is_empty() {
                         // 闪不消耗（未置出）——留手牌
+                        xj_refund_once_used(ctx, self.owner, "ctianfu");
                         return Flow::Done;
                     }
                     self.stage = HostStage::TargetChoice;

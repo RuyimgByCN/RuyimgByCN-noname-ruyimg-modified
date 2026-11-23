@@ -4,6 +4,8 @@ use super::*;
 // 提交、交接与新回合重置）外移 events/turn.rs——行为与可见性零变化，
 // re-export 兼容既有 `use events::*` 路径。
 pub(crate) mod turn;
+mod turn_handoff;
+pub(crate) use turn_handoff::maybe_abort_ywuhun;
 pub(super) use turn::{commit_turn_begin, commit_turn_end_window, commit_turn_ended};
 mod turn_reset;
 mod aux_history;

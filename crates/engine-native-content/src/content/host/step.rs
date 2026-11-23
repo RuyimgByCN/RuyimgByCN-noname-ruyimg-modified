@@ -75,6 +75,14 @@ mod xianjian_damage;
 mod xianjian_recovery;
 mod xianjian_status;
 mod xianjian_targets;
+pub(super) mod xianjian_batch;
+pub(crate) use xianjian_batch::{
+    host_card_use_after_xianjian, host_draw_begin_xianjian,
+    host_on_choose_respond_begin_xianjian, host_on_damage_end_xianjian,
+    host_on_hand_card_removed_xianjian, host_on_hp_changed_xianjian, host_on_phase_end_xianjian,
+    host_on_phase_use_end_xianjian, host_on_recover_before_xianjian,
+    host_on_round_start_xianjian, host_play_begin_xianjian, host_sha_end_xianjian,
+};
 mod yunchou;
 pub(super) mod u01_batch_a;
 pub(super) mod u01_batch_b;
@@ -1299,6 +1307,11 @@ impl HostMachine {
             | HostBehavior::U05Hearth2BatchD
             | HostBehavior::U05Hearth2BatchE
             | HostBehavior::U05Hearth2BatchF => u05_hearth::handle_u05_hearth(self, ctx),
+            HostBehavior::U05XianjianBatchA
+            | HostBehavior::U05XianjianBatchB
+            | HostBehavior::U05XianjianBatchC
+            | HostBehavior::U05XianjianBatchD
+            | HostBehavior::U05XianjianBatchE => xianjian_batch::step(self, ctx),
             HostBehavior::Rechanyuan => Flow::Done,
             HostBehavior::L11TrickCard => l11_cards::handle_l11_trick_card(self, ctx),
             HostBehavior::L11EquipCards => l11_equips::handle_l11_equips(self, ctx),

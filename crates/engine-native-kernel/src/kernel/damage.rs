@@ -330,6 +330,12 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
         ctx.core, d.source, d.target,
     );
     damage_change_hp::commit_damage_change_hp(ctx, &d);
+    let actual_loss = d.settlement.hp_loss;
+    if actual_loss > 0 {
+        if let Ok(delta) = i32::try_from(actual_loss) {
+            (ctx.catalog.hooks.on_hp_changed)(ctx, d.target, -delta);
+        }
+    }
 }
 
 pub(super) fn post_damage(
@@ -618,6 +624,11 @@ pub(crate) fn commit_lose_hp(ctx: &mut Ctx<'_>, player: PlayerId, mut amount: u3
     }
     // 伤逝（规则 v260）：体力变化（失去）后补牌
     shangshix_draw(ctx, player);
+    if !ctx.core.player(player).infinite_hp() {
+        if let Ok(delta) = i32::try_from(amount) {
+            (ctx.catalog.hooks.on_hp_changed)(ctx, player, -delta);
+        }
+    }
 }
 
 /// 伤逝（Boss 张春华，规则 v260）补牌半：

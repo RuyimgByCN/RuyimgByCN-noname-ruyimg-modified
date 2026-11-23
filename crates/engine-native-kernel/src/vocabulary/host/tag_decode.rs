@@ -638,6 +638,11 @@ impl HostBehavior {
             1191 => HostBehavior::U05GwentCharBatchB,
             1192 => HostBehavior::U05GwentCharBatchC,
             1193 => HostBehavior::U05GwentCharBatchD,
+            1100 => HostBehavior::U05XianjianBatchA,
+            1101 => HostBehavior::U05XianjianBatchB,
+            1102 => HostBehavior::U05XianjianBatchC,
+            1103 => HostBehavior::U05XianjianBatchD,
+            1104 => HostBehavior::U05XianjianBatchE,
             _ => return None,
         })
     }
