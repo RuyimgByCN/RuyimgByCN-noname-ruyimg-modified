@@ -158,6 +158,7 @@ impl HostMachine {
                         ChoiceOption::Card(c) => Some(*c),
                         _ => None,
                     }) else {
+                        refund_host_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     };
                     self.cards = vec![cost];
@@ -170,6 +171,7 @@ impl HostMachine {
                         .map(|i| ChoiceOption::Player(i as u8))
                         .collect();
                     if options.is_empty() {
+                        refund_host_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     }
                     self.stage = HostStage::Act;
@@ -191,14 +193,11 @@ impl HostMachine {
                         _ => None,
                     });
                     let (Some(cost), Some(t)) = (self.cards.first().copied(), self.target) else {
+                        refund_host_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     };
                     if ctx.core.player(self.owner).hand.contains(&cost) {
                         ctx.discard_from_hand(self.owner, cost);
-                        ctx.log(LogEvent::CardDiscarded {
-                            player: self.owner,
-                            cards: vec![cost],
-                        });
                     }
                     if ctx.core.player(t).alive {
                         if let Some(c) = ctx.core.player(t).hand.first().copied() {
@@ -252,9 +251,16 @@ impl HostMachine {
                         })
                         .collect();
                     if picked.len() < 2 {
+                        refund_host_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     }
-                    let mut types: Vec<u8> = Vec::new();
+                    let class_tag = |kind: CardKind| -> u16 {
+                        match yangpijuan_class(kind) {
+                            Some(c) => u16::from(c),
+                            None => 3 + kind as u16,
+                        }
+                    };
+                    let mut types: Vec<u16> = Vec::new();
                     for c in &picked {
                         if let Some(pos) = ctx
                             .core
@@ -265,17 +271,17 @@ impl HostMachine {
                         {
                             ctx.core.player_mut(self.owner).lianyaohu_store.remove(pos);
                         }
-                        types.push(ctx.catalog.cards[*c as usize].kind as u8);
+                        types.push(class_tag(ctx.catalog.cards[*c as usize].kind));
                         ctx.to_discard(*c);
                         ctx.log(LogEvent::CardDiscarded {
                             player: self.owner,
                             cards: vec![*c],
                         });
                     }
-                    // 牌堆序扫描首张类别均不同（上游 ui.cardPile 顺序同口径）
-                    for i in 0..ctx.core.deck.len() {
+                    // 牌堆顶起向下扫描首张大类（基本/锦囊/装备）均不同入手（`deck.pop()` 从尾部摸牌，逆序即自顶向下）
+                    for i in (0..ctx.core.deck.len()).rev() {
                         let c = ctx.core.deck[i];
-                        let k = ctx.catalog.cards[c as usize].kind as u8;
+                        let k = class_tag(ctx.catalog.cards[c as usize].kind);
                         if !types.contains(&k) {
                             ctx.core.deck.remove(i);
                             ctx.core.player_mut(self.owner).hand.push(c);
@@ -430,11 +436,11 @@ impl HostMachine {
                                 old,
                             );
                             ctx.to_discard(old);
+                            ctx.log(LogEvent::CardDiscarded {
+                                player: self.owner,
+                                cards: vec![c],
+                            });
                         }
-                        ctx.log(LogEvent::CardDiscarded {
-                            player: self.owner,
-                            cards: vec![c],
-                        });
                     }
                     Flow::Done
                 }
@@ -485,7 +491,7 @@ impl HostMachine {
                             options,
                             min: 1,
                             max: 1,
-                            allow_cancel: false,
+                            allow_cancel: true,
                         },
                     }
                 }
@@ -497,15 +503,18 @@ impl HostMachine {
                     let Some(t) = self.target else {
                         return Flow::Done;
                     };
-                    // 首张 he 弃置（确定性首张，登记差异上游随机）
-                    if let Some(c) = ctx
+                    // 随机弃置目标一张 he 牌（上游 randomDiscard）
+                    let pool: Vec<CardId> = ctx
                         .core
                         .player(t)
                         .hand
-                        .first()
+                        .iter()
+                        .chain(ctx.core.player(t).equips.iter())
                         .copied()
-                        .or_else(|| ctx.core.player(t).equips.first().copied())
-                    {
+                        .collect();
+                    if !pool.is_empty() {
+                        let idx = ctx.core.rng.gen_range(pool.len() as u32) as usize;
+                        let c = pool[idx];
                         if ctx.core.player(t).hand.contains(&c) {
                             ctx.discard_from_hand(t, c);
                         } else if let Some(pos) =
@@ -514,11 +523,11 @@ impl HostMachine {
                             let old = ctx.core.player_mut(t).equips.remove(pos);
                             crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, old);
                             ctx.to_discard(old);
+                            ctx.log(LogEvent::CardDiscarded {
+                                player: t,
+                                cards: vec![c],
+                            });
                         }
-                        ctx.log(LogEvent::CardDiscarded {
-                            player: t,
-                            cards: vec![c],
-                        });
                     }
                     Flow::Done
                 }
@@ -588,37 +597,32 @@ impl HostMachine {
                 }
                 _ => Flow::Done,
             },
-            // 神草结：确认门后弃一张神草结——受伤者是自己则伤-1、是自己
-            // 造成则伤+1
+            // 神草结：确认门后使用一张神草结（可被无懈）——未取消则受伤者是
+            // 自己伤-1、是自己造成伤+1
             HostBehavior::SwdShencaojieGuard => {
-                if let Some(EventData::Damage(dm)) =
-                    ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data)
-                {
-                    let toward_self = dm.target == self.owner;
-                    if let Some(pos) = ctx
+                let dmg_fid = ctx.current_event_frame_id();
+                if let Some(EventData::Damage(dm)) = ctx.res.frame(dmg_fid).map(|f| &f.data) {
+                    let dmg_target = dm.target;
+                    if let Some(scj) = ctx
                         .core
                         .player(self.owner)
                         .hand
                         .iter()
-                        .position(|c| ctx.catalog.card_kind(*c) == CardKind::Shencaojie)
+                        .copied()
+                        .find(|c| ctx.catalog.card_kind(*c) == CardKind::Shencaojie)
                     {
-                        let c = ctx.core.player_mut(self.owner).hand.remove(pos);
-                        ctx.to_discard(c);
-                        ctx.log(LogEvent::CardDiscarded {
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((self.owner, format!("swd_scj_dmg:{scj}")), dmg_fid);
+                        ctx.emit(EventData::CardUsed(crate::event::CardUseData {
+                            card: Some(scj),
                             player: self.owner,
-                            cards: vec![c],
-                        });
-                        let frame = ctx
-                            .res
-                            .frame_mut(ctx.current_event_frame_id())
-                            .expect("frame");
-                        if let EventData::Damage(d2) = &mut frame.data {
-                            if toward_self {
-                                d2.amount = d2.amount.saturating_sub(1);
-                            } else {
-                                d2.amount += 1;
-                            }
-                        }
+                            targets: vec![dmg_target],
+                            nature: crate::event::DamageNature::Normal,
+                            use_as: None,
+                            cancelled: false,
+                        }));
                     }
                 }
                 Flow::Done

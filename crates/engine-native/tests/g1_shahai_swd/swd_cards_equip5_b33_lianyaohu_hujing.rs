@@ -566,7 +566,7 @@ fn swd_cards_equip5_b35_kunlunjingc_donghuangzhong() {
         .expect("昆仑镜在目录") as u32;
     equip_with_skills(&mut e, 0, kj, &["kunlunjingc"]);
     let replace = e.debug_place(0, "tao");
-    let deck_top3: Vec<u32> = e.state_core().deck.iter().take(3).copied().collect();
+    let deck_top3: Vec<u32> = e.state_core().deck.iter().rev().take(3).copied().collect();
     let kj_def = e
         .catalog()
         .skill_by_name("kunlunjingc")
@@ -845,7 +845,7 @@ fn swd_cards_equip5_b36_kongdongyin_death_cancel() {
     settle_optional_confirm(&mut e);
     assert!(e.state_core().player(0).alive, "空洞印：死亡被取消存活");
     assert_eq!(e.debug_hp(0), 1, "空洞印：hp 重置 1");
-    assert_eq!(hand_len_w(&e, 0), 1, "空洞印：摸 1");
+    assert_eq!(hand_len_w(&e, 0), 2, "空洞印：摸 1 + 乾坤袋 onLose 摸 1");
     assert!(
         !e.state_core().player(0).equips.iter().any(|c| {
             e.catalog().cards[*c as usize].kind.equip_slot()

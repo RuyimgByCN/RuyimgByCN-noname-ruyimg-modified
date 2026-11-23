@@ -38,6 +38,8 @@ mod extension_choices_u05_5a;
 mod extension_choices_dispatch;
 #[path = "extension_choices_u05_5b.rs"]
 mod extension_choices_u05_5b;
+#[path = "extension_choices_u05_7a.rs"]
+mod extension_choices_u05_7a;
 
 pub(super) fn public_attitude(view: &crate::view::PlayerView, seat: u8, target: u8) -> i32 {
     if target == seat {

@@ -643,6 +643,14 @@ impl HostBehavior {
             1102 => HostBehavior::U05XianjianBatchC,
             1103 => HostBehavior::U05XianjianBatchD,
             1104 => HostBehavior::U05XianjianBatchE,
+            1280 => HostBehavior::U05SwdDujianCard,
+            1281 => HostBehavior::U05SwdPangufu,
+            1282 => HostBehavior::U05SwdHufuViewAs,
+            1283 => HostBehavior::U05SwdYuchanEquip,
+            1284 => HostBehavior::U05SwdZhiluxiaohuDraw,
+            1285 => HostBehavior::U05SwdHuanpodanGuard,
+            1286 => HostBehavior::U05SwdForgingEnd,
+            1287 => HostBehavior::U05SwdPassiveMarker,
             _ => return None,
         })
     }

@@ -12,34 +12,72 @@ impl HostMachine {
             // 确认即置位每阶段一次旗（上游 shenmiguo2 临时技：再结算牌
             // 的用牌后窗口被同一旗挡住=循环守卫）。
             HostBehavior::SwdShenmiguoWindow => match self.stage {
-                HostStage::Act => {
-                    let (x_card, x_targets) = {
-                        let u = ctx.current_card_use().expect("card use frame");
-                        (u.card, u.targets.clone())
+                HostStage::SelectCard => {
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: crate::choice::ChoiceSpec::confirm("trigger_confirm"),
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(x_card) = self.cards.first().copied() else {
+                        return Flow::Done;
                     };
+                    if !ctx.answer().contains(&ChoiceOption::Confirm) {
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .remove(&(self.owner, format!("swd_smg_nature:{x_card}")));
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .remove(&(self.owner, format!("swd_smg_use_as:{x_card}")));
+                        return Flow::Done;
+                    }
                     let Some(fruit) = ctx
                         .core
                         .player(self.owner)
                         .hand
                         .iter()
                         .copied()
-                        .find(|c| ctx.catalog.card_kind(*c) == CardKind::Shenmiguo)
+                        .find(|c| {
+                            matches!(
+                                ctx.catalog.card_kind(*c),
+                                CardKind::Shenmiguo | CardKind::Yuchankan
+                            )
+                        })
                     else {
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .remove(&(self.owner, format!("swd_smg_nature:{x_card}")));
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .remove(&(self.owner, format!("swd_smg_use_as:{x_card}")));
                         return Flow::Done;
                     };
                     self.card = Some(fruit);
-                    let Some(x_card) = x_card else {
-                        return Flow::Done;
-                    };
-                    self.cards = vec![x_card];
-                    self.targets = x_targets;
                     ctx.core.turn.shenmiguo_used = true;
+                    if let Some(def) = ["g_shenmiguo", "shenmiguo_window", "host:shenmiguo_window"]
+                        .into_iter()
+                        .find_map(|n| {
+                            ctx.catalog
+                                .skill_by_name(n)
+                                .filter(|&d| ctx.core.has_skill(self.owner, d))
+                        })
+                    {
+                        let sname = ctx.catalog.skills[def as usize].name;
+                        ctx.log_skill_triggered(sname, self.owner, def);
+                    }
+                    let fruit_use_as = (ctx.catalog.card_kind(fruit) == CardKind::Yuchankan)
+                        .then_some(CardKind::Shenmiguo);
                     ctx.emit(EventData::CardUsed(crate::event::CardUseData {
                         card: Some(fruit),
                         player: self.owner,
                         targets: Vec::new(),
                         nature: crate::event::DamageNature::Normal,
-                        use_as: None,
+                        use_as: fruit_use_as,
                         cancelled: false,
                     }));
                     self.stage = HostStage::ShenmiguoRestage;
@@ -56,18 +94,30 @@ impl HostMachine {
                     } else if !ctx.core.table.contains(&x_card) {
                         return Flow::Done;
                     }
-                    let kind = ctx.catalog.card_kind(x_card);
-                    let nature = match kind {
-                        CardKind::FireSha => crate::event::DamageNature::Fire,
-                        CardKind::LeiSha => crate::event::DamageNature::Thunder,
-                        _ => crate::event::DamageNature::Normal,
-                    };
+                    let use_as = ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .remove(&(self.owner, format!("swd_smg_use_as:{x_card}")))
+                        .and_then(|code| u16::try_from(code).ok())
+                        .and_then(|code| crate::archive::kind_from_code(code).ok());
+                    let nature = ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .remove(&(self.owner, format!("swd_smg_nature:{x_card}")))
+                        .map(decode_damage_nature)
+                        .unwrap_or_else(|| match ctx.catalog.card_kind(x_card) {
+                            CardKind::FireSha => crate::event::DamageNature::Fire,
+                            CardKind::LeiSha => crate::event::DamageNature::Thunder,
+                            _ => crate::event::DamageNature::Normal,
+                        });
                     ctx.emit(EventData::CardUsed(crate::event::CardUseData {
                         card: Some(x_card),
                         player: self.owner,
                         targets: self.targets.clone(),
                         nature,
-                        use_as: None,
+                        use_as,
                         cancelled: false,
                     }));
                     self.cards.clear();
@@ -142,6 +192,9 @@ impl HostMachine {
             // 玉蝉换形: 手牌中每张玉蝉实体轮换为八卦序下一 kind 的实体
             //（牌堆/弃堆确定性发现首张；登记差异上游随机+init 原地变形）
             HostBehavior::SwdYuchanSwap => {
+                if self.stage == HostStage::TargetChoice && ctx.core.turn.shenmiguo_used {
+                    return Flow::Done;
+                }
                 const ORDER: [CardKind; 8] = [
                     CardKind::Yuchanqian,
                     CardKind::Yuchankun,
@@ -500,4 +553,338 @@ impl HostMachine {
             _ => unreachable!("behavior routed to the wrong step module"),
         }
     }
+}
+
+fn damage_nature_code(n: crate::event::DamageNature) -> u32 {
+    match n {
+        crate::event::DamageNature::Normal => 0,
+        crate::event::DamageNature::Fire => 1,
+        crate::event::DamageNature::Thunder => 2,
+    }
+}
+
+fn decode_damage_nature(code: u32) -> crate::event::DamageNature {
+    match code {
+        1 => crate::event::DamageNature::Fire,
+        2 => crate::event::DamageNature::Thunder,
+        _ => crate::event::DamageNature::Normal,
+    }
+}
+
+pub(in crate::content::host) fn is_delayed_trick_swd(k: CardKind) -> bool {
+    matches!(
+        k,
+        CardKind::Le
+            | CardKind::Bing
+            | CardKind::ShanDian
+            | CardKind::Guiyoujie
+            | CardKind::HongShui
+    )
+}
+
+fn has_skill_named(ctx: &QueryCtx<'_>, p: PlayerId, name: &str) -> bool {
+    ctx.catalog
+        .skill_by_name(name)
+        .is_some_and(|def| ctx.state.has_skill(p, def))
+}
+
+fn target_can_use_replay(
+    ctx: &QueryCtx<'_>,
+    owner: PlayerId,
+    card: CardId,
+    k: CardKind,
+    nature: crate::event::DamageNature,
+    t: PlayerId,
+) -> bool {
+    let tp = ctx.state.player(t);
+    if !tp.alive {
+        return false;
+    }
+    if crate::rvm_bridge::modifiers::eval_card_target_canceled(
+        ctx.state,
+        ctx.catalog,
+        owner,
+        t,
+        card,
+        k,
+        nature,
+    ) {
+        return false;
+    }
+    let op = ctx.state.player(owner);
+    match k {
+        CardKind::Sha | CardKind::FireSha | CardKind::LeiSha => {
+            t != owner
+                && !(tp.hand.is_empty()
+                    && has_skill_named(ctx, t, crate::content::standard::KONG_CHENG))
+        }
+        CardKind::Duel => {
+            t != owner
+                && !(tp.hand.is_empty()
+                    && has_skill_named(ctx, t, crate::content::standard::KONG_CHENG))
+        }
+        CardKind::Dismantle => {
+            t != owner && (!tp.hand.is_empty() || !tp.equips.is_empty() || !tp.judge.is_empty())
+        }
+        CardKind::Snatch => {
+            t != owner
+                && !has_skill_named(ctx, t, crate::content::standard::QIAN_XUN)
+                && (!tp.hand.is_empty() || !tp.equips.is_empty())
+        }
+        CardKind::Tao => {
+            tp.hp < tp.max_hp as i32
+                && !crate::kernel::tao_futai2_banned(ctx.state, ctx.catalog, owner)
+        }
+        CardKind::Caoyao => t != owner && tp.hp < tp.max_hp as i32,
+        CardKind::Xuejibingbao => tp.xuejibingbao == 0,
+        CardKind::Fudichouxin | CardKind::Toulianghuanzhu => {
+            t != owner && !tp.hand.is_empty() && !op.hand.is_empty()
+        }
+        CardKind::Chenhuodajie
+        | CardKind::Zhaomingdan
+        | CardKind::Caochuanjiejian
+        | CardKind::Geanguanhuo => t != owner && !tp.hand.is_empty(),
+        CardKind::Shuigong => !tp.equips.is_empty(),
+        CardKind::Shujinsan => !tp.hand.is_empty(),
+        CardKind::Mianlijinzhen => tp.hp >= op.hp,
+        CardKind::Zhufangshenshi
+        | CardKind::Feibiao
+        | CardKind::Shihuifen
+        | CardKind::Liufengsan => t != owner,
+        _ => true,
+    }
+}
+
+pub(in crate::content::host) fn shenmiguo_matches(
+    ctx: &QueryCtx<'_>,
+    owner: PlayerId,
+    event: &EventData,
+) -> bool {
+    let EventData::CardUsed(u) = event else {
+        return false;
+    };
+    if u.cancelled
+        || u.player != owner
+        || ctx.state.turn.phase != crate::event::Phase::Play
+        || ctx.state.turn.current != owner
+        || ctx.state.turn.shenmiguo_used
+    {
+        return false;
+    }
+    let Some(card) = u.card else {
+        return false;
+    };
+    let k = u.effective_kind(ctx.catalog);
+    if matches!(k, CardKind::Shenmiguo | CardKind::Yuchankan | CardKind::Wugu) {
+        return false;
+    }
+    if !(k.is_basic_kind() || (k.is_trick_kind() && !is_delayed_trick_swd(k))) {
+        return false;
+    }
+    if !ctx.state.player(owner).hand.iter().any(|c| {
+        matches!(
+            ctx.catalog.card_kind(*c),
+            CardKind::Shenmiguo | CardKind::Yuchankan
+        )
+    }) {
+        return false;
+    }
+    if crate::rvm_bridge::modifiers::eval_card_use_canceled(
+        ctx.state,
+        ctx.catalog,
+        owner,
+        card,
+        k,
+        u.nature,
+    ) {
+        return false;
+    }
+    if u.targets.is_empty() {
+        return match k {
+            CardKind::Tao => target_can_use_replay(ctx, owner, card, k, u.nature, owner),
+            CardKind::Jiu | CardKind::Tianxianjiu => {
+                ctx.state.player(owner).alive
+                    && !crate::rvm_bridge::modifiers::eval_card_target_canceled(
+                        ctx.state,
+                        ctx.catalog,
+                        owner,
+                        owner,
+                        card,
+                        k,
+                        u.nature,
+                    )
+            }
+            CardKind::Wuzhong
+            | CardKind::Yangpijuan
+            | CardKind::Jihuocard
+            | CardKind::Fengyinzhidan => !crate::rvm_bridge::modifiers::eval_card_target_canceled(
+                ctx.state,
+                ctx.catalog,
+                owner,
+                owner,
+                card,
+                k,
+                u.nature,
+            ),
+            CardKind::Taoyuan => ctx.state.alive_players().any(|t| {
+                !crate::rvm_bridge::modifiers::eval_card_target_canceled(
+                    ctx.state,
+                    ctx.catalog,
+                    owner,
+                    t,
+                    card,
+                    k,
+                    u.nature,
+                )
+            }),
+            CardKind::SavageAttack
+            | CardKind::ArcheryAttack
+            | CardKind::Jingleishan
+            | CardKind::Chiyuxi
+            | CardKind::Shezhanqunru => ctx.state.alive_players().any(|t| {
+                t != owner
+                    && !crate::rvm_bridge::modifiers::eval_card_target_canceled(
+                        ctx.state,
+                        ctx.catalog,
+                        owner,
+                        t,
+                        card,
+                        k,
+                        u.nature,
+                    )
+            }),
+            _ => false,
+        };
+    }
+    if k == CardKind::Jiedao {
+        if u.targets.len() != 2 || u.targets[0] == owner || u.targets[0] == u.targets[1] {
+            return false;
+        }
+        let has_weapon = ctx.state.player(u.targets[0]).equips.iter().any(|&eq| {
+            ctx.catalog.card_kind(eq).equip_slot() == Some(crate::catalog::EquipSlot::Weapon)
+        });
+        if !has_weapon {
+            return false;
+        }
+    }
+    u.targets
+        .iter()
+        .all(|&t| target_can_use_replay(ctx, owner, card, k, u.nature, t))
+}
+
+fn active_shenmiguo_skill(
+    state: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    player: PlayerId,
+) -> Option<crate::ids::SkillDefId> {
+    ["g_shenmiguo", "shenmiguo_window", "host:shenmiguo_window"]
+        .into_iter()
+        .find_map(|n| catalog.skill_by_name(n).filter(|&d| state.has_skill(player, d)))
+}
+
+pub(in crate::content::host) fn should_defer_yuchan_swap(
+    state: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    owner: PlayerId,
+    u: &crate::event::CardUseData,
+) -> bool {
+    !u.cancelled
+        && u.player == owner
+        && state.turn.phase == crate::event::Phase::Play
+        && state.turn.current == owner
+        && !state.turn.shenmiguo_used
+        && active_shenmiguo_skill(state, catalog, owner).is_some()
+        && state
+            .player(owner)
+            .hand
+            .iter()
+            .any(|c| catalog.card_kind(*c) == CardKind::Yuchankan)
+}
+
+pub(in crate::content::host) fn try_push_shenmiguo_after_use(
+    ctx: &mut Ctx<'_>,
+    u: &crate::event::CardUseData,
+) {
+    let Some(x_card) = u.card else {
+        return;
+    };
+    let Some(def) = active_shenmiguo_skill(ctx.core, ctx.catalog, u.player) else {
+        return;
+    };
+    let ev = EventData::CardUsed(u.clone());
+    let matches = {
+        let qctx = ctx.query();
+        shenmiguo_matches(&qctx, u.player, &ev)
+    };
+    if !matches {
+        return;
+    }
+    ctx.core.vm_aux.flags.insert(
+        (u.player, format!("swd_smg_nature:{x_card}")),
+        damage_nature_code(u.nature),
+    );
+    if let Some(ua) = u.use_as {
+        ctx.core.vm_aux.flags.insert(
+            (u.player, format!("swd_smg_use_as:{x_card}")),
+            u32::from(crate::archive::kind_code(ua)),
+        );
+    } else {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(u.player, format!("swd_smg_use_as:{x_card}")));
+    }
+    ctx.res.parks.push(crate::resolution::Park {
+        resume_depth: ctx.res.stack.len(),
+        slot: crate::resolution::Slot::Intrinsic {
+            frame: crate::resolution::NO_FRAME,
+        },
+        awaiting_answer: false,
+        machine: Box::new(HostMachine {
+            def_key: ctx.catalog.skills[def as usize].name.to_string(),
+            behavior: HostBehavior::SwdShenmiguoWindow,
+            owner: u.player,
+            target: None,
+            card: None,
+            cards: vec![x_card],
+            targets: u.targets.clone(),
+            stage: HostStage::SelectCard,
+        }),
+    });
+}
+
+pub(in crate::content::host) fn try_push_yuchan_swap_after_use(
+    ctx: &mut Ctx<'_>,
+    u: &crate::event::CardUseData,
+) {
+    if !should_defer_yuchan_swap(ctx.core, ctx.catalog, u.player, u) {
+        return;
+    }
+    let Some(def) = ["g_yuchan_swap", "yuchan_swap", "host:yuchan_swap"]
+        .into_iter()
+        .find_map(|n| {
+            ctx.catalog
+                .skill_by_name(n)
+                .filter(|&d| ctx.core.has_skill(u.player, d))
+        })
+    else {
+        return;
+    };
+    ctx.res.parks.push(crate::resolution::Park {
+        resume_depth: ctx.res.stack.len(),
+        slot: crate::resolution::Slot::Intrinsic {
+            frame: crate::resolution::NO_FRAME,
+        },
+        awaiting_answer: false,
+        machine: Box::new(HostMachine {
+            def_key: ctx.catalog.skills[def as usize].name.to_string(),
+            behavior: HostBehavior::SwdYuchanSwap,
+            owner: u.player,
+            target: None,
+            card: None,
+            cards: Vec::new(),
+            targets: Vec::new(),
+            stage: HostStage::TargetChoice,
+        }),
+    });
 }

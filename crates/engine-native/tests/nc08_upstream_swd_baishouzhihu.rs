@@ -55,7 +55,7 @@ fn find_red(e: &Engine) -> Option<engine_native::CardId> {
         .map(|(i, _)| i as engine_native::CardId)
 }
 
-/// 白兽之琥：手持本卡 + 手牌有红牌 ⇒ **任意阶段开始**应开启 `baishouzhihu_target` 询问。
+/// 白兽之琥：手持本卡 + 实际弃牌后（上游 `player: 'discardEnd'`）应开启 `baishouzhihu_target` 询问。
 #[test]
 fn upstream_baishouzhihu_opens_target_window() {
     let mut e = swd_engine(20289002);
@@ -70,18 +70,21 @@ fn upstream_baishouzhihu_opens_target_window() {
         .find(|(_, c)| c.name.contains("baishouzhihu"))
         .map(|(i, _)| i as engine_native::CardId)
         .expect("白兽之琥在目录");
-    put_hand(&mut e, 0, card);
     let red = find_red(&e).expect("目录有红桃/方块牌");
-    put_hand(&mut e, 0, red);
+    // seat 1 留 1 张牌作为目标；seat 0 置白兽之琥 + 超手牌上限的若干废牌使 Discard 阶段真实弃牌。
+    put_hand(&mut e, 1, red);
+    let fillers: Vec<_> = (0..e.catalog().cards.len() as engine_native::CardId)
+        .filter(|&id| id != card && id != red && e.catalog().cards[id as usize].kind == engine_native::CardKind::Sha)
+        .take(5)
+        .collect();
+    for f in fillers {
+        put_hand(&mut e, 0, f);
+    }
+    put_hand(&mut e, 0, card);
 
-    // 逐步推进，观察是否出现 baishouzhihu_target
-    // ⚠ 更正：`Phase { begin: true }` 只在**回合起点的判定阶段**发射（`kernel/events.rs:753/789`），
-    // 建局时第 1 轮已发过 ⇒ 必须推进到**下一轮**（`round >= 2`）才可能看到窗口。
+    // 逐步推进，经真实弃牌触发后观察是否出现 baishouzhihu_target
     let mut seen: Option<String> = None;
     for _ in 0..260 {
-        if e.turn().round >= 2 && seen.is_none() {
-            // 到达下一轮判定阶段后，再多走一步让阶段开始事件进入结算
-        }
         if let Some(c) = e.open_choice() {
             if c.spec.prompt.contains("baishouzhihu") {
                 seen = Some(c.spec.prompt.to_string());
@@ -106,7 +109,7 @@ fn upstream_baishouzhihu_opens_target_window() {
                 seen = Some(c.spec.prompt.to_string());
                 break;
             }
-            // 其它询问：确认/放弃
+            // 弃牌时保留白兽之琥在手牌；其余询问确认/放弃
             let sel: Vec<ChoiceOption> = if c.spec.prompt == "trigger_confirm" {
                 vec![ChoiceOption::Confirm]
             } else if c.spec.options.contains(&ChoiceOption::Pass) {
@@ -114,7 +117,14 @@ fn upstream_baishouzhihu_opens_target_window() {
             } else if c.spec.allow_cancel {
                 Vec::new()
             } else {
-                c.spec.options.iter().take(c.spec.max.max(1)).copied().collect()
+                let need = c.spec.min.max(1);
+                c.spec
+                    .options
+                    .iter()
+                    .copied()
+                    .filter(|o| *o != ChoiceOption::Card(card))
+                    .take(need)
+                    .collect()
             };
             let _ = e.submit(GameCommand {
                 actor: c.observer,
@@ -132,7 +142,7 @@ fn upstream_baishouzhihu_opens_target_window() {
     );
     assert!(
         seen.is_some(),
-        "白兽之琥应开启 `baishouzhihu_target` 询问（`Phase{{begin:true}}` 家族）"
+        "白兽之琥应开启 `baishouzhihu_target` 询问（`CardsDiscarded` / `discardEnd` 家族）"
     );
 }
 

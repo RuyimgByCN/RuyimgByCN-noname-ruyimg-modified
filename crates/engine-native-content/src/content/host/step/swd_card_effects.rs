@@ -43,15 +43,12 @@ impl HostMachine {
                         })
                         .collect();
                     if picked.len() < 2 {
+                        refund_host_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     }
                     for c in picked {
                         if ctx.core.player(self.owner).hand.contains(&c) {
                             ctx.discard_from_hand(self.owner, c);
-                            ctx.log(LogEvent::CardDiscarded {
-                                player: self.owner,
-                                cards: vec![c],
-                            });
                         }
                     }
                     let p = ctx.core.player(self.owner);
@@ -149,10 +146,12 @@ impl HostMachine {
                     if ctx.core.deck.len() < 3 {
                         return Flow::Done;
                     }
+                    // 牌堆顶起亮出最多 3 张（`core.deck.pop()` 从尾部摸牌，逆序即自顶向下；上游 `get.cards(3)`）
                     let options: Vec<ChoiceOption> = ctx
                         .core
                         .deck
                         .iter()
+                        .rev()
                         .take(3)
                         .copied()
                         .map(ChoiceOption::Card)
@@ -175,6 +174,7 @@ impl HostMachine {
                         ChoiceOption::Card(c) => Some(*c),
                         _ => None,
                     }) else {
+                        refund_host_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     };
                     self.cards = vec![picked];
@@ -187,6 +187,7 @@ impl HostMachine {
                         .map(ChoiceOption::Card)
                         .collect();
                     if options.is_empty() {
+                        refund_host_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     }
                     self.stage = HostStage::TargetChoice;
@@ -207,20 +208,21 @@ impl HostMachine {
                         ChoiceOption::Card(c) => Some(*c),
                         _ => None,
                     }) else {
+                        refund_host_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     };
                     let Some(picked) = self.cards.first().copied() else {
+                        refund_host_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     };
+                    let Some(pos) = ctx.core.deck.iter().position(|x| *x == picked) else {
+                        refund_host_once_used(ctx, self.owner, &self.def_key);
+                        return Flow::Done;
+                    };
+                    // 用手牌放回原位替换，不弃牌（上游 lose(ui.special) → 回放牌堆顶）
                     if ctx.core.player(self.owner).hand.contains(&replace) {
-                        ctx.discard_from_hand(self.owner, replace);
-                        ctx.log(LogEvent::CardDiscarded {
-                            player: self.owner,
-                            cards: vec![replace],
-                        });
-                    }
-                    if let Some(pos) = ctx.core.deck.iter().position(|x| *x == picked) {
-                        ctx.core.deck.remove(pos);
+                        ctx.take_hand_card(self.owner, replace);
+                        ctx.core.deck[pos] = replace;
                         ctx.core.player_mut(self.owner).hand.push(picked);
                         ctx.log(LogEvent::CardsDrawn {
                             player: self.owner,
@@ -274,9 +276,10 @@ impl HostMachine {
                         return Flow::Done;
                     };
                     self.cards = vec![cost];
-                    let options: Vec<ChoiceOption> = (0..ctx.core.players.len())
-                        .filter(|&i| i as PlayerId != self.owner)
-                        .map(|i| ChoiceOption::Player(i as u8))
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .map(ChoiceOption::Player)
                         .collect();
                     if options.is_empty() {
                         return Flow::Done;
@@ -302,41 +305,45 @@ impl HostMachine {
                     let (Some(cost), Some(t)) = (self.cards.first().copied(), self.target) else {
                         return Flow::Done;
                     };
+                    if !ctx.core.player(t).alive {
+                        return Flow::Done;
+                    }
                     if ctx.core.player(self.owner).hand.contains(&cost) {
                         ctx.discard_from_hand(self.owner, cost);
-                        ctx.log(LogEvent::CardDiscarded {
-                            player: self.owner,
-                            cards: vec![cost],
-                        });
                     }
                     let delay_kinds = [CardKind::Le, CardKind::Bing, CardKind::ShanDian];
-                    let mut placed = None;
-                    for i in 0..ctx.core.deck.len() {
-                        let c = ctx.core.deck[i];
-                        let k = ctx.catalog.cards[c as usize].kind;
-                        if !delay_kinds.contains(&k) {
-                            continue;
-                        }
-                        if ctx
+                    let eligible_kinds: Vec<CardKind> = delay_kinds
+                        .into_iter()
+                        .filter(|k| {
+                            !ctx.core
+                                .player(t)
+                                .judge
+                                .iter()
+                                .any(|jc| ctx.catalog.cards[*jc as usize].kind == *k)
+                                && ctx
+                                    .core
+                                    .deck
+                                    .iter()
+                                    .any(|dc| ctx.catalog.cards[*dc as usize].kind == *k)
+                        })
+                        .collect();
+                    if !eligible_kinds.is_empty() {
+                        let k = eligible_kinds[ctx.core.rng.gen_range(eligible_kinds.len() as u32) as usize];
+                        if let Some(dc) = ctx
                             .core
-                            .player(t)
-                            .judge
+                            .deck
                             .iter()
-                            .any(|jc| ctx.catalog.cards[*jc as usize].kind == k)
+                            .copied()
+                            .find(|c| ctx.catalog.cards[*c as usize].kind == k)
                         {
-                            continue;
+                            ctx.core.deck.retain(|x| *x != dc);
+                            ctx.core.player_mut(t).judge.push(dc);
+                            ctx.log(LogEvent::CardsGiven {
+                                from: self.owner,
+                                to: t,
+                                cards: vec![dc],
+                            });
                         }
-                        placed = Some(c);
-                        break;
-                    }
-                    if let Some(dc) = placed {
-                        ctx.core.deck.retain(|x| *x != dc);
-                        ctx.core.player_mut(t).judge.push(dc);
-                        ctx.log(LogEvent::CardsGiven {
-                            from: self.owner,
-                            to: t,
-                            cards: vec![dc],
-                        });
                     }
                     Flow::Done
                 }
@@ -531,28 +538,77 @@ impl HostMachine {
                 }
                 _ => Flow::Done,
             },
-            HostBehavior::SwdZhiluxiaohuCard => {
-                // 指路小虎（U05 swd 机关牌首切片，规则 v189）：随机对一
-                // 名其他存活角色使用虚拟杀（无懈窗已在外层包装；虚拟杀
-                // 完整管线走闪询问/伤害）。
-                let candidates: Vec<PlayerId> = ctx
-                    .core
-                    .seat_order_from(self.owner)
-                    .into_iter()
-                    .filter(|p| *p != self.owner && ctx.core.player(*p).alive)
-                    .collect();
-                if let Some(&pick) =
-                    candidates.get(ctx.core.rng.gen_range(candidates.len() as u32) as usize)
-                {
-                    ctx.use_virtual_card(self.owner, crate::catalog::CardKind::Sha, vec![pick]);
+            HostBehavior::SwdZhiluxiaohuCard => match self.stage {
+                // 指路小虎（U05 swd 机关牌 + skill.js:59 `zhiluxiaohu`）：随机对一
+                // 名其他存活角色使用虚拟杀；若此杀造成伤害后摸 1 张牌。
+                HostStage::Act => {
+                    let candidates: Vec<PlayerId> = ctx
+                        .core
+                        .seat_order_from(self.owner)
+                        .into_iter()
+                        .filter(|p| *p != self.owner && ctx.core.player(*p).alive)
+                        .collect();
+                    if let Some(&pick) =
+                        candidates.get(ctx.core.rng.gen_range(candidates.len() as u32) as usize)
+                    {
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((self.owner, "u05_zhiluxiaohu_pending".to_string()), 1);
+                        if let Some(def) = ctx.catalog.skill_by_name("zhiluxiaohu") {
+                            if !ctx.core.skills.contains_key(&(self.owner, def)) {
+                                ctx.core.vm_aux.flags.insert(
+                                    (self.owner, "u05_zhiluxiaohu_temp".to_string()),
+                                    1,
+                                );
+                                ctx.insert_skill(
+                                    (self.owner, def),
+                                    crate::state::SkillInstance {
+                                        owner: self.owner,
+                                        enabled: true,
+                                        once_used: false,
+                                        expires_end_of_turn: false,
+                                        rounds: 0,
+                                    },
+                                );
+                            }
+                        }
+                        ctx.use_virtual_card(self.owner, crate::catalog::CardKind::Sha, vec![pick]);
+                        self.stage = HostStage::DrawSettle;
+                        return Flow::Yield;
+                    }
+                    if let Some(c) = self.card {
+                        ctx.to_discard(c);
+                        ctx.core.table.retain(|x| *x != c);
+                        self.card = None;
+                    }
+                    Flow::Done
                 }
-                // 本体弃置（卡牌机器惯例=流星火雨同款）
-                if let Some(c) = self.card {
-                    ctx.to_discard(c);
-                    ctx.core.table.retain(|x| *x != c);
+                HostStage::DrawSettle => {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(self.owner, "u05_zhiluxiaohu_pending".to_string()));
+                    if ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .remove(&(self.owner, "u05_zhiluxiaohu_temp".to_string()))
+                        .is_some()
+                    {
+                        if let Some(def) = ctx.catalog.skill_by_name("zhiluxiaohu") {
+                            ctx.core.skills.remove(&(self.owner, def));
+                        }
+                    }
+                    if let Some(c) = self.card {
+                        ctx.to_discard(c);
+                        ctx.core.table.retain(|x| *x != c);
+                        self.card = None;
+                    }
+                    Flow::Done
                 }
-                Flow::Done
-            }
+                _ => Flow::Done,
+            },
             HostBehavior::SwdMujiarenCard => {
                 // 木甲人（U05 swd 机关牌第二切片，规则 v190）：弃全部
                 // 非基本手牌（静默=上游 lose _triggered=null 同口径）→

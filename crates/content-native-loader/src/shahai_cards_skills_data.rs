@@ -197,7 +197,7 @@ pub const U05_MTG_ALL_CARDS: [(&str, CardKind, u32, Suit, u8); 12] = [
 pub const U05_SWD_ALL_CARDS: [(&str, CardKind, u32, Suit, u8); 79] = [
     ("hufu", CardKind::Hufu, 0, Suit::Spade, 10), // card/swd/card.js:4
     ("liuxinghuoyu", CardKind::Liuxinghuoyu, 0, Suit::Heart, 11), // card/swd/card.js:16
-    ("dujian", CardKind::Tao, 0, Suit::Club, 12), // card/swd/card.js:99
+    ("dujian", CardKind::Dujian, 0, Suit::Club, 12), // card/swd/card.js:99
     ("yangpijuan", CardKind::Yangpijuan, 0, Suit::Diamond, 13), // card/swd/card.js:189
     ("shencaojie", CardKind::Shencaojie, 0, Suit::Spade, 1), // card/swd/card.js:242
     ("yuruyi", CardKind::Yuruyi, 0, Suit::Heart, 2), // card/swd/card.js:282
@@ -223,7 +223,7 @@ pub const U05_SWD_ALL_CARDS: [(&str, CardKind, u32, Suit, u8); 79] = [
     ("jiguantong", CardKind::Jiguan, 0, Suit::Heart, 9), // card/swd/card.js:669
     ("donghuangzhong", CardKind::Donghuangzhong, 0, Suit::Club, 10), // card/swd/card.js:750
     ("xuanyuanjian", CardKind::Xuanyuanjian, 0, Suit::Diamond, 11), // card/swd/card.js:762
-    ("pangufu", CardKind::Weapon, 4, Suit::Spade, 12), // card/swd/card.js:785
+    ("pangufu", CardKind::Pangufu, 4, Suit::Spade, 12), // card/swd/card.js:785
     ("lianyaohu", CardKind::Lianyaohu, 0, Suit::Heart, 13), // card/swd/card.js:798
     ("haotianta", CardKind::Haotianta, 0, Suit::Club, 1), // card/swd/card.js:823
     ("fuxiqin", CardKind::WuxingPan, 0, Suit::Diamond, 2), // card/swd/card.js:835

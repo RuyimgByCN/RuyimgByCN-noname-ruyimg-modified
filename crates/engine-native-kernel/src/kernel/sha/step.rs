@@ -361,6 +361,10 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     ctx.catalog,
                     next,
                 );
+                let hufu_shan_next = ctx
+                    .catalog
+                    .skill_by_name("g_hufu_shan")
+                    .is_some_and(|d| ctx.core.has_skill(next, d));
                 let options: Vec<ChoiceOption> = ctx
                     .core
                     .player(next)
@@ -376,6 +380,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                             *c,
                         ) && (rw_lanyin_next
                             || kind == CardKind::Shan
+                            || (hufu_shan_next && kind == CardKind::Hufu)
                             || (qingguo_next
                                 && matches!(
                                     ctx.catalog.resolved_card_suit(ctx.core, *c),

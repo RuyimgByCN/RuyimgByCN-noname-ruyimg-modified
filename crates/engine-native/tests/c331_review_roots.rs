@@ -242,7 +242,7 @@ fn c9i_yudun_transformed_material_does_not_consume_regular_sha() {
     assert!(e.state_core().turn.sha_used_play_phase);
 }
 #[test]
-fn c9i_shenmiguo_excludes_transformed_material_but_replays_physical_sha() {
+fn c9i_shenmiguo_replays_transformed_use_as_and_physical_sha() {
     for transformed in [true, false] {
         let pack = super::c331_source_predicates::source_pack("shahai-swd-upstream-noname");
         let mut e = Engine::new_with_extensions(16022, 4, &[&pack]).unwrap();
@@ -272,20 +272,13 @@ fn c9i_shenmiguo_excludes_transformed_material_but_replays_physical_sha() {
             },
         );
         assert!(!matches!(out, CommandOutcome::Rejected(_)), "{out:?}");
-        if transformed {
-            assert!(
-                e.open_choice().is_none(),
-                "material replay cannot reconstruct transformed card semantics"
-            );
-            assert!(e.debug_hand(0).contains(&fruit));
-            assert_eq!(e.debug_hp(1), 3);
-        } else {
-            assert_eq!(e.open_choice().unwrap().spec.prompt, "trigger_confirm");
-            answer(&mut e, vec![O::Confirm]);
-            finish(&mut e);
-            assert_eq!(e.debug_hp(1), 2);
-            assert!(!e.debug_hand(0).contains(&fruit));
-        }
+        // 上游 `g_shenmiguo` (`card/swd/skill.js:269`) 复制 `event.card.name` 再结算一次，
+        // 故经 `ShenmiguoRestage` 保留 `use_as`/`nature` 后，`武圣` 转化杀与实体杀同样可再结算。
+        assert_eq!(e.open_choice().unwrap().spec.prompt, "trigger_confirm");
+        answer(&mut e, vec![O::Confirm]);
+        finish(&mut e);
+        assert_eq!(e.debug_hp(1), 2);
+        assert!(!e.debug_hand(0).contains(&fruit));
     }
 }
 #[test]

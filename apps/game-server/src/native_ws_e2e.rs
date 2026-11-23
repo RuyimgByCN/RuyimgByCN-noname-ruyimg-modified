@@ -910,7 +910,11 @@ fn native_extensions_ws_slow_spectator_does_not_block_commands() {
         let (healthy_outcomes, healthy_bytes) = tokio::time::timeout(Duration::from_secs(3), b_reader)
             .await.expect("reading player receives all commands").unwrap();
         assert_eq!(healthy_outcomes, 301);
-        assert!(healthy_bytes < 1024 * 1024, "broadcast load stays below 1 MiB");
+        // 301 full ObserverSnapshots with shahai-swd's 13 global skills/seat measure ~1.14 MiB (~3.98 KiB/frame).
+        assert!(
+            healthy_bytes < 1536 * 1024,
+            "broadcast load stays below 1.5 MiB (healthy_bytes={healthy_bytes})"
+        );
         println!("NATIVE_WS slow_spectator=disconnected commands=301 send_buffer={send_buffer} recv_buffer={recv_buffer} buffered_outcomes={outcomes} text_bytes={wire_bytes} healthy_outcomes={healthy_outcomes} healthy_bytes={healthy_bytes} reconnect=pass members=3");
         server.stop().await;
     });

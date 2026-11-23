@@ -86,6 +86,18 @@ pub fn revoke_equip_skills(
             }
         }
     }
+    let has_qiankundai_skill = catalog.cards[card as usize]
+        .equip_skills
+        .iter()
+        .any(|name| *name == "qiankundai");
+    if (has_qiankundai_skill
+        || catalog.card_kind(card) == crate::catalog::CardKind::Qiankundai)
+        && core.player(player).alive
+    {
+        let key = (player, "swd_qiankundai_pending_lose".to_string());
+        let cnt = core.vm_aux.flags.get(&key).copied().unwrap_or(0) + 1;
+        core.vm_aux.flags.insert(key, cnt);
+    }
     // G1 索链甲：离场装备声明横置且玩家无其他同类装备 → 重置横置
     if catalog.equip_card_links(core, card)
         || catalog.resolved_card_kind(core, card) == crate::catalog::CardKind::Suolianjia

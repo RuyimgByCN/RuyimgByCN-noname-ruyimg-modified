@@ -586,6 +586,10 @@ impl Engine {
                         *behavior == crate::content::host::HostBehavior::U05GwentCardEffect.tag()
                             && catalog.cards.iter().any(|c| c.name.starts_with("gw_"))
                     }
+                    "dujian" => {
+                        *behavior == crate::content::host::HostBehavior::U05SwdDujianCard.tag()
+                            && catalog.cards.iter().any(|c| c.kind == CardKind::Dujian)
+                    }
                     _ => false,
                 };
                 if !skill_ok && !card_ok {

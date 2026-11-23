@@ -550,6 +550,19 @@ pub(crate) fn on_outer_settled_taipingyaoshu(ctx: &mut Ctx<'_>) {
         push_pending(p, "l28_rw_baiyin_pending_lose", "l28_rw_baiyin_lose");
         push_pending(p, "l28_tianjitu_pending_lose", "l28_tianjitu_lose");
     }
+    drop(push_pending);
+    for p in 0..seats {
+        if let Some(cnt) = ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(p, "swd_qiankundai_pending_lose".to_string()))
+        {
+            if cnt > 0 && ctx.core.player(p).alive {
+                ctx.start_draw(p, cnt);
+            }
+        }
+    }
 }
 
 /// `rewrite_baiyin` 离开装备区（`mobile.js:502`）：回复 1 点体力，然后摸 2 张牌。

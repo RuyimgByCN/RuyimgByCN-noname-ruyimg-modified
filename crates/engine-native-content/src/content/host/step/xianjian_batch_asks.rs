@@ -673,7 +673,39 @@ pub(in crate::content::host) fn yujia_jiguan_pool(core: &GameStateCore, catalog:
 }
 
 pub(crate) fn host_on_hp_changed_xianjian(ctx: &mut Ctx<'_>, player: PlayerId, delta: i32) {
-    if delta == 0 || !ctx.core.player(player).alive || ctx.catalog.is_tieji_sealed(ctx.core, player) {
+    if delta == 0 || !ctx.core.player(player).alive {
+        return;
+    }
+    if ctx.core.player(player).hp <= 2
+        && ctx
+            .core
+            .player(player)
+            .equips
+            .iter()
+            .any(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Xuanyuanjian)
+        && !ctx
+            .catalog
+            .skill_by_name("xuanyuan")
+            .is_some_and(|id| ctx.core.has_skill(player, id))
+    {
+        if let Some(pos) = ctx
+            .core
+            .player(player)
+            .equips
+            .iter()
+            .position(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Xuanyuanjian)
+        {
+            let sword = ctx.core.player_mut(player).equips.remove(pos);
+            ctx.core.declared_slots.remove(&sword);
+            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, player, sword);
+            ctx.to_discard(sword);
+            ctx.log(LogEvent::CardDiscarded {
+                player,
+                cards: vec![sword],
+            });
+        }
+    }
+    if ctx.catalog.is_tieji_sealed(ctx.core, player) {
         return;
     }
     if let Some(def) = ctx.catalog.skill_by_name("xfenxin") {
@@ -735,6 +767,35 @@ pub(crate) fn host_on_choose_respond_begin_xianjian(ctx: &mut Ctx<'_>, responder
 pub(crate) fn host_on_damage_end_xianjian(ctx: &mut Ctx<'_>, d: &DamageData) {
     if d.prevented || d.amount <= 0 || d.settlement.notrigger {
         return;
+    }
+    if let Some(body) = d.card {
+        if ctx.catalog.cards[body as usize].name.contains("jiguantong") {
+            if let Some((fid, u_player)) = ctx.res.stack.iter().rev().find_map(|f| match &f.data {
+                EventData::CardUsed(u) if u.card == Some(body) => Some((f.id, u.player)),
+                _ => None,
+            }) {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((u_player, format!("u05_jiguantong_hit:{fid}")), 1);
+            }
+        }
+    }
+    if let Some(src) = d.source {
+        if ctx.core.player(src).alive
+            && ctx.catalog.skill_by_name("zhiluxiaohu").is_none()
+            && d.card.is_none_or(|c| ctx.catalog.card_kind(c).is_sha_like())
+            && ctx
+                .core
+                .vm_aux
+                .flags
+                .get(&(src, "u05_zhiluxiaohu_pending".to_string()))
+                .copied()
+                .unwrap_or(0)
+                > 0
+        {
+            ctx.start_draw(src, 1);
+        }
     }
     let cur = ctx.core.turn.current;
     if flag(ctx.core, cur, "xj_fenglue_active") > 0

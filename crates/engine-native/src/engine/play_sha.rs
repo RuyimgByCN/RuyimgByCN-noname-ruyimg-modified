@@ -1,5 +1,43 @@
 use super::*;
 
+pub(super) fn has_unlimited_sha_public(
+    core: &GameStateCore,
+    catalog: &SharedCatalog,
+    player_id: PlayerId,
+    card: CardId,
+) -> bool {
+    let red = matches!(
+        catalog.cards[card as usize].suit,
+        crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+    );
+    let fentian_red = red
+        && catalog
+            .skill_by_name(crate::content::standard::BOSS_FENTIAN)
+            .is_some_and(|def| core.has_skill(player_id, def));
+    let paoxiao = !catalog.is_rechanyuan_sealed_name(core, player_id, crate::content::standard::PAO_XIAO)
+        && catalog
+            .skill_by_name(crate::content::standard::PAO_XIAO)
+            .is_some_and(|d| core.has_skill(player_id, d));
+    let has_zhuge = !crate::kernel::mbcmfangzhu_baiban(core, player_id)
+        && core
+            .player(player_id)
+            .equips
+            .iter()
+            .any(|c| catalog.card_kind(*c) == CardKind::Zhuge);
+    let baolei_sentinel = catalog
+        .skill_by_name(crate::content::host::WUDIAN_BAOLEI_KEY)
+        .is_some_and(|def| core.has_skill(player_id, def) && core.player(player_id).baolei_mode == 1);
+    let poyue_red_free = red
+        && catalog
+            .skill_by_name("poyue")
+            .is_some_and(|def| core.has_skill(player_id, def));
+    let sbzhaxiang_extra = catalog
+        .skill_by_name(crate::content::host::L27_SBZHAXIANG_KEY)
+        .is_some_and(|def| core.has_skill(player_id, def))
+        && crate::content::host::sbzhaxiang_active(core, player_id);
+    paoxiao || has_zhuge || baolei_sentinel || fentian_red || poyue_red_free || sbzhaxiang_extra
+}
+
 pub(super) fn play_sha(
     state: &mut GameState,
     catalog: &SharedCatalog,

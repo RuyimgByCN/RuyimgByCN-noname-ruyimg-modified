@@ -105,6 +105,14 @@ pub fn host_skill_trigger_meta(
         | HostBehavior::U05XianjianBatchC
         | HostBehavior::U05XianjianBatchD
         | HostBehavior::U05XianjianBatchE => step::xianjian_batch::trigger_meta(behavior, name),
+        HostBehavior::U05SwdDujianCard
+        | HostBehavior::U05SwdPangufu
+        | HostBehavior::U05SwdHufuViewAs
+        | HostBehavior::U05SwdYuchanEquip
+        | HostBehavior::U05SwdZhiluxiaohuDraw
+        | HostBehavior::U05SwdHuanpodanGuard
+        | HostBehavior::U05SwdForgingEnd
+        | HostBehavior::U05SwdPassiveMarker => step::swd_u05_7a::trigger_meta(behavior, name),
         _ => crate::event::NativeDamageEffect::from_host(behavior)
             .map(|e| e.meta())
             .or_else(|| behavior.trigger_meta()),
@@ -235,6 +243,14 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         | HostBehavior::U05XianjianBatchC
         | HostBehavior::U05XianjianBatchD
         | HostBehavior::U05XianjianBatchE => step::xianjian_batch::limits(behavior, name),
+        HostBehavior::U05SwdDujianCard
+        | HostBehavior::U05SwdPangufu
+        | HostBehavior::U05SwdHufuViewAs
+        | HostBehavior::U05SwdYuchanEquip
+        | HostBehavior::U05SwdZhiluxiaohuDraw
+        | HostBehavior::U05SwdHuanpodanGuard
+        | HostBehavior::U05SwdForgingEnd
+        | HostBehavior::U05SwdPassiveMarker => step::swd_u05_7a::limits(behavior, name),
         HostBehavior::GujianFoodQingtuan | HostBehavior::GujianFoodLuyugeng => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,

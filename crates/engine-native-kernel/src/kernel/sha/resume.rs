@@ -542,6 +542,10 @@ impl ShaResolveMachine {
                         ctx.catalog,
                         self.target,
                     );
+                    let hufu_shan = ctx
+                        .catalog
+                        .skill_by_name("g_hufu_shan")
+                        .is_some_and(|d| ctx.core.has_skill(self.target, d));
                     let options: Vec<ChoiceOption> = if ctx
                         .catalog
                         .blocks_hand_cards(ctx.core, self.target)
@@ -560,6 +564,7 @@ impl ShaResolveMachine {
                                 );
                                 kind == CardKind::Shan
                                     || rw_lanyin
+                                    || (hufu_shan && kind == CardKind::Hufu)
                                     || (longdan && kind.is_sha_like())
                                     || (qingguo && black)
                             })

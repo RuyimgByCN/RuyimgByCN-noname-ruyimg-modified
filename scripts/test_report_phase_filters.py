@@ -11,7 +11,7 @@ import report_phase_filters as rp
 class ScanTest(unittest.TestCase):
     def test_scans_phase_filters(self) -> None:
         rows = rp.scan()
-        self.assertEqual(len(rows), 39, "阶段过滤条数变了 ⇒ 先核对是否有新增/删除")
+        self.assertEqual(len(rows), 38, "阶段过滤条数变了 ⇒ 先核对是否有新增/删除")
 
     def test_rows_are_well_formed(self) -> None:
         for beh, key, phase, begin in rp.scan():
@@ -28,10 +28,10 @@ class ScanTest(unittest.TestCase):
         from collections import Counter
 
         c = Counter(r[2] for r in rp.scan())
-        # 原 37 条保留，2026-11-21 Batch Q2-L27 新增 Xiefang Prepare(false) 与 L27MbcmQingzheng Play(true)。
+        # Batch U05-7a 将 SwdBaishouzhihuHeld 由 Phase::Discard(false) 迁至 CardsDiscarded：Discard 3->2（合计 38）。
         self.assertEqual(
             dict(c),
-            {"Prepare": 5, "Judge": 1, "Draw": 7, "Play": 9, "Discard": 3, "End": 14},
+            {"Prepare": 5, "Judge": 1, "Draw": 7, "Play": 9, "Discard": 2, "End": 14},
         )
 
 
@@ -40,7 +40,7 @@ class RenderTest(unittest.TestCase):
         text = rp.render(rp.scan())
         lines = text.strip().splitlines()
         self.assertEqual(lines[0], "行为\tkey\tPhase\tbegin\t状态\t依据")
-        self.assertEqual(len(lines), 40)
+        self.assertEqual(len(lines), 39)
         for line in lines[1:]:
             cells = line.split("\t")
             self.assertEqual(len(cells), 6)
@@ -50,7 +50,7 @@ class RenderTest(unittest.TestCase):
         from collections import Counter
 
         c = Counter(line.split("\t")[4] for line in rp.render(rp.scan()).strip().splitlines()[1:])
-        self.assertEqual(c["已核"] + c["不适用"] + c["未核"], 39)
+        self.assertEqual(c["已核"] + c["不适用"] + c["未核"], 38)
 
 
 if __name__ == "__main__":
@@ -58,11 +58,11 @@ if __name__ == "__main__":
 
 
 class ArmSlicingTest(unittest.TestCase):
-    """钉住「段切片」规则：39 条，且 `Xiefang` 的 Draw/Prepare 分支必须在。"""
+    """钉住「段切片」规则：38 条，且 `Xiefang` 的 Draw/Prepare 分支必须在。"""
 
     def test_arms_count_matches(self) -> None:
         rows = rp.scan()
-        self.assertEqual(len(rows), 39)
+        self.assertEqual(len(rows), 38)
 
     def test_xiefang_has_draw_branch(self) -> None:
         got = [(p, b) for beh, _key, p, b in rp.scan() if beh == "Xiefang"]

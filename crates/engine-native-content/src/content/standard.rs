@@ -605,7 +605,7 @@ pub fn standard_catalog_with_extensions(
         .filter(|p| p.enabled)
         .flat_map(|p| p.generals.iter().cloned())
         .collect();
-    let mut seen_global_behaviors = Vec::new();
+    let mut seen_global_skills = Vec::new();
     catalog.extension_global_skills = catalog
         .skills
         .iter()
@@ -636,8 +636,15 @@ pub fn standard_catalog_with_extensions(
                                 && def.name == "g_shihuifen"
                                 && p.host_skills.iter().any(|d| d.name == def.name)))
                 });
-            if is_global && !seen_global_behaviors.contains(&behavior) {
-                seen_global_behaviors.push(behavior);
+            let allow_dup_behavior =
+                behavior == crate::content::host::HostBehavior::U05SwdHufuViewAs;
+            let unseen = if allow_dup_behavior {
+                !seen_global_skills.contains(&(behavior, def.name))
+            } else {
+                seen_global_skills.iter().all(|(b, _)| *b != behavior)
+            };
+            if is_global && unseen {
+                seen_global_skills.push((behavior, def.name));
                 Some(id as crate::ids::SkillDefId)
             } else {
                 None

@@ -375,6 +375,11 @@ pub fn card_kind_host_skills(kind: crate::catalog::CardKind) -> &'static [HostSk
             behavior: HostBehavior::SwdDonghuangzhongCard,
             presentation_binding: None,
         }],
+        CardKind::Pangufu => &[HostSkillDecl {
+            name: "pangufu",
+            behavior: HostBehavior::U05SwdPangufu,
+            presentation_binding: None,
+        }],
         _ => &[],
     }
 }
@@ -387,6 +392,7 @@ pub fn card_kind_equip_skills(kind: crate::catalog::CardKind) -> &'static [&'sta
         CardKind::Monkey => &[HUANLE_MONKEY_KEY],
         CardKind::Xuelunyang => &[HUANLE_XUELUNYANG_KEY],
         CardKind::Mianju => &[HUANLE_MIANJI_KEY],
+        CardKind::Pangufu => &["pangufu"],
         _ => &[],
     }
 }
@@ -405,7 +411,8 @@ pub fn yangpijuan_class(kind: CardKind) -> Option<u8> {
         | K::Jiu
         | K::Hufu
         | K::Caoyao
-        | K::Tianxianjiu => Some(0),
+        | K::Tianxianjiu
+        | K::Dujian => Some(0),
         K::SavageAttack
         | K::ArcheryAttack
         | K::Duel

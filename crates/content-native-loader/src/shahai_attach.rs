@@ -82,7 +82,9 @@ fn attach_card_rows(
         if seen_cards.insert(cname.to_string()) {
             let interned = names::intern(cname.to_string());
             let mut def = if kind.equip_slot() == Some(EquipSlot::Weapon) {
-                CardDef::weapon(interned, range.max(1))
+                let mut w = CardDef::weapon(interned, range.max(1));
+                w.kind = kind;
+                w
             } else {
                 CardDef::basic(interned, kind)
             }
@@ -104,6 +106,8 @@ fn attach_card_rows(
                 vec!["gjyuheng_plus_skill"]
             } else if cname == "gjyuheng_pro" {
                 vec!["gjyuheng_pro_skill"]
+            } else if cname == "fuxiqin" {
+                vec!["kongxin"]
             } else if kind == CardKind::WuxingPan {
                 vec!["wuxingpan_skill"]
             } else {
@@ -124,6 +128,75 @@ fn map_cross_subpack_skill(package_id: &str, sk: &str) -> String {
         format!("{package_id}__ref_{sk}")
     } else {
         sk.to_string()
+    }
+}
+
+fn lookup_swd_u05_7a_behavior(name: &str) -> Option<engine_native::content::host::HostBehavior> {
+    use engine_native::content::host::HostBehavior;
+    if matches!(
+        name,
+        "cangchizhibi_equip1"
+            | "cangchizhibi_equip2"
+            | "cangchizhibi_equip3"
+            | "cangchizhibi_equip4"
+            | "cangchizhibi_equip5"
+            | "huanglinzhicong_equip1"
+            | "huanglinzhicong_equip2"
+            | "huanglinzhicong_equip3"
+            | "huanglinzhicong_equip4"
+            | "huanglinzhicong_equip5"
+            | "xuanwuzhihuang_equip1"
+            | "xuanwuzhihuang_equip2"
+            | "xuanwuzhihuang_equip3"
+            | "xuanwuzhihuang_equip4"
+            | "xuanwuzhihuang_equip5"
+            | "zhuquezhizhang_equip1"
+            | "zhuquezhizhang_equip2"
+            | "zhuquezhizhang_equip3"
+            | "zhuquezhizhang_equip4"
+            | "zhuquezhizhang_equip5"
+            | "baishouzhihu_equip1"
+            | "baishouzhihu_equip2"
+            | "baishouzhihu_equip3"
+            | "baishouzhihu_equip4"
+            | "baishouzhihu_equip5"
+            | "qinglongzhigui_equip1"
+            | "qinglongzhigui_equip2"
+            | "qinglongzhigui_equip3"
+            | "qinglongzhigui_equip4"
+            | "qinglongzhigui_equip5"
+    ) {
+        return Some(HostBehavior::U05SwdForgingEnd);
+    }
+    match name {
+        "g_hufu_sha" | "g_hufu_shan" | "g_hufu_jiu" => Some(HostBehavior::U05SwdHufuViewAs),
+        "g_yuchan_equip" => Some(HostBehavior::U05SwdYuchanEquip),
+        "zhiluxiaohu" => Some(HostBehavior::U05SwdZhiluxiaohuDraw),
+        "huanpodan_skill" => Some(HostBehavior::U05SwdHuanpodanGuard),
+        "pangufu" => Some(HostBehavior::U05SwdPangufu),
+        "qiankundai" | "zhufangshenshi" | "g_zhufangshenshi" | "lianyaohu_skill" | "yuruyi"
+        | "shuchui" | "xuejibingbao" | "gouhunluo" | "haotianta" | "kongdongyin"
+        | "xuanyuanjian" => Some(HostBehavior::U05SwdPassiveMarker),
+        "g_yuchan_swap" => Some(HostBehavior::SwdYuchanSwap),
+        "g_shencaojie" => Some(HostBehavior::SwdShencaojieGuard),
+        "g_shenmiguo" => Some(HostBehavior::SwdShenmiguoWindow),
+        "shuchui2" => Some(HostBehavior::SwdShuchuiUse),
+        "gouhunluo2" => Some(HostBehavior::SwdGouhunluoSub),
+        "jiguanyuan" => Some(HostBehavior::SwdJiguanyuanGain),
+        "g_qinglongzhigui" => Some(HostBehavior::SwdQinglongzhiguiHeld),
+        "g_baishouzhihu" => Some(HostBehavior::SwdBaishouzhihuHeld),
+        "g_zhuquezhizhang" => Some(HostBehavior::SwdZhuquezhizhangHeld),
+        "g_xuanwuzhihuang" => Some(HostBehavior::SwdXuanwuzhihuangHeld),
+        "g_huanglinzhicong" => Some(HostBehavior::SwdHuanglinzhicongHeld),
+        "g_cangchizhibi" => Some(HostBehavior::SwdCangchizhibiHeld),
+        "kunlunjingc" => Some(HostBehavior::SwdKunlunjingcCard),
+        "lianhua" => Some(HostBehavior::SwdLianyaohuLianhua),
+        "shouna" => Some(HostBehavior::SwdLianyaohuShouna),
+        "donghuangzhong" => Some(HostBehavior::SwdDonghuangzhongCard),
+        "xuanyuanjian2" => Some(HostBehavior::XuanyuanjianDamage),
+        "xuanyuanjian3" => Some(HostBehavior::XuanyuanjianBacklash),
+        "shennongding" => Some(HostBehavior::SwdShennongdingCard),
+        _ => None,
     }
 }
 
@@ -169,9 +242,13 @@ fn resolve_and_register_u05_skill(
     let xianjian_beh = (package_id == "shaai-xianjian")
         .then(|| lookup_xianjian_u05_4_behavior(clean))
         .flatten();
+    let swd_beh = (package_id == "shahai-swd")
+        .then(|| lookup_swd_u05_7a_behavior(clean))
+        .flatten();
     if let Some(behavior) = ow_beh
         .or(hearth_beh)
         .or(xianjian_beh)
+        .or(swd_beh)
         .or_else(|| crate::shahai_u05_b1::lookup_shahai_b1_host_behavior(clean))
         .or_else(|| lookup_upstream_host_behavior(&sk_owned))
         .or_else(|| lookup_upstream_host_behavior(clean))

@@ -50,6 +50,18 @@ pub(crate) fn card_intrinsic(
         None => return intrinsic_named_ext::try_named_ext_card(ctx, u, u32::MAX, effective_kind),
     };
     Some(match effective_kind {
+        CardKind::Zhufangshenshi
+        | CardKind::Shencaojie
+        | CardKind::Dujian
+        | CardKind::Guisheqi
+        | CardKind::Xianluhui => {
+            crate::content::host::step::swd_u05_7a::card_intrinsic_swd_7a(
+                ctx,
+                u,
+                card,
+                effective_kind,
+            )
+        }
         CardKind::Shuigong => {
             // 水攻（G1 运筹帷幄，锦囊）：无懈窗口 + 多目标强制弃装备
             let effect = Box::new(crate::content::host::HostMachine {
@@ -954,33 +966,6 @@ pub(crate) fn card_intrinsic(
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::TargetChoice,
-            }))
-        }
-        CardKind::Guisheqi => {
-            // 鬼蛇旗（swd 补切批⑦）：目标 +1 护甲（原生 change_hujia=
-            // 受伤抵 1 伤语义，上游 changeHujia 同口径）
-            Some(Box::new(crate::content::host::HostMachine {
-                def_key: "guisheqi_card".to_string(),
-                behavior: crate::content::host::HostBehavior::GuisheqiCard,
-                owner: u.player,
-                target: Some(*u.targets.first().expect("guisheqi target")),
-                card: Some(card),
-                cards: Vec::new(),
-                targets: Vec::new(),
-                stage: crate::content::host::HostStage::Act,
-            }))
-        }
-        CardKind::Xianluhui => {
-            // 仙露回（swd 补切批⑦）：全体受伤目标各 +1 护甲
-            Some(Box::new(crate::content::host::HostMachine {
-                def_key: "xianluhui_card".to_string(),
-                behavior: crate::content::host::HostBehavior::XianluhuiCard,
-                owner: u.player,
-                target: None,
-                card: Some(card),
-                cards: Vec::new(),
-                targets: u.targets.clone(),
-                stage: crate::content::host::HostStage::Act,
             }))
         }
         CardKind::Caochuanjiejian => {

@@ -40,7 +40,7 @@ mod swd_damage_multi;
 mod swd_damage_reactions;
 mod swd_damage_targets;
 mod swd_equipment;
-mod swd_equipment_skills;
+pub(in crate::content::host) mod swd_equipment_skills;
 mod swd_recovery;
 mod swd_status;
 mod swd_targets;
@@ -64,6 +64,9 @@ pub(super) fn sha_card_use_data(
     };
     crate::machine::card_use_with_nature(card, actor, targets, nature, use_as)
 }
+pub(in crate::content::host) mod swd_u05_7a;
+mod swd_u05_7a_forging;
+mod swd_u05_7a_hufu;
 mod wudian_ow_cards;
 mod wudian_damage;
 mod wudian_recovery;
@@ -1312,6 +1315,14 @@ impl HostMachine {
             | HostBehavior::U05XianjianBatchC
             | HostBehavior::U05XianjianBatchD
             | HostBehavior::U05XianjianBatchE => xianjian_batch::step(self, ctx),
+            HostBehavior::U05SwdDujianCard
+            | HostBehavior::U05SwdPangufu
+            | HostBehavior::U05SwdHufuViewAs
+            | HostBehavior::U05SwdYuchanEquip
+            | HostBehavior::U05SwdZhiluxiaohuDraw
+            | HostBehavior::U05SwdHuanpodanGuard
+            | HostBehavior::U05SwdForgingEnd
+            | HostBehavior::U05SwdPassiveMarker => swd_u05_7a::step(self, ctx),
             HostBehavior::Rechanyuan => Flow::Done,
             HostBehavior::L11TrickCard => l11_cards::handle_l11_trick_card(self, ctx),
             HostBehavior::L11EquipCards => l11_equips::handle_l11_equips(self, ctx),

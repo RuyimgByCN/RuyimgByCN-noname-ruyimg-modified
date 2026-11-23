@@ -552,6 +552,10 @@ pub enum CardKind {
     Changshezhen,
     /// 破阵诀（U05 zhenfa，规则 v201/T19b）：随机座位重排。
     Pozhenjue,
+    /// 毒箭（U05 swd 批 7a，基本牌）：与目标各展示一张手牌，同色弃己牌并令目标失 1 体力。
+    Dujian,
+    /// 盘古斧（U05 swd 批 7a，武器 range 4）：造成伤害后令受伤者弃置 1 张牌。
+    Pangufu,
 }
 
 /// 花色（判定用）。

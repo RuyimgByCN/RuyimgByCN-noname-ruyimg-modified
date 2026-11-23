@@ -798,14 +798,18 @@ pub fn intrinsic_machine(
                         limit += 2;
                     }
                     // 乾坤袋（swd 卡牌面补切批④）：装备时手牌上限 +1（上游
-                    // qiankundai mod maxHandcard 同口径）
-                    if ctx
+                    // qiankundai mod maxHandcard 同口径，含技能门控）。
+                    let qkd_equip = ctx
                         .core
                         .player(player)
                         .equips
                         .iter()
-                        .any(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Qiankundai)
-                    {
+                        .any(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Qiankundai);
+                    let qkd_skill = ctx
+                        .catalog
+                        .skill_by_name("qiankundai")
+                        .is_some_and(|d| ctx.core.has_skill(player, d));
+                    if qkd_equip || qkd_skill {
                         limit += 1;
                     }
                     // 倾盆大雨（gwent 天气）：手牌上限 -1

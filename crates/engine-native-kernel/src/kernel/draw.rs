@@ -88,24 +88,28 @@ impl crate::catalog::SkillMachine for DrawPhaseMachine {
                     if !num_fixed {
                         (ctx.catalog.hooks.draw_begin_step)(ctx, player, &mut pending);
                     }
-                    // 玉如意（swd b44）：摸牌前把牌堆末 20 张窗口内最大点数牌
-                    // 移至摸牌位（pop 位）——与旧 begin_draw 同口径。
-                    if ctx
+                    // 玉如意（swd 7a / b44）：摸牌前从牌堆顶 20 张窗口取最大点数牌
+                    // 移至摸牌位（pop 位）——保持 b44 既定口径并支持 `"yuruyi"` 技能。
+                    let has_yuruyi = ctx
                         .core
                         .player(player)
                         .equips
                         .iter()
                         .any(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Yuruyi)
-                        && ctx.core.deck.len() > 1
-                    {
+                        || ctx
+                            .catalog
+                            .skill_by_name("yuruyi")
+                            .is_some_and(|d| ctx.core.has_skill(player, d));
+                    if has_yuruyi && ctx.core.deck.len() > 1 {
                         let len = ctx.core.deck.len();
                         let window = len.min(20);
                         let mut best = len - 1;
+                        let mut best_rank = ctx.catalog.cards[ctx.core.deck[best] as usize].rank;
                         for i in (len - window)..len {
-                            if ctx.catalog.cards[ctx.core.deck[i] as usize].rank
-                                > ctx.catalog.cards[ctx.core.deck[best] as usize].rank
-                            {
+                            let rank = ctx.catalog.cards[ctx.core.deck[i] as usize].rank;
+                            if rank > best_rank {
                                 best = i;
+                                best_rank = rank;
                             }
                         }
                         if best != len - 1 {

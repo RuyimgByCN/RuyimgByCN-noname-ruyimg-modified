@@ -82,6 +82,10 @@ pub(in crate::kernel) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: Playe
             ctx.core
                 .vm_aux
                 .flags
+                .remove(&(seat, "u05_dujian2_turn".to_string()));
+            ctx.core
+                .vm_aux
+                .flags
                 .remove(&(seat, "l11_noda_axe2_turn".to_string()));
             ctx.core
                 .vm_aux

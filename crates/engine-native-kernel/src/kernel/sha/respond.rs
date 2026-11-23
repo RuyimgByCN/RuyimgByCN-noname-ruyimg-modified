@@ -71,6 +71,10 @@ impl ShaResolveMachine {
                 "xj_longxi_sha_guard",
             );
         }
+        let hufu_shan = ctx
+            .catalog
+            .skill_by_name("g_hufu_shan")
+            .is_some_and(|d| ctx.core.has_skill(self.target, d));
         let mut shans: Vec<ChoiceOption> = if !target_can_play_hand {
             Vec::new()
         } else {
@@ -80,7 +84,13 @@ impl ShaResolveMachine {
                 .iter()
                 .filter(|c| {
                     let kind = ctx.catalog.resolved_card_kind(ctx.core, **c);
-                    rw_lanyin || kind == CardKind::Shan || (longdan && kind == CardKind::Sha)
+                    rw_lanyin
+                        || kind == CardKind::Shan
+                        || kind.yuchan_auto_view_as() == Some(CardKind::Shan)
+                        || (longdan
+                            && (kind == CardKind::Sha
+                                || kind.yuchan_auto_view_as() == Some(CardKind::Sha)))
+                        || (hufu_shan && kind == CardKind::Hufu)
                 })
                 .copied()
                 .map(ChoiceOption::Card)
@@ -89,8 +99,13 @@ impl ShaResolveMachine {
         if qingguo && target_can_play_hand {
             for c in ctx.core.player(self.target).hand.iter().copied() {
                 let kind = ctx.catalog.resolved_card_kind(ctx.core, c);
-                let already =
-                    rw_lanyin || kind == CardKind::Shan || (longdan && kind == CardKind::Sha);
+                let already = rw_lanyin
+                    || kind == CardKind::Shan
+                    || kind.yuchan_auto_view_as() == Some(CardKind::Shan)
+                    || (longdan
+                        && (kind == CardKind::Sha
+                            || kind.yuchan_auto_view_as() == Some(CardKind::Sha)))
+                    || (hufu_shan && kind == CardKind::Hufu);
                 let black = matches!(
                     ctx.catalog.effective_card_suit(ctx.core, self.target, c),
                     crate::catalog::Suit::Spade | crate::catalog::Suit::Club

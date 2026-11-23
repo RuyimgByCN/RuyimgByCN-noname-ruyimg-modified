@@ -20,12 +20,13 @@ impl HostMachine {
                         let Some(body) = self.card else {
                             return Flow::Done;
                         };
-                        // 上游 contentAfter !preResult：本次结算中无以本
-                        // 牌归因的实际伤害（无懈抵消/取消弃牌不算；弃牌
-                        // 免伤不算）→ 使用者摸 1（按日志实伤判定）
-                        let damaged = ctx.out.iter().any(|l| {
-                            matches!(l, LogEvent::DamageDealt { card: Some(c), .. } if *c == body)
-                        });
+                        let fid = ctx.current_event_frame_id();
+                        let damaged = ctx
+                            .core
+                            .vm_aux
+                            .flags
+                            .remove(&(self.owner, format!("u05_jiguantong_hit:{fid}")))
+                            .is_some();
                         if !damaged {
                             ctx.start_draw(self.owner, 1);
                         }
@@ -93,10 +94,6 @@ impl HostMachine {
                     };
                     self.targets.remove(0);
                     ctx.discard_from_hand(t, c);
-                    ctx.log(LogEvent::CardDiscarded {
-                        player: t,
-                        cards: vec![c],
-                    });
                     self.stage = HostStage::Act;
                     Flow::Yield
                 }
@@ -124,15 +121,15 @@ impl HostMachine {
                         }
                         return Flow::Done;
                     }
-                    let options: Vec<ChoiceOption> = ctx
-                        .core
-                        .player(t)
-                        .hand
-                        .iter()
-                        .copied()
-                        .filter(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Shan)
-                        .map(ChoiceOption::Card)
-                        .collect();
+                    let options: Vec<ChoiceOption> = crate::kernel::response_kind_cards_core(
+                        ctx.core,
+                        ctx.catalog,
+                        t,
+                        crate::catalog::CardKind::Shan,
+                    )
+                    .into_iter()
+                    .map(ChoiceOption::Card)
+                    .collect();
                     if options.is_empty() {
                         // 无闪：上游 chooseToRespond 自动失败 → 未响应路径
                         self.seal_and_damage(ctx);
@@ -163,10 +160,6 @@ impl HostMachine {
                         if let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() {
                             if let Some(t) = self.target {
                                 ctx.discard_from_hand(t, c);
-                                ctx.log(LogEvent::CardDiscarded {
-                                    player: t,
-                                    cards: vec![c],
-                                });
                             }
                         }
                     } else {
@@ -205,8 +198,10 @@ impl HostMachine {
                         }
                         return Flow::Done;
                     }
-                    if ctx.core.player(self.owner).hand.is_empty() {
-                        // 上游 step0 else：无手牌 event.finish（本体入弃堆）
+                    if ctx.core.player(self.owner).hand.is_empty()
+                        && ctx.core.player(self.owner).equips.is_empty()
+                    {
+                        // 上游 step0 else：无 he 牌 event.finish（本体入弃堆）
                         if let Some(c) = self.card {
                             ctx.to_discard(c);
                             ctx.core.table.retain(|x| *x != c);
@@ -219,6 +214,7 @@ impl HostMachine {
                         .player(self.owner)
                         .hand
                         .iter()
+                        .chain(ctx.core.player(self.owner).equips.iter())
                         .copied()
                         .map(ChoiceOption::Card)
                         .collect();
@@ -240,17 +236,28 @@ impl HostMachine {
                         return Flow::Done;
                     };
                     if let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() {
-                        // 使用者手牌 + 本体 → 目标离场区；记录待获得实体
-                        ctx.take_hand_card(self.owner, c);
+                        // 使用者 he 牌 + 本体 → 目标离场区；只记录此两张牌
+                        if ctx.core.player(self.owner).hand.contains(&c) {
+                            ctx.take_hand_card(self.owner, c);
+                        } else if let Some(pos) = ctx
+                            .core
+                            .player(self.owner)
+                            .equips
+                            .iter()
+                            .position(|x| *x == c)
+                        {
+                            ctx.core.player_mut(self.owner).equips.remove(pos);
+                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, c);
+                        }
+                        let mut moved = vec![c];
                         ctx.core.player_mut(t).off_court.push(c);
                         if let Some(body) = self.card {
                             ctx.core.table.retain(|x| *x != body);
                             ctx.core.player_mut(t).off_court.push(body);
+                            moved.push(body);
                             self.card = None;
                         }
-                        let moved: Vec<crate::ids::CardId> =
-                            ctx.core.player(t).off_court.iter().copied().collect();
-                        ctx.core.player_mut(t).jiguanyuan_cards = moved;
+                        ctx.core.player_mut(t).jiguanyuan_cards = moved.clone();
                         if let Some(gdef) = ctx.catalog.skill_by_name(SWD_JIGUANYUAN_GAIN_KEY) {
                             ctx.insert_skill(
                                 (t, gdef),
@@ -266,7 +273,7 @@ impl HostMachine {
                         ctx.log(LogEvent::CardsGiven {
                             from: self.owner,
                             to: t,
-                            cards: ctx.core.player(t).jiguanyuan_cards.clone(),
+                            cards: moved,
                         });
                         ctx.start_draw(self.owner, 1);
                     }

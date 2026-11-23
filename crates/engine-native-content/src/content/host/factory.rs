@@ -199,6 +199,16 @@ impl HostSkillBehavior {
             | HostBehavior::U05XianjianBatchE => {
                 return super::step::xianjian_batch::machine(self, owner, event);
             }
+            HostBehavior::U05SwdDujianCard
+            | HostBehavior::U05SwdPangufu
+            | HostBehavior::U05SwdHufuViewAs
+            | HostBehavior::U05SwdYuchanEquip
+            | HostBehavior::U05SwdZhiluxiaohuDraw
+            | HostBehavior::U05SwdHuanpodanGuard
+            | HostBehavior::U05SwdForgingEnd
+            | HostBehavior::U05SwdPassiveMarker => {
+                return super::step::swd_u05_7a::machine(self, owner, event);
+            }
             _ => {}
         }
         let (target, card) = match self.behavior {

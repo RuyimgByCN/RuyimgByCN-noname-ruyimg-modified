@@ -413,9 +413,9 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
-            // 白兽之琥：弃牌阶段结束 direct（蝶舞口径）
+            // 白兽之琥：自己弃牌后（player: 'discardEnd'）
             HostBehavior::SwdBaishouzhihuHeld => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                event: EventKind::CardsDiscarded,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,

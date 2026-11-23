@@ -100,6 +100,8 @@ impl InitHook {
                     | HostBehavior::SwdShencaojieGuard
                     | HostBehavior::SwdYuchanSwap
                     | HostBehavior::SwdShenmiguoWindow
+                    | HostBehavior::U05SwdHufuViewAs
+                    | HostBehavior::U05SwdYuchanEquip
             ),
         }
     }

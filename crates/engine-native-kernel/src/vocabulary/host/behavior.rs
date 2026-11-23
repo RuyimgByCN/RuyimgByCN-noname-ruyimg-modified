@@ -1811,4 +1811,20 @@ pub enum HostBehavior {
     U05XianjianBatchD,
     /// U05 杀海拾遗仙剑 Batch E（tag 1104：毒卡补偿结算等辅助宿主）。
     U05XianjianBatchE,
+    /// U05 swd Batch 7a 毒箭牌效果（tag 1280：`dujian` 手牌展示比色）。
+    U05SwdDujianCard,
+    /// U05 swd Batch 7a 盘古斧武器技（tag 1281：`pangufu` 造成伤害后令受伤者弃 1 牌）。
+    U05SwdPangufu,
+    /// U05 swd Batch 7a 虎符转化（tag 1282：`g_hufu_sha/shan/jiu`）。
+    U05SwdHufuViewAs,
+    /// U05 swd Batch 7a 玉蝉锻造重铸（tag 1283：`g_yuchan_equip` 弃任意基本摸等量）。
+    U05SwdYuchanEquip,
+    /// U05 swd Batch 7a 指路小虎伤害摸牌（tag 1284：`zhiluxiaohu` 杀伤后摸 1）。
+    U05SwdZhiluxiaohuDraw,
+    /// U05 swd Batch 7a 还魄丹防死护卫（tag 1285：`huanpodan_skill` 濒死防死弃全牌回 1 摸 1）。
+    U05SwdHuanpodanGuard,
+    /// U05 swd Batch 7a 六件器族锻造回合结束触发（tag 1286：`*_equip1..5` 共 30 技）。
+    U05SwdForgingEnd,
+    /// U05 swd Batch 7a 固有修饰与被动标记（tag 1287：`qiankundai`/`zhufangshenshi` 等正式宿主绑定）。
+    U05SwdPassiveMarker,
 }

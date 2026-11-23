@@ -402,12 +402,13 @@ impl HostSkillBehavior {
                     && d.source != Some(owner)
                     && ctx.state.player(d.source.unwrap()).alive
                     && hand_has_kind(ctx, owner, CardKind::Zhuquezhizhang)),
-            // 白兽之琥：自己弃牌阶段结束且手持且有红牌
+            // 白兽之琥（第 935 轮 / `U05-7a`）：上游 `g_baishouzhihu` 为
+            // `{player:'discardEnd'}` + `countCards('h','baishouzhihu') > 0`，
+            // 在任一阶段实际弃牌后触发（非仅弃牌阶段结束）。
             HostBehavior::SwdBaishouzhihuHeld => matches!(event,
-                // 上游 `g_baishouzhihu`：`{player:'discardEnd'}` + `countCards('h','baishouzhihu') > 0`
-                //（第 935 轮：原臂写成「任意阶段开始 + 手里有红桃/方块」，两处都不对）
-                EventData::Phase { player, phase: crate::event::Phase::Discard, begin: false, .. }
+                EventData::CardsDiscarded { player, cards }
                 if *player == owner
+                    && !cards.is_empty()
                     && hand_has_kind(ctx, owner, CardKind::Baishouzhihu)),
             // 玄武之璜：自己造成伤害结算后且手持且受伤
             HostBehavior::SwdXuanwuzhihuangHeld => matches!(event,
@@ -420,11 +421,19 @@ impl HostSkillBehavior {
                 EventData::TurnBegin { player }
                 if *player == owner
                     && hand_has_kind(ctx, owner, CardKind::Cangchizhibi)),
-            // 玉蝉换形：自己用牌（非玉蝉本体）结算后且手牌有玉蝉
+            // 玉蝉换形：自己用牌（非玉蝉本体）结算后且手牌有玉蝉；
+            // 若持玉蝉坎且 g_shenmiguo 可在本阶段检查，则延后至 Stage::Done（useCardAfter
+            // priority -1）以避免在 g_shenmiguo（priority 0）之前提前换走玉蝉坎。
             HostBehavior::SwdYuchanSwap => matches!(event,
             EventData::CardUsed(u)
             if u.player == owner
                 && !u.cancelled
+                && !crate::content::host::step::swd_equipment_skills::should_defer_yuchan_swap(
+                    ctx.state,
+                    ctx.catalog,
+                    owner,
+                    u,
+                )
                 && ctx.state.player(owner).hand.iter().any(|c| {
                     ctx.catalog.card_kind(*c).yuchan_auto_view_as().is_some()
                 })),
@@ -442,13 +451,19 @@ impl HostSkillBehavior {
                     && *phase == crate::event::Phase::End
                     && *begin
                     && ctx.state.turn.wangchen_discard_basic),
-            // 神草结：锦囊伤害且自己是受伤者或来源、手持神草结
+            // 神草结：普通锦囊伤害（get.type === 'trick'）且自己是受伤者或来源、手持神草结
             HostBehavior::SwdShencaojieGuard => matches!(event,
                 EventData::Damage(d)
                 if !d.prevented && d.amount > 0
                     && d.card.map(|c| {
-                        let k = ctx.catalog.card_kind(c);
-                        !k.is_basic_kind() && k.equip_slot().is_none()
+                        let k = ctx
+                            .state
+                            .declared_kinds
+                            .get(&c)
+                            .copied()
+                            .unwrap_or_else(|| ctx.catalog.card_kind(c));
+                        k.is_trick_kind()
+                            && !crate::content::host::step::swd_equipment_skills::is_delayed_trick_swd(k)
                     })
                     .unwrap_or(false)
                     && (d.target == owner || d.source == Some(owner))
@@ -463,35 +478,14 @@ impl HostSkillBehavior {
             // 空洞印：自己死亡（maxHp>0 gate 恒真登记）
             HostBehavior::SwdKongdongyinGuard => matches!(event,
                 EventData::Death { player, .. } if *player == owner),
-            // 神秘果窗口：自己出牌阶段用出基本/普通锦囊结算后、手持神秘
-            // 果、每阶段限一次、目标全存活。登记差异：view-as 转化用牌、
-            // 五谷（Remained 面未实现）、机关异类与延时锦囊不进再结算
-            // 白名单（上游 complexTarget/exclusion 同口径收窄）。
-            HostBehavior::SwdShenmiguoWindow => matches!(event,
-                EventData::CardUsed(u)
-                if u.player == owner
-                    && u.card.is_some_and(|c|u.use_as.is_none_or(|k|k==ctx.catalog.card_kind(c)))
-                    && ctx.state.turn.phase == crate::event::Phase::Play
-                    && ctx.state.turn.current == owner
-                    && !ctx.state.turn.shenmiguo_used
-                    && {
-                        let k = u.effective_kind(ctx.catalog);
-                        if matches!(
-                            k,
-                            CardKind::Shenmiguo
-                                | CardKind::Wugu
-                                | CardKind::Jiguan
-                                | CardKind::Le
-                                | CardKind::Bing
-                                | CardKind::ShanDian
-                        ) {
-                            false
-                        } else {
-                            k.is_basic_kind() || k.equip_slot().is_none()
-                        }
-                    }
-                    && hand_has_kind(ctx, owner, CardKind::Shenmiguo)
-                    && u.targets.iter().all(|t| ctx.state.player(*t).alive)),
+            // 神秘果窗口（上游 `g_shenmiguo`）：自己出牌阶段用出基本/普通锦囊结算后、
+            // 手持神秘果、每阶段限一次、目标全存活；view-as 转化用牌、五谷（Remained
+            // 面未实现）、机关异类与延时锦囊不进再结算白名单（complexTarget/exclusion
+            // 同口径收窄）。
+            // 神秘果窗口在 `Stage::Done`（`host_card_use_after_swd` = 上游 `useCardAfter`）
+            // 派发，避免在 `AfterTriggers`（`Intrinsic` 执行前）误判未生效的目标状态，
+            // 且在 `SwdYuchanSwap` 优先检查前不提前消费或换走玉蝉坎。
+            HostBehavior::SwdShenmiguoWindow => false,
             // 浴尘：回合外使用/打出黑色牌结算后（双事件；he 有牌的目标
             // 在机器步求取，filter 只验事件形状）
             HostBehavior::SwdYuchen => {

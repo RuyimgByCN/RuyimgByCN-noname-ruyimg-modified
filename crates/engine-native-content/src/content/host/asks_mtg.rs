@@ -582,6 +582,16 @@ pub(super) fn active_ask_batches(
         | HostBehavior::U05XianjianBatchD => super::step::xianjian_batch::ask(
             stage, owner, target, targets, card, cards, core, catalog,
         ),
+        HostBehavior::U05SwdDujianCard
+        | HostBehavior::U05SwdPangufu
+        | HostBehavior::U05SwdHufuViewAs
+        | HostBehavior::U05SwdYuchanEquip
+        | HostBehavior::U05SwdZhiluxiaohuDraw
+        | HostBehavior::U05SwdHuanpodanGuard
+        | HostBehavior::U05SwdForgingEnd
+        | HostBehavior::U05SwdPassiveMarker => super::step::swd_u05_7a::ask(
+            behavior, stage, owner, target, cards, core, catalog,
+        ),
         HostBehavior::XianjianQianfang => match stage {
             HostStage::SelectNature => Some(ask(
                 owner,
@@ -718,6 +728,46 @@ pub(super) fn active_ask_batches(
                 _ => None,
             }
         }
+        HostBehavior::SwdKunlunjingcCard => match stage {
+            HostStage::SelectCard => {
+                if core.deck.len() < 3 {
+                    return None;
+                }
+                let options: Vec<ChoiceOption> = core
+                    .deck
+                    .iter()
+                    .rev()
+                    .take(3)
+                    .copied()
+                    .map(ChoiceOption::Card)
+                    .collect();
+                Some(ask(
+                    owner,
+                    "kunlunjingc_pick",
+                    ChoiceKind::SelectCards,
+                    options,
+                    1,
+                    1,
+                    true,
+                ))
+            }
+            HostStage::TargetChoice => {
+                let options = hand_card_options(&core.player(owner).hand);
+                if options.is_empty() {
+                    return None;
+                }
+                Some(ask(
+                    owner,
+                    "kunlunjingc_replace",
+                    ChoiceKind::SelectCards,
+                    options,
+                    1,
+                    1,
+                    true,
+                ))
+            }
+            _ => None,
+        },
         _ => None,
     }
 }

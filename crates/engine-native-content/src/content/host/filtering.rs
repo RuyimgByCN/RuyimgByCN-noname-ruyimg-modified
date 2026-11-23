@@ -168,6 +168,17 @@ impl HostSkillBehavior {
                 self, ctx, frames, frame, owner, event,
             );
         }
+        if matches!(
+            self.behavior,
+            HostBehavior::U05SwdPangufu
+                | HostBehavior::U05SwdZhiluxiaohuDraw
+                | HostBehavior::U05SwdHuanpodanGuard
+                | HostBehavior::U05SwdForgingEnd
+        ) {
+            return super::step::swd_u05_7a::filter_with_frame(
+                self, ctx, frame, owner, event,
+            );
+        }
         self.filter_behavior(ctx, owner, event)
     }
 
@@ -1031,6 +1042,10 @@ impl HostSkillBehavior {
             | HostBehavior::U05GwentCharBatchD => {
                 super::step::u05_b5b_gwent::filter_u05_gwent_char(self, ctx, owner, event)
             }
+            HostBehavior::U05SwdDujianCard
+            | HostBehavior::U05SwdHufuViewAs
+            | HostBehavior::U05SwdYuchanEquip
+            | HostBehavior::U05SwdPassiveMarker => false,
             _ => false,
         }
     }

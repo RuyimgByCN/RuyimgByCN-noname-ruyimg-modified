@@ -991,6 +991,21 @@ fn swd_zhufangshenshi_distance_waiver() {
         ),
         "{out:?}"
     );
+    // 贴房绅视现已走无懈窗口：若他家随机持无懈，先全部 Pass 放行
+    for _ in 0..6 {
+        let Some(c) = e.open_choice() else { break };
+        let (cid, obs, has_pass) = (
+            c.id,
+            c.observer,
+            c.spec.options.contains(&engine_native::ChoiceOption::Pass),
+        );
+        let sel = if has_pass {
+            vec![engine_native::ChoiceOption::Pass]
+        } else {
+            Vec::new()
+        };
+        submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+    }
     // 摸一张牌（g_zhufangshenshi）
     let hand_after = e.debug_hand(0).len();
     let _ = hand_after;

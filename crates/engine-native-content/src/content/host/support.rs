@@ -1073,3 +1073,12 @@ pub(super) fn hand_has_kind(ctx: &crate::catalog::QueryCtx<'_>, owner: u8, kind:
         .iter()
         .any(|c| ctx.catalog.card_kind(*c) == kind)
 }
+
+/// 取消一次性/每回合限一次主动技选择窗时退还 `once_used` 计数。
+pub(super) fn refund_host_once_used(ctx: &mut Ctx<'_>, owner: PlayerId, skill_name: &str) {
+    if let Some(def) = ctx.catalog.skill_by_name(skill_name) {
+        if let Some(inst) = ctx.core.skills.get_mut(&(owner, def)) {
+            inst.once_used = false;
+        }
+    }
+}

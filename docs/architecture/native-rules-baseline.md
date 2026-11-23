@@ -1,5 +1,12 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+## 2026-11-23 Batch U05-7a（U05 SWD 卡牌 Part 1 39 张与 67 技能 106 项语义对齐、`standard.rs` 同行为全球技去重与 `SwdBaishouzhihuHeld` 弃牌窗对齐）
+
+- **不变量保持**：`RULES_VERSION=333`、`NGSA=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。
+- **主线合入语义与生命周期对齐**：
+  - `HostBehavior` 新增 `1280..=1287`（`U05SwdDujianCard..=U05SwdPassiveMarker`，`HostBehavior::ALL=646`），独立尾追加 [known_prompts_u05_7a.rs](../../crates/engine-native-kernel/src/archive/known_prompts_u05_7a.rs) `13` 条提示键，接入 `swd_u05_7a*.rs`（3 模块，从 [intrinsic.rs](../../crates/engine-native-content/src/content/host/intrinsic.rs) 拆出 `Dujian`/`Guisheqi`/`Xianluhui` 保 `976` 有效行 `<= 1,000`）、`asks_swd.rs`、`extension_choices_u05_7a.rs` 与 Round 1–3 全 7 项复核修正（`qiankundai`、`g_shenmiguo`/`yuchankan`、`g_shencaojie`、`zhufangshenshi`/`g_zhufangshenshi`、`fuxiqin` `equip_skills`、`g_baishouzhihu`、`response_kind_cards_core`）。
+  - **主线协同与门禁对齐**：[standard.rs](../../crates/engine-native-content/src/content/standard.rs#L639-L650) 仅对 `HostBehavior::U05SwdHufuViewAs`（`g_hufu_sha`/`g_hufu_shan`/`g_hufu_jiu`）按 `(behavior, def.name)` 放行同行为多全球技，其余行为维持单全球技去重以保 `g_chenhuodajie`；[common.rs](../../crates/engine-native/tests/u05_b7a_swd_cards/common.rs#L260-L261) 于 `remove_card_everywhere` 回手时清除陈旧 `declared_kinds`/`declared_slots`；[filtering/swd.rs](../../crates/engine-native-content/src/content/host/filtering/swd.rs#L405-L412) `SwdBaishouzhihuHeld` 改为匹配 `EventData::CardsDiscarded`（并保留注释以保总行 `1,101`），同步更新 [native-phase-filter-registry.tsv](native-phase-filter-registry.tsv)（`38` 条）与 [native_ws_e2e.rs](../../apps/game-server/src/native_ws_e2e.rs#L913-L917)（`1.5 MiB` 背压预算容纳 `13` 项全局 `shahai-swd` 技能/座）。
+
 ## 2026-11-23 Batch U05-4（U05 仙剑 `xianjian` 36 武将与 120 技能 156 项语义对齐、`turn_handoff.rs` 拆分与作用域伴生绑定）
 
 - **不变量保持**：`RULES_VERSION=333`、`NGSA=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。

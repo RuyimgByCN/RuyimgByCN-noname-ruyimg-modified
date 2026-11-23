@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-23 Batch U05-7a（U05 杀海拾遗 SWD 卡牌 Part 1 +106→1,189/1,621，全局 3,509/915/0）更新
+
+- **核验与升级**：基线 `fb4a15c6b1fe0c6072c58e2be4445021a76449d0`（Batch U05-4 CI Run `45207312135` Attempt 2 `10/10 success`）；三路合入 `swarm/conv-u05-7a-swd-cards1`（`c727d3922..d94c0f0d5d100351ff44ea3fd095bec41a7c206e`，`verifier-u05-b` `#56 APPROVE`），完成 `swd_u05_7a.rs` 拆分、`standard.rs` `U05SwdHufuViewAs` 全球技白名单、SWD `common.rs` `declared_kinds` 清理与门禁校准后，将 U05 杀海拾遗 SWD 卡牌 Part 1 获批 `39` 张卡牌 + `67` 项伴生/全局/锻造技能共 **`106`** 项全数升为 `已复核等价`（`0` 保留）。`U05` 现 **`1,189 / 432 / 0`**，全局 **`3,509 / 915 / 0`**（缺失 `0`，整包 8 维签字仍 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变）。详见 [U05-杀海拾遗.md](U05-杀海拾遗.md)、[Batch U05-7a 证据摘要](../../operations/evidence/2026-11-23-u05-7a-swd-cards1/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-23 Batch U05-4（U05 杀海拾遗 `xianjian` 武将/技能 +156→1,083/1,621，全局 3,403/1,021/0）更新
 
 - **核验与升级**：基线 `362b01f2fc94c4a74b165041e94212e95a506195`（Batch U05-5b CI Run `45167390472` Attempt 1 `10/10 success`）；三路合入 `swarm/conv-u05-4-xianjian`（`505ed0704..8e14ff93ae948c37135b3a7e0982e1ce1e0a43d8`，`verifier-u05-a` `#109 APPROVE`），完成 `turn_handoff.rs` 拆分、`standard.rs` `tuoqiao` 伴生绑定 `gj_food_shihuifen_ban` 与 `off_deck`/`feibiao` 测试夹具对齐后，将 U05 杀海拾遗 `xianjian` 获批 `36` 武将 + `120` 角色/衍生/全局技能共 **`156`** 项全数升为 `已复核等价`（`0` 保留）。`U05` 现 **`1,083 / 538 / 0`**，全局 **`3,403 / 1,021 / 0`**（缺失 `0`，整包 8 维签字仍 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变）。详见 [U05-杀海拾遗.md](U05-杀海拾遗.md)、[Batch U05-4 证据摘要](../../operations/evidence/2026-11-23-u05-4-xianjian/README.md) 与 [inventory_status.json](inventory_status.json)。

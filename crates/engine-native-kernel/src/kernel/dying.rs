@@ -601,6 +601,12 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                     ) && (raw_kind != CardKind::Jiu || responder == self.dying)
                     {
                         raw_kind
+                    } else if raw_kind == CardKind::Yuchanxun {
+                        CardKind::Tao
+                    } else if responder == self.dying && raw_kind == CardKind::Yuchanzhen {
+                        CardKind::Jiu
+                    } else if responder == self.dying && raw_kind == CardKind::Yuchanli {
+                        CardKind::Tianxianjiu
                     } else if responder == self.dying
                         && ctx
                             .catalog

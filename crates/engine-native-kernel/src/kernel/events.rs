@@ -415,15 +415,10 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
             ctx.core.table.extend(u.card);
         }
         CardKind::Zhufangshenshi => {
-            // 贴房绅视（U05 swd 第十批，规则 v94）：本回合无视距离指定
-            // 该目标（sha 距离校验豁免）并摸一张牌。登记差异：上游为
-            // 锦囊可被无懈（AI 权重 0 实战不戒），原生简化为直接结算。
-            ctx.to_discard(u.card);
-            if !nullified {
-                let t = *u.targets.first().expect("zhufangshenshi has one target");
-                ctx.core.turn.zhufangshenshi_target = Some(t);
-                ctx.start_draw(u.player, 1);
-            }
+            // 贴房绅视（U05 swd 第十批，card/swd/card.js:1958）：锦囊先置桌面，
+            // 经无懈窗口（未抵消→设距免目标）；useCardAfter 摸 1 由 `g_zhufangshenshi`
+            // （on_card_use_after）无论是否被无懈皆触发。
+            ctx.core.table.extend(u.card);
         }
         CardKind::Caoyao => {
             // 草药（U05 swd 第三批，规则 v87）：为受伤目标回复 1 点体力
@@ -572,7 +567,10 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
         CardKind::Shenmiguo => {
             // 神秘果（swd 卡牌面窗口机批）：载体牌直接弃置（不置桌面）
             //——再结算由 CardUsed after 窗口行为发射（mufeng 等基本牌
-            // 计数已在前置段按真实牌种覆盖）。
+            // 计数已在前置段按真实牌种覆盖）；清除 yuchankan 临时声明。
+            if let Some(c) = u.card {
+                ctx.core.declared_kinds.remove(&c);
+            }
             ctx.to_discard(u.card);
         }
         // Le/Bing/ShanDian：先置桌面，经无懈窗口（使用时开窗，对齐旧线）

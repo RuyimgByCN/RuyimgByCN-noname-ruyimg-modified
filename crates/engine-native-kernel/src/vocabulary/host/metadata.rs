@@ -931,7 +931,15 @@ impl HostBehavior {
             | HostBehavior::U05XianjianBatchB
             | HostBehavior::U05XianjianBatchC
             | HostBehavior::U05XianjianBatchD
-            | HostBehavior::U05XianjianBatchE => None,
+            | HostBehavior::U05XianjianBatchE
+            | HostBehavior::U05SwdDujianCard
+            | HostBehavior::U05SwdPangufu
+            | HostBehavior::U05SwdHufuViewAs
+            | HostBehavior::U05SwdYuchanEquip
+            | HostBehavior::U05SwdZhiluxiaohuDraw
+            | HostBehavior::U05SwdHuanpodanGuard
+            | HostBehavior::U05SwdForgingEnd
+            | HostBehavior::U05SwdPassiveMarker => None,
             HostBehavior::U05GwentCardSkill => self.trigger_meta_common(),
             HostBehavior::L01YiyiCard
             | HostBehavior::L01FirstKs

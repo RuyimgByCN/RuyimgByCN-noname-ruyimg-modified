@@ -384,6 +384,10 @@ impl HostSkillBehavior {
             }
             HostBehavior::U05XianjianBatchD => super::step::xianjian_batch::activate(self, ctx, owner)
                 .map(|m| Box::new(m) as Box<dyn crate::catalog::SkillMachine>),
+            HostBehavior::U05SwdYuchanEquip | HostBehavior::U05SwdHufuViewAs => {
+                super::step::swd_u05_7a::activate(self, ctx, owner)
+                    .map(|m| Box::new(m) as Box<dyn crate::catalog::SkillMachine>)
+            }
             _ => None,
         }
     }
@@ -670,6 +674,9 @@ pub(in crate::content::host) fn has_phase_use_activation(
         HostBehavior::U05XianjianBatchD => {
             super::step::xianjian_batch::has_phase_use_activation(behavior, name)
         }
+        HostBehavior::U05SwdYuchanEquip | HostBehavior::U05SwdHufuViewAs => {
+            super::step::swd_u05_7a::has_phase_use_activation(behavior, name)
+        }
         _ => false,
     }
 }
@@ -720,6 +727,8 @@ pub(in crate::content::host) fn is_host_skill_bolan_eligible(
             | HostBehavior::MtgYixialanRecast
             | HostBehavior::MtgYoulinDiscard
             | HostBehavior::MtgLinzhongjiantaStrike
+            | HostBehavior::U05SwdYuchanEquip
+            | HostBehavior::U05SwdHufuViewAs
     ) && !matches!(
         name,
         "rechuhai"

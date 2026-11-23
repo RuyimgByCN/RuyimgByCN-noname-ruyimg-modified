@@ -284,6 +284,7 @@ pub(super) fn play_card(
                         && !shouyi_free
                         && !limu_in_range_free
                         && !shanxian_free
+                        && core.turn.zhufangshenshi_target != Some(target)
                         && !crate::rvm_bridge::modifiers::tanbei_unlimited_target(
                             core, catalog, from, target,
                         )
@@ -740,6 +741,7 @@ pub(super) fn play_card(
                 CardKind::HorsePlus
                 | CardKind::HorseMinus
                 | CardKind::Weapon
+                | CardKind::Pangufu
                 | CardKind::Armor
                 | CardKind::Suolianjia
                 | CardKind::WuxingPan
@@ -834,6 +836,7 @@ pub(super) fn play_card(
                         == Some(u32::from(t) + 1);
                     if !shanxian_free
                         && !xinfu_limu_in_range(core, catalog, user, t)
+                        && core.turn.zhufangshenshi_target != Some(t)
                         && !crate::rvm_bridge::modifiers::tanbei_unlimited_target(
                             core, catalog, user, t,
                         )
@@ -1004,6 +1007,7 @@ pub(super) fn play_card(
                 | CardKind::Qinpendayu
                 | CardKind::Birinongwu
                 | CardKind::Ciguhanshuang
+                | CardKind::Dujian
                 | CardKind::Bingpotong
                 | CardKind::Qiankunbiao
                 | CardKind::Shenhuofeiya

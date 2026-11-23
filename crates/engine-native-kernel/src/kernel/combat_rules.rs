@@ -280,6 +280,12 @@ pub(super) fn is_tao_like(
     if raw_kind == CardKind::Hufu {
         return responder == dying;
     }
+    // 玉蝉（U05 swd 7a）：巽=桃（全员可救），震=酒 / 离=天仙酒（仅自救）。
+    match raw_kind {
+        CardKind::Yuchanxun => return !tao_futai2_banned(ctx.core, ctx.catalog, responder),
+        CardKind::Yuchanzhen | CardKind::Yuchanli => return responder == dying,
+        _ => {}
+    }
     // 天仙酒（U05 swd 第五批，规则 v89）：酒的 swd 变体——濒死自救
     if raw_kind == CardKind::Tianxianjiu {
         return true;
@@ -498,10 +504,22 @@ pub fn response_kind_cards_core(
                     catalog.effective_card_suit(core, responder, c),
                     crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                 );
+                let ck = catalog.resolved_card_kind(core, c);
+                let hufu_as = ck == CardKind::Hufu
+                    && ((need == CardKind::Sha
+                        && catalog
+                            .skill_by_name("g_hufu_sha")
+                            .is_some_and(|d| core.has_skill(responder, d)))
+                        || (need == CardKind::Shan
+                            && catalog
+                                .skill_by_name("g_hufu_shan")
+                                .is_some_and(|d| core.has_skill(responder, d))));
                 rw_lanyin
-                    || catalog.resolved_card_kind(core, c) == need
+                    || ck == need
+                    || ck.yuchan_auto_view_as() == Some(need)
                     || (need == CardKind::Sha && catalog.cards[c as usize].name == "gw_wuyao")
                     || (ow_mujing && is_black)
+                    || hufu_as
                     || catalog
                         .find_player_vm_view_as(core, responder, c, false, Some(need))
                         .is_some()

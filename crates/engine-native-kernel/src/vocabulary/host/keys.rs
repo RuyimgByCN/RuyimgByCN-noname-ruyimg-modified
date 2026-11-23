@@ -686,6 +686,14 @@ impl HostBehavior {
             HostBehavior::U05XianjianBatchC => "host:u05_xianjian_batch_c",
             HostBehavior::U05XianjianBatchD => "host:u05_xianjian_batch_d",
             HostBehavior::U05XianjianBatchE => "host:u05_xianjian_batch_e",
+            HostBehavior::U05SwdDujianCard => "host:u05_swd_dujian_card",
+            HostBehavior::U05SwdPangufu => "host:u05_swd_pangufu",
+            HostBehavior::U05SwdHufuViewAs => "host:u05_swd_hufu_viewas",
+            HostBehavior::U05SwdYuchanEquip => "host:u05_swd_yuchan_equip",
+            HostBehavior::U05SwdZhiluxiaohuDraw => "host:u05_swd_zhiluxiaohu_draw",
+            HostBehavior::U05SwdHuanpodanGuard => "host:u05_swd_huanpodan_guard",
+            HostBehavior::U05SwdForgingEnd => "host:u05_swd_forging_end",
+            HostBehavior::U05SwdPassiveMarker => "host:u05_swd_passive_marker",
         }
     }
 }

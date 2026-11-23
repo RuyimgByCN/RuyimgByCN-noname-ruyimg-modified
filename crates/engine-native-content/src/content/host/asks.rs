@@ -7,6 +7,7 @@ use crate::snap::*;
 use crate::state::GameStateCore;
 
 use super::asks_mtg::{active_ask_batches, active_ask_mtg};
+use super::asks_swd::active_ask_swd;
 use super::asks_wudian::active_ask_wudian;
 
 pub(super) fn xuanying_target_spec(core: &GameStateCore, owner: PlayerId) -> ChoiceSpec {
@@ -148,19 +149,6 @@ pub(crate) fn active_ask_host(
             }
             _ => None,
         },
-        HostBehavior::SwdBaishouzhihuHeld => {
-            if stage != HostStage::TargetChoice { return None; }
-            let options: Vec<ChoiceOption> = core
-                .alive_players()
-                .filter(|&p| {
-                    p != owner
-                        && (!core.player(p).hand.is_empty() || !core.player(p).equips.is_empty())
-                })
-                .map(ChoiceOption::Player)
-                .collect();
-            if options.is_empty() { return None; }
-            Some(ask(owner, "baishouzhihu_target", ChoiceKind::SelectPlayers, options, 1, 1, false))
-        }
         HostBehavior::SwdMufengHeld => {
             if stage != HostStage::SelectCard || cards.is_empty() { return None; }
             Some(ask(owner, "mufeng_discover", ChoiceKind::SelectCards, cards.iter().copied().map(ChoiceOption::Card).collect(), 1, 1, false))
@@ -1023,8 +1011,11 @@ pub(crate) fn active_ask_host(
         HostBehavior::L01YiyiCard | HostBehavior::L01NeiKey | HostBehavior::L01AiRuleHooks => {
             super::step::l01_rules::active_ask_l01(behavior, stage, owner, target, core, catalog)
         }
-        _ => active_ask_batches(
-            behavior, stage, owner, target, targets, card, cards, core, catalog,
-        ),
+        _ => active_ask_swd(behavior, stage, owner, target, targets, card, cards, core, catalog)
+            .or_else(|| {
+                active_ask_batches(
+                    behavior, stage, owner, target, targets, card, cards, core, catalog,
+                )
+            }),
     }
 }

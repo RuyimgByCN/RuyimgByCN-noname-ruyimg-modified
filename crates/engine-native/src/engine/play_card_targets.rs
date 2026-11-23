@@ -90,19 +90,42 @@ pub(super) fn validate_jiguan_targets(
         // 机关怨（swd 第二十一批，规则 v196）：恰 1 名其他
         // 角色（上游 filterTarget target!==player+
         // !hasSkill("jiguanyuan") 同口径）；enable 要求除本
-        // 体至少还有一张手牌（上游 enable 同口径）
-        if targets.len() != 1
-            || targets[0] == core.turn.current
-            || !core.player(targets[0]).alive
-            || !core.player(targets[0]).jiguanyuan_cards.is_empty()
+        // 体至少还有一张手牌或装备牌（上游 getCards("he") 同口径）
+        let t = match targets.first().copied() {
+            Some(t) if targets.len() == 1 => t,
+            _ => return Err(RejectReason::IllegalTargets),
+        };
+        let has_jy_skill = catalog
+            .skill_by_name(crate::content::host::SWD_JIGUANYUAN_GAIN_KEY)
+            .is_some_and(|d| core.has_skill(t, d))
+            || catalog
+                .skill_by_name("jiguanyuan")
+                .is_some_and(|d| core.has_skill(t, d));
+        if t == core.turn.current
+            || !core.player(t).alive
+            || !core.player(t).jiguanyuan_cards.is_empty()
+            || has_jy_skill
         {
             return Err(RejectReason::IllegalTargets);
         }
-        let hand = core.player(core.turn.current).hand.clone();
-        if hand.is_empty()
-            || (hand.len() == 1 && hand[0] == card)
+        let p = core.player(core.turn.current);
+        let has_other_he = p.hand.iter().any(|c| *c != card) || !p.equips.is_empty();
+        if !has_other_he {
+            return Err(RejectReason::CardLimit);
+        }
+    } else if catalog.cards[card as usize].name.contains("zhiluxiaohu") {
+        // 指路小虎（card/swd/card.js:533）：自目标 + lib.filter.filterCard({ name: "sha" }, player)
+        if targets != [core.turn.current] {
+            return Err(RejectReason::IllegalTargets);
+        }
+        let user = core.turn.current;
+        if core.turn.sha_used_play_phase
+            && !crate::engine::play_sha::has_unlimited_sha_public(core, catalog, user, card)
         {
             return Err(RejectReason::CardLimit);
+        }
+        if !core.alive_players().any(|p| p != user) {
+            return Err(RejectReason::IllegalTargets);
         }
     } else if catalog.cards[card as usize].name.contains("yanjiadan")
         || catalog.cards[card as usize].name.contains("lingjiandai")
@@ -534,6 +557,14 @@ pub(super) fn validate_tail_ext_targets(
         }
         CardKind::Jiguan => validate_jiguan_targets(core, catalog, card, targets)?,
         CardKind::Hslingjian => validate_lingjian_targets(core, catalog, card, targets)?,
+        CardKind::Dujian => {
+            if targets.len() != 1
+                || !core.player(targets[0]).alive
+                || core.player(targets[0]).hand.is_empty()
+            {
+                return Err(RejectReason::IllegalTargets);
+            }
+        }
         CardKind::Bingpotong => {
             if targets.is_empty() || targets.len() > 3 {
                 return Err(RejectReason::IllegalTargets);

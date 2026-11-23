@@ -13,6 +13,7 @@ use crate::snap::MachineSnapshot;
 mod activation;
 mod asks;
 mod asks_mtg;
+mod asks_swd;
 mod asks_wudian;
 mod intrinsic;
 pub(crate) use asks::active_ask_host;
@@ -99,6 +100,7 @@ pub(crate) fn host_card_use_after_all(
 ) {
     host_card_use_after(ctx, fid, u);
     host_card_use_after_xianjian(ctx, u);
+    step::swd_u05_7a::host_card_use_after_swd(ctx, u);
 }
 
 pub(crate) fn host_on_phase_use_end_all(ctx: &mut Ctx<'_>, player: PlayerId) {

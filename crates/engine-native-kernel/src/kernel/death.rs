@@ -69,6 +69,25 @@ impl crate::catalog::SkillMachine for DeathMachine {
             ctx.core.player_mut(self.player).dying = false;
             return Flow::Done;
         }
+        // 勾魂锣2（U05 swd 7a，`gouhunluo2` dieBegin）：来源死亡时清除其余角色倒计时。
+        {
+            let src = self.player;
+            let gh_sub = ctx.catalog.skill_by_name(crate::vocabulary::host::SWD_GOUHUNLUO_SUB_KEY);
+            let gh_up = ctx.catalog.skill_by_name("gouhunluo");
+            for seat in 0..ctx.core.players.len() as PlayerId {
+                if ctx.core.player(seat).gouhunluo_source == Some(src) {
+                    let pl = ctx.core.player_mut(seat);
+                    pl.gouhunluo_rounds = 0;
+                    pl.gouhunluo_source = None;
+                    if let Some(d) = gh_sub {
+                        ctx.core.skills.remove(&(seat, d));
+                    }
+                    if let Some(d) = gh_up {
+                        ctx.core.skills.remove(&(seat, d));
+                    }
+                }
+            }
+        }
         // versus 替补（规则 v206）：死亡座位所在队替补池非空 → 弹队首
         // 换将复活（上游 revive+uninit/init+摸 4+濒死链取消同口径：死亡
         // 执行被替补替代——本座位不进入死亡结算，奖惩/终局判定不发生；
