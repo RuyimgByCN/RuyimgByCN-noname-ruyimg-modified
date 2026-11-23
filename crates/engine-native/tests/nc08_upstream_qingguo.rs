@@ -38,13 +38,13 @@ use engine_native::Engine;
 fn upstream_qingguo_in_shan_options() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/../engine-native-kernel/src/kernel/sha/resume.rs"
+        "/../engine-native-kernel/src/kernel/sha/respond.rs"
     ))
-    .expect("读 sha/step");
-    // 全文件检查（同文件有多个候选构造点，固定窗口会命中其它处）
+    .expect("读 sha/respond");
+    // 全文件检查（`collect_shan_response_cards` 同时服务普通出闪与萨登荆环额外出闪）
     let seg: &str = &src;
     assert!(
-        seg.contains("qingguo && black") && seg.contains("longdan && kind.is_sha_like()"),
+        seg.contains("if qingguo") && seg.contains("if black") && seg.contains("longdan && is_sha_like"),
         "原生依据：倾国（黑色）与龙胆并列进入【闪】候选：{seg}"
     );
     let up = std::fs::read_to_string(
@@ -69,16 +69,15 @@ fn upstream_qingguo_in_shan_options() {
 fn upstream_qingguo_zone_difference_is_registered() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/../engine-native-kernel/src/kernel/sha/resume.rs"
+        "/../engine-native-kernel/src/kernel/sha/respond.rs"
     ))
-    .expect("读 sha/step");
-    // 定位到含 `qingguo && black` 的候选构造点（其上方即为 `.hand` 遍历）
-    let anchor = src.find("qingguo && black").expect("倾国候选");
-    let start = src[..anchor].rfind(".hand").expect("手牌遍历");
-    let seg: String = src[start.saturating_sub(40)..anchor].chars().take(400).collect();
+    .expect("读 sha/respond");
+    // 定位到 `collect_shan_response_cards` 中 `if qingguo` 候选构造点（其紧邻 `.hand` 遍历）
+    let anchor = src.find("if qingguo").expect("倾国候选");
+    let tail: String = src[anchor..].chars().take(400).collect();
     assert!(
-        seg.contains(".hand") && !seg.contains(".equips"),
-        "差异固定：原生候选只取手牌（.hand），未含装备区（上游 position 'hs'）：{seg}"
+        tail.contains(".hand") && !tail.contains(".equips"),
+        "差异固定：原生候选只取手牌（.hand），未含装备区（上游 position 'hs'）：{tail}"
     );
     // 与既有牌区族成员对照：guose/qixi 等在 play_card.rs 的命令面同样限定手牌
     let play_card = std::fs::read_to_string(concat!(

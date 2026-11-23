@@ -261,6 +261,26 @@ fn on_card_use_popped(
         .remove(&(u.player, format!("sha_pending_end:{popped_id}")));
     core.vm_aux
         .flags
+        .remove(&(u.player, format!("u05_sha_hit_resume:{popped_id}")));
+    for p in 0..core.players.len() as PlayerId {
+        core.vm_aux
+            .flags
+            .remove(&(u.player, format!("u05_guiyanfadao_done:{popped_id}:{p}")));
+        core.vm_aux
+            .flags
+            .remove(&(u.player, format!("u05_guiyanfadao_unhurt:{popped_id}:{p}")));
+        core.vm_aux
+            .flags
+            .remove(&(u.player, format!("u05_guiyanfadao_active_fid:{p}")));
+        core.vm_aux
+            .flags
+            .remove(&(u.player, format!("u05_sadeng_tried:{popped_id}:{p}")));
+        core.vm_aux
+            .flags
+            .remove(&(u.player, format!("u05_sadeng_handled:{p}")));
+    }
+    core.vm_aux
+        .flags
         .remove(&(u.player, format!("sha_jiu_extra:{popped_id}")));
     let eff_kind = u
         .use_as
@@ -429,4 +449,13 @@ fn on_card_use_popped(
     core.vm_aux
         .flags
         .retain(|(_, k), _| !k.starts_with(&dodge_prefix));
+    {
+        let mut ctx = Ctx {
+            core,
+            res,
+            catalog,
+            out,
+        };
+        crate::kernel::flush_qiankundai_pending_lose(&mut ctx);
+    }
 }

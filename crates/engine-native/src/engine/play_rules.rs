@@ -597,6 +597,11 @@ pub(super) fn check_play_target_restrictions(
     // 的牌指定为目标（上游 jidong2 mod targetEnabled 同口径；
     // AOE 类自动指向全体的牌不受影响——上游同口径；登记差异：
     // 仅出牌使用路径，响应路径同麻茶）
+    let has_sk = |p: PlayerId, name: &str| {
+        catalog
+            .skill_by_name(name)
+            .is_some_and(|d| core.has_skill(p, d))
+    };
     {
         let has_sheng2 = |p: PlayerId| {
             catalog.skill_by_name("sheng2").is_some_and(|d| {
@@ -618,8 +623,15 @@ pub(super) fn check_play_target_restrictions(
                     || core.player(*t).yinshen_active
                     || core.player(*t).jileng_active
                     || core.player(*t).yinmi_active
-                    || has_sheng2(*t)))
+                    || has_sheng2(*t)
+                    || has_sk(*t, "hslingjian_jinjilengdong")))
                 || has_yihun2(*t)
+            {
+                return Err(RejectReason::IllegalTargets);
+            }
+            if has_sk(*t, "hslingjian_shengxiuhaojiao_equip2")
+                && (core.player(core.turn.current).chaofeng_active
+                    || has_sk(core.turn.current, "hslingjian_chaofeng"))
             {
                 return Err(RejectReason::IllegalTargets);
             }
@@ -743,8 +755,25 @@ pub(super) fn check_play_use_restrictions(
 ) -> Result<(), RejectReason> {
     // 紧急冷冻（U05 swd 灵剑，规则 v198）：冻结者不能使用卡牌
     //（上游 hslingjian_jinjilengdong mod cardEnabled 同口径）
-    if core.player(core.turn.current).jileng_active {
+    if core.player(core.turn.current).jileng_active
+        || catalog
+            .skill_by_name("hslingjian_jinjilengdong")
+            .is_some_and(|d| core.has_skill(core.turn.current, d))
+    {
         return Err(RejectReason::CardLimit);
+    }
+    if matches!(
+        kind,
+        CardKind::Sha | CardKind::FireSha | CardKind::LeiSha | CardKind::Duel
+    ) {
+        if let Some(d) = catalog.skill_by_name("hslingjian_yinmilichang_equip5") {
+            if targets
+                .iter()
+                .any(|&t| core.has_skill(t, d) && core.player(t).hand.is_empty())
+            {
+                return Err(RejectReason::IllegalTargets);
+            }
+        }
     }
     // 造异（Boss 颛顼，规则 v246）：玄冥在场 → 敌方不可为锦囊目
     // 标；共工在场 → 敌方不可为基本牌目标（上游 mod targetEnabled

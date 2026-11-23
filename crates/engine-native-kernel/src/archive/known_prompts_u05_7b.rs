@@ -1,0 +1,26 @@
+//! Batch U05-7b（`杀海拾遗 · swd` 卡牌与卡牌技后半段）新增询问提示词静态表（与 `known_prompts.rs` 分表挂载，禁止修改已冻旧表）。
+
+pub(super) const KNOWN_PROMPTS_U05_7B: &[&str] = &[
+    "u05_xiangyuye_discard",
+    "u05_kongxin_target",
+    "u05_kongxin_pindian_own",
+    "u05_kongxin_pindian_target",
+    "u05_kongxin_sha_target",
+    "u05_kongxin_lose_discard",
+    "u05_zhongxing_equip1_confirm",
+    "u05_jileng_equip1_confirm",
+    "u05_yinmi_equip1_target",
+    "u05_zhongxing_equip2_confirm",
+    "u05_jileng_equip2_confirm",
+    "u05_jileng_equip5_target",
+    "u05_lingjian_e5_cost",
+    "u05_lingjian_e5_target",
+    "u05_duanzao_equip",
+    "u05_duanzao_mat",
+    "u05_duanzao_target",
+    "u05_qinglonglingzhu_gain",
+    "u05_baihupifeng_recover",
+    "u05_fengxueren_confirm",
+    "u05_old_longfan_target",
+    "u05_guiyanfadao_confirm",
+];

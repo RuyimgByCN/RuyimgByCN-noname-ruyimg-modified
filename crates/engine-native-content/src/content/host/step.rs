@@ -67,6 +67,7 @@ pub(super) fn sha_card_use_data(
 pub(in crate::content::host) mod swd_u05_7a;
 mod swd_u05_7a_forging;
 mod swd_u05_7a_hufu;
+pub(in crate::content::host) mod swd_u05_7b;
 mod wudian_ow_cards;
 mod wudian_damage;
 mod wudian_recovery;
@@ -1323,6 +1324,36 @@ impl HostMachine {
             | HostBehavior::U05SwdHuanpodanGuard
             | HostBehavior::U05SwdForgingEnd
             | HostBehavior::U05SwdPassiveMarker => swd_u05_7a::step(self, ctx),
+            HostBehavior::U05SwdXiangyuyeCard
+            | HostBehavior::U05SwdHuanpodanCard
+            | HostBehavior::U05SwdKongxin
+            | HostBehavior::U05SwdKongxin2
+            | HostBehavior::U05SwdQinglianxindeng
+            | HostBehavior::U05SwdLingjianDmgSrc
+            | HostBehavior::U05SwdLingjianDmgTgt
+            | HostBehavior::U05SwdLingjianLoseTemp
+            | HostBehavior::U05SwdLingjianEquipped
+            | HostBehavior::U05SwdLingjianDrawPhase
+            | HostBehavior::U05SwdLingjianPhaseEnd
+            | HostBehavior::U05SwdLingjianPhaseUse
+            | HostBehavior::U05SwdLingjianShaBegin
+            | HostBehavior::U05SwdLingjianPassive
+            | HostBehavior::U05SwdJiguanyaoshuSkill
+            | HostBehavior::U05SwdLingjianduanzao
+            | HostBehavior::U05SwdForgeAction
+            | HostBehavior::U05SwdQinglonglingzhu
+            | HostBehavior::U05SwdXingjunyan
+            | HostBehavior::U05SwdBaihupifeng
+            | HostBehavior::U05SwdFengxueren
+            | HostBehavior::U05SwdChilongya
+            | HostBehavior::U05SwdChilongya2
+            | HostBehavior::U05SwdChilongfengxue
+            | HostBehavior::U05SwdOldLongfan
+            | HostBehavior::U05SwdXixue
+            | HostBehavior::U05SwdGuangshatianyi
+            | HostBehavior::U05SwdSadengjinhuan
+            | HostBehavior::U05SwdGuiyanfadao
+            | HostBehavior::U05SwdTianxianjiu => swd_u05_7b::step(self, ctx),
             HostBehavior::Rechanyuan => Flow::Done,
             HostBehavior::L11TrickCard => l11_cards::handle_l11_trick_card(self, ctx),
             HostBehavior::L11EquipCards => l11_equips::handle_l11_equips(self, ctx),

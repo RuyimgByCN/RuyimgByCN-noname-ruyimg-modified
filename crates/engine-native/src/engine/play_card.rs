@@ -766,7 +766,12 @@ pub(super) fn play_card(
                 | CardKind::Xixueguizhihuan
                 | CardKind::Shentoumianju
                 | CardKind::Xingjunyan
-                | CardKind::Qinglonglingzhu => {
+                | CardKind::Qinglonglingzhu
+                | CardKind::Qinglianxindeng
+                | CardKind::Baihupifeng
+                | CardKind::Guangshatianyi
+                | CardKind::Qipoguyu
+                | CardKind::Guiyanfadao => {
                     // 占栏装备：equip 路径在上方按 is_equip 提前处理；
                     // 此臂仅为穷尽性——正常不会到达
                     return Err(RejectReason::IllegalTargets);
@@ -816,9 +821,8 @@ pub(super) fn play_card(
                     return Err(RejectReason::IllegalTargets);
                 }
                 CardKind::Caoyao => {
-                    // 草药（U05 swd 第三批，规则 v87）：为距离 1 以内的
-                    // 受伤其他目标回复 1 点体力（上游 range.global 1 +
-                    // filterTarget hp<maxHp + recover）。
+                    // 草药（U05 swd，card/swd/card.js:1722）：为距离 1 以内的
+                    // 受伤角色（含自身）回复 1 点体力。
                     if targets.len() != 1 {
                         return Err(RejectReason::IllegalTargets);
                     }
@@ -908,41 +912,9 @@ pub(super) fn play_card(
                     }
                 }
                 CardKind::Jiu | CardKind::Tianxianjiu => {
-                    // 酒/天仙酒（swd 变体，规则 v89；登记差异：与酒共享
-                    // 每回合一次计数）：出牌阶段对自身使用，每回合限一次
-                    // ——本回合使用的下一张杀伤害 +1；濒死使用走濒死救援
-                    // 通道（不经此命令）。
-                    if !targets.is_empty() {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                    // 焚天（Boss 朱雀，规则 v236）：红色酒不受每回合一次
-                    // 限制（上游 mod cardUsable Infinity 同口径）
-                    let fentian_red_jiu = {
-                        let red = matches!(
-                            catalog.resolved_card_suit(core, card),
-                            crate::catalog::Suit::Heart
-                                | crate::catalog::Suit::Diamond
-                        );
-                        red
-                            && catalog
-                                .skill_by_name(crate::content::standard::BOSS_FENTIAN)
-                                .map(|def| core.has_skill(core.turn.current, def))
-                                .unwrap_or(false)
-                    };
-                    let bushi_unlimited = crate::rvm_bridge::modifiers::d34_l28_mods::bushi_unlimited_card(
-                        core,
-                        catalog,
-                        core.turn.current,
-                        Some(card),
-                    );
-                    let fengnu_unlimited = crate::rvm_bridge::modifiers::d34_u05_mods::fengnu_unlimited_cards(
-                        core,
-                        catalog,
-                        core.turn.current,
-                    );
-                    if core.turn.jiu_used && !fentian_red_jiu && !bushi_unlimited && !fengnu_unlimited {
-                        return Err(RejectReason::CardLimit);
-                    }
+                    play_card_targets::validate_jiu_or_tianxianjiu(
+                        core, catalog, card, kind, &targets,
+                    )?;
                 }
                 CardKind::ShouLiJian => {
                     // 手里剑（U06 欢乐卡牌 card.js:39-40）：恰 1 名距离 > 1 的其他存活目标（outrange: { global: 2 }）
@@ -1026,6 +998,27 @@ pub(super) fn play_card(
                 | CardKind::Luyugeng
                 | CardKind::Yunvyuanshen => {
                     play_card_targets::validate_tail_ext_targets(core, catalog, card, kind, &targets)?;
+                }
+                CardKind::Xiangyuye => {
+                    let user = core.turn.current;
+                    if targets.len() != 1
+                        || !core.player(targets[0]).alive
+                        || core.computed_distance(catalog, user, targets[0])
+                            <= core.attack_range(catalog, user)
+                    {
+                        return Err(RejectReason::IllegalTargets);
+                    }
+                }
+                CardKind::Huanpodan => {
+                    if targets.len() != 1 || !core.player(targets[0]).alive {
+                        return Err(RejectReason::IllegalTargets);
+                    }
+                    let has_guard = catalog
+                        .skill_by_name("huanpodan_skill")
+                        .is_some_and(|d| core.has_skill(targets[0], d));
+                    if has_guard {
+                        return Err(RejectReason::IllegalTargets);
+                    }
                 }
             }
     play_card_targets::push_play_card_frame(state, catalog, card, kind, targets)

@@ -744,6 +744,63 @@ pub(super) fn validate_tail_ext_targets(
     Ok(())
 }
 
+/// Validates `Jiu` vs `Tianxianjiu` play rules independently (`card/swd/card.js:1751-1772`).
+pub(super) fn validate_jiu_or_tianxianjiu(
+    core: &GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    card: CardId,
+    kind: CardKind,
+    targets: &[PlayerId],
+) -> Result<(), RejectReason> {
+    if !targets.is_empty() {
+        return Err(RejectReason::IllegalTargets);
+    }
+    let user = core.turn.current;
+    let bushi_unlimited = crate::rvm_bridge::modifiers::d34_l28_mods::bushi_unlimited_card(
+        core,
+        catalog,
+        user,
+        Some(card),
+    );
+    let fengnu_unlimited = crate::rvm_bridge::modifiers::d34_u05_mods::fengnu_unlimited_cards(
+        core, catalog, user,
+    );
+    if kind == CardKind::Tianxianjiu {
+        let has_txj_skill = catalog
+            .skill_by_name("tianxianjiu")
+            .is_some_and(|d| core.has_skill(user, d));
+        let active_fallback = core
+            .vm_aux
+            .flags
+            .get(&(user, "u05_tianxianjiu_active_fallback".to_string()))
+            .copied()
+            .unwrap_or(0)
+            > 0;
+        let used_turn = core
+            .vm_aux
+            .flags
+            .get(&(user, "u05_tianxianjiu_used_turn".to_string()))
+            .copied()
+            .unwrap_or(0)
+            > 0;
+        if (has_txj_skill || active_fallback || used_turn) && !bushi_unlimited && !fengnu_unlimited {
+            return Err(RejectReason::CardLimit);
+        }
+        return Ok(());
+    }
+    // 焚天（Boss 朱雀，规则 v236）：红色酒不受每回合一次限制
+    let fentian_red_jiu = matches!(
+        catalog.resolved_card_suit(core, card),
+        crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+    ) && catalog
+        .skill_by_name(crate::content::standard::BOSS_FENTIAN)
+        .is_some_and(|def| core.has_skill(user, def));
+    if core.turn.jiu_used && !fentian_red_jiu && !bushi_unlimited && !fengnu_unlimited {
+        return Err(RejectReason::CardLimit);
+    }
+    Ok(())
+}
+
 /// Recast (`chongzhu: true`) `txhj_zhijizhibi` / `txhj_shengdong` when played with 0 targets.
 pub(super) fn try_recast_l11_trick(
     state: &mut GameState,

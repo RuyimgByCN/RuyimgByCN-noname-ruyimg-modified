@@ -385,6 +385,8 @@ pub(crate) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: PlayerId) {
     ctx.core.turn.current = next;
     ctx.core.turn.phase = Phase::Judge;
     ctx.core.turn.sha_used_play_phase = false;
+    ctx.core.turn.jiu_used = false;
+    ctx.core.turn.jiu_active = false;
     ctx.core.turn.land_used = false;
     ctx.core.turn.land_sha_used = false;
     ctx.core.turn.turn_opened = false;

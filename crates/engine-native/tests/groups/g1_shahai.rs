@@ -48,3 +48,6 @@ mod u05_b4_xianjian_fixes;
 
 #[path = "../u05_b7a_swd_cards.rs"]
 mod u05_b7a_swd_cards;
+
+#[path = "../u05_b7b_swd_cards.rs"]
+mod u05_b7b_swd_cards;

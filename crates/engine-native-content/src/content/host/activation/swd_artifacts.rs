@@ -171,10 +171,13 @@ impl HostSkillBehavior {
                     stage: HostStage::TargetChoice,
                 }))
             }
-            // 逆攻发动：标记 ≥1；lv≥2 打伤需选目标，lv==1 仅摸 1（直发）
+            // 逆攻发动：标记 ≥1；lv≥2 打伤需选目标，lv==1 仅摸 1（直发）；区分独立技能 nigong2/3
             HostBehavior::SwdNigongStrike => {
                 let lv = ctx.state.player(owner).nigong_lv;
-                if lv == 0 {
+                if lv == 0
+                    || (self.name == "nigong2" && lv <= 1)
+                    || (self.name == "nigong3" && lv != 1)
+                {
                     return None;
                 }
                 if lv == 1 {

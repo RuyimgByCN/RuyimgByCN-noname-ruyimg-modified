@@ -76,6 +76,16 @@ pub(crate) fn host_play_begin_step(ctx: &mut Ctx<'_>, player: PlayerId) {
     host_play_begin_xianjian(ctx, player);
 }
 
+pub(crate) fn host_sha_hit_step_all(
+    ctx: &mut Ctx<'_>,
+    sha_frame_id: crate::ids::EventId,
+    source: PlayerId,
+    target: PlayerId,
+    sha_card: Option<CardId>,
+) -> bool {
+    step::swd_u05_7b::host_sha_hit_step_u05_7b(ctx, sha_frame_id, source, target, sha_card)
+}
+
 pub(crate) fn host_sha_end_step_all(
     ctx: &mut Ctx<'_>,
     sha_frame_id: crate::ids::EventId,
@@ -84,13 +94,16 @@ pub(crate) fn host_sha_end_step_all(
     sha_card: Option<CardId>,
     is_damage: bool,
 ) -> bool {
-    host_sha_end_step(ctx, sha_frame_id, source, target, sha_card, is_damage)
-        || host_sha_end_xianjian(ctx, sha_frame_id, source, target)
+    let u05_yield = step::swd_u05_7b::host_sha_end_step_u05_7b(ctx, source, is_damage);
+    let step_yield = host_sha_end_step(ctx, sha_frame_id, source, target, sha_card, is_damage);
+    let xianjian_yield = host_sha_end_xianjian(ctx, sha_frame_id, source, target);
+    u05_yield || step_yield || xianjian_yield
 }
 
 pub(crate) fn host_draw_begin_step_all(ctx: &mut Ctx<'_>, player: PlayerId, pending: &mut i32) {
     host_draw_begin_step(ctx, player, pending);
     host_draw_begin_xianjian(ctx, player, pending);
+    step::swd_u05_7b::host_draw_begin_step_u05_7b(ctx, player, pending);
 }
 
 pub(crate) fn host_card_use_after_all(
@@ -101,6 +114,12 @@ pub(crate) fn host_card_use_after_all(
     host_card_use_after(ctx, fid, u);
     host_card_use_after_xianjian(ctx, u);
     step::swd_u05_7a::host_card_use_after_swd(ctx, u);
+    step::swd_u05_7b::host_card_use_after_u05_7b(ctx, u);
+}
+
+pub(crate) fn host_on_outer_settled_all(ctx: &mut Ctx<'_>) {
+    host_on_outer_settled(ctx);
+    step::swd_u05_7b::on_outer_settled_u05_7b(ctx);
 }
 
 pub(crate) fn host_on_phase_use_end_all(ctx: &mut Ctx<'_>, player: PlayerId) {
@@ -121,6 +140,7 @@ pub(crate) fn host_on_hand_card_removed_all(ctx: &mut Ctx<'_>, player: PlayerId,
 pub(crate) fn host_on_phase_end_all(ctx: &mut Ctx<'_>) {
     host_on_phase_end(ctx);
     host_on_phase_end_xianjian(ctx);
+    step::swd_u05_7b::on_phase_end_u05_7b(ctx);
 }
 
 pub(crate) fn host_on_recover_before_all(ctx: &mut Ctx<'_>, player: PlayerId, amount: &mut u32) {
@@ -859,6 +879,8 @@ impl SkillBehavior for HostSkillBehavior {
                 | HostBehavior::L11Weapons
                 | HostBehavior::L11GeneralBossC
                 | HostBehavior::L11BossLingfeng
+                | HostBehavior::U05SwdJiguanyaoshuSkill
+                | HostBehavior::U05SwdLingjianLoseTemp
         )
     }
     /// 止息（L27 批 2）：**计数标记 ≥ 体力** 或 **已使用过锦囊**（记录标记
@@ -870,7 +892,10 @@ impl SkillBehavior for HostSkillBehavior {
         core: &crate::state::GameStateCore,
         p: crate::ids::PlayerId,
     ) -> bool {
-        if self.behavior == HostBehavior::U05OwBatchB && self.name == "shanguang2" {
+        if (self.behavior == HostBehavior::U05OwBatchB && self.name == "shanguang2")
+            || (self.behavior == HostBehavior::U05SwdLingjianPassive
+                && self.name == "hslingjian_jinjilengdong")
+        {
             return true;
         }
         if self.behavior != HostBehavior::NewZhixi {

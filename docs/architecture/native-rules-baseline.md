@@ -1,5 +1,17 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+## 2026-11-23 Batch U05-7b（U05 SWD 卡牌 Part 2 40 张与 64 技能 104 项语义对齐、`is_tao_like_core` / `yuchan_swap` `Stage::Done` 延迟与 4 技能边界保留）
+
+- **不变量保持**：`STANDARD_RULESET_VERSION=333`、`ARCHIVE_FORMAT_VERSION=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。
+- **主线合入语义与生命周期对齐**：
+  - `HostBehavior` 新增 `1310..=1339`（`U05SwdXiangyuyeCard..=U05SwdTianxianjiu`，[behavior.rs](../../crates/engine-native-kernel/src/vocabulary/host/behavior.rs#L1830-L1889)，`HostBehavior::ALL=676`），独立尾追加 [known_prompts_u05_7b.rs](../../crates/engine-native-kernel/src/archive/known_prompts_u05_7b.rs#L3-L26) `22` 条提示词（`u05_xiangyuye_discard..=u05_guiyanfadao_confirm`），接入 `swd_u05_7b*.rs`（4 模块）、`extension_choices_u05_7b.rs` 与 `u05_b7b_swd_cards/*`（`25` 项测试）；`qipoguyu` 上游 `skills: ["xujin"]` 本即为悬空未定义技能，空 `equip_skills` 与上游等价。
+  - **主线协同与 R3 修复保留**：[shahai_attach.rs](../../crates/content-native-loader/src/shahai_attach.rs) 修正 `"shahai-hearth"` / `"shahai-swd"` 精确包名匹配并依次解析 7a/7b SWD 行为；[host.rs](../../crates/engine-native-content/src/content/host.rs) `host_on_outer_settled_all` 顺序派发 `host_on_outer_settled` 与 `on_outer_settled_u05_7b`；[swd_equipment_skills.rs](../../crates/engine-native-content/src/content/host/step/swd_equipment_skills.rs#L785) `should_defer_yuchan_swap` 将 `g_yuchan_swap` / `yuchan_swap` / `host:yuchan_swap` 延后至 `Stage::Done`（仅保留 `c331_phase5_yuchan` 于 `AfterTriggers`）并保持 `Caoyao` 自救；[play_card_targets.rs](../../crates/engine-native/src/engine/play_card_targets.rs#L442) 统一 `validate_tail_ext_targets` 并与 `play_card.rs` 保留 `try_recast_l11_trick`/`push_play_card_frame`；[combat_rules.rs](../../crates/engine-native-kernel/src/kernel/combat_rules.rs#L224) `is_tao_like_core` 与 [dying.rs](../../crates/engine-native-kernel/src/kernel/dying.rs) / [shapes.rs](../../crates/engine-native-kernel/src/snap/asks/shapes.rs) / [sha/respond.rs](../../crates/engine-native-kernel/src/kernel/sha/respond.rs) / [sha/resume.rs](../../crates/engine-native-kernel/src/kernel/sha/resume.rs) / [snap/asks/sha.rs](../../crates/engine-native-kernel/src/snap/asks/sha.rs#L35) 统一 `Tianxianjiu` 仅自救门控、`collect_shan_response_cards`、`discard_response_card` 手牌/装备弃置与 `sadengjinhuan_*` snapshot 推导（同步对齐 `nc08_upstream_jijiu.rs` `turn.current != responder` 与 `nc08_upstream_qingguo.rs`）。
+- **明确保留为 `简化近似` 的 `4` 项 SWD 技能边界**：
+  1. `U05:skills:yiluan`（`card/swd/skill.js:1328`）：`swd_card_effects.rs` 选 `hand.first()` 与首个合法目标而非随机可用手牌与 `randomGet()`。
+  2. `U05:skills:old_longfan`（`card/swd/skill.js:2403`）：`swd_u05_7b.rs` 用 10 桶 RNG 取代交互式 `setInterval` 轮盘 UI。
+  3. `U05:skills:longfan`（`card/swd/skill.js:2531`）：`swd_equipment_skills.rs` 梅花分支取任意存活他者而非 `getEnemies()`（带装备回退）。
+  4. `U05:skills:touzhi`（`card/swd/skill.js:2580`）：`swd_equipment_skills.rs` 在致死伤害后仍将武器移入目标手牌。
+
 ## 2026-11-23 Batch U05-7a（U05 SWD 卡牌 Part 1 39 张与 67 技能 106 项语义对齐、`standard.rs` 同行为全球技去重与 `SwdBaishouzhihuHeld` 弃牌窗对齐）
 
 - **不变量保持**：`RULES_VERSION=333`、`NGSA=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。

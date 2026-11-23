@@ -598,7 +598,8 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                             | CardKind::Hufu
                             | CardKind::Tianxianjiu
                             | CardKind::Dinvxuanshuang
-                    ) && (raw_kind != CardKind::Jiu || responder == self.dying)
+                    ) && (!matches!(raw_kind, CardKind::Jiu | CardKind::Tianxianjiu)
+                        || responder == self.dying)
                     {
                         raw_kind
                     } else if raw_kind == CardKind::Yuchanxun {

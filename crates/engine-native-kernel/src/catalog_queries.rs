@@ -871,4 +871,98 @@ impl Catalog {
             .get(def as usize)
             .is_some_and(|skill| skill.behavior.is_forever())
     }
+
+    /// PA12 批⑮：查找 `player` 当前启用的 VM 技能中首个匹配 `card` 的单牌转化规则。
+    pub fn find_player_vm_view_as(
+        &self,
+        core: &crate::state::GameStateCore,
+        player: crate::ids::PlayerId,
+        card: CardId,
+        in_play: bool,
+        target_kind: Option<CardKind>,
+    ) -> Option<&crate::rvm_bridge::VmViewAsSpec> {
+        let sealed = self.is_tieji_sealed(core, player);
+        core.skills
+            .range((player, u16::MIN)..)
+            .take_while(|((p, _), _)| *p == player)
+            .filter(|((_, _), inst)| inst.enabled)
+            .find_map(|((_, def), _)| {
+                let s = self.skills.get(*def as usize)?;
+                if (sealed && !Self::is_locked_skill_name(s.name, s.trigger.as_ref()))
+                    || self.is_rechanyuan_sealed_def(core, player, *def)
+                {
+                    return None;
+                }
+                s.behavior.vm_view_as().iter().find(|spec| {
+                    spec.matches_card(core, self, player, card, in_play, target_kind)
+                })
+            })
+            .or_else(|| {
+                crate::rvm_bridge::modifiers::d34_flags::find_d34_flag_view_as(
+                    core,
+                    self,
+                    player,
+                    card,
+                    in_play,
+                    target_kind,
+                )
+            })
+    }
+
+    /// PA12 批⑰：返回 `player` 转化技在 `from none` 模式下使用的确定性虚拟令牌卡牌 ID（不在手牌与装备区中）。
+    pub fn vm_view_as_none_token(
+        &self,
+        core: &crate::state::GameStateCore,
+        player: crate::ids::PlayerId,
+    ) -> CardId {
+        let p = core.player(player);
+        (0..self.cards.len() as CardId)
+            .find(|c| !p.hand.contains(c) && !p.equips.contains(c))
+            .unwrap_or(0)
+    }
+
+    /// PA12 批⑰：枚举 `player` 非手牌区（装备区、扩展牌堆及 `from none` 虚拟令牌）可参与 VM 转化技的卡牌 ID。
+    pub fn player_vm_view_as_extra_cards(
+        &self,
+        core: &crate::state::GameStateCore,
+        player: crate::ids::PlayerId,
+        in_play: bool,
+        target_kind: Option<CardKind>,
+    ) -> Vec<CardId> {
+        let mut out = Vec::new();
+        let p = core.player(player);
+        for &eq in &p.equips {
+            if self
+                .find_player_vm_view_as(core, player, eq, in_play, target_kind)
+                .is_some()
+                && !out.contains(&eq)
+            {
+                out.push(eq);
+            }
+        }
+        for ((po, _), pile) in &core.vm_aux.piles {
+            if *po == player {
+                for &c in pile {
+                    if self
+                        .find_player_vm_view_as(core, player, c, in_play, target_kind)
+                        .is_some()
+                        && !p.hand.contains(&c)
+                        && !out.contains(&c)
+                    {
+                        out.push(c);
+                    }
+                }
+            }
+        }
+        let none_tok = self.vm_view_as_none_token(core, player);
+        if self
+            .find_player_vm_view_as(core, player, none_tok, in_play, target_kind)
+            .is_some()
+            && !p.hand.contains(&none_tok)
+            && !out.contains(&none_tok)
+        {
+            out.push(none_tok);
+        }
+        out
+    }
 }

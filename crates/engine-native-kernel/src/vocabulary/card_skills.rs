@@ -393,6 +393,10 @@ pub fn card_kind_equip_skills(kind: crate::catalog::CardKind) -> &'static [&'sta
         CardKind::Xuelunyang => &[HUANLE_XUELUNYANG_KEY],
         CardKind::Mianju => &[HUANLE_MIANJI_KEY],
         CardKind::Pangufu => &["pangufu"],
+        CardKind::Qinglianxindeng => &["qinglianxindeng"],
+        CardKind::Baihupifeng => &["baihupifeng"],
+        CardKind::Guangshatianyi => &["guangshatianyi"],
+        CardKind::Guiyanfadao => &["guiyanfadao"],
         _ => &[],
     }
 }
@@ -412,7 +416,9 @@ pub fn yangpijuan_class(kind: CardKind) -> Option<u8> {
         | K::Hufu
         | K::Caoyao
         | K::Tianxianjiu
-        | K::Dujian => Some(0),
+        | K::Dujian
+        | K::Xiangyuye
+        | K::Huanpodan => Some(0),
         K::SavageAttack
         | K::ArcheryAttack
         | K::Duel

@@ -635,7 +635,7 @@ fn target_can_use_replay(
             tp.hp < tp.max_hp as i32
                 && !crate::kernel::tao_futai2_banned(ctx.state, ctx.catalog, owner)
         }
-        CardKind::Caoyao => t != owner && tp.hp < tp.max_hp as i32,
+        CardKind::Caoyao => tp.hp < tp.max_hp as i32,
         CardKind::Xuejibingbao => tp.xuejibingbao == 0,
         CardKind::Fudichouxin | CardKind::Toulianghuanzhu => {
             t != owner && !tp.hand.is_empty() && !op.hand.is_empty()
@@ -790,15 +790,18 @@ pub(in crate::content::host) fn should_defer_yuchan_swap(
 ) -> bool {
     !u.cancelled
         && u.player == owner
-        && state.turn.phase == crate::event::Phase::Play
-        && state.turn.current == owner
-        && !state.turn.shenmiguo_used
-        && active_shenmiguo_skill(state, catalog, owner).is_some()
-        && state
-            .player(owner)
-            .hand
-            .iter()
-            .any(|c| catalog.card_kind(*c) == CardKind::Yuchankan)
+        && (["g_yuchan_swap", "yuchan_swap", "host:yuchan_swap"]
+            .into_iter()
+            .any(|n| catalog.skill_by_name(n).is_some_and(|d| state.has_skill(owner, d)))
+            || (state.turn.phase == crate::event::Phase::Play
+                && state.turn.current == owner
+                && !state.turn.shenmiguo_used
+                && active_shenmiguo_skill(state, catalog, owner).is_some()
+                && state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .any(|c| catalog.card_kind(*c) == CardKind::Yuchankan)))
 }
 
 pub(in crate::content::host) fn try_push_shenmiguo_after_use(
@@ -857,7 +860,14 @@ pub(in crate::content::host) fn try_push_yuchan_swap_after_use(
     ctx: &mut Ctx<'_>,
     u: &crate::event::CardUseData,
 ) {
-    if !should_defer_yuchan_swap(ctx.core, ctx.catalog, u.player, u) {
+    if !should_defer_yuchan_swap(ctx.core, ctx.catalog, u.player, u)
+        || !ctx
+            .core
+            .player(u.player)
+            .hand
+            .iter()
+            .any(|c| ctx.catalog.card_kind(*c).yuchan_auto_view_as().is_some())
+    {
         return;
     }
     let Some(def) = ["g_yuchan_swap", "yuchan_swap", "host:yuchan_swap"]

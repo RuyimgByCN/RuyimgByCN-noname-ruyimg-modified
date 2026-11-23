@@ -77,17 +77,20 @@ pub(super) fn hand_or_equip(core: &GameStateCore, p: PlayerId) -> Vec<CardId> {
     pl.hand.iter().chain(pl.equips.iter()).copied().collect()
 }
 
-fn has_forged_yuchan_skill(catalog: &Catalog, core: &GameStateCore, owner: PlayerId) -> bool {
+pub(super) fn has_forged_yuchan_skill(catalog: &Catalog, core: &GameStateCore, owner: PlayerId) -> bool {
     core.skills.iter().any(|((seat, def), inst)| {
         *seat == owner
             && inst.enabled
             && catalog.skills[*def as usize].name.starts_with("yuchan")
             && catalog.skills[*def as usize].name.contains("_equip")
-    }) || core
-        .player(owner)
-        .equips
-        .iter()
-        .any(|c| catalog.card_kind(*c).yuchan_auto_view_as().is_some())
+    }) || core.player(owner).equips.iter().any(|c| {
+        catalog.card_kind(*c).yuchan_auto_view_as().is_some()
+            || core
+                .player(owner)
+                .card_mods
+                .get(c)
+                .is_some_and(|m| catalog.card_kind(*m).yuchan_auto_view_as().is_some())
+    })
 }
 
 pub(in crate::content::host) fn activate(

@@ -200,6 +200,83 @@ fn lookup_swd_u05_7a_behavior(name: &str) -> Option<engine_native::content::host
     }
 }
 
+fn lookup_swd_u05_7b_behavior(name: &str) -> Option<engine_native::content::host::HostBehavior> {
+    use engine_native::content::host::HostBehavior;
+    match name {
+        "nvwashi" => Some(HostBehavior::SwdNvwashiGuard),
+        "kongxin" => Some(HostBehavior::U05SwdKongxin),
+        "kongxin2" => Some(HostBehavior::U05SwdKongxin2),
+        "qinglianxindeng" => Some(HostBehavior::U05SwdQinglianxindeng),
+        "yiluan" => Some(HostBehavior::SwdSifeizhenmianCard),
+        "hslingjian_xuanfengzhiren_equip1"
+        | "hslingjian_zhongxinghujia_equip1"
+        | "hslingjian_jinjilengdong_equip1"
+        | "hslingjian_yinmilichang_equip1"
+        | "hslingjian_xingtigaizao_equip1" => Some(HostBehavior::U05SwdLingjianDmgSrc),
+        "hslingjian_xuanfengzhiren_equip2"
+        | "hslingjian_zhongxinghujia_equip2"
+        | "hslingjian_jinjilengdong_equip2"
+        | "hslingjian_yinmilichang_equip2"
+        | "hslingjian_xingtigaizao_equip2" => Some(HostBehavior::U05SwdLingjianDmgTgt),
+        "hslingjian_xuanfengzhiren_equip3" | "hslingjian_xuanfengzhiren_equip4" => {
+            Some(HostBehavior::U05SwdLingjianLoseTemp)
+        }
+        "hslingjian_shijianhuisu_equip1" | "hslingjian_shijianhuisu_equip2" => {
+            Some(HostBehavior::U05SwdLingjianEquipped)
+        }
+        "hslingjian_xingtigaizao_equip5" => Some(HostBehavior::U05SwdLingjianDrawPhase),
+        "hslingjian_jinjilengdong_equip5" | "hslingjian_xingtigaizao" => {
+            Some(HostBehavior::U05SwdLingjianPhaseEnd)
+        }
+        "hslingjian_xuanfengzhiren_equip5"
+        | "hslingjian_zhongxinghujia_equip5"
+        | "hslingjian_shengxiuhaojiao_equip5"
+        | "hslingjian_shijianhuisu_equip5" => Some(HostBehavior::U05SwdLingjianPhaseUse),
+        "hslingjian_shengxiuhaojiao_equip1" => Some(HostBehavior::U05SwdLingjianShaBegin),
+        "hslingjian_xuanfengzhiren_equip3_dist"
+        | "hslingjian_xuanfengzhiren_equip4_dist"
+        | "hslingjian_zhongxinghujia_equip3"
+        | "hslingjian_zhongxinghujia_equip4"
+        | "hslingjian_jinjilengdong_equip3"
+        | "hslingjian_jinjilengdong_equip4"
+        | "hslingjian_yinmilichang_equip3"
+        | "hslingjian_yinmilichang_equip4"
+        | "hslingjian_yinmilichang_equip5"
+        | "hslingjian_xingtigaizao_equip3"
+        | "hslingjian_xingtigaizao_equip4"
+        | "hslingjian_shengxiuhaojiao_equip2"
+        | "hslingjian_shengxiuhaojiao_equip3"
+        | "hslingjian_shengxiuhaojiao_equip4"
+        | "hslingjian_shijianhuisu_equip3"
+        | "hslingjian_shijianhuisu_equip4"
+        | "hslingjian_chaofeng"
+        | "hslingjian_jinjilengdong" => Some(HostBehavior::U05SwdLingjianPassive),
+        "jiguanyaoshu_skill" => Some(HostBehavior::U05SwdJiguanyaoshuSkill),
+        "lingjianduanzao" => Some(HostBehavior::U05SwdLingjianduanzao),
+        "_lingjianduanzao" => Some(HostBehavior::U05SwdForgeAction),
+        "qinglonglingzhu" => Some(HostBehavior::U05SwdQinglonglingzhu),
+        "xingjunyan" => Some(HostBehavior::U05SwdXingjunyan),
+        "baihupifeng" => Some(HostBehavior::U05SwdBaihupifeng),
+        "fengxueren" => Some(HostBehavior::U05SwdFengxueren),
+        "chilongya" => Some(HostBehavior::U05SwdChilongya),
+        "chilongya2" => Some(HostBehavior::U05SwdChilongya2),
+        "chilongfengxue" => Some(HostBehavior::U05SwdChilongfengxue),
+        "shentou" => Some(HostBehavior::SwdShentouEquipSkill),
+        "old_longfan" => Some(HostBehavior::U05SwdOldLongfan),
+        "longfan" => Some(HostBehavior::SwdLangeguaiyiEquipSkill),
+        "touzhi" => Some(HostBehavior::SwdYufuluEquipSkill),
+        "xixue" => Some(HostBehavior::U05SwdXixue),
+        "guangshatianyi" => Some(HostBehavior::U05SwdGuangshatianyi),
+        "nigong" => Some(HostBehavior::SwdNigongAccumulate),
+        "nigong2" | "nigong3" => Some(HostBehavior::SwdNigongStrike),
+        "sadengjinhuan" => Some(HostBehavior::U05SwdSadengjinhuan),
+        "guiyanfadao" => Some(HostBehavior::U05SwdGuiyanfadao),
+        "guiyanfadao2" => Some(HostBehavior::U05SwdPassiveMarker),
+        "tianxianjiu" => Some(HostBehavior::U05SwdTianxianjiu),
+        _ => None,
+    }
+}
+
 fn lookup_xianjian_u05_4_behavior(name: &str) -> Option<engine_native::content::host::HostBehavior> {
     use engine_native::content::host::HostBehavior;
     match name {
@@ -243,7 +320,7 @@ fn resolve_and_register_u05_skill(
         .then(|| lookup_xianjian_u05_4_behavior(clean))
         .flatten();
     let swd_beh = (package_id == "shahai-swd")
-        .then(|| lookup_swd_u05_7a_behavior(clean))
+        .then(|| lookup_swd_u05_7a_behavior(clean).or_else(|| lookup_swd_u05_7b_behavior(clean)))
         .flatten();
     if let Some(behavior) = ow_beh
         .or(hearth_beh)

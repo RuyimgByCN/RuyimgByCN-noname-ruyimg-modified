@@ -179,6 +179,34 @@ impl HostSkillBehavior {
                 self, ctx, frame, owner, event,
             );
         }
+        if matches!(
+            self.behavior,
+            HostBehavior::U05SwdKongxin2
+                | HostBehavior::U05SwdQinglianxindeng
+                | HostBehavior::U05SwdLingjianDmgSrc
+                | HostBehavior::U05SwdLingjianDmgTgt
+                | HostBehavior::U05SwdLingjianLoseTemp
+                | HostBehavior::U05SwdLingjianEquipped
+                | HostBehavior::U05SwdLingjianDrawPhase
+                | HostBehavior::U05SwdLingjianPhaseEnd
+                | HostBehavior::U05SwdLingjianShaBegin
+                | HostBehavior::U05SwdJiguanyaoshuSkill
+                | HostBehavior::U05SwdQinglonglingzhu
+                | HostBehavior::U05SwdXingjunyan
+                | HostBehavior::U05SwdBaihupifeng
+                | HostBehavior::U05SwdFengxueren
+                | HostBehavior::U05SwdChilongya
+                | HostBehavior::U05SwdChilongya2
+                | HostBehavior::U05SwdXixue
+                | HostBehavior::U05SwdGuangshatianyi
+                | HostBehavior::U05SwdSadengjinhuan
+                | HostBehavior::U05SwdGuiyanfadao
+                | HostBehavior::U05SwdTianxianjiu
+        ) {
+            return super::step::swd_u05_7b::filter_with_frame(
+                self, ctx, frame, owner, event,
+            );
+        }
         self.filter_behavior(ctx, owner, event)
     }
 

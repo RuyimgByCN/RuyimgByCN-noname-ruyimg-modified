@@ -192,6 +192,13 @@ pub(super) fn card_kind_to_num(k: &CardKind) -> u32 {
         Pozhenjue => 138,
         Dujian => 176,
         Pangufu => 177,
+        Qinglianxindeng => 178,
+        Baihupifeng => 179,
+        Guangshatianyi => 180,
+        Xiangyuye => 181,
+        Huanpodan => 182,
+        Qipoguyu => 183,
+        Guiyanfadao => 184,
     }
 }
 
@@ -384,6 +391,13 @@ pub(super) fn card_kind_from_num(n: u32) -> Result<CardKind, ArchiveError> {
         138 => Pozhenjue,
         176 => Dujian,
         177 => Pangufu,
+        178 => Qinglianxindeng,
+        179 => Baihupifeng,
+        180 => Guangshatianyi,
+        181 => Xiangyuye,
+        182 => Huanpodan,
+        183 => Qipoguyu,
+        184 => Guiyanfadao,
         // P0 解码加固：未知编号返回结构化错误（保留完整 u32），不再 panic。
         _ => return Err(ArchiveError::UnknownCardKind(n)),
     })

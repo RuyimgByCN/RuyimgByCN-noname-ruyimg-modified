@@ -7,6 +7,8 @@ mod respond_skill;
 mod resume;
 mod step;
 
+pub use respond::collect_shan_response_cards;
+
 #[derive(Clone)]
 pub struct ShaResolveMachine {
     pub(super) card: Option<crate::ids::CardId>,
@@ -249,6 +251,28 @@ impl ShaResolveMachine {
                     .is_some_and(|d| ctx.core.has_skill(self.target, d)))
     }
 
+    pub(super) fn should_defer_sha_end(ctx: &Ctx<'_>, source: PlayerId) -> bool {
+        if Self::has_active_bolehuiyan_pred(ctx) {
+            return true;
+        }
+        for name in ["tianxianjiu", "chilongya2"] {
+            if ctx
+                .catalog
+                .skill_by_name(name)
+                .is_some_and(|def| ctx.core.has_skill(source, def))
+            {
+                return true;
+            }
+        }
+        if let Some(def) = ctx.catalog.skill_by_name("chilongfengxue") {
+            let seats = ctx.core.players.len() as PlayerId;
+            if (0..seats).any(|p| ctx.core.player(p).alive && ctx.core.has_skill(p, def)) {
+                return true;
+            }
+        }
+        false
+    }
+
     pub(super) fn take_sha_pending_end(&self, ctx: &mut Ctx<'_>) -> Option<bool> {
         let fid = self.current_sha_frame_id(ctx)?;
         ctx.core
@@ -306,7 +330,9 @@ impl ShaResolveMachine {
     }
 
     pub(super) fn finish_or_defer_sha_end(&mut self, ctx: &mut Ctx<'_>, is_damage: bool) -> Flow {
-        if Self::has_active_bolehuiyan_pred(ctx) {
+        if Self::should_defer_sha_end(ctx, self.source)
+            || (is_damage && self.target_has_shenfuhuaxie(ctx))
+        {
             let fid = self.current_sha_frame_id(ctx);
             return self.defer_sha_end(ctx, fid, is_damage);
         }
@@ -427,6 +453,8 @@ impl ShaResolveMachine {
             self.asking_fengxueren = false;
             self.asking_fuchou = false;
             self.fuchou_card = None;
+            self.asking_sadeng = false;
+            self.asking_sadeng_shan = false;
             self.hanbing_pending = 0;
             return Flow::Yield;
         }
@@ -473,40 +501,8 @@ impl ShaResolveMachine {
         Flow::Done
     }
 
-    /// 结算杀伤害（裸衣/酒/凶兽加成）并推进目标/弃置杀本体。
-    /// 萨登荆环命中改写后的伤害续入（与正常命中路径同口径：寒冰/麒麟
-    /// 窗先开，无窗则直接结算伤害）。
     fn sadeng_continue_to_damage(&mut self, ctx: &mut Ctx<'_>) -> Flow {
-        if self.hanbing_can_fire(ctx) {
-            self.asking_hanbing = true;
-            return Flow::WaitChoice {
-                observer: self.source,
-                spec: ChoiceSpec {
-                    kind: ChoiceKind::Confirm,
-                    prompt: "hanbing_prevent_confirm",
-                    options: vec![ChoiceOption::Confirm],
-                    min: 0,
-                    max: 1,
-                    allow_cancel: true,
-                },
-            };
-        }
-        let horses = self.qilin_horses(ctx);
-        if !horses.is_empty() {
-            self.asking_qilin = true;
-            return Flow::WaitChoice {
-                observer: self.source,
-                spec: ChoiceSpec {
-                    kind: ChoiceKind::SelectCards,
-                    prompt: "qilin_discard_horse",
-                    options: horses,
-                    min: 0,
-                    max: 1,
-                    allow_cancel: true,
-                },
-            };
-        }
-        self.emit_sha_damage(ctx)
+        self.sha_hit_pre_damage(ctx)
     }
 
     fn emit_sha_damage(&mut self, ctx: &mut Ctx<'_>) -> Flow {
@@ -605,7 +601,7 @@ impl ShaResolveMachine {
         }
         self.xiandan_bonus = false;
         if dealt_damage
-            && (Self::has_active_bolehuiyan_pred(ctx) || self.target_has_shenfuhuaxie(ctx))
+            && (Self::should_defer_sha_end(ctx, self.source) || self.target_has_shenfuhuaxie(ctx))
         {
             return self.defer_sha_end(ctx, fid, true);
         }

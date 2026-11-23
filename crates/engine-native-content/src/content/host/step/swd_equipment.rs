@@ -188,9 +188,11 @@ impl HostMachine {
                     }
                 }
                 HostStage::Act => {
-                    self.target = ctx.answer().iter().find_map(|o| match o {
-                        ChoiceOption::Player(p) => Some(*p),
-                        _ => None,
+                    self.target = ctx.res.answer.as_ref().and_then(|ans| {
+                        ans.iter().find_map(|o| match o {
+                            ChoiceOption::Player(p) => Some(*p),
+                            _ => None,
+                        })
                     });
                     let (Some(cost), Some(t)) = (self.cards.first().copied(), self.target) else {
                         refund_host_once_used(ctx, self.owner, &self.def_key);
@@ -364,6 +366,7 @@ impl HostMachine {
                             ctx.to_discard(old);
                         }
                     }
+                    crate::kernel::flush_qiankundai_pending_lose(ctx);
                     Flow::Done
                 }
                 _ => Flow::Done,
@@ -654,9 +657,11 @@ impl HostMachine {
                     }
                 }
                 HostStage::Act => {
-                    self.target = ctx.answer().iter().find_map(|o| match o {
-                        ChoiceOption::Player(p) => Some(*p),
-                        _ => None,
+                    self.target = ctx.res.answer.as_ref().and_then(|ans| {
+                        ans.iter().find_map(|o| match o {
+                            ChoiceOption::Player(p) => Some(*p),
+                            _ => None,
+                        })
                     });
                     let lv = ctx.core.player(self.owner).nigong_lv;
                     ctx.core.player_mut(self.owner).nigong_lv = 0;

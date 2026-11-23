@@ -60,26 +60,7 @@ pub fn other_player_options(core: &GameStateCore, owner: PlayerId) -> Vec<Choice
         .collect()
 }
 
-fn tao_save_canceled(
-    core: &GameStateCore,
-    catalog: &Catalog,
-    responder: PlayerId,
-    card: CardId,
-    dying: PlayerId,
-) -> bool {
-    crate::rvm_bridge::modifiers::eval_dying_peach_target_canceled(
-        core, catalog, responder, dying, card,
-    ) || crate::rvm_bridge::modifiers::eval_card_use_canceled(
-        core,
-        catalog,
-        responder,
-        card,
-        catalog.resolved_card_kind(core, card),
-        crate::event::DamageNature::Normal,
-    )
-}
-
-/// 濒死救援的桃判定扩面（与 kernel `is_tao_like` 一致）。
+/// 濒死救援的桃判定扩面（直接复用 kernel `is_tao_like_core`，消除运行时/快照漂移）。
 pub(in crate::snap) fn is_tao_like(
     core: &GameStateCore,
     catalog: &Catalog,
@@ -87,59 +68,7 @@ pub(in crate::snap) fn is_tao_like(
     card: CardId,
     dying: PlayerId,
 ) -> bool {
-    if tao_save_canceled(core, catalog, responder, card, dying) {
-        return false;
-    }
-    let kind = catalog.resolved_card_kind(core, card);
-    if kind == CardKind::Hufu {
-        return responder == dying;
-    }
-    if kind == CardKind::Tao {
-        return !crate::kernel::tao_futai2_banned(core, catalog, responder);
-    }
-    if matches!(kind, CardKind::Jiu | CardKind::Tianxianjiu | CardKind::Dinvxuanshuang) {
-        return true;
-    }
-    let suit = catalog.resolved_card_suit(core, card);
-    let jijiu = catalog
-        .skill_by_name(JI_JIU)
-        .map(|d| core.has_skill(responder, d))
-        .unwrap_or(false);
-    if jijiu
-        && matches!(
-            suit,
-            crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
-        )
-        && !catalog.is_rechanyuan_sealed_name(core, responder, JI_JIU)
-    {
-        return true;
-    }
-    let mizhilianou = catalog
-        .skill_by_name(GJ_FOOD_MIZHLIANOU_KEY)
-        .map(|d| core.has_skill(responder, d))
-        .unwrap_or(false)
-        || catalog
-            .skill_by_name("mizhilianou")
-            .map(|d| core.has_skill(responder, d))
-            .unwrap_or(false);
-    if mizhilianou && suit == crate::catalog::Suit::Heart {
-        return true;
-    }
-    if catalog
-        .find_player_vm_view_as(core, responder, card, false, Some(CardKind::Tao))
-        .is_some()
-        && !crate::kernel::tao_futai2_banned(core, catalog, responder)
-    {
-        return true;
-    }
-    if responder == dying
-        && catalog
-            .find_player_vm_view_as(core, responder, card, false, Some(CardKind::Jiu))
-            .is_some()
-    {
-        return true;
-    }
-    false
+    crate::kernel::is_tao_like_core(core, catalog, responder, card, dying)
 }
 
 pub(in crate::snap) fn append_vm_shan_options(
@@ -203,7 +132,7 @@ pub(in crate::snap) fn dying_save_options(
             }
         }
         let has_mizhilianou = catalog
-            .skill_by_name(GJ_FOOD_MIZHLIANOU_KEY)
+            .skill_by_name(crate::vocabulary::host::GJ_FOOD_MIZHLIANOU_KEY)
             .is_some_and(|d| core.has_skill(responder, d))
             || catalog
                 .skill_by_name("mizhilianou")

@@ -74,6 +74,8 @@ pub fn active_ask(
             asking_qinglong,
             asking_fuchou,
             asking_fengxueren,
+            asking_sadeng,
+            asking_sadeng_shan,
             fuchou_card,
             ..
         } => {
@@ -115,6 +117,8 @@ pub fn active_ask(
                 *asking_qinglong,
                 *asking_fuchou,
                 *asking_fengxueren,
+                *asking_sadeng,
+                *asking_sadeng_shan,
                 *fuchou_card,
                 core,
                 catalog,

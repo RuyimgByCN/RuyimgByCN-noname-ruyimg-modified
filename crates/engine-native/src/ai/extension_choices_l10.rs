@@ -457,6 +457,84 @@ pub(super) fn plan_l10_choice_action(
                 selection: best.map(ChoiceOption::Card).into_iter().collect(),
             })
         }
+        "dcxiaoxi:gain_card" => {
+            let need = min.max(1);
+            let mut ranked: Vec<(i64, ChoiceOption)> = options
+                .iter()
+                .filter_map(|&opt| match opt {
+                    ChoiceOption::Card(c) => Some((100 + extension_card_value(catalog, input, c), opt)),
+                    ChoiceOption::HiddenCard(_) => Some((50, opt)),
+                    _ => None,
+                })
+                .collect();
+            ranked.sort_by(|a, b| b.0.cmp(&a.0));
+            let selection: Vec<ChoiceOption> =
+                ranked.into_iter().take(need).map(|(_, o)| o).collect();
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
+        "twzhouzu:target_discard" => {
+            let need = min.max(1);
+            let mut ranked: Vec<(i64, ChoiceOption)> = options
+                .iter()
+                .filter_map(|&opt| match opt {
+                    ChoiceOption::Card(c) => Some((extension_card_value(catalog, input, c), opt)),
+                    _ => None,
+                })
+                .collect();
+            ranked.sort_by_key(|(v, _)| *v);
+            let selection: Vec<ChoiceOption> =
+                ranked.into_iter().take(need).map(|(_, o)| o).collect();
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
+        "bolan_g:choose_target" => {
+            let best = options
+                .iter()
+                .filter_map(|o| match o {
+                    ChoiceOption::Player(t) => Some(*t),
+                    _ => None,
+                })
+                .filter(|&t| !allow_cancel || public_attitude(&input.view, seat, t) >= 0)
+                .max_by_key(|&t| public_attitude(&input.view, seat, t));
+            let selection = match best {
+                Some(t) => vec![ChoiceOption::Player(t)],
+                None if allow_cancel => Vec::new(),
+                None => options.iter().take(1).copied().collect(),
+            };
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
+        "sbqingzheng:choose_suits" => {
+            let need = min.max(1);
+            let selection = if options.len() < need && allow_cancel {
+                Vec::new()
+            } else {
+                options.iter().take(need).copied().collect()
+            };
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
+        "bolan:choose_skill" => {
+            let selection = options
+                .iter()
+                .find(|o| matches!(o, ChoiceOption::Tag(_)))
+                .copied()
+                .into_iter()
+                .collect();
+            Some(GameAction::Answer {
+                choice_id: id,
+                selection,
+            })
+        }
         _ => None,
     }
 }

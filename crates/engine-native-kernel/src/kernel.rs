@@ -244,17 +244,17 @@ mod equipment;
 use equipment::commit_equip;
 pub use equipment::{
     cleanup_discard_to_deck, clear_yange_clone_card, discard_armor_for_ssr_luoyi,
-    grant_equip_skills, release_yanjia_merged_to_discard, revoke_equip_skills,
-    trigger_gw_dieyi_lost,
+    flush_qiankundai_pending_lose, forged_lingjian_skill_name, grant_equip_skills,
+    release_yanjia_merged_to_discard, revoke_equip_skills, trigger_gw_dieyi_lost,
 };
 mod intrinsic;
 pub use intrinsic::*;
 mod combat_rules;
 pub use combat_rules::{
     discard_response_card, has_ow_mujing, is_black_trick_card, is_gw_dudayuanshuai2_locked,
-    is_ssr_luoyi_trick_to_duel, jinyan_blocks_black_trick, mbcmfangzhu_baiban, mbcmfangzhu_banned,
-    response_kind_cards_core, sha_blocked_for, sha_card_use_as, sha_user_or_target_blocked,
-    tao_futai2_banned, usable_sha_options,
+    is_ssr_luoyi_trick_to_duel, is_tao_like_core, jinyan_blocks_black_trick, mbcmfangzhu_baiban,
+    mbcmfangzhu_banned, response_kind_cards_core, sha_blocked_for, sha_card_use_as,
+    sha_user_or_target_blocked, tao_futai2_banned, usable_sha_options,
 };
 pub(crate) use combat_rules::*;
 mod sha;

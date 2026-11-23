@@ -310,6 +310,7 @@ impl HostMachine {
                         .card_mods
                         .insert(equip, attached);
                 }
+                super::swd_u05_7b::lingjian::sync_forged_equip_skills(ctx, self.owner);
                 if let Some(c) = self.card {
                     ctx.to_discard(c);
                     ctx.core.table.retain(|x| *x != c);

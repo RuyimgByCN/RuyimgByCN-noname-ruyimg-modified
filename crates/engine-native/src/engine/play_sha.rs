@@ -470,17 +470,28 @@ pub(super) fn play_sha(
     // 者时只能以其为杀目标（上游 hslingjian_chaofeng mod
     // targetEnabled 同口径）
     if kind.is_sha_like() {
-        let seats = core.players.len() as u8;
-        let cur = core.turn.current;
-        let holder = (0..seats).find(|p| {
-            *p != cur && core.player(*p).alive && core.player(*p).chaofeng_active && {
-                let d = (u16::from(*p) + u16::from(seats) - u16::from(cur)) % u16::from(seats);
-                d == 1 || d == u16::from(seats) - 1
-            }
-        });
-        if let Some(h) = holder {
-            if targets.iter().any(|t| *t != h) {
-                return Err(RejectReason::IllegalTargets);
+        let has_sk = |p: PlayerId, name: &str| {
+            catalog
+                .skill_by_name(name)
+                .is_some_and(|d| core.has_skill(p, d))
+        };
+        if !has_sk(core.turn.current, "hslingjian_chaofeng") {
+            let seats = core.players.len() as u8;
+            let cur = core.turn.current;
+            let holder = (0..seats).find(|p| {
+                *p != cur
+                    && core.player(*p).alive
+                    && (core.player(*p).chaofeng_active || has_sk(*p, "hslingjian_chaofeng"))
+                    && {
+                        let d =
+                            (u16::from(*p) + u16::from(seats) - u16::from(cur)) % u16::from(seats);
+                        d == 1 || d == u16::from(seats) - 1
+                    }
+            });
+            if let Some(h) = holder {
+                if targets.iter().any(|t| *t != h) {
+                    return Err(RejectReason::IllegalTargets);
+                }
             }
         }
     }

@@ -6,18 +6,6 @@ impl ShaResolveMachine {
         ctx: &mut Ctx<'_>,
         direct_hit_in: bool,
     ) -> Flow {
-        let target_sealed = ctx.catalog.is_tieji_sealed(ctx.core, self.target);
-        let longdan = !target_sealed
-            && !ctx.catalog.is_rechanyuan_sealed_name(
-                ctx.core,
-                self.target,
-                crate::vocabulary::names::LONG_DAN,
-            )
-            && ctx
-                .catalog
-                .skill_by_name(crate::vocabulary::names::LONG_DAN)
-                .map(|d| ctx.core.has_skill(self.target, d))
-                .unwrap_or(false);
         let tieji_blocks = self.tieji_red == Some(true)
             || ctx
                 .core
@@ -27,17 +15,6 @@ impl ShaResolveMachine {
                 .copied()
                 .unwrap_or(0)
                 > 0;
-        let qingguo = !target_sealed
-            && !ctx.catalog.is_rechanyuan_sealed_name(
-                ctx.core,
-                self.target,
-                crate::vocabulary::names::QING_GUO,
-            )
-            && ctx
-                .catalog
-                .skill_by_name(crate::vocabulary::names::QING_GUO)
-                .map(|d| ctx.core.has_skill(self.target, d))
-                .unwrap_or(false);
         let target_sentinel = ctx
             .catalog
             .skill_by_name(crate::vocabulary::host::WUDIAN_BAOLEI_KEY)
@@ -46,23 +23,9 @@ impl ShaResolveMachine {
                     && ctx.core.player(self.target).baolei_mode == 1
             })
             .unwrap_or(false);
-        let hand_locked = crate::rvm_bridge::modifiers::d34_flags::is_u01_hand_locked(
-            ctx.core,
-            ctx.catalog,
-            self.target,
-        );
         let target_can_play = !tieji_blocks
             && !target_sentinel
             && !ctx.catalog.blocks_card_use_and_save(ctx.core, self.target);
-        let target_hand_blocked =
-            hand_locked || ctx.catalog.blocks_hand_cards(ctx.core, self.target);
-        let target_can_play_hand = target_can_play && !target_hand_blocked;
-        let rw_lanyin = target_can_play_hand
-            && crate::rvm_bridge::modifiers::d34_l28_mods::has_rewritten_lanyinjia(
-                ctx.core,
-                ctx.catalog,
-                self.target,
-            );
         if !direct_hit_in {
             crate::kernel::maybe_trigger_longxi_guarded(
                 ctx,
@@ -71,91 +34,14 @@ impl ShaResolveMachine {
                 "xj_longxi_sha_guard",
             );
         }
-        let hufu_shan = ctx
-            .catalog
-            .skill_by_name("g_hufu_shan")
-            .is_some_and(|d| ctx.core.has_skill(self.target, d));
-        let mut shans: Vec<ChoiceOption> = if !target_can_play_hand {
-            Vec::new()
-        } else {
-            ctx.core
-                .player(self.target)
-                .hand
-                .iter()
-                .filter(|c| {
-                    let kind = ctx.catalog.resolved_card_kind(ctx.core, **c);
-                    rw_lanyin
-                        || kind == CardKind::Shan
-                        || kind.yuchan_auto_view_as() == Some(CardKind::Shan)
-                        || (longdan
-                            && (kind == CardKind::Sha
-                                || kind.yuchan_auto_view_as() == Some(CardKind::Sha)))
-                        || (hufu_shan && kind == CardKind::Hufu)
-                })
-                .copied()
+        let mut shans: Vec<ChoiceOption> = if target_can_play {
+            collect_shan_response_cards(ctx.core, ctx.catalog, self.target)
+                .into_iter()
                 .map(ChoiceOption::Card)
                 .collect()
+        } else {
+            Vec::new()
         };
-        if qingguo && target_can_play_hand {
-            for c in ctx.core.player(self.target).hand.iter().copied() {
-                let kind = ctx.catalog.resolved_card_kind(ctx.core, c);
-                let already = rw_lanyin
-                    || kind == CardKind::Shan
-                    || kind.yuchan_auto_view_as() == Some(CardKind::Shan)
-                    || (longdan
-                        && (kind == CardKind::Sha
-                            || kind.yuchan_auto_view_as() == Some(CardKind::Sha)))
-                    || (hufu_shan && kind == CardKind::Hufu);
-                let black = matches!(
-                    ctx.catalog.effective_card_suit(ctx.core, self.target, c),
-                    crate::catalog::Suit::Spade | crate::catalog::Suit::Club
-                );
-                if black && !already {
-                    shans.push(ChoiceOption::Card(c));
-                }
-            }
-        }
-        if target_can_play {
-            if !target_hand_blocked {
-                for &c in &ctx.core.player(self.target).hand {
-                    if ctx
-                        .catalog
-                        .find_player_vm_view_as(
-                            ctx.core,
-                            self.target,
-                            c,
-                            false,
-                            Some(CardKind::Shan),
-                        )
-                        .is_some()
-                        && !shans.contains(&ChoiceOption::Card(c))
-                    {
-                        shans.push(ChoiceOption::Card(c));
-                    }
-                }
-            }
-            for c in ctx.catalog.player_vm_view_as_extra_cards(
-                ctx.core,
-                self.target,
-                false,
-                Some(CardKind::Shan),
-            ) {
-                if (!hand_locked || !ctx.core.player(self.target).hand.contains(&c))
-                    && !shans.contains(&ChoiceOption::Card(c))
-                {
-                    shans.push(ChoiceOption::Card(c));
-                }
-            }
-        }
-        shans.retain(|o| {
-            !matches!(o, ChoiceOption::Card(c)
-                if crate::rvm_bridge::modifiers::d34_flags::is_ducai3_forbidden(
-                    ctx.core,
-                    ctx.catalog,
-                    self.target,
-                    *c,
-                ))
-        });
         let chihe_block_mask = ctx
             .core
             .vm_aux
@@ -288,6 +174,34 @@ impl ShaResolveMachine {
     }
 
     pub(super) fn sha_hit_pre_damage(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        let fid = self
+            .current_sha_frame_id(ctx)
+            .unwrap_or(crate::resolution::NO_FRAME);
+        if (ctx.catalog.hooks.sha_hit_step)(
+            ctx,
+            fid,
+            self.source,
+            self.target,
+            self.card,
+        ) {
+            self.asked = false;
+            self.hujia_holder = None;
+            self.liuli_stage = 0;
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((self.source, format!("u05_sha_hit_resume:{fid}")), 1);
+            return Flow::Yield;
+        }
+        if ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(self.source, format!("u05_guiyanfadao_unhurt:{fid}:{}", self.target)))
+            .is_some()
+        {
+            return self.finish_or_defer_sha_end(ctx, false);
+        }
         if !self.asking_fengxueren
             && ctx.core.player(self.target).alive
             && !ctx.core.player(self.target).face_down
@@ -488,28 +402,11 @@ impl ShaResolveMachine {
                 };
             }
         }
-        let has_sadeng = ctx
-            .core
-            .player(self.source)
-            .equips
-            .iter()
-            .any(|c| ctx.catalog.equip_card_has_kind(ctx.core, *c, CardKind::Sadengjinhuan));
-        if has_sadeng && ctx.core.player(self.source).alive && !self.asking_sadeng {
-            self.asking_sadeng = true;
-            return Flow::WaitChoice {
-                observer: self.source,
-                spec: ChoiceSpec {
-                    kind: ChoiceKind::Confirm,
-                    prompt: "sadengjinhuan_judge_confirm",
-                    options: vec![ChoiceOption::Confirm],
-                    min: 0,
-                    max: 1,
-                    allow_cancel: true,
-                },
-            };
-        }
         if self.dodges_used < ctx.core.turn.liaoyuan_count {
-            return self.emit_sha_damage(ctx);
+            return self.sha_hit_pre_damage(ctx);
+        }
+        if let Some(flow) = self.try_open_sadeng_on_miss(ctx) {
+            return flow;
         }
         ctx.core
             .vm_aux
@@ -518,6 +415,152 @@ impl ShaResolveMachine {
         ctx.core.turn.liaoyuan_count = 0;
         self.after_sha_dodged(ctx)
     }
+
+    pub(super) fn try_open_sadeng_on_miss(&mut self, ctx: &mut Ctx<'_>) -> Option<Flow> {
+        let has_equip = !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.source)
+            && ctx
+                .core
+                .player(self.source)
+                .equips
+                .iter()
+                .any(|c| ctx.catalog.card_kind(*c) == CardKind::Sadengjinhuan);
+        let has_skill = ctx
+            .catalog
+            .skill_by_name("sadengjinhuan")
+            .is_some_and(|d| ctx.core.has_skill(self.source, d));
+        if !(has_equip || has_skill)
+            || !ctx.core.player(self.source).alive
+            || !ctx.core.player(self.target).alive
+            || self.asking_sadeng
+        {
+            return None;
+        }
+        let fid = self
+            .current_sha_frame_id(ctx)
+            .unwrap_or(crate::resolution::NO_FRAME);
+        let tried_key = format!("u05_sadeng_tried:{fid}:{}", self.target);
+        if ctx
+            .core
+            .vm_aux
+            .flags
+            .contains_key(&(self.source, tried_key.clone()))
+        {
+            return None;
+        }
+        ctx.core.vm_aux.flags.insert((self.source, tried_key), 1);
+        ctx.core.vm_aux.flags.insert(
+            (self.source, format!("u05_sadeng_handled:{}", self.target)),
+            1,
+        );
+        self.asking_sadeng = true;
+        Some(Flow::WaitChoice {
+            observer: self.source,
+            spec: ChoiceSpec {
+                kind: ChoiceKind::Confirm,
+                prompt: "sadengjinhuan_judge_confirm",
+                options: vec![ChoiceOption::Confirm],
+                min: 0,
+                max: 1,
+                allow_cancel: true,
+            },
+        })
+    }
+}
+
+/// Collects all cards `target` can use to respond with `Shan` (hand + viewAs + Yuchanqian + equips).
+pub fn collect_shan_response_cards(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    target: PlayerId,
+) -> Vec<crate::ids::CardId> {
+    let mbcm_banned = core
+        .vm_aux
+        .flags
+        .get(&(target, "mbcmfangzhu_ban".to_string()))
+        .copied()
+        .unwrap_or(0)
+        > 0;
+    let target_sentinel = catalog
+        .skill_by_name(crate::vocabulary::host::WUDIAN_BAOLEI_KEY)
+        .is_some_and(|def| core.has_skill(target, def) && core.player(target).baolei_mode == 1);
+    if mbcm_banned || target_sentinel || catalog.blocks_card_use_and_save(core, target) {
+        return Vec::new();
+    }
+    let hand_locked =
+        crate::rvm_bridge::modifiers::d34_flags::is_u01_hand_locked(core, catalog, target);
+    let target_hand_blocked = hand_locked || catalog.blocks_hand_cards(core, target);
+    let target_sealed = catalog.is_tieji_sealed(core, target);
+    let longdan = !target_sealed
+        && !catalog.is_rechanyuan_sealed_name(core, target, crate::vocabulary::names::LONG_DAN)
+        && catalog
+            .skill_by_name(crate::vocabulary::names::LONG_DAN)
+            .is_some_and(|d| core.has_skill(target, d));
+    let qingguo = !target_sealed
+        && !catalog.is_rechanyuan_sealed_name(core, target, crate::vocabulary::names::QING_GUO)
+        && catalog
+            .skill_by_name(crate::vocabulary::names::QING_GUO)
+            .is_some_and(|d| core.has_skill(target, d));
+    let rw_lanyin = crate::rvm_bridge::modifiers::d34_l28_mods::has_rewritten_lanyinjia(
+        core, catalog, target,
+    );
+    let hufu_shan = catalog
+        .skill_by_name("g_hufu_shan")
+        .is_some_and(|d| core.has_skill(target, d));
+    let mut shans: Vec<crate::ids::CardId> = if target_hand_blocked {
+        Vec::new()
+    } else {
+        core.player(target)
+            .hand
+            .iter()
+            .copied()
+            .filter(|&c| {
+                let kind = catalog.resolved_card_kind(core, c);
+                let is_shan_like = kind == CardKind::Shan
+                    || kind.yuchan_auto_view_as() == Some(CardKind::Shan);
+                let is_sha_like = kind.is_sha_like()
+                    || kind
+                        .yuchan_auto_view_as()
+                        .is_some_and(|k| k.is_sha_like());
+                rw_lanyin
+                    || is_shan_like
+                    || (longdan && is_sha_like)
+                    || (hufu_shan && kind == CardKind::Hufu)
+            })
+            .collect()
+    };
+    if qingguo && !target_hand_blocked {
+        for &c in &core.player(target).hand {
+            let black = matches!(
+                catalog.effective_card_suit(core, target, c),
+                crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+            );
+            if black && !shans.contains(&c) {
+                shans.push(c);
+            }
+        }
+    }
+    if !target_hand_blocked {
+        for &c in &core.player(target).hand {
+            if catalog
+                .find_player_vm_view_as(core, target, c, false, Some(CardKind::Shan))
+                .is_some()
+                && !shans.contains(&c)
+            {
+                shans.push(c);
+            }
+        }
+    }
+    for c in catalog.player_vm_view_as_extra_cards(core, target, false, Some(CardKind::Shan)) {
+        if (!hand_locked || !core.player(target).hand.contains(&c)) && !shans.contains(&c) {
+            shans.push(c);
+        }
+    }
+    shans.retain(|c| {
+        !crate::rvm_bridge::modifiers::d34_flags::is_ducai3_forbidden(
+            core, catalog, target, *c,
+        )
+    });
+    shans
 }
 
 pub(super) fn note_longdan_sha_source(ctx: &mut Ctx<'_>, responder: PlayerId, source: PlayerId) {

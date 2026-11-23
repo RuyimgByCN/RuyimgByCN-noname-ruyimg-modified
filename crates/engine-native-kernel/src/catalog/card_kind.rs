@@ -74,6 +74,8 @@ impl CardKind {
                 | CardKind::Shenmiguo
                 | CardKind::Fengyinzhidan
                 | CardKind::Dujian
+                | CardKind::Xiangyuye
+                | CardKind::Huanpodan
         )
     }
 
@@ -221,6 +223,11 @@ impl CardKind {
             CardKind::Chilongya => EquipSlot::Weapon,
             CardKind::Fengxueren => EquipSlot::Weapon,
             CardKind::Pangufu => EquipSlot::Weapon,
+            CardKind::Guiyanfadao => EquipSlot::Weapon,
+            CardKind::Qinglianxindeng
+            | CardKind::Baihupifeng
+            | CardKind::Guangshatianyi => EquipSlot::Armor,
+            CardKind::Qipoguyu => EquipSlot::Treasure,
             _ => return None,
         })
     }
@@ -247,6 +254,7 @@ impl CardKind {
             CardKind::Chilongya => Some(2),
             CardKind::Fengxueren => Some(2),
             CardKind::Pangufu => Some(4),
+            CardKind::Guiyanfadao => Some(2),
             _ => None,
         }
     }
@@ -254,7 +262,7 @@ impl CardKind {
 
 impl CardKind {
     /// 全部牌种（存档编码序；完整性由 `a0_tag_registry` 的穷尽守卫锁定）。
-    pub const ALL: [CardKind; 177] = [
+    pub const ALL: [CardKind; 184] = [
         CardKind::Sha,
         CardKind::Shan,
         CardKind::Tao,
@@ -432,6 +440,13 @@ impl CardKind {
         CardKind::Cangchizhibi,
         CardKind::Dujian,
         CardKind::Pangufu,
+        CardKind::Qinglianxindeng,
+        CardKind::Baihupifeng,
+        CardKind::Guangshatianyi,
+        CardKind::Xiangyuye,
+        CardKind::Huanpodan,
+        CardKind::Qipoguyu,
+        CardKind::Guiyanfadao,
     ];
 
     /// 扩展包数据的牌种键（宿主 ABI：每个牌种恰好一个键，只增不改）。
@@ -615,6 +630,13 @@ impl CardKind {
             CardKind::Pozhenjue => "pozhenjue",
             CardKind::Dujian => "dujian",
             CardKind::Pangufu => "pangufu",
+            CardKind::Qinglianxindeng => "qinglianxindeng",
+            CardKind::Baihupifeng => "baihupifeng",
+            CardKind::Guangshatianyi => "guangshatianyi",
+            CardKind::Xiangyuye => "xiangyuye",
+            CardKind::Huanpodan => "huanpodan",
+            CardKind::Qipoguyu => "qipoguyu",
+            CardKind::Guiyanfadao => "guiyanfadao",
         }
     }
 

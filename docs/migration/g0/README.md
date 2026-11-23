@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-23 Batch U05-7b（U05 杀海拾遗 SWD 卡牌 Part 2 +104→1,293/1,621，全局 3,613/811/0）更新
+
+- **核验与升级**：基线 `61ca3573d3a0aff5d0e189b703b3afed2f898d8e`（Batch U05-7a CI Run `45233301007` Attempt 1 `10/10 success`）；三路合入 `swarm/conv-u05-7b-swd-cards2`（`2099ce1a4..e7ff9868d41813f6d8bb667e79fd345014e04713`，`verifier-u05-b` `#86 APPROVE`），完成 `shahai_attach` 包名/串联修复、`host_on_outer_settled_all`、`yuchan_swap` `Stage::Done` 延迟与 `Caoyao` 自救、`validate_tail_ext_targets`、`is_tao_like_core`/`Tianxianjiu` 仅自救与 `sadengjinhuan_*` snapshot 推导后，将 U05 杀海拾遗 SWD 卡牌 Part 2 获批 `40` 张卡牌 + `64` 项伴生/灵剑/锻造技能共 **`104`** 项升为 `已复核等价`（严格保留 `yiluan`/`old_longfan`/`longfan`/`touzhi` 4 项为 `简化近似`）。`U05` 现 **`1,293 / 328 / 0`**，全局 **`3,613 / 811 / 0`**（缺失 `0`，整包 8 维签字仍 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变）。详见 [U05-杀海拾遗.md](U05-杀海拾遗.md)、[Batch U05-7b 证据摘要](../../operations/evidence/2026-11-23-u05-7b-swd-cards2/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-23 Batch U05-7a（U05 杀海拾遗 SWD 卡牌 Part 1 +106→1,189/1,621，全局 3,509/915/0）更新
 
 - **核验与升级**：基线 `fb4a15c6b1fe0c6072c58e2be4445021a76449d0`（Batch U05-4 CI Run `45207312135` Attempt 2 `10/10 success`）；三路合入 `swarm/conv-u05-7a-swd-cards1`（`c727d3922..d94c0f0d5d100351ff44ea3fd095bec41a7c206e`，`verifier-u05-b` `#56 APPROVE`），完成 `swd_u05_7a.rs` 拆分、`standard.rs` `U05SwdHufuViewAs` 全球技白名单、SWD `common.rs` `declared_kinds` 清理与门禁校准后，将 U05 杀海拾遗 SWD 卡牌 Part 1 获批 `39` 张卡牌 + `67` 项伴生/全局/锻造技能共 **`106`** 项全数升为 `已复核等价`（`0` 保留）。`U05` 现 **`1,189 / 432 / 0`**，全局 **`3,509 / 915 / 0`**（缺失 `0`，整包 8 维签字仍 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变）。详见 [U05-杀海拾遗.md](U05-杀海拾遗.md)、[Batch U05-7a 证据摘要](../../operations/evidence/2026-11-23-u05-7a-swd-cards1/README.md) 与 [inventory_status.json](inventory_status.json)。

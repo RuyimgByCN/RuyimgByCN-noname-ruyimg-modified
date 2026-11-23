@@ -198,6 +198,16 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                         | Some(crate::catalog::EquipSlot::Armor)
                 )
             });
+        // 圣休号角·武器（U05 swd 批 7b）：杀指定持有嘲讽的目标时不可闪避（shaBegin directHit）
+        let shengxiu_direct_hit = ctx
+            .catalog
+            .skill_by_name("hslingjian_shengxiuhaojiao_equip1")
+            .is_some_and(|def| ctx.core.has_skill(self.source, def))
+            && (ctx.core.player(self.target).chaofeng_active
+                || ctx
+                    .catalog
+                    .skill_by_name("hslingjian_chaofeng")
+                    .is_some_and(|d| ctx.core.has_skill(self.target, d)));
         // 诈降（L27 批 4，`sbzhaxiang`）：本阶段用牌数 ≤ 已损失体力时，所用
         // 【杀】不可被闪避（上游 useCard forced directHit 全场同口径；原生
         // 直伤面仅【杀】有闪避窗口）
@@ -287,6 +297,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 && !guilong_direct_hit
                 && !jianwu_direct_hit
                 && !bfengshi_direct
+                && !shengxiu_direct_hit
                 && !self.is_sha_direct_hit(ctx);
             if let Some(flow) = self.try_bagua_dodge(ctx, can_bagua) {
                 return flow;
@@ -334,6 +345,9 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                                 return Flow::Yield;
                             }
                             ctx.core.turn.liaoyuan_count = 0;
+                            if let Some(flow) = self.try_open_sadeng_on_miss(ctx) {
+                                return flow;
+                            }
                             return self.after_sha_dodged(ctx);
                         }
                         // 无双还需第二张：新响应窗口——重开逐人询问
@@ -719,6 +733,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 poyue_direct_hit
                     || shoulie_hit
                     || lingshi_direct_hit
+                    || shengxiu_direct_hit
                     || sbzhaxiang_direct_hit
                     || yxs_fanji2_direct_hit
                     || jianwu_hit
@@ -755,40 +770,14 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         if let ChoiceOption::Card(shan) = answer {
             return self.resolve_shan_card(ctx, shan);
         } else if ctx.core.player(self.target).alive {
-            if self.hanbing_can_fire(ctx) {
-                self.asking_hanbing = true;
-                return Flow::WaitChoice {
-                    observer: self.source,
-                    spec: ChoiceSpec {
-                        kind: ChoiceKind::Confirm,
-                        prompt: "hanbing_prevent_confirm",
-                        options: vec![ChoiceOption::Confirm],
-                        min: 0,
-                        max: 1,
-                        allow_cancel: true,
-                    },
-                };
-            }
-            let horses = self.qilin_horses(ctx);
-            if !horses.is_empty() {
-                self.asking_qilin = true;
-                return Flow::WaitChoice {
-                    observer: self.source,
-                    spec: ChoiceSpec {
-                        kind: ChoiceKind::SelectCards,
-                        prompt: "qilin_discard_horse",
-                        options: horses,
-                        min: 0,
-                        max: 1,
-                        allow_cancel: true,
-                    },
-                };
-            }
-            return self.emit_sha_damage(ctx);
+            return self.sha_hit_pre_damage(ctx);
         }
         // 燎原（swd 批 145）：仍有未满足的额外闪需求 → 未闪避部分视为命中
         if self.dodges_used < ctx.core.turn.liaoyuan_count {
-            return self.emit_sha_damage(ctx);
+            return self.sha_hit_pre_damage(ctx);
+        }
+        if let Some(flow) = self.try_open_sadeng_on_miss(ctx) {
+            return flow;
         }
         // 杀被闪避（swd 批 141，规则 v316 同批）：发射 ShaDodged（上游
         // shaMiss 触发窗；青龙/贯石斧等窗口之后——登记差异：窗口次序）

@@ -138,6 +138,38 @@ pub(in crate::kernel) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: Playe
                 .vm_aux
                 .flags
                 .remove(&(seat, "hs_shihuawuqi_used_turn".to_string()));
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(seat, "u05_tianxianjiu_used_turn".to_string()));
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(seat, "u05_tianxianjiu_active_fallback".to_string()));
+            let had_after = ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(seat, "u05_yinmi_until_phase_after".to_string()))
+                .is_some();
+            if had_after
+                && ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .get(&(seat, "u05_yinmi_until_phase_begin".to_string()))
+                    .copied()
+                    .unwrap_or(0)
+                    == 0
+            {
+                ctx.core.player_mut(seat).yinmi_active = false;
+            }
+        }
+        if let Some(tdef) = ctx.catalog.skill_by_name("tianxianjiu") {
+            let seats = ctx.core.players.len() as u8;
+            for seat in 0..seats {
+                ctx.core.skills.remove(&(seat, tdef));
+            }
         }
         ctx.core
             .vm_aux
@@ -726,3 +758,71 @@ pub(in crate::kernel) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) 
 
 pub(crate) use super::turn_handoff::turn_handoff;
 pub(crate) use super::turn_reset::reset_new_turn_state;
+
+/// Commits `Jiu` or `Tianxianjiu` card use independently (`card/swd/card.js:1751-1772`).
+pub(in crate::kernel) fn commit_jiu_or_tianxianjiu_use(
+    ctx: &mut Ctx<'_>,
+    u: &crate::event::CardUseData,
+    is_dying_save: bool,
+    nullified: bool,
+) {
+    let jiu_no_count = ctx
+        .core
+        .vm_aux
+        .flags
+        .remove(&(u.player, "vm_va_jiu_no_count".to_string()))
+        .is_some();
+    if is_dying_save {
+        ctx.core.table.extend(u.card);
+        return;
+    }
+    ctx.to_discard(u.card);
+    if u.effective_kind(ctx.catalog) == crate::catalog::CardKind::Tianxianjiu {
+        if !jiu_no_count {
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((u.player, "u05_tianxianjiu_used_turn".to_string()), 1);
+        }
+        if !nullified {
+            if let Some(tdef) = ctx.catalog.skill_by_name("tianxianjiu") {
+                ctx.ensure_skill(
+                    (u.player, tdef),
+                    crate::state::SkillInstance {
+                        owner: u.player,
+                        enabled: true,
+                        once_used: false,
+                        expires_end_of_turn: true,
+                        rounds: 0,
+                    },
+                );
+            } else {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((u.player, "u05_tianxianjiu_active_fallback".to_string()), 1);
+            }
+        }
+        return;
+    }
+    // 酒：命令边界已校验每回合一次（addCount: false 时置 vm_va_jiu_no_count 不占位）——
+    // 上游 target.storage.jiu += baseDamage 可跨多次使用叠加；回合外印记同理按次数累加。
+    if u.player == ctx.core.turn.current {
+        if !jiu_no_count {
+            ctx.core.turn.jiu_used = true;
+        }
+        if !nullified {
+            if !ctx.core.turn.jiu_active {
+                ctx.core.turn.jiu_active = true;
+            } else {
+                let key = (u.player, "jiu_extra_stacks".to_string());
+                let prev = ctx.core.vm_aux.flags.get(&key).copied().unwrap_or(0);
+                ctx.core.vm_aux.flags.insert(key, prev + 1);
+            }
+        }
+    } else if !nullified {
+        let key = (u.player, "jiu_active_offturn".to_string());
+        let prev = ctx.core.vm_aux.flags.get(&key).copied().unwrap_or(0);
+        ctx.core.vm_aux.flags.insert(key, prev + 1);
+    }
+}

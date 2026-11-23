@@ -1827,4 +1827,64 @@ pub enum HostBehavior {
     U05SwdForgingEnd,
     /// U05 swd Batch 7a 固有修饰与被动标记（tag 1287：`qiankundai`/`zhufangshenshi` 等正式宿主绑定）。
     U05SwdPassiveMarker,
+    /// U05 swd Batch 7b 象羽叶基本牌效果（tag 1310）。
+    U05SwdXiangyuyeCard,
+    /// U05 swd Batch 7b 还魄丹基本牌授予（tag 1311）。
+    U05SwdHuanpodanCard,
+    /// U05 swd Batch 7b 控心拼点控杀（tag 1312：`kongxin`）。
+    U05SwdKongxin,
+    /// U05 swd Batch 7b 控心濒死清理（tag 1313：`kongxin2`）。
+    U05SwdKongxin2,
+    /// U05 swd Batch 7b 青莲心灯免锦囊伤（tag 1314：`qinglianxindeng`）。
+    U05SwdQinglianxindeng,
+    /// U05 swd Batch 7b 灵剑锻造武器伤后技（tag 1315：`hslingjian_*_equip1` 伤后面）。
+    U05SwdLingjianDmgSrc,
+    /// U05 swd Batch 7b 灵剑锻造防具受伤后技（tag 1316：`hslingjian_*_equip2` 受伤后面）。
+    U05SwdLingjianDmgTgt,
+    /// U05 swd Batch 7b 灵剑锻造失牌临时距离（tag 1317：`hslingjian_xuanfengzhiren_equip3/4`）。
+    U05SwdLingjianLoseTemp,
+    /// U05 swd Batch 7b 灵剑锻造装配摸牌（tag 1318：`hslingjian_shijianhuisu_equip1/2`）。
+    U05SwdLingjianEquipped,
+    /// U05 swd Batch 7b 灵剑锻造摸牌阶段增量（tag 1319：`hslingjian_xingtigaizao_equip5`）。
+    U05SwdLingjianDrawPhase,
+    /// U05 swd Batch 7b 灵剑锻造阶段末/回合末收束（tag 1320：`hslingjian_jinjilengdong_equip5`/`hslingjian_xingtigaizao`）。
+    U05SwdLingjianPhaseEnd,
+    /// U05 swd Batch 7b 灵剑锻造出牌阶段主动技（tag 1321：`hslingjian_*_equip5`）。
+    U05SwdLingjianPhaseUse,
+    /// U05 swd Batch 7b 灵剑锻造杀指定强命（tag 1322：`hslingjian_shengxiuhaojiao_equip1`）。
+    U05SwdLingjianShaBegin,
+    /// U05 swd Batch 7b 灵剑锻造距离/嘲讽/冻结/禁指等被动修饰（tag 1323）。
+    U05SwdLingjianPassive,
+    /// U05 swd Batch 7b 机关妖术非自己回合失装补灵剑（tag 1324：`jiguanyaoshu_skill`）。
+    U05SwdJiguanyaoshuSkill,
+    /// U05 swd Batch 7b 灵剑锻造合成核心（tag 1325：`lingjianduanzao`）。
+    U05SwdLingjianduanzao,
+    /// U05 swd Batch 7b 灵剑锻造出牌主动（tag 1326：`_lingjianduanzao`）。
+    U05SwdForgeAction,
+    /// U05 swd Batch 7b 青龙灵珠属性伤夺牌（tag 1327：`qinglonglingzhu`）。
+    U05SwdQinglonglingzhu,
+    /// U05 swd Batch 7b 星君眼杀伤害加一（tag 1328：`xingjunyan`）。
+    U05SwdXingjunyan,
+    /// U05 swd Batch 7b 白虎披风最少血回一（tag 1329：`baihupifeng`）。
+    U05SwdBaihupifeng,
+    /// U05 swd Batch 7b 风雪刃独立免伤翻面（tag 1330：`fengxueren`）。
+    U05SwdFengxueren,
+    /// U05 swd Batch 7b 赤龙牙独立火伤加一（tag 1331：`chilongya`）。
+    U05SwdChilongya,
+    /// U05 swd Batch 7b 赤龙牙随机暴击附雪（tag 1332：`chilongya2`）。
+    U05SwdChilongya2,
+    /// U05 swd Batch 7b 赤龙风雪杀后摸一（tag 1333：`chilongfengxue`）。
+    U05SwdChilongfengxue,
+    /// U05 swd Batch 7b 旧版龙帆随机裁决（tag 1334：`old_longfan`）。
+    U05SwdOldLongfan,
+    /// U05 swd Batch 7b 吸血鬼指环独立杀伤回血（tag 1335：`xixue`）。
+    U05SwdXixue,
+    /// U05 swd Batch 7b 广煞天衣概率减伤（tag 1336：`guangshatianyi`）。
+    U05SwdGuangshatianyi,
+    /// U05 swd Batch 7b 萨登荆环独立额外闪判定（tag 1337：`sadengjinhuan`）。
+    U05SwdSadengjinhuan,
+    /// U05 swd Batch 7b 鬼眼法刀杀命中转流失体力（tag 1338：`guiyanfadao`）。
+    U05SwdGuiyanfadao,
+    /// U05 swd Batch 7b 天仙酒杀伤后摸二（tag 1339：`tianxianjiu`）。
+    U05SwdTianxianjiu,
 }

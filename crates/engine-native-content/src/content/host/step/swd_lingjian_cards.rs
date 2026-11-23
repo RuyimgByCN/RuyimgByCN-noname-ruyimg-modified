@@ -28,8 +28,15 @@ impl HostMachine {
                                 ctx.core.player_mut(t).equips.remove(pos);
                                 crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
                                 ctx.to_discard(c);
-                                // 装备弃置也发弃置事件（上游 loseEnd 含
-                                // 装备区牌；机关妖术补偿依赖此事件）
+                                if ctx.catalog.vm_card_history {
+                                    ctx.note_cards_lost(t, &[c]);
+                                    ctx.emit(EventData::CardsLost {
+                                        player: t,
+                                        cards: vec![c],
+                                        origins: vec![crate::event::LostOrigin::Equip],
+                                    });
+                                }
+                                // 装备弃置兼容旧桥接弃置事件（机关妖术补偿旧面）
                                 ctx.emit(EventData::CardsDiscarded {
                                     player: t,
                                     cards: vec![c],
@@ -211,6 +218,10 @@ impl HostMachine {
                 if let Some(t) = self.target {
                     if ctx.core.player(t).alive {
                         ctx.core.player_mut(t).yinmi_active = true;
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((t, "u05_yinmi_until_phase_begin".to_string()), 1);
                     }
                 }
                 if let Some(c) = self.card {

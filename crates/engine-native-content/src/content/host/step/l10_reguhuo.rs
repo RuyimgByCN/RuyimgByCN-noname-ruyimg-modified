@@ -149,8 +149,18 @@ pub(in crate::content::host) fn reguhuo_name_options(
                     !tao_futai2 && core.player(owner).hp < core.player(owner).max_hp as i32
                 } else if kind == CardKind::Dinvxuanshuang {
                     core.player(owner).hp < core.player(owner).max_hp as i32
-                } else if matches!(kind, CardKind::Jiu | CardKind::Tianxianjiu) {
+                } else if kind == CardKind::Jiu {
                     !core.turn.jiu_used
+                } else if kind == CardKind::Tianxianjiu {
+                    core.vm_aux
+                        .flags
+                        .get(&(owner, "u05_tianxianjiu_used_turn".to_string()))
+                        .copied()
+                        .unwrap_or(0)
+                        == 0
+                        && !catalog
+                            .skill_by_name("tianxianjiu")
+                            .is_some_and(|d| core.has_skill(owner, d))
                 } else if kind == CardKind::Changshezhen {
                     core.inline(catalog, owner)
                         || core

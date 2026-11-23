@@ -647,6 +647,9 @@ pub(crate) fn card_intrinsic(
             });
             Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
+        CardKind::Xiangyuye | CardKind::Huanpodan => {
+            intrinsic_named_ext::try_swd_basic_card_intrinsic(u, card, effective_kind)
+        }
         CardKind::Jiguan => {
             // 机关牌（swd 第十六/十七批，规则 v189/v190）：同 kind
             // 异行为按目录名分流（指路小虎=随机敌虚拟杀；木甲人=

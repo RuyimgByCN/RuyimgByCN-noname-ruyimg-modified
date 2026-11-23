@@ -12,6 +12,8 @@ pub(super) fn active_sha_ask(
     asking_qinglong: bool,
     asking_fuchou: bool,
     asking_fengxueren: bool,
+    asking_sadeng: bool,
+    asking_sadeng_shan: bool,
     _fuchou_card: Option<u32>,
     core: &GameStateCore,
     catalog: &Catalog,
@@ -25,6 +27,33 @@ pub(super) fn active_sha_ask(
             0,
             1,
             true,
+        ));
+    }
+    if asking_sadeng {
+        return Some(ask(
+            source,
+            "sadengjinhuan_judge_confirm",
+            ChoiceKind::Confirm,
+            vec![ChoiceOption::Confirm],
+            0,
+            1,
+            true,
+        ));
+    }
+    if asking_sadeng_shan {
+        let options: Vec<ChoiceOption> =
+            crate::kernel::collect_shan_response_cards(core, catalog, target)
+                .into_iter()
+                .map(ChoiceOption::Card)
+                .collect();
+        return Some(ask(
+            target,
+            "sadengjinhuan_extra_shan",
+            ChoiceKind::SelectCards,
+            options,
+            0,
+            1,
+            false,
         ));
     }
     if asking_fuchou {

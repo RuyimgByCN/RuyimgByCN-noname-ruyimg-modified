@@ -462,8 +462,7 @@ fn swd_chilongya_amplifies_fire_damage() {
 }
 
 /// 天仙酒（swd 第五批，规则 v89）：酒的 swd 变体——出牌阶段使用后下张
-/// 杀伤害 +1（每回合一次）；濒死自救通道可用。登记差异：与酒共享每
-/// 回合一次计数。
+/// 造成杀伤后摸两张（每回合一次，不加杀伤；与酒独立）；濒死自救通道可用。
 #[test]
 fn swd_tianxianjiu_ameisha_and_self_rescue() {
     let root = repo_extensions_root();
@@ -484,7 +483,7 @@ fn swd_tianxianjiu_ameisha_and_self_rescue() {
     e.debug_clear_hand(1);
     e.debug_clear_hand(2);
 
-    // ① 天仙酒 → 杀：6 血目标受 2 伤（1+1）
+    // ① 天仙酒 → 杀：造成杀伤后摸 2 张（不加杀伤）
     let txj = (0..e.catalog().cards.len() as u32)
         .find(|i| e.catalog().cards[*i as usize].kind == CardKind::Tianxianjiu)
         .expect("天仙酒在目录");
@@ -509,6 +508,8 @@ fn swd_tianxianjiu_ameisha_and_self_rescue() {
         ),
         "{out_txj:?}"
     );
+    // ① 天仙酒 → 杀：4 血目标受基础 1 伤（4-1=3），摸 2 张
+    let hand0_before_sha = e.debug_hand(0).len();
     let out = play(&mut e, sha, vec![1]);
     assert!(
         matches!(
@@ -517,10 +518,11 @@ fn swd_tianxianjiu_ameisha_and_self_rescue() {
         ),
         "{out:?}"
     );
-    assert_eq!(e.debug_hp(1), 2, "天仙酒后杀 2 伤（4-2=2）");
+    assert_eq!(e.debug_hp(1), 3, "天仙酒不加杀伤（4-1=3）");
+    assert_eq!(e.debug_hand(0).len(), hand0_before_sha - 1 + 2, "天仙酒杀造成伤害摸 2 张");
     assert!(e.debug_alive(1));
 
-    // ② 每回合一次：同回合再使用被拒（CardLimit；与酒共享计数口径）
+    // ② 每回合一次：同回合再使用天仙酒被拒（CardLimit），但酒仍可独立使用
     let txj2 = (0..e.catalog().cards.len() as u32)
         .filter(|i| e.catalog().cards[*i as usize].kind == CardKind::Tianxianjiu)
         .nth(1)

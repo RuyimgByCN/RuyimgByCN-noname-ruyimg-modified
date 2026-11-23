@@ -103,6 +103,14 @@ pub struct ContentHooks {
         Option<crate::ids::CardId>,
         bool,
     ) -> bool,
+    /// 杀命中前窗口（`shaHit`）宿主直通钩子（如 `guiyanfadao` 替代伤害为失体力）。
+    pub sha_hit_step: fn(
+        &mut crate::machine::Ctx<'_>,
+        crate::ids::EventId,
+        crate::ids::PlayerId,
+        crate::ids::PlayerId,
+        Option<crate::ids::CardId>,
+    ) -> bool,
     /// 杀单目标结算出口钩子（`is_damage=true` 为所预测杀自身 `shaDamage`，
     /// `false` 为经防具/闪避/预防后正常 `shaEnd`；不涵盖 `shaBegin` 取消）。
     pub sha_end_step: fn(
@@ -284,6 +292,7 @@ impl ContentHooks {
         on_cards_to_discard: |_, _, _, _| {},
         on_skill_removed: |_, _, _, _| Vec::new(),
         sha_begin_step: |_, _, _, _, _, _| false,
+        sha_hit_step: |_, _, _, _, _| false,
         sha_end_step: |_, _, _, _, _, _| false,
         draw_begin_step: |_, _, _| {},
         on_draw_machine_begin: |_, _| {},

@@ -20,6 +20,9 @@ impl ShaResolveMachine {
             .is_some()
         {
             ctx.core.turn.liaoyuan_count = 0;
+            if let Some(flow) = self.try_open_sadeng_on_miss(ctx) {
+                return Some(flow);
+            }
             ctx.emit(EventData::ShaDodged {
                 card: self.card,
                 source: self.source,

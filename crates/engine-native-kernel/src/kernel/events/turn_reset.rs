@@ -115,6 +115,28 @@ pub(crate) fn reset_new_turn_state(ctx: &mut Ctx<'_>, player: PlayerId) {
     if ctx.core.player(player).chaofeng_active {
         ctx.core.player_mut(player).chaofeng_active = false;
     }
+    ctx.core
+        .vm_aux
+        .flags
+        .remove(&(player, "u05_tianxianjiu_used_turn".to_string()));
+    let had_begin = ctx
+        .core
+        .vm_aux
+        .flags
+        .remove(&(player, "u05_yinmi_until_phase_begin".to_string()))
+        .is_some();
+    if had_begin
+        && ctx
+            .core
+            .vm_aux
+            .flags
+            .get(&(player, "u05_yinmi_until_phase_after".to_string()))
+            .copied()
+            .unwrap_or(0)
+            == 0
+    {
+        ctx.core.player_mut(player).yinmi_active = false;
+    }
     // U05-5b `fayin` (`character/gwent/skill.js:3024`: goMad until target's phaseBegin):
     if ctx
         .core

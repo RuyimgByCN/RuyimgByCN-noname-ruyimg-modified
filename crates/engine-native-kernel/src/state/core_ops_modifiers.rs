@@ -329,8 +329,72 @@ impl GameStateCore {
             .get(&(a, "dddquche_effect_marks".to_string()))
             .copied()
             .unwrap_or(0);
+        let has_sk = |p: PlayerId, name: &str| {
+            catalog
+                .skill_by_name(name)
+                .is_some_and(|d| self.has_skill(p, d))
+        };
+        let has_armor = |p: PlayerId| {
+            self.player(p)
+                .equips
+                .iter()
+                .any(|c| catalog.card_slot_of(self, *c) == Some(crate::catalog::EquipSlot::Armor))
+        };
+        let mut lj_delta: i32 = 0;
+        if has_sk(b, "hslingjian_xuanfengzhiren_equip3_dist") {
+            lj_delta += 1;
+        }
+        if has_sk(a, "hslingjian_xuanfengzhiren_equip4_dist") {
+            lj_delta -= 1;
+        }
+        if has_sk(b, "hslingjian_zhongxinghujia_equip3") && has_armor(b) {
+            lj_delta += 1;
+        }
+        if has_sk(a, "hslingjian_zhongxinghujia_equip4") && has_armor(a) {
+            lj_delta -= 1;
+        }
+        if has_sk(b, "hslingjian_jinjilengdong_equip3") && self.player(b).face_down {
+            lj_delta += 2;
+        }
+        if has_sk(a, "hslingjian_jinjilengdong_equip4") && self.player(a).face_down {
+            lj_delta -= 2;
+        }
+        if has_sk(b, "hslingjian_yinmilichang_equip3") && self.player(b).hp == 1 {
+            lj_delta += 1;
+        }
+        if has_sk(a, "hslingjian_yinmilichang_equip4") && self.player(a).hp == 1 {
+            lj_delta -= 1;
+        }
+        if has_sk(b, "hslingjian_xingtigaizao_equip3") {
+            lj_delta += 1;
+        }
+        if has_sk(a, "hslingjian_xingtigaizao_equip3") {
+            lj_delta += 1;
+        }
+        if has_sk(b, "hslingjian_xingtigaizao_equip4") {
+            lj_delta -= 1;
+        }
+        if has_sk(a, "hslingjian_xingtigaizao_equip4") {
+            lj_delta -= 1;
+        }
+        if has_sk(b, "hslingjian_shengxiuhaojiao_equip3")
+            && self.player(b).hp < self.player(b).hand.len() as i32
+        {
+            lj_delta += 1;
+        }
+        if has_sk(a, "hslingjian_shengxiuhaojiao_equip4")
+            && self.player(a).hp < self.player(a).hand.len() as i32
+        {
+            lj_delta -= 1;
+        }
+        if has_sk(b, "hslingjian_shijianhuisu_equip3") && self.player(b).equips.len() == 1 {
+            lj_delta += 1;
+        }
+        if has_sk(a, "hslingjian_shijianhuisu_equip4") && self.player(a).equips.len() == 1 {
+            lj_delta -= 1;
+        }
         let minus = minus + xiefang_minus + quche_minus;
-        let total = (base + plus).saturating_sub(minus) as i32 + mailun_delta;
+        let total = (base + plus).saturating_sub(minus) as i32 + mailun_delta + lj_delta;
         crate::rvm_bridge::modifiers::eval_distance_total(self, catalog, a, b, total)
     }
 
@@ -766,6 +830,25 @@ impl GameStateCore {
         });
         if gw_qinpen {
             limit = limit.saturating_sub(1);
+        }
+        // 星体改造·宝物锻造（U05 swd 批 7b `hslingjian_xingtigaizao_equip5`）：手牌上限 -1
+        if catalog
+            .skill_by_name("hslingjian_xingtigaizao_equip5")
+            .is_some_and(|d| self.has_skill(p, d))
+        {
+            limit = limit.saturating_sub(1);
+        }
+        if catalog
+            .skill_by_name("hslingjian_xingtigaizao")
+            .is_some_and(|d| self.has_skill(p, d))
+        {
+            let n = self
+                .vm_aux
+                .flags
+                .get(&(p, "u05_xingtigaizao_skill_n".to_string()))
+                .copied()
+                .unwrap_or(0) as usize;
+            limit = limit.saturating_sub(n);
         }
         crate::rvm_bridge::modifiers::eval_hand_limit(self, catalog, p, limit as i32)
     }

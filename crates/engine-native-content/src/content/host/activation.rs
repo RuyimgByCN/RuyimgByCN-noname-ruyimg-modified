@@ -388,6 +388,11 @@ impl HostSkillBehavior {
                 super::step::swd_u05_7a::activate(self, ctx, owner)
                     .map(|m| Box::new(m) as Box<dyn crate::catalog::SkillMachine>)
             }
+            HostBehavior::U05SwdKongxin
+            | HostBehavior::U05SwdLingjianPhaseUse
+            | HostBehavior::U05SwdForgeAction
+            | HostBehavior::U05SwdOldLongfan => super::step::swd_u05_7b::activate(self, ctx, owner)
+                .map(|m| Box::new(m) as Box<dyn crate::catalog::SkillMachine>),
             _ => None,
         }
     }
@@ -676,6 +681,12 @@ pub(in crate::content::host) fn has_phase_use_activation(
         }
         HostBehavior::U05SwdYuchanEquip | HostBehavior::U05SwdHufuViewAs => {
             super::step::swd_u05_7a::has_phase_use_activation(behavior, name)
+        }
+        HostBehavior::U05SwdKongxin
+        | HostBehavior::U05SwdLingjianPhaseUse
+        | HostBehavior::U05SwdForgeAction
+        | HostBehavior::U05SwdOldLongfan => {
+            super::step::swd_u05_7b::has_phase_use_activation(behavior, name)
         }
         _ => false,
     }

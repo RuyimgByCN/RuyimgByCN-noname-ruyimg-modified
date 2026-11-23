@@ -220,30 +220,27 @@ pub fn is_gw_dudayuanshuai2_locked(
     has_hupeng_global
 }
 
-/// P1/N08 急救（华佗）：持有者濒死结算时红色手牌可当【桃】使用。
-pub(super) fn is_tao_like(
-    ctx: &Ctx<'_>,
+/// P1/N08 急救（华佗）及全量濒死桃判定共用逻辑（runtime `dying_tao_cards` 与 snapshot `shapes::is_tao_like` 同源）。
+pub fn is_tao_like_core(
+    core: &crate::state::GameStateCore,
+    catalog: &Catalog,
     responder: PlayerId,
     card: crate::ids::CardId,
     dying: PlayerId,
 ) -> bool {
-    if mbcmfangzhu_banned(ctx.core, responder)
-        || is_guijiang_savable_blocked(ctx.core, ctx.catalog, dying)
-        || jinyan_blocks_black_trick(ctx.core, ctx.catalog, responder, card)
+    if mbcmfangzhu_banned(core, responder)
+        || is_guijiang_savable_blocked(core, catalog, dying)
+        || jinyan_blocks_black_trick(core, catalog, responder, card)
     {
         return false;
     }
-    let raw_kind = ctx.catalog.resolved_card_kind(ctx.core, card);
-    let raw_suit = ctx.catalog.resolved_card_suit(ctx.core, card);
+    let raw_kind = catalog.resolved_card_kind(core, card);
+    let raw_suit = catalog.resolved_card_suit(core, card);
     if crate::rvm_bridge::modifiers::eval_dying_peach_target_canceled(
-        ctx.core,
-        ctx.catalog,
-        responder,
-        dying,
-        card,
+        core, catalog, responder, dying, card,
     ) || crate::rvm_bridge::modifiers::eval_card_use_canceled(
-        ctx.core,
-        ctx.catalog,
+        core,
+        catalog,
         responder,
         card,
         raw_kind,
@@ -251,13 +248,11 @@ pub(super) fn is_tao_like(
     ) {
         return false;
     }
-    if ctx
-        .catalog
+    if catalog
         .cards
         .get(card as usize)
         .is_some_and(|d| d.name == "du" || d.name == "毒" || d.name.starts_with("xj_du_"))
-        || ctx
-            .core
+        || core
             .vm_aux
             .flags
             .get(&(responder, format!("xj_du_holder:{card}")))
@@ -269,7 +264,7 @@ pub(super) fn is_tao_like(
     }
     if raw_kind == CardKind::Tao {
         // 覆泰2（规则 v214）：全场禁桃时真桃不可救
-        return !tao_futai2_banned(ctx.core, ctx.catalog, responder);
+        return !tao_futai2_banned(core, catalog, responder);
     }
     // 酒（G1 cardpile 前置）：濒死时对自身使用回复 1 点体力
     if raw_kind == CardKind::Jiu {
@@ -282,31 +277,30 @@ pub(super) fn is_tao_like(
     }
     // 玉蝉（U05 swd 7a）：巽=桃（全员可救），震=酒 / 离=天仙酒（仅自救）。
     match raw_kind {
-        CardKind::Yuchanxun => return !tao_futai2_banned(ctx.core, ctx.catalog, responder),
+        CardKind::Yuchanxun => return !tao_futai2_banned(core, catalog, responder),
         CardKind::Yuchanzhen | CardKind::Yuchanli => return responder == dying,
         _ => {}
     }
-    // 天仙酒（U05 swd 第五批，规则 v89）：酒的 swd 变体——濒死自救
+    // 天仙酒（U05 swd，card/swd/card.js:1754）：仅限濒死者本人自救
     if raw_kind == CardKind::Tianxianjiu {
-        return true;
+        return responder == dying;
     }
-    let cname = ctx.catalog.cards[card as usize].name;
+    let cname = catalog.cards[card as usize].name;
     if cname == "gw_fuyuan" {
-        return !tao_futai2_banned(ctx.core, ctx.catalog, responder);
+        return !tao_futai2_banned(core, catalog, responder);
     }
     if matches!(cname, "gw_xianzumaijiu" | "gw_lang") {
         return responder == dying;
     }
     // 急救（v202 对齐上游 viewAsFilter）：限持有者回合外——自己是当前
     // 回合角色时不可发动
-    let jijiu = !ctx.catalog.is_rechanyuan_sealed_name(
-        ctx.core,
+    let jijiu = !catalog.is_rechanyuan_sealed_name(
+        core,
         responder,
         crate::vocabulary::names::JI_JIU,
-    ) && ctx
-        .catalog
+    ) && catalog
         .skill_by_name(crate::vocabulary::names::JI_JIU)
-        .map(|d| ctx.core.has_skill(responder, d) && ctx.core.turn.current != responder)
+        .map(|d| core.has_skill(responder, d) && core.turn.current != responder)
         .unwrap_or(false);
     if jijiu
         && matches!(
@@ -318,13 +312,12 @@ pub(super) fn is_tao_like(
     }
     // 复燃（Boss 焰灵，规则 v241）：焰灵濒死时其敌方可用红色牌当桃救
     //（上游 boss_furan2 dying chooseToUse viewAs tao 同口径）
-    let furan = ctx
-        .catalog
+    let furan = catalog
         .skill_by_name(crate::vocabulary::names::BOSS_FURAN)
-        .map(|d| ctx.core.has_skill(dying, d))
+        .map(|d| core.has_skill(dying, d))
         .unwrap_or(false);
     if furan
-        && ctx.core.is_boss_side(responder) != ctx.core.is_boss_side(dying)
+        && core.is_boss_side(responder) != core.is_boss_side(dying)
         && matches!(
             raw_suit,
             crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
@@ -333,31 +326,27 @@ pub(super) fn is_tao_like(
         return true;
     }
     // 蜜链藕（G1 古剑食物）：持有者红桃牌（he 区）可当桃（濒死响应）
-    let mizhilianou = ctx
-        .catalog
+    let mizhilianou = catalog
         .skill_by_name(crate::vocabulary::host::GJ_FOOD_MIZHLIANOU_KEY)
-        .map(|d| ctx.core.has_skill(responder, d))
+        .map(|d| core.has_skill(responder, d))
         .unwrap_or(false)
-        || ctx
-            .catalog
+        || catalog
             .skill_by_name("mizhilianou")
-            .map(|d| ctx.core.has_skill(responder, d))
+            .map(|d| core.has_skill(responder, d))
             .unwrap_or(false);
     if mizhilianou && raw_suit == crate::catalog::Suit::Heart {
         return true;
     }
-    if ctx
-        .catalog
-        .find_player_vm_view_as(ctx.core, responder, card, false, Some(CardKind::Tao))
+    if catalog
+        .find_player_vm_view_as(core, responder, card, false, Some(CardKind::Tao))
         .is_some()
-        && !tao_futai2_banned(ctx.core, ctx.catalog, responder)
+        && !tao_futai2_banned(core, catalog, responder)
     {
         return true;
     }
     if responder == dying
-        && ctx
-            .catalog
-            .find_player_vm_view_as(ctx.core, responder, card, false, Some(CardKind::Jiu))
+        && catalog
+            .find_player_vm_view_as(core, responder, card, false, Some(CardKind::Jiu))
             .is_some()
     {
         return true;
@@ -365,6 +354,15 @@ pub(super) fn is_tao_like(
     // 帝女玄霜（G1 古剑，濒死可救基本牌）：按桃结算回复 1 体力
     //（弃摸骑乘由 DyingSaveMachine rider 承担）
     raw_kind == CardKind::Dinvxuanshuang
+}
+
+pub(super) fn is_tao_like(
+    ctx: &Ctx<'_>,
+    responder: PlayerId,
+    card: crate::ids::CardId,
+    dying: PlayerId,
+) -> bool {
+    is_tao_like_core(ctx.core, ctx.catalog, responder, card, dying)
 }
 
 pub(super) fn dying_tao_cards(
@@ -848,17 +846,25 @@ pub fn sha_user_or_target_blocked(
                 == Some(crate::vocabulary::host::HostBehavior::U05OwBatchC)
                 && core.has_skill(target, d)
         })
+        || has(target, "hslingjian_jinjilengdong")
+        || has(owner, "hslingjian_jinjilengdong")
+        || (has(target, "hslingjian_yinmilichang_equip5") && core.player(target).hand.is_empty())
+        || (has(target, "hslingjian_shengxiuhaojiao_equip2")
+            && (core.player(owner).chaofeng_active || has(owner, "hslingjian_chaofeng")))
     {
         return true;
     }
     let seats = core.players.len() as u8;
     let adj_chaofeng = (0..seats).find(|&p| {
-        p != owner && core.player(p).alive && core.player(p).chaofeng_active && {
-            let d = (u16::from(p) + u16::from(seats) - u16::from(owner)) % u16::from(seats);
-            d == 1 || d == u16::from(seats) - 1
-        }
+        p != owner
+            && core.player(p).alive
+            && (core.player(p).chaofeng_active || has(p, "hslingjian_chaofeng"))
+            && {
+                let d = (u16::from(p) + u16::from(seats) - u16::from(owner)) % u16::from(seats);
+                d == 1 || d == u16::from(seats) - 1
+            }
     });
-    adj_chaofeng.is_some_and(|h| target != h)
+    !has(owner, "hslingjian_chaofeng") && adj_chaofeng.is_some_and(|h| target != h)
 }
 
 /// 询问使用真实【杀】（复仇 2 / 诱敌深入 / 诱战 共用；Step 与 Asks 同源）：忽略距离与出牌阶段次数限制。

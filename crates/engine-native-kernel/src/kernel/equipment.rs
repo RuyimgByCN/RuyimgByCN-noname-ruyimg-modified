@@ -1,10 +1,64 @@
 use super::*;
 
+/// 按 `card_mods` 中附着的灵剑与装备槽位（`equip1..=5`）推导锻造装备技键。
+pub fn forged_lingjian_skill_name(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    player: PlayerId,
+    card: crate::ids::CardId,
+) -> Option<&'static str> {
+    let attached = core.player(player).card_mods.get(&card).copied()?;
+    let akind = catalog.card_kind(attached);
+    let aname = catalog.cards.get(attached as usize)?.name;
+    let slot_num = match catalog.card_slot_of(core, card)? {
+        crate::catalog::EquipSlot::Weapon => 1,
+        crate::catalog::EquipSlot::Armor => 2,
+        crate::catalog::EquipSlot::HorsePlus => 3,
+        crate::catalog::EquipSlot::HorseMinus => 4,
+        crate::catalog::EquipSlot::Treasure => 5,
+    };
+    if akind.yuchan_auto_view_as().is_some() {
+        let specific = format!("{aname}_equip{slot_num}");
+        if let Some(id) = catalog.skill_by_name(&specific) {
+            return Some(catalog.skills[id as usize].name);
+        }
+        return catalog
+            .skill_by_name("g_yuchan_equip")
+            .map(|id| catalog.skills[id as usize].name);
+    }
+    let base = [
+        ("xuanfengzhiren", "hslingjian_xuanfengzhiren"),
+        ("zhongxinghujia", "hslingjian_zhongxinghujia"),
+        ("jinjilengdong", "hslingjian_jinjilengdong"),
+        ("yinmilichang", "hslingjian_yinmilichang"),
+        ("xingtigaizao", "hslingjian_xingtigaizao"),
+        ("shengxiuhaojiao", "hslingjian_shengxiuhaojiao"),
+        ("shijianhuisu", "hslingjian_shijianhuisu"),
+        ("qinglongzhigui", "qinglongzhigui"),
+        ("zhuquezhizhang", "zhuquezhizhang"),
+        ("baishouzhihu", "baishouzhihu"),
+        ("xuanwuzhihuang", "xuanwuzhihuang"),
+        ("huanglinzhicong", "huanglinzhicong"),
+        ("cangchizhibi", "cangchizhibi"),
+    ]
+    .iter()
+    .find(|(pat, _)| aname.contains(pat))?
+    .1;
+    let full = format!("{base}_equip{slot_num}");
+    let id = catalog.skill_by_name(&full)?;
+    Some(catalog.skills[id as usize].name)
+}
+
 /// 装备提交：牌入手牌区到对应装备栏，同栏旧牌替换入弃牌堆；
 /// 替换结果写回帧载荷（哈希可见）。
-/// G1 装备技能生命周期：装备 `card` 时授予其声明的目录技能。
+/// G1 装备技能生命周期：装备 `card` 时授予其声明的目录技能（含 `card_mods` 灵剑锻造技）。
 pub fn grant_equip_skills(ctx: &mut Ctx<'_>, player: PlayerId, card: crate::ids::CardId) {
-    let names = ctx.catalog.equip_card_skills(ctx.core, card);
+    let mut names = ctx.catalog.equip_card_skills(ctx.core, card);
+    if let Some(forged) = forged_lingjian_skill_name(ctx.core, ctx.catalog, player, card) {
+        if !names.contains(&forged) {
+            names.push(forged);
+        }
+    }
     for name in names {
         if let Some(def) = ctx.catalog.skill_by_name(name) {
             ctx.ensure_skill(
@@ -23,23 +77,27 @@ pub fn grant_equip_skills(ctx: &mut Ctx<'_>, player: PlayerId, card: crate::ids:
 }
 
 /// G1 装备技能生命周期：装备 `card` 离场时撤销其技能——若该技能不同时
-/// 由玩家剩余的其他装备提供（跨槽同名技能共存）。
+/// 由玩家剩余的其他装备提供（跨槽同名技能共存），并记录 `onLose` 延迟钩。
 pub fn revoke_equip_skills(
     core: &mut crate::state::GameStateCore,
     catalog: &crate::catalog::Catalog,
     player: PlayerId,
     card: crate::ids::CardId,
 ) {
-    let names = catalog.equip_card_skills(core, card);
+    let mut names = catalog.equip_card_skills(core, card);
+    if let Some(forged) = forged_lingjian_skill_name(core, catalog, player, card) {
+        if !names.contains(&forged) {
+            names.push(forged);
+        }
+    }
     for name in names {
         let Some(def) = catalog.skill_by_name(name) else {
             continue;
         };
-        let still_provided = core
-            .player(player)
-            .equips
-            .iter()
-            .any(|c| catalog.equip_card_skills(core, *c).contains(&name));
+        let still_provided = core.player(player).equips.iter().any(|c| {
+            catalog.equip_card_skills(core, *c).contains(&name)
+                || forged_lingjian_skill_name(core, catalog, player, *c) == Some(name)
+        });
         if !still_provided {
             core.skills.remove(&(player, def));
             if name == "txhj_chongyingshenfu"
@@ -86,6 +144,7 @@ pub fn revoke_equip_skills(
             }
         }
     }
+    // 乾坤袋 `onLose`（U05 swd 批 7a/7b 同源键名）：失去乾坤袋后摸 1。
     let has_qiankundai_skill = catalog.cards[card as usize]
         .equip_skills
         .iter()
@@ -94,9 +153,11 @@ pub fn revoke_equip_skills(
         || catalog.card_kind(card) == crate::catalog::CardKind::Qiankundai)
         && core.player(player).alive
     {
-        let key = (player, "swd_qiankundai_pending_lose".to_string());
-        let cnt = core.vm_aux.flags.get(&key).copied().unwrap_or(0) + 1;
-        core.vm_aux.flags.insert(key, cnt);
+        *core
+            .vm_aux
+            .flags
+            .entry((player, "swd_qiankundai_pending_lose".to_string()))
+            .or_insert(0) += 1;
     }
     // G1 索链甲：离场装备声明横置且玩家无其他同类装备 → 重置横置
     if catalog.equip_card_links(core, card)
@@ -115,6 +176,9 @@ pub fn revoke_equip_skills(
     }
     (catalog.hooks.on_equip_revoked)(core, catalog, player, card);
     trigger_gw_dieyi_lost(core, catalog, player, card, false);
+    // 清理锻造灵剑在离场装备上附加的伪装牌与声明槽位。
+    core.player_mut(player).card_mods.remove(&card);
+    core.declared_slots.remove(&card);
 }
 
 /// 蝶翼（U05 杀海拾遗·gwent `card/gwent/skill.js:253`）：`gw_dieyi_equip1..5`、
@@ -182,6 +246,23 @@ pub fn discard_armor_for_ssr_luoyi(
         core.discard.push(c);
     }
     armors
+}
+
+/// Flushes pending `Qiankundai.onLose` draws immediately instead of waiting for outer settlement.
+pub fn flush_qiankundai_pending_lose(ctx: &mut Ctx<'_>) {
+    let seats = ctx.core.players.len() as PlayerId;
+    for p in 0..seats {
+        if let Some(n) = ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(p, "swd_qiankundai_pending_lose".to_string()))
+        {
+            if n > 0 && ctx.core.player(p).alive {
+                ctx.start_draw(p, n);
+            }
+        }
+    }
 }
 
 pub(super) fn commit_equip(

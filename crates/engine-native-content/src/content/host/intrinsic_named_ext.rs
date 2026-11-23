@@ -318,28 +318,11 @@ pub(super) fn try_named_jiguan_card(
                 stage: crate::content::host::HostStage::Act,
             })))
         }
-        // card/swd/card.js:1062-1098: lingjiandai — gain 1 Hslingjian card from deck/discard (or draw 1)
+        // card/swd/card.js:1062-1098: lingjiandai — gain up to 3 random Hslingjian cards
         "lingjiandai" => {
             set_flag(ctx, owner, "u05_card_used:lingjiandai", 1);
-            if let Some(pos) = ctx
-                .core
-                .deck
-                .iter()
-                .position(|&c| ctx.catalog.card_kind(c) == CardKind::Hslingjian)
-            {
-                let found = ctx.core.deck.remove(pos);
-                ctx.core.player_mut(owner).hand.push(found);
-            } else if let Some(pos) = ctx
-                .core
-                .discard
-                .iter()
-                .position(|&c| ctx.catalog.card_kind(c) == CardKind::Hslingjian)
-            {
-                let found = ctx.core.discard.remove(pos);
-                ctx.core.player_mut(owner).hand.push(found);
-            } else {
-                ctx.start_draw(owner, 1);
-            }
+            let recv = u.targets.first().copied().unwrap_or(owner);
+            let _ = super::step::swd_u05_7b::lingjian::take_random_hslingjian_from_piles(ctx, recv, 3);
             finish_table_card(ctx, card);
             Some(None)
         }
@@ -920,4 +903,28 @@ pub(super) fn try_named_ext_card(
 
     finish_table_card(ctx, card);
     Some(None)
+}
+
+/// Dispatches non-nullifiable U05 `swd` basic cards (`Dujian`, `Xiangyuye`, `Huanpodan`).
+pub(super) fn try_swd_basic_card_intrinsic(
+    u: &CardUseData,
+    card: CardId,
+    effective_kind: CardKind,
+) -> Option<Box<dyn SkillMachine>> {
+    let (def_key, behavior) = match effective_kind {
+        CardKind::Dujian => ("dujian", crate::content::host::HostBehavior::U05SwdDujianCard),
+        CardKind::Xiangyuye => ("xiangyuye", crate::content::host::HostBehavior::U05SwdXiangyuyeCard),
+        CardKind::Huanpodan => ("huanpodan", crate::content::host::HostBehavior::U05SwdHuanpodanCard),
+        _ => return None,
+    };
+    Some(Box::new(crate::content::host::HostMachine {
+        def_key: def_key.to_string(),
+        behavior,
+        owner: u.player,
+        target: u.targets.first().copied(),
+        card: Some(card),
+        cards: Vec::new(),
+        targets: Vec::new(),
+        stage: crate::content::host::HostStage::Act,
+    }))
 }

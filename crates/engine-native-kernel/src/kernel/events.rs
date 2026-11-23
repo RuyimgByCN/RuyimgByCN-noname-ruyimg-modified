@@ -520,49 +520,21 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
                 .remove(&(u.player, "vm_va_sha_no_count".to_string()))
                 .unwrap_or(0)
                 != 0;
-            if ctx.core.turn.sha_used_play_phase {
-                if ctx.core.current_land == Some(crate::catalog::CardKind::Longlushanfeng)
-                    && !vm_va_free
-                {
-                    ctx.core.turn.land_sha_used = true;
+            if ctx.core.turn.phase == Phase::Play && u.player == ctx.core.turn.current {
+                if ctx.core.turn.sha_used_play_phase {
+                    if ctx.core.current_land == Some(crate::catalog::CardKind::Longlushanfeng)
+                        && !vm_va_free
+                    {
+                        ctx.core.turn.land_sha_used = true;
+                    }
+                } else if !poyue_red_free && !yudun_free && !vm_va_free {
+                    ctx.core.turn.sha_used_play_phase = true;
                 }
-            } else if !poyue_red_free && !yudun_free && !vm_va_free {
-                ctx.core.turn.sha_used_play_phase = true;
             }
             ctx.core.table.extend(u.card);
         }
         CardKind::Jiu | CardKind::Tianxianjiu => {
-            let jiu_no_count = ctx
-                .core
-                .vm_aux
-                .flags
-                .remove(&(u.player, "vm_va_jiu_no_count".to_string()))
-                .is_some();
-            if is_dying_save {
-                ctx.core.table.extend(u.card);
-            } else {
-                // 酒/天仙酒：命令边界已校验每回合一次（addCount: false 时置 vm_va_jiu_no_count 不占位）——
-                // 上游 target.storage.jiu += baseDamage 可跨多次使用叠加；回合外印记同理按次数累加。
-                ctx.to_discard(u.card);
-                if u.player == ctx.core.turn.current {
-                    if !jiu_no_count {
-                        ctx.core.turn.jiu_used = true;
-                    }
-                    if !nullified {
-                        if !ctx.core.turn.jiu_active {
-                            ctx.core.turn.jiu_active = true;
-                        } else {
-                            let key = (u.player, "jiu_extra_stacks".to_string());
-                            let prev = ctx.core.vm_aux.flags.get(&key).copied().unwrap_or(0);
-                            ctx.core.vm_aux.flags.insert(key, prev + 1);
-                        }
-                    }
-                } else if !nullified {
-                    let key = (u.player, "jiu_active_offturn".to_string());
-                    let prev = ctx.core.vm_aux.flags.get(&key).copied().unwrap_or(0);
-                    ctx.core.vm_aux.flags.insert(key, prev + 1);
-                }
-            }
+            turn::commit_jiu_or_tianxianjiu_use(ctx, &u, is_dying_save, nullified);
         }
         CardKind::Shenmiguo => {
             // 神秘果（swd 卡牌面窗口机批）：载体牌直接弃置（不置桌面）

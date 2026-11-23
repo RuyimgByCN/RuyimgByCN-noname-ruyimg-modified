@@ -18,8 +18,7 @@ use crate::resolution::{Slot, NO_FRAME};
 use crate::state::{GameMode, GameStateCore, Outcome, Winner};
 use crate::vocabulary::generals::{general_gender, Gender};
 use crate::vocabulary::host::HostBehavior;
-use crate::vocabulary::host::GJ_FOOD_MIZHLIANOU_KEY;
-use crate::vocabulary::names::{JI_JIU, LONG_DAN, QING_GUO};
+use crate::vocabulary::names::{LONG_DAN, QING_GUO};
 
 mod types;
 pub use types::*;

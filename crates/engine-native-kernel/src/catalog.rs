@@ -556,6 +556,20 @@ pub enum CardKind {
     Dujian,
     /// 盘古斧（U05 swd 批 7a，武器 range 4）：造成伤害后令受伤者弃置 1 张牌。
     Pangufu,
+    /// 青莲心灯（U05 swd 批 7b，防具 equip2）：免疫锦囊牌造成的伤害。
+    Qinglianxindeng,
+    /// 白虎披风（U05 swd 批 7b，防具 equip2）：结束阶段若为全场体力最少之一且已受伤，可回复 1 点体力。
+    Baihupifeng,
+    /// 广煞天衣（U05 swd 批 7b，防具 equip2）：即将受到伤害时 1/3 概率伤害 -1。
+    Guangshatianyi,
+    /// 降魔杵/象羽叶（U05 swd 批 7b，基本牌）：对攻击范围外一名角色使用，弃黑手牌或失 1 体力。
+    Xiangyuye,
+    /// 还魄丹（U05 swd 批 7b，基本牌）：赋予没有 huanpodan_skill 的目标角色一次防死还魄。
+    Huanpodan,
+    /// 漆魄古玉（U05 swd 批 7b，宝物 equip5）：独立古玉宝物槽位。
+    Qipoguyu,
+    /// 鬼眼法刀（U05 swd 批 7b，武器 equip1 射程 2）：杀命中时可防止伤害并令目标失去 1 点体力。
+    Guiyanfadao,
 }
 
 /// 花色（判定用）。
@@ -1281,100 +1295,6 @@ impl Catalog {
                 && self
                     .skill_by_name("ssr_luoyi")
                     .is_some_and(|d| core.has_skill(player, d)))
-    }
-
-    /// PA12 批⑮：查找 `player` 当前启用的 VM 技能中首个匹配 `card` 的单牌转化规则。
-    pub fn find_player_vm_view_as(
-        &self,
-        core: &crate::state::GameStateCore,
-        player: crate::ids::PlayerId,
-        card: CardId,
-        in_play: bool,
-        target_kind: Option<CardKind>,
-    ) -> Option<&crate::rvm_bridge::VmViewAsSpec> {
-        let sealed = self.is_tieji_sealed(core, player);
-        core.skills
-            .range((player, u16::MIN)..)
-            .take_while(|((p, _), _)| *p == player)
-            .filter(|((_, _), inst)| inst.enabled)
-            .find_map(|((_, def), _)| {
-                let s = self.skills.get(*def as usize)?;
-                if (sealed && !Self::is_locked_skill_name(s.name, s.trigger.as_ref()))
-                    || self.is_rechanyuan_sealed_def(core, player, *def)
-                {
-                    return None;
-                }
-                s.behavior.vm_view_as().iter().find(|spec| {
-                    spec.matches_card(core, self, player, card, in_play, target_kind)
-                })
-            })
-            .or_else(|| {
-                crate::rvm_bridge::modifiers::d34_flags::find_d34_flag_view_as(
-                    core,
-                    self,
-                    player,
-                    card,
-                    in_play,
-                    target_kind,
-                )
-            })
-    }
-
-    /// PA12 批⑰：返回 `player` 转化技在 `from none` 模式下使用的确定性虚拟令牌卡牌 ID（不在手牌与装备区中）。
-    pub fn vm_view_as_none_token(
-        &self,
-        core: &crate::state::GameStateCore,
-        player: crate::ids::PlayerId,
-    ) -> CardId {
-        let p = core.player(player);
-        (0..self.cards.len() as CardId)
-            .find(|c| !p.hand.contains(c) && !p.equips.contains(c))
-            .unwrap_or(0)
-    }
-
-    /// PA12 批⑰：枚举 `player` 非手牌区（装备区、扩展牌堆及 `from none` 虚拟令牌）可参与 VM 转化技的卡牌 ID。
-    pub fn player_vm_view_as_extra_cards(
-        &self,
-        core: &crate::state::GameStateCore,
-        player: crate::ids::PlayerId,
-        in_play: bool,
-        target_kind: Option<CardKind>,
-    ) -> Vec<CardId> {
-        let mut out = Vec::new();
-        let p = core.player(player);
-        for &eq in &p.equips {
-            if self
-                .find_player_vm_view_as(core, player, eq, in_play, target_kind)
-                .is_some()
-                && !out.contains(&eq)
-            {
-                out.push(eq);
-            }
-        }
-        for ((po, _), pile) in &core.vm_aux.piles {
-            if *po == player {
-                for &c in pile {
-                    if self
-                        .find_player_vm_view_as(core, player, c, in_play, target_kind)
-                        .is_some()
-                        && !p.hand.contains(&c)
-                        && !out.contains(&c)
-                    {
-                        out.push(c);
-                    }
-                }
-            }
-        }
-        let none_tok = self.vm_view_as_none_token(core, player);
-        if self
-            .find_player_vm_view_as(core, player, none_tok, in_play, target_kind)
-            .is_some()
-            && !p.hand.contains(&none_tok)
-            && !out.contains(&none_tok)
-        {
-            out.push(none_tok);
-        }
-        out
     }
 
     /// 按名字查技能定义号（构建内容/测试用；O(1) 查表，首个匹配）。

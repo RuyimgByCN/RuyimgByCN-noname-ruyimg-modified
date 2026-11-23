@@ -416,7 +416,7 @@ fn u05_all_9_formal_packages_assemble_333_generals_play_custom_cards_and_roundtr
     drain(&mut e);
     assert_eq!(e.state_core().player(1).hp, p1_hp_before - 1);
 
-    // 4c. `card/swd/card.js:1062-1098` `lingjiandai`: gains 1 `Hslingjian` card to hand
+    // 4c. `card/swd/card.js:1062-1098` `lingjiandai`: gains up to 3 `Hslingjian` cards to hand
     let cid_ljd = move_named_card_to_hand(&mut e, 0, "lingjiandai");
     let hand_before_ljd = e.state_core().player(0).hand.len();
     let out = e.submit(GameCommand {
@@ -430,7 +430,7 @@ fn u05_all_9_formal_packages_assemble_333_generals_play_custom_cards_and_roundtr
     });
     assert!(!matches!(out, CommandOutcome::Rejected(_)), "PlayCard(lingjiandai): {out:?}");
     drain(&mut e);
-    assert_eq!(e.state_core().player(0).hand.len(), hand_before_ljd); // -1 played +1 Hslingjian gained
+    assert_eq!(e.state_core().player(0).hand.len(), hand_before_ljd - 1 + 3); // -1 played +3 Hslingjian gained
 
     // 5. Authentic upstream `U05` skills & explicit modifiers (`d34_u05_mods.rs`)
     // 5a. `play/wuxing/skill.js:5-95` `_shengke` & `wuxingpan_skill`
@@ -533,10 +533,10 @@ fn u05_all_9_formal_packages_assemble_333_generals_play_custom_cards_and_roundtr
         .filter(|s| s.behavior.package_skill_id().is_some())
         .map(|s| s.name.to_string())
         .collect();
-    // U05-6a/6b + U05-5a/5b + U05-4 + U05-7a promoted hearth, gwent, xianjian & swd-cards skills from VM into native `HostBehavior`s.
+    // U05-6a/6b + U05-5a/5b + U05-4 + U05-7a/7b promoted hearth, gwent, xianjian & swd-cards skills from VM into native `HostBehavior`s.
     assert!(
-        vm_skill_names.len() >= 140,
-        "expected >= 140 remaining verified U05 VM skills in Catalog (after ow + hearth + gwent_cards + gwent_chars + xianjian + swd_cards native host migration), got {}",
+        vm_skill_names.len() >= 80,
+        "expected >= 80 remaining verified U05 VM skills in Catalog (after ow + hearth + gwent_cards + gwent_chars + xianjian + swd_cards native host migration), got {}",
         vm_skill_names.len()
     );
     for ow_sk in ["woliu", "zhongdun", "mujing", "shanxian"] {

@@ -68,6 +68,15 @@ impl ShaResolveMachine {
                 }
                 return Some(self.finish_or_defer_sha_end(ctx, false));
             }
+            if ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(self.source, format!("u05_sha_hit_resume:{fid}")))
+                .is_some()
+            {
+                return Some(self.sha_hit_pre_damage(ctx));
+            }
         }
         // 复仇（玩点论杀批 14，规则 v279）：成为杀目标时交出 1 张牌（"he"）取消
         // 该杀（上游 target shaBefore direct chooseCard("he") 同面；所选牌归来
@@ -260,7 +269,7 @@ impl ShaResolveMachine {
                 });
                 if red {
                     if ctx.core.player(self.target).alive {
-                        return Some(self.emit_sha_damage(ctx));
+                        return Some(self.sha_hit_pre_damage(ctx));
                     }
                     return Some(self.finish_target_sha_end(ctx, false));
                 }
@@ -399,7 +408,7 @@ impl ShaResolveMachine {
                     cancelled: false,
                 });
                 ctx.start_draw(self.target, 1);
-                if Self::has_active_bolehuiyan_pred(ctx) {
+                if Self::should_defer_sha_end(ctx, self.source) {
                     return Some(self.defer_sha_end(ctx, fid, false));
                 }
                 return Some(self.finish_target_sha_end(ctx, false));
@@ -462,7 +471,7 @@ impl ShaResolveMachine {
                     self.nature,
                     self.card,
                 )));
-                if Self::has_active_bolehuiyan_pred(ctx) {
+                if Self::should_defer_sha_end(ctx, self.source) {
                     return Some(self.defer_sha_end(ctx, fid, true));
                 }
                 return Some(self.finish_target_sha_end(ctx, true));
@@ -487,7 +496,31 @@ impl ShaResolveMachine {
                             .vm_aux
                             .flags
                             .remove(&(self.target, format!("yd_cancelled:{fid}")));
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .remove(&(self.source, format!("u05_sha_hit_resume:{fid}")));
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .remove(&(self.source, format!("u05_sadeng_tried:{fid}:{}", self.target)));
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .remove(&(self.source, format!("u05_guiyanfadao_done:{fid}:{}", self.target)));
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .remove(&(self.source, format!("u05_guiyanfadao_unhurt:{fid}:{}", self.target)));
                     }
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(self.source, format!("u05_sadeng_handled:{}", self.target)));
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(self.source, format!("u05_guiyanfadao_active_fid:{}", self.target)));
                     self.shoulie_direct = false;
                     self.card = Some(new_sha);
                     self.asked = false;
@@ -499,6 +532,8 @@ impl ShaResolveMachine {
                     self.liuli_card = None;
                     self.asking_fuchou = false;
                     self.fuchou_card = None;
+                    self.asking_sadeng = false;
+                    self.asking_sadeng_shan = false;
                     return Some(Flow::Yield);
                 }
             }
@@ -527,51 +562,14 @@ impl ShaResolveMachine {
                 );
                 let _ = ctx.settle_inline_judge_card(self.source, suit, judged);
                 if red {
-                    let longdan = ctx
-                        .catalog
-                        .skill_by_name(crate::vocabulary::names::LONG_DAN)
-                        .map(|d| ctx.core.has_skill(self.target, d))
-                        .unwrap_or(false);
-                    let qingguo = ctx
-                        .catalog
-                        .skill_by_name(crate::vocabulary::names::QING_GUO)
-                        .map(|d| ctx.core.has_skill(self.target, d))
-                        .unwrap_or(false);
-                    let rw_lanyin = crate::rvm_bridge::modifiers::d34_l28_mods::has_rewritten_lanyinjia(
+                    let options: Vec<ChoiceOption> = super::respond::collect_shan_response_cards(
                         ctx.core,
                         ctx.catalog,
                         self.target,
-                    );
-                    let hufu_shan = ctx
-                        .catalog
-                        .skill_by_name("g_hufu_shan")
-                        .is_some_and(|d| ctx.core.has_skill(self.target, d));
-                    let options: Vec<ChoiceOption> = if ctx
-                        .catalog
-                        .blocks_hand_cards(ctx.core, self.target)
-                    {
-                        Vec::new()
-                    } else {
-                        ctx.core
-                            .player(self.target)
-                            .hand
-                            .iter()
-                            .filter(|c| {
-                                let kind = ctx.catalog.resolved_card_kind(ctx.core, **c);
-                                let black = matches!(
-                                    ctx.catalog.resolved_card_suit(ctx.core, **c),
-                                    crate::catalog::Suit::Spade | crate::catalog::Suit::Club
-                                );
-                                kind == CardKind::Shan
-                                    || rw_lanyin
-                                    || (hufu_shan && kind == CardKind::Hufu)
-                                    || (longdan && kind.is_sha_like())
-                                    || (qingguo && black)
-                            })
-                            .copied()
-                            .map(ChoiceOption::Card)
-                            .collect()
-                    };
+                    )
+                    .into_iter()
+                    .map(ChoiceOption::Card)
+                    .collect();
                     if !options.is_empty() {
                         self.asking_sadeng_shan = true;
                         return Some(Flow::WaitChoice {
@@ -586,20 +584,23 @@ impl ShaResolveMachine {
                             },
                         });
                     }
-                    // 无闪可打：改为命中（照常走寒冰/麒麟窗）
                     return Some(self.sadeng_continue_to_damage(ctx));
                 }
             }
-            // 未确认/判定黑/目标已死：被闪结算维持 → shaEnd + 推进
-            return Some(self.finish_target_sha_end(ctx, false));
+            ctx.emit(EventData::ShaDodged {
+                card: self.card,
+                source: self.source,
+                target: self.target,
+            });
+            return Some(self.finish_or_defer_sha_end(ctx, false));
         }
-        // 萨登荆环：额外出闪恢复——打出则本杀仍被闪避；未打出则改为
-        // 命中（照常走寒冰/麒麟窗）。
         if self.asking_sadeng_shan {
             self.asking_sadeng_shan = false;
             if let Some(ChoiceOption::Card(shan)) = ctx.answer().first().copied() {
-                if ctx.core.player(self.target).hand.contains(&shan) {
-                    ctx.discard_from_hand(self.target, shan);
+                if ctx.core.player(self.target).hand.contains(&shan)
+                    || ctx.core.player(self.target).equips.contains(&shan)
+                {
+                    discard_response_card(ctx, self.target, shan, CardKind::Shan);
                     if ctx.catalog.vm_card_history {
                         if let Some(fid) = self.current_sha_frame_id(ctx) {
                             ctx.core
@@ -608,13 +609,20 @@ impl ShaResolveMachine {
                                 .insert((self.target, format!("l11_sha_dodge_ok:{fid}:{shan}")), 1);
                         }
                     }
+                    super::respond::note_longdan_sha_source(ctx, self.target, self.source);
                     crate::kernel::emit_card_responded_as(ctx, self.target, shan, CardKind::Shan);
-                    return Some(self.finish_or_defer_sha_end(ctx, false));
+                    releiji_on_shan(ctx, self.target);
+                    return Some(self.after_sha_dodged(ctx));
                 }
             }
             if ctx.core.player(self.target).alive {
                 return Some(self.sadeng_continue_to_damage(ctx));
             }
+            ctx.emit(EventData::ShaDodged {
+                card: self.card,
+                source: self.source,
+                target: self.target,
+            });
             return Some(self.finish_target_sha_end(ctx, false));
         }
         // 雌雄双股剑（批③-b 第八把；逐技对照批一 v75 消除首张差异）：
@@ -732,12 +740,25 @@ impl ShaResolveMachine {
                 "sha_tianxian_done",
                 "sha_longxiang_done",
                 "sha_yueren_done",
+                "u05_sha_hit_resume",
             ] {
                 ctx.core
                     .vm_aux
                     .flags
                     .remove(&(self.source, format!("{key}:{fid}")));
             }
+            ctx.core.vm_aux.flags.remove(&(
+                self.source,
+                format!("u05_sadeng_tried:{fid}:{}", self.target),
+            ));
+            ctx.core.vm_aux.flags.remove(&(
+                self.source,
+                format!("u05_guiyanfadao_done:{fid}:{}", self.target),
+            ));
+            ctx.core.vm_aux.flags.remove(&(
+                self.source,
+                format!("u05_guiyanfadao_unhurt:{fid}:{}", self.target),
+            ));
             ctx.core
                 .vm_aux
                 .flags
@@ -751,6 +772,14 @@ impl ShaResolveMachine {
                 format!("sha_ow_bfengshi_direct:{fid}:{}", self.target),
             ));
         }
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(self.source, format!("u05_sadeng_handled:{}", self.target)));
+        ctx.core.vm_aux.flags.remove(&(
+            self.source,
+            format!("u05_guiyanfadao_active_fid:{}", self.target),
+        ));
     }
 
     pub(super) fn resolve_tianxian(&mut self, ctx: &mut Ctx<'_>) -> Option<Flow> {

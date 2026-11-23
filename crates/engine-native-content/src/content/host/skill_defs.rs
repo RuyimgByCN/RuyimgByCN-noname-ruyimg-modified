@@ -113,6 +113,36 @@ pub fn host_skill_trigger_meta(
         | HostBehavior::U05SwdHuanpodanGuard
         | HostBehavior::U05SwdForgingEnd
         | HostBehavior::U05SwdPassiveMarker => step::swd_u05_7a::trigger_meta(behavior, name),
+        HostBehavior::U05SwdXiangyuyeCard
+        | HostBehavior::U05SwdHuanpodanCard
+        | HostBehavior::U05SwdKongxin
+        | HostBehavior::U05SwdKongxin2
+        | HostBehavior::U05SwdQinglianxindeng
+        | HostBehavior::U05SwdLingjianDmgSrc
+        | HostBehavior::U05SwdLingjianDmgTgt
+        | HostBehavior::U05SwdLingjianLoseTemp
+        | HostBehavior::U05SwdLingjianEquipped
+        | HostBehavior::U05SwdLingjianDrawPhase
+        | HostBehavior::U05SwdLingjianPhaseEnd
+        | HostBehavior::U05SwdLingjianPhaseUse
+        | HostBehavior::U05SwdLingjianShaBegin
+        | HostBehavior::U05SwdLingjianPassive
+        | HostBehavior::U05SwdJiguanyaoshuSkill
+        | HostBehavior::U05SwdLingjianduanzao
+        | HostBehavior::U05SwdForgeAction
+        | HostBehavior::U05SwdQinglonglingzhu
+        | HostBehavior::U05SwdXingjunyan
+        | HostBehavior::U05SwdBaihupifeng
+        | HostBehavior::U05SwdFengxueren
+        | HostBehavior::U05SwdChilongya
+        | HostBehavior::U05SwdChilongya2
+        | HostBehavior::U05SwdChilongfengxue
+        | HostBehavior::U05SwdOldLongfan
+        | HostBehavior::U05SwdXixue
+        | HostBehavior::U05SwdGuangshatianyi
+        | HostBehavior::U05SwdSadengjinhuan
+        | HostBehavior::U05SwdGuiyanfadao
+        | HostBehavior::U05SwdTianxianjiu => step::swd_u05_7b::trigger_meta(behavior, name),
         _ => crate::event::NativeDamageEffect::from_host(behavior)
             .map(|e| e.meta())
             .or_else(|| behavior.trigger_meta()),
@@ -251,6 +281,36 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         | HostBehavior::U05SwdHuanpodanGuard
         | HostBehavior::U05SwdForgingEnd
         | HostBehavior::U05SwdPassiveMarker => step::swd_u05_7a::limits(behavior, name),
+        HostBehavior::U05SwdXiangyuyeCard
+        | HostBehavior::U05SwdHuanpodanCard
+        | HostBehavior::U05SwdKongxin
+        | HostBehavior::U05SwdKongxin2
+        | HostBehavior::U05SwdQinglianxindeng
+        | HostBehavior::U05SwdLingjianDmgSrc
+        | HostBehavior::U05SwdLingjianDmgTgt
+        | HostBehavior::U05SwdLingjianLoseTemp
+        | HostBehavior::U05SwdLingjianEquipped
+        | HostBehavior::U05SwdLingjianDrawPhase
+        | HostBehavior::U05SwdLingjianPhaseEnd
+        | HostBehavior::U05SwdLingjianPhaseUse
+        | HostBehavior::U05SwdLingjianShaBegin
+        | HostBehavior::U05SwdLingjianPassive
+        | HostBehavior::U05SwdJiguanyaoshuSkill
+        | HostBehavior::U05SwdLingjianduanzao
+        | HostBehavior::U05SwdForgeAction
+        | HostBehavior::U05SwdQinglonglingzhu
+        | HostBehavior::U05SwdXingjunyan
+        | HostBehavior::U05SwdBaihupifeng
+        | HostBehavior::U05SwdFengxueren
+        | HostBehavior::U05SwdChilongya
+        | HostBehavior::U05SwdChilongya2
+        | HostBehavior::U05SwdChilongfengxue
+        | HostBehavior::U05SwdOldLongfan
+        | HostBehavior::U05SwdXixue
+        | HostBehavior::U05SwdGuangshatianyi
+        | HostBehavior::U05SwdSadengjinhuan
+        | HostBehavior::U05SwdGuiyanfadao
+        | HostBehavior::U05SwdTianxianjiu => step::swd_u05_7b::limits(behavior, name),
         HostBehavior::GujianFoodQingtuan | HostBehavior::GujianFoodLuyugeng => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,

@@ -1707,7 +1707,7 @@ skill test_va_wuzhong(99060099) {
             e.state_core_mut().card_natures.insert(lj, 3); // 火生土
             submit(&mut e, 0, GameAction::PlayCard { card: lj, targets: vec![] });
             drain_choices(&mut e);
-            assert_eq!(e.debug_hand(0).len(), 2, "不包无懈自定义 Jiguan 牌效摸/得 1 + _shengke 摸 1");
+            assert_eq!(e.debug_hand(0).len(), 4, "不包无懈自定义 Jiguan (lingjiandai) 牌效得 3 + _shengke 摸 1");
         }
     }
 }

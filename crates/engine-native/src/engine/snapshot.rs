@@ -590,6 +590,14 @@ impl Engine {
                         *behavior == crate::content::host::HostBehavior::U05SwdDujianCard.tag()
                             && catalog.cards.iter().any(|c| c.kind == CardKind::Dujian)
                     }
+                    "xiangyuye" => {
+                        *behavior == crate::content::host::HostBehavior::U05SwdXiangyuyeCard.tag()
+                            && catalog.cards.iter().any(|c| c.kind == CardKind::Xiangyuye)
+                    }
+                    "huanpodan" => {
+                        *behavior == crate::content::host::HostBehavior::U05SwdHuanpodanCard.tag()
+                            && catalog.cards.iter().any(|c| c.kind == CardKind::Huanpodan)
+                    }
                     _ => false,
                 };
                 if !skill_ok && !card_ok {

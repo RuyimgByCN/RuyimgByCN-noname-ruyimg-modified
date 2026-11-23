@@ -21,12 +21,12 @@
 //! 2. **时机限制**：**回合外**（`player !== _status.currentPhase`）；
 //! 3. **牌区**：`hes`。
 //!
-//! 原生实现引用：`snap/asks.rs:78`（`is_tao_like`：红桃/方块 → 视为可当【桃】响应濒死救援）。
+//! 原生实现引用：`snap/asks/shapes.rs`（`is_tao_like` 统一委托至
+//! `kernel/combat_rules.rs` `is_tao_like_core`：持急救回合外红桃/方块 → 视为可当【桃】响应濒死救援）。
 //!
-//! **登记差异（本文件固定）**：
-//! - **①回合限制缺失**：原生 `is_tao_like` **只判花色为红**，**没有** `player !== currentPhase`
-//!   的回合外限制 → 自己回合内濒死救援时**也**可用红牌当桃（上游**不允许**）→ **原生更宽松**；
-//! - **②牌区**：上游 `position: "hes"` 含装备/判定区，原生 `is_tao_like` 按牌 id 判定、未区分牌区
+//! **登记差异与修正（本文件固定）**：
+//! - **①回合限制**：`is_tao_like_core` 已补全 `core.turn.current != responder` 且由快照/运行时共用（修复原 `shapes.rs` 缺失）；
+//! - **②牌区**：上游 `position: "hes"` 含装备/判定区，原生 `is_tao_like_core` 按牌 id 判定、未区分牌区
 //!   （本样本只以源码事实固定）。
 //!
 //! 未覆盖（登记）：`check`/`ai` 表现与策略面；濒死救援的完整行为面（需构造濒死场景）。
@@ -36,13 +36,22 @@ use engine_native::Engine;
 /// 上游点 1：原生**确有**「红色牌可当【桃】」的判定（源码事实固定）。
 #[test]
 fn upstream_jijiu_red_card_is_tao_like() {
-    let src = std::fs::read_to_string(concat!(
+    let asks = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
         "/../engine-native-kernel/src/snap/asks/shapes.rs"
     ))
     .expect("读 asks 源码");
-    let idx = src.find("fn is_tao_like").expect("is_tao_like");
-    let seg: String = src[idx..].chars().take(900).collect();
+    assert!(
+        asks.contains("fn is_tao_like") && asks.contains("is_tao_like_core"),
+        "asks/shapes.rs is_tao_like 应委托给 combat_rules::is_tao_like_core"
+    );
+    let src = std::fs::read_to_string(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../engine-native-kernel/src/kernel/combat_rules.rs"
+    ))
+    .expect("读 combat_rules 源码");
+    let idx = src.find("fn is_tao_like_core").expect("is_tao_like_core");
+    let seg: String = src[idx..].chars().take(4200).collect();
     assert!(
         seg.contains("JI_JIU") && seg.contains("Suit::Heart") && seg.contains("Suit::Diamond"),
         "原生依据：持急救时红桃/方块可当桃：{seg}"
@@ -60,21 +69,19 @@ fn upstream_jijiu_red_card_is_tao_like() {
     );
 }
 
-/// **登记差异①**（回合限制缺失）：上游 `player !== _status.currentPhase`（回合外），
-/// 原生 `is_tao_like` **无**该判断 → 自己回合内也可用（**原生更宽松**）。
+/// 回合限制已对齐并由 `is_tao_like_core` 运行时与快照统一复用：限定 `core.turn.current != responder`（回合外）。
 #[test]
 fn upstream_jijiu_turn_restriction_difference_is_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/../engine-native-kernel/src/snap/asks/shapes.rs"
+        "/../engine-native-kernel/src/kernel/combat_rules.rs"
     ))
-    .expect("读 asks 源码");
-    // 只看 jijiu 判定块本身（`let jijiu =` 起 260 字符），避免窗口内混入无关代码
+    .expect("读 combat_rules 源码");
     let idx = src.find("let jijiu =").expect("jijiu 判定块");
-    let seg: String = src[idx..].chars().take(260).collect();
+    let seg: String = src[idx..].chars().take(360).collect();
     assert!(
-        !seg.contains("turn") && !seg.contains("current_phase") && !seg.contains("current"),
-        "差异①固定：原生 jijiu 判定块无回合限制（上游为回合外）：{seg}"
+        seg.contains("turn.current != responder"),
+        "已对齐上游回合外限制：{seg}"
     );
     let up = std::fs::read_to_string(
         std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -94,11 +101,11 @@ fn upstream_jijiu_turn_restriction_difference_is_fixed() {
 fn upstream_jijiu_requires_the_skill() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/../engine-native-kernel/src/snap/asks/shapes.rs"
+        "/../engine-native-kernel/src/kernel/combat_rules.rs"
     ))
-    .expect("读 asks 源码");
-    let idx = src.find("fn is_tao_like").expect("is_tao_like");
-    let seg: String = src[idx..].chars().take(900).collect();
+    .expect("读 combat_rules 源码");
+    let idx = src.find("fn is_tao_like_core").expect("is_tao_like_core");
+    let seg: String = src[idx..].chars().take(4200).collect();
     assert!(
         seg.contains("has_skill(responder, d)"),
         "门槛：仅在持有急救时扩面：{seg}"

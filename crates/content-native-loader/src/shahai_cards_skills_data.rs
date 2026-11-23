@@ -235,7 +235,7 @@ pub const U05_SWD_ALL_CARDS: [(&str, CardKind, u32, Suit, u8); 79] = [
     ("jiguanfeng", CardKind::Jiguan, 0, Suit::Heart, 8), // card/swd/card.js:936
     ("jiguanyuan", CardKind::Jiguan, 0, Suit::Club, 9), // card/swd/card.js:975
     ("shenmiguo", CardKind::Shenmiguo, 0, Suit::Diamond, 10), // card/swd/card.js:1027
-    ("qinglianxindeng", CardKind::Armor, 0, Suit::Spade, 11), // card/swd/card.js:1051
+    ("qinglianxindeng", CardKind::Qinglianxindeng, 0, Suit::Spade, 11), // card/swd/card.js:1051
     ("lingjiandai", CardKind::Jiguan, 0, Suit::Heart, 12), // card/swd/card.js:1062
     ("jiguanshu", CardKind::Jiguan, 0, Suit::Club, 13), // card/swd/card.js:1099
     ("jiguanyaoshu", CardKind::Jiguan, 0, Suit::Diamond, 1), // card/swd/card.js:1212
@@ -248,17 +248,17 @@ pub const U05_SWD_ALL_CARDS: [(&str, CardKind, u32, Suit, u8); 79] = [
     ("hslingjian_yinmilichang", CardKind::Hslingjian, 0, Suit::Club, 8), // card/swd/card.js:1525
     ("xingjunyan", CardKind::Xingjunyan, 0, Suit::Diamond, 9), // card/swd/card.js:1558
     ("qinglonglingzhu", CardKind::Qinglonglingzhu, 0, Suit::Spade, 10), // card/swd/card.js:1569
-    ("baihupifeng", CardKind::Armor, 0, Suit::Heart, 11), // card/swd/card.js:1580
+    ("baihupifeng", CardKind::Baihupifeng, 0, Suit::Heart, 11), // card/swd/card.js:1580
     ("fengxueren", CardKind::Fengxueren, 0, Suit::Club, 12), // card/swd/card.js:1597
     ("chilongya", CardKind::Chilongya, 0, Suit::Diamond, 13), // card/swd/card.js:1609
     ("daihuofenglun", CardKind::Daihuofenglun, 0, Suit::Spade, 1), // card/swd/card.js:1621
     ("xiayuncailing", CardKind::Xiayuncailing, 0, Suit::Heart, 2), // card/swd/card.js:1633
     ("shentoumianju", CardKind::Shentoumianju, 0, Suit::Club, 3), // card/swd/card.js:1639
     ("xianluhui", CardKind::Xianluhui, 0, Suit::Diamond, 4), // card/swd/card.js:1651
-    ("xiangyuye", CardKind::Tao, 0, Suit::Spade, 5), // card/swd/card.js:1685
+    ("xiangyuye", CardKind::Xiangyuye, 0, Suit::Spade, 5), // card/swd/card.js:1685
     ("caoyao", CardKind::Caoyao, 0, Suit::Heart, 6), // card/swd/card.js:1722
     ("tianxianjiu", CardKind::Tianxianjiu, 0, Suit::Club, 7), // card/swd/card.js:1747
-    ("huanpodan", CardKind::Tao, 0, Suit::Diamond, 8), // card/swd/card.js:1855
+    ("huanpodan", CardKind::Huanpodan, 0, Suit::Diamond, 8), // card/swd/card.js:1855
     ("langeguaiyi", CardKind::Langeguaiyi, 0, Suit::Spade, 9), // card/swd/card.js:1890
     ("guiyoujie", CardKind::Guiyoujie, 0, Suit::Heart, 10), // card/swd/card.js:1902
     ("yufulu", CardKind::Yufulu, 0, Suit::Club, 11), // card/swd/card.js:1936
@@ -266,13 +266,13 @@ pub const U05_SWD_ALL_CARDS: [(&str, CardKind, u32, Suit, u8); 79] = [
     ("zhufangshenshi", CardKind::Zhufangshenshi, 0, Suit::Spade, 13), // card/swd/card.js:1958
     ("jingleishan", CardKind::Jingleishan, 0, Suit::Heart, 1), // card/swd/card.js:1995
     ("chiyuxi", CardKind::Chiyuxi, 0, Suit::Club, 2), // card/swd/card.js:2076
-    ("guangshatianyi", CardKind::Armor, 0, Suit::Diamond, 3), // card/swd/card.js:2159
+    ("guangshatianyi", CardKind::Guangshatianyi, 0, Suit::Diamond, 3), // card/swd/card.js:2159
     ("guilingzhitao", CardKind::Guilingzhitao, 0, Suit::Spade, 4), // card/swd/card.js:2170
-    ("qipoguyu", CardKind::WuxingPan, 0, Suit::Heart, 5), // card/swd/card.js:2198
+    ("qipoguyu", CardKind::Qipoguyu, 0, Suit::Heart, 5), // card/swd/card.js:2198
     ("sadengjinhuan", CardKind::Sadengjinhuan, 0, Suit::Club, 6), // card/swd/card.js:2212
     ("sifeizhenmian", CardKind::Sifeizhenmian, 0, Suit::Diamond, 7), // card/swd/card.js:2223
     ("shuchui", CardKind::Shuchui, 0, Suit::Spade, 8), // card/swd/card.js:2235
-    ("guiyanfadao", CardKind::Weapon, 2, Suit::Heart, 9), // card/swd/card.js:2247
+    ("guiyanfadao", CardKind::Guiyanfadao, 2, Suit::Heart, 9), // card/swd/card.js:2247
     ("qiankundai", CardKind::Qiankundai, 0, Suit::Club, 10), // card/swd/card.js:2259
 ];
 

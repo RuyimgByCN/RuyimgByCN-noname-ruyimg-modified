@@ -209,6 +209,10 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
     // 魂殉志·殉（swd 批 132）：出牌阶段**收束**时持有「殉」者死亡（上游
     // hxunzhi2 phaseUseEnd forced player.die() 同口径——直接死亡，非伤害）
     if !begin && phase == Phase::Play {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(player, "u05_tianxianjiu_used_turn".to_string()));
         if let Some(def) = ctx
             .catalog
             .skill_by_name(crate::vocabulary::host::SWD_HXUNZHI2_KEY)
