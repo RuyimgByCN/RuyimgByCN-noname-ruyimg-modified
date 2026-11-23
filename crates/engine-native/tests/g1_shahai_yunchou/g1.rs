@@ -90,31 +90,45 @@ fn g1_yunchou_vertical_existing_kinds_and_lock() {
     snap.core.players[0].hand.push(huoshan);
     snap.core.players[0].hand.push(guohe);
     e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入恢复");
-    // 火杀：按杀结算（占用杀次数），无闪 → 1 点伤害
+    // 火山（card/yunchou/card.js:442，真实规则为自置延时锦囊 `CardKind::Le`）：targets=[] 入己方判定区
     e.debug_set_hp(1, 4);
     let sha_card = e.debug_place(0, "sha");
+    let sha_card2 = e.debug_place(0, "sha");
     let out = submit(
         &mut e,
         0,
         GameAction::PlayCard {
             card: huoshan,
-            targets: vec![1],
+            targets: vec![],
         },
     );
     if let CommandOutcome::Rejected(r) = &out {
-        panic!("火杀被拒: {r:?}");
+        panic!("火山被拒: {r:?}");
     }
     assert!(matches!(
         out,
         CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
     ));
-    assert_eq!(e.debug_hp(1), 3, "火杀 1 点伤害");
-    // 杀次数已占用：普通杀被拒
-    let out2 = submit(
+    assert!(e.debug_judge(0).contains(&huoshan), "火山应进入 0 号判定区");
+    // 常规杀结算 1 点伤害并占用杀次数，第二张杀被拒
+    let out_sha = submit(
         &mut e,
         0,
         GameAction::PlayCard {
             card: sha_card,
+            targets: vec![1],
+        },
+    );
+    assert!(matches!(
+        out_sha,
+        CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+    ));
+    assert_eq!(e.debug_hp(1), 3, "杀 1 点伤害");
+    let out2 = submit(
+        &mut e,
+        0,
+        GameAction::PlayCard {
+            card: sha_card2,
             targets: vec![1],
         },
     );
@@ -655,6 +669,7 @@ fn g1_yunchou_generals_batch6_luweiyan_conversion_and_chain() {
     advance_to(&mut e, 0, Phase::Play);
     // 给 p2 挂装备（水攻弃装备面）+ p2 有手牌
     let zhuge2 = e.debug_place(2, "zhuge");
+    e.state_core_mut().players[2].hand.retain(|c| *c != zhuge2);
     e.state_core_mut().players[2].equips.push(zhuge2);
     // 桃=基本牌：转化不生效（PlayCard 按 Tao 路由=回血拒绝？桃无受伤目标
     // 拒绝）——负例用另一张非基本牌前先验证基本牌不被转化：直接用锦囊
@@ -678,7 +693,27 @@ fn g1_yunchou_generals_batch6_luweiyan_conversion_and_chain() {
         ),
         "无中生有经厉焰转化为水攻受理: {out:?}"
     );
-    settle_optional_confirm(&mut e);
+    while let Some(c) = e.open_choice().cloned() {
+        let sel = if c.spec.prompt == "u05_luweiyan2_target" {
+            vec![ChoiceOption::Player(2)]
+        } else if c.spec.prompt == "u05_shuigong_discard" {
+            vec![ChoiceOption::Card(zhuge2)]
+        } else if c.spec.options.contains(&ChoiceOption::Pass) {
+            vec![ChoiceOption::Pass]
+        } else if c.spec.options.contains(&ChoiceOption::Confirm) {
+            vec![ChoiceOption::Confirm]
+        } else {
+            vec![c.spec.options[0]]
+        };
+        submit(
+            &mut e,
+            c.observer,
+            GameAction::Answer {
+                choice_id: c.id,
+                selection: sel,
+            },
+        );
+    }
     let hp2b = e.debug_hp(2);
     assert!(
         hp2b == hp2 - 1 || hand_len(&e, 2) < h2_before,

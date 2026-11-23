@@ -22,6 +22,8 @@ mod extension_choices_l11_b3;
 mod extension_choices_l11_b4;
 #[path = "extension_choices_l11_b5.rs"]
 mod extension_choices_l11_b5;
+#[path = "extension_choices_u05_1.rs"]
+mod extension_choices_u05_1;
 
 pub(super) fn public_attitude(view: &crate::view::PlayerView, seat: u8, target: u8) -> i32 {
     if target == seat {
@@ -831,6 +833,18 @@ pub(super) fn plan_extension_choice_action(
             max,
             allow_cancel,
         )
+        .or_else(|| {
+            extension_choices_u05_1::plan_u05_b1_choice_action(
+                catalog,
+                input,
+                id,
+                prompt,
+                options,
+                min,
+                max,
+                allow_cancel,
+            )
+        })
         .or_else(|| {
             extension_choices_l10::plan_l10_choice_action(
                 catalog,

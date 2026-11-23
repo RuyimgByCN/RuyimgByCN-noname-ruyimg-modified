@@ -91,7 +91,9 @@ fn upstream_zonghuo_discards_one_without_asking() {
         if !prompts.iter().any(|p| p == c.spec.prompt) {
             prompts.push(format!("{}@obs{}", c.spec.prompt, c.observer));
         }
-        let sel: Vec<ChoiceOption> = if c.spec.prompt == "trigger_confirm" {
+        let sel: Vec<ChoiceOption> = if c.spec.prompt == "u05_zonghuo_discard" {
+            vec![ChoiceOption::Card(marker)]
+        } else if c.spec.prompt == "trigger_confirm" {
             vec![ChoiceOption::Confirm]
         } else if c.spec.options.contains(&ChoiceOption::Pass) {
             vec![ChoiceOption::Pass]
@@ -121,11 +123,10 @@ fn upstream_zonghuo_discards_one_without_asking() {
         "纵火：造成非火焰伤害前应**弃一张手牌**——标记牌应被弃（手牌 {hand_before} → {hand_after}，         现手牌={:?}）",
         e.debug_hand(0)
     );
-    // **登记差异（源码事实）**：原生**自动弃手牌首张**（无「选哪张」询问），
-    // 上游为 `chooseToDiscard`（玩家自选、可取消）——与「取牌选择权」族同族。
+    // 已修复对齐上游 `chooseToDiscard`：造成非火焰伤害前询问 `"u05_zonghuo_discard"` 交互选弃
     assert!(
-        !prompts.iter().any(|p| p.contains("zonghuo")),
-        "登记差异：原生无『选哪张牌』的询问（自动弃首张）"
+        prompts.iter().any(|p| p.contains("zonghuo")),
+        "对齐上游：纵火须弹出『选哪张牌』询问：{prompts:?}"
     );
 }
 

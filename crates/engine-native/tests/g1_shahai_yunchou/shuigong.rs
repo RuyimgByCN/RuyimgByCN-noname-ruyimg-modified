@@ -107,7 +107,22 @@ fn shuigong_multi_target_forced_equip_discard() {
         ),
         "{out:?}"
     );
-    // 无懈窗口（无人持无懈 → 直结算）
+    // 无懈窗口 + 水攻逐目标自选弃装备
+    while let Some(c) = e.open_choice().cloned() {
+        let sel = if c.spec.prompt == "nullify_window" || c.spec.options.contains(&ChoiceOption::Pass) {
+            vec![ChoiceOption::Pass]
+        } else {
+            vec![c.spec.options[0]]
+        };
+        submit(
+            &mut e,
+            c.observer,
+            GameAction::Answer {
+                choice_id: c.id,
+                selection: sel,
+            },
+        );
+    }
     let eq1_after = e.save().core.players[1].equips.contains(&eq1);
     let eq2_after = e.save().core.players[2].equips.contains(&eq2);
     assert!(!eq1_after && !eq2_after, "两目标装备均被强制弃置");

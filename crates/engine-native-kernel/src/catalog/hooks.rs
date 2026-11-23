@@ -125,6 +125,8 @@ pub struct ContentHooks {
     pub on_phase_use_end: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId),
     /// 轮次开始（`roundStart`）宿主轮标、展示清理与 `_relifeskill` 倒数复活钩子。
     pub on_round_start: fn(&mut crate::machine::Ctx<'_>),
+    /// 角色回合开始（`phaseBegin` / `TurnBegin` Commit 段）宿主清理钩子（如 `mhuanyi` 临时标记过期）。
+    pub on_turn_begin: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId),
     /// 手牌移除钩子（如 `xingchong` 在使用/打出/装备/弃置离手时立即摸 2 而不依赖额外事件表）。
     pub on_hand_card_removed:
         fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId, crate::ids::CardId),
@@ -228,6 +230,7 @@ impl ContentHooks {
         on_player_died: |_, _| {},
         on_phase_use_end: |_, _| {},
         on_round_start: |_| {},
+        on_turn_begin: |_, _| {},
         on_hand_card_removed: |_, _, _| {},
         reguhuo_response_skill: |_, _, _, _| None,
         scsanruo_response_skill: |_, _, _, _| None,

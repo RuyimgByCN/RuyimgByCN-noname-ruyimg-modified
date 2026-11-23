@@ -152,11 +152,20 @@ fn zf_dizaizhen_major_faction_draw() {
         snap.core.players[0].hand.insert(0, dz);
         e = Engine::restore_with_extensions(&snap, &[&pack]).expect("地载阵注入②");
     }
+    // 全魏（无非大者，enable=false）：无目标出牌触发 `recastable: true` 重铸，指定目标被拒
+    let out_t = play(&mut e, dz, vec![0]);
+    assert!(
+        matches!(out_t, CommandOutcome::Rejected(RejectReason::IllegalTargets)),
+        "无非大者指定目标应拒: {out_t:?}"
+    );
     let out = play(&mut e, dz, vec![]);
     assert!(
-        matches!(out, CommandOutcome::Rejected(RejectReason::IllegalTargets)),
-        "无非大者应拒: {out:?}"
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "无非大者无目标应重铸: {out:?}"
     );
+    assert!(e.save().core.discard.contains(&dz), "重铸地载阵应进入弃牌堆");
+    assert_eq!(e.debug_hand(1).len(), 0, "重铸不得触发魏角色摸牌");
+    assert_eq!(e.debug_hand(2).len(), 0, "重铸不得触发魏角色摸牌");
 }
 
 /// ② 真实宿主全生命周期（六步，mtg 首切片模板）。
@@ -331,17 +340,17 @@ fn zf_qixingzhen_siege_discard_and_virtual_sha() {
 
     let out = play(&mut e, qx, vec![2]);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
-    // 阶段一：围攻者 1/3 各被询问弃 1
-    let tao_of = |obs: u8| if obs == 1 { tao1q } else { tao3q };
-    for expect_obs in [1u8, 3u8] {
+    // 阶段一：施放者（2 号）依次为围攻者 1/3 选择弃 1 张手牌
+    let tao_of = |t: u8| if t == 1 { tao1q } else { tao3q };
+    for expect_target in [1u8, 3u8] {
         let c = e.open_choice().cloned().expect("七星弃牌询问");
         eprintln!("DBG discard ask obs={} prompt={}", c.observer, c.spec.prompt);
-        assert_eq!(c.observer, expect_obs, "弃牌询问轮到围攻者");
+        assert_eq!(c.observer, 2, "弃牌询问由七星阵施放者观察执行");
         let cid = c.id;
         drop(c);
-        submit(&mut e, expect_obs, GameAction::Answer {
+        submit(&mut e, 2, GameAction::Answer {
             choice_id: cid,
-            selection: vec![ChoiceOption::Card(tao_of(expect_obs))],
+            selection: vec![ChoiceOption::Card(tao_of(expect_target))],
         });
     }
     // 阶段二：视为对围攻者用杀——1/3 各响应闪（免伤）

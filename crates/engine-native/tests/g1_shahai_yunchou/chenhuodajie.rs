@@ -90,10 +90,25 @@ fn chenhuodajie_gains_target_hand_card() {
         ),
         "{out:?}"
     );
-    // 无懈窗口（无人持无懈 → 直结算）
+    // 无懈窗口 + 趁火打劫交互选牌
+    while let Some(c) = e.open_choice().cloned() {
+        let sel = if c.spec.prompt == "nullify_window" || c.spec.options.contains(&ChoiceOption::Pass) {
+            vec![ChoiceOption::Pass]
+        } else {
+            vec![c.spec.options[0]]
+        };
+        submit(
+            &mut e,
+            c.observer,
+            GameAction::Answer {
+                choice_id: c.id,
+                selection: sel,
+            },
+        );
+    }
     assert!(
         e.debug_hand(0).contains(&victim),
-        "趁火打劫应获得目标首张手牌"
+        "趁火打劫应获得目标手牌"
     );
     assert!(!e.debug_hand(1).contains(&victim));
 }

@@ -1,6 +1,78 @@
 //! 轩辕剑（swd）阵法牌效果（天覆阵、七星阵、鸟翔阵、长蛇阵、破阵诀）。
 
 use super::super::*;
+use crate::snap::{ask, ExpectedAsk};
+
+pub(in crate::content::host) fn ask_swd_zhenfa_card(
+    behavior: HostBehavior,
+    stage: HostStage,
+    owner: PlayerId,
+    target: Option<PlayerId>,
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+) -> Option<ExpectedAsk> {
+    let t = target?;
+    match behavior {
+        HostBehavior::SwdTianfuzhenCard if stage == HostStage::SelectCard => {
+            let options: Vec<ChoiceOption> = core
+                .player(t)
+                .hand
+                .iter()
+                .copied()
+                .chain(core.player(t).equips.iter().copied())
+                .map(ChoiceOption::Card)
+                .collect();
+            (!options.is_empty()).then(|| {
+                ask(t, "swd_tianfuzhen_discard", ChoiceKind::SelectCards, options, 1, 1, false)
+            })
+        }
+        HostBehavior::SwdQixingzhenCard if stage == HostStage::SelectCard => {
+            let options: Vec<ChoiceOption> = core
+                .player(t)
+                .hand
+                .iter()
+                .copied()
+                .map(ChoiceOption::Card)
+                .collect();
+            (!options.is_empty()).then(|| {
+                ask(owner, "swd_qixingzhen_discard", ChoiceKind::SelectCards, options, 1, 1, false)
+            })
+        }
+        HostBehavior::SwdQixingzhenCard if stage == HostStage::TargetChoice => {
+            let options: Vec<ChoiceOption> = core
+                .player(t)
+                .hand
+                .iter()
+                .copied()
+                .filter(|c| catalog.card_kind(*c) == CardKind::Shan)
+                .map(ChoiceOption::Card)
+                .collect();
+            (!options.is_empty()).then(|| {
+                ask(t, "swd_qixingzhen_shan", ChoiceKind::SelectCards, options, 0, 1, true)
+            })
+        }
+        HostBehavior::SwdNiaoxiangzhenCard if stage == HostStage::TargetChoice => {
+            let options: Vec<ChoiceOption> = core
+                .player(t)
+                .hand
+                .iter()
+                .copied()
+                .filter(|c| catalog.card_kind(*c) == CardKind::Shan)
+                .map(ChoiceOption::Card)
+                .collect();
+            Some(ask(
+                t,
+                "swd_niaoxiangzhen_shan",
+                ChoiceKind::SelectCards,
+                options,
+                0,
+                1,
+                true,
+            ))
+        }
+        _ => None,
+    }
+}
 
 impl HostMachine {
     pub(super) fn step_swd_zhenfa_cards(&mut self, ctx: &mut Ctx<'_>) -> Flow {
@@ -82,7 +154,6 @@ impl HostMachine {
                             .hand
                             .iter()
                             .copied()
-                            .chain(ctx.core.player(t).equips.iter().copied())
                             .map(ChoiceOption::Card)
                             .collect();
                         if options.is_empty() {
@@ -90,7 +161,7 @@ impl HostMachine {
                         }
                         self.stage = HostStage::SelectCard;
                         return Flow::WaitChoice {
-                            observer: t,
+                            observer: self.owner,
                             spec: ChoiceSpec {
                                 kind: ChoiceKind::SelectCards,
                                 prompt: "swd_qixingzhen_discard",

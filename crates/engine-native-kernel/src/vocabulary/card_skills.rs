@@ -201,11 +201,18 @@ pub fn card_kind_host_skills(kind: crate::catalog::CardKind) -> &'static [HostSk
                 presentation_binding: None,
             },
         ],
-        CardKind::Bingheyaosai => &[HostSkillDecl {
-            name: MTG_BINGHEYAOSAI_KEY,
-            behavior: HostBehavior::MtgBingheyaosaiLand,
-            presentation_binding: None,
-        }],
+        CardKind::Bingheyaosai => &[
+            HostSkillDecl {
+                name: MTG_BINGHEYAOSAI_KEY,
+                behavior: HostBehavior::MtgBingheyaosaiLand,
+                presentation_binding: None,
+            },
+            HostSkillDecl {
+                name: "mtg_bingheyaosai_skill",
+                behavior: HostBehavior::U05MtgLandExtraBatch,
+                presentation_binding: None,
+            },
+        ],
         CardKind::Youlin => &[
             HostSkillDecl {
                 name: MTG_YOULIN_KEY,
@@ -218,11 +225,18 @@ pub fn card_kind_host_skills(kind: crate::catalog::CardKind) -> &'static [HostSk
                 presentation_binding: None,
             },
         ],
-        CardKind::Lindixiliu => &[HostSkillDecl {
-            name: MTG_LINDIXILIU_KEY,
-            behavior: HostBehavior::MtgLindixiliuLand,
-            presentation_binding: None,
-        }],
+        CardKind::Lindixiliu => &[
+            HostSkillDecl {
+                name: MTG_LINDIXILIU_KEY,
+                behavior: HostBehavior::MtgLindixiliuLand,
+                presentation_binding: None,
+            },
+            HostSkillDecl {
+                name: "mtg_lindixiliu_skill",
+                behavior: HostBehavior::U05MtgLandExtraBatch,
+                presentation_binding: None,
+            },
+        ],
         CardKind::Jiguan => &[
             HostSkillDecl {
                 name: SWD_GOUHUNLUO_SUB_KEY,

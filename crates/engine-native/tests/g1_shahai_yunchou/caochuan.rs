@@ -223,17 +223,18 @@ fn caochuan_no_sha_branch_shows_and_discards() {
     let c = e.open_choice().expect("分支选择挂起");
     assert_eq!(
         c.spec.options,
-        vec![ChoiceOption::Tag(1)],
-        "无杀时仅剩被弃分支"
+        vec![ChoiceOption::Card(victim)],
+        "无杀时直接询问可见区弃牌"
     );
     let cid = c.id;
     let obs = c.observer;
+    let sel = c.spec.options[0];
     submit(
         &mut e,
         obs,
         GameAction::Answer {
             choice_id: cid,
-            selection: vec![ChoiceOption::Tag(1)],
+            selection: vec![sel],
         },
     );
     assert!(e.debug_hand(1).is_empty(), "展示+被弃一张");

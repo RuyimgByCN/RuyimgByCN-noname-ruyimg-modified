@@ -15,6 +15,18 @@ pub(super) fn play_card(
         return play_equip(state, catalog, card, &targets);
     }
     check_play_use_restrictions(core, catalog, card, kind, &targets)?;
+    let actor = core.turn.current;
+    if let Some(res) = super::play_card_u05_zhenfa::try_play_u05_b1_special(
+        state,
+        catalog,
+        actor,
+        card,
+        kind,
+        targets.clone(),
+    ) {
+        return res;
+    }
+    let core = &state.core;
     match kind {
                 CardKind::Xuanyuanjian => {
                     // 轩辕剑（swd 批 146）：无目标；装备者须持有「轩辕」或
@@ -587,7 +599,10 @@ pub(super) fn play_card(
                         .player(holder)
                         .equips
                         .iter()
-                        .any(|c| catalog.card_kind(*c) == CardKind::Weapon);
+                        .any(|c| {
+                            catalog.card_slot_of(core, *c)
+                                == Some(crate::catalog::EquipSlot::Weapon)
+                        });
                     let in_range = core.in_attack_range(catalog, holder, victim);
                     if !has_weapon || !in_range {
                         return Err(RejectReason::IllegalTargets);

@@ -96,20 +96,32 @@ pub(crate) fn host_on_game_start(core: &mut GameStateCore, catalog: &Catalog) {
     super::l01_rules::l01_on_game_start(core, catalog);
 }
 
-/// `dieEnd` 死亡结算后钩子（`alive=false` 落账后）：刷新全场存活 `xiefang` 计数。
-pub(crate) fn host_on_player_died(ctx: &mut Ctx<'_>, _dead: PlayerId) {
+/// `dieEnd` 死亡结算后钩子（`alive=false` 落账后）：刷新全场存活 `xiefang` 计数，并登记 `lingyong` / 清理 `mhuanyi`。
+pub(crate) fn host_on_player_died(ctx: &mut Ctx<'_>, dead: PlayerId) {
     let seats = ctx.core.players.len() as PlayerId;
     for owner in 0..seats {
-        if ctx.core.player(owner).alive
-            && has_skill_named(ctx.core, ctx.catalog, owner, L27_XIEFANG_KEY)
-        {
+        if !ctx.core.player(owner).alive {
+            continue;
+        }
+        if has_skill_named(ctx.core, ctx.catalog, owner, L27_XIEFANG_KEY) {
             refresh_xiefang_mark(ctx.core, ctx.catalog, owner, None);
         }
+        if flag(ctx.core, owner, "u05_mhuanyi_tgt") == u32::from(dead) + 1 {
+            set_flag(ctx.core, owner, "u05_mhuanyi_tgt", 0);
+            set_flag(ctx.core, owner, "u05_mhuanyi_cls", 0);
+        }
+        if has_skill_named(ctx.core, ctx.catalog, owner, "mtongnian")
+            && super::u05_b1_mtg::alive_enemies_hand_empty(ctx.core, owner)
+        {
+            super::u05_b1_mtg::return_mtongnian_links(ctx.core, owner);
+        }
+        super::u05_b1_mtg_subplayer::capture_lingyong_subplayer(ctx, owner, dead);
     }
 }
 
-/// `phaseUseEnd`（出牌阶段结束）钩子：清理 `new_meibu` 与 `bolan` 授予的临时技能及关联标记。
+/// `phaseUseEnd`（出牌阶段结束）钩子：清理 `new_meibu` 与 `bolan` 授予的临时技能及 `mtongnian` 镜像牌。
 pub(crate) fn host_on_phase_use_end(ctx: &mut Ctx<'_>, player: PlayerId) {
+    super::u05_b1_mtg::return_mtongnian_links(ctx.core, player);
     for (flag_key, sk_name) in [
         ("l27_temp_phase_use:new_zhixi", L27_NEW_ZHIXI_KEY),
         ("l27_temp_phase_use:new_meibu_range", L27_NEW_MEIBU_RANGE_KEY),
@@ -174,8 +186,28 @@ pub(crate) fn host_on_round_start(ctx: &mut Ctx<'_>) {
     }
 }
 
-/// 手牌移除钩子：处理 `xingchong` 展示牌在用牌/打出/装备/直接弃手离手时立即摸 2 张并清标。
+/// 角色回合开始（`phaseBegin` / `TurnBegin` Commit 段）钩子：清理 `mhuanyi_target` 等跨回合临时状态。
+pub(crate) fn host_on_turn_begin(ctx: &mut Ctx<'_>, player: PlayerId) {
+    set_flag(ctx.core, player, "u05_mhuanyi_tgt", 0);
+    set_flag(ctx.core, player, "u05_mhuanyi_cls", 0);
+}
+
+/// 手牌移除钩子：处理 `mtg_du_*` 离手失血（非交出/保留在他人手牌），以及 `xingchong` 展示牌离手摸 2。
 pub(crate) fn host_on_hand_card_removed(ctx: &mut Ctx<'_>, player: PlayerId, card: CardId) {
+    if ctx
+        .catalog
+        .cards
+        .get(card as usize)
+        .is_some_and(|cd| cd.name.starts_with("mtg_du_"))
+        && ctx.core.player(player).alive
+        && !ctx
+            .core
+            .players
+            .iter()
+            .any(|p| p.hand.contains(&card) || p.off_court.contains(&card))
+    {
+        ctx.emit(EventData::LoseHp { player, amount: 1 });
+    }
     if ctx.catalog.skill_by_name("xingchong").is_none() {
         return;
     }
@@ -230,6 +262,11 @@ pub(crate) fn on_skill_removed_all(
             if let Some(exp) = core.vm_aux.piles.remove(&(owner, "twfengji".to_string())) {
                 cards.extend(exp);
             }
+        }
+        "lingyong" | "subplayer" => {
+            cards.extend(super::u05_b1_mtg_subplayer::cleanup_lingyong_on_remove(
+                core, owner, skill_name,
+            ));
         }
         _ => {}
     }

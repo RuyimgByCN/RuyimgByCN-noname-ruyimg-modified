@@ -609,6 +609,11 @@ impl HostBehavior {
             HostBehavior::L11Weapons => 740,
             HostBehavior::L11GeneralBossC => 741,
             HostBehavior::L11BossLingfeng => 742,
+            HostBehavior::U05MainStoneBatch => 920,
+            HostBehavior::U05MtgCharBatch => 921,
+            HostBehavior::U05MtgLandExtraBatch => 922,
+            HostBehavior::U05YunchouCharBatch => 923,
+            HostBehavior::U05ZhenfaRecastSkill => 924,
         }
     }
 

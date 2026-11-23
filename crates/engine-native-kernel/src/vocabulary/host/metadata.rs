@@ -894,7 +894,12 @@ impl HostBehavior {
             | HostBehavior::L11SystemHooks
             | HostBehavior::L11Weapons
             | HostBehavior::L11GeneralBossC
-            | HostBehavior::L11BossLingfeng => None,
+            | HostBehavior::L11BossLingfeng
+            | HostBehavior::U05MainStoneBatch
+            | HostBehavior::U05MtgCharBatch
+            | HostBehavior::U05MtgLandExtraBatch
+            | HostBehavior::U05YunchouCharBatch
+            | HostBehavior::U05ZhenfaRecastSkill => None,
             HostBehavior::L01YiyiCard
             | HostBehavior::L01FirstKs
             | HostBehavior::L01NeiKey

@@ -178,18 +178,11 @@ pub(in crate::content::host) fn is_named_wuzhong_unwrapped(
             | "txzhaoshu_skill"
             | "txzhaoshu_global"
             | "huogong"
+            | "mtg_du"
             | "mtg_duzhao"
+            | "g_mtg_duzhao"
             | "mtg_cangbaohaiwan"
-            | "fengyangzhen"
-            | "zf_fengyangzhen"
-            | "yunchuizhen"
-            | "zf_yunchuizhen"
-            | "shepanzhen"
-            | "zf_shepanzhen"
-            | "longfeizhen"
-            | "zf_longfeizhen"
-            | "huyizhen"
-            | "zf_huyizhen"
+            | "g_mtg_cangbaohaiwan"
             | "gw_hudiewu"
             | "gw_xinsheng"
             | "gw_huangjiashenpan"
@@ -582,47 +575,153 @@ pub(super) fn try_named_ext_card(
                 }
             }
         }
-        // U05 MTG land cards (`card/mtg/card.js:99, 391`): once-per-turn land guard
-        "mtg_duzhao" | "mtg_cangbaohaiwan" => {
-            if get_flag(ctx, owner, "mtg_land_played_this_turn") == 0 {
-                set_flag(ctx, owner, "mtg_land_played_this_turn", 1);
-                if key == "mtg_duzhao" {
-                    let m = get_flag(ctx, owner, "mtg_black_mana") + 1;
-                    set_flag(ctx, owner, "mtg_black_mana", m);
-                    if let Some(t) = first_target_or_other(ctx, u) {
-                        let _ = discard_up_to(ctx, t, 1);
-                    }
-                } else {
-                    let m = get_flag(ctx, owner, "mtg_treasure_mana") + 1;
-                    set_flag(ctx, owner, "mtg_treasure_mana", m);
-                    ctx.start_draw(owner, 1);
-                }
-            }
+        // U05 MTG land & token cards (`card/mtg/card.js:99, 391`, `card/yongjian.js:10`)
+        "mtg_du" => {
+            finish_table_card(ctx, card);
+            return Some(None);
         }
-        // U05 Zhenfa cards (`card/zhenfa/card.js:123-269`)
+        "mtg_duzhao" | "g_mtg_duzhao" | "mtg_cangbaohaiwan" | "g_mtg_cangbaohaiwan" => {
+            return Some(Some(Box::new(crate::content::host::HostMachine {
+                def_key: key.to_string(),
+                behavior: crate::content::host::HostBehavior::U05MtgLandExtraBatch,
+                owner,
+                target: None,
+                card: Some(card),
+                cards: Vec::new(),
+                targets: Vec::new(),
+                stage: crate::content::host::HostStage::Act,
+            })));
+        }
+        // U05 Zhenfa cards (`card/zhenfa/card.js:123-319`, nullify window wrapped)
         "fengyangzhen" | "zf_fengyangzhen" => {
-            set_flag(ctx, owner, "u05_mod:fengyangzhen", 1);
-            ctx.start_draw(owner, 1);
+            let targets: Vec<PlayerId> = ctx
+                .core
+                .alive_players()
+                .filter(|&p| ctx.core.sieged(ctx.catalog, p))
+                .collect();
+            let effect = Box::new(crate::content::host::HostMachine {
+                def_key: key.to_string(),
+                behavior: crate::content::host::HostBehavior::U05MainStoneBatch,
+                owner,
+                target: None,
+                card: Some(card),
+                cards: Vec::new(),
+                targets,
+                stage: crate::content::host::HostStage::Act,
+            });
+            return Some(Some(Box::new(crate::kernel::wrap_nullify_window(
+                ctx, card, owner, effect,
+            ))));
         }
         "yunchuizhen" | "zf_yunchuizhen" => {
-            set_flag(ctx, owner, "u05_mod:yunchuizhen", 1);
-            ctx.start_draw(owner, 1);
+            let targets: Vec<PlayerId> = ctx
+                .core
+                .alive_players()
+                .filter(|&p| {
+                    ctx.core
+                        .alive_players()
+                        .any(|v| ctx.core.sieges(ctx.catalog, p, v))
+                })
+                .collect();
+            let effect = Box::new(crate::content::host::HostMachine {
+                def_key: key.to_string(),
+                behavior: crate::content::host::HostBehavior::U05MainStoneBatch,
+                owner,
+                target: None,
+                card: Some(card),
+                cards: Vec::new(),
+                targets,
+                stage: crate::content::host::HostStage::Act,
+            });
+            return Some(Some(Box::new(crate::kernel::wrap_nullify_window(
+                ctx, card, owner, effect,
+            ))));
         }
         "shepanzhen" | "zf_shepanzhen" => {
-            ctx.core.player_mut(owner).linked = true;
-            ctx.start_draw(owner, 1);
+            let effect = Box::new(crate::content::host::HostMachine {
+                def_key: key.to_string(),
+                behavior: crate::content::host::HostBehavior::U05MainStoneBatch,
+                owner,
+                target: None,
+                card: Some(card),
+                cards: Vec::new(),
+                targets: Vec::new(),
+                stage: crate::content::host::HostStage::Act,
+            });
+            return Some(Some(Box::new(crate::kernel::wrap_nullify_window(
+                ctx, card, owner, effect,
+            ))));
         }
         "longfeizhen" | "zf_longfeizhen" => {
-            if let Some(t) = first_target_or_other(ctx, u) {
-                let _ = discard_up_to(ctx, t, 1);
-            }
-            ctx.start_draw(owner, 1);
+            let targets: Vec<PlayerId> = if !u.targets.is_empty() {
+                ctx.core
+                    .seat_order_from(owner)
+                    .into_iter()
+                    .filter(|p| u.targets.contains(p) && ctx.core.player(*p).alive)
+                    .collect()
+            } else {
+                let (next, prev) = ctx.core.alive_neighbors(owner);
+                let mut t = Vec::new();
+                if let Some(n) = next {
+                    if n != owner {
+                        t.push(n);
+                    }
+                }
+                if let Some(p) = prev {
+                    if p != owner && !t.contains(&p) {
+                        t.push(p);
+                    }
+                }
+                t
+            };
+            let effect = Box::new(crate::content::host::HostMachine {
+                def_key: key.to_string(),
+                behavior: crate::content::host::HostBehavior::U05MainStoneBatch,
+                owner,
+                target: None,
+                card: Some(card),
+                cards: Vec::new(),
+                targets,
+                stage: crate::content::host::HostStage::Act,
+            });
+            return Some(Some(Box::new(crate::kernel::wrap_nullify_window(
+                ctx, card, owner, effect,
+            ))));
         }
         "huyizhen" | "zf_huyizhen" => {
-            let _ = discard_up_to(ctx, owner, 1);
-            if let Some(t) = first_target_or_other(ctx, u) {
-                let _ = discard_up_to(ctx, t, 1);
+            let mut pairs: Vec<PlayerId> = Vec::new();
+            let mut first_victim = None;
+            for &victim in &u.targets {
+                if !ctx.core.player(victim).alive {
+                    continue;
+                }
+                if first_victim.is_none() {
+                    first_victim = Some(victim);
+                }
+                for p in ctx.core.seat_order_from(owner) {
+                    if ctx.core.player(p).alive && ctx.core.sieges(ctx.catalog, p, victim) {
+                        pairs.push(victim);
+                        pairs.push(p);
+                    }
+                }
             }
+            let Some(primary_victim) = first_victim else {
+                finish_table_card(ctx, card);
+                return Some(None);
+            };
+            let effect = Box::new(crate::content::host::HostMachine {
+                def_key: key.to_string(),
+                behavior: crate::content::host::HostBehavior::U05MainStoneBatch,
+                owner,
+                target: Some(primary_victim),
+                card: Some(card),
+                cards: Vec::new(),
+                targets: pairs,
+                stage: crate::content::host::HostStage::Act,
+            });
+            return Some(Some(Box::new(crate::kernel::wrap_nullify_window(
+                ctx, card, owner, effect,
+            ))));
         }
         // U05 Gwent gold/silver/adventure cards (`card/gwent/card.js` & `character/gwent/card.js`)
         "gw_hudiewu" | "gw_xinsheng" | "gw_huangjiashenpan" | "gw_chongci"

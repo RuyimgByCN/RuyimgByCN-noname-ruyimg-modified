@@ -335,6 +335,18 @@ impl HostSkillBehavior {
             HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng => {
                 super::step::l11_boss_c::activate_l11_boss_c(self, ctx, owner)
             }
+            HostBehavior::U05MainStoneBatch | HostBehavior::U05ZhenfaRecastSkill => {
+                super::step::u05_b1_zhenfa::activate_u05_zhenfa(self, ctx, owner)
+                    .map(|m| Box::new(m) as Box<dyn crate::catalog::SkillMachine>)
+            }
+            HostBehavior::U05MtgCharBatch | HostBehavior::U05MtgLandExtraBatch => {
+                super::step::u05_b1_mtg::activate_u05_mtg(self, ctx, owner)
+                    .map(|m| Box::new(m) as Box<dyn crate::catalog::SkillMachine>)
+            }
+            HostBehavior::U05YunchouCharBatch => {
+                super::step::u05_b1_yunchou::activate_u05_yunchou_char(self, ctx, owner)
+                    .map(|m| Box::new(m) as Box<dyn crate::catalog::SkillMachine>)
+            }
             _ => None,
         }
     }
@@ -580,6 +592,11 @@ pub(in crate::content::host) fn has_phase_use_activation(
             crate::vocabulary::host::L01_FIX_EQZ_KEY
                 | crate::vocabulary::host::L01_FIX_ECF_KEY
         ),
+        HostBehavior::U05ZhenfaRecastSkill => name == "u05_zhenfa_recast",
+        HostBehavior::U05MtgCharBatch => name == "lingyong",
+        HostBehavior::U05YunchouCharBatch => {
+            matches!(name, "xinfu_jingxie" | "ycnxinfu_qiaosi" | "xinfu_qiaosi")
+        }
         _ => false,
     }
 }

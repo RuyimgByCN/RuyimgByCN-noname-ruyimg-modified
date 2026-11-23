@@ -517,7 +517,7 @@ pub fn intrinsic_machine(
                     {
                         let _ = ctx.recover(u.player, 1, Some(card));
                     }
-                    let target = *u.targets.first().expect("delayed trick has one target");
+                    let target = *u.targets.first().unwrap_or(&u.player);
                     let effect = PlaceDelayedMachine {
                         card: card,
                         target,

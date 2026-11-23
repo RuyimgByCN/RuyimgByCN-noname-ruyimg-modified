@@ -602,6 +602,14 @@ impl ShaResolveMachine {
                 .copied()
                 .unwrap_or(0)
                 != 0
+            || ctx
+                .core
+                .vm_aux
+                .flags
+                .get(&(self.source, "u05_yunchuizhen_wushuang".to_string()))
+                .copied()
+                .unwrap_or(0)
+                != 0
     }
 
     /// 来源是否持有 L25 `configs:ssr_luoyi`（使用杀需要目标多出一张闪；不可闪避/`directHit` 时不生效）。

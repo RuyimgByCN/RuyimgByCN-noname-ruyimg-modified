@@ -35,8 +35,8 @@
 //! （原生从 0 号起，上游从当前回合角色起——单次发动下均为「座位序」，未逐点比对起始点）。
 
 mod nc08_common;
-use engine_native::{CommandOutcome, Engine, GameAction, GameCommand};
-use nc08_common::{advance_to_play, drain, next_dedup};
+use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand};
+use nc08_common::{advance_to_play, next_dedup};
 
 /// 运筹帷幄：**双产物桥接**（武将面在 `character.json`）。
 fn yunchou_engine(seed: u64) -> Engine {
@@ -111,16 +111,32 @@ fn upstream_jieyan_discards_red_and_damages_others() {
         ),
         "隙焰应可发动：{out:?}"
     );
-    drain(&mut e);
+    while let Some(c) = e.open_choice().cloned() {
+        let sel = if c.spec.prompt == "u05_jieyan_red" {
+            vec![ChoiceOption::Card(red)]
+        } else if c.spec.options.contains(&ChoiceOption::Pass) {
+            vec![ChoiceOption::Pass]
+        } else {
+            c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+        };
+        let _ = e.submit(GameCommand {
+            actor: c.observer,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::Answer { choice_id: c.id, selection: sel },
+        });
+    }
     let hp_after: Vec<i32> = (0..4).map(|p| e.debug_hp(p)).collect();
     let hand = e.debug_hand(0);
     eprintln!("DBG 隙焰：hp {hp:?} → {hp_after:?}；自己手牌={hand:?}（红={red} 黑={black}）");
     assert!(!hand.contains(&red), "隙焰：应弃置一张**红色**手牌");
     assert!(hand.contains(&black), "隙焰：黑牌应保留");
     assert_eq!(
-        hp_after[0], hp[0],
-        "**差异登记**：原生**排除使用者**（0 号 hp 不变：{} → {}）",
-        hp[0], hp_after[0]
+        hp_after[0],
+        hp[0] - 1,
+        "已对齐上游 `filterTarget: true`：隙焰含使用者（0 号 hp：{} → {}）",
+        hp[0],
+        hp_after[0]
     );
     for p in 1..4 {
         assert_eq!(

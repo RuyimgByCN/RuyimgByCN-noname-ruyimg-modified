@@ -2,7 +2,9 @@ use super::*;
 mod judge;
 mod sha;
 mod shapes;
+mod standard_skills;
 pub use shapes::*;
+use standard_skills::{active_standard_skill_or_trick_ask, optional_source};
 
 // ---------------------------------------------------------------------------
 // 开放选择承接派生（N04-e）
@@ -122,8 +124,32 @@ pub fn active_ask(
             responders,
             asked,
             dying,
+            guihan_asked,
             ..
         } => {
+            if *guihan_asked {
+                let options: Vec<ChoiceOption> = (0..core.players.len() as u8)
+                    .filter(|&i| {
+                        i != *dying
+                            && core.player(i).alive
+                            && core.matches_gender(
+                                catalog,
+                                i,
+                                crate::vocabulary::generals::Gender::Male,
+                            )
+                    })
+                    .map(ChoiceOption::Player)
+                    .collect();
+                return Some(ask(
+                    *dying,
+                    "wudian_guihan_ask",
+                    ChoiceKind::SelectPlayers,
+                    options,
+                    0,
+                    1,
+                    true,
+                ));
+            }
             if !*asked {
                 return None;
             }
@@ -825,76 +851,6 @@ pub fn active_ask(
             }
             _ => None,
         },
-        MachineSnapshot::QingNang { owner, stage, .. } => match stage {
-            QingNangStageSnap::TargetRead => {
-                let wounded: Vec<ChoiceOption> = core
-                    .alive_players()
-                    .filter(|p| {
-                        *p != *owner && {
-                            let pl = core.player(*p);
-                            pl.alive && (pl.hp as i64) < (pl.max_hp as i64)
-                        }
-                    })
-                    .map(ChoiceOption::Player)
-                    .collect();
-                Some(ask(
-                    *owner,
-                    "qingnang_target",
-                    ChoiceKind::SelectPlayers,
-                    wounded,
-                    1,
-                    1,
-                    true,
-                ))
-            }
-            QingNangStageSnap::CardRead => Some(ask(
-                *owner,
-                "qingnang_card",
-                ChoiceKind::SelectCards,
-                hand_card_options(&core.player(*owner).hand),
-                1,
-                1,
-                true,
-            )),
-            _ => None,
-        },
-        MachineSnapshot::JiJi { owner, stage, .. } => match stage {
-            JiJiStageSnap::GiveCard => Some(ask(
-                *owner,
-                "jiji_target",
-                ChoiceKind::SelectPlayers,
-                other_player_options(core, *owner),
-                0,
-                1,
-                true,
-            )),
-            JiJiStageSnap::GiveChooseCard => Some(ask(
-                *owner,
-                "jiji_card",
-                ChoiceKind::SelectCards,
-                hand_card_options(&core.player(*owner).hand),
-                1,
-                1,
-                true,
-            )),
-            _ => None,
-        },
-        MachineSnapshot::ZhiHeng { owner, stage } => match stage {
-            ZhiHengStageSnap::Draw => {
-                let hand = &core.player(*owner).hand;
-                let max = hand.len();
-                Some(ask(
-                    *owner,
-                    "zhiheng_select",
-                    ChoiceKind::SelectCards,
-                    hand_card_options(hand),
-                    0,
-                    max,
-                    true,
-                ))
-            }
-            _ => None,
-        },
         // ---- G1 规则宿主机器 ----
         MachineSnapshot::Host {
             behavior,
@@ -916,104 +872,15 @@ pub fn active_ask(
             core,
             catalog,
         ),
-        MachineSnapshot::Dismantle {
-            source,
-            target,
-            asked,
-            ..
-        } => {
-            if !*asked
-                || !catalog
-                    .skill_by_name("txhj_kapaikeshi")
-                    .is_some_and(|d| core.has_skill(*source, d))
-            {
-                return None;
-            }
-            let t = core.player(*target);
-            let options: Vec<ChoiceOption> = t
-                .hand
-                .iter()
-                .chain(t.equips.iter())
-                .chain(t.judge.iter())
-                .copied()
-                .map(ChoiceOption::Card)
-                .collect();
-            (!options.is_empty()).then(|| {
-                ask(
-                    *source,
-                    "txhj_kapaikeshi:choose_card",
-                    ChoiceKind::SelectCards,
-                    options,
-                    1,
-                    1,
-                    false,
-                )
-            })
-        }
-        MachineSnapshot::Snatch {
-            source,
-            target,
-            asked,
-            ..
-        } => {
-            if !*asked
-                || !catalog
-                    .skill_by_name("txhj_kapaikeshi")
-                    .is_some_and(|d| core.has_skill(*source, d))
-            {
-                return None;
-            }
-            let t = core.player(*target);
-            let options: Vec<ChoiceOption> = t
-                .hand
-                .iter()
-                .chain(t.equips.iter())
-                .copied()
-                .map(ChoiceOption::Card)
-                .collect();
-            (!options.is_empty()).then(|| {
-                ask(
-                    *source,
-                    "txhj_kapaikeshi:choose_card",
-                    ChoiceKind::SelectCards,
-                    options,
-                    1,
-                    1,
-                    false,
-                )
-            })
+        MachineSnapshot::QingNang { .. }
+        | MachineSnapshot::JiJi { .. }
+        | MachineSnapshot::ZhiHeng { .. }
+        | MachineSnapshot::Jiedao { .. }
+        | MachineSnapshot::Dismantle { .. }
+        | MachineSnapshot::Snatch { .. } => {
+            active_standard_skill_or_trick_ask(machine, core, catalog)
         }
         // ---- 无询问机器 ----
         _ => None,
     }
-}
-
-// Only OptionalGate::step has the direct delegation contract used by this source.
-fn optional_source(machine: &MachineSnapshot, catalog: &Catalog) -> Option<&'static str> {
-    let MachineSnapshot::OptionalGate {
-        def, asked, inner, ..
-    } = machine
-    else {
-        return None;
-    };
-    if let Some(inner) = inner {
-        return optional_source(inner, catalog);
-    }
-    if !asked {
-        return None;
-    }
-    let declared = catalog.skills.get(*def as usize)?;
-    if declared.name.is_empty()
-        || declared.behavior.is_vm_skill()
-        || !declared.trigger.as_ref().is_some_and(|meta| meta.optional)
-        || catalog
-            .skills
-            .iter()
-            .filter(|entry| entry.name == declared.name)
-            .count()
-            != 1
-    {
-        return None;
-    }
-    Some(declared.name)
 }

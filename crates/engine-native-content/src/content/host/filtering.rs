@@ -42,6 +42,15 @@ impl HostSkillBehavior {
                 _ => false,
             };
         }
+        if matches!(event, EventData::Death { .. })
+            && frame.stage != crate::event::Stage::BeforeTriggers
+            && matches!(
+                self.behavior,
+                HostBehavior::U05MtgCharBatch | HostBehavior::U05YunchouCharBatch
+            )
+        {
+            return false;
+        }
         if self.behavior == HostBehavior::ShengkeCheck {
             return wuxing::shengke_matches_in_frame(ctx, frame.id, owner, event);
         }
@@ -145,12 +154,6 @@ impl HostSkillBehavior {
         event: &EventData,
     ) -> bool {
         match self.behavior {
-            // 厉焰·链杀：持有者以水攻用牌（使用者=持有者；kind 按**结算
-            // 种**（use_as 转化声明优先，目录种兜底）——厉焰转化的牌目录
-            // 种非水攻）
-            // 厉焰·链杀：持有者以水攻用牌（结算种 use_as 优先；语义集
-            // 中在 helper）
-            HostBehavior::YunchouLuweiyan2 => self.filter_common(ctx, owner, event),
             HostBehavior::YunchouJieyan => self.filter_common(ctx, owner, event),
             HostBehavior::YunchouYiesheng => self.filter_common(ctx, owner, event),
             HostBehavior::WudianDiyjuntun => self.filter_common(ctx, owner, event),
@@ -582,27 +585,23 @@ impl HostSkillBehavior {
             // 悲歌：伤害由杀造成、受伤者在场、持有者有牌
             HostBehavior::YunchouBeige => self.filter_common(ctx, owner, event),
             HostBehavior::WudianLiduan => self.filter_common(ctx, owner, event),
-            // 蝉缘·变体：有来源的死亡
-            HostBehavior::YunchouDiychanyuan => self.filter_common(ctx, owner, event),
+            // 红莲/纵火/烧营/戏才/狂骨/蝉缘/狡黠/厉焰：Batch U05-1 完整规则过滤
+            HostBehavior::YunchouHonglian
+            | HostBehavior::YunchouZonghuo
+            | HostBehavior::YunchouShaoying
+            | HostBehavior::YunchouXicai
+            | HostBehavior::YunchouDiykuanggu
+            | HostBehavior::YunchouDiychanyuan
+            | HostBehavior::YunchouLuweiyan2
+            | HostBehavior::YunchouJiaoxia => {
+                super::step::u05_b1_yunchou::filter_yunchou_existing(self.behavior, ctx, owner, event)
+            }
             // 蛊惑·变体：自己回合开始且区域有牌
             HostBehavior::YunchouDiyguhuo => self.filter_common(ctx, owner, event),
-            // 狡黠：成为红色牌的目标（使用者不限）
-            HostBehavior::YunchouJiaoxia => self.filter_common(ctx, owner, event),
-            // 红莲：受到来源为其他角色的伤害且来源有红牌
-            HostBehavior::YunchouHonglian => self.filter_common(ctx, owner, event),
-            // 纵火：自己造成的非火伤害（前置窗）
-            HostBehavior::YunchouZonghuo => self.filter_common(ctx, owner, event),
-            // 烧营：自己造成的火伤害
-            HostBehavior::YunchouShaoying => self.filter_common(ctx, owner, event),
             // 雄姿：自己摸牌阶段开始（固定摸 2 后补摸）
             HostBehavior::YunchouXiongzi => self.filter_common(ctx, owner, event),
             // 雅量：自己造成或受到伤害，双方存活且异人
             HostBehavior::YunchouYaliang => self.filter_common(ctx, owner, event),
-            // 戏才：自己受到有牌伤害（可选确认门走 trigger_meta optional）
-            HostBehavior::YunchouXicai => self.filter_common(ctx, owner, event),
-            // 狂骨·变体：自己造成伤害；满血时要求目标攻击距离 >1（受伤
-            // 恒真——回复分支在效果内自检）
-            HostBehavior::YunchouDiykuanggu => self.filter_common(ctx, owner, event),
             HostBehavior::ShaDamageForceDiscard => self.filter_common(ctx, owner, event),
             HostBehavior::PhaseEndRecoverOrDraw => self.filter_common(ctx, owner, event),
             HostBehavior::TargetDiscardEquipOrDamage => self.filter_common(ctx, owner, event),
@@ -965,6 +964,15 @@ impl HostSkillBehavior {
                 super::step::l11_boss_c::filter_l11_boss_c_with_frames(
                     self, ctx, &[], None, owner, event,
                 )
+            }
+            HostBehavior::U05MainStoneBatch | HostBehavior::U05ZhenfaRecastSkill => {
+                super::step::u05_b1_zhenfa::filter_u05_zhenfa(self, ctx, owner, event)
+            }
+            HostBehavior::U05MtgCharBatch | HostBehavior::U05MtgLandExtraBatch => {
+                super::step::u05_b1_mtg::filter_u05_mtg(self, ctx, owner, event)
+            }
+            HostBehavior::U05YunchouCharBatch => {
+                super::step::u05_b1_yunchou::filter_u05_yunchou_char(self, ctx, owner, event)
             }
             _ => false,
         }

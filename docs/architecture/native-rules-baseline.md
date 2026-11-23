@@ -1,5 +1,17 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+## 2026-11-23 Batch U05-1（U05 杀海拾遗 87 项语义对齐、`Jiedao` 武器与快照修复及 7 项保留边界）
+
+- **不变量保持**：`RULES_VERSION=333`、`NGSA=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。
+- **主线合入语义修复边界**：
+  - `Jiedao`（`crates/engine-native/src/engine/play_card.rs:603-604`、`crates/engine-native-kernel/src/kernel/tricks.rs`）已对齐 `EquipSlot::Weapon` 装备栏武器判定；主线同步补齐 `MachineSnapshot::Jiedao { owner, holder, victim, stage }` 在 [restore.rs](../../crates/engine-native-kernel/src/snap/restore.rs#L24)、[asks.rs](../../crates/engine-native-kernel/src/snap/asks.rs#L878) 与 [standard_skills.rs](../../crates/engine-native-kernel/src/snap/asks/standard_skills.rs#L81) 的 `JiedaoStage::{Ask, Read}` 及 `"jiedao_sha_or_give"` 恢复与问询推导，保证真实对局持久化往返一致。
+  - `part3_d2.rs`（`u01_fix3_14_dddlianer` / `u01_fix3_15_dddanzhi`）不再借用 `decision34_pack9.rs` 的黑桃 `Wuzhong`（`mtg_duzhao` 已按 Batch U05-1 实装 `u05_mtg_duzhao_target` 选择），改用标准黑色 `CardKind::Chain`（`blk_chain`）。
+- **明确保留为 `简化近似` 的 `7` 项边界**（[inventory_status.json](../migration/g0/inventory_status.json)；另保留 Batch UI-7 `U05:configs:tip` 为 `已复核等价`）：
+  1. `U05:cards:qixingzhen`：`SwdQixingzhenCard` 仍沿用 `swd_qixingzhen_shan` 服务 `g1_shahai_zhenfa.rs:360`，未改为真实虚拟 `Sha`。
+  2. `U05:generals:diy_caiwenji`：上游 `diy_caiwenji` 载入 `archive/upstream/noname/character/shenhua/skill.js:4814` 原版 `beige`，而主线 [host_skill_bindings.rs](../../crates/content-native-loader/src/host_skill_bindings.rs#L24) 与 `nc08_upstream_yunchou_beige.rs` 将 `"beige"` 绑定至 `YunchouBeige`/`olbeige`。
+  3. `U05:skills:stone_chenshui`：当前内核无 `GameMode::Stone` 与 `getLeader()` 接口，沿用 `u05_stone_leader` 标记与牌堆/弃牌堆检索替代。
+  4. `U05:configs:{mtg,zhenfa,gwent,yunchou}`：4 项模式子包配置开关尚未接入 `start_locked_engine_with_shahai_config` 的独立过滤。
+
 ## 2026-11-23 Batch L11-6b（L11 太虚幻境 206 模式/侍从/效果包与 `tanbei`/`sidao`/`yisuan`/`kuanggu`/`chanyuan`/`hongyan` 等收口）语义对齐与隔离边界（待提交／发布）
 
 基线 HEAD `6ecddea03c8c2d5317da85780609de16f8306e70`（Batch L11-6a 已发布，CI Run `45074648377` Attempt 1 `10/10 success`）；版本号零变更（规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`），14 项标准 golden 哈希与冻结 `u01-dddanzhi-pending-v107.ngsa` 静态内容锁保持不变。语义对齐与隔离边界：1）接入 `taixu_mode/*` 全 206 项战役/事件/侍灵节点与 `taixu_battle.rs`（`Equip1..6` 全装备栏、`dieAfter2`/`txhj` 败北与 Boss 击杀裁定、`compute_score`、`Turn 1 Prepare` 开局、`player_seat == 0` 调度、商城防重购与错牌兜底剥离）；2）补齐 `l11_effect_pack*`（`kuanggu` 含死位端点距离 `seat_distance_with_dead_endpoints`、`hongyan`/`effective_card_suit`＋`sha/armor.rs` 八卦融合`_eloDraw`、`chanyuan` 于 `catalog_queries.rs` 协同 `l10_rechanyuan`/`hp <= 1` 统一封技、`txhj_tanshi`/`xingshang`/`hengzheng`/`xinfu_tanbei`〔`hej` 与目标禁/无限解耦〕/`xinfu_yisuan`〔`discard||table`＋`lose_max_hp`＋公开获牌〕/`xinfu_lveming`/`xinfu_tunjun`/`xinfu_sidao`〔移出 `view_as` VM 桩改挂 `Phase::Play` `useCardAfter` 手牌转化〕）及 `lijue`/`guosi`/`zhangji`；3）`known_prompts_l11_b5.rs` 仅尾端追加 `"_txhj_skill_addEffectStyle:mulligan"`；4）按 `#100` 仅升级 `35` 项无外部阻塞依赖 `L11:modes:*` 至 `已复核等价`，其余 `171` 项（含 `action` Spine 元数据）维持 `简化近似`。见 [Batch L11-6b 复核摘要](../operations/evidence/2026-11-23-batch3-6b-l11-6b/README.md)。

@@ -107,7 +107,9 @@ fn upstream_shaoying_reveals_deck_top_and_burns_red() {
         if !prompts.iter().any(|p| p == c.spec.prompt) {
             prompts.push(c.spec.prompt.to_string());
         }
-        let sel: Vec<ChoiceOption> = if c.spec.prompt == "trigger_confirm" {
+        let sel: Vec<ChoiceOption> = if c.spec.prompt == "u05_shaoying_target" {
+            vec![ChoiceOption::Player(2)]
+        } else if c.spec.prompt == "trigger_confirm" {
             vec![ChoiceOption::Confirm]
         } else if c.spec.options.contains(&ChoiceOption::Pass) {
             vec![ChoiceOption::Pass]
@@ -177,7 +179,23 @@ fn upstream_shaoying_black_reveal_no_burn() {
     }
     let hp_before: Vec<i32> = (0..4).map(|p| e.debug_hp(p)).collect();
     e.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Fire);
-    drain(&mut e);
+    while let Some(c) = e.open_choice().cloned() {
+        let sel = if c.spec.prompt == "u05_shaoying_target" {
+            vec![ChoiceOption::Player(2)]
+        } else if c.spec.options.contains(&ChoiceOption::Confirm) {
+            vec![ChoiceOption::Confirm]
+        } else if c.spec.options.contains(&ChoiceOption::Pass) {
+            vec![ChoiceOption::Pass]
+        } else {
+            c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+        };
+        let _ = e.submit(GameCommand {
+            actor: c.observer,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::Answer { choice_id: c.id, selection: sel },
+        });
+    }
     let hp_after: Vec<i32> = (0..4).map(|p| e.debug_hp(p)).collect();
     eprintln!("DBG 烧营（黑牌）：hp {hp_before:?} → {hp_after:?}");
     assert_eq!(hp_after[1], hp_before[1] - 1, "0 号的火伤应命中 1 号");

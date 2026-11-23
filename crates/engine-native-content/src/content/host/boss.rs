@@ -80,6 +80,7 @@ pub(super) fn chenhuodajie_damage_gate(
         return false;
     };
     !d.prevented
+        && !d.settlement.notrigger
         && d.amount > 0
         && d.target != owner
         && ctx.state.player(owner).alive
@@ -92,6 +93,15 @@ pub(super) fn chenhuodajie_damage_gate(
             .hand
             .iter()
             .any(|c| ctx.catalog.card_kind(*c) == CardKind::Chenhuodajie)
+        && super::step::u05_b1_mtg_asks::target_enabled2_for_card(
+            ctx.state,
+            ctx.catalog,
+            None,
+            CardKind::Chenhuodajie,
+            None,
+            owner,
+            d.target,
+        )
 }
 
 pub(super) fn with_boss_stage(

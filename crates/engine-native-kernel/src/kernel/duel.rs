@@ -335,7 +335,15 @@ impl crate::catalog::SkillMachine for DuelMachine {
                     .catalog
                     .skill_by_name(crate::vocabulary::names::WU_SHUANG)
                     .map(|d| ctx.core.has_skill(wushuang_holder, d))
-                    .unwrap_or(false);
+                    .unwrap_or(false)
+                    || ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .get(&(wushuang_holder, "u05_yunchuizhen_wushuang".to_string()))
+                        .copied()
+                        .unwrap_or(0)
+                        != 0;
                 let opponent_has_luoyi = ctx
                     .catalog
                     .skill_by_name("ssr_luoyi")

@@ -299,6 +299,9 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
 
     ctx.res.frame_mut(frame_id).expect("damage root").data = EventData::Damage(d.clone());
     hlss_light_refill(ctx, d.target);
+    crate::rvm_bridge::modifiers::d34_u05_b1_mods::on_damage_settled_u05(
+        ctx.core, d.source, d.target,
+    );
     damage_change_hp::commit_damage_change_hp(ctx, &d);
 }
 

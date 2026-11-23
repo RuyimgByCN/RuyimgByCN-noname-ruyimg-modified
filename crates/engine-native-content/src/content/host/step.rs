@@ -27,7 +27,7 @@ mod swd_card_contests;
 mod swd_card_effects;
 mod swd_jiguan_cards;
 mod swd_lingjian_cards;
-mod swd_zhenfa_cards;
+pub(super) mod swd_zhenfa_cards;
 mod swd_card_targets;
 mod swd_card_virtual_sha;
 mod swd_card_attach;
@@ -130,7 +130,7 @@ pub(super) mod l27_fixes;
 pub(super) mod l27_fixes_b;
 pub(crate) use l27_fixes::{
     host_on_game_start, host_on_hand_card_removed, host_on_phase_use_end, host_on_player_died,
-    host_on_round_start as host_on_round_start_l27, on_skill_removed_all,
+    host_on_round_start as host_on_round_start_l27, host_on_turn_begin, on_skill_removed_all,
 };
 pub(super) mod l19_batch_a;
 pub(super) mod l19_batch_b;
@@ -210,6 +210,12 @@ pub(super) mod l11_boss_c2;
 pub(super) mod l11_boss_c_asks;
 pub(super) mod l11_effect_pack;
 pub(super) mod l11_effect_pack_asks;
+pub(super) mod u05_b1_mtg;
+pub(super) mod u05_b1_mtg_asks;
+pub(super) mod u05_b1_mtg_subplayer;
+pub(super) mod u05_b1_yunchou;
+pub(super) mod u05_b1_yunchou_cards;
+pub(super) mod u05_b1_zhenfa;
 
 impl HostMachine {
     pub(super) fn step_behavior(&mut self, ctx: &mut Ctx<'_>) -> Flow {
@@ -618,23 +624,17 @@ impl HostMachine {
             HostBehavior::WudianFuchou => self.step_wudian_status(ctx),
             // 坚壁：锁定查询面（AOE 目标段查询），无独立效果步
             HostBehavior::WudianJianbi => self.step_wudian_status(ctx),
-            // 厉焰：目录锚（转化逻辑在 PlayCard 门，无独立效果步）
-            HostBehavior::YunchouLuweiyan => self.step_yunchou(ctx),
-            // 雄姿：补摸 1+⌊装备数/2⌋
-            HostBehavior::YunchouXiongzi => self.step_yunchou(ctx),
-            // 雅量：伤害双方各摸 1（座位序逐个）
-            HostBehavior::YunchouYaliang => self.step_yunchou(ctx),
-            // 蝉缘·变体：来源体力上限 -1（体力钳上限）
-            HostBehavior::YunchouDiychanyuan => self.step_yunchou(ctx),
+            // 厉焰 / 雄姿 / 雅量 / 蝉缘·变体 / 悲歌（U05-1 统一宿主步进）
+            HostBehavior::YunchouLuweiyan
+            | HostBehavior::YunchouXiongzi
+            | HostBehavior::YunchouYaliang
+            | HostBehavior::YunchouDiychanyuan
+            | HostBehavior::YunchouBeige => u05_b1_yunchou::handle_u05_yunchou_char(self, ctx),
             // 理断：同栏已有装备 → 其交首张手牌（登记差异：上游自选）；
             // 否则直接装备该牌（不走 Equipped 帧防双 grant）
             HostBehavior::WudianLiduan => self.step_wudian_status(ctx),
             // 复仇·清算：标记来源逐个摸 1+虚拟杀强制指定（死亡移除）
             HostBehavior::WudianFuchou2 => self.step_wudian_status(ctx),
-            // 悲歌（refresh 变体）：判定→弃 1 张（可取消）→按判定花色
-            // 分支+收回奖励。登记差异：草花来源弃 2 取首两张确定性；
-            // addExpose（AI 面）不做。
-            HostBehavior::YunchouBeige => self.step_yunchou(ctx),
             // 铁壁：弃首张黑牌 → 目标 +1 护甲（登记差异：上游玩家选弃牌）
             HostBehavior::SwdTiebi => self.step_swd_status(ctx),
             // 流虹：使用杀后摸 1
@@ -858,29 +858,18 @@ impl HostMachine {
             // 屯田·DIY：自选一张装备牌（手/场）弃之，牌堆随机获得一张
             // 装备牌（实体发现模式；deck+discard 无装备则仅弃置）
             HostBehavior::WudianDiyjuntun => self.step_wudian_cards(ctx),
-            // 隙焰：弃首张红手牌（登记差异）→ 全体其他存活座位序各 1 火
-            HostBehavior::YunchouJieyan => self.step_yunchou(ctx),
-            // 野升：自选任意张黑手牌 → 弃所选摸等量（舒筋散机器同构）
-            HostBehavior::YunchouYiesheng => self.step_yunchou(ctx),
-            // 厉焰·链杀：对座位序首目标视为用杀（虚拟杀直发；登记差异：
-            // 上游玩家选目标+可取消，原生自动首目标）
-            HostBehavior::YunchouLuweiyan2 => self.step_yunchou(ctx),
-            // 蛊惑·变体：摸 2 然后弃自己区域 2 张（判定区→装备→手牌首张序）
-            HostBehavior::YunchouDiyguhuo => self.step_yunchou(ctx),
-            // 狡黠：摸 1
-            HostBehavior::YunchouJiaoxia => self.step_yunchou(ctx),
-            // 红莲：来源弃其手牌与装备区全部红牌（装备走 revoke 同款）
-            HostBehavior::YunchouHonglian => self.step_yunchou(ctx),
-            // 纵火：弃首张手牌（登记差异）→ 直写帧 nature=Fire
-            HostBehavior::YunchouZonghuo => self.step_yunchou(ctx),
-            // 烧营：座位序首合法目标（受伤者距离 ≤1 且非受伤者）→ 弃堆顶
-            // 牌亮出，红色则其受 1 点火伤（登记差异：上游玩家选目标）
-            HostBehavior::YunchouShaoying => self.step_yunchou(ctx),
-            // 戏才：获得伤害牌（table 优先、弃堆兜底；登记近似：不校验
-            // 上游 position 'o' 处理区位）
-            HostBehavior::YunchouXicai => self.step_yunchou(ctx),
-            // 狂骨·变体：目标攻击距离 >1 摸 1，否则已受伤回复 1
-            HostBehavior::YunchouDiykuanggu => self.step_yunchou(ctx),
+            HostBehavior::YunchouJieyan
+            | HostBehavior::YunchouYiesheng
+            | HostBehavior::YunchouLuweiyan2
+            | HostBehavior::YunchouDiyguhuo
+            | HostBehavior::YunchouJiaoxia
+            | HostBehavior::YunchouHonglian
+            | HostBehavior::YunchouZonghuo
+            | HostBehavior::YunchouShaoying
+            | HostBehavior::YunchouXicai
+            | HostBehavior::YunchouDiykuanggu => {
+                u05_b1_yunchou::handle_u05_yunchou_char(self, ctx)
+            }
             HostBehavior::ShaDamageForceDiscard => self.step_skills_status(ctx),
             HostBehavior::PhaseEndRecoverOrDraw => self.step_skills_recovery(ctx),
             HostBehavior::TargetDiscardEquipOrDamage => self.step_skills_damage(ctx),
@@ -891,16 +880,18 @@ impl HostMachine {
             HostBehavior::SijiDiscardDraw => self.step_skills_status(ctx),
             HostBehavior::SanjianWeaponDamage => self.step_skills_damage(ctx),
             HostBehavior::MoshouImmunity => self.step_skills_status(ctx),
-            HostBehavior::ShuigongCard => self.step_skills_status(ctx),
-            HostBehavior::FudichouxinCompare => self.step_skills_card_use(ctx),
-            HostBehavior::ChenhuodajieCard => self.step_skills_status(ctx),
-            HostBehavior::TouliangSwap => self.step_skills_card_use(ctx),
+            HostBehavior::ShuigongCard
+            | HostBehavior::FudichouxinCompare
+            | HostBehavior::ChenhuodajieCard
+            | HostBehavior::TouliangSwap
+            | HostBehavior::GeanguanhuoCompare
+            | HostBehavior::CaochuanCard
+            | HostBehavior::ShezhanqunruCompare => {
+                u05_b1_yunchou_cards::step_u05_yunchou_cards(self, ctx)
+            }
             HostBehavior::LinghunzhihuoCard => self.step_skills_damage(ctx),
             HostBehavior::ZhaomingdanCard => self.step_skills_status(ctx),
             HostBehavior::JihuocardDraw => self.step_skills_status(ctx),
-            HostBehavior::GeanguanhuoCompare => self.step_skills_card_use(ctx),
-            HostBehavior::CaochuanCard => self.step_skills_damage(ctx),
-            HostBehavior::ShezhanqunruCompare => self.step_skills_status(ctx),
             HostBehavior::GujianShujinsanCard => self.step_gujian(ctx),
             HostBehavior::GujianMianliCard => self.step_gujian(ctx),
             HostBehavior::GujianFeibiaoCard => self.step_gujian(ctx),
@@ -1296,6 +1287,12 @@ impl HostMachine {
             HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng => {
                 l11_boss_c::handle_l11_boss_c(self, ctx)
             }
+            HostBehavior::U05MainStoneBatch | HostBehavior::U05ZhenfaRecastSkill => {
+                u05_b1_zhenfa::handle_u05_main_stone(self, ctx)
+            }
+            HostBehavior::U05MtgCharBatch => u05_b1_mtg::handle_u05_mtg_char(self, ctx),
+            HostBehavior::U05MtgLandExtraBatch => u05_b1_mtg_asks::handle_u05_mtg_land_extra(self, ctx),
+            HostBehavior::U05YunchouCharBatch => u05_b1_yunchou::handle_u05_yunchou_char(self, ctx),
         }
     }
 }

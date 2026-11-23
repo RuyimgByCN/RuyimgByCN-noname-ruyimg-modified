@@ -808,7 +808,13 @@ impl SnatchMachine {
         let from_hand = ctx.core.player(target).hand.contains(&c);
         let public_material = ctx.core.player(target).equips.contains(&c);
         if from_hand {
+            if source != target {
+                ctx.core.player_mut(source).hand.push(c);
+            }
             ctx.take_hand_card(target, c);
+            if source == target {
+                ctx.core.player_mut(source).hand.push(c);
+            }
         } else {
             let was_equip = ctx.catalog.card_kind(c).is_equip();
             let p = ctx.core.player_mut(target);
@@ -816,8 +822,8 @@ impl SnatchMachine {
             if was_equip {
                 revoke_equip_skills(ctx.core, ctx.catalog, target, c);
             }
+            ctx.core.player_mut(source).hand.push(c);
         }
-        ctx.core.player_mut(source).hand.push(c);
         if !public_material && ctx.catalog.vm_card_history {
             ctx.core
                 .vm_aux

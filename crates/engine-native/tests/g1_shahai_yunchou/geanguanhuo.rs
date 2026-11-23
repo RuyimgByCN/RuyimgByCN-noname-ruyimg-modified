@@ -53,7 +53,7 @@ fn geanguanhuo_two_target_compare_chain() {
     for p in 0..3 {
         e.debug_clear_hand(p);
     }
-    let (gg, c_low, c_high) = {
+    let (gg, c_low, c_high, eq1) = {
         let catalog = e.catalog();
         let gg = catalog
             .cards
@@ -70,20 +70,27 @@ fn geanguanhuo_two_target_compare_chain() {
             .iter()
             .position(|c| c.kind == CardKind::Sha && c.rank >= 10)
             .unwrap_or(0) as u32;
-        (gg, low, high)
+        let eq1 = catalog
+            .cards
+            .iter()
+            .position(|c| c.kind == CardKind::Armor)
+            .expect("防具") as u32;
+        (gg, low, high, eq1)
     };
     let mut snap = e.save();
     for p in snap.core.players.iter_mut() {
-        p.hand.retain(|c| *c != gg && *c != c_low && *c != c_high);
+        p.hand.retain(|c| *c != gg && *c != c_low && *c != c_high && *c != eq1);
+        p.equips.retain(|c| *c != eq1);
     }
     snap.core
         .deck
-        .retain(|c| *c != gg && *c != c_low && *c != c_high);
+        .retain(|c| *c != gg && *c != c_low && *c != c_high && *c != eq1);
     snap.core
         .discard
-        .retain(|c| *c != gg && *c != c_low && *c != c_high);
+        .retain(|c| *c != gg && *c != c_low && *c != c_high && *c != eq1);
     snap.core.players[0].hand.push(gg);
     snap.core.players[1].hand.push(c_low);
+    snap.core.players[1].equips.push(eq1);
     snap.core.players[2].hand.push(c_high);
     let mut e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入恢复");
     let out = submit(
@@ -146,11 +153,28 @@ fn geanguanhuo_two_target_compare_chain() {
             selection: vec![ChoiceOption::Card(c_high)],
         },
     );
-    // 目标二手牌大 → 赢方（2）获得输方（1）一张手牌
-    assert!(
-        restored.debug_hand(2).len() >= 2,
-        "赢方 2 应获得输方 1 的一张手牌"
+    while let Some(c) = restored.open_choice().cloned() {
+        let sel = if c.spec.options.contains(&ChoiceOption::Pass) {
+            vec![ChoiceOption::Pass]
+        } else {
+            vec![c.spec.options[0]]
+        };
+        submit(
+            &mut restored,
+            c.observer,
+            GameAction::Answer {
+                choice_id: c.id,
+                selection: sel,
+            },
+        );
+    }
+    // 目标二手牌大 → 双方拼点牌弃置，赢方（2）从输方（1）he 区交互获得 eq1
+    assert_eq!(
+        restored.debug_hand(2),
+        vec![eq1],
+        "赢方 2 应获得输方 1 的装备牌"
     );
+    assert!(restored.debug_equips(1).is_empty(), "输方 1 装备牌被赢方获得");
 }
 
 /// 隔岸观火：目标数错误（1 个/3 个）→ IllegalTargets。

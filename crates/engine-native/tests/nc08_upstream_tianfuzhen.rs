@@ -259,10 +259,20 @@ fn upstream_tianfuzhen_enable_gate_difference_is_fixed() {
         actor: 0,
         expected_revision: e3.revision(),
         dedup_id: next_dedup(),
-        action: GameAction::PlayCard { card, targets: vec![] },
+        action: GameAction::PlayCard { card, targets: vec![0] },
     });
     assert!(
         matches!(out, CommandOutcome::Rejected(_)),
-        "3 人局：原生因存活 <4 拒绝（差异登记）：{out:?}"
+        "3 人局：指定目标应被拒：{out:?}"
+    );
+    let out_recast = e3.submit(GameCommand {
+        actor: 0,
+        expected_revision: e3.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::PlayCard { card, targets: vec![] },
+    });
+    assert!(
+        matches!(out_recast, CommandOutcome::Accepted { .. }),
+        "3 人局：<4 存活 (!enable) 无目标触发 recastable 重铸：{out_recast:?}"
     );
 }

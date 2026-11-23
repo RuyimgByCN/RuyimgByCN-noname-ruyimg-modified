@@ -413,7 +413,14 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                     // 弃置责任唯一化（ADR 0705/0706）：owns_disposal 的窗口
                     // 抵消时弃置；AOE 逐目标窗口不弃置（外层收尾统一弃置）。
                     if self.owns_disposal {
-                        if let Some(pos) = ctx.core.table.iter().position(|c| *c == card) {
+                        let card = self.card;
+                        if crate::kernel::judge_u05_b1::is_hongshui_or_huoshan(ctx.catalog, card) {
+                            crate::kernel::judge_u05_b1::pass_delayed_to_next_or_discard(
+                                ctx,
+                                self.source,
+                                card,
+                            );
+                        } else if let Some(pos) = ctx.core.table.iter().position(|c| *c == card) {
                             ctx.core.table.remove(pos);
                             ctx.to_discard(card);
                         }

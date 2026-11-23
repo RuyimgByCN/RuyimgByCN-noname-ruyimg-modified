@@ -88,6 +88,10 @@ impl crate::catalog::SkillMachine for DamageFlow {
                 }
             }
             P::Stopped | P::Done => {
+                let suffix = format!("subplayer_untrigger_dmg:{}", self.root);
+                for p in 0..ctx.core.players.len() as PlayerId {
+                    ctx.core.vm_aux.flags.remove(&(p, suffix.clone()));
+                }
                 ctx.res.frame_mut(self.root).unwrap().data = EventData::Damage(d);
                 return Flow::Done;
             }

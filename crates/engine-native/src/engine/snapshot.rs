@@ -523,6 +523,45 @@ impl Engine {
                                 .iter()
                                 .any(|c| c.name == "yiyi" || c.name.ends_with("__ref_yiyi"))
                     }
+                    "mtg_duzhao" | "g_mtg_duzhao" | "mtg_cangbaohaiwan" | "g_mtg_cangbaohaiwan" => {
+                        *behavior == crate::content::host::HostBehavior::U05MtgLandExtraBatch.tag()
+                            && catalog.cards.iter().any(|c| {
+                                matches!(
+                                    c.name,
+                                    "mtg_duzhao"
+                                        | "g_mtg_duzhao"
+                                        | "mtg_cangbaohaiwan"
+                                        | "g_mtg_cangbaohaiwan"
+                                )
+                            })
+                    }
+                    "fengyangzhen"
+                    | "zf_fengyangzhen"
+                    | "yunchuizhen"
+                    | "zf_yunchuizhen"
+                    | "shepanzhen"
+                    | "zf_shepanzhen"
+                    | "longfeizhen"
+                    | "zf_longfeizhen"
+                    | "huyizhen"
+                    | "zf_huyizhen" => {
+                        *behavior == crate::content::host::HostBehavior::U05MainStoneBatch.tag()
+                            && catalog.cards.iter().any(|c| {
+                                matches!(
+                                    c.name,
+                                    "fengyangzhen"
+                                        | "zf_fengyangzhen"
+                                        | "yunchuizhen"
+                                        | "zf_yunchuizhen"
+                                        | "shepanzhen"
+                                        | "zf_shepanzhen"
+                                        | "longfeizhen"
+                                        | "zf_longfeizhen"
+                                        | "huyizhen"
+                                        | "zf_huyizhen"
+                                )
+                            })
+                    }
                     _ => false,
                 };
                 if !skill_ok && !card_ok {

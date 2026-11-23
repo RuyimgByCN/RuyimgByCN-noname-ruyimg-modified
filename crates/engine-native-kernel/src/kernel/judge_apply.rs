@@ -106,41 +106,11 @@ impl JudgePhaseMachine {
             (ctx.catalog.hooks.on_cards_to_discard)(ctx, owner, &[card], false);
         };
         match trick_kind {
-            CardKind::Le => {
-                if !shenyi_voids && !suit.is_heart() {
-                    ctx.core.turn.skip_play_phase = true;
-                }
-                discard_trick(ctx, owner, trick);
-                if !machine_holds {
-                    ctx.to_discard(judge_card);
-                }
-            }
-            CardKind::Bing => {
-                if !shenyi_voids && !suit.is_club() {
-                    ctx.core.turn.skip_draw_phase = true;
-                }
-                discard_trick(ctx, owner, trick);
-                if !machine_holds {
-                    ctx.to_discard(judge_card);
-                }
-            }
-            CardKind::HongShui => {
-                // 洪水：梅花 2–9 → 3 点雷伤（登记差异：上游未标注属性）
-                discard_trick(ctx, owner, trick);
-                if !shenyi_voids && suit.is_club() && (2..=9).contains(&rank) {
-                    if !machine_holds {
-                        ctx.to_discard(judge_card);
-                    }
-                    ctx.emit(EventData::Damage(damage_data_with(
-                        None,
-                        owner,
-                        3,
-                        crate::event::DamageNature::Thunder,
-                        None,
-                    )));
-                } else if !machine_holds {
-                    ctx.to_discard(judge_card);
-                }
+            CardKind::Le | CardKind::Bing | CardKind::HongShui => {
+                super::judge_u05_b1::resolve_le_bing_hongshui(
+                    ctx, owner, trick, trick_kind, judge_card, machine_holds, shenyi_voids, suit, rank,
+                );
+                return (trick_kind, suit);
             }
             CardKind::Guiyoujie => {
                 // 归有界判定（上游 judge 黑色 -3 / effect loseHp+randomDiscard）

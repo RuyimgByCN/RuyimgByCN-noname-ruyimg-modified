@@ -1,5 +1,6 @@
 use super::super::*;
 
+#[allow(dead_code)]
 impl HostMachine {
     pub(super) fn step_yunchou(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         match self.behavior {
@@ -462,7 +463,7 @@ impl HostMachine {
 
 /// 悲歌收回奖励（R05-C2 抽出：花色相同→判定牌归持有者；点数相同→
 /// 所弃牌归持有者。SelectCard 即时段与 DrawSettle 续行段共用）。
-fn beige_gains(ctx: &mut Ctx<'_>, owner: PlayerId, judged: CardId, discarded: CardId) {
+pub(super) fn beige_gains(ctx: &mut Ctx<'_>, owner: PlayerId, judged: CardId, discarded: CardId) {
     let judged_suit = ctx.catalog.cards[judged as usize].suit;
     let judged_num = ctx.catalog.cards[judged as usize].rank;
     let disc_suit = ctx.catalog.cards[discarded as usize].suit;

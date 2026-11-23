@@ -35,7 +35,7 @@ pub(crate) fn active_ask_host(
     catalog: &Catalog,
 ) -> Option<ExpectedAsk> {
     use crate::content::host::{
-        D3_JINGGOU_TARGET, D3_MOYAN_GAIN, D3_MOYAN_TARGET, GJ_BINGPO_SHOW_OWN, GJ_BINGPO_SHOW_TARGET, GJ_DINVXUANSHUANG_RIDER, GJ_FEIBIAO_DISCARD, GJ_JINLIANZHU_CONFIRM, GJ_LONGXU_PICK, GJ_LUYUGENG_COST, GJ_SHUJINSAN_DISCARD, GJ_XIAJIAO_DISCARD, GW_BAOXUE_DISCARD, HOST_TARGET_DISCARD_EQUIP, WD_CAOCHUAN_BRANCH, WD_FUDI_PLAYER_PICK, WD_FUDI_TARGET_PICK, WD_SANJIAN_DISCARD, WD_SANJIAN_TARGET, WD_TOULIANG_OWN, WD_TOULIANG_TARGET, WUDIAN_XJ_DIEWU_CARDS, WUDIAN_XJ_DIEWU_TARGET, WUDIAN_XJ_GUIYUAN_CARDS, WUDIAN_XJ_LINGYU_TARGET, WUXING_SELECT_CARD, WUXING_SELECT_NATURE, YC_GEAN_T1_PICK, YC_GEAN_T2_PICK,
+        D3_JINGGOU_TARGET, D3_MOYAN_GAIN, D3_MOYAN_TARGET, GJ_BINGPO_SHOW_OWN, GJ_BINGPO_SHOW_TARGET, GJ_DINVXUANSHUANG_RIDER, GJ_FEIBIAO_DISCARD, GJ_JINLIANZHU_CONFIRM, GJ_LONGXU_PICK, GJ_LUYUGENG_COST, GJ_SHUJINSAN_DISCARD, GJ_XIAJIAO_DISCARD, GW_BAOXUE_DISCARD, HOST_TARGET_DISCARD_EQUIP, WD_FUDI_PLAYER_PICK, WD_FUDI_TARGET_PICK, WD_SANJIAN_DISCARD, WD_SANJIAN_TARGET, WD_TOULIANG_OWN, WD_TOULIANG_TARGET, WUDIAN_XJ_DIEWU_CARDS, WUDIAN_XJ_DIEWU_TARGET, WUDIAN_XJ_GUIYUAN_CARDS, WUDIAN_XJ_LINGYU_TARGET, WUXING_SELECT_CARD, WUXING_SELECT_NATURE,
     };
     let behavior = HostBehavior::from_tag(behavior)?; // behavior: u16
     let stage = HostStage::from_tag(stage)?;
@@ -682,65 +682,20 @@ pub(crate) fn active_ask_host(
                 _ => None,
             }
         }
-        // 隔岸观火：目标一选牌 → 目标二选牌
-        HostBehavior::GeanguanhuoCompare => {
-            if targets.len() != 2 {
-                return None;
-            }
-            match stage {
-                HostStage::ComparePlayerPick => Some(ask(
-                    targets[0],
-                    YC_GEAN_T1_PICK,
-                    ChoiceKind::SelectCards,
-                    hand_card_options(&core.player(targets[0]).hand),
-                    1,
-                    1,
-                    false,
-                )),
-                HostStage::Act => Some(ask(
-                    targets[1],
-                    YC_GEAN_T2_PICK,
-                    ChoiceKind::SelectCards,
-                    hand_card_options(&core.player(targets[1]).hand),
-                    1,
-                    1,
-                    false,
-                )),
-                _ => None,
-            }
+        // 隔岸观火 / 草船借箭 / 舌战群儒 / 趁火打劫 / 水攻（Batch U05-1）
+        HostBehavior::GeanguanhuoCompare
+        | HostBehavior::CaochuanCard
+        | HostBehavior::ShezhanqunruCompare
+        | HostBehavior::ChenhuodajieCard
+        | HostBehavior::ShuigongCard => {
+            super::step::u05_b1_yunchou_cards::ask_u05_yunchou_card(
+                behavior, stage, owner, target, targets, card, cards, core, catalog,
+            )
         }
-        // 草船借箭：分支选择（有杀 → 目标双选；无杀 → 使用者单选）
-        HostBehavior::CaochuanCard => {
-            if stage != HostStage::Act {
-                return None;
-            }
-            let t = target?;
-            let has_sha = core
-                .player(t)
-                .hand
-                .iter()
-                .any(|c| catalog.card_kind(*c) == CardKind::Sha);
-            if has_sha {
-                Some(ask(
-                    t,
-                    WD_CAOCHUAN_BRANCH,
-                    ChoiceKind::PickTag,
-                    vec![ChoiceOption::Tag(0), ChoiceOption::Tag(1)],
-                    1,
-                    1,
-                    false,
-                ))
-            } else {
-                Some(ask(
-                    owner,
-                    WD_CAOCHUAN_BRANCH,
-                    ChoiceKind::PickTag,
-                    vec![ChoiceOption::Tag(1)],
-                    1,
-                    1,
-                    false,
-                ))
-            }
+        HostBehavior::SwdTianfuzhenCard
+        | HostBehavior::SwdQixingzhenCard
+        | HostBehavior::SwdNiaoxiangzhenCard => {
+            super::step::swd_zhenfa_cards::ask_swd_zhenfa_card(behavior, stage, owner, target, core, catalog)
         }
         // 舒筋散：目标弃任意张手牌摸等量
         HostBehavior::GujianShujinsanCard => {

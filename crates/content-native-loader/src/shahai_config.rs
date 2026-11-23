@@ -204,6 +204,37 @@ pub fn enabled_shahai_subpackages(cfg: &ShahaiMainConfig) -> Vec<&'static str> {
     pkgs
 }
 
+/// Upstream `main/precontent.js:28-75` dependency-aware subpackage resolution:
+/// - `gujian` requires `gwent`;
+/// - `swd`, `hearth`, `ow`, `xianjian` require `gwent && yunchou`;
+/// - `wuxing`, `yunchou`, `mtg`, `zhenfa` are standalone toggles.
+pub fn resolved_shahai_subpackages_upstream(cfg: &ShahaiMainConfig) -> Vec<&'static str> {
+    let mut pkgs = Vec::new();
+    if cfg.wuxing {
+        pkgs.push("wuxing");
+    }
+    if cfg.gwent {
+        pkgs.push("shahai-gwent");
+        pkgs.push("shahai-gujian");
+    }
+    if cfg.yunchou {
+        pkgs.push("shahai-yunchou");
+    }
+    if cfg.gwent && cfg.yunchou {
+        pkgs.push("shahai-swd");
+        pkgs.push("shahai-hearth");
+        pkgs.push("shaai-ow");
+        pkgs.push("shaai-xianjian");
+    }
+    if cfg.mtg {
+        pkgs.push("shahai-mtg");
+    }
+    if cfg.zhenfa {
+        pkgs.push("shahai-zhenfa");
+    }
+    pkgs
+}
+
 /// Check whether an entity (`general_or_card_id`) is forbidden in `mode` (`main/content.js:5-11,383`).
 pub fn is_shahai_forbid_in_mode(mode: &str, id: &str) -> bool {
     match mode {

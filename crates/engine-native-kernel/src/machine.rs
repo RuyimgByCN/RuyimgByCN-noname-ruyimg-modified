@@ -787,8 +787,8 @@ impl<'a> Ctx<'a> {
     /// 正常区、随所有者存放（死亡清理由 DeathMachine leftover 之外的
     /// off_court 消费技自理，此处不做）。
     pub fn hand_to_off_court(&mut self, player: PlayerId, card: CardId) {
-        self.take_hand_card(player, card);
         self.core.player_mut(player).off_court.push(card);
+        self.take_hand_card(player, card);
     }
 
     /// 离场区牌弃置（消费技用）：出区入弃堆。
@@ -842,8 +842,12 @@ impl<'a> Ctx<'a> {
     /// amount=张数，与旧线 `give_cards` 单事件同口径。一次给出多张的技能
     /// （仁德、蝶舞）须调用本方法，而不是按张循环 `give_hand_card`。
     pub fn give_hand_cards(&mut self, from: PlayerId, to: PlayerId, cards: &[CardId]) {
-        if cards.is_empty() {
+        if from == to || cards.is_empty() {
             return;
+        }
+        let delivered = (self.catalog.hooks.on_before_gain_hand)(self, Some(from), to, cards);
+        for &card in &delivered {
+            self.core.player_mut(to).hand.push(card);
         }
         for &card in cards {
             self.take_hand_card(from, card);
@@ -854,13 +858,7 @@ impl<'a> Ctx<'a> {
                 origins: vec![crate::event::LostOrigin::Hand],
             });
         }
-        let delivered = if from != to {
-            (self.catalog.hooks.on_before_gain_hand)(self, Some(from), to, cards)
-        } else {
-            cards.to_vec()
-        };
         for &card in &delivered {
-            self.core.player_mut(to).hand.push(card);
             self.emit(EventData::CardsMoved {
                 cards: vec![card],
                 from,

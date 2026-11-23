@@ -483,22 +483,94 @@ detached_cards: Vec::new(),
         Self::new_with_extensions_mode(seed, seats, packs, mode)
     }
 
+    pub fn new_with_extensions_and_shahai_config(
+        seed: u64,
+        seats: usize,
+        packs: &[&crate::content::extension::ExtensionPack],
+        identity: bool,
+        wuxing_enabled: bool,
+        wuxing_rate_pct: u8,
+    ) -> Result<Self, String> {
+        let mode = if identity {
+            if !(4..=8).contains(&seats) {
+                return Err(format!("identity mode supports 4-8 seats, got {seats}"));
+            }
+            Self::identity_mode(seats)
+        } else {
+            GameMode::Prototype
+        };
+        Self::new_with_extensions_inner(
+            seed,
+            seats,
+            packs,
+            mode,
+            Some((wuxing_enabled, wuxing_rate_pct)),
+        )
+        .map_err(|e| format!("{e:?}"))
+    }
+
     fn new_with_extensions_mode(
         seed: u64,
         seats: usize,
         packs: &[&crate::content::extension::ExtensionPack],
         mode: GameMode,
     ) -> Result<Self, crate::content::extension::ExtensionError> {
+        Self::new_with_extensions_inner(seed, seats, packs, mode, None)
+    }
+
+    fn new_with_extensions_inner(
+        seed: u64,
+        seats: usize,
+        packs: &[&crate::content::extension::ExtensionPack],
+        mode: GameMode,
+        wuxing_override: Option<(bool, u8)>,
+    ) -> Result<Self, crate::content::extension::ExtensionError> {
         let catalog = content::standard::standard_catalog_with_extensions(packs)?;
         let catalog: SharedCatalog = std::sync::Arc::new(catalog);
         let mut e = Self::new_with_catalog(seed, seats, mode, catalog, OpeningPlan::Standard);
+        {
+            let mut remaining_detached = Vec::with_capacity(e.state.core.detached_cards.len());
+            for (cid, dkind) in e.state.core.detached_cards.drain(..) {
+                let cname = e
+                    .catalog
+                    .cards
+                    .get(cid as usize)
+                    .map(|c| c.name)
+                    .unwrap_or("");
+                if cname.starts_with("mtg_du_") {
+                    e.state
+                        .core
+                        .vm_aux
+                        .piles
+                        .entry((0, "mtg_du_supply".to_string()))
+                        .or_default()
+                        .push(cid);
+                } else if cname.starts_with("mtg_mirror_") {
+                    e.state
+                        .core
+                        .vm_aux
+                        .piles
+                        .entry((0, "mtg_mirror_supply".to_string()))
+                        .or_default()
+                        .push(cid);
+                } else {
+                    remaining_detached.push((cid, dkind));
+                }
+            }
+            e.state.core.detached_cards = remaining_detached;
+        }
         // G1 wuxing 初始化钩子：每名角色随机五行属性 + 含初始手牌在内的
-        // 牌库按 `wuxing_num_playpackconfig`（默认 0.3）随机获得属性（排除 `wuxingpan` 本身，extension.js:45）。
-        if let Some(rate_bps) = packs
+        // 牌库按 `wuxing_num_playpackconfig`（默认 0.3）或 ShahaiMainConfig `rand` 百分比随机获得属性（排除 `wuxingpan`）。
+        let wuxing_bps = packs
             .iter()
             .filter(|p| p.enabled)
-            .find_map(|p| p.init_hook.wuxing_natures_bps())
-        {
+            .find_map(|p| p.init_hook.wuxing_natures_bps());
+        let run_wuxing = match wuxing_override {
+            Some((enabled, _)) => wuxing_bps.is_some() && enabled,
+            None => wuxing_bps.is_some(),
+        };
+        if run_wuxing {
+            let rate_bps = wuxing_bps.unwrap_or(0);
             let core = &mut e.state.core;
             for pl in core.players.iter_mut() {
                 if pl.alive {
@@ -513,7 +585,11 @@ detached_cards: Vec::new(),
                 if e.catalog.card_kind(card) == crate::catalog::CardKind::WuxingPan {
                     continue;
                 }
-                if rate_bps > 0 && core.rng.gen_range(10_000) < u32::from(rate_bps) {
+                let hit = match wuxing_override {
+                    Some((_, pct)) => core.rng.gen_range(100) < u32::from(pct),
+                    None => rate_bps > 0 && core.rng.gen_range(10_000) < u32::from(rate_bps),
+                };
+                if hit {
                     let nature = core.rng.gen_range(5) as u8;
                     core.card_natures.insert(card, nature);
                 }

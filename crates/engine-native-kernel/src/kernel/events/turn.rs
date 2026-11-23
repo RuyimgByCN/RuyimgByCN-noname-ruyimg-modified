@@ -222,6 +222,7 @@ pub(in crate::kernel) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: Playe
 
 pub(in crate::kernel) fn commit_turn_begin(ctx: &mut Ctx<'_>, player: PlayerId) {
     crate::kernel::elo_on_phase_before(ctx.core, ctx.catalog, player);
+    (ctx.catalog.hooks.on_turn_begin)(ctx, player);
     // K46/K47/K48（A2）：封冻／巡游／炎狱＝上游 player/global phaseBegin
     // 内联效果——置于 TurnBegin 窗 Commit 步（BeforeTriggers 已跑、准备
     // 阶段帧未压），严格落在 phaseBegin 窗内（原锚判定开始→prepare 入场）。
@@ -603,6 +604,17 @@ pub(in crate::kernel) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: P
             .vm_aux
             .flags
             .remove(&(es, "extra_turn_insert_queued".to_string()));
+        if let Some(st) = ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(es, "u05_msilian_turn_pending".to_string()))
+        {
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((es, "u05_msilian_extra_active".to_string()), st);
+        }
         if !ctx
             .core
             .vm_aux

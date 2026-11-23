@@ -709,9 +709,12 @@ impl HostSkillBehavior {
                 EventData::CardUsed(u) => u.targets.clone(),
                 _ => Vec::new(),
             },
-            // 悲歌：targets=[来源, 受伤者]
+            // 悲歌：targets=[来源, 受伤者]（无来源时仅 [受伤者]）
             HostBehavior::YunchouBeige => match event {
-                EventData::Damage(d) => vec![d.source.unwrap_or(d.target), d.target],
+                EventData::Damage(d) => match d.source {
+                    Some(s) => vec![s, d.target],
+                    None => vec![d.target],
+                },
                 _ => Vec::new(),
             },
             HostBehavior::WudianYouzhan => match event {

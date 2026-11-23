@@ -133,16 +133,20 @@ fn shezhanqunru_compares_all_responders() {
         ),
         "{out:?}"
     );
-    if let Some(c) = e.open_choice() {
-        assert_eq!(c.spec.prompt, "nullify_window");
-        let cid = c.id;
-        let obs = c.observer;
+    while let Some(c) = e.open_choice().cloned() {
+        let sel = if c.spec.prompt == "nullify_window" {
+            vec![ChoiceOption::Pass]
+        } else if c.spec.options.contains(&ChoiceOption::Confirm) {
+            vec![ChoiceOption::Confirm]
+        } else {
+            vec![c.spec.options[0]]
+        };
         submit(
             &mut e,
-            obs,
+            c.observer,
             GameAction::Answer {
-                choice_id: cid,
-                selection: vec![ChoiceOption::Pass],
+                choice_id: c.id,
+                selection: sel,
             },
         );
     }

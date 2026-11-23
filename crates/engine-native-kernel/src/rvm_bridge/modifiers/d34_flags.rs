@@ -331,6 +331,7 @@ pub fn apply_distance_total(
     {
         cur += 1;
     }
+    cur = super::d34_u05_b1_mods::apply_fengyang_distance(state, b, cur);
     let cur = d34_u05_mods::apply_distance_total(state, catalog, a, b, cur);
     d34_l11_mods::apply_distance_total(state, catalog, a, b, cur)
 }
@@ -867,6 +868,11 @@ pub fn apply_damage_amount(
     }
     if nature == DamageNature::Thunder && flag_val(state, target, "l11_buff_thunder_shield") > 0 {
         cur = (cur - 1).max(0);
+    }
+    if super::d34_u05_b1_mods::suolianjia_prevents_damage(
+        state, catalog, source, target, card, nature,
+    ) {
+        return 0;
     }
     if d34_l11_mods::tpys_damage_prevented(state, catalog, source, target, card, nature) {
         return 0;

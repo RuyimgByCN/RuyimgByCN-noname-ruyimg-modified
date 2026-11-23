@@ -528,44 +528,6 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
             } else if !poyue_red_free && !yudun_free && !vm_va_free {
                 ctx.core.turn.sha_used_play_phase = true;
             }
-            // 冰河要塞地图效果（mtg 第八批，规则 v107）：锁定全局——使
-            // 用杀时若有牌须弃一张（上游 chooseToDiscard 可取消+玩家选；
-            // 原生 RNG 代抽不可取消，登记差异）。当前弃牌阶段的水没计数
-            // 不受影响（非弃牌阶段）。
-            if ctx.core.current_land == Some(crate::catalog::CardKind::Bingheyaosai) {
-                let p = ctx.core.player(u.player);
-                let has_cards = !p.hand.is_empty() || !p.equips.is_empty();
-                if has_cards {
-                    let from_hand = if p.hand.is_empty() {
-                        false
-                    } else if p.equips.is_empty() {
-                        true
-                    } else {
-                        ctx.core.rng.gen_range(2u32) == 0
-                    };
-                    if from_hand {
-                        let n = ctx.core.player(u.player).hand.len() as u32;
-                        let j = ctx.core.rng.gen_range(n) as usize;
-                        let c = ctx.core.player(u.player).hand[j];
-                        ctx.take_hand_card(u.player, c);
-                        ctx.to_discard(c);
-                        ctx.log(LogEvent::CardDiscarded {
-                            player: u.player,
-                            cards: vec![c],
-                        });
-                    } else {
-                        let n = ctx.core.player(u.player).equips.len() as u32;
-                        let j = ctx.core.rng.gen_range(n) as usize;
-                        let c = ctx.core.player_mut(u.player).equips.remove(j);
-                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, u.player, c);
-                        ctx.to_discard(c);
-                        ctx.log(LogEvent::CardDiscarded {
-                            player: u.player,
-                            cards: vec![c],
-                        });
-                    }
-                }
-            }
             ctx.core.table.extend(u.card);
         }
         CardKind::Jiu | CardKind::Tianxianjiu => {

@@ -32,8 +32,8 @@
 //! 未覆盖（登记）：`filterButton`（延迟锦囊不可弃）的对应行为；`ai.effect` 策略面。
 
 mod nc08_common;
-use engine_native::{Engine, GameAction, GameCommand, Phase};
-use nc08_common::{drain, next_dedup};
+use engine_native::{ChoiceOption, Engine, GameAction, GameCommand, Phase};
+use nc08_common::next_dedup;
 
 /// 运筹帷幄：**双产物桥接**（武将面在 `character.json`）。
 fn yunchou_engine(seed: u64) -> Engine {
@@ -106,10 +106,15 @@ fn upstream_guhuo_draws_two_and_discards_two() {
             });
             continue;
         };
-        let sel: Vec<engine_native::ChoiceOption> = if c.spec.prompt == "trigger_confirm" {
-            vec![engine_native::ChoiceOption::Confirm]
-        } else if c.spec.options.contains(&engine_native::ChoiceOption::Pass) {
-            vec![engine_native::ChoiceOption::Pass]
+        let sel: Vec<ChoiceOption> = if c.spec.prompt == "u05_diyguhuo_discard"
+            && c.spec.options.contains(&ChoiceOption::Card(judge_card))
+            && c.spec.options.contains(&ChoiceOption::Card(equip))
+        {
+            vec![ChoiceOption::Card(judge_card), ChoiceOption::Card(equip)]
+        } else if c.spec.prompt == "trigger_confirm" {
+            vec![ChoiceOption::Confirm]
+        } else if c.spec.options.contains(&ChoiceOption::Pass) {
+            vec![ChoiceOption::Pass]
         } else if c.spec.allow_cancel {
             Vec::new()
         } else {
@@ -122,7 +127,6 @@ fn upstream_guhuo_draws_two_and_discards_two() {
             action: GameAction::Answer { choice_id: c.id, selection: sel },
         });
     }
-    drain(&mut e);
     let judge_after = e.debug_judge(0).len();
     let equips_after = e.debug_equips(0).len();
     let hand_after = e.debug_hand(0).len();

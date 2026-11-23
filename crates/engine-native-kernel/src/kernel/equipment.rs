@@ -86,12 +86,13 @@ pub fn revoke_equip_skills(
         }
     }
     // G1 索链甲：离场装备声明横置且玩家无其他同类装备 → 重置横置
-    if catalog.cards[card as usize].link_on_equip {
-        let still = core
-            .player(player)
-            .equips
-            .iter()
-            .any(|c| catalog.cards[*c as usize].link_on_equip);
+    if catalog.cards[card as usize].link_on_equip
+        || catalog.card_kind(card) == crate::catalog::CardKind::Suolianjia
+    {
+        let still = core.player(player).equips.iter().any(|c| {
+            catalog.cards[*c as usize].link_on_equip
+                || catalog.card_kind(*c) == crate::catalog::CardKind::Suolianjia
+        });
         if !still
             && core.player(player).linked
             && crate::rvm_bridge::modifiers::can_lose_link(core, catalog, player)
@@ -331,15 +332,18 @@ pub(super) fn commit_equip(
         }
     }
     // G1 索链甲：装备时横置
-    if ctx.catalog.cards[card as usize].link_on_equip
-        && !ctx.core.player(player).linked
+    if (ctx.catalog.cards[card as usize].link_on_equip
+        || ctx.catalog.card_kind(card) == crate::catalog::CardKind::Suolianjia)
         && crate::rvm_bridge::modifiers::can_gain_link(ctx.core, ctx.catalog, player)
     {
+        let was = ctx.core.player(player).linked;
         ctx.core.player_mut(player).linked = true;
-        ctx.log(LogEvent::Linked {
-            player,
-            linked: true,
-        });
+        if !was {
+            ctx.log(LogEvent::Linked {
+                player,
+                linked: true,
+            });
+        }
     }
     if let Some(f) = ctx.res.frame_mut(frame_id) {
         if let EventData::Equipped { replaced: r, .. } = &mut f.data {

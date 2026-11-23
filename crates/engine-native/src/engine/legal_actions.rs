@@ -209,6 +209,43 @@ impl Engine {
                 if is_yiyi && others.len() >= 3 {
                     combos.push(vec![others[0], others[1], others[2]]);
                 }
+                let core = self.state_core();
+                let catalog = self.catalog();
+                let (kind, _) = crate::engine::play_kind(core, catalog, card, &[]);
+                if kind == crate::catalog::CardKind::Shuigong {
+                    let eq_all: Vec<crate::ids::PlayerId> = core
+                        .alive_players()
+                        .filter(|&p| !core.player(p).equips.is_empty())
+                        .collect();
+                    if !eq_all.is_empty() && !combos.contains(&eq_all) {
+                        combos.push(eq_all);
+                    }
+                } else if let Some(cd) = catalog.cards.get(card as usize) {
+                    if cd.name.starts_with("longfeizhen") || cd.name.starts_with("zf_longfeizhen") {
+                        let (n, p) = core.alive_neighbors(seat);
+                        let mut nbrs = Vec::new();
+                        for q in [n, p].into_iter().flatten() {
+                            if q != seat
+                                && !nbrs.contains(&q)
+                                && (!core.player(q).hand.is_empty() || !core.player(q).equips.is_empty())
+                            {
+                                nbrs.push(q);
+                            }
+                        }
+                        if !nbrs.is_empty() && !combos.contains(&nbrs) {
+                            combos.push(nbrs);
+                        }
+                    } else if cd.name.starts_with("huyizhen") || cd.name.starts_with("zf_huyizhen") {
+                        let sieged: Vec<crate::ids::PlayerId> = core
+                            .seat_order_from(seat)
+                            .into_iter()
+                            .filter(|&p| core.player(p).alive && core.sieges(catalog, seat, p))
+                            .collect();
+                        if !sieged.is_empty() && !combos.contains(&sieged) {
+                            combos.push(sieged);
+                        }
+                    }
+                }
                 for targets in combos {
                     push_action(
                         self,

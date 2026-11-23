@@ -509,6 +509,29 @@ pub(super) fn active_ask_batches(
                 stage, owner, target, targets, card, cards, core, catalog,
             )
         }
+        HostBehavior::U05MainStoneBatch | HostBehavior::U05ZhenfaRecastSkill => {
+            super::step::u05_b1_zhenfa::ask_u05_zhenfa(
+                stage, owner, target, targets, card, cards, core, catalog,
+            )
+        }
+        HostBehavior::U05MtgCharBatch | HostBehavior::U05MtgLandExtraBatch => {
+            super::step::u05_b1_mtg_asks::ask_u05_mtg(
+                behavior, stage, owner, target, targets, card, cards, core, catalog,
+            )
+        }
+        HostBehavior::U05YunchouCharBatch
+        | HostBehavior::YunchouJieyan
+        | HostBehavior::YunchouDiyguhuo
+        | HostBehavior::YunchouZonghuo
+        | HostBehavior::YunchouShaoying
+        | HostBehavior::YunchouLuweiyan2
+        | HostBehavior::YunchouBeige
+        | HostBehavior::YunchouYaliang
+        | HostBehavior::YunchouYiesheng => {
+            super::step::u05_b1_yunchou::ask_u05_yunchou_char(
+                behavior, stage, owner, target, targets, card, cards, core, catalog,
+            )
+        }
         HostBehavior::NewMeibu => {
             if stage != HostStage::SelectCard {
                 return None;

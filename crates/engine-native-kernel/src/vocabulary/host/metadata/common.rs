@@ -58,7 +58,7 @@ impl HostBehavior {
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
-                optional: true,
+                optional: false,
                 extra_events: Vec::new(),
             }),
             HostBehavior::YunchouShaoying => Some(TriggerMeta {
@@ -66,7 +66,7 @@ impl HostBehavior {
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
-                optional: true,
+                optional: false,
                 extra_events: Vec::new(),
             }),
             HostBehavior::YunchouLuweiyan => None,
@@ -694,7 +694,7 @@ impl HostBehavior {
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
-                optional: true,
+                optional: false,
                 extra_events: Vec::new(),
             }),
             // 蛊惑·变体（A2 H17）：上游 player phaseBegin＝自己回合开始
@@ -713,7 +713,7 @@ impl HostBehavior {
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
-                optional: false,
+                optional: true,
                 extra_events: Vec::new(),
             }),
             HostBehavior::YunchouHonglian => Some(TriggerMeta {

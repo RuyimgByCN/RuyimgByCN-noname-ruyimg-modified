@@ -36,7 +36,7 @@ pub use step::step_l01_on_game_start;
 pub(crate) use step::{
     host_before_gain_hand, host_before_recover, host_card_use_after, host_draw_begin_step,
     host_judge_settled, host_on_game_start, host_on_hand_card_removed, host_on_phase_use_end,
-    host_on_player_died, host_on_recover_before, host_on_round_start,
+    host_on_player_died, host_on_recover_before, host_on_round_start, host_on_turn_begin,
     host_preserves_skills_on_death, host_sha_begin_step, host_sha_end_step,
     on_cards_to_discard_chengye, on_l25_host_event, on_outer_settled_taipingyaoshu,
     on_phase_end_l10_scs, on_skill_removed_all, play_begin_l19, play_begin_tianshu,
@@ -846,6 +846,15 @@ pub fn host_skill_trigger_meta(
         HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng => {
             step::l11_boss_c::trigger_meta_l11_boss_c(name)
         }
+        HostBehavior::U05MainStoneBatch | HostBehavior::U05ZhenfaRecastSkill => {
+            step::u05_b1_zhenfa::trigger_meta_u05_zhenfa(name)
+        }
+        HostBehavior::U05MtgCharBatch | HostBehavior::U05MtgLandExtraBatch => {
+            step::u05_b1_mtg::trigger_meta_u05_mtg(name)
+        }
+        HostBehavior::U05YunchouCharBatch => {
+            step::u05_b1_yunchou::trigger_meta_u05_yunchou_char(name)
+        }
         _ => crate::event::NativeDamageEffect::from_host(behavior)
             .map(|e| e.meta())
             .or_else(|| behavior.trigger_meta()),
@@ -938,6 +947,13 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng => {
             step::l11_boss_c::limits_l11_boss_c(name)
         }
+        HostBehavior::U05MainStoneBatch | HostBehavior::U05ZhenfaRecastSkill => {
+            step::u05_b1_zhenfa::limits_u05_zhenfa(name)
+        }
+        HostBehavior::U05MtgCharBatch | HostBehavior::U05MtgLandExtraBatch => {
+            step::u05_b1_mtg::limits_u05_mtg(name)
+        }
+        HostBehavior::U05YunchouCharBatch => step::u05_b1_yunchou::limits_u05_yunchou_char(name),
         HostBehavior::GujianFoodQingtuan | HostBehavior::GujianFoodLuyugeng => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,

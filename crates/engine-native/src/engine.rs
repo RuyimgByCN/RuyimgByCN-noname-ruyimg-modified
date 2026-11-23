@@ -486,6 +486,7 @@ pub mod legal_actions;
 use hash::*;
 mod play_card;
 use play_card::*;
+mod play_card_u05_zhenfa;
 mod play_rules;
 use play_rules::*;
 mod play_card_targets;

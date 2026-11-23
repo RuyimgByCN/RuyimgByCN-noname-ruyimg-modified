@@ -350,7 +350,7 @@ impl HostSkillBehavior {
             HostBehavior::YunchouJieyan => {
                 let has = ctx.state.player(owner).hand.iter().any(|c| {
                     matches!(
-                        ctx.catalog.cards[*c as usize].suit,
+                        ctx.catalog.effective_card_suit(ctx.state, owner, *c),
                         crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
                     )
                 });
@@ -372,7 +372,7 @@ impl HostSkillBehavior {
             HostBehavior::YunchouYiesheng => {
                 let has = ctx.state.player(owner).hand.iter().any(|c| {
                     matches!(
-                        ctx.catalog.cards[*c as usize].suit,
+                        ctx.catalog.effective_card_suit(ctx.state, owner, *c),
                         crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                     )
                 });
@@ -387,7 +387,7 @@ impl HostSkillBehavior {
                     card: None,
                     cards: Vec::new(),
                     targets: Vec::new(),
-                    stage: HostStage::SelectCard,
+                    stage: HostStage::Act,
                 }))
             }
             HostBehavior::ZhangbaSha => {

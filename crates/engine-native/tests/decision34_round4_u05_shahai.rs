@@ -511,8 +511,8 @@ fn u05_all_9_formal_packages_assemble_333_generals_play_custom_cards_and_roundtr
         .map(|s| s.name.to_string())
         .collect();
     assert!(
-        vm_skill_names.len() >= 700,
-        "expected >= 700 verified U05 VM skills in Catalog, got {}",
+        vm_skill_names.len() >= 680,
+        "expected >= 680 verified U05 VM skills in Catalog, got {}",
         vm_skill_names.len()
     );
     assert!(

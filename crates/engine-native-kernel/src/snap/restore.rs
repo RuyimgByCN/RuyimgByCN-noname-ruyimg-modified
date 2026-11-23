@@ -21,6 +21,21 @@ impl MachineSnapshot {
                 owner: *owner,
                 card: None,
             })),
+            MachineSnapshot::Jiedao {
+                owner,
+                holder,
+                victim,
+                stage,
+            } => Ok(Box::new(crate::kernel::JiedaoMachine {
+                owner: *owner,
+                holder: *holder,
+                victim: *victim,
+                card: None,
+                stage: match stage {
+                    JiedaoStageSnap::Ask => crate::kernel::JiedaoStage::Ask,
+                    JiedaoStageSnap::Read => crate::kernel::JiedaoStage::Read,
+                },
+            })),
             MachineSnapshot::Wugu {
                 owner,
                 cards,
@@ -203,14 +218,17 @@ impl MachineSnapshot {
                 responders,
                 asked,
                 round_used,
-                guihan_asked: _,
-            } => Ok(Box::new(crate::kernel::DyingSaveMachine::new(
-                *dying,
-                *source,
-                responders.clone(),
-                *asked,
-                *round_used,
-            ))),
+                guihan_asked,
+            } => Ok(Box::new(
+                crate::kernel::DyingSaveMachine::new(
+                    *dying,
+                    *source,
+                    responders.clone(),
+                    *asked,
+                    *round_used,
+                )
+                .with_guihan_asked(*guihan_asked),
+            )),
             MachineSnapshot::Duel {
                 card,
                 source,

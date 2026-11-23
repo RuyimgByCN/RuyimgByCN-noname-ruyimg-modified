@@ -1,5 +1,9 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+## 2026-11-23 Batch U05-1（U05 五行/阵法/MTG/运筹 +87→88/1,621；余 1,533 项待后续 U05 批次）
+
+- 合入 `swarm/conv-u05-1`（`b4fd79501`，`verifier-l11` `#49 APPROVE`）及主线回归修复，升格 `87` 项（全局 `2,408 / 2,016 / 0`，`U05` `88 / 1,533 / 0`，整包 8 维仍 `0/37`）。[inventory_status.json](../migration/g0/inventory_status.json) 保留 `qixingzhen`、`diy_caiwenji`、`stone_chenshui` 及 `mtg`/`zhenfa`/`gwent`/`yunchou` 子包开关（连同剩余 1,526 项 `U05` 与其余全局待收敛条目）待后续规则批次关闭；详见 [Batch U05-1 证据摘要](../operations/evidence/2026-11-23-batch3-7-u05-1/README.md) 与 [native-rules-baseline.md](native-rules-baseline.md)。
+
 ## 2026-11-23 Batch Q8/Q9（外部前提清单、Phase 6 收编范围与 `web-frame-external.mjs` `--host` 修复）合入
 
 - **本批变更与不变量**：合入 `swarm/conv-q8-q9-prereqs`（[2026-11-22-queue8-9-external-prereqs-and-phase6/README.md](../operations/evidence/2026-11-22-queue8-9-external-prereqs-and-phase6/README.md) 与 [web-frame-external.mjs](../../apps/web-client/scripts/web-frame-external.mjs) `--host` 支持及动态 `Host` 头注入），并提交 Batch L11-6b CI 记录至 [ci-runs.md](../operations/evidence/ci-runs.md)（`c21f105c93` / CI `45080540689`）。`inventory_status.json` 无变更（`2,321 / 2,103 / 0`，`L11` `554 / 382 / 0`，整包 8 维签字 `0/37`）；`333/107/5/759/8` 与 14 条 golden 不变。

@@ -1733,5 +1733,16 @@ pub enum HostBehavior {
     /// L11 太虚幻境 Batch L11-5 领主与通用武将技（tag 741：`txhj_mouduan`..`txhj_chuhai2` 共 21 技能）。
     L11GeneralBossC,
     /// L11 太虚幻境 Batch L11-5 灵锋（tag 742：`boss_lingfeng`，持留亮牌直至选择结束）。
+    /// L11 太虚幻境 Batch L11-5 灵锋（tag 742：`boss_lingfeng`，持留亮牌直至选择结束）。
     L11BossLingfeng,
+    /// U05 杀海拾遗 Batch 1 · 主包配置与石匠/阵法重铸（tag 920，`main/content.js:397-410` `stone_chenshui`）。
+    U05MainStoneBatch,
+    /// U05 杀海拾遗 Batch 1 · 万智牌 7 个武将技能（tag 921，`character/mtg/skill.js`）。
+    U05MtgCharBatch,
+    /// U05 杀海拾遗 Batch 1 · 万智牌地牌补充与交互技能（tag 922，`card/mtg/{card,skill}.js`）。
+    U05MtgLandExtraBatch,
+    /// U05 杀海拾遗 Batch 1 · 运筹帷幄武将与精械补充技能（tag 923，`character/yunchou/skill.js`）。
+    U05YunchouCharBatch,
+    /// U05 杀海拾遗 Batch 1 · 阵法重铸主动技（tag 924，`card/zhenfa/card.js` `recastable: true`）。
+    U05ZhenfaRecastSkill,
 }

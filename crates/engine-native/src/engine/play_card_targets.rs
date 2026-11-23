@@ -516,10 +516,16 @@ pub(super) fn validate_tail_ext_targets(
                     return Err(RejectReason::IllegalTargets);
                 }
             } else {
-                for t in targets {
-                    if !core.player(*t).alive || core.player(*t).equips.is_empty() {
-                        return Err(RejectReason::IllegalTargets);
-                    }
+                // 水攻：所有有装备的存活角色（selectTarget: -1 全选）
+                let expected: Vec<PlayerId> = core
+                    .alive_players()
+                    .filter(|&p| !core.player(p).equips.is_empty())
+                    .collect();
+                if expected.is_empty()
+                    || targets.len() != expected.len()
+                    || !expected.iter().all(|t| targets.contains(t))
+                {
+                    return Err(RejectReason::IllegalTargets);
                 }
             }
         }
@@ -536,7 +542,20 @@ pub(super) fn validate_tail_ext_targets(
                 return Err(RejectReason::IllegalTargets);
             }
         }
-        CardKind::Chenhuodajie | CardKind::Zhaomingdan | CardKind::Caochuanjiejian => {
+        CardKind::Chenhuodajie => {
+            if targets.len() != 1 {
+                return Err(RejectReason::IllegalTargets);
+            }
+            let target = targets[0];
+            if target == core.turn.current
+                || !core.player(target).alive
+                || (core.player(target).hand.is_empty()
+                    && core.player(target).equips.is_empty())
+            {
+                return Err(RejectReason::IllegalTargets);
+            }
+        }
+        CardKind::Zhaomingdan | CardKind::Caochuanjiejian => {
             if targets.len() != 1 {
                 return Err(RejectReason::IllegalTargets);
             }
@@ -560,7 +579,7 @@ pub(super) fn validate_tail_ext_targets(
         }
         CardKind::Youdishenru => return Err(RejectReason::WrongPhase),
         CardKind::Geanguanhuo => {
-            if targets.len() != 2 {
+            if targets.len() != 2 || targets[0] == targets[1] {
                 return Err(RejectReason::IllegalTargets);
             }
             for t in targets {
@@ -580,7 +599,6 @@ pub(super) fn validate_tail_ext_targets(
             if target == core.turn.current
                 || !core.player(target).alive
                 || core.player(target).hand.is_empty()
-                || core.player(core.turn.current).hand.is_empty()
             {
                 return Err(RejectReason::IllegalTargets);
             }

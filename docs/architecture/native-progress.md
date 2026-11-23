@@ -9,6 +9,11 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-23 Batch U05-1（U05 杀海拾遗 +87 项及 `part3_d2`/`MachineSnapshot::Jiedao` 修复）合入
+
+- **合入与计数**：在 `5de733e5e9` 合入 `swarm/conv-u05-1`（`b4fd79501`，`verifier-l11` `#49 APPROVE`），完成 7 处 `UU` 合并与 `generals_bridge.rs`/`snap/asks/standard_skills.rs` 行数拆分，并修复 `part3_d2.rs`（`blk_chain`）与 `MachineSnapshot::Jiedao` 快照恢复/问询；[inventory_status.json](../migration/g0/inventory_status.json) 将精确 `87` 项升为 `已复核等价`（保留 `tip` 及 7 项阻塞/子包开关为 `简化近似`），**`U05` `88 / 1,533 / 0`**、全局 **`2,408 / 2,016 / 0`**、整包 8 维 **`0/37`**、`333/107/5/759/8` 与 14 条 golden 哈希不变。详见 [Batch U05-1 证据](../operations/evidence/2026-11-23-batch3-7-u05-1/README.md)。
+- **主线全量实测（2026-11-23）**：`4-crate`（`44/44` suites、`2,921` pass/`6` ignored）、`content-native-loader`（`12/12`、`48` pass）、`conformance`（`19/19` + `3/3` suites `4` pass）、`desktop-client`（`4/4`、`20` pass/`1` ignored）、`--workspace`（`178/178`、`8,228` pass/`8` ignored）、`web-client`（`typecheck` + `test` `540/540` + `smoke:native` `83/83` + `build`）与跨端哈希（`native_wasm_match=true`、`ALL CROSS-TARGET CHECKS PASSED`）全数通过；同时纳入 Batch Q8/Q9 `ci-runs.md` 记录（`5de733e5e9` / CI `45086172185` `10/10` 通过）。
+
 ### 2026-11-23 Batch Q8/Q9（外部硬件/签名与 Phase 6 收编前置 + `web-frame-external.mjs` `--host` 修复）合入
 
 - **范围与不变量**：合入 `swarm/conv-q8-q9-prereqs`（[证据报告](../operations/evidence/2026-11-22-queue8-9-external-prereqs-and-phase6/README.md) 与 [web-frame-external.mjs](../../apps/web-client/scripts/web-frame-external.mjs) `--host` 绑定/动态 `Host` 修复），并登记 Batch L11-6b CI 记录至 [ci-runs.md](../operations/evidence/ci-runs.md)（`c21f105c93` / CI `45080540689` 首跑 `10/10` 通过）；**`0` Rust 内核改动、`0` 清单计数变动**（全局 `2,321 / 2,103 / 0`，`L11` `554 / 382 / 0`，整包 8 维签字 `0/37`，`333/107/5/759/8` 与 14 条 golden 哈希不变）。

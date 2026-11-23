@@ -31,6 +31,7 @@ pub(crate) const CONTENT_HOOKS: ContentHooks = ContentHooks {
     on_player_died: crate::content::host::host_on_player_died,
     on_phase_use_end: crate::content::host::host_on_phase_use_end,
     on_round_start: crate::content::host::host_on_round_start,
+    on_turn_begin: crate::content::host::host_on_turn_begin,
     on_hand_card_removed: crate::content::host::host_on_hand_card_removed,
     reguhuo_response_skill: crate::content::host::reguhuo_response_skill,
     scsanruo_response_skill: crate::content::host::scsanruo_response_skill,

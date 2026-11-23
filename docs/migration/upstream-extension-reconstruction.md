@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-23 Batch U05-1（U05 杀海拾遗 +87→88/1,621，全局 2,408/2,016/0）合入
+
+- **范围与结果**：在 `5de733e5e9209320500a9064a5d73f7e7970b537` 上合入 `swarm/conv-u05-1`（`b4fd79501`，`verifier-l11` `#49 APPROVE`）及 `part3_d2`/`MachineSnapshot::Jiedao` 回归修复；将 `U05` 杀海拾遗 `87` 项升为 `已复核等价`（`U05` **`88 / 1,533 / 0`**，保留 `tip` 与 7 项含阻塞/依赖偏差条目为 `简化近似`），全局 **`2,408 / 2,016 / 0`**，整包 8 维签字保持 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变。详见 [Batch U05-1 证据摘要](../operations/evidence/2026-11-23-batch3-7-u05-1/README.md) 与 [U05-杀海拾遗.md](g0/U05-杀海拾遗.md)。
+
 ## 2026-11-23 Batch Q8/Q9（外部前提与 Phase 6 范围文档 + `web-frame-external.mjs` `--host` 修复）合入
 
 - 合入 `swarm/conv-q8-q9-prereqs`（[证据报告](../operations/evidence/2026-11-22-queue8-9-external-prereqs-and-phase6/README.md) 与 [web-frame-external.mjs](../../apps/web-client/scripts/web-frame-external.mjs) `--host` 修复），并提交 `c21f105c93` / CI `45080540689` 记录于 [ci-runs.md](../operations/evidence/ci-runs.md)。

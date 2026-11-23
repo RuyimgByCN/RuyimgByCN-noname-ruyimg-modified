@@ -80,6 +80,22 @@ pub(super) fn eligible(
     let event = crate::event::damage_event(frames, frame);
     let kind = event_kind(frame);
     if let EventData::Damage(d) = event {
+        let root_id = match frame.data {
+            EventData::DamageWindow { root, .. } => root,
+            EventData::Damage(_) => frame.id,
+            _ => 0,
+        };
+        if root_id != 0
+            && core
+                .vm_aux
+                .flags
+                .get(&(q.owner, format!("subplayer_untrigger_dmg:{root_id}")))
+                .copied()
+                .unwrap_or(0)
+                > 0
+        {
+            return false;
+        }
         let terminal = matches!(
             (kind, d.settlement.outcome),
             (EventKind::DamageZero, crate::event::DamageOutcome::Zero)

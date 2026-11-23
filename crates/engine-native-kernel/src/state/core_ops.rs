@@ -28,7 +28,7 @@ impl GameStateCore {
         }
     }
 
-    fn jun_group(name: &str) -> Option<&'static str> {
+    pub fn jun_group(name: &str) -> Option<&'static str> {
         match name {
             "jun_liubei" | "gz_jun_liubei" | "pe_jun_liubei" | "jun_shu" | "君刘备" => Some("shu"),
             "jun_zhangjiao" | "gz_jun_zhangjiao" | "pe_jun_zhangjiao" | "jun_qun" | "君张角" => Some("qun"),

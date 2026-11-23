@@ -30,6 +30,11 @@ impl DyingSaveMachine {
             guihan_asked: false,
         }
     }
+
+    pub(crate) fn with_guihan_asked(mut self, guihan_asked: bool) -> Self {
+        self.guihan_asked = guihan_asked;
+        self
+    }
 }
 
 impl crate::catalog::SkillMachine for DyingSaveMachine {
@@ -64,41 +69,63 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
         // 口径）。确认后自回 1（救回由循环顶 hp>0 判定自然发出）摸 2，
         // 男性目标回 1 摸 2。
         if !self.guihan_asked {
-            let gui = ctx
-                .catalog
-                .skill_by_name(crate::vocabulary::host::WUDIAN_GUIHAN_KEY)
-                .map(|d| ctx.core.has_skill(self.dying, d))
-                .unwrap_or(false);
+            let gui = ["guihan", crate::vocabulary::host::WUDIAN_GUIHAN_KEY]
+                .iter()
+                .any(|k| {
+                    ctx.catalog
+                        .skill_by_name(k)
+                        .is_some_and(|d| ctx.core.has_skill(self.dying, d))
+                });
             let unused = !ctx.core.player(self.dying).guihan_used;
             if gui && unused {
-                self.guihan_asked = true;
-                return Flow::WaitChoice {
-                    observer: self.dying,
-                    spec: crate::choice::ChoiceSpec::confirm("wudian_guihan_ask"),
-                };
+                let options: Vec<crate::choice::ChoiceOption> = (0..ctx.core.players.len() as u8)
+                    .filter(|&i| {
+                        i != self.dying
+                            && ctx.core.player(i).alive
+                            && ctx.core.matches_gender(
+                                ctx.catalog,
+                                i,
+                                crate::vocabulary::generals::Gender::Male,
+                            )
+                    })
+                    .map(crate::choice::ChoiceOption::Player)
+                    .collect();
+                if !options.is_empty() {
+                    self.guihan_asked = true;
+                    return Flow::WaitChoice {
+                        observer: self.dying,
+                        spec: crate::choice::ChoiceSpec {
+                            kind: crate::choice::ChoiceKind::SelectPlayers,
+                            prompt: "wudian_guihan_ask",
+                            options,
+                            min: 0,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    };
+                }
             }
         } else {
             self.guihan_asked = false;
-            if let Some(crate::choice::ChoiceOption::Confirm) = ctx.answer().first().copied() {
+            if let Some(m) = ctx.answer().first().and_then(|o| match o {
+                crate::choice::ChoiceOption::Player(p) => Some(*p),
+                _ => None,
+            }) {
                 let t = self.dying;
-                ctx.core.player_mut(t).guihan_used = true;
-                ctx.recover(t, 1, None);
-                ctx.start_draw(t, 2);
-                // 座位序首男性其他存活
-                let male = (0..ctx.core.players.len() as u8).find(|&i| {
-                    i != t
-                        && ctx.core.player(i).alive
-                        && ctx.core.matches_gender(
-                            ctx.catalog,
-                            i,
-                            crate::vocabulary::generals::Gender::Male,
-                        )
-                });
-                if let Some(m) = male {
+                if m != t
+                    && ctx.core.player(m).alive
+                    && ctx.core.matches_gender(
+                        ctx.catalog,
+                        m,
+                        crate::vocabulary::generals::Gender::Male,
+                    )
+                {
+                    ctx.core.player_mut(t).guihan_used = true;
+                    ctx.recover(t, 1, None);
+                    ctx.start_draw(t, 2);
                     ctx.recover(m, 1, None);
                     ctx.start_draw(m, 2);
                 }
-                // 回血后 hp>0 → 循环顶自然发出 DyingSaved
             }
         }
         loop {

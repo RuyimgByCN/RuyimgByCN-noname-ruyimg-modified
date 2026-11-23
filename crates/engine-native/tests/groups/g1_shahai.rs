@@ -21,3 +21,6 @@ mod g1_shahai_zhenfa;
 
 #[path = "../decision34_round4_u05_shahai.rs"]
 mod decision34_round4_u05_shahai;
+
+#[path = "../u05_b1_fixes.rs"]
+mod u05_b1_fixes;

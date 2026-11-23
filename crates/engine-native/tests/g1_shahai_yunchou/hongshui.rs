@@ -124,5 +124,9 @@ fn hongshui_self_delayed_trick_thunder_damage() {
             other => panic!("advance: {other:?}"),
         }
     }
-    assert_eq!(e.debug_hp(0), 1, "洪水判定梅花命中 → 3 点雷伤");
+    assert_eq!(
+        e.debug_hp(0),
+        3,
+        "洪水判定梅花命中 → 空 he 流失 1 点体力"
+    );
 }

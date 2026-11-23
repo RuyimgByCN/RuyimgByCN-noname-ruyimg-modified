@@ -1309,9 +1309,18 @@ fn mtg_bingheyaosai_land_effect() {
     let hand_before = e.debug_hand(0).len(); // 含杀共 3
     let out = play(&mut e, sha, vec![1]);
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
-    while let Some(c) = e.open_choice() {
-        let (cid, obs) = (c.id, c.observer);
-        submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
+    while let Some(c) = e.open_choice().cloned() {
+        let sel = if c.spec.prompt == "u05_mtg_bingheyaosai_sha_discard" {
+            vec![c.spec.options[0]]
+        } else if c.spec.options.contains(&ChoiceOption::Pass) {
+            vec![ChoiceOption::Pass]
+        } else if c.spec.allow_cancel {
+            Vec::new()
+        } else {
+            c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+        };
+        let out_a = submit(&mut e, c.observer, GameAction::Answer { choice_id: c.id, selection: sel });
+        assert!(!matches!(out_a, CommandOutcome::Rejected(_)), "answer bingheyaosai: {out_a:?}");
     }
     assert_eq!(e.debug_hp(1), 3, "杀正常结算（4→3）");
     assert_eq!(e.debug_hand(0).len(), hand_before - 2, "杀离手 1 + 用杀随机弃 1");

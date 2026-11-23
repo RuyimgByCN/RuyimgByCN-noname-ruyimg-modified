@@ -1046,36 +1046,7 @@ pub(super) fn food_tick(ctx: &mut Ctx<'_>, owner: PlayerId, def_key: &str) {
 /// 技（当前仅依夏兰附重铸技；上游 addGlobalSkill+temp 簿记的实例化对
 /// 应物——once_used 随拥有者回合开始重置为既有路径）。
 pub(crate) fn sync_land_skill(ctx: &mut Ctx<'_>, owner: PlayerId, new_kind: CardKind) {
-    // 地附技映射（当前三例）：依夏兰→重铸、林中尖塔→塔击、幽林→发现
-    let key_of = |k: CardKind| match k {
-        CardKind::Yixialan => Some(MTG_YIXIALAN_RECAST_KEY),
-        CardKind::Linzhongjianta => Some(MTG_LINZHONGJIANTA_SKILL_KEY),
-        CardKind::Youlin => Some(MTG_YOULIN_DISCOVER_KEY),
-        _ => None,
-    };
-    let old_key = ctx.core.current_land.and_then(key_of);
-    let new_key = key_of(new_kind);
-    if let Some(k) = old_key {
-        if old_key != new_key {
-            if let Some(d) = ctx.catalog.skill_by_name(k) {
-                ctx.core.skills.remove(&(owner, d));
-            }
-        }
-    }
-    if let Some(k) = new_key {
-        if let Some(d) = ctx.catalog.skill_by_name(k) {
-            ctx.insert_skill(
-                (owner, d),
-                crate::state::SkillInstance {
-                    owner,
-                    enabled: true,
-                    once_used: false,
-                    expires_end_of_turn: false,
-                    rounds: 0,
-                },
-            );
-        }
-    }
+    super::step::u05_b1_mtg_asks::sync_global_land_skill(ctx, owner, new_kind);
 }
 
 /// 黑色花色（♠/♣——浴尘 filter 共用）。

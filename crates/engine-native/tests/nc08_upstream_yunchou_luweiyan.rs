@@ -262,11 +262,36 @@ fn upstream_luweiyan_chain_kill_fires_on_first_target() {
         if c.spec.prompt.contains("respond_shan") {
             saw_shan_response = true;
         }
-        // 「选目标」类询问（原生不应出现——差异点）
-        if c.spec.options.iter().filter(|o| matches!(o, engine_native::ChoiceOption::Player(_))).count() > 0
-            && c.spec.prompt.contains("sha")
+        // 「选目标」类询问（已对齐上游 u05_luweiyan2_target）
+        if c.spec.prompt == "u05_luweiyan2_target"
+            || (c.spec.options.iter().filter(|o| matches!(o, engine_native::ChoiceOption::Player(_))).count() > 0
+                && c.spec.prompt.contains("sha"))
         {
             saw_target_choice = true;
+        }
+        if c.spec.prompt == "u05_luweiyan2_target" {
+            let _ = e.submit(GameCommand {
+                actor: c.observer,
+                expected_revision: e.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer {
+                    choice_id: c.id,
+                    selection: vec![engine_native::ChoiceOption::Player(1)],
+                },
+            });
+            continue;
+        }
+        if c.spec.prompt == "u05_shuigong_discard" {
+            let _ = e.submit(GameCommand {
+                actor: c.observer,
+                expected_revision: e.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer {
+                    choice_id: c.id,
+                    selection: vec![c.spec.options[0]],
+                },
+            });
+            continue;
         }
         // 1 号打出【闪】以观测虚拟杀
         if c.observer == 1 && c.spec.options.contains(&engine_native::ChoiceOption::Card(shan)) {
@@ -309,8 +334,8 @@ fn upstream_luweiyan_chain_kill_fires_on_first_target() {
         "链杀：厉焰结算后应对座位序首目标（1 号）**视为使用【杀】**（应出现【闪】响应询问），实测 {prompts:?}"
     );
     assert!(
-        !saw_target_choice,
-        "**差异登记**：原生自动取首目标（无「是否视为使用一张杀」的目标询问），上游为玩家选目标+可取消"
+        saw_target_choice,
+        "已对齐上游：厉焰结算后弹出「u05_luweiyan2_target」选目标询问（可取消），实测 {prompts:?}"
     );
     assert!(
         !e.debug_hand(1).contains(&shan),

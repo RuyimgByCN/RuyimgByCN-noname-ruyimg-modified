@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-23 Batch U05-1（U05 杀海拾遗 +87→88/1,621，全局 2,408/2,016/0）更新
+
+- **核验与升级**：基线 `5de733e5e9209320500a9064a5d73f7e7970b537`；合入 `swarm/conv-u05-1`（`b4fd79501`，`verifier-l11` `#49 APPROVE`）及主线冲突/回归修复后，将 U05 杀海拾遗 `33` 卡牌、`2` 配置（`rand`/`wuxing`）、`12` 武将、`40` 技能共 `87` 项升为 `已复核等价`；保留 Batch UI-7 `tip` 为 `已复核等价`，严格保留 `qixingzhen`、`diy_caiwenji`、`stone_chenshui` 与 4 项子包开关（`mtg`/`zhenfa`/`gwent`/`yunchou`）为 `简化近似`。`U05` 现 **`88 / 1,533 / 0`**，全局 **`2,408 / 2,016 / 0`**（缺失 `0`，整包 8 维签字仍 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变）。详见 [U05-杀海拾遗.md](U05-杀海拾遗.md)、[Batch U05-1 证据摘要](../../operations/evidence/2026-11-23-batch3-7-u05-1/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-23 Batch L11-6b（L11 太虚幻境 206 模式节点/效果包与净集 +35→554/936）更新（待提交／发布）
 
 基线 HEAD `6ecddea03c8c2d5317da85780609de16f8306e70`（Batch L11-6a 已发布，CI Run `45074648377` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-l11` 独立复核（#100 **`APPROVE`**，含 Round 4 与三轮 Headless Chrome CDP）及主线全量门禁复测，清单按 #100 净集划分更新为 **已复核等价 2,321／简化近似 2,103／缺失 0／上游未定义 0**（合计 4,424）：`L11 太虚幻境` 由 `519 / 417 / 0` 升为 **554 / 382 / 0**（+35 项无外部阻塞依赖节点：`2` `extension_servant.js`＋`18` `event_universal.js`＋`15` `extension_season.js`，其余 `171` 项〔含 `action` Spine 元数据〕维持 `简化近似`；整包八项仍 `0/37`）。详见 [Batch L11-6b 证据摘要](../../operations/evidence/2026-11-23-batch3-6b-l11-6b/README.md) 与 [inventory_status.json](inventory_status.json)。

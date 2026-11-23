@@ -123,7 +123,21 @@ pub(super) fn play_kind(
             }
         }
     }
-    let mut kind = catalog.card_kind(card);
+    let mut kind = if core
+        .vm_aux
+        .flags
+        .get(&(actor, format!("mtongnian_link:{card}")))
+        .copied()
+        .unwrap_or(0)
+        > 0
+    {
+        core.declared_kinds
+            .get(&card)
+            .copied()
+            .unwrap_or_else(|| catalog.card_kind(card))
+    } else {
+        catalog.card_kind(card)
+    };
     if sealed {
         if let Some(spec) = catalog.find_player_vm_view_as(core, actor, card, true, None) {
             kind = spec.as_kind;

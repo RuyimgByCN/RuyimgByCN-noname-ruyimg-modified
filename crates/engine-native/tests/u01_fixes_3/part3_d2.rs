@@ -47,14 +47,14 @@ fn u01_fix3_14_dddlianer() {
     let hi_shan = find_card_by(&e, |_, d| d.kind == CardKind::Shan && d.rank as u32 >= cap);
     let hi_tao = find_card_by(&e, |_, d| d.kind == CardKind::Tao && d.rank as u32 >= cap);
     let lo_sha = find_card_by(&e, |_, d| d.kind == CardKind::Sha && d.rank as u32 > 0 && (d.rank as u32) < cap);
-    let blk_wuzhong = find_card_by(&e, |_, d| {
-        d.kind == CardKind::Wuzhong && matches!(d.suit, Suit::Spade | Suit::Club)
+    let blk_chain = find_card_by(&e, |_, d| {
+        d.kind == CardKind::Chain && matches!(d.suit, Suit::Spade | Suit::Club)
     });
     let p1_hold = find_nth_card_by(&e, 15, |_, _| true);
     let p1_hold2 = find_nth_card_by(&e, 16, |_, _| true);
     put_in_hand(&mut e, 1, p1_hold);
     put_in_hand(&mut e, 1, p1_hold2);
-    put_in_hand(&mut e, 0, blk_wuzhong);
+    put_in_hand(&mut e, 0, blk_chain);
     put_in_hand(&mut e, 0, red_guohe);
     put_in_hand(&mut e, 0, hi_sha);
     put_in_hand(&mut e, 0, hi_shan);
@@ -63,7 +63,7 @@ fn u01_fix3_14_dddlianer() {
 
     // Negative: black card does not prompt `dddlianer_confirm`.
     e.debug_set_turn(0, Phase::Play, 1);
-    submit(&mut e, 0, GameAction::PlayCard { card: blk_wuzhong, targets: vec![] });
+    submit(&mut e, 0, GameAction::PlayCard { card: blk_chain, targets: vec![2] });
     assert!(e.open_choice().is_none(), "black card does not trigger dddlianer");
 
     // Positive: P0 plays `red_guohe` on P1 -> finishes resolving -> `dddlianer_confirm` AFTER card use ends!
@@ -172,10 +172,10 @@ fn u01_fix3_15_dddanzhi() {
     let (mut e, d3, p9) = new_clean_engine(719, 3);
     e.debug_grant(0, "dddanzhi");
     // Last card played is Black -> P0 activates dddanzhi at Prepare to grant ward to P1.
-    let blk_wuzhong = find_card_by(&e, |_, d| d.kind == CardKind::Wuzhong && matches!(d.suit, Suit::Spade | Suit::Club));
-    put_in_hand(&mut e, 2, blk_wuzhong);
+    let blk_chain = find_card_by(&e, |_, d| d.kind == CardKind::Chain && matches!(d.suit, Suit::Spade | Suit::Club));
+    put_in_hand(&mut e, 2, blk_chain);
     e.debug_set_turn(2, Phase::Play, 1);
-    submit(&mut e, 2, GameAction::PlayCard { card: blk_wuzhong, targets: vec![] });
+    submit(&mut e, 2, GameAction::PlayCard { card: blk_chain, targets: vec![2] });
 
     let mut e = Engine::restore_with_extensions(&e.save(), &[&d3, &p9]).unwrap();
     advance_to_prepare(&mut e, 0, 1);

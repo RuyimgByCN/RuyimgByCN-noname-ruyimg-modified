@@ -632,6 +632,11 @@ impl HostBehavior {
             HostBehavior::L11Weapons => "host:l11_weapons",
             HostBehavior::L11GeneralBossC => "host:l11_general_boss_c",
             HostBehavior::L11BossLingfeng => "host:l11_boss_lingfeng",
+            HostBehavior::U05MainStoneBatch => "host:u05_main_stone",
+            HostBehavior::U05MtgCharBatch => "host:u05_mtg_char",
+            HostBehavior::U05MtgLandExtraBatch => "host:u05_mtg_land_extra",
+            HostBehavior::U05YunchouCharBatch => "host:u05_yunchou_char",
+            HostBehavior::U05ZhenfaRecastSkill => "host:u05_zhenfa_recast",
         }
     }
 }

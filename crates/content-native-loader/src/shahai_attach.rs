@@ -126,7 +126,9 @@ fn resolve_and_register_u05_skill(
         return Some(zh);
     }
     let sk_owned = map_cross_subpack_skill(package_id, raw_sk);
-    if let Some(behavior) = lookup_upstream_host_behavior(clean) {
+    if let Some(behavior) = crate::shahai_u05_b1::lookup_shahai_b1_host_behavior(clean)
+        .or_else(|| lookup_upstream_host_behavior(clean))
+    {
         push_host_skill_if_unseen(&sk_owned, behavior, &mut pack.host_skills, seen_skills);
         return Some(names::intern(sk_owned));
     }
@@ -237,7 +239,7 @@ pub fn try_attach_shahai_formal_package(
         return false;
     }
     let mut vm_idx = pack.vm_skills.len();
-    match package_id {
+    let attached = match package_id {
         "shahai-gujian" => {
             attach_card_rows(package_id, &U05_GUJIAN_ALL_CARDS, pack, seen_cards);
             attach_skill_rows(
@@ -451,5 +453,14 @@ pub fn try_attach_shahai_formal_package(
             true
         }
         _ => false,
+    };
+    if attached {
+        crate::shahai_u05_b1::apply_shahai_b1_pack_fixups(
+            package_id,
+            pack,
+            seen_cards,
+            seen_skills,
+        );
     }
+    attached
 }

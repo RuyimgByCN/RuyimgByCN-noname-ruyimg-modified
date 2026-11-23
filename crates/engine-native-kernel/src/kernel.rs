@@ -252,6 +252,7 @@ pub use tricks::*;
 mod nullify;
 pub use nullify::*;
 mod judge;
+mod judge_u05_b1;
 pub use judge::*;
 mod aoe;
 pub use aoe::*;

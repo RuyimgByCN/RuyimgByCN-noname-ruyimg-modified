@@ -504,6 +504,16 @@ pub fn standard_catalog_with_extensions(
                 });
             }
             let mut def = host_skill_def(decl.name.to_string(), decl.behavior);
+            if decl.behavior == crate::content::host::HostBehavior::ChenhuodajieCard {
+                def.trigger = Some(crate::catalog::TriggerMeta {
+                    event: crate::event::EventKind::Damage,
+                    timing: crate::event::Timing::Normal,
+                    priority: 0,
+                    order_selectable: true,
+                    optional: false,
+                    extra_events: Vec::new(),
+                });
+            }
             def.presentation_binding = decl.presentation_binding.clone();
             ext_skills.push(def);
         }
@@ -553,8 +563,8 @@ pub fn standard_catalog_with_extensions(
             event: crate::event::EventKind::Damage,
             timing: crate::event::Timing::Normal,
             priority: 0,
-            order_selectable: false,
-            optional: true,
+            order_selectable: true,
+            optional: false,
             extra_events: Vec::new(),
         });
         ext_skills.push(def);
@@ -602,8 +612,11 @@ pub fn standard_catalog_with_extensions(
                 || packs.iter().any(|p| {
                     p.enabled
                         && (p.init_hook.grants_global_skill(behavior)
-                            || (behavior == crate::content::host::HostBehavior::JinlianzhuCancel
-                                && p.host_skills.iter().any(|d| d.behavior == behavior)))
+                            || (matches!(
+                                behavior,
+                                crate::content::host::HostBehavior::JinlianzhuCancel
+                                    | crate::content::host::HostBehavior::U05ZhenfaRecastSkill
+                            ) && p.host_skills.iter().any(|d| d.behavior == behavior)))
                 });
             if is_global && !seen_global_behaviors.contains(&behavior) {
                 seen_global_behaviors.push(behavior);

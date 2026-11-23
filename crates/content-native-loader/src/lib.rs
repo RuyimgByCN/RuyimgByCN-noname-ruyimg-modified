@@ -44,6 +44,7 @@ mod martial;
 mod omnisearch;
 mod qhly;
 pub mod rzsh;
+mod shahai_u05_b1;
 mod shousha;
 mod shousha_mvp;
 pub mod shousha_ui;
@@ -252,7 +253,7 @@ pub struct BridgedGenerals {
     pub definition_ids: BridgedDefinitionIds,
 }
 
-fn invalid(field: &'static str, reason: impl Into<String>) -> BridgeError {
+pub(crate) fn invalid(field: &'static str, reason: impl Into<String>) -> BridgeError {
     BridgeError::InvalidField {
         field,
         reason: reason.into(),
@@ -286,7 +287,8 @@ pub mod up37_closure;
 pub use locked_content::{
     deferred_cards_for_locked_content, prepare_locked_content, prepare_locked_content_with_bridge,
     restore_locked_engine, restore_locked_engine_with_original_presentation, start_locked_engine,
-    start_locked_engine_with_original_presentation, start_locked_taixu_battle,
+    start_locked_engine_with_original_presentation, start_locked_engine_with_shahai_config,
+    start_locked_taixu_battle,
     validate_and_freeze_raw_package, validate_frozen_package, verify_locked_content,
     verify_locked_content_with_bridge, ContentLock, FrozenPackage, LockedContentEnvelope,
     LockedPackage, LockedStartMode, VerifiedLockedContent,
@@ -524,7 +526,7 @@ pub fn bridge_vm_skill_decls(
     Ok(VmBridgeOutcome { decls: out })
 }
 
-fn ensure_symbol_capacity() -> Result<(), BridgeError> {
+pub(crate) fn ensure_symbol_capacity() -> Result<(), BridgeError> {
     let limit = engine_native::content::names::SYMBOL_TABLE_LIMIT;
     if names::interned_count() >= limit {
         return Err(BridgeError::SymbolTableLimit { limit });
@@ -532,11 +534,11 @@ fn ensure_symbol_capacity() -> Result<(), BridgeError> {
     Ok(())
 }
 
-fn parse_json(json: &str) -> Result<Value, BridgeError> {
+pub(crate) fn parse_json(json: &str) -> Result<Value, BridgeError> {
     serde_json::from_str(json).map_err(|e| BridgeError::BadJson(e.to_string()))
 }
 
-fn req_str<'a>(v: &'a Value, key: &str, field: &'static str) -> Result<&'a str, BridgeError> {
+pub(crate) fn req_str<'a>(v: &'a Value, key: &str, field: &'static str) -> Result<&'a str, BridgeError> {
     match v.get(key) {
         None | Some(Value::Null) => Err(BridgeError::MissingField(field)),
         Some(Value::String(s)) => Ok(s.as_str()),
@@ -544,7 +546,7 @@ fn req_str<'a>(v: &'a Value, key: &str, field: &'static str) -> Result<&'a str, 
     }
 }
 
-fn opt_str<'a>(
+pub(crate) fn opt_str<'a>(
     v: &'a Value,
     key: &str,
     field: &'static str,
@@ -566,7 +568,7 @@ fn int_in(x: &Value, field: &'static str, range: RangeInclusive<u64>) -> Result<
     }
 }
 
-fn req_int(
+pub(crate) fn req_int(
     v: &Value,
     key: &str,
     field: &'static str,
@@ -578,7 +580,7 @@ fn req_int(
     }
 }
 
-fn opt_int(
+pub(crate) fn opt_int(
     v: &Value,
     key: &str,
     field: &'static str,
@@ -590,7 +592,7 @@ fn opt_int(
     }
 }
 
-fn req_array<'a>(v: &'a Value, key: &str, field: &'static str) -> Result<&'a [Value], BridgeError> {
+pub(crate) fn req_array<'a>(v: &'a Value, key: &str, field: &'static str) -> Result<&'a [Value], BridgeError> {
     match v.get(key) {
         None | Some(Value::Null) => Err(BridgeError::MissingField(field)),
         Some(Value::Array(a)) => Ok(a.as_slice()),
@@ -598,7 +600,7 @@ fn req_array<'a>(v: &'a Value, key: &str, field: &'static str) -> Result<&'a [Va
     }
 }
 
-fn opt_array<'a>(v: &'a Value, key: &str, field: &'static str) -> Result<&'a [Value], BridgeError> {
+pub(crate) fn opt_array<'a>(v: &'a Value, key: &str, field: &'static str) -> Result<&'a [Value], BridgeError> {
     match v.get(key) {
         None | Some(Value::Null) => Ok(&[]),
         Some(Value::Array(a)) => Ok(a.as_slice()),
@@ -610,7 +612,7 @@ fn opt_array<'a>(v: &'a Value, key: &str, field: &'static str) -> Result<&'a [Va
 /// 技能映射三态（T12 运筹武将面批 8）：暂缓（mapping null）/内置引用
 /// （`builtin:名`，白名单——**只收有原生实现的标准技**；引用不存在的
 /// def 会在建局后行为面静默失效，故白名单而非开放查名）/宿主行为。
-enum MappedSkill {
+pub(crate) enum MappedSkill {
     Deferred,
     Builtin(&'static str),
     Host(HostBehavior),
@@ -622,7 +624,7 @@ const BUILTIN_SKILL_REFS: [&str; 11] = [
     "护驾", "谦逊", "义从", "酒池", "龙胆", "无双", "闭月", "伤逝", "绝情", "突袭", "流离",
 ];
 
-fn mapping_of(v: &Value, field: &'static str) -> Result<MappedSkill, BridgeError> {
+pub(crate) fn mapping_of(v: &Value, field: &'static str) -> Result<MappedSkill, BridgeError> {
     match opt_str(v, "mapping", field)? {
         None => Ok(MappedSkill::Deferred),
         Some(key) => {
@@ -659,7 +661,7 @@ fn suit_of(suit: &str) -> Result<Suit, BridgeError> {
     })
 }
 
-fn faction_of(f: &str) -> Result<Faction, BridgeError> {
+pub(crate) fn faction_of(f: &str) -> Result<Faction, BridgeError> {
     Ok(match f {
         "wei" => Faction::Wei,
         "shu" => Faction::Shu,
@@ -669,7 +671,7 @@ fn faction_of(f: &str) -> Result<Faction, BridgeError> {
     })
 }
 
-fn gender_of(g: &str) -> Result<Gender, BridgeError> {
+pub(crate) fn gender_of(g: &str) -> Result<Gender, BridgeError> {
     Ok(match g {
         "male" => Gender::Male,
         "female" => Gender::Female,
@@ -916,7 +918,7 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
     // generals 缺省为空：卡牌包合法；同文件声明的武将经同一 pack 段装载。
     // 武将命中的宿主技能声明追加在伴随技能与 skills 数组之后（次序决定
     // 目录技能编号，属确定性规则的一部分）。
-    let generals_out = bridge_generals_inner(&parsed, false, &BTreeSet::new(), false)?;
+    let generals_out = generals_bridge::bridge_generals_inner(&parsed, false, &BTreeSet::new(), false)?;
     for decl in generals_out.host_skills {
         match host_skills.iter().find(|d| d.name == decl.name) {
             Some(d) if d.behavior != decl.behavior => {
@@ -956,198 +958,9 @@ pub fn bridge_pack_with_wuxing_config(
     Ok(bridged)
 }
 
-/// 武将装载（角色包管线）：generals 数组 → `ExtensionGeneral` + 命中宿主
-/// 行为的技能声明。势力、性别、体力上限缺失或非法均报错。
-pub fn bridge_generals(json: &str) -> Result<BridgedGenerals, BridgeError> {
-    ensure_symbol_capacity()?;
-    let parsed = parse_json(json)?;
-    ensure_host_api_compatible(&parsed)?;
-    bridge_generals_inner(&parsed, true, &BTreeSet::new(), false)
-}
-
-/// 与 [`bridge_generals`] 相同，但把 `known_vm_skills` 中的 VM 逻辑技能名视为
-/// 已解析技能：它们不产生 host 行为，只进入武将技能列表。用于完整 npack
-/// （模块 + characters 资产）的 Worker／服务端安装路径。含 VM 技能的包
-/// 必须拒绝无法解析的武将技能，避免安装成功后静默丢失技能。
-pub fn bridge_generals_with_known(
-    json: &str,
-    known_vm_skills: &BTreeSet<String>,
-) -> Result<BridgedGenerals, BridgeError> {
-    ensure_symbol_capacity()?;
-    let parsed = parse_json(json)?;
-    ensure_host_api_compatible(&parsed)?;
-    bridge_generals_inner(&parsed, true, known_vm_skills, true)
-}
-
-/// `require_generals`：独立入口必需；全量入口（bridge_pack）对纯卡牌包
-/// 容许缺省。
-fn bridge_generals_inner(
-    parsed: &Value,
-    require_generals: bool,
-    known_vm_skills: &BTreeSet<String>,
-    reject_unmapped: bool,
-) -> Result<BridgedGenerals, BridgeError> {
-    let generals_json = if require_generals {
-        req_array(&parsed, "generals", "generals")?
-    } else {
-        opt_array(&parsed, "generals", "generals")?
-    };
-    let mut generals = Vec::new();
-    let mut mapped_skill_keys = Vec::new();
-    let mut host_skills: Vec<HostSkillDecl> = Vec::new();
-    let mut unmapped = 0usize;
-    let mut definition_ids = BridgedDefinitionIds::default();
-    for g in generals_json {
-        let name = req_str(g, "name", "generals[].name")?;
-        let gen_def_id =
-            opt_int(g, "definition_id", "generals[].definition_id", 0..=u64::from(u32::MAX))?
-                .map(|n| n as u32);
-        let mut skills: Vec<&'static str> = Vec::new();
-        for sk in req_array(g, "skills", "generals[].skills")? {
-            let key = req_str(sk, "name", "generals[].skills[].name")?;
-            let sk_def_id = opt_int(
-                sk,
-                "definition_id",
-                "generals[].skills[].definition_id",
-                0..=u64::from(u32::MAX),
-            )?
-            .map(|n| n as u32);
-            match mapping_of(sk, "generals[].skills[].mapping")? {
-                MappedSkill::Host(behavior) => {
-                    let interned = names::intern(key.to_string());
-                    match host_skills.iter().find(|d| d.name == interned) {
-                        Some(d) if d.behavior != behavior => {
-                            return Err(BridgeError::DuplicateSkill(key.to_string()));
-                        }
-                        Some(_) => {}
-                        None => host_skills.push(HostSkillDecl {
-                            name: interned,
-                            behavior,
-                            presentation_binding: None,
-                        }),
-                    }
-                    match (
-                        definition_ids
-                            .host_skill_definition_ids
-                            .get(interned)
-                            .copied()
-                            .flatten(),
-                        sk_def_id,
-                    ) {
-                        (Some(existing), Some(incoming)) if existing != incoming => {
-                            return Err(invalid(
-                                "generals[].skills[].definition_id",
-                                format!("宿主技能 {key} 的 definition_id 冲突: {existing} vs {incoming}"),
-                            ));
-                        }
-                        (None, Some(incoming)) => {
-                            definition_ids
-                                .host_skill_definition_ids
-                                .insert(interned, Some(incoming));
-                        }
-                        (None, None) => {
-                            definition_ids
-                                .host_skill_definition_ids
-                                .entry(interned)
-                                .or_insert(None);
-                        }
-                        (Some(_), _) => {}
-                    }
-                    // 上游 `diy_xizhenxihong` 仅含 `["fuchou", "jinyan"]`，不含 `jianbi`
-                    //（原手写 `wudian-upstream-noname/assets/cards.json` 误将 `jianbi` 放在西真夕红下；
-                    // 保留 `host_skills` 声明与 `source_hash` 不变，但不在目录中授予西真夕红 `jianbi`）。
-                    if !(matches!(name, "西真夕红" | "wdb_xizhenxihong") && interned == "jianbi")
-                    {
-                        skills.push(interned);
-                    }
-                    mapped_skill_keys.push(interned);
-                    // 父技 group：上游把伤害子技登记在父技 group 里，授予父技即授予
-                    // 子技；转换包曾漏掉这层关系，导致「父技所有权就让伤害面可达」
-                    // 或「子技永不可达」两种错误。此处按 behavior 表补回声明与授予。
-                    for &(child_key, child_behavior) in behavior.group_children() {
-                        let child = names::intern(child_key.to_string());
-                        match host_skills.iter().find(|d| d.name == child) {
-                            Some(d) if d.behavior != child_behavior => {
-                                return Err(BridgeError::DuplicateSkill(child_key.to_string()));
-                            }
-                            Some(_) => {}
-                            None => host_skills.push(HostSkillDecl {
-                                name: child,
-                                behavior: child_behavior,
-                                presentation_binding: None,
-                            }),
-                        }
-                        if !skills.contains(&child) {
-                            skills.push(child);
-                        }
-                        mapped_skill_keys.push(child);
-                    }
-                }
-                // 内置引用：技能 def 已在标准目录（白名单保证实现存在）
-                // ——只 intern 进武将技能列表，不产出 host 行为。
-                MappedSkill::Builtin(builtin) => {
-                    if sk_def_id.is_some() {
-                        return Err(invalid(
-                            "generals[].skills[].definition_id",
-                            format!("builtin 技能引用 {builtin} 不能声明包内 definition_id"),
-                        ));
-                    }
-                    skills.push(names::intern(builtin.to_string()));
-                }
-                MappedSkill::Deferred if known_vm_skills.contains(key) => {
-                    skills.push(names::intern(key.to_string()));
-                }
-                MappedSkill::Deferred if reject_unmapped => {
-                    return Err(invalid(
-                        "generals[].skills[].name",
-                        format!("VM 包的武将技能 {key} 未映射"),
-                    ));
-                }
-                MappedSkill::Deferred => {
-                    if sk_def_id.is_some() {
-                        return Err(invalid(
-                            "generals[].skills[].definition_id",
-                            format!("暂缓技能 {key} 不能声明 definition_id"),
-                        ));
-                    }
-                    unmapped += 1;
-                }
-            }
-        }
-        let faction = faction_of(req_str(g, "faction", "generals[].faction")?)?;
-        let gender = gender_of(req_str(g, "gender", "generals[].gender")?)?;
-        // D5/T11-BOSS-ZHUGE-LIANG 前置：体力 `Infinity`（上游 JS 字面量，
-        // 包数据只能写成字符串）映射为无限体力哨兵；其余非法值仍拒绝。
-        let max_hp = match g.get("hp") {
-            Some(serde_json::Value::String(text)) if text == "Infinity" => {
-                engine_native::state::INFINITE_HP
-            }
-            Some(serde_json::Value::Number(n))
-                if n.as_u64() == Some(u64::from(engine_native::state::INFINITE_HP)) =>
-            {
-                engine_native::state::INFINITE_HP
-            }
-            _ => req_int(g, "hp", "generals[].hp", 1..=u64::from(u8::MAX))? as u32,
-        };
-        generals.push(ExtensionGeneral {
-            name: names::intern(name.to_string()),
-            faction,
-            skills: names::intern_list(skills),
-            max_hp,
-            gender,
-            presentation_binding: None,
-        });
-        definition_ids.general_definition_ids.push(gen_def_id);
-    }
-    Ok(BridgedGenerals {
-        generals,
-        host_skills,
-        mapped_skill_keys,
-        unmapped_skills: unmapped,
-        definition_ids,
-    })
-}
-
+mod generals_bridge;
+pub(crate) use generals_bridge::bridge_generals_inner;
+pub use generals_bridge::{bridge_generals, bridge_generals_with_known};
 mod pile_bridge;
 pub use pile_bridge::{bridge_pile, parse_pile_factors};
 pub mod decision34_closure;

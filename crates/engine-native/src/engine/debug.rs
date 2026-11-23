@@ -777,7 +777,7 @@ impl Engine {
                 {
                     let card = self.state.core.discard.remove(dpos);
                     self.state.core.deck.push(card);
-                    return self.state.core.deck.pop().expect("just pushed");
+                    return card;
                 }
                 let mut found = None;
                 for p in self.state.core.players.iter_mut() {

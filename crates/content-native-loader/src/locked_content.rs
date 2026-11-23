@@ -253,6 +253,34 @@ pub fn start_locked_taixu_battle(
     Ok(engine)
 }
 
+/// Start a locked engine honoring `ShahaiMainConfig` (`main/config.js` `wuxing`/`rand`).
+pub fn start_locked_engine_with_shahai_config(
+    seed: u64,
+    seats: usize,
+    mode: LockedStartMode,
+    verified: &VerifiedLockedContent,
+    cfg: &crate::ShahaiMainConfig,
+) -> Result<Engine, String> {
+    let verified_orig = Some(verify_original_presentation(
+        &embedded_original_presentation_input(),
+    )?);
+    let (packs, _) = bridge_verified_packs(verified)?;
+    let refs: Vec<&ExtensionPack> = packs.iter().collect();
+    let is_identity = matches!(mode, LockedStartMode::Identity);
+    let mut engine = Engine::new_with_extensions_and_shahai_config(
+        seed,
+        seats,
+        &refs,
+        is_identity,
+        cfg.wuxing,
+        cfg.rand.percent(),
+    )?;
+    if let Some(orig) = &verified_orig {
+        engine.try_with_catalog_mutation(|cat| attach_original_presentation_bindings(cat, orig))?;
+    }
+    Ok(engine)
+}
+
 /// Controlled locked engine restore factory (`R05 v5 §1/§3`): accepts only [`VerifiedLockedContent`], never bare `packs`.
 pub fn restore_locked_engine(
     snapshot: &StateSnapshot,
