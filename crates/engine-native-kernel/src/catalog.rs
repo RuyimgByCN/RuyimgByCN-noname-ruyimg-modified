@@ -899,6 +899,12 @@ pub trait SkillBehavior: Send + Sync {
         self.is_vm_skill()
     }
 
+    /// Whether `EventKind::CardUsed` dispatches in `Stage::BeforeTriggers`
+    /// (before `commit_card_used`, so card-replacement triggers run pre-commit).
+    fn card_used_in_before_window(&self) -> bool {
+        false
+    }
+
     /// G1 规则宿主：宿主原语行为标识（非宿主行为返回 None）。
     /// 供恢复期校验快照中的扩展机器定义键与行为标签。
     fn as_host_behavior(&self) -> Option<crate::vocabulary::host::HostBehavior> {

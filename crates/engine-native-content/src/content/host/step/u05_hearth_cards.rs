@@ -143,7 +143,7 @@ pub(crate) fn hearth_try_named_ext_card(
         .unwrap_or("");
     let exact = exact_base_name(raw);
     let virtual_src = flag(ctx.core, u.player, "hs_virtual_card_src");
-    let has_virtual_src = virtual_src > 0 && effective_kind == CardKind::Wuzhong;
+    let has_virtual_src = virtual_src > 0 && (card == u32::MAX || effective_kind == CardKind::Wuzhong);
     let mut dispatch_raw = raw;
     let mut shadow_copied_wuzhong = false;
     // Check `wxuying` transformed `hsfashu_anyingjingxiang` (keep copied card identity!)
@@ -168,6 +168,9 @@ pub(crate) fn hearth_try_named_ext_card(
     }
     if has_virtual_src {
         set_flag(ctx.core, u.player, "hs_virtual_card_src", 0);
+        if card == u32::MAX {
+            set_flag(ctx.core, u.player, "hs_last_virtual_src", virtual_src);
+        }
         if let Some(cdef) = ctx.catalog.cards.get((virtual_src - 1) as usize) {
             dispatch_raw = cdef.name;
         }

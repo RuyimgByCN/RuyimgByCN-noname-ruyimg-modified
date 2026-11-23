@@ -170,7 +170,15 @@ pub(super) fn apply_command(
             state.resolution.answer = Some(selection);
             Ok(())
         }
-        GameAction::PlayCard { card, targets } => play_card(state, catalog, actor, card, targets),
+        GameAction::PlayCard { card, targets } => {
+            play_card(state, catalog, actor, card, targets)?;
+            crate::resolution::maybe_promote_card_used_before(
+                &state.core,
+                catalog,
+                &mut state.resolution,
+            );
+            Ok(())
+        }
         GameAction::NextPhase => {
             let core = &state.core;
             // 授权：只有当前回合玩家可以推进自己的阶段。

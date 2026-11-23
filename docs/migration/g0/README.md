@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-23 Batch U05-6b（U05 杀海拾遗 `hearth` Part 2 +208→726/1,621，全局 3,046/1,378/0）更新
+
+- **核验与升级**：基线 `cc0401e8ec93c64098fc989e385ad2a30800ed86`（Batch U05-6a CI Run `45126700137` Attempt 1 `10/10 success`）；三路合入 `swarm/conv-u05-6b-hearth-part2`（`e350ea568..92e1b4cac`，`verifier-u05-b` `#45 APPROVE`）并完成主线 `virtual_diaobing_use` / `stone_chenshui` 兼容修正及 300 VM 下界校准后，将 U05 杀海拾遗 `hearth` Part 2 获批 `105` 技能 + `103` 武将共 `208` 项升为 `已复核等价`，严格保留 `U05:skills:shixu`（墙钟确定性边界）与 `7` 名 `hs_*` 武将（`hs_alleria`/`hs_jaina`/`hs_kcthun`/`hs_nozdormu`/`hs_tgolem`/`hs_wuther`/`hs_xsylvanas`）为 `简化近似`。`U05` 现 **`726 / 895 / 0`**，全局 **`3,046 / 1,378 / 0`**（缺失 `0`，整包 8 维签字仍 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变）。详见 [U05-杀海拾遗.md](U05-杀海拾遗.md)、[Batch U05-6b 证据摘要](../../operations/evidence/2026-11-23-u05-6b-hearth-part2/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-23 Batch U05-6a（U05 杀海拾遗 `hearth` +167→518/1,621，全局 2,838/1,586/0）更新
 
 - **核验与升级**：基线 `a2e340f868c62b161a73b1f21907233b7eda4234`（Batch U05-3 CI Run `45116138360` Attempt 1 `10/10 success`）；合入 `swarm/conv-u05-6a-hearth`（`9703e2188`，`verifier-u05-b` `#27 APPROVE`）并完成 `known_prompts_u05_6a.rs`、`play_card_targets_hearth.rs` 拆分、`step_stone_chenshui` `detached_cards` 离场梦境牌适配及 `decision34_round4_u05_shahai.rs` 下界校准后，将 U05 杀海拾遗 `hearth` 子包全部 `57` 卡牌、`110` 技能共 `167` 项全数升为 `已复核等价`（`0` 项保留 `简化近似`）。`U05` 现 **`518 / 1,103 / 0`**，全局 **`2,838 / 1,586 / 0`**（缺失 `0`，整包 8 维签字仍 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变）。详见 [U05-杀海拾遗.md](U05-杀海拾遗.md)、[Batch U05-6a 证据摘要](../../operations/evidence/2026-11-23-u05-6a-hearth/README.md) 与 [inventory_status.json](inventory_status.json)。

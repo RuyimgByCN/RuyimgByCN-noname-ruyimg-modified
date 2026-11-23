@@ -27,7 +27,12 @@ pub(super) mod u05_hearth_d;
 pub(super) mod u05_hearth_e;
 #[path = "u05_hearth_hooks.rs"]
 pub(super) mod u05_hearth_hooks;
+#[path = "u05_b6b_hearth/mod.rs"]
+pub(in crate::content::host) mod u05_b6b_hearth;
 
+pub(crate) use u05_b6b_hearth::{
+    hearth_response_skill_jingxiang, host_on_judge_pre_hearth, host_on_judge_rewrite_pre_hearth,
+};
 pub(in crate::content::host) use u05_hearth_asks::*;
 pub(crate) use u05_hearth_cards::{hearth_try_named_ext_card, is_hearth_named_wuzhong_unwrapped};
 pub(crate) use u05_hearth_hooks::{
@@ -275,6 +280,8 @@ pub(super) fn is_hearth_vanish_card_name(raw: &str) -> bool {
         || b.starts_with("hszuzhou_")
         || b == "hsyaoshui"
         || b == "hsnitai_card"
+        || b == "liuxinghuoyu"
+        || b == "fulei"
 }
 
 pub(super) fn is_hearth_token_card(raw: &str) -> bool {
@@ -393,16 +400,33 @@ pub(super) fn gain_card_to_hand(ctx: &mut Ctx<'_>, owner: PlayerId, card: CardId
     });
 }
 
-pub(super) fn discard_card_from_zone(ctx: &mut Ctx<'_>, seat: PlayerId, card: CardId) {
-    if ctx.core.player(seat).hand.contains(&card) {
-        ctx.take_hand_card(seat, card);
-    } else if ctx.core.player(seat).equips.contains(&card) {
-        ctx.core.player_mut(seat).equips.retain(|&x| x != card);
-        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, seat, card);
-    } else if ctx.core.player(seat).judge.contains(&card) {
-        ctx.core.player_mut(seat).judge.retain(|&x| x != card);
+pub(super) fn discard_cards_from_zone(ctx: &mut Ctx<'_>, seat: PlayerId, cards: &[CardId]) {
+    let mut removed = Vec::new();
+    for &card in cards {
+        if ctx.core.player(seat).hand.contains(&card) {
+            ctx.take_hand_card(seat, card);
+            removed.push(card);
+        } else if ctx.core.player(seat).equips.contains(&card) {
+            ctx.core.player_mut(seat).equips.retain(|&x| x != card);
+            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, seat, card);
+            removed.push(card);
+        } else if ctx.core.player(seat).judge.contains(&card) {
+            ctx.core.player_mut(seat).judge.retain(|&x| x != card);
+            removed.push(card);
+        }
+        finish_table_card_hearth(ctx, card, true);
     }
-    finish_table_card_hearth(ctx, card, true);
+    if !removed.is_empty() {
+        ctx.note_cards_lost(seat, &removed);
+        ctx.emit(crate::event::EventData::CardsDiscarded {
+            player: seat,
+            cards: removed,
+        });
+    }
+}
+
+pub(super) fn discard_card_from_zone(ctx: &mut Ctx<'_>, seat: PlayerId, card: CardId) {
+    discard_cards_from_zone(ctx, seat, &[card]);
 }
 
 pub(super) fn pick_random_hearth_derivable(ctx: &mut Ctx<'_>, count: usize) -> Vec<CardId> {
@@ -723,6 +747,11 @@ pub(super) fn collect_hearth_gainable_skills(
                     | "maoxian"
                     | "jinhua"
                     | "szbianshen"
+                    | "chongsheng"
+                    | "anying"
+                    | "s_tuteng"
+                    | "zuling"
+                    | "huanfeng"
                     | "hsbaowu_cangbaotu"
                     | "hsbaowu_huangjinyuanhou"
             )
@@ -769,6 +798,12 @@ pub(in crate::content::host) fn trigger_meta(
         HostBehavior::U05HearthBatchC => u05_hearth_c::trigger_meta_c(name),
         HostBehavior::U05HearthBatchD => u05_hearth_d::trigger_meta_d(name),
         HostBehavior::U05HearthBatchE => u05_hearth_e::trigger_meta_e(name),
+        b @ (HostBehavior::U05Hearth2BatchA
+        | HostBehavior::U05Hearth2BatchB
+        | HostBehavior::U05Hearth2BatchC
+        | HostBehavior::U05Hearth2BatchD
+        | HostBehavior::U05Hearth2BatchE
+        | HostBehavior::U05Hearth2BatchF) => u05_b6b_hearth::trigger_meta(name, b),
         _ => None,
     }
 }
@@ -780,6 +815,12 @@ pub(in crate::content::host) fn limits(name: &str, behavior: HostBehavior) -> Sk
         HostBehavior::U05HearthBatchC => u05_hearth_c::limits_c(name),
         HostBehavior::U05HearthBatchD => u05_hearth_d::limits_d(name),
         HostBehavior::U05HearthBatchE => u05_hearth_e::limits_e(name),
+        b @ (HostBehavior::U05Hearth2BatchA
+        | HostBehavior::U05Hearth2BatchB
+        | HostBehavior::U05Hearth2BatchC
+        | HostBehavior::U05Hearth2BatchD
+        | HostBehavior::U05Hearth2BatchE
+        | HostBehavior::U05Hearth2BatchF) => u05_b6b_hearth::limits(name, b),
         _ => SkillLimits::default(),
     }
 }
@@ -797,6 +838,12 @@ pub(in crate::content::host) fn filter_u05_hearth(
         HostBehavior::U05HearthBatchC => u05_hearth_c::filter_c(skill, ctx, owner, event),
         HostBehavior::U05HearthBatchD => u05_hearth_d::filter_d(skill, ctx, owner, event),
         HostBehavior::U05HearthBatchE => u05_hearth_e::filter_e(skill, ctx, owner, event),
+        HostBehavior::U05Hearth2BatchA
+        | HostBehavior::U05Hearth2BatchB
+        | HostBehavior::U05Hearth2BatchC
+        | HostBehavior::U05Hearth2BatchD
+        | HostBehavior::U05Hearth2BatchE
+        | HostBehavior::U05Hearth2BatchF => u05_b6b_hearth::filter_u05_b6b(skill, ctx, owner, event),
         _ => false,
     }
 }
@@ -812,6 +859,17 @@ pub(in crate::content::host) fn activate_u05_hearth(
         || ctx.catalog.is_tieji_sealed(ctx.state, owner)
     {
         return None;
+    }
+    if matches!(
+        skill.behavior,
+        HostBehavior::U05Hearth2BatchA
+            | HostBehavior::U05Hearth2BatchB
+            | HostBehavior::U05Hearth2BatchC
+            | HostBehavior::U05Hearth2BatchD
+            | HostBehavior::U05Hearth2BatchE
+            | HostBehavior::U05Hearth2BatchF
+    ) {
+        return u05_b6b_hearth::activate_u05_b6b(skill, ctx, owner);
     }
     let eligible = match skill.behavior {
         HostBehavior::U05HearthBatchA => u05_hearth_a::activate_a(skill, ctx, owner),
@@ -847,6 +905,12 @@ pub(in crate::content::host) fn has_phase_use_activation_hearth(
         HostBehavior::U05HearthBatchC => u05_hearth_c::has_active_c(name),
         HostBehavior::U05HearthBatchD => u05_hearth_d::has_active_d(name),
         HostBehavior::U05HearthBatchE => u05_hearth_e::has_active_e(name),
+        b @ (HostBehavior::U05Hearth2BatchA
+        | HostBehavior::U05Hearth2BatchB
+        | HostBehavior::U05Hearth2BatchC
+        | HostBehavior::U05Hearth2BatchD
+        | HostBehavior::U05Hearth2BatchE
+        | HostBehavior::U05Hearth2BatchF) => u05_b6b_hearth::has_phase_use_activation_b6b(b, name),
         _ => false,
     }
 }
@@ -856,6 +920,17 @@ pub(in crate::content::host) fn machine_u05_hearth(
     owner: PlayerId,
     event: &EventData,
 ) -> HostMachine {
+    if matches!(
+        skill.behavior,
+        HostBehavior::U05Hearth2BatchA
+            | HostBehavior::U05Hearth2BatchB
+            | HostBehavior::U05Hearth2BatchC
+            | HostBehavior::U05Hearth2BatchD
+            | HostBehavior::U05Hearth2BatchE
+            | HostBehavior::U05Hearth2BatchF
+    ) {
+        return u05_b6b_hearth::machine_u05_b6b(skill, owner, event);
+    }
     let (target, card, targets) = match event {
         EventData::Damage(d) => (Some(d.target), d.card, Vec::new()),
         EventData::CardUsed(u) => (u.targets.first().copied(), u.card, u.targets.clone()),
@@ -894,6 +969,12 @@ pub(in crate::content::host) fn handle_u05_hearth(
         HostBehavior::U05HearthBatchC => u05_hearth_c::step_c(m, ctx),
         HostBehavior::U05HearthBatchD => u05_hearth_d::step_d(m, ctx),
         HostBehavior::U05HearthBatchE => u05_hearth_e::step_e(m, ctx),
+        HostBehavior::U05Hearth2BatchA
+        | HostBehavior::U05Hearth2BatchB
+        | HostBehavior::U05Hearth2BatchC
+        | HostBehavior::U05Hearth2BatchD
+        | HostBehavior::U05Hearth2BatchE
+        | HostBehavior::U05Hearth2BatchF => u05_b6b_hearth::handle_u05_b6b(m, ctx),
         _ => Flow::Done,
     }
 }

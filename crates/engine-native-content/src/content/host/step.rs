@@ -149,8 +149,9 @@ pub(crate) fn host_on_round_start(ctx: &mut Ctx<'_>) {
 }
 pub(super) mod u05_hearth;
 pub(crate) use u05_hearth::{
-    hearth_dying_save_skills, hearth_try_named_ext_card, host_on_draw_machine_begin_hearth,
-    host_on_equip_gained_hearth, host_on_equip_revoked_hearth, host_on_outer_settled_hearth,
+    hearth_dying_save_skills, hearth_response_skill_jingxiang, hearth_try_named_ext_card,
+    host_on_draw_machine_begin_hearth, host_on_equip_gained_hearth, host_on_equip_revoked_hearth,
+    host_on_judge_pre_hearth, host_on_judge_rewrite_pre_hearth, host_on_outer_settled_hearth,
     host_on_phase_end_hearth, host_turn_before_skip_hearth, is_hearth_named_wuzhong_unwrapped,
     is_hearth_vanish_card_hook, resolve_hearth_dying_save,
 };
@@ -1284,7 +1285,13 @@ impl HostMachine {
             | HostBehavior::U05HearthBatchB
             | HostBehavior::U05HearthBatchC
             | HostBehavior::U05HearthBatchD
-            | HostBehavior::U05HearthBatchE => u05_hearth::handle_u05_hearth(self, ctx),
+            | HostBehavior::U05HearthBatchE
+            | HostBehavior::U05Hearth2BatchA
+            | HostBehavior::U05Hearth2BatchB
+            | HostBehavior::U05Hearth2BatchC
+            | HostBehavior::U05Hearth2BatchD
+            | HostBehavior::U05Hearth2BatchE
+            | HostBehavior::U05Hearth2BatchF => u05_hearth::handle_u05_hearth(self, ctx),
             HostBehavior::Rechanyuan => Flow::Done,
             HostBehavior::L11TrickCard => l11_cards::handle_l11_trick_card(self, ctx),
             HostBehavior::L11EquipCards => l11_equips::handle_l11_equips(self, ctx),

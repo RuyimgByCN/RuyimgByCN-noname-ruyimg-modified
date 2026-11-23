@@ -220,6 +220,33 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
             player: d.target,
             amount: absorbed,
         });
+        if absorbed == submitted
+            && submitted > 0
+            && ctx
+                .catalog
+                .skill_by_name("hhudun")
+                .is_some_and(|s| ctx.core.has_skill(d.target, s))
+        {
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((d.target, "hs_hhudun_hujia_full".to_string()), 1);
+        }
+    }
+    if submitted > 0 {
+        if let Some(src) = d.source {
+            if ctx.core.turn.current == src
+                && ctx
+                    .catalog
+                    .skill_by_name("jiaohui")
+                    .is_some_and(|s| ctx.core.has_skill(src, s))
+            {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((src, "hs_turn_dealt_damage".to_string()), 1);
+            }
+        }
     }
     // 机甲血（U05 ow D.Va，`ow/skill.js:1992-2007`）：只要 `jijia_hp > 0`，
     // 拦截并全额抵扣本伤害体力损失（溢出不再穿甲扣本体，机甲血扣至 `<=0` 后再受伤扣体力）。

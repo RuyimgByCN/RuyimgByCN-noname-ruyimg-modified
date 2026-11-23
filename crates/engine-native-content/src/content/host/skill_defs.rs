@@ -88,7 +88,13 @@ pub fn host_skill_trigger_meta(
         | HostBehavior::U05HearthBatchB
         | HostBehavior::U05HearthBatchC
         | HostBehavior::U05HearthBatchD
-        | HostBehavior::U05HearthBatchE => step::u05_hearth::trigger_meta(name, behavior),
+        | HostBehavior::U05HearthBatchE
+        | HostBehavior::U05Hearth2BatchA
+        | HostBehavior::U05Hearth2BatchB
+        | HostBehavior::U05Hearth2BatchC
+        | HostBehavior::U05Hearth2BatchD
+        | HostBehavior::U05Hearth2BatchE
+        | HostBehavior::U05Hearth2BatchF => step::u05_hearth::trigger_meta(name, behavior),
         _ => crate::event::NativeDamageEffect::from_host(behavior)
             .map(|e| e.meta())
             .or_else(|| behavior.trigger_meta()),
@@ -203,7 +209,13 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         | HostBehavior::U05HearthBatchB
         | HostBehavior::U05HearthBatchC
         | HostBehavior::U05HearthBatchD
-        | HostBehavior::U05HearthBatchE => step::u05_hearth::limits(name, behavior),
+        | HostBehavior::U05HearthBatchE
+        | HostBehavior::U05Hearth2BatchA
+        | HostBehavior::U05Hearth2BatchB
+        | HostBehavior::U05Hearth2BatchC
+        | HostBehavior::U05Hearth2BatchD
+        | HostBehavior::U05Hearth2BatchE
+        | HostBehavior::U05Hearth2BatchF => step::u05_hearth::limits(name, behavior),
         HostBehavior::GujianFoodQingtuan | HostBehavior::GujianFoodLuyugeng => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,

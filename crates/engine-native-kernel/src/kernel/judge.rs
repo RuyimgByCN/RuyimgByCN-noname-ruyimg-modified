@@ -84,6 +84,7 @@ impl JudgePhaseMachine {
     /// 改命取消分支在候选归还牌堆后复用本段，不重复询问改命。
     fn begin_judgement(&mut self, ctx: &mut crate::machine::Ctx<'_>, trick: Option<crate::ids::CardId>) -> Option<Flow> {
         let pref = crate::kernel::elo_judge_pref_for(ctx.core, ctx.res, ctx.catalog, trick, self.ordinary);
+        super::judge_hearth::clear_xianzhi_asked(ctx, self.owner);
         let judge_card = ctx.draw_judge_card_with_opt_elo(self.owner, pref);
         ctx.log(LogEvent::Judged {
             player: self.owner,
@@ -390,6 +391,16 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                     continue;
                 }
                 if cur.in_rewrite {
+                    if !cur.asked
+                        && cur.rewrite_provider.is_none()
+                        && (ctx.catalog.hooks.on_judge_rewrite_pre_hearth)(
+                            ctx,
+                            self.owner,
+                            &mut cur.judge_card,
+                        )
+                    {
+                        return Flow::Yield;
+                    }
                     // 应答消费：当前改判者出黑色手牌替换或放弃
                     if cur.asked {
                         cur.asked = false;
@@ -818,6 +829,16 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                 };
             }
 
+            // 炉石 `xianzhi`：判定前询问交换牌堆顶两张牌（未取队列元素前，支持待选期存档恢复）
+            let pending_judge = if self.ordinary.is_some() {
+                !self.started && (!ctx.core.deck.is_empty() || !ctx.core.discard.is_empty())
+            } else {
+                !self.queue.is_empty()
+            };
+            if pending_judge && (ctx.catalog.hooks.on_judge_pre_hearth)(ctx, self.owner) {
+                return Flow::Yield;
+            }
+            super::judge_hearth::clear_xianzhi_asked(ctx, self.owner);
             // 取下一锦囊并翻判定牌
             let trick = if self.ordinary.is_some() {
                 if self.started {

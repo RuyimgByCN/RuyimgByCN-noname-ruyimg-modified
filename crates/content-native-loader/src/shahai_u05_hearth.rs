@@ -13,6 +13,9 @@ use engine_native::content::names;
 
 use super::U05_HEARTH_ALL_CARDS;
 
+#[path = "shahai_u05_hearth_b.rs"]
+pub(crate) mod shahai_u05_hearth_b;
+
 /// U05-6a 全部 109 个技能 + `chuansongmen2` / `chuansongmen3`（`card/hearth/skill.js:5-6`）。
 pub(crate) const HEARTH_HOST_SKILL_MAP: &[(&str, HostBehavior)] = &[
     // Card skills & companions (tag 1220)
@@ -142,11 +145,12 @@ pub(crate) const HEARTH_HOST_SKILL_MAP: &[(&str, HostBehavior)] = &[
     ("hsbaowu_huangjinyuanhou2", HostBehavior::U05HearthBatchE),
 ];
 
-/// Batch U05-6a `hearth` Part 1 宿主行为分派（覆盖标签 `1220..=1225`）。
+/// Batch U05-6a + U05-6b `hearth` 宿主行为分派（覆盖标签 `1220..=1225` 与 `1250..=1255`）。
 pub(crate) fn lookup_shahai_hearth_host_behavior(clean: &str) -> Option<HostBehavior> {
     HEARTH_HOST_SKILL_MAP
         .iter()
         .find_map(|&(name, behavior)| (name == clean).then_some(behavior))
+        .or_else(|| shahai_u05_hearth_b::lookup_shahai_hearth_b6b_host_behavior(clean))
 }
 
 fn is_hearth_derived_card_name(name: &str) -> bool {
@@ -325,4 +329,5 @@ pub(crate) fn apply_shahai_hearth_pack_fixups(
             );
         }
     }
+    shahai_u05_hearth_b::apply_shahai_hearth_b6b_fixups(pack, seen_cards, seen_skills);
 }

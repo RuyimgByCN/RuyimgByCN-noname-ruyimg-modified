@@ -402,7 +402,17 @@ pub(super) fn try_named_ext_card(
         return None;
     }
     let key = if card == u32::MAX {
-        "diaobingqianjiang"
+        if ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(u.player, "virtual_diaobing_use".to_string()))
+            .is_some()
+        {
+            "diaobingqianjiang"
+        } else {
+            return None;
+        }
     } else {
         if u.use_as.is_some() {
             return None;

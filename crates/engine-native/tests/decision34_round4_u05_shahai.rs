@@ -533,10 +533,10 @@ fn u05_all_9_formal_packages_assemble_333_generals_play_custom_cards_and_roundtr
         .filter(|s| s.behavior.package_skill_id().is_some())
         .map(|s| s.name.to_string())
         .collect();
-    // U05-6a promoted ~109 hearth skills from VM into native `HostBehavior`s, so count VM + Host.
+    // U05-6a promoted ~109 and U05-6b promoted 107 hearth skills from VM into native `HostBehavior`s.
     assert!(
-        vm_skill_names.len() >= 400,
-        "expected >= 400 remaining verified U05 VM skills in Catalog (after ow + hearth native host migration), got {}",
+        vm_skill_names.len() >= 300,
+        "expected >= 300 remaining verified U05 VM skills in Catalog (after ow + hearth native host migration), got {}",
         vm_skill_names.len()
     );
     for ow_sk in ["woliu", "zhongdun", "mujing", "shanxian"] {
@@ -556,8 +556,8 @@ fn u05_all_9_formal_packages_assemble_333_generals_play_custom_cards_and_roundtr
         .filter(|s| s.behavior.as_host_behavior().is_some())
         .count();
     assert!(
-        host_skill_count >= 100,
-        "expected >= 100 verified U05 Host skills in Catalog after U05-6a, got {host_skill_count}"
+        host_skill_count >= 200,
+        "expected >= 200 verified U05 Host skills in Catalog after U05-6a/6b, got {host_skill_count}"
     );
     assert!(
         e.catalog().skills.len() >= 900,

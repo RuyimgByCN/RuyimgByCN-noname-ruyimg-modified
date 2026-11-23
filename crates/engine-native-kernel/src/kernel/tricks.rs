@@ -673,11 +673,25 @@ impl DismantleMachine {
             });
         } else {
             (ctx.catalog.hooks.on_cards_to_discard)(ctx, target, &[c], false);
-            if from_equip && ctx.catalog.vm_card_history {
+            let emitted_from_equip = from_equip && ctx.catalog.vm_card_history;
+            if emitted_from_equip {
                 ctx.core
                     .vm_aux
                     .flags
                     .insert((target, format!("l11_discard_non_hand:{c}")), 1);
+                ctx.emit(EventData::CardsDiscarded {
+                    player: target,
+                    cards: vec![c],
+                });
+            }
+            if !emitted_from_equip
+                && ctx.catalog.skill_by_name("yanshu").is_some_and(|d| {
+                    ctx.catalog.skills[d as usize]
+                        .behavior
+                        .as_host_behavior()
+                        == Some(crate::vocabulary::host::HostBehavior::U05Hearth2BatchD)
+                })
+            {
                 ctx.emit(EventData::CardsDiscarded {
                     player: target,
                     cards: vec![c],

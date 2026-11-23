@@ -193,7 +193,14 @@ pub fn intrinsic_machine(
                 return None;
             }
             let effective_kind = u.effective_kind_in(ctx.core, ctx.catalog);
-            if effective_kind == CardKind::Tao && u.card.is_some() {
+            if effective_kind == CardKind::Tao
+                && (u.card.is_some()
+                    || ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .contains_key(&(u.player, "hs_virtual_card_src".to_string())))
+            {
                 if let Some(machine) = (ctx.catalog.hooks.card_intrinsic)(ctx, &u, effective_kind)
                 {
                     return machine;
@@ -253,6 +260,12 @@ pub fn intrinsic_machine(
                         | CardKind::Zhaomingdan
                         | CardKind::Zhiliaobo
                         | CardKind::Shijieshu
+                        | CardKind::Dunpaigedang
+                        | CardKind::Chuansongmen
+                        | CardKind::Tanshezhiren
+                        | CardKind::Yuansuhuimie
+                        | CardKind::Xingjiegoutong
+                        | CardKind::Jihuocard
                 ) || ctx
                     .core
                     .vm_aux
@@ -270,17 +283,16 @@ pub fn intrinsic_machine(
                         .unwrap_or(0)
                         > 0
                     || (effective_kind == CardKind::Wuzhong
-                        && (ctx
+                        && ctx
                             .core
                             .vm_aux
                             .flags
-                            .remove(&(u.player, "virtual_diaobing_use".to_string()))
-                            .is_some()
-                            || ctx
-                                .core
-                                .vm_aux
-                                .flags
-                                .contains_key(&(u.player, "hs_virtual_card_src".to_string()))))
+                            .contains_key(&(u.player, "virtual_diaobing_use".to_string())))
+                    || ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .contains_key(&(u.player, "hs_virtual_card_src".to_string()))
                 {
                     if let Some(machine) =
                         (ctx.catalog.hooks.card_intrinsic)(ctx, &u, effective_kind)
@@ -591,6 +603,25 @@ pub fn intrinsic_machine(
                         u.player,
                         Box::new(effect),
                     )))
+                }
+                CardKind::Jiu | CardKind::Tianxianjiu => {
+                    // 幻爵等 AfterTriggers 将使用牌转为【酒】并置于处理区时，补完成结算与弃置。
+                    if ctx.core.table.contains(&card) {
+                        ctx.core.table.retain(|&x| x != card);
+                        ctx.to_discard(card);
+                        ctx.core.turn.jiu_used = true;
+                        ctx.core.turn.jiu_active = true;
+                    }
+                    None
+                }
+                kind if kind.equip_slot().is_some()
+                    && u.use_as.is_none()
+                    && ctx.core.table.contains(&card) =>
+                {
+                    // 幻爵等 AfterTriggers 将使用牌变为装备并置于处理区时，自处理区直装目标装备栏。
+                    ctx.core.table.retain(|&x| x != card);
+                    crate::kernel::equipment::install_equip_card(ctx, None, u.player, card);
+                    None
                 }
                 _ => {
                     if u.use_as.is_some() {

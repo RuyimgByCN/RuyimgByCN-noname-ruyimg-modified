@@ -35,11 +35,12 @@ pub use support::{
 };
 pub use step::step_l01_on_game_start;
 pub(crate) use step::{
-    hearth_dying_save_skills, hearth_try_named_ext_card, host_before_facedown_turn_skip,
-    host_before_gain_hand, host_before_recover, host_card_use_after, host_draw_begin_step,
-    host_judge_settled, host_on_death_before, host_on_draw_machine_begin_hearth,
-    host_on_equip_gained_hearth, host_on_equip_revoked_hearth, host_on_game_start,
-    host_on_hand_card_removed, host_on_outer_settled_hearth, host_on_phase_end_hearth,
+    hearth_dying_save_skills, hearth_response_skill_jingxiang, hearth_try_named_ext_card,
+    host_before_facedown_turn_skip, host_before_gain_hand, host_before_recover,
+    host_card_use_after, host_draw_begin_step, host_judge_settled, host_on_death_before,
+    host_on_draw_machine_begin_hearth, host_on_equip_gained_hearth, host_on_equip_revoked_hearth,
+    host_on_game_start, host_on_hand_card_removed, host_on_judge_pre_hearth,
+    host_on_judge_rewrite_pre_hearth, host_on_outer_settled_hearth, host_on_phase_end_hearth,
     host_on_phase_use_end, host_on_player_died, host_on_recover_before, host_on_round_start,
     host_on_shanxian_turnover, host_on_turn_begin, host_on_turn_phase_after,
     host_preserves_skills_on_death, host_sha_begin_step, host_sha_end_step,
@@ -351,6 +352,9 @@ impl SkillBehavior for HostSkillBehavior {
         owner: PlayerId,
     ) -> Option<usize> {
         (self.name == "txhj_xiongziyingfa").then(|| core.player(owner).max_hp as usize)
+    }
+    fn card_used_in_before_window(&self) -> bool {
+        self.behavior == HostBehavior::U05Hearth2BatchE && self.name == "huanjue"
     }
     fn window_trigger_meta(
         &self,

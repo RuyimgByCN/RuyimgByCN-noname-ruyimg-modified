@@ -241,6 +241,18 @@ pub struct ContentHooks {
     ) -> bool,
     /// 炉石衍生消散牌判据（弃置/离场直接入 `detached_cards` 而非弃牌堆）。
     pub is_hearth_vanish_card: fn(&Catalog, crate::ids::CardId) -> bool,
+    /// 炉石判定前全局询问钩子（如 `xianzhi` 查看并交换牌堆顶两张牌）；已挂起子机返回 `true`。
+    pub on_judge_pre_hearth: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId) -> bool,
+    /// 炉石判定改判前置钩子（如 `mdzhoufu2` 用存储黑牌替换当前判定牌）；替换后返回 `true`。
+    pub on_judge_rewrite_pre_hearth:
+        fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId, &mut crate::ids::CardId) -> bool,
+    /// 炉石响应借牌钩子（如 `jingxiang` 在 `chooseToRespondBegin` 借用他人手牌）。
+    pub hearth_response_skill: fn(
+        &crate::state::GameStateCore,
+        &Catalog,
+        crate::ids::PlayerId,
+        u8,
+    ) -> Option<crate::ids::SkillDefId>,
 }
 
 impl ContentHooks {
@@ -297,5 +309,8 @@ impl ContentHooks {
         hearth_dying_save_skills: |_, _, _, _| Vec::new(),
         resolve_hearth_dying_save: |_, _, _, _| false,
         is_hearth_vanish_card: |_, _| false,
+        on_judge_pre_hearth: |_, _| false,
+        on_judge_rewrite_pre_hearth: |_, _, _| false,
+        hearth_response_skill: |_, _, _, _| None,
     };
 }

@@ -30,6 +30,8 @@ mod extension_choices_u05_2;
 mod extension_choices_u05_ow;
 #[path = "extension_choices_u05_hearth.rs"]
 mod extension_choices_u05_hearth;
+#[path = "extension_choices_u05_6b.rs"]
+mod extension_choices_u05_6b;
 
 pub(super) fn public_attitude(view: &crate::view::PlayerView, seat: u8, target: u8) -> i32 {
     if target == seat {
@@ -843,6 +845,19 @@ pub(super) fn plan_extension_choice_action(
         )
         .or_else(|| {
             extension_choices_u05_hearth::plan_hearth_choice_action(
+                catalog,
+                input,
+                id,
+                kind,
+                prompt,
+                options,
+                min,
+                max,
+                allow_cancel,
+            )
+        })
+        .or_else(|| {
+            extension_choices_u05_6b::plan_hearth_6b_choice_action(
                 catalog,
                 input,
                 id,

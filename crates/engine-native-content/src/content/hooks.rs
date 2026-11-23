@@ -60,6 +60,9 @@ pub(crate) const CONTENT_HOOKS: ContentHooks = ContentHooks {
     hearth_dying_save_skills: crate::content::host::hearth_dying_save_skills,
     resolve_hearth_dying_save: crate::content::host::resolve_hearth_dying_save,
     is_hearth_vanish_card: crate::content::host::is_hearth_vanish_card_hook,
+    on_judge_pre_hearth: crate::content::host::host_on_judge_pre_hearth,
+    on_judge_rewrite_pre_hearth: crate::content::host::host_on_judge_rewrite_pre_hearth,
+    hearth_response_skill: crate::content::host::hearth_response_skill_jingxiang,
 };
 
 /// R05-F：目录名含 `#r05:{role}` 的全部定义号（装载器派生模板独占 `#`）。

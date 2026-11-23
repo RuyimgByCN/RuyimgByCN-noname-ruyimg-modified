@@ -554,6 +554,16 @@ pub(super) fn active_ask_batches(
         | HostBehavior::U05HearthBatchE => super::step::u05_hearth::ask_u05_hearth(
             behavior, stage, owner, target, targets, card, cards, core, catalog,
         ),
+        HostBehavior::U05Hearth2BatchA
+        | HostBehavior::U05Hearth2BatchB
+        | HostBehavior::U05Hearth2BatchC
+        | HostBehavior::U05Hearth2BatchD
+        | HostBehavior::U05Hearth2BatchE
+        | HostBehavior::U05Hearth2BatchF => {
+            super::step::u05_hearth::u05_b6b_hearth::ask_u05_b6b(
+                behavior, stage, owner, target, targets, card, cards, core, catalog,
+            )
+        }
         HostBehavior::NewMeibu => {
             if stage != HostStage::SelectCard {
                 return None;

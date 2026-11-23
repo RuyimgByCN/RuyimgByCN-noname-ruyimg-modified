@@ -854,7 +854,7 @@ pub(super) fn commit_cards_discarded(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 望尘（swd 古月圣，批㉑）：自己弃牌阶段弃置过基本牌（TurnState 旗，
     // 换回合清；判定区/装备区弃置路径亦计入——上游 discardEnd cards 同为
     // 实际弃置集合）
-    if let Some(f) = ctx.res.frame(ctx.current_frame_id()) {
+    if let Some(f) = ctx.res.frame(ctx.top_frame_id()) {
         if let EventData::CardsDiscarded { cards, .. } = &f.data {
             if ctx.core.turn.current == player
                 && ctx.core.turn.phase == crate::event::Phase::Discard

@@ -238,6 +238,12 @@ pub(crate) fn reguhuo_spawn_response(
         super::l10_scs::scsanruo_spawn_response(ctx, responder, resp_ctx, dying, steal_target);
         return;
     }
+    if ctx.catalog.skill_by_name("jingxiang") == Some(skill_def) {
+        super::u05_hearth::u05_b6b_hearth::jingxiang_spawn_response(
+            ctx, responder, resp_ctx, dying,
+        );
+        return;
+    }
     let machine = Box::new(HostMachine {
         def_key: EPIC_REGUHUO_KEY.to_string(),
         behavior: HostBehavior::Reguhuo,

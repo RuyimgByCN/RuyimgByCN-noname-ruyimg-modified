@@ -824,5 +824,10 @@ pub(crate) fn host_response_skills(
             }
         }
     }
+    if let Some(def) = (catalog.hooks.hearth_response_skill)(core, catalog, responder, resp_ctx) {
+        if !out.contains(&def) {
+            out.push(def);
+        }
+    }
     out
 }

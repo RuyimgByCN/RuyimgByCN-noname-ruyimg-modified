@@ -653,6 +653,12 @@ impl HostBehavior {
             HostBehavior::U05HearthBatchC => "host:u05_hearth_batch_c",
             HostBehavior::U05HearthBatchD => "host:u05_hearth_batch_d",
             HostBehavior::U05HearthBatchE => "host:u05_hearth_batch_e",
+            HostBehavior::U05Hearth2BatchA => "host:u05_hearth2_batch_a",
+            HostBehavior::U05Hearth2BatchB => "host:u05_hearth2_batch_b",
+            HostBehavior::U05Hearth2BatchC => "host:u05_hearth2_batch_c",
+            HostBehavior::U05Hearth2BatchD => "host:u05_hearth2_batch_d",
+            HostBehavior::U05Hearth2BatchE => "host:u05_hearth2_batch_e",
+            HostBehavior::U05Hearth2BatchF => "host:u05_hearth2_batch_f",
         }
     }
 }

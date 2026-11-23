@@ -13,47 +13,47 @@ use crate::machine::Ctx;
 use crate::state::GameStateCore;
 
 pub(crate) fn host_on_game_start_hearth(core: &mut GameStateCore, catalog: &Catalog) {
-    if !hearth_formal_enabled(catalog) {
-        return;
-    }
-    let seats = core.players.len() as PlayerId;
-    for p in 0..seats {
-        if has_skill_hearth(core, catalog, p, "qingzun") {
-            set_flag(core, p, "hs_qingzun_count", 0);
+    if hearth_formal_enabled(catalog) {
+        let seats = core.players.len() as PlayerId;
+        for p in 0..seats {
+            if has_skill_hearth(core, catalog, p, "qingzun") {
+                set_flag(core, p, "hs_qingzun_count", 0);
+            }
         }
     }
+    super::u05_b6b_hearth::b6b_on_game_start(core, catalog);
 }
 
 pub(crate) fn host_on_round_start_hearth(_ctx: &mut Ctx<'_>) {}
 
 pub(crate) fn host_on_phase_use_end_hearth(ctx: &mut Ctx<'_>, player: PlayerId) {
-    if !hearth_formal_enabled(ctx.catalog) {
-        return;
+    if hearth_formal_enabled(ctx.catalog) {
+        set_flag(ctx.core, player, "hs_buwendingyibian_used_turn", 0);
+        set_flag(ctx.core, player, "hs_temp_huogong2", 0);
+        set_flag(ctx.core, player, "hs_azaowu_used_turn", 0);
+        set_flag(ctx.core, player, "hs_lieyang_turn_used", 0);
+        set_flag(ctx.core, player, "hs_nuyan2_used_turn", 0);
+        set_flag(ctx.core, player, "hs_maoxian_used_turn", 0);
+        set_flag(ctx.core, player, "hs_mobao_used_turn", 0);
+        set_flag(ctx.core, player, "hs_yingxi_sha_active", 0);
+        let seats = ctx.core.players.len() as PlayerId;
+        for p in 0..seats {
+            set_flag(ctx.core, p, "hs_hllingxi_used_turn", 0);
+        }
     }
-    set_flag(ctx.core, player, "hs_buwendingyibian_used_turn", 0);
-    set_flag(ctx.core, player, "hs_temp_huogong2", 0);
-    set_flag(ctx.core, player, "hs_azaowu_used_turn", 0);
-    set_flag(ctx.core, player, "hs_lieyang_turn_used", 0);
-    set_flag(ctx.core, player, "hs_nuyan2_used_turn", 0);
-    set_flag(ctx.core, player, "hs_maoxian_used_turn", 0);
-    set_flag(ctx.core, player, "hs_mobao_used_turn", 0);
-    set_flag(ctx.core, player, "hs_yingxi_sha_active", 0);
-    let seats = ctx.core.players.len() as PlayerId;
-    for p in 0..seats {
-        set_flag(ctx.core, p, "hs_hllingxi_used_turn", 0);
-    }
+    super::u05_b6b_hearth::b6b_on_phase_use_end(ctx, player);
 }
 
 pub(crate) fn host_on_phase_end_hearth(ctx: &mut Ctx<'_>) {
-    if !hearth_formal_enabled(ctx.catalog) {
-        return;
+    if hearth_formal_enabled(ctx.catalog) {
+        let seats = ctx.core.players.len() as PlayerId;
+        for p in 0..seats {
+            set_flag(ctx.core, p, "hs_shihuawuqi_used_turn", 0);
+            set_flag(ctx.core, p, "hs_shouji_begin_used", 0);
+            set_flag(ctx.core, p, "hs_shouji_miss_used", 0);
+        }
     }
-    let seats = ctx.core.players.len() as PlayerId;
-    for p in 0..seats {
-        set_flag(ctx.core, p, "hs_shihuawuqi_used_turn", 0);
-        set_flag(ctx.core, p, "hs_shouji_begin_used", 0);
-        set_flag(ctx.core, p, "hs_shouji_miss_used", 0);
-    }
+    super::u05_b6b_hearth::b6b_on_phase_end(ctx);
 }
 
 pub(crate) fn is_hearth_vanish_card_hook(catalog: &Catalog, card: CardId) -> bool {
@@ -69,6 +69,7 @@ pub(crate) fn host_on_player_died_hearth(
     dead: PlayerId,
     killer_opt: Option<PlayerId>,
 ) {
+    super::u05_b6b_hearth::b6b_on_player_died(ctx, dead);
     if !hearth_formal_enabled(ctx.catalog) {
         return;
     }
@@ -120,6 +121,7 @@ pub(crate) fn host_draw_begin_step_hearth(
     player: PlayerId,
     pending: &mut i32,
 ) {
+    super::u05_b6b_hearth::b6b_on_draw_begin(ctx, player, pending);
     if !hearth_formal_enabled(ctx.catalog) {
         return;
     }
@@ -227,6 +229,7 @@ pub(super) fn wxuying_transform_hand(
 }
 
 pub(crate) fn host_card_use_after_hearth(ctx: &mut Ctx<'_>, u: &CardUseData) {
+    super::u05_b6b_hearth::b6b_on_card_use_after(ctx, u);
     if !hearth_formal_enabled(ctx.catalog) {
         return;
     }
@@ -340,6 +343,7 @@ pub(crate) fn host_on_hand_card_removed_hearth(
     player: PlayerId,
     card: CardId,
 ) {
+    super::u05_b6b_hearth::b6b_on_hand_card_removed(ctx, player, card);
     if !hearth_formal_enabled(ctx.catalog) {
         return;
     }
@@ -431,6 +435,7 @@ pub(crate) fn host_on_equip_revoked_hearth(
 }
 
 pub(crate) fn host_on_outer_settled_hearth(ctx: &mut Ctx<'_>) {
+    super::u05_b6b_hearth::b6b_on_outer_settled(ctx);
     if !hearth_formal_enabled(ctx.catalog) {
         return;
     }
@@ -462,6 +467,7 @@ pub(crate) fn host_on_outer_settled_hearth(ctx: &mut Ctx<'_>) {
 }
 
 pub(crate) fn host_turn_before_skip_hearth(ctx: &mut Ctx<'_>, player: PlayerId) -> bool {
+    super::u05_b6b_hearth::b6b_on_turn_begin(ctx, player);
     if !hearth_formal_enabled(ctx.catalog) {
         return false;
     }
@@ -474,7 +480,7 @@ pub(crate) fn hearth_dying_save_skills(
     responder: PlayerId,
     dying: PlayerId,
 ) -> Vec<crate::ids::SkillDefId> {
-    let mut out = Vec::new();
+    let mut out = super::u05_b6b_hearth::b6b_dying_save_skills(core, catalog, responder, dying);
     if !hearth_formal_enabled(catalog)
         || !core.player(responder).alive
         || catalog.is_tieji_sealed(core, responder)
@@ -541,7 +547,7 @@ pub(crate) fn resolve_hearth_dying_save(
             });
             false
         }
-        _ => false,
+        _ => super::u05_b6b_hearth::b6b_resolve_dying_save(ctx, responder, dying, def),
     }
 }
 
@@ -585,5 +591,8 @@ pub(crate) fn on_skill_removed_hearth(
         }
         _ => {}
     }
+    ret.extend(super::u05_b6b_hearth::b6b_on_skill_removed(
+        core, catalog, owner, skill_name,
+    ));
     ret
 }

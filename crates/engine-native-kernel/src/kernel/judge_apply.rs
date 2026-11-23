@@ -153,6 +153,18 @@ impl JudgePhaseMachine {
                 }
             }
             CardKind::ShanDian => {
+                if super::judge_hearth::is_fulei_card(ctx.catalog, trick) {
+                    super::judge_hearth::resolve_fulei_judge(
+                        ctx,
+                        owner,
+                        trick,
+                        judge_card,
+                        suit,
+                        shenyi_voids,
+                        machine_holds,
+                    );
+                    return (trick_kind, suit);
+                }
                 let mut hit = suit.is_spade() && (2..=9).contains(&rank);
                 if crate::rvm_bridge::modifiers::shandian_reversed(ctx.core, ctx.catalog, owner) {
                     hit = !hit;
@@ -177,12 +189,10 @@ impl JudgePhaseMachine {
                     let mut cand = ctx.core.next_alive(owner);
                     let mut chosen = None;
                     for _ in 0..ctx.core.players.len() {
-                        let has_shandian = ctx
-                            .core
-                            .player(cand)
-                            .judge
-                            .iter()
-                            .any(|c| ctx.catalog.resolved_card_kind(ctx.core, *c) == CardKind::ShanDian);
+                        let has_shandian = ctx.core.player(cand).judge.iter().any(|c| {
+                            ctx.catalog.resolved_card_kind(ctx.core, *c) == CardKind::ShanDian
+                                && !super::judge_hearth::is_fulei_card(ctx.catalog, *c)
+                        });
                         let blocked = crate::rvm_bridge::modifiers::eval_card_target_canceled(
                             ctx.core,
                             ctx.catalog,
@@ -205,12 +215,10 @@ impl JudgePhaseMachine {
                     chosen
                 } else {
                     let next = ctx.core.next_alive(owner);
-                    let next_has_shandian = ctx
-                        .core
-                        .player(next)
-                        .judge
-                        .iter()
-                        .any(|c| ctx.catalog.resolved_card_kind(ctx.core, *c) == CardKind::ShanDian);
+                    let next_has_shandian = ctx.core.player(next).judge.iter().any(|c| {
+                        ctx.catalog.resolved_card_kind(ctx.core, *c) == CardKind::ShanDian
+                            && !super::judge_hearth::is_fulei_card(ctx.catalog, *c)
+                    });
                     (!next_has_shandian).then_some(next)
                 };
                 if let Some(dest) = pass_to {

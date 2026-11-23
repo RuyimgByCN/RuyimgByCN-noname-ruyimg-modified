@@ -13,7 +13,7 @@ use crate::state::GameStateCore;
 #[path = "d34_view_as.rs"]
 mod d34_view_as;
 #[path = "d34_u05_mods.rs"]
-mod d34_u05_mods;
+pub mod d34_u05_mods;
 #[path = "d34_l11_mods.rs"]
 pub(super) mod d34_l11_mods;
 #[path = "d34_u01_mods.rs"]
@@ -424,7 +424,8 @@ pub fn apply_sha_use_limit(
         }
     }
     cur = super::d34_l28_mods::apply_shengong_sha_limit(state, catalog, player, cur);
-    let (cur, unlimited) = d34_u05_mods::apply_sha_use_limit(state, player, cur, unlimited);
+    let (cur, unlimited) =
+        d34_u05_mods::apply_sha_use_limit(state, catalog, player, cur, unlimited);
     d34_l11_mods::apply_sha_use_limit(state, catalog, player, cur, unlimited)
 }
 

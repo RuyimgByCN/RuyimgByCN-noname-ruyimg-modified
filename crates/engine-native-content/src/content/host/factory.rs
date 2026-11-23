@@ -177,7 +177,13 @@ impl HostSkillBehavior {
             | HostBehavior::U05HearthBatchB
             | HostBehavior::U05HearthBatchC
             | HostBehavior::U05HearthBatchD
-            | HostBehavior::U05HearthBatchE => {
+            | HostBehavior::U05HearthBatchE
+            | HostBehavior::U05Hearth2BatchA
+            | HostBehavior::U05Hearth2BatchB
+            | HostBehavior::U05Hearth2BatchC
+            | HostBehavior::U05Hearth2BatchD
+            | HostBehavior::U05Hearth2BatchE
+            | HostBehavior::U05Hearth2BatchF => {
                 return super::step::u05_hearth::machine_u05_hearth(self, owner, event);
             }
             _ => {}

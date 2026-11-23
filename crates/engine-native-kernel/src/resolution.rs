@@ -7,7 +7,7 @@
 //! （`open_choice` + 应答校验后恢复）。预算耗尽时停止并让上层回滚。
 
 use crate::catalog::{QueryCtx, SkillMachine};
-use crate::choice::{ChoiceOption, OpenChoice, Selection};
+use crate::choice::{OpenChoice, Selection};
 use crate::event::{EventData, EventKind, Frame, QueuedTrigger, Stage, Timing};
 use crate::ids::{EventId, PlayerId, SkillDefId};
 use crate::kernel;
@@ -15,9 +15,11 @@ use crate::machine::{Ctx, Flow, LogEvent};
 use crate::state::GameStateCore;
 mod dispatch;
 mod frame_hooks;
+mod optional_gate;
 mod trigger_order;
 use dispatch::{finish_slot, native_machine, notify_new_skills, start_queued_trigger};
 pub(crate) use frame_hooks::note_recover_source;
+pub use optional_gate::OptionalGate;
 pub(crate) use trigger_order::event_kind as trigger_window_kind;
 pub use trigger_order::{
     refresh_order_choice, register_added, sync_trigger_owners, validate_trigger_bindings,
@@ -181,6 +183,40 @@ pub fn push_frame(res: &mut Resolution, data: crate::event::EventData) -> EventI
     id
 }
 
+pub fn maybe_promote_card_used_before(
+    core: &GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    res: &mut Resolution,
+) {
+    if let Some(top) = res.stack.last_mut() {
+        if top.kind == EventKind::CardUsed
+            && top.stage == Stage::Commit
+            && core.skills.iter().any(|((_, d), i)| {
+                i.enabled
+                    && catalog
+                        .skills
+                        .get(*d as usize)
+                        .is_some_and(|s| s.behavior.card_used_in_before_window())
+            })
+        {
+            top.stage = Stage::BeforeTriggers;
+        }
+    }
+}
+
+/// 推入 `CardUsed` 帧：仅当场上有启用 `card_used_in_before_window` 技能（如 `huanjue`）
+/// 时才从 `BeforeTriggers` 起步，避免标准对局 golden 预算消耗发生偏移。
+pub fn push_card_used_frame(
+    core: &GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    res: &mut Resolution,
+    data: crate::event::EventData,
+) -> EventId {
+    let id = push_frame(res, data);
+    maybe_promote_card_used_before(core, catalog, res);
+    id
+}
+
 /// 单次 `run` 的结果。
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum StepOutcome {
@@ -212,6 +248,7 @@ fn next_stage(kind: EventKind, cur: Stage) -> Stage {
         (EventKind::TurnOverBefore, Stage::Commit) => Stage::Done,
         (EventKind::Equipped, Stage::BeforeTriggers) => Stage::Commit,
         (EventKind::Recover, Stage::BeforeTriggers) => Stage::Commit,
+        (EventKind::CardUsed, Stage::BeforeTriggers) => Stage::Commit,
         (EventKind::CardUsed, Stage::Commit) => Stage::AfterTriggers,
         (EventKind::CardUsed, Stage::AfterTriggers) => Stage::Intrinsic,
         (EventKind::CardUsed, Stage::Intrinsic) => Stage::Done,
@@ -255,133 +292,6 @@ fn next_stage(kind: EventKind, cur: Stage) -> Stage {
     }
 }
 
-/// 可选触发的确认闸门：确认后才启动真正的技能机器。
-pub struct OptionalGate {
-    owner: PlayerId,
-    def: SkillDefId,
-    /// 计划时的事件载荷（触发语义以进入时为准）。
-    event: crate::event::EventData,
-    asked: bool,
-    inner: Option<Box<dyn SkillMachine>>,
-}
-
-impl OptionalGate {
-    /// 运行时构造（触发入队时）与快照恢复共用。
-    pub(crate) fn new(
-        owner: PlayerId,
-        def: SkillDefId,
-        event: crate::event::EventData,
-        asked: bool,
-        inner: Option<Box<dyn SkillMachine>>,
-    ) -> Self {
-        Self {
-            owner,
-            def,
-            event,
-            asked,
-            inner,
-        }
-    }
-}
-
-impl SkillMachine for OptionalGate {
-    fn actor_owner(&self) -> Option<PlayerId> {
-        Some(self.owner)
-    }
-    fn fork(&self) -> Box<dyn SkillMachine> {
-        Box::new(Self {
-            owner: self.owner,
-            def: self.def,
-            event: self.event.clone(),
-            asked: self.asked,
-            inner: self.inner.as_ref().map(|m| m.fork()),
-        })
-    }
-
-    fn snapshot(&self) -> crate::snap::MachineSnapshot {
-        crate::snap::MachineSnapshot::OptionalGate {
-            owner: self.owner,
-            def: self.def,
-            event: self.event.clone(),
-            asked: self.asked,
-            inner: self.inner.as_ref().map(|m| Box::new(m.snapshot())),
-        }
-    }
-
-    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
-        // 内层机器存在即全权委托（其后续选择由内层自行发起）
-        if let Some(inner) = self.inner.as_mut() {
-            let flow = inner.step(ctx);
-            if matches!(flow, Flow::Done) {
-                self.inner = None;
-                return Flow::Done;
-            }
-            return flow;
-        }
-        let Some(frame) = ctx.res.stack.last() else {
-            return Flow::Done;
-        };
-        let qt = QueuedTrigger {
-            owner: self.owner,
-            def: self.def,
-            order: (0, 0, 0, 0, self.def),
-        };
-        if !trigger_order::eligible(ctx.core, ctx.catalog, &qt, &ctx.res.stack, frame) {
-            return Flow::Done;
-        }
-        let kind = trigger_order::event_kind(frame);
-        let actual_ev = crate::event::damage_event(&ctx.res.stack, frame);
-        let observer = ctx.catalog.skills[self.def as usize]
-            .behavior
-            .confirmation_actor(self.owner, actual_ev, kind);
-        self.event = if observer != self.owner {
-            actual_ev.clone()
-        } else {
-            frame.data.clone()
-        };
-        if !self.asked {
-            self.asked = true;
-            return Flow::WaitChoice {
-                observer,
-                spec: crate::choice::ChoiceSpec::confirm("trigger_confirm"),
-            };
-        }
-        if !ctx.answer().contains(&ChoiceOption::Confirm) {
-            return Flow::Done;
-        }
-        {
-            let def = &ctx.catalog.skills[self.def as usize];
-            if def.limits.once_per_turn {
-                if let Some(inst) = ctx.core.skills.get_mut(&(self.owner, self.def)) {
-                    if inst.once_used {
-                        return Flow::Done;
-                    }
-                    inst.once_used = true;
-                }
-            }
-            ctx.log_skill_triggered(def.name, self.owner, self.def);
-            let event =
-                crate::event::damage_event(&ctx.res.stack, ctx.res.stack.last().expect("frame"))
-                    .clone();
-            self.inner = Some(
-                if let Some(effect) = def.behavior.native_damage_effect(kind) {
-                    native_machine(self.owner, self.def, effect)
-                } else {
-                    def.behavior
-                        .start_in_window(&ctx.query(), self.owner, &event, kind)
-                },
-            );
-        }
-        let flow = self.inner.as_mut().expect("inner started").step(ctx);
-        if matches!(flow, Flow::Done) {
-            self.inner = None;
-            Flow::Done
-        } else {
-            flow
-        }
-    }
-}
-
 /// 收集当前阶段的触发队列。
 fn plan_triggers(
     core: &mut GameStateCore,
@@ -416,6 +326,7 @@ fn plan_triggers(
         let before_kind = match &f.data {
             EventData::TurnOverBefore { .. } => EventKind::TurnOverBefore,
             EventData::Death { .. } => EventKind::Death,
+            EventData::CardUsed(_) => EventKind::CardUsed,
             // PA12 批⑤-2（§2 K）：PhaseBegin 前置窗按帧自身 kind 查——
             // 阶段开始类技能（奋励 skip 系）在入场行为之前派发；after 段
             // 静默（上方列表）防同技重复入队。宿主 PhaseBegin 技能的执行
@@ -514,6 +425,9 @@ fn plan_triggers(
             && ((before && !matches!(def.name, "dddjiexing" | "gaizao"))
                 || (!before && def.name == "gaizao"))
         {
+            continue;
+        }
+        if kind == EventKind::CardUsed && def.behavior.card_used_in_before_window() != before {
             continue;
         }
         // NC01：触发结算顺序按**顺座次序**（不是最短距离）

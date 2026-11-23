@@ -1777,4 +1777,16 @@ pub enum HostBehavior {
     U05HearthBatchD,
     /// U05 杀海拾遗 Hearth 技能 Batch E（tag 1225，character/hearth/skill.js shengteng..=hsbaowu_huangjinyuanhou2）。
     U05HearthBatchE,
+    /// U05 杀海拾遗 Hearth Part 2 技能 Batch A（tag 1250，xieneng..=hhudun）。
+    U05Hearth2BatchA,
+    /// U05 杀海拾遗 Hearth Part 2 技能 Batch B（tag 1251，fenlie..=oldmalymowang）。
+    U05Hearth2BatchB,
+    /// U05 杀海拾遗 Hearth Part 2 技能 Batch C（tag 1252，lingzhou..=shengdun）。
+    U05Hearth2BatchC,
+    /// U05 杀海拾遗 Hearth Part 2 技能 Batch D（tag 1253，jingmeng..=anying）。
+    U05Hearth2BatchD,
+    /// U05 杀海拾遗 Hearth Part 2 技能 Batch E（tag 1254，huanjue..=jihuo, stone_chenshui）。
+    U05Hearth2BatchE,
+    /// U05 杀海拾遗 Hearth Part 2 技能 Batch F（tag 1255，tuteng_s..=hongxi）。
+    U05Hearth2BatchF,
 }

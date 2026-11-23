@@ -1,7 +1,7 @@
 //! One recoverable window over Frame.queue, including automatic and interactive dispatch.
 use super::*;
 use crate::catalog::Catalog;
-use crate::choice::{ChoiceKind, ChoiceSpec};
+use crate::choice::{ChoiceKind, ChoiceOption, ChoiceSpec};
 use crate::snap::{MachineSnapshot, ResolutionSnapshot, SnapshotError};
 use std::cmp::Ordering;
 
@@ -69,6 +69,8 @@ fn subscribes(catalog: &Catalog, def: SkillDefId, frame: &Frame) -> bool {
     (meta.event == kind || meta.extra_events.contains(&kind))
         && (kind != EventKind::PhaseBegin
             || def.behavior.runs_before_phase_begin() == (frame.stage == Stage::BeforeTriggers))
+        && (kind != EventKind::CardUsed
+            || def.behavior.card_used_in_before_window() == (frame.stage == Stage::BeforeTriggers))
 }
 pub(super) fn eligible(
     core: &GameStateCore,

@@ -277,7 +277,12 @@ impl<'a> Ctx<'a> {
             .stack
             .iter()
             .rev()
-            .find(|f| f.kind != crate::event::EventKind::CardsLost)
+            .find(|f| {
+                f.kind != crate::event::EventKind::CardsLost
+                    && !(f.kind == crate::event::EventKind::CardsDiscarded
+                        && f.stage == crate::event::Stage::Commit
+                        && !f.planned)
+            })
             .or_else(|| self.res.stack.last())
             .expect("machine runs with a frame on stack")
             .id
@@ -443,6 +448,10 @@ impl<'a> Ctx<'a> {
         ) {
             // R05：D/R/G 与伤害族同走 push_frame（起步 Intrinsic）。
             crate::resolution::push_frame(self.res, data);
+            return;
+        }
+        if matches!(data, EventData::CardUsed(_)) {
+            crate::resolution::push_card_used_frame(self.core, self.catalog, self.res, data);
             return;
         }
         let id = self.res.next_event_id;
@@ -767,6 +776,18 @@ impl<'a> Ctx<'a> {
                 .vm_aux
                 .flags
                 .insert((player, format!("u01_discard_reason:{card}")), 1);
+        }
+        if self.catalog.skill_by_name("yanshu").is_some_and(|d| {
+            self.catalog.skills[d as usize]
+                .behavior
+                .as_host_behavior()
+                == Some(crate::vocabulary::host::HostBehavior::U05Hearth2BatchD)
+        }) {
+            // LIFO stack runs `CardsLost` first, then `CardsDiscarded` (matching PhaseDiscard / `discardAfter`).
+            self.emit(EventData::CardsDiscarded {
+                player,
+                cards: vec![card],
+            });
         }
         self.emit(EventData::CardsLost {
             player,

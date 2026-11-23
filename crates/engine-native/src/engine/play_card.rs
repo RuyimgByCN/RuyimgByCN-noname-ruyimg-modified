@@ -919,7 +919,12 @@ pub(super) fn play_card(
                         core.turn.current,
                         Some(card),
                     );
-                    if core.turn.jiu_used && !fentian_red_jiu && !bushi_unlimited {
+                    let fengnu_unlimited = crate::rvm_bridge::modifiers::d34_u05_mods::fengnu_unlimited_cards(
+                        core,
+                        catalog,
+                        core.turn.current,
+                    );
+                    if core.turn.jiu_used && !fentian_red_jiu && !bushi_unlimited && !fengnu_unlimited {
                         return Err(RejectReason::CardLimit);
                     }
                 }

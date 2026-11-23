@@ -239,6 +239,18 @@ pub(super) fn commit_equip(
             eff_kind,
         );
     }
+    install_equip_card(ctx, Some(frame_id), player, card);
+}
+
+pub(super) fn install_equip_card(
+    ctx: &mut Ctx<'_>,
+    frame_id: Option<EventId>,
+    player: PlayerId,
+    card: crate::ids::CardId,
+) {
+    let Some(slot) = ctx.catalog.card_slot_of(ctx.core, card) else {
+        return;
+    };
     // 同**栏位**替换（改造后同栏位不同牌种亦替换）；六龙骖驾占双坐骑栏（customSwap: equip3|equip4|equip6）
     let is_liulong = ctx
         .catalog
@@ -347,7 +359,7 @@ pub(super) fn commit_equip(
             });
         }
     }
-    if let Some(f) = ctx.res.frame_mut(frame_id) {
+    if let Some(f) = frame_id.and_then(|id| ctx.res.frame_mut(id)) {
         if let EventData::Equipped { replaced: r, .. } = &mut f.data {
             *r = replaced;
         }

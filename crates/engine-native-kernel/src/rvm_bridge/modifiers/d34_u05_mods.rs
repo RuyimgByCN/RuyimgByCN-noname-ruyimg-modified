@@ -59,6 +59,10 @@ pub(super) fn is_card_ignored_hand_limit(
     {
         return true;
     }
+    // character/hearth/skill.js:4829-4836 (`xiaorong`): equip hand cards ignored in hand limit
+    if kind.equip_slot().is_some() && has_host_skill(state, catalog, player, "xiaorong") {
+        return true;
+    }
     false
 }
 
@@ -76,7 +80,7 @@ pub(super) fn apply_hand_limit(
         delta += 2;
     }
     // character/hearth/skill.js:5312-5321 (`xjumo`)
-    if flag_val(state, player, "u05_mod:xjumo") > 0 {
+    if flag_val(state, player, "u05_mod:xjumo") > 0 || has_host_skill(state, catalog, player, "xjumo") {
         if state.player(player).hp < state.player(player).max_hp as i32 {
             delta += 5;
         } else {
@@ -84,7 +88,9 @@ pub(super) fn apply_hand_limit(
         }
     }
     // character/hearth/skill.js:7104-7110 (`tuteng_h`)
-    if flag_val(state, player, "u05_mod:tuteng_h") > 0 {
+    if flag_val(state, player, "u05_mod:tuteng_h") > 0
+        || has_host_skill(state, catalog, player, "tuteng_h")
+    {
         delta -= 1;
     }
     // card/swd/skill.js:5-12 (`qiankundai`)
@@ -168,7 +174,9 @@ pub(super) fn apply_distance_total(
     mut dist: i32,
 ) -> i32 {
     // character/hearth/skill.js:7251-7262 (`tuteng8`) & card/swd/skill.js:1418-1424
-    if flag_val(state, from, "u05_mod:tuteng8") > 0 {
+    if flag_val(state, from, "u05_mod:tuteng8") > 0
+        || has_host_skill(state, catalog, from, "tuteng8")
+    {
         dist -= 1;
     }
     if flag_val(state, from, "u05_mod:hslingjian_xuanfengzhiren_equip4_dist") > 0 {
@@ -283,13 +291,16 @@ pub(super) fn apply_distance_total(
 
 pub(super) fn apply_sha_use_limit(
     state: &GameStateCore,
+    catalog: &Catalog,
     player: PlayerId,
     mut cur: i32,
     mut unlimited: bool,
 ) -> (i32, bool) {
-    // character/ow/skill.js:346-422 (`bshaowei`) & 2322-2330 (`zhanlong2`): unlimited Sha
+    // character/ow/skill.js:346-422 (`bshaowei`), 2322-2330 (`zhanlong2`),
+    // character/hearth/skill.js:5800-5811 (`fengnu`): unlimited Sha / cards
     if flag_val(state, player, "u05_mod:bshaowei") > 0
         || flag_val(state, player, "u05_mod:zhanlong2") > 0
+        || has_host_skill(state, catalog, player, "fengnu")
     {
         unlimited = true;
     }
@@ -304,6 +315,10 @@ pub(super) fn apply_sha_use_limit(
         cur += 1;
     }
     (cur, unlimited)
+}
+
+pub fn fengnu_unlimited_cards(state: &GameStateCore, catalog: &Catalog, player: PlayerId) -> bool {
+    has_host_skill(state, catalog, player, "fengnu")
 }
 
 pub(super) fn apply_sha_extra_targets(
@@ -352,6 +367,7 @@ pub(super) fn apply_card_distance_unlimited(
                 || catalog
                     .skill_by_name("xuanci")
                     .is_some_and(|d| state.has_skill(player, d) && !catalog.is_tieji_sealed(state, player))))
+        || has_host_skill(state, catalog, player, "fengnu")
     {
         unlimited = true;
     }
@@ -441,6 +457,14 @@ pub(super) fn apply_card_target_canceled(
     {
         canceled = true;
     }
+    // character/hearth/skill.js:5219-5229 (`moyao`): other players' tricks cannot target owner
+    if actor != target
+        && !kind.is_basic_kind()
+        && kind.equip_slot().is_none()
+        && has_host_skill(state, catalog, target, "moyao")
+    {
+        canceled = true;
+    }
     canceled
 }
 
@@ -490,7 +514,8 @@ pub(super) fn apply_card_use_canceled(
     if is_trick
         && (flag_val(state, actor, "u05_mod:lieyang2") > 0
             || flag_val(state, actor, "u05_mod:duzhang2") > 0
-            || has_host_skill(state, catalog, actor, "lieyang2"))
+            || has_host_skill(state, catalog, actor, "lieyang2")
+            || has_host_skill(state, catalog, actor, "duzhang2"))
     {
         canceled = true;
     }
@@ -506,7 +531,9 @@ pub(super) fn apply_card_use_canceled(
     }
     if in_hand
         && (flag_val(state, actor, "u05_mod:mianzhen2") > 0
-            || flag_val(state, actor, "u05_mod:mengun2") > 0)
+            || flag_val(state, actor, "u05_mod:mengun2") > 0
+            || (has_host_skill(state, catalog, actor, "mengun2")
+                && flag_val(state, actor, "hs_mengun2_card") == u32::from(card) + 1))
     {
         canceled = true;
     }

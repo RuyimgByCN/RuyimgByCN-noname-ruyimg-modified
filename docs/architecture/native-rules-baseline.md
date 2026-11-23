@@ -1,5 +1,15 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+## 2026-11-23 Batch U05-6b（U05 炉石传说 `hearth` Part 2 208 项语义对齐、`shixu` 墙钟边界与主线集成修正）
+
+- **不变量保持**：`RULES_VERSION=333`、`NGSA=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。
+- **主线合入语义与生命周期对齐**：
+  - `HostBehavior` 新增 `1250..=1255`（`U05Hearth2BatchA..=F`，`HostBehavior::ALL=627`），独立尾追加 `known_prompts_u05_6b.rs`（`59` 条提示词），保留独立 `resolution/optional_gate.rs`、`kernel/judge_hearth.rs`、`ai/extension_choices_u05_6b.rs`；`ContentHooks` 新增 `on_judge_pre_hearth`、`on_judge_rewrite_pre_hearth`、`hearth_response_skill`，`resolution.rs` 新增 `maybe_promote_card_used_before` / `push_card_used_frame` 与 `(EventKind::CardUsed, BeforeTriggers) => Commit`（仅当场上有启用 `card_used_in_before_window` 技能如 `huanjue` 时才于 `BeforeTriggers` 派发，不改标准局 golden 预算）。
+  - `shahai_u05_hearth_b.rs` 注册 `111` 条 `HEARTH_B6B_SKILL_MAP` 宿主绑定并补齐 `tuteng5..8` 与 `hsmengjing_*` / 衍生衍生卡供应；主线修复 `kernel/intrinsic.rs` 与 `intrinsic_named_ext.rs` 对 `virtual_diaobing_use` 的双重 `.remove` 冲突（`intrinsic.rs` 仅 `.contains_key` 门控），并使 `u05_b6b_hearth/group_e.rs:661-674` 的 `stone_chenshui` 兼容 `u05_stone_leader` 指定领队座次发梦境牌。
+  - **明确保留为 `简化近似` 的 `8` 项边界（`shixu` 确定性代理 + 7 名武将）**：
+    1. **`U05:skills:shixu`（墙钟确定性边界）**：上游 `character/hearth/skill.js:4877` 按玩家回合真实墙钟耗时折算弃牌数；原生内核禁止任何墙钟/系统时钟非确定性源，已实现为 `group_b.rs:115-122,495-525` 的状态旗标确定性代理（`hs_shixu_duration > 3000` ms 时于 `Phase::End` 弃置 `ms / 3000` 张），因此按 `verifier-u05-b` `#45` 保留为 `简化近似`。
+    2. **7 名依赖未闭合或简化技能之 `hs_*` 武将**：`hs_nozdormu`（依附 `shixu`）、`hs_jaina`（`swd:huopu` `简化近似`）、`hs_kcthun`（`swd:luanji` 未复核）、`hs_xsylvanas`（`swd:busi` `简化近似`）、`hs_alleria`（`xinliegong` 桩）、`hs_tgolem`（`xinwuyan` 桩）、`hs_wuther`（`rejieming` 桩）。
+
 ## 2026-11-23 Batch U05-6a（U05 炉石传说 `hearth` 167 项语义对齐、`off_deck` 供应牌消散守恒与 `stone_chenshui` 兼容）
 
 - **不变量保持**：`RULES_VERSION=333`、`NGSA=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。
