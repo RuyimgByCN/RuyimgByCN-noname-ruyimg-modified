@@ -220,9 +220,9 @@ fn activate(e: &mut Engine, seat: u8, skill_name: &str) -> CommandOutcome {
 
 fn total_tracked_cards(e: &Engine) -> usize {
     let core = e.state_core();
-    let mut n = core.deck.len() + core.discard.len() + core.table.len();
+    let mut n = core.deck.len() + core.discard.len() + core.table.len() + core.detached_cards.len();
     for p in &core.players {
-        n += p.hand.len() + p.equips.len() + p.judge.len();
+        n += p.hand.len() + p.equips.len() + p.judge.len() + p.off_court.len();
     }
     for pile in core.vm_aux.piles.values() {
         n += pile.len();

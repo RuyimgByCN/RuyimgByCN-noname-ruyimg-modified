@@ -225,6 +225,7 @@ pub(crate) fn host_on_recover_before(
     if *amount == 0 {
         return;
     }
+    super::u05_hearth::host_on_recover_before_hearth(ctx, player, amount);
     if ctx.catalog.skill_by_name("_wujinmoshiRecover").is_none()
         && ctx.catalog.skill_by_name("_wujinmoshiRecoverE").is_none()
     {

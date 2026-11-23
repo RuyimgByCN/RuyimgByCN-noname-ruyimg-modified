@@ -343,13 +343,7 @@ impl ShaResolveMachine {
             {
                 return Some(Flow::Yield);
             }
-            if ctx
-                .core
-                .vm_aux
-                .flags
-                .contains_key(&(self.source, format!("sha_cike_done:{fid}")))
-                && !self.shoulie_direct
-            {
+            if !self.shoulie_direct {
                 let cid = self.card.unwrap_or(0);
                 if ctx
                     .core

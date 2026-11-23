@@ -711,6 +711,7 @@ impl<'a> Ctx<'a> {
             .cards
             .get(card as usize)
             .is_some_and(|cd| cd.name == "txhj_piliche")
+            || (self.catalog.hooks.is_hearth_vanish_card)(self.catalog, card)
         {
             if !self.core.detached_cards.iter().any(|(dc, _)| *dc == card) {
                 self.core

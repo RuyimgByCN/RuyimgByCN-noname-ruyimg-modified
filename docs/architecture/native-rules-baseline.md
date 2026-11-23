@@ -1,5 +1,13 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+## 2026-11-23 Batch U05-6a（U05 炉石传说 `hearth` 167 项语义对齐、`off_deck` 供应牌消散守恒与 `stone_chenshui` 兼容）
+
+- **不变量保持**：`RULES_VERSION=333`、`NGSA=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。
+- **主线合入语义与生命周期对齐**：
+  - `HostBehavior` 新增 `1220..=1225`（`U05HearthCards` / `U05HearthBatchA..=E`，`HostBehavior::ALL=621`），独立尾追加 `known_prompts_u05_6a.rs`（`79` 条提示词），拆出 `crates/engine-native/src/engine/play_card_targets_hearth.rs` 保 Rust 非测试源码 `<= 1,000` 有效行；`ContentHooks` 新增 `on_draw_machine_begin`、`on_equip_gained`、`on_equip_revoked`、`on_turn_before_skip`、`hearth_dying_save_skills`、`resolve_hearth_dying_save`、`is_hearth_vanish_card`，并将 `on_player_died` 扩展传出可选 `killer`。
+  - `shahai_u05_hearth.rs` 注册 `119` 条 `HEARTH_HOST_SKILL_MAP` 宿主绑定，将 `shihuawuqi` 与 44 张衍生卡设为 `off_deck` 并于建局入 `detached_cards`（`vanish: true` / 供应衍生牌回流 `detached_cards` 维持物理牌守恒）；主线 `u05_b1_zhenfa.rs::step_stone_chenshui` 同步改为优先自 `detached_cards` 抽取 `hsmengjing_*` 并回退 `deck`/`discard`。
+  - `catalog_queries.rs`、`d34_flags.rs`、`d34_u05_mods.rs` 与 `u05_hearth*.rs` 闭环 `qianfu2`（`cardEnabled`/`cardUsable`/`cardRespondable`/`cardSavable` 全禁及全场选目标）、`hs_fengyin_xuetu` + 21 项非锁定炉石技能免封、`shandianjian` 自目标、`zhaomingdan` `hej` 目标校验、`qingtian` 严格唯一最大体力、`jinzhou` 禁指定被封者、`zengli` 含同体力及非最小目标、及 `shihuawuqi`/`chuansongmen`/`xiyong`/`tanmi` Round 1–3 全部反例修复。
+
 ## 2026-11-23 Batch U05-3（U05 守望先锋 `ow` 127 项全量语义对齐、无色 AOE 指向校准与 `shanxian` 劫持回合）
 
 - **不变量保持**：`RULES_VERSION=333`、`NGSA=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。

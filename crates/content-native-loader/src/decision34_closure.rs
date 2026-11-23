@@ -587,6 +587,8 @@ pub use decision34_pack9::*;
 
 #[path = "shahai_u05_ow.rs"]
 pub(crate) mod shahai_u05_ow;
+#[path = "shahai_u05_hearth.rs"]
+pub(crate) mod shahai_u05_hearth;
 
 #[path = "shahai_attach.rs"]
 pub mod shahai_attach;

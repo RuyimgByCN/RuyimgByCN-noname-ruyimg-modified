@@ -193,6 +193,12 @@ pub fn intrinsic_machine(
                 return None;
             }
             let effective_kind = u.effective_kind_in(ctx.core, ctx.catalog);
+            if effective_kind == CardKind::Tao && u.card.is_some() {
+                if let Some(machine) = (ctx.catalog.hooks.card_intrinsic)(ctx, &u, effective_kind)
+                {
+                    return machine;
+                }
+            }
             if effective_kind == CardKind::Tao {
                 let bonus = ctx
                     .core
@@ -240,15 +246,21 @@ pub fn intrinsic_machine(
                 return sha_intrinsic(ctx, &u);
             }
             let Some(card) = u.card else {
-                if effective_kind == CardKind::Youdishenru
-                    || ctx
-                        .core
-                        .vm_aux
-                        .flags
-                        .get(&(u.player, "l11_virtual_huogong".to_string()))
-                        .copied()
-                        .unwrap_or(0)
-                        > 0
+                if matches!(
+                    effective_kind,
+                    CardKind::Youdishenru
+                        | CardKind::Linghunzhihuo
+                        | CardKind::Zhaomingdan
+                        | CardKind::Zhiliaobo
+                        | CardKind::Shijieshu
+                ) || ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .get(&(u.player, "l11_virtual_huogong".to_string()))
+                    .copied()
+                    .unwrap_or(0)
+                    > 0
                     || ctx
                         .core
                         .vm_aux
@@ -258,12 +270,17 @@ pub fn intrinsic_machine(
                         .unwrap_or(0)
                         > 0
                     || (effective_kind == CardKind::Wuzhong
-                        && ctx
+                        && (ctx
                             .core
                             .vm_aux
                             .flags
                             .remove(&(u.player, "virtual_diaobing_use".to_string()))
-                            .is_some())
+                            .is_some()
+                            || ctx
+                                .core
+                                .vm_aux
+                                .flags
+                                .contains_key(&(u.player, "hs_virtual_card_src".to_string()))))
                 {
                     if let Some(machine) =
                         (ctx.catalog.hooks.card_intrinsic)(ctx, &u, effective_kind)

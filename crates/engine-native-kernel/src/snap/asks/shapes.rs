@@ -240,6 +240,11 @@ pub(in crate::snap) fn dying_save_options(
             options.push(opt);
         }
     }
+    for rdef in (catalog.hooks.hearth_dying_save_skills)(core, catalog, responder, dying) {
+        if !options.contains(&ChoiceOption::Skill(rdef)) {
+            options.push(ChoiceOption::Skill(rdef));
+        }
+    }
     options
 }
 

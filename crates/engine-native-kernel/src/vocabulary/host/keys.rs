@@ -647,6 +647,12 @@ impl HostBehavior {
             HostBehavior::U05OwBatchB => "host:u05_ow_batch_b",
             HostBehavior::U05OwBatchC => "host:u05_ow_batch_c",
             HostBehavior::U05OwBatchD => "host:u05_ow_batch_d",
+            HostBehavior::U05HearthCards => "host:u05_hearth_cards",
+            HostBehavior::U05HearthBatchA => "host:u05_hearth_batch_a",
+            HostBehavior::U05HearthBatchB => "host:u05_hearth_batch_b",
+            HostBehavior::U05HearthBatchC => "host:u05_hearth_batch_c",
+            HostBehavior::U05HearthBatchD => "host:u05_hearth_batch_d",
+            HostBehavior::U05HearthBatchE => "host:u05_hearth_batch_e",
         }
     }
 }

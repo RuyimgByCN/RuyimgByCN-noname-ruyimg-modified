@@ -1765,4 +1765,16 @@ pub enum HostBehavior {
     U05OwBatchC,
     /// U05 杀海拾遗 OW Batch D（tag 1043，character/ow/skill.js）：禅雅塔/法老之鹰/卢西奥/秩序之光/天使/猎空（含飞影）。
     U05OwBatchD,
+    /// U05 杀海拾遗 Hearth 扩展卡牌与衍生牌伴生行为（tag 1220，card/hearth + character/hearth）。
+    U05HearthCards,
+    /// U05 杀海拾遗 Hearth 技能 Batch A（tag 1221，character/hearth/skill.js hshuanyu..=hstianqi_shali）。
+    U05HearthBatchA,
+    /// U05 杀海拾遗 Hearth 技能 Batch B（tag 1222，character/hearth/skill.js ysjqisha..=zhuilie）。
+    U05HearthBatchB,
+    /// U05 杀海拾遗 Hearth 技能 Batch C（tag 1223，character/hearth/skill.js szbianshen..=jinzhou）。
+    U05HearthBatchC,
+    /// U05 杀海拾遗 Hearth 技能 Batch D（tag 1224，character/hearth/skill.js midian..=wzhanyi）。
+    U05HearthBatchD,
+    /// U05 杀海拾遗 Hearth 技能 Batch E（tag 1225，character/hearth/skill.js shengteng..=hsbaowu_huangjinyuanhou2）。
+    U05HearthBatchE,
 }

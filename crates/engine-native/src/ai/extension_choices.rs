@@ -28,6 +28,8 @@ mod extension_choices_u05_1;
 mod extension_choices_u05_2;
 #[path = "extension_choices_u05_ow.rs"]
 mod extension_choices_u05_ow;
+#[path = "extension_choices_u05_hearth.rs"]
+mod extension_choices_u05_hearth;
 
 pub(super) fn public_attitude(view: &crate::view::PlayerView, seat: u8, target: u8) -> i32 {
     if target == seat {
@@ -83,6 +85,7 @@ pub(super) fn plan_extension_choice_action(
     let seat = input.view.seat;
     let Some(ChoiceView::Own {
         id,
+        kind,
         prompt,
         ref options,
         min,
@@ -253,6 +256,7 @@ pub(super) fn plan_extension_choice_action(
                     selection,
                 })
             }
+            Some("wzhanyi") => extension_choices_u05_hearth::plan_wzhanyi_trigger_confirm(input, id),
             _ => extension_choices_l11_b3::plan_l11_b3_choice_action(
                 catalog,
                 input,
@@ -837,6 +841,19 @@ pub(super) fn plan_extension_choice_action(
             max,
             allow_cancel,
         )
+        .or_else(|| {
+            extension_choices_u05_hearth::plan_hearth_choice_action(
+                catalog,
+                input,
+                id,
+                kind,
+                prompt,
+                options,
+                min,
+                max,
+                allow_cancel,
+            )
+        })
         .or_else(|| {
             extension_choices_u05_1::plan_u05_b1_choice_action(
                 catalog,

@@ -624,6 +624,12 @@ impl HostBehavior {
             HostBehavior::U05OwBatchB => 1041,
             HostBehavior::U05OwBatchC => 1042,
             HostBehavior::U05OwBatchD => 1043,
+            HostBehavior::U05HearthCards => 1220,
+            HostBehavior::U05HearthBatchA => 1221,
+            HostBehavior::U05HearthBatchB => 1222,
+            HostBehavior::U05HearthBatchC => 1223,
+            HostBehavior::U05HearthBatchD => 1224,
+            HostBehavior::U05HearthBatchE => 1225,
         }
     }
 

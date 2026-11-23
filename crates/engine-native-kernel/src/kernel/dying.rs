@@ -195,6 +195,17 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                         .core
                         .vm_aux
                         .flags
+                        .remove(&(responder, "hs_yuelu_saved".to_string()))
+                        .is_some()
+                    {
+                        self.responders.remove(0);
+                        self.round_used = true;
+                        continue;
+                    }
+                    if ctx
+                        .core
+                        .vm_aux
+                        .flags
                         .remove(&(responder, "l10_reguhuo_dying_resume".to_string()))
                         .is_some()
                     {
@@ -314,7 +325,14 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                             || !dying_response_skills(ctx.core, ctx.catalog, *r, self.dying)
                                 .is_empty()
                             || !dying_save_skill_options(ctx.core, ctx.catalog, *r, self.dying)
-                                .is_empty());
+                                .is_empty()
+                            || !(ctx.catalog.hooks.hearth_dying_save_skills)(
+                                ctx.core,
+                                ctx.catalog,
+                                *r,
+                                self.dying,
+                            )
+                            .is_empty());
                     if !has_tao {
                         self.responders.remove(0);
                     } else {
@@ -338,7 +356,14 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                             || !dying_response_skills(ctx.core, ctx.catalog, pid, self.dying)
                                 .is_empty()
                             || !dying_save_skill_options(ctx.core, ctx.catalog, pid, self.dying)
-                                .is_empty())
+                                .is_empty()
+                            || !(ctx.catalog.hooks.hearth_dying_save_skills)(
+                                ctx.core,
+                                ctx.catalog,
+                                pid,
+                                self.dying,
+                            )
+                            .is_empty())
                 });
                 if !any_tao {
                     break;
@@ -490,7 +515,7 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                     } else {
                         CardKind::Tao
                     };
-                    let use_as = (eff_kind != raw_kind || !in_hand).then_some(eff_kind);
+                    let use_as = (eff_kind != ctx.catalog.card_kind(tao) || !in_hand).then_some(eff_kind);
                     self.round_used = true;
                     ctx.emit(EventData::CardUsed(crate::machine::card_use_as(
                         tao,
@@ -597,6 +622,25 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                             return Flow::Yield;
                         }
                     }
+                    if (ctx.catalog.hooks.hearth_dying_save_skills)(
+                        ctx.core,
+                        ctx.catalog,
+                        responder,
+                        self.dying,
+                    )
+                    .contains(&def)
+                    {
+                        if (ctx.catalog.hooks.resolve_hearth_dying_save)(
+                            ctx,
+                            responder,
+                            self.dying,
+                            def,
+                        ) {
+                            self.round_used = true;
+                            continue;
+                        }
+                        return Flow::Yield;
+                    }
                 }
                 continue; // 无论用桃或放弃，继续处理队列（轮转见队首过滤）
             }
@@ -659,6 +703,13 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
             for opt in dying_save_skill_options(ctx.core, ctx.catalog, responder, self.dying) {
                 if !options.contains(&opt) {
                     options.push(opt);
+                }
+            }
+            for rdef in
+                (ctx.catalog.hooks.hearth_dying_save_skills)(ctx.core, ctx.catalog, responder, self.dying)
+            {
+                if !options.contains(&ChoiceOption::Skill(rdef)) {
+                    options.push(ChoiceOption::Skill(rdef));
                 }
             }
             // 冰封·封（swd 批 134）与移魂2：封锁者不能求桃/自救

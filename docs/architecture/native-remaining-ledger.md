@@ -1,5 +1,9 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+## 2026-11-23 Batch U05-6a（U05 炉石传说 `hearth` +167→518/1,621；余 1,103 项待后续 U05 批次）
+
+- 合入 `swarm/conv-u05-6a-hearth`（`9703e2188`，`verifier-u05-b` `#27 APPROVE`）及 `step_stone_chenshui` `detached_cards` 离场梦境牌检索修复，将 `hearth` 子包全部 `167` 项（`57` 卡牌 + `110` 技能，零保留）升为 `已复核等价`（全局 `2,838 / 1,586 / 0`，`U05` `518 / 1,103 / 0`，整包 8 维仍 `0/37`）。[inventory_status.json](../migration/g0/inventory_status.json) 余下 `1,103` 项 `U05`（含 U05-1 保留 7 项及其余 `gwent`/`swd`/`xianjian`/`hearth` 武将等子包）与全局其余未收敛条目继续按后续批次推进；详见 [Batch U05-6a 证据摘要](../operations/evidence/2026-11-23-u05-6a-hearth/README.md) 与 [native-rules-baseline.md](native-rules-baseline.md)。
+
 ## 2026-11-23 Batch U05-3（U05 守望先锋 `ow` +127→351/1,621；余 1,270 项待后续 U05 批次）
 
 - 合入 `swarm/conv-u05-3-ow`（`53ed4b1fa`，`verifier-u05-a` `#113 APPROVE`）及无色 AOE / `turn_reset.rs` 集成修复，将 `ow` 子包全部 `127` 项（`24` 武将 + `103` 技能，零保留）升为 `已复核等价`（全局 `2,671 / 1,753 / 0`，`U05` `351 / 1,270 / 0`，整包 8 维仍 `0/37`）。[inventory_status.json](../migration/g0/inventory_status.json) 余下 `1,270` 项 `U05`（含 U05-1 保留 7 项及其余 `gwent`/`swd`/`xianjian`/`hearth` 等子包）与全局其余未收敛条目继续按后续批次推进；详见 [Batch U05-3 证据摘要](../operations/evidence/2026-11-23-batch3-9-u05-3-ow/README.md) 与 [native-rules-baseline.md](native-rules-baseline.md)。

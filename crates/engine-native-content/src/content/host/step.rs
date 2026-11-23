@@ -141,11 +141,19 @@ pub(crate) use l19_fixes::{
     host_preserves_skills_on_death, play_begin_l19,
 };
 
-/// 轮次开始复合宿主钩子：依次执行 L27 轮标/展示清理与 L19 `_relifeskill` 倒数复活。
+/// 轮次开始复合宿主钩子：依次执行 L27 轮标/展示清理、L19 `_relifeskill` 倒数复活与 U05-6a hearth 清理。
 pub(crate) fn host_on_round_start(ctx: &mut Ctx<'_>) {
     host_on_round_start_l27(ctx);
     host_on_round_start_l19(ctx);
+    u05_hearth::host_on_round_start_hearth(ctx);
 }
+pub(super) mod u05_hearth;
+pub(crate) use u05_hearth::{
+    hearth_dying_save_skills, hearth_try_named_ext_card, host_on_draw_machine_begin_hearth,
+    host_on_equip_gained_hearth, host_on_equip_revoked_hearth, host_on_outer_settled_hearth,
+    host_on_phase_end_hearth, host_turn_before_skip_hearth, is_hearth_named_wuzhong_unwrapped,
+    is_hearth_vanish_card_hook, resolve_hearth_dying_save,
+};
 pub(super) mod l20_batch_a;
 pub(super) mod l20_batch_b;
 pub(super) mod u08_batch_a;
@@ -1271,6 +1279,12 @@ impl HostMachine {
             | HostBehavior::U05GujianCharBatchC
             | HostBehavior::U05GujianCharBatchD
             | HostBehavior::U05GujianCharBatchE => u05_b2_gujian::step_u05_gujian(self, ctx),
+            HostBehavior::U05HearthCards
+            | HostBehavior::U05HearthBatchA
+            | HostBehavior::U05HearthBatchB
+            | HostBehavior::U05HearthBatchC
+            | HostBehavior::U05HearthBatchD
+            | HostBehavior::U05HearthBatchE => u05_hearth::handle_u05_hearth(self, ctx),
             HostBehavior::Rechanyuan => Flow::Done,
             HostBehavior::L11TrickCard => l11_cards::handle_l11_trick_card(self, ctx),
             HostBehavior::L11EquipCards => l11_equips::handle_l11_equips(self, ctx),

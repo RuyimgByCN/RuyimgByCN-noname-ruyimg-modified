@@ -939,6 +939,7 @@ pub(crate) fn host_sha_begin_step(
     sha_card: Option<CardId>,
     priority_ge_6: bool,
 ) -> bool {
+    super::u05_hearth::host_sha_begin_step_hearth(ctx, source, target, sha_card, priority_ge_6);
     u08_batch_d_hooks::host_sha_begin_step_impl(
         ctx,
         sha_frame_id,
@@ -957,6 +958,7 @@ pub(crate) fn host_sha_end_step(
     sha_card: Option<CardId>,
     is_damage: bool,
 ) -> bool {
+    super::u05_hearth::host_sha_end_step_hearth(ctx, source, target, is_damage);
     u08_batch_d_hooks::host_sha_end_step_impl(
         ctx,
         sha_frame_id,
@@ -973,4 +975,7 @@ pub(crate) fn host_card_use_after(
     u: &CardUseData,
 ) {
     u08_batch_d_hooks::host_card_use_after_impl(ctx, fid, u);
+    if !u.cancelled {
+        super::u05_hearth::host_card_use_after_hearth(ctx, u);
+    }
 }

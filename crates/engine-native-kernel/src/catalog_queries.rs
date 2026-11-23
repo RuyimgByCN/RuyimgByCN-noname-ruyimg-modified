@@ -129,6 +129,20 @@ impl Catalog {
                 .copied()
                 .unwrap_or(0)
                 > 0
+            || core
+                .vm_aux
+                .flags
+                .get(&(p, "hs_jinzhou_sealed".to_string()))
+                .copied()
+                .unwrap_or(0)
+                > 0
+            || core
+                .vm_aux
+                .flags
+                .get(&(p, "hs_fengyin_xuetu".to_string()))
+                .copied()
+                .unwrap_or(0)
+                > 0
     }
 
     /// 麻醉封印：手牌区（`position == "h"`）禁止使用或打出（不影响装备牌转换）。
@@ -237,6 +251,27 @@ impl Catalog {
                 | "_buff_txhj_guosejueyan"
                 | "_buff_txhj_wuweizhile"
                 | "_buff_txhj_jiezizhidao"
+                | "hshuanling"
+                | "hstianqi"
+                | "lieqi"
+                | "zhuilie"
+                | "szbianshen"
+                | "kekao"
+                | "kqizhou"
+                | "fuwen"
+                | "mengye"
+                | "kuixin"
+                | "zhongji"
+                | "jinzhou"
+                | "xingluo"
+                | "lianjin"
+                | "yingxi"
+                | "peiyu"
+                | "peiyu2"
+                | "mobao"
+                | "xianji"
+                | "xueren"
+                | "xunbao2"
         ) {
             return false;
         }
@@ -361,6 +396,13 @@ impl Catalog {
                 | "txhj_wuxiangdexinxue"
                 | "txhj_wuweizhile"
                 | "txhj_yuanduandilue"
+                | "hlongyi"
+                | "qingzun"
+                | "shouwang2"
+                | "ysjqisha_yi"
+                | "ysjqisha_ao"
+                | "hsbaowu_huangjinyuanhou"
+                | "lieyang2"
         ) {
             return true;
         }
@@ -481,9 +523,26 @@ impl Catalog {
                 .copied()
                 .unwrap_or(0)
                 > 0
+            || core
+                .vm_aux
+                .flags
+                .get(&(p, "hs_qianfu2_active".to_string()))
+                .copied()
+                .unwrap_or(0)
+                > 0
+            || core
+                .vm_aux
+                .flags
+                .get(&(p, "u05_mod:qianfu2".to_string()))
+                .copied()
+                .unwrap_or(0)
+                > 0
             || self
                 .skill_by_name("txhj_noda_axe2")
                 .is_some_and(|def| core.has_skill(p, def))
+            || self
+                .skill_by_name("qianfu2")
+                .is_some_and(|d| core.skills.get(&(p, d)).is_some_and(|inst| inst.enabled))
         {
             return true;
         }

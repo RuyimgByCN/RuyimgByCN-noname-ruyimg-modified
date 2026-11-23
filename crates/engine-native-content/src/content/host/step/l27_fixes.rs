@@ -96,6 +96,7 @@ pub(crate) fn host_on_game_start(core: &mut GameStateCore, catalog: &Catalog) {
     }
     super::l01_rules::l01_on_game_start(core, catalog);
     super::u05_b2_gujian::on_game_start_gujian(core, catalog);
+    super::u05_hearth::host_on_game_start_hearth(core, catalog);
 }
 
 /// `Death` 执行前钩子：当前用于 `yange`/`humeng` 子武将阵亡时退出子将并恢复主将，阻止角色死亡。
@@ -108,9 +109,14 @@ pub(crate) fn host_on_turn_phase_after(ctx: &mut Ctx<'_>, player: PlayerId) {
     super::u05_b2_gujian::on_turn_phase_after_gujian(ctx, player);
 }
 
-/// `dieEnd` 死亡结算后钩子（`alive=false` 落账后）：刷新全场存活 `xiefang` 计数，并登记 `lingyong` / 清理 `mhuanyi` 与 U05 `ow` 死亡监听。
-pub(crate) fn host_on_player_died(ctx: &mut Ctx<'_>, dead: PlayerId) {
+/// `dieEnd` 死亡结算后钩子（`alive=false` 落账后）：刷新全场存活 `xiefang` 计数，并登记 `lingyong` / 清理 `mhuanyi` 与 U05 `ow` / `hearth` 死亡监听。
+pub(crate) fn host_on_player_died(
+    ctx: &mut Ctx<'_>,
+    dead: PlayerId,
+    killer: Option<PlayerId>,
+) {
     super::u05_ow::host_on_player_died_ow(ctx, dead);
+    super::u05_hearth::host_on_player_died_hearth(ctx, dead, killer);
     let seats = ctx.core.players.len() as PlayerId;
     for owner in 0..seats {
         if !ctx.core.player(owner).alive {
@@ -185,6 +191,7 @@ pub(crate) fn host_on_phase_use_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     }
     set_flag(ctx.core, player, "bolan_granted_def", 0);
     set_flag(ctx.core, player, "bolan_temp_skill", 0);
+    super::u05_hearth::host_on_phase_use_end_hearth(ctx, player);
 }
 
 /// `roundStart` 轮次开始钩子：清除 `xingchong` 上轮展示牌与标记、`clandianzhan` 本轮花色记录。
@@ -222,6 +229,7 @@ pub(crate) fn host_on_hand_card_removed(ctx: &mut Ctx<'_>, player: PlayerId, car
     {
         ctx.emit(EventData::LoseHp { player, amount: 1 });
     }
+    super::u05_hearth::host_on_hand_card_removed_hearth(ctx, player, card);
     if ctx.catalog.skill_by_name("xingchong").is_none() {
         return;
     }
@@ -287,6 +295,9 @@ pub(crate) fn on_skill_removed_all(
         }
         _ => {}
     }
+    let hearth_cards =
+        super::u05_hearth::on_skill_removed_hearth(core, catalog, owner, skill_name);
+    cards.extend(hearth_cards);
     cards
 }
 

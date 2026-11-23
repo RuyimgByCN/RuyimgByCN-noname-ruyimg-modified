@@ -35,18 +35,33 @@ pub use support::{
 };
 pub use step::step_l01_on_game_start;
 pub(crate) use step::{
-    host_before_facedown_turn_skip, host_before_gain_hand, host_before_recover,
-    host_card_use_after, host_draw_begin_step, host_judge_settled, host_on_death_before,
-    host_on_game_start, host_on_hand_card_removed, host_on_phase_use_end, host_on_player_died,
-    host_on_recover_before, host_on_round_start, host_on_shanxian_turnover, host_on_turn_begin,
-    host_on_turn_phase_after, host_preserves_skills_on_death, host_sha_begin_step,
-    host_sha_end_step, on_cards_to_discard_chengye, on_l25_host_event,
-    on_outer_settled_taipingyaoshu, on_phase_end_l10_scs, on_skill_removed_all, play_begin_l19,
-    play_begin_tianshu, play_end_rui_skill1, reguhuo_consume_resp, reguhuo_has_pending_final,
-    reguhuo_response_skill, reguhuo_spawn_final, reguhuo_spawn_response, scsanruo_response_skill,
-    u01_phase_skipped_hook, u01_respond_skill_options as u01_respond_skill_options_hook,
+    hearth_dying_save_skills, hearth_try_named_ext_card, host_before_facedown_turn_skip,
+    host_before_gain_hand, host_before_recover, host_card_use_after, host_draw_begin_step,
+    host_judge_settled, host_on_death_before, host_on_draw_machine_begin_hearth,
+    host_on_equip_gained_hearth, host_on_equip_revoked_hearth, host_on_game_start,
+    host_on_hand_card_removed, host_on_outer_settled_hearth, host_on_phase_end_hearth,
+    host_on_phase_use_end, host_on_player_died, host_on_recover_before, host_on_round_start,
+    host_on_shanxian_turnover, host_on_turn_begin, host_on_turn_phase_after,
+    host_preserves_skills_on_death, host_sha_begin_step, host_sha_end_step,
+    host_turn_before_skip_hearth, is_hearth_named_wuzhong_unwrapped, is_hearth_vanish_card_hook,
+    on_cards_to_discard_chengye, on_l25_host_event, on_outer_settled_taipingyaoshu,
+    on_phase_end_l10_scs, on_skill_removed_all, play_begin_l19, play_begin_tianshu,
+    play_end_rui_skill1, reguhuo_consume_resp, reguhuo_has_pending_final, reguhuo_response_skill,
+    reguhuo_spawn_final, reguhuo_spawn_response, resolve_hearth_dying_save,
+    scsanruo_response_skill, u01_phase_skipped_hook,
+    u01_respond_skill_options as u01_respond_skill_options_hook,
     u01_try_activate_respond_skill as u01_try_activate_respond_skill_hook,
 };
+
+pub(crate) fn host_on_outer_settled(ctx: &mut Ctx<'_>) {
+    on_outer_settled_taipingyaoshu(ctx);
+    host_on_outer_settled_hearth(ctx);
+}
+
+pub(crate) fn host_on_phase_end(ctx: &mut Ctx<'_>) {
+    on_phase_end_l10_scs(ctx);
+    host_on_phase_end_hearth(ctx);
+}
 
 pub(crate) fn host_play_begin_step(ctx: &mut Ctx<'_>, player: PlayerId) {
     play_begin_tianshu(ctx, player);
@@ -307,6 +322,10 @@ impl SkillBehavior for HostSkillBehavior {
                 | "th_tiansuan2_fire"
                 | "th_gushe2"
                 | "th_taipingyaoshu"
+                | "shouwang2"
+                | "qianfu2"
+                | "chuansongmen2"
+                | "chuansongmen3"
                 | "th_g_taipingyaoshu_ai"
                 | "th_pcaudio_shuijing_card"
                 | "th_pcaudio_xuanjian_card"
@@ -674,6 +693,7 @@ impl SkillBehavior for HostSkillBehavior {
     fn runs_before_phase_begin(&self) -> bool {
         step::u01_fixes_2::runs_before_phase_begin_2(&self.name)
             || step::u01_fixes_3::runs_before_phase_begin_3(&self.name)
+            || (self.behavior == HostBehavior::U05HearthBatchD && self.name == "wzhanyi")
     }
     fn start_in_window(
         &self,

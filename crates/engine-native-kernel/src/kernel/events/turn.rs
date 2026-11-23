@@ -97,6 +97,29 @@ pub(in crate::kernel) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: Playe
                 .vm_aux
                 .flags
                 .remove(&(seat, "dddxuanlun_choose".to_string()));
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(seat, "hs_shihuawuqi_used_turn".to_string()));
+        }
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(player, "hs_jinzhou_sealed".to_string()));
+        if ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(player, "hs_xuetu_clear_phase_after".to_string()))
+            .is_some()
+        {
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(player, "hs_fengyin_xuetu".to_string()));
+            if let Some(def) = ctx.catalog.skill_by_name("zhoujiang") {
+                ctx.core.skills.remove(&(player, def));
+            }
         }
         ctx.core.vm_aux.flags.retain(|(_, k), _| {
             !k.starts_with("u01_zhuanshe_used:")
@@ -809,6 +832,10 @@ pub(crate) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: PlayerId) {
         .remove(&(0, "extra_turn_in_progress".to_string()))
         .is_some()
     {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(prev, "hs_ylyuchu_extra_draw_minus".to_string()));
         let saved_next = ctx
             .core
             .vm_aux
@@ -866,6 +893,16 @@ pub(crate) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: PlayerId) {
             .flags
             .remove(&(0, "extra_turn_force_round_bump".to_string()))
             .is_some();
+    if (ctx.catalog.hooks.on_turn_before_skip)(ctx, next) {
+        if force_round_bump {
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((0, "extra_turn_force_round_bump".to_string()), 1);
+        }
+        ctx.emit(EventData::TurnEnded { player: next });
+        return;
+    }
     // R05（K10）：翻面整回合跳过在回合开始窗之前（上游 phaseBefore 检测）
     // ——翻面者不发 TurnBegin／不进任何阶段（含准备阶段）；翻回序列与
     // TurnEnded 同 E03/U05 原口径，TurnEnded 的窗→handoff 链继续交接。

@@ -130,6 +130,18 @@ pub(crate) fn mbcmjiushi_dying_skill(
     core.has_skill(responder, def).then_some(def)
 }
 
+#[inline]
+pub(crate) fn effective_card_kind_in_core(
+    core: &crate::state::GameStateCore,
+    catalog: &Catalog,
+    card: crate::ids::CardId,
+) -> CardKind {
+    core.declared_kinds
+        .get(&card)
+        .copied()
+        .unwrap_or_else(|| catalog.card_kind(card))
+}
+
 /// P1/N08 急救（华佗）：持有者濒死结算时红色手牌可当【桃】使用。
 pub(super) fn is_tao_like(
     ctx: &Ctx<'_>,
@@ -168,7 +180,7 @@ pub(super) fn is_tao_like(
     if raw_kind == CardKind::Jiu {
         return true;
     }
-    // 护符（U05 swd 首切片，规则 v85）：仅濒死者本人的桃形救援
+    // 护符（U05 swd 首切片，规则 v85）：仅濒死者本人的桃形救援牌
     //（上游 savable: dying === player）
     if raw_kind == CardKind::Hufu {
         return responder == dying;
@@ -437,7 +449,7 @@ pub fn discard_response_card(
 ) {
     let in_hand = ctx.core.player(player).hand.contains(&card);
     let mut from_none = false;
-    if ctx.catalog.card_kind(card) != target_kind || !in_hand {
+    if effective_card_kind_in_core(ctx.core, ctx.catalog, card) != target_kind || !in_hand {
         if let Some(spec) = ctx
             .catalog
             .find_player_vm_view_as(ctx.core, player, card, false, Some(target_kind))

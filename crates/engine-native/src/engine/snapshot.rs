@@ -570,6 +570,16 @@ impl Engine {
                                 .iter()
                                 .any(|c| c.kind == CardKind::Jiguan && c.name.starts_with("yanjiadan_"))
                     }
+                    k if k.starts_with("hs_card:")
+                        && *behavior == crate::content::host::HostBehavior::U05HearthCards.tag() =>
+                    {
+                        catalog
+                            .skill_by_name("shihuawuqi")
+                            .is_some_and(|d| {
+                                catalog.skills[d as usize].behavior.as_host_behavior()
+                                    == Some(crate::content::host::HostBehavior::U05HearthCards)
+                            })
+                    }
                     _ => false,
                 };
                 if !skill_ok && !card_ok {

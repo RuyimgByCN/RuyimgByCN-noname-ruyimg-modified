@@ -857,6 +857,7 @@ pub(crate) fn host_draw_begin_step(ctx: &mut Ctx<'_>, player: PlayerId, pending:
     super::l11_common_b3::on_draw_begin_l11_b3(ctx, player, pending);
     super::u05_b1_mtg::apply_msilian_draw_bonus(ctx, player, pending);
     crate::content::host::step::u05_ow::host_draw_begin_step_ow(ctx, player, pending);
+    super::u05_hearth::host_draw_begin_step_hearth(ctx, player, pending);
     let yd_def = ctx.catalog.skill_by_name("yxsdili");
     let hq2_def = ctx.catalog.skill_by_name("heqin2");
     if yd_def.is_none() && hq2_def.is_none() {

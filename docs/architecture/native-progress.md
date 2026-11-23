@@ -9,6 +9,11 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-23 Batch U05-6a（U05 炉石传说 `hearth` 167 项全量等价与 `stone_chenshui` 离线梦境牌适配器）合入
+
+- **合入与计数**：在 `a2e340f868` 合入 `swarm/conv-u05-6a-hearth`（`9703e2188`，`verifier-u05-b` `#27 APPROVE`），完成冲突合入、`known_prompts_u05_6a.rs`（`79` 条）与 `play_card_targets_hearth.rs` 拆分、主线 `u05_b1_zhenfa.rs::step_stone_chenshui` 优先从 `detached_cards` 取用 off-deck `hsmengjing_*` 并更新 `u05_b1_fixes.rs::total_tracked_cards`、以及 `decision34_round4_u05_shahai.rs` 校准（剩余 `vm_skill_names >= 400`、`host_skill_count >= 100`）；[inventory_status.json](../migration/g0/inventory_status.json) 将全部 `167` 项 `hearth`（`57` 卡牌/`110` 技能，零保留）升为 `已复核等价`，**`U05` `518 / 1,103 / 0`**、全局 **`2,838 / 1,586 / 0`**、整包 8 维 **`0/37`**、`333/107/5/759/8` 与 14 条 golden 不变。详见 [Batch U05-6a 证据](../operations/evidence/2026-11-23-u05-6a-hearth/README.md)。
+- **主线全量实测（2026-11-23）**：`-D warnings` 原生与 `wasm32` 零警告、`4-crate`（`44/44` 块、`3,010/0/6`，`g1_shahai` `291/0/0`、`u05_b6a_hearth_fixes` `26/0/0`、`kernel` `436/0/0`）、`content-native-loader`（`48/0/0`）、`conformance`（`19/19` + `4/0/0`）、`desktop-client`（`20/0/1`）、`--workspace`（`178/178` 块、`8,317/0/8`）、`web-client`（`typecheck` + `test` `540/0` + `smoke:native` `83/0` + `build` `244` 模块）与跨端双检（`native_wasm_match=true`、`ALL CROSS-TARGET CHECKS PASSED`）全过；并入 Batch U05-3 [ci-runs.md](../operations/evidence/ci-runs.md) 实测行（`a2e340f868` / CI `45116138360` `10/10`）。
+
 ### 2026-11-23 Batch U05-3（U05 守望先锋 `ow` 127 项全量等价、无色 AOE 与 `turn_reset.rs` 拆分）合入
 
 - **合入与计数**：在 `35bc3def96` 合入 `swarm/conv-u05-3-ow`（`53ed4b1fa`，`verifier-u05-a` `#113 APPROVE`），完成 39 处碰撞合入、`known_prompts_u05_3.rs`（`67` 条）与 `kernel/events/turn_reset.rs` 拆分、`aoe.rs`（`eval_card_target_canceled_opt` 仅桌面实卡传 `Some`，免无色 `huoyu` 误读 `cards[0]` 黑桃被 `weimu` 挡）及 500 VM 下界校准；[inventory_status.json](../migration/g0/inventory_status.json) 将全部 `127` 项 `ow`（`24` 武将/`103` 技能，零保留）升为 `已复核等价`，**`U05` `351 / 1,270 / 0`**、全局 **`2,671 / 1,753 / 0`**、整包 8 维 **`0/37`**、`333/107/5/759/8` 与 14 条 golden 不变。详见 [Batch U05-3 证据](../operations/evidence/2026-11-23-batch3-9-u05-3-ow/README.md)。

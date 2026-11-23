@@ -996,6 +996,14 @@ impl HostSkillBehavior {
             | HostBehavior::U05GujianCharBatchC
             | HostBehavior::U05GujianCharBatchD
             | HostBehavior::U05GujianCharBatchE => self.filter_u05_gujian(ctx, owner, event),
+            HostBehavior::U05HearthCards
+            | HostBehavior::U05HearthBatchA
+            | HostBehavior::U05HearthBatchB
+            | HostBehavior::U05HearthBatchC
+            | HostBehavior::U05HearthBatchD
+            | HostBehavior::U05HearthBatchE => {
+                super::step::u05_hearth::filter_u05_hearth(self, ctx, owner, event)
+            }
             _ => false,
         }
     }

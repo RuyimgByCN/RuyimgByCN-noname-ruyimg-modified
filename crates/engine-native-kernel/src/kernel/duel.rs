@@ -487,7 +487,7 @@ pub(crate) fn jijiang_shu_helper(
             .iter()
             .copied()
             .filter(|c| {
-                catalog.card_kind(*c).is_sha_like()
+                effective_card_kind_in_core(core, catalog, *c).is_sha_like()
                     || catalog
                         .find_player_vm_view_as(core, p, *c, false, Some(CardKind::Sha))
                         .is_some()

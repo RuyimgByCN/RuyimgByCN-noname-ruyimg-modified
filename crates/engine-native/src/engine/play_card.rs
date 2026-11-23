@@ -851,30 +851,44 @@ pub(super) fn play_card(
                         return Err(RejectReason::IllegalTargets);
                     }
                     let user = core.turn.current;
-                    // 覆泰2（Boss 穷奇，规则 v214）：全场禁桃时非穷奇玩
-                    // 家非穷奇回合不能用桃（上游 cardEnabled 同口径；护
-                    // 符濒死专用不受此 mod）
-                    if kind == CardKind::Tao
-                        && crate::kernel::tao_futai2_banned(core, catalog, user)
-                    {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                    let p = core.player(user);
-                    if kind == CardKind::Tao
-                        && p.dying
-                        && crate::rvm_bridge::modifiers::eval_dying_peach_target_canceled(
-                            core, catalog, user, user, card,
-                        )
-                    {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                    // 护符（U05 swd 首切片，规则 v85）：仅濒死（自己进入
-                    // 濒死流程）时可用；非濒死拒绝（上游 savable 守卫）
-                    if kind == CardKind::Hufu && !p.dying {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                    if p.hp >= p.max_hp as i32 {
-                        return Err(RejectReason::HpFull);
+                    if super::play_card_targets::is_shihuawuqi_card(core, catalog, user, card) {
+                        // 石化武器（`card/hearth/card.js:342`）：满体力亦可对自己使用，每回合限一次
+                        if core
+                            .vm_aux
+                            .flags
+                            .get(&(user, "hs_shihuawuqi_used_turn".to_string()))
+                            .copied()
+                            .unwrap_or(0)
+                            > 0
+                        {
+                            return Err(RejectReason::CardLimit);
+                        }
+                    } else {
+                        // 覆泰2（Boss 穷奇，规则 v214）：全场禁桃时非穷奇玩
+                        // 家非穷奇回合不能用桃（上游 cardEnabled 同口径；护
+                        // 符濒死专用不受此 mod）
+                        if kind == CardKind::Tao
+                            && crate::kernel::tao_futai2_banned(core, catalog, user)
+                        {
+                            return Err(RejectReason::IllegalTargets);
+                        }
+                        let p = core.player(user);
+                        if kind == CardKind::Tao
+                            && p.dying
+                            && crate::rvm_bridge::modifiers::eval_dying_peach_target_canceled(
+                                core, catalog, user, user, card,
+                            )
+                        {
+                            return Err(RejectReason::IllegalTargets);
+                        }
+                        // 护符（U05 swd 首切片，规则 v85）：仅濒死（自己进入
+                        // 濒死流程）时可用；非濒死拒绝（上游 savable 守卫）
+                        if kind == CardKind::Hufu && !p.dying {
+                            return Err(RejectReason::IllegalTargets);
+                        }
+                        if p.hp >= p.max_hp as i32 {
+                            return Err(RejectReason::HpFull);
+                        }
                     }
                 }
                 CardKind::Jiu | CardKind::Tianxianjiu => {

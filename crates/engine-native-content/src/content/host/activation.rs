@@ -361,6 +361,14 @@ impl HostSkillBehavior {
             | HostBehavior::U05GujianCharBatchE => {
                 super::step::u05_b2_gujian::activate_u05_gujian(self, ctx, owner)
             }
+            HostBehavior::U05HearthCards
+            | HostBehavior::U05HearthBatchA
+            | HostBehavior::U05HearthBatchB
+            | HostBehavior::U05HearthBatchC
+            | HostBehavior::U05HearthBatchD
+            | HostBehavior::U05HearthBatchE => {
+                super::step::u05_hearth::activate_u05_hearth(self, ctx, owner)
+            }
             _ => None,
         }
     }
@@ -624,6 +632,13 @@ pub(in crate::content::host) fn has_phase_use_activation(
         | HostBehavior::U05OwBatchC
         | HostBehavior::U05OwBatchD => {
             super::step::u05_ow::has_phase_use_activation_u05_ow(behavior, name)
+        }
+        b @ (HostBehavior::U05HearthBatchA
+        | HostBehavior::U05HearthBatchB
+        | HostBehavior::U05HearthBatchC
+        | HostBehavior::U05HearthBatchD
+        | HostBehavior::U05HearthBatchE) => {
+            super::step::u05_hearth::has_phase_use_activation_hearth(b, name)
         }
         _ => false,
     }

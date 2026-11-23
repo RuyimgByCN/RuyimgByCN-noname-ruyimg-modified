@@ -19,6 +19,7 @@ pub fn grant_equip_skills(ctx: &mut Ctx<'_>, player: PlayerId, card: crate::ids:
             );
         }
     }
+    (ctx.catalog.hooks.on_equip_gained)(ctx, player, card);
 }
 
 /// G1 装备技能生命周期：装备 `card` 离场时撤销其技能——若该技能不同时
@@ -100,6 +101,7 @@ pub fn revoke_equip_skills(
             core.player_mut(player).linked = false;
         }
     }
+    (catalog.hooks.on_equip_revoked)(core, catalog, player, card);
 }
 
 /// L25 `ssr_luoyi` (`extension.js:15031-15037`): 禁用防具栏并弃置已有防具。

@@ -30,3 +30,6 @@ mod u05_b2_gujian_fixes;
 
 #[path = "../u05_b3_ow_fixes.rs"]
 mod u05_b3_ow_fixes;
+
+#[path = "../u05_b6a_hearth_fixes.rs"]
+mod u05_b6a_hearth_fixes;

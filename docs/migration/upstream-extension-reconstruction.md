@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-23 Batch U05-6a（U05 杀海拾遗 `hearth` +167→518/1,621，全局 2,838/1,586/0）合入
+
+- **范围与结果**：在 `a2e340f868c62b161a73b1f21907233b7eda4234`（Batch U05-3 CI `45116138360` Attempt 1 `10/10 success`）上合入 `swarm/conv-u05-6a-hearth`（`9703e2188`，`verifier-u05-b` `#27 APPROVE`），完成 `known_prompts_u05_6a.rs` / `play_card_targets_hearth.rs` 拆分、主线 `stone_chenshui` `detached_cards` 离场梦境牌检索修复与 `decision34_round4_u05_shahai.rs` 校准；将 `U05` 炉石传说 `hearth` 全量 `167` 项（`57` 卡牌 + `110` 技能，零保留）升为 `已复核等价`（`U05` **`518 / 1,103 / 0`**），全局 **`2,838 / 1,586 / 0`**，整包 8 维签字保持 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变。详见 [Batch U05-6a 证据摘要](../operations/evidence/2026-11-23-u05-6a-hearth/README.md) 与 [U05-杀海拾遗.md](g0/U05-杀海拾遗.md)。
+
 ## 2026-11-23 Batch U05-3（U05 杀海拾遗 `ow` +127→351/1,621，全局 2,671/1,753/0）合入
 
 - **范围与结果**：在 `35bc3def969bf9c4efa1a9c1806c19be11513a01`（Batch U05-2 CI `45107904173` `10/10 success`）上合入 `swarm/conv-u05-3-ow`（`53ed4b1fa`，`verifier-u05-a` `#113 APPROVE`），完成 `kernel/events/turn_reset.rs` 拆分、无色虚拟 AOE `aoe.rs` 指向校准与 500 VM 下界校准；将 `U05` 守望先锋 `ow` 全量 `127` 项（`24` 武将 + `103` 技能，零保留）升为 `已复核等价`（`U05` **`351 / 1,270 / 0`**），全局 **`2,671 / 1,753 / 0`**，整包 8 维签字保持 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变。详见 [Batch U05-3 证据摘要](../operations/evidence/2026-11-23-batch3-9-u05-3-ow/README.md) 与 [U05-杀海拾遗.md](g0/U05-杀海拾遗.md)。

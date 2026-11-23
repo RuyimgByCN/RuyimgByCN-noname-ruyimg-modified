@@ -233,7 +233,7 @@ pub fn apply_hand_limit(
     limit += d34_u01_mods::u01_xiaoxing_bonus(state, catalog, player);
     limit += flag_val(state, player, "u05_mod:tanlin3") as i32;
     let limit = super::d34_l28_mods::apply_shengong_hand_limit(state, catalog, player, limit);
-    let limit = d34_u05_mods::apply_hand_limit(state, player, limit);
+    let limit = d34_u05_mods::apply_hand_limit(state, catalog, player, limit);
     d34_l11_mods::apply_hand_limit(state, catalog, player, limit)
 }
 
@@ -266,6 +266,10 @@ pub fn apply_attack_range(
         cur += 2;
     }
     cur += d34_u01_mods::u01_xiaoxing_bonus(state, catalog, player);
+    cur += flag_val(state, player, "hs_shihuawuqi_used_turn") as i32;
+    if has_ext_skill(state, catalog, player, "hstianqi_shali") {
+        cur += 1;
+    }
     if flag_val(state, player, "u05_mod:mailun5") > 0 {
         cur += 1;
     }

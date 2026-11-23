@@ -7,6 +7,16 @@ use crate::event::DamageNature;
 use crate::ids::{CardId, PlayerId};
 use crate::state::GameStateCore;
 
+fn has_host_skill(state: &GameStateCore, catalog: &Catalog, player: PlayerId, name: &str) -> bool {
+    catalog.skill_by_name(name).is_some_and(|d| {
+        catalog.skills[d as usize]
+            .behavior
+            .as_host_behavior()
+            .is_some()
+            && state.has_skill(player, d)
+    })
+}
+
 fn flag_val(state: &GameStateCore, seat: PlayerId, key: &str) -> u32 {
     state
         .vm_aux
@@ -37,13 +47,32 @@ pub(super) fn is_card_ignored_hand_limit(
     {
         return true;
     }
+    // card/gujian/skill.js:343-371 (`yuanbaorou`): Sha ignored in hand limit
+    if kind.is_sha_like() && flag_val(state, player, "u05_mod:yuanbaorou") > 0 {
+        return true;
+    }
+    // character/hearth/skill.js:2514 (`hlongyi`): black hand cards ignored in hand limit
+    if matches!(
+        catalog.cards.get(card as usize).map(|c| c.suit),
+        Some(Suit::Spade | Suit::Club)
+    ) && has_host_skill(state, catalog, player, "hlongyi")
+    {
+        return true;
+    }
     false
 }
 
-pub(super) fn apply_hand_limit(state: &GameStateCore, player: PlayerId, mut limit: i32) -> i32 {
+pub(super) fn apply_hand_limit(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    player: PlayerId,
+    mut limit: i32,
+) -> i32 {
     let mut delta: i32 = 0;
     // card/hearth/skill.js:14-20 (`jihuocard2`)
-    if flag_val(state, player, "u05_mod:jihuocard2") > 0 {
+    if flag_val(state, player, "u05_mod:jihuocard2") > 0
+        || has_host_skill(state, catalog, player, "jihuocard2")
+    {
         delta += 2;
     }
     // character/hearth/skill.js:5312-5321 (`xjumo`)
@@ -87,6 +116,7 @@ pub(super) fn apply_hand_limit(state: &GameStateCore, player: PlayerId, mut limi
     // character/hearth/skill.js:679-709 (`nsaiqi`), card/mtg/skill.js:93-110 (`mtg_shuimomuxue_skill`),
     // character/swd/skill.js:720-741 (`hujing`), 2914-2976 (`hutian`), character/ow/skill.js:2428 (`xie2`)
     if flag_val(state, player, "u05_mod:nsaiqi") > 0
+        || has_host_skill(state, catalog, player, "nsaiqi")
         || flag_val(state, player, "u05_mod:mtg_shuimomuxue_skill") > 0
         || flag_val(state, player, "u05_mod:hujing") > 0
         || flag_val(state, player, "u05_mod:chunbing") > 0
@@ -98,6 +128,14 @@ pub(super) fn apply_hand_limit(state: &GameStateCore, player: PlayerId, mut limi
     }
     if flag_val(state, player, "u05_mod:gj_juejing") > 0 {
         delta += 2;
+    }
+    if has_host_skill(state, catalog, player, "qingzun") {
+        delta += flag_val(state, player, "hs_qingzun_count") as i32;
+    }
+    if flag_val(state, player, "hs_ysjqisha_ao") > 0
+        || has_host_skill(state, catalog, player, "ysjqisha_ao")
+    {
+        delta -= 2;
     }
     if flag_val(state, player, "u05_mod:yuling2") > 0 {
         return 5;
@@ -355,11 +393,19 @@ pub(super) fn apply_card_target_canceled(
         canceled = true;
     }
     // character/ow/skill.js:1880-1905 (`jidong2`), 2643-2657 (`sheng2`),
-    // character/hearth/skill.js:1747-1814 (`qianfu2`): untargetable by others
+    // character/hearth/skill.js:4162 (`hsbaowu_huangjinyuanhou`): untargetable by others
     if actor != target
         && (flag_val(state, target, "u05_mod:jidong2") > 0
             || flag_val(state, target, "u05_mod:sheng2") > 0
-            || flag_val(state, target, "u05_mod:qianfu2") > 0)
+            || has_host_skill(state, catalog, target, "hsbaowu_huangjinyuanhou"))
+    {
+        canceled = true;
+    }
+    // character/hearth/skill.js:1228 (`ysjqisha_yi`): untargetable by non-enemy cards
+    if actor != target
+        && (flag_val(state, target, "hs_ysjqisha_yi") > 0
+            || has_host_skill(state, catalog, target, "ysjqisha_yi"))
+        && state.is_friend_of(catalog, actor, target)
     {
         canceled = true;
     }
@@ -443,12 +489,16 @@ pub(super) fn apply_card_use_canceled(
     let is_trick = !kind.is_basic_kind() && kind.equip_slot().is_none();
     if is_trick
         && (flag_val(state, actor, "u05_mod:lieyang2") > 0
-            || flag_val(state, actor, "u05_mod:duzhang2") > 0)
+            || flag_val(state, actor, "u05_mod:duzhang2") > 0
+            || has_host_skill(state, catalog, actor, "lieyang2"))
     {
         canceled = true;
     }
-    // character/hearth/skill.js:6779-6794 (`mengun2`) & character/ow/skill.js:1285-1311, 1415-1436, 2702-2723
-    if flag_val(state, actor, "u05_mod:shanguang2") > 0
+    // character/hearth/skill.js:1765-1776 (`qianfu2`) & `mengun2` & character/ow/skill.js
+    if flag_val(state, actor, "u05_mod:qianfu2") > 0
+        || flag_val(state, actor, "hs_qianfu2_active") > 0
+        || has_host_skill(state, catalog, actor, "qianfu2")
+        || flag_val(state, actor, "u05_mod:shanguang2") > 0
         || flag_val(state, actor, "u05_mod:yihun2") > 0
         || flag_val(state, actor, "u05_mod:hslingjian_jinjilengdong") > 0
     {
@@ -469,8 +519,10 @@ pub(super) fn apply_dying_peach_target_canceled(
     dying_target: PlayerId,
     mut canceled: bool,
 ) -> bool {
-    // character/xianjian/skill.js:2583-2591 (`guijiang3` / `guijiang2`) & `shanguang2`
-    if flag_val(state, actor, "u05_mod:shanguang2") > 0
+    // character/hearth/skill.js:1765-1776 (`qianfu2`), xianjian (`guijiang2`/`guijiang3`) & `shanguang2`
+    if flag_val(state, actor, "u05_mod:qianfu2") > 0
+        || flag_val(state, actor, "hs_qianfu2_active") > 0
+        || flag_val(state, actor, "u05_mod:shanguang2") > 0
         || flag_val(state, dying_target, "u05_mod:guijiang2") > 0
         || flag_val(state, dying_target, "u05_mod:guijiang3") > 0
     {

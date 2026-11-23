@@ -125,6 +125,16 @@ fn base_card_key(raw: &str) -> &str {
     s
 }
 
+/// 共享火攻弃置并造成火焰伤害结算（`intrinsic_named_ext` 与虚卡/镜像复刻共用）。
+pub(in crate::content::host) fn resolve_huogong_effect(ctx: &mut Ctx<'_>, u: &CardUseData) {
+    let owner = u.player;
+    if let Some(t) = first_target_or_other(ctx, u) {
+        if discard_up_to(ctx, owner, 1) > 0 {
+            deal_damage(ctx, owner, t, 1, DamageNature::Fire);
+        }
+    }
+}
+
 /// Shared predicate: custom `CardKind::Jiguan` keys that resolve without `wrap_nullify_window`.
 pub(in crate::content::host) fn is_named_jiguan_unwrapped(raw_name: &str) -> bool {
     let key = base_card_key(raw_name);
@@ -148,6 +158,9 @@ pub(in crate::content::host) fn is_named_wuzhong_unwrapped(
     catalog: &crate::catalog::Catalog,
     card: CardId,
 ) -> bool {
+    if crate::content::host::is_hearth_named_wuzhong_unwrapped(catalog, card) {
+        return true;
+    }
     let Some(raw_name) = catalog.cards.get(card as usize).map(|c| c.name) else {
         return false;
     };
@@ -391,6 +404,9 @@ pub(super) fn try_named_ext_card(
     let key = if card == u32::MAX {
         "diaobingqianjiang"
     } else {
+        if u.use_as.is_some() {
+            return None;
+        }
         let raw_name = ctx.catalog.cards.get(card as usize)?.name;
         if raw_name == "无中生有" || raw_name == "wuzhong" || raw_name.starts_with("wuzhong_") {
             return None;
@@ -547,13 +563,7 @@ pub(super) fn try_named_ext_card(
                 ctx.start_draw(owner, 1);
             }
         }
-        "huogong" => {
-            if let Some(t) = first_target_or_other(ctx, u) {
-                if discard_up_to(ctx, owner, 1) > 0 {
-                    deal_damage(ctx, owner, t, 1, DamageNature::Fire);
-                }
-            }
-        }
+        "huogong" => resolve_huogong_effect(ctx, u),
         // U05 MTG land & token cards (`card/mtg/card.js:99, 391`, `card/yongjian.js:10`)
         "mtg_du" => {
             finish_table_card(ctx, card);

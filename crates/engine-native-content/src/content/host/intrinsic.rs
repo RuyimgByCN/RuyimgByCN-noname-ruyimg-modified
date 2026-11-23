@@ -9,7 +9,7 @@ use crate::kernel::*;
 #[path = "intrinsic_named_ext.rs"]
 mod intrinsic_named_ext;
 pub(in crate::content::host) use intrinsic_named_ext::{
-    is_named_jiguan_unwrapped, is_named_wuzhong_unwrapped,
+    is_named_jiguan_unwrapped, is_named_wuzhong_unwrapped, resolve_huogong_effect,
 };
 
 /// 内容牌种的固有结算机器；`None` = 不是内容牌种，由内核继续分派。
@@ -19,6 +19,12 @@ pub(crate) fn card_intrinsic(
     effective_kind: CardKind,
 ) -> Option<Option<Box<dyn SkillMachine>>> {
     if let Some(res) = super::step::l11_cards::try_l11_card_intrinsic(ctx, u, effective_kind) {
+        return Some(res);
+    }
+    let card_id = u.card.unwrap_or(u32::MAX);
+    if let Some(res) =
+        crate::content::host::hearth_try_named_ext_card(ctx, u, card_id, effective_kind)
+    {
         return Some(res);
     }
     let Some(card) = u.card else {

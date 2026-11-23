@@ -263,6 +263,23 @@ fn step_stone_chenshui(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             ) || cd.name.starts_with("hsmengjing_")
         })
     };
+    let from_detached: Vec<CardId> = ctx
+        .core
+        .detached_cards
+        .iter()
+        .filter_map(|&(c, _)| is_dream(c).then_some(c))
+        .collect();
+    if !from_detached.is_empty() {
+        let idx = ctx.core.rng.gen_range(from_detached.len() as u32) as usize;
+        let cid = from_detached[idx];
+        ctx.core.detached_cards.retain(|&(c, _)| c != cid);
+        ctx.core.player_mut(target).hand.push(cid);
+        ctx.log(LogEvent::CardsDrawn {
+            player: target,
+            cards: vec![cid],
+        });
+        return Flow::Done;
+    }
     let mut from_deck: Vec<CardId> = ctx.core.deck.iter().copied().filter(|&c| is_dream(c)).collect();
     let (chosen, from_discard) = if !from_deck.is_empty() {
         let idx = ctx.core.rng.gen_range(from_deck.len() as u32) as usize;

@@ -409,7 +409,11 @@ fn certainly_illegal(engine: &Engine, seat: crate::ids::PlayerId, action: &GameA
                         .cards
                         .get(*card as usize)
                         .is_some_and(|c| c.name == "yiyi" || c.name.ends_with("__ref_yiyi"));
-                    if is_yiyi {
+                    let is_hearth = crate::engine::play_card_targets::is_hearth_formal(catalog)
+                        && cname != "无中生有"
+                        && cname != "wuzhong"
+                        && !cname.starts_with("wuzhong_");
+                    if is_yiyi || is_hearth {
                         crate::engine::play_card_targets::validate_wuzhong_targets(
                             core, catalog, *card, kind, targets,
                         )

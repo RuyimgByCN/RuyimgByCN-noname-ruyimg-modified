@@ -2,6 +2,9 @@
 
 use super::*;
 
+#[path = "play_card_targets_hearth.rs"]
+mod hearth;
+
 /// 机关牌（swd 第十六~十八批）逐卡目标规则。
 pub(super) fn validate_jiguan_targets(
     core: &GameStateCore,
@@ -118,6 +121,59 @@ pub(super) fn validate_jiguan_targets(
     Ok(())
 }
 
+fn strip_hearth_base(raw: &str) -> &str {
+    let s = raw
+        .strip_prefix("hs_")
+        .or_else(|| raw.strip_prefix("ht_"))
+        .unwrap_or(raw);
+    if let Some((stem, tail)) = s.rsplit_once('_') {
+        if !tail.is_empty() && tail.bytes().all(|b| b.is_ascii_digit()) {
+            return stem;
+        }
+    }
+    s
+}
+
+pub(super) fn is_hearth_formal(catalog: &SharedCatalog) -> bool {
+    catalog.skill_by_name("shihuawuqi").is_some_and(|d| {
+        catalog.skills[d as usize]
+            .behavior
+            .as_host_behavior()
+            .is_some()
+    }) || catalog.skill_by_name("hshuanyu").is_some_and(|d| {
+        catalog.skills[d as usize]
+            .behavior
+            .as_host_behavior()
+            .is_some()
+    })
+}
+
+pub(super) fn is_shihuawuqi_card(
+    core: &GameStateCore,
+    catalog: &SharedCatalog,
+    user: PlayerId,
+    card: CardId,
+) -> bool {
+    let eff_card = if catalog
+        .cards
+        .get(card as usize)
+        .is_some_and(|c| strip_hearth_base(c.name) == "hsfashu_anyingjingxiang")
+        && core.declared_kinds.get(&card).copied() == Some(CardKind::Tao)
+    {
+        core.vm_aux
+            .flags
+            .get(&(user, format!("hs_wxuying_src_card:{card}")))
+            .and_then(|&v| (v > 0).then(|| (v - 1) as CardId))
+            .unwrap_or(card)
+    } else {
+        card
+    };
+    catalog.cards.get(eff_card as usize).is_some_and(|c| strip_hearth_base(c.name) == "shihuawuqi")
+        && catalog.skill_by_name("shihuawuqi").is_some_and(|d| {
+            catalog.skills[d as usize].behavior.as_host_behavior().is_some()
+        })
+}
+
 pub(super) fn validate_wuzhong_targets(
     core: &GameStateCore,
     catalog: &SharedCatalog,
@@ -232,6 +288,11 @@ pub(super) fn validate_wuzhong_targets(
                     return Ok(());
                 }
                 return Err(RejectReason::IllegalTargets);
+            }
+            if let Some(res) =
+                hearth::validate_hearth_wuzhong_targets(core, catalog, card, cname, targets)
+            {
+                return res;
             }
             if cname.contains("diaobingqianjiang") {
                 let actor = core.turn.current;
@@ -434,7 +495,14 @@ pub(super) fn validate_tail_ext_targets(
             }
         }
         CardKind::Shijieshu => {
-            if !targets.is_empty() {
+            let formal = catalog.skill_by_name("shihuawuqi").is_some_and(|d| {
+                catalog.skills[d as usize].behavior.as_host_behavior().is_some()
+            });
+            if formal {
+                if targets.len() != 1 || !core.player(targets[0]).alive {
+                    return Err(RejectReason::IllegalTargets);
+                }
+            } else if !targets.is_empty() {
                 return Err(RejectReason::IllegalTargets);
             }
         }
@@ -559,7 +627,20 @@ pub(super) fn validate_tail_ext_targets(
                 return Err(RejectReason::IllegalTargets);
             }
         }
-        CardKind::Zhaomingdan | CardKind::Caochuanjiejian => {
+        CardKind::Zhaomingdan => {
+            if targets.len() != 1 {
+                return Err(RejectReason::IllegalTargets);
+            }
+            let target = targets[0];
+            let tp = core.player(target);
+            if target == core.turn.current
+                || !tp.alive
+                || (tp.hand.is_empty() && tp.equips.is_empty() && tp.judge.is_empty())
+            {
+                return Err(RejectReason::IllegalTargets);
+            }
+        }
+        CardKind::Caochuanjiejian => {
             if targets.len() != 1 {
                 return Err(RejectReason::IllegalTargets);
             }

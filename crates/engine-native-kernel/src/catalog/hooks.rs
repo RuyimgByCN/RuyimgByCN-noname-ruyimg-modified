@@ -115,6 +115,8 @@ pub struct ContentHooks {
     ) -> bool,
     /// 摸牌阶段 `DP::Begin`（非跳过且 `!num_fixed`）摸牌数修改钩子。
     pub draw_begin_step: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId, &mut i32),
+    /// 单次摸牌事件开始（含阶段摸牌与无中生有等技能摸牌，未翻面摸底牌时）的牌堆调整钩子。
+    pub on_draw_machine_begin: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId),
     /// 用牌结算完成弹出时（`useCardAfter`）宿主触发钩子（如 `jieyong`）。
     pub on_card_use_after: fn(&mut crate::machine::Ctx<'_>, crate::ids::EventId, &crate::event::CardUseData),
     /// 建局开局发牌后（`gameDrawEnd`）宿主初始化钩子（如 `xiefang`）。
@@ -123,8 +125,9 @@ pub struct ContentHooks {
     pub on_death_before: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId) -> bool,
     /// `TurnEndWindow { after: true }`（`phaseAfter`）窗触发队列收集前钩子（例如 `yange` 退出子将）。
     pub on_turn_phase_after: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId),
-    /// 角色死亡结算（`alive=false` 后、`dieEnd`）宿主刷新钩子（如 `xiefang`）。
-    pub on_player_died: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId),
+    /// 角色死亡结算（`alive=false` 后、`dieEnd`）宿主刷新钩子（如 `xiefang`/`bzhuiji`）。
+    pub on_player_died:
+        fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId, Option<crate::ids::PlayerId>),
     /// 出牌阶段结束（`phaseUseEnd`）宿主临时技清理钩子（如 `new_zhixi`/`new_meibu_range`/`bolan`）。
     pub on_phase_use_end: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId),
     /// 轮次开始（`roundStart`）宿主轮标、展示清理与 `_relifeskill` 倒数复活钩子。
@@ -215,6 +218,29 @@ pub struct ContentHooks {
     ) -> bool,
     /// `ow::shanxian` 劫持回合 `phaseAfter` 提交后延迟翻面再归还回合交接钩子。
     pub on_shanxian_turnover: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId) -> bool,
+    /// 装备落场后宿主钩子（如 `hsqingyu_zhao` / `hstianqi_nazigelin` / `xiubu`）。
+    pub on_equip_gained: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId, crate::ids::CardId),
+    /// 装备离场时宿主记录钩子（如 `hstianqi_suolasi` / `yinzong`）。
+    pub on_equip_revoked:
+        fn(&mut crate::state::GameStateCore, &Catalog, crate::ids::PlayerId, crate::ids::CardId),
+    /// 回合前跳过钩子（`turnBefore` 取消回合，如 `qianfu2`）。
+    pub on_turn_before_skip: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId) -> bool,
+    /// 濒死求援宿主技能列表（`shouwang` / `yuelu`）。
+    pub hearth_dying_save_skills: fn(
+        &crate::state::GameStateCore,
+        &Catalog,
+        crate::ids::PlayerId,
+        crate::ids::PlayerId,
+    ) -> Vec<crate::ids::SkillDefId>,
+    /// 执行濒死求援宿主技能；返回 `true` 表示同步结算完成并推进队列，`false` 表示已挂起子机。
+    pub resolve_hearth_dying_save: fn(
+        &mut crate::machine::Ctx<'_>,
+        crate::ids::PlayerId,
+        crate::ids::PlayerId,
+        crate::ids::SkillDefId,
+    ) -> bool,
+    /// 炉石衍生消散牌判据（弃置/离场直接入 `detached_cards` 而非弃牌堆）。
+    pub is_hearth_vanish_card: fn(&Catalog, crate::ids::CardId) -> bool,
 }
 
 impl ContentHooks {
@@ -237,11 +263,12 @@ impl ContentHooks {
         sha_begin_step: |_, _, _, _, _, _| false,
         sha_end_step: |_, _, _, _, _, _| false,
         draw_begin_step: |_, _, _| {},
+        on_draw_machine_begin: |_, _| {},
         on_card_use_after: |_, _, _| {},
         on_game_start: |_, _| {},
         on_death_before: |_, _| false,
         on_turn_phase_after: |_, _| {},
-        on_player_died: |_, _| {},
+        on_player_died: |_, _, _| {},
         on_phase_use_end: |_, _| {},
         on_round_start: |_| {},
         on_turn_begin: |_, _| {},
@@ -264,5 +291,11 @@ impl ContentHooks {
         on_judge_settled: |_, _, _, _, _| false,
         before_facedown_turn_skip: |_, _, _| false,
         on_shanxian_turnover: |_, _| false,
+        on_equip_gained: |_, _, _| {},
+        on_equip_revoked: |_, _, _, _| {},
+        on_turn_before_skip: |_, _| false,
+        hearth_dying_save_skills: |_, _, _, _| Vec::new(),
+        resolve_hearth_dying_save: |_, _, _, _| false,
+        is_hearth_vanish_card: |_, _| false,
     };
 }

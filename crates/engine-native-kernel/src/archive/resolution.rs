@@ -102,6 +102,8 @@ mod known_prompts_l11_b5;
 mod known_prompts_u05_2;
 #[path = "known_prompts_u05_3.rs"]
 mod known_prompts_u05_3;
+#[path = "known_prompts_u05_6a.rs"]
+mod known_prompts_u05_6a;
 
 pub(super) fn intern_prompt(bytes: &[u8]) -> Result<&'static str, ArchiveError> {
     let s = std::str::from_utf8(bytes).map_err(|_| ArchiveError::BadTag("prompt_utf8", 0))?;
@@ -177,6 +179,12 @@ pub(super) fn intern_prompt(bytes: &[u8]) -> Result<&'static str, ArchiveError> 
         })
         .or_else(|| {
             known_prompts_u05_3::KNOWN_PROMPTS_U05_3
+                .iter()
+                .find(|k| **k == s)
+                .copied()
+        })
+        .or_else(|| {
+            known_prompts_u05_6a::KNOWN_PROMPTS_U05_6A
                 .iter()
                 .find(|k| **k == s)
                 .copied()
