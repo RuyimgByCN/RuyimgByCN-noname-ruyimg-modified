@@ -253,9 +253,17 @@ pub(super) mod u05_b1_zhenfa;
 pub(super) mod u05_b2_gujian;
 pub(super) mod u05_ow;
 pub(crate) use u05_ow::{host_before_facedown_turn_skip, host_on_shanxian_turnover};
+pub(super) mod swd_u05_7d;
+mod swd_u05_7d_duijue_tanlin;
+mod swd_u05_7d_fixes;
+pub(super) mod swd_u05_7d_fixes_cards;
+mod swd_u05_7d_fixes_combat;
 
 impl HostMachine {
     pub(super) fn step_behavior(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        if let Some(flow) = swd_u05_7d::try_step_swd_u05_7d_fixes_override(self, ctx) {
+            return flow;
+        }
         match self.behavior {
             // 平恤：无效果步（computed_distance 字段消费）
             HostBehavior::SwdPingxu => self.step_swd_status(ctx),
@@ -1408,6 +1416,23 @@ impl HostMachine {
             | HostBehavior::U05GwentCharBatchB
             | HostBehavior::U05GwentCharBatchC
             | HostBehavior::U05GwentCharBatchD => u05_b5b_gwent::handle_u05_gwent_char(self, ctx),
+            HostBehavior::SwdDuijue
+            | HostBehavior::SwdDuijueOut
+            | HostBehavior::SwdDuijueTrigger
+            | HostBehavior::SwdTanlin
+            | HostBehavior::SwdTanlinTarget
+            | HostBehavior::SwdTanlinOwner
+            | HostBehavior::SwdTanlinRange
+            | HostBehavior::SwdTanlinDefence
+            | HostBehavior::SwdOldLiaoyuan
+            | HostBehavior::SwdOldLiaoyuan2
+            | HostBehavior::SwdHuanling2
+            | HostBehavior::SwdLexue2
+            | HostBehavior::SwdTianshuRemove
+            | HostBehavior::SwdYinguo2
+            | HostBehavior::SwdSusheng2
+            | HostBehavior::SwdMoyu
+            | HostBehavior::SwdU05_7dSub => swd_u05_7d::step_swd_u05_7d(self, ctx),
         }
     }
 }

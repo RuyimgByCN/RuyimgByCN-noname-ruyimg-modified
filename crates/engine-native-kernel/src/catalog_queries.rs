@@ -679,13 +679,67 @@ impl Catalog {
             .is_some_and(|def| core.has_skill(p, def))
     }
 
+    /// 查找持有指定宿主行为且已启用的技能定义 ID。
+    pub fn skill_by_behavior(
+        &self,
+        behavior: crate::vocabulary::host::HostBehavior,
+    ) -> Option<crate::ids::SkillDefId> {
+        self.skills.iter().enumerate().find_map(|(id, def)| {
+            (def.behavior.as_host_behavior() == Some(behavior))
+                .then_some(id as crate::ids::SkillDefId)
+        })
+    }
+
+    /// 玩家 `p` 是否拥有启用中的指定宿主行为。
+    pub fn has_host_behavior(
+        &self,
+        core: &crate::state::GameStateCore,
+        p: crate::ids::PlayerId,
+        behavior: crate::vocabulary::host::HostBehavior,
+    ) -> bool {
+        core.skills.range((p, u16::MIN)..).take_while(|((o, _), _)| *o == p).any(
+            |((_, def), inst)| {
+                inst.enabled
+                    && self.skills[*def as usize].behavior.as_host_behavior() == Some(behavior)
+            },
+        )
+    }
+
+    /// 对决出局标记（`duijue2`）：不计距离、不能使用牌/救援、不能成为牌目标。
+    pub fn has_duijue_out(
+        &self,
+        core: &crate::state::GameStateCore,
+        p: crate::ids::PlayerId,
+    ) -> bool {
+        core.vm_aux
+            .flags
+            .get(&(p, "duijue_out_active".to_string()))
+            .copied()
+            .unwrap_or(0)
+            > 0
+            || self.has_host_behavior(
+                core,
+                p,
+                crate::vocabulary::host::HostBehavior::SwdDuijueOut,
+            )
+    }
+
+    /// 不计入距离计算且作为无效目标（调虎离山或对决出局）。
+    pub fn has_undist(
+        &self,
+        core: &crate::state::GameStateCore,
+        p: crate::ids::PlayerId,
+    ) -> bool {
+        self.has_diaohulishan(core, p) || self.has_duijue_out(core, p)
+    }
+
     /// 出牌封锁查询（swd 批 134 冰封）：玩家任一启用实例的行为声明封锁。
     pub fn blocks_all_cards(
         &self,
         core: &crate::state::GameStateCore,
         p: crate::ids::PlayerId,
     ) -> bool {
-        if self.has_diaohulishan(core, p)
+        if self.has_undist(core, p)
             || core
                 .vm_aux
                 .flags

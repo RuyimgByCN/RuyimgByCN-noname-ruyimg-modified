@@ -721,7 +721,8 @@ pub fn jinyan_blocks_black_trick(
 }
 
 pub use super::combat_rules_sha::{
-    sha_blocked_for, sha_card_use_as, sha_user_or_target_blocked, usable_sha_options,
+    can_target_sha_no_range, sha_blocked_for, sha_card_use_as, sha_user_or_target_blocked,
+    usable_sha_options,
 };
 
 /// 响应窗（1=闪, 2=杀, 3=无懈, 4=濒死桃, 5=自救桃/酒）可用宿主转化技能列表。

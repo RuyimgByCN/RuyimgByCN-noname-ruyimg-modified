@@ -7,6 +7,45 @@ use super::*;
 /// （`legal_actions::certainly_illegal`）共用同一段代码，语义不可能
 /// 漂移；此后牌种分派校验（杀限/距离/满血/装备空栏等）仍由
 /// `play_card` 各分支负责。
+/// U05-7d 装备区可直接转化为目标牌种的宿主 `viewAs`（`position:"he"`：万钧/火扑/破晓/幻剑）。
+pub(super) fn host_equip_view_as_kind(
+    core: &GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    actor: PlayerId,
+    card: CardId,
+) -> Option<CardKind> {
+    if !core.player(actor).equips.contains(&card) {
+        return None;
+    }
+    let sealed = catalog.is_tieji_sealed(core, actor)
+        || (core.player(actor).hp <= 1 && catalog.has_rechanyuan(core, actor));
+    if sealed {
+        return None;
+    }
+    let has_active = |name: &str, check_unused: bool| -> bool {
+        catalog
+            .skill_by_name(name)
+            .and_then(|d| core.skills.get(&(actor, d)))
+            .is_some_and(|i| i.enabled && (!check_unused || !i.once_used))
+    };
+    let suit = catalog.effective_card_suit(core, actor, card);
+    if has_active("wanjun", false) && catalog.card_kind(card).is_equip() {
+        return Some(CardKind::SavageAttack);
+    }
+    if has_active("huopu", true) && matches!(suit, crate::catalog::Suit::Heart) {
+        return Some(CardKind::Liuxinghuoyu);
+    }
+    if has_active("poxiao", false) && catalog.card_kind(card).is_equip() {
+        return Some(CardKind::Sha);
+    }
+    if has_active("huanjian", false)
+        && matches!(suit, crate::catalog::Suit::Spade | crate::catalog::Suit::Club)
+    {
+        return Some(CardKind::Bingpotong);
+    }
+    None
+}
+
 pub(super) fn common_play_validation(
     core: &crate::state::GameStateCore,
     catalog: &crate::catalog::Catalog,
@@ -92,6 +131,7 @@ pub(super) fn common_play_validation(
             || catalog
                 .host_view_as_extra_cards(core, core.turn.current)
                 .contains(&card)
+            || host_equip_view_as_kind(core, catalog, core.turn.current, card).is_some()
             || (actor_p.equips.contains(&card)
                 && crate::kernel::has_ow_mujing(core, catalog, core.turn.current)
                 && !catalog.is_tieji_sealed(core, core.turn.current)
@@ -103,8 +143,11 @@ pub(super) fn common_play_validation(
     if !in_hand && !in_equip_va {
         return Err(RejectReason::CardNotInHand);
     }
-    // 目标 ID 越界必须显式拒绝（不得进入 player() 索引）。
-    if targets.iter().any(|t| *t as usize >= core.players.len()) {
+    // 目标 ID 越界或对决出局目标（duijue2 targetEnabled=>false）必须显式拒绝。
+    if targets
+        .iter()
+        .any(|t| *t as usize >= core.players.len() || catalog.has_duijue_out(core, *t))
+    {
         return Err(RejectReason::IllegalTargets);
     }
     let is_poison = catalog
@@ -341,14 +384,13 @@ pub(super) fn play_kind(
         {
             kind = CardKind::SavageAttack;
         }
-        // 火扑（夜鸦熙，swd 武将面批㉖）：红桃牌当流星火雨使用
-        //（上游 viewAs liuxinghuoyu 同口径）
+        // 火扑（夜鸦熙，swd 武将面批㉖）：红桃牌当流星火雨使用（usable: 1，position: "he"）
         else if catalog
             .skill_by_name("huopu")
-            .map(|d| core.has_skill(actor, d))
-            .unwrap_or(false)
+            .and_then(|d| core.skills.get(&(actor, d)))
+            .is_some_and(|i| i.enabled && !i.once_used)
             && matches!(
-                catalog.resolved_card_suit(core, card),
+                catalog.effective_card_suit(core, actor, card),
                 crate::catalog::Suit::Heart
             )
         {
@@ -365,18 +407,32 @@ pub(super) fn play_kind(
         {
             kind = CardKind::Sha;
         }
-        // 圣手（淳于恒，swd 武将面批 84）：黑色手牌当草药使用
-        //（上游 viewAs caoyao 同口径）
+        // 圣手（淳于恒，swd 武将面批 84）：黑色手牌当草药使用（仅限手牌；自装备 `targets=[]` 不截胡）
         else if catalog
             .skill_by_name("shengshou")
             .map(|d| core.has_skill(actor, d))
             .unwrap_or(false)
+            && core.player(actor).hand.contains(&card)
+            && (!targets.is_empty() || !catalog.card_kind(card).is_equip())
             && matches!(
-                catalog.resolved_card_suit(core, card),
+                catalog.effective_card_suit(core, actor, card),
                 crate::catalog::Suit::Spade | crate::catalog::Suit::Club
             )
         {
             kind = CardKind::Caoyao;
+        }
+        // 幻剑（符鬼，swd）：黑色牌（he）当冰魄通使用（上游 viewAs bingpotong；自装备 `targets=[]` 不截胡）
+        else if catalog
+            .skill_by_name("huanjian")
+            .map(|d| core.has_skill(actor, d))
+            .unwrap_or(false)
+            && (!targets.is_empty() || !catalog.card_kind(card).is_equip())
+            && matches!(
+                catalog.effective_card_suit(core, actor, card),
+                crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+            )
+        {
+            kind = CardKind::Bingpotong;
         }
         // 妖童（齐，swd deferred 消解批 93）：ActivateSkill(yaotong) 主动可转任意奇数手牌（含 8 种锦囊）；
         // PlayCard 仅在非自然有效牌/目标时回落为【杀】（不劫持正常可用牌）
@@ -858,9 +914,12 @@ pub(super) fn check_play_use_restrictions(
         if pg {
             return Err(RejectReason::IllegalTargets);
         }
-        // 无邪（莉莲，swd 武将面批㉙）：锁定——延时锦囊只能以自己
-        // 为目标（上游 mod targetEnabled delay target!=self false
-        // 同口径）
+    }
+    // 无邪（莉莲，swd 武将面批㉙）：锁定——全部延时锦囊只能以自己为目标
+    if matches!(
+        kind,
+        CardKind::Le | CardKind::Bing | CardKind::ShanDian | CardKind::HongShui
+    ) {
         let wuxie = catalog
             .skill_by_name("swd_wuxie")
             .map(|def| core.has_skill(core.turn.current, def))

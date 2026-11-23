@@ -1,11 +1,6 @@
-//! swd 批 150：疾风（`jifeng`）——单目标牌多目标 + 多目标时概率失误。
-//!
-//! 上游 `character/swd.js`：`mod.selectTarget` 让【杀】与单目标锦囊目标数
-//! 无限；`trigger {player:'useCardToBefore'}` 锁定——多目标使用时按概率
-//! `1-(1.3+n/5)/n` **整牌取消**（失误）。
-//!
-//! 登记差异：原生**仅【杀】族**支持多目标（单目标锦囊的机器为单目标结算，
-//! 其多目标扩展未落地）。
+//! swd 批 150 / Round 2 对齐：疾风（`jifeng`）——【杀】与 `[1,1]` 单目标普通锦囊目标数
+//! 无限，多目标使用时对**每个目标分别**按概率 `1-(1.3+n/5)/n` 独立判定失误
+//! （仅从目标列表移除失误目标；若全部移除则整牌取消）。
 
 use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -117,12 +112,13 @@ fn jifeng_allows_multi_target_sha() {
     );
 }
 
-/// 疾风：多目标使用时按概率失误——多次尝试必出现整牌取消（无伤害）。
+/// 疾风：多目标使用时对每个目标独立判定失误——同时出现全中、单目标失误（另一目标命中）与全失误。
 #[test]
 fn jifeng_multi_target_may_fizzle() {
-    let mut saw_fizzle = false;
+    let mut saw_all_miss = false;
+    let mut saw_partial_miss = false;
     let mut saw_hit = false;
-    for seed in 126100..126140u64 {
+    for seed in 126100..126500u64 {
         let mut e = swd_engine(seed);
         e.debug_grant(0, "jifeng");
         advance_to_play(&mut e, 0);
@@ -147,16 +143,19 @@ fn jifeng_multi_target_may_fizzle() {
         let d1 = hp1 - e.debug_hp(1);
         let d3 = hp3 - e.debug_hp(3);
         if d1 == 0 && d3 == 0 {
-            saw_fizzle = true;
+            saw_all_miss = true;
+        } else if (d1 == 1 && d3 == 0) || (d1 == 0 && d3 == 1) {
+            saw_partial_miss = true;
         } else if d1 == 1 && d3 == 1 {
             saw_hit = true;
         }
-        if saw_fizzle && saw_hit {
+        if saw_all_miss && saw_partial_miss && saw_hit {
             break;
         }
     }
-    assert!(saw_hit, "多目标命中样本出现");
-    assert!(saw_fizzle, "多目标失误（整牌取消）样本出现");
+    assert!(saw_hit, "多目标全命中样本出现");
+    assert!(saw_partial_miss, "多目标独立单失误（仅移除失误目标）样本出现");
+    assert!(saw_all_miss, "多目标全失误样本出现");
 }
 
 /// 疾风：单目标使用不触发失误判定（目标数 ≤1）。

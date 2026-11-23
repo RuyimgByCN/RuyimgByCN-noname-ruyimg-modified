@@ -13,6 +13,11 @@ impl HostBehavior {
     pub const fn group_children(self) -> &'static [(&'static str, HostBehavior)] {
         match self {
             HostBehavior::SwdXuanying => &[("xuanying_use", HostBehavior::SwdXuanyingUse)],
+            HostBehavior::SwdTanlin => &[("tanlin4", HostBehavior::SwdTanlinRange)],
+            HostBehavior::SwdHuanling => &[("huanling2", HostBehavior::SwdHuanling2)],
+            HostBehavior::SwdLexue => &[("lexue2", HostBehavior::SwdLexue2)],
+            HostBehavior::SwdTianshu => &[("swdtianshu_remove", HostBehavior::SwdTianshuRemove)],
+            HostBehavior::SwdGuiyan => &[("swd_guiyan2", HostBehavior::SwdGuiyan2)],
             HostBehavior::U05GwentCharBatchA => &[
                 ("gwhuanshuang_disable", HostBehavior::U05GwentCharBatchA),
                 ("gwjinli_jiu", HostBehavior::U05GwentCharBatchA),
@@ -730,6 +735,23 @@ impl HostBehavior {
             HostBehavior::SwdLmazui3 => "host:lmazui3",
             HostBehavior::SwdXuanyingUse => "host:xuanying_use",
             HostBehavior::SwdPozhouSealed => "host:pozhou_sealed",
+            HostBehavior::SwdDuijue => "host:swd_duijue",
+            HostBehavior::SwdDuijueOut => "host:swd_duijue2",
+            HostBehavior::SwdDuijueTrigger => "host:swd_duijue3",
+            HostBehavior::SwdTanlin => "host:swd_tanlin",
+            HostBehavior::SwdTanlinTarget => "host:swd_tanlin2",
+            HostBehavior::SwdTanlinOwner => "host:swd_tanlin3",
+            HostBehavior::SwdTanlinRange => "host:swd_tanlin4",
+            HostBehavior::SwdTanlinDefence => "host:swd_tanlin_defence",
+            HostBehavior::SwdOldLiaoyuan => "host:swd_oldliaoyuan",
+            HostBehavior::SwdOldLiaoyuan2 => "host:swd_oldliaoyuan2",
+            HostBehavior::SwdHuanling2 => "host:swd_huanling2",
+            HostBehavior::SwdLexue2 => "host:swd_lexue2",
+            HostBehavior::SwdTianshuRemove => "host:swd_tianshu_remove",
+            HostBehavior::SwdYinguo2 => "host:swd_yinguo2",
+            HostBehavior::SwdSusheng2 => "host:swd_susheng2",
+            HostBehavior::SwdMoyu => "host:swd_moyu",
+            HostBehavior::SwdU05_7dSub => "host:swd_u05_7d_sub",
         }
     }
 }

@@ -143,7 +143,7 @@ fn swd_deferred_b95_shoulie_busi() {
     assert!(e.state_core().player(1).face_down, "不死：翻面");
     let busi_def = e.catalog().skill_by_name("busi").expect("不死在目录");
     assert!(
-        !e.state_core().skills.contains_key(&(1, busi_def)),
-        "不死：实例已移除（unique）"
+        e.state_core().skills.contains_key(&(1, busi_def)),
+        "不死：unique: true 技能保留"
     );
 }

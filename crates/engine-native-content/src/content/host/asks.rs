@@ -168,7 +168,7 @@ pub(crate) fn active_ask_host(
         }
         HostBehavior::SwdWangchenHeld => {
             if stage != HostStage::TargetChoice { return None; }
-            let options: Vec<ChoiceOption> = core.alive_players().map(ChoiceOption::Player).collect();
+            let options: Vec<ChoiceOption> = core.alive_players().filter(|p| *p != owner).map(ChoiceOption::Player).collect();
             if options.is_empty() { return None; }
             Some(ask(owner, "wangchen_target", ChoiceKind::SelectPlayers, options, 1, 1, true))
         }
@@ -1025,6 +1025,11 @@ pub(crate) fn active_ask_host(
             super::step::l01_rules::active_ask_l01(behavior, stage, owner, target, core, catalog)
         }
         _ => active_ask_swd(behavior, stage, owner, target, targets, card, cards, core, catalog)
+            .or_else(|| {
+                super::asks_u05_7d::active_ask_u05_7d(
+                    behavior, stage, owner, target, targets, card, cards, core, catalog,
+                )
+            })
             .or_else(|| {
                 active_ask_batches(
                     behavior, stage, owner, target, targets, card, cards, core, catalog,

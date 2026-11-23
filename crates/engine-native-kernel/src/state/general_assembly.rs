@@ -163,6 +163,21 @@ pub fn apply_general_assembly(
         if skill == "ssr_luoyi" {
             let _ = crate::kernel::discard_armor_for_ssr_luoyi(state, catalog, player);
         }
+        if let Some(behavior) = catalog.skills[def as usize].behavior.as_host_behavior() {
+            for &(child_name, _) in behavior.group_children() {
+                if let Some(cdef) = catalog.skill_by_name(child_name) {
+                    state.skills.entry((player, cdef)).or_insert(
+                        crate::state::SkillInstance {
+                            owner: player,
+                            enabled: true,
+                            once_used: false,
+                            expires_end_of_turn: false,
+                            rounds: 0,
+                        },
+                    );
+                }
+            }
+        }
         for &sub in group_subskills(skill) {
             if let Some(sub_def) = catalog.skill_by_name(sub) {
                 state.skills.entry((player, sub_def)).or_insert(crate::state::SkillInstance {

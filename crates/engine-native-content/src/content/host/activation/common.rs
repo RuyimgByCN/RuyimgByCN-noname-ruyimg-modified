@@ -117,7 +117,7 @@ impl HostSkillBehavior {
                 let p = ctx.state.player(owner);
                 let has_red = p.hand.iter().any(|c| {
                     matches!(
-                        ctx.catalog.cards[*c as usize].suit,
+                        ctx.catalog.effective_card_suit(ctx.state, owner, *c),
                         crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
                     )
                 });

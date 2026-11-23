@@ -216,6 +216,10 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
         let absorbed = (hujia as u32).min(hp_loss);
         ctx.core.player_mut(d.target).hujia = hujia - absorbed as u8;
         hp_loss -= absorbed;
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((d.target, format!("damage_hujia_absorbed:{frame_id}")), absorbed);
         ctx.log(LogEvent::HujiaAbsorbed {
             player: d.target,
             amount: absorbed,

@@ -490,6 +490,9 @@ impl GameStateCore {
         if self.computed_distance(catalog, from, to) <= self.attack_range(catalog, from) {
             return true;
         }
+        if self.tanlin_target_in_range(catalog, from, to) {
+            return true;
+        }
         let f = u32::from(from) + 1;
         self.vm_aux
             .flags
@@ -504,6 +507,24 @@ impl GameStateCore {
                 .copied()
                 .unwrap_or(0)
                 > 0
+    }
+
+    /// 探林无视距离：`from` 持有 `tanlin4` 且 `to` 持有 `tanlin2`（上游 `targetInRange`）。
+    pub fn tanlin_target_in_range(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        from: PlayerId,
+        to: PlayerId,
+    ) -> bool {
+        catalog.has_host_behavior(
+            self,
+            from,
+            crate::vocabulary::host::HostBehavior::SwdTanlinRange,
+        ) && catalog.has_host_behavior(
+            self,
+            to,
+            crate::vocabulary::host::HostBehavior::SwdTanlinTarget,
+        )
     }
 
     /// 存活玩家间的座位最短距离（死亡玩家及调虎离山 `undist` 座位不计数）。
@@ -523,6 +544,13 @@ impl GameStateCore {
                         .copied()
                         .unwrap_or(0)
                         == 0
+                        && self
+                            .vm_aux
+                            .flags
+                            .get(&(p, "duijue_out_active".to_string()))
+                            .copied()
+                            .unwrap_or(0)
+                            == 0
                         && self
                             .vm_aux
                             .flags
@@ -561,7 +589,7 @@ impl GameStateCore {
             .filter(|&p| {
                 p == a
                     || p == b
-                    || (!catalog.has_diaohulishan(self, p)
+                    || (!catalog.has_undist(self, p)
                         && self
                             .vm_aux
                             .flags

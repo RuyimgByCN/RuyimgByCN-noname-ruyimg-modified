@@ -99,12 +99,15 @@ impl crate::catalog::SkillMachine for TaoyuanMachine {
         let mut others: Vec<PlayerId> = if include_owner && !use_targets.is_empty() {
             use_targets
                 .into_iter()
-                .filter(|p| ctx.core.player(*p).alive)
+                .filter(|p| ctx.core.player(*p).alive && !ctx.catalog.has_duijue_out(ctx.core, *p))
                 .collect()
         } else {
             ctx.core
                 .alive_players()
-                .filter(|p| include_owner || *p != self.owner)
+                .filter(|p| {
+                    (include_owner || *p != self.owner)
+                        && !ctx.catalog.has_duijue_out(ctx.core, *p)
+                })
                 .collect()
         };
         if let Some(targets) = take_dddanzhi_targets(ctx, self.owner) {
@@ -233,6 +236,7 @@ impl crate::catalog::SkillMachine for WuguMachine {
                     .flags
                     .contains_key(&(self.owner, format!("dddtongyu_wugu_rem_owner:{frame}")));
                 let mut alive: Vec<PlayerId> = ctx.core.seat_order_from(self.owner);
+                alive.retain(|&p| !ctx.catalog.has_duijue_out(ctx.core, p));
                 let take = (alive.len() + extra).min(ctx.core.deck.len());
                 if ccw && alive.len() > 2 {
                     alive[1..].reverse();

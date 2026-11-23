@@ -306,7 +306,7 @@ impl HostMachine {
                 ctx.start_draw(self.owner, 1);
                 Flow::Done
             }
-            // 道法：来源弃首张手牌（登记差异：上游玩家自选）
+            // 道法：来源弃置一张“he”牌（手牌优先，否则装备区）
             HostBehavior::SwdDaofa => {
                 if let Some(src) = self.target {
                     if let Some(c) = ctx.core.player(src).hand.first().copied() {
@@ -315,6 +315,8 @@ impl HostMachine {
                             player: src,
                             cards: vec![c],
                         });
+                    } else if let Some(c) = ctx.core.player(src).equips.first().copied() {
+                        super::swd_u05_7d::discard_owned_card_once(ctx, src, c);
                     }
                 }
                 Flow::Done

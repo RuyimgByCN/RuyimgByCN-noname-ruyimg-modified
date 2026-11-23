@@ -5,6 +5,7 @@ mod xianjian;
 mod wudian;
 mod swd_artifacts;
 mod swd_skills;
+mod swd_u05_7d;
 
 impl HostSkillBehavior {
     pub(super) fn activate_behavior(
@@ -405,6 +406,10 @@ impl HostSkillBehavior {
             | HostBehavior::U05SwdForgeAction
             | HostBehavior::U05SwdOldLongfan => super::step::swd_u05_7b::activate(self, ctx, owner)
                 .map(|m| Box::new(m) as Box<dyn crate::catalog::SkillMachine>),
+            HostBehavior::SwdDuijue
+            | HostBehavior::SwdTanlin
+            | HostBehavior::SwdOldLiaoyuan
+            | HostBehavior::SwdOldLiaoyuan2 => self.activate_swd_u05_7d(ctx, owner),
             _ => None,
         }
     }
@@ -417,6 +422,10 @@ pub(in crate::content::host) fn has_phase_use_activation(
     match behavior {
         HostBehavior::Xuanyuan => false,
         HostBehavior::SwdZhenjiu
+        | HostBehavior::SwdDuijue
+        | HostBehavior::SwdTanlin
+        | HostBehavior::SwdOldLiaoyuan
+        | HostBehavior::SwdOldLiaoyuan2
         | HostBehavior::SwdLmazui
         | HostBehavior::SwdJianji
         | HostBehavior::SwdAojian

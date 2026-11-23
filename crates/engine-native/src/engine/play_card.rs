@@ -156,21 +156,18 @@ pub(super) fn play_card(
                         );
                         return Ok(());
                     }
-                    // 决斗：恰好 1 名其他存活目标，无距离/射程限制。
-                    if targets.len() != 1 {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                    let target = targets[0];
-                    if target == core.turn.current || !core.player(target).alive {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                    // 空城（诸葛亮）：同杀
-                    let kongcheng = catalog
-                        .skill_by_name(crate::content::standard::KONG_CHENG)
-                        .map(|d| core.has_skill(target, d))
-                        .unwrap_or(false);
-                    if kongcheng && core.player(target).hand.is_empty() {
-                        return Err(RejectReason::IllegalTargets);
+                    // 决斗：通常恰 1 名其他存活目标（持疾风可任意多目标），无距离/射程限制。
+                    play_card_targets::check_single_or_jifeng_targets(core, catalog, &targets)?;
+                    let kongcheng_def = catalog.skill_by_name(crate::content::standard::KONG_CHENG);
+                    for &target in &targets {
+                        if target == core.turn.current || !core.player(target).alive {
+                            return Err(RejectReason::IllegalTargets);
+                        }
+                        if kongcheng_def.is_some_and(|d| core.has_skill(target, d))
+                            && core.player(target).hand.is_empty()
+                        {
+                            return Err(RejectReason::IllegalTargets);
+                        }
                     }
                     let use_as = (kind != catalog.resolved_card_kind(core, card)
                         || !core.player(core.turn.current).hand.contains(&card))
@@ -187,13 +184,12 @@ pub(super) fn play_card(
                     return Ok(());
                 }
                 CardKind::Dismantle => {
-                    // 过河拆桥 / 草木皆兵：弃置一名其他存活玩家的一张牌
-                    if targets.len() != 1 {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                    let target = targets[0];
-                    if target == core.turn.current || !core.player(target).alive {
-                        return Err(RejectReason::IllegalTargets);
+                    // 过河拆桥 / 草木皆兵：弃置其他存活玩家的一张牌（持疾风可任意多目标）
+                    play_card_targets::check_single_or_jifeng_targets(core, catalog, &targets)?;
+                    for &target in &targets {
+                        if target == core.turn.current || !core.player(target).alive {
+                            return Err(RejectReason::IllegalTargets);
+                        }
                     }
                     let use_as = (kind != catalog.card_kind(card)
                         || !core.player(core.turn.current).hand.contains(&card))
@@ -210,30 +206,14 @@ pub(super) fn play_card(
                     return Ok(());
                 }
                 CardKind::Snatch => {
-                    // 顺手牵羊：获得距离 1 的一名其他存活角色的一张牌
-                    if targets.len() != 1 {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                    let target = targets[0];
-                    if target == core.turn.current || !core.player(target).alive {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                    // 谦逊（陆逊）：不能成为顺手牵羊目标（锁定门控）
-                    let qianxun = catalog
-                        .skill_by_name(crate::content::standard::QIAN_XUN)
-                        .map(|d| core.has_skill(target, d))
-                        .unwrap_or(false);
-                    if qianxun {
-                        return Err(RejectReason::IllegalTargets);
-                    }
+                    // 顺手牵羊：获得距离 1 的其他存活角色的一张牌（持疾风可任意多目标）
+                    play_card_targets::check_single_or_jifeng_targets(core, catalog, &targets)?;
+                    let qianxun_def = catalog.skill_by_name(crate::content::standard::QIAN_XUN);
                     let from = core.turn.current;
-                    // 奇才（黄月英，锁定）：使用锦囊无距离限制
                     let qicai = catalog
                         .skill_by_name(crate::content::standard::QI_CAI)
                         .map(|d| core.has_skill(from, d))
                         .unwrap_or(false);
-                    // 神恩（Boss 太昊/炎帝 光环，规则 v238）：boss 方用
-                    // 牌无视距离
                     let shenen_boss_free = {
                         let active = catalog
                             .skill_by_name(crate::content::standard::BOSS_SHENEN)
@@ -241,23 +221,19 @@ pub(super) fn play_card(
                             .unwrap_or(false);
                         active && core.is_boss_side(from)
                     };
-                    // 守翼（年兽守翼形态，规则 v251）：所有牌无视距离
                     let shouyi_free = catalog
                         .skill_by_name(crate::content::standard::BOSS_SHOUYI)
                         .map(|def| core.has_skill(from, def))
                         .unwrap_or(false);
-                    // 焚天（Boss 朱雀，规则 v236）：红色牌无视距离
                     let fentian_red_free = {
                         let red = matches!(
                             catalog.resolved_card_suit(core, card),
-                            crate::catalog::Suit::Heart
-                                | crate::catalog::Suit::Diamond
+                            crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
                         );
-                        red
-                            && catalog
-                                .skill_by_name(crate::content::standard::BOSS_FENTIAN)
-                                .map(|def| core.has_skill(from, def))
-                                .unwrap_or(false)
+                        red && catalog
+                            .skill_by_name(crate::content::standard::BOSS_FENTIAN)
+                            .map(|def| core.has_skill(from, def))
+                            .unwrap_or(false)
                     };
                     // 探囊（U05 xianjian 韩菱纱，规则 v148）：视为的顺手
                     // 牵羊无距离限制（上游 mod targetInRange 同口径；仅
@@ -268,42 +244,57 @@ pub(super) fn play_card(
                             .map(|def| core.has_skill(from, def))
                             .unwrap_or(false)
                             || catalog
-                                .find_player_vm_view_as(core, from, card, true, Some(CardKind::Snatch))
+                                .find_player_vm_view_as(
+                                    core,
+                                    from,
+                                    card,
+                                    true,
+                                    Some(CardKind::Snatch),
+                                )
                                 .is_some_and(|s| s.ignore_distance));
-                    let limu_in_range_free = xinfu_limu_in_range(core, catalog, from, target);
-                    let shanxian_free = core
-                        .vm_aux
-                        .flags
-                        .get(&(from, "ow_shanxian_target".to_string()))
-                        .copied()
-                        == Some(u32::from(target) + 1);
-                    if !qicai
-                        && !tannang_free
-                        && !fentian_red_free
-                        && !shenen_boss_free
-                        && !shouyi_free
-                        && !limu_in_range_free
-                        && !shanxian_free
-                        && core.turn.zhufangshenshi_target != Some(target)
-                        && !crate::rvm_bridge::modifiers::tanbei_unlimited_target(
-                            core, catalog, from, target,
-                        )
-                        && !crate::rvm_bridge::modifiers::eval_card_distance_unlimited_to(
-                            core,
-                            catalog,
-                            from,
-                            Some(target),
-                            card,
-                            CardKind::Snatch,
-                            crate::event::DamageNature::Normal,
-                        )
-                        && core.computed_distance(catalog, from, target) > 1
-                    {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                    let t = core.player(target);
-                    if t.hand.is_empty() && t.equips.is_empty() {
-                        return Err(RejectReason::IllegalTargets);
+                    for &target in &targets {
+                        if target == from || !core.player(target).alive {
+                            return Err(RejectReason::IllegalTargets);
+                        }
+                        if qianxun_def.is_some_and(|d| core.has_skill(target, d)) {
+                            return Err(RejectReason::IllegalTargets);
+                        }
+                        let limu_in_range_free = xinfu_limu_in_range(core, catalog, from, target);
+                        let shanxian_free = core
+                            .vm_aux
+                            .flags
+                            .get(&(from, "ow_shanxian_target".to_string()))
+                            .copied()
+                            == Some(u32::from(target) + 1);
+                        if !qicai
+                            && !tannang_free
+                            && !fentian_red_free
+                            && !shenen_boss_free
+                            && !shouyi_free
+                            && !limu_in_range_free
+                            && !shanxian_free
+                            && core.turn.zhufangshenshi_target != Some(target)
+                            && !crate::rvm_bridge::modifiers::tanbei_unlimited_target(
+                                core, catalog, from, target,
+                            )
+                            && !crate::rvm_bridge::modifiers::eval_card_distance_unlimited_to(
+                                core,
+                                catalog,
+                                from,
+                                Some(target),
+                                card,
+                                CardKind::Snatch,
+                                crate::event::DamageNature::Normal,
+                            )
+                            && !core.tanlin_target_in_range(catalog, from, target)
+                            && core.computed_distance(catalog, from, target) > 1
+                        {
+                            return Err(RejectReason::IllegalTargets);
+                        }
+                        let t = core.player(target);
+                        if t.hand.is_empty() && t.equips.is_empty() {
+                            return Err(RejectReason::IllegalTargets);
+                        }
                     }
                     crate::resolution::push_frame(
                         &mut state.resolution,
@@ -668,6 +659,7 @@ pub(super) fn play_card(
                         .into_iter()
                         .filter(|p| {
                             *p != player
+                                && !catalog.has_duijue_out(core, *p)
                                 && !crate::rvm_bridge::modifiers::eval_card_target_canceled(
                                     core, catalog, player, *p, card, kind, aoe_nature,
                                 )
@@ -698,19 +690,7 @@ pub(super) fn play_card(
                     return Ok(());
                 }
                 CardKind::Guisheqi => {
-                    // 鬼蛇旗：恰 1 名任意存活目标（可含自己）
-                    if targets.len() != 1 || !core.player(targets[0]).alive {
-                        return Err(RejectReason::IllegalTargets);
-                    }
-                    crate::resolution::push_frame(
-                        &mut state.resolution,
-                        EventData::CardUsed(crate::machine::card_use(
-                            card,
-                            core.turn.current,
-                            targets,
-                        )),
-                    );
-                    return Ok(());
+                    play_card_targets::validate_jifeng_trick_targets(core, catalog, kind, &targets)?;
                 }
                 CardKind::Xianluhui => {
                     // 仙露回：AOE 全体受伤角色（含自己，reverseOrder 逆序近似
@@ -723,7 +703,10 @@ pub(super) fn play_card(
                         .seat_order_from(core.next_alive(player))
                         .into_iter()
                         .filter(|p| {
-                            *p != player && core.player(*p).alive && core.player(*p).hp < core.player(*p).max_hp as i32
+                            *p != player
+                                && core.player(*p).alive
+                                && !catalog.has_duijue_out(core, *p)
+                                && core.player(*p).hp < core.player(*p).max_hp as i32
                         })
                         .collect();
                     if core.player(player).hp < core.player(player).max_hp as i32 {
@@ -801,14 +784,8 @@ pub(super) fn play_card(
                     }
                 }
                 CardKind::Zhufangshenshi => {
-                    // 贴房绅视（U05 swd 第十批，规则 v94）：恰 1 名其他
-                    // 存活目标（上游 filterTarget target !== player）
-                    if targets.len() != 1
-                        || !core.player(targets[0]).alive
-                        || targets[0] == core.turn.current
-                    {
-                        return Err(RejectReason::IllegalTargets);
-                    }
+                    // 贴房绅视（U05 swd 第十批，规则 v94）：通常 1 名其他存活目标（持疾风可多目标）
+                    play_card_targets::validate_jifeng_trick_targets(core, catalog, kind, &targets)?;
                 }
                 CardKind::Fengxueren
                 | CardKind::Yufulu
@@ -853,6 +830,7 @@ pub(super) fn play_card(
                             CardKind::Caoyao,
                             crate::event::DamageNature::Normal,
                         )
+                        && !core.tanlin_target_in_range(catalog, user, t)
                         && core.computed_distance(catalog, user, t) > 1
                     {
                         return Err(RejectReason::IllegalTargets);

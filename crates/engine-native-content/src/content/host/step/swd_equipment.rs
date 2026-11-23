@@ -87,7 +87,7 @@ impl HostMachine {
             HostBehavior::SwdWangchenHeld => match self.stage {
                 HostStage::Act => {
                     let options: Vec<ChoiceOption> = (0..ctx.core.players.len())
-                        .filter(|&i| ctx.core.player(i as PlayerId).alive)
+                        .filter(|&i| i as PlayerId != self.owner && ctx.core.player(i as PlayerId).alive)
                         .map(|i| ChoiceOption::Player(i as u8))
                         .collect();
                     if options.is_empty() {

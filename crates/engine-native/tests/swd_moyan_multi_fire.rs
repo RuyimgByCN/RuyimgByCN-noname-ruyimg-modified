@@ -228,7 +228,7 @@ fn moyan_is_once_per_play_phase() {
     }
     e.debug_grant(0, "moyan");
     e.debug_set_hp(0, 2); // 体力差 2 ⇒ 可选 1..=2 张红牌
-    let _ = place_red_basic(&mut e, 0);
+    let c_red = place_red_basic(&mut e, 0);
     let def = e.catalog().skill_by_name("moyan").expect("魔焰在目录");
     let first = e.submit(GameCommand {
         actor: 0,
@@ -243,7 +243,27 @@ fn moyan_is_once_per_play_phase() {
         ),
         "魔焰第一次应可发动：{first:?}"
     );
-    // 应答完第一次的全部询问
+    // 应答完第一次的全部询问（选中红牌与目标，正式结算消耗每阶段限次）
+    let c_cards = e.open_choice().expect("moyan_cards").clone();
+    let _ = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: c_cards.id,
+            selection: vec![ChoiceOption::Card(c_red)],
+        },
+    });
+    let c_tgts = e.open_choice().expect("moyan_targets").clone();
+    let _ = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: c_tgts.id,
+            selection: vec![ChoiceOption::Player(1)],
+        },
+    });
     drain(&mut e);
     let second = e.submit(GameCommand {
         actor: 0,

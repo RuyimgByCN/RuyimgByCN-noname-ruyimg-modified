@@ -264,10 +264,12 @@ impl HostSkillBehavior {
                     .skill_by_name(SWD_TIANSHU_KEY)
                     .and_then(|d| ctx.state.skills.get(&(owner, d)).map(|i| i.enabled))
                     .unwrap_or(false);
-                let has_trick = ctx.state.player(owner).hand.iter().any(|c| {
-                    let kind = ctx.catalog.card_kind(*c);
-                    !kind.is_basic_kind() && !kind.is_equip()
-                });
+                let has_trick = ctx
+                    .state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .any(|c| ctx.catalog.card_kind(*c).is_trick_kind());
                 if !enabled || !has_trick {
                     return None;
                 }
@@ -322,12 +324,14 @@ impl HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
-            // 玄咒（deferred 消解批）：手牌有普通锦囊
+            // 玄咒（deferred 消解批）：手/装备区有普通锦囊（type === "trick"）
             HostBehavior::SwdXuanzhou => {
-                let has = ctx.state.player(owner).hand.iter().any(|c| {
-                    let k = ctx.catalog.card_kind(*c);
-                    !k.is_basic_kind() && k.equip_slot().is_none() && k != CardKind::Jiguan
-                });
+                let p = ctx.state.player(owner);
+                let has = p
+                    .hand
+                    .iter()
+                    .chain(p.equips.iter())
+                    .any(|c| ctx.catalog.card_kind(*c).is_ordinary_trick_kind());
                 if !has {
                     return None;
                 }
@@ -730,16 +734,25 @@ impl HostSkillBehavior {
                 }))
             }
             // 神鼎·麦星面（武将面批㉞）：恒可发动（判定分支自带无效果面）
-            HostBehavior::SwdShending => Some(Box::new(HostMachine {
-                def_key: self.name.clone(),
-                behavior: self.behavior,
-                owner,
-                target: None,
-                card: None,
-                cards: Vec::new(),
-                targets: Vec::new(),
-                stage: HostStage::Act,
-            })),
+            HostBehavior::SwdShending => {
+                let has_treasure = ctx.state.player(owner).equips.iter().any(|c| {
+                    ctx.catalog.card_slot_of(ctx.state, *c)
+                        == Some(crate::catalog::EquipSlot::Treasure)
+                });
+                if has_treasure {
+                    return None;
+                }
+                Some(Box::new(HostMachine {
+                    def_key: self.name.clone(),
+                    behavior: self.behavior,
+                    owner,
+                    target: None,
+                    card: None,
+                    cards: Vec::new(),
+                    targets: Vec::new(),
+                    stage: HostStage::Act,
+                }))
+            }
             // 鬼眼（武将面批㉞ 冯天凌）：任一其他角色手牌有梅花
             HostBehavior::SwdGuiyan => {
                 let has = ctx.state.alive_players().any(|p| {
@@ -833,14 +846,20 @@ impl HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
-            // 湛卢（武将面批㉕ 屠维）：有黑桃牌且场上有已受伤角色
+            // 湛卢（武将面批㉕ 屠维）：手牌或装备区有黑桃牌且场上有已受伤角色
             HostBehavior::SwdZhanlu => {
-                let has_spade = ctx.state.player(owner).hand.iter().any(|c| {
-                    matches!(
-                        ctx.catalog.cards[*c as usize].suit,
-                        crate::catalog::Suit::Spade
-                    )
-                });
+                let has_spade = ctx
+                    .state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .chain(ctx.state.player(owner).equips.iter())
+                    .any(|c| {
+                        matches!(
+                            ctx.catalog.cards[*c as usize].suit,
+                            crate::catalog::Suit::Spade
+                        )
+                    });
                 let any_damaged = ctx
                     .state
                     .alive_players()
@@ -919,119 +938,7 @@ impl HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
-            // 分舵：存在手牌多于自己的存活角色才可发动
-            HostBehavior::SwdJiefen => {
-                let my = ctx.state.player(owner).hand.len();
-                let has = ctx
-                    .state
-                    .alive_players()
-                    .any(|p| p != owner && ctx.state.player(p).hand.len() > my);
-                if !has {
-                    return None;
-                }
-                Some(Box::new(HostMachine {
-                    def_key: self.name.clone(),
-                    behavior: self.behavior,
-                    owner,
-                    target: None,
-                    card: None,
-                    cards: Vec::new(),
-                    targets: Vec::new(),
-                    stage: HostStage::JiefenTarget,
-                }))
-            }
-            // 断月：有装备牌（手/装备区）且存在其他存活角色
-            HostBehavior::SwdDuanyue => {
-                let has = !ctx.state.player(owner).equips.is_empty()
-                    || ctx
-                        .state
-                        .player(owner)
-                        .hand
-                        .iter()
-                        .any(|c| ctx.catalog.card_slot_of(ctx.state, *c).is_some());
-                let others = ctx.state.alive_players().any(|p| p != owner);
-                if !has || !others {
-                    return None;
-                }
-                Some(Box::new(HostMachine {
-                    def_key: self.name.clone(),
-                    behavior: self.behavior,
-                    owner,
-                    target: None,
-                    card: None,
-                    cards: Vec::new(),
-                    targets: Vec::new(),
-                    stage: HostStage::SelectCard,
-                }))
-            }
-            // 星点：有手牌且存在其他有牌角色
-            HostBehavior::SwdXingdian => {
-                let has = !ctx.state.player(owner).hand.is_empty();
-                let others = ctx.state.alive_players().any(|p| {
-                    p != owner
-                        && (!ctx.state.player(p).hand.is_empty()
-                            || !ctx.state.player(p).equips.is_empty())
-                });
-                if !has || !others {
-                    return None;
-                }
-                Some(Box::new(HostMachine {
-                    def_key: self.name.clone(),
-                    behavior: self.behavior,
-                    owner,
-                    target: None,
-                    card: None,
-                    cards: Vec::new(),
-                    targets: Vec::new(),
-                    stage: HostStage::SelectCard,
-                }))
-            }
-            // 雪煌：limited 未发动、手牌全红且非空
-            HostBehavior::SwdXuehuang => {
-                let p = ctx.state.player(owner);
-                let all_red = !p.hand.is_empty()
-                    && p.hand.iter().all(|c| {
-                        matches!(
-                            ctx.catalog.cards[*c as usize].suit,
-                            crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
-                        )
-                    });
-                if p.xuehuang_used || !all_red {
-                    return None;
-                }
-                Some(Box::new(HostMachine {
-                    def_key: self.name.clone(),
-                    behavior: self.behavior,
-                    owner,
-                    target: None,
-                    card: None,
-                    cards: Vec::new(),
-                    targets: Vec::new(),
-                    stage: HostStage::Act,
-                }))
-            }
-            // 悲歌：确认门由 optional 承担（activate 恒供机）
-            HostBehavior::SwdTiebi => Some(Box::new(HostMachine {
-                def_key: self.name.clone(),
-                behavior: self.behavior,
-                owner,
-                target: None,
-                card: None,
-                cards: Vec::new(),
-                targets: Vec::new(),
-                stage: HostStage::Act,
-            })),
-            HostBehavior::SwdDatong => Some(Box::new(HostMachine {
-                def_key: self.name.clone(),
-                behavior: self.behavior,
-                owner,
-                target: None,
-                card: None,
-                cards: Vec::new(),
-                targets: Vec::new(),
-                stage: HostStage::Act,
-            })),
-            _ => unreachable!("behavior routed to the wrong activate module"),
+            _ => self.activate_swd_tail(ctx, owner),
         }
     }
 }

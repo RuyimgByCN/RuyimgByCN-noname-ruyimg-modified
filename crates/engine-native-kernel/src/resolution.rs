@@ -16,6 +16,7 @@ use crate::state::GameStateCore;
 mod dispatch;
 mod frame_hooks;
 mod optional_gate;
+mod pop_cleanup;
 mod trigger_order;
 use dispatch::{finish_slot, native_machine, notify_new_skills, start_queued_trigger};
 pub(crate) use frame_hooks::note_recover_source;
@@ -543,7 +544,7 @@ pub fn run(
                 notify_new_skills(core, res, catalog, &prior_skills, out);
                 res.answer = None; // 应答只消费一次
                 match flow {
-                    Flow::Done => finish_slot(res, park.slot),
+                    Flow::Done => finish_slot(core, res, park.slot),
                     Flow::Yield => {
                         if park.machine.trigger_order().is_some() {
                             res.parks.insert(0, park);
@@ -743,7 +744,7 @@ pub fn run(
                         machine: m,
                         awaiting_answer: false,
                     }),
-                    None => res.frame_mut(top).expect("frame").intrinsic_done = true,
+                    None => finish_slot(core, res, Slot::Intrinsic { frame: top }),
                 }
             }
             Stage::Done => {

@@ -93,13 +93,8 @@ pub(super) fn on_frame_popped(
             .remove(&(*player, "dddfushi_resp_eff_kind".to_string()));
     }
     if let EventData::Damage(d) = &popped.data {
-        core.vm_aux
-            .flags
-            .remove(&(d.target, "l28_vdmg_kind".to_string()));
+        super::pop_cleanup::on_damage_pop_cleanup(core, catalog, popped.id, d.target);
         for p in 0..core.players.len() as PlayerId {
-            core.vm_aux
-                .flags
-                .remove(&(p, format!("mbcmjiushi_dmg:{}", popped.id)));
             core.vm_aux
                 .flags
                 .remove(&(p, format!("sha_damage_frame:{}", popped.id)));
@@ -217,6 +212,7 @@ fn on_card_use_popped(
     catalog: &crate::catalog::Catalog,
     out: &mut Vec<LogEvent>,
 ) {
+    super::pop_cleanup::clear_jifeng_more_flags(core, u.player, popped_id);
     core.vm_aux
         .flags
         .remove(&(u.player, format!("dddanzhi_targets:{popped_id}")));

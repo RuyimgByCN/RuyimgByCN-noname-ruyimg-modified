@@ -74,6 +74,8 @@ MANUAL_TRIGGERS = {
     # 分支对应子技能 huajin3 的 `player:'phaseBegin'`（回合开始移除效果）——
     # 判定阶段开始与回合开始几乎同刻，按**近似等价**处理，不计缺陷（详见规则基准）。
     "huajin2": "source:'damageBegin'",
+    # 探林反制（host:swd_tanlin_defence）：上游 skill.js:5767 为 tanlin_defence（player:'damageEnd'）
+    "swd_tanlin_defence": 'player: "damageEnd"',
 }
 
 #: Engine phase -> the upstream event name stem (`Play` is `phaseUse…` in noname).

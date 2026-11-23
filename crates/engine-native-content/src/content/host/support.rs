@@ -16,23 +16,19 @@ pub fn sbzhaxiang_active(core: &crate::state::GameStateCore, p: PlayerId) -> boo
     core.turn.cards_used_play_phase < lost
 }
 
-/// 疾风范围扩展适用牌种（上游：`card.name=='sha'` 或 `selectTarget` 为
-/// [1,1] 的锦囊——原生按「恰一名目标」的既有牌种集合判定）。
+/// 疾风范围扩展适用牌种（上游：`card.name=='sha'` 或 `selectTarget` 为 `[1,1]` 的普通锦囊）。
 pub fn jifeng_single_target_trick(kind: crate::catalog::CardKind) -> bool {
-    use crate::catalog::CardKind as K;
-    matches!(
-        kind,
-        K::Duel | K::Snatch | K::Dismantle | K::Le | K::Bing | K::Jiedao
-    )
+    kind.is_jifeng_single_target_trick()
 }
 
 /// 昆仑镜回滚：把 `card` 从当前所在任意区移到 `player` 的第 `zone` 区
 /// （0=手牌 1=装备 2=判定区）；装备区变更同步授予/撤销装备技。
 pub(super) fn kunlunjing_move_to(ctx: &mut Ctx<'_>, card: CardId, player: PlayerId, zone: u8) {
-    // 先自任意区移除（含装备技撤销）
+    // 先自任意区移除（含装备技撤销与 declared_slots 清理）
     for p in 0..ctx.core.players.len() as PlayerId {
         if ctx.core.player(p).equips.contains(&card) {
             ctx.core.player_mut(p).equips.retain(|x| *x != card);
+            ctx.core.declared_slots.remove(&card);
             crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, p, card);
         }
         ctx.core.player_mut(p).hand.retain(|x| *x != card);
@@ -95,32 +91,52 @@ pub fn shengong_borrowed_owner(
         .find(|p| *p != responder && ctx.core.player(*p).equips.contains(&card))
 }
 
-/// 天书候选：目标武将技能中自己未持有者（登记差异：上游排除 unique
-/// 限定技，原生无 unique 元数据，故一并列出）。
-pub(super) fn swdtianshu_skills(
-    ctx: &Ctx<'_>,
+/// 天书候选：排除上游 `unique: true` 技能与 `cards.json` 附加的内部组技（无 `_info`）。
+fn is_swdtianshu_unique_skill(name: &str) -> bool {
+    matches!(
+        name,
+        "niepan" | "涅槃" | "luanwu" | "乱武" | "busi" | "yinguo" | "guiyan"
+            | "duijue" | "xuehuang" | "bingfeng" | "kunlunjing" | "swdtianshu"
+            | "tianlun" | "mohua2" | "mailun" | "xuying" | "miles_xueyi"
+            | "hxunzhi" | "jinlin" | "shouyin" | "xuanyuan" | "pozhou"
+            | "pozhou2" | "daixing2" | "daixing3" | "hyunshen2"
+            | "juxi_count" | "guxing3" | "sxianjing_gain" | "sxianjing_damage"
+    )
+}
+
+pub(super) fn swdtianshu_skills_for_state(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
     target: PlayerId,
     owner: PlayerId,
 ) -> Vec<&'static str> {
     let mut out: Vec<&'static str> = Vec::new();
-    for slot in ctx.core.player(target).general_slots.iter().flatten() {
-        let Some((_, _, skills, _, _)) = ctx.catalog.general_meta(*slot) else {
+    for slot in core.player(target).general_slots.iter().flatten() {
+        let Some((_, _, skills, _, _)) = catalog.general_meta(*slot) else {
             continue;
         };
         for name in skills {
-            if out.contains(&name) {
+            if out.contains(&name) || is_swdtianshu_unique_skill(name) {
                 continue;
             }
-            let Some(def) = ctx.catalog.skill_by_name(name) else {
+            let Some(def) = catalog.skill_by_name(name) else {
                 continue;
             };
-            if ctx.core.skills.contains_key(&(owner, def)) {
+            if core.skills.contains_key(&(owner, def)) {
                 continue;
             }
             out.push(name);
         }
     }
     out
+}
+
+pub(super) fn swdtianshu_skills(
+    ctx: &Ctx<'_>,
+    target: PlayerId,
+    owner: PlayerId,
+) -> Vec<&'static str> {
+    swdtianshu_skills_for_state(ctx.core, ctx.catalog, target, owner)
 }
 
 pub(super) fn cyqiaoxie_rule(name: &str) -> Option<CyqiaoxieRule> {

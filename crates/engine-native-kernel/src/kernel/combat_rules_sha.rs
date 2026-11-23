@@ -176,6 +176,32 @@ pub fn sha_user_or_target_blocked(
     !has(owner, "hslingjian_chaofeng") && adj_chaofeng.is_some_and(|h| target != h)
 }
 
+/// 检查 `owner` 能否对 `target` 使用指定种类的【杀】（忽略距离；对齐上游 `targetEnabled({ name: "sha" })`）。
+pub fn can_target_sha_no_range(
+    core: &crate::state::GameStateCore,
+    catalog: &Catalog,
+    owner: PlayerId,
+    target: PlayerId,
+    kind: CardKind,
+) -> bool {
+    if sha_user_or_target_blocked(core, catalog, owner, target) || catalog.has_undist(core, target) {
+        return false;
+    }
+    if kind == CardKind::Sha
+        && catalog
+            .skill_by_name(crate::vocabulary::names::BOSS_REMEN)
+            .is_some_and(|def| {
+                core.has_skill(target, def)
+                    && !core.player(target).equips.iter().any(|c| {
+                        catalog.card_slot_of(core, *c) == Some(crate::catalog::EquipSlot::Armor)
+                    })
+            })
+    {
+        return false;
+    }
+    true
+}
+
 /// 询问使用真实【杀】（复仇 2 / 诱敌深入 / 诱战 共用；Step 与 Asks 同源）：忽略距离与出牌阶段次数限制。
 pub fn usable_sha_options(
     core: &crate::state::GameStateCore,

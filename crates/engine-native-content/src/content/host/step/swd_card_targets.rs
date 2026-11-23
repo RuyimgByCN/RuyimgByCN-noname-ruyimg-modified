@@ -647,12 +647,12 @@ impl HostMachine {
                     let Some(ChoiceOption::Card(card)) = ctx.answer().first().copied() else {
                         return Flow::Done;
                     };
-                    let is_equip = ctx.catalog.card_kind(card).is_equip();
+                    let from_equip = ctx.core.player(target).equips.contains(&card);
                     ctx.take_owned_card(target, card);
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "魅惑",
                         owner: self.owner, presentation: None });
-                    if is_equip {
+                    if from_equip {
                         // 装备牌：入手 → Equipped 帧（commit_equip 全托管）
                         ctx.core.player_mut(self.owner).hand.push(card);
                         ctx.emit(EventData::Equipped {

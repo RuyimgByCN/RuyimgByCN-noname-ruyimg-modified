@@ -170,6 +170,48 @@ impl CardKind {
         )
     }
 
+    /// 延时锦囊（`type == "delay"`）：乐不思蜀/兵粮寸断/闪电/洪水/鬼幽界。
+    pub fn is_delay_trick_kind(self) -> bool {
+        matches!(
+            self,
+            CardKind::Le
+                | CardKind::Bing
+                | CardKind::ShanDian
+                | CardKind::HongShui
+                | CardKind::Guiyoujie
+        )
+    }
+
+    /// 普通（即时）锦囊（上游 `get.type(card) === "trick"`）：含普通锦囊、不含延时锦囊与基本/装备/特殊牌。
+    pub fn is_ordinary_trick_kind(self) -> bool {
+        self.is_trick_kind() && !self.is_delay_trick_kind()
+    }
+
+    /// 疾风可扩目标的 `[1, 1]` 普通锦囊（上游 `get.type(card) === 'trick'` 且 `selectTarget == [1, 1]`）。
+    pub fn is_jifeng_single_target_trick(self) -> bool {
+        matches!(
+            self,
+            CardKind::Duel
+                | CardKind::Dismantle
+                | CardKind::Snatch
+                | CardKind::WangmeiZhike
+                | CardKind::Fudichouxin
+                | CardKind::Chenhuodajie
+                | CardKind::Toulianghuanzhu
+                | CardKind::Caochuanjiejian
+                | CardKind::Linghunzhihuo
+                | CardKind::Zhaomingdan
+                | CardKind::Zhiliaobo
+                | CardKind::Shujinsan
+                | CardKind::Shihuifen
+                | CardKind::Liufengsan
+                | CardKind::Shatang
+                | CardKind::Liuxinghuoyu
+                | CardKind::Zhufangshenshi
+                | CardKind::Guisheqi
+        )
+    }
+
     /// 装备牌 → 装备栏；非装备牌返回 None。
     pub fn equip_slot(self) -> Option<EquipSlot> {
         Some(match self {

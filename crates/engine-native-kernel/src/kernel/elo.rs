@@ -371,6 +371,50 @@ pub enum EloJudgePref {
     CardValue,
 }
 
+const ORDINARY_JUDGE_ELO_PREF_FLAG: &str = "ordinary_judge_elo_pref";
+
+const SKILL_JUDGE_PREFS: &[(u32, EloJudgePref)] = &[
+    (1, EloJudgePref::RedPositive),
+    (2, EloJudgePref::BlackPositive),
+    (3, EloJudgePref::HeartPositive),
+    (4, EloJudgePref::NonHeartPositive),
+    (5, EloJudgePref::SpadePositive),
+    (6, EloJudgePref::NonSpadePositive),
+    (7, EloJudgePref::ClubPositive),
+    (8, EloJudgePref::NonClubPositive),
+    (9, EloJudgePref::DiamondPositive),
+    (10, EloJudgePref::Releiji),
+    (11, EloJudgePref::Zhongdu),
+    (12, EloJudgePref::Beige),
+    (13, EloJudgePref::Yueren),
+    (14, EloJudgePref::TaoOrTaoyuanPositive),
+    (15, EloJudgePref::Shending),
+    (16, EloJudgePref::Huanyin),
+    (17, EloJudgePref::CardValue),
+];
+
+/// 为即将发起的宿主 `OrdinaryJudge`（`invocation == u32::MAX`）登记或清理 `_eloDraw` 偏好。
+pub fn set_ordinary_judge_elo_pref(
+    core: &mut GameStateCore,
+    owner: PlayerId,
+    pref: Option<EloJudgePref>,
+) {
+    let key = (owner, ORDINARY_JUDGE_ELO_PREF_FLAG.to_string());
+    if let Some(code) = pref.and_then(|p| SKILL_JUDGE_PREFS.iter().find(|(_, v)| *v == p).map(|(c, _)| *c)) {
+        core.vm_aux.flags.insert(key, code);
+    } else {
+        core.vm_aux.flags.remove(&key);
+    }
+}
+
+/// 清理宿主 `OrdinaryJudge` 登记的 `_eloDraw` 偏好。
+#[inline]
+pub fn clear_ordinary_judge_elo_pref(core: &mut GameStateCore, owner: PlayerId) {
+    core.vm_aux
+        .flags
+        .remove(&(owner, ORDINARY_JUDGE_ELO_PREF_FLAG.to_string()));
+}
+
 fn elo_has_card_val_overrides(core: &GameStateCore) -> bool {
     core.vm_aux
         .flags
@@ -438,10 +482,29 @@ pub fn elo_judge_pref_for(
             }
         }
         if let Some(f) = res.stack.iter().find(|f| f.id == inv) {
-            if let crate::event::EventData::SkillInvocation(d) = &f.data {
-                if let Some(pref) = elo_skill_judge_pref(catalog.skill_name(d.def)) {
-                    return Some(pref);
+            match &f.data {
+                crate::event::EventData::SkillInvocation(d) => {
+                    if let Some(pref) = elo_skill_judge_pref(catalog.skill_name(d.def)) {
+                        return Some(pref);
+                    }
                 }
+                crate::event::EventData::OrdinaryJudge { owner, invocation }
+                    if *invocation == u32::MAX =>
+                {
+                    if let Some(code) = core
+                        .vm_aux
+                        .flags
+                        .get(&(*owner, ORDINARY_JUDGE_ELO_PREF_FLAG.to_string()))
+                        .copied()
+                    {
+                        if let Some(pref) =
+                            SKILL_JUDGE_PREFS.iter().find(|(c, _)| *c == code).map(|(_, p)| *p)
+                        {
+                            return Some(pref);
+                        }
+                    }
+                }
+                _ => {}
             }
         }
     }
@@ -877,6 +940,7 @@ fn elo_is_choice_before_prompt(prompt: &str) -> bool {
             | "wudian_youdishenru_sha"
             | "yxs_fanji_sha"
             | "zhuhai_sha"
+            | "rexue_sha"
             | "choose_to_discard"
             | "discard_to_limit"
             | "discard_cards"

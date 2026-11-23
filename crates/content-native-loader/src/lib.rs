@@ -920,6 +920,7 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
         }
     }
     definition_ids.merge(generals_out.definition_ids)?;
+    host_skill_bindings::inject_post_general_companions(&mut host_skills);
     let pack = ExtensionPack {
         def: meta.def,
         generals: generals_out.generals,

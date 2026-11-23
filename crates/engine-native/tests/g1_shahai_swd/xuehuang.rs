@@ -25,6 +25,12 @@ fn swd_generals_b26_xuehuang_limited_virtual_firesha() {
     .unwrap();
     let pack = bridge(&json);
     let mut e = Engine::new_with_extensions(62009, 4, &[&pack]).expect("建局");
+    e.debug_set_identity_roles(vec![
+        engine_native::state::Role::Lord,
+        engine_native::state::Role::Rebel,
+        engine_native::state::Role::Rebel,
+        engine_native::state::Role::Loyalist,
+    ]);
     e.debug_grant(0, "xuehuang");
     advance_to_play(&mut e, 0);
     for p in 0..4 {

@@ -192,10 +192,7 @@ impl HostMachine {
                         .hand
                         .iter()
                         .copied()
-                        .filter(|c| {
-                            let kind = ctx.catalog.card_kind(*c);
-                            !kind.is_basic_kind() && !kind.is_equip()
-                        })
+                        .filter(|c| ctx.catalog.card_kind(*c).is_trick_kind())
                         .map(ChoiceOption::Card)
                         .collect();
                     if options.is_empty() {
@@ -302,7 +299,13 @@ impl HostMachine {
                     if ctx.core.player(self.owner).hand.contains(&card) {
                         ctx.discard_from_hand(self.owner, card);
                     }
-                    // 永久获取（附加技实例）
+                    // 永久获取（附加技实例；先清除此前天书附加技）
+                    if let Some(old_raw) = ctx.core.player_mut(self.owner).swdtianshu_granted.take() {
+                        let old_def = crate::ids::SkillDefId::from(old_raw);
+                        if old_def != def {
+                            ctx.core.skills.remove(&(self.owner, old_def));
+                        }
+                    }
                     if !ctx.core.skills.contains_key(&(self.owner, def)) {
                         ctx.insert_skill(
                             (self.owner, def),

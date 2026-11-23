@@ -857,3 +857,97 @@ pub fn push_host_skill_if_unseen(
         }
     }
 }
+
+/// Dedicated U05-7d (`swd/skill.js` 4132..8107) host behavior lookup used only by
+/// `shahai_attach` so frozen `decision34_pack9` coexistence locks remain untouched.
+pub(crate) fn lookup_u05_swd_7d_host_behavior(skill_name: &str) -> Option<HostBehavior> {
+    match skill_name {
+        "duijue" => Some(HostBehavior::SwdDuijue),
+        "duijue2" => Some(HostBehavior::SwdDuijueOut),
+        "duijue3" => Some(HostBehavior::SwdDuijueTrigger),
+        "tanlin" => Some(HostBehavior::SwdTanlin),
+        "tanlin2" => Some(HostBehavior::SwdTanlinTarget),
+        "tanlin3" => Some(HostBehavior::SwdTanlinOwner),
+        "tanlin4" => Some(HostBehavior::SwdTanlinRange),
+        "tanlin_defence" => Some(HostBehavior::SwdTanlinDefence),
+        "oldliaoyuan" => Some(HostBehavior::SwdOldLiaoyuan),
+        "oldliaoyuan2" => Some(HostBehavior::SwdOldLiaoyuan2),
+        "huanling2" => Some(HostBehavior::SwdHuanling2),
+        "lexue2" => Some(HostBehavior::SwdLexue2),
+        "swdtianshu_remove" => Some(HostBehavior::SwdTianshuRemove),
+        "yinguo2" => Some(HostBehavior::SwdYinguo2),
+        "susheng2" => Some(HostBehavior::SwdSusheng2),
+        "moyu" => Some(HostBehavior::SwdMoyu),
+        "guiyan2" => Some(HostBehavior::SwdGuiyan2),
+        "zhenjiu2" => Some(HostBehavior::SwdZhenjiu2),
+        "wangchen2"
+        | "wangchen3"
+        | "kunlunjing1"
+        | "kunlunjing2"
+        | "liaoyuan2"
+        | "liaoyuan3"
+        | "yishan2"
+        | "lexue1"
+        | "swdtianshu2"
+        | "swdtianshu3"
+        | "xiaomoyu2"
+        | "guxing1"
+        | "yueren2"
+        | "yinguo3"
+        | "mailun31"
+        | "mailun32"
+        | "mailun41"
+        | "mailun42"
+        | "mailun5"
+        | "mailun6"
+        | "mailun7"
+        | "mailun8" => Some(HostBehavior::SwdU05_7dSub),
+        _ => None,
+    }
+}
+
+pub(crate) fn push_companion_if_absent(
+    host_skills: &mut Vec<HostSkillDecl>,
+    sk_name: &str,
+    behavior: HostBehavior,
+) {
+    let interned = names::intern(sk_name.to_string());
+    if !host_skills.iter().any(|d| d.name == interned) {
+        host_skills.push(HostSkillDecl {
+            name: interned,
+            behavior,
+            presentation_binding: None,
+        });
+    }
+}
+
+pub(crate) fn inject_pre_general_companions(
+    host_skills: &mut Vec<HostSkillDecl>,
+    deferred: &[String],
+) {
+    if host_skills.iter().any(|d| d.name == "reguhuo") {
+        push_companion_if_absent(host_skills, "rechanyuan", HostBehavior::Rechanyuan);
+    }
+    if deferred.iter().any(|name| name == "shichangshi") {
+        for &(sk_name, behavior) in &[
+            ("k_danggu", HostBehavior::KDanggu),
+            ("k_mowang", HostBehavior::KMowang),
+        ] {
+            push_companion_if_absent(host_skills, sk_name, behavior);
+        }
+        for &sk_name in &crate::decision34_closure::L10_SCS_COMPANION_SKILLS {
+            push_companion_if_absent(host_skills, sk_name, HostBehavior::L10ScsCompanion);
+        }
+    }
+}
+
+pub(crate) fn inject_post_general_companions(host_skills: &mut Vec<HostSkillDecl>) {
+    for (trigger_beh, sub_name, sub_beh) in [
+        (HostBehavior::SwdYinguo, "yinguo2", HostBehavior::SwdYinguo2),
+        (HostBehavior::SwdSusheng, "susheng2", HostBehavior::SwdSusheng2),
+    ] {
+        if host_skills.iter().any(|d| d.behavior == trigger_beh) {
+            push_companion_if_absent(host_skills, sub_name, sub_beh);
+        }
+    }
+}

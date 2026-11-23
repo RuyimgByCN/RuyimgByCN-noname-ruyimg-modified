@@ -279,22 +279,38 @@ impl HostMachine {
                 super::l27_fixes::refresh_xiefang_mark(ctx.core, ctx.catalog, self.owner, ex);
                 Flow::Done
             }
-            // 疾风：多目标使用 → 按概率整牌取消（上游 `trigger.cancel()`）
+            // 疾风：多目标使用 → 按目标逐个概率取消（上游 `useCardToBefore` `trigger.cancel()`）
             HostBehavior::Jifeng => {
-                let n = match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data) {
-                    Some(EventData::CardUsed(u)) => u.targets.len() as u32,
+                let fid = ctx.current_event_frame_id();
+                let orig_targets = match ctx.res.frame(fid).map(|f| &f.data) {
+                    Some(EventData::CardUsed(u)) => u.targets.clone(),
                     _ => return Flow::Done,
                 };
-                // 上游：Math.random() > (1.3 + n/5)/n 时取消（即取消概率
-                // = 1 - (1.3 + n/5)/n）。原生以 gen_range(1000) 千分位判定。
+                let n = orig_targets.len() as u32;
+                if n <= 1 {
+                    return Flow::Done;
+                }
+                // 上游：Math.random() > (1.3 + n/5)/n 时取消该目标（即失误概率
+                // = 1 - (1.3 + n/5)/n）。原生以 gen_range(1000) 千分位逐目标判定。
                 let cancel_permille =
                     ((1000.0 * (1.0 - (1.3 + n as f64 / 5.0) / n as f64)).round()).max(0.0) as u32;
-                let roll = ctx.core.rng.gen_range(1000);
-                if roll < cancel_permille {
-                    ctx.current_card_use_mut().cancelled = true;
-                    ctx.log(LogEvent::SkillTriggered {
-                        skill: "疾风·失误",
-                        owner: self.owner, presentation: None });
+                let mut kept = Vec::with_capacity(orig_targets.len());
+                for t in orig_targets {
+                    if ctx.core.rng.gen_range(1000) < cancel_permille {
+                        ctx.log(LogEvent::SkillTriggered {
+                            skill: "疾风·失误",
+                            owner: self.owner,
+                            presentation: None,
+                        });
+                    } else {
+                        kept.push(t);
+                    }
+                }
+                let u = ctx.current_card_use_mut();
+                if kept.is_empty() {
+                    u.cancelled = true;
+                } else {
+                    u.targets = kept;
                 }
                 Flow::Done
             }

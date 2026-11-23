@@ -471,20 +471,20 @@ pub(super) fn validate_tail_ext_targets(
                 return Err(RejectReason::IllegalTargets);
             }
         }
-        CardKind::Shihuifen => {
-            if targets.len() != 1
-                || targets[0] == core.turn.current
-                || !core.player(targets[0]).alive
-            {
-                return Err(RejectReason::IllegalTargets);
-            }
-        }
-        CardKind::Liufengsan => {
-            if targets.len() != 1 || !core.player(targets[0]).alive {
-                return Err(RejectReason::IllegalTargets);
-            }
-        }
-        CardKind::Shatang | CardKind::Liutouge => {
+        CardKind::Shihuifen
+        | CardKind::Liufengsan
+        | CardKind::Shatang
+        | CardKind::Zhiliaobo
+        | CardKind::Liuxinghuoyu
+        | CardKind::Fudichouxin
+        | CardKind::Chenhuodajie
+        | CardKind::Zhaomingdan
+        | CardKind::Caochuanjiejian
+        | CardKind::Linghunzhihuo
+        | CardKind::WangmeiZhike
+        | CardKind::Toulianghuanzhu
+        | CardKind::Shujinsan => validate_jifeng_trick_targets(core, catalog, kind, targets)?,
+        CardKind::Liutouge => {
             if targets.len() != 1 || !core.player(targets[0]).alive {
                 return Err(RejectReason::IllegalTargets);
             }
@@ -515,14 +515,6 @@ pub(super) fn validate_tail_ext_targets(
                 return Err(RejectReason::IllegalTargets);
             }
         }
-        CardKind::Zhiliaobo => {
-            if targets.len() != 1
-                || !core.player(targets[0]).alive
-                || core.player(targets[0]).hp >= core.player(targets[0]).max_hp as i32
-            {
-                return Err(RejectReason::IllegalTargets);
-            }
-        }
         CardKind::Yuansuhuimie => {
             if !targets.is_empty() {
                 return Err(RejectReason::IllegalTargets);
@@ -549,7 +541,6 @@ pub(super) fn validate_tail_ext_targets(
         | CardKind::Wenyi
         | CardKind::Zhihuanjun
         | CardKind::Baoxueyaoshui
-        | CardKind::Liuxinghuoyu
         | CardKind::Qinpendayu
         | CardKind::Birinongwu
         | CardKind::Ciguhanshuang => {
@@ -622,62 +613,6 @@ pub(super) fn validate_tail_ext_targets(
                 }
             }
         }
-        CardKind::Fudichouxin => {
-            if targets.len() != 1 {
-                return Err(RejectReason::IllegalTargets);
-            }
-            let target = targets[0];
-            if target == core.turn.current
-                || !core.player(target).alive
-                || core.player(target).hand.is_empty()
-                || core.player(core.turn.current).hand.is_empty()
-            {
-                return Err(RejectReason::IllegalTargets);
-            }
-        }
-        CardKind::Chenhuodajie => {
-            if targets.len() != 1 {
-                return Err(RejectReason::IllegalTargets);
-            }
-            let target = targets[0];
-            if target == core.turn.current
-                || !core.player(target).alive
-                || (core.player(target).hand.is_empty()
-                    && core.player(target).equips.is_empty())
-            {
-                return Err(RejectReason::IllegalTargets);
-            }
-        }
-        CardKind::Zhaomingdan => {
-            if targets.len() != 1 {
-                return Err(RejectReason::IllegalTargets);
-            }
-            let target = targets[0];
-            let tp = core.player(target);
-            if target == core.turn.current
-                || !tp.alive
-                || (tp.hand.is_empty() && tp.equips.is_empty() && tp.judge.is_empty())
-            {
-                return Err(RejectReason::IllegalTargets);
-            }
-        }
-        CardKind::Caochuanjiejian => {
-            if targets.len() != 1 {
-                return Err(RejectReason::IllegalTargets);
-            }
-            let target = targets[0];
-            if target == core.turn.current
-                || !core.player(target).alive
-                || core.player(target).hand.is_empty()
-            {
-                return Err(RejectReason::IllegalTargets);
-            }
-        }
-        CardKind::Linghunzhihuo | CardKind::WangmeiZhike => {
-            if targets.len() != 1 || !core.player(targets[0]).alive {
-                return Err(RejectReason::IllegalTargets);
-            }
-        }
         CardKind::Jihuocard | CardKind::Shezhanqunru => {
             if !targets.is_empty() {
                 return Err(RejectReason::IllegalTargets);
@@ -695,27 +630,6 @@ pub(super) fn validate_tail_ext_targets(
                 {
                     return Err(RejectReason::IllegalTargets);
                 }
-            }
-        }
-        CardKind::Toulianghuanzhu => {
-            if targets.len() != 1 {
-                return Err(RejectReason::IllegalTargets);
-            }
-            let target = targets[0];
-            if target == core.turn.current
-                || !core.player(target).alive
-                || core.player(target).hand.is_empty()
-            {
-                return Err(RejectReason::IllegalTargets);
-            }
-        }
-        CardKind::Shujinsan => {
-            if targets.len() != 1
-                || !core.player(targets[0]).alive
-                || (core.player(targets[0]).hand.is_empty()
-                    && core.player(targets[0]).equips.is_empty())
-            {
-                return Err(RejectReason::IllegalTargets);
             }
         }
         CardKind::Mianlijinzhen => {
@@ -801,6 +715,68 @@ pub(super) fn validate_jiu_or_tianxianjiu(
     Ok(())
 }
 
+/// 校验 `[1, 1]` 牌的目标数（疾风持技可任意多目标且不可重复）。
+pub(super) fn check_single_or_jifeng_targets(
+    core: &GameStateCore,
+    catalog: &SharedCatalog,
+    targets: &[PlayerId],
+) -> Result<(), RejectReason> {
+    let has_jifeng = catalog
+        .skill_by_name(crate::content::host::SWD_JIFENG_KEY)
+        .is_some_and(|def| core.has_skill(core.turn.current, def));
+    if targets.is_empty() || (!has_jifeng && targets.len() != 1) {
+        return Err(RejectReason::IllegalTargets);
+    }
+    let mut seen = std::collections::BTreeSet::new();
+    for &t in targets {
+        if !seen.insert(t) {
+            return Err(RejectReason::IllegalTargets);
+        }
+    }
+    Ok(())
+}
+
+/// 杀海/云筹/炉石/古剑 `[1, 1]` 普通锦囊统一逐目标校验（兼容疾风多目标）。
+pub(super) fn validate_jifeng_trick_targets(
+    core: &GameStateCore,
+    catalog: &SharedCatalog,
+    kind: CardKind,
+    targets: &[PlayerId],
+) -> Result<(), RejectReason> {
+    check_single_or_jifeng_targets(core, catalog, targets)?;
+    let cur = core.turn.current;
+    for &t in targets {
+        let tp = core.player(t);
+        if !tp.alive {
+            return Err(RejectReason::IllegalTargets);
+        }
+        let ok = match kind {
+            CardKind::Fudichouxin | CardKind::Toulianghuanzhu => {
+                t != cur && !tp.hand.is_empty() && !core.player(cur).hand.is_empty()
+            }
+            CardKind::Chenhuodajie => t != cur && (!tp.hand.is_empty() || !tp.equips.is_empty()),
+            CardKind::Zhaomingdan => {
+                t != cur && (!tp.hand.is_empty() || !tp.equips.is_empty() || !tp.judge.is_empty())
+            }
+            CardKind::Caochuanjiejian => t != cur && !tp.hand.is_empty(),
+            CardKind::Shujinsan => !tp.hand.is_empty() || !tp.equips.is_empty(),
+            CardKind::Zhiliaobo => tp.hp < tp.max_hp as i32,
+            CardKind::Shihuifen | CardKind::Zhufangshenshi => t != cur,
+            CardKind::Liufengsan
+            | CardKind::Shatang
+            | CardKind::Linghunzhihuo
+            | CardKind::WangmeiZhike
+            | CardKind::Guisheqi
+            | CardKind::Liuxinghuoyu => true,
+            _ => true,
+        };
+        if !ok {
+            return Err(RejectReason::IllegalTargets);
+        }
+    }
+    Ok(())
+}
+
 /// Recast (`chongzhu: true`) `txhj_zhijizhibi` / `txhj_shengdong` when played with 0 targets.
 pub(super) fn try_recast_l11_trick(
     state: &mut GameState,
@@ -848,7 +824,7 @@ pub(super) fn try_recast_l11_trick(
     Ok(true)
 }
 
-/// 生成常规出牌 `CardUsed` 结算帧（含 view-as 转化与还侠跟踪）。
+/// 生成常规出牌 `CardUsed` 结算帧（含 view-as 转化、火扑次数耗尽与还侠跟踪）。
 pub(super) fn push_play_card_frame(
     state: &mut GameState,
     catalog: &SharedCatalog,
@@ -865,6 +841,15 @@ pub(super) fn push_play_card_frame(
     } else {
         None
     };
+    if use_as == Some(CardKind::Liuxinghuoyu)
+        && kind != catalog.resolved_card_kind(&state.core, card)
+    {
+        if let Some(hdef) = catalog.skill_by_name("huopu") {
+            if let Some(inst) = state.core.skills.get_mut(&(player, hdef)) {
+                inst.once_used = true;
+            }
+        }
+    }
     // 还侠跟踪（swd 屈娴，批 27）：还侠转化的杀入跟踪列（是否造
     // 成伤害由 commit_damage 置位；阶段末回收未造成伤害者）
     if use_as == Some(CardKind::Sha)

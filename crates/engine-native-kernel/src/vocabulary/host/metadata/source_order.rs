@@ -572,6 +572,14 @@ impl HostBehavior {
             Self::L01AttitudeTracker => (Timing::Normal, -50, false),
             // 杀海拾遗/card/gwent/skill.js & character/gwent/skill.js
             Self::U05GwentCardSkill => (Timing::Normal, 0, false),
+            // U05-7d 杀海拾遗 swd 补充（tag 1370..=1386）
+            Self::SwdDuijueOut => (Timing::Normal, 0, false),
+            Self::SwdDuijueTrigger => (Timing::Normal, -50, false),
+            Self::SwdTanlinTarget | Self::SwdTanlinOwner => (Timing::Normal, 0, false),
+            Self::SwdTanlinDefence => (Timing::Normal, 0, true),
+            Self::SwdHuanling2 | Self::SwdLexue2 => (Timing::Normal, 0, false),
+            Self::SwdTianshuRemove => (Timing::Normal, 1, false),
+            Self::SwdMoyu => (Timing::Normal, 0, true),
             _ => return None,
         })
     }

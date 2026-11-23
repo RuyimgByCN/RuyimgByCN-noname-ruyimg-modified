@@ -1034,14 +1034,14 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
-            // 热血（A2 审计 H42）：上游 trigger {global:'phaseBegin'}＝
-            // 他人回合开始，每回合一次（原锚任意阶段开始＝每回合 5→6 次）。
+            // 热血（A2 审计 H42 + Round 2）：上游 trigger {global:'phaseBegin'}＝
+            // 他人回合开始，每回合一次，可选询问使用杀并在使用时摸 1。
             HostBehavior::SwdRexue => Some(TriggerMeta {
                 event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
-                optional: false,
+                optional: true,
                 extra_events: Vec::new(),
             }),
             // 幻音：他人对你使用牌（上游 useCardToBefore target，priority 5.9）

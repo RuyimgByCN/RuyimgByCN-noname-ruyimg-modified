@@ -73,9 +73,13 @@ class ArmTests(unittest.TestCase):
         cls.rows = cls.mod.arms()
 
     def test_damage_arms_are_enumerated(self):
-        # Batch 1.5 已将 MbcmJiushi 从旧 EventData::Damage 迁至 DamageBegin3 + DamageEnd（upstream mobile.js:17251）。
-        self.assertEqual(len(self.rows), 88)
-        self.assertNotIn(("MbcmJiushi", "Damage"), [(row[0], row[1]) for row in self.rows])
+        # Batch 1.5 已将 MbcmJiushi 从旧 EventData::Damage 迁至 DamageBegin3 + DamageEnd；
+        # Batch U05-7d 在 filtering/swd_u05_7d.rs 新增 SwdTanlinDefence 与 SwdHuanling2 共 2 条（88 -> 90）。
+        self.assertEqual(len(self.rows), 90)
+        pairs = [(row[0], row[1]) for row in self.rows]
+        self.assertNotIn(("MbcmJiushi", "Damage"), pairs)
+        self.assertIn(("SwdTanlinDefence", "Damage"), pairs)
+        self.assertIn(("SwdHuanling2", "Damage"), pairs)
 
     def test_every_row_has_behavior_and_kind(self):
         for behavior, which, *_ in self.rows:

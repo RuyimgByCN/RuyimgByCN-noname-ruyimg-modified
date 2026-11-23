@@ -150,9 +150,12 @@ pub(super) fn start_queued_trigger(
     });
 }
 
-pub(super) fn finish_slot(res: &mut Resolution, slot: Slot) {
+pub(super) fn finish_slot(core: &mut GameStateCore, res: &mut Resolution, slot: Slot) {
     if let Slot::Intrinsic { frame } = slot {
         if frame == NO_FRAME {
+            return;
+        }
+        if super::pop_cleanup::advance_jifeng_slot(core, res, frame) {
             return;
         }
         if let Some(f) = res.frame_mut(frame) {

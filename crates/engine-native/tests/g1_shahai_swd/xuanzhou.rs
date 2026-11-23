@@ -78,12 +78,24 @@ fn swd_deferred_b97_xuanzhou_yinguo() {
             selection: vec![ChoiceOption::Player(1)],
         },
     );
+    let c = e.open_choice().expect("玄咒延时牌种窗");
+    assert_eq!(c.spec.prompt, "xuanzhou_delay_kind");
+    let (cid, obs) = (c.id, c.observer);
+    submit(
+        &mut e,
+        obs,
+        GameAction::Answer {
+            choice_id: cid,
+            selection: vec![ChoiceOption::Tag(2)],
+        },
+    );
     settle_optional_confirm(&mut e);
     let judge = e.state_core().player(1).judge.clone();
     assert_eq!(judge.len(), 1, "玄咒：p1 判定区 +1 延时");
-    assert!(
-        e.catalog().card_kind(judge[0]) == engine_native::catalog::CardKind::Le,
-        "玄咒：确定性 kind=乐（p1 手牌>1）"
+    assert_eq!(
+        e.state_core().declared_kinds.get(&judge[0]).copied(),
+        Some(engine_native::catalog::CardKind::Le),
+        "玄咒：自选 declared_kind=乐"
     );
     assert!(!e.debug_hand(0).contains(&trick_c), "玄咒：素材锦囊已置出");
     // 反例：每回合限一次
@@ -160,9 +172,14 @@ fn swd_deferred_b97_xuanzhou_yinguo() {
     assert_eq!(e.debug_hp(1), 3, "因果：对调后原来源 p1 受伤（4→3）");
     assert_eq!(e.debug_hp(2), 4, "因果：原目标 p2 无伤");
     let yg_def = e.catalog().skill_by_name("yinguo").expect("因果在目录");
+    let yg2_def = e.catalog().skill_by_name("yinguo2").expect("因果2在目录");
     assert!(
-        !e.state_core().skills.contains_key(&(3, yg_def)),
-        "因果：unique 实例已移除"
+        e.state_core().skills.contains_key(&(3, yg_def)),
+        "因果：unique: true 原技保留"
+    );
+    assert!(
+        !e.state_core().skills.contains_key(&(3, yg2_def)),
+        "因果：伤害帧弹栈后 yinguo2 已清理"
     );
     let _ = cost3;
 }

@@ -1899,4 +1899,38 @@ pub enum HostBehavior {
     SwdXuanyingUse,
     /// U05 杀海拾遗 swd 破舟封印状态面（tag 1345，`swd/skill.js:3463`）：破舟2付与，目标下一回合结束（`TurnPhaseAfter`）解封并移除自身。
     SwdPozhouSealed,
+    /// U05 杀海拾遗 swd：对决（tag 1370，`duijue` 出牌限一次限定技）。
+    SwdDuijue,
+    /// U05 杀海拾遗 swd：对决出局标记（tag 1371，`duijue2`）。
+    SwdDuijueOut,
+    /// U05 杀海拾遗 swd：对决启动器（tag 1372，`duijue3` `phaseAfter`）。
+    SwdDuijueTrigger,
+    /// U05 杀海拾遗 swd：探林（tag 1373，`tanlin` 拼点技）。
+    SwdTanlin,
+    /// U05 杀海拾遗 swd：探林目标临时标记（tag 1374，`tanlin2`）。
+    SwdTanlinTarget,
+    /// U05 杀海拾遗 swd：探林己方加杀次标记（tag 1375，`tanlin3`）。
+    SwdTanlinOwner,
+    /// U05 杀海拾遗 swd：探林无视距离子技（tag 1376，`tanlin4`）。
+    SwdTanlinRange,
+    /// U05 杀海拾遗 swd：探林反制（tag 1377，`tanlin_defence`）。
+    SwdTanlinDefence,
+    /// U05 杀海拾遗 swd：旧燎原（tag 1378，`oldliaoyuan`）。
+    SwdOldLiaoyuan,
+    /// U05 杀海拾遗 swd：旧燎原·双杀（tag 1379，`oldliaoyuan2`）。
+    SwdOldLiaoyuan2,
+    /// U05 杀海拾遗 swd：幻灵减伤面（tag 1380，`huanling2`）。
+    SwdHuanling2,
+    /// U05 杀海拾遗 swd：乐学回合结束切换面（tag 1381，`lexue2`）。
+    SwdLexue2,
+    /// U05 杀海拾遗 swd：天书目标阵亡回收面（tag 1382，`swdtianshu_remove`）。
+    SwdTianshuRemove,
+    /// U05 杀海拾遗 swd：因果单次防重入临时标记（tag 1383，`yinguo2`）。
+    SwdYinguo2,
+    /// U05 杀海拾遗 swd：苏生当回合临时禁用标记（tag 1384，`susheng2`）。
+    SwdSusheng2,
+    /// U05 杀海拾遗 swd：魔语（tag 1385，`moyu`）。
+    SwdMoyu,
+    /// U05 杀海拾遗 swd：U05-7d 伴生子技/目录锚（tag 1386）。
+    SwdU05_7dSub,
 }

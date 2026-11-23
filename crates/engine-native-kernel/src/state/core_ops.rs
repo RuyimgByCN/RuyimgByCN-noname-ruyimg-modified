@@ -280,7 +280,7 @@ impl GameStateCore {
             .collect();
         let range = self.attack_range(catalog, player);
         let in_range = |t: PlayerId| self.computed_distance(catalog, player, t) <= range;
-        match kind {
+        let (min, mut max, pool) = match kind {
             K::Sha | K::FireSha | K::LeiSha => {
                 let v: Vec<PlayerId> = others
                     .iter()
@@ -539,7 +539,16 @@ impl GameStateCore {
                 (1, max, v)
             }
             _ => (0, 0, Vec::new()),
+        };
+        if (kind.is_sha_like() || kind.is_jifeng_single_target_trick())
+            && max == 1
+            && catalog
+                .skill_by_name(crate::vocabulary::host::SWD_JIFENG_KEY)
+                .is_some_and(|def| self.has_skill(player, def))
+        {
+            max = pool.len().max(1).min(u8::MAX as usize) as u8;
         }
+        (min, max, pool)
     }
 
     /// 关卡流程态可变访问（浴火置 loopType；非 Boss 返回 None）。
@@ -1070,7 +1079,7 @@ impl GameStateCore {
         allow_dead_endpoints: bool,
     ) -> u32 {
         use crate::catalog::CardKind;
-        if a != b && (catalog.has_diaohulishan(self, a) || catalog.has_diaohulishan(self, b)) {
+        if a != b && (catalog.has_undist(self, a) || catalog.has_undist(self, b)) {
             return 999;
         }
         if a == self.turn.current && self.turn.liangou_hook == Some(b) {

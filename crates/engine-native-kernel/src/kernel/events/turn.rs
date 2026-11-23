@@ -164,6 +164,10 @@ pub(in crate::kernel) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: Playe
             {
                 ctx.core.player_mut(seat).yinmi_active = false;
             }
+            ctx.core
+                .vm_aux
+                .flags
+                .retain(|(p, k), _| *p != seat || !k.starts_with("zhufangshenshi_extra:"));
         }
         if let Some(tdef) = ctx.catalog.skill_by_name("tianxianjiu") {
             let seats = ctx.core.players.len() as u8;
@@ -293,6 +297,16 @@ pub(in crate::kernel) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: Playe
                 origins: vec![crate::event::LostOrigin::Hand; lost_n],
             });
         }
+        // U05-7d 苏生临时禁标（`susheng2`，上游 `addTempSkill("susheng2")` 默认在整回合结束清理）。
+        if let Some(s2_def) = ctx
+            .catalog
+            .skill_by_behavior(crate::vocabulary::host::HostBehavior::SwdSusheng2)
+        {
+            let seats = ctx.core.players.len() as PlayerId;
+            for seat in 0..seats {
+                ctx.core.skills.remove(&(seat, s2_def));
+            }
+        }
         if ctx.core.turn.extra_phases.is_empty()
             && ctx.core.player(player).alive
             && (ctx.catalog.hooks.on_shanxian_turnover)(ctx, player)
@@ -302,7 +316,8 @@ pub(in crate::kernel) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: Playe
         // phaseAfter 段 Commit＝回合交接（K25：回合重置已在 handoff 内、
         // 先于 TurnBegin）。boss 重整 tick 在窗前已由 commit_turn_ended
         // 处理（与存活者选取耦合），此处不再重复。
-        turn_handoff(ctx, player, ctx.core.next_alive(player));
+        let next_seat = resolve_duijue_next_seat(ctx, player);
+        turn_handoff(ctx, player, next_seat);
     } else {
         ctx.log(LogEvent::TurnPhaseEnded { player });
         // K17：护天寄存取回——寄存主面（H54）在本窗 BeforeTriggers 刚授
@@ -377,6 +392,106 @@ pub(in crate::kernel) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: Playe
             player,
             after: true,
         });
+    }
+}
+
+fn clear_duijue_state(ctx: &mut Ctx<'_>) {
+    let d2_def = ctx
+        .catalog
+        .skill_by_behavior(crate::vocabulary::host::HostBehavior::SwdDuijueOut);
+    let seats = ctx.core.players.len() as PlayerId;
+    for seat in 0..seats {
+        if let Some(def) = d2_def {
+            ctx.core.skills.remove(&(seat, def));
+        }
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(seat, "duijue_out_active".to_string()));
+    }
+    for key in [
+        "duijue_loop_remaining",
+        "duijue_in_duel_turn",
+        "duijue_duelist_a",
+        "duijue_duelist_b",
+        "duijue_return_after",
+    ] {
+        ctx.core.vm_aux.flags.remove(&(0, key.to_string()));
+    }
+}
+
+fn resolve_duijue_next_seat(ctx: &mut Ctx<'_>, player: PlayerId) -> PlayerId {
+    let rem = ctx
+        .core
+        .vm_aux
+        .flags
+        .get(&(0, "duijue_loop_remaining".to_string()))
+        .copied()
+        .unwrap_or(0);
+    if rem == 0 {
+        return ctx.core.next_alive(player);
+    }
+    let da = ctx
+        .core
+        .vm_aux
+        .flags
+        .get(&(0, "duijue_duelist_a".to_string()))
+        .copied()
+        .and_then(|v| v.checked_sub(1))
+        .map(|v| v as PlayerId);
+    let db = ctx
+        .core
+        .vm_aux
+        .flags
+        .get(&(0, "duijue_duelist_b".to_string()))
+        .copied()
+        .and_then(|v| v.checked_sub(1))
+        .map(|v| v as PlayerId);
+    let ret_origin = ctx
+        .core
+        .vm_aux
+        .flags
+        .get(&(0, "duijue_return_after".to_string()))
+        .copied()
+        .and_then(|v| v.checked_sub(1))
+        .map(|v| v as PlayerId);
+    let (Some(da), Some(db)) = (da, db) else {
+        clear_duijue_state(ctx);
+        return ctx.core.next_alive(player);
+    };
+    let in_duel = ctx
+        .core
+        .vm_aux
+        .flags
+        .get(&(0, "duijue_in_duel_turn".to_string()))
+        .copied()
+        .unwrap_or(0)
+        != 0;
+    if !in_duel {
+        if !ctx.core.player(da).alive || !ctx.core.player(db).alive {
+            clear_duijue_state(ctx);
+            return ctx.core.next_alive(player);
+        }
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((0, "duijue_in_duel_turn".to_string()), 1);
+        return da;
+    }
+    let next_rem = rem.saturating_sub(1);
+    if next_rem == 0 || !ctx.core.player(da).alive || !ctx.core.player(db).alive {
+        let resume_from = ret_origin.unwrap_or(player);
+        clear_duijue_state(ctx);
+        return ctx.core.next_alive(resume_from);
+    }
+    ctx.core
+        .vm_aux
+        .flags
+        .insert((0, "duijue_loop_remaining".to_string()), next_rem);
+    if player == da {
+        db
+    } else {
+        da
     }
 }
 

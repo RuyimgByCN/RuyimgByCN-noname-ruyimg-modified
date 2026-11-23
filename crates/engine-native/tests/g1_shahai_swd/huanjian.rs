@@ -26,17 +26,17 @@ fn swd_generals_b70_huanjian_weida_xuying() {
         e.debug_clear_hand(p);
     }
 
-    // ① 幻剑（妮可）：黑色牌当冰魄针（古剑机关——目标+邻座各弃首张）
+    // ① 幻剑（妮可）：黑色牌（he）当冰魄通（gujian/card.js:bingpotong——双方各展 1 手牌，同色弃己展失 1 体力）
     e.debug_grant(0, "huanjian");
     let bc = {
         let b = (0..e.catalog().cards.len() as u32)
             .find(|c| {
                 matches!(
                     e.catalog().cards[*c as usize].suit,
-                    engine_native::catalog::Suit::Spade
-                ) && e.catalog().card_kind(*c) == engine_native::catalog::CardKind::Snatch
+                    engine_native::catalog::Suit::Spade | engine_native::catalog::Suit::Club
+                ) && e.catalog().card_kind(*c) == engine_native::catalog::CardKind::Dismantle
             })
-            .expect("黑顺手牵羊在目录");
+            .expect("黑色过河拆桥在目录");
         let core = e.state_core_mut();
         core.deck.retain(|x| *x != b);
         core.discard.retain(|x| *x != b);
@@ -47,7 +47,50 @@ fn swd_generals_b70_huanjian_weida_xuying() {
         core.players[0].hand.push(b);
         b
     };
-    let d1 = e.debug_place(1, "tao");
+    let show0 = {
+        let s = (0..e.catalog().cards.len() as u32)
+            .find(|c| {
+                *c != bc
+                    && matches!(
+                        e.catalog().cards[*c as usize].suit,
+                        engine_native::catalog::Suit::Club
+                    )
+                    && e.catalog().card_kind(*c) == engine_native::catalog::CardKind::Sha
+            })
+            .expect("梅花杀在目录");
+        let core = e.state_core_mut();
+        core.deck.retain(|x| *x != s);
+        core.discard.retain(|x| *x != s);
+        core.table.retain(|x| *x != s);
+        for pl in core.players.iter_mut() {
+            pl.hand.retain(|x| *x != s);
+        }
+        core.players[0].hand.push(s);
+        s
+    };
+    let show1 = {
+        let s = (0..e.catalog().cards.len() as u32)
+            .find(|c| {
+                *c != bc
+                    && *c != show0
+                    && matches!(
+                        e.catalog().cards[*c as usize].suit,
+                        engine_native::catalog::Suit::Spade
+                    )
+                    && e.catalog().card_kind(*c) == engine_native::catalog::CardKind::Sha
+            })
+            .expect("p1 黑桃杀在目录");
+        let core = e.state_core_mut();
+        core.deck.retain(|x| *x != s);
+        core.discard.retain(|x| *x != s);
+        core.table.retain(|x| *x != s);
+        for pl in core.players.iter_mut() {
+            pl.hand.retain(|x| *x != s);
+        }
+        core.players[1].hand.push(s);
+        s
+    };
+    e.debug_set_hp(1, 4);
     submit(
         &mut e,
         0,
@@ -56,11 +99,24 @@ fn swd_generals_b70_huanjian_weida_xuying() {
             targets: vec![1],
         },
     );
-    settle_optional_confirm(&mut e);
-    assert!(
-        !e.debug_hand(1).contains(&d1),
-        "幻剑：冰魄针路由（p1 被弃牌）"
-    );
+    while let Some(c) = e.open_choice().cloned() {
+        let sel = match c.spec.prompt {
+            "bingpotong_show_own" => vec![ChoiceOption::Card(show0)],
+            "bingpotong_show_target" => vec![ChoiceOption::Card(show1)],
+            _ if c.spec.options.contains(&ChoiceOption::Confirm) => vec![ChoiceOption::Confirm],
+            _ => c.spec.options.iter().take(1).copied().collect(),
+        };
+        submit(
+            &mut e,
+            c.observer,
+            GameAction::Answer {
+                choice_id: c.id,
+                selection: sel,
+            },
+        );
+    }
+    assert_eq!(e.debug_hp(1), 3, "幻剑：冰魄通同色 p1 失去 1 点体力（4→3）");
+    assert!(!e.debug_hand(0).contains(&show0), "幻剑：冰魄通同色 p0 弃展示牌");
 
     // ② 渔人 def 复用（韦达）：喀玛同技同 mapping——韦达持技生效
     e.debug_grant(0, "yueren");

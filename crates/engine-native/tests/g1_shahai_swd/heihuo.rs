@@ -237,7 +237,7 @@ fn swd_deferred_b92_heihuo_fzhenwei_dunxing() {
     assert_eq!(e.debug_hp(1), 4, "遁行：非红桃判定 → 杀被取消（无伤）");
     assert!(!e.debug_hand(1).contains(&cost1), "遁行：代价牌已弃");
     assert!(
-        e.debug_hand(0).contains(&sha2),
-        "遁行：被取消的杀归还使用者手牌"
+        !e.debug_hand(0).contains(&sha2) && e.state_core().discard.contains(&sha2),
+        "遁行：被取消的杀进入弃牌堆，不回使用者手牌"
     );
 }

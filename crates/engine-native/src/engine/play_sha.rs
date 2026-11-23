@@ -54,6 +54,7 @@ pub(super) fn play_sha(
     let mut mark_lingshi = false;
     let mut mark_dcdichou_eff = false;
     let mut mark_vm_sha_extra = false;
+    let mut mark_tanlin3 = false;
     let player_id = core.turn.current;
     let sha_nature = match kind {
         CardKind::FireSha => crate::event::DamageNature::Fire,
@@ -178,7 +179,7 @@ pub(super) fn play_sha(
         .map(|def| core.has_skill(core.turn.current, def))
         .unwrap_or(false)
         && matches!(
-            catalog.resolved_card_suit(core, card),
+            catalog.effective_card_suit(core, player_id, card),
             crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
         );
     let vm_va_sha = if kind != catalog.resolved_card_kind(core, card)
@@ -190,12 +191,13 @@ pub(super) fn play_sha(
     } else {
         None
     };
+    let eff_suit = catalog.effective_card_suit(core, player_id, card);
     let is_black = matches!(
-        catalog.resolved_card_suit(core, card),
+        eff_suit,
         crate::catalog::Suit::Spade | crate::catalog::Suit::Club
     );
     let is_red = matches!(
-        catalog.resolved_card_suit(core, card),
+        eff_suit,
         crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
     );
     let vm_va_no_count = vm_va_sha
@@ -315,7 +317,21 @@ pub(super) fn play_sha(
                     .copied()
                     .unwrap_or(0);
                 let vm_sha_extra = vm_sha_limit > 1 + vm_sha_extra_used;
-                if !lingshi_extra && !sbzhaxiang_extra && !dcdichou_eff_extra && !vm_sha_extra {
+                let tanlin3_extra = catalog
+                    .skill_by_behavior(crate::content::host::HostBehavior::SwdTanlinOwner)
+                    .map(|def| {
+                        core.skills
+                            .get(&(core.turn.current, def))
+                            .map(|i| i.enabled && !i.once_used)
+                            .unwrap_or(false)
+                    })
+                    .unwrap_or(false);
+                if !lingshi_extra
+                    && !sbzhaxiang_extra
+                    && !dcdichou_eff_extra
+                    && !vm_sha_extra
+                    && !tanlin3_extra
+                {
                     return Err(RejectReason::ShaLimit);
                 }
                 if lingshi_extra {
@@ -324,6 +340,8 @@ pub(super) fn play_sha(
                     mark_dcdichou_eff = true;
                 } else if !sbzhaxiang_extra && vm_sha_extra {
                     mark_vm_sha_extra = true;
+                } else if !sbzhaxiang_extra && tanlin3_extra {
+                    mark_tanlin3 = true;
                 }
             } else {
                 mark_huihuo = true;
@@ -595,7 +613,14 @@ pub(super) fn play_sha(
                 sha_nature,
             )
     };
-    let zfs_free = core.turn.zhufangshenshi_target == Some(target);
+    let zfs_free = core.turn.zhufangshenshi_target == Some(target)
+        || core
+            .vm_aux
+            .flags
+            .get(&(player_id, format!("zhufangshenshi_extra:{target}")))
+            .copied()
+            .unwrap_or(0)
+            > 0;
     // 逐月（U05 xianjian 云天河，规则 v161）：杀向逐月目标
     // 无距离限制（上游 mod targetInRange 同口径）
     let zhuyue_free = core.turn.zhuyue_targets.contains(&target);
@@ -698,6 +723,15 @@ pub(super) fn play_sha(
     }
     if mark_lingshi {
         if let Some(def) = catalog.skill_by_name("lingshi") {
+            if let Some(inst) = state.core.skills.get_mut(&(player_id, def)) {
+                inst.once_used = true;
+            }
+        }
+    }
+    if mark_tanlin3 {
+        if let Some(def) =
+            catalog.skill_by_behavior(crate::content::host::HostBehavior::SwdTanlinOwner)
+        {
             if let Some(inst) = state.core.skills.get_mut(&(player_id, def)) {
                 inst.once_used = true;
             }

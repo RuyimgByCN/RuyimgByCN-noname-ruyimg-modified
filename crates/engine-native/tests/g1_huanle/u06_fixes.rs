@@ -1239,16 +1239,13 @@ fn u06_xuelunyang_ignores_expired_temp_skills_and_preserves_awakened_skill() {
             e.debug_remove_general(p);
             e.debug_clear_hand(p);
         }
-        advance_to_play(&mut e, 0);
-        e.debug_clear_hand(0);
-        let xly = e.debug_place(0, "hnl_xuelunyang_4");
-        assert!(matches!(
-            submit(&mut e, 0, GameAction::PlayCard { card: xly, targets: vec![] }),
-            CommandOutcome::Accepted { .. }
-        ));
-        e.debug_grant(1, "lexue");
+        advance_to_play(&mut e, 1);
+        for p in 0..3 {
+            e.debug_clear_hand(p);
+        }
+        e.debug_grant(1, "奸雄");
+        e.debug_grant(2, "制衡");
         let zhiheng = e.catalog().skill_by_name("制衡").unwrap();
-        let jizhi = e.catalog().skill_by_name("集智").unwrap();
         let base_skills_count = e
             .save()
             .core
@@ -1256,25 +1253,72 @@ fn u06_xuelunyang_ignores_expired_temp_skills_and_preserves_awakened_skill() {
             .range((1, 0)..(1, u16::MAX))
             .filter(|((_, d), _)| !e.catalog().is_charlotte_skill(*d))
             .count();
-        // 推进至 1 号出牌（lexue 于 TurnBegin 授予制衡/集智至回合末），再走过 1 号回合末使之过期，直到停在 2 号出牌
-        advance_to_play(&mut e, 1);
-        assert!(
-            e.debug_has_skill(1, "制衡") || e.debug_has_skill(1, "集智"),
-            "1 号回合内 lexue 应临时授予制衡或集智"
-        );
-        for p in 0..3 {
-            e.debug_clear_hand(p);
-        }
+        let xly1 = e.debug_place(1, "hnl_xuelunyang_4");
+        assert!(matches!(
+            submit(&mut e, 1, GameAction::PlayCard { card: xly1, targets: vec![] }),
+            CommandOutcome::Accepted { .. }
+        ));
+        // 推进至下一轮 1 号 TurnBegin，让 1 号用写轮眼窃取 2 号的「制衡」(expires_end_of_turn=true)
         advance_to_play(&mut e, 2);
         for p in 0..3 {
             e.debug_clear_hand(p);
         }
-        // 推进 2 号各阶段直到轮转至 0 号 TurnBegin 触发写轮眼询问
         for _ in 0..8 {
             if let Some(c) = e.open_choice() {
-                if c.spec.prompt == "huanle_xuelunyang_target" {
+                if c.spec.prompt == "huanle_xuelunyang_target" && c.observer == 1 {
                     break;
                 }
+            }
+            let cur = e.turn().current;
+            e.debug_clear_hand(cur);
+            submit(&mut e, cur, GameAction::NextPhase);
+        }
+        let p1_tgt = e.open_choice().expect("p1 huanle_xuelunyang_target").clone();
+        assert_eq!(p1_tgt.observer, 1);
+        submit(
+            &mut e,
+            1,
+            GameAction::Answer {
+                choice_id: p1_tgt.id,
+                selection: vec![ChoiceOption::Player(2)],
+            },
+        );
+        let p1_sk = e.open_choice().expect("p1 huanle_xuelunyang_skill").clone();
+        submit(
+            &mut e,
+            1,
+            GameAction::Answer {
+                choice_id: p1_sk.id,
+                selection: vec![ChoiceOption::Tag(0)],
+            },
+        );
+        assert!(
+            e.debug_has_skill(1, "制衡"),
+            "1 号 TurnBegin 应经写轮眼临时获得「制衡」"
+        );
+        for p in 0..3 {
+            e.debug_clear_hand(p);
+        }
+        // 推进至 0 号出牌（已走完 1 号回合末，制衡已过期）；0 号顺手牵羊取走写轮眼并装备
+        advance_to_play(&mut e, 0);
+        for p in 0..3 {
+            e.debug_clear_hand(p);
+        }
+        let snatch = e.debug_place(0, "snatch");
+        submit(&mut e, 0, GameAction::PlayCard { card: snatch, targets: vec![1] });
+        if let Some(nw) = e.open_choice().filter(|c| c.spec.prompt == "nullify_window").cloned() {
+            submit(&mut e, nw.observer, GameAction::Answer { choice_id: nw.id, selection: vec![ChoiceOption::Pass] });
+        }
+        assert!(e.debug_hand(0).contains(&xly1), "0 号顺手牵羊应取回 1 号写轮眼");
+        submit(&mut e, 0, GameAction::PlayCard { card: xly1, targets: vec![] });
+        // 推进 0->1->2 直到下轮 0 号 TurnBegin 触发写轮眼询问（1 号若再进自己 TurnBegin 则取消偷取）
+        for _ in 0..24 {
+            if let Some(c) = e.open_choice().cloned() {
+                if c.spec.prompt == "huanle_xuelunyang_target" && c.observer == 0 {
+                    break;
+                }
+                submit(&mut e, c.observer, GameAction::Answer { choice_id: c.id, selection: Vec::new() });
+                continue;
             }
             let cur = e.turn().current;
             e.debug_clear_hand(cur);
@@ -1294,9 +1338,8 @@ fn u06_xuelunyang_ignores_expired_temp_skills_and_preserves_awakened_skill() {
         let sk_ask = e.open_choice().expect("huanle_xuelunyang_skill").clone();
         assert_eq!(sk_ask.spec.prompt, "huanle_xuelunyang_skill");
         assert!(
-            !e.save().core.skills.contains_key(&(1, zhiheng))
-                && !e.save().core.skills.contains_key(&(1, jizhi)),
-            "1 号已过期的回合末临时技（制衡/集智）不得保留于 core.skills"
+            !e.save().core.skills.contains_key(&(1, zhiheng)),
+            "1 号已过期的回合末临时技（制衡）不得保留于 core.skills"
         );
         assert_eq!(
             sk_ask.spec.options.len(),

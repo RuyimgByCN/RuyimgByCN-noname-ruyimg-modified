@@ -252,6 +252,38 @@ pub fn intrinsic_machine(
             if effective_kind.is_sha_like() {
                 return sha_intrinsic(ctx, &u);
             }
+            let is_txhj_jiedao = effective_kind == CardKind::Duel
+                && u.card.is_some_and(|c| {
+                    ctx.catalog
+                        .cards
+                        .get(c as usize)
+                        .is_some_and(|cd| cd.name == "txhj_jiedao")
+                });
+            if effective_kind.is_jifeng_single_target_trick()
+                && effective_kind != CardKind::Zhufangshenshi
+                && !is_txhj_jiedao
+                && u.targets.len() > 1
+            {
+                let tail: Vec<PlayerId> = u.targets[1..].to_vec();
+                ctx.core.vm_aux.flags.insert(
+                    (u.player, format!("jifeng_more_len:{frame_id}")),
+                    tail.len() as u32,
+                );
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((u.player, format!("jifeng_more_idx:{frame_id}")), 0);
+                for (i, p) in tail.into_iter().enumerate() {
+                    ctx.core.vm_aux.flags.insert(
+                        (u.player, format!("jifeng_more:{frame_id}:{i}")),
+                        u32::from(p),
+                    );
+                }
+                u.targets.truncate(1);
+                if let Some(fr) = ctx.res.frame_mut(frame_id) {
+                    fr.card_use_mut().targets.truncate(1);
+                }
+            }
             let Some(card) = u.card else {
                 if matches!(
                     effective_kind,

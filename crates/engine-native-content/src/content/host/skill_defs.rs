@@ -311,6 +311,12 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         | HostBehavior::U05SwdSadengjinhuan
         | HostBehavior::U05SwdGuiyanfadao
         | HostBehavior::U05SwdTianxianjiu => step::swd_u05_7b::limits(behavior, name),
+        HostBehavior::SwdTanlin
+        | HostBehavior::SwdOldLiaoyuan
+        | HostBehavior::SwdOldLiaoyuan2 => crate::catalog::SkillLimits {
+            once_per_turn: true,
+            ..Default::default()
+        },
         HostBehavior::GujianFoodQingtuan | HostBehavior::GujianFoodLuyugeng => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,

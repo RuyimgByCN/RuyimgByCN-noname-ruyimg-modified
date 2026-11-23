@@ -14,6 +14,7 @@ mod activation;
 mod asks;
 mod asks_mtg;
 mod asks_swd;
+mod asks_u05_7d;
 mod asks_wudian;
 mod intrinsic;
 pub(crate) use asks::active_ask_host;
@@ -880,7 +881,7 @@ impl SkillBehavior for HostSkillBehavior {
         self.blocks_delayed_trick()
     }
     fn blocks_all_cards(&self) -> bool {
-        false
+        matches!(self.behavior, HostBehavior::SwdDuijueOut)
     }
     fn blocks_hand_cards(&self) -> bool {
         matches!(self.behavior, HostBehavior::Bingfeng2)

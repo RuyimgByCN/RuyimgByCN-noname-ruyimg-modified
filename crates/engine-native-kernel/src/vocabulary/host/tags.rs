@@ -691,6 +691,23 @@ impl HostBehavior {
             HostBehavior::SwdLmazui3 => 1343,
             HostBehavior::SwdXuanyingUse => 1344,
             HostBehavior::SwdPozhouSealed => 1345,
+            HostBehavior::SwdDuijue => 1370,
+            HostBehavior::SwdDuijueOut => 1371,
+            HostBehavior::SwdDuijueTrigger => 1372,
+            HostBehavior::SwdTanlin => 1373,
+            HostBehavior::SwdTanlinTarget => 1374,
+            HostBehavior::SwdTanlinOwner => 1375,
+            HostBehavior::SwdTanlinRange => 1376,
+            HostBehavior::SwdTanlinDefence => 1377,
+            HostBehavior::SwdOldLiaoyuan => 1378,
+            HostBehavior::SwdOldLiaoyuan2 => 1379,
+            HostBehavior::SwdHuanling2 => 1380,
+            HostBehavior::SwdLexue2 => 1381,
+            HostBehavior::SwdTianshuRemove => 1382,
+            HostBehavior::SwdYinguo2 => 1383,
+            HostBehavior::SwdSusheng2 => 1384,
+            HostBehavior::SwdMoyu => 1385,
+            HostBehavior::SwdU05_7dSub => 1386,
         }
     }
 

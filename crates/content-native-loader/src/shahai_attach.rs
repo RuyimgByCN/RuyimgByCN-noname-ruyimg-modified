@@ -16,17 +16,17 @@ use engine_native::content::names;
 use engine_native::content::standard::Gender;
 
 use super::{
-    lookup_standard_catalog_skill_zh, lookup_upstream_host_behavior, make_vm_skill_decl,
-    push_host_skill_if_unseen, MTG_LAND_CARD_ID, OW_SKILL_DISPATCH_ID, SWD_DUIJUE_ID,
-    SWD_TANLIN_ID, U05_GUJIAN_ALL_CARDS, U05_GUJIAN_ALL_SKILLS, U05_GUJIAN_GENERALS,
-    U05_GWENT_ALL_CARDS, U05_GWENT_ALL_SKILLS, U05_GWENT_GENERALS, U05_HEARTH_ALL_CARDS,
-    U05_HEARTH_ALL_SKILLS, U05_HEARTH_GENERALS, U05_MTG_ALL_CARDS, U05_MTG_ALL_SKILLS,
-    U05_MTG_GENERALS, U05_OW_ALL_SKILLS, U05_OW_GENERALS, U05_STONE_GENERALS, U05_SWD_ALL_CARDS,
-    U05_SWD_CARD_SKILLS, U05_SWD_CHAR_SKILLS, U05_SWD_GENERALS, U05_WUXING_ALL_CARDS,
-    U05_WUXING_PLAY_SKILLS, U05_XIANJIAN_ALL_SKILLS, U05_XIANJIAN_GENERALS_FULL,
-    U05_YUNCHOU_ALL_CARDS, U05_YUNCHOU_ALL_SKILLS, U05_YUNCHOU_GENERALS,
-    U05_YUNCHOU_REMAINING_SKILLS, U05_ZHENFA_ALL_CARDS, XIANJIAN_SKILL_DISPATCH_ID,
-    YUNCHOU_SKILL_ID, ZHENFA_POZHENJUE_ID,
+    lookup_standard_catalog_skill_zh, lookup_u05_swd_7d_host_behavior,
+    lookup_upstream_host_behavior, make_vm_skill_decl, push_host_skill_if_unseen,
+    MTG_LAND_CARD_ID, OW_SKILL_DISPATCH_ID, U05_GUJIAN_ALL_CARDS, U05_GUJIAN_ALL_SKILLS,
+    U05_GUJIAN_GENERALS, U05_GWENT_ALL_CARDS, U05_GWENT_ALL_SKILLS, U05_GWENT_GENERALS,
+    U05_HEARTH_ALL_CARDS, U05_HEARTH_ALL_SKILLS, U05_HEARTH_GENERALS, U05_MTG_ALL_CARDS,
+    U05_MTG_ALL_SKILLS, U05_MTG_GENERALS, U05_OW_ALL_SKILLS, U05_OW_GENERALS,
+    U05_STONE_GENERALS, U05_SWD_ALL_CARDS, U05_SWD_CARD_SKILLS, U05_SWD_CHAR_SKILLS,
+    U05_SWD_GENERALS, U05_WUXING_ALL_CARDS, U05_WUXING_PLAY_SKILLS, U05_XIANJIAN_ALL_SKILLS,
+    U05_XIANJIAN_GENERALS_FULL, U05_YUNCHOU_ALL_CARDS, U05_YUNCHOU_ALL_SKILLS,
+    U05_YUNCHOU_GENERALS, U05_YUNCHOU_REMAINING_SKILLS, U05_ZHENFA_ALL_CARDS,
+    XIANJIAN_SKILL_DISPATCH_ID, YUNCHOU_SKILL_ID, ZHENFA_POZHENJUE_ID,
 };
 
 #[path = "shahai_implemented_skills.rs"]
@@ -309,6 +309,9 @@ fn resolve_and_register_u05_skill(
     if let Some(zh) = lookup_standard_catalog_skill_zh(clean) {
         return Some(zh);
     }
+    if clean == "jueqing" {
+        return Some("绝情");
+    }
     let sk_owned = map_cross_subpack_skill(package_id, raw_sk);
     let ow_beh = (package_id == "shaai-ow")
         .then(|| crate::shahai_u05_ow::lookup_shahai_ow_host_behavior(clean))
@@ -326,19 +329,33 @@ fn resolve_and_register_u05_skill(
         .or(hearth_beh)
         .or(xianjian_beh)
         .or(swd_beh)
+        .or_else(|| lookup_u05_swd_7d_host_behavior(clean))
         .or_else(|| crate::shahai_u05_b1::lookup_shahai_b1_host_behavior(clean))
         .or_else(|| lookup_upstream_host_behavior(&sk_owned))
         .or_else(|| lookup_upstream_host_behavior(clean))
     {
         push_host_skill_if_unseen(&sk_owned, behavior, &mut pack.host_skills, seen_skills);
+        if clean == "yinguo" {
+            push_host_skill_if_unseen(
+                "yinguo2",
+                engine_native::content::host::HostBehavior::SwdYinguo2,
+                &mut pack.host_skills,
+                seen_skills,
+            );
+        } else if clean == "susheng" {
+            push_host_skill_if_unseen(
+                "susheng2",
+                engine_native::content::host::HostBehavior::SwdSusheng2,
+                &mut pack.host_skills,
+                seen_skills,
+            );
+        }
         return Some(names::intern(sk_owned));
     }
     if !shahai_implemented_skills::is_implemented_u05_vm_skill(&sk_owned) {
         return None;
     }
     let dispatch_id = match clean {
-        "duijue" => SWD_DUIJUE_ID,
-        "tanlin" => SWD_TANLIN_ID,
         "mtg_duzhao" | "g_mtg_duzhao" | "mtg_cangbaohaiwan" | "g_mtg_cangbaohaiwan" => {
             MTG_LAND_CARD_ID
         }
@@ -408,6 +425,21 @@ fn attach_general_rows(
                 gender,
                 presentation_binding: None,
             });
+        } else if let Some(existing) = pack.generals.iter_mut().find(|g| g.name == sym) {
+            existing.faction = faction;
+            existing.gender = gender;
+            existing.max_hp = max_hp;
+            let mut merged: Vec<&'static str> = existing.skills.to_vec();
+            let mut changed = false;
+            for sk in resolved {
+                if !merged.contains(&sk) {
+                    merged.push(sk);
+                    changed = true;
+                }
+            }
+            if changed {
+                existing.skills = names::intern_list(merged);
+            }
         }
     }
 }
@@ -715,41 +747,7 @@ pub(crate) fn attach_bridge_companion_skills(
     host_skills: &mut Vec<HostSkillDecl>,
     deferred: &[String],
 ) {
-    if host_skills.iter().any(|d| d.name == "reguhuo") {
-        let interned = names::intern("rechanyuan".to_string());
-        if !host_skills.iter().any(|d| d.name == interned) {
-            host_skills.push(HostSkillDecl {
-                name: interned,
-                behavior: HostBehavior::Rechanyuan,
-                presentation_binding: None,
-            });
-        }
-    }
-    if deferred.iter().any(|name| name == "shichangshi") {
-        for &(sk_name, behavior) in &[
-            ("k_danggu", HostBehavior::KDanggu),
-            ("k_mowang", HostBehavior::KMowang),
-        ] {
-            let interned = names::intern(sk_name.to_string());
-            if !host_skills.iter().any(|d| d.name == interned) {
-                host_skills.push(HostSkillDecl {
-                    name: interned,
-                    behavior,
-                    presentation_binding: None,
-                });
-            }
-        }
-        for &sk_name in &crate::decision34_closure::L10_SCS_COMPANION_SKILLS {
-            let interned = names::intern(sk_name.to_string());
-            if !host_skills.iter().any(|d| d.name == interned) {
-                host_skills.push(HostSkillDecl {
-                    name: interned,
-                    behavior: HostBehavior::L10ScsCompanion,
-                    presentation_binding: None,
-                });
-            }
-        }
-    }
+    crate::host_skill_bindings::inject_pre_general_companions(host_skills, deferred);
     for &(trigger_name, companion_name, behavior) in &[
         ("kbolan", "kbolan2", HostBehavior::SwdKbolan2),
         ("lmazui", "lmazui3", HostBehavior::SwdLmazui3),

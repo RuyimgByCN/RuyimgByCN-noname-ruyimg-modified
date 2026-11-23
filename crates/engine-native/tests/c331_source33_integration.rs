@@ -103,8 +103,8 @@ fn phase7_all_trigger_bearing_host_behaviors_have_bound_source_order() {
         .copied()
         .filter(|h| h.trigger_meta().is_some())
         .collect();
-    // U05-5a (+1 → 304) + U05-7c (+5: SwdTouxi/SwdTouxi2/SwdLmazui3/SwdXuanyingUse/SwdPozhouSealed → 309)
-    assert_eq!(trigger_bearing.len(), 309);
+    // U05-5a (+1 → 304) + U05-7c (+5 → 309) + U05-7d (+9: SwdDuijueOut/SwdDuijueTrigger/SwdTanlinTarget/SwdTanlinOwner/SwdTanlinDefence/SwdHuanling2/SwdLexue2/SwdTianshuRemove/SwdMoyu → 318)
+    assert_eq!(trigger_bearing.len(), 318);
     assert!(
         trigger_bearing.iter().all(|h| h.source_order().is_some()),
         "every trigger-bearing HostBehavior must have an explicit source_order tuple"

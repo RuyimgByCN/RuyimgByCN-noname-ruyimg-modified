@@ -417,6 +417,21 @@ impl Engine {
                 });
             }
         }
+        if let Some(behavior) = self.catalog.skills[def as usize].behavior.as_host_behavior() {
+            for &(child_name, _) in behavior.group_children() {
+                if let Some(cdef) = self.catalog.skill_by_name(child_name) {
+                    self.state.core.skills.entry((player, cdef)).or_insert(
+                        crate::state::SkillInstance {
+                            owner: player,
+                            enabled: true,
+                            once_used: false,
+                            expires_end_of_turn: false,
+                            rounds: 0,
+                        },
+                    );
+                }
+            }
+        }
         if name == "kuangchan" {
             let is_lord = self
                 .state

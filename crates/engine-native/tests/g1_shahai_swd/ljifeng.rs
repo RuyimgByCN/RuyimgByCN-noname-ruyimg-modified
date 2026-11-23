@@ -129,7 +129,7 @@ fn swd_generals_b68_ljifeng_duanyi_yinyue() {
     );
     settle_optional_confirm(&mut e);
     assert_eq!(e.debug_hp(1), 1, "断义：1 伤（2→1）");
-    assert_eq!(e.debug_hand(1).len(), 1, "断义：随机弃 X=2（3→1）");
+    assert_eq!(e.debug_hand(1).len(), 0, "断义：伤后已损失体力 X=3 随机弃光手牌（3→0）");
     assert!(
         !e.debug_hand(0).contains(&s_a) && !e.debug_hand(0).contains(&s_b),
         "断义：两杀已弃"

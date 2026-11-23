@@ -191,19 +191,32 @@ impl HostSkillBehavior {
                     && !d.prevented
                     && ctx.state.turn.guxing_armed),
             HostBehavior::SwdNlianji => false,
-            // 热血：在杀范围内，自己手牌有杀
+            // 热血（character/swd/skill.js:4412-4426）：他人回合开始，targetEnabled(sha) && hasSha(null, true)
             HostBehavior::SwdRexue => {
-                // A2 H42：上游 global phaseBegin＝回合开始（每回合一次）。
                 if let EventData::TurnBegin { player } = event {
                     let actor = *player;
-                    ctx.state
-                        .player(owner)
-                        .hand
-                        .iter()
-                        .any(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Sha)
-                        && ctx.state.seat_distance_alive(owner, actor) > 0
-                        && ctx.state.computed_distance(ctx.catalog, owner, actor)
-                            <= ctx.state.attack_range(ctx.catalog, owner)
+                    crate::kernel::usable_sha_options(ctx.state, ctx.catalog, owner, actor)
+                        .into_iter()
+                        .any(|opt| {
+                            let ChoiceOption::Card(c) = opt else {
+                                return false;
+                            };
+                            let eff = crate::kernel::sha_card_use_as(
+                                ctx.state,
+                                ctx.catalog,
+                                owner,
+                                c,
+                            )
+                            .and_then(|(u, _)| u)
+                            .unwrap_or_else(|| ctx.catalog.card_kind(c));
+                            crate::kernel::can_target_sha_no_range(
+                                ctx.state,
+                                ctx.catalog,
+                                owner,
+                                actor,
+                                eff,
+                            )
+                        })
                 } else {
                     false
                 }
@@ -305,13 +318,15 @@ impl HostSkillBehavior {
                 if u.player == owner
                     && u.effective_kind(ctx.catalog).is_sha_like()
                     && !u.targets.is_empty()),
-            // 道法：其他角色受伤且来源有牌
+            // 道法：其他角色受伤且来源"he"区有牌
             HostBehavior::SwdDaofa => matches!(event,
                 EventData::Damage(d)
                 if !d.prevented && d.amount > 0
-                    && d.source.is_some()
-                    && d.source != Some(owner)
-                    && !ctx.state.player(d.source.unwrap()).hand.is_empty()),
+                    && d.source.is_some_and(|src| {
+                        src != owner
+                            && (!ctx.state.player(src).hand.is_empty()
+                                || !ctx.state.player(src).equips.is_empty())
+                    })),
             // 玉鳞：持有者即将受伤且手/装备区有装备牌
             HostBehavior::SwdYulin => matches!(event,
             EventData::Damage(d)
@@ -345,8 +360,7 @@ impl HostSkillBehavior {
                     let hand = &ctx.state.player(owner).hand;
                     hand.len() >= 2
                         && {
-                            let first =
-                                ctx.catalog.cards[hand[0] as usize].suit;
+                            let first = ctx.catalog.effective_card_suit(ctx.state, owner, hand[0]);
                             hand.iter().all(|c| {
                                 let red = |su| {
                                     matches!(
@@ -355,7 +369,7 @@ impl HostSkillBehavior {
                                             | crate::catalog::Suit::Diamond
                                     )
                                 };
-                                red(ctx.catalog.cards[*c as usize].suit)
+                                red(ctx.catalog.effective_card_suit(ctx.state, owner, *c))
                                     == red(first)
                             })
                         }
@@ -795,12 +809,13 @@ impl HostSkillBehavior {
             HostBehavior::SwdLqingcheng => matches!(event,
                 EventData::TurnEndWindow { player, after: false }
                 if *player == owner),
-            // 因果：他人受到有来源伤害前置（来源≠自己、自己 he 有牌）
+            // 因果：他人受到有来源伤害前置（来源≠自己、自己 he 有牌、未带 yinguo2）
             HostBehavior::SwdYinguo => matches!(event,
                 EventData::Damage(d)
                 if d.target != owner
                     && !d.prevented
                     && d.source.map(|src| src != owner).unwrap_or(false)
+                    && !ctx.catalog.has_host_behavior(ctx.state, owner, HostBehavior::SwdYinguo2)
                     && (!ctx.state.player(owner).hand.is_empty()
                         || !ctx.state.player(owner).equips.is_empty())),
             // 拷贝栏/奥剑：内联/主动通道，无触发 filter
@@ -973,7 +988,8 @@ impl HostSkillBehavior {
             // OptionalGate 消费；目标体力重置在机器步写回）
             HostBehavior::SwdSusheng => matches!(event,
                 EventData::Death { .. }
-                if !ctx.state.player(owner).hand.is_empty()),
+                if !ctx.state.player(owner).hand.is_empty()
+                    && !ctx.catalog.has_host_behavior(ctx.state, owner, HostBehavior::SwdSusheng2)),
             // 挥琪：自己受伤结算后（hp<maxHp 门在 filter——X=损失值）
             HostBehavior::SwdHuiqi => matches!(event,
                 EventData::Damage(d)

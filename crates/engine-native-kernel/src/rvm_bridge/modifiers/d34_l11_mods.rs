@@ -763,8 +763,8 @@ pub(super) fn apply_card_target_canceled(
     {
         canceled = true;
     }
-    // L20 标记补充 (`diaohulishan`, `extension.js:1432`: target cannot be targeted by cards this turn)
-    if catalog.has_diaohulishan(state, target) {
+    // L20 标记补充 (`diaohulishan`, `extension.js:1432`) + U05-7d 对决出局 (`duijue2`): target cannot be targeted by cards
+    if catalog.has_undist(state, target) {
         canceled = true;
     }
     // L20 标记补充 (`_aozhan_judge`, `extension.js:2152`: real Tao cannot target ANY player)
@@ -806,8 +806,8 @@ pub(super) fn apply_card_use_canceled(
     {
         canceled = true;
     }
-    // L20 标记补充 (`diaohulishan`, `extension.js:1432`: cannot use/respond with cards while out of game)
-    if catalog.has_diaohulishan(state, actor) {
+    // L20 标记补充 (`diaohulishan`, `extension.js:1432`) + U05-7d 对决出局 (`duijue2`): cannot use/respond with cards while out of game
+    if catalog.has_undist(state, actor) {
         canceled = true;
     }
     // L20 标记补充 (`_aozhan_judge`, `extension.js:2152`: real Tao cannot be used to heal/save)

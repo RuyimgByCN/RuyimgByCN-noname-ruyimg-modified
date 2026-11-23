@@ -4,6 +4,7 @@ mod common;
 mod wudian;
 mod swd;
 mod swd_cards;
+mod swd_u05_7d;
 mod xianjian;
 mod l01;
 mod source_order;
@@ -983,6 +984,23 @@ impl HostBehavior {
             | HostBehavior::L01NeiKey
             | HostBehavior::L01AttitudeTracker
             | HostBehavior::L01AiRuleHooks => self.trigger_meta_l01(),
+            HostBehavior::SwdDuijue
+            | HostBehavior::SwdDuijueOut
+            | HostBehavior::SwdDuijueTrigger
+            | HostBehavior::SwdTanlin
+            | HostBehavior::SwdTanlinTarget
+            | HostBehavior::SwdTanlinOwner
+            | HostBehavior::SwdTanlinRange
+            | HostBehavior::SwdTanlinDefence
+            | HostBehavior::SwdOldLiaoyuan
+            | HostBehavior::SwdOldLiaoyuan2
+            | HostBehavior::SwdHuanling2
+            | HostBehavior::SwdLexue2
+            | HostBehavior::SwdTianshuRemove
+            | HostBehavior::SwdYinguo2
+            | HostBehavior::SwdSusheng2
+            | HostBehavior::SwdMoyu
+            | HostBehavior::SwdU05_7dSub => self.trigger_meta_swd_u05_7d(),
         };
         if let (Some(meta), Some((timing, priority, selectable))) = (&mut meta, self.source_order()) {
             meta.timing = timing;

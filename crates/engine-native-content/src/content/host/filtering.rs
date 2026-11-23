@@ -2,6 +2,7 @@ use super::*;
 
 mod common;
 mod swd;
+mod swd_u05_7d;
 mod u05_gujian;
 mod wuxing;
 mod xianjian;
@@ -1129,6 +1130,23 @@ impl HostSkillBehavior {
             | HostBehavior::SwdLmazui3
             | HostBehavior::SwdXuanyingUse
             | HostBehavior::SwdPozhouSealed => self.filter_swd(ctx, owner, event),
+            HostBehavior::SwdDuijue
+            | HostBehavior::SwdDuijueOut
+            | HostBehavior::SwdDuijueTrigger
+            | HostBehavior::SwdTanlin
+            | HostBehavior::SwdTanlinTarget
+            | HostBehavior::SwdTanlinOwner
+            | HostBehavior::SwdTanlinRange
+            | HostBehavior::SwdTanlinDefence
+            | HostBehavior::SwdOldLiaoyuan
+            | HostBehavior::SwdOldLiaoyuan2
+            | HostBehavior::SwdHuanling2
+            | HostBehavior::SwdLexue2
+            | HostBehavior::SwdTianshuRemove
+            | HostBehavior::SwdYinguo2
+            | HostBehavior::SwdSusheng2
+            | HostBehavior::SwdMoyu
+            | HostBehavior::SwdU05_7dSub => self.filter_swd_u05_7d(ctx, owner, event),
             _ => false,
         }
     }

@@ -159,6 +159,19 @@ impl Engine {
                     hand.push(eq);
                 }
             }
+            for &eq in &self.state_core().player(seat).equips {
+                if !hand.contains(&eq)
+                    && crate::engine::play_rules::host_equip_view_as_kind(
+                        self.state_core(),
+                        self.catalog(),
+                        seat,
+                        eq,
+                    )
+                    .is_some()
+                {
+                    hand.push(eq);
+                }
+            }
             let others: Vec<crate::ids::PlayerId> = (0..self.state_core().players.len() as u8)
                 .filter(|p| *p != seat && self.state_core().player(*p).alive)
                 .collect();

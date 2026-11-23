@@ -283,6 +283,7 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
             // 拥有者死亡（防御路径：对齐排序下能致死的闪电在队尾）：
             // 待判队列与进行中的判定牌逐张弃置。
             if !ctx.core.player(self.owner).alive {
+                crate::kernel::clear_ordinary_judge_elo_pref(ctx.core, self.owner);
                 let mut leftover = Vec::new();
                 crate::snap::machine_held_cards(&self.snapshot(), &mut leftover);
                 self.queue.clear();
@@ -689,6 +690,7 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                             })
                         });
                         if host_judge {
+                            crate::kernel::clear_ordinary_judge_elo_pref(ctx.core, self.owner);
                             let code = match suit {
                                 crate::catalog::Suit::Spade => 1,
                                 crate::catalog::Suit::Heart => 2,
