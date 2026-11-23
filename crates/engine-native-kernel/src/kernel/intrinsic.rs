@@ -256,16 +256,20 @@ pub fn intrinsic_machine(
                 if matches!(
                     effective_kind,
                     CardKind::Youdishenru
-                        | CardKind::Linghunzhihuo
-                        | CardKind::Zhaomingdan
-                        | CardKind::Zhiliaobo
-                        | CardKind::Shijieshu
-                        | CardKind::Dunpaigedang
-                        | CardKind::Chuansongmen
-                        | CardKind::Tanshezhiren
-                        | CardKind::Yuansuhuimie
                         | CardKind::Xingjiegoutong
                         | CardKind::Jihuocard
+                        | CardKind::Qinpendayu
+                        | CardKind::Birinongwu
+                        | CardKind::Ciguhanshuang
+                        | CardKind::Zumoshoukao
+                        | CardKind::Kunenfayin
+                        | CardKind::Shanbengshu
+                        | CardKind::Poxiao
+                        | CardKind::Yanziyaoshui
+                        | CardKind::Aozuzhilei
+                        | CardKind::Wenyi
+                        | CardKind::Zhihuanjun
+                        | CardKind::Baoxueyaoshui
                 ) || ctx
                     .core
                     .vm_aux
@@ -891,11 +895,30 @@ pub fn intrinsic_machine(
                             .saturating_sub(ctx.core.ignored_hand_card_count(ctx.catalog, player))
                     };
                     if hand > limit {
-                        Some(Box::new(DiscardToLimitMachine {
-                            player,
-                            need: hand - limit,
-                            asked: false,
-                        }))
+                        let discardable = ctx
+                            .core
+                            .player(player)
+                            .hand
+                            .iter()
+                            .filter(|c| {
+                                !crate::kernel::combat_rules::is_gw_dudayuanshuai2_locked(
+                                    ctx.core,
+                                    ctx.catalog,
+                                    player,
+                                    **c,
+                                )
+                            })
+                            .count();
+                        let need = (hand - limit).min(discardable);
+                        if need > 0 {
+                            Some(Box::new(DiscardToLimitMachine {
+                                player,
+                                need,
+                                asked: false,
+                            }))
+                        } else {
+                            None
+                        }
                     } else {
                         None
                     }

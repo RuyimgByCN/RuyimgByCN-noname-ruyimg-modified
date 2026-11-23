@@ -99,6 +99,15 @@ pub(super) fn host_sha_begin_step_impl(
     ) {
         return true;
     }
+    if crate::content::host::step::u05_b5b_gwent::u05_b5b_sha_begin_step(
+        ctx,
+        sha_frame_id,
+        source,
+        target,
+        sha_card,
+    ) {
+        return true;
+    }
     let Some(cike_def) = ctx.catalog.skill_by_name("cike") else {
         return false;
     };
@@ -143,9 +152,19 @@ pub(super) fn host_sha_end_step_impl(
     sha_frame_id: EventId,
     source: PlayerId,
     target: PlayerId,
-    _sha_card: Option<CardId>,
+    sha_card: Option<CardId>,
     is_damage: bool,
 ) -> bool {
+    if crate::content::host::step::u05_b5b_gwent::u05_b5b_sha_end_step(
+        ctx,
+        sha_frame_id,
+        source,
+        target,
+        sha_card,
+        is_damage,
+    ) {
+        return true;
+    }
     let sub_name = if is_damage {
         "bolehuiyan3"
     } else {

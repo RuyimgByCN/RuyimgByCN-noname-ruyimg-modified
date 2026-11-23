@@ -65,12 +65,28 @@ impl crate::catalog::SkillMachine for TaoyuanMachine {
         crate::snap::MachineSnapshot::Taoyuan { owner: self.owner }
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
-        let card = ctx.current_card_use().ok().and_then(|u| u.card);
-        let mut others: Vec<PlayerId> = ctx
+        let frame = ctx.current_frame_id();
+        let include_owner = ctx
             .core
-            .alive_players()
-            .filter(|p| *p != self.owner)
-            .collect();
+            .vm_aux
+            .flags
+            .remove(&(self.owner, format!("taoyuan_include_owner:{frame}")))
+            .is_some();
+        let (card, use_targets) = match ctx.current_card_use() {
+            Ok(u) => (u.card, u.targets.clone()),
+            Err(_) => (None, Vec::new()),
+        };
+        let mut others: Vec<PlayerId> = if include_owner && !use_targets.is_empty() {
+            use_targets
+                .into_iter()
+                .filter(|p| ctx.core.player(*p).alive)
+                .collect()
+        } else {
+            ctx.core
+                .alive_players()
+                .filter(|p| include_owner || *p != self.owner)
+                .collect()
+        };
         if let Some(targets) = take_dddanzhi_targets(ctx, self.owner) {
             others.retain(|p| targets.contains(p));
         }

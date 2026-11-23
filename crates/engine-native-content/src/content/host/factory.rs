@@ -186,6 +186,12 @@ impl HostSkillBehavior {
             | HostBehavior::U05Hearth2BatchF => {
                 return super::step::u05_hearth::machine_u05_hearth(self, owner, event);
             }
+            HostBehavior::U05GwentCharBatchA
+            | HostBehavior::U05GwentCharBatchB
+            | HostBehavior::U05GwentCharBatchC
+            | HostBehavior::U05GwentCharBatchD => {
+                return super::step::u05_b5b_gwent::machine_u05_gwent_char(self, owner, event);
+            }
             _ => {}
         }
         let (target, card) = match self.behavior {

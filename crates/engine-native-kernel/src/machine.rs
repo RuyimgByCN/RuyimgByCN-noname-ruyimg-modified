@@ -675,6 +675,12 @@ impl<'a> Ctx<'a> {
         {
             return;
         }
+        // Card newly entering discard loses any prior `bolang` tag (reclaimed & re-discarded);
+        // `step_bolang` sets `gw_bolang_tag:{c}` after calling `ctx.to_discard(c)`.
+        let bkey = format!("gw_bolang_tag:{card}");
+        for s in 0..self.core.players.len() as PlayerId {
+            self.core.vm_aux.flags.remove(&(s, bkey.clone()));
+        }
         let is_stj = |c: CardId| {
             matches!(
                 self.catalog.card_kind(c),
@@ -907,6 +913,10 @@ impl<'a> Ctx<'a> {
         let cur = self.core.player(player).hujia as i32;
         let next = (cur + delta).max(0) as u8;
         self.core.player_mut(player).hujia = next;
+        let actual_delta = next as i32 - cur;
+        if actual_delta != 0 {
+            (self.catalog.hooks.on_hujia_changed)(self, player, actual_delta);
+        }
         next
     }
 

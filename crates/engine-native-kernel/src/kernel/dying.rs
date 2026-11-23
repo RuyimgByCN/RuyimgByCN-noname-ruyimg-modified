@@ -128,6 +128,74 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                 }
             }
         }
+        match ctx
+            .core
+            .vm_aux
+            .flags
+            .get(&(self.dying, "gw_fusheng_stage".to_string()))
+            .copied()
+            .unwrap_or(0)
+        {
+            1 => {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((self.dying, "gw_fusheng_stage".to_string()), 2);
+                if ctx.core.player(self.dying).alive {
+                    ctx.recover(self.dying, 1, None);
+                    return Flow::Yield;
+                }
+            }
+            2 => {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.dying, "gw_fusheng_stage".to_string()));
+                let resp = ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.dying, "gw_fusheng_resp".to_string()))
+                    .and_then(|v| v.checked_sub(1))
+                    .map(|v| v as PlayerId);
+                if let Some(responder) = resp {
+                    if responder == self.dying {
+                        if ctx.core.player(responder).alive {
+                            ctx.start_draw(responder, 2);
+                            return Flow::Yield;
+                        }
+                    } else {
+                        let first_alive = ctx.core.player(responder).alive;
+                        let second_alive = ctx.core.player(self.dying).alive;
+                        if first_alive && second_alive {
+                            ctx.core
+                                .vm_aux
+                                .flags
+                                .insert((self.dying, "gw_fusheng_stage".to_string()), 3);
+                            ctx.start_draw(responder, 1);
+                            return Flow::Yield;
+                        } else if first_alive {
+                            ctx.start_draw(responder, 1);
+                            return Flow::Yield;
+                        } else if second_alive {
+                            ctx.start_draw(self.dying, 1);
+                            return Flow::Yield;
+                        }
+                    }
+                }
+            }
+            3 => {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.dying, "gw_fusheng_stage".to_string()));
+                if ctx.core.player(self.dying).alive {
+                    ctx.start_draw(self.dying, 1);
+                    return Flow::Yield;
+                }
+            }
+            _ => {}
+        }
         loop {
             if super::has_u01_respond_park(ctx)
                 || ctx
@@ -322,6 +390,13 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                                 self.dying,
                             )
                             .is_some()
+                            || crate::kernel::gwfusheng_dying_skill(
+                                ctx.core,
+                                ctx.catalog,
+                                *r,
+                                self.dying,
+                            )
+                            .is_some()
                             || !dying_response_skills(ctx.core, ctx.catalog, *r, self.dying)
                                 .is_empty()
                             || !dying_save_skill_options(ctx.core, ctx.catalog, *r, self.dying)
@@ -347,6 +422,13 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                     p.alive
                         && (!dying_tao_cards(ctx, pid, self.dying).is_empty()
                             || crate::kernel::mbcmjiushi_dying_skill(
+                                ctx.core,
+                                ctx.catalog,
+                                pid,
+                                self.dying,
+                            )
+                            .is_some()
+                            || crate::kernel::gwfusheng_dying_skill(
                                 ctx.core,
                                 ctx.catalog,
                                 pid,
@@ -628,6 +710,30 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                             });
                             return Flow::Yield;
                         }
+                    } else if crate::kernel::gwfusheng_dying_skill(
+                        ctx.core,
+                        ctx.catalog,
+                        responder,
+                        self.dying,
+                    ) == Some(def)
+                    {
+                        self.round_used = true;
+                        ctx.log(LogEvent::SkillTriggered {
+                            skill: "gwfusheng",
+                            owner: responder,
+                            presentation: None,
+                        });
+                        // character/gwent/skill.js:1391-1399: 令目标翻面并回复 1 体力，然后与目标各摸 1（自救摸 2）；分步 Yield 保证 LIFO 顺序。
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((self.dying, "gw_fusheng_stage".to_string()), 1);
+                        ctx.core.vm_aux.flags.insert(
+                            (self.dying, "gw_fusheng_resp".to_string()),
+                            u32::from(responder) + 1,
+                        );
+                        ctx.turn_over(self.dying);
+                        return Flow::Yield;
                     }
                     if (ctx.catalog.hooks.hearth_dying_save_skills)(
                         ctx.core,
@@ -700,6 +806,16 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                 self.dying,
             ) {
                 options.push(ChoiceOption::Skill(def));
+            }
+            if let Some(def) = crate::kernel::gwfusheng_dying_skill(
+                ctx.core,
+                ctx.catalog,
+                responder,
+                self.dying,
+            ) {
+                if !options.contains(&ChoiceOption::Skill(def)) {
+                    options.push(ChoiceOption::Skill(def));
+                }
             }
             for rdef in dying_response_skills(ctx.core, ctx.catalog, responder, self.dying) {
                 let opt = ChoiceOption::Skill(rdef);

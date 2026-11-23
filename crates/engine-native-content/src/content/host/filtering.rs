@@ -1013,6 +1013,12 @@ impl HostSkillBehavior {
             HostBehavior::U05GwentCardSkill => {
                 super::step::u05_b5a_gwent::filter_u05_gwent_skill(self, ctx, owner, event)
             }
+            HostBehavior::U05GwentCharBatchA
+            | HostBehavior::U05GwentCharBatchB
+            | HostBehavior::U05GwentCharBatchC
+            | HostBehavior::U05GwentCharBatchD => {
+                super::step::u05_b5b_gwent::filter_u05_gwent_char(self, ctx, owner, event)
+            }
             _ => false,
         }
     }

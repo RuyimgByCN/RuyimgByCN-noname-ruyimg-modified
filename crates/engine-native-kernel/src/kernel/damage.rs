@@ -232,6 +232,9 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
                 .flags
                 .insert((d.target, "hs_hhudun_hujia_full".to_string()), 1);
         }
+        if absorbed > 0 {
+            (ctx.catalog.hooks.on_hujia_changed)(ctx, d.target, -(absorbed as i32));
+        }
     }
     if submitted > 0 {
         if let Some(src) = d.source {

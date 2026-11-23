@@ -231,6 +231,11 @@ pub(in crate::snap) fn dying_save_options(
         if let Some(def) = crate::kernel::mbcmjiushi_dying_skill(core, catalog, responder, dying) {
             options.push(ChoiceOption::Skill(def));
         }
+        if let Some(def) = crate::kernel::gwfusheng_dying_skill(core, catalog, responder, dying) {
+            if !options.contains(&ChoiceOption::Skill(def)) {
+                options.push(ChoiceOption::Skill(def));
+            }
+        }
     }
     for rdef in crate::kernel::dying_response_skills(core, catalog, responder, dying) {
         options.push(ChoiceOption::Skill(rdef));

@@ -598,7 +598,7 @@ pub(in crate::content::host) fn u05_gwent_on_round_start(ctx: &mut Ctx<'_>) {
     }
 }
 
-pub(super) fn apply_fengyin_to_target(ctx: &mut Ctx<'_>, t: PlayerId) {
+pub(in crate::content::host::step) fn apply_fengyin_to_target(ctx: &mut Ctx<'_>, t: PlayerId) {
     let Some(fdef) = ctx.catalog.skill_by_name(GW_FENGYIN_STATE_KEY) else {
         return;
     };
@@ -645,7 +645,7 @@ pub(super) fn apply_fengyin_to_target(ctx: &mut Ctx<'_>, t: PlayerId) {
 }
 
 /// `player.getBuff()` (`library/element/player.js:9235`) 6 分支精准移植。
-pub(super) fn apply_buff(ctx: &mut Ctx<'_>, t: PlayerId) {
+pub(in crate::content::host::step) fn apply_buff(ctx: &mut Ctx<'_>, t: PlayerId) {
     let mut list = vec![1u8, 2, 3, 4, 5, 6];
     let p = ctx.core.player(t);
     if p.hp >= p.max_hp as i32 {
@@ -712,7 +712,7 @@ pub(super) fn apply_buff(ctx: &mut Ctx<'_>, t: PlayerId) {
 }
 
 /// `player.getDebuff()` (`library/element/player.js:9285`) 6 分支精准移植。
-pub(super) fn apply_debuff(ctx: &mut Ctx<'_>, t: PlayerId) {
+pub(in crate::content::host::step) fn apply_debuff(ctx: &mut Ctx<'_>, t: PlayerId) {
     let mut list = vec![1u8, 2, 3, 4, 5, 6];
     let p = ctx.core.player(t);
     if p.hand.is_empty() && p.equips.is_empty() {

@@ -342,7 +342,18 @@ pub fn active_ask(
             if !*asked {
                 return None;
             }
-            let options = hand_card_options(&core.player(*player).hand);
+            let options: Vec<ChoiceOption> = core
+                .player(*player)
+                .hand
+                .iter()
+                .copied()
+                .filter(|c| {
+                    !crate::kernel::is_gw_dudayuanshuai2_locked(
+                        core, catalog, *player, *c,
+                    )
+                })
+                .map(ChoiceOption::Card)
+                .collect();
             Some(ask(
                 *player,
                 "discard_to_limit",

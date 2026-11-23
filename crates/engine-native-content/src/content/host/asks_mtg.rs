@@ -570,6 +570,12 @@ pub(super) fn active_ask_batches(
         HostBehavior::U05GwentCardSkill => {
             super::step::u05_b5a_gwent::ask_u05_gwent_skill(stage, owner, core)
         }
+        HostBehavior::U05GwentCharBatchA
+        | HostBehavior::U05GwentCharBatchB
+        | HostBehavior::U05GwentCharBatchC
+        | HostBehavior::U05GwentCharBatchD => super::step::u05_b5b_gwent::ask_u05_gwent_char(
+            behavior, stage, owner, target, targets, card, cards, core, catalog,
+        ),
         HostBehavior::NewMeibu => {
             if stage != HostStage::SelectCard {
                 return None;

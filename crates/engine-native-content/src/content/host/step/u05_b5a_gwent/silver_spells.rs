@@ -490,7 +490,7 @@ fn step_zirankuizeng(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     }
 }
 
-pub(super) fn eligible_bronze_tags(
+pub(in crate::content::host::step) fn eligible_bronze_tags(
     core: &GameStateCore,
     catalog: &Catalog,
     owner: PlayerId,
@@ -511,7 +511,7 @@ pub(super) fn eligible_bronze_tags(
         .collect()
 }
 
-pub(super) fn eligible_bronze_targets(
+pub(in crate::content::host::step) fn eligible_bronze_targets(
     core: &GameStateCore,
     catalog: &Catalog,
     owner: PlayerId,
@@ -568,14 +568,14 @@ fn step_nuhaifengbao(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
 }
 
 /// 白霜 (`card/gwent/card.js:1367`): 为至多 3 名目标授予 `gw_cigu_state`。
-fn step_baishuang(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
+pub(in crate::content::host) fn apply_gw_baishuang_to_targets(ctx: &mut Ctx<'_>, targets: &[PlayerId]) {
     let def = ctx
         .catalog
         .skill_by_name(GW_CIGU_STATE_KEY)
         .or_else(|| ctx.catalog.skill_by_name("gw_ciguhanshuang"));
     let alt_def = ctx.catalog.skill_by_name("gw_ciguhanshuang");
     if let Some(def) = def {
-        for &t in &m.targets {
+        for &t in targets {
             if ctx.core.player(t).alive
                 && !ctx.core.skills.contains_key(&(t, def))
                 && !alt_def.is_some_and(|ad| ctx.core.skills.contains_key(&(t, ad)))
@@ -593,6 +593,10 @@ fn step_baishuang(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             }
         }
     }
+}
+
+fn step_baishuang(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
+    apply_gw_baishuang_to_targets(ctx, &m.targets);
     finish_gwent_card(m, ctx, false)
 }
 

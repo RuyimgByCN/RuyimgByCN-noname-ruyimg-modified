@@ -156,6 +156,10 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 .catalog
                 .skill_by_name("cike")
                 .is_some_and(|d| ctx.core.has_skill(self.source, d))
+                || ctx
+                    .catalog
+                    .skill_by_name("fayin")
+                    .is_some_and(|d| ctx.core.has_skill(self.source, d))
             {
                 if self.renwang_blocks(ctx, qinggang_pierce) {
                     return self.advance_target(ctx);

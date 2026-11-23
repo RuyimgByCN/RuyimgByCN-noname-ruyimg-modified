@@ -64,6 +64,9 @@ pub(super) fn common_play_validation(
     if crate::kernel::jinyan_blocks_black_trick(core, catalog, actor, card) && targets.is_empty() {
         return Err(RejectReason::CardLimit);
     }
+    if crate::kernel::is_gw_dudayuanshuai2_locked(core, catalog, actor, card) {
+        return Err(RejectReason::CardBlocked);
+    }
     let actor_p = core.player(core.turn.current);
     let in_hand = actor_p.hand.contains(&card);
     let has_mizhilianou_equip_heart = !in_hand

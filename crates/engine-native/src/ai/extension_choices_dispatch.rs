@@ -195,4 +195,16 @@ pub(super) fn plan_extension_choice_fallback(
             allow_cancel,
         )
     })
+    .or_else(|| {
+        extension_choices_u05_5b::plan_u05_5b_choice_action(
+            catalog,
+            input,
+            id,
+            prompt,
+            options,
+            min,
+            max,
+            allow_cancel,
+        )
+    })
 }

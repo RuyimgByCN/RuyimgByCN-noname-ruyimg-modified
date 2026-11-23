@@ -21,11 +21,39 @@ mod gold_spells;
 mod silver_spells;
 mod skills;
 
+pub(in crate::content::host::step) use adventure_huoge::emit_huoge_use;
+pub(in crate::content::host::step) use silver_spells::{
+    eligible_bronze_tags, eligible_bronze_targets,
+};
+pub(in crate::content::host) use silver_spells::apply_gw_baishuang_to_targets;
 pub(in crate::content::host) use asks::{ask_u05_gwent_card, ask_u05_gwent_skill};
+pub(in crate::content::host::step) use skills::{apply_buff, apply_debuff};
 pub(in crate::content::host) use skills::{
     filter_u05_gwent_skill, filter_u05_gwent_skill_with_frame, handle_u05_gwent_skill,
     trigger_meta_u05_gwent_skill, u05_gwent_on_round_start,
 };
+pub(in crate::content::host::step) fn pull_gwent_or_vanished<F>(
+    ctx: &mut Ctx<'_>,
+    mut pred: F,
+) -> Option<CardId>
+where
+    F: FnMut(CardId) -> bool,
+{
+    if let Some(c) = pull_card_matching(ctx, &mut pred) {
+        return Some(c);
+    }
+    if let Some(pile) = ctx
+        .core
+        .vm_aux
+        .piles
+        .get_mut(&(0, "u05_vanished".to_string()))
+    {
+        if let Some(idx) = pile.iter().position(|c| pred(*c)) {
+            return Some(pile.remove(idx));
+        }
+    }
+    None
+}
 
 pub(in crate::content::host) const GOLD_SPELL_PICK_NAMES: &[&str] = &[
     "gw_hudiewu",
@@ -82,7 +110,7 @@ pub(in crate::content::host) const WEATHER_SKILL_NAMES: &[&str] = &[
     "gw_nuhaifengbao",
 ];
 
-pub(super) fn clean_gwent_name(name: &str) -> &str {
+pub(in crate::content::host::step) fn clean_gwent_name(name: &str) -> &str {
     name.rsplit_once('_')
         .and_then(|(head, tail)| {
             (!tail.is_empty() && tail.chars().all(|c| c.is_ascii_digit())).then_some(head)
@@ -348,7 +376,7 @@ pub(super) fn grant_random_bronze_spell(ctx: &mut Ctx<'_>, owner: PlayerId) {
     }
 }
 
-pub(super) fn pull_card_matching<F>(ctx: &mut Ctx<'_>, mut pred: F) -> Option<CardId>
+pub(in crate::content::host::step) fn pull_card_matching<F>(ctx: &mut Ctx<'_>, mut pred: F) -> Option<CardId>
 where
     F: FnMut(CardId) -> bool,
 {
@@ -475,7 +503,7 @@ fn finalize_gwent_card_after_yield(
     Flow::Done
 }
 
-pub(super) fn discard_he_card(ctx: &mut Ctx<'_>, player: PlayerId, c: CardId) {
+pub(in crate::content::host) fn discard_he_card(ctx: &mut Ctx<'_>, player: PlayerId, c: CardId) {
     ctx.core.declared_slots.remove(&c);
     if ctx.core.player(player).hand.contains(&c) {
         ctx.discard_from_hand(player, c);
@@ -498,7 +526,7 @@ pub(super) fn discard_he_card(ctx: &mut Ctx<'_>, player: PlayerId, c: CardId) {
     }
 }
 
-pub(super) fn has_named_skill(
+pub(in crate::content::host) fn has_named_skill(
     core: &GameStateCore,
     catalog: &Catalog,
     p: PlayerId,
@@ -509,7 +537,7 @@ pub(super) fn has_named_skill(
         .is_some_and(|def| core.skills.contains_key(&(p, def)))
 }
 
-pub(super) fn enemies_of(core: &GameStateCore, catalog: &Catalog, owner: PlayerId) -> Vec<PlayerId> {
+pub(in crate::content::host) fn enemies_of(core: &GameStateCore, catalog: &Catalog, owner: PlayerId) -> Vec<PlayerId> {
     core.seat_order_from(owner)
         .into_iter()
         .filter(|&p| {
@@ -518,7 +546,7 @@ pub(super) fn enemies_of(core: &GameStateCore, catalog: &Catalog, owner: PlayerI
         .collect()
 }
 
-pub(super) fn friends_of(core: &GameStateCore, catalog: &Catalog, owner: PlayerId) -> Vec<PlayerId> {
+pub(in crate::content::host) fn friends_of(core: &GameStateCore, catalog: &Catalog, owner: PlayerId) -> Vec<PlayerId> {
     core.seat_order_from(owner)
         .into_iter()
         .filter(|&p| p != owner && core.player(p).alive && core.is_friend_of(catalog, owner, p))

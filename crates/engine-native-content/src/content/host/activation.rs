@@ -375,6 +375,13 @@ impl HostSkillBehavior {
             | HostBehavior::U05Hearth2BatchF => {
                 super::step::u05_hearth::activate_u05_hearth(self, ctx, owner)
             }
+            HostBehavior::U05GwentCharBatchA
+            | HostBehavior::U05GwentCharBatchB
+            | HostBehavior::U05GwentCharBatchC
+            | HostBehavior::U05GwentCharBatchD => {
+                super::step::u05_b5b_gwent::activate_u05_gwent_char(self, ctx, owner)
+                    .map(|m| Box::new(m) as Box<dyn crate::catalog::SkillMachine>)
+            }
             _ => None,
         }
     }
@@ -651,6 +658,12 @@ pub(in crate::content::host) fn has_phase_use_activation(
         | HostBehavior::U05Hearth2BatchE
         | HostBehavior::U05Hearth2BatchF) => {
             super::step::u05_hearth::has_phase_use_activation_hearth(b, name)
+        }
+        HostBehavior::U05GwentCharBatchA
+        | HostBehavior::U05GwentCharBatchB
+        | HostBehavior::U05GwentCharBatchC
+        | HostBehavior::U05GwentCharBatchD => {
+            super::step::u05_b5b_gwent::has_phase_use_u05_gwent_char(behavior, name)
         }
         _ => false,
     }

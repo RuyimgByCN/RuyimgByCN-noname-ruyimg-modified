@@ -20,7 +20,8 @@ pub(super) fn begin_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
                 ctx.catalog
                     .skill_by_name(k)
                     .is_some_and(|d| ctx.core.has_skill(player, d))
-            });
+            })
+        || (ctx.catalog.hooks.on_phase_draw_before)(ctx, player);
     if skipped {
         if ctx.core.turn.skip_draw_phase {
             ctx.core.turn.skip_draw_phase = false;

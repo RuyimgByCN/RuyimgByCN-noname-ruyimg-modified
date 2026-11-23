@@ -109,7 +109,7 @@ pub(crate) fn host_on_turn_phase_after(ctx: &mut Ctx<'_>, player: PlayerId) {
     super::u05_b2_gujian::on_turn_phase_after_gujian(ctx, player);
 }
 
-/// `dieEnd` 死亡结算后钩子（`alive=false` 落账后）：刷新全场存活 `xiefang` 计数，并登记 `lingyong` / 清理 `mhuanyi` 与 U05 `ow` / `hearth` 死亡监听。
+/// `dieEnd` 死亡结算后钩子（`alive=false` 落账后）：刷新全场存活 `xiefang` 计数，并登记 `lingyong` / 清理 `mhuanyi` 与 U05 `ow` / `hearth` / `gwent` 死亡监听。
 pub(crate) fn host_on_player_died(
     ctx: &mut Ctx<'_>,
     dead: PlayerId,
@@ -117,6 +117,7 @@ pub(crate) fn host_on_player_died(
 ) {
     super::u05_ow::host_on_player_died_ow(ctx, dead);
     super::u05_hearth::host_on_player_died_hearth(ctx, dead, killer);
+    crate::content::host::step::u05_b5b_gwent::u05_b5b_on_player_died(ctx, dead);
     let seats = ctx.core.players.len() as PlayerId;
     for owner in 0..seats {
         if !ctx.core.player(owner).alive {
@@ -141,6 +142,7 @@ pub(crate) fn host_on_player_died(
 /// `phaseUseEnd`（出牌阶段结束）钩子：清理 `new_meibu` 与 `bolan` 授予的临时技能及 `mtongnian` 镜像牌。
 pub(crate) fn host_on_phase_use_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     super::u05_b1_mtg::return_mtongnian_links(ctx.core, player);
+    crate::content::host::step::u05_b5b_gwent::u05_b5b_on_phase_use_end(ctx, player);
     for (flag_key, sk_name) in [
         ("l27_temp_phase_use:new_zhixi", L27_NEW_ZHIXI_KEY),
         ("l27_temp_phase_use:new_meibu_range", L27_NEW_MEIBU_RANGE_KEY),

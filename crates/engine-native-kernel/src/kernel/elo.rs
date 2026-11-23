@@ -120,9 +120,24 @@ pub fn elo_mark_deck_insert(core: &mut GameStateCore, card: CardId, no_mark: boo
     }
 }
 
+/// Clears U05-5b discard-pile vanishtags (`bolang` / `_gwshenyu`) when cards leave `discard`.
+pub fn clear_u05_discard_vanishtags(core: &mut GameStateCore, cards: &[CardId]) {
+    let seats = core.players.len() as PlayerId;
+    for &c in cards {
+        core.vm_aux
+            .flags
+            .remove(&(0, format!("gw_shenyu_vanishtag:{c}")));
+        let bkey = format!("gw_bolang_tag:{c}");
+        for s in 0..seats {
+            core.vm_aux.flags.remove(&(s, bkey.clone()));
+        }
+    }
+}
+
 /// `game.washCard` hook installed by `_eloMechanism` (`extension.js:44-55`).
 /// Clears `isEloKnown` on all cards washed back into the draw pile.
 pub fn elo_on_wash_deck(core: &mut GameStateCore, washed_cards: &[CardId]) {
+    clear_u05_discard_vanishtags(core, washed_cards);
     if elo_is_init(core) {
         for &c in washed_cards {
             elo_set_card_known(core, c, false);

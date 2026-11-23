@@ -15,6 +15,7 @@ pub(super) fn step_huoge(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             for _ in 0..6 {
                 if ctx.core.deck.is_empty() && !ctx.core.discard.is_empty() {
                     let mut d = std::mem::take(&mut ctx.core.discard);
+                    crate::kernel::clear_u05_discard_vanishtags(ctx.core, &d);
                     ctx.core.rng.shuffle(&mut d);
                     ctx.core.deck = d;
                 }
@@ -183,7 +184,7 @@ fn advance_huoge_queue(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     finish_gwent_card(m, ctx, true)
 }
 
-fn emit_huoge_use(ctx: &mut Ctx<'_>, owner: PlayerId, c: CardId, mut targets: Vec<PlayerId>) {
+pub(in crate::content::host::step) fn emit_huoge_use(ctx: &mut Ctx<'_>, owner: PlayerId, c: CardId, mut targets: Vec<PlayerId>) {
     let name = super::clean_gwent_name(ctx.catalog.cards[c as usize].name);
     let kind = ctx.catalog.card_kind(c);
     ctx.core.table.push(c);
@@ -345,7 +346,7 @@ fn is_huoge_no_target_card(
     }
 }
 
-pub(super) fn huoge_card_can_use(
+pub(in crate::content::host::step) fn huoge_card_can_use(
     core: &GameStateCore,
     catalog: &Catalog,
     owner: PlayerId,
@@ -473,7 +474,7 @@ fn filter_huoge_targets(
 }
 
 /// 若牌需手选目标返回 `Some((options, min, max))`，否则（装备/无目标/全自动目标）返回 `None`。
-pub(super) fn huoge_card_targets(
+pub(in crate::content::host::step) fn huoge_card_targets(
     core: &GameStateCore,
     catalog: &Catalog,
     owner: PlayerId,
@@ -801,7 +802,7 @@ fn is_target_hidden(core: &GameStateCore, p: PlayerId) -> bool {
         || core.player(p).yinmi_active
 }
 
-pub(super) fn jiedao_victim_options(
+pub(in crate::content::host::step) fn jiedao_victim_options(
     core: &GameStateCore,
     catalog: &Catalog,
     owner: PlayerId,

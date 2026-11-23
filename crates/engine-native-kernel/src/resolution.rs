@@ -374,11 +374,21 @@ fn plan_triggers(
     // 与遍历序无关。
     let mut providers: Vec<_> = core.skills.keys().copied().collect();
     for &def in catalog.candidates(kind) {
-        if catalog.skills[def as usize]
+        let sk = &catalog.skills[def as usize];
+        if sk
             .behavior
             .native_damage_effect(kind)
-            .is_some_and(|e| e.helper_name() == Some(catalog.skills[def as usize].name))
+            .is_some_and(|e| e.helper_name() == Some(sk.name))
         {
+            providers.extend((0..core.players.len() as PlayerId).map(|owner| (owner, def)));
+        }
+    }
+    if kind == EventKind::TurnPhaseEnd {
+        if let Some(def) = catalog.skill_by_name("hupeng3") {
+            providers.extend((0..core.players.len() as PlayerId).map(|owner| (owner, def)));
+        }
+    } else if kind == EventKind::CardUsed {
+        if let Some(def) = catalog.skill_by_name("hupeng4") {
             providers.extend((0..core.players.len() as PlayerId).map(|owner| (owner, def)));
         }
     }

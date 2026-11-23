@@ -168,6 +168,62 @@ pub(in crate::kernel) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: Playe
         if ctx.core.player(player).anwugu_count > 0 {
             ctx.core.player_mut(player).anwugu_count -= 1;
         }
+        // U05-5b `gwqinwu`: `target.addTempSkill(["gwqinwu", "gwqinwu2"], { player: "phaseAfter" })`
+        if ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(player, "gw_qinwu_temp".to_string()))
+            .is_some()
+        {
+            for sk in ["gwqinwu", "gwqinwu2"] {
+                if let Some(def) = ctx.catalog.skill_by_name(sk) {
+                    ctx.core.skills.remove(&(player, def));
+                }
+            }
+        }
+        // U05-5b `gwgouhun`: `goMad({ player: "phaseAfter" })`
+        if ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(player, "gw_gouhun_mad".to_string()))
+            .is_some()
+        {
+            ctx.core.player_mut(player).boss_mad = false;
+        }
+        // U05-5b `g_gw_yewu` (`character/gwent/skill.js:1124`): phaseAfter 移去 gw_wuyao / gw_lang
+        let yewu_vanish: Vec<crate::ids::CardId> = ctx
+            .core
+            .player(player)
+            .hand
+            .iter()
+            .copied()
+            .filter(|&c| {
+                matches!(
+                    ctx.catalog.cards[c as usize].name,
+                    "gw_wuyao" | "gw_lang"
+                )
+            })
+            .collect();
+        if !yewu_vanish.is_empty() {
+            for &c in &yewu_vanish {
+                ctx.take_hand_card(player, c);
+            }
+            ctx.note_cards_lost(player, &yewu_vanish);
+            let lost_n = yewu_vanish.len();
+            ctx.core
+                .vm_aux
+                .piles
+                .entry((0, "u05_vanished".to_string()))
+                .or_default()
+                .extend(yewu_vanish.iter().copied());
+            ctx.emit(EventData::CardsLost {
+                player,
+                cards: yewu_vanish,
+                origins: vec![crate::event::LostOrigin::Hand; lost_n],
+            });
+        }
         if ctx.core.turn.extra_phases.is_empty()
             && ctx.core.player(player).alive
             && (ctx.catalog.hooks.on_shanxian_turnover)(ctx, player)

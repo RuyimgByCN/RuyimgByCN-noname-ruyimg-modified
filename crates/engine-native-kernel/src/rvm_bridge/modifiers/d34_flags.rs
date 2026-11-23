@@ -275,7 +275,7 @@ pub fn apply_attack_range(
         cur += 1;
     }
     let cur = super::d34_l28_mods::apply_shengong_attack_range(state, catalog, player, cur);
-    let cur = d34_u05_mods::apply_attack_range(state, player, cur);
+    let cur = d34_u05_mods::apply_attack_range(state, catalog, player, cur);
     d34_l11_mods::apply_attack_range(state, catalog, player, cur)
 }
 
@@ -451,6 +451,12 @@ pub fn apply_sha_extra_targets(
         extra += flag_val(state, player, "ddd_xianxi_target_added") as i32;
         if flag_val(state, player, "u05_mod:gwchuanxin") > 0
             || flag_val(state, player, "u05_mod:shewu") > 0
+        {
+            extra += 1;
+        }
+        if has_weapon(state, catalog, player)
+            && (flag_val(state, player, "l11_weapon_ziyideyongzhan") > 0
+                || has_ext_skill(state, catalog, player, "buff_txhj_ziyideyongzhan"))
         {
             extra += 1;
         }

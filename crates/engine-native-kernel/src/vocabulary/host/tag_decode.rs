@@ -634,6 +634,10 @@ impl HostBehavior {
             1255 => HostBehavior::U05Hearth2BatchF,
             1160 => HostBehavior::U05GwentCardEffect,
             1161 => HostBehavior::U05GwentCardSkill,
+            1190 => HostBehavior::U05GwentCharBatchA,
+            1191 => HostBehavior::U05GwentCharBatchB,
+            1192 => HostBehavior::U05GwentCharBatchC,
+            1193 => HostBehavior::U05GwentCharBatchD,
             _ => return None,
         })
     }

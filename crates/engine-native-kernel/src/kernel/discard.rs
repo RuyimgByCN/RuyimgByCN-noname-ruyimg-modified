@@ -79,6 +79,14 @@ impl crate::catalog::SkillMachine for DiscardToLimitMachine {
                     {
                         return false;
                     }
+                    if crate::kernel::combat_rules::is_gw_dudayuanshuai2_locked(
+                        ctx.core,
+                        ctx.catalog,
+                        self.player,
+                        *c,
+                    ) {
+                        return false;
+                    }
                     if honglianx
                         && is_hand
                         && matches!(

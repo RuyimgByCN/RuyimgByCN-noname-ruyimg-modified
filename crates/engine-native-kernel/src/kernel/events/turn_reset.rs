@@ -115,6 +115,33 @@ pub(crate) fn reset_new_turn_state(ctx: &mut Ctx<'_>, player: PlayerId) {
     if ctx.core.player(player).chaofeng_active {
         ctx.core.player_mut(player).chaofeng_active = false;
     }
+    // U05-5b `fayin` (`character/gwent/skill.js:3024`: goMad until target's phaseBegin):
+    if ctx
+        .core
+        .vm_aux
+        .flags
+        .remove(&(player, "gw_fayin_mad".to_string()))
+        .is_some()
+    {
+        ctx.core.player_mut(player).boss_mad = false;
+    }
+    // U05-5b `shuangxi` / `shewu_dist` / `gw_use2_cnt:*` 回合开始清零
+    ctx.core
+        .vm_aux
+        .flags
+        .remove(&(player, "gw_shuangxi_turn_damaged".to_string()));
+    ctx.core
+        .vm_aux
+        .flags
+        .remove(&(player, "u05_mod:shewu_dist".to_string()));
+    ctx.core
+        .vm_aux
+        .flags
+        .remove(&(player, "gw_use2_cnt:gwliaotian".to_string()));
+    ctx.core
+        .vm_aux
+        .flags
+        .remove(&(player, "gw_use2_cnt:gwxiaoshou".to_string()));
     // K09：屏障标志转计数（上游 pingzhang_count phaseBegin silent）。
     {
         let used = u8::from(ctx.core.player(player).pingzhang_self_used)

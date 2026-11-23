@@ -253,6 +253,10 @@ pub struct ContentHooks {
         crate::ids::PlayerId,
         u8,
     ) -> Option<crate::ids::SkillDefId>,
+    /// 护甲变化后宿主触发钩子（如 U05-5b `gwweitu_gain`：`changeHujiaAfter` `num < 0`）。
+    pub on_hujia_changed: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId, i32),
+    /// 摸牌阶段开始前前置替换/跳过钩子（`phaseDrawBefore`，如 U05-5b `gwjingtian`/`gwzhongmo`）。
+    pub on_phase_draw_before: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId) -> bool,
 }
 
 impl ContentHooks {
@@ -312,5 +316,7 @@ impl ContentHooks {
         on_judge_pre_hearth: |_, _| false,
         on_judge_rewrite_pre_hearth: |_, _, _| false,
         hearth_response_skill: |_, _, _, _| None,
+        on_hujia_changed: |_, _, _| {},
+        on_phase_draw_before: |_, _| false,
     };
 }

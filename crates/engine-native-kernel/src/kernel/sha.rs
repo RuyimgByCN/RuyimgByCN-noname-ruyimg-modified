@@ -228,6 +228,11 @@ impl ShaResolveMachine {
             .flags
             .iter()
             .any(|((_, k), &v)| k == "bolehuiyan_pred" && v > 0)
+            || ["gwchuanxin", "junchi"].into_iter().any(|name| {
+                ctx.catalog
+                    .skill_by_name(name)
+                    .is_some_and(|def| ctx.core.alive_players().any(|p| ctx.core.has_skill(p, def)))
+            })
     }
 
     pub(super) fn target_has_shenfuhuaxie(&self, ctx: &Ctx<'_>) -> bool {

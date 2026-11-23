@@ -1,5 +1,12 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+## 2026-11-23 Batch U05-5b（U05 昆特牌 `gwent` 52 武将与 69 技能 121 项语义对齐、全钩子协同与模块拆分）
+
+- **不变量保持**：`RULES_VERSION=333`、`NGSA=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。
+- **主线合入语义与生命周期对齐**：
+  - `HostBehavior` 新增 `1190..=1193`（`U05GwentCharBatchA..=D`，`HostBehavior::ALL=633`），独立尾追加 [known_prompts_u05_5b.rs](../../crates/engine-native-kernel/src/archive/known_prompts_u05_5b.rs)（`69` 条提示词，`0` 重名），接入 [u05_b5b_gwent/mod.rs](../../crates/engine-native-content/src/content/host/step/u05_b5b_gwent/mod.rs)（`group_a..d` / `group_*_asks` / `group_*_steps` / `targets`），`extension_choices_dispatch.rs` 末尾串接 [extension_choices_u05_5b.rs](../../crates/engine-native/src/ai/extension_choices_u05_5b.rs)，并自 `host_skill_bindings.rs` 拆出 [host_skill_bindings_std.rs](../../crates/content-native-loader/src/host_skill_bindings_std.rs) 保 Rust 非测试源码 `<= 1,000` 有效行。
+  - **主线协同与 Round 2/3 修复保留**：`targets.rs::has_zhuge_clean` 统一调用 [core_ops_modifiers.rs](../../crates/engine-native-kernel/src/state/core_ops_modifiers.rs#L854-L867) `has_active_equip_kind`（兼顾 `yange`/`yanjia` 与 `gw_dieyi` 屏蔽）；`hooks.rs`/`catalog/hooks.rs` 新增 `on_hujia_changed`（`damage.rs` 护甲变化派发）与 `on_phase_draw_before`（`phase/draw.rs` 摸牌前钩子）；`combat_rules.rs` / `discard.rs` / `dying.rs` / `events/turn_reset.rs` / `d34_flags.rs` 协同对齐 `effective_card_kind_in_core`、`is_gw_dudayuanshuai2_locked`、`gwfusheng`、`shahun`/`duhun` 与 `shewu` 无限距离；`round3.rs` 将 `gj_food_molicha` 授予置于 `advance_to_seat_play(2)` 之后以适配 `U05-2` `food_tick` 倒计时（完整保留 `junchi_playable_cards`、`BOSS_REMEN` 与 `hupeng2` 不可弃锁）。
+
 ## 2026-11-23 Batch U05-5a（U05 昆特牌 `gwent` 卡牌及伴生技能 80 项语义对齐、`gw_dieyi` 装备屏蔽与 `yange`/`yanjia` 联动）
 
 - **不变量保持**：`RULES_VERSION=333`、`NGSA=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。

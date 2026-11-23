@@ -142,6 +142,58 @@ pub(crate) fn effective_card_kind_in_core(
         .unwrap_or_else(|| catalog.card_kind(card))
 }
 
+/// `U05-5b` 复生（`gwfusheng` `chooseToUse`）：任一存活角色在濒死者正面朝上时可发动。
+pub(crate) fn gwfusheng_dying_skill(
+    core: &crate::state::GameStateCore,
+    catalog: &Catalog,
+    responder: PlayerId,
+    dying: PlayerId,
+) -> Option<crate::ids::SkillDefId> {
+    if !core.player(responder).alive
+        || !core.player(dying).alive
+        || core.player(dying).face_down
+    {
+        return None;
+    }
+    if catalog.is_rechanyuan_sealed_name(core, responder, "gwfusheng") {
+        return None;
+    }
+    let def = catalog.skill_by_name("gwfusheng")?;
+    core.has_skill(responder, def).then_some(def)
+}
+
+/// `U05-5b` `hupeng2`：手牌中 `gw_dudayuanshuai2` 不可使用、打出、弃置或救人。
+pub fn is_gw_dudayuanshuai2_locked(
+    core: &crate::state::GameStateCore,
+    catalog: &Catalog,
+    player: PlayerId,
+    card: crate::ids::CardId,
+) -> bool {
+    let Some(cdef) = catalog.cards.get(card as usize) else {
+        return false;
+    };
+    let clean = cdef
+        .name
+        .rsplit_once('_')
+        .and_then(|(h, t)| (!t.is_empty() && t.chars().all(|b| b.is_ascii_digit())).then_some(h))
+        .unwrap_or(cdef.name);
+    if clean != "gw_dudayuanshuai2" {
+        return false;
+    }
+    let has_hupeng_global = catalog
+        .skill_by_name("hupeng")
+        .is_some_and(|d| (0..core.players.len() as PlayerId).any(|p| core.player(p).alive && core.has_skill(p, d)))
+        || catalog
+            .skill_by_name("hupeng2")
+            .is_some_and(|d| core.has_skill(player, d))
+        || core
+            .vm_aux
+            .flags
+            .get(&(player, "u05_mod:hupeng2".to_string()))
+            .is_some_and(|&v| v > 0);
+    has_hupeng_global
+}
+
 /// P1/N08 急救（华佗）：持有者濒死结算时红色手牌可当【桃】使用。
 pub(super) fn is_tao_like(
     ctx: &Ctx<'_>,
@@ -368,6 +420,9 @@ pub fn response_kind_cards_core(
             .iter()
             .copied()
             .filter(|&c| {
+                if is_gw_dudayuanshuai2_locked(core, catalog, responder, c) {
+                    return false;
+                }
                 if need == CardKind::Nullify
                     && is_ssr_luoyi_trick_to_duel(core, catalog, responder, c)
                 {
@@ -570,7 +625,10 @@ pub fn sha_card_use_as(
     card: crate::ids::CardId,
 ) -> Option<(Option<CardKind>, bool)> {
     let in_hand = core.player(owner).hand.contains(&card);
-    if in_hand && catalog.blocks_hand_cards(core, owner) {
+    if in_hand
+        && (catalog.blocks_hand_cards(core, owner)
+            || is_gw_dudayuanshuai2_locked(core, catalog, owner, card))
+    {
         return None;
     }
     let kind = catalog.resolved_card_kind(core, card);

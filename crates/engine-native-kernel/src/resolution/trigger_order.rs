@@ -146,7 +146,8 @@ pub(super) fn eligible(
     let helper = def
         .behavior
         .native_damage_effect(kind)
-        .is_some_and(|e| e.helper_name() == Some(def.name));
+        .is_some_and(|e| e.helper_name() == Some(def.name))
+        || matches!(def.name, "hupeng3" | "hupeng4");
     (helper || inst.is_some_and(|i| i.enabled && (!def.limits.once_per_turn || !i.once_used)))
         && !(kind == EventKind::TurnPhaseAfter
             && core.turn.extra_phases.is_empty()

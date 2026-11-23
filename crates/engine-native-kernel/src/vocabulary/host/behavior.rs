@@ -1793,4 +1793,12 @@ pub enum HostBehavior {
     U05GwentCardEffect,
     /// U05 杀海拾遗·gwent 卡牌关联与全局触发技（tag 1161：gw_aerdeyin/gw_baobaoshu/gw_nuhaifengbao/gw_youer/gw_dieyi/gw_leizhoushu/_gainspell/gw_xianzumaijiu/gwmaoxian_hengsaite_sha 等）。
     U05GwentCardSkill,
+    /// U05-5b 杀海拾遗·gwent 角色技 Batch A（tag 1190：sqlong*/jielue/gwhuanshuang/gwjinli*/gwliaotian/gwhuanbi/gwminxiang/gwlangshi/gwjingtian*/gwjingshi/gwweitu/gwgouhun/gwfutian/gwzhongmo/gwyewu/g_gw_yewu）。
+    U05GwentCharBatchA,
+    /// U05-5b 杀海拾遗·gwent 角色技 Batch B（tag 1191：shuangxi/yangfan/gwfengshi/gwchenshui/gwliedi/julian/gwfusheng/gwqinwu*/huanshu*/gwjieyin/zhengjun/gwxuezhan/bolang/gwjushi*/gwfengchi）。
+    U05GwentCharBatchB,
+    /// U05-5b 杀海拾遗·gwent 角色技 Batch C（tag 1192：lingji/gwjinyan/gwshenyu/junchi/hupeng*/hunmo*/shuijian/yunhuo/yinzhang/gwtianbian/gwxiaoshou/kuanglie*/gwjiquan）。
+    U05GwentCharBatchC,
+    /// U05-5b 杀海拾遗·gwent 角色技 Batch D（tag 1193：nuhou/shewu*/gwzhanjiang*/gwchuanxin/fengjian/huandie*/xuezhou*/fayin/gwbaquan/huihun/lanquan）。
+    U05GwentCharBatchD,
 }

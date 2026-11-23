@@ -159,6 +159,11 @@ pub(crate) use u05_hearth::{
 };
 pub(super) mod l20_batch_a;
 pub(super) mod l20_batch_b;
+pub(super) mod u05_b5b_gwent;
+pub(crate) use u05_b5b_gwent::{
+    u05_b5b_on_hujia_changed as host_on_hujia_changed,
+    u05_b5b_on_phase_draw_before as host_on_phase_draw_before,
+};
 pub(super) mod u08_batch_a;
 pub(crate) use u08_batch_a::host_draw_begin_step;
 pub(super) mod u08_batch_a_asks;
@@ -1332,6 +1337,10 @@ impl HostMachine {
             HostBehavior::U05YunchouCharBatch => u05_b1_yunchou::handle_u05_yunchou_char(self, ctx),
             HostBehavior::U05GwentCardEffect => u05_b5a_gwent::step_u05_gwent_card(self, ctx),
             HostBehavior::U05GwentCardSkill => u05_b5a_gwent::handle_u05_gwent_skill(self, ctx),
+            HostBehavior::U05GwentCharBatchA
+            | HostBehavior::U05GwentCharBatchB
+            | HostBehavior::U05GwentCharBatchC
+            | HostBehavior::U05GwentCharBatchD => u05_b5b_gwent::handle_u05_gwent_char(self, ctx),
         }
     }
 }

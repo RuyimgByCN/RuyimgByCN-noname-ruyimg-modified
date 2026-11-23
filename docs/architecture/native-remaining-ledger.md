@@ -1,5 +1,9 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+## 2026-11-23 Batch U05-5b（U05 昆特牌 `gwent` 52 武将与 69 技能 +121→927/1,621；余 694 项待后续 U05 批次）
+
+- 合入 `swarm/conv-u05-5b-gwent-chars`（`4a145b5f7..0ec2caac8`，`verifier-u05-a` `#116 APPROVE`），协同 `has_active_equip_kind` 统一连弩校验、拆出 `host_skill_bindings_std.rs` 保 Rust 有效行 `<= 1,000` 并修复 `round3.rs` `gj_food_molicha` 授予时序，将 `gwent` 全部 `52` 名武将（`character/gwent/character.js`）+ `69` 项角色/衍生/全局技能（`character/gwent/skill.js`）共 `121` 项全数升为 `已复核等价`（`0` 保留；全局 **`3,247 / 1,177 / 0`**，`U05` **`927 / 694 / 0`**，整包 8 维仍 `0/37`）。[inventory_status.json](../migration/g0/inventory_status.json) 余下 `U05:configs:gwent`、`U05-6b` 保留 8 项、`U05-1` 保留 7 项与其余 `swd`/`xianjian` 等 `U05` 剩余 `694` 项待后续规则批次关闭；详见 [Batch U05-5b 证据摘要](../operations/evidence/2026-11-23-u05-5b-gwent-chars/README.md) 与 [native-rules-baseline.md](native-rules-baseline.md)。
+
 ## 2026-11-23 Batch U05-5a（U05 昆特牌 `gwent` 卡牌/技能 +80→806/1,621；余 815 项待后续 U05 批次）
 
 - 合入 `swarm/conv-u05-5a-gwent-cards`（`b7ac33cb6..278b0ac8a`，`verifier-u05-a` `#96 APPROVE`），协同 `has_active_equip_kind`（叠加 `equip_card_has_kind` 与 `!is_gw_dieyi_masked`）并拆分 `play_card_targets_gwent.rs` 与 `extension_choices_dispatch.rs`，将 `gwent` 全部 `69` 卡牌（`43` `card/gwent/card.js` + `26` `character/gwent/card.js`）+ `11` 卡牌伴生技能（`card/gwent/skill.js`）共 `80` 项全数升为 `已复核等价`（`0` 保留；全局 **`3,126 / 1,298 / 0`**，`U05` **`806 / 815 / 0`**，整包 8 维仍 `0/37`）。[inventory_status.json](../migration/g0/inventory_status.json) 余下 `/character/gwent/` `121` 项（归 `U05-5b`）、`main/config.js:39`、`U05-6b` 保留 8 项、`U05-1` 保留 7 项与其余 `swd`/`xianjian` 等 `U05` 剩余 `815` 项待后续规则批次关闭；详见 [Batch U05-5a 证据摘要](../operations/evidence/2026-11-23-u05-5a-gwent-cards/README.md) 与 [native-rules-baseline.md](native-rules-baseline.md)。

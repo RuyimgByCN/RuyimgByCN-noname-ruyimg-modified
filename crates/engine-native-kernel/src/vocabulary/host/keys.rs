@@ -13,6 +13,22 @@ impl HostBehavior {
     pub const fn group_children(self) -> &'static [(&'static str, HostBehavior)] {
         match self {
             HostBehavior::SwdXuanying => &[("xuanying_damage", HostBehavior::SwdXuanyingDamage)],
+            HostBehavior::U05GwentCharBatchA => &[
+                ("gwhuanshuang_disable", HostBehavior::U05GwentCharBatchA),
+                ("gwjinli_jiu", HostBehavior::U05GwentCharBatchA),
+                ("gwweitu_gain", HostBehavior::U05GwentCharBatchA),
+                ("gwjingtian2", HostBehavior::U05GwentCharBatchA),
+            ],
+            HostBehavior::U05GwentCharBatchC => &[
+                ("hunmo2", HostBehavior::U05GwentCharBatchC),
+                ("kuanglie2", HostBehavior::U05GwentCharBatchC),
+            ],
+            HostBehavior::U05GwentCharBatchD => &[
+                ("shewu_dist", HostBehavior::U05GwentCharBatchD),
+                ("gwzhanjiang2", HostBehavior::U05GwentCharBatchD),
+                ("huandie_discard", HostBehavior::U05GwentCharBatchD),
+                ("xuezhou_hp2", HostBehavior::U05GwentCharBatchD),
+            ],
             _ => &[],
         }
     }
@@ -661,6 +677,10 @@ impl HostBehavior {
             HostBehavior::U05Hearth2BatchF => "host:u05_hearth2_batch_f",
             HostBehavior::U05GwentCardEffect => "host:u05_gwent_card_effect",
             HostBehavior::U05GwentCardSkill => "host:u05_gwent_card_skill",
+            HostBehavior::U05GwentCharBatchA => "host:u05_gwent_char_batch_a",
+            HostBehavior::U05GwentCharBatchB => "host:u05_gwent_char_batch_b",
+            HostBehavior::U05GwentCharBatchC => "host:u05_gwent_char_batch_c",
+            HostBehavior::U05GwentCharBatchD => "host:u05_gwent_char_batch_d",
         }
     }
 }

@@ -150,7 +150,18 @@ pub(super) fn apply_hand_limit(
     limit
 }
 
-pub(super) fn apply_attack_range(state: &GameStateCore, player: PlayerId, mut range: i32) -> i32 {
+pub(super) fn apply_attack_range(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    player: PlayerId,
+    mut range: i32,
+) -> i32 {
+    // character/gwent/skill.js:2804-2808 (`gwchuanxin`: attackFrom distance - from.hp + 1)
+    if let Some(def) = catalog.skill_by_name("gwchuanxin") {
+        if state.has_skill(player, def) && !catalog.is_tieji_sealed(state, player) {
+            range += (state.player(player).hp - 1).max(0);
+        }
+    }
     // character/ow/skill.js:941-963 (`bfengshi`: attackFrom - countUsed())
     if flag_val(state, player, "u05_mod:bfengshi") > 0 {
         range += state.turn.cards_used_play_phase.max(1) as i32;
@@ -353,6 +364,14 @@ pub(super) fn apply_card_distance_unlimited(
     kind: CardKind,
     mut unlimited: bool,
 ) -> bool {
+    // character/gwent/skill.js:2702-2710 (`shewu_dist`: targetInRange() => true)
+    if flag_val(state, player, "u05_mod:shewu_dist") > 0
+        || catalog
+            .skill_by_name("shewu_dist")
+            .is_some_and(|d| state.has_skill(player, d))
+    {
+        return true;
+    }
     if kind.is_sha_like()
         && (flag_val(state, player, "u05_mod:bshaowei") > 0
             || flag_val(state, player, "u05_mod:feiren") > 0)
@@ -501,12 +520,7 @@ pub(super) fn apply_card_use_canceled(
         canceled = true;
     }
     // character/gwent/skill.js:2197-2234 (`hupeng2`: gw_dudayuanshuai2 unplayable)
-    if flag_val(state, actor, "u05_mod:hupeng2") > 0
-        && catalog
-            .cards
-            .get(card as usize)
-            .is_some_and(|c| c.name.contains("gw_dudayuanshuai2"))
-    {
+    if crate::kernel::is_gw_dudayuanshuai2_locked(state, catalog, actor, card) {
         canceled = true;
     }
     // character/hearth/skill.js:1847-1855 (`lieyang2`) & 4601-4614 (`duzhang2`): trick cards locked

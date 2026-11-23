@@ -96,6 +96,10 @@ pub fn host_skill_trigger_meta(
         | HostBehavior::U05Hearth2BatchE
         | HostBehavior::U05Hearth2BatchF => step::u05_hearth::trigger_meta(name, behavior),
         HostBehavior::U05GwentCardSkill => step::u05_b5a_gwent::trigger_meta_u05_gwent_skill(name),
+        HostBehavior::U05GwentCharBatchA
+        | HostBehavior::U05GwentCharBatchB
+        | HostBehavior::U05GwentCharBatchC
+        | HostBehavior::U05GwentCharBatchD => step::u05_b5b_gwent::trigger_meta_u05_gwent_char(name),
         _ => crate::event::NativeDamageEffect::from_host(behavior)
             .map(|e| e.meta())
             .or_else(|| behavior.trigger_meta()),
@@ -217,6 +221,10 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         | HostBehavior::U05Hearth2BatchD
         | HostBehavior::U05Hearth2BatchE
         | HostBehavior::U05Hearth2BatchF => step::u05_hearth::limits(name, behavior),
+        HostBehavior::U05GwentCharBatchA
+        | HostBehavior::U05GwentCharBatchB
+        | HostBehavior::U05GwentCharBatchC
+        | HostBehavior::U05GwentCharBatchD => step::u05_b5b_gwent::limits_u05_gwent_char(name),
         HostBehavior::GujianFoodQingtuan | HostBehavior::GujianFoodLuyugeng => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,

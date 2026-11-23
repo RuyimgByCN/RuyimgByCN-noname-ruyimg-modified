@@ -922,7 +922,11 @@ impl HostBehavior {
             | HostBehavior::U05Hearth2BatchD
             | HostBehavior::U05Hearth2BatchE
             | HostBehavior::U05Hearth2BatchF
-            | HostBehavior::U05GwentCardEffect => None,
+            | HostBehavior::U05GwentCardEffect
+            | HostBehavior::U05GwentCharBatchA
+            | HostBehavior::U05GwentCharBatchB
+            | HostBehavior::U05GwentCharBatchC
+            | HostBehavior::U05GwentCharBatchD => None,
             HostBehavior::U05GwentCardSkill => self.trigger_meta_common(),
             HostBehavior::L01YiyiCard
             | HostBehavior::L01FirstKs
