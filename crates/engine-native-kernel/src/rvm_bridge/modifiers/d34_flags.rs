@@ -522,6 +522,18 @@ pub fn apply_card_target_canceled(
     target: PlayerId,
     card: CardId,
     kind: CardKind,
+    canceled: bool,
+) -> bool {
+    apply_card_target_canceled_opt(state, catalog, actor, target, Some(card), kind, canceled)
+}
+
+pub fn apply_card_target_canceled_opt(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    actor: PlayerId,
+    target: PlayerId,
+    card: Option<CardId>,
+    kind: CardKind,
     mut canceled: bool,
 ) -> bool {
     let is_trick = !kind.is_basic_kind() && !kind.is_equip();
@@ -542,7 +554,9 @@ pub fn apply_card_target_canceled(
         && (has_ext_skill(state, catalog, target, "xianqu")
             || flag_val(state, target, "yxs_xianqu_ward") > 0)
     {
-        let rank = catalog.cards.get(card as usize).map_or(0, |d| d.rank);
+        let rank = card
+            .and_then(|c| catalog.cards.get(c as usize))
+            .map_or(0, |d| d.rank);
         if rank > 0 && rank < 8 {
             canceled = true;
         }
@@ -579,11 +593,30 @@ pub fn apply_card_target_canceled(
             canceled = true;
         }
     }
-    let is_black = matches!(card_suit(catalog, Some(card)), Some(Suit::Spade | Suit::Club));
+    let is_black = card
+        .and_then(|c| {
+            catalog
+                .cards
+                .get(c as usize)
+                .map(|_| catalog.effective_card_suit(state, actor, c))
+        })
+        .is_some_and(|s| matches!(s, Suit::Spade | Suit::Club));
+    let is_weimu = catalog
+        .skill_by_name(crate::vocabulary::names::BOSS_WEIMU)
+        .is_some_and(|def| state.has_skill(target, def));
+    let is_gj_molicha = catalog
+        .skill_by_name(crate::vocabulary::host::GJ_FOOD_MOLICHA_KEY)
+        .is_some_and(|def| state.has_skill(target, def));
     if is_black && flag_val(state, target, "dddanzhi_black_ward") > 0 {
         canceled = true;
     }
-    if actor != target && is_black && flag_val(state, target, "u05_mod:molicha") > 0 {
+    if is_black && is_trick && is_weimu {
+        canceled = true;
+    }
+    if actor != target
+        && is_black
+        && (flag_val(state, target, "u05_mod:molicha") > 0 || is_gj_molicha)
+    {
         canceled = true;
     }
     if actor != target
@@ -628,7 +661,7 @@ pub fn apply_card_target_canceled(
         canceled = true;
     }
     let canceled = d34_u05_mods::apply_card_target_canceled(state, catalog, actor, target, kind, canceled);
-    d34_l11_mods::apply_card_target_canceled(state, catalog, actor, target, Some(card), kind, canceled)
+    d34_l11_mods::apply_card_target_canceled(state, catalog, actor, target, card, kind, canceled)
 }
 
 #[inline]

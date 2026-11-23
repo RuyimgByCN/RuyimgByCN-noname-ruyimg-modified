@@ -220,6 +220,9 @@ fn on_card_use_popped(
     let _ = crate::kernel::take_tao_extra_carriers(core, u.player, popped_id);
     core.vm_aux
         .flags
+        .remove(&(u.player, format!("ow_card_use_suit_spade:{popped_id}")));
+    core.vm_aux
+        .flags
         .remove(&(u.player, format!("l11_carduse_lost:{popped_id}")));
     core.vm_aux
         .flags

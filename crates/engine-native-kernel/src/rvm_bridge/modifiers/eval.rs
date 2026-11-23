@@ -375,6 +375,42 @@ pub fn eval_card_distance_unlimited_to(
     )
 }
 
+/// 评估目标是否免疫某张牌的指向（`CardTargetCancel` / `CardTargetEnabled`）；
+/// `card == None` 表示无色虚拟牌，不触发按花色/黑牌判定的免疫，且向 `matches_card` 传 `CardId::MAX`。
+pub fn eval_card_target_canceled_opt(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    actor: PlayerId,
+    target: PlayerId,
+    card: Option<CardId>,
+    kind: CardKind,
+    nature: DamageNature,
+) -> bool {
+    let sentinel = card.unwrap_or(CardId::MAX);
+    let mut canceled = false;
+    for_each_player_vm_modifier(state, catalog, target, |def, rule| {
+        if rule.target == VmModifierTarget::CardTargetCancel
+            && rule
+                .selector
+                .map_or(true, |s| s.matches_card(state, catalog, actor, sentinel, kind, nature))
+            && rule.effective_value_for(state, catalog, target, Some(actor), def) > 0
+        {
+            canceled = true;
+        }
+        if rule.target == VmModifierTarget::CardTargetEnabled
+            && rule
+                .selector
+                .map_or(true, |s| s.matches_card(state, catalog, actor, sentinel, kind, nature))
+            && rule.effective_value_for(state, catalog, target, Some(actor), def) <= 0
+        {
+            canceled = true;
+        }
+    });
+    super::d34_flags::apply_card_target_canceled_opt(
+        state, catalog, actor, target, card, kind, canceled,
+    )
+}
+
 /// 评估目标是否免疫某张牌的指向（`CardTargetCancel` / `CardTargetEnabled`）。
 pub fn eval_card_target_canceled(
     state: &GameStateCore,
@@ -385,28 +421,7 @@ pub fn eval_card_target_canceled(
     kind: CardKind,
     nature: DamageNature,
 ) -> bool {
-    let mut canceled = false;
-    for_each_player_vm_modifier(state, catalog, target, |def, rule| {
-        if rule.target == VmModifierTarget::CardTargetCancel
-            && rule
-                .selector
-                .map_or(true, |s| s.matches_card(state, catalog, actor, card, kind, nature))
-            && rule.effective_value_for(state, catalog, target, Some(actor), def) > 0
-        {
-            canceled = true;
-        }
-        if rule.target == VmModifierTarget::CardTargetEnabled
-            && rule
-                .selector
-                .map_or(true, |s| s.matches_card(state, catalog, actor, card, kind, nature))
-            && rule.effective_value_for(state, catalog, target, Some(actor), def) <= 0
-        {
-            canceled = true;
-        }
-    });
-    super::d34_flags::apply_card_target_canceled(
-        state, catalog, actor, target, card, kind, canceled,
-    )
+    eval_card_target_canceled_opt(state, catalog, actor, target, Some(card), kind, nature)
 }
 
 /// 评估角色是否被禁止使用某张牌（`ShaUseCancel` / `CardUseCancel` / `HandCardUseResponseCancel` / `CardUsable`）。
@@ -877,4 +892,199 @@ pub fn eval_card_discard_protected(
         }
     });
     protected
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::catalog::{CardDef, QueryCtx, SkillBehavior, SkillDef, SkillLimits, SkillMachine, Suit};
+    use crate::event::{EventData, Phase};
+    use crate::rng::RuleRng;
+    use crate::rvm_bridge::modifiers::{VmModifierMode, VmModifierSelector};
+    use crate::state::{GameMode, PlayerState, SkillInstance, TurnState, VmAux};
+    use std::collections::BTreeMap;
+
+    #[derive(Debug)]
+    struct TestModBehavior(Vec<VmModifierRule>);
+    impl SkillBehavior for TestModBehavior {
+        fn filter(&self, _ctx: &QueryCtx<'_>, _owner: PlayerId, _event: &EventData) -> bool {
+            false
+        }
+        fn start(&self, _owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
+            unreachable!()
+        }
+        fn vm_modifiers(&self) -> &[VmModifierRule] {
+            &self.0
+        }
+    }
+
+    fn minimal_core(seats: usize) -> GameStateCore {
+        GameStateCore {
+            revision: 1,
+            ruleset_version: 333,
+            mode: GameMode::Prototype,
+            players: (0..seats).map(|_| PlayerState::new(4)).collect(),
+            seat_ring: (0..seats as u8).collect(),
+            deck: Vec::new(),
+            discard: Vec::new(),
+            detached_cards: Vec::new(),
+            table: Vec::new(),
+            rng: RuleRng::from_seed(7),
+            turn: TurnState {
+                current: 0,
+                phase: Phase::Play,
+                round: 1,
+                sha_used_play_phase: false,
+                mufeng_used_basic: false,
+                wangchen_discard_basic: false,
+                shenmiguo_used: false,
+                shuchui_armed: false,
+                shuchui_hit: false,
+                lianda_used: false,
+                land_used: false,
+                land_sha_used: false,
+                discard_phase_discarded: 0,
+                ciqiu_dying: Vec::new(),
+                kangyin2: None,
+                huanxia_track: Vec::new(),
+                cards_used_play_phase: 0,
+                cards_used_turn: 0,
+                liaoyuan_count: 0,
+                xuanyuanjian_marked: false,
+                kunlunjing_snapshot: Vec::new(),
+                kunlunjing_hp: 0,
+                extra_phases: Vec::new(),
+                extra_phase_lingwu: false,
+                bte_used_play_phase: 0,
+                phase_number: 1,
+                rende_given: 0,
+                jiu_used: false,
+                mujiaren_used: false,
+                jiu_active: false,
+                turn_opened: true,
+                skip_draw_phase: false,
+                skip_play_phase: false,
+                guxing_armed: false,
+                guxing_count: 0,
+                mengtai_draw_pending: false,
+                mengtai_use_pending: false,
+                zhufangshenshi_target: None,
+                yuedong_num: 0,
+                yuedong_eff: 0,
+                yuedong_recover: false,
+                liangou_hook: None,
+                liangou_bonus_used: false,
+                feitiao_target: None,
+                fanling_used: false,
+                diewu_draw_used: false,
+                lueying_used: false,
+                txianqu_used: false,
+                jtjubao_used: false,
+                zhuyue_targets: Vec::new(),
+                sheling_used: 0,
+                sheying_used: false,
+                zhangmu_used: false,
+                yingfeng_chain: false,
+                luanjian_card: None,
+                minwan_targets: Vec::new(),
+                yanyu_count: 0,
+                xjyufeng_used: 0,
+                qizuo_copy: None,
+                jidian_chain: false,
+            },
+            skills: BTreeMap::new(),
+            declared_kinds: BTreeMap::new(),
+            declared_slots: BTreeMap::new(),
+            card_natures: BTreeMap::new(),
+            current_land: None,
+            outcome: None,
+            vm_aux: VmAux::default(),
+        }
+    }
+
+    fn skill(name: &'static str, rules: Vec<VmModifierRule>) -> SkillDef {
+        SkillDef {
+            name,
+            trigger: None,
+            limits: SkillLimits::default(),
+            behavior: Box::new(TestModBehavior(rules)),
+            original_source: None,
+            presentation_binding: None,
+        }
+    }
+
+    #[test]
+    fn ow_target_enabled_distinguishes_colorless_red_and_black_under_black_trick_modifier() {
+        let cards = vec![
+            CardDef::basic("sha", CardKind::Sha).with_suit_rank(Suit::Spade, 7),
+            CardDef::basic("tao", CardKind::Tao).with_suit_rank(Suit::Heart, 3),
+        ];
+        let black_trick_rule = VmModifierRule {
+            target: VmModifierTarget::CardTargetCancel,
+            mode: VmModifierMode::Override,
+            selector: Some(VmModifierSelector::BlackTrick),
+            value: 1,
+            value_source: None,
+        };
+        let all_trick_rule = VmModifierRule {
+            target: VmModifierTarget::CardTargetCancel,
+            mode: VmModifierMode::Override,
+            selector: Some(VmModifierSelector::Trick),
+            value: 1,
+            value_source: None,
+        };
+        let skills = vec![
+            skill("weimu_vm", vec![black_trick_rule]),
+            skill("trick_ward_vm", vec![all_trick_rule]),
+            skill("xinhongyan", vec![]),
+        ];
+        let catalog = Catalog::build(cards, skills);
+        let mut core = minimal_core(3);
+        let inst = |owner| SkillInstance {
+            owner,
+            enabled: true,
+            once_used: false,
+            expires_end_of_turn: false,
+            rounds: 0,
+        };
+        core.skills.insert((1, 0), inst(1)); // seat 1: weimu_vm (BlackTrick CardTargetCancel)
+        core.skills.insert((2, 1), inst(2)); // seat 2: trick_ward_vm (Trick CardTargetCancel)
+
+        // 无色虚拟炽羽袭 (card = None): even though cards[0] is Spade 7, BlackTrick on seat 1 MUST allow,
+        // while generic Trick Ward on seat 2 MUST block!
+        assert!(catalog.ow_target_enabled(&core, 0, 1, None, CardKind::Chiyuxi, DamageNature::Fire));
+        assert!(!catalog.ow_target_enabled(&core, 0, 2, None, CardKind::Chiyuxi, DamageNature::Fire));
+
+        // 红色牌惊雷闪 (card = 1 Heart) -> allowed against seat 1 (BlackTrick);
+        // 黑色牌惊雷闪 (card = 0 Spade) -> blocked against seat 1 (BlackTrick)!
+        assert!(catalog.ow_target_enabled(
+            &core,
+            0,
+            1,
+            Some(1),
+            CardKind::Jingleishan,
+            DamageNature::Thunder
+        ));
+        assert!(!catalog.ow_target_enabled(
+            &core,
+            0,
+            1,
+            Some(0),
+            CardKind::Jingleishan,
+            DamageNature::Thunder
+        ));
+
+        // 持有 `xinhongyan` 时黑桃视作红桃 -> 对 `weimu_vm` / `u05_mod:molicha` / `dddanzhi_black_ward` 均不再视为黑牌
+        core.skills.insert((0, 2), inst(0));
+        core.vm_aux.flags.insert((1, "u05_mod:molicha".to_string()), 1);
+        core.vm_aux.flags.insert((1, "dddanzhi_black_ward".to_string()), 1);
+        assert!(catalog.ow_target_enabled(
+            &core,
+            0,
+            1,
+            Some(0),
+            CardKind::Jingleishan,
+            DamageNature::Thunder
+        ));
+    }
 }

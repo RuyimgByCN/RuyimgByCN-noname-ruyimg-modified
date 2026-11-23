@@ -221,9 +221,8 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
             amount: absorbed,
         });
     }
-    // 机甲血（U05 ow D.Va，规则 v141）：1:1 抵扣伤害（体力不损）——
-    // 上游 changeHp 拦截（体力回补+机甲血同扣）观察等价；归零后照常
-    // 扣体力（chongzhuang 重装累计登记暂缓）。
+    // 机甲血（U05 ow D.Va，`ow/skill.js:1992-2007`）：只要 `jijia_hp > 0`，
+    // 拦截并全额抵扣本伤害体力损失（溢出不再穿甲扣本体，机甲血扣至 `<=0` 后再受伤扣体力）。
     let has_jijia = ctx
         .catalog
         .skill_by_name(crate::vocabulary::host::WUDIAN_JIJIA_KEY)
@@ -231,10 +230,11 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
         .unwrap_or(false);
     if has_jijia {
         let j = ctx.core.player(d.target).jijia_hp;
-        if j > 0 {
-            let absorbed = (j as u32).min(hp_loss);
-            ctx.core.player_mut(d.target).jijia_hp = j - absorbed as u8;
-            hp_loss -= absorbed;
+        if j > 0 && hp_loss > 0 {
+            let absorbed = hp_loss;
+            ctx.core.player_mut(d.target).jijia_hp =
+                j.saturating_sub(absorbed.min(u32::from(u8::MAX)) as u8);
+            hp_loss = 0;
             ctx.log(LogEvent::HujiaAbsorbed {
                 player: d.target,
                 amount: absorbed,

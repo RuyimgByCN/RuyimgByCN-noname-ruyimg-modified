@@ -118,6 +118,7 @@ impl Engine {
             p.max_hp as i32
         };
         p.hujia = crate::state::general_starting_hujia(gname);
+        p.jijia_hp = 0;
         p.alive = true;
         p.dying = false;
         let has_miaoxing = self
@@ -191,6 +192,14 @@ impl Engine {
                 .flags
                 .insert((seat, "dddxiaoxing_init_done".to_string()), 1);
         }
+        self.state_core_mut()
+            .vm_aux
+            .flags
+            .remove(&(seat, "ow_zhongdun_inited".to_string()));
+        self.state_core_mut()
+            .vm_aux
+            .flags
+            .remove(&(seat, "ow_jijia_inited".to_string()));
         if self.state_core().turn.phase_number == 0 {
             let catalog = self.catalog().clone();
             (catalog.hooks.on_game_start)(self.state_core_mut(), &catalog);

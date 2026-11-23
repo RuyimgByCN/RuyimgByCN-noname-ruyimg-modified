@@ -1,5 +1,12 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+## 2026-11-23 Batch U05-3（U05 守望先锋 `ow` 127 项全量语义对齐、无色 AOE 指向校准与 `shanxian` 劫持回合）
+
+- **不变量保持**：`RULES_VERSION=333`、`NGSA=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。
+- **主线合入语义与生命周期对齐**：
+  - `HostBehavior` 新增 `1040..=1043`（`U05OwBatchA..=D`，`HostBehavior::ALL=615`），独立尾追加 `known_prompts_u05_3.rs`（`67` 条提示词），拆出 `crates/engine-native-kernel/src/kernel/events/turn_reset.rs` 保 Rust 非测试源码 `<= 1,000` 有效行；`ContentHooks` 新增 `before_facedown_turn_skip` 与 `on_shanxian_turnover`。
+  - `catalog_queries.rs` 与 `eval.rs`/`d34_flags.rs`/`selector.rs` 接入 `blocks_hand_cards`（`mianzhen2`）、`blocks_card_use_and_save`（`yihun2` 仅禁出牌/救命/无懈，不阻杀/决斗/AOE 响应与 `mbcmjiushi`）、`ow_target_enabled` 与 `eval_card_target_canceled_opt`（无色虚拟牌传 `None`/`CardId::MAX`，不触发 `BlackTrick`/`weimu`/`molicha`/`dddanzhi` 黑色免疫）；`kernel/aoe.rs` 仅在 `ctx.core.table.contains(&self.card)` 时传 `Some(self.card)`，修复无色 `huoyu` 炽羽袭误读取 `cards[0]` 黑桃被 `weimu` 格挡的问题；`dianji` 经实体牌传 `Some(cid)` 保留花色；`shanxian` 对齐翻面劫持、`ow_shanxian_target` 回合清零、背面守卫与 0 号座回绕轮次递增；`bfengshi` 于 `CardUsed` 挂 `bfengshi4`，`lianpo` 可选确认、`feiren3` 与离线派生供应闭环。
+
 ## 2026-11-23 Batch U05-2（U05 古剑奇谭 136 项全量语义对齐、`yange`/`yanjia` 载体生命周期与 `declared_kinds` 清理）
 
 - **不变量保持**：`RULES_VERSION=333`、`NGSA=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。

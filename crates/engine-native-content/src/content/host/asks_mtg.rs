@@ -457,6 +457,12 @@ pub(super) fn active_ask_batches(
         HostBehavior::L25ZuanBatchG => super::step::l25_batch_g::ask_l25_batch_g(
             stage, owner, target, targets, card, cards, core, catalog,
         ),
+        HostBehavior::U05OwBatchA
+        | HostBehavior::U05OwBatchB
+        | HostBehavior::U05OwBatchC
+        | HostBehavior::U05OwBatchD => Some(super::step::u05_ow::ask_u05_ow(
+            stage, owner, target, targets, card, cards, core, catalog,
+        )),
         HostBehavior::L10ScsCompanion => super::step::l10_scs::ask_l10_scs(
             stage, owner, target, targets, card, cards, core, catalog,
         ),

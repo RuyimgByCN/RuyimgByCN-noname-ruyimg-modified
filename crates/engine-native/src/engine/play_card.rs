@@ -266,12 +266,19 @@ pub(super) fn play_card(
                                 .find_player_vm_view_as(core, from, card, true, Some(CardKind::Snatch))
                                 .is_some_and(|s| s.ignore_distance));
                     let limu_in_range_free = xinfu_limu_in_range(core, catalog, from, target);
+                    let shanxian_free = core
+                        .vm_aux
+                        .flags
+                        .get(&(from, "ow_shanxian_target".to_string()))
+                        .copied()
+                        == Some(u32::from(target) + 1);
                     if !qicai
                         && !tannang_free
                         && !fentian_red_free
                         && !shenen_boss_free
                         && !shouyi_free
                         && !limu_in_range_free
+                        && !shanxian_free
                         && !crate::rvm_bridge::modifiers::tanbei_unlimited_target(
                             core, catalog, from, target,
                         )
@@ -814,7 +821,14 @@ pub(super) fn play_card(
                         return Err(RejectReason::IllegalTargets);
                     }
                     let user = core.turn.current;
-                    if !xinfu_limu_in_range(core, catalog, user, t)
+                    let shanxian_free = core
+                        .vm_aux
+                        .flags
+                        .get(&(user, "ow_shanxian_target".to_string()))
+                        .copied()
+                        == Some(u32::from(t) + 1);
+                    if !shanxian_free
+                        && !xinfu_limu_in_range(core, catalog, user, t)
                         && !crate::rvm_bridge::modifiers::tanbei_unlimited_target(
                             core, catalog, user, t,
                         )

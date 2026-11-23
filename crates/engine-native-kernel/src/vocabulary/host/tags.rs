@@ -620,6 +620,10 @@ impl HostBehavior {
             HostBehavior::U05GujianCharBatchC => 983,
             HostBehavior::U05GujianCharBatchD => 984,
             HostBehavior::U05GujianCharBatchE => 985,
+            HostBehavior::U05OwBatchA => 1040,
+            HostBehavior::U05OwBatchB => 1041,
+            HostBehavior::U05OwBatchC => 1042,
+            HostBehavior::U05OwBatchD => 1043,
         }
     }
 

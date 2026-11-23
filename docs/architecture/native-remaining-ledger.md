@@ -1,5 +1,9 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+## 2026-11-23 Batch U05-3（U05 守望先锋 `ow` +127→351/1,621；余 1,270 项待后续 U05 批次）
+
+- 合入 `swarm/conv-u05-3-ow`（`53ed4b1fa`，`verifier-u05-a` `#113 APPROVE`）及无色 AOE / `turn_reset.rs` 集成修复，将 `ow` 子包全部 `127` 项（`24` 武将 + `103` 技能，零保留）升为 `已复核等价`（全局 `2,671 / 1,753 / 0`，`U05` `351 / 1,270 / 0`，整包 8 维仍 `0/37`）。[inventory_status.json](../migration/g0/inventory_status.json) 余下 `1,270` 项 `U05`（含 U05-1 保留 7 项及其余 `gwent`/`swd`/`xianjian`/`hearth` 等子包）与全局其余未收敛条目继续按后续批次推进；详见 [Batch U05-3 证据摘要](../operations/evidence/2026-11-23-batch3-9-u05-3-ow/README.md) 与 [native-rules-baseline.md](native-rules-baseline.md)。
+
 ## 2026-11-23 Batch U05-2（U05 古剑奇谭 +136→224/1,621；余 1,397 项待后续 U05 批次）
 
 - 合入 `swarm/conv-u05-2-gujian`（`921a8f499`，`verifier-u05-a` `#95 APPROVE`）及集成修复，将 `gujian` 子包全部 `136` 项（`36` 卡牌 + `18` 武将 + `82` 技能，零保留）升为 `已复核等价`（全局 `2,544 / 1,880 / 0`，`U05` `224 / 1,397 / 0`，整包 8 维仍 `0/37`）。[inventory_status.json](../migration/g0/inventory_status.json) 余下 `1,397` 项 `U05`（含 U05-1 保留 7 项及其余 `gwent`/`swd`/`xianjian`/`ow`/`hearth` 等子包）与全局其余未收敛条目继续按后续批次推进；详见 [Batch U05-2 证据摘要](../operations/evidence/2026-11-23-batch3-8-u05-2-gujian/README.md) 与 [native-rules-baseline.md](native-rules-baseline.md)。

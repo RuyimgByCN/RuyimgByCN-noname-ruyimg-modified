@@ -14,7 +14,7 @@ impl SkillBehavior for LianYingBehavior {
         match event {
             EventData::CardUsed(u) => u.player == owner,
             EventData::CardResponded { player, .. } => *player == owner,
-            EventData::CardsMoved { from, .. } => *from == owner,
+            EventData::CardsMoved { from, to, .. } => *from == owner && *from != *to,
             EventData::CardsDiscarded { player, cards } => {
                 *player == owner
                     && cards.iter().any(|&c| {

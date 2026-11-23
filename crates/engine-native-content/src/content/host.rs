@@ -35,11 +35,12 @@ pub use support::{
 };
 pub use step::step_l01_on_game_start;
 pub(crate) use step::{
-    host_before_gain_hand, host_before_recover, host_card_use_after, host_draw_begin_step,
-    host_judge_settled, host_on_death_before, host_on_game_start, host_on_hand_card_removed,
-    host_on_phase_use_end, host_on_player_died, host_on_recover_before, host_on_round_start,
-    host_on_turn_begin, host_on_turn_phase_after, host_preserves_skills_on_death,
-    host_sha_begin_step, host_sha_end_step, on_cards_to_discard_chengye, on_l25_host_event,
+    host_before_facedown_turn_skip, host_before_gain_hand, host_before_recover,
+    host_card_use_after, host_draw_begin_step, host_judge_settled, host_on_death_before,
+    host_on_game_start, host_on_hand_card_removed, host_on_phase_use_end, host_on_player_died,
+    host_on_recover_before, host_on_round_start, host_on_shanxian_turnover, host_on_turn_begin,
+    host_on_turn_phase_after, host_preserves_skills_on_death, host_sha_begin_step,
+    host_sha_end_step, on_cards_to_discard_chengye, on_l25_host_event,
     on_outer_settled_taipingyaoshu, on_phase_end_l10_scs, on_skill_removed_all, play_begin_l19,
     play_begin_tianshu, play_end_rui_skill1, reguhuo_consume_resp, reguhuo_has_pending_final,
     reguhuo_response_skill, reguhuo_spawn_final, reguhuo_spawn_response, scsanruo_response_skill,
@@ -660,6 +661,12 @@ impl SkillBehavior for HostSkillBehavior {
                     .or_else(|| step::u01_fixes_2::trigger_meta_u01_fix2(&self.name))
                     .or_else(|| step::u01_fixes_3::trigger_meta_u01_fix3(&self.name))
             }
+            HostBehavior::U05OwBatchA
+            | HostBehavior::U05OwBatchB
+            | HostBehavior::U05OwBatchC
+            | HostBehavior::U05OwBatchD => {
+                step::u05_ow::window_trigger_meta_u05_ow(self.behavior, &self.name, kind)
+            }
             _ => None,
         }
     }
@@ -755,6 +762,9 @@ impl SkillBehavior for HostSkillBehavior {
         core: &crate::state::GameStateCore,
         p: crate::ids::PlayerId,
     ) -> bool {
+        if self.behavior == HostBehavior::U05OwBatchB && self.name == "shanguang2" {
+            return true;
+        }
         if self.behavior != HostBehavior::NewZhixi {
             return self.blocks_all_cards();
         }

@@ -74,6 +74,93 @@ pub(super) fn apply_guanfu_disrecover(
     (amount > 0).then_some(amount)
 }
 
+impl<'a> Ctx<'a> {
+    /// 虚拟用牌原语（规则 v169 基建，上游 game.useCard({name}) 同族）：
+    /// 以牌堆底一张实体为载体、use_as 声明牌种发起一次完整使用管线
+    /// （响应/伤害/弃置全走 use_as 分派）。载体经使用者手牌通道取出、
+    /// 结算后入弃堆（登记差异：上游凭空造牌无实体不入弃堆）。返回载体。
+    pub fn use_virtual_card(
+        &mut self,
+        source: PlayerId,
+        as_kind: crate::catalog::CardKind,
+        targets: Vec<PlayerId>,
+    ) -> CardId {
+        self.use_virtual_card_with_suit_and_nature(
+            source,
+            as_kind,
+            crate::event::DamageNature::Normal,
+            false,
+            targets,
+        )
+    }
+
+    /// 扩展虚拟用牌原语：支持声明 `nature` 并在 `force_spade` 时优先择取牌堆黑桃载体或挂单帧黑桃覆写。
+    pub fn use_virtual_card_with_suit_and_nature(
+        &mut self,
+        source: PlayerId,
+        as_kind: crate::catalog::CardKind,
+        nature: crate::event::DamageNature,
+        force_spade: bool,
+        targets: Vec<PlayerId>,
+    ) -> CardId {
+        assert!(!self.core.deck.is_empty(), "virtual use: deck empty");
+        let pos = if force_spade {
+            self.core
+                .deck
+                .iter()
+                .position(|&c| self.catalog.cards[c as usize].suit == crate::catalog::Suit::Spade)
+                .unwrap_or(0)
+        } else {
+            0
+        };
+        let carrier = self.core.deck.remove(pos);
+        self.core.player_mut(source).hand.push(carrier);
+        self.emit(EventData::CardUsed(crate::event::CardUseData {
+            card: Some(carrier),
+            player: source,
+            targets,
+            nature,
+            use_as: Some(as_kind),
+            cancelled: false,
+        }));
+        if force_spade {
+            if let Some(fid) = self.res.stack.last().map(|f| f.id) {
+                self.core
+                    .vm_aux
+                    .flags
+                    .insert((source, format!("ow_card_use_suit_spade:{fid}")), 1);
+            }
+        }
+        carrier
+    }
+
+    /// `ow::shanxian`（`global: "phaseBefore"`）在翻面跳过前确认劫持时启动己方插队回合。
+    pub fn start_hijacked_turn(&mut self, owner: PlayerId) {
+        self.core.turn.current = owner;
+        self.core.turn.phase = crate::event::Phase::Judge;
+        self.core.turn.turn_opened = false;
+        crate::kernel::events::turn::reset_new_turn_state(self, owner);
+        self.emit(EventData::TurnBegin { player: owner });
+    }
+
+    /// `ow::shanxian` 拒绝劫持背面朝上目标时，恢复该目标原本的翻面整回合跳过流程。
+    pub fn resume_facedown_turn_skip(&mut self, victim: PlayerId) {
+        self.core.player_mut(victim).jileng_active = false;
+        self.emit(EventData::TurnEnded { player: victim });
+        self.emit(EventData::TurnOverBefore {
+            player: victim,
+            cancelled: false,
+        });
+        self.core.player_mut(victim).boss_mad = false;
+    }
+
+    /// `ow::shanxian` 在劫持回合 `phaseAfter` 提交后完成自身翻面再归还原本回合交接。
+    pub fn handoff_after_shanxian(&mut self, prev: PlayerId) {
+        let next = self.core.next_alive(prev);
+        crate::kernel::events::turn::turn_handoff(self, prev, next);
+    }
+}
+
 /// 便捷构造：普通伤害载荷。
 pub fn damage_data(source: Option<PlayerId>, target: PlayerId, amount: i32) -> DamageData {
     damage_data_with(source, target, amount, DamageNature::Normal, None)

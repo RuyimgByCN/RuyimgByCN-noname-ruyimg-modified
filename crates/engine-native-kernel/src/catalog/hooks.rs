@@ -207,6 +207,14 @@ pub struct ContentHooks {
         super::Suit,
         crate::ids::CardId,
     ) -> bool,
+    /// 翻面跳过前置钩子（如 `ow::shanxian` `global: "phaseBefore"` 在翻面检测之前触发）。
+    pub before_facedown_turn_skip: fn(
+        &mut crate::machine::Ctx<'_>,
+        crate::ids::PlayerId,
+        Option<crate::ids::PlayerId>,
+    ) -> bool,
+    /// `ow::shanxian` 劫持回合 `phaseAfter` 提交后延迟翻面再归还回合交接钩子。
+    pub on_shanxian_turnover: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId) -> bool,
 }
 
 impl ContentHooks {
@@ -254,5 +262,7 @@ impl ContentHooks {
         before_recover: |_, _| true,
         on_before_gain_hand: |_, _, _, cards| cards.to_vec(),
         on_judge_settled: |_, _, _, _, _| false,
+        before_facedown_turn_skip: |_, _, _| false,
+        on_shanxian_turnover: |_, _| false,
     };
 }

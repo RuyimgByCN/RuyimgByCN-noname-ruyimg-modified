@@ -343,11 +343,12 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                     }
                 }
             }
-            // 询问队列清理：跳过死亡/无无懈持有者
+            // 询问队列清理：跳过死亡/无无懈或被 cardEnabled 封禁（含 yihun2）的持有者
             while let Some(p) = self.queue.first().copied() {
-                let has_host_resp = !host_response_skills(ctx.core, ctx.catalog, p, 3).is_empty()
-                    || (!ctx.catalog.blocks_all_cards(ctx.core, p)
-                        && !(ctx.catalog.hooks.respond_skill_options)(
+                let can_use_nullify = !ctx.catalog.blocks_card_use_and_save(ctx.core, p);
+                let has_host_resp = can_use_nullify
+                    && (!host_response_skills(ctx.core, ctx.catalog, p, 3).is_empty()
+                        || !(ctx.catalog.hooks.respond_skill_options)(
                             ctx.core,
                             ctx.catalog,
                             p,
@@ -356,6 +357,7 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                         )
                         .is_empty());
                 let has_nullify = ctx.core.player(p).alive
+                    && can_use_nullify
                     && (!response_kind_cards(ctx, p, CardKind::Nullify).is_empty() || has_host_resp);
                 if !has_nullify {
                     self.queue.remove(0);
@@ -568,7 +570,7 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
             }
             self.asked = true;
             let mut options = vec![ChoiceOption::Pass];
-            if !ctx.catalog.blocks_all_cards(ctx.core, responder) {
+            if !ctx.catalog.blocks_card_use_and_save(ctx.core, responder) {
                 options.extend(
                     response_kind_cards(ctx, responder, CardKind::Nullify)
                         .into_iter()

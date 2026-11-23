@@ -678,12 +678,15 @@ pub fn intrinsic_machine(
                     None
                 } else {
                     let mut limit = ctx.core.hand_limit(ctx.catalog, player);
-                    // 机甲（U05 ow D.Va，规则 v141）：机甲血>0 时手牌上限 +4
-                    //（上游 mod maxHandcard storage.jijia 同口径）
+                    // 机甲（U05 ow D.Va，规则 v141）：WudianJijia 保持历史 +4；U05OwBatchC 已在 core.hand_limit 累加 jijia_hp
                     if ctx
                         .catalog
                         .skill_by_name(crate::vocabulary::host::WUDIAN_JIJIA_KEY)
-                        .map(|def| ctx.core.has_skill(player, def))
+                        .map(|def| {
+                            ctx.catalog.skills[def as usize].behavior.as_host_behavior()
+                                != Some(crate::vocabulary::host::HostBehavior::U05OwBatchC)
+                                && ctx.core.has_skill(player, def)
+                        })
                         .unwrap_or(false)
                         && ctx.core.player(player).jijia_hp > 0
                     {

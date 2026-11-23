@@ -279,6 +279,7 @@ impl ShaResolveMachine {
 
     pub(super) fn after_sha_dodged(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         self.emit_sha_dodged(ctx);
+        self.maybe_ow_mujing2_refund(ctx);
         let has_override = ctx.catalog.vm_card_history
             && ctx
                 .catalog
@@ -766,7 +767,58 @@ impl ShaResolveMachine {
                         | Some(crate::catalog::EquipSlot::Armor)
                 )
             });
-        sbzhaxiang || lingshi
+        let juji3_direct = ctx
+            .catalog
+            .skill_by_name("juji3")
+            .is_some_and(|def| {
+                ctx.catalog.skills[def as usize].behavior.as_host_behavior()
+                    == Some(crate::vocabulary::host::HostBehavior::U05OwBatchC)
+                    && ctx.core.has_skill(self.source, def)
+                    && ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .get(&(self.source, "ow_juji2_target".to_string()))
+                        .copied()
+                        == Some(u32::from(self.target) + 1)
+            });
+        let target_bshaowei = ctx
+            .catalog
+            .skill_by_name(crate::vocabulary::host::WUDIAN_BAOLEI_KEY)
+            .is_some_and(|def| {
+                ctx.catalog.skills[def as usize].behavior.as_host_behavior()
+                    == Some(crate::vocabulary::host::HostBehavior::U05OwBatchA)
+                    && ctx.core.has_skill(self.target, def)
+                    && ctx.core.player(self.target).baolei_mode == 1
+            });
+        sbzhaxiang || lingshi || juji3_direct || target_bshaowei
+    }
+
+    pub(super) fn maybe_ow_mujing2_refund(&self, ctx: &mut Ctx<'_>) {
+        let Some(fid) = self.current_sha_frame_id(ctx) else {
+            return;
+        };
+        let has_mujing = ["mujing2", "mujing"].into_iter().any(|sk| {
+            ctx.catalog.skill_by_name(sk).is_some_and(|def| {
+                ctx.catalog.skills[def as usize].behavior.as_host_behavior()
+                    == Some(crate::vocabulary::host::HostBehavior::U05OwBatchC)
+                    && ctx.core.has_skill(self.source, def)
+            })
+        });
+        if !has_mujing || ctx.core.turn.current != self.source {
+            return;
+        }
+        let key = (self.source, format!("ow_mujing2_done:{fid}"));
+        if ctx.core.vm_aux.flags.contains_key(&key) {
+            return;
+        }
+        ctx.core.vm_aux.flags.insert(key, 1);
+        ctx.core.turn.sha_used_play_phase = false;
+        ctx.log(LogEvent::SkillTriggered {
+            skill: "mujing2",
+            owner: self.source,
+            presentation: None,
+        });
     }
 
     /// 堡垒哨卫（U05 ow，规则 v125）：来源持 bshaowei 且哨卫模式——

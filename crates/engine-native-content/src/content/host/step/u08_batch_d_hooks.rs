@@ -33,6 +33,16 @@ pub(super) fn host_sha_begin_step_impl(
         ) {
             return true;
         }
+        if crate::content::host::step::u05_ow::host_sha_begin_step_ow(
+            ctx,
+            sha_frame_id,
+            source,
+            target,
+            sha_card,
+            true,
+        ) {
+            return true;
+        }
         let Some(bhy_def) = ctx.catalog.skill_by_name("bolehuiyan") else {
             return false;
         };
@@ -78,6 +88,16 @@ pub(super) fn host_sha_begin_step_impl(
             return true;
         }
         return false;
+    }
+    if crate::content::host::step::u05_ow::host_sha_begin_step_ow(
+        ctx,
+        sha_frame_id,
+        source,
+        target,
+        sha_card,
+        false,
+    ) {
+        return true;
     }
     let Some(cike_def) = ctx.catalog.skill_by_name("cike") else {
         return false;
@@ -179,6 +199,7 @@ pub(super) fn host_card_use_after_impl(
     fid: crate::ids::EventId,
     u: &CardUseData,
 ) {
+    crate::content::host::step::u05_ow::host_card_use_after_ow(ctx, u);
     crate::content::host::step::l27_fixes::host_card_use_after_clandianzhan(ctx, u);
     crate::content::host::step::u01_fixes_1::u01_card_use_after_hook(ctx, u);
     crate::content::host::step::l11_common::on_card_use_after_l11(ctx, u);

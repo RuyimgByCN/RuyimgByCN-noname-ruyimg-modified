@@ -218,6 +218,8 @@ pub(super) mod u05_b1_yunchou;
 pub(super) mod u05_b1_yunchou_cards;
 pub(super) mod u05_b1_zhenfa;
 pub(super) mod u05_b2_gujian;
+pub(super) mod u05_ow;
+pub(crate) use u05_ow::{host_before_facedown_turn_skip, host_on_shanxian_turnover};
 
 impl HostMachine {
     pub(super) fn step_behavior(&mut self, ctx: &mut Ctx<'_>) -> Flow {
@@ -1258,6 +1260,10 @@ impl HostMachine {
             HostBehavior::L25ZuanBatchE => l25_batch_e::handle_l25_batch_e(self, ctx),
             HostBehavior::L25ZuanBatchF => l25_batch_f::handle_l25_batch_f(self, ctx),
             HostBehavior::L25ZuanBatchG => l25_batch_g::handle_l25_batch_g(self, ctx),
+            HostBehavior::U05OwBatchA
+            | HostBehavior::U05OwBatchB
+            | HostBehavior::U05OwBatchC
+            | HostBehavior::U05OwBatchD => u05_ow::step_u05_ow(self, ctx),
             HostBehavior::L10ScsCompanion => l10_scs::handle_l10_scs(self, ctx),
             HostBehavior::U05GujianCardBatch
             | HostBehavior::U05GujianCharBatchA

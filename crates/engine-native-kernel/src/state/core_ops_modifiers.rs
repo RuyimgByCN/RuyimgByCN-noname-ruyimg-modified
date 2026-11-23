@@ -124,17 +124,86 @@ impl GameStateCore {
                 minus += x;
             }
         }
-        // 突击（U07 ow 士兵76，规则 v118）：锁定——持有者回合内每已使
-        // 用一张牌，进攻距离 -1（上游 tuji mod globalFrom countUsed 同
-        // 口径）
+        // 突击（U07 ow 士兵76，规则 v118；U05-3 ow 正式包使用 cards_used_turn 对齐上游 countUsed()）：
+        // 锁定——持有者回合内每已使用一张牌，计算到其他角色距离 -1。
         if let Some(def) = catalog.skill_by_name(crate::vocabulary::host::WUDIAN_TUJI_KEY) {
             let tuji = self
                 .skills
                 .get(&(a, def))
                 .map(|i| i.enabled)
                 .unwrap_or(false);
-            if tuji && self.turn.current == a && self.turn.cards_used_play_phase > 0 {
-                minus += self.turn.cards_used_play_phase;
+            if tuji && self.turn.current == a {
+                let is_ow_v3 = catalog.skills[def as usize].behavior.as_host_behavior()
+                    == Some(crate::vocabulary::host::HostBehavior::U05OwBatchC);
+                let used = if is_ow_v3 {
+                    self.turn.cards_used_turn
+                } else {
+                    self.turn.cards_used_play_phase
+                };
+                minus += used;
+            }
+        }
+        // U05-3 ow（狙击2 / 链钩2 / 飞跳2）：对指定目标距离视为 1
+        if catalog.skill_by_name("juji2").is_some_and(|def| {
+            catalog.skills[def as usize].behavior.as_host_behavior()
+                == Some(crate::vocabulary::host::HostBehavior::U05OwBatchC)
+                && self.has_skill(a, def)
+                && self.vm_aux.flags.get(&(a, "ow_juji2_target".to_string())).copied()
+                    == Some(u32::from(b) + 1)
+        }) || catalog.skill_by_name("liangou2").is_some_and(|def| {
+            catalog.skills[def as usize].behavior.as_host_behavior()
+                == Some(crate::vocabulary::host::HostBehavior::U05OwBatchA)
+                && self.has_skill(b, def)
+                && self.vm_aux.flags.get(&(b, "ow_liangou2_from".to_string())).copied()
+                    == Some(u32::from(a) + 1)
+        }) || catalog.skill_by_name("feitiao2").is_some_and(|def| {
+            catalog.skills[def as usize].behavior.as_host_behavior()
+                == Some(crate::vocabulary::host::HostBehavior::U05OwBatchA)
+                && self.has_skill(a, def)
+                && self.turn.feitiao_target == Some(b)
+        }) || catalog.skill_by_name("tuijin2").is_some_and(|def| {
+            catalog.skills[def as usize].behavior.as_host_behavior()
+                == Some(crate::vocabulary::host::HostBehavior::U05OwBatchC)
+                && self.has_skill(a, def)
+                && self.vm_aux.flags.get(&(a, "ow_tuijin_target".to_string())).copied()
+                    == Some(u32::from(b) + 1)
+        }) {
+            return 1;
+        }
+        // U05-3 ow 飞影（globalTo +1）
+        if let Some(def) = catalog.skill_by_name("feiying") {
+            if catalog.skills[def as usize].behavior.as_host_behavior()
+                == Some(crate::vocabulary::host::HostBehavior::U05OwBatchD)
+                && self.has_skill(b, def)
+            {
+                plus += 1;
+            }
+        }
+        // U05-3 ow 冰墙2（globalTo +N）/ 冰墙5（globalFrom +N）
+        if let Some(def) = catalog.skill_by_name("bingqiang2") {
+            if catalog.skills[def as usize].behavior.as_host_behavior()
+                == Some(crate::vocabulary::host::HostBehavior::U05OwBatchB)
+                && self.has_skill(b, def)
+            {
+                plus += self
+                    .vm_aux
+                    .flags
+                    .get(&(b, "ow_bingqiang2".to_string()))
+                    .copied()
+                    .unwrap_or(0);
+            }
+        }
+        if let Some(def) = catalog.skill_by_name("bingqiang5") {
+            if catalog.skills[def as usize].behavior.as_host_behavior()
+                == Some(crate::vocabulary::host::HostBehavior::U05OwBatchB)
+                && self.has_skill(a, def)
+            {
+                plus += self
+                    .vm_aux
+                    .flags
+                    .get(&(a, "ow_bingqiang5".to_string()))
+                    .copied()
+                    .unwrap_or(0);
             }
         }
         // 绝道（U07 玩点论杀刘焉，规则 v116）：锁定——**持技者**横置时
@@ -323,11 +392,21 @@ impl GameStateCore {
         } else {
             0
         };
+        let bfengshi_bonus = if catalog.skill_by_name("bfengshi").is_some_and(|def| {
+            catalog.skills[def as usize].behavior.as_host_behavior()
+                == Some(crate::vocabulary::host::HostBehavior::U05OwBatchB)
+                && self.has_skill(p, def)
+                && self.turn.current == p
+        }) {
+            self.turn.cards_used_turn
+        } else {
+            0
+        };
         crate::rvm_bridge::modifiers::eval_attack_range(
             self,
             catalog,
             p,
-            base + dcdichou_eff_bonus,
+            base + dcdichou_eff_bonus + bfengshi_bonus,
         )
     }
 
@@ -659,6 +738,15 @@ impl GameStateCore {
                     == Some(3)
             {
                 limit += 2;
+            }
+        }
+        if let Some(def) = catalog.skill_by_name(crate::vocabulary::host::WUDIAN_JIJIA_KEY) {
+            if catalog.skills[def as usize].behavior.as_host_behavior()
+                == Some(crate::vocabulary::host::HostBehavior::U05OwBatchC)
+                && self.has_skill(p, def)
+                && self.player(p).jijia_hp > 0
+            {
+                limit += usize::from(self.player(p).jijia_hp);
             }
         }
         crate::rvm_bridge::modifiers::eval_hand_limit(self, catalog, p, limit as i32)

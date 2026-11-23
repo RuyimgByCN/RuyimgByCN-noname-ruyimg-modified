@@ -87,6 +87,7 @@ pub(super) fn clear_xingchong_state(core: &mut GameStateCore, catalog: &Catalog,
 
 /// `gameDrawEnd` 开局钩子：为建局即持 `xiefang` 的角色初始化存活女性计数标记，并初始化 U05-2 古剑局内标记。
 pub(crate) fn host_on_game_start(core: &mut GameStateCore, catalog: &Catalog) {
+    super::u05_ow::host_on_game_start_ow(core, catalog);
     let seats = core.players.len() as PlayerId;
     for owner in 0..seats {
         if core.player(owner).alive && has_skill_named(core, catalog, owner, L27_XIEFANG_KEY) {
@@ -107,8 +108,9 @@ pub(crate) fn host_on_turn_phase_after(ctx: &mut Ctx<'_>, player: PlayerId) {
     super::u05_b2_gujian::on_turn_phase_after_gujian(ctx, player);
 }
 
-/// `dieEnd` 死亡结算后钩子（`alive=false` 落账后）：刷新全场存活 `xiefang` 计数，并登记 `lingyong` / 清理 `mhuanyi`。
+/// `dieEnd` 死亡结算后钩子（`alive=false` 落账后）：刷新全场存活 `xiefang` 计数，并登记 `lingyong` / 清理 `mhuanyi` 与 U05 `ow` 死亡监听。
 pub(crate) fn host_on_player_died(ctx: &mut Ctx<'_>, dead: PlayerId) {
+    super::u05_ow::host_on_player_died_ow(ctx, dead);
     let seats = ctx.core.players.len() as PlayerId;
     for owner in 0..seats {
         if !ctx.core.player(owner).alive {
@@ -245,6 +247,9 @@ pub(crate) fn on_skill_removed_all(
     skill_name: &str,
 ) -> Vec<CardId> {
     let mut cards = super::on_skill_removed_l28(core, catalog, owner, skill_name);
+    cards.extend(super::u05_ow::on_skill_removed_ow(
+        core, catalog, owner, skill_name,
+    ));
     match skill_name {
         L27_XIEFANG_KEY => {
             clear_skill_marks_by_name(core, catalog, owner, L27_XIEFANG_KEY);

@@ -119,6 +119,14 @@ pub(super) fn eligible(
     if matches!(event, EventData::Death { player, .. } if core.player(*player).death_cancelled) {
         return false;
     }
+    if frame.kind == EventKind::TurnBegin
+        && core
+            .vm_aux
+            .flags
+            .contains_key(&(0, format!("ow_shanxian_hijack_frame:{}", frame.id)))
+    {
+        return false;
+    }
     let inst = core.skills.get(&(q.owner, q.def));
     let Some(def) = catalog.skills.get(q.def as usize) else {
         return false;

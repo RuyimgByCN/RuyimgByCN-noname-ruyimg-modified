@@ -145,6 +145,12 @@ pub(in crate::kernel) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: Playe
         if ctx.core.player(player).anwugu_count > 0 {
             ctx.core.player_mut(player).anwugu_count -= 1;
         }
+        if ctx.core.turn.extra_phases.is_empty()
+            && ctx.core.player(player).alive
+            && (ctx.catalog.hooks.on_shanxian_turnover)(ctx, player)
+        {
+            return;
+        }
         // phaseAfter 段 Commit＝回合交接（K25：回合重置已在 handoff 内、
         // 先于 TurnBegin）。boss 重整 tick 在窗前已由 commit_turn_ended
         // 处理（与存活者选取耦合），此处不再重复。
@@ -214,6 +220,11 @@ pub(in crate::kernel) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: Playe
                 .remove(&(seat, "dddanzhi_stamp".to_string()));
         }
         (ctx.catalog.hooks.on_turn_phase_after)(ctx, player);
+        // U05-3 ow 侵入封印：持续至目标自身回合结束 ({ player: "phaseAfter" })
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(player, "ow_qinru_fengyin".to_string()));
         ctx.emit(EventData::TurnEndWindow {
             player,
             after: true,
@@ -222,6 +233,73 @@ pub(in crate::kernel) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: Playe
 }
 
 pub(in crate::kernel) fn commit_turn_begin(ctx: &mut Ctx<'_>, player: PlayerId) {
+    let fid = ctx.current_frame_id();
+    if let Some(owner_plus1) = ctx
+        .core
+        .vm_aux
+        .flags
+        .remove(&(0, format!("ow_shanxian_hijack_frame:{fid}")))
+    {
+        if let Some(owner) = owner_plus1.checked_sub(1).map(|v| v as PlayerId) {
+            ctx.core.turn.current = owner;
+            ctx.core.turn.turn_opened = false;
+            reset_new_turn_state(ctx, owner);
+            ctx.emit(EventData::TurnBegin { player: owner });
+            return;
+        }
+    }
+    if ctx.catalog.skill_by_name("ziyu").is_some_and(|d| {
+        ctx.catalog.skills[d as usize].behavior.as_host_behavior()
+            == Some(crate::vocabulary::host::HostBehavior::U05OwBatchD)
+    }) {
+        let key = (0, "ow_phase_number".to_string());
+        let cur = ctx.core.vm_aux.flags.get(&key).copied().unwrap_or(0);
+        ctx.core.vm_aux.flags.insert(key, cur + 1);
+        for s in 0..ctx.core.players.len() as PlayerId {
+            if !ctx.core.player(s).alive {
+                continue;
+            }
+            if ctx.catalog.skill_by_name("jijia").is_some_and(|d| {
+                ctx.catalog.skills[d as usize].behavior.as_host_behavior()
+                    == Some(crate::vocabulary::host::HostBehavior::U05OwBatchC)
+                    && ctx.core.has_skill(s, d)
+            }) && ctx
+                .core
+                .vm_aux
+                .flags
+                .get(&(s, "ow_jijia_inited".to_string()))
+                .copied()
+                .unwrap_or(0)
+                == 0
+            {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((s, "ow_jijia_inited".to_string()), 1);
+                ctx.core.player_mut(s).jijia_hp = 4;
+            }
+            if ctx.catalog.skill_by_name("zhongdun").is_some_and(|d| {
+                ctx.catalog.skills[d as usize].behavior.as_host_behavior()
+                    == Some(crate::vocabulary::host::HostBehavior::U05OwBatchB)
+                    && ctx.core.has_skill(s, d)
+            }) && ctx
+                .core
+                .vm_aux
+                .flags
+                .get(&(s, "ow_zhongdun_inited".to_string()))
+                .copied()
+                .unwrap_or(0)
+                == 0
+            {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((s, "ow_zhongdun_inited".to_string()), 1);
+                let cur_h = ctx.core.player(s).hujia;
+                ctx.core.player_mut(s).hujia = cur_h.saturating_add(8);
+            }
+        }
+    }
     crate::kernel::elo_on_phase_before(ctx.core, ctx.catalog, player);
     (ctx.catalog.hooks.on_turn_begin)(ctx, player);
     // K46/K47/K48（A2）：封冻／巡游／炎狱＝上游 player/global phaseBegin
@@ -517,7 +595,7 @@ pub(in crate::kernel) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) 
 /// 执行：轮次推进、换人、回合级存量清零、**新回合玩家的回合重置**
 /// （`begin_judge` 原 `!turn_opened` 门整体前移至此，使回合开始窗与准备
 /// 阶段读到本回合的新值），最后发 TurnBegin（自动接准备阶段→判定）。
-pub(in crate::kernel) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: PlayerId) {
+pub(crate) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: PlayerId) {
     // R05-F（§6 兜底位）：任何已死亡角色的 Limit/Combs/Current 语义槽与
     // helper 实例在回合交接时清理（真实死亡经 DeathMachine 前置清理；此
     // 处覆盖无死亡帧的跳过路径——Next 保留）。
@@ -563,7 +641,7 @@ pub(in crate::kernel) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: P
             ctx.core.skills.remove(&(prev, xdef));
         }
     }
-    ctx.core.vm_aux.flags.retain(|(_, k), _| {
+    ctx.core.vm_aux.flags.retain(|(p, k), _| {
         !k.starts_with("turn_discard_card:")
             && k != "turn_change_hp"
             && k != "turn_dmg_sources_mask"
@@ -582,7 +660,33 @@ pub(in crate::kernel) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: P
             && k != "dddchashi_kind"
             && !k.starts_with("dddxuyu_old_armed:")
             && !k.starts_with("dddshijian_old_armed:")
+            && !matches!(
+                k.as_str(),
+                "ow_turn_kill_count" | "ow_juji2_target" | "ow_liangou2_from" | "ow_tuijin_target"
+            )
+            && !(*p == prev
+                && matches!(
+                    k.as_str(),
+                    "ow_shanxian_target" | "ow_shanxian_pending_turnover"
+                ))
     });
+    // U05-3 ow 回合结束清理：狙击2/狙击3/链钩2/飞跳2/侦查2/暴风矢4/推进2/闪光2 临时技
+    for sk in [
+        "juji2",
+        "juji3",
+        "liangou2",
+        "feitiao2",
+        "zhencha2",
+        "bfengshi4",
+        "tuijin2",
+        "shanguang2",
+    ] {
+        if let Some(def) = ctx.catalog.skill_by_name(sk) {
+            for s in 0..ctx.core.players.len() as PlayerId {
+                ctx.core.skills.remove(&(s, def));
+            }
+        }
+    }
     if ctx.catalog.vm_card_history {
         ctx.core
             .vm_aux
@@ -654,7 +758,8 @@ pub(in crate::kernel) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: P
                     > 0
         })
     });
-    let (next, suppress_round_bump) = if let Some(es) = queued_extra {
+    let has_queued_extra = queued_extra.is_some();
+    let (next, suppress_round_bump, returning_from_shanxian) = if let Some(es) = queued_extra {
         ctx.core
             .vm_aux
             .flags
@@ -674,22 +779,29 @@ pub(in crate::kernel) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: P
             .core
             .vm_aux
             .flags
-            .contains_key(&(0, "extra_turn_resume_next".to_string()))
+            .contains_key(&(0, "ow_shanxian_resume_target".to_string()))
         {
+            if !ctx
+                .core
+                .vm_aux
+                .flags
+                .contains_key(&(0, "extra_turn_resume_next".to_string()))
+            {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((0, "extra_turn_resume_next".to_string()), u32::from(next) + 1);
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((0, "extra_turn_resume_prev".to_string()), u32::from(prev) + 1);
+            }
             ctx.core
                 .vm_aux
                 .flags
-                .insert((0, "extra_turn_resume_next".to_string()), u32::from(next) + 1);
-            ctx.core
-                .vm_aux
-                .flags
-                .insert((0, "extra_turn_resume_prev".to_string()), u32::from(prev) + 1);
+                .insert((0, "extra_turn_in_progress".to_string()), 1);
         }
-        ctx.core
-            .vm_aux
-            .flags
-            .insert((0, "extra_turn_in_progress".to_string()), 1);
-        (es, true)
+        (es, true, false)
     } else if ctx
         .core
         .vm_aux
@@ -724,25 +836,50 @@ pub(in crate::kernel) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: P
                 .flags
                 .insert((0, "extra_turn_force_round_bump".to_string()), 1);
         }
-        (actual_n, actual_n > resume_p)
-    } else {
-        (next, false)
-    };
-    let force_round_bump = ctx
+        (actual_n, actual_n > resume_p, false)
+    } else if let Some(saved_res) = ctx
         .core
         .vm_aux
         .flags
-        .remove(&(0, "extra_turn_force_round_bump".to_string()))
-        .is_some();
-    // R05（K10）：翻面整回合跳过在回合开始窗之前（上游 phaseBefore 检测）
-    // ——翻面者不发 TurnBegin／不进任何阶段（含准备阶段）；翻回序列与
-    // TurnEnded 同 E03/U05 原口径，TurnEnded 的窗→handoff 链继续交接。
-    if ctx.core.player(next).face_down {
-        if force_round_bump {
+        .remove(&(0, "ow_shanxian_resume_target".to_string()))
+    {
+        let cand = saved_res.saturating_sub(1) as PlayerId;
+        let actual_n = if (cand as usize) < ctx.core.players.len() && ctx.core.player(cand).alive {
+            cand
+        } else {
+            ctx.core.next_alive(cand)
+        };
+        if actual_n != cand && actual_n <= cand {
             ctx.core
                 .vm_aux
                 .flags
                 .insert((0, "extra_turn_force_round_bump".to_string()), 1);
+        }
+        (actual_n, actual_n == cand || actual_n > cand, true)
+    } else {
+        (next, false, false)
+    };
+    let force_round_bump = !has_queued_extra
+        && ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(0, "extra_turn_force_round_bump".to_string()))
+            .is_some();
+    // R05（K10）：翻面整回合跳过在回合开始窗之前（上游 phaseBefore 检测）
+    // ——翻面者不发 TurnBegin／不进任何阶段（含准备阶段）；翻回序列与
+    // TurnEnded 同 E03/U05 原口径，TurnEnded 的窗→handoff 链继续交接。
+    if ctx.core.player(next).face_down {
+        if force_round_bump || (!suppress_round_bump && next <= prev) {
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((0, "extra_turn_force_round_bump".to_string()), 1);
+        }
+        if !returning_from_shanxian
+            && (ctx.catalog.hooks.before_facedown_turn_skip)(ctx, next, Some(prev))
+        {
+            return;
         }
         ctx.core.player_mut(next).jileng_active = false;
         ctx.emit(EventData::TurnOverBefore {
@@ -753,7 +890,7 @@ pub(in crate::kernel) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: P
         ctx.emit(EventData::TurnEnded { player: next });
         return;
     }
-    if !suppress_round_bump && (force_round_bump || next <= prev) {
+    if force_round_bump || (!suppress_round_bump && next <= prev) {
         if ctx.catalog.vm_card_history {
             let seats = ctx.core.players.len() as PlayerId;
             for p in 0..seats {
@@ -844,183 +981,4 @@ pub(in crate::kernel) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: P
     ctx.emit(EventData::TurnBegin { player: next });
 }
 
-/// 新回合玩家的回合重置（K25：原 `begin_judge` 的 `!turn_opened` 门整体
-/// 前移；`turn_opened` 置真保留字段语义）。含红莲回合开始效果（原判定
-/// 开始执行——时点前移属 A2 审计 K25 项，行为面等价：仍先于回合开始窗
-/// 与准备阶段）。
-pub(in crate::kernel) fn reset_new_turn_state(ctx: &mut Ctx<'_>, player: PlayerId) {
-    if ctx.core.turn.turn_opened {
-        return;
-    }
-    ctx.core.turn.turn_opened = true;
-    ctx.core.vm_aux.flags.retain(|(_, k), _| {
-        !k.starts_with("dddzhilian_sha_d:")
-            && k != "dddtongyu_hand_locked_stamp"
-            && k != "turn_use_resp_mask"
-            && k != "turn_use_resp_stamp"
-            && k != "jiu_active_offturn"
-            && k != "jiu_extra_stacks"
-            && k != "dddjijian_jiu_used"
-            && k != "dddfushi_resp_eff_kind"
-            && k != "dddlianer_rank_cap"
-            && k != "dddyulv_turn_cnt"
-            && k != "dddxuanlun_choose"
-            && !k.starts_with("u01_zhuanshe_used:")
-            && !k.starts_with("u01_cj_len:")
-            && !k.starts_with("u01_cj_card:")
-            && !k.starts_with("dddzhuanshe_given:")
-            && k != "u01_turn_trick_used_stamp"
-    });
-    ctx.core.vm_aux.once.retain(|(_, _, scope)| *scope != 4);
-    ctx.reset_turn_limits(player);
-    // 本回合已用牌数（swd 灵武批 120，规则 v307）：回合开始清零
-    ctx.core.turn.cards_used_turn = 0;
-    // 回合伤害统计清零（U05 xianjian 明绣，规则 v160）
-    ctx.core.player_mut(player).turn_damage = 0;
-    // 忘忧戳清零（U05 xianjian 紫萱，规则 v162；登记差异：保留期延长）
-    ctx.core.player_mut(player).wangyou3_round = 0;
-    // 摄灵回合次数清零（U05 xianjian 南宫煌，规则 v168）
-    ctx.core.turn.sheling_used = 0;
-    // 射影回合清零（U05 xianjian 苏媚，规则 v175）
-    ctx.core.turn.sheying_used = false;
-    // 张目回合清零（U05 xianjian 南宫煌，规则 v181）
-    ctx.core.turn.zhangmu_used = false;
-    // 古剑奇谭 黑龙鳞片（card/gujian/skill.js:456-467）：持续至使用者下回合开始前清除
-    ctx.core
-        .vm_aux
-        .flags
-        .remove(&(player, "u05_mod:gj_heilonglinpian".to_string()));
-    ctx.core
-        .vm_aux
-        .flags
-        .remove(&(player, "u05_mod:heilonglinpian".to_string()));
-    // 红莲（Boss 毕方，规则 v228）：回合开始——顺序获牌堆前缀红牌至多
-    // 3 张，并对座位序前至多 3 名其他角色各造成 1 点火伤
-    if let Some(hdef) = ctx
-        .catalog
-        .skill_by_name(crate::vocabulary::names::BOSS_HONGLIANX)
-    {
-        if ctx.core.has_skill(player, hdef) {
-            let mut gained = 0usize;
-            while gained < 3 && !ctx.core.deck.is_empty() {
-                let c = ctx.core.deck[ctx.core.deck.len() - 1];
-                if matches!(
-                    ctx.catalog.cards[c as usize].suit,
-                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
-                ) {
-                    ctx.core.deck.pop();
-                    ctx.core.player_mut(player).hand.push(c);
-                    gained += 1;
-                } else {
-                    break;
-                }
-            }
-            if gained > 0 {
-                ctx.log(LogEvent::CardsDrawn {
-                    player,
-                    cards: ctx
-                        .core
-                        .player(player)
-                        .hand
-                        .iter()
-                        .rev()
-                        .take(gained)
-                        .copied()
-                        .collect::<Vec<_>>(),
-                });
-            }
-            let targets: Vec<PlayerId> = ctx
-                .core
-                .seat_order_from(player)
-                .into_iter()
-                .filter(|t| *t != player && ctx.core.player(*t).alive)
-                .take(3)
-                .collect();
-            for t in targets {
-                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                    Some(player),
-                    t,
-                    1,
-                    crate::event::DamageNature::Fire,
-                    None,
-                )));
-            }
-        }
-    }
-    // K02/K03/K04：三个「至 phaseBegin」到期解除（先于回合开始窗）。
-    if ctx.core.player(player).qianggu_active {
-        ctx.core.player_mut(player).qianggu_active = false;
-    }
-    if ctx.core.player(player).yinshen_active {
-        ctx.core.player_mut(player).yinshen_active = false;
-    }
-    if ctx.core.player(player).chaofeng_active {
-        ctx.core.player_mut(player).chaofeng_active = false;
-    }
-    // K09：屏障标志转计数（上游 pingzhang_count phaseBegin silent）。
-    {
-        let used = u8::from(ctx.core.player(player).pingzhang_self_used)
-            + u8::from(ctx.core.player(player).pingzhang_other_used);
-        let p = ctx.core.player_mut(player);
-        p.pingzhang_count = used;
-        p.pingzhang_self_used = false;
-        p.pingzhang_other_used = false;
-    }
-    // K30：形态轮换（Boss 年兽系，规则 v249）——上游 phaseBefore 换将，
-    // 须先于 TurnBegin 使新形态的回合开始技生效。
-        // 形态轮换（Boss 年兽系，规则 v249）：回合开始——
-        // 交替旗标首次置位不换将（初始形态即条目形态），此后
-        // 每回合轮换至另一「形态轮换」携带将（assembly 重挂+
-        // hp 保留——versus 替补换将先例同构；随机序列→确定性
-        // 互斥轮转登记）
-        if let Some(nbdef) = ctx
-            .catalog
-            .skill_by_name(crate::vocabulary::names::BOSS_NBIANSHEN)
-        {
-            if ctx.core.has_skill(player, nbdef) {
-                let armed = ctx.core.player(player).nbianshen_toggle;
-                if armed {
-                    // 启动后每回合轮换（上游 storage 存在后每
-                    // 次 phaseBefore 均换同口径）
-                    // 轮换：找另一携带「形态轮换」的 BOSS 段将
-                    let base = (ctx.catalog.general_count()
-                        - crate::vocabulary::generals::BOSS_GENERALS.len())
-                        as u16;
-                    let cur = ctx.core.player(player).general_slots[0];
-                    let other = (base..ctx.catalog.general_count() as u16).find(|&d| {
-                        Some(d) != cur
-                            && ctx
-                                .catalog
-                                .general_meta(d)
-                                .map(|m| m.2.contains(&crate::vocabulary::names::BOSS_NBIANSHEN))
-                                .unwrap_or(false)
-                    });
-                    if let (Some(other), Some(cur)) = (other, cur) {
-                        let _ = cur;
-                        // 技能实例清空+重挂（区域保留）
-                        let removed: Vec<crate::ids::SkillDefId> = ctx
-                            .core
-                            .skills
-                            .keys()
-                            .filter(|(o, _)| *o == player)
-                            .map(|(_, d)| *d)
-                            .collect();
-                        for d in removed {
-                            ctx.core.skills.remove(&(player, d));
-                        }
-                        ctx.core.player_mut(player).general_slots[0] = Some(other);
-                        crate::state::apply_general_assembly(ctx.core, ctx.catalog, player, 0);
-                        // hp/手牌/装备/判定区保留（上游 init 保
-                        // 留 hp/maxHp/hujia 同口径）
-                        ctx.log(LogEvent::SkillToggled {
-                            player,
-                            skill: "形态轮换",
-                            enabled: true,
-                        });
-                    }
-                }
-                ctx.core.player_mut(player).nbianshen_toggle = true;
-            }
-        }
-
-}
+pub(crate) use super::turn_reset::reset_new_turn_state;

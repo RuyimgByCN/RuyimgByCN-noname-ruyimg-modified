@@ -1757,4 +1757,12 @@ pub enum HostBehavior {
     U05GujianCharBatchD,
     /// U05-2 古剑奇谭 CharBatchE（tag 985，`character/gujian/skill.js`：谢衣/偃甲/初七/北洛/云无月/岑缨）。
     U05GujianCharBatchE,
+    /// U05 杀海拾遗 OW Batch A（tag 1040，character/ow/skill.js）：奥丽莎/温斯顿/堡垒/查莉娅/路霸/黑影。
+    U05OwBatchA,
+    /// U05 杀海拾遗 OW Batch B（tag 1041，character/ow/skill.js）：莱因哈特/托比昂/半藏/安娜/狂鼠/麦克雷/美。
+    U05OwBatchB,
+    /// U05 杀海拾遗 OW Batch C（tag 1042，character/ow/skill.js）：黑百合/D.Va/死神/士兵76/源氏（含连破）。
+    U05OwBatchC,
+    /// U05 杀海拾遗 OW Batch D（tag 1043，character/ow/skill.js）：禅雅塔/法老之鹰/卢西奥/秩序之光/天使/猎空（含飞影）。
+    U05OwBatchD,
 }

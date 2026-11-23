@@ -229,7 +229,7 @@ use damage::*;
 pub use damage_flow::DamageFlow;
 pub use draw::{DrawMachine, DrawPhaseMachine, GainMachine};
 pub use damage_skill::NativeDamageSkill;
-mod events;
+pub(crate) mod events;
 pub use events::{peek_tao_extra_carriers, record_dddanzhi_card, take_tao_extra_carriers};
 use events::*;
 mod equipment;
@@ -242,7 +242,7 @@ mod intrinsic;
 pub use intrinsic::*;
 mod combat_rules;
 pub use combat_rules::{
-    discard_response_card, is_black_trick_card, is_ssr_luoyi_trick_to_duel,
+    discard_response_card, has_ow_mujing, is_black_trick_card, is_ssr_luoyi_trick_to_duel,
     jinyan_blocks_black_trick, mbcmfangzhu_baiban, mbcmfangzhu_banned, response_kind_cards_core,
     sha_card_use_as, tao_futai2_banned, usable_sha_options,
 };

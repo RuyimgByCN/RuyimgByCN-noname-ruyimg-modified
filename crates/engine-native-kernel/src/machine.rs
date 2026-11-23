@@ -803,35 +803,6 @@ impl<'a> Ctx<'a> {
         self.to_discard(card);
     }
 
-    /// 虚拟用牌原语（规则 v169 基建，上游 game.useCard({name}) 同族）：
-    /// 以牌堆底一张实体为载体、use_as 声明牌种发起一次完整使用管线
-    /// （响应/伤害/弃置全走 use_as 分派）。载体经使用者手牌通道取出、
-    /// 结算后入弃堆（登记差异：上游凭空造牌无实体不入弃堆）。返回载体。
-    pub fn use_virtual_card(
-        &mut self,
-        source: PlayerId,
-        as_kind: crate::catalog::CardKind,
-        targets: Vec<PlayerId>,
-    ) -> CardId {
-        let carrier = self
-            .core
-            .deck
-            .first()
-            .copied()
-            .expect("virtual use: deck empty");
-        self.core.deck.remove(0);
-        self.core.player_mut(source).hand.push(carrier);
-        self.emit(EventData::CardUsed(crate::event::CardUseData {
-            card: Some(carrier),
-            player: source,
-            targets,
-            nature: crate::event::DamageNature::Normal,
-            use_as: Some(as_kind),
-            cancelled: false,
-        }));
-        carrier
-    }
-
     /// 手牌直接给予另一玩家（不进弃牌堆）——单张便捷形式，见 `give_hand_cards`。
     pub fn give_hand_card(&mut self, from: PlayerId, to: PlayerId, card: CardId) {
         self.give_hand_cards(from, to, &[card]);

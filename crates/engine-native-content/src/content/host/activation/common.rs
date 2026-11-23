@@ -53,7 +53,7 @@ impl HostSkillBehavior {
                 if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
                     || ctx.state.turn.current != owner
                     || ctx.state.player(owner).hand.is_empty()
-                    || ctx.catalog.blocks_all_cards(ctx.state, owner)
+                    || ctx.catalog.blocks_card_use_and_save(ctx.state, owner)
                 {
                     return None;
                 }

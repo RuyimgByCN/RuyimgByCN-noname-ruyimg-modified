@@ -93,7 +93,12 @@ pub(in crate::content::host) fn reguhuo_name_options(
     owner: PlayerId,
     resp_ctx: u32,
 ) -> Vec<ChoiceOption> {
-    if catalog.blocks_all_cards(core, owner) {
+    let blocked = if resp_ctx == 0 || resp_ctx >= 3 {
+        catalog.blocks_card_use_and_save(core, owner)
+    } else {
+        catalog.blocks_all_cards(core, owner)
+    };
+    if blocked {
         return Vec::new();
     }
     let all = reguhuo_all_kinds(catalog);

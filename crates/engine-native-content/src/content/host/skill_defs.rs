@@ -79,6 +79,10 @@ pub fn host_skill_trigger_meta(
         | HostBehavior::U05GujianCharBatchC
         | HostBehavior::U05GujianCharBatchD
         | HostBehavior::U05GujianCharBatchE => step::u05_b2_gujian::trigger_meta_u05_gujian(behavior, name),
+        HostBehavior::U05OwBatchA
+        | HostBehavior::U05OwBatchB
+        | HostBehavior::U05OwBatchC
+        | HostBehavior::U05OwBatchD => step::u05_ow::trigger_meta_u05_ow(behavior, name),
         _ => crate::event::NativeDamageEffect::from_host(behavior)
             .map(|e| e.meta())
             .or_else(|| behavior.trigger_meta()),
@@ -184,6 +188,10 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         | HostBehavior::U05GujianCharBatchC
         | HostBehavior::U05GujianCharBatchD
         | HostBehavior::U05GujianCharBatchE => step::u05_b2_gujian::limits_u05_gujian(behavior, name),
+        HostBehavior::U05OwBatchA
+        | HostBehavior::U05OwBatchB
+        | HostBehavior::U05OwBatchC
+        | HostBehavior::U05OwBatchD => step::u05_ow::limits_u05_ow(name),
         HostBehavior::GujianFoodQingtuan | HostBehavior::GujianFoodLuyugeng => {
             crate::catalog::SkillLimits {
                 once_per_turn: true,

@@ -905,7 +905,11 @@ impl HostBehavior {
             | HostBehavior::U05GujianCharBatchB
             | HostBehavior::U05GujianCharBatchC
             | HostBehavior::U05GujianCharBatchD
-            | HostBehavior::U05GujianCharBatchE => None,
+            | HostBehavior::U05GujianCharBatchE
+            | HostBehavior::U05OwBatchA
+            | HostBehavior::U05OwBatchB
+            | HostBehavior::U05OwBatchC
+            | HostBehavior::U05OwBatchD => None,
             HostBehavior::L01YiyiCard
             | HostBehavior::L01FirstKs
             | HostBehavior::L01NeiKey

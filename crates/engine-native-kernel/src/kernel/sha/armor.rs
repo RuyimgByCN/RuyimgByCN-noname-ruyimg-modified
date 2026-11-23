@@ -21,6 +21,16 @@ impl ShaResolveMachine {
                 .skill_by_name(crate::vocabulary::names::BOSS_ZHADAO)
                 .map(|def| ctx.core.has_skill(self.source, def))
                 .unwrap_or(false)
+            || (self.baolei_sentinel(ctx)
+                && ctx
+                    .catalog
+                    .skill_by_name(crate::vocabulary::host::WUDIAN_BAOLEI_KEY)
+                    .is_some_and(|def| {
+                        ctx.catalog.skills[def as usize]
+                            .behavior
+                            .as_host_behavior()
+                            == Some(crate::vocabulary::host::HostBehavior::U05OwBatchA)
+                    }))
             || ctx
                 .core
                 .ignores_target_armor(ctx.catalog, self.source, self.target, self.card, self.nature))

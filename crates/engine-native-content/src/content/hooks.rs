@@ -51,6 +51,8 @@ pub(crate) const CONTENT_HOOKS: ContentHooks = ContentHooks {
     before_recover: crate::content::host::host_before_recover,
     on_before_gain_hand: crate::content::host::host_before_gain_hand,
     on_judge_settled: crate::content::host::host_judge_settled,
+    before_facedown_turn_skip: crate::content::host::host_before_facedown_turn_skip,
+    on_shanxian_turnover: crate::content::host::host_on_shanxian_turnover,
 };
 
 /// R05-F：目录名含 `#r05:{role}` 的全部定义号（装载器派生模板独占 `#`）。

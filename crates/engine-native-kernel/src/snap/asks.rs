@@ -236,20 +236,23 @@ pub fn active_ask(
                     return None;
                 }
                 let responder = *queue.first()?;
-                let mut options =
-                    response_kind_options(core, catalog, responder, CardKind::Nullify);
-                for rdef in crate::kernel::host_response_skills(core, catalog, responder, 3) {
-                    options.push(ChoiceOption::Skill(rdef));
-                }
-                if !catalog.blocks_all_cards(core, responder) {
-                    options.extend((catalog.hooks.respond_skill_options)(
+                let options = if catalog.blocks_card_use_and_save(core, responder) {
+                    vec![ChoiceOption::Pass]
+                } else {
+                    let mut opts =
+                        response_kind_options(core, catalog, responder, CardKind::Nullify);
+                    for rdef in crate::kernel::host_response_skills(core, catalog, responder, 3) {
+                        opts.push(ChoiceOption::Skill(rdef));
+                    }
+                    opts.extend((catalog.hooks.respond_skill_options)(
                         core,
                         catalog,
                         responder,
                         CardKind::Nullify,
                         true,
                     ));
-                }
+                    opts
+                };
                 Some(ask(
                     responder,
                     "nullify_window",

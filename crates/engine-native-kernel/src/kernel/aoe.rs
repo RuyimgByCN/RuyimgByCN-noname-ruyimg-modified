@@ -432,30 +432,39 @@ impl crate::catalog::SkillMachine for AoeResolveMachine {
                         self.source,
                         self.targets[self.idx],
                     )
-                    || crate::rvm_bridge::modifiers::eval_card_target_canceled(
-                        ctx.core,
-                        ctx.catalog,
-                        self.source,
-                        self.targets[self.idx],
-                        self.card,
-                        {
-                            let raw_kind = ctx.catalog.card_kind(self.card);
-                            if matches!(
+                    || {
+                        let eval_card = ctx.core.table.contains(&self.card).then_some(self.card);
+                        let raw_kind = ctx.catalog.card_kind(self.card);
+                        let eff_kind = if eval_card.is_some()
+                            && matches!(
                                 raw_kind,
                                 CardKind::SavageAttack
                                     | CardKind::ArcheryAttack
                                     | CardKind::Jingleishan
                                     | CardKind::Chiyuxi
                             ) {
-                                raw_kind
-                            } else if self.need == CardKind::Shan {
-                                CardKind::ArcheryAttack
+                            raw_kind
+                        } else if self.need == CardKind::Shan {
+                            if self.nature == crate::event::DamageNature::Fire {
+                                CardKind::Chiyuxi
                             } else {
-                                CardKind::SavageAttack
+                                CardKind::ArcheryAttack
                             }
-                        },
-                        self.nature,
-                    ))
+                        } else if self.nature == crate::event::DamageNature::Thunder {
+                            CardKind::Jingleishan
+                        } else {
+                            CardKind::SavageAttack
+                        };
+                        crate::rvm_bridge::modifiers::eval_card_target_canceled_opt(
+                            ctx.core,
+                            ctx.catalog,
+                            self.source,
+                            self.targets[self.idx],
+                            eval_card,
+                            eff_kind,
+                            self.nature,
+                        )
+                    })
             {
                 self.idx += 1;
             }

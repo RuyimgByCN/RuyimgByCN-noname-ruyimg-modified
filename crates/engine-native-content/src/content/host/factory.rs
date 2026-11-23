@@ -95,6 +95,12 @@ impl HostSkillBehavior {
             HostBehavior::L25ZuanBatchG => {
                 return super::step::l25_batch_g::machine_l25_batch_g(self, owner, event);
             }
+            HostBehavior::U05OwBatchA
+            | HostBehavior::U05OwBatchB
+            | HostBehavior::U05OwBatchC
+            | HostBehavior::U05OwBatchD => {
+                return super::step::u05_ow::machine_u05_ow(self, owner, event);
+            }
             HostBehavior::L10ScsCompanion => {
                 return super::step::l10_scs::machine_l10_scs(self, owner, event);
             }

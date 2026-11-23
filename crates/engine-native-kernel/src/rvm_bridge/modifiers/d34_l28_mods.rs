@@ -440,14 +440,14 @@ pub fn guofengyupao_cancels_target(
     catalog: &Catalog,
     actor: PlayerId,
     target: PlayerId,
-    card: CardId,
+    card: Option<CardId>,
     kind: CardKind,
 ) -> bool {
     actor != target
         && is_ordinary_trick(kind)
         && has_ext_skill(state, catalog, target, "guofengyupao")
         && !super::is_target_unequip2(state, target)
-        && !source_ignores_armor(state, catalog, actor, target, Some(card), Some(kind), DamageNature::Normal)
+        && !source_ignores_armor(state, catalog, actor, target, card, Some(kind), DamageNature::Normal)
 }
 
 /// 奇门八卦 / 国风玉袍 / 黑光铠：在使用前/指定目标后将该目标移除（对持有者无效）。

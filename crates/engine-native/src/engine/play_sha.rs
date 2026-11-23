@@ -90,6 +90,13 @@ pub(super) fn play_sha(
                 .unwrap_or(false)
         })
         .unwrap_or(false)
+        || catalog
+            .skill_by_name("guangshu_club")
+            .is_some_and(|def| {
+                catalog.skills[def as usize].behavior.as_host_behavior()
+                    == Some(crate::vocabulary::host::HostBehavior::U05OwBatchD)
+                    && core.has_skill(core.turn.current, def)
+            })
     {
         return Err(RejectReason::IllegalTargets);
     }
@@ -167,14 +174,19 @@ pub(super) fn play_sha(
             && targets
                 .iter()
                 .all(|&t| xinfu_limu_in_range(core, catalog, player_id, t)));
+    let zhanlong2_unlimited = catalog.skill_by_name("zhanlong2").is_some_and(|d| {
+        catalog.skills[d as usize].behavior.as_host_behavior()
+            == Some(crate::vocabulary::host::HostBehavior::U05OwBatchC)
+            && core.has_skill(player_id, d)
+    });
+    let sha_unlimited_ext = vm_sha_unlimited || zhanlong2_unlimited || tanbei_free;
     if !paoxiao
         && !has_zhuge
         && !baolei_sentinel
         && !fentian_red
         && !poyue_red_free
         && !vm_va_no_count
-        && !vm_sha_unlimited
-        && !tanbei_free
+        && !sha_unlimited_ext
         && (core.turn.sha_used_play_phase || vm_sha_limit == 0)
         && !land_sha_bonus
     {
@@ -469,7 +481,11 @@ pub(super) fn play_sha(
                         .unwrap_or(false)
                         || catalog
                             .skill_by_name(crate::content::host::WUDIAN_FEIDAN_KEY)
-                            .map(|def| core.has_skill(core.turn.current, def))
+                            .map(|def| {
+                                catalog.skills[def as usize].behavior.as_host_behavior()
+                                    != Some(crate::vocabulary::host::HostBehavior::U05OwBatchD)
+                                    && core.has_skill(core.turn.current, def)
+                            })
                             .unwrap_or(false)
                         // 天弦（U05 xianjian 柳梦璃，规则 v184）：锁定——
                         // 杀无视距离（上游 mod targetInRange 同口径）
@@ -550,12 +566,29 @@ pub(super) fn play_sha(
         .unwrap_or(false);
     let tanbei_tgt_free =
         crate::rvm_bridge::modifiers::tanbei_unlimited_target(core, catalog, from, target);
+    let ow_feidan = catalog.skill_by_name("feidan").is_some_and(|def| {
+        catalog.skills[def as usize].behavior.as_host_behavior()
+            == Some(crate::vocabulary::host::HostBehavior::U05OwBatchD)
+            && core.has_skill(from, def)
+    });
+    let shanxian_target_flag = core
+        .vm_aux
+        .flags
+        .get(&(from, "ow_shanxian_target".to_string()))
+        .copied();
+    let dist = core.computed_distance(catalog, from, target);
+    if ow_feidan && dist <= 1 {
+        return Err(RejectReason::IllegalTargets);
+    }
+    let shanxian_free = shanxian_target_flag == Some(u32::from(target) + 1);
     if !zfs_free
         && !baolei_range_free
         && !feiren_range_free_for(target)
+        && !ow_feidan
         && !zhuyue_free
         && !sliufeng_free
         && !tanbei_tgt_free
+        && !shanxian_free
         && !core.in_attack_range(catalog, from, target)
     {
         return Err(RejectReason::IllegalTargets);
@@ -572,8 +605,15 @@ pub(super) fn play_sha(
         if kc && core.player(*t).hand.is_empty() {
             return Err(RejectReason::IllegalTargets);
         }
+        let d2 = core.computed_distance(catalog, from, *t);
+        if ow_feidan && d2 <= 1 {
+            return Err(RejectReason::IllegalTargets);
+        }
+        let shanxian_free_t = shanxian_target_flag == Some(u32::from(*t) + 1);
         if !feiren_range_free_for(*t)
+            && !ow_feidan
             && !crate::rvm_bridge::modifiers::tanbei_unlimited_target(core, catalog, from, *t)
+            && !shanxian_free_t
             && !core.in_attack_range(catalog, from, *t)
         {
             return Err(RejectReason::IllegalTargets);

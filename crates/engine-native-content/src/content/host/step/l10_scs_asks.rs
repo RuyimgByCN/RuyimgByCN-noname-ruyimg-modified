@@ -16,7 +16,12 @@ pub(in crate::content::host) fn anruo_usable_cards_for_ctx(
     owner: PlayerId,
     resp_ctx: u32,
 ) -> Vec<CardId> {
-    if catalog.blocks_all_cards(core, owner) {
+    let blocked = if resp_ctx == 0 || resp_ctx >= 3 {
+        catalog.blocks_card_use_and_save(core, owner)
+    } else {
+        catalog.blocks_all_cards(core, owner)
+    };
+    if blocked {
         return Vec::new();
     }
     let tao_futai2 = crate::kernel::tao_futai2_banned(core, catalog, owner);

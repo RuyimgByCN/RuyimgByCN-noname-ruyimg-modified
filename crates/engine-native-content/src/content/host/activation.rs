@@ -270,6 +270,12 @@ impl HostSkillBehavior {
             HostBehavior::L25ZuanBatchG => {
                 super::step::l25_batch_g::activate_l25_batch_g(self, ctx, owner)
             }
+            HostBehavior::U05OwBatchA
+            | HostBehavior::U05OwBatchB
+            | HostBehavior::U05OwBatchC
+            | HostBehavior::U05OwBatchD => {
+                super::step::u05_ow::activate_u05_ow(self, ctx, owner)
+            }
             HostBehavior::L10ScsCompanion => {
                 super::step::l10_scs::activate_l10_scs(self, ctx, owner)
             }
@@ -613,6 +619,12 @@ pub(in crate::content::host) fn has_phase_use_activation(
         | HostBehavior::U05GujianCharBatchE => {
             super::step::u05_b2_gujian::is_phase_use_active_u05_gujian(behavior, name)
         }
+        HostBehavior::U05OwBatchA
+        | HostBehavior::U05OwBatchB
+        | HostBehavior::U05OwBatchC
+        | HostBehavior::U05OwBatchD => {
+            super::step::u05_ow::has_phase_use_activation_u05_ow(behavior, name)
+        }
         _ => false,
     }
 }
@@ -625,6 +637,16 @@ pub(in crate::content::host) fn is_host_skill_bolan_eligible(
         return false;
     }
     if name.starts_with('_') || name.ends_with("_card") || name.ends_with("_global") {
+        return false;
+    }
+    if matches!(
+        behavior,
+        HostBehavior::U05OwBatchA
+            | HostBehavior::U05OwBatchB
+            | HostBehavior::U05OwBatchC
+            | HostBehavior::U05OwBatchD
+    ) && !super::step::u05_ow::is_bolan_eligible_u05_ow(name)
+    {
         return false;
     }
     !matches!(

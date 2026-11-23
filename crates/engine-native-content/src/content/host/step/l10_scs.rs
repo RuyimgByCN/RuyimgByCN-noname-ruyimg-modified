@@ -243,7 +243,7 @@ pub(in crate::content::host) fn activate_l10_scs(
     let ok = match skill.name.as_str() {
         "scsniqu" => state.alive_players().next().is_some(),
         "scstaoluan" => {
-            !catalog.blocks_all_cards(state, owner)
+            !catalog.blocks_card_use_and_save(state, owner)
                 && (!state.player(owner).hand.is_empty() || !state.player(owner).equips.is_empty())
                 && !super::l10_reguhuo::reguhuo_name_options(state, catalog, owner, 0).is_empty()
         }
@@ -258,7 +258,7 @@ pub(in crate::content::host) fn activate_l10_scs(
             .alive_players()
             .any(|p| p != owner && !state.player(p).hand.is_empty()),
         "scsanruo" => {
-            !catalog.blocks_all_cards(state, owner)
+            !catalog.blocks_card_use_and_save(state, owner)
                 && !anruo_usable_cards(state, catalog, owner).is_empty()
         }
         _ => false,

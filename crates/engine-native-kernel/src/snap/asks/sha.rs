@@ -220,7 +220,8 @@ pub(super) fn active_sha_ask(
             .is_some_and(|def| core.has_skill(target, def) && core.player(target).baolei_mode == 1);
         let target_can_play = !tieji_blocks
             && !target_sentinel
-            && !catalog.blocks_all_cards(core, target);
+            && !catalog.blocks_card_use_and_save(core, target)
+            && !catalog.blocks_hand_cards(core, target);
         let mut options: Vec<ChoiceOption> = vec![ChoiceOption::Pass];
         if !hand_locked {
             for c in core.player(target).hand.iter().copied() {

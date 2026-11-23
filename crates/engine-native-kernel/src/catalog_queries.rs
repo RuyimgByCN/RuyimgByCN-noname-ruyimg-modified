@@ -96,7 +96,8 @@ impl Catalog {
         }
     }
 
-    /// L20 标记补充 (`fz_new_tieji` / `sbtieji`): whether `p`'s non-locked skills are sealed this turn.
+    /// L20 标记补充 (`fz_new_tieji` / `sbtieji`) 及 U05-ow `qinru` 侵入封印:
+    /// whether `p`'s non-locked skills are sealed.
     pub fn is_tieji_sealed(
         &self,
         core: &crate::state::GameStateCore,
@@ -121,6 +122,80 @@ impl Catalog {
             || self
                 .skill_by_name("txtanbei_effect1")
                 .is_some_and(|def| core.has_skill(p, def))
+            || core
+                .vm_aux
+                .flags
+                .get(&(p, "ow_qinru_fengyin".to_string()))
+                .copied()
+                .unwrap_or(0)
+                > 0
+    }
+
+    /// 麻醉封印：手牌区（`position == "h"`）禁止使用或打出（不影响装备牌转换）。
+    /// 注意：Boss 应昭「封冻」(`fengyin_active`) 仅限出牌使用面，不在此阻塞响应出闪；
+    /// `qinru`（`ow_qinru_fengyin`）仅封非锁定技（`is_tieji_sealed`），不封手牌。
+    pub fn blocks_hand_cards(
+        &self,
+        core: &crate::state::GameStateCore,
+        p: crate::ids::PlayerId,
+    ) -> bool {
+        self.skill_by_name("mianzhen2").is_some_and(|d| {
+            self.skills[d as usize].behavior.as_host_behavior()
+                == Some(crate::vocabulary::host::HostBehavior::U05OwBatchB)
+                && core.has_skill(p, d)
+        })
+    }
+
+    /// 牌使用与濒死求救封锁（`cardEnabled` + `cardSavable`，不含 `cardRespondable`）：
+    /// 涵盖 `blocks_all_cards` 以及 U05 `ow` 死神 `yihun2`（仅禁 `targetEnabled` / `cardEnabled`，不阻响应）。
+    pub fn blocks_card_use_and_save(
+        &self,
+        core: &crate::state::GameStateCore,
+        p: crate::ids::PlayerId,
+    ) -> bool {
+        self.blocks_all_cards(core, p)
+            || self.skill_by_name("yihun2").is_some_and(|d| {
+                self.skills[d as usize].behavior.as_host_behavior()
+                    == Some(crate::vocabulary::host::HostBehavior::U05OwBatchC)
+                    && core.has_skill(p, d)
+            })
+    }
+
+    /// 通用出牌目标合法性查询（`targetEnabled`：`yihun2`/`sheng2`/`jidong2`/`yinshen`/`yinmi`/`jileng` + VM 修饰）；
+    /// `card == None` 表示无色虚拟牌。
+    pub fn ow_target_enabled(
+        &self,
+        core: &crate::state::GameStateCore,
+        actor: crate::ids::PlayerId,
+        target: crate::ids::PlayerId,
+        card: Option<crate::ids::CardId>,
+        kind: crate::catalog::CardKind,
+        nature: crate::event::DamageNature,
+    ) -> bool {
+        if !core.player(target).alive {
+            return false;
+        }
+        let has_behavior = |name: &str, beh: crate::vocabulary::host::HostBehavior| {
+            self.skill_by_name(name).is_some_and(|d| {
+                self.skills[d as usize].behavior.as_host_behavior() == Some(beh)
+                    && core.has_skill(target, d)
+            })
+        };
+        if has_behavior("yihun2", crate::vocabulary::host::HostBehavior::U05OwBatchC) {
+            return false;
+        }
+        if target != actor
+            && (core.player(target).jidong_active
+                || core.player(target).yinshen_active
+                || core.player(target).jileng_active
+                || core.player(target).yinmi_active
+                || has_behavior("sheng2", crate::vocabulary::host::HostBehavior::U05OwBatchD))
+        {
+            return false;
+        }
+        !crate::rvm_bridge::modifiers::eval_card_target_canceled_opt(
+            core, self, actor, target, card, kind, nature,
+        )
     }
 
     /// Whether a skill is a locked skill (`锁定技` / `forced: true` / `charlotte: true`) exempt from `tieji` seal.

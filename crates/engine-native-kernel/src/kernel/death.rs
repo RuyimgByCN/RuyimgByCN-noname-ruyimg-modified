@@ -182,6 +182,24 @@ impl crate::catalog::SkillMachine for DeathMachine {
         ctx.log(LogEvent::PlayerDied {
             player: self.player,
             killer: self.killer, presentation: None });
+        if let Some(k) = self.killer {
+            if ctx.catalog.skill_by_name("lianpo").is_some_and(|d| {
+                ctx.catalog.skills[d as usize].behavior.as_host_behavior()
+                    == Some(crate::vocabulary::host::HostBehavior::U05OwBatchC)
+            }) {
+                let cur = ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .get(&(k, "ow_turn_kill_count".to_string()))
+                    .copied()
+                    .unwrap_or(0);
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((k, "ow_turn_kill_count".to_string()), cur + 1);
+            }
+        }
         (ctx.catalog.hooks.on_player_died)(ctx, self.player);
         // 造异（Boss 颛顼，规则 v246）：玄冥/共工死亡且场上无存活同名
         // 将 → 造异持有者摸 4 并获「造异异变」（运行时授予；技能实例已

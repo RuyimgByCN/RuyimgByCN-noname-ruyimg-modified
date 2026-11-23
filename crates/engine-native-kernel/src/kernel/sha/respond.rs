@@ -53,28 +53,31 @@ impl ShaResolveMachine {
         );
         let target_can_play = !tieji_blocks
             && !target_sentinel
-            && !ctx.catalog.blocks_all_cards(ctx.core, self.target);
-        let target_can_play_hand = target_can_play && !hand_locked;
+            && !ctx.catalog.blocks_card_use_and_save(ctx.core, self.target);
+        let target_hand_blocked =
+            hand_locked || ctx.catalog.blocks_hand_cards(ctx.core, self.target);
+        let target_can_play_hand = target_can_play && !target_hand_blocked;
         let rw_lanyin = target_can_play_hand
             && crate::rvm_bridge::modifiers::d34_l28_mods::has_rewritten_lanyinjia(
                 ctx.core,
                 ctx.catalog,
                 self.target,
             );
-        let mut shans: Vec<ChoiceOption> = ctx
-            .core
-            .player(self.target)
-            .hand
-            .iter()
-            .filter(|c| {
-                target_can_play_hand && {
+        let mut shans: Vec<ChoiceOption> = if !target_can_play_hand {
+            Vec::new()
+        } else {
+            ctx.core
+                .player(self.target)
+                .hand
+                .iter()
+                .filter(|c| {
                     let kind = ctx.catalog.resolved_card_kind(ctx.core, **c);
                     rw_lanyin || kind == CardKind::Shan || (longdan && kind == CardKind::Sha)
-                }
-            })
-            .copied()
-            .map(ChoiceOption::Card)
-            .collect();
+                })
+                .copied()
+                .map(ChoiceOption::Card)
+                .collect()
+        };
         if qingguo && target_can_play_hand {
             for c in ctx.core.player(self.target).hand.iter().copied() {
                 let kind = ctx.catalog.resolved_card_kind(ctx.core, c);
@@ -90,9 +93,9 @@ impl ShaResolveMachine {
             }
         }
         if target_can_play {
-            for &c in &ctx.core.player(self.target).hand {
-                if !hand_locked
-                    && ctx
+            if !target_hand_blocked {
+                for &c in &ctx.core.player(self.target).hand {
+                    if ctx
                         .catalog
                         .find_player_vm_view_as(
                             ctx.core,
@@ -102,9 +105,10 @@ impl ShaResolveMachine {
                             Some(CardKind::Shan),
                         )
                         .is_some()
-                    && !shans.contains(&ChoiceOption::Card(c))
-                {
-                    shans.push(ChoiceOption::Card(c));
+                        && !shans.contains(&ChoiceOption::Card(c))
+                    {
+                        shans.push(ChoiceOption::Card(c));
+                    }
                 }
             }
             for c in ctx.catalog.player_vm_view_as_extra_cards(

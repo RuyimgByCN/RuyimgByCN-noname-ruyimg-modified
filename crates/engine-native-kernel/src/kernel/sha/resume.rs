@@ -215,7 +215,7 @@ impl ShaResolveMachine {
                 .contains_key(&(self.target, format!("yd_tried:{sha_fid}")))
                 && ctx.core.player(self.target).alive
                 && !self.is_sha_direct_hit(ctx)
-                && !ctx.catalog.blocks_all_cards(ctx.core, self.target)
+                && !ctx.catalog.blocks_card_use_and_save(ctx.core, self.target)
                 && !ctx.core.player(self.target).fengyin_active
             {
                 let yd_opts = Self::youdishenru_use_options(ctx.core, ctx.catalog, self.target);
@@ -542,25 +542,31 @@ impl ShaResolveMachine {
                         ctx.catalog,
                         self.target,
                     );
-                    let options: Vec<ChoiceOption> = ctx
-                        .core
-                        .player(self.target)
-                        .hand
-                        .iter()
-                        .filter(|c| {
-                            let kind = ctx.catalog.resolved_card_kind(ctx.core, **c);
-                            let black = matches!(
-                                ctx.catalog.resolved_card_suit(ctx.core, **c),
-                                crate::catalog::Suit::Spade | crate::catalog::Suit::Club
-                            );
-                            kind == CardKind::Shan
-                                || rw_lanyin
-                                || (longdan && kind.is_sha_like())
-                                || (qingguo && black)
-                        })
-                        .copied()
-                        .map(ChoiceOption::Card)
-                        .collect();
+                    let options: Vec<ChoiceOption> = if ctx
+                        .catalog
+                        .blocks_hand_cards(ctx.core, self.target)
+                    {
+                        Vec::new()
+                    } else {
+                        ctx.core
+                            .player(self.target)
+                            .hand
+                            .iter()
+                            .filter(|c| {
+                                let kind = ctx.catalog.resolved_card_kind(ctx.core, **c);
+                                let black = matches!(
+                                    ctx.catalog.resolved_card_suit(ctx.core, **c),
+                                    crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                                );
+                                kind == CardKind::Shan
+                                    || rw_lanyin
+                                    || (longdan && kind.is_sha_like())
+                                    || (qingguo && black)
+                            })
+                            .copied()
+                            .map(ChoiceOption::Card)
+                            .collect()
+                    };
                     if !options.is_empty() {
                         self.asking_sadeng_shan = true;
                         return Some(Flow::WaitChoice {
@@ -719,6 +725,18 @@ impl ShaResolveMachine {
                     .flags
                     .remove(&(self.source, format!("{key}:{fid}")));
             }
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(self.target, format!("sha_cancelled_target:{fid}")));
+            ctx.core.vm_aux.flags.remove(&(
+                self.source,
+                format!("sha_ow_begin_done:{fid}:{}", self.target),
+            ));
+            ctx.core.vm_aux.flags.remove(&(
+                self.source,
+                format!("sha_ow_bfengshi_direct:{fid}:{}", self.target),
+            ));
         }
     }
 

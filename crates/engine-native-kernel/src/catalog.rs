@@ -1056,10 +1056,23 @@ impl Catalog {
             .take_while(|((p, _), _)| *p == target)
             .any(|((_, def), inst)| {
                 inst.enabled
-                    && self.skills[*def as usize]
+                    && (self.skills[*def as usize]
                         .behavior
                         .as_host_behavior()
                         .is_some_and(|h| h.aoe_exclude())
+                        || matches!(
+                            (
+                                self.skills[*def as usize].name,
+                                self.skills[*def as usize].behavior.as_host_behavior()
+                            ),
+                            (
+                                "sheng2",
+                                Some(crate::vocabulary::host::HostBehavior::U05OwBatchD)
+                            ) | (
+                                "yihun2",
+                                Some(crate::vocabulary::host::HostBehavior::U05OwBatchC)
+                            )
+                        ))
             })
     }
 

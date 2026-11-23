@@ -643,6 +643,10 @@ impl HostBehavior {
             HostBehavior::U05GujianCharBatchC => "host:u05_gujian_char_batch_c",
             HostBehavior::U05GujianCharBatchD => "host:u05_gujian_char_batch_d",
             HostBehavior::U05GujianCharBatchE => "host:u05_gujian_char_batch_e",
+            HostBehavior::U05OwBatchA => "host:u05_ow_batch_a",
+            HostBehavior::U05OwBatchB => "host:u05_ow_batch_b",
+            HostBehavior::U05OwBatchC => "host:u05_ow_batch_c",
+            HostBehavior::U05OwBatchD => "host:u05_ow_batch_d",
         }
     }
 }

@@ -184,8 +184,12 @@ pub(in crate::snap) fn dying_save_options(
     responder: PlayerId,
     dying: PlayerId,
 ) -> Vec<ChoiceOption> {
+    if catalog.blocks_card_use_and_save(core, responder) {
+        return vec![ChoiceOption::Pass];
+    }
     let hand_locked =
-        crate::rvm_bridge::modifiers::d34_flags::is_u01_hand_locked(core, catalog, responder);
+        crate::rvm_bridge::modifiers::d34_flags::is_u01_hand_locked(core, catalog, responder)
+            || catalog.blocks_hand_cards(core, responder);
     let mut options = vec![ChoiceOption::Pass];
     if !crate::kernel::mbcmfangzhu_banned(core, responder) {
         let p = core.player(responder);

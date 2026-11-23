@@ -122,7 +122,8 @@ pub fn matches_vm_modifier_selector(
         }
         _ => nature,
     };
-    let Some(def) = catalog.cards.get(card as usize) else {
+    let def = catalog.cards.get(card as usize);
+    if def.is_none() && card != CardId::MAX {
         return match selector {
             VmModifierSelector::Any => true,
             VmModifierSelector::DamageNormal => eff_nature == DamageNature::Normal,
@@ -130,11 +131,11 @@ pub fn matches_vm_modifier_selector(
             VmModifierSelector::DamageThunder => eff_nature == DamageNature::Thunder,
             _ => false,
         };
-    };
-    let suit = catalog.effective_card_suit(state, owner, card);
-    let is_red = matches!(suit, Suit::Heart | Suit::Diamond);
-    let is_black = matches!(suit, Suit::Spade | Suit::Club);
-    let rank = def.rank;
+    }
+    let suit = def.map(|_| catalog.effective_card_suit(state, owner, card));
+    let is_red = matches!(suit, Some(Suit::Heart | Suit::Diamond));
+    let is_black = matches!(suit, Some(Suit::Spade | Suit::Club));
+    let rank = def.map_or(0, |d| d.rank);
     let is_sha = kind.is_sha_like();
     match selector {
         VmModifierSelector::Any => true,
@@ -146,18 +147,19 @@ pub fn matches_vm_modifier_selector(
         VmModifierSelector::NonBasic => !kind.is_basic_kind(),
         VmModifierSelector::Trick => is_trick_kind(kind),
         VmModifierSelector::Equip => kind.is_equip(),
-        VmModifierSelector::Spade => suit == Suit::Spade,
-        VmModifierSelector::Heart => suit == Suit::Heart,
-        VmModifierSelector::Club => suit == Suit::Club,
-        VmModifierSelector::Diamond => suit == Suit::Diamond,
+        VmModifierSelector::Spade => suit == Some(Suit::Spade),
+        VmModifierSelector::Heart => suit == Some(Suit::Heart),
+        VmModifierSelector::Club => suit == Some(Suit::Club),
+        VmModifierSelector::Diamond => suit == Some(Suit::Diamond),
         VmModifierSelector::Red => is_red,
         VmModifierSelector::Black => is_black,
         VmModifierSelector::Juedou => kind == CardKind::Duel,
         VmModifierSelector::BlackTrick => is_trick_kind(kind) && is_black,
         VmModifierSelector::DamageTrick => is_damage_trick_kind(kind),
         VmModifierSelector::ShaFire => is_sha && eff_nature == DamageNature::Fire,
-        VmModifierSelector::Huogong => def.name == "huogong",
-        VmModifierSelector::Jiu | VmModifierSelector::PhysicalJiu => kind == CardKind::Jiu,
+        VmModifierSelector::Huogong => def.is_some_and(|d| d.name == "huogong"),
+        VmModifierSelector::Jiu => kind == CardKind::Jiu,
+        VmModifierSelector::PhysicalJiu => def.is_some() && kind == CardKind::Jiu,
         VmModifierSelector::ShaRed => is_sha && is_red,
         VmModifierSelector::Nanman => kind == CardKind::SavageAttack,
         VmModifierSelector::OrdinaryTrick => is_trick_kind(kind) && !is_delayed_trick_kind(kind),
@@ -172,7 +174,7 @@ pub fn matches_vm_modifier_selector(
         }
         VmModifierSelector::Wanjian => kind == CardKind::ArcheryAttack,
         VmModifierSelector::ShaNormal => is_sha && eff_nature == DamageNature::Normal,
-        VmModifierSelector::ShaHeart => is_sha && suit == Suit::Heart,
+        VmModifierSelector::ShaHeart => is_sha && suit == Some(Suit::Heart),
         VmModifierSelector::DelayedTrick => is_delayed_trick_kind(kind),
         VmModifierSelector::Wuxie => kind == CardKind::Nullify,
         VmModifierSelector::Guohe => kind == CardKind::Dismantle,
@@ -180,16 +182,16 @@ pub fn matches_vm_modifier_selector(
         VmModifierSelector::ShaThunder => is_sha && eff_nature == DamageNature::Thunder,
         VmModifierSelector::HandRankLetter => matches!(rank, 1 | 11 | 12 | 13),
         VmModifierSelector::SoleHandCard => {
-            state.player(owner).hand.len() == 1 && state.player(owner).hand.contains(&card)
+            def.is_some() && state.player(owner).hand.len() == 1 && state.player(owner).hand.contains(&card)
         }
-        VmModifierSelector::ShaDiamond => is_sha && suit == Suit::Diamond,
+        VmModifierSelector::ShaDiamond => is_sha && suit == Some(Suit::Diamond),
         VmModifierSelector::SkillTracked => false,
         VmModifierSelector::DamageCard => is_sha || is_damage_trick_kind(kind),
         VmModifierSelector::FaceUp => !state.player(owner).face_down,
         VmModifierSelector::DamageNormal => eff_nature == DamageNature::Normal,
         VmModifierSelector::DamageFire => {
             eff_nature == DamageNature::Fire
-                || def.name == "huogong"
+                || def.is_some_and(|d| d.name == "huogong")
                 || matches!(
                     kind,
                     CardKind::FireSha

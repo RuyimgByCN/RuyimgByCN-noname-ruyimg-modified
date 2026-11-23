@@ -141,7 +141,11 @@ fn resolve_and_register_u05_skill(
         return Some(zh);
     }
     let sk_owned = map_cross_subpack_skill(package_id, raw_sk);
-    if let Some(behavior) = crate::shahai_u05_b1::lookup_shahai_b1_host_behavior(clean)
+    let ow_beh = (package_id == "shaai-ow")
+        .then(|| crate::shahai_u05_ow::lookup_shahai_ow_host_behavior(clean))
+        .flatten();
+    if let Some(behavior) = ow_beh
+        .or_else(|| crate::shahai_u05_b1::lookup_shahai_b1_host_behavior(clean))
         .or_else(|| lookup_upstream_host_behavior(&sk_owned))
         .or_else(|| lookup_upstream_host_behavior(clean))
     {
@@ -445,6 +449,12 @@ pub fn try_attach_shahai_formal_package(
                 seen_skills,
                 &mut vm_idx,
                 OW_SKILL_DISPATCH_ID,
+            );
+            crate::shahai_u05_ow::apply_shahai_ow_pack_fixups(
+                package_id,
+                pack,
+                seen_cards,
+                seen_skills,
             );
             true
         }

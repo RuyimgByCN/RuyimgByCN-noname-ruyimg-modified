@@ -122,7 +122,7 @@ pub(crate) fn mbcmjiushi_dying_skill(
         || !core.player(responder).alive
         || core.player(responder).face_down
         || mbcmfangzhu_banned(core, responder)
-        || catalog.blocks_all_cards(core, responder)
+        || catalog.blocks_card_use_and_save(core, responder)
     {
         return None;
     }
@@ -252,14 +252,14 @@ pub(super) fn dying_tao_cards(
     responder: PlayerId,
     dying: PlayerId,
 ) -> Vec<crate::ids::CardId> {
-    if ctx.catalog.blocks_all_cards(ctx.core, responder) {
+    if ctx.catalog.blocks_card_use_and_save(ctx.core, responder) {
         return Vec::new();
     }
     let hand_locked = crate::rvm_bridge::modifiers::d34_flags::is_u01_hand_locked(
         ctx.core,
         ctx.catalog,
         responder,
-    );
+    ) || ctx.catalog.blocks_hand_cards(ctx.core, responder);
     let p = ctx.core.player(responder);
     let mut out: Vec<crate::ids::CardId> = if hand_locked {
         Vec::new()
@@ -310,18 +310,29 @@ pub(super) fn dying_tao_cards(
     out
 }
 
-/// 通用响应/打出候选项（kernel 与 snap/asks 共用，含禁言 `jinyan` 禁用与黑锦囊转【杀】）。
+pub fn has_ow_mujing(core: &crate::state::GameStateCore, catalog: &Catalog, owner: PlayerId) -> bool {
+    catalog.skill_by_name("mujing").is_some_and(|d| {
+        catalog.skills[d as usize].behavior.as_host_behavior()
+            == Some(crate::vocabulary::host::HostBehavior::U05OwBatchC)
+            && core.has_skill(owner, d)
+    })
+}
+
+/// 通用响应/打出候选项（kernel 与 snap/asks 共用，含禁言 `jinyan` 禁用、手牌封印、黑锦囊转【杀】与暮景转化【杀】）。
 pub fn response_kind_cards_core(
     core: &crate::state::GameStateCore,
     catalog: &Catalog,
     responder: PlayerId,
     need: CardKind,
 ) -> Vec<crate::ids::CardId> {
-    if catalog.blocks_all_cards(core, responder) {
+    if catalog.blocks_all_cards(core, responder)
+        || (need == CardKind::Nullify && catalog.blocks_card_use_and_save(core, responder))
+    {
         return Vec::new();
     }
     let hand_locked =
-        crate::rvm_bridge::modifiers::d34_flags::is_u01_hand_locked(core, catalog, responder);
+        crate::rvm_bridge::modifiers::d34_flags::is_u01_hand_locked(core, catalog, responder)
+            || catalog.blocks_hand_cards(core, responder);
     let sealed = catalog.is_tieji_sealed(core, responder)
         || (core.player(responder).hp <= 1 && catalog.has_rechanyuan(core, responder));
     let rw_lanyin = !hand_locked
@@ -329,6 +340,7 @@ pub fn response_kind_cards_core(
         && crate::rvm_bridge::modifiers::d34_l28_mods::has_rewritten_lanyinjia(
             core, catalog, responder,
         );
+    let ow_mujing = need == CardKind::Sha && !sealed && has_ow_mujing(core, catalog, responder);
     let p = core.player(responder);
     let mut out: Vec<crate::ids::CardId> = if hand_locked {
         Vec::new()
@@ -345,14 +357,30 @@ pub fn response_kind_cards_core(
                 if jinyan_blocks_black_trick(core, catalog, responder, c) {
                     return need == CardKind::Sha && !sealed;
                 }
+                let is_black = matches!(
+                    catalog.effective_card_suit(core, responder, c),
+                    crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                );
                 rw_lanyin
                     || catalog.resolved_card_kind(core, c) == need
+                    || (ow_mujing && is_black)
                     || catalog
                         .find_player_vm_view_as(core, responder, c, false, Some(need))
                         .is_some()
             })
             .collect()
     };
+    if ow_mujing {
+        for &c in &p.equips {
+            let is_black = matches!(
+                catalog.effective_card_suit(core, responder, c),
+                crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+            );
+            if is_black && !out.contains(&c) {
+                out.push(c);
+            }
+        }
+    }
     for c in catalog.player_vm_view_as_extra_cards(core, responder, false, Some(need)) {
         if (!hand_locked || !p.hand.contains(&c))
             && !jinyan_blocks_black_trick(core, catalog, responder, c)
@@ -522,7 +550,7 @@ pub fn sha_card_use_as(
     card: crate::ids::CardId,
 ) -> Option<(Option<CardKind>, bool)> {
     let in_hand = core.player(owner).hand.contains(&card);
-    if in_hand && core.player(owner).fengyin_active {
+    if in_hand && catalog.blocks_hand_cards(core, owner) {
         return None;
     }
     let kind = catalog.resolved_card_kind(core, card);
@@ -545,6 +573,8 @@ pub fn sha_card_use_as(
             || (has_skill(crate::vocabulary::names::LONG_DAN) && kind == CardKind::Shan)
             || (has_skill("huanxia") && red)
             || (has_skill("yaotong") && core.player(owner).hand.len() % 2 == 1)
+            || (has_ow_mujing(core, catalog, owner)
+                && matches!(suit, crate::catalog::Suit::Spade | crate::catalog::Suit::Club))
         {
             return Some((Some(CardKind::Sha), false));
         }
@@ -569,9 +599,14 @@ pub fn sha_card_use_as(
     if !in_hand
         && !sealed
         && core.player(owner).equips.contains(&card)
-        && catalog
+        && (catalog
             .skill_by_name("poxiao")
             .is_some_and(|d| core.has_skill(owner, d))
+            || (has_ow_mujing(core, catalog, owner)
+                && matches!(
+                    catalog.effective_card_suit(core, owner, card),
+                    crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                )))
     {
         return Some((Some(CardKind::Sha), false));
     }
@@ -588,11 +623,16 @@ fn sha_user_or_target_blocked(
         return true;
     }
     let has = |p: PlayerId, k: &str| catalog.skill_by_name(k).is_some_and(|d| core.has_skill(p, d));
-    if catalog.blocks_all_cards(core, owner)
+    if catalog.blocks_card_use_and_save(core, owner)
         || has(owner, crate::vocabulary::host::WUDIAN_SHOUHU_KEY)
         || has(owner, crate::vocabulary::host::GW_BIRIN_STATE_KEY)
         || has(owner, crate::vocabulary::host::GJ_FOOD_SHIHUIFEN_BAN_KEY)
         || has(owner, "shihuifen")
+        || catalog.skill_by_name("guangshu_club").is_some_and(|d| {
+            catalog.skills[d as usize].behavior.as_host_behavior()
+                == Some(crate::vocabulary::host::HostBehavior::U05OwBatchD)
+                && core.has_skill(owner, d)
+        })
     {
         return true;
     }
@@ -624,6 +664,16 @@ fn sha_user_or_target_blocked(
         || flag(target, "u05_mod:gj_lianjing_out_of_play") > 0
         || (core.player(target).face_down
             && (flag(target, "u05_mod:gj_xlqianhuan") > 0 || has(target, "xlqianhuan")))
+        || catalog.skill_by_name("sheng2").is_some_and(|d| {
+            catalog.skills[d as usize].behavior.as_host_behavior()
+                == Some(crate::vocabulary::host::HostBehavior::U05OwBatchD)
+                && core.has_skill(target, d)
+        })
+        || catalog.skill_by_name("yihun2").is_some_and(|d| {
+            catalog.skills[d as usize].behavior.as_host_behavior()
+                == Some(crate::vocabulary::host::HostBehavior::U05OwBatchC)
+                && core.has_skill(target, d)
+        })
     {
         return true;
     }
@@ -662,6 +712,7 @@ pub fn usable_sha_options(
     if catalog
         .skill_by_name("poxiao")
         .is_some_and(|d| core.has_skill(owner, d))
+        || has_ow_mujing(core, catalog, owner)
     {
         for &c in &core.player(owner).equips {
             if !candidates.contains(&c) {
@@ -705,7 +756,9 @@ pub(crate) fn host_response_skills(
     resp_ctx: u8,
 ) -> Vec<crate::ids::SkillDefId> {
     let mut out = Vec::new();
-    if catalog.blocks_all_cards(core, responder) {
+    if catalog.blocks_all_cards(core, responder)
+        || (resp_ctx >= 3 && catalog.blocks_card_use_and_save(core, responder))
+    {
         return out;
     }
     if let Some(def) = (catalog.hooks.reguhuo_response_skill)(core, catalog, responder, resp_ctx) {

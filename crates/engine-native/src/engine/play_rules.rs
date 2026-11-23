@@ -21,8 +21,8 @@ pub(super) fn common_play_validation(
     if core.turn.phase != Phase::Play {
         return Err(RejectReason::WrongPhase);
     }
-    // 冰封·封（swd 批 134，规则 v314 同批）：出牌封锁者不能使用牌
-    if catalog.blocks_all_cards(core, actor) {
+    // 冰封·封（swd 批 134，规则 v314 同批）与移魂2：出牌封锁者不能使用牌
+    if catalog.blocks_card_use_and_save(core, actor) {
         return Err(RejectReason::CardBlocked);
     }
     if crate::rvm_bridge::modifiers::d34_flags::is_u01_hand_locked(core, catalog, actor)
@@ -82,7 +82,15 @@ pub(super) fn common_play_validation(
         && (has_mizhilianou_equip_heart
             || catalog
                 .player_vm_view_as_extra_cards(core, core.turn.current, true, None)
-                .contains(&card));
+                .contains(&card)
+            || (actor_p.equips.contains(&card)
+                && crate::kernel::has_ow_mujing(core, catalog, core.turn.current)
+                && !catalog.is_tieji_sealed(core, core.turn.current)
+                && !(actor_p.hp <= 1 && catalog.has_rechanyuan(core, core.turn.current))
+                && matches!(
+                    catalog.effective_card_suit(core, core.turn.current, card),
+                    crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                )));
     if !in_hand && !in_equip_va {
         return Err(RejectReason::CardNotInHand);
     }
@@ -93,7 +101,8 @@ pub(super) fn common_play_validation(
     // 封印（Boss 应昭封冻，规则 v228）：被封印者本回合无法使用手
     // 牌（上游 fengyin mod cardEnabled2 position=h 同口径；装备区
     // 牌不受限）
-    if core.player(core.turn.current).fengyin_active
+    if (core.player(core.turn.current).fengyin_active
+        || catalog.blocks_hand_cards(core, core.turn.current))
         && core.player(core.turn.current).hand.contains(&card)
     {
         return Err(RejectReason::IllegalTargets);
@@ -214,7 +223,13 @@ pub(super) fn play_kind(
         let suit = catalog.effective_card_suit(core, actor, card);
         let black = matches!(suit, crate::catalog::Suit::Spade | crate::catalog::Suit::Club);
         let red = matches!(suit, crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond);
-        if (wusheng && red) || (longdan && kind == CardKind::Shan) {
+        let in_hand = core.player(actor).hand.contains(&card);
+        let ow_mujing_hit = crate::kernel::has_ow_mujing(core, catalog, actor)
+            && black
+            && (kind == CardKind::Shan
+                || !in_hand
+                || (!targets.is_empty() && kind.is_equip()));
+        if (wusheng && red) || (longdan && kind == CardKind::Shan) || ow_mujing_hit {
             kind = CardKind::Sha;
         }
         // 奇袭（甘宁）：黑色牌当过河拆桥（优先级低于杀类转化）
@@ -561,12 +576,28 @@ pub(super) fn check_play_target_restrictions(
     // AOE 类自动指向全体的牌不受影响——上游同口径；登记差异：
     // 仅出牌使用路径，响应路径同麻茶）
     {
+        let has_sheng2 = |p: PlayerId| {
+            catalog.skill_by_name("sheng2").is_some_and(|d| {
+                catalog.skills[d as usize].behavior.as_host_behavior()
+                    == Some(crate::vocabulary::host::HostBehavior::U05OwBatchD)
+                    && core.has_skill(p, d)
+            })
+        };
+        let has_yihun2 = |p: PlayerId| {
+            catalog.skill_by_name("yihun2").is_some_and(|d| {
+                catalog.skills[d as usize].behavior.as_host_behavior()
+                    == Some(crate::vocabulary::host::HostBehavior::U05OwBatchC)
+                    && core.has_skill(p, d)
+            })
+        };
         for t in targets {
-            if *t != core.turn.current
+            if (*t != core.turn.current
                 && (core.player(*t).jidong_active
                     || core.player(*t).yinshen_active
                     || core.player(*t).jileng_active
-                    || core.player(*t).yinmi_active)
+                    || core.player(*t).yinmi_active
+                    || has_sheng2(*t)))
+                || has_yihun2(*t)
             {
                 return Err(RejectReason::IllegalTargets);
             }

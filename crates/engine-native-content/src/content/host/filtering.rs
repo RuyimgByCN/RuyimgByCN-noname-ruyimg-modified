@@ -145,6 +145,17 @@ impl HostSkillBehavior {
         ) {
             return v;
         }
+        if matches!(
+            self.behavior,
+            HostBehavior::U05OwBatchA
+                | HostBehavior::U05OwBatchB
+                | HostBehavior::U05OwBatchC
+                | HostBehavior::U05OwBatchD
+        ) {
+            return super::step::u05_ow::filter_u05_ow_with_frames(
+                self, ctx, frames, frame, owner, event,
+            );
+        }
         self.filter_behavior(ctx, owner, event)
     }
 
@@ -889,6 +900,10 @@ impl HostSkillBehavior {
             HostBehavior::L25ZuanBatchG => {
                 super::step::l25_batch_g::filter_l25_batch_g(self, ctx, owner, event)
             }
+            HostBehavior::U05OwBatchA
+            | HostBehavior::U05OwBatchB
+            | HostBehavior::U05OwBatchC
+            | HostBehavior::U05OwBatchD => false,
             HostBehavior::L10ScsCompanion => {
                 super::step::l10_scs::filter_l10_scs(self, ctx, owner, event)
             }

@@ -127,8 +127,30 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             return self.ask_respond_shan_or_hit(ctx, false);
         }
         if !self.asked && !self.armor_judged && self.hujia_queue.is_none() {
+            if let Some(fid) = self.current_sha_frame_id(ctx) {
+                if ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.target, format!("sha_cancelled_target:{fid}")))
+                    .is_some()
+                {
+                    return self.advance_target(ctx);
+                }
+            }
             if let Some(flow) = self.check_sha_begin_hook(ctx, true) {
                 return flow;
+            }
+            if let Some(fid) = self.current_sha_frame_id(ctx) {
+                if ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.target, format!("sha_cancelled_target:{fid}")))
+                    .is_some()
+                {
+                    return self.advance_target(ctx);
+                }
             }
             if ctx
                 .catalog
@@ -140,6 +162,17 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 }
                 if let Some(flow) = self.check_sha_begin_hook(ctx, false) {
                     return flow;
+                }
+            } else if !self.renwang_blocks(ctx, qinggang_pierce) {
+                let fid = self.current_sha_frame_id(ctx).unwrap_or(0);
+                let ow_ran = ctx.core.vm_aux.flags.contains_key(&(
+                    self.source,
+                    format!("sha_ow_begin_done:{fid}:{}", self.target),
+                ));
+                if !ow_ran {
+                    if let Some(flow) = self.check_sha_begin_hook(ctx, false) {
+                        return flow;
+                    }
                 }
             }
         }
@@ -228,6 +261,18 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 })
                 && ctx.core.computed_distance(ctx.catalog, self.target, self.source)
                     > ctx.core.attack_range(ctx.catalog, self.target);
+            let bfengshi_direct = self.current_sha_frame_id(ctx).is_some_and(|fid| {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .get(&(
+                        self.source,
+                        format!("sha_ow_bfengshi_direct:{fid}:{}", self.target),
+                    ))
+                    .copied()
+                    .unwrap_or(0)
+                    != 0
+            });
             let can_bagua = !qinggang_pierce
                 && !fentian_direct_hit
                 && !yxs_fanji2_direct_hit
@@ -236,7 +281,9 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 && !shoulie_hit
                 && !lingshi_direct_hit
                 && !guilong_direct_hit
-                && !jianwu_direct_hit;
+                && !jianwu_direct_hit
+                && !bfengshi_direct
+                && !self.is_sha_direct_hit(ctx);
             if let Some(flow) = self.try_bagua_dodge(ctx, can_bagua) {
                 return flow;
             }
@@ -473,37 +520,44 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             let has_xiandan = ctx
                 .catalog
                 .skill_by_name(crate::vocabulary::host::WUDIAN_XIANDAN_KEY)
-                .map(|d| ctx.core.has_skill(self.source, d))
-                .unwrap_or(false);
-            if has_xiandan
-                && !self.xiandan_done
-                && ctx.core.player(self.source).alive
-                && ctx.core.player(self.target).alive
-                && (!ctx.core.player(self.source).hand.is_empty()
-                    || !ctx.core.player(self.source).equips.is_empty())
-            {
-                self.xiandan_done = true;
-                self.asking_xiandan = true;
-                let options: Vec<ChoiceOption> = ctx
-                    .core
-                    .player(self.source)
-                    .hand
-                    .iter()
-                    .copied()
-                    .chain(ctx.core.player(self.source).equips.iter().copied())
-                    .map(ChoiceOption::Card)
-                    .collect();
-                return Flow::WaitChoice {
-                    observer: self.source,
-                    spec: ChoiceSpec {
-                        kind: ChoiceKind::SelectCards,
-                        prompt: "xiandan_discard",
-                        options,
-                        min: 0,
-                        max: 1,
-                        allow_cancel: true,
-                    },
+                .map(|d| {
+                    (
+                        ctx.core.has_skill(self.source, d),
+                        ctx.catalog.skills[d as usize].behavior.as_host_behavior()
+                            == Some(crate::vocabulary::host::HostBehavior::U05OwBatchC),
+                    )
+                });
+            if let Some((true, is_ow_v3)) = has_xiandan {
+                let p = ctx.core.player(self.source);
+                let has_cards = if is_ow_v3 {
+                    !p.hand.is_empty()
+                } else {
+                    !p.hand.is_empty() || !p.equips.is_empty()
                 };
+                if !self.xiandan_done
+                    && ctx.core.player(self.source).alive
+                    && ctx.core.player(self.target).alive
+                    && has_cards
+                {
+                    self.xiandan_done = true;
+                    self.asking_xiandan = true;
+                    let mut options: Vec<ChoiceOption> =
+                        p.hand.iter().copied().map(ChoiceOption::Card).collect();
+                    if !is_ow_v3 {
+                        options.extend(p.equips.iter().copied().map(ChoiceOption::Card));
+                    }
+                    return Flow::WaitChoice {
+                        observer: self.source,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "xiandan_discard",
+                            options,
+                            min: 0,
+                            max: 1,
+                            allow_cancel: true,
+                        },
+                    };
+                }
             }
             // 雌雄双股剑（批③-b 第八把）：杀指定异性目标后（性别有槽取
             // 武将性别、无槽默认男），目标选择：弃一张手牌（自选，逐技
@@ -642,6 +696,18 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 })
                 && ctx.core.computed_distance(ctx.catalog, self.target, self.source)
                     > ctx.core.attack_range(ctx.catalog, self.target);
+            let bfengshi_direct = self.current_sha_frame_id(ctx).is_some_and(|fid| {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .get(&(
+                        self.source,
+                        format!("sha_ow_bfengshi_direct:{fid}:{}", self.target),
+                    ))
+                    .copied()
+                    .unwrap_or(0)
+                    != 0
+            });
             return self.ask_respond_shan_or_hit(
                 ctx,
                 poyue_direct_hit
@@ -649,14 +715,17 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     || lingshi_direct_hit
                     || sbzhaxiang_direct_hit
                     || yxs_fanji2_direct_hit
-                    || jianwu_hit,
+                    || jianwu_hit
+                    || bfengshi_direct
+                    || self.is_sha_direct_hit(ctx),
             );
         }
         // 已恢复：读取应答
         let answer = ctx.answer_first();
         if let ChoiceOption::Skill(rdef) = answer {
-            if super::super::host_response_skills(ctx.core, ctx.catalog, self.target, 1)
-                .contains(&rdef)
+            if !ctx.catalog.blocks_card_use_and_save(ctx.core, self.target)
+                && super::super::host_response_skills(ctx.core, ctx.catalog, self.target, 1)
+                    .contains(&rdef)
             {
                 self.asked = false;
                 ctx.core

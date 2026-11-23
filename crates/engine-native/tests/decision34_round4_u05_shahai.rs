@@ -525,7 +525,7 @@ fn u05_all_9_formal_packages_assemble_333_generals_play_custom_cards_and_roundtr
     );
     set_flag(&mut e, 1, "u05_debuff:chengxin", 0);
 
-    // 6. Sweep all registered VM skills in Catalog and verify strict card conservation
+    // 6. Sweep remaining U05 VM skills in Catalog (ow skills migrated to native HostBehavior::U05OwBatchA..=D)
     let vm_skill_names: Vec<String> = e
         .catalog()
         .skills
@@ -534,10 +534,20 @@ fn u05_all_9_formal_packages_assemble_333_generals_play_custom_cards_and_roundtr
         .map(|s| s.name.to_string())
         .collect();
     assert!(
-        vm_skill_names.len() >= 600,
-        "expected >= 600 verified U05 VM skills in Catalog, got {}",
+        vm_skill_names.len() >= 500,
+        "expected >= 500 remaining verified U05 VM skills in Catalog (after ow native host migration), got {}",
         vm_skill_names.len()
     );
+    for ow_sk in ["woliu", "zhongdun", "mujing", "shanxian"] {
+        let def = e.catalog().skill_by_name(ow_sk).expect("ow host skill in catalog");
+        assert!(
+            e.catalog().skills[def as usize]
+                .behavior
+                .package_skill_id()
+                .is_none(),
+            "ow skill {ow_sk} must be native HostSkillDecl rather than VM stub"
+        );
+    }
     assert!(
         e.catalog().skills.len() >= 900,
         "expected >= 900 total U05 Host + VM skills in Catalog, got {}",

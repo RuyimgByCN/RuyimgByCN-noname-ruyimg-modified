@@ -661,9 +661,9 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                     options.push(opt);
                 }
             }
-            // 冰封·封（swd 批 134）：封锁者不能求桃/自救
-            let options = if ctx.catalog.blocks_all_cards(ctx.core, responder) {
-                Vec::new()
+            // 冰封·封（swd 批 134）与移魂2：封锁者不能求桃/自救
+            let options = if ctx.catalog.blocks_card_use_and_save(ctx.core, responder) {
+                vec![ChoiceOption::Pass]
             } else {
                 options
             };
@@ -725,7 +725,7 @@ fn other_dying_save_banned(
     responder: PlayerId,
     dying: PlayerId,
 ) -> bool {
-    if catalog.blocks_all_cards(core, responder) {
+    if catalog.blocks_card_use_and_save(core, responder) {
         return true;
     }
     if responder == dying {
