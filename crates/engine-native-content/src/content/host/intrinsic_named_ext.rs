@@ -722,71 +722,67 @@ pub(super) fn try_named_ext_card(
                 ctx, card, owner, effect,
             ))));
         }
-        // U05 Gwent gold/silver/adventure cards (`card/gwent/card.js` & `character/gwent/card.js`)
-        "gw_hudiewu" | "gw_xinsheng" | "gw_huangjiashenpan" | "gw_chongci"
-        | "gw_butianshu" | "gw_shizizhaohuan" | "gw_zuihouyuanwang" | "gw_zirankuizeng"
-        | "gwmaoxian_falanxisika" | "gwmaoxian_huoge" => {
-            set_flag(ctx, owner, &format!("u05_card_used:{key}"), 1);
-            ctx.start_draw(owner, 2);
-        }
-        "gw_fuyuan" | "gwmaoxian_telisi" | "gwmaoxian_aisinie" | "gw_xianzumaijiu" | "gwjinli_jiu" => {
-            set_flag(ctx, owner, &format!("u05_card_used:{key}"), 1);
-            let _ = recover_if_damaged(ctx, owner, 1);
-            ctx.start_draw(owner, 1);
-        }
-        "gw_leizhoushu" | "gwmaoxian_yenaifa" => {
-            set_flag(ctx, owner, &format!("u05_card_used:{key}"), 1);
-            if let Some(t) = first_target_or_other(ctx, u) {
-                deal_damage(ctx, owner, t, 1, DamageNature::Thunder);
-            }
-        }
-        "gw_yigeniyin" | "gw_zhuoshao" | "gw_zhongmozhizhan" => {
-            set_flag(ctx, owner, &format!("u05_card_used:{key}"), 1);
-            if let Some(t) = first_target_or_other(ctx, u) {
-                deal_damage(ctx, owner, t, 1, DamageNature::Fire);
-            }
-        }
-        "gw_ansha" | "gw_ganhan" | "gwmaoxian_yioufeisi" | "gwmaoxian_luoqi"
-        | "gwmaoxian_jieluote" | "gwmaoxian_kuite" | "gwmaoxian_haluo" | "gwmaoxian_airuiting"
-        | "gw_wuyao" => {
-            set_flag(ctx, owner, &format!("u05_card_used:{key}"), 1);
-            if let Some(t) = first_target_or_other(ctx, u) {
-                deal_damage(ctx, owner, t, 1, DamageNature::Normal);
-            }
-        }
-        "gw_aerdeyin" | "gwmaoxian_laduoweide" => {
-            set_flag(ctx, owner, &format!("u05_card_used:{key}"), 1);
-            if let Some(t) = first_target_or_other(ctx, u) {
-                ctx.turn_over(t);
-            }
-        }
-        "gw_tunshi" => {
-            set_flag(ctx, owner, "u05_card_used:gw_tunshi", 1);
-            if ctx.core.player(owner).max_hp > 1 {
-                change_max_hp(ctx, owner, -1);
-                change_hujia(ctx, owner, 2);
-                ctx.start_draw(owner, 1);
-            }
-        }
-        "gw_niuquzhijing" | "gw_youer" | "gw_tongdi" | "gwmaoxian_enxier"
-        | "gwmaoxian_fulisi" | "gwmaoxian_kaerweite" | "gwmaoxian_gaier" => {
-            set_flag(ctx, owner, &format!("u05_card_used:{key}"), 1);
-            if let Some(t) = first_target_or_other(ctx, u) {
-                let _ = steal_one_to_hand(ctx, owner, t);
-            }
-            ctx.start_draw(owner, 1);
-        }
-        "gw_nuhaifengbao" | "gw_baishuang" | "gw_baobaoshu" | "gwmaoxian_dagong" => {
-            set_flag(ctx, owner, &format!("u05_card_used:{key}"), 1);
-            if let Some(t) = first_target_or_other(ctx, u) {
-                let _ = discard_up_to(ctx, t, 1);
-            }
-        }
-        "gw_guaiwuchaoxue" | "gwmaoxian_hengsaite" | "gwmaoxian_fuertaisite"
-        | "gwmaoxian_bulanwang" | "gw_lang" | "gw_dudayuanshuai1" | "gw_dudayuanshuai2" => {
-            set_flag(ctx, owner, &format!("u05_card_used:{key}"), 1);
-            change_hujia(ctx, owner, 1);
-            ctx.start_draw(owner, 1);
+        // U05-5a (`杀海拾遗·gwent`): 全部 Gwent 金/银/冒险/特殊卡牌转入真实交互状态机 (`U05GwentCardEffect`)
+        "gw_hudiewu"
+        | "gw_yigeniyin"
+        | "gw_leizhoushu"
+        | "gw_aerdeyin"
+        | "gw_ansha"
+        | "gw_xinsheng"
+        | "gw_niuquzhijing"
+        | "gw_zhongmozhizhan"
+        | "gw_ganhan"
+        | "gw_huangjiashenpan"
+        | "gw_tunshi"
+        | "gw_chongci"
+        | "gw_youer"
+        | "gw_tongdi"
+        | "gw_fuyuan"
+        | "gw_zhuoshao"
+        | "gw_butianshu"
+        | "gw_shizizhaohuan"
+        | "gw_zuihouyuanwang"
+        | "gw_zirankuizeng"
+        | "gw_nuhaifengbao"
+        | "gw_baishuang"
+        | "gw_baobaoshu"
+        | "gw_guaiwuchaoxue"
+        | "gw_xianzumaijiu"
+        | "gwjinli_jiu"
+        | "gw_wuyao"
+        | "gw_lang"
+        | "gw_dudayuanshuai1"
+        | "gw_dudayuanshuai2"
+        | "gwmaoxian_yioufeisi"
+        | "gwmaoxian_luoqi"
+        | "gwmaoxian_jieluote"
+        | "gwmaoxian_yenaifa"
+        | "gwmaoxian_telisi"
+        | "gwmaoxian_hengsaite"
+        | "gwmaoxian_fuertaisite"
+        | "gwmaoxian_laduoweide"
+        | "gwmaoxian_enxier"
+        | "gwmaoxian_fulisi"
+        | "gwmaoxian_kaerweite"
+        | "gwmaoxian_bulanwang"
+        | "gwmaoxian_kuite"
+        | "gwmaoxian_haluo"
+        | "gwmaoxian_dagong"
+        | "gwmaoxian_gaier"
+        | "gwmaoxian_airuiting"
+        | "gwmaoxian_aisinie"
+        | "gwmaoxian_falanxisika"
+        | "gwmaoxian_huoge" => {
+            return Some(Some(Box::new(crate::content::host::HostMachine {
+                def_key: crate::content::host::U05_GWENT_CARD_KEY.to_string(),
+                behavior: crate::content::host::HostBehavior::U05GwentCardEffect,
+                owner,
+                target: u.targets.first().copied(),
+                card: Some(card),
+                cards: Vec::new(),
+                targets: u.targets.clone(),
+                stage: crate::content::host::HostStage::Act,
+            })));
         }
         // U05 Hearthstone spells / artifacts / dreams / curses / totems (`character/hearth/card.js`)
         "shandianjian" | "ht_shandianjian" | "hsqingyu_shandian" => {

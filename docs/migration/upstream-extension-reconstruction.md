@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-23 Batch U05-5a（U05 杀海拾遗 `gwent` 卡牌/技能 +80→806/1,621，全局 3,126/1,298/0）合入
+
+- **范围与结果**：在 `d6d411439fc2f763ceeeef359e10372f702dd0b0`（Batch U05-6b CI `45138296268` Attempt 1 `10/10 success`）上三路合入 `swarm/conv-u05-5a-gwent-cards`（`b7ac33cb6..278b0ac8a`，`verifier-u05-a` `#96 APPROVE`），完成 `has_active_equip_kind` 装备别名与 `gw_dieyi` 屏蔽联动及 `play_card_targets_gwent.rs`/`extension_choices_dispatch.rs` 拆分；将 `U05` 昆特牌 `69` 卡牌（`card/gwent/card.js` 43 + `character/gwent/card.js` 26）+ `11` 卡牌伴生技能（`card/gwent/skill.js`）共 **`80`** 项全数升为 `已复核等价`（`0` 保留；`/character/gwent/` `121` 项留待 `U05-5b`），**`U05` `806 / 815 / 0`**、全局 **`3,126 / 1,298 / 0`**，整包 8 维签字保持 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变。详见 [Batch U05-5a 证据摘要](../operations/evidence/2026-11-23-u05-5a-gwent-cards/README.md) 与 [U05-杀海拾遗.md](g0/U05-杀海拾遗.md)。
+
 ## 2026-11-23 Batch U05-6b（U05 杀海拾遗 `hearth` Part 2 +208→726/1,621，全局 3,046/1,378/0）合入
 
 - **范围与结果**：在 `cc0401e8ec93c64098fc989e385ad2a30800ed86`（Batch U05-6a CI `45126700137` Attempt 1 `10/10 success`）上三路合入 `swarm/conv-u05-6b-hearth-part2`（`e350ea568..92e1b4cac`，`verifier-u05-b` `#45 APPROVE`），完成 `virtual_diaobing_use` 单次消费修正、`stone_chenshui` `u05_stone_leader` 兼容及 `decision34_round4_u05_shahai.rs` 300 VM 下界校准；将 `U05` 炉石传说 Part 2 获批 `105` 技能 + `103` 武将共 `208` 项升为 `已复核等价`（保留 `shixu` 墙钟代理与 `7` 名 `hs_*` 武将为 `简化近似`），**`U05` `726 / 895 / 0`**、全局 **`3,046 / 1,378 / 0`**，整包 8 维签字保持 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变。详见 [Batch U05-6b 证据摘要](../operations/evidence/2026-11-23-u05-6b-hearth-part2/README.md) 与 [U05-杀海拾遗.md](g0/U05-杀海拾遗.md)。

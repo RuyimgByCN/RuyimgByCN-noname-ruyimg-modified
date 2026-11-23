@@ -13,18 +13,6 @@ pub(super) fn try_resolve_u05_gujian_gwent(ctx: &mut Ctx<'_>, skill: &str, owner
             let _ = u05_store_pile(ctx, owner, "xuanning");
             u05_recover(ctx, owner, 1);
         }
-        // card/gwent/skill.js:5-35
-        "gw_aerdeyin" =>  { u05_mark_invoked(ctx, owner, "gw_aerdeyin"); u05_turn_over(ctx, owner); },
-        // card/gwent/skill.js:80-122
-        "gw_baobaoshu" => { u05_mark_invoked(ctx, owner, "gw_baobaoshu"); let _ = u05_discard_up_to(ctx, owner, 1); }
-        // card/gwent/skill.js:173-197
-        "gw_qinpendayu" =>  { u05_mark_invoked(ctx, owner, "gw_qinpendayu"); set_flag(ctx.core, owner, "u05_mod:gw_qinpendayu", 1); },
-        // card/gwent/skill.js:198-224
-        "gw_birinongwu" =>  { u05_mark_invoked(ctx, owner, "gw_birinongwu"); set_flag(ctx.core, owner, "u05_mod:gw_birinongwu", 1); },
-        // card/gwent/skill.js:299-335
-        "gw_dieyi" =>  { u05_mark_invoked(ctx, owner, "gw_dieyi"); u05_recover(ctx, owner, 1); ctx.start_draw(owner, 1); },
-        // card/gwent/skill.js:336-389
-        "_gainspell" =>  { u05_mark_invoked(ctx, owner, "_gainspell"); ctx.start_draw(owner, 1); },
         // character/gwent/skill.js:31-73
         "sqlongnu" =>  { u05_mark_invoked(ctx, owner, "sqlongnu"); u05_damage_other(ctx, owner, 1, DamageNature::Fire); ctx.start_draw(owner, 1); },
         // character/gwent/skill.js:74-119
@@ -161,12 +149,6 @@ pub(super) fn try_resolve_u05_gujian_gwent(ctx: &mut Ctx<'_>, skill: &str, owner
         "gwbaquan" =>  { u05_mark_invoked(ctx, owner, "gwbaquan"); if !u05_check_usable(ctx, owner, "gwbaquan", 1) { return true; } u05_damage_other(ctx, owner, 1, DamageNature::Normal); },
         // character/gwent/skill.js:3145-3197
         "lanquan" =>  { u05_mark_invoked(ctx, owner, "lanquan"); if !u05_check_usable(ctx, owner, "lanquan", 1) { return true; } ctx.start_draw(owner, 1); },
-        // card/gwent/skill.js:123-148
-        "gw_nuhaifengbao" =>  { u05_mark_invoked(ctx, owner, "gw_nuhaifengbao"); if let Some(t) = hostile_target(ctx, owner) { let _ = u05_discard_up_to(ctx, t, 1); } },
-        // card/gwent/skill.js:149-192
-        "gw_youer" =>  { u05_mark_invoked(ctx, owner, "gw_youer"); if !u05_pay_discard(ctx, owner, "gw_youer", 1, true) { return true; } let _ = u05_prey_other(ctx, owner, true); },
-        // card/gwent/skill.js:270-310
-        "gw_leizhoushu" =>  { u05_mark_invoked(ctx, owner, "gw_leizhoushu"); if let Some(t) = hostile_target(ctx, owner) { let _ = u05_discard_up_to(ctx, t, 1); } },
         // character/gujian/skill.js:130-185
         "xuanzhen" =>  { u05_mark_invoked(ctx, owner, "xuanzhen"); if !u05_pay_discard(ctx, owner, "xuanzhen", 1, true) { return true; } },
         // character/gujian/skill.js:481-501
@@ -209,12 +191,8 @@ pub(super) fn try_resolve_u05_gujian_gwent(ctx: &mut Ctx<'_>, skill: &str, owner
         "sqlongyin" =>  { u05_mark_invoked(ctx, owner, "sqlongyin"); if !u05_pay_discard(ctx, owner, "sqlongyin", 1, true) { return true; } },
         // character/gwent/skill.js:149-210
         "jielue" =>  { u05_mark_invoked(ctx, owner, "jielue"); ctx.start_draw(owner, 1); let _ = u05_prey_other(ctx, owner, true); },
-        // character/gwent/skill.js:211-222
-        "gwmaoxian_hengsaite_sha" =>  { u05_mark_invoked(ctx, owner, "gwmaoxian_hengsaite_sha"); if !u05_pay_discard(ctx, owner, "gwmaoxian_hengsaite_sha", 1, true) { return true; } },
         // character/gwent/skill.js:223-280
         "gwhuanshuang" =>  { u05_mark_invoked(ctx, owner, "gwhuanshuang"); if !u05_pay_discard(ctx, owner, "gwhuanshuang", 2, true) { return true; } },
-        // character/gwent/skill.js:341-376
-        "gw_xianzumaijiu" =>  { u05_mark_invoked(ctx, owner, "gw_xianzumaijiu"); if !u05_pay_discard(ctx, owner, "gw_xianzumaijiu", 1, true) { return true; } ctx.start_draw(owner, 1); if let Some(t) = hostile_target(ctx, owner) { ctx.start_draw(t, 1); } },
         // character/gwent/skill.js:417-468
         "gwliaotian" =>  { u05_mark_invoked(ctx, owner, "gwliaotian"); if !u05_check_usable(ctx, owner, "gwliaotian", 2) { return true; } if !u05_pay_discard(ctx, owner, "gwliaotian", 2, true) { return true; } set_flag(ctx.core, owner, &format!("u05_viewas:{}", "sha"), 1); },
         // character/gwent/skill.js:705-765

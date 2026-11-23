@@ -355,6 +355,11 @@ impl GameStateCore {
             .equips
             .iter()
             .filter_map(|&c| {
+                if self.is_gw_dieyi_masked(catalog, p, c) {
+                    return (catalog.card_slot_of(self, c)
+                        == Some(crate::catalog::EquipSlot::Weapon))
+                        .then_some(1);
+                }
                 let r1 = kind_range(c);
                 let r2 = catalog.yanjia_merged_card_id(self, c).and_then(&kind_range);
                 match (r1, r2) {
@@ -749,6 +754,19 @@ impl GameStateCore {
                 limit += usize::from(self.player(p).jijia_hp);
             }
         }
+        let gw_qinpen = [
+            crate::vocabulary::host::GW_QINPEN_STATE_KEY,
+            "gw_qinpendayu",
+        ]
+        .into_iter()
+        .any(|k| {
+            catalog
+                .skill_by_name(k)
+                .is_some_and(|def| self.has_skill(p, def))
+        });
+        if gw_qinpen {
+            limit = limit.saturating_sub(1);
+        }
         crate::rvm_bridge::modifiers::eval_hand_limit(self, catalog, p, limit as i32)
     }
 
@@ -810,6 +828,42 @@ impl GameStateCore {
         nature: crate::event::DamageNature,
     ) -> bool {
         crate::rvm_bridge::modifiers::eval_ignore_armor(self, catalog, source, target, card, nature)
+    }
+
+    /// Returns whether `card` in `owner`'s equip/judge zone is replaced by or masked as `gw_dieyi_*`.
+    #[inline]
+    pub fn is_gw_dieyi_masked(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        owner: PlayerId,
+        card: crate::ids::CardId,
+    ) -> bool {
+        catalog
+            .cards
+            .get(card as usize)
+            .is_some_and(|d| d.name.starts_with("gw_dieyi_equip"))
+            || (!self.vm_aux.flags.is_empty()
+                && self
+                    .vm_aux
+                    .flags
+                    .contains_key(&(owner, format!("gw_dieyi_card:{card}"))))
+    }
+
+    /// Returns whether `owner` holds an active (unmasked by `gw_dieyi_*`) equip of `kind`.
+    #[inline]
+    pub fn has_active_equip_kind(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        owner: PlayerId,
+        kind: crate::catalog::CardKind,
+    ) -> bool {
+        self.player(owner)
+            .equips
+            .iter()
+            .any(|&c| {
+                catalog.equip_card_has_kind(self, c, kind)
+                    && !self.is_gw_dieyi_masked(catalog, owner, c)
+            })
     }
 
     /// 评估使用卡牌是否不可被响应（`card_use_unrespondable` / `sha_unrespondable` / `card_unrespondable_*`）。

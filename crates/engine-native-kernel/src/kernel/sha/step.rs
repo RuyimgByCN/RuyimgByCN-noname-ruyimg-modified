@@ -573,10 +573,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 && !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.source)
                 && ctx
                     .core
-                    .player(self.source)
-                    .equips
-                    .iter()
-                    .any(|c| ctx.catalog.equip_card_has_kind(ctx.core, *c, CardKind::Cixiong))
+                    .has_active_equip_kind(ctx.catalog, self.source, CardKind::Cixiong)
                 && ctx.core.player(self.target).alive
                 && ctx
                     .core

@@ -1094,13 +1094,19 @@ impl GameStateCore {
             .player(b)
             .equips
             .iter()
-            .filter(|c| catalog.equip_card_has_kind(self, **c, CardKind::HorsePlus))
+            .filter(|c| {
+                catalog.equip_card_has_kind(self, **c, CardKind::HorsePlus)
+                    && !self.is_gw_dieyi_masked(catalog, b, **c)
+            })
             .count() as u32;
         let minus = self
             .player(a)
             .equips
             .iter()
-            .filter(|c| catalog.equip_card_has_kind(self, **c, CardKind::HorseMinus))
+            .filter(|c| {
+                catalog.equip_card_has_kind(self, **c, CardKind::HorseMinus)
+                    && !self.is_gw_dieyi_masked(catalog, a, **c)
+            })
             .count() as u32;
         // 马术（马超）：锁定技——计算与他人的距离时始终 -1（下限 1）
         let mashu = catalog

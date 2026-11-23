@@ -189,6 +189,13 @@ pub(super) fn is_tao_like(
     if raw_kind == CardKind::Tianxianjiu {
         return true;
     }
+    let cname = ctx.catalog.cards[card as usize].name;
+    if cname == "gw_fuyuan" {
+        return !tao_futai2_banned(ctx.core, ctx.catalog, responder);
+    }
+    if matches!(cname, "gw_xianzumaijiu" | "gw_lang") {
+        return responder == dying;
+    }
     // 急救（v202 对齐上游 viewAsFilter）：限持有者回合外——自己是当前
     // 回合角色时不可发动
     let jijiu = !ctx.catalog.is_rechanyuan_sealed_name(
@@ -375,6 +382,7 @@ pub fn response_kind_cards_core(
                 );
                 rw_lanyin
                     || catalog.resolved_card_kind(core, c) == need
+                    || (need == CardKind::Sha && catalog.cards[c as usize].name == "gw_wuyao")
                     || (ow_mujing && is_black)
                     || catalog
                         .find_player_vm_view_as(core, responder, c, false, Some(need))
@@ -566,8 +574,14 @@ pub fn sha_card_use_as(
         return None;
     }
     let kind = catalog.resolved_card_kind(core, card);
-    if in_hand && kind.is_sha_like() && !core.player(owner).wangshi_ban {
-        return Some((None, false));
+    if in_hand
+        && (kind.is_sha_like() || catalog.cards[card as usize].name == "gw_wuyao")
+        && !core.player(owner).wangshi_ban
+    {
+        return Some((
+            (catalog.cards[card as usize].name == "gw_wuyao").then_some(CardKind::Sha),
+            false,
+        ));
     }
     let sealed = catalog.is_tieji_sealed(core, owner)
         || (core.player(owner).hp <= 1 && catalog.has_rechanyuan(core, owner));
@@ -625,19 +639,16 @@ pub fn sha_card_use_as(
     None
 }
 
-fn sha_user_or_target_blocked(
+pub fn sha_blocked_for(
     core: &crate::state::GameStateCore,
     catalog: &Catalog,
     owner: PlayerId,
-    target: PlayerId,
 ) -> bool {
-    if !core.player(owner).alive || !core.player(target).alive || owner == target {
-        return true;
-    }
     let has = |p: PlayerId, k: &str| catalog.skill_by_name(k).is_some_and(|d| core.has_skill(p, d));
     if catalog.blocks_card_use_and_save(core, owner)
         || has(owner, crate::vocabulary::host::WUDIAN_SHOUHU_KEY)
         || has(owner, crate::vocabulary::host::GW_BIRIN_STATE_KEY)
+        || has(owner, "gw_birinongwu")
         || has(owner, crate::vocabulary::host::GJ_FOOD_SHIHUIFEN_BAN_KEY)
         || has(owner, "shihuifen")
         || catalog.skill_by_name("guangshu_club").is_some_and(|d| {
@@ -648,12 +659,24 @@ fn sha_user_or_target_blocked(
     {
         return true;
     }
-    if core.turn.current == owner
+    core.turn.current == owner
         && has(owner, crate::vocabulary::names::BOSS_QINGZHU)
         && !has(owner, crate::vocabulary::names::BOSS_JIDING)
-    {
+}
+
+pub fn sha_user_or_target_blocked(
+    core: &crate::state::GameStateCore,
+    catalog: &Catalog,
+    owner: PlayerId,
+    target: PlayerId,
+) -> bool {
+    if !core.player(owner).alive || !core.player(target).alive || owner == target {
         return true;
     }
+    if sha_blocked_for(core, catalog, owner) {
+        return true;
+    }
+    let has = |p: PlayerId, k: &str| catalog.skill_by_name(k).is_some_and(|d| core.has_skill(p, d));
     if has(owner, crate::vocabulary::names::BOSS_MINWAN)
         && !core.turn.minwan_targets.is_empty()
         && !core.turn.minwan_targets.contains(&target)

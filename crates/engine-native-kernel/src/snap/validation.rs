@@ -551,7 +551,8 @@ pub fn machine_held_cards(m: &MachineSnapshot, out: &mut Vec<CardId>) {
             behavior, cards, ..
         } if *behavior == HostBehavior::D3Moyan.tag()
             || *behavior == HostBehavior::WudianDiaobingCard.tag()
-            || *behavior == HostBehavior::L11BossLingfeng.tag() =>
+            || *behavior == HostBehavior::L11BossLingfeng.tag()
+            || *behavior == HostBehavior::U05GwentCardEffect.tag() =>
         {
             out.extend(cards.iter().copied());
         }

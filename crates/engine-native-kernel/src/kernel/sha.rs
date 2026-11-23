@@ -446,6 +446,19 @@ impl ShaResolveMachine {
         {
             ctx.core.turn.sha_used_play_phase = false;
         }
+        // 先祖麦酒（U05-5a，`character/gwent/card.js:36`：`["phaseAfter", "shaAfter"]`）：
+        // 若本次【杀】已压入 `Damage` 帧等待结算，则交由 `DamageSource` / `DamageZero` / `DamageCancelled`
+        // 后段自行清除；仅当闪避/寒冰无伤害出栈时在此清理。
+        let damage_pending = ctx
+            .res
+            .stack
+            .iter()
+            .any(|f| matches!(f.data, EventData::Damage(_)));
+        if !damage_pending {
+            if let Some(xzm) = ctx.catalog.skill_by_name("gw_xianzumaijiu") {
+                ctx.core.skills.remove(&(self.source, xzm));
+            }
+        }
         if let Some(cid) = card {
             if let Some(pos) = ctx.core.table.iter().position(|c| *c == cid) {
                 ctx.core.table.remove(pos);
@@ -573,6 +586,17 @@ impl ShaResolveMachine {
                 self.nature,
                 self.card,
             )));
+            let dmg_fid = ctx.top_frame_id();
+            if ctx
+                .catalog
+                .skill_by_name("gw_xianzumaijiu")
+                .is_some_and(|xzm| ctx.core.has_skill(self.source, xzm))
+            {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((self.source, format!("sha_damage_frame:{dmg_fid}")), 1);
+            }
         }
         self.xiandan_bonus = false;
         if dealt_damage
@@ -837,10 +861,7 @@ impl ShaResolveMachine {
             && !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.source)
             && ctx
                 .core
-                .player(self.source)
-                .equips
-                .iter()
-                .any(|c| ctx.catalog.equip_card_has_kind(ctx.core, *c, CardKind::Hanbing));
+                .has_active_equip_kind(ctx.catalog, self.source, CardKind::Hanbing);
         has_hanbing
             && ctx.core.player(self.target).alive
             && (!ctx.core.player(self.target).hand.is_empty()
@@ -919,10 +940,7 @@ impl ShaResolveMachine {
         let has_qilin = !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.source)
             && ctx
                 .core
-                .player(self.source)
-                .equips
-                .iter()
-                .any(|c| ctx.catalog.equip_card_has_kind(ctx.core, *c, CardKind::Qilin));
+                .has_active_equip_kind(ctx.catalog, self.source, CardKind::Qilin);
         if !has_qilin {
             return Vec::new();
         }

@@ -451,6 +451,17 @@ pub fn lookup_upstream_host_behavior(skill_name: &str) -> Option<HostBehavior> {
         "gouhunluo2" => Some(HostBehavior::SwdGouhunluoSub),
         "gw_ciguhanshuang" => Some(HostBehavior::GwentCiguState),
         "gw_kunenfayin" => Some(HostBehavior::GwentKunenState),
+        "gw_qinpendayu" => Some(HostBehavior::GwentQinpenState),
+        "gw_birinongwu" => Some(HostBehavior::GwentBirinState),
+        "gw_aerdeyin"
+        | "gw_baobaoshu"
+        | "gw_nuhaifengbao"
+        | "gw_youer"
+        | "gw_dieyi"
+        | "gw_leizhoushu"
+        | "_gainspell"
+        | "gw_xianzumaijiu"
+        | "gwmaoxian_hengsaite_sha" => Some(HostBehavior::U05GwentCardSkill),
         "huajin2" => Some(HostBehavior::SwdHuajin2),
         "huanxing2" => Some(HostBehavior::SwdHuanxing2),
         "jiguanyaoshu_skill" => Some(HostBehavior::SwdJiguanyaoState),

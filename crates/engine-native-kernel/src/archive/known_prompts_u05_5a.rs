@@ -1,0 +1,25 @@
+//! U05-5a (`杀海拾遗·gwent`) 选择提示词静态注册表（N11 零分配解码）。
+
+pub(super) const KNOWN_PROMPTS_U05_5A: &[&str] = &[
+    "gw_poxiao_targets",
+    "gw_xinsheng_general",
+    "gw_xinsheng_target",
+    "gw_huangjiashenpan_pick",
+    "gw_tongdi_pick",
+    "gw_butianshu_delay",
+    "gw_zuihouyuanwang_discard",
+    "gw_zirankuizeng_spell",
+    "gw_zirankuizeng_target",
+    "gw_baobaoshu_discard",
+    "gwmaoxian_luoqi_sha",
+    "gwmaoxian_fulisi_discard",
+    "gwmaoxian_kaerweite_pick",
+    "gwmaoxian_bulanwang_discard",
+    "gwmaoxian_gaier_branch",
+    "gwmaoxian_airuiting_sha",
+    "gwmaoxian_airuiting_target",
+    "gwmaoxian_aisinie_pick",
+    "gwmaoxian_falanxisika_pick",
+    "gwmaoxian_huoge_pick",
+    "gwmaoxian_huoge_target",
+];

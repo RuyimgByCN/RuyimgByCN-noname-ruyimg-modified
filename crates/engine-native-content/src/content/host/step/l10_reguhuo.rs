@@ -19,11 +19,7 @@ pub(in crate::content::host) fn has_unlimited_sha(
         && catalog
             .skill_by_name("paoxiao")
             .is_some_and(|d| core.has_skill(owner, d));
-    let zhuge = core
-        .player(owner)
-        .equips
-        .iter()
-        .any(|c| catalog.equip_card_has_kind(core, *c, CardKind::Zhuge));
+    let zhuge = core.has_active_equip_kind(catalog, owner, CardKind::Zhuge);
     let baolei = !catalog.is_rechanyuan_sealed_name(core, owner, WUDIAN_BAOLEI_KEY)
         && catalog
             .skill_by_name(WUDIAN_BAOLEI_KEY)

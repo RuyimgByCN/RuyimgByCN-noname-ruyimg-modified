@@ -202,19 +202,28 @@ fn gwent_spells_yanzhi_aozu_wenyi() {
     assert_eq!(e.debug_hp(1), hp1 - 1, "1 点雷电伤害");
     assert_eq!(e.debug_hand(1).len(), h1 + 1, "目标摸 1");
 
-    // 瘟疫：有手牌弃首张
+    // 瘟疫（upstream: selectTarget: -1, filterTarget: isMinHp）：拒绝手选目标；全体体力最少者弃首张手牌，无手牌失去 1 点体力
     let wy = find(&e0, "gw_wenyi");
     let e = inject(&e0, &pack, &[wy], 0);
     let mut e = inject(&e, &pack, &[sha], 1);
+    e.debug_set_hp(1, 1);
+    assert!(
+        matches!(
+            submit(&mut e, 0, GameAction::PlayCard { card: wy, targets: vec![1] }),
+            CommandOutcome::Rejected(RejectReason::IllegalTargets)
+        ),
+        "瘟疫 selectTarget=-1 应拒绝显式指定目标"
+    );
     let h1 = e.debug_hand(1).len();
-    let out = submit(&mut e, 0, GameAction::PlayCard { card: wy, targets: vec![1] });
+    let out = submit(&mut e, 0, GameAction::PlayCard { card: wy, targets: vec![] });
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
     pass_window(&mut e);
-    assert_eq!(e.debug_hand(1).len(), h1 - 1, "弃首张手牌");
-    // 无手牌 → 受 1 点伤害
+    assert_eq!(e.debug_hand(1).len(), h1 - 1, "全体体力最少者弃首张手牌");
+    // 无手牌 → 失去 1 点体力
+    let mut e = inject(&e0, &pack, &[wy], 0);
+    e.debug_set_hp(2, 1);
     let hp2 = e.debug_hp(2);
-    let mut e = inject(&e, &pack, &[wy], 0);
-    let out = submit(&mut e, 0, GameAction::PlayCard { card: wy, targets: vec![2] });
+    let out = submit(&mut e, 0, GameAction::PlayCard { card: wy, targets: vec![] });
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
     pass_window(&mut e);
     assert_eq!(e.debug_hp(2), hp2 - 1, "无手牌失去 1 点体力（规则 v77 对齐上游 loseHp）");
@@ -461,8 +470,8 @@ fn gwent_closeout_kunen_shanbeng_poxiao() {
     let e = inject(&e0, &pack, &[knf], 0);
     let mut e = inject(&e, &pack, &[sha], 1);
     e.debug_set_hp(1, 9);
-    // 0 号出牌阶段使用昆恩法印（自-target）→ 获得状态
-    let out = submit(&mut e, 0, GameAction::PlayCard { card: knf, targets: vec![] });
+    // 0 号出牌阶段使用昆恩法印（单目标含己方）→ 获得状态
+    let out = submit(&mut e, 0, GameAction::PlayCard { card: knf, targets: vec![0] });
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
     pass_window(&mut e);
     let knf_def = e
@@ -498,26 +507,40 @@ fn gwent_closeout_kunen_shanbeng_poxiao() {
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
     pass_window(&mut e);
     while let Some(c) = e.open_choice() {
-        if c.spec.prompt != "respond_shan" {
-            let cid = c.id;
-            let obs = c.observer;
-            submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
-            continue;
-        }
         let cid = c.id;
         let obs = c.observer;
         submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
     }
     assert_eq!(e.debug_hp(0), hp0, "昆恩防止普通伤害");
+    // 推进至 1 号整回合结束（上游 global: phaseEnd），昆恩回合计数递减
+    let mut end_steps = 0;
+    while e.turn().current == 1 {
+        end_steps += 1;
+        assert!(end_steps < 32);
+        if let Some(c) = e.open_choice().cloned() {
+            let cid = c.id;
+            let sel = if c.spec.min > 0 {
+                c.spec.options.iter().take(c.spec.min).copied().collect()
+            } else {
+                vec![c.spec.options[0]]
+            };
+            let obs = c.observer;
+            drop(c);
+            submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+            continue;
+        }
+        let actor = e.turn().current;
+        submit(&mut e, actor, GameAction::NextPhase);
+    }
     let knf_def = e
         .catalog()
         .skill_by_name(engine_native::content::host::GW_KUNEN_STATE_KEY)
         .expect("昆恩状态技在目录");
     let rounds_after = e.save().core.skills.get(&(0, knf_def)).unwrap().rounds;
-    assert!(rounds_after < 5, "计数递减");
+    assert!(rounds_after < 5, "计数于全局 phaseEnd 递减");
     assert_zone_conservation(&e);
 
-    // —— 山崩术：其他角色前两件装备被弃 ——
+    // —— 山崩术：无敌方装备拒绝使用；有敌方装备时随机弃至多 2 张 ——
     let sbs = find(&e0, "gw_shanbengshu");
     let armor = {
         let catalog = e0.catalog();
@@ -535,10 +558,23 @@ fn gwent_closeout_kunen_shanbeng_poxiao() {
             .position(|c| c.kind == CardKind::Weapon)
             .expect("武器在目录") as u32
     };
+    let mut e_empty = inject(&e0, &pack, &[sbs], 0);
+    assert!(
+        matches!(
+            submit(&mut e_empty, 0, GameAction::PlayCard { card: sbs, targets: vec![] }),
+            CommandOutcome::Rejected(RejectReason::IllegalTargets)
+        ),
+        "无敌方装备时山崩术不可用"
+    );
     let e = inject(&e0, &pack, &[sbs], 0);
     let e = inject(&e, &pack, &[armor], 1);
-    let mut e = inject(&e, &pack, &[armor2], 2);
-    let _h_none = e.debug_hand(0).len();
+    let e = inject(&e, &pack, &[armor2], 2);
+    let mut snap = e.save();
+    snap.core.players[1].hand.retain(|c| *c != armor);
+    snap.core.players[1].equips.push(armor);
+    snap.core.players[2].hand.retain(|c| *c != armor2);
+    snap.core.players[2].equips.push(armor2);
+    let mut e = Engine::restore_with_extensions(&snap, &[&pack]).expect("恢复装备");
     let out = submit(&mut e, 0, GameAction::PlayCard { card: sbs, targets: vec![] });
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
     pass_window(&mut e);
@@ -547,12 +583,10 @@ fn gwent_closeout_kunen_shanbeng_poxiao() {
     assert!(e.save().core.players[2].equips.is_empty(), "2 号装备被弃");
     assert_zone_conservation(&e);
 
-    // —— 破晓分支 1：获得牌堆首张天气法术 ——
+    // —— 破晓分支 1：无天气/判定牌时直达摸取铜卡法术；场上存在天气时弹出选项分支 ——
     let px = find(&e0, "gw_poxiao");
     let qpd = find(&e0, "gw_qinpendayu");
     let mut e = inject(&e0, &pack, &[px, qpd], 0);
-    // v78 起分支 1 为「随机获得一张铜卡法术」——改为集合成员断言：
-    // 记录出牌前牌堆中的全部铜法术，结算后手牌应获得其中之一
     let deck_bronzes: Vec<u32> = {
         let s = e.save();
         let catalog = e.catalog();
@@ -560,9 +594,26 @@ fn gwent_closeout_kunen_shanbeng_poxiao() {
             .deck
             .iter()
             .filter(|c| {
+                let n = catalog.cards[**c as usize].name;
+                let base = n
+                    .rsplit_once('_')
+                    .and_then(|(head, tail)| {
+                        tail.chars().all(|ch| ch.is_ascii_digit()).then_some(head)
+                    })
+                    .unwrap_or(n);
                 matches!(
-                    catalog.card_kind(**c),
-                    CardKind::Qinpendayu | CardKind::Birinongwu | CardKind::Ciguhanshuang | CardKind::Baoxueyaoshui
+                    base,
+                    "gw_qinpendayu"
+                        | "gw_birinongwu"
+                        | "gw_ciguhanshuang"
+                        | "gw_baoxueyaoshui"
+                        | "gw_zhihuanjun"
+                        | "gw_zumoshoukao"
+                        | "gw_aozuzhilei"
+                        | "gw_kunenfayin"
+                        | "gw_yanziyaoshui"
+                        | "gw_wenyi"
+                        | "gw_shanbengshu"
                 )
             })
             .copied()
@@ -571,18 +622,37 @@ fn gwent_closeout_kunen_shanbeng_poxiao() {
     let out = submit(&mut e, 0, GameAction::PlayCard { card: px, targets: vec![] });
     assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }));
     pass_window(&mut e);
-    let c = e.open_choice().expect("破晓分支挂起");
+    assert!(e.open_choice().is_none(), "无天气与判定牌时直接摸铜法术，不弹多余询问");
+    assert!(
+        e.debug_hand(0).iter().any(|c| deck_bronzes.contains(c)),
+        "直接获得牌堆中任一铜卡法术（随机）"
+    );
+    assert_zone_conservation(&e);
+
+    // 场上存在天气时，破晓弹出 gw_poxiao_branch 询问（分支 0 / 分支 1）
+    let mut e2 = inject(&e0, &pack, &[qpd, px], 0);
+    assert!(matches!(
+        submit(&mut e2, 0, GameAction::PlayCard { card: qpd, targets: vec![1] }),
+        CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+    ));
+    pass_window(&mut e2);
+    assert!(matches!(
+        submit(&mut e2, 0, GameAction::PlayCard { card: px, targets: vec![] }),
+        CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+    ));
+    pass_window(&mut e2);
+    let c = e2.open_choice().expect("场上有天气时破晓分支挂起");
     assert_eq!(c.spec.prompt, "gw_poxiao_branch");
     let cid = c.id;
-    submit(&mut e, 0, GameAction::Answer {
+    submit(&mut e2, 0, GameAction::Answer {
         choice_id: cid,
         selection: vec![ChoiceOption::Tag(1)],
     });
     assert!(
-        e.debug_hand(0).iter().any(|c| deck_bronzes.contains(c)),
-        "获得牌堆中任一铜卡法术（随机）"
+        e2.debug_hand(0).iter().any(|c| deck_bronzes.contains(c)),
+        "分支 1 获得牌堆中任一铜卡法术"
     );
-    assert_zone_conservation(&e);
+    assert_zone_conservation(&e2);
 }
 
 /// 祖墨手铠（封印/技能失效原语）：目标全部技能实例失效，其任意阶段

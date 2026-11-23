@@ -560,6 +560,8 @@ impl HostBehavior {
             // noname-liuli/noname/extension/AI优化/extension.js:8, 870 (L01 AI优化, silent).
             Self::L01FirstKs => (Timing::Normal, 100, false),
             Self::L01AttitudeTracker => (Timing::Normal, -50, false),
+            // 杀海拾遗/card/gwent/skill.js & character/gwent/skill.js
+            Self::U05GwentCardSkill => (Timing::Normal, 0, false),
             _ => return None,
         })
     }

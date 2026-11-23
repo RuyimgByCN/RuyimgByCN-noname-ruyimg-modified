@@ -179,6 +179,8 @@ impl Engine {
                         cname,
                         "huogong" | "txhj_yiyi" | "txzhaoshu_skill" | "txzhaoshu_global"
                     )
+                    || cname.starts_with("gw_")
+                    || cname.starts_with("gwmaoxian_")
                 {
                     combos.push(vec![seat]);
                 }
@@ -208,6 +210,27 @@ impl Engine {
                 }
                 if is_yiyi && others.len() >= 3 {
                     combos.push(vec![others[0], others[1], others[2]]);
+                }
+                if cname == "gw_zhuoshao" {
+                    let max_hp = self
+                        .state_core()
+                        .alive_players()
+                        .map(|p| self.state_core().player(p).hp)
+                        .max();
+                    if let Some(mhp) = max_hp {
+                        let tops: Vec<crate::ids::PlayerId> = self
+                            .state_core()
+                            .seat_order_from(seat)
+                            .into_iter()
+                            .filter(|&p| {
+                                self.state_core().player(p).alive
+                                    && self.state_core().player(p).hp == mhp
+                            })
+                            .collect();
+                        if tops.len() > 1 {
+                            combos.push(tops);
+                        }
+                    }
                 }
                 let core = self.state_core();
                 let catalog = self.catalog();
@@ -243,6 +266,33 @@ impl Engine {
                             .collect();
                         if !sieged.is_empty() && !combos.contains(&sieged) {
                             combos.push(sieged);
+                        }
+                    }
+                }
+                let cname = self
+                    .catalog()
+                    .cards
+                    .get(card as usize)
+                    .map(|c| c.name)
+                    .unwrap_or("");
+                if cname == "gw_zhuoshao" {
+                    let max_hp = self
+                        .state_core()
+                        .alive_players()
+                        .map(|p| self.state_core().player(p).hp)
+                        .max();
+                    if let Some(mhp) = max_hp {
+                        let tops: Vec<crate::ids::PlayerId> = self
+                            .state_core()
+                            .seat_order_from(seat)
+                            .into_iter()
+                            .filter(|&p| {
+                                self.state_core().player(p).alive
+                                    && self.state_core().player(p).hp == mhp
+                            })
+                            .collect();
+                        if tops.len() > 1 {
+                            combos.push(tops);
                         }
                     }
                 }
@@ -413,7 +463,11 @@ fn certainly_illegal(engine: &Engine, seat: crate::ids::PlayerId, action: &GameA
                         && cname != "无中生有"
                         && cname != "wuzhong"
                         && !cname.starts_with("wuzhong_");
-                    if is_yiyi || is_hearth {
+                    let is_gwent = (cname == "gwjinli_jiu"
+                        || cname.starts_with("gw_")
+                        || cname.starts_with("gwmaoxian_"))
+                        && !targets.is_empty();
+                    if is_yiyi || is_hearth || is_gwent {
                         crate::engine::play_card_targets::validate_wuzhong_targets(
                             core, catalog, *card, kind, targets,
                         )

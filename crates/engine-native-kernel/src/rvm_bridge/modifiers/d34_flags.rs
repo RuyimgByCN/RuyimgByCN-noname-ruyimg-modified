@@ -155,10 +155,11 @@ pub fn apply_hand_limit(
     limit += flag_val(state, player, "l19_wujin_hand_limit_bonus") as i32;
     limit -= flag_val(state, player, "l27_jishe_limit_minus") as i32;
     let has_tpys_card = state.player(player).equips.iter().any(|&c| {
-        catalog
-            .cards
-            .get(c as usize)
-            .is_some_and(|cd| cd.name == "th_taipingyaoshu")
+        !state.is_gw_dieyi_masked(catalog, player, c)
+            && catalog
+                .cards
+                .get(c as usize)
+                .is_some_and(|cd| cd.name == "th_taipingyaoshu")
     });
     if !is_target_unequip2(state, player)
         && (flag_val(state, player, "th_taipingyaoshu_prevent_elemental") > 0

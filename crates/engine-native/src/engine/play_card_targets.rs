@@ -4,6 +4,10 @@ use super::*;
 
 #[path = "play_card_targets_hearth.rs"]
 mod hearth;
+#[path = "play_card_targets_gwent.rs"]
+mod gwent;
+
+pub(super) use gwent::clean_gwent_name;
 
 /// 机关牌（swd 第十六~十八批）逐卡目标规则。
 pub(super) fn validate_jiguan_targets(
@@ -308,6 +312,13 @@ pub(super) fn validate_wuzhong_targets(
                 }
                 return Err(RejectReason::IllegalTargets);
             }
+            let clean = gwent::clean_gwent_name(cname);
+            if clean == "gwjinli_jiu"
+                || clean.starts_with("gw_")
+                || clean.starts_with("gwmaoxian_")
+            {
+                return gwent::validate_u05_gwent_targets(core, catalog, clean, targets);
+            }
             if targets.is_empty() || (targets.len() == 1 && core.player(targets[0]).alive) {
                 return Ok(());
             }
@@ -506,44 +517,23 @@ pub(super) fn validate_tail_ext_targets(
                 return Err(RejectReason::IllegalTargets);
             }
         }
-        CardKind::Kunenfayin | CardKind::Poxiao => {
-            if !targets.is_empty() {
-                return Err(RejectReason::IllegalTargets);
-            }
-        }
-        CardKind::Zumoshoukao => {
-            if targets.len() != 1
-                || targets[0] == core.turn.current
-                || !core.player(targets[0]).alive
-            {
-                return Err(RejectReason::IllegalTargets);
-            }
-        }
-        CardKind::Shanbengshu => {
-            if !targets.is_empty() {
-                return Err(RejectReason::IllegalTargets);
-            }
-        }
-        CardKind::Yanziyaoshui
+        CardKind::Kunenfayin
+        | CardKind::Poxiao
+        | CardKind::Zumoshoukao
+        | CardKind::Shanbengshu
+        | CardKind::Yanziyaoshui
         | CardKind::Aozuzhilei
         | CardKind::Wenyi
         | CardKind::Zhihuanjun
         | CardKind::Baoxueyaoshui
-        | CardKind::Liuxinghuoyu => {
-            if targets.len() != 1 || !core.player(targets[0]).alive {
-                return Err(RejectReason::IllegalTargets);
-            }
+        | CardKind::Liuxinghuoyu
+        | CardKind::Qinpendayu
+        | CardKind::Birinongwu
+        | CardKind::Ciguhanshuang => {
+            gwent::validate_u05_gwent_bronze_targets(core, catalog, kind, targets)?;
         }
         CardKind::Jiguan => validate_jiguan_targets(core, catalog, card, targets)?,
         CardKind::Hslingjian => validate_lingjian_targets(core, catalog, card, targets)?,
-        CardKind::Qinpendayu | CardKind::Birinongwu | CardKind::Ciguhanshuang => {
-            if targets.len() != 1
-                || targets[0] == core.turn.current
-                || !core.player(targets[0]).alive
-            {
-                return Err(RejectReason::IllegalTargets);
-            }
-        }
         CardKind::Bingpotong => {
             if targets.is_empty() || targets.len() > 3 {
                 return Err(RejectReason::IllegalTargets);

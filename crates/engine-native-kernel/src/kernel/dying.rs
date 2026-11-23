@@ -488,8 +488,15 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                 self.responders.remove(0);
                 if let Some(ChoiceOption::Card(tao)) = answer.first().copied() {
                     let raw_kind = ctx.catalog.resolved_card_kind(ctx.core, tao);
+                    let raw_cname = ctx.catalog.cards[tao as usize].name;
                     let in_hand = ctx.core.player(responder).hand.contains(&tao);
-                    let eff_kind = if matches!(
+                    let eff_kind = if raw_cname == "gw_fuyuan" {
+                        CardKind::Tao
+                    } else if matches!(raw_cname, "gw_xianzumaijiu" | "gw_lang")
+                        && responder == self.dying
+                    {
+                        CardKind::Jiu
+                    } else if matches!(
                         raw_kind,
                         CardKind::Tao
                             | CardKind::Jiu
@@ -740,6 +747,24 @@ impl DyingSaveMachine {
         responder: PlayerId,
         tao: crate::ids::CardId,
     ) {
+        let tao_name = ctx.catalog.cards[tao as usize].name;
+        if tao_name == "gw_fuyuan" {
+            ctx.recover(self.dying, 1, Some(tao));
+            ctx.start_draw(self.dying, 1);
+            ctx.log(LogEvent::DyingSaved {
+                player: self.dying,
+                by_card: tao,
+            });
+            return;
+        }
+        if matches!(tao_name, "gw_xianzumaijiu" | "gw_lang") {
+            ctx.recover(self.dying, 1, Some(tao));
+            ctx.log(LogEvent::DyingSaved {
+                player: self.dying,
+                by_card: tao,
+            });
+            return;
+        }
         // 救援（孙权主公技，锁定；v202 对齐上游 filter）：主公
         // 资格 + 用桃者为吴势力 + 非濒死者本人——桃回复 +1
         let jiuyuan = ctx

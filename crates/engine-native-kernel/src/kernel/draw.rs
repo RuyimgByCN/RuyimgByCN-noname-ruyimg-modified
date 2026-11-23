@@ -347,7 +347,7 @@ fn host_pending_adjust(ctx: &Ctx<'_>, player: PlayerId) -> i32 {
         6 => 1,
         _ => 0,
     };
-    if name(crate::vocabulary::host::GW_CIGU_STATE_KEY) {
+    if name(crate::vocabulary::host::GW_CIGU_STATE_KEY) || name("gw_ciguhanshuang") {
         delta -= 1;
     }
     delta

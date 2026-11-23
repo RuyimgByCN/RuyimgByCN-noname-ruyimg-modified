@@ -536,7 +536,7 @@ fn u05_all_9_formal_packages_assemble_333_generals_play_custom_cards_and_roundtr
     // U05-6a promoted ~109 and U05-6b promoted 107 hearth skills from VM into native `HostBehavior`s.
     assert!(
         vm_skill_names.len() >= 300,
-        "expected >= 300 remaining verified U05 VM skills in Catalog (after ow + hearth native host migration), got {}",
+        "expected >= 300 remaining verified U05 VM skills in Catalog (after ow + hearth + gwent_cards native host migration), got {}",
         vm_skill_names.len()
     );
     for ow_sk in ["woliu", "zhongdun", "mujing", "shanxian"] {

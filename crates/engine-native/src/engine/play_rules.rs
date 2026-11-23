@@ -145,7 +145,11 @@ pub(super) fn play_kind(
             }
         }
     }
-    let mut kind = catalog.resolved_card_kind(core, card);
+    let mut kind = match catalog.cards[card as usize].name {
+        "gw_wuyao" => CardKind::Sha,
+        "gw_lang" => CardKind::Jiu,
+        _ => catalog.resolved_card_kind(core, card),
+    };
     if sealed {
         if let Some(spec) = catalog.find_player_vm_view_as(core, actor, card, true, None) {
             kind = spec.as_kind;

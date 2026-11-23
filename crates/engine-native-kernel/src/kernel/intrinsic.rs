@@ -804,19 +804,21 @@ pub fn intrinsic_machine(
                         limit += 1;
                     }
                     // 倾盆大雨（gwent 天气）：手牌上限 -1
-                    if let Some(def) = ctx
-                        .catalog
-                        .skill_by_name(crate::vocabulary::host::GW_QINPEN_STATE_KEY)
-                    {
-                        if ctx
-                            .core
-                            .skills
-                            .get(&(player, def))
-                            .map(|i| i.enabled)
-                            .unwrap_or(false)
-                        {
-                            limit = limit.saturating_sub(1);
-                        }
+                    let gw_qinpen = [
+                        crate::vocabulary::host::GW_QINPEN_STATE_KEY,
+                        "gw_qinpendayu",
+                    ]
+                    .into_iter()
+                    .any(|k| {
+                        ctx.catalog.skill_by_name(k).is_some_and(|def| {
+                            ctx.core
+                                .skills
+                                .get(&(player, def))
+                                .is_some_and(|i| i.enabled)
+                        })
+                    });
+                    if gw_qinpen {
+                        limit = limit.saturating_sub(1);
                     }
                     // 妄尊印（袁术妄尊授予的回合级印记）：手牌上限 -1
                     if let Some(def) = ctx

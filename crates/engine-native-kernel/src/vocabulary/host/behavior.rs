@@ -1789,4 +1789,8 @@ pub enum HostBehavior {
     U05Hearth2BatchE,
     /// U05 杀海拾遗 Hearth Part 2 技能 Batch F（tag 1255，tuteng_s..=hongxi）。
     U05Hearth2BatchF,
+    /// U05 杀海拾遗·gwent 牌面状态机（tag 1160，金/银/冒险/特殊卡牌及蝴蝶舞/自然馈赠等交互流程）。
+    U05GwentCardEffect,
+    /// U05 杀海拾遗·gwent 卡牌关联与全局触发技（tag 1161：gw_aerdeyin/gw_baobaoshu/gw_nuhaifengbao/gw_youer/gw_dieyi/gw_leizhoushu/_gainspell/gw_xianzumaijiu/gwmaoxian_hengsaite_sha 等）。
+    U05GwentCardSkill,
 }

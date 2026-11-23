@@ -1010,6 +1010,9 @@ impl HostSkillBehavior {
             | HostBehavior::U05Hearth2BatchF => {
                 super::step::u05_hearth::filter_u05_hearth(self, ctx, owner, event)
             }
+            HostBehavior::U05GwentCardSkill => {
+                super::step::u05_b5a_gwent::filter_u05_gwent_skill(self, ctx, owner, event)
+            }
             _ => false,
         }
     }

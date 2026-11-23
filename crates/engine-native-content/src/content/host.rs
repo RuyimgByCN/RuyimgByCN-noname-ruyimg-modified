@@ -275,6 +275,11 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::L25ZuanBatchE if self.name == "pyzhuren_diamond" => {
                 step::l25_batch_e::pyzhuren_diamond_filter(ctx, _frames, frame, owner, event, kind)
             }
+            HostBehavior::U05GwentCardSkill => {
+                step::u05_b5a_gwent::filter_u05_gwent_skill_with_frame(
+                    self, ctx, frame, owner, event,
+                )
+            }
             _ => self.filter_with_frames(ctx, _frames, frame, owner, event),
         }
     }
@@ -689,6 +694,10 @@ impl SkillBehavior for HostSkillBehavior {
             | HostBehavior::U05OwBatchC
             | HostBehavior::U05OwBatchD => {
                 step::u05_ow::window_trigger_meta_u05_ow(self.behavior, &self.name, kind)
+            }
+            HostBehavior::U05GwentCardSkill => {
+                step::u05_b5a_gwent::trigger_meta_u05_gwent_skill(&self.name)
+                    .filter(|m| m.event == kind || m.extra_events.contains(&kind))
             }
             _ => None,
         }

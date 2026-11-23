@@ -959,7 +959,7 @@ impl HostBehavior {
                 priority: 0,
                 order_selectable: true,
                 optional: false,
-                extra_events: Vec::new(),
+                extra_events: vec![EventKind::TurnPhaseEnd],
             }),
             HostBehavior::GwentKunenCard => None,
             HostBehavior::GwentShanbengCard => None,
@@ -1015,6 +1015,26 @@ impl HostBehavior {
             HostBehavior::MtgYoulinLand => None,
             HostBehavior::MtgYoulinDiscard => None,
             HostBehavior::MtgLindixiliuLand => None,
+            HostBehavior::U05GwentCardSkill => Some(TriggerMeta {
+                event: EventKind::TurnPhaseEnd,
+                timing: Timing::Normal,
+                priority: 0,
+                order_selectable: false,
+                optional: false,
+                extra_events: vec![
+                    EventKind::PhaseBegin,
+                    EventKind::TurnBegin,
+                    EventKind::DrawPhaseBegin,
+                    EventKind::CardUsed,
+                    EventKind::DamageSource,
+                    EventKind::DamageEnd,
+                    EventKind::DamageCancelled,
+                    EventKind::DamageZero,
+                    EventKind::Damage,
+                    EventKind::TurnPhaseAfter,
+                    EventKind::Death,
+                ],
+            }),
 
 
 

@@ -27,8 +27,27 @@ pub(crate) fn card_intrinsic(
     {
         return Some(res);
     }
-    let Some(card) = u.card else {
-        return intrinsic_named_ext::try_named_ext_card(ctx, u, u32::MAX, effective_kind);
+    let is_virtual_gwent = u.card.is_none()
+        && matches!(
+            effective_kind,
+            CardKind::Qinpendayu
+                | CardKind::Birinongwu
+                | CardKind::Ciguhanshuang
+                | CardKind::Zumoshoukao
+                | CardKind::Kunenfayin
+                | CardKind::Shanbengshu
+                | CardKind::Poxiao
+                | CardKind::Yanziyaoshui
+                | CardKind::Aozuzhilei
+                | CardKind::Wenyi
+                | CardKind::Zhihuanjun
+                | CardKind::Baoxueyaoshui
+        );
+    let opt_card = u.card;
+    let card = match u.card {
+        Some(c) => c,
+        None if is_virtual_gwent => u32::MAX,
+        None => return intrinsic_named_ext::try_named_ext_card(ctx, u, u32::MAX, effective_kind),
     };
     Some(match effective_kind {
         CardKind::Shuigong => {
@@ -143,12 +162,12 @@ pub(crate) fn card_intrinsic(
             Some(effect)
         }
         CardKind::Qinpendayu | CardKind::Birinongwu | CardKind::Ciguhanshuang => {
-            // gwent 天气（G1）：目标 + 距离 1 邻座（座位序，已持有
-            // 者授予时跳过）；无懈窗口包装
+            // gwent 天气（U05-5a，`type: "spell"` 非锦囊不触发无懈；上游 aliveNeighbors）
             let t = *u.targets.first().expect("weather has one target");
             let mut q = vec![t];
-            for p in ctx.core.alive_players() {
-                if p != t && ctx.core.computed_distance(ctx.catalog, t, p) == 1 {
+            let (prev, next) = ctx.core.alive_neighbors(t);
+            for p in [prev, next].into_iter().flatten() {
+                if !q.contains(&p) {
                     q.push(p);
                 }
             }
@@ -171,29 +190,29 @@ pub(crate) fn card_intrinsic(
                 behavior,
                 owner: u.player,
                 target: None,
-                card: Some(card),
+                card: opt_card,
                 cards: Vec::new(),
                 targets: q,
                 stage: crate::content::host::HostStage::Act,
             });
-            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
+            Some(effect)
         }
         CardKind::Zumoshoukao => {
-            // 祖墨手铠（G1 gwent）：无懈窗口 + 封印授予机
+            // 祖墨手铠（U05-5a：`type: "spell"` 非锦囊不触发无懈）
             let effect = Box::new(crate::content::host::HostMachine {
                 def_key: crate::content::host::GW_ZUMO_CARD_KEY.to_string(),
                 behavior: crate::content::host::HostBehavior::GwentZumoCard,
                 owner: u.player,
                 target: u.targets.first().copied(),
-                card: Some(card),
+                card: opt_card,
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
             });
-            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
+            Some(effect)
         }
         CardKind::Kunenfayin | CardKind::Shanbengshu | CardKind::Poxiao => {
-            // gwent 收官（G1）：无懈窗口包装 + 各自机器
+            // gwent 收官（U05-5a：`type: "spell"` 非锦囊不触发无懈）
             let (key, behavior) = match effective_kind {
                 CardKind::Kunenfayin => (
                     crate::content::host::GW_KUNEN_CARD_KEY,
@@ -208,17 +227,18 @@ pub(crate) fn card_intrinsic(
                     crate::content::host::HostBehavior::GwentPoxiaoCard,
                 ),
             };
+            let target = u.targets.first().copied().or(Some(u.player));
             let effect = Box::new(crate::content::host::HostMachine {
                 def_key: key.to_string(),
                 behavior,
                 owner: u.player,
-                target: Some(u.targets.first().copied().unwrap_or(u.player)),
-                card: Some(card),
+                target,
+                card: opt_card,
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
             });
-            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
+            Some(effect)
         }
         CardKind::Yanziyaoshui
         | CardKind::Aozuzhilei
@@ -259,12 +279,12 @@ pub(crate) fn card_intrinsic(
                 behavior,
                 owner: u.player,
                 target: u.targets.first().copied(),
-                card: Some(card),
+                card: opt_card,
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage,
             });
-            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
+            Some(effect)
         }
         CardKind::Shatang | CardKind::Heilonglinpian | CardKind::Liutouge => {
             // 古剑最后机关/锦囊（G1）

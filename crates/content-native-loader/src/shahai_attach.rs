@@ -98,7 +98,9 @@ fn attach_card_rows(
             ) {
                 def = def.with_off_deck();
             }
-            def.equip_skills = if cname == "gjyuheng_plus" {
+            def.equip_skills = if def.name.starts_with("gw_dieyi_") {
+                card_kind_equip_skills(kind).to_vec()
+            } else if cname == "gjyuheng_plus" {
                 vec!["gjyuheng_plus_skill"]
             } else if cname == "gjyuheng_pro" {
                 vec!["gjyuheng_pro_skill"]

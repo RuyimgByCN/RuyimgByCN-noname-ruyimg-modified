@@ -350,10 +350,7 @@ impl ShaResolveMachine {
             && !crate::kernel::mbcmfangzhu_banned(ctx.core, self.source)
             && ctx
                 .core
-                .player(self.source)
-                .equips
-                .iter()
-                .any(|c| ctx.catalog.equip_card_has_kind(ctx.core, *c, CardKind::Qinglong));
+                .has_active_equip_kind(ctx.catalog, self.source, CardKind::Qinglong);
         let hand_shas: Vec<ChoiceOption> = ctx
             .core
             .player(self.source)
@@ -390,10 +387,7 @@ impl ShaResolveMachine {
             && !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.source)
             && ctx
                 .core
-                .player(self.source)
-                .equips
-                .iter()
-                .any(|c| ctx.catalog.equip_card_has_kind(ctx.core, *c, CardKind::Guanshi));
+                .has_active_equip_kind(ctx.catalog, self.source, CardKind::Guanshi);
         if has_guanshi && ctx.core.player(self.source).alive {
             let mut pool: Vec<ChoiceOption> = ctx
                 .core
@@ -408,7 +402,10 @@ impl ShaResolveMachine {
                     .player(self.source)
                     .equips
                     .iter()
-                    .filter(|c| !ctx.catalog.equip_card_has_kind(ctx.core, **c, CardKind::Guanshi))
+                    .filter(|c| {
+                        ctx.core.is_gw_dieyi_masked(ctx.catalog, self.source, **c)
+                            || !ctx.catalog.equip_card_has_kind(ctx.core, **c, CardKind::Guanshi)
+                    })
                     .copied()
                     .map(ChoiceOption::Card),
             );

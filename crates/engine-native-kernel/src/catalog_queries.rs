@@ -592,6 +592,8 @@ impl Catalog {
                     | "diaohulishan"
                     | "chanyuan"
                     | "rechanyuan"
+                    | "gw_xianzumaijiu"
+                    | "gwmaoxian_hengsaite_sha"
             )
     }
 

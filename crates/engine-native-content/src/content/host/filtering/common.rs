@@ -678,12 +678,16 @@ impl HostSkillBehavior {
                 // 上游 `phaseDrawBegin`：摸牌阶段**开始**（原为 begin:false，晚一步）
                 EventData::Phase { player, phase: crate::event::Phase::Draw, begin: true }
                 if *player == owner),
-            HostBehavior::GwentKunenState => matches!(event,
-                EventData::Damage(d)
-                if d.target == owner
-                    && !d.prevented
-                    && d.amount > 0
-                    && d.nature == crate::event::DamageNature::Normal),
+            HostBehavior::GwentKunenState => match event {
+                EventData::Damage(d) => {
+                    d.target == owner
+                        && !d.prevented
+                        && d.amount > 0
+                        && d.nature == crate::event::DamageNature::Normal
+                }
+                EventData::TurnEndWindow { after: false, .. } => true,
+                _ => false,
+            },
             HostBehavior::GwentQinpenState => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::Discard, begin: false }
                 if *player == owner),

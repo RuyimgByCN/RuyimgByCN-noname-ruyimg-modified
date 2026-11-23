@@ -29,11 +29,7 @@ fn has_ext_skill(state: &GameStateCore, catalog: &Catalog, player: PlayerId, nam
 }
 
 fn has_qinggang_or_zhadao(state: &GameStateCore, catalog: &Catalog, source: PlayerId) -> bool {
-    state
-        .player(source)
-        .equips
-        .iter()
-        .any(|c| catalog.equip_card_has_kind(state, *c, CardKind::Qinggang))
+    state.has_active_equip_kind(catalog, source, CardKind::Qinggang)
         || has_ext_skill(state, catalog, source, crate::vocabulary::names::BOSS_ZHADAO)
 }
 
@@ -144,11 +140,11 @@ pub fn has_rewritten_armor(
     player: PlayerId,
     name: &str,
 ) -> bool {
-    state
-        .player(player)
-        .equips
-        .iter()
-        .any(|&c| is_jingxie_rewritten(state, c) && catalog.cards[c as usize].name == name)
+    state.player(player).equips.iter().any(|&c| {
+        !state.is_gw_dieyi_masked(catalog, player, c)
+            && is_jingxie_rewritten(state, c)
+            && catalog.cards[c as usize].name == name
+    })
 }
 
 pub fn rewrite_bagua_judge_ok(
@@ -161,7 +157,8 @@ pub fn rewrite_bagua_judge_ok(
         return None;
     }
     let has = state.player(target).equips.iter().any(|&c| {
-        is_jingxie_rewritten(state, c)
+        !state.is_gw_dieyi_masked(catalog, target, c)
+            && is_jingxie_rewritten(state, c)
             && matches!(catalog.cards[c as usize].name, "armor" | "bagua")
     });
     has.then(|| !suit.is_spade())
@@ -263,6 +260,7 @@ fn is_non_bagua_armor_name(name: &str) -> bool {
             | "lanyinjia"
             | "tengjia"
             | "baiyin"
+            | "gw_dieyi_equip2"
     )
 }
 

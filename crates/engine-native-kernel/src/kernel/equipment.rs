@@ -102,6 +102,50 @@ pub fn revoke_equip_skills(
         }
     }
     (catalog.hooks.on_equip_revoked)(core, catalog, player, card);
+    trigger_gw_dieyi_lost(core, catalog, player, card, false);
+}
+
+/// 蝶翼（U05 杀海拾遗·gwent `card/gwent/skill.js:253`）：`gw_dieyi_equip1..5`、
+/// `gw_dieyi_judge` 或带 `gw_dieyi_card:{c}` 假标的牌离场时授予或递增 `gw_dieyi`。
+pub fn trigger_gw_dieyi_lost(
+    core: &mut crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    player: PlayerId,
+    card: crate::ids::CardId,
+    force_trigger: bool,
+) {
+    let cname = catalog.cards[card as usize].name;
+    let masked = core
+        .vm_aux
+        .flags
+        .remove(&(player, format!("gw_dieyi_card:{card}")))
+        .is_some();
+    if !force_trigger && !masked && !cname.starts_with("gw_dieyi_") {
+        return;
+    }
+    if !core.player(player).alive {
+        return;
+    }
+    let Some(def) = catalog.skill_by_name("gw_dieyi") else {
+        return;
+    };
+    let key = (player, "gw_dieyi_storage".to_string());
+    if core.has_skill(player, def) {
+        let cur = core.vm_aux.flags.get(&key).copied().unwrap_or(1);
+        core.vm_aux.flags.insert(key, cur.saturating_add(1));
+    } else {
+        core.skills.insert(
+            (player, def),
+            crate::state::SkillInstance {
+                owner: player,
+                enabled: true,
+                once_used: false,
+                expires_end_of_turn: false,
+                rounds: 0,
+            },
+        );
+        core.vm_aux.flags.insert(key, 1);
+    }
 }
 
 /// L25 `ssr_luoyi` (`extension.js:15031-15037`): 禁用防具栏并弃置已有防具。
@@ -157,7 +201,8 @@ pub(super) fn commit_equip(
         .vm_aux
         .flags
         .remove(&(player, format!("u01_equip_from_table:{frame_id}")))
-        .is_some();
+        .is_some()
+        || ctx.core.table.contains(&card);
     if ctx
         .core
         .vm_aux

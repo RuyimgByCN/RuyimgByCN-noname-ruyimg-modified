@@ -146,7 +146,9 @@ pub(crate) fn host_on_round_start(ctx: &mut Ctx<'_>) {
     host_on_round_start_l27(ctx);
     host_on_round_start_l19(ctx);
     u05_hearth::host_on_round_start_hearth(ctx);
+    u05_b5a_gwent::u05_gwent_on_round_start(ctx);
 }
+pub(super) mod u05_b5a_gwent;
 pub(super) mod u05_hearth;
 pub(crate) use u05_hearth::{
     hearth_dying_save_skills, hearth_response_skill_jingxiang, hearth_try_named_ext_card,
@@ -1328,6 +1330,8 @@ impl HostMachine {
             HostBehavior::U05MtgCharBatch => u05_b1_mtg::handle_u05_mtg_char(self, ctx),
             HostBehavior::U05MtgLandExtraBatch => u05_b1_mtg_asks::handle_u05_mtg_land_extra(self, ctx),
             HostBehavior::U05YunchouCharBatch => u05_b1_yunchou::handle_u05_yunchou_char(self, ctx),
+            HostBehavior::U05GwentCardEffect => u05_b5a_gwent::step_u05_gwent_card(self, ctx),
+            HostBehavior::U05GwentCardSkill => u05_b5a_gwent::handle_u05_gwent_skill(self, ctx),
         }
     }
 }

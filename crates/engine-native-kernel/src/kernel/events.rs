@@ -576,7 +576,11 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
         // Le/Bing/ShanDian：先置桌面，经无懈窗口（使用时开窗，对齐旧线）
         // 由 PlaceDelayedMachine 放入判定区或弃置。
         _ => {
-            ctx.core.table.extend(u.card);
+            if let Some(c) = u.card {
+                if !ctx.core.table.contains(&c) {
+                    ctx.core.table.push(c);
+                }
+            }
         }
     }
     // 突击计数 / 回合已用牌数 / 三类计数（猴子前置放行路径已记则跳过）

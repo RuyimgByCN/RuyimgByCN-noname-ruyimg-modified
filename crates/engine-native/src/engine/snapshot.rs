@@ -580,6 +580,10 @@ impl Engine {
                                     == Some(crate::content::host::HostBehavior::U05HearthCards)
                             })
                     }
+                    crate::content::host::U05_GWENT_CARD_KEY => {
+                        *behavior == crate::content::host::HostBehavior::U05GwentCardEffect.tag()
+                            && catalog.cards.iter().any(|c| c.name.starts_with("gw_"))
+                    }
                     _ => false,
                 };
                 if !skill_ok && !card_ok {

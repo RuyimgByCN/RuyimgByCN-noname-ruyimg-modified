@@ -202,5 +202,13 @@ impl Ctx<'_> {
                 inst.once_used = false;
             }
         }
+        self.core
+            .vm_aux
+            .flags
+            .remove(&(owner, "gw_guaiwuchaoxue_used_play".to_string()));
+        self.core
+            .vm_aux
+            .flags
+            .remove(&(owner, "gw_xianzumaijiu_used_play".to_string()));
     }
 }

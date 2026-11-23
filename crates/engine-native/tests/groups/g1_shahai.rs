@@ -36,3 +36,6 @@ mod u05_b6a_hearth_fixes;
 
 #[path = "../u05_b6b_hearth_fixes.rs"]
 mod u05_b6b_hearth_fixes;
+
+#[path = "../u05_b5a_gwent_cards_fixes.rs"]
+mod u05_b5a_gwent_cards_fixes;

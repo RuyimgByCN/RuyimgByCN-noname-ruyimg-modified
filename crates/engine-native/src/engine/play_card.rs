@@ -10,6 +10,11 @@ pub(super) fn play_card(
     common_play_validation(&state.core, catalog, actor, card, &targets)?;
     let core = &state.core;
     let (kind, mark_mutoumianju) = play_kind(core, catalog, card, &targets);
+    if super::play_card_targets::clean_gwent_name(catalog.cards[card as usize].name) == "gw_dieyi"
+        && kind == catalog.card_kind(card)
+    {
+        return Err(RejectReason::WrongPhase);
+    }
     check_play_target_restrictions(core, catalog, card, &targets)?;
     if kind.is_equip() {
         return play_equip(state, catalog, card, &targets);
@@ -982,8 +987,8 @@ pub(super) fn play_card(
                 | CardKind::Shanbengshu
                 | CardKind::Yanziyaoshui
                 | CardKind::Aozuzhilei
-                | CardKind::Wenyi
                 | CardKind::Zhihuanjun
+                | CardKind::Wenyi
                 | CardKind::Baoxueyaoshui
                 | CardKind::Liuxinghuoyu
                 | CardKind::Jiguan

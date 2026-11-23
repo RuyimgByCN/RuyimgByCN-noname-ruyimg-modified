@@ -10,8 +10,8 @@ pub fn is_implemented_u05_vm_skill(skill: &str) -> bool {
 }
 
 #[rustfmt::skip]
-const IMPLEMENTED_U05_VM_SKILLS: [&str; 842] = [
-    "_gainspell", "_lingjianduanzao", "_shengke", "anlianying",
+const IMPLEMENTED_U05_VM_SKILLS: [&str; 831] = [
+    "_lingjianduanzao", "_shengke", "anlianying",
     "anying", "aojian", "aoshu", "aqianghua",
     "aqianghua2", "asyouzhang", "ayuling", "azaowu",
     "baihupifeng", "baishouzhihu_equip1", "baishouzhihu_equip2", "baishouzhihu_equip3",
@@ -52,15 +52,13 @@ const IMPLEMENTED_U05_VM_SKILLS: [&str; 842] = [
     "guijiang2", "guijiang3", "guijin", "guijin2",
     "guiyan2", "guiyanfadao", "guiyanfadao2", "guiying",
     "guiyuan", "guozai", "guozai2", "guozaix",
-    "guozaix2", "guozao", "guxing1", "gw_aerdeyin",
-    "gw_baobaoshu", "gw_birinongwu", "gw_dieyi", "gw_leizhoushu",
-    "gw_nuhaifengbao", "gw_qinpendayu", "gw_xianzumaijiu", "gw_youer",
+    "guozaix2", "guozao", "guxing1",
     "gwbaquan", "gwchenshui", "gwchuanxin", "gwfengchi",
     "gwfengshi", "gwfusheng", "gwfutian", "gwgouhun",
     "gwhuanbi", "gwhuanshuang", "gwjieyin", "gwjingshi",
     "gwjingtian", "gwjinli", "gwjinyan", "gwjiquan",
     "gwjushi", "gwjushi2", "gwlangshi", "gwliaotian",
-    "gwliedi", "gwmaoxian_hengsaite_sha", "gwminxiang", "gwqinwu",
+    "gwliedi", "gwminxiang", "gwqinwu",
     "gwqinwu2", "gwshenyu", "gwtianbian", "gwweitu",
     "gwxiaoshou", "gwxuezhan", "gwyewu", "gwzhanjiang",
     "gwzhanjiang3", "gwzhongmo", "gxianyin", "hannu",

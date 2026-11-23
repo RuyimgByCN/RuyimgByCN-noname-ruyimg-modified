@@ -103,7 +103,8 @@ fn phase7_all_trigger_bearing_host_behaviors_have_bound_source_order() {
         .copied()
         .filter(|h| h.trigger_meta().is_some())
         .collect();
-    assert_eq!(trigger_bearing.len(), 303);
+    // U05-5a 新增 1 个含 trigger_meta 的宿主行为 `U05GwentCardSkill`（303 -> 304）
+    assert_eq!(trigger_bearing.len(), 304);
     assert!(
         trigger_bearing.iter().all(|h| h.source_order().is_some()),
         "every trigger-bearing HostBehavior must have an explicit source_order tuple"

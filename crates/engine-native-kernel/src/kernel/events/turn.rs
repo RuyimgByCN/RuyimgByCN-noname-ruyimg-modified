@@ -324,6 +324,16 @@ pub(in crate::kernel) fn commit_turn_begin(ctx: &mut Ctx<'_>, player: PlayerId) 
         }
     }
     crate::kernel::elo_on_phase_before(ctx.core, ctx.catalog, player);
+    if let Some(raw_def) = ctx
+        .core
+        .vm_aux
+        .flags
+        .remove(&(player, "gw_guaiwuchaoxue_temp_def".to_string()))
+    {
+        if let Some(def) = raw_def.checked_sub(1).and_then(|v| u16::try_from(v).ok()) {
+            ctx.core.skills.remove(&(player, def));
+        }
+    }
     (ctx.catalog.hooks.on_turn_begin)(ctx, player);
     // K46/K47/K48（A2）：封冻／巡游／炎狱＝上游 player/global phaseBegin
     // 内联效果——置于 TurnBegin 窗 Commit 步（BeforeTriggers 已跑、准备

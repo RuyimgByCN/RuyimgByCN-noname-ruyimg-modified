@@ -323,7 +323,9 @@ impl crate::catalog::SkillMachine for DeathMachine {
                                     revoke_equip_skills(ctx.core, ctx.catalog, k, *c);
                                 }
                                 cards.extend(lord_equips);
-                                ctx.core.discard.extend(cards.clone());
+                                for &c in &cards {
+                                    ctx.to_discard(c);
+                                }
                                 if !cards.is_empty() {
                                     ctx.log(LogEvent::CardDiscarded {
                                         player: k,
@@ -402,7 +404,9 @@ impl crate::catalog::SkillMachine for DeathMachine {
                                 revoke_equip_skills(ctx.core, ctx.catalog, k, *c);
                             }
                             cards.extend(killer_equips);
-                            ctx.core.discard.extend(cards.clone());
+                            for &c in &cards {
+                                ctx.to_discard(c);
+                            }
                             if !cards.is_empty() {
                                 ctx.log(LogEvent::CardDiscarded {
                                     player: k,

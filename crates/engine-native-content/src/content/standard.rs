@@ -607,6 +607,13 @@ pub fn standard_catalog_with_extensions(
             if engine_native_kernel::kernel::is_l22_elo_global_skill(def.name) {
                 return Some(id as crate::ids::SkillDefId);
             }
+            if def.name == "_gainspell"
+                && packs
+                    .iter()
+                    .any(|p| p.enabled && p.host_skills.iter().any(|d| d.name == "_gainspell"))
+            {
+                return Some(id as crate::ids::SkillDefId);
+            }
             let behavior = def.behavior.as_host_behavior()?;
             let is_global = behavior == crate::content::host::HostBehavior::ChenhuodajieCard
                 || packs.iter().any(|p| {

@@ -484,7 +484,7 @@ pub(crate) fn active_ask_host(
         },
         // 暴雪药水：目标自选两张手牌（逐技对照批五 v79）
         HostBehavior::GwentBaoxueCard => {
-            if stage != HostStage::SelectCard {
+            if stage != HostStage::Act {
                 return None;
             }
             let t = target?;
@@ -502,6 +502,56 @@ pub(crate) fn active_ask_host(
                 false,
             ))
         }
+        // 破晓：分支确认 / 清除天气与判定目标选择
+        HostBehavior::GwentPoxiaoCard => match stage {
+            HostStage::SelectCard => Some(ask(
+                owner,
+                crate::content::host::GW_POXIAO_BRANCH,
+                ChoiceKind::PickTag,
+                vec![ChoiceOption::Tag(0), ChoiceOption::Tag(1)],
+                1,
+                1,
+                false,
+            )),
+            HostStage::TargetChoice => {
+                let opts: Vec<ChoiceOption> = core
+                    .seat_order_from(owner)
+                    .into_iter()
+                    .filter(|&p| {
+                        core.player(p).alive
+                            && (!core.player(p).judge.is_empty()
+                                || [
+                                    crate::content::host::GW_QINPEN_STATE_KEY,
+                                    "gw_qinpendayu",
+                                    crate::content::host::GW_BIRIN_STATE_KEY,
+                                    "gw_birinongwu",
+                                    crate::content::host::GW_CIGU_STATE_KEY,
+                                    "gw_ciguhanshuang",
+                                    "gw_baobaoshu",
+                                    "gw_nuhaifengbao",
+                                ]
+                                .iter()
+                                .filter_map(|k| catalog.skill_by_name(k))
+                                .any(|def| core.skills.contains_key(&(p, def))))
+                    })
+                    .map(ChoiceOption::Player)
+                    .collect();
+                let max = opts.len();
+                if max == 0 {
+                    return None;
+                }
+                Some(ask(
+                    owner,
+                    crate::content::host::GW_POXIAO_TARGETS,
+                    ChoiceKind::SelectPlayers,
+                    opts,
+                    1,
+                    max,
+                    false,
+                ))
+            }
+            _ => None,
+        },
         // 冰魄通：双段自选展示（逐技对照批五 v79）
         HostBehavior::JiguanBingpoCard => match stage {
             HostStage::ComparePlayerPick => Some(ask(

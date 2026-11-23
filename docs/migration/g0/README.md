@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-23 Batch U05-5a（U05 杀海拾遗 `gwent` 卡牌/技能 +80→806/1,621，全局 3,126/1,298/0）更新
+
+- **核验与升级**：基线 `d6d411439fc2f763ceeeef359e10372f702dd0b0`（Batch U05-6b CI Run `45138296268` Attempt 1 `10/10 success`）；三路合入 `swarm/conv-u05-5a-gwent-cards`（`b7ac33cb6..278b0ac8a`，`verifier-u05-a` `#96 APPROVE`），完成 `has_active_equip_kind` 协同修正与 `play_card_targets_gwent.rs`/`extension_choices_dispatch.rs` 拆分后，将 U05 杀海拾遗 `gwent` 获批 `69` 卡牌 + `11` 卡牌伴生技能共 **`80`** 项全数升为 `已复核等价`（`0` 保留，`/character/gwent/` `121` 项留待 `U05-5b`）。`U05` 现 **`806 / 815 / 0`**，全局 **`3,126 / 1,298 / 0`**（缺失 `0`，整包 8 维签字仍 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变）。详见 [U05-杀海拾遗.md](U05-杀海拾遗.md)、[Batch U05-5a 证据摘要](../../operations/evidence/2026-11-23-u05-5a-gwent-cards/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-23 Batch U05-6b（U05 杀海拾遗 `hearth` Part 2 +208→726/1,621，全局 3,046/1,378/0）更新
 
 - **核验与升级**：基线 `cc0401e8ec93c64098fc989e385ad2a30800ed86`（Batch U05-6a CI Run `45126700137` Attempt 1 `10/10 success`）；三路合入 `swarm/conv-u05-6b-hearth-part2`（`e350ea568..92e1b4cac`，`verifier-u05-b` `#45 APPROVE`）并完成主线 `virtual_diaobing_use` / `stone_chenshui` 兼容修正及 300 VM 下界校准后，将 U05 杀海拾遗 `hearth` Part 2 获批 `105` 技能 + `103` 武将共 `208` 项升为 `已复核等价`，严格保留 `U05:skills:shixu`（墙钟确定性边界）与 `7` 名 `hs_*` 武将（`hs_alleria`/`hs_jaina`/`hs_kcthun`/`hs_nozdormu`/`hs_tgolem`/`hs_wuther`/`hs_xsylvanas`）为 `简化近似`。`U05` 现 **`726 / 895 / 0`**，全局 **`3,046 / 1,378 / 0`**（缺失 `0`，整包 8 维签字仍 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变）。详见 [U05-杀海拾遗.md](U05-杀海拾遗.md)、[Batch U05-6b 证据摘要](../../operations/evidence/2026-11-23-u05-6b-hearth-part2/README.md) 与 [inventory_status.json](inventory_status.json)。

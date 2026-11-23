@@ -95,6 +95,7 @@ pub fn host_skill_trigger_meta(
         | HostBehavior::U05Hearth2BatchD
         | HostBehavior::U05Hearth2BatchE
         | HostBehavior::U05Hearth2BatchF => step::u05_hearth::trigger_meta(name, behavior),
+        HostBehavior::U05GwentCardSkill => step::u05_b5a_gwent::trigger_meta_u05_gwent_skill(name),
         _ => crate::event::NativeDamageEffect::from_host(behavior)
             .map(|e| e.meta())
             .or_else(|| behavior.trigger_meta()),

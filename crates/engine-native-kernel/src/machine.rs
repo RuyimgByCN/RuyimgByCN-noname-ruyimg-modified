@@ -729,6 +729,17 @@ impl<'a> Ctx<'a> {
             }
             return;
         }
+        if crate::vocabulary::card_skills::is_u05_vanish_card_name(
+            self.catalog.cards[card as usize].name,
+        ) {
+            self.core
+                .vm_aux
+                .piles
+                .entry((0, "u05_vanished".to_string()))
+                .or_default()
+                .push(card);
+            return;
+        }
         self.core.discard.push(card);
         if self.catalog.vm_card_history {
             self.core

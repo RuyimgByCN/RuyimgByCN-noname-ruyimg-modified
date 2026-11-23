@@ -18,7 +18,7 @@
 1. **`U06:skills/cards:monkey`**：将出牌阶段使用桃与濒死救援桃统一接入 `EventData::CardUsed` ＋ `HostBehavior::HuanleMonkeyCard`（`crates/engine-native-kernel/src/kernel/dying.rs`、`events.rs`、`resolution.rs` 及 `crates/engine-native-content/src/content/host/step/huanle.rs:10-143`），按座位序触发并校验 `filterInD`；无论持猴者拿取或取消，桃于结算完毕后正确入弃牌堆消费。
 2. **`U06:skills/cards:xuelunyang`**：修复第二步选择允许取消并干净结束；修复 `crates/engine-native-kernel/src/machine.rs:921-955` 回合末清理临时技能时遗漏被禁用条目的问题（去除 `i.enabled &&` 过滤，仅在原启用时发失技事件）；补全 `content/host.rs:180-200` 的 `is_charlotte` 状态戳集合，并阻止同名/主公/唯一/隐匿/觉醒技误列及原临时技重叠覆盖。
 3. **`U06:skills/cards:{kuwu,mianju,shoulijian,jiuwei}`**：补齐 `kuwu` 转化杀（`use_as`）与 `_notrigger` 排除及去重日志；`mianju` 统一覆盖全部普通与扩展直接翻面路径；`shoulijian` 校验多目标距离 +1 与非装备 `he` 弃牌询问；`jiuwei` 复核手牌上限加成与无懈不可响应条件。
-4. **`L06:skills:_shengke`**：补齐联机禁用、装备使用与直装区分、`Wuzhong`/`Jiguan` 原主判断及 `Tianfuzhen`/`Niaoxiangzhen`/`use_as=Wuzhong` 无懈窗口包装（`crates/engine-native-content/src/content/host/filtering/wuxing.rs:1-249`、`step/skills_status.rs:677-713`）；桃园/五谷单批次事件结构按冻结 `NGSA 107` 基线维持不变。
+4. **`L06:skills:_shengke`**：补齐联机禁用、装备使用与直装区分、`Wuzhong`/`Jiguan` 原主判断及 `Tianfuzhen`/`Niaoxiangzhen`/`use_as=Wuzhong` 无懈窗口包装（`crates/engine-native-content/src/content/host/filtering/wuxing.rs:1-237`、`step/skills_status.rs:677-713`）；桃园/五谷单批次事件结构按冻结 `NGSA 107` 基线维持不变。
 5. **`L06:skills:wuxingpan_skill` & `L06:cards:wuxingpan`**：`wuxingpan_skill`（`step/skills_card_use.rs:6-62`）第一步选牌可取消并返还出牌阶段限 1 次数，第二步 `SelectNature` 按上游强制选择与合理 AI 取向工作（含 NGSA 挂起恢复）；`wuxingpan` 卡牌保留 `简化近似`——原生 `wuxing.json:5`／`construction.rs:479-503` 固定按 `1/3` 概率为牌库注五行属性，未读取上游 `lib.config.wuxing_num_playpackconfig`（默认 `0.3`）。
 
 ## 3. 独立复核 14 项明细表（`602b9dd3-b8e7-4e3c-81fe-b57137a6f312`）
@@ -36,7 +36,7 @@
 | `U06:skills:jiuwei` | **PASS** | 无懈不可响应与手牌上限修正、`u06_jiuwei_six_dimension_real_match_equivalence` | `已复核等价` |
 | `U06:cards:jiuwei` | **PASS** | 牌面与绑定技能 `jiuwei` 核验通过 | `已复核等价` |
 | `U06:cards:shoulijian` | **PASS** | 多目标范围与非装备 `he` 弃牌询问、`u06_shoulijian_no_dup_log_and_non_equip_he_prompt` | `已复核等价` |
-| `L06:skills:_shengke` | **PASS** | `filtering/wuxing.rs:1-249`、`skills_status.rs:677-713`；上游 9 项 `_shengke` 探针；`l06_shengke_*` 与 `l06_shengke_zhenfa_and_view_as_wuzhong_nullify_order`（注：桃园/五谷单批次受冻结 NGSA 107 约束保持） | `已复核等价` |
+| `L06:skills:_shengke` | **PASS** | `filtering/wuxing.rs:1-237`、`skills_status.rs:677-713`；上游 9 项 `_shengke` 探针；`l06_shengke_*` 与 `l06_shengke_zhenfa_and_view_as_wuzhong_nullify_order`（注：桃园/五谷单批次受冻结 NGSA 107 约束保持） | `已复核等价` |
 | `L06:skills:wuxingpan_skill` | **PASS** | `skills_card_use.rs:6-62`；上游 `wuxingpan_skill_flow`；`l06_wuxingpan_stage1_cancel_refund_and_stage2_mandatory` | `已复核等价` |
 | `L06:cards:wuxingpan` | **FAIL（S2 留差）** | 牌面/插入牌堆无误；`wuxing.json:5` / `construction.rs:479-503` 固定 `1/3` 概率注入五行属性，与上游默认 `0.3`（`wuxing_num_playpackconfig`）存在数值与配置差异 | `简化近似`（下调维持） |
 

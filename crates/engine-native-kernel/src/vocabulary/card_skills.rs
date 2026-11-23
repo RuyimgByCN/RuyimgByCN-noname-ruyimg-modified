@@ -436,3 +436,44 @@ pub fn yangpijuan_class(kind: CardKind) -> Option<u8> {
         _ => None,
     }
 }
+
+/// U05-5a (`杀海拾遗·gwent`) 具有 `vanish: true` 的牌名：弃置/结算结束后入
+/// `vm_aux.piles[(0, "u05_vanished")]`，不入弃牌堆洗混，保持全牌守恒。
+pub fn is_u05_vanish_card_name(name: &str) -> bool {
+    matches!(
+        name,
+        "gw_dieyi"
+            | "gw_dieyi_equip1"
+            | "gw_dieyi_equip2"
+            | "gw_dieyi_equip3"
+            | "gw_dieyi_equip4"
+            | "gw_dieyi_equip5"
+            | "gw_dieyi_judge"
+            | "gw_hudiewu"
+            | "gw_yigeniyin"
+            | "gw_leizhoushu"
+            | "gw_aerdeyin"
+            | "gw_ansha"
+            | "gw_xinsheng"
+            | "gw_niuquzhijing"
+            | "gw_zhongmozhizhan"
+            | "gw_ganhan"
+            | "gw_huangjiashenpan"
+            | "gw_tunshi"
+            | "gw_chongci"
+            | "gw_youer"
+            | "gw_tongdi"
+            | "gw_fuyuan"
+            | "gw_zhuoshao"
+            | "gw_butianshu"
+            | "gw_shizizhaohuan"
+            | "gw_zuihouyuanwang"
+            | "gw_zirankuizeng"
+            | "gwjinli_jiu"
+            | "gw_xianzumaijiu"
+            | "gw_wuyao"
+            | "gw_lang"
+            | "gw_dudayuanshuai1"
+            | "gw_dudayuanshuai2"
+    ) || name.starts_with("gwmaoxian_")
+}

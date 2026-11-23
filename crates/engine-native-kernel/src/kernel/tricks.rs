@@ -652,6 +652,11 @@ impl DismantleMachine {
             p.judge.retain(|x| *x != c);
             if was_equip {
                 revoke_equip_skills(ctx.core, ctx.catalog, target, c);
+            } else if from_judge {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(target, format!("gw_dieyi_card:{c}")));
             }
         }
         ctx.to_discard(c);

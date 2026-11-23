@@ -1,5 +1,12 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+## 2026-11-23 Batch U05-5a（U05 昆特牌 `gwent` 卡牌及伴生技能 80 项语义对齐、`gw_dieyi` 装备屏蔽与 `yange`/`yanjia` 联动）
+
+- **不变量保持**：`RULES_VERSION=333`、`NGSA=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。
+- **主线合入语义与生命周期对齐**：
+  - `HostBehavior` 新增 `1160..=1161`（`U05GwentCardEffect` / `U05GwentCardSkill`，`HostBehavior::ALL=629`），独立尾追加 [known_prompts_u05_5a.rs](../../crates/engine-native-kernel/src/archive/known_prompts_u05_5a.rs)（`21` 条提示词，`0` 重名），接入 [u05_b5a_gwent/mod.rs](../../crates/engine-native-content/src/content/host/step/u05_b5a_gwent/mod.rs)（`gold_spells`/`silver_spells`/`adventure_a`/`adventure_b`/`adventure_huoge`/`skills`/`asks`）并保持 [extension_choices_dispatch.rs](../../crates/engine-native/src/ai/extension_choices_dispatch.rs) 与 [play_card_targets_gwent.rs](../../crates/engine-native/src/engine/play_card_targets_gwent.rs) 职责拆分（Rust 非测试源码 `<= 1,000` 有效行）。
+  - **Round 2 反例修复与主线协同**：`gw_dieyi_equip2` 排除出 `is_bagua_armor` 并在 [core_ops_modifiers.rs](../../crates/engine-native-kernel/src/state/core_ops_modifiers.rs#L854-L867) 将 `has_active_equip_kind` 统一为 `catalog.equip_card_has_kind(self, c, kind) && !self.is_gw_dieyi_masked(catalog, owner, c)`，使 `gw_dieyi` 屏蔽、`yange`/`yanjia` 装备别名与 `gw_qinpen` 手牌上限减益（协同 `WUDIAN_JIJIA_KEY`）在 `sha.rs`/`sha/armor.rs`/`sha/respond.rs`/`play_sha.rs`/`equipment.rs`/`tricks.rs`/`d34_flags.rs`/`d34_l28_mods.rs` 全路径并行生效；`airuiting`/`huoge` 严格检查隐匿/空城/帷幕与取消修正，`step_falanxisika` 仅发单次 `EventData::CardUsed` 并经 `HostStage::HuanrenPick` 避免双重结束出牌阶段；`/character/gwent/` 下 `121` 项留待 `U05-5b`。
+
 ## 2026-11-23 Batch U05-6b（U05 炉石传说 `hearth` Part 2 208 项语义对齐、`shixu` 墙钟边界与主线集成修正）
 
 - **不变量保持**：`RULES_VERSION=333`、`NGSA=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。
@@ -140,7 +147,7 @@
 
 ## 2026-11-19 Batch 1.1（U06 欢乐卡牌 ＋ L06 五行）语义对齐与 S2 留差边界（待提交／发布）
 
-基线 HEAD `352236724b5e173cc1ff74c0fb706509129ab7a1` ＋ Batch 1.1；版本号零变更（规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`），14 项标准 golden 哈希全部保持不变。语义调整：1）`U06 monkey` 统一出牌区与濒死救治路径为 `EventData::CardUsed` ＋ `HostBehavior::HuanleMonkeyCard`（`dying.rs`/`events.rs`/`step/huanle.rs:10-143`），桃无论被拿取或拒绝均于结算后正确消耗入弃牌堆，并校验 `filterInD` 与座位序；2）`U06 xuelunyang` 修复第二步取消、被禁用临时技能在回合末正常清理（`machine.rs:921-955`）及 `is_charlotte` 内部状态戳排除（`content/host.rs:180-200`）；3）`L06 _shengke`（`filtering/wuxing.rs:1-249`、`skills_status.rs:677-713`）补齐联机禁用、装备直装排除、`Tianfuzhen`/`Niaoxiangzhen`/`use_as=Wuzhong` 与 `Wuzhong`/`Jiguan` 原主过滤；按冻结 `NGSA 107` 保持桃园/五谷单批事件结构，并按 `wuxingpan_skill` 保持第二步强制 `SelectNature`；4）**S2 留差**：`L06 wuxingpan` 卡牌依 `wuxing.json:5`／`construction.rs:479-503` 固定按 `1/3` 随机注入牌库五行属性，未读取上游 `wuxing_num_playpackconfig`（默认 `0.3`），由独立复核下调为 `简化近似`。见 [Batch 1.1 复核摘要](../operations/evidence/2026-11-19-batch1-1-u06-l06/README.md)。
+基线 HEAD `352236724b5e173cc1ff74c0fb706509129ab7a1` ＋ Batch 1.1；版本号零变更（规则 `333`／NGSA `107`／content schema `5`／ABI `759`／WS `8`），14 项标准 golden 哈希全部保持不变。语义调整：1）`U06 monkey` 统一出牌区与濒死救治路径为 `EventData::CardUsed` ＋ `HostBehavior::HuanleMonkeyCard`（`dying.rs`/`events.rs`/`step/huanle.rs:10-143`），桃无论被拿取或拒绝均于结算后正确消耗入弃牌堆，并校验 `filterInD` 与座位序；2）`U06 xuelunyang` 修复第二步取消、被禁用临时技能在回合末正常清理（`machine.rs:921-955`）及 `is_charlotte` 内部状态戳排除（`content/host.rs:180-200`）；3）`L06 _shengke`（`filtering/wuxing.rs:1-237`、`skills_status.rs:677-713`）补齐联机禁用、装备直装排除、`Tianfuzhen`/`Niaoxiangzhen`/`use_as=Wuzhong` 与 `Wuzhong`/`Jiguan` 原主过滤；按冻结 `NGSA 107` 保持桃园/五谷单批事件结构，并按 `wuxingpan_skill` 保持第二步强制 `SelectNature`；4）**S2 留差**：`L06 wuxingpan` 卡牌依 `wuxing.json:5`／`construction.rs:479-503` 固定按 `1/3` 随机注入牌库五行属性，未读取上游 `wuxing_num_playpackconfig`（默认 `0.3`），由独立复核下调为 `简化近似`。见 [Batch 1.1 复核摘要](../operations/evidence/2026-11-19-batch1-1-u06-l06/README.md)。
 
 ## 2026-11-14T03:16:45.676673+08:00 L10／U08／L28实际反例与规则边界
 

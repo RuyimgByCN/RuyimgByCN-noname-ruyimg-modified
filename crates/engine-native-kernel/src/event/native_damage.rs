@@ -159,7 +159,7 @@ impl NativeDamageEffect {
                     .unwrap_or_else(|| catalog.card_kind(card));
                 kind.is_sha_like()
             });
-        let equip = |kind| catalog.player_has_equip_kind(core, owner, kind);
+        let equip = |kind| core.has_active_equip_kind(catalog, owner, kind);
         if !p.alive {
             return false;
         }

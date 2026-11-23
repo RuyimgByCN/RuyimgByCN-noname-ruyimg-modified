@@ -22,53 +22,73 @@ impl HostMachine {
                 }
                 Flow::Done
             }
-            HostBehavior::GwentAozuCard => {
-                // 1 点雷电伤害，若存活摸 1
-                let Some(t) = self.target else {
-                    return Flow::Done;
-                };
-                if ctx.core.player(t).alive {
-                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                        Some(self.owner),
-                        t,
-                        1,
-                        crate::event::DamageNature::Thunder,
-                        self.card,
-                    )));
+            HostBehavior::GwentAozuCard => match self.stage {
+                HostStage::Act => {
+                    // 1 点雷电伤害，待伤害结算后再判存活摸 1（LIFO：Damage 先弹栈）
+                    let Some(t) = self.target else {
+                        return Flow::Done;
+                    };
                     if ctx.core.player(t).alive {
-                        ctx.start_draw(t, 1);
+                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                            Some(self.owner),
+                            t,
+                            1,
+                            crate::event::DamageNature::Thunder,
+                            self.card,
+                        )));
+                        self.stage = HostStage::DrawSettle;
+                        return Flow::Yield;
                     }
+                    if let Some(c) = self.card {
+                        ctx.to_discard(c);
+                        ctx.core.table.retain(|x| *x != c);
+                    }
+                    Flow::Done
                 }
-                if let Some(c) = self.card {
-                    ctx.to_discard(c);
-                    ctx.core.table.retain(|x| *x != c);
+                HostStage::DrawSettle => {
+                    if let Some(t) = self.target {
+                        if ctx.core.player(t).alive {
+                            ctx.start_draw(t, 1);
+                        }
+                    }
+                    if let Some(c) = self.card {
+                        ctx.to_discard(c);
+                        ctx.core.table.retain(|x| *x != c);
+                    }
+                    Flow::Done
                 }
-                Flow::Done
-            }
+                _ => Flow::Done,
+            },
             HostBehavior::GwentWenyiCard => {
-                // 有手牌 → 弃首张（登记差异：随机改首张）；无手牌 →
-                // 失去 1 点体力（规则 v77 原语）
-                let Some(t) = self.target else {
-                    return Flow::Done;
-                };
-                if ctx.core.player(t).alive {
-                    // 上游 target.randomDiscard("h")：随机一张手牌
-                    //（逐技对照批四 v78 种子 RNG 均匀抽取）
-                    let hand_len = ctx.core.player(t).hand.len();
-                    if hand_len > 0 {
-                        let i = ctx.core.rng.gen_range(hand_len as u32) as usize;
-                        let c = ctx.core.player(t).hand[i];
-                        ctx.discard_from_hand(t, c);
-                        ctx.log(LogEvent::CardDiscarded {
-                            player: t,
-                            cards: vec![c],
-                        });
-                    } else {
-                        // 失去 1 点体力（逐技对照批三 v77 消除登记差异）
-                        ctx.emit(EventData::LoseHp {
-                            player: t,
-                            amount: 1,
-                        });
+                // 瘟疫（`card/gwent/card.js:1814`）：所有体力最少者（`isMinHp()`）
+                // 按座位序随机弃 1 张手牌；无手牌则失去 1 点体力。
+                let min_hp = ctx
+                    .core
+                    .alive_players()
+                    .map(|p| ctx.core.player(p).hp)
+                    .min();
+                if let Some(min_hp) = min_hp {
+                    let targets: Vec<PlayerId> = ctx
+                        .core
+                        .seat_order_from(self.owner)
+                        .into_iter()
+                        .filter(|&p| ctx.core.player(p).alive && ctx.core.player(p).hp == min_hp)
+                        .collect();
+                    for t in targets {
+                        if !ctx.core.player(t).alive {
+                            continue;
+                        }
+                        let hand_len = ctx.core.player(t).hand.len();
+                        if hand_len > 0 {
+                            let i = ctx.core.rng.gen_range(hand_len as u32) as usize;
+                            let c = ctx.core.player(t).hand[i];
+                            ctx.discard_from_hand(t, c);
+                        } else {
+                            ctx.emit(EventData::LoseHp {
+                                player: t,
+                                amount: 1,
+                            });
+                        }
                     }
                 }
                 if let Some(c) = self.card {
@@ -78,23 +98,18 @@ impl HostMachine {
                 Flow::Done
             }
             HostBehavior::GwentZhihuanCard => {
-                // 反复失去 1 点体力上限，直至未受伤或手牌数 ≥ 体力上限
+                // 致幻菌（`card/gwent/card.js:1585`）：反复经 `lose_max_hp` 失去 1 点体力上限，
+                // 直至未受伤或手牌数 >= 体力上限。
                 let Some(t) = self.target else {
                     return Flow::Done;
                 };
-                if ctx.core.player(t).alive {
-                    loop {
-                        let p = ctx.core.player(t);
-                        let damaged = p.hp < p.max_hp as i32;
-                        if !(damaged && (p.hand.len() as u32) < p.max_hp) {
-                            break;
-                        }
-                        let p = ctx.core.player_mut(t);
-                        p.max_hp -= 1;
-                        if p.hp > p.max_hp as i32 {
-                            p.hp = p.max_hp as i32;
-                        }
+                while ctx.core.player(t).alive {
+                    let p = ctx.core.player(t);
+                    let damaged = p.hp < p.max_hp as i32;
+                    if !(damaged && (p.hand.len() as u32) < p.max_hp) {
+                        break;
                     }
+                    ctx.lose_max_hp(t, 1);
                 }
                 if let Some(c) = self.card {
                     ctx.to_discard(c);
@@ -154,20 +169,35 @@ impl HostMachine {
                             _ => None,
                         })
                         .collect();
-                    let mut discarded = Vec::new();
+                    let mut discarded = Vec::with_capacity(picks.len());
                     for c in picks {
                         if ctx.core.player(t).hand.contains(&c) {
-                            ctx.core.player_mut(t).hand.retain(|x| *x != c);
+                            ctx.discard_from_hand(t, c);
                             discarded.push(c);
                         }
                     }
                     if !discarded.is_empty() {
-                        ctx.log(LogEvent::CardDiscarded {
+                        ctx.emit(EventData::CardsDiscarded {
                             player: t,
                             cards: discarded,
                         });
                     }
-                    ctx.start_draw(t, 1);
+                    if ctx.core.player(t).alive {
+                        self.stage = HostStage::DrawSettle;
+                        return Flow::Yield;
+                    }
+                    if let Some(c) = self.card {
+                        ctx.to_discard(c);
+                        ctx.core.table.retain(|x| *x != c);
+                    }
+                    Flow::Done
+                }
+                HostStage::DrawSettle => {
+                    if let Some(t) = self.target {
+                        if ctx.core.player(t).alive {
+                            ctx.start_draw(t, 1);
+                        }
+                    }
                     if let Some(c) = self.card {
                         ctx.to_discard(c);
                         ctx.core.table.retain(|x| *x != c);
@@ -189,24 +219,38 @@ impl HostMachine {
         Flow::Done
     }
     HostBehavior::GwentWeatherGrant => {
-                // 对 targets（目标 + 距离 1 邻座）逐个安装对应天气状态
+                // 对 targets（目标 + 左右存活邻座）逐个安装对应天气状态
                 //（已持有者跳过，对齐上游 filterTarget）
                 let kind = self.card.map(|c| ctx.catalog.card_kind(c));
-                let listener = match kind {
-                    Some(CardKind::Qinpendayu) => Some(GW_QINPEN_STATE_KEY),
-                    Some(CardKind::Birinongwu) => Some(GW_BIRIN_STATE_KEY),
-                    Some(CardKind::Ciguhanshuang) => Some(GW_CIGU_STATE_KEY),
-                    _ => None,
+                let (listener, alt_name) = match (kind, self.def_key.as_str()) {
+                    (Some(CardKind::Qinpendayu), _) | (_, GW_QINPEN_CARD_KEY) => {
+                        (Some(GW_QINPEN_STATE_KEY), Some("gw_qinpendayu"))
+                    }
+                    (Some(CardKind::Birinongwu), _) | (_, GW_BIRIN_CARD_KEY) => {
+                        (Some(GW_BIRIN_STATE_KEY), Some("gw_birinongwu"))
+                    }
+                    (Some(CardKind::Ciguhanshuang), _) | (_, GW_CIGU_CARD_KEY) => {
+                        (Some(GW_CIGU_STATE_KEY), Some("gw_ciguhanshuang"))
+                    }
+                    _ => (None, None),
                 };
-                let Some(listener) = listener else {
+                let (Some(listener), Some(alt)) = (listener, alt_name) else {
                     return Flow::Done;
                 };
-                let Some(def) = ctx.catalog.skill_by_name(listener) else {
+                let def = ctx
+                    .catalog
+                    .skill_by_name(listener)
+                    .or_else(|| ctx.catalog.skill_by_name(alt));
+                let Some(def) = def else {
                     return Flow::Done;
                 };
+                let alt_def = ctx.catalog.skill_by_name(alt);
                 let targets = self.targets.clone();
                 for t in targets {
-                    if !ctx.core.player(t).alive || ctx.core.skills.contains_key(&(t, def)) {
+                    if !ctx.core.player(t).alive
+                        || ctx.core.skills.contains_key(&(t, def))
+                        || alt_def.is_some_and(|ad| ctx.core.skills.contains_key(&(t, ad)))
+                    {
                         continue;
                     }
                     ctx.insert_skill(
@@ -227,9 +271,17 @@ impl HostMachine {
                 Flow::Done
             }
             HostBehavior::GwentKunenState => {
-                // 防止此次普通伤害并按次数扣减计数，归零移除状态
-                ctx.current_damage_mut().prevented = true;
-                food_tick(ctx, self.owner, &self.def_key);
+                let is_turn_end = ctx
+                    .res
+                    .frame(ctx.current_event_frame_id())
+                    .is_some_and(|f| matches!(f.data, EventData::TurnEndWindow { after: false, .. }));
+                if is_turn_end {
+                    // `gw_kunenfayin_count` (`card/gwent/skill.js:64`): 全局 phaseEnd 递减计数，归零移除
+                    food_tick(ctx, self.owner, &self.def_key);
+                } else {
+                    // `gw_kunenfayin` (`card/gwent/skill.js:45`): 仅防止所有非属性伤害
+                    ctx.current_damage_mut().prevented = true;
+                }
                 Flow::Done
             }
             HostBehavior::GwentKunenCard => {
@@ -237,7 +289,11 @@ impl HostMachine {
                 let Some(t) = self.target else {
                     return Flow::Done;
                 };
-                let Some(def) = ctx.catalog.skill_by_name(GW_KUNEN_STATE_KEY) else {
+                let def = ctx
+                    .catalog
+                    .skill_by_name(GW_KUNEN_STATE_KEY)
+                    .or_else(|| ctx.catalog.skill_by_name("gw_kunenfayin"));
+                let Some(def) = def else {
                     return Flow::Done;
                 };
                 let rounds = (ctx.core.alive_count() as u8).min(5);
@@ -258,13 +314,13 @@ impl HostMachine {
                 Flow::Done
             }
             HostBehavior::GwentShanbengCard => {
-                // 所有其他存活角色装备区合集均匀随机取两张，恰两张才弃置
-                //（上游 equips.randomGets(2) + length===2 门控；逐技对照
-                // 批四 v78 种子 RNG，无序对均匀：i + j 越过法）
+                // 山崩术（`card/gwent/card.js:1850`）：所有敌方装备区随机取至多 2 张弃置
                 let pool: Vec<(crate::ids::PlayerId, CardId)> = ctx
                     .core
                     .alive_players()
-                    .filter(|v| *v != self.owner)
+                    .filter(|v| {
+                        *v != self.owner && !ctx.core.is_friend_of(ctx.catalog, self.owner, *v)
+                    })
                     .flat_map(|v| {
                         ctx.core
                             .player(v)
@@ -275,22 +331,31 @@ impl HostMachine {
                             .collect::<Vec<_>>()
                     })
                     .collect();
-                if pool.len() >= 2 {
+                let picked: Vec<(crate::ids::PlayerId, CardId)> = if pool.len() >= 2 {
                     let n = pool.len() as u32;
                     let i = ctx.core.rng.gen_range(n) as usize;
                     let mut j = ctx.core.rng.gen_range(n - 1) as usize;
                     if j >= i {
                         j += 1;
                     }
-                    for (v, c) in [pool[i], pool[j]] {
-                        ctx.core.player_mut(v).equips.retain(|x| *x != c);
-                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, v, c);
-                        ctx.to_discard(c);
-                        ctx.log(LogEvent::CardDiscarded {
-                            player: v,
-                            cards: vec![c],
-                        });
-                    }
+                    vec![pool[i], pool[j]]
+                } else {
+                    pool
+                };
+                for (v, c) in picked {
+                    ctx.core.player_mut(v).equips.retain(|x| *x != c);
+                    crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, v, c);
+                    ctx.to_discard(c);
+                    ctx.note_cards_lost(v, &[c]);
+                    ctx.emit(EventData::CardsLost {
+                        player: v,
+                        cards: vec![c],
+                        origins: vec![crate::event::LostOrigin::Equip],
+                    });
+                    ctx.log(LogEvent::CardDiscarded {
+                        player: v,
+                        cards: vec![c],
+                    });
                 }
                 if let Some(c) = self.card {
                     ctx.to_discard(c);
@@ -298,91 +363,26 @@ impl HostMachine {
                 }
                 Flow::Done
             }
-            HostBehavior::GwentPoxiaoCard => match self.stage {
-                HostStage::Act => {
-                    self.stage = HostStage::SelectCard;
-                    let options = vec![ChoiceOption::Tag(0), ChoiceOption::Tag(1)];
-                    Flow::WaitChoice {
-                        observer: self.owner,
-                        spec: ChoiceSpec {
-                            kind: ChoiceKind::PickTag,
-                            prompt: GW_POXIAO_BRANCH,
-                            options,
-                            min: 1,
-                            max: 1,
-                            allow_cancel: false,
-                        },
-                    }
-                }
-                HostStage::SelectCard => {
-                    // 分支 0：清除所有天气状态并弃置全部判定区牌
-                    // 分支 1：获得牌堆中首张天气/暴雪法术（登记差异：
-                    // 随机改牌堆序首张；上游分支一为自选角色）
-                    match ctx.answer_first() {
-                        ChoiceOption::Tag(0) => {
-                            let weather_defs: Vec<_> =
-                                [GW_QINPEN_STATE_KEY, GW_BIRIN_STATE_KEY, GW_CIGU_STATE_KEY]
-                                    .iter()
-                                    .filter_map(|k| ctx.catalog.skill_by_name(k))
-                                    .collect();
-                            let mut to_remove = Vec::new();
-                            for ((o, def), _) in ctx.core.skills.iter() {
-                                if weather_defs.contains(def) {
-                                    to_remove.push((*o, *def));
-                                }
-                            }
-                            for key in to_remove {
-                                ctx.core.skills.remove(&key);
-                            }
-                            for p in ctx.core.alive_players().collect::<Vec<_>>() {
-                                let judge: Vec<CardId> = ctx.core.player(p).judge.clone();
-                                for c in judge {
-                                    ctx.core.player_mut(p).judge.retain(|x| *x != c);
-                                    ctx.to_discard(c);
-                                }
-                            }
-                        }
-                        ChoiceOption::Tag(1) => {
-                            // 随机获得一张铜卡法术（上游随机；逐技对照批四
-                            // v78 种子 RNG 均匀抽取）
-                            let bronze: Vec<CardKind> = vec![
-                                CardKind::Qinpendayu,
-                                CardKind::Birinongwu,
-                                CardKind::Ciguhanshuang,
-                                CardKind::Baoxueyaoshui,
-                            ];
-                            let positions: Vec<usize> = ctx
-                                .core
-                                .deck
-                                .iter()
-                                .enumerate()
-                                .filter(|(_, c)| bronze.contains(&ctx.catalog.card_kind(**c)))
-                                .map(|(i, _)| i)
-                                .collect();
-                            if positions.is_empty() {
-                                ctx.start_draw(self.owner, 1);
-                            } else {
-                                let i = positions
-                                    [ctx.core.rng.gen_range(positions.len() as u32) as usize];
-                                let c = ctx.core.deck.remove(i);
-                                ctx.core.player_mut(self.owner).hand.push(c);
-                            }
-                        }
-                        _ => {}
-                    }
-                    if let Some(c) = self.card {
-                        ctx.to_discard(c);
-                        ctx.core.table.retain(|x| *x != c);
-                    }
-                    Flow::Done
-                }
-                _ => Flow::Done,
-            },
+            HostBehavior::GwentPoxiaoCard => super::u05_b5a_gwent::step_poxiao_card(self, ctx),
             HostBehavior::GwentFengyinState => {
-                // 拥有者任意阶段结束：解除封印——全部技能实例重新
-                // 启用，并移除封印实例自身
-                for ((p, _), inst) in ctx.core.skills.iter_mut() {
-                    if *p == self.owner {
+                // 祖墨手铐·封印解除（`card/gwent/card.js:1625`, `skill.js:1702`）：
+                // 恢复封印期间禁用的非锁定/非持恒/非 charlotte 技能，并移除封印实例。
+                let prefix = "gw_fengyin_dis:";
+                let keys: Vec<(u16, String)> = ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .keys()
+                    .filter(|(p, k)| *p == self.owner && k.starts_with(prefix))
+                    .filter_map(|(_p, k)| {
+                        k.strip_prefix(prefix)
+                            .and_then(|s| s.parse::<u16>().ok())
+                            .map(|def| (def, k.clone()))
+                    })
+                    .collect();
+                for (def, flag_key) in keys {
+                    ctx.core.vm_aux.flags.remove(&(self.owner, flag_key));
+                    if let Some(inst) = ctx.core.skills.get_mut(&(self.owner, def)) {
                         inst.enabled = true;
                     }
                 }
@@ -392,24 +392,43 @@ impl HostMachine {
                 Flow::Done
             }
             HostBehavior::GwentZumoCard => {
-                // 目标技能全部失效（授予封印实例 + 禁用其余实例；
-                // 登记差异：原生无锁定技区分）
+                // 祖墨手铐（`card/gwent/card.js:1616`）：禁用目标全部非锁定技
+                //（豁免锁定技、持恒技与 charlotte 技，含天气状态），直至其整回合结束。
                 let Some(t) = self.target else {
                     return Flow::Done;
                 };
                 let Some(fdef) = ctx.catalog.skill_by_name(GW_FENGYIN_STATE_KEY) else {
                     return Flow::Done;
                 };
-                let keys: Vec<(PlayerId, crate::ids::SkillDefId)> = ctx
+                let defs: Vec<crate::ids::SkillDefId> = ctx
                     .core
                     .skills
                     .iter()
-                    .map(|((p, d), _)| (*p, *d))
-                    .filter(|(p, d)| *p == t && *d != fdef)
+                    .filter_map(|((p, d), inst)| (*p == t && *d != fdef && inst.enabled).then_some(*d))
                     .collect();
-                for k in keys {
-                    if let Some(inst) = ctx.core.skills.get_mut(&k) {
+                for def in defs {
+                    let skill = &ctx.catalog.skills[def as usize];
+                    let weather_non_locked = matches!(
+                        skill.name,
+                        GW_QINPEN_STATE_KEY | "gw_qinpendayu" | GW_BIRIN_STATE_KEY | "gw_birinongwu"
+                    );
+                    let eff_meta = if weather_non_locked {
+                        None
+                    } else {
+                        skill.trigger.as_ref()
+                    };
+                    let exempt = ctx.catalog.is_forever_skill(def)
+                        || ctx.catalog.is_charlotte_skill(def)
+                        || crate::catalog::Catalog::is_locked_skill_name(skill.name, eff_meta);
+                    if exempt {
+                        continue;
+                    }
+                    if let Some(inst) = ctx.core.skills.get_mut(&(t, def)) {
                         inst.enabled = false;
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((t, format!("gw_fengyin_dis:{def}")), 1);
                     }
                 }
                 ctx.insert_skill(

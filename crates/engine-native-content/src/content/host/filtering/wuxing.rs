@@ -25,18 +25,6 @@ fn is_nullify_wrapped_trick(
         | CardKind::Shuigong
         | CardKind::Shezhanqunru
         | CardKind::Shujinsan
-        | CardKind::Qinpendayu
-        | CardKind::Birinongwu
-        | CardKind::Ciguhanshuang
-        | CardKind::Zumoshoukao
-        | CardKind::Kunenfayin
-        | CardKind::Shanbengshu
-        | CardKind::Poxiao
-        | CardKind::Yanziyaoshui
-        | CardKind::Aozuzhilei
-        | CardKind::Wenyi
-        | CardKind::Zhihuanjun
-        | CardKind::Baoxueyaoshui
         | CardKind::Shatang
         | CardKind::Heilonglinpian
         | CardKind::Liutouge

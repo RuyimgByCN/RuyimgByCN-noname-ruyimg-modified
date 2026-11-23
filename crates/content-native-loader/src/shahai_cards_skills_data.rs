@@ -46,7 +46,7 @@ pub const U05_GUJIAN_ALL_CARDS: [(&str, CardKind, u32, Suit, u8); 36] = [
 /// `U05` `gwent` cards (`69` items).
 pub const U05_GWENT_ALL_CARDS: [(&str, CardKind, u32, Suit, u8); 69] = [
     ("gw_dieyi", CardKind::Weapon, 2, Suit::Spade, 7), // card/gwent/card.js:4
-    ("gw_dieyi_equip1", CardKind::Weapon, 2, Suit::Heart, 8), // card/gwent/card.js:7
+    ("gw_dieyi_equip1", CardKind::Weapon, 1, Suit::Heart, 8), // card/gwent/card.js:7
     ("gw_dieyi_equip2", CardKind::Armor, 0, Suit::Club, 9), // card/gwent/card.js:24
     ("gw_dieyi_equip3", CardKind::HorsePlus, 0, Suit::Diamond, 10), // card/gwent/card.js:40
     ("gw_dieyi_equip4", CardKind::HorseMinus, 0, Suit::Spade, 11), // card/gwent/card.js:56

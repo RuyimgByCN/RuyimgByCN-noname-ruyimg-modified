@@ -65,6 +65,14 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
             .flags
             .remove(&(player, "l11_phase_sha_count".to_string()));
         ctx.core.turn.zhuyue_targets.clear();
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(player, "gw_guaiwuchaoxue_used_play".to_string()));
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(player, "gw_xianzumaijiu_used_play".to_string()));
         if ctx
             .core
             .vm_aux

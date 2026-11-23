@@ -54,15 +54,18 @@ pub(super) fn play_sha(
         .map(|d| core.has_skill(core.turn.current, d))
         .unwrap_or(false);
     // 碧日浓雾（gwent 天气）：持有者不能使用杀
-    if catalog
-        .skill_by_name(crate::content::host::GW_BIRIN_STATE_KEY)
-        .map(|def| {
+    if [
+        crate::content::host::GW_BIRIN_STATE_KEY,
+        "gw_birinongwu",
+    ]
+    .into_iter()
+    .any(|k| {
+        catalog.skill_by_name(k).is_some_and(|def| {
             core.skills
                 .get(&(core.turn.current, def))
-                .map(|i| i.enabled)
-                .unwrap_or(false)
+                .is_some_and(|i| i.enabled)
         })
-        .unwrap_or(false)
+    })
     {
         return Err(RejectReason::IllegalTargets);
     }
@@ -124,11 +127,7 @@ pub(super) fn play_sha(
     // 诸葛连弩（批③-b 第四把）：装备时出杀不限次数（与
     // 咆哮同口径的锁定豁免，按装备牌种判断）。
     let has_zhuge = !crate::kernel::mbcmfangzhu_baiban(core, player_id)
-        && core
-            .player(player_id)
-            .equips
-            .iter()
-            .any(|c| catalog.equip_card_has_kind(core, *c, CardKind::Zhuge));
+        && core.has_active_equip_kind(catalog, player_id, CardKind::Zhuge);
     // 龙颅山峰（mtg 首切片，规则 v100）：地图效果全局
     // 出杀上限 +1（上游 addGlobalSkill cardUsable 同口径）
     let land_sha_bonus =
@@ -299,11 +298,7 @@ pub(super) fn play_sha(
     // 时可指定至多 3 个目标（逐个独立合法性检查，去重）。
     let fangtian = !crate::kernel::mbcmfangzhu_baiban(core, player_id)
         && core.player(player_id).hand.len() == 1
-        && core
-            .player(player_id)
-            .equips
-            .iter()
-            .any(|c| catalog.equip_card_has_kind(core, *c, CardKind::Fangtian));
+        && core.has_active_equip_kind(catalog, player_id, CardKind::Fangtian);
     // 抗yin2（U07 批四，规则 v114）：杀额外目标上限 +X
     let kangyin_extra = match core.turn.kangyin2 {
         Some((o, x)) if o == player_id => x as usize,

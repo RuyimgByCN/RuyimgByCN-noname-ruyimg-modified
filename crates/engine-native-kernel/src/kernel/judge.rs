@@ -289,7 +289,9 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                 self.current = None;
                 self.payment = None;
                 if !leftover.is_empty() {
-                    ctx.core.discard.extend(leftover.iter().copied());
+                    for &c in &leftover {
+                        ctx.to_discard(c);
+                    }
                     ctx.log(LogEvent::CardDiscarded {
                         player: self.owner,
                         cards: std::mem::take(&mut leftover),
@@ -855,6 +857,38 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                 }
                 Some(self.queue.remove(0))
             };
+            if let Some(trick_card) = trick {
+                let cname = ctx.catalog.cards[trick_card as usize].name;
+                let dieyi_masked = ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.owner, format!("gw_dieyi_card:{trick_card}")))
+                    .is_some();
+                if cname == "gw_dieyi_judge" || dieyi_masked {
+                    ctx.to_discard(trick_card);
+                    if ctx.catalog.vm_card_history {
+                        ctx.note_cards_lost(self.owner, &[trick_card]);
+                        ctx.emit(EventData::CardsLost {
+                            player: self.owner,
+                            cards: vec![trick_card],
+                            origins: vec![crate::event::LostOrigin::Judge],
+                        });
+                    }
+                    ctx.log(LogEvent::CardDiscarded {
+                        player: self.owner,
+                        cards: vec![trick_card],
+                    });
+                    crate::kernel::trigger_gw_dieyi_lost(
+                        ctx.core,
+                        ctx.catalog,
+                        self.owner,
+                        trick_card,
+                        true,
+                    );
+                    continue;
+                }
+            }
             // 改命（T11 Boss 诸葛亮族批 116，规则 v303 同批）：判定前——拥有
             // 者持技时亮牌堆顶 7 张，由其选 1 作为判定结果（其余弃置、改判/
             // 天妒窗跳过；上游 judgeBefore chooseCardButton + trigger.cancel

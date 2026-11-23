@@ -100,6 +100,9 @@ pub(super) fn on_frame_popped(
             core.vm_aux
                 .flags
                 .remove(&(p, format!("mbcmjiushi_dmg:{}", popped.id)));
+            core.vm_aux
+                .flags
+                .remove(&(p, format!("sha_damage_frame:{}", popped.id)));
         }
     }
     if super::is_post_commit_host_event(&popped.data) {

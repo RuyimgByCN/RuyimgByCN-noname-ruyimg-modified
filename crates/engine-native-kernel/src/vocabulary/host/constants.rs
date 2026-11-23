@@ -167,7 +167,11 @@ pub const GW_KUNEN_STATE_KEY: &str = "gw_kunen_state";
 
 pub const GW_POXIAO_BRANCH: &str = "gw_poxiao_branch";
 
+pub const GW_POXIAO_TARGETS: &str = "gw_poxiao_targets";
+
 pub const GW_POXIAO_CARD_KEY: &str = "gw:poxiao";
+
+pub const U05_GWENT_CARD_KEY: &str = "u05_gwent_card";
 
 pub const GW_QINPEN_CARD_KEY: &str = "gw:qinpendayu";
 
